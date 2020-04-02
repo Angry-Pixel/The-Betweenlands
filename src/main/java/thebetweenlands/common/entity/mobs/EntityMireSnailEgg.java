@@ -15,12 +15,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.EntityAnimalBL;
 import thebetweenlands.common.item.food.ItemMireSnailEgg;
 import thebetweenlands.common.network.clientbound.MessageMireSnailEggHatching;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.util.AnimationMathHelper;
 
-public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
+public class EntityMireSnailEgg extends EntityAnimalBL {
 	private static final DataParameter<Integer> HATCH_TICKS = EntityDataManager.createKey(EntityMireSnailEgg.class, DataSerializers.VARINT);
 	public float pulseFloat;
 	AnimationMathHelper pulse = new AnimationMathHelper();

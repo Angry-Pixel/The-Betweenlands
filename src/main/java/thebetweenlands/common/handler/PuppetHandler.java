@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.lwjgl.opengl.GL11;
 
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
@@ -36,6 +37,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
@@ -50,7 +53,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IPuppetCapability;
 import thebetweenlands.api.capability.IPuppeteerCapability;
+import thebetweenlands.api.capability.ProtectionShield;
 import thebetweenlands.client.handler.WorldRenderHandler;
+import thebetweenlands.client.render.entity.RenderFortressBoss;
 import thebetweenlands.client.render.entity.RenderSwordEnergy;
 import thebetweenlands.client.render.entity.layer.LayerPuppetOverlay;
 import thebetweenlands.client.render.particle.BLParticles;
@@ -63,6 +68,8 @@ import thebetweenlands.common.entity.ai.puppet.EntityAIGoTo;
 import thebetweenlands.common.entity.ai.puppet.EntityAIGuardHome;
 import thebetweenlands.common.entity.ai.puppet.EntityAIPuppet;
 import thebetweenlands.common.entity.ai.puppet.EntityAIStay;
+import thebetweenlands.common.entity.mobs.EntityFortressBoss;
+import thebetweenlands.common.entity.mobs.EntityFortressBoss.AttackShieldResult;
 import thebetweenlands.common.item.equipment.ItemRing;
 import thebetweenlands.common.item.equipment.ItemRingOfRecruitment;
 import thebetweenlands.common.registries.CapabilityRegistry;
@@ -104,6 +111,25 @@ public class PuppetHandler {
 			if(controller != null && (source.getImmediateSource() == controller || source.getTrueSource() == controller)) {
 				event.setCanceled(true);
 				return;
+			}
+		}
+
+		//Check for shield protection
+		if(target.isSneaking()) {
+			IPuppeteerCapability shieldCap = target.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
+			if(shieldCap != null) {
+				ProtectionShield shield = shieldCap.getShield();
+				if(shield != null && shield.hasShield()) {
+					AttackShieldResult result = EntityFortressBoss.attackShield(target.world, shield, target.getPositionVector().add(0, 1, 0),
+							shield.getYaw(shieldCap.getShieldRotationTicks() + 1), shield.getPitch(shieldCap.getShieldRotationTicks() + 1), shield.getRoll(shieldCap.getShieldRotationTicks() + 1),
+							0.15f, new Object2IntOpenHashMap<>(), source, false);
+
+					if(result.deflected && result.shieldHit >= 0) {
+						shield.setActive(result.shieldHit, false);
+
+						event.setCanceled(true);
+					}
+				}
 			}
 		}
 
@@ -158,25 +184,25 @@ public class PuppetHandler {
 			}
 		}
 	}
-	
+
 	private static void cycleAiState(EntityLiving entity, IPuppetCapability cap, EntityPlayer player, BlockPos pos) {
 		if(!cap.getStay() && !cap.getGuard()) {
 			//From follow state to guard state
 			cap.setStay(false);
 			cap.setGuard(true, pos);
-			
+
 			player.sendStatusMessage(new TextComponentTranslation("chat.ring_of_recruitment.state.guard", entity.getDisplayName()), true);
 		} else if(cap.getGuard()) {
 			//From guard state to stay state
 			cap.setStay(true);
 			cap.setGuard(false, null);
-			
+
 			player.sendStatusMessage(new TextComponentTranslation("chat.ring_of_recruitment.state.stay", entity.getDisplayName()), true);
 		} else {
 			//From stay state to follow state
 			cap.setStay(false);
 			cap.setGuard(false, null);
-			
+
 			player.sendStatusMessage(new TextComponentTranslation("chat.ring_of_recruitment.state.follow", entity.getDisplayName()), true);
 		}
 	}
@@ -218,7 +244,7 @@ public class PuppetHandler {
 					} else {
 						living.enablePersistence();
 
-						if(controller instanceof EntityPlayer && living.getHealth() < living.getMaxHealth() - 2 && living.ticksExisted % 40 == 0 &&
+						if(controller instanceof EntityPlayer && living.getHealth() < living.getMaxHealth() - 1 && living.ticksExisted % 40 == 0 &&
 								((!cap.getStay() && !cap.getGuard()) || controller.getDistance(entity) < 6) &&
 								ItemRing.removeXp((EntityPlayer) controller, 3) >= 3) {
 
@@ -244,7 +270,7 @@ public class PuppetHandler {
 								protected double getTargetDistance() {
 									return 16;
 								}
-								
+
 								@Override
 								public boolean shouldExecute() {
 									if(super.shouldExecute()) {
@@ -266,20 +292,20 @@ public class PuppetHandler {
 
 						if(puppetAI == null) {
 							EntityAISwimming aiSwim = new EntityAISwimming(living);
-							
+
 							EntityAIStay aiStay = new EntityAIStay(living);
 							aiStay.setMutexBits(3); //11
 
 							EntityAIGuardHome aiGuardHome = null;
 							EntityAIWander aiWander = null;
-							
+
 							EntityAIBase aiAttack = null;
-							
+
 							if(living instanceof EntityCreature) {
 								aiGuardHome = new EntityAIGuardHome((EntityCreature) living, 1.0D, 24);
-								
+
 								aiWander = new EntityAIWander((EntityCreature) living, 1.0D);
-								
+
 								aiAttack = new EntityAIAttackMelee((EntityCreature) living, 1.2D, true) {
 									@Override
 									protected void checkAndPerformAttack(EntityLivingBase enemy, double distToEnemySqr) {
@@ -302,7 +328,7 @@ public class PuppetHandler {
 								aiAttack = new EntityAIAttackOnCollide(living, true);
 								aiAttack.setMutexBits(2); //10
 							}
-							
+
 							EntityAIGoTo aiGoTo = new EntityAIGoTo(living, 1.2D) {
 								@Override
 								public boolean shouldExecute() {
@@ -375,11 +401,11 @@ public class PuppetHandler {
 										living.motionZ + (living.world.rand.nextFloat() - 0.5F) / 8.0F * entity.width
 										).withData(40).withColor(0.2F, 0.8F, 0.4F, 1));
 					}
-					
+
 					if(living.ticksExisted % 50 == 0) {
 						ParticleArgs<?> args = ParticleArgs.get().withScale(1.5f).withColor(1, 1, 1, 0.3f).withData(living);
 						Particle particle;
-						
+
 						if(!cap.getStay() && !cap.getGuard()) {
 							particle = BLParticles.RING_OF_RECRUITMENT_FOLLOW.create(living.world, 0, living.height + 0.25f, 0, args);
 						} else if(cap.getStay()) {
@@ -387,7 +413,7 @@ public class PuppetHandler {
 						} else {
 							particle = BLParticles.RING_OF_RECRUITMENT_GUARD.create(living.world, 0, living.height + 0.25f, 0, args);
 						}
-						
+
 						BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, particle);
 					}
 				}
@@ -483,6 +509,17 @@ public class PuppetHandler {
 			IPuppeteerCapability cap = event.player.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
 
 			if (cap != null) {
+				ProtectionShield shield = cap.getShield();
+				if(shield != null) {
+					if(!event.player.world.isRemote && !ItemRingOfRecruitment.isRingActive(event.player, null) && shield.hasShield()) {
+						for(int i = 0; i < 20; i++) {
+							shield.setActive(i, false);
+						}
+					}
+
+					cap.updateShield();
+				}
+
 				Entity activatingEntity = cap.getActivatingEntity();
 
 				if (activatingEntity instanceof EntityLiving) {
@@ -593,6 +630,51 @@ public class PuppetHandler {
 				}
 			}
 		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public static void onRenderWorld(RenderWorldLastEvent event) {
+		EntityPlayer player = Minecraft.getMinecraft().player;
+		if(Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 && player != null && player.isSneaking()) {
+			IPuppeteerCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
+			if(cap != null) {
+				ProtectionShield shield = cap.getShield();
+				if(shield != null && shield.hasShield()) {
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(0, 1, 0);
+
+					renderShield(shield, cap, player, event.getPartialTicks(), 0.4f, 1, false);
+
+					GlStateManager.popMatrix();
+				}
+			}
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public static void onRenderPlayer(RenderPlayerEvent.Post event) {
+		EntityPlayer player = event.getEntityPlayer();
+		if(Minecraft.getMinecraft().gameSettings.thirdPersonView != 0 || player != Minecraft.getMinecraft().player) {
+			IPuppeteerCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
+			if(cap != null) {
+				ProtectionShield shield = cap.getShield();
+				if(shield != null && shield.hasShield()) {
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(event.getX(), event.getY() + 1, event.getZ());
+
+					renderShield(shield, cap, event.getEntityPlayer(), event.getPartialRenderTick(), 1, player.isSneaking() ? 1.0f : 0.15f, player.isSneaking());
+
+					GlStateManager.popMatrix();
+				}
+			}
+		}
+	}
+
+	private static void renderShield(ProtectionShield shield, IPuppeteerCapability cap, EntityPlayer player, float partialTicks, float insideAlpha, float alpha, boolean depthMask) {
+		float ticks = cap.getPrevShieldRotationTicks() + (cap.getShieldRotationTicks() - cap.getPrevShieldRotationTicks()) * partialTicks;
+		RenderFortressBoss.renderShield(shield, player.getPositionVector().add(0, 1, 0), shield.getYaw(ticks), shield.getPitch(ticks), shield.getRoll(ticks), 0.15f, player.ticksExisted, partialTicks, true, true, insideAlpha, insideAlpha * 0.45f, alpha, depthMask);
 	}
 
 	@SideOnly(Side.CLIENT)

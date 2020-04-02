@@ -27,7 +27,6 @@ import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.AbstractHorse;
-import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -51,10 +50,10 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IRingOfGatheringMinion;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.common.block.misc.BlockOctine;
+import thebetweenlands.common.entity.EntityTameableBL;
 import thebetweenlands.common.entity.ai.EntityAIFollowOwnerBL;
 import thebetweenlands.common.entity.ai.EntityAISitBL;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -62,7 +61,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityEmberling extends EntityTameable implements IEntityMultiPart, IEntityBL, IRingOfGatheringMinion {
+public class EntityEmberling extends EntityTameableBL implements IEntityMultiPart, IRingOfGatheringMinion {
 
 	public MultiPartEntityPart[] tailPart;
 	private static final DataParameter<Boolean> IS_FLAME_ATTACKING = EntityDataManager.<Boolean>createKey(EntityEmberling.class, DataSerializers.BOOLEAN);
