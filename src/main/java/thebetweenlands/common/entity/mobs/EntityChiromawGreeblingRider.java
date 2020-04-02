@@ -13,7 +13,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
@@ -41,6 +41,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 public class EntityChiromawGreeblingRider extends EntityChiromaw {
 	private static final DataParameter<Boolean> IS_SHOOTING = EntityDataManager.createKey(EntityChiromawGreeblingRider.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> RELOAD_TIMER = EntityDataManager.createKey(EntityChiromawGreeblingRider.class, DataSerializers.VARINT);
+	public boolean playPullSound;
 	public EntityChiromawGreeblingRider(World world) {
 		super(world);
 		setSize(0.7F, 0.9F);
@@ -59,6 +60,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 		tasks.addTask(1, new EntityChiromawGreeblingRider.EntityAISlingshotAttack(this));
 		tasks.addTask(2, new EntityChiromawGreeblingRider.EntityAIMoveTowardsTargetWithDistance(this, 1.25D, 8, 128));
 		targetTasks.addTask(1, new EntityAIFindNearestTarget<EntityLivingBase>(this, EntityLivingBase.class, 10, true, false, e -> e instanceof IPullerEntity).setUnseenMemoryTicks(160));
+		targetTasks.addTask(1, new EntityAIFindNearestTarget<EntityLivingBase>(this, EntityLivingBase.class, 10, true, false, e -> e instanceof EntitySheep).setUnseenMemoryTicks(160));
 	}
 
 	@Override
@@ -84,9 +86,18 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 			if (getReloadTimer() > 0 && !getIsShooting())
 				setReloadTimer(getReloadTimer() - 2);
 			}
+
+			if (getReloadTimer() <= 0)
+				playPullSound = true;
+
+			if (isPulling())
+				if (playPullSound) {
+					getEntityWorld().playSound(null, getPosition(), SoundRegistry.SLINGSHOT_CHARGE, SoundCategory.HOSTILE, 1F, 0.5F);
+					playPullSound = false;
+				}
 		}
 	}
-	
+
 	@Override
 	public void setDead() {
 		super.setDead();
@@ -115,6 +126,10 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 
 	public void setReloadTimer(int timer) {
 		dataManager.set(RELOAD_TIMER, timer);
+	}
+
+	public boolean isPulling() {
+		return dataManager.get(RELOAD_TIMER) > 0 && dataManager.get(RELOAD_TIMER) < 90 ;
 	}
 
 	@Override
@@ -247,12 +262,14 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 				EntityUnjustPebble pebble = new EntityUnjustPebble(chiromawRider.getEntityWorld(), chiromawRider);
 				pebble.shoot(targetX, targetY + targetDistance * 0.10000000298023224D, targetZ, 1.6F, 0F);
 				chiromawRider.getEntityWorld().spawnEntity(pebble);
-				chiromawRider.getEntityWorld().playSound(null, chiromawRider.getPosition(), SoundEvents.ENTITY_SKELETON_SHOOT, SoundCategory.HOSTILE, 0.5F, 1F + (chiromawRider.getEntityWorld().rand.nextFloat() - chiromawRider.getEntityWorld().rand.nextFloat()) * 0.8F);
+				chiromawRider.getEntityWorld().playSound(null, chiromawRider.getPosition(), SoundRegistry.SLINGSHOT_SHOOT, SoundCategory.HOSTILE, 1F, 1F + (chiromawRider.getEntityWorld().rand.nextFloat() - chiromawRider.getEntityWorld().rand.nextFloat()) * 0.8F);
+				chiromawRider.playPullSound = true;
 			}
 			if (chiromawRider.getReloadTimer() == 102) {
 				if (chiromawRider.getIsShooting()) {
 					chiromawRider.setIsShooting(false);
 					chiromawRider.setReloadTimer(0);
+					chiromawRider.playPullSound = true;
 				}
 			}
 		}
