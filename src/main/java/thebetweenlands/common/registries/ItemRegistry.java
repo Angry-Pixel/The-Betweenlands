@@ -105,6 +105,7 @@ import thebetweenlands.common.item.misc.ItemCavingRope;
 import thebetweenlands.common.item.misc.ItemCritters;
 import thebetweenlands.common.item.misc.ItemDentrothystShard;
 import thebetweenlands.common.item.misc.ItemDoorBetweenlands;
+import thebetweenlands.common.item.misc.ItemDraeton;
 import thebetweenlands.common.item.misc.ItemEmptyAmateMap;
 import thebetweenlands.common.item.misc.ItemGalleryFrame;
 import thebetweenlands.common.item.misc.ItemGem;
@@ -429,6 +430,12 @@ public class ItemRegistry {
     public static final Item SHAMBLER_TONGUE = new Item().setCreativeTab(BLCreativeTabs.ITEMS);
     public static final Item RUNE_DOOR_KEY = new ItemRuneDoorKey();
     public static final Item LURKER_SKIN_PATCH = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(16);
+    public static final Item DRAETON_BALLOON = new Item().setCreativeTab(BLCreativeTabs.ITEMS);
+    public static final Item DRAETON_BURNER = new Item().setCreativeTab(BLCreativeTabs.ITEMS);
+    public static final Item DRAETON = new ItemDraeton();
+    public static final Item DRAETON_UPGRADE_FURNACE = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1);
+    public static final Item DRAETON_UPGRADE_ANCHOR = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1);
+    public static final Item DRAETON_UPGRADE_CRAFTING = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1);
     
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();

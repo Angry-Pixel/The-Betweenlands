@@ -852,6 +852,12 @@ item.thebetweenlands.gallery_frame_large.name=Large Gallery Frame
 item.thebetweenlands.gallery_frame_very_large.name=Very Large Gallery Frame
 item.thebetweenlands.simple_slingshot.name=Simple Slingshot
 item.thebetweenlands.lurker_skin_patch.name=Lurker Skin Patch
+item.thebetweenlands.draeton.name=Draeton
+item.thebetweenlands.draeton_balloon.name=Draeton Balloon
+item.thebetweenlands.draeton_burner.name=Draeton Burner
+item.thebetweenlands.draeton_upgrade_anchor.name=Draeton Anchor Upgrade
+item.thebetweenlands.draeton_upgrade_furnace.name=Draeton Furnace Upgrade
+item.thebetweenlands.draeton_upgrade_crafting.name=Draeton Crafting Upgrade
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial

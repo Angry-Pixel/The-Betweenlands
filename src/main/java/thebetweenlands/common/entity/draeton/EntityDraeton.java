@@ -1644,14 +1644,18 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 				if(!this.world.isRemote) {
 					this.setTimeSinceHit(10);
-					this.setDamageTaken(Math.min(this.getDamageTaken() + amount * 10.0F, 30.0f));
+					if(isPlayerHit) {
+						this.setDamageTaken(this.getDamageTaken() + amount * 10.0F);
+					} else {
+						this.setDamageTaken(Math.min(this.getDamageTaken() + amount * 10.0F, 25.0f));
+					}
 
 					if(isPlayerHit) {
 						boolean isCreative = source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer)source.getTrueSource()).capabilities.isCreativeMode;
 
 						if (isCreative || this.getDamageTaken() > 40.0F) {
 							if (!isCreative && this.world.getGameRules().getBoolean("doEntityDrops")) {
-								//TODO Drop item
+								this.dropItemWithOffset(ItemRegistry.DRAETON, 1, 0.0F);
 							}
 
 							this.setDead();
@@ -1954,7 +1958,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	}
 
 	public boolean isFurnaceUpgrade(ItemStack stack) {
-		return stack.getItem() == Item.getItemFromBlock(BlockRegistry.SULFUR_FURNACE);
+		return stack.getItem() == ItemRegistry.DRAETON_UPGRADE_FURNACE;
 	}
 
 	public boolean isStorageUpgrade(ItemStack stack) {
@@ -1962,11 +1966,11 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	}
 
 	public boolean isCraftingUpgrade(ItemStack stack) {
-		return stack.getItem() == Item.getItemFromBlock(BlockRegistry.WEEDWOOD_WORKBENCH);
+		return stack.getItem() == ItemRegistry.DRAETON_UPGRADE_CRAFTING;
 	}
 
 	public boolean isAnchorUpgrade(ItemStack stack) {
-		return stack.getItem() == ItemRegistry.GRAPPLING_HOOK;
+		return stack.getItem() == ItemRegistry.DRAETON_UPGRADE_ANCHOR;
 	}
 
 	@Override

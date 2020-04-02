@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WFW",
+    "SIS"
+  ],
+  "key": {
+    "W": {
+      "item": "thebetweenlands:weedwood_plank_slab"
+    },
+    "S": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    },
+    "I": {
+      "item": "thebetweenlands:items_misc",
+      "data": 11
+    },
+    "F": {
+      "item": "thebetweenlands:sulfur_furnace"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:draeton_upgrade_furnace"
+  }
+}

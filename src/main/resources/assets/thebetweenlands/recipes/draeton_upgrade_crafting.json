@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WCW",
+    "SIS"
+  ],
+  "key": {
+    "W": {
+      "item": "thebetweenlands:weedwood_plank_slab"
+    },
+    "S": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    },
+    "I": {
+      "item": "thebetweenlands:octine_ingot"
+    },
+    "C": {
+      "item": "thebetweenlands:weedwood_workbench"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:draeton_upgrade_crafting"
+  }
+}
