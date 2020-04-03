@@ -13,7 +13,6 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
@@ -60,7 +59,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 		tasks.addTask(1, new EntityChiromawGreeblingRider.EntityAISlingshotAttack(this));
 		tasks.addTask(2, new EntityChiromawGreeblingRider.EntityAIMoveTowardsTargetWithDistance(this, 1.25D, 8, 128));
 		targetTasks.addTask(1, new EntityAIFindNearestTarget<EntityLivingBase>(this, EntityLivingBase.class, 10, true, false, e -> e instanceof IPullerEntity).setUnseenMemoryTicks(160));
-		targetTasks.addTask(1, new EntityAIFindNearestTarget<EntityLivingBase>(this, EntityLivingBase.class, 10, true, false, e -> e instanceof EntitySheep).setUnseenMemoryTicks(160));
+		//targetTasks.addTask(1, new EntityAIFindNearestTarget<EntityLivingBase>(this, EntityLivingBase.class, 10, true, false, e -> e instanceof EntitySheep).setUnseenMemoryTicks(160));
 	}
 
 	@Override
@@ -76,15 +75,15 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 		super.onUpdate();
 		// WIP Temp
 		if (!getEntityWorld().isRemote) {
-			if(getAttackTarget() != null) {
-			if (getReloadTimer() < 90 && !getIsShooting())
-				setReloadTimer(getReloadTimer() + 2);
-			if (getReloadTimer() >= 90 && getIsShooting() && getReloadTimer() < 100)
-				setReloadTimer(getReloadTimer() + 4);
+			if (getAttackTarget() != null) {
+				if (getReloadTimer() < 90 && !getIsShooting())
+					setReloadTimer(getReloadTimer() + 2);
+				if (getReloadTimer() >= 90 && getIsShooting() && getReloadTimer() < 100)
+					setReloadTimer(getReloadTimer() + 4);
 			}
-			if(getAttackTarget() == null) {
-			if (getReloadTimer() > 0 && !getIsShooting())
-				setReloadTimer(getReloadTimer() - 2);
+			if (getAttackTarget() == null) {
+				if (getReloadTimer() > 0 && !getIsShooting())
+					setReloadTimer(getReloadTimer() - 2);
 			}
 
 			if (getReloadTimer() <= 0)
@@ -202,7 +201,11 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 		@Override
 		public boolean shouldExecute() {
 			if (super.shouldExecute()) {
-				taskOwner.getEntityWorld().playSound(null, taskOwner.getPosition(), SoundRegistry.GREEBLING_HEY, SoundCategory.HOSTILE, 0.5F, 1F);
+				if (targetEntity != null) {
+					double distance = taskOwner.getDistanceSq(targetEntity);
+					if (distance <= 576.0D)
+						taskOwner.getEntityWorld().playSound(null, taskOwner.getPosition(), SoundRegistry.GREEBLING_HEY, SoundCategory.HOSTILE, 0.5F, 1F);
+				}
 				return true;
 			}
 			return false;
@@ -256,10 +259,10 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 
 		@Override
 		public void updateTask() {
+			if(!chiromawRider.getIsShooting())
+				chiromawRider.setIsShooting(true);
 			if(target != null) {
-					chiromawRider.faceEntity(target, 30F, 30F);
-				if(!chiromawRider.getIsShooting())
-					chiromawRider.setIsShooting(true);
+				chiromawRider.faceEntity(target, 30F, 30F);
 				chiromawRider.getLookHelper().setLookPositionWithEntity(target, 30.0F, 30.0F);
 				float f = (float) MathHelper.atan2(target.posZ - chiromawRider.posZ, target.posX - chiromawRider.posX);
 				int distance = MathHelper.floor(chiromawRider.getDistance(target));
@@ -275,18 +278,18 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 					chiromawRider.playPullSound = true;
 				}
 			}
-			if (chiromawRider.getReloadTimer() >= 102) {
+			if (chiromawRider.getReloadTimer() == 102) {
+				if (chiromawRider.getIsShooting()) {
+					chiromawRider.setIsShooting(false);
+					chiromawRider.setReloadTimer(0);
+					chiromawRider.playPullSound = true;
+				}
 				resetTask();
 			}
 		}
 
 		@Override
 	    public void resetTask() {
-			if (chiromawRider.getIsShooting()) {
-				chiromawRider.setIsShooting(false);
-				chiromawRider.setReloadTimer(0);
-				chiromawRider.playPullSound = true;
-			}
 	        target = null;
 	    }
 	}
@@ -317,7 +320,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 				return false;
 			} else if (chiromawRider.getDistanceSq(target) > (double) (maxTargetDistance * maxTargetDistance)) {
 				return false;
-			} else if (chiromawRider.getDistanceSq(target) > (double) (minTargetDistance * minTargetDistance) && chiromawRider.getDistanceSq(target) < (double) (maxTargetDistance * maxTargetDistance)) {
+			} else if (chiromawRider.getDistanceSq(target) > (double) (minTargetDistance * minTargetDistance) && chiromawRider.getDistanceSq(target) <= (double) (maxTargetDistance * maxTargetDistance)) {
 				Vec3d vec3d = findNextPointTowards(8, 3, new Vec3d(target.posX, target.posY, target.posZ));
 				if (vec3d == null) {
 					return false;
@@ -374,7 +377,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 
 		@Override
 	    public boolean shouldContinueExecuting() {
-	        return !chiromawRider.getNavigator().noPath() && target.isEntityAlive() && target.getDistanceSq(chiromawRider) < (double)(maxTargetDistance * maxTargetDistance);
+	        return !chiromawRider.getNavigator().noPath() && target.isEntityAlive() && target.getDistanceSq(chiromawRider) <= (double)(maxTargetDistance * maxTargetDistance);
 	    }
 
 		@Override
