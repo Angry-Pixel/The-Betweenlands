@@ -25,7 +25,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -69,7 +68,6 @@ import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsP
 import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsPart.Action;
 import thebetweenlands.common.network.clientbound.MessageSyncDraetonLeakages;
 import thebetweenlands.common.network.serverbound.MessageSetDraetonAnchorPos;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityDraetonFurnace;
@@ -179,6 +177,11 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 	private List<DraetonLeakage> leakages = new ArrayList<>();
 
+	protected int movementSyncTicks = 10;
+
+	protected float crashSpeedThreshold = 0.25f; //TODO adjust after speed rebalancing
+	protected int crashCooldown = 20;
+	
 	public EntityDraeton(World world) {
 		super(world);
 		this.setSize(1.5F, 1.5f);
@@ -672,14 +675,33 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		this.motionX *= drag;
 		this.motionZ *= drag;
 
+		float speed = MathHelper.sqrt(this.motionX*this.motionX + this.motionY*this.motionY + this.motionZ*this.motionZ);
+		
 		this.handleWaterMovement();
 		this.move(MoverType.SELF, this.motionX, this.motionY - 0.0000001f, this.motionZ);
 		this.pushOutOfBlocks(this.posX, this.posY, this.posZ);
 
-		if(this.canPassengerSteer()) {
+		float newSpeed = MathHelper.sqrt(this.motionX*this.motionX + this.motionY*this.motionY + this.motionZ*this.motionZ);
+		
+		if(!this.world.isRemote) {
+			if(this.crashCooldown > 0) {
+				if(!this.collided || this.onGround) {
+					this.crashCooldown--;
+				}
+			} else if(this.getControllingPassenger() != null && !this.dataManager.get(ANCHOR_FIXATED) && (this.collided || this.onGround) && speed > this.crashSpeedThreshold && speed - newSpeed > this.crashSpeedThreshold * 0.5f) {
+				float leakageChance = Math.min((speed - this.crashSpeedThreshold) * 3.0f, 0.5f) + 0.25f;
+				if(this.world.rand.nextFloat() < leakageChance) {
+					this.motionX = this.motionY = this.motionZ = 0;
+					this.crashCooldown = 20;
+					this.addLeakage(this.generateRandomLeakage());
+				}
+			}
+		}
+
+		if(!this.world.isRemote || this.canPassengerSteer()) {
 			Entity controller = this.getControllingPassenger();
 
-			if(this.world.isRemote && controller instanceof EntityLivingBase) {
+			if(this.world.isRemote && this.canPassengerSteer() && controller instanceof EntityLivingBase) {
 				controller.fallDistance = 0;
 
 				this.handleControllerMovement((EntityLivingBase) controller);
@@ -751,7 +773,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 		if(this.world instanceof WorldServer) {
 			//Send server state of parts to non-controller players
-			if(this.ticksExisted % 10 == 0) {
+			if(this.ticksExisted % this.movementSyncTicks == 0) {
 				for(DraetonPhysicsPart part : this.physicsParts) {
 					MessageUpdateDraetonPhysicsPart msg = new MessageUpdateDraetonPhysicsPart(this, part, MessageUpdateDraetonPhysicsPart.Action.UPDATE);
 
@@ -1189,9 +1211,9 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 				part.lerpZ = this.lerpZ + z;
 				part.lerpSteps = 10;
 			} else {
-				part.lerpX = part.x = this.posX + x;
-				part.lerpY = part.y = this.posY + y;
-				part.lerpZ = part.z = this.posZ + z;
+				part.lerpX = part.x = this.posX + x + part.motionX * this.movementSyncTicks;
+				part.lerpY = part.y = this.posY + y + part.motionY * this.movementSyncTicks;
+				part.lerpZ = part.z = this.posZ + z + part.motionZ * this.movementSyncTicks;
 			}
 
 			part.motionX = mx;
@@ -1383,7 +1405,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		}
 
 		//Send client state of parts to server
-		if(this.world.isRemote && this.canPassengerSteer() && this.ticksExisted % 10 == 0) {
+		if(this.world.isRemote && this.canPassengerSteer() && this.ticksExisted % this.movementSyncTicks == 0) {
 			for(DraetonPhysicsPart part : this.physicsParts) {
 				TheBetweenlands.networkWrapper.sendToServer(new MessageUpdateDraetonPhysicsPart(this, part, MessageUpdateDraetonPhysicsPart.Action.UPDATE));
 			}
@@ -1566,6 +1588,14 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		this.lerpYaw = (double)yaw;
 		this.lerpPitch = (double)pitch;
 		this.lerpSteps = 10;
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void setVelocity(double x, double y, double z) {
+		if(!this.canPassengerSteer()) {
+			super.setVelocity(x, y, z);
+		}
 	}
 
 	@Override
