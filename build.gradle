@@ -85,7 +85,7 @@ allprojects {
 	apply plugin: 'com.wynprice.cursemaven'
 	
 	minecraft {
-		version = "1.12.2-14.23.5.2768"
+		version = "1.12.2-14.23.5.2773"
 		runDir = 'minecraft'
 		replace '${version}', project.version
 		replace '${mcversion}', project.minecraft.version

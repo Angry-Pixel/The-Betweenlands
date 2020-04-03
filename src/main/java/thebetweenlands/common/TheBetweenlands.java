@@ -34,6 +34,7 @@ import thebetweenlands.common.command.CommandResetAspects;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.config.ConfigHelper;
 import thebetweenlands.common.entity.EntityVolarkite;
+import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.entity.mobs.EntitySludgeMenace;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.handler.AdvancementHandler;
@@ -264,5 +265,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(ItemRingOfGathering.class);
 		MinecraftForge.EVENT_BUS.register(EntityVolarkite.class);
 		MinecraftForge.EVENT_BUS.register(BLDataFixers.class);
+		MinecraftForge.EVENT_BUS.register(EntityDraeton.class);
 	}
 }
