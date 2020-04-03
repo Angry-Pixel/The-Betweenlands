@@ -39,7 +39,11 @@ public class GuiDraetonBurner extends GuiContainer {
 		this.renderHoveredToolTip(mouseX, mouseY);
 		
 		if(mouseX >= this.guiLeft + 82 && mouseY >= this.guiTop + 32 && mouseX < this.guiLeft + 94 && mouseY < this.guiTop + 65) {
-			this.drawHoveringText(MathHelper.ceil(this.draeton.getBurnerFuel() / (float)this.draeton.getMaxBurnerFuel() * 100) + "%", mouseX, mouseY);
+			if(this.draeton.getBurnerFuel() > 0) {
+				this.drawHoveringText(MathHelper.ceil(this.draeton.getBurnerFuel() / (float)this.draeton.getMaxBurnerFuel() * 100) + "%", mouseX, mouseY);
+			} else {
+				this.drawHoveringText(I18n.format("gui.bl.draeton.burner.fuel"), mouseX, mouseY);
+			}
 		}
 	}
 

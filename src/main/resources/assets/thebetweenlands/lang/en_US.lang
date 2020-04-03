@@ -1601,6 +1601,10 @@ gui.gallery.search=Search:
 gui.gallery.random=Randomize!
 gui.gallery.submission=Want to see your own fan art featured?\nSubmit it to {twitter} on Twitter\nor on our {discord} server using\nthe #BetweenlandsGallery hashtag!
 
+gui.bl.draeton.burner.fuel=Burner requires Shallowbreath fluid
+gui.bl.draeton.main.puller=Puller slot:\n§7 - Dragonfly\n§7 - Firefly
+gui.bl.draeton.main.upgrade_utility=Utility upgrade slot:\n§7 - Lurker Skin Pouch\n§7 - Draeton Crafting Upgrade\n§7 - Draeton Furnace Upgrade
+gui.bl.draeton.main.upgrade_anchor=Anchor upgrade slot:\n§7 - Draeton Anchor Upgrade
 
 # Advancements
 
