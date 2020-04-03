@@ -199,7 +199,7 @@ public class CommonProxy implements IGuiHandler {
 		case GUI_DRAETON_BURNER:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton)
-				return new ContainerDraetonBurner(player.inventory, ((EntityDraeton)entity).getBurnerInventory());
+				return new ContainerDraetonBurner(player.inventory, ((EntityDraeton)entity).getBurnerInventory(), (EntityDraeton)entity);
 			break;
 			
 		case GUI_DRAETON_UPGRADES:

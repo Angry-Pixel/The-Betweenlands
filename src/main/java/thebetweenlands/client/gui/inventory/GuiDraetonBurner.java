@@ -24,13 +24,20 @@ public class GuiDraetonBurner extends GuiContainer {
 	private final EntityDraeton draeton;
 
 	public GuiDraetonBurner(InventoryPlayer playerInventory, IInventory inventory, EntityDraeton draeton) {
-		super(new ContainerDraetonBurner(playerInventory, inventory));
+		super(new ContainerDraetonBurner(playerInventory, inventory, draeton));
 		this.draeton = draeton;
 
 		xSize = 176;
 		ySize = 168;
 	}
 
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		this.drawDefaultBackground();
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        this.renderHoveredToolTip(mouseX, mouseY);
+	}
+	
 	@Override
 	public void initGui() {
 		super.initGui();

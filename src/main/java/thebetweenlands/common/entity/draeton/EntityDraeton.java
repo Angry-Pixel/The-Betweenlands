@@ -52,6 +52,9 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.MapData;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
@@ -65,11 +68,11 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
-import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsPart;
 import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsPart.Action;
 import thebetweenlands.common.network.clientbound.MessageSyncDraetonLeakages;
 import thebetweenlands.common.network.serverbound.MessageSetDraetonAnchorPos;
+import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityDraetonFurnace;
@@ -170,7 +173,8 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	private boolean turnSoundRoll = false;
 	private boolean turnSoundPitch = false;
 
-	protected int maxFuel = 1000;
+	protected int fuelConversion = 3;
+	protected int maxFuel = 1000 * this.fuelConversion * 4;
 
 	private boolean wasBurnerRunning = false;
 
@@ -726,7 +730,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 					part.lerpZ = part.z;
 				}
 			}
-			
+
 			if(this.getPassengers().isEmpty() || this.physicsParts.isEmpty()) {
 				this.motionY -= 0.005f;
 			}
@@ -801,14 +805,27 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 				this.setBurnerFuel(Math.max(0, this.getBurnerFuel() - 1 - this.leakages.size()));
 			}
 
-			if(this.maxFuel - this.getBurnerFuel() > 100) {
-				ItemStack burnerStack = this.burnerInventory.getStackInSlot(0);
+			ItemStack burnerStack = this.burnerInventory.getStackInSlot(0);
 
-				//TODO Fuel item
-				if(!burnerStack.isEmpty() && EnumItemMisc.SULFUR.isItemOf(burnerStack)) {
-					burnerStack.shrink(1);
+			if(!burnerStack.isEmpty()) {
+				IFluidHandlerItem handler = burnerStack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 
-					this.setBurnerFuel(this.getBurnerFuel() + 100);
+				if(handler != null) {
+					FluidStack drained = handler.drain(new FluidStack(FluidRegistry.SHALLOWBREATH, 1000), false);
+
+					if(drained != null) {
+						int space = this.maxFuel - this.getBurnerFuel();
+						int toDrain = Math.min(space / this.fuelConversion, drained.amount);
+
+						if(toDrain > 0) {
+							drained = handler.drain(new FluidStack(FluidRegistry.SHALLOWBREATH, toDrain), true);
+
+							if(drained != null) {
+								this.setBurnerFuel(this.getBurnerFuel() + drained.amount * this.fuelConversion);
+								this.burnerInventory.setInventorySlotContents(0, handler.getContainer());
+							}
+						}
+					}
 				}
 			}
 		} else {
@@ -831,7 +848,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 	@SideOnly(Side.CLIENT)
 	protected void spawnBurnerFlame() {
-		BLParticles.DRAETON_BURNER_FLAME.spawn(this.world, 0, 0, 0, ParticleArgs.get().withMotion(0, 0.1D, 0).withData(this));
+		BLParticles.DRAETON_BURNER_FLAME.spawn(this.world, 0, 0, 0, ParticleArgs.get().withMotion(0, 0.1D, 0).withColor(0, 0.8f, 1, 0.8f).withData(this));
 	}
 
 	@SideOnly(Side.CLIENT)

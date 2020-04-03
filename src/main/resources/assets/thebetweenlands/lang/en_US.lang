@@ -873,6 +873,8 @@ item.thebetweenlands.elixir.dentrothyst_vial.green.filled.name=Green Dentrothyst
 item.thebetweenlands.elixir.dentrothyst_vial.orange.filled.name=Orange Dentrothyst Vial (%s)
 item.thebetweenlands.elixir.dentrothyst_vial.green.fluid.fog.name=Bottled Fog
 item.thebetweenlands.elixir.dentrothyst_vial.orange.fluid.fog.name=Bottled Fog
+item.thebetweenlands.elixir.dentrothyst_vial.green.fluid.shallowbreath.name=Bottled Shallowbreath
+item.thebetweenlands.elixir.dentrothyst_vial.orange.fluid.shallowbreath.name=Bottled Shallowbreath
 
 # Fluids
 fluid.swamp_water=Swamp Water
@@ -880,6 +882,7 @@ fluid.tar=Tar
 fluid.stagnant_water=Stagnant Water
 fluid.rubber=Rubber
 fluid.fog=Fog
+fluid.shallowbreath=Shallowbreath
 
 # Creative Tabs
 itemGroup.thebetweenlands.block=The Betweenlands Blocks
