@@ -96,7 +96,7 @@ public class ItemMob extends Item {
 			NBTTagCompound entityNbt = nbt.getCompoundTag("Entity");
 
 			if(entityNbt.hasKey("id", Constants.NBT.TAG_STRING)) {
-				Class<? extends Entity> entityCls = EntityList.getClassFromName(entityNbt.getString("id"));
+				Class<? extends Entity> entityCls = EntityList.getClass(new ResourceLocation(entityNbt.getString("id")));
 				return entityCls != null && cls.isAssignableFrom(entityCls);
 			}
 		}
