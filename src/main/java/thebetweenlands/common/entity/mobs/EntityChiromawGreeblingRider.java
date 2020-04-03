@@ -246,7 +246,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 
 		@Override
 		public boolean shouldContinueExecuting() {
-			return chiromawRider.recentlyHit <= 40 && chiromawRider.getReloadTimer() >= 90;
+			return target != null && chiromawRider.recentlyHit <= 40 && chiromawRider.getReloadTimer() >= 90;
 		}
 
 		@Override
@@ -256,35 +256,37 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 
 		@Override
 		public void updateTask() {
-			EntityLivingBase entitylivingbase = chiromawRider.getAttackTarget();
-			chiromawRider.faceEntity(entitylivingbase, 30F, 30F);
-			if(!chiromawRider.getIsShooting())
-				chiromawRider.setIsShooting(true);
-			chiromawRider.getLookHelper().setLookPositionWithEntity(target, 30.0F, 30.0F);
-			float f = (float) MathHelper.atan2(target.posZ - chiromawRider.posZ, target.posX - chiromawRider.posX);
-			int distance = MathHelper.floor(chiromawRider.getDistance(target));
-			if (chiromawRider.getReloadTimer() == 90) {
-				double targetX = entitylivingbase.posX - chiromawRider.posX;
-				double targetY = entitylivingbase.getEntityBoundingBox().minY + (double) (entitylivingbase.height / 2.0F) - (chiromawRider.posY + (double) (chiromawRider.height / 2.0F));
-				double targetZ = entitylivingbase.posZ - chiromawRider.posZ;
-				double targetDistance = (double) MathHelper.sqrt(targetX * targetX + targetZ * targetZ);
-				EntityBetweenstonePebble pebble = new EntityBetweenstonePebble(chiromawRider.getEntityWorld(), chiromawRider);
-				pebble.shoot(targetX, targetY + targetDistance * 0.10000000298023224D, targetZ, 1.6F, 0F);
-				chiromawRider.getEntityWorld().spawnEntity(pebble);
-				chiromawRider.getEntityWorld().playSound(null, chiromawRider.getPosition(), SoundRegistry.SLINGSHOT_SHOOT, SoundCategory.HOSTILE, 1F, 1F + (chiromawRider.getEntityWorld().rand.nextFloat() - chiromawRider.getEntityWorld().rand.nextFloat()) * 0.8F);
-				chiromawRider.playPullSound = true;
-			}
-			if (chiromawRider.getReloadTimer() == 102) {
-				if (chiromawRider.getIsShooting()) {
-					chiromawRider.setIsShooting(false);
-					chiromawRider.setReloadTimer(0);
+			if(target != null) {
+					chiromawRider.faceEntity(target, 30F, 30F);
+				if(!chiromawRider.getIsShooting())
+					chiromawRider.setIsShooting(true);
+				chiromawRider.getLookHelper().setLookPositionWithEntity(target, 30.0F, 30.0F);
+				float f = (float) MathHelper.atan2(target.posZ - chiromawRider.posZ, target.posX - chiromawRider.posX);
+				int distance = MathHelper.floor(chiromawRider.getDistance(target));
+				if (chiromawRider.getReloadTimer() == 90) {
+					double targetX = target.posX - chiromawRider.posX;
+					double targetY = target.getEntityBoundingBox().minY + (double) (target.height / 2.0F) - (chiromawRider.posY + (double) (chiromawRider.height / 2.0F));
+					double targetZ = target.posZ - chiromawRider.posZ;
+					double targetDistance = (double) MathHelper.sqrt(targetX * targetX + targetZ * targetZ);
+					EntityBetweenstonePebble pebble = new EntityBetweenstonePebble(chiromawRider.getEntityWorld(), chiromawRider);
+					pebble.shoot(targetX, targetY + targetDistance * 0.10000000298023224D, targetZ, 1.6F, 0F);
+					chiromawRider.getEntityWorld().spawnEntity(pebble);
+					chiromawRider.getEntityWorld().playSound(null, chiromawRider.getPosition(), SoundRegistry.SLINGSHOT_SHOOT, SoundCategory.HOSTILE, 1F, 1F + (chiromawRider.getEntityWorld().rand.nextFloat() - chiromawRider.getEntityWorld().rand.nextFloat()) * 0.8F);
 					chiromawRider.playPullSound = true;
 				}
+			}
+			if (chiromawRider.getReloadTimer() >= 102) {
+				resetTask();
 			}
 		}
 
 		@Override
 	    public void resetTask() {
+			if (chiromawRider.getIsShooting()) {
+				chiromawRider.setIsShooting(false);
+				chiromawRider.setReloadTimer(0);
+				chiromawRider.playPullSound = true;
+			}
 	        target = null;
 	    }
 	}
@@ -316,7 +318,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 			} else if (chiromawRider.getDistanceSq(target) > (double) (maxTargetDistance * maxTargetDistance)) {
 				return false;
 			} else if (chiromawRider.getDistanceSq(target) > (double) (minTargetDistance * minTargetDistance) && chiromawRider.getDistanceSq(target) < (double) (maxTargetDistance * maxTargetDistance)) {
-				Vec3d vec3d = findNextPointTowards(3, 3, new Vec3d(target.posX, target.posY, target.posZ));
+				Vec3d vec3d = findNextPointTowards(8, 3, new Vec3d(target.posX, target.posY, target.posZ));
 				if (vec3d == null) {
 					return false;
 				} else {
