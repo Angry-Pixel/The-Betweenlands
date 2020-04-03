@@ -196,7 +196,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 				this.guiPart = new EntityDraetonInteractionPart(this, "gui", 0.5f, 0.5f, false),
 						this.upgradePart1 = new EntityDraetonInteractionPart(this, "upgrade_1", 0.5f, 0.75f, false), this.upgradePart2 = new EntityDraetonInteractionPart(this, "upgrade_2", 0.5f, 0.75f, false),
 						this.upgradePart3 = new EntityDraetonInteractionPart(this, "upgrade_3", 0.5f, 0.75f, false), this.upgradePart4 = new EntityDraetonInteractionPart(this, "upgrade_4", 0.5f, 0.75f, false),
-						this.burnerPart = new EntityDraetonInteractionPart(this, "burner", 0.7f, 0.2f, false),
+						this.burnerPart = new EntityDraetonInteractionPart(this, "burner", 0.75f, 0.2f, false),
 						this.upgradeAnchorPart = new EntityDraetonInteractionPart(this, "upgrade_anchor", 0.5f, 0.5f, false),
 						this.upgradeFramePart = new EntityDraetonInteractionPart(this, "upgrade_frame", 0.5f, 0.5f, false),
 						this.balloonFront = new EntityDraetonInteractionPart(this, "balloon_front", 1.5f, 1.0f, true), this.balloonMiddle = new EntityDraetonInteractionPart(this, "balloon_middle", 1.5f, 1.0f, true), this.balloonBack = new EntityDraetonInteractionPart(this, "balloon_back", 1.5f, 1.0f, true)
@@ -1525,6 +1525,10 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 	public int getBurnerFuel() {
 		return this.dataManager.get(BURNER_FUEL);
+	}
+	
+	public int getMaxBurnerFuel() {
+		return this.maxFuel;
 	}
 
 	public void setBurnerFuel(int fuel) {

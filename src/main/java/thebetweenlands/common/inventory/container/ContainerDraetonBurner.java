@@ -15,7 +15,7 @@ public class ContainerDraetonBurner extends Container {
 	public ContainerDraetonBurner(InventoryPlayer playerInventory, IInventory entityInventory, EntityDraeton draeton) {
 		this.draeton = draeton;
 
-		addSlotToContainer(new Slot(entityInventory, 0, 8 + 4 * 18, 36));
+		addSlotToContainer(new Slot(entityInventory, 0, 37, 40));
 
 		int i = -18;
 
