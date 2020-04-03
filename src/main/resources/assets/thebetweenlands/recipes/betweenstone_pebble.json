@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+   "#"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:betweenstone"
+    }
+  },
+  "result": {
+     "item": "thebetweenlands:items_misc",
+      "data": 50,
+      "count": 2
+  }
+}
