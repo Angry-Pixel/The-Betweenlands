@@ -51,6 +51,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.MapData;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.entity.ProjectileImpactEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -181,7 +183,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 	protected float crashSpeedThreshold = 0.25f; //TODO adjust after speed rebalancing
 	protected int crashCooldown = 20;
-	
+
 	public EntityDraeton(World world) {
 		super(world);
 		this.setSize(1.5F, 1.5f);
@@ -190,7 +192,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 				this.guiPart = new EntityDraetonInteractionPart(this, "gui", 0.5f, 0.5f, false),
 						this.upgradePart1 = new EntityDraetonInteractionPart(this, "upgrade_1", 0.5f, 0.75f, false), this.upgradePart2 = new EntityDraetonInteractionPart(this, "upgrade_2", 0.5f, 0.75f, false),
 						this.upgradePart3 = new EntityDraetonInteractionPart(this, "upgrade_3", 0.5f, 0.75f, false), this.upgradePart4 = new EntityDraetonInteractionPart(this, "upgrade_4", 0.5f, 0.75f, false),
-						this.burnerPart = new EntityDraetonInteractionPart(this, "burner", 0.7f, 0.5f, false),
+						this.burnerPart = new EntityDraetonInteractionPart(this, "burner", 0.7f, 0.2f, false),
 						this.upgradeAnchorPart = new EntityDraetonInteractionPart(this, "upgrade_anchor", 0.5f, 0.5f, false),
 						this.upgradeFramePart = new EntityDraetonInteractionPart(this, "upgrade_frame", 0.5f, 0.5f, false),
 						this.balloonFront = new EntityDraetonInteractionPart(this, "balloon_front", 1.5f, 1.0f, true), this.balloonMiddle = new EntityDraetonInteractionPart(this, "balloon_middle", 1.5f, 1.0f, true), this.balloonBack = new EntityDraetonInteractionPart(this, "balloon_back", 1.5f, 1.0f, true)
@@ -676,13 +678,13 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		this.motionZ *= drag;
 
 		float speed = MathHelper.sqrt(this.motionX*this.motionX + this.motionY*this.motionY + this.motionZ*this.motionZ);
-		
+
 		this.handleWaterMovement();
 		this.move(MoverType.SELF, this.motionX, this.motionY - 0.0000001f, this.motionZ);
 		this.pushOutOfBlocks(this.posX, this.posY, this.posZ);
 
 		float newSpeed = MathHelper.sqrt(this.motionX*this.motionX + this.motionY*this.motionY + this.motionZ*this.motionZ);
-		
+
 		if(!this.world.isRemote) {
 			if(this.crashCooldown > 0) {
 				if(!this.collided || this.onGround) {
@@ -693,7 +695,9 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 				if(this.world.rand.nextFloat() < leakageChance) {
 					this.motionX = this.motionY = this.motionZ = 0;
 					this.crashCooldown = 20;
-					this.addLeakage(this.generateRandomLeakage());
+					if(this.leakages.size() < 16) {
+						this.addLeakage(this.generateRandomLeakage());
+					}
 				}
 			}
 		}
@@ -722,20 +726,18 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 					part.lerpZ = part.z;
 				}
 			}
-		} else if(this.world.isRemote) {
-			this.motionX = this.motionY = this.motionZ = 0;
-
-			for(DraetonPhysicsPart part : this.physicsParts) {
-				part.tickLerp();
-			}
-		}
-
-		if(this.canPassengerSteer()) {
+			
 			if(this.getPassengers().isEmpty() || this.physicsParts.isEmpty()) {
 				this.motionY -= 0.005f;
 			}
 			if(!this.isBurnerRunning()) {
 				this.motionY -= 0.06f;
+			}
+		} else if(this.world.isRemote) {
+			this.motionX = this.motionY = this.motionZ = 0;
+
+			for(DraetonPhysicsPart part : this.physicsParts) {
+				part.tickLerp();
 			}
 		}
 
@@ -1855,10 +1857,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 	@Override
 	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float damage) {
-		if(part == this.balloonFront || part == this.balloonMiddle || part == this.balloonBack) {
-			this.attackEntityFrom(source, damage);
-		}
-		return false;
+		return this.attackEntityFrom(source, damage);
 	}
 
 	protected boolean interactFromMultipart(EntityDraetonInteractionPart part, EntityPlayer player, EnumHand hand) {
@@ -2012,5 +2011,13 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	public void readSpawnData(ByteBuf buffer) {
 		this.leakages.clear();
 		MessageSyncDraetonLeakages.deserialize(this.leakages, new PacketBuffer(buffer));
+	}
+
+	@SubscribeEvent
+	public static void onProjectileImpact(ProjectileImpactEvent event) {
+		Entity target = event.getRayTraceResult().entityHit;
+		if(event.getEntity().ticksExisted < 3 && (target instanceof EntityDraeton || target instanceof EntityDraetonInteractionPart)) {
+			event.setCanceled(true);
+		}
 	}
 }
