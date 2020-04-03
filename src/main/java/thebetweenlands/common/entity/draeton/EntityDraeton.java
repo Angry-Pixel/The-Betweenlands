@@ -695,7 +695,9 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 				if(this.world.rand.nextFloat() < leakageChance) {
 					this.motionX = this.motionY = this.motionZ = 0;
 					this.crashCooldown = 20;
-					this.addLeakage(this.generateRandomLeakage());
+					if(this.leakages.size() < 16) {
+						this.addLeakage(this.generateRandomLeakage());
+					}
 				}
 			}
 		}
