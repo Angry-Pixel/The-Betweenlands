@@ -724,20 +724,18 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 					part.lerpZ = part.z;
 				}
 			}
-		} else if(this.world.isRemote) {
-			this.motionX = this.motionY = this.motionZ = 0;
-
-			for(DraetonPhysicsPart part : this.physicsParts) {
-				part.tickLerp();
-			}
-		}
-
-		if(this.canPassengerSteer()) {
+			
 			if(this.getPassengers().isEmpty() || this.physicsParts.isEmpty()) {
 				this.motionY -= 0.005f;
 			}
 			if(!this.isBurnerRunning()) {
 				this.motionY -= 0.06f;
+			}
+		} else if(this.world.isRemote) {
+			this.motionX = this.motionY = this.motionZ = 0;
+
+			for(DraetonPhysicsPart part : this.physicsParts) {
+				part.tickLerp();
 			}
 		}
 
