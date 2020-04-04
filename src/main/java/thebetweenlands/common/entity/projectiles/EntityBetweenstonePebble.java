@@ -50,7 +50,7 @@ public class EntityBetweenstonePebble extends Entity implements IProjectile, ITh
 
 	public EntityBetweenstonePebble(World world) {
 		super(world);
-		damage = 2.0D;
+		damage = 1.0D;
 		setSize(0.5F, 0.5F);
 	}
 
