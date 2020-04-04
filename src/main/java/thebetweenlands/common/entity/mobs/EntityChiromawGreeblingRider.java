@@ -272,6 +272,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 					double targetZ = target.posZ - chiromawRider.posZ;
 					double targetDistance = (double) MathHelper.sqrt(targetX * targetX + targetZ * targetZ);
 					EntityBetweenstonePebble pebble = new EntityBetweenstonePebble(chiromawRider.getEntityWorld(), chiromawRider);
+					pebble.setDamage(2D);
 					pebble.shoot(targetX, targetY + targetDistance * 0.10000000298023224D, targetZ, 1.6F, 0F);
 					chiromawRider.getEntityWorld().spawnEntity(pebble);
 					chiromawRider.getEntityWorld().playSound(null, chiromawRider.getPosition(), SoundRegistry.SLINGSHOT_SHOOT, SoundCategory.HOSTILE, 1F, 1F + (chiromawRider.getEntityWorld().rand.nextFloat() - chiromawRider.getEntityWorld().rand.nextFloat()) * 0.8F);
