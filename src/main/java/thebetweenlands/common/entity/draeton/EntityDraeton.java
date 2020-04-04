@@ -700,8 +700,11 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		float speed = MathHelper.sqrt(this.motionX*this.motionX + this.motionY*this.motionY + this.motionZ*this.motionZ);
 
 		this.handleWaterMovement();
-		this.move(MoverType.SELF, this.motionX, this.motionY - 0.0000001f, this.motionZ);
-		this.pushOutOfBlocks(this.posX, this.posY, this.posZ);
+		
+		if(!this.world.isRemote || this.canPassengerSteer()) {
+			this.move(MoverType.SELF, this.motionX, this.motionY - 0.0000001f, this.motionZ);
+			this.pushOutOfBlocks(this.posX, this.posY, this.posZ);
+		}
 
 		float newSpeed = MathHelper.sqrt(this.motionX*this.motionX + this.motionY*this.motionY + this.motionZ*this.motionZ);
 
@@ -765,34 +768,6 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 		this.updatePullerSlots();
 
-		if(this.world.isRemote) {
-			this.balloonMotion = this.balloonMotion.add(0, 0.125f, 0).scale(0.9f);
-
-			this.prevBalloonPos = this.balloonPos;
-			this.balloonPos = this.balloonPos.add(this.balloonMotion);
-
-			for(int i = 0; i < 8; i++) {
-				Vec3d balloonConnection = this.getBalloonRopeConnection(i, 1);
-				Vec3d tetherPos = this.getPositionVector().add(this.getCarriageRopeConnection(i, 1));
-
-				Vec3d diff = balloonConnection.subtract(tetherPos);
-
-				float tetherLength = 2.0f + (float)Math.sin(this.ticksExisted * 0.1f) * 0.05f;
-
-				if(diff.length() > 6.0f) {
-					this.balloonPos = this.getPositionVector().add(0, 1, 0);
-				} else if(diff.length() > tetherLength) {
-					Vec3d correction = diff.normalize().scale(-(diff.length() - tetherLength));
-					this.balloonPos = this.balloonPos.add(correction.scale(0.75f));
-
-					this.balloonMotion = this.balloonMotion.add(correction.scale(1.25f));
-				}
-			}
-		} else {
-			this.balloonMotion = Vec3d.ZERO;
-			this.prevBalloonPos = this.balloonPos = this.getPositionVector().add(0, 2.5f, 0);
-		}
-
 		if(this.world instanceof WorldServer) {
 			//Send server state of parts to non-controller players
 			if(this.ticksExisted % this.movementSyncTicks == 0) {
@@ -809,8 +784,6 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 				}
 			}
 		}
-
-		this.updateParts();
 
 		this.firstUpdate = false;
 	}
@@ -946,8 +919,48 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 			this.anchorRetractTicks = Math.max(0, this.anchorRetractTicks - 1);
 		}
 
+		//Leakage particles
+		if(this.world.isRemote && this.isLeaking()) {
+			for(DraetonLeakage leakage : this.leakages) {
+				Vec3d leakagePos = this.getBalloonPos(1).add(this.getRotatedBalloonPoint(leakage.pos, 1));
+				Vec3d leakageDir = this.getRotatedBalloonPoint(leakage.dir, 1);
+				this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, leakagePos.x, leakagePos.y, leakagePos.z, this.motionX + leakageDir.x * 0.1f, this.motionY + leakageDir.y * 0.1f, this.motionZ + leakageDir.z * 0.1f);
+			}
+		}
+
 		for(Entity entity : this.parts) {
 			entity.onUpdate();
+		}
+
+		this.updatePartPositions();
+	}
+
+	protected void updatePartPositions() {
+		if(this.world.isRemote) {
+			this.balloonMotion = this.balloonMotion.add(0, 0.125f, 0).scale(0.9f);
+			
+			this.balloonPos = this.balloonPos.add(this.balloonMotion);
+
+			for(int i = 0; i < 8; i++) {
+				Vec3d balloonConnection = this.getBalloonRopeConnection(i, 1);
+				Vec3d tetherPos = this.getPositionVector().add(this.getCarriageRopeConnection(i, 1));
+
+				Vec3d diff = balloonConnection.subtract(tetherPos);
+
+				float tetherLength = 2.0f + (float)Math.sin(this.ticksExisted * 0.1f) * 0.05f;
+
+				if(diff.length() > 6.0f) {
+					this.balloonPos = this.getPositionVector().add(0, 1, 0);
+				} else if(diff.length() > tetherLength) {
+					Vec3d correction = diff.normalize().scale(-(diff.length() - tetherLength));
+					this.balloonPos = this.balloonPos.add(correction.scale(0.75f));
+
+					this.balloonMotion = this.balloonMotion.add(correction.scale(1.25f));
+				}
+			}
+		} else {
+			this.balloonMotion = Vec3d.ZERO;
+			this.prevBalloonPos = this.balloonPos = this.getPositionVector().add(0, 2.5f, 0);
 		}
 
 		//Set leakage part positions
@@ -959,15 +972,6 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 			DraetonLeakage leakage = this.leakages.get(i);
 			Vec3d leakagePos = this.getBalloonPos(1).add(this.getRotatedBalloonPoint(leakage.pos, 1));
 			this.leakageParts[i].setPosition(leakagePos.x, leakagePos.y - this.leakageParts[i].height / 2.0f, leakagePos.z);
-		}
-
-		//Leakage particles
-		if(this.world.isRemote && this.isLeaking()) {
-			for(DraetonLeakage leakage : this.leakages) {
-				Vec3d leakagePos = this.getBalloonPos(1).add(this.getRotatedBalloonPoint(leakage.pos, 1));
-				Vec3d leakageDir = this.getRotatedBalloonPoint(leakage.dir, 1);
-				this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, leakagePos.x, leakagePos.y, leakagePos.z, this.motionX + leakageDir.x * 0.1f, this.motionY + leakageDir.y * 0.1f, this.motionZ + leakageDir.z * 0.1f);
-			}
 		}
 
 		Vec3d guiPos = this.getRotatedCarriagePoint(new Vec3d(0, 0.05D, 0.25D), 1).add(this.posX, this.posY, this.posZ);
@@ -1008,6 +1012,8 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	public void onUpdate() {
 		this.prevRotationRoll = this.rotationRoll;
 
+		this.prevBalloonPos = this.balloonPos;
+		
 		if(this.getControllingPassenger() == null) {
 			this.descend = false;
 		}
@@ -1128,6 +1134,8 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 		this.tickLerp();
 
+		this.updateParts();
+
 		if(this.dataManager.get(ANCHOR_FIXATED) && this.anchorPhysicsPart != null) {
 			BlockPos anchorPos = this.getAnchorPos();
 			this.anchorPhysicsPart.prevX = this.anchorPhysicsPart.x = anchorPos.getX() + 0.5f;
@@ -1242,6 +1250,10 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 				part.move((this.posX - startX) * drag, (this.posY - startY) * drag, (this.posZ - startZ) * drag);
 			}
 		}
+
+		if(this.world.isRemote && !this.canPassengerSteer()) {
+			this.balloonPos = this.balloonPos.add(this.posX - startX, this.posY - startY, this.posZ - startZ);
+		}
 	}
 
 	public void setPacketRelativePartPosition(DraetonPhysicsPart part, float x, float y, float z, float mx, float my, float mz) {
@@ -1251,14 +1263,20 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		if (entity instanceof EntityPlayer == false || !((EntityPlayer)entity).isUser()) {
 			if(this.world.isRemote) {
 				//interpolate on client side
-				part.lerpX = this.lerpX + x;
-				part.lerpY = this.lerpY + y;
-				part.lerpZ = this.lerpZ + z;
+				part.lerpX = this.posX + x;
+				part.lerpY = this.posY + y;
+				part.lerpZ = this.posZ + z;
 				part.lerpSteps = 10;
 			} else {
-				part.lerpX = part.x = this.posX + x + part.motionX * this.movementSyncTicks;
-				part.lerpY = part.y = this.posY + y + part.motionY * this.movementSyncTicks;
-				part.lerpZ = part.z = this.posZ + z + part.motionZ * this.movementSyncTicks;
+				if(part.type == DraetonPhysicsPart.Type.PULLER) {
+					part.lerpX = part.x = this.posX + x + part.motionX * this.movementSyncTicks;
+					part.lerpY = part.y = this.posY + y + part.motionY * this.movementSyncTicks;
+					part.lerpZ = part.z = this.posZ + z + part.motionZ * this.movementSyncTicks;
+				} else {
+					part.lerpX = part.x = this.posX + x;
+					part.lerpY = part.y = this.posY + y;
+					part.lerpZ = part.z = this.posZ + z;
+				}
 			}
 
 			part.motionX = mx;
@@ -1712,6 +1730,9 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		}
 
 		this.prevBalloonPos = this.balloonPos = this.balloonPos.add(dx, dy, dz);
+		
+		//Update multipart positions
+		this.updatePartPositions();
 	}
 
 	@Override
