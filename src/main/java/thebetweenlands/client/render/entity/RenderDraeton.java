@@ -36,10 +36,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelDraetonBalloon;
 import thebetweenlands.client.render.model.entity.ModelDraetonCarriage;
+import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeAnchor;
 import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeCrafting;
 import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeFurnace;
 import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeStorage;
-import thebetweenlands.client.render.model.entity.ModelShambler;
 import thebetweenlands.common.entity.draeton.DraetonLeakage;
 import thebetweenlands.common.entity.draeton.DraetonPhysicsPart;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
@@ -49,17 +49,17 @@ import thebetweenlands.common.lib.ModInfo;
 public class RenderDraeton extends Render<EntityDraeton> {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_carriage.png");
 	private static final ResourceLocation TEXTURE_BALLOON = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_balloon.png");
+	private static final ResourceLocation TEXTURE_ANCHOR = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_upgrade_anchor.png");
 	private static final ResourceLocation TEXTURE_CRAFTING = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_upgrade_crafting.png");
 	private static final ResourceLocation TEXTURE_STORAGE = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_upgrade_storage.png");
 	private static final ResourceLocation TEXTURE_FURNACE = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_upgrade_furnace.png");
-	private static final ResourceLocation TEXTURE_SHAMBLER = new ResourceLocation("thebetweenlands:textures/entity/shambler.png");
 	private static final ResourceLocation TEXTURE_LEAKAGE_HOLE = new ResourceLocation("thebetweenlands:textures/entity/leakage_hole.png");
 
 	private static final ResourceLocation MAP_BACKGROUND_TEXTURES = new ResourceLocation("textures/map/map_background.png");
 
 	private final ModelDraetonCarriage modelCarriage = new ModelDraetonCarriage();
 	private final ModelDraetonBalloon modelBalloon = new ModelDraetonBalloon();
-	private final ModelShambler modelShambler = new ModelShambler();
+	private final ModelDraetonUpgradeAnchor modelAnchor = new ModelDraetonUpgradeAnchor();
 	private final ModelDraetonUpgradeCrafting modelCrafting = new ModelDraetonUpgradeCrafting();
 	private final ModelDraetonUpgradeStorage modelStorage = new ModelDraetonUpgradeStorage();
 	private final ModelDraetonUpgradeFurnace modelFurnace = new ModelDraetonUpgradeFurnace();
@@ -165,15 +165,11 @@ public class RenderDraeton extends Render<EntityDraeton> {
 
 				this.renderConnection(tessellator, buffer, 0, 0, 0, dinterpX - x - pullPoint.x, dinterpY - y - pullPoint.y + 0.25f, dinterpZ - z - pullPoint.z);
 
-				GlStateManager.translate(dinterpX - x - pullPoint.x, dinterpY - y - pullPoint.y, dinterpZ - z - pullPoint.z);
-				GlStateManager.rotate(90, 1, 0, 0);
-				GlStateManager.translate(0, -1f, -0.135f);
-				GlStateManager.disableCull();
+				GlStateManager.translate(dinterpX - x - pullPoint.x, dinterpY - y - pullPoint.y + 0.3f, dinterpZ - z - pullPoint.z);
+				GlStateManager.scale(-1, -1, 1);
 
-				this.bindTexture(TEXTURE_SHAMBLER);
-				this.modelShambler.renderTongueEnd(0.0625F);
-
-				GlStateManager.enableCull();
+				this.bindTexture(TEXTURE_ANCHOR);
+				this.modelAnchor.render(entity, 0, 0, 0, 0, 0, 0.0625F);
 			}
 
 			GlStateManager.popMatrix();
@@ -273,12 +269,15 @@ public class RenderDraeton extends Render<EntityDraeton> {
 		GlStateManager.color(1, 1, 1, 1);
 
 		IInventory upgrades = entity.getUpgradesInventory();
-		for(int i = 0; i < 4; i++) {
+		for(int i = 0; i < 5; i++) {
 			ItemStack upgrade = upgrades.getStackInSlot(i);
 			if(!upgrade.isEmpty()) {
 				ModelBase upgradeModel = null;
-
-				if(entity.isFurnaceUpgrade(upgrade)) {
+				
+				/*if(entity.isAnchorUpgrade(upgrade)) {
+					upgradeModel = this.modelAnchor;
+					this.bindTexture(TEXTURE_ANCHOR);
+				} else */if(entity.isFurnaceUpgrade(upgrade)) {
 					upgradeModel = this.modelFurnace;
 					this.bindTexture(TEXTURE_FURNACE);
 				} else if(entity.isStorageUpgrade(upgrade)) {
@@ -288,6 +287,7 @@ public class RenderDraeton extends Render<EntityDraeton> {
 					upgradeModel = this.modelCrafting;
 					this.bindTexture(TEXTURE_CRAFTING);
 				}
+				
 
 				if(upgradeModel != null) {
 					entity.upgradeCounterRoll = entity.getUpgradeCounterRoll(i, partialTicks);

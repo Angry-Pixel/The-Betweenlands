@@ -32,9 +32,6 @@ public class DraetonPhysicsPart {
 	public double lerpY;
 	public double lerpZ;
 
-	public final float width = 0.5f;
-	public final float height = 0.5f;
-
 	public boolean isActive = true;
 	
 	public boolean grounded = false;
@@ -59,16 +56,28 @@ public class DraetonPhysicsPart {
 	}
 
 	public AxisAlignedBB getAabb() {
-		return new AxisAlignedBB(this.x - this.width / 2, this.y, this.z - this.width / 2, this.x + this.width / 2, this.y + this.height, this.z + this.width / 2);
+		return this.carriage.getAabb(this);
 	}
 
 	private void setPosToAabb(AxisAlignedBB aabb) {
-		this.x = aabb.minX + this.width / 2;
-		this.y = aabb.minY;
-		this.z = aabb.minZ + this.width / 2;
+		this.carriage.setPosToAabb(this, aabb);
+	}
+	
+	public float getWidth() {
+		return this.carriage.getWidth(this);
+	}
+	
+	public float getHeight() {
+		return this.carriage.getHeight(this);
 	}
 
 	public void move(double x, double y, double z) {
+		if(!this.carriage.canCollide(this)) {
+			this.grounded = false;
+			this.setPosToAabb(this.getAabb().offset(x, y, z));
+			return;
+		}
+		
 		double ty = y;
 		
 		List<AxisAlignedBB> collisionBoxes = this.carriage.world.getCollisionBoxes(null, this.getAabb().expand(x, y, z));

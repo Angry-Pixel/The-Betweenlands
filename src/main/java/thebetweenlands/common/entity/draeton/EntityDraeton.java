@@ -36,7 +36,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -188,6 +188,11 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	protected float crashSpeedThreshold = 0.25f; //TODO adjust after speed rebalancing
 	protected int crashCooldown = 20;
 
+	protected float minAnchorLength = 0.25f;
+	protected float maxAnchorLength = 8.0f;
+
+	protected int anchorRetractTicks = 0;
+
 	public EntityDraeton(World world) {
 		super(world);
 		this.setSize(1.5F, 1.5f);
@@ -319,8 +324,14 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 					this.getUpgradesInventory().setInventorySlotContents(i, this.dataManager.get(param));
 				}
 			}
+		}
 
-			if(ANCHOR_DEPLOYED.equals(key) && !this.dataManager.get(ANCHOR_DEPLOYED)) {
+		if(ANCHOR_DEPLOYED.equals(key)) {
+			if(!this.world.isRemote && this.dataManager.get(ANCHOR_DEPLOYED)) {
+				this.dataManager.set(ANCHOR_LENGTH, this.maxAnchorLength);
+			}
+
+			if(this.world.isRemote && !this.dataManager.get(ANCHOR_DEPLOYED)) {
 				this.playPulleySound();
 			}
 		}
@@ -599,6 +610,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	public float getUpgradeRotY(int i) {
 		switch(i) {
 		default:
+			return 0;
 		case 0:
 		case 2:
 			return 0.0f;
@@ -612,6 +624,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		float roll = this.prevRotationRoll + (this.rotationRoll - this.prevRotationRoll) * partialTicks;
 		switch(i) {
 		default:
+			return 0;
 		case 0:
 		case 2:
 			return -roll;
@@ -622,7 +635,10 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	}
 
 	public float getUpgradeOpenTicks(int i, float partialTicks) {
-		return this.prevStorageOpenTicks[i] + (this.storageOpenTicks[i] - this.prevStorageOpenTicks[i]) * partialTicks;
+		if(i < 4) {
+			return this.prevStorageOpenTicks[i] + (this.storageOpenTicks[i] - this.prevStorageOpenTicks[i]) * partialTicks;
+		}
+		return 0.0f;
 	}
 
 	@Override
@@ -808,25 +824,8 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 			ItemStack burnerStack = this.burnerInventory.getStackInSlot(0);
 
 			if(!burnerStack.isEmpty()) {
-				IFluidHandlerItem handler = burnerStack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-
-				if(handler != null) {
-					FluidStack drained = handler.drain(new FluidStack(FluidRegistry.SHALLOWBREATH, 1000), false);
-
-					if(drained != null) {
-						int space = this.maxFuel - this.getBurnerFuel();
-						int toDrain = Math.min(space / this.fuelConversion, drained.amount);
-
-						if(toDrain > 0) {
-							drained = handler.drain(new FluidStack(FluidRegistry.SHALLOWBREATH, toDrain), true);
-
-							if(drained != null) {
-								this.setBurnerFuel(this.getBurnerFuel() + drained.amount * this.fuelConversion);
-								this.burnerInventory.setInventorySlotContents(0, handler.getContainer());
-							}
-						}
-					}
-				}
+				burnerStack = this.tryFillingBurner(burnerStack);
+				this.burnerInventory.setInventorySlotContents(0, burnerStack);
 			}
 		} else {
 			if(!this.wasBurnerRunning && this.isBurnerRunning()) {
@@ -839,6 +838,30 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 				this.spawnBurnerFlame();
 			}
 		}
+	}
+
+	protected ItemStack tryFillingBurner(ItemStack stack) {
+		IFluidHandlerItem handler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+
+		if(handler != null) {
+			FluidStack drained = handler.drain(new FluidStack(FluidRegistry.SHALLOWBREATH, 1000), false);
+
+			if(drained != null) {
+				int space = this.maxFuel - this.getBurnerFuel();
+				int toDrain = Math.min(space / this.fuelConversion, drained.amount);
+
+				if(toDrain > 0) {
+					drained = handler.drain(new FluidStack(FluidRegistry.SHALLOWBREATH, toDrain), true);
+
+					if(drained != null) {
+						this.setBurnerFuel(this.getBurnerFuel() + drained.amount * this.fuelConversion);
+						return handler.getContainer();
+					}
+				}
+			}
+		}
+
+		return stack;
 	}
 
 	@SideOnly(Side.CLIENT) 
@@ -912,12 +935,15 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 			}
 		}
 
-		if(!this.world.isRemote) {
-			if(this.dataManager.get(ANCHOR_DEPLOYED)) {
-				this.dataManager.set(ANCHOR_LENGTH, 8.0f);
-			} else {
-				this.dataManager.set(ANCHOR_LENGTH, Math.max(0.25f, this.dataManager.get(ANCHOR_LENGTH) - 0.1f));
+		if(!this.world.isRemote && !this.dataManager.get(ANCHOR_DEPLOYED)) {
+			this.dataManager.set(ANCHOR_LENGTH, Math.max(this.minAnchorLength, this.dataManager.get(ANCHOR_LENGTH) - 0.1f));
+		}
+
+		if(this.anchorRetractTicks > 0) {
+			if(!this.world.isRemote && this.dataManager.get(ANCHOR_DEPLOYED)) {
+				this.dataManager.set(ANCHOR_LENGTH, Math.max(this.minAnchorLength, this.dataManager.get(ANCHOR_LENGTH) - 0.05f));
 			}
+			this.anchorRetractTicks = Math.max(0, this.anchorRetractTicks - 1);
 		}
 
 		for(Entity entity : this.parts) {
@@ -1105,7 +1131,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		if(this.dataManager.get(ANCHOR_FIXATED) && this.anchorPhysicsPart != null) {
 			BlockPos anchorPos = this.getAnchorPos();
 			this.anchorPhysicsPart.prevX = this.anchorPhysicsPart.x = anchorPos.getX() + 0.5f;
-			this.anchorPhysicsPart.prevY = this.anchorPhysicsPart.y = anchorPos.getY();
+			this.anchorPhysicsPart.prevY = this.anchorPhysicsPart.y = anchorPos.getY() - this.getAnchorYOffset();
 			this.anchorPhysicsPart.prevZ = this.anchorPhysicsPart.z = anchorPos.getZ() + 0.5f;
 		}
 
@@ -1458,6 +1484,49 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		return this.getControllingPassenger() != null && (entity == null || entity.getRidingEntity() == null);
 	}
 
+	public float getWidth(DraetonPhysicsPart part) {
+		return 0.5f;
+	}
+
+	public float getHeight(DraetonPhysicsPart part) {
+		if(part == this.anchorPhysicsPart) {
+			return 0.75f;
+		}
+		return 0.5f;
+	}
+
+	public AxisAlignedBB getAabb(DraetonPhysicsPart part) {
+		float width = this.getWidth(part);
+		float height = this.getHeight(part);
+		float yOff = 0;
+		if(part == this.anchorPhysicsPart) {
+			yOff = this.getAnchorYOffset();
+		}
+		return new AxisAlignedBB(part.x - width / 2, part.y + yOff, part.z - width / 2, part.x + width / 2, part.y + yOff + height, part.z + width / 2);
+	}
+
+	public void setPosToAabb(DraetonPhysicsPart part, AxisAlignedBB aabb) {
+		float width = this.getWidth(part);
+		float yOff = 0;
+		if(part == this.anchorPhysicsPart) {
+			yOff = this.getAnchorYOffset();
+		}
+		part.x = aabb.minX + width / 2;
+		part.y = aabb.minY - yOff;
+		part.z = aabb.minZ + width / 2;
+	}
+
+	public boolean canCollide(DraetonPhysicsPart part) {
+		if(part == this.anchorPhysicsPart && !this.dataManager.get(ANCHOR_DEPLOYED) && this.getMaxTetherLength(part) < this.minAnchorLength + 0.1f) {
+			return false;
+		}
+		return true;
+	}
+
+	protected float getAnchorYOffset() {
+		return -0.3f;
+	}
+
 	public float getMaxPullerSpeed() {
 		return 3.0f;
 	}
@@ -1516,7 +1585,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	}
 
 	public boolean isReelingInAnchor() {
-		return !this.dataManager.get(ANCHOR_DEPLOYED) && this.dataManager.get(ANCHOR_LENGTH) > 0.3f;
+		return (!this.dataManager.get(ANCHOR_DEPLOYED) && this.dataManager.get(ANCHOR_LENGTH) > this.minAnchorLength + 0.1) || this.anchorRetractTicks > 0;
 	}
 
 	public boolean isBurnerRunning() {
@@ -1526,7 +1595,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	public int getBurnerFuel() {
 		return this.dataManager.get(BURNER_FUEL);
 	}
-	
+
 	public int getMaxBurnerFuel() {
 		return this.maxFuel;
 	}
@@ -1690,7 +1759,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		if (this.isEntityInvulnerable(source)) {
 			return false;
 		} else if (!this.isDead) {
-			if (source instanceof EntityDamageSourceIndirect && source.getTrueSource() != null && this.isPassenger(source.getTrueSource())) {
+			if (source instanceof EntityDamageSource && ((source.getTrueSource() != null && this.isPassenger(source.getTrueSource())) || (source.getImmediateSource() != null && this.isPassenger(source.getImmediateSource())))) {
 				return false;
 			} else {
 				boolean isPlayerHit = source.getImmediateSource() instanceof EntityPlayer;
@@ -1878,6 +1947,13 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 	@Override
 	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float damage) {
+		if(part == this.upgradeAnchorPart && source instanceof EntityDamageSource && source.getImmediateSource() != null && this.isPassenger(source.getImmediateSource())) {
+			if(this.world.isRemote && this.anchorRetractTicks == 0) {
+				this.playPulleySound();
+			}
+			this.anchorRetractTicks = 20;
+			return false;
+		}
 		return this.attackEntityFrom(source, damage);
 	}
 
@@ -1910,9 +1986,21 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 			} else if(part == this.upgradePart4) {
 				this.interactWithUpgrade(part, player, hand, 3);
 			} else if(part == this.burnerPart) {
-				if(!this.world.isRemote) player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_BURNER, player.getEntityWorld(), getEntityId(), 0, 0);
-				player.swingArm(hand);
-				return true;
+				if(!held.isEmpty() && held.getItem() == ItemRegistry.DENTROTHYST_FLUID_VIAL) {
+					if(!this.world.isRemote) {
+						ItemStack result = this.tryFillingBurner(held);
+						if(!result.equals(held)) {
+							this.world.playSound(null, player.posX, player.posY, player.posZ, FluidRegistry.SHALLOWBREATH.getEmptySound(new FluidStack(FluidRegistry.SHALLOWBREATH, 1000)), SoundCategory.BLOCKS, 1.0F, 1.0F);
+							player.setHeldItem(hand, result);
+						}
+					}
+					player.swingArm(hand);
+					return true;
+				} else {
+					if(!this.world.isRemote) player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_BURNER, player.getEntityWorld(), getEntityId(), 0, 0);
+					player.swingArm(hand);
+					return true;
+				}
 			} else if(part == this.upgradeAnchorPart) {
 				if(!this.world.isRemote) this.dataManager.set(ANCHOR_DEPLOYED, !this.dataManager.get(ANCHOR_DEPLOYED));
 				player.swingArm(hand);
