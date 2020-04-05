@@ -19,6 +19,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -32,6 +33,7 @@ import thebetweenlands.common.entity.mobs.EntityFortressBossBlockade;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.NBTHelper;
 
 public class ItemRingOfRecruitment extends ItemRing {
@@ -94,7 +96,7 @@ public class ItemRingOfRecruitment extends ItemRing {
 	
 	@Override
 	public void onKeybindState(EntityPlayer player, ItemStack stack, IInventory inventory, boolean active) {
-		if(!player.world.isRemote && active) {
+		if(!player.world.isRemote && active && !player.getCooldownTracker().hasCooldown(ItemRegistry.RING_OF_RECRUITMENT)) {
 			IPuppeteerCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
 			
 			if(cap != null && cap.getShield() != null) {
@@ -121,6 +123,12 @@ public class ItemRingOfRecruitment extends ItemRing {
 						
 						target.world.spawnEntity(blockade);
 					}
+				}
+				
+				if(!spawned.isEmpty()) {
+					player.world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.FORTRESS_BOSS_SUMMON_PROJECTILES, SoundCategory.HOSTILE, 0.8f, 0.9f + player.world.rand.nextFloat() * 0.15f);
+				
+					player.getCooldownTracker().setCooldown(ItemRegistry.RING_OF_RECRUITMENT, 40);
 				}
 			}
 		}

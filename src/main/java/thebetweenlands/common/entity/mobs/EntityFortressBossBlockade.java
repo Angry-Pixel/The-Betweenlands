@@ -28,6 +28,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import thebetweenlands.api.capability.IPuppetCapability;
 import thebetweenlands.api.capability.IPuppeteerCapability;
 import thebetweenlands.api.capability.ProtectionShield;
 import thebetweenlands.api.entity.IEntityBL;
@@ -198,13 +199,16 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL, 
 					if(EntityFortressBoss.rayTraceTriangle(new Vec3d(target.posX - this.posX, 1, target.posZ - this.posZ), new Vec3d(0, -2, 0), vertices[0], vertices[1], vertices[2])) {
 						
 						if(this.isPlayerControlled()) {
+							IPuppetCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
+							
 							Entity owner = this.getOwner();
-							if(owner instanceof EntityPlayer) {
+							
+							if(cap != null && cap.getPuppeteer() == owner && owner instanceof EntityPlayer) {
 								EntityPlayer player = (EntityPlayer) owner;
 								
-								IPuppeteerCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
-								if(cap != null) {
-									ProtectionShield shield = cap.getShield();
+								IPuppeteerCapability playerCap = player.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
+								if(playerCap != null) {
+									ProtectionShield shield = playerCap.getShield();
 									
 									if(shield != null) {
 										float healthPercent = 0.3f;
