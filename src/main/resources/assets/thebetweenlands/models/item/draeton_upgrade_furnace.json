@@ -1,6 +1,35 @@
 {
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "thebetweenlands:items/draeton_upgrade_furnace"
-  }
+  "parent": "thebetweenlands:item/internal/draeton_upgrade_furnace$from_item(thebetweenlands:draeton_upgrade_furnace)",
+  "display": {
+        "gui": {
+            "rotation": [ 30, 225, 0 ],
+            "translation": [ 1, -8, 0],
+            "scale":[ 0.8, 0.8, 0.8 ]
+        },
+        "ground": {
+            "rotation": [ 0, 0, 0 ],
+            "translation": [ 0, -5, 0],
+            "scale":[ 0.5, 0.5, 0.5 ]
+        },
+        "fixed": {
+            "rotation": [ 0, 90, 0 ],
+            "translation": [ 0, -11, 0],
+            "scale":[ 0.8, 0.8, 0.8 ]
+        },
+        "thirdperson_righthand": {
+            "rotation": [ 75, 45, 0 ],
+            "translation": [ 0, 1, -2],
+            "scale": [ 0.375, 0.375, 0.375 ]
+        },
+        "firstperson_righthand": {
+            "rotation": [ 0, 225, 0 ],
+            "translation": [ 0, -2, 0 ],
+            "scale": [ 0.40, 0.40, 0.40 ]
+        },
+        "firstperson_lefthand": {
+            "rotation": [ 0, 405, 0 ],
+            "translation": [ 0, -2, 0 ],
+            "scale": [ 0.40, 0.40, 0.40 ]
+        }
+    }
 }

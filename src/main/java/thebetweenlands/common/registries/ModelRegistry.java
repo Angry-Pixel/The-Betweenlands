@@ -51,6 +51,7 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelSundew;
 import thebetweenlands.client.render.model.baked.modelbase.ModelSwampPlant;
 import thebetweenlands.client.render.model.baked.modelbase.ModelVenusFlyTrap;
 import thebetweenlands.client.render.model.baked.modelbase.ModelVolarpad;
+import thebetweenlands.client.render.model.baked.modelbase.ModelWeedwoodRowboatItem;
 import thebetweenlands.client.render.model.baked.modelbase.ModelWeepingBlue;
 import thebetweenlands.client.render.model.baked.modelbase.ModelWhitePearCrop1;
 import thebetweenlands.client.render.model.baked.modelbase.ModelWhitePearCrop2;
@@ -69,15 +70,19 @@ import thebetweenlands.client.render.model.baked.modelbase.shields.ModelOctineSh
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelSyrmoriteShield;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelValoniteShield;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelWeedwoodShield;
+import thebetweenlands.client.render.model.entity.ModelDraetonCarriage;
+import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeAnchor;
+import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeCrafting;
+import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeFurnace;
 import thebetweenlands.client.render.model.entity.ModelMireSnailEgg;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
+import thebetweenlands.client.render.model.tile.ModelBarrel;
 import thebetweenlands.client.render.model.tile.ModelLootPot1;
 import thebetweenlands.client.render.model.tile.ModelLootPot2;
 import thebetweenlands.client.render.model.tile.ModelLootPot3;
 import thebetweenlands.client.render.model.tile.ModelLootUrn1;
 import thebetweenlands.client.render.model.tile.ModelLootUrn2;
 import thebetweenlands.client.render.model.tile.ModelLootUrn3;
-import thebetweenlands.client.render.model.tile.ModelBarrel;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.ModelConverter.Box;
 import thebetweenlands.util.ModelConverter.Quad;
@@ -190,6 +195,18 @@ public class ModelRegistry {
 	public static final IModel BUCKET = new ModelDynBucketBL();
 	public static final IModel MIRE_SNAIL_EGG = new ModelFromModelBase.Builder(new ModelMireSnailEgg(), new ResourceLocation("thebetweenlands:items/mire_snail_egg"), 16, 16)
 			.packer(MODEL_TEXTURE_PACKER).build();
+	public static final IModel DRAETON_CARRIAGE = new ModelFromModelBase.Builder(new ModelDraetonCarriage(), new ResourceLocation("thebetweenlands:entity/draeton_carriage"), 256, 128)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/weedwood_planks")).packer(MODEL_TEXTURE_PACKER).build();
+	public static final IModel WEEDWOOD_ROWBOAT = new ModelFromModelBase.Builder(new ModelWeedwoodRowboatItem(), new ResourceLocation("thebetweenlands:entity/weedwood_rowboat"), 256, 128)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/weedwood_planks")).packer(MODEL_TEXTURE_PACKER).build();
+	public static final IModel WEEDWOOD_ROWBOAT_TARRED = new ModelFromModelBase.Builder(new ModelWeedwoodRowboatItem(), new ResourceLocation("thebetweenlands:entity/weedwood_rowboat_tarred"), 256, 128)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/weedwood_planks")).packer(MODEL_TEXTURE_PACKER).build();
+	public static final IModel DRAETON_UPGRADE_FURNACE = new ModelFromModelBase.Builder(new ModelDraetonUpgradeFurnace(), new ResourceLocation("thebetweenlands:entity/draeton_upgrade_furnace"), 64, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone")).packer(MODEL_TEXTURE_PACKER).build();
+	public static final IModel DRAETON_UPGRADE_ANCHOR = new ModelFromModelBase.Builder(new ModelDraetonUpgradeAnchor(), new ResourceLocation("thebetweenlands:entity/draeton_upgrade_anchor"), 64, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/syrmorite_block")).packer(MODEL_TEXTURE_PACKER).build();
+	public static final IModel DRAETON_UPGRADE_CRAFTING = new ModelFromModelBase.Builder(new ModelDraetonUpgradeCrafting(), new ResourceLocation("thebetweenlands:entity/draeton_upgrade_crafting"), 64, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/weedwood_planks")).packer(MODEL_TEXTURE_PACKER).build();
 
 	//Misc
 	public static final IModel LIFE_CRYSTAL_STALACTITE = new ModelLifeCrystalStalactite();
