@@ -23,6 +23,7 @@ import thebetweenlands.common.entity.EntityTinyWormEggSac;
 import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
 import thebetweenlands.common.entity.EntityTriggeredSludgeWallJet;
 import thebetweenlands.common.entity.EntityVolarkite;
+import thebetweenlands.common.entity.EntityWormGroundSpawner;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.entity.draeton.EntityPullerDragonfly;
 import thebetweenlands.common.entity.draeton.EntityPullerFirefly;
@@ -89,6 +90,7 @@ import thebetweenlands.common.entity.mobs.EntityWallLamprey;
 import thebetweenlands.common.entity.mobs.EntityWallLivingRoot;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
+import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
 import thebetweenlands.common.entity.projectiles.EntityPredatorArrowGuide;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
@@ -97,7 +99,6 @@ import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
 import thebetweenlands.common.entity.projectiles.EntitySludgeWallJet;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.entity.projectiles.EntityThrownTarminion;
-import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.lib.ModInfo;
 
@@ -209,6 +210,8 @@ public class EntityRegistry {
 		registerEntity(EntityChiromawGreeblingRider.class, "chiromaw_greebling_rider", 0x3F5A69, 0xA16A77);
 		registerEntity(EntityGreeblingVolarpadFloater.class, "greebling_volarpad_floater", 64, 20, true);
 		registerEntity(EntityBetweenstonePebble.class, "betweenstone_pebble", 64, 20, true);
+		
+		registerEntity(EntityWormGroundSpawner.class, "worm_ground_spawner");
 	}
 
 	private static int id = 0;

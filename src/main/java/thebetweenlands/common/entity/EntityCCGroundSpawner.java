@@ -125,7 +125,7 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 		super.onUpdate();
 
 		if (!getEntityWorld().isRemote) {
-			if(isWorldSpawned() && !isBloodSky(getEntityWorld()))
+			if(isWorldSpawned() && !isSpawnEventActive(getEntityWorld()))
 				setDead();
 
 			if (getEntityWorld().getTotalWorldTime() % 60 == 0)
@@ -143,7 +143,7 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 		this.prevPosZ = this.lastTickPosZ = this.posZ;
 	}
 
-	public boolean isBloodSky(World world) {
+	public boolean isSpawnEventActive(World world) {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
         if(worldStorage.getEnvironmentEventRegistry().bloodSky.isActive())
             return true;
@@ -157,7 +157,7 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 			if(getCanBeRemovedSafely() && canBeRemovedNow())
 				setDead();
 			if (getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL) {
-				if(isWorldSpawned() && !isBloodSky(getEntityWorld()))
+				if(isWorldSpawned() && !isSpawnEventActive(getEntityWorld()))
 					return null;
 				List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, proximityBox());
 				if(list.stream().filter(e -> e instanceof EntityCryptCrawler).count() >= 4)
