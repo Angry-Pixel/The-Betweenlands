@@ -244,7 +244,7 @@ public class PuppetHandler {
 					} else {
 						living.enablePersistence();
 
-						if(controller instanceof EntityPlayer && living.getHealth() < living.getMaxHealth() - 1 && living.ticksExisted % 40 == 0 &&
+						if(controller instanceof EntityPlayer && living.getHealth() < living.getMaxHealth() - 0.1f && living.ticksExisted % 40 == 0 &&
 								((!cap.getStay() && !cap.getGuard()) || controller.getDistance(entity) < 6) &&
 								ItemRing.removeXp((EntityPlayer) controller, 3) >= 3) {
 
