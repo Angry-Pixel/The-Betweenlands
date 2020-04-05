@@ -1,0 +1,6 @@
+{
+    "parent": "thebetweenlands:item/simple_slingshot",
+    "textures": {
+        "layer0": "thebetweenlands:items/simple_slingshot_equipped"
+    }
+}

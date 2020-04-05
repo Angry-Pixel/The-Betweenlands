@@ -12,12 +12,14 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -35,6 +37,7 @@ import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class ItemSimpleSlingshot extends Item implements ICorrodible, IAnimatorRepairable {
@@ -44,16 +47,24 @@ public class ItemSimpleSlingshot extends Item implements ICorrodible, IAnimatorR
 		setCreativeTab(BLCreativeTabs.GEARS);
 		CorrosionHelper.addCorrosionPropertyOverrides(this);
 
-/*	TODO Add pulling sprites
-		addPropertyOverride(new ResourceLocation("pull"), (stack, worldIn, entityIn) -> {
-			if (entityIn == null) {
-				return 0.0F;
-			} else {
-				ItemStack itemStack = entityIn.getActiveItemStack();
-				return !itemStack.isEmpty() && itemStack == stack ? (float) (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
+	//TODO Add pulling sprites
+		this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
+			@SideOnly(Side.CLIENT)
+			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+				if (entityIn == null) {
+					return 0.0F;
+				} else {
+					return entityIn.getActiveItemStack().getItem() != ItemRegistry.SIMPLE_SLINGSHOT ? 0.0F : (float) (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F;
+				}
 			}
 		});
-*/
+		this.addPropertyOverride(new ResourceLocation("pulling"), new IItemPropertyGetter() {
+			@SideOnly(Side.CLIENT)
+			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+				return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
+			}
+		});
+
 	}
 
 	protected ItemStack findAmmo(EntityPlayer player) {
