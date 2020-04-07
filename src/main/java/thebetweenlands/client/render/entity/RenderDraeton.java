@@ -39,6 +39,7 @@ import thebetweenlands.client.render.model.entity.ModelDraetonCarriage;
 import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeAnchor;
 import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeCrafting;
 import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeFurnace;
+import thebetweenlands.client.render.model.entity.ModelDraetonUpgradePulley;
 import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeStorage;
 import thebetweenlands.common.entity.draeton.DraetonLeakage;
 import thebetweenlands.common.entity.draeton.DraetonPhysicsPart;
@@ -50,6 +51,7 @@ public class RenderDraeton extends Render<EntityDraeton> {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_carriage.png");
 	private static final ResourceLocation TEXTURE_BALLOON = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_balloon.png");
 	private static final ResourceLocation TEXTURE_ANCHOR = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_upgrade_anchor.png");
+	private static final ResourceLocation TEXTURE_PULLEY = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_upgrade_pulley.png");
 	private static final ResourceLocation TEXTURE_CRAFTING = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_upgrade_crafting.png");
 	private static final ResourceLocation TEXTURE_STORAGE = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_upgrade_storage.png");
 	private static final ResourceLocation TEXTURE_FURNACE = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_upgrade_furnace.png");
@@ -60,6 +62,7 @@ public class RenderDraeton extends Render<EntityDraeton> {
 	private final ModelDraetonCarriage modelCarriage = new ModelDraetonCarriage();
 	private final ModelDraetonBalloon modelBalloon = new ModelDraetonBalloon();
 	private final ModelDraetonUpgradeAnchor modelAnchor = new ModelDraetonUpgradeAnchor();
+	private final ModelDraetonUpgradePulley modelPulley = new ModelDraetonUpgradePulley();
 	private final ModelDraetonUpgradeCrafting modelCrafting = new ModelDraetonUpgradeCrafting();
 	private final ModelDraetonUpgradeStorage modelStorage = new ModelDraetonUpgradeStorage();
 	private final ModelDraetonUpgradeFurnace modelFurnace = new ModelDraetonUpgradeFurnace();
@@ -272,12 +275,24 @@ public class RenderDraeton extends Render<EntityDraeton> {
 		for(int i = 0; i < 5; i++) {
 			ItemStack upgrade = upgrades.getStackInSlot(i);
 			if(!upgrade.isEmpty()) {
+				Vec3d upgradePos = entity.getUpgradePoint(i, 0);
+				
 				ModelBase upgradeModel = null;
 				
-				/*if(entity.isAnchorUpgrade(upgrade)) {
-					upgradeModel = this.modelAnchor;
-					this.bindTexture(TEXTURE_ANCHOR);
-				} else */if(entity.isFurnaceUpgrade(upgrade)) {
+				if(entity.isAnchorUpgrade(upgrade)) {
+					GlStateManager.pushMatrix();
+					
+					float ropeOffset = ((entity.prevPulleyRotation + (entity.pulleyRotation - entity.prevPulleyRotation) * partialTicks) * 0.0015f) % (1 / 24.0f * 0.7f * 2);
+					
+					GlStateManager.translate(upgradePos.x - 0.015f, upgradePos.y - ropeOffset, -upgradePos.z + 0.1f);
+					
+					this.renderConnection(tessellator, buffer, 0, 0, 0, 0, -0.7f, 0);
+					
+					GlStateManager.popMatrix();
+					
+					upgradeModel = this.modelPulley;
+					this.bindTexture(TEXTURE_PULLEY);
+				} else if(entity.isFurnaceUpgrade(upgrade)) {
 					upgradeModel = this.modelFurnace;
 					this.bindTexture(TEXTURE_FURNACE);
 				} else if(entity.isStorageUpgrade(upgrade)) {
@@ -293,8 +308,6 @@ public class RenderDraeton extends Render<EntityDraeton> {
 					entity.upgradeCounterRoll = entity.getUpgradeCounterRoll(i, partialTicks);
 					entity.upgradeOpenTicks = entity.getUpgradeOpenTicks(i, partialTicks);
 
-					Vec3d upgradePos = entity.getUpgradePoint(i, 0);
-
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(upgradePos.x, upgradePos.y, -upgradePos.z);
 					GlStateManager.rotate(entity.getUpgradeRotY(i), 0, 1, 0);
@@ -309,7 +322,7 @@ public class RenderDraeton extends Render<EntityDraeton> {
 		ItemStack displayStack = entity.getUpgradesInventory().getStackInSlot(5);
 		if(!displayStack.isEmpty()) {
 			GlStateManager.scale(-1, -1, 1);
-			GlStateManager.translate(0, -0.4f, -0.84f);
+			GlStateManager.translate(0, -0.35f, -0.84f);
 			GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
 			GlStateManager.scale(0.5f, 0.5f, 0.5f);
 

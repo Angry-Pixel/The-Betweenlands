@@ -193,6 +193,11 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 	protected int anchorRetractTicks = 0;
 
+	public float prevPulleyRotation = 0;
+	public float pulleyRotation = 0;
+	
+	protected int pulleyRotationTicks = 0;
+	
 	public EntityDraeton(World world) {
 		super(world);
 		this.setSize(1.5F, 1.5f);
@@ -202,7 +207,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 						this.upgradePart1 = new EntityDraetonInteractionPart(this, "upgrade_1", 0.5f, 0.75f, false), this.upgradePart2 = new EntityDraetonInteractionPart(this, "upgrade_2", 0.5f, 0.75f, false),
 						this.upgradePart3 = new EntityDraetonInteractionPart(this, "upgrade_3", 0.5f, 0.75f, false), this.upgradePart4 = new EntityDraetonInteractionPart(this, "upgrade_4", 0.5f, 0.75f, false),
 						this.burnerPart = new EntityDraetonInteractionPart(this, "burner", 0.75f, 0.2f, false),
-						this.upgradeAnchorPart = new EntityDraetonInteractionPart(this, "upgrade_anchor", 0.5f, 0.5f, false),
+						this.upgradeAnchorPart = new EntityDraetonInteractionPart(this, "upgrade_anchor", 0.5f, 0.75f, false),
 						this.upgradeFramePart = new EntityDraetonInteractionPart(this, "upgrade_frame", 0.5f, 0.5f, false),
 						this.balloonFront = new EntityDraetonInteractionPart(this, "balloon_front", 1.5f, 1.0f, true), this.balloonMiddle = new EntityDraetonInteractionPart(this, "balloon_middle", 1.5f, 1.0f, true), this.balloonBack = new EntityDraetonInteractionPart(this, "balloon_back", 1.5f, 1.0f, true)
 		};
@@ -327,8 +332,12 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		}
 
 		if(ANCHOR_DEPLOYED.equals(key)) {
-			if(!this.world.isRemote && this.dataManager.get(ANCHOR_DEPLOYED)) {
-				this.dataManager.set(ANCHOR_LENGTH, this.maxAnchorLength);
+			if(this.dataManager.get(ANCHOR_DEPLOYED)) {
+				if(!this.world.isRemote) {
+					this.dataManager.set(ANCHOR_LENGTH, this.maxAnchorLength);
+				} else {
+					this.pulleyRotationTicks = 10;
+				}
 			}
 
 			if(this.world.isRemote && !this.dataManager.get(ANCHOR_DEPLOYED)) {
@@ -604,6 +613,8 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 			return new Vec3d(10 / 16.0f, 14 / 16.0f, -8 / 16.0f).add(offsetVec);
 		case 3:
 			return new Vec3d(-10 / 16.0f, 14 / 16.0f, -8 / 16.0f).add(offsetVec);
+		case 4:
+			return new Vec3d(0, 22 / 16.0f, 14 / 16.0f);
 		}
 	}
 
@@ -919,6 +930,12 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 			this.anchorRetractTicks = Math.max(0, this.anchorRetractTicks - 1);
 		}
 
+		for(Entity entity : this.parts) {
+			entity.onUpdate();
+		}
+
+		this.updatePartPositions();
+		
 		//Leakage particles
 		if(this.world.isRemote && this.isLeaking()) {
 			for(DraetonLeakage leakage : this.leakages) {
@@ -927,12 +944,6 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 				this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, leakagePos.x, leakagePos.y, leakagePos.z, this.motionX + leakageDir.x * 0.1f, this.motionY + leakageDir.y * 0.1f, this.motionZ + leakageDir.z * 0.1f);
 			}
 		}
-
-		for(Entity entity : this.parts) {
-			entity.onUpdate();
-		}
-
-		this.updatePartPositions();
 	}
 
 	protected void updatePartPositions() {
@@ -989,7 +1000,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		Vec3d upgradePos4 = this.getRotatedCarriagePoint(this.getUpgradePoint(3, 0.25f), 1).add(this.posX, this.posY - this.upgradePart4.height + 0.05f, this.posZ);
 		this.upgradePart4.setPosition(upgradePos4.x, upgradePos4.y, upgradePos4.z);
 
-		Vec3d anchorPos = this.getRotatedCarriagePoint(new Vec3d(0.0f, 0.4f, 0.975f), 1).add(this.posX, this.posY, this.posZ);
+		Vec3d anchorPos = this.getRotatedCarriagePoint(new Vec3d(0.0f, 0.525f, 0.975f), 1).add(this.posX, this.posY, this.posZ);
 		this.upgradeAnchorPart.setPosition(anchorPos.x, anchorPos.y - this.upgradeAnchorPart.height / 2, anchorPos.z);
 
 		Vec3d burnerPos = this.getBalloonPos(1).add(this.getRotatedBalloonPoint(new Vec3d(0, -0.5f, 0), 1));
@@ -1149,6 +1160,20 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		}
 
 		if(this.world.isRemote) {
+			this.prevPulleyRotation = this.pulleyRotation;
+			
+			if(this.isReelingInAnchor()) {
+				this.pulleyRotationTicks = -1;
+			}
+			
+			if(this.pulleyRotationTicks < 0) {
+				this.pulleyRotationTicks = Math.min(0, this.pulleyRotationTicks + 1);
+				this.pulleyRotation += 8.0f;
+			} else if(this.pulleyRotationTicks > 0) {
+				this.pulleyRotationTicks = Math.max(0, this.pulleyRotationTicks - 1);
+				this.pulleyRotation -= 30.0f;
+			}
+			
 			if(this.prevLeakCount < this.leakages.size()) {
 				Vec3d pos = this.getBalloonPos(1);
 				this.world.playSound(pos.x, pos.y, pos.z, SoundRegistry.DRAETON_LEAK_START, SoundCategory.NEUTRAL, 1, 0.85f + this.world.rand.nextFloat() * 0.35f, false);
@@ -1971,6 +1996,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		if(part == this.upgradeAnchorPart && source instanceof EntityDamageSource && source.getImmediateSource() != null && this.isPassenger(source.getImmediateSource())) {
 			if(this.world.isRemote && this.anchorRetractTicks == 0) {
 				this.playPulleySound();
+				this.pulleyRotationTicks = -20;
 			}
 			this.anchorRetractTicks = 20;
 			return false;
