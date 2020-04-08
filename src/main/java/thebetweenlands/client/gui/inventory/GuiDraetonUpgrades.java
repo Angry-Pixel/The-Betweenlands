@@ -17,12 +17,18 @@ import thebetweenlands.common.inventory.container.ContainerDraetonUpgrades;
 
 @SideOnly(Side.CLIENT)
 public class GuiDraetonUpgrades extends GuiContainer {
-	private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/draeton_upgrades.png");
+	private static final ResourceLocation[] TEXTURES = {
+			new ResourceLocation("thebetweenlands:textures/gui/draeton_upgrades_0.png"),
+			new ResourceLocation("thebetweenlands:textures/gui/draeton_upgrades_1.png"),
+			new ResourceLocation("thebetweenlands:textures/gui/draeton_upgrades_2.png"),
+			new ResourceLocation("thebetweenlands:textures/gui/draeton_upgrades_3.png")
+			};
 
-	
+	private final EntityDraeton draeton;
 	
 	public GuiDraetonUpgrades(InventoryPlayer playerInventory, EntityDraeton draeton) {
 		super(new ContainerDraetonUpgrades(playerInventory, draeton));
+		this.draeton = draeton;
 		xSize = 182;
 		ySize = 256;
 	}
@@ -74,9 +80,13 @@ public class GuiDraetonUpgrades extends GuiContainer {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTickTime, int x, int y) {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.getTextureManager().bindTexture(TEXTURE);
+		
+		int damageStage = (this.draeton.getLeakages().size() + 1) / 2;
+		mc.getTextureManager().bindTexture(TEXTURES[Math.min(damageStage, TEXTURES.length - 1)]);
+		
 		int k = (width - xSize) / 2;
 		int l = (height - ySize) / 2;
+		
 		drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
 	}
 }
