@@ -15,16 +15,16 @@ public class ContainerDraetonBurner extends Container {
 	public ContainerDraetonBurner(InventoryPlayer playerInventory, IInventory entityInventory, EntityDraeton draeton) {
 		this.draeton = draeton;
 
-		addSlotToContainer(new Slot(entityInventory, 0, 37, 40));
+		addSlotToContainer(new Slot(entityInventory, 0, 83, 85));
 
-		int i = -18;
+		int i = 37;
 
 		for (int y = 0; y < 3; ++y)
 			for (int x = 0; x < 9; ++x)
-				addSlotToContainer(new Slot(playerInventory, x + y * 9 + 9, 8 + x * 18, 104 + y * 18 + i));
+				addSlotToContainer(new Slot(playerInventory, x + y * 9 + 9, 11 + x * 18, 104 + y * 18 + i));
 
 		for (int x = 0; x < 9; ++x)
-			addSlotToContainer(new Slot(playerInventory, x, 8 + x * 18, 162 + i));
+			addSlotToContainer(new Slot(playerInventory, x, 11 + x * 18, 162 + i));
 	}
 
 	@Override

@@ -28,8 +28,8 @@ public class GuiDraetonBurner extends GuiContainer {
 		super(new ContainerDraetonBurner(playerInventory, inventory, draeton));
 		this.draeton = draeton;
 
-		xSize = 176;
-		ySize = 168;
+		xSize = 182;
+		ySize = 222;
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class GuiDraetonBurner extends GuiContainer {
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
 		
-		if(mouseX >= this.guiLeft + 82 && mouseY >= this.guiTop + 32 && mouseX < this.guiLeft + 94 && mouseY < this.guiTop + 65) {
+		if(mouseX >= this.guiLeft + 79 && mouseY >= this.guiTop + 13 && mouseX < this.guiLeft + 103 && mouseY < this.guiTop + 105) {
 			if(this.draeton.getBurnerFuel() > 0) {
 				this.drawHoveringText(MathHelper.ceil(this.draeton.getBurnerFuel() / (float)this.draeton.getMaxBurnerFuel() * 100) + "%", mouseX, mouseY);
 			} else {
@@ -50,14 +50,14 @@ public class GuiDraetonBurner extends GuiContainer {
 	@Override
 	public void initGui() {
 		super.initGui();
-		this.addButton(new GuiButton(0, this.guiLeft + xSize / 2 + 25, this.guiTop + 37, 40, 20, "Purge"));
+		this.addButton(new GuiButton(0, this.guiLeft + 71, this.guiTop + 110, 40, 20, "Purge"));
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 
-		this.fontRenderer.drawString(I18n.format(new TextComponentTranslation("container.bl.draeton_burner").getFormattedText()), xSize / 2 - fontRenderer.getStringWidth(I18n.format(new TextComponentTranslation("container.bl.draeton_burner").getFormattedText())) / 2, 6, 4210752);
+		this.fontRenderer.drawString(I18n.format(new TextComponentTranslation("container.bl.draeton_burner").getFormattedText()), xSize / 2 - fontRenderer.getStringWidth(I18n.format(new TextComponentTranslation("container.bl.draeton_burner").getFormattedText())) / 2, 5, 4210752);
 		this.fontRenderer.drawString(I18n.format(new TextComponentTranslation("container.inventory").getFormattedText()), xSize - 170, ySize - 93, 4210752);
 
 		GlStateManager.color(1, 1, 1, 1);
@@ -68,8 +68,12 @@ public class GuiDraetonBurner extends GuiContainer {
 			this.drawTexturedModalRect(81, 18, 176, 0, 14, 14);
 		}
 
-		int barHeight = MathHelper.ceil(this.draeton.getBurnerFuel() / (float)this.draeton.getMaxBurnerFuel() * 31);
-		this.drawTexturedModalRect(82, 33 + 31 - barHeight, 197, 32 - barHeight, 12, barHeight);
+		GlStateManager.color(0, 0.9f, 0.63f, 1);
+		
+		int barHeight = MathHelper.ceil(this.draeton.getBurnerFuel() / (float)this.draeton.getMaxBurnerFuel() * 57);
+		this.drawTexturedModalRect(82, 14 + 57 - barHeight, 191, 57 + 24 - barHeight, 24, barHeight);
+		
+		GlStateManager.color(1, 1, 1, 1);
 	}
 
 	@Override

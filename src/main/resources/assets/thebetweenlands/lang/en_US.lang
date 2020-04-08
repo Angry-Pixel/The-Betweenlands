@@ -913,7 +913,7 @@ container.bl.censer=Censer
 container.bl.draeton_inventory=Draeton
 container.bl.draeton_storage=Draeton Storage
 container.bl.draeton_furnace=Draeton Furnace
-container.bl.draeton_burner=Draeton Burner
+container.bl.draeton_burner=Burner
 
 # Locations
 location.wilderness.name=80:<scale:1.75>Wilderness</scale>
@@ -1020,6 +1020,7 @@ tooltip.bl.aspectrus_seeds.mist=This plant can only flourish in\naspect infused 
 tooltip.bl.sludge_dungeon_plant.mist=This plant can only grow in\nSludgeon mist.
 tooltip.bl.item_mob.health=Health: %s / %s
 tooltip.bl.simple_slingshot=Shoots Betweenstone Pebbles
+tooltip.bl.lurker_skin_patch=Fixes Draeton leakages
 
 
 tooltip.bl.elixir.potency=§9Potency: %s

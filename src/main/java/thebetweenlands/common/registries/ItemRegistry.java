@@ -114,6 +114,7 @@ import thebetweenlands.common.item.misc.ItemGlue;
 import thebetweenlands.common.item.misc.ItemGrapplingHook;
 import thebetweenlands.common.item.misc.ItemLifeCrystal;
 import thebetweenlands.common.item.misc.ItemLoreScrap;
+import thebetweenlands.common.item.misc.ItemLurkerSkinPatch;
 import thebetweenlands.common.item.misc.ItemMagicItemMagnet;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -429,7 +430,7 @@ public class ItemRegistry {
     public static final Item GEM_SINGER = new ItemGemSinger();
     public static final Item SHAMBLER_TONGUE = new Item().setCreativeTab(BLCreativeTabs.ITEMS);
     public static final Item RUNE_DOOR_KEY = new ItemRuneDoorKey();
-    public static final Item LURKER_SKIN_PATCH = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(16);
+    public static final Item LURKER_SKIN_PATCH = new ItemLurkerSkinPatch();
     public static final Item DRAETON_BALLOON = new Item().setCreativeTab(BLCreativeTabs.ITEMS);
     public static final Item DRAETON_BURNER = new Item().setCreativeTab(BLCreativeTabs.ITEMS);
     public static final Item DRAETON = new ItemDraeton();
