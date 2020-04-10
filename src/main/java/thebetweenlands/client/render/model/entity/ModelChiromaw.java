@@ -14,6 +14,7 @@ import thebetweenlands.client.render.model.MowzieModelBase;
 import thebetweenlands.client.render.model.MowzieModelRenderer;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityChiromawGreeblingRider;
+import thebetweenlands.common.entity.mobs.EntityLargeChiromaw;
 
 @SideOnly(Side.CLIENT)
 public class ModelChiromaw extends MowzieModelBase {
@@ -352,8 +353,13 @@ public class ModelChiromaw extends MowzieModelBase {
         EntityChiromaw chiromaw = (EntityChiromaw) entity;
         GlStateManager.pushMatrix();
         if (chiromaw.getIsHanging()) {
-            GlStateManager.translate(0.0F, 2.125F, 0.0F);
-            GlStateManager.rotate(180, 1F, 0F, 0.0F);
+        	if (!(entity instanceof EntityLargeChiromaw)) {
+        		GlStateManager.translate(0.0F, 2.125F, 0.0F);
+        		GlStateManager.rotate(180, 1F, 0F, 0.0F);
+        	}
+        	if (entity instanceof EntityLargeChiromaw) {
+        		GlStateManager.translate(0.0F, 0F, 0.0F);
+        	}
         } else {
             GlStateManager.rotate(40, 1F, 0F, 0.0F);
             GlStateManager.translate(0.0F, 0F, -0.8F);
