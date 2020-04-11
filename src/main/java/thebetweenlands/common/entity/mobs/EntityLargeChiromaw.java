@@ -82,7 +82,6 @@ public class EntityLargeChiromaw extends EntityChiromaw {
 		//}
 
 		if (getBroodCount() > 0 && getAttackTarget() == null && getIsBroody() && !getIsHanging()) {
-			BlockPos blockBelow = getPosition();
 			if(getEntityBoundingBox().intersects(getNestBox())) {
 				if (getEntityBoundingBox().minY > getBoundOrigin().getY()) {
 					if (!getEntityWorld().isRemote) {
