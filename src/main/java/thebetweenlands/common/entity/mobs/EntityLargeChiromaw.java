@@ -14,6 +14,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
@@ -22,13 +23,14 @@ import net.minecraft.world.World;
 
 public class EntityLargeChiromaw extends EntityChiromaw {
 	private static final DataParameter<Boolean> IS_BROODY = EntityDataManager.createKey(EntityLargeChiromaw.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IS_LANDING = EntityDataManager.createKey(EntityLargeChiromaw.class, DataSerializers.BOOLEAN);
 	public int broodCount;
 	@Nullable
 	private BlockPos boundOrigin;
 	
 	public EntityLargeChiromaw(World world) {
 		super(world);
-		setSize(1.4F, 1.8F);
+		setSize(2.1F, 2.7F);
 		setIsHanging(false);
 	}
 	
@@ -36,6 +38,7 @@ public class EntityLargeChiromaw extends EntityChiromaw {
 	protected void entityInit() {
 		super.entityInit();
 		dataManager.register(IS_BROODY, false);
+		dataManager.register(IS_LANDING, false);
 	}
 
 	@Override
@@ -80,14 +83,20 @@ public class EntityLargeChiromaw extends EntityChiromaw {
 
 		if (getBroodCount() > 0 && getAttackTarget() == null && getIsBroody() && !getIsHanging()) {
 			BlockPos blockBelow = getPosition();
-			if(blockBelow.getX() == getBoundOrigin().getX() && blockBelow.getZ() == getBoundOrigin().getZ()) {
+			if(getEntityBoundingBox().intersects(getNestBox())) {
 				if (getEntityBoundingBox().minY > getBoundOrigin().getY()) {
+					if (!getEntityWorld().isRemote) {
+						if (!getIsLanding())
+							setIsLanding(true);
+					}
 					motionX = 0D;
 					motionY -= 0.0625D;
 					motionZ = 0D;
 				}
 				if (getEntityBoundingBox().minY <= getBoundOrigin().getY()) {
 					if (!getEntityWorld().isRemote) {
+						if(getIsLanding())
+							setIsLanding(false);
 						setIsHanging(true);
 						setPosition(getBoundOrigin().getX() + 0.5D, getBoundOrigin().getY(), getBoundOrigin().getZ() + 0.5D);
 					}
@@ -96,8 +105,8 @@ public class EntityLargeChiromaw extends EntityChiromaw {
 		}
 
 		if(getEntityWorld().getBlockState(getPosition().down()).isSideSolid(getEntityWorld(), getPosition().down(), EnumFacing.UP)) {
-			if(!getIsBroody())
-				getMoveHelper().setMoveTo(posX, posY + 2, posZ, 1.0D);
+			if(!getIsLanding() && !getIsHanging())
+				getMoveHelper().setMoveTo(posX, posY + 3, posZ, 1.0D);
 		}
 	}
 	
@@ -122,12 +131,20 @@ public class EntityLargeChiromaw extends EntityChiromaw {
 	public void setIsBroody(boolean broody) {
 		dataManager.set(IS_BROODY, broody);
 	}
+	
+	public boolean getIsLanding() {
+		return dataManager.get(IS_LANDING);
+	}
 
-	private void setBroodCount(int count) {
+	public void setIsLanding(boolean landing) {
+		dataManager.set(IS_LANDING, landing);
+	}
+
+	public void setBroodCount(int count) {
 		broodCount = count;
 	}
 	
-	private int getBroodCount() {
+	public int getBroodCount() {
 		return broodCount;
 	}
 
@@ -171,6 +188,11 @@ public class EntityLargeChiromaw extends EntityChiromaw {
 
 	public void setBoundOrigin(@Nullable BlockPos boundOriginIn) {
 		boundOrigin = boundOriginIn;
+	}
+	
+	public AxisAlignedBB getNestBox() {
+		return new AxisAlignedBB(boundOrigin, boundOrigin.up(3));
+		
 	}
 	
 	class AIMoveRandom extends EntityAIBase {

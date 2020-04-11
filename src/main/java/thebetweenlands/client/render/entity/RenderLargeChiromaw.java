@@ -22,11 +22,13 @@ public class RenderLargeChiromaw extends RenderLiving<EntityLargeChiromaw> {
 
 	@Override
 	protected void preRenderCallback(EntityLargeChiromaw chiromaw, float partialTickTime) {
-		GlStateManager.scale(2.0F, 2.0F, 2.0F);
-		if (!chiromaw.getIsHanging()) {
+		GlStateManager.scale(3.0F, 3.0F, 3.0F);
+		if (!chiromaw.getIsHanging() && !chiromaw.getIsLanding()) {
 			float flap = MathHelper.sin((chiromaw.ticksExisted + partialTickTime) * 0.5F) * 0.6F;
-			GlStateManager.translate(0.0F, 0F - flap * 0.5F, 0.0F);
+			GlStateManager.translate(0.0F, 0F - flap * 0.25F, 0.0F);
 		}
+		if (chiromaw.getIsLanding())
+			GlStateManager.rotate(-20F, 1F, 0F, 0F);
 	}
 
 	@Override

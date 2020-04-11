@@ -440,7 +440,7 @@ public class ModelChiromaw extends MowzieModelBase {
             head_jaw1.rotateAngleX = 0.9560913642424937F;
             head_base.rotateAngleX = 0.091106186954104F;
         } else {
-            float flap = MathHelper.sin((chiromaw.ticksExisted + partialRenderTicks) * 0.5F) * 0.6F;
+        	 float flap = MathHelper.sin((chiromaw.ticksExisted + partialRenderTicks) * 0.5F) * 0.6F;
             arm_right1.rotateAngleZ = 0.5462880558742251F;
             arm_right2.rotateAngleZ = 0F;
             arm_left1.rotateAngleZ = -0.5462880558742251F;
@@ -451,10 +451,20 @@ public class ModelChiromaw extends MowzieModelBase {
             arm_left1.rotateAngleY = -0.9091106186954104F;
             arm_left2.rotateAngleY = 0;
 
-            float globalSpeed = 1;
-            float globalDegree = 1;
+            float globalSpeed = 1F;
+            float globalDegree = 1F;
             float frame = chiromaw.ticksExisted + partialRenderTicks;
 
+       	 	if(chiromaw instanceof EntityLargeChiromaw && ((EntityLargeChiromaw) chiromaw).getIsLanding()) {
+       	 		flap = 0F;
+       	 		globalSpeed  = 1.5F;
+       	 		globalDegree = 0.25F;
+               // globalDegree = 0;
+       	 		head_base.rotateAngleX = -0.091106186954104F;
+       	 	}
+       	 	else
+       	 		head_base.rotateAngleX = -0.698132F;
+       	 	
             swing(arm_right1, globalSpeed * 0.5f, globalDegree * 1.1f, false, 2.8f, 0.5f, frame, 1F);
             flap(arm_right2, globalSpeed * 0.5f, globalDegree * 0.8f, false, 2.0f, 0f, frame, 1F);
             swing(arm_left1, globalSpeed * 0.5f, globalDegree * 1.1f, true, 2.8f, -0.5f, frame, 1F);
@@ -473,7 +483,8 @@ public class ModelChiromaw extends MowzieModelBase {
             lil_tail3.rotateAngleX = 0.40980330836826856F + flap * 0.125F;
 
             head_jaw1.rotateAngleX = 0.9560913642424937F - flap * 0.5F;
-            head_base.rotateAngleX = -0.698132F;
+           // head_base.rotateAngleX = -0.698132F;
+
             
             // WIP shooting animation
             
