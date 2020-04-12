@@ -2,7 +2,9 @@ package thebetweenlands.common.entity.mobs;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -12,31 +14,47 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
+import thebetweenlands.common.entity.movement.FlightMoveHelper;
+import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityLargeChiromaw extends EntityChiromaw {
-	private static final DataParameter<Boolean> IS_BROODY = EntityDataManager.createKey(EntityLargeChiromaw.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> IS_LANDING = EntityDataManager.createKey(EntityLargeChiromaw.class, DataSerializers.BOOLEAN);
+public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityBL {
+	private static final DataParameter<Boolean> IS_NESTING = EntityDataManager.createKey(EntityChiromawMatriarch.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IS_BROODY = EntityDataManager.createKey(EntityChiromawMatriarch.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IS_LANDING = EntityDataManager.createKey(EntityChiromawMatriarch.class, DataSerializers.BOOLEAN);
 	public int broodCount;
 	@Nullable
 	private BlockPos boundOrigin;
 	
-	public EntityLargeChiromaw(World world) {
+	public EntityChiromawMatriarch(World world) {
 		super(world);
-		setSize(2.1F, 2.7F);
+		setSize(1.75F, 2F);
 		setIsHanging(false);
+
+		this.moveHelper = new FlightMoveHelper(this);
+		setPathPriority(PathNodeType.WATER, -8F);
+		setPathPriority(PathNodeType.BLOCKED, -8.0F);
+		setPathPriority(PathNodeType.OPEN, 8.0F);
+		setPathPriority(PathNodeType.FENCE, -8.0F);
 	}
 	
 	@Override
 	protected void entityInit() {
 		super.entityInit();
+		dataManager.register(IS_NESTING, false);
 		dataManager.register(IS_BROODY, false);
 		dataManager.register(IS_LANDING, false);
 	}
@@ -45,14 +63,15 @@ public class EntityLargeChiromaw extends EntityChiromaw {
 	protected void initEntityAI() {
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
-		tasks.addTask(2, new EntityLargeChiromaw.AIMoveRandom(this));
-		tasks.addTask(3, new EntityLargeChiromaw.AIReturnToNest(this, 2D));
+		tasks.addTask(2, new EntityChiromawMatriarch.AIMoveRandom(this));
+		tasks.addTask(3, new EntityChiromawMatriarch.AIReturnToNest(this, 1.25D));
 		targetTasks.addTask(1, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, true).setUnseenMemoryTicks(160));
 	}
 	
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+
 		if (!getEntityWorld().isRemote) {
 			if (getEntityWorld().getDifficulty() == EnumDifficulty.PEACEFUL)
 				setDead();
@@ -73,26 +92,26 @@ public class EntityLargeChiromaw extends EntityChiromaw {
 			getMoveHelper().setMoveTo(posX, posY + 1, posZ, 1.0D);
 		}
 
-		if (getIsHanging()) {
+		if (getIsNesting()) {
 			motionX = motionY = motionZ = 0.0D;
 		}
 
-		//if (motionY < 0.0D && getAttackTarget() == null) {
-		//	motionY *= 0.5D;
-		//}
-
-		if (getBroodCount() > 0 && getAttackTarget() == null && getIsBroody() && !getIsHanging()) {
+		if (getBroodCount() > 0 && getAttackTarget() == null && getIsBroody() && !getIsNesting()) {
 			if(getEntityBoundingBox().intersects(getNestBox())) {
-				if (getEntityBoundingBox().minY > getBoundOrigin().getY()) {
+				double d0 = getBoundOrigin().getX() + 0.5D - posX;
+				double d1 = getBoundOrigin().getY() - posY;
+				double d2 = getBoundOrigin().getZ() + 0.5D - posZ;
+				motionX += (Math.signum(d0) - motionX) * 0.0000000003D;
+				motionY += (Math.signum(d1) - motionY) * 0.03125D;
+				motionZ += (Math.signum(d2) - motionZ) * 0.0000000003D;
+
+				if (getEntityBoundingBox().minY > getNestBox().minY) {
 					if (!getEntityWorld().isRemote) {
 						if (!getIsLanding())
 							setIsLanding(true);
 					}
-					motionX = 0D;
-					motionY -= 0.0625D;
-					motionZ = 0D;
 				}
-				if (getEntityBoundingBox().minY <= getBoundOrigin().getY()) {
+				if (getEntityBoundingBox().minY <= getNestBox().minY + 0.0625D) {
 					if (!getEntityWorld().isRemote) {
 						if(getIsLanding())
 							setIsLanding(false);
@@ -104,20 +123,20 @@ public class EntityLargeChiromaw extends EntityChiromaw {
 		}
 
 		if(getEntityWorld().getBlockState(getPosition().down()).isSideSolid(getEntityWorld(), getPosition().down(), EnumFacing.UP)) {
-			if(!getIsLanding() && !getIsHanging())
+			if(!getIsLanding() && !getIsNesting())
 				getMoveHelper().setMoveTo(posX, posY + 3, posZ, 1.0D);
 		}
 	}
-	
+
 	@Override
 	protected void updateAITasks() {
-		if (getIsHanging()) {
-			if (!this.world.isRemote) {
-				if (this.world.getBlockState(new BlockPos(this.posX, this.posY - 1, this.posZ)).isNormalCube()) {
+		if (getIsNesting()) {
+			if (!getEntityWorld().isRemote) {
+				if (getEntityWorld().getBlockState(new BlockPos(this.posX, this.posY - 1, this.posZ)).isNormalCube()) {
 					setIsHanging(false);
-				} else if (this.getAttackTarget() != null) {
+				} else if (getAttackTarget() != null) {
 					setIsHanging(false);
-					this.world.playEvent(null, 1025, this.getPosition(), 0);
+					getEntityWorld().playEvent(null, 1025, this.getPosition(), 0);
 				}
 			}
 		}
@@ -142,10 +161,68 @@ public class EntityLargeChiromaw extends EntityChiromaw {
 	public void setBroodCount(int count) {
 		broodCount = count;
 	}
-	
+
 	public int getBroodCount() {
 		return broodCount;
 	}
+
+	public boolean getIsNesting() {
+		return dataManager.get(IS_NESTING);
+	}
+
+	public void setIsHanging(boolean nesting) {
+		dataManager.set(IS_NESTING, nesting);
+	}
+
+	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.CHIROMAW;
+	}
+
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return SoundRegistry.FLYING_FIEND_LIVING;
+	}
+
+	@Nullable
+	@Override
+	protected SoundEvent getHurtSound(DamageSource source) {
+		return SoundRegistry.FLYING_FIEND_HURT;
+	}
+
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundRegistry.FLYING_FIEND_DEATH;
+	}
+
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
+		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.095D);
+	}
+
+	@Override
+	public boolean attackEntityAsMob(Entity entityIn) {
+		return EntityAIAttackOnCollide.useStandardAttack(this, entityIn);
+	}
+
+	@Override
+	public int getMaxSpawnedInChunk() {
+		return 1;
+	}
+	
+	@Override
+    public float getBlockPathWeight(BlockPos pos) {
+        return 0.5F;
+    }
+
+    @Override
+    protected boolean isValidLightLevel() {
+    	return true;
+    }
 
 	@Override
 	@Nullable
@@ -190,14 +267,14 @@ public class EntityLargeChiromaw extends EntityChiromaw {
 	}
 	
 	public AxisAlignedBB getNestBox() {
-		return new AxisAlignedBB(boundOrigin, boundOrigin.up(3));
+		return new AxisAlignedBB(boundOrigin, boundOrigin.up(4)).grow(0.0625D, 0F, 0.0625D);
 		
 	}
 	
 	class AIMoveRandom extends EntityAIBase {
-		private final EntityLargeChiromaw largeChiromaw;
+		private final EntityChiromawMatriarch largeChiromaw;
 
-		public AIMoveRandom(EntityLargeChiromaw large_chiromaw) {
+		public AIMoveRandom(EntityChiromawMatriarch large_chiromaw) {
 			setMutexBits(1);
 			largeChiromaw = large_chiromaw;
 		}
@@ -236,13 +313,13 @@ public class EntityLargeChiromaw extends EntityChiromaw {
 	}
 	
 	class AIReturnToNest extends EntityAIBase {
-		private final EntityLargeChiromaw largeChiromaw;
+		private final EntityChiromawMatriarch largeChiromaw;
 		protected double x;
 		protected double y;
 		protected double z;
 		private final double speed;
 
-		public AIReturnToNest(EntityLargeChiromaw large_chiromaw, double speedIn) {
+		public AIReturnToNest(EntityChiromawMatriarch large_chiromaw, double speedIn) {
 			largeChiromaw = large_chiromaw;
 			speed = speedIn;
 			setMutexBits(1);
@@ -250,7 +327,7 @@ public class EntityLargeChiromaw extends EntityChiromaw {
 
 		@Override
 		public boolean shouldExecute() {
-			if (largeChiromaw.getIsBroody()) {
+			if (largeChiromaw.getIsBroody() && !largeChiromaw.getIsNesting()) {
 
 				Vec3d nestLocation = getNestPosition();
 
@@ -269,7 +346,7 @@ public class EntityLargeChiromaw extends EntityChiromaw {
 
 		@Nullable
 		protected Vec3d getNestPosition() {
-			return new Vec3d(largeChiromaw.getBoundOrigin().getX() + 0.5D, largeChiromaw.getBoundOrigin().getY() + 0.5D, largeChiromaw.getBoundOrigin().getZ() + 0.5D);
+			return new Vec3d(getBoundOrigin().getX() + 0.5D, largeChiromaw.getBoundOrigin().getY() + 0.5D, largeChiromaw.getBoundOrigin().getZ() + 0.5D);
 		}
 
 		@Override

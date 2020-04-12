@@ -56,7 +56,7 @@ import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.entity.mobs.EntityGiantToad;
 import thebetweenlands.common.entity.mobs.EntityGreebling;
 import thebetweenlands.common.entity.mobs.EntityGreeblingVolarpadFloater;
-import thebetweenlands.common.entity.mobs.EntityLargeChiromaw;
+import thebetweenlands.common.entity.mobs.EntityChiromawMatriarch;
 import thebetweenlands.common.entity.mobs.EntityLargeSludgeWorm;
 import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityLurker;
@@ -213,7 +213,7 @@ public class EntityRegistry {
 		registerEntity(EntityBetweenstonePebble.class, "betweenstone_pebble", 64, 20, true);
 		
 		registerEntity(EntityWormGroundSpawner.class, "worm_ground_spawner");
-		registerEntity(EntityLargeChiromaw.class, "large_chirowmaw", 0x3F5A69, 0xA16A77);
+		registerEntity(EntityChiromawMatriarch.class, "chirowmaw_matriarch", 0x3F5A69, 0xA16A77);
 	}
 
 	private static int id = 0;

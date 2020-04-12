@@ -126,7 +126,7 @@ import thebetweenlands.client.render.entity.RenderGiantToad;
 import thebetweenlands.client.render.entity.RenderGrapplingHookNode;
 import thebetweenlands.client.render.entity.RenderGreebling;
 import thebetweenlands.client.render.entity.RenderGreeblingVolarpadFloater;
-import thebetweenlands.client.render.entity.RenderLargeChiromaw;
+import thebetweenlands.client.render.entity.RenderChiromawMatriarch;
 import thebetweenlands.client.render.entity.RenderLargeSludgeWorm;
 import thebetweenlands.client.render.entity.RenderLeech;
 import thebetweenlands.client.render.entity.RenderLurker;
@@ -279,7 +279,7 @@ import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.entity.mobs.EntityGiantToad;
 import thebetweenlands.common.entity.mobs.EntityGreebling;
 import thebetweenlands.common.entity.mobs.EntityGreeblingVolarpadFloater;
-import thebetweenlands.common.entity.mobs.EntityLargeChiromaw;
+import thebetweenlands.common.entity.mobs.EntityChiromawMatriarch;
 import thebetweenlands.common.entity.mobs.EntityLargeSludgeWorm;
 import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityLurker;
@@ -709,7 +709,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityChiromawGreeblingRider.class, RenderChiromawGreeblingRider::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGreeblingVolarpadFloater.class, RenderGreeblingVolarpadFloater::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBetweenstonePebble.class, RenderBetweenstonePebbleProjectile::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityLargeChiromaw.class, RenderLargeChiromaw::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityChiromawMatriarch.class, RenderChiromawMatriarch::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());

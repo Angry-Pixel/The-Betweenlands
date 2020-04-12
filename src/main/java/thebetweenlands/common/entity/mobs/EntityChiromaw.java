@@ -72,8 +72,7 @@ public class EntityChiromaw extends EntityFlyingMob implements IEntityBL {
 
 		if (this.getIsHanging()) {
 			this.motionX = this.motionY = this.motionZ = 0.0D;
-			if(!(this instanceof EntityLargeChiromaw))
-				this.posY = (double) MathHelper.floor(this.posY) + 1.0D - (double) this.height;
+			this.posY = (double) MathHelper.floor(this.posY) + 1.0D - (double) this.height;
 		}
 
 		if (motionY < 0.0D && this.getAttackTarget() == null) {

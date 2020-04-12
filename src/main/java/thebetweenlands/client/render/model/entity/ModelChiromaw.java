@@ -14,7 +14,6 @@ import thebetweenlands.client.render.model.MowzieModelBase;
 import thebetweenlands.client.render.model.MowzieModelRenderer;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityChiromawGreeblingRider;
-import thebetweenlands.common.entity.mobs.EntityLargeChiromaw;
 
 @SideOnly(Side.CLIENT)
 public class ModelChiromaw extends MowzieModelBase {
@@ -353,13 +352,9 @@ public class ModelChiromaw extends MowzieModelBase {
         EntityChiromaw chiromaw = (EntityChiromaw) entity;
         GlStateManager.pushMatrix();
         if (chiromaw.getIsHanging()) {
-        	if (!(entity instanceof EntityLargeChiromaw)) {
-        		GlStateManager.translate(0.0F, 2.125F, 0.0F);
-        		GlStateManager.rotate(180, 1F, 0F, 0.0F);
-        	}
-        	if (entity instanceof EntityLargeChiromaw) {
-        		GlStateManager.translate(0.0F, 0F, 0.0F);
-        	}
+        	GlStateManager.translate(0.0F, 2.125F, 0.0F);
+        	GlStateManager.rotate(180, 1F, 0F, 0.0F);
+        	
         } else {
             GlStateManager.rotate(40, 1F, 0F, 0.0F);
             GlStateManager.translate(0.0F, 0F, -0.8F);
@@ -414,7 +409,7 @@ public class ModelChiromaw extends MowzieModelBase {
     public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
         EntityChiromaw chiromaw = (EntityChiromaw) entity;
         setToInitPose();
-
+        float flap = MathHelper.sin((chiromaw.ticksExisted + partialRenderTicks) * 0.5F) * 0.6F;
         if (chiromaw.getIsHanging()) {
             arm_right1.rotateAngleZ = 0.5462880558742251F;
             arm_right2.rotateAngleZ = 0F;
@@ -440,7 +435,6 @@ public class ModelChiromaw extends MowzieModelBase {
             head_jaw1.rotateAngleX = 0.9560913642424937F;
             head_base.rotateAngleX = 0.091106186954104F;
         } else {
-        	 float flap = MathHelper.sin((chiromaw.ticksExisted + partialRenderTicks) * 0.5F) * 0.6F;
             arm_right1.rotateAngleZ = 0.5462880558742251F;
             arm_right2.rotateAngleZ = 0F;
             arm_left1.rotateAngleZ = -0.5462880558742251F;
@@ -455,16 +449,6 @@ public class ModelChiromaw extends MowzieModelBase {
             float globalDegree = 1F;
             float frame = chiromaw.ticksExisted + partialRenderTicks;
 
-       	 	if(chiromaw instanceof EntityLargeChiromaw && ((EntityLargeChiromaw) chiromaw).getIsLanding()) {
-       	 		flap = 0F;
-       	 		globalSpeed  = 1.5F;
-       	 		globalDegree = 0.25F;
-               // globalDegree = 0;
-       	 		head_base.rotateAngleX = -0.091106186954104F;
-       	 	}
-       	 	else
-       	 		head_base.rotateAngleX = -0.698132F;
-       	 	
             swing(arm_right1, globalSpeed * 0.5f, globalDegree * 1.1f, false, 2.8f, 0.5f, frame, 1F);
             flap(arm_right2, globalSpeed * 0.5f, globalDegree * 0.8f, false, 2.0f, 0f, frame, 1F);
             swing(arm_left1, globalSpeed * 0.5f, globalDegree * 1.1f, true, 2.8f, -0.5f, frame, 1F);
@@ -483,7 +467,7 @@ public class ModelChiromaw extends MowzieModelBase {
             lil_tail3.rotateAngleX = 0.40980330836826856F + flap * 0.125F;
 
             head_jaw1.rotateAngleX = 0.9560913642424937F - flap * 0.5F;
-           // head_base.rotateAngleX = -0.698132F;
+            head_base.rotateAngleX = -0.698132F;
 
             
             // WIP shooting animation
