@@ -57,6 +57,7 @@ public class MapGenCavesBetweenlands extends MapGenBase {
 			= ImmutableSet.of(
 				BiomeRegistry.DEEP_WATERS,
 				BiomeRegistry.COARSE_ISLANDS,
+				BiomeRegistry.RAISED_ISLES,
 				BiomeRegistry.MARSH_0,
 				BiomeRegistry.MARSH_1,
 				BiomeRegistry.PATCHY_ISLANDS,

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -15,6 +16,7 @@ import com.google.common.base.Predicate;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -22,8 +24,10 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.network.IGenericDataManagerAccess;
 import thebetweenlands.api.storage.IChunkStorage;
+import thebetweenlands.api.storage.IDeferredStorageOperation;
 import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.api.storage.IWorldStorage;
@@ -72,6 +76,14 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 				this.tickableLocalStorage.add(storage);
 			}
 
+			if(isInitialAdd) {
+				storage.onAdded();
+			}
+
+			storage.onLoaded();
+
+			boolean isReferenced = false;
+
 			//Add already loaded references
 			for(ChunkPos referenceChunk : storage.getLinkedChunks()) {
 				Chunk chunk = this.world.getChunkProvider().getLoadedChunk(referenceChunk.x, referenceChunk.z);
@@ -79,19 +91,24 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 					IChunkStorage chunkStorage = this.worldStorage.getChunkStorage(chunk);
 					if(chunkStorage != null) {
 						LocalStorageReference reference = chunkStorage.getReference(storage.getID());
-						if(reference != null && !storage.getLoadedReferences().contains(reference)) {
-							//Add reference
-							storage.loadReference(reference);
+						if(reference != null) {
+							isReferenced = true;
+
+							if(!storage.getLoadedReferences().contains(reference)) {
+								//Add reference
+								storage.loadReference(reference);
+							}
 						}
 					}
 				}
 			}
 
-			if(isInitialAdd) {
-				storage.onAdded();
+			if(!isReferenced && isInitialAdd && !this.world.isRemote) {
+				//Location is not referenced by any chunk and being added for the first time.
+				//Linking probably deferred. Save and unload storage until needed.
+				storage.setDirty(true);
+				this.unloadLocalStorage(storage);
 			}
-
-			storage.onLoaded();
 
 			return true;
 		}
@@ -102,7 +119,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	public boolean removeLocalStorage(ILocalStorage storage) {
 		if(this.localStorage.containsKey(storage.getID())) {
 			storage.onRemoving();
-			
+
 			if(!this.world.isRemote) {
 				storage.unlinkAllChunks();
 			}
@@ -354,6 +371,76 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 		storage.getID().writeToNBT(nbt);
 		nbt.setTag("data", storage.writeToNBT(new NBTTagCompound()));
 		return nbt;
+	}
+
+	@Override
+	public void queueDeferredOperation(ChunkPos chunk, IDeferredStorageOperation operation) {
+		//Run immediately if chunk is already loaded
+		Chunk loadedChunk = this.getWorldStorage().getWorld().getChunkProvider().getLoadedChunk(chunk.x, chunk.z);
+		if(loadedChunk != null) {
+			IChunkStorage chunkStorage = this.getWorldStorage().getChunkStorage(loadedChunk);
+			operation.apply(chunkStorage);
+			return;
+		}
+
+		LocalRegionData region = this.regionCache.getOrCreateRegion(LocalRegion.getFromBlockPos(chunk.x * 16, chunk.z * 16));
+
+		NBTTagCompound chunkNbt = region.getChunkNBT(chunk);
+		if(chunkNbt == null) {
+			chunkNbt = new NBTTagCompound();
+		}
+
+		NBTTagList operationsNbt = chunkNbt.getTagList("DeferredOperations", Constants.NBT.TAG_COMPOUND);
+
+		ResourceLocation type = StorageRegistry.getDeferredOperationId(operation.getClass());
+		if (type == null) {
+			throw new RuntimeException("Deferred storage operation type not mapped: " + operation);
+		}
+
+		NBTTagCompound data = new NBTTagCompound();
+		data.setString("type", type.toString());
+		data.setTag("data", operation.writeToNBT(new NBTTagCompound()));
+
+		operationsNbt.appendTag(data);
+		chunkNbt.setTag("DeferredOperations", operationsNbt);
+
+		region.setChunkNBT(chunk, chunkNbt);
+	}
+
+	@Override
+	public void loadDeferredOperations(IChunkStorage storage) {
+		ChunkPos chunk = storage.getChunk().getPos();
+
+		LocalRegionData region = this.regionCache.getOrCreateRegion(LocalRegion.getFromBlockPos(chunk.x * 16, chunk.z * 16));
+
+		NBTTagCompound chunkNbt = region.getChunkNBT(chunk);
+
+		if(chunkNbt != null && chunkNbt.hasKey("DeferredOperations", Constants.NBT.TAG_LIST)) {
+			NBTTagList operationsNbt = chunkNbt.getTagList("DeferredOperations", Constants.NBT.TAG_COMPOUND);
+
+			for(int i = 0; i < operationsNbt.tagCount(); i++) {
+				NBTTagCompound data = operationsNbt.getCompoundTagAt(i);
+
+				ResourceLocation type = new ResourceLocation(data.getString("type"));
+
+				Supplier<? extends IDeferredStorageOperation> factory = StorageRegistry.getDeferredOperationFactory(type);
+				if (factory == null) {
+					TheBetweenlands.logger.error("Deferred storage operation type not mapped: " + type + ". Skipping...");
+					continue;
+				}
+
+				IDeferredStorageOperation operation = factory.get();
+
+				operation.readFromNBT(data.getCompoundTag("data"));
+
+				operation.apply(storage);
+			}
+
+			//Clear deferred operations
+			chunkNbt.removeTag("DeferredOperations");
+
+			region.setChunkNBT(chunk, chunkNbt);
+		}
 	}
 
 	public LocalStorageSaveHandler getSaveHandler() {

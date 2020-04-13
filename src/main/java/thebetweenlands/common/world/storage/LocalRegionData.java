@@ -7,8 +7,8 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
 
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
@@ -79,14 +79,6 @@ public class LocalRegionData {
 	}
 
 	/**
-	 * Returns whether the data is dirty
-	 * @return
-	 */
-	public boolean isDirty() {
-		return this.dirty;
-	}
-
-	/**
 	 * Removes a shared storage from this region
 	 * @param dir
 	 * @param id
@@ -101,6 +93,27 @@ public class LocalRegionData {
 		}
 	}
 
+	public void setChunkNBT(ChunkPos chunk, NBTTagCompound nbt) {
+		this.nbt.setTag("ChunkData." + chunk.x + "." + chunk.z, nbt);
+		this.dirty = true;
+	}
+	
+	@Nullable
+	public NBTTagCompound getChunkNBT(ChunkPos chunk) {
+		if(this.nbt.hasKey("ChunkData." + chunk.x + "." + chunk.z, Constants.NBT.TAG_COMPOUND)) {
+			return this.nbt.getCompoundTag("ChunkData." + chunk.x + "." + chunk.z);
+		}
+		return null;
+	}
+
+	/**
+	 * Returns whether the data is dirty
+	 * @return
+	 */
+	public boolean isDirty() {
+		return this.dirty;
+	}
+	
 	/**
 	 * Tries to read the region from a file and if it doesn't exist a new region is created
 	 * @param cache

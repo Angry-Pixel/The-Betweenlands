@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.ChunkPos;
 
 public interface ILocalStorageHandler {
 	/**
@@ -22,7 +23,8 @@ public interface ILocalStorageHandler {
 
 	/**
 	 * Adds a local storage to the world.
-	 * The storage may have no linked chunks when initially added
+	 * The storage may have no linked chunks when initially added, but it needs to be linked
+	 * at latest in {@link ILocalStorage#onAdded()}
 	 * @param storage
 	 * @return
 	 */
@@ -125,6 +127,20 @@ public interface ILocalStorageHandler {
 	 */
 	public ILocalStorage createLocalStorage(ResourceLocation type, StorageID id, @Nullable LocalRegion region);
 
+	/**
+	 * Queues the specified deferred storage operation to be run when the specified chunk is loaded. If the chunk is already loaded
+	 * the operation is executed immediately.
+	 * @param chunk
+	 * @param operation
+	 */
+	public void queueDeferredOperation(ChunkPos chunk, IDeferredStorageOperation operation);
+	
+	/**
+	 * Loads and runs the deferred storage operations of the specified chunk.
+	 * @param storage
+	 */
+	public void loadDeferredOperations(IChunkStorage storage);
+	
 	/**
 	 * Saves a local storage instance to NBT
 	 * @param nbt
