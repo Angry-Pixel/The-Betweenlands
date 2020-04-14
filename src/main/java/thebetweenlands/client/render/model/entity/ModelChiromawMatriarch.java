@@ -458,7 +458,8 @@ public class ModelChiromawMatriarch extends MowzieModelBase {
         GlStateManager.pushMatrix();
         if (chiromaw.getIsNesting()) {
         	GlStateManager.translate(0.0F, 0F, 0.0F);
-        } else {
+        }
+        else {
             GlStateManager.rotate(20, 1F, 0F, 0.0F);
             GlStateManager.translate(0.0F, 0F, 0F);
         }
@@ -510,7 +511,7 @@ public class ModelChiromawMatriarch extends MowzieModelBase {
         float globalDegree = 0.5F;
         float rippleSpeed = 1F;
         float frame = chiromaw.ticksExisted + partialRenderTicks;
-        if (chiromaw.getIsNesting()) {
+        if (chiromaw.getIsNesting() || chiromaw.getIsSpinning()) {
             jaw.rotateAngleX = 0.8651597102135892F;
             head1.rotateAngleX = 0.136659280431156F;
             walk(jaw, rippleSpeed * 0.125f, globalDegree * 0.5f, true, 2.0f, 0f, frame, 1F);
