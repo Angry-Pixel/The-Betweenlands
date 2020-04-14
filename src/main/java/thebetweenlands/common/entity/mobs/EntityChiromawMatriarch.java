@@ -13,7 +13,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -76,7 +76,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		tasks.addTask(2, new EntityChiromawMatriarch.AIMoveRandom(this));
 		tasks.addTask(3, new EntityChiromawMatriarch.AIReturnToNest(this, 1.25D));
 		//targetTasks.addTask(1, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, true).setUnseenMemoryTicks(160));
-		targetTasks.addTask(1, new AIFindNearestTarget<EntitySheep>(this, EntitySheep.class, true, 16D).setUnseenMemoryTicks(160));
+		targetTasks.addTask(1, new AIFindNearestTarget<EntityVillager>(this, EntityVillager.class, true, 16D).setUnseenMemoryTicks(160));
 	}
 	
 	@Override
@@ -328,8 +328,8 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 
 		@Override
 		public boolean shouldExecute() {
-			if (((EntityChiromawMatriarch) taskOwner).getReturnToNest())
-				return false;
+			//if (((EntityChiromawMatriarch) taskOwner).getReturnToNest())
+				//return false;
 			return super.shouldExecute();
 		}
 
@@ -554,6 +554,10 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 
 		@Override
 		public boolean shouldExecute() {
+			EntityLivingBase entitylivingbase = largeChiromaw.getAttackTarget();
+			if (entitylivingbase != null)
+				return false;
+
 			if (largeChiromaw.getReturnToNest() && !largeChiromaw.getIsNesting()) {
 
 				Vec3d nestLocation = getNestPosition();
