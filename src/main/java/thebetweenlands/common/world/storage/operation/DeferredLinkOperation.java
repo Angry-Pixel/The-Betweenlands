@@ -3,7 +3,7 @@ package thebetweenlands.common.world.storage.operation;
 import net.minecraft.nbt.NBTTagCompound;
 import thebetweenlands.api.storage.IChunkStorage;
 import thebetweenlands.api.storage.IDeferredStorageOperation;
-import thebetweenlands.api.storage.ILocalStorage;
+import thebetweenlands.api.storage.ILocalStorageHandle;
 import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.api.storage.LocalStorageReference;
 
@@ -22,13 +22,10 @@ public class DeferredLinkOperation implements IDeferredStorageOperation {
 	public void apply(IChunkStorage chunkStorage) {
 		ILocalStorageHandler handler = chunkStorage.getWorldStorage().getLocalStorageHandler();
 
-		ILocalStorage localStorage = handler.getLocalStorage(this.ref.getID());
-		if(localStorage == null) {
-			localStorage = handler.loadLocalStorage(ref);
-		}
-
-		if(localStorage != null) {
-			chunkStorage.linkLocalStorage(localStorage);
+		try(ILocalStorageHandle handle = handler.getOrLoadLocalStorage(this.ref)) {
+			if(handle != null) {
+				chunkStorage.linkLocalStorage(handle.get());
+			}
 		}
 	}
 

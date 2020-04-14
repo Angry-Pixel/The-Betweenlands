@@ -133,7 +133,7 @@ public class MapGenFloatingIslands extends MapGenBase {
 		if(center.getX() >> 4 == chunkX && center.getZ() >> 4 == chunkZ) {
 			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(this.world);
 			LocationStorage locationStorage = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(center), "floating_island", EnumLocationType.FLOATING_ISLAND);
-			locationStorage.addBounds(new AxisAlignedBB(center).grow(30, 15, 30).offset(0, 8, 0));
+			locationStorage.addBounds(new AxisAlignedBB(center).grow(30, 18, 30).offset(0, 5, 0));
 			locationStorage.setVisible(false);
 			locationStorage.setSeed(locationSeed);
 			locationStorage.setDirty(true);

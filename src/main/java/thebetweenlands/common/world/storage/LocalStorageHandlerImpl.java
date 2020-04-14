@@ -29,6 +29,7 @@ import thebetweenlands.api.network.IGenericDataManagerAccess;
 import thebetweenlands.api.storage.IChunkStorage;
 import thebetweenlands.api.storage.IDeferredStorageOperation;
 import thebetweenlands.api.storage.ILocalStorage;
+import thebetweenlands.api.storage.ILocalStorageHandle;
 import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
@@ -45,6 +46,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 
 	private final Map<StorageID, ILocalStorage> localStorage = new HashMap<StorageID, ILocalStorage>();
 	private final List<ILocalStorage> tickableLocalStorage = new ArrayList<>();
+	private final List<ILocalStorage> pendingUnreferencedStorages = new ArrayList<>();
 
 	private final LocalRegionCache regionCache;
 
@@ -104,10 +106,9 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 			}
 
 			if(!isReferenced && isInitialAdd && !this.world.isRemote) {
-				//Location is not referenced by any chunk and being added for the first time.
-				//Linking probably deferred. Save and unload storage until needed.
-				storage.setDirty(true);
-				this.unloadLocalStorage(storage);
+				//Queue storage to be checked in the next tick.
+				//If it is still unreferenced it will be unloaded.
+				this.pendingUnreferencedStorages.add(storage);
 			}
 
 			return true;
@@ -126,12 +127,19 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 
 			this.localStorage.remove(storage.getID());
 
-			Iterator<ILocalStorage> it = this.tickableLocalStorage.iterator();
-			ILocalStorage tickableStorage = null;
-			while(it.hasNext()) {
-				tickableStorage = it.next();
+			Iterator<ILocalStorage> tickableIt = this.tickableLocalStorage.iterator();
+			while(tickableIt.hasNext()) {
+				ILocalStorage tickableStorage = tickableIt.next();
 				if(storage.getID().equals(tickableStorage.getID())) {
-					it.remove();
+					tickableIt.remove();
+				}
+			}
+
+			Iterator<ILocalStorage> pendingIt = this.pendingUnreferencedStorages.iterator();
+			while(pendingIt.hasNext()) {
+				ILocalStorage pendingStorage = pendingIt.next();
+				if(storage.getID().equals(pendingStorage.getID())) {
+					pendingIt.remove();
 				}
 			}
 
@@ -228,23 +236,46 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 		}
 	}
 
+	@Nullable
+	private ILocalStorage loadLocalStorageUnsafe(LocalStorageReference reference) {
+		if(!this.world.isRemote) {
+			try {
+				ILocalStorage storage = this.createLocalStorageFromFile(reference);
+				if(storage != null) {
+					this.addLocalStorageInternal(storage, false);
+
+					if(storage.getRegion() != null) {
+						LocalRegionData data = this.regionCache.getOrCreateRegion(reference.getRegion());
+						data.incrRefCounter();
+					}
+				}
+				return storage;
+			} catch(Exception ex) {
+				TheBetweenlands.logger.error(String.format("Failed loading local storage with ID %s at %s", reference.getID().getStringID(), "[x=" + reference.getChunk().x + ", z=" + reference.getChunk().z + "]"), ex);
+			}
+		}
+		return null;
+	}
+
+	@Deprecated
 	@Override
 	public ILocalStorage loadLocalStorage(LocalStorageReference reference) {
-		try {
-			ILocalStorage storage = this.createLocalStorageFromFile(reference);
-			if(storage != null) {
-				this.addLocalStorageInternal(storage, false);
+		return this.loadLocalStorageUnsafe(reference);
+	}
 
-				if(storage.getRegion() != null) {
-					LocalRegionData data = this.regionCache.getOrCreateRegion(reference.getRegion());
-					data.incrRefCounter();
-				}
+	@Override
+	public ILocalStorageHandle getOrLoadLocalStorage(LocalStorageReference reference) {
+		ILocalStorage storage = this.getLocalStorage(reference.getID());
 
-				return storage;
-			}
-		} catch(Exception ex) {
-			TheBetweenlands.logger.error(String.format("Failed loading local storage with ID %s at %s", reference.getID().getStringID(), "[x=" + reference.getChunk().x + ", z=" + reference.getChunk().z + "]"), ex);
+		//If not already loaded try to load from file
+		if(storage == null && !this.world.isRemote) {
+			storage = this.loadLocalStorageUnsafe(reference);
 		}
+
+		if(storage != null) {
+			return new LocalStorageHandleImpl(storage, reference);
+		}
+
 		return null;
 	}
 
@@ -286,12 +317,19 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 
 			this.localStorage.remove(storage.getID());
 
-			Iterator<ILocalStorage> it = this.tickableLocalStorage.iterator();
-			ILocalStorage tickableStorage = null;
-			while(it.hasNext()) {
-				tickableStorage = it.next();
+			Iterator<ILocalStorage> tickableIt = this.tickableLocalStorage.iterator();
+			while(tickableIt.hasNext()) {
+				ILocalStorage tickableStorage = tickableIt.next();
 				if(storage.getID().equals(tickableStorage.getID())) {
-					it.remove();
+					tickableIt.remove();
+				}
+			}
+
+			Iterator<ILocalStorage> pendingIt = this.pendingUnreferencedStorages.iterator();
+			while(pendingIt.hasNext()) {
+				ILocalStorage pendingStorage = pendingIt.next();
+				if(storage.getID().equals(pendingStorage.getID())) {
+					pendingIt.remove();
 				}
 			}
 
@@ -341,6 +379,19 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 				}
 			}
 		}
+
+		if(!this.world.isRemote) {
+			for(int i = 0; i < this.pendingUnreferencedStorages.size(); i++) {
+				ILocalStorage localStorage = this.pendingUnreferencedStorages.get(i);
+
+				if(localStorage.getLoadedReferences().isEmpty() && this.getLocalStorage(localStorage.getID()) != null) {
+					//Storage is not referenced by any chunk and being added for the first time.
+					//Linking probably deferred. Save and unload storage until needed.
+					this.unloadLocalStorage(localStorage);
+				}
+			}
+		}
+		this.pendingUnreferencedStorages.clear();
 	}
 
 	@Override
