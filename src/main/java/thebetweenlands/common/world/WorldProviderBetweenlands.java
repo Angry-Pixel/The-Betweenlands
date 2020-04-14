@@ -2,6 +2,8 @@ package thebetweenlands.common.world;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBucket;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -12,6 +14,7 @@ import net.minecraft.world.WorldProvider;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.IRenderHandler;
+import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.misc.Fog;
@@ -20,6 +23,7 @@ import thebetweenlands.client.render.sky.BLSkyRenderer;
 import thebetweenlands.client.render.sky.BLSnowRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.handler.LocationHandler;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.event.EventRift;
@@ -323,5 +327,15 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	@SideOnly(Side.CLIENT)
 	public void setShowClouds(boolean show) {
 		this.showClouds = show;
+	}
+
+	@Override
+	public boolean canMineBlock(EntityPlayer player, BlockPos pos) {
+		if (super.canMineBlock(player, pos)) {
+			final ItemStack held = player.getHeldItemMainhand();
+			// buckets check position clicked instead of where water goes
+			return held.getItem() instanceof ItemBucket || held.getItem() instanceof UniversalBucket || !LocationHandler.isProtected(this.world, player, pos);
+		}
+		return false;
 	}
 }
