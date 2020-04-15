@@ -60,6 +60,14 @@
       }
     ]
   },
+  "ambient_floating_island": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:ambience/ambient_floating_island",
+        "stream": true
+      }
+    ]
+  },
   "druid_chant": {
     "sounds": [
       "thebetweenlands:druid_chant"
