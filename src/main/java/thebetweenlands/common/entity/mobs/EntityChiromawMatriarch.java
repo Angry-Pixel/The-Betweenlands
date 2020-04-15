@@ -1,5 +1,9 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import com.google.common.base.Predicate;
@@ -37,12 +41,16 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.item.tools.bow.EnumArrowType;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityBL {
 	private static final DataParameter<Boolean> IS_NESTING = EntityDataManager.createKey(EntityChiromawMatriarch.class, DataSerializers.BOOLEAN);
@@ -81,8 +89,9 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	protected void initEntityAI() {
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityChiromawMatriarch.AIPickUpAndDropAttack(this, 2.0D, true));
-		tasks.addTask(2, new EntityChiromawMatriarch.AIMoveRandom(this));
-		tasks.addTask(3, new EntityChiromawMatriarch.AIReturnToNest(this, 1.25D));
+		tasks.addTask(2, new EntityChiromawMatriarch.AIReturnToNest(this, 1.25D));
+		tasks.addTask(3, new EntityChiromawMatriarch.AIMoveRandom(this));
+		tasks.addTask(4, new EntityChiromawMatriarch.AIChangeNest(this));
 		targetTasks.addTask(1, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, true).setUnseenMemoryTicks(160));
 		targetTasks.addTask(1, new AIFindNearestTarget<EntityVillager>(this, EntityVillager.class, true, 16D).setUnseenMemoryTicks(160));
 	}
@@ -300,6 +309,11 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
     	return true;
     }
 
+    @Override
+    protected boolean canDespawn() {
+    	return false;
+    }
+    
 	@Override
 	@Nullable
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
@@ -608,6 +622,68 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 					}
 					break;
 				}
+			}
+		}
+	}
+	
+	class AIChangeNest extends EntityAIBase {
+		private final EntityChiromawMatriarch largeChiromaw;
+
+		protected float maxRangeSq = 180 * 180;
+		
+		public AIChangeNest(EntityChiromawMatriarch large_chiromaw) {
+			this.setMutexBits(0);
+			this.largeChiromaw = large_chiromaw;
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			return !this.largeChiromaw.getReturnToNest() && this.largeChiromaw.getAttackTarget() == null && 
+					(this.largeChiromaw.getBoundOrigin() == null || this.largeChiromaw.getBoundOrigin().distanceSq(this.largeChiromaw.posX, this.largeChiromaw.posY, this.largeChiromaw.posZ) < 64) && this.largeChiromaw.rand.nextInt(100) == 0; //TODO Timer?
+		}
+
+		@Override
+		public boolean shouldContinueExecuting() {
+			return false;
+		}
+
+		@Override
+		public void updateTask() {
+			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(this.largeChiromaw.world);
+			
+			List<LocationStorage> priorityNests = new ArrayList<>();
+			List<LocationStorage> otherNests = new ArrayList<>();
+			
+			for(ILocalStorage localStorage : worldStorage.getLocalStorageHandler().getLoadedStorages()) {
+				
+				if(localStorage instanceof LocationStorage && localStorage.getBoundingBox() != null &&
+						localStorage.getBoundingBox().getCenter().squareDistanceTo(this.largeChiromaw.posX, this.largeChiromaw.posY, this.largeChiromaw.posZ) < this.maxRangeSq &&
+						((LocationStorage) localStorage).getType() == EnumLocationType.FLOATING_ISLAND) { //TODO Check for nest location instead
+					
+					Vec3d center = localStorage.getBoundingBox().getCenter();
+					
+					if(this.largeChiromaw.world.getClosestPlayer(center.x, center.y, center.z, 32, entity -> !((EntityPlayer) entity).isCreative() && !((EntityPlayer) entity).isSpectator()) != null) {
+						priorityNests.add((LocationStorage) localStorage);
+					} else {
+						otherNests.add((LocationStorage) localStorage);
+					}
+				}
+				
+			}
+
+			LocationStorage nest = null;
+			if(!priorityNests.isEmpty()) {
+				Collections.shuffle(priorityNests);
+				nest = priorityNests.get(0);
+			} else if(!otherNests.isEmpty()) {
+				Collections.shuffle(otherNests);
+				nest = otherNests.get(0);
+			}
+			
+			if(nest != null) {
+				this.largeChiromaw.setBoundOrigin(new BlockPos(nest.getBoundingBox().getCenter())); //TODO Use correct nest position
+				this.largeChiromaw.setIsNesting(false);
+				this.largeChiromaw.setReturnToNest(true);
 			}
 		}
 	}
