@@ -523,10 +523,15 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 			
 			if(largeChiromaw.getIsSpinning()) {
 	    		rotation += 30;
-	    		if (rotation%60 == 0) {
+	    		if (rotation%30 == 0) {
+	    			Vec3d targetVector = new Vec3d(entitylivingbase.posX, entitylivingbase.posY, entitylivingbase.posZ);
+	    			Vec3d chiromawVectorToTarget = new Vec3d(largeChiromaw.posX, largeChiromaw.posY, largeChiromaw.posZ).subtract(targetVector);
+	    			double height = chiromawVectorToTarget.y;
+	    			double distance = chiromawVectorToTarget.length();
+	    			double angle = MathHelper.atan2(height, distance) * (180D / Math.PI);
 	    			EntityBLArrow arrow = new EntityBLArrow(world, largeChiromaw);
 	    			arrow.setType(EnumArrowType.DEFAULT);
-	    			arrow.shoot(largeChiromaw, 60F, rotation, 0.5F, 0.5F, 1F);
+	    			arrow.shoot(largeChiromaw, (float)angle, rotation, 1.5F, 0.5F, 0.5F);
 	    			world.spawnEntity(arrow);
 	    		}
 	    		if(rotation >= 720) {
@@ -552,7 +557,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	            attackTick = 20;
 	            largeChiromaw.jump();
 	            largeChiromaw.swingArm(EnumHand.MAIN_HAND);
-	           // largeChiromaw.attackEntityAsMob(enemy);
+	            largeChiromaw.attackEntityAsMob(enemy);
 	    		if (enemy.isSneaking())
 	    			enemy.setSneaking(false);
 	    		enemy.startRiding(largeChiromaw, true);
