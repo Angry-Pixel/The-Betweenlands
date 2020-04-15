@@ -17,6 +17,8 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.RandomPositionGenerator;
+import net.minecraft.entity.item.EntityFallingBlock;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -28,6 +30,7 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -46,8 +49,10 @@ import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.item.tools.bow.EnumArrowType;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationStorage;
@@ -92,6 +97,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		tasks.addTask(2, new EntityChiromawMatriarch.AIReturnToNest(this, 1.25D));
 		tasks.addTask(3, new EntityChiromawMatriarch.AIMoveRandom(this));
 		tasks.addTask(4, new EntityChiromawMatriarch.AIChangeNest(this));
+		tasks.addTask(5, new EntityChiromawMatriarch.AIPoop(this));
 		targetTasks.addTask(1, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, true).setUnseenMemoryTicks(160));
 		targetTasks.addTask(1, new AIFindNearestTarget<EntityVillager>(this, EntityVillager.class, true, 16D).setUnseenMemoryTicks(160));
 	}
@@ -362,6 +368,63 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	public AxisAlignedBB getNestBox() {
 		return new AxisAlignedBB(boundOrigin, boundOrigin.up(4)).grow(0.0625D, 0F, 0.0625D);
 		
+	}
+
+	public class AIPoop extends EntityAIBase {
+		private final EntityChiromawMatriarch largeChiromaw;
+
+		public AIPoop(EntityChiromawMatriarch large_chiromaw) {
+			setMutexBits(0);
+			largeChiromaw = large_chiromaw;
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			return !largeChiromaw.getIsNesting() && largeChiromaw.rand.nextInt(10) == 0; // 50 is more sensible
+		}
+
+		@Override
+		public boolean shouldContinueExecuting() {
+			return false;
+		}
+
+		@Override
+		public void updateTask() {
+			checkForPoopTarget(); // TODO this is placeholder stuff atm until poop is a thing
+		}
+
+		private void checkForPoopTarget() {
+			int distanceToSurface = (largeChiromaw.world.getSeaLevel() - largeChiromaw.getPosition().getY());
+			if (largeChiromaw.world.provider instanceof WorldProviderBetweenlands) {
+				distanceToSurface = (WorldProviderBetweenlands.LAYER_HEIGHT - largeChiromaw.getPosition().getY());
+			}
+			//TODO use a poop entity that can be aimed rather than dropping from a random pos nearby
+			List<BlockPos> placeToPoop = new ArrayList<>();
+			// if (distanceToSurface > 16D) {
+			AxisAlignedBB underBox = largeChiromaw.getEntityBoundingBox().grow(2D, (double) -distanceToSurface, 2D);
+			if (!getPoopTarget(world, underBox).isEmpty()) {
+				EntitySheep sheepo = getPoopTarget(world, underBox).get(0);
+				if (sheepo != null) {
+					BlockPos pos = sheepo.getPosition();
+					for (BlockPos posDrop : pos.getAllInBox(sheepo.getPosition().add(-2, 0, -2), sheepo.getPosition().add(2, 2, 2)))
+						if (world.isAirBlock(posDrop) && world.canSeeSky(posDrop))
+							placeToPoop.add(posDrop);
+
+					if (!placeToPoop.isEmpty()) {
+						Collections.shuffle(placeToPoop);
+						BlockPos posPoop = placeToPoop.get(0);
+						world.setBlockState(new BlockPos(posPoop.getX(), largeChiromaw.getPosition().getY() - 1D, posPoop.getZ()), BlockRegistry.LOG_ROTTEN_BARK_CARVED_1.getDefaultState());
+						EntityFallingBlock poopEntity = new EntityFallingBlock(world, posPoop.getX() + 0.5D, largeChiromaw.getPosition().getY() - 1D, posPoop.getZ() + 0.5D, BlockRegistry.LOG_ROTTEN_BARK_CARVED_1.getDefaultState());
+						world.spawnEntity(poopEntity);
+					}
+				}
+			}
+			// }
+		}
+		// TODO Eventually make this a player
+		public List<EntitySheep> getPoopTarget(World world, AxisAlignedBB underBox) {
+			return world.<EntitySheep>getEntitiesWithinAABB(EntitySheep.class, underBox, EntitySelectors.IS_ALIVE);
+	    }
 	}
 
 	class AIFindNearestTarget<T extends EntityLivingBase> extends EntityAINearestAttackableTarget {
