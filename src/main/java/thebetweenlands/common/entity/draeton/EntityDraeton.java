@@ -59,6 +59,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IPullerEntity;
 import thebetweenlands.client.audio.DraetonBurnerSound;
 import thebetweenlands.client.audio.DraetonLeakSound;
@@ -80,7 +81,7 @@ import thebetweenlands.util.Matrix;
 import thebetweenlands.util.NBTHelper;
 import thebetweenlands.util.PlayerUtil;
 
-public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAdditionalSpawnData {
+public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAdditionalSpawnData, IEntityBL {
 	private static final DataParameter<Integer> TIME_SINCE_HIT = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.VARINT);
 	private static final DataParameter<Float> DAMAGE_TAKEN = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.FLOAT);
 	private static final DataParameter<Boolean> ANCHOR_DEPLOYED = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);

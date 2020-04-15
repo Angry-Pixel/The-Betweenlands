@@ -482,6 +482,7 @@ item.thebetweenlands.angler_tooth.name=Angler Tooth
 item.thebetweenlands.arrow_arum_leaf.name=Arrow Arum Leaf
 item.thebetweenlands.aspectrus_fruit.name=Aspectrus Fruit
 item.thebetweenlands.aspectrus_fruit.filled.name=Aspectrus Fruit - %s (%s)
+item.thebetweenlands.aspectrus_fruit.filled.default.name=Aspectrus Fruit - %s
 item.thebetweenlands.astatos.name=Legendary Disc
 item.thebetweenlands.beneath_a_green_sky.name=Music Disc
 item.thebetweenlands.between_you_and_me.name=Tribeman's Disc

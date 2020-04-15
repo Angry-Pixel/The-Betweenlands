@@ -30,6 +30,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.aspect.Aspect;
+import thebetweenlands.api.aspect.AspectContainer;
 import thebetweenlands.api.aspect.DiscoveryContainer;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.aspect.ItemAspectContainer;
@@ -79,11 +80,12 @@ public class ItemBucketInfusion extends Item implements ITintedItem, ItemRegistr
 					int count = stackCount.getValue();
 					if (!ingredient.isEmpty()) {
 						list.add((count > 1 ? (count + "x ") : "") + ingredient.getDisplayName());
-						List<Aspect> ingredientAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getDiscoveredStaticAspects(AspectManager.getAspectItem(ingredient), DiscoveryContainer.getMergedDiscoveryContainer(FMLClientHandler.instance().getClientPlayerEntity()));
+						ItemAspectContainer container = ItemAspectContainer.fromItem(ingredient, AspectManager.get(TheBetweenlands.proxy.getClientWorld()));
+						List<Aspect> ingredientAspects = container.getAspects(DiscoveryContainer.getMergedDiscoveryContainer(FMLClientHandler.instance().getClientPlayerEntity()));
 						if (ingredientAspects.size() >= 1) {
 							if (GuiScreen.isShiftKeyDown()) {
 								for (Aspect aspect : ingredientAspects) {
-									list.add("  - " + aspect.type.getName() + " (" + aspect.getDisplayAmount() * count + ")");
+									list.add("  - " + aspect.type.getName() + " (" + Aspect.ASPECT_AMOUNT_FORMAT.format(aspect.getDisplayAmount() * count) + ")");
 								}
 							}
 						}

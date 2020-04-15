@@ -1,6 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/aspectrus_fruit"
+    "layer0": "thebetweenlands:items/aspectrus_fruit",
+    "layer1": "thebetweenlands:items/aspectrus_fruit_overlay"
   }
 }

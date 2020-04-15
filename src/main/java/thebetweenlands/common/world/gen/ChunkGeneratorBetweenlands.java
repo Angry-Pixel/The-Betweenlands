@@ -20,6 +20,7 @@ import javax.imageio.ImageIO;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 
 import net.minecraft.block.Block;
@@ -43,6 +44,7 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.NoiseGeneratorSimplex;
 import net.minecraftforge.event.ForgeEventFactory;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.biome.spawning.WorldMobSpawner;
 import thebetweenlands.common.world.gen.biome.BiomeWeights;
@@ -141,7 +143,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		world.setSeaLevel(layerHeight);
 		this.caveGenerator = new MapGenCavesBetweenlands(seed);
 		this.ravineGenerator = new MapGenRavineBetweenlands();
-		this.giantRootGenerator = new MapGenGiantRoots(seed);
+		this.giantRootGenerator = new MapGenGiantRoots(seed, ImmutableSet.of(BiomeRegistry.COARSE_ISLANDS, BiomeRegistry.RAISED_ISLES));
 		this.floatingIslandGenerator = new MapGenFloatingIslands(seed);
 	}
 

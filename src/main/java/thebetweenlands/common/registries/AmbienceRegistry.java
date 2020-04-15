@@ -10,6 +10,7 @@ import thebetweenlands.client.audio.ambience.AmbienceLayer;
 import thebetweenlands.client.audio.ambience.AmbienceManager;
 import thebetweenlands.client.audio.ambience.list.CaveAmbienceType;
 import thebetweenlands.client.audio.ambience.list.EventAmbienceType;
+import thebetweenlands.client.audio.ambience.list.FloatingIslandAmbienceType;
 import thebetweenlands.client.audio.ambience.list.FrostyAmbienceType;
 import thebetweenlands.client.audio.ambience.list.LocationAmbienceType;
 import thebetweenlands.client.audio.ambience.list.PresentAmbienceType;
@@ -38,6 +39,7 @@ public class AmbienceRegistry {
 		AmbienceManager.INSTANCE.registerAmbience(new WaterAmbienceType(true));
 		AmbienceManager.INSTANCE.registerAmbience(new WaterAmbienceType(false));
 		AmbienceManager.INSTANCE.registerAmbience(new WindAmbienceType());
+		AmbienceManager.INSTANCE.registerAmbience(new FloatingIslandAmbienceType());
 
 		//Locations
 		AmbienceManager.INSTANCE.registerAmbience(new LocationAmbienceType(EnumLocationAmbience.WIGHT_TOWER, SoundRegistry.AMBIENT_WIGHT_FORTRESS) {

@@ -216,6 +216,7 @@ public class AmateMapData extends MapData {
             SPIRIT_TREE(10, 16, 16, 16, 16, 4.0f),
             FORTRESS(11, 0, 104, 24, 24, 6.0f),
             SLUDGE_WORM_DUNGEON(13, 24, 96, 32, 32, 8.0f),
+            FLOATING_ISLAND(14, 48, 16, 16, 16, 4.0f),
 
             CHECK(127, 0, 32, 16, 16, 4.0f);
 
@@ -273,6 +274,8 @@ public class AmateMapData extends MapData {
                         return SPIRIT_TREE;
                     case "sludge_worm_dungeon":
                     	return SLUDGE_WORM_DUNGEON;
+                    case "floating_island":
+                    	return FLOATING_ISLAND;
                 }
                 return NONE;
             }

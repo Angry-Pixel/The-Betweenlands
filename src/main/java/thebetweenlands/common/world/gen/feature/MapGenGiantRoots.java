@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.MapGenBase;
 import thebetweenlands.common.registries.BiomeRegistry;
@@ -22,8 +24,11 @@ public class MapGenGiantRoots extends MapGenBase {
 
 	protected List<WorldGenGiantRoot> giantRootGens = new ArrayList<>();
 
-	public MapGenGiantRoots(long worldSeed) {
+	protected Set<Biome> biomes;
+	
+	public MapGenGiantRoots(long worldSeed, Set<Biome> biomes) {
 		this.range = 5;
+		this.biomes = biomes;
 		this.coarseIslandsFeature.initializeGenerators(worldSeed, BiomeRegistry.COARSE_ISLANDS);
 	}
 
@@ -54,7 +59,7 @@ public class MapGenGiantRoots extends MapGenBase {
 		int inChunkZ = 0;
 		for(int xs = 0; xs < subDivs; xs++) {
 			for(int zs = 0; zs < subDivs; zs++) {
-				if(worldIn.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + inChunkX, 64, chunkZ * 16 + inChunkZ)) == BiomeRegistry.COARSE_ISLANDS && this.rand.nextInt(28) == 0 /*&& this.coarseIslandsFeature.isIslandAt(inChunkX, inChunkZ, 1) && !this.coarseIslandsFeature.isIslandCragrockAt(inChunkX, inChunkZ)*/) {
+				if(this.biomes.contains(worldIn.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + inChunkX, 64, chunkZ * 16 + inChunkZ))) && this.rand.nextInt(28) == 0 /*&& this.coarseIslandsFeature.isIslandAt(inChunkX, inChunkZ, 1) && !this.coarseIslandsFeature.isIslandCragrockAt(inChunkX, inChunkZ)*/) {
 					BlockPos candidate = new BlockPos(chunkX * 16 + inChunkX, WorldProviderBetweenlands.LAYER_HEIGHT - 6, chunkZ * 16 + inChunkZ);
 					startCandidates.add(candidate);
 				}
