@@ -17,7 +17,6 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -48,8 +47,8 @@ import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
+import thebetweenlands.common.entity.projectiles.EntityChiromawDroppings;
 import thebetweenlands.common.item.tools.bow.EnumArrowType;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
@@ -380,7 +379,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 
 		@Override
 		public boolean shouldExecute() {
-			return !largeChiromaw.getIsNesting() && largeChiromaw.rand.nextInt(10) == 0; // 50 is more sensible
+			return !largeChiromaw.getIsNesting() && largeChiromaw.rand.nextInt(20) == 0; // frequency of random pooping
 		}
 
 		@Override
@@ -390,40 +389,39 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 
 		@Override
 		public void updateTask() {
-			checkForPoopTarget(); // TODO this is placeholder stuff atm until poop is a thing
+			checkForPoopTarget();
 		}
 
 		private void checkForPoopTarget() {
-			int distanceToSurface = (largeChiromaw.world.getSeaLevel() - largeChiromaw.getPosition().getY());
+			int distanceToSurface = (largeChiromaw.getPosition().getY() - largeChiromaw.world.getSeaLevel());
 			if (largeChiromaw.world.provider instanceof WorldProviderBetweenlands) {
-				distanceToSurface = (WorldProviderBetweenlands.LAYER_HEIGHT - largeChiromaw.getPosition().getY());
+				distanceToSurface = (largeChiromaw.getPosition().getY() - WorldProviderBetweenlands.LAYER_HEIGHT);
 			}
-			//TODO use a poop entity that can be aimed rather than dropping from a random pos nearby
+			// TODO use a poop entity that can be aimed rather than dropping
+			// from a random pos nearby
 			List<BlockPos> placeToPoop = new ArrayList<>();
-			// if (distanceToSurface > 16D) {
-			AxisAlignedBB underBox = largeChiromaw.getEntityBoundingBox().grow(2D, (double) -distanceToSurface, 2D);
-			if (!getPoopTarget(world, underBox).isEmpty()) {
-				EntitySheep sheepo = getPoopTarget(world, underBox).get(0);
-				if (sheepo != null) {
-					BlockPos pos = sheepo.getPosition();
-					for (BlockPos posDrop : pos.getAllInBox(sheepo.getPosition().add(-2, 0, -2), sheepo.getPosition().add(2, 2, 2)))
-						if (world.isAirBlock(posDrop) && world.canSeeSky(posDrop))
-							placeToPoop.add(posDrop);
-
-					if (!placeToPoop.isEmpty()) {
-						Collections.shuffle(placeToPoop);
-						BlockPos posPoop = placeToPoop.get(0);
-						world.setBlockState(new BlockPos(posPoop.getX(), largeChiromaw.getPosition().getY() - 1D, posPoop.getZ()), BlockRegistry.LOG_ROTTEN_BARK_CARVED_1.getDefaultState());
-						EntityFallingBlock poopEntity = new EntityFallingBlock(world, posPoop.getX() + 0.5D, largeChiromaw.getPosition().getY() - 1D, posPoop.getZ() + 0.5D, BlockRegistry.LOG_ROTTEN_BARK_CARVED_1.getDefaultState());
-						world.spawnEntity(poopEntity);
+			if (distanceToSurface >= 16) {
+				AxisAlignedBB underBox = largeChiromaw.getEntityBoundingBox().grow(0.625D, (double) -distanceToSurface, 0.625D);
+				if (!getPoopTarget(world, underBox).isEmpty()) {
+					EntityPlayer player = getPoopTarget(world, underBox).get(0);
+					if (player != null) {
+						BlockPos pos = player.getPosition();
+						for (BlockPos posDrop : pos.getAllInBox(player.getPosition().add(-1, 0, -1), player.getPosition().add(1, 2, 1)))
+							if (world.isAirBlock(posDrop) && world.canSeeSky(posDrop))
+								placeToPoop.add(posDrop);
+						if (!placeToPoop.isEmpty()) {
+							Collections.shuffle(placeToPoop);
+							BlockPos posPoop = placeToPoop.get(0);
+							EntityChiromawDroppings poopEntity = new EntityChiromawDroppings(world, largeChiromaw, posPoop.getX() + 0.5D, largeChiromaw.getPosition().getY(), posPoop.getZ() + 0.5D);
+							world.spawnEntity(poopEntity);
+						}
 					}
 				}
 			}
-			// }
 		}
-		// TODO Eventually make this a player
-		public List<EntitySheep> getPoopTarget(World world, AxisAlignedBB underBox) {
-			return world.<EntitySheep>getEntitiesWithinAABB(EntitySheep.class, underBox, EntitySelectors.IS_ALIVE);
+
+		public List<EntityPlayer> getPoopTarget(World world, AxisAlignedBB underBox) {
+			return world.<EntityPlayer>getEntitiesWithinAABB(EntityPlayer.class, underBox, EntitySelectors.IS_ALIVE);
 	    }
 	}
 
