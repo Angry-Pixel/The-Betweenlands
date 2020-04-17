@@ -68,6 +68,29 @@
         "arrow_type": 5
       },
       "model": "thebetweenlands:item/predator_bow_worm_2"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "arrow_type": 6
+      },
+      "model": "thebetweenlands:item/predator_bow_barb_0"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.65,
+        "arrow_type": 6
+      },
+      "model": "thebetweenlands:item/predator_bow_barb_1"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.9,
+        "arrow_type": 6
+      },
+      "model": "thebetweenlands:item/predator_bow_barb_2"
     }
   ]
 }
