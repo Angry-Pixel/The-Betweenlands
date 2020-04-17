@@ -211,6 +211,11 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	}
 
 	@Override
+	public boolean shouldRiderSit() {
+		return false;
+	}
+
+	@Override
     public boolean canPassengerSteer() {
       return false; //TODO different rider cases
     }
