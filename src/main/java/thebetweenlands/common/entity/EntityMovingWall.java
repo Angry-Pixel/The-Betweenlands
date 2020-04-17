@@ -50,7 +50,6 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake, IEnt
 	private int shake_timer;
 	private boolean shaking = false;
 	private int shakingTimerMax = 20;
-	private int impacts;
 
 	public static final Set<Block> UNBREAKABLE_BLOCKS = new HashSet<Block>();
 
@@ -149,12 +148,6 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake, IEnt
 			calculateAllCollisions(posX, posY + 0.5D, posZ + 1D);
 			calculateAllCollisions(posX, posY - 0.5D, posZ + 1D);
 			calculateAllCollisions(posX, posY + 1.5D, posZ + 1D);
-		}
-		if (!this.world.isRemote && this.impacts > 0) {
-			if (this.impacts-- > 2) {
-				this.setDead();
-				return;
-			}
 		}
 
 		EnumFacing heading = EnumFacing.getFacingFromVector((float)motionX, 0, (float)motionZ);
@@ -294,11 +287,6 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake, IEnt
 		}
 	}
 
-	@Override
-	public boolean isPushedByWater() {
-		return false;
-	}
-
 	private void checkSpawnArea() {
 		BlockPos posEntity = getPosition();
 		Iterable<BlockPos> blocks = BlockPos.getAllInBox(posEntity.add(-1F, -1F, -1F), posEntity.add(1F, 1F, 1F));
@@ -420,7 +408,6 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake, IEnt
 						getEntityWorld().playSound(null, getPosition(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 0.5F, 0.75F);
 					}
 				}
-				this.impacts += 2;
 			}
 			else {
 				if (state.getBlock() != Blocks.BEDROCK) {
