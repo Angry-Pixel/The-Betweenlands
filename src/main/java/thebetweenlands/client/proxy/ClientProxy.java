@@ -232,6 +232,7 @@ import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.entity.EntityAngryPebble;
+import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityGalleryFrame;
@@ -716,7 +717,10 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityChiromawMatriarch.class, RenderChiromawMatriarch::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityChiromawDroppings.class, RenderChiromawDroppings::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityShock.class, RenderNothing::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityBLLightningBolt.class, RenderNothing::new);
+		
 
+		
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new RenderDruidAltar());
