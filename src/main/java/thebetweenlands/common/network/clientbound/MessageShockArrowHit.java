@@ -6,6 +6,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -15,6 +16,7 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.network.MessageEntity;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class MessageShockArrowHit extends MessageEntity {
 	public MessageShockArrowHit() {
@@ -42,7 +44,10 @@ public class MessageShockArrowHit extends MessageEntity {
 				if(from != null && to != null) {
 					Particle particle = BLParticles.LIGHTNING_ARC.create(from.world, from.posX, from.posY + from.height / 2, from.posZ, 
 							ParticleArgs.get().withColor(0.3f, 0.5f, 1.0f, 0.9f).withData(new Vec3d(to.posX, to.posY + to.height / 2, to.posZ)));
+					
 					BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, particle);
+					
+					from.world.playSound(from.posX, from.posY, from.posZ, SoundRegistry.ZAP, SoundCategory.PLAYERS, 1, 1, false);
 				}
 			}
 		}

@@ -85,6 +85,7 @@ public class SoundRegistry {
     public static final BLSoundEvent SLINGSHOT_CHARGE = reg("slingshot_charge");
     public static final BLSoundEvent SLINGSHOT_HIT = reg("slingshot_hit");
     public static final BLSoundEvent SLINGSHOT_SHOOT = reg("slingshot_shoot");
+    public static final BLSoundEvent ZAP = reg("zap");
     // Hostiles
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");
     public static final BLSoundEvent ANGLER_DEATH = reg("angler_death");
