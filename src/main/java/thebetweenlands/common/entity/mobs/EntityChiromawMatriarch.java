@@ -96,7 +96,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		tasks.addTask(3, new EntityChiromawMatriarch.AIMoveRandom(this));
 		tasks.addTask(4, new EntityChiromawMatriarch.AIChangeNest(this));
 		tasks.addTask(5, new EntityChiromawMatriarch.AIPoop(this));
-		targetTasks.addTask(1, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, true).setUnseenMemoryTicks(160));
+		targetTasks.addTask(1, new AIFindNearestTarget<EntityPlayer>(this, EntityPlayer.class, true, 16D).setUnseenMemoryTicks(160));
 		targetTasks.addTask(1, new AIFindNearestTarget<EntityVillager>(this, EntityVillager.class, true, 16D).setUnseenMemoryTicks(160));
 	}
 	
@@ -383,7 +383,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 
 		@Override
 		public boolean shouldExecute() {
-			return !largeChiromaw.getIsNesting() && largeChiromaw.rand.nextInt(20) == 0; // frequency of random pooping
+			return !largeChiromaw.getIsNesting() && largeChiromaw.rand.nextInt(10) == 0; // frequency of random pooping
 		}
 
 		@Override
