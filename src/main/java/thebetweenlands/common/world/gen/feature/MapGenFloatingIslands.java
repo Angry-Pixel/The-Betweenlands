@@ -140,55 +140,57 @@ public class MapGenFloatingIslands extends MapGenBase {
 			worldStorage.getLocalStorageHandler().addLocalStorage(locationStorage);
 		}
 		
-		double[] islandMask = new double[4096];
+		float[] islandMask = new float[256];
 
 		int i = rand.nextInt(4) + 6;
 
 		float size = rand.nextFloat();
 
-		double minSize = 20 + size * 8;
-		double maxSize = 40 + size * 18;
+		float minSize = 20 + size * 8;
+		float maxSize = 40 + size * 18;
 
+		int relX = center.getX() - chunkX * 16;
+		int relZ = center.getZ() - chunkZ * 16;
+		
 		for(int round = 0; round < i; ++round) {
-			double wx = rand.nextDouble() * (maxSize - minSize) + minSize;
-			double wz = rand.nextDouble() * (maxSize - minSize) + minSize;
-			double mx = 32 + (rand.nextDouble() - 0.5D) * wx * 0.5D;
-			double mz = 32 + (rand.nextDouble() - 0.5D) * wz * 0.5D;
+			float wx = rand.nextFloat() * (maxSize - minSize) + minSize;
+			float wz = rand.nextFloat() * (maxSize - minSize) + minSize;
+			float mx = 32 + (rand.nextFloat() - 0.5F) * wx * 0.5F;
+			float mz = 32 + (rand.nextFloat() - 0.5F) * wz * 0.5F;
 
-			for(int ix = 1; ix < 63; ++ix) {
-				for(int iz = 1; iz < 63; ++iz) {
-					double dx = ((double)ix - mx) / wx;
-					double dz = ((double)iz - mz) / wz;
-					double d = dx * dx + dz * dz;
-
-					islandMask[ix * 64 + iz] = Math.max(islandMask[ix * 64 + iz], 1 - d);
+			for(int bx = 0; bx < 16; ++bx) {
+				for(int bz = 0; bz < 16; ++bz) {
+					int ix = bx - relX + 32;
+					int iz = bz - relZ + 32;
+					
+					if(ix >= 0 && ix < 64 && iz >= 0 && iz < 64) {
+						float dx = (ix - mx) / wx;
+						float dz = (iz - mz) / wz;
+						float d = dx * dx + dz * dz;
+	
+						islandMask[bx * 16 + bz] = Math.max(islandMask[bx * 16 + bz], 1 - d);
+					}
 				}
 			}
 		}
 
-		int relX = center.getX() - chunkX * 16;
-		int relZ = center.getZ() - chunkZ * 16;
-
 		this.islandNoise = this.islandNoiseGen.getRegion(this.islandNoise, (double) (chunkX * 16), (double) (chunkZ * 16), 16, 16, 0.4D, 0.4D, 1.0D);
 		this.cragNoise = this.cragNoiseGen.getRegion(this.cragNoise, (double) (chunkX * 16), (double) (chunkZ * 16), 16, 16, 0.55D, 0.55D, 1.0D);
 
-		double minVal = 0.8D;
+		float minVal = 0.8f;
 
 		boolean hasPond = rand.nextInt(3) == 0;
 
 		for(int bx = 0; bx < 16; ++bx) {
 			for(int bz = 0; bz < 16; ++bz) {
-				int ix = bx - relX + 32;
-				int iz = bz - relZ + 32;
-
-				if(ix >= 0 && ix < 64 && iz >= 0 && iz < 64 && islandMask[ix * 64 + iz] > minVal) {
+				if(islandMask[bx * 16 + bz] > minVal) {
 					double islandNoiseVal = this.islandNoise[bz * 16 + bx] / 0.9f + 2.1f;
 
 					double cragNoise = this.cragNoise[bz * 16 + bx] / 2.1f + 2.0f;
 
 					boolean isCrag = cragNoise <= 0;
 
-					double islandMaskVal = islandMask[ix * 64 + iz] - minVal;
+					double islandMaskVal = islandMask[bx * 16 + bz] - minVal;
 
 					int depth = MathHelper.ceil(islandMaskVal * islandMaskVal * 200 + islandNoiseVal * islandNoiseVal * islandMaskVal);
 					int height = MathHelper.floor(islandMaskVal * 12.0f - islandNoiseVal * islandMaskVal * 0.1f + (cragNoise < 0.2f ? 1 : 0));
