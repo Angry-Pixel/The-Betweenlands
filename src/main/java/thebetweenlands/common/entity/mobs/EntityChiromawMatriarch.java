@@ -194,7 +194,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
             	float f = MathHelper.cos(animTime * ((float)Math.PI * 2F));
             	float f1 = MathHelper.cos(prevAnimTime * ((float)Math.PI * 2F));
             	if (f1 <= -0.3F && f >= -0.3F)
-            		world.playSound(posX, posY, posZ, getFlySound(), getSoundCategory(), getIsLanding() ? 0.125F : 0.25F, getIsLanding() ? 1.5F + rand.nextFloat() * 0.3F : 0.8F + rand.nextFloat() * 0.3F, false);
+            		world.playSound(posX, posY, posZ, getFlySound(), getSoundCategory(), getIsLanding() ? 0.25F : 0.5F, getIsLanding() ? 1.5F + rand.nextFloat() * 0.3F : 0.8F + rand.nextFloat() * 0.3F, false);
             }
             
             prevAnimTime = animTime;
