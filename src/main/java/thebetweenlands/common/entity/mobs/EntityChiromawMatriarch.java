@@ -66,6 +66,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	@Nullable
 	private BlockPos boundOrigin;
 	public float previousSpinAngle, spinAngle;
+	public float animTime, prevAnimTime;
 
 	public EntityChiromawMatriarch(World world) {
 		super(world);
@@ -146,7 +147,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 				motionY += (Math.signum(d1) - motionY) * 0.03125D;
 				motionZ += (Math.signum(d2) - motionZ) * 0.0000000003D;
 
-				if (getEntityBoundingBox().minY > getNestBox().minY) {
+				if (getEntityBoundingBox().minY > getNestBox().minY + 0.0625D) {
 					if (!getEntityWorld().isRemote) {
 						if (!getIsLanding())
 							setIsLanding(true);
@@ -154,11 +155,13 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 				}
 				if (getEntityBoundingBox().minY <= getNestBox().minY + 0.0625D) {
 					if (!getEntityWorld().isRemote) {
-						if(getIsLanding())
+						if(getIsLanding()) {
 							setIsLanding(false);
-						setIsNesting(true);
+							getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_LAND, SoundCategory.HOSTILE, 0.5F, 1F + (getEntityWorld().rand.nextFloat() - getEntityWorld().rand.nextFloat()) * 0.8F);
+						}
+						if(!getIsNesting()) 
+							setIsNesting(true);
 						setPosition(getBoundOrigin().getX() + 0.5D, getBoundOrigin().getY(), getBoundOrigin().getZ() + 0.5D);
-						getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_LAND, SoundCategory.HOSTILE, 0.5F, 1F + (getEntityWorld().rand.nextFloat() - getEntityWorld().rand.nextFloat()) * 0.8F);
 					}
 				}
 			}
@@ -183,6 +186,31 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 			//motionZ *= 000001F;
 		}
 	}
+
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
+        if (world.isRemote) {
+            if (!isSilent() && !getIsNesting()) {
+            	float f = MathHelper.cos(animTime * ((float)Math.PI * 2F));
+            	float f1 = MathHelper.cos(prevAnimTime * ((float)Math.PI * 2F));
+            	if (f1 <= -0.3F && f >= -0.3F)
+            		world.playSound(posX, posY, posZ, getFlySound(), getSoundCategory(), getIsLanding() ? 0.125F : 0.25F, getIsLanding() ? 1.5F + rand.nextFloat() * 0.3F : 0.8F + rand.nextFloat() * 0.3F, false);
+            }
+            
+            prevAnimTime = animTime;
+            float flaptimer = 0.079F;
+            if (getIsLanding())
+                animTime += flaptimer * 2F;
+            if (getIsNesting())
+                animTime = 0;
+            else
+                animTime += flaptimer;
+
+            if (isAIDisabled())
+                animTime = 0.5F;
+
+        }
+    }
 
 	@Override
 	protected void updateAITasks() {
@@ -704,14 +732,14 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		protected float maxRangeSq = 180 * 180;
 		
 		public AIChangeNest(EntityChiromawMatriarch large_chiromaw) {
-			this.setMutexBits(0);
-			this.largeChiromaw = large_chiromaw;
+			setMutexBits(0);
+			largeChiromaw = large_chiromaw;
 		}
 
 		@Override
 		public boolean shouldExecute() {
-			return !this.largeChiromaw.getReturnToNest() && this.largeChiromaw.getAttackTarget() == null && 
-					(this.largeChiromaw.getBoundOrigin() == null || this.largeChiromaw.getBoundOrigin().distanceSq(this.largeChiromaw.posX, this.largeChiromaw.posY, this.largeChiromaw.posZ) < 64) && this.largeChiromaw.rand.nextInt(100) == 0; //TODO Timer?
+			return !largeChiromaw.getReturnToNest() && largeChiromaw.getAttackTarget() == null && 
+					(largeChiromaw.getBoundOrigin() == null || largeChiromaw.getBoundOrigin().distanceSq(largeChiromaw.posX, largeChiromaw.posY, largeChiromaw.posZ) < 64) && largeChiromaw.rand.nextInt(100) == 0; //TODO Timer?
 		}
 
 		@Override
@@ -721,7 +749,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 
 		@Override
 		public void updateTask() {
-			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(this.largeChiromaw.world);
+			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(largeChiromaw.world);
 			
 			List<LocationStorage> priorityNests = new ArrayList<>();
 			List<LocationStorage> otherNests = new ArrayList<>();
@@ -729,12 +757,12 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 			for(ILocalStorage localStorage : worldStorage.getLocalStorageHandler().getLoadedStorages()) {
 				
 				if(localStorage instanceof LocationStorage && localStorage.getBoundingBox() != null &&
-						localStorage.getBoundingBox().getCenter().squareDistanceTo(this.largeChiromaw.posX, this.largeChiromaw.posY, this.largeChiromaw.posZ) < this.maxRangeSq &&
+						localStorage.getBoundingBox().getCenter().squareDistanceTo(largeChiromaw.posX, largeChiromaw.posY, largeChiromaw.posZ) < maxRangeSq &&
 						((LocationStorage) localStorage).getType() == EnumLocationType.FLOATING_ISLAND) { //TODO Check for nest location instead
 					
 					Vec3d center = localStorage.getBoundingBox().getCenter();
 					
-					if(this.largeChiromaw.world.getClosestPlayer(center.x, center.y, center.z, 32, entity -> !((EntityPlayer) entity).isCreative() && !((EntityPlayer) entity).isSpectator()) != null) {
+					if(largeChiromaw.world.getClosestPlayer(center.x, center.y, center.z, 32, entity -> !((EntityPlayer) entity).isCreative() && !((EntityPlayer) entity).isSpectator()) != null) {
 						priorityNests.add((LocationStorage) localStorage);
 					} else {
 						otherNests.add((LocationStorage) localStorage);
@@ -753,9 +781,9 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 			}
 			
 			if(nest != null) {
-				this.largeChiromaw.setBoundOrigin(new BlockPos(nest.getBoundingBox().getCenter())); //TODO Use correct nest position
-				this.largeChiromaw.setIsNesting(false);
-				this.largeChiromaw.setReturnToNest(true);
+				largeChiromaw.setBoundOrigin(new BlockPos(nest.getBoundingBox().getCenter())); //TODO Use correct nest position
+				largeChiromaw.setIsNesting(false);
+				largeChiromaw.setReturnToNest(true);
 			}
 		}
 	}
