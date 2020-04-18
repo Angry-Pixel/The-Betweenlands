@@ -4,6 +4,7 @@ import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -30,6 +31,7 @@ import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleLightningArc;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityBLLightningBolt extends EntityLightningBolt implements IEntityAdditionalSpawnData {
 	private static final byte EVENT_STRIKE = 80;
@@ -192,7 +194,9 @@ public class EntityBLLightningBolt extends EntityLightningBolt implements IEntit
 
 	@SideOnly(Side.CLIENT)
 	private void spawnArcs() {
-		if(this.delay < 30 || this.ticksExisted % (this.delay / 20 + 1) == 0) {
+		Entity view = Minecraft.getMinecraft().getRenderViewEntity();
+		
+		if(view != null && view.getDistance(this) < 60 && (this.delay < 30 || this.ticksExisted % (this.delay / 20 + 1) == 0)) {
 			float ox = (this.world.rand.nextFloat() - 0.5f) * 4;
 			float oy = this.world.rand.nextFloat() * 2;
 			float oz = (this.world.rand.nextFloat() - 0.5f) * 4;
@@ -203,6 +207,10 @@ public class EntityBLLightningBolt extends EntityLightningBolt implements IEntit
 					.withData(new Vec3d(this.posX + ox, this.posY + oy, this.posZ + oz)));
 
 			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, particle);
+
+			if(view.getDistance(this) < 8) {
+				this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.ZAP, SoundCategory.AMBIENT, 1, 1, false);
+			}
 		}
 	}
 

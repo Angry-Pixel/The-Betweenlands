@@ -7,9 +7,11 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -49,12 +51,23 @@ public class EventThunderstorm extends TimedEnvironmentEvent {
 				WorldServer worldServer = (WorldServer)world;
 				for (Iterator<Chunk> iterator = worldServer.getPersistentChunkIterable(worldServer.getPlayerChunkMap().getChunkIterator()); iterator.hasNext(); ) {
 					Chunk chunk = iterator.next();
-					if(world.provider.canDoLightning(chunk) && world.rand.nextInt(30000) == 0) {
+					if(world.provider.canDoLightning(chunk) && world.rand.nextInt(2500) == 0) {
 						this.updateLCG = this.updateLCG * 3 + 1013904223;
 						int l = this.updateLCG >> 2;
-						BlockPos pos = this.adjustPosToNearbyEntity(worldServer, new BlockPos(chunk.x * 16 + (l & 15), 0, chunk.z * 16 + (l >> 8 & 15)));
-						if(world.isRainingAt(pos)) {
-							world.spawnEntity(new EntityBLLightningBolt(world, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), 400));
+						
+						BlockPos seedPos = new BlockPos(chunk.x * 16 + (l & 15), 0, chunk.z * 16 + (l >> 8 & 15));
+						
+						boolean isFlyingPlayerTarget = false;
+						
+						BlockPos pos = this.getNearbyFlyingPlayer(worldServer, seedPos);
+						if(pos == null) {
+							pos = this.adjustPosToNearbyEntity(worldServer, seedPos);
+						} else {
+							isFlyingPlayerTarget = true;
+						}
+						
+						if((pos.getY() > 150 || this.getWorld().rand.nextInt(8) == 0) && world.isRainingAt(pos)) {
+							world.spawnEntity(new EntityBLLightningBolt(world, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), isFlyingPlayerTarget ? 50 : 400));
 						}
 					}
 				}
@@ -62,6 +75,40 @@ public class EventThunderstorm extends TimedEnvironmentEvent {
 		}
 	}
 
+	@Nullable
+	protected BlockPos getNearbyFlyingPlayer(WorldServer world, BlockPos blockpos) {
+		EntityPlayer closestPlayer = null;
+		double closestDistSq = Double.MAX_VALUE;
+		for(EntityPlayer player : world.playerEntities) {
+			if(player.posY > 130 && (!player.onGround || player.isRiding()) && (player.posY - world.getHeight(new BlockPos(player)).getY()) > 8) {
+				double dstSq = (blockpos.getX() - player.posX) * (blockpos.getX() - player.posX) + (blockpos.getZ() - player.posZ) * (blockpos.getZ() - player.posZ);
+				if(dstSq < closestDistSq) {
+					closestPlayer = player;
+					closestDistSq = dstSq;
+				}
+			}
+		}
+		
+		if(closestPlayer != null && closestDistSq < 50 * 50) {
+			double motionX;
+			double motionY;
+			double motionZ;
+			if(closestPlayer.getRidingEntity() != null) {
+				motionX = closestPlayer.getRidingEntity().motionX;
+				motionY = closestPlayer.getRidingEntity().motionY;
+				motionZ = closestPlayer.getRidingEntity().motionZ;
+			} else {
+				motionX = closestPlayer.motionX;
+				motionY = closestPlayer.motionY;
+				motionZ = closestPlayer.motionZ;
+			}
+			
+			return new BlockPos(closestPlayer).add(motionX * 60 + world.rand.nextInt(5) - 2, motionY * 60 + world.rand.nextInt(5) - 2, motionZ * 60 + world.rand.nextInt(5) - 2);
+		}
+		
+		return null;
+	}
+	
 	protected BlockPos adjustPosToNearbyEntity(WorldServer world, BlockPos pos) {
 		BlockPos blockpos = world.getPrecipitationHeight(pos);
 		AxisAlignedBB aabb = (new AxisAlignedBB(blockpos, new BlockPos(blockpos.getX(), world.getHeight(), blockpos.getZ()))).grow(3.0D);

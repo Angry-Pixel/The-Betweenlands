@@ -203,6 +203,8 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		super(world);
 		this.setSize(1.5F, 1.5f);
 
+		this.isImmuneToFire = true;
+		
 		EntityDraetonInteractionPart[] mainParts = new EntityDraetonInteractionPart[]{ 
 				this.guiPart = new EntityDraetonInteractionPart(this, "gui", 0.5f, 0.5f, false),
 						this.upgradePart1 = new EntityDraetonInteractionPart(this, "upgrade_1", 0.5f, 0.75f, false), this.upgradePart2 = new EntityDraetonInteractionPart(this, "upgrade_2", 0.5f, 0.75f, false),
@@ -1022,6 +1024,8 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 	@Override
 	public void onUpdate() {
+		this.extinguish();
+		
 		this.prevRotationRoll = this.rotationRoll;
 
 		this.prevBalloonPos = this.balloonPos;
@@ -1812,7 +1816,6 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 				boolean isPlayerHit = source.getImmediateSource() instanceof EntityPlayer;
 
 				if(!this.world.isRemote) {
-					this.setTimeSinceHit(10);
 					if(isPlayerHit) {
 						this.setDamageTaken(this.getDamageTaken() + amount * 10.0F);
 					} else {
@@ -1830,12 +1833,16 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 							this.setDead();
 						}
 					} else {
-						if(this.leakages.size() < 16) {
+						if(this.getTimeSinceHit() < 5 && this.leakages.size() < 16) {
 							this.addLeakage(this.generateRandomLeakage());
 						}
 					}
 
-					this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.DRAETON_DAMAGE, SoundCategory.NEUTRAL, 1, 1);
+					if(this.getTimeSinceHit() < 5) {
+						this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.DRAETON_DAMAGE, SoundCategory.NEUTRAL, 1, 1);
+					}
+					
+					this.setTimeSinceHit(10);
 				}
 
 				if(!isPlayerHit) {
@@ -2036,10 +2043,13 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 			} else if(part == this.burnerPart) {
 				if(!held.isEmpty() && held.getItem() == ItemRegistry.DENTROTHYST_FLUID_VIAL) {
 					if(!this.world.isRemote) {
-						ItemStack result = this.tryFillingBurner(held);
-						if(!result.equals(held)) {
+						ItemStack input = held.copy();
+						ItemStack result = this.tryFillingBurner(input);
+						if(!result.equals(input)) {
 							this.world.playSound(null, player.posX, player.posY, player.posZ, FluidRegistry.SHALLOWBREATH.getEmptySound(new FluidStack(FluidRegistry.SHALLOWBREATH, 1000)), SoundCategory.BLOCKS, 1.0F, 1.0F);
-							player.setHeldItem(hand, result);
+							if(!player.isCreative()) {
+								player.setHeldItem(hand, result);
+							}
 						}
 					}
 					player.swingArm(hand);

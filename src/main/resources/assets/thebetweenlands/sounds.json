@@ -1597,5 +1597,17 @@
     "sounds": [
       "thebetweenlands:pit_fall"
     ]
+  },
+  "zap": {
+    "sounds": [
+      "thebetweenlands:zap_1",
+      "thebetweenlands:zap_2",
+      "thebetweenlands:zap_3",
+      "thebetweenlands:zap_4",
+      "thebetweenlands:zap_5",
+      "thebetweenlands:zap_6",
+      "thebetweenlands:zap_7",
+      "thebetweenlands:zap_8"
+    ]
   }
 }
