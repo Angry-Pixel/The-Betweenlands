@@ -28,8 +28,11 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.EntitySplodeshroom;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
+import thebetweenlands.common.network.clientbound.PacketParticle;
+import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
 
 public class EntityChiromawDroppings extends Entity {
 
@@ -37,8 +40,8 @@ public class EntityChiromawDroppings extends Entity {
 	private static final DataParameter<Float> AOE_SIZE_XZ = EntityDataManager.createKey(EntitySplodeshroom.class, DataSerializers.FLOAT);
 	private static final DataParameter<Float> AOE_SIZE_Y = EntityDataManager.createKey(EntitySplodeshroom.class, DataSerializers.FLOAT);
 
-	protected float prevFloatingRotationTicks = 0;
-	protected float floatingRotationTicks = 0;
+	public float prevRotationTicks = 0;
+	public float rotationTicks = 0;
 	protected EntityLivingBase thrower;
     public Entity ignoreEntity;
     private int ignoreTime;
@@ -68,11 +71,11 @@ public class EntityChiromawDroppings extends Entity {
 	public void onUpdate() {
 		super.onUpdate();
 		// TODO in case we want an animation grab smoothedAngle(float partialTicks) method for render class
-		prevFloatingRotationTicks = floatingRotationTicks;
-		floatingRotationTicks += 5;
-		float wrap = MathHelper.wrapDegrees(floatingRotationTicks) - floatingRotationTicks;
-		floatingRotationTicks +=wrap;
-		prevFloatingRotationTicks += wrap;
+		prevRotationTicks = rotationTicks;
+		rotationTicks += 15;
+		float wrap = MathHelper.wrapDegrees(rotationTicks) - rotationTicks;
+		rotationTicks +=wrap;
+		prevRotationTicks += wrap;
 
 		if (!getEntityWorld().isRemote) {
 			if(getHasExploded()) {
@@ -83,6 +86,9 @@ public class EntityChiromawDroppings extends Entity {
 				if (getAOESizeXZ() <= 0.5F)
 					setDead();
 			}
+			if (!getHasExploded())
+				if (getEntityWorld().getTotalWorldTime() % 5 == 0)
+					TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.CHIROMAW_DROPPINGS, (float) posX, (float)posY + (float) motionY, (float)posZ, 1F));
 		}
 
 		if (getHasExploded())
@@ -211,7 +217,7 @@ public class EntityChiromawDroppings extends Entity {
 
     @SideOnly(Side.CLIENT)
     public float smoothedAngle(float partialTicks) {
-        return prevFloatingRotationTicks + (floatingRotationTicks - prevFloatingRotationTicks) * partialTicks;
+        return prevRotationTicks + (rotationTicks - prevRotationTicks) * partialTicks;
     }
 
 	@Override
