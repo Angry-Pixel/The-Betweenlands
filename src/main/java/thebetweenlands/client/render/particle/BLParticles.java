@@ -20,6 +20,7 @@ import thebetweenlands.client.render.particle.entity.ParticleBreakingBL;
 import thebetweenlands.client.render.particle.entity.ParticleBubbleBL;
 import thebetweenlands.client.render.particle.entity.ParticleBug;
 import thebetweenlands.client.render.particle.entity.ParticleCaveWaterDrip;
+import thebetweenlands.client.render.particle.entity.ParticleChiromawDroppings;
 import thebetweenlands.client.render.particle.entity.ParticleDamageReduction;
 import thebetweenlands.client.render.particle.entity.ParticleDraetonBurnerFlame;
 import thebetweenlands.client.render.particle.entity.ParticleDruidCasting;
@@ -140,7 +141,9 @@ public enum BLParticles {
 	RING_OF_RECRUITMENT_FOLLOW(new ParticleRingOfRecruitmentState.FactoryFollow()),
 	RING_OF_RECRUITMENT_GUARD(new ParticleRingOfRecruitmentState.FactoryGuard()),
 	DRAETON_BURNER_FLAME(new ParticleDraetonBurnerFlame.Factory()),
+	CHIROMAW_DROPPINGS(new ParticleChiromawDroppings.Factory().getBaseArgsBuilder().withColor(0, 0, 0, 1).buildBaseArgs()),
 	LIGHTNING_ARC(new ParticleLightningArc.Factory());
+
 
 	private ParticleFactory<?, ?> factory;
 

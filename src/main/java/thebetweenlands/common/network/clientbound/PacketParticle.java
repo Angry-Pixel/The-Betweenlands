@@ -28,7 +28,8 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 		BEAM_YELLOW,
 		GOOP_SPLAT, 
 		SPLODE_SHROOM,
-		FLAME_JET;
+		FLAME_JET,
+		CHIROMAW_DROPPINGS;
 		static final ParticleType[] values = values();
 	}
 
@@ -154,6 +155,23 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 						TheBetweenlands.proxy.spawnCustomParticle("flame", world, d3, d1, d4, 0.0D, 0.01D, 0.0D);
 						TheBetweenlands.proxy.spawnCustomParticle("flame", world, d5, d6, d7, 0.0D, 0.01D, 0.0D);
 					}
+					break;
+				case CHIROMAW_DROPPINGS:
+						double d0 = message.posX - 0.075F;
+						double d1 = message.posY;
+						double d2 = message.posZ - 0.075F;
+						double d3 = message.posX + 0.075F;
+						double d4 = message.posZ + 0.075F;
+						double d5 = message.posX;
+						double d6 = message.posY + 0.25F;
+						double d7 = message.posZ;
+
+						BLParticles.CHIROMAW_DROPPINGS.spawn(world, d0, d1, d4, ParticleArgs.get().withMotion(0.125f * (d1) * (rand.nextFloat() - 0.5f), -0.03f, 0.125f * (d1) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+						BLParticles.CHIROMAW_DROPPINGS.spawn(world, d3, d1, d2, ParticleArgs.get().withMotion(0.125f * (d1) * (rand.nextFloat() - 0.5f), -0.03f, 0.125f * (d1) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+						BLParticles.CHIROMAW_DROPPINGS.spawn(world, d3, d1, d4, ParticleArgs.get().withMotion(0.125f * (d1) * (rand.nextFloat() - 0.5f), -0.03f, 0.125f * (d1) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+						BLParticles.CHIROMAW_DROPPINGS.spawn(world, d0, d1, d2, ParticleArgs.get().withMotion(0.125f * (d1) * (rand.nextFloat() - 0.5f), -0.03f, 0.125f * (d1) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+						BLParticles.CHIROMAW_DROPPINGS.spawn(world, d5, d6, d7, ParticleArgs.get().withMotion(0.125f * (d1) * (rand.nextFloat() - 0.5f), -0.03f, 0.125f * (d1) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+						BLParticles.CHIROMAW_DROPPINGS.spawn(world, d0, d1, d2, ParticleArgs.get().withMotion(0.125f * (d1) * (rand.nextFloat() - 0.5f), -0.03f, 0.125f * (d1) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
 					break;
 				default:
 			}

@@ -98,7 +98,9 @@ import thebetweenlands.client.render.entity.RenderBloodSnail;
 import thebetweenlands.client.render.entity.RenderBoulderSprite;
 import thebetweenlands.client.render.entity.RenderCCGroundSpawner;
 import thebetweenlands.client.render.entity.RenderChiromaw;
+import thebetweenlands.client.render.entity.RenderChiromawDroppings;
 import thebetweenlands.client.render.entity.RenderChiromawGreeblingRider;
+import thebetweenlands.client.render.entity.RenderChiromawMatriarch;
 import thebetweenlands.client.render.entity.RenderCryptCrawler;
 import thebetweenlands.client.render.entity.RenderDarkDruid;
 import thebetweenlands.client.render.entity.RenderDarkLight;
@@ -126,7 +128,6 @@ import thebetweenlands.client.render.entity.RenderGiantToad;
 import thebetweenlands.client.render.entity.RenderGrapplingHookNode;
 import thebetweenlands.client.render.entity.RenderGreebling;
 import thebetweenlands.client.render.entity.RenderGreeblingVolarpadFloater;
-import thebetweenlands.client.render.entity.RenderChiromawMatriarch;
 import thebetweenlands.client.render.entity.RenderLargeSludgeWorm;
 import thebetweenlands.client.render.entity.RenderLeech;
 import thebetweenlands.client.render.entity.RenderLurker;
@@ -260,6 +261,7 @@ import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityChiromawGreeblingRider;
+import thebetweenlands.common.entity.mobs.EntityChiromawMatriarch;
 import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
 import thebetweenlands.common.entity.mobs.EntityDarkDruid;
 import thebetweenlands.common.entity.mobs.EntityDarkLight;
@@ -282,7 +284,6 @@ import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.entity.mobs.EntityGiantToad;
 import thebetweenlands.common.entity.mobs.EntityGreebling;
 import thebetweenlands.common.entity.mobs.EntityGreeblingVolarpadFloater;
-import thebetweenlands.common.entity.mobs.EntityChiromawMatriarch;
 import thebetweenlands.common.entity.mobs.EntityLargeSludgeWorm;
 import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityLurker;
@@ -317,6 +318,7 @@ import thebetweenlands.common.entity.mobs.EntityWallLivingRoot;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
+import thebetweenlands.common.entity.projectiles.EntityChiromawDroppings;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
 import thebetweenlands.common.entity.projectiles.EntityPredatorArrowGuide;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
@@ -713,8 +715,11 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityGreeblingVolarpadFloater.class, RenderGreeblingVolarpadFloater::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBetweenstonePebble.class, RenderBetweenstonePebbleProjectile::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityChiromawMatriarch.class, RenderChiromawMatriarch::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityChiromawDroppings.class, RenderChiromawDroppings::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityShock.class, RenderNothing::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBLLightningBolt.class, RenderNothing::new);
+		
+
 		
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());

@@ -7,6 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.entity.layer.LayerOverlay;
 import thebetweenlands.client.render.model.entity.ModelChiromawMatriarch;
 import thebetweenlands.common.entity.mobs.EntityChiromawMatriarch;
 
@@ -16,7 +17,7 @@ public class RenderChiromawMatriarch extends RenderLiving<EntityChiromawMatriarc
 
 	public RenderChiromawMatriarch(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelChiromawMatriarch(), 1.5F);
-		//this.addLayer(new LayerOverlay<>(this, new ResourceLocation("thebetweenlands:textures/entity/chiromaw_matriarch_glow.png")).setGlow(true));
+		this.addLayer(new LayerOverlay<>(this, new ResourceLocation("thebetweenlands:textures/entity/chiromaw_matriarch_glow.png")).setGlow(true));
 	}
 
 	@Override
