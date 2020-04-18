@@ -200,6 +200,7 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 				
 				TheBetweenlands.networkWrapper.sendToAllTracking(new MessageShockArrowHit(chain), this);
 			}
+			break;
 		case CHIROMAW_BARB:
 			if(living.isNonBoss()) {
 				living.addPotionEffect(ElixirEffectRegistry.EFFECT_PETRIFY.createEffect(40, 1));
