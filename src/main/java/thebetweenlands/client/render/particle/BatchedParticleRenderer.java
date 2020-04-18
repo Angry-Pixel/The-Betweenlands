@@ -213,6 +213,7 @@ public class BatchedParticleRenderer {
 				batchType.postRender(tessellator, entity, partialTicks, rx, rxz, rz, ryz, rxy);
 			}
 
+			GlStateManager.enableCull();
 			GlStateManager.enableDepth();
 			GlStateManager.colorMask(true, true, true, true);
 			GlStateManager.depthMask(true);

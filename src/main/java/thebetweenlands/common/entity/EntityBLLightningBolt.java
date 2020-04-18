@@ -196,20 +196,31 @@ public class EntityBLLightningBolt extends EntityLightningBolt implements IEntit
 	private void spawnArcs() {
 		Entity view = Minecraft.getMinecraft().getRenderViewEntity();
 		
-		if(view != null && view.getDistance(this) < 60 && (this.delay < 30 || this.ticksExisted % (this.delay / 20 + 1) == 0)) {
-			float ox = (this.world.rand.nextFloat() - 0.5f) * 4;
-			float oy = this.world.rand.nextFloat() * 2;
-			float oz = (this.world.rand.nextFloat() - 0.5f) * 4;
-
-			Particle particle = BLParticles.LIGHTNING_ARC.create(this.world, this.posX, this.posY, this.posZ, 
-					ParticleArgs.get()
-					.withColor(0.5f, 0.4f, 1.0f, 0.9f)
-					.withData(new Vec3d(this.posX + ox, this.posY + oy, this.posZ + oz)));
-
-			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, particle);
-
-			if(view.getDistance(this) < 8) {
-				this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.ZAP, SoundCategory.AMBIENT, 1, 1, false);
+		if(view != null && (this.delay < 30 || this.ticksExisted % (this.delay / 20 + 1) == 0)) {
+			float dst = view.getDistance(this);
+			
+			if(dst < 100) {
+				float ox = (this.world.rand.nextFloat() - 0.5f) * 4;
+				float oy = this.world.rand.nextFloat() * 2;
+				float oz = (this.world.rand.nextFloat() - 0.5f) * 4;
+	
+				ParticleLightningArc particle = (ParticleLightningArc) BLParticles.LIGHTNING_ARC.create(this.world, this.posX, this.posY, this.posZ, 
+						ParticleArgs.get()
+						.withColor(0.5f, 0.4f, 1.0f, 0.9f)
+						.withData(new Vec3d(this.posX + ox, this.posY + oy, this.posZ + oz)));
+	
+				if(dst > 30) {
+					//lower quality
+					particle.setBaseSize(0.1f);
+					particle.setSubdivs(2, 1);
+					particle.setSplits(2);
+				}
+				
+				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, particle);
+	
+				if(dst < 16) {
+					this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.ZAP, SoundCategory.AMBIENT, 1, 1, false);
+				}
 			}
 		}
 	}
