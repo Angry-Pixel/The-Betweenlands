@@ -38,6 +38,7 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.EntityShock;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWormHelper;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.tools.bow.EnumArrowType;
@@ -143,62 +144,7 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 			break;
 		case SHOCK:
 			if(!this.world.isRemote) {
-				DamageSource damagesource;
-	            if (this.shootingEntity == null) {
-	                damagesource = DamageSource.causeArrowDamage(this, this);
-	            } else {
-	                damagesource = DamageSource.causeArrowDamage(this, this.shootingEntity);
-	            }
-				
-				List<Pair<Entity, Entity>> chain = new ArrayList<>();
-				
-				Set<EntityLivingBase> targets = new HashSet<>();
-
-				targets.add(living);
-				
-				int iters = 2 + this.world.rand.nextInt(3);
-				
-				if(this.isWet() || this.isInWater() || this.world.isRainingAt(this.getPosition().up())) {
-					iters = iters * 2;
-				}
-				
-				for(int i = 0; i < iters; i++) {
-					Set<EntityLivingBase> newTargets = new HashSet<>();
-					
-					entityLoop: for(Entity entity : targets) {
-						boolean isWet = entity.isWet() || entity.isInWater() || this.world.isRainingAt(entity.getPosition().up());
-						
-						List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().grow(isWet ? 6 : 4));
-						
-						if(entities.size() > 1) {
-							Collections.sort(entities, (e1, e2) -> Double.compare(e1.getDistanceSq(entity), e2.getDistanceSq(entity)));
-							
-							for(int j = 1; j < entities.size(); j++) {
-								EntityLivingBase newTarget = entities.get(j);
-								
-								if(!targets.contains(newTarget) && !newTargets.contains(newTarget)) {
-									newTargets.add(newTarget);
-									
-									chain.add(Pair.of(entity, newTarget));
-									
-						            float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
-						            float damage = MathHelper.ceil((double)f * this.getDamage());
-						            if (this.getIsCritical()) {
-						            	damage += this.rand.nextInt(i / 2 + 2);
-						            }
-						            
-						            newTarget.attackEntityFrom(damagesource, isWet ? 2 * damage : damage);
-									
-									continue entityLoop;
-								}
-							}
-						}
-					}
-					
-					targets.addAll(newTargets);
-				}
-				
-				TheBetweenlands.networkWrapper.sendToAllTracking(new MessageShockArrowHit(chain), this);
+				this.world.spawnEntity(new EntityShock(this.world, this, living, this.isWet() || this.isInWater() || this.world.isRainingAt(this.getPosition().up())));
 			}
 			break;
 		case CHIROMAW_BARB:
