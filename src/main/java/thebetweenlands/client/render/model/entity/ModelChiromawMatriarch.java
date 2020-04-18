@@ -510,7 +510,10 @@ public class ModelChiromawMatriarch extends MowzieModelBase {
         float globalSpeed = 1F;
         float globalDegree = 0.5F;
         float rippleSpeed = 1F;
+        
         float frame = chiromaw.ticksExisted + partialRenderTicks;
+        float flapFrame = chiromaw.flapTicks + partialRenderTicks;
+        
         if (chiromaw.getIsNesting() || chiromaw.getIsSpinning()) {
             jaw.rotateAngleX = 0.8651597102135892F;
             head1.rotateAngleX = 0.136659280431156F;
@@ -537,18 +540,18 @@ public class ModelChiromawMatriarch extends MowzieModelBase {
 	            leg_left1b.rotateAngleX = 1.367539130330308F;
        	 	}
 
-       	 	flap(arm_right1a, globalSpeed * 0.5f, globalDegree * 1.2f, false, 2.0f, 0f, frame, 1F);
-            swing(arm_right1b, globalSpeed * 0.5f, globalDegree * 1.5f, false, 2.8f, 0.5f, frame, 1F);
-            flap(arm_right1c, globalSpeed * 0.5f, globalDegree * 2.5f, false, 2.0f, 0f, frame, 1F);
+       	 	flap(arm_right1a, chiromaw.flapSpeed, globalDegree * 1.2f, false, 2.0f, 0f, flapFrame, 1F);
+            swing(arm_right1b, chiromaw.flapSpeed, globalDegree * 1.5f, false, 2.8f, 0.5f, flapFrame, 1F);
+            flap(arm_right1c, chiromaw.flapSpeed, globalDegree * 2.5f, false, 2.0f, 0f, flapFrame, 1F);
             
-            flap(arm_left1a, globalSpeed * 0.5f, globalDegree * 1.2f, true, 2.0f, 0f, frame, 1F);
-            swing(arm_left1b, globalSpeed * 0.5f, globalDegree * 1.5f, true, 2.8f, -0.5f, frame, 1F);
-            flap(arm_left1c, globalSpeed * 0.5f, globalDegree * 2.5f, true, 2.0f, 0f, frame, 1F);
+            flap(arm_left1a, chiromaw.flapSpeed, globalDegree * 1.2f, true, 2.0f, 0f, flapFrame, 1F);
+            swing(arm_left1b, chiromaw.flapSpeed, globalDegree * 1.5f, true, 2.8f, -0.5f, flapFrame, 1F);
+            flap(arm_left1c, chiromaw.flapSpeed, globalDegree * 2.5f, true, 2.0f, 0f, flapFrame, 1F);
 
-            walk(arm_right1b, globalSpeed * 0.5f, globalDegree * 1f, true, 1.2f, 0.15f, frame, 1F);
-            walk(arm_right1c, globalSpeed * 0.5f, globalDegree * 1.2f, false, 1.2f, -0.9f, frame, 1F);
-            walk(arm_left1b, globalSpeed * 0.5f, globalDegree * 1f, true, 1.2f, 0.15f, frame, 1F);
-            walk(arm_left1c, globalSpeed * 0.5f, globalDegree * 1.2f, false, 1.2f, -0.9f, frame, 1F);
+            walk(arm_right1b, chiromaw.flapSpeed, globalDegree * 1f, true, 1.2f, 0.15f, flapFrame, 1F);
+            walk(arm_right1c, chiromaw.flapSpeed, globalDegree * 1.2f, false, 1.2f, -0.9f, flapFrame, 1F);
+            walk(arm_left1b, chiromaw.flapSpeed, globalDegree * 1f, true, 1.2f, 0.15f, flapFrame, 1F);
+            walk(arm_left1c, chiromaw.flapSpeed, globalDegree * 1.2f, false, 1.2f, -0.9f, flapFrame, 1F);
             
             chainWave(partsTail, rippleSpeed * 0.5f, globalDegree * 0.25f, 2f, frame, 1F);
             swing(head1, rippleSpeed * 0.5f, globalDegree * 0.25f, false, 2.0f, 0f, frame, 1F);

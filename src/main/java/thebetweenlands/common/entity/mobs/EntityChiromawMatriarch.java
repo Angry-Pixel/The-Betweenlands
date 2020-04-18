@@ -67,6 +67,8 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	private BlockPos boundOrigin;
 	public float previousSpinAngle, spinAngle;
 	public float animTime, prevAnimTime;
+	public float flapSpeed = 0.5f;
+	public int flapTicks;
 
 	public EntityChiromawMatriarch(World world) {
 		super(world);
@@ -187,14 +189,18 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		}
 	}
 
+	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
         if (world.isRemote) {
+        	this.flapTicks++;
+        	
             if (!isSilent() && !getIsNesting()) {
-            	float f = MathHelper.cos(animTime * ((float)Math.PI * 2F));
-            	float f1 = MathHelper.cos(prevAnimTime * ((float)Math.PI * 2F));
-            	if (f1 <= -0.3F && f >= -0.3F)
+            	float flapAngle1 = MathHelper.cos(this.flapTicks * this.flapSpeed);
+            	float flapAngle2 = MathHelper.cos((this.flapTicks + 1) * this.flapSpeed);
+            	if(flapAngle1 <= 0.3f && flapAngle2 > 0.3f) {
             		world.playSound(posX, posY, posZ, getFlySound(), getSoundCategory(), getIsLanding() ? 0.25F : 0.5F, getIsLanding() ? 1.5F + rand.nextFloat() * 0.3F : 0.8F + rand.nextFloat() * 0.3F, false);
+            	}
             }
             
             prevAnimTime = animTime;
@@ -319,7 +325,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	}
 
 	protected SoundEvent getFlySound() {
-		return SoundRegistry.CHIROMAW_MATRIARCH_DEATH;
+		return SoundRegistry.CHIROMAW_MATRIARCH_FLAP;
 	}
 
 	@Override
@@ -430,20 +436,16 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		}
 
 		private void checkForPoopTarget() {
-			int distanceToSurface = (largeChiromaw.getPosition().getY() - largeChiromaw.world.getSeaLevel());
-			if (largeChiromaw.world.provider instanceof WorldProviderBetweenlands) {
-				distanceToSurface = (largeChiromaw.getPosition().getY() - WorldProviderBetweenlands.LAYER_HEIGHT);
-			}
+			int distanceToSurface = MathHelper.floor(largeChiromaw.posY) - largeChiromaw.world.getHeight(new BlockPos(largeChiromaw)).getY();
 			// TODO use a poop entity that can be aimed rather than dropping
 			// from a random pos nearby
 			List<BlockPos> placeToPoop = new ArrayList<>();
 			if (distanceToSurface >= 16) {
-				AxisAlignedBB underBox = largeChiromaw.getEntityBoundingBox().grow(0.625D, (double) -distanceToSurface, 0.625D);
+				AxisAlignedBB underBox = largeChiromaw.getEntityBoundingBox().grow(0.625D, distanceToSurface, 0.625D).offset(0, -distanceToSurface / 2.0D, 0);
 				if (!getPoopTarget(world, underBox).isEmpty()) {
 					EntityPlayer player = getPoopTarget(world, underBox).get(0);
 					if (player != null) {
-						BlockPos pos = player.getPosition();
-						for (BlockPos posDrop : pos.getAllInBox(player.getPosition().add(-1, 0, -1), player.getPosition().add(1, 2, 1)))
+						for (BlockPos posDrop : BlockPos.getAllInBox(player.getPosition().add(-1, 0, -1), player.getPosition().add(1, 2, 1)))
 							if (world.isAirBlock(posDrop) && world.canSeeSky(posDrop))
 								placeToPoop.add(posDrop);
 						if (!placeToPoop.isEmpty()) {
@@ -463,11 +465,11 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	    }
 	}
 
-	class AIFindNearestTarget<T extends EntityLivingBase> extends EntityAINearestAttackableTarget {
+	class AIFindNearestTarget<T extends EntityLivingBase> extends EntityAINearestAttackableTarget<T> {
 
 		protected double range;
 		
-		public AIFindNearestTarget(EntityCreature creature, Class classTarget, boolean checkSight, double rangeIn) {
+		public AIFindNearestTarget(EntityCreature creature, Class<T> classTarget, boolean checkSight, double rangeIn) {
 			super(creature, classTarget, checkSight);
 			range = rangeIn;
 		}
