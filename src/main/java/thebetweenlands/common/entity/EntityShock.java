@@ -114,7 +114,7 @@ public class EntityShock extends Entity {
 
 										chain.add(Pair.of(entity, newTarget));
 
-										float f = MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+										float f = MathHelper.sqrt(this.arrow.motionX * this.arrow.motionX + this.arrow.motionY * this.arrow.motionY + this.arrow.motionZ * this.arrow.motionZ);
 										float damage = MathHelper.ceil((double)f * this.arrow.getDamage());
 										if (this.arrow.getIsCritical()) {
 											damage += this.rand.nextInt((int)damage / 2 + 2);

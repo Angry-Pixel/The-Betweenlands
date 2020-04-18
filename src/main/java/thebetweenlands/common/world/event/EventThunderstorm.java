@@ -7,13 +7,13 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
@@ -54,7 +54,7 @@ public class EventThunderstorm extends TimedEnvironmentEvent {
 						int l = this.updateLCG >> 2;
 						BlockPos pos = this.adjustPosToNearbyEntity(worldServer, new BlockPos(chunk.x * 16 + (l & 15), 0, chunk.z * 16 + (l >> 8 & 15)));
 						if(world.isRainingAt(pos)) {
-							world.addWeatherEffect(new EntityLightningBolt(world, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), false));
+							world.spawnEntity(new EntityBLLightningBolt(world, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), 400));
 						}
 					}
 				}

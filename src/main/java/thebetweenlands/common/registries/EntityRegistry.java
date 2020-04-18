@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.EntityAngryPebble;
+import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityGalleryFrame;
@@ -204,6 +205,7 @@ public class EntityRegistry {
 		registerEntity(EntitySludgeMenace.class, "sludge_menace", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntitySludgeMenace.DummyPart.class, "sludge_menace_multipart_dummy", 64, 20, false);
 		registerEntity(EntityShock.class, "shock", 64, 20, false);
+		registerEntity(EntityBLLightningBolt.class, "lightning", 100, 20, false);
 		
 		registerEntity(EntityMultipartDummy.class, "multipart_dummy", 64, 20, false);
 		
