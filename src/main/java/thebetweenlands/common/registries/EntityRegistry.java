@@ -13,6 +13,7 @@ import thebetweenlands.common.entity.EntityLurkerSkinRaft;
 import thebetweenlands.common.entity.EntityMovingWall;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityRopeNode;
+import thebetweenlands.common.entity.EntityShock;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySpikeWave;
@@ -202,6 +203,7 @@ public class EntityRegistry {
 		registerEntity(EntityGalleryFrame.class, "gallery_frame");
 		registerEntity(EntitySludgeMenace.class, "sludge_menace", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntitySludgeMenace.DummyPart.class, "sludge_menace_multipart_dummy", 64, 20, false);
+		registerEntity(EntityShock.class, "shock", 64, 20, false);
 		
 		registerEntity(EntityMultipartDummy.class, "multipart_dummy", 64, 20, false);
 		

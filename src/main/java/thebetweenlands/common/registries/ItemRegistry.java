@@ -305,6 +305,7 @@ public class ItemRegistry {
     public static final Item OCTINE_ARROW = new ItemBLArrow(EnumArrowType.OCTINE).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item BASILISK_ARROW = new ItemBLArrow(EnumArrowType.BASILISK).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item SLUDGE_WORM_ARROW = new ItemBLArrow(EnumArrowType.WORM).setCreativeTab(BLCreativeTabs.GEARS);
+    public static final Item SHOCK_ARROW = new ItemBLArrow(EnumArrowType.SHOCK).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item CHIROMAW_BARB = new ItemBLArrow(EnumArrowType.CHIROMAW_BARB).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item WEEDWOOD_BOW = new ItemBLBow().setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item PREDATOR_BOW = new ItemPredatorBow();
