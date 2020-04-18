@@ -206,6 +206,16 @@ public class SoundRegistry {
     public static final BLSoundEvent BARRISHEE_DEATH = reg("barrishee_death");
     public static final BLSoundEvent BARRISHEE_STEP = reg("barrishee_step");
     public static final BLSoundEvent BARRISHEE_SCREAM = reg("barrishee_scream");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_BARB_FIRE = reg("chiromaw_matriarch_barb_fire");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_BARB_HIT = reg("chiromaw_matriarch_barb_hit");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_LIVING = reg("chiromaw_matriarch_living");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_HURT = reg("chiromaw_matriarch_hurt");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_DEATH = reg("chiromaw_matriarch_death");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_POOP = reg("chiromaw_matriarch_poop");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_SPLAT = reg("chiromaw_matriarch_splat");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_LAND = reg("chiromaw_matriarch_land");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_FLAP = reg("chiromaw_matriarch_flap");
+
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");
     public static final BLSoundEvent FROG_DEATH = reg("frog_death");

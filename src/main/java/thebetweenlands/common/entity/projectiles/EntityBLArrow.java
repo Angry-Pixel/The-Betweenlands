@@ -1,13 +1,5 @@
 package thebetweenlands.common.entity.projectiles;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
@@ -23,10 +15,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -37,13 +27,12 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.EntityShock;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWormHelper;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.tools.bow.EnumArrowType;
-import thebetweenlands.common.network.clientbound.MessageShockArrowHit;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for shooter sync*/ {
 	private static final DataParameter<String> DW_TYPE = EntityDataManager.<String>createKey(EntityBLArrow.class, DataSerializers.STRING);
@@ -175,7 +164,7 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 		if (!this.isSilent()) {
 			if(getArrowType() == EnumArrowType.CHIROMAW_BARB) {
 				if(soundIn == SoundEvents.ENTITY_ARROW_HIT)
-					soundIn = SoundEvents.ENTITY_ITEMFRAME_REMOVE_ITEM; // TODO awaiting sounds
+					soundIn = SoundRegistry.CHIROMAW_MATRIARCH_BARB_HIT;
 			}	
 		}
 		super.playSound(soundIn, volume, pitch);

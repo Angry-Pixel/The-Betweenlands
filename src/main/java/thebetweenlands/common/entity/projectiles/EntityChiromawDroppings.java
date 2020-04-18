@@ -15,6 +15,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -33,6 +34,7 @@ import thebetweenlands.common.entity.EntitySplodeshroom;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.network.clientbound.PacketParticle;
 import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityChiromawDroppings extends Entity {
 
@@ -233,8 +235,10 @@ public class EntityChiromawDroppings extends Entity {
 	protected void onImpact(RayTraceResult result) {
 		if (!getHasExploded() && result.typeOfHit != null) {
 			if(result.typeOfHit == result.typeOfHit.BLOCK || result.typeOfHit == result.typeOfHit.ENTITY && !(result.entityHit instanceof EntityChiromawDroppings) && result.entityHit != thrower)
-			if (!getEntityWorld().isRemote)
-				setHasExploded(true);	
+			if (!getEntityWorld().isRemote) {
+				setHasExploded(true);
+				getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_SPLAT, SoundCategory.HOSTILE, 1F, 1F + (getEntityWorld().rand.nextFloat() - getEntityWorld().rand.nextFloat()) * 0.8F);
+			}
 		}
 	}
 

@@ -931,6 +931,64 @@
       "thebetweenlands:greebling_vanish"
     ]
   },
+   "chiromaw_matriarch_barb_fire": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_barb_fire_1",
+       "thebetweenlands:chiromaw_matriarch_barb_fire_2",
+       "thebetweenlands:chiromaw_matriarch_barb_fire_3"
+    ]
+  },
+   "chiromaw_matriarch_barb_hit": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_barb_hit_1",
+      "thebetweenlands:chiromaw_matriarch_barb_hit_2",
+      "thebetweenlands:chiromaw_matriarch_barb_hit_3"
+    ]
+  },
+   "chiromaw_matriarch_living": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_living_1",
+      "thebetweenlands:chiromaw_matriarch_living_2",
+      "thebetweenlands:chiromaw_matriarch_living_3"
+    ]
+  },
+   "chiromaw_matriarch_hurt": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_hurt_1",
+      "thebetweenlands:chiromaw_matriarch_hurt_2"
+    ]
+  },
+   "chiromaw_matriarch_death": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_death"
+    ]
+  },
+   "chiromaw_matriarch_poop": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_poop_1",
+      "thebetweenlands:chiromaw_matriarch_poop_2",
+      "thebetweenlands:chiromaw_matriarch_poop_3"
+    ]
+  },
+   "chiromaw_matriarch_splat": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_splat_1",
+      "thebetweenlands:chiromaw_matriarch_splat_2",
+      "thebetweenlands:chiromaw_matriarch_splat_3"
+    ]
+  },
+   "chiromaw_matriarch_land": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_land"
+    ]
+  },
+   "chiromaw_matriarch_flap": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_flap_1",
+      "thebetweenlands:chiromaw_matriarch_flap_2",
+      "thebetweenlands:chiromaw_matriarch_flap_3"
+    ]
+  },
   "roof_collapse": {
     "sounds": [
       "thebetweenlands:roof_collapse"

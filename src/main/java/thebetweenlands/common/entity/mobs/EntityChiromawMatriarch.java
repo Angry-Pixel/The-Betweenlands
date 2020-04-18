@@ -158,6 +158,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 							setIsLanding(false);
 						setIsNesting(true);
 						setPosition(getBoundOrigin().getX() + 0.5D, getBoundOrigin().getY(), getBoundOrigin().getZ() + 0.5D);
+						getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_LAND, SoundCategory.HOSTILE, 0.5F, 1F + (getEntityWorld().rand.nextFloat() - getEntityWorld().rand.nextFloat()) * 0.8F);
 					}
 				}
 			}
@@ -275,18 +276,22 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundRegistry.FLYING_FIEND_LIVING;
+		return SoundRegistry.CHIROMAW_MATRIARCH_LIVING;
 	}
 
 	@Nullable
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return SoundRegistry.FLYING_FIEND_HURT;
+		return SoundRegistry.CHIROMAW_MATRIARCH_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundRegistry.FLYING_FIEND_DEATH;
+		return SoundRegistry.CHIROMAW_MATRIARCH_DEATH;
+	}
+
+	protected SoundEvent getFlySound() {
+		return SoundRegistry.CHIROMAW_MATRIARCH_DEATH;
 	}
 
 	@Override
@@ -418,6 +423,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 							BlockPos posPoop = placeToPoop.get(0);
 							EntityChiromawDroppings poopEntity = new EntityChiromawDroppings(world, largeChiromaw, posPoop.getX() + 0.5D, largeChiromaw.getPosition().getY(), posPoop.getZ() + 0.5D);
 							world.spawnEntity(poopEntity);
+							largeChiromaw.getEntityWorld().playSound(null, largeChiromaw.getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_POOP, SoundCategory.HOSTILE, 0.5F, 1F + (largeChiromaw.getEntityWorld().rand.nextFloat() - largeChiromaw.getEntityWorld().rand.nextFloat()) * 0.8F);
 						}
 					}
 				}
@@ -611,6 +617,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	    			EntityBLArrow arrow = new EntityBLArrow(world, largeChiromaw);
 	    			arrow.setType(EnumArrowType.CHIROMAW_BARB);
 	    			arrow.shoot(largeChiromaw, (float)angle, rotation, 1.5F, 0.5F, 0.5F);
+	    			largeChiromaw.getEntityWorld().playSound(null, largeChiromaw.getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_BARB_FIRE, SoundCategory.HOSTILE, 0.5F, 1F + (largeChiromaw.getEntityWorld().rand.nextFloat() - largeChiromaw.getEntityWorld().rand.nextFloat()) * 0.8F);
 	    			world.spawnEntity(arrow);
 	    		}
 	    		if(rotation >= 720) {
