@@ -87,7 +87,7 @@ public class EntityChiromawDroppings extends Entity {
 					setDead();
 			}
 			if (!getHasExploded())
-				if (getEntityWorld().getTotalWorldTime() % 5 == 0)
+				if (getEntityWorld().getTotalWorldTime() % 4 == 0)
 					TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.CHIROMAW_DROPPINGS, (float) posX, (float)posY + (float) motionY, (float)posZ, 1F));
 		}
 
