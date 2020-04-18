@@ -211,6 +211,11 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	}
 
 	@Override
+	public boolean shouldRiderSit() {
+		return false;
+	}
+
+	@Override
     public boolean canPassengerSteer() {
       return false; //TODO different rider cases
     }
@@ -604,7 +609,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	    			double distance = chiromawVectorToTarget.length();
 	    			double angle = MathHelper.atan2(height, distance) * (180D / Math.PI);
 	    			EntityBLArrow arrow = new EntityBLArrow(world, largeChiromaw);
-	    			arrow.setType(EnumArrowType.DEFAULT);
+	    			arrow.setType(EnumArrowType.CHIROMAW_BARB);
 	    			arrow.shoot(largeChiromaw, (float)angle, rotation, 1.5F, 0.5F, 0.5F);
 	    			world.spawnEntity(arrow);
 	    		}

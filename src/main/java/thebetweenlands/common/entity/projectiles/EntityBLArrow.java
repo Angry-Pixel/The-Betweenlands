@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -23,6 +24,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -198,6 +200,10 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 				
 				TheBetweenlands.networkWrapper.sendToAllTracking(new MessageShockArrowHit(chain), this);
 			}
+		case CHIROMAW_BARB:
+			if(living.isNonBoss()) {
+				living.addPotionEffect(ElixirEffectRegistry.EFFECT_PETRIFY.createEffect(40, 1));
+			} 
 			break;
 		default:
 		}
@@ -216,7 +222,18 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 			}
 		}
 	}
-	
+
+	@Override
+	public void playSound(SoundEvent soundIn, float volume, float pitch) {
+		if (!this.isSilent()) {
+			if(getArrowType() == EnumArrowType.CHIROMAW_BARB) {
+				if(soundIn == SoundEvents.ENTITY_ARROW_HIT)
+					soundIn = SoundEvents.ENTITY_ITEMFRAME_REMOVE_ITEM; // TODO awaiting sounds
+			}	
+		}
+		super.playSound(soundIn, volume, pitch);
+	}
+
 	/**
 	 * Sets the arrow type
 	 * @param type
@@ -246,6 +263,8 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 			return new ItemStack(ItemRegistry.SLUDGE_WORM_ARROW);
 		case SHOCK:
 			return new ItemStack(ItemRegistry.SHOCK_ARROW);
+		case CHIROMAW_BARB:
+			return new ItemStack(ItemRegistry.CHIROMAW_BARB);
 		case DEFAULT:
 		default:
 			return new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW);
