@@ -27,6 +27,7 @@ import thebetweenlands.client.render.particle.entity.ParticleFish;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.client.render.particle.entity.ParticleLeafSwirl;
 import thebetweenlands.client.render.particle.entity.ParticleLifeEssence;
+import thebetweenlands.client.render.particle.entity.ParticleLightningArc;
 import thebetweenlands.client.render.particle.entity.ParticleMoth;
 import thebetweenlands.client.render.particle.entity.ParticlePuzzleBeam;
 import thebetweenlands.client.render.particle.entity.ParticlePuzzleBeam2;
@@ -138,7 +139,8 @@ public enum BLParticles {
 	RING_OF_RECRUITMENT_STAY(new ParticleRingOfRecruitmentState.FactoryStay()),
 	RING_OF_RECRUITMENT_FOLLOW(new ParticleRingOfRecruitmentState.FactoryFollow()),
 	RING_OF_RECRUITMENT_GUARD(new ParticleRingOfRecruitmentState.FactoryGuard()),
-	DRAETON_BURNER_FLAME(new ParticleDraetonBurnerFlame.Factory());
+	DRAETON_BURNER_FLAME(new ParticleDraetonBurnerFlame.Factory()),
+	LIGHTNING_ARC(new ParticleLightningArc.Factory());
 
 	private ParticleFactory<?, ?> factory;
 
