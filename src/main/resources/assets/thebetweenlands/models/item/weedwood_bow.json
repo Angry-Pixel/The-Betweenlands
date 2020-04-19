@@ -49,6 +49,75 @@
     {
       "predicate": {
         "pulling": 1,
+        "arrow_type": 2
+      },
+      "model": "thebetweenlands:item/weedwood_bow_poison_0"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.65,
+        "arrow_type": 2
+      },
+      "model": "thebetweenlands:item/weedwood_bow_poison_1"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.9,
+        "arrow_type": 2
+      },
+      "model": "thebetweenlands:item/weedwood_bow_poison_2"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "arrow_type": 3
+      },
+      "model": "thebetweenlands:item/weedwood_bow_octine_0"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.65,
+        "arrow_type": 3
+      },
+      "model": "thebetweenlands:item/weedwood_bow_octine_1"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.9,
+        "arrow_type": 3
+      },
+      "model": "thebetweenlands:item/weedwood_bow_octine_2"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "arrow_type": 4
+      },
+      "model": "thebetweenlands:item/weedwood_bow_basilisk_0"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.65,
+        "arrow_type": 4
+      },
+      "model": "thebetweenlands:item/weedwood_bow_basilisk_1"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.9,
+        "arrow_type": 4
+      },
+      "model": "thebetweenlands:item/weedwood_bow_basilisk_2"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
         "arrow_type": 5
       },
       "model": "thebetweenlands:item/weedwood_bow_worm_0"
@@ -68,6 +137,29 @@
         "arrow_type": 5
       },
       "model": "thebetweenlands:item/weedwood_bow_worm_2"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "arrow_type": 6
+      },
+      "model": "thebetweenlands:item/weedwood_bow_shock_0"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.65,
+        "arrow_type": 6
+      },
+      "model": "thebetweenlands:item/weedwood_bow_shock_1"
+    },
+    {
+      "predicate": {
+        "pulling": 1,
+        "pull": 0.9,
+        "arrow_type": 6
+      },
+      "model": "thebetweenlands:item/weedwood_bow_shock_2"
     },
     {
       "predicate": {
