@@ -71,6 +71,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	
 	public final ControlledAnimation landingTimer = new ControlledAnimation(10);
 	public final ControlledAnimation nestingTimer = new ControlledAnimation(20);
+	public final ControlledAnimation spinningTimer = new ControlledAnimation(10);
 
 	public EntityChiromawMatriarch(World world) {
 		super(world);
@@ -191,18 +192,26 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		}
 		
 		if(this.world.isRemote) {
-			this.nestingTimer.updateTimer();
-			this.landingTimer.updateTimer();
-			
+			nestingTimer.updateTimer();
+			landingTimer.updateTimer();
+			spinningTimer.updateTimer();
+
 			if(this.getIsNesting()) {
-				this.nestingTimer.increaseTimer();
-				this.landingTimer.decreaseTimer();
+				nestingTimer.increaseTimer();
+				landingTimer.decreaseTimer();
+				spinningTimer.decreaseTimer();
 			} else if(this.getIsLanding()) {
-				this.landingTimer.increaseTimer();
-				this.nestingTimer.decreaseTimer();
+				landingTimer.increaseTimer();
+				nestingTimer.decreaseTimer();
+				spinningTimer.decreaseTimer();
+			} else if(this.getIsSpinning()) {
+				spinningTimer.increaseTimer();
+				landingTimer.decreaseTimer();
+				nestingTimer.decreaseTimer();
 			} else {
-				this.landingTimer.decreaseTimer();
-				this.nestingTimer.decreaseTimer();
+				landingTimer.decreaseTimer();
+				nestingTimer.decreaseTimer();
+				spinningTimer.decreaseTimer();
 			}
 		}
 	}

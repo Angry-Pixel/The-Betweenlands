@@ -1,7 +1,5 @@
 package thebetweenlands.client.render.model.entity;
 
-import java.util.function.Consumer;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.entity.Entity;
@@ -515,37 +513,19 @@ public class ModelChiromawMatriarch extends MowzieModelBase {
         float frame = chiromaw.ticksExisted + partialRenderTicks;
         float flapFrame = chiromaw.flapTicks + partialRenderTicks;
         
-        /*float leg_right1aState1 = -0.7285004297824331F;
-        float leg_left1aState1 = -0.7285004297824331F;
-        float leg_right1bState1 = 2.367539130330308F;
-        float leg_left1bState1 = 2.367539130330308F;
-        float leg_right1cState1 = -0.9560913642424937F;
-        float leg_left1cState1 = -0.9560913642424937F;
-        
-        float leg_right1aState2 = -body_base.rotateAngleX + 0.5285004297824331F;
-        float leg_left1aState2 = - body_base.rotateAngleX + 0.5285004297824331F;
-        float leg_right1bState2 = leg_right1a.rotateAngleX + 1.367539130330308F;
-        float leg_left1bState2 = leg_left1a.rotateAngleX + 1.367539130330308F;
-        float leg_right1cState2 = leg_right1b.rotateAngleX + 0.4560913642424937F;
-        float leg_left1cState2 = leg_left1b.rotateAngleX + 0.4560913642424937F;
-        
-        float leg_right1aState3 = 0.7285004297824331F;
-        float leg_left1aState3 = 0.7285004297824331F;
-        float leg_right1bState3 = 1.367539130330308F;
-        float leg_left1bState3 = 1.367539130330308F;
-        float leg_right1cState3 = leg_right1cState1;
-        float leg_left1cState3 = leg_left1cState1;*/
 
         AnimationBlender<ModelChiromawMatriarch> blender = new AnimationBlender<>(this); //TODO Make this a field once animations are done
         
         float landingPercent = chiromaw.landingTimer.getAnimationProgressSmooth(partialRenderTicks);
         float nestingPercent = chiromaw.nestingTimer.getAnimationProgressSmooth(partialRenderTicks);
-        float flyingPercent = Math.max(0, 1.0f - landingPercent - nestingPercent);
+        float spinningPercent = chiromaw.spinningTimer.getAnimationProgressSmooth(partialRenderTicks);
+        float flyingPercent = Math.max(0, 1.0f - landingPercent - nestingPercent - spinningPercent);
         
         //Nesting animation state
         blender.addState(model -> {
         	model.setToInitPose();
-        	
+        	jaw.rotateAngleX = 0.8651597102135892F;
+        	head1.rotateAngleX = 0.136659280431156F;
         	walk(model.jaw, rippleSpeed * 0.125f, globalDegree * 0.5f, false, 2.0f, 0f, frame, 1F);
         	walk(model.body2, rippleSpeed * 0.125f, globalDegree * 0.125f, true, 2.0f, 0f, frame, 1F);
         	walk(model.arm_right1c, rippleSpeed * 0.125f, globalDegree * 0.125f, false, 2.0f, 0f, frame, 1F);
@@ -554,9 +534,16 @@ public class ModelChiromawMatriarch extends MowzieModelBase {
         	swing(model.arm_left1c, rippleSpeed * 0.125f, globalDegree * 0.125f, false, 2.0f, 0f, frame, 1F);
         	chainSwing(model.partsTail, rippleSpeed * 0.125f, globalDegree * 0.25f, 2f, frame, 1F);
         }, () -> nestingPercent);
-        
+
         class FlyingPose {
         	public void apply(ModelChiromawMatriarch model, float globalSpeed, float globalDegree, float rippleSpeed) {
+        		head1.rotateAngleX = -0.398132F;
+				if (!chiromaw.isBeingRidden()) {
+					leg_right1a.rotateAngleX = 0.7285004297824331F;
+					leg_left1a.rotateAngleX = 0.7285004297824331F;
+					leg_right1b.rotateAngleX = 1.367539130330308F;
+					leg_left1b.rotateAngleX = 1.367539130330308F;
+				}
         		flap(model.arm_right1a, chiromaw.flapSpeed, globalDegree * 1.2f, false, 2.0f, 0f, flapFrame, 1F);
     			swing(model.arm_right1b, chiromaw.flapSpeed, globalDegree * 1.5f, false, 2.8f, 0.5f, flapFrame, 1F);
     			flap(model.arm_right1c, chiromaw.flapSpeed, globalDegree * 2.5f, false, 2.0f, 0f, flapFrame, 1F);
@@ -576,7 +563,17 @@ public class ModelChiromawMatriarch extends MowzieModelBase {
     			walk(model.jaw, rippleSpeed * 0.5f, globalDegree * 1f, true, 2.0f, 0f, frame, 1F);
         	}
         }
+
+        class SpinningPose {
+        	public void apply(ModelChiromawMatriarch model, float globalSpeed, float globalDegree, float rippleSpeed) {
+            	model.setToInitPose();
+            	jaw.rotateAngleX = 0.8651597102135892F;
+            	head1.rotateAngleX = 0.136659280431156F;
+        	}
+        }
+        
         FlyingPose idlePose = new FlyingPose();
+        SpinningPose spinningPose = new SpinningPose();
         
         //Idle (flying) animation state
         blender.addState(model -> {
@@ -595,116 +592,14 @@ public class ModelChiromawMatriarch extends MowzieModelBase {
 	 		idlePose.apply(model, 1.5f, 0.25f, 0);
         }, () -> landingPercent);
         
+        //Spinning animation state
+        blender.addState(model -> {
+        	model.setToInitPose();
+
+        	spinningPose.apply(model, 0f, 0f, 0);
+        }, () -> spinningPercent);
+
         blender.setAngles(false);
-        
-        /*flap(arm_right1a, chiromaw.flapSpeed, globalDegree * 1.2f, false, 2.0f, 0f, flapFrame, 1F);
-		swing(arm_right1b, chiromaw.flapSpeed, globalDegree * 1.5f, false, 2.8f, 0.5f, flapFrame, 1F);
-		flap(arm_right1c, chiromaw.flapSpeed, globalDegree * 2.5f, false, 2.0f, 0f, flapFrame, 1F);
-		
-		flap(arm_left1a, chiromaw.flapSpeed, globalDegree * 1.2f, true, 2.0f, 0f, flapFrame, 1F);
-		swing(arm_left1b, chiromaw.flapSpeed, globalDegree * 1.5f, true, 2.8f, -0.5f, flapFrame, 1F);
-		flap(arm_left1c, chiromaw.flapSpeed, globalDegree * 2.5f, true, 2.0f, 0f, flapFrame, 1F);
-		
-		walk(arm_right1b, chiromaw.flapSpeed, globalDegree * 1f, true, 1.2f, 0.15f, flapFrame, 1F);
-		walk(arm_right1c, chiromaw.flapSpeed, globalDegree * 1.2f, false, 1.2f, -0.9f, flapFrame, 1F);
-		walk(arm_left1b, chiromaw.flapSpeed, globalDegree * 1f, true, 1.2f, 0.15f, flapFrame, 1F);
-		walk(arm_left1c, chiromaw.flapSpeed, globalDegree * 1.2f, false, 1.2f, -0.9f, flapFrame, 1F);
-		
-		chainWave(partsTailAndBum, rippleSpeed * 0.5f, globalDegree * 0.25f, 2f, frame, 1F);
-		swing(head1, rippleSpeed * 0.5f, globalDegree * 0.25f, false, 2.0f, 0f, frame, 1F);
-		walk(head1, rippleSpeed * 0.5f, globalDegree * 0.25f, true, 2.0f, 0f, frame, 1F);
-		walk(jaw, rippleSpeed * 0.5f, globalDegree * 1f, true, 2.0f, 0f, frame, 1F);*/
-        
-//        if (chiromaw.getIsNesting() || chiromaw.getIsSpinning()) {
-//        	//TODO State1 here (default model Pose)
-//        	if (chiromaw.getIsSpinning()) {
-//	   	        blender.addState(model -> {model.leg_right1a.rotateAngleX = leg_right1aState3;}, () -> leg_right1aState1);
-//	   	        blender.addState(model -> {model.leg_left1a.rotateAngleX = leg_left1aState3;}, () -> leg_left1aState1);
-//	   	        blender.addState(model -> {model.leg_right1b.rotateAngleX = leg_right1bState3;}, () -> leg_right1bState1);
-//	   	        blender.addState(model -> {model.leg_left1b.rotateAngleX = leg_left1bState3;}, () -> leg_left1bState1);
-//	   	        blender.addState(model -> {model.leg_right1c.rotateAngleX = leg_right1cState3;}, () -> leg_right1cState1);
-//	   	        blender.addState(model -> {model.leg_left1c.rotateAngleX = leg_left1cState3;}, () -> leg_left1cState1);
-//	   	        blender.setAngles(true);
-//        	}
-//            jaw.rotateAngleX = 0.8651597102135892F;
-//            head1.rotateAngleX = 0.136659280431156F;
-//            if (chiromaw.getIsNesting()) {
-//       	        blender.addState(model -> {model.leg_right1a.rotateAngleX = leg_right1aState2;}, () -> leg_right1aState1);
-//       	        blender.addState(model -> {model.leg_left1a.rotateAngleX = leg_left1aState2;}, () -> leg_left1aState1);
-//       	        blender.addState(model -> {model.leg_right1b.rotateAngleX = leg_right1bState2;}, () -> leg_right1bState1);
-//       	        blender.addState(model -> {model.leg_left1b.rotateAngleX = leg_left1bState2;}, () -> leg_left1bState1);
-//       	        blender.addState(model -> {model.leg_right1c.rotateAngleX = leg_right1cState2;}, () -> leg_right1cState1);
-//       	        blender.addState(model -> {model.leg_left1c.rotateAngleX = leg_left1cState2;}, () -> leg_left1cState1);
-//       	        blender.setAngles(true);
-//            	walk(jaw, rippleSpeed * 0.125f, globalDegree * 0.5f, false, 2.0f, 0f, frame, 1F);
-//            	walk(body2, rippleSpeed * 0.125f, globalDegree * 0.125f, true, 2.0f, 0f, frame, 1F);
-//            	walk(arm_right1c, rippleSpeed * 0.125f, globalDegree * 0.125f, false, 2.0f, 0f, frame, 1F);
-//            	walk(arm_left1c, rippleSpeed * 0.125f, globalDegree * 0.125f, true, 2.0f, 0f, frame, 1F);
-//            	swing(arm_right1c, rippleSpeed * 0.125f, globalDegree * 0.125f, true, 2.0f, 0f, frame, 1F);
-//            	swing(arm_left1c, rippleSpeed * 0.125f, globalDegree * 0.125f, false, 2.0f, 0f, frame, 1F);
-//            	chainSwing(partsTail, rippleSpeed * 0.125f, globalDegree * 0.25f, 2f, frame, 1F);
-//            }
-//        } else {
-//       	 	if(chiromaw.getIsLanding()) {
-//       	 		globalSpeed  = 1.5F;
-//       	 		globalDegree = 0.25F;
-//       	 		rippleSpeed = 0;
-//       	 		arm_right1a.rotateAngleX = 0.3553564018453205F;
-//       	 		arm_left1a.rotateAngleX = 0.3553564018453205F;
-//
-//       	 	//TODO State2 here
-//       	        blender.addState(model -> {model.leg_right1a.rotateAngleX = leg_right1aState3;}, () -> leg_right1aState2);
-//       	        blender.addState(model -> {model.leg_left1a.rotateAngleX = leg_left1aState3;}, () -> leg_left1aState2);
-//       	        blender.addState(model -> {model.leg_right1b.rotateAngleX = leg_right1bState3;}, () -> leg_right1bState2);
-//       	        blender.addState(model -> {model.leg_left1b.rotateAngleX = leg_left1bState3;}, () -> leg_left1bState2);
-//       	        blender.addState(model -> {model.leg_right1c.rotateAngleX = leg_right1cState3;}, () -> leg_right1cState2);
-//       	        blender.addState(model -> {model.leg_left1c.rotateAngleX = leg_left1cState3;}, () -> leg_left1cState2);
-//       	        blender.setAngles(true);
-//       	 		/*				
-// 				leg_right1a.rotateAngleX = body_base.rotateAngleX + 0.5285004297824331F;
-//                leg_left1a.rotateAngleX = body_base.rotateAngleX + 0.5285004297824331F;
-//                leg_right1b.rotateAngleX = -leg_right1a.rotateAngleX + 1.367539130330308F;
-//                leg_left1b.rotateAngleX = -leg_right1a.rotateAngleX + 1.367539130330308F;
-//                leg_right1c.rotateAngleX = -leg_right1b.rotateAngleX + 0.4560913642424937F;
-//                leg_left1c.rotateAngleX = -leg_right1b.rotateAngleX + 0.4560913642424937F;
-//       	 		 */
-//       	 	}
-//       	 	else {
-//       	 		head1.rotateAngleX = -0.398132F;
-//           	 	//TODO State3 here
-//       	        blender.addState(model -> {model.leg_right1a.rotateAngleX = leg_right1aState1;}, () -> leg_right1aState3);
-//       	        blender.addState(model -> {model.leg_left1a.rotateAngleX = leg_left1aState1;}, () -> leg_left1aState3);
-//       	        blender.addState(model -> {model.leg_right1b.rotateAngleX = leg_right1bState1;}, () -> leg_right1bState3);
-//       	        blender.addState(model -> {model.leg_left1b.rotateAngleX = leg_left1bState1;}, () -> leg_left1bState3);
-//       	        blender.addState(model -> {model.leg_right1c.rotateAngleX = leg_right1cState1;}, () -> leg_right1cState3);
-//       	        blender.addState(model -> {model.leg_left1c.rotateAngleX = leg_left1cState1;}, () -> leg_left1cState3);
-//       	        blender.setAngles(true);
-//       	 		/*
-//	            leg_right1a.rotateAngleX = 0.7285004297824331F;
-//	            leg_left1a.rotateAngleX = 0.7285004297824331F;
-//	            leg_right1b.rotateAngleX = 1.367539130330308F;
-//	            leg_left1b.rotateAngleX = 1.367539130330308F;
-//	            */
-//       	 	}
-//
-//       	 	flap(arm_right1a, chiromaw.flapSpeed, globalDegree * 1.2f, false, 2.0f, 0f, flapFrame, 1F);
-//            swing(arm_right1b, chiromaw.flapSpeed, globalDegree * 1.5f, false, 2.8f, 0.5f, flapFrame, 1F);
-//            flap(arm_right1c, chiromaw.flapSpeed, globalDegree * 2.5f, false, 2.0f, 0f, flapFrame, 1F);
-//            
-//            flap(arm_left1a, chiromaw.flapSpeed, globalDegree * 1.2f, true, 2.0f, 0f, flapFrame, 1F);
-//            swing(arm_left1b, chiromaw.flapSpeed, globalDegree * 1.5f, true, 2.8f, -0.5f, flapFrame, 1F);
-//            flap(arm_left1c, chiromaw.flapSpeed, globalDegree * 2.5f, true, 2.0f, 0f, flapFrame, 1F);
-//
-//            walk(arm_right1b, chiromaw.flapSpeed, globalDegree * 1f, true, 1.2f, 0.15f, flapFrame, 1F);
-//            walk(arm_right1c, chiromaw.flapSpeed, globalDegree * 1.2f, false, 1.2f, -0.9f, flapFrame, 1F);
-//            walk(arm_left1b, chiromaw.flapSpeed, globalDegree * 1f, true, 1.2f, 0.15f, flapFrame, 1F);
-//            walk(arm_left1c, chiromaw.flapSpeed, globalDegree * 1.2f, false, 1.2f, -0.9f, flapFrame, 1F);
-//            
-//            chainWave(partsTailAndBum, rippleSpeed * 0.5f, globalDegree * 0.25f, 2f, frame, 1F);
-//            swing(head1, rippleSpeed * 0.5f, globalDegree * 0.25f, false, 2.0f, 0f, frame, 1F);
-//            walk(head1, rippleSpeed * 0.5f, globalDegree * 0.25f, true, 2.0f, 0f, frame, 1F);
-//            walk(jaw, rippleSpeed * 0.5f, globalDegree * 1f, true, 2.0f, 0f, frame, 1F);
-//        }
     }
 
 	//just some helpers for future
