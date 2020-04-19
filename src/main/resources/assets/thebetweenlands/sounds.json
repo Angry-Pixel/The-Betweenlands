@@ -949,7 +949,8 @@
     "sounds": [
       "thebetweenlands:chiromaw_matriarch_living_1",
       "thebetweenlands:chiromaw_matriarch_living_2",
-      "thebetweenlands:chiromaw_matriarch_living_3"
+      "thebetweenlands:chiromaw_matriarch_living_3",
+      "thebetweenlands:chiromaw_matriarch_living_4"
     ]
   },
    "chiromaw_matriarch_hurt": {
@@ -987,6 +988,21 @@
       "thebetweenlands:chiromaw_matriarch_flap_1",
       "thebetweenlands:chiromaw_matriarch_flap_2",
       "thebetweenlands:chiromaw_matriarch_flap_3"
+    ]
+  },
+   "chiromaw_matriarch_grab": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_grab"
+    ]
+  },
+   "chiromaw_matriarch_release": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_release"
+    ]
+  },
+   "chiromaw_matriarch_roar": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_roar"
     ]
   },
   "roof_collapse": {
