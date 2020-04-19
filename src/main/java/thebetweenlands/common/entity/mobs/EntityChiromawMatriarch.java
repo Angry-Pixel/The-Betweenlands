@@ -630,6 +630,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 					largeChiromaw.setReturnToNest(true);
 					//largeChiromaw.setAttackTarget((EntityLivingBase)null);
 					largeChiromaw.removePassengers();
+					largeChiromaw.getEntityWorld().playSound(null, largeChiromaw.getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_RELEASE, SoundCategory.HOSTILE, 0.5F, 1F + (largeChiromaw.getEntityWorld().rand.nextFloat() - largeChiromaw.getEntityWorld().rand.nextFloat()) * 0.8F);
 				}
 
 				if (largeChiromaw.getDroppingTimer() >= 0)
@@ -676,6 +677,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	            largeChiromaw.attackEntityAsMob(enemy);
 	    		if (enemy.isSneaking())
 	    			enemy.setSneaking(false);
+	    		largeChiromaw.getEntityWorld().playSound(null, largeChiromaw.getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_GRAB, SoundCategory.HOSTILE, 0.5F, 1F + (largeChiromaw.getEntityWorld().rand.nextFloat() - largeChiromaw.getEntityWorld().rand.nextFloat()) * 0.8F);
 	    		enemy.startRiding(largeChiromaw, true);
 	    		largeChiromaw.pickupHeight = largeChiromaw.posY;
 	    		largeChiromaw.setDroppingTimer(120);
