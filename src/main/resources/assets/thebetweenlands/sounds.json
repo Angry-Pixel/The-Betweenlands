@@ -282,6 +282,11 @@
       "thebetweenlands:sludge_menace_spawn"
     ]
   },
+  "sludge_menace_living": {
+    "sounds": [
+      "thebetweenlands:sludge_menace_living"
+    ]
+  },
   "dragonfly": {
     "sounds": [
       "thebetweenlands:dragonfly"

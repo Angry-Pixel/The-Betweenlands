@@ -14,6 +14,8 @@ import com.google.common.base.Optional;
 import gnu.trove.map.TObjectIntMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
@@ -33,6 +35,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -51,6 +54,7 @@ import thebetweenlands.api.entity.IEntityMusic;
 import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.api.entity.spawning.IWeightProvider;
 import thebetweenlands.client.audio.EntityMusicLayers;
+import thebetweenlands.client.audio.EntitySound;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
@@ -184,6 +188,9 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	private int deathTicks = 0;
 	private Vec3d deathSpazzMotion = Vec3d.ZERO;
 
+	@SideOnly(Side.CLIENT)
+	private ISound livingSound;
+	
 	public EntitySludgeMenace(World world) {
 		super(world);
 		this.dummies = new DummyPart[this.getParts().length];
@@ -297,7 +304,29 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	protected float getArmLengthSlack() {
 		return 0.25f;
 	}
-
+	
+	@Override
+	public void playLivingSound() {
+		if(this.world.isRemote) {
+			this.playLivingSoundLoop();
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private void playLivingSoundLoop() {
+		if(this.livingSound != null && !Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(this.livingSound)) {
+			this.livingSound = null;
+		}
+		
+		if(this.livingSound == null) {
+			this.livingSound = new EntitySound<EntitySludgeMenace>(SoundRegistry.SLUDGE_MENACE_LIVING, SoundCategory.HOSTILE, this, e -> e.isEntityAlive());
+		}
+		
+		if(!Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(this.livingSound)) {
+			Minecraft.getMinecraft().getSoundHandler().playSound(this.livingSound);
+		}
+	}
+	
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSource) {
 		return SoundRegistry.SLUDGE_MENACE_HURT;
