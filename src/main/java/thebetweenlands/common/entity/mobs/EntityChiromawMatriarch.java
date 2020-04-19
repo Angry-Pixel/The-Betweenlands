@@ -19,7 +19,6 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -50,7 +49,6 @@ import thebetweenlands.common.entity.projectiles.EntityChiromawDroppings;
 import thebetweenlands.common.item.tools.bow.EnumArrowType;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationStorage;
@@ -480,9 +478,15 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 
 		@Override
 		public boolean shouldExecute() {
-			//if (((EntityChiromawMatriarch) taskOwner).getReturnToNest())
-				//return false;
-			return super.shouldExecute();
+			if (super.shouldExecute()) {
+				if (targetEntity != null) {
+					double distance = taskOwner.getDistanceSq(targetEntity);
+					if (distance <= 256.0D)
+						taskOwner.getEntityWorld().playSound(null, taskOwner.getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_ROAR, SoundCategory.HOSTILE, 1F, 1F + (taskOwner.getEntityWorld().rand.nextFloat() - taskOwner.getEntityWorld().rand.nextFloat()) * 0.8F);
+				}
+				return true;
+			}
+			return false;
 		}
 
 		@Override
