@@ -660,7 +660,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 
 	    private void checkAndPerformSpinAttack(EntityLivingBase entitylivingbase, double distToEnemySqr) {
 			if (distToEnemySqr >= 36.0D && distToEnemySqr <= 100.0D && attackTick <= 0) {
-				largeChiromaw.getEntityWorld().playSound(null, largeChiromaw.getPosition(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.HOSTILE, 0.5F, 1F + (largeChiromaw.getEntityWorld().rand.nextFloat() - largeChiromaw.getEntityWorld().rand.nextFloat()) * 0.8F);
+				largeChiromaw.getEntityWorld().playSound(null, largeChiromaw.getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_ROAR, SoundCategory.HOSTILE, 1F, 1F + (largeChiromaw.getEntityWorld().rand.nextFloat() - largeChiromaw.getEntityWorld().rand.nextFloat()) * 0.8F);
 				attackTick = 40;
 				largeChiromaw.setIsSpinning(true);
 			}
