@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.model.AnimationBlender;
 import thebetweenlands.client.render.model.MowzieModelBase;
 import thebetweenlands.client.render.model.MowzieModelRenderer;
 import thebetweenlands.common.entity.mobs.EntityChiromawMatriarch;
@@ -72,8 +73,9 @@ public class ModelChiromawMatriarch extends MowzieModelBase {
 	MowzieModelRenderer leg_right1b;
 	MowzieModelRenderer leg_right1c;
 	MowzieModelRenderer foot_claw_right1;
-	
+
 	MowzieModelRenderer[] partsTail;
+	MowzieModelRenderer[] partsTailAndBum;
 
 	public ModelChiromawMatriarch() {
 		textureWidth = 128;
@@ -440,8 +442,16 @@ public class ModelChiromawMatriarch extends MowzieModelBase {
 			foot_claw_right1
 	        };
 
-		partsTail = new MowzieModelRenderer[] {
+		partsTailAndBum = new MowzieModelRenderer[] {
 				body1,
+				tail1,
+				tail2,
+				tail3,
+				tail4,
+				tail5
+
+		};
+		partsTail = new MowzieModelRenderer[] {
 				tail1,
 				tail2,
 				tail3,
@@ -506,6 +516,7 @@ public class ModelChiromawMatriarch extends MowzieModelBase {
 	@Override
     public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
 		EntityChiromawMatriarch chiromaw = (EntityChiromawMatriarch) entity;
+		AnimationBlender<ModelChiromawMatriarch> blender = new AnimationBlender<>(this); // ???????
         setToInitPose();
         float globalSpeed = 1F;
         float globalDegree = 0.5F;
@@ -514,10 +525,56 @@ public class ModelChiromawMatriarch extends MowzieModelBase {
         float frame = chiromaw.ticksExisted + partialRenderTicks;
         float flapFrame = chiromaw.flapTicks + partialRenderTicks;
         
+        float leg_right1aState1 = -0.7285004297824331F;
+        float leg_left1aState1 = -0.7285004297824331F;
+        float leg_right1bState1 = 2.367539130330308F;
+        float leg_left1bState1 = 2.367539130330308F;
+        float leg_right1cState1 = -0.9560913642424937F;
+        float leg_left1cState1 = -0.9560913642424937F;
+        
+        float leg_right1aState2 = -body_base.rotateAngleX + 0.5285004297824331F;
+        float leg_left1aState2 = - body_base.rotateAngleX + 0.5285004297824331F;
+        float leg_right1bState2 = leg_right1a.rotateAngleX + 1.367539130330308F;
+        float leg_left1bState2 = leg_left1a.rotateAngleX + 1.367539130330308F;
+        float leg_right1cState2 = leg_right1b.rotateAngleX + 0.4560913642424937F;
+        float leg_left1cState2 = leg_left1b.rotateAngleX + 0.4560913642424937F;
+        
+        float leg_right1aState3 = 0.7285004297824331F;
+        float leg_left1aState3 = 0.7285004297824331F;
+        float leg_right1bState3 = 1.367539130330308F;
+        float leg_left1bState3 = 1.367539130330308F;
+        float leg_right1cState3 = leg_right1cState1;
+        float leg_left1cState3 = leg_left1cState1;
+
         if (chiromaw.getIsNesting() || chiromaw.getIsSpinning()) {
+        	//TODO State1 here (default model Pose)
+        	if (chiromaw.getIsSpinning()) {
+	   	        blender.addState(model -> {model.leg_right1a.rotateAngleX = leg_right1aState3;}, () -> leg_right1aState1);
+	   	        blender.addState(model -> {model.leg_left1a.rotateAngleX = leg_left1aState3;}, () -> leg_left1aState1);
+	   	        blender.addState(model -> {model.leg_right1b.rotateAngleX = leg_right1bState3;}, () -> leg_right1bState1);
+	   	        blender.addState(model -> {model.leg_left1b.rotateAngleX = leg_left1bState3;}, () -> leg_left1bState1);
+	   	        blender.addState(model -> {model.leg_right1c.rotateAngleX = leg_right1cState3;}, () -> leg_right1cState1);
+	   	        blender.addState(model -> {model.leg_left1c.rotateAngleX = leg_left1cState3;}, () -> leg_left1cState1);
+	   	        blender.setAngles(true);
+        	}
             jaw.rotateAngleX = 0.8651597102135892F;
             head1.rotateAngleX = 0.136659280431156F;
-            walk(jaw, rippleSpeed * 0.125f, globalDegree * 0.5f, true, 2.0f, 0f, frame, 1F);
+            if (chiromaw.getIsNesting()) {
+       	        blender.addState(model -> {model.leg_right1a.rotateAngleX = leg_right1aState2;}, () -> leg_right1aState1);
+       	        blender.addState(model -> {model.leg_left1a.rotateAngleX = leg_left1aState2;}, () -> leg_left1aState1);
+       	        blender.addState(model -> {model.leg_right1b.rotateAngleX = leg_right1bState2;}, () -> leg_right1bState1);
+       	        blender.addState(model -> {model.leg_left1b.rotateAngleX = leg_left1bState2;}, () -> leg_left1bState1);
+       	        blender.addState(model -> {model.leg_right1c.rotateAngleX = leg_right1cState2;}, () -> leg_right1cState1);
+       	        blender.addState(model -> {model.leg_left1c.rotateAngleX = leg_left1cState2;}, () -> leg_left1cState1);
+       	        blender.setAngles(true);
+            	walk(jaw, rippleSpeed * 0.125f, globalDegree * 0.5f, false, 2.0f, 0f, frame, 1F);
+            	walk(body2, rippleSpeed * 0.125f, globalDegree * 0.125f, true, 2.0f, 0f, frame, 1F);
+            	walk(arm_right1c, rippleSpeed * 0.125f, globalDegree * 0.125f, false, 2.0f, 0f, frame, 1F);
+            	walk(arm_left1c, rippleSpeed * 0.125f, globalDegree * 0.125f, true, 2.0f, 0f, frame, 1F);
+            	swing(arm_right1c, rippleSpeed * 0.125f, globalDegree * 0.125f, true, 2.0f, 0f, frame, 1F);
+            	swing(arm_left1c, rippleSpeed * 0.125f, globalDegree * 0.125f, false, 2.0f, 0f, frame, 1F);
+            	chainSwing(partsTail, rippleSpeed * 0.125f, globalDegree * 0.25f, 2f, frame, 1F);
+            }
         } else {
        	 	if(chiromaw.getIsLanding()) {
        	 		globalSpeed  = 1.5F;
@@ -525,19 +582,40 @@ public class ModelChiromawMatriarch extends MowzieModelBase {
        	 		rippleSpeed = 0;
        	 		arm_right1a.rotateAngleX = 0.3553564018453205F;
        	 		arm_left1a.rotateAngleX = 0.3553564018453205F;
-                leg_right1a.rotateAngleX = body_base.rotateAngleX + 0.5285004297824331F;
+
+       	 	//TODO State2 here
+       	        blender.addState(model -> {model.leg_right1a.rotateAngleX = leg_right1aState3;}, () -> leg_right1aState2);
+       	        blender.addState(model -> {model.leg_left1a.rotateAngleX = leg_left1aState3;}, () -> leg_left1aState2);
+       	        blender.addState(model -> {model.leg_right1b.rotateAngleX = leg_right1bState3;}, () -> leg_right1bState2);
+       	        blender.addState(model -> {model.leg_left1b.rotateAngleX = leg_left1bState3;}, () -> leg_left1bState2);
+       	        blender.addState(model -> {model.leg_right1c.rotateAngleX = leg_right1cState3;}, () -> leg_right1cState2);
+       	        blender.addState(model -> {model.leg_left1c.rotateAngleX = leg_left1cState3;}, () -> leg_left1cState2);
+       	        blender.setAngles(true);
+       	 		/*				
+ 				leg_right1a.rotateAngleX = body_base.rotateAngleX + 0.5285004297824331F;
                 leg_left1a.rotateAngleX = body_base.rotateAngleX + 0.5285004297824331F;
                 leg_right1b.rotateAngleX = -leg_right1a.rotateAngleX + 1.367539130330308F;
                 leg_left1b.rotateAngleX = -leg_right1a.rotateAngleX + 1.367539130330308F;
                 leg_right1c.rotateAngleX = -leg_right1b.rotateAngleX + 0.4560913642424937F;
                 leg_left1c.rotateAngleX = -leg_right1b.rotateAngleX + 0.4560913642424937F;
+       	 		 */
        	 	}
        	 	else {
        	 		head1.rotateAngleX = -0.398132F;
+           	 	//TODO State3 here
+       	        blender.addState(model -> {model.leg_right1a.rotateAngleX = leg_right1aState1;}, () -> leg_right1aState3);
+       	        blender.addState(model -> {model.leg_left1a.rotateAngleX = leg_left1aState1;}, () -> leg_left1aState3);
+       	        blender.addState(model -> {model.leg_right1b.rotateAngleX = leg_right1bState1;}, () -> leg_right1bState3);
+       	        blender.addState(model -> {model.leg_left1b.rotateAngleX = leg_left1bState1;}, () -> leg_left1bState3);
+       	        blender.addState(model -> {model.leg_right1c.rotateAngleX = leg_right1cState1;}, () -> leg_right1cState3);
+       	        blender.addState(model -> {model.leg_left1c.rotateAngleX = leg_left1cState1;}, () -> leg_left1cState3);
+       	        blender.setAngles(true);
+       	 		/*
 	            leg_right1a.rotateAngleX = 0.7285004297824331F;
 	            leg_left1a.rotateAngleX = 0.7285004297824331F;
 	            leg_right1b.rotateAngleX = 1.367539130330308F;
 	            leg_left1b.rotateAngleX = 1.367539130330308F;
+	            */
        	 	}
 
        	 	flap(arm_right1a, chiromaw.flapSpeed, globalDegree * 1.2f, false, 2.0f, 0f, flapFrame, 1F);
@@ -553,7 +631,7 @@ public class ModelChiromawMatriarch extends MowzieModelBase {
             walk(arm_left1b, chiromaw.flapSpeed, globalDegree * 1f, true, 1.2f, 0.15f, flapFrame, 1F);
             walk(arm_left1c, chiromaw.flapSpeed, globalDegree * 1.2f, false, 1.2f, -0.9f, flapFrame, 1F);
             
-            chainWave(partsTail, rippleSpeed * 0.5f, globalDegree * 0.25f, 2f, frame, 1F);
+            chainWave(partsTailAndBum, rippleSpeed * 0.5f, globalDegree * 0.25f, 2f, frame, 1F);
             swing(head1, rippleSpeed * 0.5f, globalDegree * 0.25f, false, 2.0f, 0f, frame, 1F);
             walk(head1, rippleSpeed * 0.5f, globalDegree * 0.25f, true, 2.0f, 0f, frame, 1F);
             walk(jaw, rippleSpeed * 0.5f, globalDegree * 1f, true, 2.0f, 0f, frame, 1F);
