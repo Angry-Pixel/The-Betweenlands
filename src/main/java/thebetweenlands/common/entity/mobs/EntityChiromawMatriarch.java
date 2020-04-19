@@ -42,6 +42,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.storage.ILocalStorage;
+import thebetweenlands.client.render.model.ControlledAnimation;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
@@ -67,6 +68,9 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	public float animTime, prevAnimTime;
 	public float flapSpeed = 0.5f;
 	public int flapTicks;
+	
+	public final ControlledAnimation landingTimer = new ControlledAnimation(10);
+	public final ControlledAnimation nestingTimer = new ControlledAnimation(20);
 
 	public EntityChiromawMatriarch(World world) {
 		super(world);
@@ -184,6 +188,22 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 			//motionX *= 000001F;
 			motionY += 0.05F;
 			//motionZ *= 000001F;
+		}
+		
+		if(this.world.isRemote) {
+			this.nestingTimer.updateTimer();
+			this.landingTimer.updateTimer();
+			
+			if(this.getIsNesting()) {
+				this.nestingTimer.increaseTimer();
+				this.landingTimer.decreaseTimer();
+			} else if(this.getIsLanding()) {
+				this.landingTimer.increaseTimer();
+				this.nestingTimer.decreaseTimer();
+			} else {
+				this.landingTimer.decreaseTimer();
+				this.nestingTimer.decreaseTimer();
+			}
 		}
 	}
 
