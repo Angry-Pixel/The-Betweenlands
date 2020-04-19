@@ -467,16 +467,6 @@ public class ModelChiromawMatriarch extends MowzieModelBase {
 
 	@Override
     public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
-		EntityChiromawMatriarch chiromaw = (EntityChiromawMatriarch) entity;
-        GlStateManager.pushMatrix();
-        if (chiromaw.getIsNesting()) {
-        	GlStateManager.translate(0.0F, 0F, 0.0F);
-        }
-        else {
-            GlStateManager.rotate(20, 1F, 0F, 0.0F);
-            GlStateManager.translate(0.0F, 0F, 0F);
-        }
-        
         GlStateManager.enableCull();
         GlStateManager.cullFace(CullFace.FRONT);
         wingflap_left1.showModel = false;
@@ -506,8 +496,6 @@ public class ModelChiromawMatriarch extends MowzieModelBase {
         GlStateManager.cullFace(CullFace.BACK);
         body_base.render(unitPixel);
         GlStateManager.disableCull();
-
-        GlStateManager.popMatrix();
     }
 
 	public void setRotateAngle(MowzieModelRenderer modelRenderer, float x, float y, float z) {
@@ -552,7 +540,7 @@ public class ModelChiromawMatriarch extends MowzieModelBase {
         
         float landingPercent = chiromaw.landingTimer.getAnimationProgressSmooth(partialRenderTicks);
         float nestingPercent = chiromaw.nestingTimer.getAnimationProgressSmooth(partialRenderTicks);
-        float flyingPercent = 1.0f - landingPercent - nestingPercent;
+        float flyingPercent = Math.max(0, 1.0f - landingPercent - nestingPercent);
         
         //Nesting animation state
         blender.addState(model -> {

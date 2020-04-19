@@ -23,12 +23,13 @@ public class RenderChiromawMatriarch extends RenderLiving<EntityChiromawMatriarc
 	@Override
 	protected void preRenderCallback(EntityChiromawMatriarch chiromaw, float partialTickTime) {
 		GlStateManager.scale(1.5F, 1.5F, 1.5F);
-		if (!chiromaw.getIsNesting() && !chiromaw.getIsLanding() && !chiromaw.getIsSpinning()) {
-			float flap = MathHelper.sin((chiromaw.ticksExisted + partialTickTime) * 0.5F) * 0.6F;
-			GlStateManager.translate(0.0F, 0F - flap * 0.5F, 0.0F);
-		}
-		if (chiromaw.getIsLanding())
-			GlStateManager.rotate(-30F, 1F, 0F, 0F);
+		
+		float flyingPercent = Math.max(0, 1.0f - chiromaw.landingTimer.getAnimationProgressSmooth(partialTickTime) - chiromaw.nestingTimer.getAnimationProgressSmooth(partialTickTime));
+		
+		float flap = MathHelper.sin((chiromaw.ticksExisted + partialTickTime) * 0.5F) * 0.6F;
+		GlStateManager.translate(0.0F, -flap * 0.5F * flyingPercent, 0.0F);
+		
+		GlStateManager.rotate(20F * flyingPercent, 1F, 0F, 0F);
 
 		if (chiromaw.getIsSpinning()) {
 			float spinningRotation = chiromaw.previousSpinAngle + (chiromaw.spinAngle - chiromaw.previousSpinAngle) * partialTickTime;
