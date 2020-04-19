@@ -68,6 +68,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	public float animTime, prevAnimTime;
 	public float flapSpeed = 0.5f;
 	public int flapTicks;
+	public int landingAbortTime;
 	
 	public final ControlledAnimation landingTimer = new ControlledAnimation(10);
 	public final ControlledAnimation nestingTimer = new ControlledAnimation(20);
@@ -142,7 +143,19 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		if (getIsNesting()) {
 			motionX = motionY = motionZ = 0.0D;
 		}
-
+		
+		if (!getEntityWorld().isRemote && getIsLanding()) {
+			if (landingAbortTime > 0 )
+				landingAbortTime--;
+			if (landingAbortTime <= 0) {
+				if (getIsLanding())
+					setIsLanding(false);
+				if (getReturnToNest())
+					setReturnToNest(false);
+				if (getBroodCount() < 240)
+					setBroodCount(240);
+			}
+		}
 		if (getBroodCount() > 0 && getAttackTarget() == null && getReturnToNest() && !getIsNesting()) {
 			if(getNestBox() != null && getEntityBoundingBox().intersects(getNestBox())) {
 				double d0 = getBoundOrigin().getX() + 0.5D - posX;
@@ -154,8 +167,10 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 
 				if (getEntityBoundingBox().minY > getNestBox().minY + 0.0625D) {
 					if (!getEntityWorld().isRemote) {
-						if (!getIsLanding())
+						if (!getIsLanding()) {
 							setIsLanding(true);
+							landingAbortTime = 20;
+						}
 					}
 				}
 				if (getEntityBoundingBox().minY <= getNestBox().minY + 0.0625D) {
