@@ -482,7 +482,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 				if (targetEntity != null) {
 					double distance = taskOwner.getDistanceSq(targetEntity);
 					if (distance <= 256.0D)
-						taskOwner.getEntityWorld().playSound(null, taskOwner.getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_ROAR, SoundCategory.HOSTILE, 1F, 1F + (taskOwner.getEntityWorld().rand.nextFloat() - taskOwner.getEntityWorld().rand.nextFloat()) * 0.8F);
+						taskOwner.getEntityWorld().playSound(null, taskOwner.getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_ROAR, SoundCategory.HOSTILE, 2F, 1.5F);
 				}
 				return true;
 			}
