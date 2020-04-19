@@ -299,11 +299,6 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	}
 
 	@Override
-	protected SoundEvent getAmbientSound() {
-		return SoundRegistry.SLUDGE_MENACE_LIVING;
-	}
-
-	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSource) {
 		return SoundRegistry.SLUDGE_MENACE_HURT;
 	}
@@ -521,6 +516,8 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 					}
 
 					this.world.spawnEntity(mob);
+					
+					this.playSound(SoundRegistry.SLUDGE_MENACE_SPIT, 1, 1);
 				}
 			}
 		}
@@ -619,6 +616,8 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	public boolean attackEntityAsMob(Entity target) {
 		boolean damaged = super.attackEntityAsMob(target);
 
+		this.playSound(SoundRegistry.SLUDGE_MENACE_ATTACK, 1, 1);
+		
 		if(this.actionState == ActionState.POKE) {
 			if(target == this.getAttackTarget() && this.actionTimer >= 40) {
 				DummyPart endDummy = this.dummies[this.dummies.length - 1];
@@ -835,8 +834,16 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	}
 
 	protected Vec3d updateSwingTargetTipPos(Vec3d armStartWorld, float maxArmLength, Vec3d dirFwd, Vec3d dirUp) {
+		float prevDrive = (this.actionTimer - 1) * 0.07f * (1.0f + (this.actionTimer - 1) / 300.0f * 2.0f);
 		float drive = this.actionTimer * 0.07f * (1.0f + this.actionTimer / 300.0f * 2.0f);
 
+		float prevDriveMod = prevDrive % ((float)Math.PI * 2);
+		float driveMod = drive % ((float)Math.PI * 2);
+		
+		if(prevDriveMod <= 1f && driveMod > 1f) {
+			this.playSound(SoundRegistry.SLUDGE_MENACE_ATTACK, 1, 1);
+		}
+		
 		if(this.actionTimer >= 300) {
 			this.startAction(ActionState.IDLE);
 		}
@@ -1070,6 +1077,7 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 		this.screenShakeTimer = 10;
 
 		this.playSound(SoundRegistry.WALL_SLAM, 2, 1);
+		this.playSound(SoundRegistry.SLUDGE_MENACE_ATTACK, 1, 1);
 
 		if(!this.world.isRemote) {
 			this.world.setEntityState(this, EVENT_SLAM_HIT);

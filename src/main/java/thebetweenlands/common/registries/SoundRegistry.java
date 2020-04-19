@@ -226,7 +226,9 @@ public class SoundRegistry {
     public static final BLSoundEvent LEECH_LIVING = reg("leech_living");
     public static final BLSoundEvent SLUDGE_MENACE_DEATH = reg("sludge_menace_death");
     public static final BLSoundEvent SLUDGE_MENACE_HURT = reg("sludge_menace_hurt");
-    public static final BLSoundEvent SLUDGE_MENACE_LIVING = reg("sludge_menace_living");
+    public static final BLSoundEvent SLUDGE_MENACE_ATTACK = reg("sludge_menace_attack");
+    public static final BLSoundEvent SLUDGE_MENACE_SPIT = reg("sludge_menace_spit");
+    public static final BLSoundEvent SLUDGE_MENACE_SPAWN = reg("sludge_menace_spawn");
     public static final BLSoundEvent SPORELING_DEATH = reg("sporeling_death");
     public static final BLSoundEvent SPORELING_HURT = reg("sporeling_hurt");
     public static final BLSoundEvent SPORELING_LIVING = reg("sporeling_living");

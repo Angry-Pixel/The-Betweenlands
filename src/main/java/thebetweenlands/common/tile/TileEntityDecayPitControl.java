@@ -278,8 +278,8 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 
 				if(getTentacleSpawnCountDown() == 0) {
 					// whizz-bang
-					getWorld().playSound(null, getPos(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 1F, 0.75F);
-					getWorld().playSound(null, getPos(), SoundEvents.ENTITY_ZOMBIE_BREAK_DOOR_WOOD, SoundCategory.HOSTILE, 0.25F, 0.5F);
+					getWorld().playSound(null, getPos(), SoundRegistry.WALL_SLAM, SoundCategory.BLOCKS, 1F, 0.75F);
+					getWorld().playSound(null, getPos(), SoundRegistry.SLUDGE_MENACE_SPAWN, SoundCategory.BLOCKS, 1, 1);
 					getWorld().setBlockState(getPos(), BlockRegistry.GLOWING_BETWEENSTONE_TILE.getDefaultState(), 3);
 
 					EntitySludgeMenace menace = new EntitySludgeMenace(this.world);
