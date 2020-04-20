@@ -67,7 +67,7 @@ public class EventThunderstorm extends TimedEnvironmentEvent {
 						}
 						
 						if((pos.getY() > 150 || this.getWorld().rand.nextInt(8) == 0) && world.isRainingAt(pos)) {
-							world.spawnEntity(new EntityBLLightningBolt(world, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), isFlyingPlayerTarget ? 50 : 400));
+							world.spawnEntity(new EntityBLLightningBolt(world, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), isFlyingPlayerTarget ? 50 : 400, isFlyingPlayerTarget));
 						}
 					}
 				}

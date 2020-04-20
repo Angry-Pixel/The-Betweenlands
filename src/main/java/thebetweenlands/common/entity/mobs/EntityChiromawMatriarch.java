@@ -24,6 +24,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.Path;
+import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
@@ -846,6 +847,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		protected double y;
 		protected double z;
 		private final double speed;
+		private int timeToRecalcPath;
 
 		public AIReturnToNest(EntityChiromawMatriarch large_chiromaw, double speedIn) {
 			largeChiromaw = large_chiromaw;
@@ -882,15 +884,56 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		}
 
 		@Override
+		public void startExecuting() {
+			this.moveTowardsNest();
+		}
+		
+		@Override
 		public boolean shouldContinueExecuting() {
-			return !largeChiromaw.getNavigator().noPath() && !largeChiromaw.getMoveHelper().isUpdating();
+			return !largeChiromaw.getReturnToNest() && !largeChiromaw.getIsNesting() && largeChiromaw.getAttackTarget() == null;
 		}
 
 		@Override
-		public void startExecuting() {
-			if(!largeChiromaw.getMoveHelper().isUpdating()) {
-				largeChiromaw.getNavigator().tryMoveToXYZ(x, y, z, speed);
+		public void updateTask() {
+			if (--this.timeToRecalcPath <= 0) {
+                if(!this.moveTowardsNest()) {
+                	this.timeToRecalcPath = 40;
+                } else {
+                	this.timeToRecalcPath = 10;
+                }
+            }
+		}
+		
+		private boolean moveTowardsNest() {
+			if(largeChiromaw.getDistanceSq(x, y, z) < 4) {
+				largeChiromaw.getMoveHelper().setMoveTo(x, y, z, speed);
+				return true;
 			}
+			
+			PathNavigate navigator = largeChiromaw.getNavigator();
+			if(!navigator.tryMoveToXYZ(x, y, z, speed)) {
+				Vec3d target = new Vec3d(x, y, z);
+				target = this.findNextPointTowards(12, 5, target);
+				if(target != null) {
+					navigator.tryMoveToXYZ(target.x, target.y, target.z, speed);
+				}
+				return false;
+			}
+			return true;
+		}
+		
+		@Nullable
+		private Vec3d findNextPointTowards(int xz, int y, Vec3d target) {
+			Vec3d newTarget = RandomPositionGenerator.findRandomTargetBlockTowards(this.largeChiromaw, xz, y, target);
+			if(newTarget == null) {
+				return null;
+			}
+			if(target.y < this.largeChiromaw.posY) {
+				newTarget = new Vec3d(newTarget.x, this.largeChiromaw.posY - Math.abs(newTarget.y - this.largeChiromaw.posY), newTarget.z);
+			} else {
+				newTarget = new Vec3d(newTarget.x, this.largeChiromaw.posY + Math.abs(newTarget.y - this.largeChiromaw.posY), newTarget.z);
+			}
+			return newTarget;
 		}
 	}
 }

@@ -5,7 +5,6 @@ import java.util.List;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
@@ -38,17 +37,21 @@ public class EntityBLLightningBolt extends EntityLightningBolt implements IEntit
 
 	private BlockPos startPos;
 	private int delay;
+	private boolean isFloatingTarget;
 
 	public EntityBLLightningBolt(World world) {
 		super(world, 0, 0, 0, true);
 		this.setSize(1, 1);
+		this.isImmuneToFire = true;
 	}
 
-	public EntityBLLightningBolt(World world, double x, double y, double z, int delay) {
+	public EntityBLLightningBolt(World world, double x, double y, double z, int delay, boolean isFloatingTarget) {
 		super(world, x, y, z, true);
 		this.setSize(1, 1);
+		this.isImmuneToFire = true;
 		this.delay = Math.max(8, delay);
 		this.startPos = new BlockPos(x, y, z).add(world.rand.nextInt(40) - 20, 80, world.rand.nextInt(40) - 20);
+		this.isFloatingTarget = isFloatingTarget;
 	}
 
 	@Override
@@ -78,20 +81,30 @@ public class EntityBLLightningBolt extends EntityLightningBolt implements IEntit
 		super.handleStatusUpdate(id);
 
 		if(id == EVENT_STRIKE) {
-			ParticleLightningArc particle = (ParticleLightningArc) BLParticles.LIGHTNING_ARC.create(this.world, this.startPos.getX(), this.startPos.getY(), this.startPos.getZ(), 
-					ParticleArgs.get().withColor(0.5f, 0.4f, 1.0f, 0.9f).withData(new Vec3d(this.posX, this.posY, this.posZ)));
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, this.createParticle(new Vec3d(this.startPos.getX() + 0.5f, this.startPos.getY(), this.startPos.getZ() + 0.5f), this.getPositionVector()));
 
-			particle.setBaseSize(0.8f);
-			particle.setSubdivs(15, 4);
-			particle.setOffsets(4.0f, 0.8f);
-			particle.setSplits(3);
-			particle.setSplitSpeed(0.1f, 0.65f);
-			particle.setLengthDecay(0.1f);
-			particle.setSizeDecay(0.3f);
-			particle.setMaxAge(20);
-
-			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, particle);
+			if(this.isFloatingTarget) {
+				BlockPos ground = this.world.getHeight(this.getPosition());
+				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, this.createParticle(this.getPositionVector(), new Vec3d(ground.getX() + 0.5f, ground.getY(), ground.getZ() + 0.5f)));
+			}
 		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private ParticleLightningArc createParticle(Vec3d start, Vec3d end) {
+		ParticleLightningArc particle = (ParticleLightningArc) BLParticles.LIGHTNING_ARC.create(this.world, start.x, start.y, start.z, 
+				ParticleArgs.get().withColor(0.5f, 0.4f, 1.0f, 0.9f).withData(end));
+
+		particle.setBaseSize(0.8f);
+		particle.setSubdivs(15, 4);
+		particle.setOffsets(4.0f, 0.8f);
+		particle.setSplits(3);
+		particle.setSplitSpeed(0.1f, 0.65f);
+		particle.setLengthDecay(0.1f);
+		particle.setSizeDecay(0.3f);
+		particle.setMaxAge(20);
+
+		return particle;
 	}
 
 	@Override
@@ -149,36 +162,38 @@ public class EntityBLLightningBolt extends EntityLightningBolt implements IEntit
 					List<Entity> nearbyEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(checkPos.x - range, checkPos.y - range, checkPos.z - range, checkPos.x + range, checkPos.y + range, checkPos.z + range));
 
 					for(Entity entity : nearbyEntities) {
-						Vec3d entityPos = entity.getPositionVector();
+						if(entity instanceof EntityLightningBolt == false) {
+							Vec3d entityPos = entity.getPositionVector();
 
-						Vec3d projection = start.add(dir.scale(dir.dotProduct(entityPos.subtract(start))));
+							Vec3d projection = start.add(dir.scale(dir.dotProduct(entityPos.subtract(start))));
 
-						if(projection.subtract(entityPos).length() < range) {
+							if(projection.subtract(entityPos).length() < range) {
 
-							if(entity instanceof EntityItem) {
-								EntityItem entityItem = (EntityItem) entity;
-								ItemStack stack = entityItem.getItem();
-								Item item = stack.getItem();
+								if(entity instanceof EntityItem) {
+									EntityItem entityItem = (EntityItem) entity;
+									ItemStack stack = entityItem.getItem();
+									Item item = stack.getItem();
 
-								if(item == ItemRegistry.ANGLER_TOOTH_ARROW || item == ItemRegistry.BASILISK_ARROW || item == ItemRegistry.OCTINE_ARROW || item == ItemRegistry.POISONED_ANGLER_TOOTH_ARROW || item == ItemRegistry.SLUDGE_WORM_ARROW) {
-									if(this.world.rand.nextInt(5) == 0) {
-										int converted = this.world.rand.nextInt(Math.min(stack.getCount(), 5)) + 1;
+									if(item == ItemRegistry.ANGLER_TOOTH_ARROW || item == ItemRegistry.BASILISK_ARROW || item == ItemRegistry.OCTINE_ARROW || item == ItemRegistry.POISONED_ANGLER_TOOTH_ARROW || item == ItemRegistry.SLUDGE_WORM_ARROW) {
+										if(this.world.rand.nextInt(5) == 0) {
+											int converted = this.world.rand.nextInt(Math.min(stack.getCount(), 5)) + 1;
 
-										stack.shrink(converted);
-										if(stack.isEmpty()) {
-											entityItem.setDead();
-										} else {
-											entityItem.setItem(stack);
+											stack.shrink(converted);
+											if(stack.isEmpty()) {
+												entityItem.setDead();
+											} else {
+												entityItem.setItem(stack);
+											}
+
+											EntityItem arrows = new EntityItem(this.world, entityItem.posX, entityItem.posY, entityItem.posZ, new ItemStack(ItemRegistry.SHOCK_ARROW, converted));
+											this.world.spawnEntity(arrows);
 										}
-
-										EntityItem arrows = new EntityItem(this.world, entityItem.posX, entityItem.posY, entityItem.posZ, new ItemStack(ItemRegistry.SHOCK_ARROW, converted));
-										this.world.spawnEntity(arrows);
 									}
+								} else if(!net.minecraftforge.event.ForgeEventFactory.onEntityStruckByLightning(entity, this)) {
+									entity.onStruckByLightning(this);
 								}
-							} else if(!net.minecraftforge.event.ForgeEventFactory.onEntityStruckByLightning(entity, this)) {
-								entity.onStruckByLightning(this);
-							}
 
+							}
 						}
 					}
 				}
@@ -195,29 +210,34 @@ public class EntityBLLightningBolt extends EntityLightningBolt implements IEntit
 	@SideOnly(Side.CLIENT)
 	private void spawnArcs() {
 		Entity view = Minecraft.getMinecraft().getRenderViewEntity();
-		
+
 		if(view != null && (this.delay < 30 || this.ticksExisted % (this.delay / 20 + 1) == 0)) {
 			float dst = view.getDistance(this);
-			
+
 			if(dst < 100) {
 				float ox = (this.world.rand.nextFloat() - 0.5f) * 4;
-				float oy = this.world.rand.nextFloat() * 2;
+				float oy;
+				if(this.isFloatingTarget) {
+					oy = (this.world.rand.nextFloat() - 0.5f) * 4;
+				} else {
+					oy = this.world.rand.nextFloat() * 2;
+				}
 				float oz = (this.world.rand.nextFloat() - 0.5f) * 4;
-	
+
 				ParticleLightningArc particle = (ParticleLightningArc) BLParticles.LIGHTNING_ARC.create(this.world, this.posX, this.posY, this.posZ, 
 						ParticleArgs.get()
 						.withColor(0.5f, 0.4f, 1.0f, 0.9f)
 						.withData(new Vec3d(this.posX + ox, this.posY + oy, this.posZ + oz)));
-	
+
 				if(dst > 30) {
 					//lower quality
 					particle.setBaseSize(0.1f);
 					particle.setSubdivs(2, 1);
 					particle.setSplits(2);
 				}
-				
+
 				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, particle);
-	
+
 				if(dst < 16) {
 					this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.ZAP, SoundCategory.AMBIENT, 1, 1, false);
 				}
@@ -227,6 +247,7 @@ public class EntityBLLightningBolt extends EntityLightningBolt implements IEntit
 
 	@Override
 	public void writeSpawnData(ByteBuf buf) {
+		buf.writeBoolean(this.isFloatingTarget);
 		buf.writeInt(this.delay);
 		buf.writeInt(this.startPos.getX());
 		buf.writeInt(this.startPos.getY());
@@ -235,6 +256,7 @@ public class EntityBLLightningBolt extends EntityLightningBolt implements IEntit
 
 	@Override
 	public void readSpawnData(ByteBuf buf) {
+		this.isFloatingTarget = buf.readBoolean();
 		this.delay = buf.readInt();
 		this.startPos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
 	}
