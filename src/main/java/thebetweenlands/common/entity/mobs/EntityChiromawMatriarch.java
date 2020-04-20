@@ -435,8 +435,13 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	public boolean attackEntityFrom(DamageSource source, float damage) {
 		if (source.equals(DamageSource.IN_WALL) || source.equals(DamageSource.DROWN))
 			return false;
-		if (source instanceof EntityDamageSourceIndirect && source.getTrueSource() == this)
-			return false;
+		if (source instanceof EntityDamageSourceIndirect) {
+			if (source.getTrueSource() == this)
+				return false;
+			if (source.getTrueSource() instanceof EntityLivingBase) {
+				setRevengeTarget((EntityLivingBase) source.getTrueSource());
+			}
+		}
 		return super.attackEntityFrom(source, damage);
 	}
 
@@ -540,6 +545,10 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 
 		@Override
 	    protected double getTargetDistance() {
+			if(getRevengeTarget() != null) {
+				setAttackTarget(getRevengeTarget());
+				range = getDistance(getRevengeTarget());
+			}
 	        return range;
 	    }
 	}
