@@ -505,14 +505,13 @@ public class ModelChiromawMatriarch extends MowzieModelBase {
 	@Override
     public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
 		EntityChiromawMatriarch chiromaw = (EntityChiromawMatriarch) entity;
-		
+
         float globalSpeed = 1F;
         float globalDegree = 0.5F;
         float rippleSpeed = 1F;
-        
+
         float frame = chiromaw.ticksExisted + partialRenderTicks;
         float flapFrame = chiromaw.flapTicks + partialRenderTicks;
-        
 
         AnimationBlender<ModelChiromawMatriarch> blender = new AnimationBlender<>(this); //TODO Make this a field once animations are done
         
@@ -520,12 +519,16 @@ public class ModelChiromawMatriarch extends MowzieModelBase {
         float nestingPercent = chiromaw.nestingTimer.getAnimationProgressSmooth(partialRenderTicks);
         float spinningPercent = chiromaw.spinningTimer.getAnimationProgressSmooth(partialRenderTicks);
         float flyingPercent = Math.max(0, 1.0f - landingPercent - nestingPercent - spinningPercent);
-        
+        float featherControl = (float) ((Math.sin(0.05 * frame - Math.cos(0.05 * frame))) * 0.5);
+
         //Nesting animation state
         blender.addState(model -> {
         	model.setToInitPose();
         	jaw.rotateAngleX = 0.8651597102135892F;
         	head1.rotateAngleX = 0.136659280431156F;
+        	crest_left1a.rotateAngleX -= 0.25 * featherControl * Math.cos(0.5 * frame);
+        	crest_right1a.rotateAngleX -= 0.25 * featherControl * Math.cos(0.5 * frame);
+        	crest_mid1a.rotateAngleX -= 0.25 * featherControl * Math.cos(0.5 * frame);
         	walk(model.jaw, rippleSpeed * 0.125f, globalDegree * 0.5f, false, 2.0f, 0f, frame, 1F);
         	walk(model.body2, rippleSpeed * 0.125f, globalDegree * 0.125f, true, 2.0f, 0f, frame, 1F);
         	walk(model.arm_right1c, rippleSpeed * 0.125f, globalDegree * 0.125f, false, 2.0f, 0f, frame, 1F);
@@ -571,27 +574,27 @@ public class ModelChiromawMatriarch extends MowzieModelBase {
             	head1.rotateAngleX = 0.136659280431156F;
         	}
         }
-        
+
         FlyingPose idlePose = new FlyingPose();
         SpinningPose spinningPose = new SpinningPose();
-        
+
         //Idle (flying) animation state
         blender.addState(model -> {
         	model.setToInitPose();
-        	
+
         	idlePose.apply(model, globalSpeed, globalDegree, rippleSpeed);
         }, () -> flyingPercent);
-        
+
         //Landing animation state
         blender.addState(model -> {
         	model.setToInitPose();
-        	
+
 	 		model.arm_right1a.rotateAngleX = 0.3553564018453205F;
 	 		model.arm_left1a.rotateAngleX = 0.3553564018453205F;
-	 		
+
 	 		idlePose.apply(model, 1.5f, 0.25f, 0);
         }, () -> landingPercent);
-        
+
         //Spinning animation state
         blender.addState(model -> {
         	model.setToInitPose();
