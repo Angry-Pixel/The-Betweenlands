@@ -21,7 +21,6 @@ import thebetweenlands.common.entity.EntityProximitySpawner;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityChiromawHatchling extends EntityProximitySpawner {
-	
 
 	public int prevRise;
 	public float feederRotation, prevFeederRotation;
@@ -85,7 +84,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 
 			if (getRising() && getRiseCount() < MAX_RISE)
 				setRiseCount(getRiseCount() + 4);
-			
+
 			if (!getIsHungry()) {
 				eatingCooldown--;
 				if (eatingCooldown <= MAX_EATING_COOLDOWN && eatingCooldown > MAX_EATING_COOLDOWN - 60 && !getIsChewing())
@@ -188,7 +187,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 			setLocationAndAngles(posX, posY, posZ, 0F, 0.0F); // stahp random rotating on spawn with an egg mojang pls
 		return livingdata;
 	}
-	
+
 	private void setRising(boolean rise) {
 		dataManager.set(IS_RISING, rise);
 	}

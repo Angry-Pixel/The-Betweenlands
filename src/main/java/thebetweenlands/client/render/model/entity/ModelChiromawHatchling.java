@@ -38,7 +38,7 @@ public class ModelChiromawHatchling extends MowzieModelBase {
     MowzieModelRenderer wee_lil_tail2;
     MowzieModelRenderer leg_left2;
     MowzieModelRenderer leg_right2;
-    
+
     MowzieModelRenderer[] partsJustBaby;
 
     public ModelChiromawHatchling() {
@@ -166,7 +166,7 @@ public class ModelChiromawHatchling extends MowzieModelBase {
         head1.addChild(babytooth_right);
         egg_base.addChild(egg1);
         arm_right2.addChild(wing_right2);
-        
+
         parts = new MowzieModelRenderer[] {
 				egg_base,
 				chiromaw_base,
@@ -233,7 +233,7 @@ public class ModelChiromawHatchling extends MowzieModelBase {
     	GlStateManager.popMatrix();
         egg_base.render(scale);
     }
-    
+
 	@Override
     public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
     	EntityChiromawHatchling chiromaw = (EntityChiromawHatchling) entity;
@@ -253,7 +253,6 @@ public class ModelChiromawHatchling extends MowzieModelBase {
     	arm_left1.rotateAngleX = convertDegtoRad(-23.5F + smoother);
     	arm_right2.rotateAngleX = convertDegtoRad(-92F + smoother);
     	arm_left2.rotateAngleX = convertDegtoRad(-92F + smoother);
-    	
     	arm_right1.rotateAngleY = convertDegtoRad(-20F  - smootherHead * 1.5F);
     	arm_left1.rotateAngleY = convertDegtoRad(20F + smootherHead * 1.5F);
     	arm_right2.rotateAngleY = convertDegtoRad(60F - smootherHead * 1.5F);
@@ -267,7 +266,7 @@ public class ModelChiromawHatchling extends MowzieModelBase {
     	else {
     		neck.rotateAngleY = 0F;
     	}
-    	
+
     	if (chiromaw.getIsChewing()) {
     		swing(jaw, globalSpeed * 0.75f, globalDegree * 0.5f, false, 2.0f, 0f, frame / ((float) Math.PI), 1F);
     		walk(jaw, globalSpeed * 0.5f, globalDegree * 0.5f, false, 2.0f, -0.75f, frame, 1F);
@@ -281,7 +280,7 @@ public class ModelChiromawHatchling extends MowzieModelBase {
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
     }
-    
+
 	//just some helpers for future
 	public float convertDegtoRad(float angleIn) {
 		return angleIn * ((float) Math.PI / 180F);
