@@ -272,7 +272,8 @@ public class ModelChiromawHatchling extends MowzieModelBase {
     		swing(jaw, globalSpeed * 0.75f, globalDegree * 0.5f, false, 2.0f, 0f, frame / ((float) Math.PI), 1F);
     		walk(jaw, globalSpeed * 0.5f, globalDegree * 0.5f, false, 2.0f, -0.75f, frame, 1F);
     		}
-    	
+    	else if(!chiromaw.getIsHungry() && chiromaw.getRiseCount() >= chiromaw.MAX_RISE)
+    		walk(jaw, globalSpeed * 0.125f, globalDegree * 0.5f, false, 2.0f, -0.75f, frame, 1F);
 	}
 
     public void setRotateAngle(MowzieModelRenderer modelRenderer, float x, float y, float z) {
