@@ -26,6 +26,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	public int MIN_RISE = 0;
 	public int PREV_RISE;
 	public float FEEDER_ROTATION, PREV_FEEDER_ROTATION;
+	public float HEAD_PITCH, PREV_HEAD_PITCH;
 	public int MAX_FOOD_NEEDED = 5;
 	public int eatingCooldown = 120;
 	private static final DataParameter<Boolean> IS_RISING = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.BOOLEAN);
@@ -52,11 +53,25 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 		super.onUpdate();
 		PREV_RISE = getRiseCount();
 		PREV_FEEDER_ROTATION = FEEDER_ROTATION;
-		if(!getEntityWorld().isRemote)
+		PREV_HEAD_PITCH = HEAD_PITCH;
+		if(!getEntityWorld().isRemote && getEntityWorld().getTotalWorldTime()%20 == 0)
 			checkArea();
+
 		if(getEntityWorld().isRemote)
 			checkFeeder();
-		
+
+		if (getRising() && getRiseCount() >= MAX_RISE) {
+			if(!getIsHungry())
+				if(HEAD_PITCH < 40)
+					HEAD_PITCH += 8;
+			if(getIsHungry())
+				if(HEAD_PITCH > 0)
+					HEAD_PITCH -= 8;
+		}
+
+		if (!getRising() && getRiseCount() < MAX_RISE)
+			HEAD_PITCH = getRiseCount();
+
 		if (!getEntityWorld().isRemote) {
 			if (!getRising() && getRiseCount() > MIN_RISE)
 				setRiseCount(getRiseCount() - 4);

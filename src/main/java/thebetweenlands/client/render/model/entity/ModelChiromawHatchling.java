@@ -220,6 +220,7 @@ public class ModelChiromawHatchling extends MowzieModelBase {
     			leg_left2,
     			leg_right2
         };
+        setInitPose();
     }
 
     @Override
@@ -236,19 +237,21 @@ public class ModelChiromawHatchling extends MowzieModelBase {
 	@Override
     public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
     	EntityChiromawHatchling chiromaw = (EntityChiromawHatchling) entity;
-    	
+    	setToInitPose();
         float frame = chiromaw.ticksExisted + partialRenderTicks;
         float flap = MathHelper.sin((frame) * 0.5F) * 0.6F;
     	float smoother = chiromaw.PREV_RISE + (chiromaw.getRiseCount() - chiromaw.PREV_RISE) * partialRenderTicks;
     	float smootherFeed = chiromaw.PREV_FEEDER_ROTATION + (chiromaw.FEEDER_ROTATION - chiromaw.PREV_FEEDER_ROTATION) * partialRenderTicks;
+    	float smootherHead = chiromaw.PREV_HEAD_PITCH + (chiromaw.HEAD_PITCH - chiromaw.PREV_HEAD_PITCH) * partialRenderTicks;
+
     	chiromaw_base.rotateAngleY = convertDegtoRad(smootherFeed);
-    	head1.rotateAngleX = convertDegtoRad(-43.5F + (!chiromaw.getIsHungry() ? smoother * 1.5F : 0F)); // will make nicer
+    	head1.rotateAngleX = convertDegtoRad(-43.5F + smootherHead * 1.5F);
     	jaw.rotateAngleX = convertDegtoRad(4F + smoother * 1.5F);
     	arm_right1.rotateAngleX = convertDegtoRad(-23.5F + smoother);
     	arm_left1.rotateAngleX = convertDegtoRad(-23.5F + smoother);
     	arm_right2.rotateAngleX = convertDegtoRad(-92F + smoother);
     	arm_left2.rotateAngleX = convertDegtoRad(-92F + smoother);
-    	
+
     	if (chiromaw.getRiseCount() >= chiromaw.MAX_RISE - 20 && chiromaw.getIsHungry())
     		neck.rotateAngleY = 0F + flap;
     	else

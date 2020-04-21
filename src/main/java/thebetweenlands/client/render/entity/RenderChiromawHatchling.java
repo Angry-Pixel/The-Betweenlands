@@ -18,11 +18,6 @@ public class RenderChiromawHatchling extends RenderLiving<EntityChiromawHatchlin
 	}
 
 	@Override
-	protected void preRenderCallback(EntityChiromawHatchling entity, float partialTickTime) {
-		//GlStateManager.translate(0F, 0.85F, 0F);
-	}
-
-	@Override
 	protected ResourceLocation getEntityTexture(EntityChiromawHatchling entity) {
 		return TEXTURE;
 	}
