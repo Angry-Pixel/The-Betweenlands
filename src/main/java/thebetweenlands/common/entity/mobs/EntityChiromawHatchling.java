@@ -57,20 +57,21 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 		if(!getEntityWorld().isRemote && getEntityWorld().getTotalWorldTime()%20 == 0)
 			checkArea();
 
-		if(getEntityWorld().isRemote)
+		if (getEntityWorld().isRemote) {
 			checkFeeder();
 
-		if (getRising() && getRiseCount() >= MAX_RISE) {
-			if(!getIsHungry())
-				if(HEAD_PITCH < 40)
-					HEAD_PITCH += 8;
-			if(getIsHungry())
-				if(HEAD_PITCH > 0)
-					HEAD_PITCH -= 8;
-		}
+			if (getRising() && getRiseCount() >= MAX_RISE) {
+				if (!getIsHungry())
+					if (HEAD_PITCH < 40)
+						HEAD_PITCH += 8;
+				if (getIsHungry())
+					if (HEAD_PITCH > 0)
+						HEAD_PITCH -= 8;
+			}
 
-		if (!getRising() && getRiseCount() < MAX_RISE)
-			HEAD_PITCH = getRiseCount();
+			if (!getRising() && getRiseCount() < MAX_RISE)
+				HEAD_PITCH = getRiseCount();
+		}
 
 		if (!getEntityWorld().isRemote) {
 			if (!getRising() && getRiseCount() > MIN_RISE)
