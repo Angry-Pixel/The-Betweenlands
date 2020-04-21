@@ -100,6 +100,7 @@ import thebetweenlands.client.render.entity.RenderCCGroundSpawner;
 import thebetweenlands.client.render.entity.RenderChiromaw;
 import thebetweenlands.client.render.entity.RenderChiromawDroppings;
 import thebetweenlands.client.render.entity.RenderChiromawGreeblingRider;
+import thebetweenlands.client.render.entity.RenderChiromawHatchling;
 import thebetweenlands.client.render.entity.RenderChiromawMatriarch;
 import thebetweenlands.client.render.entity.RenderCryptCrawler;
 import thebetweenlands.client.render.entity.RenderDarkDruid;
@@ -261,6 +262,7 @@ import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityChiromawGreeblingRider;
+import thebetweenlands.common.entity.mobs.EntityChiromawHatchling;
 import thebetweenlands.common.entity.mobs.EntityChiromawMatriarch;
 import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
 import thebetweenlands.common.entity.mobs.EntityDarkDruid;
@@ -718,9 +720,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityChiromawDroppings.class, RenderChiromawDroppings::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityShock.class, RenderNothing::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBLLightningBolt.class, RenderNothing::new);
-		
+		RenderingRegistry.registerEntityRenderingHandler(EntityChiromawHatchling.class, RenderChiromawHatchling::new);
 
-		
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new RenderDruidAltar());

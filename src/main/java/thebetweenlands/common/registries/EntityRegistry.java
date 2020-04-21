@@ -37,6 +37,7 @@ import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityChiromawGreeblingRider;
+import thebetweenlands.common.entity.mobs.EntityChiromawHatchling;
 import thebetweenlands.common.entity.mobs.EntityChiromawMatriarch;
 import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
 import thebetweenlands.common.entity.mobs.EntityDarkDruid;
@@ -220,6 +221,7 @@ public class EntityRegistry {
 		registerEntity(EntityWormGroundSpawner.class, "worm_ground_spawner");
 		registerEntity(EntityChiromawMatriarch.class, "chiromaw_matriarch", 0x3F5A69, 0xA16A77);
 		registerEntity(EntityChiromawDroppings.class, "chiromaw_droppings", 64, 20, true);
+		registerEntity(EntityChiromawHatchling.class, "chiromaw_hatchling", 0x3F5A69, 0xA16A77);
 	}
 
 	private static int id = 0;
