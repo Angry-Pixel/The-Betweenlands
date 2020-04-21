@@ -253,11 +253,20 @@ public class ModelChiromawHatchling extends MowzieModelBase {
     	arm_left1.rotateAngleX = convertDegtoRad(-23.5F + smoother);
     	arm_right2.rotateAngleX = convertDegtoRad(-92F + smoother);
     	arm_left2.rotateAngleX = convertDegtoRad(-92F + smoother);
+    	
+    	arm_right1.rotateAngleY = convertDegtoRad(-20F  - smootherHead * 1.5F);
+    	arm_left1.rotateAngleY = convertDegtoRad(20F + smootherHead * 1.5F);
+    	arm_right2.rotateAngleY = convertDegtoRad(60F - smootherHead * 1.5F);
+    	arm_left2.rotateAngleY = convertDegtoRad(-60F + smootherHead * 1.5F);
 
-    	if (chiromaw.getRiseCount() >= chiromaw.MAX_RISE - 20 && chiromaw.getIsHungry())
+    	if (chiromaw.getRiseCount() >= chiromaw.MAX_RISE - 20 && chiromaw.getIsHungry()) {
     		neck.rotateAngleY = 0F + flap;
-    	else
+    		walk(arm_right2, globalSpeed * 0.5f, globalDegree * 0.5f, false, 2.0f, 0f, frame, 1F);
+    		walk(arm_left2, globalSpeed * 0.5f, globalDegree * 0.5f, false, 2.0f, 0f, frame, 1F);
+    	}
+    	else {
     		neck.rotateAngleY = 0F;
+    	}
     	
     	if (chiromaw.getIsChewing()) {
     		swing(jaw, globalSpeed * 0.75f, globalDegree * 0.5f, false, 2.0f, 0f, frame / ((float) Math.PI), 1F);
