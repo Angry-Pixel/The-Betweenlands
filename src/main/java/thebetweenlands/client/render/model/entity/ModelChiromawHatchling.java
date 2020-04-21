@@ -242,9 +242,9 @@ public class ModelChiromawHatchling extends MowzieModelBase {
         float globalDegree = 0.5F;
         float frame = chiromaw.ticksExisted + partialRenderTicks;
         float flap = MathHelper.sin((frame) * 0.5F) * 0.6F;
-    	float smoother = chiromaw.PREV_RISE + (chiromaw.getRiseCount() - chiromaw.PREV_RISE) * partialRenderTicks;
-    	float smootherFeed = chiromaw.PREV_FEEDER_ROTATION + (chiromaw.FEEDER_ROTATION - chiromaw.PREV_FEEDER_ROTATION) * partialRenderTicks;
-    	float smootherHead = chiromaw.PREV_HEAD_PITCH + (chiromaw.HEAD_PITCH - chiromaw.PREV_HEAD_PITCH) * partialRenderTicks;
+    	float smoother = chiromaw.prevRise + (chiromaw.getRiseCount() - chiromaw.prevRise) * partialRenderTicks;
+    	float smootherFeed = chiromaw.prevFeederRotation + (chiromaw.feederRotation - chiromaw.prevFeederRotation) * partialRenderTicks;
+    	float smootherHead = chiromaw.prevHeadPitch + (chiromaw.headPitch - chiromaw.prevHeadPitch) * partialRenderTicks;
 
     	chiromaw_base.rotateAngleY = convertDegtoRad(smootherFeed);
     	head1.rotateAngleX = convertDegtoRad(-43.5F + smootherHead * 1.5F);

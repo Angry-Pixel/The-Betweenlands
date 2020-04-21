@@ -22,13 +22,17 @@ import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityChiromawHatchling extends EntityProximitySpawner {
 	
-	public int MAX_RISE = 40;
-	public int MIN_RISE = 0;
-	public int PREV_RISE;
-	public float FEEDER_ROTATION, PREV_FEEDER_ROTATION;
-	public float HEAD_PITCH, PREV_HEAD_PITCH;
-	public int MAX_FOOD_NEEDED = 5;
-	public int eatingCooldown = 120;
+
+	public int prevRise;
+	public float feederRotation, prevFeederRotation;
+	public float headPitch, prevHeadPitch;
+	public int eatingCooldown;
+	public final int MAX_EATING_COOLDOWN = 120; // set to whatever time between hunger cycles
+	public final int MIN_EATING_COOLDOWN = 0;
+	public final int MAX_RISE = 40;
+	public final int MIN_RISE = 0; 
+	public final int MAX_FOOD_NEEDED = 5; // amount of times needs to be fed
+
 	private static final DataParameter<Boolean> IS_RISING = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> RISE_COUNT = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> IS_HUNGRY = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.BOOLEAN);
@@ -53,9 +57,9 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		PREV_RISE = getRiseCount();
-		PREV_FEEDER_ROTATION = FEEDER_ROTATION;
-		PREV_HEAD_PITCH = HEAD_PITCH;
+		prevRise = getRiseCount();
+		prevFeederRotation = feederRotation;
+		prevHeadPitch = headPitch;
 		if(!getEntityWorld().isRemote && getEntityWorld().getTotalWorldTime()%20 == 0)
 			checkArea();
 
@@ -64,15 +68,15 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 
 			if (getRising() && getRiseCount() >= MAX_RISE) {
 				if (!getIsHungry())
-					if (HEAD_PITCH < 40)
-						HEAD_PITCH += 8;
+					if (headPitch < 40)
+						headPitch += 8;
 				if (getIsHungry())
-					if (HEAD_PITCH > 0)
-						HEAD_PITCH -= 8;
+					if (headPitch > 0)
+						headPitch -= 8;
 			}
 
 			if (!getRising() && getRiseCount() < MAX_RISE)
-				HEAD_PITCH = getRiseCount();
+				headPitch = getRiseCount();
 		}
 
 		if (!getEntityWorld().isRemote) {
@@ -84,11 +88,11 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 			
 			if (!getIsHungry()) {
 				eatingCooldown--;
-				if (eatingCooldown <= 120 && eatingCooldown > 60 && !getIsChewing())
+				if (eatingCooldown <= MAX_EATING_COOLDOWN && eatingCooldown > MAX_EATING_COOLDOWN - 60 && !getIsChewing())
 					setIsChewing(true);
-				if (eatingCooldown < 60 && getIsChewing())
+				if (eatingCooldown < MAX_EATING_COOLDOWN - 60 && getIsChewing())
 					setIsChewing(false);
-				if (eatingCooldown <= 0)
+				if (eatingCooldown <= MIN_EATING_COOLDOWN)
 					setIsHungry(true);
 			}
 		}
@@ -106,7 +110,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 			}
 
 			if (entity == null && getRiseCount() > MIN_RISE)
-				FEEDER_ROTATION = updateFeederRotation(FEEDER_ROTATION, 0F, 30F);
+				feederRotation = updateFeederRotation(feederRotation, 0F, 30F);
 
 		return entity;
 	}
@@ -146,7 +150,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 		double distanceX = entity.posX - posX;
 		double distanceZ = entity.posZ - posZ;
 		float angle = (float) (MathHelper.atan2(distanceZ, distanceX) * (180D / Math.PI)) - 90.0F;
-		FEEDER_ROTATION = updateFeederRotation(FEEDER_ROTATION, angle, maxYawIncrease);
+		feederRotation = updateFeederRotation(feederRotation, angle, maxYawIncrease);
 	}
 
 	private float updateFeederRotation(float angle, float targetAngle, float maxIncrease) {
@@ -168,7 +172,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 					if (stack.getCount() <= 0)
 						player.setHeldItem(hand, ItemStack.EMPTY);
 				}
-				eatingCooldown = 120;
+				eatingCooldown = MAX_EATING_COOLDOWN;
 				setAmountEaten(getAmountEaten() + 1);
 				setIsHungry(false);
 				return true;
