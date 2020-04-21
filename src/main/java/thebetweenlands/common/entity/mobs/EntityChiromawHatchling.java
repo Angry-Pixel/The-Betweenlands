@@ -26,11 +26,11 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	public float feederRotation, prevFeederRotation;
 	public float headPitch, prevHeadPitch;
 	public int eatingCooldown;
-	public final int MAX_EATING_COOLDOWN = 120; // set to whatever time between hunger cycles
+	public final int MAX_EATING_COOLDOWN = 240; // set to whatever time between hunger cycles
 	public final int MIN_EATING_COOLDOWN = 0;
 	public final int MAX_RISE = 40;
 	public final int MIN_RISE = 0; 
-	public final int MAX_FOOD_NEEDED = 5; // amount of times needs to be fed
+	public final int MAX_FOOD_NEEDED = 2; // amount of times needs to be fed
 
 	private static final DataParameter<Boolean> IS_RISING = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> RISE_COUNT = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.VARINT);
@@ -132,7 +132,18 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 								setRising(true);
 						}
 						if (!isDead && getRiseCount() >= MAX_RISE) {
-							// STUFF
+							if (getAmountEaten() >= MAX_FOOD_NEEDED && eatingCooldown <= 0) {
+								Entity spawn = getEntitySpawned();
+								if (spawn != null) {
+									performPreSpawnaction(entity, spawn);
+									if (!spawn.isDead) { // just in case of pre-emptive removal
+										((EntityChiromawTame) spawn).setOwnerId(entity.getUniqueID()); // just for now
+										getEntityWorld().spawnEntity(spawn);
+									}
+									performPostSpawnaction(entity, spawn);
+									setDead();
+								}
+							}
 						}
 					}
 				}
@@ -284,7 +295,8 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 
 	@Override
 	protected Entity getEntitySpawned() {
-		EntityChiromaw entity = new EntityChiromaw(getEntityWorld());
+		EntityChiromawTame entity = new EntityChiromawTame(getEntityWorld());
+		//entity.setOwnerId(player.getUniqueID());
 		return entity;
 	}
 
