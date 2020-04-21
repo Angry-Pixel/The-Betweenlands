@@ -33,6 +33,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	private static final DataParameter<Integer> RISE_COUNT = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> IS_HUNGRY = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> FOOD_COUNT = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.VARINT);
+	private static final DataParameter<Boolean> IS_CHEWING = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.BOOLEAN);
 
 	public EntityChiromawHatchling(World world) {
 		super(world);
@@ -46,6 +47,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 		dataManager.register(RISE_COUNT, 0);
 		dataManager.register(IS_HUNGRY, true);
 		dataManager.register(FOOD_COUNT, 0);
+		dataManager.register(IS_CHEWING, false);
 	}
 
 	@Override
@@ -82,6 +84,10 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 			
 			if (!getIsHungry()) {
 				eatingCooldown--;
+				if (eatingCooldown <= 120 && eatingCooldown > 60 && !getIsChewing())
+					setIsChewing(true);
+				if (eatingCooldown < 60 && getIsChewing())
+					setIsChewing(false);
 				if (eatingCooldown <= 0)
 					setIsHungry(true);
 			}
@@ -209,6 +215,14 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 
 	public boolean getIsHungry() {
 		return dataManager.get(IS_HUNGRY);
+	}
+
+	private void setIsChewing(boolean chewing) {
+		dataManager.set(IS_CHEWING, chewing);
+	}
+
+	public boolean getIsChewing() {
+		return dataManager.get(IS_CHEWING);
 	}
 
 	@Override
