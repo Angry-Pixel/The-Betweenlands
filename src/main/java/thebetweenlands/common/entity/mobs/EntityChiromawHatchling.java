@@ -114,7 +114,13 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 			prevTransformTick = getTransformCount();
 
 			if (getEntityWorld().isRemote) {
-				checkFeeder();
+				if(!getIsTransforming())
+					checkFeeder();
+				else {
+					if(getOwner() != null)
+						lookAtFeeder(getOwner(), 30F);
+					}
+
 				if (getRising() && getRiseCount() >= MAX_RISE) {
 					if (!getIsHungry())
 						if (headPitch < 40)
@@ -155,9 +161,12 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 						setIsHungry(true);
 				}
 
-				if (!getEntityWorld().isRemote && getIsTransforming())
+				if (getIsTransforming()) {
 					if (getTransformCount() <= 60)
 						setTransformCount(getTransformCount() + 1);
+					if(getOwner() != null)
+						lookAtFeeder(getOwner(), 30F);
+				}
 
 				if (!isDead && getRiseCount() >= MAX_RISE) {
 					if (getAmountEaten() >= MAX_FOOD_NEEDED && getEatingCooldown() <= 0) {
@@ -166,8 +175,9 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 						if (!isDead && getTransformCount() >= 60) {
 							Entity spawn = getEntitySpawned();
 							if (spawn != null) {
-								if (!spawn.isDead) // just in case
+								if (!spawn.isDead) { // just in case
 									getEntityWorld().spawnEntity(spawn);
+								}
 								setDead();
 							}
 						}
@@ -294,8 +304,11 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	@Nullable
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-		if (!getEntityWorld().isRemote)
+		if (!getEntityWorld().isRemote) {
 			setLocationAndAngles(posX, posY, posZ, 0F, 0.0F); // stahp random rotating on spawn with an egg mojang pls
+		if(checkArea() != null && checkArea() instanceof EntityPlayer)
+			setOwnerId(checkArea().getUniqueID());
+		}
 		return livingdata;
 	}
 
@@ -434,7 +447,8 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	protected Entity getEntitySpawned() {
 		EntityChiromawTame entity = new EntityChiromawTame(getEntityWorld());
 		entity.setOwnerId(getOwnerId());
-		// feederRotation won't work but I guess it doesn't matter for this as it'll just be 0
+		// feederRotation won't work but I guess it doesn't matter :(
+		System.out.println("FEEDER ROTATION: " + feederRotation);
 		entity.setLocationAndAngles(getPosition().getX() + 0.5F, getPosition().getY() + 1F, getPosition().getZ() + 0.5F, feederRotation, 0.0F);
 		
 		/* TODO - Doesn't work here now, but it never worked anyway :( maybe something can be figured out?
