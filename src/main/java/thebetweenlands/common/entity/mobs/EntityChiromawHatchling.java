@@ -39,7 +39,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	public final int MIN_EATING_COOLDOWN = 0;
 	public final int MAX_RISE = 40;
 	public final int MIN_RISE = 0; 
-	public final int MAX_FOOD_NEEDED = 2; // amount of times needs to be fed
+	public final int MAX_FOOD_NEEDED = 1; // amount of times needs to be fed
 	public int prevTransformTick;
 
 	private static final DataParameter<Boolean> IS_RISING = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.BOOLEAN);
@@ -78,50 +78,47 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 
 		if (getEntityWorld().isRemote) {
 			checkFeeder();
-			if (!getIsTransforming()) {
-				if (getRising() && getRiseCount() >= MAX_RISE) {
-					if (!getIsHungry())
-						if (headPitch < 40)
-							headPitch += 8;
-					if (getIsHungry())
-						if (headPitch > 0)
-							headPitch -= 8;
-				}
-
-				if (!getRising() && getRiseCount() < MAX_RISE)
-					headPitch = getRiseCount();
+			if (getRising() && getRiseCount() >= MAX_RISE) {
+				if (!getIsHungry())
+					if (headPitch < 40)
+						headPitch += 8;
+				if (getIsHungry())
+					if (headPitch > 0)
+						headPitch -= 8;
 			}
 
-			if(getIsTransforming()) {
-				if (getTransformCount() < 60)
-					spawnLightningArcs();
+			if (!getRising() && getRiseCount() < MAX_RISE)
+				headPitch = getRiseCount();
+
+			if (getAmountEaten() >= MAX_FOOD_NEEDED && !getIsChewing()) {
+				spawnLightningArcs(); // TODO maybe else something to show this is ready to transform/transforming
 			}
-			
-			if(getIsChewing()) {
+
+			if (getIsChewing()) {
 				if (getTransformCount() < 60)
 					spawnEatingParticles();
 			}
 		}
 
 		if (!getEntityWorld().isRemote) {
-			if (!getIsTransforming()) {
-				if (!getRising() && getRiseCount() > MIN_RISE)
-					setRiseCount(getRiseCount() - 4);
 
-				if (getRising() && getRiseCount() < MAX_RISE)
-					setRiseCount(getRiseCount() + 4);
+			if (!getRising() && getRiseCount() > MIN_RISE)
+				setRiseCount(getRiseCount() - 4);
 
-				if (!getIsHungry()) {
-					eatingCooldown--;
-					if (eatingCooldown <= MAX_EATING_COOLDOWN && eatingCooldown > MAX_EATING_COOLDOWN - 60 && !getIsChewing())
-						setIsChewing(true);
-					if (eatingCooldown < MAX_EATING_COOLDOWN - 60 && getIsChewing())
-						setIsChewing(false);
-					if (eatingCooldown <= MIN_EATING_COOLDOWN)
-						setIsHungry(true);
-				}
+			if (getRising() && getRiseCount() < MAX_RISE)
+				setRiseCount(getRiseCount() + 4);
+
+			if (!getIsHungry()) {
+				eatingCooldown--;
+				if (eatingCooldown <= MAX_EATING_COOLDOWN && eatingCooldown > MAX_EATING_COOLDOWN - 60 && !getIsChewing())
+					setIsChewing(true);
+				if (eatingCooldown < MAX_EATING_COOLDOWN - 60 && getIsChewing())
+					setIsChewing(false);
+				if (eatingCooldown <= MIN_EATING_COOLDOWN && getAmountEaten() < MAX_FOOD_NEEDED)
+					setIsHungry(true);
 			}
-			if(!getEntityWorld().isRemote && getIsTransforming())
+
+			if (!getEntityWorld().isRemote && getIsTransforming())
 				if (getTransformCount() <= 60)
 					setTransformCount(getTransformCount() + 1);
 		}
@@ -183,21 +180,25 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 							if(!getRising())
 								setRising(true);
 						}
-						if (!isDead && getTransformCount() >= 60) {
-							Entity spawn = getEntitySpawned();
-							if (spawn != null) {
-								performPreSpawnaction(entity, spawn);
-								if (!spawn.isDead) { // just in case of pre-emptive removal				
-									getEntityWorld().spawnEntity(spawn);
+						if (!isDead && getRiseCount() >= MAX_RISE) {
+							if (getAmountEaten() >= MAX_FOOD_NEEDED && eatingCooldown <= 0) {
+								Entity spawn = getEntitySpawned();
+								if (spawn != null) {
+									performPreSpawnaction(entity, spawn);
+									if (!isDead && getTransformCount() >= 60) {
+										if (!spawn.isDead) { // just in case
+											getEntityWorld().spawnEntity(spawn);
+										}
+										performPostSpawnaction(entity, spawn);
+										setDead();
+									}
 								}
-								performPostSpawnaction(entity, spawn);
-								setDead();
 							}
 						}
 					}
 				}
 			}
-			if (entity == null && getRiseCount() > MIN_RISE) {
+			if (entity == null && getRiseCount() > MIN_RISE && !getIsTransforming()) {
 				if (getRising())
 					setRising(false);
 			}
@@ -207,6 +208,8 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 
 	@Override
 	protected void performPreSpawnaction(Entity targetEntity, Entity entitySpawned) {
+		if(!getIsTransforming())
+			setTransformAnimation(true);
 		EntityLiving entityliving = (EntityLiving)entitySpawned;
 		((EntityChiromawTame) entityliving).setOwnerId(targetEntity.getUniqueID()); // just for now
 		double distanceX = targetEntity.posX - posX;
@@ -242,13 +245,9 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 					if (stack.getCount() <= 0)
 						player.setHeldItem(hand, ItemStack.EMPTY);
 				}
-				if(getAmountEaten() >= MAX_FOOD_NEEDED)
-					setTransformAnimation(true);
-				if (!getIsTransforming()) {
-					eatingCooldown = MAX_EATING_COOLDOWN;
-					setAmountEaten(getAmountEaten() + 1);
-					setIsHungry(false);
-				}
+				eatingCooldown = MAX_EATING_COOLDOWN;
+				setAmountEaten(getAmountEaten() + 1);
+				setIsHungry(false);
 				return true;
 			}
 		}
