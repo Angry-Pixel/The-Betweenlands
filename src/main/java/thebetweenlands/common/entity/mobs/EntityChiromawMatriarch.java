@@ -899,7 +899,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		
 		@Override
 		public boolean shouldContinueExecuting() {
-			return !largeChiromaw.getReturnToNest() && !largeChiromaw.getIsNesting() && largeChiromaw.getAttackTarget() == null;
+			return largeChiromaw.getReturnToNest() && !largeChiromaw.getIsNesting() && largeChiromaw.getAttackTarget() == null;
 		}
 
 		@Override
