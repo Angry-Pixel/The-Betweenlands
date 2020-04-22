@@ -44,7 +44,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	public final int MIN_EATING_COOLDOWN = 0;
 	public final int MAX_RISE = 40;
 	public final int MIN_RISE = 0; 
-	public final int MAX_FOOD_NEEDED = 1; // amount of times needs to be fed
+	public final int MAX_FOOD_NEEDED = 5; // amount of times needs to be fed
 	public float feederRotation, prevFeederRotation, headPitch, prevHeadPitch;
 	public int prevHatchAnimation, hatchAnimation, prevRise, prevTransformTick;
 
@@ -92,7 +92,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 					if (getEntityWorld().getBlockState(getPosition().down()).getBlock() instanceof BlockOctine)
 						setHatchTick(getHatchTick() + 1); // increment whilst on an octine block.
 				}
-				if (getHatchTick() >= 1) { // how many increments before hatching
+				if (getHatchTick() >= 10) { // how many increments before hatching
 					TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.CHIROMAW_HATCH, (float) posX, (float) posY + 1F, (float) posZ, 0F));
 					setHasHatched(true);
 				}
