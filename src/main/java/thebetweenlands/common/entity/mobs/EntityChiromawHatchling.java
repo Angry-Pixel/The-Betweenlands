@@ -92,7 +92,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 					if (getEntityWorld().getBlockState(getPosition().down()).getBlock() instanceof BlockOctine)
 						setHatchTick(getHatchTick() + 1); // increment whilst on an octine block.
 				}
-				if (getHatchTick() >= 10) { // how many increments before hatching
+				if (getHatchTick() >= 1) { // how many increments before hatching
 					TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.CHIROMAW_HATCH, (float) posX, (float) posY + 1F, (float) posZ, 0F));
 					setHasHatched(true);
 				}
@@ -447,18 +447,12 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	protected Entity getEntitySpawned() {
 		EntityChiromawTame entity = new EntityChiromawTame(getEntityWorld());
 		entity.setOwnerId(getOwnerId());
-		// feederRotation won't work but I guess it doesn't matter :(
-		System.out.println("FEEDER ROTATION: " + feederRotation);
+		//System.out.println("FEEDER ROTATION: " + feederRotation);
 		entity.setLocationAndAngles(getPosition().getX() + 0.5F, getPosition().getY() + 1F, getPosition().getZ() + 0.5F, feederRotation, 0.0F);
-		
-		/* TODO - Doesn't work here now, but it never worked anyway :( maybe something can be figured out?
-		 	EntityLiving entityliving = (EntityLiving)entity; // cast was needed for below non working rotation
-			double distanceX = targetEntity.posX - posX;
-			double distanceZ = targetEntity.posZ - posZ;
-			float angle = (float) (MathHelper.atan2(distanceZ, distanceX) * (180D / Math.PI)) - 90F;
-			entityliving.setLocationAndAngles(getPosition().getX() + 0.5F, getPosition().getY() + 1F, getPosition().getZ() + 0.5F, MathHelper.wrapDegrees(angle), 0.0F);
-			// mojang pls - why wont it spawn rotated?
-		 */
+		entity.rotationYawHead = entity.rotationYaw;
+		entity.renderYawOffset = entity.rotationYaw;
+        // mojang pls - why wont it spawn rotated?
+
 		return entity;
 	}
 
