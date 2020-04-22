@@ -91,8 +91,9 @@ public abstract class EntityProximitySpawner extends EntityCreature implements I
 	 * Override to change.
 	 */
 
-	protected void performPreSpawnaction(Entity targetEntity, Entity entitySpawned) {
-		entitySpawned.setPosition(getPosition().getX() + 0.5F, getPosition().getY(), getPosition().getZ() + 0.5F);
+	protected void performPreSpawnaction(@Nullable Entity targetEntity, @Nullable Entity entitySpawned) {
+		if(entitySpawned != null)
+			entitySpawned.setPosition(getPosition().getX() + 0.5F, getPosition().getY(), getPosition().getZ() + 0.5F);
 	}
 
 	/**
@@ -101,7 +102,7 @@ public abstract class EntityProximitySpawner extends EntityCreature implements I
 	 * Entity can be null
 	 */
 
-	protected void performPostSpawnaction(Entity targetEntity, @Nullable Entity entitySpawned) { }
+	protected void performPostSpawnaction(@Nullable Entity targetEntity, @Nullable Entity entitySpawned) { }
 	
 	/**
 	 * The Proximity box used

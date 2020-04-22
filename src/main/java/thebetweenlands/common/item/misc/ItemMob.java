@@ -28,6 +28,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.entity.mobs.EntityChiromawHatchling;
 
 public class ItemMob extends Item {
 	private final Class<? extends Entity> defaultMob;
@@ -185,7 +186,10 @@ public class ItemMob extends Item {
 					if(entity instanceof EntityLiving) {
 						((EntityLiving) entity).playLivingSound();
 					}
-					stack.shrink(1);
+					if (entity instanceof EntityChiromawHatchling) {
+						((EntityChiromawHatchling) entity).setOwnerId(player.getUniqueID());
+					}
+ 					stack.shrink(1);
 					return EnumActionResult.SUCCESS;
 				}
 			}

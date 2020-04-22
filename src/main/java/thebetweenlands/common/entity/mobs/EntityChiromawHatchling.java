@@ -2,18 +2,23 @@ package thebetweenlands.common.entity.mobs;
 
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Optional;
+
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
@@ -26,29 +31,35 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.misc.BlockOctine;
 import thebetweenlands.common.entity.EntityProximitySpawner;
+import thebetweenlands.common.network.clientbound.PacketParticle;
+import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityChiromawHatchling extends EntityProximitySpawner {
 
-	public int prevRise;
-	public float feederRotation, prevFeederRotation;
-	public float headPitch, prevHeadPitch;
-	public int eatingCooldown;
 	public final int MAX_EATING_COOLDOWN = 240; // set to whatever time between hunger cycles
 	public final int MIN_EATING_COOLDOWN = 0;
 	public final int MAX_RISE = 40;
 	public final int MIN_RISE = 0; 
 	public final int MAX_FOOD_NEEDED = 1; // amount of times needs to be fed
-	public int prevTransformTick;
+	public float feederRotation, prevFeederRotation, headPitch, prevHeadPitch;
+	public int prevHatchAnimation, hatchAnimation, prevRise, prevTransformTick;
 
+	protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntityChiromawHatchling.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+	private static final DataParameter<Boolean> HATCHED = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_RISING = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> RISE_COUNT = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> IS_HUNGRY = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> EATING_COOLDOWN = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> FOOD_COUNT = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> IS_CHEWING = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> TRANSFORM = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> TRANSFORM_COUNT = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> HATCH_COUNT = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.VARINT);
+
 	public EntityChiromawHatchling(World world) {
 		super(world);
 		setSize(1F, 1F);
@@ -57,76 +68,125 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
+		dataManager.register(OWNER_UNIQUE_ID, Optional.<UUID>absent());
+		dataManager.register(HATCHED, false);
 		dataManager.register(IS_RISING, false);
 		dataManager.register(RISE_COUNT, 0);
 		dataManager.register(IS_HUNGRY, true);
+		dataManager.register(EATING_COOLDOWN, 0);
 		dataManager.register(FOOD_COUNT, 0);
 		dataManager.register(IS_CHEWING, false);
 		dataManager.register(TRANSFORM, false);
 		dataManager.register(TRANSFORM_COUNT, 0);
+		dataManager.register(HATCH_COUNT, 0);
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		prevRise = getRiseCount();
-		prevFeederRotation = feederRotation;
-		prevHeadPitch = headPitch;
-		prevTransformTick = getTransformCount();
-		if(!getEntityWorld().isRemote)
-			checkArea();
 
-		if (getEntityWorld().isRemote) {
-			checkFeeder();
-			if (getRising() && getRiseCount() >= MAX_RISE) {
-				if (!getIsHungry())
-					if (headPitch < 40)
-						headPitch += 8;
-				if (getIsHungry())
-					if (headPitch > 0)
-						headPitch -= 8;
+		// STAGE 1
+		if (!getHasHatched()) {
+			if (!getEntityWorld().isRemote) {
+				if (ticksExisted % 120 == 0) {
+					if (getEntityWorld().getBlockState(getPosition().down()).getBlock() instanceof BlockOctine)
+						setHatchTick(getHatchTick() + 1); // increment whilst on
+															// an octine block.
+				}
+				if (getHatchTick() >= 10) { // how many increments before
+											// hatching
+					TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.GOOP_SPLAT, (float) posX,
+							(float) posY + 1F, (float) posZ, 0F));
+					setHasHatched(true);
+				}
 			}
 
-			if (!getRising() && getRiseCount() < MAX_RISE)
-				headPitch = getRiseCount();
-
-			if (getAmountEaten() >= MAX_FOOD_NEEDED && !getIsChewing()) {
-				spawnLightningArcs(); // TODO maybe else something to show this is ready to transform/transforming
-			}
-
-			if (getIsChewing()) {
-				if (getTransformCount() < 60)
-					spawnEatingParticles();
+			if (getEntityWorld().isRemote) {
+				if (getHatchTick() >= 1) { // after the 1st hatch increment
+					prevHatchAnimation = hatchAnimation;
+					hatchAnimation++;
+				}
 			}
 		}
 
-		if (!getEntityWorld().isRemote) {
+		// STAGE 2
+		if (getHasHatched()) {
+			prevRise = getRiseCount();
+			prevFeederRotation = feederRotation;
+			prevHeadPitch = headPitch;
+			prevTransformTick = getTransformCount();
 
-			if (!getRising() && getRiseCount() > MIN_RISE)
-				setRiseCount(getRiseCount() - 4);
+			if (getEntityWorld().isRemote) {
+				checkFeeder();
+				if (getRising() && getRiseCount() >= MAX_RISE) {
+					if (!getIsHungry())
+						if (headPitch < 40)
+							headPitch += 8;
+					if (getIsHungry())
+						if (headPitch > 0)
+							headPitch -= 8;
+				}
 
-			if (getRising() && getRiseCount() < MAX_RISE)
-				setRiseCount(getRiseCount() + 4);
+				if (!getRising() && getRiseCount() < MAX_RISE)
+					headPitch = getRiseCount();
 
-			if (!getIsHungry()) {
-				eatingCooldown--;
-				if (eatingCooldown <= MAX_EATING_COOLDOWN && eatingCooldown > MAX_EATING_COOLDOWN - 60 && !getIsChewing())
-					setIsChewing(true);
-				if (eatingCooldown < MAX_EATING_COOLDOWN - 60 && getIsChewing())
-					setIsChewing(false);
-				if (eatingCooldown <= MIN_EATING_COOLDOWN && getAmountEaten() < MAX_FOOD_NEEDED)
-					setIsHungry(true);
+				if (getAmountEaten() >= MAX_FOOD_NEEDED && !getIsChewing())
+					spawnLightningArcs(); // TODO maybe else something to show this is ready to transform/transforming
+
+				if (getIsChewing())
+					if (getTransformCount() < 60)
+						spawnEatingParticles();
+
 			}
 
-			if (!getEntityWorld().isRemote && getIsTransforming())
-				if (getTransformCount() <= 60)
-					setTransformCount(getTransformCount() + 1);
+			if (!getEntityWorld().isRemote) {
+				checkArea();
+
+				if (!getRising() && getRiseCount() > MIN_RISE)
+					setRiseCount(getRiseCount() - 4);
+
+				if (getRising() && getRiseCount() < MAX_RISE)
+					setRiseCount(getRiseCount() + 4);
+
+				if (!getIsHungry()) {
+					setEatingCooldown(getEatingCooldown() - 1);
+					if (getEatingCooldown() <= MAX_EATING_COOLDOWN && getEatingCooldown() > MAX_EATING_COOLDOWN - 60 && !getIsChewing())
+						setIsChewing(true);
+					if (getEatingCooldown() < MAX_EATING_COOLDOWN - 60 && getIsChewing())
+						setIsChewing(false);
+					if (getEatingCooldown() <= MIN_EATING_COOLDOWN && getAmountEaten() < MAX_FOOD_NEEDED)
+						setIsHungry(true);
+				}
+
+				if (!getEntityWorld().isRemote && getIsTransforming())
+					if (getTransformCount() <= 60)
+						setTransformCount(getTransformCount() + 1);
+
+				if (!isDead && getRiseCount() >= MAX_RISE) {
+					if (getAmountEaten() >= MAX_FOOD_NEEDED && getEatingCooldown() <= 0) {
+						if (!getIsTransforming())
+							setIsTransforming(true);
+						if (!isDead && getTransformCount() >= 60) {
+							Entity spawn = getEntitySpawned();
+							if (spawn != null) {
+								if (!spawn.isDead) // just in case
+									getEntityWorld().spawnEntity(spawn);
+								setDead();
+							}
+						}
+					}
+				}
+			}
 		}
+	}
+
+	private void spawnHatchingParticles() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private void spawnEatingParticles() {
 		// TODO 
-		
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -180,21 +240,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 							if(!getRising())
 								setRising(true);
 						}
-						if (!isDead && getRiseCount() >= MAX_RISE) {
-							if (getAmountEaten() >= MAX_FOOD_NEEDED && eatingCooldown <= 0) {
-								Entity spawn = getEntitySpawned();
-								if (spawn != null) {
-									performPreSpawnaction(entity, spawn);
-									if (!isDead && getTransformCount() >= 60) {
-										if (!spawn.isDead) { // just in case
-											getEntityWorld().spawnEntity(spawn);
-										}
-										performPostSpawnaction(entity, spawn);
-										setDead();
-									}
-								}
-							}
-						}
+
 					}
 				}
 			}
@@ -207,17 +253,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	}
 
 	@Override
-	protected void performPreSpawnaction(Entity targetEntity, Entity entitySpawned) {
-		if(!getIsTransforming())
-			setTransformAnimation(true);
-		EntityLiving entityliving = (EntityLiving)entitySpawned;
-		((EntityChiromawTame) entityliving).setOwnerId(targetEntity.getUniqueID()); // just for now
-		double distanceX = targetEntity.posX - posX;
-		double distanceZ = targetEntity.posZ - posZ;
-		float angle = (float) (MathHelper.atan2(distanceZ, distanceX) * (180D / Math.PI)) - 90F;
-		entityliving.setLocationAndAngles(getPosition().getX() + 0.5F, getPosition().getY() + 1F, getPosition().getZ() + 0.5F, MathHelper.wrapDegrees(angle), 0.0F);
-		// mojang pls - why wont it spawn rotated?
-	}
+	protected void performPreSpawnaction(@Nullable Entity targetEntity, Entity entitySpawned) {}
 
 	public void lookAtFeeder(Entity entity, float maxYawIncrease) {
 		double distanceX = entity.posX - posX;
@@ -238,6 +274,10 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	@Override
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
+		if (!stack.isEmpty() && getHasHatched()) {
+			if (stack.getItem() == ItemRegistry.NET)
+				return false;
+			}
 		if (!stack.isEmpty() && getIsHungry()) {
 			if (stack.getItem() == ItemRegistry.SNAIL_FLESH_RAW) {
 				if (!player.capabilities.isCreativeMode) {
@@ -245,7 +285,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 					if (stack.getCount() <= 0)
 						player.setHeldItem(hand, ItemStack.EMPTY);
 				}
-				eatingCooldown = MAX_EATING_COOLDOWN;
+				setEatingCooldown(MAX_EATING_COOLDOWN);
 				setAmountEaten(getAmountEaten() + 1);
 				setIsHungry(false);
 				return true;
@@ -261,6 +301,14 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 			setLocationAndAngles(posX, posY, posZ, 0F, 0.0F); // stahp random rotating on spawn with an egg mojang pls
 		return livingdata;
 	}
+
+	private void setHasHatched(boolean hatched) {
+		dataManager.set(HATCHED, hatched);
+	}
+
+    public boolean getHasHatched() {
+        return dataManager.get(HATCHED);
+    }
 
 	private void setRising(boolean rise) {
 		dataManager.set(IS_RISING, rise);
@@ -286,6 +334,14 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 		return dataManager.get(FOOD_COUNT);
 	}
 
+	private void setEatingCooldown(int cooldown) {
+		dataManager.set(EATING_COOLDOWN, cooldown);
+	}
+
+	public int getEatingCooldown() {
+		return dataManager.get(EATING_COOLDOWN);
+	}
+
 	private void setIsHungry(boolean hungry) {
 		dataManager.set(IS_HUNGRY, hungry);
 	}
@@ -302,7 +358,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 		return dataManager.get(IS_CHEWING);
 	}
 
-	private void setTransformAnimation(boolean transform) {
+	private void setIsTransforming(boolean transform) {
 		dataManager.set(TRANSFORM, transform);
 	}
 
@@ -318,6 +374,15 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 		return dataManager.get(TRANSFORM_COUNT);
 	}
 
+	private void setHatchTick(int hatchCount) {
+		dataManager.set(HATCH_COUNT, hatchCount);
+		
+	}
+
+	public int getHatchTick() {
+		return dataManager.get(HATCH_COUNT);
+	}
+
 	@Override
 	public void onKillCommand() {
 		setDead();
@@ -330,17 +395,13 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 
 	@Override
     public boolean canBePushed() {
-        return false;
+        return true;
     }
 
 	@Override
     public boolean canBeCollidedWith() {
         return true;
     }
-
-	@Override
-	public void addVelocity(double x, double y, double z) {
-	}
 
 	@Override
 	public boolean getIsInvulnerable() {
@@ -375,6 +436,18 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	@Override
 	protected Entity getEntitySpawned() {
 		EntityChiromawTame entity = new EntityChiromawTame(getEntityWorld());
+		entity.setOwnerId(getOwnerId());
+		// feederRotation won't work but I guess it doesn't matter for this as it'll just be 0
+		entity.setLocationAndAngles(getPosition().getX() + 0.5F, getPosition().getY() + 1F, getPosition().getZ() + 0.5F, feederRotation, 0.0F);
+		
+		/* TODO - Doesn't work here now, but it never worked anyway :( maybe something can be figured out?
+		 	EntityLiving entityliving = (EntityLiving)entity; // cast was needed for below non working rotation
+			double distanceX = targetEntity.posX - posX;
+			double distanceZ = targetEntity.posZ - posZ;
+			float angle = (float) (MathHelper.atan2(distanceZ, distanceX) * (180D / Math.PI)) - 90F;
+			entityliving.setLocationAndAngles(getPosition().getX() + 0.5F, getPosition().getY() + 1F, getPosition().getZ() + 0.5F, MathHelper.wrapDegrees(angle), 0.0F);
+			// mojang pls - why wont it spawn rotated?
+		 */
 		return entity;
 	}
 
@@ -391,5 +464,74 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	@Override
 	protected int maxUseCount() {
 		return 1;
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
+		if (getOwnerId() == null)
+			nbt.setString("OwnerUUID", "");
+		else
+			nbt.setString("OwnerUUID", getOwnerId().toString());
+
+		nbt.setBoolean("Hatched", getHasHatched());
+		nbt.setInteger("HatchTick", getHatchTick());
+		nbt.setBoolean("Rising", getRising());
+		nbt.setInteger("RisingCount", getRiseCount());
+		nbt.setBoolean("Hungry", getIsHungry());
+		nbt.setInteger("FoodEaten", getAmountEaten());
+		nbt.setInteger("EatingCooldown", getEatingCooldown());
+		nbt.setBoolean("Transforming", getIsTransforming());
+		nbt.setInteger("TransformCount", getTransformCount());
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
+		String s;
+		if (nbt.hasKey("OwnerUUID", 8))
+			s = nbt.getString("OwnerUUID");
+		else {
+			String s1 = nbt.getString("Owner");
+			s = PreYggdrasilConverter.convertMobOwnerIfNeeded(getServer(), s1);
+		}
+
+		if (!s.isEmpty()) {
+			try {
+				setOwnerId(UUID.fromString(s));
+			} catch (Throwable e) {}
+		}
+		setHasHatched(nbt.getBoolean("Hatched"));
+		setHatchTick(nbt.getInteger("HatchTick"));
+		setRising(nbt.getBoolean("Rising"));
+		setRiseCount(nbt.getInteger("RisingCount"));
+		setIsHungry(nbt.getBoolean("Hungry"));
+		setAmountEaten(nbt.getInteger("FoodEaten"));
+		setEatingCooldown(nbt.getInteger("EatingCooldown"));
+		setIsTransforming(nbt.getBoolean("Transforming"));
+		setTransformCount(nbt.getInteger("TransformCount"));
+	}
+
+	@Nullable
+	public UUID getOwnerId() {
+		return (UUID) ((Optional) dataManager.get(OWNER_UNIQUE_ID)).orNull();
+	}
+
+	public void setOwnerId(@Nullable UUID uuid) {
+		dataManager.set(OWNER_UNIQUE_ID, Optional.fromNullable(uuid));
+	}
+
+	@Nullable
+	public EntityLivingBase getOwner() {
+		try {
+			UUID uuid = getOwnerId();
+			return uuid == null ? null : getEntityWorld().getPlayerEntityByUUID(uuid);
+		} catch (IllegalArgumentException e) {
+			return null;
+		}
+	}
+
+	public boolean isOwner(EntityLivingBase entityIn) {
+		return entityIn == getOwner();
 	}
 }

@@ -14,6 +14,7 @@ import net.minecraft.util.EnumHand;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.EntityTinyWormEggSac;
+import thebetweenlands.common.entity.mobs.EntityChiromawHatchling;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityGecko;
@@ -28,6 +29,7 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 		CATCHABLE_ENTITIES.put(EntityGecko.class, () -> ItemRegistry.CRITTER);
 		CATCHABLE_ENTITIES.put(EntityDragonFly.class, () -> ItemRegistry.CRITTER);
 		CATCHABLE_ENTITIES.put(EntityTinyWormEggSac.class, () -> ItemRegistry.SLUDGE_WORM_EGG_SAC);
+		CATCHABLE_ENTITIES.put(EntityChiromawHatchling.class, () -> ItemRegistry.CHIROWMAW_EGG);
 	}
 
 	public ItemNet() {
@@ -42,6 +44,10 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 
 		if(mobItem != null) {
 			if(!player.world.isRemote) {
+
+				if(exludeThisMob(target))
+					return false;
+
 				ItemMob item = mobItem.get();
 
 				ItemStack mobItemStack = item.capture(target);
@@ -58,6 +64,14 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 
 			player.swingArm(hand);
 			return true;
+		}
+		return false;
+	}
+
+	private boolean exludeThisMob(EntityLivingBase target) {
+		if(target instanceof EntityChiromawHatchling) {
+			if(((EntityChiromawHatchling) target).getHasHatched())
+				return true;
 		}
 		return false;
 	}

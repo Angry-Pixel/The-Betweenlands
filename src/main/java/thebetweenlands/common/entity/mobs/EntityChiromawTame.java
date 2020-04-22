@@ -52,7 +52,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 public class EntityChiromawTame extends EntityCreature {
 
 	private static final DataParameter<Boolean> ATTACKING = EntityDataManager.<Boolean>createKey(EntityChiromawTame.class, DataSerializers.BOOLEAN);
-	 protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntityChiromawTame.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+	protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntityChiromawTame.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
 	public EntityChiromawTame(World world) {
 		super(world);
