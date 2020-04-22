@@ -401,7 +401,7 @@ public class ItemRegistry {
     public static final Item PYRAD_FLAME = new ItemPyradFlame();
     public static final ItemMob CRITTER = new ItemCritters();
     public static final ItemMob SLUDGE_WORM_EGG_SAC = new ItemMob(16, EntityTinyWormEggSac.class);
-    public static final ItemMob CHIROWMAW_EGG = new ItemMob(12, EntityChiromawHatchling.class);
+    public static final ItemMob CHIROMAW_EGG = new ItemMob(12, EntityChiromawHatchling.class);
     public static final Item SHIMMER_STONE = new ItemShimmerStone();
     public static final Item TARMINION = new ItemTarminion();
     public static final Item MOSS_BED_ITEM = new ItemMossBed();

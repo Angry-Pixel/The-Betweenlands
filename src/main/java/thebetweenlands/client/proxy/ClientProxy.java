@@ -956,6 +956,10 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			fx.setRBGColorF(48F, 64F, 91F);
 		}
 
+		if (particleName.equals("chiromaw_hatch")) {
+			fx = new ParticleBreaking.Factory().createParticle(EnumParticleTypes.ITEM_CRACK.getParticleID(), world, x, y, z, vecX, vecY, vecZ, Item.getIdFromItem(ItemRegistry.CHIROMAW_EGG));
+		}
+
 		if (particleName.equals("splode_shroom")) {
 			fx = new ParticleBreaking.SnowballFactory().createParticle(EnumParticleTypes.SNOWBALL.getParticleID(), world, x, y, z, vecX, vecY, vecZ, 0);
 			fx.setRBGColorF(128F, 203F, 175F);

@@ -29,7 +29,8 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 		GOOP_SPLAT, 
 		SPLODE_SHROOM,
 		FLAME_JET,
-		CHIROMAW_DROPPINGS;
+		CHIROMAW_DROPPINGS,
+		CHIROMAW_HATCH;
 		static final ParticleType[] values = values();
 	}
 
@@ -172,6 +173,10 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 						BLParticles.CHIROMAW_DROPPINGS.spawn(world, d0, d1, d2, ParticleArgs.get().withMotion(0.125f * (d1) * (rand.nextFloat() - 0.5f), -0.03f, 0.125f * (d1) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
 						BLParticles.CHIROMAW_DROPPINGS.spawn(world, d5, d6, d7, ParticleArgs.get().withMotion(0.125f * (d1) * (rand.nextFloat() - 0.5f), -0.03f, 0.125f * (d1) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
 						BLParticles.CHIROMAW_DROPPINGS.spawn(world, d0, d1, d2, ParticleArgs.get().withMotion(0.125f * (d1) * (rand.nextFloat() - 0.5f), -0.03f, 0.125f * (d1) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+					break;
+				case CHIROMAW_HATCH:
+					for (int count = 0; count <= 100; ++count)
+						TheBetweenlands.proxy.spawnCustomParticle("chiromaw_hatch", world, message.posX + (world.rand.nextDouble() - 0.5D) , message.posY + world.rand.nextDouble(), message.posZ + (world.rand.nextDouble() - 0.5D), 0, 0, 0);
 					break;
 				default:
 			}
