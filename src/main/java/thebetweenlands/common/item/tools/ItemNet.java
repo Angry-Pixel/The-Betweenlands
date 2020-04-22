@@ -29,7 +29,7 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 		CATCHABLE_ENTITIES.put(EntityGecko.class, () -> ItemRegistry.CRITTER);
 		CATCHABLE_ENTITIES.put(EntityDragonFly.class, () -> ItemRegistry.CRITTER);
 		CATCHABLE_ENTITIES.put(EntityTinyWormEggSac.class, () -> ItemRegistry.SLUDGE_WORM_EGG_SAC);
-		CATCHABLE_ENTITIES.put(EntityChiromawHatchling.class, () -> ItemRegistry.CHIROWMAW_EGG);
+		CATCHABLE_ENTITIES.put(EntityChiromawHatchling.class, () -> ItemRegistry.CHIROMAW_EGG);
 	}
 
 	public ItemNet() {

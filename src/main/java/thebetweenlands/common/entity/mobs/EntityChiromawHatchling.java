@@ -90,13 +90,10 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 			if (!getEntityWorld().isRemote) {
 				if (ticksExisted % 120 == 0) {
 					if (getEntityWorld().getBlockState(getPosition().down()).getBlock() instanceof BlockOctine)
-						setHatchTick(getHatchTick() + 1); // increment whilst on
-															// an octine block.
+						setHatchTick(getHatchTick() + 1); // increment whilst on an octine block.
 				}
-				if (getHatchTick() >= 10) { // how many increments before
-											// hatching
-					TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.GOOP_SPLAT, (float) posX,
-							(float) posY + 1F, (float) posZ, 0F));
+				if (getHatchTick() >= 10) { // how many increments before hatching
+					TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.CHIROMAW_HATCH, (float) posX, (float) posY + 1F, (float) posZ, 0F));
 					setHasHatched(true);
 				}
 			}
