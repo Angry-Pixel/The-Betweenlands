@@ -1,5 +1,7 @@
 package thebetweenlands.client.render.model.entity;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -225,14 +227,39 @@ public class ModelChiromawHatchling extends MowzieModelBase {
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale) {
-    	EntityChiromawHatchling chiromaw = (EntityChiromawHatchling) entity;
-    	GlStateManager.pushMatrix();
-    	GlStateManager.translate(0.0F, 0.5F - chiromaw.getRiseCount() * 0.0125F, 0.0F);
-    	GlStateManager.translate(0.0F, 0.0F, 0.25F - chiromaw.getRiseCount() * 0.00625F);
-    	chiromaw_base.render(scale);
-    	GlStateManager.popMatrix();
-        egg_base.render(scale);
     }
+ 
+	public void renderBaby(EntityChiromawHatchling entity, float partialTicks, float scale) {
+    	EntityChiromawHatchling chiromaw = (EntityChiromawHatchling) entity;
+    	float flyUp = chiromaw.getTransformCount() + (chiromaw.prevTransformTick - chiromaw.getTransformCount()) * partialTicks;
+    	float flap = MathHelper.sin((chiromaw.ticksExisted + partialTicks) * 0.5F) * 0.15F;
+		if (!chiromaw.getIsTransforming())
+			flap = 0F;
+
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(0.0F, 0.5F - chiromaw.getRiseCount() * 0.0125F - flyUp * 0.01F - flap * 0.5F, 0.0F);
+		GlStateManager.translate(0.0F, 0.0F, 0.25F - chiromaw.getRiseCount() * 0.00625F);
+		GlStateManager.color(1F, 1F, 1F, 1F);
+		chiromaw_base.render(scale);
+		GlStateManager.popMatrix();
+	}
+
+	public void renderEgg(EntityChiromawHatchling entity, float partialTicks, float scale) {
+		EntityChiromawHatchling chiromaw = (EntityChiromawHatchling) entity;
+		float eggFade = chiromaw.getTransformCount() + (chiromaw.prevTransformTick - chiromaw.getTransformCount()) * partialTicks;
+		GlStateManager.pushMatrix();
+        GlStateManager.disableCull();
+        GlStateManager.enableBlend();
+		GlStateManager.disableLighting();
+
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1F, 1F, 1F, 1F - eggFade * 0.02F);
+        egg_base.render(scale);
+		GlStateManager.enableCull();
+		GlStateManager.disableBlend();
+		GlStateManager.enableLighting();
+		GlStateManager.popMatrix();
+	}
 
 	@Override
     public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
@@ -245,34 +272,43 @@ public class ModelChiromawHatchling extends MowzieModelBase {
     	float smoother = chiromaw.prevRise + (chiromaw.getRiseCount() - chiromaw.prevRise) * partialRenderTicks;
     	float smootherFeed = chiromaw.prevFeederRotation + (chiromaw.feederRotation - chiromaw.prevFeederRotation) * partialRenderTicks;
     	float smootherHead = chiromaw.prevHeadPitch + (chiromaw.headPitch - chiromaw.prevHeadPitch) * partialRenderTicks;
-
     	chiromaw_base.rotateAngleY = convertDegtoRad(smootherFeed);
-    	head1.rotateAngleX = convertDegtoRad(-43.5F + smootherHead * 1.5F);
-    	jaw.rotateAngleX = convertDegtoRad(4F + smoother * 1.5F);
-    	arm_right1.rotateAngleX = convertDegtoRad(-23.5F + smoother);
-    	arm_left1.rotateAngleX = convertDegtoRad(-23.5F + smoother);
-    	arm_right2.rotateAngleX = convertDegtoRad(-92F + smoother);
-    	arm_left2.rotateAngleX = convertDegtoRad(-92F + smoother);
-    	arm_right1.rotateAngleY = convertDegtoRad(-20F  - smootherHead * 1.5F);
-    	arm_left1.rotateAngleY = convertDegtoRad(20F + smootherHead * 1.5F);
-    	arm_right2.rotateAngleY = convertDegtoRad(60F - smootherHead * 1.5F);
-    	arm_left2.rotateAngleY = convertDegtoRad(-60F + smootherHead * 1.5F);
+    	if (!chiromaw.getIsTransforming()) {
+			head1.rotateAngleX = convertDegtoRad(-43.5F + smootherHead * 1.5F);
+			jaw.rotateAngleX = convertDegtoRad(4F + smoother * 1.5F);
+			arm_right1.rotateAngleX = convertDegtoRad(-23.5F + smoother);
+			arm_left1.rotateAngleX = convertDegtoRad(-23.5F + smoother);
+			arm_right2.rotateAngleX = convertDegtoRad(-92F + smoother);
+			arm_left2.rotateAngleX = convertDegtoRad(-92F + smoother);
+			arm_right1.rotateAngleY = convertDegtoRad(-20F - smootherHead * 1.5F);
+			arm_left1.rotateAngleY = convertDegtoRad(20F + smootherHead * 1.5F);
+			arm_right2.rotateAngleY = convertDegtoRad(60F - smootherHead * 1.5F);
+			arm_left2.rotateAngleY = convertDegtoRad(-60F + smootherHead * 1.5F);
 
-    	if (chiromaw.getRiseCount() >= chiromaw.MAX_RISE - 20 && chiromaw.getIsHungry()) {
-    		neck.rotateAngleY = 0F + flap;
-    		walk(arm_right2, globalSpeed * 0.5f, globalDegree * 0.5f, false, 2.0f, 0f, frame, 1F);
-    		walk(arm_left2, globalSpeed * 0.5f, globalDegree * 0.5f, false, 2.0f, 0f, frame, 1F);
-    	}
-    	else {
-    		neck.rotateAngleY = 0F;
-    	}
+			if (chiromaw.getRiseCount() >= chiromaw.MAX_RISE - 20 && chiromaw.getIsHungry()) {
+				neck.rotateAngleY = 0F + flap;
+				walk(arm_right2, globalSpeed * 0.5f, globalDegree * 0.5f, false, 2.0f, 0f, frame, 1F);
+				walk(arm_left2, globalSpeed * 0.5f, globalDegree * 0.5f, false, 2.0f, 0f, frame, 1F);
+			} else {
+				neck.rotateAngleY = 0F;
+			}
 
-    	if (chiromaw.getIsChewing()) {
-    		swing(jaw, globalSpeed * 0.75f, globalDegree * 0.5f, false, 2.0f, 0f, frame / ((float) Math.PI), 1F);
-    		walk(jaw, globalSpeed * 0.5f, globalDegree * 0.5f, false, 2.0f, -0.75f, frame, 1F);
-    		}
-    	else if(!chiromaw.getIsHungry() && chiromaw.getRiseCount() >= chiromaw.MAX_RISE)
-    		walk(jaw, globalSpeed * 0.125f, globalDegree * 0.5f, false, 2.0f, -0.75f, frame, 1F);
+			if (chiromaw.getIsChewing()) {
+				swing(jaw, globalSpeed * 0.75f, globalDegree * 0.5f, false, 2.0f, 0f, frame / ((float) Math.PI), 1F);
+				walk(jaw, globalSpeed * 0.5f, globalDegree * 0.5f, false, 2.0f, -0.75f, frame, 1F);
+			} else if (!chiromaw.getIsHungry() && chiromaw.getRiseCount() >= chiromaw.MAX_RISE)
+				walk(jaw, globalSpeed * 0.125f, globalDegree * 0.5f, false, 2.0f, -0.75f, frame, 1F);
+		}
+    	if (chiromaw.getIsTransforming()) {
+    		flap(arm_right1, globalSpeed * 0.5f, globalDegree * 1f, false, 2.0f, 0f, frame, 1F);
+			flap(arm_left1, globalSpeed * 0.5f, globalDegree * 1f, true, 2.0f, 0f, frame, 1F);
+			flap(arm_right2, globalSpeed * 0.5f, globalDegree * 1f, false, 2.0f, 0f, frame, 1F);
+			flap(arm_left2, globalSpeed * 0.5f, globalDegree * 1f, true, 2.0f, 0f, frame, 1F);
+			
+            swing(arm_right1, globalSpeed * 0.5f, globalDegree * 1.1f, false, 2.8f, 0.5f, frame, 1F);
+            swing(arm_left1, globalSpeed * 0.5f, globalDegree * 1.1f, true, 2.8f, -0.5f, frame, 1F);
+            walk(jaw, globalSpeed * 0.125f, globalDegree * 0.5f, false, 2.0f, 0f, frame, 1F);
+    	}
 	}
 
     public void setRotateAngle(MowzieModelRenderer modelRenderer, float x, float y, float z) {
@@ -289,4 +325,6 @@ public class ModelChiromawHatchling extends MowzieModelBase {
 	public float convertRadtoDeg(float radIn) {
 		return radIn * 180F / ((float) Math.PI);
 	}
+
+
 }
