@@ -232,32 +232,36 @@ public class ModelChiromawTame extends MowzieModelBase {
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
         EntityChiromawTame chiromaw = (EntityChiromawTame) entity;
-        GlStateManager.pushMatrix();
-      /*  if (chiromaw.getIsHanging()) {
-        	GlStateManager.translate(0.0F, 2.125F, 0.0F);
-        	GlStateManager.rotate(180, 1F, 0F, 0.0F);
-        	
-        } else {*/
-            GlStateManager.rotate(40, 1F, 0F, 0.0F);
-            GlStateManager.translate(0.0F, 0F, -0.8F);
-       // }
-        
-        GlStateManager.enableCull();
-        GlStateManager.cullFace(CullFace.FRONT);
-        wing_left1.showModel = false;
-        wing_left2.showModel = false;
-        wing_right1.showModel = false;
-        wing_right2.showModel = false;
-        body_base.render(unitPixel);
-        wing_left1.showModel = true;
-        wing_left2.showModel = true;
-        wing_right1.showModel = true;
-        wing_right2.showModel = true;
-        GlStateManager.cullFace(CullFace.BACK);
-        body_base.render(unitPixel);
-        GlStateManager.disableCull();
+		// hax to prevent rotation derpiness
+		if (chiromaw.getOwner() == null || chiromaw.ticksExisted > 4) {
+			GlStateManager.pushMatrix();
+			/*
+			 if (chiromaw.getIsHanging()) {
+			 GlStateManager.translate(0.0F, 2.125F, 0.0F);
+			 GlStateManager.rotate(180, 1F, 0F, 0.0F);
+			} else {
+			 */
+			GlStateManager.rotate(40, 1F, 0F, 0.0F);
+			GlStateManager.translate(0.0F, 0F, -0.8F);
+			// }
 
-        GlStateManager.popMatrix();
+			GlStateManager.enableCull();
+			GlStateManager.cullFace(CullFace.FRONT);
+			wing_left1.showModel = false;
+			wing_left2.showModel = false;
+			wing_right1.showModel = false;
+			wing_right2.showModel = false;
+			body_base.render(unitPixel);
+			wing_left1.showModel = true;
+			wing_left2.showModel = true;
+			wing_right1.showModel = true;
+			wing_right2.showModel = true;
+			GlStateManager.cullFace(CullFace.BACK);
+			body_base.render(unitPixel);
+			GlStateManager.disableCull();
+
+			GlStateManager.popMatrix();
+		}
     }
 
     public void setRotation(MowzieModelRenderer modelRenderer, float x, float y, float z) {

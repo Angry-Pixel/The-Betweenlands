@@ -448,9 +448,10 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 		EntityChiromawTame entity = new EntityChiromawTame(getEntityWorld());
 		entity.setOwnerId(getOwnerId());
 		//System.out.println("FEEDER ROTATION: " + feederRotation);
-		entity.setLocationAndAngles(getPosition().getX() + 0.5F, getPosition().getY() + 1F, getPosition().getZ() + 0.5F, feederRotation, 0.0F);
+		entity.setLocationAndAngles(posX, posY + 1F, posZ, feederRotation, 0.0F);
 		entity.rotationYawHead = entity.rotationYaw;
 		entity.renderYawOffset = entity.rotationYaw;
+		entity.setMoveForward(0.1F);
         // mojang pls - why wont it spawn rotated?
 
 		return entity;
