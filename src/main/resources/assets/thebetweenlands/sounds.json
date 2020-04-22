@@ -68,6 +68,42 @@
       }
     ]
   },
+  "lightning": {
+    "sounds": [
+        "thebetweenlands:ambience/lightning_1",
+        "thebetweenlands:ambience/lightning_2",
+        "thebetweenlands:ambience/lightning_3"
+    ]
+  },
+  "thunder": {
+    "sounds": [
+        "thebetweenlands:ambience/thunder_1",
+        "thebetweenlands:ambience/thunder_2",
+        "thebetweenlands:ambience/thunder_3",
+        "thebetweenlands:ambience/thunder_4",
+        "thebetweenlands:ambience/thunder_5"
+    ]
+  },
+  "rain_strong": {
+    "sounds": [
+        "thebetweenlands:ambience/rain_strong"
+    ]
+  },
+  "rain_medium": {
+    "sounds": [
+        "thebetweenlands:ambience/rain_medium"
+    ]
+  },
+  "rain_weak": {
+    "sounds": [
+        "thebetweenlands:ambience/rain_weak"
+    ]
+  },
+  "rain_dripping": {
+    "sounds": [
+        "thebetweenlands:ambience/rain_dripping"
+    ]
+  },
   "druid_chant": {
     "sounds": [
       "thebetweenlands:druid_chant"

@@ -118,8 +118,8 @@ public class EntityBLLightningBolt extends EntityLightningBolt implements IEntit
 		this.delay = Math.max(this.delay - 1, 0);
 
 		if(this.delay == 6) {
-			this.world.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.WEATHER, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
-			this.world.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_IMPACT, SoundCategory.WEATHER, 2.0F, 0.5F + this.rand.nextFloat() * 0.2F);
+			this.world.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundRegistry.THUNDER, SoundCategory.WEATHER, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
+			this.world.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundRegistry.LIGHTNING, SoundCategory.WEATHER, 2.0F, 0.5F + this.rand.nextFloat() * 0.2F);
 
 			this.world.setEntityState(this, EVENT_STRIKE);
 		} else if(this.delay > 0 && this.delay <= 4) {

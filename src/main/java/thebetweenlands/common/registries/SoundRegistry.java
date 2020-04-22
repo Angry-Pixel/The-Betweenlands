@@ -44,6 +44,12 @@ public class SoundRegistry {
     public static final BLSoundEvent AMBIENT_SNOWFALL = reg("ambient_snowfall");
     public static final BLSoundEvent AMBIENT_SLUDGE_WORM_DUNGEON = reg("ambient_sludge_worm_dungeon");
     public static final BLSoundEvent AMBIENT_FLOATING_ISLAND = reg("ambient_floating_island");
+    public static final BLSoundEvent LIGHTNING = reg("lightning");
+    public static final BLSoundEvent THUNDER = reg("thunder");
+    public static final BLSoundEvent RAIN_STRONG = reg("rain_strong");
+    public static final BLSoundEvent RAIN_MEDIUM = reg("rain_medium");
+    public static final BLSoundEvent RAIN_WEAK = reg("rain_weak");
+    public static final BLSoundEvent RAIN_DRIPPING = reg("rain_dripping");
     // Miscellaneous
     public static final BLSoundEvent CRUMBLE = reg("crumble");
     public static final BLSoundEvent FIG = reg("fig");
