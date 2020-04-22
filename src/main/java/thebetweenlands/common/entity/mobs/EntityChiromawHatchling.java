@@ -376,7 +376,6 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	@Override
 	protected Entity getEntitySpawned() {
 		EntityChiromawTame entity = new EntityChiromawTame(getEntityWorld());
-		//entity.setOwnerId(player.getUniqueID());
 		return entity;
 	}
 
