@@ -44,7 +44,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	public final int MIN_EATING_COOLDOWN = 0;
 	public final int MAX_RISE = 40;
 	public final int MIN_RISE = 0; 
-	public final int MAX_FOOD_NEEDED = 1; // amount of times needs to be fed
+	public final int MAX_FOOD_NEEDED = 5; // amount of times needs to be fed
 	public float feederRotation, prevFeederRotation, headPitch, prevHeadPitch;
 	public int prevHatchAnimation, hatchAnimation, prevRise, prevTransformTick;
 
@@ -447,18 +447,13 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	protected Entity getEntitySpawned() {
 		EntityChiromawTame entity = new EntityChiromawTame(getEntityWorld());
 		entity.setOwnerId(getOwnerId());
-		// feederRotation won't work but I guess it doesn't matter :(
-		System.out.println("FEEDER ROTATION: " + feederRotation);
-		entity.setLocationAndAngles(getPosition().getX() + 0.5F, getPosition().getY() + 1F, getPosition().getZ() + 0.5F, feederRotation, 0.0F);
-		
-		/* TODO - Doesn't work here now, but it never worked anyway :( maybe something can be figured out?
-		 	EntityLiving entityliving = (EntityLiving)entity; // cast was needed for below non working rotation
-			double distanceX = targetEntity.posX - posX;
-			double distanceZ = targetEntity.posZ - posZ;
-			float angle = (float) (MathHelper.atan2(distanceZ, distanceX) * (180D / Math.PI)) - 90F;
-			entityliving.setLocationAndAngles(getPosition().getX() + 0.5F, getPosition().getY() + 1F, getPosition().getZ() + 0.5F, MathHelper.wrapDegrees(angle), 0.0F);
-			// mojang pls - why wont it spawn rotated?
-		 */
+		//System.out.println("FEEDER ROTATION: " + feederRotation);
+		entity.setLocationAndAngles(posX, posY + 1F, posZ, feederRotation, 0.0F);
+		entity.rotationYawHead = entity.rotationYaw;
+		entity.renderYawOffset = entity.rotationYaw;
+		entity.setMoveForward(0.1F);
+        // mojang pls - why wont it spawn rotated?
+
 		return entity;
 	}
 
