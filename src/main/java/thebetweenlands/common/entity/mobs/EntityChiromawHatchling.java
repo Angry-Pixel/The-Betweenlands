@@ -296,21 +296,29 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 		if (!stack.isEmpty() && getHasHatched()) {
 			if (stack.getItem() == ItemRegistry.NET)
 				return false;
-			}
+		}
 		if (!stack.isEmpty() && getIsHungry()) {
 			if (stack.getItem() == getFoodCraved().getItem() && stack.getItemDamage() == getFoodCraved().getItemDamage()) {
-				if (!player.capabilities.isCreativeMode) {
-					stack.shrink(1);
-					if (stack.getCount() <= 0)
-						player.setHeldItem(hand, ItemStack.EMPTY);
+				if (checkforNBT(stack, getFoodCraved())) {
+					if (!player.capabilities.isCreativeMode) {
+						stack.shrink(1);
+						if (stack.getCount() <= 0)
+							player.setHeldItem(hand, ItemStack.EMPTY);
+					}
+					setEatingCooldown(MAX_EATING_COOLDOWN);
+					setAmountEaten(getAmountEaten() + 1);
+					setIsHungry(false);
+					return true;
 				}
-				setEatingCooldown(MAX_EATING_COOLDOWN);
-				setAmountEaten(getAmountEaten() + 1);
-				setIsHungry(false);
-				return true;
 			}
 		}
 		return super.processInteract(player, hand);
+	}
+
+	private boolean checkforNBT(ItemStack stack, ItemStack foodCraved) {
+		if (stack.hasTagCompound() && foodCraved.hasTagCompound())
+			return stack.getTagCompound().equals(foodCraved.getTagCompound());
+		return true;
 	}
 
 	protected ResourceLocation getFoodCravingLootTable() {
@@ -324,7 +332,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 			List<ItemStack> loot = lootTable.generateLootForPools(world.rand, lootBuilder.build());
 			if (!loot.isEmpty()) {
 				Collections.shuffle(loot); // mix it up a bit
-			return loot.get(0);
+				return loot.get(0);
 			}
 		}
 		return new ItemStack(ItemRegistry.SNAIL_FLESH_RAW); // to stop null;

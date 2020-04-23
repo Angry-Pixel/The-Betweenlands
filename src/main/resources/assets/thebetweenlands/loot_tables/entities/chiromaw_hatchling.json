@@ -3,21 +3,88 @@
       {
          "name":"chiromaw_hatchling",
          "rolls":2,
-         "conditions":[],
+         "conditions":[
+
+         ],
          "entries":[
             {
                "type":"item",
-               "name":"thebetweenlands:candy_blue",
+               "name":"thebetweenlands:angler_meat_raw",
                "weight":1
             },
             {
                "type":"item",
-               "name":"thebetweenlands:candy_red",
+               "name":"thebetweenlands:silt_crab_claw",
                "weight":1
             },
             {
                "type":"item",
-               "name":"thebetweenlands:candy_yellow",
+               "name":"thebetweenlands:critter",
+               "functions":[
+                  {
+                     "function":"set_nbt",
+                     "tag":"{Entity: {id: \"thebetweenlands:dragonfly\"}}"
+                  }
+               ],
+               "weight":1
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_misc",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data":3
+                  }
+               ],
+               "weight":1
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:critter",
+               "functions":[
+                  {
+                     "function":"set_nbt",
+                     "tag":"{Entity: {id: \"thebetweenlands:firefly\"}}"
+                  }
+               ],
+               "weight":1
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:frog_legs_raw",
+               "weight":1
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:critter",
+               "functions":[
+                  {
+                     "function":"set_nbt",
+                     "tag":"{Entity: {id: \"thebetweenlands:gecko\"}}"
+                  }
+               ],
+               "weight":1
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_misc",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data":4
+                  }
+               ],
+               "weight":1
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:mire_snail_egg",
+               "weight":1
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:snail_flesh_raw",
                "weight":1
             }
          ]
