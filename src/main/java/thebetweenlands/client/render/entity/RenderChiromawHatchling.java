@@ -1,9 +1,17 @@
 package thebetweenlands.client.render.entity;
 
+import org.lwjgl.opengl.GL11;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelChiromawEgg;
@@ -39,7 +47,31 @@ public class RenderChiromawHatchling extends RenderLiving<EntityChiromawHatchlin
 		else
 			MODEL_EGG.renderEgg(entity, partialTicks, 0.0625F);
         GlStateManager.popMatrix();
+        
+        if(entity.getIsHungry()) {
+        	float size = MathHelper.sin((entity.ticksExisted + partialTicks) * 0.125F) * 0.0625F;
+        	renderFoodCraved(entity.getFoodCraved(), x, y + 1.5D, z, 0.25F + size);
+        }
     }
+
+	private void renderFoodCraved(ItemStack foodCraved, double x, double y, double z, float scale) {
+		if (!foodCraved.isEmpty()) {
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(x, y, z);
+			GlStateManager.scale(-scale, -scale, scale);
+			GlStateManager.rotate(Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+			GlStateManager.rotate(180F, 1.0F, 0.0F, 0.0F);
+			bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+			Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			Minecraft.getMinecraft().getRenderItem().renderItem(foodCraved, Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(foodCraved, (World) null, (EntityLivingBase) null));
+			GlStateManager.disableBlend();
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.popMatrix();
+		}
+		
+	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityChiromawHatchling entity) {

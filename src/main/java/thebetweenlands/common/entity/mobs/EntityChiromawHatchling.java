@@ -20,6 +20,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -45,6 +46,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	public final int MAX_RISE = 40;
 	public final int MIN_RISE = 0; 
 	public final int MAX_FOOD_NEEDED = 5; // amount of times needs to be fed
+	NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(5, ItemStack.EMPTY);
 	public float feederRotation, prevFeederRotation, headPitch, prevHeadPitch;
 	public int prevHatchAnimation, hatchAnimation, prevRise, prevTransformTick;
 
@@ -59,6 +61,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	private static final DataParameter<Boolean> TRANSFORM = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> TRANSFORM_COUNT = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> HATCH_COUNT = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.VARINT);
+	private static final DataParameter<ItemStack> FOOD_CRAVED = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.ITEM_STACK);
 
 	public EntityChiromawHatchling(World world) {
 		super(world);
@@ -72,13 +75,14 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 		dataManager.register(HATCHED, false);
 		dataManager.register(IS_RISING, false);
 		dataManager.register(RISE_COUNT, 0);
-		dataManager.register(IS_HUNGRY, true);
+		dataManager.register(IS_HUNGRY, false);
 		dataManager.register(EATING_COOLDOWN, 0);
 		dataManager.register(FOOD_COUNT, 0);
 		dataManager.register(IS_CHEWING, false);
 		dataManager.register(TRANSFORM, false);
 		dataManager.register(TRANSFORM_COUNT, 0);
 		dataManager.register(HATCH_COUNT, 0);
+		dataManager.register(FOOD_CRAVED, ItemStack.EMPTY);
 	}
 
 	@Override
@@ -94,6 +98,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 				}
 				if (getHatchTick() >= 10) { // how many increments before hatching
 					TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.CHIROMAW_HATCH, (float) posX, (float) posY + 1F, (float) posZ, 0F));
+					setIsHungry(true);
 					setHasHatched(true);
 				}
 			}
@@ -286,7 +291,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 				return false;
 			}
 		if (!stack.isEmpty() && getIsHungry()) {
-			if (stack.getItem() == ItemRegistry.SNAIL_FLESH_RAW) {
+			if (stack.getItem() == getFoodCraved().getItem() && stack.getItemDamage() == getFoodCraved().getItemDamage()) {
 				if (!player.capabilities.isCreativeMode) {
 					stack.shrink(1);
 					if (stack.getCount() <= 0)
@@ -306,6 +311,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
 		if (!getEntityWorld().isRemote) {
 			setLocationAndAngles(posX, posY, posZ, 0F, 0.0F); // stahp random rotating on spawn with an egg mojang pls
+			setFoodCraved(new ItemStack(ItemRegistry.SNAIL_FLESH_RAW));
 		if(checkArea() != null && checkArea() instanceof EntityPlayer)
 			setOwnerId(checkArea().getUniqueID());
 		}
@@ -391,6 +397,15 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 
 	public int getHatchTick() {
 		return dataManager.get(HATCH_COUNT);
+	}
+
+	private void setFoodCraved(ItemStack itemStack) {
+		dataManager.set(FOOD_CRAVED, itemStack);
+		
+	}
+
+	public ItemStack getFoodCraved() {
+		return dataManager.get(FOOD_CRAVED);
 	}
 
 	@Override
@@ -489,6 +504,10 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 		nbt.setInteger("EatingCooldown", getEatingCooldown());
 		nbt.setBoolean("Transforming", getIsTransforming());
 		nbt.setInteger("TransformCount", getTransformCount());
+
+		NBTTagCompound nbtFood = new NBTTagCompound();
+		getFoodCraved().writeToNBT(nbtFood);
+		nbt.setTag("Items", nbtFood);
 	}
 
 	@Override
@@ -501,12 +520,12 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 			String s1 = nbt.getString("Owner");
 			s = PreYggdrasilConverter.convertMobOwnerIfNeeded(getServer(), s1);
 		}
-
 		if (!s.isEmpty()) {
 			try {
 				setOwnerId(UUID.fromString(s));
 			} catch (Throwable e) {}
 		}
+
 		setHasHatched(nbt.getBoolean("Hatched"));
 		setHatchTick(nbt.getInteger("HatchTick"));
 		setRising(nbt.getBoolean("Rising"));
@@ -516,6 +535,15 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 		setEatingCooldown(nbt.getInteger("EatingCooldown"));
 		setIsTransforming(nbt.getBoolean("Transforming"));
 		setTransformCount(nbt.getInteger("TransformCount"));
+
+		NBTTagCompound nbtFood = (NBTTagCompound) nbt.getTag("Items");
+		ItemStack stack = new ItemStack(ItemRegistry.SNAIL_FLESH_RAW); // to stop null
+		if(nbtFood != null)
+			stack = new ItemStack(nbtFood);
+		setFoodCraved(stack);
+
+		System.out.println("NBT FOOD NAME IS HERE!: " + nbtFood);
+		System.out.println("STACK NAME IS HERE!: " + stack.getDisplayName());
 	}
 
 	@Nullable
