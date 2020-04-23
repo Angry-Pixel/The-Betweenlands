@@ -103,7 +103,7 @@ public class AmbienceSoundPlayHandler {
 					isAbove += (position.isAbove ? 1 : 0) * weight;
 					rd = Math.min(rd, (float)Math.sqrt(position.position.length()));
 
-					if(playSound && position.timer > RainPosition.MAX_TIMER - 20) {
+					if(playSound && position.timer > RainPosition.MAX_TIMER - 12) {
 						ISound sound = new PositionedSoundRecord(getSoundForDistance((float)position.position.length() - 3f, position.isAbove ? 1 : 0), SoundCategory.WEATHER, position.isAbove ? 0.05f : 0.1f, position.isAbove ? 0.5f : 0.9f, (float)position.position.x + (float)event.player.posX, (float)position.position.y + (float)event.player.posY, (float)position.position.z + (float)event.player.posZ);
 						Minecraft.getMinecraft().getSoundHandler().playSound(sound);
 					}
