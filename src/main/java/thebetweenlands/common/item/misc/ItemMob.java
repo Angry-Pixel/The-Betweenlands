@@ -188,6 +188,7 @@ public class ItemMob extends Item {
 					}
 					if (entity instanceof EntityChiromawHatchling) {
 						((EntityChiromawHatchling) entity).setOwnerId(player.getUniqueID());
+						((EntityChiromawHatchling) entity).setFoodCraved(((EntityChiromawHatchling) entity).chooseNewFoodFromLootTable());
 					}
  					stack.shrink(1);
 					return EnumActionResult.SUCCESS;

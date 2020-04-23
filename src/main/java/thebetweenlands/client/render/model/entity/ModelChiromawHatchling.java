@@ -231,14 +231,15 @@ public class ModelChiromawHatchling extends MowzieModelBase {
  
 	public void renderBaby(EntityChiromawHatchling entity, float partialTicks, float scale) {
     	EntityChiromawHatchling chiromaw = (EntityChiromawHatchling) entity;
+    	float smootherRise = chiromaw.prevRise + (chiromaw.getRiseCount() - chiromaw.prevRise) * partialTicks;
     	float flyUp = chiromaw.getTransformCount() + (chiromaw.prevTransformTick - chiromaw.getTransformCount()) * partialTicks;
     	float flap = MathHelper.sin((chiromaw.ticksExisted + partialTicks) * 0.5F) * 0.15F;
 		if (!chiromaw.getIsTransforming())
 			flap = 0F;
 
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(0.0F, 0.5F - chiromaw.getRiseCount() * 0.0125F - flyUp * 0.01F - flap * 0.5F, 0.0F);
-		GlStateManager.translate(0.0F, 0.0F, 0.25F - chiromaw.getRiseCount() * 0.00625F);
+		GlStateManager.translate(0.0F, 0.5F - smootherRise * 0.0125F - flyUp * 0.01F - flap * 0.5F, 0.0F);
+		GlStateManager.translate(0.0F, 0.0F, 0.25F - smootherRise * 0.00625F);
 		GlStateManager.color(1F, 1F, 1F, 1F);
 		chiromaw_base.render(scale);
 		GlStateManager.popMatrix();

@@ -1,6 +1,7 @@
 package thebetweenlands.common.entity.mobs;
 
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,11 +22,15 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
@@ -38,6 +43,7 @@ import thebetweenlands.common.entity.EntityProximitySpawner;
 import thebetweenlands.common.network.clientbound.PacketParticle;
 import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 
 public class EntityChiromawHatchling extends EntityProximitySpawner {
 
@@ -97,7 +103,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 						setHatchTick(getHatchTick() + 1); // increment whilst on an octine block.
 				}
 				if (getHatchTick() >= 10) { // how many increments before hatching
-					TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.CHIROMAW_HATCH, (float) posX, (float) posY + 1F, (float) posZ, 0F));
+					spawnHatchingParticles();
 					setIsHungry(true);
 					setHasHatched(true);
 				}
@@ -162,8 +168,10 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 						setIsChewing(true);
 					if (getEatingCooldown() < MAX_EATING_COOLDOWN - 60 && getIsChewing())
 						setIsChewing(false);
-					if (getEatingCooldown() <= MIN_EATING_COOLDOWN && getAmountEaten() < MAX_FOOD_NEEDED)
+					if (getEatingCooldown() <= MIN_EATING_COOLDOWN && getAmountEaten() < MAX_FOOD_NEEDED) {
 						setIsHungry(true);
+						setFoodCraved(chooseNewFoodFromLootTable());
+					}
 				}
 
 				if (getIsTransforming()) {
@@ -193,12 +201,11 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	}
 
 	private void spawnHatchingParticles() {
-		// TODO Auto-generated method stub
-		
+		TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.CHIROMAW_HATCH, (float) posX, (float) posY + 1F, (float) posZ, 0F, new ItemStack(ItemRegistry.CHIROMAW_EGG)));
 	}
 
 	private void spawnEatingParticles() {
-		// TODO 
+		TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.CHIROMAW_HATCHLING_EAT, (float) posX, (float) posY + 0.75F, (float) posZ, 0F, getFoodCraved()));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -306,12 +313,29 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 		return super.processInteract(player, hand);
 	}
 
+	protected ResourceLocation getFoodCravingLootTable() {
+		return LootTableRegistry.CHIROMAW_HATCHLING;
+	}
+
+	public ItemStack chooseNewFoodFromLootTable() {
+		LootTable lootTable = this.world.getLootTableManager().getLootTableFromLocation(getFoodCravingLootTable());
+		if (lootTable != null) {
+			LootContext.Builder lootBuilder = (new LootContext.Builder((WorldServer) this.world)).withLootedEntity(this);
+			List<ItemStack> loot = lootTable.generateLootForPools(world.rand, lootBuilder.build());
+			if (!loot.isEmpty()) {
+				Collections.shuffle(loot); // mix it up a bit
+			return loot.get(0);
+			}
+		}
+		return new ItemStack(ItemRegistry.SNAIL_FLESH_RAW); // to stop null;
+	}
+
 	@Nullable
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
 		if (!getEntityWorld().isRemote) {
 			setLocationAndAngles(posX, posY, posZ, 0F, 0.0F); // stahp random rotating on spawn with an egg mojang pls
-			setFoodCraved(new ItemStack(ItemRegistry.SNAIL_FLESH_RAW));
+			setFoodCraved(chooseNewFoodFromLootTable());
 		if(checkArea() != null && checkArea() instanceof EntityPlayer)
 			setOwnerId(checkArea().getUniqueID());
 		}
@@ -399,7 +423,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 		return dataManager.get(HATCH_COUNT);
 	}
 
-	private void setFoodCraved(ItemStack itemStack) {
+	public void setFoodCraved(ItemStack itemStack) {
 		dataManager.set(FOOD_CRAVED, itemStack);
 		
 	}
@@ -537,13 +561,10 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 		setTransformCount(nbt.getInteger("TransformCount"));
 
 		NBTTagCompound nbtFood = (NBTTagCompound) nbt.getTag("Items");
-		ItemStack stack = new ItemStack(ItemRegistry.SNAIL_FLESH_RAW); // to stop null
+		ItemStack stack = new ItemStack(ItemRegistry.SNAIL_FLESH_RAW);
 		if(nbtFood != null)
 			stack = new ItemStack(nbtFood);
 		setFoodCraved(stack);
-
-		System.out.println("NBT FOOD NAME IS HERE!: " + nbtFood);
-		System.out.println("STACK NAME IS HERE!: " + stack.getDisplayName());
 	}
 
 	@Nullable

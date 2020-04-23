@@ -956,13 +956,23 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			fx.setRBGColorF(48F, 64F, 91F);
 		}
 
-		if (particleName.equals("chiromaw_hatch")) {
-			fx = new ParticleBreaking.Factory().createParticle(EnumParticleTypes.ITEM_CRACK.getParticleID(), world, x, y, z, vecX, vecY, vecZ, Item.getIdFromItem(ItemRegistry.CHIROMAW_EGG));
-		}
-
 		if (particleName.equals("splode_shroom")) {
 			fx = new ParticleBreaking.SnowballFactory().createParticle(EnumParticleTypes.SNOWBALL.getParticleID(), world, x, y, z, vecX, vecY, vecZ, 0);
 			fx.setRBGColorF(128F, 203F, 175F);
+		}
+
+		if (fx != null)
+			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+	}
+
+	@Override
+	public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ, ItemStack stack) {
+		Particle fx = null;
+
+		if (particleName.equals("item_breaking")) {
+			Item item = stack.getItem();
+			item.setDamage(stack, stack.getItemDamage());
+			fx = new ParticleBreaking.Factory().createParticle(EnumParticleTypes.ITEM_CRACK.getParticleID(), world, x, y, z, vecX, vecY, vecZ, Item.getIdFromItem(item));
 		}
 
 		if (fx != null)

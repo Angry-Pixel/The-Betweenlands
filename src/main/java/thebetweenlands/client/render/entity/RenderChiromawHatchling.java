@@ -25,6 +25,7 @@ public class RenderChiromawHatchling extends RenderLiving<EntityChiromawHatchlin
 	private static final ResourceLocation TEXTURE_EGG = new ResourceLocation(ModInfo.ID, "textures/entity/chiromaw_egg.png");
 	private static final ModelChiromawHatchling MODEL_HATCHLING = new ModelChiromawHatchling();
 	private static final ModelChiromawEgg MODEL_EGG = new ModelChiromawEgg();
+
 	public RenderChiromawHatchling(RenderManager renderManager) {
 		super(renderManager, MODEL_HATCHLING, 0.2F);
 	}
@@ -36,7 +37,7 @@ public class RenderChiromawHatchling extends RenderLiving<EntityChiromawHatchlin
         if (!this.renderOutlines) {
             this.renderLeash(entity, x, y, z, entityYaw, partialTicks);
         }
-        
+
     	GlStateManager.pushMatrix();
     	GlStateManager.translate(x, y + 1.51F, z);
     	GlStateManager.scale(1F, -1F, -1F);
@@ -48,9 +49,10 @@ public class RenderChiromawHatchling extends RenderLiving<EntityChiromawHatchlin
 			MODEL_EGG.renderEgg(entity, partialTicks, 0.0625F);
         GlStateManager.popMatrix();
         
-        if(entity.getIsHungry()) {
+        if(entity.getIsHungry() && entity.getRiseCount() > 0) {
         	float size = MathHelper.sin((entity.ticksExisted + partialTicks) * 0.125F) * 0.0625F;
-        	renderFoodCraved(entity.getFoodCraved(), x, y + 1.5D, z, 0.25F + size);
+        	float smoothRise = entity.prevRise + (entity.getRiseCount() - entity.prevRise) * partialTicks;
+        	renderFoodCraved(entity.getFoodCraved(), x, y + 1D + smoothRise * 0.0125F + size, z, 0.25F + size);
         }
     }
 
@@ -70,7 +72,6 @@ public class RenderChiromawHatchling extends RenderLiving<EntityChiromawHatchlin
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			GlStateManager.popMatrix();
 		}
-		
 	}
 
 	@Override

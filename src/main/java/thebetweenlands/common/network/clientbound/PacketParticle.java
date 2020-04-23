@@ -3,8 +3,10 @@ import java.util.Random;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -15,6 +17,7 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
 
 public class PacketParticle implements IMessage, IMessageHandler<PacketParticle, IMessage> {
 	//TODO Delete this
@@ -30,7 +33,8 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 		SPLODE_SHROOM,
 		FLAME_JET,
 		CHIROMAW_DROPPINGS,
-		CHIROMAW_HATCH;
+		CHIROMAW_HATCH,
+		CHIROMAW_HATCHLING_EAT;
 		static final ParticleType[] values = values();
 	}
 
@@ -39,6 +43,7 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 	public float posY;
 	public float posZ;
 	public float scale;
+	public ItemStack stack;
 	private static Random rand = new Random();
 	private static int counter = 0;
 
@@ -51,12 +56,23 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 		this.posY = posY;
 		this.posZ = posZ;
 		this.scale = scale;
+		this.stack = ItemStack.EMPTY;
+	}
+
+	public PacketParticle(ParticleType particleType, float posX, float posY, float posZ, float scale, ItemStack stack) {
+		this.particleType = (byte) particleType.ordinal();
+		this.posX = posX;
+		this.posY = posY;
+		this.posZ = posZ;
+		this.scale = scale;
+		this.stack = stack;
 	}
 
 	@Override
 	public void toBytes(ByteBuf buffer) {
 		buffer.writeByte(particleType);
 		buffer.writeFloat(posX).writeFloat(posY).writeFloat(posZ).writeFloat(scale);
+		ByteBufUtils.writeItemStack(buffer, stack);
 	}
 
 	@Override
@@ -66,6 +82,7 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 		posY = buffer.readFloat();
 		posZ = buffer.readFloat();
 		scale = buffer.readFloat();
+		stack = ByteBufUtils.readItemStack(buffer);
 	}
 
 	@Override
@@ -176,7 +193,10 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 					break;
 				case CHIROMAW_HATCH:
 					for (int count = 0; count <= 100; ++count)
-						TheBetweenlands.proxy.spawnCustomParticle("chiromaw_hatch", world, message.posX + (world.rand.nextDouble() - 0.5D) , message.posY + world.rand.nextDouble(), message.posZ + (world.rand.nextDouble() - 0.5D), 0, 0, 0);
+						TheBetweenlands.proxy.spawnCustomParticle("item_breaking", world, message.posX + (world.rand.nextDouble() - 0.5D) , message.posY + world.rand.nextDouble(), message.posZ + (world.rand.nextDouble() - 0.5D), 0, 0, 0, message.stack);
+					break;
+				case CHIROMAW_HATCHLING_EAT:
+					TheBetweenlands.proxy.spawnCustomParticle("item_breaking", world, message.posX + (world.rand.nextDouble() - 0.5D) , message.posY, message.posZ + (world.rand.nextDouble() - 0.5D), 0, 0, 0, message.stack);
 					break;
 				default:
 			}
