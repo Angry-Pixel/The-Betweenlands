@@ -20,6 +20,7 @@
             {
                "type":"item",
                "name":"thebetweenlands:critter",
+               "entryName": "dragonfly",
                "functions":[
                   {
                      "function":"set_nbt",
@@ -31,6 +32,7 @@
             {
                "type":"item",
                "name":"thebetweenlands:items_misc",
+               "entryName": "dragonfly_wing",
                "functions":[
                   {
                      "function":"set_data",
@@ -42,6 +44,7 @@
             {
                "type":"item",
                "name":"thebetweenlands:critter",
+               "entryName": "firefly",
                "functions":[
                   {
                      "function":"set_nbt",
@@ -58,6 +61,7 @@
             {
                "type":"item",
                "name":"thebetweenlands:critter",
+               "entryName": "gecko",
                "functions":[
                   {
                      "function":"set_nbt",
@@ -69,6 +73,7 @@
             {
                "type":"item",
                "name":"thebetweenlands:items_misc",
+               "entryName": "lurker_skin",
                "functions":[
                   {
                      "function":"set_data",

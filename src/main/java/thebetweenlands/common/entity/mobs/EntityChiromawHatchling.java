@@ -40,6 +40,7 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.misc.BlockOctine;
 import thebetweenlands.common.entity.EntityProximitySpawner;
+import thebetweenlands.common.item.misc.ItemCritters;
 import thebetweenlands.common.network.clientbound.PacketParticle;
 import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -205,7 +206,13 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	}
 
 	private void spawnEatingParticles() {
-		TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.CHIROMAW_HATCHLING_EAT, (float) posX, (float) posY + 0.75F, (float) posZ, 0F, getFoodCraved()));
+		// TODO temp unless item particles chane for critters
+		ItemStack tempThing = ItemStack.EMPTY;
+		if(getFoodCraved().getItem() instanceof ItemCritters)
+			tempThing = new ItemStack(ItemRegistry.SAP_SPIT);
+		else
+			tempThing = getFoodCraved();
+		TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.CHIROMAW_HATCHLING_EAT, (float) posX, (float) posY + 0.75F, (float) posZ, 0F, tempThing));
 	}
 
 	@SideOnly(Side.CLIENT)
