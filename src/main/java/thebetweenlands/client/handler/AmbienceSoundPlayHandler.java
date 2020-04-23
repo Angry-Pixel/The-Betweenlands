@@ -27,7 +27,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 public class AmbienceSoundPlayHandler {
 	private static class RainPosition {
-		private static final int MAX_TIMER = 80;
+		private static final int MAX_TIMER = 40;
 
 		private final Vec3d position;
 		private final boolean isAbove;
@@ -84,6 +84,12 @@ public class AmbienceSoundPlayHandler {
 			if(!rainPositions.isEmpty()) {
 				float totalWeight = 0.0f;
 
+				boolean playSound = false;
+				if(rainSoundTimer-- < 0) {
+					rainSoundTimer = 30 + event.player.world.rand.nextInt(20);
+					playSound = true;
+				}
+				
 				Iterator<RainPosition> it = rainPositions.iterator();
 				while(it.hasNext()) {
 					RainPosition position = it.next();
@@ -95,8 +101,13 @@ public class AmbienceSoundPlayHandler {
 					ry += (float)position.position.y * weight;
 					rz += (float)position.position.z * weight;
 					isAbove += (position.isAbove ? 1 : 0) * weight;
-					rd = Math.min(rd, (float)Math.sqrt(position.position.subtract(event.player.getPositionVector()).length()));
+					rd = Math.min(rd, (float)Math.sqrt(position.position.length()));
 
+					if(playSound && position.timer > RainPosition.MAX_TIMER - 12) {
+						ISound sound = new PositionedSoundRecord(getSoundForDistance((float)position.position.length() - 3f, position.isAbove ? 1 : 0), SoundCategory.WEATHER, position.isAbove ? 0.05f : 0.1f, position.isAbove ? 0.5f : 0.9f, (float)position.position.x + (float)event.player.posX, (float)position.position.y + (float)event.player.posY, (float)position.position.z + (float)event.player.posZ);
+						Minecraft.getMinecraft().getSoundHandler().playSound(sound);
+					}
+					
 					if(--position.timer < 0) {
 						it.remove();
 					}
@@ -107,17 +118,16 @@ public class AmbienceSoundPlayHandler {
 				rz /= totalWeight;
 				isAbove /= totalWeight;
 
-				float blend = 0.05f;
+				float blend = 0.25f;
 
-				relRainX = (1 - blend) * relRainX + blend * (rx - (float)event.player.posX);
-				relRainY = (1 - blend) * relRainY + blend * (ry - (float)event.player.posY);
-				relRainZ = (1 - blend) * relRainZ + blend * (rz - (float)event.player.posZ);
+				relRainX = (1 - blend) * relRainX + blend * rx;
+				relRainY = (1 - blend) * relRainY + blend * ry;
+				relRainZ = (1 - blend) * relRainZ + blend * rz;
 
 				rainAbove = (1 - blend) * rainAbove + blend * isAbove;
 				rainVolume = (1 - blend) * rainVolume + blend * MathHelper.clamp(1.0f / (rd - 0.5f), 0, 1);
 
-				if(rainSoundTimer-- < 0) {
-					rainSoundTimer = 30 + event.player.world.rand.nextInt(30);
+				if(playSound) {
 					ISound rainSound = new RainBackgroundSound(getSoundForDistance(rd, rainAbove * 2.0f), SoundCategory.WEATHER);
 					Minecraft.getMinecraft().getSoundHandler().playSound(rainSound);
 				}
@@ -141,16 +151,13 @@ public class AmbienceSoundPlayHandler {
 			boolean isWeatherSoundAbove = SoundEvents.WEATHER_RAIN_ABOVE.getSoundName().equals(sound.getSoundLocation());
 
 			if(isWeatherSound || isWeatherSoundAbove) {
-				if(rainPositions.size() < 100) {
-					rainPositions.add(new RainPosition(new Vec3d(sound.getXPosF(), sound.getYPosF(), sound.getZPosF()), isWeatherSoundAbove));
-				}
-
 				Entity view = Minecraft.getMinecraft().getRenderViewEntity();
-				if(view != null && view.world.rand.nextInt(10) == 0) {
-					event.setResultSound(new PositionedSoundRecord(getSoundForDistance((float)Math.sqrt(new Vec3d(sound.getXPosF(), sound.getYPosF(), sound.getZPosF()).subtract(view.getPositionVector()).length() - 0.5f), isWeatherSoundAbove ? 1 : 0), SoundCategory.WEATHER, isWeatherSoundAbove ? 0.1f : 0.2f, isWeatherSoundAbove ? 0.5f : 0.9f, sound.getXPosF(), sound.getYPosF(), sound.getZPosF()));
-				} else {
-					event.setResultSound(null);
+				if(view != null) {
+					if(rainPositions.size() < 100) {
+						rainPositions.add(new RainPosition(new Vec3d(sound.getXPosF() - (float)view.posX, sound.getYPosF() - (float)view.posY, sound.getZPosF() - (float)view.posZ), isWeatherSoundAbove));
+					}
 				}
+				event.setResultSound(null);
 			}
 		}
 	}
