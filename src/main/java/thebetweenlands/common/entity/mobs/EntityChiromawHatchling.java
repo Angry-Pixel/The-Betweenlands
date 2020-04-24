@@ -221,7 +221,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	private void spawnEatingParticles() {
 		if(getOwner() != null)
 			lookAtFeeder(getOwner(), 30F);
-		double angle = Math.toRadians(feederRotation);
+		double angle = Math.toRadians(feederRotation + rotationYaw);
 		double offSetX = -Math.sin(angle) * 0.35D;
 		double offSetZ = Math.cos(angle) * 0.35D;
 		BLParticles.ITEM_BREAKING.spawn(world, this.posX + (float) offSetX + (world.rand.nextDouble() * 0.5D - 0.25D) , this.posY + 0.75F, this.posZ + (float) offSetZ + (world.rand.nextDouble() * 0.5D - 0.25D), ParticleArgs.get().withData(this.getFoodCraved()));
@@ -523,7 +523,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		EntityChiromawTame entity = new EntityChiromawTame(getEntityWorld());
 		entity.setOwnerId(getOwnerId());
 		//System.out.println("FEEDER ROTATION: " + feederRotation);
-		entity.setLocationAndAngles(posX, posY + 1F, posZ, feederRotation, 0.0F);
+		entity.setLocationAndAngles(posX, posY + 1F, posZ, feederRotation + rotationYaw, 0.0F);
 		entity.rotationYawHead = entity.rotationYaw;
 		entity.renderYawOffset = entity.rotationYaw;
 		entity.setMoveForward(0.1F);
