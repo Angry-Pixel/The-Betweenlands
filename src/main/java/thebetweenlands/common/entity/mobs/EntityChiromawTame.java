@@ -44,12 +44,13 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIFlyingWander;
 import thebetweenlands.common.entity.ai.PathNavigateFlyingBL;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityChiromawTame extends EntityCreature {
+public class EntityChiromawTame extends EntityCreature implements IEntityBL {
 
 	private static final DataParameter<Boolean> ATTACKING = EntityDataManager.<Boolean>createKey(EntityChiromawTame.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntityChiromawTame.class, DataSerializers.OPTIONAL_UNIQUE_ID);
