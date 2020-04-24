@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 public class EventDenseFog extends TimedEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "dense_fog");
@@ -57,5 +58,15 @@ public class EventDenseFog extends TimedEnvironmentEvent {
 
 	public float getFade(float partialTicks) {
 		return this.fade + (this.fade - this.lastFade) * partialTicks;
+	}
+	
+	public static boolean isDenseFog(World world) {
+		if(world != null) {
+			WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(world);
+			if(provider != null) {
+				return provider.getEnvironmentEventRegistry().denseFog.isActive();
+			}
+		}
+		return false;
 	}
 }

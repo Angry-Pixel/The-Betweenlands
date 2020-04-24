@@ -986,6 +986,14 @@
       }
     ]
   },
+  "ambient_swamp_dense_fog": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:ambience/ambient_swamp_dense_fog",
+        "stream": true
+      }
+    ]
+  },
   "ambient_cave": {
     "sounds": [
       {

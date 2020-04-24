@@ -9,6 +9,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.audio.ambience.AmbienceLayer;
 import thebetweenlands.client.audio.ambience.AmbienceManager;
 import thebetweenlands.client.audio.ambience.list.CaveAmbienceType;
+import thebetweenlands.client.audio.ambience.list.DenseFogSurfaceAmbienceType;
 import thebetweenlands.client.audio.ambience.list.EventAmbienceType;
 import thebetweenlands.client.audio.ambience.list.FloatingIslandAmbienceType;
 import thebetweenlands.client.audio.ambience.list.FrostyAmbienceType;
@@ -35,6 +36,7 @@ public class AmbienceRegistry {
 	public static void preInit() {
 		//Base ambience
 		AmbienceManager.INSTANCE.registerAmbience(new SurfaceAmbienceType());
+		AmbienceManager.INSTANCE.registerAmbience(new DenseFogSurfaceAmbienceType());
 		AmbienceManager.INSTANCE.registerAmbience(new CaveAmbienceType());
 		AmbienceManager.INSTANCE.registerAmbience(new WaterAmbienceType(true));
 		AmbienceManager.INSTANCE.registerAmbience(new WaterAmbienceType(false));
