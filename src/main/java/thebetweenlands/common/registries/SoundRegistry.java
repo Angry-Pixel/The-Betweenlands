@@ -225,6 +225,11 @@ public class SoundRegistry {
     public static final BLSoundEvent CHIROMAW_MATRIARCH_RELEASE = reg("chiromaw_matriarch_release");
     public static final BLSoundEvent CHIROMAW_MATRIARCH_GRAB = reg("chiromaw_matriarch_grab");
     public static final BLSoundEvent CHIROMAW_MATRIARCH_ROAR = reg("chiromaw_matriarch_roar");
+    public static final BLSoundEvent CHIROMAW_HATCHLING_LIVING = reg("chiromaw_hatchling_living");
+    public static final BLSoundEvent CHIROMAW_HATCHLING_HUNGRY_SHORT = reg("chiromaw_hatchling_hungry_short");
+    public static final BLSoundEvent CHIROMAW_HATCHLING_HUNGRY_LONG = reg("chiromaw_hatchling_hungry_long");
+    public static final BLSoundEvent CHIROMAW_HATCHLING_EAT = reg("chiromaw_hatchling_eat");
+    public static final BLSoundEvent CHIROMAW_HATCHLING_NO = reg("chiromaw_hatchling_no");
 
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");

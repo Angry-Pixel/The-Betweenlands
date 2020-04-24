@@ -1041,6 +1041,46 @@
       "thebetweenlands:chiromaw_matriarch_roar"
     ]
   },
+  "chiromaw_hatchling_living": {
+    "sounds": [
+      "thebetweenlands:chirobaby_living_1",
+      "thebetweenlands:chirobaby_matriarch_living_2",
+      "thebetweenlands:chirobaby_matriarch_living_3",
+      "thebetweenlands:chirobaby_matriarch_living_4"
+    ]
+  },
+   "chiromaw_hatchling_hungry_short": {
+    "sounds": [
+      "thebetweenlands:chirobaby_hungry_1",
+      "thebetweenlands:chirobaby_hungry_2",
+      "thebetweenlands:chirobaby_hungry_2",
+      "thebetweenlands:chirobaby_hungry_3",
+      "thebetweenlands:chirobaby_hungry_4",
+      "thebetweenlands:chirobaby_hungry_5",
+      "thebetweenlands:chirobaby_hungry_6",
+      "thebetweenlands:chirobaby_hungry_7",
+      "thebetweenlands:chirobaby_hungry_8"
+    ]
+  },
+  ,
+   "chiromaw_hatchling_hungry_long": {
+    "sounds": [
+      "thebetweenlands:chirobaby_hungry_9",
+      "thebetweenlands:chirobaby_hungry_10"
+    ]
+  },
+   "chiromaw_hatchling_eat": {
+    "sounds": [
+      "thebetweenlands:chirobaby_eat_1",
+      "thebetweenlands:chirobaby_eat_2",
+      "thebetweenlands:chirobaby_eat_3"
+    ]
+  },
+   "chiromaw_hatchling_no": {
+    "sounds": [
+      "thebetweenlands:chirobaby_no"
+    ]
+  },
   "roof_collapse": {
     "sounds": [
       "thebetweenlands:roof_collapse"
