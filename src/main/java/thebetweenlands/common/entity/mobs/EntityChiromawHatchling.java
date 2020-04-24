@@ -112,6 +112,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 					this.world.setEntityState(this, EVENT_HATCH_PARTICLES);
 					setIsHungry(true);
 					setHasHatched(true);
+					 getEntityWorld().playSound(null, getPosition(), SoundRegistry.ROOF_COLLAPSE, SoundCategory.BLOCKS, 1F, 2F);
 				}
 			}
 
