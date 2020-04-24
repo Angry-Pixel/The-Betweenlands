@@ -17,10 +17,6 @@ import com.google.gson.JsonParser;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleBreaking;
-import net.minecraft.client.particle.ParticleFlame;
-import net.minecraft.client.particle.ParticleSpell;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.entity.Render;
@@ -40,7 +36,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -940,44 +935,6 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
     public void onPilotExitWeedwoodRowboat(EntityWeedwoodRowboat rowboat, Entity pilot) {
         WeedwoodRowboatHandler.INSTANCE.onPilotExitWeedwoodRowboat(rowboat, pilot);
     }
-
-	@Override
-	public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ) {
-		Particle fx = null;
-
-		if (particleName.equals("spell"))
-			fx = new ParticleSpell.Factory().createParticle(EnumParticleTypes.SPELL.getParticleID(), world, x, y, z, vecX, vecY, vecZ, 0);
-
-		if (particleName.equals("flame"))
-			fx = new ParticleFlame.Factory().createParticle(EnumParticleTypes.FLAME.getParticleID(), world, x, y, z, vecX, vecY, vecZ, 0);
-
-		if (particleName.equals("egg_sac")) {
-			fx = new ParticleBreaking.SnowballFactory().createParticle(EnumParticleTypes.SNOWBALL.getParticleID(), world, x, y, z, vecX, vecY, vecZ, 0);
-			fx.setRBGColorF(48F, 64F, 91F);
-		}
-
-		if (particleName.equals("splode_shroom")) {
-			fx = new ParticleBreaking.SnowballFactory().createParticle(EnumParticleTypes.SNOWBALL.getParticleID(), world, x, y, z, vecX, vecY, vecZ, 0);
-			fx.setRBGColorF(128F, 203F, 175F);
-		}
-
-		if (fx != null)
-			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
-	}
-
-	@Override
-	public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ, ItemStack stack) {
-		Particle fx = null;
-
-		if (particleName.equals("item_breaking")) {
-			Item item = stack.getItem();
-			item.setDamage(stack, stack.getItemDamage());
-			fx = new ParticleBreaking.Factory().createParticle(EnumParticleTypes.ITEM_CRACK.getParticleID(), world, x, y, z, vecX, vecY, vecZ, Item.getIdFromItem(item));
-		}
-
-		if (fx != null)
-			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
-	}
 
     @Override
     public Proxy getNetProxy() {

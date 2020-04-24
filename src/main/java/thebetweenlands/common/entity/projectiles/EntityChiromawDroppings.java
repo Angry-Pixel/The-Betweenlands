@@ -28,12 +28,10 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.EntitySplodeshroom;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
-import thebetweenlands.common.network.clientbound.PacketParticle;
-import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityChiromawDroppings extends Entity {
@@ -69,6 +67,25 @@ public class EntityChiromawDroppings extends Entity {
 		dataManager.register(AOE_SIZE_Y, 0.5F);
 	}
 
+	@SideOnly(Side.CLIENT)
+	private void spawnDroppingsParticles() {
+		double d0 = this.posX - 0.075F;
+		double d1 = this.posY + this.motionY;
+		double d2 = this.posZ - 0.075F;
+		double d3 = this.posX + 0.075F;
+		double d4 = this.posZ + 0.075F;
+		double d5 = this.posX;
+		double d6 = this.posY + this.motionY + 0.25F;
+		double d7 = this.posZ;
+
+		BLParticles.CHIROMAW_DROPPINGS.spawn(world, d0, d1, d4, ParticleArgs.get().withMotion(0.08f * (d1) * (rand.nextFloat() - 0.5f), this.motionY + 0.1f * (rand.nextFloat() - 0.5f), 0.08f * (d1) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+		BLParticles.CHIROMAW_DROPPINGS.spawn(world, d3, d1, d2, ParticleArgs.get().withMotion(0.08f * (d1) * (rand.nextFloat() - 0.5f), this.motionY + 0.1f * (rand.nextFloat() - 0.5f), 0.08f * (d1) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+		BLParticles.CHIROMAW_DROPPINGS.spawn(world, d3, d1, d4, ParticleArgs.get().withMotion(0.08f * (d1) * (rand.nextFloat() - 0.5f), this.motionY + 0.1f * (rand.nextFloat() - 0.5f), 0.08f * (d1) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+		BLParticles.CHIROMAW_DROPPINGS.spawn(world, d0, d1, d2, ParticleArgs.get().withMotion(0.08f * (d1) * (rand.nextFloat() - 0.5f), this.motionY + 0.1f * (rand.nextFloat() - 0.5f), 0.08f * (d1) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+		BLParticles.CHIROMAW_DROPPINGS.spawn(world, d5, d6, d7, ParticleArgs.get().withMotion(0.08f * (d1) * (rand.nextFloat() - 0.5f), this.motionY + 0.1f * (rand.nextFloat() - 0.5f), 0.08f * (d1) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+		BLParticles.CHIROMAW_DROPPINGS.spawn(world, d0, d1, d2, ParticleArgs.get().withMotion(0.08f * (d1) * (rand.nextFloat() - 0.5f), this.motionY + 0.1f * (rand.nextFloat() - 0.5f), 0.08f * (d1) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+	}
+	
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
@@ -88,9 +105,10 @@ public class EntityChiromawDroppings extends Entity {
 				if (getAOESizeXZ() <= 0.5F)
 					setDead();
 			}
-			if (!getHasExploded())
-				if (getEntityWorld().getTotalWorldTime() % 4 == 0)
-					TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.CHIROMAW_DROPPINGS, (float) posX, (float)posY + (float) motionY, (float)posZ, 1F));
+		} else {
+			if (!getHasExploded() && this.ticksExisted % 4 == 0) {
+				this.spawnDroppingsParticles();
+			}
 		}
 
 		if (getHasExploded())
@@ -234,7 +252,7 @@ public class EntityChiromawDroppings extends Entity {
 
 	protected void onImpact(RayTraceResult result) {
 		if (!getHasExploded() && result.typeOfHit != null) {
-			if(result.typeOfHit == result.typeOfHit.BLOCK || result.typeOfHit == result.typeOfHit.ENTITY && !(result.entityHit instanceof EntityChiromawDroppings) && result.entityHit != thrower)
+			if(result.typeOfHit == RayTraceResult.Type.BLOCK || result.typeOfHit == RayTraceResult.Type.ENTITY && !(result.entityHit instanceof EntityChiromawDroppings) && result.entityHit != thrower)
 			if (!getEntityWorld().isRemote) {
 				setHasExploded(true);
 				getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_SPLAT, SoundCategory.HOSTILE, 1F, 1F + (getEntityWorld().rand.nextFloat() - getEntityWorld().rand.nextFloat()) * 0.8F);

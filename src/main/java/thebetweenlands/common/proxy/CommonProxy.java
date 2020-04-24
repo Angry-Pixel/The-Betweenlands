@@ -275,13 +275,6 @@ public class CommonProxy implements IGuiHandler {
     public void onPilotExitWeedwoodRowboat(EntityWeedwoodRowboat rowboat, Entity pilot) {
 
     }
-
-	public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ) {
-		
-	}
-	
-	public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ, ItemStack stack) {
-	}
     
     public boolean isSingleplayer() {
     	return false;

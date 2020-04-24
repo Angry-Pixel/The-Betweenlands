@@ -54,7 +54,7 @@ public class RenderChiromawHatchling extends RenderLiving<EntityChiromawHatchlin
         if(entity.getIsHungry() && entity.getRiseCount() > 0) {
         	float size = MathHelper.sin((entity.ticksExisted + partialTicks) * 0.125F) * 0.0625F;
         	float smoothRise = entity.prevRise + (entity.getRiseCount() - entity.prevRise) * partialTicks;
-        	renderFoodCraved(entity.getFoodCraved(), x, y + 1F + smoothRise * 0.0125F + size, z, 0.25F + size);
+        	renderFoodCraved(entity.getFoodCraved(), x, y + 1F + smoothRise * 0.0125F + size, z, (0.25F + size) * smoothRise / EntityChiromawHatchling.MAX_RISE);
         }
     }
 

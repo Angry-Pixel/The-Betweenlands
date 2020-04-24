@@ -3,6 +3,7 @@ package thebetweenlands.common.entity.mobs;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -37,30 +38,27 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.misc.BlockOctine;
 import thebetweenlands.common.entity.EntityProximitySpawner;
-import thebetweenlands.common.item.misc.ItemCritters;
-import thebetweenlands.common.network.clientbound.PacketParticle;
-import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
+import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 
 public class EntityChiromawHatchling extends EntityProximitySpawner {
-
-	public final int MAX_EATING_COOLDOWN = 240; // set to whatever time between hunger cycles
-	public final int MIN_EATING_COOLDOWN = 0;
-	public final int MAX_RISE = 40;
-	public final int MIN_RISE = 0; 
-	public final int MAX_FOOD_NEEDED = 5; // amount of times needs to be fed
+	private static final byte EVENT_HATCH_PARTICLES = 100;
+	
+	public static final int MAX_EATING_COOLDOWN = 240; // set to whatever time between hunger cycles
+	public static final int MIN_EATING_COOLDOWN = 0;
+	public static final int MAX_RISE = 40;
+	public static final int MIN_RISE = 0; 
+	public static final int MAX_FOOD_NEEDED = 5; // amount of times needs to be fed
 	NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(5, ItemStack.EMPTY);
 	public float feederRotation, prevFeederRotation, headPitch, prevHeadPitch;
-	public int prevHatchAnimation, hatchAnimation, prevRise, prevTransformTick;
-
+	public int prevHatchAnimation, hatchAnimation, riseCount, prevRise, prevTransformTick;
+	
 	protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntityChiromawHatchling.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 	private static final DataParameter<Boolean> HATCHED = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_RISING = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Integer> RISE_COUNT = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> IS_HUNGRY = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> EATING_COOLDOWN = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> FOOD_COUNT = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.VARINT);
@@ -81,7 +79,6 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 		dataManager.register(OWNER_UNIQUE_ID, Optional.<UUID>absent());
 		dataManager.register(HATCHED, false);
 		dataManager.register(IS_RISING, false);
-		dataManager.register(RISE_COUNT, 0);
 		dataManager.register(IS_HUNGRY, false);
 		dataManager.register(EATING_COOLDOWN, 0);
 		dataManager.register(FOOD_COUNT, 0);
@@ -104,7 +101,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 						setHatchTick(getHatchTick() + 1); // increment whilst on an octine block.
 				}
 				if (getHatchTick() >= 10) { // how many increments before hatching
-					spawnHatchingParticles();
+					this.world.setEntityState(this, EVENT_HATCH_PARTICLES);
 					setIsHungry(true);
 					setHasHatched(true);
 				}
@@ -120,7 +117,6 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 
 		// STAGE 2
 		if (getHasHatched()) {
-			prevRise = getRiseCount();
 			prevFeederRotation = feederRotation;
 			prevHeadPitch = headPitch;
 			prevTransformTick = getTransformCount();
@@ -153,15 +149,16 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 						spawnEatingParticles();
 
 			}
-
+			
+			prevRise = getRiseCount();
+			if (!getRising() && getRiseCount() > MIN_RISE) {
+				setRiseCount(getRiseCount() - 4);
+			} else if (getRising() && getRiseCount() < MAX_RISE) {
+				setRiseCount(getRiseCount() + 4);
+			}
+			
 			if (!getEntityWorld().isRemote) {
 				checkArea();
-
-				if (!getRising() && getRiseCount() > MIN_RISE)
-					setRiseCount(getRiseCount() - 4);
-
-				if (getRising() && getRiseCount() < MAX_RISE)
-					setRiseCount(getRiseCount() + 4);
 
 				if (!getIsHungry()) {
 					setEatingCooldown(getEatingCooldown() - 1);
@@ -200,18 +197,27 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 			}
 		}
 	}
-
-	private void spawnHatchingParticles() {
-		TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.CHIROMAW_HATCH, (float) posX, (float) posY + 1F, (float) posZ, 0F, new ItemStack(ItemRegistry.CHIROMAW_EGG)));
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void handleStatusUpdate(byte id) {
+		super.handleStatusUpdate(id);
+		
+		if(id == EVENT_HATCH_PARTICLES) {
+			for (int count = 0; count <= 100; ++count) {
+				BLParticles.ITEM_BREAKING.spawn(world, this.posX + (world.rand.nextDouble() - 0.5D), this.posY + 1 + world.rand.nextDouble(), this.posZ + (world.rand.nextDouble() - 0.5D), ParticleArgs.get().withData(new ItemStack(ItemRegistry.CHIROMAW_EGG)));
+			}
+		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	private void spawnEatingParticles() {
 		if(getOwner() != null)
 			lookAtFeeder(getOwner(), 30F);
 		double angle = Math.toRadians(feederRotation);
 		double offSetX = -Math.sin(angle) * 0.35D;
 		double offSetZ = Math.cos(angle) * 0.35D;
-		TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.CHIROMAW_HATCHLING_EAT, (float) posX + (float) offSetX, (float) posY + 0.75F, (float) posZ + (float) offSetZ, 0F, getFoodCraved()));
+		BLParticles.ITEM_BREAKING.spawn(world, this.posX + (float) offSetX + (world.rand.nextDouble() * 0.5D - 0.25D) , this.posY + 0.75F, this.posZ + (float) offSetZ + (world.rand.nextDouble() * 0.5D - 0.25D), ParticleArgs.get().withData(this.getFoodCraved()));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -304,27 +310,36 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 				return false;
 		}
 		if (!stack.isEmpty() && getIsHungry()) {
-			if (stack.getItem() == getFoodCraved().getItem() && stack.getItemDamage() == getFoodCraved().getItemDamage()) {
-				if (checkforNBT(stack, getFoodCraved())) {
-					if (!player.capabilities.isCreativeMode) {
-						stack.shrink(1);
-						if (stack.getCount() <= 0)
-							player.setHeldItem(hand, ItemStack.EMPTY);
-					}
-					setEatingCooldown(MAX_EATING_COOLDOWN);
-					setAmountEaten(getAmountEaten() + 1);
-					setIsHungry(false);
-					return true;
+			if (this.checkFoodEqual(stack, getFoodCraved())) {
+				if (!player.capabilities.isCreativeMode) {
+					stack.shrink(1);
+					if (stack.getCount() <= 0)
+						player.setHeldItem(hand, ItemStack.EMPTY);
 				}
+				setEatingCooldown(MAX_EATING_COOLDOWN);
+				setAmountEaten(getAmountEaten() + 1);
+				setIsHungry(false);
+				return true;
 			}
 		}
 		return super.processInteract(player, hand);
 	}
 
-	private boolean checkforNBT(ItemStack stack, ItemStack foodCraved) {
-		if (stack.hasTagCompound() && foodCraved.hasTagCompound())
-			return stack.getTagCompound().equals(foodCraved.getTagCompound());
-		return true;
+	private boolean checkFoodEqual(ItemStack stack, ItemStack foodCraved) {
+		if(stack.getItem() == foodCraved.getItem() && stack.getItemDamage() == foodCraved.getItemDamage()) {
+
+			if(stack.getItem() instanceof ItemMob) {
+				ResourceLocation cravedEntity = ((ItemMob)foodCraved.getItem()).getCapturedEntityId(foodCraved);
+				ResourceLocation stackEntity = ((ItemMob)stack.getItem()).getCapturedEntityId(stack);
+				
+				if(!Objects.equals(cravedEntity, stackEntity)) {
+					return false;
+				}
+			}
+			
+			return true;
+		}
+		return false;
 	}
 
 	protected ResourceLocation getFoodCravingLootTable() {
@@ -373,11 +388,11 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
     }
 
 	private void setRiseCount(int riseCountIn) {
-		dataManager.set(RISE_COUNT, riseCountIn);
+		this.riseCount = riseCountIn;
 	}
 
 	public int getRiseCount() {
-		return dataManager.get(RISE_COUNT);
+		return this.riseCount;
 	}
 
 	private void setAmountEaten(int foodIn) {
@@ -583,7 +598,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 
 	@Nullable
 	public UUID getOwnerId() {
-		return (UUID) ((Optional) dataManager.get(OWNER_UNIQUE_ID)).orNull();
+		return dataManager.get(OWNER_UNIQUE_ID).orNull();
 	}
 
 	public void setOwnerId(@Nullable UUID uuid) {

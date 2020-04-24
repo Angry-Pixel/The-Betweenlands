@@ -20,7 +20,6 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.capability.base.EntityCapabilityHandler;
@@ -69,7 +68,6 @@ import thebetweenlands.common.item.shields.ItemDentrothystShield;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.item.tools.ItemGreatsword;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.network.clientbound.PacketParticle;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.recipe.censer.CenserRecipeCremains;
 import thebetweenlands.common.registries.BiomeRegistry;
@@ -139,8 +137,6 @@ public class TheBetweenlands {
 
 		MessageRegistry.preInit();
 
-		// Temp packet
-		networkWrapper.registerMessage(PacketParticle.class, PacketParticle.class, 100, Side.CLIENT); //ID 100 until added
 		//Renderers
 		proxy.registerItemAndBlockRenderers();
 		proxy.preInit();
