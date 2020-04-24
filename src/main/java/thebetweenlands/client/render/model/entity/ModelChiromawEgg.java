@@ -38,6 +38,7 @@ public class ModelChiromawEgg extends ModelBase {
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale) {
+    	egg_base.render(scale);
     }
 
 	public void renderEgg(EntityChiromawHatchling entity, float partialTicks, float scale) {

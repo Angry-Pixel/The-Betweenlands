@@ -227,6 +227,7 @@ public class ModelChiromawHatchling extends MowzieModelBase {
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale) {
+    	this.renderEgg((EntityChiromawHatchling) entity, entityTickTime - entity.ticksExisted, 0.0625f);
     }
  
 	public void renderBaby(EntityChiromawHatchling entity, float partialTicks, float scale) {
@@ -240,21 +241,17 @@ public class ModelChiromawHatchling extends MowzieModelBase {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0.0F, 0.5F - smootherRise * 0.0125F - flyUp * 0.01F - flap * 0.5F, 0.0F);
 		GlStateManager.translate(0.0F, 0.0F, 0.25F - smootherRise * 0.00625F);
-		GlStateManager.color(1F, 1F, 1F, 1F);
 		chiromaw_base.render(scale);
 		GlStateManager.popMatrix();
 	}
 
 	public void renderEgg(EntityChiromawHatchling entity, float partialTicks, float scale) {
-		EntityChiromawHatchling chiromaw = (EntityChiromawHatchling) entity;
-		float eggFade = chiromaw.getTransformCount() + (chiromaw.prevTransformTick - chiromaw.getTransformCount()) * partialTicks;
 		GlStateManager.pushMatrix();
         GlStateManager.disableCull();
         GlStateManager.enableBlend();
 		GlStateManager.disableLighting();
 
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color(1F, 1F, 1F, 1F - eggFade * 0.02F);
         egg_base.render(scale);
 		GlStateManager.enableCull();
 		GlStateManager.disableBlend();
@@ -286,7 +283,7 @@ public class ModelChiromawHatchling extends MowzieModelBase {
 			arm_right2.rotateAngleY = convertDegtoRad(60F - smootherHead * 1.5F);
 			arm_left2.rotateAngleY = convertDegtoRad(-60F + smootherHead * 1.5F);
 
-			if (chiromaw.getRiseCount() >= chiromaw.MAX_RISE - 20 && chiromaw.getIsHungry()) {
+			if (chiromaw.getRiseCount() >= EntityChiromawHatchling.MAX_RISE - 20 && chiromaw.getIsHungry()) {
 				neck.rotateAngleY = 0F + flap;
 				walk(arm_right2, globalSpeed * 0.5f, globalDegree * 0.5f, false, 2.0f, 0f, frame, 1F);
 				walk(arm_left2, globalSpeed * 0.5f, globalDegree * 0.5f, false, 2.0f, 0f, frame, 1F);
@@ -297,7 +294,7 @@ public class ModelChiromawHatchling extends MowzieModelBase {
 			if (chiromaw.getIsChewing()) {
 				swing(jaw, globalSpeed * 0.75f, globalDegree * 0.5f, false, 2.0f, 0f, frame / ((float) Math.PI), 1F);
 				walk(jaw, globalSpeed * 0.5f, globalDegree * 0.5f, false, 2.0f, -0.75f, frame, 1F);
-			} else if (!chiromaw.getIsHungry() && chiromaw.getRiseCount() >= chiromaw.MAX_RISE)
+			} else if (!chiromaw.getIsHungry() && chiromaw.getRiseCount() >= EntityChiromawHatchling.MAX_RISE)
 				walk(jaw, globalSpeed * 0.125f, globalDegree * 0.5f, false, 2.0f, -0.75f, frame, 1F);
 		}
     	if (chiromaw.getIsTransforming()) {
