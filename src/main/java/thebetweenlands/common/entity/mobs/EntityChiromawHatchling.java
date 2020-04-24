@@ -52,6 +52,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityChiromawHatchling extends EntityProximitySpawner implements IEntityAdditionalSpawnData {
 	private static final byte EVENT_HATCH_PARTICLES = 100;
+	private static final byte EVENT_FLOAT_UP_PARTICLES = 101;
 	
 	public static final int MAX_EATING_COOLDOWN = 240; // set to whatever time between hunger cycles
 	public static final int MIN_EATING_COOLDOWN = 0;
@@ -112,7 +113,8 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 					this.world.setEntityState(this, EVENT_HATCH_PARTICLES);
 					setIsHungry(true);
 					setHasHatched(true);
-					 getEntityWorld().playSound(null, getPosition(), SoundRegistry.ROOF_COLLAPSE, SoundCategory.BLOCKS, 1F, 2F);
+					// TODO Awaiting sound
+					//getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCH, SoundCategory.BLOCKS, 1F, 1F);
 				}
 			}
 
@@ -150,8 +152,8 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 				if (!getRising() && getRiseCount() < MAX_RISE)
 					headPitch = getRiseCount();
 
-				if (getAmountEaten() >= MAX_FOOD_NEEDED && !getIsChewing())
-					spawnLightningArcs(); // TODO maybe else something to show this is ready to transform/transforming
+				//if (getAmountEaten() >= MAX_FOOD_NEEDED && !getIsChewing())
+				//	spawnLightningArcs(); // TODO maybe else something to show this is ready to transform/transforming
 
 				if (getIsChewing())
 					if (getTransformCount() < 60)
@@ -182,8 +184,12 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 				}
 
 				if (getIsTransforming()) {
-					if (getTransformCount() <= 60)
+					//if (getTransformCount() == 1) // TODO Awaiting sound
+					//	getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCHLING_FLOAT_UP, SoundCategory.NEUTRAL, 1F, 1F);
+					if (getTransformCount() <= 60) {
 						setTransformCount(getTransformCount() + 1);
+						this.world.setEntityState(this, EVENT_FLOAT_UP_PARTICLES);
+						}
 					if(getOwner() != null)
 						lookAtFeeder(getOwner(), 30F);
 				}
@@ -199,6 +205,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 							Entity spawn = getEntitySpawned();
 							if (spawn != null) {
 								if (!spawn.isDead) { // just in case
+									getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_BARB_FIRE, SoundCategory.NEUTRAL, 0.5F, 1F + (getEntityWorld().rand.nextFloat() - getEntityWorld().rand.nextFloat()) * 0.8F);
 									getEntityWorld().spawnEntity(spawn);
 								}
 								setDead();
@@ -218,8 +225,15 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		super.handleStatusUpdate(id);
 		
 		if(id == EVENT_HATCH_PARTICLES) {
-			for (int count = 0; count <= 100; ++count) {
+			for (int count = 0; count <= 50; ++count) {
 				BLParticles.ITEM_BREAKING.spawn(world, this.posX + (world.rand.nextDouble() - 0.5D), this.posY + 1 + world.rand.nextDouble(), this.posZ + (world.rand.nextDouble() - 0.5D), ParticleArgs.get().withData(new ItemStack(ItemRegistry.CHIROMAW_EGG)));
+			}
+		}
+		
+		if(id == EVENT_FLOAT_UP_PARTICLES) {
+			// TODO NOT THIS!
+			for (int count = 0; count <= 5; ++count) {
+				BLParticles.ITEM_BREAKING.spawn(world, this.posX + (world.rand.nextDouble() - 0.5D), this.posY + getTransformCount() * 0.02F, this.posZ + (world.rand.nextDouble() - 0.5D), ParticleArgs.get().withData(new ItemStack(ItemRegistry.CHIROMAW_BARB)));
 			}
 		}
 	}
@@ -561,6 +575,9 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	protected SoundEvent getAmbientSound() {
 		if (getIsHungry() && getRiseCount() < MAX_RISE)
 			return SoundRegistry.CHIROMAW_HATCHLING_HUNGRY_SHORT;
+	// TODO Awaiting sound
+	//	if (!getHasHatched())
+	//		return SoundRegistry.CHIROMAW_HATCHLING_INSIDE_EGG;
 		return SoundRegistry.CHIROMAW_HATCHLING_LIVING;
 	}
 
