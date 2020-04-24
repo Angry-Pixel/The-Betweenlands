@@ -110,6 +110,7 @@ public enum BLParticles {
 			.withColor(0, 0, 0, 1.0F)
 			.buildBaseArgs()),
 	MOTION_ITEM_BREAKING(new ParticleBreakingBL.MotionFactory()),
+	ITEM_BREAKING(new ParticleBreakingBL.DefaultFactory()),
 	TAR_BEAST_DRIP(new ParticleTarBeastDrip.Factory().getBaseArgsBuilder().withColor(0, 0, 0, 1).buildBaseArgs()),
 	CAVE_WATER_DRIP(new ParticleCaveWaterDrip.Factory()),
 	STEAM_PURIFIER(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory())),

@@ -4,6 +4,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -13,8 +14,8 @@ import thebetweenlands.client.render.particle.ParticleTextureStitcher;
 public class ParticleXPPieces extends ParticleBreakingBL {
 	protected int xpColor;
 
-	protected ParticleXPPieces(World worldIn, double posXIn, double posYIn, double posZIn, Item itemIn, int meta, float scale) {
-		super(worldIn, posXIn, posYIn, posZIn, itemIn, meta, scale);
+	protected ParticleXPPieces(World worldIn, double posXIn, double posYIn, double posZIn, ItemStack stack, float scale) {
+		super(worldIn, posXIn, posYIn, posZIn, stack, scale);
 		this.setAlphaF(0.5F);
 	}
 
@@ -43,12 +44,12 @@ public class ParticleXPPieces extends ParticleBreakingBL {
 
 		@Override
 		public ParticleXPPieces createParticle(ImmutableParticleArgs args) {
-			return new ParticleXPPieces(args.world, args.x, args.y, args.z, args.data.getObject(Item.class, 0), args.data.getInt(1), args.scale);
+			return new ParticleXPPieces(args.world, args.x, args.y, args.z, args.data.getObject(ItemStack.class, 0), args.scale);
 		}
 
 		@Override
 		protected void setBaseArguments(ParticleArgs<?> args) {
-			args.withData(Items.AIR, 0);
+			args.withData(ItemStack.EMPTY);
 		}
 	}
 }

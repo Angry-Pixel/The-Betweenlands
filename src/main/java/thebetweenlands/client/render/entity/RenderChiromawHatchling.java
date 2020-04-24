@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -53,8 +54,7 @@ public class RenderChiromawHatchling extends RenderLiving<EntityChiromawHatchlin
         if(entity.getIsHungry() && entity.getRiseCount() > 0) {
         	float size = MathHelper.sin((entity.ticksExisted + partialTicks) * 0.125F) * 0.0625F;
         	float smoothRise = entity.prevRise + (entity.getRiseCount() - entity.prevRise) * partialTicks;
-        	boolean stupidEgg = entity.getFoodCraved().getItem() == ItemRegistry.MIRE_SNAIL_EGG;
-        	renderFoodCraved(entity.getFoodCraved(), x, y + (stupidEgg ? 1F + smoothRise * 0.025F + size * 2F : 1F + smoothRise * 0.0125F + size), z, stupidEgg ? 1F + size * 2F : 0.25F + size);
+        	renderFoodCraved(entity.getFoodCraved(), x, y + 1F + smoothRise * 0.0125F + size, z, 0.25F + size);
         }
     }
 
@@ -62,16 +62,9 @@ public class RenderChiromawHatchling extends RenderLiving<EntityChiromawHatchlin
 		if (!foodCraved.isEmpty()) {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x, y, z);
-			GlStateManager.scale(-scale, -scale, scale);
-			GlStateManager.rotate(Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
-			GlStateManager.rotate(180F, 1.0F, 0.0F, 0.0F);
-			bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
-			GlStateManager.enableBlend();
-			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			Minecraft.getMinecraft().getRenderItem().renderItem(foodCraved, Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(foodCraved, (World) null, (EntityLivingBase) null));
-			GlStateManager.disableBlend();
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.scale(scale, scale, scale);
+			GlStateManager.rotate(-Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+			Minecraft.getMinecraft().getRenderItem().renderItem(foodCraved, TransformType.FIXED);
 			GlStateManager.popMatrix();
 		}
 	}
