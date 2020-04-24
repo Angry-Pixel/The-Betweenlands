@@ -27,6 +27,27 @@ public class RenderChiromawHatchling extends RenderLiving<EntityChiromawHatchlin
 	}
 
 	@Override
+	public void doRender(EntityChiromawHatchling entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+		
+		if(entity.getIsHungry() && entity.getRiseCount() > 0) {
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(x, y, z);
+			
+        	float size = MathHelper.sin((entity.ticksExisted + partialTicks) * 0.125F) * 0.0625F;
+        	float smoothRise = entity.prevRise + (entity.getRiseCount() - entity.prevRise) * partialTicks;
+        	renderFoodCraved(entity.getFoodCraved(), 0, 0.5f + smoothRise * 0.025F, 0, (0.25F + size) * smoothRise / EntityChiromawHatchling.MAX_RISE);
+        	
+        	GlStateManager.popMatrix();
+        }
+	}
+	
+	@Override
+	protected void applyRotations(EntityChiromawHatchling entity, float ageInTicks, float rotationYaw, float partialTicks) {
+		super.applyRotations(entity, ageInTicks, entity.rotationYaw, partialTicks);
+	}
+	
+	@Override
 	protected void renderModel(EntityChiromawHatchling entity, float limbSwing, float limbSwingAmount,
 			float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
 		boolean isVisible = this.isVisible(entity);
@@ -55,12 +76,6 @@ public class RenderChiromawHatchling extends RenderLiving<EntityChiromawHatchlin
     			MODEL_EGG.renderEgg(entity, partialTicks, 0.0625F);
     		}
             
-            if(entity.getIsHungry() && entity.getRiseCount() > 0) {
-            	float size = MathHelper.sin((entity.ticksExisted + partialTicks) * 0.125F) * 0.0625F;
-            	float smoothRise = entity.prevRise + (entity.getRiseCount() - entity.prevRise) * partialTicks;
-            	renderFoodCraved(entity.getFoodCraved(), 0, 1.0f - smoothRise * 0.025F, 0, (0.25F + size) * smoothRise / EntityChiromawHatchling.MAX_RISE);
-            }
-
             if (isTransparent) {
                 GlStateManager.disableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
             }
@@ -71,8 +86,8 @@ public class RenderChiromawHatchling extends RenderLiving<EntityChiromawHatchlin
 		if (!foodCraved.isEmpty()) {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x, y, z);
-			GlStateManager.scale(-scale, -scale, scale);
-			GlStateManager.rotate(180F -Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+			GlStateManager.scale(scale, scale, scale);
+			GlStateManager.rotate(-Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
 			Minecraft.getMinecraft().getRenderItem().renderItem(foodCraved, TransformType.FIXED);
 			GlStateManager.popMatrix();
 		}

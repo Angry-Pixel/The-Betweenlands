@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -21,6 +22,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.management.PreYggdrasilConverter;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -32,6 +34,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
@@ -44,7 +47,7 @@ import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 
-public class EntityChiromawHatchling extends EntityProximitySpawner {
+public class EntityChiromawHatchling extends EntityProximitySpawner implements IEntityAdditionalSpawnData {
 	private static final byte EVENT_HATCH_PARTICLES = 100;
 	
 	public static final int MAX_EATING_COOLDOWN = 240; // set to whatever time between hunger cycles
@@ -55,6 +58,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(5, ItemStack.EMPTY);
 	public float feederRotation, prevFeederRotation, headPitch, prevHeadPitch;
 	public int prevHatchAnimation, hatchAnimation, riseCount, prevRise, prevTransformTick;
+	private EnumFacing facing = EnumFacing.NORTH;
 	
 	protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntityChiromawHatchling.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 	private static final DataParameter<Boolean> HATCHED = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.BOOLEAN);
@@ -71,6 +75,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	public EntityChiromawHatchling(World world) {
 		super(world);
 		setSize(1F, 1F);
+		this.facing = EnumFacing.HORIZONTALS[world.rand.nextInt(4)];
 	}
 
 	@Override
@@ -196,6 +201,8 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 				}
 			}
 		}
+		
+		this.rotationYaw = this.facing.getHorizontalAngle();
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -290,7 +297,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 		double distanceX = entity.posX - posX;
 		double distanceZ = entity.posZ - posZ;
 		float angle = (float) (MathHelper.atan2(distanceZ, distanceX) * (180D / Math.PI)) - 90.0F;
-		feederRotation = updateFeederRotation(feederRotation, angle, maxYawIncrease);
+		feederRotation = updateFeederRotation(feederRotation, angle - this.rotationYaw, maxYawIncrease);
 	}
 
 	private float updateFeederRotation(float angle, float targetAngle, float maxIncrease) {
@@ -557,6 +564,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 		nbt.setInteger("EatingCooldown", getEatingCooldown());
 		nbt.setBoolean("Transforming", getIsTransforming());
 		nbt.setInteger("TransformCount", getTransformCount());
+		nbt.setInteger("Facing", this.facing.ordinal());
 
 		NBTTagCompound nbtFood = new NBTTagCompound();
 		getFoodCraved().writeToNBT(nbtFood);
@@ -588,6 +596,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 		setEatingCooldown(nbt.getInteger("EatingCooldown"));
 		setIsTransforming(nbt.getBoolean("Transforming"));
 		setTransformCount(nbt.getInteger("TransformCount"));
+		this.facing = EnumFacing.VALUES[nbt.getInteger("Facing")];
 
 		NBTTagCompound nbtFood = (NBTTagCompound) nbt.getTag("Items");
 		ItemStack stack = new ItemStack(ItemRegistry.SNAIL_FLESH_RAW);
@@ -617,5 +626,15 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 
 	public boolean isOwner(EntityLivingBase entityIn) {
 		return entityIn == getOwner();
+	}
+
+	@Override
+	public void writeSpawnData(ByteBuf buf) {
+		buf.writeInt(this.facing.ordinal());
+	}
+
+	@Override
+	public void readSpawnData(ByteBuf buf) {
+		this.facing = EnumFacing.VALUES[buf.readInt()];
 	}
 }
