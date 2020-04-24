@@ -50,6 +50,7 @@ public class SoundRegistry {
     public static final BLSoundEvent RAIN_MEDIUM = reg("rain_medium");
     public static final BLSoundEvent RAIN_WEAK = reg("rain_weak");
     public static final BLSoundEvent RAIN_DRIPPING = reg("rain_dripping");
+    public static final BLSoundEvent RAIN_MOUNT = reg("rain_mount");
     // Miscellaneous
     public static final BLSoundEvent CRUMBLE = reg("crumble");
     public static final BLSoundEvent FIG = reg("fig");

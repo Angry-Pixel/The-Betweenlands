@@ -104,6 +104,11 @@
         "thebetweenlands:ambience/rain_dripping"
     ]
   },
+  "rain_mount": {
+    "sounds": [
+      "thebetweenlands:ambience/rain_mount"
+    ]
+  },
   "druid_chant": {
     "sounds": [
       "thebetweenlands:druid_chant"

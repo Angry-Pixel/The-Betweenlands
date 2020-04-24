@@ -53,7 +53,7 @@ public class ParticleBreakingBL extends ParticleBreaking implements IParticleSpr
 
 		@Override
 		protected void setBaseArguments(ParticleArgs<?> args) {
-			args.withData(Items.SLIME_BALL, 0);
+			args.withData(new ItemStack(Items.SLIME_BALL));
 		}
 	}
 	
