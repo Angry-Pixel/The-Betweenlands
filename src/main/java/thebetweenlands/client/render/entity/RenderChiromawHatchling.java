@@ -72,7 +72,7 @@ public class RenderChiromawHatchling extends RenderLiving<EntityChiromawHatchlin
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x, y, z);
 			GlStateManager.scale(-scale, -scale, scale);
-			GlStateManager.rotate(-Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+			GlStateManager.rotate(180F -Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
 			Minecraft.getMinecraft().getRenderItem().renderItem(foodCraved, TransformType.FIXED);
 			GlStateManager.popMatrix();
 		}
