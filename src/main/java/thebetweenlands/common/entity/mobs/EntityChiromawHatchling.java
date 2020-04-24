@@ -188,8 +188,9 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 				}
 
 				if (!isDead && getRiseCount() >= MAX_RISE) {
-					if(getIsHungry() && getEntityWorld().getTotalWorldTime() %20 == 0)
-						getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCHLING_HUNGRY_LONG, SoundCategory.NEUTRAL, 1F, 1F);
+					if(getIsHungry() && ticksExisted %20 == 0) {
+						getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCHLING_HUNGRY_LONG, SoundCategory.NEUTRAL, 1F, 1F + rand.nextFloat() * 0.125F - rand.nextFloat() * 0.125F);
+					}
 					if (getAmountEaten() >= MAX_FOOD_NEEDED && getEatingCooldown() <= 0) {
 						if (!getIsTransforming())
 							setIsTransforming(true);
@@ -317,22 +318,24 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	@Override
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
-		if (!stack.isEmpty() && !checkFoodEqual(stack, getFoodCraved())) {
-			getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCHLING_NO, SoundCategory.NEUTRAL, 1F, 1F);
-				return false;
-		}
-		if (!stack.isEmpty() && getIsHungry()) {
-			if (checkFoodEqual(stack, getFoodCraved())) {
-				if (!player.capabilities.isCreativeMode) {
-					stack.shrink(1);
-					if (stack.getCount() <= 0)
-						player.setHeldItem(hand, ItemStack.EMPTY);
+		if(!getIsTransforming() && getHasHatched()) {
+			if (!stack.isEmpty() && !checkFoodEqual(stack, getFoodCraved())) {
+				getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCHLING_NO, SoundCategory.NEUTRAL, 1F, 1F);
+					return false;
+			}
+			if (!stack.isEmpty() && getIsHungry()) {
+				if (checkFoodEqual(stack, getFoodCraved())) {
+					if (!player.capabilities.isCreativeMode) {
+						stack.shrink(1);
+						if (stack.getCount() <= 0)
+							player.setHeldItem(hand, ItemStack.EMPTY);
+					}
+					setEatingCooldown(MAX_EATING_COOLDOWN);
+					setAmountEaten(getAmountEaten() + 1);
+					getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCHLING_EAT, SoundCategory.NEUTRAL, 1F, 1F);
+					setIsHungry(false);
+					return true;
 				}
-				setEatingCooldown(MAX_EATING_COOLDOWN);
-				setAmountEaten(getAmountEaten() + 1);
-				getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCHLING_EAT, SoundCategory.NEUTRAL, 1F, 1F);
-				setIsHungry(false);
-				return true;
 			}
 		}
 		return super.processInteract(player, hand);
