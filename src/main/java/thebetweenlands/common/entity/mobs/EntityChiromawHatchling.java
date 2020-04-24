@@ -26,6 +26,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -46,6 +48,7 @@ import thebetweenlands.common.entity.EntityProximitySpawner;
 import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityChiromawHatchling extends EntityProximitySpawner implements IEntityAdditionalSpawnData {
 	private static final byte EVENT_HATCH_PARTICLES = 100;
@@ -185,6 +188,8 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 				}
 
 				if (!isDead && getRiseCount() >= MAX_RISE) {
+					if(getIsHungry() && getEntityWorld().getTotalWorldTime() %20 == 0)
+						getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCHLING_HUNGRY_LONG, SoundCategory.NEUTRAL, 1F, 1F);
 					if (getAmountEaten() >= MAX_FOOD_NEEDED && getEatingCooldown() <= 0) {
 						if (!getIsTransforming())
 							setIsTransforming(true);
@@ -312,12 +317,12 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	@Override
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
-		if (!stack.isEmpty() && getHasHatched()) {
-			if (stack.getItem() == ItemRegistry.NET)
+		if (!stack.isEmpty() && !checkFoodEqual(stack, getFoodCraved())) {
+			getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCHLING_NO, SoundCategory.NEUTRAL, 1F, 1F);
 				return false;
 		}
 		if (!stack.isEmpty() && getIsHungry()) {
-			if (this.checkFoodEqual(stack, getFoodCraved())) {
+			if (checkFoodEqual(stack, getFoodCraved())) {
 				if (!player.capabilities.isCreativeMode) {
 					stack.shrink(1);
 					if (stack.getCount() <= 0)
@@ -325,6 +330,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 				}
 				setEatingCooldown(MAX_EATING_COOLDOWN);
 				setAmountEaten(getAmountEaten() + 1);
+				getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCHLING_EAT, SoundCategory.NEUTRAL, 1F, 1F);
 				setIsHungry(false);
 				return true;
 			}
@@ -545,6 +551,13 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	@Override
 	protected int maxUseCount() {
 		return 1;
+	}
+
+	@Override
+	protected SoundEvent getAmbientSound() {
+		if (getIsHungry() && getRiseCount() < MAX_RISE)
+			return SoundRegistry.CHIROMAW_HATCHLING_HUNGRY_SHORT;
+		return SoundRegistry.CHIROMAW_HATCHLING_LIVING;
 	}
 
 	@Override
