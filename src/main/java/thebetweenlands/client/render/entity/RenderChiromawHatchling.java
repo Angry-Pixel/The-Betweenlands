@@ -18,6 +18,7 @@ import thebetweenlands.client.render.model.entity.ModelChiromawEgg;
 import thebetweenlands.client.render.model.entity.ModelChiromawHatchling;
 import thebetweenlands.common.entity.mobs.EntityChiromawHatchling;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.registries.ItemRegistry;
 
 @SideOnly(Side.CLIENT)
 public class RenderChiromawHatchling extends RenderLiving<EntityChiromawHatchling> {
@@ -52,7 +53,8 @@ public class RenderChiromawHatchling extends RenderLiving<EntityChiromawHatchlin
         if(entity.getIsHungry() && entity.getRiseCount() > 0) {
         	float size = MathHelper.sin((entity.ticksExisted + partialTicks) * 0.125F) * 0.0625F;
         	float smoothRise = entity.prevRise + (entity.getRiseCount() - entity.prevRise) * partialTicks;
-        	renderFoodCraved(entity.getFoodCraved(), x, y + 1D + smoothRise * 0.0125F + size, z, 0.25F + size);
+        	boolean stupidEgg = entity.getFoodCraved().getItem() == ItemRegistry.MIRE_SNAIL_EGG;
+        	renderFoodCraved(entity.getFoodCraved(), x, y + (stupidEgg ? 1F + smoothRise * 0.025F + size * 2F : 1F + smoothRise * 0.0125F + size), z, stupidEgg ? 1F + size * 2F : 0.25F + size);
         }
     }
 

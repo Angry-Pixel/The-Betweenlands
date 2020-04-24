@@ -206,13 +206,19 @@ public class EntityChiromawHatchling extends EntityProximitySpawner {
 	}
 
 	private void spawnEatingParticles() {
-		// TODO temp unless item particles chane for critters
+		// TODO temp unless item particles change for critters
 		ItemStack tempThing = ItemStack.EMPTY;
 		if(getFoodCraved().getItem() instanceof ItemCritters)
 			tempThing = new ItemStack(ItemRegistry.SAP_SPIT);
 		else
 			tempThing = getFoodCraved();
-		TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.CHIROMAW_HATCHLING_EAT, (float) posX, (float) posY + 0.75F, (float) posZ, 0F, tempThing));
+		
+		if(getOwner() != null)
+			lookAtFeeder(getOwner(), 30F);
+		double angle = Math.toRadians(feederRotation);
+		double offSetX = -Math.sin(angle) * 0.35D;
+		double offSetZ = Math.cos(angle) * 0.35D;
+		TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.CHIROMAW_HATCHLING_EAT, (float) posX + (float) offSetX, (float) posY + 0.75F, (float) posZ + (float) offSetZ, 0F, tempThing));
 	}
 
 	@SideOnly(Side.CLIENT)

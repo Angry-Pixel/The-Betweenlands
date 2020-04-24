@@ -196,7 +196,7 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 						TheBetweenlands.proxy.spawnCustomParticle("item_breaking", world, message.posX + (world.rand.nextDouble() - 0.5D) , message.posY + world.rand.nextDouble(), message.posZ + (world.rand.nextDouble() - 0.5D), 0, 0, 0, message.stack);
 					break;
 				case CHIROMAW_HATCHLING_EAT:
-					TheBetweenlands.proxy.spawnCustomParticle("item_breaking", world, message.posX + (world.rand.nextDouble() - 0.5D) , message.posY, message.posZ + (world.rand.nextDouble() - 0.5D), 0, 0, 0, message.stack);
+					TheBetweenlands.proxy.spawnCustomParticle("item_breaking", world, message.posX + (world.rand.nextDouble() * 0.5D - 0.25D) , message.posY, message.posZ + (world.rand.nextDouble() * 0.5D - 0.25D), 0, 0, 0, message.stack);
 					break;
 				default:
 			}
