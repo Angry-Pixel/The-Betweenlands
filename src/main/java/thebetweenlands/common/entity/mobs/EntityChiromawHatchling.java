@@ -566,6 +566,8 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	protected Entity getEntitySpawned() {
 		EntityChiromawTame entity = new EntityChiromawTame(getEntityWorld());
 		entity.setOwnerId(getOwnerId());
+		if(hasCustomName())
+			entity.setCustomNameTag(getCustomNameTag());
 		//System.out.println("FEEDER ROTATION: " + feederRotation);
 		entity.setLocationAndAngles(posX, posY + 1F, posZ, feederRotation + rotationYaw, 0.0F);
 		entity.rotationYawHead = entity.rotationYaw;
