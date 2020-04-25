@@ -113,8 +113,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 					this.world.setEntityState(this, EVENT_HATCH_PARTICLES);
 					setIsHungry(true);
 					setHasHatched(true);
-					// TODO Awaiting sound
-					//getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCH, SoundCategory.BLOCKS, 1F, 1F);
+					getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCH, SoundCategory.BLOCKS, 1F, 1F);
 				}
 			}
 
@@ -184,8 +183,8 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 				}
 
 				if (getIsTransforming()) {
-					//if (getTransformCount() == 1) // TODO Awaiting sound
-					//	getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCHLING_FLOAT_UP, SoundCategory.NEUTRAL, 1F, 1F);
+					if (getTransformCount() == 1)
+						getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCHLING_TRANSFORM, SoundCategory.NEUTRAL, 1F, 1F);
 					if (getTransformCount() <= 60) {
 						setTransformCount(getTransformCount() + 1);
 						this.world.setEntityState(this, EVENT_FLOAT_UP_PARTICLES);
@@ -575,9 +574,8 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	protected SoundEvent getAmbientSound() {
 		if (getIsHungry() && getRiseCount() < MAX_RISE)
 			return SoundRegistry.CHIROMAW_HATCHLING_HUNGRY_SHORT;
-	// TODO Awaiting sound
-	//	if (!getHasHatched())
-	//		return SoundRegistry.CHIROMAW_HATCHLING_INSIDE_EGG;
+		if (!getHasHatched())
+			return SoundRegistry.CHIROMAW_HATCHLING_INSIDE_EGG;
 		return SoundRegistry.CHIROMAW_HATCHLING_LIVING;
 	}
 

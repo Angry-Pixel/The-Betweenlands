@@ -1079,9 +1079,30 @@
       "thebetweenlands:chirobaby_eat_3"
     ]
   },
+   "chiromaw_hatch": {
+    "sounds": [
+      "thebetweenlands:chirobaby_hatch_1",
+      "thebetweenlands:chirobaby_hatch_2",
+      "thebetweenlands:chirobaby_hatch_3"
+    ]
+  },
    "chiromaw_hatchling_no": {
     "sounds": [
       "thebetweenlands:chirobaby_no"
+    ]
+  },
+   "chiromaw_hatchling_transform": {
+    "sounds": [
+      "thebetweenlands:chirobaby_evolve"
+    ]
+  },
+   "chiromaw_hatchling_inside_egg": {
+    "sounds": [
+      "thebetweenlands:chirobaby_egg_1",
+      "thebetweenlands:chirobaby_egg_2",
+      "thebetweenlands:chirobaby_egg_3",
+      "thebetweenlands:chirobaby_egg_4",
+      "thebetweenlands:chirobaby_egg_5"
     ]
   },
   "roof_collapse": {
