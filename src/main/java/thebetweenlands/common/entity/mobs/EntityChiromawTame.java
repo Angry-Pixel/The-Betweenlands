@@ -1,16 +1,12 @@
 package thebetweenlands.common.entity.mobs;
 
-import java.util.UUID;
-
 import javax.annotation.Nullable;
-
-import com.google.common.base.Optional;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -28,32 +24,37 @@ import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.api.item.IEquippable;
+import thebetweenlands.common.entity.EntityTameableBL;
 import thebetweenlands.common.entity.ai.EntityAIFlyingWander;
 import thebetweenlands.common.entity.ai.PathNavigateFlyingBL;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
+import thebetweenlands.common.entity.projectiles.EntityBLArrow;
+import thebetweenlands.common.item.tools.bow.EnumArrowType;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityChiromawTame extends EntityCreature implements IEntityBL {
+public class EntityChiromawTame extends EntityTameableBL {
 
 	private static final DataParameter<Boolean> ATTACKING = EntityDataManager.<Boolean>createKey(EntityChiromawTame.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntityChiromawTame.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
 	public EntityChiromawTame(World world) {
 		super(world);
@@ -64,11 +65,12 @@ public class EntityChiromawTame extends EntityCreature implements IEntityBL {
 	@Override
 	protected void initEntityAI() {
 		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, true));
-		tasks.addTask(2, new EntityAIFlyingWander(this, 0.5D));
-		tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-		tasks.addTask(4, new EntityAILookIdle(this));
-        tasks.addTask(5, new EntityAIAvoidEntity(this, EntityMob.class, 4.0F, 0.75D, 0.75D));
+		tasks.addTask(1, new EntityChiromawTame.AIBarbAttack(this));
+		tasks.addTask(2, new EntityAIAttackMelee(this, 0.5D, true));
+		tasks.addTask(3, new EntityAIFlyingWander(this, 0.5D));
+		tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+		tasks.addTask(5, new EntityAILookIdle(this));
+        tasks.addTask(6, new EntityAIAvoidEntity(this, EntityMob.class, 4.0F, 0.75D, 0.75D));
 		tasks.addTask(1, new EntityChiromawTame.AIFollowOwner(this, 1.0D, 10.0F, 2.0F));
 		targetTasks.addTask(1, new EntityChiromawTame.AIChiromawOwnerHurtByTarget(this));
         targetTasks.addTask(2, new EntityChiromawTame.AIChiromawOwnerHurtTarget(this));
@@ -79,76 +81,36 @@ public class EntityChiromawTame extends EntityCreature implements IEntityBL {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-        dataManager.register(ATTACKING, Boolean.valueOf(false));
-		dataManager.register(OWNER_UNIQUE_ID, Optional.<UUID>absent());
+        dataManager.register(ATTACKING, false);
 	}
 
     @SideOnly(Side.CLIENT)
     public boolean isAttacking() {
-        return ((Boolean)dataManager.get(ATTACKING)).booleanValue();
+        return dataManager.get(ATTACKING);
     }
 
     public void setAttacking(boolean attacking) {
-        dataManager.set(ATTACKING, Boolean.valueOf(attacking));
+        dataManager.set(ATTACKING, attacking);
     }
 	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
-		if (getOwnerId() == null)
-			nbt.setString("OwnerUUID", "");
-		else
-			nbt.setString("OwnerUUID", getOwnerId().toString());
+		
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		String s;
-		if (nbt.hasKey("OwnerUUID", 8))
-			s = nbt.getString("OwnerUUID");
-		else {
-			String s1 = nbt.getString("Owner");
-			s = PreYggdrasilConverter.convertMobOwnerIfNeeded(getServer(), s1);
-		}
-
-		if (!s.isEmpty()) {
-			try {
-				setOwnerId(UUID.fromString(s));
-			} catch (Throwable e) {
-			}
-		}
-	}
-
-	@Nullable
-	public UUID getOwnerId() {
-		return (UUID) ((Optional) dataManager.get(OWNER_UNIQUE_ID)).orNull();
-	}
-
-	public void setOwnerId(@Nullable UUID uuid) {
-		dataManager.set(OWNER_UNIQUE_ID, Optional.fromNullable(uuid));
-	}
-
-	@Nullable
-	public EntityLivingBase getOwner() {
-		try {
-			UUID uuid = getOwnerId();
-			return uuid == null ? null : getEntityWorld().getPlayerEntityByUUID(uuid);
-		} catch (IllegalArgumentException e) {
-			return null;
-		}
-	}
-
-	public boolean isOwner(EntityLivingBase entityIn) {
-		return entityIn == getOwner();
+		
 	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50.0D);
 		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.095D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
 	}
 	
@@ -175,14 +137,9 @@ public class EntityChiromawTame extends EntityCreature implements IEntityBL {
 
 	@Override
 	public void onUpdate() {
-
-
-		if (!world.isRemote && world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-			setDead();
-		}
+		super.onUpdate();
 
 		if (isJumping && isInWater()) {
-			//Moving out of water
 			getMoveHelper().setMoveTo(posX, posY + 1, posZ, 1.0D);
 		}
 /*
@@ -198,8 +155,6 @@ public class EntityChiromawTame extends EntityCreature implements IEntityBL {
 		if(getEntityWorld().getBlockState(getPosition().down()).isSideSolid(getEntityWorld(), getPosition().down(), EnumFacing.UP)) {
 			getMoveHelper().setMoveTo(posX, posY + 1, posZ, 1.0D);
 		}
-
-		super.onUpdate();
 	}
 
 	public boolean shouldAttackEntity(EntityLivingBase entityTarget, EntityLivingBase entityTarget2) {
@@ -219,12 +174,24 @@ public class EntityChiromawTame extends EntityCreature implements IEntityBL {
 
 	@Override
 	public boolean attackEntityAsMob(Entity entity) { 
-		boolean flag = entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float) ((int) getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-
-		if (flag)
+		boolean hasHit = entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float) ((int) getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+		if (hasHit)
 			applyEnchantments(this, entity);
-
-		return flag;
+		return hasHit;
+	}
+	
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float damage) {
+		if (source.equals(DamageSource.IN_WALL) || source.equals(DamageSource.DROWN))
+			return false;
+		if (source instanceof EntityDamageSourceIndirect) {
+			if (source.getTrueSource() == this)
+				return false;
+			if (source.getImmediateSource() instanceof EntityBLArrow)
+				if (((EntityBLArrow) source.getImmediateSource()).getArrowType() == EnumArrowType.CHIROMAW_BARB)
+					return false;
+		}
+		return super.attackEntityFrom(source, damage);
 	}
 
 	@Override
@@ -295,6 +262,47 @@ public class EntityChiromawTame extends EntityCreature implements IEntityBL {
 	@Override
 	public boolean isOnLadder() {
 		return false;
+	}
+	
+	@Override
+	public boolean processInteract(EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.getHeldItem(hand);
+		boolean holdsEquipment = hand == EnumHand.MAIN_HAND && !stack.isEmpty() && (stack.getItem() instanceof IEquippable || stack.getItem() == ItemRegistry.AMULET_SLOT);
+		if (holdsEquipment)
+			return true;
+		if (!stack.isEmpty()) {
+				if (stack.getItem() == ItemRegistry.SNAIL_FLESH_RAW) {
+					if (getHealth() < getMaxHealth()) {
+						if (!getEntityWorld().isRemote) {
+							heal(5.0F);
+
+							if (!player.capabilities.isCreativeMode) {
+								stack.shrink(1);
+								if (stack.getCount() <= 0)
+									player.setHeldItem(hand, ItemStack.EMPTY);
+							}
+						} else {
+							playTameEffect(true);
+						}
+
+						return true;
+					}
+				}
+		}
+
+		if (isOwner(player) && !world.isRemote) {
+			//startRiding(player, true);
+			isJumping = false;
+			navigator.clearPath();
+			setAttackTarget((EntityLivingBase) null);
+		}
+
+		return super.processInteract(player, hand);
+	}
+
+	@Override
+	public EntityAgeable createChild(EntityAgeable ageable) {
+		return null;
 	}
 	
 	class AIFollowOwner extends EntityAIBase {
@@ -463,4 +471,51 @@ public class EntityChiromawTame extends EntityCreature implements IEntityBL {
 				super.startExecuting();
 			}
 		}
+	 
+	class AIBarbAttack extends EntityAIBase {
+		EntityChiromawTame chiromaw;
+		public int attackTimer;
+
+		public AIBarbAttack(EntityChiromawTame chirowmawIn) {
+			chiromaw = chirowmawIn;
+		}
+
+		public boolean shouldExecute() {
+			return chiromaw.getAttackTarget() != null;
+		}
+
+		public void startExecuting() {
+			this.attackTimer = 0;
+		}
+
+		public void resetTask() {
+			chiromaw.setAttacking(false);
+		}
+
+		public void updateTask() {
+			EntityLivingBase entitylivingbase = chiromaw.getAttackTarget();
+			if (!chiromaw.getEntityWorld().isRemote) {
+				double d0 = 64.0D;
+				World world = chiromaw.getEntityWorld();
+				if (entitylivingbase.getDistanceSq(chiromaw) < 576 && entitylivingbase.getDistanceSq(chiromaw) > 25 && chiromaw.canEntityBeSeen(entitylivingbase)) {
+					++this.attackTimer;
+					if (attackTimer == 20) {
+						EntityBLArrow arrow = new EntityBLArrow(world, chiromaw);
+						arrow.setType(EnumArrowType.CHIROMAW_BARB);
+						double targetX = entitylivingbase.posX + entitylivingbase.motionX - chiromaw.posX;
+						double targetY = entitylivingbase.posY + entitylivingbase.getEyeHeight() - chiromaw.posY + chiromaw.getEyeHeight();
+						double targetZ = entitylivingbase.posZ + entitylivingbase.motionZ - chiromaw.posZ;
+						arrow.shoot(targetX, targetY, targetZ, 1.2F, 0.0F);
+						world.spawnEntity(arrow);
+						chiromaw.getEntityWorld().playSound(null, chiromaw.getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_BARB_FIRE, SoundCategory.NEUTRAL, 0.5F, 1F + (chiromaw.getEntityWorld().rand.nextFloat() - chiromaw.getEntityWorld().rand.nextFloat()) * 0.8F);
+						attackTimer = -20;
+					}
+
+				} else if (this.attackTimer > 0) {
+					--this.attackTimer;
+				}
+				chiromaw.setAttacking(this.attackTimer > 10);
+			}
+		}
+	}
 }
