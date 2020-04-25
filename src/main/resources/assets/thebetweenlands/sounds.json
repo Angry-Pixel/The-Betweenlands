@@ -1061,14 +1061,14 @@
       "thebetweenlands:chirobaby_hungry_2",
       "thebetweenlands:chirobaby_hungry_3",
       "thebetweenlands:chirobaby_hungry_4",
-      "thebetweenlands:chirobaby_hungry_5",
-      "thebetweenlands:chirobaby_hungry_6",
-      "thebetweenlands:chirobaby_hungry_7",
-      "thebetweenlands:chirobaby_hungry_8"
+      "thebetweenlands:chirobaby_hungry_5"
     ]
   },
    "chiromaw_hatchling_hungry_long": {
     "sounds": [
+      "thebetweenlands:chirobaby_hungry_6",
+      "thebetweenlands:chirobaby_hungry_7",
+      "thebetweenlands:chirobaby_hungry_8",
       "thebetweenlands:chirobaby_hungry_9",
       "thebetweenlands:chirobaby_hungry_10"
     ]
