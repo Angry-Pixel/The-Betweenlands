@@ -42,6 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
+import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.block.misc.BlockOctine;
 import thebetweenlands.common.entity.EntityProximitySpawner;
@@ -53,6 +54,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 public class EntityChiromawHatchling extends EntityProximitySpawner implements IEntityAdditionalSpawnData {
 	private static final byte EVENT_HATCH_PARTICLES = 100;
 	private static final byte EVENT_FLOAT_UP_PARTICLES = 101;
+	private static final byte EVENT_NEW_SPAWN = 102;
 	
 	public static final int MAX_EATING_COOLDOWN = 240; // set to whatever time between hunger cycles
 	public static final int MIN_EATING_COOLDOWN = 0;
@@ -110,7 +112,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 						setHatchTick(getHatchTick() + 1); // increment whilst on an octine block.
 				}
 				if (getHatchTick() >= 10) { // how many increments before hatching
-					this.world.setEntityState(this, EVENT_HATCH_PARTICLES);
+					getEntityWorld().setEntityState(this, EVENT_HATCH_PARTICLES);
 					setIsHungry(true);
 					setHasHatched(true);
 					getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCH, SoundCategory.BLOCKS, 1F, 1F);
@@ -151,8 +153,8 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 				if (!getRising() && getRiseCount() < MAX_RISE)
 					headPitch = getRiseCount();
 
-				//if (getAmountEaten() >= MAX_FOOD_NEEDED && !getIsChewing())
-				//	spawnLightningArcs(); // TODO maybe else something to show this is ready to transform/transforming
+				if (getAmountEaten() >= MAX_FOOD_NEEDED && !getIsChewing())
+					spawnLightningArcs(); // TODO maybe else something to show this is ready to transform/transforming
 
 				if (getIsChewing())
 					if (getTransformCount() < 60)
@@ -187,7 +189,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 						getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCHLING_TRANSFORM, SoundCategory.NEUTRAL, 1F, 1F);
 					if (getTransformCount() <= 60) {
 						setTransformCount(getTransformCount() + 1);
-						this.world.setEntityState(this, EVENT_FLOAT_UP_PARTICLES);
+						getEntityWorld().setEntityState(this, EVENT_FLOAT_UP_PARTICLES);
 						}
 					if(getOwner() != null)
 						lookAtFeeder(getOwner(), 30F);
@@ -204,7 +206,8 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 							Entity spawn = getEntitySpawned();
 							if (spawn != null) {
 								if (!spawn.isDead) { // just in case
-									getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_BARB_FIRE, SoundCategory.NEUTRAL, 0.5F, 1F + (getEntityWorld().rand.nextFloat() - getEntityWorld().rand.nextFloat()) * 0.8F);
+									getEntityWorld().setEntityState(this, EVENT_NEW_SPAWN);
+									getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_BARB_FIRE, SoundCategory.NEUTRAL, 1F, 1F + (getEntityWorld().rand.nextFloat() - getEntityWorld().rand.nextFloat()) * 0.8F);
 									getEntityWorld().spawnEntity(spawn);
 								}
 								setDead();
@@ -224,35 +227,49 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		super.handleStatusUpdate(id);
 		
 		if(id == EVENT_HATCH_PARTICLES) {
-			for (int count = 0; count <= 50; ++count) {
-				BLParticles.ITEM_BREAKING.spawn(world, this.posX + (world.rand.nextDouble() - 0.5D), this.posY + 1 + world.rand.nextDouble(), this.posZ + (world.rand.nextDouble() - 0.5D), ParticleArgs.get().withData(new ItemStack(ItemRegistry.CHIROMAW_EGG)));
+			for (int count = 0; count <= 100; ++count) {
+				BLParticles.ITEM_BREAKING.spawn(world, this.posX + (world.rand.nextDouble() - 0.5D), this.posY + 2D + world.rand.nextDouble(), this.posZ + (world.rand.nextDouble() - 0.5D), ParticleArgs.get().withData(new ItemStack(ItemRegistry.CHIROMAW_EGG)));
 			}
 		}
 		
 		if(id == EVENT_FLOAT_UP_PARTICLES) {
-			// TODO NOT THIS!
-			for (int count = 0; count <= 5; ++count) {
-				BLParticles.ITEM_BREAKING.spawn(world, this.posX + (world.rand.nextDouble() - 0.5D), this.posY + getTransformCount() * 0.02F, this.posZ + (world.rand.nextDouble() - 0.5D), ParticleArgs.get().withData(new ItemStack(ItemRegistry.CHIROMAW_BARB)));
+			// TODO NOT THIS! // no idea how this works it's on a weird timer also; not leaves but barbs/feather particles maybe?
+			ParticleArgs<?> args = ParticleArgs.get().withDataBuilder().setData(2, this).buildData();
+			args.withColor(1F, 0.65F, 0.25F, 0.75F);
+			args.withScale(0.5F + rand.nextFloat() * 6);
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.LEAF_SWIRL.create(this.world, this.posX, this.posY + 1.5D, this.posZ, args));
+		}
+		
+		if(id == EVENT_NEW_SPAWN) {
+			// TODO not leaves but barbs/feather particles maybe
+			int leafCount = 40;
+			float x = (float) (posX);
+			float y = (float) (posY + 1.5F);
+			float z = (float) (posZ);
+			while (leafCount-- > 0) {
+				float dx = getEntityWorld().rand.nextFloat() * 1 - 0.5f;
+				float dy = getEntityWorld().rand.nextFloat() * 1f - 0.1F;
+				float dz = getEntityWorld().rand.nextFloat() * 1 - 0.5f;
+				float mag = 0.08F + getEntityWorld().rand.nextFloat() * 0.07F;
+				BLParticles.WEEDWOOD_LEAF.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
 			}
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
 	private void spawnEatingParticles() {
-		if(getOwner() != null)
-			lookAtFeeder(getOwner(), 30F);
 		double angle = Math.toRadians(feederRotation + rotationYaw);
 		double offSetX = -Math.sin(angle) * 0.35D;
 		double offSetZ = Math.cos(angle) * 0.35D;
-		BLParticles.ITEM_BREAKING.spawn(world, this.posX + (float) offSetX + (world.rand.nextDouble() * 0.5D - 0.25D) , this.posY + 0.75F, this.posZ + (float) offSetZ + (world.rand.nextDouble() * 0.5D - 0.25D), ParticleArgs.get().withData(this.getFoodCraved()));
+		BLParticles.ITEM_BREAKING.spawn(world, this.posX + (float) offSetX + (world.rand.nextDouble() * 0.25D - 0.125D) , this.posY + 0.75F, this.posZ + (float) offSetZ + (world.rand.nextDouble() * 0.25D - 0.125D), ParticleArgs.get().withData(this.getFoodCraved()));
 	}
 
 	@SideOnly(Side.CLIENT)
 	private void spawnLightningArcs() {
-		if(this.world.rand.nextInt(2) == 0) {
-			float ox = this.world.rand.nextFloat() - 0.5f;
-			float oy = this.world.rand.nextFloat() - 0.5f + ((float)this.motionY + getTransformCount() * 0.02F);
-			float oz = this.world.rand.nextFloat() - 0.5f;
+		if(getEntityWorld().rand.nextInt(2) == 0) {
+			float ox = getEntityWorld().rand.nextFloat() - 0.5f;
+			float oy = getEntityWorld().rand.nextFloat() - 0.5f + ((float)this.motionY + getTransformCount() * 0.02F);
+			float oz = getEntityWorld().rand.nextFloat() - 0.5f;
 			
 			Particle particle = BLParticles.LIGHTNING_ARC.create(this.world, this.posX, this.posY + 0.5F + getTransformCount() * 0.02F, this.posZ, 
 					ParticleArgs.get()
@@ -377,7 +394,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	}
 
 	public ItemStack chooseNewFoodFromLootTable() {
-		LootTable lootTable = this.world.getLootTableManager().getLootTableFromLocation(getFoodCravingLootTable());
+		LootTable lootTable = getEntityWorld().getLootTableManager().getLootTableFromLocation(getFoodCravingLootTable());
 		if (lootTable != null) {
 			LootContext.Builder lootBuilder = (new LootContext.Builder((WorldServer) this.world)).withLootedEntity(this);
 			List<ItemStack> loot = lootTable.generateLootForPools(world.rand, lootBuilder.build());
@@ -508,6 +525,8 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 
 	@Override
     public boolean canBeCollidedWith() {
+		if(getIsTransforming())
+			return false;
         return true;
     }
 
