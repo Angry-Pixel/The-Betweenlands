@@ -48,6 +48,7 @@ import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.capability.equipment.EquipmentHelper;
+import thebetweenlands.common.entity.mobs.EntityChiromawTame;
 import thebetweenlands.common.entity.mobs.EntityEmberling;
 import thebetweenlands.common.entity.mobs.EntityGiantToad;
 import thebetweenlands.common.entity.mobs.EntityTamedSpiritTreeFace;
@@ -66,6 +67,7 @@ public class ItemAmulet extends Item implements IEquippable {
 		SUPPORTED_ENTITIES.add(EntityGiantToad.class);
 		SUPPORTED_ENTITIES.add(EntityTamedSpiritTreeFace.class);
 		SUPPORTED_ENTITIES.add(EntityEmberling.class);
+		SUPPORTED_ENTITIES.add(EntityChiromawTame.class);
 	}
 
 	public ItemAmulet() {

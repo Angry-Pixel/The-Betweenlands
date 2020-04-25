@@ -1,5 +1,7 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.UUID;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.block.material.Material;
@@ -42,6 +44,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.entity.IRingOfGatheringMinion;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.common.entity.EntityTameableBL;
 import thebetweenlands.common.entity.ai.EntityAIFlyingWander;
@@ -52,7 +55,7 @@ import thebetweenlands.common.item.tools.bow.EnumArrowType;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityChiromawTame extends EntityTameableBL {
+public class EntityChiromawTame extends EntityTameableBL implements IRingOfGatheringMinion {
 
 	private static final DataParameter<Boolean> ATTACKING = EntityDataManager.<Boolean>createKey(EntityChiromawTame.class, DataSerializers.BOOLEAN);
 
@@ -517,5 +520,37 @@ public class EntityChiromawTame extends EntityTameableBL {
 				chiromaw.setAttacking(this.attackTimer > 10);
 			}
 		}
+	}
+
+	@Override
+	public NBTTagCompound returnToRing(UUID userId) {
+		return this.writeToNBT(new NBTTagCompound());
+	}
+
+	@Override
+	public boolean returnFromRing(Entity user, NBTTagCompound nbt) {
+		double prevX = this.posX;
+		double prevY = this.posY;
+		double prevZ = this.posZ;
+		float prevYaw = this.rotationYaw;
+		float prevPitch = this.rotationPitch;
+		this.readFromNBT(nbt);
+		this.setLocationAndAngles(prevX, prevY, prevZ, prevYaw, prevPitch);
+		if(!this.isEntityAlive()) {
+			//Revivd by animator
+			this.setHealth(this.getMaxHealth());
+		}
+		this.world.spawnEntity(this);
+		return true;
+	}
+
+	@Override
+	public boolean shouldReturnOnUnload(boolean isOwnerLoggedIn) {
+		return IRingOfGatheringMinion.super.shouldReturnOnUnload(isOwnerLoggedIn) && !this.isSitting();
+	}
+
+	@Override
+	public UUID getRingOwnerId() {
+		return this.getOwnerId();
 	}
 }
