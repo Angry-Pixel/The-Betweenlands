@@ -1049,15 +1049,14 @@
   "chiromaw_hatchling_living": {
     "sounds": [
       "thebetweenlands:chirobaby_living_1",
-      "thebetweenlands:chirobaby_matriarch_living_2",
-      "thebetweenlands:chirobaby_matriarch_living_3",
-      "thebetweenlands:chirobaby_matriarch_living_4"
+      "thebetweenlands:chirobaby_living_2",
+      "thebetweenlands:chirobaby_living_3",
+      "thebetweenlands:chirobaby_living_4"
     ]
   },
    "chiromaw_hatchling_hungry_short": {
     "sounds": [
       "thebetweenlands:chirobaby_hungry_1",
-      "thebetweenlands:chirobaby_hungry_2",
       "thebetweenlands:chirobaby_hungry_2",
       "thebetweenlands:chirobaby_hungry_3",
       "thebetweenlands:chirobaby_hungry_4",
