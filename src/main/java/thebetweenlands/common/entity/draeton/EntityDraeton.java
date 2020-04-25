@@ -2161,13 +2161,31 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {
-		MessageSyncDraetonLeakages.serialize(this.leakages, new PacketBuffer(buffer));
+		PacketBuffer packetBuffer = new PacketBuffer(buffer);
+		
+		MessageSyncDraetonLeakages.serialize(this.leakages, packetBuffer);
+		
+		buffer.writeInt(this.physicsParts.size());
+		for(DraetonPhysicsPart part : this.physicsParts) {
+			MessageUpdateDraetonPhysicsPart msg = new MessageUpdateDraetonPhysicsPart(this, part, MessageUpdateDraetonPhysicsPart.Action.UPDATE);
+			msg.serialize(packetBuffer);
+		}
 	}
 
 	@Override
 	public void readSpawnData(ByteBuf buffer) {
+		PacketBuffer packetBuffer = new PacketBuffer(buffer);
+		
 		this.leakages.clear();
-		MessageSyncDraetonLeakages.deserialize(this.leakages, new PacketBuffer(buffer));
+		MessageSyncDraetonLeakages.deserialize(this.leakages, packetBuffer);
+		
+		this.physicsParts.clear();
+		int numParts = buffer.readInt();
+		for(int i = 0; i < numParts; i++) {
+			MessageUpdateDraetonPhysicsPart msg = new MessageUpdateDraetonPhysicsPart();
+			msg.deserialize(packetBuffer);
+			msg.processClient(this);
+		}
 	}
 
 	@SubscribeEvent
