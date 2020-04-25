@@ -113,6 +113,18 @@
 			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/the_mask_master_pitted_against_a_horrible_foe.png",
 			"title": "Pitted Against A Horrible Foe",
 			"author": "The Mask Master"
+		},
+		{
+			"sha256": "C18E0E21F09C25431A6807681C66705E7E01D35C398399E2A7E955CB84E697D9",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/sneko_monolith.png",
+			"title": "Monolith",
+			"author": "Sneko"
+		},
+		{
+			"sha256": "F1CD1F9B22CEB897C78C900D64FB906C475B900609DA8EFBC7A50727FFE77C8E",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/kirito_discovery.png",
+			"title": "Discovery",
+			"author": "Kirito"
 		}
 	]
 }]
