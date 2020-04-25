@@ -189,7 +189,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 						getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCHLING_TRANSFORM, SoundCategory.NEUTRAL, 1F, 1F);
 					if (getTransformCount() <= 60) {
 						setTransformCount(getTransformCount() + 1);
-						getEntityWorld().setEntityState(this, EVENT_FLOAT_UP_PARTICLES);
+						getEntityWorld().setEntityState(this, EVENT_FLOAT_UP_PARTICLES); // TODO - no idea O.o
 						}
 					if(getOwner() != null)
 						lookAtFeeder(getOwner(), 30F);
@@ -233,7 +233,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		}
 		
 		if(id == EVENT_FLOAT_UP_PARTICLES) {
-			// TODO NOT THIS! // no idea how this works it's on a weird timer also; not leaves but barbs/feather particles maybe?
+			// TODO NOT THIS! // no idea how this works it's on a weird timer etc also; not leaves but barbs/feather particles maybe?
 			ParticleArgs<?> args = ParticleArgs.get().withDataBuilder().setData(2, this).buildData();
 			args.withColor(1F, 0.65F, 0.25F, 0.75F);
 			args.withScale(0.5F + rand.nextFloat() * 6);
@@ -251,7 +251,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 				float dy = getEntityWorld().rand.nextFloat() * 1f - 0.1F;
 				float dz = getEntityWorld().rand.nextFloat() * 1 - 0.5f;
 				float mag = 0.08F + getEntityWorld().rand.nextFloat() * 0.07F;
-				BLParticles.WEEDWOOD_LEAF.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
+				BLParticles.CHIROMAW_TRANSFORM.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
 			}
 		}
 	}
@@ -349,12 +349,14 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	@Override
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
+		player.swingArm(hand);
 		if(!getIsTransforming() && getHasHatched()) {
 			if (!stack.isEmpty() && !checkFoodEqual(stack, getFoodCraved())) {
 				getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCHLING_NO, SoundCategory.NEUTRAL, 1F, 1F);
 					return false;
 			}
 			if (!stack.isEmpty() && getIsHungry()) {
+				
 				if (checkFoodEqual(stack, getFoodCraved())) {
 					if (!player.capabilities.isCreativeMode) {
 						stack.shrink(1);

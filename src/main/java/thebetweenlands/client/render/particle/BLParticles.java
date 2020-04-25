@@ -143,8 +143,8 @@ public enum BLParticles {
 	RING_OF_RECRUITMENT_GUARD(new ParticleRingOfRecruitmentState.FactoryGuard()),
 	DRAETON_BURNER_FLAME(new ParticleDraetonBurnerFlame.Factory()),
 	CHIROMAW_DROPPINGS(new ParticleChiromawDroppings.Factory().getBaseArgsBuilder().withColor(0, 0, 0, 1).buildBaseArgs()),
-	LIGHTNING_ARC(new ParticleLightningArc.Factory());
-
+	LIGHTNING_ARC(new ParticleLightningArc.Factory()),
+	CHIROMAW_TRANSFORM(new ParticleWeedwoodLeaf.Factory().getBaseArgsBuilder().withColor(0.227F, 0.317F, 0.294F, 1).buildBaseArgs());
 
 	private ParticleFactory<?, ?> factory;
 
