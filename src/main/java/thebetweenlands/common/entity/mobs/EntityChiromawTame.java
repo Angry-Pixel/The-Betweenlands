@@ -1,5 +1,7 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -10,6 +12,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -26,11 +29,14 @@ import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.Packet;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.play.server.SPacketSetPassengers;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
@@ -39,8 +45,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -65,7 +73,29 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 		setSize(0.7F, 0.9F);
 		moveHelper = new FlightMoveHelper(this);
 	}
-	
+
+	// TEMP JUST HERE TO SET OWNER DURING TEST
+	@Nullable
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+		if (!getEntityWorld().isRemote) {
+		if(checkArea() != null && checkArea() instanceof EntityPlayer)
+			setOwnerId(checkArea().getUniqueID());
+		}
+		return livingdata;
+	}
+
+	protected Entity checkArea() {
+		Entity entity = null;
+		if (!getEntityWorld().isRemote) {
+			List<EntityPlayer> list = getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(getPosition()).grow(6D));
+			for (int entityCount = 0; entityCount < list.size(); entityCount++)
+				entity = list.get(entityCount);
+			}
+		return entity;
+	}
+	//TEMP END
+
 	@Override
 	protected void initEntityAI() {
 		tasks.addTask(0, new EntityAISwimming(this));
@@ -144,22 +174,20 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		if (getRidingEntity() == null) {
+			if (isJumping && isInWater())
+				getMoveHelper().setMoveTo(posX, posY + 1, posZ, 1.0D);
 
-		if (isJumping && isInWater()) {
-			getMoveHelper().setMoveTo(posX, posY + 1, posZ, 1.0D);
-		}
+			if (isSitting()) {
+				motionX = motionY = motionZ = 0.0D;
+				posY = (double) MathHelper.floor(posY) + 1.0D - (double) height;
+			}
 
-		if (isSitting()) {
-			motionX = motionY = motionZ = 0.0D;
-			posY = (double) MathHelper.floor(posY) + 1.0D - (double) height;
-		}
+			if (motionY < 0.0D && getAttackTarget() == null)
+				motionY *= 0.25D;
 
-		if (motionY < 0.0D && getAttackTarget() == null) {
-			motionY *= 0.25D;
-		}
-
-		if(getEntityWorld().getBlockState(getPosition().down()).isSideSolid(getEntityWorld(), getPosition().down(), EnumFacing.UP)) {
-			getMoveHelper().setMoveTo(posX, posY + 1, posZ, 1.0D);
+			if (getEntityWorld().getBlockState(getPosition().down()).isSideSolid(getEntityWorld(), getPosition().down(), EnumFacing.UP))
+				getMoveHelper().setMoveTo(posX, posY + 1, posZ, 1.0D);
 		}
 	}
 
@@ -281,7 +309,6 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 					if (getHealth() < getMaxHealth()) {
 						if (!getEntityWorld().isRemote) {
 							heal(5.0F);
-
 							if (!player.capabilities.isCreativeMode) {
 								stack.shrink(1);
 								if (stack.getCount() <= 0)
@@ -296,21 +323,51 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 				}
 		}
 
-		if (isOwner(player) && !world.isRemote) {
-			aiSit.setSitting(!isSitting());
-			isJumping = false;
-			navigator.clearPath();
-			setAttackTarget((EntityLivingBase) null);
+		if (isOwner(player)) {
+			rotationYaw = player.rotationYaw;
+			if (!getEntityWorld().isRemote) {
+				// aiSit.setSitting(!isSitting());
+				// isJumping = false;
+				// navigator.clearPath();
+				setAttackTarget((EntityLivingBase) null);
+
+				if (getRidingEntity() == null) {
+					startRiding(player, true);
+					sendPassengerPacket();
+					System.out.println("MOUNTING PLAYER: " + player.getName());
+				} else {
+					// dismount sound
+					System.out.println("DIS-MOUNTING ENTITY: " + getRidingEntity().getName());
+					dismountRidingEntity();
+					sendPassengerPacket();
+				}
+			}
+			return true;
 		}
 
 		return super.processInteract(player, hand);
 	}
 
 	@Override
+	public void updateRidden() {
+		super.updateRidden();
+	}
+	public void sendPassengerPacket() {
+		if (!getEntityWorld().isRemote) {
+			Iterator<EntityPlayer> players = getEntityWorld().playerEntities.iterator();
+			while (players.hasNext()) {
+				EntityPlayer playersNear = players.next();
+				Packet<?> packet = new SPacketSetPassengers(playersNear);
+				((EntityPlayerMP) playersNear).connection.sendPacket(packet);
+			}
+		}
+	}
+
+	@Override
 	public EntityAgeable createChild(EntityAgeable ageable) {
 		return null;
 	}
-	
+
 	class AIFollowOwner extends EntityAIBase {
 		private final EntityChiromawTame chiromaw;
 		private EntityLivingBase owner;
