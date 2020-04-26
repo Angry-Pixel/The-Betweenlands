@@ -56,11 +56,11 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	private static final byte EVENT_FLOAT_UP_PARTICLES = 101;
 	private static final byte EVENT_NEW_SPAWN = 102;
 	
-	public static final int MAX_EATING_COOLDOWN = 240; // set to whatever time between hunger cycles
+	public static final int MAX_EATING_COOLDOWN = 3000; // set to whatever time between hunger cycles 3000 = 2.5 minutes
 	public static final int MIN_EATING_COOLDOWN = 0;
 	public static final int MAX_RISE = 40;
 	public static final int MIN_RISE = 0; 
-	public static final int MAX_FOOD_NEEDED = 5; // amount of times needs to be fed
+	public static final int MAX_FOOD_NEEDED = 8; // amount of times needs to be fed
 	NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(5, ItemStack.EMPTY);
 	public float feederRotation, prevFeederRotation, headPitch, prevHeadPitch;
 	public int prevHatchAnimation, hatchAnimation, riseCount, prevRise, prevTransformTick;
@@ -107,11 +107,11 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		// STAGE 1
 		if (!getHasHatched()) {
 			if (!getEntityWorld().isRemote) {
-				if (ticksExisted % 120 == 0) {
+				if (ticksExisted %200 == 0) { // 200 = 10 seconds (no need to count this every second)
 					if (getEntityWorld().getBlockState(getPosition().down()).getBlock() instanceof BlockOctine)
 						setHatchTick(getHatchTick() + 1); // increment whilst on an octine block.
 				}
-				if (getHatchTick() >= 10) { // how many increments before hatching
+				if (getHatchTick() >= 1200) { // how many increments before hatching 1200 * 10 = 10 minutes
 					getEntityWorld().setEntityState(this, EVENT_HATCH_PARTICLES);
 					setIsHungry(true);
 					setHasHatched(true);
@@ -120,7 +120,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 			}
 
 			if (getEntityWorld().isRemote) {
-				if (getHatchTick() >= 1) { // after the 1st hatch increment
+				if (getHatchTick() >= 600) { // pulsing animation after 600 * 10 = 5 minutes
 					prevHatchAnimation = hatchAnimation;
 					hatchAnimation++;
 				}
