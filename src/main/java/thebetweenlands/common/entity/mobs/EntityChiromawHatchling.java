@@ -110,8 +110,9 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 				if (ticksExisted %200 == 0) { // 200 = 10 seconds (no need to count this every second)
 					if (getEntityWorld().getBlockState(getPosition().down()).getBlock() instanceof BlockOctine)
 						setHatchTick(getHatchTick() + 1); // increment whilst on an octine block.
+					System.out.println("Hatch ticks: " + getHatchTick());
 				}
-				if (getHatchTick() >= 1200) { // how many increments before hatching 1200 * 10 = 10 minutes
+				if (getHatchTick() >= 60) { // how many increments before hatching 60 = 10 minutes
 					getEntityWorld().setEntityState(this, EVENT_HATCH_PARTICLES);
 					setIsHungry(true);
 					setHasHatched(true);
@@ -120,7 +121,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 			}
 
 			if (getEntityWorld().isRemote) {
-				if (getHatchTick() >= 600) { // pulsing animation after 600 * 10 = 5 minutes
+				if (getHatchTick() >= 1) { // animation
 					prevHatchAnimation = hatchAnimation;
 					hatchAnimation++;
 				}
