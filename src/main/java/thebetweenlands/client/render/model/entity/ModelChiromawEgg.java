@@ -44,7 +44,7 @@ public class ModelChiromawEgg extends ModelBase {
 	public void renderEgg(EntityChiromawHatchling entity, float partialTicks, float scale) {
 		EntityChiromawHatchling chiromaw = (EntityChiromawHatchling) entity;
 		float flap = MathHelper.sin((chiromaw.hatchAnimation + partialTicks) * 0.125F) * 0.03125F;
-		if(chiromaw.getHatchTick() < 1)
+		if(chiromaw.getHatchTick() < 600)
 			flap = 0F;
 		GlStateManager.pushMatrix();
 		GlStateManager.scale(1F + flap, 1F - flap, 1F + flap);
