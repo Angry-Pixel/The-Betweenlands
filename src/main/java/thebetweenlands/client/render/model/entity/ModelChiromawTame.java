@@ -235,15 +235,15 @@ public class ModelChiromawTame extends MowzieModelBase {
 		// hax to prevent rotation derpiness
 		if (chiromaw.getOwner() == null || chiromaw.ticksExisted > 4) {
 			GlStateManager.pushMatrix();
-			/*
-			 if (chiromaw.getIsHanging()) {
+
+			 if (chiromaw.isSitting()) {
 			 GlStateManager.translate(0.0F, 2.125F, 0.0F);
 			 GlStateManager.rotate(180, 1F, 0F, 0.0F);
 			} else {
-			 */
+
 			GlStateManager.rotate(40, 1F, 0F, 0.0F);
 			GlStateManager.translate(0.0F, 0F, -0.8F);
-			// }
+			}
 
 			GlStateManager.enableCull();
 			GlStateManager.cullFace(CullFace.FRONT);
@@ -275,7 +275,7 @@ public class ModelChiromawTame extends MowzieModelBase {
         EntityChiromawTame chiromaw = (EntityChiromawTame) entity;
         setToInitPose();
         float flap = MathHelper.sin((chiromaw.ticksExisted + partialRenderTicks) * 0.5F) * 0.6F;
-    /*    if (chiromaw.getIsHanging()) {
+       if (chiromaw.isSitting()) {
             arm_right1.rotateAngleZ = 0.5462880558742251F;
             arm_right2.rotateAngleZ = 0F;
             arm_left1.rotateAngleZ = -0.5462880558742251F;
@@ -299,7 +299,7 @@ public class ModelChiromawTame extends MowzieModelBase {
 
             head_jaw1.rotateAngleX = 0.9560913642424937F;
             head_base.rotateAngleX = 0.091106186954104F;
-        } else {*/
+        } else {
             arm_right1.rotateAngleZ = 0.5462880558742251F;
             arm_right2.rotateAngleZ = 0F;
             arm_left1.rotateAngleZ = -0.5462880558742251F;
@@ -333,7 +333,7 @@ public class ModelChiromawTame extends MowzieModelBase {
 
             head_jaw1.rotateAngleX = 0.9560913642424937F - flap * 0.5F;
             head_base.rotateAngleX = -0.698132F;
-      //  }   
+       }   
     }
 
 	public float convertDegtoRad(float angleIn) {

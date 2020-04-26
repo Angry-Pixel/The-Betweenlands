@@ -48,6 +48,7 @@ import thebetweenlands.api.entity.IRingOfGatheringMinion;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.common.entity.EntityTameableBL;
 import thebetweenlands.common.entity.ai.EntityAIFlyingWander;
+import thebetweenlands.common.entity.ai.EntityAISitBL;
 import thebetweenlands.common.entity.ai.PathNavigateFlyingBL;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
@@ -68,6 +69,8 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 	@Override
 	protected void initEntityAI() {
 		tasks.addTask(0, new EntityAISwimming(this));
+		this.aiSit = new EntityAISitBL(this);
+		tasks.addTask(1, this.aiSit);
 		tasks.addTask(1, new EntityChiromawTame.AIBarbAttack(this));
 		tasks.addTask(2, new EntityAIAttackMelee(this, 0.5D, true));
 		tasks.addTask(3, new EntityAIFlyingWander(this, 0.5D));
@@ -145,12 +148,12 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 		if (isJumping && isInWater()) {
 			getMoveHelper().setMoveTo(posX, posY + 1, posZ, 1.0D);
 		}
-/*
-		if (getIsHanging()) {
+
+		if (isSitting()) {
 			motionX = motionY = motionZ = 0.0D;
 			posY = (double) MathHelper.floor(posY) + 1.0D - (double) height;
 		}
-*/
+
 		if (motionY < 0.0D && getAttackTarget() == null) {
 			motionY *= 0.25D;
 		}
@@ -294,7 +297,7 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 		}
 
 		if (isOwner(player) && !world.isRemote) {
-			//startRiding(player, true);
+			aiSit.setSitting(!isSitting());
 			isJumping = false;
 			navigator.clearPath();
 			setAttackTarget((EntityLivingBase) null);

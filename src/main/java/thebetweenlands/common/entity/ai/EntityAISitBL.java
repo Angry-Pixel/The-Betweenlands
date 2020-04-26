@@ -3,6 +3,7 @@ package thebetweenlands.common.entity.ai;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAISit;
 import net.minecraft.entity.passive.EntityTameable;
+import thebetweenlands.common.entity.mobs.EntityChiromawTame;
 
 /**
  * Same as {@link EntityAISit} but setting mutex to not look at players
@@ -23,7 +24,7 @@ public class EntityAISitBL extends EntityAISit {
 			return false;
 		else if (tameable.isInWater())
 			return false;
-		else if (!tameable.onGround)
+		else if (!tameable.onGround && !(tameable instanceof EntityChiromawTame))
 			return false;
 		else {
 			EntityLivingBase entitylivingbase = tameable.getOwner();
