@@ -25,6 +25,8 @@ import thebetweenlands.common.capability.flight.FlightEntityCapability;
 import thebetweenlands.common.capability.foodsickness.FoodSicknessEntityCapability;
 import thebetweenlands.common.capability.item.ILivingWeedwoodShieldCapability;
 import thebetweenlands.common.capability.item.LivingWeedwoodShieldItemCapability;
+import thebetweenlands.common.capability.playermounts.IPlayerMountsEntityCapability;
+import thebetweenlands.common.capability.playermounts.PlayerMountsEntityCapability;
 import thebetweenlands.common.capability.portal.PortalEntityCapability;
 import thebetweenlands.common.capability.recruitment.EntityPuppetCapability;
 import thebetweenlands.common.capability.recruitment.EntityPuppeteerCapability;
@@ -69,6 +71,9 @@ public class CapabilityRegistry {
 	@CapabilityInject(IEntityCustomCollisionsCapability.class)
 	public static final Capability<IEntityCustomCollisionsCapability> CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS = null;
 	
+	@CapabilityInject(IPlayerMountsEntityCapability.class)
+	public static final Capability<IPlayerMountsEntityCapability> CAPABILITY_PLAYER_MOUNTS = null;
+		
 	public static void preInit() {
 		EntityCapabilityHandler.registerEntityCapability(new DecayEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new CircleGemEntityCapability());
@@ -81,6 +86,7 @@ public class CapabilityRegistry {
 		EntityCapabilityHandler.registerEntityCapability(new FoodSicknessEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new CustomStepSoundCapability());
 		EntityCapabilityHandler.registerEntityCapability(new RingOfDispersionEntityCapability());
+		EntityCapabilityHandler.registerEntityCapability(new PlayerMountsEntityCapability());
 		
 		ItemCapabilityHandler.registerItemCapability(new LivingWeedwoodShieldItemCapability());
 		

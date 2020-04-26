@@ -106,12 +106,12 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 		tasks.addTask(3, new EntityAIFlyingWander(this, 0.5D));
 		tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		tasks.addTask(5, new EntityAILookIdle(this));
-        tasks.addTask(6, new EntityAIAvoidEntity(this, EntityMob.class, 4.0F, 0.75D, 0.75D));
+        tasks.addTask(6, new EntityAIAvoidEntity<>(this, EntityMob.class, 4.0F, 0.75D, 0.75D));
 		tasks.addTask(1, new EntityChiromawTame.AIFollowOwner(this, 1.0D, 10.0F, 2.0F));
 		targetTasks.addTask(1, new EntityChiromawTame.AIChiromawOwnerHurtByTarget(this));
         targetTasks.addTask(2, new EntityChiromawTame.AIChiromawOwnerHurtTarget(this));
         targetTasks.addTask(3, new EntityAIHurtByTarget(this, true, new Class[0]));
-        targetTasks.addTask(4, new EntityAINearestAttackableTarget(this, EntityMob.class, true));
+        targetTasks.addTask(4, new EntityAINearestAttackableTarget<>(this, EntityMob.class, true));
 	}
 
 	@Override
@@ -191,6 +191,7 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 		}
 	}
 
+	@Override
 	public boolean shouldAttackEntity(EntityLivingBase entityTarget, EntityLivingBase entityTarget2) {
 		if (!(entityTarget instanceof EntityCreeper) && !(entityTarget instanceof EntityGhast)) {
 			if (entityTarget instanceof EntityChiromawTame) {
@@ -331,15 +332,15 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 				// navigator.clearPath();
 				setAttackTarget((EntityLivingBase) null);
 
-				if (getRidingEntity() == null) {
+				Entity riding = getRidingEntity();
+				
+				if(riding == null) {
 					startRiding(player, true);
-					sendPassengerPacket();
-					System.out.println("MOUNTING PLAYER: " + player.getName());
+					getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(player));
 				} else {
-					// dismount sound
-					System.out.println("DIS-MOUNTING ENTITY: " + getRidingEntity().getName());
+					// TODO dismount sound
 					dismountRidingEntity();
-					sendPassengerPacket();
+					getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(riding));
 				}
 			}
 			return true;
@@ -351,16 +352,6 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 	@Override
 	public void updateRidden() {
 		super.updateRidden();
-	}
-	public void sendPassengerPacket() {
-		if (!getEntityWorld().isRemote) {
-			Iterator<EntityPlayer> players = getEntityWorld().playerEntities.iterator();
-			while (players.hasNext()) {
-				EntityPlayer playersNear = players.next();
-				Packet<?> packet = new SPacketSetPassengers(playersNear);
-				((EntityPlayerMP) playersNear).connection.sendPacket(packet);
-			}
-		}
 	}
 
 	@Override
@@ -543,18 +534,22 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 			chiromaw = chirowmawIn;
 		}
 
+		@Override
 		public boolean shouldExecute() {
 			return chiromaw.getAttackTarget() != null;
 		}
 
+		@Override
 		public void startExecuting() {
 			this.attackTimer = 0;
 		}
 
+		@Override
 		public void resetTask() {
 			chiromaw.setAttacking(false);
 		}
 
+		@Override
 		public void updateTask() {
 			EntityLivingBase entitylivingbase = chiromaw.getAttackTarget();
 			if (!chiromaw.getEntityWorld().isRemote) {

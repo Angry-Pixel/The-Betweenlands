@@ -25,6 +25,7 @@ import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.capability.base.ItemCapabilityHandler;
 import thebetweenlands.common.capability.collision.RingOfDispersionEntityCapability;
+import thebetweenlands.common.capability.playermounts.PlayerMountsEntityCapability;
 import thebetweenlands.common.command.CommandAspectDiscovery;
 import thebetweenlands.common.command.CommandBLEvent;
 import thebetweenlands.common.command.CommandDecay;
@@ -262,5 +263,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(EntityVolarkite.class);
 		MinecraftForge.EVENT_BUS.register(BLDataFixers.class);
 		MinecraftForge.EVENT_BUS.register(EntityDraeton.class);
+		MinecraftForge.EVENT_BUS.register(PlayerMountsEntityCapability.class);
 	}
 }
