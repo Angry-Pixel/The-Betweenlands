@@ -15,6 +15,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -78,6 +79,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	private static final DataParameter<Integer> TRANSFORM_COUNT = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> HATCH_COUNT = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.VARINT);
 	private static final DataParameter<ItemStack> FOOD_CRAVED = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.ITEM_STACK);
+	private static final DataParameter<Boolean> ELECTRIC = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.BOOLEAN);
 
 	public EntityChiromawHatchling(World world) {
 		super(world);
@@ -99,6 +101,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		dataManager.register(TRANSFORM_COUNT, 0);
 		dataManager.register(HATCH_COUNT, 0);
 		dataManager.register(FOOD_CRAVED, ItemStack.EMPTY);
+		dataManager.register(ELECTRIC, false);
 	}
 
 	@Override
@@ -451,6 +454,22 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		return livingdata;
 	}
 
+	@Override
+    public void onStruckByLightning(EntityLightningBolt lightningBolt) {
+		if(!getHasHatched() && getHatchTick() < 1)
+			setElectricBoogaloo(true);
+		else
+			super.onStruckByLightning(lightningBolt);
+    }
+
+	private void setElectricBoogaloo(boolean electric) {
+		dataManager.set(ELECTRIC, electric);
+	}
+
+    public boolean getElectricBoogaloo() {
+        return dataManager.get(ELECTRIC);
+    }
+
 	private void setHasHatched(boolean hatched) {
 		dataManager.set(HATCHED, hatched);
 	}
@@ -639,6 +658,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		nbt.setBoolean("Transforming", getIsTransforming());
 		nbt.setInteger("TransformCount", getTransformCount());
 		nbt.setInteger("Facing", this.facing.ordinal());
+		nbt.setBoolean("Electric", getElectricBoogaloo());
 
 		NBTTagCompound nbtFood = new NBTTagCompound();
 		getFoodCraved().writeToNBT(nbtFood);
@@ -671,6 +691,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		setIsTransforming(nbt.getBoolean("Transforming"));
 		setTransformCount(nbt.getInteger("TransformCount"));
 		this.facing = EnumFacing.VALUES[nbt.getInteger("Facing")];
+		setElectricBoogaloo(nbt.getBoolean("Electric"));
 
 		NBTTagCompound nbtFood = (NBTTagCompound) nbt.getTag("Items");
 		ItemStack stack = new ItemStack(ItemRegistry.SNAIL_FLESH_RAW);

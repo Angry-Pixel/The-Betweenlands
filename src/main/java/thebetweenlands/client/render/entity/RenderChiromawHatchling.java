@@ -20,6 +20,9 @@ public class RenderChiromawHatchling extends RenderLiving<EntityChiromawHatchlin
 	private static final ResourceLocation TEXTURE_HATCHLING = new ResourceLocation(ModInfo.ID, "textures/entity/chiromaw_hatchling.png");
 	private static final ResourceLocation TEXTURE_HATCHLING_BLINK_1 = new ResourceLocation(ModInfo.ID, "textures/entity/chiromaw_hatchling_blink_1.png");
 	private static final ResourceLocation TEXTURE_HATCHLING_BLINK_2 = new ResourceLocation(ModInfo.ID, "textures/entity/chiromaw_hatchling_blink_2.png");
+	private static final ResourceLocation TEXTURE_HATCHLING_LIGHTNING = new ResourceLocation(ModInfo.ID, "textures/entity/chiromaw_hatchling_lightning.png");
+	private static final ResourceLocation TEXTURE_HATCHLING_LIGHTNING_BLINK_1 = new ResourceLocation(ModInfo.ID, "textures/entity/chiromaw_hatchling_lightning_blink_1.png");
+	private static final ResourceLocation TEXTURE_HATCHLING_LIGHTNING_BLINK_2 = new ResourceLocation(ModInfo.ID, "textures/entity/chiromaw_hatchling_lightning_blink_2.png");
 	private static final ResourceLocation TEXTURE_EGG = new ResourceLocation(ModInfo.ID, "textures/entity/chiromaw_egg.png");
 	private static final ModelChiromawHatchling MODEL_HATCHLING = new ModelChiromawHatchling();
 	private static final ModelChiromawEgg MODEL_EGG = new ModelChiromawEgg();
@@ -97,12 +100,20 @@ public class RenderChiromawHatchling extends RenderLiving<EntityChiromawHatchlin
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityChiromawHatchling entity) {
-		if(entity.getHasHatched()) {
-			if(entity.blinkCount <= 10 && entity.blinkCount > 8 || entity.blinkCount <= 4 && entity.blinkCount > 2)
-				return TEXTURE_HATCHLING_BLINK_1;
-			if(entity.blinkCount <= 8 && entity.blinkCount > 6 || entity.blinkCount <= 2 && entity.blinkCount > 0)
-				return TEXTURE_HATCHLING_BLINK_2;
-			return TEXTURE_HATCHLING;
+		if (entity.getHasHatched()) {
+			if (entity.getElectricBoogaloo()) {
+				if (entity.blinkCount <= 10 && entity.blinkCount > 8 || entity.blinkCount <= 4 && entity.blinkCount > 2)
+					return TEXTURE_HATCHLING_LIGHTNING_BLINK_1;
+				if (entity.blinkCount <= 8 && entity.blinkCount > 6 || entity.blinkCount <= 2 && entity.blinkCount > 0)
+					return TEXTURE_HATCHLING_LIGHTNING_BLINK_2;
+				return TEXTURE_HATCHLING_LIGHTNING;
+			} else {
+				if (entity.blinkCount <= 10 && entity.blinkCount > 8 || entity.blinkCount <= 4 && entity.blinkCount > 2)
+					return TEXTURE_HATCHLING_BLINK_1;
+				if (entity.blinkCount <= 8 && entity.blinkCount > 6 || entity.blinkCount <= 2 && entity.blinkCount > 0)
+					return TEXTURE_HATCHLING_BLINK_2;
+				return TEXTURE_HATCHLING;
+			}
 		}
 		return TEXTURE_EGG;
 	}
