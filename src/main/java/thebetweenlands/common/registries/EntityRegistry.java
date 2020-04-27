@@ -10,6 +10,7 @@ import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityGalleryFrame;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
+import thebetweenlands.common.entity.EntityGreeblingCorpse;
 import thebetweenlands.common.entity.EntityLurkerSkinRaft;
 import thebetweenlands.common.entity.EntityMovingWall;
 import thebetweenlands.common.entity.EntityRootGrabber;
@@ -224,6 +225,7 @@ public class EntityRegistry {
 		registerEntity(EntityChiromawDroppings.class, "chiromaw_droppings", 64, 20, true);
 		registerEntity(EntityChiromawHatchling.class, "chiromaw_hatchling", 0x3F5A69, 0xA16A77);
 		registerEntity(EntityChiromawTame.class, "chiromaw_tame", 0x3F5A69, 0xA16A77);
+		registerEntity(EntityGreeblingCorpse.class, "greebling_corpse", 80, 20, false);
 	}
 
 	private static int id = 0;
