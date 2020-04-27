@@ -1,6 +1,5 @@
 package thebetweenlands.common.entity.mobs;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,10 +28,8 @@ import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -334,9 +331,11 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 
 				Entity riding = getRidingEntity();
 				
-				if(riding == null) {
-					startRiding(player, true);
-					getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(player));
+				if (riding == null) {
+					if (!player.isBeingRidden()) { // stops multiple mounting you
+						startRiding(player, true);
+						getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(player));
+					}
 				} else {
 					// TODO dismount sound
 					dismountRidingEntity();
@@ -353,6 +352,13 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 	public void updateRidden() {
 		super.updateRidden();
 	}
+
+	@Override
+    public double getYOffset() {
+		 if(getRidingEntity() !=null && getRidingEntity() instanceof EntityPlayer)
+			 return height * 0.5D;
+        return 0.0D;
+    }
 
 	@Override
 	public EntityAgeable createChild(EntityAgeable ageable) {

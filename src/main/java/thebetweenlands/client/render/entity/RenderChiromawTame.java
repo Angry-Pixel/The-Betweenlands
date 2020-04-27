@@ -22,7 +22,7 @@ public class RenderChiromawTame extends RenderLiving<EntityChiromawTame> {
 
 	@Override
 	protected void preRenderCallback(EntityChiromawTame chiromaw, float partialTickTime) {
-		if (!chiromaw.isSitting()) {
+		if (!chiromaw.isSitting() && !chiromaw.isRiding()) {
 			float flap = MathHelper.sin((chiromaw.ticksExisted + partialTickTime) * 0.5F) * 0.6F;
 			GlStateManager.translate(0.0F, 0F - flap * 0.5F, 0.0F);
 		}

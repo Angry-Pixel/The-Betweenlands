@@ -268,7 +268,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 			ParticleArgs<?> args = ParticleArgs.get().withDataBuilder().setData(2, this).buildData();
 			args.withColor(1F, 0.65F, 0.25F, 0.75F);
 			args.withScale(0.5F + rand.nextFloat() * 6);
-			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.LEAF_SWIRL.create(this.world, this.posX, this.posY + 1.5D, this.posZ, args));
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.LEAF_SWIRL.create(this.world, this.posX, this.posY + 2.6D, this.posZ, args));
 		}
 		
 		if(id == EVENT_NEW_SPAWN) {
