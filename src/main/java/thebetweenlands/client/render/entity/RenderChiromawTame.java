@@ -14,6 +14,7 @@ import thebetweenlands.common.entity.mobs.EntityChiromawTame;
 @SideOnly(Side.CLIENT)
 public class RenderChiromawTame extends RenderLiving<EntityChiromawTame> {
 	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/chiromaw_tame.png");
+	public static final ResourceLocation TEXTURE_LIGHTNING = new ResourceLocation("thebetweenlands:textures/entity/chiromaw_tame_lightning.png");
 
 	public RenderChiromawTame(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelChiromawTame(), 0.5F);
@@ -30,6 +31,6 @@ public class RenderChiromawTame extends RenderLiving<EntityChiromawTame> {
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityChiromawTame entity) {
-		return TEXTURE;
+		return entity.getElectricBoogaloo()? TEXTURE_LIGHTNING : TEXTURE;
 	}
 }

@@ -623,6 +623,8 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		entity.setOwnerId(getOwnerId());
 		if(hasCustomName())
 			entity.setCustomNameTag(getCustomNameTag());
+		if(getElectricBoogaloo())
+			entity.setElectricBoogaloo(true);
 		entity.setLocationAndAngles(posX, posY + 1F, posZ, feederRotation + rotationYaw, 0.0F);
 		entity.rotationYawHead = entity.rotationYaw;
 		entity.renderYawOffset = entity.rotationYaw;

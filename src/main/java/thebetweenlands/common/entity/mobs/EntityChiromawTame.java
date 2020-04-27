@@ -40,7 +40,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -71,6 +70,7 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 	private static final byte EVENT_DOUBLE_JUMP = 80;
 
 	private static final DataParameter<Boolean> ATTACKING = EntityDataManager.createKey(EntityChiromawTame.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> ELECTRIC = EntityDataManager.createKey(EntityChiromawTame.class, DataSerializers.BOOLEAN);
 
 	public int doubleJumpTicks;
 	public int prevWingFlapTicks, wingFlapTicks;
@@ -126,6 +126,7 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 	protected void entityInit() {
 		super.entityInit();
 		dataManager.register(ATTACKING, false);
+		dataManager.register(ELECTRIC, true);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -137,16 +138,24 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 		dataManager.set(ATTACKING, attacking);
 	}
 
+	public void setElectricBoogaloo(boolean electric) {
+		dataManager.set(ELECTRIC, electric);
+	}
+
+    public boolean getElectricBoogaloo() {
+        return dataManager.get(ELECTRIC);
+    }
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
-
+		nbt.setBoolean("Electric", getElectricBoogaloo());
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-
+		setElectricBoogaloo(nbt.getBoolean("Electric"));
 	}
 
 	@Override
