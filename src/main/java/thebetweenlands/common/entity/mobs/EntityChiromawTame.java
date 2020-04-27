@@ -126,7 +126,7 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 	protected void entityInit() {
 		super.entityInit();
 		dataManager.register(ATTACKING, false);
-		dataManager.register(ELECTRIC, true);
+		dataManager.register(ELECTRIC, false);
 	}
 
 	@SideOnly(Side.CLIENT)
