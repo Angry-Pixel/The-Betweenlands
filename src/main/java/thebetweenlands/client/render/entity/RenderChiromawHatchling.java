@@ -18,6 +18,8 @@ import thebetweenlands.common.lib.ModInfo;
 @SideOnly(Side.CLIENT)
 public class RenderChiromawHatchling extends RenderLiving<EntityChiromawHatchling> {
 	private static final ResourceLocation TEXTURE_HATCHLING = new ResourceLocation(ModInfo.ID, "textures/entity/chiromaw_hatchling.png");
+	private static final ResourceLocation TEXTURE_HATCHLING_BLINK_1 = new ResourceLocation(ModInfo.ID, "textures/entity/chiromaw_hatchling_blink_1.png");
+	private static final ResourceLocation TEXTURE_HATCHLING_BLINK_2 = new ResourceLocation(ModInfo.ID, "textures/entity/chiromaw_hatchling_blink_2.png");
 	private static final ResourceLocation TEXTURE_EGG = new ResourceLocation(ModInfo.ID, "textures/entity/chiromaw_egg.png");
 	private static final ModelChiromawHatchling MODEL_HATCHLING = new ModelChiromawHatchling();
 	private static final ModelChiromawEgg MODEL_EGG = new ModelChiromawEgg();
@@ -95,6 +97,13 @@ public class RenderChiromawHatchling extends RenderLiving<EntityChiromawHatchlin
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityChiromawHatchling entity) {
-		return entity.getHasHatched() ? TEXTURE_HATCHLING : TEXTURE_EGG;
+		if(entity.getHasHatched()) {
+			if(entity.blinkCount <= 10 && entity.blinkCount > 8 || entity.blinkCount <= 4 && entity.blinkCount > 2)
+				return TEXTURE_HATCHLING_BLINK_1;
+			if(entity.blinkCount <= 8 && entity.blinkCount > 6 || entity.blinkCount <= 2 && entity.blinkCount > 0)
+				return TEXTURE_HATCHLING_BLINK_2;
+			return TEXTURE_HATCHLING;
+		}
+		return TEXTURE_EGG;
 	}
 }

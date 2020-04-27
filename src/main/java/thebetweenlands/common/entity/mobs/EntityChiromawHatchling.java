@@ -63,7 +63,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	public static final int MAX_FOOD_NEEDED = 8; // amount of times needs to be fed
 	NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(5, ItemStack.EMPTY);
 	public float feederRotation, prevFeederRotation, headPitch, prevHeadPitch;
-	public int prevHatchAnimation, hatchAnimation, riseCount, prevRise, prevTransformTick, flapArmsCount;
+	public int prevHatchAnimation, hatchAnimation, riseCount, prevRise, prevTransformTick, flapArmsCount, blinkCount;
 	public boolean flapArms = false;
 	private EnumFacing facing = EnumFacing.NORTH;
 	
@@ -168,6 +168,9 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 							flapArmsCount = 30;
 						}
 					}
+					if(blinkCount <= 0)
+						if(rand.nextInt(200) == 0)
+							blinkCount = 30;
 				}
 
 				if (flapArmsCount >= 0)
@@ -175,6 +178,9 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 
 				if(flapArms && flapArmsCount <= 0)
 					flapArms = false;
+				
+				if (blinkCount >= 0)
+					blinkCount--;
 
 			}
 
