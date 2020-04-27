@@ -95,6 +95,7 @@ public class RenderBLArrow extends RenderArrow<EntityBLArrow> {
 			return TEXTURE_WORM;
 		case SHOCK:
 			return TEXTURE_SHOCK;
+		case CHIROMAW_SHOCK_BARB:
 		case CHIROMAW_BARB:
 			return TEXTURE_CHIROMAW_BARB;
 		default:
