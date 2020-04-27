@@ -128,6 +128,8 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 					prevHatchAnimation = hatchAnimation;
 					hatchAnimation++;
 				}
+				if(getElectricBoogaloo())
+					spawnLightningArcs();
 			}
 		}
 
@@ -158,7 +160,10 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 					headPitch = getRiseCount();
 
 				if (getAmountEaten() >= MAX_FOOD_NEEDED && !getIsChewing())
-					spawnLightningArcs(); // TODO maybe else something to show this is ready to transform/transforming
+					; // TODO maybe else something to show this is ready to transform/transforming
+				
+				if (getElectricBoogaloo())
+					spawnLightningArcs();
 
 				if (getIsChewing())
 					if (getTransformCount() < 60)
