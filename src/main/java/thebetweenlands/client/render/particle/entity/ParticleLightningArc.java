@@ -52,6 +52,7 @@ public class ParticleLightningArc extends Particle {
 	private float maxSplitSpeed = 2;
 	private float lengthDecay = 0.25f;
 	private float sizeDecay = 0.8f;
+	private boolean lighting = true;
 	
 	protected ParticleLightningArc(World worldIn, double posXIn, double posYIn, double posZIn, double mx, double my, double mz, Vec3d target) {
 		super(worldIn, posXIn, posYIn, posZIn);
@@ -101,6 +102,11 @@ public class ParticleLightningArc extends Particle {
 		return this;
 	}
 	
+	public ParticleLightningArc setLighting(boolean light) {
+		this.lighting = light;
+		return this;
+	}
+	
 	private void addArc(List<Arc> arcs, Arc arc, float offsets, int subdivs) {
 		Vec3d startpoint = arc.from;
 		Arc prevArc = null;
@@ -146,7 +152,7 @@ public class ParticleLightningArc extends Particle {
 
 		}
 		
-		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
+		if(this.lighting && ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			double distFromCam = entityIn.getDistance(this.target.x, this.target.y, this.target.z);
 			if(distFromCam < 40) {
 	        	ShaderHelper.INSTANCE.require();

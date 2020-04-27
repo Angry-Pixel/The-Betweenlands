@@ -45,6 +45,7 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.client.render.particle.entity.ParticleLightningArc;
 import thebetweenlands.common.block.misc.BlockOctine;
 import thebetweenlands.common.entity.EntityProximitySpawner;
 import thebetweenlands.common.item.misc.ItemMob;
@@ -306,15 +307,16 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	@SideOnly(Side.CLIENT)
 	private void spawnLightningArcs() {
 		if(getEntityWorld().rand.nextInt(2) == 0) {
-			float ox = getEntityWorld().rand.nextFloat() - 0.5f;
-			float oy = getEntityWorld().rand.nextFloat() - 0.5f + ((float)this.motionY + getTransformCount() * 0.02F);
-			float oz = getEntityWorld().rand.nextFloat() - 0.5f;
+			float ox = (getEntityWorld().rand.nextFloat() - 0.5f) * 2;
+			float oy = (getEntityWorld().rand.nextFloat() - 0.5f) * 2;
+			float oz = (getEntityWorld().rand.nextFloat() - 0.5f) * 2;
 			
-			Particle particle = BLParticles.LIGHTNING_ARC.create(this.world, this.posX, this.posY + 0.5F + getTransformCount() * 0.02F, this.posZ, 
+			ParticleLightningArc particle = (ParticleLightningArc) BLParticles.LIGHTNING_ARC.create(this.world, this.posX, this.posY + 0.5F + getTransformCount() * 0.02F, this.posZ, 
 					ParticleArgs.get()
 					.withMotion(this.motionX, this.motionY, this.motionZ)
 					.withColor(0.3f, 0.5f, 1.0f, 0.9f)
 					.withData(new Vec3d(this.posX + ox, this.posY + oy, this.posZ + oz)));
+			particle.setLighting(false);
 			
 			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, particle);
 		}
