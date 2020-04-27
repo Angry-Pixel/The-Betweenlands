@@ -81,7 +81,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 
 	public EntityChiromawHatchling(World world) {
 		super(world);
-		setSize(1F, 1F);
+		setSize(0.75F, 1F);
 		this.facing = EnumFacing.HORIZONTALS[world.rand.nextInt(4)];
 	}
 

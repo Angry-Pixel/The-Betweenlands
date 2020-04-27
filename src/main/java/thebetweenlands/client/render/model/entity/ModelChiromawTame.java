@@ -276,6 +276,7 @@ public class ModelChiromawTame extends MowzieModelBase {
         EntityChiromawTame chiromaw = (EntityChiromawTame) entity;
         setToInitPose();
         float flap = MathHelper.sin((chiromaw.ticksExisted + partialRenderTicks) * 0.5F) * 0.6F;
+        float flapSlower = MathHelper.sin((chiromaw.ticksExisted + partialRenderTicks) * 0.125F) * 0.1F;
        if (chiromaw.isSitting() || chiromaw.isRiding()) {
             arm_right1.rotateAngleZ = 0.5462880558742251F;
             arm_right2.rotateAngleZ = 0F;
@@ -297,8 +298,8 @@ public class ModelChiromawTame extends MowzieModelBase {
             lil_tail1.rotateAngleX = 0.27314402793711257F;
             lil_tail2.rotateAngleX = 0.36425021489121656F;
             lil_tail3.rotateAngleX = 0.40980330836826856F;
-
-            head_jaw1.rotateAngleX = 0.9560913642424937F;
+            
+            head_jaw1.rotateAngleX = 0.9560913642424937F - flapSlower;
             head_base.rotateAngleX = 0.091106186954104F;
         } else {
             arm_right1.rotateAngleZ = 0.5462880558742251F;
