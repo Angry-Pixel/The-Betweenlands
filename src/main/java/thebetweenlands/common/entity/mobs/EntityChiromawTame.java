@@ -177,7 +177,12 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 
 			if (isSitting()) {
 				motionX = motionY = motionZ = 0.0D;
-				posY = (double) MathHelper.floor(posY) + 1.0D - (double) height;
+				if (!getEntityWorld().isRemote) {
+					if (!getEntityWorld().getBlockState(getPosition().up()).isNormalCube())
+						aiSit.setSitting(!isSitting());
+					else if (getAttackTarget() != null)
+						aiSit.setSitting(!isSitting());
+				}
 			}
 
 			if (motionY < 0.0D && getAttackTarget() == null)
@@ -324,22 +329,29 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 		if (isOwner(player)) {
 			rotationYaw = player.rotationYaw;
 			if (!getEntityWorld().isRemote) {
-				// aiSit.setSitting(!isSitting());
-				// isJumping = false;
-				// navigator.clearPath();
 				setAttackTarget((EntityLivingBase) null);
 
 				Entity riding = getRidingEntity();
 				
 				if (riding == null) {
 					if (!player.isBeingRidden()) { // stops multiple mounting you
+						if(isSitting())
+							aiSit.setSitting(!isSitting());
+						getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_LAND, SoundCategory.NEUTRAL, 0.25F, 1.5F);
 						startRiding(player, true);
 						getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(player));
 					}
 				} else {
-					// TODO dismount sound
+					getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_RELEASE, SoundCategory.NEUTRAL, 0.5F, 1F);
 					dismountRidingEntity();
 					getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(riding));
+					IBlockState state = getEntityWorld().getBlockState(riding.getPosition().up(3));
+					if(state.isNormalCube() && getEntityWorld().isAirBlock(riding.getPosition().up(2))) {
+						aiSit.setSitting(!isSitting());
+						isJumping = false;
+						navigator.clearPath();
+						setPosition(riding.posX, (double)riding.getPosition().up(3).getY() - (double) height, riding.posZ);
+					}
 				}
 			}
 			return true;
