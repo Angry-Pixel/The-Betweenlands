@@ -1,0 +1,223 @@
+{
+	"pools": [
+		{
+			"name": "misc_drops",
+			"rolls": 1,
+			"conditions": [],
+			"entries": [
+				{
+					"type": "item",
+					"entryName": "tar_drip",
+					"name": "thebetweenlands:items_misc",
+					"functions": [
+						{
+							"function": "set_data",
+							"data": 26
+						}
+					],
+					"weight": 3
+				},
+				{
+					"type": "item",
+					"entryName": "valonite_splinter",
+					"name": "thebetweenlands:items_misc",
+					"functions": [
+						{
+							"function": "set_data",
+							"data": 43
+						}
+					],
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"entryName": "dragonfly_wing",
+					"name": "thebetweenlands:items_misc",
+					"functions": [
+						{
+							"function": "set_data",
+							"data": 3
+						}
+					],
+					"weight": 10
+				},
+				{
+					"type": "item",
+					"entryName": "octine_nugget",
+					"name": "thebetweenlands:items_misc",
+					"functions": [
+						{
+							"function": "set_data",
+							"data": 42
+						}
+					],
+					"weight": 13
+				},
+				{
+					"type": "item",
+					"entryName": "syrmorite_nugget",
+					"name": "thebetweenlands:items_misc",
+					"functions": [
+						{
+							"function": "set_data",
+							"data": 41
+						}
+					],
+					"weight": 15
+				},
+				{
+					"type": "item",
+					"entryName": "amate_paper",
+					"name": "thebetweenlands:items_misc",
+					"functions": [
+						{
+							"function": "set_data",
+							"data": 32
+						}
+					],
+					"weight": 10
+				},
+				{
+					"type": "item",
+					"entryName": "lurker_skin",
+					"name": "thebetweenlands:items_misc",
+					"functions": [
+						{
+							"function": "set_data",
+							"data": 4
+						}
+					],
+					"weight": 10
+				},
+				{
+					"type": "item",
+					"entryName": "donut",
+					"name": "thebetweenlands:reed_donut",
+					"weight": 5
+				},
+				{
+					"type": "item",
+					"entryName": "reed_rope",
+					"name": "thebetweenlands:items_misc",
+					"functions": [
+						{
+							"function": "set_data",
+							"data": 7
+						},
+						{
+							"function": "set_count",
+							"count": {
+								"min": 1,
+								"max": 3
+							}
+						}
+					],
+					"weight": 35
+				}
+			]
+		},
+		{
+			"name": "ancient_remnants",
+			"rolls": 1,
+			"conditions": [],
+			"entries": [
+				{
+					"type": "item",
+					"name": "thebetweenlands:items_misc",
+					"functions": [
+						{
+							"function": "set_count",
+							"count": {
+								"min": 1,
+								"max": 3
+							}
+						},
+						{
+							"function": "set_data",
+							"data": 47
+						}
+					],
+					"weight": 1
+				},
+				{
+					"type": "empty",
+					"weight": 1
+				}
+			]
+		},
+		{
+			"name": "spook_candy",
+			"rolls": 2,
+			"conditions": [
+				{
+					"condition": "killed_by_player"
+				},
+				{
+					"condition": "entity_properties",
+					"entity": "this",
+					"properties": {
+						"thebetweenlands:is_event_active": {
+							"event": "thebetweenlands:spook",
+							"active": "true"
+						}
+					}
+				}
+			],
+			"entries": [
+				{
+					"type": "empty",
+					"name": "nothing",
+					"functions": [],
+					"weight": 6
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:candy_blue",
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:candy_red",
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:candy_yellow",
+					"weight": 1
+				}
+			]
+		},
+		{
+			"name": "winter_mince_pie",
+			"rolls": 1,
+			"conditions": [
+				{
+					"condition": "killed_by_player"
+				},
+				{
+					"condition": "entity_properties",
+					"entity": "this",
+					"properties": {
+						"thebetweenlands:is_event_active": {
+							"event": "thebetweenlands:winter",
+							"active": "true"
+						}
+					}
+				}
+			],
+			"entries": [
+				{
+					"type": "empty",
+					"name": "nothing",
+					"functions": [],
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:mince_pie",
+					"weight": 1
+				}
+			]
+		}
+	]
+}
