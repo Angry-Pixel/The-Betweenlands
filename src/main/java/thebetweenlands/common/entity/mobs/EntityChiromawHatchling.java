@@ -390,7 +390,6 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 					}
 					setEatingCooldown(MAX_EATING_COOLDOWN);
 					setAmountEaten(getAmountEaten() + 1);
-					System.out.println("EATEN: " + getAmountEaten());
 					getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCHLING_EAT, SoundCategory.NEUTRAL, 1F, 1F);
 					setIsHungry(false);
 					return true;
@@ -594,13 +593,10 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		entity.setOwnerId(getOwnerId());
 		if(hasCustomName())
 			entity.setCustomNameTag(getCustomNameTag());
-		//System.out.println("FEEDER ROTATION: " + feederRotation);
 		entity.setLocationAndAngles(posX, posY + 1F, posZ, feederRotation + rotationYaw, 0.0F);
 		entity.rotationYawHead = entity.rotationYaw;
 		entity.renderYawOffset = entity.rotationYaw;
 		entity.setMoveForward(0.1F);
-        // mojang pls - why wont it spawn rotated?
-
 		return entity;
 	}
 
