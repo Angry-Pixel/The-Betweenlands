@@ -35,8 +35,8 @@ import thebetweenlands.common.registries.SoundRegistry;
 public class EntityBLLightningBolt extends EntityLightningBolt implements IEntityAdditionalSpawnData {
 	private static final byte EVENT_STRIKE = 80;
 
-	private BlockPos startPos;
-	private int delay;
+	private BlockPos startPos = BlockPos.ORIGIN;
+	private int delay = 60;
 	private boolean isFloatingTarget;
 
 	public EntityBLLightningBolt(World world) {
@@ -54,6 +54,15 @@ public class EntityBLLightningBolt extends EntityLightningBolt implements IEntit
 		this.isFloatingTarget = isFloatingTarget;
 	}
 
+	@Override
+	public void setLocationAndAngles(double x, double y, double z, float yaw, float pitch) {
+		super.setLocationAndAngles(x, y, z, yaw, pitch);
+		
+		if(BlockPos.ORIGIN.equals(this.startPos)) {
+			this.startPos = new BlockPos(x, y, z).add(world.rand.nextInt(40) - 20, 80, world.rand.nextInt(40) - 20);
+		}
+	}
+	
 	@Override
 	protected void entityInit() {
 
