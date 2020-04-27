@@ -110,7 +110,6 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 				if (ticksExisted %200 == 0) { // 200 = 10 seconds (no need to count this every second)
 					if (getEntityWorld().getBlockState(getPosition().down()).getBlock() instanceof BlockOctine)
 						setHatchTick(getHatchTick() + 1); // increment whilst on an octine block.
-					System.out.println("Hatch ticks: " + getHatchTick());
 				}
 				if (getHatchTick() >= 60) { // how many increments before hatching 60 = 10 minutes
 					getEntityWorld().setEntityState(this, EVENT_HATCH_PARTICLES);
