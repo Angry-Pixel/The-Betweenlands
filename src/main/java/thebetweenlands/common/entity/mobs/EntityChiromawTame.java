@@ -361,6 +361,11 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
     }
 
 	@Override
+    public boolean canRiderInteract() {
+        return true;
+    }
+
+	@Override
 	public EntityAgeable createChild(EntityAgeable ageable) {
 		return null;
 	}
