@@ -11,7 +11,6 @@ import javax.annotation.Nullable;
 import com.google.common.base.Optional;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
