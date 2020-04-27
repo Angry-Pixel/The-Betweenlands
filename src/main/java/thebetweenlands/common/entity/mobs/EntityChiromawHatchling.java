@@ -63,7 +63,8 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	public static final int MAX_FOOD_NEEDED = 8; // amount of times needs to be fed
 	NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(5, ItemStack.EMPTY);
 	public float feederRotation, prevFeederRotation, headPitch, prevHeadPitch;
-	public int prevHatchAnimation, hatchAnimation, riseCount, prevRise, prevTransformTick;
+	public int prevHatchAnimation, hatchAnimation, riseCount, prevRise, prevTransformTick, flapArmsCount;
+	public boolean flapArms = false;
 	private EnumFacing facing = EnumFacing.NORTH;
 	
 	protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntityChiromawHatchling.class, DataSerializers.OPTIONAL_UNIQUE_ID);
@@ -160,8 +161,23 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 					if (getTransformCount() < 60)
 						spawnEatingParticles();
 
+				if (!getIsHungry() && getRiseCount() >= MAX_RISE && !getIsChewing()) {
+					if(!flapArms && flapArmsCount <= 0) {
+						if(rand.nextInt(200) == 0) {
+							flapArms = true;
+							flapArmsCount = 30;
+						}
+					}
+				}
+
+				if (flapArmsCount >= 0)
+					flapArmsCount--;
+
+				if(flapArms && flapArmsCount <= 0)
+					flapArms = false;
+
 			}
-			
+
 			prevRise = getRiseCount();
 			if (!getRising() && getRiseCount() > MIN_RISE) {
 				setRiseCount(getRiseCount() - 4);
@@ -171,7 +187,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 			
 			if (!getEntityWorld().isRemote) {
 				checkArea();
-
+					
 				if (!getIsHungry()) {
 					setEatingCooldown(getEatingCooldown() - 1);
 					if (getEatingCooldown() <= MAX_EATING_COOLDOWN && getEatingCooldown() > MAX_EATING_COOLDOWN - 60 && !getIsChewing())
@@ -219,6 +235,15 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		}
 		
 		this.rotationYaw = this.facing.getHorizontalAngle();
+	}
+	
+	@Override
+	protected SoundEvent getAmbientSound() {
+		if (getIsHungry() && getRiseCount() < MAX_RISE)
+			return SoundRegistry.CHIROMAW_HATCHLING_HUNGRY_SHORT;
+		if (!getHasHatched())
+			return SoundRegistry.CHIROMAW_HATCHLING_INSIDE_EGG;
+		return SoundRegistry.CHIROMAW_HATCHLING_LIVING;
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -365,6 +390,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 					}
 					setEatingCooldown(MAX_EATING_COOLDOWN);
 					setAmountEaten(getAmountEaten() + 1);
+					System.out.println("EATEN: " + getAmountEaten());
 					getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCHLING_EAT, SoundCategory.NEUTRAL, 1F, 1F);
 					setIsHungry(false);
 					return true;
@@ -591,15 +617,6 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	@Override
 	protected int maxUseCount() {
 		return 1;
-	}
-
-	@Override
-	protected SoundEvent getAmbientSound() {
-		if (getIsHungry() && getRiseCount() < MAX_RISE)
-			return SoundRegistry.CHIROMAW_HATCHLING_HUNGRY_SHORT;
-		if (!getHasHatched())
-			return SoundRegistry.CHIROMAW_HATCHLING_INSIDE_EGG;
-		return SoundRegistry.CHIROMAW_HATCHLING_LIVING;
 	}
 
 	@Override

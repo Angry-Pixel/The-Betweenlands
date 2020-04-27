@@ -283,6 +283,13 @@ public class ModelChiromawHatchling extends MowzieModelBase {
 			arm_right2.rotateAngleY = convertDegtoRad(60F - smootherHead * 1.5F);
 			arm_left2.rotateAngleY = convertDegtoRad(-60F + smootherHead * 1.5F);
 
+			if(chiromaw.flapArms) {
+				flap(arm_right2, globalSpeed, globalDegree * 0.25f, false, 2.0f, 0f, chiromaw.flapArmsCount, 1F);
+				flap(arm_left2, globalSpeed, globalDegree * 0.25f, true, 2.0f, 0f, chiromaw.flapArmsCount, 1F);
+				flap(arm_right1, globalSpeed, globalDegree * 0.25f, false, 2.0f, 0f, chiromaw.flapArmsCount, 1F);
+				flap(arm_left1, globalSpeed, globalDegree * 0.25f, true, 2.0f, 0f, chiromaw.flapArmsCount, 1F);
+			}
+
 			if (chiromaw.getRiseCount() >= EntityChiromawHatchling.MAX_RISE - 20 && chiromaw.getIsHungry()) {
 				neck.rotateAngleY = 0F + flap;
 				walk(arm_right2, globalSpeed * 0.5f, globalDegree * 0.5f, false, 2.0f, 0f, frame, 1F);
