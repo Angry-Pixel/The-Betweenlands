@@ -170,7 +170,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 					}
 					if(blinkCount <= 0)
 						if(rand.nextInt(200) == 0)
-							blinkCount = 30;
+							blinkCount =  rand.nextBoolean() ? 10 : 5;
 				}
 
 				if (flapArmsCount >= 0)
