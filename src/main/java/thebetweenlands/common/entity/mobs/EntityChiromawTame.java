@@ -687,7 +687,7 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 					++this.attackTimer;
 					if (attackTimer == 20) {
 						EntityBLArrow arrow = new EntityBLArrow(world, chiromaw);
-						arrow.setType(EnumArrowType.CHIROMAW_BARB);
+						arrow.setType(chiromaw.getElectricBoogaloo()? EnumArrowType.CHIROMAW_SHOCK_BARB: EnumArrowType.CHIROMAW_BARB);
 						double targetX = entitylivingbase.posX + entitylivingbase.motionX - chiromaw.posX;
 						double targetY = entitylivingbase.posY + entitylivingbase.getEyeHeight() - chiromaw.posY + chiromaw.getEyeHeight();
 						double targetZ = entitylivingbase.posZ + entitylivingbase.motionZ - chiromaw.posZ;
