@@ -466,7 +466,7 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 								this.setSitting(true);
 								this.isJumping = false;
 								
-								Collections.sort(sitPositions, Comparator.comparing(pos -> this.getDistanceSq(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f)));
+								Collections.sort(sitPositions, Comparator.comparingDouble(pos -> this.getDistanceSq(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f)));
 								
 								BlockPos sitPosition = sitPositions.get(0);
 								
