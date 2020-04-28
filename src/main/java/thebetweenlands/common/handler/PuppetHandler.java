@@ -74,6 +74,7 @@ import thebetweenlands.common.item.equipment.ItemRing;
 import thebetweenlands.common.item.equipment.ItemRingOfRecruitment;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.util.RenderUtils;
+import thebetweenlands.util.RotationMatrix;
 
 public class PuppetHandler {
 	private PuppetHandler() { }
@@ -526,7 +527,7 @@ public class PuppetHandler {
 					EntityLiving living = (EntityLiving) activatingEntity;
 
 					if (!event.player.world.isRemote) {
-						if(event.player.getHeldItemMainhand().isEmpty() && !event.player.isSwingInProgress) {
+						if(event.player.getHeldItemMainhand().isEmpty()) {
 							if (living.getDistance(event.player) > 5.0D) {
 								cap.setActivatingEntity(null);
 								cap.setActivatingTicks(0);
@@ -569,13 +570,23 @@ public class PuppetHandler {
 							cap.setActivatingTicks(0);
 						}
 					} else {
-						Vec3d vec = new Vec3d(living.posX - event.player.posX, (living.posY + living.getEyeHeight() * 0.8F) - (event.player.posY + event.player.getEyeHeight() * 0.8F), living.posZ - event.player.posZ);
+						Vec3d offset = new Vec3d(-0.2f, -0.06f, 0.5f);
+						RotationMatrix matrix = new RotationMatrix();
+						matrix.setRotations((float)Math.toRadians(event.player.rotationPitch), (float)Math.toRadians(-event.player.rotationYaw), 0);
+						offset = matrix.transformVec(offset, Vec3d.ZERO);
+						Vec3d start = new Vec3d(event.player.posX + offset.x, event.player.posY + event.player.getEyeHeight() + offset.y, event.player.posZ + offset.z);
+						Vec3d vec = new Vec3d(living.posX - start.x, (living.posY + living.getEyeHeight() * 0.8F) - start.y, living.posZ - start.z);
 						vec = vec.normalize();
 						vec = vec.add((event.player.world.rand.nextFloat() - 0.5F) / 3.0F, (event.player.world.rand.nextFloat() - 0.5F) / 3.0F, (event.player.world.rand.nextFloat() - 0.5F) / 3.0F);
 						vec = vec.normalize();
 						double dist = event.player.getDistance(living);
 						vec = vec.scale(dist / 15.0F);
-						BLParticles.SPAWNER.spawn(event.player.world, event.player.posX, event.player.posY + event.player.getEyeHeight() * 0.8F, event.player.posZ, ParticleArgs.get().withData(40).withColor(0.2F, 0.8F, 0.4F, 1).withMotion(vec.x, vec.y, vec.z));
+						BLParticles.SPAWNER.spawn(event.player.world, start.x, start.y, start.z, ParticleArgs.get().withData(40).withColor(0.2F, 0.8F, 0.4F, 1).withMotion(vec.x, vec.y, vec.z));
+					
+						event.player.swingingHand = EnumHand.MAIN_HAND;
+						event.player.isSwingInProgress = true;
+						event.player.prevSwingProgress = event.player.swingProgress = 0.03f;
+						event.player.swingProgressInt = 1;
 					}
 
 					event.player.motionX *= 0.05D;

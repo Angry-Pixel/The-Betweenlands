@@ -18,6 +18,7 @@ import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -1112,10 +1113,9 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     @SubscribeEvent
     public static void onLivingAttacked(LivingAttackEvent event) {
         Entity ridingEntity = event.getEntityLiving().getRidingEntity();
-        DamageSource source = event.getSource();
-    	if (ridingEntity instanceof EntityWeedwoodRowboat && source.getTrueSource() != null) {
-            Vec3d location = source.getDamageLocation();
-            Entity attacker = source.getImmediateSource();
+    	if (ridingEntity instanceof EntityWeedwoodRowboat && (event.getSource() instanceof EntityDamageSource == false || event.getSource().getTrueSource() != null)) {
+            Vec3d location = event.getSource().getDamageLocation();
+            Entity attacker = event.getSource().getImmediateSource();
             if (location != null && location.y + (attacker != null ? attacker.getEyeHeight() : 0) < ridingEntity.posY + ridingEntity.height / 2) {
                 //Cancel any damage dealt from below the boat
                 event.setCanceled(true);
