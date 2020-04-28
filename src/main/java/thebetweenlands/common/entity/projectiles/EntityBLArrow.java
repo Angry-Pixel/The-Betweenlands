@@ -11,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
@@ -123,6 +124,9 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 		if(entity == this.shootingEntity) {
 			return false;
 		} else if(this.shootingEntity instanceof EntityPlayer == false && this.shootingEntity != null && this.shootingEntity.getRidingEntity() == entity) {
+			return false;
+		} else if(this.shootingEntity instanceof EntityPlayer && this.shootingEntity != null && entity instanceof IEntityOwnable &&
+				((IEntityOwnable) entity).getOwner() == this.shootingEntity && this.shootingEntity.getRecursivePassengers().contains(entity)) {
 			return false;
 		}
 		return true;

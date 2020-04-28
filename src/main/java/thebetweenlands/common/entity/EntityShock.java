@@ -11,12 +11,14 @@ import org.apache.commons.lang3.tuple.Pair;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
+import thebetweenlands.common.item.armor.ItemRubberBoots;
 import thebetweenlands.common.network.clientbound.MessageShockArrowHit;
 
 public class EntityShock extends Entity {
@@ -38,7 +40,7 @@ public class EntityShock extends Entity {
 		this.setSize(0.5f, 0.5f);
 
 		this.setLocationAndAngles(arrow.posX, arrow.posY, arrow.posZ, 0, 0);
-		
+
 		this.arrow = arrow;	
 		this.targets.add(hit);
 		this.isWet = isWet;
@@ -101,7 +103,16 @@ public class EntityShock extends Entity {
 						entityLoop: for(Entity entity : this.targets) {
 							boolean isWet = entity.isWet() || entity.isInWater() || this.world.isRainingAt(entity.getPosition().up());
 
-							List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().grow(isWet ? 6 : 4));
+							List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().grow(isWet ? 6 : 4), e -> {
+								Entity riding = e.getLowestRidingEntity();
+
+								//Passengers are handled further down
+								if(riding != e && riding instanceof EntityLivingBase) {
+									return false;
+								}
+
+								return true;	
+							});
 
 							if(entities.size() > 1) {
 								Collections.sort(entities, (e1, e2) -> Double.compare(e1.getDistanceSq(entity), e2.getDistanceSq(entity)));
@@ -120,7 +131,26 @@ public class EntityShock extends Entity {
 											damage += this.rand.nextInt((int)damage / 2 + 2);
 										}
 
-										newTarget.attackEntityFrom(damagesource, isWet ? 2 * damage : damage);
+										boolean blocked = false;
+
+										for(ItemStack stack : newTarget.getEquipmentAndArmor()) {
+											if(!stack.isEmpty() && stack.getItem() instanceof ItemRubberBoots) {
+												stack.damageItem(2, newTarget);
+												blocked = true;
+											}
+										}
+
+										if(!blocked) {
+											newTarget.attackEntityFrom(damagesource, isWet ? 2 * damage : damage);
+
+											//Also zap all passengers >:)
+											for(Entity passenger : newTarget.getRecursivePassengers()) {
+												if(passenger instanceof EntityLivingBase && !this.targets.contains(passenger) && !newTargets.contains(passenger)) {
+													passenger.attackEntityFrom(damagesource, isWet ? 2 * damage : damage);
+													newTargets.add((EntityLivingBase) passenger);
+												}
+											}
+										}
 
 										continue entityLoop;
 									}
