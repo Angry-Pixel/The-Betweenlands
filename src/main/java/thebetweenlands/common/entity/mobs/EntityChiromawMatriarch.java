@@ -137,7 +137,6 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		}
 
 		if (isJumping && isInWater()) {
-			//Moving out of water
 			getMoveHelper().setMoveTo(posX, posY + 1, posZ, 1.0D);
 		}
 
@@ -374,9 +373,9 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(200.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(64.0D);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0D);
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.095D);
 	}
 
@@ -485,8 +484,6 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 
 		private void checkForPoopTarget() {
 			int distanceToSurface = MathHelper.floor(largeChiromaw.posY) - largeChiromaw.world.getHeight(new BlockPos(largeChiromaw)).getY();
-			// TODO use a poop entity that can be aimed rather than dropping
-			// from a random pos nearby
 			List<BlockPos> placeToPoop = new ArrayList<>();
 			if (distanceToSurface >= 16) {
 				AxisAlignedBB underBox = largeChiromaw.getEntityBoundingBox().grow(0.625D, distanceToSurface, 0.625D).offset(0, -distanceToSurface / 2.0D, 0);

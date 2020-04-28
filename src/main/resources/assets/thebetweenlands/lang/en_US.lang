@@ -1360,6 +1360,11 @@ entity.thebetweenlands.gallery_frame_very_large.name=Very Large Gallery Frame
 entity.thebetweenlands.chiromaw_greebling_rider.name=Chiromaw Greebling Rider
 entity.thebetweenlands.greebling_volarpad_floater.name=Greebling Volarpad Floater
 entity.thebetweenlands.betweenstone_pebble.name=Betweenstone Pebble
+entity.thebetweenlands.chiromaw_matriarch.name=Chiromaw Matriarch
+entity.thebetweenlands.chiromaw_droppings.name=Chiromaw Droppings
+entity.thebetweenlands.chiromaw_hatchling.name=Chiromaw Hatchling
+entity.thebetweenlands.chiromaw_tame.name=Tamed Chiromaw
+entity.thebetweenlands.greebling_corpse.name=Greebling Corpse
 
 # Equipment
 equipment.menu.equip=Equip %s

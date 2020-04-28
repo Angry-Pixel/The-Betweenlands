@@ -581,6 +581,11 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	}
 
 	@Override
+	protected boolean canDespawn() {
+		return false;
+	}
+
+	@Override
 	protected boolean isMovementBlocked() {
 		return true;
 	}
