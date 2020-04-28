@@ -1204,6 +1204,8 @@ chat.ring_of_recruitment.state.stay=Your %s is now staying
 chat.ring_of_recruitment.state.guard=Your %s is now guarding
 chat.ring_of_recruitment.state.follow=Your %s is now following
 
+chat.chiromaw_tame.obstructed=You can't unmount your Chiromaw here
+
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath
 

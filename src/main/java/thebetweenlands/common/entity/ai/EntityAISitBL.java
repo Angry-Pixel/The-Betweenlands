@@ -46,6 +46,7 @@ public class EntityAISitBL extends EntityAISit {
 		tameable.setSitting(false);
 	}
 
+	@Override
 	public void setSitting(boolean sitting) {
 		isSitting = sitting;
 	}
