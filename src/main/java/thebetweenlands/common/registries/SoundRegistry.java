@@ -39,6 +39,7 @@ public class SoundRegistry {
     public static final BLSoundEvent AMBIENT_WIGHT_FORTRESS = reg("ambient_wight_fortress");
     public static final BLSoundEvent AMBIENT_SPOOPY = reg("ambient_spoopy");
     public static final BLSoundEvent AMBIENT_SWAMP = reg("ambient_swamp");
+    public static final BLSoundEvent AMBIENT_SWAMP_DENSE_FOG = reg("ambient_swamp_dense_fog");
     public static final BLSoundEvent AMBIENT_WATER = reg("ambient_water");
     public static final BLSoundEvent AMBIENT_FROSTY = reg("ambient_frosty");
     public static final BLSoundEvent AMBIENT_SNOWFALL = reg("ambient_snowfall");
@@ -256,6 +257,9 @@ public class SoundRegistry {
     public static final BLSoundEvent SLUDGE_MENACE_DEATH = reg("sludge_menace_death");
     public static final BLSoundEvent SLUDGE_MENACE_HURT = reg("sludge_menace_hurt");
     public static final BLSoundEvent SLUDGE_MENACE_LIVING = reg("sludge_menace_living");
+    public static final BLSoundEvent SLUDGE_MENACE_ATTACK = reg("sludge_menace_attack");
+    public static final BLSoundEvent SLUDGE_MENACE_SPIT = reg("sludge_menace_spit");
+    public static final BLSoundEvent SLUDGE_MENACE_SPAWN = reg("sludge_menace_spawn");
     public static final BLSoundEvent SPORELING_DEATH = reg("sporeling_death");
     public static final BLSoundEvent SPORELING_HURT = reg("sporeling_hurt");
     public static final BLSoundEvent SPORELING_LIVING = reg("sporeling_living");

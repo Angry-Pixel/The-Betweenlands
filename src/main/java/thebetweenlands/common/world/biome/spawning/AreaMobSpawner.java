@@ -383,7 +383,7 @@ public abstract class AreaMobSpawner {
 			}
 		}
 
-		this.updateEntityCounts(world);
+		this.updateEntityCounts(world, this.entityCounts);
 		int totalEligibleEntityCount = 0;
 		for(int count : this.entityCounts.values()) {
 			totalEligibleEntityCount += count;
@@ -414,7 +414,8 @@ public abstract class AreaMobSpawner {
 		int attempts = 0, chunkSpawnedEntities = 0;
 
 		spawnLoop:
-			while(attempts++ < attemptsPerChunk && chunkSpawnedEntities < maxSpawnsPerChunk) {
+			while(attempts < attemptsPerChunk && chunkSpawnedEntities < maxSpawnsPerChunk) {
+				attempts++;
 				BlockPos spawnPos = this.getRandomSpawnPosition(world, chunkPos);
 
 				if(!this.isInsideSpawningArea(world, spawnPos, false)) {
@@ -457,8 +458,8 @@ public abstract class AreaMobSpawner {
 					continue;
 				}
 
-				int dynamicLimitBase = (int)((double)entityLimit / (double)totalBaseWeight * spawnEntry.getBaseWeight());
-				int dynamicLimit = (int)((double)entityLimit / (double)totalWeight * spawnEntry.getWeight());
+				int dynamicLimitBase = MathHelper.ceil((double)entityLimit / (double)totalBaseWeight * spawnEntry.getBaseWeight());
+				int dynamicLimit = MathHelper.ceil((double)entityLimit / (double)totalWeight * spawnEntry.getWeight());
 
 				int spawnEntityCount = this.entityCounts.get(spawnEntry.getEntityType());
 
@@ -628,7 +629,13 @@ public abstract class AreaMobSpawner {
 		return chunkSpawnedEntities;
 	}
 
-	private BlockPos getRandomSpawnPosition(World world, ChunkPos chunkPos) {
+	/**
+	 * Generates a random position to potentially spawn a mob at
+	 * @param world
+	 * @param chunkPos
+	 * @return
+	 */
+	protected BlockPos getRandomSpawnPosition(World world, ChunkPos chunkPos) {
 		Chunk chunk = world.getChunk(chunkPos.x, chunkPos.z);
 		int x = chunkPos.x * 16 + world.rand.nextInt(16);
 		int z = chunkPos.z * 16 + world.rand.nextInt(16);
@@ -636,7 +643,14 @@ public abstract class AreaMobSpawner {
 		return new BlockPos(x, y, z);
 	}
 
-	private BlockPos getRandomSpawnPosition(World world, BlockPos centerPos, int radius) {
+	/**
+	 * Generates a random offset position from a group spawn position
+	 * @param world
+	 * @param centerPos
+	 * @param radius
+	 * @return
+	 */
+	protected BlockPos getRandomSpawnPosition(World world, BlockPos centerPos, int radius) {
 		return new BlockPos(
 				centerPos.getX() + world.rand.nextInt(radius*2) - radius,
 				MathHelper.clamp(centerPos.getY() + world.rand.nextInt(4) - 2, 1, world.getHeight()),
@@ -654,8 +668,13 @@ public abstract class AreaMobSpawner {
 
 	private final TObjectIntHashMap<Class<? extends Entity>> entityCounts = new TObjectIntHashMap<Class<? extends Entity>>();
 
-	private void updateEntityCounts(World world) {
-		this.entityCounts.clear();
+	/**
+	 * Updates the entity counts of the spawner chunks
+	 * @param world
+	 * @param entityCounts
+	 */
+	protected void updateEntityCounts(World world, TObjectIntHashMap<Class<? extends Entity>> entityCounts) {
+		entityCounts.clear();
 
 		for(ChunkPos chunkPos : this.eligibleChunksForSpawning) {
 			if(world.getChunkProvider().getLoadedChunk(chunkPos.x, chunkPos.z) != null) {
@@ -665,7 +684,7 @@ public abstract class AreaMobSpawner {
 				for(ClassInheritanceMultiMap<Entity> entityList : entityLists) {
 					for(Entity entity : entityList) {
 						if(this.isCountedEntity(world, entity)) {
-							this.entityCounts.adjustOrPutValue(entity.getClass(), 1, 1);
+							entityCounts.adjustOrPutValue(entity.getClass(), 1, 1);
 						}
 					}
 				}

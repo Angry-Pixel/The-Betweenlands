@@ -44,10 +44,10 @@ public class RenderBetweenstonePebbleProjectile extends Render<EntityBetweenston
 		}
 
 		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
-		vertexbuffer.pos(-0.5D, -0.25D, 0.0D).tex((double)minU, (double)maxV).normal(0.0F, 1.0F, 0.0F).endVertex();
-		vertexbuffer.pos(0.5D, -0.25D, 0.0D).tex((double)maxU, (double)maxV).normal(0.0F, 1.0F, 0.0F).endVertex();
-		vertexbuffer.pos(0.5D, 0.75D, 0.0D).tex((double)maxU, (double)minV).normal(0.0F, 1.0F, 0.0F).endVertex();
-		vertexbuffer.pos(-0.5D, 0.75D, 0.0D).tex((double)minU, (double)minV).normal(0.0F, 1.0F, 0.0F).endVertex();
+		vertexbuffer.pos(-0.25D, -0.25D, 0.0D).tex((double)minU, (double)maxV).normal(0.0F, 1.0F, 0.0F).endVertex();
+		vertexbuffer.pos(0.25D, -0.25D, 0.0D).tex((double)maxU, (double)maxV).normal(0.0F, 1.0F, 0.0F).endVertex();
+		vertexbuffer.pos(0.25D, 0.25D, 0.0D).tex((double)maxU, (double)minV).normal(0.0F, 1.0F, 0.0F).endVertex();
+		vertexbuffer.pos(-0.25D, 0.25D, 0.0D).tex((double)minU, (double)minV).normal(0.0F, 1.0F, 0.0F).endVertex();
 		tessellator.draw();
 
 		if (this.renderOutlines) {

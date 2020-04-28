@@ -1,13 +1,18 @@
 package thebetweenlands.client.render.model.entity.rowboat;
 
 import java.util.EnumMap;
+import java.util.Optional;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.oredict.OreDictionary;
 import thebetweenlands.client.render.model.AdvancedModelRenderer;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.entity.rowboat.ShipSide;
+import thebetweenlands.util.Matrix;
 import thebetweenlands.util.RotationOrder;
 
 public class ModelWeedwoodRowboat extends ModelBase {
@@ -85,6 +90,8 @@ public class ModelWeedwoodRowboat extends ModelBase {
 
     private ModelRenderer piece3frontb;
 
+    private ModelRenderer lanternMount;
+
     public ModelWeedwoodRowboat() {
         textureWidth = 256;
         textureHeight = 128;
@@ -99,7 +106,7 @@ public class ModelWeedwoodRowboat extends ModelBase {
         piece3rb.setRotationPoint(-6.0F, -8.0F, -2.0F);
         piece3rb.addBox(-2.0F, -6.0F, -2.0F, 2, 6, 6, 0.0F);
         hullGunwaleRight = new ModelRenderer(this, 49, 59);
-        hullGunwaleRight.setRotationPoint(8.0F, 16.0F, 0.0F);
+        hullGunwaleRight.setRotationPoint(8.0F, -8.0F, 0.0F);
         hullGunwaleRight.addBox(0.0F, -6.0F, -11.0F, 2, 6, 22, 0.0F);
         fillupback1 = new ModelRenderer(this, 0, 92);
         fillupback1.setRotationPoint(0.0F, -2.0F, 11.0F);
@@ -112,7 +119,7 @@ public class ModelWeedwoodRowboat extends ModelBase {
         piece3r.setRotationPoint(-4.0F, -2.0F, -2.0F);
         piece3r.addBox(-2.0F, -8.0F, -2.0F, 2, 10, 6, 0.0F);
         hullGunwaleLeft = new ModelRenderer(this, 49, 25);
-        hullGunwaleLeft.setRotationPoint(-8.0F, 16.0F, 0.0F);
+        hullGunwaleLeft.setRotationPoint(-8.0F, -8.0F, 0.0F);
         hullGunwaleLeft.addBox(-2.0F, -6.0F, -11.0F, 2, 6, 22, 0.0F);
         piece2rb = new ModelRenderer(this, 100, 27);
         piece2rb.setRotationPoint(-6.0F, -8.0F, 0.0F);
@@ -131,20 +138,20 @@ public class ModelWeedwoodRowboat extends ModelBase {
         backrim1.addBox(-2.0F, -16.0F, -1.0F, 4, 16, 3, 0.0F);
         setRotateAngle(backrim1, -0.36425021489121656F, 0.0F, 0.0F);
         hullStern = new ModelRenderer(this, 140, 0);
-        hullStern.setRotationPoint(0.0F, 22.0F, -11.0F);
+        hullStern.setRotationPoint(0.0F, -2.0F, -11.0F);
         hullStern.addBox(-4.0F, -2.0F, -4.0F, 8, 2, 6, 0.0F);
         setRotateAngle(hullStern, -0.045553093477052F, 0.0F, 0.0F);
         hullBottomLeft = new ModelRenderer(this, 0, 25);
-        hullBottomLeft.setRotationPoint(-6.0F, 22.0F, 0.0F);
+        hullBottomLeft.setRotationPoint(-6.0F, -2.0F, 0.0F);
         hullBottomLeft.addBox(-2.0F, -8.0F, -11.0F, 2, 10, 22, 0.0F);
         piece2r = new ModelRenderer(this, 100, 9);
         piece2r.setRotationPoint(-4.0F, -2.0F, 0.0F);
         piece2r.addBox(-2.0F, -8.0F, -2.0F, 2, 10, 6, 0.0F);
         hullBottom = new ModelRenderer(this, 0, 0);
-        hullBottom.setRotationPoint(0.0F, 24.0F, 0.0F);
+        hullBottom.setRotationPoint(0.0F, 0.0F, 0.0F);
         hullBottom.addBox(-6.0F, -2.0F, -11.0F, 12, 2, 22, 0.0F);
         keel = new ModelRenderer(this, 0, 92);
-        keel.setRotationPoint(0.0F, 28.0F, 0.0F);
+        keel.setRotationPoint(0.0F, 4.0F, 0.0F);
         keel.addBox(-2.0F, -4.0F, -11.0F, 4, 2, 22, 0.0F);
         piece2l = new ModelRenderer(this, 117, 9);
         piece2l.setRotationPoint(4.0F, -2.0F, 0.0F);
@@ -190,7 +197,7 @@ public class ModelWeedwoodRowboat extends ModelBase {
         piece3lb.setRotationPoint(6.0F, -8.0F, -2.0F);
         piece3lb.addBox(0.0F, -6.0F, -2.0F, 2, 6, 6, 0.0F);
         hullBottomRight = new ModelRenderer(this, 0, 59);
-        hullBottomRight.setRotationPoint(6.0F, 22.0F, 0.0F);
+        hullBottomRight.setRotationPoint(6.0F, -2.0F, 0.0F);
         hullBottomRight.addBox(0.0F, -8.0F, -11.0F, 2, 10, 22, 0.0F);
         backrim2 = new ModelRenderer(this, 70, 92);
         backrim2.setRotationPoint(0.0F, -16.0F, 0.0F);
@@ -204,7 +211,7 @@ public class ModelWeedwoodRowboat extends ModelBase {
         oarLoomRight.addBox(-1.0F, -8.0F, -1.0F, 2, 35, 2, 0.0F);
         setRotateAngle(oarLoomRight, 0.31869712141416456F, 0.0F, 1.0016444577195458F);
         hullBow = new ModelRenderer(this, 100, 0);
-        hullBow.setRotationPoint(0.0F, 22.0F, 11.0F);
+        hullBow.setRotationPoint(0.0F, -2.0F, 11.0F);
         hullBow.addBox(-4.0F, -2.0F, -2.0F, 8, 2, 6, 0.0F);
         setRotateAngle(hullBow, 0.045553093477052F, 0.0F, 0.0F);
         oarlockRight = new ModelRenderer(this, 180, 0);
@@ -242,10 +249,44 @@ public class ModelWeedwoodRowboat extends ModelBase {
         hullGunwaleRight.addChild(oarlockLeft);
         oarlockRight.addChild(oarLoomRight);
         hullGunwaleLeft.addChild(oarlockRight);
+
+        lanternMount = new ModelRenderer(this, 218, 0);
+        lanternMount.setRotationPoint(0.0F, -3.0F, 10.0F);
+        lanternMount.addBox(-1.0F, 0.0F, 0.0F, 2, 4, 2, 0.0F);
+        backrim2.addChild(lanternMount);
+
         oars = ShipSide.newEnumMap(ModelRenderer.class, oarLoomLeft, oarLoomRight);
     }
 
-    public void render(EntityWeedwoodRowboat rowboat, float scale, float delta) {
+    private Optional<Vec3d> getPosition(final Matrix matrix, final ModelRenderer bone, final ModelRenderer part, final float scale) {
+        matrix.push();
+        matrix.translate(bone.rotationPointX * scale, bone.rotationPointY * scale, bone.rotationPointZ * scale);
+        if (bone == part) {
+            return Optional.of(matrix.transform(Vec3d.ZERO));
+        }
+        if (bone.rotateAngleZ != 0.0F) {
+            matrix.rotate(bone.rotateAngleZ, 0.0F, 0.0F, 1.0F);
+        }
+        if (bone.rotateAngleY != 0.0F) {
+            matrix.rotate(bone.rotateAngleY, 0.0F, 1.0F, 0.0F);
+        }
+        if (bone.rotateAngleX != 0.0F) {
+            matrix.rotate(bone.rotateAngleX, 1.0F, 0.0F, 0.0F);
+        }
+        if (bone.childModels != null) {
+            for (final ModelRenderer child : bone.childModels) {
+                final Optional<Vec3d> p = getPosition(matrix, child, part, scale);
+                if (p.isPresent()) {
+                    return p;
+                }
+            }
+        }
+        matrix.pop();
+        return Optional.empty();
+    }
+
+    public void render(EntityWeedwoodRowboat rowboat, boolean lantern, float scale, float delta) {
+        lanternMount.showModel = lantern;
         keel.render(scale);
         hullBottom.render(scale);
         hullBottomLeft.render(scale);

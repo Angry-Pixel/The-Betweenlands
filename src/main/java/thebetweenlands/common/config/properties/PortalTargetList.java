@@ -24,12 +24,17 @@ public class PortalTargetList extends ConfigProperty {
 		String[] unparsed = BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionTargets;
 		for(String listed : unparsed) {
 			try {
-				String[] data = listed.split(":");
-				String block = data[0] + ":" + data[1];
+				String[] dimData = listed.split("/");
+				if(dimData.length < 2) {
+					TheBetweenlands.logger.error("Failed to parse custom portal entry, missing dimension: " + listed);
+					continue;
+				}
+				String[] blockData = dimData[0].split(":");
+				String block = blockData[0] + ":" + blockData[1];
 				if(this.customPortalBlockMap.get(block) == null || !this.customPortalBlockMap.get(block).containsKey(OreDictionary.WILDCARD_VALUE)) {
 					int meta = 0;
-					if(data.length > 2) {
-						String metaStr = data[2].split("/")[0];
+					if(blockData.length > 2) {
+						String metaStr = blockData[2].split("/")[0];
 						if(!"*".equals(metaStr)) {
 							try {
 								meta = Integer.parseInt(metaStr);
@@ -47,11 +52,6 @@ public class PortalTargetList extends ConfigProperty {
 					}
 					if(meta == OreDictionary.WILDCARD_VALUE) {
 						metaMap.clear();
-					}
-					String[] dimData = listed.split("/");
-					if(dimData.length < 2) {
-						TheBetweenlands.logger.error("Failed to parse custom portal entry, missing dimension: " + listed);
-						continue;
 					}
 					int dim;
 					try {

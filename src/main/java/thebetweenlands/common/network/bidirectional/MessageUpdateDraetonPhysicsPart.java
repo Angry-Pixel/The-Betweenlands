@@ -143,25 +143,27 @@ public class MessageUpdateDraetonPhysicsPart extends MessageEntity {
 		} else {
 			Entity entity = this.getEntity(0);
 			if(entity instanceof EntityDraeton) {
-				EntityDraeton carriage = (EntityDraeton) entity;
-
-				if(this.action == Action.ADD) {
-					carriage.addPhysicsPart(this.position);
-				} else if(this.action == Action.REMOVE) {
-					carriage.removePhysicsPartById(this.position.id);
-				} else {
-					DraetonPhysicsPart part = carriage.getPhysicsPartById(this.position.id);
-
-					//fallback if adding failed somehow
-					if(part == null) {
-						part = carriage.addPhysicsPart(this.position);
-					} else {
-						carriage.setPacketRelativePartPosition(part, this.position.x, this.position.y, this.position.z, this.position.mx, this.position.my, this.position.mz);
-					}
-				}
+				this.processClient((EntityDraeton) entity);
 			}
 		}
 
 		return null;
+	}
+	
+	public void processClient(EntityDraeton carriage) {
+		if(this.action == Action.ADD) {
+			carriage.addPhysicsPart(this.position);
+		} else if(this.action == Action.REMOVE) {
+			carriage.removePhysicsPartById(this.position.id);
+		} else {
+			DraetonPhysicsPart part = carriage.getPhysicsPartById(this.position.id);
+
+			//fallback if adding failed somehow
+			if(part == null) {
+				part = carriage.addPhysicsPart(this.position);
+			} else {
+				carriage.setPacketRelativePartPosition(part, this.position.x, this.position.y, this.position.z, this.position.mx, this.position.my, this.position.mz);
+			}
+		}
 	}
 }

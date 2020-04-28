@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -60,7 +61,7 @@ public class AttackDamageHandler {
 	}
 
 	private static boolean canBlockDamageSource(EntityLivingBase entity, DamageSource source) {
-		if(!source.isUnblockable() && entity.isActiveItemStackBlocking()) {
+		if(!source.isUnblockable() && entity.isActiveItemStackBlocking() && (source instanceof EntityDamageSource == false || source.getTrueSource() != null)) {
 			Vec3d location = source.getDamageLocation();
 
 			if(location != null) {

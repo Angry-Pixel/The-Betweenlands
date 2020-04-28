@@ -28,6 +28,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IPullerEntity;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
@@ -73,6 +74,11 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 	}
 
 	@Override
+	public boolean getCanSpawnHere() {
+		return this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
+	}
+	
+	@Override
 	public void onUpdate() {
 		super.onUpdate();
 		// WIP Temp
@@ -98,13 +104,14 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 				}
 		}
 	}
-
+	
 	@Override
-	public void setDead() {
-		super.setDead();
-		if (!getEntityWorld().isRemote) {
-			EntityGreeblingVolarpadFloater floater = new EntityGreeblingVolarpadFloater(getEntityWorld(), posX, posY, posZ);
-			getEntityWorld().spawnEntity(floater);
+	protected void onDeathUpdate() {
+		super.onDeathUpdate();
+		
+		if(!this.world.isRemote && this.isDead) {
+			EntityGreeblingVolarpadFloater floater = new EntityGreeblingVolarpadFloater(this.world, posX, posY, posZ);
+			this.world.spawnEntity(floater);
 		}
 	}
 

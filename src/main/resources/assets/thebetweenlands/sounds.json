@@ -292,18 +292,40 @@
   },
   "sludge_menace_death": {
     "sounds": [
-      "thebetweenlands:snail_death"
+      "thebetweenlands:sludge_menace_death"
     ]
   },
   "sludge_menace_hurt": {
     "sounds": [
-      "thebetweenlands:snail_hurt"
+      "thebetweenlands:sludge_menace_hurt_1",
+      "thebetweenlands:sludge_menace_hurt_2",
+      "thebetweenlands:sludge_menace_hurt_3"
+    ]
+  },
+  "sludge_menace_attack": {
+    "sounds": [
+      "thebetweenlands:sludge_menace_attack_1",
+      "thebetweenlands:sludge_menace_attack_2",
+      "thebetweenlands:sludge_menace_attack_3",
+      "thebetweenlands:sludge_menace_attack_4",
+      "thebetweenlands:sludge_menace_attack_5"
+    ]
+  },
+  "sludge_menace_spit": {
+    "sounds": [
+      "thebetweenlands:sludge_menace_spit_1",
+      "thebetweenlands:sludge_menace_spit_2",
+      "thebetweenlands:sludge_menace_spit_3"
+    ]
+  },
+  "sludge_menace_spawn": {
+    "sounds": [
+      "thebetweenlands:sludge_menace_spawn"
     ]
   },
   "sludge_menace_living": {
     "sounds": [
-      "thebetweenlands:snail_living_1",
-      "thebetweenlands:snail_living_2"
+      "thebetweenlands:sludge_menace_living"
     ]
   },
   "dragonfly": {
@@ -1134,6 +1156,14 @@
     "sounds": [
       {
         "name": "thebetweenlands:ambience/ambient_swamp",
+        "stream": true
+      }
+    ]
+  },
+  "ambient_swamp_dense_fog": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:ambience/ambient_swamp_dense_fog",
         "stream": true
       }
     ]

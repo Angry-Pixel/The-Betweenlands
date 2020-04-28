@@ -2,6 +2,7 @@ package thebetweenlands.client.render.entity;
 
 import java.util.Random;
 
+import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.ActiveRenderInfo;
@@ -38,8 +39,10 @@ public class RenderFirefly extends RenderLiving<EntityFirefly> {
 
 	@Override
 	public void doRender(EntityFirefly entity, double x, double y, double z, float yaw, float partialTicks) {
+		double glowStrength = (float)entity.getEntityAttribute(EntityFirefly.GLOW_STRENGTH_ATTRIB).getAttributeValue();
+		double scale = entity.getGlowTicks(partialTicks) / 20.0F * glowStrength;
+
 		if(MinecraftForgeClient.getRenderPass() == 0) {
-			double glowStrength = (float)entity.getEntityAttribute(EntityFirefly.GLOW_STRENGTH_ATTRIB).getAttributeValue();
 
 			this.glow.setAlpha(entity.getGlowTicks(partialTicks) / 20.0F * (float)Math.min(glowStrength, 1.0D));
 
@@ -49,36 +52,32 @@ public class RenderFirefly extends RenderLiving<EntityFirefly> {
 			GlStateManager.popMatrix();
 
 			if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
-				float radius = entity.getGlowTicks(partialTicks) / 20.0F * 7.0F * (float)glowStrength;
+				float radius = (float) scale * 7.0F;
 
 				if(radius > 0.1F) {
 					double interpX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;
 					double interpY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks - 0.5D;
 					double interpZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;
-					ShaderHelper.INSTANCE.require();
-					ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(interpX, interpY, interpZ,
-							entity.world.rand.nextFloat() * 0.1f + radius,
-							16.0f / 255.0f * 60.0F + entity.world.rand.nextFloat() * 0.4f,
-							12.0f / 255.0f * 60.0F + entity.world.rand.nextFloat() * 0.1f,
-							8.0f / 255.0f * 60.0F));
+					addFireflyLight(interpX, interpY, interpZ, radius);
 				}
 			}
 		} else {
 			GlStateManager.disableLighting();
-			this.renderFireflyGlow(entity, x, y, z, partialTicks);
+			renderFireflyGlow(x, y + 0.25D + Math.sin((entity.ticksExisted + partialTicks) / 10.0F) * 0.15F, z, scale);
 			GlStateManager.enableLighting();
 		}
 	}
 
-	/**
-	 * Renders the firefly glow
-	 * @param entity
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @param partialTicks
-	 */
-	public void renderFireflyGlow(EntityFirefly entity, double x, double y, double z, float partialTicks) {
+	public static void addFireflyLight(double x, double y, double z, float radius) {
+		ShaderHelper.INSTANCE.require();
+		ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(x, y, z,
+				RANDOM.nextFloat() * 0.1f + radius,
+				16.0f / 255.0f * 60.0F + RANDOM.nextFloat() * 0.4f,
+				12.0f / 255.0f * 60.0F + RANDOM.nextFloat() * 0.1f,
+				8.0f / 255.0f * 60.0F));
+	}
+
+	public static void renderFireflyGlow(double x, double y, double z, double scale) {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 
@@ -89,7 +88,7 @@ public class RenderFirefly extends RenderLiving<EntityFirefly> {
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.003921569F);
 
-		this.bindTexture(GLOW_TEXTURE);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(GLOW_TEXTURE);
 
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 
@@ -98,14 +97,6 @@ public class RenderFirefly extends RenderLiving<EntityFirefly> {
 		float rz = ActiveRenderInfo.getRotationZ();
 		float ryz = ActiveRenderInfo.getRotationYZ();
 		float rxy = ActiveRenderInfo.getRotationXY();
-
-		double ipx = x;
-		double ipy = y + 0.25D + Math.sin((entity.ticksExisted + partialTicks) / 10.0F) * 0.15F;
-		double ipz = z;
-
-		double glowStrength = (float)entity.getEntityAttribute(EntityFirefly.GLOW_STRENGTH_ATTRIB).getAttributeValue();
-
-		double scale = entity.getGlowTicks(partialTicks) / 20.0F * glowStrength;
 
 		float red = 0.4F;
 		float green = 0.2F;
@@ -120,10 +111,10 @@ public class RenderFirefly extends RenderLiving<EntityFirefly> {
 
 		for (int i = 0; i < 10; i++) {
 			currentScale -= scale * 0.15D;
-			buffer.pos(ipx - rx * currentScale - ryz * currentScale, ipy - rxz * currentScale, ipz - rz * currentScale - rxy * currentScale).tex(0.0, 1.0).color(red, green, blue, alpha).endVertex();
-			buffer.pos(ipx - rx * currentScale + ryz * currentScale, ipy + rxz * currentScale, ipz - rz * currentScale + rxy * currentScale).tex(1.0D, 1.0D).color(red, green, blue, alpha).endVertex();
-			buffer.pos(ipx + rx * currentScale + ryz * currentScale, ipy + rxz * currentScale, ipz + rz * currentScale + rxy * currentScale).tex(1.0D, 0.0D).color(red, green, blue, alpha).endVertex();
-			buffer.pos(ipx + rx * currentScale - ryz * currentScale, ipy - rxz * currentScale, ipz + rz * currentScale - rxy * currentScale).tex(0.0D, 0.0D).color(red, green, blue, alpha).endVertex();
+			buffer.pos(x - rx * currentScale - ryz * currentScale, y - rxz * currentScale, z - rz * currentScale - rxy * currentScale).tex(0.0, 1.0).color(red, green, blue, alpha).endVertex();
+			buffer.pos(x - rx * currentScale + ryz * currentScale, y + rxz * currentScale, z - rz * currentScale + rxy * currentScale).tex(1.0D, 1.0D).color(red, green, blue, alpha).endVertex();
+			buffer.pos(x + rx * currentScale + ryz * currentScale, y + rxz * currentScale, z + rz * currentScale + rxy * currentScale).tex(1.0D, 0.0D).color(red, green, blue, alpha).endVertex();
+			buffer.pos(x + rx * currentScale - ryz * currentScale, y - rxz * currentScale, z + rz * currentScale - rxy * currentScale).tex(0.0D, 0.0D).color(red, green, blue, alpha).endVertex();
 		}
 
 		red = 0.6F;
@@ -133,10 +124,10 @@ public class RenderFirefly extends RenderLiving<EntityFirefly> {
 		currentScale = scale / 4.0D;
 		for (int i = 0; i < 10; i++) {
 			currentScale -= scale * 0.15D / 4.0D;
-			buffer.pos(ipx - rx * currentScale - ryz * currentScale, ipy - rxz * currentScale, ipz - rz * currentScale - rxy * currentScale).tex(0.0D, 1.0D).color(red, green, blue, alpha).endVertex();
-			buffer.pos(ipx - rx * currentScale + ryz * currentScale, ipy + rxz * currentScale, ipz - rz * currentScale + rxy * currentScale).tex(1.0D, 1.0D).color(red, green, blue, alpha).endVertex();
-			buffer.pos(ipx + rx * currentScale + ryz * currentScale, ipy + rxz * currentScale, ipz + rz * currentScale + rxy * currentScale).tex(1.0D, 0.0D).color(red, green, blue, alpha).endVertex();
-			buffer.pos(ipx + rx * currentScale - ryz * currentScale, ipy - rxz * currentScale, ipz + rz * currentScale - rxy * currentScale).tex(0.0D, 0.0D).color(red, green, blue, alpha).endVertex();
+			buffer.pos(x - rx * currentScale - ryz * currentScale, y - rxz * currentScale, z - rz * currentScale - rxy * currentScale).tex(0.0D, 1.0D).color(red, green, blue, alpha).endVertex();
+			buffer.pos(x - rx * currentScale + ryz * currentScale, y + rxz * currentScale, z - rz * currentScale + rxy * currentScale).tex(1.0D, 1.0D).color(red, green, blue, alpha).endVertex();
+			buffer.pos(x + rx * currentScale + ryz * currentScale, y + rxz * currentScale, z + rz * currentScale + rxy * currentScale).tex(1.0D, 0.0D).color(red, green, blue, alpha).endVertex();
+			buffer.pos(x + rx * currentScale - ryz * currentScale, y - rxz * currentScale, z + rz * currentScale - rxy * currentScale).tex(0.0D, 0.0D).color(red, green, blue, alpha).endVertex();
 		}
 
 		tessellator.draw();

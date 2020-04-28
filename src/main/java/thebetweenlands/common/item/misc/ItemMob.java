@@ -42,11 +42,17 @@ public class ItemMob extends Item {
 		this.defaultMob = defaultMob;
 		this.setCreativeTab(BLCreativeTabs.ITEMS);
 	}
-
+	
 	public ItemStack capture(Class<? extends Entity> cls) {
+		return this.capture(cls, null);
+	}
+
+	public ItemStack capture(Class<? extends Entity> cls, @Nullable NBTTagCompound nbt) {
 		ResourceLocation id = EntityList.getKey(cls);
 		if(id != null) {
-			NBTTagCompound nbt = new NBTTagCompound();
+			if(nbt == null) {
+				nbt = new NBTTagCompound();
+			}
 			nbt.setString("id", id.toString());
 
 			ItemStack stack = new ItemStack(this);

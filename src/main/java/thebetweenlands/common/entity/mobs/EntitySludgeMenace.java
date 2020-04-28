@@ -14,6 +14,8 @@ import com.google.common.base.Optional;
 import gnu.trove.map.TObjectIntMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
@@ -33,6 +35,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -51,6 +54,7 @@ import thebetweenlands.api.entity.IEntityMusic;
 import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.api.entity.spawning.IWeightProvider;
 import thebetweenlands.client.audio.EntityMusicLayers;
+import thebetweenlands.client.audio.EntitySound;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
@@ -184,6 +188,9 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	private int deathTicks = 0;
 	private Vec3d deathSpazzMotion = Vec3d.ZERO;
 
+	@SideOnly(Side.CLIENT)
+	private ISound livingSound;
+	
 	public EntitySludgeMenace(World world) {
 		super(world);
 		this.dummies = new DummyPart[this.getParts().length];
@@ -297,12 +304,29 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	protected float getArmLengthSlack() {
 		return 0.25f;
 	}
-
+	
 	@Override
-	protected SoundEvent getAmbientSound() {
-		return SoundRegistry.SLUDGE_MENACE_LIVING;
+	public void playLivingSound() {
+		if(this.world.isRemote) {
+			this.playLivingSoundLoop();
+		}
 	}
-
+	
+	@SideOnly(Side.CLIENT)
+	private void playLivingSoundLoop() {
+		if(this.livingSound != null && !Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(this.livingSound)) {
+			this.livingSound = null;
+		}
+		
+		if(this.livingSound == null) {
+			this.livingSound = new EntitySound<EntitySludgeMenace>(SoundRegistry.SLUDGE_MENACE_LIVING, SoundCategory.HOSTILE, this, e -> e.isEntityAlive());
+		}
+		
+		if(!Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(this.livingSound)) {
+			Minecraft.getMinecraft().getSoundHandler().playSound(this.livingSound);
+		}
+	}
+	
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSource) {
 		return SoundRegistry.SLUDGE_MENACE_HURT;
@@ -521,6 +545,8 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 					}
 
 					this.world.spawnEntity(mob);
+					
+					this.playSound(SoundRegistry.SLUDGE_MENACE_SPIT, 1, 1);
 				}
 			}
 		}
@@ -619,6 +645,8 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	public boolean attackEntityAsMob(Entity target) {
 		boolean damaged = super.attackEntityAsMob(target);
 
+		this.playSound(SoundRegistry.SLUDGE_MENACE_ATTACK, 1, 1);
+		
 		if(this.actionState == ActionState.POKE) {
 			if(target == this.getAttackTarget() && this.actionTimer >= 40) {
 				DummyPart endDummy = this.dummies[this.dummies.length - 1];
@@ -835,8 +863,16 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	}
 
 	protected Vec3d updateSwingTargetTipPos(Vec3d armStartWorld, float maxArmLength, Vec3d dirFwd, Vec3d dirUp) {
+		float prevDrive = (this.actionTimer - 1) * 0.07f * (1.0f + (this.actionTimer - 1) / 300.0f * 2.0f);
 		float drive = this.actionTimer * 0.07f * (1.0f + this.actionTimer / 300.0f * 2.0f);
 
+		float prevDriveMod = prevDrive % ((float)Math.PI * 2);
+		float driveMod = drive % ((float)Math.PI * 2);
+		
+		if(prevDriveMod <= 1f && driveMod > 1f) {
+			this.playSound(SoundRegistry.SLUDGE_MENACE_ATTACK, 1, 1);
+		}
+		
 		if(this.actionTimer >= 300) {
 			this.startAction(ActionState.IDLE);
 		}
@@ -1070,6 +1106,7 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 		this.screenShakeTimer = 10;
 
 		this.playSound(SoundRegistry.WALL_SLAM, 2, 1);
+		this.playSound(SoundRegistry.SLUDGE_MENACE_ATTACK, 1, 1);
 
 		if(!this.world.isRemote) {
 			this.world.setEntityState(this, EVENT_SLAM_HIT);
