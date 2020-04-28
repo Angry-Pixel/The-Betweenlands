@@ -108,6 +108,15 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	public void onUpdate() {
 		super.onUpdate();
 
+		//TODO Insta hatch
+		/*if (!getEntityWorld().isRemote) {
+			this.setHasHatched(true);
+			this.setIsTransforming(true);
+			this.setTransformCount(60);
+			this.setEatingCooldown(0);
+			this.setAmountEaten(MAX_FOOD_NEEDED);
+		}*/
+		
 		// STAGE 1
 		if (!getHasHatched()) {
 			if (!getEntityWorld().isRemote) {

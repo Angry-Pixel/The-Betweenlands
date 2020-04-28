@@ -215,10 +215,12 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 		if(riding == null || riding.onGround) {
 			this.doubleJumpTicks = 0;
 		}
-
+		
 		if (riding == null) {
-			if (isJumping && isInWater())
+			if (isJumping && isInWater()) {
 				getMoveHelper().setMoveTo(posX, posY + 1, posZ, 1.0D);
+				this.setSitting(false);
+			}
 
 			if (isSitting()) {
 				motionX = motionY = motionZ = 0.0D;
@@ -230,13 +232,18 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 						this.setSitting(false);
 					}
 				}
+			} else if (getEntityWorld().getBlockState(getPosition().down()).isSideSolid(getEntityWorld(), getPosition().down(), EnumFacing.UP)) {
+				getMoveHelper().setMoveTo(posX, posY + 1, posZ, 1.0D);
 			}
 
-			if (motionY < 0.0D && getAttackTarget() == null)
+			if (motionY < 0.0D && getAttackTarget() == null) {
 				motionY *= 0.25D;
-
-			if (getEntityWorld().getBlockState(getPosition().down()).isSideSolid(getEntityWorld(), getPosition().down(), EnumFacing.UP))
-				getMoveHelper().setMoveTo(posX, posY + 1, posZ, 1.0D);
+			}
+			
+			this.prevRaiseWingTicks = this.raiseWingsTicks;
+			if(this.raiseWingsTicks > 0) {
+				this.raiseWingsTicks--;
+			}
 		} else {
 			this.prevRaiseWingTicks = this.raiseWingsTicks;
 
@@ -314,6 +321,11 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 
 	@Override
 	public void travel(float strafe, float vertical, float forward) {
+		//Don't wander around when sitting
+		if(this.isSitting() && !this.world.isRemote) {
+			return;
+		}
+		
 		if (isInWater()) {
 			moveRelative(strafe, vertical, forward, 0.02F);
 			move(MoverType.SELF, motionX, motionY, motionZ);
@@ -403,8 +415,9 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 			}
 		}
 
-		if (isOwner(player)) {
+		if (isOwner(player) && hand == EnumHand.MAIN_HAND) {
 			rotationYaw = player.rotationYaw;
+			
 			if (!getEntityWorld().isRemote) {
 				setAttackTarget((EntityLivingBase) null);
 
@@ -452,13 +465,18 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 							if(!sitPositions.isEmpty()) {
 								this.setSitting(true);
 								this.isJumping = false;
-								this.navigator.clearPath();
 								
 								Collections.sort(sitPositions, Comparator.comparing(pos -> this.getDistanceSq(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f)));
 								
 								BlockPos sitPosition = sitPositions.get(0);
 								
-								setPosition(sitPosition.getX() + 0.5f, sitPosition.getY() + 1 - this.height, sitPosition.getZ() + 0.5f);
+								this.setPosition(sitPosition.getX() + 0.5f, sitPosition.getY() + 1 - this.height, sitPosition.getZ() + 0.5f);
+								this.navigator.clearPath();
+								this.motionX = this.motionY = this.motionZ = 0;
+								this.velocityChanged = true;
+								this.setMoveForward(0);
+								this.setMoveStrafing(0);
+								this.setMoveVertical(0);
 							}
 						}
 					} else {

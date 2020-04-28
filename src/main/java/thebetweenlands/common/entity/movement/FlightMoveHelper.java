@@ -38,14 +38,18 @@ public class FlightMoveHelper extends EntityMoveHelper {
 				if(dist < this.entity.width + speed) {
 					this.blocked = false;
 				} else if(this.isNotColliding(this.posX, this.posY, this.posZ, dist)) {
-					this.entity.motionX += dx / dist * speed;
-					this.entity.motionY += dy / dist * speed;
-					this.entity.motionZ += dz / dist * speed;
+					if(dist < 0.01D) {
+						this.entity.setMoveForward(0);
+					} else {
+						this.entity.motionX += dx / dist * speed;
+						this.entity.motionY += dy / dist * speed;
+						this.entity.motionZ += dz / dist * speed;
 
-					float yaw = (float)(MathHelper.atan2(dz, dx) * (180D / Math.PI)) - 90.0F;
-					this.entity.rotationYaw = this.limitAngle(this.entity.rotationYaw, yaw, 90.0F);
+						float yaw = (float)(MathHelper.atan2(dz, dx) * (180D / Math.PI)) - 90.0F;
+						this.entity.rotationYaw = this.limitAngle(this.entity.rotationYaw, yaw, 90.0F);
 
-					this.entity.setAIMoveSpeed((float)speed);
+						this.entity.setAIMoveSpeed((float)speed);
+					}
 
 					this.blocked = false;
 				} else {
