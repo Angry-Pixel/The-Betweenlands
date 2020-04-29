@@ -2,13 +2,43 @@ package thebetweenlands.common.world.gen.feature.structure;
 
 import java.util.Random;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import thebetweenlands.common.block.SoilHelper;
+import thebetweenlands.common.block.plant.BlockEdgePlant;
+import thebetweenlands.common.block.plant.BlockMoss;
+import thebetweenlands.common.block.terrain.BlockCragrock;
+import thebetweenlands.common.block.terrain.BlockCragrock.EnumCragrockType;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class WorldGenChiromawNest extends WorldGenerator {
+
+	public IBlockState CRAGROCK = BlockRegistry.CRAGROCK.getDefaultState();
+	public IBlockState NESTING_BLOCK_BONES = BlockRegistry.NESTING_BLOCK_BONES.getDefaultState();
+	public IBlockState NESTING_BLOCK_STICKS = BlockRegistry.NESTING_BLOCK_STICKS.getDefaultState();
+	public IBlockState ROOT = BlockRegistry.ROOT.getDefaultState();
+
+	//shrooms
+	public IBlockState BLACK_HAT_MUSHROOM = BlockRegistry.BLACK_HAT_MUSHROOM.getDefaultState();
+	public IBlockState FLAT_HEAD_MUSHROOM = BlockRegistry.FLAT_HEAD_MUSHROOM.getDefaultState();
+	public IBlockState ROTBULB = BlockRegistry.ROTBULB.getDefaultState();
+
+	//floor plants
+	public IBlockState TALL_SLUDGECREEP = BlockRegistry.TALL_SLUDGECREEP.getDefaultState();
+	public IBlockState PALE_GRASS = BlockRegistry.PALE_GRASS.getDefaultState();
+
+	//wall plants
+	public IBlockState MOSS = BlockRegistry.DEAD_MOSS.getDefaultState();
+	public IBlockState LICHEN = BlockRegistry.DEAD_LICHEN.getDefaultState();
+
+	//edge plants
+	public IBlockState EDGE_SHROOM = BlockRegistry.EDGE_SHROOM.getDefaultState();
+	public IBlockState EDGE_MOSS = BlockRegistry.EDGE_MOSS.getDefaultState();
+	public IBlockState EDGE_LEAF = BlockRegistry.EDGE_LEAF.getDefaultState();
 
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
@@ -25,32 +55,148 @@ public class WorldGenChiromawNest extends WorldGenerator {
 					double dSqDome = Math.pow(xx, 2.0D) + Math.pow(zz, 2.0D) + Math.pow(yy, 2.0D);
 
 					if (Math.round(Math.sqrt(dSqDome)) < 4) {
-						setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), rand.nextInt(4) == 0 ? BlockRegistry.NESTING_BLOCK_BONES.getDefaultState() : BlockRegistry.NESTING_BLOCK_STICKS.getDefaultState());
+						setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), rand.nextInt(4) == 0 ? NESTING_BLOCK_BONES : NESTING_BLOCK_STICKS);
 
 						if (yy == 0 && Math.round(Math.sqrt(dSqDome)) == 1)
 							setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), Blocks.AIR.getDefaultState());
 					}
-
-					setBlockAndNotifyAdequately(world, pos.add(0, yy, 0), BlockRegistry.BETWEENSTONE.getDefaultState());
+					setBlockAndNotifyAdequately(world, pos.add(0, yy, 0),  CRAGROCK.withProperty(BlockCragrock.VARIANT, getCragrockForYLevel(rand, yy + 3)));
 				}
 			}
 		}
 	}
 
 	public void generateRockPile(World world, Random rand, BlockPos pos) {
-		for (int xx = -5; xx <= 5; xx++) {
-			for (int zz = -5; zz <= 5; zz++) {
+		for (int xx = -6; xx <= 6; xx++) {
+			for (int zz = -6; zz <= 6; zz++) {
 				for (int yy = 0; yy < 4; yy++) {
 					double dSqDome = Math.pow(xx, 2.0D) + Math.pow(zz, 2.0D) + Math.pow(yy, 2.0D);
 
 					if (yy == 0 && rand.nextBoolean() && Math.round(Math.sqrt(dSqDome)) == 5)
-						setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), BlockRegistry.BETWEENSTONE.getDefaultState());
+						setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), CRAGROCK.withProperty(BlockCragrock.VARIANT, getCragrockForYLevel(rand, 1)));
+
+					if (yy == 0 && rand.nextBoolean() && Math.round(Math.sqrt(dSqDome)) == 6)
+						if (isPlantableAbove(world, pos.add(xx, yy, zz)))
+							setRandomRoot(world, pos.add(xx, yy, zz), rand);
 
 					if (Math.round(Math.sqrt(dSqDome)) < 5)
-						setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), BlockRegistry.BETWEENSTONE.getDefaultState());
+						setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), CRAGROCK.withProperty(BlockCragrock.VARIANT, getCragrockForYLevel(rand, yy)));
 				}
 			}
 		}
+
+		for (int yy = -1; yy < 4; yy++) {
+			addGroundPlants(world, pos.add(-5, 0, -5), rand, 11, yy, 11, false, true, true);
+			addEdgePlant(world, pos.add(-5, 0, -5), rand, 11, yy, 11);
+		}
+
+		addWallPlants(world, pos.add(2, 0, -2), rand, 3, 4, 5, EnumFacing.EAST);
+		addWallPlants(world, pos.add(-4, 0, -2), rand, 3, 4, 5, EnumFacing.WEST);
+		addWallPlants(world, pos.add(-2, 0, -4), rand, 5, 4, 3, EnumFacing.NORTH);
+		addWallPlants(world, pos.add(-2, 0, 2), rand, 5, 4, 3, EnumFacing.SOUTH);
+
+	}
+	
+	public void setRandomRoot(World world, BlockPos pos, Random rand) {
+		int rnd = rand.nextInt(32);
+		if (rnd < 8) {
+			setBlockAndNotifyAdequately(world, pos, ROOT);
+		} else if (rnd < 16) {
+			setBlockAndNotifyAdequately(world, pos, ROOT);
+			if (world.isAirBlock(pos.up(1)))
+				setBlockAndNotifyAdequately(world, pos.up(1), ROOT);
+		} else if (rnd < 24) {
+			setBlockAndNotifyAdequately(world, pos, ROOT);
+			if (world.isAirBlock(pos.up(1)) && world.isAirBlock(pos.up(2))) {
+				setBlockAndNotifyAdequately(world, pos.up(1), ROOT);
+				setBlockAndNotifyAdequately(world, pos.up(2), ROOT);
+			}
+		} else {
+			setBlockAndNotifyAdequately(world, pos, ROOT);
+			if (world.isAirBlock(pos.up(1)) && world.isAirBlock(pos.up(2)) && world.isAirBlock(pos.up(3))) {
+				setBlockAndNotifyAdequately(world, pos.up(1), ROOT);
+				setBlockAndNotifyAdequately(world, pos.up(2), ROOT);
+				setBlockAndNotifyAdequately(world, pos.up(3), ROOT);
+			}
+		}
+	}
+
+	public void addGroundPlants(World world, BlockPos pos, Random rand, int x, int y, int z, boolean addMoss, boolean addWeeds, boolean addMushrooms) {
+		for (int horizontalX = 0; horizontalX < x; horizontalX++)
+			for (int horizontalZ = 0; horizontalZ < z; horizontalZ++) {
+				if (isPlantableAbove(world, pos.add(horizontalX, y, horizontalZ)))
+					if (addWeeds && plantingChance(rand))
+						this.setBlockAndNotifyAdequately(world, pos.add(horizontalX, y + 1, horizontalZ), getRandomFloorPlant(rand));
+					else if (addMushrooms && plantingChance(rand))
+						this.setBlockAndNotifyAdequately(world, pos.add(horizontalX, y + 1, horizontalZ), getRandomMushroom(rand));
+					else if (addMoss && rand.nextBoolean())
+						this.setBlockAndNotifyAdequately(world, pos.add(horizontalX, y + 1, horizontalZ), MOSS.withProperty(BlockMoss.FACING, EnumFacing.UP));
+			}
+	}
+
+	public void addEdgePlant(World world, BlockPos pos, Random rand, int x, int y, int z) {
+		for (int horizontalX = 0; horizontalX < x; horizontalX++)
+			for (int horizontalZ = 0; horizontalZ < z; horizontalZ++) {
+				for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+					if (world.getBlockState(pos.add(horizontalX, y + 1, horizontalZ).offset(facing)).isSideSolid(world, pos.add(horizontalX, y + 1, horizontalZ).offset(facing), facing.getOpposite())) {
+						if (plantingChance(rand) && isPlantableAbove(world, pos.add(horizontalX, y, horizontalZ)))
+							this.setBlockAndNotifyAdequately(world, pos.add(horizontalX, y + 1, horizontalZ), getRandomEdgePlant(rand, facing.getOpposite()));
+					}
+				}
+			}
+	}
+
+	public void addWallPlants(World world, BlockPos pos, Random rand, int x, int y, int z, EnumFacing facing) {
+		for (int horizontalX = 0; horizontalX < x; horizontalX++)
+			for (int horizontalZ = 0; horizontalZ < z; horizontalZ++)
+				for (int vertical = 0; vertical < y; vertical++)
+					if (plantingChance(rand) && isPlantableWall(world, pos.add(horizontalX, vertical, horizontalZ), facing))
+						setBlockAndNotifyAdequately(world, pos.add(horizontalX, vertical, horizontalZ).offset(facing), MOSS.withProperty(BlockMoss.FACING, facing));
+	}
+
+	public boolean isPlantableAbove(World world, BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
+		return SoilHelper.canSustainPlant(state) && world.isAirBlock(pos.up());
+	}
+
+	public boolean isPlantableWall(World world, BlockPos pos, EnumFacing facing) {
+		IBlockState state = world.getBlockState(pos);
+		return state.isFullBlock() && world.isAirBlock(pos.offset(facing));
+	}
+
+	public boolean plantingChance(Random rand) {
+		return rand.nextBoolean() && rand.nextBoolean();
+	}
+
+	public EnumCragrockType getCragrockForYLevel(Random rand, int y) {
+		return y < 1 ? EnumCragrockType.DEFAULT : y >= 1 && y < 3 ? (rand.nextBoolean() ? EnumCragrockType.DEFAULT : EnumCragrockType.MOSSY_2) : EnumCragrockType.MOSSY_1;
+	}
+
+	public IBlockState getRandomFloorPlant(Random rand) {
+		return rand.nextBoolean() ? TALL_SLUDGECREEP : PALE_GRASS; //what plants do we want
+	}
+
+	public IBlockState getRandomMushroom(Random rand) {
+		int type = rand.nextInt(30);
+		if (type < 10)
+			return FLAT_HEAD_MUSHROOM;
+		else if (type < 20)
+			return BLACK_HAT_MUSHROOM;
+		else
+			return ROTBULB;
+	}
+
+	public IBlockState getRandomEdgePlant(Random rand, EnumFacing facing) {
+		int type = rand.nextInt(3);
+		switch (type) {
+		case 0:
+			return EDGE_SHROOM.withProperty(BlockEdgePlant.FACING, facing);
+		case 1:
+			return EDGE_MOSS.withProperty(BlockEdgePlant.FACING, facing);
+		case 2:
+			return EDGE_LEAF.withProperty(BlockEdgePlant.FACING, facing);
+		}
+		return EDGE_SHROOM.withProperty(BlockEdgePlant.FACING, facing);
 	}
 
 }
