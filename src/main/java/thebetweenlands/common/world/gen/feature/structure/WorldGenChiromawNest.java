@@ -25,7 +25,7 @@ public class WorldGenChiromawNest extends WorldGenerator {
 					double dSqDome = Math.pow(xx, 2.0D) + Math.pow(zz, 2.0D) + Math.pow(yy, 2.0D);
 
 					if (Math.round(Math.sqrt(dSqDome)) < 4) {
-						setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), BlockRegistry.WEEDWOOD_BUSH.getDefaultState()); // proxy for nest blocks
+						setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), rand.nextInt(4) == 0 ? BlockRegistry.NESTING_BLOCK_BONES.getDefaultState() : BlockRegistry.NESTING_BLOCK_STICKS.getDefaultState());
 
 						if (yy == 0 && Math.round(Math.sqrt(dSqDome)) == 1)
 							setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), Blocks.AIR.getDefaultState());

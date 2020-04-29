@@ -132,15 +132,15 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
 		return state
-				.withProperty(NORTH, Boolean.valueOf(this.canConnectTo(worldIn, pos.north())))
-				.withProperty(EAST, Boolean.valueOf(this.canConnectTo(worldIn, pos.east())))
-				.withProperty(SOUTH, Boolean.valueOf(this.canConnectTo(worldIn, pos.south())))
-				.withProperty(WEST, Boolean.valueOf(this.canConnectTo(worldIn, pos.west())))
-				.withProperty(UP, Boolean.valueOf(this.canConnectTo(worldIn, pos.up())))
-				.withProperty(DOWN, Boolean.valueOf(this.canConnectTo(worldIn, pos.down())));
+				.withProperty(NORTH, Boolean.valueOf(this.canConnectTo(worldIn, pos.north(), EnumFacing.NORTH)))
+				.withProperty(EAST, Boolean.valueOf(this.canConnectTo(worldIn, pos.east(), EnumFacing.EAST)))
+				.withProperty(SOUTH, Boolean.valueOf(this.canConnectTo(worldIn, pos.south(), EnumFacing.SOUTH)))
+				.withProperty(WEST, Boolean.valueOf(this.canConnectTo(worldIn, pos.west(), EnumFacing.WEST)))
+				.withProperty(UP, Boolean.valueOf(this.canConnectTo(worldIn, pos.up(), EnumFacing.UP)))
+				.withProperty(DOWN, Boolean.valueOf(this.canConnectTo(worldIn, pos.down(), EnumFacing.DOWN)));
 	}
 
-	public boolean canConnectTo(IBlockAccess worldIn, BlockPos pos) {
+	public boolean canConnectTo(IBlockAccess worldIn, BlockPos pos, EnumFacing dir) {
 		IBlockState iblockstate = worldIn.getBlockState(pos);
 		Block block = iblockstate.getBlock();
 		return block == this;
