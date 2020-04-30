@@ -1,0 +1,26 @@
+{
+   "pools":[
+      {
+         "name":"chiromaw_nest_scattered_loot",
+         "rolls":2,
+         "conditions":[],
+         "entries":[
+            {
+               "type":"item",
+               "name":"thebetweenlands:candy_blue",
+               "weight":1
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:candy_red",
+               "weight":1
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:candy_yellow",
+               "weight":1
+            }
+         ]
+      }
+   ]
+}

@@ -1,19 +1,32 @@
 package thebetweenlands.common.world.gen.feature.structure;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootTable;
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.block.plant.BlockEdgePlant;
 import thebetweenlands.common.block.plant.BlockMoss;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockCragrock.EnumCragrockType;
+import thebetweenlands.common.entity.EntityGreeblingCorpse;
+import thebetweenlands.common.entity.mobs.EntityChiromawHatchling;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.tile.TileEntityGroundItem;
 
 public class WorldGenChiromawNest extends WorldGenerator {
 
@@ -39,6 +52,9 @@ public class WorldGenChiromawNest extends WorldGenerator {
 	public IBlockState EDGE_SHROOM = BlockRegistry.EDGE_SHROOM.getDefaultState();
 	public IBlockState EDGE_MOSS = BlockRegistry.EDGE_MOSS.getDefaultState();
 	public IBlockState EDGE_LEAF = BlockRegistry.EDGE_LEAF.getDefaultState();
+	
+	//ground item loot
+	public IBlockState GROUND_ITEM = BlockRegistry.GROUND_ITEM.getDefaultState();
 
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
@@ -57,13 +73,58 @@ public class WorldGenChiromawNest extends WorldGenerator {
 					if (Math.round(Math.sqrt(dSqDome)) < 4) {
 						setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), rand.nextInt(4) == 0 ? NESTING_BLOCK_BONES : NESTING_BLOCK_STICKS);
 
-						if (yy == 0 && Math.round(Math.sqrt(dSqDome)) == 1)
+						if (yy == 0 && Math.round(Math.sqrt(dSqDome)) == 1) {
 							setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), Blocks.AIR.getDefaultState());
+							addEntitiesAndLootBlocks (world, rand, pos.add(xx, yy, zz));
+						}
 					}
 					setBlockAndNotifyAdequately(world, pos.add(0, yy, 0),  CRAGROCK.withProperty(BlockCragrock.VARIANT, getCragrockForYLevel(rand, yy + 3)));
 				}
 			}
 		}
+	}
+
+	private void addEntitiesAndLootBlocks(World world, Random rand, BlockPos pos) {
+		if (rand.nextBoolean()) {
+			EntityChiromawHatchling egg = new EntityChiromawHatchling(world);
+			egg.setPosition(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+			world.spawnEntity(egg);
+		}
+		else if(rand.nextBoolean() && rand.nextBoolean()) {
+			EntityGreeblingCorpse corpse = new EntityGreeblingCorpse(world);
+			corpse.setPosition(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+			world.spawnEntity(corpse);
+		}
+		else {
+			setBlockAndNotifyAdequately(world, pos, GROUND_ITEM);
+			setScatteredLoot(world, rand, pos);
+		}
+	}
+
+	public void setScatteredLoot(World world, Random rand, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
+		if (tile instanceof TileEntityGroundItem) {
+			ItemStack stack = getScatteredLoot(world, rand);
+			((TileEntityGroundItem) tile).setStack(stack);
+			world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+		}
+	}
+	
+	public ItemStack getScatteredLoot(World world, Random rand) {
+		LootTable lootTable = world.getLootTableManager().getLootTableFromLocation(getScatteredLootTable());
+		if (lootTable != null) {
+			LootContext.Builder lootBuilder = (new LootContext.Builder((WorldServer) world));
+			List<ItemStack> loot = lootTable.generateLootForPools(rand, lootBuilder.build());
+			if (!loot.isEmpty()) {
+				Collections.shuffle(loot); // mix it up a bit
+				return loot.get(0);
+			}
+		}
+		return EnumItemMisc.SLIMY_BONE.create(1); // to stop null;
+	}
+
+	protected ResourceLocation getScatteredLootTable() {
+		return LootTableRegistry.CHIROMAW_NEST_SCATTERED_LOOT;
 	}
 
 	public void generateRockPile(World world, Random rand, BlockPos pos) {

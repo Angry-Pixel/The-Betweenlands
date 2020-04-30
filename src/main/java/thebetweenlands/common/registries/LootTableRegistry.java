@@ -86,6 +86,8 @@ public class LootTableRegistry {
     //Wight fortress
     public static final ResourceLocation WIGHT_FORTRESS_CHEST = register("loot/wight_fortress_chest");
     public static final ResourceLocation WIGHT_FORTRESS_POT = register("loot/wight_fortress_pot");
+    //Chiromaw Nest
+    public static final ResourceLocation CHIROMAW_NEST_SCATTERED_LOOT = register("loot/chiromaw_nest_scattered_loot");
     
     //MOBS
     public static final ResourceLocation ANGLER = register("entities/angler");
@@ -131,7 +133,7 @@ public class LootTableRegistry {
     public static final ResourceLocation EMBERLING = register("entities/emberling");
     public static final ResourceLocation EMBERLING_SHAMAN = register("entities/emberling_shaman");
     public static final ResourceLocation GREEBLING_CORPSE = register("entities/greebling_corpse");
-    
+
     //SPECIAL MOB LOOT FUNCTIONS
     public static final ResourceLocation CHIROMAW_HATCHLING = register("entities/chiromaw_hatchling");
     
