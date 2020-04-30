@@ -28,6 +28,7 @@ import thebetweenlands.common.entity.EntityTriggeredSludgeWallJet;
 import thebetweenlands.common.entity.EntityVolarkite;
 import thebetweenlands.common.entity.EntityWormGroundSpawner;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
+import thebetweenlands.common.entity.draeton.EntityPullerChiromaw;
 import thebetweenlands.common.entity.draeton.EntityPullerDragonfly;
 import thebetweenlands.common.entity.draeton.EntityPullerFirefly;
 import thebetweenlands.common.entity.mobs.EntityAngler;
@@ -215,6 +216,7 @@ public class EntityRegistry {
 		registerEntity(EntityDraeton.class, "draeton", 80, 3, true);
 		registerEntity(EntityPullerDragonfly.class, "draeton_dragonfly", 80, 3, true);
 		registerEntity(EntityPullerFirefly.class, "draeton_firefly", 80, 3, true);
+		registerEntity(EntityPullerChiromaw.class, "draeton_chiromaw_tamed", 80, 3, true);
 		
 		registerEntity(EntityChiromawGreeblingRider.class, "chiromaw_greebling_rider", 0x3F5A69, 0xA16A77);
 		registerEntity(EntityGreeblingVolarpadFloater.class, "greebling_volarpad_floater", 64, 20, true);

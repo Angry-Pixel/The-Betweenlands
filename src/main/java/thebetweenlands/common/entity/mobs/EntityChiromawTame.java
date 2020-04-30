@@ -413,6 +413,8 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 					return true;
 				}
 			}
+			if (stack.getItem() == ItemRegistry.NET)
+				return stack.getItem().itemInteractionForEntity(stack, player, this, EnumHand.MAIN_HAND);
 		}
 
 		if (isOwner(player) && hand == EnumHand.MAIN_HAND) {

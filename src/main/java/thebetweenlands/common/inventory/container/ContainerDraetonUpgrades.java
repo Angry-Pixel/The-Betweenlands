@@ -7,6 +7,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
+import thebetweenlands.common.entity.mobs.EntityChiromawTame;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -56,7 +57,7 @@ public class ContainerDraetonUpgrades extends Container {
 
 		@Override
 		public boolean isItemValid(ItemStack stack) {
-			return ItemRegistry.CRITTER.isCapturedEntity(stack, EntityDragonFly.class) || ItemRegistry.CRITTER.isCapturedEntity(stack, EntityFirefly.class);
+			return ItemRegistry.CRITTER.isCapturedEntity(stack, EntityDragonFly.class) || ItemRegistry.CRITTER.isCapturedEntity(stack, EntityFirefly.class) || ItemRegistry.CRITTER.isCapturedEntity(stack, EntityChiromawTame.class);
 		}
 	}
 

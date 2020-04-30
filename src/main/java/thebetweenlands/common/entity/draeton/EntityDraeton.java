@@ -67,6 +67,7 @@ import thebetweenlands.client.audio.DraetonPulleySound;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.mobs.EntityChiromawTame;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsPart;
@@ -2147,6 +2148,25 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 					this.world.spawnEntity(firefly);
 
+					TheBetweenlands.networkWrapper.sendToAllTracking(new MessageUpdateDraetonPhysicsPart(this, puller, MessageUpdateDraetonPhysicsPart.Action.ADD), this);
+				} else if(capturedEntity instanceof EntityChiromawTame) {
+					puller = new DraetonPhysicsPart(DraetonPhysicsPart.Type.PULLER, this, this.nextPhysicsPartId++, index);
+	
+					Vec3d pos = this.getPullPoint(puller, 1).add(this.getPositionVector());
+	
+					puller.lerpX = puller.x = pos.x;
+					puller.lerpY = puller.y = pos.y;
+					puller.lerpZ = puller.z = pos.z;
+					this.physicsParts.add(puller);
+	
+					EntityPullerChiromaw chiromaw = new EntityPullerChiromaw(this.world, this, puller);
+					chiromaw.readFromNBT(capturedEntity.writeToNBT(new NBTTagCompound()));
+					chiromaw.setLocationAndAngles(pos.x, pos.y, pos.z, 0, 0);
+	
+					puller.setEntity(chiromaw);
+	
+					this.world.spawnEntity(chiromaw);
+	
 					TheBetweenlands.networkWrapper.sendToAllTracking(new MessageUpdateDraetonPhysicsPart(this, puller, MessageUpdateDraetonPhysicsPart.Action.ADD), this);
 				}
 			}
