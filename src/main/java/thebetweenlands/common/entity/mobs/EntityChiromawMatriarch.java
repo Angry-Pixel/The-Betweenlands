@@ -53,6 +53,7 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.LocationChiromawMatriarchNest;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityBL {
@@ -167,7 +168,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 				motionY += (Math.signum(d1) - motionY) * 0.03125D;
 				motionZ += (Math.signum(d2) - motionZ) * 0.0000000003D;
 
-				if (getEntityBoundingBox().minY > getNestBox().minY + 0.0625D) {
+				if (getEntityBoundingBox().minY > getNestBox().minY + 0.0625D && Math.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ) < 0.1D) {
 					if (!getEntityWorld().isRemote) {
 						if (!getIsLanding()) {
 							setIsLanding(true);
@@ -809,29 +810,28 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 				
 				BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(largeChiromaw.world);
 				
-				List<LocationStorage> priorityNests = new ArrayList<>();
-				List<LocationStorage> otherNests = new ArrayList<>();
+				List<LocationChiromawMatriarchNest> priorityNests = new ArrayList<>();
+				List<LocationChiromawMatriarchNest> otherNests = new ArrayList<>();
 				
 				for(ILocalStorage localStorage : worldStorage.getLocalStorageHandler().getLoadedStorages()) {
 					
-					if(localStorage instanceof LocationStorage && localStorage.getBoundingBox() != null &&
-							localStorage.getBoundingBox().getCenter().squareDistanceTo(largeChiromaw.posX, largeChiromaw.posY, largeChiromaw.posZ) < maxRangeSq &&
-							((LocationStorage) localStorage).getType() == EnumLocationType.FLOATING_ISLAND) { //TODO Check for nest location instead
+					if(localStorage instanceof LocationChiromawMatriarchNest && localStorage.getBoundingBox() != null &&
+							localStorage.getBoundingBox().getCenter().squareDistanceTo(largeChiromaw.posX, largeChiromaw.posY, largeChiromaw.posZ) < maxRangeSq) {
 						
 						Vec3d center = localStorage.getBoundingBox().getCenter();
 						
 						EntityPlayer player = largeChiromaw.world.getClosestPlayer(center.x, center.y, center.z, 32, entity -> !((EntityPlayer) entity).isCreative() && !((EntityPlayer) entity).isSpectator());
 						
 						if(player != null) {
-							priorityNests.add((LocationStorage) localStorage);
+							priorityNests.add((LocationChiromawMatriarchNest) localStorage);
 						} else {
-							otherNests.add((LocationStorage) localStorage);
+							otherNests.add((LocationChiromawMatriarchNest) localStorage);
 						}
 					}
 					
 				}
 
-				LocationStorage nest = null;
+				LocationChiromawMatriarchNest nest = null;
 				if(!priorityNests.isEmpty()) {
 					Collections.shuffle(priorityNests);
 					nest = priorityNests.get(0);
@@ -845,7 +845,11 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 				}
 				
 				if(nest != null) {
-					largeChiromaw.setBoundOrigin(new BlockPos(nest.getBoundingBox().getCenter())); //TODO Use correct nest position
+					BlockPos nestPos = nest.getNestPosition();
+					if(nestPos == null) {
+						nestPos = new BlockPos(nest.getBoundingBox().getCenter());
+					}
+					largeChiromaw.setBoundOrigin(nestPos);
 					largeChiromaw.setIsNesting(false);
 					largeChiromaw.setReturnToNest(true);
 				}

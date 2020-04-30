@@ -3,6 +3,7 @@ package thebetweenlands.common.world.gen.feature.structure;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -10,15 +11,19 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import thebetweenlands.api.storage.LocalRegion;
+import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.block.plant.BlockEdgePlant;
 import thebetweenlands.common.block.plant.BlockMoss;
+import thebetweenlands.common.block.plant.BlockPlant;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockCragrock.EnumCragrockType;
 import thebetweenlands.common.entity.EntityGreeblingCorpse;
@@ -27,6 +32,10 @@ import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityGroundItem;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.LocationChiromawMatriarchNest;
+import thebetweenlands.common.world.storage.location.LocationGuarded;
+import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 
 public class WorldGenChiromawNest extends WorldGenerator {
 
@@ -41,8 +50,8 @@ public class WorldGenChiromawNest extends WorldGenerator {
 	public IBlockState ROTBULB = BlockRegistry.ROTBULB.getDefaultState();
 
 	//floor plants
-	public IBlockState TALL_SLUDGECREEP = BlockRegistry.TALL_SLUDGECREEP.getDefaultState();
-	public IBlockState PALE_GRASS = BlockRegistry.PALE_GRASS.getDefaultState();
+	public IBlockState SWAMP_TALLGRASS = BlockRegistry.SWAMP_TALLGRASS.getDefaultState();
+	public IBlockState SHOOTS = BlockRegistry.SHOOTS.getDefaultState();
 
 	//wall plants
 	public IBlockState MOSS = BlockRegistry.DEAD_MOSS.getDefaultState();
@@ -56,11 +65,24 @@ public class WorldGenChiromawNest extends WorldGenerator {
 	//ground item loot
 	public IBlockState GROUND_ITEM = BlockRegistry.GROUND_ITEM.getDefaultState();
 
+	private ILocationGuard guard;
+	
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+		
+		LocationChiromawMatriarchNest location = new LocationChiromawMatriarchNest(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), pos.up(7));
+		location.addBounds(new AxisAlignedBB(pos).grow(5, 0, 5).expand(0, 8, 0));
+		location.setSeed(rand.nextLong());
+		
+		this.guard = location.getGuard();
+		
 		generateRockPile(world, rand, pos);
 		generateNest(world, rand, pos.up(6));
 
+		location.setDirty(true);
+		worldStorage.getLocalStorageHandler().addLocalStorage(location);
+		
 		return true;
 	}
 
@@ -234,7 +256,7 @@ public class WorldGenChiromawNest extends WorldGenerator {
 	}
 
 	public IBlockState getRandomFloorPlant(Random rand) {
-		return rand.nextBoolean() ? TALL_SLUDGECREEP : PALE_GRASS; //what plants do we want
+		return rand.nextBoolean() ? SWAMP_TALLGRASS : SHOOTS; //what plants do we want
 	}
 
 	public IBlockState getRandomMushroom(Random rand) {
@@ -260,4 +282,12 @@ public class WorldGenChiromawNest extends WorldGenerator {
 		return EDGE_SHROOM.withProperty(BlockEdgePlant.FACING, facing);
 	}
 
+	@Override
+	protected void setBlockAndNotifyAdequately(World worldIn, BlockPos pos, IBlockState state) {
+		super.setBlockAndNotifyAdequately(worldIn, pos, state);
+		
+		if(this.guard != null && state.getBlock() instanceof BlockPlant == false) {
+			this.guard.setGuarded(worldIn, pos, true);
+		}
+	}
 }
