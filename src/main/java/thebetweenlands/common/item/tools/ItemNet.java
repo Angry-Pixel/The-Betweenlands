@@ -2,7 +2,10 @@ package thebetweenlands.common.item.tools;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,15 +26,20 @@ import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemNet extends Item implements IAnimatorRepairable {
-	public static final Map<Class<? extends Entity>, Supplier<? extends ItemMob>> CATCHABLE_ENTITIES = new HashMap<>();
+	public static final Map<Class<? extends Entity>, Pair<Supplier<? extends ItemMob>, Predicate<Entity>>> CATCHABLE_ENTITIES = new HashMap<>();
 
+	@SuppressWarnings("unchecked")
+	public static <T extends Entity> void register(Class<T> cls, Supplier<? extends ItemMob> item, Predicate<T> predicate) {
+		CATCHABLE_ENTITIES.put(cls, Pair.of(item, (Predicate<Entity>) predicate));
+	}
+	
 	static {
-		CATCHABLE_ENTITIES.put(EntityFirefly.class, () -> ItemRegistry.CRITTER);
-		CATCHABLE_ENTITIES.put(EntityGecko.class, () -> ItemRegistry.CRITTER);
-		CATCHABLE_ENTITIES.put(EntityDragonFly.class, () -> ItemRegistry.CRITTER);
-		CATCHABLE_ENTITIES.put(EntityTinyWormEggSac.class, () -> ItemRegistry.SLUDGE_WORM_EGG_SAC);
-		CATCHABLE_ENTITIES.put(EntityChiromawHatchling.class, () -> ItemRegistry.CHIROMAW_EGG);
-		CATCHABLE_ENTITIES.put(EntityChiromawTame.class, () -> ItemRegistry.CRITTER);
+		register(EntityFirefly.class, () -> ItemRegistry.CRITTER, e -> true);
+		register(EntityGecko.class, () -> ItemRegistry.CRITTER, e -> true);
+		register(EntityDragonFly.class, () -> ItemRegistry.CRITTER, e -> true);
+		register(EntityTinyWormEggSac.class, () -> ItemRegistry.SLUDGE_WORM_EGG_SAC, e -> true);
+		register(EntityChiromawHatchling.class, () -> ItemRegistry.CHIROMAW_EGG, e -> !e.getHasHatched());
+		register(EntityChiromawTame.class, () -> ItemRegistry.CRITTER, e -> true);
 	}
 
 	public ItemNet() {
@@ -42,15 +50,11 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
-		Supplier<? extends ItemMob> mobItem = CATCHABLE_ENTITIES.get(target.getClass());
+		Pair<Supplier<? extends ItemMob>, Predicate<Entity>> entry = CATCHABLE_ENTITIES.get(target.getClass());
 
-		if(mobItem != null) {
-			if(!player.world.isRemote) {
-
-				if(exludeThisMob(target))
-					return false;
-
-				ItemMob item = mobItem.get();
+		if(entry != null) {
+			if(!player.world.isRemote && entry.getRight().test(target)) {
+				ItemMob item = entry.getLeft().get();
 
 				ItemStack mobItemStack = item.capture(target);
 
@@ -66,14 +70,6 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 
 			player.swingArm(hand);
 			return true;
-		}
-		return false;
-	}
-
-	private boolean exludeThisMob(EntityLivingBase target) {
-		if(target instanceof EntityChiromawHatchling) {
-			if(((EntityChiromawHatchling) target).getHasHatched())
-				return true;
 		}
 		return false;
 	}
