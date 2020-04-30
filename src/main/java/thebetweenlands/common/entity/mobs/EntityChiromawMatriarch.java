@@ -111,15 +111,6 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	}
 	
 	@Override
-	public void setAttackTarget(EntityLivingBase entitylivingbaseIn) {
-		super.setAttackTarget(entitylivingbaseIn);
-		
-		if(entitylivingbaseIn == null) {
-			new RuntimeException().printStackTrace();
-		}
-	}
-	
-	@Override
 	public void onUpdate() {
 		super.onUpdate();
 		
