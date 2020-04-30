@@ -61,7 +61,7 @@ public class WorldGenChiromawNest extends WorldGenerator {
 		generateRockPile(world, rand, pos);
 		generateNest(world, rand, pos.up(6));
 
-		return false;
+		return true;
 	}
 
 	public void generateNest(World world, Random rand, BlockPos pos) {

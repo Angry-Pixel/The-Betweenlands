@@ -34,12 +34,15 @@ public class FlightMoveHelper extends EntityMoveHelper {
 				this.courseChangeCooldown += this.getCourseChangeCooldown();
 
 				dist = (double)MathHelper.sqrt(dist);
-
-				if(dist < this.entity.width + speed) {
-					this.blocked = false;
-				} else if(this.isNotColliding(this.posX, this.posY, this.posZ, dist)) {
+				
+				if(this.isNotColliding(this.posX, this.posY, this.posZ, dist)) {
+					if(dist < this.entity.width + speed) {
+						speed *= dist / (this.entity.width + speed);
+					}
+					
 					if(dist < 0.01D) {
 						this.entity.setMoveForward(0);
+						this.action = EntityMoveHelper.Action.WAIT;
 					} else {
 						this.entity.motionX += dx / dist * speed;
 						this.entity.motionY += dy / dist * speed;
@@ -56,7 +59,9 @@ public class FlightMoveHelper extends EntityMoveHelper {
 					this.blocked = true;
 				}
 				
-				this.action = EntityMoveHelper.Action.WAIT;
+				if(this.blocked) {
+					this.action = EntityMoveHelper.Action.WAIT;
+				}
 			}
 		} else if(this.action == EntityMoveHelper.Action.STRAFE) {
 			float forward = this.moveForward;
