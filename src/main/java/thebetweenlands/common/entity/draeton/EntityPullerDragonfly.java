@@ -35,7 +35,7 @@ public class EntityPullerDragonfly extends EntityDragonFly implements IPullerEnt
 
 	@Override
 	public float getPull(float pull) {
-		return pull;
+		return pull * 0.4f;
 	}
 
 	@Override

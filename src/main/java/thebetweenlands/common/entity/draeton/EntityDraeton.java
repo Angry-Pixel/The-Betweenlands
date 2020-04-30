@@ -61,15 +61,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IPullerEntity;
+import thebetweenlands.api.entity.IPullerEntityProvider;
 import thebetweenlands.client.audio.DraetonBurnerSound;
 import thebetweenlands.client.audio.DraetonLeakSound;
 import thebetweenlands.client.audio.DraetonPulleySound;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.mobs.EntityChiromawTame;
-import thebetweenlands.common.entity.mobs.EntityDragonFly;
-import thebetweenlands.common.entity.mobs.EntityFirefly;
+import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsPart;
 import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsPart.Action;
 import thebetweenlands.common.network.clientbound.MessageSyncDraetonLeakages;
@@ -197,15 +196,15 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 	public float prevPulleyRotation = 0;
 	public float pulleyRotation = 0;
-	
+
 	protected int pulleyRotationTicks = 0;
-	
+
 	public EntityDraeton(World world) {
 		super(world);
 		this.setSize(1.5F, 1.5f);
 
 		this.isImmuneToFire = true;
-		
+
 		EntityDraetonInteractionPart[] mainParts = new EntityDraetonInteractionPart[]{ 
 				this.guiPart = new EntityDraetonInteractionPart(this, "gui", 0.5f, 0.5f, false),
 						this.upgradePart1 = new EntityDraetonInteractionPart(this, "upgrade_1", 0.5f, 0.75f, false), this.upgradePart2 = new EntityDraetonInteractionPart(this, "upgrade_2", 0.5f, 0.75f, false),
@@ -715,7 +714,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		float speed = MathHelper.sqrt(this.motionX*this.motionX + this.motionY*this.motionY + this.motionZ*this.motionZ);
 
 		this.handleWaterMovement();
-		
+
 		if(!this.world.isRemote || this.canPassengerSteer()) {
 			this.move(MoverType.SELF, this.motionX, this.motionY - 0.0000001f, this.motionZ);
 			this.pushOutOfBlocks(this.posX, this.posY, this.posZ);
@@ -876,7 +875,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		if(!this.world.isRemote) {
 			for(int i = 0; i < 6; i++) {
 				ItemStack stack = this.getPullersInventory().getStackInSlot(i);
-				if(!stack.isEmpty()) {
+				if(!stack.isEmpty() && stack.getItem() instanceof ItemMob) {
 					DraetonPhysicsPart puller = this.getPhysicsPartBySlot(i, DraetonPhysicsPart.Type.PULLER);
 
 					if(puller == null) {
@@ -887,7 +886,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 						if(entity != null) {
 							//Update puller item
-							stack = ItemRegistry.CRITTER.capture(entity);
+							stack = ((ItemMob) stack.getItem()).capture(entity);
 							this.getPullersInventory().setInventorySlotContents(i, stack);
 						}
 					}
@@ -939,7 +938,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		}
 
 		this.updatePartPositions();
-		
+
 		//Leakage particles
 		if(this.world.isRemote && this.isLeaking()) {
 			for(DraetonLeakage leakage : this.leakages) {
@@ -953,7 +952,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	protected void updatePartPositions() {
 		if(this.world.isRemote) {
 			this.balloonMotion = this.balloonMotion.add(0, 0.125f, 0).scale(0.9f);
-			
+
 			this.balloonPos = this.balloonPos.add(this.balloonMotion);
 
 			for(int i = 0; i < 8; i++) {
@@ -1026,11 +1025,11 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	@Override
 	public void onUpdate() {
 		this.extinguish();
-		
+
 		this.prevRotationRoll = this.rotationRoll;
 
 		this.prevBalloonPos = this.balloonPos;
-		
+
 		if(this.getControllingPassenger() == null) {
 			this.descend = false;
 		}
@@ -1167,11 +1166,11 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 		if(this.world.isRemote) {
 			this.prevPulleyRotation = this.pulleyRotation;
-			
+
 			if(this.isReelingInAnchor()) {
 				this.pulleyRotationTicks = -1;
 			}
-			
+
 			if(this.pulleyRotationTicks < 0) {
 				this.pulleyRotationTicks = Math.min(0, this.pulleyRotationTicks + 1);
 				this.pulleyRotation += 8.0f;
@@ -1179,7 +1178,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 				this.pulleyRotationTicks = Math.max(0, this.pulleyRotationTicks - 1);
 				this.pulleyRotation -= 30.0f;
 			}
-			
+
 			if(this.prevLeakCount < this.leakages.size()) {
 				Vec3d pos = this.getBalloonPos(1);
 				this.world.playSound(pos.x, pos.y, pos.z, SoundRegistry.DRAETON_LEAK_START, SoundCategory.NEUTRAL, 1, 0.85f + this.world.rand.nextFloat() * 0.35f, false);
@@ -1761,7 +1760,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		}
 
 		this.prevBalloonPos = this.balloonPos = this.balloonPos.add(dx, dy, dz);
-		
+
 		//Update multipart positions
 		this.updatePartPositions();
 	}
@@ -1842,7 +1841,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 					if(this.getTimeSinceHit() < 5) {
 						this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.DRAETON_DAMAGE, SoundCategory.NEUTRAL, 1, 1);
 					}
-					
+
 					this.setTimeSinceHit(10);
 				}
 
@@ -2108,66 +2107,38 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 			//Add new puller part and entity
 			ItemStack stack = this.getPullersInventory().getStackInSlot(index);
-			if(!stack.isEmpty() && stack.getItem() == ItemRegistry.CRITTER) {
-				Entity capturedEntity = ItemRegistry.CRITTER.createCapturedEntity(this.world, this.posX, this.posY, this.posZ, stack);
+			if(!stack.isEmpty() && stack.getItem() instanceof ItemMob) {
+				Entity capturedEntity = ((ItemMob) stack.getItem()).createCapturedEntity(this.world, this.posX, this.posY, this.posZ, stack);
 
-				if(capturedEntity instanceof EntityDragonFly) {
+				Entity spawnedEntity = null;
+
+				if(capturedEntity instanceof IPullerEntityProvider) {
 					puller = new DraetonPhysicsPart(DraetonPhysicsPart.Type.PULLER, this, this.nextPhysicsPartId++, index);
 
-					Vec3d pos = this.getPullPoint(puller, 1).add(this.getPositionVector());
+					Entity pullerEntity = ((IPullerEntityProvider<?>) capturedEntity).createPuller(this, puller);
 
-					puller.lerpX = puller.x = pos.x;
-					puller.lerpY = puller.y = pos.y;
-					puller.lerpZ = puller.z = pos.z;
-					this.physicsParts.add(puller);
+					if(pullerEntity instanceof IPullerEntity) {
+						Vec3d pos = this.getPullPoint(puller, 1).add(this.getPositionVector());
 
-					EntityPullerDragonfly dragonfly = new EntityPullerDragonfly(this.world, this, puller);
-					dragonfly.readFromNBT(capturedEntity.writeToNBT(new NBTTagCompound()));
-					dragonfly.setLocationAndAngles(pos.x, pos.y, pos.z, 0, 0);
+						puller.lerpX = puller.x = pos.x;
+						puller.lerpY = puller.y = pos.y;
+						puller.lerpZ = puller.z = pos.z;
+						this.physicsParts.add(puller);
 
-					puller.setEntity(dragonfly);
+						pullerEntity.readFromNBT(capturedEntity.writeToNBT(new NBTTagCompound()));
+						pullerEntity.setLocationAndAngles(pos.x, pos.y, pos.z, 0, 0);
 
-					this.world.spawnEntity(dragonfly);
+						this.world.spawnEntity(pullerEntity);
+						spawnedEntity = pullerEntity;
 
-					TheBetweenlands.networkWrapper.sendToAllTracking(new MessageUpdateDraetonPhysicsPart(this, puller, MessageUpdateDraetonPhysicsPart.Action.ADD), this);
-				} else if(capturedEntity instanceof EntityFirefly) {
-					puller = new DraetonPhysicsPart(DraetonPhysicsPart.Type.PULLER, this, this.nextPhysicsPartId++, index);
+						puller.setEntity((IPullerEntity) pullerEntity);
 
-					Vec3d pos = this.getPullPoint(puller, 1).add(this.getPositionVector());
+						TheBetweenlands.networkWrapper.sendToAllTracking(new MessageUpdateDraetonPhysicsPart(this, puller, MessageUpdateDraetonPhysicsPart.Action.ADD), this);
+					}
+				}
 
-					puller.lerpX = puller.x = pos.x;
-					puller.lerpY = puller.y = pos.y;
-					puller.lerpZ = puller.z = pos.z;
-					this.physicsParts.add(puller);
-
-					EntityPullerFirefly firefly = new EntityPullerFirefly(this.world, this, puller);
-					firefly.readFromNBT(capturedEntity.writeToNBT(new NBTTagCompound()));
-					firefly.setLocationAndAngles(pos.x, pos.y, pos.z, 0, 0);
-
-					puller.setEntity(firefly);
-
-					this.world.spawnEntity(firefly);
-
-					TheBetweenlands.networkWrapper.sendToAllTracking(new MessageUpdateDraetonPhysicsPart(this, puller, MessageUpdateDraetonPhysicsPart.Action.ADD), this);
-				} else if(capturedEntity instanceof EntityChiromawTame) {
-					puller = new DraetonPhysicsPart(DraetonPhysicsPart.Type.PULLER, this, this.nextPhysicsPartId++, index);
-	
-					Vec3d pos = this.getPullPoint(puller, 1).add(this.getPositionVector());
-	
-					puller.lerpX = puller.x = pos.x;
-					puller.lerpY = puller.y = pos.y;
-					puller.lerpZ = puller.z = pos.z;
-					this.physicsParts.add(puller);
-	
-					EntityPullerChiromaw chiromaw = new EntityPullerChiromaw(this.world, this, puller);
-					chiromaw.readFromNBT(capturedEntity.writeToNBT(new NBTTagCompound()));
-					chiromaw.setLocationAndAngles(pos.x, pos.y, pos.z, 0, 0);
-	
-					puller.setEntity(chiromaw);
-	
-					this.world.spawnEntity(chiromaw);
-	
-					TheBetweenlands.networkWrapper.sendToAllTracking(new MessageUpdateDraetonPhysicsPart(this, puller, MessageUpdateDraetonPhysicsPart.Action.ADD), this);
+				if(capturedEntity != null && capturedEntity != spawnedEntity) {
+					capturedEntity.setDead();
 				}
 			}
 		}
@@ -2192,9 +2163,9 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {
 		PacketBuffer packetBuffer = new PacketBuffer(buffer);
-		
+
 		MessageSyncDraetonLeakages.serialize(this.leakages, packetBuffer);
-		
+
 		buffer.writeInt(this.physicsParts.size());
 		for(DraetonPhysicsPart part : this.physicsParts) {
 			MessageUpdateDraetonPhysicsPart msg = new MessageUpdateDraetonPhysicsPart(this, part, MessageUpdateDraetonPhysicsPart.Action.UPDATE);
@@ -2205,10 +2176,10 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	@Override
 	public void readSpawnData(ByteBuf buffer) {
 		PacketBuffer packetBuffer = new PacketBuffer(buffer);
-		
+
 		this.leakages.clear();
 		MessageSyncDraetonLeakages.deserialize(this.leakages, packetBuffer);
-		
+
 		this.physicsParts.clear();
 		int numParts = buffer.readInt();
 		for(int i = 0; i < numParts; i++) {

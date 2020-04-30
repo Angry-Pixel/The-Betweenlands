@@ -1,16 +1,17 @@
 package thebetweenlands.common.inventory.container;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import thebetweenlands.api.entity.IPullerEntityProvider;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
-import thebetweenlands.common.entity.mobs.EntityChiromawTame;
-import thebetweenlands.common.entity.mobs.EntityDragonFly;
-import thebetweenlands.common.entity.mobs.EntityFirefly;
-import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.item.misc.ItemMob;
 
 public class ContainerDraetonUpgrades extends Container {
 	private static class MainUpgradeSlot extends Slot {
@@ -57,7 +58,16 @@ public class ContainerDraetonUpgrades extends Container {
 
 		@Override
 		public boolean isItemValid(ItemStack stack) {
-			return ItemRegistry.CRITTER.isCapturedEntity(stack, EntityDragonFly.class) || ItemRegistry.CRITTER.isCapturedEntity(stack, EntityFirefly.class) || ItemRegistry.CRITTER.isCapturedEntity(stack, EntityChiromawTame.class);
+			if(stack.getItem() instanceof ItemMob) {
+				ResourceLocation id = ((ItemMob) stack.getItem()).getCapturedEntityId(stack);
+				
+				if(id != null) {
+					Class<? extends Entity> cls = EntityList.getClass(id);
+					return cls != null && IPullerEntityProvider.class.isAssignableFrom(cls);
+				}
+			}
+			
+			return false;
 		}
 	}
 

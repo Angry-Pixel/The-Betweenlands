@@ -58,6 +58,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IPullerEntity;
+import thebetweenlands.api.entity.IPullerEntityProvider;
 import thebetweenlands.api.entity.IRingOfGatheringMinion;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.common.TheBetweenlands;
@@ -65,6 +66,9 @@ import thebetweenlands.common.entity.EntityTameableBL;
 import thebetweenlands.common.entity.ai.EntityAIFlyingWander;
 import thebetweenlands.common.entity.ai.EntityAISitBL;
 import thebetweenlands.common.entity.ai.PathNavigateFlyingBL;
+import thebetweenlands.common.entity.draeton.DraetonPhysicsPart;
+import thebetweenlands.common.entity.draeton.EntityDraeton;
+import thebetweenlands.common.entity.draeton.EntityPullerChiromaw;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.item.tools.bow.EnumArrowType;
@@ -72,7 +76,7 @@ import thebetweenlands.common.network.serverbound.MessageChiromawDoubleJump;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityChiromawTame extends EntityTameableBL implements IRingOfGatheringMinion {
+public class EntityChiromawTame extends EntityTameableBL implements IRingOfGatheringMinion, IPullerEntityProvider<EntityPullerChiromaw> {
 	private static final byte EVENT_DOUBLE_JUMP = 80;
 
 	private static final DataParameter<Boolean> ATTACKING = EntityDataManager.createKey(EntityChiromawTame.class, DataSerializers.BOOLEAN);
@@ -818,5 +822,10 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 	@Override
 	public UUID getRingOwnerId() {
 		return this.getOwnerId();
+	}
+
+	@Override
+	public EntityPullerChiromaw createPuller(EntityDraeton draeton, DraetonPhysicsPart puller) {
+		return new EntityPullerChiromaw(draeton.world, draeton, puller);
 	}
 }

@@ -25,10 +25,15 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.api.entity.IPullerEntity;
+import thebetweenlands.api.entity.IPullerEntityProvider;
+import thebetweenlands.common.entity.draeton.DraetonPhysicsPart;
+import thebetweenlands.common.entity.draeton.EntityDraeton;
+import thebetweenlands.common.entity.draeton.EntityPullerDragonfly;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL {
+public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL, IPullerEntityProvider<EntityPullerDragonfly> {
 	private BlockPos currentFlightTarget;
 	private boolean entityFlying;
 	protected BlockPos spawnPos;
@@ -249,5 +254,10 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 			this.spawnPos = BlockPos.fromLong(nbt.getLong("spawnPos"));
 		}
 		super.readFromNBT(nbt);
+	}
+
+	@Override
+	public EntityPullerDragonfly createPuller(EntityDraeton draeton, DraetonPhysicsPart puller) {
+		return new EntityPullerDragonfly(draeton.world, draeton, puller);
 	}
 }

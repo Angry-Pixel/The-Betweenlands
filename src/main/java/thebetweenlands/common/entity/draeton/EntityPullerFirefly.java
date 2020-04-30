@@ -35,7 +35,7 @@ public class EntityPullerFirefly extends EntityFirefly implements IPullerEntity,
 
 	@Override
 	public float getPull(float pull) {
-		return pull * 0.25f;
+		return pull * 0.15f;
 	}
 
 	@Override
