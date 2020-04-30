@@ -111,6 +111,15 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	}
 	
 	@Override
+	public void setAttackTarget(EntityLivingBase entitylivingbaseIn) {
+		super.setAttackTarget(entitylivingbaseIn);
+		
+		if(entitylivingbaseIn == null) {
+			new RuntimeException().printStackTrace();
+		}
+	}
+	
+	@Override
 	public void onUpdate() {
 		super.onUpdate();
 		
@@ -519,12 +528,12 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	}
 
 	class AIFindNearestTarget<T extends EntityLivingBase> extends EntityAINearestAttackableTarget<T> {
-
-		protected double range;
+		protected double baseRange;
+		protected double revengeRange;
 		
 		public AIFindNearestTarget(EntityCreature creature, Class<T> classTarget, boolean checkSight, double rangeIn) {
 			super(creature, classTarget, checkSight);
-			range = rangeIn;
+			baseRange = revengeRange = rangeIn;
 		}
 
 		public AIFindNearestTarget(EntityCreature creature, Class<T> classTarget, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate <? super T > targetSelector) {
@@ -553,9 +562,9 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	    protected double getTargetDistance() {
 			if(getRevengeTarget() != null) {
 				setAttackTarget(getRevengeTarget());
-				range = getDistance(getRevengeTarget());
+				revengeRange = getDistance(getRevengeTarget());
 			}
-	        return range;
+	        return Math.max(baseRange, revengeRange);
 	    }
 	}
 

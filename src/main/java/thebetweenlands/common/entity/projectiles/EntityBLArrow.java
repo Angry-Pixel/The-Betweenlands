@@ -57,6 +57,7 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 	private static final DataParameter<String> DW_TYPE = EntityDataManager.<String>createKey(EntityBLArrow.class, DataSerializers.STRING);
 
 	private int ticksSpentInAir = 0;
+	private int ticksSpentInGround = 0;
 
 	public EntityBLArrow(World worldIn) {
 		super(worldIn);
@@ -139,10 +140,16 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 
 		if(this.inGround) {
 			this.ticksSpentInAir = 0;
+			this.ticksSpentInGround++;
 		} else {
 			this.ticksSpentInAir++;
+			this.ticksSpentInGround = 0;
 		}
 
+		if(!this.world.isRemote && this.getArrowType() == EnumArrowType.CHIROMAW_BARB && this.pickupStatus != PickupStatus.ALLOWED && this.ticksSpentInGround > 100) {
+			this.setDead();
+		}
+		
 		if(this.world.isRemote && (this.getArrowType() == EnumArrowType.SHOCK || this.getArrowType() == EnumArrowType.CHIROMAW_SHOCK_BARB)) {
 			this.spawnLightningArcs();
 		}
