@@ -57,6 +57,7 @@ import net.minecraftforge.client.event.InputUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.entity.IPullerEntity;
 import thebetweenlands.api.entity.IRingOfGatheringMinion;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.common.TheBetweenlands;
@@ -417,7 +418,7 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 				return stack.getItem().itemInteractionForEntity(stack, player, this, EnumHand.MAIN_HAND);
 		}
 
-		if (isOwner(player) && hand == EnumHand.MAIN_HAND) {
+		if (isOwner(player) && hand == EnumHand.MAIN_HAND &&  !(this instanceof IPullerEntity)) {
 			rotationYaw = player.rotationYaw;
 			
 			if (!getEntityWorld().isRemote) {
