@@ -408,11 +408,6 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
     }
 
 	@Override
-    public boolean isNonBoss() {
-        return false;
-    }
-
-	@Override
 	@Nullable
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
 		if(!world.isRemote)

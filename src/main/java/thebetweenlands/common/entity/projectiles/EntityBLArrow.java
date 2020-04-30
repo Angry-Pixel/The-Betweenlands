@@ -38,6 +38,7 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.EntityShock;
+import thebetweenlands.common.entity.mobs.EntityChiromawMatriarch;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWormHelper;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.tools.bow.EnumArrowType;
@@ -202,7 +203,7 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 			}
 			break;
 		case CHIROMAW_BARB:
-			if(living.isNonBoss()) {
+			if(living.isNonBoss() && !(living instanceof EntityChiromawMatriarch)) {
 				living.addPotionEffect(ElixirEffectRegistry.EFFECT_PETRIFY.createEffect(40, 1));
 			} 
 			break;
