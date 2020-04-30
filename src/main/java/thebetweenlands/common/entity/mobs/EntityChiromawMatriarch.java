@@ -448,6 +448,11 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		return super.attackEntityFrom(source, damage);
 	}
 
+	@Override
+	public boolean isInRangeToRenderDist(double distance) {
+		return distance < 16384 * getRenderDistanceWeight();
+	}
+	
 	@Nullable
 	public BlockPos getBoundOrigin() {
 		return boundOrigin;
@@ -810,48 +815,64 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 				
 				BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(largeChiromaw.world);
 				
-				List<LocationChiromawMatriarchNest> priorityNests = new ArrayList<>();
-				List<LocationChiromawMatriarchNest> otherNests = new ArrayList<>();
+				List<LocationStorage> priorityNests = new ArrayList<>();
+				List<LocationStorage> otherNests = new ArrayList<>();
 				
 				for(ILocalStorage localStorage : worldStorage.getLocalStorageHandler().getLoadedStorages()) {
 					
-					if(localStorage instanceof LocationChiromawMatriarchNest && localStorage.getBoundingBox() != null &&
+					if(localStorage instanceof LocationStorage  && localStorage.getBoundingBox() != null &&
 							localStorage.getBoundingBox().getCenter().squareDistanceTo(largeChiromaw.posX, largeChiromaw.posY, largeChiromaw.posZ) < maxRangeSq) {
 						
-						Vec3d center = localStorage.getBoundingBox().getCenter();
+						LocationStorage location = (LocationStorage) localStorage;
 						
-						EntityPlayer player = largeChiromaw.world.getClosestPlayer(center.x, center.y, center.z, 32, entity -> !((EntityPlayer) entity).isCreative() && !((EntityPlayer) entity).isSpectator());
-						
-						if(player != null) {
-							priorityNests.add((LocationChiromawMatriarchNest) localStorage);
-						} else {
-							otherNests.add((LocationChiromawMatriarchNest) localStorage);
+						if((location.getType() == EnumLocationType.FLOATING_ISLAND || location.getType() == EnumLocationType.CHIROMAW_MATRIARCH_NEST) &&
+								(largeChiromaw.rand.nextInt(15) == 0 || largeChiromaw.world.getEntitiesWithinAABB(this.largeChiromaw.getClass(), location.getBoundingBox()).isEmpty() /*Avoid already occupied places*/)) {
+							Vec3d center = location.getBoundingBox().getCenter();
+							
+							if(location instanceof LocationChiromawMatriarchNest && largeChiromaw.world.getClosestPlayer(center.x, center.y, center.z, 32, entity -> !((EntityPlayer) entity).isCreative() && !((EntityPlayer) entity).isSpectator()) != null) {
+								//Prioritise nests with players nearby
+								priorityNests.add(location);
+							} else {
+								otherNests.add(location);
+							}
 						}
 					}
 					
 				}
 
-				LocationChiromawMatriarchNest nest = null;
+				LocationStorage nest = null;
 				if(!priorityNests.isEmpty()) {
 					Collections.shuffle(priorityNests);
 					nest = priorityNests.get(0);
 					largeChiromaw.returnFast = true;
-				} else if(!otherNests.isEmpty() && idleChangeCounter++ >= 5) {
+				} else if(!otherNests.isEmpty() && idleChangeCounter++ >= 10) {
 					idleChangeCounter = 0;
 					Collections.shuffle(otherNests);
 					nest = otherNests.get(0);
 					largeChiromaw.returnFast = false;
-					
 				}
 				
 				if(nest != null) {
-					BlockPos nestPos = nest.getNestPosition();
-					if(nestPos == null) {
-						nestPos = new BlockPos(nest.getBoundingBox().getCenter());
+					BlockPos nestPos;
+					if(nest instanceof LocationChiromawMatriarchNest) {
+						nestPos = ((LocationChiromawMatriarchNest) nest).getNestPosition();
+						if(nestPos == null) {
+							nestPos = new BlockPos(nest.getBoundingBox().getCenter());
+						}
+					} else {
+						AxisAlignedBB locationBB = nest.getBoundingBox();
+						if(locationBB != null) {
+							nestPos = largeChiromaw.world.getHeight(new BlockPos(locationBB.getCenter()));
+						} else {
+							nestPos = null;
+						}
 					}
-					largeChiromaw.setBoundOrigin(nestPos);
-					largeChiromaw.setIsNesting(false);
-					largeChiromaw.setReturnToNest(true);
+					
+					if(nestPos != null) {
+						largeChiromaw.setBoundOrigin(nestPos);
+						largeChiromaw.setIsNesting(false);
+						largeChiromaw.setReturnToNest(true);
+					}
 				}
 				
 				return true;

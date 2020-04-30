@@ -221,7 +221,7 @@ public class EntityRegistry {
 		registerEntity(EntityBetweenstonePebble.class, "betweenstone_pebble", 64, 20, true);
 		
 		registerEntity(EntityWormGroundSpawner.class, "worm_ground_spawner");
-		registerEntity(EntityChiromawMatriarch.class, "chiromaw_matriarch", 0x3F5A69, 0xA16A77);
+		registerEntity(EntityChiromawMatriarch.class, "chiromaw_matriarch", 0x3F5A69, 0xA16A77, 128, 3, true);
 		registerEntity(EntityChiromawDroppings.class, "chiromaw_droppings", 64, 20, true);
 		registerEntity(EntityChiromawHatchling.class, "chiromaw_hatchling", 0x3F5A69, 0xA16A77);
 		registerEntity(EntityChiromawTame.class, "chiromaw_tame", 0x3F5A69, 0xA16A77);
