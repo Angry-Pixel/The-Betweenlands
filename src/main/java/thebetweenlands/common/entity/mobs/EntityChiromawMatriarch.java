@@ -811,7 +811,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		@Override
 		public boolean shouldExecute() {
 			if(!largeChiromaw.getReturnToNest() && largeChiromaw.getAttackTarget() == null && checkTimer-- <= 0) {
-				checkTimer = 5;
+				checkTimer = 10;
 				
 				BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(largeChiromaw.world);
 				
@@ -833,7 +833,10 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 								//Prioritise nests with players nearby
 								priorityNests.add(location);
 							} else {
-								otherNests.add(location);
+								//Prioritise nests over islands
+								if(location instanceof LocationChiromawMatriarchNest || largeChiromaw.rand.nextInt(3) == 0) {
+									otherNests.add(location);
+								}
 							}
 						}
 					}
@@ -845,7 +848,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 					Collections.shuffle(priorityNests);
 					nest = priorityNests.get(0);
 					largeChiromaw.returnFast = true;
-				} else if(!otherNests.isEmpty() && idleChangeCounter++ >= 10) {
+				} else if(!otherNests.isEmpty() && idleChangeCounter++ >= 8) {
 					idleChangeCounter = 0;
 					Collections.shuffle(otherNests);
 					nest = otherNests.get(0);
@@ -862,20 +865,23 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 					} else {
 						AxisAlignedBB locationBB = nest.getBoundingBox();
 						if(locationBB != null) {
-							nestPos = largeChiromaw.world.getHeight(new BlockPos(locationBB.getCenter()));
+							nestPos = new BlockPos(locationBB.getCenter());
 						} else {
 							nestPos = null;
 						}
 					}
 					
 					if(nestPos != null) {
-						largeChiromaw.setBoundOrigin(nestPos);
-						largeChiromaw.setIsNesting(false);
-						largeChiromaw.setReturnToNest(true);
+						nestPos = largeChiromaw.world.getHeight(nestPos);
+						
+						if(!nestPos.equals(largeChiromaw.getBoundOrigin())) {
+							largeChiromaw.setBoundOrigin(nestPos);
+							largeChiromaw.setIsNesting(false);
+							largeChiromaw.setReturnToNest(true);
+							return true;
+						}
 					}
 				}
-				
-				return true;
 			}
 			
 			return false;
@@ -975,7 +981,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 			Vec3d offset = target.subtract(largeChiromaw.getPositionVector()).normalize().scale(8 + largeChiromaw.rand.nextFloat() * 6);
 			Vec3d side = offset.crossProduct(new Vec3d(0, 1, 0)).normalize();
 			Vec3d up = side.crossProduct(offset).normalize();
-			return largeChiromaw.getPositionVector().add(offset).add(side.scale((largeChiromaw.rand.nextFloat() - 0.5f) * 6)).add(up.scale((largeChiromaw.rand.nextFloat() - 0.5f) * 6));
+			return largeChiromaw.getPositionVector().add(offset).add(side.scale((largeChiromaw.rand.nextFloat() - 0.5f) * 8)).add(up.scale((largeChiromaw.rand.nextFloat() - 0.5f) * 8));
 		}
 	}
 }
