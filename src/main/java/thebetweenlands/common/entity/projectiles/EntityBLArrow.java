@@ -211,7 +211,7 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 			if(!this.world.isRemote) {
 				this.world.spawnEntity(new EntityShock(this.world, this, living, this.isWet() || this.isInWater() || this.world.isRainingAt(this.getPosition().up())));
 			}
-			if(living.isNonBoss()) {
+			if(living.isNonBoss() && !(living instanceof EntityChiromawMatriarch)) {
 				living.addPotionEffect(ElixirEffectRegistry.EFFECT_PETRIFY.createEffect(40, 1));
 			} 
 			break;
