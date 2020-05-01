@@ -121,11 +121,10 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 				setReturnToNest(!getReturnToNest());
 				setBroodCount(240);
 			}
-
 			if (getBroodCount() > 0)
 				setBroodCount(getBroodCount() - 1);
 		}
-		
+
 		if (!getEntityWorld().isRemote && getAttackTarget() != null) {
 			if (getIsNesting())
 				setIsNesting(false);
@@ -139,10 +138,6 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 			getMoveHelper().setMoveTo(posX, posY + 1, posZ, 1.0D);
 		}
 
-		if (getIsNesting()) {
-			motionX = motionY = motionZ = 0.0D;
-		}
-		
 		if(!this.world.isRemote && this.ticksExisted % 20 == 0 && this.getBoundOrigin() != null) {
 			this.setBoundOrigin(this.world.getHeight(this.getBoundOrigin()));
 		}
@@ -182,7 +177,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 							setIsLanding(false);
 							getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_LAND, SoundCategory.HOSTILE, 0.5F, 1F + (getEntityWorld().rand.nextFloat() - getEntityWorld().rand.nextFloat()) * 0.8F);
 						}
-						if(!getIsNesting()) 
+						if(!getIsNesting())
 							setIsNesting(true);
 						setPosition(getBoundOrigin().getX() + 0.5D, getBoundOrigin().getY(), getBoundOrigin().getZ() + 0.5D);
 					}
@@ -235,6 +230,36 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	}
 
 	@Override
+	public void addVelocity(double x, double y, double z) {
+		if (getIsNesting()) {
+			motionX = 0;
+			motionY += y;
+			motionZ = 0;
+			isAirBorne = false;
+		} else {
+			motionX += x;
+			motionY += y;
+			motionZ += z;
+			isAirBorne = true;
+		}
+	}
+
+	//moved outside of AI because it may be useful
+	private boolean homeisOccupied() {
+		if (getNestBox() != null) {
+			Entity entity = null;
+			List<Entity> entityList = getEntityWorld().getEntitiesWithinAABBExcludingEntity(this, getNestBox());
+			if (!entityList.isEmpty())
+				for (int entityCount = 0; entityCount < entityList.size(); entityCount++) {
+					entity = entityList.get(entityCount);
+					if (entity != null && entity instanceof EntityChiromawMatriarch)
+						return true;
+				}
+		}
+		return false;
+	}
+
+	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
         if (world.isRemote) {
@@ -267,11 +292,10 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	protected void updateAITasks() {
 		if (getIsNesting()) {
 			if (!getEntityWorld().isRemote) {
-				if (getEntityWorld().getBlockState(new BlockPos(posX, posY - 1, posZ)).isNormalCube()) {
+				if (!getEntityWorld().getBlockState(new BlockPos(posX, posY - 1, posZ)).isNormalCube()) {
 					setIsNesting(false);
 				} else if (getAttackTarget() != null) {
 					setIsNesting(false);
-					getEntityWorld().playEvent(null, 1025, getPosition(), 0);
 				}
 			}
 		}
@@ -464,7 +488,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 
 	@Nullable
 	public AxisAlignedBB getNestBox() {
-		return boundOrigin != null ? new AxisAlignedBB(boundOrigin, boundOrigin.up(4)).grow(0.0625D, 0F, 0.0625D) : null;
+		return boundOrigin != null ? new AxisAlignedBB(boundOrigin, boundOrigin.up(5)).grow(0.0625D, 0F, 0.0625D) : null;
 	}
 
 	public class AIPoop extends EntityAIBase {
@@ -913,7 +937,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 			EntityLivingBase entitylivingbase = largeChiromaw.getAttackTarget();
 			if (entitylivingbase != null)
 				return false;
-			if (homeisOccupied())
+			if (largeChiromaw.homeisOccupied())
 				return false;
 			if (largeChiromaw.getReturnToNest() && !largeChiromaw.getIsNesting()) {
 				Vec3d nestLocation = getNestPosition();
@@ -944,19 +968,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		
 		@Override
 		public boolean shouldContinueExecuting() {
-			return largeChiromaw.getReturnToNest() && !largeChiromaw.getIsNesting() && largeChiromaw.getAttackTarget() == null && !homeisOccupied();
-		}
-
-		private boolean homeisOccupied() {
-			Entity entity = null;
-			List<Entity> entityList = getEntityWorld().getEntitiesWithinAABBExcludingEntity(largeChiromaw, largeChiromaw.getNestBox());
-			if (!entityList.isEmpty())
-				for (int entityCount = 0; entityCount < entityList.size(); entityCount++) {
-					entity = entityList.get(entityCount);
-					if (entity != null && entity instanceof EntityChiromawMatriarch)
-						return true;
-				}
-			return false;
+			return largeChiromaw.getReturnToNest() && !largeChiromaw.getIsNesting() && largeChiromaw.getAttackTarget() == null && !largeChiromaw.homeisOccupied();
 		}
 
 		@Override
