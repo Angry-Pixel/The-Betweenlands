@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 import com.google.common.base.Optional;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
@@ -44,6 +45,7 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.client.render.particle.entity.ParticleEntitySwirl;
 import thebetweenlands.client.render.particle.entity.ParticleLightningArc;
 import thebetweenlands.common.block.misc.BlockOctine;
 import thebetweenlands.common.entity.EntityProximitySpawner;
@@ -283,16 +285,20 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		if(id == EVENT_FLOAT_UP_PARTICLES) {
 			// TODO NOT THIS! // no idea how this works it's on a weird timer etc also; not leaves but barbs/feather particles maybe?
 			ParticleArgs<?> args = ParticleArgs.get().withDataBuilder().setData(2, this).buildData();
-			args.withColor(1F, 0.65F, 0.25F, 0.75F);
-			args.withScale(0.5F + rand.nextFloat() * 6);
-			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.LEAF_SWIRL.create(this.world, this.posX, this.posY + 2.6D, this.posZ, args));
+			args.withColor(0.227F, 0.317F, 0.294F, 1);
+			args.withScale(0.5F + rand.nextFloat() * 0.5f);
+			ParticleEntitySwirl particle = (ParticleEntitySwirl) BLParticles.LEAF_SWIRL.create(this.world, this.posX, this.posY + 2.6D, this.posZ, args);
+			particle.setOffset(0, -1.3D, 0);
+			particle.setTargetOffset(0, 1.3D, 0);
+			particle.updateTarget();
+			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 		}
 		
 		if(id == EVENT_NEW_SPAWN) {
 			// TODO not leaves but barbs/feather particles maybe
 			int leafCount = 40;
 			float x = (float) (posX);
-			float y = (float) (posY + 1.5F);
+			float y = (float) (posY + 1.1F);
 			float z = (float) (posZ);
 			while (leafCount-- > 0) {
 				float dx = getEntityWorld().rand.nextFloat() * 1 - 0.5f;

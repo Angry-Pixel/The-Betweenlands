@@ -72,8 +72,14 @@ public class RenderChiromawHatchling extends RenderLiving<EntityChiromawHatchlin
     		if (entity.getHasHatched()) {
     			float eggFade = entity.getTransformCount() + (entity.prevTransformTick - entity.getTransformCount()) * partialTicks;
     			
+    			if(entity.getTransformCount() > 0) {
+    				GlStateManager.depthMask(false);
+    			}
+    			
     			GlStateManager.color(1F, 1F, 1F, 1F - eggFade * 0.02F);
     			MODEL_HATCHLING.renderEgg(entity, partialTicks, 0.0625F);
+    			
+    			GlStateManager.depthMask(true);
     			
     			GlStateManager.color(1F, 1F, 1F, 1F);
     			MODEL_HATCHLING.renderBaby(entity, partialTicks, 0.0625F);

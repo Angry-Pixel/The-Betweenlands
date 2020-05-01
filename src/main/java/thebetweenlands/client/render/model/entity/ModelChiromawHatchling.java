@@ -241,7 +241,13 @@ public class ModelChiromawHatchling extends MowzieModelBase {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0.0F, 0.5F - smootherRise * 0.0125F - flyUp * 0.01F - flap * 0.5F, 0.0F);
 		GlStateManager.translate(0.0F, 0.0F, 0.25F - smootherRise * 0.00625F);
+		
+		GlStateManager.disableCull();
+		
 		chiromaw_base.render(scale);
+		
+		GlStateManager.enableCull();
+		
 		GlStateManager.popMatrix();
 	}
 
@@ -249,13 +255,12 @@ public class ModelChiromawHatchling extends MowzieModelBase {
 		GlStateManager.pushMatrix();
         GlStateManager.disableCull();
         GlStateManager.enableBlend();
-		GlStateManager.disableLighting();
-
+		
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         egg_base.render(scale);
+        
 		GlStateManager.enableCull();
 		GlStateManager.disableBlend();
-		GlStateManager.enableLighting();
 		GlStateManager.popMatrix();
 	}
 
