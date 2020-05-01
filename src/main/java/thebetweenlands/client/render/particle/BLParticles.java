@@ -40,6 +40,7 @@ import thebetweenlands.client.render.particle.entity.ParticleSoundRipple;
 import thebetweenlands.client.render.particle.entity.ParticleSpiritButterfly;
 import thebetweenlands.client.render.particle.entity.ParticleTarBeastDrip;
 import thebetweenlands.client.render.particle.entity.ParticleThem;
+import thebetweenlands.client.render.particle.entity.ParticleWaterRipple;
 import thebetweenlands.client.render.particle.entity.ParticleWeedwoodLeaf;
 import thebetweenlands.client.render.particle.entity.ParticleWisp;
 import thebetweenlands.client.render.particle.entity.ParticleXPPieces;
@@ -144,7 +145,8 @@ public enum BLParticles {
 	DRAETON_BURNER_FLAME(new ParticleDraetonBurnerFlame.Factory()),
 	CHIROMAW_DROPPINGS(new ParticleChiromawDroppings.Factory().getBaseArgsBuilder().withColor(0, 0, 0, 1).buildBaseArgs()),
 	LIGHTNING_ARC(new ParticleLightningArc.Factory()),
-	CHIROMAW_TRANSFORM(new ParticleWeedwoodLeaf.Factory().getBaseArgsBuilder().withColor(0.227F, 0.317F, 0.294F, 1).buildBaseArgs());
+	CHIROMAW_TRANSFORM(new ParticleWeedwoodLeaf.Factory().getBaseArgsBuilder().withColor(0.227F, 0.317F, 0.294F, 1).buildBaseArgs()),
+	WATER_RIPPLE(new ParticleWaterRipple.Factory());
 
 	private ParticleFactory<?, ?> factory;
 
