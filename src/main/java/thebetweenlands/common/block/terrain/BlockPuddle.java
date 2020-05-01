@@ -30,7 +30,7 @@ import thebetweenlands.util.AdvancedStateMap;
 public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBlock {
 
     private static final AxisAlignedBB AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D/16.0D, 1.0D);
-    public static PropertyInteger AMOUNT = PropertyInteger.create("amount", 0, 15);
+    public final static PropertyInteger AMOUNT = PropertyInteger.create("amount", 0, 15);
 
     public BlockPuddle() {
         super(Material.GROUND);
@@ -96,7 +96,7 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
 
     @Override
     public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.CUTOUT;
+        return BlockRenderLayer.TRANSLUCENT;
     }
 
     @Override
