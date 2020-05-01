@@ -913,7 +913,8 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 			EntityLivingBase entitylivingbase = largeChiromaw.getAttackTarget();
 			if (entitylivingbase != null)
 				return false;
-
+			if (homeisOccupied())
+				return false;
 			if (largeChiromaw.getReturnToNest() && !largeChiromaw.getIsNesting()) {
 				Vec3d nestLocation = getNestPosition();
 
@@ -943,7 +944,19 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		
 		@Override
 		public boolean shouldContinueExecuting() {
-			return largeChiromaw.getReturnToNest() && !largeChiromaw.getIsNesting() && largeChiromaw.getAttackTarget() == null;
+			return largeChiromaw.getReturnToNest() && !largeChiromaw.getIsNesting() && largeChiromaw.getAttackTarget() == null && !homeisOccupied();
+		}
+
+		private boolean homeisOccupied() {
+			Entity entity = null;
+			List<Entity> entityList = getEntityWorld().getEntitiesWithinAABBExcludingEntity(largeChiromaw, largeChiromaw.getNestBox());
+			if (!entityList.isEmpty())
+				for (int entityCount = 0; entityCount < entityList.size(); entityCount++) {
+					entity = entityList.get(entityCount);
+					if (entity != null && entity instanceof EntityChiromawMatriarch)
+						return true;
+				}
+			return false;
 		}
 
 		@Override
