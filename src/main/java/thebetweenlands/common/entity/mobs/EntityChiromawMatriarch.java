@@ -412,6 +412,12 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	}
 
 	@Override
+	@SuppressWarnings("rawtypes")
+	public boolean canAttackClass(Class entity) {
+		return EntityChiromawMatriarch.class != entity;
+	}
+
+	@Override
 	public int getMaxSpawnedInChunk() {
 		return 1;
 	}
