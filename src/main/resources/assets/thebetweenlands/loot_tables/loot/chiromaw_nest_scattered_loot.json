@@ -3,21 +3,118 @@
       {
          "name":"chiromaw_nest_scattered_loot",
          "rolls":2,
-         "conditions":[],
+         "conditions":[
+
+         ],
          "entries":[
             {
                "type":"item",
-               "name":"thebetweenlands:candy_blue",
+               "name":"thebetweenlands:crimson_middle_gem",
                "weight":1
             },
             {
                "type":"item",
-               "name":"thebetweenlands:candy_red",
+               "name":"thebetweenlands:aqua_middle_gem",
                "weight":1
             },
             {
                "type":"item",
-               "name":"thebetweenlands:candy_yellow",
+               "name":"thebetweenlands:green_middle_gem",
+               "weight":1
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:chiromaw_barb",
+               "weight":8
+            },
+            {
+               "type":"item",
+               "entryName":"valonite_shard",
+               "name":"thebetweenlands:items_misc",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data":19
+                  }
+               ],
+               "weight":2
+            },
+            {
+               "type":"item",
+               "entryName":"syrmorite_nugget",
+               "name":"thebetweenlands:items_misc",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data":41
+                  }
+               ],
+               "weight":5
+            },
+            {
+               "type":"item",
+               "entryName":"octine_nugget",
+               "name":"thebetweenlands:items_misc",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data":42
+                  }
+               ],
+               "weight":5
+            },
+            {
+               "type":"item",
+               "entryName":"valonite_splinters",
+               "name":"thebetweenlands:items_misc",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data":43
+                  }
+               ],
+               "weight":5
+            },
+            {
+               "type":"item",
+               "entryName":"green_dentrothyst_vial",
+               "name":"thebetweenlands:dentrothyst_vial",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data":{
+                        "min":0,
+                        "max":1
+                     }
+                  }
+               ],
+               "weight":1
+            },
+            {
+               "type":"item",
+               "entryName":"orange_dentrothyst_vial",
+               "name":"thebetweenlands:dentrothyst_vial",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data":2
+                  }
+               ],
+               "weight":1
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:dentrothyst_shard_green",
+               "weight":5
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:dentrothyst_shard_orange",
+               "weight":5
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:explorers_hat",
                "weight":1
             }
          ]
