@@ -18,6 +18,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -73,11 +74,14 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
 
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		PooledMutableBlockPos offset = PooledMutableBlockPos.retain();
+		PooledMutableBlockPos offsetDown = PooledMutableBlockPos.retain();
+
 		for(EnumFacing facing : EnumFacing.HORIZONTALS) {
-			BlockPos offset = pos.offset(facing);
+			offset.setPos(pos.getX() + facing.getXOffset(), pos.getY(), pos.getZ() + facing.getZOffset());
 			IBlockState offsetState = worldIn.getBlockState(offset);
 
-			BlockPos offsetDown = pos.add(facing.getXOffset(), -1, facing.getZOffset());
+			offsetDown.setPos(pos.getX() + facing.getXOffset(), pos.getY() - 1, pos.getZ() + facing.getZOffset());
 			IBlockState offsetDownState = worldIn.getBlockState(offsetDown);
 
 			PropertyBool prop;
@@ -99,6 +103,9 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
 
 			state = state.withProperty(prop, offsetState.getBlock() instanceof BlockPuddle == false && offsetDownState.isSideSolid(worldIn, offsetDown, EnumFacing.UP) && offsetDownState.getBlockFaceShape(worldIn, offsetDown, EnumFacing.UP) == BlockFaceShape.SOLID);
 		}
+
+		offset.release();
+		offsetDown.release();
 
 		return state;
 	}
