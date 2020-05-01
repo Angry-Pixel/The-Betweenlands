@@ -59,11 +59,11 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	private static final byte EVENT_FLOAT_UP_PARTICLES = 101;
 	private static final byte EVENT_NEW_SPAWN = 102;
 	
-	public static final int MAX_EATING_COOLDOWN = 1; // set to whatever time between hunger cycles 3000 = 2.5 minutes
+	public static final int MAX_EATING_COOLDOWN = 3000; // set to whatever time between hunger cycles 3000 = 2.5 minutes
 	public static final int MIN_EATING_COOLDOWN = 0;
 	public static final int MAX_RISE = 40;
 	public static final int MIN_RISE = 0; 
-	public static final int MAX_FOOD_NEEDED = 1; // amount of times needs to be fed
+	public static final int MAX_FOOD_NEEDED = 8; // amount of times needs to be fed
 	NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(5, ItemStack.EMPTY);
 	public float feederRotation, prevFeederRotation, headPitch, prevHeadPitch;
 	public int prevHatchAnimation, hatchAnimation, riseCount, prevRise, prevTransformTick, flapArmsCount, blinkCount;
@@ -126,7 +126,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 					if (getEntityWorld().getBlockState(getPosition().down()).getBlock() instanceof BlockOctine)
 						setHatchTick(getHatchTick() + 1); // increment whilst on an octine block.
 				}
-				if (getHatchTick() >= 1) { // how many increments before hatching 60 = 10 minutes
+				if (getHatchTick() >= 60) { // how many increments before hatching 60 = 10 minutes
 					getEntityWorld().setEntityState(this, EVENT_HATCH_PARTICLES);
 					setIsHungry(true);
 					setHasHatched(true);
