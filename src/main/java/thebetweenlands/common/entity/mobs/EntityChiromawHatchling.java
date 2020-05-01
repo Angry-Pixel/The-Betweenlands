@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 import com.google.common.base.Optional;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
@@ -44,6 +45,7 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.client.render.particle.entity.ParticleEntitySwirl;
 import thebetweenlands.client.render.particle.entity.ParticleLightningArc;
 import thebetweenlands.common.block.misc.BlockOctine;
 import thebetweenlands.common.entity.EntityProximitySpawner;
@@ -57,11 +59,11 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	private static final byte EVENT_FLOAT_UP_PARTICLES = 101;
 	private static final byte EVENT_NEW_SPAWN = 102;
 	
-	public static final int MAX_EATING_COOLDOWN = 3000; // set to whatever time between hunger cycles 3000 = 2.5 minutes
+	public static final int MAX_EATING_COOLDOWN = 1; // set to whatever time between hunger cycles 3000 = 2.5 minutes
 	public static final int MIN_EATING_COOLDOWN = 0;
 	public static final int MAX_RISE = 40;
 	public static final int MIN_RISE = 0; 
-	public static final int MAX_FOOD_NEEDED = 8; // amount of times needs to be fed
+	public static final int MAX_FOOD_NEEDED = 1; // amount of times needs to be fed
 	NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(5, ItemStack.EMPTY);
 	public float feederRotation, prevFeederRotation, headPitch, prevHeadPitch;
 	public int prevHatchAnimation, hatchAnimation, riseCount, prevRise, prevTransformTick, flapArmsCount, blinkCount;
@@ -124,7 +126,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 					if (getEntityWorld().getBlockState(getPosition().down()).getBlock() instanceof BlockOctine)
 						setHatchTick(getHatchTick() + 1); // increment whilst on an octine block.
 				}
-				if (getHatchTick() >= 60) { // how many increments before hatching 60 = 10 minutes
+				if (getHatchTick() >= 1) { // how many increments before hatching 60 = 10 minutes
 					getEntityWorld().setEntityState(this, EVENT_HATCH_PARTICLES);
 					setIsHungry(true);
 					setHasHatched(true);
@@ -283,16 +285,20 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		if(id == EVENT_FLOAT_UP_PARTICLES) {
 			// TODO NOT THIS! // no idea how this works it's on a weird timer etc also; not leaves but barbs/feather particles maybe?
 			ParticleArgs<?> args = ParticleArgs.get().withDataBuilder().setData(2, this).buildData();
-			args.withColor(1F, 0.65F, 0.25F, 0.75F);
-			args.withScale(0.5F + rand.nextFloat() * 6);
-			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.LEAF_SWIRL.create(this.world, this.posX, this.posY + 2.6D, this.posZ, args));
+			args.withColor(0.227F, 0.317F, 0.294F, 1);
+			args.withScale(0.5F + rand.nextFloat() * 0.5f);
+			ParticleEntitySwirl particle = (ParticleEntitySwirl) BLParticles.LEAF_SWIRL.create(this.world, this.posX, this.posY + 2.6D, this.posZ, args);
+			particle.setOffset(0, -1.3D, 0);
+			particle.setTargetOffset(0, 1.3D, 0);
+			particle.updateTarget();
+			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
 		}
 		
 		if(id == EVENT_NEW_SPAWN) {
 			// TODO not leaves but barbs/feather particles maybe
 			int leafCount = 40;
 			float x = (float) (posX);
-			float y = (float) (posY + 1.5F);
+			float y = (float) (posY + 1.1F);
 			float z = (float) (posZ);
 			while (leafCount-- > 0) {
 				float dx = getEntityWorld().rand.nextFloat() * 1 - 0.5f;

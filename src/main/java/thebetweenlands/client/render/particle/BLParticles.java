@@ -26,7 +26,7 @@ import thebetweenlands.client.render.particle.entity.ParticleDraetonBurnerFlame;
 import thebetweenlands.client.render.particle.entity.ParticleDruidCasting;
 import thebetweenlands.client.render.particle.entity.ParticleFish;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
-import thebetweenlands.client.render.particle.entity.ParticleLeafSwirl;
+import thebetweenlands.client.render.particle.entity.ParticleEntitySwirl;
 import thebetweenlands.client.render.particle.entity.ParticleLifeEssence;
 import thebetweenlands.client.render.particle.entity.ParticleLightningArc;
 import thebetweenlands.client.render.particle.entity.ParticleMoth;
@@ -117,7 +117,7 @@ public enum BLParticles {
 	STEAM_PURIFIER(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory())),
 	GAS_CLOUD(new ParticleGasCloud.Factory()),
 	WEEDWOOD_LEAF(new ParticleWeedwoodLeaf.Factory()),
-	LEAF_SWIRL(new ParticleLeafSwirl.Factory()),
+	LEAF_SWIRL(new ParticleEntitySwirl.Factory()),
 	REDSTONE_DUST(VanillaParticleFactory.create(ParticleRedstone.class, new ParticleRedstone.Factory())),
 	THEM(new ParticleThem.Factory()),
 	GEM_PROC(VanillaParticleFactory.create(ParticleCrit.class, new ParticleCrit.MagicFactory())),
@@ -137,8 +137,8 @@ public enum BLParticles {
 	PUZZLE_BEAM_2(new ParticlePuzzleBeam2.Factory()),
 	SMOOTH_SMOKE(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/smooth_smoke"))),
 	SONIC_SCREAM(new ParticleSonicScream.Factory()),
-	EMBER_SWIRL(new ParticleLeafSwirl.FactoryEmberSwirl()),
-	SLUDGE_SWIRL(new ParticleLeafSwirl.FactorySludgeSwirl()),
+	EMBER_SWIRL(new ParticleEntitySwirl.FactoryEmberSwirl()),
+	SLUDGE_SWIRL(new ParticleEntitySwirl.FactorySludgeSwirl()),
 	RING_OF_RECRUITMENT_STAY(new ParticleRingOfRecruitmentState.FactoryStay()),
 	RING_OF_RECRUITMENT_FOLLOW(new ParticleRingOfRecruitmentState.FactoryFollow()),
 	RING_OF_RECRUITMENT_GUARD(new ParticleRingOfRecruitmentState.FactoryGuard()),
