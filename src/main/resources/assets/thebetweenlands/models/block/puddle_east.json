@@ -1,0 +1,16 @@
+{
+  "parent": "block/thin_block",
+  "textures": {
+    "particle": "thebetweenlands:fluids/swamp_water_puddle_base",
+    "water": "thebetweenlands:fluids/swamp_water_puddle_vertical"
+  },
+  "elements": [
+    {
+      "from": [ 16, 0.2, 0 ],
+      "to": [ 19, 0.2, 16 ],
+      "faces": {
+        "up":    { "uv": [ 0,  0, 3, 16 ], "texture": "#water", "tintindex": 0 }
+      }
+    }
+  ]
+}
