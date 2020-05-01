@@ -5,6 +5,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -12,13 +13,18 @@ import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -235,5 +241,28 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
 	@Override
 	public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
 		return true;
+	}
+
+	@Override
+	public SoundType getSoundType(IBlockState state, World world, BlockPos pos, Entity entity) {
+		IBlockState stateBelow = world.getBlockState(pos.down());
+		return stateBelow.getBlock().getSoundType(stateBelow, world, pos.down(), entity);
+	}
+
+	@Override
+	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+		if(entityIn.world.isRemote && entityIn instanceof EntityPlayer && entityIn.posY <= pos.getY() + 0.01f && entityIn.ticksExisted % 5 == 0) {
+			float strength = MathHelper.sqrt(entityIn.motionX * entityIn.motionX * 0.2D + entityIn.motionY * entityIn.motionY + entityIn.motionZ * entityIn.motionZ * 0.2D) * 0.2f;
+
+			if(strength > 0.01f) {
+				entityIn.playSound(SoundEvents.ENTITY_GENERIC_SWIM, strength, 1.0F + (worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.4F);
+
+				for(int j = 0; (float)j < 10.0F + entityIn.width * 20.0F; ++j) {
+					float rx = (worldIn.rand.nextFloat() * 2.0F - 1.0F) * entityIn.width;
+					float rz = (worldIn.rand.nextFloat() * 2.0F - 1.0F) * entityIn.width;
+					worldIn.spawnParticle(EnumParticleTypes.WATER_SPLASH, entityIn.posX + rx, pos.getY() + 0.1f, entityIn.posZ + rz, entityIn.motionX + (worldIn.rand.nextFloat() - 0.5f) * strength * 20, entityIn.motionY, entityIn.motionZ + (worldIn.rand.nextFloat() - 0.5f) * strength * 20);
+				}
+			}
+		}
 	}
 }
