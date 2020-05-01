@@ -704,12 +704,13 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		            if (!largeChiromaw.getNavigator().tryMoveToEntityLiving(entitylivingbase, speedTowardsTarget))
 		                delayCounter += 15;
 		        }
-		        attackTick = Math.max(attackTick - 1, 0);
 		        if (largeChiromaw.rand.nextBoolean())
 		        	checkAndPerformDropAttack(entitylivingbase, distToEnemySqr);
 		        else
 		        	checkAndPerformSpinAttack(entitylivingbase, distToEnemySqr);
 			}
+
+			attackTick = Math.max(attackTick - 1, 0);
 
 			if (largeChiromaw.isBeingRidden()) {
 				if (entitylivingbase != null && !world.isAirBlock(largeChiromaw.getPosition().down(3)) || largeChiromaw.getPosition().getY() < largeChiromaw.pickupHeight + 16D) {
@@ -719,12 +720,18 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 						largeChiromaw.getNavigator().tryMoveToXYZ(vec3d.x, vec3d.y, vec3d.z, 2D);
 					largeChiromaw.motionY += 0.05D;
 				}
-				
+
 				if (!world.isRemote &&  (largeChiromaw.posY >= largeChiromaw.pickupHeight + 16D || largeChiromaw.getDroppingTimer() <= 0 || !world.isRemote && world.isSideSolid(new BlockPos (MathHelper.floor(largeChiromaw.posX), MathHelper.floor(largeChiromaw.posY + 1D), MathHelper.floor(largeChiromaw.posZ)), EnumFacing.DOWN))) {
 					largeChiromaw.setReturnToNest(true);
-					//largeChiromaw.setAttackTarget((EntityLivingBase)null);
 					largeChiromaw.removePassengers();
 					largeChiromaw.getEntityWorld().playSound(null, largeChiromaw.getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_RELEASE, SoundCategory.HOSTILE, 0.5F, 1F + (largeChiromaw.getEntityWorld().rand.nextFloat() - largeChiromaw.getEntityWorld().rand.nextFloat()) * 0.8F);
+				}
+
+				if (largeChiromaw.getDroppingTimer() >= 0) {
+					if(attackTick <= 0) {
+						largeChiromaw.attackEntityAsMob(entitylivingbase);
+						attackTick = 20;
+					}
 				}
 
 				if (largeChiromaw.getDroppingTimer() >= 0)
@@ -765,7 +772,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		protected void checkAndPerformDropAttack(EntityLivingBase enemy, double distToEnemySqr) {
 	        double attackReachSq = getAttackReachSqr(enemy);
 	        if (distToEnemySqr <= attackReachSq && attackTick <= 0)  {
-	            attackTick = 20;
+	        	attackTick = 20;
 	            largeChiromaw.jump();
 	            largeChiromaw.swingArm(EnumHand.MAIN_HAND);
 	            largeChiromaw.attackEntityAsMob(enemy);
