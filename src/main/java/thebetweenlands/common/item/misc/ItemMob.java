@@ -236,7 +236,7 @@ public class ItemMob extends Item {
 		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
 			NBTTagCompound entityNbt = stack.getTagCompound().getCompoundTag("Entity");
 				ResourceLocation id = this.getCapturedEntityId(stack);
-				if((id.getNamespace() + ":" + id.getPath()).equals("thebetweenlands:chiromaw_tame") || (id.getNamespace() + ":" + id.getPath()).equals("thebetweenlands:chiromaw_hatchling"))
+				if((id.getNamespace() + ":" + id.getPath()).equals("thebetweenlands:chiromaw_hatchling"))
 					if(entityNbt.getBoolean("Electric")) {
 						return true;
 			}

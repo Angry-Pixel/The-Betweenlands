@@ -39,7 +39,9 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 		register(EntityDragonFly.class, () -> ItemRegistry.CRITTER, e -> true);
 		register(EntityTinyWormEggSac.class, () -> ItemRegistry.SLUDGE_WORM_EGG_SAC, e -> true);
 		register(EntityChiromawHatchling.class, () -> ItemRegistry.CHIROMAW_EGG, e -> !e.getHasHatched());
-		register(EntityChiromawTame.class, () -> ItemRegistry.CRITTER, e -> true);
+		register(EntityChiromawHatchling.class, () -> ItemRegistry.CHIROMAW_EGG_LIGHTNING, e -> (!e.getHasHatched() && e.getElectricBoogaloo()));
+		register(EntityChiromawTame.class, () -> ItemRegistry.CHIROMAW_TAME, e -> !e.getElectricBoogaloo());
+		register(EntityChiromawTame.class, () -> ItemRegistry.CHIROMAW_TAME_LIGHTNING, e ->  e.getElectricBoogaloo());
 	}
 
 	public ItemNet() {
