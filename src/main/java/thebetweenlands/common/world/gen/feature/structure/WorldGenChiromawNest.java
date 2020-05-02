@@ -28,6 +28,7 @@ import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockCragrock.EnumCragrockType;
 import thebetweenlands.common.entity.EntityGreeblingCorpse;
 import thebetweenlands.common.entity.mobs.EntityChiromawHatchling;
+import thebetweenlands.common.entity.mobs.EntityChiromawMatriarch;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
@@ -117,13 +118,23 @@ public class WorldGenChiromawNest extends WorldGenerator {
 
 						if (yy == 0 && Math.round(Math.sqrt(dSqDome)) == 1) {
 							setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), Blocks.AIR.getDefaultState());
-							addEntitiesAndLootBlocks (world, rand, pos.add(xx, yy, zz));
+							addEntitiesAndLootBlocks(world, rand, pos.add(xx, yy, zz));
+						}
+						if (yy == 0 && Math.round(Math.sqrt(dSqDome)) == 0) {
+							addMatiarch(world, rand, pos.add(xx, yy, zz));
 						}
 					}
 					setBlockAndNotifyAdequately(world, pos.add(0, yy, 0),  CRAGROCK.withProperty(BlockCragrock.VARIANT, getCragrockForYLevel(rand, yy + 3)));
 				}
 			}
 		}
+	}
+
+	private void addMatiarch(World world, Random rand, BlockPos pos) {
+		EntityChiromawMatriarch matriarch = new EntityChiromawMatriarch(world);
+		matriarch.setPosition(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+		matriarch.onInitialSpawn(world.getDifficultyForLocation(pos), null);
+		world.spawnEntity(matriarch);
 	}
 
 	private void addEntitiesAndLootBlocks(World world, Random rand, BlockPos pos) {
