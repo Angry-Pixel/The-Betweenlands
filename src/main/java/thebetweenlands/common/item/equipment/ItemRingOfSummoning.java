@@ -99,12 +99,11 @@ public class ItemRingOfSummoning extends ItemRing {
 								}
 
 								if (targetPos != null && entity.world.getBlockState(targetPos.down()).isSideSolid(entity.world, targetPos.down(), EnumFacing.UP)) {
-									EntityMummyArm arm = new EntityMummyArm(entity.world);
+									EntityMummyArm arm = new EntityMummyArm(entity.world, (EntityPlayer) entity);
 									arm.setLocationAndAngles(targetPos.getX() + 0.5D, targetPos.getY(), targetPos.getZ() + 0.5D, 0, 0);
 
 									if (arm.world.getCollisionBoxes(arm, arm.getEntityBoundingBox()).isEmpty()) {
 										this.drainPower(stack, entity);
-										arm.setPlayerOwner(entity);
 										entity.world.spawnEntity(arm);
 									}
 								}

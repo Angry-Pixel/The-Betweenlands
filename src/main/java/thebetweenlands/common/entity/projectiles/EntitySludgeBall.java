@@ -117,14 +117,7 @@ public class EntitySludgeBall extends EntityThrowable {
 				state.addCollisionBoxToList(this.world, collision.getBlockPos(), this.getEntityBoundingBox().offset(this.motionX, this.motionY, this.motionZ), aabbs, this, true);
 				
 				if(!aabbs.isEmpty()) {
-					if(Math.abs(this.motionY) <= 0.001) {
-						if(this.getEntityWorld().isRemote)
-							this.motionX = this.motionY = this.motionZ = 0.0D;
-						else 
-							explode();
-					}
-					
-					if(!this.world.isRemote && ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
+					if(!this.world.isRemote && ForgeEventFactory.getMobGriefingEvent(this.world, this) && this.bounces == 0) {
 						Entity owner = this.getOwner();
 						
 						if(owner instanceof EntityLivingBase && this.posY > owner.getEntityBoundingBox().maxY && this.motionY > 0.1D) {
@@ -141,6 +134,13 @@ public class EntitySludgeBall extends EntityThrowable {
 								explode();
 							}
 						}
+					}
+					
+					if(Math.abs(this.motionY) <= 0.001) {
+						if(this.getEntityWorld().isRemote)
+							this.motionX = this.motionY = this.motionZ = 0.0D;
+						else 
+							explode();
 					}
 					
 					if (collision.sideHit.getAxis() == Axis.Y) {

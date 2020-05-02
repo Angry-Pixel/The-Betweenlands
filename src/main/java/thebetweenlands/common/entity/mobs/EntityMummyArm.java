@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -17,6 +18,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -27,10 +29,11 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.item.equipment.ItemRingOfSummoning;
 
-public class EntityMummyArm extends EntityCreature implements IEntityBL {
+public class EntityMummyArm extends EntityCreature implements IEntityBL, IEntityAdditionalSpawnData {
 	private static final DataParameter<Integer> OWNER_ID = EntityDataManager.<Integer>createKey(EntityMummyArm.class, DataSerializers.VARINT);
 
 	private Entity owner;
@@ -49,6 +52,12 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 	public EntityMummyArm(World world) {
 		super(world);
 		this.setSize(0.7F, 0.7F);
+	}
+
+	public EntityMummyArm(World world, EntityPlayer player) {
+		super(world);
+		this.setSize(0.7F, 0.7F);
+		this.setPlayerOwner(player);
 	}
 
 	@Override
@@ -72,7 +81,7 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 	}
 
-	public void setPlayerOwner(@Nullable Entity owner) {
+	public void setPlayerOwner(@Nullable EntityPlayer owner) {
 		this.owner = owner;
 		this.ownerUUID = owner == null ? null : owner.getUniqueID();
 		this.getDataManager().set(OWNER_ID, owner == null ? -1 : owner.getEntityId());
@@ -81,7 +90,7 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 	public boolean hasPlayerOwner() {
 		return this.ownerUUID != null;
 	}
-	
+
 	@Nullable
 	public Entity getPlayerOwner() {
 		if(!this.world.isRemote) {
@@ -154,7 +163,7 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 			if(this.spawnTicks >= 4) {
 				List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox());
 				for(EntityLivingBase target : targets) {
-					
+
 					boolean isValidTarget;
 					if(this.hasPlayerOwner()) {
 						isValidTarget = target != this && target != this.getPlayerOwner() && (target instanceof EntityMob || target instanceof IMob);
@@ -265,5 +274,24 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 		this.spawnTicks = nbt.getInteger("spawnTicks");
 		this.despawnTicks = nbt.getInteger("despawnTicks");
 		this.deathTicks = nbt.getInteger("deathTicks");
+	}
+
+	@Override
+	public void writeSpawnData(ByteBuf buf) {
+		PacketBuffer packet = new PacketBuffer(buf);
+		packet.writeBoolean(this.ownerUUID != null);
+		if(this.ownerUUID != null) {
+			packet.writeUniqueId(this.ownerUUID);
+		}
+	}
+
+	@Override
+	public void readSpawnData(ByteBuf buf) {
+		PacketBuffer packet = new PacketBuffer(buf);
+		if(packet.readBoolean()) {
+			this.ownerUUID = packet.readUniqueId();
+		} else {
+			this.ownerUUID = null;
+		}
 	}
 }
