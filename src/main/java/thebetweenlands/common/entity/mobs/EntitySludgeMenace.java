@@ -520,7 +520,7 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 						break;
 					case SLUDGE_BALL:
 					case SLUDGE_BALL_SERIES:
-						mob = new EntitySludgeBall(this.world, this);
+						mob = new EntitySludgeBall(this.world, this, false);
 						break;
 					}
 

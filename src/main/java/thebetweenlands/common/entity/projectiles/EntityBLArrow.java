@@ -8,6 +8,7 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -157,7 +158,8 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 
 	@SideOnly(Side.CLIENT)
 	private void spawnLightningArcs() {
-		if(this.world.rand.nextInt(!this.inGround ? 2 : 20) == 0) {
+		Entity view = Minecraft.getMinecraft().getRenderViewEntity();
+		if(view != null && view.getDistance(this) < 16 && this.world.rand.nextInt(!this.inGround ? 2 : 20) == 0) {
 			float ox = this.world.rand.nextFloat() - 0.5f + (!this.inGround ? (float)this.motionX : 0);
 			float oy = this.world.rand.nextFloat() - 0.5f + (!this.inGround ? (float)this.motionY : 0);
 			float oz = this.world.rand.nextFloat() - 0.5f + (!this.inGround ? (float)this.motionZ : 0);
