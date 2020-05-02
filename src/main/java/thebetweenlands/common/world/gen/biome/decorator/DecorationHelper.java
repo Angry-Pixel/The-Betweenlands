@@ -844,6 +844,7 @@ public class DecorationHelper {
 
 	public static boolean generateChiromawMatriarchNest(DecoratorPositionProvider decorator) {
 		BlockPos pos = decorator.getRandomPos(6);
+		pos = decorator.getWorld().getHeight(pos);
 		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down()) && pos.getY() >= WorldProviderBetweenlands.LAYER_HEIGHT + 25) {
 			return GEN_CHIROMAW_MATRIARCH_NEST.generate(decorator.getWorld(), decorator.getRand(), pos.down());
 		}
@@ -852,7 +853,7 @@ public class DecorationHelper {
 	
 	public static boolean generateRottenLogs(DecoratorPositionProvider decorator) {
 		BlockPos pos = decorator.getRandomPos();
-		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down())) {
+		if(SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down())) {
 			WorldGenRottenLogs gen = new WorldGenRottenLogs(decorator.getRand().nextInt(5) + 4, decorator.getRand().nextInt(3) + 2, (byte)decorator.getRand().nextInt(2));
 			gen.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}

@@ -33,6 +33,7 @@ import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityGroundItem;
+import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationChiromawMatriarchNest;
 import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
@@ -71,7 +72,8 @@ public class WorldGenChiromawNest extends WorldGenerator {
 	public boolean generate(World world, Random rand, BlockPos pos) {
 		for(int xo = -4; xo <= 4; xo++) {
 			for(int zo = -4; zo <= 4; zo++) {
-				if(world.isAirBlock(pos.add(xo, -2, zo))) {
+				BlockPos checkPos = pos.add(xo, -1, zo);
+				if(xo*xo + zo*zo <= 16 && (world.isAirBlock(checkPos) || world.getBlockState(checkPos).getMaterial().isLiquid())) {
 					return false;
 				}
 			}
@@ -83,7 +85,7 @@ public class WorldGenChiromawNest extends WorldGenerator {
 					BlockPos checkPos = pos.add(xo, yo, zo);
 					IBlockState state = world.getBlockState(checkPos);
 					
-					if(!state.getBlock().isReplaceable(world, checkPos) && state.getBlock() instanceof BlockPlant == false) {
+					if(!state.getBlock().isReplaceable(world, checkPos) && !SurfaceType.MIXED_GROUND.apply(state) && state.getBlock() instanceof BlockPlant == false) {
 						return false;
 					}
 				}
