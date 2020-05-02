@@ -471,6 +471,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 			setFoodCraved(chooseNewFoodFromLootTable());
 		if(checkArea() != null && checkArea() instanceof EntityPlayer)
 			setOwnerId(checkArea().getUniqueID());
+		setElectricBoogaloo(true);
 		}
 		return livingdata;
 	}

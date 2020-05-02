@@ -196,9 +196,12 @@ public class ItemMob extends Item {
 					if (entity instanceof EntityChiromawHatchling) {
 						((EntityChiromawHatchling) entity).setOwnerId(player.getUniqueID());
 						((EntityChiromawHatchling) entity).setFoodCraved(((EntityChiromawHatchling) entity).chooseNewFoodFromLootTable());
+						
+						if(stack.getItem() == ItemRegistry.CHIROMAW_EGG_LIGHTNING)
+							((EntityChiromawHatchling) entity).setElectricBoogaloo(true);
 					}
-
- 					stack.shrink(1);
+	
+					stack.shrink(1);
 					return EnumActionResult.SUCCESS;
 				}
 			}
