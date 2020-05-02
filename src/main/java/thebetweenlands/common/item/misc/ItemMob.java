@@ -29,6 +29,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.mobs.EntityChiromawHatchling;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemMob extends Item {
 	private final Class<? extends Entity> defaultMob;
@@ -196,6 +197,7 @@ public class ItemMob extends Item {
 						((EntityChiromawHatchling) entity).setOwnerId(player.getUniqueID());
 						((EntityChiromawHatchling) entity).setFoodCraved(((EntityChiromawHatchling) entity).chooseNewFoodFromLootTable());
 					}
+
  					stack.shrink(1);
 					return EnumActionResult.SUCCESS;
 				}
@@ -233,14 +235,8 @@ public class ItemMob extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean hasEffect(ItemStack stack) {
-		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
-			NBTTagCompound entityNbt = stack.getTagCompound().getCompoundTag("Entity");
-				ResourceLocation id = this.getCapturedEntityId(stack);
-				if((id.getNamespace() + ":" + id.getPath()).equals("thebetweenlands:chiromaw_hatchling"))
-					if(entityNbt.getBoolean("Electric")) {
-						return true;
-			}
-		}
+		if (!stack.isEmpty() && stack.getItem() == ItemRegistry.CHIROMAW_EGG_LIGHTNING)
+			return true;
 		return false;
 	}
 }
