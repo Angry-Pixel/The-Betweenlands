@@ -41,6 +41,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.EntityMountEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.client.render.model.ControlledAnimation;
@@ -309,8 +311,6 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 			double offSetX = -Math.sin(a) * 0.6D;
 			double offSetZ = Math.cos(a) * 0.6D;
 			entity.setPosition(posX - offSetX, posY - entity.height + MathHelper.sin((ticksExisted) * 0.5F) * 0.3F, posZ - offSetZ);
-			if (entity.isSneaking())
-				entity.setSneaking(false);
 		}
 	}
 
@@ -468,6 +468,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	public boolean attackEntityFrom(DamageSource source, float damage) {
 		if (source.equals(DamageSource.IN_WALL) || source.equals(DamageSource.DROWN))
 			return false;
+		
 		if (source instanceof EntityDamageSourceIndirect) {
 			if (source.getTrueSource() == this)
 				return false;
@@ -475,6 +476,12 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 				setRevengeTarget((EntityLivingBase) source.getTrueSource());
 			}
 		}
+
+		if (source.getTrueSource() instanceof EntityPlayer)
+			if (isBeingRidden() && isPassenger(source.getTrueSource()))
+				if(!getEntityWorld().isRemote)
+					setDroppingTimer(0);
+
 		return super.attackEntityFrom(source, damage);
 	}
 
@@ -776,8 +783,6 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	            largeChiromaw.jump();
 	            largeChiromaw.swingArm(EnumHand.MAIN_HAND);
 	            largeChiromaw.attackEntityAsMob(enemy);
-	    		if (enemy.isSneaking())
-	    			enemy.setSneaking(false);
 	    		largeChiromaw.getEntityWorld().playSound(null, largeChiromaw.getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_GRAB, SoundCategory.HOSTILE, 0.5F, 1F + (largeChiromaw.getEntityWorld().rand.nextFloat() - largeChiromaw.getEntityWorld().rand.nextFloat()) * 0.8F);
 	    		enemy.startRiding(largeChiromaw, true);
 	    		largeChiromaw.pickupHeight = largeChiromaw.posY;
@@ -1020,6 +1025,19 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 			Vec3d side = offset.crossProduct(new Vec3d(0, 1, 0)).normalize();
 			Vec3d up = side.crossProduct(offset).normalize();
 			return largeChiromaw.getPositionVector().add(offset).add(side.scale((largeChiromaw.rand.nextFloat() - 0.5f) * 8)).add(up.scale((largeChiromaw.rand.nextFloat() - 0.5f) * 8));
+		}
+	}
+
+	@SubscribeEvent
+	public static void onEntityDismount(EntityMountEvent event) {
+		if (event.isDismounting() && !event.getWorldObj().isRemote) {
+			Entity rider = event.getEntityMounting();
+			Entity mount = event.getEntityBeingMounted();
+			if (rider instanceof EntityPlayer && mount instanceof EntityChiromawMatriarch) {
+				if (((EntityChiromawMatriarch) mount).getDroppingTimer() > 0) {
+					event.setCanceled(true);
+				}
+			}
 		}
 	}
 }
