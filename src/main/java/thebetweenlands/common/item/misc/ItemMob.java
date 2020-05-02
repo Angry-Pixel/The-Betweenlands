@@ -2,6 +2,7 @@ package thebetweenlands.common.item.misc;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
@@ -28,21 +29,24 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.entity.mobs.EntityChiromawHatchling;
 
 public class ItemMob extends Item {
 	private final Class<? extends Entity> defaultMob;
+	private final Consumer<Entity> defaultMobSetter;
 
 	/**
 	 * @param maxStackSize Max stack size of the item. If this is > 1 then only the entity's ID and no additional NBT is stored.
-	 * @param defaultMob Default mob of this item
+	 * @param defaultMob Default mob type of this item
+	 * @param defaultMobSetter Sets the properties of the default mob
 	 */
-	public ItemMob(int maxStackSize, @Nullable Class<? extends Entity> defaultMob) {
+	@SuppressWarnings("unchecked")
+	public <T extends Entity> ItemMob(int maxStackSize, @Nullable Class<T> defaultMob, @Nullable Consumer<T> defaultMobSetter) {
 		this.maxStackSize = maxStackSize;
 		this.defaultMob = defaultMob;
+		this.defaultMobSetter = (Consumer<Entity>) defaultMobSetter;
 		this.setCreativeTab(BLCreativeTabs.ITEMS);
 	}
-	
+
 	public ItemStack capture(Class<? extends Entity> cls) {
 		return this.capture(cls, null);
 	}
@@ -143,7 +147,11 @@ public class ItemMob extends Item {
 			if(id != null) {
 				NBTTagCompound nbt = new NBTTagCompound();
 				nbt.setString("id", id.toString());
-				return this.createCapturedEntityFromNBT(world, x, y, z, nbt);
+				Entity entity = this.createCapturedEntityFromNBT(world, x, y, z, nbt);
+				if(this.defaultMobSetter != null) {
+					this.defaultMobSetter.accept(entity);
+				}
+				return entity;
 			}
 		}
 
@@ -167,7 +175,7 @@ public class ItemMob extends Item {
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		if(this.defaultMob != null && this.isInCreativeTab(tab)) {
-			items.add(this.capture(this.defaultMob));
+			items.add(new ItemStack(this));
 		}
 	}
 
@@ -188,20 +196,21 @@ public class ItemMob extends Item {
 				}
 
 				if(world.getCollisionBoxes(entity, entity.getEntityBoundingBox()).isEmpty()) {
-					world.spawnEntity(entity);
-					if(entity instanceof EntityLiving) {
-						((EntityLiving) entity).playLivingSound();
-					}
-					if (entity instanceof EntityChiromawHatchling) {
-						((EntityChiromawHatchling) entity).setOwnerId(player.getUniqueID());
-						((EntityChiromawHatchling) entity).setFoodCraved(((EntityChiromawHatchling) entity).chooseNewFoodFromLootTable());
-					}
- 					stack.shrink(1);
+					this.spawnCapturedEntity(player, world, entity);
+					stack.shrink(1);
 					return EnumActionResult.SUCCESS;
 				}
 			}
 		}
 		return EnumActionResult.SUCCESS;
+	}
+
+	protected void spawnCapturedEntity(EntityPlayer player, World world, Entity entity) {
+		world.spawnEntity(entity);
+
+		if(entity instanceof EntityLiving) {
+			((EntityLiving) entity).playLivingSound();
+		}
 	}
 
 	@Override
@@ -228,19 +237,5 @@ public class ItemMob extends Item {
 				tooltip.add(I18n.format("tooltip.bl.item_mob.health", MathHelper.ceil(living.getHealth() / 2), MathHelper.ceil(living.getMaxHealth() / 2)));
 			}
 		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean hasEffect(ItemStack stack) {
-		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
-			NBTTagCompound entityNbt = stack.getTagCompound().getCompoundTag("Entity");
-				ResourceLocation id = this.getCapturedEntityId(stack);
-				if((id.getNamespace() + ":" + id.getPath()).equals("thebetweenlands:chiromaw_hatchling"))
-					if(entityNbt.getBoolean("Electric")) {
-						return true;
-			}
-		}
-		return false;
 	}
 }

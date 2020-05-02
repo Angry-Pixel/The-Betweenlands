@@ -483,7 +483,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 			super.onStruckByLightning(lightningBolt);
     }
 
-	private void setElectricBoogaloo(boolean electric) {
+	public void setElectricBoogaloo(boolean electric) {
 		dataManager.set(ELECTRIC, electric);
 	}
 

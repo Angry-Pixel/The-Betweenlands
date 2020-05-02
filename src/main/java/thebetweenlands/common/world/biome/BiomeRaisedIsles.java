@@ -30,7 +30,7 @@ import thebetweenlands.common.world.biome.spawning.spawners.SkySpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SporelingSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SwampHagCaveSpawnEntry;
-import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorCoarseIslands;
+import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorRaisedIsles;
 import thebetweenlands.common.world.gen.biome.feature.AlgaeFeature;
 import thebetweenlands.common.world.gen.biome.feature.CoarseIslandsFeature;
 
@@ -45,7 +45,7 @@ public class BiomeRaisedIsles extends BiomeBetweenlands {
 				.setTemperature(0.8F)
 				.setRainfall(0.9F));
 		this.setWeight(16);
-		this.getBiomeGenerator().setDecorator(new BiomeDecoratorCoarseIslands(this))
+		this.getBiomeGenerator().setDecorator(new BiomeDecoratorRaisedIsles(this))
 		.addFeature(new CoarseIslandsFeature())
 		.addFeature(new AlgaeFeature());
 		this.setFoliageColors(-1, 0xA8A800);

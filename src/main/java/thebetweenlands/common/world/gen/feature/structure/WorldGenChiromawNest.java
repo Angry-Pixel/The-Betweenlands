@@ -34,7 +34,6 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityGroundItem;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationChiromawMatriarchNest;
-import thebetweenlands.common.world.storage.location.LocationGuarded;
 import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 
 public class WorldGenChiromawNest extends WorldGenerator {
@@ -69,6 +68,27 @@ public class WorldGenChiromawNest extends WorldGenerator {
 	
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
+		for(int xo = -4; xo <= 4; xo++) {
+			for(int zo = -4; zo <= 4; zo++) {
+				if(world.isAirBlock(pos.add(xo, -2, zo))) {
+					return false;
+				}
+			}
+		}
+		
+		for(int xo = -2; xo <= 2; xo++) {
+			for(int yo = 3; yo <= 6; yo++) {
+				for(int zo = -2; zo <= 2; zo++) {
+					BlockPos checkPos = pos.add(xo, yo, zo);
+					IBlockState state = world.getBlockState(checkPos);
+					
+					if(!state.getBlock().isReplaceable(world, checkPos) && state.getBlock() instanceof BlockPlant == false) {
+						return false;
+					}
+				}
+			}
+		}
+		
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 		
 		LocationChiromawMatriarchNest location = new LocationChiromawMatriarchNest(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), pos.up(7));

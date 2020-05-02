@@ -37,6 +37,7 @@ import thebetweenlands.common.world.gen.feature.WorldGenSwampKelpCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenSwampReedCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenWaterRootsCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenWeedwoodBush;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenChiromawNest;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenIdolHeads;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenMudStructures;
@@ -121,6 +122,7 @@ public class DecorationHelper {
 	public static final WorldGenerator GEN_TAR_POOL_DUNGEON = new WorldGenTarPoolDungeon();
 	public static final WorldGenerator GEN_SPIRIT_TREE_STRUCTURE = new WorldGenSpiritTreeStructure();
 	public static final WorldGenerator GEN_SLUDGE_WORM_DUNGEON = new WorldGenSludgeWormDungeon();
+	public static final WorldGenerator GEN_CHIROMAW_MATRIARCH_NEST = new WorldGenChiromawNest();
 	
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
@@ -840,6 +842,14 @@ public class DecorationHelper {
 		return false;
 	}
 
+	public static boolean generateChiromawMatriarchNest(DecoratorPositionProvider decorator) {
+		BlockPos pos = decorator.getRandomPos(6);
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down()) && pos.getY() >= WorldProviderBetweenlands.LAYER_HEIGHT + 25) {
+			return GEN_CHIROMAW_MATRIARCH_NEST.generate(decorator.getWorld(), decorator.getRand(), pos.down());
+		}
+		return false;
+	}
+	
 	public static boolean generateRottenLogs(DecoratorPositionProvider decorator) {
 		BlockPos pos = decorator.getRandomPos();
 		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down())) {

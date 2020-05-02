@@ -14,13 +14,13 @@ import thebetweenlands.common.item.tools.ItemNet;
 
 public class ItemCritters extends ItemMob {
 	public ItemCritters() {
-		super(1, null);
+		super(1, null, null);
 	}
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		if(this.isInCreativeTab(tab)) {
-			for(Entry<Class<? extends Entity>, Pair<Supplier<? extends ItemMob>, Predicate<Entity>>> entry : ItemNet.CATCHABLE_ENTITIES.entrySet()) {
+			for(Entry<Class<? extends Entity>, Pair<Supplier<? extends ItemMob>, Predicate<Entity>>> entry : ItemNet.CATCHABLE_ENTITIES.entries()) {
 				if(entry.getValue().getLeft().get() == this) {
 					items.add(this.capture(entry.getKey()));
 				}
