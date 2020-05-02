@@ -59,6 +59,7 @@ import thebetweenlands.client.audio.EntityMusicLayers;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
 import thebetweenlands.common.network.clientbound.MessageSummonPeatMummyParticles;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.sound.BLSoundEvent;
@@ -317,6 +318,70 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 		return false;
 	}
 
+	protected void placeBridge() {
+		Path path = this.getNavigator().getPath();
+
+		if(path != null && path.getCurrentPathIndex() < path.getCurrentPathLength()) {
+			PathPoint nextPoint = path.getPathPointFromIndex(path.getCurrentPathIndex());
+
+			if(nextPoint.y == MathHelper.floor(this.posY + 0.5f)) {
+				BlockPos pos = new BlockPos(this);
+				pos = pos.add(0, nextPoint.y - pos.getY() - 1, 0);
+
+				if(this.getDistanceSq(pos) <= 2 && (this.world.isAirBlock(pos) || this.getNavigator().getNodeProcessor().getPathNodeType(this.world, pos.getX(), pos.getY(), pos.getZ()) != PathNodeType.BLOCKED)) {
+					if(ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
+
+						int nx = -2;
+						int nz = -2;
+
+						if(path.getCurrentPathIndex() < path.getCurrentPathLength() - 1) {
+							PathPoint secondNextPoint = path.getPathPointFromIndex(path.getCurrentPathIndex() + 1);
+							nx = MathHelper.clamp(secondNextPoint.x - nextPoint.x, -1, 1);
+							nz = MathHelper.clamp(secondNextPoint.z - nextPoint.z, -1, 1);
+							if(nx == 0) nx = -2;
+							if(nz == 0) nz = -2;
+						}
+
+						for(int xo = -1; xo <= 1; xo++) {
+							for(int zo = -1; zo <= 1; zo++) {
+								if(xo != nx && zo != nz) {
+									BlockPos offsetPos = pos.add(xo, 0, zo);
+
+									if((this.world.isAirBlock(offsetPos) || this.getNavigator().getNodeProcessor().getPathNodeType(this.world, offsetPos.getX(), offsetPos.getY(), offsetPos.getZ()) != PathNodeType.BLOCKED)) {
+										
+										boolean canReplace = false;
+
+										if(this.world.isAirBlock(offsetPos)) {
+											canReplace = true;
+										} else {
+											IBlockState hitState = this.world.getBlockState(offsetPos);
+											float hardness = hitState.getBlockHardness(this.world, offsetPos);
+	
+											if(hardness >= 0 && hardness <= 2.5F
+													&& hitState.getBlock().canEntityDestroy(hitState, this.world, offsetPos, this)
+													&& ForgeEventFactory.onEntityDestroyBlock(this, offsetPos, hitState)) {
+	
+												canReplace = true;
+												this.world.playEvent(2001, offsetPos, Block.getStateId(hitState));
+												this.world.setBlockToAir(offsetPos);
+											}
+										}
+	
+										if(canReplace) {
+											this.world.setBlockState(offsetPos, BlockRegistry.SLUDGY_DIRT.getDefaultState());
+										}
+										
+									}
+								}
+							}
+						}
+
+					}
+				}
+			}
+		}
+	}
+
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
@@ -383,6 +448,10 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 			}
 		} else {
 			EntityLivingBase target = this.getAttackTarget();
+
+			if(target != null) {
+				this.placeBridge();
+			}
 
 			float targetMotionX = 0.0f;
 			float targetMotionY = 0.0f;
