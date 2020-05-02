@@ -18,7 +18,23 @@ public class RenderChiromawTame extends RenderLiving<EntityChiromawTame> {
 
 	public RenderChiromawTame(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelChiromawTame(), 0.5F);
-		this.addLayer(new LayerOverlay<>(this, new ResourceLocation("thebetweenlands:textures/entity/chiromaw_glow.png")).setGlow(true));
+        addLayer(new LayerOverlay<EntityChiromawTame >(this, new ResourceLocation("thebetweenlands:textures/entity/chiromaw_glow.png")) {
+        	@Override
+        	public void doRenderLayer(EntityChiromawTame  entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        		if(!entity.getElectricBoogaloo()) {
+        			super.doRenderLayer(entity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
+        		}
+        	}
+        }.setGlow(true));
+
+        addLayer(new LayerOverlay<EntityChiromawTame >(this, new ResourceLocation("thebetweenlands:textures/entity/chiromaw_tame_lightning_glow.png")) {
+        	@Override
+        	public void doRenderLayer(EntityChiromawTame  entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        		if(entity.getElectricBoogaloo()) {
+        			super.doRenderLayer(entity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
+        		}
+        	}
+        }.setGlow(true));
 	}
 
 	@Override
