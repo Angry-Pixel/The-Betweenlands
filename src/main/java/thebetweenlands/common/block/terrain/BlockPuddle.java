@@ -255,7 +255,7 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
 			float strength = MathHelper.sqrt(entityIn.motionX * entityIn.motionX * 0.2D + entityIn.motionY * entityIn.motionY + entityIn.motionZ * entityIn.motionZ * 0.2D) * 0.2f;
 
 			if(strength > 0.01f) {
-				entityIn.playSound(SoundEvents.ENTITY_GENERIC_SWIM, strength, 1.0F + (worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.4F);
+				entityIn.playSound(SoundEvents.ENTITY_GENERIC_SWIM, strength * 8, 1.0F + (worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.4F);
 
 				for(int j = 0; (float)j < 10.0F + entityIn.width * 20.0F; ++j) {
 					float rx = (worldIn.rand.nextFloat() * 2.0F - 1.0F) * entityIn.width;
