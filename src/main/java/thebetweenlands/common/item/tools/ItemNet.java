@@ -1,7 +1,7 @@
 package thebetweenlands.common.item.tools;
 
 import java.util.Collection;
-import java.util.function.Predicate;
+import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -28,22 +28,22 @@ import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemNet extends Item implements IAnimatorRepairable {
-	public static final Multimap<Class<? extends Entity>, Pair<Supplier<? extends ItemMob>, Predicate<Entity>>> CATCHABLE_ENTITIES = MultimapBuilder.hashKeys().arrayListValues().build();
+	public static final Multimap<Class<? extends Entity>, Pair<Supplier<? extends ItemMob>, BiPredicate<EntityPlayer, Entity>>> CATCHABLE_ENTITIES = MultimapBuilder.hashKeys().arrayListValues().build();
 
 	@SuppressWarnings("unchecked")
-	public static <T extends Entity> void register(Class<T> cls, Supplier<? extends ItemMob> item, Predicate<T> predicate) {
-		CATCHABLE_ENTITIES.put(cls, Pair.of(item, (Predicate<Entity>) predicate));
+	public static <T extends Entity> void register(Class<T> cls, Supplier<? extends ItemMob> item, BiPredicate<EntityPlayer, T> predicate) {
+		CATCHABLE_ENTITIES.put(cls, Pair.of(item, (BiPredicate<EntityPlayer, Entity>) predicate));
 	}
 
 	static {
-		register(EntityFirefly.class, () -> ItemRegistry.CRITTER, e -> true);
-		register(EntityGecko.class, () -> ItemRegistry.CRITTER, e -> true);
-		register(EntityDragonFly.class, () -> ItemRegistry.CRITTER, e -> true);
-		register(EntityTinyWormEggSac.class, () -> ItemRegistry.SLUDGE_WORM_EGG_SAC, e -> true);
-		register(EntityChiromawHatchling.class, () -> ItemRegistry.CHIROMAW_EGG, e -> !e.getHasHatched() && !e.getElectricBoogaloo());
-		register(EntityChiromawHatchling.class, () -> ItemRegistry.CHIROMAW_EGG_LIGHTNING, e -> !e.getHasHatched() && e.getElectricBoogaloo());
-		register(EntityChiromawTame.class, () -> ItemRegistry.CHIROMAW_TAME, e -> !e.getElectricBoogaloo());
-		register(EntityChiromawTame.class, () -> ItemRegistry.CHIROMAW_TAME_LIGHTNING, e -> e.getElectricBoogaloo());
+		register(EntityFirefly.class, () -> ItemRegistry.CRITTER, (p, e) -> true);
+		register(EntityGecko.class, () -> ItemRegistry.CRITTER, (p, e) -> true);
+		register(EntityDragonFly.class, () -> ItemRegistry.CRITTER, (p, e) -> true);
+		register(EntityTinyWormEggSac.class, () -> ItemRegistry.SLUDGE_WORM_EGG_SAC, (p, e) -> true);
+		register(EntityChiromawHatchling.class, () -> ItemRegistry.CHIROMAW_EGG, (p, e) -> !e.getHasHatched() && !e.getElectricBoogaloo());
+		register(EntityChiromawHatchling.class, () -> ItemRegistry.CHIROMAW_EGG_LIGHTNING, (p, e) -> !e.getHasHatched() && e.getElectricBoogaloo());
+		register(EntityChiromawTame.class, () -> ItemRegistry.CHIROMAW_TAME, (p, e) -> e.getOwner() == p && !e.getElectricBoogaloo());
+		register(EntityChiromawTame.class, () -> ItemRegistry.CHIROMAW_TAME_LIGHTNING, (p, e) -> e.getOwner() == p && e.getElectricBoogaloo());
 	}
 
 	public ItemNet() {
@@ -54,12 +54,12 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
-		Collection<Pair<Supplier<? extends ItemMob>, Predicate<Entity>>> entries = CATCHABLE_ENTITIES.get(target.getClass());
+		Collection<Pair<Supplier<? extends ItemMob>, BiPredicate<EntityPlayer, Entity>>> entries = CATCHABLE_ENTITIES.get(target.getClass());
 
 		if(entries != null) {
 			if(!player.world.isRemote) {
-				for(Pair<Supplier<? extends ItemMob>, Predicate<Entity>> entry : entries) {
-					if(entry.getRight().test(target)) {
+				for(Pair<Supplier<? extends ItemMob>, BiPredicate<EntityPlayer, Entity>> entry : entries) {
+					if(entry.getRight().test(player, target)) {
 						ItemMob item = entry.getLeft().get();
 
 						ItemStack mobItemStack = item.capture(target);
