@@ -21,12 +21,13 @@ import thebetweenlands.client.render.particle.entity.ParticleBubbleBL;
 import thebetweenlands.client.render.particle.entity.ParticleBug;
 import thebetweenlands.client.render.particle.entity.ParticleCaveWaterDrip;
 import thebetweenlands.client.render.particle.entity.ParticleChiromawDroppings;
+import thebetweenlands.client.render.particle.entity.ParticleChiromawFeathers;
 import thebetweenlands.client.render.particle.entity.ParticleDamageReduction;
 import thebetweenlands.client.render.particle.entity.ParticleDraetonBurnerFlame;
 import thebetweenlands.client.render.particle.entity.ParticleDruidCasting;
+import thebetweenlands.client.render.particle.entity.ParticleEntitySwirl;
 import thebetweenlands.client.render.particle.entity.ParticleFish;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
-import thebetweenlands.client.render.particle.entity.ParticleEntitySwirl;
 import thebetweenlands.client.render.particle.entity.ParticleLifeEssence;
 import thebetweenlands.client.render.particle.entity.ParticleLightningArc;
 import thebetweenlands.client.render.particle.entity.ParticleMoth;
@@ -145,7 +146,9 @@ public enum BLParticles {
 	DRAETON_BURNER_FLAME(new ParticleDraetonBurnerFlame.Factory()),
 	CHIROMAW_DROPPINGS(new ParticleChiromawDroppings.Factory().getBaseArgsBuilder().withColor(0, 0, 0, 1).buildBaseArgs()),
 	LIGHTNING_ARC(new ParticleLightningArc.Factory()),
-	CHIROMAW_TRANSFORM(new ParticleWeedwoodLeaf.Factory().getBaseArgsBuilder().withColor(0.227F, 0.317F, 0.294F, 1).buildBaseArgs()),
+	CHIROMAW_TRANSFORM(new ParticleChiromawFeathers.Factory().getBaseArgsBuilder().withColor(0.227F, 0.317F, 0.294F, 1).buildBaseArgs()),
+	CHIROMAW_TRANSFORM_LIGHTNING(new ParticleChiromawFeathers.Factory().getBaseArgsBuilder().withColor(0.420F, 0.565F, 0.553F, 1).buildBaseArgs()),
+	CHIROMAW_TRANSFORM_SWIRL(new ParticleEntitySwirl.FactoryChiromawSwirl()),
 	WATER_RIPPLE(new ParticleWaterRipple.Factory());
 
 	private ParticleFactory<?, ?> factory;

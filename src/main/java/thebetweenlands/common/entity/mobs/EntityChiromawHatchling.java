@@ -109,16 +109,16 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-
+		/*
 		//TODO Insta hatch
-		/*if (!getEntityWorld().isRemote) {
+		if (!getEntityWorld().isRemote) {
 			this.setHasHatched(true);
 			this.setIsTransforming(true);
 			this.setTransformCount(60);
 			this.setEatingCooldown(0);
 			this.setAmountEaten(MAX_FOOD_NEEDED);
-		}*/
-		
+		}
+		 */		
 		// STAGE 1
 		if (!getHasHatched()) {
 			if (!getEntityWorld().isRemote) {
@@ -284,9 +284,13 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		
 		if(id == EVENT_FLOAT_UP_PARTICLES) {
 			ParticleArgs<?> args = ParticleArgs.get().withDataBuilder().setData(2, this).buildData();
-			args.withColor(0.227F, 0.317F, 0.294F, 1);
+			if(getElectricBoogaloo())
+				args.withColor(0.420F, 0.565F, 0.553F, 1); //lightning
+			else
+				args.withColor(0.227F, 0.317F, 0.294F, 1); //normal
+
 			args.withScale(0.5F + rand.nextFloat() * 0.5f);
-			ParticleEntitySwirl particle = (ParticleEntitySwirl) BLParticles.LEAF_SWIRL.create(this.world, this.posX, this.posY + 2.6D, this.posZ, args);
+			ParticleEntitySwirl particle = (ParticleEntitySwirl) BLParticles.CHIROMAW_TRANSFORM_SWIRL.create(this.world, this.posX, this.posY + 2.6D, this.posZ, args);
 			particle.setOffset(0, -1.3D, 0);
 			particle.setTargetOffset(0, 1.3D, 0);
 			particle.updateTarget();
@@ -303,7 +307,10 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 				float dy = getEntityWorld().rand.nextFloat() * 1f - 0.1F;
 				float dz = getEntityWorld().rand.nextFloat() * 1 - 0.5f;
 				float mag = 0.08F + getEntityWorld().rand.nextFloat() * 0.07F;
-				BLParticles.CHIROMAW_TRANSFORM.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
+				if(getElectricBoogaloo())
+					BLParticles.CHIROMAW_TRANSFORM_LIGHTNING.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
+				else
+					BLParticles.CHIROMAW_TRANSFORM.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
 			}
 		}
 	}

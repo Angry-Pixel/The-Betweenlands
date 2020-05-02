@@ -111,4 +111,20 @@ public class ParticleEntitySwirl extends ParticleSwirl implements IParticleSprit
 			args.withData(400, 0.0F, null);
 		}
 	}
+	
+	public static final class FactoryChiromawSwirl extends ParticleFactory<FactoryChiromawSwirl, ParticleEntitySwirl> {
+		public FactoryChiromawSwirl() {
+			super(ParticleEntitySwirl.class, ParticleTextureStitcher.create(ParticleEntitySwirl.class, new ResourceLocation("thebetweenlands:particle/chiromaw_transform")).setSplitAnimations(true));
+		}
+
+		@Override
+		public ParticleEntitySwirl createParticle(ImmutableParticleArgs args) {
+			return new ParticleEntitySwirl(args.world, args.x, args.y, args.z, args.data.getInt(0), args.scale, args.data.getFloat(1), args.data.getObject(Entity.class, 2));
+		}
+
+		@Override
+		protected void setBaseArguments(ParticleArgs<?> args) {
+			args.withData(400, 0.0F, null);
+		}
+	}
 }
