@@ -99,6 +99,7 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 		if (!getEntityWorld().isRemote) {
 			if(checkArea() != null && checkArea() instanceof EntityPlayer)
 				setOwnerId(checkArea().getUniqueID());
+			//setElectricBoogaloo(true);
 		}
 		return livingdata;
 	}
