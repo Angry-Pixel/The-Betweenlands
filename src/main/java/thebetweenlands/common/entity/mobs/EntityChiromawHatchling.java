@@ -230,7 +230,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 						getEntityWorld().playSound(null, getPosition(), SoundRegistry.CHIROMAW_HATCHLING_TRANSFORM, SoundCategory.NEUTRAL, 1F, 1F);
 					if (getTransformCount() <= 60) {
 						setTransformCount(getTransformCount() + 1);
-						getEntityWorld().setEntityState(this, EVENT_FLOAT_UP_PARTICLES); // TODO - no idea O.o
+						getEntityWorld().setEntityState(this, EVENT_FLOAT_UP_PARTICLES);
 						}
 					if(getOwner() != null)
 						lookAtFeeder(getOwner(), 30F);
@@ -283,7 +283,6 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		}
 		
 		if(id == EVENT_FLOAT_UP_PARTICLES) {
-			// TODO NOT THIS! // no idea how this works it's on a weird timer etc also; not leaves but barbs/feather particles maybe?
 			ParticleArgs<?> args = ParticleArgs.get().withDataBuilder().setData(2, this).buildData();
 			args.withColor(0.227F, 0.317F, 0.294F, 1);
 			args.withScale(0.5F + rand.nextFloat() * 0.5f);
@@ -295,7 +294,6 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		}
 		
 		if(id == EVENT_NEW_SPAWN) {
-			// TODO not leaves but barbs/feather particles maybe
 			int leafCount = 40;
 			float x = (float) (posX);
 			float y = (float) (posY + 1.1F);
@@ -356,12 +354,12 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	@Override
 	protected Entity checkArea() {
 		Entity entity = null;
-		if (!getEntityWorld().isRemote) {// && getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL) {
+		if (!getEntityWorld().isRemote) {
 			List<EntityPlayer> list = getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class, proximityBox());
 			for (int entityCount = 0; entityCount < list.size(); entityCount++) {
 				entity = list.get(entityCount);
 				if (entity != null) {
-					if (entity instanceof EntityPlayer) {// && !((EntityPlayer) entity).isSpectator() && !((EntityPlayer) entity).isCreative()) {
+					if (entity instanceof EntityPlayer) {
 						if (canSneakPast() && entity.isSneaking())
 							return null;
 						else if (checkSight() && !canEntityBeSeen(entity))
@@ -466,12 +464,8 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	@Nullable
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-		if (!getEntityWorld().isRemote) {
+		if (!getEntityWorld().isRemote)
 			setLocationAndAngles(posX, posY, posZ, 0F, 0.0F); // stahp random rotating on spawn with an egg mojang pls
-			setFoodCraved(chooseNewFoodFromLootTable());
-		if(checkArea() != null && checkArea() instanceof EntityPlayer)
-			setOwnerId(checkArea().getUniqueID());
-		}
 		return livingdata;
 	}
 

@@ -14,7 +14,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -46,11 +45,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.InputUpdateEvent;
@@ -91,29 +88,6 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 		setSize(0.7F, 0.9F);
 		moveHelper = new FlightMoveHelper(this);
 	}
-
-	// TEMP JUST HERE TO SET OWNER DURING TEST
-	@Nullable
-	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-		if (!getEntityWorld().isRemote) {
-			if(checkArea() != null && checkArea() instanceof EntityPlayer)
-				setOwnerId(checkArea().getUniqueID());
-			//setElectricBoogaloo(true);
-		}
-		return livingdata;
-	}
-
-	protected Entity checkArea() {
-		Entity entity = null;
-		if (!getEntityWorld().isRemote) {
-			List<EntityPlayer> list = getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(getPosition()).grow(6D));
-			for (int entityCount = 0; entityCount < list.size(); entityCount++)
-				entity = list.get(entityCount);
-		}
-		return entity;
-	}
-	//TEMP END
 
 	@Override
 	protected void initEntityAI() {
@@ -423,7 +397,7 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 				return stack.getItem().itemInteractionForEntity(stack, player, this, EnumHand.MAIN_HAND);
 		}
 
-		if (isOwner(player) && hand == EnumHand.MAIN_HAND &&  !(this instanceof IPullerEntity)) {
+		if (isOwner(player) && hand == EnumHand.MAIN_HAND && !(this instanceof IPullerEntity)) {
 			rotationYaw = player.rotationYaw;
 			
 			if (!getEntityWorld().isRemote) {
