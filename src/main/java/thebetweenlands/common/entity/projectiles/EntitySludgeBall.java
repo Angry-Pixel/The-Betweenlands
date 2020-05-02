@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,9 +21,11 @@ import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeEventFactory;
 import thebetweenlands.common.entity.mobs.EntityDreadfulMummy;
 import thebetweenlands.common.entity.mobs.EntityMultipartDummy;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
@@ -30,17 +33,20 @@ import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 public class EntitySludgeBall extends EntityThrowable {
 	private int bounces = 0;
 	private String ownerUUID;
+	private boolean breakBlocks;
 
 	public EntitySludgeBall(World world) {
 		super(world);
 		this.setSize(0.75F, 0.75F);
 		this.ownerUUID = "";
+		this.breakBlocks = false;
 	}
 
-	public EntitySludgeBall(World world, EntityLivingBase owner) {
+	public EntitySludgeBall(World world, EntityLivingBase owner, boolean breakBlocks) {
 		this(world);
 		this.ownerUUID = owner.getUniqueID().toString();
 		this.thrower = owner;
+		this.breakBlocks = breakBlocks;
 	}
 
 	public Entity getOwner() {
@@ -76,7 +82,7 @@ public class EntitySludgeBall extends EntityThrowable {
 		double prevY = this.posY;
 		double prevZ = this.posZ;
 		move(MoverType.SELF,this.motionX, this.motionY, this.motionZ);
-		if(!this.getEntityWorld().isRemote && new Vec3d(prevX - this.posX, prevY - this.posY, prevZ - this.posZ).lengthSquared() < 0.01D && this.ticksExisted > 10) {
+		if(!this.getEntityWorld().isRemote && new Vec3d(prevX - this.posX, prevY - this.posY, prevZ - this.posZ).lengthSquared() < 0.001D && this.ticksExisted > 10) {
 			this.explode();
 		}
 		this.motionX = prevMotionX;
@@ -105,9 +111,11 @@ public class EntitySludgeBall extends EntityThrowable {
 	protected void onImpact(RayTraceResult collision) {
 		if(collision.typeOfHit == RayTraceResult.Type.BLOCK) {
 			IBlockState state = getEntityWorld().getBlockState(collision.getBlockPos());
+			
 			if (state.getBlock().canCollideCheck(state, false)) {
 				List<AxisAlignedBB> aabbs = new ArrayList<>();
 				state.addCollisionBoxToList(this.world, collision.getBlockPos(), this.getEntityBoundingBox().offset(this.motionX, this.motionY, this.motionZ), aabbs, this, true);
+				
 				if(!aabbs.isEmpty()) {
 					if(Math.abs(this.motionY) <= 0.001) {
 						if(this.getEntityWorld().isRemote)
@@ -115,6 +123,26 @@ public class EntitySludgeBall extends EntityThrowable {
 						else 
 							explode();
 					}
+					
+					if(!this.world.isRemote && ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
+						Entity owner = this.getOwner();
+						
+						if(owner instanceof EntityLivingBase && this.posY > owner.getEntityBoundingBox().maxY && this.motionY > 0.1D) {
+							BlockPos pos = collision.getBlockPos();
+							IBlockState hitState = this.world.getBlockState(pos);
+							float hardness = hitState.getBlockHardness(this.world, pos);
+							
+							if(!hitState.getBlock().isAir(hitState, this.world, pos) && hardness >= 0 && hardness <= 2.5F
+									&& hitState.getBlock().canEntityDestroy(hitState, this.world, pos, (EntityLivingBase) owner)
+									&& ForgeEventFactory.onEntityDestroyBlock((EntityLivingBase) owner, pos, hitState)) {
+								this.world.playEvent(2001, pos, Block.getStateId(hitState));
+								this.world.setBlockToAir(pos);
+								
+								explode();
+							}
+						}
+					}
+					
 					if (collision.sideHit.getAxis() == Axis.Y) {
 						this.motionY *= -0.9D;
 						this.velocityChanged = true;
@@ -154,7 +182,7 @@ public class EntitySludgeBall extends EntityThrowable {
 		}
 		
 		if (collision.typeOfHit == RayTraceResult.Type.ENTITY) {
-			if(collision.entityHit != this.thrower && !(collision.entityHit instanceof MultiPartEntityPart) &&  !(collision.entityHit instanceof EntityMultipartDummy) && !(collision.entityHit instanceof EntityPeatMummy) && !(collision.entityHit instanceof EntityDreadfulMummy)) {
+			if(collision.entityHit != this.thrower && !(collision.entityHit instanceof EntitySludgeBall) && !(collision.entityHit instanceof MultiPartEntityPart) &&  !(collision.entityHit instanceof EntityMultipartDummy) && !(collision.entityHit instanceof EntityPeatMummy) && !(collision.entityHit instanceof EntityDreadfulMummy)) {
 				if(this.attackEntity(collision.entityHit)) {
 					explode();
 				} else {
@@ -214,13 +242,17 @@ public class EntitySludgeBall extends EntityThrowable {
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
 		nbt.setInteger("bounces", this.bounces);
 		nbt.setString("ownerUUID", this.ownerUUID);
+		nbt.setBoolean("breakBlocks", this.breakBlocks);
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
 		this.bounces = nbt.getInteger("bounces");
 		this.ownerUUID = nbt.getString("ownerUUID");
+		this.breakBlocks = nbt.getBoolean("breakBlocks");
 	}
 }

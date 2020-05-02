@@ -104,7 +104,7 @@ public class ItemRingOfSummoning extends ItemRing {
 
 									if (arm.world.getCollisionBoxes(arm, arm.getEntityBoundingBox()).isEmpty()) {
 										this.drainPower(stack, entity);
-										arm.setOwner(entity);
+										arm.setPlayerOwner(entity);
 										entity.world.spawnEntity(arm);
 									}
 								}

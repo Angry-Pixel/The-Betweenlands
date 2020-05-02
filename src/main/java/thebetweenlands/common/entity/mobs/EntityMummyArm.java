@@ -3,6 +3,8 @@ package thebetweenlands.common.entity.mobs;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -70,13 +72,18 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 	}
 
-	public void setOwner(Entity owner) {
+	public void setPlayerOwner(@Nullable Entity owner) {
 		this.owner = owner;
 		this.ownerUUID = owner == null ? null : owner.getUniqueID();
 		this.getDataManager().set(OWNER_ID, owner == null ? -1 : owner.getEntityId());
 	}
 
-	public Entity getOwner() {
+	public boolean hasPlayerOwner() {
+		return this.ownerUUID != null;
+	}
+	
+	@Nullable
+	public Entity getPlayerOwner() {
 		if(!this.world.isRemote) {
 			if(this.owner != null && this.owner.getUniqueID().equals(this.ownerUUID)) {
 				return this.owner;
@@ -113,21 +120,19 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 		IBlockState blockState = this.world.getBlockState(pos);
 
 		if(!this.world.isRemote) {
-			if(blockState.getBlock() == Blocks.AIR || !blockState.isSideSolid(this.world, pos, EnumFacing.UP)) {
+			if(blockState.getBlock() == Blocks.AIR || (this.hasPlayerOwner() && !blockState.isSideSolid(this.world, pos, EnumFacing.UP))) {
 				this.setDead();
 			}
 
-			Entity owner = this.getOwner();
+			Entity owner = this.getPlayerOwner();
 
-			if(owner == null || owner.getDistance(this) > 32.0D) {
+			if(this.hasPlayerOwner() && (owner == null || owner.getDistance(this) > 32.0D)) {
 				this.setHealth(0);
 			} else if(owner instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) owner;
 				if(!ItemRingOfSummoning.isRingActive(player)) {
 					this.setHealth(0);
 				}
-			} else {
-				this.setHealth(0);
 			}
 
 			if(this.despawnTicks >= 150) {
@@ -149,12 +154,19 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 			if(this.spawnTicks >= 4) {
 				List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox());
 				for(EntityLivingBase target : targets) {
-					if(target != this && target != this.getOwner() && target instanceof EntityMob || target instanceof IMob) {
+					
+					boolean isValidTarget;
+					if(this.hasPlayerOwner()) {
+						isValidTarget = target != this && target != this.getPlayerOwner() && (target instanceof EntityMob || target instanceof IMob);
+					} else {
+						isValidTarget = target instanceof EntityPlayer;
+					}
+					if(isValidTarget) {
 						target.setInWeb();
 
 						if(target.hurtResistantTime < 10) {
 							DamageSource damageSource;
-							Entity owner = this.getOwner();
+							Entity owner = this.getPlayerOwner();
 							if(owner != null) {
 								damageSource = new EntityDamageSourceIndirect("mob", this, owner);
 							} else {
