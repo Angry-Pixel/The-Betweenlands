@@ -9,12 +9,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.item.tools.ItemNet;
 
 public class ItemCritters extends ItemMob {
@@ -31,19 +26,5 @@ public class ItemCritters extends ItemMob {
 				}
 			}
 		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean hasEffect(ItemStack stack) {
-		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
-			NBTTagCompound entityNbt = stack.getTagCompound().getCompoundTag("Entity");
-				ResourceLocation id = this.getCapturedEntityId(stack);
-				if((id.getNamespace() + ":" + id.getPath()).equals("thebetweenlands:chiromaw_tame") || (id.getNamespace() + ":" + id.getPath()).equals("thebetweenlands:chiromaw_hatchling"))
-					if(entityNbt.getBoolean("Electric")) {
-						return true;
-			}
-		}
-		return false;
 	}
 }
