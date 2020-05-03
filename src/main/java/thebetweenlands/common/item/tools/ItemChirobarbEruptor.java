@@ -30,8 +30,8 @@ import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.NBTHelper;
 
 
-public class ItemChiromawBarbTorc extends Item {
-	public ItemChiromawBarbTorc() {
+public class ItemChirobarbEruptor extends Item {
+	public ItemChirobarbEruptor() {
 		super();
 		maxStackSize = 1;
 		setMaxDamage(32);
@@ -41,7 +41,7 @@ public class ItemChiromawBarbTorc extends Item {
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
-			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.chiromaw_barb_torc.usage"), 0));
+			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.chirobarb_eruptor.usage"), 0));
 	}
 
 	@Override

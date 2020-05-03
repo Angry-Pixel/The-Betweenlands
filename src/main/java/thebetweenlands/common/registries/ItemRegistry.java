@@ -155,7 +155,7 @@ import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.item.tools.ItemBLShovel;
 import thebetweenlands.common.item.tools.ItemBLSword;
 import thebetweenlands.common.item.tools.ItemBucketInfusion;
-import thebetweenlands.common.item.tools.ItemChiromawBarbTorc;
+import thebetweenlands.common.item.tools.ItemChirobarbEruptor;
 import thebetweenlands.common.item.tools.ItemGreataxe;
 import thebetweenlands.common.item.tools.ItemHagHacker;
 import thebetweenlands.common.item.tools.ItemLootSword;
@@ -327,7 +327,7 @@ public class ItemRegistry {
     public static final Item GRAPPLING_HOOK = new ItemGrapplingHook();
     public static final Item VOLARKITE = new ItemVolarkite();
     public static final Item SIMPLE_SLINGSHOT = new ItemSimpleSlingshot();
-    public static final Item CHIROMAW_BARB_TORC = new ItemChiromawBarbTorc();
+    public static final Item CHIROBARB_ERUPTOR = new ItemChirobarbEruptor();
     //BUCKETS
     public static final ItemBLBucket BL_BUCKET = new ItemBLBucket();
     public static final Item BL_BUCKET_RUBBER = new ItemSpecificBucket(FluidRegistry.RUBBER);
