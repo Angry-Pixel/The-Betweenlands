@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,27 +29,50 @@ public class ItemVoodooDoll extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		ItemStack stack = player.getHeldItem(hand);
-		List<EntityLivingBase> living = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(player.posX, player.posY, player.posZ, player.posX, player.posY, player.posZ).grow(5, 5, 5));
-		living.remove(player);
-		boolean attacked = false;
-		for (EntityLivingBase entity : living) {
-			if (entity.isEntityAlive() && !(entity instanceof IBLBoss) && entity instanceof EntityPlayer == false) {
-				if (!world.isRemote) {
-					attacked |= entity.attackEntityFrom(DamageSource.MAGIC, 20);
-				} else if (!entity.isEntityInvulnerable(DamageSource.MAGIC)) {
-					attacked = true;
-					for (int i = 0; i < 20; i++)
-						BLParticles.SWAMP_SMOKE.spawn(world, entity.posX, entity.posY + entity.height / 2.0D, entity.posZ, ParticleFactory.ParticleArgs.get().withMotion((world.rand.nextFloat() - 0.5F) * 0.5F, (world.rand.nextFloat() - 0.5F) * 0.5F, (world.rand.nextFloat() - 0.5F) * 0.5F).withColor(1, 1, 1, 1));
+	public int getMaxItemUseDuration(ItemStack stack) {
+		return 40;
+	}
+
+	@Override
+	public ItemStack onItemUseFinish(ItemStack stack, World world, EntityLivingBase user) {
+		if(user instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) user;
+
+			List<EntityLivingBase> living = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(player.posX, player.posY, player.posZ, player.posX, player.posY, player.posZ).grow(5, 5, 5));
+			living.remove(player);
+
+			boolean attacked = false;
+			for (EntityLivingBase entity : living) {
+				if (entity.isEntityAlive() && !(entity instanceof IBLBoss) && entity instanceof EntityPlayer == false) {
+					if (!world.isRemote) {
+						attacked |= entity.attackEntityFrom(DamageSource.MAGIC, 20);
+					} else if (!entity.isEntityInvulnerable(DamageSource.MAGIC)) {
+						attacked = true;
+						for (int i = 0; i < 20; i++) {
+							BLParticles.SWAMP_SMOKE.spawn(world, entity.posX, entity.posY + entity.height / 2.0D, entity.posZ, ParticleFactory.ParticleArgs.get().withMotion((world.rand.nextFloat() - 0.5F) * 0.5F, (world.rand.nextFloat() - 0.5F) * 0.5F, (world.rand.nextFloat() - 0.5F) * 0.5F).withColor(1, 1, 1, 1));
+						}
+					}
 				}
 			}
+
+			if (!world.isRemote && attacked) {
+				stack.damageItem(1, player);
+				world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.VOODOO_DOLL, SoundCategory.PLAYERS, 0.5F, 1.0F - world.rand.nextFloat() * 0.3F);
+			}
 		}
-		if (!world.isRemote && attacked) {
-			stack.damageItem(1, player);
-			world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.VOODOO_DOLL, SoundCategory.PLAYERS, 0.5F, 1.0F - world.rand.nextFloat() * 0.3F);
-		}
-		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
+
+		return stack;
+	}
+
+	@Override
+	public EnumAction getItemUseAction(ItemStack stack) {
+		return EnumAction.BOW;
+	}
+
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		playerIn.setActiveHand(handIn);
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 
 	@Override
