@@ -51,7 +51,7 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.container.BlockMudBrickAlcove;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
-import thebetweenlands.common.entity.ai.IPathObstructionCallback;
+import thebetweenlands.common.entity.ai.IPathObstructionAwareEntity;
 import thebetweenlands.common.entity.ai.PathNavigateBarrishee;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -59,7 +59,7 @@ import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
 
-public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IEntityBL, IPathObstructionCallback {
+public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IEntityBL, IPathObstructionAwareEntity {
 	private static final DataParameter<Boolean> AMBUSH_SPAWNED = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> SCREAM = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> SCREAM_TIMER = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.VARINT);
@@ -470,7 +470,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	 * Called by barrishee path navigator if a path is obstructed and the barrishee becomes stuck
 	 */
 	@Override
-	public void onPathingObstructed() {
+	public void onPathingObstructed(EnumFacing facing) {
 		if(this.getAttackTarget() != null && this.isReadyForSpecialAttack()) {
 			this.setScreamTimer(0);
 		}

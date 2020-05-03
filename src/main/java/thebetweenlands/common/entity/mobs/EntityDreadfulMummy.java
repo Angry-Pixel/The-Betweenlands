@@ -10,6 +10,7 @@ import com.google.common.base.Optional;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -37,6 +38,7 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -58,8 +60,8 @@ import thebetweenlands.api.entity.IEntityMusic;
 import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.client.audio.EntityMusicLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.ai.IPathObstructionCallback;
-import thebetweenlands.common.entity.ai.PathNavigateGroundObstructionCheck;
+import thebetweenlands.common.entity.ai.IPathObstructionAwareEntity;
+import thebetweenlands.common.entity.ai.ObstructionAwarePathNavigateGround;
 import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
 import thebetweenlands.common.network.clientbound.MessageSummonPeatMummyParticles;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -67,7 +69,7 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.sound.BLSoundEvent;
 
-public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss, IEntityScreenShake, IEntityCameraOffset, IEntityMusic, IPathObstructionCallback {
+public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss, IEntityScreenShake, IEntityCameraOffset, IEntityMusic, IPathObstructionAwareEntity {
 
 	private final BossInfoServer bossInfo = (BossInfoServer)(new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
 	public static final IAttribute SPAWN_LENGTH_ATTRIB = (new RangedAttribute(null, "bl.spawnLength", 180.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Spawning Length");
@@ -99,6 +101,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 	private int outOfRangeCounter = 0;
 	private int outOfRangeCycleCounter = 0;
 	private int obstructedCounter = 0;
+	private boolean breakBlocksBelow = false;
 	private int blockBreakCounter = 0;
 
 	public EntityDreadfulMummy(World world) {
@@ -141,7 +144,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 
 	@Override
 	protected PathNavigate createNavigator(World worldIn) {
-		PathNavigateGroundObstructionCheck<EntityDreadfulMummy> navigate = new PathNavigateGroundObstructionCheck<>(this, worldIn);
+		ObstructionAwarePathNavigateGround<EntityDreadfulMummy> navigate = new ObstructionAwarePathNavigateGround<>(this, worldIn);
 		navigate.setCanSwim(true);
 		return navigate;
 	}
@@ -393,32 +396,36 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 		}
 	}
 
-	private boolean malusMode = false;
-
 	@Override
-	public void setMalusMode(boolean on) {
-		this.malusMode = on;
-	}
-
-	@Override
-	public float getPathPriority(PathNodeType nodeType) {
-		if(this.malusMode && nodeType == PathNodeType.BLOCKED) {
+	public float getPathingMalus(EntityLiving entity, PathNodeType nodeType, BlockPos pos) {
+		if(nodeType == PathNodeType.BLOCKED) {
 			return 10.0f;
 		}
 		return super.getPathPriority(nodeType);
 	}
 
 	@Override
-	public void onPathingObstructed() {
+	public void onPathingObstructed(EnumFacing facing) {
 		if(this.getAttackTarget() != null) {
+			this.breakBlocksBelow = facing == EnumFacing.DOWN;
 			this.blockBreakCounter = 40;
 		}
+	}
+
+	@Override
+	public int getMaxFallHeight() {
+		//Doesn't take fall damage
+		return 128;
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
 		this.prevYOffset = (float) getYOffset();
+
+		if((getPrey() != null && this.dataManager.get(SPEW)) || !this.isEntityAlive()) {
+			setPrey(null);
+		}
 
 		Entity prey = getPrey();
 		if(prey instanceof EntityLivingBase) {
@@ -482,7 +489,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 		} else {
 			EntityLivingBase target = this.getAttackTarget();
 
-			if(target != null) {
+			if(target != null && (this.blockBreakCounter == 0 || !this.breakBlocksBelow)) {
 				this.placeBridge();
 			}
 
@@ -552,6 +559,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 						this.world.spawnEntity(arm);
 					}
 
+					this.breakBlocksBelow = false;
 					this.blockBreakCounter = 40;
 				}
 			}
@@ -563,12 +571,12 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 					boolean broken = false;
 
 					for(int xo = -2; xo <= 2; xo++) {
-						for(int yo = 0; yo <= 2; yo++) {
+						for(int yo = (this.breakBlocksBelow ? -2 : 0); yo <= 2; yo++) {
 							for(int zo = -2; zo <= 2; zo++) {
 								if(this.world.rand.nextInt(6) == 0) {
 									Vec3d center = new Vec3d(this.posX + xo, this.posY + yo, this.posZ + zo);
 
-									if(center.subtract(new Vec3d(this.posX, center.y, this.posZ)).dotProduct(this.getLookVec()) > 0.3) {
+									if(center.subtract(new Vec3d(this.posX, this.posY, this.posZ)).dotProduct(this.breakBlocksBelow ? new Vec3d(0, -1, 0) : this.getLookVec()) > 0.3) {
 										BlockPos pos = new BlockPos(center);
 
 										IBlockState hitState = this.world.getBlockState(pos);
@@ -775,7 +783,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 		}
 
 		boolean attacked = super.attackEntityAsMob(target);
-		if (attacked && rand.nextInt(6) == 0 && target != currentEatPrey && target instanceof EntityLivingBase && !(target instanceof EntityPlayer && ((EntityPlayer)target).capabilities.isCreativeMode) && !getEntityWorld().isRemote) {
+		if (attacked && this.isEntityAlive() && rand.nextInt(6) == 0 && target != currentEatPrey && target instanceof EntityLivingBase && !(target instanceof EntityPlayer && ((EntityPlayer)target).capabilities.isCreativeMode) && !getEntityWorld().isRemote && !this.dataManager.get(SPEW)) {
 			setPrey((EntityLivingBase)target);
 		}
 

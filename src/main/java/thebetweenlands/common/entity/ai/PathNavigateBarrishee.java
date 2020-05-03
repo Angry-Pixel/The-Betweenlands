@@ -4,7 +4,7 @@ import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.mobs.EntityBarrishee;
 
-public class PathNavigateBarrishee extends PathNavigateGroundObstructionCheck<EntityBarrishee> {
+public class PathNavigateBarrishee extends ObstructionAwarePathNavigateGround<EntityBarrishee> {
 	public PathNavigateBarrishee(EntityBarrishee entity, World worldIn) {
 		super(entity, worldIn);
 		this.setCanSwim(true);
