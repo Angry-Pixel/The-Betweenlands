@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:weedwood_rowboat"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.captain101.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.captain101.description"
+    }
+  },
+  "parent": "thebetweenlands:adventurer/dank_world",
+  "criteria": {
+    "get_book": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:weedwood_rowboat"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:chiromaw_barb"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.king_of_the_hill.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.king_of_the_hill.description"
+    }
+  },
+  "parent": "thebetweenlands:adventurer/flat_round_and_up_in_the_sky",
+  "criteria": {
+    "nest_claimed": {
+      "trigger": "thebetweenlands:chiromaw_matriarch_nest_claimed"
+    }
+  }
+}

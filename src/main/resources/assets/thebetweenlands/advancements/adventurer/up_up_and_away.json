@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:volarkite"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.up_up_and_away.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.up_up_and_away.description"
+    }
+  },
+  "parent": "thebetweenlands:adventurer/dank_world",
+  "criteria": {
+    "get_book": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:volarkite"
+          }
+        ]
+      }
+    }
+  }
+}
