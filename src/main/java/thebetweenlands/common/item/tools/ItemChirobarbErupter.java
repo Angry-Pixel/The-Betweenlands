@@ -122,7 +122,7 @@ public class ItemChirobarbErupter extends Item {
 						arrow.shoot(entity, 0F, entity.rotationYaw + stack.getTagCompound().getInteger("rotation") - 30F, 1.5F, velocity, 0F);
 					}
 
-					world.playSound(null, entity.getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_BARB_FIRE, SoundCategory.NEUTRAL, 0.5F, 1F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.8F);
+					world.playSound(null, entity.getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_BARB_FIRE, SoundCategory.NEUTRAL, 0.25F, 1F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.8F);
 					world.spawnEntity(arrow);
 				}
 			}
@@ -147,6 +147,7 @@ public class ItemChirobarbErupter extends Item {
 				player.getCooldownTracker().setCooldown(this, 60);
 				stack.getTagCompound().setBoolean("shooting", true);
 				stack.getTagCompound().setInteger("rotation", 0);
+				world.playSound(null, player.getPosition(), SoundRegistry.CHIROBARB_ERUPTER, SoundCategory.NEUTRAL, 1F, 1F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.8F);
 			}
 			player.swingArm(hand);
 			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, player.getHeldItem(hand));

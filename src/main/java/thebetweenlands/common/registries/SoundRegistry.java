@@ -94,6 +94,7 @@ public class SoundRegistry {
     public static final BLSoundEvent SLINGSHOT_HIT = reg("slingshot_hit");
     public static final BLSoundEvent SLINGSHOT_SHOOT = reg("slingshot_shoot");
     public static final BLSoundEvent ZAP = reg("zap");
+    public static final BLSoundEvent CHIROBARB_ERUPTER = reg("chirobarb_erupter");
     // Hostiles
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");
     public static final BLSoundEvent ANGLER_DEATH = reg("angler_death");
