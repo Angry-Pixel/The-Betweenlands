@@ -124,7 +124,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 		super.entityInit();
 		dataManager.register(SPAWNING_STATE_DW, 0);
 		dataManager.register(SPEW, false);
-		dataManager.register(PREY, 0);
+		dataManager.register(PREY, -1);
 		dataManager.register(Y_OFFSET, 0F);
 		this.getDataManager().register(BOSSINFO_ID, Optional.absent());
 	}
@@ -332,6 +332,14 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 		return false;
 	}
 
+	protected boolean isBridgableSpot(BlockPos pos) {
+		if(this.world.isAirBlock(pos)) {
+			return true;
+		}
+		PathNodeType nodeType = this.getNavigator().getNodeProcessor().getPathNodeType(this.world, pos.getX(), pos.getY(), pos.getZ());
+		return nodeType != PathNodeType.BLOCKED && nodeType != PathNodeType.WATER;
+	}
+
 	protected void placeBridge() {
 		Path path = this.getNavigator().getPath();
 
@@ -342,7 +350,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 				BlockPos pos = new BlockPos(this);
 				pos = pos.add(0, nextPoint.y - pos.getY() - 1, 0);
 
-				if(this.getDistanceSq(pos) <= 2 && (this.world.isAirBlock(pos) || this.getNavigator().getNodeProcessor().getPathNodeType(this.world, pos.getX(), pos.getY(), pos.getZ()) != PathNodeType.BLOCKED)) {
+				if(this.getDistanceSq(pos) <= 2 && this.isBridgableSpot(pos)) {
 					if(ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
 
 						int nx = -2;
@@ -361,11 +369,11 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 								if(xo != nx && zo != nz) {
 									BlockPos offsetPos = pos.add(xo, 0, zo);
 
-									if((this.world.isAirBlock(offsetPos) || this.getNavigator().getNodeProcessor().getPathNodeType(this.world, offsetPos.getX(), offsetPos.getY(), offsetPos.getZ()) != PathNodeType.BLOCKED)) {
+									if(this.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(offsetPos), e -> e != this).isEmpty() && this.isBridgableSpot(offsetPos)) {
 
 										boolean canReplace = false;
 
-										if(this.world.isAirBlock(offsetPos)) {
+										if(this.world.getBlockState(offsetPos).getBlock().isReplaceable(this.world, offsetPos)) {
 											canReplace = true;
 										} else {
 											IBlockState hitState = this.world.getBlockState(offsetPos);
@@ -376,13 +384,15 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 													&& ForgeEventFactory.onEntityDestroyBlock(this, offsetPos, hitState)) {
 
 												canReplace = true;
-												this.world.playEvent(2001, offsetPos, Block.getStateId(hitState));
+												if(!hitState.getMaterial().isLiquid() && hitState.getCollisionBoundingBox(this.world, pos) != null) {
+													this.world.playEvent(2001, offsetPos, Block.getStateId(hitState));
+												}
 												this.world.setBlockToAir(offsetPos);
 											}
 										}
 
 										if(canReplace) {
-											this.world.setBlockState(offsetPos, BlockRegistry.SLUDGY_DIRT.getDefaultState());
+											this.world.setBlockState(offsetPos, BlockRegistry.PEAT.getDefaultState());
 										}
 
 									}
@@ -394,6 +404,11 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 				}
 			}
 		}
+	}
+
+	@Override
+	public float getBridgePathingMalus(EntityLiving entity, BlockPos pos, PathPoint fallPathPoint) {
+		return fallPathPoint == null || fallPathPoint.y < pos.getY() ? 2.0f : -1.0f;
 	}
 
 	@Override
@@ -489,7 +504,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 		} else {
 			EntityLivingBase target = this.getAttackTarget();
 
-			if(target != null && (this.blockBreakCounter == 0 || !this.breakBlocksBelow)) {
+			if(target != null && (this.blockBreakCounter == 0 || !this.breakBlocksBelow) && !this.isJumping) {
 				this.placeBridge();
 			}
 
@@ -585,7 +600,9 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 										if(!hitState.getBlock().isAir(hitState, this.world, pos) && hardness >= 0
 												&& hitState.getBlock().canEntityDestroy(hitState, this.world, pos, this)
 												&& ForgeEventFactory.onEntityDestroyBlock(this, pos, hitState)) {
-											this.world.playEvent(2001, pos, Block.getStateId(hitState));
+											if(!hitState.getMaterial().isLiquid() && hitState.getCollisionBoundingBox(this.world, pos) != null) {
+												this.world.playEvent(2001, pos, Block.getStateId(hitState));
+											}
 											this.world.setBlockToAir(pos);
 											broken = true;
 										}
@@ -820,7 +837,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 
 	private EntityLivingBase getPrey() {
 		int id = dataManager.get(PREY);
-		Entity prey = id != -1 ? getEntityWorld().getEntityByID(id) : null;
+		Entity prey = id >= 0 ? getEntityWorld().getEntityByID(id) : null;
 		if(prey instanceof EntityLivingBase)
 			return (EntityLivingBase) prey;
 		return null;
