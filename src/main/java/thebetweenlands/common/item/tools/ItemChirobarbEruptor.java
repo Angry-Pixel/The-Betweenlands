@@ -34,7 +34,7 @@ public class ItemChirobarbEruptor extends Item {
 	public ItemChirobarbEruptor() {
 		super();
 		maxStackSize = 1;
-		setMaxDamage(32);
+		setMaxDamage(64);
 	}
 
 	@SideOnly(Side.CLIENT)
