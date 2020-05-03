@@ -197,8 +197,8 @@ public class EntityBLLightningBolt extends EntityLightningBolt implements IEntit
 											EntityItem arrows = new EntityItem(this.world, entityItem.posX, entityItem.posY, entityItem.posZ, new ItemStack(ItemRegistry.SHOCK_ARROW, converted));
 											this.world.spawnEntity(arrows);
 										}
-									} else if(item == ItemRegistry.CHIROBARB_ERUPTOR) {
-										entityItem.setItem(new ItemStack(ItemRegistry.CHIROBARB_SHOCK_ERUPTOR, stack.getCount()));
+									} else if(item == ItemRegistry.CHIROBARB_ERUPTER) {
+										entityItem.setItem(new ItemStack(ItemRegistry.CHIROBARB_SHOCK_ERUPTER, stack.getCount()));
 									}
 									
 								} else if(!net.minecraftforge.event.ForgeEventFactory.onEntityStruckByLightning(entity, this)) {

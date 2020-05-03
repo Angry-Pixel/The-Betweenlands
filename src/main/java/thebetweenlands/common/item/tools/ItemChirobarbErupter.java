@@ -33,10 +33,10 @@ import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.NBTHelper;
 
 
-public class ItemChirobarbEruptor extends Item {
+public class ItemChirobarbErupter extends Item {
 	public final boolean electric;
 
-	public ItemChirobarbEruptor(boolean electric) {
+	public ItemChirobarbErupter(boolean electric) {
 		this.electric = electric;
 		this.maxStackSize = 1;
 		this.setMaxDamage(64);
@@ -47,7 +47,7 @@ public class ItemChirobarbEruptor extends Item {
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
-		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.chirobarb_eruptor.usage"), 0));
+		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.chirobarb_erupter.usage"), 0));
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class ItemChirobarbEruptor extends Item {
 					double offsetZ = dz * 1.5D;
 
 					List<Entity> nearbyEntities = world.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().grow(12, 0, 12), 
-							e -> e instanceof EntityLivingBase && e instanceof IMob && Math.abs(e.getEntityData().getInteger("thebetweenlands.chirobarb_eruptor.lastTargetted") - e.ticksExisted) >= 60);
+							e -> e instanceof EntityLivingBase && e instanceof IMob && Math.abs(e.getEntityData().getInteger("thebetweenlands.chirobarb_erupter.lastTargetted") - e.ticksExisted) >= 60);
 
 					arrow.setPosition(entity.posX + offsetX, entity.posY + entity.height * 0.75D, entity.posZ + offsetZ);
 
@@ -115,7 +115,7 @@ public class ItemChirobarbEruptor extends Item {
 					float velocity = this.electric ? 1.4F : 1.1F;
 
 					if(closestNearby != null) {
-						closestNearby.getEntityData().setInteger("thebetweenlands.chirobarb_eruptor.lastTargetted", closestNearby.ticksExisted);
+						closestNearby.getEntityData().setInteger("thebetweenlands.chirobarb_erupter.lastTargetted", closestNearby.ticksExisted);
 
 						arrow.shoot(entity, 0F, (float)closestNearbyAngle, 1.5F, velocity, 0F);
 					} else {
