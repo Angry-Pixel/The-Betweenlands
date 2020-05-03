@@ -10,6 +10,7 @@ import com.google.common.base.Optional;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -32,10 +33,12 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.Path;
+import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -57,6 +60,8 @@ import thebetweenlands.api.entity.IEntityMusic;
 import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.client.audio.EntityMusicLayers;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.ai.IPathObstructionAwareEntity;
+import thebetweenlands.common.entity.ai.ObstructionAwarePathNavigateGround;
 import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
 import thebetweenlands.common.network.clientbound.MessageSummonPeatMummyParticles;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -64,7 +69,7 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.sound.BLSoundEvent;
 
-public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss, IEntityScreenShake, IEntityCameraOffset, IEntityMusic {
+public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss, IEntityScreenShake, IEntityCameraOffset, IEntityMusic, IPathObstructionAwareEntity {
 
 	private final BossInfoServer bossInfo = (BossInfoServer)(new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
 	public static final IAttribute SPAWN_LENGTH_ATTRIB = (new RangedAttribute(null, "bl.spawnLength", 180.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Spawning Length");
@@ -82,20 +87,6 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 
 	private static final int BREAK_COUNT = 20;
 
-	public EntityDreadfulMummy(World world) {
-		super(world);
-		setSize(1.1F, 2.0F);
-
-		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, false));
-		tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 1.0D));
-		tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 16.0F));
-		tasks.addTask(4, new EntityAIWander(this, 1.0D));
-		tasks.addTask(5, new EntityAILookIdle(this));
-		targetTasks.addTask(0, new EntityAIHurtByTarget(this, true));
-		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, false));
-	}
-
 	private static final int SPAWN_MUMMY_COOLDOWN = 350;
 	private int untilSpawnMummy = 0;
 	private static final int SPAWN_SLUDGE_COOLDOWN = 150;
@@ -110,7 +101,23 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 	private int outOfRangeCounter = 0;
 	private int outOfRangeCycleCounter = 0;
 	private int obstructedCounter = 0;
+	private boolean breakBlocksBelow = false;
 	private int blockBreakCounter = 0;
+
+	public EntityDreadfulMummy(World world) {
+		super(world);
+		this.isImmuneToFire = true;
+		setSize(1.1F, 2.0F);
+
+		tasks.addTask(0, new EntityAISwimming(this));
+		tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, false));
+		tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 1.0D));
+		tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 16.0F));
+		tasks.addTask(4, new EntityAIWander(this, 1.0D));
+		tasks.addTask(5, new EntityAILookIdle(this));
+		targetTasks.addTask(0, new EntityAIHurtByTarget(this, true));
+		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, false));
+	}
 
 	@Override
 	protected void entityInit() {
@@ -133,6 +140,13 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 
 		getAttributeMap().registerAttribute(SPAWN_LENGTH_ATTRIB);
 		getAttributeMap().registerAttribute(SPAWN_OFFSET_ATTRIB);
+	}
+
+	@Override
+	protected PathNavigate createNavigator(World worldIn) {
+		ObstructionAwarePathNavigateGround<EntityDreadfulMummy> navigate = new ObstructionAwarePathNavigateGround<>(this, worldIn);
+		navigate.setCanSwim(true);
+		return navigate;
 	}
 
 	@Override
@@ -348,7 +362,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 									BlockPos offsetPos = pos.add(xo, 0, zo);
 
 									if((this.world.isAirBlock(offsetPos) || this.getNavigator().getNodeProcessor().getPathNodeType(this.world, offsetPos.getX(), offsetPos.getY(), offsetPos.getZ()) != PathNodeType.BLOCKED)) {
-										
+
 										boolean canReplace = false;
 
 										if(this.world.isAirBlock(offsetPos)) {
@@ -356,21 +370,21 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 										} else {
 											IBlockState hitState = this.world.getBlockState(offsetPos);
 											float hardness = hitState.getBlockHardness(this.world, offsetPos);
-	
-											if(hardness >= 0 && hardness <= 2.5F
+
+											if(hardness >= 0
 													&& hitState.getBlock().canEntityDestroy(hitState, this.world, offsetPos, this)
 													&& ForgeEventFactory.onEntityDestroyBlock(this, offsetPos, hitState)) {
-	
+
 												canReplace = true;
 												this.world.playEvent(2001, offsetPos, Block.getStateId(hitState));
 												this.world.setBlockToAir(offsetPos);
 											}
 										}
-	
+
 										if(canReplace) {
 											this.world.setBlockState(offsetPos, BlockRegistry.SLUDGY_DIRT.getDefaultState());
 										}
-										
+
 									}
 								}
 							}
@@ -383,9 +397,35 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 	}
 
 	@Override
+	public float getPathingMalus(EntityLiving entity, PathNodeType nodeType, BlockPos pos) {
+		if(nodeType == PathNodeType.BLOCKED) {
+			return 10.0f;
+		}
+		return super.getPathPriority(nodeType);
+	}
+
+	@Override
+	public void onPathingObstructed(EnumFacing facing) {
+		if(this.getAttackTarget() != null) {
+			this.breakBlocksBelow = facing == EnumFacing.DOWN;
+			this.blockBreakCounter = 40;
+		}
+	}
+
+	@Override
+	public int getMaxFallHeight() {
+		//Doesn't take fall damage
+		return 128;
+	}
+
+	@Override
 	public void onUpdate() {
 		super.onUpdate();
 		this.prevYOffset = (float) getYOffset();
+
+		if((getPrey() != null && this.dataManager.get(SPEW)) || !this.isEntityAlive()) {
+			setPrey(null);
+		}
 
 		Entity prey = getPrey();
 		if(prey instanceof EntityLivingBase) {
@@ -449,7 +489,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 		} else {
 			EntityLivingBase target = this.getAttackTarget();
 
-			if(target != null) {
+			if(target != null && (this.blockBreakCounter == 0 || !this.breakBlocksBelow)) {
 				this.placeBridge();
 			}
 
@@ -519,6 +559,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 						this.world.spawnEntity(arm);
 					}
 
+					this.breakBlocksBelow = false;
 					this.blockBreakCounter = 40;
 				}
 			}
@@ -530,18 +571,18 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 					boolean broken = false;
 
 					for(int xo = -2; xo <= 2; xo++) {
-						for(int yo = 0; yo <= 2; yo++) {
+						for(int yo = (this.breakBlocksBelow ? -2 : 0); yo <= 2; yo++) {
 							for(int zo = -2; zo <= 2; zo++) {
 								if(this.world.rand.nextInt(6) == 0) {
-									Vec3d center = new Vec3d(this.posX + xo, this.posY + this.height / 2 + yo, this.posZ + zo);
+									Vec3d center = new Vec3d(this.posX + xo, this.posY + yo, this.posZ + zo);
 
-									if(center.subtract(new Vec3d(this.posX, center.y, this.posZ)).dotProduct(this.getLookVec()) > 0.3) {
+									if(center.subtract(new Vec3d(this.posX, this.posY, this.posZ)).dotProduct(this.breakBlocksBelow ? new Vec3d(0, -1, 0) : this.getLookVec()) > 0.3) {
 										BlockPos pos = new BlockPos(center);
 
 										IBlockState hitState = this.world.getBlockState(pos);
 										float hardness = hitState.getBlockHardness(this.world, pos);
 
-										if(!hitState.getBlock().isAir(hitState, this.world, pos) && hardness >= 0 && hardness <= 2.5F
+										if(!hitState.getBlock().isAir(hitState, this.world, pos) && hardness >= 0
 												&& hitState.getBlock().canEntityDestroy(hitState, this.world, pos, this)
 												&& ForgeEventFactory.onEntityDestroyBlock(this, pos, hitState)) {
 											this.world.playEvent(2001, pos, Block.getStateId(hitState));
@@ -742,7 +783,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 		}
 
 		boolean attacked = super.attackEntityAsMob(target);
-		if (attacked && rand.nextInt(6) == 0 && target != currentEatPrey && target instanceof EntityLivingBase && !(target instanceof EntityPlayer && ((EntityPlayer)target).capabilities.isCreativeMode) && !getEntityWorld().isRemote) {
+		if (attacked && this.isEntityAlive() && rand.nextInt(6) == 0 && target != currentEatPrey && target instanceof EntityLivingBase && !(target instanceof EntityPlayer && ((EntityPlayer)target).capabilities.isCreativeMode) && !getEntityWorld().isRemote && !this.dataManager.get(SPEW)) {
 			setPrey((EntityLivingBase)target);
 		}
 
@@ -789,6 +830,11 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 	public boolean attackEntityFrom(DamageSource source, float damage) {
 		if(source == DamageSource.OUT_OF_WORLD) {
 			return super.attackEntityFrom(source, damage);
+		}
+
+		if(source == DamageSource.FALL || source == DamageSource.FALLING_BLOCK || source == DamageSource.IN_WALL || source == DamageSource.CRAMMING
+				|| source == DamageSource.DROWN || source == DamageSource.HOT_FLOOR || source == DamageSource.IN_FIRE || source == DamageSource.ON_FIRE) {
+			return false;
 		}
 
 		if (currentEatPrey != null && source.getTrueSource() == currentEatPrey)  {
