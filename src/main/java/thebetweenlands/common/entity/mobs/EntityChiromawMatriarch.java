@@ -374,7 +374,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return LootTableRegistry.CHIROMAW;
+		return LootTableRegistry.CHIROMAW_MATRIARCH;
 	}
 
 	@Override

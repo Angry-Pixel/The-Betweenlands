@@ -133,6 +133,7 @@ public class LootTableRegistry {
     public static final ResourceLocation EMBERLING = register("entities/emberling");
     public static final ResourceLocation EMBERLING_SHAMAN = register("entities/emberling_shaman");
     public static final ResourceLocation GREEBLING_CORPSE = register("entities/greebling_corpse");
+    public static final ResourceLocation CHIROMAW_MATRIARCH = register("entities/chiromaw_matriarch");
 
     //SPECIAL MOB LOOT FUNCTIONS
     public static final ResourceLocation CHIROMAW_HATCHLING = register("entities/chiromaw_hatchling");

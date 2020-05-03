@@ -867,6 +867,7 @@ item.thebetweenlands.draeton_upgrade_anchor.name=Draeton Anchor Upgrade
 item.thebetweenlands.draeton_upgrade_furnace.name=Draeton Furnace Upgrade
 item.thebetweenlands.draeton_upgrade_crafting.name=Draeton Crafting Upgrade
 item.thebetweenlands.weedwood_rowboat_upgrade_lantern.name=Weedwood Rowboat Lantern Upgrade
+item.thebetweenlands.chirobarb_eruptor.name=Chirobarb Eruptor
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -1030,7 +1031,7 @@ tooltip.bl.sludge_dungeon_plant.mist=This plant can only grow in\nSludgeon mist.
 tooltip.bl.item_mob.health=Health: %s / %s
 tooltip.bl.simple_slingshot=Shoots Betweenstone Pebbles
 tooltip.bl.lurker_skin_patch=Fixes Draeton leakages
-
+tooltip.bl.chirobarb_eruptor.usage=Right-click to fire 360 degree volley of barbs.\nHas 3 second cooldown.
 
 tooltip.bl.elixir.potency=§9Potency: %s
 tooltip.bl.elixir.duration=§9Duration: %s (%s)
