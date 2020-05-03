@@ -147,7 +147,7 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 			this.ticksSpentInGround = 0;
 		}
 
-		if(!this.world.isRemote && this.getArrowType() == EnumArrowType.CHIROMAW_BARB && this.pickupStatus != PickupStatus.ALLOWED && this.ticksSpentInGround > 100) {
+		if(!this.world.isRemote && (this.getArrowType() == EnumArrowType.CHIROMAW_BARB || this.getArrowType() == EnumArrowType.CHIROMAW_SHOCK_BARB) && this.pickupStatus != PickupStatus.ALLOWED && this.ticksSpentInGround > 100) {
 			this.setDead();
 		}
 		

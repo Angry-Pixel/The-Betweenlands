@@ -327,7 +327,8 @@ public class ItemRegistry {
     public static final Item GRAPPLING_HOOK = new ItemGrapplingHook();
     public static final Item VOLARKITE = new ItemVolarkite();
     public static final Item SIMPLE_SLINGSHOT = new ItemSimpleSlingshot();
-    public static final Item CHIROBARB_ERUPTOR = new ItemChirobarbEruptor();
+    public static final Item CHIROBARB_ERUPTOR = new ItemChirobarbEruptor(false);
+    public static final Item CHIROBARB_SHOCK_ERUPTOR = new ItemChirobarbEruptor(true);
     //BUCKETS
     public static final ItemBLBucket BL_BUCKET = new ItemBLBucket();
     public static final Item BL_BUCKET_RUBBER = new ItemSpecificBucket(FluidRegistry.RUBBER);
