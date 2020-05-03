@@ -1755,5 +1755,10 @@
       "thebetweenlands:zap_7",
       "thebetweenlands:zap_8"
     ]
+  },
+  "chirobarb_erupter": {
+    "sounds": [
+      "thebetweenlands:chirobarb_erupter"
+    ]
   }
 }
