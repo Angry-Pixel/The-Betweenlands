@@ -97,10 +97,8 @@ public class ItemChirobarbEruptor extends Item {
 			return new ActionResult<ItemStack>(EnumActionResult.PASS, player.getHeldItem(hand));
 		}
 
-		if(stack.getTagCompound().getInteger("cooldown") < 60) {
-			stack.getTagCompound().setInteger("cooldown", 0);
+		if(stack.getTagCompound().getInteger("cooldown") < 60)
 			return new ActionResult<ItemStack>(EnumActionResult.PASS, player.getHeldItem(hand));
-		}
 
 		if (!stack.getTagCompound().getBoolean("shooting")) {
 			if (!world.isRemote) {
