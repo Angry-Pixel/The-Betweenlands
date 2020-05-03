@@ -104,7 +104,7 @@ public class ItemChirobarbEruptor extends Item {
 
 		if (!stack.getTagCompound().getBoolean("shooting")) {
 			if (!world.isRemote) {
-				stack.damageItem(2, player);
+				stack.damageItem(1, player);
 				stack.getTagCompound().setBoolean("shooting", true);
 				stack.getTagCompound().setInteger("cooldown", 0);
 
