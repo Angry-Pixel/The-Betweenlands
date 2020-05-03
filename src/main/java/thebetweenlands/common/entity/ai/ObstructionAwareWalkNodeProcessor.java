@@ -195,6 +195,12 @@ public class ObstructionAwareWalkNodeProcessor<T extends EntityLiving & IPathObs
 
 					int fallDistance = 0;
 
+					boolean cancelFall = false;
+
+					PathPoint fallPathPoint = null;
+
+					int preFallY = y;
+
 					while (y > 0 && nodeType == PathNodeType.OPEN) {
 						--y;
 
@@ -207,16 +213,33 @@ public class ObstructionAwareWalkNodeProcessor<T extends EntityLiving & IPathObs
 						malus = this.entity.getPathPriority(nodeType);
 
 						if(nodeType != PathNodeType.OPEN && malus >= 0.0F) {
-							directPathPoint = this.openPoint(x, y, z);
+							fallPathPoint = directPathPoint = this.openPoint(x, y, z);
 							directPathPoint.nodeType = nodeType;
 							directPathPoint.costMalus = Math.max(directPathPoint.costMalus, malus);
 							break;
 						}
 
 						if(malus < 0.0F) {
-							result[0] = null;
-							return result;
+							cancelFall = true;
 						}
+					}
+
+					if(result.length == 1) {
+						float bridingMalus = this.callbackEntity.getBridgePathingMalus(this.callbackEntity, new BlockPos(x, preFallY, z), fallPathPoint);
+						if(bridingMalus >= 0.0f) {
+							result = new PathPoint[2];
+							result[0] = directPathPoint;
+
+							PathPoint bridgePathPoint = this.openPoint(x, preFallY, z);
+							bridgePathPoint.nodeType = PathNodeType.WALKABLE;
+							bridgePathPoint.costMalus = Math.max(bridgePathPoint.costMalus, bridingMalus);
+							result[1] = bridgePathPoint;
+						}
+					}
+
+					if(cancelFall) {
+						result[0] = null;
+						return result;
 					}
 				}
 

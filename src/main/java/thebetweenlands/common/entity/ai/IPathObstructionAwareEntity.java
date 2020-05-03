@@ -1,7 +1,10 @@
 package thebetweenlands.common.entity.ai;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
@@ -17,6 +20,17 @@ public interface IPathObstructionAwareEntity {
 	 */
 	public default int getMaxStuckCheckTicks() {
 		return 40;
+	}
+	
+	/**
+	 * Returns the pathing malus for building a bridge
+	 * @param entity
+	 * @param pos
+	 * @param fallPathPoint
+	 * @return
+	 */
+	public default float getBridgePathingMalus(EntityLiving entity, BlockPos pos, @Nullable PathPoint fallPathPoint) {
+		return -1.0f;
 	}
 
 	/**
