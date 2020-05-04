@@ -95,7 +95,8 @@ public class WorldGenChiromawNest extends WorldGenerator {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 		
 		LocationChiromawMatriarchNest location = new LocationChiromawMatriarchNest(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), pos.up(7));
-		location.addBounds(new AxisAlignedBB(pos).grow(5, 0, 5).expand(0, 8, 0));
+		location.setVisible(true);
+		location.addBounds(new AxisAlignedBB(pos).grow(8, 0, 8).expand(0, 9, 0));
 		location.setSeed(rand.nextLong());
 		
 		this.guard = location.getGuard();

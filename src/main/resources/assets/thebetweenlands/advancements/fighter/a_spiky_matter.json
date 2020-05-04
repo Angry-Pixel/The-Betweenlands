@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:chirobarb_erupter"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.fighter.a_spiky_matter.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.fighter.a_spiky_matter.description"
+    },
+    "frame": "goal"
+  },
+  "parent": "thebetweenlands:fighter/chopping_boy",
+  "criteria": {
+    "primordial_malevolence": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:chiromaw_matriarch"
+        }
+      }
+    }
+  }
+}

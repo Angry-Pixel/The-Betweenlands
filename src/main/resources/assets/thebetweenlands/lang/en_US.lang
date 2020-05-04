@@ -947,6 +947,7 @@ location.sludge_worm_dungeon_crypt.name=80:Crypt
 location.sludge_worm_dungeon_maze.name=80:Labyrinthine Vaults
 location.sludge_worm_dungeon.name=80:Sludgeon Tower
 location.sludge_worm_dungeon_pit.name=80:Pit of Decay
+location.chiromaw_matriarch_nest.name=80:Chiromaw Matriarch Nest
 
 
 
@@ -1213,6 +1214,7 @@ chat.ring_of_recruitment.state.guard=Your %s is now guarding
 chat.ring_of_recruitment.state.follow=Your %s is now following
 
 chat.chiromaw_tame.obstructed=You can't unmount your Chiromaw here
+chat.chiromaw_matriarch_nest.tainted=The scent of you has tainted this nest forever - Chiromaws will no longer abide here
 
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath
@@ -1666,6 +1668,18 @@ advancements.thebetweenlands.adventurer.a_real_poopy_experience.title=A Real Poo
 advancements.thebetweenlands.adventurer.a_real_poopy_experience.description=Enter the Labyrinthine Vaults
 advancements.thebetweenlands.adventurer.disgracing_the_dead.title=Disgracing The Dead
 advancements.thebetweenlands.adventurer.disgracing_the_dead.description=Loot 20 Urns of Chance
+advancements.thebetweenlands.adventurer.flat_round_and_up_in_the_sky.title=Flat, Round and up in the Sky
+advancements.thebetweenlands.adventurer.flat_round_and_up_in_the_sky.description=Conquer the Raised Isles
+advancements.thebetweenlands.adventurer.captain101.title=Captain 101
+advancements.thebetweenlands.adventurer.captain101.description=Obtain a Weedwood Rowboat
+advancements.thebetweenlands.adventurer.full_of_hot_air.title=Full of Hot Air
+advancements.thebetweenlands.adventurer.full_of_hot_air.description=Obtain a Draeton Aircraft
+advancements.thebetweenlands.adventurer.up_up_and_away.title=Up, Up and Away
+advancements.thebetweenlands.adventurer.up_up_and_away.description=Obtain a Volarkite
+advancements.thebetweenlands.adventurer.king_of_the_hill.title=King of the Hill
+advancements.thebetweenlands.adventurer.king_of_the_hill.description=Claim a Chiromaw Matriarch Nest
+advancements.thebetweenlands.adventurer.queen_of_the_hill.title=Queen of the Hill
+advancements.thebetweenlands.adventurer.queen_of_the_hill.description=Raid a Chiromaw Matriarch Nest without claiming it
 
 # Fighter
 advancements.thebetweenlands.fighter.root.title=Fighter
@@ -1708,6 +1722,8 @@ advancements.thebetweenlands.fighter.secret_of_the_crypt.title=Secret of the Cry
 advancements.thebetweenlands.fighter.secret_of_the_crypt.description=Obtain the Ancient Greatsword
 advancements.thebetweenlands.fighter.not_a_boss.title=Not A Boss...?
 advancements.thebetweenlands.fighter.not_a_boss.description=Seal the Pit of Decay and defeat the Sludge Menace
+advancements.thebetweenlands.fighter.a_spiky_matter.title=A Spiky Matter
+advancements.thebetweenlands.fighter.a_spiky_matter.description=Defeat a Chiromaw Matriarch
 
 # Farmer
 advancements.thebetweenlands.farmer.root.title=Farmer

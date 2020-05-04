@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:draeton"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.full_of_hot_air.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.full_of_hot_air.description"
+    }
+  },
+  "parent": "thebetweenlands:adventurer/captain101",
+  "criteria": {
+    "get_book": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:draeton"
+          }
+        ]
+      }
+    }
+  }
+}

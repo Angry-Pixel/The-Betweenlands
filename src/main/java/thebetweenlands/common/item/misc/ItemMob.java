@@ -213,6 +213,10 @@ public class ItemMob extends Item {
 		}
 	}
 
+	public void onCapturedByPlayer(EntityPlayer player, EnumHand hand, ItemStack captured) {
+		
+	}
+	
 	@Override
 	public String getTranslationKey(ItemStack stack) {
 		ResourceLocation id = this.getCapturedEntityId(stack);
