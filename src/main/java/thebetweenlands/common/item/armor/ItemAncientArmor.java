@@ -94,30 +94,26 @@ public class ItemAncientArmor extends ItemBLArmor {
 
 	@SubscribeEvent
 	public static void onEntityMagicDamage(LivingHurtEvent event) {
-		if (event.getEntityLiving() instanceof EntityLivingBase) {
-			EntityLivingBase entityHit = (EntityLivingBase) event.getEntityLiving();
-			if(event.getSource() == DamageSource.MAGIC) {
-				float damage = 1;
+		if(event.getSource().isMagicDamage()) {
+			float damage = 1;
 
-				ItemStack boots = entityHit.getItemStackFromSlot(EntityEquipmentSlot.FEET);
-				ItemStack legs = entityHit.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-				ItemStack chest = entityHit.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-				ItemStack helm = entityHit.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+			EntityLivingBase entityHit = event.getEntityLiving();
+			
+			ItemStack boots = entityHit.getItemStackFromSlot(EntityEquipmentSlot.FEET);
+			ItemStack legs = entityHit.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+			ItemStack chest = entityHit.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+			ItemStack helm = entityHit.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
 
-				if (!boots.isEmpty() && boots.getItem() == ItemRegistry.ANCIENT_BOOTS)
-					damage -= 0.125D;
-				if (!legs.isEmpty()  && legs.getItem() == ItemRegistry.ANCIENT_LEGGINGS)
-					damage -= 0.125D;
-				if (!chest.isEmpty() && chest.getItem() == ItemRegistry.ANCIENT_CHESTPLATE)
-					damage -= 0.125D;
-				if (!helm.isEmpty() && helm.getItem() == ItemRegistry.ANCIENT_HELMET)
-					damage -= 0.125D;
-
-				if (event.getAmount() * damage <= 0)
-					event.setCanceled(true);
-				else
-					entityHit.attackEntityFrom(event.getSource(), event.getAmount() * damage);
-			}
+			if (!boots.isEmpty() && boots.getItem() == ItemRegistry.ANCIENT_BOOTS)
+				damage -= 0.125D;
+			if (!legs.isEmpty()  && legs.getItem() == ItemRegistry.ANCIENT_LEGGINGS)
+				damage -= 0.125D;
+			if (!chest.isEmpty() && chest.getItem() == ItemRegistry.ANCIENT_CHESTPLATE)
+				damage -= 0.125D;
+			if (!helm.isEmpty() && helm.getItem() == ItemRegistry.ANCIENT_HELMET)
+				damage -= 0.125D;
+			
+			event.setAmount(event.getAmount() * damage);
 		}
 	}
 }
