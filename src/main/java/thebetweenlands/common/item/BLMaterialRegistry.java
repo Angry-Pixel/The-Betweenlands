@@ -163,7 +163,9 @@ public class BLMaterialRegistry {
 			return 6;
 		} else if(material == ARMOR_LEGEND) {
 			return 24;
-		}
+		} else if(material == ARMOR_ANCIENT) {
+			return 6;
+		} 
 		return 4;
 	}
 
@@ -182,7 +184,9 @@ public class BLMaterialRegistry {
 			return 16;
 		} else if(material == ARMOR_LEGEND) {
 			return 48;
-		}
+		}else if(material == ARMOR_ANCIENT) {
+			return 24;
+		} 
 		return 8;
 	}
 
@@ -201,7 +205,9 @@ public class BLMaterialRegistry {
 			return 12;
 		} else if(material == ARMOR_LEGEND) {
 			return 48;
-		}
+		}else if(material == ARMOR_ANCIENT) {
+			return 16;
+		} 
 		return 4;
 	}
 
@@ -220,6 +226,8 @@ public class BLMaterialRegistry {
 			return 48;
 		} else if(material == ARMOR_LEGEND) {
 			return 110;
+		} else if(material == ARMOR_ANCIENT) {
+			return 48;
 		}
 		return 8;
 	}
