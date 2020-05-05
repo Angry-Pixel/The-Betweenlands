@@ -42,6 +42,7 @@ import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.item.BLMaterialRegistry;
+import thebetweenlands.common.item.armor.ItemAncientArmor;
 import thebetweenlands.common.item.armor.ItemBoneArmor;
 import thebetweenlands.common.item.armor.ItemExplorersHat;
 import thebetweenlands.common.item.armor.ItemLurkerSkinArmor;
@@ -260,6 +261,10 @@ public class ItemRegistry {
     public static final Item VALONITE_CHESTPLATE = new ItemValoniteArmor(EntityEquipmentSlot.CHEST);
     public static final Item VALONITE_LEGGINGS = new ItemValoniteArmor(EntityEquipmentSlot.LEGS);
     public static final Item VALONITE_BOOTS = new ItemValoniteArmor(EntityEquipmentSlot.FEET);
+    public static final Item ANCIENT_HELMET = new ItemAncientArmor(EntityEquipmentSlot.HEAD);
+    public static final Item ANCIENT_CHESTPLATE = new ItemAncientArmor(EntityEquipmentSlot.CHEST);
+    public static final Item ANCIENT_LEGGINGS = new ItemAncientArmor(EntityEquipmentSlot.LEGS);
+    public static final Item ANCIENT_BOOTS = new ItemAncientArmor(EntityEquipmentSlot.FEET);
     public static final Item RUBBER_BOOTS = new ItemRubberBoots();
     public static final Item MARSH_RUNNER_BOOTS = new ItemMarshRunnerBoots();
     public static final Item SKULL_MASK = new ItemSkullMask();
