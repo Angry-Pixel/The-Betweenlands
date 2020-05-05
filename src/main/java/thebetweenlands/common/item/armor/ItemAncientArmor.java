@@ -31,8 +31,6 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemAncientArmor extends ItemBLArmor {
-
-	@SideOnly(Side.CLIENT)
 	public static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/armor/ancient.png");
 	public static final ResourceLocation TEXTURE_AQUA = new ResourceLocation(ModInfo.ID, "textures/armor/ancient_aqua.png");
 	public static final ResourceLocation TEXTURE_CRIMSON = new ResourceLocation(ModInfo.ID, "textures/armor/ancient_crimson.png");
