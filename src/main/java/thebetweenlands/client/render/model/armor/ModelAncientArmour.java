@@ -483,7 +483,7 @@ public class ModelAncientArmour extends ModelBodyAttachment {
 			leggings_mainrotation.setRotationPoint(0F, 8F, -0.4F);
 		}
 		else {
-			chestplate_armrotation_right.setRotationPoint(0F, 1F, 0F);
+			chestplate_armrotation_right.setRotationPoint(0F, 0F, 0F);
 			chestplate_armrotation_left.setRotationPoint(0F, 0F, 0F);
 			leggings_mainrotation.setRotationPoint(0F, 10F, 0F);
 		}
