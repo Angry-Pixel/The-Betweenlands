@@ -386,6 +386,7 @@ import thebetweenlands.common.tile.TileEntityWeedwoodSign;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
+import thebetweenlands.common.world.event.EventHeavyRain;
 import thebetweenlands.common.world.event.EventSpoopy;
 import thebetweenlands.common.world.event.EventWinter;
 import thebetweenlands.util.GLUProjection;
@@ -923,6 +924,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         MinecraftForge.EVENT_BUS.register(RenderUtils.class);
         MinecraftForge.EVENT_BUS.register(EntityChiromawTame.class);
         MinecraftForge.EVENT_BUS.register(MountOverlayRemoval.class);
+        MinecraftForge.EVENT_BUS.register(EventHeavyRain.class);
 	}
 
 	private static FontRenderer pixelLove;

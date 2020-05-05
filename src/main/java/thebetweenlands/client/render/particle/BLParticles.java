@@ -15,6 +15,7 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleAltarCrafting;
 import thebetweenlands.client.render.particle.entity.ParticleAnimated;
 import thebetweenlands.client.render.particle.entity.ParticleAnimator;
+import thebetweenlands.client.render.particle.entity.ParticleBLRain;
 import thebetweenlands.client.render.particle.entity.ParticleBlockProtection;
 import thebetweenlands.client.render.particle.entity.ParticleBreakingBL;
 import thebetweenlands.client.render.particle.entity.ParticleBubbleBL;
@@ -149,8 +150,9 @@ public enum BLParticles {
 	CHIROMAW_TRANSFORM(new ParticleChiromawFeathers.Factory().getBaseArgsBuilder().withColor(0.227F, 0.317F, 0.294F, 1).buildBaseArgs()),
 	CHIROMAW_TRANSFORM_LIGHTNING(new ParticleChiromawFeathers.Factory().getBaseArgsBuilder().withColor(0.420F, 0.565F, 0.553F, 1).buildBaseArgs()),
 	CHIROMAW_TRANSFORM_SWIRL(new ParticleEntitySwirl.FactoryChiromawSwirl()),
-	WATER_RIPPLE(new ParticleWaterRipple.Factory());
-
+	WATER_RIPPLE(new ParticleWaterRipple.Factory()),
+	RAIN(new ParticleBLRain.Factory());
+	
 	private ParticleFactory<?, ?> factory;
 
 	private BLParticles(ParticleFactory<?, ?> factory) {
