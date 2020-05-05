@@ -3,6 +3,7 @@ package thebetweenlands.client.render.model.armor;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -471,6 +472,9 @@ public class ModelAncientArmour extends ModelBodyAttachment {
 		leggings_mainrotation.showModel = false;
 		chainmail_leg_right.showModel = false;
 		chainmail_leg_left.showModel = false;
+		if(entity instanceof EntityArmorStand)
+			helmet_mainrotation.rotateAngleY = entity.rotationYaw * ((float) Math.PI / 180F);
+		
 		helmet_mainrotation.setRotationPoint(0F, 0F, 0F);
 		chestplate_mainrotation.setRotationPoint(0F, 0F, 0F);
 		if(entity.isSneaking()) {
@@ -479,9 +483,9 @@ public class ModelAncientArmour extends ModelBodyAttachment {
 			leggings_mainrotation.setRotationPoint(0F, 8F, -0.4F);
 		}
 		else {
-			chestplate_armrotation_right.setRotationPoint(0F, 0F, 0F);
+			chestplate_armrotation_right.setRotationPoint(0F, 1F, 0F);
 			chestplate_armrotation_left.setRotationPoint(0F, 0F, 0F);
-			leggings_mainrotation.setRotationPoint(0F, 9F, 0F);
+			leggings_mainrotation.setRotationPoint(0F, 10F, 0F);
 		}
 		boots_right_main.setRotationPoint(0F, 0F, 0F);
 		boots_left_main.setRotationPoint(0F, 0F, 0F);
