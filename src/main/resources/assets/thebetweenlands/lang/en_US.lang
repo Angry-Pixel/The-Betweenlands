@@ -1038,6 +1038,7 @@ tooltip.bl.item_mob.health=Health: %s / %s
 tooltip.bl.simple_slingshot=Shoots Betweenstone Pebbles
 tooltip.bl.lurker_skin_patch=Fixes Draeton leakages
 tooltip.bl.chirobarb_erupter.usage=Right-click to fire 360 degree volley of barbs.\nHas 3 second cooldown.
+tooltip.bl.ancient_armor.usage=Reduces Magic Damage.\nUp to half magic damage reduction\nwith a full set equipped.
 
 tooltip.bl.elixir.potency=§9Potency: %s
 tooltip.bl.elixir.duration=§9Duration: %s (%s)

@@ -1,6 +1,12 @@
 package thebetweenlands.common.item.armor;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -8,10 +14,12 @@ import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.render.model.armor.ModelAncientArmour;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
@@ -29,6 +37,13 @@ public class ItemAncientArmor extends ItemBLArmor {
 
 	public ItemAncientArmor(EntityEquipmentSlot slot) {
 		super(BLMaterialRegistry.ARMOR_ANCIENT, 3, slot, "ancient");
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		super.addInformation(stack, worldIn, tooltip, flagIn);
+		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.ancient_armor.usage"), 0));
 	}
 
 	@Override
@@ -78,7 +93,7 @@ public class ItemAncientArmor extends ItemBLArmor {
 	}
 
 	@SubscribeEvent
-	public void onEntityMagicDamage(LivingHurtEvent event) {
+	public static void onEntityMagicDamage(LivingHurtEvent event) {
 		if (event.getEntityLiving() instanceof EntityLivingBase) {
 			EntityLivingBase entityHit = (EntityLivingBase) event.getEntityLiving();
 			if(event.getSource() == DamageSource.MAGIC) {
