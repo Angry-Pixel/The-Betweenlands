@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.handler.ItemTooltipHandler;
-import thebetweenlands.client.render.model.armor.ModelAncientArmour;
+import thebetweenlands.client.render.model.armor.ModelAncientArmor;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.item.BLMaterialRegistry;
@@ -69,7 +69,7 @@ public class ItemAncientArmor extends ItemBLArmor {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped defaultModel) {
-		ModelAncientArmour model = new ModelAncientArmour();
+		ModelAncientArmor model = new ModelAncientArmor();
 		model.setUpModel(entityLiving);
 
 		if (armorSlot == EntityEquipmentSlot.FEET)

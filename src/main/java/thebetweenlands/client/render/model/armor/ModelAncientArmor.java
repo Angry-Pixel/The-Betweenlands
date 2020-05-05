@@ -8,7 +8,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelAncientArmour extends ModelBodyAttachment {
+public class ModelAncientArmor extends ModelBodyAttachment {
     public ModelRenderer helmet_mainrotation;
     public ModelRenderer leggings_mainrotation;
     public ModelRenderer chestplate_mainrotation;
@@ -73,7 +73,7 @@ public class ModelAncientArmour extends ModelBodyAttachment {
     public ModelRenderer legParts[];
     public ModelRenderer bootParts[];
 
-    public ModelAncientArmour() {
+    public ModelAncientArmor() {
         textureWidth = 128;
         textureHeight = 64;
         topplate1 = new ModelRenderer(this, 0, 0);
@@ -475,7 +475,7 @@ public class ModelAncientArmour extends ModelBodyAttachment {
 		if(entity instanceof EntityArmorStand)
 			helmet_mainrotation.rotateAngleY = entity.rotationYaw * ((float) Math.PI / 180F);
 		
-		helmet_mainrotation.setRotationPoint(0F, 0F, 0F);
+		helmet_mainrotation.setRotationPoint(0F, -1.0F, 0F);
 		chestplate_mainrotation.setRotationPoint(0F, 0F, 0F);
 		if(entity.isSneaking()) {
 			chestplate_armrotation_right.setRotationPoint(0F, 0F, -0.2F);
@@ -487,6 +487,8 @@ public class ModelAncientArmour extends ModelBodyAttachment {
 			chestplate_armrotation_left.setRotationPoint(0F, 0F, 0F);
 			leggings_mainrotation.setRotationPoint(0F, 10F, 0F);
 		}
+		boots_left_toes.setRotationPoint(0.0F, 10F, -2.0F);
+		boots_right_toes.setRotationPoint(0.0F, 10F, -2.0F);
 		boots_right_main.setRotationPoint(0F, 0F, 0F);
 		boots_left_main.setRotationPoint(0F, 0F, 0F);
 		chainmail_leg_right.setRotationPoint(0F, 0F, 0F);
