@@ -681,6 +681,9 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		@Override
 		public void updateTask() {
 			EntityLivingBase entitylivingbase = largeChiromaw.getAttackTarget();
+			if(entitylivingbase == null) {
+				return;
+			}
 			if(!largeChiromaw.getIsSpinning())
 				largeChiromaw.getLookHelper().setLookPositionWithEntity(entitylivingbase, 30.0F, 30.0F);
 			double distToEnemySqr = largeChiromaw.getDistanceSq(entitylivingbase.posX, entitylivingbase.getEntityBoundingBox().minY, entitylivingbase.posZ);

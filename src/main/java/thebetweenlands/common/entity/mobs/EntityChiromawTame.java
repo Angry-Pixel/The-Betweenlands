@@ -747,7 +747,7 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 		@Override
 		public void updateTask() {
 			EntityLivingBase entitylivingbase = chiromaw.getAttackTarget();
-			if (!chiromaw.getEntityWorld().isRemote) {
+			if (!chiromaw.getEntityWorld().isRemote && entitylivingbase != null) {
 				World world = chiromaw.getEntityWorld();
 				if (entitylivingbase.getDistanceSq(chiromaw) < 576 && entitylivingbase.getDistanceSq(chiromaw) > 25 && chiromaw.canEntityBeSeen(entitylivingbase)) {
 					++this.attackTimer;
