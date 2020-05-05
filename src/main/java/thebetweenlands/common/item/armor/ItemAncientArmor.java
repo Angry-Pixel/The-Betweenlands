@@ -24,6 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.render.model.armor.ModelAncientArmor;
+import thebetweenlands.client.render.model.armor.ModelExplorersHat;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.item.BLMaterialRegistry;
@@ -36,6 +37,9 @@ public class ItemAncientArmor extends ItemBLArmor {
 	public static final ResourceLocation TEXTURE_CRIMSON = new ResourceLocation(ModInfo.ID, "textures/armor/ancient_crimson.png");
 	public static final ResourceLocation TEXTURE_GREEN = new ResourceLocation(ModInfo.ID, "textures/armor/ancient_green.png");
 
+	@SideOnly(Side.CLIENT)
+	private static ModelAncientArmor model;
+	
 	public ItemAncientArmor(EntityEquipmentSlot slot) {
 		super(BLMaterialRegistry.ARMOR_ANCIENT, 3, slot, "ancient");
 	}
@@ -73,21 +77,10 @@ public class ItemAncientArmor extends ItemBLArmor {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped defaultModel) {
-		ModelAncientArmor model = new ModelAncientArmor();
-		model.setUpModel(entityLiving);
-
-		if (armorSlot == EntityEquipmentSlot.FEET)
-			model.renderPostScaledPartBoots();
-
-		if (armorSlot == EntityEquipmentSlot.LEGS)
-			model.renderPostScaledPartLegs();
-
-		if (armorSlot == EntityEquipmentSlot.CHEST)
-			model.renderPostScaledPartChest();
-
-		if (armorSlot == EntityEquipmentSlot.HEAD)
-			model.renderPostScaledPartHelm();
-
+		if(model == null) {
+			model = new ModelAncientArmor();
+		}
+		model.setUpModel(entityLiving, armorSlot);
 		return model;
 	}
 
