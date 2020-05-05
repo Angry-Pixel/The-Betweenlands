@@ -3,6 +3,7 @@ package thebetweenlands.client.render.model.entity;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
@@ -242,13 +243,22 @@ public class ModelChiromawHatchling extends MowzieModelBase {
 		GlStateManager.translate(0.0F, 0.5F - smootherRise * 0.0125F - flyUp * 0.01F - flap * 0.5F, 0.0F);
 		GlStateManager.translate(0.0F, 0.0F, 0.25F - smootherRise * 0.00625F);
 		
-		GlStateManager.disableCull();
-		
-		chiromaw_base.render(scale);
-		
-		GlStateManager.enableCull();
-		
+        GlStateManager.enableCull();
+        GlStateManager.cullFace(CullFace.FRONT);
+        wing_left1.showModel = false;
+        wing_left2.showModel = false;
+        wing_right1.showModel = false;
+        wing_right2.showModel = false;
+        chiromaw_base.render(scale);
+        wing_left1.showModel = true;
+        wing_left2.showModel = true;
+        wing_right1.showModel = true;
+        wing_right2.showModel = true;
+        GlStateManager.cullFace(CullFace.BACK);
+        chiromaw_base.render(scale);
+        GlStateManager.disableCull();
 		GlStateManager.popMatrix();
+		
 	}
 
 	public void renderEgg(EntityChiromawHatchling entity, float partialTicks, float scale) {
