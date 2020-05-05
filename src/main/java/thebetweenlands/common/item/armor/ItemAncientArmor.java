@@ -4,15 +4,18 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -44,6 +47,9 @@ public class ItemAncientArmor extends ItemBLArmor {
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.ancient_armor.usage"), 0));
+		if(stack.getItemDamage() == stack.getMaxDamage()) {
+			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.tool.broken", stack.getDisplayName()), 0));
+		}
 	}
 
 	@Override
@@ -92,27 +98,53 @@ public class ItemAncientArmor extends ItemBLArmor {
 		return EnumRarity.EPIC;
 	}
 
+	@Override
+	public void setDamage(ItemStack stack, int damage) {
+		int maxDamage = stack.getMaxDamage();
+		if(damage > maxDamage) {
+			//Don't let the sword break
+			damage = maxDamage;
+		}
+		super.setDamage(stack, damage);
+	}
+
+	@Override
+	public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot) {
+		//ItemStack unspecific method can't check for damage, so just return no modifiers
+		return HashMultimap.create();
+	}
+
+	@Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+		if(stack.getItemDamage() == stack.getMaxDamage()) {
+			//Armor shouldn't give any reduction when fully damaged
+			return HashMultimap.create();
+		}
+		//Returns default armor attributes
+		return super.getItemAttributeModifiers(slot);
+	}
+
 	@SubscribeEvent
 	public static void onEntityMagicDamage(LivingHurtEvent event) {
 		if(event.getSource().isMagicDamage()) {
 			float damage = 1;
 
 			EntityLivingBase entityHit = event.getEntityLiving();
-			
+
 			ItemStack boots = entityHit.getItemStackFromSlot(EntityEquipmentSlot.FEET);
 			ItemStack legs = entityHit.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
 			ItemStack chest = entityHit.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 			ItemStack helm = entityHit.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
 
-			if (!boots.isEmpty() && boots.getItem() == ItemRegistry.ANCIENT_BOOTS)
+			if (!boots.isEmpty() && boots.getItem() == ItemRegistry.ANCIENT_BOOTS && boots.getItemDamage() < boots.getMaxDamage())
 				damage -= 0.125D;
-			if (!legs.isEmpty()  && legs.getItem() == ItemRegistry.ANCIENT_LEGGINGS)
+			if (!legs.isEmpty()  && legs.getItem() == ItemRegistry.ANCIENT_LEGGINGS && legs.getItemDamage() < legs.getMaxDamage())
 				damage -= 0.125D;
-			if (!chest.isEmpty() && chest.getItem() == ItemRegistry.ANCIENT_CHESTPLATE)
+			if (!chest.isEmpty() && chest.getItem() == ItemRegistry.ANCIENT_CHESTPLATE && chest.getItemDamage() < chest.getMaxDamage())
 				damage -= 0.125D;
-			if (!helm.isEmpty() && helm.getItem() == ItemRegistry.ANCIENT_HELMET)
+			if (!helm.isEmpty() && helm.getItem() == ItemRegistry.ANCIENT_HELMET && helm.getItemDamage() < helm.getMaxDamage())
 				damage -= 0.125D;
-			
+
 			event.setAmount(event.getAmount() * damage);
 		}
 	}
