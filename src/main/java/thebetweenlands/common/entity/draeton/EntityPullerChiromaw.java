@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import thebetweenlands.api.entity.IPullerEntity;
@@ -24,6 +25,15 @@ public class EntityPullerChiromaw extends EntityChiromawTame implements IPullerE
 	public EntityPullerChiromaw(World world, EntityDraeton carriage, DraetonPhysicsPart puller) {
 		super(world);
 		this.setPuller(carriage, puller);
+	}
+
+	@Override
+	public String getName() {
+		if (getElectricBoogaloo()) {
+			return I18n.translateToLocal("entity.thebetweenlands.chiromaw_tame_lightning.name");
+		} else {
+			return I18n.translateToLocal("entity.thebetweenlands.chiromaw_tame.name");
+		}
 	}
 
 	@Override

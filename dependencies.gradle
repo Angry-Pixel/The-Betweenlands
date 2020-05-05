@@ -12,10 +12,15 @@ repositories {
 		name = 'ModMaven'
 		url = 'modmaven.k-4u.nl'
 	}
+	maven {
+		url 'http://tehnut.info/maven'
+	}
 }
 dependencies {
 	deobfCompile "curse.maven:tombmanygraves-2-api:2563073" // 1.0.0
 
 	deobfCompile 'mezz.jei:jei_1.12.2:4.15.0.268:api'
 	runtime 'mezz.jei:jei_1.12.2:4.15.0.268'
+
+	deobfCompile 'mcp.mobius.waila:Hwyla:1.8.26-B41_1.12.2'
 }

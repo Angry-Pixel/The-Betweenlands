@@ -1,5 +1,6 @@
 package thebetweenlands.common;
 
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -88,6 +89,7 @@ import thebetweenlands.common.world.gen.feature.structure.WorldGenWaystone;
 import thebetweenlands.common.world.storage.BetweenlandsChunkStorage;
 import thebetweenlands.common.world.storage.OfflinePlayerHandlerImpl;
 import thebetweenlands.common.world.storage.WorldStorageImpl;
+import thebetweenlands.compat.hwyla.HwylaProvider;
 import thebetweenlands.compat.tmg.TMGEquipmentInventory;
 import thebetweenlands.core.TheBetweenlandsPreconditions;
 
@@ -139,6 +141,7 @@ public class TheBetweenlands {
 		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
 
 		MessageRegistry.preInit();
+		FMLInterModComms.sendMessage("waila", "register", "thebetweenlands.compat.hwyla.HwylaProvider.callbackRegister");
 
 		//Renderers
 		proxy.registerItemAndBlockRenderers();

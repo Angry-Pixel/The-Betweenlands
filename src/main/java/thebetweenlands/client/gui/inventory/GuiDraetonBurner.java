@@ -50,7 +50,7 @@ public class GuiDraetonBurner extends GuiContainer {
 	@Override
 	public void initGui() {
 		super.initGui();
-		this.addButton(new GuiButton(0, this.guiLeft + 71, this.guiTop + 110, 40, 20, "Purge"));
+		this.addButton(new GuiButton(0, this.guiLeft + 71, this.guiTop + 110, 40, 20, I18n.format("gui.bl.draeton.burner.purge")));
 	}
 
 	@Override

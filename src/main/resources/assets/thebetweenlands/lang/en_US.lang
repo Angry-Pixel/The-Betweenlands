@@ -1351,6 +1351,7 @@ entity.thebetweenlands.tiny_sludge_worm.name=Tiny Sludge Worm
 entity.thebetweenlands.tiny_sludge_worm_helper.name=Tiny Sludge Worm Helper
 entity.thebetweenlands.tiny_worm_egg_sac.name=Sludge Worm Egg Sac
 entity.thebetweenlands.moving_spawner_hole.name=Worm Hole
+entity.thebetweenlands.worm_ground_spawner.name=Worm Hole
 entity.thebetweenlands.wall_lamprey.name=Lamprey
 entity.thebetweenlands.wall_living_root.name=Living Root
 entity.thebetweenlands.ash_sprite.name=Ash Sprite
@@ -1380,7 +1381,14 @@ entity.thebetweenlands.chiromaw_matriarch.name=Chiromaw Matriarch
 entity.thebetweenlands.chiromaw_droppings.name=Chiromaw Droppings
 entity.thebetweenlands.chiromaw_hatchling.name=Chiromaw Hatchling
 entity.thebetweenlands.chiromaw_tame.name=Tamed Chiromaw
+entity.thebetweenlands.chiromaw_tame_lightning.name=Tamed Lightning Chiromaw
 entity.thebetweenlands.greebling_corpse.name=Greebling Corpse
+entity.thebetweenlands.draeton.name=Draeton
+entity.thebetweenlands.draeton_balloon.name=Draeton Balloon
+entity.thebetweenlands.draeton_burner.name=Draeton Burner
+entity.thebetweenlands.draeton_upgrade_anchor.name=Draeton Anchor
+entity.thebetweenlands.draeton_upgrade_furnace.name=Draeton Furnace
+entity.thebetweenlands.draeton_upgrade_crafting.name=Draeton Crafting
 
 # Equipment
 equipment.menu.equip=Equip %s
@@ -1629,6 +1637,7 @@ gui.gallery.random=Randomize!
 gui.gallery.submission=Want to see your own fan art featured?\nSubmit it to {twitter} on Twitter\nor on our {discord} server using\nthe #BetweenlandsGallery hashtag!
 
 gui.bl.draeton.burner.fuel=Burner requires Shallowbreath fluid
+gui.bl.draeton.burner.purge=Purge
 gui.bl.draeton.main.puller=Puller slot:\n§7 - Dragonfly\n§7 - Firefly\n§7 - Tamed Chiromaw
 gui.bl.draeton.main.upgrade_utility=Utility upgrade slot:\n§7 - Lurker Skin Pouch\n§7 - Draeton Crafting Upgrade\n§7 - Draeton Furnace Upgrade
 gui.bl.draeton.main.upgrade_anchor=Anchor upgrade slot:\n§7 - Draeton Anchor Upgrade

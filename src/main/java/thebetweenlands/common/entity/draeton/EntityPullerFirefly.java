@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import thebetweenlands.api.entity.IPullerEntity;
@@ -24,6 +25,11 @@ public class EntityPullerFirefly extends EntityFirefly implements IPullerEntity,
 	public EntityPullerFirefly(World world, EntityDraeton carriage, DraetonPhysicsPart puller) {
 		super(world);
 		this.setPuller(carriage, puller);
+	}
+
+	@Override
+	public String getName() {
+		return I18n.translateToLocal("entity.thebetweenlands.firefly.name");
 	}
 
 	@Override
