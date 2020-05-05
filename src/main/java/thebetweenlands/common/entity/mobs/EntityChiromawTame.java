@@ -577,6 +577,10 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 
 		@Override
 		public boolean shouldExecute() {
+			if(chiromaw.isSitting()) {
+				return false;
+			}
+			
 			EntityLivingBase entitylivingbase = chiromaw.getOwner();
 
 			if (entitylivingbase == null)
