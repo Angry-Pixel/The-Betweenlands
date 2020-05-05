@@ -6,7 +6,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.armor.ModelAncientArmour;
@@ -14,6 +17,7 @@ import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemAncientArmor extends ItemBLArmor {
 
@@ -71,5 +75,34 @@ public class ItemAncientArmor extends ItemBLArmor {
 	@Override
 	public EnumRarity getRarity(ItemStack stack) {
 		return EnumRarity.EPIC;
+	}
+
+	@SubscribeEvent
+	public void onEntityMagicDamage(LivingHurtEvent event) {
+		if (event.getEntityLiving() instanceof EntityLivingBase) {
+			EntityLivingBase entityHit = (EntityLivingBase) event.getEntityLiving();
+			if(event.getSource() == DamageSource.MAGIC) {
+				float damage = 1;
+
+				ItemStack boots = entityHit.getItemStackFromSlot(EntityEquipmentSlot.FEET);
+				ItemStack legs = entityHit.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+				ItemStack chest = entityHit.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+				ItemStack helm = entityHit.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+
+				if (!boots.isEmpty() && boots.getItem() == ItemRegistry.ANCIENT_BOOTS)
+					damage -= 0.125D;
+				if (!legs.isEmpty()  && legs.getItem() == ItemRegistry.ANCIENT_LEGGINGS)
+					damage -= 0.125D;
+				if (!chest.isEmpty() && chest.getItem() == ItemRegistry.ANCIENT_CHESTPLATE)
+					damage -= 0.125D;
+				if (!helm.isEmpty() && helm.getItem() == ItemRegistry.ANCIENT_HELMET)
+					damage -= 0.125D;
+
+				if (event.getAmount() * damage <= 0)
+					event.setCanceled(true);
+				else
+					entityHit.attackEntityFrom(event.getSource(), event.getAmount() * damage);
+			}
+		}
 	}
 }

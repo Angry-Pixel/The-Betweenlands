@@ -63,6 +63,7 @@ import thebetweenlands.common.handler.PuppetHandler;
 import thebetweenlands.common.handler.WorldEventHandler;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.PotionRootBound;
+import thebetweenlands.common.item.armor.ItemAncientArmor;
 import thebetweenlands.common.item.equipment.ItemRingOfFlight;
 import thebetweenlands.common.item.misc.ItemMagicItemMagnet;
 import thebetweenlands.common.item.misc.ItemRingOfGathering;
@@ -266,5 +267,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(EntityDraeton.class);
 		MinecraftForge.EVENT_BUS.register(PlayerMountsEntityCapability.class);
 		MinecraftForge.EVENT_BUS.register(EntityChiromawMatriarch.class);
+		MinecraftForge.EVENT_BUS.register(ItemAncientArmor.class);
 	}
 }
