@@ -181,6 +181,11 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 		public boolean shouldRiderSit() {
 			return false;
 		}
+
+		@Override
+		public String getName() {
+			return getParent() != null ? getParent().getName(): super.getName();
+		}
 	}
 
 	private final BossInfoServer bossInfo = (BossInfoServer)(new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
