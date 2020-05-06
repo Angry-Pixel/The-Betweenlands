@@ -1222,6 +1222,8 @@ chat.ring_of_recruitment.state.follow=Tu %s ahora te está siguiendo
 chat.chiromaw_tame.obstructed=No puedes desmontar de tu Chiromaw aquí
 chat.chiromaw_matriarch_nest.tainted=Tu olor ha contaminado este nido para siempre - Los Chiromaws se irán para no volver
 
+chat.draeton_dismount_timer=Descenso en %s...
+
 # Damage Source
 death.attack.suffocation=%s se ha asfixiado en una nube de Gas Letal
 
