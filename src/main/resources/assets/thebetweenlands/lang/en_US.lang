@@ -1222,6 +1222,8 @@ chat.ring_of_recruitment.state.follow=Your %s is now following
 chat.chiromaw_tame.obstructed=You can't unmount your Chiromaw here
 chat.chiromaw_matriarch_nest.tainted=The scent of you has tainted this nest forever - Chiromaws will no longer abide here
 
+chat.draeton_dismount_timer=Dismounting in %s...
+
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath
 

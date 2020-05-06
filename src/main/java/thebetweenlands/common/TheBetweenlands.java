@@ -48,6 +48,7 @@ import thebetweenlands.common.handler.BlockBreakHandler;
 import thebetweenlands.common.handler.BossHandler;
 import thebetweenlands.common.handler.CustomEntityCollisionsHandler;
 import thebetweenlands.common.handler.ElixirCommonHandler;
+import thebetweenlands.common.handler.EntityUnmountHandler;
 import thebetweenlands.common.handler.EntitySpawnHandler;
 import thebetweenlands.common.handler.EnvironmentEventHandler;
 import thebetweenlands.common.handler.EnvironmentEventOverridesHandler;
@@ -271,5 +272,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(PlayerMountsEntityCapability.class);
 		MinecraftForge.EVENT_BUS.register(EntityChiromawMatriarch.class);
 		MinecraftForge.EVENT_BUS.register(ItemAncientArmor.class);
+		MinecraftForge.EVENT_BUS.register(EntityUnmountHandler.class);
 	}
 }

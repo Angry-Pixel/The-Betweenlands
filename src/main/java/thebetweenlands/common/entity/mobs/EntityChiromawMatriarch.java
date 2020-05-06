@@ -44,6 +44,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.api.entity.IEntityPreventUnmount;
 import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.client.render.model.ControlledAnimation;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
@@ -58,7 +59,7 @@ import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationChiromawMatriarchNest;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 
-public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityBL {
+public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityBL, IEntityPreventUnmount {
 	private static final DataParameter<Boolean> IS_NESTING = EntityDataManager.createKey(EntityChiromawMatriarch.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> RETURN_TO_NEST = EntityDataManager.createKey(EntityChiromawMatriarch.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_LANDING = EntityDataManager.createKey(EntityChiromawMatriarch.class, DataSerializers.BOOLEAN);
@@ -1037,16 +1038,8 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		}
 	}
 
-	@SubscribeEvent
-	public static void onEntityDismount(EntityMountEvent event) {
-		if (event.isDismounting() && !event.getWorldObj().isRemote) {
-			Entity rider = event.getEntityMounting();
-			Entity mount = event.getEntityBeingMounted();
-			if (rider instanceof EntityPlayer && mount instanceof EntityChiromawMatriarch) {
-				if (((EntityChiromawMatriarch) mount).getDroppingTimer() > 0) {
-					event.setCanceled(true);
-				}
-			}
-		}
+	@Override
+	public boolean isUnmountBlocked(EntityPlayer rider) {
+		return !this.world.isRemote && this.getDroppingTimer() > 0;
 	}
 }

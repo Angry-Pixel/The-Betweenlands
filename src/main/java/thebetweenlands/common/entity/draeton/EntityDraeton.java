@@ -9,6 +9,8 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
 
+import gnu.trove.map.TObjectIntMap;
+import gnu.trove.map.hash.TObjectIntHashMap;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -47,6 +49,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.MapData;
@@ -60,6 +63,7 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.api.entity.IEntityPreventUnmount;
 import thebetweenlands.api.entity.IPullerEntity;
 import thebetweenlands.api.entity.IPullerEntityProvider;
 import thebetweenlands.client.audio.DraetonBurnerSound;
@@ -81,7 +85,7 @@ import thebetweenlands.util.Matrix;
 import thebetweenlands.util.NBTHelper;
 import thebetweenlands.util.PlayerUtil;
 
-public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAdditionalSpawnData, IEntityBL {
+public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAdditionalSpawnData, IEntityBL, IEntityPreventUnmount {
 	private static final DataParameter<Integer> TIME_SINCE_HIT = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.VARINT);
 	private static final DataParameter<Float> DAMAGE_TAKEN = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.FLOAT);
 	private static final DataParameter<Boolean> ANCHOR_DEPLOYED = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
@@ -186,7 +190,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 	protected int movementSyncTicks = 10;
 
-	protected float crashSpeedThreshold = 0.25f; //TODO adjust after speed rebalancing
+	protected float crashSpeedThreshold = 0.25f;
 	protected int crashCooldown = 20;
 
 	protected float minAnchorLength = 0.25f;
@@ -198,6 +202,9 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	public float pulleyRotation = 0;
 
 	protected int pulleyRotationTicks = 0;
+
+	protected TObjectIntMap<EntityPlayer> unmountTicks = new TObjectIntHashMap<>();
+	protected TObjectIntMap<EntityPlayer> notSneakingTicks = new TObjectIntHashMap<>();
 
 	public EntityDraeton(World world) {
 		super(world);
@@ -1029,6 +1036,27 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		this.prevRotationRoll = this.rotationRoll;
 
 		this.prevBalloonPos = this.balloonPos;
+
+		Iterator<EntityPlayer> unmountingPlayersIt = this.unmountTicks.keySet().iterator();
+		while(unmountingPlayersIt.hasNext()) {
+			EntityPlayer player = unmountingPlayersIt.next();
+
+			if(player.getRidingEntity() != this) {
+				unmountingPlayersIt.remove();
+			} else if(!player.isSneaking() && this.notSneakingTicks.adjustOrPutValue(player, 1, 0) > 40) {
+				unmountingPlayersIt.remove();
+				this.notSneakingTicks.remove(player);
+			}
+		}
+
+		Iterator<EntityPlayer> notSneakingPlayersIt = this.notSneakingTicks.keySet().iterator();
+		while(notSneakingPlayersIt.hasNext()) {
+			EntityPlayer player = notSneakingPlayersIt.next();
+
+			if(player.getRidingEntity() != this) {
+				notSneakingPlayersIt.remove();
+			}
+		}
 
 		if(this.getControllingPassenger() == null) {
 			this.descend = false;
@@ -2195,5 +2223,26 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		if(event.getEntity().ticksExisted < 3 && (target instanceof EntityDraeton || target instanceof EntityDraetonInteractionPart)) {
 			event.setCanceled(true);
 		}
+	}
+
+	@Override
+	public boolean isUnmountBlocked(EntityPlayer rider) {
+		return !this.world.isRemote && this.unmountTicks.get(rider) < 40;
+	}
+
+	@Override
+	public void onUnmountBlocked(EntityPlayer rider) {
+		if(!this.world.isRemote) {
+			int unmountTicks = this.unmountTicks.adjustOrPutValue(rider, 1, 0);
+
+			if(rider instanceof EntityPlayerMP) {
+				((EntityPlayerMP) rider).sendStatusMessage(new TextComponentTranslation("chat.draeton_dismount_timer", String.valueOf(unmountTicks == 40 ? 0 : ((40 - unmountTicks) / 14 + 1))), true);
+			}
+		}
+	}
+
+	@Override
+	public boolean shouldPreventStatusBarText(EntityPlayer rider) {
+		return false;
 	}
 }

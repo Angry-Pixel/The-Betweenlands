@@ -71,7 +71,6 @@ import thebetweenlands.client.handler.ElixirClientHandler;
 import thebetweenlands.client.handler.FogHandler;
 import thebetweenlands.client.handler.InputHandler;
 import thebetweenlands.client.handler.ItemTooltipHandler;
-import thebetweenlands.client.handler.MountOverlayRemoval;
 import thebetweenlands.client.handler.MusicHandler;
 import thebetweenlands.client.handler.OverlayHandler;
 import thebetweenlands.client.handler.ScreenRenderHandler;
@@ -923,7 +922,6 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         MinecraftForge.EVENT_BUS.register(RenderVolarkite.class);
         MinecraftForge.EVENT_BUS.register(RenderUtils.class);
         MinecraftForge.EVENT_BUS.register(EntityChiromawTame.class);
-        MinecraftForge.EVENT_BUS.register(MountOverlayRemoval.class);
         MinecraftForge.EVENT_BUS.register(EventHeavyRain.class);
 	}
 
