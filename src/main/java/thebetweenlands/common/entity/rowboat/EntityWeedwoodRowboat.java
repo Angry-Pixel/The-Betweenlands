@@ -271,10 +271,6 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
             if (creative || getDamageTaken() > 20) {
                 if (!creative && world.getGameRules().getBoolean("doEntityDrops")) {
                     entityDropItem(getItem(), 0);
-                    
-                    if(this.hasLantern()) {
-                    	this.entityDropItem(new ItemStack(ItemRegistry.WEEDWOOD_ROWBOAT_UPGRADE_LANTERN), 0);
-                    }
                 }
                 setDead();
             }
