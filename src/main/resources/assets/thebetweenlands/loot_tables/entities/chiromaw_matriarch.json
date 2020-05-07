@@ -9,6 +9,20 @@
 					"type": "item",
 					"name": "thebetweenlands:chirobarb_erupter",
 					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:chiromaw_barb",
+					"functions": [
+						{
+							"function": "set_count",
+							"count": {
+								"min": 5,
+								"max": 10
+							}
+						}
+					],
+					"weight": 1
 				}
 			]
 		},
