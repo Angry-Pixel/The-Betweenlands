@@ -3,21 +3,25 @@ package thebetweenlands.common.entity;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleBreaking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import thebetweenlands.common.TheBetweenlands;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
-import thebetweenlands.common.network.clientbound.PacketParticle;
-import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityTinyWormEggSac extends EntityProximitySpawner {
-
+	private static final byte EVENT_GOOP_PARTICLES = 100;
+	
 	public EntityTinyWormEggSac(World world) {
 		super(world);
 		setSize(1F, 0.5F);
@@ -70,9 +74,24 @@ public class EntityTinyWormEggSac extends EntityProximitySpawner {
 
 	@Override
 	protected void performPostSpawnaction(Entity targetEntity, @Nullable Entity entitySpawned) {
-		if(!entitySpawned.getEntityWorld().isRemote)
-			TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.GOOP_SPLAT, (float) posX, (float)posY + 0.25F, (float)posZ, 0F));
+		if(!this.world.isRemote) {
+			this.world.setEntityState(this, EVENT_GOOP_PARTICLES);
+		}
 		getEntityWorld().playSound((EntityPlayer)null, getPosition(), getDeathSound(), SoundCategory.HOSTILE, 0.5F, 1.0F);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void handleStatusUpdate(byte id) {
+		super.handleStatusUpdate(id);
+
+		if(id == EVENT_GOOP_PARTICLES) {
+			for (int count = 0; count <= 200; ++count) {
+				Particle fx = new ParticleBreaking.SnowballFactory().createParticle(EnumParticleTypes.SNOWBALL.getParticleID(), world, this.posX + (world.rand.nextDouble() - 0.5D), this.posY + 0.25f + world.rand.nextDouble(), this.posZ + (world.rand.nextDouble() - 0.5D), 0, 0, 0, 0);
+				fx.setRBGColorF(48F, 64F, 91F);
+				Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+			}
+		}
 	}
 
 	@Override

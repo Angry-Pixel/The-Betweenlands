@@ -31,6 +31,8 @@ import thebetweenlands.common.capability.item.ILivingWeedwoodShieldCapability;
 import thebetweenlands.common.capability.item.LivingWeedwoodShieldItemCapability;
 import thebetweenlands.common.capability.item.RuneChainItemCapability;
 import thebetweenlands.common.capability.item.RuneItemCapability;
+import thebetweenlands.common.capability.playermounts.IPlayerMountsEntityCapability;
+import thebetweenlands.common.capability.playermounts.PlayerMountsEntityCapability;
 import thebetweenlands.common.capability.portal.PortalEntityCapability;
 import thebetweenlands.common.capability.recruitment.EntityPuppetCapability;
 import thebetweenlands.common.capability.recruitment.EntityPuppeteerCapability;
@@ -84,6 +86,9 @@ public class CapabilityRegistry {
 	@CapabilityInject(IRuneChainUserCapability.class)
 	public static final Capability<IRuneChainUserCapability> CAPABILITY_RUNE_CHAIN_USER = null;
 	
+	@CapabilityInject(IPlayerMountsEntityCapability.class)
+	public static final Capability<IPlayerMountsEntityCapability> CAPABILITY_PLAYER_MOUNTS = null;
+		
 	public static void preInit() {
 		EntityCapabilityHandler.registerEntityCapability(new DecayEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new CircleGemEntityCapability());
@@ -97,6 +102,7 @@ public class CapabilityRegistry {
 		EntityCapabilityHandler.registerEntityCapability(new CustomStepSoundCapability());
 		EntityCapabilityHandler.registerEntityCapability(new RingOfDispersionEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new RuneChainUserPlayerCapability());
+		EntityCapabilityHandler.registerEntityCapability(new PlayerMountsEntityCapability());
 		
 		ItemCapabilityHandler.registerItemCapability(new LivingWeedwoodShieldItemCapability());
 		ItemCapabilityHandler.registerItemCapability(new RuneChainItemCapability());

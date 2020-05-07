@@ -1,0 +1,11 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "thebetweenlands:items/ancient_leggings"
+  },
+  "overrides": [
+        { "predicate": { "gem": 1.0 }, "model": "thebetweenlands:item/ancient_leggings_aqua_gem" },
+        { "predicate": { "gem": 2.0 }, "model": "thebetweenlands:item/ancient_leggings_crimson_gem" },
+        { "predicate": { "gem": 3.0 }, "model": "thebetweenlands:item/ancient_leggings_green_gem" }
+    ]
+}

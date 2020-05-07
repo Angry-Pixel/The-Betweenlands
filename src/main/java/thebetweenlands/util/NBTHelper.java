@@ -6,9 +6,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.NonNullList;
 import thebetweenlands.common.capability.base.AbstractCapability;
 
 public class NBTHelper {
@@ -120,4 +123,50 @@ public class NBTHelper {
 		}
 		return true;
 	}
+	
+	public static NBTTagCompound saveAllItems(NBTTagCompound tag, IInventory inventory)
+    {
+        return saveAllItems(tag, inventory, true);
+    }
+
+    public static NBTTagCompound saveAllItems(NBTTagCompound tag, IInventory inventory, boolean saveEmpty)
+    {
+        NBTTagList nbttaglist = new NBTTagList();
+
+        for (int i = 0; i < inventory.getSizeInventory(); ++i)
+        {
+            ItemStack itemstack = inventory.getStackInSlot(i);
+
+            if (!itemstack.isEmpty())
+            {
+                NBTTagCompound nbttagcompound = new NBTTagCompound();
+                nbttagcompound.setByte("Slot", (byte)i);
+                itemstack.writeToNBT(nbttagcompound);
+                nbttaglist.appendTag(nbttagcompound);
+            }
+        }
+
+        if (!nbttaglist.isEmpty() || saveEmpty)
+        {
+            tag.setTag("Items", nbttaglist);
+        }
+
+        return tag;
+    }
+
+    public static void loadAllItems(NBTTagCompound tag, IInventory inventory)
+    {
+        NBTTagList nbttaglist = tag.getTagList("Items", 10);
+
+        for (int i = 0; i < nbttaglist.tagCount(); ++i)
+        {
+            NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
+            int j = nbttagcompound.getByte("Slot") & 255;
+
+            if (j >= 0 && j < inventory.getSizeInventory())
+            {
+            	inventory.setInventorySlotContents(j,  new ItemStack(nbttagcompound));
+            }
+        }
+    }
 }

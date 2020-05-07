@@ -31,19 +31,6 @@ public class PotionRootBound extends Potion {
 		this.registerPotionAttributeModifier(SharedMonsterAttributes.MOVEMENT_SPEED, "be8859c1-024b-4f31-b606-5991011ddd98", -1, 2);
 	}
 
-	@SubscribeEvent
-	public static void onEntityJump(LivingJumpEvent event) {
-		EntityLivingBase entity = event.getEntityLiving();
-		if(entity.getActivePotionEffect(ElixirEffectRegistry.ROOT_BOUND) != null) {
-			entity.motionX = 0;
-			entity.motionZ = 0;
-			if(entity.motionY > -0.1D) {
-				entity.motionY = -0.1D;
-				entity.velocityChanged = true;
-			}
-		}
-	}
-
 	@Override
 	public boolean shouldRender(PotionEffect effect) {
 		return false;
@@ -57,51 +44,5 @@ public class PotionRootBound extends Potion {
 	@Override
 	public List<ItemStack> getCurativeItems() {
 		return Collections.emptyList();
-	}
-
-	@SubscribeEvent
-	public static void onEntityLivingUpdate(LivingUpdateEvent event) {
-		EntityLivingBase entity = event.getEntityLiving();
-
-		if(entity.getActivePotionEffect(ElixirEffectRegistry.ROOT_BOUND) != null) {
-			entity.setInWeb();
-			entity.motionX = entity.motionZ = 0;
-		}
-	}
-	
-	@SubscribeEvent
-	public static void onClientTick(ClientTickEvent event) {
-		if(event.phase == TickEvent.Phase.END) {
-			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
-			if(player != null) {
-				updatePlayerRootboundTicks(player);
-			}
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	private static void updatePlayerRootboundTicks(EntityLivingBase entity) {
-		NBTTagCompound nbt = entity.getEntityData();
-		if(entity.getActivePotionEffect(ElixirEffectRegistry.ROOT_BOUND) != null) {
-			nbt.setInteger("thebetweenlands.rootBoundTicks", 5);
-		} else {
-			int rootBoundTicks = nbt.getInteger("thebetweenlands.rootBoundTicks");
-			if(rootBoundTicks > 1) {
-				nbt.setInteger("thebetweenlands.rootBoundTicks", rootBoundTicks - 1);
-			} else {
-				nbt.removeTag("thebetweenlands.rootBoundTicks");
-			}
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public static void onFovUpdate(FOVUpdateEvent event) {
-		EntityPlayer entity = event.getEntity();
-		NBTTagCompound nbt = entity.getEntityData();
-		//NBT is necessary so that FOV doesn't flicker when potion wears off .-.
-		if(entity.getActivePotionEffect(ElixirEffectRegistry.ROOT_BOUND) != null || nbt.hasKey("thebetweenlands.rootBoundTicks")) {
-			event.setNewfov(1);
-		}
 	}
 }

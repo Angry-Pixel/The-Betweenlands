@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleBreaking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
@@ -14,6 +17,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.EnumDifficulty;
@@ -25,13 +29,12 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
-import thebetweenlands.common.network.clientbound.PacketParticle;
-import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySplodeshroom extends EntityProximitySpawner {
+	private static final byte EVENT_EXPLODE_PARTICLES = 100;
+	
 	public int MAX_SWELL = 40;
 	public int MIN_SWELL = 0;
 	private static final DataParameter<Boolean> IS_SWELLING = EntityDataManager.createKey(EntitySplodeshroom.class, DataSerializers.BOOLEAN);
@@ -144,12 +147,25 @@ public class EntitySplodeshroom extends EntityProximitySpawner {
 	}
 
 	private void explode() {
-		//TODO whiz bang particles
-		TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.SPLODE_SHROOM, (float) posX, (float)posY + 0.25F, (float)posZ, 0F));
+		this.world.setEntityState(this, EVENT_EXPLODE_PARTICLES);
 		getEntityWorld().playSound((EntityPlayer)null, getPosition(), SoundRegistry.SPLODESHROOM_POP, SoundCategory.HOSTILE, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 		setHasExploded(true);
 	}
 
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void handleStatusUpdate(byte id) {
+		super.handleStatusUpdate(id);
+
+		if(id == EVENT_EXPLODE_PARTICLES) {
+			for (int count = 0; count <= 200; ++count) {
+				Particle fx = new ParticleBreaking.SnowballFactory().createParticle(EnumParticleTypes.SNOWBALL.getParticleID(), world, this.posX + (world.rand.nextDouble() - 0.5D), this.posY + 0.25f + world.rand.nextDouble(), this.posZ + (world.rand.nextDouble() - 0.5D), 0, 0, 0, 0);
+				fx.setRBGColorF(128F, 203F, 175F);
+				Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+			}
+		}
+	}
+	
 	@Override
     public void notifyDataManagerChange(DataParameter<?> key) {
         if (AOE_SIZE_XZ.equals(key)) 

@@ -23,6 +23,7 @@ public class RenderDreadfulMummy extends RenderLiving<EntityDreadfulMummy> {
 
 	@Override
 	public void doRender(EntityDreadfulMummy entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		this.shadowSize = Math.max(0, entity.getSpawningProgress(partialTicks) * 1 - 0.3f);
 		super.doRender(entity, x, y + entity.getInterpolatedYOffsetProgress(partialTicks), z, entityYaw, partialTicks);
 	}
 }

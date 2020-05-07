@@ -9,17 +9,26 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemBow;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 
 import java.util.ArrayList;
@@ -119,6 +128,7 @@ public class ElixirCommonHandler {
     @SubscribeEvent
     public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
         EntityLivingBase entityLivingBase = event.getEntityLiving();
+        
         if(ElixirEffectRegistry.EFFECT_SPIDERBREED.isActive(entityLivingBase)) {
             int strength = ElixirEffectRegistry.EFFECT_SPIDERBREED.getStrength(entityLivingBase);
             float relStrength = Math.min((strength + 1) / 4.0F, 1.0F);
@@ -219,6 +229,15 @@ public class ElixirCommonHandler {
 	            }
 	        }
         }
+        
+        if(entityLivingBase.getActivePotionEffect(ElixirEffectRegistry.ROOT_BOUND) != null) {
+        	entityLivingBase.setInWeb();
+        	entityLivingBase.motionX = entityLivingBase.motionZ = 0;
+		}
+        
+        if(ElixirEffectRegistry.EFFECT_BASILISK.isActive(entityLivingBase) || ElixirEffectRegistry.EFFECT_PETRIFY.isActive(entityLivingBase)) {
+        	entityLivingBase.motionX = entityLivingBase.motionZ = 0;
+        }
     }
     private AttributeModifier getFollowRangeModifier(int strength) {
         return new AttributeModifier(FOLLOW_RANGE_MODIFIER.getID(), FOLLOW_RANGE_MODIFIER.getName() + " " + strength, FOLLOW_RANGE_MODIFIER.getAmount() / 4.0D * (Math.min(strength, 4)), FOLLOW_RANGE_MODIFIER.getOperation());
@@ -276,10 +295,19 @@ public class ElixirCommonHandler {
     @SubscribeEvent
     public void onLivingJump(LivingEvent.LivingJumpEvent event) {
         EntityLivingBase living = event.getEntityLiving();
+        
         if(ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.isActive(living)) {
             float relStrength = Math.min((ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.getStrength(living)) / 9.0F, 0.4F);
             living.motionY *= 1.0F + relStrength;
         }
+        
+        if(living.getActivePotionEffect(ElixirEffectRegistry.ROOT_BOUND) != null || ElixirEffectRegistry.EFFECT_BASILISK.isActive(living) || ElixirEffectRegistry.EFFECT_PETRIFY.isActive(living)) {
+        	living.motionX = 0;
+        	living.motionZ = 0;
+			if(living.motionY > -0.1D) {
+				living.motionY = -0.1D;
+				living.velocityChanged = true;
+			}
+		}
     }
-
 }

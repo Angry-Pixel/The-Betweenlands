@@ -1,7 +1,8 @@
 {
   "display": {
     "icon": {
-      "item": "thebetweenlands:gecko"
+      "item": "thebetweenlands:critter",
+      "nbt": "{\"Entity\": {\"id\": \"thebetweenlands:gecko\"}}"
     },
     "title": {
       "translate": "advancements.thebetweenlands.herbalist.screw_peta.title"

@@ -517,7 +517,7 @@ public class BetweenlandsConfig {
 		@Name("online_event_overrides_enabled")
 		@LangKey(LANG_PREFIX + "online_event_overrides_enabled")
 		@Comment("If true this allows the developers to remotely enable certain environment events (such as the seasonal events for example) over a file hosted on our repository (https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/environment_event_overrides/overrides.json). If you do not wish to use this feature it can be fully disabled by setting this to false")
-		public boolean onlineEnvironmentEventOverrides = true;
+		public boolean onlineEnvironmentEventOverrides = false;
 
 		@Name("check_interval")
 		@LangKey(LANG_PREFIX + "check_interval")

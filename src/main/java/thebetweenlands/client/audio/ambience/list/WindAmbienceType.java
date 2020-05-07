@@ -8,6 +8,7 @@ import thebetweenlands.client.audio.ambience.AmbienceLayer;
 import thebetweenlands.client.audio.ambience.AmbienceType;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.entity.EntityVolarkite;
+import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.registries.AmbienceRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -15,7 +16,7 @@ public class WindAmbienceType extends AmbienceType {
 	@Override
 	public boolean isActive() {
 		Entity ridingEntity = this.getPlayer().getRidingEntity();
-		return ridingEntity instanceof EntityGrapplingHookNode || ridingEntity instanceof EntityVolarkite;
+		return ridingEntity instanceof EntityGrapplingHookNode || ridingEntity instanceof EntityVolarkite || ridingEntity instanceof EntityDraeton;
 	}
 
 	@Override

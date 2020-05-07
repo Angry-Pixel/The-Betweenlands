@@ -1,0 +1,7 @@
+{
+    "parent": "thebetweenlands:item/ancient_greatsword_base",
+    "textures": {
+        "layer0": "thebetweenlands:items/ancient_greatsword_aqua_corrodible",
+        "layer1": "thebetweenlands:items/ancient_greatsword_aqua_corrosion_5"
+    }
+}

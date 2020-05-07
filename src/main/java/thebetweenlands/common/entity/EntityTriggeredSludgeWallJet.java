@@ -80,7 +80,7 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 	@Override
 	public void notifyDataManagerChange(DataParameter<?> key) {
 		super.notifyDataManagerChange(key);
-		if(getEntityWorld().isRemote && key == ANIMATION_TICKS_SYNC)
+		if(getEntityWorld().isRemote && ANIMATION_TICKS_SYNC.equals(key))
 			this.animationTicks = this.animationTicksPrev = this.dataManager.get(ANIMATION_TICKS_SYNC);
 	}
 

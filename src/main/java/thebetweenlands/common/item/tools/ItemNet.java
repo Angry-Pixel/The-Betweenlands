@@ -1,20 +1,51 @@
 package thebetweenlands.common.item.tools;
 
+import java.util.Collection;
+import java.util.function.BiPredicate;
+import java.util.function.Supplier;
+
+import org.apache.commons.lang3.tuple.Pair;
+
+import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
+
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.EntityTinyWormEggSac;
+import thebetweenlands.common.entity.mobs.EntityChiromawHatchling;
+import thebetweenlands.common.entity.mobs.EntityChiromawTame;
+import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityGecko;
+import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemNet extends Item implements IAnimatorRepairable {
+	public static final Multimap<Class<? extends Entity>, Pair<Supplier<? extends ItemMob>, BiPredicate<EntityPlayer, Entity>>> CATCHABLE_ENTITIES = MultimapBuilder.hashKeys().arrayListValues().build();
+
+	@SuppressWarnings("unchecked")
+	public static <T extends Entity> void register(Class<T> cls, Supplier<? extends ItemMob> item, BiPredicate<EntityPlayer, T> predicate) {
+		CATCHABLE_ENTITIES.put(cls, Pair.of(item, (BiPredicate<EntityPlayer, Entity>) predicate));
+	}
+
+	static {
+		register(EntityFirefly.class, () -> ItemRegistry.CRITTER, (p, e) -> true);
+		register(EntityGecko.class, () -> ItemRegistry.CRITTER, (p, e) -> true);
+		register(EntityDragonFly.class, () -> ItemRegistry.CRITTER, (p, e) -> true);
+		register(EntityTinyWormEggSac.class, () -> ItemRegistry.SLUDGE_WORM_EGG_SAC, (p, e) -> true);
+		register(EntityChiromawHatchling.class, () -> ItemRegistry.CHIROMAW_EGG, (p, e) -> !e.getHasHatched() && !e.getElectricBoogaloo());
+		register(EntityChiromawHatchling.class, () -> ItemRegistry.CHIROMAW_EGG_LIGHTNING, (p, e) -> !e.getHasHatched() && e.getElectricBoogaloo());
+		register(EntityChiromawTame.class, () -> ItemRegistry.CHIROMAW_TAME, (p, e) -> e.getOwner() == p && !e.getElectricBoogaloo());
+		register(EntityChiromawTame.class, () -> ItemRegistry.CHIROMAW_TAME_LIGHTNING, (p, e) -> e.getOwner() == p && e.getElectricBoogaloo());
+	}
+
 	public ItemNet() {
 		this.maxStackSize = 1;
 		this.setMaxDamage(32);
@@ -23,31 +54,36 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
-		if (target instanceof EntityFirefly || target instanceof EntityGecko || target instanceof EntityTinyWormEggSac ) {
-			ItemStack receivedItem;
-			if (target instanceof EntityFirefly) {
-				receivedItem = new ItemStack(ItemRegistry.FIREFLY);
-			}
-			else if (target instanceof EntityGecko){
-				receivedItem = new ItemStack(ItemRegistry.GECKO);
-				if (receivedItem.getTagCompound() == null)
-					receivedItem.setTagCompound(new NBTTagCompound());
-				receivedItem.getTagCompound().setFloat("Health", target.getHealth());
-			}
-			else  {
-				receivedItem = new ItemStack(ItemRegistry.SLUDGE_WORM_EGG_SAC);
-			}
-			if (!player.getHeldItem(hand).isEmpty() && player.getHeldItem(hand).getItem() == this && !player.world.isRemote) {
-				if (!target.getCustomNameTag().isEmpty()) {
-					receivedItem.setStackDisplayName(target.getCustomNameTag());
+		Collection<Pair<Supplier<? extends ItemMob>, BiPredicate<EntityPlayer, Entity>>> entries = CATCHABLE_ENTITIES.get(target.getClass());
+
+		if(entries != null) {
+			if(!player.world.isRemote) {
+				for(Pair<Supplier<? extends ItemMob>, BiPredicate<EntityPlayer, Entity>> entry : entries) {
+					if(entry.getRight().test(player, target)) {
+						ItemMob item = entry.getLeft().get();
+
+						ItemStack mobItemStack = item.capture(target);
+
+						if(!mobItemStack.isEmpty()) {
+							target.setDropItemsWhenDead(false);
+							target.setDead();
+
+							player.world.spawnEntity(new EntityItem(player.world, player.posX, player.posY, player.posZ, mobItemStack));
+
+							stack.damageItem(1, player);
+
+							item.onCapturedByPlayer(player, hand, mobItemStack);
+							
+							break;
+						}
+					}
 				}
-				player.world.spawnEntity(new EntityItem(player.world, player.posX, player.posY, player.posZ, receivedItem));
-				target.setDead();
-				stack.damageItem(1, player);
 			}
+
 			player.swingArm(hand);
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	@Override

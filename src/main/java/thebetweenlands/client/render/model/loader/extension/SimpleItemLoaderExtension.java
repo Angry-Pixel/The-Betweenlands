@@ -42,7 +42,7 @@ public class SimpleItemLoaderExtension extends LoaderExtension {
 					(loc) -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(loc.toString()));
 
 			//Return wrapped model
-			return new BakedModelItemWrapper(original, bakedModel);
+			return new BakedModelItemWrapper(original, bakedModel, replacementModel.getDependencies());
 		}
 		//Nothing to replace
 		return null;

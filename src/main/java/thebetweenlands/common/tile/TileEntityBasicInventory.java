@@ -1,5 +1,9 @@
 package thebetweenlands.common.tile;
 
+import java.util.function.BiFunction;
+
+import javax.annotation.Nonnull;
+
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -19,32 +23,30 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
-import javax.annotation.Nonnull;
-
 public class TileEntityBasicInventory extends TileEntity implements ISidedInventory {
+	protected static final BiFunction<TileEntityBasicInventory, NonNullList<ItemStack>, ItemStackHandler> DEFAULT_HANDLER = (te, inv) -> new ItemStackHandler(inv) {
+		@Override
+		public void setSize(int size) {
+			if(size != inv.size()) {
+				throw new UnsupportedOperationException("Can't resize this inventory");
+			}
+		}
+
+		@Override
+		protected void onContentsChanged(int slot) {
+			// Don't mark dirty while loading chunk!
+			if(te.hasWorld()) {
+				te.markDirty();
+			}
+		}
+	};
+	
 	private final String name;
 	protected NonNullList<ItemStack> inventory;
 	protected final ItemStackHandler inventoryHandler;
 
 	public TileEntityBasicInventory(int invSize, String name) {
-		this.inventoryHandler = new ItemStackHandler(this.inventory = NonNullList.withSize(invSize, ItemStack.EMPTY)) {
-			@Override
-			public void setSize(int size) {
-				this.stacks = TileEntityBasicInventory.this.inventory = NonNullList.withSize(invSize, ItemStack.EMPTY);
-			}
-
-			@Override
-			protected void onContentsChanged(int slot) {
-				// Don't mark dirty while loading chunk!
-				if(TileEntityBasicInventory.this.hasWorld()) {
-					TileEntityBasicInventory.this.markDirty();
-				}
-			}
-		};
-		this.name = name;
+		this(name, NonNullList.withSize(invSize, ItemStack.EMPTY), DEFAULT_HANDLER);
 	}
 	
 	public TileEntityBasicInventory(String name, NonNullList<ItemStack> inventory, BiFunction<TileEntityBasicInventory, NonNullList<ItemStack>, ItemStackHandler> handler) {
@@ -52,7 +54,7 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 		this.inventory = inventory;
 		this.name = name;
 	}
-
+	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);

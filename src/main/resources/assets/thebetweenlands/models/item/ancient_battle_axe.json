@@ -1,41 +1,173 @@
 {
     "parent": "thebetweenlands:item/ancient_battle_axe_base",
     "overrides": [
-        {
-            "predicate": {
-                "corrosion": 0
-            },
-            "model": "thebetweenlands:item/ancient_battle_axe_corrosion_0"
-        },
-        {
-            "predicate": {
-                "corrosion": 1
-            },
-            "model": "thebetweenlands:item/ancient_battle_axe_corrosion_1"
-        },
-        {
-            "predicate": {
-                "corrosion": 2
-            },
-            "model": "thebetweenlands:item/ancient_battle_axe_corrosion_2"
-        },
-        {
-            "predicate": {
-                "corrosion": 3
-            },
-            "model": "thebetweenlands:item/ancient_battle_axe_corrosion_3"
-        },
-        {
-            "predicate": {
-                "corrosion": 4
-            },
-            "model": "thebetweenlands:item/ancient_battle_axe_corrosion_4"
-        },
-        {
-            "predicate": {
-                "corrosion": 5
-            },
-            "model": "thebetweenlands:item/ancient_battle_axe_corrosion_5"
-        }
+      {
+          "predicate": {
+              "gem": 0,
+              "corrosion": 0
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_corrosion_0"
+      },
+      {
+          "predicate": {
+              "gem": 0,
+              "corrosion": 1
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_corrosion_1"
+      },
+      {
+          "predicate": {
+              "gem": 0,
+              "corrosion": 2
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_corrosion_2"
+      },
+      {
+          "predicate": {
+              "gem": 0,
+              "corrosion": 3
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_corrosion_3"
+      },
+      {
+          "predicate": {
+              "gem": 0,
+              "corrosion": 4
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_corrosion_4"
+      },
+      {
+          "predicate": {
+              "gem": 0,
+              "corrosion": 5
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_corrosion_5"
+      },
+      {
+          "predicate": {
+              "gem": 1,
+              "corrosion": 0
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_aqua_corrosion_0"
+      },
+      {
+          "predicate": {
+              "gem": 1,
+              "corrosion": 1
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_aqua_corrosion_1"
+      },
+      {
+          "predicate": {
+              "gem": 1,
+              "corrosion": 2
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_aqua_corrosion_2"
+      },
+      {
+          "predicate": {
+              "gem": 1,
+              "corrosion": 3
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_aqua_corrosion_3"
+      },
+      {
+          "predicate": {
+              "gem": 1,
+              "corrosion": 4
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_aqua_corrosion_4"
+      },
+      {
+          "predicate": {
+              "gem": 1,
+              "corrosion": 5
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_aqua_corrosion_5"
+      },
+      {
+          "predicate": {
+              "gem": 2,
+              "corrosion": 0
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_crimson_corrosion_0"
+      },
+      {
+          "predicate": {
+              "gem": 2,
+              "corrosion": 1
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_crimson_corrosion_1"
+      },
+      {
+          "predicate": {
+              "gem": 2,
+              "corrosion": 2
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_crimson_corrosion_2"
+      },
+      {
+          "predicate": {
+              "gem": 2,
+              "corrosion": 3
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_crimson_corrosion_3"
+      },
+      {
+          "predicate": {
+              "gem": 2,
+              "corrosion": 4
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_crimson_corrosion_4"
+      },
+      {
+          "predicate": {
+              "gem": 2,
+              "corrosion": 5
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_crimson_corrosion_5"
+      },
+      {
+          "predicate": {
+              "gem": 3,
+              "corrosion": 0
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_green_corrosion_0"
+      },
+      {
+          "predicate": {
+              "gem": 3,
+              "corrosion": 1
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_green_corrosion_1"
+      },
+      {
+          "predicate": {
+              "gem": 3,
+              "corrosion": 2
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_green_corrosion_2"
+      },
+      {
+          "predicate": {
+              "gem": 3,
+              "corrosion": 3
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_green_corrosion_3"
+      },
+      {
+          "predicate": {
+              "gem": 3,
+              "corrosion": 4
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_green_corrosion_4"
+      },
+      {
+          "predicate": {
+              "gem": 3,
+              "corrosion": 5
+          },
+          "model": "thebetweenlands:item/ancient_battle_axe_green_corrosion_5"
+      }
     ]
 }

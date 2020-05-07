@@ -21,6 +21,7 @@ import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.api.entity.spawning.IWeightProvider;
 import thebetweenlands.api.event.InitializeBetweenlandsBiomeEvent;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
+import thebetweenlands.common.entity.EntityWormGroundSpawner;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
@@ -71,7 +72,8 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider, ICustom
 	 */
 	protected void addSpawnEntries(List<ICustomSpawnEntry> entries) {
 		BiPredicate<World, BlockPos> bloodSkyPredicate = ConditionalSpawnEntry.createEventPredicate(new ResourceLocation(ModInfo.ID, "blood_sky"));
-		
+		BiPredicate<World, BlockPos> heavyRainPredictate = ConditionalSpawnEntry.createEventPredicate(new ResourceLocation(ModInfo.ID, "heavy_rain"));
+
 		entries.add(new ConditionalSpawnEntry(800, new SurfaceSpawnEntry(-1, EntityFirefly.class, EntityFirefly::new, (short) 280), bloodSkyPredicate).setSpawnCheckRadius(16.0D).setGroupSize(1, 4));
 		entries.add(new ConditionalSpawnEntry(801, new SurfaceSpawnEntry(-1, EntitySwampHag.class, EntitySwampHag::new, (short) 250), bloodSkyPredicate) {
 			@Override
@@ -91,7 +93,9 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider, ICustom
 				return entity;
 			}
 		}.setHostile(true).setSpawnCheckRadius(20.0D));
+
 		entries.add(new ConditionalSpawnEntry(804, new WallSpawnEntry(-1, EntityCCGroundSpawner.class, EntityCCGroundSpawner::new, (short) 120), bloodSkyPredicate).setSpawnCheckRadius(32.0D).setGroupSize(1, 1).setHostile(true));
+		entries.add(new ConditionalSpawnEntry(805, new WallSpawnEntry(-1, EntityWormGroundSpawner.class, EntityWormGroundSpawner::new, (short) 120), heavyRainPredictate).setSpawnCheckRadius(32.0D).setGroupSize(1, 1).setHostile(true));
 
 		entries.add(new LocationSpawnEntry(803, EntityPyrad.class, EntityPyrad::new, (short) 120, EnumLocationType.GIANT_TREE) {
 			@Override

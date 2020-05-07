@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.MowzieModelBase;
@@ -275,7 +276,17 @@ public class ModelDreadfulMummy extends MowzieModelBase {
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 		EntityDreadfulMummy mummy = (EntityDreadfulMummy)entity;
 
-		faceTarget(neck, 1, f3, f4);
+		float partialTicks = f2 - entity.ticksExisted;
+		
+		float spawningProgress = mummy.getSpawningProgress(partialTicks);
+		body_base.rotateAngleX -= Math.min((1 - spawningProgress) * 1.5f, 0.7f);
+		head1.rotateAngleX -= Math.min((1 - spawningProgress) * 2.0f, 1.5f);
+		
+		legleft1.rotateAngleX += (1 - spawningProgress) * 0.85f;
+		legright1.rotateAngleX += (1 - spawningProgress) * 0.85f;
+		
+
+		faceTarget(neck, 1, MathHelper.clamp(MathHelper.wrapDegrees(f3), -25, 25), MathHelper.clamp(MathHelper.wrapDegrees(f4), -35, 35));
 		//        f = mummy.ticksExisted;
 		//        f1 = 1f;
 

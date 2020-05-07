@@ -1,0 +1,98 @@
+{
+   "pools":[
+      {
+         "name":"chiromaw_hatchling",
+         "rolls":2,
+         "conditions":[
+
+         ],
+         "entries":[
+            {
+               "type":"item",
+               "name":"thebetweenlands:angler_meat_raw",
+               "weight":1
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:silt_crab_claw",
+               "weight":1
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:critter",
+               "entryName": "dragonfly",
+               "functions":[
+                  {
+                     "function":"set_nbt",
+                     "tag":"{Entity: {id: \"thebetweenlands:dragonfly\"}}"
+                  }
+               ],
+               "weight":1
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_misc",
+               "entryName": "dragonfly_wing",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data":3
+                  }
+               ],
+               "weight":1
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:critter",
+               "entryName": "firefly",
+               "functions":[
+                  {
+                     "function":"set_nbt",
+                     "tag":"{Entity: {id: \"thebetweenlands:firefly\"}}"
+                  }
+               ],
+               "weight":1
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:frog_legs_raw",
+               "weight":1
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:critter",
+               "entryName": "gecko",
+               "functions":[
+                  {
+                     "function":"set_nbt",
+                     "tag":"{Entity: {id: \"thebetweenlands:gecko\"}}"
+                  }
+               ],
+               "weight":1
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_misc",
+               "entryName": "lurker_skin",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data":4
+                  }
+               ],
+               "weight":1
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:mire_snail_egg",
+               "weight":1
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:snail_flesh_raw",
+               "weight":1
+            }
+         ]
+      }
+   ]
+}

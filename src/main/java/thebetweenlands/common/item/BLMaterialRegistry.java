@@ -27,6 +27,7 @@ public class BLMaterialRegistry {
 	public static final ArmorMaterial ARMOR_VALONITE = EnumHelper.addArmorMaterial("valonite", "valonite", 35, new int[]{3, 6, 8, 3}, 0, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.0f);
 	public static final ArmorMaterial ARMOR_RUBBER = EnumHelper.addArmorMaterial("rubber", "rubber", 10, new int[]{1, 0, 0, 0}, 0, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0f);
 	public static final ArmorMaterial ARMOR_LEGEND = EnumHelper.addArmorMaterial("legend", "legend", 66, new int[]{6, 12, 16, 6}, 0, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.0f);
+	public static final ArmorMaterial ARMOR_ANCIENT = EnumHelper.addArmorMaterial("ancient", "ancient", 35, new int[]{3, 6, 8, 3}, 0, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 3.0f);
 
 	public static final Material MUD = new Material(MapColor.DIRT) {
 		@Override
@@ -162,7 +163,9 @@ public class BLMaterialRegistry {
 			return 6;
 		} else if(material == ARMOR_LEGEND) {
 			return 24;
-		}
+		} else if(material == ARMOR_ANCIENT) {
+			return 6;
+		} 
 		return 4;
 	}
 
@@ -181,7 +184,9 @@ public class BLMaterialRegistry {
 			return 16;
 		} else if(material == ARMOR_LEGEND) {
 			return 48;
-		}
+		}else if(material == ARMOR_ANCIENT) {
+			return 24;
+		} 
 		return 8;
 	}
 
@@ -200,7 +205,9 @@ public class BLMaterialRegistry {
 			return 12;
 		} else if(material == ARMOR_LEGEND) {
 			return 48;
-		}
+		}else if(material == ARMOR_ANCIENT) {
+			return 16;
+		} 
 		return 4;
 	}
 
@@ -219,6 +226,8 @@ public class BLMaterialRegistry {
 			return 48;
 		} else if(material == ARMOR_LEGEND) {
 			return 110;
+		} else if(material == ARMOR_ANCIENT) {
+			return 48;
 		}
 		return 8;
 	}

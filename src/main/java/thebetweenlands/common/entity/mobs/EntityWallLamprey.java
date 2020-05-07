@@ -104,7 +104,7 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 	public void notifyDataManagerChange(DataParameter<?> key) {
 		super.notifyDataManagerChange(key);
 
-		if(key == LOOK_X || key == LOOK_Y || key == LOOK_Z) {
+		if(LOOK_X.equals(key) || LOOK_Y.equals(key) || LOOK_Z.equals(key)) {
 			this.clientHeadLookChanged = true;
 		}
 	}

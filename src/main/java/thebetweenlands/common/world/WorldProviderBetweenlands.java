@@ -19,6 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.misc.Fog;
 import thebetweenlands.client.handler.FogHandler;
+import thebetweenlands.client.render.sky.BLRainRenderer;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
 import thebetweenlands.client.render.sky.BLSnowRenderer;
 import thebetweenlands.common.TheBetweenlands;
@@ -311,6 +312,8 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	public IRenderHandler getWeatherRenderer() {
 		if(this.getEnvironmentEventRegistry().snowfall.isSnowing()) {
 			return BLSnowRenderer.INSTANCE;
+		} else if(this.world.getRainStrength(1) > 0.001f) {
+			return BLRainRenderer.INSTANCE;
 		}
 		return null;
 	}

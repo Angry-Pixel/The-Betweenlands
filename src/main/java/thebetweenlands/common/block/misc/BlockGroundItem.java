@@ -16,6 +16,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -60,6 +61,15 @@ public class BlockGroundItem extends Block implements BlockRegistry.ICustomItemB
     @Override
     public ItemBlock getItemBlock() {
         return null;
+    }
+
+    @Override
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+        TileEntity tileEntity = world.getTileEntity(pos);
+        if (tileEntity instanceof TileEntityGroundItem) {
+            return ((TileEntityGroundItem) tileEntity).getStack();
+        }
+        return ItemStack.EMPTY;
     }
 
     @Override

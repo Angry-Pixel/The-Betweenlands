@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA",
+    "ACA",
+    " E "
+  ],
+  "key": {
+    "A": {
+      "item": "thebetweenlands:items_misc",
+      "data": 47
+    },
+    "E": {
+      "item": "thebetweenlands:items_misc",
+      "data": 45
+    },
+    "C": {
+      "item": "thebetweenlands:censer"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:draeton_burner"
+  }
+}

@@ -1,5 +1,6 @@
 package thebetweenlands.common;
 
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,12 +21,12 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.capability.base.ItemCapabilityHandler;
 import thebetweenlands.common.capability.collision.RingOfDispersionEntityCapability;
+import thebetweenlands.common.capability.playermounts.PlayerMountsEntityCapability;
 import thebetweenlands.common.command.CommandAspectDiscovery;
 import thebetweenlands.common.command.CommandBLEvent;
 import thebetweenlands.common.command.CommandDecay;
@@ -34,6 +35,8 @@ import thebetweenlands.common.command.CommandResetAspects;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.config.ConfigHelper;
 import thebetweenlands.common.entity.EntityVolarkite;
+import thebetweenlands.common.entity.draeton.EntityDraeton;
+import thebetweenlands.common.entity.mobs.EntityChiromawMatriarch;
 import thebetweenlands.common.entity.mobs.EntitySludgeMenace;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.handler.AdvancementHandler;
@@ -45,6 +48,7 @@ import thebetweenlands.common.handler.BlockBreakHandler;
 import thebetweenlands.common.handler.BossHandler;
 import thebetweenlands.common.handler.CustomEntityCollisionsHandler;
 import thebetweenlands.common.handler.ElixirCommonHandler;
+import thebetweenlands.common.handler.EntityUnmountHandler;
 import thebetweenlands.common.handler.EntitySpawnHandler;
 import thebetweenlands.common.handler.EnvironmentEventHandler;
 import thebetweenlands.common.handler.EnvironmentEventOverridesHandler;
@@ -62,6 +66,7 @@ import thebetweenlands.common.handler.PuppetHandler;
 import thebetweenlands.common.handler.WorldEventHandler;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.PotionRootBound;
+import thebetweenlands.common.item.armor.ItemAncientArmor;
 import thebetweenlands.common.item.equipment.ItemRingOfFlight;
 import thebetweenlands.common.item.misc.ItemMagicItemMagnet;
 import thebetweenlands.common.item.misc.ItemRingOfGathering;
@@ -69,7 +74,6 @@ import thebetweenlands.common.item.shields.ItemDentrothystShield;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.item.tools.ItemGreatsword;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.network.clientbound.PacketParticle;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.recipe.censer.CenserRecipeCremains;
 import thebetweenlands.common.registries.BiomeRegistry;
@@ -87,6 +91,7 @@ import thebetweenlands.common.world.gen.feature.structure.WorldGenWaystone;
 import thebetweenlands.common.world.storage.BetweenlandsChunkStorage;
 import thebetweenlands.common.world.storage.OfflinePlayerHandlerImpl;
 import thebetweenlands.common.world.storage.WorldStorageImpl;
+import thebetweenlands.compat.hwyla.HwylaProvider;
 import thebetweenlands.compat.tmg.TMGEquipmentInventory;
 import thebetweenlands.core.TheBetweenlandsPreconditions;
 
@@ -138,9 +143,8 @@ public class TheBetweenlands {
 		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
 
 		MessageRegistry.preInit();
+		FMLInterModComms.sendMessage("waila", "register", "thebetweenlands.compat.hwyla.HwylaProvider.callbackRegister");
 
-		// Temp packet
-		networkWrapper.registerMessage(PacketParticle.class, PacketParticle.class, 100, Side.CLIENT); //ID 100 until added
 		//Renderers
 		proxy.registerItemAndBlockRenderers();
 		proxy.preInit();
@@ -265,5 +269,11 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(ItemRingOfGathering.class);
 		MinecraftForge.EVENT_BUS.register(EntityVolarkite.class);
 		MinecraftForge.EVENT_BUS.register(PlayerRuneChainHandler.class);
+		MinecraftForge.EVENT_BUS.register(BLDataFixers.class);
+		MinecraftForge.EVENT_BUS.register(EntityDraeton.class);
+		MinecraftForge.EVENT_BUS.register(PlayerMountsEntityCapability.class);
+		MinecraftForge.EVENT_BUS.register(EntityChiromawMatriarch.class);
+		MinecraftForge.EVENT_BUS.register(ItemAncientArmor.class);
+		MinecraftForge.EVENT_BUS.register(EntityUnmountHandler.class);
 	}
 }

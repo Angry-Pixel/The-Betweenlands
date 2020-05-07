@@ -110,6 +110,7 @@ import thebetweenlands.common.block.plant.BlockLichen;
 import thebetweenlands.common.block.plant.BlockMarshMarigoldFlower;
 import thebetweenlands.common.block.plant.BlockMarshMarigoldStalk;
 import thebetweenlands.common.block.plant.BlockMoss;
+import thebetweenlands.common.block.plant.BlockNesting;
 import thebetweenlands.common.block.plant.BlockNettle;
 import thebetweenlands.common.block.plant.BlockNettleFlowered;
 import thebetweenlands.common.block.plant.BlockPhragmites;
@@ -704,6 +705,8 @@ public class BlockRegistry {
     public static final Block SWAMP_TALLGRASS = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SWAMP_TALL_GRASS_BLADES.create(1)).setReplaceable(true);
     public static final Block DEAD_WEEDWOOD_BUSH = new BlockPlant().setSickleDrop(EnumItemMisc.WEEDWOOD_STICK.create(1));
     public static final Block WEEDWOOD_BUSH = new BlockWeedwoodBush();
+    public static final Block NESTING_BLOCK_STICKS = new BlockNesting(EnumItemMisc.WEEDWOOD_STICK.create(1));
+    public static final Block NESTING_BLOCK_BONES = new BlockNesting(EnumItemMisc.SLIMY_BONE.create(1));
     public static final Block HOLLOW_LOG = new BlockHollowLog();
     public static final Block CAVE_MOSS = new BlockCaveMoss();
     public static final Block CRYPTWEED = new BlockSludgeDungeonHangingPlant().setSickleDrop(EnumItemPlantDrop.CRYPTWEED_BLADES.create(1));

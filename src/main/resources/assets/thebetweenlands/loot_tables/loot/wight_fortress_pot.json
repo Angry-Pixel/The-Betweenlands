@@ -243,7 +243,22 @@
                             }
                         }
                     ],
-                    "weight": 20
+                    "weight": 12
+                },
+                {
+                    "type": "item",
+                    "entryName": "shock_arrow",
+                    "name": "thebetweenlands:shock_arrow",
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        }
+                    ],
+                    "weight": 12
                 },
                 {
                     "type": "item",

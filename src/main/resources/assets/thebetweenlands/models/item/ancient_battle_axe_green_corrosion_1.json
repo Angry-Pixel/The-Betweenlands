@@ -1,0 +1,7 @@
+{
+    "parent": "thebetweenlands:item/ancient_battle_axe_base",
+    "textures": {
+        "layer0": "thebetweenlands:items/ancient_battle_axe_green_corrodible",
+        "layer1": "thebetweenlands:items/ancient_battle_axe_green_corrosion_1"
+    }
+}

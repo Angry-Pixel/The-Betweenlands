@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.ChunkPos;
 
 public interface ILocalStorageHandler {
 	/**
@@ -22,7 +23,8 @@ public interface ILocalStorageHandler {
 
 	/**
 	 * Adds a local storage to the world.
-	 * The storage may have no linked chunks when initially added
+	 * The storage may have no linked chunks when initially added, but if it is not linked
+	 * until after local storages are ticked again it may be unloaded and discarded.
 	 * @param storage
 	 * @return
 	 */
@@ -75,13 +77,25 @@ public interface ILocalStorageHandler {
 	public void saveLocalStorageFile(ILocalStorage storage);
 
 	/**
-	 * Loads the local storage of the specified reference from
-	 * a file or the region cache if the local storage uses a region
+	 * Deprecated. Use {@link #getOrLoadLocalStorage(LocalStorageReference)}!
+	 * Using this may cause changes made to the location to be lost.
 	 * @param reference
 	 * @return
 	 */
+	@Deprecated
 	@Nullable
 	public ILocalStorage loadLocalStorage(LocalStorageReference reference);
+
+	/**
+	 * Returns a {@link ILocalStorageHandle} of the local storage of the specified reference. If the local storage is already loaded that
+	 * instance will be returned, otherwise it will be loaded from a file or the region cache if the local storage
+	 * uses a region.
+	 * Handle must be closed when no longer needed.
+	 * @param id
+	 * @return
+	 */
+	@Nullable
+	public ILocalStorageHandle getOrLoadLocalStorage(LocalStorageReference reference);
 
 	/**
 	 * Unloads a local storage and saves to a file if necessary
@@ -124,6 +138,20 @@ public interface ILocalStorageHandler {
 	 * @return
 	 */
 	public ILocalStorage createLocalStorage(ResourceLocation type, StorageID id, @Nullable LocalRegion region);
+
+	/**
+	 * Queues the specified deferred storage operation to be run when the specified chunk is loaded. If the chunk is already loaded
+	 * the operation is executed immediately.
+	 * @param chunk
+	 * @param operation
+	 */
+	public void queueDeferredOperation(ChunkPos chunk, IDeferredStorageOperation operation);
+
+	/**
+	 * Loads and runs the deferred storage operations of the specified chunk.
+	 * @param storage
+	 */
+	public void loadDeferredOperations(IChunkStorage storage);
 
 	/**
 	 * Saves a local storage instance to NBT

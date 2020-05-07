@@ -6,6 +6,7 @@ import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -16,6 +17,11 @@ public class EntityDecayPitTargetPart extends MultiPartEntityPart {
 		super(parent, partName, width, height);
 		setSize(width, height);
 		this.isShield = isShield;
+	}
+
+	@Override
+	public String getName() {
+		return I18n.translateToLocal("entity.thebetweenlands.decay_pit_target.name");
 	}
 
 	@Override

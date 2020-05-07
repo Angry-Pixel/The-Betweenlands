@@ -1,5 +1,9 @@
 package thebetweenlands.common.item.tools;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -16,9 +20,6 @@ import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.TranslationHelper;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
 public class ItemSyrmoriteBucketSolidRubber extends Item {
 	public ItemSyrmoriteBucketSolidRubber() {
 		this.setCreativeTab(BLCreativeTabs.GEARS);
@@ -33,13 +34,19 @@ public class ItemSyrmoriteBucketSolidRubber extends Item {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		player.addStat(StatList.getObjectUseStats(this));
-		ItemStack bucket = new ItemStack(ItemRegistry.BL_BUCKET, 1, 1);
-		bucket.getItem().onCreated(bucket, world, player);
-		player.setHeldItem(hand, bucket);
-		ItemStack rubber = EnumItemMisc.RUBBER_BALL.create(3);
-		if (player.addItemStackToInventory(rubber))
-			player.dropItem(rubber, false);
+		if(!world.isRemote) {
+			player.addStat(StatList.getObjectUseStats(this));
+			
+			ItemStack bucket = new ItemStack(ItemRegistry.BL_BUCKET, 1, 1);
+			bucket.getItem().onCreated(bucket, world, player);
+			player.setHeldItem(hand, bucket);
+			
+			ItemStack rubber = EnumItemMisc.RUBBER_BALL.create(3);
+			if(!player.addItemStackToInventory(rubber)) {
+				player.dropItem(rubber, false);
+			}
+		}
+		
 		return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 	}
 }

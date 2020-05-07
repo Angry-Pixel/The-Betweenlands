@@ -197,6 +197,15 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 * @return True if the chunk was linked successfully
 	 */
 	public boolean linkChunk(Chunk chunk);
+	
+	/**
+	 * Links the specified chunk to this local storage using a deferred
+	 * storage operation. The link will be completed once the chunk is loaded
+	 * @param chunk
+	 */
+	public default void linkChunkDeferred(ChunkPos chunk) {
+		
+	}
 
 	/**
 	 * Unlinks the specified chunk from this local storage
