@@ -3,12 +3,9 @@ package thebetweenlands.client.render.model.armor;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 
 @SideOnly(Side.CLIENT)
 public class ModelAncientArmor extends ModelBodyAttachment {
@@ -425,7 +422,7 @@ public class ModelAncientArmor extends ModelBodyAttachment {
 				boots_right_main,
 				boots_left_main
 		};
-		
+
 		setVisible(false);
 
 		helmet_mainrotation.setRotationPoint(0F, -1.0F, 0F);
@@ -438,6 +435,7 @@ public class ModelAncientArmor extends ModelBodyAttachment {
 		chainmail_leg_left.setRotationPoint(0F, 0F, 0F);
 		chestplate_armrotation_right.setRotationPoint(0F, 0F, 0F);
 		chestplate_armrotation_left.setRotationPoint(0F, 0F, 0F);
+		leggings_mainrotation.setRotationPoint(0F, 10F, 0F);
 	}
 
 	public void setBootsVisible() {
@@ -467,19 +465,6 @@ public class ModelAncientArmor extends ModelBodyAttachment {
 		modelRenderer.rotateAngleZ = z;
 	}
 
-	@Override
-	public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
-		if(entitylivingbaseIn.isSneaking()) {
-			chestplate_armrotation_right.setRotationPoint(0F, 0F, -0.2F);
-			chestplate_armrotation_left.setRotationPoint(0F, 0F, -0.2F);
-			leggings_mainrotation.setRotationPoint(0F, 8F, -0.4F);
-		} else {
-			chestplate_armrotation_right.setRotationPoint(0F, 0F, 0F);
-			chestplate_armrotation_left.setRotationPoint(0F, 0F, 0F);
-			leggings_mainrotation.setRotationPoint(0F, 10F, 0F);
-		}
-	}
-	
 	public void resetVisibilities() {
 		helmet_mainrotation.showModel = false;
 		chestplate_mainrotation.showModel = false;
@@ -491,8 +476,10 @@ public class ModelAncientArmor extends ModelBodyAttachment {
 		chainmail_leg_right.showModel = false;
 		chainmail_leg_left.showModel = false;
 	}
-	
+
 	public void setVisibilities(EntityEquipmentSlot slot) {
+		this.resetVisibilities();
+
 		switch(slot) {
 		case HEAD:
 			this.setHelmVisible();
@@ -508,46 +495,28 @@ public class ModelAncientArmor extends ModelBodyAttachment {
 			break;
 		}
 	}
-	
+
 	@Override
 	public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		this.resetVisibilities();
-		
-		if(this.bipedHeadwear.showModel || this.bipedHead.showModel) {
-			this.setHelmVisible();
-			
-			GlStateManager.pushMatrix();
-			for(int x = 0; x < helmetParts.length; x++)
-				helmetParts[x].postRender(0.0675F);
-			GlStateManager.popMatrix();
-		}
-		
-		if(this.bipedBody.showModel && (this.bipedLeftArm.showModel || this.bipedRightArm.showModel)) {
-			this.setChestVisible();
-			
-			GlStateManager.pushMatrix();
-			for(int x = 0; x < chestParts.length; x++)
-				chestParts[x].postRender(0.0675F);
-			GlStateManager.popMatrix();
-		}
-		
-		if(this.bipedBody.showModel && (this.bipedLeftLeg.showModel || this.bipedRightLeg.showModel)) {
-			this.setLegsVisible();
-			
-			GlStateManager.pushMatrix();
-			for(int x = 0; x < legParts.length; x++)
-				legParts[x].postRender(0.0675F);
-			GlStateManager.popMatrix();
-		}
-		
-		if(!this.bipedBody.showModel && (this.bipedLeftLeg.showModel || this.bipedRightLeg.showModel)) {
-			this.setBootsVisible();
-			
-			GlStateManager.pushMatrix();
-			for(int x = 0; x < bootParts.length; x++)
-				bootParts[x].postRender(0.06625F);
-			GlStateManager.popMatrix();
-		}
+		GlStateManager.pushMatrix();
+		for(int x = 0; x < helmetParts.length; x++)
+			helmetParts[x].postRender(0.0675F);
+		GlStateManager.popMatrix();
+
+		GlStateManager.pushMatrix();
+		for(int x = 0; x < chestParts.length; x++)
+			chestParts[x].postRender(0.0675F);
+		GlStateManager.popMatrix();
+
+		GlStateManager.pushMatrix();
+		for(int x = 0; x < legParts.length; x++)
+			legParts[x].postRender(0.0675F);
+		GlStateManager.popMatrix();
+
+		GlStateManager.pushMatrix();
+		for(int x = 0; x < bootParts.length; x++)
+			bootParts[x].postRender(0.06625F);
+		GlStateManager.popMatrix();
 
 		super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 	}
