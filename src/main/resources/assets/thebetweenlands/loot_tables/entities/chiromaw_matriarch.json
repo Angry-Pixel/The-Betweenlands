@@ -9,7 +9,14 @@
 					"type": "item",
 					"name": "thebetweenlands:chirobarb_erupter",
 					"weight": 1
-				},
+				}
+			]
+		},
+		{
+			"name": "barbs",
+			"rolls": 1,
+			"conditions": [],
+			"entries": [
 				{
 					"type": "item",
 					"name": "thebetweenlands:chiromaw_barb",
