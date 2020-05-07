@@ -32,6 +32,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -466,6 +467,14 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 			}
 		}
 		return new ItemStack(ItemRegistry.SNAIL_FLESH_RAW); // to stop null;
+	}
+
+	@Override
+	public String getName() {
+		if (getElectricBoogaloo()) {
+			return I18n.translateToLocal("entity.thebetweenlands.chiromaw_hatchling_lightning.name");
+		}
+		return super.getName();
 	}
 
 	@Nullable

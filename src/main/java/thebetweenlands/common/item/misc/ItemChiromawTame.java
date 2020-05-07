@@ -26,6 +26,11 @@ public class ItemChiromawTame extends ItemMob {
 		super.spawnCapturedEntity(player, world, entity);
 	}
 
+	@Override
+	public String getTranslationKey(ItemStack stack) {
+		return getTranslationKey();
+	}
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public boolean hasEffect(ItemStack stack) {

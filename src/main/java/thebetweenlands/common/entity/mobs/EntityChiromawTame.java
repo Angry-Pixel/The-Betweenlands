@@ -48,6 +48,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.InputUpdateEvent;
@@ -112,6 +113,14 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 		super.entityInit();
 		dataManager.register(ATTACKING, false);
 		dataManager.register(ELECTRIC, false);
+	}
+
+	@Override
+	public String getName() {
+		if (getElectricBoogaloo()) {
+			return I18n.translateToLocal("entity.thebetweenlands.chiromaw_tame_lightning.name");
+		}
+		return super.getName();
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -31,22 +31,18 @@ public class EntityDraetonInteractionPart extends MultiPartEntityPart {
 	@Override
 	public String getName() {
 		String name = "";
-		if (draeton.upgradePart1 == this) {
-			name = getUpgradeName(0);
-		} else if (draeton.upgradePart2 == this) {
-			name = getUpgradeName(1);
-		} else if (draeton.upgradePart3 == this) {
-			name = getUpgradeName(2);
-		} else if (draeton.upgradePart4 == this) {
-			name = getUpgradeName(3);
-		} else if (draeton.upgradeAnchorPart == this) {
+		if (partName.matches("upgrade_([1-4])")) {
+			name = getUpgradeName(Integer.parseInt(partName.substring(8))-1);
+		} else if (partName.equals("upgrade_anchor")) {
 			name = translationBase + "_upgrade_anchor.name";
-		} else if (draeton.burnerPart == this) {
+		} else if (partName.equals("burner")) {
 			name = translationBase + "_burner.name";
-		} else if (draeton.balloonFront == this || draeton.balloonMiddle == this || draeton.balloonBack == this) {
+		} else if (partName.startsWith("balloon")) {
 			name = translationBase + "_balloon.name";
-		} else if (draeton.guiPart == this) {
+		} else if (partName.equals("gui")) {
 			name = translationBase + ".name";
+		} else if (partName.startsWith("leakage")) {
+			name = translationBase + "_leakage.name";
 		}
 		return I18n.translateToLocal(name);
 	}
