@@ -1,21 +1,23 @@
 package thebetweenlands.client.render.model.entity;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.MowzieModelBase;
 import thebetweenlands.client.render.model.MowzieModelRenderer;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
+import thebetweenlands.common.entity.mobs.EntityChiromawGreeblingRider;
 
 @SideOnly(Side.CLIENT)
 public class ModelChiromaw extends MowzieModelBase {
-    MowzieModelRenderer body_base;
+	MowzieModelRenderer body_base;
     MowzieModelRenderer body_buttpart;
     MowzieModelRenderer neck;
     MowzieModelRenderer arm_left1;
@@ -44,6 +46,25 @@ public class ModelChiromaw extends MowzieModelBase {
     MowzieModelRenderer arm_right2;
     MowzieModelRenderer wing_right1;
     MowzieModelRenderer wing_right2;
+    
+
+    public MowzieModelRenderer body;
+    MowzieModelRenderer chest;
+    MowzieModelRenderer legleft1;
+    MowzieModelRenderer legright1;
+    MowzieModelRenderer head_main;
+    MowzieModelRenderer arm_left_upper;
+    MowzieModelRenderer arm_right_upper;
+    MowzieModelRenderer nose;
+    MowzieModelRenderer jaw_back;
+    MowzieModelRenderer ear_right;
+    MowzieModelRenderer ear_left;
+    MowzieModelRenderer jaw_main;
+    public MowzieModelRenderer arm_left_lower;
+    public MowzieModelRenderer arm_right_lower;
+    MowzieModelRenderer leg_left_lower;
+    MowzieModelRenderer leg_right_lower;
+  
 
     public ModelChiromaw() {
         textureWidth = 128;
@@ -195,6 +216,85 @@ public class ModelChiromaw extends MowzieModelBase {
         head_base.addChild(teeth_upperjaw_front);
         body_base.addChild(arm_right1);
         body_base.addChild(body_buttpart);
+        
+        arm_left_lower = new MowzieModelRenderer(this, 101, 0);
+        arm_left_lower.setRotationPoint(0.0F, 3.5F, 0.0F);
+        arm_left_lower.addBox(-0.5F, 0.0F, -0.5F, 1, 4, 1, 0.0F);
+        setRotation(arm_left_lower, -0.6829473363053812F, 0.0F, 0.0F);
+        nose = new MowzieModelRenderer(this, 82, 25);
+        nose.setRotationPoint(0.0F, 0.0F, -3.0F);
+        nose.addBox(-0.5F, -2.0F, -1.0F, 1, 2, 1, 0.0F);
+        setRotation(nose, -0.22759093446006054F, 0.0F, 0.0F);
+        body = new MowzieModelRenderer(this, 71, 9);
+        body.setRotationPoint(0.0F, 19.5F, 1.3F);
+        body.addBox(-2.0F, -4.0F, -1.5F, 4, 4, 3, 0.0F);
+        arm_left_upper = new MowzieModelRenderer(this, 96, 0);
+        arm_left_upper.setRotationPoint(2.5F, -2.7F, 0.5F);
+        arm_left_upper.addBox(-0.5F, -0.5F, -0.5F, 1, 4, 1, 0.0F);
+        setRotation(arm_left_upper, -1.2292353921796064F, 0.045553093477052F, -0.36425021489121656F);
+        head_main = new MowzieModelRenderer(this, 71, 17);
+        head_main.setRotationPoint(0.0F, -3.8F, -0.5F);
+        head_main.addBox(-2.0F, -3.0F, -3.0F, 4, 3, 4, 0.0F);
+        setRotation(head_main, -0.5918411493512771F, 0.0F, 0.0F);
+        chest = new MowzieModelRenderer(this, 71, 0);
+        chest.setRotationPoint(0.0F, -3.4F, 0.0F);
+        chest.addBox(-2.5F, -3.5F, -2.0F, 5, 4, 4, 0.0F);
+        setRotation(chest, 0.5462880558742251F, 0.0F, 0.0F);
+        legright1 = new MowzieModelRenderer(this, 116, 5);
+        legright1.setRotationPoint(-1.7F, -0.4F, 0.0F);
+        legright1.addBox(-0.5F, -0.5F, -0.5F, 1, 3, 1, 0.0F);
+        setRotation(legright1, -0.5462880558742251F, 1.0927506446736497F, 0.40980330836826856F);
+        ear_left = new MowzieModelRenderer(this, 87, 25);
+        ear_left.setRotationPoint(2.0F, -1.5F, -0.5F);
+        ear_left.addBox(-1.0F, -2.0F, 0.0F, 5, 3, 0, 0.0F);
+        setRotation(ear_left, -0.091106186954104F, -0.5918411493512771F, -0.5009094953223726F);
+        leg_left_lower = new MowzieModelRenderer(this, 121, 0);
+        leg_left_lower.setRotationPoint(0.0F, 2.5F, 0.0F);
+        leg_left_lower.addBox(-0.5F, 0.0F, -0.5F, 1, 3, 1, 0.0F);
+        setRotation(leg_left_lower, 0.6829473363053812F, -0.045553093477052F, 0.045553093477052F);
+        ear_right = new MowzieModelRenderer(this, 87, 29);
+        ear_right.setRotationPoint(-2.0F, -1.5F, -0.5F);
+        ear_right.addBox(-4.0F, -2.0F, 0.0F, 5, 3, 0, 0.0F);
+        setRotation(ear_right, -0.091106186954104F, 0.5918411493512771F, 0.5009094953223726F);
+        jaw_main = new MowzieModelRenderer(this, 71, 25);
+        jaw_main.setRotationPoint(0.0F, 0.0F, -1.0F);
+        jaw_main.addBox(-1.5F, -0.0F, -2.0F, 3, 1, 2, 0.0F);
+        setRotation(jaw_main, 0.5009094953223726F, 0.0F, 0.0F);
+        legleft1 = new MowzieModelRenderer(this, 116, 0);
+        legleft1.setRotationPoint(1.7F, -0.4F, 0.0F);
+        legleft1.addBox(-0.4F, -0.5F, -0.5F, 1, 3, 1, 0.0F);
+        setRotation(legleft1, -0.5462880558742251F, -1.0927506446736497F, -0.40980330836826856F);
+        leg_right_lower = new MowzieModelRenderer(this, 121, 5);
+        leg_right_lower.setRotationPoint(0.0F, 2.5F, 0.0F);
+        leg_right_lower.addBox(-0.5F, 0.0F, -0.5F, 1, 3, 1, 0.0F);
+        setRotation(leg_right_lower, 0.6829473363053812F, 0.0F, 0.0F);
+        arm_right_lower = new MowzieModelRenderer(this, 111, 0);
+        arm_right_lower.setRotationPoint(0.0F, 3.5F, 0.0F);
+        arm_right_lower.addBox(-0.5F, 0.0F, -0.5F, 1, 4, 1, 0.0F);
+        setRotation(arm_right_lower, -2.5497515042385164F, 0.045553093477052F, -0.045553093477052F);
+        jaw_back = new MowzieModelRenderer(this, 88, 21);
+        jaw_back.setRotationPoint(0.0F, 0.0F, 0.0F);
+        jaw_back.addBox(-2.0F, 0.0F, -1.0F, 4, 1, 2, 0.0F);
+        arm_right_upper = new MowzieModelRenderer(this, 106, 0);
+        arm_right_upper.setRotationPoint(-2.5F, -2.7F, 0.5F);
+        arm_right_upper.addBox(-0.5F, -0.5F, -0.5F, 1, 4, 1, 0.0F);
+        setRotation(arm_right_upper, 0.9105382707654417F, -0.136659280431156F, 0.18203784098300857F);
+        arm_left_upper.addChild(arm_left_lower);
+        head_main.addChild(nose);
+        chest.addChild(arm_left_upper);
+        chest.addChild(head_main);
+        body.addChild(chest);
+        body.addChild(legright1);
+        head_main.addChild(ear_left);
+        legleft1.addChild(leg_left_lower);
+        head_main.addChild(ear_right);
+        head_main.addChild(jaw_main);
+        body.addChild(legleft1);
+        legright1.addChild(leg_right_lower);
+        arm_right_upper.addChild(arm_right_lower);
+        head_main.addChild(jaw_back);
+        chest.addChild(arm_right_upper);
+
 
         parts = new MowzieModelRenderer[] {
             body_base,
@@ -225,7 +325,24 @@ public class ModelChiromaw extends MowzieModelBase {
             wing_left2,
             arm_right2,
             wing_right1,
-            wing_right2
+            wing_right2,
+
+            body,
+			chest,
+			legleft1,
+			legright1,
+			head_main,
+			arm_left_upper,
+			arm_right_upper,
+			nose,
+			jaw_back,
+			ear_right,
+			ear_left,
+			jaw_main,
+			arm_left_lower,
+			arm_right_lower,
+			leg_left_lower,
+			leg_right_lower
         };
         setInitPose();
     }
@@ -235,8 +352,9 @@ public class ModelChiromaw extends MowzieModelBase {
         EntityChiromaw chiromaw = (EntityChiromaw) entity;
         GlStateManager.pushMatrix();
         if (chiromaw.getIsHanging()) {
-            GlStateManager.translate(0.0F, 2.125F, 0.0F);
-            GlStateManager.rotate(180, 1F, 0F, 0.0F);
+        	GlStateManager.translate(0.0F, 2.125F, 0.0F);
+        	GlStateManager.rotate(180, 1F, 0F, 0.0F);
+        	
         } else {
             GlStateManager.rotate(40, 1F, 0F, 0.0F);
             GlStateManager.translate(0.0F, 0F, -0.8F);
@@ -256,11 +374,32 @@ public class ModelChiromaw extends MowzieModelBase {
         GlStateManager.cullFace(CullFace.BACK);
         body_base.render(unitPixel);
         GlStateManager.disableCull();
-        
+
         GlStateManager.popMatrix();
+
+        boolean showRider = chiromaw instanceof EntityChiromawGreeblingRider;
+        body.showModel = showRider;
+		chest.showModel = showRider;
+		legleft1.showModel = showRider;
+		legright1.showModel = showRider;
+		head_main.showModel = showRider;
+		arm_left_upper.showModel = showRider;
+		arm_right_upper.showModel = showRider;
+		nose.showModel = showRider;
+		jaw_back.showModel = showRider;
+		ear_right.showModel = showRider;
+		ear_left.showModel = showRider;
+		jaw_main.showModel = showRider;
+		arm_left_lower.showModel = showRider;
+		arm_right_lower.showModel = showRider;
+		leg_left_lower.showModel = showRider;
+		leg_right_lower.showModel = showRider;
+		body.rotationPointY = 15.5F;
+		body.rotationPointZ = -2F;
+		body.render(unitPixel);
     }
 
-    public void setRotation(ModelRenderer modelRenderer, float x, float y, float z) {
+    public void setRotation(MowzieModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
@@ -270,7 +409,7 @@ public class ModelChiromaw extends MowzieModelBase {
     public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
         EntityChiromaw chiromaw = (EntityChiromaw) entity;
         setToInitPose();
-
+        float flap = MathHelper.sin((chiromaw.ticksExisted + partialRenderTicks) * 0.5F) * 0.6F;
         if (chiromaw.getIsHanging()) {
             arm_right1.rotateAngleZ = 0.5462880558742251F;
             arm_right2.rotateAngleZ = 0F;
@@ -296,7 +435,6 @@ public class ModelChiromaw extends MowzieModelBase {
             head_jaw1.rotateAngleX = 0.9560913642424937F;
             head_base.rotateAngleX = 0.091106186954104F;
         } else {
-            float flap = MathHelper.sin((chiromaw.ticksExisted + partialRenderTicks) * 0.5F) * 0.6F;
             arm_right1.rotateAngleZ = 0.5462880558742251F;
             arm_right2.rotateAngleZ = 0F;
             arm_left1.rotateAngleZ = -0.5462880558742251F;
@@ -307,8 +445,8 @@ public class ModelChiromaw extends MowzieModelBase {
             arm_left1.rotateAngleY = -0.9091106186954104F;
             arm_left2.rotateAngleY = 0;
 
-            float globalSpeed = 1;
-            float globalDegree = 1;
+            float globalSpeed = 1F;
+            float globalDegree = 1F;
             float frame = chiromaw.ticksExisted + partialRenderTicks;
 
             swing(arm_right1, globalSpeed * 0.5f, globalDegree * 1.1f, false, 2.8f, 0.5f, frame, 1F);
@@ -330,6 +468,67 @@ public class ModelChiromaw extends MowzieModelBase {
 
             head_jaw1.rotateAngleX = 0.9560913642424937F - flap * 0.5F;
             head_base.rotateAngleX = -0.698132F;
+
+            
+            // WIP shooting animation
+            
+            if(chiromaw instanceof EntityChiromawGreeblingRider) {
+            	EntityChiromawGreeblingRider mountedChiromaw = (EntityChiromawGreeblingRider) chiromaw;
+            	float animationShootingTick = mountedChiromaw.getReloadTimer();
+            	float animationShooting = animationShootingTick + partialRenderTicks;
+            	if (mountedChiromaw.getReloadTimer() < 90) {
+            	chest.rotateAngleY = 0F + convertDegtoRad(animationShooting);
+            	head_main.rotateAngleY = 0F - convertDegtoRad(animationShooting);
+            	head_main.rotateAngleX = -0.5918411493512771F + convertDegtoRad(animationShooting) / (float)Math.PI;
+
+            	jaw_main.rotateAngleX = 0.5009094953223726F - convertDegtoRad(animationShooting) / (float)Math.PI;
+            	arm_left_upper.rotateAngleY = 0.045553093477052F - convertDegtoRad(animationShooting);
+            	arm_left_lower.rotateAngleX = -0.6829473363053812F + convertDegtoRad(animationShooting) / (float)Math.PI;
+            	
+            	arm_right_upper.rotateAngleX = 0.9105382707654417F - convertDegtoRad(animationShooting);
+            	arm_right_upper.rotateAngleZ = 0.18203784098300857F + convertDegtoRad(animationShooting) / (float)Math.PI;
+            	arm_right_lower.rotateAngleX = -2.5497515042385164F + convertDegtoRad(animationShooting);
+            	}
+
+            	if (mountedChiromaw.getReloadTimer() >= 90) {
+                	chest.rotateAngleY = 0F + convertDegtoRad(90F) - convertDegtoRad(animationShooting -90) * 9;
+                	head_main.rotateAngleY = 0F - convertDegtoRad(90F) + convertDegtoRad(animationShooting -90) * 9;
+                	head_main.rotateAngleX = -0.5918411493512771F + convertDegtoRad(90F) / (float)Math.PI - (convertDegtoRad(animationShooting -90) / (float)Math.PI) * 9;
+
+                	jaw_main.rotateAngleX = 0.5009094953223726F - convertDegtoRad(90F) / (float)Math.PI + (convertDegtoRad(animationShooting -90) / (float)Math.PI) * 9;
+                	arm_left_upper.rotateAngleY = 0.045553093477052F - convertDegtoRad(90F) + convertDegtoRad(animationShooting -90)* 9;
+                	arm_left_lower.rotateAngleX = -0.6829473363053812F + convertDegtoRad(90F) / (float)Math.PI - (convertDegtoRad(animationShooting -90) / (float)Math.PI) * 9;
+                	
+                	arm_right_upper.rotateAngleX = 0.9105382707654417F - convertDegtoRad(90F) + convertDegtoRad(animationShooting -90) * 9;
+                	arm_right_upper.rotateAngleZ = 0.18203784098300857F + convertDegtoRad(90F) / (float)Math.PI - (convertDegtoRad(animationShooting -90) / (float)Math.PI) * 9;
+                	arm_right_lower.rotateAngleX = -2.5497515042385164F + convertDegtoRad(90F) - convertDegtoRad(animationShooting -90) * 9;
+            	}
+            }
         }
     }
+
+	public float convertDegtoRad(float angleIn) {
+		return angleIn * ((float) Math.PI / 180F);
+	}
+
+	public float convertRadtoDeg(float radIn) {
+		return radIn * 180F / ((float) Math.PI);
+	}
+	
+	public void postRenderArm(float scale, EnumHandSide side) {
+		getArmForSide(side).postRender(scale);
+	}
+
+	protected ModelRenderer getArmForSide(EnumHandSide side) {
+		return side == EnumHandSide.LEFT ? arm_left_lower : arm_right_lower;
+	}
+
+	protected EnumHandSide getMainHand(Entity entityIn) {
+		if (entityIn instanceof EntityLivingBase) {
+			EntityLivingBase entitylivingbase = (EntityLivingBase) entityIn;
+			EnumHandSide enumhandside = entitylivingbase.getPrimaryHand();
+			return entitylivingbase.swingingHand == EnumHand.MAIN_HAND ? enumhandside : enumhandside.opposite();
+		} else
+			return EnumHandSide.RIGHT;
+	}
 }

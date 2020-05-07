@@ -12,6 +12,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -20,28 +21,34 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import thebetweenlands.client.render.sky.RiftVariant;
+import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.inventory.container.ContainerAnimator;
 import thebetweenlands.common.inventory.container.ContainerBLDualFurnace;
 import thebetweenlands.common.inventory.container.ContainerBLFurnace;
+import thebetweenlands.common.inventory.container.ContainerBarrel;
 import thebetweenlands.common.inventory.container.ContainerCenser;
+import thebetweenlands.common.inventory.container.ContainerDraetonBurner;
+import thebetweenlands.common.inventory.container.ContainerDraetonFurnace;
+import thebetweenlands.common.inventory.container.ContainerDraetonPouch;
+import thebetweenlands.common.inventory.container.ContainerDraetonUpgrades;
+import thebetweenlands.common.inventory.container.ContainerDraetonWorkbench;
 import thebetweenlands.common.inventory.container.ContainerDruidAltar;
 import thebetweenlands.common.inventory.container.ContainerItemNaming;
 import thebetweenlands.common.inventory.container.ContainerMortar;
 import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
-import thebetweenlands.common.inventory.container.ContainerBarrel;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
+import thebetweenlands.common.tile.TileEntityBarrel;
 import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityPurifier;
-import thebetweenlands.common.tile.TileEntityBarrel;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 
 public class CommonProxy implements IGuiHandler {
@@ -60,10 +67,17 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_LURKER_POUCH_KEYBIND = 14;
 	public static final int GUI_CENSER = 15;
 	public static final int GUI_BARREL = 16;
+	public static final int GUI_DRAETON_POUCH = 17;
+	public static final int GUI_DRAETON_BURNER = 18;
+	public static final int GUI_DRAETON_CRAFTING = 19;
+	public static final int GUI_DRAETON_FURNACE = 20;
+	public static final int GUI_DRAETON_UPGRADES = 21;
 	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
+		Entity entity = null;
+		
 		switch (id) {
 		case GUI_DRUID_ALTAR:
 			if (tile instanceof TileEntityDruidAltar) {
@@ -141,6 +155,58 @@ public class CommonProxy implements IGuiHandler {
 				return new ContainerBarrel(player.inventory, (TileEntityBarrel) tile);
 			}
 			break;
+
+		case GUI_DRAETON_POUCH:
+			entity = world.getEntityByID(x);
+			if (entity instanceof EntityDraeton) {
+				IInventory upgrades = ((EntityDraeton) entity).getUpgradesInventory();
+				if(y >= 0 && y < 4) {
+					ItemStack stack = upgrades.getStackInSlot(y);
+					if(!stack.isEmpty() && ((EntityDraeton) entity).isStorageUpgrade(stack)) {
+						String name = stack.hasDisplayName() ? stack.getDisplayName(): "container.bl.draeton_storage";
+						return new ContainerDraetonPouch(player, player.inventory, new InventoryItem(stack, 9 + (stack.getItemDamage() * 9), name), (EntityDraeton)entity, y);
+					}
+				}
+			}
+			break;
+			
+		case GUI_DRAETON_CRAFTING:
+			entity = world.getEntityByID(x);
+			if (entity instanceof EntityDraeton) {
+				IInventory upgrades = ((EntityDraeton) entity).getUpgradesInventory();
+				if(y >= 0 && y < 4) {
+					ItemStack stack = upgrades.getStackInSlot(y);
+					if(!stack.isEmpty() && ((EntityDraeton) entity).isCraftingUpgrade(stack)) {
+						return new ContainerDraetonWorkbench(player.inventory, (EntityDraeton) entity, y);
+					}
+				}
+			}
+			break;
+			
+		case GUI_DRAETON_FURNACE:
+			entity = world.getEntityByID(x);
+			if (entity instanceof EntityDraeton) {
+				IInventory upgrades = ((EntityDraeton) entity).getUpgradesInventory();
+				if(y >= 0 && y < 4) {
+					ItemStack stack = upgrades.getStackInSlot(y);
+					if(!stack.isEmpty() && ((EntityDraeton) entity).isFurnaceUpgrade(stack)) {
+						return new ContainerDraetonFurnace(player, player.inventory, ((EntityDraeton) entity).getFurnace(y), (EntityDraeton)entity, y);
+					}
+				}
+			}
+			break;
+			
+		case GUI_DRAETON_BURNER:
+			entity = world.getEntityByID(x);
+			if (entity instanceof EntityDraeton)
+				return new ContainerDraetonBurner(player.inventory, ((EntityDraeton)entity).getBurnerInventory(), (EntityDraeton)entity);
+			break;
+			
+		case GUI_DRAETON_UPGRADES:
+			entity = world.getEntityByID(x);
+			if (entity instanceof EntityDraeton)
+				return new ContainerDraetonUpgrades(player.inventory, (EntityDraeton)entity);
+			break;
 		}
 		return null;
 	}
@@ -209,10 +275,6 @@ public class CommonProxy implements IGuiHandler {
     public void onPilotExitWeedwoodRowboat(EntityWeedwoodRowboat rowboat, Entity pilot) {
 
     }
-
-	public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ) {
-		
-	}
     
     public boolean isSingleplayer() {
     	return false;

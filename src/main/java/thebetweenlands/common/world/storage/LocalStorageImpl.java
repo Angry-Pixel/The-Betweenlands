@@ -31,6 +31,7 @@ import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.clientbound.MessageAddLocalStorage;
 import thebetweenlands.common.network.clientbound.MessageRemoveLocalStorage;
+import thebetweenlands.common.world.storage.operation.DeferredLinkOperation;
 
 public abstract class LocalStorageImpl implements ILocalStorage {
 	private final IWorldStorage worldStorage;
@@ -297,6 +298,14 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public void linkChunkDeferred(ChunkPos chunk) {
+		if(!this.linkedChunks.contains(chunk) && this.linkedChunks.add(chunk)) {
+			this.setDirty(true);
+			this.worldStorage.getLocalStorageHandler().queueDeferredOperation(chunk, new DeferredLinkOperation(new LocalStorageReference(chunk, this.getID(), this.getRegion())));
+		}
 	}
 
 	@Override

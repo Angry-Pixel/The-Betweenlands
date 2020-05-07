@@ -1,29 +1,64 @@
 package thebetweenlands.common.entity.projectiles;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IThrowableEntity;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.entity.EntityShock;
+import thebetweenlands.common.entity.mobs.EntityChiromawMatriarch;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWormHelper;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.tools.bow.EnumArrowType;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for shooter sync*/ {
+	@SuppressWarnings("unchecked")
+	private static final Predicate<Entity> ARROW_TARGETS = Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>() {
+		@Override
+		public boolean apply(@Nullable Entity entity) {
+			return entity.canBeCollidedWith();
+		}
+	});
+
 	private static final DataParameter<String> DW_TYPE = EntityDataManager.<String>createKey(EntityBLArrow.class, DataSerializers.STRING);
+
+	private int ticksSpentInAir = 0;
+	private int ticksSpentInGround = 0;
 
 	public EntityBLArrow(World worldIn) {
 		super(worldIn);
@@ -37,12 +72,12 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 	public Entity getThrower() {
 		return this.shootingEntity;
 	}
-	
+
 	@Override
 	public void setThrower(Entity entity) {
 		this.shootingEntity = entity;
 	}
-	
+
 	@Override
 	public void entityInit() {
 		super.entityInit();
@@ -59,6 +94,84 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
 		this.setType(EnumArrowType.getEnumFromString(nbt.getString("arrowType")));
+	}
+
+	@Override
+	@Nullable
+	protected Entity findEntityOnPath(Vec3d start, Vec3d end) {
+		List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D), ARROW_TARGETS);
+
+		Entity hit = null;
+		double minDstSq = 0.0D;
+
+		for(Entity entity : list) {
+			if(this.isNotShootingEntity(entity) || this.ticksSpentInAir >= 5) {
+				AxisAlignedBB checkBox = entity.getEntityBoundingBox().grow(0.3D);
+				RayTraceResult rayTrace = checkBox.calculateIntercept(start, end);
+
+				if(rayTrace != null) {
+					double dstSq = start.squareDistanceTo(rayTrace.hitVec);
+
+					if(dstSq < minDstSq || minDstSq == 0.0D) {
+						hit = entity;
+						minDstSq = dstSq;
+					}
+				}
+			}
+		}
+
+		return hit;
+	}
+
+	private boolean isNotShootingEntity(Entity entity) {
+		if(entity == this.shootingEntity) {
+			return false;
+		} else if(this.shootingEntity instanceof EntityPlayer == false && this.shootingEntity != null && this.shootingEntity.getRidingEntity() == entity) {
+			return false;
+		} else if(this.shootingEntity instanceof EntityPlayer && this.shootingEntity != null && entity instanceof IEntityOwnable &&
+				((IEntityOwnable) entity).getOwner() == this.shootingEntity && this.shootingEntity.getRecursivePassengers().contains(entity)) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+
+		if(this.inGround) {
+			this.ticksSpentInAir = 0;
+			this.ticksSpentInGround++;
+		} else {
+			this.ticksSpentInAir++;
+			this.ticksSpentInGround = 0;
+		}
+
+		if(!this.world.isRemote && (this.getArrowType() == EnumArrowType.CHIROMAW_BARB || this.getArrowType() == EnumArrowType.CHIROMAW_SHOCK_BARB) && this.pickupStatus != PickupStatus.ALLOWED && this.ticksSpentInGround > 100) {
+			this.setDead();
+		}
+		
+		if(this.world.isRemote && (this.getArrowType() == EnumArrowType.SHOCK || this.getArrowType() == EnumArrowType.CHIROMAW_SHOCK_BARB)) {
+			this.spawnLightningArcs();
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void spawnLightningArcs() {
+		Entity view = Minecraft.getMinecraft().getRenderViewEntity();
+		if(view != null && view.getDistance(this) < 16 && this.world.rand.nextInt(!this.inGround ? 2 : 20) == 0) {
+			float ox = this.world.rand.nextFloat() - 0.5f + (!this.inGround ? (float)this.motionX : 0);
+			float oy = this.world.rand.nextFloat() - 0.5f + (!this.inGround ? (float)this.motionY : 0);
+			float oz = this.world.rand.nextFloat() - 0.5f + (!this.inGround ? (float)this.motionZ : 0);
+
+			Particle particle = BLParticles.LIGHTNING_ARC.create(this.world, this.posX, this.posY, this.posZ, 
+					ParticleArgs.get()
+					.withMotion(!this.inGround ? this.motionX : 0, !this.inGround ? this.motionY : 0, !this.inGround ? this.motionZ : 0)
+					.withColor(0.3f, 0.5f, 1.0f, 0.9f)
+					.withData(new Vec3d(this.posX + ox, this.posY + oy, this.posZ + oz)));
+
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, particle);
+		}
 	}
 
 	@Override
@@ -93,6 +206,24 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 				this.setDead();
 			}
 			break;
+		case SHOCK:
+			if(!this.world.isRemote) {
+				this.world.spawnEntity(new EntityShock(this.world, this, living, this.isWet() || this.isInWater() || this.world.isRainingAt(this.getPosition().up())));
+			}
+			break;
+		case CHIROMAW_BARB:
+			if(living.isNonBoss() && !(living instanceof EntityChiromawMatriarch)) {
+				living.addPotionEffect(ElixirEffectRegistry.EFFECT_PETRIFY.createEffect(40, 1));
+			} 
+			break;
+		case CHIROMAW_SHOCK_BARB:
+			if(!this.world.isRemote) {
+				this.world.spawnEntity(new EntityShock(this.world, this, living, this.isWet() || this.isInWater() || this.world.isRainingAt(this.getPosition().up())));
+			}
+			if(living.isNonBoss() && !(living instanceof EntityChiromawMatriarch)) {
+				living.addPotionEffect(ElixirEffectRegistry.EFFECT_PETRIFY.createEffect(40, 1));
+			} 
+			break;
 		default:
 		}
 	}
@@ -100,17 +231,28 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 	@Override
 	protected void onHit(RayTraceResult raytrace) {
 		super.onHit(raytrace);
-		
+
 		if(raytrace.entityHit == null && raytrace.getBlockPos() != null && raytrace.sideHit != null && this.getArrowType() == EnumArrowType.OCTINE) {
 			BlockPos pos = raytrace.getBlockPos().offset(raytrace.sideHit);
 			IBlockState state = this.world.getBlockState(pos);
-			
+
 			if(ItemRegistry.OCTINE_INGOT.isTinder(new ItemStack(ItemRegistry.OCTINE_INGOT), ItemStack.EMPTY, state)) {
 				this.world.setBlockState(pos, Blocks.FIRE.getDefaultState());
 			}
 		}
 	}
-	
+
+	@Override
+	public void playSound(SoundEvent soundIn, float volume, float pitch) {
+		if (!this.isSilent()) {
+			if(getArrowType() == EnumArrowType.CHIROMAW_BARB || getArrowType() == EnumArrowType.CHIROMAW_SHOCK_BARB) {
+				if(soundIn == SoundEvents.ENTITY_ARROW_HIT)
+					soundIn = SoundRegistry.CHIROMAW_MATRIARCH_BARB_HIT;
+			}	
+		}
+		super.playSound(soundIn, volume, pitch);
+	}
+
 	/**
 	 * Sets the arrow type
 	 * @param type
@@ -138,9 +280,14 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 			return new ItemStack(ItemRegistry.BASILISK_ARROW);
 		case WORM:
 			return new ItemStack(ItemRegistry.SLUDGE_WORM_ARROW);
+		case SHOCK:
+			return new ItemStack(ItemRegistry.SHOCK_ARROW);
+		case CHIROMAW_BARB:
+			return new ItemStack(ItemRegistry.CHIROMAW_BARB);
 		case DEFAULT:
-		default:
 			return new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW);
+		default:
+			return ItemStack.EMPTY;
 		}
 	}
 }

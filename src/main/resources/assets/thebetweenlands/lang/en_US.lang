@@ -42,6 +42,8 @@ tile.thebetweenlands.rotbulb.name=Rotbulb
 tile.thebetweenlands.pale_grass.name=Pale Grass
 tile.thebetweenlands.weedwood_bush.name=Weedwood Bush
 tile.thebetweenlands.dead_weedwood_bush.name=Dead Weedwood Bush
+tile.thebetweenlands.nesting_block_sticks.name=Nesting Block
+tile.thebetweenlands.nesting_block_bones.name=Nesting Block
 tile.thebetweenlands.swamp_tallgrass.name=Swamp Tallgrass
 tile.thebetweenlands.tall_cattail.name=Tall Cattail
 tile.thebetweenlands.thorns.name=Thorns
@@ -233,7 +235,7 @@ tile.thebetweenlands.wisp.name=Wisp
 tile.thebetweenlands.sulfur_furnace.name=Sulfur Furnace
 tile.thebetweenlands.sulfur_furnace_dual.name=Dual Sulfur Furnace
 tile.thebetweenlands.fallen_leaves.name=Fallen Leaves
-tile.thebetweenlands.spike_trap.name=Spike Trap
+tile.thebetweenlands.spike_trap.name=Polished Limestone Spike Trap
 tile.thebetweenlands.mud_brick_spike_trap.name=Mud Brick Spike Trap
 tile.thebetweenlands.mud_tiles_spike_trap.name=Mud Tiles Spike Trap
 tile.thebetweenlands.possessed_block.name=Possessed Block
@@ -482,6 +484,7 @@ item.thebetweenlands.angler_tooth.name=Angler Tooth
 item.thebetweenlands.arrow_arum_leaf.name=Arrow Arum Leaf
 item.thebetweenlands.aspectrus_fruit.name=Aspectrus Fruit
 item.thebetweenlands.aspectrus_fruit.filled.name=Aspectrus Fruit - %s (%s)
+item.thebetweenlands.aspectrus_fruit.filled.default.name=Aspectrus Fruit - %s
 item.thebetweenlands.astatos.name=Legendary Disc
 item.thebetweenlands.beneath_a_green_sky.name=Music Disc
 item.thebetweenlands.between_you_and_me.name=Tribeman's Disc
@@ -700,6 +703,7 @@ item.thebetweenlands.test_item_chimp.name=Test Banana
 item.thebetweenlands.location_debug.name=Location Debug
 item.thebetweenlands.the_explorer.name=Explorer's Disc
 item.thebetweenlands.thorns_item.name=Thorn Branch
+item.thebetweenlands.betweenstone_pebble.name=Betweenstone Pebble
 item.thebetweenlands.valonite_axe.name=Valonite Axe
 item.thebetweenlands.valonite_greataxe.name=Valonite Greataxe
 item.thebetweenlands.valonite_boots.name=Valonite Boots
@@ -749,7 +753,7 @@ item.thebetweenlands.lore_scrap.pitstone.name=Explorer's Entries: Underground Ru
 item.thebetweenlands.lore_scrap.tower.name=Explorer's Entries: The Tower
 item.thebetweenlands.lore_scrap.fort.name=Explorer's Entries: The Fortress
 item.thebetweenlands.angry_pebble.name=Angry Pebble
-item.thebetweenlands.inanimate_angry_pebble.name=Pebble
+item.thebetweenlands.inanimate_angry_pebble.name=Inanimate Angry Pebble
 item.thebetweenlands.ancient_remnant.name=Ancient Remnant
 item.thebetweenlands.loot_scraps.name=Loot Scraps
 item.thebetweenlands.fabricated_scroll.name=Fabricated Scroll
@@ -769,6 +773,11 @@ item.thebetweenlands.tarminion.name=Tarminion
 item.thebetweenlands.shimmer_stone.name=Shimmerstone
 item.thebetweenlands.firefly.name=Firefly
 item.thebetweenlands.gecko.name=Gecko
+item.thebetweenlands.chiromaw_barb.name=Chiromaw Barb
+item.thebetweenlands.chiromaw_tame.name=Tamed Chiromaw
+item.thebetweenlands.chiromaw_tame_lightning.name=Tamed Lightning Chiromaw
+item.thebetweenlands.chiromaw_egg.name=Chiromaw Hatchling
+item.thebetweenlands.chiromaw_egg_lightning.name=Lightning Chiromaw Hatchling
 item.thebetweenlands.net.name=Net
 item.thebetweenlands.life_crystal.name=Life Crystal
 item.thebetweenlands.green_middle_gem.name=Green Middle Gem
@@ -792,6 +801,7 @@ item.thebetweenlands.poisoned_angler_tooth_arrow.name=Poisoned Angler Tooth Arro
 item.thebetweenlands.octine_arrow.name=Octine Arrow
 item.thebetweenlands.basilisk_arrow.name=Basilisk Arrow
 item.thebetweenlands.sludge_worm_arrow.name=Sludge Worm Arrow
+item.thebetweenlands.shock_arrow.name=Shock Arrow
 item.thebetweenlands.weedwood_bow.name=Weedwood Bow
 item.thebetweenlands.predator_bow.name=Predator Bow
 item.thebetweenlands.wights_bane.name=Wight's Bane
@@ -845,10 +855,24 @@ item.thebetweenlands.cremains.name=Cremains
 item.thebetweenlands.undying_ember.name=Undying Embers
 item.thebetweenlands.sludge_worm_egg_sac.name=Sludge Worm Egg Sac
 item.thebetweenlands.sushi.name=Sushi
-item.thebetweenlands.volarkite.name=Volarkite
 item.thebetweenlands.gallery_frame_small.name=Small Gallery Frame
 item.thebetweenlands.gallery_frame_large.name=Large Gallery Frame
 item.thebetweenlands.gallery_frame_very_large.name=Very Large Gallery Frame
+item.thebetweenlands.simple_slingshot.name=Simple Slingshot
+item.thebetweenlands.lurker_skin_patch.name=Lurker Skin Patch
+item.thebetweenlands.draeton.name=Draeton
+item.thebetweenlands.draeton_balloon.name=Draeton Balloon
+item.thebetweenlands.draeton_burner.name=Draeton Burner
+item.thebetweenlands.draeton_upgrade_anchor.name=Draeton Anchor Upgrade
+item.thebetweenlands.draeton_upgrade_furnace.name=Draeton Furnace Upgrade
+item.thebetweenlands.draeton_upgrade_crafting.name=Draeton Crafting Upgrade
+item.thebetweenlands.weedwood_rowboat_upgrade_lantern.name=Weedwood Rowboat Lantern Upgrade
+item.thebetweenlands.chirobarb_erupter.name=Chirobarb Erupter
+item.thebetweenlands.chirobarb_shock_erupter.name=Chirobarb Shock Erupter
+item.thebetweenlands.ancient_boots.name=Ancient Boots
+item.thebetweenlands.ancient_chestplate.name=Ancient Chestplate
+item.thebetweenlands.ancient_helmet.name=Ancient Helmet
+item.thebetweenlands.ancient_leggings.name=Ancient Leggings
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -858,12 +882,12 @@ item.thebetweenlands.aspect_vial.green.name=Green Dentrothyst Aspect Vial
 item.thebetweenlands.aspect_vial.orange.name=Orange Dentrothyst Aspect Vial
 item.thebetweenlands.aspect_vial.green.filled.name=%s (%s)
 item.thebetweenlands.aspect_vial.orange.filled.name=%s (%s)
-item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
-item.thebetweenlands.elixir.dentrothyst_vial.orange.name=Orange Dentrothyst Vial
 item.thebetweenlands.elixir.dentrothyst_vial.green.filled.name=Green Dentrothyst Vial (%s)
 item.thebetweenlands.elixir.dentrothyst_vial.orange.filled.name=Orange Dentrothyst Vial (%s)
 item.thebetweenlands.elixir.dentrothyst_vial.green.fluid.fog.name=Bottled Fog
 item.thebetweenlands.elixir.dentrothyst_vial.orange.fluid.fog.name=Bottled Fog
+item.thebetweenlands.elixir.dentrothyst_vial.green.fluid.shallowbreath.name=Bottled Shallowbreath
+item.thebetweenlands.elixir.dentrothyst_vial.orange.fluid.shallowbreath.name=Bottled Shallowbreath
 
 # Fluids
 fluid.swamp_water=Swamp Water
@@ -871,6 +895,7 @@ fluid.tar=Tar
 fluid.stagnant_water=Stagnant Water
 fluid.rubber=Rubber
 fluid.fog=Fog
+fluid.shallowbreath=Shallowbreath
 
 # Creative Tabs
 itemGroup.thebetweenlands.block=The Betweenlands Blocks
@@ -898,7 +923,10 @@ container.bl.loot_urn=Loot Urn
 container.bl.mud_bricks_alcove=Mud Brick Alcove
 container.bl.present=Present
 container.bl.censer=Censer
-
+container.bl.draeton_inventory=Draeton
+container.bl.draeton_storage=Draeton Storage
+container.bl.draeton_furnace=Draeton Furnace
+container.bl.draeton_burner=Burner
 
 # Locations
 location.wilderness.name=80:<scale:1.75>Wilderness</scale>
@@ -921,6 +949,7 @@ location.sludge_worm_dungeon_crypt.name=80:Crypt
 location.sludge_worm_dungeon_maze.name=80:Labyrinthine Vaults
 location.sludge_worm_dungeon.name=80:Sludgeon Tower
 location.sludge_worm_dungeon_pit.name=80:Pit of Decay
+location.chiromaw_matriarch_nest.name=80:Chiromaw Matriarch Nest
 
 
 
@@ -1003,7 +1032,11 @@ tooltip.bl.grappling_hook.more_info=Use '%1$s + %2$s' and '%1$s + %3$s'\nto retr
 tooltip.bl.grappling_hook.upgrade=Craft with two Angler Teeth and a\nShambler Tongue to upgrade.
 tooltip.bl.aspectrus_seeds.mist=This plant can only flourish in\naspect infused mist.
 tooltip.bl.sludge_dungeon_plant.mist=This plant can only grow in\nSludgeon mist.
-
+tooltip.bl.item_mob.health=Health: %s / %s
+tooltip.bl.simple_slingshot=Shoots Betweenstone Pebbles
+tooltip.bl.lurker_skin_patch=Fixes Draeton leakages
+tooltip.bl.chirobarb_erupter.usage=Right-click to fire 360 degree volley of barbs.\nHas 3 second cooldown.
+tooltip.bl.ancient_armor.usage=Reduces Magic Damage.\nUp to half magic damage reduction\nwith a full set equipped.
 
 tooltip.bl.elixir.potency=§9Potency: %s
 tooltip.bl.elixir.duration=§9Duration: %s (%s)
@@ -1183,6 +1216,11 @@ chat.ring_of_recruitment.state.stay=Your %s is now staying
 chat.ring_of_recruitment.state.guard=Your %s is now guarding
 chat.ring_of_recruitment.state.follow=Your %s is now following
 
+chat.chiromaw_tame.obstructed=You can't unmount your Chiromaw here
+chat.chiromaw_matriarch_nest.tainted=The scent of you has tainted this nest forever - Chiromaws will no longer abide here
+
+chat.draeton_dismount_timer=Dismounting in %s...
+
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath
 
@@ -1294,7 +1332,6 @@ entity.thebetweenlands.weedwood_rowboat.name=Weedwood Rowboat
 entity.thebetweenlands.bl_arrow.name=Arrow
 entity.thebetweenlands.boulder_sprite.name=Boulder Sprite
 entity.thebetweenlands.sludge_ball.name=Sludge Ball
-entity.thebetweenlands.smoll_sludge.name=Smoll Sludge
 entity.thebetweenlands.spirit_tree_face_small.name=Small Spirit Tree Face
 entity.thebetweenlands.spirit_tree_face_large.name=Large Spirit Tree Face
 entity.thebetweenlands.tamed_spirit_tree_face.name=Tamed Spirit Tree Face
@@ -1312,6 +1349,7 @@ entity.thebetweenlands.tiny_sludge_worm.name=Tiny Sludge Worm
 entity.thebetweenlands.tiny_sludge_worm_helper.name=Tiny Sludge Worm Helper
 entity.thebetweenlands.tiny_worm_egg_sac.name=Sludge Worm Egg Sac
 entity.thebetweenlands.moving_spawner_hole.name=Worm Hole
+entity.thebetweenlands.worm_ground_spawner.name=Worm Hole
 entity.thebetweenlands.wall_lamprey.name=Lamprey
 entity.thebetweenlands.wall_living_root.name=Living Root
 entity.thebetweenlands.ash_sprite.name=Ash Sprite
@@ -1334,6 +1372,23 @@ entity.thebetweenlands.sludge_menace_multipart_dummy.name=Sludge Menace
 entity.thebetweenlands.gallery_frame_small.name=Small Gallery Frame
 entity.thebetweenlands.gallery_frame_large.name=Large Gallery Frame
 entity.thebetweenlands.gallery_frame_very_large.name=Very Large Gallery Frame
+entity.thebetweenlands.chiromaw_greebling_rider.name=Chiromaw Greebling Rider
+entity.thebetweenlands.greebling_volarpad_floater.name=Greebling Volarpad Floater
+entity.thebetweenlands.betweenstone_pebble.name=Betweenstone Pebble
+entity.thebetweenlands.chiromaw_matriarch.name=Chiromaw Matriarch
+entity.thebetweenlands.chiromaw_droppings.name=Chiromaw Droppings
+entity.thebetweenlands.chiromaw_hatchling.name=Chiromaw Hatchling
+entity.thebetweenlands.chiromaw_hatchling_lightning.name=Lightning Chiromaw Hatchling
+entity.thebetweenlands.chiromaw_tame.name=Tamed Chiromaw
+entity.thebetweenlands.chiromaw_tame_lightning.name=Tamed Lightning Chiromaw
+entity.thebetweenlands.greebling_corpse.name=Greebling Corpse
+entity.thebetweenlands.draeton.name=Draeton
+entity.thebetweenlands.draeton_balloon.name=Draeton Balloon
+entity.thebetweenlands.draeton_burner.name=Draeton Burner
+entity.thebetweenlands.draeton_leakage.name=Draeton Leakage
+entity.thebetweenlands.draeton_upgrade_anchor.name=Draeton Anchor
+entity.thebetweenlands.draeton_upgrade_furnace.name=Draeton Furnace
+entity.thebetweenlands.draeton_upgrade_crafting.name=Draeton Crafting
 
 # Equipment
 equipment.menu.equip=Equip %s
@@ -1581,6 +1636,11 @@ gui.gallery.search=Search:
 gui.gallery.random=Randomize!
 gui.gallery.submission=Want to see your own fan art featured?\nSubmit it to {twitter} on Twitter\nor on our {discord} server using\nthe #BetweenlandsGallery hashtag!
 
+gui.bl.draeton.burner.fuel=Burner requires Shallowbreath fluid
+gui.bl.draeton.burner.purge=Purge
+gui.bl.draeton.main.puller=Puller slot:\n§7 - Dragonfly\n§7 - Firefly\n§7 - Tamed Chiromaw
+gui.bl.draeton.main.upgrade_utility=Utility upgrade slot:\n§7 - Lurker Skin Pouch\n§7 - Draeton Crafting Upgrade\n§7 - Draeton Furnace Upgrade
+gui.bl.draeton.main.upgrade_anchor=Anchor upgrade slot:\n§7 - Draeton Anchor Upgrade
 
 # Advancements
 
@@ -1623,6 +1683,18 @@ advancements.thebetweenlands.adventurer.a_real_poopy_experience.title=A Real Poo
 advancements.thebetweenlands.adventurer.a_real_poopy_experience.description=Enter the Labyrinthine Vaults
 advancements.thebetweenlands.adventurer.disgracing_the_dead.title=Disgracing The Dead
 advancements.thebetweenlands.adventurer.disgracing_the_dead.description=Loot 20 Urns of Chance
+advancements.thebetweenlands.adventurer.flat_round_and_up_in_the_sky.title=Flat, Round and Up in the Sky
+advancements.thebetweenlands.adventurer.flat_round_and_up_in_the_sky.description=Conquer the Raised Isles
+advancements.thebetweenlands.adventurer.captain101.title=Captain 101
+advancements.thebetweenlands.adventurer.captain101.description=Obtain a Weedwood Rowboat
+advancements.thebetweenlands.adventurer.full_of_hot_air.title=Full of Hot Air
+advancements.thebetweenlands.adventurer.full_of_hot_air.description=Obtain a Draeton Aircraft
+advancements.thebetweenlands.adventurer.up_up_and_away.title=Up, Up and Away
+advancements.thebetweenlands.adventurer.up_up_and_away.description=Obtain a Volarkite
+advancements.thebetweenlands.adventurer.king_of_the_hill.title=King of the Hill
+advancements.thebetweenlands.adventurer.king_of_the_hill.description=Claim a Chiromaw Matriarch Nest
+advancements.thebetweenlands.adventurer.queen_of_the_hill.title=Queen of the Hill
+advancements.thebetweenlands.adventurer.queen_of_the_hill.description=Raid a Chiromaw Matriarch Nest without claiming it
 
 # Fighter
 advancements.thebetweenlands.fighter.root.title=Fighter
@@ -1665,6 +1737,8 @@ advancements.thebetweenlands.fighter.secret_of_the_crypt.title=Secret of the Cry
 advancements.thebetweenlands.fighter.secret_of_the_crypt.description=Obtain the Ancient Greatsword
 advancements.thebetweenlands.fighter.not_a_boss.title=Not A Boss...?
 advancements.thebetweenlands.fighter.not_a_boss.description=Seal the Pit of Decay and defeat the Sludge Menace
+advancements.thebetweenlands.fighter.a_spiky_matter.title=A Spiky Matter
+advancements.thebetweenlands.fighter.a_spiky_matter.description=Defeat a Chiromaw Matriarch
 
 # Farmer
 advancements.thebetweenlands.farmer.root.title=Farmer

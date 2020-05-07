@@ -15,17 +15,22 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleAltarCrafting;
 import thebetweenlands.client.render.particle.entity.ParticleAnimated;
 import thebetweenlands.client.render.particle.entity.ParticleAnimator;
+import thebetweenlands.client.render.particle.entity.ParticleBLRain;
 import thebetweenlands.client.render.particle.entity.ParticleBlockProtection;
 import thebetweenlands.client.render.particle.entity.ParticleBreakingBL;
 import thebetweenlands.client.render.particle.entity.ParticleBubbleBL;
 import thebetweenlands.client.render.particle.entity.ParticleBug;
 import thebetweenlands.client.render.particle.entity.ParticleCaveWaterDrip;
+import thebetweenlands.client.render.particle.entity.ParticleChiromawDroppings;
+import thebetweenlands.client.render.particle.entity.ParticleChiromawFeathers;
 import thebetweenlands.client.render.particle.entity.ParticleDamageReduction;
+import thebetweenlands.client.render.particle.entity.ParticleDraetonBurnerFlame;
 import thebetweenlands.client.render.particle.entity.ParticleDruidCasting;
+import thebetweenlands.client.render.particle.entity.ParticleEntitySwirl;
 import thebetweenlands.client.render.particle.entity.ParticleFish;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
-import thebetweenlands.client.render.particle.entity.ParticleLeafSwirl;
 import thebetweenlands.client.render.particle.entity.ParticleLifeEssence;
+import thebetweenlands.client.render.particle.entity.ParticleLightningArc;
 import thebetweenlands.client.render.particle.entity.ParticleMoth;
 import thebetweenlands.client.render.particle.entity.ParticlePuzzleBeam;
 import thebetweenlands.client.render.particle.entity.ParticlePuzzleBeam2;
@@ -37,6 +42,7 @@ import thebetweenlands.client.render.particle.entity.ParticleSoundRipple;
 import thebetweenlands.client.render.particle.entity.ParticleSpiritButterfly;
 import thebetweenlands.client.render.particle.entity.ParticleTarBeastDrip;
 import thebetweenlands.client.render.particle.entity.ParticleThem;
+import thebetweenlands.client.render.particle.entity.ParticleWaterRipple;
 import thebetweenlands.client.render.particle.entity.ParticleWeedwoodLeaf;
 import thebetweenlands.client.render.particle.entity.ParticleWisp;
 import thebetweenlands.client.render.particle.entity.ParticleXPPieces;
@@ -107,12 +113,13 @@ public enum BLParticles {
 			.withColor(0, 0, 0, 1.0F)
 			.buildBaseArgs()),
 	MOTION_ITEM_BREAKING(new ParticleBreakingBL.MotionFactory()),
+	ITEM_BREAKING(new ParticleBreakingBL.DefaultFactory()),
 	TAR_BEAST_DRIP(new ParticleTarBeastDrip.Factory().getBaseArgsBuilder().withColor(0, 0, 0, 1).buildBaseArgs()),
 	CAVE_WATER_DRIP(new ParticleCaveWaterDrip.Factory()),
 	STEAM_PURIFIER(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory())),
 	GAS_CLOUD(new ParticleGasCloud.Factory()),
 	WEEDWOOD_LEAF(new ParticleWeedwoodLeaf.Factory()),
-	LEAF_SWIRL(new ParticleLeafSwirl.Factory()),
+	LEAF_SWIRL(new ParticleEntitySwirl.Factory()),
 	REDSTONE_DUST(VanillaParticleFactory.create(ParticleRedstone.class, new ParticleRedstone.Factory())),
 	THEM(new ParticleThem.Factory()),
 	GEM_PROC(VanillaParticleFactory.create(ParticleCrit.class, new ParticleCrit.MagicFactory())),
@@ -132,12 +139,20 @@ public enum BLParticles {
 	PUZZLE_BEAM_2(new ParticlePuzzleBeam2.Factory()),
 	SMOOTH_SMOKE(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/smooth_smoke"))),
 	SONIC_SCREAM(new ParticleSonicScream.Factory()),
-	EMBER_SWIRL(new ParticleLeafSwirl.FactoryEmberSwirl()),
-	SLUDGE_SWIRL(new ParticleLeafSwirl.FactorySludgeSwirl()),
+	EMBER_SWIRL(new ParticleEntitySwirl.FactoryEmberSwirl()),
+	SLUDGE_SWIRL(new ParticleEntitySwirl.FactorySludgeSwirl()),
 	RING_OF_RECRUITMENT_STAY(new ParticleRingOfRecruitmentState.FactoryStay()),
 	RING_OF_RECRUITMENT_FOLLOW(new ParticleRingOfRecruitmentState.FactoryFollow()),
-	RING_OF_RECRUITMENT_GUARD(new ParticleRingOfRecruitmentState.FactoryGuard());
-
+	RING_OF_RECRUITMENT_GUARD(new ParticleRingOfRecruitmentState.FactoryGuard()),
+	DRAETON_BURNER_FLAME(new ParticleDraetonBurnerFlame.Factory()),
+	CHIROMAW_DROPPINGS(new ParticleChiromawDroppings.Factory().getBaseArgsBuilder().withColor(0, 0, 0, 1).buildBaseArgs()),
+	LIGHTNING_ARC(new ParticleLightningArc.Factory()),
+	CHIROMAW_TRANSFORM(new ParticleChiromawFeathers.Factory().getBaseArgsBuilder().withColor(0.227F, 0.317F, 0.294F, 1).buildBaseArgs()),
+	CHIROMAW_TRANSFORM_LIGHTNING(new ParticleChiromawFeathers.Factory().getBaseArgsBuilder().withColor(0.420F, 0.565F, 0.553F, 1).buildBaseArgs()),
+	CHIROMAW_TRANSFORM_SWIRL(new ParticleEntitySwirl.FactoryChiromawSwirl()),
+	WATER_RIPPLE(new ParticleWaterRipple.Factory()),
+	RAIN(new ParticleBLRain.Factory());
+	
 	private ParticleFactory<?, ?> factory;
 
 	private BLParticles(ParticleFactory<?, ?> factory) {

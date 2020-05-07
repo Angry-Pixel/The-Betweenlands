@@ -2,16 +2,19 @@ package thebetweenlands.client.render.entity;
 
 import java.util.EnumMap;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Quaternion;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.LayeredTexture;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraftforge.client.MinecraftForgeClient;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Quaternion;
+
+import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -20,13 +23,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import thebetweenlands.client.render.model.entity.rowboat.ModelLantern;
 import thebetweenlands.client.render.model.entity.rowboat.ModelWeedwoodRowboat;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
+import thebetweenlands.common.entity.rowboat.Lantern;
 import thebetweenlands.common.entity.rowboat.ShipSide;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.CubicBezier;
@@ -37,7 +41,9 @@ import thebetweenlands.util.Quat;
 public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
     private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/weedwood_rowboat.png");
 
-    private static final ResourceLocation TEXTURE_TARRED = new ResourceLocation(ModInfo.ID, "textures/entity/weedwood_rowboat_tarred.png");
+    private static final ResourceLocation TEXTURE_TARRED = new ResourceLocation(ModInfo.ID, "textures/entity/weedwood_tarred.png");
+
+    private static final ResourceLocation TEXTURE_TAR_OVERLAY = new ResourceLocation(ModInfo.ID, "textures/entity/weedwood_rowboat_tar_overlay.png");
 
     private static final CubicBezier PULL_CURVE = new CubicBezier(1, 0, 1, 0.25F);
 
@@ -46,6 +52,8 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
     private RenderPlayerRower rowerSlimRender;
 
     private ModelWeedwoodRowboat model = new ModelWeedwoodRowboat();
+
+    private ModelLantern lanternModel = new ModelLantern();
 
     private int maskId = -1;
 
@@ -56,8 +64,6 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
     private EnumMap<ShipSide, ArmArticulation> arms = ShipSide.newEnumMap(ArmArticulation.class, new ArmArticulation(), new ArmArticulation());
 
     private EnumMap<ShipSide, Float> shoulderZ = ShipSide.newEnumMap(float.class);
-
-    private Vec3d arm = Vec3d.ZERO;
 
     private float bodyRotateAngleX;
 
@@ -76,41 +82,68 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
 
     @Override
     public void doRender(EntityWeedwoodRowboat rowboat, double x, double y, double z, float yaw, float delta) {
-        model.animateOar(rowboat, ShipSide.STARBOARD, delta);
-        model.animateOar(rowboat, ShipSide.PORT, delta);
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y + 1.5F + rowboat.getWaveHeight(delta), z);
-        roll(rowboat, yaw, delta);
-        bindEntityTexture(rowboat);
-        GlStateManager.scale(-1, -1, 1);
-        model.render(rowboat, 0.0625F, delta);
-        GlStateManager.popMatrix();
+        double wave = rowboat.getWaveHeight(delta);
+        Lantern lantern = rowboat.getLantern();
+        Vec3d anchor = Vec3d.ZERO, light = Vec3d.ZERO;
+        if (lantern != null) {
+            anchor = rowboat.getLocalLanternPosition(delta);
+            Matrix m = new Matrix();
+            m.translate(
+                rowboat.lastTickPosX + (rowboat.posX - rowboat.lastTickPosX) * delta + anchor.x,
+                rowboat.lastTickPosY + (rowboat.posY - rowboat.lastTickPosY) * delta + anchor.y + wave,
+                rowboat.lastTickPosZ + (rowboat.posZ - rowboat.lastTickPosZ) * delta + anchor.z
+            );
+            m.rotate(lantern.getAngle(delta), 1, 0, 0);
+            m.translate(0, -3.5 / 16, 0);
+            light = m.transform(Vec3d.ZERO);
+        }
+        float scale = 0.6F;
+        if (MinecraftForgeClient.getRenderPass() == 0) {
+            model.animateOar(rowboat, ShipSide.STARBOARD, delta);
+            model.animateOar(rowboat, ShipSide.PORT, delta);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(x, y + wave, z);
+            GlStateManager.pushMatrix();
+            roll(rowboat, yaw, delta);
+            bindEntityTexture(rowboat);
+            GlStateManager.scale(-1, -1, 1);
+            model.render(rowboat, lantern != null, 0.0625F, delta);
+            GlStateManager.popMatrix();
+            if (lantern != null) {
+                GlStateManager.translate(anchor.x, anchor.y, anchor.z);
+                GlStateManager.rotate(-yaw, 0, 1, 0);
+                GlStateManager.scale(-1, -1, 1);
+                lanternModel.render(lantern, 0.0625F, delta);
+                if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
+                    RenderFirefly.addFireflyLight(light.x, light.y, light.z, scale * 7.0F);
+                }
+            }
+            GlStateManager.popMatrix();
+        } else if (lantern != null) {
+            GlStateManager.disableLighting();
+            RenderFirefly.renderFireflyGlow(light.x - renderManager.renderPosX, light.y - renderManager.renderPosY, light.z - renderManager.renderPosZ, scale);
+            GlStateManager.enableLighting();
+        }
     }
 
     @Override
     public void renderMultipass(EntityWeedwoodRowboat rowboat, double x, double y, double z, float yaw, float delta) {
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y + 1.5F + rowboat.getWaveHeight(delta), z);
-        roll(rowboat, yaw, delta);
-        renderWaterMask();
-        GlStateManager.popMatrix();
+        if (MinecraftForgeClient.getRenderPass() == 0) {
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(x, y + rowboat.getWaveHeight(delta), z);
+            roll(rowboat, yaw, delta);
+            renderWaterMask();
+            GlStateManager.popMatrix();
+        }
     }
 
     private void roll(EntityWeedwoodRowboat rowboat, float yaw, float delta) {
         Quat rot = rowboat.getRotation(delta);
-        GlStateManager.translate(0, -1.5F, 0);
         GlStateManager.rotate(new Quaternion((float) rot.x, (float) rot.y, (float) rot.z, (float) rot.w));
-        GlStateManager.translate(0, 1.5F, 0);
         GlStateManager.rotate(-yaw, 0, 1, 0);
-        float timeSinceHit = rowboat.getTimeSinceHit() - delta;
-        float damageTaken = rowboat.getDamageTaken() - delta;
-        if (damageTaken < 0) {
-            damageTaken = 0;
-        }
-        if (timeSinceHit > 0) {
-            GlStateManager.translate(0, -1, 0);
-            GlStateManager.rotate(MathHelper.sin(timeSinceHit) * timeSinceHit * damageTaken / 10 * rowboat.getForwardDirection(), 0, 0, 1);
-            GlStateManager.translate(0, 1, 0);
+        float roll = rowboat.getRoll(delta);
+        if (roll != 0) {
+            GlStateManager.rotate(roll, 0, 0, 1);
         }
     }
 
@@ -193,12 +226,10 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
 
     private void articulateArm(ShipSide side, float yaw) {
         int dir = side == ShipSide.PORT ? 1 : -1;
-        // the player is scaled by this amount
-        final float ps = 0.9375F;
         createBodyTransformationMatrix();
         // move to shoulder joint
         matrix.translate(-6 / 16F * dir, -10 / 16F, shoulderZ.get(side));
-        arm = matrix.transform(Vec3d.ZERO);
+        Vec3d arm = matrix.transform(Vec3d.ZERO);
         Vec3d grip = grips.get(side);
         float targetX = (float) (grip.x - arm.x);
         float targetY = (float) (grip.y - arm.y);
@@ -239,7 +270,7 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder vb = tessellator.getBuffer();
             vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
-            double y = -0.687;
+            double y = 0.813;
             double midWidth = 0.55;
             double midDepth = 0.65;
             double endWidth = 0.4;
@@ -269,9 +300,18 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
         }
     }
 
+
     @Override
     protected ResourceLocation getEntityTexture(EntityWeedwoodRowboat rowboat) {
-        return rowboat.isTarred() ? TEXTURE_TARRED : TEXTURE;
+        if (rowboat.isTarred()) {
+            TextureManager mgr = Minecraft.getMinecraft().getTextureManager();
+            //noinspection ConstantConditions
+            if (mgr.getTexture(TEXTURE_TARRED) == null) {
+                mgr.loadTexture(TEXTURE_TARRED, new LayeredTexture(TEXTURE.toString(), TEXTURE_TAR_OVERLAY.toString()));
+            }
+            return TEXTURE_TARRED;
+        }
+        return TEXTURE;
     }
 
     public static class ArmArticulation {

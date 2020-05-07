@@ -1,7 +1,40 @@
 {
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:puddle"
+  },
   "variants": {
-    "normal": {
-      "model": "thebetweenlands:puddle"
+    "north": {
+      "true": {
+        "submodel": "thebetweenlands:puddle_north"
+      },
+      "false": {
+      
+      }
+    },
+    "east": {
+      "true": {
+        "submodel": "thebetweenlands:puddle_east"
+      },
+      "false": {
+      
+      }
+    },
+    "south": {
+      "true": {
+        "submodel": "thebetweenlands:puddle_south"
+      },
+      "false": {
+      
+      }
+    },
+    "west": {
+      "true": {
+        "submodel": "thebetweenlands:puddle_west"
+      },
+      "false": {
+      
+      }
     }
   }
 }

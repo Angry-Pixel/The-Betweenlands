@@ -16,6 +16,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
@@ -158,8 +159,12 @@ public class LocationStorage extends LocalStorageImpl {
 			int ez = MathHelper.floor(boundingBox.maxZ) >> 4;
 			for(int cx = sx; cx <= ex; cx++) {
 				for(int cz = sz; cz <= ez; cz++) {
-					Chunk chunk = this.getWorldStorage().getWorld().getChunk(cx, cz);
-					this.linkChunk(chunk);
+					Chunk chunk = this.getWorldStorage().getWorld().getChunkProvider().getLoadedChunk(cx, cz);
+					if(chunk != null) {
+						this.linkChunk(chunk);
+					} else {
+						this.linkChunkDeferred(new ChunkPos(cx, cz));
+					}
 				}
 			}
 		}

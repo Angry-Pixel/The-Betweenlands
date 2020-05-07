@@ -11,6 +11,7 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -132,16 +133,15 @@ public class BlockGeckoCage extends BlockContainer {
 			if(!heldItemStack.isEmpty()) {
 
 				Item heldItem = heldItemStack.getItem();
-				if(heldItem == ItemRegistry.GECKO) {
+				if(ItemRegistry.CRITTER.isCapturedEntity(heldItemStack, EntityGecko.class)) {
 					if(!tile.hasGecko()) {
 						if(!world.isRemote) {
-							String name = "";
-							if (!(heldItemStack.getDisplayName().equals(TranslationHelper.translateToLocal(heldItemStack.getTranslationKey()))) && heldItemStack.hasDisplayName())
-									name = heldItemStack.getDisplayName();
-	
-							tile.addGecko(heldItemStack.hasTagCompound() && heldItemStack.getTagCompound().hasKey("Health") ? (int) heldItemStack.getTagCompound().getFloat("Health") : 12, name);
-							if(!player.capabilities.isCreativeMode)
-								heldItemStack.shrink(1);
+							Entity gecko = ItemRegistry.CRITTER.createCapturedEntity(world, pos.getX(), pos.getY(), pos.getZ(), heldItemStack);
+							if(gecko instanceof EntityGecko) {
+								tile.addGecko((int)((EntityGecko) gecko).getHealth(), gecko.hasCustomName() ? gecko.getCustomNameTag() : null);
+								if(!player.capabilities.isCreativeMode)
+									heldItemStack.shrink(1);
+							}
 						}
 						return true;
 					}

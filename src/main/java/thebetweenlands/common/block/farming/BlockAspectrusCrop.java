@@ -24,6 +24,7 @@ import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.api.block.IAspectFogBlock;
+import thebetweenlands.common.item.food.ItemAspectrusFruit;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -246,7 +247,7 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 								break;
 							}
 						} else {
-							this.setAspect(world, pos, new Aspect(aspectType, 250));
+							this.setAspect(world, pos, new Aspect(aspectType, ItemAspectrusFruit.DEFAULT_AMOUNT));
 							hasSource = true;
 							break;
 						}

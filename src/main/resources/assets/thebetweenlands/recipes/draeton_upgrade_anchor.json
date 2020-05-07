@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " R ",
+    "SGS",
+    " S "
+  ],
+  "key": {
+    "R": {
+      "item": "thebetweenlands:items_misc",
+      "data": 7
+    },
+    "S": {
+      "item": "thebetweenlands:items_misc",
+      "data": 11
+    },
+    "G": {
+      "item": "thebetweenlands:grappling_hook"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:draeton_upgrade_anchor"
+  }
+}

@@ -60,6 +60,55 @@
       }
     ]
   },
+  "ambient_floating_island": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:ambience/ambient_floating_island",
+        "stream": true
+      }
+    ]
+  },
+  "lightning": {
+    "sounds": [
+        "thebetweenlands:ambience/lightning_1",
+        "thebetweenlands:ambience/lightning_2",
+        "thebetweenlands:ambience/lightning_3"
+    ]
+  },
+  "thunder": {
+    "sounds": [
+        "thebetweenlands:ambience/thunder_1",
+        "thebetweenlands:ambience/thunder_2",
+        "thebetweenlands:ambience/thunder_3",
+        "thebetweenlands:ambience/thunder_4",
+        "thebetweenlands:ambience/thunder_5"
+    ]
+  },
+  "rain_strong": {
+    "sounds": [
+        "thebetweenlands:ambience/rain_strong"
+    ]
+  },
+  "rain_medium": {
+    "sounds": [
+        "thebetweenlands:ambience/rain_medium"
+    ]
+  },
+  "rain_weak": {
+    "sounds": [
+        "thebetweenlands:ambience/rain_weak"
+    ]
+  },
+  "rain_dripping": {
+    "sounds": [
+        "thebetweenlands:ambience/rain_dripping"
+    ]
+  },
+  "rain_mount": {
+    "sounds": [
+      "thebetweenlands:ambience/rain_mount"
+    ]
+  },
   "druid_chant": {
     "sounds": [
       "thebetweenlands:druid_chant"
@@ -243,18 +292,40 @@
   },
   "sludge_menace_death": {
     "sounds": [
-      "thebetweenlands:snail_death"
+      "thebetweenlands:sludge_menace_death"
     ]
   },
   "sludge_menace_hurt": {
     "sounds": [
-      "thebetweenlands:snail_hurt"
+      "thebetweenlands:sludge_menace_hurt_1",
+      "thebetweenlands:sludge_menace_hurt_2",
+      "thebetweenlands:sludge_menace_hurt_3"
+    ]
+  },
+  "sludge_menace_attack": {
+    "sounds": [
+      "thebetweenlands:sludge_menace_attack_1",
+      "thebetweenlands:sludge_menace_attack_2",
+      "thebetweenlands:sludge_menace_attack_3",
+      "thebetweenlands:sludge_menace_attack_4",
+      "thebetweenlands:sludge_menace_attack_5"
+    ]
+  },
+  "sludge_menace_spit": {
+    "sounds": [
+      "thebetweenlands:sludge_menace_spit_1",
+      "thebetweenlands:sludge_menace_spit_2",
+      "thebetweenlands:sludge_menace_spit_3"
+    ]
+  },
+  "sludge_menace_spawn": {
+    "sounds": [
+      "thebetweenlands:sludge_menace_spawn"
     ]
   },
   "sludge_menace_living": {
     "sounds": [
-      "thebetweenlands:snail_living_1",
-      "thebetweenlands:snail_living_2"
+      "thebetweenlands:sludge_menace_living"
     ]
   },
   "dragonfly": {
@@ -377,7 +448,7 @@
   },
   "dreadful_peat_mummy_lick": {
     "sounds": [
-      "thebetweenlands:dreadful_peat_mummy_emerge"
+      "thebetweenlands:dreadful_peat_mummy_lick"
     ]
   },
   "dreadful_peat_mummy_death": {
@@ -894,9 +965,166 @@
       "thebetweenlands:barrishee_step_4"
     ]
   },
+  "chirowmaw_greebling_rider_living": {
+    "sounds": [
+      "thebetweenlands:flying_fiend_living_1",
+      "thebetweenlands:flying_fiend_living_2",
+      "thebetweenlands:flying_fiend_living_3",
+      "thebetweenlands:flying_fiend_living_4"
+    ]
+  },
+  "greebling_giggle": {
+    "sounds": [
+      "thebetweenlands:greebling_giggle",
+      "thebetweenlands:greebling_laugh"
+    ]
+  },
+  "greebling_hey": {
+    "sounds": [
+      "thebetweenlands:greebling_hey"
+    ]
+  },
+  "greebling_fall": {
+    "sounds": [
+      "thebetweenlands:greebling_fall"
+    ]
+  },
   "greebling_vanish": {
     "sounds": [
       "thebetweenlands:greebling_vanish"
+    ]
+  },
+   "chiromaw_matriarch_barb_fire": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_barb_fire_1",
+       "thebetweenlands:chiromaw_matriarch_barb_fire_2",
+       "thebetweenlands:chiromaw_matriarch_barb_fire_3"
+    ]
+  },
+   "chiromaw_matriarch_barb_hit": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_barb_hit_1",
+      "thebetweenlands:chiromaw_matriarch_barb_hit_2",
+      "thebetweenlands:chiromaw_matriarch_barb_hit_3"
+    ]
+  },
+   "chiromaw_matriarch_living": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_living_1",
+      "thebetweenlands:chiromaw_matriarch_living_2",
+      "thebetweenlands:chiromaw_matriarch_living_3",
+      "thebetweenlands:chiromaw_matriarch_living_4"
+    ]
+  },
+   "chiromaw_matriarch_hurt": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_hurt_1",
+      "thebetweenlands:chiromaw_matriarch_hurt_2"
+    ]
+  },
+   "chiromaw_matriarch_death": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_death"
+    ]
+  },
+   "chiromaw_matriarch_poop": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_poop_1",
+      "thebetweenlands:chiromaw_matriarch_poop_2",
+      "thebetweenlands:chiromaw_matriarch_poop_3"
+    ]
+  },
+   "chiromaw_matriarch_splat": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_splat_1",
+      "thebetweenlands:chiromaw_matriarch_splat_2",
+      "thebetweenlands:chiromaw_matriarch_splat_3"
+    ]
+  },
+   "chiromaw_matriarch_land": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_land"
+    ]
+  },
+   "chiromaw_matriarch_flap": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_flap_1",
+      "thebetweenlands:chiromaw_matriarch_flap_2",
+      "thebetweenlands:chiromaw_matriarch_flap_3"
+    ]
+  },
+   "chiromaw_matriarch_grab": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_grab"
+    ]
+  },
+   "chiromaw_matriarch_release": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_release"
+    ]
+  },
+   "chiromaw_matriarch_roar": {
+    "sounds": [
+      "thebetweenlands:chiromaw_matriarch_roar"
+    ]
+  },
+  "chiromaw_hatchling_living": {
+    "sounds": [
+      "thebetweenlands:chirobaby_living_1",
+      "thebetweenlands:chirobaby_living_2",
+      "thebetweenlands:chirobaby_living_3",
+      "thebetweenlands:chirobaby_living_4"
+    ]
+  },
+   "chiromaw_hatchling_hungry_short": {
+    "sounds": [
+      "thebetweenlands:chirobaby_hungry_1",
+      "thebetweenlands:chirobaby_hungry_2",
+      "thebetweenlands:chirobaby_hungry_3",
+      "thebetweenlands:chirobaby_hungry_4",
+      "thebetweenlands:chirobaby_hungry_5"
+    ]
+  },
+   "chiromaw_hatchling_hungry_long": {
+    "sounds": [
+      "thebetweenlands:chirobaby_hungry_6",
+      "thebetweenlands:chirobaby_hungry_7",
+      "thebetweenlands:chirobaby_hungry_8",
+      "thebetweenlands:chirobaby_hungry_9",
+      "thebetweenlands:chirobaby_hungry_10"
+    ]
+  },
+   "chiromaw_hatchling_eat": {
+    "sounds": [
+      "thebetweenlands:chirobaby_eat_1",
+      "thebetweenlands:chirobaby_eat_2",
+      "thebetweenlands:chirobaby_eat_3"
+    ]
+  },
+   "chiromaw_hatch": {
+    "sounds": [
+      "thebetweenlands:chirobaby_hatch_1",
+      "thebetweenlands:chirobaby_hatch_2",
+      "thebetweenlands:chirobaby_hatch_3"
+    ]
+  },
+   "chiromaw_hatchling_no": {
+    "sounds": [
+      "thebetweenlands:chirobaby_no"
+    ]
+  },
+   "chiromaw_hatchling_transform": {
+    "sounds": [
+      "thebetweenlands:chirobaby_evolve"
+    ]
+  },
+   "chiromaw_hatchling_inside_egg": {
+    "sounds": [
+      "thebetweenlands:chirobaby_egg_1",
+      "thebetweenlands:chirobaby_egg_2",
+      "thebetweenlands:chirobaby_egg_3",
+      "thebetweenlands:chirobaby_egg_4",
+      "thebetweenlands:chirobaby_egg_5"
     ]
   },
   "roof_collapse": {
@@ -928,6 +1156,14 @@
     "sounds": [
       {
         "name": "thebetweenlands:ambience/ambient_swamp",
+        "stream": true
+      }
+    ]
+  },
+  "ambient_swamp_dense_fog": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:ambience/ambient_swamp_dense_fog",
         "stream": true
       }
     ]
@@ -1335,6 +1571,75 @@
       "thebetweenlands:boat_row_start_2"
     ]
   },
+  "draeton_turn": {
+    "sounds": [
+      "thebetweenlands:draeton_turn_1",
+      "thebetweenlands:draeton_turn_2",
+      "thebetweenlands:draeton_turn_3",
+      "thebetweenlands:draeton_turn_4",
+      "thebetweenlands:draeton_turn_5"
+    ]
+  },
+  "draeton_damage": {
+    "sounds": [
+      "thebetweenlands:draeton_damage_1",
+      "thebetweenlands:draeton_damage_2",
+      "thebetweenlands:draeton_damage_3",
+      "thebetweenlands:draeton_damage_4"
+    ]
+  },
+  "draeton_burner": {
+    "sounds": [
+      "thebetweenlands:draeton_burner"
+    ]
+  },
+  "draeton_anchor": {
+    "sounds": [
+      "thebetweenlands:draeton_anchor"
+    ]
+  },
+  "draeton_pulley": {
+    "sounds": [
+      "thebetweenlands:draeton_pulley"
+    ]
+  },
+  "draeton_leak_start": {
+    "sounds": [
+      "thebetweenlands:draeton_leak_1"
+    ]
+  },
+  "draeton_leak_loop": {
+    "sounds": [
+      "thebetweenlands:draeton_leak_2"
+    ]
+  },
+  "draeton_plug": {
+    "sounds": [
+      "thebetweenlands:draeton_plug"
+    ]
+  },
+  "draeton_pop": {
+    "sounds": [
+      "thebetweenlands:draeton_pop"
+    ]
+  },
+  "slingshot_charge": {
+    "sounds": [
+      "thebetweenlands:slingshot_charge"
+    ]
+  },
+  "slingshot_shoot": {
+    "sounds": [
+      "thebetweenlands:slingshot_shoot"
+    ]
+  },
+  "slingshot_hit": {
+    "sounds": [
+      "thebetweenlands:slingshot_hit_1",
+      "thebetweenlands:slingshot_hit_2",
+      "thebetweenlands:slingshot_hit_3"
+    ]
+  },
   "possessed_scream": {
     "sounds": [
       "thebetweenlands:possessed_scream"
@@ -1437,6 +1742,23 @@
   "pit_fall": {
     "sounds": [
       "thebetweenlands:pit_fall"
+    ]
+  },
+  "zap": {
+    "sounds": [
+      "thebetweenlands:zap_1",
+      "thebetweenlands:zap_2",
+      "thebetweenlands:zap_3",
+      "thebetweenlands:zap_4",
+      "thebetweenlands:zap_5",
+      "thebetweenlands:zap_6",
+      "thebetweenlands:zap_7",
+      "thebetweenlands:zap_8"
+    ]
+  },
+  "chirobarb_erupter": {
+    "sounds": [
+      "thebetweenlands:chirobarb_erupter"
     ]
   }
 }

@@ -720,14 +720,10 @@ public class SludgeWormMazeBlockHelper {
 	}
 
 	public void placeArmourStandLoot(World world, BlockPos pos, EnumFacing facing, Random rand) {
-		ItemStack helm = new ItemStack(ItemRegistry.VALONITE_HELMET);
-		ItemStack chest = new ItemStack(ItemRegistry.VALONITE_CHESTPLATE);
-		ItemStack legs = new ItemStack(ItemRegistry.VALONITE_LEGGINGS);
-		ItemStack boots = new ItemStack(ItemRegistry.VALONITE_BOOTS);
-		CircleGemHelper.setGem(helm, getCircleGemType(rand));
-		CircleGemHelper.setGem(chest, getCircleGemType(rand));
-		CircleGemHelper.setGem(boots, getCircleGemType(rand));
-		CircleGemHelper.setGem(legs, getCircleGemType(rand));
+		ItemStack helm = new ItemStack(ItemRegistry.ANCIENT_HELMET);
+		ItemStack chest = new ItemStack(ItemRegistry.ANCIENT_CHESTPLATE);
+		ItemStack legs = new ItemStack(ItemRegistry.ANCIENT_LEGGINGS);
+		ItemStack boots = new ItemStack(ItemRegistry.ANCIENT_BOOTS);
 		EntityArmorStand stand = new EntityArmorStand(world);
 		stand.setPositionAndRotation(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, facing.getHorizontalAngle(), 0F);
 		stand.setItemStackToSlot(EntityEquipmentSlot.HEAD, helm);
@@ -735,11 +731,6 @@ public class SludgeWormMazeBlockHelper {
 		stand.setItemStackToSlot(EntityEquipmentSlot.LEGS, legs);
 		stand.setItemStackToSlot(EntityEquipmentSlot.FEET, boots);
 		world.spawnEntity(stand);
-	}
-
-	private CircleGemType getCircleGemType(Random rand) {
-		int randomType = rand.nextInt(CircleGemType.values().length);
-		return CircleGemType.values()[randomType];
 	}
 
 	/// TOWER STUFF

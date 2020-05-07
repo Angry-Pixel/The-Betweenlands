@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+   "r r",
+   " s "
+  ],
+  "key": {
+    "r": {
+      "item": "thebetweenlands:items_misc",
+      "data": 7
+    },
+    "s": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    }
+  },
+  "result": {
+     "item": "thebetweenlands:simple_slingshot"
+  }
+}

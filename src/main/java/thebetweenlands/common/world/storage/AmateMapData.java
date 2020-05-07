@@ -84,10 +84,10 @@ public class AmateMapData extends MapData {
         int r = (rgb >> 16) & 0xFF;
         int g = (rgb >> 8) & 0xFF;
         int b = rgb & 0xFF;
-        int rs = MathHelper.clamp((int) ((0.293 * r + 0.269 * g + 0.089 * b) * 0.8D), 0, 255);
-        int rg = MathHelper.clamp((int) ((0.049 * r + 0.386 * g + 0.128 * b) * 0.8D), 0, 255);
-        int rb = MathHelper.clamp((int) ((0.072 * r + 0.034 * g + 0.111 * b) * 0.8D), 0, 255);
-        return rs << 16 | rg << 8 | rb;
+        int rs = MathHelper.clamp((int) ((0.293 * r + 0.269 * g + 0.089 * b) * 5), 0, 255);
+        int rg = MathHelper.clamp((int) ((0.049 * r + 0.386 * g + 0.128 * b) * 5), 0, 255);
+        int rb = MathHelper.clamp((int) ((0.072 * r + 0.034 * g + 0.111 * b) * 5), 0, 255);
+        return rs << 16 | rg << 8 | rb | ((rgb >> 24) & 0xFF << 24);
     }
 
     @Override
@@ -216,6 +216,7 @@ public class AmateMapData extends MapData {
             SPIRIT_TREE(10, 16, 16, 16, 16, 4.0f),
             FORTRESS(11, 0, 104, 24, 24, 6.0f),
             SLUDGE_WORM_DUNGEON(13, 24, 96, 32, 32, 8.0f),
+            FLOATING_ISLAND(14, 48, 16, 16, 16, 4.0f),
 
             CHECK(127, 0, 32, 16, 16, 4.0f);
 
@@ -273,6 +274,8 @@ public class AmateMapData extends MapData {
                         return SPIRIT_TREE;
                     case "sludge_worm_dungeon":
                     	return SLUDGE_WORM_DUNGEON;
+                    case "floating_island":
+                    	return FLOATING_ISLAND;
                 }
                 return NONE;
             }

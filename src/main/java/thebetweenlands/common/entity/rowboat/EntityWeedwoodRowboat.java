@@ -18,6 +18,7 @@ import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -49,6 +50,8 @@ import thebetweenlands.util.Quat;
 
 import io.netty.buffer.ByteBuf;
 
+import javax.annotation.Nullable;
+
 /*
  * Useful links:
  * https://en.wikipedia.org/wiki/Glossary_of_rowing_terms
@@ -64,6 +67,8 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     private static final EnumMap<ShipSide, DataParameter<Float>> ROW_PROGRESS = ShipSide.newEnumMap((Class<DataParameter<Float>>) (Class<?>) DataParameter.class, defineId(DataSerializers.FLOAT), defineId(DataSerializers.FLOAT));
 
     private static final DataParameter<Boolean> IS_TARRED = defineId(DataSerializers.BOOLEAN);
+
+    private static final DataParameter<Boolean> HAS_LANTERN = defineId(DataSerializers.BOOLEAN);
 
     public static final float OAR_ROTATION_SCALE = -28;
 
@@ -140,6 +145,9 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
 
     private float pilotPower;
 
+    @Nullable
+    private Lantern lantern;
+
     public EntityWeedwoodRowboat(World world) {
         super(world);
         setSize(2, 0.9F);
@@ -155,6 +163,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         dataManager.register(ROW_PROGRESS.get(ShipSide.STARBOARD), RESTING_ROW_PROGRESS);
         dataManager.register(ROW_PROGRESS.get(ShipSide.PORT), RESTING_ROW_PROGRESS);
         dataManager.register(IS_TARRED, false);
+        dataManager.register(HAS_LANTERN, false);
     }
 
     @Override
@@ -270,6 +279,14 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     }
 
     @Override
+    public void notifyDataManagerChange(DataParameter<?> key) {
+        if (HAS_LANTERN.equals(key)) {
+            lantern = hasLantern() ? new Lantern(1.2F, 0.2F) : null;
+        }
+        super.notifyDataManagerChange(key);
+    }
+
+    @Override
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if (EnumItemMisc.TAR_DRIP.isItemOf(stack) && !isTarred()) {
@@ -278,10 +295,25 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
                 stack.shrink(1);
                 playSound(SoundRegistry.TAR_BEAST_STEP, 0.9F + rand.nextFloat() * 0.1F, 0.6F + rand.nextFloat() * 0.15F);
             }
+            player.swingArm(hand);
+        } else if (!stack.isEmpty() && stack.getItem() == ItemRegistry.WEEDWOOD_ROWBOAT_UPGRADE_LANTERN) {
+            if (!world.isRemote) {
+                stack.shrink(1);
+                setHasLantern(true);
+            }
+            player.swingArm(hand);
         } else if (!world.isRemote && !player.isSneaking()) {
             player.startRiding(this);
         }
         return true;
+    }
+
+    private void setHasLantern(boolean lantern) {
+        dataManager.set(HAS_LANTERN, lantern);
+    }
+
+    private boolean hasLantern() {
+        return dataManager.get(HAS_LANTERN);
     }
 
     @Override
@@ -392,11 +424,24 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
                 createSoundFX();
             }
         }
+        if (lantern != null && world.isRemote) {
+            lantern.tick(getLanternPosition(), rotationYaw);
+        }
         if (!world.isRemote) {
             world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(0.2, 0.05, 0.2)).forEach(this::applyEntityCollision);
         }
         rotationYaw = MathHelper.wrapDegrees(rotationYaw);
         prevRotationYaw = MathUtils.adjustAngleForInterpolation(rotationYaw, prevRotationYaw);
+    }
+
+    @Override
+    public boolean shouldRenderInPass(int pass) {
+        return pass == 0 || pass == 1;
+    }
+
+    @Nullable
+    public Lantern getLantern() {
+        return this.lantern;
     }
 
     private void hitWaves(double pow) {
@@ -651,9 +696,9 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
             updateRowProgress(ShipSide.PORT, rightOarForce * getOarWaterResistance(ShipSide.PORT));
             if (canOarsApplyForce()) {
                 rightOarForce *= getOarPeriodicForceApplyment(ShipSide.PORT);
-                Vec3d righerLever = new Vec3d(0, 0, rightOarForce);
+                Vec3d rightLever = new Vec3d(0, 0, rightOarForce);
                 motion = motion.add(0, 0, rightOarForce * forceFactor);
-                Vec3d cross = new Vec3d(-rowForce.x, -rowForce.y, -rowForce.z).crossProduct(righerLever);
+                Vec3d cross = new Vec3d(-rowForce.x, -rowForce.y, -rowForce.z).crossProduct(rightLever);
                 rotation = rotation.add(cross.x, cross.y, cross.z);
             }
         }
@@ -793,10 +838,31 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         }
     }
 
+    public Vec3d getLanternPosition() {
+        Matrix mat = new Matrix();
+        mat.translate(posX, posY + waveHeight, posZ);
+        return this.getLocalLanternPosition(mat, 1);
+    }
+
+    public Vec3d getLocalLanternPosition(float t) {
+        return getLocalLanternPosition(new Matrix(), t);
+    }
+
+    private Vec3d getLocalLanternPosition(Matrix mat, float t) {
+        mat.rotate(getRotation(t));
+        mat.rotate(-(prevRotationYaw + (rotationYaw - prevRotationYaw) * t) * MathUtils.DEG_TO_RAD, 0, 1, 0);
+        float roll = getRoll(t);
+        if (roll != 0) {
+            mat.rotate(roll * MathUtils.DEG_TO_RAD, 0, 0, 1);
+        }
+        mat.scale(-1, -1, 1);
+        return mat.transform(new Vec3d(0.0, -0.9922452370881644, 1.6755452654813303));
+    }
+
     private Vec3d getOarlockPosition(ShipSide side) {
         float dir = side == ShipSide.PORT ? 1 : -1;
         Matrix mat = new Matrix();
-        mat.translate(posX, posY, posZ);
+        mat.translate(posX, posY + waveHeight, posZ);
         mat.rotate(rotation);
         mat.rotate(-rotationYaw * MathUtils.DEG_TO_RAD, 0, 1, 0);
         mat.translate(0.6 * dir, 1.15, -0.2);
@@ -954,20 +1020,29 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         return rot;
     }
 
+    public float getRoll(float delta) {
+        float timeSinceHit = getTimeSinceHit() - delta;
+        float damageTaken = Math.max(getDamageTaken() - delta, 0.0F);
+        if (timeSinceHit > 0) {
+            return MathHelper.sin(timeSinceHit) * timeSinceHit * damageTaken / 10 * getForwardDirection();
+        }
+        return 0;
+    }
+
     public double getWaveHeight(float delta) {
         return delta == 1 ? waveHeight : prevWaveHeight + (waveHeight - prevWaveHeight) * delta;
     }
 
     @Override
     protected void writeEntityToNBT(NBTTagCompound compound) {
-        if (isTarred()) {
-            compound.setBoolean("isTarred", isTarred());   
-        }
+        compound.setBoolean("isTarred", isTarred());
+        compound.setBoolean("hasLantern", hasLantern());
     }
 
     @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
         setIsTarred(compound.getBoolean("isTarred"));
+        setHasLantern(compound.getBoolean("hasLantern"));
     }
 
     @Override
@@ -1034,7 +1109,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     @SubscribeEvent
     public static void onLivingAttacked(LivingAttackEvent event) {
         Entity ridingEntity = event.getEntityLiving().getRidingEntity();
-    	if (ridingEntity instanceof EntityWeedwoodRowboat && event.getSource().getTrueSource() != null) {
+    	if (ridingEntity instanceof EntityWeedwoodRowboat && (event.getSource() instanceof EntityDamageSource == false || event.getSource().getTrueSource() != null)) {
             Vec3d location = event.getSource().getDamageLocation();
             Entity attacker = event.getSource().getImmediateSource();
             if (location != null && location.y + (attacker != null ? attacker.getEyeHeight() : 0) < ridingEntity.posY + ridingEntity.height / 2) {

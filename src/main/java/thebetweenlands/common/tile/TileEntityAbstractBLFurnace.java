@@ -9,14 +9,21 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.ItemStackHandler;
+
 import org.apache.commons.lang3.ArrayUtils;
+
+import com.google.common.base.Preconditions;
+
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.ArrayList;
+import java.util.function.BiFunction;
 import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
@@ -41,8 +48,14 @@ public abstract class TileEntityAbstractBLFurnace extends TileEntityBasicInvento
      * @param furnaceAmount The amount of furnaces, each one have (input, output, fuel & flux)
      */
     public TileEntityAbstractBLFurnace(String name, int furnaceAmount) {
-        super(furnaceAmount * 4, name);
-        this.furnaceAmount = furnaceAmount;
+        this(name, NonNullList.withSize(furnaceAmount * 4, ItemStack.EMPTY));
+    }
+    
+    public TileEntityAbstractBLFurnace(String name, NonNullList<ItemStack> inventory) {
+    	super(name, inventory, DEFAULT_HANDLER);
+    	Preconditions.checkArgument(inventory.size() % 4 == 0, "Furnace inventory size must be a multiple of 4");
+    	
+    	this.furnaceAmount = inventory.size() / 4;
         IntStream.range(0, furnaceAmount).forEach(i -> furnaceData.add(new FurnaceData(i)));
 
         inputSlots = furnaceData.stream().flatMapToInt(data -> IntStream.of(data.getInputSlot())).toArray();
@@ -74,7 +87,11 @@ public abstract class TileEntityAbstractBLFurnace extends TileEntityBasicInvento
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
-        for (FurnaceData data: furnaceData) {
+        this.readFurnaceData(nbt);
+    }
+    
+    protected void readFurnaceData(NBTTagCompound nbt) {
+    	for (FurnaceData data: furnaceData) {
             if (nbt.hasKey(NBT_BURN_TIME, Constants.NBT.TAG_SHORT) && nbt.hasKey(NBT_COOK_TIME, Constants.NBT.TAG_SHORT)) {
                 data.furnaceBurnTime = nbt.getShort(NBT_BURN_TIME);
                 data.furnaceCookTime = nbt.getShort(NBT_COOK_TIME);
@@ -91,7 +108,11 @@ public abstract class TileEntityAbstractBLFurnace extends TileEntityBasicInvento
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
-        for (FurnaceData data: furnaceData) {
+        return this.writeFurnaceData(nbt);
+    }
+    
+    protected NBTTagCompound writeFurnaceData(NBTTagCompound nbt) {
+    	for (FurnaceData data: furnaceData) {
             nbt.setShort(NBT_BURN_TIME + data.index, (short) data.furnaceBurnTime);
             nbt.setShort(NBT_COOK_TIME + data.index, (short) data.furnaceCookTime);
         }

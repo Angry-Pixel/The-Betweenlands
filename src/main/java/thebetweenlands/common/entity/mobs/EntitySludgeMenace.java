@@ -14,6 +14,8 @@ import com.google.common.base.Optional;
 import gnu.trove.map.TObjectIntMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
@@ -33,6 +35,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -42,15 +45,15 @@ import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraftforge.event.entity.EntityMountEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IBLBoss;
 import thebetweenlands.api.entity.IEntityMusic;
+import thebetweenlands.api.entity.IEntityPreventUnmount;
 import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.api.entity.spawning.IWeightProvider;
 import thebetweenlands.client.audio.EntityMusicLayers;
+import thebetweenlands.client.audio.EntitySound;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
@@ -67,7 +70,7 @@ import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.WeightedList;
 
-public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityScreenShake, IBLBoss, IEntityMusic {
+public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityScreenShake, IBLBoss, IEntityMusic, IEntityPreventUnmount {
 	protected static final byte EVENT_START_ACTION = 90;
 	protected static final byte EVENT_SLAM_HIT = 91;
 
@@ -159,7 +162,7 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	protected int spawnSeriesCount = 0;
 	protected BulgeType spawnSeriesType = null;
 
-	public static class DummyPart extends EntityMultipartDummy {
+	public static class DummyPart extends EntityMultipartDummy implements IEntityPreventUnmount {
 		public DummyPart(World world) {
 			super(world);
 		}
@@ -177,12 +180,25 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 		public boolean shouldRiderSit() {
 			return false;
 		}
+
+		@Override
+		public String getName() {
+			return getParent() != null ? getParent().getName(): super.getName();
+		}
+
+		@Override
+		public boolean isUnmountBlocked(EntityPlayer rider) {
+			return this.getParent() != null && this.getParent().parent instanceof IEntityPreventUnmount ? ((IEntityPreventUnmount) this.getParent().parent).isUnmountBlocked(rider) : false;
+		}
 	}
 
 	private final BossInfoServer bossInfo = (BossInfoServer)(new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
 
 	private int deathTicks = 0;
 	private Vec3d deathSpazzMotion = Vec3d.ZERO;
+
+	@SideOnly(Side.CLIENT)
+	private ISound livingSound;
 
 	public EntitySludgeMenace(World world) {
 		super(world);
@@ -299,8 +315,25 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	}
 
 	@Override
-	protected SoundEvent getAmbientSound() {
-		return SoundRegistry.SLUDGE_MENACE_LIVING;
+	public void playLivingSound() {
+		if(this.world.isRemote) {
+			this.playLivingSoundLoop();
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void playLivingSoundLoop() {
+		if(this.livingSound != null && !Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(this.livingSound)) {
+			this.livingSound = null;
+		}
+
+		if(this.livingSound == null) {
+			this.livingSound = new EntitySound<EntitySludgeMenace>(SoundRegistry.SLUDGE_MENACE_LIVING, SoundCategory.HOSTILE, this, e -> e.isEntityAlive());
+		}
+
+		if(!Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(this.livingSound)) {
+			Minecraft.getMinecraft().getSoundHandler().playSound(this.livingSound);
+		}
 	}
 
 	@Override
@@ -348,12 +381,12 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	protected boolean canDespawn() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean isNonBoss() {
 		return false;
 	}
-	
+
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
@@ -425,21 +458,21 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 			if(this.ticksExisted % 12 == 0 && this.getHealth() < this.getMaxHealth()) {
 				final double rangeXZ = 14;
 				final double rangeY = 13;
-				
+
 				List<EntityLivingBase> nearbyPlayers = this.world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(rangeXZ, rangeXZ, rangeXZ));
-				
+
 				Iterator<EntityLivingBase> it = nearbyPlayers.iterator();
 				while(it.hasNext()) {
 					EntityLivingBase living = it.next();
 					if(living.getDistance(this.posX, living.posY, this.posZ) > rangeXZ || Math.abs(living.posY - this.posY) > rangeY)
 						it.remove();
 				}
-				
+
 				if(nearbyPlayers.isEmpty()) {
 					this.heal(1);
 				}
 			}
-			
+
 			for(int i = 0; i < this.dummies.length; i++) {
 				DummyPart dummy = this.dummies[i];
 
@@ -496,7 +529,7 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 						break;
 					case SLUDGE_BALL:
 					case SLUDGE_BALL_SERIES:
-						mob = new EntitySludgeBall(this.world, this);
+						mob = new EntitySludgeBall(this.world, this, false);
 						break;
 					}
 
@@ -521,11 +554,13 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 					}
 
 					this.world.spawnEntity(mob);
+
+					this.playSound(SoundRegistry.SLUDGE_MENACE_SPIT, 1, 1);
 				}
 			}
 		}
 	}
-	
+
 	@Override
 	protected void onDeathUpdate() {
 		this.bossInfo.setPercent(0);
@@ -618,6 +653,8 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	@Override
 	public boolean attackEntityAsMob(Entity target) {
 		boolean damaged = super.attackEntityAsMob(target);
+
+		this.playSound(SoundRegistry.SLUDGE_MENACE_ATTACK, 1, 1);
 
 		if(this.actionState == ActionState.POKE) {
 			if(target == this.getAttackTarget() && this.actionTimer >= 40) {
@@ -835,7 +872,15 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	}
 
 	protected Vec3d updateSwingTargetTipPos(Vec3d armStartWorld, float maxArmLength, Vec3d dirFwd, Vec3d dirUp) {
+		float prevDrive = (this.actionTimer - 1) * 0.07f * (1.0f + (this.actionTimer - 1) / 300.0f * 2.0f);
 		float drive = this.actionTimer * 0.07f * (1.0f + this.actionTimer / 300.0f * 2.0f);
+
+		float prevDriveMod = prevDrive % ((float)Math.PI * 2);
+		float driveMod = drive % ((float)Math.PI * 2);
+
+		if(prevDriveMod <= 1f && driveMod > 1f) {
+			this.playSound(SoundRegistry.SLUDGE_MENACE_ATTACK, 1, 1);
+		}
 
 		if(this.actionTimer >= 300) {
 			this.startAction(ActionState.IDLE);
@@ -1070,6 +1115,7 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 		this.screenShakeTimer = 10;
 
 		this.playSound(SoundRegistry.WALL_SLAM, 2, 1);
+		this.playSound(SoundRegistry.SLUDGE_MENACE_ATTACK, 1, 1);
 
 		if(!this.world.isRemote) {
 			this.world.setEntityState(this, EVENT_SLAM_HIT);
@@ -1096,36 +1142,6 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 			bulge.renderSize = bulge.prevSize + (bulge.size - bulge.prevSize) * partialTicks;
 		}
 		return this.bulges;
-	}
-
-	@SubscribeEvent
-	public static void onEntityMountEvent(EntityMountEvent event) {
-		//Prevent target from dismounting while sucking out target
-
-		if(event.isDismounting() && !event.getWorldObj().isRemote) {
-			Entity passenger = event.getEntityMounting();
-			Entity mount = event.getEntityBeingMounted();
-
-			if(mount instanceof DummyPart && passenger.isEntityAlive() && mount.isEntityAlive()) {
-				DummyPart dummy = (DummyPart) mount;
-
-				if(dummy.getParent() != null && dummy.getParent().parent instanceof EntitySludgeMenace) {
-					EntitySludgeMenace menage = (EntitySludgeMenace) dummy.getParent().parent;
-
-					if(menage.actionState == ActionState.POKE) {
-						DummyPart endDummy = menage.dummies[menage.dummies.length - 1];
-
-						if(endDummy != null && endDummy.isEntityAlive()) {
-							List<Entity> passengers = endDummy.getPassengers();
-
-							if(!passengers.isEmpty() && passengers.get(0) == passenger) {
-								event.setCanceled(true);
-							}
-						}
-					}
-				}
-			}
-		}
 	}
 
 	protected static class AISludgeMenaceArmAttack extends AIArmAttack {
@@ -1247,5 +1263,24 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	@Override
 	public int getMusicLayer(EntityPlayer listener) {
 		return EntityMusicLayers.BOSS;
+	}
+
+	@Override
+	public boolean isUnmountBlocked(EntityPlayer rider) {
+		//Prevent target from dismounting while sucking out target
+
+		if(!this.world.isRemote && this.actionState == ActionState.POKE) {
+			DummyPart endDummy = this.dummies[this.dummies.length - 1];
+
+			if(endDummy != null && endDummy.isEntityAlive()) {
+				List<Entity> passengers = endDummy.getPassengers();
+
+				if(!passengers.isEmpty() && passengers.get(0) == rider) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 }

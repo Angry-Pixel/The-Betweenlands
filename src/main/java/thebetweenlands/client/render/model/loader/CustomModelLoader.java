@@ -20,6 +20,8 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.tuple.Pair;
+
+import thebetweenlands.client.render.entity.RenderDraeton;
 import thebetweenlands.client.render.model.loader.extension.*;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
@@ -233,6 +235,13 @@ public final class CustomModelLoader implements ICustomModelLoader {
 		//Normal loader
 		return new LoaderResult(actualLocation); 
 	}
+	
+	private void stitchLocation(TextureStitchEvent.Pre event, ModelResourceLocation location) {
+		IModel model = ModelLoaderRegistry.getModelOrLogError(location, "Failed loading model '" + location);
+		for(ResourceLocation texture : model.getTextures()) {
+			event.getMap().registerSprite(texture);
+		}
+	}
 
 	@SubscribeEvent
 	public void onTextureStitch(TextureStitchEvent.Pre event) {
@@ -242,13 +251,20 @@ public final class CustomModelLoader implements ICustomModelLoader {
 				Collection<ModelResourceLocation> locations = ((IFastTESRBakedModels) renderer).getModelLocations();
 				
 				for(ModelResourceLocation location : locations) {
-					IModel model = ModelLoaderRegistry.getModelOrLogError(location, "Failed loading model '" + location + "' for FastTESR");
-					for(ResourceLocation texture : model.getTextures()) {
-						event.getMap().registerSprite(texture);
-					}
+					this.stitchLocation(event, location);
 				}
 			}
 		}
+		
+		this.stitchLocation(event, RenderDraeton.FRAME_MAP_MODEL);
+		this.stitchLocation(event, RenderDraeton.FRAME_MODEL);
+	}
+	
+	private IBakedModel bakeLocation(IRegistry<ModelResourceLocation, IBakedModel> modelRegistry, ModelResourceLocation location) {
+		IModel model = ModelLoaderRegistry.getModelOrLogError(location, "Failed loading model '" + location);
+		IBakedModel bakedModel = model.bake(model.getDefaultState(), DefaultVertexFormats.BLOCK, (loc) -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(loc.toString()));
+		modelRegistry.putObject(location, bakedModel);
+		return bakedModel;
 	}
 	
 	@SubscribeEvent
@@ -262,14 +278,39 @@ public final class CustomModelLoader implements ICustomModelLoader {
 				Collection<ModelResourceLocation> locations = ((IFastTESRBakedModels) renderer).getModelLocations();
 				
 				for(ModelResourceLocation location : locations) {
-					IModel model = ModelLoaderRegistry.getModelOrLogError(location, "Failed loading model '" + location + "' for FastTESR");
-					IBakedModel bakedModel = model.bake(model.getDefaultState(), DefaultVertexFormats.BLOCK, (loc) -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(loc.toString()));
-					modelRegistry.putObject(location, bakedModel);
-					((IFastTESRBakedModels) renderer).onModelBaked(location, bakedModel);
+					((IFastTESRBakedModels) renderer).onModelBaked(location, this.bakeLocation(modelRegistry, location));
 				}
 			}
 		}
 		
+		this.bakeLocation(modelRegistry, RenderDraeton.FRAME_MAP_MODEL);
+		this.bakeLocation(modelRegistry, RenderDraeton.FRAME_MODEL);
+		
+		//Replace loader extensions models
+		Set<ModelResourceLocation> keys = modelRegistry.getKeys();
+		Map<ModelResourceLocation, IBakedModel> replacementMap = new HashMap<>();
+
+		//Get model replacements from extensions
+		for(LoaderExtension extension : this.loaderExtensions) {
+			for(ModelResourceLocation loc : keys) {
+				try {
+					IBakedModel replacement = extension.getModelReplacement(loc, modelRegistry.getObject(loc));
+					if(replacement != null) {
+						replacementMap.put(loc, replacement);
+					}
+				} catch(Exception ex) {
+					if(ex instanceof LoaderExtensionException == false) {
+						this.throwLoaderException(extension, ex);
+					} else {
+						throw ex;
+					}
+				}
+			}
+		}
+
+		this.replaceRegistryObjects(modelRegistry, replacementMap);
+		
+		//Register baked model dependencies
 		for(ModelResourceLocation modelLocation : modelRegistry.getKeys()) {
 			IBakedModel model = modelRegistry.getObject(modelLocation);
 
@@ -307,30 +348,6 @@ public final class CustomModelLoader implements ICustomModelLoader {
 				if(BetweenlandsConfig.DEBUG.debugModelLoader) TheBetweenlands.logger.warn(String.format("Additional baked model %s is null!", loadedModel.getKey()));
 			}
 		}
-
-		//Replace loader extensions models
-		Set<ModelResourceLocation> keys = modelRegistry.getKeys();
-		Map<ModelResourceLocation, IBakedModel> replacementMap = new HashMap<>();
-
-		//Get model replacements from extensions
-		for(LoaderExtension extension : this.loaderExtensions) {
-			for(ModelResourceLocation loc : keys) {
-				try {
-					IBakedModel replacement = extension.getModelReplacement(loc, modelRegistry.getObject(loc));
-					if(replacement != null) {
-						replacementMap.put(loc, replacement);
-					}
-				} catch(Exception ex) {
-					if(ex instanceof LoaderExtensionException == false) {
-						this.throwLoaderException(extension, ex);
-					} else {
-						throw ex;
-					}
-				}
-			}
-		}
-
-		this.replaceRegistryObjects(modelRegistry, replacementMap);
 	}
 
 	/**

@@ -11,7 +11,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.entity.mobs.EntityPyradFlame;
+import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
 
 public class ItemPyradFlame extends Item {
 	public ItemPyradFlame() {

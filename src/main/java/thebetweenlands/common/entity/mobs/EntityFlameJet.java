@@ -7,10 +7,10 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
-import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.network.clientbound.PacketParticle;
-import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityFlameJet extends EntityLiving {
 	public EntityLivingBase shootingEntity;
@@ -19,13 +19,13 @@ public class EntityFlameJet extends EntityLiving {
 		setSize(1F, 2.5F);
 		setEntityInvulnerable(true);
 	}
-	
-    public EntityFlameJet(World world, EntityLivingBase shooter) {
-    	super(world);
+
+	public EntityFlameJet(World world, EntityLivingBase shooter) {
+		super(world);
 		setSize(1F, 2.5F);
 		setEntityInvulnerable(true);
-    	this.shootingEntity = shooter;
-    }
+		this.shootingEntity = shooter;
+	}
 
 	@Override
 	protected void entityInit() {
@@ -38,9 +38,29 @@ public class EntityFlameJet extends EntityLiving {
 		if (!getEntityWorld().isRemote) {
 			if (ticksExisted > 20)
 				setDead();
+		} else {
 			if (ticksExisted == 1) {
-				TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.FLAME_JET, (float) posX, (float) posY, (float) posZ, 0F));
+				this.spawnFlameJetParticles();
 			}
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void spawnFlameJetParticles() {
+		for (double yy = this.posY; yy < this.posY + 2D; yy += 0.5D) {
+			double d0 = this.posX - 0.075F;
+			double d1 = yy;
+			double d2 = this.posZ - 0.075F;
+			double d3 = this.posX + 0.075F;
+			double d4 = this.posZ + 0.075F;
+			double d5 = this.posX;
+			double d6 = yy + 0.25F;
+			double d7 = this.posZ;
+			this.world.spawnParticle(EnumParticleTypes.FLAME, d0, d1, d2, 0.0D, 0.01D, 0.0D);
+			this.world.spawnParticle(EnumParticleTypes.FLAME, d0, d1, d4, 0.0D, 0.01D, 0.0D);
+			this.world.spawnParticle(EnumParticleTypes.FLAME, d3, d1, d2, 0.0D, 0.01D, 0.0D);
+			this.world.spawnParticle(EnumParticleTypes.FLAME, d3, d1, d4, 0.0D, 0.01D, 0.0D);
+			this.world.spawnParticle(EnumParticleTypes.FLAME, d5, d6, d7, 0.0D, 0.01D, 0.0D);
 		}
 	}
 
@@ -61,10 +81,10 @@ public class EntityFlameJet extends EntityLiving {
 				if (entity.getEntityBoundingBox().maxX >= getEntityBoundingBox().minX && entity.getEntityBoundingBox().minX <= getEntityBoundingBox().maxX)
 					if (entity.getEntityBoundingBox().maxZ >= getEntityBoundingBox().minZ && entity.getEntityBoundingBox().minZ <= getEntityBoundingBox().maxZ)
 						if (entity instanceof EntityLivingBase && !(entity instanceof EntityFlameJet))
-							 if (!entity.isImmuneToFire()) {
-								 boolean catch_fire = entity.attackEntityFrom(causeFlameJetDamage(this, shootingEntity), 5.0F);
-								 if (catch_fire)
-									 entity.setFire(5);
+							if (!entity.isImmuneToFire()) {
+								boolean catch_fire = entity.attackEntityFrom(causeFlameJetDamage(this, shootingEntity), 5.0F);
+								if (catch_fire)
+									entity.setFire(5);
 							}
 							else {
 								if (entity != shootingEntity)
@@ -74,7 +94,7 @@ public class EntityFlameJet extends EntityLiving {
 		}
 	}
 
-    public static DamageSource causeFlameJetDamage(EntityFlameJet flame_jet, @Nullable Entity indirectEntityIn) {
-        return indirectEntityIn == null ? (new EntityDamageSourceIndirect("onFire", flame_jet, flame_jet)).setFireDamage().setProjectile() : (new EntityDamageSourceIndirect("flamejet", flame_jet, indirectEntityIn)).setFireDamage().setProjectile();
-    }
+	public static DamageSource causeFlameJetDamage(EntityFlameJet flame_jet, @Nullable Entity indirectEntityIn) {
+		return indirectEntityIn == null ? (new EntityDamageSourceIndirect("onFire", flame_jet, flame_jet)).setFireDamage().setProjectile() : (new EntityDamageSourceIndirect("flamejet", flame_jet, indirectEntityIn)).setFireDamage().setProjectile();
+	}
 }

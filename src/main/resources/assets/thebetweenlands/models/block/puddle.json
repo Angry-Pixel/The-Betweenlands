@@ -1,20 +1,15 @@
 {
   "parent": "block/thin_block",
   "textures": {
-    "particle": "thebetweenlands:fluids/swamp_water_still",
-    "water": "thebetweenlands:fluids/swamp_water_still"
+    "particle": "thebetweenlands:fluids/swamp_water_puddle_base",
+    "water": "thebetweenlands:fluids/swamp_water_puddle_base"
   },
   "elements": [
     {
-      "from": [ 0, 0, 0 ],
-      "to": [ 16, 1, 16 ],
+      "from": [ 0, 0.2, 0 ],
+      "to": [ 16, 0.2, 16 ],
       "faces": {
-        "down":  { "uv": [ 0,  0, 16, 16 ], "texture": "#water", "cullface": "down" },
-        "up":    { "uv": [ 0,  0, 16, 16 ], "texture": "#water", "tintindex": 0 },
-        "north": { "uv": [ 0, 15, 16, 16 ], "texture": "#water", "cullface": "north", "tintindex": 0 },
-        "south": { "uv": [ 0, 15, 16, 16 ], "texture": "#water", "cullface": "south", "tintindex": 0 },
-        "west":  { "uv": [ 0, 15, 16, 16 ], "texture": "#water", "cullface": "west", "tintindex": 0 },
-        "east":  { "uv": [ 0, 15, 16, 16 ], "texture": "#water", "cullface": "east", "tintindex": 0 }
+        "up":    { "uv": [ 0,  0, 16, 16 ], "texture": "#water", "tintindex": 0 }
       }
     }
   ]

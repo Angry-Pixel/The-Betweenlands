@@ -22,6 +22,7 @@ import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.event.AttachChunkStorageCapabilitiesEvent;
 import thebetweenlands.api.storage.IChunkStorage;
 import thebetweenlands.api.storage.ILocalStorage;
+import thebetweenlands.api.storage.ILocalStorageHandle;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalStorageReference;
 import thebetweenlands.api.storage.StorageID;
@@ -117,19 +118,15 @@ public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
 		Iterator<LocalStorageReference> refIT = this.localStorageReferences.iterator();
 		while(refIT.hasNext()) {
 			LocalStorageReference ref = refIT.next();
-			ILocalStorage storage = this.worldStorage.getLocalStorageHandler().getLocalStorage(ref.getID());
 
-			//Not cached, load from file
-			if(!this.worldStorage.getWorld().isRemote && storage == null) {
-				storage = this.worldStorage.getLocalStorageHandler().loadLocalStorage(ref);
-			}
-
-			//Load reference if properly linked
-			if(storage != null && storage.getLinkedChunks().contains(this.chunk.getPos())) {
-				storage.loadReference(ref);
-			} else if(!this.worldStorage.getWorld().isRemote) {
-				//Local storage doesn't exist or chunk shouldn't be linked to local storage, remove link
-				refIT.remove();
+			try(ILocalStorageHandle handle = this.worldStorage.getLocalStorageHandler().getOrLoadLocalStorage(ref)) {
+				//Load reference if properly linked
+				if(handle != null && handle.get().getLinkedChunks().contains(this.chunk.getPos())) {
+					handle.get().loadReference(ref);
+				} else if(!this.worldStorage.getWorld().isRemote) {
+					//Local storage doesn't exist or chunk shouldn't be linked to local storage, remove link
+					refIT.remove();
+				}
 			}
 		}
 		return nbt;
@@ -154,7 +151,9 @@ public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
 		if(!this.localStorageReferences.isEmpty()) {
 			NBTTagList localReferenceList = new NBTTagList();
 			for(LocalStorageReference ref : this.localStorageReferences) {
-				localReferenceList.appendTag(ref.writeToNBT(new NBTTagCompound()));
+				if(ref.getHandle() == null) {
+					localReferenceList.appendTag(ref.writeToNBT(new NBTTagCompound()));
+				}
 			}
 			nbt.setTag("LocalStorageReferences", localReferenceList);
 		}

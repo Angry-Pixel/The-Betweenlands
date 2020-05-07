@@ -16,8 +16,10 @@ public class AdvancementCriterionRegistry {
     public static final HasAdvancementTrigger HAS_ADVANCEMENT = CriteriaTriggers.register(new HasAdvancementTrigger());
     public static final EquipTrigger EQUIP = CriteriaTriggers.register(new EquipTrigger());
     public static final RightClickBlockTrigger CLICK_BLOCK = CriteriaTriggers.register(new RightClickBlockTrigger());
+    
     public static final NoCriteriaTrigger CAVINGROPE_PLACED = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "cavingrope_placed")));
-
+    public static final NoCriteriaTrigger CHIROMAW_MATRIARCH_NEST_CLAIMED = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "chiromaw_matriarch_nest_claimed")));
+    public static final NoCriteriaTrigger CHIROMAW_MATRIARCH_NEST_RAIDED = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "chiromaw_matriarch_nest_raided")));
     public static final NoCriteriaTrigger PEAT_FIRE = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "peat_fire")));
     public static final NoCriteriaTrigger PYRAD_AGGRO = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "pyrad_aggro")));
     public static final NoCriteriaTrigger CRAGROCK_TOP = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "cragrock_tower_top")));

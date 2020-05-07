@@ -1,0 +1,6 @@
+{
+  "parent": "item/bow",
+  "textures": {
+    "layer0": "thebetweenlands:items/predator_bow_poison_0"
+  }
+}

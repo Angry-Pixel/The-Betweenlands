@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.MessageBase;
+import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsPart;
 import thebetweenlands.common.network.clientbound.MessageAddLocalStorage;
 import thebetweenlands.common.network.clientbound.MessageAmateMap;
 import thebetweenlands.common.network.clientbound.MessageBlockGuardData;
@@ -26,10 +27,12 @@ import thebetweenlands.common.network.clientbound.MessagePlayEntityIdle;
 import thebetweenlands.common.network.clientbound.MessagePowerRingParticles;
 import thebetweenlands.common.network.clientbound.MessageRemoveLocalStorage;
 import thebetweenlands.common.network.clientbound.MessageRiftSound;
+import thebetweenlands.common.network.clientbound.MessageShockArrowHit;
 import thebetweenlands.common.network.clientbound.MessageShowFoodSicknessLine;
 import thebetweenlands.common.network.clientbound.MessageSoundRipple;
 import thebetweenlands.common.network.clientbound.MessageSummonPeatMummyParticles;
 import thebetweenlands.common.network.clientbound.MessageSyncChunkStorage;
+import thebetweenlands.common.network.clientbound.MessageSyncDraetonLeakages;
 import thebetweenlands.common.network.clientbound.MessageSyncEntityCapabilities;
 import thebetweenlands.common.network.clientbound.MessageSyncEnvironmentEventData;
 import thebetweenlands.common.network.clientbound.MessageSyncGameRules;
@@ -38,13 +41,16 @@ import thebetweenlands.common.network.clientbound.MessageSyncLocalStorageReferen
 import thebetweenlands.common.network.clientbound.MessageSyncStaticAspects;
 import thebetweenlands.common.network.clientbound.MessageWeedwoodBushRustle;
 import thebetweenlands.common.network.clientbound.MessageWightVolatileParticles;
+import thebetweenlands.common.network.serverbound.MessageChiromawDoubleJump;
 import thebetweenlands.common.network.serverbound.MessageConnectCavingRope;
 import thebetweenlands.common.network.serverbound.MessageEquipItem;
 import thebetweenlands.common.network.serverbound.MessageExtendedReach;
 import thebetweenlands.common.network.serverbound.MessageFlightState;
 import thebetweenlands.common.network.serverbound.MessageItemNaming;
 import thebetweenlands.common.network.serverbound.MessageOpenPouch;
+import thebetweenlands.common.network.serverbound.MessagePurgeDraetonBurner;
 import thebetweenlands.common.network.serverbound.MessageRow;
+import thebetweenlands.common.network.serverbound.MessageSetDraetonAnchorPos;
 import thebetweenlands.common.network.serverbound.MessageSetGalleryUrl;
 import thebetweenlands.common.network.serverbound.MessageUpdatePuppeteerState;
 import thebetweenlands.common.network.serverbound.MessageUpdateRingKeybindState;
@@ -83,6 +89,9 @@ public class MessageRegistry {
 		registerMessage(MessageSoundRipple.class, Side.CLIENT);
 		registerMessage(MessageSyncGameRules.class, Side.CLIENT);
 		registerMessage(MessageCureDecayParticles.class, Side.CLIENT);
+		registerMessage(MessageUpdateDraetonPhysicsPart.class, Side.CLIENT);
+		registerMessage(MessageSyncDraetonLeakages.class, Side.CLIENT);
+		registerMessage(MessageShockArrowHit.class, Side.CLIENT);
 		
 		registerMessage(MessageEquipItem.class, Side.SERVER);
 		registerMessage(MessageOpenPouch.class, Side.SERVER);
@@ -94,6 +103,10 @@ public class MessageRegistry {
 		registerMessage(MessageConnectCavingRope.class, Side.SERVER);
 		registerMessage(MessageExtendedReach.class, Side.SERVER);
 		registerMessage(MessageSetGalleryUrl.class, Side.SERVER);
+		registerMessage(MessageUpdateDraetonPhysicsPart.class, Side.SERVER);
+		registerMessage(MessageSetDraetonAnchorPos.class, Side.SERVER);
+		registerMessage(MessagePurgeDraetonBurner.class, Side.SERVER);
+		registerMessage(MessageChiromawDoubleJump.class, Side.SERVER);
 	}
 
 	private static void registerMessage(Class<? extends MessageBase> messageType, Side toSide) {

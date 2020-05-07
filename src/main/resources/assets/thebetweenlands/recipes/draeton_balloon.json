@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LLL",
+    "RRR",
+    "R R"
+  ],
+  "key": {
+    "L": {
+      "item": "thebetweenlands:items_misc",
+      "data": 4
+    },
+    "R": {
+      "item": "thebetweenlands:items_misc",
+      "data": 23
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:draeton_balloon"
+  }
+}

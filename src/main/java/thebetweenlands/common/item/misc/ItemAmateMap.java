@@ -219,7 +219,7 @@ public class ItemAmateMap extends ItemMap implements ICustomMeshCallback {
                                 if (tower.isTopConquered()) {
                                     done = true;
                                 }
-                            } else if (location == Location.FORTRESS || location == Location.SPIRIT_TREE) {
+                            } else if (location == Location.FORTRESS || location == Location.SPIRIT_TREE || location == Location.SLUDGE_WORM_DUNGEON) {
                                 LocationGuarded guarded = (LocationGuarded) storage;
                                 if (guarded.getGuard().isClear(world)) {
                                     done = true;

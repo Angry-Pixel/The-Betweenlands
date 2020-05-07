@@ -10,12 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.entity.EntityDecayPitTarget;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenIdolHeads;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenSludgeWormDungeon;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenSpawnerStructure;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenChiromawNest;
 
 
 //MINE!!
@@ -157,14 +152,14 @@ public class TestItemChimp extends Item {
 				//playerIn.setHeldItem(hand, null);
 			}
 	*/
-			WorldGenSludgeWormDungeon dungeon = new WorldGenSludgeWormDungeon();
+		/*		WorldGenSludgeWormDungeon dungeon = new WorldGenSludgeWormDungeon();
 			//dungeon.makeMaze(worldIn, itemRand, pos.up().add(1, 0, 1));
 			//dungeon.generate(worldIn, itemRand, pos.up(59).add(3, 0, 3)); //generates up
 			dungeon.generate(worldIn, itemRand, pos.up(1).add(3, 0, 3)); //generates down
 			//dungeon.generateTower(worldIn, itemRand, pos.add(15, 0, 15));
 			//dungeon.generateDecayPit(worldIn, itemRand, pos.up(14));
 	
-		/*	
+		
 	
 			EntityDecayPitTarget target = new EntityDecayPitTarget(worldIn);
 			target.setPosition(pos.getX() + 0.5F, pos.getY() + 8, pos.getZ() + 0.5F);
@@ -191,7 +186,12 @@ public class TestItemChimp extends Item {
 				EntityMovingWall wall = new EntityMovingWall(worldIn);
 				wall.setPosition(pos.getX() + 0.5F, pos.getY() + 2F, pos.getZ() + 0.5F);
 				//wall.motionZ = 0.05F; //X or Z movement - renderer rotates automagic atm
-				worldIn.spawnEntity(wall);*/
+				worldIn.spawnEntity(wall);
+			*/	
+				
+				WorldGenChiromawNest nest = new WorldGenChiromawNest();
+				nest .generate(worldIn, itemRand, pos.up());
+				
 		}
 
 		return EnumActionResult.SUCCESS;

@@ -39,10 +39,19 @@ public class SoundRegistry {
     public static final BLSoundEvent AMBIENT_WIGHT_FORTRESS = reg("ambient_wight_fortress");
     public static final BLSoundEvent AMBIENT_SPOOPY = reg("ambient_spoopy");
     public static final BLSoundEvent AMBIENT_SWAMP = reg("ambient_swamp");
+    public static final BLSoundEvent AMBIENT_SWAMP_DENSE_FOG = reg("ambient_swamp_dense_fog");
     public static final BLSoundEvent AMBIENT_WATER = reg("ambient_water");
     public static final BLSoundEvent AMBIENT_FROSTY = reg("ambient_frosty");
     public static final BLSoundEvent AMBIENT_SNOWFALL = reg("ambient_snowfall");
     public static final BLSoundEvent AMBIENT_SLUDGE_WORM_DUNGEON = reg("ambient_sludge_worm_dungeon");
+    public static final BLSoundEvent AMBIENT_FLOATING_ISLAND = reg("ambient_floating_island");
+    public static final BLSoundEvent LIGHTNING = reg("lightning");
+    public static final BLSoundEvent THUNDER = reg("thunder");
+    public static final BLSoundEvent RAIN_STRONG = reg("rain_strong");
+    public static final BLSoundEvent RAIN_MEDIUM = reg("rain_medium");
+    public static final BLSoundEvent RAIN_WEAK = reg("rain_weak");
+    public static final BLSoundEvent RAIN_DRIPPING = reg("rain_dripping");
+    public static final BLSoundEvent RAIN_MOUNT = reg("rain_mount");
     // Miscellaneous
     public static final BLSoundEvent CRUMBLE = reg("crumble");
     public static final BLSoundEvent FIG = reg("fig");
@@ -68,6 +77,24 @@ public class SoundRegistry {
     public static final BLSoundEvent WALL_SLAM = reg("wall_slam");
     public static final BLSoundEvent POOP_JET = reg("poop_jet");
     public static final BLSoundEvent PIT_FALL = reg("pit_fall");
+    public static final BLSoundEvent DRAETON_TURN = reg("draeton_turn");
+    public static final BLSoundEvent DRAETON_DAMAGE = reg("draeton_damage");
+    public static final BLSoundEvent DRAETON_BURNER = reg("draeton_burner");
+    public static final BLSoundEvent DRAETON_PULLEY = reg("draeton_pulley");
+    public static final BLSoundEvent DRAETON_ANCHOR = reg("draeton_anchor");
+    public static final BLSoundEvent DRAETON_LEAK_START = reg("draeton_leak_start");
+    public static final BLSoundEvent DRAETON_LEAK_LOOP = reg("draeton_leak_loop");
+    public static final BLSoundEvent DRAETON_PLUG = reg("draeton_plug");
+    public static final BLSoundEvent DRAETON_POP = reg("draeton_pop");
+    public static final BLSoundEvent GREEBLING_FALL = reg("greebling_fall");
+    public static final BLSoundEvent GREEBLING_HEY = reg("greebling_hey");
+    public static final BLSoundEvent GREEBLING_GIGGLE = reg("greebling_giggle");
+    public static final BLSoundEvent CHIROMAW_GREEBLING_RIDER_LIVING = reg("chirowmaw_greebling_rider_living");
+    public static final BLSoundEvent SLINGSHOT_CHARGE = reg("slingshot_charge");
+    public static final BLSoundEvent SLINGSHOT_HIT = reg("slingshot_hit");
+    public static final BLSoundEvent SLINGSHOT_SHOOT = reg("slingshot_shoot");
+    public static final BLSoundEvent ZAP = reg("zap");
+    public static final BLSoundEvent CHIROBARB_ERUPTER = reg("chirobarb_erupter");
     // Hostiles
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");
     public static final BLSoundEvent ANGLER_DEATH = reg("angler_death");
@@ -189,6 +216,27 @@ public class SoundRegistry {
     public static final BLSoundEvent BARRISHEE_DEATH = reg("barrishee_death");
     public static final BLSoundEvent BARRISHEE_STEP = reg("barrishee_step");
     public static final BLSoundEvent BARRISHEE_SCREAM = reg("barrishee_scream");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_BARB_FIRE = reg("chiromaw_matriarch_barb_fire");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_BARB_HIT = reg("chiromaw_matriarch_barb_hit");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_LIVING = reg("chiromaw_matriarch_living");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_HURT = reg("chiromaw_matriarch_hurt");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_DEATH = reg("chiromaw_matriarch_death");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_POOP = reg("chiromaw_matriarch_poop");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_SPLAT = reg("chiromaw_matriarch_splat");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_LAND = reg("chiromaw_matriarch_land");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_FLAP = reg("chiromaw_matriarch_flap");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_RELEASE = reg("chiromaw_matriarch_release");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_GRAB = reg("chiromaw_matriarch_grab");
+    public static final BLSoundEvent CHIROMAW_MATRIARCH_ROAR = reg("chiromaw_matriarch_roar");
+    public static final BLSoundEvent CHIROMAW_HATCHLING_LIVING = reg("chiromaw_hatchling_living");
+    public static final BLSoundEvent CHIROMAW_HATCHLING_HUNGRY_SHORT = reg("chiromaw_hatchling_hungry_short");
+    public static final BLSoundEvent CHIROMAW_HATCHLING_HUNGRY_LONG = reg("chiromaw_hatchling_hungry_long");
+    public static final BLSoundEvent CHIROMAW_HATCHLING_EAT = reg("chiromaw_hatchling_eat");
+    public static final BLSoundEvent CHIROMAW_HATCHLING_NO = reg("chiromaw_hatchling_no");
+    public static final BLSoundEvent CHIROMAW_HATCH = reg("chiromaw_hatch");
+    public static final BLSoundEvent CHIROMAW_HATCHLING_TRANSFORM = reg("chiromaw_hatchling_transform");
+    public static final BLSoundEvent CHIROMAW_HATCHLING_INSIDE_EGG = reg("chiromaw_hatchling_inside_egg");
+
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");
     public static final BLSoundEvent FROG_DEATH = reg("frog_death");
@@ -210,6 +258,9 @@ public class SoundRegistry {
     public static final BLSoundEvent SLUDGE_MENACE_DEATH = reg("sludge_menace_death");
     public static final BLSoundEvent SLUDGE_MENACE_HURT = reg("sludge_menace_hurt");
     public static final BLSoundEvent SLUDGE_MENACE_LIVING = reg("sludge_menace_living");
+    public static final BLSoundEvent SLUDGE_MENACE_ATTACK = reg("sludge_menace_attack");
+    public static final BLSoundEvent SLUDGE_MENACE_SPIT = reg("sludge_menace_spit");
+    public static final BLSoundEvent SLUDGE_MENACE_SPAWN = reg("sludge_menace_spawn");
     public static final BLSoundEvent SPORELING_DEATH = reg("sporeling_death");
     public static final BLSoundEvent SPORELING_HURT = reg("sporeling_hurt");
     public static final BLSoundEvent SPORELING_LIVING = reg("sporeling_living");

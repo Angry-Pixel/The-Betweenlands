@@ -14,13 +14,17 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.api.entity.IPullerEntityProvider;
 import thebetweenlands.common.entity.ai.EntityAIFlyingWander;
 import thebetweenlands.common.entity.ai.EntityAISeekRainShelter;
+import thebetweenlands.common.entity.draeton.DraetonPhysicsPart;
+import thebetweenlands.common.entity.draeton.EntityDraeton;
+import thebetweenlands.common.entity.draeton.EntityPullerFirefly;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
-public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
+public class EntityFirefly extends EntityFlyingCreature implements IEntityBL, IPullerEntityProvider<EntityPullerFirefly> {
 	public static final IAttribute GLOW_STRENGTH_ATTRIB = (new RangedAttribute(null, "bl.fireflyGlowStrength", 1, 0, 8)).setDescription("Firefly glow strength").setShouldWatch(true);
 	public static final IAttribute GLOW_START_CHANCE = (new RangedAttribute(null, "bl.fireflyGlowStartChance", 0.0025D, 0, 1)).setDescription("Firefly glow start chance per tick");
 	public static final IAttribute GLOW_STOP_CHANCE = (new RangedAttribute(null, "bl.fireflyGlowStopChance", 0.00083D, 0, 1)).setDescription("Firefly glow stop chance per tick");
@@ -166,5 +170,10 @@ public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 	@Override
 	public boolean shouldRenderInPass(int pass) {
 		return pass == 0 || pass == 1;
+	}
+
+	@Override
+	public EntityPullerFirefly createPuller(EntityDraeton draeton, DraetonPhysicsPart puller) {
+		return new EntityPullerFirefly(draeton.world, draeton, puller);
 	}
 }

@@ -170,6 +170,6 @@ public class ItemDentrothystFluidVial extends UniversalBucket implements ItemReg
 	}
 
 	public boolean canFillWith(ItemStack stack, FluidStack fluid) {
-		return fluid.getFluid() == thebetweenlands.common.registries.FluidRegistry.FOG;
+		return fluid.getFluid() == thebetweenlands.common.registries.FluidRegistry.FOG || fluid.getFluid() == thebetweenlands.common.registries.FluidRegistry.SHALLOWBREATH;
 	}
 }

@@ -1,0 +1,50 @@
+{
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "thebetweenlands:items/simple_slingshot"
+	},
+    "display": {
+        "thirdperson_righthand": {
+            "rotation": [ 0, 180, 45 ],
+            "translation": [ 0, 2, 1 ],
+            "scale": [ 0.55, 0.55, 0.55 ]
+        },
+        "thirdperson_lefthand": {
+            "rotation": [ 0, 0, -45 ],
+            "translation": [ 0, 2, 1 ],
+            "scale": [ 0.55, 0.55, 0.55 ]
+        },
+        "firstperson_righthand": {
+            "rotation": [ 5, 180, 35 ],
+            "translation": [ 1.13, 1.5, 1.13],
+            "scale": [ 0.55, 0.55, 0.55 ]
+        },
+        "firstperson_lefthand": {
+            "rotation": [ 5, 0, -35 ],
+            "translation": [ 1.13, 1.5, 1.13],
+            "scale": [ 0.55, 0.55, 0.55 ]
+        }
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "pulling": 1
+            },
+            "model": "thebetweenlands:item/simple_slingshot_pulling_0"
+        },
+        {
+            "predicate": {
+                "pulling": 1,
+                "pull": 0.65
+            },
+            "model": "thebetweenlands:item/simple_slingshot_pulling_1"
+        },
+        {
+            "predicate": {
+                "pulling": 1,
+                "pull": 0.9
+            },
+            "model": "thebetweenlands:item/simple_slingshot_pulling_2"
+        }
+    ]
+}

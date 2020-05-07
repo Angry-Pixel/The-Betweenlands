@@ -176,7 +176,7 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 	 * @return
 	 */
 	public boolean canBlockDamageSource(ItemStack stack, EntityLivingBase attacked, EnumHand hand, DamageSource source) {
-		if (attacked.isHandActive() && attacked.getActiveHand() == hand && !source.isUnblockable() && attacked.isActiveItemStackBlocking()) {
+		if (attacked.isHandActive() && attacked.getActiveHand() == hand && !source.isUnblockable() && attacked.isActiveItemStackBlocking() && (source instanceof EntityDamageSource == false || source.getTrueSource() != null)) {
 			Vec3d vec3d = source.getDamageLocation();
 			if (vec3d != null) {
 				Vec3d vec3d1 = attacked.getLook(1.0F);

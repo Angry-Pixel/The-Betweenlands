@@ -71,6 +71,11 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 
 		this.targetTasks.addTask(0, new EntityAIHurtByTargetImproved(this, true));
 		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 3, true, true, null).setUnseenMemoryTicks(120));
+		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityFrog.class, 3, true, true, null).setUnseenMemoryTicks(120));
+		this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<>(this, EntityChiromaw.class, 3, true, true, null).setUnseenMemoryTicks(120));
+		this.targetTasks.addTask(4, new EntityAINearestAttackableTarget<>(this, EntityMireSnail.class, 3, true, true, null).setUnseenMemoryTicks(120));
+		this.targetTasks.addTask(5, new EntityAINearestAttackableTarget<>(this, EntityBloodSnail.class, 3, true, true, null).setUnseenMemoryTicks(120));
+		this.targetTasks.addTask(6, new EntityAINearestAttackableTarget<>(this, EntityDragonFly.class, 3, true, true, null).setUnseenMemoryTicks(120));
 	}
 
 	@Override

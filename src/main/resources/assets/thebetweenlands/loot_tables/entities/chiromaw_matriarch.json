@@ -1,0 +1,90 @@
+{
+	"pools": [
+		{
+			"name": "lurker",
+			"rolls": 1,
+			"conditions": [],
+			"entries": [
+				{
+					"type": "item",
+					"name": "thebetweenlands:chirobarb_erupter",
+					"weight": 1
+				}
+			]
+		},
+		{
+			"name": "spook_candy",
+			"rolls": 2,
+			"conditions": [
+				{
+					"condition": "killed_by_player"
+				},
+				{
+					"condition": "entity_properties",
+					"entity": "this",
+					"properties": {
+						"thebetweenlands:is_event_active": {
+							"event": "thebetweenlands:spook",
+							"active": "true"
+						}
+					}
+				}
+			],
+			"entries": [
+				{
+					"type": "empty",
+					"name": "nothing",
+					"functions": [],
+					"weight": 6
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:candy_blue",
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:candy_red",
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:candy_yellow",
+					"weight": 1
+				}
+			]
+		},
+		{
+			"name": "winter_mince_pie",
+			"rolls": 1,
+			"conditions": [
+				{
+					"condition": "killed_by_player"
+				},
+				{
+					"condition": "entity_properties",
+					"entity": "this",
+					"properties": {
+						"thebetweenlands:is_event_active": {
+							"event": "thebetweenlands:winter",
+							"active": "true"
+						}
+					}
+				}
+			],
+			"entries": [
+				{
+					"type": "empty",
+					"name": "nothing",
+					"functions": [],
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:mince_pie",
+					"weight": 1
+				}
+			]
+		}
+	]
+}

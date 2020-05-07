@@ -1,13 +1,23 @@
 package thebetweenlands.client.handler;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
+import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -18,8 +28,6 @@ import thebetweenlands.api.event.ArmSwingSpeedEvent;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
-
-import java.util.*;
 
 public class ElixirClientHandler {
 
@@ -100,6 +108,7 @@ public class ElixirClientHandler {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         EntityPlayer player = Minecraft.getMinecraft().player;
+        
         if(event.phase == TickEvent.Phase.END) {
             if(player != null && player.world != null && player.world.isRemote && player == Minecraft.getMinecraft().player) {
                 if(ElixirEffectRegistry.EFFECT_HUNTERSSENSE.isActive(player)) {
@@ -185,7 +194,27 @@ public class ElixirClientHandler {
             } else {
                 this.entityTrails.clear();
             }
+            
+			if(player != null) {
+				updatePlayerRootboundTicks(player);
+			}
         }
+    }
+    
+    //Ewww... but only way to set player rotation before rendering?...
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void onFogColors(FogColors event) {
+    	EntityPlayer player = Minecraft.getMinecraft().player;
+    	if(player != null) {
+    		NBTTagCompound nbt = player.getEntityData();
+    		
+	    	if(ElixirEffectRegistry.EFFECT_BASILISK.isActive(player) || ElixirEffectRegistry.EFFECT_PETRIFY.isActive(player)) {
+	    		player.prevRotationPitch = player.rotationPitch = nbt.getFloat("thebetweenlands.petrify.pitch");
+	    		player.prevRotationYaw = player.rotationYaw = nbt.getFloat("thebetweenlands.petrify.yaw");
+	    		player.prevRotationYawHead = player.rotationYawHead = nbt.getFloat("thebetweenlands.petrify.yawHead");
+			}
+    	}
     }
 
     @SubscribeEvent
@@ -205,4 +234,31 @@ public class ElixirClientHandler {
             }
         }
     }
+
+	@SideOnly(Side.CLIENT)
+	private void updatePlayerRootboundTicks(EntityLivingBase entity) {
+		NBTTagCompound nbt = entity.getEntityData();
+		if(entity.getActivePotionEffect(ElixirEffectRegistry.ROOT_BOUND) != null || ElixirEffectRegistry.EFFECT_BASILISK.isActive(entity) || ElixirEffectRegistry.EFFECT_PETRIFY.isActive(entity)) {
+			nbt.setInteger("thebetweenlands.stuckTicks", 5);
+		} else {
+			int rootBoundTicks = nbt.getInteger("thebetweenlands.stuckTicks");
+			if(rootBoundTicks > 1) {
+				nbt.setInteger("thebetweenlands.stuckTicks", rootBoundTicks - 1);
+			} else {
+				nbt.removeTag("thebetweenlands.stuckTicks");
+			}
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void onFovUpdate(FOVUpdateEvent event) {
+		EntityPlayer entity = event.getEntity();
+		NBTTagCompound nbt = entity.getEntityData();
+		
+		//NBT is necessary so that FOV doesn't flicker when potion wears off .-.
+		if(entity.getActivePotionEffect(ElixirEffectRegistry.ROOT_BOUND) != null || ElixirEffectRegistry.EFFECT_BASILISK.isActive(entity) || ElixirEffectRegistry.EFFECT_PETRIFY.isActive(entity) || nbt.hasKey("thebetweenlands.stuckTicks")) {
+			event.setNewfov(1);
+		}
+	}
 }

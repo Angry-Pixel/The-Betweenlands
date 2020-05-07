@@ -9,6 +9,9 @@ import javax.annotation.Nullable;
 import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleBreaking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
@@ -23,6 +26,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -32,11 +36,10 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import thebetweenlands.common.TheBetweenlands;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.structure.BlockCompactedMudSlope;
 import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
-import thebetweenlands.common.network.clientbound.PacketParticle;
-import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
@@ -44,6 +47,8 @@ import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBl
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class EntityCCGroundSpawner extends EntityProximitySpawner {
+	private static final byte EVENT_GOOP_PARTICLES = 100;
+	
 	private static final DataParameter<Boolean> IS_WORLD_SPANWED = EntityDataManager.createKey(EntityCCGroundSpawner.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> SPAWN_COUNT = EntityDataManager.createKey(EntityCCGroundSpawner.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> CAN_BE_REMOVED_SAFELY = EntityDataManager.createKey(EntityCCGroundSpawner.class, DataSerializers.BOOLEAN);
@@ -125,7 +130,7 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 		super.onUpdate();
 
 		if (!getEntityWorld().isRemote) {
-			if(isWorldSpawned() && !isBloodSky(getEntityWorld()))
+			if(isWorldSpawned() && !isSpawnEventActive(getEntityWorld()))
 				setDead();
 
 			if (getEntityWorld().getTotalWorldTime() % 60 == 0)
@@ -143,7 +148,7 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 		this.prevPosZ = this.lastTickPosZ = this.posZ;
 	}
 
-	public boolean isBloodSky(World world) {
+	public boolean isSpawnEventActive(World world) {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
         if(worldStorage.getEnvironmentEventRegistry().bloodSky.isActive())
             return true;
@@ -157,7 +162,7 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 			if(getCanBeRemovedSafely() && canBeRemovedNow())
 				setDead();
 			if (getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL) {
-				if(isWorldSpawned() && !isBloodSky(getEntityWorld()))
+				if(isWorldSpawned() && !isSpawnEventActive(getEntityWorld()))
 					return null;
 				List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, proximityBox());
 				if(list.stream().filter(e -> e instanceof EntityCryptCrawler).count() >= 4)
@@ -256,13 +261,28 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	@Override
 	protected void performPostSpawnaction(Entity targetEntity, @Nullable Entity entitySpawned) {
 		if(!getEntityWorld().isRemote) {
-			TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.GOOP_SPLAT, (float) posX, (float)posY + 0.25F, (float)posZ, 0F));
+			this.world.setEntityState(this, EVENT_GOOP_PARTICLES);
+			
 			entitySpawned.motionY += 0.5D;
 			if(isWorldSpawned() && getSpawnCount() >= maxUseCount())
 				setCanBeRemovedSafely(true);
 		}
 	}
-
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void handleStatusUpdate(byte id) {
+		super.handleStatusUpdate(id);
+		
+		if(id == EVENT_GOOP_PARTICLES) {
+			for (int count = 0; count <= 200; ++count) {
+				Particle fx = new ParticleBreaking.SnowballFactory().createParticle(EnumParticleTypes.SNOWBALL.getParticleID(), world, this.posX + (world.rand.nextDouble() - 0.5D) , this.posY + world.rand.nextDouble() + 0.25F, this.posZ + (world.rand.nextDouble() - 0.5D), 0, 0, 0, 0);
+				fx.setRBGColorF(48F, 64F, 91F);
+				Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+			}
+		}
+	}
+	
 	@Override
 	protected float getProximityHorizontal() {
 		return 8F;

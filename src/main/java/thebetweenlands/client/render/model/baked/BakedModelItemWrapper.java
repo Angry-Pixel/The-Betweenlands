@@ -1,5 +1,7 @@
 package thebetweenlands.client.render.model.baked;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,9 +9,9 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 
-import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.state.IBlockState;
@@ -19,27 +21,37 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ItemOverride;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
+import net.minecraftforge.common.model.IModelState;
+import thebetweenlands.client.render.model.loader.IBakedModelDependant;
 
-public class BakedModelItemWrapper implements IBakedModel {
-	private final IBakedModel transformsModel, quadModel;
+public class BakedModelItemWrapper implements IBakedModel, IBakedModelDependant {
+	private final Collection<ResourceLocation> dependencies;
+	private final IBakedModel transformsModel, bakedQuadModel;
 	private boolean shouldInheritOverrides = true;
 	private boolean shouldCacheOverrideModels = true;
 	private ItemOverrideList wrappedOverrideList;
 
 	/**
 	 * Creates a baked model that returns the quads of quadModel and the transforms and item overrides list of transformsModel.
-	 * @param transformsModel The model with the transforms and item overrides list to be used
-	 * @param quadModel The model with the quads to be used
+	 * @param transformsModel The baked model with the transforms and item overrides list to be used
+	 * @param bakedQuadModel The baked model with the quads to be used
+	 * @param quadModel Dependencies of the IModel of bakedQuadModel
 	 */
-	public BakedModelItemWrapper(IBakedModel transformsModel, IBakedModel quadModel) {
+	public BakedModelItemWrapper(IBakedModel transformsModel, IBakedModel bakedQuadModel, Collection<ResourceLocation> dependencies) {
 		this.transformsModel = transformsModel;
-		this.quadModel = quadModel;
+		this.bakedQuadModel = bakedQuadModel;
+		this.dependencies = dependencies;
 	}
 
 	/**
@@ -63,18 +75,64 @@ public class BakedModelItemWrapper implements IBakedModel {
 	}
 
 	@Override
+	public Collection<ModelResourceLocation> getDependencies(ResourceLocation modelLocation) {
+		List<ModelResourceLocation> dependencies = new ArrayList<>();
+
+		for(ResourceLocation location : this.dependencies) {
+			dependencies.add(ModelLoader.getInventoryVariant(location.toString()));
+		}
+
+		if(this.bakedQuadModel instanceof IBakedModelDependant) {
+			dependencies.addAll(((IBakedModelDependant) this.bakedQuadModel).getDependencies(modelLocation));
+		}
+
+		return dependencies;
+	}
+
+	@Override
+	public void setDependencies(ResourceLocation modelLocation, Map<ModelResourceLocation, IBakedModel> dependencies) {
+		if(this.bakedQuadModel instanceof IBakedModelDependant) {
+			((IBakedModelDependant) this.bakedQuadModel).setDependencies(modelLocation, dependencies);
+		}
+	}
+
+	@Override
+	public IModelState getModelState(IModel dependecyModel) {
+		if(this.bakedQuadModel instanceof IBakedModelDependant) {
+			return ((IBakedModelDependant) this.bakedQuadModel).getModelState(dependecyModel);
+		}
+		return IBakedModelDependant.super.getModelState(dependecyModel);
+	}
+
+	@Override
+	public VertexFormat getVertexFormat(IModel dependencyModel) {
+		if(this.bakedQuadModel instanceof IBakedModelDependant) {
+			return ((IBakedModelDependant) this.bakedQuadModel).getVertexFormat(dependencyModel);
+		}
+		return IBakedModelDependant.super.getVertexFormat(dependencyModel);
+	}
+
+	@Override
+	public Function<ResourceLocation, TextureAtlasSprite> getTextureGetter(IModel dependencyModel) {
+		if(this.bakedQuadModel instanceof IBakedModelDependant) {
+			return ((IBakedModelDependant) this.bakedQuadModel).getTextureGetter(dependencyModel);
+		}
+		return IBakedModelDependant.super.getTextureGetter(dependencyModel);
+	}
+
+	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-		return this.quadModel.getQuads(state, side, rand);
+		return this.bakedQuadModel.getQuads(state, side, rand);
 	}
 
 	@Override
 	public boolean isAmbientOcclusion() {
-		return this.quadModel.isAmbientOcclusion();
+		return this.bakedQuadModel.isAmbientOcclusion();
 	}
 
 	@Override
 	public boolean isGui3d() {
-		return this.quadModel.isGui3d();
+		return this.bakedQuadModel.isGui3d();
 	}
 
 	@Override
@@ -84,7 +142,7 @@ public class BakedModelItemWrapper implements IBakedModel {
 
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
-		return this.quadModel.getParticleTexture();
+		return this.bakedQuadModel.getParticleTexture();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -99,7 +157,7 @@ public class BakedModelItemWrapper implements IBakedModel {
 			return this.transformsModel.getOverrides();
 		} else {
 			if(this.wrappedOverrideList == null)
-				this.wrappedOverrideList = new WrappedItemOverrideList(this.quadModel.getOverrides());
+				this.wrappedOverrideList = new WrappedItemOverrideList(this.bakedQuadModel.getOverrides(), this.dependencies);
 			return this.wrappedOverrideList;
 		}
 	}
@@ -116,12 +174,14 @@ public class BakedModelItemWrapper implements IBakedModel {
 	}
 
 	private static final class WrappedItemOverrideList extends ItemOverrideList {
+		private final Collection<ResourceLocation> dependencies;
 		private final Map<IBakedModel, IBakedModel> cachedModels = new HashMap<IBakedModel, IBakedModel>();
 		private final ItemOverrideList parent;
 
-		protected WrappedItemOverrideList(ItemOverrideList parent) {
+		protected WrappedItemOverrideList(ItemOverrideList parent, Collection<ResourceLocation> dependencies) {
 			super(ImmutableList.of());
 			this.parent = parent;
+			this.dependencies = dependencies;
 		}
 
 		@SuppressWarnings("deprecation")
@@ -139,7 +199,7 @@ public class BakedModelItemWrapper implements IBakedModel {
 		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity) {
 			//Make sure that the correct baked model is passed in here, so that if the object is cast later on it doesn't cause issues
 			BakedModelItemWrapper wrapper = ((BakedModelItemWrapper)originalModel);
-			IBakedModel quadModel = wrapper.quadModel;
+			IBakedModel quadModel = wrapper.bakedQuadModel;
 			IBakedModel newModel = this.parent.handleItemState(quadModel, stack, world, entity);
 			//This makes sure that all baked models are wrapped properly
 			if(newModel instanceof BakedModelItemWrapper == false) {
@@ -147,10 +207,10 @@ public class BakedModelItemWrapper implements IBakedModel {
 				if(wrapper.shouldCacheOverrideModels) {
 					IBakedModel cachedModel = this.cachedModels.get(newModel);
 					if(cachedModel == null)
-						this.cachedModels.put(newModel, cachedModel = new BakedModelItemWrapper(wrapper.transformsModel, newModel).setInheritOverrides(wrapper.shouldInheritOverrides));
+						this.cachedModels.put(newModel, cachedModel = new BakedModelItemWrapper(wrapper.transformsModel, newModel, this.dependencies).setInheritOverrides(wrapper.shouldInheritOverrides));
 					return cachedModel;
 				}
-				return new BakedModelItemWrapper(wrapper.transformsModel, newModel).setInheritOverrides(wrapper.shouldInheritOverrides);
+				return new BakedModelItemWrapper(wrapper.transformsModel, newModel, this.dependencies).setInheritOverrides(wrapper.shouldInheritOverrides);
 			}
 			return newModel;
 		}

@@ -12,6 +12,7 @@ import org.objectweb.asm.tree.MethodNode;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.launchwrapper.IClassTransformer;
+import thebetweenlands.core.module.AddRainParticlesHookTransformer;
 import thebetweenlands.core.module.PreRenderShadersHookTransformer;
 import thebetweenlands.core.module.SplashPotionInstantHookTransformer;
 import thebetweenlands.core.module.SplashPotionNotInstantHookTransformer;
@@ -26,6 +27,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 		registerModule(new PreRenderShadersHookTransformer());
 		registerModule(new SplashPotionInstantHookTransformer());
 		registerModule(new SplashPotionNotInstantHookTransformer());
+		registerModule(new AddRainParticlesHookTransformer());
 	}
 
 	public TheBetweenlandsClassTransformer() {
