@@ -3,10 +3,12 @@ package thebetweenlands.client.render.model.armor;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 
 @SideOnly(Side.CLIENT)
 public class ModelAncientArmor extends ModelBodyAttachment {
@@ -73,8 +75,6 @@ public class ModelAncientArmor extends ModelBodyAttachment {
 	public ModelRenderer chestParts[];
 	public ModelRenderer legParts[];
 	public ModelRenderer bootParts[];
-
-	private EntityEquipmentSlot slot;
 
 	public ModelAncientArmor() {
 		textureWidth = 128;
@@ -425,71 +425,40 @@ public class ModelAncientArmor extends ModelBodyAttachment {
 				boots_right_main,
 				boots_left_main
 		};
-	}
-
-	public void renderPostScaledPartBoots() {
-		boots_right_main.showModel = true;
-		boots_left_main.showModel = true;
-		GlStateManager.pushMatrix();
-		for(int x = 0; x < bootParts.length; x++)
-			bootParts[x].postRender(0.06625F);
-		GlStateManager.popMatrix();
-	}
-
-	public void renderPostScaledPartLegs() {
-		chainmail_leg_right.showModel = true;
-		chainmail_leg_left.showModel = true;
-		leggings_mainrotation.showModel = true;
-		GlStateManager.pushMatrix();
-		for(int x = 0; x < legParts.length; x++)
-			legParts[x].postRender(0.0675F);
-		GlStateManager.popMatrix();
-	}
-
-	public void renderPostScaledPartChest() {
-		chestplate_mainrotation.showModel = true;
-		chestplate_armrotation_right.showModel = true;
-		chestplate_armrotation_left.showModel = true;
-		GlStateManager.pushMatrix();
-		for(int x = 0; x < chestParts.length; x++)
-			chestParts[x].postRender(0.0675F);
-		GlStateManager.popMatrix();
-	}
-
-	public void renderPostScaledPartHelm() {
-		helmet_mainrotation.showModel = true;
-		GlStateManager.pushMatrix();
-		for(int x = 0; x < helmetParts.length; x++)
-			helmetParts[x].postRender(0.0675F);
-		GlStateManager.popMatrix();
-	}
-
-	public void setUpModel(Entity entity, EntityEquipmentSlot slot) {
-		this.slot = slot;
-
+		
 		setVisible(false);
-
-		if(entity instanceof EntityArmorStand)
-			helmet_mainrotation.rotateAngleY = entity.rotationYaw * ((float) Math.PI / 180F);
 
 		helmet_mainrotation.setRotationPoint(0F, -1.0F, 0F);
 		chestplate_mainrotation.setRotationPoint(0F, 0F, 0F);
-		if(entity.isSneaking()) {
-			chestplate_armrotation_right.setRotationPoint(0F, 0F, -0.2F);
-			chestplate_armrotation_left.setRotationPoint(0F, 0F, -0.2F);
-			leggings_mainrotation.setRotationPoint(0F, 8F, -0.4F);
-		}
-		else {
-			chestplate_armrotation_right.setRotationPoint(0F, 0F, 0F);
-			chestplate_armrotation_left.setRotationPoint(0F, 0F, 0F);
-			leggings_mainrotation.setRotationPoint(0F, 10F, 0F);
-		}
 		boots_left_toes.setRotationPoint(0.0F, 10F, -2.0F);
 		boots_right_toes.setRotationPoint(0.0F, 10F, -2.0F);
 		boots_right_main.setRotationPoint(0F, 0F, 0F);
 		boots_left_main.setRotationPoint(0F, 0F, 0F);
 		chainmail_leg_right.setRotationPoint(0F, 0F, 0F);
 		chainmail_leg_left.setRotationPoint(0F, 0F, 0F);
+		chestplate_armrotation_right.setRotationPoint(0F, 0F, 0F);
+		chestplate_armrotation_left.setRotationPoint(0F, 0F, 0F);
+	}
+
+	public void setBootsVisible() {
+		boots_right_main.showModel = true;
+		boots_left_main.showModel = true;
+	}
+
+	public void setLegsVisible() {
+		chainmail_leg_right.showModel = true;
+		chainmail_leg_left.showModel = true;
+		leggings_mainrotation.showModel = true;
+	}
+
+	public void setChestVisible() {
+		chestplate_mainrotation.showModel = true;
+		chestplate_armrotation_right.showModel = true;
+		chestplate_armrotation_left.showModel = true;
+	}
+
+	public void setHelmVisible() {
+		helmet_mainrotation.showModel = true;
 	}
 
 	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
@@ -499,7 +468,19 @@ public class ModelAncientArmor extends ModelBodyAttachment {
 	}
 
 	@Override
-	public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
+		if(entitylivingbaseIn.isSneaking()) {
+			chestplate_armrotation_right.setRotationPoint(0F, 0F, -0.2F);
+			chestplate_armrotation_left.setRotationPoint(0F, 0F, -0.2F);
+			leggings_mainrotation.setRotationPoint(0F, 8F, -0.4F);
+		} else {
+			chestplate_armrotation_right.setRotationPoint(0F, 0F, 0F);
+			chestplate_armrotation_left.setRotationPoint(0F, 0F, 0F);
+			leggings_mainrotation.setRotationPoint(0F, 10F, 0F);
+		}
+	}
+	
+	public void resetVisibilities() {
 		helmet_mainrotation.showModel = false;
 		chestplate_mainrotation.showModel = false;
 		chestplate_armrotation_right.showModel = false;
@@ -509,31 +490,64 @@ public class ModelAncientArmor extends ModelBodyAttachment {
 		leggings_mainrotation.showModel = false;
 		chainmail_leg_right.showModel = false;
 		chainmail_leg_left.showModel = false;
-
-		if(this.slot != null) {
-			switch(this.slot) {
-			case FEET:
-				this.renderPostScaledPartBoots();
-				break;
-			case LEGS:
-				this.renderPostScaledPartLegs();
-				break;
-			case CHEST:
-				this.renderPostScaledPartChest();
-				break;
-			case HEAD:
-				this.renderPostScaledPartHelm();
-				break;
-			}
-		} else {
-			this.renderPostScaledPartBoots();
-			this.renderPostScaledPartLegs();
-			this.renderPostScaledPartChest();
-			this.renderPostScaledPartHelm();
+	}
+	
+	public void setVisibilities(EntityEquipmentSlot slot) {
+		switch(slot) {
+		case HEAD:
+			this.setHelmVisible();
+			break;
+		case CHEST:
+			this.setChestVisible();
+			break;
+		case LEGS:
+			this.setLegsVisible();
+			break;
+		case FEET:
+			this.setBootsVisible();
+			break;
 		}
-
-		//Reset so that renderers that do not call the forge armor hook can still render properly
-		this.slot = null;
+	}
+	
+	@Override
+	public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+		this.resetVisibilities();
+		
+		if(this.bipedHeadwear.showModel || this.bipedHead.showModel) {
+			this.setHelmVisible();
+			
+			GlStateManager.pushMatrix();
+			for(int x = 0; x < helmetParts.length; x++)
+				helmetParts[x].postRender(0.0675F);
+			GlStateManager.popMatrix();
+		}
+		
+		if(this.bipedBody.showModel && (this.bipedLeftArm.showModel || this.bipedRightArm.showModel)) {
+			this.setChestVisible();
+			
+			GlStateManager.pushMatrix();
+			for(int x = 0; x < chestParts.length; x++)
+				chestParts[x].postRender(0.0675F);
+			GlStateManager.popMatrix();
+		}
+		
+		if(this.bipedBody.showModel && (this.bipedLeftLeg.showModel || this.bipedRightLeg.showModel)) {
+			this.setLegsVisible();
+			
+			GlStateManager.pushMatrix();
+			for(int x = 0; x < legParts.length; x++)
+				legParts[x].postRender(0.0675F);
+			GlStateManager.popMatrix();
+		}
+		
+		if(!this.bipedBody.showModel && (this.bipedLeftLeg.showModel || this.bipedRightLeg.showModel)) {
+			this.setBootsVisible();
+			
+			GlStateManager.pushMatrix();
+			for(int x = 0; x < bootParts.length; x++)
+				bootParts[x].postRender(0.06625F);
+			GlStateManager.popMatrix();
+		}
 
 		super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 	}

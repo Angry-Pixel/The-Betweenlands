@@ -80,7 +80,7 @@ public class ItemAncientArmor extends ItemBLArmor {
 		if(model == null) {
 			model = new ModelAncientArmor();
 		}
-		model.setUpModel(entityLiving, armorSlot);
+		model.setVisibilities(armorSlot);
 		return model;
 	}
 
