@@ -111,6 +111,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		tasks.addTask(5, new EntityChiromawMatriarch.AIPoop(this));
 		targetTasks.addTask(1, new AIFindNearestTarget<EntityPlayer>(this, EntityPlayer.class, true, 16D).setUnseenMemoryTicks(160));
 		targetTasks.addTask(1, new AIFindNearestTarget<EntityVillager>(this, EntityVillager.class, true, 16D).setUnseenMemoryTicks(160));
+		targetTasks.addTask(1, new AIFindNearestTarget<EntityChiromawGreeblingRider>(this, EntityChiromawGreeblingRider.class, true, 16D).setUnseenMemoryTicks(160));
 	}
 
 	@Override
