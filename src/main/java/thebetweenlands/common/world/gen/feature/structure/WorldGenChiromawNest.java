@@ -144,6 +144,8 @@ public class WorldGenChiromawNest extends WorldGenerator {
 		if (rand.nextBoolean()) {
 			EntityChiromawHatchling egg = new EntityChiromawHatchling(world);
 			egg.setPosition(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+			if (rand.nextBoolean())
+				egg.setIsWild(true);
 			world.spawnEntity(egg);
 		}
 		else if(rand.nextBoolean() && rand.nextBoolean()) {
