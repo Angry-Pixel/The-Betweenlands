@@ -254,10 +254,8 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 			return false;
 		}
 		if (!(entityTarget instanceof EntityCreeper) && !(entityTarget instanceof EntityGhast)) {
-			if (entityTarget instanceof EntityChiromawTame) {
-				EntityChiromawTame chiromawIn = (EntityChiromawTame) entityTarget;
-
-				if (chiromawIn.getOwner() == entityTarget2) {
+			if (entityTarget instanceof EntityChiromawTame || entityTarget instanceof EntityPullerChiromaw) {
+				if (((EntityTameableBL) entityTarget).getOwner() != null && getOwner() !=null && ((EntityTameableBL) entityTarget).getOwner() == getOwner()) {
 					return false;
 				}
 			}
@@ -266,6 +264,13 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 			return false;
 		}
 	}
+
+    public void setRevengeTarget(@Nullable EntityLivingBase entity) {
+    	super.setRevengeTarget(entity);
+    	if (entity instanceof EntityChiromawTame || entity instanceof EntityPullerChiromaw)
+			if (((EntityTameableBL) entity).getOwner() != null && getOwner() !=null && ((EntityTameableBL) entity).getOwner() == getOwner())
+				setRevengeTarget(null);
+    }
 
 	@Override
 	public boolean attackEntityAsMob(Entity entity) { 
