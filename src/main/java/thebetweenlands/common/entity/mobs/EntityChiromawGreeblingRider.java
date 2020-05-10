@@ -119,7 +119,8 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 	protected void updateAITasks() {
 		super.updateAITasks();
 		if (getIsHanging())
-			setIsHanging(false);
+			if (!this.world.isRemote)
+				setIsHanging(false);
 	}
 
 	public boolean getIsShooting() {
