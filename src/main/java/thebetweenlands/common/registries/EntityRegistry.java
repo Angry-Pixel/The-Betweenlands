@@ -177,7 +177,7 @@ public class EntityRegistry {
 		registerEntity(EntitySpiritTreeFaceMask.class, "spirit_tree_face_mask", 64, 20, false);
 		registerEntity(EntityRootSprite.class, "root_sprite", 0x686868, 0x9fe530);
 		registerEntity(EntityPredatorArrowGuide.class, "predator_arrow_guide");
-		
+
 		registerEntity(EntitySludgeWorm.class, "small_sludge_worm", 0x3A2F0B, 0x5F4C0B);
 		registerEntity(EntityTinySludgeWorm.class, "tiny_sludge_worm", 0x3A2F0B, 0x5F4C0B);
 		registerEntity(EntityLargeSludgeWorm.class, "large_sludge_worm", 0x3A2F0B, 0x5F4C0B);
@@ -185,7 +185,7 @@ public class EntityRegistry {
 		registerEntity(EntityTinySludgeWormHelper.class, "tiny_sludge_worm_helper", 0x3A2F0B, 0x5F4C0B);
 
 		registerEntity(EntityLurkerSkinRaft.class, "lurker_skin_raft");
-		
+
 		registerEntity(EntityShambler.class, "shambler", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityWallLamprey.class, "wall_lamprey", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityMovingSpawnerHole.class, "moving_spawner_hole", 0x0B3B0B, 0xDBA901);
@@ -210,24 +210,27 @@ public class EntityRegistry {
 		registerEntity(EntitySludgeMenace.DummyPart.class, "sludge_menace_multipart_dummy", 64, 20, false);
 		registerEntity(EntityShock.class, "shock", 64, 20, false);
 		registerEntity(EntityBLLightningBolt.class, "lightning", 100, 20, false);
-		
+
 		registerEntity(EntityMultipartDummy.class, "multipart_dummy", 64, 20, false);
-		
+
 		registerEntity(EntityDraeton.class, "draeton", 80, 3, true);
 		registerEntity(EntityPullerDragonfly.class, "draeton_dragonfly", 80, 3, true);
 		registerEntity(EntityPullerFirefly.class, "draeton_firefly", 80, 3, true);
 		registerEntity(EntityPullerChiromaw.class, "draeton_chiromaw_tamed", 80, 3, true);
-		
+
 		registerEntity(EntityChiromawGreeblingRider.class, "chiromaw_greebling_rider", 0x3F5A69, 0xA16A77);
 		registerEntity(EntityGreeblingVolarpadFloater.class, "greebling_volarpad_floater", 64, 20, true);
 		registerEntity(EntityBetweenstonePebble.class, "betweenstone_pebble", 64, 20, true);
-		
+
 		registerEntity(EntityWormGroundSpawner.class, "worm_ground_spawner");
 		registerEntity(EntityChiromawMatriarch.class, "chiromaw_matriarch", 0x3F5A69, 0xA16A77, 128, 3, true);
 		registerEntity(EntityChiromawDroppings.class, "chiromaw_droppings", 64, 20, true);
 		registerEntity(EntityChiromawHatchling.class, "chiromaw_hatchling", 64, 3, true);
 		registerEntity(EntityChiromawTame.class, "chiromaw_tame", 128, 3, true);
 		registerEntity(EntityGreeblingCorpse.class, "greebling_corpse", 80, 20, false);
+
+		// TODO Re-enable when testing. Too early W.I.P. dev spoilers are getting on my nerves :P
+		// registerEntity(EntityAnadia.class, "anadia", 0x243B0B, 0x00FFFF);
 	}
 
 	private static int id = 0;
