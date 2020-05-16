@@ -13,6 +13,7 @@ import com.google.common.base.Optional;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -83,6 +84,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 	private static final DataParameter<Integer> HATCH_COUNT = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.VARINT);
 	private static final DataParameter<ItemStack> FOOD_CRAVED = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.ITEM_STACK);
 	private static final DataParameter<Boolean> ELECTRIC = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IS_WILD = EntityDataManager.createKey(EntityChiromawHatchling.class, DataSerializers.BOOLEAN);
 
 	public EntityChiromawHatchling(World world) {
 		super(world);
@@ -105,6 +107,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		dataManager.register(HATCH_COUNT, 0);
 		dataManager.register(FOOD_CRAVED, ItemStack.EMPTY);
 		dataManager.register(ELECTRIC, false);
+		dataManager.register(IS_WILD, false);
 	}
 
 	@Override
@@ -119,7 +122,15 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 			this.setEatingCooldown(0);
 			this.setAmountEaten(MAX_FOOD_NEEDED);
 		}
-		 */		
+		 */	
+
+		//Wild Eggs
+		if (!getEntityWorld().isRemote && getIsWild()) {
+			this.setHasHatched(true);
+			this.setEatingCooldown(0);
+			this.setAmountEaten(MAX_FOOD_NEEDED);
+		}
+
 		// STAGE 1
 		if (!getHasHatched()) {
 			if (!getEntityWorld().isRemote) {
@@ -591,6 +602,14 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		return dataManager.get(FOOD_CRAVED);
 	}
 
+	public void setIsWild(boolean wild) {
+		dataManager.set(IS_WILD, wild);
+	}
+
+	public boolean getIsWild() {
+		return dataManager.get(IS_WILD);
+	}
+
 	@Override
 	public void onKillCommand() {
 		setDead();
@@ -650,16 +669,23 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 
 	@Override
 	protected Entity getEntitySpawned() {
-		EntityChiromawTame entity = new EntityChiromawTame(getEntityWorld());
-		entity.setOwnerId(getOwnerId());
-		if(hasCustomName())
-			entity.setCustomNameTag(getCustomNameTag());
-		if(getElectricBoogaloo())
-			entity.setElectricBoogaloo(true);
-		entity.setLocationAndAngles(posX, posY + 1F, posZ, feederRotation + rotationYaw, 0.0F);
-		entity.rotationYawHead = entity.rotationYaw;
-		entity.renderYawOffset = entity.rotationYaw;
-		entity.setMoveForward(0.1F);
+		EntityLiving entity = null;
+		if (getIsWild()) {
+			entity = new EntityChiromaw(getEntityWorld());
+		} else {
+			entity = new EntityChiromawTame(getEntityWorld());
+			((EntityChiromawTame) entity).setOwnerId(getOwnerId());
+			if (hasCustomName())
+				entity.setCustomNameTag(getCustomNameTag());
+			if (getElectricBoogaloo())
+				((EntityChiromawTame) entity).setElectricBoogaloo(true);
+		}
+		if (entity != null) {
+			entity.setLocationAndAngles(posX, posY + 1F, posZ, feederRotation + rotationYaw, 0.0F);
+			entity.rotationYawHead = entity.rotationYaw;
+			entity.renderYawOffset = entity.rotationYaw;
+			((EntityLiving) entity).setMoveForward(0.1F);
+		}
 		return entity;
 	}
 
@@ -697,6 +723,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		nbt.setInteger("TransformCount", getTransformCount());
 		nbt.setInteger("Facing", this.facing.ordinal());
 		nbt.setBoolean("Electric", getElectricBoogaloo());
+		nbt.setBoolean("Wild", getIsWild());
 
 		NBTTagCompound nbtFood = new NBTTagCompound();
 		getFoodCraved().writeToNBT(nbtFood);
@@ -730,6 +757,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 		setTransformCount(nbt.getInteger("TransformCount"));
 		this.facing = EnumFacing.VALUES[nbt.getInteger("Facing")];
 		setElectricBoogaloo(nbt.getBoolean("Electric"));
+		setIsWild(nbt.getBoolean("Wild"));
 
 		NBTTagCompound nbtFood = (NBTTagCompound) nbt.getTag("Items");
 		ItemStack stack = new ItemStack(ItemRegistry.SNAIL_FLESH_RAW);
