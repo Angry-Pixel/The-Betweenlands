@@ -450,40 +450,40 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         @Override
 		public void onUpdateMoveHelper() {
             if (action == EntityMoveHelper.Action.MOVE_TO && !anadia.getNavigator().noPath()) {
-                double d0 = posX - anadia.posX;
-                double d1 = posY - anadia.posY;
-                double d2 = posZ - anadia.posZ;
-                double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-                d3 = (double) MathHelper.sqrt(d3);
-                d1 = d1 / d3;
-                float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
-                anadia.rotationYaw = limitAngle(anadia.rotationYaw, f, 90.0F);
+                double targetX = posX - anadia.posX;
+                double targetY = posY - anadia.posY;
+                double targetZ = posZ - anadia.posZ;
+                double targetDistance = targetX * targetX + targetY * targetY + targetZ * targetZ;
+                targetDistance = (double) MathHelper.sqrt(targetDistance);
+                targetY = targetY / targetDistance;
+                float targetAngle = (float) (MathHelper.atan2(targetZ, targetX) * (180D / Math.PI)) - 90.0F;
+                anadia.rotationYaw = limitAngle(anadia.rotationYaw, targetAngle, 90.0F);
                 anadia.renderYawOffset = anadia.rotationYaw;
-                float f1 = (float) (speed * anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
-                anadia.setAIMoveSpeed(anadia.getAIMoveSpeed() + (f1 - anadia.getAIMoveSpeed()) * 0.125F);
-                double d4 = Math.sin((double) (anadia.ticksExisted + anadia.getEntityId()) * 0.5D) * 0.05D;
-                double d5 = Math.cos((double) (anadia.rotationYaw * 0.017453292F));
-                double d6 = Math.sin((double) (anadia.rotationYaw * 0.017453292F));
-                anadia.motionX += d4 * d5;
-                anadia.motionZ += d4 * d6;
-                d4 = Math.sin((double) (anadia.ticksExisted + anadia.getEntityId()) * 0.75D) * 0.05D;
-                anadia.motionY += d4 * (d6 + d5) * 0.25D;
-                anadia.motionY += (double) anadia.getAIMoveSpeed() * d1 * 0.1D;
+                float travelSpeed = (float) (speed * anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+                anadia.setAIMoveSpeed(anadia.getAIMoveSpeed() + (travelSpeed - anadia.getAIMoveSpeed()) * 0.125F);
+                double wiggleSpeed = Math.sin((double) (anadia.ticksExisted + anadia.getEntityId()) * 0.5D) * 0.05D;
+                double wiggleOffsetX = Math.cos((double) (anadia.rotationYaw * anadia.getFishSize() * 0.017453292F));
+                double wiggleOffsetZ = Math.sin((double) (anadia.rotationYaw * anadia.getFishSize() * 0.017453292F));
+                anadia.motionX += wiggleSpeed * wiggleOffsetX;
+                anadia.motionZ += wiggleSpeed * wiggleOffsetZ;
+                wiggleSpeed = Math.sin((double) (anadia.ticksExisted + anadia.getEntityId()) * 0.75D) * 0.05D;
+                anadia.motionY += wiggleSpeed * (wiggleOffsetZ + wiggleOffsetX) * 0.25D;
+                anadia.motionY += (double) anadia.getAIMoveSpeed() * targetY * 0.1D;
                 EntityLookHelper entitylookhelper = anadia.getLookHelper();
-                double d7 = anadia.posX + d0 / d3 * 2.0D;
-                double d8 = (double) anadia.getEyeHeight() + anadia.posY + d1 / d3;
-                double d9 = anadia.posZ + d2 / d3 * 2.0D;
-                double d10 = entitylookhelper.getLookPosX();
-                double d11 = entitylookhelper.getLookPosY();
-                double d12 = entitylookhelper.getLookPosZ();
+                double targetDirectionX = anadia.posX + targetX / targetDistance * 2.0D;
+                double targetDirectionY = (double) anadia.getEyeHeight() + anadia.posY + targetY / targetDistance;
+                double targetDirectionZ = anadia.posZ + targetZ / targetDistance * 2.0D;
+                double lookX = entitylookhelper.getLookPosX();
+                double lookY = entitylookhelper.getLookPosY();
+                double lookZ = entitylookhelper.getLookPosZ();
 
                 if (!entitylookhelper.getIsLooking()) {
-                    d10 = d7;
-                    d11 = d8;
-                    d12 = d9;
+                	lookX = targetDirectionX;
+                	lookY = targetDirectionY;
+                	lookZ = targetDirectionZ;
                 }
 
-                anadia.getLookHelper().setLookPosition(d10 + (d7 - d10) * 0.125D, d11 + (d8 - d11) * 0.125D, d12 + (d9 - d12) * 0.125D, 10.0F, 40.0F);
+                anadia.getLookHelper().setLookPosition(lookX + (targetDirectionX - lookX) * 0.125D, lookY + (targetDirectionY - lookY) * 0.125D, lookZ + (targetDirectionZ - lookZ) * 0.125D, 10.0F, 40.0F);
             } else {
                 anadia.setAIMoveSpeed(0.0F);
             }
