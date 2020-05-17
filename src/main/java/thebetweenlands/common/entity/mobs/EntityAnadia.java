@@ -234,11 +234,11 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	@Override
 	public void onLivingUpdate() {
 		if (getEntityWorld().isRemote) {
-			if (isInWater()) {
+		/*	if (isInWater()) {
 				Vec3d vec3d = getLook(0.0F);
 				for (int i = 0; i < 2; ++i)
 					getEntityWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX + (rand.nextDouble() - 0.5D) * (double) width - vec3d.x , posY + rand.nextDouble() * (double) height - vec3d.y , posZ + (rand.nextDouble() - 0.5D) * (double) width - vec3d.z, 0.0D, 0.0D, 0.0D, new int[0]);
-			}
+			}*/
 		}
 
 		if (inWater) {
