@@ -299,7 +299,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 				motionZ *= 0.75D;
 
 				if (getAttackTarget() == null) {
-					motionY -= 0.004D;
+					motionY -= 0.003D;
 				}
 			} else {
 				super.travel(strafe, up, forward);
@@ -461,9 +461,9 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
                 anadia.renderYawOffset = anadia.rotationYaw;
                 float travelSpeed = (float) (speed * anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
                 anadia.setAIMoveSpeed(anadia.getAIMoveSpeed() + (travelSpeed - anadia.getAIMoveSpeed()) * 0.125F);
-                double wiggleSpeed = Math.sin((double) (anadia.ticksExisted + anadia.getEntityId()) * 0.5D) * 0.05D;
-                double wiggleOffsetX = Math.cos((double) (anadia.rotationYaw * anadia.getFishSize() * 0.017453292F));
-                double wiggleOffsetZ = Math.sin((double) (anadia.rotationYaw * anadia.getFishSize() * 0.017453292F));
+                double wiggleSpeed = Math.sin((double) (anadia.ticksExisted + anadia.getEntityId()) * 0.5D) * anadia.getFishSize()* 0.05D;
+                double wiggleOffsetX = Math.cos((double) (anadia.rotationYaw * anadia.getFishSize() * 0.01F));
+                double wiggleOffsetZ = Math.sin((double) (anadia.rotationYaw * anadia.getFishSize() * 0.01F));
                 anadia.motionX += wiggleSpeed * wiggleOffsetX;
                 anadia.motionZ += wiggleSpeed * wiggleOffsetZ;
                 wiggleSpeed = Math.sin((double) (anadia.ticksExisted + anadia.getEntityId()) * 0.75D) * 0.05D;

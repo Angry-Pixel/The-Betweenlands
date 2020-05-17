@@ -31,6 +31,7 @@ public class RenderAnadia extends RenderLiving<EntityAnadia> {
 		float smoothedYaw = anadia.prevRotationYaw + (anadia.rotationYaw - anadia.prevRotationYaw) * partialTicks;
 		float smoothedPitch = anadia.prevRotationPitch + (anadia.rotationPitch - anadia.prevRotationPitch) * partialTicks;
 		float scale = anadia.getFishSize();
+		shadowSize = scale * 0.5F;
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y + scale * 1.5F, z);
 		GlStateManager.scale(scale, -scale, -scale);
