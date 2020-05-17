@@ -65,6 +65,36 @@ public class ModelAnadia extends ModelBase {
     public ModelRenderer set2_analfin1;
     public ModelRenderer set2_caudalfin1;
 
+    public ModelRenderer set3_body_main;
+    public ModelRenderer set3_head_main;
+    public ModelRenderer set3_tail_main;
+    public ModelRenderer set3_body_bass;
+    public ModelRenderer set3_body_mid;
+    public ModelRenderer set3_connectionfix;
+    public ModelRenderer set3_dorsalfin1;
+    public ModelRenderer set3_pectoralfin_left1a;
+    public ModelRenderer set3_pectoralfin_right1a;
+    public ModelRenderer set3_body_back;
+    public ModelRenderer set3_pelvicfin_left1;
+    public ModelRenderer set3_pelvicfin_right1;
+    public ModelRenderer set3_pectoralfin_left1b;
+    public ModelRenderer set3_pectoralfin_right1b;
+    public ModelRenderer set3_head_bass;
+    public ModelRenderer set3_head_2;
+    public ModelRenderer set3_head_side_left;
+    public ModelRenderer set3_head_side_right;
+    public ModelRenderer set3_head_3;
+    public ModelRenderer set3_head_jaw;
+    public ModelRenderer set3_sensorything_left1a;
+    public ModelRenderer set3_sensorything_right1a;
+    public ModelRenderer set3_sensorything_left1b;
+    public ModelRenderer set3_sensorything_right1b;
+    public ModelRenderer set_tail_bass;
+    public ModelRenderer set3_tail_mid;
+    public ModelRenderer set3_analfin1;
+    public ModelRenderer set3_tail_back;
+    public ModelRenderer set3_caudalfin1;
+
     public ModelAnadia() {
         textureWidth = 64;
         textureHeight = 64;
@@ -320,6 +350,142 @@ public class ModelAnadia extends ModelBase {
         set2_head_2.addChild(set2_sensorything_left2a);
         set2_tail_back.addChild(set2_caudalfin1);
         set2_body_bass.addChild(set2_dorsalfin1);
+       
+        set3_head_3 = new ModelRenderer(this, 22, 20);
+        set3_head_3.setRotationPoint(0.0F, -5.0F, -3.0F);
+        set3_head_3.addBox(-2.01F, 0.0F, -2.0F, 4, 4, 2, 0.0F);
+        setRotateAngle(set3_head_3, 0.5009094953223726F, 0.0F, 0.0F);
+        set3_sensorything_left1b = new ModelRenderer(this, 22, 27);
+        set3_sensorything_left1b.setRotationPoint(0.0F, 1.0F, 0.0F);
+        set3_sensorything_left1b.addBox(0.0F, 0.0F, 0.0F, 0, 2, 2, 0.0F);
+        setRotateAngle(set3_sensorything_left1b, 0.0F, 0.0F, 0.5462880558742251F);
+        set3_body_back = new ModelRenderer(this, 0, 19);
+        set3_body_back.setRotationPoint(0.0F, 0.0F, 4.0F);
+        set3_body_back.addBox(-2.0F, 0.0F, 0.0F, 4, 4, 4, 0.0F);
+        set3_sensorything_left1a = new ModelRenderer(this, 22, 26);
+        set3_sensorything_left1a.setRotationPoint(2.0F, 0.0F, -2.0F);
+        set3_sensorything_left1a.addBox(0.0F, 0.0F, 0.0F, 0, 1, 1, 0.0F);
+        setRotateAngle(set3_sensorything_left1a, 0.0F, 0.0F, -0.8651597102135892F);
+        set3_body_mid = new ModelRenderer(this, 0, 9);
+        set3_body_mid.setRotationPoint(0.0F, 0.0F, 2.0F);
+        set3_body_mid.addBox(-2.0F, 0.0F, 0.0F, 4, 5, 4, 0.0F);
+        set3_pectoralfin_left1a = new ModelRenderer(this, 0, 40);
+        set3_pectoralfin_left1a.setRotationPoint(2.0F, 5.0F, 1.0F);
+        set3_pectoralfin_left1a.addBox(0.0F, 0.0F, 0.0F, 0, 2, 2, 0.0F);
+        setRotateAngle(set3_pectoralfin_left1a, 0.4553564018453205F, 0.0F, -0.40980330836826856F);
+        set3_connectionfix = new ModelRenderer(this, 0, 28);
+        set3_connectionfix.setRotationPoint(0.0F, 5.0F, 0.0F);
+        set3_connectionfix.addBox(-2.0F, 0.0F, -2.0F, 4, 1, 2, 0.0F);
+        set3_pectoralfin_right1b = new ModelRenderer(this, 5, 44);
+        set3_pectoralfin_right1b.setRotationPoint(0.0F, 2.0F, 0.0F);
+        set3_pectoralfin_right1b.addBox(0.0F, 0.0F, 0.0F, 0, 3, 2, 0.0F);
+        setRotateAngle(set3_pectoralfin_right1b, 0.0F, 0.0F, 0.36425021489121656F);
+        set3_analfin1 = new ModelRenderer(this, 0, 30);
+        set3_analfin1.setRotationPoint(0.0F, 3.0F, 1.0F);
+        set3_analfin1.addBox(0.0F, 0.0F, 0.0F, 0, 3, 5, 0.0F);
+        setRotateAngle(set3_analfin1, -0.136659280431156F, 0.0F, 0.0F);
+        set3_pelvicfin_right1 = new ModelRenderer(this, 5, 30);
+        set3_pelvicfin_right1.setRotationPoint(-2.0F, 4.0F, 0.0F);
+        set3_pelvicfin_right1.addBox(0.0F, 0.0F, 0.0F, 0, 2, 2, 0.0F);
+        setRotateAngle(set3_pelvicfin_right1, 0.5009094953223726F, 0.0F, 0.36425021489121656F);
+        set3_pectoralfin_left1b = new ModelRenderer(this, 5, 40);
+        set3_pectoralfin_left1b.setRotationPoint(0.0F, 2.0F, 0.0F);
+        set3_pectoralfin_left1b.addBox(0.0F, 0.0F, 0.0F, 0, 3, 2, 0.0F);
+        setRotateAngle(set3_pectoralfin_left1b, 0.0F, 0.0F, -0.36425021489121656F);
+        set3_tail_main = new ModelRenderer(this, 0, 0);
+        set3_tail_main.setRotationPoint(0.0F, 15.0F, 7.0F);
+        set3_tail_main.addBox(0.0F, 0.0F, 0.0F, 0, 0, 0, 0.0F);
+        set3_sensorything_right1a = new ModelRenderer(this, 27, 26);
+        set3_sensorything_right1a.setRotationPoint(-2.0F, 0.0F, -2.0F);
+        set3_sensorything_right1a.addBox(0.0F, 0.0F, 0.0F, 0, 1, 1, 0.0F);
+        setRotateAngle(set3_sensorything_right1a, 0.0F, 0.0F, 0.8651597102135892F);
+        set3_dorsalfin1 = new ModelRenderer(this, 0, 29);
+        set3_dorsalfin1.setRotationPoint(0.0F, 0.0F, 10.0F);
+        set3_dorsalfin1.addBox(0.0F, -2.0F, -10.0F, 0, 2, 10, 0.0F);
+        setRotateAngle(set3_dorsalfin1, 0.091106186954104F, 0.0F, 0.0F);
+        set3_tail_mid = new ModelRenderer(this, 42, 9);
+        set3_tail_mid.setRotationPoint(0.0F, 0.0F, 4.0F);
+        set3_tail_mid.addBox(-1.0F, 0.0F, 0.0F, 2, 3, 4, 0.0F);
+        setRotateAngle(set3_tail_mid, -0.136659280431156F, 0.0F, 0.0F);
+        set3_head_main = new ModelRenderer(this, 0, 0);
+        set3_head_main.setRotationPoint(0.0F, 15.0F, -3.0F);
+        set3_head_main.addBox(0.0F, 0.0F, 0.0F, 0, 0, 0, 0.0F);
+        set3_head_jaw = new ModelRenderer(this, 22, 32);
+        set3_head_jaw.setRotationPoint(0.0F, 0.0F, -3.0F);
+        set3_head_jaw.addBox(-2.0F, -1.0F, -4.0F, 4, 1, 4, 0.0F);
+        setRotateAngle(set3_head_jaw, -0.6829473363053812F, 0.0F, 0.0F);
+        set3_head_side_right = new ModelRenderer(this, 29, 38);
+        set3_head_side_right.setRotationPoint(-2.5F, 5.0F, -4.0F);
+        set3_head_side_right.addBox(0.0F, 0.0F, 0.0F, 1, 1, 2, 0.0F);
+        setRotateAngle(set3_head_side_right, 0.0F, 0.0F, -0.18203784098300857F);
+        set3_head_2 = new ModelRenderer(this, 22, 10);
+        set3_head_2.setRotationPoint(0.0F, 5.0F, -4.0F);
+        set3_head_2.addBox(-2.0F, -5.0F, -3.0F, 4, 5, 4, 0.0F);
+        setRotateAngle(set3_head_2, -0.18203784098300857F, 0.0F, 0.0F);
+        set3_tail_back = new ModelRenderer(this, 42, 17);
+        set3_tail_back.setRotationPoint(0.0F, 3.0F, 4.0F);
+        set3_tail_back.addBox(-0.5F, -3.0F, 0.0F, 1, 3, 3, 0.0F);
+        setRotateAngle(set3_tail_back, 0.136659280431156F, 0.0F, 0.0F);
+        set3_head_bass = new ModelRenderer(this, 22, 0);
+        set3_head_bass.setRotationPoint(0.0F, 0.0F, 0.0F);
+        set3_head_bass.addBox(-2.5F, 0.0F, -4.0F, 5, 5, 4, 0.0F);
+        setRotateAngle(set3_head_bass, 0.36425021489121656F, 0.0F, 0.0F);
+        set3_sensorything_right1b = new ModelRenderer(this, 27, 27);
+        set3_sensorything_right1b.setRotationPoint(0.0F, 1.0F, 0.0F);
+        set3_sensorything_right1b.addBox(0.0F, 0.0F, 0.0F, 0, 2, 2, 0.0F);
+        setRotateAngle(set3_sensorything_right1b, 0.0F, 0.0F, -0.5462880558742251F);
+        set3_pelvicfin_left1 = new ModelRenderer(this, 0, 30);
+        set3_pelvicfin_left1.setRotationPoint(2.0F, 4.0F, 0.0F);
+        set3_pelvicfin_left1.addBox(0.0F, 0.0F, 0.0F, 0, 2, 2, 0.0F);
+        setRotateAngle(set3_pelvicfin_left1, 0.5009094953223726F, 0.0F, -0.36425021489121656F);
+        set3_pectoralfin_right1a = new ModelRenderer(this, 0, 44);
+        set3_pectoralfin_right1a.setRotationPoint(-2.0F, 5.0F, 1.0F);
+        set3_pectoralfin_right1a.addBox(0.0F, 0.0F, 0.0F, 0, 2, 2, 0.0F);
+        setRotateAngle(set3_pectoralfin_right1a, 0.4553564018453205F, 0.0F, 0.40980330836826856F);
+        set_tail_bass = new ModelRenderer(this, 42, 0);
+        set_tail_bass.setRotationPoint(0.0F, 0.0F, 0.0F);
+        set_tail_bass.addBox(-1.5F, 0.0F, 0.0F, 3, 4, 4, 0.0F);
+        setRotateAngle(set_tail_bass, -0.136659280431156F, 0.0F, 0.0F);
+        set3_body_bass = new ModelRenderer(this, 0, 0);
+        set3_body_bass.setRotationPoint(0.0F, 0.0F, 0.0F);
+        set3_body_bass.addBox(-2.0F, 0.0F, 0.0F, 4, 6, 2, 0.0F);
+        set3_body_main = new ModelRenderer(this, 0, 0);
+        set3_body_main.setRotationPoint(0.0F, 15.0F, -3.0F);
+        set3_body_main.addBox(0.0F, 0.0F, 0.0F, 0, 0, 0, 0.0F);
+        set3_head_side_left = new ModelRenderer(this, 22, 38);
+        set3_head_side_left.setRotationPoint(2.5F, 5.0F, -4.0F);
+        set3_head_side_left.addBox(-1.0F, 0.0F, 0.0F, 1, 1, 2, 0.0F);
+        setRotateAngle(set3_head_side_left, 0.0F, 0.0F, 0.18203784098300857F);
+        set3_caudalfin1 = new ModelRenderer(this, 42, 17);
+        set3_caudalfin1.setRotationPoint(0.0F, 0.0F, 3.0F);
+        set3_caudalfin1.addBox(0.0F, -4.0F, 0.0F, 0, 5, 7, 0.0F);
+        setRotateAngle(set3_caudalfin1, 0.136659280431156F, 0.0F, 0.0F);
+        set3_head_2.addChild(set3_head_3);
+        set3_sensorything_left1a.addChild(set3_sensorything_left1b);
+        set3_body_mid.addChild(set3_body_back);
+        set3_head_3.addChild(set3_sensorything_left1a);
+        set3_body_bass.addChild(set3_body_mid);
+        set3_body_bass.addChild(set3_pectoralfin_left1a);
+        set3_body_bass.addChild(set3_connectionfix);
+        set3_pectoralfin_right1a.addChild(set3_pectoralfin_right1b);
+        set_tail_bass.addChild(set3_analfin1);
+        set3_body_back.addChild(set3_pelvicfin_right1);
+        set3_pectoralfin_left1a.addChild(set3_pectoralfin_left1b);
+        set3_head_3.addChild(set3_sensorything_right1a);
+        set3_body_bass.addChild(set3_dorsalfin1);
+        set_tail_bass.addChild(set3_tail_mid);
+        set3_head_2.addChild(set3_head_jaw);
+        set3_head_bass.addChild(set3_head_side_right);
+        set3_head_bass.addChild(set3_head_2);
+        set3_tail_mid.addChild(set3_tail_back);
+        set3_head_main.addChild(set3_head_bass);
+        set3_sensorything_right1a.addChild(set3_sensorything_right1b);
+        set3_body_back.addChild(set3_pelvicfin_left1);
+        set3_body_bass.addChild(set3_pectoralfin_right1a);
+        set3_tail_main.addChild(set_tail_bass);
+        set3_body_main.addChild(set3_body_bass);
+        set3_head_bass.addChild(set3_head_side_left);
+        set3_tail_back.addChild(set3_caudalfin1);
     }
 
     @Override
@@ -335,8 +501,8 @@ public class ModelAnadia extends ModelBase {
 		case 1:
 			set2_head_main.render(scale);
 			break;
-		case 2: // temp until next model
-			set2_head_main.render(scale);
+		case 2:
+			set3_head_main.render(scale);
 			break;
 		}
 	}
@@ -349,8 +515,8 @@ public class ModelAnadia extends ModelBase {
 		case 1:
 			set2_body_main.render(scale);
 			break;
-		case 2:// temp until next model
-			set2_body_main.render(scale);
+		case 2:
+			set3_body_main.render(scale);
 			break;
 		}
 	}
@@ -363,8 +529,8 @@ public class ModelAnadia extends ModelBase {
 		case 1:
 			set2_tail_main.render(scale);
 			break;
-		case 2: // temp until next model
-			set2_tail_main.render(scale);
+		case 2:
+			set3_tail_main.render(scale);
 			break;
 		}
 	}
