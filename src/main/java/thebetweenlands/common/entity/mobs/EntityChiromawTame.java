@@ -265,6 +265,7 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 		}
 	}
 
+	@Override
     public void setRevengeTarget(@Nullable EntityLivingBase entity) {
     	super.setRevengeTarget(entity);
     	if (entity instanceof EntityChiromawTame || entity instanceof EntityPullerChiromaw)
