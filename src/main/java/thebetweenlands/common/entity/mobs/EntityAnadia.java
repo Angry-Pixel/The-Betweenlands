@@ -142,7 +142,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	@Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        setSize(getFishSize(), getFishSize());
+        setSize(getFishSize(), getFishSize() * 0.75F);
         getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D + getSpeedMods());
         getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D + getHealthMods());
         getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(12.0D);
@@ -264,7 +264,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	@Override
 	public void onUpdate() {
 		if (getEntityWorld().isRemote)
-			setSize(getFishSize(), getFishSize());
+			setSize(getFishSize(), getFishSize() * 0.75F);
 
 		if(!getEntityWorld().isRemote) {
 			if(getAttackTarget() != null && !getEntityWorld().containsAnyLiquid(getAttackTarget().getEntityBoundingBox())) {
@@ -294,12 +294,12 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 			if (isInWater()) {
 				moveRelative(strafe, up,  forward, 0.1F);
 				move(MoverType.SELF, motionX, motionY, motionZ);
-				motionX *= 0.8999999761581421D;
-				motionY *= 1D;
-				motionZ *= 0.8999999761581421D;
+				motionX *= 0.75D;
+				motionY *= 0.75D;
+				motionZ *= 0.75D;
 
 				if (getAttackTarget() == null) {
-					motionY -= 0.005D;
+					motionY -= 0.004D;
 				}
 			} else {
 				super.travel(strafe, up, forward);
