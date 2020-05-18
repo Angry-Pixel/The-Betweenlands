@@ -1,5 +1,9 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.block.material.Material;
@@ -8,6 +12,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
@@ -21,20 +26,20 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.entity.EntityFishBait;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class EntityAnadia extends EntityCreature implements IEntityBL {
@@ -64,8 +69,9 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         });
         tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.4D));
         tasks.addTask(2, new EntityAIWander(this, 0.5D, 20));
-        tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-        tasks.addTask(4, new EntityAILookIdle(this));
+        tasks.addTask(3, new EntityAnadia.AIFindBait(this, 2D));
+        tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        tasks.addTask(5, new EntityAILookIdle(this));
         // TODO leaving this for future hostile code
         // targetTasks.addTask(0, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, 0, true, true, null));
         targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
@@ -488,5 +494,78 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
                 anadia.setAIMoveSpeed(0.0F);
             }
         }
+    }
+
+    class AIFindBait extends EntityAIBase {
+
+    	private final EntityAnadia anadia;
+    	private double searchRange;
+
+    	public AIFindBait(EntityAnadia anadiaIn, double searchRangeIn) {
+    		anadia = anadiaIn;
+    		searchRange = searchRangeIn;
+    	}
+
+    	@Override
+    	public boolean shouldExecute() {
+    		return getClosestBait(searchRange) != null;
+    	}
+
+    	@Override
+    	public void startExecuting() {
+    	}
+
+    	@Override
+    	public boolean shouldContinueExecuting() {
+            return shouldExecute();
+        }
+
+    	@Override
+    	public void updateTask() {
+    		if (!anadia.world.isRemote && shouldExecute()) {
+    			EntityFishBait entityBait = getClosestBait(searchRange);
+    			if (entityBait != null) {
+    				float distance = entityBait.getDistance(anadia);
+					double x = entityBait.posX;
+					double y = entityBait.posY;
+					double z = entityBait.posZ;
+    				if (distance >= 1F && !entityBait.cannotPickup() && !entityBait.isDead) {
+    					anadia.getLookHelper().setLookPosition(x, y, z, 20.0F, 8.0F);
+    					moveToItem(entityBait);
+    					return;
+    				}
+    				if (distance < 1F) {
+    					anadia.getMoveHelper().setMoveTo(x, y, z, anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+    					entityBait.getItem().shrink(1);
+    					if (entityBait.getItem().getCount() <= 0)
+    						entityBait.setDead();
+    					return;
+    				}
+    			}
+    		}
+    	}
+
+    	@SuppressWarnings("unchecked")
+    	public EntityFishBait getClosestBait(double distance) {
+    		List<EntityFishBait> list = anadia.getEntityWorld().getEntitiesWithinAABB(EntityFishBait.class, anadia.getEntityBoundingBox().grow(distance, distance, distance));
+    		for (Iterator<EntityFishBait> iterator = list.iterator(); iterator.hasNext();) {
+    			EntityFishBait entityBait = iterator.next();
+    			if (entityBait.getAge() >= entityBait.lifespan || !entityBait.isInWater())
+    				iterator.remove();
+    		}
+    		if (list.isEmpty())
+    			return null;
+    		if (!list.isEmpty())
+				Collections.shuffle(list);
+    		return list.get(0);
+    	}
+
+    	public void moveToItem(EntityFishBait entityBait) {
+    		Path pathentity = anadia.getNavigator().getPath();
+    		if (pathentity != null) {
+    			//entity.getNavigator().setPath(pathentity, 0.5D);
+    			anadia.getNavigator().tryMoveToXYZ(entityBait.posX, entityBait.posY, entityBait.posZ, anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+    		}
+    	}
     }
 }
