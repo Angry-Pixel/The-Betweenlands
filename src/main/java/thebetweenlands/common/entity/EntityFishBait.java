@@ -21,7 +21,10 @@ public class EntityFishBait extends EntityItem {
 	@Override
     public void onUpdate() {
 		super.onUpdate();
-		if(isInWater())
-			motionY =- 0.00001;
+		if(isInWater()) {
+			motionX *= 0.9D;
+			motionY *= 0.1D;
+			motionZ *= 0.9D;
+		}
     }
 }
