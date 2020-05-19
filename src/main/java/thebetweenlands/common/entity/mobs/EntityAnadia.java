@@ -48,6 +48,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	private static final DataParameter<Byte> BODY_TYPE = EntityDataManager.<Byte>createKey(EntityAnadia.class, DataSerializers.BYTE);
 	private static final DataParameter<Byte> TAIL_TYPE = EntityDataManager.<Byte>createKey(EntityAnadia.class, DataSerializers.BYTE);
 	private static final DataParameter<Boolean> IS_LEAPING = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> HUNGER_COOLDOWN = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
+
 	private static float BASE_MULTIPLE = 1F; // just a arbitrary number to increase the size multiplier
 
 	public EntityAnadia(World world) {
@@ -69,7 +71,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         });
         tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.4D));
         tasks.addTask(2, new EntityAIWander(this, 0.5D, 20));
-        tasks.addTask(3, new EntityAnadia.AIFindBait(this, 2D));
+        tasks.addTask(3, new EntityAnadia.AIFindBait(this, 4D));
         tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         tasks.addTask(5, new EntityAILookIdle(this));
         // TODO leaving this for future hostile code
@@ -85,6 +87,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         dataManager.register(BODY_TYPE, (byte)rand.nextInt(3));
         dataManager.register(TAIL_TYPE, (byte)rand.nextInt(3));
         dataManager.register(IS_LEAPING, false);
+        dataManager.register(HUNGER_COOLDOWN, 0);
     }
 
     public float getFishSize() {
@@ -126,6 +129,14 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
     private void setIsLeaping(boolean leaping) {
         dataManager.set(IS_LEAPING, leaping);
     }
+    
+    public int getHungerCooldown() {
+        return dataManager.get(HUNGER_COOLDOWN);
+    }
+
+    private void setHungerCooldown(int count) {
+        dataManager.set(HUNGER_COOLDOWN, count);
+    }
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
@@ -134,6 +145,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		nbt.setByte("headType", getHeadType());
 		nbt.setByte("bodyType", getBodyType());
 		nbt.setByte("tailType", getTailType());
+		nbt.setInteger("hunger", getHungerCooldown());
 	}
 
 	@Override
@@ -143,6 +155,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		setHeadType(nbt.getByte("headType"));
 		setBodyType(nbt.getByte("bodyType"));
 		setTailType(nbt.getByte("tailType"));
+		setHungerCooldown(nbt.getInteger("hunger"));
 	}
 
 	@Override
@@ -274,26 +287,33 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 		if(!getEntityWorld().isRemote) {
 			if(getAttackTarget() != null && !getEntityWorld().containsAnyLiquid(getAttackTarget().getEntityBoundingBox())) {
-				Double distance = getPosition().getDistance((int) getAttackTarget().posX, (int) getAttackTarget().posY, (int) getAttackTarget().posZ);
-				if (distance > 1.0F && distance < 6.0F) // && getAttackTarget().getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && getAttackTarget().getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && rand.nextInt(3) == 0)
-					if (isInWater() && getEntityWorld().isAirBlock(new BlockPos((int) posX, (int) posY + 1, (int) posZ))) {
-						if(!isLeaping()) {
-							setIsLeaping(true);
-							getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.HOSTILE, 1F, 2F);
-						}
-						double distanceX = getAttackTarget().posX - posX;
-						double distanceZ = getAttackTarget().posZ - posZ;
-						float distanceSqrRoot = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ);
-						motionX = distanceX / distanceSqrRoot * 0.5D * 0.900000011920929D + motionX * 0.70000000298023224D;
-						motionZ = distanceZ / distanceSqrRoot * 0.5D * 0.900000011920929D + motionZ * 0.70000000298023224D;
-						motionY = 0.4D;
-					}
+				double distance = getPosition().getDistance((int) getAttackTarget().posX, (int) getAttackTarget().posY, (int) getAttackTarget().posZ);
+				if (distance > 1.0F && distance < 6.0F)
+					if (isInWater() && getEntityWorld().isAirBlock(new BlockPos((int) posX, (int) posY + 1, (int) posZ))) 
+						leapAtTarget(getAttackTarget().posX, getAttackTarget().posY, getAttackTarget().posZ);
 			}
+
+			if(getHungerCooldown() >= 0)
+				setHungerCooldown(getHungerCooldown() - 1);
+
 		}
 		super.onUpdate();
 	}
 
-	// TODO make it work of the speed modifiers properly
+	public void leapAtTarget(double targetX, double targetY, double targetZ) {
+		if(!isLeaping()) {
+			setIsLeaping(true);
+			getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_HOSTILE_SWIM, SoundCategory.NEUTRAL, 1F, 2F);
+		}
+		double distanceX = targetX - posX;
+		double distanceZ = targetZ - posZ;
+		float distanceSqrRoot = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ);
+		motionX = distanceX / distanceSqrRoot * 0.1D + motionX * getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue();
+		motionZ = distanceZ / distanceSqrRoot * 0.1D + motionZ * getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue();
+		motionY = 0.3F;
+		
+	}
+
 	@Override
 	public void travel(float strafe, float up, float forward) {
 		if (isServerWorld()) {
@@ -443,8 +463,6 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		}
 	}
 
-	// TODO make it work of the speed modifiers properly
-    //AIs
     static class AnadiaMoveHelper extends EntityMoveHelper {
         private final EntityAnadia anadia;
 
@@ -500,6 +518,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
     	private final EntityAnadia anadia;
     	private double searchRange;
+    	private EntityFishBait bait = null;
 
     	public AIFindBait(EntityAnadia anadiaIn, double searchRangeIn) {
     		anadia = anadiaIn;
@@ -508,49 +527,63 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
     	@Override
     	public boolean shouldExecute() {
-    		return getClosestBait(searchRange) != null;
+    		return anadia.getHungerCooldown() <= 0 && bait == null;
     	}
 
     	@Override
     	public void startExecuting() {
+    		bait = getClosestBait(searchRange);
     	}
 
     	@Override
     	public boolean shouldContinueExecuting() {
-            return shouldExecute();
+    		return anadia.getHungerCooldown() <= 0 && bait != null && !bait.isDead;
         }
 
-    	@Override
-    	public void updateTask() {
-    		if (!anadia.world.isRemote && shouldExecute()) {
-    			EntityFishBait entityBait = getClosestBait(searchRange);
-    			if (entityBait != null) {
-    				float distance = entityBait.getDistance(anadia);
-					double x = entityBait.posX;
-					double y = entityBait.posY;
-					double z = entityBait.posZ;
-    				if (distance >= 1F && !entityBait.cannotPickup() && !entityBait.isDead) {
-    					anadia.getLookHelper().setLookPosition(x, y, z, 20.0F, 8.0F);
-    					moveToItem(entityBait);
-    					return;
-    				}
-    				if (distance < 1F) {
-    					anadia.getMoveHelper().setMoveTo(x, y, z, anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
-    					entityBait.getItem().shrink(1);
-    					if (entityBait.getItem().getCount() <= 0)
-    						entityBait.setDead();
-    					return;
-    				}
-    			}
-    		}
-    	}
+		@Override
+		public void updateTask() {
+			if (!anadia.world.isRemote && shouldContinueExecuting()) {
+
+				if (bait != null) {
+					float distance = bait.getDistance(anadia);
+					double x = bait.posX;
+					double y = bait.posY;
+					double z = bait.posZ;
+					if (!bait.cannotPickup()) {
+						if (distance >= 1F) {
+							anadia.getLookHelper().setLookPosition(x, y, z, 20.0F, 8.0F);
+							moveToItem(bait);
+						}
+
+						if (distance <= 2F)
+							if (anadia.isInWater() && anadia.getEntityWorld().isAirBlock(new BlockPos(x, y + 1D, z)))
+								anadia.leapAtTarget(x, y, z);
+
+						if (distance <= 1F) {
+							anadia.getMoveHelper().setMoveTo(x, y, z, anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+							anadia.setHungerCooldown(bait.getBaitHungerValue());
+							bait.getItem().shrink(1);
+							if (bait.getItem().getCount() <= 0)
+								bait.setDead();
+							anadia.setIsLeaping(false);
+							resetTask();
+						}
+					}
+				}
+			}
+		}
+ 
+		@Override
+		public void resetTask() {
+			bait = null;
+		}
 
     	@SuppressWarnings("unchecked")
     	public EntityFishBait getClosestBait(double distance) {
     		List<EntityFishBait> list = anadia.getEntityWorld().getEntitiesWithinAABB(EntityFishBait.class, anadia.getEntityBoundingBox().grow(distance, distance, distance));
     		for (Iterator<EntityFishBait> iterator = list.iterator(); iterator.hasNext();) {
-    			EntityFishBait entityBait = iterator.next();
-    			if (entityBait.getAge() >= entityBait.lifespan || !entityBait.isInWater())
+    			EntityFishBait bait = iterator.next();
+    			if (bait.getAge() >= bait.lifespan || !bait.isInWater())
     				iterator.remove();
     		}
     		if (list.isEmpty())
@@ -560,11 +593,11 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
     		return list.get(0);
     	}
 
-    	public void moveToItem(EntityFishBait entityBait) {
+    	public void moveToItem(EntityFishBait bait) {
     		Path pathentity = anadia.getNavigator().getPath();
     		if (pathentity != null) {
     			//entity.getNavigator().setPath(pathentity, 0.5D);
-    			anadia.getNavigator().tryMoveToXYZ(entityBait.posX, entityBait.posY, entityBait.posZ, anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+    			anadia.getNavigator().tryMoveToXYZ(bait.posX, bait.posY, bait.posZ, anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
     		}
     	}
     }
