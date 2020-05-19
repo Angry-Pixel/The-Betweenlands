@@ -8,6 +8,7 @@ import thebetweenlands.common.entity.EntityAngryPebble;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
+import thebetweenlands.common.entity.EntityFishBait;
 import thebetweenlands.common.entity.EntityGalleryFrame;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.entity.EntityGreeblingCorpse;
@@ -31,6 +32,7 @@ import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.entity.draeton.EntityPullerChiromaw;
 import thebetweenlands.common.entity.draeton.EntityPullerDragonfly;
 import thebetweenlands.common.entity.draeton.EntityPullerFirefly;
+import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityAshSprite;
 import thebetweenlands.common.entity.mobs.EntityBarrishee;
@@ -228,7 +230,7 @@ public class EntityRegistry {
 		registerEntity(EntityChiromawHatchling.class, "chiromaw_hatchling", 64, 3, true);
 		registerEntity(EntityChiromawTame.class, "chiromaw_tame", 128, 3, true);
 		registerEntity(EntityGreeblingCorpse.class, "greebling_corpse", 80, 20, false);
-
+		registerEntity(EntityFishBait.class, "fish_bait_item");
 		// TODO Re-enable when testing. Too early W.I.P. dev spoilers are getting on my nerves :P
 		// registerEntity(EntityAnadia.class, "anadia", 0x243B0B, 0x00FFFF);
 	}
