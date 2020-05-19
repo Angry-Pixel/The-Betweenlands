@@ -873,6 +873,7 @@ item.thebetweenlands.ancient_boots.name=Ancient Boots
 item.thebetweenlands.ancient_chestplate.name=Ancient Chestplate
 item.thebetweenlands.ancient_helmet.name=Ancient Helmet
 item.thebetweenlands.ancient_leggings.name=Ancient Leggings
+item.thebetweenlands.fish_bait.name=Fish Bait
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -1092,6 +1093,11 @@ tooltip.bl.recipes.censer_secondary=Censer (secondary)
 tooltip.bl.recipes.purifier=Purifier
 tooltip.bl.recipes.mortar=Mortar
 
+tooltip.bl.fish_bait.saturation=Saturation: %s
+tooltip.bl.fish_bait.sink_speed=Sinking Speed: %s
+tooltip.bl.fish_bait.dissolve_time=Dissolve Time: %s
+tooltip.bl.fish_bait.range=Range: %s
+tooltip.bl.fish_bait.glowing=Glowing: %s
 
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing
@@ -1389,6 +1395,8 @@ entity.thebetweenlands.draeton_leakage.name=Draeton Leakage
 entity.thebetweenlands.draeton_upgrade_anchor.name=Draeton Anchor
 entity.thebetweenlands.draeton_upgrade_furnace.name=Draeton Furnace
 entity.thebetweenlands.draeton_upgrade_crafting.name=Draeton Crafting
+entity.thebetweenlands.anadia.name=Anadia
+entity.thebetweenlands.fish_bait_item.name=Fish Bait
 
 # Equipment
 equipment.menu.equip=Equip %s

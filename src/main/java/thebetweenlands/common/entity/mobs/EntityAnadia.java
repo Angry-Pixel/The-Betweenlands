@@ -51,6 +51,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	private static final DataParameter<Integer> HUNGER_COOLDOWN = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 
 	private static float BASE_MULTIPLE = 1F; // just a arbitrary number to increase the size multiplier
+	public EntityAnadia.AIFindBait aiFindbait;
 
 	public EntityAnadia(World world) {
 		super(world);
@@ -71,7 +72,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         });
         tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.4D));
         tasks.addTask(2, new EntityAIWander(this, 0.5D, 20));
-        tasks.addTask(3, new EntityAnadia.AIFindBait(this, 4D));
+        aiFindbait = new EntityAnadia.AIFindBait(this, 1D);
+        tasks.addTask(3, aiFindbait);
         tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         tasks.addTask(5, new EntityAILookIdle(this));
         // TODO leaving this for future hostile code
@@ -514,11 +516,11 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         }
     }
 
-    class AIFindBait extends EntityAIBase {
+    public class AIFindBait extends EntityAIBase {
 
     	private final EntityAnadia anadia;
     	private double searchRange;
-    	private EntityFishBait bait = null;
+    	public EntityFishBait bait = null;
 
     	public AIFindBait(EntityAnadia anadiaIn, double searchRangeIn) {
     		anadia = anadiaIn;
@@ -532,7 +534,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
     	@Override
     	public void startExecuting() {
-    		bait = getClosestBait(searchRange);
+    		if(bait == null)
+    			bait = getClosestBait(searchRange);
     	}
 
     	@Override
@@ -556,12 +559,12 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 						}
 
 						if (distance <= 2F)
-							if (anadia.isInWater() && anadia.getEntityWorld().isAirBlock(new BlockPos(x, y + 1D, z)))
+							if (anadia.isInWater() && anadia.getEntityWorld().isAirBlock(new BlockPos(x, y + 1D, z)) && anadia.canEntityBeSeen(bait))
 								anadia.leapAtTarget(x, y, z);
 
 						if (distance <= 1F) {
 							anadia.getMoveHelper().setMoveTo(x, y, z, anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
-							anadia.setHungerCooldown(bait.getBaitHungerValue());
+							anadia.setHungerCooldown(bait.getBaitSaturation());
 							bait.getItem().shrink(1);
 							if (bait.getItem().getCount() <= 0)
 								bait.setDead();

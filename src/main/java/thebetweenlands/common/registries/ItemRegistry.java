@@ -192,6 +192,7 @@ public class ItemRegistry {
     public static final Item DENTROTHYST_SHARD_ORANGE = new ItemDentrothystShard(EnumDentrothyst.ORANGE);
     public static final Item DENTROTHYST_SHARD_GREEN = new ItemDentrothystShard(EnumDentrothyst.GREEN);
     public static final Item FISH_BAIT = new ItemFishBait();
+
     //food
     public static final Item SAP_BALL = new ItemSapBall();
     public static final ItemRottenFood ROTTEN_FOOD = (ItemRottenFood) new ItemRottenFood().setAlwaysEdible();
