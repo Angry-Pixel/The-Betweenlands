@@ -14,10 +14,10 @@ public class RenderAnadia extends RenderLiving<EntityAnadia> {
 	public final static ResourceLocation TEXTURE_1 = new ResourceLocation("thebetweenlands:textures/entity/anadia_1.png");
 	public final static ResourceLocation TEXTURE_2 = new ResourceLocation("thebetweenlands:textures/entity/anadia_2.png");
 	public final static ResourceLocation TEXTURE_3 = new ResourceLocation("thebetweenlands:textures/entity/anadia_3.png");
-	private final static ModelAnadia ANADIA_MODEL = new ModelAnadia();
+	public final static ModelAnadia ANADIA_MODEL = new ModelAnadia();
 
 	public RenderAnadia(RenderManager manager) {
-		super(manager, new ModelAnadia(), 0.5F);
+		super(manager, ANADIA_MODEL, 0.5F);
 	}
 
 	@Override
@@ -82,5 +82,6 @@ public class RenderAnadia extends RenderLiving<EntityAnadia> {
 				break;
 		} 
 		GlStateManager.popMatrix();
+		ANADIA_MODEL.setLivingAnimations(anadia, anadia.limbSwing, anadia.limbSwingAmount, partialTicks);
 	}
 }
