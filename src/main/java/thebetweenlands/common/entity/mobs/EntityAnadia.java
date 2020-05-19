@@ -72,7 +72,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         });
         tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.4D));
         tasks.addTask(2, new EntityAIWander(this, 0.5D, 20));
-        aiFindbait = new EntityAnadia.AIFindBait(this, 1D);
+        aiFindbait = new EntityAnadia.AIFindBait(this, 2D);
         tasks.addTask(3, aiFindbait);
         tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         tasks.addTask(5, new EntityAILookIdle(this));

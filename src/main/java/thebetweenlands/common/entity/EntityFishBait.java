@@ -40,9 +40,9 @@ public class EntityFishBait extends EntityItem {
     protected void entityInit() {
         super.entityInit();
         dataManager.register(SATURATION, 200); // ticks before fish are hungry again (lower will be better) 
-        dataManager.register(SINK_SPEED, 1); // 0 for surface floating ;)
-        dataManager.register(DISSOLVE_TIME, 2000); //ticks it should exist for in water
-        dataManager.register(RANGE, 5); // will increase range somehow probably with an aabb :P
+        dataManager.register(SINK_SPEED, 3); // 0 for surface floating ;)
+        dataManager.register(DISSOLVE_TIME, 200); //ticks it should exist for in water
+        dataManager.register(RANGE, 1); // will increase range somehow probably with an aabb :P
     }
 
 	@Override

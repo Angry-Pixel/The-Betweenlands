@@ -42,13 +42,13 @@ public class ItemFishBait extends Item {
 			if (!stack.hasTagCompound())
 				stack.setTagCompound(new NBTTagCompound());
 			if (!stack.getTagCompound().hasKey("saturation"))
-				stack.getTagCompound().setInteger("saturation", 20);
+				stack.getTagCompound().setInteger("saturation", 200);
 			if (!stack.getTagCompound().hasKey("sink_speed"))
-				stack.getTagCompound().setInteger("sink_speed", 0);
+				stack.getTagCompound().setInteger("sink_speed", 3);
 			if (!stack.getTagCompound().hasKey("dissolve_time"))
-				stack.getTagCompound().setInteger("dissolve_time", 2000);
+				stack.getTagCompound().setInteger("dissolve_time", 200);
 			if (!stack.getTagCompound().hasKey("range"))
-				stack.getTagCompound().setInteger("range", 3);
+				stack.getTagCompound().setInteger("range", 1);
 			if (!stack.getTagCompound().hasKey("glowing"))
 				stack.getTagCompound().setBoolean("glowing", false);
 		}
