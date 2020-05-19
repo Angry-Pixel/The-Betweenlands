@@ -37,7 +37,6 @@ public class ModelAnadia extends MowzieModelBase {
     MowzieModelRenderer set1_tail_back;
     MowzieModelRenderer set1_analfin1;
     MowzieModelRenderer set1_caudalfin1;
-    MowzieModelRenderer[] set1_tail_parts;
     
     MowzieModelRenderer set2_body_main;
     MowzieModelRenderer set2_head_main;
@@ -48,7 +47,7 @@ public class ModelAnadia extends MowzieModelBase {
     MowzieModelRenderer set2_dorsalfin1;
     MowzieModelRenderer set2_pectoralfin_left1a;
     MowzieModelRenderer set2_pectoralfin_right1a;
-    MowzieModelRenderer set2_pelvicfin1;
+    MowzieModelRenderer set2_pelvicfin_left1;
     MowzieModelRenderer set2_pelvicfin_right1;
     MowzieModelRenderer set2_pectoralfin_left1b;
     MowzieModelRenderer set2_pectoralfin_right1b;
@@ -67,7 +66,6 @@ public class ModelAnadia extends MowzieModelBase {
     MowzieModelRenderer set2_tail_back;
     MowzieModelRenderer set2_analfin1;
     MowzieModelRenderer set2_caudalfin1;
-    MowzieModelRenderer[] set2_tail_parts;
 
     MowzieModelRenderer set3_body_main;
     MowzieModelRenderer set3_head_main;
@@ -98,7 +96,6 @@ public class ModelAnadia extends MowzieModelBase {
     MowzieModelRenderer set3_analfin1;
     MowzieModelRenderer set3_tail_back;
     MowzieModelRenderer set3_caudalfin1;
-    MowzieModelRenderer[] set3_tail_parts;
 
 	public ModelAnadia() {
 		textureWidth = 64;
@@ -228,10 +225,10 @@ public class ModelAnadia extends MowzieModelBase {
 		set2_tail_back.setRotationPoint(0.0F, 0.0F, 3.0F);
 		set2_tail_back.addBox(-1.0F, 0.0F, -1.0F, 2, 3, 3, 0.0F);
 		setRotateAngle(set2_tail_back, 0.136659280431156F, 0.0F, 0.0F);
-		set2_pelvicfin1 = new MowzieModelRenderer(this, 0, 21);
-		set2_pelvicfin1.setRotationPoint(2.0F, 5.0F, 0.0F);
-		set2_pelvicfin1.addBox(0.0F, 0.0F, 0.0F, 0, 2, 2, 0.0F);
-		setRotateAngle(set2_pelvicfin1, 0.36425021489121656F, 0.0F, -0.40980330836826856F);
+		set2_pelvicfin_left1 = new MowzieModelRenderer(this, 0, 21);
+		set2_pelvicfin_left1.setRotationPoint(2.0F, 5.0F, 0.0F);
+		set2_pelvicfin_left1.addBox(0.0F, 0.0F, 0.0F, 0, 2, 2, 0.0F);
+		setRotateAngle(set2_pelvicfin_left1, 0.36425021489121656F, 0.0F, -0.40980330836826856F);
 		set2_sensorything_right2a = new MowzieModelRenderer(this, 31, 16);
 		set2_sensorything_right2a.setRotationPoint(-2.5F, 0.0F, -2.0F);
 		set2_sensorything_right2a.addBox(0.0F, 0.0F, -2.0F, 0, 2, 2, 0.0F);
@@ -331,7 +328,7 @@ public class ModelAnadia extends MowzieModelBase {
 		set2_dorsalfin1.addBox(0.0F, -2.0F, 0.0F, 0, 2, 5, 0.0F);
 		setRotateAngle(set2_dorsalfin1, -0.136659280431156F, 0.0F, 0.0F);
 		set2_tail_bass.addChild(set2_tail_back);
-		set2_body_back.addChild(set2_pelvicfin1);
+		set2_body_back.addChild(set2_pelvicfin_left1);
 		set2_head_2.addChild(set2_sensorything_right2a);
 		set2_tail_bass.addChild(set2_analfin1);
 		set2_pectoralfin_left1a.addChild(set2_pectoralfin_left1b);
@@ -529,7 +526,7 @@ public class ModelAnadia extends MowzieModelBase {
 				set2_dorsalfin1,
 				set2_pectoralfin_left1a,
 				set2_pectoralfin_right1a,
-				set2_pelvicfin1,
+				set2_pelvicfin_left1,
 				set2_pelvicfin_right1,
 				set2_pectoralfin_left1b,
 				set2_pectoralfin_right1b,
@@ -580,24 +577,6 @@ public class ModelAnadia extends MowzieModelBase {
 				set3_caudalfin1
 		};
 
-		set1_tail_parts = new MowzieModelRenderer[] {
-				set1_tail_bass,
-    		    set1_tail_back,
-    		    set1_caudalfin1
-		};
-       
-		set2_tail_parts = new MowzieModelRenderer[] {
-				set2_tail_bass,
-				set2_tail_back,
-				set2_caudalfin1
-		};
-       
-		set3_tail_parts = new MowzieModelRenderer[] {
-				set3_tail_bass,
-				set3_tail_back,
-   		    set3_caudalfin1
-		};
-		
 		setInitPose();
     }
 
@@ -607,6 +586,18 @@ public class ModelAnadia extends MowzieModelBase {
     	setToInitPose();
     	
     	float frame = anadia.ticksExisted + partialRenderTicks;
+    	
+    	switch (anadia.getHeadType()) {
+		case 0:
+			walk(set1_jaw, (1.5F - anadia.getFishSize()) * 0.25F, 0.35F, false, 0.0F, 0F, frame, 1F - speed);
+			break;
+		case 1:
+			walk(set2_head_jaw, (1.5F - anadia.getFishSize()) * 0.25F, 0.35F, false, 0.0F, 0F, frame, 1F - speed);
+			break;
+		case 2:
+			walk(set3_head_jaw, (1.5F - anadia.getFishSize()) * 0.25F, 0.35F, false, 0.0F, 0F, frame, 1F - speed);
+			break;
+		}
     	
     	switch (anadia.getTailType()) {
 		case 0:
@@ -623,6 +614,59 @@ public class ModelAnadia extends MowzieModelBase {
 			swing(set3_tail_bass, 1F, 0.25F, false, 0.0F, 0F, frame, 0.0625F + speed);
 			swing(set3_tail_back, 1F, 0.25F, false, 1.0F, 0F, frame, 0.0625F + speed);
 			swing(set3_caudalfin1, 1F, 0.25F, false, 2.0F, 0F, frame, 0.0625F + speed);
+			break;
+		}
+    	
+    	switch (anadia.getBodyType()) {
+		case 0:
+			swing(set1_pelvicfin_left1, 0.25F, 0.5F, false, 2.0F, 0F, frame, 0.125F + speed);
+			swing(set1_pelvicfin_right1, 0.25F, 0.5F, true, 2.0F, 0F, frame, 0.125F + speed);
+			
+			swing(set1_pectoralfin_left1a, 0.25F, 0.5F, true, 1.0F, 0F, frame, 0.125F + speed);
+			swing(set1_pectoralfin_left1b, 0.25F, 0.5F, true, 2.0F, 0F, frame, 0.125F + speed);
+			
+			swing(set1_pectoralfin_right1a, 0.25F, 0.5F, false, 1.0F, 0F, frame, 0.125F + speed);
+			swing(set1_pectoralfin_right1b, 0.25F, 0.5F, false, 2.0F, 0F, frame, 0.125F + speed);
+			
+			walk(set1_pectoralfin_left1a, 0.25F, 0.5F, false, 0.0F, 0F, frame, 0.125F + speed);
+			walk(set1_pectoralfin_right1a, 0.25F, 0.5F, false, 0.0F, 0F, frame, 0.125F + speed);
+			
+			flap(set1_pectoralfin_left1a, 0.25F, 0.5F, false, 0.0F, 0F, frame, 0.125F + speed);
+			flap(set1_pectoralfin_right1a, 0.25F, 0.5F, true, 0.0F, 0F, frame, 0.125F + speed);
+
+			break;
+		case 1:
+			swing(set2_pelvicfin_left1, 0.5F, 0.5F, false, 2.0F, 0F, frame, 0.125F + speed);
+			swing(set2_pelvicfin_right1, 0.5F, 0.5F, true, 2.0F, 0F, frame, 0.125F + speed);
+			
+			swing(set2_pectoralfin_left1a, 0.5F, 0.5F, true, 1.0F, 0F, frame, 0.125F + speed);
+			swing(set2_pectoralfin_left1b, 0.5F, 0.5F, true, 2.0F, 0F, frame, 0.125F + speed);
+			
+			swing(set2_pectoralfin_right1a, 0.5F, 0.5F, false, 1.0F, 0F, frame, 0.125F + speed);
+			swing(set2_pectoralfin_right1b, 0.5F, 0.5F, false, 2.0F, 0F, frame, 0.125F + speed);
+			
+			walk(set2_pectoralfin_left1a, 0.5F, 0.5F, false, 0.0F, 0F, frame, 0.125F + speed);
+			walk(set2_pectoralfin_right1a, 0.5F, 0.5F, false, 0.0F, 0F, frame, 0.125F + speed);
+			
+			flap(set2_pectoralfin_left1a, 0.5F, 0.5F, false, 0.0F, 0F, frame, 0.125F + speed);
+			flap(set2_pectoralfin_right1a, 0.5F, 0.5F, true, 0.0F, 0F, frame, 0.125F + speed);
+
+			break;
+		case 2:
+			swing(set3_pelvicfin_left1, 0.5F, 0.5F, false, 2.0F, 0F, frame, 0.125F + speed);
+			swing(set3_pelvicfin_right1, 0.5F, 0.5F, true, 2.0F, 0F, frame, 0.125F + speed);
+			
+			swing(set3_pectoralfin_left1a, 0.5F, 0.5F, true, 1.0F, 0F, frame, 0.125F + speed);
+			swing(set3_pectoralfin_left1b, 0.5F, 0.5F, true, 2.0F, 0F, frame, 0.125F + speed);
+			
+			swing(set3_pectoralfin_right1a, 0.5F, 0.5F, false, 1.0F, 0F, frame, 0.125F + speed);
+			swing(set3_pectoralfin_right1b, 0.5F, 0.5F, false, 2.0F, 0F, frame, 0.125F + speed);
+			
+			walk(set3_pectoralfin_left1a, 0.5F, 0.5F, false, 0.0F, 0F, frame, 0.125F + speed);
+			walk(set3_pectoralfin_right1a, 0.5F, 0.5F, false, 0.0F, 0F, frame, 0.125F + speed);
+			
+			flap(set3_pectoralfin_left1a, 0.5F, 0.5F, false, 0.0F, 0F, frame, 0.125F + speed);
+			flap(set3_pectoralfin_right1a, 0.5F, 0.5F, true, 0.0F, 0F, frame, 0.125F + speed);
 			break;
 		}
 	}
