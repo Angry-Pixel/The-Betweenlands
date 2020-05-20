@@ -13,6 +13,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.loot.ISharedLootPool;
 import thebetweenlands.api.network.IGenericDataManagerAccess;
@@ -108,7 +110,7 @@ public class SharedLootPoolStorage extends LocalStorageImpl {
 		this.lootInventories.adjustOrPutValue(lootTable, 1, 1);
 
 		//Make sure this storage is linked to the chunk the loot inventory is in
-		this.linkChunk(this.getWorldStorage().getWorld().getChunk(pos));
+		this.linkChunkSafely(new ChunkPos(pos));
 
 		this.markDirty();
 	}

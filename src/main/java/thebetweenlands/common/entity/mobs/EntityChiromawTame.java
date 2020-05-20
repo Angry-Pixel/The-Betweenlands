@@ -191,7 +191,7 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 		super.onUpdate();
 
 		Entity riding = this.getRidingEntity();
-
+		
 		if(this.doubleJumpTicks > 1) {
 			this.doubleJumpTicks--;
 		}
@@ -254,10 +254,8 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 			return false;
 		}
 		if (!(entityTarget instanceof EntityCreeper) && !(entityTarget instanceof EntityGhast)) {
-			if (entityTarget instanceof EntityChiromawTame) {
-				EntityChiromawTame chiromawIn = (EntityChiromawTame) entityTarget;
-
-				if (chiromawIn.getOwner() == entityTarget2) {
+			if (entityTarget instanceof EntityChiromawTame || entityTarget instanceof EntityPullerChiromaw) {
+				if (((EntityTameableBL) entityTarget).getOwner() != null && getOwner() !=null && ((EntityTameableBL) entityTarget).getOwner() == getOwner()) {
 					return false;
 				}
 			}
@@ -266,6 +264,14 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 			return false;
 		}
 	}
+
+	@Override
+    public void setRevengeTarget(@Nullable EntityLivingBase entity) {
+    	super.setRevengeTarget(entity);
+    	if (entity instanceof EntityChiromawTame || entity instanceof EntityPullerChiromaw)
+			if (((EntityTameableBL) entity).getOwner() != null && getOwner() !=null && ((EntityTameableBL) entity).getOwner() == getOwner())
+				setRevengeTarget(null);
+    }
 
 	@Override
 	public boolean attackEntityAsMob(Entity entity) { 
@@ -535,8 +541,9 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 			player.jump();
 			player.fallDistance = -2;
 
+			this.prevWingFlapTicks = this.wingFlapTicks = this.doubleJumpTicks = 20;
+			
 			if(!this.world.isRemote) {
-				this.prevWingFlapTicks = this.wingFlapTicks = this.doubleJumpTicks = 20;
 				this.world.setEntityState(this, EVENT_DOUBLE_JUMP);
 				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.CHIROMAW_MATRIARCH_FLAP, SoundCategory.NEUTRAL, 1, 1);
 			} else {

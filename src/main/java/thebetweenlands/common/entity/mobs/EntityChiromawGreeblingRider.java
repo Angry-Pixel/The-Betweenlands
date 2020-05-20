@@ -58,11 +58,11 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 	@Override
 	protected void initEntityAI() {
 		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityChiromawGreeblingRider.EntityAISlingshotAttack(this));
-		tasks.addTask(2, new EntityChiromawGreeblingRider.EntityAIMoveTowardsTargetWithDistance(this, 1.5D, 8, 128));
-		tasks.addTask(3, new EntityAIFlyingWander(this, 0.5D));
+		tasks.addTask(1, new EntityAIFlyingWander(this, 0.75D, 5));
+		tasks.addTask(2, new EntityChiromawGreeblingRider.EntityAISlingshotAttack(this));
+		tasks.addTask(3, new EntityChiromawGreeblingRider.EntityAIMoveTowardsTargetWithDistance(this, 1.5D, 8, 128));
 		targetTasks.addTask(1, new EntityAIFindNearestTarget<EntityLivingBase>(this, EntityLivingBase.class, 10, true, false, e -> e instanceof IPullerEntity).setUnseenMemoryTicks(160));
-		//targetTasks.addTask(1, new EntityAIFindNearestTarget<EntityLivingBase>(this, EntityLivingBase.class, 10, true, false, e -> e instanceof EntitySheep).setUnseenMemoryTicks(160));
+		targetTasks.addTask(1, new EntityAIFindNearestTarget<EntityLivingBase>(this, EntityLivingBase.class, 10, true, false, e -> e instanceof EntityChiromawMatriarch).setUnseenMemoryTicks(160));
 	}
 
 	@Override
@@ -114,10 +114,13 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 			this.world.spawnEntity(floater);
 		}
 	}
-
+	
 	@Override
 	protected void updateAITasks() {
 		super.updateAITasks();
+		if (getIsHanging())
+			if (!this.world.isRemote)
+				setIsHanging(false);
 	}
 
 	public boolean getIsShooting() {
