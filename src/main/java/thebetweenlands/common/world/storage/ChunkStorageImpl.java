@@ -286,6 +286,9 @@ public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
 		if(this.localStorageReferences.add(ref)) {
 			this.markDirty();
 
+			//Make sure that the storage also knows about the reference
+			storage.loadReference(ref);
+			
 			//Add watchers
 			for(EntityPlayerMP watcher : this.getWatchers()) {
 				storage.addWatcher(this, watcher);

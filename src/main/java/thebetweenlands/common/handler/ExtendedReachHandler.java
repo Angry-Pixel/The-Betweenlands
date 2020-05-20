@@ -1,6 +1,14 @@
 package thebetweenlands.common.handler;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+
 import com.google.common.base.Predicates;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
@@ -17,21 +25,42 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent.MouseInputEvent;
 import thebetweenlands.api.item.IExtendedReach;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.serverbound.MessageExtendedReach;
 
-import java.util.List;
-import java.util.function.Consumer;
-
 public class ExtendedReachHandler {
-
     @SubscribeEvent
-    public static void onMouseClick(MouseEvent event) {
-        if ((event.getButton() == 0) && event.isButtonstate()) {
-            extendedRayTrace(trace -> TheBetweenlands.networkWrapper.sendToServer(new MessageExtendedReach(trace.entityHit)));
+    public static void onMouseInput(MouseInputEvent event) {
+    	if(Mouse.getEventButtonState() && Minecraft.getMinecraft().gameSettings.keyBindAttack.isActiveAndMatches(Mouse.getEventButton() - 100)) {
+    		handleAttack();
+    	}
+    }
+    
+    @SubscribeEvent
+    public static void onKeyboardInput(KeyInputEvent event) {
+    	int i = Keyboard.getEventKey() == 0 ? Keyboard.getEventCharacter() + 256 : Keyboard.getEventKey();
+    	if(Keyboard.getEventKeyState() && Minecraft.getMinecraft().gameSettings.keyBindAttack.isActiveAndMatches(i)) {
+    		handleAttack();
+    	}
+    }
+    
+    private static void handleAttack() {
+    	List<Entity> hitEntities = new ArrayList<>();
+        if(extendedRayTrace(trace -> hitEntities.add(trace.entityHit))) {
+        	Minecraft mc = Minecraft.getMinecraft();
+            EntityPlayer player = mc.player;
+            if (player != null) {
+                ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
+                if (!stack.isEmpty() && stack.getItem() instanceof IExtendedReach) {
+                	((IExtendedReach)stack.getItem()).onLeftClick(player, stack);
+                }
+            }
+        	
+        	TheBetweenlands.networkWrapper.sendToServer(new MessageExtendedReach(hitEntities));
         }
     }
 
@@ -91,7 +120,7 @@ public class ExtendedReachHandler {
         }
     }
 
-    private static void extendedRayTrace(Consumer<RayTraceResult> consumer) {
+    private static boolean extendedRayTrace(Consumer<RayTraceResult> consumer) {
         Minecraft mc = Minecraft.getMinecraft();
         EntityPlayer player = mc.player;
         if (player != null) {
@@ -103,9 +132,11 @@ public class ExtendedReachHandler {
                     if (trace != null && trace.entityHit != null && trace.entityHit.hurtResistantTime == 0 && trace.entityHit != player) {
                         consumer.accept(trace);
                     }
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     public static RayTraceResult getExtendedRayTrace(double dist) {
