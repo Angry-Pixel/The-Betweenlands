@@ -125,6 +125,19 @@
 			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/kirito_discovery.png",
 			"title": "Discovery",
 			"author": "Kirito"
+		},
+		{
+			"sha256": "4B0C6FC1A7722DB2679AAFD6A0F6D021842DCBCCE1768F1ADAC9E67AA9113D09",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/spiderking23_blade_of_the_champion.png",
+			"title": "Blade of the Champion",
+			"author": "spiderking23"
+		},
+		{
+			"sha256": "5B6B0FF70E71D2EFA99849081E85DBC3D703FA78F31CDE107EDC2A2677848136",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/spiderking23_dreadful_peat_mummy.png",
+			"title": "Dreadful Peat Mummy",
+			"author": "spiderking23",
+			"description": "Dreadful, simply Dreadful."
 		}
 	]
 }]
