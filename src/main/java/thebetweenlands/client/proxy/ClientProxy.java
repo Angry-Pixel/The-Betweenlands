@@ -222,6 +222,7 @@ import thebetweenlands.common.entity.mobs.EntityWallLamprey;
 import thebetweenlands.common.entity.mobs.EntityWallLivingRoot;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
+import thebetweenlands.common.entity.projectiles.EntityBLFishHook;
 import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.entity.projectiles.EntityChiromawDroppings;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
@@ -232,6 +233,7 @@ import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
 import thebetweenlands.common.entity.projectiles.EntitySludgeWallJet;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.entity.projectiles.EntityThrownTarminion;
+import thebetweenlands.common.entity.projectiles.RenderBLFishHook;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.handler.ExtendedReachHandler;
 import thebetweenlands.common.herblore.book.GuiManualHerblore;
@@ -628,6 +630,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityChiromawTame.class, RenderChiromawTame::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGreeblingCorpse.class, RenderGreeblingCorpse::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityAnadia.class, RenderAnadia::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityBLFishHook.class, RenderBLFishHook::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());
