@@ -90,6 +90,18 @@
           }
         }
       }
-    }
+    },
+    "hurt_mob_barb": {
+      "trigger": "minecraft:player_hurt_entity",
+      "conditions": {
+        "damage": {
+          "type": {
+            "direct_entity": {
+              "type": "thebetweenlands:bl_arrow",
+              "nbt": "{\"arrowType\":\"chiromaw_barb\"}"
+            }
+          }
+        }
+      }    
   }
 }
