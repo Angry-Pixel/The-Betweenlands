@@ -138,6 +138,36 @@
 			"title": "The Horror from the Peat",
 			"author": "spiderking23",
 			"description": "Dreadful, simply Dreadful."
+		},
+		{
+			"sha256": "9728CA616B703784874BF7E8CD8CF5060FCEEAD7E116C4F26AF20F513D666D88",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/swampman_derp_a_gaze_from_the_dark.png",
+			"title": "A Gaze from the Dark",
+			"author": "swampman derp"
+		},
+		{
+			"sha256": "B32DFCB07188E23688F646B79FBCE0E36BE584E25952C13B9726F73673AA29FB",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/swampman_derp_dancing_auroras.png",
+			"title": "Dancing Auroras",
+			"author": "swampman derp"
+		},
+		{
+			"sha256": "03522B748767A80A268013354201F8A4730F7C225A0D859ED920A76C82CDDCAD",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/swampman_derp_sporeling_shuffle.png",
+			"title": "Sporeling Shuffle",
+			"author": "swampman derp"
+		},
+		{
+			"sha256": "6FC2F76026FE1E91BB1FD60686D2FDE6046AEA481518A737E57BB11DC70786F5",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/swampman_derp_the_big_tree.png",
+			"title": "The Big Tree",
+			"author": "swampman derp"
+		},
+		{
+			"sha256": "36BE6A65F99975905BA1BEBD265A19AE13058D50E67CACE20E048756341121EE",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/swampman_derp_the_secret_in_the_slime.png",
+			"title": "The Secret in the Slime",
+			"author": "swampman derp"
 		}
 	]
 }]
