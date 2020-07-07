@@ -341,14 +341,12 @@ public class TextContainer {
             Gui.drawRect(0, 0, 10, 10, 0x20FF0000);
             GlStateManager.popMatrix();
             for(TextSegment segment : this.textSegments) {
-                GlStateManager.popMatrix();
                 GlStateManager.pushMatrix();
                 GlStateManager.translate(segment.x + x, segment.y + y, 0);
                 GlStateManager.scale(segment.width / 10.0D, segment.height / 10.0D, 1.0D);
                 Gui.drawRect(0, 0, 10, 10, 0x250000FF);
                 GlStateManager.popMatrix();
                 GlStateManager.color(1, 1, 1, 1);
-                GlStateManager.popMatrix();
             }
             for(TextArea ta : this.getTextAreas()) {
                 if(ta instanceof TooltipArea) {

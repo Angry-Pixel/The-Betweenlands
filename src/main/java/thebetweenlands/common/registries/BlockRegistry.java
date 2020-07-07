@@ -841,7 +841,7 @@ public class BlockRegistry {
     public static final Block THATCH_ROOF = new BlockThatchRoof();
     public static final Block MUD_BRICK_ROOF = new BlockMudBrickRoof();
     public static final Block REPELLER = new BlockRepeller();
-    public static final Block RUNE_CHAIN_ALTAR = new BlockRuneWeavingTable();
+    public static final Block RUNE_WEAVING_TABLE = new BlockRuneWeavingTable();
     public static final Block WAYSTONE = new BlockWaystone();
     public static final Block CAVING_ROPE_LIGHT = new BlockCavingRopeLight();
     public static final Block GROUND_ITEM = new BlockGroundItem();

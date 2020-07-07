@@ -105,8 +105,8 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 	protected int updateCounter;
 
-	protected int maxXSize = 166;
-	protected int maxYSize = 216;
+	protected int maxXSize = 182;
+	protected int maxYSize = 255;
 
 	protected int xSize = this.maxXSize;
 	protected int ySize = this.maxYSize;
@@ -122,7 +122,6 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	protected int currentDescriptionPageIndex = 0;
 
 	protected boolean hasMultipleConfigurations = false;
-	protected int additionalConfigurationsHeight = 0;
 
 	int currentConfigurationIndex = 0;
 
@@ -146,12 +145,12 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 			@Override
 			public void render(int centerX, int centerY) {
 				mc.getTextureManager().bindTexture(GUI_RUNE_TOKENS);
-				
+
 				float x = centerX - width / 2;
 				float y = centerY - height / 2;
-				
+
 				float scale = 0.0285714285F;
-				
+
 				Tessellator tessellator = Tessellator.getInstance();
 				BufferBuilder bufferbuilder = tessellator.getBuffer();
 				bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -179,22 +178,10 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		this.hasMultipleConfigurations = container.getBlueprint().getConfigurations().size() > 1;
 		if(this.hasMultipleConfigurations) {
-			this.additionalConfigurationsHeight = 12;
-
 			this.currentConfigurationIndex = Math.max(0, this.container.getBlueprint().getConfigurations().indexOf(this.context.getConfiguration()));
 		}
 
 		INodeConfiguration config = this.context.getConfiguration();
-
-		int tokensHeight = 0;
-
-		if(!config.getInputs().isEmpty()) {
-			tokensHeight += 22;
-		}
-
-		if(!config.getOutputs().isEmpty()) {
-			tokensHeight += 22;
-		}
 
 		this.title = new TextContainer(this.xSize - 8 - 20, 80, I18n.format(String.format("rune.%s.configuration.%d.title", container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId())), this.fontRenderer);
 
@@ -211,7 +198,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		this.title.parse();
 
-		this.description = new TextContainer(this.xSize - 8 - 4, this.maxYSize - 6 - this.title.getPages().get(0).getTextHeight() - 50 - this.additionalConfigurationsHeight, I18n.format(String.format("rune.%s.configuration.%d.description", container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId())), this.fontRenderer);
+		this.description = new TextContainer(this.xSize - 24, 170 /*TODO Scrolling*/, I18n.format(String.format("rune.%s.configuration.%d.description", container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId())), this.fontRenderer);
 
 		this.description.setCurrentScale(1).setCurrentColor(0xFF3d3d3d);
 
@@ -226,29 +213,40 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		this.description.parse();
 
-		this.ySize = (int) (this.title.getPages().get(0).getTextHeight() + 20 + tokensHeight + this.description.getPages().get(0).getTextHeight()) + this.additionalConfigurationsHeight;
+		this.ySize = Math.min(this.maxYSize, 32 /*top*/ + 52 /*bottom*/ + Math.max(16 /*center*/, (int)this.description.getPages().get(0).getTextHeight()));
 
-		int tokensYOffset = 0;
+		/*int tokensXOffset = 0;
+
+		if(!this.outputTokens.isEmpty()) {
+			this.fontRenderer.drawString(I18n.format("rune.gui.outputs"), x + 8, y + this.ySize - 49, 0xFF3d3d3d);
+			tokensXOffset += (this.xSize - 16) / 2;
+		}
+
+		if(!this.inputTokens.isEmpty()) {
+			this.fontRenderer.drawString(I18n.format("rune.gui.inputs"), x + 8 + tokensXOffset, y + this.ySize - 49, 0xFF3d3d3d);
+		}*/
+		
+		int tokensXOffset = 0;
 
 		int xOffOutputs = this.fontRenderer.getStringWidth(I18n.format("rune.gui.outputs")) + 2;
 
 		this.outputTokens.clear();
-		int x = 4;
+		int x = 8;
 		for(int i = 0; i < config.getOutputs().size(); i++) {
-			this.outputTokens.add(new Token(this, i, xOffOutputs + x, this.ySize - 3 - 20 - tokensYOffset - this.additionalConfigurationsHeight, 16, 16, true));
+			this.outputTokens.add(new Token(this, i, xOffOutputs + x, this.ySize - 53, 16, 16, true));
 			x += 18;
 		}
 
 		if(!this.outputTokens.isEmpty()) {
-			tokensYOffset += 20;
+			tokensXOffset += (this.xSize - 16) / 2;
 		}
 
 		int xOffInputs = this.fontRenderer.getStringWidth(I18n.format("rune.gui.inputs")) + 2;
 
-		x = 4;
+		x = 8;
 		this.inputTokens.clear();
 		for(int i = 0; i < config.getInputs().size(); i++) {
-			this.inputTokens.add(new Token(this, i, xOffInputs + x, this.ySize - 3 - 20 - tokensYOffset - this.additionalConfigurationsHeight, 16, 16, false));
+			this.inputTokens.add(new Token(this, i, xOffInputs + x + tokensXOffset, this.ySize - 53, 16, 16, false));
 			x += 18;
 		}
 	}
@@ -270,7 +268,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 	@Override
 	public void drawBackground(int mouseX, int mouseY) {
-		this.drawMenuBackground();
+		this.drawMenuBackground(mouseX, mouseY);
 	}
 
 	@Override
@@ -312,7 +310,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	@Override
 	public void drawTokenTooltip(IGuiRuneToken token, int centerX, int centerY, int mouseX, int mouseY, RuneMenuDrawingContext.Tooltip context) {
 		if(token instanceof Token) {
-			this.drawTokenTooltip((Token) token, centerX, centerY, mouseX, mouseY);
+			this.drawTokenTooltip((Token) token, centerX, centerY, mouseX, mouseY + (context == RuneMenuDrawingContext.Tooltip.CONNECTION_END ? 10 : 0));
 		}
 	}
 
@@ -392,22 +390,30 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		//this.drawTexturedModalRect512(x + this.xSize / 2 - 8 - 13, y + this.ySize - 13, 452, 0, 13, 7);
 		//this.drawTexturedModalRect512(x + this.xSize / 2 + 8, y + this.ySize - 13, 452, 29, 13, 7);
 
-		if(mouseX >= x + this.xSize / 2 - 8 - 13 && mouseX < x + this.xSize / 2 - 8 - 13 + 13
-				&& mouseY >= y + this.ySize - 13 && mouseY < y + this.ySize - 13 + 7) {
-			this.currentConfigurationIndex = Math.max(this.currentConfigurationIndex - 1, 0);
-			this.context.setConfiguration(this.container.getBlueprint().getConfigurations().get(this.currentConfigurationIndex));
-			this.createGui();
-			TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneWeavingTableConfiguration(this.context.getRuneIndex(), this.currentConfigurationIndex));
-			return true;
+		if(this.currentConfigurationIndex > 0) {
+			int sx = x + this.xSize / 2 - 20 - 26;
+			int sy = y + this.ySize - 33;
+			
+			if(mouseX >= sx + 3 && mouseX < sx + 29 - 4 && mouseY >= sy + 10 && mouseY < sy + 35 - 3) {
+				this.currentConfigurationIndex = Math.max(this.currentConfigurationIndex - 1, 0);
+				this.context.setConfiguration(this.container.getBlueprint().getConfigurations().get(this.currentConfigurationIndex));
+				this.createGui();
+				TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneWeavingTableConfiguration(this.context.getRuneIndex(), this.currentConfigurationIndex));
+				return true;
+			}
 		}
-
-		if(mouseX >= x + this.xSize / 2 + 8 && mouseX < x + this.xSize / 2 + 8 + 13
-				&& mouseY >= y + this.ySize - 13 && mouseY < y + this.ySize - 13 + 7) {
-			this.currentConfigurationIndex = Math.min(this.currentConfigurationIndex + 1, this.container.getBlueprint().getConfigurations().size() - 1);
-			this.context.setConfiguration(this.container.getBlueprint().getConfigurations().get(this.currentConfigurationIndex));
-			this.createGui();
-			TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneWeavingTableConfiguration(this.context.getRuneIndex(), this.currentConfigurationIndex));
-			return true;
+		
+		if(this.currentConfigurationIndex < this.container.getBlueprint().getConfigurations().size() - 1) {
+			int sx = x + this.xSize / 2 + 20 - 3;
+			int sy = y + this.ySize - 33;
+			
+			if(mouseX >= sx + 4 && mouseX < sx + 29 - 3 && mouseY >= sy + 10 && mouseY < sy + 35 - 3) {
+				this.currentConfigurationIndex = Math.min(this.currentConfigurationIndex + 1, this.container.getBlueprint().getConfigurations().size() - 1);
+				this.context.setConfiguration(this.container.getBlueprint().getConfigurations().get(this.currentConfigurationIndex));
+				this.createGui();
+				TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneWeavingTableConfiguration(this.context.getRuneIndex(), this.currentConfigurationIndex));
+				return true;
+			}
 		}
 
 		return false;
@@ -461,12 +467,12 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 	@Override
 	public int getMinX() {
-		return this.menu == RuneMenuType.PRIMARY ? this.context.getRuneWeavingTableGui().getMinX() - 185 : this.context.getRuneWeavingTableGui().getMaxX() + 19;
+		return this.menu == RuneMenuType.PRIMARY ? this.context.getRuneWeavingTableGui().getMinX() - 200 : this.context.getRuneWeavingTableGui().getMaxX() + 19;
 	}
 
 	@Override
 	public int getMinY() {
-		return this.context.getRuneWeavingTableGui().getMinY() + 70 - this.ySize / 2;
+		return this.context.getRuneWeavingTableGui().getMinY() + 70 - Math.min(75, this.ySize / 2);
 	}
 
 	@Override
@@ -479,83 +485,112 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		return this.getMinY() + this.ySize;
 	}
 
-	protected void drawMenuBackground() {
+	protected void drawMenuBackground(int mouseX, int mouseY) {
 		int x = this.getMinX();
 		int y = this.getMinY();
+		
 
 		this.mc.getTextureManager().bindTexture(GUI_RUNE_MENU);
 
-		//Top left corner
-		this.drawTexturedModalRect512(x, y, 212, 94, 3, 3);
-		//Top bar
-		this.drawTexturedModalRect512(x + 3, y, 215, 94, this.xSize - 6, 3);
-		//Top right corner
-		this.drawTexturedModalRect512(x + 3 + this.xSize - 6, y, 383, 94, 3, 3);
-		//Right bar
-		this.drawTexturedModalRect512(x + 3 + this.xSize - 6, y + 3, 383, 97, 3, this.ySize - 6);
-		//Bottom right corner
-		this.drawTexturedModalRect512(x + 3 + this.xSize - 6, y + 3 + this.ySize - 6, 383, 313, 3, 3);
-		//Bottom bar
-		this.drawTexturedModalRect512(x + 3, y + 3 + this.ySize - 6, 215, 313, this.xSize - 6, 3);
-		//Bottom left corner
-		this.drawTexturedModalRect512(x, y + 3 + this.ySize - 6, 212, 313, 3, 3);
-		//Left bar
-		this.drawTexturedModalRect512(x, y + 3, 212, 97, 3, this.ySize - 6);
-
-		//Background
-		this.drawTexturedModalRect512(x + 3, y + 3, 215, 97, this.xSize - 6, this.ySize - 6);
-
+		int backgroundSize = 170;
+		int backgroundHeight = this.ySize - 52 - 32;
+		int backgroundStart = 33 + (backgroundSize - backgroundHeight) / 2;
+		
+		//Background part
+		this.drawTexturedModalRect(x, y + 32, 0, backgroundStart, 182, backgroundHeight);
+		//drawRect(x, y + 32, x + 182, y + 32 + backgroundHeight, 0x30FF0000);
+		//GlStateManager.color(1, 1, 1, 1);
+		
+		//Top part
+		this.drawTexturedModalRect(x, y, 0, 0, 182, 32);
+		//drawRect(x, y, x + 182, y + 32, 0x3000FF00);
+		//GlStateManager.color(1, 1, 1, 1);
+		
+		//Bottom part
+		this.drawTexturedModalRect(x, y + this.ySize - 52, 0, 204, 182, 52);
+		//drawRect(x, y + this.ySize - 52, x + 182, y + this.ySize, 0x300000FF);
+		//GlStateManager.color(1, 1, 1, 1);
+		
 		//Page left/right
-		if(this.description.getPages().size() > 1) {
+		/*if(this.description.getPages().size() > 1) {
 			if(this.currentDescriptionPageIndex > 0) {
-				this.drawTexturedModalRect512(x + this.xSize - 6 - 40, y + 8, 452, 0, 13, 7);
+				this.drawTexturedModalRect(x + this.xSize - 6 - 40, y + 8, 452, 0, 13, 7);
 			}
 			if(this.currentDescriptionPageIndex < this.description.getPages().size() - 1) {
-				this.drawTexturedModalRect512(x + this.xSize - 6 - 13, y + 8, 452, 29, 13, 7);
+				this.drawTexturedModalRect(x + this.xSize - 6 - 13, y + 8, 452, 29, 13, 7);
 			}
 		}
 
 		//Configuration left/right
 		if(this.hasMultipleConfigurations) {
 			if(this.currentConfigurationIndex > 0) {
-				this.drawTexturedModalRect512(x + this.xSize / 2 - 8 - 13, y + this.ySize - 13, 452, 0, 13, 7);
+				this.drawTexturedModalRect(x + this.xSize / 2 - 8 - 13, y + this.ySize - 13, 452, 0, 13, 7);
 			}
 			if(this.currentConfigurationIndex < this.container.getBlueprint().getConfigurations().size() - 1) {
-				this.drawTexturedModalRect512(x + this.xSize / 2 + 8, y + this.ySize - 13, 452, 29, 13, 7);
+				this.drawTexturedModalRect(x + this.xSize / 2 + 8, y + this.ySize - 13, 452, 29, 13, 7);
 			}
+		}*/
+		
+		if(this.hasMultipleConfigurations) {
+			GlStateManager.enableBlend();
+			
+			if(this.currentConfigurationIndex > 0) {
+				int sx = x + this.xSize / 2 - 20 - 26;
+				int sy = y + this.ySize - 33;
+				
+				if(mouseX >= sx + 3 && mouseX < sx + 29 - 4 && mouseY >= sy + 10 && mouseY < sy + 35 - 3) {
+					this.drawTexturedModalRect(sx, sy, 188, 85, 29, 40);
+				} else {
+					this.drawTexturedModalRect(sx, sy, 188, 27, 29, 35);
+				}
+			}
+			
+			if(this.currentConfigurationIndex < this.container.getBlueprint().getConfigurations().size() - 1) {
+				int sx = x + this.xSize / 2 + 20 - 3;
+				int sy = y + this.ySize - 33;
+				
+				if(mouseX >= sx + 4 && mouseX < sx + 29 - 3 && mouseY >= sy + 10 && mouseY < sy + 35 - 3) {
+					this.drawTexturedModalRect(sx, sy, 221, 85, 29, 40);
+				} else {
+					this.drawTexturedModalRect(sx, sy, 221, 27, 29, 35);
+				}
+			}
+
+			GlStateManager.disableBlend();
+			
+			//Oval
+			this.drawTexturedModalRect(x + this.xSize / 2 - 17, y + this.ySize - 24, 187, 65, 34, 17);
 		}
 
+		int titleWidth = (int)this.title.getPages().get(0).getTextWidth();
+		
 		ItemStack stack = this.context.getRuneItemStack();
 
-		ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, stack, x + 4, y + 4, 1, 1, 1, 1);
+		ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, stack, x + this.xSize / 2 - 8, y + 4, 1, 1, 1, 1);
 
-		//Page left/right number
-		if(this.description.getPages().size() > 1) {
-			this.fontRenderer.drawString(String.valueOf(this.currentDescriptionPageIndex + 1), x + this.xSize - 6 - 40 + 21 - this.fontRenderer.getStringWidth(String.valueOf(this.currentDescriptionPageIndex + 1)) / 2, y + 8, 0xFF3d3d3d);
-		}
+		this.title.getPages().get(0).render(x + this.xSize / 2 - titleWidth / 2, y + 22);
 
 		//Configuration left/right
 		if(this.hasMultipleConfigurations) {
-			this.fontRenderer.drawString(String.valueOf(this.currentConfigurationIndex + 1), x + this.xSize / 2 + 1 - this.fontRenderer.getStringWidth(String.valueOf(this.currentConfigurationIndex + 1)) / 2, y + this.ySize - 13, 0xFF3d3d3d);
+			String str = String.valueOf(this.currentConfigurationIndex + 1) + "/" + String.valueOf(this.container.getBlueprint().getConfigurations().size());
+			this.fontRenderer.drawString(str, x + this.xSize / 2 - this.fontRenderer.getStringWidth(str) / 2, y + this.ySize - 19, 0xFF3d3d3d);
 		}
-
-		this.title.getPages().get(0).render(x + 4 + 20, y + 8);
 
 		if(this.currentDescriptionPageIndex < this.description.getPages().size()) {
-			this.description.getPages().get(this.currentDescriptionPageIndex).render(x + 4, y + 16 + this.title.getPages().get(0).getTextHeight());
+			this.description.getPages().get(this.currentDescriptionPageIndex).render(x + 12, y + 33);
 		}
-
+		
 
 		//TODO Improve input/output tokens GUI
-		int tokensYOffset = 0;
+		int tokensXOffset = 0;
 
 		if(!this.outputTokens.isEmpty()) {
-			this.fontRenderer.drawString(I18n.format("rune.gui.outputs"), x + 4, y + 4 + this.ySize - 3 - 20 - this.additionalConfigurationsHeight, 0xFF3d3d3d);
-			tokensYOffset += 20;
+			this.fontRenderer.drawString(I18n.format("rune.gui.outputs"), x + 8, y + this.ySize - 49, 0xFF3d3d3d);
+			tokensXOffset += (this.xSize - 16) / 2;
 		}
 
 		if(!this.inputTokens.isEmpty()) {
-			this.fontRenderer.drawString(I18n.format("rune.gui.inputs"), x + 4, y + 4 + this.ySize - 3 - 20 - tokensYOffset - this.additionalConfigurationsHeight, 0xFF3d3d3d);
+			this.fontRenderer.drawString(I18n.format("rune.gui.inputs"), x + 8 + tokensXOffset, y + this.ySize - 49, 0xFF3d3d3d);
 		}
 
 		for(Token token : this.inputTokens) {
@@ -715,21 +750,6 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 			pyc2 = yc2;
 		}
 
-		tessellator.draw();
-	}
-
-	/**
-	 * Same as {@link #drawTexturedModalRect(int, int, int, int, int, int)} but for 512x512 textures
-	 */
-	protected void drawTexturedModalRect512(float x, float y, int minU, int minV, int width, int height) {
-		float scale = 0.001953125F;
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuffer();
-		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-		bufferbuilder.pos((double)(x + 0), (double)(y + height), (double)this.zLevel).tex((double)((float)(minU + 0) * scale), (double)((float)(minV + height) * scale)).endVertex();
-		bufferbuilder.pos((double)(x + width), (double)(y + height), (double)this.zLevel).tex((double)((float)(minU + width) * scale), (double)((float)(minV + height) * scale)).endVertex();
-		bufferbuilder.pos((double)(x + width), (double)(y + 0), (double)this.zLevel).tex((double)((float)(minU + width) * scale), (double)((float)(minV + 0) * scale)).endVertex();
-		bufferbuilder.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel).tex((double)((float)(minU + 0) * scale), (double)((float)(minV + 0) * scale)).endVertex();
 		tessellator.draw();
 	}
 
