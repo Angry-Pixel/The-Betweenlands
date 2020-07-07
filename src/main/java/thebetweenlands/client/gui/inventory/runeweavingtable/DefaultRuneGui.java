@@ -14,6 +14,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -106,7 +107,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	protected int updateCounter;
 
 	protected int maxXSize = 182;
-	protected int maxYSize = 255;
+	protected int maxYSize = 254;
 
 	protected int xSize = this.maxXSize;
 	protected int ySize = this.maxYSize;
@@ -119,8 +120,8 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	protected TextContainer title;
 	protected TextContainer description;
 
-	protected int currentDescriptionPageIndex = 0;
-
+	protected float scroll = 0.0f;
+	
 	protected boolean hasMultipleConfigurations = false;
 
 	int currentConfigurationIndex = 0;
@@ -175,8 +176,6 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	}
 
 	protected void createGui() {
-		this.currentDescriptionPageIndex = 0;
-
 		this.hasMultipleConfigurations = container.getBlueprint().getConfigurations().size() > 1;
 		if(this.hasMultipleConfigurations) {
 			this.currentConfigurationIndex = Math.max(0, this.container.getBlueprint().getConfigurations().indexOf(this.context.getConfiguration()));
@@ -199,7 +198,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		this.title.parse();
 
-		this.description = new TextContainer(this.xSize - 24, 170 /*TODO Scrolling*/, I18n.format(String.format("rune.%s.configuration.%d.description", container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId())), this.fontRenderer);
+		this.description = new TextContainer(this.xSize - 26, 10000, I18n.format(String.format("rune.%s.configuration.%d.description", container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId())), this.fontRenderer);
 
 		this.description.setCurrentScale(1).setCurrentColor(0xFF3d3d3d);
 
@@ -375,19 +374,6 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		int x = this.getMinX();
 		int y = this.getMinY();
 
-		//TODO Sounds?
-		if(mouseX >= x + this.xSize - 6 - 40 && mouseX < x + this.xSize - 6 - 40 + 13
-				&& mouseY >= y + 8 && mouseY < y + 8 + 7) {
-			this.currentDescriptionPageIndex = Math.max(this.currentDescriptionPageIndex - 1, 0);
-			return true;
-		}
-
-		if(mouseX >= x + this.xSize - 6 - 13 && mouseX < x + this.xSize - 6 - 13 + 13
-				&& mouseY >= y + 8 && mouseY < y + 8 + 7) {
-			this.currentDescriptionPageIndex = Math.min(this.currentDescriptionPageIndex + 1, this.description.getPages().size() - 1);
-			return true;
-		}
-
 		//this.drawTexturedModalRect512(x + this.xSize / 2 - 8 - 13, y + this.ySize - 13, 452, 0, 13, 7);
 		//this.drawTexturedModalRect512(x + this.xSize / 2 + 8, y + this.ySize - 13, 452, 29, 13, 7);
 
@@ -512,26 +498,6 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		//drawRect(x, y + this.ySize - 52, x + 182, y + this.ySize, 0x300000FF);
 		//GlStateManager.color(1, 1, 1, 1);
 		
-		//Page left/right
-		/*if(this.description.getPages().size() > 1) {
-			if(this.currentDescriptionPageIndex > 0) {
-				this.drawTexturedModalRect(x + this.xSize - 6 - 40, y + 8, 452, 0, 13, 7);
-			}
-			if(this.currentDescriptionPageIndex < this.description.getPages().size() - 1) {
-				this.drawTexturedModalRect(x + this.xSize - 6 - 13, y + 8, 452, 29, 13, 7);
-			}
-		}
-
-		//Configuration left/right
-		if(this.hasMultipleConfigurations) {
-			if(this.currentConfigurationIndex > 0) {
-				this.drawTexturedModalRect(x + this.xSize / 2 - 8 - 13, y + this.ySize - 13, 452, 0, 13, 7);
-			}
-			if(this.currentConfigurationIndex < this.container.getBlueprint().getConfigurations().size() - 1) {
-				this.drawTexturedModalRect(x + this.xSize / 2 + 8, y + this.ySize - 13, 452, 29, 13, 7);
-			}
-		}*/
-		
 		if(this.hasMultipleConfigurations) {
 			GlStateManager.enableBlend();
 			
@@ -562,6 +528,21 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 			//Oval
 			this.drawTexturedModalRect(x + this.xSize / 2 - 17, y + this.ySize - 24, 187, 65, 34, 17);
 		}
+		
+		//Slider
+		if(this.ySize == this.maxYSize) {
+			//Background
+			this.drawTexturedModalRect(x + this.xSize - 13, y + 42, 251, 27, 5, 152);
+			
+			this.scroll = (float)(Math.sin((System.currentTimeMillis() % 100000) * 0.001f) + 1) * 0.5f;
+			
+			int handleStart = y + 47;
+			int handleEnd = handleStart + 142 - 9;
+			int handleRange = handleEnd - handleStart;
+			
+			//Handle
+			this.drawTexturedModalRect(x + this.xSize - 15, y + 47 + (int)(this.scroll * handleRange), 249, 15, 7, 9);
+		}
 
 		int titleWidth = (int)this.title.getPages().get(0).getTextWidth();
 		
@@ -577,10 +558,23 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 			this.fontRenderer.drawString(str, x + this.xSize / 2 - this.fontRenderer.getStringWidth(str) / 2, y + this.ySize - 19, 0xFF3d3d3d);
 		}
 
-		if(this.currentDescriptionPageIndex < this.description.getPages().size()) {
-			this.description.getPages().get(this.currentDescriptionPageIndex).render(x + 12, y + 33);
-		}
+		ScaledResolution res = new ScaledResolution(this.mc);
+		int descriptionStartX = (int)((x + 12) / res.getScaledWidth_double() * this.mc.displayWidth);
+		int descriptionStartY = (int)((1 - (y + this.ySize - 52) / res.getScaledHeight_double()) * this.mc.displayHeight);
+		int descriptionWidth = (int)((this.xSize - 24) / res.getScaledWidth_double() * this.mc.displayWidth);
+		int descriptionHeight = (int)((this.ySize - 52 - 33) / res.getScaledHeight_double() * this.mc.displayHeight);
 		
+		GL11.glEnable(GL11.GL_SCISSOR_TEST);
+		GL11.glScissor(descriptionStartX, descriptionStartY, descriptionWidth, descriptionHeight);
+		
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(0, (168 - this.description.getPages().get(0).getTextHeight()) * this.scroll, 0);
+		
+		this.description.getPages().get(0).render(x + 13, y + 33);
+		
+		GlStateManager.popMatrix();
+		
+		GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
 		//TODO Improve input/output tokens GUI
 		int tokensXOffset = 0;
