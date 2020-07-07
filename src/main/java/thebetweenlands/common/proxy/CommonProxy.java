@@ -42,7 +42,7 @@ import thebetweenlands.common.inventory.container.ContainerMortar;
 import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
-import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltar;
+import thebetweenlands.common.inventory.container.runeweavingtable.ContainerRuneWeavingTable;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.common.tile.TileEntityBLDualFurnace;
@@ -52,7 +52,7 @@ import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityPurifier;
-import thebetweenlands.common.tile.TileEntityRuneChainAltar;
+import thebetweenlands.common.tile.TileEntityRuneWeavingTable;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 
 public class CommonProxy implements IGuiHandler {
@@ -76,7 +76,7 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_DRAETON_CRAFTING = 19;
 	public static final int GUI_DRAETON_FURNACE = 20;
 	public static final int GUI_DRAETON_UPGRADES = 21;
-	public static final int GUI_RUNE_CHAIN_ALTAR = 22;
+	public static final int GUI_RUNE_WEAVING_TABLE = 22;
 	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -161,9 +161,9 @@ public class CommonProxy implements IGuiHandler {
 			}
 			break;
 
-		case GUI_RUNE_CHAIN_ALTAR:
-			if (tile instanceof TileEntityRuneChainAltar) {
-				return new ContainerRuneChainAltar(player, (TileEntityRuneChainAltar) tile);
+		case GUI_RUNE_WEAVING_TABLE:
+			if (tile instanceof TileEntityRuneWeavingTable) {
+				return new ContainerRuneWeavingTable(player, (TileEntityRuneWeavingTable) tile);
 			}
 			break;
 			

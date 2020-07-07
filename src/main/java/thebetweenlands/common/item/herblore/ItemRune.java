@@ -7,9 +7,9 @@ import thebetweenlands.api.rune.IRuneContainerFactory;
 import thebetweenlands.api.rune.IRuneGui;
 import thebetweenlands.api.rune.RuneMenuType;
 import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.client.gui.inventory.runechainaltar.DefaultRuneGui;
+import thebetweenlands.client.gui.inventory.runeweavingtable.DefaultRuneGui;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.inventory.container.runechainaltar.DefaultRuneContainer;
+import thebetweenlands.common.inventory.container.runeweavingtable.DefaultRuneContainer;
 
 public class ItemRune extends Item {
 	private final Factory factory = new Factory(this);

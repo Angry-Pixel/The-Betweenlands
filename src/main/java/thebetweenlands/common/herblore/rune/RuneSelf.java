@@ -11,7 +11,7 @@ import thebetweenlands.api.rune.impl.AbstractRune;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration.OutputPort;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneMarkDescriptors;
+import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
@@ -31,7 +31,7 @@ public final class RuneSelf extends AbstractRune<RuneSelf> {
 		static {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 
-			OUT_ENTITY = builder.out(RuneMarkDescriptors.ENTITY, IRuneChainUser.class);
+			OUT_ENTITY = builder.out(RuneTokenDescriptors.ENTITY, IRuneChainUser.class);
 
 			CONFIGURATION_1 = builder.build();
 		}

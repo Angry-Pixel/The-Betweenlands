@@ -1,4 +1,4 @@
-package thebetweenlands.client.gui.inventory.runechainaltar;
+package thebetweenlands.client.gui.inventory.runeweavingtable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,31 +24,31 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import thebetweenlands.api.rune.IGuiRuneMark;
+import thebetweenlands.api.rune.IGuiRuneToken;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.IRuneContainer;
 import thebetweenlands.api.rune.IRuneContainerContext;
 import thebetweenlands.api.rune.IRuneGui;
 import thebetweenlands.api.rune.RuneMenuDrawingContext;
 import thebetweenlands.api.rune.RuneMenuType;
-import thebetweenlands.api.rune.impl.RuneMarkDescriptors;
+import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.book.widgets.text.FormatTags;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.network.serverbound.MessageSetRuneChainAltarConfiguration;
+import thebetweenlands.common.network.serverbound.MessageSetRuneWeavingTableConfiguration;
 import thebetweenlands.util.ColoredItemRenderer;
 
 public class DefaultRuneGui extends Gui implements IRuneGui {
-	public static class Mark implements IGuiRuneMark {
+	public static class Token implements IGuiRuneToken {
 		private final IRuneGui gui;
-		private final int markIndex, x, y, w, h;
+		private final int tokenIndex, x, y, w, h;
 		private final boolean output;
 
-		public Mark(IRuneGui gui, int markIndex, int x, int y, int w, int h, boolean output) {
+		public Token(IRuneGui gui, int tokenIndex, int x, int y, int w, int h, boolean output) {
 			this.gui = gui;
-			this.markIndex = markIndex;
+			this.tokenIndex = tokenIndex;
 			this.x = x;
 			this.y = y;
 			this.w = w;
@@ -66,8 +66,8 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		}
 
 		@Override
-		public int getMarkIndex() {
-			return this.markIndex;
+		public int getTokenIndex() {
+			return this.tokenIndex;
 		}
 
 		@Override
@@ -86,6 +86,10 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		}
 	}
 
+	public static final ResourceLocation GUI_RUNE_MENU = new ResourceLocation("thebetweenlands:textures/gui/rune/rune_menu.png");
+	public static final ResourceLocation GUI_RUNE_ROPE = new ResourceLocation("thebetweenlands:textures/gui/rune/rune_rope.png");
+	public static final ResourceLocation GUI_RUNE_TOKENS = new ResourceLocation("thebetweenlands:textures/gui/rune/rune_tokens.png");
+
 	protected final Minecraft mc = Minecraft.getMinecraft();
 	protected final FontRenderer fontRenderer = this.mc.fontRenderer;
 	protected final RenderItem itemRender = this.mc.getRenderItem();
@@ -96,8 +100,8 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	protected IRuneContainerContext context;
 	protected IRuneContainer container;
 
-	protected List<Mark> inputMarks = new ArrayList<>();
-	protected List<Mark> outputMarks = new ArrayList<>();
+	protected List<Token> inputTokens = new ArrayList<>();
+	protected List<Token> outputTokens = new ArrayList<>();
 
 	protected int updateCounter;
 
@@ -107,10 +111,10 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	protected int xSize = this.maxXSize;
 	protected int ySize = this.maxYSize;
 
-	protected Map<String, IMarkRenderer> markRenderers = new HashMap<>();
-	protected IMarkRenderer unknownMarkRenderer = null;
+	protected Map<String, ITokenRenderer> tokenRenderers = new HashMap<>();
+	protected ITokenRenderer unknownTokenRenderer = null;
 
-	protected static final ResourceLocation UNKNOWN_MARK_DESCRIPTOR = new ResourceLocation(ModInfo.ID, "N/A");
+	protected static final ResourceLocation UNKNOWN_TOKEN_DESCRIPTOR = new ResourceLocation(ModInfo.ID, "N/A");
 
 	protected TextContainer title;
 	protected TextContainer description;
@@ -122,26 +126,40 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 	int currentConfigurationIndex = 0;
 
-	protected static interface IMarkRenderer {
+	protected static interface ITokenRenderer {
 		public void render(int centerX, int centerY);
 	}
 
 	public DefaultRuneGui(RuneMenuType menu) {
 		this.menu = menu;
 
-		this.addDefaultMarkRenderer(UNKNOWN_MARK_DESCRIPTOR, 414, 110, 12, 14);
+		this.addDefaultTokenRenderer(UNKNOWN_TOKEN_DESCRIPTOR, 27, 1, 8, 10);
 
-		this.addDefaultMarkRenderer(RuneMarkDescriptors.BLOCK, 414, 94, 12, 14);
-		this.addDefaultMarkRenderer(RuneMarkDescriptors.BLOCK, 430, 94, 12, 14);
-		this.addDefaultMarkRenderer(RuneMarkDescriptors.ENTITY, 446, 94, 12, 14);
+		this.addDefaultTokenRenderer(RuneTokenDescriptors.BLOCK, 0, 0, 8, 10);
+		this.addDefaultTokenRenderer(RuneTokenDescriptors.ENTITY, 9, 0, 8, 10);
+		this.addDefaultTokenRenderer(RuneTokenDescriptors.POSITION, 18, 0, 8, 10);
+		this.addDefaultTokenRenderer(RuneTokenDescriptors.RAY, 0, 11, 8, 10);
 	}
 
-	protected void addDefaultMarkRenderer(ResourceLocation descriptor, int minU, int minV, int width, int height) {
-		this.markRenderers.put(String.format("%s.%s", descriptor.getNamespace(), descriptor.getPath()), new IMarkRenderer() {
+	protected void addDefaultTokenRenderer(ResourceLocation descriptor, int minU, int minV, int width, int height) {
+		this.tokenRenderers.put(String.format("%s.%s", descriptor.getNamespace(), descriptor.getPath()), new ITokenRenderer() {
 			@Override
 			public void render(int centerX, int centerY) {
-				mc.getTextureManager().bindTexture(GuiRuneChainAltar.GUI_RUNE_CHAIN_ALTAR);
-				drawTexturedModalRect512(centerX - width / 2, centerY - height / 2, minU, minV, width, height);
+				mc.getTextureManager().bindTexture(GUI_RUNE_TOKENS);
+				
+				float x = centerX - width / 2;
+				float y = centerY - height / 2;
+				
+				float scale = 0.0285714285F;
+				
+				Tessellator tessellator = Tessellator.getInstance();
+				BufferBuilder bufferbuilder = tessellator.getBuffer();
+				bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+				bufferbuilder.pos((double)(x + 0), (double)(y + height), (double)zLevel).tex((double)((float)(minU + 0) * scale), (double)((float)(minV + height) * scale)).endVertex();
+				bufferbuilder.pos((double)(x + width), (double)(y + height), (double)zLevel).tex((double)((float)(minU + width) * scale), (double)((float)(minV + height) * scale)).endVertex();
+				bufferbuilder.pos((double)(x + width), (double)(y + 0), (double)zLevel).tex((double)((float)(minU + width) * scale), (double)((float)(minV + 0) * scale)).endVertex();
+				bufferbuilder.pos((double)(x + 0), (double)(y + 0), (double)zLevel).tex((double)((float)(minU + 0) * scale), (double)((float)(minV + 0) * scale)).endVertex();
+				tessellator.draw();
 			}
 		});
 	}
@@ -168,14 +186,14 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		INodeConfiguration config = this.context.getConfiguration();
 
-		int marksHeight = 0;
+		int tokensHeight = 0;
 
 		if(!config.getInputs().isEmpty()) {
-			marksHeight += 22;
+			tokensHeight += 22;
 		}
 
 		if(!config.getOutputs().isEmpty()) {
-			marksHeight += 22;
+			tokensHeight += 22;
 		}
 
 		this.title = new TextContainer(this.xSize - 8 - 20, 80, I18n.format(String.format("rune.%s.configuration.%d.title", container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId())), this.fontRenderer);
@@ -208,29 +226,29 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		this.description.parse();
 
-		this.ySize = (int) (this.title.getPages().get(0).getTextHeight() + 20 + marksHeight + this.description.getPages().get(0).getTextHeight()) + this.additionalConfigurationsHeight;
+		this.ySize = (int) (this.title.getPages().get(0).getTextHeight() + 20 + tokensHeight + this.description.getPages().get(0).getTextHeight()) + this.additionalConfigurationsHeight;
 
-		int marksYOffset = 0;
+		int tokensYOffset = 0;
 
 		int xOffOutputs = this.fontRenderer.getStringWidth(I18n.format("rune.gui.outputs")) + 2;
 
-		this.outputMarks.clear();
+		this.outputTokens.clear();
 		int x = 4;
 		for(int i = 0; i < config.getOutputs().size(); i++) {
-			this.outputMarks.add(new Mark(this, i, xOffOutputs + x, this.ySize - 3 - 20 - marksYOffset - this.additionalConfigurationsHeight, 16, 16, true));
+			this.outputTokens.add(new Token(this, i, xOffOutputs + x, this.ySize - 3 - 20 - tokensYOffset - this.additionalConfigurationsHeight, 16, 16, true));
 			x += 18;
 		}
 
-		if(!this.outputMarks.isEmpty()) {
-			marksYOffset += 20;
+		if(!this.outputTokens.isEmpty()) {
+			tokensYOffset += 20;
 		}
 
 		int xOffInputs = this.fontRenderer.getStringWidth(I18n.format("rune.gui.inputs")) + 2;
 
 		x = 4;
-		this.inputMarks.clear();
+		this.inputTokens.clear();
 		for(int i = 0; i < config.getInputs().size(); i++) {
-			this.inputMarks.add(new Mark(this, i, xOffInputs + x, this.ySize - 3 - 20 - marksYOffset - this.additionalConfigurationsHeight, 16, 16, false));
+			this.inputTokens.add(new Token(this, i, xOffInputs + x, this.ySize - 3 - 20 - tokensYOffset - this.additionalConfigurationsHeight, 16, 16, false));
 			x += 18;
 		}
 	}
@@ -261,28 +279,30 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	}
 
 	@Override
-	public void drawMark(IGuiRuneMark mark, int centerX, int centerY, RuneMenuDrawingContext.Mark context) {
-		this.drawMark((Mark) mark, centerX, centerY);
+	public void drawToken(IGuiRuneToken token, int centerX, int centerY, RuneMenuDrawingContext.Token context) {
+		if(token instanceof Token) {
+			this.drawToken((Token) token, centerX, centerY);
+		}
 	}
 
-	protected void drawMark(Mark mark, int centerX, int centerY) {
+	protected void drawToken(Token token, int centerX, int centerY) {
 		String desc;
-		if(mark.isOutput()) {
-			desc = this.context.getConfiguration().getOutputs().get(mark.getMarkIndex()).getDescriptor();
-			//Gui.drawRect(centerX - mark.w / 2, centerY - mark.h / 2, centerX + mark.w / 2, centerY + mark.h / 2, 0xFF0000FF);
+		if(token.isOutput()) {
+			desc = this.context.getConfiguration().getOutputs().get(token.getTokenIndex()).getDescriptor();
+			//Gui.drawRect(centerX - token.w / 2, centerY - token.h / 2, centerX + token.w / 2, centerY + token.h / 2, 0xFF0000FF);
 		} else {
-			desc = this.context.getConfiguration().getInputs().get(mark.getMarkIndex()).getDescriptor();
-			//Gui.drawRect(centerX - mark.w / 2, centerY - mark.h / 2, centerX + mark.w / 2, centerY + mark.h / 2, 0xFFFF0000);
+			desc = this.context.getConfiguration().getInputs().get(token.getTokenIndex()).getDescriptor();
+			//Gui.drawRect(centerX - token.w / 2, centerY - token.h / 2, centerX + token.w / 2, centerY + token.h / 2, 0xFFFF0000);
 		}
 
 		GlStateManager.enableBlend();
 		GlStateManager.color(1, 1, 1, 1);
 
-		IMarkRenderer renderer = null;
+		ITokenRenderer renderer = null;
 		if(desc != null) {
-			renderer = this.markRenderers.get(desc);
+			renderer = this.tokenRenderers.get(desc);
 		} else {
-			renderer = this.markRenderers.get(UNKNOWN_MARK_DESCRIPTOR.toString());
+			renderer = this.tokenRenderers.get(UNKNOWN_TOKEN_DESCRIPTOR.toString());
 		}
 		if(renderer != null) {
 			renderer.render(centerX, centerY);
@@ -290,37 +310,39 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	}
 
 	@Override
-	public void drawMarkTooltip(IGuiRuneMark mark, int centerX, int centerY, int mouseX, int mouseY, RuneMenuDrawingContext.Tooltip context) {
-		this.drawMarkTooltip((Mark) mark, centerX, centerY, mouseX, mouseY);
+	public void drawTokenTooltip(IGuiRuneToken token, int centerX, int centerY, int mouseX, int mouseY, RuneMenuDrawingContext.Tooltip context) {
+		if(token instanceof Token) {
+			this.drawTokenTooltip((Token) token, centerX, centerY, mouseX, mouseY);
+		}
 	}
 
-	protected void drawMarkTooltip(Mark mark, int centerX, int centerY, int mouseX, int mouseY) {
+	protected void drawTokenTooltip(Token token, int centerX, int centerY, int mouseX, int mouseY) {
 		List<String> text = new ArrayList<>();
 
 		String descriptor;
 
-		if(mark.isOutput()) {
-			descriptor = this.context.getConfiguration().getOutputs().get(mark.getMarkIndex()).getDescriptor();
+		if(token.isOutput()) {
+			descriptor = this.context.getConfiguration().getOutputs().get(token.getTokenIndex()).getDescriptor();
 		} else {
-			descriptor = this.context.getConfiguration().getInputs().get(mark.getMarkIndex()).getDescriptor();
+			descriptor = this.context.getConfiguration().getInputs().get(token.getTokenIndex()).getDescriptor();
 		}
 
 		if(descriptor != null) {
-			text.add(TextFormatting.RESET + "     " + I18n.format(String.format("rune.mark.%s", descriptor)));
+			text.add(TextFormatting.RESET + "     " + I18n.format(String.format("rune.token.%s", descriptor)));
 		} else {
-			text.add(TextFormatting.RESET + "     " + I18n.format("rune.mark.unknown"));
+			text.add(TextFormatting.RESET + "     " + I18n.format("rune.token.unknown"));
 		}
 
-		text.add(TextFormatting.RESET + "     " + TextFormatting.DARK_PURPLE + (mark.isOutput() ? I18n.format("rune.output") : I18n.format("rune.input")));
+		text.add(TextFormatting.RESET + "     " + TextFormatting.DARK_PURPLE + (token.isOutput() ? I18n.format("rune.output") : I18n.format("rune.input")));
 
 		if(descriptor != null) {
-			if(mark.isOutput()) {
-				if(I18n.hasKey(String.format("rune.%s.configuration.%d.output.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId(), mark.getMarkIndex()))) {
-					text.addAll(ItemTooltipHandler.splitTooltip(TextFormatting.GRAY + I18n.format(String.format("rune.%s.configuration.%d.output.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId(), mark.getMarkIndex())), 0));
+			if(token.isOutput()) {
+				if(I18n.hasKey(String.format("rune.%s.configuration.%d.output.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId(), token.getTokenIndex()))) {
+					text.addAll(ItemTooltipHandler.splitTooltip(TextFormatting.GRAY + I18n.format(String.format("rune.%s.configuration.%d.output.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId(), token.getTokenIndex())), 0));
 				}
 			} else {
-				if(I18n.hasKey(String.format("rune.%s.configuration.%d.input.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId(), mark.getMarkIndex()))) {
-					text.addAll(ItemTooltipHandler.splitTooltip(TextFormatting.GRAY + I18n.format(String.format("rune.%s.configuration.%d.input.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId(), mark.getMarkIndex())), 0));
+				if(I18n.hasKey(String.format("rune.%s.configuration.%d.input.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId(), token.getTokenIndex()))) {
+					text.addAll(ItemTooltipHandler.splitTooltip(TextFormatting.GRAY + I18n.format(String.format("rune.%s.configuration.%d.input.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId(), token.getTokenIndex())), 0));
 				}
 			}
 		}
@@ -328,7 +350,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		this.drawHoveringText(text, mouseX, mouseY, this.fontRenderer, (tx, ty) -> {
 			GlStateManager.disableLighting();
 			GlStateManager.disableDepth();
-			this.drawMark(mark, tx + 12, ty + 13);
+			this.drawToken(token, tx + 12, ty + 13);
 		});
 
 		GlStateManager.enableDepth();
@@ -337,10 +359,10 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	}
 
 	@Override
-	public void drawMarkConnection(IGuiRuneMark mark, int targetX, int targetY, RuneMenuDrawingContext.Connection context) {
+	public void drawTokenConnection(IGuiRuneToken token, int targetX, int targetY, RuneMenuDrawingContext.Connection context) {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0, 0, 280.0F);
-		drawHangingRope(this.updateCounter, mark.getCenterX(), mark.getCenterY(), targetX, targetY, 0.0F, this.zLevel);
+		drawHangingRope(this.updateCounter, token.getCenterX(), token.getCenterY(), targetX, targetY, 0.0F, this.zLevel);
 		GlStateManager.popMatrix();
 	}
 
@@ -375,7 +397,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 			this.currentConfigurationIndex = Math.max(this.currentConfigurationIndex - 1, 0);
 			this.context.setConfiguration(this.container.getBlueprint().getConfigurations().get(this.currentConfigurationIndex));
 			this.createGui();
-			TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneChainAltarConfiguration(this.context.getRuneIndex(), this.currentConfigurationIndex));
+			TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneWeavingTableConfiguration(this.context.getRuneIndex(), this.currentConfigurationIndex));
 			return true;
 		}
 
@@ -384,7 +406,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 			this.currentConfigurationIndex = Math.min(this.currentConfigurationIndex + 1, this.container.getBlueprint().getConfigurations().size() - 1);
 			this.context.setConfiguration(this.container.getBlueprint().getConfigurations().get(this.currentConfigurationIndex));
 			this.createGui();
-			TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneChainAltarConfiguration(this.context.getRuneIndex(), this.currentConfigurationIndex));
+			TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneWeavingTableConfiguration(this.context.getRuneIndex(), this.currentConfigurationIndex));
 			return true;
 		}
 
@@ -408,43 +430,43 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	}
 
 	@Override
-	public boolean onStartMarkLinking(IGuiRuneMark mark, int mouseX, int mouseY) {
+	public boolean onStartTokenLinking(IGuiRuneToken token, int mouseX, int mouseY) {
 		return false;
 	}
 
 	@Override
-	public boolean onStartMarkUnlinking(IGuiRuneMark mark, int mouseX, int mouseY) {
+	public boolean onStartTokenUnlinking(IGuiRuneToken token, int mouseX, int mouseY) {
 		return false;
 	}
 
 	@Override
-	public IGuiRuneMark getInputMark(int markIndex) {
-		return this.inputMarks.get(markIndex);
+	public IGuiRuneToken getInputToken(int tokenIndex) {
+		return this.inputTokens.get(tokenIndex);
 	}
 
 	@Override
-	public Collection<Mark> getInputMarks() {
-		return this.inputMarks;
+	public Collection<Token> getInputTokens() {
+		return this.inputTokens;
 	}
 
 	@Override
-	public IGuiRuneMark getOutputMark(int markIndex) {
-		return this.outputMarks.get(markIndex);
+	public IGuiRuneToken getOutputToken(int tokenIndex) {
+		return this.outputTokens.get(tokenIndex);
 	}
 
 	@Override
-	public Collection<Mark> getOutputMarks() {
-		return this.outputMarks;
+	public Collection<Token> getOutputTokens() {
+		return this.outputTokens;
 	}
 
 	@Override
 	public int getMinX() {
-		return this.menu == RuneMenuType.PRIMARY ? this.context.getRuneChainAltarGui().getMinX() - 185 : this.context.getRuneChainAltarGui().getMaxX() + 19;
+		return this.menu == RuneMenuType.PRIMARY ? this.context.getRuneWeavingTableGui().getMinX() - 185 : this.context.getRuneWeavingTableGui().getMaxX() + 19;
 	}
 
 	@Override
 	public int getMinY() {
-		return this.context.getRuneChainAltarGui().getMinY() + 70 - this.ySize / 2;
+		return this.context.getRuneWeavingTableGui().getMinY() + 70 - this.ySize / 2;
 	}
 
 	@Override
@@ -461,7 +483,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		int x = this.getMinX();
 		int y = this.getMinY();
 
-		this.mc.getTextureManager().bindTexture(GuiRuneChainAltar.GUI_RUNE_CHAIN_ALTAR);
+		this.mc.getTextureManager().bindTexture(GUI_RUNE_MENU);
 
 		//Top left corner
 		this.drawTexturedModalRect512(x, y, 212, 94, 3, 3);
@@ -524,24 +546,24 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		}
 
 
-		//TODO Improve input/output marks GUI
-		int marksYOffset = 0;
+		//TODO Improve input/output tokens GUI
+		int tokensYOffset = 0;
 
-		if(!this.outputMarks.isEmpty()) {
+		if(!this.outputTokens.isEmpty()) {
 			this.fontRenderer.drawString(I18n.format("rune.gui.outputs"), x + 4, y + 4 + this.ySize - 3 - 20 - this.additionalConfigurationsHeight, 0xFF3d3d3d);
-			marksYOffset += 20;
+			tokensYOffset += 20;
 		}
 
-		if(!this.inputMarks.isEmpty()) {
-			this.fontRenderer.drawString(I18n.format("rune.gui.inputs"), x + 4, y + 4 + this.ySize - 3 - 20 - marksYOffset - this.additionalConfigurationsHeight, 0xFF3d3d3d);
+		if(!this.inputTokens.isEmpty()) {
+			this.fontRenderer.drawString(I18n.format("rune.gui.inputs"), x + 4, y + 4 + this.ySize - 3 - 20 - tokensYOffset - this.additionalConfigurationsHeight, 0xFF3d3d3d);
 		}
 
-		for(Mark mark : this.inputMarks) {
-			this.drawMark(mark, mark.getCenterX(), mark.getCenterY());
+		for(Token token : this.inputTokens) {
+			this.drawToken(token, token.getCenterX(), token.getCenterY());
 		}
 
-		for(Mark mark : this.outputMarks) {
-			this.drawMark(mark, mark.getCenterX(), mark.getCenterY());
+		for(Token token : this.outputTokens) {
+			this.drawToken(token, token.getCenterX(), token.getCenterY());
 		}
 
 		GlStateManager.color(1, 1, 1, 1);
@@ -559,26 +581,26 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 			this.zLevel = 0;
 		}*/
 
-		for(Mark mark : this.inputMarks) {
-			if(mark.isInside(mark.getCenterX(), mark.getCenterY(), mouseX, mouseY)) {
-				this.drawMarkTooltip(mark, mark.getCenterX(), mark.getCenterY(), mouseX, mouseY);
+		for(Token token : this.inputTokens) {
+			if(token.isInside(token.getCenterX(), token.getCenterY(), mouseX, mouseY)) {
+				this.drawTokenTooltip(token, token.getCenterX(), token.getCenterY(), mouseX, mouseY);
 			}
 		}
 
-		for(Mark mark : this.outputMarks) {
-			if(mark.isInside(mark.getCenterX(), mark.getCenterY(), mouseX, mouseY)) {
-				this.drawMarkTooltip(mark, mark.getCenterX(), mark.getCenterY(), mouseX, mouseY);
+		for(Token token : this.outputTokens) {
+			if(token.isInside(token.getCenterX(), token.getCenterY(), mouseX, mouseY)) {
+				this.drawTokenTooltip(token, token.getCenterX(), token.getCenterY(), mouseX, mouseY);
 			}
 		}
 
 		GlStateManager.color(1, 1, 1, 1);
-		this.mc.getTextureManager().bindTexture(GuiRuneChainAltar.GUI_RUNE_CHAIN_ALTAR);
+		this.mc.getTextureManager().bindTexture(GUI_RUNE_MENU);
 	}
 
 	public static void drawHangingRope(int updateCounter, float sx, float sy, float ex, float ey, float hang, double zLevel) {
 		Minecraft mc = Minecraft.getMinecraft();
 
-		mc.getTextureManager().bindTexture(GuiRuneChainAltar.GUI_RUNE_CHAIN_ALTAR_ROPE);
+		mc.getTextureManager().bindTexture(GUI_RUNE_ROPE);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();

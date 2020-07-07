@@ -14,7 +14,7 @@ import thebetweenlands.api.rune.impl.PortNodeConfiguration;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration.InputPort;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration.OutputPort;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneMarkDescriptors;
+import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
@@ -38,10 +38,10 @@ public final class RunePinpoint extends AbstractRune<RunePinpoint> {
 		static {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 
-			IN_ENTITY = builder.in(RuneMarkDescriptors.ENTITY, Entity.class, IRuneChainUser.class);
-			OUT_POSITION = builder.out(RuneMarkDescriptors.POSITION, Vec3d.class);
-			OUT_EYE_POSITION = builder.out(RuneMarkDescriptors.POSITION, Vec3d.class);
-			OUT_RAY = builder.out(RuneMarkDescriptors.RAY, Vec3d.class);
+			IN_ENTITY = builder.in(RuneTokenDescriptors.ENTITY, Entity.class, IRuneChainUser.class);
+			OUT_POSITION = builder.out(RuneTokenDescriptors.POSITION, Vec3d.class);
+			OUT_EYE_POSITION = builder.out(RuneTokenDescriptors.POSITION, Vec3d.class);
+			OUT_RAY = builder.out(RuneTokenDescriptors.RAY, Vec3d.class);
 
 			CONFIGURATION_1 = builder.build();
 		}

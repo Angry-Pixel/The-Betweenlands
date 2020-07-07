@@ -6,15 +6,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltar;
+import thebetweenlands.common.inventory.container.runeweavingtable.ContainerRuneWeavingTable;
 import thebetweenlands.common.network.MessageBase;
 
-public class MessageLinkRuneChainAltarRune extends MessageBase {
+public class MessageLinkRuneWeavingTableRune extends MessageBase {
 	private int inputRune, input, outputRune, output;
 
-	public MessageLinkRuneChainAltarRune() { }
+	public MessageLinkRuneWeavingTableRune() { }
 
-	public MessageLinkRuneChainAltarRune(int inputRune, int input, int outputRune, int output) {
+	public MessageLinkRuneWeavingTableRune(int inputRune, int input, int outputRune, int output) {
 		this.inputRune = inputRune;
 		this.input = input;
 		this.outputRune = outputRune;
@@ -41,8 +41,8 @@ public class MessageLinkRuneChainAltarRune extends MessageBase {
 	public IMessage process(MessageContext ctx) {
 		if(this.inputRune > 0 && this.input >= 0 && this.outputRune < this.inputRune && this.outputRune >= 0 && this.output >= 0 && ctx.getServerHandler() != null) {
 			EntityPlayer player = ctx.getServerHandler().player;
-			if(player.openContainer instanceof ContainerRuneChainAltar) {
-				ContainerRuneChainAltar container = (ContainerRuneChainAltar) player.openContainer;
+			if(player.openContainer instanceof ContainerRuneWeavingTable) {
+				ContainerRuneWeavingTable container = (ContainerRuneWeavingTable) player.openContainer;
 				container.link(this.inputRune, this.input, this.outputRune, this.output);
 			}
 		}

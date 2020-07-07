@@ -18,11 +18,11 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import thebetweenlands.api.rune.IRuneChainContainerData;
-import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltar;
-import thebetweenlands.common.inventory.container.runechainaltar.RuneChainContainerData;
+import thebetweenlands.common.inventory.container.runeweavingtable.ContainerRuneWeavingTable;
+import thebetweenlands.common.inventory.container.runeweavingtable.RuneChainContainerData;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
-public class TileEntityRuneChainAltar extends TileEntity implements ISidedInventory {
+public class TileEntityRuneWeavingTable extends TileEntity implements ISidedInventory {
 	private final String name;
 
 	protected NonNullList<ItemStack> inventory;
@@ -33,18 +33,18 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 	public static final int OUTPUT_SLOT = 0;
 	public static final int NON_INPUT_SLOTS = 1;
 
-	private ContainerRuneChainAltar openContainer;
+	private ContainerRuneWeavingTable openContainer;
 
-	public TileEntityRuneChainAltar() {
-		this(43 /*output + 3 full pages*/, "rune_chain_altar" /*TODO: Proper name??*/);
+	public TileEntityRuneWeavingTable() {
+		this(43 /*output + 3 full pages*/, "rune_weaving_table");
 	}
 
-	protected TileEntityRuneChainAltar(int invtSize, String name) {
+	protected TileEntityRuneWeavingTable(int invtSize, String name) {
 		this.inventoryHandler = new ItemStackHandler(NonNullList.withSize(0, ItemStack.EMPTY)) {
 			@Override
 			public void setSize(int size) {
-				Preconditions.checkArgument(size >= 2, "Rune chain altar inventory must have at least one input and one output slot");
-				this.stacks = TileEntityRuneChainAltar.this.inventory = NonNullList.withSize(invtSize, ItemStack.EMPTY);
+				Preconditions.checkArgument(size >= 2, "Rune weaving table inventory must have at least one input and one output slot");
+				this.stacks = TileEntityRuneWeavingTable.this.inventory = NonNullList.withSize(invtSize, ItemStack.EMPTY);
 			}
 
 			@Override
@@ -54,7 +54,7 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 
 			@Override
 			public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-				if (stack.isEmpty() || (!TileEntityRuneChainAltar.this.isOutputItemAvailable() && slot >= NON_INPUT_SLOTS) || !TileEntityRuneChainAltar.this.isItemValidForSlot(slot, stack)) {
+				if (stack.isEmpty() || (!TileEntityRuneWeavingTable.this.isOutputItemAvailable() && slot >= NON_INPUT_SLOTS) || !TileEntityRuneWeavingTable.this.isItemValidForSlot(slot, stack)) {
 					return stack;
 				}
 
@@ -63,7 +63,7 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 
 			@Override
 			protected void onContentsChanged(int slot) {
-				TileEntityRuneChainAltar.this.markDirty();
+				TileEntityRuneWeavingTable.this.markDirty();
 
 				if(openContainer != null) {
 					openContainer.onSlotChanged(slot);
@@ -72,7 +72,7 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 
 			@Override
 			public int getSlots() {
-				return TileEntityRuneChainAltar.this.getSizeInventory();
+				return TileEntityRuneWeavingTable.this.getSizeInventory();
 			}
 
 			@Override
@@ -86,7 +86,7 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 		this.name = name;
 	}
 
-	public void openContainer(ContainerRuneChainAltar container) {
+	public void openContainer(ContainerRuneWeavingTable container) {
 		this.openContainer = container;
 	}
 

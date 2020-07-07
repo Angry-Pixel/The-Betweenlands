@@ -1,4 +1,4 @@
-package thebetweenlands.client.gui.inventory.runechainaltar;
+package thebetweenlands.client.gui.inventory.runeweavingtable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,40 +36,39 @@ import net.minecraft.util.Tuple;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.api.rune.IGuiRuneMark;
+import thebetweenlands.api.rune.IGuiRuneToken;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.INodeConfiguration.IConfigurationInput;
 import thebetweenlands.api.rune.INodeConfiguration.IConfigurationOutput;
 import thebetweenlands.api.rune.INodeConfiguration.IType;
-import thebetweenlands.api.rune.IRuneChainAltarGui;
 import thebetweenlands.api.rune.IRuneContainer;
 import thebetweenlands.api.rune.IRuneGui;
 import thebetweenlands.api.rune.IRuneLink;
+import thebetweenlands.api.rune.IRuneWeavingTableGui;
 import thebetweenlands.api.rune.RuneMenuDrawingContext;
 import thebetweenlands.api.rune.RuneMenuType;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltar;
-import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltar.Page;
-import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltarGui;
-import thebetweenlands.common.inventory.slot.SlotRuneChainAltarInput;
-import thebetweenlands.common.network.serverbound.MessageLinkRuneChainAltarRune;
-import thebetweenlands.common.network.serverbound.MessageSetRuneChainAltarPage;
-import thebetweenlands.common.network.serverbound.MessageShiftRuneChainAltarSlot;
-import thebetweenlands.common.network.serverbound.MessageUnlinkRuneChainAltarRune;
+import thebetweenlands.common.inventory.container.runeweavingtable.ContainerRuneWeavingTable;
+import thebetweenlands.common.inventory.container.runeweavingtable.ContainerRuneWeavingTable.Page;
+import thebetweenlands.common.inventory.container.runeweavingtable.ContainerRuneWeavingTableGui;
+import thebetweenlands.common.inventory.slot.SlotRuneWeavingTableInput;
+import thebetweenlands.common.network.serverbound.MessageLinkRuneWeavingTableRune;
+import thebetweenlands.common.network.serverbound.MessageSetRuneWeavingTablePage;
+import thebetweenlands.common.network.serverbound.MessageShiftRuneWeavingTableSlot;
+import thebetweenlands.common.network.serverbound.MessageUnlinkRuneWeavingTableRune;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.common.tile.TileEntityRuneChainAltar;
+import thebetweenlands.common.tile.TileEntityRuneWeavingTable;
 import thebetweenlands.util.ColoredItemRenderer;
 
 @SideOnly(Side.CLIENT)
-public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGui {
+public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTableGui {
 	private static final Random rand = new Random();
 
-	public static final ResourceLocation GUI_RUNE_CHAIN_ALTAR = new ResourceLocation("thebetweenlands:textures/gui/rune_chain_altar.png");
-	public static final ResourceLocation GUI_RUNE_CHAIN_ALTAR_ROPE = new ResourceLocation("thebetweenlands:textures/gui/rune_chain_altar_rope.png");
+	public static final ResourceLocation GUI_RUNE_WEAVING_TABLE = new ResourceLocation("thebetweenlands:textures/gui/rune/rune_weaving_table.png");
 
-	private final TileEntityRuneChainAltar tile;
-	private final ContainerRuneChainAltar container;
+	private final TileEntityRuneWeavingTable tile;
+	private final ContainerRuneWeavingTable container;
 	private final EntityPlayer player;
 
 	private static final int SWAP_ANIMATION_HALF_DURATION = 7;
@@ -83,10 +82,10 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 	private EnumMap<RuneMenuType, IRuneGui> openRuneGuis = new EnumMap<>(RuneMenuType.class);
 
-	private IGuiRuneMark draggingMark = null;
+	private IGuiRuneToken draggingToken = null;
 
 	private int linkingDropdownMenuSlot = -1;
-	private Tuple<IGuiRuneMark, IRuneLink> recentlyLinked = null;
+	private Tuple<IGuiRuneToken, IRuneLink> recentlyLinked = null;
 
 	private static final int[][] CORD_PIECE_SLOT_UVs = new int[][] {
 		{10, 251}, {36, 266}, {60, 261}, {84, 260}, {108, 260}, {132, 261}, {156, 266},
@@ -106,14 +105,14 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		{6, 6}, {6, 5}, {6, 4}, {6, 4}, {6, 5}, {6, 6}, {10, 22}
 	};
 
-	public GuiRuneChainAltar(EntityPlayer player, TileEntityRuneChainAltar tile) {
-		super(new ContainerRuneChainAltarGui(player, tile));
-		((ContainerRuneChainAltarGui) this.inventorySlots).setGui(this);
-		this.container = (ContainerRuneChainAltar) this.inventorySlots;
+	public GuiRuneWeavingTable(EntityPlayer player, TileEntityRuneWeavingTable tile) {
+		super(new ContainerRuneWeavingTableGui(player, tile));
+		((ContainerRuneWeavingTableGui) this.inventorySlots).setGui(this);
+		this.container = (ContainerRuneWeavingTable) this.inventorySlots;
 		this.tile = tile;
 		this.allowUserInput = false;
 		this.xSize = 176;
-		this.ySize = 224;
+		this.ySize = 237;
 		this.player = player;
 	}
 
@@ -147,7 +146,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 					this.openRuneGuis.put(RuneMenuType.PRIMARY, newGui);
 
-					this.draggingMark = null;
+					this.draggingToken = null;
 				}
 			} else {
 				clear = true;
@@ -161,7 +160,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 			this.openRuneGuis.clear();
 
-			this.draggingMark = null;
+			this.draggingToken = null;
 		}
 	}
 
@@ -175,13 +174,13 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 		int targetRune = -1;
 
-		Tuple<IGuiRuneMark, IRuneLink> hoveredLink = this.getHoveredOnLink(mouseX, mouseY);
+		Tuple<IGuiRuneToken, IRuneLink> hoveredLink = this.getHoveredOnLink(mouseX, mouseY);
 
 		if(hoveredLink != null) {
 			targetRune = hoveredLink.getSecond().getOutputRune();
 		} else if(this.linkingDropdownMenuSlot >= this.tile.getChainStart()) {
 			targetRune = this.linkingDropdownMenuSlot - this.tile.getChainStart();
-		} else if(this.draggingMark == null) {
+		} else if(this.draggingToken == null) {
 			closeCurrentGui = true;
 		}
 
@@ -292,15 +291,15 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 			this.hoveredSlot = null;
 		}
 
-		if(!this.isInsideLinkingDropdownMenu(mouseX, mouseY, this.draggingMark != null)) {
+		if(!this.isInsideLinkingDropdownMenu(mouseX, mouseY, this.draggingToken != null)) {
 			this.renderHoveredToolTip(mouseX, mouseY);
 		}
 	}
 
 	@Override
 	public void drawSlot(Slot slot) {
-		if(slot instanceof SlotRuneChainAltarInput) {
-			SlotRuneChainAltarInput slotRune = (SlotRuneChainAltarInput) slot;
+		if(slot instanceof SlotRuneWeavingTableInput) {
+			SlotRuneWeavingTableInput slotRune = (SlotRuneWeavingTableInput) slot;
 
 			if(slotRune.hoverTicks + slotRune.prevHoverTicks == 0 != this.drawHoveringSlots) {
 				float hoverPercent = (slotRune.prevHoverTicks + (slotRune.hoverTicks - slotRune.prevHoverTicks) * this.mc.getRenderPartialTicks()) / 7.0F;
@@ -444,7 +443,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 		this.drawLinkingDropdownMenus(mouseX, mouseY);
 
-		this.drawRuneMarkConnections(mouseX, mouseY);
+		this.drawRuneTokenConnections(mouseX, mouseY);
 
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(-this.guiLeft, -this.guiTop, 0);
@@ -453,22 +452,44 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 			gui.drawForeground(mouseX, mouseY);
 		}
 
-		if(this.draggingMark != null) {
+		if(this.draggingToken != null) {
 			IRuneGui primaryRuneGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
 
 			if(primaryRuneGui != null) {
-				if(primaryRuneGui.getInputMarks().contains(this.draggingMark) && this.draggingMark.isInteractable()) {
+				if(primaryRuneGui.getInputTokens().contains(this.draggingToken) && this.draggingToken.isInteractable()) {
 					GlStateManager.pushMatrix();
-					GlStateManager.translate(0, 0, 120);
+					GlStateManager.translate(0, 0, 271);
 
-					primaryRuneGui.drawMarkConnection(this.draggingMark, mouseX, mouseY, RuneMenuDrawingContext.Connection.CONNECTING); //TODO Check context
+					boolean drawn = false;
+
+					if(this.container.getSelectedRuneIndex() >= 0 && this.linkingDropdownMenuSlot >= 0) {
+						int linkingTokenIndex = this.getLinkingDropdownMenuTokenIndex(mouseX, mouseY);
+
+						if(linkingTokenIndex >= 0) {
+							Slot slot = this.inventorySlots.getSlot(this.linkingDropdownMenuSlot);
+
+							int sx = slot.xPos - 3;
+							int sy = slot.yPos - 3;
+
+							int cx = this.guiLeft + sx + 3 + 8;
+							int cy = this.guiTop + sy + 3 + linkingTokenIndex * 18 + 8 + 18;
+
+							primaryRuneGui.drawTokenConnection(this.draggingToken, cx, cy, RuneMenuDrawingContext.Connection.VIA_DROPDOWN);
+
+							drawn = true;
+						}
+					}
+
+					if(!drawn) {
+						primaryRuneGui.drawTokenConnection(this.draggingToken, mouseX, mouseY, RuneMenuDrawingContext.Connection.CONNECTING);
+					}
 
 					GlStateManager.popMatrix();
 				} else {
-					this.draggingMark = null;
+					this.draggingToken = null;
 				}
 			} else {
-				this.draggingMark = null;
+				this.draggingToken = null;
 			}
 		}
 
@@ -477,64 +498,64 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTickTime, int x, int y) {
-		this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);
+		this.mc.getTextureManager().bindTexture(GUI_RUNE_WEAVING_TABLE);
 
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.enableBlend();
 
 		this.setSlabTransform();
-		this.drawSlabBackground(this.guiLeft - 11, this.guiTop + 4);
+		this.drawSlabBackground(this.guiLeft - 11, this.guiTop + 17);
 		this.revertSlabTransform();
 
 		this.drawTexturedModalRect512(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
 
 		this.setSlabTransform();
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
-		this.drawSlabForeground(this.guiLeft - 11, this.guiTop + 4);
+		this.drawSlabForeground(this.guiLeft - 11, this.guiTop + 17);
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 		this.revertSlabTransform();
 
 		if(this.container.getCurrentPage().index > 0) {
-			this.drawUpArrow(this.guiLeft + this.xSize + 2, this.guiTop + 18, x, y, this.setSlabTransform());
+			this.drawUpArrow(this.guiLeft + this.xSize + 12, this.guiTop + 18, x, y, this.setSlabTransform());
 			this.revertSlabTransform();
 		}
 
 		if(this.container.getCurrentPage().index < this.container.getPages() - 1) {
-			this.drawDownArrow(this.guiLeft + this.xSize + 2, this.guiTop + 100, x, y, this.setSlabTransform());
+			this.drawDownArrow(this.guiLeft + this.xSize + 12, this.guiTop + 100, x, y, this.setSlabTransform());
 			this.revertSlabTransform();
 		}
 
 		this.setSlabTransform();
 
-		for(int i = 0; i < Math.min(ContainerRuneChainAltar.SLOTS_PER_PAGE + 1, this.tile.getChainLength() - this.container.getCurrentPage().index * ContainerRuneChainAltar.SLOTS_PER_PAGE); i++) {
+		for(int i = 0; i < Math.min(ContainerRuneWeavingTable.SLOTS_PER_PAGE + 1, this.tile.getChainLength() - this.container.getCurrentPage().index * ContainerRuneWeavingTable.SLOTS_PER_PAGE); i++) {
 			this.drawCordPiece(this.guiLeft - 11, this.guiTop + 4, i);
 		}
 
 		int coverStartIndex = this.tile.getChainLength() + (this.tile.isOutputItemAvailable() ? 1 : 0);
 
 		for(int i = coverStartIndex; i < this.tile.getMaxChainLength(); i++) {
-			SlotRuneChainAltarInput slot = (SlotRuneChainAltarInput) this.inventorySlots.getSlot(i + TileEntityRuneChainAltar.NON_INPUT_SLOTS);
+			SlotRuneWeavingTableInput slot = (SlotRuneWeavingTableInput) this.inventorySlots.getSlot(i + TileEntityRuneWeavingTable.NON_INPUT_SLOTS);
 
 			if(slot.getPage().isCurrent()) {
 				this.drawSlotCoverStone(this.guiLeft + slot.xPos, this.guiTop + slot.yPos);
 			}
 		}
-		int unfilledSlots = Math.max(0, ContainerRuneChainAltar.SLOTS_PER_PAGE - (this.tile.getMaxChainLength() - this.container.getCurrentPage().index * ContainerRuneChainAltar.SLOTS_PER_PAGE));
-		for(int i = ContainerRuneChainAltar.SLOTS_PER_PAGE - unfilledSlots; i < ContainerRuneChainAltar.SLOTS_PER_PAGE; i++) {
-			this.drawSlotCoverStone(this.guiLeft + ContainerRuneChainAltar.SLOT_POSITIONS[i][0], this.guiTop + ContainerRuneChainAltar.SLOT_POSITIONS[i][1]);
+		int unfilledSlots = Math.max(0, ContainerRuneWeavingTable.SLOTS_PER_PAGE - (this.tile.getMaxChainLength() - this.container.getCurrentPage().index * ContainerRuneWeavingTable.SLOTS_PER_PAGE));
+		for(int i = ContainerRuneWeavingTable.SLOTS_PER_PAGE - unfilledSlots; i < ContainerRuneWeavingTable.SLOTS_PER_PAGE; i++) {
+			this.drawSlotCoverStone(this.guiLeft + ContainerRuneWeavingTable.SLOT_POSITIONS[i][0], this.guiTop + ContainerRuneWeavingTable.SLOT_POSITIONS[i][1]);
 		}
 
 		this.revertSlabTransform();
 
-		for(int i = 0; i < ContainerRuneChainAltar.SLOTS_PER_PAGE; i++) {
-			int slotIndex = this.container.getCurrentPage().index * ContainerRuneChainAltar.SLOTS_PER_PAGE + TileEntityRuneChainAltar.NON_INPUT_SLOTS + i;
+		for(int i = 0; i < ContainerRuneWeavingTable.SLOTS_PER_PAGE; i++) {
+			int slotIndex = this.container.getCurrentPage().index * ContainerRuneWeavingTable.SLOTS_PER_PAGE + TileEntityRuneWeavingTable.NON_INPUT_SLOTS + i;
 
-			SlotRuneChainAltarInput slot = (SlotRuneChainAltarInput) this.inventorySlots.getSlot(slotIndex);
+			SlotRuneWeavingTableInput slot = (SlotRuneWeavingTableInput) this.inventorySlots.getSlot(slotIndex);
 
 			if(slot.getHasStack() && x >= this.guiLeft + slot.xPos - 4 && x <= this.guiLeft + slot.xPos + 16 + 3 && y >= this.guiTop + slot.yPos - 10 && y < this.guiTop + slot.yPos + 16 + 10) {
 				if(this.container.getShiftHoleSlot(slotIndex, false) >= 0) {
-					if(i >= ContainerRuneChainAltar.SLOTS_PER_PAGE / 2) {
+					if(i >= ContainerRuneWeavingTable.SLOTS_PER_PAGE / 2) {
 						this.drawShiftLeftArrow(this.guiLeft + slot.xPos + 2, this.guiTop + slot.yPos - 9, x, y, this.setSlabTransform());
 						this.revertSlabTransform();
 					} else {
@@ -544,7 +565,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 				}
 
 				if(this.container.getShiftHoleSlot(slotIndex, true) >= 0) {
-					if(i >= ContainerRuneChainAltar.SLOTS_PER_PAGE / 2) {
+					if(i >= ContainerRuneWeavingTable.SLOTS_PER_PAGE / 2) {
 						this.drawShiftRightArrow(this.guiLeft + slot.xPos + 2, this.guiTop + slot.yPos + 9 + 9, x, y, this.setSlabTransform());
 						this.revertSlabTransform();
 					} else {
@@ -567,28 +588,28 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		if(this.swapAnimationTicks == 0) {
 			if(mouseButton == 0) {
 				if(!handled) {
-					int relX = mouseX - (this.guiLeft + this.xSize + 2);
+					int relX = mouseX - (this.guiLeft + this.xSize + 12);
 					int relY = mouseY - (this.guiTop + 20);
-					if(relX >= 0 && relX <= 15 && relY >= 0 && relY <= 24) {
+					if(relX >= 0 && relX <= 24 && relY >= 0 && relY <= 36) {
 						this.movePage(-1);
 						handled = true;
 					}
 				}
 
 				if(!handled) {
-					int relX = mouseX - (this.guiLeft + this.xSize + 2);
+					int relX = mouseX - (this.guiLeft + this.xSize + 12);
 					int relY = mouseY - (this.guiTop + 100);
-					if(relX >= 0 && relX <= 15 && relY >= 0 && relY <= 24) {
+					if(relX >= 0 && relX <= 24 && relY >= 0 && relY <= 36) {
 						this.movePage(1);
 						handled = true;
 					}
 				}
 
 				if(!handled) {
-					for(int i = 0; i < ContainerRuneChainAltar.SLOTS_PER_PAGE; i++) {
-						int slotIndex = this.container.getCurrentPage().index * ContainerRuneChainAltar.SLOTS_PER_PAGE + TileEntityRuneChainAltar.NON_INPUT_SLOTS + i;
+					for(int i = 0; i < ContainerRuneWeavingTable.SLOTS_PER_PAGE; i++) {
+						int slotIndex = this.container.getCurrentPage().index * ContainerRuneWeavingTable.SLOTS_PER_PAGE + TileEntityRuneWeavingTable.NON_INPUT_SLOTS + i;
 
-						SlotRuneChainAltarInput slot = (SlotRuneChainAltarInput) this.inventorySlots.getSlot(slotIndex);
+						SlotRuneWeavingTableInput slot = (SlotRuneWeavingTableInput) this.inventorySlots.getSlot(slotIndex);
 
 						if(slot.getHasStack() && mouseX >= this.guiLeft + slot.xPos - 4 && mouseX < this.guiLeft + slot.xPos + 16 + 3 && mouseY >= this.guiTop + slot.yPos - 10 && mouseY < this.guiTop + slot.yPos + 16 + 10) {
 							if(this.container.getShiftHoleSlot(slotIndex, false) >= 0) {
@@ -596,7 +617,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 								int relY = mouseY - (this.guiTop + slot.yPos - 9);
 								if(relX >= 0 && relX <= 13 && relY >= 0 && relY <= 7) {
 									this.container.shiftSlot(slotIndex, false);
-									TheBetweenlands.networkWrapper.sendToServer(new MessageShiftRuneChainAltarSlot(slotIndex, false));
+									TheBetweenlands.networkWrapper.sendToServer(new MessageShiftRuneWeavingTableSlot(slotIndex, false));
 									this.mc.getSoundHandler().playSound(PositionedSoundRecord.getRecord(SoundRegistry.RUNE_SLOT_SHIFT, rand.nextFloat() * 0.066F + 0.933F, 1.0F));
 									handled = true;
 									break;
@@ -608,7 +629,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 								int relY = mouseY - (this.guiTop + slot.yPos + 9 + 9);
 								if(relX >= 0 && relX <= 13 && relY >= 0 && relY <= 7) {
 									this.container.shiftSlot(slotIndex, true);
-									TheBetweenlands.networkWrapper.sendToServer(new MessageShiftRuneChainAltarSlot(slotIndex, true));
+									TheBetweenlands.networkWrapper.sendToServer(new MessageShiftRuneWeavingTableSlot(slotIndex, true));
 									this.mc.getSoundHandler().playSound(PositionedSoundRecord.getRecord(SoundRegistry.RUNE_SLOT_SHIFT, rand.nextFloat() * 0.066F + 0.933F, 1.0F));
 									handled = true;
 									break;
@@ -626,20 +647,20 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 			IRuneGui primaryRuneGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
 
 			if(primaryRuneGui != null) {
-				for(IGuiRuneMark mark : primaryRuneGui.getInputMarks()) {
-					if(mark.isInteractable() && mark.isInside(mark.getCenterX(), mark.getCenterY(), mouseX, mouseY)) {
+				for(IGuiRuneToken token : primaryRuneGui.getInputTokens()) {
+					if(token.isInteractable() && token.isInside(token.getCenterX(), token.getCenterY(), mouseX, mouseY)) {
 						if(mouseButton == 0) {
-							if(!primaryRuneGui.onStartMarkLinking(mark, mouseX, mouseY)) {
-								this.draggingMark = mark;
+							if(!primaryRuneGui.onStartTokenLinking(token, mouseX, mouseY)) {
+								this.draggingToken = token;
 								handled = true;
 								break;
 							}
 						} else if(mouseButton == 1) {
-							if(!primaryRuneGui.onStartMarkUnlinking(mark, mouseX, mouseY)) {
-								IRuneLink unlinked = this.container.unlink(primaryRuneGui.getContainer().getContext().getRuneIndex(), mark.getMarkIndex());
+							if(!primaryRuneGui.onStartTokenUnlinking(token, mouseX, mouseY)) {
+								IRuneLink unlinked = this.container.unlink(primaryRuneGui.getContainer().getContext().getRuneIndex(), token.getTokenIndex());
 								if(unlinked != null) {
 									//Send message to link on server side too
-									TheBetweenlands.networkWrapper.sendToServer(new MessageUnlinkRuneChainAltarRune(primaryRuneGui.getContainer().getContext().getRuneIndex(), mark.getMarkIndex()));
+									TheBetweenlands.networkWrapper.sendToServer(new MessageUnlinkRuneWeavingTableRune(primaryRuneGui.getContainer().getContext().getRuneIndex(), token.getTokenIndex()));
 								}
 								break;
 							}
@@ -660,20 +681,20 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 		boolean handled = false;
 
-		if(this.draggingMark != null) {
+		if(this.draggingToken != null) {
 			this.recentlyLinked = null;
 
 			if(this.container.getSelectedRuneIndex() >= 0 && this.linkingDropdownMenuSlot >= 0) {
-				int linkingMarkIndex = this.getLinkingDropdownMenuMarkIndex(mouseX, mouseY);
+				int linkingTokenIndex = this.getLinkingDropdownMenuTokenIndex(mouseX, mouseY);
 
-				if(linkingMarkIndex >= 0) {
-					if(this.container.link(this.container.getSelectedRuneIndex(), this.draggingMark.getMarkIndex(), this.linkingDropdownMenuSlot - this.tile.getChainStart(), linkingMarkIndex)) {
+				if(linkingTokenIndex >= 0) {
+					if(this.container.link(this.container.getSelectedRuneIndex(), this.draggingToken.getTokenIndex(), this.linkingDropdownMenuSlot - this.tile.getChainStart(), linkingTokenIndex)) {
 						//Send message to link on server side too
-						TheBetweenlands.networkWrapper.sendToServer(new MessageLinkRuneChainAltarRune(this.container.getSelectedRuneIndex(), this.draggingMark.getMarkIndex(), this.linkingDropdownMenuSlot - this.tile.getChainStart(), linkingMarkIndex));
+						TheBetweenlands.networkWrapper.sendToServer(new MessageLinkRuneWeavingTableRune(this.container.getSelectedRuneIndex(), this.draggingToken.getTokenIndex(), this.linkingDropdownMenuSlot - this.tile.getChainStart(), linkingTokenIndex));
 
-						IRuneLink link = this.container.getLink(this.container.getSelectedRuneIndex(), this.draggingMark.getMarkIndex());
+						IRuneLink link = this.container.getLink(this.container.getSelectedRuneIndex(), this.draggingToken.getTokenIndex());
 						if(link != null) {
-							this.recentlyLinked = new Tuple<>(this.draggingMark, link);
+							this.recentlyLinked = new Tuple<>(this.draggingToken, link);
 						}
 					}
 				}
@@ -683,7 +704,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 				this.linkingDropdownMenuSlot = -1;
 			}
 
-			this.draggingMark = null;
+			this.draggingToken = null;
 
 			handled = true;
 		}
@@ -714,7 +735,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		if(i > 0 && this.container.getCurrentPage().index < this.container.getPages() - 1 && this.swapAnimationTicks < SWAP_ANIMATION_HALF_DURATION) {
 			int start = this.newPage >= 0 ? this.newPage : this.container.getCurrentPage().index;
 			this.newPage = Math.min(start + i, this.container.getPages() - 1);
-			TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneChainAltarPage(this.newPage));
+			TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneWeavingTablePage(this.newPage));
 			if(this.swapAnimationTicks <= 0) {
 				this.swapAnimationTicks = 1;
 			}
@@ -722,7 +743,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		} else if(i < 0 && this.container.getCurrentPage().index > 0 && this.swapAnimationTicks < SWAP_ANIMATION_HALF_DURATION) {
 			int start = this.newPage >= 0 ? this.newPage : this.container.getCurrentPage().index;
 			this.newPage = Math.max(start + i, 0);
-			TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneChainAltarPage(this.newPage));
+			TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneWeavingTablePage(this.newPage));
 			if(this.swapAnimationTicks <= 0) {
 				this.swapAnimationTicks = 1;
 			}
@@ -774,8 +795,8 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 	protected void updateSlotHoverTicks() {
 		for(Slot slot : this.container.inventorySlots) {
-			if(slot instanceof SlotRuneChainAltarInput) {
-				SlotRuneChainAltarInput slotRune = (SlotRuneChainAltarInput) slot;
+			if(slot instanceof SlotRuneWeavingTableInput) {
+				SlotRuneWeavingTableInput slotRune = (SlotRuneWeavingTableInput) slot;
 
 				slotRune.prevHoverTicks = slotRune.hoverTicks;
 
@@ -826,8 +847,8 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 	protected List<Integer> getCurrentlyLinkableOutputs(int outputRuneIndex, INodeConfiguration outputConfiguration) {
 		IRuneGui primaryGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
-		if(primaryGui != null && this.draggingMark != null) {
-			IConfigurationInput input = primaryGui.getContainer().getContext().getConfiguration().getInputs().get(this.draggingMark.getMarkIndex());
+		if(primaryGui != null && this.draggingToken != null) {
+			IConfigurationInput input = primaryGui.getContainer().getContext().getConfiguration().getInputs().get(this.draggingToken.getTokenIndex());
 			if(input != null) {
 				return this.getLinkableOutputs(input, outputRuneIndex, outputConfiguration);
 			}
@@ -897,13 +918,13 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		if(this.linkingDropdownMenuSlot >= 0) {
 			Slot slot = this.inventorySlots.getSlot(this.linkingDropdownMenuSlot);
 
-			if(slot instanceof SlotRuneChainAltarInput)  {
+			if(slot instanceof SlotRuneWeavingTableInput)  {
 				IRuneContainer container = this.container.getRuneContainer(this.linkingDropdownMenuSlot - this.tile.getChainStart());
 
 				if(container != null) {
 					INodeConfiguration configuration = container.getContext().getConfiguration();
 					int outputs;
-					if(this.draggingMark != null) {
+					if(this.draggingToken != null) {
 						outputs = this.getCurrentlyLinkableOutputs(this.linkingDropdownMenuSlot - this.tile.getChainStart(), configuration).size();
 					} else {
 						outputs = configuration.getOutputs().size();
@@ -926,12 +947,12 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 			this.recentlyLinked = null;
 		}
 
-		if(this.draggingMark != null && this.linkingDropdownMenuSlot < 0) {
+		if(this.draggingToken != null && this.linkingDropdownMenuSlot < 0) {
 			IRuneGui primaryRuneGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
 
 			if(primaryRuneGui != null) {
 				for(Slot slot : this.container.inventorySlots) {
-					if(slot instanceof SlotRuneChainAltarInput && slot.isEnabled() && slot.slotNumber - this.tile.getChainStart() < primaryRuneGui.getContainer().getContext().getRuneIndex()) {
+					if(slot instanceof SlotRuneWeavingTableInput && slot.isEnabled() && slot.slotNumber - this.tile.getChainStart() < primaryRuneGui.getContainer().getContext().getRuneIndex()) {
 						IRuneContainer container = this.container.getRuneContainer(slot.slotNumber - this.tile.getChainStart());
 
 						if(container != null) {
@@ -996,7 +1017,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		return mouseX >= minX && mouseX < maxX && mouseY >= minY && mouseY < maxY;
 	}
 
-	protected int getLinkingDropdownMenuMarkIndex(int mouseX, int mouseY) {
+	protected int getLinkingDropdownMenuTokenIndex(int mouseX, int mouseY) {
 		if(this.linkingDropdownMenuSlot >= 0 && this.isInsideLinkingDropdownMenu(mouseX, mouseY, true)) {
 			IRuneContainer container = this.container.getRuneContainer(this.linkingDropdownMenuSlot - this.tile.getChainStart());
 			Slot slot = this.inventorySlots.getSlot(this.linkingDropdownMenuSlot);
@@ -1016,9 +1037,9 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 						int cx = this.guiLeft + sx + 3 + 8;
 						int cy = this.guiTop + sy + 3 + yOff + 8 + 18;
 
-						IGuiRuneMark mark = secondaryRuneGui.getOutputMark(output);
+						IGuiRuneToken token = secondaryRuneGui.getOutputToken(output);
 
-						if(mark.isInside(cx, cy, mouseX, mouseY)) {
+						if(token.isInside(cx, cy, mouseX, mouseY)) {
 							return output;
 						}
 
@@ -1053,7 +1074,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 				int sx = slot.xPos - 3;
 				int sy = slot.yPos - 3;
 
-				this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);
+				this.mc.getTextureManager().bindTexture(GUI_RUNE_WEAVING_TABLE);
 
 				this.zLevel = 270;
 				this.drawDrowndownMenuBackground(sx, sy, outputs.size() * 18 + 3 + 18);
@@ -1069,7 +1090,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 				IRuneGui secondaryGui = this.openRuneGuis.get(RuneMenuType.SECONDARY);
 
 				if(secondaryGui != null) {
-					Tuple<IGuiRuneMark, IRuneLink> link = this.getHoveredOnLink(mouseX, mouseY);
+					Tuple<IGuiRuneToken, IRuneLink> link = this.getHoveredOnLink(mouseX, mouseY);
 
 					if(link == null) {
 						link = this.recentlyLinked;
@@ -1083,36 +1104,38 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 						int cx = this.guiLeft + sx + 3 + 8;
 						int cy = this.guiTop + sy + 3 + yOff + 8 + 18;
 
-						IGuiRuneMark mark = secondaryGui.getOutputMark(output);
+						IGuiRuneToken token = secondaryGui.getOutputToken(output);
 
-						RuneMenuDrawingContext.Mark drawingContext;
+						RuneMenuDrawingContext.Token drawingContext;
 						boolean isLinked = link != null && link.getSecond().getOutput() == output;
-						boolean isConnecting = this.draggingMark != null;
+						boolean isConnecting = this.draggingToken != null;
 						if(isLinked && isConnecting) {
-							drawingContext = RuneMenuDrawingContext.Mark.DROPDOWN_CONNECTION_AND_CONNECTING;
+							drawingContext = RuneMenuDrawingContext.Token.DROPDOWN_CONNECTION_AND_CONNECTING;
 						} else if(isLinked) {
-							drawingContext = RuneMenuDrawingContext.Mark.DROPDOWN_CONNECTION;
+							drawingContext = RuneMenuDrawingContext.Token.DROPDOWN_CONNECTION;
 						} else if(isConnecting) {
-							drawingContext = RuneMenuDrawingContext.Mark.DROPDOWN_CONNECTING;
+							drawingContext = RuneMenuDrawingContext.Token.DROPDOWN_CONNECTING;
 						} else {
-							drawingContext = RuneMenuDrawingContext.Mark.DROPDOWN;
+							drawingContext = RuneMenuDrawingContext.Token.DROPDOWN;
 						}
 
-						secondaryGui.drawMark(mark, cx, cy, drawingContext);
+						secondaryGui.drawToken(token, cx, cy, drawingContext);
 
 						yOff += 18;
 					}
 
-					if(this.draggingMark != null) {
+					if(this.draggingToken != null) {
 						yOff = 0;
 						for(int output : outputs) {
 							int cx = this.guiLeft + sx + 3 + 8;
 							int cy = this.guiTop + sy + 3 + yOff + 8 + 18;
 
-							IGuiRuneMark mark = secondaryGui.getOutputMark(output);
+							IGuiRuneToken token = secondaryGui.getOutputToken(output);
 
-							if(mark.isInside(cx, cy, mouseX, mouseY)) {
-								secondaryGui.drawMarkTooltip(mark, cx, cy, mouseX, mouseY, link != null && link.getSecond().getOutput() == output ? RuneMenuDrawingContext.Tooltip.DROPDOWN_CONNECTION_AND_CONNECTING : RuneMenuDrawingContext.Tooltip.DROPDOWN_CONNECTING);
+							if(token.isInside(cx, cy, mouseX, mouseY)) {
+								secondaryGui.drawTokenConnection(token, cx, cy, RuneMenuDrawingContext.Connection.VIA_DROPDOWN);
+
+								secondaryGui.drawTokenTooltip(token, cx, cy, mouseX, mouseY, link != null && link.getSecond().getOutput() == output ? RuneMenuDrawingContext.Tooltip.DROPDOWN_CONNECTION_AND_CONNECTING : RuneMenuDrawingContext.Tooltip.DROPDOWN_CONNECTING);
 							}
 
 							yOff += 18;
@@ -1152,16 +1175,16 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 	}
 
 	@Nullable
-	protected Tuple<IGuiRuneMark, IRuneLink> getHoveredOnLink(int mouseX, int mouseY) {
+	protected Tuple<IGuiRuneToken, IRuneLink> getHoveredOnLink(int mouseX, int mouseY) {
 		IRuneGui primaryRuneGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
 
 		if(primaryRuneGui != null) {
-			for(IGuiRuneMark mark : primaryRuneGui.getInputMarks()) {
-				if(mark.isInteractable() && mark.isInside(mark.getCenterX(), mark.getCenterY(), mouseX, mouseY)) {
-					IRuneLink link = this.container.getLink(primaryRuneGui.getContainer().getContext().getRuneIndex(), mark.getMarkIndex());
+			for(IGuiRuneToken token : primaryRuneGui.getInputTokens()) {
+				if(token.isInteractable() && token.isInside(token.getCenterX(), token.getCenterY(), mouseX, mouseY)) {
+					IRuneLink link = this.container.getLink(primaryRuneGui.getContainer().getContext().getRuneIndex(), token.getTokenIndex());
 
 					if(link != null) {
-						return new Tuple<>(mark, link);
+						return new Tuple<>(token, link);
 					}
 				}
 			}
@@ -1170,16 +1193,16 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		return null;
 	}
 
-	protected void drawRuneMarkConnections(int mouseX, int mouseY) {
+	protected void drawRuneTokenConnections(int mouseX, int mouseY) {
 		if(isShiftKeyDown()) {
 			this.setSlabTransform();
 
 			for(int runeIndex = 0; runeIndex < this.container.getRuneInventorySize(); runeIndex++) {
 				Slot runeSlot = this.container.getRuneSlot(runeIndex);
 
-				if(runeSlot instanceof SlotRuneChainAltarInput && ((SlotRuneChainAltarInput) runeSlot).isEnabled() && !this.container.getRuneItemStack(runeIndex).isEmpty()) {
-					Page runeSlotPage = ((SlotRuneChainAltarInput) runeSlot).getPage();
-					
+				if(runeSlot instanceof SlotRuneWeavingTableInput && ((SlotRuneWeavingTableInput) runeSlot).isEnabled() && !this.container.getRuneItemStack(runeIndex).isEmpty()) {
+					Page runeSlotPage = ((SlotRuneWeavingTableInput) runeSlot).getPage();
+
 					Set<Integer> visitedRunes = new HashSet<>();
 
 					for(int linkedInput : this.container.getLinkedInputs(runeIndex)) {
@@ -1188,13 +1211,13 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 						if(visitedRunes.add(link.getOutputRune())) {
 							Slot linkedSlot = this.container.getRuneSlot(link.getOutputRune());
 
-							if(linkedSlot instanceof SlotRuneChainAltarInput) {
-								Page linkedSlotPage = ((SlotRuneChainAltarInput) linkedSlot).getPage();
-								
-								boolean isTopHalf = runeIndex >= runeSlotPage.index * ContainerRuneChainAltar.SLOTS_PER_PAGE && runeIndex < runeSlotPage.index * ContainerRuneChainAltar.SLOTS_PER_PAGE + ContainerRuneChainAltar.SLOTS_PER_PAGE / 2;
-								boolean isLinkedTopHalf = link.getOutputRune() >= linkedSlotPage.index * ContainerRuneChainAltar.SLOTS_PER_PAGE && link.getOutputRune() < linkedSlotPage.index * ContainerRuneChainAltar.SLOTS_PER_PAGE + ContainerRuneChainAltar.SLOTS_PER_PAGE / 2;
-								
-								if(((SlotRuneChainAltarInput) linkedSlot).isEnabled()) {
+							if(linkedSlot instanceof SlotRuneWeavingTableInput) {
+								Page linkedSlotPage = ((SlotRuneWeavingTableInput) linkedSlot).getPage();
+
+								boolean isTopHalf = runeIndex >= runeSlotPage.index * ContainerRuneWeavingTable.SLOTS_PER_PAGE && runeIndex < runeSlotPage.index * ContainerRuneWeavingTable.SLOTS_PER_PAGE + ContainerRuneWeavingTable.SLOTS_PER_PAGE / 2;
+								boolean isLinkedTopHalf = link.getOutputRune() >= linkedSlotPage.index * ContainerRuneWeavingTable.SLOTS_PER_PAGE && link.getOutputRune() < linkedSlotPage.index * ContainerRuneWeavingTable.SLOTS_PER_PAGE + ContainerRuneWeavingTable.SLOTS_PER_PAGE / 2;
+
+								if(((SlotRuneWeavingTableInput) linkedSlot).isEnabled()) {
 									DefaultRuneGui.drawHangingRope(this.updateCounter + runeIndex * 50, runeSlot.xPos + 8, runeSlot.yPos + 8, linkedSlot.xPos + 8, linkedSlot.yPos + 8, !isTopHalf && isLinkedTopHalf ? -14.0F : 14.0F, this.zLevel);
 								} else {
 									DefaultRuneGui.drawHangingRope(this.updateCounter + runeIndex * 50, runeSlot.xPos + 8, runeSlot.yPos + 8, 88, 70, !isTopHalf ? -6.0F : 0.0F, this.zLevel);
@@ -1207,13 +1230,13 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 			this.revertSlabTransform();
 
-			this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);
+			this.mc.getTextureManager().bindTexture(GUI_RUNE_WEAVING_TABLE);
 		}
 
 		IRuneGui primaryRuneGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
 
 		if(primaryRuneGui != null) {
-			Tuple<IGuiRuneMark, IRuneLink> link = this.getHoveredOnLink(mouseX, mouseY);
+			Tuple<IGuiRuneToken, IRuneLink> link = this.getHoveredOnLink(mouseX, mouseY);
 
 			if(link == null) {
 				link = this.recentlyLinked;
@@ -1221,18 +1244,18 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 			if(link != null) {
 				IRuneGui secondaryRuneGui = this.openRuneGuis.get(RuneMenuType.SECONDARY);
-				IGuiRuneMark secondaryGuiRuneMark = null;
+				IGuiRuneToken secondaryGuiRuneToken = null;
 
 				if(secondaryRuneGui != null) {
-					IGuiRuneMark mark = secondaryRuneGui.getOutputMark(link.getSecond().getOutput());
-					if(mark.isInteractable()) {
-						secondaryGuiRuneMark = mark;
+					IGuiRuneToken token = secondaryRuneGui.getOutputToken(link.getSecond().getOutput());
+					if(token.isInteractable()) {
+						secondaryGuiRuneToken = token;
 					}
 				}
 
 				Slot linkedSlot = this.inventorySlots.getSlot(link.getSecond().getOutputRune() + this.tile.getChainStart());
 
-				if(this.swapAnimationTicks == 0 && linkedSlot instanceof SlotRuneChainAltarInput && linkedSlot.isEnabled()) {
+				if(this.swapAnimationTicks == 0 && linkedSlot instanceof SlotRuneWeavingTableInput && linkedSlot.isEnabled()) {
 					this.drawDropdownMenu(linkedSlot, mouseX, mouseY, false);
 
 					int sy = this.guiTop + linkedSlot.yPos - 3;
@@ -1243,22 +1266,22 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(-this.guiLeft, -this.guiTop, 120);
 
-					primaryRuneGui.drawMarkConnection(link.getFirst(), cx, cy, RuneMenuDrawingContext.Connection.VIA_DROPDOWN);
+					primaryRuneGui.drawTokenConnection(link.getFirst(), cx, cy, RuneMenuDrawingContext.Connection.VIA_DROPDOWN);
 
-					if(secondaryGuiRuneMark != null) {
-						secondaryRuneGui.drawMarkConnection(secondaryGuiRuneMark, cx, cy, RuneMenuDrawingContext.Connection.VIA_DROPDOWN);
+					if(secondaryGuiRuneToken != null) {
+						secondaryRuneGui.drawTokenConnection(secondaryGuiRuneToken, cx, cy, RuneMenuDrawingContext.Connection.VIA_DROPDOWN);
 
-						secondaryRuneGui.drawMarkTooltip(secondaryGuiRuneMark, secondaryGuiRuneMark.getCenterX(), secondaryGuiRuneMark.getCenterY(), secondaryGuiRuneMark.getCenterX(), secondaryGuiRuneMark.getCenterY(), RuneMenuDrawingContext.Tooltip.CONNECTION_END);
+						secondaryRuneGui.drawTokenTooltip(secondaryGuiRuneToken, secondaryGuiRuneToken.getCenterX(), secondaryGuiRuneToken.getCenterY(), secondaryGuiRuneToken.getCenterX(), secondaryGuiRuneToken.getCenterY(), RuneMenuDrawingContext.Tooltip.CONNECTION_END);
 					}
 
 					GlStateManager.popMatrix();
-				} else if(secondaryGuiRuneMark != null) {
+				} else if(secondaryGuiRuneToken != null) {
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(-this.guiLeft, -this.guiTop, 120);
 
-					primaryRuneGui.drawMarkConnection(link.getFirst(), secondaryGuiRuneMark.getCenterX(), secondaryGuiRuneMark.getCenterY(), RuneMenuDrawingContext.Connection.DIRECTLY);
+					primaryRuneGui.drawTokenConnection(link.getFirst(), secondaryGuiRuneToken.getCenterX(), secondaryGuiRuneToken.getCenterY(), RuneMenuDrawingContext.Connection.DIRECTLY);
 
-					secondaryRuneGui.drawMarkTooltip(secondaryGuiRuneMark, secondaryGuiRuneMark.getCenterX(), secondaryGuiRuneMark.getCenterY(), secondaryGuiRuneMark.getCenterX(), secondaryGuiRuneMark.getCenterY(), RuneMenuDrawingContext.Tooltip.CONNECTION_END);
+					secondaryRuneGui.drawTokenTooltip(secondaryGuiRuneToken, secondaryGuiRuneToken.getCenterX(), secondaryGuiRuneToken.getCenterY(), secondaryGuiRuneToken.getCenterX(), secondaryGuiRuneToken.getCenterY(), RuneMenuDrawingContext.Tooltip.CONNECTION_END);
 
 					GlStateManager.popMatrix();
 				}
@@ -1273,20 +1296,22 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 	protected void drawUpArrow(float x, float y, int mouseX, int mouseY, float alpha) {
 		int relX = mouseX - (int) x;
 		int relY = mouseY - (int) y;
-		if(this.swapAnimationTicks != 0 || !(relX >= 0 && relX <= 15 && relY >= 0 && relY <= 24)) {
-			GlStateManager.color(0.7F, 0.7F, 0.7F, alpha);
+		if(this.swapAnimationTicks != 0 || !(relX >= 0 && relX <= 24 && relY >= 0 && relY <= 36)) {
+			this.drawTexturedModalRect512(x, y, 182, 22, 24, 36);
+		} else {
+			this.drawTexturedModalRect512(x, y, 182, 63, 24, 36);
 		}
-		this.drawTexturedModalRect512(x, y, 187, 16, 15, 24);
 		GlStateManager.color(1, 1, 1);
 	}
 
 	protected void drawDownArrow(float x, float y, int mouseX, int mouseY, float alpha) {
 		int relX = mouseX - (int) x;
 		int relY = mouseY - (int) y;
-		if(this.swapAnimationTicks != 0 || !(relX >= 0 && relX <= 15 && relY >= 0 && relY <= 24)) {
-			GlStateManager.color(0.7F, 0.7F, 0.7F, alpha);
+		if(this.swapAnimationTicks != 0 || !(relX >= 0 && relX <= 24 && relY >= 0 && relY <= 36)) {
+			this.drawTexturedModalRect512(x, y, 182, 116, 24, 36);
+		} else {
+			this.drawTexturedModalRect512(x, y, 182, 157, 24, 36);
 		}
-		this.drawTexturedModalRect512(x, y, 187, 108, 15, 24);
 		GlStateManager.color(1, 1, 1);
 	}
 
@@ -1311,15 +1336,15 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 	}
 
 	protected void drawSlabForeground(float x, float y) {
-		this.drawTexturedModalRect512(x, y, 0, 224, 198, 134);
+		this.drawTexturedModalRect512(x, y, 0, 237, 198, 134);
 	}
 
 	protected void drawSlabBackground(float x, float y) {
-		this.drawTexturedModalRect512(x, y, 0, 357, 198, 134);
+		this.drawTexturedModalRect512(x, y, 0, 370, 198, 134);
 	}
 
 	protected void drawCordPiece(float slabX, float slabY, int piece) {
-		this.drawCordPiecePositioned(CORD_PIECE_SLOT_UVs[piece][0] + slabX, CORD_PIECE_SLOT_UVs[piece][1] - 224 + slabY, piece);
+		this.drawCordPiecePositioned(CORD_PIECE_SLOT_UVs[piece][0] + slabX, CORD_PIECE_SLOT_UVs[piece][1] - 211 + slabY, piece);
 	}
 
 	protected void drawCordPiecePositioned(float x, float y, int piece) {
@@ -1372,6 +1397,6 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 			return false;
 		}
 		Slot slot = this.container.getRuneSlot(runeIndex);
-		return slot instanceof SlotRuneChainAltarInput ? ((SlotRuneChainAltarInput) slot).isEnabled() : false;
+		return slot instanceof SlotRuneWeavingTableInput ? ((SlotRuneWeavingTableInput) slot).isEnabled() : false;
 	}
 }

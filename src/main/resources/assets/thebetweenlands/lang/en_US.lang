@@ -1656,13 +1656,13 @@ gui.bl.draeton.main.upgrade_anchor=Anchor upgrade slot:\n§7 - Draeton Anchor Up
 
 
 # Runes
-rune.mark.unknown=Rune Mark
+rune.token.unknown=Rune Mark
 
-rune.mark.thebetweenlands.any=Any Mark
-rune.mark.thebetweenlands.block=Block Mark
-rune.mark.thebetweenlands.entity=Entity Mark
-rune.mark.thebetweenlands.position=Position Mark
-rune.mark.thebetweenlands.ray=Ray Mark
+rune.token.thebetweenlands.any=Any Mark
+rune.token.thebetweenlands.block=Block Mark
+rune.token.thebetweenlands.entity=Entity Mark
+rune.token.thebetweenlands.position=Position Mark
+rune.token.thebetweenlands.ray=Ray Mark
 
 rune.input=Input
 rune.output=Output

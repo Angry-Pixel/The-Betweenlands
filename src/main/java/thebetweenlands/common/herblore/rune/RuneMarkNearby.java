@@ -15,7 +15,7 @@ import thebetweenlands.api.rune.impl.PortNodeConfiguration;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration.InputPort;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration.OutputPort;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneMarkDescriptors;
+import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
@@ -40,12 +40,12 @@ public final class RuneMarkNearby extends AbstractRune<RuneMarkNearby> {
 		static {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 
-			OUT_ENTITIES = builder.multiOut(RuneMarkDescriptors.ENTITY, Entity.class);
+			OUT_ENTITIES = builder.multiOut(RuneTokenDescriptors.ENTITY, Entity.class);
 
 			CONFIGURATION_1 = builder.build();
 
-			IN_POSITION_2 = builder.in(RuneMarkDescriptors.BLOCK, BlockPos.class);
-			OUT_ENTITIES_2 = builder.multiOut(RuneMarkDescriptors.ENTITY, Entity.class);
+			IN_POSITION_2 = builder.in(RuneTokenDescriptors.BLOCK, BlockPos.class);
+			OUT_ENTITIES_2 = builder.multiOut(RuneTokenDescriptors.ENTITY, Entity.class);
 
 			CONFIGURATION_2 = builder.build();
 		}

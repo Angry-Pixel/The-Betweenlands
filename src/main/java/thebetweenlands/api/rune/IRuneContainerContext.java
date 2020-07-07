@@ -8,10 +8,10 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public interface IRuneContainerContext {
 	@Nullable
-	public IRuneChainAltarContainer getRuneChainAltarContainer();
+	public IRuneWeavingTableContainer getRuneWeavingTableContainer();
 
 	@Nullable
-	public IRuneChainAltarGui getRuneChainAltarGui();
+	public IRuneWeavingTableGui getRuneWeavingTableGui();
 
 	public int getRuneIndex();
 
@@ -25,8 +25,8 @@ public interface IRuneContainerContext {
 
 	/**
 	 * Sets the NBT data that is associated with the rune container this context belongs to.
-	 * If this data changes and affects the rune container's {@link IRuneContainer#getBlueprint()}, {@link IRuneChainAltarContainer#onRuneChanged(int)} must be called
-	 * if the rune chain altar container is not <code>null</code>.
+	 * If this data changes and affects the rune container's {@link IRuneContainer#getBlueprint()}, {@link IRuneWeavingTableContainer#onRuneChanged(int)} must be called
+	 * if the rune weaving table container is not <code>null</code>.
 	 * @param nbt - NBT data that is associated with the rune container this context belongs to
 	 */
 	public void setData(NBTTagCompound nbt);

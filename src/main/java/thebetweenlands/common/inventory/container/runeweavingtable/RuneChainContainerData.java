@@ -1,4 +1,4 @@
-package thebetweenlands.common.inventory.container.runechainaltar;
+package thebetweenlands.common.inventory.container.runeweavingtable;
 
 import java.util.Collection;
 import java.util.HashMap;

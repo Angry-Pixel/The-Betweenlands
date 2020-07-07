@@ -10,7 +10,7 @@ import thebetweenlands.api.rune.impl.AbstractRune;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration.InputPort;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneMarkDescriptors;
+import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
@@ -29,9 +29,9 @@ public final class RuneBranching extends AbstractRune<RuneBranching> {
 		private static final InputPort<?> IN;
 
 		static {
-			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder(RuneMarkDescriptors.ANY);
+			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder(RuneTokenDescriptors.ANY);
 
-			IN = builder.in(RuneMarkDescriptors.ANY, Object.class);
+			IN = builder.in(RuneTokenDescriptors.ANY, Object.class);
 
 			CONFIGURATION_1 = builder.build();
 		}

@@ -18,7 +18,7 @@ import thebetweenlands.api.rune.impl.PortNodeConfiguration;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration.InputPort;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration.OutputPort;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneMarkDescriptors;
+import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
@@ -52,20 +52,20 @@ public final class RuneProjectile extends AbstractRune<RuneProjectile> {
 		static {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 
-			IN_ENTITY_1 = builder.in(RuneMarkDescriptors.ENTITY, Entity.class, IRuneChainUser.class);
-			OUT_POSITION_1 = builder.out(RuneMarkDescriptors.BLOCK, BlockPos.class);
+			IN_ENTITY_1 = builder.in(RuneTokenDescriptors.ENTITY, Entity.class, IRuneChainUser.class);
+			OUT_POSITION_1 = builder.out(RuneTokenDescriptors.BLOCK, BlockPos.class);
 
 			CONFIGURATION_1 = builder.build();
 
-			IN_ENTITY_2 = builder.in(RuneMarkDescriptors.ENTITY, Entity.class, IRuneChainUser.class);
-			IN_RAY_2 = builder.in(RuneMarkDescriptors.RAY, Vec3d.class);
-			OUT_POSITION_2 = builder.out(RuneMarkDescriptors.BLOCK, BlockPos.class);
+			IN_ENTITY_2 = builder.in(RuneTokenDescriptors.ENTITY, Entity.class, IRuneChainUser.class);
+			IN_RAY_2 = builder.in(RuneTokenDescriptors.RAY, Vec3d.class);
+			OUT_POSITION_2 = builder.out(RuneTokenDescriptors.BLOCK, BlockPos.class);
 
 			CONFIGURATION_2 = builder.build();
 
-			IN_POSITION_3 = builder.in(RuneMarkDescriptors.POSITION, Vec3d.class);
-			IN_RAY_3 = builder.in(RuneMarkDescriptors.RAY, Vec3d.class);
-			OUT_POSITION_3 = builder.out(RuneMarkDescriptors.BLOCK, BlockPos.class);
+			IN_POSITION_3 = builder.in(RuneTokenDescriptors.POSITION, Vec3d.class);
+			IN_RAY_3 = builder.in(RuneTokenDescriptors.RAY, Vec3d.class);
+			OUT_POSITION_3 = builder.out(RuneTokenDescriptors.BLOCK, BlockPos.class);
 
 			CONFIGURATION_3 = builder.build();
 		}

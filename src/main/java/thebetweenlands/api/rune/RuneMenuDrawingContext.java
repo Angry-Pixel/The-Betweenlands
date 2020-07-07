@@ -16,7 +16,7 @@ public final class RuneMenuDrawingContext {
 
 		/**
 		 * A connection is rendered while connecting
-		 * a rune mark
+		 * a rune token
 		 */
 		CONNECTING,
 
@@ -26,28 +26,28 @@ public final class RuneMenuDrawingContext {
 		OTHER
 	}
 
-	public static enum Mark {
+	public static enum Token {
 		/**
-		 * A mark is rendered in the dropdown menu
+		 * A token is rendered in the dropdown menu
 		 */
 		DROPDOWN,
 
 		/**
-		 * A mark is rendered in the dropdown menu
-		 * while connecting a rune mark
+		 * A token is rendered in the dropdown menu
+		 * while connecting a rune token
 		 */
 		DROPDOWN_CONNECTING,
 
 		/**
-		 * A mark is rendered in the dropdown menu
+		 * A token is rendered in the dropdown menu
 		 * with a connection connected to it
 		 */
 		DROPDOWN_CONNECTION,
 
 		/**
-		 * A mark is rendered in the dropdown menu
+		 * A token is rendered in the dropdown menu
 		 * with a connection connected to it while
-		 * connecting a rune mark
+		 * connecting a rune token
 		 */
 		DROPDOWN_CONNECTION_AND_CONNECTING,
 
@@ -59,30 +59,30 @@ public final class RuneMenuDrawingContext {
 
 	public static enum Tooltip {
 		/**
-		 * A tooltip of a mark in the dropdown
+		 * A tooltip of a token in the dropdown
 		 * menu is rendered
 		 */
 		DROPDOWN,
 
 		/**
-		 * A tooltip of a mark in the dropdown
+		 * A tooltip of a token in the dropdown
 		 * menu is rendered while connecting
-		 * a rune mark
+		 * a rune token
 		 */
 		DROPDOWN_CONNECTING,
 
 		/**
-		 * A tooltip of a mark in the dropdown
+		 * A tooltip of a token in the dropdown
 		 * menu is rendered with a connection
 		 * connected to it
 		 */
 		DROPDOWN_CONNECTION,
 
 		/**
-		 * A tooltip of a mark in the dropdown
+		 * A tooltip of a token in the dropdown
 		 * menu is rendered with a connection
 		 * connected to it while connecting
-		 * a rune mark
+		 * a rune token
 		 */
 		DROPDOWN_CONNECTION_AND_CONNECTING,
 

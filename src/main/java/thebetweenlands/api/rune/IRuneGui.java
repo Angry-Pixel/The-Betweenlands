@@ -15,11 +15,11 @@ public interface IRuneGui {
 
 	public void drawForeground(int mouseX, int mouseY);
 
-	public void drawMark(IGuiRuneMark mark, int centerX, int centerY, RuneMenuDrawingContext.Mark context);
+	public void drawToken(IGuiRuneToken token, int centerX, int centerY, RuneMenuDrawingContext.Token context);
 	
-	public void drawMarkTooltip(IGuiRuneMark mark, int centerX, int centerY, int mouseX, int mouseY, RuneMenuDrawingContext.Tooltip context);
+	public void drawTokenTooltip(IGuiRuneToken token, int centerX, int centerY, int mouseX, int mouseY, RuneMenuDrawingContext.Tooltip context);
 	
-	public void drawMarkConnection(IGuiRuneMark mark, int targetX, int targetY, RuneMenuDrawingContext.Connection context);
+	public void drawTokenConnection(IGuiRuneToken token, int targetX, int targetY, RuneMenuDrawingContext.Connection context);
 
 	public boolean onKeyTyped(char typedChar, int keyCode, boolean handled);
 
@@ -31,17 +31,17 @@ public interface IRuneGui {
 
 	public void onParentSizeSet(int w, int h);
 	
-	public boolean onStartMarkLinking(IGuiRuneMark mark, int mouseX, int mouseY);
+	public boolean onStartTokenLinking(IGuiRuneToken token, int mouseX, int mouseY);
 
-	public boolean onStartMarkUnlinking(IGuiRuneMark mark, int mouseX, int mouseY);
+	public boolean onStartTokenUnlinking(IGuiRuneToken token, int mouseX, int mouseY);
 	
-	public IGuiRuneMark getInputMark(int markIndex);
+	public IGuiRuneToken getInputToken(int tokenIndex);
 	
-	public Collection<? extends IGuiRuneMark> getInputMarks();
+	public Collection<? extends IGuiRuneToken> getInputTokens();
 	
-	public IGuiRuneMark getOutputMark(int markIndex);
+	public IGuiRuneToken getOutputToken(int tokenIndex);
 	
-	public Collection<? extends IGuiRuneMark> getOutputMarks();
+	public Collection<? extends IGuiRuneToken> getOutputTokens();
 
 	public int getMinX();
 

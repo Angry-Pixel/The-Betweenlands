@@ -3,14 +3,14 @@ package thebetweenlands.common.inventory.slot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltar;
-import thebetweenlands.common.tile.TileEntityRuneChainAltar;
+import thebetweenlands.common.inventory.container.runeweavingtable.ContainerRuneWeavingTable;
+import thebetweenlands.common.tile.TileEntityRuneWeavingTable;
 
-public class SlotRuneChainAltarOutput extends Slot {
-	private final TileEntityRuneChainAltar altar;
-	private final ContainerRuneChainAltar container;
+public class SlotRuneWeavingTableOutput extends Slot {
+	private final TileEntityRuneWeavingTable altar;
+	private final ContainerRuneWeavingTable container;
 
-	public SlotRuneChainAltarOutput(TileEntityRuneChainAltar altar, int slotIndex, int x, int y, ContainerRuneChainAltar container) {
+	public SlotRuneWeavingTableOutput(TileEntityRuneWeavingTable altar, int slotIndex, int x, int y, ContainerRuneWeavingTable container) {
 		super(altar, slotIndex, x, y);
 		this.altar = altar;
 		this.container = container;

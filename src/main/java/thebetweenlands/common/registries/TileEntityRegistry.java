@@ -42,7 +42,7 @@ import thebetweenlands.common.tile.TileEntityPuffshroom;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityRepeller;
 import thebetweenlands.common.tile.TileEntityRubberTap;
-import thebetweenlands.common.tile.TileEntityRuneChainAltar;
+import thebetweenlands.common.tile.TileEntityRuneWeavingTable;
 import thebetweenlands.common.tile.TileEntitySpikeTrap;
 import thebetweenlands.common.tile.TileEntityBarrel;
 import thebetweenlands.common.tile.TileEntityTarLootPot1;
@@ -95,7 +95,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityPuffshroom.class, "puffshroom");
 		registerTileEntity(TileEntityBeamOrigin.class, "beam_origin");
 		registerTileEntity(TileEntityBeamRelay.class, "beam_relay");
-		registerTileEntity(TileEntityRuneChainAltar.class, "rune_chain_altar");
+		registerTileEntity(TileEntityRuneWeavingTable.class, "rune_weaving_table");
 		registerTileEntity(TileEntityWaystone.class, "waystone");
 		registerTileEntity(TileEntityMudBrickAlcove.class, "mud_bricks_alcove");
 		registerTileEntity(TileEntityLootUrn.class, "loot_urn");

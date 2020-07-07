@@ -14,7 +14,7 @@ import thebetweenlands.api.rune.impl.AbstractRune;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration.InputPort;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneMarkDescriptors;
+import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
@@ -35,7 +35,7 @@ public final class RuneSelectGrass extends AbstractRune<RuneSelectGrass> {
 		static {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 
-			IN_POSITION = builder.in(RuneMarkDescriptors.BLOCK, BlockPos.class);
+			IN_POSITION = builder.in(RuneTokenDescriptors.BLOCK, BlockPos.class);
 
 			CONFIGURATION_1 = builder.build();
 		}

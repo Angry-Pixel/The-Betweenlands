@@ -3,8 +3,8 @@ package thebetweenlands.api.rune.impl;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.lib.ModInfo;
 
-public final class RuneMarkDescriptors {
-	private RuneMarkDescriptors()  {}
+public final class RuneTokenDescriptors {
+	private RuneTokenDescriptors()  {}
 
 	public static final ResourceLocation ANY = new ResourceLocation(ModInfo.ID, "any");
 	public static final ResourceLocation BLOCK = new ResourceLocation(ModInfo.ID, "block");

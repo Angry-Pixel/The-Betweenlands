@@ -16,7 +16,7 @@ import thebetweenlands.api.rune.impl.PortNodeConfiguration;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration.InputPort;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration.OutputPort;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneMarkDescriptors;
+import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
@@ -41,12 +41,12 @@ public final class RuneMarkArea extends AbstractRune<RuneMarkArea> {
 		static {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 
-			OUT_POSITIONS = builder.multiOut(RuneMarkDescriptors.BLOCK, BlockPos.class);
+			OUT_POSITIONS = builder.multiOut(RuneTokenDescriptors.BLOCK, BlockPos.class);
 
 			CONFIGURATION_1 = builder.build();
 			
-			IN_POSITION_2 = builder.in(RuneMarkDescriptors.BLOCK, BlockPos.class);
-			OUT_POSITIONS_2 = builder.multiOut(RuneMarkDescriptors.BLOCK, BlockPos.class);
+			IN_POSITION_2 = builder.in(RuneTokenDescriptors.BLOCK, BlockPos.class);
+			OUT_POSITIONS_2 = builder.multiOut(RuneTokenDescriptors.BLOCK, BlockPos.class);
 
 			CONFIGURATION_2 = builder.build();
 		}

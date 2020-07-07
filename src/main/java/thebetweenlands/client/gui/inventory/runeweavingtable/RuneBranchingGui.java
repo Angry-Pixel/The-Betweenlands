@@ -1,4 +1,4 @@
-package thebetweenlands.client.gui.inventory.runechainaltar;
+package thebetweenlands.client.gui.inventory.runeweavingtable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,20 +19,20 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import thebetweenlands.api.rune.IGuiRuneMark;
+import thebetweenlands.api.rune.IGuiRuneToken;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.IRuneContainer;
 import thebetweenlands.api.rune.IRuneContainerContext;
 import thebetweenlands.api.rune.IRuneGui;
 import thebetweenlands.api.rune.RuneMenuDrawingContext;
 import thebetweenlands.api.rune.RuneMenuType;
-import thebetweenlands.api.rune.impl.RuneMarkDescriptors;
+import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.book.widgets.text.FormatTags;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.network.serverbound.MessageSetRuneChainAltarConfiguration;
+import thebetweenlands.common.network.serverbound.MessageSetRuneWeavingTableConfiguration;
 import thebetweenlands.util.ColoredItemRenderer;
 
 public class RuneBranchingGui extends DefaultRuneGui {

@@ -58,7 +58,7 @@ import thebetweenlands.common.block.container.BlockMudBrickAlcove;
 import thebetweenlands.common.block.container.BlockPresent;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockRepeller;
-import thebetweenlands.common.block.container.BlockRuneChainAltar;
+import thebetweenlands.common.block.container.BlockRuneWeavingTable;
 import thebetweenlands.common.block.container.BlockTarLootPot;
 import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
 import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
@@ -841,7 +841,7 @@ public class BlockRegistry {
     public static final Block THATCH_ROOF = new BlockThatchRoof();
     public static final Block MUD_BRICK_ROOF = new BlockMudBrickRoof();
     public static final Block REPELLER = new BlockRepeller();
-    public static final Block RUNE_CHAIN_ALTAR = new BlockRuneChainAltar();
+    public static final Block RUNE_CHAIN_ALTAR = new BlockRuneWeavingTable();
     public static final Block WAYSTONE = new BlockWaystone();
     public static final Block CAVING_ROPE_LIGHT = new BlockCavingRopeLight();
     public static final Block GROUND_ITEM = new BlockGroundItem();

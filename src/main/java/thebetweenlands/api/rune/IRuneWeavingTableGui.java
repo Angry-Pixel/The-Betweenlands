@@ -2,7 +2,7 @@ package thebetweenlands.api.rune;
 
 import java.util.Collection;
 
-public interface IRuneChainAltarGui {
+public interface IRuneWeavingTableGui {
 	public Collection<IRuneGui> getOpenRuneGuis();
 
 	public boolean isRuneSlotInteractable(int runeIndex);

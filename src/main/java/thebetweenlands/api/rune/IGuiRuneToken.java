@@ -1,9 +1,9 @@
 package thebetweenlands.api.rune;
 
-public interface IGuiRuneMark {
+public interface IGuiRuneToken {
 	public boolean isInside(int centerX, int centerY, int mouseX, int mouseY);
 
-	public int getMarkIndex();
+	public int getTokenIndex();
 
 	public int getCenterX();
 

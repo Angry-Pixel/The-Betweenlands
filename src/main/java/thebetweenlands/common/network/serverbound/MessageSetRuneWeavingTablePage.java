@@ -4,15 +4,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltar;
+import thebetweenlands.common.inventory.container.runeweavingtable.ContainerRuneWeavingTable;
 import thebetweenlands.common.network.MessageBase;
 
-public class MessageSetRuneChainAltarPage extends MessageBase {
+public class MessageSetRuneWeavingTablePage extends MessageBase {
 	private int page;
 
-	public MessageSetRuneChainAltarPage() { }
+	public MessageSetRuneWeavingTablePage() { }
 
-	public MessageSetRuneChainAltarPage(int page) {
+	public MessageSetRuneWeavingTablePage(int page) {
 		this.page = page;
 	}
 
@@ -30,8 +30,8 @@ public class MessageSetRuneChainAltarPage extends MessageBase {
 	public IMessage process(MessageContext ctx) {
 		if(this.page >= 0 && ctx.getServerHandler() != null) {
 			EntityPlayer player = ctx.getServerHandler().player;
-			if(player.openContainer instanceof ContainerRuneChainAltar) {
-				ContainerRuneChainAltar container = (ContainerRuneChainAltar) player.openContainer;
+			if(player.openContainer instanceof ContainerRuneWeavingTable) {
+				ContainerRuneWeavingTable container = (ContainerRuneWeavingTable) player.openContainer;
 				if(this.page < container.getPages()) {
 					container.setCurrentPage(this.page);
 				}

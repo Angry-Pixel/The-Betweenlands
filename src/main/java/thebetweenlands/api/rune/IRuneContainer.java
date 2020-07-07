@@ -10,9 +10,9 @@ public interface IRuneContainer {
 	
 	public void init();
 
-	public void onMarkLinked(int input, IRuneLink link);
+	public void onTokenLinked(int input, IRuneLink link);
 
-	public void onMarkUnlinked(int input, IRuneLink link);
+	public void onTokenUnlinked(int input, IRuneLink link);
 
 	public void onRuneDataMoved(int fromRuneIndex, int toRuneIndex);
 

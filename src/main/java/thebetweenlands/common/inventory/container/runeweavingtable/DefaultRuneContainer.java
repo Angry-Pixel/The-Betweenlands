@@ -1,4 +1,4 @@
-package thebetweenlands.common.inventory.container.runechainaltar;
+package thebetweenlands.common.inventory.container.runeweavingtable;
 
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.api.rune.INodeBlueprint;
@@ -36,12 +36,12 @@ public class DefaultRuneContainer implements IRuneContainer {
 	}
 
 	@Override
-	public void onMarkLinked(int input, IRuneLink link) {
+	public void onTokenLinked(int input, IRuneLink link) {
 
 	}
 
 	@Override
-	public void onMarkUnlinked(int input, IRuneLink link) {
+	public void onTokenUnlinked(int input, IRuneLink link) {
 
 	}
 

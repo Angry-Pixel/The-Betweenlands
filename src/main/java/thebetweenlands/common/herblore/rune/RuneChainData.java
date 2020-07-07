@@ -7,7 +7,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.rune.IRuneChainContainerData;
 import thebetweenlands.api.rune.IRuneChainData;
-import thebetweenlands.common.inventory.container.runechainaltar.RuneChainContainerData;
+import thebetweenlands.common.inventory.container.runeweavingtable.RuneChainContainerData;
 
 public class RuneChainData implements IRuneChainData {
 	private final NonNullList<ItemStack> runes;

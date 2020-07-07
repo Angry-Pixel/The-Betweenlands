@@ -11,8 +11,8 @@ import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.capability.IRuneChainCapability;
 import thebetweenlands.api.rune.INodeBlueprint;
 import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.IRuneChainAltarContainer;
-import thebetweenlands.api.rune.IRuneChainAltarGui;
+import thebetweenlands.api.rune.IRuneWeavingTableContainer;
+import thebetweenlands.api.rune.IRuneWeavingTableGui;
 import thebetweenlands.api.rune.IRuneChainContainerData;
 import thebetweenlands.api.rune.IRuneChainData;
 import thebetweenlands.api.rune.IRuneContainer;
@@ -106,12 +106,12 @@ public class RuneChainItemCapability extends ItemCapability<RuneChainItemCapabil
 
 				IRuneContainerContext context = new IRuneContainerContext() {
 					@Override
-					public IRuneChainAltarContainer getRuneChainAltarContainer() {
+					public IRuneWeavingTableContainer getRuneWeavingTableContainer() {
 						return null;
 					}
 
 					@Override
-					public IRuneChainAltarGui getRuneChainAltarGui() {
+					public IRuneWeavingTableGui getRuneWeavingTableGui() {
 						return null;
 					}
 

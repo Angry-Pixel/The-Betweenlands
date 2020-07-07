@@ -24,12 +24,12 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.tile.TileEntityAnimator;
-import thebetweenlands.common.tile.TileEntityRuneChainAltar;
+import thebetweenlands.common.tile.TileEntityRuneWeavingTable;
 
-public class BlockRuneChainAltar extends BlockContainer {
+public class BlockRuneWeavingTable extends BlockContainer {
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
-	public BlockRuneChainAltar() {
+	public BlockRuneWeavingTable() {
 		super(Material.ROCK);
 		setHardness(2.0F);
 		setSoundType(SoundType.STONE);
@@ -39,7 +39,7 @@ public class BlockRuneChainAltar extends BlockContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileEntityRuneChainAltar();
+		return new TileEntityRuneWeavingTable();
 	}
 
 	@Override
@@ -58,8 +58,8 @@ public class BlockRuneChainAltar extends BlockContainer {
 			return true;
 		}
 		
-		if (world.getTileEntity(pos) instanceof TileEntityRuneChainAltar) {
-			player.openGui(TheBetweenlands.instance, CommonProxy.GUI_RUNE_CHAIN_ALTAR, world, pos.getX(), pos.getY(), pos.getZ());
+		if (world.getTileEntity(pos) instanceof TileEntityRuneWeavingTable) {
+			player.openGui(TheBetweenlands.instance, CommonProxy.GUI_RUNE_WEAVING_TABLE, world, pos.getX(), pos.getY(), pos.getZ());
 		}
 
 		return true;

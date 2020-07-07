@@ -5,9 +5,9 @@ import thebetweenlands.api.rune.IRuneContainer;
 import thebetweenlands.api.rune.IRuneContainerFactory;
 import thebetweenlands.api.rune.IRuneGui;
 import thebetweenlands.api.rune.RuneMenuType;
-import thebetweenlands.client.gui.inventory.runechainaltar.RuneBranchingGui;
+import thebetweenlands.client.gui.inventory.runeweavingtable.RuneBranchingGui;
 import thebetweenlands.common.herblore.rune.RuneBranching;
-import thebetweenlands.common.inventory.container.runechainaltar.DefaultRuneContainer;
+import thebetweenlands.common.inventory.container.runeweavingtable.DefaultRuneContainer;
 
 public class ItemRuneBranching extends ItemRune {
 	private final Factory factory = new Factory(this);
