@@ -553,6 +553,33 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 
 			SlotRuneWeavingTableInput slot = (SlotRuneWeavingTableInput) this.inventorySlots.getSlot(slotIndex);
 
+			if(slot.isEnabled()) {
+				IRuneContainer container = this.container.getRuneContainer(slot.slotNumber - this.tile.getChainStart());
+
+				if(container != null) {
+					INodeConfiguration configuration = container.getContext().getConfiguration();
+
+					if(configuration != null) {
+						int numInputs = configuration.getInputs().size();
+						
+						boolean isMissingLink = false;
+						
+						for(int j = 0; j < numInputs; j++) {
+							if(this.container.getLink(container.getContext().getRuneIndex(), j) == null) {
+								isMissingLink = true;
+								break;
+							}
+						}
+						
+						if(isMissingLink) {
+							this.setSlabTransform();
+							this.drawTexturedModalRect512(this.guiLeft + slot.xPos + 4, this.guiTop + slot.yPos - 8, 479, 0, 8, 8);
+							this.revertSlabTransform();
+						}
+					}
+				}
+			}
+			
 			if(slot.getHasStack() && x >= this.guiLeft + slot.xPos - 4 && x <= this.guiLeft + slot.xPos + 16 + 3 && y >= this.guiTop + slot.yPos - 10 && y < this.guiTop + slot.yPos + 16 + 10) {
 				if(this.container.getShiftHoleSlot(slotIndex, false) >= 0) {
 					if(i >= ContainerRuneWeavingTable.SLOTS_PER_PAGE / 2) {

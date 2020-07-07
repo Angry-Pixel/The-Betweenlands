@@ -132,8 +132,9 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	public DefaultRuneGui(RuneMenuType menu) {
 		this.menu = menu;
 
-		this.addDefaultTokenRenderer(UNKNOWN_TOKEN_DESCRIPTOR, 27, 1, 8, 10);
-
+		this.addDefaultTokenRenderer(UNKNOWN_TOKEN_DESCRIPTOR, 27, 11, 8, 10);
+		
+		this.addDefaultTokenRenderer(RuneTokenDescriptors.ANY, 27, 11, 8, 10);
 		this.addDefaultTokenRenderer(RuneTokenDescriptors.BLOCK, 0, 0, 8, 10);
 		this.addDefaultTokenRenderer(RuneTokenDescriptors.ENTITY, 9, 0, 8, 10);
 		this.addDefaultTokenRenderer(RuneTokenDescriptors.POSITION, 18, 0, 8, 10);
