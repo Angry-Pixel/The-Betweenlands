@@ -27,7 +27,7 @@ public interface IRuneGui {
 
 	public boolean onMouseReleased(int mouseX, int mouseY, int state, boolean handled);
 	
-	public void onMouseInput();
+	public void onMouseInput(int mouseX, int mouseY);
 
 	public void onParentSizeSet(int w, int h);
 	

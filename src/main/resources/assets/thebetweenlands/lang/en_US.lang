@@ -1667,8 +1667,8 @@ rune.token.thebetweenlands.ray=Ray Mark
 rune.input=Input
 rune.output=Output
 
-rune.gui.inputs=Consumes:
-rune.gui.outputs=Produces:
+rune.gui.inputs=In:
+rune.gui.outputs=Out:
 
 rune.item.thebetweenlands.test_rune_fire.configuration.0.title=<underline>Block Fire</underline>
 rune.item.thebetweenlands.test_rune_fire.configuration.0.description=Sets the marked block on fire

@@ -9,6 +9,7 @@ import java.util.function.BiConsumer;
 
 import javax.annotation.Nullable;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -112,6 +113,8 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	protected int xSize = this.maxXSize;
 	protected int ySize = this.maxYSize;
 
+	protected int additionalTokensHeight = 0;
+
 	protected Map<String, ITokenRenderer> tokenRenderers = new HashMap<>();
 	protected ITokenRenderer unknownTokenRenderer = null;
 
@@ -120,11 +123,13 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	protected TextContainer title;
 	protected TextContainer description;
 
-	protected float scroll = 0.0f;
-	
 	protected boolean hasMultipleConfigurations = false;
 
-	int currentConfigurationIndex = 0;
+	protected int currentConfigurationIndex = 0;
+
+	protected float scroll = 0.0f;
+	protected boolean draggingSlider = false;
+	protected int sliderDragYOffset = 0;
 
 	protected static interface ITokenRenderer {
 		public void render(int centerX, int centerY);
@@ -134,7 +139,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		this.menu = menu;
 
 		this.addDefaultTokenRenderer(UNKNOWN_TOKEN_DESCRIPTOR, 27, 11, 8, 10);
-		
+
 		this.addDefaultTokenRenderer(RuneTokenDescriptors.ANY, 27, 11, 8, 10);
 		this.addDefaultTokenRenderer(RuneTokenDescriptors.BLOCK, 0, 0, 8, 10);
 		this.addDefaultTokenRenderer(RuneTokenDescriptors.ENTITY, 9, 0, 8, 10);
@@ -213,40 +218,61 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		this.description.parse();
 
-		this.ySize = Math.min(this.maxYSize, 32 /*top*/ + 52 /*bottom*/ + Math.max(16 /*center*/, (int)this.description.getPages().get(0).getTextHeight()));
+		this.additionalTokensHeight = 0;
+		int inputTokensXOffset = config.getOutputs().size() > 0 ? (this.xSize - 16) / 2 : 0;
 
-		/*int tokensXOffset = 0;
-
-		if(!this.outputTokens.isEmpty()) {
-			this.fontRenderer.drawString(I18n.format("rune.gui.outputs"), x + 8, y + this.ySize - 49, 0xFF3d3d3d);
-			tokensXOffset += (this.xSize - 16) / 2;
-		}
-
-		if(!this.inputTokens.isEmpty()) {
-			this.fontRenderer.drawString(I18n.format("rune.gui.inputs"), x + 8 + tokensXOffset, y + this.ySize - 49, 0xFF3d3d3d);
-		}*/
-		
-		int tokensXOffset = 0;
+		int outputTokensMaxX = config.getInputs().size() > 0 ? this.xSize / 2 : this.xSize - 8;
+		int inputTokensMaxX = this.xSize - 8;
 
 		int xOffOutputs = this.fontRenderer.getStringWidth(I18n.format("rune.gui.outputs")) + 2;
-
-		this.outputTokens.clear();
 		int x = 8;
+		int y = 0;
 		for(int i = 0; i < config.getOutputs().size(); i++) {
-			this.outputTokens.add(new Token(this, i, xOffOutputs + x, this.ySize - 53, 16, 16, true));
-			x += 18;
+			if(xOffOutputs + x + 16 >= outputTokensMaxX) {
+				y += 16;
+				x = 8;
+			}
+			x += 16;
 		}
-
-		if(!this.outputTokens.isEmpty()) {
-			tokensXOffset += (this.xSize - 16) / 2;
-		}
+		this.additionalTokensHeight = Math.max(this.additionalTokensHeight, y);
 
 		int xOffInputs = this.fontRenderer.getStringWidth(I18n.format("rune.gui.inputs")) + 2;
+		x = 8;
+		y = 0;
+		for(int i = 0; i < config.getInputs().size(); i++) {
+			if(xOffInputs + x + inputTokensXOffset + 16 >= inputTokensMaxX) {
+				y += 16;
+				x = 8;
+			}
+			x += 18;
+		}
+		this.additionalTokensHeight = Math.max(this.additionalTokensHeight, y);
+
+		this.ySize = Math.min(this.maxYSize, 40 /*top*/ + 52 /*bottom*/ + 8 /*missing link indicator*/ + this.additionalTokensHeight + Math.max(16 /*center*/, (int)this.description.getPages().get(0).getTextHeight()));
 
 		x = 8;
+		y = 0;
+		this.outputTokens.clear();
+		for(int i = 0; i < config.getOutputs().size(); i++) {
+			if(xOffOutputs + x + 16 >= outputTokensMaxX) {
+				y += 16;
+				x = 8;
+			}
+
+			this.outputTokens.add(new Token(this, i, xOffOutputs + x, this.ySize - 53 + y - this.additionalTokensHeight, 16, 16, true));
+			x += 16;
+		}
+
+		x = 8;
+		y = 0;
 		this.inputTokens.clear();
 		for(int i = 0; i < config.getInputs().size(); i++) {
-			this.inputTokens.add(new Token(this, i, xOffInputs + x + tokensXOffset, this.ySize - 53, 16, 16, false));
+			if(xOffInputs + x + inputTokensXOffset + 16 >= inputTokensMaxX) {
+				y += 16;
+				x = 8;
+			}
+
+			this.inputTokens.add(new Token(this, i, xOffInputs + x + inputTokensXOffset, this.ySize - 53 + y - this.additionalTokensHeight, 16, 16, false));
 			x += 18;
 		}
 	}
@@ -374,13 +400,10 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		int x = this.getMinX();
 		int y = this.getMinY();
 
-		//this.drawTexturedModalRect512(x + this.xSize / 2 - 8 - 13, y + this.ySize - 13, 452, 0, 13, 7);
-		//this.drawTexturedModalRect512(x + this.xSize / 2 + 8, y + this.ySize - 13, 452, 29, 13, 7);
-
 		if(this.currentConfigurationIndex > 0) {
 			int sx = x + this.xSize / 2 - 20 - 26;
 			int sy = y + this.ySize - 33;
-			
+
 			if(mouseX >= sx + 3 && mouseX < sx + 29 - 4 && mouseY >= sy + 10 && mouseY < sy + 35 - 3) {
 				this.currentConfigurationIndex = Math.max(this.currentConfigurationIndex - 1, 0);
 				this.context.setConfiguration(this.container.getBlueprint().getConfigurations().get(this.currentConfigurationIndex));
@@ -389,11 +412,11 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 				return true;
 			}
 		}
-		
+
 		if(this.currentConfigurationIndex < this.container.getBlueprint().getConfigurations().size() - 1) {
 			int sx = x + this.xSize / 2 + 20 - 3;
 			int sy = y + this.ySize - 33;
-			
+
 			if(mouseX >= sx + 4 && mouseX < sx + 29 - 3 && mouseY >= sy + 10 && mouseY < sy + 35 - 3) {
 				this.currentConfigurationIndex = Math.min(this.currentConfigurationIndex + 1, this.container.getBlueprint().getConfigurations().size() - 1);
 				this.context.setConfiguration(this.container.getBlueprint().getConfigurations().get(this.currentConfigurationIndex));
@@ -403,17 +426,44 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 			}
 		}
 
+		if(this.ySize == this.maxYSize) {
+			int handleStart = y + 47;
+			int handleEnd = handleStart + 142 - 9;
+			int handleRange = handleEnd - handleStart;
+			int sliderX = x + this.xSize - 15;
+			int sliderY = y + 47 + (int)(this.scroll * handleRange);
+
+			if(mouseX >= sliderX - 1 && mouseX < sliderX + 8 && mouseY >= sliderY - 1 && mouseY < sliderY + 10) {
+				this.draggingSlider = true;
+				this.sliderDragYOffset = sliderY - mouseY;
+				return true;
+			}
+		}
+
 		return false;
 	}
 
 	@Override
 	public boolean onMouseReleased(int mouseX, int mouseY, int state, boolean handled) {
+		if(this.draggingSlider) {
+			this.draggingSlider = false;
+			return true;
+		}
+
 		return false;
 	}
 
 	@Override
-	public void onMouseInput() {
+	public void onMouseInput(int mouseX, int mouseY) {
+		if(this.ySize == this.maxYSize && mouseX >= this.getMinX() && mouseX < this.getMaxX() && mouseY >= this.getMinY() && mouseY < this.getMaxY()) {
+			int scroll = Mouse.getEventDWheel();
 
+			if(scroll < 0) {
+				this.scroll = Math.min(this.scroll + 0.1f, 1.0f);
+			} else if(scroll > 0) {
+				this.scroll = Math.max(this.scroll - 0.1f, 0.0f);
+			}
+		}
 	}
 
 	@Override
@@ -475,47 +525,47 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	protected void drawMenuBackground(int mouseX, int mouseY) {
 		int x = this.getMinX();
 		int y = this.getMinY();
-		
+
 
 		this.mc.getTextureManager().bindTexture(GUI_RUNE_MENU);
 
 		int backgroundSize = 170;
 		int backgroundHeight = this.ySize - 52 - 32;
 		int backgroundStart = 33 + (backgroundSize - backgroundHeight) / 2;
-		
+
 		//Background part
 		this.drawTexturedModalRect(x, y + 32, 0, backgroundStart, 182, backgroundHeight);
 		//drawRect(x, y + 32, x + 182, y + 32 + backgroundHeight, 0x30FF0000);
 		//GlStateManager.color(1, 1, 1, 1);
-		
+
 		//Top part
 		this.drawTexturedModalRect(x, y, 0, 0, 182, 32);
 		//drawRect(x, y, x + 182, y + 32, 0x3000FF00);
 		//GlStateManager.color(1, 1, 1, 1);
-		
+
 		//Bottom part
 		this.drawTexturedModalRect(x, y + this.ySize - 52, 0, 204, 182, 52);
 		//drawRect(x, y + this.ySize - 52, x + 182, y + this.ySize, 0x300000FF);
 		//GlStateManager.color(1, 1, 1, 1);
-		
+
 		if(this.hasMultipleConfigurations) {
 			GlStateManager.enableBlend();
-			
+
 			if(this.currentConfigurationIndex > 0) {
 				int sx = x + this.xSize / 2 - 20 - 26;
 				int sy = y + this.ySize - 33;
-				
+
 				if(mouseX >= sx + 3 && mouseX < sx + 29 - 4 && mouseY >= sy + 10 && mouseY < sy + 35 - 3) {
 					this.drawTexturedModalRect(sx, sy, 188, 85, 29, 40);
 				} else {
 					this.drawTexturedModalRect(sx, sy, 188, 27, 29, 35);
 				}
 			}
-			
+
 			if(this.currentConfigurationIndex < this.container.getBlueprint().getConfigurations().size() - 1) {
 				int sx = x + this.xSize / 2 + 20 - 3;
 				int sy = y + this.ySize - 33;
-				
+
 				if(mouseX >= sx + 4 && mouseX < sx + 29 - 3 && mouseY >= sy + 10 && mouseY < sy + 35 - 3) {
 					this.drawTexturedModalRect(sx, sy, 221, 85, 29, 40);
 				} else {
@@ -524,28 +574,35 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 			}
 
 			GlStateManager.disableBlend();
-			
+
 			//Oval
 			this.drawTexturedModalRect(x + this.xSize / 2 - 17, y + this.ySize - 24, 187, 65, 34, 17);
 		}
-		
+
 		//Slider
 		if(this.ySize == this.maxYSize) {
-			//Background
-			this.drawTexturedModalRect(x + this.xSize - 13, y + 42, 251, 27, 5, 152);
-			
-			this.scroll = (float)(Math.sin((System.currentTimeMillis() % 100000) * 0.001f) + 1) * 0.5f;
-			
 			int handleStart = y + 47;
 			int handleEnd = handleStart + 142 - 9;
 			int handleRange = handleEnd - handleStart;
-			
+
+			//Update slider position
+			if(this.draggingSlider) {
+				int newSliderY = Math.max(handleStart, Math.min(handleEnd, mouseY + this.sliderDragYOffset));
+				this.scroll = (newSliderY - handleStart) / (float)handleRange;
+			}
+
+			//Background
+			this.drawTexturedModalRect(x + this.xSize - 13, y + 42, 251, 27, 5, 152);
+
+			int sliderX = x + this.xSize - 15;
+			int sliderY = y + 47 + (int)(this.scroll * handleRange);
+
 			//Handle
-			this.drawTexturedModalRect(x + this.xSize - 15, y + 47 + (int)(this.scroll * handleRange), 249, 15, 7, 9);
+			this.drawTexturedModalRect(sliderX, sliderY, 249, 15, 7, 9);
 		}
 
 		int titleWidth = (int)this.title.getPages().get(0).getTextWidth();
-		
+
 		ItemStack stack = this.context.getRuneItemStack();
 
 		ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, stack, x + this.xSize / 2 - 8, y + 4, 1, 1, 1, 1);
@@ -560,36 +617,40 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		ScaledResolution res = new ScaledResolution(this.mc);
 		int descriptionStartX = (int)((x + 12) / res.getScaledWidth_double() * this.mc.displayWidth);
-		int descriptionStartY = (int)((1 - (y + this.ySize - 52) / res.getScaledHeight_double()) * this.mc.displayHeight);
+		int descriptionStartY = (int)((1 - (y + this.ySize - 52 - 8 - this.additionalTokensHeight) / res.getScaledHeight_double()) * this.mc.displayHeight);
 		int descriptionWidth = (int)((this.xSize - 24) / res.getScaledWidth_double() * this.mc.displayWidth);
-		int descriptionHeight = (int)((this.ySize - 52 - 33) / res.getScaledHeight_double() * this.mc.displayHeight);
-		
+		int descriptionHeight = (int)((this.ySize - 52 - 40 - 8 - this.additionalTokensHeight) / res.getScaledHeight_double() * this.mc.displayHeight);
+
 		GL11.glEnable(GL11.GL_SCISSOR_TEST);
 		GL11.glScissor(descriptionStartX, descriptionStartY, descriptionWidth, descriptionHeight);
-		
+
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0, (168 - this.description.getPages().get(0).getTextHeight()) * this.scroll, 0);
-		
-		this.description.getPages().get(0).render(x + 13, y + 33);
-		
+
+		this.description.getPages().get(0).render(x + 13, y + 40);
+
 		GlStateManager.popMatrix();
-		
+
 		GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
-		//TODO Improve input/output tokens GUI
 		int tokensXOffset = 0;
 
 		if(!this.outputTokens.isEmpty()) {
-			this.fontRenderer.drawString(I18n.format("rune.gui.outputs"), x + 8, y + this.ySize - 49, 0xFF3d3d3d);
+			this.fontRenderer.drawString(I18n.format("rune.gui.outputs"), x + 8, y + this.ySize - 49 - this.additionalTokensHeight, 0xFF3d3d3d);
 			tokensXOffset += (this.xSize - 16) / 2;
 		}
 
 		if(!this.inputTokens.isEmpty()) {
-			this.fontRenderer.drawString(I18n.format("rune.gui.inputs"), x + 8 + tokensXOffset, y + this.ySize - 49, 0xFF3d3d3d);
+			this.fontRenderer.drawString(I18n.format("rune.gui.inputs"), x + 8 + tokensXOffset, y + this.ySize - 49 - this.additionalTokensHeight, 0xFF3d3d3d);
 		}
 
 		for(Token token : this.inputTokens) {
 			this.drawToken(token, token.getCenterX(), token.getCenterY());
+
+			if(this.container.getContext().getRuneWeavingTableContainer().getLink(this.container.getContext().getRuneIndex(), token.getTokenIndex()) == null) {
+				this.mc.getTextureManager().bindTexture(GuiRuneWeavingTable.getUnlinkedRuneIndicator(this.updateCounter));
+				this.drawTexturedModalRect16(token.getCenterX() - 8, token.getCenterY() - 16, 0, 0, 16, 16);
+			}
 		}
 
 		for(Token token : this.outputTokens) {
@@ -601,15 +662,6 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 	protected void drawMenu(int mouseX, int mouseY) {
 		GlStateManager.color(1, 1, 1, 1);
-
-		/*if(this.menu == RuneMenuType.PRIMARY) {
-			int mx = Mouse.getX() * this.width / this.mc.displayWidth;
-			int my = this.height - Mouse.getY() * this.height / this.mc.displayHeight - 1;
-
-			this.zLevel = 280.0F;
-			this.drawHangingRope(x + width - 10, y + height - 10, mx - 10, my - 10);
-			this.zLevel = 0;
-		}*/
 
 		for(Token token : this.inputTokens) {
 			if(token.isInside(token.getCenterX(), token.getCenterY(), mouseX, mouseY)) {
@@ -927,5 +979,20 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		GlStateManager.disableBlend();
 		GlStateManager.enableAlpha();
 		GlStateManager.enableTexture2D();
+	}
+
+	/**
+	 * Same as {@link #drawTexturedModalRect(int, int, int, int, int, int)} but for 16x16 textures
+	 */
+	protected void drawTexturedModalRect16(float x, float y, int minU, int minV, int width, int height) {
+		float scale = 0.0625F;
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder bufferbuilder = tessellator.getBuffer();
+		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+		bufferbuilder.pos((double)(x + 0), (double)(y + height), (double)this.zLevel).tex((double)((float)(minU + 0) * scale), (double)((float)(minV + height) * scale)).endVertex();
+		bufferbuilder.pos((double)(x + width), (double)(y + height), (double)this.zLevel).tex((double)((float)(minU + width) * scale), (double)((float)(minV + height) * scale)).endVertex();
+		bufferbuilder.pos((double)(x + width), (double)(y + 0), (double)this.zLevel).tex((double)((float)(minU + width) * scale), (double)((float)(minV + 0) * scale)).endVertex();
+		bufferbuilder.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel).tex((double)((float)(minU + 0) * scale), (double)((float)(minV + 0) * scale)).endVertex();
+		tessellator.draw();
 	}
 }

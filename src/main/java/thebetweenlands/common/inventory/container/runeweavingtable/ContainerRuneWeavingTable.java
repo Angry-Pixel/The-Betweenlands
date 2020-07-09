@@ -19,13 +19,14 @@ import net.minecraft.util.NonNullList;
 import thebetweenlands.api.capability.IRuneChainCapability;
 import thebetweenlands.api.rune.INodeBlueprint;
 import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.IRuneWeavingTableContainer;
-import thebetweenlands.api.rune.IRuneWeavingTableGui;
 import thebetweenlands.api.rune.IRuneChainContainerData;
 import thebetweenlands.api.rune.IRuneChainData;
 import thebetweenlands.api.rune.IRuneContainer;
 import thebetweenlands.api.rune.IRuneContainerContext;
+import thebetweenlands.api.rune.IRuneContainerFactory;
 import thebetweenlands.api.rune.IRuneLink;
+import thebetweenlands.api.rune.IRuneWeavingTableContainer;
+import thebetweenlands.api.rune.IRuneWeavingTableGui;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.common.herblore.rune.RuneChainData;
 import thebetweenlands.common.inventory.slot.SlotRuneWeavingTableInput;
@@ -474,14 +475,26 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 		ItemStack stack = this.getRuneItemStack(runeIndex);
 
 		if(!stack.isEmpty() && stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE, null)) {
-			IRuneContainer newContainer = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE, null).getRuneContainerFactory().createContainer();
+			IRuneContainerFactory containerFactory = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE, null).getRuneContainerFactory();
 
 			RuneContainerEntry currentContainerEntry = this.runeContainers.get(runeIndex);
-			
-			boolean isDifferentContainer = currentContainerEntry != null && !currentContainerEntry.container.getId().equals(newContainer.getId());
 
-			if(currentContainerEntry == null || isDifferentContainer) {
-				if(isDifferentContainer) {
+			boolean isDifferentContainer = false;
+			IRuneContainer newContainer;
+
+			if(currentContainerEntry == null) {
+				//No container currently exists, can be replaced directly
+				newContainer = containerFactory.createContainer();
+				isDifferentContainer = true;
+			} else {
+				//Container already exists, need to check if the container needs to be replaced
+				newContainer = currentContainerEntry.container.updateRuneContainer(stack, containerFactory);
+				isDifferentContainer = !currentContainerEntry.container.equals(newContainer);
+			}
+
+			if(isDifferentContainer) {
+				//Remove current container if one already exists
+				if(currentContainerEntry != null) {
 					this.removeContainerEntry(runeIndex);
 				}
 
@@ -631,7 +644,7 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 
 		if(this.updateOutput) {
 			this.updateOutput = false;
-			
+
 			ItemStack stack = this.table.getStackInSlot(0);
 
 			if(!stack.isEmpty() && stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null)) {
@@ -676,7 +689,7 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 
 					//Set data *before* setting runes so that the rune containers are initialized correctly!
 					this.table.setContainerData(data.getContainerData());
-					
+
 					for(int i = 0; i < runes.size(); i++) {
 						this.setRuneItemStack(i, runes.get(i));
 					}

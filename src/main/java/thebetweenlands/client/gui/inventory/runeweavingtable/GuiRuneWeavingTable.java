@@ -67,6 +67,13 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 
 	public static final ResourceLocation GUI_RUNE_WEAVING_TABLE = new ResourceLocation("thebetweenlands:textures/gui/rune/rune_weaving_table.png");
 
+	public static final ResourceLocation[] GUI_RUNE_UNLINKED = new ResourceLocation[] {
+			new ResourceLocation("thebetweenlands:textures/gui/rune/rune_unlinked_1.png"),
+			new ResourceLocation("thebetweenlands:textures/gui/rune/rune_unlinked_2.png"),
+			new ResourceLocation("thebetweenlands:textures/gui/rune/rune_unlinked_3.png"),
+			new ResourceLocation("thebetweenlands:textures/gui/rune/rune_unlinked_4.png")
+	};
+
 	private final TileEntityRuneWeavingTable tile;
 	private final ContainerRuneWeavingTable container;
 	private final EntityPlayer player;
@@ -402,19 +409,45 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 	}
 
 	protected void drawSlotItem(Slot slot) {
-		if(this.swapAnimationTicks > 0 && this.isSlabSlot(slot)) {
+		boolean isDisabledFromLinking = false;
+		
+		if(this.draggingToken != null && slot.slotNumber != this.container.getSelectedSlot() && this.isSlabSlot(slot)) {
+			if(slot.slotNumber > this.container.getSelectedSlot()) {
+				isDisabledFromLinking = true;
+			} else {
+				IRuneGui primaryRuneGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
+
+				if(primaryRuneGui != null && primaryRuneGui.getInputTokens().contains(this.draggingToken) && this.draggingToken.isInteractable() && this.container.getSelectedRuneIndex() >= 0) {
+					
+					IRuneContainer outputContainer = this.container.getRuneContainer(slot.slotNumber - this.tile.getChainStart());
+					
+					if(outputContainer != null && this.getCurrentlyLinkableOutputs(slot.slotNumber - this.tile.getChainStart(), outputContainer.getContext().getConfiguration()).isEmpty()) {
+						isDisabledFromLinking = true;
+					}
+				}
+			}
+		}
+		
+		if((this.swapAnimationTicks > 0 || isDisabledFromLinking) && this.isSlabSlot(slot)) {
 			this.zLevel = 100.0F;
 			this.itemRender.zLevel = 100.0F;
 			GlStateManager.enableDepth();
+			GlStateManager.enableBlend();
 
 			float alpha = this.setSlabTransform();
-
+			float brightness = 1.0f;
+			
+			if(isDisabledFromLinking) {
+				brightness = 0.5f;
+				alpha *= 0.5f;
+			}
+			
 			int x = slot.xPos;
 			int y = slot.yPos;
 			ItemStack itemstack = slot.getStack();
 
-			ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, itemstack, x, y, 1, 1, 1, alpha);
-			ColoredItemRenderer.renderItemOverlayIntoGUI(this.fontRenderer, itemstack, x, y, null, 1, 1, 1, alpha);
+			ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, itemstack, x, y, brightness, brightness, brightness, alpha);
+			ColoredItemRenderer.renderItemOverlayIntoGUI(this.fontRenderer, itemstack, x, y, null, brightness, brightness, brightness, alpha);
 
 			this.revertSlabTransform();
 
@@ -466,17 +499,29 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 						int linkingTokenIndex = this.getLinkingDropdownMenuTokenIndex(mouseX, mouseY);
 
 						if(linkingTokenIndex >= 0) {
-							Slot slot = this.inventorySlots.getSlot(this.linkingDropdownMenuSlot);
-
-							int sx = slot.xPos - 3;
-							int sy = slot.yPos - 3;
-
-							int cx = this.guiLeft + sx + 3 + 8;
-							int cy = this.guiTop + sy + 3 + linkingTokenIndex * 18 + 8 + 18;
-
-							primaryRuneGui.drawTokenConnection(this.draggingToken, cx, cy, RuneMenuDrawingContext.Connection.VIA_DROPDOWN);
-
-							drawn = true;
+							IRuneContainer outputContainer = this.container.getRuneContainer(this.linkingDropdownMenuSlot - this.tile.getChainStart());
+							if(outputContainer != null) {
+								List<Integer> linkableOutputs = this.getCurrentlyLinkableOutputs(this.linkingDropdownMenuSlot - this.tile.getChainStart(), outputContainer.getContext().getConfiguration());
+								
+								int dropdownMenuIndex = 0;
+								for(int linkableOutput : linkableOutputs) {
+									if(linkableOutput == linkingTokenIndex) {
+										Slot slot = this.inventorySlots.getSlot(this.linkingDropdownMenuSlot);
+										
+										int sx = slot.xPos - 3;
+										int sy = slot.yPos - 3;
+			
+										int cx = this.guiLeft + sx + 3 + 8;
+										int cy = this.guiTop + sy + 3 + dropdownMenuIndex * 18 + 8 + 18;
+			
+										primaryRuneGui.drawTokenConnection(this.draggingToken, cx, cy, RuneMenuDrawingContext.Connection.VIA_DROPDOWN);
+			
+										drawn = true;
+									}
+									
+									dropdownMenuIndex++;
+								}
+							}
 						}
 					}
 
@@ -496,6 +541,24 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 		GlStateManager.popMatrix();
 	}
 
+	public static ResourceLocation getUnlinkedRuneIndicator(int ticks) {
+		switch((ticks / 4) % 8) {
+		default:
+		case 0:
+		case 1:
+			return GUI_RUNE_UNLINKED[0];
+		case 2:
+			return GUI_RUNE_UNLINKED[1];
+		case 3:
+			return GUI_RUNE_UNLINKED[2];
+		case 4:
+		case 5:
+		case 6:
+		case 7:
+			return GUI_RUNE_UNLINKED[3];
+		}
+	}
+	
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTickTime, int x, int y) {
 		this.mc.getTextureManager().bindTexture(GUI_RUNE_WEAVING_TABLE);
@@ -561,25 +624,29 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 
 					if(configuration != null) {
 						int numInputs = configuration.getInputs().size();
-						
+
 						boolean isMissingLink = false;
-						
+
 						for(int j = 0; j < numInputs; j++) {
 							if(this.container.getLink(container.getContext().getRuneIndex(), j) == null) {
 								isMissingLink = true;
 								break;
 							}
 						}
-						
+
 						if(isMissingLink) {
 							this.setSlabTransform();
-							this.drawTexturedModalRect512(this.guiLeft + slot.xPos + 4, this.guiTop + slot.yPos - 8, 479, 0, 8, 8);
+
+							this.mc.getTextureManager().bindTexture(getUnlinkedRuneIndicator(this.updateCounter));
+							this.drawTexturedModalRect16(this.guiLeft + slot.xPos, this.guiTop + slot.yPos - 13, 0, 0, 16, 16);
+							this.mc.getTextureManager().bindTexture(GUI_RUNE_WEAVING_TABLE);
+
 							this.revertSlabTransform();
 						}
 					}
 				}
 			}
-			
+
 			if(slot.getHasStack() && x >= this.guiLeft + slot.xPos - 4 && x <= this.guiLeft + slot.xPos + 16 + 3 && y >= this.guiTop + slot.yPos - 10 && y < this.guiTop + slot.yPos + 16 + 10) {
 				if(this.container.getShiftHoleSlot(slotIndex, false) >= 0) {
 					if(i >= ContainerRuneWeavingTable.SLOTS_PER_PAGE / 2) {
@@ -745,16 +812,30 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 	public void handleMouseInput() throws IOException {
 		super.handleMouseInput();
 
-		int scroll = Mouse.getEventDWheel();
+		int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
+        int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+        
+        boolean isOnRuneGui = false;
+        
+        for(IRuneGui gui : this.openRuneGuis.values()) {
+        	if(mouseX >= gui.getMinX() && mouseX < gui.getMaxX() && mouseY >= gui.getMinY() && mouseY < gui.getMaxY()) {
+        		isOnRuneGui = true;
+        		break;
+        	}
+        }
+        
+        if(!isOnRuneGui) {
+        	int scroll = Mouse.getEventDWheel();
 
-		if(scroll < 0) {
-			this.movePage(1);
-		} else if(scroll > 0) {
-			this.movePage(-1);
-		}
+    		if(scroll < 0) {
+    			this.movePage(1);
+    		} else if(scroll > 0) {
+    			this.movePage(-1);
+    		}
+        }
 
 		for(IRuneGui gui : this.openRuneGuis.values()) {
-			gui.onMouseInput();
+			gui.onMouseInput(mouseX, mouseY);
 		}
 	}
 
@@ -1383,6 +1464,21 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 	 */
 	protected void drawTexturedModalRect512(float x, float y, int minU, int minV, int width, int height) {
 		float scale = 0.001953125F;
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder bufferbuilder = tessellator.getBuffer();
+		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+		bufferbuilder.pos((double)(x + 0), (double)(y + height), (double)this.zLevel).tex((double)((float)(minU + 0) * scale), (double)((float)(minV + height) * scale)).endVertex();
+		bufferbuilder.pos((double)(x + width), (double)(y + height), (double)this.zLevel).tex((double)((float)(minU + width) * scale), (double)((float)(minV + height) * scale)).endVertex();
+		bufferbuilder.pos((double)(x + width), (double)(y + 0), (double)this.zLevel).tex((double)((float)(minU + width) * scale), (double)((float)(minV + 0) * scale)).endVertex();
+		bufferbuilder.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel).tex((double)((float)(minU + 0) * scale), (double)((float)(minV + 0) * scale)).endVertex();
+		tessellator.draw();
+	}
+
+	/**
+	 * Same as {@link #drawTexturedModalRect(int, int, int, int, int, int)} but for 16x16 textures
+	 */
+	protected void drawTexturedModalRect16(float x, float y, int minU, int minV, int width, int height) {
+		float scale = 0.0625F;
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
