@@ -596,7 +596,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 			int sliderX = x + this.xSize - 15;
 			int sliderY = y + 47 + (int)(this.scroll * handleRange);
-
+			
 			//Handle
 			this.drawTexturedModalRect(sliderX, sliderY, 249, 15, 7, 9);
 		}
@@ -625,7 +625,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		GL11.glScissor(descriptionStartX, descriptionStartY, descriptionWidth, descriptionHeight);
 
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(0, (168 - this.description.getPages().get(0).getTextHeight()) * this.scroll, 0);
+		GlStateManager.translate(0, (this.ySize - 52 - 40 - 8 - this.additionalTokensHeight - this.description.getPages().get(0).getTextHeight()) * this.scroll, 0);
 
 		this.description.getPages().get(0).render(x + 13, y + 40);
 
