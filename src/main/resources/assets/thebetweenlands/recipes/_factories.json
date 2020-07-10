@@ -1,5 +1,9 @@
 {
 	"ingredients": {
 		"mob_item": "thebetweenlands.common.recipe.ingredients.MobItemIngredientFactory"
+	},
+	"recipes": {
+		"shapeless_rune_carving": "thebetweenlands.common.recipe.rune.RecipeShapelessRuneCarvingFactory",
+		"shaped_rune_carving": "thebetweenlands.common.recipe.rune.RecipeShapedRuneCarvingFactory"
 	}
 }

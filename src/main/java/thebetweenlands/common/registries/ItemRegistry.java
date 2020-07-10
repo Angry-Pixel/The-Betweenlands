@@ -467,6 +467,14 @@ public class ItemRegistry {
     public static final Item WEEDWOOD_ROWBOAT_UPGRADE_LANTERN = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1);
     
     public static final Item RUNE_CHAIN = new ItemRuneChain();
+    
+    public static final Item WEEDWOOD_RUNELET = new Item().setCreativeTab(BLCreativeTabs.HERBLORE);
+    public static final Item PITSTONE_RUNELET = new Item().setCreativeTab(BLCreativeTabs.HERBLORE);
+    public static final Item DENTROTHYST_ORANGE_RUNELET = new Item().setCreativeTab(BLCreativeTabs.HERBLORE);
+    public static final Item DENTROTHYST_GREEN_RUNELET = new Item().setCreativeTab(BLCreativeTabs.HERBLORE);
+    public static final Item BONE_RUNELET = new Item().setCreativeTab(BLCreativeTabs.HERBLORE);
+    public static final Item ANCIENT_RUNELET = new Item().setCreativeTab(BLCreativeTabs.HERBLORE);
+    
     public static final Item TEST_RUNE_DESTROY_BLOCK = new ItemRune(new RuneDestroyBlock.Blueprint());
     public static final Item TEST_RUNE_MARK_AREA = new ItemRune(new RuneMarkArea.Blueprint());
     public static final Item TEST_RUNE_SELECT_GRASS = new ItemRune(new RuneSelectGrass.Blueprint());

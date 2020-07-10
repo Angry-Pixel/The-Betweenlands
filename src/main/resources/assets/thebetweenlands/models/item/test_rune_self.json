@@ -1,6 +1,7 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "thebetweenlands:items/strictly_herblore/runes/test_rune_destroy_block"
+		"layer0": "thebetweenlands:items/strictly_herblore/runes/pitstone_rune_4",
+		"layer1": "thebetweenlands:items/strictly_herblore/runes/rune_glyph_4"
 	}
 }

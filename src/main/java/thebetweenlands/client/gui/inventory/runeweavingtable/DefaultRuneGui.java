@@ -605,6 +605,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		ItemStack stack = this.context.getRuneItemStack();
 
+		GlStateManager.enableBlend();
 		ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, stack, x + this.xSize / 2 - 8, y + 4, 1, 1, 1, 1);
 
 		this.title.getPages().get(0).render(x + this.xSize / 2 - titleWidth / 2, y + 22);

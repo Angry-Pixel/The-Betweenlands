@@ -1,6 +1,7 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "thebetweenlands:items/strictly_herblore/runes/test_rune_destroy_block"
+		"layer0": "thebetweenlands:items/strictly_herblore/runes/dentrothyst_orange_rune_1",
+		"layer1": "thebetweenlands:items/strictly_herblore/runes/rune_glyph_1"
 	}
 }

@@ -8,10 +8,9 @@ import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.impl.AbstractRune;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration;
-import thebetweenlands.api.rune.impl.PortNodeConfiguration.InputPort;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.api.rune.impl.RuneStats;
+import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.common.registries.AspectRegistry;
 
 public final class RuneBranching extends AbstractRune<RuneBranching> {
@@ -25,20 +24,28 @@ public final class RuneBranching extends AbstractRune<RuneBranching> {
 		}
 
 		public static final INodeConfiguration CONFIGURATION_1;
-
-		private static final InputPort<?> IN;
+		public static final INodeConfiguration CONFIGURATION_2;
+		public static final INodeConfiguration CONFIGURATION_3;
 
 		static {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder(RuneTokenDescriptors.ANY);
 
-			IN = builder.in(RuneTokenDescriptors.ANY, Object.class);
-
+			builder.in(RuneTokenDescriptors.ANY, Object.class);
 			CONFIGURATION_1 = builder.build();
+
+			builder.in(RuneTokenDescriptors.ANY, Object.class);
+			builder.in(RuneTokenDescriptors.ANY, Object.class);
+			CONFIGURATION_2 = builder.build();
+
+			builder.in(RuneTokenDescriptors.ANY, Object.class);
+			builder.in(RuneTokenDescriptors.ANY, Object.class);
+			builder.in(RuneTokenDescriptors.ANY, Object.class);
+			CONFIGURATION_3 = builder.build();
 		}
 
 		@Override
 		public List<INodeConfiguration> getConfigurations() {
-			return ImmutableList.of(CONFIGURATION_1);
+			return ImmutableList.of(CONFIGURATION_1, CONFIGURATION_2, CONFIGURATION_3);
 		}
 
 		@Override
@@ -48,9 +55,7 @@ public final class RuneBranching extends AbstractRune<RuneBranching> {
 
 		@Override
 		protected void activate(RuneBranching state, RuneExecutionContext context, INodeIO io) {
-			if(state.getConfiguration() == CONFIGURATION_1) {
-				io.branch();
-			}
+			io.branch();
 		}
 	}
 
