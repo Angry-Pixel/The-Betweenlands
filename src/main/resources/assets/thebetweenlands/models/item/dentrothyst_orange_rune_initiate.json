@@ -1,0 +1,14 @@
+{
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "thebetweenlands:items/strictly_herblore/runes/dentrothyst_orange_rune_1"
+	},
+	"overrides": [
+		{
+			"predicate": {
+				"infused": 1
+			},
+			"model": "thebetweenlands:item/dentrothyst_orange_rune_initiate_infused"
+		}
+	]
+}

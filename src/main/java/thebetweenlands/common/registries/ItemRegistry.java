@@ -106,6 +106,7 @@ import thebetweenlands.common.item.herblore.ItemElixir;
 import thebetweenlands.common.item.herblore.ItemManualHL;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.herblore.ItemRune;
+import thebetweenlands.common.item.herblore.ItemTestRune;
 import thebetweenlands.common.item.herblore.ItemRuneChain;
 import thebetweenlands.common.item.misc.ItemAmateMap;
 import thebetweenlands.common.item.misc.ItemAmuletSlot;
@@ -470,20 +471,27 @@ public class ItemRegistry {
     
     public static final Item WEEDWOOD_RUNELET = new Item().setCreativeTab(BLCreativeTabs.HERBLORE);
     public static final Item PITSTONE_RUNELET = new Item().setCreativeTab(BLCreativeTabs.HERBLORE);
-    public static final Item DENTROTHYST_ORANGE_RUNELET = new Item().setCreativeTab(BLCreativeTabs.HERBLORE);
     public static final Item DENTROTHYST_GREEN_RUNELET = new Item().setCreativeTab(BLCreativeTabs.HERBLORE);
+    public static final Item DENTROTHYST_ORANGE_RUNELET = new Item().setCreativeTab(BLCreativeTabs.HERBLORE);
     public static final Item BONE_RUNELET = new Item().setCreativeTab(BLCreativeTabs.HERBLORE);
     public static final Item ANCIENT_RUNELET = new Item().setCreativeTab(BLCreativeTabs.HERBLORE);
     
-    public static final Item TEST_RUNE_DESTROY_BLOCK = new ItemRune(new RuneDestroyBlock.Blueprint());
-    public static final Item TEST_RUNE_MARK_AREA = new ItemRune(new RuneMarkArea.Blueprint());
-    public static final Item TEST_RUNE_SELECT_GRASS = new ItemRune(new RuneSelectGrass.Blueprint());
-    public static final Item TEST_RUNE_FIRE = new ItemRune(new RuneFire.Blueprint());
-    public static final Item TEST_RUNE_PROJECTILE = new ItemRune(new RuneProjectile.Blueprint());
-    public static final Item TEST_RUNE_SELF = new ItemRune(new RuneSelf.Blueprint());
-    public static final Item TEST_RUNE_PINPOINT = new ItemRune(new RunePinpoint.Blueprint());
-    public static final Item TEST_RUNE_MARK_NEARBY = new ItemRune(new RuneMarkNearby.Blueprint());
-    public static final Item TEST_RUNE_BRANCHING = new ItemRune(new RuneBranching.Blueprint());
+    public static final Item WEEDWOOD_RUNE = new ItemRune();
+    public static final Item PITSTONE_RUNE = new ItemRune();
+    public static final Item DENTROTHYST_GREEN_RUNE = new ItemRune();
+    public static final Item DENTROTHYST_ORANGE_RUNE = new ItemRune();
+    public static final Item BONE_RUNE = new ItemRune();
+    public static final Item ANCIENT_RUNE = new ItemRune();
+    
+    public static final Item TEST_RUNE_DESTROY_BLOCK = new ItemTestRune(new RuneDestroyBlock.Blueprint());
+    public static final Item TEST_RUNE_MARK_AREA = new ItemTestRune(new RuneMarkArea.Blueprint());
+    public static final Item TEST_RUNE_SELECT_GRASS = new ItemTestRune(new RuneSelectGrass.Blueprint());
+    public static final Item TEST_RUNE_FIRE = new ItemTestRune(new RuneFire.Blueprint());
+    public static final Item TEST_RUNE_PROJECTILE = new ItemTestRune(new RuneProjectile.Blueprint());
+    public static final Item TEST_RUNE_SELF = new ItemTestRune(new RuneSelf.Blueprint());
+    public static final Item TEST_RUNE_PINPOINT = new ItemTestRune(new RunePinpoint.Blueprint());
+    public static final Item TEST_RUNE_MARK_NEARBY = new ItemTestRune(new RuneMarkNearby.Blueprint());
+    public static final Item TEST_RUNE_BRANCHING = new ItemTestRune(new RuneBranching.Blueprint());
     
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
