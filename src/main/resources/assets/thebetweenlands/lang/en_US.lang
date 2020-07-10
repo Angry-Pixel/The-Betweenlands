@@ -885,6 +885,12 @@ item.thebetweenlands.test_rune_self.name=Rune: Self
 item.thebetweenlands.test_rune_pinpoint.name=Rune: Pinpoint
 item.thebetweenlands.test_rune_mark_nearby.name=Rune: Mark Nearby
 item.thebetweenlands.test_rune_branching.name=Rune: Branch
+item.thebetweenlands.weedwood_runelet.name=Weedwood Runelet
+item.thebetweenlands.pitstone_runelet.name=Pitstone Runelet
+item.thebetweenlands.dentrothyst_orange_runelet.name=Orange Dentrothyst Runelet
+item.thebetweenlands.dentrothyst_green_runelet.name=Green Dentrothyst Runelet
+item.thebetweenlands.bone_runelet.name=Bone Runelet
+item.thebetweenlands.ancient_runelet.name=Ancient Runelet
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -1656,13 +1662,18 @@ gui.bl.draeton.main.upgrade_anchor=Anchor upgrade slot:\n§7 - Draeton Anchor Up
 
 
 # Runes
-rune.token.unknown=Rune Mark
+rune.token.unknown=Rune Token
 
-rune.token.thebetweenlands.any=Any Mark
-rune.token.thebetweenlands.block=Block Mark
-rune.token.thebetweenlands.entity=Entity Mark
-rune.token.thebetweenlands.position=Position Mark
-rune.token.thebetweenlands.ray=Ray Mark
+rune.token.thebetweenlands.any.singular=Any Token
+rune.token.thebetweenlands.any.plural=Any Tokens
+rune.token.thebetweenlands.block.singular=Block Token
+rune.token.thebetweenlands.block.plural=Block Tokens
+rune.token.thebetweenlands.entity.singular=Entity Token
+rune.token.thebetweenlands.entity.plural=Entity Tokens
+rune.token.thebetweenlands.position.singular=Position Token
+rune.token.thebetweenlands.position.plural=Position Tokens
+rune.token.thebetweenlands.direction.singular=Direction Token
+rune.token.thebetweenlands.direction.plural=Direction Tokens
 
 rune.input=Input
 rune.output=Output
@@ -1684,12 +1695,12 @@ rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.input.0.descri
 
 rune.item.thebetweenlands.test_rune_mark_area.configuration.0.title=<underline>Mark Area</underline>
 rune.item.thebetweenlands.test_rune_mark_area.configuration.0.description=Marks block area around the rune chain user
-rune.item.thebetweenlands.test_rune_mark_area.configuration.0.output.0.description=Block in area around rune chain user
+rune.item.thebetweenlands.test_rune_mark_area.configuration.0.output.0.description=Blocks in area around rune chain user
 
 rune.item.thebetweenlands.test_rune_mark_area.configuration.1.title=<underline>Mark Area</underline>
 rune.item.thebetweenlands.test_rune_mark_area.configuration.1.description=Marks block area around a marked center block
 rune.item.thebetweenlands.test_rune_mark_area.configuration.1.input.0.description=Center block
-rune.item.thebetweenlands.test_rune_mark_area.configuration.1.output.0.description=Block in area around center block
+rune.item.thebetweenlands.test_rune_mark_area.configuration.1.output.0.description=Blocks in the area around center block
 
 rune.item.thebetweenlands.test_rune_select_grass.configuration.0.title=<underline>Select Grass</underline>
 rune.item.thebetweenlands.test_rune_select_grass.configuration.0.description=Only allows the block mark if the block is grass. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
@@ -1721,20 +1732,29 @@ rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.description=Pinpoin
 rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.input.0.description=Entity to pinpoint
 rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.output.0.description=Position of the entity
 rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.output.1.description=Eye position of the entity
-rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.output.2.description=Look ray of the entity
+rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.output.2.description=Look direction of the entity
 
 rune.item.thebetweenlands.test_rune_mark_nearby.configuration.0.title=<underline>Mark Nearby</underline>
 rune.item.thebetweenlands.test_rune_mark_nearby.configuration.0.description=Marks nearby entities
-rune.item.thebetweenlands.test_rune_mark_nearby.configuration.0.output.0.description=Entity that is near the rune chain user
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.0.output.0.description=Entities that are near the rune chain user
 
 rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.title=<underline>Mark Nearby</underline>
 rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.description=Marks entities that are near a marked block
 rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.input.0.description=Center block
-rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.output.0.description=Entity that is near the marked block
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.output.0.description=Entities that are near a marked block
 
 rune.item.thebetweenlands.test_rune_branching.configuration.0.title=<underline>Branch</underline>
-rune.item.thebetweenlands.test_rune_branching.configuration.0.description=Branches the rune chain flow for the linked input marks
-rune.item.thebetweenlands.test_rune_branching.configuration.0.input.0.description=Input mark to branch on
+rune.item.thebetweenlands.test_rune_branching.configuration.0.description=Branches the rune chain flow for the linked input token
+rune.item.thebetweenlands.test_rune_branching.configuration.0.input.0.description=Input token to branch on
+rune.item.thebetweenlands.test_rune_branching.configuration.1.title=<underline>Branch</underline>
+rune.item.thebetweenlands.test_rune_branching.configuration.1.description=Branches the rune chain flow for the linked input tokens
+rune.item.thebetweenlands.test_rune_branching.configuration.1.input.0.description=First input token to branch on
+rune.item.thebetweenlands.test_rune_branching.configuration.1.input.1.description=Second input token to branch on
+rune.item.thebetweenlands.test_rune_branching.configuration.2.title=<underline>Branch</underline>
+rune.item.thebetweenlands.test_rune_branching.configuration.2.description=Branches the rune chain flow for the linked input tokens
+rune.item.thebetweenlands.test_rune_branching.configuration.2.input.0.description=Firs token to branch on
+rune.item.thebetweenlands.test_rune_branching.configuration.2.input.1.description=Second token to branch on
+rune.item.thebetweenlands.test_rune_branching.configuration.2.input.2.description=Third token to branch on
 
 
 # Advancements

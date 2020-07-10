@@ -58,13 +58,13 @@ public final class RuneProjectile extends AbstractRune<RuneProjectile> {
 			CONFIGURATION_1 = builder.build();
 
 			IN_ENTITY_2 = builder.in(RuneTokenDescriptors.ENTITY, Entity.class, IRuneChainUser.class);
-			IN_RAY_2 = builder.in(RuneTokenDescriptors.RAY, Vec3d.class);
+			IN_RAY_2 = builder.in(RuneTokenDescriptors.DIRECTION, Vec3d.class);
 			OUT_POSITION_2 = builder.out(RuneTokenDescriptors.BLOCK, BlockPos.class);
 
 			CONFIGURATION_2 = builder.build();
 
 			IN_POSITION_3 = builder.in(RuneTokenDescriptors.POSITION, Vec3d.class);
-			IN_RAY_3 = builder.in(RuneTokenDescriptors.RAY, Vec3d.class);
+			IN_RAY_3 = builder.in(RuneTokenDescriptors.DIRECTION, Vec3d.class);
 			OUT_POSITION_3 = builder.out(RuneTokenDescriptors.BLOCK, BlockPos.class);
 
 			CONFIGURATION_3 = builder.build();

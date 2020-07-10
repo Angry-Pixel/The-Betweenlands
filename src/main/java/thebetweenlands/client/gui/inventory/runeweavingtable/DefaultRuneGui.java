@@ -28,6 +28,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import thebetweenlands.api.rune.IGuiRuneToken;
 import thebetweenlands.api.rune.INodeConfiguration;
+import thebetweenlands.api.rune.INodeConfiguration.IConfigurationInput;
+import thebetweenlands.api.rune.INodeConfiguration.IConfigurationOutput;
 import thebetweenlands.api.rune.IRuneContainer;
 import thebetweenlands.api.rune.IRuneContainerContext;
 import thebetweenlands.api.rune.IRuneGui;
@@ -138,17 +140,27 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	public DefaultRuneGui(RuneMenuType menu) {
 		this.menu = menu;
 
-		this.addDefaultTokenRenderer(UNKNOWN_TOKEN_DESCRIPTOR, 27, 11, 8, 10);
+		this.addDefaultTokenRenderer(UNKNOWN_TOKEN_DESCRIPTOR, 24, 24, 12, 12, false);
+		this.addDefaultTokenRenderer(UNKNOWN_TOKEN_DESCRIPTOR, 36, 24, 12, 12, true);
 
-		this.addDefaultTokenRenderer(RuneTokenDescriptors.ANY, 27, 11, 8, 10);
-		this.addDefaultTokenRenderer(RuneTokenDescriptors.BLOCK, 0, 0, 8, 10);
-		this.addDefaultTokenRenderer(RuneTokenDescriptors.ENTITY, 9, 0, 8, 10);
-		this.addDefaultTokenRenderer(RuneTokenDescriptors.POSITION, 18, 0, 8, 10);
-		this.addDefaultTokenRenderer(RuneTokenDescriptors.RAY, 0, 11, 8, 10);
+		this.addDefaultTokenRenderer(RuneTokenDescriptors.ANY, 24, 24, 12, 12, false);
+		this.addDefaultTokenRenderer(RuneTokenDescriptors.ANY, 36, 24, 12, 12, true);
+
+		this.addDefaultTokenRenderer(RuneTokenDescriptors.BLOCK, 0, 12, 12, 12, false);
+		this.addDefaultTokenRenderer(RuneTokenDescriptors.BLOCK, 12, 12, 12, 12, true);
+
+		this.addDefaultTokenRenderer(RuneTokenDescriptors.ENTITY, 24, 0, 12, 12, false);
+		this.addDefaultTokenRenderer(RuneTokenDescriptors.ENTITY, 36, 0, 12, 12, true);
+
+		this.addDefaultTokenRenderer(RuneTokenDescriptors.POSITION, 0, 0, 12, 12, false);
+		this.addDefaultTokenRenderer(RuneTokenDescriptors.POSITION, 12, 0, 12, 12, true);
+
+		this.addDefaultTokenRenderer(RuneTokenDescriptors.DIRECTION, 0, 24, 12, 12, false);
+		this.addDefaultTokenRenderer(RuneTokenDescriptors.DIRECTION, 12, 24, 12, 12, true);
 	}
 
-	protected void addDefaultTokenRenderer(ResourceLocation descriptor, int minU, int minV, int width, int height) {
-		this.tokenRenderers.put(String.format("%s.%s", descriptor.getNamespace(), descriptor.getPath()), new ITokenRenderer() {
+	protected void addDefaultTokenRenderer(ResourceLocation descriptor, int minU, int minV, int width, int height, boolean multi) {
+		this.tokenRenderers.put(String.format("%s.%s.%s", descriptor.getNamespace(), descriptor.getPath(), multi ? "multi" : "single"), new ITokenRenderer() {
 			@Override
 			public void render(int centerX, int centerY) {
 				mc.getTextureManager().bindTexture(GUI_RUNE_TOKENS);
@@ -156,7 +168,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 				float x = centerX - width / 2;
 				float y = centerY - height / 2;
 
-				float scale = 0.0285714285F;
+				float scale = 0.02083333333F;
 
 				Tessellator tessellator = Tessellator.getInstance();
 				BufferBuilder bufferbuilder = tessellator.getBuffer();
@@ -311,12 +323,16 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 	protected void drawToken(Token token, int centerX, int centerY) {
 		String desc;
+		boolean multi;
+		
 		if(token.isOutput()) {
-			desc = this.context.getConfiguration().getOutputs().get(token.getTokenIndex()).getDescriptor();
-			//Gui.drawRect(centerX - token.w / 2, centerY - token.h / 2, centerX + token.w / 2, centerY + token.h / 2, 0xFF0000FF);
+			IConfigurationOutput output = this.context.getConfiguration().getOutputs().get(token.getTokenIndex());
+			desc = output.getDescriptor();
+			multi = output.isCollection();
 		} else {
-			desc = this.context.getConfiguration().getInputs().get(token.getTokenIndex()).getDescriptor();
-			//Gui.drawRect(centerX - token.w / 2, centerY - token.h / 2, centerX + token.w / 2, centerY + token.h / 2, 0xFFFF0000);
+			IConfigurationInput input = this.context.getConfiguration().getInputs().get(token.getTokenIndex());
+			desc = input.getDescriptor();
+			multi = input.isCollection();
 		}
 
 		GlStateManager.enableBlend();
@@ -324,9 +340,9 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		ITokenRenderer renderer = null;
 		if(desc != null) {
-			renderer = this.tokenRenderers.get(desc);
+			renderer = this.tokenRenderers.get(String.format("%s.%s", desc, multi ? "multi" : "single"));
 		} else {
-			renderer = this.tokenRenderers.get(UNKNOWN_TOKEN_DESCRIPTOR.toString());
+			renderer = this.tokenRenderers.get(String.format("%s.%s", UNKNOWN_TOKEN_DESCRIPTOR.toString(), multi ? "multi" : "single"));
 		}
 		if(renderer != null) {
 			renderer.render(centerX, centerY);
@@ -344,15 +360,20 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		List<String> text = new ArrayList<>();
 
 		String descriptor;
+		boolean multi;
 
 		if(token.isOutput()) {
-			descriptor = this.context.getConfiguration().getOutputs().get(token.getTokenIndex()).getDescriptor();
+			IConfigurationOutput output = this.context.getConfiguration().getOutputs().get(token.getTokenIndex());
+			descriptor = output.getDescriptor();
+			multi = output.isCollection();
 		} else {
-			descriptor = this.context.getConfiguration().getInputs().get(token.getTokenIndex()).getDescriptor();
+			IConfigurationInput input = this.context.getConfiguration().getInputs().get(token.getTokenIndex());
+			descriptor = input.getDescriptor();
+			multi = input.isCollection();
 		}
 
 		if(descriptor != null) {
-			text.add(TextFormatting.RESET + "     " + I18n.format(String.format("rune.token.%s", descriptor)));
+			text.add(TextFormatting.RESET + "     " + I18n.format(String.format(multi ? "rune.token.%s.plural" : "rune.token.%s.singular", descriptor)));
 		} else {
 			text.add(TextFormatting.RESET + "     " + I18n.format("rune.token.unknown"));
 		}
@@ -596,7 +617,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 			int sliderX = x + this.xSize - 15;
 			int sliderY = y + 47 + (int)(this.scroll * handleRange);
-			
+
 			//Handle
 			this.drawTexturedModalRect(sliderX, sliderY, 249, 15, 7, 9);
 		}

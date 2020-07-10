@@ -592,7 +592,10 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 		this.setSlabTransform();
 
 		for(int i = 0; i < Math.min(ContainerRuneWeavingTable.SLOTS_PER_PAGE + 1, this.tile.getChainLength() - this.container.getCurrentPage().index * ContainerRuneWeavingTable.SLOTS_PER_PAGE); i++) {
-			this.drawCordPiece(this.guiLeft - 11, this.guiTop + 4, i);
+			int slot = this.container.getCurrentPage().index * ContainerRuneWeavingTable.SLOTS_PER_PAGE + i;
+			if((slot == 0 || !this.container.getRuneItemStack(slot - 1).isEmpty()) &&  !this.container.getRuneItemStack(slot).isEmpty()) {
+				this.drawCordPiece(this.guiLeft - 11, this.guiTop + 4, i);
+			}
 		}
 
 		int coverStartIndex = this.tile.getChainLength() + (this.tile.isOutputItemAvailable() ? 1 : 0);
@@ -1308,7 +1311,7 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 			for(int runeIndex = 0; runeIndex < this.container.getRuneInventorySize(); runeIndex++) {
 				Slot runeSlot = this.container.getRuneSlot(runeIndex);
 
-				if(runeSlot instanceof SlotRuneWeavingTableInput && ((SlotRuneWeavingTableInput) runeSlot).isEnabled() && !this.container.getRuneItemStack(runeIndex).isEmpty()) {
+				if(runeSlot instanceof SlotRuneWeavingTableInput && !this.container.getRuneItemStack(runeIndex).isEmpty()) {
 					Page runeSlotPage = ((SlotRuneWeavingTableInput) runeSlot).getPage();
 
 					Set<Integer> visitedRunes = new HashSet<>();
@@ -1325,10 +1328,12 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 								boolean isTopHalf = runeIndex >= runeSlotPage.index * ContainerRuneWeavingTable.SLOTS_PER_PAGE && runeIndex < runeSlotPage.index * ContainerRuneWeavingTable.SLOTS_PER_PAGE + ContainerRuneWeavingTable.SLOTS_PER_PAGE / 2;
 								boolean isLinkedTopHalf = link.getOutputRune() >= linkedSlotPage.index * ContainerRuneWeavingTable.SLOTS_PER_PAGE && link.getOutputRune() < linkedSlotPage.index * ContainerRuneWeavingTable.SLOTS_PER_PAGE + ContainerRuneWeavingTable.SLOTS_PER_PAGE / 2;
 
-								if(((SlotRuneWeavingTableInput) linkedSlot).isEnabled()) {
+								if(((SlotRuneWeavingTableInput) runeSlot).isEnabled() && ((SlotRuneWeavingTableInput) linkedSlot).isEnabled()) {
 									DefaultRuneGui.drawHangingRope(this.updateCounter + runeIndex * 50, runeSlot.xPos + 8, runeSlot.yPos + 8, linkedSlot.xPos + 8, linkedSlot.yPos + 8, !isTopHalf && isLinkedTopHalf ? -14.0F : 14.0F, this.zLevel);
-								} else {
-									DefaultRuneGui.drawHangingRope(this.updateCounter + runeIndex * 50, runeSlot.xPos + 8, runeSlot.yPos + 8, 88, 70, !isTopHalf ? -6.0F : 0.0F, this.zLevel);
+								} else if(((SlotRuneWeavingTableInput) runeSlot).isEnabled()) {
+									DefaultRuneGui.drawHangingRope(this.updateCounter + runeIndex * 50, runeSlot.xPos + 8, runeSlot.yPos + 8, 88, 84, !isTopHalf ? -6.0F : 0.0F, this.zLevel);
+								} else if(((SlotRuneWeavingTableInput) linkedSlot).isEnabled()) {
+									DefaultRuneGui.drawHangingRope(this.updateCounter + runeIndex * 50, 88, 84, linkedSlot.xPos + 8, linkedSlot.yPos + 8, !isTopHalf ? -6.0F : 0.0F, this.zLevel);
 								}
 							}
 						}

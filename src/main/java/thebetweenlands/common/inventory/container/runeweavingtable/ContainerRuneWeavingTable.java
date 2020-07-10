@@ -637,6 +637,7 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 	}
 
 	private boolean updateOutput = true;
+	private boolean updateInputs = true;
 
 	@Override
 	public void onRunesChanged() {
@@ -644,27 +645,31 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 
 		if(this.updateOutput) {
 			this.updateOutput = false;
+			this.updateInputs = false; //Don't update inputs since the rune chain will contain the exact same input data
 
-			ItemStack stack = this.table.getStackInSlot(0);
+			try {
+				ItemStack stack = this.table.getStackInSlot(0);
 
-			if(!stack.isEmpty() && stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null)) {
-				IRuneChainCapability cap = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null);
+				if(!stack.isEmpty() && stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null)) {
+					IRuneChainCapability cap = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null);
 
-				int runeCount = this.getRuneInventorySize();
+					int runeCount = this.getRuneInventorySize();
 
-				NonNullList<ItemStack> runes = NonNullList.withSize(runeCount, ItemStack.EMPTY);
-				for(int i = 0; i < runeCount; i++) {
-					runes.set(i, this.getRuneItemStack(i));
+					NonNullList<ItemStack> runes = NonNullList.withSize(runeCount, ItemStack.EMPTY);
+					for(int i = 0; i < runeCount; i++) {
+						runes.set(i, this.getRuneItemStack(i));
+					}
+
+					RuneChainData data = new RuneChainData(runes, this.table.getContainerData());
+
+					cap.setData(data);
 				}
 
-				RuneChainData data = new RuneChainData(runes, this.table.getContainerData());
-
-				cap.setData(data);
+				this.table.setInventorySlotContents(0, stack);
+			} finally {
+				this.updateOutput = true;
+				this.updateInputs = true;
 			}
-
-			this.table.setInventorySlotContents(0, stack);
-
-			this.updateOutput = true;
 		}
 	}
 
@@ -672,31 +677,43 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 	protected void updateInputsFromRuneChain() {
 		ItemStack stack = this.table.getStackInSlot(0);
 
-		if(this.updateOutput) {
+		if(this.updateOutput && this.updateInputs) {
 			this.updateOutput = false;
 
-			for(int i = 0; i < this.getRuneInventorySize(); i++) {
-				this.setRuneItemStack(i, ItemStack.EMPTY);
-			}
+			try {
+				boolean hasData = false;
 
-			if(!stack.isEmpty() && stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null)) {
-				IRuneChainCapability cap = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null);
+				if(!stack.isEmpty() && stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null)) {
+					IRuneChainCapability cap = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null);
 
-				IRuneChainData data = cap.getData();
+					IRuneChainData data = cap.getData();
 
-				if(data != null) {
-					NonNullList<ItemStack> runes = data.getRuneItems();
+					if(data != null) {
+						hasData = true;
 
-					//Set data *before* setting runes so that the rune containers are initialized correctly!
-					this.table.setContainerData(data.getContainerData());
+						NonNullList<ItemStack> runes = data.getRuneItems();
 
-					for(int i = 0; i < runes.size(); i++) {
-						this.setRuneItemStack(i, runes.get(i));
+						//Set data *before* setting runes so that the rune containers are initialized correctly!
+						this.table.setContainerData(data.getContainerData());
+
+						for(int i = 0; i < this.getRuneInventorySize(); i++) {
+							if(i < runes.size()) {
+								this.setRuneItemStack(i, runes.get(i));
+							} else {
+								this.setRuneItemStack(i, ItemStack.EMPTY);
+							}
+						}
 					}
 				}
-			}
 
-			this.updateOutput = true;
+				if(!hasData) {
+					for(int i = 0; i < this.getRuneInventorySize(); i++) {
+						this.setRuneItemStack(i, ItemStack.EMPTY);
+					}
+				}
+			} finally {
+				this.updateOutput = true;
+			}
 		}
 	}
 }

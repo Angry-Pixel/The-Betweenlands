@@ -9,6 +9,6 @@ public final class RuneTokenDescriptors {
 	public static final ResourceLocation ANY = new ResourceLocation(ModInfo.ID, "any");
 	public static final ResourceLocation BLOCK = new ResourceLocation(ModInfo.ID, "block");
 	public static final ResourceLocation ENTITY = new ResourceLocation(ModInfo.ID, "entity");
-	public static final ResourceLocation RAY = new ResourceLocation(ModInfo.ID, "ray");
+	public static final ResourceLocation DIRECTION = new ResourceLocation(ModInfo.ID, "direction");
 	public static final ResourceLocation POSITION = new ResourceLocation(ModInfo.ID, "position");
 }

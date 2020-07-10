@@ -41,7 +41,7 @@ public final class RunePinpoint extends AbstractRune<RunePinpoint> {
 			IN_ENTITY = builder.in(RuneTokenDescriptors.ENTITY, Entity.class, IRuneChainUser.class);
 			OUT_POSITION = builder.out(RuneTokenDescriptors.POSITION, Vec3d.class);
 			OUT_EYE_POSITION = builder.out(RuneTokenDescriptors.POSITION, Vec3d.class);
-			OUT_RAY = builder.out(RuneTokenDescriptors.RAY, Vec3d.class);
+			OUT_RAY = builder.out(RuneTokenDescriptors.DIRECTION, Vec3d.class);
 
 			CONFIGURATION_1 = builder.build();
 		}
