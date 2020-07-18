@@ -10,9 +10,11 @@ import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.IRuneChainUser;
 import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.api.rune.impl.PortNodeConfiguration;
-import thebetweenlands.api.rune.impl.PortNodeConfiguration.InputPort;
-import thebetweenlands.api.rune.impl.PortNodeConfiguration.OutputPort;
+import thebetweenlands.api.rune.impl.InputSerializers;
+import thebetweenlands.api.rune.impl.RuneConfiguration;
+import thebetweenlands.api.rune.impl.RuneEffectModifier;
+import thebetweenlands.api.rune.impl.RuneConfiguration.InputPort;
+import thebetweenlands.api.rune.impl.RuneConfiguration.OutputPort;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.api.rune.impl.RuneStats;
@@ -28,7 +30,7 @@ public final class RunePinpoint extends AbstractRune<RunePinpoint> {
 					.build());
 		}
 
-		public static final INodeConfiguration CONFIGURATION_1;
+		public static final RuneConfiguration CONFIGURATION_1;
 
 		private static final InputPort<?> IN_ENTITY;
 		private static final OutputPort<Vec3d> OUT_POSITION;
@@ -36,9 +38,9 @@ public final class RunePinpoint extends AbstractRune<RunePinpoint> {
 		private static final OutputPort<Vec3d> OUT_RAY;
 
 		static {
-			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.builder();
 
-			IN_ENTITY = builder.in(RuneTokenDescriptors.ENTITY, Entity.class, IRuneChainUser.class);
+			IN_ENTITY = builder.in(RuneTokenDescriptors.ENTITY, InputSerializers.USER, Entity.class, IRuneChainUser.class); //TODO Needs custom serializer
 			OUT_POSITION = builder.out(RuneTokenDescriptors.POSITION, Vec3d.class);
 			OUT_EYE_POSITION = builder.out(RuneTokenDescriptors.POSITION, Vec3d.class);
 			OUT_RAY = builder.out(RuneTokenDescriptors.DIRECTION, Vec3d.class);
@@ -47,17 +49,17 @@ public final class RunePinpoint extends AbstractRune<RunePinpoint> {
 		}
 
 		@Override
-		public List<INodeConfiguration> getConfigurations() {
+		public List<RuneConfiguration> getConfigurations() {
 			return ImmutableList.of(CONFIGURATION_1);
 		}
 
 		@Override
-		public RunePinpoint create(INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
-			return new RunePinpoint(this, composition, configuration);
+		public RunePinpoint create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+			return new RunePinpoint(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected void activate(RunePinpoint state, RuneExecutionContext context, INodeIO io) {
+		protected RuneEffectModifier.Subject activate(RunePinpoint state, RuneExecutionContext context, INodeIO io) {
 			if (state.getConfiguration() == CONFIGURATION_1) {
 				IN_ENTITY.run(io, Entity.class, entity -> {
 					OUT_POSITION.set(io, entity.getPositionVector());
@@ -70,10 +72,12 @@ public final class RunePinpoint extends AbstractRune<RunePinpoint> {
 					OUT_RAY.set(io, user.getLook());
 				});
 			}
+			
+			return null;
 		}
 	}
 
-	private RunePinpoint(Blueprint blueprint, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
-		super(blueprint, composition, configuration);
+	private RunePinpoint(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+		super(blueprint, index, composition, configuration);
 	}
 }

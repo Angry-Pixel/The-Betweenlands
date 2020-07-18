@@ -985,7 +985,7 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 	}
 
 	protected List<IType> getInputTypes(int runeIndex, INodeConfiguration configuration) {
-		List<IConfigurationInput> inputs = configuration.getInputs();
+		List<? extends IConfigurationInput> inputs = configuration.getInputs();
 
 		List<IType> inputTypes = new ArrayList<>();
 
@@ -1004,7 +1004,7 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 	}
 
 	protected IType getOutputType(int runeIndex, INodeConfiguration configuration, IConfigurationOutput output) {
-		List<IConfigurationInput> inputs = configuration.getInputs();
+		List<? extends IConfigurationInput> inputs = configuration.getInputs();
 
 		List<IType> inputTypes = new ArrayList<>();
 

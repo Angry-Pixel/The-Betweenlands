@@ -7,7 +7,8 @@ import com.google.common.collect.ImmutableList;
 import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.api.rune.impl.PortNodeConfiguration;
+import thebetweenlands.api.rune.impl.RuneConfiguration;
+import thebetweenlands.api.rune.impl.RuneEffectModifier;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
@@ -23,43 +24,44 @@ public final class RuneBranching extends AbstractRune<RuneBranching> {
 					.build());
 		}
 
-		public static final INodeConfiguration CONFIGURATION_1;
-		public static final INodeConfiguration CONFIGURATION_2;
-		public static final INodeConfiguration CONFIGURATION_3;
+		public static final RuneConfiguration CONFIGURATION_1;
+		public static final RuneConfiguration CONFIGURATION_2;
+		public static final RuneConfiguration CONFIGURATION_3;
 
 		static {
-			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder(RuneTokenDescriptors.ANY);
+			RuneConfiguration.Builder builder = RuneConfiguration.builder(RuneTokenDescriptors.ANY);
 
-			builder.in(RuneTokenDescriptors.ANY, Object.class);
+			builder.in(RuneTokenDescriptors.ANY, null, Object.class);
 			CONFIGURATION_1 = builder.build();
 
-			builder.in(RuneTokenDescriptors.ANY, Object.class);
-			builder.in(RuneTokenDescriptors.ANY, Object.class);
+			builder.in(RuneTokenDescriptors.ANY, null, Object.class);
+			builder.in(RuneTokenDescriptors.ANY, null, Object.class);
 			CONFIGURATION_2 = builder.build();
 
-			builder.in(RuneTokenDescriptors.ANY, Object.class);
-			builder.in(RuneTokenDescriptors.ANY, Object.class);
-			builder.in(RuneTokenDescriptors.ANY, Object.class);
+			builder.in(RuneTokenDescriptors.ANY, null, Object.class);
+			builder.in(RuneTokenDescriptors.ANY, null, Object.class);
+			builder.in(RuneTokenDescriptors.ANY, null, Object.class);
 			CONFIGURATION_3 = builder.build();
 		}
 
 		@Override
-		public List<INodeConfiguration> getConfigurations() {
+		public List<RuneConfiguration> getConfigurations() {
 			return ImmutableList.of(CONFIGURATION_1, CONFIGURATION_2, CONFIGURATION_3);
 		}
 
 		@Override
-		public RuneBranching create(INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
-			return new RuneBranching(this, composition, configuration);
+		public RuneBranching create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+			return new RuneBranching(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected void activate(RuneBranching state, RuneExecutionContext context, INodeIO io) {
+		protected RuneEffectModifier.Subject activate(RuneBranching state, RuneExecutionContext context, INodeIO io) {
 			io.branch();
+			return null;
 		}
 	}
 
-	private RuneBranching(Blueprint blueprint, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
-		super(blueprint, composition, configuration);
+	private RuneBranching(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+		super(blueprint, index, composition, configuration);
 	}
 }

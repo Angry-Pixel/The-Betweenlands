@@ -12,9 +12,11 @@ import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.IRuneChainUser;
 import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.api.rune.impl.PortNodeConfiguration;
-import thebetweenlands.api.rune.impl.PortNodeConfiguration.InputPort;
-import thebetweenlands.api.rune.impl.PortNodeConfiguration.OutputPort;
+import thebetweenlands.api.rune.impl.InputSerializers;
+import thebetweenlands.api.rune.impl.RuneConfiguration;
+import thebetweenlands.api.rune.impl.RuneEffectModifier;
+import thebetweenlands.api.rune.impl.RuneConfiguration.InputPort;
+import thebetweenlands.api.rune.impl.RuneConfiguration.OutputPort;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.api.rune.impl.RuneStats;
@@ -30,8 +32,8 @@ public final class RuneMarkArea extends AbstractRune<RuneMarkArea> {
 					.build());
 		}
 
-		public static final INodeConfiguration CONFIGURATION_1;
-		public static final INodeConfiguration CONFIGURATION_2;
+		public static final RuneConfiguration CONFIGURATION_1;
+		public static final RuneConfiguration CONFIGURATION_2;
 
 		private static final InputPort<BlockPos> IN_POSITION_2;
 		private static final OutputPort<Collection<BlockPos>> OUT_POSITIONS_2;
@@ -39,30 +41,30 @@ public final class RuneMarkArea extends AbstractRune<RuneMarkArea> {
 		private static final OutputPort<Collection<BlockPos>> OUT_POSITIONS;
 
 		static {
-			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.builder();
 
 			OUT_POSITIONS = builder.multiOut(RuneTokenDescriptors.BLOCK, BlockPos.class);
 
 			CONFIGURATION_1 = builder.build();
 			
-			IN_POSITION_2 = builder.in(RuneTokenDescriptors.BLOCK, BlockPos.class);
+			IN_POSITION_2 = builder.in(RuneTokenDescriptors.BLOCK, InputSerializers.BLOCK, BlockPos.class);
 			OUT_POSITIONS_2 = builder.multiOut(RuneTokenDescriptors.BLOCK, BlockPos.class);
 
 			CONFIGURATION_2 = builder.build();
 		}
 
 		@Override
-		public List<INodeConfiguration> getConfigurations() {
+		public List<RuneConfiguration> getConfigurations() {
 			return ImmutableList.of(CONFIGURATION_1, CONFIGURATION_2);
 		}
 
 		@Override
-		public RuneMarkArea create(INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
-			return new RuneMarkArea(this, composition, configuration);
+		public RuneMarkArea create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+			return new RuneMarkArea(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected void activate(RuneMarkArea state, RuneExecutionContext context, INodeIO io) {
+		protected RuneEffectModifier.Subject activate(RuneMarkArea state, RuneExecutionContext context, INodeIO io) {
 			
 			if(state.getConfiguration() == CONFIGURATION_1) {
 				List<BlockPos> positions = new ArrayList<>();
@@ -97,10 +99,12 @@ public final class RuneMarkArea extends AbstractRune<RuneMarkArea> {
 
 				OUT_POSITIONS_2.set(io, positions);
 			}
+			
+			return null;
 		}
 	}
 
-	private RuneMarkArea(Blueprint blueprint, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
-		super(blueprint, composition, configuration);
+	private RuneMarkArea(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+		super(blueprint, index, composition, configuration);
 	}
 }

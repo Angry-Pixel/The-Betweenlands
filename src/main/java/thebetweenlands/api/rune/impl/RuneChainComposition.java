@@ -1,5 +1,6 @@
 package thebetweenlands.api.rune.impl;
 
+import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,9 +9,10 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import java.util.Queue;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -19,6 +21,7 @@ import com.google.common.collect.ImmutableList;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.network.PacketBuffer;
 import thebetweenlands.api.aspect.AspectContainer;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.rune.INode;
@@ -277,13 +280,13 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 			List<INodeConfiguration> inConfigurations = this.getValidConfigurations(inNodeIndex, false);
 
 			for(INodeConfiguration inConfiguration : inConfigurations) {
-				List<IConfigurationInput> inputs = inConfiguration.getInputs();
+				List<? extends IConfigurationInput> inputs = inConfiguration.getInputs();
 
 				if(inputIndex < inputs.size()) {
 					IConfigurationInput input = inputs.get(inputIndex);
 
 					for(INodeConfiguration outConfiguration : outConfigurations) {
-						List<IConfigurationOutput> outputs = outConfiguration.getOutputs();
+						List<? extends IConfigurationOutput> outputs = outConfiguration.getOutputs();
 
 						if(outputIndex < outputs.size()) {
 							List<Entry<IConfigurationOutput, IType>> validOutputTypes = this.getValidOutputTypes(outNodeIndex, outputIndex);
@@ -307,8 +310,8 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 			Collection<Integer> linkedSlots = this.getLinkedSlots(nodeIndex);
 
 			for(INodeConfiguration configuration : configurations) {
-				List<IConfigurationOutput> outputs = configuration.getOutputs();
-				List<IConfigurationInput> inputs = configuration.getInputs();
+				List<? extends IConfigurationOutput> outputs = configuration.getOutputs();
+				List<? extends IConfigurationInput> inputs = configuration.getInputs();
 
 				if(outputIndex < outputs.size()) {
 					IConfigurationOutput output = outputs.get(outputIndex);
@@ -341,7 +344,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 			INodeBlueprint<?, ?> node = this.getNodeBlueprint(nodeIndex);
 
 			List<INodeConfiguration> validConfigurations = new ArrayList<>();
-			
+
 			List<INodeConfiguration> potentialConfigurations = new ArrayList<>();
 			INodeConfiguration setConfiguration = this.getNodeConfiguration(nodeIndex);
 			if(setConfiguration != null) {
@@ -351,7 +354,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 			}
 
 			configurations: for(INodeConfiguration configuration : potentialConfigurations) {
-				List<IConfigurationInput> inputs = configuration.getInputs();
+				List<? extends IConfigurationInput> inputs = configuration.getInputs();
 
 				Collection<Integer> linkedSlots = this.getLinkedSlots(nodeIndex);
 
@@ -368,7 +371,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 						boolean validOutputConfiguration = false;
 
 						for(INodeConfiguration outputConfiguration : this.getValidConfigurations(link.getNode(), false)) {
-							List<IConfigurationOutput> outputs = outputConfiguration.getOutputs();
+							List<? extends IConfigurationOutput> outputs = outputConfiguration.getOutputs();
 
 							if(link.getOutput() < outputs.size()) {
 								List<Entry<IConfigurationOutput, IType>> validOutputTypes = this.getValidOutputTypes(link.getNode(), link.getOutput());
@@ -409,7 +412,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 			this.delay = 0.0F;
 			this.terminated = false;
 		}
-		
+
 		private void finishScheduledTask() {
 			this.updateCount = 0;
 		}
@@ -590,8 +593,8 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 
 	public final class RuneExecutionContext {
 		private final IRuneChainUser user;
-		private int parallelActivationCount;
-		private int parallelActivation;
+		private int inputIndexCount;
+		private int inputIndex;
 		private int branchCount;
 		private int branch;
 
@@ -632,19 +635,19 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 		}
 
 		/**
-		 * Returns the number of current parallel rune activations.
-		 * @return the number of current parallel rune activations
+		 * Returns the number of current input combinations.
+		 * @return the number of current input combinations
 		 */
-		public int getParallelActivationCount() {
-			return this.parallelActivationCount;
+		public int getInputIndexCount() {
+			return this.inputIndexCount;
 		}
 
 		/**
-		 * Returns the current parallel rune activation starting at 0.
-		 * @return the current parallel rune activation starting at 0
+		 * Returns the current input combination index.
+		 * @return the current input combination index
 		 */
-		public int getParallelActivation() {
-			return this.parallelActivation;
+		public int getInputIndex() {
+			return this.inputIndex;
 		}
 
 		/**
@@ -653,6 +656,13 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 		 */
 		public int getRune() {
 			return RuneChainComposition.this.currentNode;
+		}
+
+		public void sendPacket(Consumer<PacketBuffer> serializer) {
+			this.getUser().sendPacket(RuneChainComposition.this, buffer -> {
+				buffer.writeVarInt(this.getRune());
+				serializer.accept(buffer);
+			});
 		}
 	}
 
@@ -711,11 +721,11 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 
 			if(validConfigurations.isEmpty() || (setConfiguration != null && !validConfigurations.contains(setConfiguration))) {
 				// Add dummy node that always fails instantly
-				this.nodes.add(NodeDummy.Blueprint.INSTANCE.create(this, NodeDummy.Blueprint.CONFIGURATION));
+				this.nodes.add(NodeDummy.Blueprint.INSTANCE.create(i, this, NodeDummy.Blueprint.CONFIGURATION));
 			} else {
 				INodeConfiguration configuration = setConfiguration != null ? setConfiguration : validConfigurations.get(0);
 				INodeBlueprint<?, RuneExecutionContext> nodeBlueprint = this.blueprint.getNodeBlueprint(i);
-				this.nodes.add(nodeBlueprint.create(this, configuration));
+				this.nodes.add(nodeBlueprint.create(i, this, configuration));
 			}
 		}
 	}
@@ -795,7 +805,11 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 				this.delay -= 1.0F;
 
 				if(this.scheduledTask != null && this.delay < 1.0F) {
-					if(this.updateTask()) {
+					INode<?, RuneExecutionContext> node = this.nodes.get(this.currentNode);
+					@SuppressWarnings("unchecked")
+					INodeBlueprint<INode<?, RuneExecutionContext>, RuneExecutionContext> blueprint = (INodeBlueprint<INode<?, RuneExecutionContext>, RuneExecutionContext>) node.getBlueprint();
+
+					if(this.updateTask(node, blueprint)) {
 						// Delay has accumulated > 1.0, exit and continue next tick
 						return;
 					}
@@ -822,7 +836,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 					@SuppressWarnings("unchecked")
 					INodeBlueprint<INode<?, RuneExecutionContext>, RuneExecutionContext> blueprint = (INodeBlueprint<INode<?, RuneExecutionContext>, RuneExecutionContext>) node.getBlueprint();
 					INodeConfiguration configuration = node.getConfiguration();
-					List<IConfigurationInput> inputs = configuration.getInputs();
+					List<? extends IConfigurationInput> inputs = configuration.getInputs();
 
 					while(!this.branches.isEmpty() || resumeSuspension) {
 						if(!resumeSuspension) {
@@ -873,12 +887,12 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 							this.combination = new Object[inputs.size()];
 							this.currentCombination = 0;
 
-							this.context.parallelActivationCount = this.combinations;
+							this.context.inputIndexCount = this.combinations;
 						}
 
 						//Execute node for each combination
 						while(this.currentCombination < this.combinations) {
-							this.context.parallelActivation = this.currentCombination;
+							this.context.inputIndex = this.currentCombination;
 
 							// Get input value combination
 							for(int inputIndex = 0; inputIndex < inputs.size(); inputIndex++) {
@@ -927,7 +941,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 
 							if(!this.nodeIO.terminated && this.nodeIO.task != null) {
 								this.scheduledTask = this.nodeIO.task;
-								if(this.updateTask()) {
+								if(this.updateTask(node, blueprint)) {
 									// Delay has accumulated > 1.0, exit and continue next tick
 									return;
 								}
@@ -961,23 +975,46 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 		}
 	}
 
-	private boolean updateTask() {
+	private boolean updateTask(INode<?, RuneExecutionContext> node, INodeBlueprint<INode<?, RuneExecutionContext>, RuneExecutionContext> blueprint) {
 		this.scheduler.beginUpdateTask();
+
+		boolean updated = false;
 
 		while(this.delay < 1.0F) {
 			this.scheduledTask.update(this.scheduler);
+			updated = true;
 
 			this.delay += this.scheduler.delay;
 
 			this.scheduler.updateCount++;
-			
+
 			if(this.scheduler.terminated) {
 				this.scheduler.finishScheduledTask();
 				this.scheduledTask = null;
-				return this.delay >= 1.0F;
+				break;
 			}
 		}
 
-		return true;
+		if(updated && this.delay >= 1.0F && (this.currentCombination != this.combinations || !this.branches.isEmpty()) /*only suspend if execution of node isn't already finished for all inputs/branches*/) {
+			blueprint.suspend(node, this.context);
+		}
+
+		return this.delay >= 1.0F;
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void processPacket(IRuneChainUser user, PacketBuffer buffer) throws IOException {
+		int runeIndex = buffer.readVarInt();
+
+		if(runeIndex >= 0 && runeIndex < this.getBlueprint().getNodeBlueprints()) {
+			INode<?, RuneExecutionContext> node = this.getNode(runeIndex);
+			INodeBlueprint<INode<?, RuneExecutionContext>, RuneExecutionContext> blueprint = (INodeBlueprint<INode<?, RuneExecutionContext>, RuneExecutionContext>) node.getBlueprint();
+
+			if(blueprint instanceof AbstractRune.Blueprint) {
+				AbstractRune rune = (AbstractRune) node;
+				AbstractRune.Blueprint runeBlueprint = (AbstractRune.Blueprint) blueprint;
+				runeBlueprint.processPacket(rune, user, buffer);
+			}
+		}
 	}
 }

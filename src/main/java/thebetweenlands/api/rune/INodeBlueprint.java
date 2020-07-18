@@ -8,21 +8,25 @@ import thebetweenlands.api.rune.INodeBlueprint.INodeIO;
 
 public interface INodeBlueprint<T extends INode<?, E>, E> {
 	/**
-	 * A node input/output for the currently executing node that allows retrieving and setting the node's input and
-	 * output values. Also allows scheduling a task that can run over an arbitrary duration while the node composition's
-	 * execution is suspended.
+	 * A node input for the currently executing node that allows retrieving the node's input values.
 	 */
-	public static interface INodeIO {
+	public static interface INodeInput {
 		/**
 		 * Returns the value at the specified input.
 		 * @param input - input index
 		 * @return value at the specified input
 		 */
 		public Object get(int input);
-
+	}
+	
+	/**
+	 * A node input/output for the currently executing node that allows retrieving and setting the node's input and
+	 * output values. Also allows scheduling a task that can run over an arbitrary duration while the node composition's
+	 * execution is suspended.
+	 */
+	public static interface INodeIO extends INodeInput {
 		/**
-		 * A scheduler task that can be used to execute timed tasks. While the task is running the node composition's
-		 * execution is suspended. To implement timed tasks {@link IScheduler#sleep(float)}
+		 * A scheduler task that can be used to execute timed tasks. To implement timed tasks {@link IScheduler#sleep(float)}
 		 * can be used. The task can be terminated with {@link IScheduler#terminate()}
 		 * so that the node composition can continue execution.
 		 */
@@ -102,8 +106,7 @@ public interface INodeBlueprint<T extends INode<?, E>, E> {
 		public boolean failed();
 
 		/**
-		 * Schedules a task to be run immediately after returning. While the task is running the node composition's
-		 * execution is suspended. The task will be executed even if the node's state is set to failed.
+		 * Schedules a task to be run immediately after returning. The task will be executed even if the node's state is set to failed.
 		 * Only one task can be scheduled at once.
 		 * <p>
 		 * <b>Do not forget to terminate the task with {@link IScheduler#terminate()} once it has
@@ -140,15 +143,16 @@ public interface INodeBlueprint<T extends INode<?, E>, E> {
 	 * @return an unmodifiable list containing all valid configurations for
 	 * nodes of this blueprint
 	 */
-	public List<INodeConfiguration> getConfigurations();
+	public List<? extends INodeConfiguration> getConfigurations();
 
 	/**
 	 * Creates a node instance from the specified configuration.
+	 * @param index - index of the node instance
 	 * @param composition - node composition this blueprint belongs to
 	 * @param configuration - configuration of the node. <b>Must be from this blueprint's {@link #getConfigurations()}</b>.
 	 * @return a node instance with the specified configuration
 	 */
-	public T create(INodeComposition<E> composition, INodeConfiguration configuration);
+	public T create(int index, INodeComposition<E> composition, INodeConfiguration configuration);
 
 	/**
 	 * Called when the node's execution has failed, e.g. when inputs are missing
@@ -174,4 +178,12 @@ public interface INodeBlueprint<T extends INode<?, E>, E> {
 	 * @param io - node input/output that allow reading input values and  writing output values
 	 */
 	public void run(T state, E context, INodeIO io);
+
+	/**
+	 * Called when the node's function execution is suspended, i.e. temporarily interrupted during a running task or between calling {@link #run(INode, Object, INodeIO)}
+	 * for different inputs or different branches. 
+	 * @param state - node instance created by {@link #create(INodeComposition, INodeConfiguration)}
+	 * @param context - context that was executing the node
+	 */
+	public default void suspend(T state, E context) { }
 }

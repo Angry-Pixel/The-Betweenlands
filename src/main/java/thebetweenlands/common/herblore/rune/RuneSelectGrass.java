@@ -11,8 +11,10 @@ import net.minecraft.util.math.BlockPos;
 import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.api.rune.impl.PortNodeConfiguration;
-import thebetweenlands.api.rune.impl.PortNodeConfiguration.InputPort;
+import thebetweenlands.api.rune.impl.InputSerializers;
+import thebetweenlands.api.rune.impl.RuneConfiguration;
+import thebetweenlands.api.rune.impl.RuneEffectModifier;
+import thebetweenlands.api.rune.impl.RuneConfiguration.InputPort;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.api.rune.impl.RuneStats;
@@ -28,30 +30,30 @@ public final class RuneSelectGrass extends AbstractRune<RuneSelectGrass> {
 					.build());
 		}
 
-		public static final INodeConfiguration CONFIGURATION_1;
+		public static final RuneConfiguration CONFIGURATION_1;
 
 		private static final InputPort<BlockPos> IN_POSITION;
 
 		static {
-			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.builder();
 
-			IN_POSITION = builder.in(RuneTokenDescriptors.BLOCK, BlockPos.class);
+			IN_POSITION = builder.in(RuneTokenDescriptors.BLOCK, InputSerializers.BLOCK, BlockPos.class);
 
 			CONFIGURATION_1 = builder.build();
 		}
 
 		@Override
-		public List<INodeConfiguration> getConfigurations() {
+		public List<RuneConfiguration> getConfigurations() {
 			return ImmutableList.of(CONFIGURATION_1);
 		}
 
 		@Override
-		public RuneSelectGrass create(INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
-			return new RuneSelectGrass(this, composition, configuration);
+		public RuneSelectGrass create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+			return new RuneSelectGrass(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected void activate(RuneSelectGrass state, RuneExecutionContext context, INodeIO io) {
+		protected RuneEffectModifier.Subject activate(RuneSelectGrass state, RuneExecutionContext context, INodeIO io) {
 
 			if (state.getConfiguration() == CONFIGURATION_1) {
 				BlockPos position = IN_POSITION.get(io);
@@ -62,10 +64,11 @@ public final class RuneSelectGrass extends AbstractRune<RuneSelectGrass> {
 				}
 			}
 
+			return null;
 		}
 	}
 
-	private RuneSelectGrass(Blueprint blueprint, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
-		super(blueprint, composition, configuration);
+	private RuneSelectGrass(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+		super(blueprint, index, composition, configuration);
 	}
 }

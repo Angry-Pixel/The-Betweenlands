@@ -1,20 +1,35 @@
 package thebetweenlands.api.rune.impl;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
+
 import javax.annotation.Nullable;
 
+import io.netty.buffer.Unpooled;
+import net.minecraft.entity.Entity;
+import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.AspectContainer;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.rune.INode;
 import thebetweenlands.api.rune.INodeBlueprint;
 import thebetweenlands.api.rune.INodeComposition;
+import thebetweenlands.api.rune.INodeCompositionBlueprint.INodeLink;
 import thebetweenlands.api.rune.INodeConfiguration;
+import thebetweenlands.api.rune.IRuneChainUser;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 
 public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T, RuneExecutionContext> {
 
 	public static abstract class Blueprint<T extends AbstractRune<T>> implements INodeBlueprint<T, RuneExecutionContext> {
 		private final RuneStats stats;
+
+		private int recursiveRuneEffectModifierCount = 0;
 
 		public Blueprint(RuneStats stats) {
 			this.stats = stats;
@@ -24,16 +39,45 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 			return this.stats;
 		}
 
+		protected void setRecursiveRuneEffectModifierCount(int count) {
+			this.recursiveRuneEffectModifierCount = count;
+		}
+
+		@Override
+		public abstract List<RuneConfiguration> getConfigurations();
+
 		@Override
 		public void run(T state, RuneExecutionContext context, INodeIO io) {
 			RuneStats stats = this.getStats();
 			Aspect cost = stats.getAspect();
 
 			if(this.updateFuelConsumption(state, context, io, stats, cost.type, cost.amount)) {
-				this.activate(state, context, io);
+				RuneEffectModifier.Subject subject = this.activate(state, context, io);
+
+				//Activate modifier
+				RuneEffectModifier effect = state.getRuneEffectModifier();
+				if(effect != null) {
+					effect.activate(context.getUser(), subject);
+
+					//Sync activation over network
+					//TODO Batch activations together
+					PacketBuffer inputsBuffer = new PacketBuffer(Unpooled.buffer());
+					state.getConfiguration().serialize(context.getUser(), io, inputsBuffer);
+					
+					PacketBuffer subjectBuffer = new PacketBuffer(Unpooled.buffer());
+					this.writeRuneEffectModifierSubject(subject, subjectBuffer);
+					
+					context.sendPacket(buffer -> {
+						buffer.writeVarInt(0);
+						buffer.writeVarInt(inputsBuffer.writerIndex());
+						buffer.writeBytes(inputsBuffer, inputsBuffer.writerIndex());
+						buffer.writeVarInt(subjectBuffer.writerIndex());
+						buffer.writeBytes(subjectBuffer, subjectBuffer.writerIndex());
+					});
+				}
 
 				// On last parallel rune activation on last branch drain any left over fuel to be consumed
-				if(context.getParallelActivation() == context.getParallelActivationCount() - 1 && context.getBranch() == context.getBranchCount() - 1) {
+				if(context.getInputIndex() == context.getInputIndexCount() - 1 && context.getBranch() == context.getBranchCount() - 1) {
 					this.drainLeftOverFuel(state, context);
 				}
 
@@ -53,6 +97,16 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 		@Override
 		public void terminate(T state, RuneExecutionContext context) {
 			this.drainLeftOverFuel(state, context);
+
+			RuneEffectModifier effect = state.getRuneEffectModifier();
+			if(effect != null) {
+				effect.terminate();
+
+				//Sync termination over network
+				context.sendPacket(buffer -> {
+					buffer.writeVarInt(1);
+				});
+			}
 		}
 
 		/**
@@ -90,11 +144,7 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 
 				state.bufferedCost %= stats.getCostRatio();
 
-				if(container.drain(type, drain) >= drain) {
-					return true;
-				} else {
-					return false;
-				}
+				return container.drain(type, drain) >= drain;
 			}
 
 			return true;
@@ -105,18 +155,117 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 		 * @param state - node instance created by {@link #create(INodeComposition, INodeConfiguration)}
 		 * @param context - context that is executing the node
 		 * @param io - node input/output that allow reading input values and writing output values
+		 * @return subject to be affected by the rune effect modifier to be applied to this rune ({@link AbstractRune#getRuneEffectModifier()}), e.g. a projectile or position
 		 */
-		protected abstract void activate(T state, RuneExecutionContext context, INodeIO io);
+		@Nullable
+		protected abstract RuneEffectModifier.Subject activate(T state, RuneExecutionContext context, INodeIO io);
+
+		/**
+		 * Creates a rune effect modifier to be applied to a previous rune linked to this rune
+		 * @param target previous rune to apply the rune effect modifier to
+		 * @param output output index of the target rune
+		 * @param input input index of this rune that the target rune is linked to
+		 * @return
+		 */
+		@Nullable
+		protected RuneEffectModifier createRuneEffectModifier(AbstractRune<?> target, int output, int input) {
+			return null;
+		}
+
+		/**
+		 * Creates a rune effect modifier to be applied to only this rune itself
+		 * @return
+		 */
+		@Nullable
+		protected RuneEffectModifier createRuneEffectModifier() {
+			return null;
+		}
+
+		public void writeRuneEffectModifierSubject(@Nullable RuneEffectModifier.Subject subject, PacketBuffer buffer) {
+			buffer.writeBoolean(subject != null);
+
+			if(subject != null) {
+				buffer.writeBoolean(subject.position != null);
+				if(subject.position != null) {
+					InputSerializers.VECTOR.write(subject.position, buffer);
+				}
+
+				buffer.writeBoolean(subject.block != null);
+				if(subject.block != null) {
+					InputSerializers.BLOCK.write(subject.block, buffer);
+				}
+
+				buffer.writeBoolean(subject.entity != null);
+				if(subject.entity != null) {
+					InputSerializers.ENTITY.write(subject.entity, buffer);
+				}
+			}
+		}
+
+		@Nullable
+		public RuneEffectModifier.Subject readRuneEffectModifierSubject(T state, IRuneChainUser user, INodeInput input, PacketBuffer buffer) throws IOException {
+			if(buffer.readBoolean()) {
+				Vec3d position = null;
+				if(buffer.readBoolean()) {
+					position = InputSerializers.VECTOR.read(user, buffer);
+				}
+
+				BlockPos block = null;
+				if(buffer.readBoolean()) {
+					block = InputSerializers.BLOCK.read(user, buffer);
+				}
+
+				Entity entity = null;
+				if(buffer.readBoolean()) {
+					entity = InputSerializers.ENTITY.read(user, buffer);
+				}
+
+				return new RuneEffectModifier.Subject(position, block, entity);
+			}
+
+			return null;
+		}
+
+		public void processPacket(T state, IRuneChainUser user, PacketBuffer buffer) throws IOException {
+			switch(buffer.readVarInt()) {
+			
+			case 0: //Activate effect
+				PacketBuffer inputsBuffer = new PacketBuffer(Unpooled.buffer());
+				buffer.readBytes(inputsBuffer, buffer.readVarInt());
+				
+				PacketBuffer subjectBuffer = new PacketBuffer(Unpooled.buffer());
+				buffer.readBytes(subjectBuffer, buffer.readVarInt());
+				
+				List<Object> inputs = state.getConfiguration().deserialize(user, inputsBuffer);
+				
+				state.getRuneEffectModifier().activate(user, this.readRuneEffectModifierSubject(state, user, new INodeInput() {
+					@Override
+					public Object get(int input) {
+						return inputs.get(input);
+					}
+				}, subjectBuffer));
+				
+				break;
+			case 1: //Terminate effect
+				//TODO Terminate
+				
+			}
+		}
 	}
 
 	private final Blueprint<T> blueprint;
 	private final INodeComposition<RuneExecutionContext> composition;
-	private final INodeConfiguration configuration;
+	private final RuneConfiguration configuration;
+	private final int index;
+
+	private boolean runeEffectModifierSet = false;
+	private RuneEffectModifier runeEffectModifier = null;
 
 	protected int bufferedCost = 0;
 
-	protected AbstractRune(Blueprint<T> blueprint, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+	protected AbstractRune(Blueprint<T> blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
 		this.blueprint = blueprint;
+		this.index = index;
 		this.composition = composition;
 		this.configuration = configuration;
 	}
@@ -127,12 +276,139 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 	}
 
 	@Override
-	public final INodeConfiguration getConfiguration() {
+	public final RuneConfiguration getConfiguration() {
 		return this.configuration;
 	}
 
 	@Override
 	public final INodeComposition<RuneExecutionContext> getComposition() {
 		return this.composition;
+	}
+
+	@Override
+	public int getIndex() {
+		return this.index;
+	}
+
+	/**
+	 * Returns the rune effect modifier to be applied to this rune
+	 * @return
+	 */
+	@Nullable
+	public RuneEffectModifier getRuneEffectModifier() {
+		if(!this.runeEffectModifierSet) {
+			this.runeEffectModifierSet = true;
+
+			List<RuneEffectModifier> effects = new ArrayList<>();
+
+			Deque<Integer> queue = new LinkedList<>();
+
+			queue.add(this.index);
+
+			RuneEffectModifier effect = this.getBlueprint().createRuneEffectModifier();
+			if(effect != null) {
+				effects.add(effect);
+			}
+
+			if(this.blueprint.recursiveRuneEffectModifierCount > 0) {
+				effectsLoop: while(!queue.isEmpty()) {
+					int startIndex = queue.removeFirst();
+
+					for(int runeIndex = startIndex + 1; runeIndex < this.composition.getBlueprint().getNodeBlueprints(); runeIndex++) {
+						INode<?, RuneExecutionContext> node = this.composition.getNode(runeIndex);
+
+						if(node instanceof AbstractRune) {
+							AbstractRune<?> rune = (AbstractRune<?>) node;
+
+							for(int linkIndex : this.composition.getBlueprint().getLinkedSlots(runeIndex)) {
+								INodeLink link = this.composition.getBlueprint().getLink(runeIndex, linkIndex);
+
+								if(link != null && link.getNode() == startIndex) {
+									queue.add(runeIndex);
+
+									effect = rune.getBlueprint().createRuneEffectModifier(this, link.getNode(), linkIndex);
+									if(effect != null) {
+										effects.add(effect);
+
+										if(effects.size() >= this.blueprint.recursiveRuneEffectModifierCount) {
+											break effectsLoop;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			if(!effects.isEmpty()) {
+				this.runeEffectModifier = new RuneEffectModifier() {
+					@Override
+					public void activate(IRuneChainUser user, RuneEffectModifier.Subject context) {
+						for(RuneEffectModifier effect : effects) {
+							effect.activate(user, context);
+						}
+					}
+
+					@Override
+					public int getColorModifier() {
+						int r = 0;
+						int g = 0;
+						int b = 0;
+						int a = 0;
+
+						int count = 0;
+
+						for(RuneEffectModifier effect : effects) {
+							if(effect.hasColorModifier()) {
+								int color = effect.getColorModifier();
+
+								r += (color >> 16) & 255;
+								g += (color >> 8) & 255;
+								b += color & 255;
+								a += (color >> 24) & 255;
+
+								count++;
+							}
+						}
+
+						return count > 0 ? (((a / count) << 24) | ((r / count) << 16) | ((g / count) << 8) | (b / count)) : 0xFFFFFFFF;
+					}
+
+					@Override
+					public int getColorModifier(int index) {
+						if(index < 0 || index > effects.size()) {
+							return 0xFFFFFFFF;
+						}
+
+						int currentIndex = 0;
+
+						for(RuneEffectModifier effect : effects) {
+							if(effect.hasColorModifier()) {
+								if(currentIndex == index) {
+									return effect.getColorModifier();
+								}
+
+								currentIndex++;
+							}
+						}
+
+						return 0xFFFFFFFF;
+					}
+
+					@Override
+					public boolean hasColorModifier() {
+						for(RuneEffectModifier effect : effects) {
+							if(effect.hasColorModifier()) {
+								return true;
+							}
+						}
+						return false;
+					}
+				};
+			}
+		}
+
+		return this.runeEffectModifier;
 	}
 }

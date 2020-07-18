@@ -18,4 +18,10 @@ public interface INode<T extends INode<T, E>, E> {
 	 * @return node composition this node belongs to
 	 */
 	public INodeComposition<E> getComposition();
+	
+	/**
+	 * Returns the index of this node in the node composition it belongs to.
+	 * @return index of this node in the node composition it belongs to
+	 */
+	public int getIndex();
 }

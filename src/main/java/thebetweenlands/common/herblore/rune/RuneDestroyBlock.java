@@ -8,11 +8,13 @@ import net.minecraft.util.math.BlockPos;
 import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.api.rune.impl.PortNodeConfiguration;
-import thebetweenlands.api.rune.impl.PortNodeConfiguration.InputPort;
+import thebetweenlands.api.rune.impl.InputSerializers;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
+import thebetweenlands.api.rune.impl.RuneConfiguration;
+import thebetweenlands.api.rune.impl.RuneEffectModifier;
+import thebetweenlands.api.rune.impl.RuneConfiguration.InputPort;
 import thebetweenlands.api.rune.impl.RuneStats;
+import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.common.registries.AspectRegistry;
 
 public final class RuneDestroyBlock extends AbstractRune<RuneDestroyBlock> {
@@ -25,30 +27,30 @@ public final class RuneDestroyBlock extends AbstractRune<RuneDestroyBlock> {
 					.build());
 		}
 
-		public static final INodeConfiguration CONFIGURATION_1;
+		public static final RuneConfiguration CONFIGURATION_1;
 
 		private static final InputPort<BlockPos> IN_POSITION;
 
 		static {
-			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.builder();
 
-			IN_POSITION = builder.in(RuneTokenDescriptors.BLOCK, BlockPos.class);
+			IN_POSITION = builder.in(RuneTokenDescriptors.BLOCK, InputSerializers.BLOCK, BlockPos.class);
 
 			CONFIGURATION_1 = builder.build();
 		}
 
 		@Override
-		public List<INodeConfiguration> getConfigurations() {
+		public List<RuneConfiguration> getConfigurations() {
 			return ImmutableList.of(CONFIGURATION_1);
 		}
 
 		@Override
-		public RuneDestroyBlock create(INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
-			return new RuneDestroyBlock(this, composition, configuration);
+		public RuneDestroyBlock create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+			return new RuneDestroyBlock(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected void activate(RuneDestroyBlock state, RuneExecutionContext context, INodeIO io) {
+		protected RuneEffectModifier.Subject activate(RuneDestroyBlock state, RuneExecutionContext context, INodeIO io) {
 
 			if (state.getConfiguration() == CONFIGURATION_1) {
 				BlockPos position = IN_POSITION.get(io);
@@ -56,10 +58,11 @@ public final class RuneDestroyBlock extends AbstractRune<RuneDestroyBlock> {
 				context.getUser().getWorld().setBlockToAir(position);
 			}
 
+			return null;
 		}
 	}
 
-	private RuneDestroyBlock(Blueprint blueprint, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
-		super(blueprint, composition, configuration);
+	private RuneDestroyBlock(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+		super(blueprint, index, composition, configuration);
 	}
 }

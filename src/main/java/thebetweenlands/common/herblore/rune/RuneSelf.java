@@ -8,8 +8,9 @@ import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.IRuneChainUser;
 import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.api.rune.impl.PortNodeConfiguration;
-import thebetweenlands.api.rune.impl.PortNodeConfiguration.OutputPort;
+import thebetweenlands.api.rune.impl.RuneConfiguration;
+import thebetweenlands.api.rune.impl.RuneEffectModifier;
+import thebetweenlands.api.rune.impl.RuneConfiguration.OutputPort;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.api.rune.impl.RuneStats;
@@ -24,12 +25,12 @@ public final class RuneSelf extends AbstractRune<RuneSelf> {
 					.build());
 		}
 
-		public static final INodeConfiguration CONFIGURATION_1;
+		public static final RuneConfiguration CONFIGURATION_1;
 
 		private static final OutputPort<IRuneChainUser> OUT_ENTITY;
 
 		static {
-			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.builder();
 
 			OUT_ENTITY = builder.out(RuneTokenDescriptors.ENTITY, IRuneChainUser.class);
 
@@ -37,24 +38,26 @@ public final class RuneSelf extends AbstractRune<RuneSelf> {
 		}
 
 		@Override
-		public List<INodeConfiguration> getConfigurations() {
+		public List<RuneConfiguration> getConfigurations() {
 			return ImmutableList.of(CONFIGURATION_1);
 		}
 
 		@Override
-		public RuneSelf create(INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
-			return new RuneSelf(this, composition, configuration);
+		public RuneSelf create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+			return new RuneSelf(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected void activate(RuneSelf state, RuneExecutionContext context, INodeIO io) {
+		protected RuneEffectModifier.Subject activate(RuneSelf state, RuneExecutionContext context, INodeIO io) {
 			if(state.getConfiguration() == CONFIGURATION_1) {
 				OUT_ENTITY.set(io, context.getUser());
-			} 
+			}
+			
+			return null;
 		}
 	}
 
-	private RuneSelf(Blueprint blueprint, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
-		super(blueprint, composition, configuration);
+	private RuneSelf(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+		super(blueprint, index, composition, configuration);
 	}
 }

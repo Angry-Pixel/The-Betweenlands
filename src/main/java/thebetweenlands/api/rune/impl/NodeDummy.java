@@ -18,7 +18,7 @@ public final class NodeDummy implements INode<NodeDummy, RuneExecutionContext> {
 		public static final INodeConfiguration CONFIGURATION;
 
 		static {
-			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.builder();
 			CONFIGURATION = builder.build();
 		}
 
@@ -30,8 +30,8 @@ public final class NodeDummy implements INode<NodeDummy, RuneExecutionContext> {
 		}
 
 		@Override
-		public NodeDummy create(INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
-			return new NodeDummy(this, composition, configuration);
+		public NodeDummy create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+			return new NodeDummy(this, index, composition, configuration);
 		}
 
 		@Override
@@ -53,11 +53,13 @@ public final class NodeDummy implements INode<NodeDummy, RuneExecutionContext> {
 	private final Blueprint blueprint;
 	private final INodeComposition<RuneExecutionContext> composition;
 	private final INodeConfiguration configuration;
+	private final int index;
 
-	private NodeDummy(Blueprint blueprint, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+	private NodeDummy(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
 		this.blueprint = blueprint;
 		this.composition = composition;
 		this.configuration = configuration;
+		this.index = index;
 	}
 
 	@Override
@@ -73,5 +75,10 @@ public final class NodeDummy implements INode<NodeDummy, RuneExecutionContext> {
 	@Override
 	public INodeComposition<RuneExecutionContext> getComposition() {
 		return this.composition;
+	}
+
+	@Override
+	public int getIndex() {
+		return this.index;
 	}
 }
