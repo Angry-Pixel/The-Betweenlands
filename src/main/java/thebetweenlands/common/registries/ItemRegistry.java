@@ -341,7 +341,7 @@ public class ItemRegistry {
     public static final Item CHIROBARB_ERUPTER = new ItemChirobarbErupter(false);
     public static final Item CHIROBARB_SHOCK_ERUPTER = new ItemChirobarbErupter(true);
     // TODO Re-enable when testing. Too early W.I.P. dev spoilers are getting on my nerves :P
-    public static final Item FISHING_ROD = new ItemBLFishingRod();
+   // public static final Item FISHING_ROD = new ItemBLFishingRod();
 
     //BUCKETS
     public static final ItemBLBucket BL_BUCKET = new ItemBLBucket();
