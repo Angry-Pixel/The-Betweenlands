@@ -29,23 +29,6 @@ public class ItemBLFishingRod extends Item {
 		this.setMaxDamage(64);
 		this.setMaxStackSize(1);
 		this.setCreativeTab(CreativeTabs.TOOLS);
-		this.addPropertyOverride(new ResourceLocation("cast"), new IItemPropertyGetter() {
-			@SideOnly(Side.CLIENT)
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-				if (entityIn == null) {
-					return 0.0F;
-				} else {
-					boolean flag = entityIn.getHeldItemMainhand() == stack;
-					boolean flag1 = entityIn.getHeldItemOffhand() == stack;
-
-					if (entityIn.getHeldItemMainhand().getItem() instanceof ItemBLFishingRod) {
-						flag1 = false;
-					}
-
-					return (flag || flag1) && entityIn instanceof EntityPlayer && fishEntity != null ? 1.0F : 0.0F;
-				}
-			}
-		});
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -75,18 +58,6 @@ public class ItemBLFishingRod extends Item {
 
 			if (!world.isRemote) {
 				EntityBLFishHook entityfishhook = new EntityBLFishHook(world, playerIn);
-				int j = EnchantmentHelper.getFishingSpeedBonus(stack);
-
-				if (j > 0) {
-					entityfishhook.setLureSpeed(j);
-				}
-
-				int k = EnchantmentHelper.getFishingLuckBonus(stack);
-
-				if (k > 0) {
-					entityfishhook.setLuck(k);
-				}
-
 				world.spawnEntity(entityfishhook);
 				fishEntity = entityfishhook; //shit
 			}

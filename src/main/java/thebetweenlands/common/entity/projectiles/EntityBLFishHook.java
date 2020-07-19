@@ -124,16 +124,6 @@ public class EntityBLFishHook extends Entity {
         super.notifyDataManagerChange(key);
     }
 
-    public void setLureSpeed(int p_191516_1_)
-    {
-        lureSpeed = p_191516_1_;
-    }
-
-    public void setLuck(int p_191517_1_)
-    {
-        luck = p_191517_1_;
-    }
-
     private void shoot()
     {
         float f = getAngler().prevRotationPitch + (getAngler().rotationPitch - getAngler().prevRotationPitch);

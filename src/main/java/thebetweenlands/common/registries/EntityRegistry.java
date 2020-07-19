@@ -233,8 +233,8 @@ public class EntityRegistry {
 		registerEntity(EntityGreeblingCorpse.class, "greebling_corpse", 80, 20, false);
 		registerEntity(EntityFishBait.class, "fish_bait_item");
 		// TODO Re-enable when testing. Too early W.I.P. dev spoilers are getting on my nerves :P
-		//registerEntity(EntityAnadia.class, "anadia", 0x243B0B, 0x00FFFF);
-		// registerEntity(EntityBLFishHook.class, "betweenlands_fish_hook");
+		registerEntity(EntityAnadia.class, "anadia", 0x243B0B, 0x00FFFF);
+		registerEntity(EntityBLFishHook.class, "betweenlands_fish_hook");
 	}
 
 	private static int id = 0;
