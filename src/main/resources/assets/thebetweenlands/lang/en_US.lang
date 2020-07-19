@@ -1398,6 +1398,20 @@ entity.thebetweenlands.draeton_upgrade_crafting.name=Draeton Crafting
 entity.thebetweenlands.anadia.name=Anadia
 entity.thebetweenlands.fish_bait_item.name=Fish Bait
 
+#Fish Parts
+entity.thebetweenlands.anadia_body_0=Skittish
+entity.thebetweenlands.anadia_body_1=Stubby
+entity.thebetweenlands.anadia_body_2=Slender
+
+entity.thebetweenlands.anadia_tail_0=Cliptail
+entity.thebetweenlands.anadia_tail_1=Fantail
+entity.thebetweenlands.anadia_tail_2=Longtail
+
+entity.thebetweenlands.anadia_head_0=Grazer
+entity.thebetweenlands.anadia_head_1=Thumphead
+entity.thebetweenlands.anadia_head_2=Prowler
+
+
 # Equipment
 equipment.menu.equip=Equip %s
 equipment.menu.unequip=Unequip %s

@@ -41,6 +41,7 @@ import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.EntityFishBait;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.util.TranslationHelper;
 
 public class EntityAnadia extends EntityCreature implements IEntityBL {
 	private static final DataParameter<Float> FISH_SIZE = EntityDataManager.<Float>createKey(EntityAnadia.class, DataSerializers.FLOAT);
@@ -138,6 +139,14 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
     private void setHungerCooldown(int count) {
         dataManager.set(HUNGER_COOLDOWN, count);
+    }
+ 
+	@Override
+    public String getName() {
+		String body = TranslationHelper.translateToLocal("entity.thebetweenlands.anadia_body" + "_" + EnumAnadiaBodyParts.values()[getBodyType()].ordinal());
+		String tail = TranslationHelper.translateToLocal("entity.thebetweenlands.anadia_tail" + "_" + EnumAnadiaTailParts.values()[getTailType()].ordinal());
+		String head = TranslationHelper.translateToLocal("entity.thebetweenlands.anadia_head" + "_" + EnumAnadiaHeadParts.values()[getHeadType()].ordinal());
+		return body + " " + tail + " " + head;
     }
 
 	@Override
@@ -281,7 +290,6 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		super.onLivingUpdate();
 	}
 
-	// TODO make it work of the speed modifiers properly
 	@Override
 	public void onUpdate() {
 		if (getEntityWorld().isRemote)
