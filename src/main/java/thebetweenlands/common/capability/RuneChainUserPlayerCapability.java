@@ -1,7 +1,11 @@
 package thebetweenlands.common.capability;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.function.Consumer;
+
+import javax.annotation.Nullable;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -16,13 +20,20 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IRuneChainUserCapability;
+import thebetweenlands.api.rune.IRuneChainData;
 import thebetweenlands.api.rune.IRuneChainUser;
 import thebetweenlands.api.rune.impl.RuneChainComposition;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.base.EntityCapability;
+import thebetweenlands.common.capability.item.RuneChainItemCapability;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.network.clientbound.MessagePlayerRuneChainAdd;
 import thebetweenlands.common.network.clientbound.MessagePlayerRuneChainPacket;
+import thebetweenlands.common.network.clientbound.MessagePlayerRuneChainRemove;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class RuneChainUserPlayerCapability extends EntityCapability<RuneChainUserPlayerCapability, IRuneChainUserCapability, EntityPlayer> implements IRuneChainUserCapability {
@@ -113,11 +124,17 @@ public class RuneChainUserPlayerCapability extends EntityCapability<RuneChainUse
 			}
 
 			@Override
-			public void sendPacket(RuneChainComposition runeChain, Consumer<PacketBuffer> serializer) {
-				if(player instanceof EntityPlayerMP) {
-					RuneChainEntry entry = RuneChainUserPlayerCapability.this.entryByObject.get(runeChain);
-					if(entry != null) {
-						TheBetweenlands.networkWrapper.sendTo(new MessagePlayerRuneChainPacket(player, entry.id, serializer), (EntityPlayerMP) player);
+			public void sendPacket(RuneChainComposition runeChain, Consumer<PacketBuffer> serializer, @Nullable TargetPoint target) {
+				RuneChainEntry entry = RuneChainUserPlayerCapability.this.entryByObject.get(runeChain);
+				if(entry != null) {
+					if(target != null) {
+						TheBetweenlands.networkWrapper.sendToAllTracking(new MessagePlayerRuneChainPacket(player, entry.id, serializer), target);
+					} else {
+						MessagePlayerRuneChainPacket message = new MessagePlayerRuneChainPacket(player, entry.id, serializer);
+						TheBetweenlands.networkWrapper.sendToAllTracking(message, player);
+						if(player instanceof EntityPlayerMP) {
+							TheBetweenlands.networkWrapper.sendTo(message, (EntityPlayerMP) player);
+						}
 					}
 				}
 			}
@@ -130,17 +147,38 @@ public class RuneChainUserPlayerCapability extends EntityCapability<RuneChainUse
 	}
 
 	@Override
-	public int addRuneChain(RuneChainComposition chain) {
+	public int addRuneChain(IRuneChainData data) {
+		RuneChainComposition chain = RuneChainItemCapability.createBlueprint(data).create();
+
 		int id = nextRuneChainID++;
 		RuneChainEntry entry = new RuneChainEntry(id, chain);
 		this.entryById.put(id, entry);
 		this.entryByObject.put(chain, entry);
+
+		if(!this.getEntity().world.isRemote) {
+			//TODO Also in start tracking
+			MessagePlayerRuneChainAdd message = new MessagePlayerRuneChainAdd(this.getEntity(), id, data);
+			TheBetweenlands.networkWrapper.sendToAllTracking(message, this.getEntity());
+			if(this.getEntity() instanceof EntityPlayerMP) {
+				TheBetweenlands.networkWrapper.sendTo(message, (EntityPlayerMP) this.getEntity());
+			}
+		}
+
 		return id;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addRuneChain(RuneChainComposition chain, int id) {
+		RuneChainEntry entry = new RuneChainEntry(id, chain);
+		this.entryById.put(id, entry);
+		this.entryByObject.put(chain, entry);
 	}
 
 	@Override
 	public boolean setUpdating(int id, boolean ticking, boolean removeOnFinish) {
 		RuneChainEntry entry = this.entryById.get(id);
+
 		if(entry != null) {
 			if(ticking) {
 				this.tickingRuneChains.put(id, entry.runeChain);
@@ -149,20 +187,34 @@ public class RuneChainUserPlayerCapability extends EntityCapability<RuneChainUse
 				this.tickingRuneChains.remove(id);
 				entry.ticking = false;
 			}
+
 			entry.removeOnFinish = entry.removeOnFinish;
+
 			return true;
 		}
+
 		return false;
 	}
 
 	@Override
 	public RuneChainComposition removeRuneChain(int id) {
 		this.tickingRuneChains.remove(id);
+
 		RuneChainEntry entry = this.entryById.remove(id);
+
 		if(entry != null) {
+			if(!this.getEntity().world.isRemote) {
+				MessagePlayerRuneChainRemove message = new MessagePlayerRuneChainRemove(this.getEntity(), id);
+				TheBetweenlands.networkWrapper.sendToAllTracking(message, this.getEntity());
+				if(this.getEntity() instanceof EntityPlayerMP) {
+					TheBetweenlands.networkWrapper.sendTo(message, (EntityPlayerMP) this.getEntity());
+				}
+			}
+
 			this.entryByObject.remove(entry.runeChain);
 			return entry.runeChain;
 		}
+
 		return null;
 	}
 
@@ -174,18 +226,32 @@ public class RuneChainUserPlayerCapability extends EntityCapability<RuneChainUse
 
 	@Override
 	public void update() {
-		Iterator<RuneChainComposition> chainIT = this.tickingRuneChains.values().iterator();
-		while(chainIT.hasNext()) {
-			RuneChainComposition chain = chainIT.next();
-			if(chain.isRunning()) {
-				chain.update();
-			} else {
-				chainIT.remove();
+		if(!this.getEntity().world.isRemote) {
+			List<RuneChainComposition> finished = null;
 
-				RuneChainEntry entry = this.entryByObject.remove(chain);
-				if(entry != null) {
-					this.entryById.remove(entry.id);
+			Iterator<RuneChainComposition> chainIT = this.tickingRuneChains.values().iterator();
+			while(chainIT.hasNext()) {
+				RuneChainComposition chain = chainIT.next();
+				if(chain.isRunning()) {
+					chain.update();
+					chain.updateRuneEffectModifiers(this.getUser());
+				} else {
+					if(finished == null) {
+						finished = new ArrayList<>();
+					}
+					finished.add(chain);
 				}
+			}
+
+			if(finished != null) {
+				for(RuneChainComposition chain : finished) {
+					this.removeRuneChain(this.entryByObject.get(chain).id);
+				}
+			}
+		} else {
+			//Update rune effect modifiers
+			for(RuneChainComposition chain : this.entryByObject.keySet()) {
+				chain.updateRuneEffectModifiers(this.getUser());
 			}
 		}
 	}

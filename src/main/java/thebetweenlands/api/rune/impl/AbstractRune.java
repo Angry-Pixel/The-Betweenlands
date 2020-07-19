@@ -55,6 +55,7 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 				RuneEffectModifier.Subject subject = this.activate(state, context, io);
 
 				//Activate modifier
+				state.initRuneEffectModifier();
 				RuneEffectModifier effect = state.getRuneEffectModifier();
 				if(effect != null) {
 					effect.activate(context.getUser(), subject);
@@ -63,17 +64,23 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 					//TODO Batch activations together
 					PacketBuffer inputsBuffer = new PacketBuffer(Unpooled.buffer());
 					state.getConfiguration().serialize(context.getUser(), io, inputsBuffer);
-					
+
 					PacketBuffer subjectBuffer = new PacketBuffer(Unpooled.buffer());
 					this.writeRuneEffectModifierSubject(subject, subjectBuffer);
-					
+
 					context.sendPacket(buffer -> {
 						buffer.writeVarInt(0);
-						buffer.writeVarInt(inputsBuffer.writerIndex());
-						buffer.writeBytes(inputsBuffer, inputsBuffer.writerIndex());
-						buffer.writeVarInt(subjectBuffer.writerIndex());
-						buffer.writeBytes(subjectBuffer, subjectBuffer.writerIndex());
-					});
+						synchronized(inputsBuffer) {
+							buffer.writeVarInt(inputsBuffer.writerIndex());
+							buffer.writeBytes(inputsBuffer, inputsBuffer.writerIndex());
+							inputsBuffer.resetReaderIndex();
+						}
+						synchronized(subjectBuffer) {
+							buffer.writeVarInt(subjectBuffer.writerIndex());
+							buffer.writeBytes(subjectBuffer, subjectBuffer.writerIndex());
+							subjectBuffer.resetReaderIndex();
+						}
+					}, null);
 				}
 
 				// On last parallel rune activation on last branch drain any left over fuel to be consumed
@@ -105,7 +112,7 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 				//Sync termination over network
 				context.sendPacket(buffer -> {
 					buffer.writeVarInt(1);
-				});
+				}, null);
 			}
 		}
 
@@ -181,29 +188,48 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 			return null;
 		}
 
-		public void writeRuneEffectModifierSubject(@Nullable RuneEffectModifier.Subject subject, PacketBuffer buffer) {
+		/**
+		 * Writes a rune effect modifier subject to a packet to be synced over the network
+		 * @param subject subject to write to the packet
+		 * @param buffer packet buffer to write to
+		 */
+		protected void writeRuneEffectModifierSubject(@Nullable RuneEffectModifier.Subject subject, PacketBuffer buffer) {
 			buffer.writeBoolean(subject != null);
 
 			if(subject != null) {
-				buffer.writeBoolean(subject.position != null);
-				if(subject.position != null) {
-					InputSerializers.VECTOR.write(subject.position, buffer);
+				Entity entity = subject.getEntity();
+
+				Vec3d vector = subject.getPosition();
+				buffer.writeBoolean(entity == null && vector != null);
+				if(entity == null && vector != null) {
+					InputSerializers.VECTOR.write(vector, buffer);
 				}
 
-				buffer.writeBoolean(subject.block != null);
-				if(subject.block != null) {
-					InputSerializers.BLOCK.write(subject.block, buffer);
+				BlockPos block = subject.getBlock();
+				buffer.writeBoolean(block != null);
+				if(block != null) {
+					InputSerializers.BLOCK.write(block, buffer);
 				}
 
-				buffer.writeBoolean(subject.entity != null);
-				if(subject.entity != null) {
-					InputSerializers.ENTITY.write(subject.entity, buffer);
+				buffer.writeBoolean(entity != null);
+				if(entity != null) {
+					InputSerializers.ENTITY.write(entity, buffer);
 				}
 			}
 		}
 
+		/**
+		 * Reads and creates the rune effect modifier subject from a packet synced over the network
+		 * @param state node instance created by {@link #create(INodeComposition, INodeConfiguration)}
+		 * @param user user that activated the rune chain
+		 * @param input node input that allows reading input values that were present when the sender's {@link AbstractRune.Blueprint#activate(AbstractRune, RuneExecutionContext, thebetweenlands.api.rune.INodeBlueprint.INodeIO)} was called.
+		 * Values may not always be serialized over the network and could thus be null even though they were present on the sender's side.
+		 * @param buffer packet buffer to read from
+		 * @return
+		 * @throws IOException
+		 */
 		@Nullable
-		public RuneEffectModifier.Subject readRuneEffectModifierSubject(T state, IRuneChainUser user, INodeInput input, PacketBuffer buffer) throws IOException {
+		protected RuneEffectModifier.Subject readRuneEffectModifierSubject(T state, IRuneChainUser user, INodeInput input, PacketBuffer buffer) throws IOException {
 			if(buffer.readBoolean()) {
 				Vec3d position = null;
 				if(buffer.readBoolean()) {
@@ -226,29 +252,37 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 			return null;
 		}
 
+		/**
+		 * Processes a packet sent through {@link RuneExecutionContext#sendPacket(java.util.function.Consumer, net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint)}.
+		 * @param state node instance created by {@link #create(INodeComposition, INodeConfiguration)}
+		 * @param user user that activated the rune chain
+		 * @param buffer packet buffer to read from
+		 * @throws IOException
+		 */
 		public void processPacket(T state, IRuneChainUser user, PacketBuffer buffer) throws IOException {
 			switch(buffer.readVarInt()) {
-			
+
 			case 0: //Activate effect
 				PacketBuffer inputsBuffer = new PacketBuffer(Unpooled.buffer());
 				buffer.readBytes(inputsBuffer, buffer.readVarInt());
-				
+
 				PacketBuffer subjectBuffer = new PacketBuffer(Unpooled.buffer());
 				buffer.readBytes(subjectBuffer, buffer.readVarInt());
-				
+
 				List<Object> inputs = state.getConfiguration().deserialize(user, inputsBuffer);
-				
+
+				state.initRuneEffectModifier();
 				state.getRuneEffectModifier().activate(user, this.readRuneEffectModifierSubject(state, user, new INodeInput() {
 					@Override
 					public Object get(int input) {
 						return inputs.get(input);
 					}
 				}, subjectBuffer));
-				
+
 				break;
 			case 1: //Terminate effect
 				//TODO Terminate
-				
+
 			}
 		}
 	}
@@ -291,11 +325,9 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 	}
 
 	/**
-	 * Returns the rune effect modifier to be applied to this rune
-	 * @return
+	 * Initializes the rune effect modifier applied to this rune. See {@link #getRuneEffectModifier()}.
 	 */
-	@Nullable
-	public RuneEffectModifier getRuneEffectModifier() {
+	protected void initRuneEffectModifier() {
 		if(!this.runeEffectModifierSet) {
 			this.runeEffectModifierSet = true;
 
@@ -344,9 +376,16 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 			if(!effects.isEmpty()) {
 				this.runeEffectModifier = new RuneEffectModifier() {
 					@Override
-					public void activate(IRuneChainUser user, RuneEffectModifier.Subject context) {
+					public void activate(IRuneChainUser user, RuneEffectModifier.Subject subject) {
 						for(RuneEffectModifier effect : effects) {
-							effect.activate(user, context);
+							effect.activate(user, subject);
+						}
+					}
+
+					@Override
+					public void update(IRuneChainUser user) {
+						for(RuneEffectModifier effect : effects) {
+							effect.update(user);
 						}
 					}
 
@@ -408,7 +447,15 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 				};
 			}
 		}
-
+	}
+	
+	/**
+	 * Returns the rune effect modifier to be applied to this rune. If multiple rune effect modifiers are available they are combined into
+	 * one compound rune effect modifier.
+	 * @return
+	 */
+	@Nullable
+	public RuneEffectModifier getRuneEffectModifier() {
 		return this.runeEffectModifier;
 	}
 }

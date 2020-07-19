@@ -1,5 +1,6 @@
 package thebetweenlands.common.network;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +80,7 @@ public abstract class MessageEntity extends MessageBase {
 	}
 
 	@Override
-	public void deserialize(PacketBuffer buf) {
+	public void deserialize(PacketBuffer buf) throws IOException {
 		this.entityIdentifiers.clear();
 		int entities = buf.readByte();
 		for(int i = 0; i < entities; i++) {

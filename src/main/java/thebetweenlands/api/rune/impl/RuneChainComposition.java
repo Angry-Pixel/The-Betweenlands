@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import thebetweenlands.api.aspect.AspectContainer;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.rune.INode;
@@ -658,11 +659,16 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 			return RuneChainComposition.this.currentNode;
 		}
 
-		public void sendPacket(Consumer<PacketBuffer> serializer) {
+		/**
+		 * Sends a packet over the network. Once arrived {@link AbstractRune.Blueprint#processPacket(AbstractRune, IRuneChainUser, PacketBuffer)} is called with the packet's data.
+		 * @param serializer serializer that writes the data to a packet buffer. This may be called off main-thread!
+		 * @param target targets to receive this packet. If null all players tracking the rune chain's user receive the packet.
+		 */
+		public void sendPacket(Consumer<PacketBuffer> serializer, @Nullable TargetPoint target) {
 			this.getUser().sendPacket(RuneChainComposition.this, buffer -> {
 				buffer.writeVarInt(this.getRune());
 				serializer.accept(buffer);
-			});
+			}, target);
 		}
 	}
 
@@ -1002,6 +1008,21 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 		return this.delay >= 1.0F;
 	}
 
+	@SuppressWarnings({ "rawtypes" })
+	public void updateRuneEffectModifiers(IRuneChainUser user) {
+		for(int i = 0; i < this.getBlueprint().getNodeBlueprints(); i++) {
+			INode<?, RuneExecutionContext> node = this.getNode(i);
+
+			//TODO
+			if(node instanceof AbstractRune) {
+				RuneEffectModifier modifier = ((AbstractRune) node).getRuneEffectModifier();
+				if(modifier != null) {
+					modifier.update(user);
+				}
+			}
+		}
+	}
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void processPacket(IRuneChainUser user, PacketBuffer buffer) throws IOException {
 		int runeIndex = buffer.readVarInt();
@@ -1010,6 +1031,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 			INode<?, RuneExecutionContext> node = this.getNode(runeIndex);
 			INodeBlueprint<INode<?, RuneExecutionContext>, RuneExecutionContext> blueprint = (INodeBlueprint<INode<?, RuneExecutionContext>, RuneExecutionContext>) node.getBlueprint();
 
+			//TODO
 			if(blueprint instanceof AbstractRune.Blueprint) {
 				AbstractRune rune = (AbstractRune) node;
 				AbstractRune.Blueprint runeBlueprint = (AbstractRune.Blueprint) blueprint;

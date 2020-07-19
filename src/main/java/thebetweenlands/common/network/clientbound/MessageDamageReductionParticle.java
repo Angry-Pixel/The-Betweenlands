@@ -1,5 +1,7 @@
 package thebetweenlands.common.network.clientbound;
 
+import java.io.IOException;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.Vec3d;
@@ -35,7 +37,7 @@ public class MessageDamageReductionParticle extends MessageEntity {
 	}
 
 	@Override
-	public void deserialize(PacketBuffer buf) {
+	public void deserialize(PacketBuffer buf) throws IOException {
 		super.deserialize(buf);
 
 		this.offset = new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());

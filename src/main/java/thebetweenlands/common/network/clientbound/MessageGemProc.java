@@ -32,7 +32,7 @@ public class MessageGemProc extends MessageEntity {
 	}
 
 	@Override
-	public void deserialize(PacketBuffer buf) {
+	public void deserialize(PacketBuffer buf) throws IOException {
 		super.deserialize(buf);
 		try {
 			this.gem = CircleGem.readFromNBT(buf.readCompoundTag());

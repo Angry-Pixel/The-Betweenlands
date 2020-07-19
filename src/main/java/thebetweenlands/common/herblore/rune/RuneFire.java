@@ -1,25 +1,24 @@
 package thebetweenlands.common.herblore.rune;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.IRuneChainUser;
 import thebetweenlands.api.rune.impl.AbstractRune;
 import thebetweenlands.api.rune.impl.InputSerializers;
-import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneEffectModifier;
-import thebetweenlands.api.rune.impl.RuneConfiguration.InputPort;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
+import thebetweenlands.api.rune.impl.RuneConfiguration;
+import thebetweenlands.api.rune.impl.RuneConfiguration.InputPort;
+import thebetweenlands.api.rune.impl.RuneEffectModifier;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.common.registries.AspectRegistry;
@@ -79,37 +78,34 @@ public final class RuneFire extends AbstractRune<RuneFire> {
 
 			return null;
 		}
-		
+
 		@Override
 		protected RuneEffectModifier createRuneEffectModifier(AbstractRune<?> target, int output, int input) {
 			return new RuneEffectModifier() {
+				private List<Entity> targets = new ArrayList<>();
+
 				@Override
-				public void activate(IRuneChainUser user, RuneEffectModifier.Subject subject) {
-					if(subject != null && subject.entity != null) {
-						//TODO Temporary for testing
-						Entity flames = new Entity(user.getWorld()) {
-							@Override
-							protected void entityInit() {
-							}
+				public void activate(IRuneChainUser user, Subject subject) {
+					super.activate(user, subject);
 
-							@Override
-							protected void readEntityFromNBT(NBTTagCompound compound) {
-							}
+					if(subject != null && subject.getEntity() != null) {
+						this.targets.add(subject.getEntity());
+					}
+				}
 
-							@Override
-							protected void writeEntityToNBT(NBTTagCompound compound) {
+				@Override
+				public void update(IRuneChainUser user) {
+					if(user.getWorld().isRemote) {
+						Iterator<Entity> targetsIt = this.targets.iterator();
+						while(targetsIt.hasNext()) {
+							Entity target = targetsIt.next();
+
+							if(target.isEntityAlive()) {
+								target.world.spawnParticle(EnumParticleTypes.FLAME, target.posX, target.posY, target.posZ, 0, 0, 0);
+							} else {
+								targetsIt.remove();
 							}
-							
-							@Override
-							public void onUpdate() {
-								super.onUpdate();
-								this.world.spawnParticle(EnumParticleTypes.FLAME, subject.entity.posX, subject.entity.posY, subject.entity.posZ, 0, 0, 0);
-							}
-						};
-						
-						flames.setLocationAndAngles(subject.entity.posX, subject.entity.posY - 20, subject.entity.posZ, 0, 0);
-						
-						user.getWorld().spawnEntity(flames);
+						}
 					}
 				}
 			};

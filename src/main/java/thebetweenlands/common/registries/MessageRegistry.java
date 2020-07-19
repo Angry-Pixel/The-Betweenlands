@@ -24,7 +24,9 @@ import thebetweenlands.common.network.clientbound.MessageGemProc;
 import thebetweenlands.common.network.clientbound.MessageLivingWeedwoodShieldSpit;
 import thebetweenlands.common.network.clientbound.MessageMireSnailEggHatching;
 import thebetweenlands.common.network.clientbound.MessagePlayEntityIdle;
+import thebetweenlands.common.network.clientbound.MessagePlayerRuneChainAdd;
 import thebetweenlands.common.network.clientbound.MessagePlayerRuneChainPacket;
+import thebetweenlands.common.network.clientbound.MessagePlayerRuneChainRemove;
 import thebetweenlands.common.network.clientbound.MessagePowerRingParticles;
 import thebetweenlands.common.network.clientbound.MessageRemoveLocalStorage;
 import thebetweenlands.common.network.clientbound.MessageRiftSound;
@@ -99,6 +101,8 @@ public class MessageRegistry {
 		registerMessage(MessageSyncDraetonLeakages.class, Side.CLIENT);
 		registerMessage(MessageShockArrowHit.class, Side.CLIENT);
 		registerMessage(MessagePlayerRuneChainPacket.class, Side.CLIENT);
+		registerMessage(MessagePlayerRuneChainAdd.class, Side.CLIENT);
+		registerMessage(MessagePlayerRuneChainRemove.class, Side.CLIENT);
 		
 		registerMessage(MessageEquipItem.class, Side.SERVER);
 		registerMessage(MessageOpenPouch.class, Side.SERVER);

@@ -35,7 +35,7 @@ public class MessageSyncEntityCapabilities extends MessageEntity {
 	}
 
 	@Override
-	public void deserialize(PacketBuffer buf) {
+	public void deserialize(PacketBuffer buf) throws IOException {
 		super.deserialize(buf);
 		this.capability = new ResourceLocation(buf.readString(128));
 		try {

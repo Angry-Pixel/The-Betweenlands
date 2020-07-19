@@ -11,6 +11,7 @@ import thebetweenlands.api.aspect.AspectContainer;
 import thebetweenlands.api.capability.IRuneChainCapability;
 import thebetweenlands.api.capability.IRuneChainUserCapability;
 import thebetweenlands.api.item.IRenamableItem;
+import thebetweenlands.api.rune.IRuneChainData;
 import thebetweenlands.api.rune.impl.RuneChainComposition;
 import thebetweenlands.api.rune.impl.RuneChainComposition.IAspectBuffer;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -41,22 +42,12 @@ public class ItemRuneChain extends Item implements IRenamableItem {
 				if(stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null)) {
 					IRuneChainCapability chainCap = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null);
 
-					RuneChainComposition.Blueprint bp = chainCap.getBlueprint();
+					IRuneChainData data = chainCap.getData();
 
-					if(bp != null) {
-						/*RuneChainComposition.Blueprint bp = new RuneChainComposition.Blueprint();
+					if(data != null) {
+						int id = userCap.addRuneChain(data);
 
-						bp.addNodeBlueprint(new RuneMarkArea.Blueprint());
-						//bp.addNodeBlueprint(new NodeDestroyBlocks.Blueprint());
-						bp.addNodeBlueprint(new RuneSelectGrass.Blueprint());
-						bp.addNodeBlueprint(new RuneFire.Blueprint());
-
-						System.out.println("Link mark -> grass 1: " + bp.link(1, 0, 0, 0));
-						System.out.println("Link mark -> grass 2: " + bp.link(1, 1, 0, 1));
-						System.out.println("Link mark -> destroy 1: " + bp.link(2, 0, 0, 0));
-						//System.out.println("Link mark -> destroy 2: " + bp.link(2, 1, 0, 1));*/
-
-						final RuneChainComposition composition = bp.create();
+						RuneChainComposition composition = userCap.getRuneChain(id);
 
 						final AspectContainer aspects = new AspectContainer();
 
@@ -69,7 +60,7 @@ public class ItemRuneChain extends Item implements IRenamableItem {
 
 						composition.run(userCap.getUser());
 
-						userCap.setUpdating(userCap.addRuneChain(composition), true, true);
+						userCap.setUpdating(id, true, true);
 					}
 				}
 			}

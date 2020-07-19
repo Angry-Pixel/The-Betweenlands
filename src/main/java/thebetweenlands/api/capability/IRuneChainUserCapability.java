@@ -3,6 +3,9 @@ package thebetweenlands.api.capability;
 import javax.annotation.Nullable;
 
 import net.minecraft.util.ITickable;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.rune.IRuneChainData;
 import thebetweenlands.api.rune.IRuneChainUser;
 import thebetweenlands.api.rune.impl.RuneChainComposition;
 
@@ -15,11 +18,19 @@ public interface IRuneChainUserCapability extends ITickable {
 
 	/**
 	 * Adds a rune chain instance to this capability and assigns it a unique ID
-	 * @param chain Rune chain instance to add to this capability
+	 * @param chain Data to create the rune chain from
 	 * @return Unique ID assigned to the rune chain instance
 	 */
-	public int addRuneChain(RuneChainComposition chain);
+	public int addRuneChain(IRuneChainData data);
 
+	/**
+	 * Adds a rune chain instance synced over the network to this capability
+	 * @param chain Rune chain instance to add to this capability
+	 * @param id Unique ID to be assigned to the rune chain instance
+	 */
+	@SideOnly(Side.CLIENT)
+	public void addRuneChain(RuneChainComposition chain, int id);
+	
 	/**
 	 * Sets whether the rune chain should automatically be updated by the capability holder
 	 * @param id ID that was assigned to the rune chain instance

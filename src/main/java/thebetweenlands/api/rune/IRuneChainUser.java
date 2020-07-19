@@ -9,6 +9,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import thebetweenlands.api.rune.impl.AbstractRune;
 import thebetweenlands.api.rune.impl.RuneChainComposition;
 
 public interface IRuneChainUser {
@@ -64,12 +66,12 @@ public interface IRuneChainUser {
 	 * the rune chain
 	 */
 	public boolean isUsingRuneChain();
-
+	
 	/**
-	 * Sends a packet to be received by the rune chain {@link RuneChainComposition} being used by this user. Once received {@link RuneChainComposition#processPacket(IRuneChainUser, PacketBuffer)} must
-	 * be called from the main thread.
-	 * @param runeChain Rune chain that the packet is being sent from
-	 * @param serializer Serializer that writes the packet data to a {@link PacketBuffer}
+	 * Sends a packet over the network. Once received {@link RuneChainComposition#processPacket(IRuneChainUser, PacketBuffer)} must be called with the packet's data.
+	 * @param runeChain rune chain that the packet is being sent from
+	 * @param serializer serializer that writes the data to a packet buffer. This may be called off main-thread!
+	 * @param target targets to receive this packet. If null all players tracking the rune chain's user receive the packet.
 	 */
-	public void sendPacket(RuneChainComposition runeChain, Consumer<PacketBuffer> serializer);
+	public void sendPacket(RuneChainComposition runeChain, Consumer<PacketBuffer> serializer, @Nullable TargetPoint target);
 }
