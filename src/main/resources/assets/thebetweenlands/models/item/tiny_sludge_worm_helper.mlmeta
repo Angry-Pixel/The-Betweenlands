@@ -1,0 +1,9 @@
+{
+  "source": "thebetweenlands:tiny_sludge_worm_helper",
+  "inherit_overrides": false,
+  "custom": {
+    "map": {
+      "thebetweenlands:tiny_sludge_worm_helper": "thebetweenlands:item/tiny_sludge_worm_helper_item"
+    }
+  }
+}

@@ -5,7 +5,8 @@
     "map": {
       "thebetweenlands:gecko": "thebetweenlands:item/gecko",
       "thebetweenlands:firefly": "thebetweenlands:item/firefly",
-      "thebetweenlands:dragonfly": "thebetweenlands:item/dragonfly"
+      "thebetweenlands:dragonfly": "thebetweenlands:item/dragonfly",
+      "thebetweenlands:mire_snail": "thebetweenlands:item/mire_snail"
     }
   }
 }

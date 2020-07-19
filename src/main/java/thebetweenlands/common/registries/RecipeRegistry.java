@@ -519,7 +519,11 @@ public class RecipeRegistry {
 		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.RING_OF_RECRUITMENT));
 		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.RING_OF_SUMMONING));
 		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.RING_OF_GATHERING));
-		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.GEM_SINGER));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.CRITTER));
+		
+		//Fishing
+		PestleAndMortarRecipe.addRecipe(new ItemStack(ItemRegistry.FISH_BAIT, 4), new ItemStack(ItemRegistry.TINY_SLUDGE_WORM));
+		PestleAndMortarRecipe.addRecipe(new ItemStack(ItemRegistry.FISH_BAIT, 2), new ItemStack(ItemRegistry.TINY_SLUDGE_WORM_HELPER));
 	}
 
 	private static void registerAnimatorRecipes() {

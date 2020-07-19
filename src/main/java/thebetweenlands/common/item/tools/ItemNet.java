@@ -24,6 +24,9 @@ import thebetweenlands.common.entity.mobs.EntityChiromawTame;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityGecko;
+import thebetweenlands.common.entity.mobs.EntityMireSnail;
+import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
+import thebetweenlands.common.entity.mobs.EntityTinySludgeWormHelper;
 import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -44,6 +47,9 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 		register(EntityChiromawHatchling.class, () -> ItemRegistry.CHIROMAW_EGG_LIGHTNING, (p, e) -> !e.getHasHatched() && e.getElectricBoogaloo());
 		register(EntityChiromawTame.class, () -> ItemRegistry.CHIROMAW_TAME, (p, e) -> e.getOwner() == p && !e.getElectricBoogaloo());
 		register(EntityChiromawTame.class, () -> ItemRegistry.CHIROMAW_TAME_LIGHTNING, (p, e) -> e.getOwner() == p && e.getElectricBoogaloo());
+		register(EntityTinySludgeWorm.class, () -> ItemRegistry.TINY_SLUDGE_WORM, (p, e) -> true);
+		register(EntityTinySludgeWormHelper.class, () -> ItemRegistry.TINY_SLUDGE_WORM_HELPER, (p, e) -> true);
+		register(EntityMireSnail.class, () -> ItemRegistry.CRITTER, (p, e) -> true);
 	}
 
 	public ItemNet() {

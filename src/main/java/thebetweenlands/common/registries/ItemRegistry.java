@@ -40,6 +40,8 @@ import thebetweenlands.common.entity.mobs.EntitySludge;
 import thebetweenlands.common.entity.mobs.EntitySmollSludge;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntityTermite;
+import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
+import thebetweenlands.common.entity.mobs.EntityTinySludgeWormHelper;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.ItemAncientArmor;
@@ -417,6 +419,8 @@ public class ItemRegistry {
     public static final Item PYRAD_FLAME = new ItemPyradFlame();
     public static final ItemMob CRITTER = new ItemCritters();
     public static final ItemMob SLUDGE_WORM_EGG_SAC = new ItemMob(16, EntityTinyWormEggSac.class, null);
+    public static final ItemMob TINY_SLUDGE_WORM = new ItemMob(1, EntityTinySludgeWorm.class, null);
+    public static final ItemMob TINY_SLUDGE_WORM_HELPER = new ItemMob(1, EntityTinySludgeWormHelper.class, null);
     public static final ItemMob CHIROMAW_EGG = new ItemChiromawEgg(false);
     public static final ItemMob CHIROMAW_EGG_LIGHTNING = new ItemChiromawEgg(true);
     public static final ItemMob CHIROMAW_TAME = new ItemChiromawTame(false);
