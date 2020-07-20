@@ -85,16 +85,18 @@ public final class RuneFire extends AbstractRune<RuneFire> {
 				private List<Entity> targets = new ArrayList<>();
 
 				@Override
-				public void activate(IRuneChainUser user, Subject subject) {
-					super.activate(user, subject);
+				public boolean activate(AbstractRune<?> rune, IRuneChainUser user, Subject subject) {
+					super.activate(rune, user, subject);
 
 					if(subject != null && subject.getEntity() != null) {
 						this.targets.add(subject.getEntity());
 					}
+
+					return true;
 				}
 
 				@Override
-				public void update(IRuneChainUser user) {
+				public void update() {
 					if(user.getWorld().isRemote) {
 						Iterator<Entity> targetsIt = this.targets.iterator();
 						while(targetsIt.hasNext()) {

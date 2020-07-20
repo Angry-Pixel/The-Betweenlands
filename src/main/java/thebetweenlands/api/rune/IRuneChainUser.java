@@ -10,7 +10,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import thebetweenlands.api.rune.impl.AbstractRune;
 import thebetweenlands.api.rune.impl.RuneChainComposition;
 
 public interface IRuneChainUser {
@@ -60,15 +59,22 @@ public interface IRuneChainUser {
 	public Entity getEntity();
 
 	/**
-	 * Returns whether the rune chain user is currently "using"
-	 * the rune chain (e.g. player holding right-click with a rune chain item)
-	 * @return Whether the rune chain user is currently "using"
-	 * the rune chain
+	 * Returns whether this rune chain user is still active and exists
+	 * @return
 	 */
-	public boolean isUsingRuneChain();
+	public boolean isActive();
 	
 	/**
-	 * Sends a packet over the network. Once received {@link RuneChainComposition#processPacket(IRuneChainUser, PacketBuffer)} must be called with the packet's data.
+	 * Returns whether the rune chain user is currently activating/"using"
+	 * the rune chain (e.g. player holding right-click with a rune chain item)
+	 * @param runeChain rune chain to check for
+	 * @return Whether the rune chain user is currently activating/"using"
+	 * the rune chain
+	 */
+	public boolean isActivatingRuneChain(RuneChainComposition runeChain);
+
+	/**
+	 * Sends a packet over the network. Once received {@link RuneChainComposition#processPacket(IRuneChainUser, PacketBuffer)} is called with the packet's data.
 	 * @param runeChain rune chain that the packet is being sent from
 	 * @param serializer serializer that writes the data to a packet buffer. This may be called off main-thread!
 	 * @param target targets to receive this packet. If null all players tracking the rune chain's user receive the packet.

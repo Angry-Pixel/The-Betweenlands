@@ -1,0 +1,21 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:internal/blank",
+    "custom": {
+      "particle_texture": "thebetweenlands:particle/block/rune_weaving_table_particle"
+    }
+  },
+  "variants": {
+    "facing": {
+      "north": { },
+      "east": { },
+      "south": { },
+      "west": { }
+    },
+    "part": {
+      "main": { },
+      "filler": { }
+    }
+  }
+}

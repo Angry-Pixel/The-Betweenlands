@@ -111,6 +111,11 @@ public class RuneChainUserPlayerCapability extends EntityCapability<RuneChainUse
 			public Entity getEntity() {
 				return player;
 			}
+			
+			@Override
+			public boolean isActive() {
+				return player.isEntityAlive();
+			}
 
 			@Override
 			public IInventory getInventory() {
@@ -118,7 +123,7 @@ public class RuneChainUserPlayerCapability extends EntityCapability<RuneChainUse
 			}
 
 			@Override
-			public boolean isUsingRuneChain() {
+			public boolean isActivatingRuneChain(RuneChainComposition runeChain) {
 				//TODO Implement this
 				return false;
 			}
@@ -234,7 +239,7 @@ public class RuneChainUserPlayerCapability extends EntityCapability<RuneChainUse
 				RuneChainComposition chain = chainIT.next();
 				if(chain.isRunning()) {
 					chain.update();
-					chain.updateRuneEffectModifiers(this.getUser());
+					chain.updateRuneEffectModifiers();
 				} else {
 					if(finished == null) {
 						finished = new ArrayList<>();
@@ -251,7 +256,7 @@ public class RuneChainUserPlayerCapability extends EntityCapability<RuneChainUse
 		} else {
 			//Update rune effect modifiers
 			for(RuneChainComposition chain : this.entryByObject.keySet()) {
-				chain.updateRuneEffectModifiers(this.getUser());
+				chain.updateRuneEffectModifiers();
 			}
 		}
 	}

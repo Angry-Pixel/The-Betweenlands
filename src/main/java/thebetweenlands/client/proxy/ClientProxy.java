@@ -216,6 +216,8 @@ import thebetweenlands.client.render.tile.RenderPestleAndMortar;
 import thebetweenlands.client.render.tile.RenderPossessedBlock;
 import thebetweenlands.client.render.tile.RenderPurifier;
 import thebetweenlands.client.render.tile.RenderRepeller;
+import thebetweenlands.client.render.tile.RenderRuneWeavingTable;
+import thebetweenlands.client.render.tile.RenderRuneWeavingTableFiller;
 import thebetweenlands.client.render.tile.RenderSpawnerBetweenlands;
 import thebetweenlands.client.render.tile.RenderSpikeTrap;
 import thebetweenlands.client.render.tile.RenderTarLootPot1;
@@ -378,6 +380,7 @@ import thebetweenlands.common.tile.TileEntityPuffshroom;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityRepeller;
 import thebetweenlands.common.tile.TileEntityRuneWeavingTable;
+import thebetweenlands.common.tile.TileEntityRuneWeavingTableFiller;
 import thebetweenlands.common.tile.TileEntitySpikeTrap;
 import thebetweenlands.common.tile.TileEntityTarLootPot1;
 import thebetweenlands.common.tile.TileEntityTarLootPot2;
@@ -770,6 +773,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCenser.class, new RenderCenser());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBarrel.class, new RenderBarrel());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecayPitGroundChain.class, new RenderDecayPitGroundChain());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRuneWeavingTable.class, new RenderRuneWeavingTable());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRuneWeavingTableFiller.class, new RenderRuneWeavingTableFiller());
 		
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
@@ -836,6 +841,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		Item.getItemFromBlock(BlockRegistry.WEEDWOOD_CHEST).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityChestBetweenlands.class));
 		Item.getItemFromBlock(BlockRegistry.CENSER).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityCenser.class));
 		Item.getItemFromBlock(BlockRegistry.WEEDWOOD_BARREL).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityBarrel.class));
+		Item.getItemFromBlock(BlockRegistry.RUNE_WEAVING_TABLE).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityRuneWeavingTable.class));
 		
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {

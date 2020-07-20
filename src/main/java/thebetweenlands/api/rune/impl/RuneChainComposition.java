@@ -1008,16 +1008,15 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 		return this.delay >= 1.0F;
 	}
 
-	@SuppressWarnings({ "rawtypes" })
-	public void updateRuneEffectModifiers(IRuneChainUser user) {
+	public void updateRuneEffectModifiers() {
 		for(int i = 0; i < this.getBlueprint().getNodeBlueprints(); i++) {
 			INode<?, RuneExecutionContext> node = this.getNode(i);
 
 			//TODO
 			if(node instanceof AbstractRune) {
-				RuneEffectModifier modifier = ((AbstractRune) node).getRuneEffectModifier();
+				RuneEffectModifier modifier = ((AbstractRune<?>) node).getRuneEffectModifier();
 				if(modifier != null) {
-					modifier.update(user);
+					modifier.update();
 				}
 			}
 		}

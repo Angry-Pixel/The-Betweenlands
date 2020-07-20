@@ -65,6 +65,8 @@ public class RuneEffectModifier {
 		}
 	}
 
+	protected AbstractRune<?> rune;
+
 	protected IRuneChainUser user;
 
 	@Nullable
@@ -73,19 +75,22 @@ public class RuneEffectModifier {
 	/**
 	 * Called when the rune that this rune effect modifier applies to is activated ({@link AbstractRune.Blueprint#activate(AbstractRune, thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext, thebetweenlands.api.rune.INodeBlueprint.INodeIO)}).
 	 * This may be called multiple times for different subjects.
+	 * @param rune rune that this rune effect modifier applies to
 	 * @param user user that activated the rune chain
 	 * @param subject subject this rune effect modifier applies to
+	 * @return whether the activation was successful and the rune effect modifier should by synced to clients
 	 */
-	public void activate(IRuneChainUser user, @Nullable Subject subject) {
+	public boolean activate(AbstractRune<?> rune, IRuneChainUser user, @Nullable Subject subject) {
+		this.rune = rune;
 		this.user = user;
 		this.subject = subject;
+		return true;
 	}
 
 	/**
 	 * Called once every rune chain update, usually per tick, after the first activation until the rune chain is terminated.
-	 * @param user user that activated the rune chain
 	 */
-	public void update(IRuneChainUser user) {
+	public void update() {
 
 	}
 

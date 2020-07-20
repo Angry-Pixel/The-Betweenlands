@@ -57,9 +57,7 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 				//Activate modifier
 				state.initRuneEffectModifier();
 				RuneEffectModifier effect = state.getRuneEffectModifier();
-				if(effect != null) {
-					effect.activate(context.getUser(), subject);
-
+				if(effect != null && effect.activate(state, context.getUser(), subject)) {
 					//Sync activation over network
 					//TODO Batch activations together
 					PacketBuffer inputsBuffer = new PacketBuffer(Unpooled.buffer());
@@ -261,7 +259,6 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 		 */
 		public void processPacket(T state, IRuneChainUser user, PacketBuffer buffer) throws IOException {
 			switch(buffer.readVarInt()) {
-
 			case 0: //Activate effect
 				PacketBuffer inputsBuffer = new PacketBuffer(Unpooled.buffer());
 				buffer.readBytes(inputsBuffer, buffer.readVarInt());
@@ -272,7 +269,7 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 				List<Object> inputs = state.getConfiguration().deserialize(user, inputsBuffer);
 
 				state.initRuneEffectModifier();
-				state.getRuneEffectModifier().activate(user, this.readRuneEffectModifierSubject(state, user, new INodeInput() {
+				state.getRuneEffectModifier().activate(state, user, this.readRuneEffectModifierSubject(state, user, new INodeInput() {
 					@Override
 					public Object get(int input) {
 						return inputs.get(input);
@@ -281,8 +278,10 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 
 				break;
 			case 1: //Terminate effect
-				//TODO Terminate
-
+				RuneEffectModifier modifier = state.getRuneEffectModifier();
+				if(modifier != null) {
+					modifier.terminate();
+				}
 			}
 		}
 	}
@@ -376,16 +375,18 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 			if(!effects.isEmpty()) {
 				this.runeEffectModifier = new RuneEffectModifier() {
 					@Override
-					public void activate(IRuneChainUser user, RuneEffectModifier.Subject subject) {
+					public boolean activate(AbstractRune<?> rune, IRuneChainUser user, RuneEffectModifier.Subject subject) {
+						boolean activated = false;
 						for(RuneEffectModifier effect : effects) {
-							effect.activate(user, subject);
+							activated |= effect.activate(rune, user, subject);
 						}
+						return activated;
 					}
 
 					@Override
-					public void update(IRuneChainUser user) {
+					public void update() {
 						for(RuneEffectModifier effect : effects) {
-							effect.update(user);
+							effect.update();
 						}
 					}
 
@@ -448,7 +449,7 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns the rune effect modifier to be applied to this rune. If multiple rune effect modifiers are available they are combined into
 	 * one compound rune effect modifier.
