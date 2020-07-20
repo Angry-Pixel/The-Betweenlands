@@ -13,6 +13,8 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -311,5 +313,11 @@ public class TileEntityRuneWeavingTable extends TileEntity implements ISidedInve
 	
 	public boolean isOutputItemAvailable() {
 		return !this.inventory.get(OUTPUT_SLOT).isEmpty();
+	}
+	
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		BlockPos pos = this.getPos();
+		return new AxisAlignedBB(pos.getX() - 1, pos.getY(), pos.getZ() - 1, pos.getX() + 2, pos.getY() + 1, pos.getZ() + 2);
 	}
 }
