@@ -12,6 +12,9 @@ import com.google.common.collect.ImmutableList;
 import gnu.trove.map.TObjectIntMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -19,6 +22,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.MultiPartEntityPart;
+import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -205,6 +209,8 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 	protected TObjectIntMap<EntityPlayer> unmountTicks = new TObjectIntHashMap<>();
 	protected TObjectIntMap<EntityPlayer> notSneakingTicks = new TObjectIntHashMap<>();
+
+	protected double waterLevel = 0;
 
 	public EntityDraeton(World world) {
 		super(world);
@@ -663,6 +669,65 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		return 0.0f;
 	}
 
+	private boolean checkWaterLevel() {
+		AxisAlignedBB axisalignedbb = this.getEntityBoundingBox();
+		int i = MathHelper.floor(axisalignedbb.minX);
+		int j = MathHelper.ceil(axisalignedbb.maxX);
+		int k = MathHelper.floor(axisalignedbb.minY - 1);
+		int l = MathHelper.ceil(axisalignedbb.minY + 1);
+		int i1 = MathHelper.floor(axisalignedbb.minZ);
+		int j1 = MathHelper.ceil(axisalignedbb.maxZ);
+		boolean flag = false;
+		this.waterLevel = Double.MIN_VALUE;
+		BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain();
+
+		try {
+			for (int k1 = i; k1 < j; ++k1) {
+				for (int l1 = k; l1 < l; ++l1) {
+					for (int i2 = i1; i2 < j1; ++i2) {
+						blockpos$pooledmutableblockpos.setPos(k1, l1, i2);
+						IBlockState iblockstate = this.world.getBlockState(blockpos$pooledmutableblockpos);
+
+						if (iblockstate.getMaterial() == Material.WATER) {
+							float f = BlockLiquid.getLiquidHeight(iblockstate, this.world, blockpos$pooledmutableblockpos);
+							this.waterLevel = Math.max((double)f, this.waterLevel);
+							flag |= axisalignedbb.minY < (double)f;
+						}
+					}
+				}
+			}
+		} finally {
+			blockpos$pooledmutableblockpos.release();
+		}
+
+		return flag;
+	}
+
+	@Override
+	public boolean handleWaterMovement() {
+		this.checkWaterLevel();
+
+		if (this.getRidingEntity() instanceof EntityBoat) {
+			this.inWater = false;
+		} else if (this.world.handleMaterialAcceleration(this.getEntityBoundingBox().grow(0.0D, -0.1D, 0.0D).shrink(0.001D), Material.WATER, this)) {
+			if (!this.inWater && !this.firstUpdate) {
+				this.doWaterSplashEffect();
+			}
+
+			this.fallDistance = 0.0F;
+			this.inWater = true;
+			this.extinguish();
+		} else {
+			this.inWater = false;
+		}
+
+		if(this.waterLevel - this.posY > 0.1D) {
+			this.inWater = true;
+		}
+
+		return this.inWater;
+	}
+
 	@Override
 	public void onEntityUpdate() {
 		if(!this.world.isRemote) {
@@ -727,7 +792,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 			}
 		}
 
-		if(this.onGround) {
+		if(this.onGround || this.inWater) {
 			drag *= 0.8f;
 		}
 
@@ -738,6 +803,14 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		float speed = MathHelper.sqrt(this.motionX*this.motionX + this.motionY*this.motionY + this.motionZ*this.motionZ);
 
 		this.handleWaterMovement();
+
+		if(this.waterLevel - this.posY > 0.2D) {
+			if(this.motionY < 0) {
+				this.motionY *= 0.75F;
+			}
+
+			this.motionY += 0.01D;
+		}
 
 		if(!this.world.isRemote || this.canPassengerSteer()) {
 			this.move(MoverType.SELF, this.motionX, this.motionY - 0.0000001f, this.motionZ);
@@ -788,11 +861,13 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 				}
 			}
 
-			if(this.getPassengers().isEmpty() || this.physicsParts.isEmpty()) {
-				this.motionY -= 0.005f;
-			}
-			if(!this.isBurnerRunning()) {
-				this.motionY -= 0.06f;
+			if(!this.inWater) {
+				if(this.getPassengers().isEmpty() || this.physicsParts.isEmpty()) {
+					this.motionY -= 0.005f;
+				}
+				if(!this.isBurnerRunning()) {
+					this.motionY -= 0.06f;
+				}
 			}
 		} else if(this.world.isRemote) {
 			this.motionX = this.motionY = this.motionZ = 0;
@@ -1403,7 +1478,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	}
 
 	protected void updateCarriage() {
-		if(!this.onGround) {
+		if(this.isBurnerRunning()) {
 			for(DraetonLeakage leakage : this.leakages) {
 				float leakageStrength = 0.005f + this.world.rand.nextFloat() * 0.0075f;
 
@@ -1682,7 +1757,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	}
 
 	public boolean isBurnerRunning() {
-		return this.dataManager.get(BURNER_FUEL) > 0 && (!this.onGround || (this.getControllingPassenger() instanceof EntityLivingBase && ((EntityLivingBase)this.getControllingPassenger()).isJumping));
+		return this.dataManager.get(BURNER_FUEL) > 0 && ((!this.onGround && !this.inWater) || (this.getControllingPassenger() instanceof EntityLivingBase && ((EntityLivingBase)this.getControllingPassenger()).isJumping));
 	}
 
 	public int getBurnerFuel() {
