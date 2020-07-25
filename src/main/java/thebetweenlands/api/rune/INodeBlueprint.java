@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import thebetweenlands.api.rune.INodeBlueprint.INodeIO;
+import thebetweenlands.api.rune.INodeConfiguration.IConfigurationOutput;
 
 public interface INodeBlueprint<T extends INode<?, E>, E> {
 	/**
@@ -18,7 +18,7 @@ public interface INodeBlueprint<T extends INode<?, E>, E> {
 		 */
 		public Object get(int input);
 	}
-	
+
 	/**
 	 * A node input/output for the currently executing node that allows retrieving and setting the node's input and
 	 * output values. Also allows scheduling a task that can run over an arbitrary duration while the node composition's
@@ -71,6 +71,8 @@ public interface INodeBlueprint<T extends INode<?, E>, E> {
 		//TODO Exceptions when invalid output?
 		/**
 		 * Sets the value at the specified output.
+		 * This call may be deferred until the last {@link INodeBlueprint#run(INode, Object, INodeIO)} call of
+		 * the same node.
 		 * @param output - output index
 		 * @param obj - the value
 		 */
@@ -81,9 +83,9 @@ public interface INodeBlueprint<T extends INode<?, E>, E> {
 		 * any following node executions will run on the old branches
 		 * and additionally on a newly created branch.
 		 * Branching must be done before calling {@link #set(int, Object)}
-		 * or {@link #fail(Throwable)}.
+		 * or {@link #fail()}.
 		 * @throws IllegalStateException if this method is called after {@link #set(int, Object)} or
-		 * {@link #fail(Throwable)} was already called
+		 * {@link #fail()} was already called
 		 */
 		public void branch();
 
@@ -137,13 +139,26 @@ public interface INodeBlueprint<T extends INode<?, E>, E> {
 		public boolean terminated();
 	}
 
+	@FunctionalInterface
+	public static interface IConfigurationLinkAccess {
+		/**
+		 * Returns the configuration output of the node that is linked to the specified input.
+		 * Calling this method is safe for any input index.
+		 * @param input - index of the input
+		 * @return
+		 */
+		@Nullable
+		public IConfigurationOutput getLinkedOutput(int input);
+	}
+
 	/**
 	 * Returns an unmodifiable list containing all valid configurations for
 	 * nodes of this blueprint.
+	 * @param linkAccess - allows accessing the configuration output of the node that the specified input is linked to. May be null that data is not available
 	 * @return an unmodifiable list containing all valid configurations for
 	 * nodes of this blueprint
 	 */
-	public List<? extends INodeConfiguration> getConfigurations();
+	public List<? extends INodeConfiguration> getConfigurations(@Nullable IConfigurationLinkAccess linkAccess);
 
 	/**
 	 * Creates a node instance from the specified configuration.

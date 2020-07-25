@@ -26,6 +26,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
+import scala.reflect.internal.Trees.This;
 import thebetweenlands.api.rune.IGuiRuneToken;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.INodeConfiguration.IConfigurationInput;
@@ -193,9 +194,9 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	}
 
 	protected void createGui() {
-		this.hasMultipleConfigurations = container.getBlueprint().getConfigurations().size() > 1;
+		this.hasMultipleConfigurations = this.container.getBlueprint().getConfigurations(this.context.getLinkAccess()).size() > 1;
 		if(this.hasMultipleConfigurations) {
-			this.currentConfigurationIndex = Math.max(0, this.container.getBlueprint().getConfigurations().indexOf(this.context.getConfiguration()));
+			this.currentConfigurationIndex = Math.max(0, this.container.getBlueprint().getConfigurations(this.context.getLinkAccess()).indexOf(this.context.getConfiguration()));
 		}
 
 		INodeConfiguration config = this.context.getConfiguration();
@@ -427,20 +428,20 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 			if(mouseX >= sx + 3 && mouseX < sx + 29 - 4 && mouseY >= sy + 10 && mouseY < sy + 35 - 3) {
 				this.currentConfigurationIndex = Math.max(this.currentConfigurationIndex - 1, 0);
-				this.context.setConfiguration(this.container.getBlueprint().getConfigurations().get(this.currentConfigurationIndex));
+				this.context.setConfiguration(this.container.getBlueprint().getConfigurations(this.context.getLinkAccess()).get(this.currentConfigurationIndex));
 				this.createGui();
 				TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneWeavingTableConfiguration(this.context.getRuneIndex(), this.currentConfigurationIndex));
 				return true;
 			}
 		}
 
-		if(this.currentConfigurationIndex < this.container.getBlueprint().getConfigurations().size() - 1) {
+		if(this.currentConfigurationIndex < this.container.getBlueprint().getConfigurations(this.context.getLinkAccess()).size() - 1) {
 			int sx = x + this.xSize / 2 + 20 - 3;
 			int sy = y + this.ySize - 33;
 
 			if(mouseX >= sx + 4 && mouseX < sx + 29 - 3 && mouseY >= sy + 10 && mouseY < sy + 35 - 3) {
-				this.currentConfigurationIndex = Math.min(this.currentConfigurationIndex + 1, this.container.getBlueprint().getConfigurations().size() - 1);
-				this.context.setConfiguration(this.container.getBlueprint().getConfigurations().get(this.currentConfigurationIndex));
+				this.currentConfigurationIndex = Math.min(this.currentConfigurationIndex + 1, this.container.getBlueprint().getConfigurations(this.context.getLinkAccess()).size() - 1);
+				this.context.setConfiguration(this.container.getBlueprint().getConfigurations(this.context.getLinkAccess()).get(this.currentConfigurationIndex));
 				this.createGui();
 				TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneWeavingTableConfiguration(this.context.getRuneIndex(), this.currentConfigurationIndex));
 				return true;
@@ -583,7 +584,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 				}
 			}
 
-			if(this.currentConfigurationIndex < this.container.getBlueprint().getConfigurations().size() - 1) {
+			if(this.currentConfigurationIndex < this.container.getBlueprint().getConfigurations(this.context.getLinkAccess()).size() - 1) {
 				int sx = x + this.xSize / 2 + 20 - 3;
 				int sy = y + this.ySize - 33;
 
@@ -633,7 +634,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		//Configuration left/right
 		if(this.hasMultipleConfigurations) {
-			String str = String.valueOf(this.currentConfigurationIndex + 1) + "/" + String.valueOf(this.container.getBlueprint().getConfigurations().size());
+			String str = String.valueOf(this.currentConfigurationIndex + 1) + "/" + String.valueOf(this.container.getBlueprint().getConfigurations(this.context.getLinkAccess()).size());
 			this.fontRenderer.drawString(str, x + this.xSize / 2 - this.fontRenderer.getStringWidth(str) / 2, y + this.ySize - 19, 0xFF3d3d3d);
 		}
 

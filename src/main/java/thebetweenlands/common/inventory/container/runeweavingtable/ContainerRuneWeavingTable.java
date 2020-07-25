@@ -18,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import thebetweenlands.api.capability.IRuneChainCapability;
 import thebetweenlands.api.rune.INodeBlueprint;
+import thebetweenlands.api.rune.INodeBlueprint.IConfigurationLinkAccess;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.IRuneChainContainerData;
 import thebetweenlands.api.rune.IRuneChainData;
@@ -399,6 +400,10 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 				entry.container.onTokenLinked(input, this.table.getContainerData().getLink(runeIndex, input));
 			}
 
+			for(int i = 0; i < this.table.getMaxChainLength(); i++) {
+				this.updateConfiguration(i);
+			}
+			
 			this.onRunesChanged();
 
 			this.table.markDirty();
@@ -417,6 +422,10 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 				entry.container.onTokenUnlinked(input, unlinked);
 			}
 
+			for(int i = 0; i < this.table.getMaxChainLength(); i++) {
+				this.updateConfiguration(i);
+			}
+			
 			this.onRunesChanged();
 
 			this.table.markDirty();
@@ -441,12 +450,50 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 				entry.container.onTokenUnlinked(unlinked.getKey(), unlinked.getValue());
 			}
 		}
-
+		
+		for(int i = 0; i < this.table.getMaxChainLength(); i++) {
+			this.updateConfiguration(i);
+		}
+		
 		this.onRunesChanged();
 
 		this.table.markDirty();
 	}
 
+	/**
+	 * Gets all new configurations of the rune at the specified index and then compares it to its current configuration.
+	 * If any of the new configurations' ID matches with the current configuration then the current configuration is replaced
+	 * with the matching new configuration.
+	 * @param runeIndex
+	 */
+	protected void updateConfiguration(int runeIndex) {
+		RuneContainerEntry entry = this.runeContainers.get(runeIndex);
+		
+		if(entry != null) {
+			INodeConfiguration currentConfiguration = entry.container.getContext().getConfiguration();
+			
+			if(currentConfiguration != null) {
+				for(INodeConfiguration newConfiguration : entry.container.getBlueprint().getConfigurations(this.createLinkAccess(runeIndex))) {
+					if(currentConfiguration != newConfiguration && currentConfiguration.getId() == newConfiguration.getId()) {
+						entry.container.onConfigurationChanged(currentConfiguration, newConfiguration);
+
+						entry.configuration = newConfiguration;
+
+						ContainerRuneWeavingTable.this.table.getContainerData().setConfigurationId(entry.runeIndex, newConfiguration.getId());
+
+						ContainerRuneWeavingTable.this.onRunesChanged();
+
+						ContainerRuneWeavingTable.this.table.markDirty();
+						
+						//TODO Check links for validity
+						
+						break;
+					}
+				}
+			}
+		}
+	}
+	
 	@Override
 	public void moveRuneData(int fromRuneIndex, int toRuneIndex) {
 		this.table.getContainerData().moveRuneData(fromRuneIndex, toRuneIndex);
@@ -513,7 +560,7 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 				if(containerData.hasConfigurationId(entry.runeIndex)) {
 					int savedConfigurationId = containerData.getConfigurationId(entry.runeIndex);
 
-					for(INodeConfiguration configuration : entry.container.getBlueprint().getConfigurations()) {
+					for(INodeConfiguration configuration : entry.container.getBlueprint().getConfigurations(this.createLinkAccess(runeIndex))) {
 						if(configuration.getId() == savedConfigurationId) {
 							entry.configuration = configuration;
 							break;
@@ -522,7 +569,7 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 				}
 
 				if(entry.configuration == null) {
-					entry.configuration = entry.container.getBlueprint().getConfigurations().get(0);
+					entry.configuration = entry.container.getBlueprint().getConfigurations(this.createLinkAccess(runeIndex)).get(0);
 				}
 
 				newContainer.init();
@@ -623,6 +670,11 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 
 					ContainerRuneWeavingTable.this.table.markDirty();
 				}
+			}
+
+			@Override
+			public IConfigurationLinkAccess getLinkAccess() {
+				return ContainerRuneWeavingTable.this.createLinkAccess(entry.runeIndex);
 			}
 		};
 	}

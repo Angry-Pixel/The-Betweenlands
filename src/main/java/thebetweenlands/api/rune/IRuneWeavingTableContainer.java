@@ -1,12 +1,15 @@
 package thebetweenlands.api.rune;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import thebetweenlands.api.rune.INodeBlueprint.IConfigurationLinkAccess;
+import thebetweenlands.api.rune.INodeConfiguration.IConfigurationOutput;
 
 public interface IRuneWeavingTableContainer {
 	public int getRuneInventorySize();
@@ -50,4 +53,23 @@ public interface IRuneWeavingTableContainer {
 	 * @param runeIndex - index of the rune that has changed
 	 */
 	public void onRunesChanged();
+	
+	public default IConfigurationLinkAccess createLinkAccess(int node) {
+		return input -> {
+			IRuneLink link = this.getLink(node, input);
+			if(link != null && link.getOutput() >= 0) {
+				IRuneContainer container = this.getRuneContainer(link.getOutputRune());
+				if(container != null) {
+					INodeConfiguration configuration = container.getContext().getConfiguration();
+					if(configuration != null) {
+						List<? extends IConfigurationOutput> outputs = configuration.getOutputs();
+						if(link.getOutput() < outputs.size()) {
+							return outputs.get(link.getOutput());
+						}
+					}
+				}
+			}
+			return null;
+		};
+	}
 }

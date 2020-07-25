@@ -51,8 +51,8 @@ public class ItemRuneChain extends Item implements IRenamableItem {
 
 						final AspectContainer aspects = new AspectContainer();
 
-						aspects.add(AspectRegistry.ORDANIIS, 10000);
-						aspects.add(AspectRegistry.FERGALAZ, 10000);
+						aspects.add(AspectRegistry.ORDANIIS, 1000000);
+						aspects.add(AspectRegistry.FERGALAZ, 1000000);
 
 						final IAspectBuffer buffer = type -> aspects;
 

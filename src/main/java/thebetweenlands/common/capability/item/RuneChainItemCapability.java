@@ -1,5 +1,7 @@
 package thebetweenlands.common.capability.item;
 
+import java.util.List;
+
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -10,14 +12,16 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.capability.IRuneChainCapability;
 import thebetweenlands.api.rune.INodeBlueprint;
+import thebetweenlands.api.rune.INodeBlueprint.IConfigurationLinkAccess;
 import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.IRuneWeavingTableContainer;
-import thebetweenlands.api.rune.IRuneWeavingTableGui;
+import thebetweenlands.api.rune.INodeConfiguration.IConfigurationOutput;
 import thebetweenlands.api.rune.IRuneChainContainerData;
 import thebetweenlands.api.rune.IRuneChainData;
 import thebetweenlands.api.rune.IRuneContainer;
 import thebetweenlands.api.rune.IRuneContainerContext;
 import thebetweenlands.api.rune.IRuneLink;
+import thebetweenlands.api.rune.IRuneWeavingTableContainer;
+import thebetweenlands.api.rune.IRuneWeavingTableGui;
 import thebetweenlands.api.rune.impl.NodeDummy;
 import thebetweenlands.api.rune.impl.RuneChainComposition;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
@@ -148,6 +152,11 @@ public class RuneChainItemCapability extends ItemCapability<RuneChainItemCapabil
 
 					@Override
 					public void setConfiguration(INodeConfiguration configuration) { }
+
+					@Override
+					public IConfigurationLinkAccess getLinkAccess() {
+						return null;
+					}
 				};
 
 				container.setContext(context);
@@ -156,10 +165,24 @@ public class RuneChainItemCapability extends ItemCapability<RuneChainItemCapabil
 
 				INodeConfiguration nodeConfiguration = null;
 
+				IConfigurationLinkAccess linkAccess = input -> {
+					IRuneLink link = containerData.getLink(runeIndex, input);
+					if(link != null && link.getOutputRune() >= 0 && link.getOutputRune() < runeIndex && link.getOutput() >= 0) {
+						INodeConfiguration configuration = blueprint.getNodeConfiguration(link.getOutputRune());
+						if(configuration != null) {
+							List<? extends IConfigurationOutput> outputs = configuration.getOutputs();
+							if(link.getOutput() < outputs.size()) {
+								return outputs.get(link.getOutput());
+							}
+						}
+					}
+					return null;
+				};
+				
 				if(containerData.hasConfigurationId(runeIndex)) {
 					int savedConfigurationId = containerData.getConfigurationId(runeIndex);
 
-					for(INodeConfiguration configuration : nodeBlueprint.getConfigurations()) {
+					for(INodeConfiguration configuration : nodeBlueprint.getConfigurations(linkAccess)) {
 						if(configuration.getId() == savedConfigurationId) {
 							nodeConfiguration = configuration;
 							break;
@@ -168,7 +191,7 @@ public class RuneChainItemCapability extends ItemCapability<RuneChainItemCapabil
 				}
 
 				if(nodeConfiguration == null) {
-					nodeConfiguration = nodeBlueprint.getConfigurations().get(0);
+					nodeConfiguration = nodeBlueprint.getConfigurations(linkAccess).get(0);
 				}
 
 				//Always specify the used configuration

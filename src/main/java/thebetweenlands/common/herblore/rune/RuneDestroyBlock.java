@@ -6,13 +6,15 @@ import com.google.common.collect.ImmutableList;
 
 import net.minecraft.util.math.BlockPos;
 import thebetweenlands.api.rune.INodeComposition;
+import thebetweenlands.api.rune.INodeCompositionBlueprint;
 import thebetweenlands.api.rune.INodeConfiguration;
+import thebetweenlands.api.rune.INodeBlueprint.IConfigurationLinkAccess;
 import thebetweenlands.api.rune.impl.AbstractRune;
 import thebetweenlands.api.rune.impl.InputSerializers;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneEffectModifier;
 import thebetweenlands.api.rune.impl.RuneConfiguration.InputPort;
+import thebetweenlands.api.rune.impl.RuneEffectModifier;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.common.registries.AspectRegistry;
@@ -40,7 +42,7 @@ public final class RuneDestroyBlock extends AbstractRune<RuneDestroyBlock> {
 		}
 
 		@Override
-		public List<RuneConfiguration> getConfigurations() {
+		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess) {
 			return ImmutableList.of(CONFIGURATION_1);
 		}
 

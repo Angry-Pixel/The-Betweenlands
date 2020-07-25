@@ -44,7 +44,7 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 		}
 
 		@Override
-		public abstract List<RuneConfiguration> getConfigurations();
+		public abstract List<RuneConfiguration> getConfigurations(@Nullable IConfigurationLinkAccess linkAccess);
 
 		@Override
 		public void run(T state, RuneExecutionContext context, INodeIO io) {
@@ -82,7 +82,7 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 				}
 
 				// On last parallel rune activation on last branch drain any left over fuel to be consumed
-				if(context.getInputIndex() == context.getInputIndexCount() - 1 && context.getBranch() == context.getBranchCount() - 1) {
+				if(context.getInputIndex() == context.getInputIndexCount() - 1 && context.getBranchIndex() == context.getBranchIndexCount() - 1) {
 					this.drainLeftOverFuel(state, context);
 				}
 

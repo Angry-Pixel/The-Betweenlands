@@ -1,8 +1,12 @@
 package thebetweenlands.api.rune;
 
 import java.util.Collection;
+import java.util.List;
 
 import javax.annotation.Nullable;
+
+import thebetweenlands.api.rune.INodeBlueprint.IConfigurationLinkAccess;
+import thebetweenlands.api.rune.INodeConfiguration.IConfigurationOutput;
 
 public interface INodeCompositionBlueprint<E> {
 	/**
@@ -69,4 +73,20 @@ public interface INodeCompositionBlueprint<E> {
 	 * @return a node composition instance created from this blueprint
 	 */
 	public INodeComposition<E> create();
+	
+	public default IConfigurationLinkAccess createLinkAccess(int node) {
+		return input -> {
+			INodeLink link = this.getLink(node, input);
+			if(link != null && link.getOutput() >= 0) {
+				INodeConfiguration configuration = this.getNodeConfiguration(link.getNode());
+				if(configuration != null) {
+					List<? extends IConfigurationOutput> outputs = configuration.getOutputs();
+					if(link.getOutput() < outputs.size()) {
+						return outputs.get(link.getOutput());
+					}
+				}
+			}
+			return null;
+		};
+	}
 }

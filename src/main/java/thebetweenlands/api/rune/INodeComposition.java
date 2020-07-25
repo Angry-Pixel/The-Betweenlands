@@ -1,5 +1,7 @@
 package thebetweenlands.api.rune;
 
+import thebetweenlands.api.rune.INodeBlueprint.IConfigurationLinkAccess;
+
 public interface INodeComposition<E> {
 	/**
 	 * Returns the blueprint that created this composition.

@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableList;
 import thebetweenlands.api.rune.INode;
 import thebetweenlands.api.rune.INodeBlueprint;
 import thebetweenlands.api.rune.INodeComposition;
+import thebetweenlands.api.rune.INodeCompositionBlueprint;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 
@@ -25,7 +26,7 @@ public final class NodeDummy implements INode<NodeDummy, RuneExecutionContext> {
 		private Blueprint() {}
 
 		@Override
-		public List<INodeConfiguration> getConfigurations() {
+		public List<INodeConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess) {
 			return ImmutableList.of(CONFIGURATION);
 		}
 

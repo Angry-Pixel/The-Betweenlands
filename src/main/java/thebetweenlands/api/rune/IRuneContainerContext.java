@@ -1,10 +1,13 @@
 package thebetweenlands.api.rune;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import thebetweenlands.api.rune.INodeBlueprint.IConfigurationLinkAccess;
 
 public interface IRuneContainerContext {
 	@Nullable
@@ -33,6 +36,8 @@ public interface IRuneContainerContext {
 
 	public void addSlot(Slot slot);
 
+	public IConfigurationLinkAccess getLinkAccess();
+	
 	/**
 	 * Returns the configuration to be used for the rune.
 	 * Returns <code>null</code> before {@link IRuneContainer#init()} is called.

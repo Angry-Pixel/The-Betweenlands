@@ -135,12 +135,24 @@ public class RuneConfiguration implements INodeConfiguration {
 		 * @param in - the input whose type should be used as output type
 		 * @return a new output that produces multiple objects of the same type as the specified input at once
 		 */
-		public <T, A extends T> OutputPort<Collection<T>> multiOut(Class<T> type, InputPort<Collection<A>> in) {
+		public <T, A extends T> OutputPort<Collection<T>> multiOutFromMultiIn(Class<T> type, InputPort<Collection<? extends A>> in) {
 			PassthroughOutputPort<Collection<T>> output = new PassthroughOutputPort<>(type, this.outIndices++, in, true);
 			this.outputPorts.add(output);
 			return output;
 		}
 
+		/**
+		 * Creates a new output that produces multiple objects of the same type as the specified input at once
+		 * @param type - upper bound of the type to produce
+		 * @param in - the input whose type should be used as output type
+		 * @return a new output that produces multiple objects of the same type as the specified input at once
+		 */
+		public <T, A extends T> OutputPort<Collection<T>> multiOutFromIn(Class<T> type, InputPort<? extends A> in) {
+			PassthroughOutputPort<Collection<T>> output = new PassthroughOutputPort<>(type, this.outIndices++, in, true);
+			this.outputPorts.add(output);
+			return output;
+		}
+		
 		/**
 		 * Creates the new configuration
 		 * @return the new configuration
@@ -150,49 +162,7 @@ public class RuneConfiguration implements INodeConfiguration {
 			ImmutableList.Builder<IConfigurationOutput> outputTypes = ImmutableList.builder();
 
 			inputTypes.addAll(this.inputPorts);
-
-			for(OutputPort<?> output : this.outputPorts) {
-				final IType type = new IType() {
-					@Override
-					public Class<?> getTypeClass() {
-						return output.type;
-					}
-
-					@Override
-					public List<IType> getTypeGenerics() {
-						return Collections.emptyList(); //TODO Add generics to output ports?
-					}
-				};
-				outputTypes.add(new IConfigurationOutput() {
-					@Override
-					public IType getType(List<IType> inputs) {
-						if(output instanceof PassthroughOutputPort) {
-							PassthroughOutputPort<?> passthrough = (PassthroughOutputPort<?>) output;
-							return inputs.get(passthrough.input.index);
-						}
-						return type;
-					}
-
-					@Override
-					public boolean isEnabled(List<IType> inputs) {
-						if(output instanceof PassthroughOutputPort) {
-							PassthroughOutputPort<?> passthrough = (PassthroughOutputPort<?>) output;
-							return inputs.get(passthrough.input.index) != null;
-						}
-						return true;
-					}
-
-					@Override
-					public boolean isCollection() {
-						return output.isMulti;
-					}
-
-					@Override
-					public String getDescriptor() {
-						return output.getDescriptor();
-					}
-				});
-			}
+			outputTypes.addAll(this.outputPorts);
 
 			this.inIndices = 0;
 			this.outIndices = 0;
@@ -369,17 +339,16 @@ public class RuneConfiguration implements INodeConfiguration {
 	/**
 	 * An output port that allows setting values of the node output
 	 */
-	public static class OutputPort<T> {
+	public static class OutputPort<T> implements IConfigurationOutput {
 		private final Class<T> type;
 		private final int index;
 		private final boolean isMulti;
 		private final String descriptor;
 
+		private final IType outputType;
+		
 		private OutputPort(Class<T> type, int index, String descriptor) {
-			this.type = type;
-			this.index = index;
-			this.isMulti = false;
-			this.descriptor = descriptor;
+			this(type, index, descriptor, false);
 		}
 
 		@SuppressWarnings("unchecked")
@@ -388,10 +357,17 @@ public class RuneConfiguration implements INodeConfiguration {
 			this.index = index;
 			this.isMulti = isMulti;
 			this.descriptor = descriptor;
-		}
+			this.outputType = new IType() {
+				@Override
+				public Class<?> getTypeClass() {
+					return type;
+				}
 
-		public String getDescriptor() {
-			return this.descriptor;
+				@Override
+				public List<IType> getTypeGenerics() {
+					return Collections.emptyList(); //TODO Add generics to output ports?
+				}
+			};
 		}
 
 		/**
@@ -401,6 +377,34 @@ public class RuneConfiguration implements INodeConfiguration {
 		 */
 		public void set(INodeIO io, T obj) {
 			io.set(this.index, obj);
+		}
+		
+		@Override
+		public IType getType(List<IType> inputs) {
+			if(this instanceof PassthroughOutputPort) {
+				PassthroughOutputPort<?> passthrough = (PassthroughOutputPort<?>) this;
+				return inputs.get(passthrough.input.index);
+			}
+			return this.outputType;
+		}
+
+		@Override
+		public boolean isEnabled(List<IType> inputs) {
+			if(this instanceof PassthroughOutputPort) {
+				PassthroughOutputPort<?> passthrough = (PassthroughOutputPort<?>) this;
+				return inputs.get(passthrough.input.index) != null;
+			}
+			return true;
+		}
+
+		@Override
+		public boolean isCollection() {
+			return this.isMulti;
+		}
+
+		@Override
+		public String getDescriptor() {
+			return this.descriptor;
 		}
 	}
 

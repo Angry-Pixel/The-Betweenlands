@@ -46,9 +46,11 @@ import thebetweenlands.common.herblore.rune.RuneDestroyBlock;
 import thebetweenlands.common.herblore.rune.RuneFire;
 import thebetweenlands.common.herblore.rune.RuneMarkArea;
 import thebetweenlands.common.herblore.rune.RuneMarkNearby;
+import thebetweenlands.common.herblore.rune.RuneMerging;
 import thebetweenlands.common.herblore.rune.RunePinpoint;
 import thebetweenlands.common.herblore.rune.RuneProjectile;
 import thebetweenlands.common.herblore.rune.RuneSelectGrass;
+import thebetweenlands.common.herblore.rune.RuneSelectRandom;
 import thebetweenlands.common.herblore.rune.RuneSelf;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.ItemAncientArmor;
@@ -492,6 +494,8 @@ public class ItemRegistry {
     public static final Item TEST_RUNE_PINPOINT = new ItemTestRune(new RunePinpoint.Blueprint());
     public static final Item TEST_RUNE_MARK_NEARBY = new ItemTestRune(new RuneMarkNearby.Blueprint());
     public static final Item TEST_RUNE_BRANCHING = new ItemTestRune(new RuneBranching.Blueprint());
+    public static final Item TEST_RUNE_MERGING = new ItemTestRune(new RuneMerging.Blueprint());
+    public static final Item TEST_RUNE_RANDOM = new ItemTestRune(new RuneSelectRandom.Blueprint());
     
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();

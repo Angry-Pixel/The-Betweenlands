@@ -59,7 +59,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 				if(configuration != null) {
 					maxSlots = configuration.getInputs().size();
 				} else {
-					for(INodeConfiguration c : blueprint.getConfigurations()) {
+					for(INodeConfiguration c : blueprint.getConfigurations(Blueprint.this.createLinkAccess(this.getIndex()))) {
 						maxSlots = Math.max(c.getInputs().size(), maxSlots);
 					}
 				}
@@ -342,7 +342,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 				return Collections.emptyList();
 			}
 
-			INodeBlueprint<?, ?> node = this.getNodeBlueprint(nodeIndex);
+			INodeBlueprint<?, RuneExecutionContext> node = this.getNodeBlueprint(nodeIndex);
 
 			List<INodeConfiguration> validConfigurations = new ArrayList<>();
 
@@ -351,7 +351,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 			if(setConfiguration != null) {
 				potentialConfigurations.add(setConfiguration);
 			} else {
-				potentialConfigurations.addAll(node.getConfigurations());
+				potentialConfigurations.addAll(node.getConfigurations(this.createLinkAccess(nodeIndex)));
 			}
 
 			configurations: for(INodeConfiguration configuration : potentialConfigurations) {
@@ -437,8 +437,10 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 	}
 
 	private final class NodeIO implements INodeIO {
-		private INode<?,RuneExecutionContext> node;
-		private INodeBlueprint<INode<?, RuneExecutionContext>, RuneExecutionContext> blueprint;
+		private final INode<?,RuneExecutionContext> node;
+		private final INodeBlueprint<INode<?, RuneExecutionContext>, RuneExecutionContext> blueprint;
+		private final List<Collection<Object>> outputValues;
+
 		private Branch branch;
 
 		private boolean branchingAllowed;
@@ -447,12 +449,9 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 		private boolean terminated;
 		private INodeIO.ISchedulerTask task;
 
-		private NodeIO() {
-			this.reset(null, null, null);
-		}
-
-		private void reset(Branch branch, INodeBlueprint<INode<?, RuneExecutionContext>, RuneExecutionContext> blueprint, INode<?, RuneExecutionContext> node) {
+		private NodeIO(Branch branch, List<Collection<Object>> outputValues, INodeBlueprint<INode<?, RuneExecutionContext>, RuneExecutionContext> blueprint, INode<?, RuneExecutionContext> node) {
 			this.branch = branch;
+			this.outputValues = outputValues;
 			this.node = node;
 			this.blueprint = blueprint;
 			this.branchingAllowed = true;
@@ -468,9 +467,9 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 			this.branchingAllowed = false;
 			// TODO Type check?
 			if(obj instanceof Collection) {
-				RuneChainComposition.this.outputValues.get(output).addAll((Collection<Object>) obj);
+				this.outputValues.get(output).addAll((Collection<Object>) obj);
 			} else {
-				RuneChainComposition.this.outputValues.get(output).add(obj);
+				this.outputValues.get(output).add(obj);
 			}
 		}
 
@@ -567,6 +566,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 				for(int i = 0; i < slots; i++) {
 					nodeValues.add(new ArrayList<>());
 				}
+				this.outputValues.put(node, nodeValues);
 			}
 
 			if(slot < nodeValues.size()) {
@@ -623,7 +623,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 		 * Returns the number of currently active branches.
 		 * @return the number of currently active branches
 		 */
-		public int getBranchCount() {
+		public int getBranchIndexCount() {
 			return this.branchCount;
 		}
 
@@ -631,7 +631,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 		 * Returns the current active branch starting at 0.
 		 * @return the current active branch starting at 0
 		 */
-		public int getBranch() {
+		public int getBranchIndex() {
 			return this.branch;
 		}
 
@@ -693,8 +693,6 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 	private final List<INode<?, RuneExecutionContext>> nodes;
 
 	private final Scheduler scheduler = new Scheduler();
-	private final NodeIO nodeIO = new NodeIO();
-
 	private IAspectBuffer aspectBuffer;
 
 	private boolean running = false;
@@ -702,6 +700,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 	private int nextNode = 0;
 	private Queue<Branch> branches;
 	private Queue<Branch> newBranches;
+	private List<NodeIO> outputtingNodeIOs;
 	private int currentNode;
 	private boolean sourceBranchAdded = false;
 	private Branch sourceBranch;
@@ -830,6 +829,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 				while(this.nextNode < this.nodes.size() || resumeSuspension) {
 					if(!resumeSuspension) {
 						this.newBranches = new LinkedList<>();
+						this.outputtingNodeIOs = new ArrayList<>();
 					}
 
 					if(!resumeSuspension) {
@@ -895,7 +895,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 
 							this.context.inputIndexCount = this.combinations;
 						}
-
+						
 						//Execute node for each combination
 						while(this.currentCombination < this.combinations) {
 							this.context.inputIndex = this.currentCombination;
@@ -911,9 +911,9 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 							}
 
 							// Reset I/O for new node execution
-							this.nodeIO.reset(this.sourceBranch, blueprint, node);
+							NodeIO nodeIO = new NodeIO(this.sourceBranch, this.outputValues, blueprint, node);
 
-							blueprint.run(node, this.context, this.nodeIO);
+							blueprint.run(node, this.context, nodeIO);
 
 							// Increment before potentially suspending
 							this.currentCombination++;
@@ -921,32 +921,32 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 							// Already resumed don't try again next loop
 							resumeSuspension = false;
 
-							if(!this.nodeIO.failed && !this.nodeIO.terminated) {
-								// Add output values to new branch
-								this.nodeIO.branch.addOverrideOutputValues(this.currentNode, this.outputValues);
+							if(!nodeIO.failed && !nodeIO.terminated) {
+								// Queue I/O to output values at the end of the rune execution
+								this.outputtingNodeIOs.add(nodeIO);
 
-								if(this.nodeIO.branch != this.sourceBranch) {
-									this.newBranches.add(this.nodeIO.branch);
+								if(nodeIO.branch != this.sourceBranch) {
+									this.newBranches.add(nodeIO.branch);
 
 									// Override values at nodes that produced the input values
 									for(int inputIndex = 0; inputIndex < inputs.size(); inputIndex++) {
 										INodeLink link = this.blueprint.getLink(this.currentNode, inputIndex);
-										this.nodeIO.branch.addOverrideOutputValue(link.getNode(), link.getOutput(), Collections.singleton(this.combination[inputIndex]));
+										nodeIO.branch.addOverrideOutputValue(link.getNode(), link.getOutput(), Collections.singleton(this.combination[inputIndex]));
 									}
-								} else if(this.nodeIO.branch == this.sourceBranch && !this.sourceBranchAdded) {
+								} else if(nodeIO.branch == this.sourceBranch && !this.sourceBranchAdded) {
 									this.newBranches.add(this.sourceBranch);
 									this.sourceBranchAdded = true;
 								}
-							} else if(this.nodeIO.terminated) {
+							} else if(nodeIO.terminated) {
 								this.terminate();
 								return;
-							} else if(this.nodeIO.branch == this.sourceBranch) {
+							} else if(nodeIO.branch == this.sourceBranch) {
 								this.newBranches.remove(this.sourceBranch);
 								this.currentCombination = this.combinations; //Exit loop
 							}
 
-							if(!this.nodeIO.terminated && this.nodeIO.task != null) {
-								this.scheduledTask = this.nodeIO.task;
+							if(!nodeIO.terminated && nodeIO.task != null) {
+								this.scheduledTask = nodeIO.task;
 								if(this.updateTask(node, blueprint)) {
 									// Delay has accumulated > 1.0, exit and continue next tick
 									return;
@@ -958,6 +958,12 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 
 						// Already resumed don't try again next loop
 						resumeSuspension = false;
+					}
+
+
+					// Add rune output values to new branch
+					for(NodeIO nodeIO : this.outputtingNodeIOs) {
+						nodeIO.branch.addOverrideOutputValues(nodeIO.node.getIndex(), nodeIO.outputValues);
 					}
 
 					this.branches = this.newBranches;
