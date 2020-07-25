@@ -95,7 +95,7 @@ public class ItemPlantTonic extends Item implements ItemRegistry.IMultipleItemMo
 				if(!world.isRemote && !player.isCreative()) {
 					setUsages(stack, getUsages(stack) + 1);
 					if(getUsages(stack) >= 3) {
-						player.setHeldItem(hand, new ItemStack(ItemRegistry.BL_BUCKET, 1, getMetadata(stack)));
+						player.setHeldItem(hand, ItemRegistry.BL_BUCKET.getEmpty(new ItemStack(ItemRegistry.BL_BUCKET, 1, stack.getMetadata())));
 					}
 				}
 
