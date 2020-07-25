@@ -65,6 +65,7 @@ import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.sound.BLSoundEvent;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
 import thebetweenlands.common.world.storage.location.LocationStorage;
@@ -365,6 +366,13 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	@Override
 	protected boolean isValidBlockForMovement(BlockPos pos, IBlockState state) {
 		return state.isOpaqueCube() && state.isNormalCube() && state.isFullCube() && state.getBlockHardness(this.world, pos) > 0;
+	}
+
+	@Override
+	protected boolean isTravelBlocked() {
+		//Don't travel unless obstructed and not in sludgeon
+		return this.isMovementBlocked() || this.checkAnchorHere(AnchorChecks.BLOCKS) == 0 ||
+				!BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSludgeWormDungeon.class, this.getEntityBoundingBox(), loc -> loc.isInside(this)).isEmpty();
 	}
 
 	@Override
