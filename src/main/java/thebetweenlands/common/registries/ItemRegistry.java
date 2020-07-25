@@ -154,13 +154,13 @@ import thebetweenlands.common.item.tools.ItemAncientBattleAxe;
 import thebetweenlands.common.item.tools.ItemAncientGreatsword;
 import thebetweenlands.common.item.tools.ItemBLAxe;
 import thebetweenlands.common.item.tools.ItemBLBucket;
-import thebetweenlands.common.item.tools.ItemBLFishingRod;
 import thebetweenlands.common.item.tools.ItemBLPickaxe;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.item.tools.ItemBLShovel;
 import thebetweenlands.common.item.tools.ItemBLSword;
 import thebetweenlands.common.item.tools.ItemBucketInfusion;
 import thebetweenlands.common.item.tools.ItemChirobarbErupter;
+import thebetweenlands.common.item.tools.ItemFishingSpear;
 import thebetweenlands.common.item.tools.ItemGreataxe;
 import thebetweenlands.common.item.tools.ItemHagHacker;
 import thebetweenlands.common.item.tools.ItemLootSword;
@@ -342,7 +342,8 @@ public class ItemRegistry {
     public static final Item CHIROBARB_SHOCK_ERUPTER = new ItemChirobarbErupter(true);
     // TODO Re-enable when testing. Too early W.I.P. dev spoilers are getting on my nerves :P
    // public static final Item FISHING_ROD = new ItemBLFishingRod();
-
+    public static final Item FISHING_SPEAR = new ItemFishingSpear();
+    
     //BUCKETS
     public static final ItemBLBucket BL_BUCKET = new ItemBLBucket();
     public static final Item BL_BUCKET_RUBBER = new ItemSpecificBucket(FluidRegistry.RUBBER);

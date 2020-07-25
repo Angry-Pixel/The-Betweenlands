@@ -103,6 +103,7 @@ import thebetweenlands.common.entity.projectiles.EntityBLFishHook;
 import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.entity.projectiles.EntityChiromawDroppings;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
+import thebetweenlands.common.entity.projectiles.EntityFishingSpear;
 import thebetweenlands.common.entity.projectiles.EntityPredatorArrowGuide;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
@@ -235,6 +236,7 @@ public class EntityRegistry {
 		// TODO Re-enable when testing. Too early W.I.P. dev spoilers are getting on my nerves :P
 		registerEntity(EntityAnadia.class, "anadia", 0x243B0B, 0x00FFFF);
 		registerEntity(EntityBLFishHook.class, "betweenlands_fish_hook");
+		registerEntity(EntityFishingSpear.class, "fishing_spear", 64, 20, true);
 	}
 
 	private static int id = 0;
