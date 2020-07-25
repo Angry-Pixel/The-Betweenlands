@@ -42,7 +42,7 @@ public class OreGens {
 		@Override
 		public boolean generate(World world, Random rand, BlockPos pos) {
 			if(world.getBlockState(pos).getBlock() == BlockRegistry.SWAMP_WATER && world.getBlockState(pos.down()).getBlock() == BlockRegistry.PITSTONE) {
-				boolean genOre = rand.nextInt(BetweenlandsConfig.WORLD_AND_DIMENSION.oreGenBlockCountLifeGem) == 0;
+				boolean genOre = rand.nextInt(1 + BetweenlandsConfig.WORLD_AND_DIMENSION.oreGenBlockChanceLifeCrystal) == 0;
 				int height = 0;
 				while(world.getBlockState(pos.add(0, ++height, 0)).getBlock() == BlockRegistry.SWAMP_WATER && height < 8);
 				height--;
@@ -51,7 +51,7 @@ public class OreGens {
 					int oreBlock = rand.nextInt(height);
 					for(int i = 0; i <= height; i++) {
 						IBlockState blockState = BlockRegistry.LIFE_CRYSTAL_STALACTITE.getDefaultState();
-						if(genOre && (i == oreBlock || rand.nextInt(BetweenlandsConfig.WORLD_AND_DIMENSION.oreGenBlockCountLifeGem / 2) == 0))
+						if(genOre && (i == oreBlock || rand.nextInt(1 + BetweenlandsConfig.WORLD_AND_DIMENSION.oreGenBlockChanceLifeCrystal / 2) == 0))
 							blockState = blockState.withProperty(BlockLifeCrystalStalactite.VARIANT, EnumLifeCrystalType.ORE);
 						world.setBlockState(pos.add(0, i, 0), blockState);
 					}

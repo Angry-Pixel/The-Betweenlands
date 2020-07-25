@@ -198,10 +198,12 @@ public class BlockCenser extends BasicBlock implements ITileEntityProvider, IDun
 		if(te instanceof TileEntityCenser) {
 			TileEntityCenser censer = (TileEntityCenser) te;
 
-			ICenserRecipe<Object> recipe = censer.getCurrentRecipe();
-
-			if(recipe != null) {
-				return recipe.getAspectFogType(censer.getCurrentRecipeContext(), censer);
+			if(censer.isRecipeRunning()) {
+				ICenserRecipe<Object> recipe = censer.getCurrentRecipe();
+	
+				if(recipe != null) {
+					return recipe.getAspectFogType(censer.getCurrentRecipeContext(), censer);
+				}
 			}
 		}
 		return null;

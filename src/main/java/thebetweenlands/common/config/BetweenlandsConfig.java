@@ -164,12 +164,12 @@ public class BetweenlandsConfig {
 		@RequiresMcRestart
 		public int oreGenBlockCountLimestone = 100;
 
-		@Name("ore_gen_count_lifegem")
-		@LangKey(LANG_PREFIX + "ore_gen_count_lifegem")
-		@Comment("Life Gem chance (lower values = higher chance")
+		@Name("ore_gen_chance_life_crystal")
+		@LangKey(LANG_PREFIX + "ore_gen_chance_life_crystal")
+		@Comment("Life Crystal Chance (lower values = higher chance")
 		@RangeInt(min = 0, max = Integer.MAX_VALUE)
 		@RequiresMcRestart
-		public int oreGenBlockCountLifeGem = 36;
+		public int oreGenBlockChanceLifeCrystal = 35;
 	}
 
 	@Name("rendering")
