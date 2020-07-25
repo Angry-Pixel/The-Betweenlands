@@ -178,7 +178,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	private boolean turnSoundRoll = false;
 	private boolean turnSoundPitch = false;
 
-	protected int fuelConversion = 3;
+	protected int fuelConversion = 6;
 	protected int maxFuel = 1000 * this.fuelConversion * 4;
 
 	private boolean wasBurnerRunning = false;
@@ -448,7 +448,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		NBTTagList leakagesNbt = nbt.getTagList("Leakages", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < leakagesNbt.tagCount(); i++) {
 			NBTTagCompound leakageNbt = leakagesNbt.getCompoundTagAt(i);
-			this.leakages.add(new DraetonLeakage(new Vec3d(leakageNbt.getFloat("x"), leakageNbt.getFloat("y"), leakageNbt.getFloat("z")), new Vec3d(leakageNbt.getFloat("dx"), leakageNbt.getFloat("dy"), leakageNbt.getFloat("dz"))));
+			this.leakages.add(new DraetonLeakage(new Vec3d(leakageNbt.getFloat("x"), leakageNbt.getFloat("y"), leakageNbt.getFloat("z")), new Vec3d(leakageNbt.getFloat("dx"), leakageNbt.getFloat("dy"), leakageNbt.getFloat("dz")), leakageNbt.getInteger("age")));
 		}
 	}
 
@@ -511,6 +511,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 			leakageNbt.setFloat("dx", (float)leakage.dir.x);
 			leakageNbt.setFloat("dy", (float)leakage.dir.y);
 			leakageNbt.setFloat("dz", (float)leakage.dir.z);
+			leakageNbt.setInteger("age", leakage.age);
 			leakagesNbt.appendTag(leakageNbt);
 		}
 		nbt.setTag("Leakages", leakagesNbt);
@@ -677,18 +678,34 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 			}
 
 			//Remove dead pullers
-			Iterator<DraetonPhysicsPart> it = this.physicsParts.iterator();
-			while(it.hasNext()) {
-				DraetonPhysicsPart part = it.next();
+			Iterator<DraetonPhysicsPart> partIt = this.physicsParts.iterator();
+			while(partIt.hasNext()) {
+				DraetonPhysicsPart part = partIt.next();
 
 				if(part.type == DraetonPhysicsPart.Type.PULLER) {
 					Entity entity = part.getEntity();
 					if(entity == null || !entity.isEntityAlive()) {
 						part.isActive = false;
-						it.remove();
+						partIt.remove();
 
 						TheBetweenlands.networkWrapper.sendToAllTracking(new MessageUpdateDraetonPhysicsPart(this, part, Action.REMOVE), this);
 					}
+				}
+			}
+
+			//Updates leakages
+			List<DraetonLeakage> expiredLeakages = null;
+			for(DraetonLeakage leakage : this.leakages) {
+				if(leakage.age++ > 6000) {
+					if(expiredLeakages == null) {
+						expiredLeakages = new ArrayList<>();
+					}
+					expiredLeakages.add(leakage);
+				}
+			}
+			if(expiredLeakages != null) {
+				for(DraetonLeakage expired : expiredLeakages) {
+					this.removeLeakage(expired);
 				}
 			}
 		}
@@ -1744,7 +1761,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 			break;
 		}
 
-		return new DraetonLeakage(pos, dir);
+		return new DraetonLeakage(pos, dir, 0);
 	}
 
 	@Override
@@ -1861,7 +1878,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 							this.setDead();
 						}
 					} else {
-						if(this.getTimeSinceHit() < 5 && this.leakages.size() < 16) {
+						if(this.getTimeSinceHit() < 5 && this.leakages.size() < 16 && this.rand.nextInt(3) == 0) {
 							this.addLeakage(this.generateRandomLeakage());
 						}
 					}

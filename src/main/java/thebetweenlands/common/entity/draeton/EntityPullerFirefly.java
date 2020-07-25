@@ -33,6 +33,12 @@ public class EntityPullerFirefly extends EntityFirefly implements IPullerEntity,
 	}
 
 	@Override
+	public EntityDraeton getCarriage() {
+		Entity entity = this.world.getEntityByID(this.carriageId);
+		return entity instanceof EntityDraeton ? (EntityDraeton)entity : null;
+	}
+	
+	@Override
 	public void setPuller(EntityDraeton carriage, DraetonPhysicsPart puller) {
 		this.puller = puller;
 		this.pullerId = puller.id;
