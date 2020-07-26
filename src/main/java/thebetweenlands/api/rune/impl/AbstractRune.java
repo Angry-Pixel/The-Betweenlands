@@ -284,6 +284,38 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 				}
 			}
 		}
+
+		public static class InitiationState {
+			public static final InitiationState SUCCESS = new InitiationState(true);
+			
+			protected boolean success;
+
+			public InitiationState() {
+				this(false);
+			}
+
+			public InitiationState(boolean success) {
+				this.success = success;
+			}
+
+			public boolean isSuccess() {
+				return this.success;
+			}
+		}
+
+		public static class InitiationPhase {
+			public static final InitiationPhase TICK = new InitiationPhase();
+			public static final InitiationPhase USE = new InitiationPhase();
+		}
+
+		@Nullable
+		public InitiationState checkInitiation(IRuneChainUser user, InitiationPhase phase, @Nullable InitiationState state) {
+			return null;
+		}
+
+		public void initiate(IRuneChainUser user, InitiationState state, T node) {
+
+		}
 	}
 
 	private final Blueprint<T> blueprint;

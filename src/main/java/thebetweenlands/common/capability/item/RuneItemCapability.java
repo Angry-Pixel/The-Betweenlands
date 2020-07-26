@@ -1,7 +1,6 @@
 package thebetweenlands.common.capability.item;
 
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import thebetweenlands.api.capability.IRuneCapability;

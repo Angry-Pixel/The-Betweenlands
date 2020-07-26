@@ -1,5 +1,6 @@
 package thebetweenlands.common.item.herblore;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,8 +12,7 @@ import thebetweenlands.api.aspect.AspectContainer;
 import thebetweenlands.api.capability.IRuneChainCapability;
 import thebetweenlands.api.capability.IRuneChainUserCapability;
 import thebetweenlands.api.item.IRenamableItem;
-import thebetweenlands.api.rune.IRuneChainData;
-import thebetweenlands.api.rune.impl.RuneChainComposition;
+import thebetweenlands.api.rune.impl.AbstractRune.Blueprint.InitiationPhase;
 import thebetweenlands.api.rune.impl.RuneChainComposition.IAspectBuffer;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
@@ -34,38 +34,41 @@ public class ItemRuneChain extends Item implements IRenamableItem {
 				return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 			}
 
-			if(player.hasCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN_USER, null)) {
-				IRuneChainUserCapability userCap = player.getCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN_USER, null);
-
-				ItemStack stack = player.getHeldItem(hand);
-
-				if(stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null)) {
-					IRuneChainCapability chainCap = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null);
-
-					IRuneChainData data = chainCap.getData();
-
-					if(data != null) {
-						int id = userCap.addRuneChain(data);
-
-						RuneChainComposition composition = userCap.getRuneChain(id);
-
-						final AspectContainer aspects = new AspectContainer();
-
-						aspects.add(AspectRegistry.ORDANIIS, 1000000);
-						aspects.add(AspectRegistry.FERGALAZ, 1000000);
-
-						final IAspectBuffer buffer = type -> aspects;
-
-						composition.setAspectBuffer(buffer);
-
-						composition.run(userCap.getUser());
-
-						userCap.setUpdating(id, true, true);
-					}
-				}
+			if(this.updateRuneChainInitiation(player.getHeldItem(hand), player, InitiationPhase.USE)) {
+				return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 			}
 		}
 
 		return super.onItemRightClick(world, player, hand);
+	}
+
+	@Override
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		this.updateRuneChainInitiation(stack, entityIn, InitiationPhase.TICK);
+	}
+
+	protected boolean updateRuneChainInitiation(ItemStack stack, Entity user, InitiationPhase state) {
+		IRuneChainUserCapability userCap = user.getCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN_USER, null);
+
+		if(userCap != null) {
+			IRuneChainCapability chainCap = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null);
+
+			if(chainCap != null) {
+				int id = chainCap.checkInitiationAndRun(userCap, state, composition -> {
+					//TODO Temporary for debug
+					final AspectContainer aspects = new AspectContainer();
+
+					aspects.add(AspectRegistry.ORDANIIS, 1000000);
+					aspects.add(AspectRegistry.FERGALAZ, 1000000);
+
+					final IAspectBuffer buffer = type -> aspects;
+
+					composition.setAspectBuffer(buffer);
+				});
+				return id >= 0;
+			}
+		}
+
+		return false;
 	}
 }

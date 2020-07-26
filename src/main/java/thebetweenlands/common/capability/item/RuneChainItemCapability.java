@@ -22,6 +22,7 @@ import thebetweenlands.api.rune.IRuneContainerContext;
 import thebetweenlands.api.rune.IRuneLink;
 import thebetweenlands.api.rune.IRuneWeavingTableContainer;
 import thebetweenlands.api.rune.IRuneWeavingTableGui;
+import thebetweenlands.api.rune.impl.AbstractRune.Blueprint.InitiationState;
 import thebetweenlands.api.rune.impl.NodeDummy;
 import thebetweenlands.api.rune.impl.RuneChainComposition;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
@@ -61,6 +62,8 @@ public class RuneChainItemCapability extends ItemCapability<RuneChainItemCapabil
 
 	private IRuneChainData data;
 	private RuneChainComposition.Blueprint blueprint;
+
+	private InitiationState initiationState;
 
 	public static final String RUNE_CHAIN_BLUEPRINT_NBT_KEY = "thebetweenlands.runechain.blueprint";
 
@@ -178,7 +181,7 @@ public class RuneChainItemCapability extends ItemCapability<RuneChainItemCapabil
 					}
 					return null;
 				};
-				
+
 				if(containerData.hasConfigurationId(runeIndex)) {
 					int savedConfigurationId = containerData.getConfigurationId(runeIndex);
 
@@ -242,5 +245,15 @@ public class RuneChainItemCapability extends ItemCapability<RuneChainItemCapabil
 	public RuneChainComposition.Blueprint getBlueprint() {
 		this.initFromNbt();
 		return this.blueprint;
+	}
+
+	@Override
+	public void setInitiationState(InitiationState state) {
+		this.initiationState = state;
+	}
+
+	@Override
+	public InitiationState getInitiationState() {
+		return this.initiationState;
 	}
 }
