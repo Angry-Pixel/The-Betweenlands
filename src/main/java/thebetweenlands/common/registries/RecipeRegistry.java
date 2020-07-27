@@ -76,6 +76,7 @@ import thebetweenlands.common.recipe.misc.RecipeSapSpitCleanTool;
 import thebetweenlands.common.recipe.misc.RecipesAspectVials;
 import thebetweenlands.common.recipe.misc.RecipesCircleGems;
 import thebetweenlands.common.recipe.misc.RecipesCoating;
+import thebetweenlands.common.recipe.misc.RecipesFishBait;
 import thebetweenlands.common.recipe.misc.RecipesLifeCrystal;
 import thebetweenlands.common.recipe.misc.RecipesPlantTonic;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
@@ -98,7 +99,8 @@ public class RecipeRegistry {
 	public static final ResourceLocation CLEAR_BONE_WAYFINDER = new ResourceLocation(ModInfo.ID, "clear_bone_wayfinder");
 	public static final ResourceLocation SAP_SPIT_CLEAN_TOOL = new ResourceLocation(ModInfo.ID, "sap_spit_clean_tool");
 	public static final ResourceLocation GRAPPLING_HOOK_UPGRADE = new ResourceLocation(ModInfo.ID, "grappling_hook_upgrade");
-	
+	public static final ResourceLocation FISH_BAIT = new ResourceLocation(ModInfo.ID, "recipe_fish_bait");
+
 	private RecipeRegistry() { }
 
 	@SubscribeEvent
@@ -225,6 +227,7 @@ public class RecipeRegistry {
 		registry.register(new RecipeClearBoneWayfinder().setRegistryName(CLEAR_BONE_WAYFINDER));
 		registry.register(new RecipeSapSpitCleanTool().setRegistryName(SAP_SPIT_CLEAN_TOOL));
 		registry.register(new RecipeGrapplingHookUpgrades().setRegistryName(GRAPPLING_HOOK_UPGRADE));
+		registry.register(new RecipesFishBait().setRegistryName(FISH_BAIT));
 	}
 
 	private static void registerSmelting() {
