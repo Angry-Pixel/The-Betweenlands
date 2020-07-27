@@ -250,7 +250,10 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 	}
 
 	public void onSlotChanged(int slotIndex) {
-		this.updateRuneContainer(slotIndex - this.table.getChainStart());
+		if(slotIndex >= this.table.getChainStart() && !this.updateRuneContainer(slotIndex - this.table.getChainStart())) {
+			//Makes sure this is called when items are added/removed so they can't be duped from rune chain item
+			this.onRunesChanged();
+		}
 
 		if(slotIndex == 0) {
 			this.updateInputsFromRuneChain();
@@ -519,7 +522,7 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 		return entry != null ? entry.context : null;
 	}
 
-	protected void updateRuneContainer(int runeIndex) {
+	protected boolean updateRuneContainer(int runeIndex) {
 		ItemStack stack = this.getRuneItemStack(runeIndex);
 
 		IRuneCapability runeCap = null;
@@ -579,13 +582,17 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 				this.runeContainers.put(runeIndex, entry);
 
 				this.onRunesChanged();
+
+				return true;
 			}
 		} else {
-			this.removeContainerEntry(runeIndex);
+			return this.removeContainerEntry(runeIndex);
 		}
+
+		return false;
 	}
 
-	protected void removeContainerEntry(int runeIndex) {
+	protected boolean removeContainerEntry(int runeIndex) {
 		RuneContainerEntry entry = this.runeContainers.get(runeIndex);
 
 		if(entry != null) {
@@ -603,7 +610,11 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 			this.runeContainers.remove(runeIndex);
 
 			this.onRunesChanged();
+
+			return true;
 		}
+
+		return false;
 	}
 
 	protected IRuneContainerContext createRuneContainerContext(RuneContainerEntry entry) {
