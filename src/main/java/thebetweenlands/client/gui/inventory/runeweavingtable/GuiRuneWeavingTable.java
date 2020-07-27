@@ -36,12 +36,14 @@ import net.minecraft.util.Tuple;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.capability.IRuneCapability;
 import thebetweenlands.api.rune.IGuiRuneToken;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.INodeConfiguration.IConfigurationInput;
 import thebetweenlands.api.rune.INodeConfiguration.IConfigurationOutput;
 import thebetweenlands.api.rune.INodeConfiguration.IType;
 import thebetweenlands.api.rune.IRuneContainer;
+import thebetweenlands.api.rune.IRuneContainerFactory;
 import thebetweenlands.api.rune.IRuneGui;
 import thebetweenlands.api.rune.IRuneLink;
 import thebetweenlands.api.rune.IRuneWeavingTableGui;
@@ -139,7 +141,9 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 
 			ItemStack stack = this.container.getRuneItemStack(runeIndex);
 
-			if(!stack.isEmpty() && stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE, null)) {
+			IRuneCapability runeCap = null;
+			
+			if(!stack.isEmpty() && (runeCap = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE, null)) != null) {
 				IRuneContainer container = this.container.getRuneContainer(runeIndex);
 
 				if(currentGui == null || currentGui.getContainer() != container) {
@@ -147,13 +151,18 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 						currentGui.close();
 					}
 
-					IRuneGui newGui = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE, null).getRuneContainerFactory().createGui(RuneMenuType.PRIMARY);
+					IRuneContainerFactory factory = runeCap.getRuneContainerFactory();
+					if(factory != null) {
+						IRuneGui newGui = factory.createGui(RuneMenuType.PRIMARY);
 
-					newGui.init(container, this.width, this.height);
+						newGui.init(container, this.width, this.height);
 
-					this.openRuneGuis.put(RuneMenuType.PRIMARY, newGui);
+						this.openRuneGuis.put(RuneMenuType.PRIMARY, newGui);
 
-					this.draggingToken = null;
+						this.draggingToken = null;
+					} else {
+						clear = true;
+					}
 				}
 			} else {
 				clear = true;
@@ -194,7 +203,9 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 		if(targetRune >= 0) {
 			ItemStack stack = this.container.getRuneItemStack(targetRune);
 
-			if(!stack.isEmpty() && stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE, null)) {
+			IRuneCapability runeCap = null;
+			
+			if(!stack.isEmpty() && (runeCap = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE, null)) != null) {
 				IRuneContainer container = this.container.getRuneContainer(targetRune);
 
 				if(container != null) {
@@ -203,11 +214,16 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 							currentGui.close();
 						}
 
-						IRuneGui newGui = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE, null).getRuneContainerFactory().createGui(RuneMenuType.SECONDARY);
+						IRuneContainerFactory factory = runeCap.getRuneContainerFactory();
+						if(factory != null) {
+							IRuneGui newGui = factory.createGui(RuneMenuType.SECONDARY);
 
-						newGui.init(container, this.width, this.height);
+							newGui.init(container, this.width, this.height);
 
-						this.openRuneGuis.put(RuneMenuType.SECONDARY, newGui);
+							this.openRuneGuis.put(RuneMenuType.SECONDARY, newGui);
+						} else {
+							closeCurrentGui = true;
+						}
 					}
 				} else {
 					closeCurrentGui = true;

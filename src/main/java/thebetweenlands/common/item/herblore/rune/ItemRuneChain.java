@@ -1,4 +1,4 @@
-package thebetweenlands.common.item.herblore;
+package thebetweenlands.common.item.herblore.rune;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;

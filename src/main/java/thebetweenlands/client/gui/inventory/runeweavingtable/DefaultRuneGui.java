@@ -26,7 +26,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import scala.reflect.internal.Trees.This;
 import thebetweenlands.api.rune.IGuiRuneToken;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.INodeConfiguration.IConfigurationInput;
@@ -134,6 +133,8 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	protected boolean draggingSlider = false;
 	protected int sliderDragYOffset = 0;
 
+	protected String translationKey;
+
 	protected static interface ITokenRenderer {
 		public void render(int centerX, int centerY);
 	}
@@ -190,6 +191,8 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		this.width = width;
 		this.height = height;
 
+		this.translationKey = String.format("rune.%s.%s", container.getId().getNamespace(), container.getId().getPath());
+
 		this.createGui();
 	}
 
@@ -201,7 +204,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		INodeConfiguration config = this.context.getConfiguration();
 
-		this.title = new TextContainer(this.xSize - 8 - 20, 80, I18n.format(String.format("rune.%s.configuration.%d.title", container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId())), this.fontRenderer);
+		this.title = new TextContainer(this.xSize - 8 - 20, 80, I18n.format(String.format("%s.configuration.%d.title", this.translationKey, this.context.getConfiguration().getId())), this.fontRenderer);
 
 		this.title.setCurrentScale(1).setCurrentColor(0xFF3d3d3d);
 
@@ -216,7 +219,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		this.title.parse();
 
-		this.description = new TextContainer(this.xSize - 26, 10000, I18n.format(String.format("rune.%s.configuration.%d.description", container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId())), this.fontRenderer);
+		this.description = new TextContainer(this.xSize - 26, 10000, I18n.format(String.format("%s.configuration.%d.description", this.translationKey, this.context.getConfiguration().getId())), this.fontRenderer);
 
 		this.description.setCurrentScale(1).setCurrentColor(0xFF3d3d3d);
 
@@ -325,7 +328,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	protected void drawToken(Token token, int centerX, int centerY) {
 		String desc;
 		boolean multi;
-		
+
 		if(token.isOutput()) {
 			IConfigurationOutput output = this.context.getConfiguration().getOutputs().get(token.getTokenIndex());
 			desc = output.getDescriptor();
@@ -383,12 +386,12 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		if(descriptor != null) {
 			if(token.isOutput()) {
-				if(I18n.hasKey(String.format("rune.%s.configuration.%d.output.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId(), token.getTokenIndex()))) {
-					text.addAll(ItemTooltipHandler.splitTooltip(TextFormatting.GRAY + I18n.format(String.format("rune.%s.configuration.%d.output.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId(), token.getTokenIndex())), 0));
+				if(I18n.hasKey(String.format("%s.configuration.%d.output.%d.description", this.translationKey, this.context.getConfiguration().getId(), token.getTokenIndex()))) {
+					text.addAll(ItemTooltipHandler.splitTooltip(TextFormatting.GRAY + I18n.format(String.format("%s.configuration.%d.output.%d.description", this.translationKey, this.context.getConfiguration().getId(), token.getTokenIndex())), 0));
 				}
 			} else {
-				if(I18n.hasKey(String.format("rune.%s.configuration.%d.input.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId(), token.getTokenIndex()))) {
-					text.addAll(ItemTooltipHandler.splitTooltip(TextFormatting.GRAY + I18n.format(String.format("rune.%s.configuration.%d.input.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId(), token.getTokenIndex())), 0));
+				if(I18n.hasKey(String.format("%s.configuration.%d.input.%d.description", this.translationKey, this.context.getConfiguration().getId(), token.getTokenIndex()))) {
+					text.addAll(ItemTooltipHandler.splitTooltip(TextFormatting.GRAY + I18n.format(String.format("%s.configuration.%d.input.%d.description", this.translationKey, this.context.getConfiguration().getId(), token.getTokenIndex())), 0));
 				}
 			}
 		}

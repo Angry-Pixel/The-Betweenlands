@@ -6,7 +6,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import thebetweenlands.api.capability.IRuneCapability;
 import thebetweenlands.api.rune.IRuneContainerFactory;
 import thebetweenlands.common.capability.base.ItemCapability;
-import thebetweenlands.common.item.herblore.ItemTestRune;
+import thebetweenlands.common.item.herblore.rune.ItemRune;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
@@ -15,7 +15,7 @@ public class RuneItemCapability extends ItemCapability<RuneItemCapability, IRune
 
 	@Override
 	public boolean isApplicable(Item item) {
-		return item instanceof ItemTestRune;
+		return item instanceof ItemRune;
 	}
 
 	@Override
@@ -45,6 +45,6 @@ public class RuneItemCapability extends ItemCapability<RuneItemCapability, IRune
 
 	@Override
 	public IRuneContainerFactory getRuneContainerFactory() {
-		return ((ItemTestRune) this.getItemStack().getItem()).getRuneContainerFactory(this.getItemStack());
+		return ((ItemRune) this.getItemStack().getItem()).getRuneContainerFactory(this.getItemStack());
 	}
 }

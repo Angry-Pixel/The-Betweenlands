@@ -16,6 +16,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import thebetweenlands.api.capability.IRuneCapability;
 import thebetweenlands.api.capability.IRuneChainCapability;
 import thebetweenlands.api.rune.INodeBlueprint;
 import thebetweenlands.api.rune.INodeBlueprint.IConfigurationLinkAccess;
@@ -403,7 +404,7 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 			for(int i = 0; i < this.table.getMaxChainLength(); i++) {
 				this.updateConfiguration(i);
 			}
-			
+
 			this.onRunesChanged();
 
 			this.table.markDirty();
@@ -425,7 +426,7 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 			for(int i = 0; i < this.table.getMaxChainLength(); i++) {
 				this.updateConfiguration(i);
 			}
-			
+
 			this.onRunesChanged();
 
 			this.table.markDirty();
@@ -450,11 +451,11 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 				entry.container.onTokenUnlinked(unlinked.getKey(), unlinked.getValue());
 			}
 		}
-		
+
 		for(int i = 0; i < this.table.getMaxChainLength(); i++) {
 			this.updateConfiguration(i);
 		}
-		
+
 		this.onRunesChanged();
 
 		this.table.markDirty();
@@ -468,10 +469,10 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 	 */
 	protected void updateConfiguration(int runeIndex) {
 		RuneContainerEntry entry = this.runeContainers.get(runeIndex);
-		
+
 		if(entry != null) {
 			INodeConfiguration currentConfiguration = entry.container.getContext().getConfiguration();
-			
+
 			if(currentConfiguration != null) {
 				for(INodeConfiguration newConfiguration : entry.container.getBlueprint().getConfigurations(this.createLinkAccess(runeIndex))) {
 					if(currentConfiguration != newConfiguration && currentConfiguration.getId() == newConfiguration.getId()) {
@@ -484,16 +485,16 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 						ContainerRuneWeavingTable.this.onRunesChanged();
 
 						ContainerRuneWeavingTable.this.table.markDirty();
-						
+
 						//TODO Check links for validity
-						
+
 						break;
 					}
 				}
 			}
 		}
 	}
-	
+
 	@Override
 	public void moveRuneData(int fromRuneIndex, int toRuneIndex) {
 		this.table.getContainerData().moveRuneData(fromRuneIndex, toRuneIndex);
@@ -521,9 +522,10 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 	protected void updateRuneContainer(int runeIndex) {
 		ItemStack stack = this.getRuneItemStack(runeIndex);
 
-		if(!stack.isEmpty() && stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE, null)) {
-			IRuneContainerFactory containerFactory = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE, null).getRuneContainerFactory();
+		IRuneCapability runeCap = null;
+		IRuneContainerFactory factory = null;
 
+		if(!stack.isEmpty() && (runeCap = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE, null)) != null && (factory = runeCap.getRuneContainerFactory()) != null) {
 			RuneContainerEntry currentContainerEntry = this.runeContainers.get(runeIndex);
 
 			boolean isDifferentContainer = false;
@@ -531,11 +533,11 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 
 			if(currentContainerEntry == null) {
 				//No container currently exists, can be replaced directly
-				newContainer = containerFactory.createContainer();
+				newContainer = factory.createContainer();
 				isDifferentContainer = true;
 			} else {
 				//Container already exists, need to check if the container needs to be replaced
-				newContainer = currentContainerEntry.container.updateRuneContainer(stack, containerFactory);
+				newContainer = currentContainerEntry.container.updateRuneContainer(stack, factory);
 				isDifferentContainer = !currentContainerEntry.container.equals(newContainer);
 			}
 
@@ -702,19 +704,21 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 			try {
 				ItemStack stack = this.table.getStackInSlot(0);
 
-				if(!stack.isEmpty() && stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null)) {
+				if(!stack.isEmpty()) {
 					IRuneChainCapability cap = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null);
 
-					int runeCount = this.getRuneInventorySize();
+					if(cap != null) {
+						int runeCount = this.getRuneInventorySize();
 
-					NonNullList<ItemStack> runes = NonNullList.withSize(runeCount, ItemStack.EMPTY);
-					for(int i = 0; i < runeCount; i++) {
-						runes.set(i, this.getRuneItemStack(i));
+						NonNullList<ItemStack> runes = NonNullList.withSize(runeCount, ItemStack.EMPTY);
+						for(int i = 0; i < runeCount; i++) {
+							runes.set(i, this.getRuneItemStack(i));
+						}
+
+						RuneChainData data = new RuneChainData(runes, this.table.getContainerData());
+
+						cap.setData(data);
 					}
-
-					RuneChainData data = new RuneChainData(runes, this.table.getContainerData());
-
-					cap.setData(data);
 				}
 
 				this.table.setInventorySlotContents(0, stack);
@@ -735,24 +739,26 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 			try {
 				boolean hasData = false;
 
-				if(!stack.isEmpty() && stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null)) {
+				if(!stack.isEmpty()) {
 					IRuneChainCapability cap = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null);
 
-					IRuneChainData data = cap.getData();
+					if(cap != null) {
+						IRuneChainData data = cap.getData();
 
-					if(data != null) {
-						hasData = true;
+						if(data != null) {
+							hasData = true;
 
-						NonNullList<ItemStack> runes = data.getRuneItems();
+							NonNullList<ItemStack> runes = data.getRuneItems();
 
-						//Set data *before* setting runes so that the rune containers are initialized correctly!
-						this.table.setContainerData(data.getContainerData());
+							//Set data *before* setting runes so that the rune containers are initialized correctly!
+							this.table.setContainerData(data.getContainerData());
 
-						for(int i = 0; i < this.getRuneInventorySize(); i++) {
-							if(i < runes.size()) {
-								this.setRuneItemStack(i, runes.get(i));
-							} else {
-								this.setRuneItemStack(i, ItemStack.EMPTY);
+							for(int i = 0; i < this.getRuneInventorySize(); i++) {
+								if(i < runes.size()) {
+									this.setRuneItemStack(i, runes.get(i));
+								} else {
+									this.setRuneItemStack(i, ItemStack.EMPTY);
+								}
 							}
 						}
 					}

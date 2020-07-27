@@ -13,6 +13,7 @@ public class Registries {
 		EntityRegistry.preInit();
 		SoundRegistry.preInit();
 		CapabilityRegistry.preInit();
+		RuneRegistry.preInit();
 		StorageRegistry.preInit();
 		CustomRecipeRegistry.preInit();
 		AdvancementCriterionRegistry.preInit();

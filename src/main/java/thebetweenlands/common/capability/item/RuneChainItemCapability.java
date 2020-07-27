@@ -10,6 +10,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
+import thebetweenlands.api.capability.IRuneCapability;
 import thebetweenlands.api.capability.IRuneChainCapability;
 import thebetweenlands.api.rune.INodeBlueprint;
 import thebetweenlands.api.rune.INodeBlueprint.IConfigurationLinkAccess;
@@ -19,6 +20,7 @@ import thebetweenlands.api.rune.IRuneChainContainerData;
 import thebetweenlands.api.rune.IRuneChainData;
 import thebetweenlands.api.rune.IRuneContainer;
 import thebetweenlands.api.rune.IRuneContainerContext;
+import thebetweenlands.api.rune.IRuneContainerFactory;
 import thebetweenlands.api.rune.IRuneLink;
 import thebetweenlands.api.rune.IRuneWeavingTableContainer;
 import thebetweenlands.api.rune.IRuneWeavingTableGui;
@@ -28,7 +30,7 @@ import thebetweenlands.api.rune.impl.RuneChainComposition;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.common.capability.base.ItemCapability;
 import thebetweenlands.common.herblore.rune.RuneChainData;
-import thebetweenlands.common.item.herblore.ItemRuneChain;
+import thebetweenlands.common.item.herblore.rune.ItemRuneChain;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
@@ -106,10 +108,13 @@ public class RuneChainItemCapability extends ItemCapability<RuneChainItemCapabil
 		for(int i = 0; i < runes.size(); i++) {
 			ItemStack stack = runes.get(i);
 
-			if(!stack.isEmpty() && stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE, null)) {
+			IRuneCapability runeCap = null;
+			IRuneContainerFactory factory = null;
+			
+			if(!stack.isEmpty() && (runeCap = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE, null)) != null && (factory = runeCap.getRuneContainerFactory()) != null) {
 				final int runeIndex = i;
 
-				IRuneContainer container = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE, null).getRuneContainerFactory().createContainer();
+				IRuneContainer container = factory.createContainer();
 
 				IRuneContainerContext context = new IRuneContainerContext() {
 					@Override

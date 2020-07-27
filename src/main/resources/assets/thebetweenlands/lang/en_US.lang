@@ -876,22 +876,21 @@ item.thebetweenlands.ancient_helmet.name=Ancient Helmet
 item.thebetweenlands.ancient_leggings.name=Ancient Leggings
 
 item.thebetweenlands.rune_chain.name=Rune Chain
-item.thebetweenlands.test_rune_destroy_block.name=Rune: Destroy Block
-item.thebetweenlands.test_rune_destroy_blocks.name=Rune: Destroy Blocks
-item.thebetweenlands.test_rune_mark_area.name=Rune: Mark Area
-item.thebetweenlands.test_rune_select_grass.name=Rune: Select Grass
-item.thebetweenlands.test_rune_fire.name=Rune: Fire
-item.thebetweenlands.test_rune_projectile.name=Rune: Projectile
-item.thebetweenlands.test_rune_self.name=Rune: Self
-item.thebetweenlands.test_rune_pinpoint.name=Rune: Pinpoint
-item.thebetweenlands.test_rune_mark_nearby.name=Rune: Mark Nearby
-item.thebetweenlands.test_rune_branching.name=Rune: Branch
 item.thebetweenlands.weedwood_runelet.name=Weedwood Runelet
 item.thebetweenlands.pitstone_runelet.name=Pitstone Runelet
 item.thebetweenlands.dentrothyst_orange_runelet.name=Orange Dentrothyst Runelet
 item.thebetweenlands.dentrothyst_green_runelet.name=Green Dentrothyst Runelet
 item.thebetweenlands.bone_runelet.name=Bone Runelet
 item.thebetweenlands.ancient_runelet.name=Ancient Runelet
+item.thebetweenlands.unknown_rune.name=Unknown Rune
+item.thebetweenlands.initiate_rune.carved.name=Initiate Rune
+item.thebetweenlands.token_rune.carved.name=Token Rune
+item.thebetweenlands.gate_rune.carved.name=Gate Rune
+item.thebetweenlands.conduct_rune.carved.name=Conduct Rune
+item.thebetweenlands.initiate_rune.infused.name=Initiate Rune - %1$s
+item.thebetweenlands.token_rune.infused.name=Token Rune - %1$s
+item.thebetweenlands.gate_rune.infused.name=Gate Rune - %1$s
+item.thebetweenlands.conduct_rune.infused.name=Conduct Rune - %1$s
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -1111,6 +1110,14 @@ tooltip.bl.recipes.censer_secondary=Censer (secondary)
 tooltip.bl.recipes.purifier=Purifier
 tooltip.bl.recipes.mortar=Mortar
 
+tooltip.thebetweenlands.initiate_rune.carved=Material: %1$s
+tooltip.thebetweenlands.initiate_rune.infused=Material: %1$s\nAspect: %2$s\nTier: %3$s\nEffect: %4$s
+tooltip.thebetweenlands.token_rune.carved=Material: %1$s
+tooltip.thebetweenlands.token_rune.infused=Material: %1$s\nAspect: %2$s\nTier: %3$s\nEffect: %4$s
+tooltip.thebetweenlands.gate_rune.carved=Material: %1$s
+tooltip.thebetweenlands.gate_rune.infused=Material: %1$s\nAspect: %2$s\nTier: %3$s\nEffect: %4$s
+tooltip.thebetweenlands.conduct_rune.carved=Material: %1$s
+tooltip.thebetweenlands.conduct_rune.infused=Material: %1$s\nAspect: %2$s\nTier: %3$s\nEffect: %4$s
 
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing
@@ -1681,6 +1688,23 @@ rune.output=Output
 
 rune.gui.inputs=In:
 rune.gui.outputs=Out:
+
+rune_tier.tier_1.name=I
+rune_tier.tier_2.name=II
+rune_tier.tier_3.name=III
+
+rune_material.thebetweenlands.weedwood.name=Weedwood
+rune_material.thebetweenlands.pitstone.name=Pitstone
+rune_material.thebetweenlands.dentrothyst_green.name=Green Dentrothyst
+rune_material.thebetweenlands.dentrothyst_orange.name=Orange Dentrothyst
+rune_material.thebetweenlands.bone.name=Bone
+rune_material.thebetweenlands.ancient.name=Ancient
+
+rune.thebetweenlands.no_effect.name=No effect
+
+rune.thebetweenlands.initiate_water.name=Water
+rune.thebetweenlands.initiate_water.configuration.0.title=<underline>Water</underline>
+rune.thebetweenlands.initiate_water.configuration.0.description=Activates when entering water
 
 rune.item.thebetweenlands.test_rune_fire.configuration.0.title=<underline>Block Fire</underline>
 rune.item.thebetweenlands.test_rune_fire.configuration.0.description=Sets the marked block on fire
