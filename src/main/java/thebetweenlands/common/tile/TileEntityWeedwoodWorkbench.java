@@ -11,28 +11,31 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.util.Constants;
-import thebetweenlands.common.inventory.InventoryWeedwoodWorkbench;
+import thebetweenlands.common.inventory.InventoryCustomCrafting;
+import thebetweenlands.common.inventory.InventoryCustomCrafting.ICustomCraftingGrid;
 
-public class TileEntityWeedwoodWorkbench extends TileEntity {
+public class TileEntityWeedwoodWorkbench extends TileEntity implements ICustomCraftingGrid {
 	public NonNullList<ItemStack> craftingSlots = NonNullList.withSize(9, ItemStack.EMPTY);
-	public ItemStack craftResult;
 	public byte rotation = 0;
 
-	private Set<InventoryWeedwoodWorkbench> openInventories = new HashSet<>();
+	private Set<InventoryCustomCrafting> openInventories = new HashSet<>();
 
-	public void openInventory(InventoryWeedwoodWorkbench inv) {
+	@Override
+	public void openInventory(InventoryCustomCrafting inv) {
 		this.openInventories.add(inv);
 	}
 
-	public void closeInventory(InventoryWeedwoodWorkbench inv) {
+	@Override
+	public void closeInventory(InventoryCustomCrafting inv) {
 		this.openInventories.remove(inv);
 	}
 
 	/**
 	 * Notifies *all* open inventories of the changes, fixes dupe bug as in #532
 	 */
+	@Override
 	public void onCraftMatrixChanged() {
-		for(InventoryWeedwoodWorkbench inv : this.openInventories) {
+		for(InventoryCustomCrafting inv : this.openInventories) {
 			inv.eventHandler.onCraftMatrixChanged(inv);
 		}
 	}
@@ -97,5 +100,10 @@ public class TileEntityWeedwoodWorkbench extends TileEntity {
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		return this.writeNbt(super.getUpdateTag());
+	}
+
+	@Override
+	public NonNullList<ItemStack> getCraftingGrid() {
+		return this.craftingSlots;
 	}
 }

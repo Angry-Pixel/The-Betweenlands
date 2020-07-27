@@ -77,6 +77,7 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_DRAETON_FURNACE = 20;
 	public static final int GUI_DRAETON_UPGRADES = 21;
 	public static final int GUI_RUNE_WEAVING_TABLE = 22;
+	public static final int GUI_RUNE_CARVING_TABLE = 23;
 	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {

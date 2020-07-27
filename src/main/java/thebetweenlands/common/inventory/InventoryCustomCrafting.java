@@ -6,21 +6,42 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
-import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 
-public class InventoryWeedwoodWorkbench extends InventoryCrafting {
+public class InventoryCustomCrafting extends InventoryCrafting {
+	public static interface ICustomCraftingGrid {
+		public NonNullList<ItemStack> getCraftingGrid();
+
+		public void openInventory(InventoryCustomCrafting inv);
+
+		public void closeInventory(InventoryCustomCrafting inv);
+
+		public void onCraftMatrixChanged();
+
+		public default int getGridWidth() {
+			return 3;
+		}
+
+		public default int getGridHeight() {
+			return 3;
+		}
+	}
+
 	private NonNullList<ItemStack> stackList;
-	private static final int INV_WIDTH = 3;
-	private final TileEntityWeedwoodWorkbench tile;
+	private final TileEntity tile;
+	private final ICustomCraftingGrid grid;
+	private final String name;
 
-	public InventoryWeedwoodWorkbench(Container eventHandler, TileEntityWeedwoodWorkbench tile) {
-		super(eventHandler, 3, 3);
-		this.stackList = tile.craftingSlots;
-		this.tile = tile;
+	public InventoryCustomCrafting(Container eventHandler, ICustomCraftingGrid tile, String name) {
+		super(eventHandler, tile.getGridWidth(), tile.getGridHeight());
+		this.name = name;
+		this.stackList = tile.getCraftingGrid();
+		this.tile = (TileEntity)tile;
+		this.grid = tile;
 	}
 
 	@Override
@@ -35,8 +56,8 @@ public class InventoryWeedwoodWorkbench extends InventoryCrafting {
 
 	@Override
 	public ItemStack getStackInRowAndColumn(int row, int col) {
-		if (row >= 0 && row < INV_WIDTH) {
-			int k = row + col * INV_WIDTH;
+		if (row >= 0 && row < this.grid.getGridWidth()) {
+			int k = row + col * this.grid.getGridWidth();
 			return this.getStackInSlot(k);
 		} else {
 			return ItemStack.EMPTY;
@@ -44,14 +65,14 @@ public class InventoryWeedwoodWorkbench extends InventoryCrafting {
 	}
 
 	@Override
-    public String getName() {
-        return "container.bl.weedwood_workbench";
-    }
-    
-    @Override
-    public ITextComponent getDisplayName() {
-        return (ITextComponent)(this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName(), new Object[0]));
-    }
+	public String getName() {
+		return this.name;
+	}
+
+	@Override
+	public ITextComponent getDisplayName() {
+		return (ITextComponent)(this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName(), new Object[0]));
+	}
 
 	@Override
 	public boolean hasCustomName() {
@@ -63,7 +84,7 @@ public class InventoryWeedwoodWorkbench extends InventoryCrafting {
 		ItemStack itemstack = ItemStackHelper.getAndSplit(this.stackList, slot, amount);
 
 		if(!itemstack.isEmpty()) {
-			this.tile.onCraftMatrixChanged();
+			this.grid.onCraftMatrixChanged();
 		}
 
 		return itemstack;
@@ -72,7 +93,7 @@ public class InventoryWeedwoodWorkbench extends InventoryCrafting {
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
 		this.stackList.set(slot, stack);
-		this.tile.onCraftMatrixChanged();
+		this.grid.onCraftMatrixChanged();
 	}
 
 	@Override
@@ -96,13 +117,13 @@ public class InventoryWeedwoodWorkbench extends InventoryCrafting {
 	public void openInventory(EntityPlayer player) {
 		super.openInventory(player);
 
-		this.tile.openInventory(this);
+		this.grid.openInventory(this);
 	}
 
 	@Override
 	public void closeInventory(EntityPlayer player) {
 		super.closeInventory(player);
 
-		this.tile.closeInventory(this);
+		this.grid.closeInventory(this);
 	}
 }
