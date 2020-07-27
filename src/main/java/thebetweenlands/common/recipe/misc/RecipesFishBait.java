@@ -72,7 +72,7 @@ public class RecipesFishBait extends net.minecraftforge.registries.IForgeRegistr
 
 				if (stack.getItem() == ItemRegistry.FISH_BAIT && stack.hasTagCompound()) {
 
-					this.resultItem = stack.copy();
+					this.resultItem = stack.copy().splitStack(1);
 					if(stack.getTagCompound().getBoolean("glowing") && addGlowing || !stack.getTagCompound().getBoolean("glowing") && minusGlowing)
 						return false;
 
