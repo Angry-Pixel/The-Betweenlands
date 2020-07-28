@@ -8,14 +8,6 @@
 			"source_url": "https://twitter.com/1ju8me7bIrpVHbG/status/1183828652305403905"
 		},
 		{
-			"sha256": "422129A4BA59114BBB854E625BCC7BA8DC6DD9545EBBB1351B3F45EEC8F3CA90",
-			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/riftless_night.png",
-			"title": "Riftless Night",
-			"author": "Støne",
-			"source_url": "https://twitter.com/UnlimatedStone9/status/1166862053090516992",
-			"description": "Are they fireflies? Orbs?\nOr those mysterious glowing\nspheres that seem to disappear as\nyou approach? Could be a fiery\nlotus out on the lake... Hm..."
-		},
-		{
 			"sha256": "93B40AFC564405B4208EDFF2D6CFB0EE421B7BF842F06DF7BF866C61034D17C7",
 			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/mc_baguchan_winter.png",
 			"title": "Betweenlands Winter",
@@ -169,6 +161,34 @@
 			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/swampman_derp_the_secret_in_the_slime.png",
 			"title": "The Secret in the Slime",
 			"author": "swampman derp"
+		},
+		{
+			"sha256": "2D0E2603D3098451F248AA09F8C1F61275B36EB8BE447E0C55E24DF9A751AD12",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/pedroralof_the_environmental_pressure.png",
+			"title": "The Environmental Pressure",
+			"author": "PedroRalof",
+			"description": "Fauna and flora adapted to this harsh and\nunpredictable environment and started to flourish"
+		},
+		{
+			"sha256": "238CCAF33C857EB0628A1580EB99A93310A98CB46EAD7BA5FAA5F674CE873E94",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/stone_rift_in_the_night.png",
+			"title": "Rift in the Night",
+			"author": "Støne",
+			"description": "Strolling along the silted shores one\neerie night I took notice of an interesting sight.\nThe sky had a long tear across it, shining brightly in the\ndarkest of hours, intriguing. Something was oddly familiar\nabout this too but I just couldn't quite put my finger on it.\nIt was almost like it was a rift in the night sky.\nHow peculiar..."
+		},
+		{
+			"sha256": "934DDD6ACD667DEB250EB2BFBEC9BB247678FC408A738D04F61A9B172E44A24A",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/stone_moonless_night.png",
+			"title": "Moonless Night",
+			"author": "Støne",
+			"description": "A traveller once came to me and told tales of his land,\none that intrigued me greatly was of a large spherical object\nhovering in the sky.\n'The Moon!' he said, 'It feels weird not having one here. Those orbs are pretty though!',\nwe didn't speak of it much more, something found us..."
+		},
+		{
+			"sha256": "C97E05EE05550D8BA65E2EDCB0028723DAAC6AC602035DF9D40D57236B565C85",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/stone_effortless_resistance.png",
+			"title": "Effortless Resistance",
+			"author": "Støne",
+			"description": "An old acquaintance of mine from long ago had an interesting\nquirk, he used to consume the sap from the trees that grew nearby.\n He said to me 'The taste isn't that bad, it renews me in some way,\nlike I still feel like myself'.\n I always laughed it off and took it as a weird preference\nof his, or some silly superstition.\nI didn't laugh anymore when I was reading through his old\nstudies on that unfortunate night. I haven't laughed much since..."
 		}
 	]
 }]
