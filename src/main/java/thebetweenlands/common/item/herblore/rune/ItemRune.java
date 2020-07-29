@@ -19,7 +19,10 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.aspect.IAspectType;
+import thebetweenlands.api.item.IRune;
 import thebetweenlands.api.rune.IRuneContainerFactory;
+import thebetweenlands.api.rune.RuneCategory;
+import thebetweenlands.api.rune.RuneTier;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.ITintedItem;
@@ -27,7 +30,7 @@ import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.NBTHelper;
 
-public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipleItemModelDefinition {
+public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipleItemModelDefinition, IRune {
 	private static final Map<Triple<Integer, Integer, IAspectType>, IRuneContainerFactory> REGISTRY = new HashMap<>();
 
 	private static final String NBT_ASPECT_TYPE = "thebetweenlands.rune.aspect_type";
@@ -71,6 +74,7 @@ public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipl
 		return getFactory(this.getCategory(stack), this.getTier(stack), this.getAspect(stack));
 	}
 
+	@Override
 	public ItemStack infuse(ItemStack stack, IAspectType type, RuneTier tier) {
 		ItemStack infused = stack.copy();
 		infused.setItemDamage(this.getCategory(stack) * RuneTier.COUNT + tier.id);
@@ -203,7 +207,7 @@ public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipl
 
 			String aspectName = this.getAspect(stack).getName();
 			String tierName = I18n.translateToLocal(String.format("rune_tier.%s.name", RuneTier.fromId(this.getTier(stack)).name));
-			
+
 			tooltip.addAll(ItemTooltipHandler.splitTooltip(
 					I18n.translateToLocalFormatted(
 							String.format("tooltip.%s.%s_rune.infused", this.getRegistryName().getNamespace(), RuneCategory.fromId(this.getCategory(stack)).name),

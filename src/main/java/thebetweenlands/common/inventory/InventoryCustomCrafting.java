@@ -36,12 +36,30 @@ public class InventoryCustomCrafting extends InventoryCrafting {
 	private final ICustomCraftingGrid grid;
 	private final String name;
 
+	private boolean isBatchCrafting = false;
+	private boolean batchCraftingGridChange = false;
+
 	public InventoryCustomCrafting(Container eventHandler, ICustomCraftingGrid tile, String name) {
 		super(eventHandler, tile.getGridWidth(), tile.getGridHeight());
 		this.name = name;
 		this.stackList = tile.getCraftingGrid();
 		this.tile = (TileEntity)tile;
 		this.grid = tile;
+	}
+
+	public void startBatchCrafting() {
+		this.isBatchCrafting = true;
+		this.batchCraftingGridChange = false;
+	}
+
+	public void stopBatchCrafting() {
+		this.isBatchCrafting = false;
+
+		if(this.batchCraftingGridChange) {
+			this.batchCraftingGridChange = false;
+
+			this.grid.onCraftMatrixChanged();
+		}
 	}
 
 	@Override
@@ -84,7 +102,10 @@ public class InventoryCustomCrafting extends InventoryCrafting {
 		ItemStack itemstack = ItemStackHelper.getAndSplit(this.stackList, slot, amount);
 
 		if(!itemstack.isEmpty()) {
-			this.grid.onCraftMatrixChanged();
+			this.batchCraftingGridChange = true;
+			if(!this.isBatchCrafting) {
+				this.grid.onCraftMatrixChanged();
+			}
 		}
 
 		return itemstack;
@@ -93,7 +114,10 @@ public class InventoryCustomCrafting extends InventoryCrafting {
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
 		this.stackList.set(slot, stack);
-		this.grid.onCraftMatrixChanged();
+		this.batchCraftingGridChange = true;
+		if(!this.isBatchCrafting) {
+			this.grid.onCraftMatrixChanged();
+		}
 	}
 
 	@Override

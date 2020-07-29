@@ -7,6 +7,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+import thebetweenlands.common.inventory.InventoryRuneletCrafting;
 
 public class RecipeRuneCarving extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 	private final IRecipe recipe;
@@ -17,12 +18,11 @@ public class RecipeRuneCarving extends IForgeRegistryEntry.Impl<IRecipe> impleme
 
 	@Override
 	public boolean matches(InventoryCrafting inv, World worldIn) {
-		return this.recipe.matches(inv, worldIn);
+		return inv instanceof InventoryRuneletCrafting && this.recipe.matches(inv, worldIn);
 	}
 
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting inv) {
-		//TODO Check if inventory is rune carving table
 		return this.recipe.getCraftingResult(inv);
 	}
 

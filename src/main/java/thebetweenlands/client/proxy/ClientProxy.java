@@ -57,6 +57,7 @@ import thebetweenlands.client.gui.inventory.GuiDruidAltar;
 import thebetweenlands.client.gui.inventory.GuiMortar;
 import thebetweenlands.client.gui.inventory.GuiPouch;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
+import thebetweenlands.client.gui.inventory.GuiRuneCarvingTable;
 import thebetweenlands.client.gui.inventory.GuiTarBarrel;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.client.gui.inventory.runeweavingtable.GuiRuneWeavingTable;
@@ -505,7 +506,13 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 				return new GuiRuneWeavingTable(player, (TileEntityRuneWeavingTable) tile);
 			}
 			break;
-
+			
+		case GUI_RUNE_CARVING_TABLE:
+			if (tile instanceof TileEntityRuneCarvingTable) {
+				return new GuiRuneCarvingTable(player.inventory, (TileEntityRuneCarvingTable) tile);
+			}
+			break;
+			
 		case GUI_DRAETON_POUCH:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton) {

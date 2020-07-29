@@ -41,6 +41,7 @@ import thebetweenlands.common.inventory.container.ContainerItemNaming;
 import thebetweenlands.common.inventory.container.ContainerMortar;
 import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
+import thebetweenlands.common.inventory.container.ContainerRuneCarvingTable;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
 import thebetweenlands.common.inventory.container.runeweavingtable.ContainerRuneWeavingTable;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
@@ -52,6 +53,7 @@ import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityPurifier;
+import thebetweenlands.common.tile.TileEntityRuneCarvingTable;
 import thebetweenlands.common.tile.TileEntityRuneWeavingTable;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 
@@ -165,6 +167,13 @@ public class CommonProxy implements IGuiHandler {
 		case GUI_RUNE_WEAVING_TABLE:
 			if (tile instanceof TileEntityRuneWeavingTable) {
 				return new ContainerRuneWeavingTable(player, (TileEntityRuneWeavingTable) tile);
+			}
+			break;
+			
+
+		case GUI_RUNE_CARVING_TABLE:
+			if (tile instanceof TileEntityRuneCarvingTable) {
+				return new ContainerRuneCarvingTable(player.inventory, (TileEntityRuneCarvingTable) tile);
 			}
 			break;
 			

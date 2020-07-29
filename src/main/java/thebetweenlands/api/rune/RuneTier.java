@@ -1,4 +1,4 @@
-package thebetweenlands.common.item.herblore.rune;
+package thebetweenlands.api.rune;
 
 public enum RuneTier {
 	TIER_1(0, "tier_1"), TIER_2(1, "tier_2"), TIER_3(2, "tier_3");

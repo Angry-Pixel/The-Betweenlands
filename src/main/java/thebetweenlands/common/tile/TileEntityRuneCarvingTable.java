@@ -7,11 +7,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import thebetweenlands.common.inventory.InventoryCustomCrafting;
 import thebetweenlands.common.inventory.InventoryCustomCrafting.ICustomCraftingGrid;
+import thebetweenlands.util.NonNullDelegateList;
 
 public class TileEntityRuneCarvingTable extends TileEntityBasicInventory implements ICustomCraftingGrid {
 	private Set<InventoryCustomCrafting> openInventories = new HashSet<>();
 
 	public TileEntityRuneCarvingTable() {
+		//Slots 0-8: crafting grid, 9: crafting output, 10: aspect slot, 11-14: rune outputs
 		super(15, "rune_carving_table");
 	}
 
@@ -37,7 +39,6 @@ public class TileEntityRuneCarvingTable extends TileEntityBasicInventory impleme
 
 	@Override
 	public NonNullList<ItemStack> getCraftingGrid() {
-		// TODO Return crafting grid view of inventory
-		return null;
+		return new NonNullDelegateList<ItemStack>(this.inventory.subList(0, 9), ItemStack.EMPTY);
 	}
 }

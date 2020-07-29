@@ -1,4 +1,4 @@
-package thebetweenlands.common.item.herblore.rune;
+package thebetweenlands.api.rune;
 
 public enum RuneCategory {
 	INITIATE(0, "initiate"), TOKEN(1, "token"), GATE(2, "gate"), CONDUCT(3, "conduct");
