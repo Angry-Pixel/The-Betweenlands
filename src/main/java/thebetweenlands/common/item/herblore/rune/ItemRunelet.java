@@ -4,11 +4,11 @@ import java.util.function.Supplier;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import thebetweenlands.api.item.IRunelet;
+import thebetweenlands.api.item.IRuneletItem;
 import thebetweenlands.api.rune.RuneCategory;
 import thebetweenlands.client.tab.BLCreativeTabs;
 
-public class ItemRunelet extends Item implements IRunelet {
+public class ItemRunelet extends Item implements IRuneletItem {
 	private final Supplier<ItemRune> rune;
 
 	public ItemRunelet(Supplier<ItemRune> rune) {

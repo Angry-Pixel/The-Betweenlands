@@ -19,7 +19,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.aspect.IAspectType;
-import thebetweenlands.api.item.IRune;
+import thebetweenlands.api.item.IRuneItem;
 import thebetweenlands.api.rune.IRuneContainerFactory;
 import thebetweenlands.api.rune.RuneCategory;
 import thebetweenlands.api.rune.RuneTier;
@@ -30,7 +30,7 @@ import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.NBTHelper;
 
-public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipleItemModelDefinition, IRune {
+public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipleItemModelDefinition, IRuneItem {
 	private static final Map<Triple<Integer, Integer, IAspectType>, IRuneContainerFactory> REGISTRY = new HashMap<>();
 
 	private static final String NBT_ASPECT_TYPE = "thebetweenlands.rune.aspect_type";
@@ -220,5 +220,10 @@ public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipl
 							runeMaterial
 							).trim(), 0));
 		}
+	}
+
+	@Override
+	public RuneCategory getRuneCategory(ItemStack stack) {
+		return RuneCategory.fromId(this.getCategory(stack));
 	}
 }

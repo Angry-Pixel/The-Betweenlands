@@ -13,36 +13,26 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 
 public class InventoryCustomCrafting extends InventoryCrafting {
-	public static interface ICustomCraftingGrid {
-		public NonNullList<ItemStack> getCraftingGrid();
+	public static interface ICustomCraftingGridChangeHandler {
+		public void onCraftMatrixChanged();
 
 		public void openInventory(InventoryCustomCrafting inv);
 
 		public void closeInventory(InventoryCustomCrafting inv);
-
-		public void onCraftMatrixChanged();
-
-		public default int getGridWidth() {
-			return 3;
-		}
-
-		public default int getGridHeight() {
-			return 3;
-		}
 	}
 
 	private NonNullList<ItemStack> stackList;
 	private final TileEntity tile;
-	private final ICustomCraftingGrid grid;
+	private final ICustomCraftingGridChangeHandler grid;
 	private final String name;
 
 	private boolean isBatchCrafting = false;
 	private boolean batchCraftingGridChange = false;
 
-	public InventoryCustomCrafting(Container eventHandler, ICustomCraftingGrid tile, String name) {
-		super(eventHandler, tile.getGridWidth(), tile.getGridHeight());
+	public InventoryCustomCrafting(Container eventHandler, ICustomCraftingGridChangeHandler tile, NonNullList<ItemStack> inventory, int width, int height, String name) {
+		super(eventHandler, width, height);
 		this.name = name;
-		this.stackList = tile.getCraftingGrid();
+		this.stackList = inventory;
 		this.tile = (TileEntity)tile;
 		this.grid = tile;
 	}
@@ -74,8 +64,8 @@ public class InventoryCustomCrafting extends InventoryCrafting {
 
 	@Override
 	public ItemStack getStackInRowAndColumn(int row, int col) {
-		if (row >= 0 && row < this.grid.getGridWidth()) {
-			int k = row + col * this.grid.getGridWidth();
+		if (row >= 0 && row < this.getHeight()) {
+			int k = row + col * this.getWidth();
 			return this.getStackInSlot(k);
 		} else {
 			return ItemStack.EMPTY;

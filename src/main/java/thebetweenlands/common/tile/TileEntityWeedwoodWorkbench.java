@@ -12,9 +12,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.inventory.InventoryCustomCrafting;
-import thebetweenlands.common.inventory.InventoryCustomCrafting.ICustomCraftingGrid;
+import thebetweenlands.common.inventory.InventoryCustomCrafting.ICustomCraftingGridChangeHandler;
 
-public class TileEntityWeedwoodWorkbench extends TileEntity implements ICustomCraftingGrid {
+public class TileEntityWeedwoodWorkbench extends TileEntity implements ICustomCraftingGridChangeHandler {
 	public NonNullList<ItemStack> craftingSlots = NonNullList.withSize(9, ItemStack.EMPTY);
 	public byte rotation = 0;
 
@@ -102,7 +102,6 @@ public class TileEntityWeedwoodWorkbench extends TileEntity implements ICustomCr
 		return this.writeNbt(super.getUpdateTag());
 	}
 
-	@Override
 	public NonNullList<ItemStack> getCraftingGrid() {
 		return this.craftingSlots;
 	}

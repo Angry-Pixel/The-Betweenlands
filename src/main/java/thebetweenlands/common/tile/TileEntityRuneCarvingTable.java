@@ -6,10 +6,10 @@ import java.util.Set;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import thebetweenlands.common.inventory.InventoryCustomCrafting;
-import thebetweenlands.common.inventory.InventoryCustomCrafting.ICustomCraftingGrid;
+import thebetweenlands.common.inventory.InventoryCustomCrafting.ICustomCraftingGridChangeHandler;
 import thebetweenlands.util.NonNullDelegateList;
 
-public class TileEntityRuneCarvingTable extends TileEntityBasicInventory implements ICustomCraftingGrid {
+public class TileEntityRuneCarvingTable extends TileEntityBasicInventory implements ICustomCraftingGridChangeHandler {
 	private Set<InventoryCustomCrafting> openInventories = new HashSet<>();
 
 	public TileEntityRuneCarvingTable() {
@@ -37,8 +37,11 @@ public class TileEntityRuneCarvingTable extends TileEntityBasicInventory impleme
 		}
 	}
 
-	@Override
 	public NonNullList<ItemStack> getCraftingGrid() {
 		return new NonNullDelegateList<ItemStack>(this.inventory.subList(0, 9), ItemStack.EMPTY);
+	}
+	
+	public NonNullList<ItemStack> getAspectGrid() {
+		return new NonNullDelegateList<ItemStack>(this.inventory.subList(10, 11), ItemStack.EMPTY);
 	}
 }
