@@ -173,7 +173,7 @@ public class CommonProxy implements IGuiHandler {
 
 		case GUI_RUNE_CARVING_TABLE:
 			if (tile instanceof TileEntityRuneCarvingTable) {
-				return new ContainerRuneCarvingTable(player.inventory, (TileEntityRuneCarvingTable) tile, false);
+				return new ContainerRuneCarvingTable(player.inventory, (TileEntityRuneCarvingTable) tile, ((TileEntityRuneCarvingTable) tile).isFullGrid());
 			}
 			break;
 			

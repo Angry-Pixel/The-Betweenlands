@@ -12,6 +12,10 @@
       "east": { },
       "south": { },
       "west": { }
+    },
+    "full_grid": {
+      "true": { },
+      "false": { }
     }
   }
 }

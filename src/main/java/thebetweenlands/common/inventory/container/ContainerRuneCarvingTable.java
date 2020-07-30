@@ -97,7 +97,7 @@ public class ContainerRuneCarvingTable extends ContainerWorkbench {
 			this.addSlotToContainer(new Slot(this.craftMatrix, 0, 80, 72)); //1
 
 			for(int i = 0; i < 8; i++) {
-				this.addSlotToContainer(new Slot(this.craftMatrix, 0, 0, 0) {
+				this.addSlotToContainer(new Slot(this.craftMatrix, i, 0, 0) {
 					@Override
 					public boolean isItemValid(ItemStack stack) {
 						return false;

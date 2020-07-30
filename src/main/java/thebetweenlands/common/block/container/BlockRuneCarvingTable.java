@@ -1,8 +1,11 @@
 package thebetweenlands.common.block.container;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.BlockWorkbench;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -29,23 +32,24 @@ import thebetweenlands.common.tile.TileEntityRuneCarvingTable;
 
 public class BlockRuneCarvingTable extends BasicBlock implements ITileEntityProvider {
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
+	public static final PropertyBool FULL_GRID = PropertyBool.create("full_grid");
 
 	public BlockRuneCarvingTable() {
 		super(Material.ROCK);
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
-		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(FULL_GRID, false));
 	}
 
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
-		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing());
+		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing()).withProperty(FULL_GRID, this.checkFullGridState(world, pos));
 	}
 
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing()), 2);
+		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing()).withProperty(FULL_GRID, this.checkFullGridState(world, pos)), 2);
 	}
 
 	@Override
@@ -62,6 +66,37 @@ public class BlockRuneCarvingTable extends BasicBlock implements ITileEntityProv
 			}
 		}
 		return true;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+		super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
+
+		if(!worldIn.isRemote) {
+			boolean fullGridState = this.checkFullGridState(worldIn, pos);
+			if(state.getValue(FULL_GRID) != fullGridState) {
+				worldIn.setBlockState(pos, state.withProperty(FULL_GRID, fullGridState));
+
+				if(!fullGridState) {
+					TileEntity tile = worldIn.getTileEntity(pos);
+
+					if(tile instanceof TileEntityRuneCarvingTable) {
+						TileEntityRuneCarvingTable carvingTable = (TileEntityRuneCarvingTable) tile;
+
+						for(int i = 1; i < 9; ++i) {
+							ItemStack stack = carvingTable.getStackInSlot(i);
+
+							if(!stack.isEmpty()) {
+								InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY() + 0.5f, pos.getZ(), stack);
+
+								carvingTable.setInventorySlotContents(i, ItemStack.EMPTY);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Override
@@ -128,10 +163,10 @@ public class BlockRuneCarvingTable extends BasicBlock implements ITileEntityProv
 	public boolean hasCustomBreakingProgress(IBlockState state) {
 		return true;
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, FACING);
+		return new BlockStateContainer(this, FACING, FULL_GRID);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -140,5 +175,17 @@ public class BlockRuneCarvingTable extends BasicBlock implements ITileEntityProv
 		super.eventReceived(state, worldIn, pos, id, param);
 		TileEntity tileentity = worldIn.getTileEntity(pos);
 		return tileentity == null ? false : tileentity.receiveClientEvent(id, param);
+	}
+
+	protected boolean checkFullGridState(IBlockAccess world, BlockPos pos) {
+		for(EnumFacing facing : EnumFacing.VALUES) {
+			if(facing != EnumFacing.UP) {
+				IBlockState state = world.getBlockState(pos.offset(facing));
+				if(state.getBlock() instanceof BlockWeedwoodWorkbench || state.getBlock() instanceof BlockWorkbench) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

@@ -509,7 +509,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			
 		case GUI_RUNE_CARVING_TABLE:
 			if (tile instanceof TileEntityRuneCarvingTable) {
-				return new GuiRuneCarvingTable(player.inventory, (TileEntityRuneCarvingTable) tile, false);
+				return new GuiRuneCarvingTable(player.inventory, (TileEntityRuneCarvingTable) tile, ((TileEntityRuneCarvingTable) tile).isFullGrid());
 			}
 			break;
 			
