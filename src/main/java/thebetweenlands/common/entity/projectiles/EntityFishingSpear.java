@@ -64,7 +64,6 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 	public Entity shootingEntity;
 	protected int ticksInGround;
 	protected int ticksInAir;
-	protected int ticksInWater;
 	protected double damage = 0;
 
 	public EntityFishingSpear(World world) {
@@ -278,35 +277,25 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 
 
 			if (isInWater()) {
-				for (int i = 0; i < 4; ++i) {
+				for (int i = 0; i < 4; ++i)
 					world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX - motionX * 0.25D, posY - motionY * 0.25D, posZ - motionZ * 0.25D, motionX, motionY, motionZ, new int[0]);
-				}
-				if(ticksInWater <= 60 && !inGround)
-					ticksInWater++;
 				f1 = 0.6F;
 			}
 
 			if (isWet())
 				extinguish();
 
-			motionX *= (double) f1;
-			if (isInWater())
-				motionY = f1 * 0.1F;
-			else
-				motionY *= (double) f1;
-			motionZ *= (double) f1;
-
 			if (!hasNoGravity())
 				motionY -= 0.05000000074505806D;
+
+			motionX *= (double) f1;
+			motionY *= (double) f1;
+			motionZ *= (double) f1;
 
 			setPosition(posX, posY, posZ);
 			doBlockCollisions();
 		}
-	/*	if (!world.isRemote && ticksInWater >= 60) {
-			entityDropItem(getEntityItem(), 0.1F);
-			setDead();
-		}
-		*/
+
 	}
 
 	protected void onHit(RayTraceResult raytraceResultIn) {
