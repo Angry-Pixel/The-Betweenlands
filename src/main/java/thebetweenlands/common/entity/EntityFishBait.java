@@ -3,12 +3,14 @@ package thebetweenlands.common.entity;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -146,4 +148,39 @@ public class EntityFishBait extends EntityItem {
     public void setBaitRange(int range) {
         dataManager.set(RANGE, range);
     }
+    
+	public void shoot(Entity shooter, float pitch, float yaw, float pitchOffset, float velocity, float inaccuracy) {
+		float f = -MathHelper.sin(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
+		float f1 = -MathHelper.sin(pitch * 0.017453292F);
+		float f2 = MathHelper.cos(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
+		shoot((double) f, (double) f1, (double) f2, velocity, inaccuracy);
+		motionX += shooter.motionX;
+		motionZ += shooter.motionZ;
+
+		if (!shooter.onGround) {
+			motionY += shooter.motionY;
+		}
+	}
+
+	public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
+		float f = MathHelper.sqrt(x * x + y * y + z * z);
+		x = x / (double) f;
+		y = y / (double) f;
+		z = z / (double) f;
+		x = x + rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+		y = y + rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+		z = z + rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+		x = x * (double) velocity;
+		y = y * (double) velocity;
+		z = z * (double) velocity;
+		motionX = x;
+		motionY = y;
+		motionZ = z;
+		float f1 = MathHelper.sqrt(x * x + z * z);
+		rotationYaw = (float) (MathHelper.atan2(x, z) * (180D / Math.PI));
+		rotationPitch = (float) (MathHelper.atan2(y, (double) f1) * (180D / Math.PI));
+		prevRotationYaw = rotationYaw;
+		prevRotationPitch = rotationPitch;
+	}
+	
 }
