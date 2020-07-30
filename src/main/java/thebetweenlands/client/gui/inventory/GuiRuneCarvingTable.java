@@ -29,7 +29,11 @@ import thebetweenlands.common.tile.TileEntityRuneCarvingTable;
 
 @SideOnly(Side.CLIENT)
 public class GuiRuneCarvingTable extends GuiContainer implements IRecipeShownListener {
-	private static final ResourceLocation CRAFTING_TABLE_GUI_TEXTURES = new ResourceLocation(ModInfo.ID, "textures/gui/rune/rune_carving_table_full.png");
+	private static final ResourceLocation CRAFTING_TABLE_FULL_GUI_TEXTURES = new ResourceLocation(ModInfo.ID, "textures/gui/rune/rune_carving_table_full.png");
+	private static final ResourceLocation CRAFTING_TABLE_SINGLE_GUI_TEXTURES = new ResourceLocation(ModInfo.ID, "textures/gui/rune/rune_carving_table_single.png");
+
+	private boolean fullGrid;
+
 	private GuiButtonImage recipeButton;
 	private final GuiRecipeBook recipeBookGui;
 	private boolean widthTooNarrow;
@@ -37,11 +41,17 @@ public class GuiRuneCarvingTable extends GuiContainer implements IRecipeShownLis
 
 	private int carveTicks = 0;
 
-	public GuiRuneCarvingTable(InventoryPlayer playerInventory, TileEntityRuneCarvingTable table) {
-		super(new ContainerRuneCarvingTableGui(playerInventory, table));
+	public GuiRuneCarvingTable(InventoryPlayer playerInventory, TileEntityRuneCarvingTable table, boolean fullGrid) {
+		super(new ContainerRuneCarvingTableGui(playerInventory, table, fullGrid));
 		((ContainerRuneCarvingTableGui) this.inventorySlots).setGui(this);
-		this.recipeBookGui = new GuiRecipeBook();
+		this.fullGrid = fullGrid;
 		this.table = table;
+
+		if(fullGrid) {
+			this.recipeBookGui = new GuiRecipeBook();
+		} else {
+			this.recipeBookGui = null;
+		}
 
 		this.xSize = 176;
 		this.ySize = 247;
@@ -50,31 +60,41 @@ public class GuiRuneCarvingTable extends GuiContainer implements IRecipeShownLis
 	@Override
 	public void initGui() {
 		super.initGui();
-		widthTooNarrow = width < 379;
-		recipeBookGui.func_194303_a(width, height, mc, widthTooNarrow, ((ContainerWorkbench)inventorySlots).craftMatrix);
-		guiLeft = recipeBookGui.updateScreenPosition(widthTooNarrow, width, xSize);
-		recipeButton = new GuiButtonImage(10, guiLeft + 20, guiTop + 53, 20, 18, 235, 209, 19, CRAFTING_TABLE_GUI_TEXTURES);
-		buttonList.add(recipeButton);
+		this.widthTooNarrow = this.width < 379;
+
+		if(this.recipeBookGui != null) {
+			this.recipeBookGui.func_194303_a(this.width, this.height, this.mc, this.widthTooNarrow, ((ContainerWorkbench)this.inventorySlots).craftMatrix);
+			this.guiLeft = this.recipeBookGui.updateScreenPosition(this.widthTooNarrow, this.width, this.xSize);
+			this.recipeButton = new GuiButtonImage(10, this.guiLeft + 20, this.guiTop + 53, 20, 18, 235, 209, 19, CRAFTING_TABLE_FULL_GUI_TEXTURES);
+			this.buttonList.add(this.recipeButton);
+		}
 	}
 
 	@Override
 	public void updateScreen() {
 		super.updateScreen();
-		recipeBookGui.tick();
+
+		if(this.recipeBookGui != null) {
+			this.recipeBookGui.tick();
+		}
 
 		this.carveTicks = Math.max(this.carveTicks - 1, 0);
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y) {
-		fontRenderer.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752);
+		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTickTime, int x, int y) {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
-		this.mc.getTextureManager().bindTexture(CRAFTING_TABLE_GUI_TEXTURES);
+		if(this.fullGrid) {
+			this.mc.getTextureManager().bindTexture(CRAFTING_TABLE_FULL_GUI_TEXTURES);
+		} else {
+			this.mc.getTextureManager().bindTexture(CRAFTING_TABLE_SINGLE_GUI_TEXTURES);
+		}
 
 		int centerX = this.guiLeft;
 		int centerY = (this.height - this.ySize) / 2;
@@ -116,22 +136,22 @@ public class GuiRuneCarvingTable extends GuiContainer implements IRecipeShownLis
 
 					if(!output1.isEmpty() && output1.getItem() instanceof IRuneItem && ((IRuneItem) output1.getItem()).getInfusedAspect(output1) != null) {
 						//Top left rune slot
-						this.drawTexturedModalRect(this.guiLeft + 73, this.guiTop + 117, 209, 68, 5, 4);
+						this.drawTexturedModalRect(this.guiLeft + 73, this.guiTop + 117, 209, 68, 10, 10);
 					}
 
 					if(!output2.isEmpty() && output2.getItem() instanceof IRuneItem && ((IRuneItem) output2.getItem()).getInfusedAspect(output2) != null) {
 						//Bottom left rune slot
-						this.drawTexturedModalRect(this.guiLeft + 73, this.guiTop + 136, 209, 87, 5, 4);
+						this.drawTexturedModalRect(this.guiLeft + 73, this.guiTop + 130, 209, 81, 10, 10);
 					}
 
 					if(!output3.isEmpty() && output3.getItem() instanceof IRuneItem && ((IRuneItem) output3.getItem()).getInfusedAspect(output3) != null) {
 						//Bottom right rune slot
-						this.drawTexturedModalRect(this.guiLeft + 98, this.guiTop + 117, 234, 68, 5, 4);
+						this.drawTexturedModalRect(this.guiLeft + 93, this.guiTop + 117, 229, 68, 10, 10);
 					}
 
 					if(!output4.isEmpty() && output4.getItem() instanceof IRuneItem && ((IRuneItem) output4.getItem()).getInfusedAspect(output4) != null) {
 						//Top right rune slot
-						this.drawTexturedModalRect(this.guiLeft + 98, this.guiTop + 136, 234, 87, 5, 4);
+						this.drawTexturedModalRect(this.guiLeft + 93, this.guiTop + 130, 229, 81, 10, 10);
 					}
 
 					//Pipe
@@ -151,52 +171,58 @@ public class GuiRuneCarvingTable extends GuiContainer implements IRecipeShownLis
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
 
-		if (this.recipeBookGui.isVisible() && widthTooNarrow) {
-			drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
-			recipeBookGui.render(mouseX, mouseY, partialTicks);
+		if(this.recipeBookGui != null) {
+			if (this.recipeBookGui.isVisible() && this.widthTooNarrow) {
+				this.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+				this.recipeBookGui.render(mouseX, mouseY, partialTicks);
+			} else {
+				this.recipeBookGui.render(mouseX, mouseY, partialTicks);
+				super.drawScreen(mouseX, mouseY, partialTicks);
+				this.recipeBookGui.renderGhostRecipe(this.guiLeft, this.guiTop, true, partialTicks);
+			}
 		} else {
-			recipeBookGui.render(mouseX, mouseY, partialTicks);
 			super.drawScreen(mouseX, mouseY, partialTicks);
-			recipeBookGui.renderGhostRecipe(guiLeft, guiTop, true, partialTicks);
 		}
 
 		this.renderHoveredToolTip(mouseX, mouseY);
-		this.recipeBookGui.renderTooltip(guiLeft, guiTop, mouseX, mouseY);
+		if(this.recipeBookGui != null) {
+			this.recipeBookGui.renderTooltip(this.guiLeft, this.guiTop, mouseX, mouseY);
+		}
 	}
 
 	@Override
 	protected boolean isPointInRegion(int rectX, int rectY, int rectWidth, int rectHeight, int pointX, int pointY) {
-		return (!widthTooNarrow || !recipeBookGui.isVisible()) && super.isPointInRegion(rectX, rectY, rectWidth, rectHeight, pointX, pointY);
+		return (!this.widthTooNarrow || this.recipeBookGui == null || !this.recipeBookGui.isVisible()) && super.isPointInRegion(rectX, rectY, rectWidth, rectHeight, pointX, pointY);
 	}
 
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-		if (!recipeBookGui.mouseClicked(mouseX, mouseY, mouseButton)) {
-			if (!widthTooNarrow || !recipeBookGui.isVisible()) {
+		if (this.recipeBookGui == null || !this.recipeBookGui.mouseClicked(mouseX, mouseY, mouseButton)) {
+			if (!this.widthTooNarrow || this.recipeBookGui == null || !this.recipeBookGui.isVisible()) {
 				super.mouseClicked(mouseX, mouseY, mouseButton);
 			}
 		}
 	}
 
 	@Override
-	protected boolean hasClickedOutside(int p_193983_1_, int p_193983_2_, int p_193983_3_, int p_193983_4_) {
-		boolean flag = p_193983_1_ < p_193983_3_ || p_193983_2_ < p_193983_4_ || p_193983_1_ >= p_193983_3_ + xSize || p_193983_2_ >= p_193983_4_ + ySize;
-		return this.recipeBookGui.hasClickedOutside(p_193983_1_, p_193983_2_, guiLeft, guiTop, xSize, ySize) && flag;
+	protected boolean hasClickedOutside(int x1, int x2, int x3, int x4) {
+		boolean insideMainGui = x1 < x3 || x2 < x4 || x1 >= x3 + this.xSize || x2 >= x4 + this.ySize;
+		return (this.recipeBookGui == null || this.recipeBookGui.hasClickedOutside(x1, x2, this.guiLeft, this.guiTop, this.xSize, this.ySize)) && insideMainGui;
 	}
 
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
-		if (button.id == 10) {
-			recipeBookGui.initVisuals(widthTooNarrow, ((ContainerWorkbench)inventorySlots).craftMatrix);
-			recipeBookGui.toggleVisibility();
-			guiLeft = recipeBookGui.updateScreenPosition(widthTooNarrow, width, xSize);
-			recipeButton.setPosition(guiLeft + 20, guiTop + 53);
+		if (this.recipeBookGui != null && button.id == 10) {
+			this.recipeBookGui.initVisuals(this.widthTooNarrow, ((ContainerWorkbench)this.inventorySlots).craftMatrix);
+			this.recipeBookGui.toggleVisibility();
+			this.guiLeft = this.recipeBookGui.updateScreenPosition(this.widthTooNarrow, this.width, this.xSize);
+			this.recipeButton.setPosition(this.guiLeft + 20, this.guiTop + 53);
 		}
 	}
 
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException {
-		if (!recipeBookGui.keyPressed(typedChar, keyCode)) {
+		if (this.recipeBookGui == null || !this.recipeBookGui.keyPressed(typedChar, keyCode)) {
 			super.keyTyped(typedChar, keyCode);
 		}
 	}
@@ -204,23 +230,29 @@ public class GuiRuneCarvingTable extends GuiContainer implements IRecipeShownLis
 	@Override
 	protected void handleMouseClick(Slot slotIn, int slotId, int mouseButton, ClickType type) {
 		super.handleMouseClick(slotIn, slotId, mouseButton, type);
-		recipeBookGui.slotClicked(slotIn);
+		if(this.recipeBookGui != null) {
+			this.recipeBookGui.slotClicked(slotIn);
+		}
 	}
 
 	@Override
 	public void recipesUpdated() {
-		recipeBookGui.recipesUpdated();
+		if(this.recipeBookGui != null) {
+			this.recipeBookGui.recipesUpdated();
+		}
 	}
 
 	@Override
 	public void onGuiClosed() {
-		recipeBookGui.removed();
+		if(this.recipeBookGui != null) {
+			this.recipeBookGui.removed();
+		}
 		super.onGuiClosed();
 	}
 
 	@Override
 	public GuiRecipeBook func_194310_f() {
-		return recipeBookGui;
+		return this.recipeBookGui;
 	}
 
 	public void onCrafting() {

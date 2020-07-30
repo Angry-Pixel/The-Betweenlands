@@ -7,8 +7,8 @@ import thebetweenlands.common.tile.TileEntityRuneCarvingTable;
 public class ContainerRuneCarvingTableGui extends ContainerRuneCarvingTable {
 	private GuiRuneCarvingTable gui;
 
-	public ContainerRuneCarvingTableGui(InventoryPlayer playerInventory, TileEntityRuneCarvingTable tile) {
-		super(playerInventory, tile);
+	public ContainerRuneCarvingTableGui(InventoryPlayer playerInventory, TileEntityRuneCarvingTable tile, boolean fullGrid) {
+		super(playerInventory, tile, fullGrid);
 	}
 
 	public void setGui(GuiRuneCarvingTable gui) {

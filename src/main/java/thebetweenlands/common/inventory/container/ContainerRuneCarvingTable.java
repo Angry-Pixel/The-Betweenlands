@@ -19,6 +19,8 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.network.play.server.SPacketSetSlot;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.AspectContainer;
 import thebetweenlands.api.aspect.ItemAspectContainer;
@@ -50,7 +52,7 @@ public class ContainerRuneCarvingTable extends ContainerWorkbench {
 	protected final InventoryPassthroughCraftingInput carvingMatrix;
 	protected final InventoryRuneCarveResult[] runeCarveResults;
 
-	public ContainerRuneCarvingTable(InventoryPlayer playerInventory, TileEntityRuneCarvingTable tile) {
+	public ContainerRuneCarvingTable(InventoryPlayer playerInventory, TileEntityRuneCarvingTable tile, boolean fullGrid) {
 		super(playerInventory, tile.getWorld(), tile.getPos());
 		this.world = tile.getWorld();
 		this.player = playerInventory.player;
@@ -58,14 +60,14 @@ public class ContainerRuneCarvingTable extends ContainerWorkbench {
 
 		this.inventorySlots.clear();
 		this.inventoryItemStacks.clear();
-
-		this.craftMatrix = new InventoryRuneletCrafting(this, tile, tile.getCraftingGrid());
+		
+		this.craftMatrix = new InventoryRuneletCrafting(this, tile, tile.getCraftingGrid(), 3, 3);
 		this.craftMatrix.openInventory(playerInventory.player);
 
 		this.craftResult = new InventoryCustomCraftResult(tile, this);
 
 		//Crafting Result
-		this.craftingSlot = new SlotPassthroughCraftingInput(playerInventory.player, this.craftMatrix, this.craftResult, 9, 80, 121, tile, this) {
+		this.craftingSlot = new SlotPassthroughCraftingInput(playerInventory.player, this.craftMatrix, this.craftResult, 9, 80, fullGrid ? 121 : 120, tile, this) {
 			@Override
 			protected void onCrafting(ItemStack stack) {
 				super.onCrafting(stack);
@@ -83,9 +85,28 @@ public class ContainerRuneCarvingTable extends ContainerWorkbench {
 		this.carvingMatrix.openInventory(playerInventory.player);
 
 		//Crafting matrix
-		for (int y = 0; y < 3; ++y) {
-			for (int x = 0; x < 3; ++x) {
-				this.addSlotToContainer(new Slot(this.craftMatrix, x + y * 3, 62 + x * 18, 36 + y * 18)); //1-9
+		if(fullGrid) {
+			for (int y = 0; y < 3; ++y) {
+				for (int x = 0; x < 3; ++x) {
+					this.addSlotToContainer(new Slot(this.craftMatrix, x + y * 3, 62 + x * 18, 36 + y * 18)); //1-9
+				}
+			}
+		} else {
+			this.addSlotToContainer(new Slot(this.craftMatrix, 0, 80, 72)); //1
+			
+			for(int i = 0; i < 8; i++) {
+				this.addSlotToContainer(new Slot(this.craftMatrix, 0, 0, 0) {
+					@Override
+					public boolean isItemValid(ItemStack stack) {
+						return false;
+					}
+					
+					@SideOnly(Side.CLIENT)
+					@Override
+					public boolean isEnabled() {
+						return false;
+					}
+				}); //2-9, dummy slots
 			}
 		}
 
