@@ -45,6 +45,7 @@ public class ContainerRuneCarvingTable extends ContainerWorkbench {
 	protected final World world;
 	protected final EntityPlayer player;
 	protected final TileEntityRuneCarvingTable tile;
+	protected final boolean fullGrid;
 
 	protected final Slot aspectSlot;
 	protected final SlotPassthroughCraftingInput craftingSlot;
@@ -57,10 +58,11 @@ public class ContainerRuneCarvingTable extends ContainerWorkbench {
 		this.world = tile.getWorld();
 		this.player = playerInventory.player;
 		this.tile = tile;
+		this.fullGrid = fullGrid;
 
 		this.inventorySlots.clear();
 		this.inventoryItemStacks.clear();
-		
+
 		this.craftMatrix = new InventoryRuneletCrafting(this, tile, tile.getCraftingGrid(), 3, 3);
 		this.craftMatrix.openInventory(playerInventory.player);
 
@@ -93,14 +95,14 @@ public class ContainerRuneCarvingTable extends ContainerWorkbench {
 			}
 		} else {
 			this.addSlotToContainer(new Slot(this.craftMatrix, 0, 80, 72)); //1
-			
+
 			for(int i = 0; i < 8; i++) {
 				this.addSlotToContainer(new Slot(this.craftMatrix, 0, 0, 0) {
 					@Override
 					public boolean isItemValid(ItemStack stack) {
 						return false;
 					}
-					
+
 					@SideOnly(Side.CLIENT)
 					@Override
 					public boolean isEnabled() {
@@ -274,7 +276,7 @@ public class ContainerRuneCarvingTable extends ContainerWorkbench {
 	}
 
 	@Nullable
-	protected IRecipe findRuneletSlotRecipe(InventoryCrafting craftingMatrix, World world) {
+	protected IRecipe findRuneletSlotRecipe(InventoryCrafting craftingMatrix, World world, boolean runeletsOnly) {
 		IRecipe regularMatchingRecipe = null;
 
 		for(IRecipe recipe : CraftingManager.REGISTRY) {
@@ -291,7 +293,7 @@ public class ContainerRuneCarvingTable extends ContainerWorkbench {
 			}
 		}
 
-		return regularMatchingRecipe;
+		return runeletsOnly ? null : regularMatchingRecipe;
 	}
 
 	@Override
@@ -301,7 +303,7 @@ public class ContainerRuneCarvingTable extends ContainerWorkbench {
 
 			ItemStack result = ItemStack.EMPTY;
 
-			IRecipe recipe = this.findRuneletSlotRecipe(craftingMatrix, world);
+			IRecipe recipe = this.findRuneletSlotRecipe(craftingMatrix, world, !this.fullGrid);
 
 			if(recipe != null && (recipe.isDynamic() || !world.getGameRules().getBoolean("doLimitedCrafting") || entityplayermp.getRecipeBook().isUnlocked(recipe))) {
 				craftingResult.setRecipeUsed(recipe);
