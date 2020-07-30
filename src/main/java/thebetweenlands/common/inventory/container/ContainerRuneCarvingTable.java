@@ -113,7 +113,12 @@ public class ContainerRuneCarvingTable extends ContainerWorkbench {
 		}
 
 		//Aspect input
-		this.aspectSlot = this.addSlotToContainer(new SlotAspectContainer(new InventoryCustomCrafting(this, tile, tile.getAspectGrid(), 1, 1, "container.bl.rune_carving_table"), 0, 134, 98, AspectManager.get(this.world))); //10
+		this.aspectSlot = this.addSlotToContainer(new SlotAspectContainer(new InventoryCustomCrafting(this, tile, tile.getAspectGrid(), 1, 1, "container.bl.rune_carving_table") {
+			@Override
+			public int getInventoryStackLimit() {
+				return 1;
+			}
+		}, 0, 134, 98, AspectManager.get(this.world))); //10
 
 		//Carving Results
 		this.addSlotToContainer(new SlotRuneCarving(playerInventory.player, this.carvingMatrix, this.runeCarveResults[0], 11, 56, 108, this.craftingSlot, this.aspectSlot) {

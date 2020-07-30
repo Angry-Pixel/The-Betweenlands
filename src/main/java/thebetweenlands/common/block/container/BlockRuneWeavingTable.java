@@ -25,6 +25,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -43,11 +44,23 @@ public class BlockRuneWeavingTable extends BlockContainer implements ICustomItem
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
 	public BlockRuneWeavingTable() {
-		super(Material.ROCK);
-		setHardness(2.0F);
-		setSoundType(SoundType.STONE);
+		super(Material.WOOD);
+		setHardness(2.5F);
+		setSoundType(SoundType.WOOD);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
 		setDefaultState(this.getDefaultState().withProperty(FACING, EnumFacing.NORTH).withProperty(PART, EnumPartType.MAIN));
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
+		EnumFacing facing = state.getValue(FACING);
+		if(state.getValue(PART) == EnumPartType.MAIN) {
+			facing = facing.rotateY();
+		} else {
+			facing = facing.rotateYCCW();
+		}
+		return new AxisAlignedBB(pos).expand(facing.getXOffset(), 0, facing.getZOffset());
 	}
 
 	@Override
@@ -72,25 +85,31 @@ public class BlockRuneWeavingTable extends BlockContainer implements ICustomItem
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ){
-		if (world.isRemote) {
+		TileEntity tile = world.getTileEntity(pos);
+
+		if(tile instanceof TileEntityRuneWeavingTable || tile instanceof TileEntityRuneWeavingTableFiller) {
+			if(player.isSneaking()) {
+				return false;
+			}
+
+			if(!world.isRemote) {
+				if(state.getValue(PART) == EnumPartType.MAIN) {
+					player.openGui(TheBetweenlands.instance, CommonProxy.GUI_RUNE_WEAVING_TABLE, world, pos.getX(), pos.getY(), pos.getZ());
+				} else {
+					BlockPos offsetPos = pos.offset(state.getValue(FACING).rotateYCCW());
+					player.openGui(TheBetweenlands.instance, CommonProxy.GUI_RUNE_WEAVING_TABLE, world, offsetPos.getX(), offsetPos.getY(), offsetPos.getZ());
+				}
+			}
+
 			return true;
 		}
 
-		if(state.getValue(PART) == EnumPartType.MAIN) {
-			player.openGui(TheBetweenlands.instance, CommonProxy.GUI_RUNE_WEAVING_TABLE, world, pos.getX(), pos.getY(), pos.getZ());
-		} else {
-			BlockPos offsetPos = pos.offset(state.getValue(FACING).rotateYCCW());
-			player.openGui(TheBetweenlands.instance, CommonProxy.GUI_RUNE_WEAVING_TABLE, world, offsetPos.getX(), offsetPos.getY(), offsetPos.getZ());
-		}
-
-		return true;
+		return false;
 	}
 
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		TileEntity tileEntity = world.getTileEntity(pos);
-
-		//TODO Neighbor checks?
 
 		if (tileEntity instanceof IInventory) {
 			InventoryHelper.dropInventoryItems(world, pos, (IInventory)tileEntity);

@@ -114,7 +114,21 @@ public class GuiRuneCarvingTable extends GuiContainer implements IRecipeShownLis
 			List<Aspect> aspects = ItemAspectContainer.fromItem(aspectStack, AspectManager.get(this.table.getWorld())).getAspects();
 
 			if(!aspects.isEmpty()) {
-				int color = aspects.get(0).type.getColor();
+				Aspect aspect = aspects.get(0);
+				
+				//Text holder
+				this.drawTexturedModalRect(this.guiLeft + 145, this.guiTop + 78, 227, 105, 29, 31);
+				
+				String displayAmount = aspect.getRoundedDisplayAmount();
+				this.fontRenderer.drawString(displayAmount, this.guiLeft + 159 - this.fontRenderer.getStringWidth(displayAmount) / 2, this.guiTop + 81, 4210752);
+				
+				if(this.fullGrid) {
+					this.mc.getTextureManager().bindTexture(CRAFTING_TABLE_FULL_GUI_TEXTURES);
+				} else {
+					this.mc.getTextureManager().bindTexture(CRAFTING_TABLE_SINGLE_GUI_TEXTURES);
+				}
+				
+				int color = aspect.type.getColor();
 
 				float r = (float)(color >> 16 & 255) / 255.0F;
 				float g = (float)(color >> 8 & 255) / 255.0F;

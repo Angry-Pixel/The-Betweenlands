@@ -44,6 +44,7 @@ import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityRepeller;
 import thebetweenlands.common.tile.TileEntityRubberTap;
 import thebetweenlands.common.tile.TileEntityRuneCarvingTable;
+import thebetweenlands.common.tile.TileEntityRuneCarvingTableFiller;
 import thebetweenlands.common.tile.TileEntityRuneWeavingTable;
 import thebetweenlands.common.tile.TileEntityRuneWeavingTableFiller;
 import thebetweenlands.common.tile.TileEntitySpikeTrap;
@@ -98,8 +99,9 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityBeamOrigin.class, "beam_origin");
 		registerTileEntity(TileEntityBeamRelay.class, "beam_relay");
 		registerTileEntity(TileEntityRuneWeavingTable.class, "rune_weaving_table");
-		registerTileEntity(TileEntityRuneCarvingTable.class, "rune_carving_table");
 		registerTileEntity(TileEntityRuneWeavingTableFiller.class, "rune_weaving_table_filler");
+		registerTileEntity(TileEntityRuneCarvingTable.class, "rune_carving_table");
+		registerTileEntity(TileEntityRuneCarvingTableFiller.class, "rune_carving_table_filler");
 		registerTileEntity(TileEntityWaystone.class, "waystone");
 		registerTileEntity(TileEntityMudBrickAlcove.class, "mud_bricks_alcove");
 		registerTileEntity(TileEntityLootUrn.class, "loot_urn");

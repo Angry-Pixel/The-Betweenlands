@@ -218,6 +218,7 @@ import thebetweenlands.client.render.tile.RenderPossessedBlock;
 import thebetweenlands.client.render.tile.RenderPurifier;
 import thebetweenlands.client.render.tile.RenderRepeller;
 import thebetweenlands.client.render.tile.RenderRuneCarvingTable;
+import thebetweenlands.client.render.tile.RenderRuneCarvingTableFiller;
 import thebetweenlands.client.render.tile.RenderRuneWeavingTable;
 import thebetweenlands.client.render.tile.RenderRuneWeavingTableFiller;
 import thebetweenlands.client.render.tile.RenderSpawnerBetweenlands;
@@ -382,6 +383,7 @@ import thebetweenlands.common.tile.TileEntityPuffshroom;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityRepeller;
 import thebetweenlands.common.tile.TileEntityRuneCarvingTable;
+import thebetweenlands.common.tile.TileEntityRuneCarvingTableFiller;
 import thebetweenlands.common.tile.TileEntityRuneWeavingTable;
 import thebetweenlands.common.tile.TileEntityRuneWeavingTableFiller;
 import thebetweenlands.common.tile.TileEntitySpikeTrap;
@@ -785,6 +787,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRuneWeavingTable.class, new RenderRuneWeavingTable());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRuneWeavingTableFiller.class, new RenderRuneWeavingTableFiller());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRuneCarvingTable.class, new RenderRuneCarvingTable());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRuneCarvingTableFiller.class, new RenderRuneCarvingTableFiller());
 		
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);

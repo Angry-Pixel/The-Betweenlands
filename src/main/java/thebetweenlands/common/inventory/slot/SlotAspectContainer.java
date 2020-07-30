@@ -15,6 +15,16 @@ public class SlotAspectContainer extends Slot {
 	}
 
 	@Override
+	public int getItemStackLimit(ItemStack stack) {
+		return 1;
+	}
+
+	@Override
+	public int getSlotStackLimit() {
+		return 1;
+	}
+
+	@Override
 	public boolean isItemValid(ItemStack stack) {
 		return !ItemAspectContainer.fromItem(stack, this.manager).getAspects().isEmpty();
 	}

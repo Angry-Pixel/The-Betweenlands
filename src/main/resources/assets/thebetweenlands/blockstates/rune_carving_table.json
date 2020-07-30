@@ -13,6 +13,10 @@
       "south": { },
       "west": { }
     },
+    "part": {
+      "main": { },
+      "filler": { }
+    },
     "full_grid": {
       "true": { },
       "false": { }

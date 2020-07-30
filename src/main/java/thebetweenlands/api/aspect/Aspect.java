@@ -4,15 +4,16 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.MathHelper;
 import thebetweenlands.common.registries.AspectRegistry;
 
 public final class Aspect implements Comparable<Aspect> {
 	public static final DecimalFormat ASPECT_AMOUNT_FORMAT = new DecimalFormat("#.##");
-	
+
 	static {
 		ASPECT_AMOUNT_FORMAT.setRoundingMode(RoundingMode.CEILING);
 	}
-	
+
 	/**
 	 * The type of this aspect
 	 */
@@ -28,13 +29,13 @@ public final class Aspect implements Comparable<Aspect> {
 		this.type = aspect;
 		this.amount = amount;
 	}
-	
+
 	public float getDisplayAmount() {
 		return this.amount / 1000.0F;
 	}
-	
+
 	public String getRoundedDisplayAmount() {
-		return ASPECT_AMOUNT_FORMAT.format(this.getDisplayAmount());
+		return ASPECT_AMOUNT_FORMAT.format(this.getDisplayAmount() - 0.00001f);
 	}
 
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
