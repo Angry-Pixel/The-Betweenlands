@@ -1,8 +1,10 @@
 package thebetweenlands.common.item.herblore.rune;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -26,7 +28,6 @@ import thebetweenlands.api.rune.RuneTier;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.ITintedItem;
-import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.NBTHelper;
 
@@ -109,8 +110,8 @@ public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipl
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		if(this.isInCreativeTab(tab)) {
-			//TODO Testing
-			for(RuneCategory category : RuneCategory.VALUES) {
+			//Testing
+			/*for(RuneCategory category : RuneCategory.VALUES) {
 				items.add(this.carve(category));
 
 				for(RuneTier tier : RuneTier.VALUES) {
@@ -118,9 +119,9 @@ public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipl
 						items.add(this.infuse(this.carve(category), aspect, tier));
 					}
 				}
-			}
+			}*/
 
-			/*Set<RuneCategory> usedCategories = new HashSet<>();
+			Set<RuneCategory> usedCategories = new HashSet<>();
 			for(Triple<Integer, Integer, IAspectType> key : REGISTRY.keySet()) {
 				usedCategories.add(RuneCategory.fromId(key.getLeft()));
 			}
@@ -130,7 +131,7 @@ public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipl
 
 			for(Triple<Integer, Integer, IAspectType> key : REGISTRY.keySet()) {
 				items.add(this.infuse(this.carve(RuneCategory.fromId(key.getLeft())), key.getRight(), RuneTier.fromId(key.getMiddle())));
-			}*/
+			}
 		}
 	}
 

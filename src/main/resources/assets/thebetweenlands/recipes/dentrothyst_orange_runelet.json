@@ -1,0 +1,17 @@
+{
+  "type": "thebetweenlands:shaped_rune_carving",
+  "pattern": [
+    "#"
+  ],
+  "key": {
+    "#": [
+      {
+        "item": "thebetweenlands:dentrothyst_shard_orange"
+      }
+    ]
+  },
+  "result": {
+    "item": "thebetweenlands:dentrothyst_orange_runelet",
+    "count": 1
+  }
+}

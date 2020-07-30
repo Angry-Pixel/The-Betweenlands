@@ -1,0 +1,17 @@
+{
+  "type": "thebetweenlands:shaped_rune_carving",
+  "pattern": [
+    "#"
+  ],
+  "key": {
+    "#": [
+      {
+        "item": "thebetweenlands:pitstone"
+      }
+    ]
+  },
+  "result": {
+    "item": "thebetweenlands:pitstone_runelet",
+    "count": 1
+  }
+}

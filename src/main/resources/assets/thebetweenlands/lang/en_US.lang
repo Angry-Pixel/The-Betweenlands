@@ -886,11 +886,11 @@ item.thebetweenlands.ancient_runelet.name=Ancient Runelet
 item.thebetweenlands.unknown_rune.name=Unknown Rune
 item.thebetweenlands.initiate_rune.carved.name=Initiate Rune
 item.thebetweenlands.token_rune.carved.name=Token Rune
-item.thebetweenlands.gate_rune.carved.name=Gate Rune
+item.thebetweenlands.gating_rune.carved.name=Gating Rune
 item.thebetweenlands.conduct_rune.carved.name=Conduct Rune
 item.thebetweenlands.initiate_rune.infused.name=Initiate Rune - %1$s
 item.thebetweenlands.token_rune.infused.name=Token Rune - %1$s
-item.thebetweenlands.gate_rune.infused.name=Gate Rune - %1$s
+item.thebetweenlands.gating_rune.infused.name=Gating Rune - %1$s
 item.thebetweenlands.conduct_rune.infused.name=Conduct Rune - %1$s
 
 # Herblore
@@ -1115,8 +1115,8 @@ tooltip.thebetweenlands.initiate_rune.carved=Material: %1$s
 tooltip.thebetweenlands.initiate_rune.infused=Material: %1$s\nAspect: %2$s\nTier: %3$s\nEffect: %4$s
 tooltip.thebetweenlands.token_rune.carved=Material: %1$s
 tooltip.thebetweenlands.token_rune.infused=Material: %1$s\nAspect: %2$s\nTier: %3$s\nEffect: %4$s
-tooltip.thebetweenlands.gate_rune.carved=Material: %1$s
-tooltip.thebetweenlands.gate_rune.infused=Material: %1$s\nAspect: %2$s\nTier: %3$s\nEffect: %4$s
+tooltip.thebetweenlands.gating_rune.carved=Material: %1$s
+tooltip.thebetweenlands.gating_rune.infused=Material: %1$s\nAspect: %2$s\nTier: %3$s\nEffect: %4$s
 tooltip.thebetweenlands.conduct_rune.carved=Material: %1$s
 tooltip.thebetweenlands.conduct_rune.infused=Material: %1$s\nAspect: %2$s\nTier: %3$s\nEffect: %4$s
 

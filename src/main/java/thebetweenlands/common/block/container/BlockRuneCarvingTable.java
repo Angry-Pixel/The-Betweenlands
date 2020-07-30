@@ -178,12 +178,12 @@ public class BlockRuneCarvingTable extends BasicBlock implements ITileEntityProv
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(FACING).getHorizontalIndex() << 1 | (state.getValue(PART) == EnumPartType.FILLER ? 0b1 : 0b0);
+		return (state.getValue(FULL_GRID) ? 0b1000 : 0) | state.getValue(FACING).getHorizontalIndex() << 1 | (state.getValue(PART) == EnumPartType.FILLER ? 0b1 : 0b0);
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta >> 1)).withProperty(PART, (meta & 0b1) != 0 ? EnumPartType.FILLER : EnumPartType.MAIN);
+		return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta >> 1)).withProperty(PART, (meta & 0b1) != 0 ? EnumPartType.FILLER : EnumPartType.MAIN).withProperty(FULL_GRID, (meta & 0b1000) != 0);
 	}
 
 	@Override

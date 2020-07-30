@@ -1,7 +1,7 @@
 package thebetweenlands.api.rune;
 
 public enum RuneCategory {
-	INITIATE(0, "initiate"), TOKEN(1, "token"), GATE(2, "gate"), CONDUCT(3, "conduct");
+	INITIATE(0, "initiate"), TOKEN(1, "token"), GATING(2, "gating"), CONDUCT(3, "conduct");
 
 	public static final RuneCategory[] VALUES = RuneCategory.values();
 	public static final int COUNT = RuneCategory.values().length;

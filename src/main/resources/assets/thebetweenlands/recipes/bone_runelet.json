@@ -1,0 +1,18 @@
+{
+  "type": "thebetweenlands:shaped_rune_carving",
+  "pattern": [
+    "#"
+  ],
+  "key": {
+    "#": [
+      {
+        "item": "thebetweenlands:items_misc",
+        "data": 14
+      }
+    ]
+  },
+  "result": {
+    "item": "thebetweenlands:bone_runelet",
+    "count": 1
+  }
+}
