@@ -5,6 +5,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.aspect.AspectContainer;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.aspect.ItemAspectContainer;
@@ -71,5 +73,11 @@ public class SlotRuneCarving extends SlotPassthroughCraftingOutput {
 		this.source.onTake(this.player, this.craftMatrix.decrStackSize(0, 1));
 		
 		return stack;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean isEnabled() {
+		return this.getHasStack();
 	}
 }

@@ -1,6 +1,7 @@
 package thebetweenlands.client.gui.inventory;
 
 import java.io.IOException;
+import java.util.List;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonImage;
@@ -13,10 +14,16 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.inventory.container.ContainerRuneCarvingTable;
+import thebetweenlands.api.aspect.Aspect;
+import thebetweenlands.api.aspect.ItemAspectContainer;
+import thebetweenlands.api.item.IRuneItem;
+import thebetweenlands.api.item.IRuneletItem;
+import thebetweenlands.common.herblore.aspect.AspectManager;
+import thebetweenlands.common.inventory.container.ContainerRuneCarvingTableGui;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.tile.TileEntityRuneCarvingTable;
 
@@ -26,11 +33,16 @@ public class GuiRuneCarvingTable extends GuiContainer implements IRecipeShownLis
 	private GuiButtonImage recipeButton;
 	private final GuiRecipeBook recipeBookGui;
 	private boolean widthTooNarrow;
+	private TileEntityRuneCarvingTable table;
+
+	private int carveTicks = 0;
 
 	public GuiRuneCarvingTable(InventoryPlayer playerInventory, TileEntityRuneCarvingTable table) {
-		super(new ContainerRuneCarvingTable(playerInventory, table));
-		recipeBookGui = new GuiRecipeBook();
-		
+		super(new ContainerRuneCarvingTableGui(playerInventory, table));
+		((ContainerRuneCarvingTableGui) this.inventorySlots).setGui(this);
+		this.recipeBookGui = new GuiRecipeBook();
+		this.table = table;
+
 		this.xSize = 176;
 		this.ySize = 247;
 	}
@@ -49,6 +61,8 @@ public class GuiRuneCarvingTable extends GuiContainer implements IRecipeShownLis
 	public void updateScreen() {
 		super.updateScreen();
 		recipeBookGui.tick();
+
+		this.carveTicks = Math.max(this.carveTicks - 1, 0);
 	}
 
 	@Override
@@ -59,10 +73,78 @@ public class GuiRuneCarvingTable extends GuiContainer implements IRecipeShownLis
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTickTime, int x, int y) {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.getTextureManager().bindTexture(CRAFTING_TABLE_GUI_TEXTURES);
-		int centerX = guiLeft;
-		int centerY = (height - ySize) / 2;
-		drawTexturedModalRect(centerX, centerY, 0, 0, xSize, ySize);
+
+		this.mc.getTextureManager().bindTexture(CRAFTING_TABLE_GUI_TEXTURES);
+
+		int centerX = this.guiLeft;
+		int centerY = (this.height - this.ySize) / 2;
+		this.drawTexturedModalRect(centerX, centerY, 0, 0, this.xSize, this.ySize);
+
+		//Draw rune slot covers
+		for(int i = 0; i < 4; i++) {
+			Slot slot = this.inventorySlots.getSlot(11 + i);
+			if(!slot.getHasStack()) {
+				this.drawTexturedModalRect(this.guiLeft + slot.xPos, this.guiTop + slot.yPos, 182, 20, 16, 16);
+			}
+		}
+
+		//Draw aspect overlays
+		ItemStack aspectStack = this.inventorySlots.getSlot(10).getStack();
+		if(!aspectStack.isEmpty()) {
+			List<Aspect> aspects = ItemAspectContainer.fromItem(aspectStack, AspectManager.get(this.table.getWorld())).getAspects();
+
+			if(!aspects.isEmpty()) {
+				int color = aspects.get(0).type.getColor();
+
+				float r = (float)(color >> 16 & 255) / 255.0F;
+				float g = (float)(color >> 8 & 255) / 255.0F;
+				float b = (float)(color & 255) / 255.0F;
+				float a = (float)(color >> 24 & 255) / 255.0F;
+
+				GlStateManager.color(r, g, b, a);
+
+				//Circle
+				this.drawTexturedModalRect(this.guiLeft + 131, this.guiTop + 96, 179, 68, 22, 22);
+
+				ItemStack craftingStack = this.inventorySlots.getSlot(0).getStack();
+
+				if(!craftingStack.isEmpty() && (craftingStack.getItem() instanceof IRuneletItem || craftingStack.getItem() instanceof IRuneItem)) {
+					ItemStack output1 = this.inventorySlots.getSlot(11).getStack();
+					ItemStack output2 = this.inventorySlots.getSlot(12).getStack();
+					ItemStack output3 = this.inventorySlots.getSlot(13).getStack();
+					ItemStack output4 = this.inventorySlots.getSlot(14).getStack();
+
+					if(!output1.isEmpty() && output1.getItem() instanceof IRuneItem && ((IRuneItem) output1.getItem()).getInfusedAspect(output1) != null) {
+						//Top left rune slot
+						this.drawTexturedModalRect(this.guiLeft + 73, this.guiTop + 117, 209, 68, 5, 4);
+					}
+
+					if(!output2.isEmpty() && output2.getItem() instanceof IRuneItem && ((IRuneItem) output2.getItem()).getInfusedAspect(output2) != null) {
+						//Bottom left rune slot
+						this.drawTexturedModalRect(this.guiLeft + 73, this.guiTop + 136, 209, 87, 5, 4);
+					}
+
+					if(!output3.isEmpty() && output3.getItem() instanceof IRuneItem && ((IRuneItem) output3.getItem()).getInfusedAspect(output3) != null) {
+						//Bottom right rune slot
+						this.drawTexturedModalRect(this.guiLeft + 98, this.guiTop + 117, 234, 68, 5, 4);
+					}
+
+					if(!output4.isEmpty() && output4.getItem() instanceof IRuneItem && ((IRuneItem) output4.getItem()).getInfusedAspect(output4) != null) {
+						//Top right rune slot
+						this.drawTexturedModalRect(this.guiLeft + 98, this.guiTop + 136, 234, 87, 5, 4);
+					}
+
+					//Pipe
+					this.drawTexturedModalRect(this.guiLeft + 96, this.guiTop + 90, 203, 23, 50, 39);
+				}
+
+
+				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			}
+		}
+
+		//Chisel
+		this.drawTexturedModalRect(this.guiLeft + 85, this.guiTop + 91 + Math.max(this.carveTicks - partialTickTime, 0), 187, 37, 6, 26);
 	}
 
 	@Override
@@ -139,5 +221,9 @@ public class GuiRuneCarvingTable extends GuiContainer implements IRecipeShownLis
 	@Override
 	public GuiRecipeBook func_194310_f() {
 		return recipeBookGui;
+	}
+
+	public void onCrafting() {
+		this.carveTicks = 5;
 	}
 }

@@ -44,7 +44,7 @@ public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipl
 		this.setCreativeTab(BLCreativeTabs.HERBLORE);
 
 		this.addPropertyOverride(new ResourceLocation("infused"), (stack, worldIn, entityIn) -> {
-			return this.getAspect(stack) != null ? 1.0f : 0.0f;
+			return this.getInfusedAspect(stack) != null ? 1.0f : 0.0f;
 		});
 
 		this.addPropertyOverride(new ResourceLocation("category"), (stack, worldIn, entityIn) -> {
@@ -71,7 +71,7 @@ public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipl
 	}
 
 	public IRuneContainerFactory getRuneContainerFactory(ItemStack stack) {
-		return getFactory(this.getCategory(stack), this.getTier(stack), this.getAspect(stack));
+		return getFactory(this.getCategory(stack), this.getTier(stack), this.getInfusedAspect(stack));
 	}
 
 	@Override
@@ -95,8 +95,8 @@ public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipl
 		return stack.getItemDamage() % RuneTier.COUNT;
 	}
 
-	@Nullable
-	public IAspectType getAspect(ItemStack stack) {
+	@Override
+	public IAspectType getInfusedAspect(ItemStack stack) {
 		if(stack.hasTagCompound()) {
 			NBTTagCompound nbt = stack.getTagCompound();
 			if(nbt.hasKey(NBT_ASPECT_TYPE, Constants.NBT.TAG_COMPOUND)) {
@@ -149,7 +149,7 @@ public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipl
 	@Override
 	public int getColorMultiplier(ItemStack stack, int tintIndex) {
 		if(tintIndex == 1) {
-			IAspectType aspect = this.getAspect(stack);
+			IAspectType aspect = this.getInfusedAspect(stack);
 			return aspect != null ? aspect.getColor() : 0xFFFFFFFF;
 		}
 		return 0xFFFFFFFF;
@@ -162,18 +162,18 @@ public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipl
 
 	@Override
 	public String getTranslationKey(ItemStack stack) {
-		return String.format("item.%s.%s_rune.%s", this.getRegistryName().getNamespace(), RuneCategory.fromId(this.getCategory(stack)).name, this.getAspect(stack) != null ? "infused" : "carved");
+		return String.format("item.%s.%s_rune.%s", this.getRegistryName().getNamespace(), RuneCategory.fromId(this.getCategory(stack)).name, this.getInfusedAspect(stack) != null ? "infused" : "carved");
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		IAspectType aspect = this.getAspect(stack);
+		IAspectType aspect = this.getInfusedAspect(stack);
 
 		if(aspect != null) {
 			String runeName;
 
-			IRuneContainerFactory factory = getFactory(this.getCategory(stack), this.getTier(stack), this.getAspect(stack));
+			IRuneContainerFactory factory = getFactory(this.getCategory(stack), this.getTier(stack), this.getInfusedAspect(stack));
 
 			if(factory != null) {
 				runeName = I18n.translateToLocal(String.format("rune.%s.%s.name", factory.getId().getNamespace(), factory.getId().getPath()));
@@ -192,12 +192,12 @@ public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipl
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		String runeMaterial = I18n.translateToLocal(String.format("rune_material.%s.%s.name", this.material.getNamespace(), this.material.getPath()));
 
-		IAspectType aspect = this.getAspect(stack);
+		IAspectType aspect = this.getInfusedAspect(stack);
 
 		if(aspect != null) {
 			String runeName;
 
-			IRuneContainerFactory factory = getFactory(this.getCategory(stack), this.getTier(stack), this.getAspect(stack));
+			IRuneContainerFactory factory = getFactory(this.getCategory(stack), this.getTier(stack), this.getInfusedAspect(stack));
 
 			if(factory != null) {
 				runeName = I18n.translateToLocal(String.format("rune.%s.%s.name", factory.getId().getNamespace(), factory.getId().getPath()));
@@ -205,7 +205,7 @@ public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipl
 				runeName = I18n.translateToLocal("rune.thebetweenlands.no_effect.name");
 			}
 
-			String aspectName = this.getAspect(stack).getName();
+			String aspectName = this.getInfusedAspect(stack).getName();
 			String tierName = I18n.translateToLocal(String.format("rune_tier.%s.name", RuneTier.fromId(this.getTier(stack)).name));
 
 			tooltip.addAll(ItemTooltipHandler.splitTooltip(

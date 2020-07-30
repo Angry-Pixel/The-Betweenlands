@@ -40,15 +40,15 @@ import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.tile.TileEntityRuneCarvingTable;
 
 public class ContainerRuneCarvingTable extends ContainerWorkbench {
-	private final World world;
-	private final EntityPlayer player;
-	private final TileEntityRuneCarvingTable tile;
+	protected final World world;
+	protected final EntityPlayer player;
+	protected final TileEntityRuneCarvingTable tile;
 
-	private final Slot aspectSlot;
-	private final SlotPassthroughCraftingInput craftingSlot;
+	protected final Slot aspectSlot;
+	protected final SlotPassthroughCraftingInput craftingSlot;
 
-	private final InventoryPassthroughCraftingInput carvingMatrix;
-	private final InventoryRuneCarveResult[] runeCarveResults;
+	protected final InventoryPassthroughCraftingInput carvingMatrix;
+	protected final InventoryRuneCarveResult[] runeCarveResults;
 
 	public ContainerRuneCarvingTable(InventoryPlayer playerInventory, TileEntityRuneCarvingTable tile) {
 		super(playerInventory, tile.getWorld(), tile.getPos());
@@ -65,7 +65,13 @@ public class ContainerRuneCarvingTable extends ContainerWorkbench {
 		this.craftResult = new InventoryCustomCraftResult(tile, this);
 
 		//Crafting Result
-		this.craftingSlot = new SlotPassthroughCraftingInput(playerInventory.player, this.craftMatrix, this.craftResult, 9, 80, 121, tile, this);
+		this.craftingSlot = new SlotPassthroughCraftingInput(playerInventory.player, this.craftMatrix, this.craftResult, 9, 80, 121, tile, this) {
+			@Override
+			protected void onCrafting(ItemStack stack) {
+				super.onCrafting(stack);
+				ContainerRuneCarvingTable.this.onCrafting();
+			}
+		};
 		this.addSlotToContainer(this.craftingSlot); //0
 
 		this.runeCarveResults = new InventoryRuneCarveResult[4];
@@ -87,10 +93,34 @@ public class ContainerRuneCarvingTable extends ContainerWorkbench {
 		this.aspectSlot = this.addSlotToContainer(new SlotAspectContainer(new InventoryCustomCrafting(this, tile, tile.getAspectGrid(), 1, 1, "container.bl.rune_carving_table"), 0, 134, 98, AspectManager.get(this.world))); //10
 
 		//Carving Results
-		this.addSlotToContainer(new SlotRuneCarving(playerInventory.player, this.carvingMatrix, this.runeCarveResults[0], 11, 56, 108, this.craftingSlot, this.aspectSlot)); //11
-		this.addSlotToContainer(new SlotRuneCarving(playerInventory.player, this.carvingMatrix, this.runeCarveResults[1], 12, 56, 132, this.craftingSlot, this.aspectSlot)); //12
-		this.addSlotToContainer(new SlotRuneCarving(playerInventory.player, this.carvingMatrix, this.runeCarveResults[2], 13, 104, 132, this.craftingSlot, this.aspectSlot)); //13
-		this.addSlotToContainer(new SlotRuneCarving(playerInventory.player, this.carvingMatrix, this.runeCarveResults[3], 14, 104, 108, this.craftingSlot, this.aspectSlot)); //14
+		this.addSlotToContainer(new SlotRuneCarving(playerInventory.player, this.carvingMatrix, this.runeCarveResults[0], 11, 56, 108, this.craftingSlot, this.aspectSlot) {
+			@Override
+			protected void onCrafting(ItemStack stack) {
+				super.onCrafting(stack);
+				ContainerRuneCarvingTable.this.onCrafting();
+			}
+		}); //11
+		this.addSlotToContainer(new SlotRuneCarving(playerInventory.player, this.carvingMatrix, this.runeCarveResults[1], 12, 56, 132, this.craftingSlot, this.aspectSlot) {
+			@Override
+			protected void onCrafting(ItemStack stack) {
+				super.onCrafting(stack);
+				ContainerRuneCarvingTable.this.onCrafting();
+			}
+		}); //12
+		this.addSlotToContainer(new SlotRuneCarving(playerInventory.player, this.carvingMatrix, this.runeCarveResults[2], 13, 104, 132, this.craftingSlot, this.aspectSlot) {
+			@Override
+			protected void onCrafting(ItemStack stack) {
+				super.onCrafting(stack);
+				ContainerRuneCarvingTable.this.onCrafting();
+			}
+		}); //13
+		this.addSlotToContainer(new SlotRuneCarving(playerInventory.player, this.carvingMatrix, this.runeCarveResults[3], 14, 104, 108, this.craftingSlot, this.aspectSlot) {
+			@Override
+			protected void onCrafting(ItemStack stack) {
+				super.onCrafting(stack);
+				ContainerRuneCarvingTable.this.onCrafting();
+			}
+		}); //14
 
 		//Player inventory
 		for (int y = 0; y < 3; ++y) {
@@ -125,11 +155,11 @@ public class ContainerRuneCarvingTable extends ContainerWorkbench {
 
 				slot.onSlotChange(currentStack, result);
 			} else if(index >= 15 && index <= 41) {
-				if(!this.mergeItemStack(currentStack, 10, 11, false) && !this.mergeItemStack(currentStack, 42, 51, false)) {
+				if(!this.mergeItemStack(currentStack, 10, 11, false) && !this.mergeItemStack(currentStack, 1, 10, false) && !this.mergeItemStack(currentStack, 42, 51, false)) {
 					return ItemStack.EMPTY;
 				}
 			} else if(index >= 42 && index <= 50) {
-				if(!this.mergeItemStack(currentStack, 10, 11, false) && !this.mergeItemStack(currentStack, 15, 42, false)) {
+				if(!this.mergeItemStack(currentStack, 10, 11, false) && !this.mergeItemStack(currentStack, 1, 10, false) && !this.mergeItemStack(currentStack, 15, 42, false)) {
 					return ItemStack.EMPTY;
 				}
 			} else if (!this.mergeItemStack(currentStack, 15, 51, false)) {
@@ -319,5 +349,9 @@ public class ContainerRuneCarvingTable extends ContainerWorkbench {
 			craftingResult.setInventorySlotContents(0, result);
 			entityplayermp.connection.sendPacket(new SPacketSetSlot(this.windowId, slotNumber, result));
 		}
+	}
+
+	protected void onCrafting() {
+
 	}
 }
