@@ -2,7 +2,9 @@ package thebetweenlands.client.gui.inventory;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonImage;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -25,10 +27,13 @@ import thebetweenlands.api.item.IRuneletItem;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.inventory.container.ContainerRuneCarvingTableGui;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityRuneCarvingTable;
 
 @SideOnly(Side.CLIENT)
 public class GuiRuneCarvingTable extends GuiContainer implements IRecipeShownListener {
+	private static final Random rand = new Random();
+
 	private static final ResourceLocation CRAFTING_TABLE_FULL_GUI_TEXTURES = new ResourceLocation(ModInfo.ID, "textures/gui/rune/rune_carving_table_full.png");
 	private static final ResourceLocation CRAFTING_TABLE_SINGLE_GUI_TEXTURES = new ResourceLocation(ModInfo.ID, "textures/gui/rune/rune_carving_table_single.png");
 
@@ -115,19 +120,19 @@ public class GuiRuneCarvingTable extends GuiContainer implements IRecipeShownLis
 
 			if(!aspects.isEmpty()) {
 				Aspect aspect = aspects.get(0);
-				
+
 				//Text holder
 				this.drawTexturedModalRect(this.guiLeft + 145, this.guiTop + 78, 227, 105, 29, 31);
-				
+
 				String displayAmount = aspect.getRoundedDisplayAmount();
 				this.fontRenderer.drawString(displayAmount, this.guiLeft + 159 - this.fontRenderer.getStringWidth(displayAmount) / 2, this.guiTop + 81, 4210752);
-				
+
 				if(this.fullGrid) {
 					this.mc.getTextureManager().bindTexture(CRAFTING_TABLE_FULL_GUI_TEXTURES);
 				} else {
 					this.mc.getTextureManager().bindTexture(CRAFTING_TABLE_SINGLE_GUI_TEXTURES);
 				}
-				
+
 				int color = aspect.type.getColor();
 
 				float r = (float)(color >> 16 & 255) / 255.0F;
@@ -160,12 +165,12 @@ public class GuiRuneCarvingTable extends GuiContainer implements IRecipeShownLis
 
 					if(!output3.isEmpty() && output3.getItem() instanceof IRuneItem && ((IRuneItem) output3.getItem()).getInfusedAspect(output3) != null) {
 						//Bottom right rune slot
-						this.drawTexturedModalRect(this.guiLeft + 93, this.guiTop + 117, 229, 68, 10, 10);
+						this.drawTexturedModalRect(this.guiLeft + 93, this.guiTop + 130, 229, 81, 10, 10);
 					}
 
 					if(!output4.isEmpty() && output4.getItem() instanceof IRuneItem && ((IRuneItem) output4.getItem()).getInfusedAspect(output4) != null) {
 						//Top right rune slot
-						this.drawTexturedModalRect(this.guiLeft + 93, this.guiTop + 130, 229, 81, 10, 10);
+						this.drawTexturedModalRect(this.guiLeft + 93, this.guiTop + 117, 229, 68, 10, 10);
 					}
 
 					//Pipe
@@ -270,6 +275,10 @@ public class GuiRuneCarvingTable extends GuiContainer implements IRecipeShownLis
 	}
 
 	public void onCrafting() {
+		if(this.carveTicks < 5) {
+			this.mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundRegistry.RUNE_CARVING, 0.96f + rand.nextFloat() * 0.06f));
+		}
+
 		this.carveTicks = 5;
 	}
 }

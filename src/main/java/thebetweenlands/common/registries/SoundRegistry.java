@@ -306,6 +306,7 @@ public class SoundRegistry {
     public static final BLSoundEvent RUNE_CONNECT_FINISH = reg("rune_connect_finish");
     public static final BLSoundEvent RUNE_DISCONNECT = reg("rune_disconnect");
     public static final BLSoundEvent RUNE_SELECT = reg("rune_select");
+    public static final BLSoundEvent RUNE_CARVING = reg("rune_carving");
     
     private SoundRegistry() {
     }

@@ -1790,5 +1790,13 @@
     "sounds": [
       "thebetweenlands:rune_select"
     ]
+  },
+  "rune_carving": {
+    "sounds": [
+      "thebetweenlands:rune_carving_1",
+      "thebetweenlands:rune_carving_2",
+      "thebetweenlands:rune_carving_3",
+      "thebetweenlands:rune_carving_4"
+    ]
   }
 }
