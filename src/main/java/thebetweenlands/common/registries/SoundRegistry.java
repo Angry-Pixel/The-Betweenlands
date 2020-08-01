@@ -77,8 +77,6 @@ public class SoundRegistry {
     public static final BLSoundEvent WALL_SLAM = reg("wall_slam");
     public static final BLSoundEvent POOP_JET = reg("poop_jet");
     public static final BLSoundEvent PIT_FALL = reg("pit_fall");
-    public static final BLSoundEvent RUNE_SLATE_MOVE = reg("rune_slate_move");
-    public static final BLSoundEvent RUNE_SLOT_SHIFT = reg("rune_slot_shift");
     public static final BLSoundEvent DRAETON_TURN = reg("draeton_turn");
     public static final BLSoundEvent DRAETON_DAMAGE = reg("draeton_damage");
     public static final BLSoundEvent DRAETON_BURNER = reg("draeton_burner");
@@ -301,6 +299,13 @@ public class SoundRegistry {
     public static final BLSoundEvent MUD_DOOR_LOCK = reg("mud_door_lock");
     public static final BLSoundEvent MUD_DOOR_TRAP = reg("mud_door_trap");
     public static final BLSoundEvent BEAM_SWITCH = reg("beam_switch");
+    // GUI
+    public static final BLSoundEvent RUNE_SLATE_MOVE = reg("rune_slate_move");
+    public static final BLSoundEvent RUNE_SLOT_SHIFT = reg("rune_slot_shift");
+    public static final BLSoundEvent RUNE_CONNECT_START = reg("rune_connect_start");
+    public static final BLSoundEvent RUNE_CONNECT_FINISH = reg("rune_connect_finish");
+    public static final BLSoundEvent RUNE_DISCONNECT = reg("rune_disconnect");
+    public static final BLSoundEvent RUNE_SELECT = reg("rune_select");
     
     private SoundRegistry() {
     }

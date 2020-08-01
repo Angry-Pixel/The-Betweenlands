@@ -2,6 +2,8 @@ package thebetweenlands.api.rune;
 
 import java.util.Collection;
 
+import javax.annotation.Nullable;
+
 public interface IRuneGui {
 	public void init(IRuneContainer container, int width, int height);
 
@@ -33,6 +35,8 @@ public interface IRuneGui {
 	
 	public boolean onStartTokenLinking(IGuiRuneToken token, int mouseX, int mouseY);
 
+	public void onStopTokenLinking(IGuiRuneToken token, int mouseX, int mouseY, @Nullable IRuneLink link);
+	
 	public boolean onStartTokenUnlinking(IGuiRuneToken token, int mouseX, int mouseY);
 	
 	public IGuiRuneToken getInputToken(int tokenIndex);

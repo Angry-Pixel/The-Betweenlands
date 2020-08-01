@@ -129,6 +129,8 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 		this.linkingDropdownMenuSlot = -1;
 
 		this.updateSelectedRuneGui(runeIndex);
+		
+		this.mc.getSoundHandler().playSound(PositionedSoundRecord.getRecord(SoundRegistry.RUNE_SELECT, rand.nextFloat() * 0.066F + 0.933F, 1.0F));
 	}
 
 	protected void updateSelectedRuneGui(int runeIndex) {
@@ -797,6 +799,8 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 		if(this.draggingToken != null) {
 			this.recentlyLinked = null;
 
+			IRuneGui primaryRuneGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
+			
 			if(this.container.getSelectedRuneIndex() >= 0 && this.linkingDropdownMenuSlot >= 0) {
 				int linkingTokenIndex = this.getLinkingDropdownMenuTokenIndex(mouseX, mouseY);
 
@@ -808,6 +812,10 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 						IRuneLink link = this.container.getLink(this.container.getSelectedRuneIndex(), this.draggingToken.getTokenIndex());
 						if(link != null) {
 							this.recentlyLinked = new Tuple<>(this.draggingToken, link);
+
+							if(primaryRuneGui != null) {
+								primaryRuneGui.onStopTokenLinking(this.draggingToken, mouseX, mouseY, link);
+							}
 						}
 					}
 				}
@@ -815,6 +823,10 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 
 			if(this.recentlyLinked == null) {
 				this.linkingDropdownMenuSlot = -1;
+				
+				if(primaryRuneGui != null) {
+					primaryRuneGui.onStopTokenLinking(this.draggingToken, mouseX, mouseY, null);
+				}
 			}
 
 			this.draggingToken = null;

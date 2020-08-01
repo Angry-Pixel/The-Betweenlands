@@ -45,6 +45,6 @@ public class RuneItemCapability extends ItemCapability<RuneItemCapability, IRune
 
 	@Override
 	public IRuneContainerFactory getRuneContainerFactory() {
-		return ((ItemRune) this.getItemStack().getItem()).getRuneContainerFactory(this.getItemStack());
+		return ((ItemRune) this.getItemStack().getItem()).getProperties(this.getItemStack()).getFactory(this.getItemStack());
 	}
 }

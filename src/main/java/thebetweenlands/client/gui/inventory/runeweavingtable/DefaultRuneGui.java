@@ -13,6 +13,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -33,6 +34,8 @@ import thebetweenlands.api.rune.INodeConfiguration.IConfigurationOutput;
 import thebetweenlands.api.rune.IRuneContainer;
 import thebetweenlands.api.rune.IRuneContainerContext;
 import thebetweenlands.api.rune.IRuneGui;
+import thebetweenlands.api.rune.IRuneLink;
+import thebetweenlands.api.rune.IRuneWeavingTableContainer;
 import thebetweenlands.api.rune.RuneMenuDrawingContext;
 import thebetweenlands.api.rune.RuneMenuType;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
@@ -42,6 +45,7 @@ import thebetweenlands.common.herblore.book.widgets.text.FormatTags;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.network.serverbound.MessageSetRuneWeavingTableConfiguration;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.ColoredItemRenderer;
 
 public class DefaultRuneGui extends Gui implements IRuneGui {
@@ -499,11 +503,23 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 	@Override
 	public boolean onStartTokenLinking(IGuiRuneToken token, int mouseX, int mouseY) {
+		Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundRegistry.RUNE_CONNECT_START, 1.0f));
 		return false;
 	}
 
 	@Override
+	public void onStopTokenLinking(IGuiRuneToken token, int mouseX, int mouseY, IRuneLink link) {
+		if(link != null) {
+			Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundRegistry.RUNE_CONNECT_FINISH, 1.0f));
+		}
+	}
+
+	@Override
 	public boolean onStartTokenUnlinking(IGuiRuneToken token, int mouseX, int mouseY) {
+		IRuneWeavingTableContainer table = this.getContainer().getContext().getRuneWeavingTableContainer();
+		if(table != null && table.getLink(this.getContainer().getContext().getRuneIndex(), token.getTokenIndex()) != null) {
+			Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundRegistry.RUNE_DISCONNECT, 1.0f));
+		}
 		return false;
 	}
 

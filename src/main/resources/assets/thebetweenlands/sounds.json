@@ -1770,5 +1770,25 @@
     "sounds": [
       "thebetweenlands:chirobarb_erupter"
     ]
+  },
+  "rune_connect_start": {
+    "sounds": [
+      "thebetweenlands:rune_connect_start"
+    ]
+  },
+  "rune_connect_finish": {
+    "sounds": [
+      "thebetweenlands:rune_connect_finish"
+    ]
+  },
+  "rune_disconnect": {
+    "sounds": [
+      "thebetweenlands:rune_connect_finish"
+    ]
+  },
+  "rune_select": {
+    "sounds": [
+      "thebetweenlands:rune_select"
+    ]
   }
 }

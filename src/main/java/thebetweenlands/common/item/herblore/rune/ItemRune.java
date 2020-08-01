@@ -12,13 +12,23 @@ import org.apache.commons.lang3.tuple.Triple;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.item.IRuneItem;
@@ -32,11 +42,122 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.NBTHelper;
 
 public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipleItemModelDefinition, IRuneItem {
-	private static final Map<Triple<Integer, Integer, IAspectType>, IRuneContainerFactory> REGISTRY = new HashMap<>();
+	private static final Map<Triple<Integer, Integer, IAspectType>, RuneItemProperties> REGISTRY = new HashMap<>();
 
 	private static final String NBT_ASPECT_TYPE = "thebetweenlands.rune.aspect_type";
 
 	public final ResourceLocation material;
+
+	public static abstract class RuneItemProperties {
+		public abstract IRuneContainerFactory getFactory(ItemStack stack);
+
+		/**
+		 * See {@link Item#onItemRightClick(World, EntityPlayer, EnumHand)}
+		 * @param worldIn
+		 * @param playerIn
+		 * @param handIn
+		 * @return
+		 */
+		public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+			return ActionResult.newResult(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
+		}
+
+		/**
+		 * See {@link Item#onItemUse(EntityPlayer, World, BlockPos, EnumHand, EnumFacing, float, float, float)}
+		 * @param player
+		 * @param worldIn
+		 * @param pos
+		 * @param hand
+		 * @param facing
+		 * @param hitX
+		 * @param hitY
+		 * @param hitZ
+		 * @return
+		 */
+		public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+			return EnumActionResult.PASS;
+		}
+
+		/**
+		 * See {@link Item#getItemUseAction(ItemStack)}
+		 * @param stack
+		 * @return
+		 */
+		public EnumAction getItemUseAction(ItemStack stack) {
+			return EnumAction.NONE;
+		}
+
+		/**
+		 * See {@link Item#onUsingTick(ItemStack, EntityLivingBase, int)}
+		 * @param stack
+		 * @param player
+		 * @param count
+		 */
+		public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
+		}
+
+		/**
+		 * See {@link Item#onPlayerStoppedUsing(ItemStack, World, EntityLivingBase, int)}
+		 * @param stack
+		 * @param worldIn
+		 * @param entityLiving
+		 * @param timeLeft
+		 */
+		public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
+		}
+
+		/**
+		 * See {@link Item#getMaxItemUseDuration(ItemStack)}
+		 * @param stack
+		 * @return
+		 */
+		public int getMaxItemUseDuration(ItemStack stack) {
+			return 0;
+		}
+
+		/**
+		 * See {@link ItemRune#onUpdate(ItemStack, World, Entity, int, boolean)}
+		 * @param stack
+		 * @param worldIn
+		 * @param entityIn
+		 * @param itemSlot
+		 * @param isSelected
+		 */
+		public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		}
+
+		/**
+		 * See {@link Item#itemInteractionForEntity(ItemStack, EntityPlayer, EntityLivingBase, EnumHand)}
+		 * @param stack
+		 * @param playerIn
+		 * @param target
+		 * @param hand
+		 * @return
+		 */
+		public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
+			return false;
+		}
+
+		/**
+		 * See {@link Item#addInformation(ItemStack, World, List, ITooltipFlag)}
+		 * @param stack
+		 * @param worldIn
+		 * @param tooltip
+		 * @param flagIn
+		 */
+		public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		}
+
+		/**
+		 * See {@link Item#initCapabilities(ItemStack, NBTTagCompound)}
+		 * @param stack
+		 * @param nbt
+		 * @return
+		 */
+		public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+			return null;
+		}
+	}
 
 	public ItemRune(ResourceLocation material) {
 		this.material = material;
@@ -57,22 +178,22 @@ public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipl
 		});
 	}
 
-	public static void register(RuneCategory category, RuneTier tier, IAspectType type, IRuneContainerFactory factory) {
-		REGISTRY.put(Triple.of(category.id, tier.id, type), factory);
+	public static void register(RuneCategory category, RuneTier tier, IAspectType type, RuneItemProperties properties) {
+		REGISTRY.put(Triple.of(category.id, tier.id, type), properties);
 	}
 
 	@Nullable
-	public static IRuneContainerFactory getFactory(RuneCategory category, RuneTier tier, IAspectType type) {
+	public static RuneItemProperties getProperties(RuneCategory category, RuneTier tier, IAspectType type) {
 		return REGISTRY.get(Triple.of(category.id, tier.id, type));
 	}
 
 	@Nullable
-	public static IRuneContainerFactory getFactory(int category, int tier, IAspectType type) {
+	public static RuneItemProperties getProperties(int category, int tier, IAspectType type) {
 		return REGISTRY.get(Triple.of(category, tier, type));
 	}
 
-	public IRuneContainerFactory getRuneContainerFactory(ItemStack stack) {
-		return getFactory(this.getCategory(stack), this.getTier(stack), this.getInfusedAspect(stack));
+	public RuneItemProperties getProperties(ItemStack stack) {
+		return getProperties(this.getCategory(stack), this.getTier(stack), this.getInfusedAspect(stack));
 	}
 
 	@Override
@@ -174,9 +295,10 @@ public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipl
 		if(aspect != null) {
 			String runeName;
 
-			IRuneContainerFactory factory = getFactory(this.getCategory(stack), this.getTier(stack), this.getInfusedAspect(stack));
+			RuneItemProperties properties = this.getProperties(stack);
 
-			if(factory != null) {
+			if(properties != null) {
+				IRuneContainerFactory factory = properties.getFactory(stack);
 				runeName = I18n.translateToLocal(String.format("rune.%s.%s.name", factory.getId().getNamespace(), factory.getId().getPath()));
 			} else {
 				runeName = I18n.translateToLocal("rune.thebetweenlands.no_effect.name");
@@ -186,6 +308,11 @@ public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipl
 		} else {
 			return super.getItemStackDisplayName(stack);
 		}
+	}
+
+	@Override
+	public RuneCategory getRuneCategory(ItemStack stack) {
+		return RuneCategory.fromId(this.getCategory(stack));
 	}
 
 	@SuppressWarnings("deprecation")
@@ -198,9 +325,10 @@ public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipl
 		if(aspect != null) {
 			String runeName;
 
-			IRuneContainerFactory factory = getFactory(this.getCategory(stack), this.getTier(stack), this.getInfusedAspect(stack));
+			RuneItemProperties properties = this.getProperties(stack);
 
-			if(factory != null) {
+			if(properties != null) {
+				IRuneContainerFactory factory = properties.getFactory(stack);
 				runeName = I18n.translateToLocal(String.format("rune.%s.%s.name", factory.getId().getNamespace(), factory.getId().getPath()));
 			} else {
 				runeName = I18n.translateToLocal("rune.thebetweenlands.no_effect.name");
@@ -214,6 +342,10 @@ public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipl
 							String.format("tooltip.%s.%s_rune.infused", this.getRegistryName().getNamespace(), RuneCategory.fromId(this.getCategory(stack)).name),
 							runeMaterial, aspectName, tierName, runeName
 							).trim(), 0));
+
+			if(properties != null) {
+				properties.addInformation(stack, worldIn, tooltip, flagIn);
+			}
 		} else {
 			tooltip.addAll(ItemTooltipHandler.splitTooltip(
 					I18n.translateToLocalFormatted(
@@ -224,7 +356,79 @@ public class ItemRune extends Item implements ITintedItem, ItemRegistry.IMultipl
 	}
 
 	@Override
-	public RuneCategory getRuneCategory(ItemStack stack) {
-		return RuneCategory.fromId(this.getCategory(stack));
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		ItemStack stack = playerIn.getHeldItem(handIn);
+		RuneItemProperties properties = this.getProperties(stack);
+		if(properties != null) {
+			return properties.onItemRightClick(worldIn, playerIn, handIn);
+		}
+		return super.onItemRightClick(worldIn, playerIn, handIn);
+	}
+
+	@Override
+	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack stack = player.getHeldItem(hand);
+		RuneItemProperties properties = this.getProperties(stack);
+		if(properties != null) {
+			return properties.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+		}
+		return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+	}
+
+	@Override
+	public EnumAction getItemUseAction(ItemStack stack) {
+		RuneItemProperties properties = this.getProperties(stack);
+		if(properties != null) {
+			return properties.getItemUseAction(stack);
+		}
+		return super.getItemUseAction(stack);
+	}
+
+	@Override
+	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
+		RuneItemProperties properties = this.getProperties(stack);
+		if(properties != null) {
+			properties.onUsingTick(stack, player, count);
+		}
+	}
+
+	@Override
+	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
+		RuneItemProperties properties = this.getProperties(stack);
+		if(properties != null) {
+			properties.onPlayerStoppedUsing(stack, worldIn, entityLiving, timeLeft);
+		}
+	}
+
+	@Override
+	public int getMaxItemUseDuration(ItemStack stack) {
+		RuneItemProperties properties = this.getProperties(stack);
+		if(properties != null) {
+			return properties.getMaxItemUseDuration(stack);
+		}
+		return super.getMaxItemUseDuration(stack);
+	}
+
+	@Override
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		RuneItemProperties properties = this.getProperties(stack);
+		if(properties != null) {
+			properties.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+		}
+	}
+
+	@Override
+	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
+		RuneItemProperties properties = this.getProperties(stack);
+		if(properties != null) {
+			properties.itemInteractionForEntity(stack, playerIn, target, hand);
+		}
+		return super.itemInteractionForEntity(stack, playerIn, target, hand);
+	}
+
+	@Override
+	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+		// TODO Auto-generated method stub
+		return super.initCapabilities(stack, nbt);
 	}
 }
