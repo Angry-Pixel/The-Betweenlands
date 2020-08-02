@@ -1248,6 +1248,8 @@ chat.chiromaw_matriarch_nest.tainted=The scent of you has tainted this nest fore
 
 chat.draeton_dismount_timer=Dismounting in %s...
 
+chat.pattern_rune_set_origin=Set the origin first by sneaking
+
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath
 
