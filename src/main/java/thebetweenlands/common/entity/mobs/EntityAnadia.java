@@ -40,6 +40,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.EntityFishBait;
+import thebetweenlands.common.entity.projectiles.EntityBLFishHook;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.util.TranslationHelper;
 
@@ -52,8 +53,9 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	private static final DataParameter<Integer> HUNGER_COOLDOWN = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 
 	private static float BASE_MULTIPLE = 1F; // just a arbitrary number to increase the size multiplier
-	public EntityAnadia.AIFindBait aiFindbait;
-
+	public EntityAnadia.AIFindBait aiFindBait;
+	public EntityAnadia.AIFindHook aiFindHook;
+	
 	public EntityAnadia(World world) {
 		super(world);
         setSize(0.8F, 0.8F);
@@ -73,10 +75,12 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         });
         tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.4D));
         tasks.addTask(2, new EntityAIWander(this, 0.5D, 20));
-        aiFindbait = new EntityAnadia.AIFindBait(this, 2D);
-        tasks.addTask(3, aiFindbait);
-        tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-        tasks.addTask(5, new EntityAILookIdle(this));
+        aiFindBait = new EntityAnadia.AIFindBait(this, 2D);
+        aiFindHook = new EntityAnadia.AIFindHook(this, 2D);
+        tasks.addTask(3, aiFindBait);
+        tasks.addTask(4, aiFindHook);
+        tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        tasks.addTask(6, new EntityAILookIdle(this));
         // TODO leaving this for future hostile code
         // targetTasks.addTask(0, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, 0, true, true, null));
         targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
@@ -609,6 +613,94 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
     		if (pathentity != null) {
     			//entity.getNavigator().setPath(pathentity, 0.5D);
     			anadia.getNavigator().tryMoveToXYZ(bait.posX, bait.posY, bait.posZ, anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+    		}
+    	}
+    }
+    
+    
+    public class AIFindHook extends EntityAIBase {
+
+    	private final EntityAnadia anadia;
+    	private double searchRange;
+    	public EntityBLFishHook hook = null;
+
+    	public AIFindHook(EntityAnadia anadiaIn, double searchRangeIn) {
+    		anadia = anadiaIn;
+    		searchRange = searchRangeIn;
+    	}
+
+    	@Override
+    	public boolean shouldExecute() {
+    		return anadia.getHungerCooldown() <= 0 && hook == null;
+    	}
+
+    	@Override
+    	public void startExecuting() {
+    		if(hook == null)
+    			hook = getClosestHook(searchRange);
+    	}
+
+    	@Override
+    	public boolean shouldContinueExecuting() {
+    		return anadia.getHungerCooldown() <= 0 && hook != null && !hook.isDead;
+        }
+
+		@Override
+		public void updateTask() {
+			if (!anadia.world.isRemote && shouldContinueExecuting()) {
+
+				if (hook != null) {
+					float distance = hook.getDistance(anadia);
+					double x = hook.posX;
+					double y = hook.posY;
+					double z = hook.posZ;
+
+						if (distance >= 1F) {
+							anadia.getLookHelper().setLookPosition(x, y, z, 20.0F, 8.0F);
+							moveToEntity(hook);
+						}
+
+						if (distance <= 2F)
+							if (anadia.isInWater() && anadia.getEntityWorld().isAirBlock(new BlockPos(x, y + 1D, z)) && anadia.canEntityBeSeen(hook))
+								anadia.leapAtTarget(x, y, z);
+
+						if (distance <= 1F) {
+							anadia.getMoveHelper().setMoveTo(x, y, z, anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+							anadia.setHungerCooldown(600);
+							anadia.setIsLeaping(false);
+							hook.caughtEntity = anadia;
+							//resetTask();
+						}
+					}
+
+			}
+		}
+ 
+		@Override
+		public void resetTask() {
+			hook = null;
+		}
+
+    	@SuppressWarnings("unchecked")
+    	public EntityBLFishHook getClosestHook(double distance) {
+    		List<EntityBLFishHook> list = anadia.getEntityWorld().getEntitiesWithinAABB(EntityBLFishHook.class, anadia.getEntityBoundingBox().grow(distance, distance, distance));
+    		for (Iterator<EntityBLFishHook> iterator = list.iterator(); iterator.hasNext();) {
+    			EntityBLFishHook hook = iterator.next();
+    			if (!hook.isInWater())
+    				iterator.remove();
+    		}
+    		if (list.isEmpty())
+    			return null;
+    		if (!list.isEmpty())
+				Collections.shuffle(list);
+    		return list.get(0);
+    	}
+
+    	public void moveToEntity(EntityBLFishHook hook) {
+    		Path pathentity = anadia.getNavigator().getPath();
+    		if (pathentity != null) {
+    			//entity.getNavigator().setPath(pathentity, 0.5D);
+    			anadia.getNavigator().tryMoveToXYZ(hook.posX, hook.posY, hook.posZ, anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
     		}
     	}
     }

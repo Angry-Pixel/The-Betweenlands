@@ -87,9 +87,9 @@ public class EntityFishBait extends EntityItem {
 			return;
 		if (!list.isEmpty()) {
 			EntityAnadia foundFish = list.get(0);
-			if(foundFish.aiFindbait != null) {
-				foundFish.aiFindbait.bait = this;
-				foundFish.aiFindbait.updateTask();
+			if(foundFish.aiFindBait != null) {
+				foundFish.aiFindBait.bait = this;
+				foundFish.aiFindBait.updateTask();
 			}
 		}
 	}
