@@ -259,12 +259,17 @@ public class EntityBLFishHook extends Entity {
 	}
 
 	private boolean shouldStopFishing() {
-		ItemStack itemstack = getAngler().getHeldItemMainhand();
-		ItemStack itemstack1 = getAngler().getHeldItemOffhand();
-		boolean flag = itemstack.getItem() instanceof ItemBLFishingRod;
-		boolean flag1 = itemstack1.getItem() instanceof ItemBLFishingRod;
+		ItemStack stack = getAngler().getHeldItemMainhand();
+		ItemStack stack1 = getAngler().getHeldItemOffhand();
+		boolean mainHandHeld = stack.getItem() instanceof ItemBLFishingRod;
+		boolean offHandHeld = stack1.getItem() instanceof ItemBLFishingRod;
 
-		if (!getAngler().isDead && getAngler().isEntityAlive() && (flag || flag1) && getDistanceSq(getAngler()) <= 1024.0D) {
+		if (!getAngler().isDead && getAngler().isEntityAlive() && (mainHandHeld || offHandHeld) && getDistanceSq(getAngler()) <= 1024.0D) {
+			if(mainHandHeld && stack.getTagCompound().getFloat("distance") != getDistance(getAngler()))
+				stack.getTagCompound().setFloat("distance", getDistance(getAngler()));
+			else
+				if(offHandHeld&& stack.getTagCompound().getFloat("distance") != getDistance(getAngler()))
+					stack.getTagCompound().setFloat("distance", getDistance(getAngler()));
 			return false;
 		} else {
 			setDead();
@@ -482,8 +487,8 @@ public class EntityBLFishHook extends Entity {
 			double d1 = getAngler().posY - posY;
 			double d2 = getAngler().posZ - posZ;
 			double d3 = 0.1D;
-			caughtEntity.motionX += d0 * 0.1D;
-			caughtEntity.motionY += d1 * 0.6D;
+			caughtEntity.motionX += d0 * 0.1D; // TODO add reeling in mechanic modifiers based on fish stamina
+			caughtEntity.motionY += d1 * 0.275D;
 			caughtEntity.motionZ += d2 * 0.1D;
 		}
 	}

@@ -874,6 +874,7 @@ item.thebetweenlands.ancient_chestplate.name=Ancient Chestplate
 item.thebetweenlands.ancient_helmet.name=Ancient Helmet
 item.thebetweenlands.ancient_leggings.name=Ancient Leggings
 item.thebetweenlands.fish_bait.name=Fish Bait
+item.thebetweenlands.fishing_rod.name=Weedwood Fishing Rod
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -1098,6 +1099,8 @@ tooltip.bl.fish_bait.sink_speed=Sinking Speed: %s
 tooltip.bl.fish_bait.dissolve_time=Dissolve Time: %s
 tooltip.bl.fish_bait.range=Range: %s
 tooltip.bl.fish_bait.glowing=Glowing: %s
+
+tooltip.bl.fishing_rod.distance=Distance: %s
 
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing

@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
@@ -312,6 +313,17 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 		}
 		super.onUpdate();
+	}
+
+	@Override
+	public void updatePassenger(Entity entity) {
+		super.updatePassenger(entity);
+		if (entity instanceof EntityBLFishHook) {
+			double a = Math.toRadians(rotationYaw);
+			double offSetX = -Math.sin(a) * width * 0.5D + entity.width * 0.5D;
+			double offSetZ = Math.cos(a) * width * 0.5D + entity.width * 0.5D;
+			entity.setPosition(posX + offSetX, posY + entity.height, posZ + offSetZ);
+		}
 	}
 
 	public void leapAtTarget(double targetX, double targetY, double targetZ) {
@@ -649,7 +661,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		public void updateTask() {
 			if (!anadia.world.isRemote && shouldContinueExecuting()) {
 
-				if (hook != null) {
+				if (hook != null && hook.caughtEntity == null) {
 					float distance = hook.getDistance(anadia);
 					double x = hook.posX;
 					double y = hook.posY;
@@ -669,6 +681,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 							anadia.setHungerCooldown(600);
 							anadia.setIsLeaping(false);
 							hook.caughtEntity = anadia;
+							hook.startRiding(anadia, true);
 							//resetTask();
 						}
 					}
