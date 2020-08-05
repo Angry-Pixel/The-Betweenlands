@@ -36,17 +36,11 @@ public class EntityBLFishHook extends Entity {
 	private boolean inGround;
 	private int ticksInGround;
 	private int ticksInAir;
-	//private int ticksCatchable;
-	//private int ticksCaughtDelay;
-	//private int ticksCatchableDelay;
-	//private float fishApproachAngle;
 	public Entity caughtEntity;
 	private EntityBLFishHook.State currentState = State.FLYING;
-	//private int luck;
-	//private int lureSpeed;
 	
 	@Nullable
-	public EntityBLFishHook fishingHook; //shit
+	public EntityBLFishHook fishingHook;
 
 	static enum State {
 		FLYING, HOOKED_IN_ENTITY, BOBBING;
@@ -268,8 +262,8 @@ public class EntityBLFishHook extends Entity {
 			if(mainHandHeld && stack.getTagCompound().getFloat("distance") != getDistance(getAngler()))
 				stack.getTagCompound().setFloat("distance", getDistance(getAngler()));
 			else
-				if(offHandHeld&& stack.getTagCompound().getFloat("distance") != getDistance(getAngler()))
-					stack.getTagCompound().setFloat("distance", getDistance(getAngler()));
+				if(offHandHeld && stack1.getTagCompound().getFloat("distance") != getDistance(getAngler()))
+					stack1.getTagCompound().setFloat("distance", getDistance(getAngler()));
 			return false;
 		} else {
 			setDead();
@@ -281,8 +275,7 @@ public class EntityBLFishHook extends Entity {
 		float f = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
 		rotationYaw = (float) (MathHelper.atan2(motionX, motionZ) * (180D / Math.PI));
 
-		for (rotationPitch = (float) (MathHelper.atan2(motionY, (double) f) * (180D / Math.PI)); rotationPitch
-				- prevRotationPitch < -180.0F; prevRotationPitch -= 360.0F) {
+		for (rotationPitch = (float) (MathHelper.atan2(motionY, (double) f) * (180D / Math.PI)); rotationPitch - prevRotationPitch < -180.0F; prevRotationPitch -= 360.0F) {
 			;
 		}
 
@@ -352,98 +345,7 @@ public class EntityBLFishHook extends Entity {
 	}
 
 	private void catchingFish(BlockPos pos) {
-	/*	WorldServer worldserver = (WorldServer) world;
-		int i = 1;
-		BlockPos blockpos = pos.up();
-
-		if (rand.nextFloat() < 0.25F && world.isRainingAt(blockpos)) {
-			++i;
-		}
-
-		if (rand.nextFloat() < 0.5F && !world.canSeeSky(blockpos)) {
-			--i;
-		}
-
-		if (ticksCatchable > 0) {
-			--ticksCatchable;
-
-			if (ticksCatchable <= 0) {
-				ticksCaughtDelay = 0;
-				ticksCatchableDelay = 0;
-			} else {
-				motionY -= 0.2D * (double) rand.nextFloat() * (double) rand.nextFloat();
-			}
-		} else if (ticksCatchableDelay > 0) {
-			ticksCatchableDelay -= i;
-
-			if (ticksCatchableDelay > 0) {
-				fishApproachAngle = (float) ((double) fishApproachAngle + rand.nextGaussian() * 4.0D);
-				float f = fishApproachAngle * 0.017453292F;
-				float f1 = MathHelper.sin(f);
-				float f2 = MathHelper.cos(f);
-				double d0 = posX + (double) (f1 * (float) ticksCatchableDelay * 0.1F);
-				double d1 = (double) ((float) MathHelper.floor(getEntityBoundingBox().minY) + 1.0F);
-				double d2 = posZ + (double) (f2 * (float) ticksCatchableDelay * 0.1F);
-				IBlockState state = worldserver.getBlockState(new BlockPos(d0, d1 - 1.0D, d2));
-
-				if (state.getMaterial() == Material.WATER) {
-					if (rand.nextFloat() < 0.15F) {
-						worldserver.spawnParticle(EnumParticleTypes.WATER_BUBBLE, d0, d1 - 0.10000000149011612D, d2, 1,
-								(double) f1, 0.1D, (double) f2, 0.0D);
-					}
-
-					float f3 = f1 * 0.04F;
-					float f4 = f2 * 0.04F;
-					worldserver.spawnParticle(EnumParticleTypes.WATER_WAKE, d0, d1, d2, 0, (double) f4, 0.01D,
-							(double) (-f3), 1.0D);
-					worldserver.spawnParticle(EnumParticleTypes.WATER_WAKE, d0, d1, d2, 0, (double) (-f4), 0.01D,
-							(double) f3, 1.0D);
-				}
-			} else {
-				motionY = (double) (-0.4F * MathHelper.nextFloat(rand, 0.6F, 1.0F));
-				playSound(SoundEvents.ENTITY_BOBBER_SPLASH, 0.25F, 1.0F + (rand.nextFloat() - rand.nextFloat()) * 0.4F);
-				double d3 = getEntityBoundingBox().minY + 0.5D;
-				worldserver.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX, d3, posZ, (int) (1.0F + width * 20.0F),
-						(double) width, 0.0D, (double) width, 0.20000000298023224D);
-				worldserver.spawnParticle(EnumParticleTypes.WATER_WAKE, posX, d3, posZ, (int) (1.0F + width * 20.0F),
-						(double) width, 0.0D, (double) width, 0.20000000298023224D);
-				ticksCatchable = MathHelper.getInt(rand, 20, 40);
-			}
-		} else if (ticksCaughtDelay > 0) {
-			ticksCaughtDelay -= i;
-			float f5 = 0.15F;
-
-			if (ticksCaughtDelay < 20) {
-				f5 = (float) ((double) f5 + (double) (20 - ticksCaughtDelay) * 0.05D);
-			} else if (ticksCaughtDelay < 40) {
-				f5 = (float) ((double) f5 + (double) (40 - ticksCaughtDelay) * 0.02D);
-			} else if (ticksCaughtDelay < 60) {
-				f5 = (float) ((double) f5 + (double) (60 - ticksCaughtDelay) * 0.01D);
-			}
-
-			if (rand.nextFloat() < f5) {
-				float f6 = MathHelper.nextFloat(rand, 0.0F, 360.0F) * 0.017453292F;
-				float f7 = MathHelper.nextFloat(rand, 25.0F, 60.0F);
-				double d4 = posX + (double) (MathHelper.sin(f6) * f7 * 0.1F);
-				double d5 = (double) ((float) MathHelper.floor(getEntityBoundingBox().minY) + 1.0F);
-				double d6 = posZ + (double) (MathHelper.cos(f6) * f7 * 0.1F);
-				IBlockState state = worldserver.getBlockState(new BlockPos((int) d4, (int) d5 - 1, (int) d6));
-
-				if (state.getMaterial() == Material.WATER) {
-					worldserver.spawnParticle(EnumParticleTypes.WATER_SPLASH, d4, d5, d6, 2 + rand.nextInt(2),
-							0.10000000149011612D, 0.0D, 0.10000000149011612D, 0.0D);
-				}
-			}
-
-			if (ticksCaughtDelay <= 0) {
-				fishApproachAngle = MathHelper.nextFloat(rand, 0.0F, 360.0F);
-				ticksCatchableDelay = MathHelper.getInt(rand, 20, 80);
-			}
-		} else {
-			ticksCaughtDelay = MathHelper.getInt(rand, 100, 600);
-			ticksCaughtDelay -= lureSpeed * 20 * 5;
-		}
-		*/
+	//TODO add something here maybe at some point
 	}
 
 	protected boolean canHookFish(Entity entity) {
@@ -453,6 +355,12 @@ public class EntityBLFishHook extends Entity {
 	public int reelInFishingHook() {
 		if (!world.isRemote && getAngler() != null) {
 			int i = 0;
+			
+			if (caughtEntity == null) {
+				bringInHookedEntity();
+				world.setEntityState(this, (byte) 31);
+				i = 5;
+			}
 
 			if (caughtEntity != null) {
 				bringInHookedEntity();
@@ -464,7 +372,6 @@ public class EntityBLFishHook extends Entity {
 				i = 2;
 			}
 
-			setDead();
 			return i;
 		} else {
 			return 0;
@@ -487,9 +394,16 @@ public class EntityBLFishHook extends Entity {
 			double d1 = getAngler().posY - posY;
 			double d2 = getAngler().posZ - posZ;
 			double d3 = 0.1D;
-			caughtEntity.motionX += d0 * 0.1D; // TODO add reeling in mechanic modifiers based on fish stamina
-			caughtEntity.motionY += d1 * 0.275D;
-			caughtEntity.motionZ += d2 * 0.1D;
+			// TODO add reeling in mechanic modifiers based on fish stamina
+			if (caughtEntity != null) {
+				caughtEntity.motionX += d0 * (0.05D - ((EntityAnadia)caughtEntity).getStaminaMods() * 0.005D);
+				caughtEntity.motionY += d1 * (0.08D - ((EntityAnadia)caughtEntity).getStaminaMods() * 0.005D);
+				caughtEntity.motionZ += d2 * (0.05D - ((EntityAnadia)caughtEntity).getStaminaMods()* 0.005D);
+			} else {
+				motionX += d0 * 0.06D;
+				motionY += d1 * 0.06D;
+				motionZ += d2 * 0.06D;
+			}
 		}
 	}
 
@@ -503,9 +417,7 @@ public class EntityBLFishHook extends Entity {
 		super.setDead();
 
 		if (getAngler() != null)
-		 {
 		 fishingHook = null;
-		 }
 	}
 
 	@Override

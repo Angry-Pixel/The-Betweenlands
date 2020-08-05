@@ -28,7 +28,7 @@ import thebetweenlands.util.TranslationHelper;
 
 public class ItemBLFishingRod extends Item {
 	@Nullable
-	public EntityBLFishHook fishingHook; //shit
+	public EntityBLFishHook fishingHook;
 
 	public ItemBLFishingRod() {
 		this.setMaxDamage(64);
@@ -61,7 +61,7 @@ public class ItemBLFishingRod extends Item {
 		if(!isSelected && fishingHook != null)
 			if (!world.isRemote) {
 				fishingHook.setDead();
-				fishingHook = null; //shit
+				fishingHook = null;
 			}
 	}
 
@@ -78,15 +78,15 @@ public class ItemBLFishingRod extends Item {
 
 		if (fishingHook != null) {
 			int i = fishingHook.reelInFishingHook();
-			stack.damageItem(i, player);
-			player.swingArm(handIn);
 			world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_RETRIEVE, SoundCategory.NEUTRAL, 1.0F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 			System.out.println("Reeling In The Years!");
-			if (!world.isRemote) {
+			if (!world.isRemote && stack.getTagCompound().getFloat("distance") <= 0F) {
+				stack.damageItem(i, player);
 				fishingHook.setDead();
-				fishingHook = null; //shit
+				fishingHook = null;
 				stack.getTagCompound().setFloat("distance", 0);
 			}
+			return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 		} else {
 			world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
@@ -94,7 +94,7 @@ public class ItemBLFishingRod extends Item {
 				System.out.println("Casting!");
 				EntityBLFishHook entityfishhook = new EntityBLFishHook(world, player);
 				world.spawnEntity(entityfishhook);
-				fishingHook = entityfishhook; //shit
+				fishingHook = entityfishhook;
 			}
 
 			player.swingArm(handIn);
