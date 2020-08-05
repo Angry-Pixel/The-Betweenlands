@@ -13,6 +13,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -46,6 +47,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.util.TranslationHelper;
 
 public class EntityAnadia extends EntityCreature implements IEntityBL {
+
 	private static final DataParameter<Float> FISH_SIZE = EntityDataManager.<Float>createKey(EntityAnadia.class, DataSerializers.FLOAT);
 	private static final DataParameter<Byte> HEAD_TYPE = EntityDataManager.<Byte>createKey(EntityAnadia.class, DataSerializers.BYTE);
 	private static final DataParameter<Byte> BODY_TYPE = EntityDataManager.<Byte>createKey(EntityAnadia.class, DataSerializers.BYTE);
@@ -56,6 +58,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	private static float BASE_MULTIPLE = 1F; // just a arbitrary number to increase the size multiplier
 	public EntityAnadia.AIFindBait aiFindBait;
 	public EntityAnadia.AIFindHook aiFindHook;
+	public int staminaTicks;
 	
 	public EntityAnadia(World world) {
 		super(world);
@@ -75,13 +78,14 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
             }
         });
         tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.4D));
-        tasks.addTask(2, new EntityAIWander(this, 0.5D, 20));
+        tasks.addTask(2, new EntityAnadia.EntityAIAFishCalledWander(this, 0.5D, 20));
+        tasks.addTask(3, new EntityAnadia.EntityAIAvoidWhenHooked(this, EntityPlayer.class, 16));
         aiFindBait = new EntityAnadia.AIFindBait(this, 2D);
         aiFindHook = new EntityAnadia.AIFindHook(this, 2D);
-        tasks.addTask(3, aiFindBait);
-        tasks.addTask(4, aiFindHook);
-        tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-        tasks.addTask(6, new EntityAILookIdle(this));
+        tasks.addTask(4, aiFindBait);
+        tasks.addTask(5, aiFindHook);
+        tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        tasks.addTask(7, new EntityAILookIdle(this));
         // TODO leaving this for future hostile code
         // targetTasks.addTask(0, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, 0, true, true, null));
         targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
@@ -310,6 +314,10 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 			if(getHungerCooldown() >= 0)
 				setHungerCooldown(getHungerCooldown() - 1);
+
+			//regains stamina over time whilst not hooked
+	        if(!isBeingRidden() && staminaTicks < (int) (getStaminaMods() * 20))
+	        	staminaTicks++;
 
 		}
 		super.onUpdate();
@@ -717,4 +725,40 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
     		}
     	}
     }
+    
+	public class EntityAIAFishCalledWander extends EntityAIWander {
+
+		public EntityAIAFishCalledWander(EntityCreature creatureIn, double speedIn, int chance) {
+			super(creatureIn, speedIn, chance);
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			return super.shouldExecute() && !isBeingRidden();
+		}
+
+		@Override
+	    public boolean shouldContinueExecuting(){
+	        return !this.entity.getNavigator().noPath() && !isBeingRidden();
+	    }
+	}
+	
+	public class EntityAIAvoidWhenHooked extends EntityAIAvoidEntity {
+		private final EntityAnadia anadia;
+		
+		public EntityAIAvoidWhenHooked(EntityAnadia entity, Class classToAvoidIn, float avoidDistanceIn) {
+			super(entity, classToAvoidIn, avoidDistanceIn, entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue(), entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+			anadia = entity;
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			return super.shouldExecute() && anadia.isBeingRidden() && anadia.staminaTicks >= 1;
+		}
+
+		@Override
+	    public boolean shouldContinueExecuting(){
+	        return !this.entity.getNavigator().noPath() && anadia.isBeingRidden() && anadia.staminaTicks >= 1;
+	    }
+	}
 }

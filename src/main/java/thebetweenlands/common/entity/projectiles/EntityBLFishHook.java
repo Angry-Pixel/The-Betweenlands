@@ -378,27 +378,24 @@ public class EntityBLFishHook extends Entity {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public void handleStatusUpdate(byte id) {
-		if (id == 31 && world.isRemote && caughtEntity instanceof EntityPlayer && ((EntityPlayer) caughtEntity).isUser()) {
-			bringInHookedEntity();
-		}
-
-		super.handleStatusUpdate(id);
-	}
-
 	protected void bringInHookedEntity() {
 		if (getAngler() != null) {
 			double d0 = getAngler().posX - posX;
 			double d1 = getAngler().posY - posY;
 			double d2 = getAngler().posZ - posZ;
-			double d3 = 0.1D;
 			// TODO add reeling in mechanic modifiers based on fish stamina
 			if (caughtEntity != null) {
-				caughtEntity.motionX += d0 * (0.05D - ((EntityAnadia)caughtEntity).getStaminaMods() * 0.005D);
-				caughtEntity.motionY += d1 * (0.08D - ((EntityAnadia)caughtEntity).getStaminaMods() * 0.005D);
-				caughtEntity.motionZ += d2 * (0.05D - ((EntityAnadia)caughtEntity).getStaminaMods()* 0.005D);
+					if(((EntityAnadia)caughtEntity).staminaTicks > 0) { 
+						((EntityAnadia)caughtEntity).staminaTicks--;
+						System.out.println("STAMINA: " + ((EntityAnadia)caughtEntity).staminaTicks);
+						if (((EntityAnadia)caughtEntity).staminaTicks%40 == 0) {
+							// consumes half a shank of hunger every 2 seconds or so whilst the fish has stamina
+							getAngler().getFoodStats().setFoodLevel(getAngler().getFoodStats().getFoodLevel() - 1);
+						}
+					}
+				caughtEntity.motionX += d0 * (0.045D - ((EntityAnadia)caughtEntity).getStrengthMods() * 0.005D);
+				caughtEntity.motionY += d1 * (0.045D - ((EntityAnadia)caughtEntity).getStrengthMods() * 0.005D);
+				caughtEntity.motionZ += d2 * (0.045D - ((EntityAnadia)caughtEntity).getStrengthMods() * 0.005D);
 			} else {
 				motionX += d0 * 0.06D;
 				motionY += d1 * 0.06D;
