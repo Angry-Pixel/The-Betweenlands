@@ -57,7 +57,7 @@ public class BlockSulfurScrivenerMark extends BlockScrivenerMark {
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
 
-		if(!worldIn.isRemote && blockIn == Blocks.FIRE) {
+		if(!worldIn.isRemote && worldIn.getBlockState(fromPos).getBlock() == Blocks.FIRE) {
 			this.setOnFire(worldIn, pos, state);
 		}
 	}
