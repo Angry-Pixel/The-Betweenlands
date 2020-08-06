@@ -1,0 +1,16 @@
+{
+    "ambientocclusion": false,
+    "textures": {
+        "particle": "thebetweenlands:blocks/scrivener_burnt_mark_2",
+        "overlay": "thebetweenlands:blocks/scrivener_burnt_mark_2"
+    },
+    "elements": [
+        {   "from": [ 0, 0, 0.25 ],
+            "to": [ 16, 16, 0.25 ],
+            "shade": false,
+            "faces": {
+                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#overlay" }
+            }
+        }
+    ]
+}

@@ -473,6 +473,8 @@ tile.thebetweenlands.weedwood_barrel.name=Weedwood Barrel
 tile.thebetweenlands.syrmorite_barrel.name=Syrmorite Barrel
 tile.thebetweenlands.rune_weaving_table.name=Rune Weaving Table
 tile.thebetweenlands.rune_carving_table.name=Rune Carving Table
+tile.thebetweenlands.scrivener_sulfur_mark.name=Scrivener's Sulfur Mark
+tile.thebetweenlands.scrivener_burnt_mark.name=Scrivener's Burnt Mark
 
 # Items
 
@@ -877,6 +879,7 @@ item.thebetweenlands.ancient_helmet.name=Ancient Helmet
 item.thebetweenlands.ancient_leggings.name=Ancient Leggings
 
 item.thebetweenlands.rune_chain.name=Rune Chain
+item.thebetweenlands.scrivener_tool.name=Scrivener's Tool
 item.thebetweenlands.weedwood_runelet.name=Weedwood Runelet
 item.thebetweenlands.pitstone_runelet.name=Pitstone Runelet
 item.thebetweenlands.dentrothyst_orange_runelet.name=Orange Dentrothyst Runelet

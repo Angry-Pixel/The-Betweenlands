@@ -1,0 +1,67 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:internal/connected_texture",
+    "custom": {
+      "particle_texture": "thebetweenlands:blocks/scrivener_sulfur_mark_0",
+      "ambient_occlusion": true,
+      "connected_texture_faces": [
+        {
+          "cullface": "up",
+          "connected_textures": [
+            "thebetweenlands:blocks/scrivener_sulfur_mark_0",
+            "thebetweenlands:blocks/scrivener_sulfur_mark_1",
+            "thebetweenlands:blocks/scrivener_sulfur_mark_2",
+            "thebetweenlands:blocks/scrivener_sulfur_mark_3",
+            "thebetweenlands:blocks/scrivener_sulfur_mark_3"
+          ],
+          "indices": [
+            "top_north_west_index",
+            "top_south_west_index",
+            "top_south_east_index",
+            "top_north_east_index"
+          ],
+          "vertices": [
+            { "x": 0.0, "y": 0.015625, "z": 0.0, "u": 0, "v": 0 },
+            { "x": 0.0, "y": 0.015625, "z": 1.0, "u": 0, "v": 1 },
+            { "x": 1.0, "y": 0.015625, "z": 1.0, "u": 1, "v": 1 },
+            { "x": 1.0, "y": 0.015625, "z": 0.0, "u": 1, "v": 0 }
+          ]
+        }
+      ]
+    }
+  },
+  "variants": { 
+    "north_side": {
+      "true": {
+        "submodel": "thebetweenlands:scrivener_sulfur_mark_side"
+      },
+      "false": { }
+    },
+    "east_side": {
+      "true": {
+        "submodel": "thebetweenlands:scrivener_sulfur_mark_side",
+        "y": 90
+      },
+      "false": { }
+    },
+    "south_side": {
+      "true": {
+        "submodel": "thebetweenlands:scrivener_sulfur_mark_side",
+        "y": 180
+      },
+      "false": { }
+    },
+    "west_side": {
+      "true": {
+        "submodel": "thebetweenlands:scrivener_sulfur_mark_side",
+        "y": 270
+      },
+      "false": { }
+    },
+    "burning": {
+      "true": { },
+      "false": { }
+    }
+  } 
+}

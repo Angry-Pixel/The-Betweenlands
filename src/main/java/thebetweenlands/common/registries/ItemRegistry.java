@@ -96,6 +96,7 @@ import thebetweenlands.common.item.herblore.ItemDentrothystVial;
 import thebetweenlands.common.item.herblore.ItemElixir;
 import thebetweenlands.common.item.herblore.ItemManualHL;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
+import thebetweenlands.common.item.herblore.ItemScrivenerTool;
 import thebetweenlands.common.item.herblore.rune.ItemRune;
 import thebetweenlands.common.item.herblore.rune.ItemRuneChain;
 import thebetweenlands.common.item.herblore.rune.ItemRunelet;
@@ -459,6 +460,7 @@ public class ItemRegistry {
     public static final Item WEEDWOOD_ROWBOAT_UPGRADE_LANTERN = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1);
     
     public static final Item RUNE_CHAIN = new ItemRuneChain();
+    public static final Item SCRIVENER_TOOL = new ItemScrivenerTool();
     
     public static final ItemRune WEEDWOOD_RUNE = new ItemRune(new ResourceLocation(ModInfo.ID, "weedwood"));
     public static final ItemRune PITSTONE_RUNE = new ItemRune(new ResourceLocation(ModInfo.ID, "pitstone"));

@@ -22,6 +22,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -40,6 +41,7 @@ import thebetweenlands.common.item.herblore.rune.ItemRune;
 import thebetweenlands.common.item.herblore.rune.ItemRune.RuneItemProperties;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.AspectRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.NBTHelper;
 
 public class PatternRuneItemProperties extends RuneItemProperties {
@@ -101,10 +103,12 @@ public class PatternRuneItemProperties extends RuneItemProperties {
 					nbt.removeTag(NBT_PATTERN_CENTER_Y);
 					nbt.removeTag(NBT_PATTERN_CENTER_Z);
 					nbt.removeTag(NBT_PATTERN_BLOCKS);
+					worldIn.playSound(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, SoundRegistry.PATTERN_RUNE_REMOVE, SoundCategory.PLAYERS, 0.5f, 0.9f + 0.2f * worldIn.rand.nextFloat(), false);
 				} else {
 					nbt.setInteger(NBT_PATTERN_CENTER_X, pos.getX());
 					nbt.setInteger(NBT_PATTERN_CENTER_Y, pos.getY());
 					nbt.setInteger(NBT_PATTERN_CENTER_Z, pos.getZ());
+					worldIn.playSound(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, SoundRegistry.PATTERN_RUNE_ADD, SoundCategory.PLAYERS, 0.5f, 0.9f + 0.2f * worldIn.rand.nextFloat(), false);
 				}
 
 				changed = true;
@@ -127,6 +131,9 @@ public class PatternRuneItemProperties extends RuneItemProperties {
 			if(!contained) {
 				blocks.appendTag(new NBTTagLong(pos.subtract(center).toLong()));
 				changed = true;
+				worldIn.playSound(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, SoundRegistry.PATTERN_RUNE_ADD, SoundCategory.PLAYERS, 0.5f, 0.9f + 0.2f * worldIn.rand.nextFloat(), false);
+			} else {
+				worldIn.playSound(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, SoundRegistry.PATTERN_RUNE_REMOVE, SoundCategory.PLAYERS, 0.5f, 0.9f + 0.2f * worldIn.rand.nextFloat(), false);
 			}
 
 			nbt.setTag(NBT_PATTERN_BLOCKS, blocks);

@@ -87,7 +87,9 @@ import thebetweenlands.common.block.misc.BlockPolishedDentrothyst;
 import thebetweenlands.common.block.misc.BlockPressurePlateBetweenlands;
 import thebetweenlands.common.block.misc.BlockRope;
 import thebetweenlands.common.block.misc.BlockRubberTap;
+import thebetweenlands.common.block.misc.BlockScrivenerMark;
 import thebetweenlands.common.block.misc.BlockSludge;
+import thebetweenlands.common.block.misc.BlockSulfurScrivenerMark;
 import thebetweenlands.common.block.misc.BlockSulfurTorch;
 import thebetweenlands.common.block.misc.BlockTrapDoorBetweenlands;
 import thebetweenlands.common.block.plant.BlockAlgae;
@@ -844,6 +846,8 @@ public class BlockRegistry {
     public static final Block REPELLER = new BlockRepeller();
     public static final Block RUNE_WEAVING_TABLE = new BlockRuneWeavingTable();
     public static final Block RUNE_CARVING_TABLE = new BlockRuneCarvingTable();
+    public static final Block SCRIVENER_SULFUR_MARK = new BlockSulfurScrivenerMark();
+    public static final Block SCRIVENER_BURNT_MARK = new BlockScrivenerMark().setHardness(0.5f);
     public static final Block WAYSTONE = new BlockWaystone();
     public static final Block CAVING_ROPE_LIGHT = new BlockCavingRopeLight();
     public static final Block GROUND_ITEM = new BlockGroundItem();

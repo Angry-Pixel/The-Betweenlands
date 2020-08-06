@@ -1798,5 +1798,15 @@
       "thebetweenlands:rune_carving_3",
       "thebetweenlands:rune_carving_4"
     ]
+  },
+  "pattern_rune_add": {
+    "sounds": [
+      "thebetweenlands:pattern_rune_add"
+    ]
+  },
+  "pattern_rune_remove": {
+    "sounds": [
+      "thebetweenlands:pattern_rune_remove"
+    ]
   }
 }

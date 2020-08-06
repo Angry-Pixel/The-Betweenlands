@@ -236,7 +236,7 @@ public interface IConnectedTextureBlock {
 					//if the block can't connect to its own faces because otherwise it wouldn't be able to connect to anything
 					return true;
 				}
-				return false;
+				return canConnectTo.apply(to.setPos(to.getX() - face.getXOffset(), to.getY() - face.getYOffset(), to.getZ() - face.getZOffset()));
 			}
 		};
 		return this.getExtendedConnectedTextureState(state, world, pos, connectionRules);
@@ -412,12 +412,15 @@ public interface IConnectedTextureBlock {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
+
 		boolean xp = true;
 		boolean yp = true;
 		boolean xr = false;
 		boolean yr = false;
 		boolean zr = false;
+
 		boolean[] connectionArray = new boolean[9];
+
 		switch (dir) {
 		case DOWN:
 			xp = false;
@@ -441,32 +444,45 @@ public interface IConnectedTextureBlock {
 			return connectionArray;
 		}
 		PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
-		for (int xo = xr ? -1 : 0; xo <= (xr ? 1 : 0); xo++) {
-			for (int yo = yr ? -1 : 0; yo <= (yr ? 1 : 0); yo++) {
-				for (int zo = zr ? -1 : 0; zo <= (zr ? 1 : 0); zo++) {
-					int mx = (xr ? xo : yo) + 1;
-					int my = (zr ? zo : (xr ? yo : zo)) + 1;
-					int blockIndex = getIndex(xp ? mx : 2 - mx, yp ? my : 2 - my, 3);
 
-					if(connectionRules.canConnectThrough(world, pos, dir, checkPos.setPos(x + dir.getXOffset(), y + dir.getYOffset(), z + dir.getZOffset()))) {
-						Axis axis = dir.getAxis();
-						if((axis == Axis.X && (yo != 0 || zo != 0)) || (axis == Axis.Y && (xo != 0 || zo != 0)) || (axis == Axis.Z && (xo != 0 || yo != 0))) {
-							MutableBlockPos diagPos = checkPos.setPos(axis == Axis.X ? (x + dir.getXOffset()) : (x + xo), axis == Axis.Y ? (y + dir.getYOffset()) : (y + yo), axis == Axis.Z ? (z + dir.getZOffset()) : (z + zo));
-							boolean isDiagConnectable = connectionRules.canConnectTo(world, pos, dir, diagPos);
-							if(isDiagConnectable || connectionRules.canConnectThrough(world, pos, dir, diagPos)) {
-								MutableBlockPos obstructionPos = checkPos.setPos(axis == Axis.X ? x : (x + xo), axis == Axis.Y ? y : (y + yo), axis == Axis.Z ? z : (z + zo));
-								if(isDiagConnectable || connectionRules.canConnectThrough(world, pos, dir, obstructionPos)) {
-									connectionArray[blockIndex] = true;
-								} else {
-									connectionArray[blockIndex] = connectionRules.canConnectTo(world, pos, dir, checkPos.setPos(x + xo, y + yo, z + zo));
+		try {
+			for (int xo = xr ? -1 : 0; xo <= (xr ? 1 : 0); xo++) {
+				for (int yo = yr ? -1 : 0; yo <= (yr ? 1 : 0); yo++) {
+					for (int zo = zr ? -1 : 0; zo <= (zr ? 1 : 0); zo++) {
+						int mx = (xr ? xo : yo) + 1;
+						int my = (zr ? zo : (xr ? yo : zo)) + 1;
+						int blockIndex = getIndex(xp ? mx : 2 - mx, yp ? my : 2 - my, 3);
+
+						checkPos.setPos(x + dir.getXOffset(), y + dir.getYOffset(), z + dir.getZOffset());
+
+						if(connectionRules.canConnectThrough(world, pos, dir, checkPos)) {
+							Axis axis = dir.getAxis();
+
+							if((axis == Axis.X && (yo != 0 || zo != 0)) || (axis == Axis.Y && (xo != 0 || zo != 0)) || (axis == Axis.Z && (xo != 0 || yo != 0))) {
+
+								MutableBlockPos diagPos = checkPos.setPos(axis == Axis.X ? (x + dir.getXOffset()) : (x + xo), axis == Axis.Y ? (y + dir.getYOffset()) : (y + yo), axis == Axis.Z ? (z + dir.getZOffset()) : (z + zo));
+
+								boolean isDiagConnectable = connectionRules.canConnectTo(world, pos, dir, diagPos);
+
+								if(isDiagConnectable || connectionRules.canConnectThrough(world, pos, dir, diagPos)) {
+
+									MutableBlockPos obstructionPos = checkPos.setPos(axis == Axis.X ? x : (x + xo), axis == Axis.Y ? y : (y + yo), axis == Axis.Z ? z : (z + zo));
+
+									if(isDiagConnectable || connectionRules.canConnectThrough(world, pos, dir, obstructionPos)) {
+										connectionArray[blockIndex] = true;
+									} else {
+										connectionArray[blockIndex] = connectionRules.canConnectTo(world, pos, dir, checkPos.setPos(x + xo, y + yo, z + zo));
+									}
 								}
 							}
 						}
 					}
 				}
 			}
+		} finally {
+			checkPos.release();
 		}
-		checkPos.release();
+
 		return connectionArray;
 	}
 
