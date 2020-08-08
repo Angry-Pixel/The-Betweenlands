@@ -70,6 +70,7 @@ import thebetweenlands.common.block.farming.BlockFungusCrop;
 import thebetweenlands.common.block.farming.BlockMiddleFruitBush;
 import thebetweenlands.common.block.misc.BlockAmatePaperPane;
 import thebetweenlands.common.block.misc.BlockBouncyBetweenlands;
+import thebetweenlands.common.block.misc.BlockBurntScrivenerMark;
 import thebetweenlands.common.block.misc.BlockButtonBetweenlands;
 import thebetweenlands.common.block.misc.BlockCavingRopeLight;
 import thebetweenlands.common.block.misc.BlockDampTorch;
@@ -847,7 +848,7 @@ public class BlockRegistry {
     public static final Block RUNE_WEAVING_TABLE = new BlockRuneWeavingTable();
     public static final Block RUNE_CARVING_TABLE = new BlockRuneCarvingTable();
     public static final Block SCRIVENER_SULFUR_MARK = new BlockSulfurScrivenerMark();
-    public static final Block SCRIVENER_BURNT_MARK = new BlockScrivenerMark().setHardness(0.5f);
+    public static final Block SCRIVENER_BURNT_MARK = new BlockBurntScrivenerMark();
     public static final Block WAYSTONE = new BlockWaystone();
     public static final Block CAVING_ROPE_LIGHT = new BlockCavingRopeLight();
     public static final Block GROUND_ITEM = new BlockGroundItem();
