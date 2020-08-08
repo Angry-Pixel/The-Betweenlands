@@ -1039,6 +1039,11 @@ tooltip.bl.simple_slingshot=Shoots Betweenstone Pebbles
 tooltip.bl.lurker_skin_patch=Fixes Draeton leakages
 tooltip.bl.chirobarb_erupter.usage=Right-click to fire 360 degree volley of barbs.\nHas 3 second cooldown.
 tooltip.bl.ancient_armor.usage=Reduces Magic Damage.\nUp to half magic damage reduction\nwith a full set equipped.
+# Anadia item mob stats
+tooltip.bl.item_mob.size=Size: %s
+tooltip.bl.item_mob.speed=Speed: %s
+tooltip.bl.item_mob.strength=Strength: %s
+tooltip.bl.item_mob.stamina=Stamina: %s
 
 tooltip.bl.elixir.potency=§9Potency: %s
 tooltip.bl.elixir.duration=§9Duration: %s (%s)

@@ -30,6 +30,7 @@ import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.EntityGalleryFrame;
 import thebetweenlands.common.entity.EntityTinyWormEggSac;
+import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
@@ -423,6 +424,7 @@ public class ItemRegistry {
     public static final ItemMob SLUDGE_WORM_EGG_SAC = new ItemMob(16, EntityTinyWormEggSac.class, null);
     public static final ItemMob TINY_SLUDGE_WORM = new ItemMob(1, EntityTinySludgeWorm.class, null);
     public static final ItemMob TINY_SLUDGE_WORM_HELPER = new ItemMob(1, EntityTinySludgeWormHelper.class, null);
+    public static final ItemMob ANADIA = new ItemMob(1, EntityAnadia.class, null);
     public static final ItemMob CHIROMAW_EGG = new ItemChiromawEgg(false);
     public static final ItemMob CHIROMAW_EGG_LIGHTNING = new ItemChiromawEgg(true);
     public static final ItemMob CHIROMAW_TAME = new ItemChiromawTame(false);

@@ -387,7 +387,7 @@ public class EntityBLFishHook extends Entity {
 			if (caughtEntity != null) {
 					if(((EntityAnadia)caughtEntity).staminaTicks > 0) { 
 						((EntityAnadia)caughtEntity).staminaTicks--;
-						System.out.println("STAMINA: " + ((EntityAnadia)caughtEntity).staminaTicks);
+					//	System.out.println("STAMINA: " + ((EntityAnadia)caughtEntity).staminaTicks);
 						if (((EntityAnadia)caughtEntity).staminaTicks%40 == 0) {
 							// consumes half a shank of hunger every 2 seconds or so whilst the fish has stamina
 							getAngler().getFoodStats().setFoodLevel(getAngler().getFoodStats().getFoodLevel() - 1);

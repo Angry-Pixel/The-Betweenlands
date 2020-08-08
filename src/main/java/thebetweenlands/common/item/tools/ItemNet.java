@@ -19,6 +19,7 @@ import net.minecraft.util.EnumHand;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.EntityTinyWormEggSac;
+import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityChiromawHatchling;
 import thebetweenlands.common.entity.mobs.EntityChiromawTame;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
@@ -50,6 +51,7 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 		register(EntityTinySludgeWorm.class, () -> ItemRegistry.TINY_SLUDGE_WORM, (p, e) -> true);
 		register(EntityTinySludgeWormHelper.class, () -> ItemRegistry.TINY_SLUDGE_WORM_HELPER, (p, e) -> true);
 		register(EntityMireSnail.class, () -> ItemRegistry.CRITTER, (p, e) -> true);
+		register(EntityAnadia.class, () -> ItemRegistry.ANADIA, (p, e) -> e.staminaTicks == 0);
 	}
 
 	public ItemNet() {

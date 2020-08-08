@@ -13,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -29,6 +30,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.entity.mobs.EntityAnadia;
 
 public class ItemMob extends Item {
 	private final Class<? extends Entity> defaultMob;
@@ -238,7 +240,16 @@ public class ItemMob extends Item {
 			Entity entity = this.createCapturedEntity(worldIn, 0, 0, 0, stack);
 			if(entity instanceof EntityLivingBase) {
 				EntityLivingBase living = (EntityLivingBase) entity;
-				tooltip.add(I18n.format("tooltip.bl.item_mob.health", MathHelper.ceil(living.getHealth() / 2), MathHelper.ceil(living.getMaxHealth() / 2)));
+				
+				if (living instanceof EntityAnadia) {
+					tooltip.add(I18n.format("tooltip.bl.item_mob.health", MathHelper.ceil(living.getHealth()), MathHelper.ceil((living.getMaxHealth()))));
+					tooltip.add(I18n.format("tooltip.bl.item_mob.size", ((EntityAnadia) living).getFishSize()));
+					tooltip.add(I18n.format("tooltip.bl.item_mob.speed", (living.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue())));
+					tooltip.add(I18n.format("tooltip.bl.item_mob.strength", (living.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue())));
+					tooltip.add(I18n.format("tooltip.bl.item_mob.stamina", ((EntityAnadia) living).getStaminaMods()));
+				}
+				else
+					tooltip.add(I18n.format("tooltip.bl.item_mob.health", MathHelper.ceil(living.getHealth() / 2), MathHelper.ceil(living.getMaxHealth() / 2)));
 			}
 		}
 	}

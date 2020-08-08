@@ -1,0 +1,9 @@
+{
+  "source": "thebetweenlands:anadia",
+  "inherit_overrides": false,
+  "custom": {
+    "map": {
+      "thebetweenlands:anadia": "thebetweenlands:item/anadia"
+    }
+  }
+}
