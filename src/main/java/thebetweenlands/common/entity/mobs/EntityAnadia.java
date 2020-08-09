@@ -10,6 +10,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -38,6 +39,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
@@ -94,12 +96,28 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataManager.register(FISH_SIZE, Math.round(Math.max(0.125F, rand.nextFloat()) * 16F) / 16F);
-        dataManager.register(HEAD_TYPE, (byte)rand.nextInt(3));
-        dataManager.register(BODY_TYPE, (byte)rand.nextInt(3));
-        dataManager.register(TAIL_TYPE, (byte)rand.nextInt(3));
+        dataManager.register(FISH_SIZE, 0.5F);
+        dataManager.register(HEAD_TYPE, (byte) 0);
+        dataManager.register(BODY_TYPE, (byte) 0);
+        dataManager.register(TAIL_TYPE, (byte) 0);
         dataManager.register(IS_LEAPING, false);
         dataManager.register(HUNGER_COOLDOWN, 0);
+    }
+
+	@Override
+    protected void applyEntityAttributes() {
+        super.applyEntityAttributes();
+        getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(12.0D);
+    }
+
+    @Nullable
+	@Override
+    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+        setHeadType((byte)rand.nextInt(3));
+        setBodyType((byte)rand.nextInt(3));
+        setTailType((byte)rand.nextInt(3));
+        setFishSize(Math.round(Math.max(0.125F, rand.nextFloat()) * 16F) / 16F);
+        return super.onInitialSpawn(difficulty, livingdata);
     }
 
     public float getFishSize() {
@@ -108,6 +126,29 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
     private void setFishSize(float size) {
         dataManager.set(FISH_SIZE, size);
+        setSize(getFishSize(), getFishSize() * 0.75F);
+        setPosition(posX, posY, posZ);
+
+        getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D + getSpeedMods());
+        getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D + getHealthMods());
+
+        if(getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE) == null)
+        	getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5D + getStrengthMods());
+        else
+        	getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5D + getStrengthMods());
+
+        setHealth(getMaxHealth());
+/*
+        if(!getEntityWorld().isRemote) {
+        	System.out.println("NAME: " + getName());
+        	System.out.println("HEALTH: " + getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue());
+        	System.out.println("FISH SIZE:" + getFishSize());
+        	System.out.println("HEAD: " + getHeadType() + " BODY: " + getBodyType() + " TAIL: " + getTailType());
+        	System.out.println("SPEED: " + getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+        	System.out.println("STRENGTH: " + getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+        	System.out.println("STAMINA: " + getStaminaMods());
+        }
+ */
     }
 
     public byte getHeadType() {
@@ -149,6 +190,16 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
     private void setHungerCooldown(int count) {
         dataManager.set(HUNGER_COOLDOWN, count);
     }
+
+	@Override
+    public void notifyDataManagerChange(DataParameter<?> key) {
+        if (FISH_SIZE.equals(key)) {
+            setSize(getFishSize(), getFishSize());
+            rotationYaw = rotationYawHead;
+            renderYawOffset = rotationYawHead;
+        }
+        super.notifyDataManagerChange(key);
+    }
  
 	@Override
     public String getName() {
@@ -161,40 +212,22 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
-		nbt.setFloat("fishSize", getFishSize());
 		nbt.setByte("headType", getHeadType());
 		nbt.setByte("bodyType", getBodyType());
 		nbt.setByte("tailType", getTailType());
+		nbt.setFloat("fishSize", getFishSize());
 		nbt.setInteger("hunger", getHungerCooldown());
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		setFishSize(nbt.getFloat("fishSize"));
 		setHeadType(nbt.getByte("headType"));
 		setBodyType(nbt.getByte("bodyType"));
 		setTailType(nbt.getByte("tailType"));
+		setFishSize(nbt.getFloat("fishSize"));
 		setHungerCooldown(nbt.getInteger("hunger"));
 	}
-
-	@Override
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
-        setSize(getFishSize(), getFishSize() * 0.75F);
-        getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D + getSpeedMods());
-        getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D + getHealthMods());
-        getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(12.0D);
-        getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5D + getStrengthMods());
-        if(!getEntityWorld().isRemote) {
-        	System.out.println("FISH SIZE:" + getFishSize());
-        	System.out.println("HEAD:" + getHeadType() + " BODY: " + getBodyType() + " TAIL: " + getTailType());
-        	System.out.println("SPEED:" + getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
-        	System.out.println("HEALTH:" + getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue());
-        	System.out.println("STRENGTH:" + getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
-        	System.out.println("STAMINA:" + getStaminaMods());
-        }
-    }
 
 	//cumulative speed, health, strength, & stamina modifiers
 	public float getSpeedMods() {
@@ -392,10 +425,10 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		float stamina; // possible use for how much it pulls or time taken to catch once hooked
 
 		EnumAnadiaHeadParts(float speedModifier, float healthModifier, float strengthModifier, float staminaModifier) {
-			this.speed = speedModifier;
-			this.health = healthModifier;
-			this.strength = strengthModifier;
-			this.stamina = staminaModifier;
+			speed = speedModifier;
+			health = healthModifier;
+			strength = strengthModifier;
+			stamina = staminaModifier;
 		}
 
 		EnumAnadiaHeadParts() {
@@ -431,10 +464,10 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		float stamina; // possible use for how much it pulls or time taken to catch once hooked
 
 		EnumAnadiaBodyParts(float speedModifier, float healthModifier, float strengthModifier, float staminaModifier) {
-			this.speed = speedModifier;
-			this.health = healthModifier;
-			this.strength = strengthModifier;
-			this.stamina = staminaModifier;
+			speed = speedModifier;
+			health = healthModifier;
+			strength = strengthModifier;
+			stamina = staminaModifier;
 		}
 
 		EnumAnadiaBodyParts() {
@@ -470,10 +503,10 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		float stamina; // possible use for how much it pulls or time taken to catch once hooked
 
 		EnumAnadiaTailParts(float speedModifier, float healthModifier, float strengthModifier, float staminaModifier) {
-			this.speed = speedModifier;
-			this.health = healthModifier;
-			this.strength = strengthModifier;
-			this.stamina = staminaModifier;
+			speed = speedModifier;
+			health = healthModifier;
+			strength = strengthModifier;
+			stamina = staminaModifier;
 		}
 
 		EnumAnadiaTailParts() {
@@ -739,7 +772,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 		@Override
 	    public boolean shouldContinueExecuting(){
-	        return !this.entity.getNavigator().noPath() && !isBeingRidden();
+	        return !entity.getNavigator().noPath() && !isBeingRidden();
 	    }
 	}
 	
@@ -758,7 +791,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 		@Override
 	    public boolean shouldContinueExecuting(){
-	        return !this.entity.getNavigator().noPath() && anadia.isBeingRidden() && anadia.staminaTicks >= 1;
+	        return !entity.getNavigator().noPath() && anadia.isBeingRidden() && anadia.staminaTicks >= 1;
 	    }
 	}
 }

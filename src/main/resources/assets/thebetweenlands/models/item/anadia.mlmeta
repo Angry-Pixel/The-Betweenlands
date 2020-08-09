@@ -3,7 +3,7 @@
   "inherit_overrides": false,
   "custom": {
     "map": {
-      "thebetweenlands:anadia": "thebetweenlands:item/anadia"
+      "thebetweenlands:anadia": "thebetweenlands:item/anadia_item"
     }
   }
 }
