@@ -51,7 +51,7 @@ public final class RunePinpoint extends AbstractRune<RunePinpoint> {
 		}
 
 		@Override
-		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess) {
+		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess, boolean provisional) {
 			return ImmutableList.of(CONFIGURATION_1);
 		}
 

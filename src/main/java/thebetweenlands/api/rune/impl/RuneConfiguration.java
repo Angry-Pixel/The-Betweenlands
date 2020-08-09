@@ -78,7 +78,33 @@ public class RuneConfiguration implements INodeConfiguration {
 			this.inputPorts.add(input);
 			return input;
 		}
+		
+		/**
+		 * Creates a new input that accepts the same type as the specified input
+		 * @param descriptor - descriptor that identifies the input types
+		 * @param serializer - serializer to send value over network
+		 * @param type - type to accept
+		 * @return a new input that accepts the specified type
+		 */
+		public <T> InputPort<T> in(Class<T> type, InputPort<? extends T> in) {
+			InputPort<T> input = new InputPort<>(type, this.inIndices++, in);
+			this.inputPorts.add(input);
+			return input;
+		}
 
+		/**
+		 * Creates a new input that accepts the same type as the specified input
+		 * @param descriptor - descriptor that identifies the input types
+		 * @param serializer - serializer to send value over network
+		 * @param type - type to accept
+		 * @return a new input that accepts the specified type
+		 */
+		public <T> InputPort<T> in(Class<T> type, OutputPort<? extends T> in) {
+			InputPort<T> input = new InputPort<>(type, this.inIndices++, in);
+			this.inputPorts.add(input);
+			return input;
+		}
+		
 		/**
 		 * Creates a new input that accepts a multiple objects of the specified type at once
 		 * @param descriptor - descriptor that identifies the input type
@@ -225,7 +251,27 @@ public class RuneConfiguration implements INodeConfiguration {
 			this.descriptor = descriptor;
 			this.serializer = serializer;
 		}
+		
+		private InputPort(Class<T> type, int index, InputPort<? extends T> in) {
+			this.type = type;
+			this.types = in.types;
+			this.index = index;
+			this.isMulti = in.isMulti;
+			this.descriptorWildcard = in.descriptorWildcard;
+			this.descriptor = in.descriptor;
+			this.serializer = in.serializer;
+		}
 
+		private InputPort(Class<T> type, int index, OutputPort<? extends T> in) {
+			this.type = type;
+			this.types = null;
+			this.index = index;
+			this.isMulti = in.isMulti;
+			this.descriptorWildcard = false;
+			this.descriptor = in.descriptor;
+			this.serializer = null;
+		}
+		
 		public boolean isDescriptorWildcard() {
 			return this.descriptorWildcard;
 		}

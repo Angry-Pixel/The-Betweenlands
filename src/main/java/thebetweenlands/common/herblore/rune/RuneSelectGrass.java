@@ -44,7 +44,7 @@ public final class RuneSelectGrass extends AbstractRune<RuneSelectGrass> {
 		}
 
 		@Override
-		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess) {
+		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess, boolean provisional) {
 			return ImmutableList.of(CONFIGURATION_1);
 		}
 

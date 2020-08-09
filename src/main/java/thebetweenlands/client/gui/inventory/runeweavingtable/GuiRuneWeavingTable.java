@@ -129,7 +129,7 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 		this.linkingDropdownMenuSlot = -1;
 
 		this.updateSelectedRuneGui(runeIndex);
-		
+
 		this.mc.getSoundHandler().playSound(PositionedSoundRecord.getRecord(SoundRegistry.RUNE_SELECT, rand.nextFloat() * 0.066F + 0.933F, 1.0F));
 	}
 
@@ -144,7 +144,7 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 			ItemStack stack = this.container.getRuneItemStack(runeIndex);
 
 			IRuneCapability runeCap = null;
-			
+
 			if(!stack.isEmpty() && (runeCap = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE, null)) != null) {
 				IRuneContainer container = this.container.getRuneContainer(runeIndex);
 
@@ -158,6 +158,8 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 						IRuneGui newGui = factory.createGui(RuneMenuType.PRIMARY);
 
 						newGui.init(container, this.width, this.height);
+
+						container.setGui(newGui);
 
 						this.openRuneGuis.put(RuneMenuType.PRIMARY, newGui);
 
@@ -174,6 +176,8 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 		if(clear) {
 			for(IRuneGui gui : this.openRuneGuis.values()) {
 				gui.close();
+
+				gui.getContainer().setGui(null);
 			}
 
 			this.openRuneGuis.clear();
@@ -206,7 +210,7 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 			ItemStack stack = this.container.getRuneItemStack(targetRune);
 
 			IRuneCapability runeCap = null;
-			
+
 			if(!stack.isEmpty() && (runeCap = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE, null)) != null) {
 				IRuneContainer container = this.container.getRuneContainer(targetRune);
 
@@ -221,6 +225,8 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 							IRuneGui newGui = factory.createGui(RuneMenuType.SECONDARY);
 
 							newGui.init(container, this.width, this.height);
+
+							container.setGui(newGui);
 
 							this.openRuneGuis.put(RuneMenuType.SECONDARY, newGui);
 						} else {
@@ -237,6 +243,9 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 
 		if(closeCurrentGui && currentGui != null) {
 			currentGui.close();
+
+			currentGui.getContainer().setGui(null);
+
 			this.openRuneGuis.remove(RuneMenuType.SECONDARY);
 		}
 	}
@@ -428,7 +437,7 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 
 	protected void drawSlotItem(Slot slot) {
 		boolean isDisabledFromLinking = false;
-		
+
 		if(this.draggingToken != null && slot.slotNumber != this.container.getSelectedSlot() && this.isSlabSlot(slot)) {
 			if(slot.slotNumber > this.container.getSelectedSlot()) {
 				isDisabledFromLinking = true;
@@ -436,16 +445,16 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 				IRuneGui primaryRuneGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
 
 				if(primaryRuneGui != null && primaryRuneGui.getInputTokens().contains(this.draggingToken) && this.draggingToken.isInteractable() && this.container.getSelectedRuneIndex() >= 0) {
-					
+
 					IRuneContainer outputContainer = this.container.getRuneContainer(slot.slotNumber - this.tile.getChainStart());
-					
-					if(outputContainer != null && this.getCurrentlyLinkableOutputs(slot.slotNumber - this.tile.getChainStart(), outputContainer.getContext().getConfiguration()).isEmpty()) {
+
+					if(outputContainer != null && this.getCurrentlyLinkableOutputs(slot.slotNumber - this.tile.getChainStart(), outputContainer.getContext().getProvisionalConfiguration()).isEmpty()) {
 						isDisabledFromLinking = true;
 					}
 				}
 			}
 		}
-		
+
 		if((this.swapAnimationTicks > 0 || isDisabledFromLinking) && this.isSlabSlot(slot)) {
 			this.zLevel = 100.0F;
 			this.itemRender.zLevel = 100.0F;
@@ -454,12 +463,12 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 
 			float alpha = this.setSlabTransform();
 			float brightness = 1.0f;
-			
+
 			if(isDisabledFromLinking) {
 				brightness = 0.5f;
 				alpha *= 0.5f;
 			}
-			
+
 			int x = slot.xPos;
 			int y = slot.yPos;
 			ItemStack itemstack = slot.getStack();
@@ -519,24 +528,24 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 						if(linkingTokenIndex >= 0) {
 							IRuneContainer outputContainer = this.container.getRuneContainer(this.linkingDropdownMenuSlot - this.tile.getChainStart());
 							if(outputContainer != null) {
-								List<Integer> linkableOutputs = this.getCurrentlyLinkableOutputs(this.linkingDropdownMenuSlot - this.tile.getChainStart(), outputContainer.getContext().getConfiguration());
-								
+								List<Integer> linkableOutputs = this.getCurrentlyLinkableOutputs(this.linkingDropdownMenuSlot - this.tile.getChainStart(), outputContainer.getContext().getProvisionalConfiguration());
+
 								int dropdownMenuIndex = 0;
 								for(int linkableOutput : linkableOutputs) {
 									if(linkableOutput == linkingTokenIndex) {
 										Slot slot = this.inventorySlots.getSlot(this.linkingDropdownMenuSlot);
-										
+
 										int sx = slot.xPos - 3;
 										int sy = slot.yPos - 3;
-			
+
 										int cx = this.guiLeft + sx + 3 + 8;
 										int cy = this.guiTop + sy + 3 + dropdownMenuIndex * 18 + 8 + 18;
-			
+
 										primaryRuneGui.drawTokenConnection(this.draggingToken, cx, cy, RuneMenuDrawingContext.Connection.VIA_DROPDOWN);
-			
+
 										drawn = true;
 									}
-									
+
 									dropdownMenuIndex++;
 								}
 							}
@@ -576,7 +585,7 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 			return GUI_RUNE_UNLINKED[3];
 		}
 	}
-	
+
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTickTime, int x, int y) {
 		this.mc.getTextureManager().bindTexture(GUI_RUNE_WEAVING_TABLE);
@@ -800,7 +809,7 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 			this.recentlyLinked = null;
 
 			IRuneGui primaryRuneGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
-			
+
 			if(this.container.getSelectedRuneIndex() >= 0 && this.linkingDropdownMenuSlot >= 0) {
 				int linkingTokenIndex = this.getLinkingDropdownMenuTokenIndex(mouseX, mouseY);
 
@@ -823,7 +832,7 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 
 			if(this.recentlyLinked == null) {
 				this.linkingDropdownMenuSlot = -1;
-				
+
 				if(primaryRuneGui != null) {
 					primaryRuneGui.onStopTokenLinking(this.draggingToken, mouseX, mouseY, null);
 				}
@@ -844,26 +853,26 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 		super.handleMouseInput();
 
 		int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
-        int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-        
-        boolean isOnRuneGui = false;
-        
-        for(IRuneGui gui : this.openRuneGuis.values()) {
-        	if(mouseX >= gui.getMinX() && mouseX < gui.getMaxX() && mouseY >= gui.getMinY() && mouseY < gui.getMaxY()) {
-        		isOnRuneGui = true;
-        		break;
-        	}
-        }
-        
-        if(!isOnRuneGui) {
-        	int scroll = Mouse.getEventDWheel();
+		int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
 
-    		if(scroll < 0) {
-    			this.movePage(1);
-    		} else if(scroll > 0) {
-    			this.movePage(-1);
-    		}
-        }
+		boolean isOnRuneGui = false;
+
+		for(IRuneGui gui : this.openRuneGuis.values()) {
+			if(mouseX >= gui.getMinX() && mouseX < gui.getMaxX() && mouseY >= gui.getMinY() && mouseY < gui.getMaxY()) {
+				isOnRuneGui = true;
+				break;
+			}
+		}
+
+		if(!isOnRuneGui) {
+			int scroll = Mouse.getEventDWheel();
+
+			if(scroll < 0) {
+				this.movePage(1);
+			} else if(scroll > 0) {
+				this.movePage(-1);
+			}
+		}
 
 		for(IRuneGui gui : this.openRuneGuis.values()) {
 			gui.onMouseInput(mouseX, mouseY);
@@ -987,7 +996,7 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 	protected List<Integer> getCurrentlyLinkableOutputs(int outputRuneIndex, INodeConfiguration outputConfiguration) {
 		IRuneGui primaryGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
 		if(primaryGui != null && this.draggingToken != null) {
-			IConfigurationInput input = primaryGui.getContainer().getContext().getConfiguration().getInputs().get(this.draggingToken.getTokenIndex());
+			IConfigurationInput input = primaryGui.getContainer().getContext().getProvisionalConfiguration().getInputs().get(this.draggingToken.getTokenIndex());
 			if(input != null) {
 				return this.getLinkableOutputs(input, outputRuneIndex, outputConfiguration);
 			}
@@ -1021,7 +1030,7 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 			IRuneLink link = this.container.getLink(runeIndex, i);
 
 			if(link != null) {
-				INodeConfiguration inputConfiguration = this.container.getRuneContainer(link.getOutputRune()).getContext().getConfiguration();
+				INodeConfiguration inputConfiguration = this.container.getRuneContainer(link.getOutputRune()).getContext().getProvisionalConfiguration();
 				inputTypes.add(this.getOutputType(link.getOutputRune(), inputConfiguration, inputConfiguration.getOutputs().get(link.getOutput())));
 			} else {
 				inputTypes.add((IType) null);
@@ -1040,7 +1049,7 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 			IRuneLink link = this.container.getLink(runeIndex, i);
 
 			if(link != null) {
-				INodeConfiguration inputConfiguration = this.container.getRuneContainer(link.getOutputRune()).getContext().getConfiguration();
+				INodeConfiguration inputConfiguration = this.container.getRuneContainer(link.getOutputRune()).getContext().getProvisionalConfiguration();
 				inputTypes.add(this.getOutputType(link.getOutputRune(), inputConfiguration, inputConfiguration.getOutputs().get(link.getOutput())));
 			} else {
 				inputTypes.add((IType) null);
@@ -1061,7 +1070,7 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 				IRuneContainer container = this.container.getRuneContainer(this.linkingDropdownMenuSlot - this.tile.getChainStart());
 
 				if(container != null) {
-					INodeConfiguration configuration = container.getContext().getConfiguration();
+					INodeConfiguration configuration = container.getContext().getProvisionalConfiguration();
 					int outputs;
 					if(this.draggingToken != null) {
 						outputs = this.getCurrentlyLinkableOutputs(this.linkingDropdownMenuSlot - this.tile.getChainStart(), configuration).size();
@@ -1095,7 +1104,7 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 						IRuneContainer container = this.container.getRuneContainer(slot.slotNumber - this.tile.getChainStart());
 
 						if(container != null) {
-							INodeConfiguration configuration = container.getContext().getConfiguration();
+							INodeConfiguration configuration = container.getContext().getProvisionalConfiguration();
 							int outputs = this.getCurrentlyLinkableOutputs(slot.slotNumber - this.tile.getChainStart(), configuration).size();
 
 							if(outputs > 0) {
@@ -1128,7 +1137,7 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 			IRuneContainer container = this.container.getRuneContainer(this.linkingDropdownMenuSlot - this.tile.getChainStart());
 
 			if(container != null) {
-				INodeConfiguration configuration = container.getContext().getConfiguration();
+				INodeConfiguration configuration = container.getContext().getProvisionalConfiguration();
 
 				int outputs;
 				if(onlyLinkable) {
@@ -1165,7 +1174,7 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 				IRuneGui secondaryRuneGui = this.openRuneGuis.get(RuneMenuType.SECONDARY);
 
 				if(secondaryRuneGui != null) {
-					INodeConfiguration configuration = container.getContext().getConfiguration();
+					INodeConfiguration configuration = container.getContext().getProvisionalConfiguration();
 					List<Integer> outputs = this.getCurrentlyLinkableOutputs(this.linkingDropdownMenuSlot - this.tile.getChainStart(), configuration);
 
 					int sx = slot.xPos - 3;
@@ -1201,7 +1210,7 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 		IRuneContainer container = this.container.getRuneContainer(slot.slotNumber - this.tile.getChainStart());
 
 		if(container != null) {
-			INodeConfiguration configuration = container.getContext().getConfiguration();
+			INodeConfiguration configuration = container.getContext().getProvisionalConfiguration();
 			List<Integer> outputs;
 			if(onlyLinkable) {
 				outputs = this.getCurrentlyLinkableOutputs(slot.slotNumber - this.tile.getChainStart(), configuration);
@@ -1524,7 +1533,7 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 
 	@Override
 	public Collection<IRuneGui> getOpenRuneGuis() {
-		return this.openRuneGuis.values();
+		return Collections.unmodifiableCollection(this.openRuneGuis.values());
 	}
 
 	@Override

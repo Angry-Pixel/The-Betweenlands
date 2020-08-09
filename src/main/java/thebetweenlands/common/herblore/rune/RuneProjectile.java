@@ -11,10 +11,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.api.rune.INodeComposition;
-import thebetweenlands.api.rune.INodeCompositionBlueprint;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.IRuneChainUser;
-import thebetweenlands.api.rune.INodeBlueprint.IConfigurationLinkAccess;
 import thebetweenlands.api.rune.impl.AbstractRune;
 import thebetweenlands.api.rune.impl.InputSerializers;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
@@ -55,6 +53,12 @@ public final class RuneProjectile extends AbstractRune<RuneProjectile> {
 		private static final InputPort<Vec3d> IN_RAY_3;
 		private static final OutputPort<BlockPos> OUT_POSITION_3;
 
+		public static final RuneConfiguration CONFIGURATION_4;
+		
+		private static final InputPort<BlockPos> IN_BLOCK_4;
+		private static final InputPort<Vec3d> IN_RAY_4;
+		private static final OutputPort<BlockPos> OUT_POSITION_4;
+		
 		static {
 			RuneConfiguration.Builder builder = RuneConfiguration.builder();
 
@@ -74,11 +78,17 @@ public final class RuneProjectile extends AbstractRune<RuneProjectile> {
 			OUT_POSITION_3 = builder.out(RuneTokenDescriptors.BLOCK, BlockPos.class);
 
 			CONFIGURATION_3 = builder.build();
+			
+			IN_BLOCK_4 = builder.in(RuneTokenDescriptors.BLOCK, InputSerializers.BLOCK, BlockPos.class);
+			IN_RAY_4 = builder.in(RuneTokenDescriptors.DIRECTION, InputSerializers.VECTOR, Vec3d.class);
+			OUT_POSITION_4 = builder.out(RuneTokenDescriptors.BLOCK, BlockPos.class);
+
+			CONFIGURATION_4 = builder.build();
 		}
 
 		@Override
-		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess) {
-			return ImmutableList.of(CONFIGURATION_1, CONFIGURATION_2, CONFIGURATION_3);
+		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess, boolean provisional) {
+			return ImmutableList.of(CONFIGURATION_1, CONFIGURATION_2, CONFIGURATION_3, CONFIGURATION_4);
 		}
 
 		@Override
@@ -106,10 +116,13 @@ public final class RuneProjectile extends AbstractRune<RuneProjectile> {
 				}, projectile);
 			} else if(state.getConfiguration() == CONFIGURATION_3) {
 				projectile = run(io, context.getUser().getWorld(), null, IN_POSITION_3.get(io), IN_RAY_3.get(io), OUT_POSITION_3);
+			} else if(state.getConfiguration() == CONFIGURATION_4) {
+				BlockPos block = IN_BLOCK_4.get(io);
+				projectile = run(io, context.getUser().getWorld(), null, new Vec3d(block.getX() + 0.5f, block.getY() + 0.5f, block.getZ() + 0.5f), IN_RAY_4.get(io), OUT_POSITION_4);
 			}
 
 			if(projectile != null) {
-				return new RuneEffectModifier.Subject(null, null, projectile);
+				return new RuneEffectModifier.Subject(projectile);
 			}
 
 			return null;

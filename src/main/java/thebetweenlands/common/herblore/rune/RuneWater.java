@@ -33,7 +33,7 @@ public final class RuneWater extends AbstractRune<RuneWater> {
 		}
 
 		@Override
-		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess) {
+		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess, boolean provisional) {
 			return ImmutableList.of(CONFIGURATION_1);
 		}
 

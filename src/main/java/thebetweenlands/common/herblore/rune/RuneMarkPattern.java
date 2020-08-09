@@ -51,7 +51,7 @@ public final class RuneMarkPattern extends AbstractRune<RuneMarkPattern> {
 		}
 
 		@Override
-		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess) {
+		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess, boolean provisional) {
 			return ImmutableList.of(CONFIGURATION_1, CONFIGURATION_2);
 		}
 

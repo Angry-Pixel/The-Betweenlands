@@ -42,7 +42,7 @@ public final class RuneDestroyBlock extends AbstractRune<RuneDestroyBlock> {
 		}
 
 		@Override
-		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess) {
+		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess, boolean provisional) {
 			return ImmutableList.of(CONFIGURATION_1);
 		}
 

@@ -9,6 +9,8 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
@@ -80,6 +82,7 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 		protected final List<Slot> slots = new ArrayList<>();
 		protected int runeIndex;
 		protected INodeConfiguration configuration;
+		protected INodeConfiguration provisionalConfiguration;
 
 		protected RuneContainerEntry(int runeIndex) {
 			this.runeIndex = runeIndex;
@@ -477,17 +480,20 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 			INodeConfiguration currentConfiguration = entry.container.getContext().getConfiguration();
 
 			if(currentConfiguration != null) {
-				for(INodeConfiguration newConfiguration : entry.container.getBlueprint().getConfigurations(this.createLinkAccess(runeIndex))) {
+				for(INodeConfiguration newConfiguration : entry.container.getBlueprint().getConfigurations(this.createLinkAccess(runeIndex), false)) {
 					if(currentConfiguration != newConfiguration && currentConfiguration.getId() == newConfiguration.getId()) {
+						Pair<INodeConfiguration, INodeConfiguration> newConfigurations = ContainerRuneWeavingTable.this.getConfigurations(this.createLinkAccess(runeIndex), entry.container.getBlueprint(), newConfiguration);
+						
+						entry.configuration = newConfigurations.getKey();
+						entry.provisionalConfiguration = newConfigurations.getRight();
+
+						this.table.getContainerData().setConfigurationId(entry.runeIndex, newConfiguration.getId());
+
 						entry.container.onConfigurationChanged(currentConfiguration, newConfiguration);
 
-						entry.configuration = newConfiguration;
+						this.onRunesChanged();
 
-						ContainerRuneWeavingTable.this.table.getContainerData().setConfigurationId(entry.runeIndex, newConfiguration.getId());
-
-						ContainerRuneWeavingTable.this.onRunesChanged();
-
-						ContainerRuneWeavingTable.this.table.markDirty();
+						this.table.markDirty();
 
 						//TODO Check links for validity
 
@@ -565,16 +571,21 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 				if(containerData.hasConfigurationId(entry.runeIndex)) {
 					int savedConfigurationId = containerData.getConfigurationId(entry.runeIndex);
 
-					for(INodeConfiguration configuration : entry.container.getBlueprint().getConfigurations(this.createLinkAccess(runeIndex))) {
+					for(INodeConfiguration configuration : entry.container.getBlueprint().getConfigurations(this.createLinkAccess(runeIndex), false)) {
 						if(configuration.getId() == savedConfigurationId) {
-							entry.configuration = configuration;
+							Pair<INodeConfiguration, INodeConfiguration> newConfigurations = ContainerRuneWeavingTable.this.getConfigurations(this.createLinkAccess(runeIndex), entry.container.getBlueprint(), configuration);
+							
+							entry.configuration = newConfigurations.getLeft();
+							entry.provisionalConfiguration = newConfigurations.getRight();
+							
 							break;
 						}
 					}
 				}
 
-				if(entry.configuration == null) {
-					entry.configuration = entry.container.getBlueprint().getConfigurations(this.createLinkAccess(runeIndex)).get(0);
+				if(entry.configuration == null || entry.provisionalConfiguration == null) {
+					entry.configuration = entry.container.getBlueprint().getConfigurations(this.createLinkAccess(runeIndex), false).get(0);
+					entry.provisionalConfiguration = entry.container.getBlueprint().getConfigurations(this.createLinkAccess(runeIndex), true).get(0);
 				}
 
 				newContainer.init();
@@ -665,19 +676,27 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 			public INodeConfiguration getConfiguration() {
 				return entry.configuration;
 			}
+			
+			@Override
+			public INodeConfiguration getProvisionalConfiguration() {
+				return entry.provisionalConfiguration;
+			}
 
 			@Override
 			public void setConfiguration(INodeConfiguration configuration) {
-				if(entry.configuration != configuration) {
-					entry.container.onConfigurationChanged(entry.configuration, configuration);
-
-					entry.configuration = configuration;
+				if(entry.configuration != configuration && entry.provisionalConfiguration != configuration) {
+					Pair<INodeConfiguration, INodeConfiguration> newConfigurations = ContainerRuneWeavingTable.this.getConfigurations(ContainerRuneWeavingTable.this.createLinkAccess(entry.runeIndex), entry.container.getBlueprint(), configuration);
+					
+					entry.configuration = newConfigurations.getLeft();
+					entry.provisionalConfiguration = newConfigurations.getRight();
 
 					ContainerRuneWeavingTable.this.table.getContainerData().setConfigurationId(entry.runeIndex, configuration.getId());
 
 					//TODO Preferably store links per configuration
 					ContainerRuneWeavingTable.this.table.getContainerData().unlinkAll(entry.runeIndex);
 					ContainerRuneWeavingTable.this.table.getContainerData().unlinkAllIncoming(entry.runeIndex);
+
+					entry.container.onConfigurationChanged(entry.configuration, configuration);
 
 					ContainerRuneWeavingTable.this.onRunesChanged();
 
@@ -690,6 +709,24 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 				return ContainerRuneWeavingTable.this.createLinkAccess(entry.runeIndex);
 			}
 		};
+	}
+
+	protected Pair<INodeConfiguration, INodeConfiguration> getConfigurations(@Nullable IConfigurationLinkAccess access, INodeBlueprint<?, RuneExecutionContext> blueprint, INodeConfiguration configuration) {
+		INodeConfiguration finalConfiguration = null;
+		for(INodeConfiguration config : blueprint.getConfigurations(access, false)) {
+			if(config.getId() == configuration.getId()) {
+				finalConfiguration = config;
+			}
+		}
+
+		INodeConfiguration provisionalConfiguration = null;
+		for(INodeConfiguration config : blueprint.getConfigurations(access, true)) {
+			if(config.getId() == configuration.getId()) {
+				provisionalConfiguration = config;
+			}
+		}
+
+		return Pair.of(finalConfiguration, provisionalConfiguration);
 	}
 
 	protected IRuneWeavingTableGui getRuneWeavingTableGui() {

@@ -47,6 +47,14 @@ public interface IRuneContainerContext {
 	public INodeConfiguration getConfiguration();
 	
 	/**
+	 * Returns the provisional configuration to be used for the rune.
+	 * Returns <code>null</code> before {@link IRuneContainer#init()} is called.
+	 * @return provisional configuration to be used for the rune
+	 */
+	@Nullable
+	public INodeConfiguration getProvisionalConfiguration();
+	
+	/**
 	 * Sets the configuration to be used for the rune.
 	 * @param configuration - configuration to be used for the rune
 	 */

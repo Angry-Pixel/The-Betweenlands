@@ -43,7 +43,7 @@ public final class RuneMarkFormation extends AbstractRune<RuneMarkFormation> {
 		}
 
 		@Override
-		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess) {
+		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess, boolean provisional) {
 			return ImmutableList.of(CONFIGURATION);
 		}
 

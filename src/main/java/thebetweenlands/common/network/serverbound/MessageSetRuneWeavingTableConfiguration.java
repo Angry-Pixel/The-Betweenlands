@@ -40,7 +40,7 @@ public class MessageSetRuneWeavingTableConfiguration extends MessageBase {
 				ContainerRuneWeavingTable container = (ContainerRuneWeavingTable) player.openContainer;
 				IRuneContainer runeContainer = container.getRuneContainer(this.runeIndex);
 				if(runeContainer != null) {
-					for(INodeConfiguration configuration : runeContainer.getBlueprint().getConfigurations(container.createLinkAccess(this.runeIndex))) {
+					for(INodeConfiguration configuration : runeContainer.getBlueprint().getConfigurations(container.createLinkAccess(this.runeIndex), false)) {
 						if(configuration.getId() == this.configurationId) {
 							runeContainer.getContext().setConfiguration(configuration);
 							break;

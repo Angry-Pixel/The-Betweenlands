@@ -5,8 +5,10 @@ import thebetweenlands.api.rune.INodeBlueprint;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.IRuneContainer;
 import thebetweenlands.api.rune.IRuneContainerContext;
+import thebetweenlands.api.rune.IRuneGui;
 import thebetweenlands.api.rune.IRuneLink;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
+import thebetweenlands.client.gui.inventory.runeweavingtable.DefaultRuneGui;
 
 public class DefaultRuneContainer implements IRuneContainer {
 	protected final ResourceLocation id;
@@ -14,6 +16,8 @@ public class DefaultRuneContainer implements IRuneContainer {
 	protected IRuneContainerContext context;
 
 	protected INodeBlueprint<?, RuneExecutionContext> blueprint;
+
+	protected IRuneGui gui;
 
 	public DefaultRuneContainer(ResourceLocation id, INodeBlueprint<?, RuneExecutionContext> blueprint) {
 		this.id = id;
@@ -24,15 +28,20 @@ public class DefaultRuneContainer implements IRuneContainer {
 	public void setContext(IRuneContainerContext context) {
 		this.context = context;
 	}
-	
-	@Override
-	public void init() {
-		
-	}
 
 	@Override
 	public IRuneContainerContext getContext() {
 		return this.context;
+	}
+
+	@Override
+	public void init() {
+
+	}
+
+	@Override
+	public void setGui(IRuneGui gui) {
+		this.gui = gui;
 	}
 
 	@Override
@@ -57,7 +66,9 @@ public class DefaultRuneContainer implements IRuneContainer {
 
 	@Override
 	public void onConfigurationChanged(INodeConfiguration oldConfiguration, INodeConfiguration newConfiguration) {
-
+		if(this.gui instanceof DefaultRuneGui) {
+			((DefaultRuneGui) this.gui).initGui();
+		}
 	}
 
 	@Override

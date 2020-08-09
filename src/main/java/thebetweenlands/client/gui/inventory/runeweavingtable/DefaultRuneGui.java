@@ -197,18 +197,18 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		this.translationKey = String.format("rune.%s.%s", container.getId().getNamespace(), container.getId().getPath());
 
-		this.createGui();
+		this.initGui();
 	}
 
-	protected void createGui() {
-		this.hasMultipleConfigurations = this.container.getBlueprint().getConfigurations(this.context.getLinkAccess()).size() > 1;
+	public void initGui() {
+		this.hasMultipleConfigurations = this.container.getBlueprint().getConfigurations(this.context.getLinkAccess(), true).size() > 1;
 		if(this.hasMultipleConfigurations) {
-			this.currentConfigurationIndex = Math.max(0, this.container.getBlueprint().getConfigurations(this.context.getLinkAccess()).indexOf(this.context.getConfiguration()));
+			this.currentConfigurationIndex = Math.max(0, this.container.getBlueprint().getConfigurations(this.context.getLinkAccess(), true).indexOf(this.context.getProvisionalConfiguration()));
 		}
 
-		INodeConfiguration config = this.context.getConfiguration();
-
-		this.title = new TextContainer(this.xSize - 8 - 20, 80, I18n.format(String.format("%s.configuration.%d.title", this.translationKey, this.context.getConfiguration().getId())), this.fontRenderer);
+		INodeConfiguration config = this.context.getProvisionalConfiguration();
+		
+		this.title = new TextContainer(this.xSize - 8 - 20, 80, I18n.format(String.format("%s.configuration.%d.title", this.translationKey, this.context.getProvisionalConfiguration().getId())), this.fontRenderer);
 
 		this.title.setCurrentScale(1).setCurrentColor(0xFF3d3d3d);
 
@@ -223,7 +223,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		this.title.parse();
 
-		this.description = new TextContainer(this.xSize - 26, 10000, I18n.format(String.format("%s.configuration.%d.description", this.translationKey, this.context.getConfiguration().getId())), this.fontRenderer);
+		this.description = new TextContainer(this.xSize - 26, 10000, I18n.format(String.format("%s.configuration.%d.description", this.translationKey, this.context.getProvisionalConfiguration().getId())), this.fontRenderer);
 
 		this.description.setCurrentScale(1).setCurrentColor(0xFF3d3d3d);
 
@@ -334,11 +334,11 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		boolean multi;
 
 		if(token.isOutput()) {
-			IConfigurationOutput output = this.context.getConfiguration().getOutputs().get(token.getTokenIndex());
+			IConfigurationOutput output = this.context.getProvisionalConfiguration().getOutputs().get(token.getTokenIndex());
 			desc = output.getDescriptor();
 			multi = output.isCollection();
 		} else {
-			IConfigurationInput input = this.context.getConfiguration().getInputs().get(token.getTokenIndex());
+			IConfigurationInput input = this.context.getProvisionalConfiguration().getInputs().get(token.getTokenIndex());
 			desc = input.getDescriptor();
 			multi = input.isCollection();
 		}
@@ -371,11 +371,11 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		boolean multi;
 
 		if(token.isOutput()) {
-			IConfigurationOutput output = this.context.getConfiguration().getOutputs().get(token.getTokenIndex());
+			IConfigurationOutput output = this.context.getProvisionalConfiguration().getOutputs().get(token.getTokenIndex());
 			descriptor = output.getDescriptor();
 			multi = output.isCollection();
 		} else {
-			IConfigurationInput input = this.context.getConfiguration().getInputs().get(token.getTokenIndex());
+			IConfigurationInput input = this.context.getProvisionalConfiguration().getInputs().get(token.getTokenIndex());
 			descriptor = input.getDescriptor();
 			multi = input.isCollection();
 		}
@@ -390,12 +390,12 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		if(descriptor != null) {
 			if(token.isOutput()) {
-				if(I18n.hasKey(String.format("%s.configuration.%d.output.%d.description", this.translationKey, this.context.getConfiguration().getId(), token.getTokenIndex()))) {
-					text.addAll(ItemTooltipHandler.splitTooltip(TextFormatting.GRAY + I18n.format(String.format("%s.configuration.%d.output.%d.description", this.translationKey, this.context.getConfiguration().getId(), token.getTokenIndex())), 0));
+				if(I18n.hasKey(String.format("%s.configuration.%d.output.%d.description", this.translationKey, this.context.getProvisionalConfiguration().getId(), token.getTokenIndex()))) {
+					text.addAll(ItemTooltipHandler.splitTooltip(TextFormatting.GRAY + I18n.format(String.format("%s.configuration.%d.output.%d.description", this.translationKey, this.context.getProvisionalConfiguration().getId(), token.getTokenIndex())), 0));
 				}
 			} else {
-				if(I18n.hasKey(String.format("%s.configuration.%d.input.%d.description", this.translationKey, this.context.getConfiguration().getId(), token.getTokenIndex()))) {
-					text.addAll(ItemTooltipHandler.splitTooltip(TextFormatting.GRAY + I18n.format(String.format("%s.configuration.%d.input.%d.description", this.translationKey, this.context.getConfiguration().getId(), token.getTokenIndex())), 0));
+				if(I18n.hasKey(String.format("%s.configuration.%d.input.%d.description", this.translationKey, this.context.getProvisionalConfiguration().getId(), token.getTokenIndex()))) {
+					text.addAll(ItemTooltipHandler.splitTooltip(TextFormatting.GRAY + I18n.format(String.format("%s.configuration.%d.input.%d.description", this.translationKey, this.context.getProvisionalConfiguration().getId(), token.getTokenIndex())), 0));
 				}
 			}
 		}
@@ -435,21 +435,21 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 			if(mouseX >= sx + 3 && mouseX < sx + 29 - 4 && mouseY >= sy + 10 && mouseY < sy + 35 - 3) {
 				this.currentConfigurationIndex = Math.max(this.currentConfigurationIndex - 1, 0);
-				this.context.setConfiguration(this.container.getBlueprint().getConfigurations(this.context.getLinkAccess()).get(this.currentConfigurationIndex));
-				this.createGui();
+				this.context.setConfiguration(this.container.getBlueprint().getConfigurations(this.context.getLinkAccess(), true).get(this.currentConfigurationIndex));
+				this.initGui();
 				TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneWeavingTableConfiguration(this.context.getRuneIndex(), this.currentConfigurationIndex));
 				return true;
 			}
 		}
 
-		if(this.currentConfigurationIndex < this.container.getBlueprint().getConfigurations(this.context.getLinkAccess()).size() - 1) {
+		if(this.currentConfigurationIndex < this.container.getBlueprint().getConfigurations(this.context.getLinkAccess(), true).size() - 1) {
 			int sx = x + this.xSize / 2 + 20 - 3;
 			int sy = y + this.ySize - 33;
 
 			if(mouseX >= sx + 4 && mouseX < sx + 29 - 3 && mouseY >= sy + 10 && mouseY < sy + 35 - 3) {
-				this.currentConfigurationIndex = Math.min(this.currentConfigurationIndex + 1, this.container.getBlueprint().getConfigurations(this.context.getLinkAccess()).size() - 1);
-				this.context.setConfiguration(this.container.getBlueprint().getConfigurations(this.context.getLinkAccess()).get(this.currentConfigurationIndex));
-				this.createGui();
+				this.currentConfigurationIndex = Math.min(this.currentConfigurationIndex + 1, this.container.getBlueprint().getConfigurations(this.context.getLinkAccess(), true).size() - 1);
+				this.context.setConfiguration(this.container.getBlueprint().getConfigurations(this.context.getLinkAccess(), true).get(this.currentConfigurationIndex));
+				this.initGui();
 				TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneWeavingTableConfiguration(this.context.getRuneIndex(), this.currentConfigurationIndex));
 				return true;
 			}
@@ -603,7 +603,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 				}
 			}
 
-			if(this.currentConfigurationIndex < this.container.getBlueprint().getConfigurations(this.context.getLinkAccess()).size() - 1) {
+			if(this.currentConfigurationIndex < this.container.getBlueprint().getConfigurations(this.context.getLinkAccess(), true).size() - 1) {
 				int sx = x + this.xSize / 2 + 20 - 3;
 				int sy = y + this.ySize - 33;
 
@@ -653,7 +653,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		//Configuration left/right
 		if(this.hasMultipleConfigurations) {
-			String str = String.valueOf(this.currentConfigurationIndex + 1) + "/" + String.valueOf(this.container.getBlueprint().getConfigurations(this.context.getLinkAccess()).size());
+			String str = String.valueOf(this.currentConfigurationIndex + 1) + "/" + String.valueOf(this.container.getBlueprint().getConfigurations(this.context.getLinkAccess(), true).size());
 			this.fontRenderer.drawString(str, x + this.xSize / 2 - this.fontRenderer.getStringWidth(str) / 2, y + this.ySize - 19, 0xFF3d3d3d);
 		}
 

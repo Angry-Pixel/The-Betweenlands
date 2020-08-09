@@ -26,6 +26,18 @@ public class RuneEffectModifier {
 			this.entity = entity;
 		}
 
+		public Subject(Vec3d position) {
+			this(position, null, null);
+		}
+
+		public Subject(BlockPos block) {
+			this(null, block, null);
+		}
+
+		public Subject(Entity entity) {
+			this(null, null, entity);
+		}
+
 		/**
 		 * Returns the position described by this subject
 		 * @return

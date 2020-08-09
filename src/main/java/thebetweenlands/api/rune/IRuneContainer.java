@@ -1,5 +1,7 @@
 package thebetweenlands.api.rune;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
@@ -11,6 +13,8 @@ public interface IRuneContainer {
 
 	public void init();
 
+	public void setGui(@Nullable IRuneGui gui);
+	
 	public void onTokenLinked(int input, IRuneLink link);
 
 	public void onTokenUnlinked(int input, IRuneLink link);

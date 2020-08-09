@@ -159,6 +159,11 @@ public class RuneChainItemCapability extends ItemCapability<RuneChainItemCapabil
 					}
 
 					@Override
+					public INodeConfiguration getProvisionalConfiguration() {
+						return null;
+					}
+					
+					@Override
 					public void setConfiguration(INodeConfiguration configuration) { }
 
 					@Override
@@ -190,7 +195,7 @@ public class RuneChainItemCapability extends ItemCapability<RuneChainItemCapabil
 				if(containerData.hasConfigurationId(runeIndex)) {
 					int savedConfigurationId = containerData.getConfigurationId(runeIndex);
 
-					for(INodeConfiguration configuration : nodeBlueprint.getConfigurations(linkAccess)) {
+					for(INodeConfiguration configuration : nodeBlueprint.getConfigurations(linkAccess, false)) {
 						if(configuration.getId() == savedConfigurationId) {
 							nodeConfiguration = configuration;
 							break;
@@ -199,7 +204,7 @@ public class RuneChainItemCapability extends ItemCapability<RuneChainItemCapabil
 				}
 
 				if(nodeConfiguration == null) {
-					nodeConfiguration = nodeBlueprint.getConfigurations(linkAccess).get(0);
+					nodeConfiguration = nodeBlueprint.getConfigurations(linkAccess, false).get(0);
 				}
 
 				//Always specify the used configuration

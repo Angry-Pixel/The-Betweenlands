@@ -59,7 +59,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 				if(configuration != null) {
 					maxSlots = configuration.getInputs().size();
 				} else {
-					for(INodeConfiguration c : blueprint.getConfigurations(Blueprint.this.createLinkAccess(this.getIndex()))) {
+					for(INodeConfiguration c : blueprint.getConfigurations(Blueprint.this.createLinkAccess(this.getIndex()), false)) {
 						maxSlots = Math.max(c.getInputs().size(), maxSlots);
 					}
 				}
@@ -351,7 +351,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 			if(setConfiguration != null) {
 				potentialConfigurations.add(setConfiguration);
 			} else {
-				potentialConfigurations.addAll(node.getConfigurations(this.createLinkAccess(nodeIndex)));
+				potentialConfigurations.addAll(node.getConfigurations(this.createLinkAccess(nodeIndex), false));
 			}
 
 			configurations: for(INodeConfiguration configuration : potentialConfigurations) {

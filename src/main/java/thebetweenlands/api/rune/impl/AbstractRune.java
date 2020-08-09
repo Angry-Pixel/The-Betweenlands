@@ -44,7 +44,7 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 		}
 
 		@Override
-		public abstract List<RuneConfiguration> getConfigurations(@Nullable IConfigurationLinkAccess linkAccess);
+		public abstract List<RuneConfiguration> getConfigurations(@Nullable IConfigurationLinkAccess linkAccess, boolean provisional);
 
 		@Override
 		public void run(T state, RuneExecutionContext context, INodeIO io) {

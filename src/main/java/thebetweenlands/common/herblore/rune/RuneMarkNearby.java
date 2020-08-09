@@ -55,7 +55,7 @@ public final class RuneMarkNearby extends AbstractRune<RuneMarkNearby> {
 		}
 
 		@Override
-		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess) {
+		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess, boolean provisional) {
 			return ImmutableList.of(CONFIGURATION_1, CONFIGURATION_2);
 		}
 

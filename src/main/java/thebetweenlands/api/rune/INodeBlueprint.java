@@ -155,10 +155,11 @@ public interface INodeBlueprint<T extends INode<?, E>, E> {
 	 * Returns an unmodifiable list containing all valid configurations for
 	 * nodes of this blueprint.
 	 * @param linkAccess - allows accessing the configuration output of the node that the specified input is linked to. May be null that data is not available
+	 * @param provisional - whether the returned configurations may be provisional, e.g. contain potential node inputs that may not end up getting used
 	 * @return an unmodifiable list containing all valid configurations for
 	 * nodes of this blueprint
 	 */
-	public List<? extends INodeConfiguration> getConfigurations(@Nullable IConfigurationLinkAccess linkAccess);
+	public List<? extends INodeConfiguration> getConfigurations(@Nullable IConfigurationLinkAccess linkAccess, boolean provisional);
 
 	/**
 	 * Creates a node instance from the specified configuration.

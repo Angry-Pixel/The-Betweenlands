@@ -26,7 +26,7 @@ public final class NodeDummy implements INode<NodeDummy, RuneExecutionContext> {
 		private Blueprint() {}
 
 		@Override
-		public List<INodeConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess) {
+		public List<INodeConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess, boolean provisional) {
 			return ImmutableList.of(CONFIGURATION);
 		}
 
