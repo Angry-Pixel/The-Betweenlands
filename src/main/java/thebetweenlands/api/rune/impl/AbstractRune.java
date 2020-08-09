@@ -287,7 +287,7 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 
 		public static class InitiationState {
 			public static final InitiationState SUCCESS = new InitiationState(true);
-			
+
 			protected boolean success;
 
 			public InitiationState() {
@@ -308,12 +308,24 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 			public static final InitiationPhase USE = new InitiationPhase();
 		}
 
+		public static class InteractionInitiationPhase extends InitiationPhase {
+			private final Entity target;
+
+			public InteractionInitiationPhase(Entity target) {
+				this.target = target;
+			}
+
+			public Entity getTarget() {
+				return this.target;
+			}
+		}
+
 		@Nullable
-		public InitiationState checkInitiation(IRuneChainUser user, InitiationPhase phase, @Nullable InitiationState state) {
+		public InitiationState checkInitiation(IRuneChainUser user, InitiationPhase initiationPhase, @Nullable InitiationState initiationState) {
 			return null;
 		}
 
-		public void initiate(IRuneChainUser user, InitiationState state, T node) {
+		public void initiate(IRuneChainUser user, InitiationState initiationState, T state) {
 
 		}
 	}

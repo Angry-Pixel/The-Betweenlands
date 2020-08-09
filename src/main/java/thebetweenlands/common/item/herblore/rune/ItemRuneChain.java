@@ -1,6 +1,7 @@
 package thebetweenlands.common.item.herblore.rune;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,6 +14,7 @@ import thebetweenlands.api.capability.IRuneChainCapability;
 import thebetweenlands.api.capability.IRuneChainUserCapability;
 import thebetweenlands.api.item.IRenamableItem;
 import thebetweenlands.api.rune.impl.AbstractRune.Blueprint.InitiationPhase;
+import thebetweenlands.api.rune.impl.AbstractRune.Blueprint.InteractionInitiationPhase;
 import thebetweenlands.api.rune.impl.RuneChainComposition.IAspectBuffer;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
@@ -40,6 +42,14 @@ public class ItemRuneChain extends Item implements IRenamableItem {
 		}
 
 		return super.onItemRightClick(world, player, hand);
+	}
+
+	@Override
+	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
+		if(!playerIn.world.isRemote && this.updateRuneChainInitiation(stack, playerIn, new InteractionInitiationPhase(target))) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override

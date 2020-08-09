@@ -10,16 +10,18 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import thebetweenlands.api.rune.INodeComposition;
-import thebetweenlands.api.rune.INodeCompositionBlueprint;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.IRuneChainUser;
-import thebetweenlands.api.rune.INodeBlueprint.IConfigurationLinkAccess;
+import thebetweenlands.api.rune.IRuneEffect;
 import thebetweenlands.api.rune.impl.AbstractRune;
 import thebetweenlands.api.rune.impl.InputSerializers;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.api.rune.impl.RuneConfiguration;
 import thebetweenlands.api.rune.impl.RuneConfiguration.InputPort;
+import thebetweenlands.api.rune.impl.RuneConfiguration.OutputPort;
 import thebetweenlands.api.rune.impl.RuneEffectModifier;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
@@ -36,24 +38,65 @@ public final class RuneFire extends AbstractRune<RuneFire> {
 		}
 
 		public static final RuneConfiguration CONFIGURATION_1;
-		public static final RuneConfiguration CONFIGURATION_2;
+		private static final InputPort<BlockPos> IN_POSITION_1;
 
-		private static final InputPort<Entity> IN_ENTITY;
-		private static final InputPort<BlockPos> IN_POSITION;
+		public static final RuneConfiguration CONFIGURATION_2;
+		private static final InputPort<Entity> IN_ENTITY_2;
+
+		public static final RuneConfiguration CONFIGURATION_3;
+		private static final OutputPort<IRuneEffect> OUT_EFFECT_3;
+
+		private static final IRuneEffect FIRE_EFFECT = new IRuneEffect() {
+			@Override
+			public boolean apply(World world, IRuneChainUser user) {
+				Entity entity = user.getEntity();
+				if(entity != null && !entity.isImmuneToFire()) {
+					entity.setFire(3);
+					return true;
+				}
+				return false;
+			}
+
+			@Override
+			public boolean apply(World world, Entity entity) {
+				if(!entity.isImmuneToFire()) {
+					entity.setFire(3);
+					return true;
+				}
+				return false;
+			}
+
+			@Override
+			public boolean apply(World world, BlockPos pos) {
+				if(world.isAirBlock(pos.up())) {
+					world.setBlockState(pos.up(), Blocks.FIRE.getDefaultState());
+					return true;
+				}
+				return false;
+			}
+
+			@Override
+			public boolean apply(World world, Vec3d position) {
+				return false;
+			}
+		};
 
 		static {
 			RuneConfiguration.Builder builder = RuneConfiguration.builder();
 
-			IN_POSITION = builder.in(RuneTokenDescriptors.BLOCK, InputSerializers.BLOCK, BlockPos.class);
+			IN_POSITION_1 = builder.in(RuneTokenDescriptors.BLOCK, InputSerializers.BLOCK, BlockPos.class);
 			CONFIGURATION_1 = builder.build();
 
-			IN_ENTITY = builder.in(RuneTokenDescriptors.ENTITY, InputSerializers.ENTITY, Entity.class);
+			IN_ENTITY_2 = builder.in(RuneTokenDescriptors.ENTITY, InputSerializers.ENTITY, Entity.class);
 			CONFIGURATION_2 = builder.build();
+
+			OUT_EFFECT_3 = builder.out(RuneTokenDescriptors.EFFECT, IRuneEffect.class);
+			CONFIGURATION_3 = builder.build();
 		}
 
 		@Override
 		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess, boolean provisional) {
-			return ImmutableList.of(CONFIGURATION_1, CONFIGURATION_2);
+			return ImmutableList.of(CONFIGURATION_1, CONFIGURATION_2, CONFIGURATION_3);
 		}
 
 		@Override
@@ -64,18 +107,12 @@ public final class RuneFire extends AbstractRune<RuneFire> {
 		@Override
 		protected RuneEffectModifier.Subject activate(RuneFire state, RuneExecutionContext context, INodeIO io) {
 
-			if (state.getConfiguration() == CONFIGURATION_1) {
-				BlockPos pos = IN_POSITION.get(io);
-
-				if(context.getUser().getWorld().isAirBlock(pos.up())) {
-					context.getUser().getWorld().setBlockState(pos.up(), Blocks.FIRE.getDefaultState());
-				}
-			}
-
-			if (state.getConfiguration() == CONFIGURATION_2) {
-				Entity entity = IN_ENTITY.get(io);
-
-				entity.setFire(3);
+			if(state.getConfiguration() == CONFIGURATION_1) {
+				FIRE_EFFECT.apply(context.getUser().getWorld(), IN_POSITION_1.get(io));
+			} else if(state.getConfiguration() == CONFIGURATION_2) {
+				FIRE_EFFECT.apply(context.getUser().getWorld(), IN_ENTITY_2.get(io));
+			} else if(state.getConfiguration() == CONFIGURATION_3) {
+				OUT_EFFECT_3.set(io, FIRE_EFFECT);
 			}
 
 			return null;

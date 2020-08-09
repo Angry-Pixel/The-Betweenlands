@@ -63,17 +63,17 @@
       "true": {
         "model": "thebetweenlands:internal/connected_texture",
         "custom": {
-          "particle_texture": "thebetweenlands:blocks/scrivener_burnt_mark_0",
+          "particle_texture": "thebetweenlands:blocks/scrivener_burnt_linked_mark_0",
           "ambient_occlusion": true,
           "connected_texture_faces": [
             {
               "cullface": "up",
               "connected_textures": [
-                "thebetweenlands:blocks/scrivener_burnt_mark_0",
-                "thebetweenlands:blocks/scrivener_burnt_mark_1",
-                "thebetweenlands:blocks/scrivener_burnt_mark_2",
-                "thebetweenlands:blocks/scrivener_burnt_mark_3",
-                "thebetweenlands:blocks/scrivener_burnt_mark_3"
+                "thebetweenlands:blocks/scrivener_burnt_linked_mark_0",
+                "thebetweenlands:blocks/scrivener_burnt_linked_mark_1",
+                "thebetweenlands:blocks/scrivener_burnt_linked_mark_2",
+                "thebetweenlands:blocks/scrivener_burnt_linked_mark_3",
+                "thebetweenlands:blocks/scrivener_burnt_linked_mark_3"
               ],
               "indices": [
                 "top_north_west_index",

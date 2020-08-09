@@ -163,6 +163,9 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		this.addDefaultTokenRenderer(RuneTokenDescriptors.DIRECTION, 0, 24, 12, 12, false);
 		this.addDefaultTokenRenderer(RuneTokenDescriptors.DIRECTION, 12, 24, 12, 12, true);
+
+		this.addDefaultTokenRenderer(RuneTokenDescriptors.EFFECT, 24, 12, 12, 12, false);
+		this.addDefaultTokenRenderer(RuneTokenDescriptors.EFFECT, 36, 12, 12, 12, true);
 	}
 
 	protected void addDefaultTokenRenderer(ResourceLocation descriptor, int minU, int minV, int width, int height, boolean multi) {
