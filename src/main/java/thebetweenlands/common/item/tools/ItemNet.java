@@ -51,7 +51,7 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 		register(EntityTinySludgeWorm.class, () -> ItemRegistry.TINY_SLUDGE_WORM, (p, e) -> true);
 		register(EntityTinySludgeWormHelper.class, () -> ItemRegistry.TINY_SLUDGE_WORM_HELPER, (p, e) -> true);
 		register(EntityMireSnail.class, () -> ItemRegistry.CRITTER, (p, e) -> true);
-		register(EntityAnadia.class, () -> ItemRegistry.ANADIA, (p, e) -> e.staminaTicks == 0);
+		register(EntityAnadia.class, () -> ItemRegistry.ANADIA, (p, e) -> e.getStaminaTicks() == 0);
 	}
 
 	public ItemNet() {
@@ -87,9 +87,12 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 					}
 				}
 			}
-
-			player.swingArm(hand);
-			return true;
+			
+			if(target instanceof EntityAnadia && ((EntityAnadia)target).getStaminaTicks() > 0)
+				;
+			else
+				player.swingArm(hand);
+			
 		}
 		return false;
 	}

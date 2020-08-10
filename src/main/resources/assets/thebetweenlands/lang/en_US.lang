@@ -874,7 +874,8 @@ item.thebetweenlands.ancient_chestplate.name=Ancient Chestplate
 item.thebetweenlands.ancient_helmet.name=Ancient Helmet
 item.thebetweenlands.ancient_leggings.name=Ancient Leggings
 item.thebetweenlands.fish_bait.name=Fish Bait
-item.thebetweenlands.fishing_rod.name=Weedwood Fishing Rod
+item.thebetweenlands.fishing_spear.name=Fishing Spear
+item.thebetweenlands.weedwood_fishing_rod.name=Weedwood Fishing Rod
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial

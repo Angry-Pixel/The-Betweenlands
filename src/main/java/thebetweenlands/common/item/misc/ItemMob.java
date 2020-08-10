@@ -241,6 +241,8 @@ public class ItemMob extends Item {
 			if(entity instanceof EntityLivingBase) {
 				EntityLivingBase living = (EntityLivingBase) entity;
 				if (living instanceof EntityAnadia) {
+					if(((EntityAnadia) living).isBeingRidden())
+						((EntityAnadia) living).removePassengers();
 					tooltip.add(I18n.format(living.getName()));
 					tooltip.add(I18n.format("tooltip.bl.item_mob.health", MathHelper.ceil(living.getHealth()), MathHelper.ceil((living.getMaxHealth()))));
 					tooltip.add(I18n.format("tooltip.bl.item_mob.size", ((EntityAnadia) living).getFishSize()));

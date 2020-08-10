@@ -1,4 +1,4 @@
-package thebetweenlands.common.entity.projectiles;
+package thebetweenlands.client.render.entity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -15,11 +15,14 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.model.entity.ModelBLFishHook;
+import thebetweenlands.common.entity.projectiles.EntityBLFishHook;
 import thebetweenlands.common.item.tools.ItemBLFishingRod;
 
 @SideOnly(Side.CLIENT)
 public class RenderBLFishHook extends Render<EntityBLFishHook> {
-	private static final ResourceLocation FISH_PARTICLES = new ResourceLocation("textures/particle/particles.png");
+	private static final ResourceLocation HOOK_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/fish_hook.png");
+	public final static ModelBLFishHook HOOK_MODEL = new ModelBLFishHook();
 
 	public RenderBLFishHook(RenderManager renderManagerIn) {
 		super(renderManagerIn);
@@ -29,43 +32,29 @@ public class RenderBLFishHook extends Render<EntityBLFishHook> {
 		EntityPlayer entityplayer = entity.getAngler();
 		if (entityplayer != null && !this.renderOutlines) {
 			GlStateManager.pushMatrix();
-			GlStateManager.translate((float) x, (float) y, (float) z);
-			GlStateManager.enableRescaleNormal();
-			GlStateManager.scale(0.5F, 0.5F, 0.5F);
-			this.bindEntityTexture(entity);
-			Tessellator tessellator = Tessellator.getInstance();
-			BufferBuilder bufferbuilder = tessellator.getBuffer();
-			int i = 1;
-			int j = 2;
-			float f = 0.0625F;
-			float f1 = 0.125F;
-			float f2 = 0.125F;
-			float f3 = 0.1875F;
-			float f4 = 1.0F;
-			float f5 = 0.5F;
-			float f6 = 0.5F;
-			GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-			GlStateManager.rotate((float) (this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+			GlStateManager.translate((float) x, (float) y + 1.1F, (float) z);
+			GlStateManager.scale(-0.8F, -0.8F, 0.8F);
+			bindTexture(HOOK_TEXTURE);
+			//causes janky rotationrendering atm
+			//GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+			//GlStateManager.rotate((float) (this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 
 			if (this.renderOutlines) {
 				GlStateManager.enableColorMaterial();
 				GlStateManager.enableOutlineMode(this.getTeamColor(entity));
 			}
-
-			bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
-			bufferbuilder.pos(-0.5D, -0.5D, 0.0D).tex(0.0625D, 0.1875D).normal(0.0F, 1.0F, 0.0F).endVertex();
-			bufferbuilder.pos(0.5D, -0.5D, 0.0D).tex(0.125D, 0.1875D).normal(0.0F, 1.0F, 0.0F).endVertex();
-			bufferbuilder.pos(0.5D, 0.5D, 0.0D).tex(0.125D, 0.125D).normal(0.0F, 1.0F, 0.0F).endVertex();
-			bufferbuilder.pos(-0.5D, 0.5D, 0.0D).tex(0.0625D, 0.125D).normal(0.0F, 1.0F, 0.0F).endVertex();
-			tessellator.draw();
+			
+			HOOK_MODEL.render();
 
 			if (this.renderOutlines) {
 				GlStateManager.disableOutlineMode();
 				GlStateManager.disableColorMaterial();
 			}
-
-			GlStateManager.disableRescaleNormal();
 			GlStateManager.popMatrix();
+			
+	///////	
+			Tessellator tessellator = Tessellator.getInstance();
+			BufferBuilder bufferbuilder = tessellator.getBuffer();
 			int k = entityplayer.getPrimaryHand() == EnumHandSide.RIGHT ? 1 : -1;
 			ItemStack itemstack = entityplayer.getHeldItemMainhand();
 
@@ -164,6 +153,6 @@ public class RenderBLFishHook extends Render<EntityBLFishHook> {
 	}
 
 	protected ResourceLocation getEntityTexture(EntityBLFishHook entity) {
-		return FISH_PARTICLES;
+		return HOOK_TEXTURE;
 	}
 }

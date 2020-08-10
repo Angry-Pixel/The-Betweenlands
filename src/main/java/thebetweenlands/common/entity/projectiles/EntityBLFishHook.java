@@ -60,7 +60,6 @@ public class EntityBLFishHook extends Entity {
 		super(world);
 		init(player);
 		shoot();
-		System.out.println("Angler: " + getAngler().getName());
 	}
 
 	public EntityBLFishHook(World world) {
@@ -258,17 +257,23 @@ public class EntityBLFishHook extends Entity {
 		boolean mainHandHeld = stack.getItem() instanceof ItemBLFishingRod;
 		boolean offHandHeld = stack1.getItem() instanceof ItemBLFishingRod;
 
-		if (!getAngler().isDead && getAngler().isEntityAlive() && (mainHandHeld || offHandHeld) && getDistanceSq(getAngler()) <= 1024.0D) {
-			if(mainHandHeld && stack.getTagCompound().getFloat("distance") != getDistance(getAngler()))
-				stack.getTagCompound().setFloat("distance", getDistance(getAngler()));
-			else
-				if(offHandHeld && stack1.getTagCompound().getFloat("distance") != getDistance(getAngler()))
-					stack1.getTagCompound().setFloat("distance", getDistance(getAngler()));
+		if (!getAngler().isDead && getAngler().isEntityAlive() && (mainHandHeld || offHandHeld) && (int) getDistance(getAngler()) <= 32) {
 			return false;
+		} else if (!getAngler().isDead && getAngler().isEntityAlive() && (mainHandHeld || offHandHeld) && (int) getDistance(getAngler()) > 32) {
+			if (mainHandHeld && stack.getTagCompound().getBoolean("cast")) {
+				stack.getTagCompound().setBoolean("cast", false);
+				setDead();
+				return true;
+			} else if (offHandHeld && stack1.getTagCompound().getBoolean("cast")) {
+				stack1.getTagCompound().setBoolean("cast", false);
+				setDead();
+				return true;
+			}
 		} else {
 			setDead();
 			return true;
 		}
+		return false;
 	}
 
 	private void updateRotation() {
@@ -385,10 +390,9 @@ public class EntityBLFishHook extends Entity {
 			double d2 = getAngler().posZ - posZ;
 			// TODO add reeling in mechanic modifiers based on fish stamina
 			if (caughtEntity != null) {
-					if(((EntityAnadia)caughtEntity).staminaTicks > 0) { 
-						((EntityAnadia)caughtEntity).staminaTicks--;
-					//	System.out.println("STAMINA: " + ((EntityAnadia)caughtEntity).staminaTicks);
-						if (((EntityAnadia)caughtEntity).staminaTicks%40 == 0) {
+					if(((EntityAnadia)caughtEntity).getStaminaTicks() > 0) { 
+						((EntityAnadia)caughtEntity).setStaminaTicks(((EntityAnadia)caughtEntity).getStaminaTicks() - 1);
+						if (((EntityAnadia)caughtEntity).getStaminaTicks()%40 == 0) {
 							// consumes half a shank of hunger every 2 seconds or so whilst the fish has stamina
 							getAngler().getFoodStats().setFoodLevel(getAngler().getFoodStats().getFoodLevel() - 1);
 						}

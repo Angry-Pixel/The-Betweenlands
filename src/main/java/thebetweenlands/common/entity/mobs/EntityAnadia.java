@@ -19,6 +19,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
+import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.EntityLookHelper;
@@ -56,11 +57,11 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	private static final DataParameter<Byte> TAIL_TYPE = EntityDataManager.<Byte>createKey(EntityAnadia.class, DataSerializers.BYTE);
 	private static final DataParameter<Boolean> IS_LEAPING = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> HUNGER_COOLDOWN = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> STAMINA_TICKS = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 
 	private static float BASE_MULTIPLE = 1F; // just a arbitrary number to increase the size multiplier
 	public EntityAnadia.AIFindBait aiFindBait;
 	public EntityAnadia.AIFindHook aiFindHook;
-	public int staminaTicks;
 	
 	public EntityAnadia(World world) {
 		super(world);
@@ -81,7 +82,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         });
         tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.4D));
         tasks.addTask(2, new EntityAnadia.EntityAIAFishCalledWander(this, 0.5D, 20));
-        tasks.addTask(3, new EntityAnadia.EntityAIAvoidWhenHooked(this, EntityPlayer.class, 16));
+        tasks.addTask(3, new EntityAIPanicWhenHooked(this));
+       // tasks.addTask(3, new EntityAnadia.EntityAIAvoidWhenHooked(this, EntityPlayer.class, 16));
         aiFindBait = new EntityAnadia.AIFindBait(this, 2D);
         aiFindHook = new EntityAnadia.AIFindHook(this, 2D);
         tasks.addTask(4, aiFindBait);
@@ -102,6 +104,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         dataManager.register(TAIL_TYPE, (byte) 0);
         dataManager.register(IS_LEAPING, false);
         dataManager.register(HUNGER_COOLDOWN, 0);
+        dataManager.register(STAMINA_TICKS, 40);
     }
 
 	@Override
@@ -189,6 +192,14 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
     private void setHungerCooldown(int count) {
         dataManager.set(HUNGER_COOLDOWN, count);
+    }
+
+    public int getStaminaTicks() {
+        return dataManager.get(STAMINA_TICKS);
+    }
+
+    public void setStaminaTicks(int count) {
+        dataManager.set(STAMINA_TICKS, count);
     }
 
 	@Override
@@ -349,8 +360,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 				setHungerCooldown(getHungerCooldown() - 1);
 
 			//regains stamina over time whilst not hooked
-	        if(!isBeingRidden() && staminaTicks < (int) (getStaminaMods() * 20))
-	        	staminaTicks++;
+	        if(!isBeingRidden() && getStaminaTicks() < (int) (getStaminaMods() * 20))
+	        	setStaminaTicks(getStaminaTicks() + 1);
 
 		}
 		super.onUpdate();
@@ -786,12 +797,35 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 		@Override
 		public boolean shouldExecute() {
-			return super.shouldExecute() && anadia.isBeingRidden() && anadia.staminaTicks >= 1;
+			return super.shouldExecute() && anadia.isBeingRidden() && anadia.getStaminaTicks() >= 1;
 		}
 
 		@Override
 	    public boolean shouldContinueExecuting(){
-	        return !entity.getNavigator().noPath() && anadia.isBeingRidden() && anadia.staminaTicks >= 1;
+	        return !entity.getNavigator().noPath() && anadia.isBeingRidden() && anadia.getStaminaTicks() >= 1;
+	    }
+	}
+
+	public class EntityAIPanicWhenHooked extends EntityAIPanic {
+		private final EntityAnadia anadia;
+		
+		public EntityAIPanicWhenHooked(EntityAnadia entity) {
+			super(entity, entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 2D);
+			anadia = entity;
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			return findRandomPosition() && anadia.isBeingRidden() && anadia.getStaminaTicks() >= 1;
+		}
+
+		@Override
+	    public boolean shouldContinueExecuting(){
+	        return !anadia.getNavigator().noPath() && anadia.isBeingRidden() && anadia.getStaminaTicks() >= 1;
+	    }
+	    
+	    public void startExecuting() {
+	        anadia.getNavigator().tryMoveToXYZ(this.randPosX, this.randPosY, this.randPosZ, this.speed);
 	    }
 	}
 }

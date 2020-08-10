@@ -9,8 +9,10 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,6 +20,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -29,20 +32,33 @@ import thebetweenlands.util.TranslationHelper;
 public class ItemBLFishingRod extends Item {
 	@Nullable
 	public EntityBLFishHook fishingHook;
-	
-	public float prevDistance;
 
 	public ItemBLFishingRod() {
-		this.setMaxDamage(64);
-		this.setMaxStackSize(1);
-		this.setCreativeTab(CreativeTabs.TOOLS);
+		setMaxDamage(64);
+		setMaxStackSize(1);
+		setCreativeTab(CreativeTabs.TOOLS);
+
+		addPropertyOverride(new ResourceLocation("cast"), new IItemPropertyGetter() {
+			@SideOnly(Side.CLIENT)
+			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+				if (entityIn == null) {
+					return 0.0F;
+				} else {
+					boolean mainHand = entityIn.getHeldItemMainhand() == stack;
+					boolean offHand = entityIn.getHeldItemOffhand() == stack;
+					if (entityIn.getHeldItemMainhand().getItem() instanceof ItemBLFishingRod)
+						offHand = false;
+					return (mainHand || offHand) && entityIn instanceof EntityPlayer && (stack.hasTagCompound() && stack.getTagCompound().hasKey("cast") && stack.getTagCompound().getBoolean("cast")) ? 1.0F : 0.0F;
+				}
+			}
+		});
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flag) {
-		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("distance")) {
-			tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.fishing_rod.distance", stack.getTagCompound().getFloat("distance")));
+		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("cast")) {
+			tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.fishing_rod.distance", stack.getTagCompound().getBoolean("cast")));
 		}
 	}
 
@@ -57,13 +73,21 @@ public class ItemBLFishingRod extends Item {
 	public boolean shouldRotateAroundWhenRendering() {
 		return true;
 	}
-	
+
 	@Override
 	   public void onUpdate(ItemStack stack, World world, Entity entityIn, int itemSlot, boolean isSelected) {
+		if(!world.isRemote) {
+			if (!stack.hasTagCompound())
+				stack.setTagCompound(new NBTTagCompound());
+			if (!stack.getTagCompound().hasKey("cast"))
+				stack.getTagCompound().setBoolean("cast", false);
+		}
+
 		if(!isSelected && fishingHook != null)
 			if (!world.isRemote) {
 				fishingHook.setDead();
 				fishingHook = null;
+				stack.getTagCompound().setBoolean("cast", false);
 			}
 	}
 
@@ -71,35 +95,35 @@ public class ItemBLFishingRod extends Item {
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand handIn) {
 		ItemStack stack = player.getHeldItem(handIn);
 
-		// TODO add reeling in for hook entity rather than just destroying it here
 		if(!world.isRemote) {
 			if (!stack.hasTagCompound())
 				stack.setTagCompound(new NBTTagCompound());
-			if (!stack.getTagCompound().hasKey("distance"))
-				stack.getTagCompound().setFloat("distance", 0);
+			if (!stack.getTagCompound().hasKey("cast"))
+				stack.getTagCompound().setBoolean("cast", false);
 		}
 
 		if (fishingHook != null) {
 			int i = fishingHook.reelInFishingHook();
-			if(stack.getTagCompound().getFloat("distance") < prevDistance)
-				world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_RETRIEVE, SoundCategory.NEUTRAL, 1.0F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+			world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_RETRIEVE, SoundCategory.NEUTRAL, 1.0F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 			//TODO
 			//else play creaking sound
-			
+			if(fishingHook.caughtEntity != null && !fishingHook.isRiding())
+				fishingHook.caughtEntity = null;
+
 			//System.out.println("Reeling In The Years!");
-			if (!world.isRemote && stack.getTagCompound().getFloat("distance") <= 0F) {
+			if (!world.isRemote && (int)fishingHook.getDistance(fishingHook.getAngler()) <= 0 && !fishingHook.isRiding() || !stack.getTagCompound().getBoolean("cast")) {
 				stack.damageItem(i, player);
 				fishingHook.setDead();
 				fishingHook = null;
-				stack.getTagCompound().setFloat("distance", 0);
+				stack.getTagCompound().setBoolean("cast", false);
 			}
-			prevDistance = stack.getTagCompound().getFloat("distance");
 			return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 		} else {
 			world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
 			if (!world.isRemote) {
 				//System.out.println("Casting!");
+				stack.getTagCompound().setBoolean("cast", true);
 				EntityBLFishHook entityfishhook = new EntityBLFishHook(world, player);
 				world.spawnEntity(entityfishhook);
 				fishingHook = entityfishhook;
@@ -111,7 +135,7 @@ public class ItemBLFishingRod extends Item {
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
 
-	private static final ImmutableList<String> STACK_NBT_EXCLUSIONS = ImmutableList.of("distance");
+	private static final ImmutableList<String> STACK_NBT_EXCLUSIONS = ImmutableList.of("cast");
 
 	@Override
 	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
