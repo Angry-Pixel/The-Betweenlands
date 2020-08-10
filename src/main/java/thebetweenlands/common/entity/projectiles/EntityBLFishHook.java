@@ -388,7 +388,6 @@ public class EntityBLFishHook extends Entity {
 			double d0 = getAngler().posX - posX;
 			double d1 = getAngler().posY - posY;
 			double d2 = getAngler().posZ - posZ;
-			// TODO add reeling in mechanic modifiers based on fish stamina
 			if (caughtEntity != null) {
 					if(((EntityAnadia)caughtEntity).getStaminaTicks() > 0) { 
 						((EntityAnadia)caughtEntity).setStaminaTicks(((EntityAnadia)caughtEntity).getStaminaTicks() - 1);
