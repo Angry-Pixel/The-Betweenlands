@@ -154,6 +154,21 @@ public class ItemBLFishingRod extends Item {
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
 
+	@Override
+    public boolean onDroppedByPlayer(ItemStack stack, EntityPlayer player) {
+		if (!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+		if (!stack.getTagCompound().hasKey("cast"))
+			stack.getTagCompound().setBoolean("cast", false);
+		else
+			stack.getTagCompound().setBoolean("cast", false);
+		if(fishingHook != null) {
+			fishingHook.setDead();
+			fishingHook = null;
+		}
+        return true;
+    }
+
 	private static final ImmutableList<String> STACK_NBT_EXCLUSIONS = ImmutableList.of("cast", "baited");
 
 	@Override
