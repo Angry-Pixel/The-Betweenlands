@@ -34,7 +34,7 @@ public class ItemBLFishingRod extends Item {
 	public EntityBLFishHook fishingHook;
 
 	public ItemBLFishingRod() {
-		setMaxDamage(64);
+		setMaxDamage(128);
 		setMaxStackSize(1);
 		setCreativeTab(CreativeTabs.TOOLS);
 
@@ -112,22 +112,29 @@ public class ItemBLFishingRod extends Item {
 			//TODO
 			//else play creaking sound
 
-			//fixes stupid entity
-			if(fishingHook.caughtEntity != null && !fishingHook.isRiding())
-				fishingHook.caughtEntity = null;
-			
-			if(fishingHook.caughtEntity != null && stack.getTagCompound().getBoolean("baited")) {
-				//removes bait from hook
-				if (!world.isRemote )
-					stack.getTagCompound().setBoolean("baited", false);
+			if (!world.isRemote) {
+				//fixes stupid entity
+				if(fishingHook.caughtEntity != null && !fishingHook.isRiding())
+					fishingHook.caughtEntity = null;
+				
+				if (fishingHook.caughtEntity != null) {
+					if (stack.getTagCompound().getBoolean("baited"))
+						stack.getTagCompound().setBoolean("baited", false);
+					if (fishingHook.caughtEntity.getStaminaTicks() % 20 == 0 && fishingHook.caughtEntity.getStaminaTicks() != 0) {
+						stack.damageItem(i, player);
+					}
+				}
+
+				if (fishingHook.caughtEntity == null && (int)fishingHook.getDistance(fishingHook.getAngler()) > 0)
+					stack.damageItem(i, player);
+
+				if ((int)fishingHook.getDistance(fishingHook.getAngler()) <= 0 && !fishingHook.isRiding() || !stack.getTagCompound().getBoolean("cast")) {
+					fishingHook.setDead();
+					fishingHook = null;
+					stack.getTagCompound().setBoolean("cast", false);
+				}
 			}
 
-			if (!world.isRemote && (int)fishingHook.getDistance(fishingHook.getAngler()) <= 0 && !fishingHook.isRiding() || !stack.getTagCompound().getBoolean("cast")) {
-				stack.damageItem(i, player);
-				fishingHook.setDead();
-				fishingHook = null;
-				stack.getTagCompound().setBoolean("cast", false);
-			}
 			return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 		} else {
 			world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));

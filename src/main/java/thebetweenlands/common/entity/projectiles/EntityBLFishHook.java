@@ -1,6 +1,5 @@
 package thebetweenlands.common.entity.projectiles;
 
-import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -12,6 +11,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,7 +19,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.management.PreYggdrasilConverter;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -33,10 +32,10 @@ import thebetweenlands.common.item.tools.ItemBLFishingRod;
 public class EntityBLFishHook extends Entity {
 	protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntityBLFishHook.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 	private static final DataParameter<Boolean> IS_BAITED = EntityDataManager.createKey(EntityBLFishHook.class, DataSerializers.BOOLEAN);
-	private boolean inGround;
+	public boolean inGround;
 	private int ticksInGround;
 	private int ticksInAir;
-	public Entity caughtEntity;
+	public EntityAnadia caughtEntity;
 	private EntityBLFishHook.State currentState = State.FLYING;
 	
 	@Nullable
@@ -180,6 +179,10 @@ public class EntityBLFishHook extends Entity {
 					currentState = EntityBLFishHook.State.BOBBING;
 					return;
 				}
+				
+                if (!world.isRemote) {
+                    checkCollision();
+                }
 
 				if (!inGround && !onGround && !collidedHorizontally) {
 					++ticksInAir;
@@ -227,6 +230,20 @@ public class EntityBLFishHook extends Entity {
 			setPosition(posX, posY, posZ);
 		}
 	}
+
+	private void checkCollision() {
+		Vec3d vec3d = new Vec3d(posX, posY, posZ);
+		Vec3d vec3d1 = new Vec3d(posX + motionX, posY + motionY, posZ + motionZ);
+		RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d1, false, true, false);
+		vec3d = new Vec3d(posX, posY, posZ);
+		vec3d1 = new Vec3d(posX + motionX, posY + motionY, posZ + motionZ);
+
+		if (raytraceresult != null)
+			vec3d1 = new Vec3d(raytraceresult.hitVec.x, raytraceresult.hitVec.y, raytraceresult.hitVec.z);
+
+		if (raytraceresult != null && raytraceresult.typeOfHit != RayTraceResult.Type.MISS)
+			inGround = true;
+    }
 
 	private boolean shouldStopFishing() {
 		ItemStack stack = getAngler().getHeldItemMainhand();
@@ -292,18 +309,16 @@ public class EntityBLFishHook extends Entity {
 			if (caughtEntity == null) {
 				bringInHookedEntity();
 				world.setEntityState(this, (byte) 31);
-				i = 5;
 			}
 
 			if (caughtEntity != null) {
 				bringInHookedEntity();
 				world.setEntityState(this, (byte) 31);
-				i = 5;
+				i = (int) caughtEntity.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
 			}
 
-			if (inGround) {
+			if (inGround)
 				i = 2;
-			}
 
 			return i;
 		} else {
@@ -317,16 +332,16 @@ public class EntityBLFishHook extends Entity {
 			double d1 = getAngler().posY - posY;
 			double d2 = getAngler().posZ - posZ;
 			if (caughtEntity != null) {
-					if(((EntityAnadia)caughtEntity).getStaminaTicks() > 0) { 
-						((EntityAnadia)caughtEntity).setStaminaTicks(((EntityAnadia)caughtEntity).getStaminaTicks() - 1);
-						if (((EntityAnadia)caughtEntity).getStaminaTicks()%40 == 0) {
+					if(caughtEntity.getStaminaTicks() > 0) { 
+						caughtEntity.setStaminaTicks(caughtEntity.getStaminaTicks() - 1);
+						if (caughtEntity.getStaminaTicks()%40 == 0) {
 							// consumes half a shank of hunger every 2 seconds or so whilst the fish has stamina
 							getAngler().getFoodStats().setFoodLevel(getAngler().getFoodStats().getFoodLevel() - 1);
 						}
 					}
-				caughtEntity.motionX += d0 * (0.045D - ((EntityAnadia)caughtEntity).getStrengthMods() * 0.005D);
-				caughtEntity.motionY += d1 * (0.045D - ((EntityAnadia)caughtEntity).getStrengthMods() * 0.005D);
-				caughtEntity.motionZ += d2 * (0.045D - ((EntityAnadia)caughtEntity).getStrengthMods() * 0.005D);
+				caughtEntity.motionX += d0 * (0.045D - caughtEntity.getStrengthMods() * 0.005D);
+				caughtEntity.motionY += d1 * (0.045D - caughtEntity.getStrengthMods() * 0.005D);
+				caughtEntity.motionZ += d2 * (0.045D - caughtEntity.getStrengthMods() * 0.005D);
 			} else {
 				motionX += d0 * 0.06D;
 				motionY += d1 * 0.06D;
