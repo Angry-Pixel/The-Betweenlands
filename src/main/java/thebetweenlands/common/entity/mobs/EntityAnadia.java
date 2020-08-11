@@ -706,7 +706,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
     	@Override
     	public boolean shouldContinueExecuting() {
-    		return anadia.getHungerCooldown() <= 0 && hook != null && !hook.isDead && hook.getBaited();
+    		return  anadia.getHungerCooldown() <= 0 && hook != null && !hook.isDead &&  hook.getBaited() ? true : anadia.getHungerCooldown() <= 0 && hook != null && !hook.isDead && (anadia.getEntityWorld().rand.nextInt(50) == 0 && !hook.getBaited());
         }
 
 		@Override
@@ -751,7 +751,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
     		List<EntityBLFishHook> list = anadia.getEntityWorld().getEntitiesWithinAABB(EntityBLFishHook.class, anadia.getEntityBoundingBox().grow(distance, distance, distance));
     		for (Iterator<EntityBLFishHook> iterator = list.iterator(); iterator.hasNext();) {
     			EntityBLFishHook hook = iterator.next();
-    			if (!hook.isInWater() || !hook.getBaited())
+    			if (!hook.isInWater())
     				iterator.remove();
     		}
     		if (list.isEmpty())
