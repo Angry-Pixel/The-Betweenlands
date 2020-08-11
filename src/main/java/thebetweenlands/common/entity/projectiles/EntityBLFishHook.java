@@ -32,7 +32,7 @@ import thebetweenlands.common.item.tools.ItemBLFishingRod;
 
 public class EntityBLFishHook extends Entity {
 	protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntityBLFishHook.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-	private static final DataParameter<Integer> DATA_HOOKED_ENTITY = EntityDataManager.<Integer>createKey(EntityBLFishHook.class, DataSerializers.VARINT);
+	private static final DataParameter<Boolean> IS_BAITED = EntityDataManager.createKey(EntityBLFishHook.class, DataSerializers.BOOLEAN);
 	private boolean inGround;
 	private int ticksInGround;
 	private int ticksInAir;
@@ -77,8 +77,8 @@ public class EntityBLFishHook extends Entity {
 
 	@Override
 	protected void entityInit() {
-		dataManager.register(DATA_HOOKED_ENTITY, 0);
 		dataManager.register(OWNER_UNIQUE_ID, Optional.<UUID>absent());
+		dataManager.register(IS_BAITED, false);
 	}
 
 	@Nullable
@@ -102,15 +102,6 @@ public class EntityBLFishHook extends Entity {
 
 	public boolean isOwner(EntityPlayer playerIn) {
 		return playerIn == getAngler();
-	}
-
-	@Override
-	public void notifyDataManagerChange(DataParameter<?> key) {
-		if (DATA_HOOKED_ENTITY.equals(key)) {
-			int entityId = dataManager.get(DATA_HOOKED_ENTITY);
-			caughtEntity = entityId > 0 ? world.getEntityByID(entityId - 1) : null;
-		}
-		super.notifyDataManagerChange(key);
 	}
 
 	private void shoot() {
@@ -190,10 +181,6 @@ public class EntityBLFishHook extends Entity {
 					return;
 				}
 
-				if (!world.isRemote) {
-					checkCollision();
-				}
-
 				if (!inGround && !onGround && !collidedHorizontally) {
 					++ticksInAir;
 				} else {
@@ -208,15 +195,8 @@ public class EntityBLFishHook extends Entity {
 						if (caughtEntity.isDead) {
 							caughtEntity = null;
 							currentState = EntityBLFishHook.State.FLYING;
-						} else {
-							posX = caughtEntity.posX;
-							double d2 = (double) caughtEntity.height;
-							posY = caughtEntity.getEntityBoundingBox().minY + d2 * 0.8D;
-							posZ = caughtEntity.posZ;
-							setPosition(posX, posY, posZ);
 						}
 					}
-
 					return;
 				}
 
@@ -231,9 +211,6 @@ public class EntityBLFishHook extends Entity {
 
 					motionY -= d0 * (double) rand.nextFloat() * 0.2D;
 
-					if (!world.isRemote && f > 0.0F) {
-						catchingFish(blockpos);
-					}
 				}
 			}
 
@@ -300,61 +277,12 @@ public class EntityBLFishHook extends Entity {
 		rotationYaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * 0.2F;
 	}
 
-	private void checkCollision() {
-		Vec3d vec3d = new Vec3d(posX, posY, posZ);
-		Vec3d vec3d1 = new Vec3d(posX + motionX, posY + motionY, posZ + motionZ);
-		RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d1, false, true, false);
-		vec3d = new Vec3d(posX, posY, posZ);
-		vec3d1 = new Vec3d(posX + motionX, posY + motionY, posZ + motionZ);
-
-		if (raytraceresult != null) {
-			vec3d1 = new Vec3d(raytraceresult.hitVec.x, raytraceresult.hitVec.y, raytraceresult.hitVec.z);
-		}
-
-		Entity entity = null;
-		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(motionX, motionY, motionZ).grow(1.0D));
-		double d0 = 0.0D;
-
-		for (Entity entity1 : list) {
-			if (canHookFish(entity1) && (entity1 != getAngler() || ticksInAir >= 5)) {
-				AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow(0.30000001192092896D);
-				RayTraceResult raytraceresult1 = axisalignedbb.calculateIntercept(vec3d, vec3d1);
-
-				if (raytraceresult1 != null) {
-					double d1 = vec3d.squareDistanceTo(raytraceresult1.hitVec);
-
-					if (d1 < d0 || d0 == 0.0D) {
-						entity = entity1;
-						d0 = d1;
-					}
-				}
-			}
-		}
-
-		if (entity != null) {
-			raytraceresult = new RayTraceResult(entity);
-		}
-
-		if (raytraceresult != null && raytraceresult.typeOfHit != RayTraceResult.Type.MISS) {
-			if (raytraceresult.typeOfHit == RayTraceResult.Type.ENTITY) {
-				caughtEntity = raytraceresult.entityHit;
-				setHookedEntity();
-			} else {
-				inGround = true;
-			}
-		}
+	public void setBaited(boolean hasBait) {
+		dataManager.set(IS_BAITED, hasBait);
 	}
-
-	private void setHookedEntity() {
-		getDataManager().set(DATA_HOOKED_ENTITY, Integer.valueOf(caughtEntity.getEntityId() + 1));
-	}
-
-	private void catchingFish(BlockPos pos) {
-	//TODO add something here maybe at some point
-	}
-
-	protected boolean canHookFish(Entity entity) {
-		return entity instanceof EntityAnadia;
+	
+	public boolean getBaited() {
+		return dataManager.get(IS_BAITED);
 	}
 
 	public int reelInFishingHook() {

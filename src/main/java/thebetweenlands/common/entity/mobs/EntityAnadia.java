@@ -374,7 +374,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 			double a = Math.toRadians(rotationYaw);
 			double offSetX = -Math.sin(a) * width * 0.5D + entity.width * 0.5D;
 			double offSetZ = Math.cos(a) * width * 0.5D + entity.width * 0.5D;
-			entity.setPosition(posX + offSetX, posY + entity.height, posZ + offSetZ);
+			entity.setPosition(posX + offSetX, posY + height* 0.5D, posZ + offSetZ);
 		}
 	}
 
@@ -706,7 +706,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
     	@Override
     	public boolean shouldContinueExecuting() {
-    		return anadia.getHungerCooldown() <= 0 && hook != null && !hook.isDead;
+    		return anadia.getHungerCooldown() <= 0 && hook != null && !hook.isDead && hook.getBaited();
         }
 
 		@Override
@@ -734,10 +734,10 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 							anadia.setIsLeaping(false);
 							hook.caughtEntity = anadia;
 							hook.startRiding(anadia, true);
+							hook.setBaited(false);
 							//resetTask();
 						}
 					}
-
 			}
 		}
  
@@ -751,7 +751,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
     		List<EntityBLFishHook> list = anadia.getEntityWorld().getEntitiesWithinAABB(EntityBLFishHook.class, anadia.getEntityBoundingBox().grow(distance, distance, distance));
     		for (Iterator<EntityBLFishHook> iterator = list.iterator(); iterator.hasNext();) {
     			EntityBLFishHook hook = iterator.next();
-    			if (!hook.isInWater())
+    			if (!hook.isInWater() || !hook.getBaited())
     				iterator.remove();
     		}
     		if (list.isEmpty())

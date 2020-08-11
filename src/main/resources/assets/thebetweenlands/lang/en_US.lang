@@ -1106,7 +1106,7 @@ tooltip.bl.fish_bait.dissolve_time=Dissolve Time: %s
 tooltip.bl.fish_bait.range=Range: %s
 tooltip.bl.fish_bait.glowing=Glowing: %s
 
-tooltip.bl.fishing_rod.distance=Distance: %s
+tooltip.bl.fishing_rod.baited=Has Worm: %s
 
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing
