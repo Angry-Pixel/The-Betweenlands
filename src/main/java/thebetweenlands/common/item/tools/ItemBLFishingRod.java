@@ -25,13 +25,14 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.projectiles.EntityBLFishHook;
+import thebetweenlands.common.network.clientbound.MessageBLFishHookSpawn;
 import thebetweenlands.util.NBTHelper;
 import thebetweenlands.util.TranslationHelper;
 
 public class ItemBLFishingRod extends Item {
-	@Nullable
-	public EntityBLFishHook fishingHook;
 
 	public ItemBLFishingRod() {
 		setMaxDamage(128);
@@ -48,7 +49,7 @@ public class ItemBLFishingRod extends Item {
 					boolean offHand = entityIn.getHeldItemOffhand() == stack;
 					if (entityIn.getHeldItemMainhand().getItem() instanceof ItemBLFishingRod)
 						offHand = false;
-					return (mainHand || offHand) && entityIn instanceof EntityPlayer && (stack.hasTagCompound() && stack.getTagCompound().hasKey("cast") && stack.getTagCompound().getBoolean("cast")) ? 1.0F : 0.0F;
+					return (mainHand || offHand)  && entityIn instanceof EntityPlayer && ((EntityPlayer)entityIn).fishEntity != null ? 1.0F : 0.0F;
 				}
 			}
 		});
@@ -57,7 +58,7 @@ public class ItemBLFishingRod extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flag) {
-		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("cast")) {
+		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("baited")) {
 			tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.fishing_rod.baited", stack.getTagCompound().getBoolean("baited")));
 		}
 	}
@@ -79,18 +80,9 @@ public class ItemBLFishingRod extends Item {
 		if(!world.isRemote) {
 			if (!stack.hasTagCompound())
 				stack.setTagCompound(new NBTTagCompound());
-			if (!stack.getTagCompound().hasKey("cast"))
-				stack.getTagCompound().setBoolean("cast", false);
 			if (!stack.getTagCompound().hasKey("baited"))
 				stack.getTagCompound().setBoolean("baited", false);
 		}
-
-		if(!isSelected && fishingHook != null)
-			if (!world.isRemote) {
-				fishingHook.setDead();
-				fishingHook = null;
-				stack.getTagCompound().setBoolean("cast", false);
-			}
 	}
 
 	@Override
@@ -100,52 +92,47 @@ public class ItemBLFishingRod extends Item {
 		if(!world.isRemote) {
 			if (!stack.hasTagCompound())
 				stack.setTagCompound(new NBTTagCompound());
-			if (!stack.getTagCompound().hasKey("cast"))
-				stack.getTagCompound().setBoolean("cast", false);
 			if (!stack.getTagCompound().hasKey("baited"))
 				stack.getTagCompound().setBoolean("baited", false);
 		}
 
-		if (fishingHook != null) {
-			int i = fishingHook.reelInFishingHook();
+		if (player.fishEntity != null) {
+			int i = player.fishEntity.handleHookRetraction();
 			world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_RETRIEVE, SoundCategory.NEUTRAL, 1.0F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 			//TODO
 			//else play creaking sound
 
-			if (!world.isRemote) {
-				//fixes stupid entity
-				if(fishingHook.caughtEntity != null && !fishingHook.isRiding())
-					fishingHook.caughtEntity = null;
+			if (!world.isRemote && player.fishEntity != null) {
+				//fixes stupid entity MobItem still being ridden after netted
+				if(player.fishEntity.caughtEntity != null && !player.fishEntity.isRiding())
+					player.fishEntity.caughtEntity = null;
 				
-				if (fishingHook.caughtEntity != null) {
+				if (player.fishEntity.caughtEntity != null && stack.getTagCompound().hasKey("baited")) {
 					if (stack.getTagCompound().getBoolean("baited"))
 						stack.getTagCompound().setBoolean("baited", false);
-					if (fishingHook.caughtEntity.getStaminaTicks() % 20 == 0 && fishingHook.caughtEntity.getStaminaTicks() != 0) {
+					if (((EntityAnadia) player.fishEntity.caughtEntity).getStaminaTicks() % 20 == 0 && ((EntityAnadia) player.fishEntity.caughtEntity).getStaminaTicks() != 0) {
 						stack.damageItem(i, player);
 					}
 				}
-
-				if (fishingHook.caughtEntity == null && (int)fishingHook.getDistance(fishingHook.getAngler()) > 0)
+				if (player.fishEntity.caughtEntity == null && (int)player.fishEntity.getDistance(player.fishEntity.getAngler()) > 0)
 					stack.damageItem(i, player);
 
-				if ((int)fishingHook.getDistance(fishingHook.getAngler()) <= 0 && !fishingHook.isRiding() || !stack.getTagCompound().getBoolean("cast")) {
-					fishingHook.setDead();
-					fishingHook = null;
-					stack.getTagCompound().setBoolean("cast", false);
+				if ((int)player.fishEntity.getDistance(player.fishEntity.getAngler()) <= 0 && !player.fishEntity.isRiding()) {
+					player.fishEntity.setDead();
 				}
 			}
-
 			return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 		} else {
 			world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
-			if (!world.isRemote) {
-				stack.getTagCompound().setBoolean("cast", true);
-				EntityBLFishHook entityfishhook = new EntityBLFishHook(world, player);
+			if (!world.isRemote && player.fishEntity == null) {
+				EntityBLFishHook entityFishHook = new EntityBLFishHook(world, player);
 				if(stack.getTagCompound().getBoolean("baited"))
-					entityfishhook.setBaited(true);
-				world.spawnEntity(entityfishhook);
-				fishingHook = entityfishhook;
+					entityFishHook.setBaited(true);
+				world.spawnEntity(entityFishHook);
+				player.fishEntity = entityFishHook;
+				//Packet handling here I guess
+			    TheBetweenlands.networkWrapper.sendToDimension(new MessageBLFishHookSpawn(player.getEntityId(), entityFishHook.getEntityId()), player.dimension);
 			}
 
 			player.swingArm(handIn);
@@ -154,22 +141,7 @@ public class ItemBLFishingRod extends Item {
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
 
-	@Override
-    public boolean onDroppedByPlayer(ItemStack stack, EntityPlayer player) {
-		if (!stack.hasTagCompound())
-			stack.setTagCompound(new NBTTagCompound());
-		if (!stack.getTagCompound().hasKey("cast"))
-			stack.getTagCompound().setBoolean("cast", false);
-		else
-			stack.getTagCompound().setBoolean("cast", false);
-		if(fishingHook != null) {
-			fishingHook.setDead();
-			fishingHook = null;
-		}
-        return true;
-    }
-
-	private static final ImmutableList<String> STACK_NBT_EXCLUSIONS = ImmutableList.of("cast", "baited");
+	private static final ImmutableList<String> STACK_NBT_EXCLUSIONS = ImmutableList.of("baited");
 
 	@Override
 	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {

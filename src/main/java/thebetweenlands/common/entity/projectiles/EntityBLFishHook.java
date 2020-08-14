@@ -1,45 +1,39 @@
 package thebetweenlands.common.entity.projectiles;
 
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
-import com.google.common.base.Optional;
-
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.server.management.PreYggdrasilConverter;
+import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.item.tools.ItemBLFishingRod;
 
-public class EntityBLFishHook extends Entity {
-	protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntityBLFishHook.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+public class EntityBLFishHook extends EntityFishHook {
+
 	private static final DataParameter<Boolean> IS_BAITED = EntityDataManager.createKey(EntityBLFishHook.class, DataSerializers.BOOLEAN);
 	public boolean inGround;
 	private int ticksInGround;
+	private EntityPlayer angler;
 	private int ticksInAir;
-	public EntityAnadia caughtEntity;
 	private EntityBLFishHook.State currentState = State.FLYING;
-	
-	@Nullable
-	public EntityBLFishHook fishingHook;
 
 	static enum State {
 		FLYING, HOOKED_IN_ENTITY, BOBBING;
@@ -47,7 +41,7 @@ public class EntityBLFishHook extends Entity {
 
 	@SideOnly(Side.CLIENT)
 	public EntityBLFishHook(World world, EntityPlayer player, double x, double y, double z) {
-		super(world);
+		super(world, player, x, y, z);
 		init(player);
 		setPosition(x, y, z);
 		prevPosX = posX;
@@ -56,54 +50,55 @@ public class EntityBLFishHook extends Entity {
 	}
 
 	public EntityBLFishHook(World world, EntityPlayer player) {
-		super(world);
+		super(world, player);
 		init(player);
 		shoot();
 	}
 
 	public EntityBLFishHook(World world) {
-		super(world);
+		super(world, getPlayer(world));
 		setSize(0.25F, 0.25F);
 		ignoreFrustumCheck = true;
+	}
+
+	private static EntityPlayer getPlayer(World world) {
+		if (world.isRemote)
+			return TheBetweenlands.proxy.getClientPlayer();
+
+		if (FMLCommonHandler.instance().getMinecraftServerInstance() != null) {
+			PlayerList players = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList();
+			if (!players.getPlayers().isEmpty()) {
+				return (EntityPlayer) players.getPlayers().get(0);
+			}
+		}
+
+		throw new IllegalStateException("Can't create Betweenlands Fish Hook Entity without a player.");
 	}
 
 	private void init(EntityPlayer player) {
 		setSize(0.25F, 0.25F);
 		ignoreFrustumCheck = true;
-		setAnglerId(player.getUniqueID());
-		fishingHook = this;
+        angler = player;
+        angler.fishEntity = this;
 	}
 
 	@Override
 	protected void entityInit() {
-		dataManager.register(OWNER_UNIQUE_ID, Optional.<UUID>absent());
 		dataManager.register(IS_BAITED, false);
 	}
 
-	@Nullable
+	@Override
 	public EntityPlayer getAngler() {
-		try {
-			UUID uuid = getAnglerId();
-			return uuid == null ? null : getEntityWorld().getPlayerEntityByUUID(uuid);
-		} catch (IllegalArgumentException e) {
-			return null;
-		}
+		return angler;
 	}
+	
+	@Override
+    public void setLureSpeed(int speed) {}
+	
+	@Override
+    public void setLuck(int luck) {}
 
-	@Nullable
-	public UUID getAnglerId() {
-		return dataManager.get(OWNER_UNIQUE_ID).orNull();
-	}
-
-	public void setAnglerId(@Nullable UUID uuid) {
-		dataManager.set(OWNER_UNIQUE_ID, Optional.fromNullable(uuid));
-	}
-
-	public boolean isOwner(EntityPlayer playerIn) {
-		return playerIn == getAngler();
-	}
-
-	private void shoot() {
+	public void shoot() {
 		float f = getAngler().prevRotationPitch + (getAngler().rotationPitch - getAngler().prevRotationPitch);
 		float f1 = getAngler().prevRotationYaw + (getAngler().rotationYaw - getAngler().prevRotationYaw);
 		float f2 = MathHelper.cos(-f1 * 0.017453292F - (float) Math.PI);
@@ -253,21 +248,10 @@ public class EntityBLFishHook extends Entity {
 
 		if (!getAngler().isDead && getAngler().isEntityAlive() && (mainHandHeld || offHandHeld) && (int) getDistance(getAngler()) <= 32) {
 			return false;
-		} else if (!getAngler().isDead && getAngler().isEntityAlive() && (mainHandHeld || offHandHeld) && (int) getDistance(getAngler()) > 32) {
-			if (mainHandHeld && stack.getTagCompound().getBoolean("cast")) {
-				stack.getTagCompound().setBoolean("cast", false);
-				setDead();
-				return true;
-			} else if (offHandHeld && stack1.getTagCompound().getBoolean("cast")) {
-				stack1.getTagCompound().setBoolean("cast", false);
-				setDead();
-				return true;
-			}
 		} else {
 			setDead();
 			return true;
 		}
-		return false;
 	}
 
 	private void updateRotation() {
@@ -302,7 +286,8 @@ public class EntityBLFishHook extends Entity {
 		return dataManager.get(IS_BAITED);
 	}
 
-	public int reelInFishingHook() {
+	@Override
+	public int handleHookRetraction() {
 		if (!world.isRemote && getAngler() != null) {
 			int i = 0;
 			
@@ -314,7 +299,7 @@ public class EntityBLFishHook extends Entity {
 			if (caughtEntity != null) {
 				bringInHookedEntity();
 				world.setEntityState(this, (byte) 31);
-				i = (int) caughtEntity.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+				i = (int) ((EntityLivingBase) caughtEntity).getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
 			}
 
 			if (inGround)
@@ -326,22 +311,23 @@ public class EntityBLFishHook extends Entity {
 		}
 	}
 
+	@Override
 	protected void bringInHookedEntity() {
 		if (getAngler() != null) {
 			double d0 = getAngler().posX - posX;
 			double d1 = getAngler().posY - posY;
 			double d2 = getAngler().posZ - posZ;
 			if (caughtEntity != null) {
-					if(caughtEntity.getStaminaTicks() > 0) { 
-						caughtEntity.setStaminaTicks(caughtEntity.getStaminaTicks() - 1);
-						if (caughtEntity.getStaminaTicks()%40 == 0) {
+					if(((EntityAnadia) caughtEntity).getStaminaTicks() > 0) { 
+						((EntityAnadia) caughtEntity).setStaminaTicks(((EntityAnadia) caughtEntity).getStaminaTicks() - 1);
+						if (((EntityAnadia) caughtEntity).getStaminaTicks()%40 == 0) {
 							// consumes half a shank of hunger every 2 seconds or so whilst the fish has stamina
 							getAngler().getFoodStats().setFoodLevel(getAngler().getFoodStats().getFoodLevel() - 1);
 						}
 					}
-				caughtEntity.motionX += d0 * (0.045D - caughtEntity.getStrengthMods() * 0.005D);
-				caughtEntity.motionY += d1 * (0.045D - caughtEntity.getStrengthMods() * 0.005D);
-				caughtEntity.motionZ += d2 * (0.045D - caughtEntity.getStrengthMods() * 0.005D);
+				caughtEntity.motionX += d0 * (0.045D - ((EntityAnadia) caughtEntity).getStrengthMods() * 0.005D);
+				caughtEntity.motionY += d1 * (0.045D - ((EntityAnadia) caughtEntity).getStrengthMods() * 0.005D);
+				caughtEntity.motionZ += d2 * (0.045D - ((EntityAnadia) caughtEntity).getStrengthMods() * 0.005D);
 			} else {
 				motionX += d0 * 0.06D;
 				motionY += d1 * 0.06D;
@@ -360,32 +346,14 @@ public class EntityBLFishHook extends Entity {
 		super.setDead();
 
 		if (getAngler() != null)
-		 fishingHook = null;
+			getAngler().fishEntity = null;
 	}
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
-		if (getAnglerId() == null)
-			nbt.setString("OwnerUUID", "");
-		else
-			nbt.setString("OwnerUUID", getAnglerId().toString());
-
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
-		String s;
-		if (nbt.hasKey("OwnerUUID", 8))
-			s = nbt.getString("OwnerUUID");
-		else {
-			String s1 = nbt.getString("Owner");
-			s = PreYggdrasilConverter.convertMobOwnerIfNeeded(getServer(), s1);
-		}
-		if (!s.isEmpty()) {
-			try {
-				setAnglerId(UUID.fromString(s));
-			} catch (Throwable e) {
-			}
-		}
 	}
 }

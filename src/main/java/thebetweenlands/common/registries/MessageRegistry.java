@@ -13,6 +13,7 @@ import thebetweenlands.common.network.MessageBase;
 import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsPart;
 import thebetweenlands.common.network.clientbound.MessageAddLocalStorage;
 import thebetweenlands.common.network.clientbound.MessageAmateMap;
+import thebetweenlands.common.network.clientbound.MessageBLFishHookSpawn;
 import thebetweenlands.common.network.clientbound.MessageBlockGuardData;
 import thebetweenlands.common.network.clientbound.MessageBlockGuardSectionChange;
 import thebetweenlands.common.network.clientbound.MessageClearBlockGuard;
@@ -92,7 +93,8 @@ public class MessageRegistry {
 		registerMessage(MessageUpdateDraetonPhysicsPart.class, Side.CLIENT);
 		registerMessage(MessageSyncDraetonLeakages.class, Side.CLIENT);
 		registerMessage(MessageShockArrowHit.class, Side.CLIENT);
-		
+		registerMessage(MessageBLFishHookSpawn.class, Side.CLIENT);
+
 		registerMessage(MessageEquipItem.class, Side.SERVER);
 		registerMessage(MessageOpenPouch.class, Side.SERVER);
 		registerMessage(MessageItemNaming.class, Side.SERVER);
