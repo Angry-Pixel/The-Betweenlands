@@ -20,9 +20,9 @@ import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.common.block.misc.BlockBurntScrivenerMark;
 
-public final class RuneMarkFormation extends AbstractRune<RuneMarkFormation> {
+public final class TokenRuneFormation extends AbstractRune<TokenRuneFormation> {
 
-	public static final class Blueprint extends AbstractRune.Blueprint<RuneMarkFormation> {
+	public static final class Blueprint extends AbstractRune.Blueprint<TokenRuneFormation> {
 		private final List<BlockPos> formation;
 
 		public Blueprint(RuneStats stats, List<BlockPos> formation) {
@@ -48,12 +48,12 @@ public final class RuneMarkFormation extends AbstractRune<RuneMarkFormation> {
 		}
 
 		@Override
-		public RuneMarkFormation create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
-			return new RuneMarkFormation(this, index, composition, (RuneConfiguration) configuration);
+		public TokenRuneFormation create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+			return new TokenRuneFormation(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected RuneEffectModifier.Subject activate(RuneMarkFormation state, RuneExecutionContext context, INodeIO io) {
+		protected RuneEffectModifier.Subject activate(TokenRuneFormation state, RuneExecutionContext context, INodeIO io) {
 
 			World world = context.getUser().getWorld();
 
@@ -73,11 +73,16 @@ public final class RuneMarkFormation extends AbstractRune<RuneMarkFormation> {
 
 			OUT_POSITIONS.set(io, positions);
 
+			io.schedule(scheduler -> {
+				scheduler.sleep(positions.size() * 0.1f);
+				scheduler.terminate();
+			});
+			
 			return null;
 		}
 	}
 
-	private RuneMarkFormation(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+	private TokenRuneFormation(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
 		super(blueprint, index, composition, configuration);
 	}
 }

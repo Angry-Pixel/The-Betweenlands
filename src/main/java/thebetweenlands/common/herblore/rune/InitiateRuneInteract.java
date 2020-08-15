@@ -17,8 +17,8 @@ import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.common.registries.AspectRegistry;
 
-public final class RuneInteract extends AbstractRune<RuneInteract> {
-	public static final class Blueprint extends AbstractRune.Blueprint<RuneInteract> {
+public final class InitiateRuneInteract extends AbstractRune<InitiateRuneInteract> {
+	public static final class Blueprint extends AbstractRune.Blueprint<InitiateRuneInteract> {
 		public Blueprint() {
 			super(RuneStats.builder()
 					.aspect(AspectRegistry.ORDANIIS, 1)
@@ -42,39 +42,27 @@ public final class RuneInteract extends AbstractRune<RuneInteract> {
 		}
 
 		@Override
-		public RuneInteract create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
-			return new RuneInteract(this, index, composition, (RuneConfiguration) configuration);
+		public InitiateRuneInteract create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+			return new InitiateRuneInteract(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected RuneEffectModifier.Subject activate(RuneInteract state, RuneExecutionContext context, INodeIO io) {
+		protected RuneEffectModifier.Subject activate(InitiateRuneInteract state, RuneExecutionContext context, INodeIO io) {
 			OUT_ENTITY_1.set(io, state.target);
 			return null;
 		}
 
-		private static class EntityInitiationState extends InitiationState {
-			private final Entity target;
-
-			private EntityInitiationState(Entity target) {
-				this.target = target;
-				this.success = true;
-			}
-		}
-
 		@Override
-		public InitiationState checkInitiation(IRuneChainUser user, InitiationPhase phase, InitiationState state) {
-			return phase instanceof InteractionInitiationPhase ? new EntityInitiationState(((InteractionInitiationPhase) phase).getTarget()) : null;
-		}
-
-		@Override
-		public void initiate(IRuneChainUser user, InitiationState state, RuneInteract node) {
-			node.target = ((EntityInitiationState) state).target;
+		public InitiationState<InitiateRuneInteract> checkInitiation(IRuneChainUser user, InitiationPhase phase, InitiationState<InitiateRuneInteract> initiationState) {
+			return phase instanceof InteractionInitiationPhase ? InitiationState.success(state -> {
+				state.target = ((InteractionInitiationPhase) phase).getTarget();
+			}) : null;
 		}
 	}
 
 	private Entity target;
 
-	private RuneInteract(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+	private InitiateRuneInteract(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
 		super(blueprint, index, composition, configuration);
 	}
 }

@@ -1123,6 +1123,12 @@ tooltip.thebetweenlands.gating_rune.infused=Material: %1$s\nAspect: %2$s\nTier: 
 tooltip.thebetweenlands.conduct_rune.carved=Material: %1$s
 tooltip.thebetweenlands.conduct_rune.infused=Material: %1$s\nAspect: %2$s\nTier: %3$s\nEffect: %4$s
 
+tooltip.thebetweenlands.rune.gating_block.unbound=Unbound
+tooltip.thebetweenlands.rune.gating_block.bound=Bound block: %s
+
+tooltip.thebetweenlands.rune.token_item.unbound=Unbound
+tooltip.thebetweenlands.rune.token_item.bound=Bound item: %s
+
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing
 chat.foodSickness.fine.1=Finally, something different to eat

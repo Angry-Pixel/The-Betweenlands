@@ -21,13 +21,21 @@ public interface IRuneChainCapability {
 	@Nullable
 	public RuneChainComposition.Blueprint getBlueprint();
 
-	public void setInitiationState(@Nullable InitiationState state);
+	public void setInitiationState(@Nullable InitiationState<?> state);
 
 	@Nullable
-	public InitiationState getInitiationState();
+	public InitiationState<?> getInitiationState();
 
+	/**
+	 * Checks the rune chain's initiation state for a given initiation phase (e.g. interaction, right-click, etc).
+	 * @param userCap Rune chain user
+	 * @param initiationPhase Initiation phase (e.g. interaction, right-click, etc)
+	 * @param initializer Initializer that is called when the rune chain is initiated and before it is run
+	 * @param runOnInitiation Whether the rune chain should be run when the initiation state is true
+	 * @return If runOnInitiation is true: ID of the initiated rune chain if initiation state is true or else -1. If runOnInitiation is false: 0 if initiation state is true or else -1.
+	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public default int checkInitiationAndRun(IRuneChainUserCapability userCap, InitiationPhase state, Consumer<RuneChainComposition> initializer) {
+	public default int checkInitiation(IRuneChainUserCapability userCap, InitiationPhase initiationPhase, Consumer<RuneChainComposition> initializer, boolean runOnInitiation) {
 		IRuneChainData data = this.getData();
 		RuneChainComposition.Blueprint blueprint = this.getBlueprint();
 
@@ -35,24 +43,28 @@ public interface IRuneChainCapability {
 			INodeBlueprint<?, RuneExecutionContext> node = blueprint.getNodeBlueprint(0);
 
 			if(node instanceof AbstractRune.Blueprint) {
-				InitiationState initiation = ((AbstractRune.Blueprint<?>) node).checkInitiation(userCap.getUser(), state, this.getInitiationState());
+				InitiationState initiation = ((AbstractRune.Blueprint) node).checkInitiation(userCap.getUser(), initiationPhase, this.getInitiationState());
 
 				this.setInitiationState(initiation);
 
 				if(initiation != null && initiation.isSuccess()) {
-					int id = userCap.addRuneChain(data);
+					if(runOnInitiation) {
+						int id = userCap.addRuneChain(data);
 
-					RuneChainComposition composition = userCap.getRuneChain(id);
+						RuneChainComposition composition = userCap.getRuneChain(id);
 
-					initializer.accept(composition);
+						initializer.accept(composition);
 
-					((AbstractRune.Blueprint) node).initiate(userCap.getUser(), initiation, (AbstractRune) composition.getNode(0));
+						initiation.initiate((AbstractRune) composition.getNode(0));
 
-					composition.run(userCap.getUser());
+						composition.run(userCap.getUser());
 
-					userCap.setUpdating(id, true, true);
+						userCap.setUpdating(id, true, true);
 
-					return id;
+						return id;
+					} else {
+						return 0;
+					}
 				}
 			}
 		}

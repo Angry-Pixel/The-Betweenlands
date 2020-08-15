@@ -29,11 +29,13 @@ public final class PlayerUtil {
 	public static void resetFloating(Entity player) {
 		if(player instanceof EntityPlayerMP) {
 			NetHandlerPlayServer handler = ((EntityPlayerMP) player).connection;
-			try {
-				f_NetHandlerPlayServer_floating.set(handler, false);
-				f_NetHandlerPlayServer_floatingTickCount.set(handler, 0);
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				throw new RuntimeException(e);
+			if(handler != null) {
+				try {
+					f_NetHandlerPlayServer_floating.set(handler, false);
+					f_NetHandlerPlayServer_floatingTickCount.set(handler, 0);
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					throw new RuntimeException(e);
+				}
 			}
 		}
 	}
@@ -41,11 +43,13 @@ public final class PlayerUtil {
 	public static void resetVehicleFloating(Entity player) {
 		if(player instanceof EntityPlayerMP) {
 			NetHandlerPlayServer handler = ((EntityPlayerMP) player).connection;
-			try {
-				f_NetHandlerPlayServer_vehicleFloating.set(handler, false);
-				f_NetHandlerPlayServer_vehicleFloatingTickCount.set(handler, 0);
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				throw new RuntimeException(e);
+			if(handler != null) {
+				try {
+					f_NetHandlerPlayServer_vehicleFloating.set(handler, false);
+					f_NetHandlerPlayServer_vehicleFloatingTickCount.set(handler, 0);
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					throw new RuntimeException(e);
+				}
 			}
 		}
 	}

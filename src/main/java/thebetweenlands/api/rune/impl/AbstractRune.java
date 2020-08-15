@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
 import io.netty.buffer.Unpooled;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import thebetweenlands.api.aspect.Aspect;
@@ -285,27 +287,72 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 			}
 		}
 
-		public static class InitiationState {
-			public static final InitiationState SUCCESS = new InitiationState(true);
-
+		public static class InitiationState<T extends AbstractRune<T>> {
 			protected boolean success;
+			protected Consumer<T> initializer;
 
-			public InitiationState() {
-				this(false);
+			protected InitiationState() {
+				this.success = false;
+				this.initializer = null;
 			}
 
-			public InitiationState(boolean success) {
+			protected InitiationState(boolean success, @Nullable Consumer<T> initializer) {
 				this.success = success;
+				this.initializer = initializer;
 			}
 
 			public boolean isSuccess() {
 				return this.success;
 			}
+
+			public void initiate(T state) {
+				if(this.initializer != null) {
+					this.initializer.accept(state);
+				}
+			}
+
+			public static <T extends AbstractRune<T>> InitiationState<T> success(Consumer<T> initializer) {
+				return new InitiationState<T>(true, initializer);
+			}
+
+			public static <T extends AbstractRune<T>> InitiationState<T> success() {
+				return new InitiationState<T>(true, null);
+			}
 		}
 
 		public static class InitiationPhase {
 			public static final InitiationPhase TICK = new InitiationPhase();
-			public static final InitiationPhase USE = new InitiationPhase();
+		}
+
+		public static class UseInitiationPhase extends InitiationPhase {
+			private final BlockPos block;
+			private final EnumFacing facing;
+			private final Vec3d pos;
+
+			public UseInitiationPhase(BlockPos block, EnumFacing facing, Vec3d pos) {
+				this.block = block;
+				this.facing = facing;
+				this.pos = pos;
+			}
+
+			public UseInitiationPhase() {
+				this(null, null, null);
+			}
+
+			@Nullable
+			public BlockPos getBlock() {
+				return this.block;
+			}
+
+			@Nullable
+			public EnumFacing getFacing() {
+				return this.facing;
+			}
+
+			@Nullable
+			public Vec3d getPosition() {
+				return this.pos;
+			}
 		}
 
 		public static class InteractionInitiationPhase extends InitiationPhase {
@@ -321,12 +368,8 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 		}
 
 		@Nullable
-		public InitiationState checkInitiation(IRuneChainUser user, InitiationPhase initiationPhase, @Nullable InitiationState initiationState) {
+		public InitiationState<T> checkInitiation(IRuneChainUser user, InitiationPhase initiationPhase, @Nullable InitiationState<T> initiationState) {
 			return null;
-		}
-
-		public void initiate(IRuneChainUser user, InitiationState initiationState, T state) {
-
 		}
 	}
 

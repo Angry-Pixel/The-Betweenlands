@@ -15,8 +15,8 @@ import thebetweenlands.api.rune.impl.RuneEffectModifier;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
-public final class RuneWater extends AbstractRune<RuneWater> {
-	public static final class Blueprint extends AbstractRune.Blueprint<RuneWater> {
+public final class InitiateRuneWater extends AbstractRune<InitiateRuneWater> {
+	public static final class Blueprint extends AbstractRune.Blueprint<InitiateRuneWater> {
 		public Blueprint() {
 			super(RuneStats.builder()
 					.aspect(AspectRegistry.ORDANIIS, 1)
@@ -38,16 +38,16 @@ public final class RuneWater extends AbstractRune<RuneWater> {
 		}
 
 		@Override
-		public RuneWater create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
-			return new RuneWater(this, index, composition, (RuneConfiguration) configuration);
+		public InitiateRuneWater create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+			return new InitiateRuneWater(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected RuneEffectModifier.Subject activate(RuneWater state, RuneExecutionContext context, INodeIO io) {
+		protected RuneEffectModifier.Subject activate(InitiateRuneWater state, RuneExecutionContext context, INodeIO io) {
 			return null;
 		}
 
-		private static class WaterInitiationState extends InitiationState {
+		private static class WaterInitiationState extends InitiationState<InitiateRuneWater> {
 			public boolean wasInWater = true;
 
 			public void setSuccess() {
@@ -56,7 +56,7 @@ public final class RuneWater extends AbstractRune<RuneWater> {
 		}
 
 		@Override
-		public InitiationState checkInitiation(IRuneChainUser user, InitiationPhase phase, InitiationState state) {
+		public InitiationState<InitiateRuneWater> checkInitiation(IRuneChainUser user, InitiationPhase phase, InitiationState<InitiateRuneWater> state) {
 			if(state instanceof WaterInitiationState == false) {
 				return new WaterInitiationState();
 			} else {
@@ -64,7 +64,7 @@ public final class RuneWater extends AbstractRune<RuneWater> {
 				if(entity != null) {
 					WaterInitiationState waterState = (WaterInitiationState) state;
 					if(!waterState.wasInWater && entity.isInWater()) {
-						return InitiationState.SUCCESS;
+						return InitiationState.success();
 					}
 					waterState.wasInWater = entity.isInWater();
 				}
@@ -73,7 +73,7 @@ public final class RuneWater extends AbstractRune<RuneWater> {
 		}
 	}
 
-	private RuneWater(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+	private InitiateRuneWater(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
 		super(blueprint, index, composition, configuration);
 	}
 }

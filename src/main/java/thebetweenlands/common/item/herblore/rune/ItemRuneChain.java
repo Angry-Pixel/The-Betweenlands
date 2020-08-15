@@ -7,7 +7,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.api.aspect.AspectContainer;
 import thebetweenlands.api.capability.IRuneChainCapability;
@@ -15,6 +18,7 @@ import thebetweenlands.api.capability.IRuneChainUserCapability;
 import thebetweenlands.api.item.IRenamableItem;
 import thebetweenlands.api.rune.impl.AbstractRune.Blueprint.InitiationPhase;
 import thebetweenlands.api.rune.impl.AbstractRune.Blueprint.InteractionInitiationPhase;
+import thebetweenlands.api.rune.impl.AbstractRune.Blueprint.UseInitiationPhase;
 import thebetweenlands.api.rune.impl.RuneChainComposition.IAspectBuffer;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
@@ -30,23 +34,33 @@ public class ItemRuneChain extends Item implements IRenamableItem {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		if(!world.isRemote) {
-			if (player.isSneaking()) {
-				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_ITEM_RENAMING, world, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
-				return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
-			}
+		if(!world.isRemote && player.isSneaking()) {
+			player.openGui(TheBetweenlands.instance, CommonProxy.GUI_ITEM_RENAMING, world, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
+			return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+		}
 
-			if(this.updateRuneChainInitiation(player.getHeldItem(hand), player, InitiationPhase.USE)) {
-				return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
-			}
+		if(this.updateRuneChainInitiation(player.getHeldItem(hand), player, new UseInitiationPhase(), !world.isRemote)) {
+			player.swingArm(hand);
+			return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 		}
 
 		return super.onItemRightClick(world, player, hand);
 	}
 
 	@Override
+	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if(this.updateRuneChainInitiation(player.getHeldItem(hand), player, new UseInitiationPhase(pos, facing, new Vec3d(pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ)), !worldIn.isRemote)) {
+			player.swingArm(hand);
+			return EnumActionResult.SUCCESS;
+		}
+
+		return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+	}
+
+	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
-		if(!playerIn.world.isRemote && this.updateRuneChainInitiation(stack, playerIn, new InteractionInitiationPhase(target))) {
+		if(this.updateRuneChainInitiation(stack, playerIn, new InteractionInitiationPhase(target), !playerIn.world.isRemote)) {
+			playerIn.swingArm(hand);
 			return true;
 		}
 		return false;
@@ -54,17 +68,17 @@ public class ItemRuneChain extends Item implements IRenamableItem {
 
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		this.updateRuneChainInitiation(stack, entityIn, InitiationPhase.TICK);
+		this.updateRuneChainInitiation(stack, entityIn, InitiationPhase.TICK, !worldIn.isRemote);
 	}
 
-	protected boolean updateRuneChainInitiation(ItemStack stack, Entity user, InitiationPhase state) {
+	protected boolean updateRuneChainInitiation(ItemStack stack, Entity user, InitiationPhase state, boolean runOnInitiation) {
 		IRuneChainUserCapability userCap = user.getCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN_USER, null);
 
 		if(userCap != null) {
 			IRuneChainCapability chainCap = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null);
 
 			if(chainCap != null) {
-				int id = chainCap.checkInitiationAndRun(userCap, state, composition -> {
+				int id = chainCap.checkInitiation(userCap, state, composition -> {
 					//TODO Temporary for debug
 					final AspectContainer aspects = new AspectContainer();
 
@@ -74,7 +88,7 @@ public class ItemRuneChain extends Item implements IRenamableItem {
 					final IAspectBuffer buffer = type -> aspects;
 
 					composition.setAspectBuffer(buffer);
-				});
+				}, runOnInitiation);
 				return id >= 0;
 			}
 		}

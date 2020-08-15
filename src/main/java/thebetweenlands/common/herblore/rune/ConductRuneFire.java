@@ -3,6 +3,7 @@ package thebetweenlands.common.herblore.rune;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import com.google.common.collect.ImmutableList;
 
@@ -27,13 +28,13 @@ import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 import thebetweenlands.common.registries.AspectRegistry;
 
-public final class RuneFire extends AbstractRune<RuneFire> {
+public final class ConductRuneFire extends AbstractRune<ConductRuneFire> {
 
-	public static final class Blueprint extends AbstractRune.Blueprint<RuneFire> {
+	public static final class Blueprint extends AbstractRune.Blueprint<ConductRuneFire> {
 		public Blueprint() {
 			super(RuneStats.builder()
 					.aspect(AspectRegistry.FERGALAZ, 1)
-					.duration(0.333f)
+					.duration(0.1f)
 					.build());
 		}
 
@@ -100,12 +101,12 @@ public final class RuneFire extends AbstractRune<RuneFire> {
 		}
 
 		@Override
-		public RuneFire create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
-			return new RuneFire(this, index, composition, (RuneConfiguration) configuration);
+		public ConductRuneFire create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+			return new ConductRuneFire(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected RuneEffectModifier.Subject activate(RuneFire state, RuneExecutionContext context, INodeIO io) {
+		protected RuneEffectModifier.Subject activate(ConductRuneFire state, RuneExecutionContext context, INodeIO io) {
 
 			if(state.getConfiguration() == CONFIGURATION_1) {
 				FIRE_EFFECT.apply(context.getUser().getWorld(), IN_POSITION_1.get(io));
@@ -127,8 +128,15 @@ public final class RuneFire extends AbstractRune<RuneFire> {
 				public boolean activate(AbstractRune<?> rune, IRuneChainUser user, Subject subject) {
 					super.activate(rune, user, subject);
 
-					if(subject != null && subject.getEntity() != null) {
-						this.targets.add(subject.getEntity());
+					if(subject != null) {
+						if(subject.getEntity() != null) {
+							this.targets.add(subject.getEntity());
+						} else if(subject.getBlock() != null) {
+							BlockPos pos = subject.getBlock();
+							World world = this.user.getWorld();
+							world.spawnParticle(EnumParticleTypes.FLAME, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, (world.rand.nextFloat() - 0.5f) * 0.1f, (world.rand.nextFloat() - 0.5f) * 0.1f, (world.rand.nextFloat() - 0.5f) * 0.1f);
+							world.spawnParticle(EnumParticleTypes.LAVA, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, 0, 0, 0);
+						}
 					}
 
 					return true;
@@ -136,24 +144,36 @@ public final class RuneFire extends AbstractRune<RuneFire> {
 
 				@Override
 				public void update() {
-					if(user.getWorld().isRemote) {
+					if(this.user.getWorld().isRemote) {
 						Iterator<Entity> targetsIt = this.targets.iterator();
 						while(targetsIt.hasNext()) {
 							Entity target = targetsIt.next();
 
 							if(target.isEntityAlive()) {
-								target.world.spawnParticle(EnumParticleTypes.FLAME, target.posX, target.posY, target.posZ, 0, 0, 0);
+								Random rng = this.user.getWorld().rand;
+								target.world.spawnParticle(EnumParticleTypes.FLAME, target.posX, target.posY, target.posZ, (rng.nextFloat() - 0.5f) * 0.1f, (rng.nextFloat() - 0.5f) * 0.1f, (rng.nextFloat() - 0.5f) * 0.1f);
+								target.world.spawnParticle(EnumParticleTypes.LAVA, target.posX, target.posY, target.posZ, 0, 0, 0);
 							} else {
 								targetsIt.remove();
 							}
 						}
 					}
 				}
+				
+				@Override
+				public int getColorModifier() {
+					return 0xFFE8440E;
+				}
+				
+				@Override
+				public boolean hasColorModifier() {
+					return true;
+				}
 			};
 		}
 	}
 
-	private RuneFire(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+	private ConductRuneFire(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
 		super(blueprint, index, composition, configuration);
 	}
 }

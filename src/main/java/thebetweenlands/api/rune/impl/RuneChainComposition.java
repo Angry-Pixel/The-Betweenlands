@@ -317,17 +317,15 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 				if(outputIndex < outputs.size()) {
 					IConfigurationOutput output = outputs.get(outputIndex);
 
-					ImmutableList.Builder<IType> inputTypesBuilder = ImmutableList.builder();
+					List<IType> inputTypes = new ArrayList<>();
 					for(int i = 0; i < inputs.size(); i++) {
 						if(linkedSlots.contains(i)) {
 							INodeLink link = this.getLink(nodeIndex, i);
-							inputTypesBuilder.addAll(this.getValidOutputTypes(link.getNode(), link.getOutput()).stream().map(entry -> entry.getValue()).collect(Collectors.toList()));
+							inputTypes.addAll(this.getValidOutputTypes(link.getNode(), link.getOutput()).stream().map(entry -> entry.getValue()).collect(Collectors.toList()));
 						} else {
-							inputTypesBuilder.add((IType) null);
+							inputTypes.add((IType) null);
 						}
 					}
-
-					List<IType> inputTypes = inputTypesBuilder.build();
 
 					if(output.isEnabled(inputTypes)) {
 						validOutputTypes.add(new AbstractMap.SimpleImmutableEntry<>(output, output.getType(inputTypes)));

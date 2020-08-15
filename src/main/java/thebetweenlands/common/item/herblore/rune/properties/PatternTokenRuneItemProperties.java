@@ -35,7 +35,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.rune.IRuneContainerFactory;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.herblore.rune.RuneMarkPattern;
+import thebetweenlands.common.herblore.rune.TokenRunePattern;
 import thebetweenlands.common.item.herblore.rune.DefaultRuneContainerFactory;
 import thebetweenlands.common.item.herblore.rune.ItemRune;
 import thebetweenlands.common.item.herblore.rune.ItemRune.RuneItemProperties;
@@ -44,7 +44,7 @@ import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.NBTHelper;
 
-public class PatternRuneItemProperties extends RuneItemProperties {
+public class PatternTokenRuneItemProperties extends RuneItemProperties {
 	private static final ResourceLocation TEXTURE_MARK = new ResourceLocation(ModInfo.ID, "textures/items/strictly_herblore/runes/pattern_rune_mark.png");
 	private static final ResourceLocation TEXTURE_CENTER = new ResourceLocation(ModInfo.ID, "textures/items/strictly_herblore/runes/pattern_rune_center.png");
 
@@ -55,28 +55,30 @@ public class PatternRuneItemProperties extends RuneItemProperties {
 
 	private final ResourceLocation regName;
 
-	public PatternRuneItemProperties(ResourceLocation regName) {
+	public PatternTokenRuneItemProperties(ResourceLocation regName) {
 		this.regName = regName;
 	}
 
 	@Override
 	public IRuneContainerFactory getFactory(ItemStack stack) {
-		List<BlockPos> pattern = new ArrayList<>();
+		return new DefaultRuneContainerFactory(this.regName, () -> {
+			List<BlockPos> pattern = new ArrayList<>();
 
-		if(stack.hasTagCompound()) {
-			NBTTagList blocks = stack.getTagCompound().getTagList(NBT_PATTERN_BLOCKS, Constants.NBT.TAG_LONG);
+			if(stack.hasTagCompound()) {
+				NBTTagList blocks = stack.getTagCompound().getTagList(NBT_PATTERN_BLOCKS, Constants.NBT.TAG_LONG);
 
-			for(int i = 0; i < blocks.tagCount(); i++) {
-				pattern.add(BlockPos.fromLong(((NBTTagLong)blocks.get(i)).getLong()));
+				for(int i = 0; i < blocks.tagCount(); i++) {
+					pattern.add(BlockPos.fromLong(((NBTTagLong)blocks.get(i)).getLong()));
+				}
 			}
-		}
 
-		return new DefaultRuneContainerFactory(this.regName, new RuneMarkPattern.Blueprint(
-				RuneStats.builder()
-				.aspect(AspectRegistry.ORDANIIS, 1)
-				.duration(5.0f)
-				.build(),
-				pattern));
+			return new TokenRunePattern.Blueprint(
+					RuneStats.builder()
+					.aspect(AspectRegistry.ORDANIIS, 1)
+					.duration(5.0f)
+					.build(),
+					pattern);
+		});
 	}
 
 	@Override
@@ -185,8 +187,8 @@ public class PatternRuneItemProperties extends RuneItemProperties {
 			if(!stack.isEmpty() && stack.getItem() instanceof ItemRune) {
 				RuneItemProperties properties = ((ItemRune) stack.getItem()).getProperties(stack);
 
-				if(properties instanceof PatternRuneItemProperties) {
-					PatternRuneItemProperties rune = (PatternRuneItemProperties) properties;
+				if(properties instanceof PatternTokenRuneItemProperties) {
+					PatternTokenRuneItemProperties rune = (PatternTokenRuneItemProperties) properties;
 
 					if(rune.hasPattern(stack)) {
 						holdingPattern = true;

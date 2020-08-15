@@ -40,7 +40,7 @@ import thebetweenlands.api.rune.IRuneContainerFactory;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.misc.BlockBurntScrivenerMark;
-import thebetweenlands.common.herblore.rune.RuneMarkFormation;
+import thebetweenlands.common.herblore.rune.TokenRuneFormation;
 import thebetweenlands.common.item.herblore.rune.DefaultRuneContainerFactory;
 import thebetweenlands.common.item.herblore.rune.ItemRune;
 import thebetweenlands.common.item.herblore.rune.ItemRune.RuneItemProperties;
@@ -49,7 +49,7 @@ import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.NBTHelper;
 
-public class FormationRuneItemProperties extends RuneItemProperties {
+public class FormationTokenRuneItemProperties extends RuneItemProperties {
 	private static final ResourceLocation TEXTURE_MARK = new ResourceLocation(ModInfo.ID, "textures/items/strictly_herblore/runes/formation_rune_mark.png");
 	private static final ResourceLocation TEXTURE_MARK_SIDE = new ResourceLocation(ModInfo.ID, "textures/items/strictly_herblore/runes/formation_rune_mark_side.png");
 
@@ -57,28 +57,30 @@ public class FormationRuneItemProperties extends RuneItemProperties {
 
 	private final ResourceLocation regName;
 
-	public FormationRuneItemProperties(ResourceLocation regName) {
+	public FormationTokenRuneItemProperties(ResourceLocation regName) {
 		this.regName = regName;
 	}
 
 	@Override
 	public IRuneContainerFactory getFactory(ItemStack stack) {
-		List<BlockPos> formation = new ArrayList<>();
+		return new DefaultRuneContainerFactory(this.regName, () -> {
+			List<BlockPos> formation = new ArrayList<>();
 
-		if(stack.hasTagCompound()) {
-			NBTTagList blocks = stack.getTagCompound().getTagList(NBT_FORMATION_BLOCKS, Constants.NBT.TAG_COMPOUND);
+			if(stack.hasTagCompound()) {
+				NBTTagList blocks = stack.getTagCompound().getTagList(NBT_FORMATION_BLOCKS, Constants.NBT.TAG_COMPOUND);
 
-			for(int i = 0; i < blocks.tagCount(); i++) {
-				formation.add(NBTUtil.getPosFromTag(blocks.getCompoundTagAt(i)));
+				for(int i = 0; i < blocks.tagCount(); i++) {
+					formation.add(NBTUtil.getPosFromTag(blocks.getCompoundTagAt(i)));
+				}
 			}
-		}
-		
-		return new DefaultRuneContainerFactory(this.regName, new RuneMarkFormation.Blueprint(
-				RuneStats.builder()
-				.aspect(AspectRegistry.ORDANIIS, 1)
-				.duration(5.0f)
-				.build(),
-				formation));
+
+			return new TokenRuneFormation.Blueprint(
+					RuneStats.builder()
+					.aspect(AspectRegistry.ORDANIIS, 1)
+					.duration(5.0f)
+					.build(),
+					formation);
+		});
 	}
 
 	@Override
@@ -193,8 +195,8 @@ public class FormationRuneItemProperties extends RuneItemProperties {
 			if(!stack.isEmpty() && stack.getItem() instanceof ItemRune) {
 				RuneItemProperties properties = ((ItemRune) stack.getItem()).getProperties(stack);
 
-				if(properties instanceof FormationRuneItemProperties) {
-					FormationRuneItemProperties rune = (FormationRuneItemProperties) properties;
+				if(properties instanceof FormationTokenRuneItemProperties) {
+					FormationTokenRuneItemProperties rune = (FormationTokenRuneItemProperties) properties;
 
 					if(rune.hasFormation(stack)) {
 						holdingFormation = true;

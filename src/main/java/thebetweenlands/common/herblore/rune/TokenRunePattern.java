@@ -19,14 +19,16 @@ import thebetweenlands.api.rune.impl.RuneEffectModifier;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 
-public final class RuneMarkPattern extends AbstractRune<RuneMarkPattern> {
+public final class TokenRunePattern extends AbstractRune<TokenRunePattern> {
 
-	public static final class Blueprint extends AbstractRune.Blueprint<RuneMarkPattern> {
+	public static final class Blueprint extends AbstractRune.Blueprint<TokenRunePattern> {
 		private final List<BlockPos> pattern;
 
 		public Blueprint(RuneStats stats, List<BlockPos> pattern) {
 			super(stats);
 			this.pattern = pattern;
+			
+			this.setRecursiveRuneEffectModifierCount(3);
 		}
 
 		public static final RuneConfiguration CONFIGURATION_1;
@@ -56,12 +58,12 @@ public final class RuneMarkPattern extends AbstractRune<RuneMarkPattern> {
 		}
 
 		@Override
-		public RuneMarkPattern create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
-			return new RuneMarkPattern(this, index, composition, (RuneConfiguration) configuration);
+		public TokenRunePattern create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+			return new TokenRunePattern(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected RuneEffectModifier.Subject activate(RuneMarkPattern state, RuneExecutionContext context, INodeIO io) {
+		protected RuneEffectModifier.Subject activate(TokenRunePattern state, RuneExecutionContext context, INodeIO io) {
 
 			BlockPos center;
 			if(state.getConfiguration() == CONFIGURATION_1) {
@@ -80,12 +82,17 @@ public final class RuneMarkPattern extends AbstractRune<RuneMarkPattern> {
 			} else {
 				OUT_POSITIONS_2.set(io, positions);
 			}
+			
+			io.schedule(scheduler -> {
+				scheduler.sleep(positions.size() * 0.1f);
+				scheduler.terminate();
+			});
 
-			return null;
+			return new RuneEffectModifier.Subject(center);
 		}
 	}
 
-	private RuneMarkPattern(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+	private TokenRunePattern(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
 		super(blueprint, index, composition, configuration);
 	}
 }
