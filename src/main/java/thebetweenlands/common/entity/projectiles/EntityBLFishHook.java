@@ -1,5 +1,6 @@
 package thebetweenlands.common.entity.projectiles;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -20,13 +21,15 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.item.tools.ItemBLFishingRod;
 
-public class EntityBLFishHook extends EntityFishHook {
+public class EntityBLFishHook extends EntityFishHook implements IEntityAdditionalSpawnData {
 
 	private static final DataParameter<Boolean> IS_BAITED = EntityDataManager.createKey(EntityBLFishHook.class, DataSerializers.BOOLEAN);
 	public boolean inGround;
@@ -91,7 +94,7 @@ public class EntityBLFishHook extends EntityFishHook {
 	public EntityPlayer getAngler() {
 		return angler;
 	}
-	
+
 	@Override
     public void setLureSpeed(int speed) {}
 	
@@ -136,7 +139,10 @@ public class EntityBLFishHook extends EntityFishHook {
 
 	@Override
 	public void onUpdate() {
-		super.onUpdate();
+        if (!this.world.isRemote)
+            this.setFlag(6, this.isGlowing());
+
+        this.onEntityUpdate();
 
 		if (getAngler() == null) {
 			setDead();
@@ -299,7 +305,7 @@ public class EntityBLFishHook extends EntityFishHook {
 			if (caughtEntity != null) {
 				bringInHookedEntity();
 				world.setEntityState(this, (byte) 31);
-				i = (int) ((EntityLivingBase) caughtEntity).getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+				i = (int) ((EntityAnadia) caughtEntity).getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
 			}
 
 			if (inGround)
@@ -344,7 +350,6 @@ public class EntityBLFishHook extends EntityFishHook {
 	@Override
 	public void setDead() {
 		super.setDead();
-
 		if (getAngler() != null)
 			getAngler().fishEntity = null;
 	}
@@ -356,4 +361,18 @@ public class EntityBLFishHook extends EntityFishHook {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 	}
+
+	@Override
+	public void writeSpawnData(ByteBuf buffer) {
+		buffer.writeInt(getAngler().getEntityId());
+	}
+
+	@Override
+	public void readSpawnData(ByteBuf buffer) {
+		int entityPlayerID = buffer.readInt();
+		EntityPlayer playerIn = (EntityPlayer) world.getEntityByID(entityPlayerID);
+		EntityBLFishHook entityFishHookIn = (EntityBLFishHook) ((EntityPlayer) world.getEntityByID(entityPlayerID)).fishEntity;
+		ObfuscationReflectionHelper.setPrivateValue(EntityBLFishHook.class, entityFishHookIn, playerIn, new String[] { "angler", "field_146042_b" });
+	}
+
 }

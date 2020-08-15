@@ -25,10 +25,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.projectiles.EntityBLFishHook;
-import thebetweenlands.common.network.clientbound.MessageBLFishHookSpawn;
 import thebetweenlands.util.NBTHelper;
 import thebetweenlands.util.TranslationHelper;
 
@@ -49,7 +47,7 @@ public class ItemBLFishingRod extends Item {
 					boolean offHand = entityIn.getHeldItemOffhand() == stack;
 					if (entityIn.getHeldItemMainhand().getItem() instanceof ItemBLFishingRod)
 						offHand = false;
-					return (mainHand || offHand)  && entityIn instanceof EntityPlayer && ((EntityPlayer)entityIn).fishEntity != null ? 1.0F : 0.0F;
+					return (mainHand || offHand) && entityIn instanceof EntityPlayer && ((EntityPlayer)entityIn).fishEntity != null && ((EntityPlayer)entityIn).fishEntity instanceof EntityBLFishHook ? 1.0F : 0.0F;
 				}
 			}
 		});
@@ -130,15 +128,12 @@ public class ItemBLFishingRod extends Item {
 				if(stack.getTagCompound().getBoolean("baited"))
 					entityFishHook.setBaited(true);
 				world.spawnEntity(entityFishHook);
-				player.fishEntity = entityFishHook;
-				//Packet handling here I guess
-			    TheBetweenlands.networkWrapper.sendToDimension(new MessageBLFishHookSpawn(player.getEntityId(), entityFishHook.getEntityId()), player.dimension);
 			}
 
 			player.swingArm(handIn);
 			player.addStat(StatList.getObjectUseStats(this));
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 	}
 
 	private static final ImmutableList<String> STACK_NBT_EXCLUSIONS = ImmutableList.of("baited");
