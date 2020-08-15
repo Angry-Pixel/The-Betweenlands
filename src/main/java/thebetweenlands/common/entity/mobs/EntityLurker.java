@@ -122,6 +122,7 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
         targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
         targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityDragonFly.class, true));
         targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityAngler.class, true));
+        targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityAnadia.class, true));
     }
 
     @Override
