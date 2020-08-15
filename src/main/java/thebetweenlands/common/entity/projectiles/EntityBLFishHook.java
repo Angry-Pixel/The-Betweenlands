@@ -364,15 +364,18 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {
-		buffer.writeInt(getAngler().getEntityId());
+		if (getAngler() != null)
+			buffer.writeInt(getAngler().getEntityId());
 	}
 
 	@Override
 	public void readSpawnData(ByteBuf buffer) {
-		int entityPlayerID = buffer.readInt();
-		EntityPlayer playerIn = (EntityPlayer) world.getEntityByID(entityPlayerID);
-		EntityBLFishHook entityFishHookIn = (EntityBLFishHook) ((EntityPlayer) world.getEntityByID(entityPlayerID)).fishEntity;
-		ObfuscationReflectionHelper.setPrivateValue(EntityBLFishHook.class, entityFishHookIn, playerIn, new String[] { "angler", "field_146042_b" });
+		if(buffer.isReadable()) {
+			int entityPlayerID = buffer.readInt();
+			EntityPlayer playerIn = (EntityPlayer) world.getEntityByID(entityPlayerID);
+			EntityBLFishHook entityFishHookIn = (EntityBLFishHook) ((EntityPlayer) world.getEntityByID(entityPlayerID)).fishEntity;
+			ObfuscationReflectionHelper.setPrivateValue(EntityBLFishHook.class, entityFishHookIn, playerIn, new String[] { "angler", "field_146042_b" });
+		}
 	}
 
 }
