@@ -61,7 +61,7 @@ public class ItemFishBait extends Item {
 
 	@Override
 	public Entity createEntity(World world, Entity location, ItemStack stack) {
-		EntityFishBait entity = new EntityFishBait(world, location.posX, location.posY, location.posZ, stack);
+		EntityFishBait entity = new EntityFishBait(world, location.posX, location.posY + ((double) location.getEyeHeight()* 0.75D - 0.10000000149011612D), location.posZ, stack);
 		entity.motionX = location.motionX;
 		entity.motionY = location.motionY;
 		entity.motionZ = location.motionZ;
