@@ -75,7 +75,9 @@ public final class TokenRuneItem extends AbstractRune<TokenRuneItem> {
 						if(!stack.isEmpty() && stack.getItem() == this.item) {
 							Entity entity = context.getUser().getEntity();
 
-							IRuneItemStackAccess access = new InventoryRuneItemStackAccess(inventory, i, s -> !s.isEmpty() && s.getItem() == this.item && (entity == null || entity.isEntityAlive()));
+							IRuneItemStackAccess access = new InventoryRuneItemStackAccess(inventory, i,
+									s -> !s.isEmpty() && s.getItem() == this.item && (entity == null || entity.isEntityAlive()),
+									s -> s.isEmpty() && (entity == null || entity.isEntityAlive()));
 
 							if(state.getConfiguration() == CONFIGURATION_1) {
 								OUT_ITEM_1.set(io, access);

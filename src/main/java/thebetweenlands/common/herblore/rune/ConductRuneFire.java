@@ -161,13 +161,13 @@ public final class ConductRuneFire extends AbstractRune<ConductRuneFire> {
 				}
 				
 				@Override
-				public int getColorModifier() {
+				public int getColorModifier(RuneEffectModifier.Subject subject, int index) {
 					return 0xFFE8440E;
 				}
 				
 				@Override
-				public boolean hasColorModifier() {
-					return true;
+				public int getColorModifierCount(RuneEffectModifier.Subject subject) {
+					return 1;
 				}
 			};
 		}

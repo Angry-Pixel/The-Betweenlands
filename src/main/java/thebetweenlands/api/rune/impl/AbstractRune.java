@@ -478,62 +478,65 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 					}
 
 					@Override
-					public int getColorModifier() {
-						int r = 0;
-						int g = 0;
-						int b = 0;
-						int a = 0;
-
-						int count = 0;
-
-						for(RuneEffectModifier effect : effects) {
-							if(effect.hasColorModifier()) {
-								int color = effect.getColorModifier();
-
-								r += (color >> 16) & 255;
-								g += (color >> 8) & 255;
-								b += color & 255;
-								a += (color >> 24) & 255;
-
-								count++;
-							}
-						}
-
-						return count > 0 ? (((a / count) << 24) | ((r / count) << 16) | ((g / count) << 8) | (b / count)) : 0xFFFFFFFF;
-					}
-
-					@Override
-					public int getColorModifier(int index) {
+					public int getColorModifier(RuneEffectModifier.Subject subject, int index) {
 						if(index < 0 || index > effects.size()) {
 							return 0xFFFFFFFF;
 						}
 
-						int currentIndex = 0;
+						int accumulated = 0;
 
 						for(RuneEffectModifier effect : effects) {
-							if(effect.hasColorModifier()) {
-								if(currentIndex == index) {
-									return effect.getColorModifier();
-								}
+							int count = effect.getColorModifierCount(subject);
 
-								currentIndex++;
+							if(index >= accumulated && index < accumulated + count) {
+								return effect.getColorModifier(subject, index - accumulated);
 							}
+
+							accumulated += count;
 						}
 
 						return 0xFFFFFFFF;
 					}
 
 					@Override
-					public boolean hasColorModifier() {
+					public int getColorModifierCount(RuneEffectModifier.Subject subject) {
+						int count = 0;
 						for(RuneEffectModifier effect : effects) {
-							if(effect.hasColorModifier()) {
-								return true;
-							}
+							count += effect.getColorModifierCount(subject);
 						}
-						return false;
+						return count;
+					}
+
+					@Override
+					public void render(
+							RuneEffectModifier.Subject subject, int index,
+							float red, float green, float blue, float alpha,
+							float sizeX, float sizeY, float sizeZ,
+							float partialTicks) {
+						int accumulated = 0;
+
+						for(RuneEffectModifier effect : effects) {
+							int count = effect.getRendererCount(subject);
+
+							if(index >= accumulated && index < accumulated + count) {
+								effect.render(subject, index - accumulated, red, green, blue, alpha, sizeX, sizeY, sizeZ, partialTicks);
+								return;
+							}
+
+							accumulated += count;
+						}
+					}
+
+					@Override
+					public int getRendererCount(RuneEffectModifier.Subject subject) {
+						int count = 0;
+						for(RuneEffectModifier effect : effects) {
+							count += effect.getRendererCount(subject);
+						}
+						return count;
 					}
 				};
-			}
+			};
 		}
 	}
 

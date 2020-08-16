@@ -114,28 +114,53 @@ public class RuneEffectModifier {
 	}
 
 	/**
-	 * Returns a color modifier to be applied to the effects of this modifier's subject.
+	 * Returns a color modified to be applied to the effects of this modifier's subject.
+	 * This method allows returning multiple different colors that may be used by multi colored effects.
+	 * @param subject subject this rune effect modifier applies to
+	 * @param index index of the color modifier. May be any arbitrary number, but usually starts at 0.
 	 * @return
 	 */
-	public int getColorModifier() {
+	public int getColorModifier(@Nullable Subject subject, int index) {
 		return 0xFFFFFFFF;
 	}
 
 	/**
-	 * Returns a color modified to be applied to the effects of this modifier's subject.
-	 * This method allows returning multiple different colors that may be used by multi colored effects.
-	 * @param index index of the color modifier. May be any arbitrary number, but usually starts at 0.
+	 * Returns how many color modifiers this rune effect modifier has.
+	 * @param subject subject this rune effect modifier applies to
 	 * @return
 	 */
-	public int getColorModifier(int index) {
-		return this.getColorModifier();
+	public int getColorModifierCount(@Nullable Subject subject) {
+		return 0;
 	}
 
 	/**
-	 * Returns whether this rune effect modifier has a color modifier.
+	 * Renders the effect modifier.
+	 * This method allows returning multiple different colors that may be used by multi colored effects.
+	 * @param subject subject this rune effect modifier applies to
+	 * @param index index of the renderer. May be any arbitrary number, but usually starts at 0.
+	 * @param red Red component multiplier
+	 * @param green Green component multiplier
+	 * @param blue Blue component multiplier
+	 * @param alpha Alpha component multiplier
+	 * @param sizeX X size the renderer should fit into, [-sizeX, sizeX]
+	 * @param sizeY Y size the renderer should fit into, [-sizeY, sizeY]
+	 * @param sizeZ Z size the renderer should fit into, [-sizeZ, sizeZ]
+	 * @param partialTicks Partial render ticks
+	 */
+	public void render(
+			@Nullable Subject subject, int index,
+			float red, float green, float blue, float alpha,
+			float sizeX, float sizeY, float sizeZ,
+			float partialTicks) {
+
+	}
+
+	/**
+	 * Returns how many renderers this rune effect modifier has.
+	 * @param subject subject this rune effect modifier applies to
 	 * @return
 	 */
-	public boolean hasColorModifier() {
-		return false;
+	public int getRendererCount(@Nullable Subject subject) {
+		return 0;
 	}
 }

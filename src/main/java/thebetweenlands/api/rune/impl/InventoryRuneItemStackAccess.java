@@ -9,18 +9,21 @@ import thebetweenlands.api.rune.IRuneItemStackAccess;
 public class InventoryRuneItemStackAccess implements IRuneItemStackAccess {
 	private final IInventory inventory;
 	private final int slot;
-	private final Predicate<ItemStack> predicate;
+	private final Predicate<ItemStack> outputPredicate;
+	private final Predicate<ItemStack> inputPredicate;
 
 
-	public InventoryRuneItemStackAccess(IInventory inventory, int slot, Predicate<ItemStack> predicate) {
+	public InventoryRuneItemStackAccess(IInventory inventory, int slot, Predicate<ItemStack> outputPredicate, Predicate<ItemStack> inputPredicate) {
 		this.inventory = inventory;
 		this.slot = slot;
-		this.predicate = predicate;
+		this.outputPredicate = outputPredicate;
+		this.inputPredicate = inputPredicate;
 	}
 
 	@Override
 	public boolean isAccessValid() {
-		return this.predicate.test(this.inventory.getStackInSlot(this.slot));
+		ItemStack stack = this.inventory.getStackInSlot(this.slot);
+		return this.outputPredicate.test(stack) || this.inputPredicate.test(stack);
 	}
 
 	@Override

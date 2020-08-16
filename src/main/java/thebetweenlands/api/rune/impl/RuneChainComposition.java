@@ -427,7 +427,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 		public void terminate() {
 			this.terminated = true;
 		}
-
+		
 		@Override
 		public int getUpdateCount() {
 			return this.updateCount;
