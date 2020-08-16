@@ -5,6 +5,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import thebetweenlands.common.item.herblore.ItemCrushed.EnumItemCrushed;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class RecipesFishBait extends net.minecraftforge.registries.IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
@@ -29,23 +31,23 @@ public class RecipesFishBait extends net.minecraftforge.registries.IForgeRegistr
 					hasBaitItem++;
 //				else if (itemstack.getItem() == ItemRegistry.SNAIL_FLESH_RAW)
 //					addSaturation++;
-				else if (itemstack.getItem() == ItemRegistry.CHRISTMAS_PUDDING)
+				else if (EnumItemCrushed.GROUND_BETWEENSTONE_PEBBLE.isItemOf(itemstack))
 					addSinkSpeed++;
-				else if (itemstack.getItem() == ItemRegistry.GLUE)
+				else if (EnumItemMisc.TAR_DRIP.isItemOf(itemstack))
 					addDissolveTime++;
 				else if (itemstack.getItem() == ItemRegistry.CRAB_STICK)
 					addRange++;
-				else if (itemstack.getItem() == ItemRegistry.BULB_CAPPED_MUSHROOM_ITEM)
+				else if (EnumItemCrushed.GROUND_BULB_CAPPED_MUSHROOM.isItemOf(itemstack))
 					addGlowing = true;
 //				else if (itemstack.getItem() == ItemRegistry.CANDY_BLUE)
 //					addSaturation--;
-				else if (itemstack.getItem() == ItemRegistry.MARSHMALLOW_PINK)
+				else if (EnumItemCrushed.GROUND_BLADDERWORT_STALK.isItemOf(itemstack))
 					addSinkSpeed--;
-				else if (itemstack.getItem() == ItemRegistry.SAP_SPIT)
+				else if (EnumItemCrushed.GROUND_MILKWEED.isItemOf(itemstack))
 					addDissolveTime--;
-				else if (itemstack.getItem() == ItemRegistry.SLUDGE_BALL)
+				else if (itemstack.getItem() == ItemRegistry.SAP_SPIT)
 					addRange--;
-				else if (itemstack.getItem() == ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM)
+				else if (itemstack.getItem() == ItemRegistry.SLUDGE_BALL)
 					minusGlowing = true;
 				else
 					return false;
