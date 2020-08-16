@@ -57,10 +57,14 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	private static final DataParameter<Boolean> IS_LEAPING = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> HUNGER_COOLDOWN = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> STAMINA_TICKS = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
+	private static final DataParameter<Byte> FISH_COLOUR = EntityDataManager.<Byte>createKey(EntityAnadia.class, DataSerializers.BYTE);
 
 	private static float BASE_MULTIPLE = 1F; // just a arbitrary number to increase the size multiplier
 	public EntityAnadia.AIFindBait aiFindBait;
 	public EntityAnadia.AIFindHook aiFindHook;
+	public byte BASE = 0;
+	public byte SILVER = 1;
+	public byte SOOTY = 32;// NYI just making this higher so we can addd others inbetween
 	
 	public EntityAnadia(World world) {
 		super(world);
@@ -106,6 +110,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         dataManager.register(IS_LEAPING, false);
         dataManager.register(HUNGER_COOLDOWN, 0);
         dataManager.register(STAMINA_TICKS, 40);
+        dataManager.register(FISH_COLOUR, (byte) 0);
     }
 
 	@Override
@@ -121,6 +126,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         setBodyType((byte)rand.nextInt(3));
         setTailType((byte)rand.nextInt(3));
         setFishSize(Math.round(Math.max(0.125F, rand.nextFloat()) * 16F) / 16F);
+        setTailType((byte)rand.nextInt(3));
+        setFishColour((byte)rand.nextInt(2)); // testing colours - TODO set this based on biome spawned in /other possible things
         return super.onInitialSpawn(difficulty, livingdata);
     }
 
@@ -179,6 +186,14 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         dataManager.set(TAIL_TYPE, type);
     }
 
+    public byte getFishColour() {
+        return dataManager.get(FISH_COLOUR);
+    }
+
+    private void setFishColour(byte colour) {
+        dataManager.set(FISH_COLOUR, colour);
+    }
+
     public boolean isLeaping() {
         return dataManager.get(IS_LEAPING);
     }
@@ -210,6 +225,9 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
             rotationYaw = rotationYawHead;
             renderYawOffset = rotationYawHead;
         }
+        if (FISH_COLOUR.equals(key)) {
+            setFishColour(getFishColour());
+        }
         super.notifyDataManagerChange(key);
     }
  
@@ -229,6 +247,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		nbt.setByte("tailType", getTailType());
 		nbt.setFloat("fishSize", getFishSize());
 		nbt.setInteger("hunger", getHungerCooldown());
+		nbt.setByte("fishColour", getFishColour());
 	}
 
 	@Override
@@ -239,6 +258,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		setTailType(nbt.getByte("tailType"));
 		setFishSize(nbt.getFloat("fishSize"));
 		setHungerCooldown(nbt.getInteger("hunger"));
+		setFishColour(nbt.getByte("fishColour"));
 	}
 
 	//cumulative speed, health, strength, & stamina modifiers

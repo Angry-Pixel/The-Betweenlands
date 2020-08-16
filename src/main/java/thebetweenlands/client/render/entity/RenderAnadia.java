@@ -11,9 +11,18 @@ import thebetweenlands.common.entity.mobs.EntityAnadia;
 
 @SideOnly(Side.CLIENT)
 public class RenderAnadia extends RenderLiving<EntityAnadia> {
-	public final static ResourceLocation TEXTURE_1 = new ResourceLocation("thebetweenlands:textures/entity/anadia_1.png");
-	public final static ResourceLocation TEXTURE_2 = new ResourceLocation("thebetweenlands:textures/entity/anadia_2.png");
-	public final static ResourceLocation TEXTURE_3 = new ResourceLocation("thebetweenlands:textures/entity/anadia_3.png");
+	private static final ResourceLocation[] TEXTURE_1 = new ResourceLocation[] {
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_1_base.png"),
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_1_silver.png") };
+	
+	private static final ResourceLocation[] TEXTURE_2 = new ResourceLocation[] {
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_2_base.png"),
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_2_silver.png") };
+	
+	private static final ResourceLocation[] TEXTURE_3 = new ResourceLocation[] {
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_base.png"),
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_silver.png") };
+	
 	public final static ModelAnadia ANADIA_MODEL = new ModelAnadia();
 
 	public RenderAnadia(RenderManager manager) {
@@ -22,7 +31,7 @@ public class RenderAnadia extends RenderLiving<EntityAnadia> {
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityAnadia entity) {
-		return TEXTURE_1;
+		return TEXTURE_1[0];
 	}
 
 	@Override
@@ -39,45 +48,45 @@ public class RenderAnadia extends RenderLiving<EntityAnadia> {
 		GlStateManager.rotate(smoothedPitch, 1F, 0F, 0F);
 		switch (anadia.getHeadType()) {
 			case 0:
-				bindTexture(TEXTURE_1);
+				bindTexture(TEXTURE_1[anadia.getFishColour()]);
 				ANADIA_MODEL.renderHead(anadia.getHeadType(), 0.0625F);
 				break;
 			case 1:
-				bindTexture(TEXTURE_2);
+				bindTexture(TEXTURE_2[anadia.getFishColour()]);
 				ANADIA_MODEL.renderHead(anadia.getHeadType(), 0.0625F);
 				break;
 			case 2:
-				bindTexture(TEXTURE_3);
+				bindTexture(TEXTURE_3[anadia.getFishColour()]);
 				ANADIA_MODEL.renderHead(anadia.getHeadType(), 0.0625F);
 				break;
 		}
 
 		switch (anadia.getBodyType()) {
 			case 0:
-				bindTexture(TEXTURE_1);
+				bindTexture(TEXTURE_1[anadia.getFishColour()]);
 				ANADIA_MODEL.renderBody(anadia.getBodyType(), 0.0625F);
 				break;
 			case 1:
-				bindTexture(TEXTURE_2);
+				bindTexture(TEXTURE_2[anadia.getFishColour()]);
 				ANADIA_MODEL.renderBody(anadia.getBodyType(), 0.0625F);
 				break;
 			case 2:
-				bindTexture(TEXTURE_3);
+				bindTexture(TEXTURE_3[anadia.getFishColour()]);
 				ANADIA_MODEL.renderBody(anadia.getBodyType(), 0.0625F);
 				break;
 		}
 
 		switch (anadia.getTailType()) {
 			case 0:
-				bindTexture(TEXTURE_1);
+				bindTexture(TEXTURE_1[anadia.getFishColour()]);
 				ANADIA_MODEL.renderTail(anadia.getTailType(), 0.0625F);
 				break;
 			case 1:
-				bindTexture(TEXTURE_2);
+				bindTexture(TEXTURE_2[anadia.getFishColour()]);
 				ANADIA_MODEL.renderTail(anadia.getTailType(), 0.0625F);
 				break;
 			case 2:
-				bindTexture(TEXTURE_3);
+				bindTexture(TEXTURE_3[anadia.getFishColour()]);
 				ANADIA_MODEL.renderTail(anadia.getTailType(), 0.0625F);
 				break;
 		} 
