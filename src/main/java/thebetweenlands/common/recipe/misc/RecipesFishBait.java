@@ -14,7 +14,7 @@ public class RecipesFishBait extends net.minecraftforge.registries.IForgeRegistr
     public boolean matches(InventoryCrafting inv, World worldIn) {
         this.resultItem = ItemStack.EMPTY;
         int hasBaitItem = 0;
-        int addSaturation = 0;
+//        int addSaturation = 0;
         int addSinkSpeed = 0;
         int addDissolveTime = 0;
         int addRange = 0;
@@ -27,8 +27,8 @@ public class RecipesFishBait extends net.minecraftforge.registries.IForgeRegistr
 			if (!itemstack.isEmpty()) {
 				if (itemstack.getItem() == ItemRegistry.FISH_BAIT)
 					hasBaitItem++;
-				else if (itemstack.getItem() == ItemRegistry.SNAIL_FLESH_RAW)
-					addSaturation++;
+//				else if (itemstack.getItem() == ItemRegistry.SNAIL_FLESH_RAW)
+//					addSaturation++;
 				else if (itemstack.getItem() == ItemRegistry.CHRISTMAS_PUDDING)
 					addSinkSpeed++;
 				else if (itemstack.getItem() == ItemRegistry.GLUE)
@@ -37,8 +37,8 @@ public class RecipesFishBait extends net.minecraftforge.registries.IForgeRegistr
 					addRange++;
 				else if (itemstack.getItem() == ItemRegistry.BULB_CAPPED_MUSHROOM_ITEM)
 					addGlowing = true;
-				else if (itemstack.getItem() == ItemRegistry.CANDY_BLUE)
-					addSaturation--;
+//				else if (itemstack.getItem() == ItemRegistry.CANDY_BLUE)
+//					addSaturation--;
 				else if (itemstack.getItem() == ItemRegistry.MARSHMALLOW_PINK)
 					addSinkSpeed--;
 				else if (itemstack.getItem() == ItemRegistry.SAP_SPIT)
@@ -67,11 +67,11 @@ public class RecipesFishBait extends net.minecraftforge.registries.IForgeRegistr
 						return false;
 
 					//add stuffs
-					if (stack.getTagCompound().getInteger("saturation") + addSaturation * 20 < 0)
+/*					if (stack.getTagCompound().getInteger("saturation") + addSaturation * 20 < 0)
 						return false;
 					else
 						resultItem.getTagCompound().setInteger("saturation", stack.getTagCompound().getInteger("saturation") + addSaturation * 20);
-
+*/
 					if (stack.getTagCompound().getInteger("sink_speed") + addSinkSpeed < 0)
 						return false;
 					else

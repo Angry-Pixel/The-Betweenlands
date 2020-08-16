@@ -20,7 +20,7 @@ import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityFishBait extends EntityItem {
-	private static final DataParameter<Integer> SATURATION = EntityDataManager.createKey(EntityFishBait.class, DataSerializers.VARINT);
+//	private static final DataParameter<Integer> SATURATION = EntityDataManager.createKey(EntityFishBait.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> SINK_SPEED = EntityDataManager.createKey(EntityFishBait.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> DISSOLVE_TIME = EntityDataManager.createKey(EntityFishBait.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> RANGE = EntityDataManager.createKey(EntityFishBait.class, DataSerializers.VARINT);
@@ -41,7 +41,7 @@ public class EntityFishBait extends EntityItem {
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataManager.register(SATURATION, 200); // ticks before fish are hungry again (lower will be better) 
+ //       dataManager.register(SATURATION, 200); // ticks before fish are hungry again (lower will be better) 
         dataManager.register(SINK_SPEED, 3); // 0 for surface floating ;)
         dataManager.register(DISSOLVE_TIME, 200); //ticks it should exist for in water
         dataManager.register(RANGE, 1); // will increase range somehow probably with an aabb :P
@@ -80,7 +80,7 @@ public class EntityFishBait extends EntityItem {
 		List<EntityAnadia> list = getEntityWorld().getEntitiesWithinAABB(EntityAnadia.class, extendRangeBox());
 		for (Iterator<EntityAnadia> iterator = list.iterator(); iterator.hasNext();) {
 			EntityAnadia fish = iterator.next();
-			if (!fish.isInWater() || fish.getHungerCooldown() > 0 || !fish.canEntityBeSeen(this))
+			if (!fish.isInWater() || !fish.canEntityBeSeen(this) )// || fish.getHungerCooldown() > 0)
 				iterator.remove();
 		}
 		if (list.isEmpty())
@@ -116,7 +116,7 @@ public class EntityFishBait extends EntityItem {
 	public boolean isPushedByWater() {
 		return false;
 	}
-
+/*
     public int getBaitSaturation() {
         return dataManager.get(SATURATION);
     }
@@ -124,7 +124,7 @@ public class EntityFishBait extends EntityItem {
     public void setBaitSaturation(int count) {
         dataManager.set(SATURATION, count);
     }
-    
+*/    
     public int getBaitSinkSPeed() {
         return dataManager.get(SINK_SPEED);
     }

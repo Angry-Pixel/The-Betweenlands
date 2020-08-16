@@ -26,8 +26,8 @@ public class ItemFishBait extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flag) {
-		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("saturation")) {
-			tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.fish_bait.saturation", stack.getTagCompound().getInteger("saturation")));
+		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("sink_speed")) {
+		//	tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.fish_bait.saturation", stack.getTagCompound().getInteger("saturation")));
 			tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.fish_bait.sink_speed", stack.getTagCompound().getInteger("sink_speed")));
 			tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.fish_bait.dissolve_time", stack.getTagCompound().getInteger("dissolve_time")));
 			tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.fish_bait.range", stack.getTagCompound().getInteger("range")));
@@ -41,8 +41,8 @@ public class ItemFishBait extends Item {
 			// basic default here before crafting changes it
 			if (!stack.hasTagCompound())
 				stack.setTagCompound(new NBTTagCompound());
-			if (!stack.getTagCompound().hasKey("saturation"))
-				stack.getTagCompound().setInteger("saturation", 200);
+//			if (!stack.getTagCompound().hasKey("saturation"))
+//				stack.getTagCompound().setInteger("saturation", 200);
 			if (!stack.getTagCompound().hasKey("sink_speed"))
 				stack.getTagCompound().setInteger("sink_speed", 3);
 			if (!stack.getTagCompound().hasKey("dissolve_time"))
@@ -66,7 +66,7 @@ public class ItemFishBait extends Item {
 		entity.motionY = location.motionY;
 		entity.motionZ = location.motionZ;
 		entity.setPickupDelay(10);
-		entity.setBaitSaturation(stack.getTagCompound().getInteger("saturation"));
+//		entity.setBaitSaturation(stack.getTagCompound().getInteger("saturation"));
 		entity.setBaitSinkSpeed(stack.getTagCompound().getInteger("sink_speed"));
 		entity.setBaitDissolveTime(stack.getTagCompound().getInteger("dissolve_time"));
 		entity.setBaitRange(stack.getTagCompound().getInteger("range"));

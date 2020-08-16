@@ -55,7 +55,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	private static final DataParameter<Byte> BODY_TYPE = EntityDataManager.<Byte>createKey(EntityAnadia.class, DataSerializers.BYTE);
 	private static final DataParameter<Byte> TAIL_TYPE = EntityDataManager.<Byte>createKey(EntityAnadia.class, DataSerializers.BYTE);
 	private static final DataParameter<Boolean> IS_LEAPING = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Integer> HUNGER_COOLDOWN = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
+	//private static final DataParameter<Integer> HUNGER_COOLDOWN = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> STAMINA_TICKS = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 	private static final DataParameter<Byte> FISH_COLOUR = EntityDataManager.<Byte>createKey(EntityAnadia.class, DataSerializers.BYTE);
 
@@ -108,7 +108,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         dataManager.register(BODY_TYPE, (byte) 0);
         dataManager.register(TAIL_TYPE, (byte) 0);
         dataManager.register(IS_LEAPING, false);
-        dataManager.register(HUNGER_COOLDOWN, 0);
+      //  dataManager.register(HUNGER_COOLDOWN, 0);
         dataManager.register(STAMINA_TICKS, 40);
         dataManager.register(FISH_COLOUR, (byte) 0);
     }
@@ -201,7 +201,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
     private void setIsLeaping(boolean leaping) {
         dataManager.set(IS_LEAPING, leaping);
     }
-    
+/*    
     public int getHungerCooldown() {
         return dataManager.get(HUNGER_COOLDOWN);
     }
@@ -209,7 +209,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
     private void setHungerCooldown(int count) {
         dataManager.set(HUNGER_COOLDOWN, count);
     }
-
+*/
     public int getStaminaTicks() {
         return dataManager.get(STAMINA_TICKS);
     }
@@ -246,7 +246,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		nbt.setByte("bodyType", getBodyType());
 		nbt.setByte("tailType", getTailType());
 		nbt.setFloat("fishSize", getFishSize());
-		nbt.setInteger("hunger", getHungerCooldown());
+//		nbt.setInteger("hunger", getHungerCooldown());
 		nbt.setByte("fishColour", getFishColour());
 	}
 
@@ -257,7 +257,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		setBodyType(nbt.getByte("bodyType"));
 		setTailType(nbt.getByte("tailType"));
 		setFishSize(nbt.getFloat("fishSize"));
-		setHungerCooldown(nbt.getInteger("hunger"));
+//		setHungerCooldown(nbt.getInteger("hunger"));
 		setFishColour(nbt.getByte("fishColour"));
 	}
 
@@ -377,8 +377,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 						leapAtTarget(getAttackTarget().posX, getAttackTarget().posY, getAttackTarget().posZ);
 			}
 
-			if(getHungerCooldown() >= 0)
-				setHungerCooldown(getHungerCooldown() - 1);
+//			if(getHungerCooldown() >= 0)
+//				setHungerCooldown(getHungerCooldown() - 1);
 
 			//regains stamina over time whilst not hooked
 	        if(!isBeingRidden() && getStaminaTicks() < (int) (getStaminaMods() * 20))
@@ -626,7 +626,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
     	@Override
     	public boolean shouldExecute() {
-    		return anadia.getHungerCooldown() <= 0 && bait == null;
+    		return bait == null;
+    		//return anadia.getHungerCooldown() <= 0 && bait == null;
     	}
 
     	@Override
@@ -637,7 +638,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
     	@Override
     	public boolean shouldContinueExecuting() {
-    		return anadia.getHungerCooldown() <= 0 && bait != null && !bait.isDead;
+    		return bait != null && !bait.isDead;
+    	//	return anadia.getHungerCooldown() <= 0 && bait != null && !bait.isDead;
         }
 
 		@Override
@@ -661,7 +663,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 						if (distance <= 1F) {
 							anadia.getMoveHelper().setMoveTo(x, y, z, anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
-							anadia.setHungerCooldown(bait.getBaitSaturation());
+							//anadia.setHungerCooldown(bait.getBaitSaturation());
 							bait.getItem().shrink(1);
 							if (bait.getItem().getCount() <= 0)
 								bait.setDead();
@@ -716,7 +718,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
     	@Override
     	public boolean shouldExecute() {
-    		return anadia.getHungerCooldown() <= 0 && hook == null;
+    		return hook == null;
+ //   		return anadia.getHungerCooldown() <= 0 && hook == null;
     	}
 
     	@Override
@@ -727,7 +730,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
     	@Override
     	public boolean shouldContinueExecuting() {
-    		return  anadia.getHungerCooldown() <= 0 && hook != null && !hook.isDead &&  hook.getBaited() ? true : anadia.getHungerCooldown() <= 0 && hook != null && !hook.isDead && (anadia.getEntityWorld().rand.nextInt(50) == 0 && !hook.getBaited());
+    		return   hook != null && !hook.isDead &&  hook.getBaited() ? true : hook != null && !hook.isDead && (anadia.getEntityWorld().rand.nextInt(50) == 0 && !hook.getBaited());
+//    		return  anadia.getHungerCooldown() <= 0 && hook != null && !hook.isDead &&  hook.getBaited() ? true : anadia.getHungerCooldown() <= 0 && hook != null && !hook.isDead && (anadia.getEntityWorld().rand.nextInt(50) == 0 && !hook.getBaited());
         }
 
 		@Override
@@ -751,7 +755,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 						if (distance <= 1F) {
 							anadia.getMoveHelper().setMoveTo(x, y, z, anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
-							anadia.setHungerCooldown(600);
+						//	anadia.setHungerCooldown(600);
 							anadia.setIsLeaping(false);
 							hook.caughtEntity = anadia;
 							hook.startRiding(anadia, true);
