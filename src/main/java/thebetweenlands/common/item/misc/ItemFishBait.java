@@ -19,7 +19,8 @@ import thebetweenlands.util.TranslationHelper;
 public class ItemFishBait extends Item {
 
 	public ItemFishBait() {
-		setMaxStackSize(64);
+		setMaxStackSize(1);
+		setMaxDamage(64);
 		setCreativeTab(BLCreativeTabs.ITEMS);
 	}
 

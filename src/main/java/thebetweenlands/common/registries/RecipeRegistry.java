@@ -73,6 +73,7 @@ import thebetweenlands.common.recipe.misc.RecipeLurkerSkinPouchUpgrades;
 import thebetweenlands.common.recipe.misc.RecipeMarshRunnerBoots;
 import thebetweenlands.common.recipe.misc.RecipeMummyBait;
 import thebetweenlands.common.recipe.misc.RecipeSapSpitCleanTool;
+import thebetweenlands.common.recipe.misc.RecipeWeedwoodFishingRod;
 import thebetweenlands.common.recipe.misc.RecipesAspectVials;
 import thebetweenlands.common.recipe.misc.RecipesCircleGems;
 import thebetweenlands.common.recipe.misc.RecipesCoating;
@@ -100,6 +101,7 @@ public class RecipeRegistry {
 	public static final ResourceLocation SAP_SPIT_CLEAN_TOOL = new ResourceLocation(ModInfo.ID, "sap_spit_clean_tool");
 	public static final ResourceLocation GRAPPLING_HOOK_UPGRADE = new ResourceLocation(ModInfo.ID, "grappling_hook_upgrade");
 	public static final ResourceLocation FISH_BAIT = new ResourceLocation(ModInfo.ID, "recipe_fish_bait");
+	public static final ResourceLocation WEEDWOOD_FISHING_ROD_PARTS = new ResourceLocation(ModInfo.ID, "weedwood_fishing_rod_parts");
 
 	private RecipeRegistry() { }
 
@@ -228,6 +230,7 @@ public class RecipeRegistry {
 		registry.register(new RecipeSapSpitCleanTool().setRegistryName(SAP_SPIT_CLEAN_TOOL));
 		registry.register(new RecipeGrapplingHookUpgrades().setRegistryName(GRAPPLING_HOOK_UPGRADE));
 		registry.register(new RecipesFishBait().setRegistryName(FISH_BAIT));
+		registry.register(new RecipeWeedwoodFishingRod().setRegistryName(WEEDWOOD_FISHING_ROD_PARTS));
 	}
 
 	private static void registerSmelting() {
@@ -525,8 +528,8 @@ public class RecipeRegistry {
 		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.CRITTER));
 		
 		//Fishing
-		PestleAndMortarRecipe.addRecipe(new ItemStack(ItemRegistry.FISH_BAIT, 4), new ItemStack(ItemRegistry.TINY_SLUDGE_WORM));
-		PestleAndMortarRecipe.addRecipe(new ItemStack(ItemRegistry.FISH_BAIT, 2), new ItemStack(ItemRegistry.TINY_SLUDGE_WORM_HELPER));
+		PestleAndMortarRecipe.addRecipe(new ItemStack(ItemRegistry.FISH_BAIT, 1), new ItemStack(ItemRegistry.TINY_SLUDGE_WORM));
+		PestleAndMortarRecipe.addRecipe(new ItemStack(ItemRegistry.FISH_BAIT, 1), new ItemStack(ItemRegistry.TINY_SLUDGE_WORM_HELPER));
 	}
 
 	private static void registerAnimatorRecipes() {

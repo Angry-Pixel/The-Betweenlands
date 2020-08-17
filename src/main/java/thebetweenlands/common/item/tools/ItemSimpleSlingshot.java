@@ -139,7 +139,9 @@ public class ItemSimpleSlingshot extends Item implements ICorrodible, IAnimatorR
 
 					if (ammo.getItem() == ItemRegistry.FISH_BAIT) {
 						ItemFishBait itemAmmo = (ItemFishBait) ammo.getItem();
-						EntityFishBait bait = (EntityFishBait) itemAmmo.createEntity(world, player, ammo.splitStack(1));
+						EntityFishBait bait = (EntityFishBait) itemAmmo.createEntity(world, player, ammo.copy());
+						bait.setInfinitePickupDelay();
+						ammo.damageItem(1, player);
 						bait.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, strength * 3.0F, 1.0F);
 						fireBaitAmmo(player, stack, bait, strength);
 					}

@@ -50,6 +50,11 @@ public class EntityFishBait extends EntityItem {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+
+		if(!getEntityWorld().isRemote)
+			if(ticksExisted >= getBaitDissolveTime() && cannotPickup())
+				setDead();
+
 		if(isInWater()) {
 			motionX *= 0.9D;
 			motionY = -(float) getBaitSinkSPeed() * 0.02D;
@@ -57,13 +62,9 @@ public class EntityFishBait extends EntityItem {
 			if(!getEntityWorld().isRemote) {
 				if(!hasNoGravity())
 					setNoGravity(true);
-				if(ticksExisted >= getBaitDissolveTime())
-					setDead();
-			
 			if(getBaitRange() >= 1)
 				lureCloseFish();
 			}
-			
 		} else {
 			if(!getEntityWorld().isRemote)
 				if(hasNoGravity())

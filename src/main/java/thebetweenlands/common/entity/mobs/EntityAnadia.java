@@ -651,7 +651,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 					double x = bait.posX;
 					double y = bait.posY;
 					double z = bait.posZ;
-					if (!bait.cannotPickup()) {
+					if (bait.cannotPickup()) {
 						if (distance >= 1F) {
 							anadia.getLookHelper().setLookPosition(x, y, z, 20.0F, 8.0F);
 							moveToItem(bait);
