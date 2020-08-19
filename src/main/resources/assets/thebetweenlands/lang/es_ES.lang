@@ -471,6 +471,10 @@ tile.thebetweenlands.rotten_plank_fence_gate.name=Puerta de Valla de Tablas Podr
 tile.thebetweenlands.censer.name=Inciensario
 tile.thebetweenlands.weedwood_barrel.name=Barril de Madera Viva
 tile.thebetweenlands.syrmorite_barrel.name=Barril de Sirmorita
+tile.thebetweenlands.rune_weaving_table.name=Mesa de tejer Runas
+tile.thebetweenlands.rune_carving_table.name=Mesa de tallado de Runas
+tile.thebetweenlands.scrivener_sulfur_mark.name=Marca de azufre de Scrivener
+tile.thebetweenlands.scrivener_burnt_mark.name=Quemadura de Scrivener
 
 # Items
 
@@ -874,6 +878,24 @@ item.thebetweenlands.ancient_chestplate.name=Pechera Ancestral
 item.thebetweenlands.ancient_helmet.name=Yelmo Ancestral
 item.thebetweenlands.ancient_leggings.name=Grebas Ancestrales
 
+item.thebetweenlands.rune_chain.name=Cadena de Runas
+item.thebetweenlands.scrivener_tool.name=Herramienta de Scrivener
+item.thebetweenlands.weedwood_runelet.name=Runa de Madera Viva
+item.thebetweenlands.pitstone_runelet.name=Runa de Piedra Abisal
+item.thebetweenlands.dentrothyst_orange_runelet.name=Runa de Dendrita Naranja
+item.thebetweenlands.dentrothyst_green_runelet.name=Runa de Dendrita Verde
+item.thebetweenlands.bone_runelet.name=Runa de Hueso
+item.thebetweenlands.ancient_runelet.name=Runa Ancestral
+item.thebetweenlands.unknown_rune.name=Runa Misteriosa
+item.thebetweenlands.initiate_rune.carved.name=Runa de Inicio
+item.thebetweenlands.token_rune.carved.name=Runa simbólica
+item.thebetweenlands.gating_rune.carved.name=Runa de Apertura
+item.thebetweenlands.conduct_rune.carved.name=Runa de Conducta
+item.thebetweenlands.initiate_rune.infused.name=Runa de Inicio - %1$s
+item.thebetweenlands.token_rune.infused.name=Runa simbólica - %1$s
+item.thebetweenlands.gating_rune.infused.name=Runa de Apertura - %1$s
+item.thebetweenlands.conduct_rune.infused.name=Runa de Conducta - %1$s
+
 # Herbologia
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Frasco de Dendrita verde
 item.thebetweenlands.elixir.dentrothyst_vial.orange.name=Frasco de Dendrita naranja
@@ -1092,6 +1114,20 @@ tooltip.bl.recipes.censer_secondary=Incensario (segundario)
 tooltip.bl.recipes.purifier=Purificador
 tooltip.bl.recipes.mortar=Mortero
 
+tooltip.thebetweenlands.initiate_rune.carved=Material: %1$s
+tooltip.thebetweenlands.initiate_rune.infused=Material: %1$s\nEsencia: %2$s\nNivel: %3$s\nEfecto: %4$s
+tooltip.thebetweenlands.token_rune.carved=Material: %1$s
+tooltip.thebetweenlands.token_rune.infused=Material: %1$s\nEsencia: %2$s\nNivel: %3$s\nEfecto: %4$s
+tooltip.thebetweenlands.gating_rune.carved=Material: %1$s
+tooltip.thebetweenlands.gating_rune.infused=Material: %1$s\nEsencia: %2$s\nNivel: %3$s\nEfecto: %4$s
+tooltip.thebetweenlands.conduct_rune.carved=Material: %1$s
+tooltip.thebetweenlands.conduct_rune.infused=Material: %1$s\nEsencia: %2$s\nNivel: %3$s\nEfecto: %4$s
+
+tooltip.thebetweenlands.rune.gating_block.unbound=Desvinculado
+tooltip.thebetweenlands.rune.gating_block.bound=Vinculo: %s
+
+tooltip.thebetweenlands.rune.token_item.unbound=Desvinculado
+tooltip.thebetweenlands.rune.token_item.bound=Objeto Vinculado: %s
 
 # Chat
 chat.foodSickness.fine.0=Ah, que refrescante
@@ -1220,6 +1256,8 @@ chat.chiromaw_tame.obstructed=No puedes desmontar de tu Chiromaw aquí
 chat.chiromaw_matriarch_nest.tainted=Tu olor ha contaminado este nido para siempre - Los Chiromaws se irán para no volver
 
 chat.draeton_dismount_timer=Desmontarás en %s...
+
+chat.pattern_rune_set_origin=Establece el origen agachandote.
 
 # Damage Source
 death.attack.suffocation=%s se ha asfixiado en una nube de Gas Letal
@@ -1642,6 +1680,120 @@ gui.bl.draeton.main.puller=Ranura de tracción:\n§7 - Libélula\n§7 - Luciérn
 gui.bl.draeton.main.upgrade_utility=Ranura de Mejora:\n§7 - Bolsa de Piel de Pizzi\n§7 - Mejora de Mesa de Crafteo\n§7 - Mejora de Horno
 gui.bl.draeton.main.upgrade_anchor=Ranura de Ancla:\n§7 - Mejora de Ancla
 
+
+# Runes
+rune.token.unknown=Runa Simbólica
+
+rune.token.thebetweenlands.any.singular=Cualquier Simbolo
+rune.token.thebetweenlands.any.plural=Cualquier Simbolo
+rune.token.thebetweenlands.block.singular=Bloque de Simbolo
+rune.token.thebetweenlands.block.plural=Bloque de Simbolos
+rune.token.thebetweenlands.entity.singular=Entidad Simbolo
+rune.token.thebetweenlands.entity.plural=Entidad de Simbolos
+rune.token.thebetweenlands.position.singular=Posicion de Simbolo
+rune.token.thebetweenlands.position.plural=Posicion de Simbolos
+rune.token.thebetweenlands.direction.singular=Direccion de Simbolo
+rune.token.thebetweenlands.direction.plural=Direccion de Simbolos
+
+rune.input=Entrada
+rune.output=Salida
+
+rune.gui.inputs=Dentro:
+rune.gui.outputs=Fuera:
+
+rune_tier.tier_1.name=I
+rune_tier.tier_2.name=II
+rune_tier.tier_3.name=III
+
+rune_material.thebetweenlands.weedwood.name=Madera Viva
+rune_material.thebetweenlands.pitstone.name=Piedra Abisal
+rune_material.thebetweenlands.dentrothyst_green.name=Dendrita Verde
+rune_material.thebetweenlands.dentrothyst_orange.name=Dendrita Naranja
+rune_material.thebetweenlands.bone.name=Hueso
+rune_material.thebetweenlands.ancient.name=Ancestral
+
+rune.thebetweenlands.no_effect.name=Sin efecto
+
+rune.thebetweenlands.initiate_water.name=Agua
+rune.thebetweenlands.initiate_water.configuration.0.title=<underline>Agua</underline>
+rune.thebetweenlands.initiate_water.configuration.0.description=Se activara al entrar al Agua
+
+rune.item.thebetweenlands.test_rune_fire.configuration.0.title=<underline>Bloque de Fuego</underline>
+rune.item.thebetweenlands.test_rune_fire.configuration.0.description=Prende fuego al bloque marcado
+rune.item.thebetweenlands.test_rune_fire.configuration.0.input.0.description=Bloque para prender fuego
+
+rune.item.thebetweenlands.test_rune_fire.configuration.1.title=<underline>Criatura de Fuego</underline>
+rune.item.thebetweenlands.test_rune_fire.configuration.1.description=Prende fuego a la Criatura marcada
+rune.item.thebetweenlands.test_rune_fire.configuration.1.input.0.description=Criatura para prender fuego
+
+rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.title=<underline>Destroy Block</underline>
+rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.description=Destroys the marked block
+rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.input.0.description=Block to destroy
+
+rune.item.thebetweenlands.test_rune_mark_area.configuration.0.title=<underline>Mark Area</underline>
+rune.item.thebetweenlands.test_rune_mark_area.configuration.0.description=Marks block area around the rune chain user
+rune.item.thebetweenlands.test_rune_mark_area.configuration.0.output.0.description=Blocks in area around rune chain user
+
+rune.item.thebetweenlands.test_rune_mark_area.configuration.1.title=<underline>Mark Area</underline>
+rune.item.thebetweenlands.test_rune_mark_area.configuration.1.description=Marks block area around a marked center block
+rune.item.thebetweenlands.test_rune_mark_area.configuration.1.input.0.description=Center block
+rune.item.thebetweenlands.test_rune_mark_area.configuration.1.output.0.description=Blocks in the area around center block
+
+rune.item.thebetweenlands.test_rune_select_grass.configuration.0.title=<underline>Select Grass</underline>
+rune.item.thebetweenlands.test_rune_select_grass.configuration.0.description=Only allows the block mark if the block is grass. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+rune.item.thebetweenlands.test_rune_select_grass.configuration.0.input.0.description=Block to filter
+
+rune.item.thebetweenlands.test_rune_projectile.configuration.0.title=<underline>Projectile</underline>
+rune.item.thebetweenlands.test_rune_projectile.configuration.0.description=Shoots a projectile from a marked entity in the direction it is looking
+rune.item.thebetweenlands.test_rune_projectile.configuration.0.input.0.description=Entity to shoot the projectile from
+rune.item.thebetweenlands.test_rune_projectile.configuration.0.output.0.description=Block that is hit by the projectile
+
+rune.item.thebetweenlands.test_rune_projectile.configuration.1.title=<underline>Projectile</underline>
+rune.item.thebetweenlands.test_rune_projectile.configuration.1.description=Shoots a projectile from a marked entity in the direction of a marked ray
+rune.item.thebetweenlands.test_rune_projectile.configuration.1.input.0.description=Entity to shoot the projectile from
+rune.item.thebetweenlands.test_rune_projectile.configuration.1.input.1.description=Direction of the projectile
+rune.item.thebetweenlands.test_rune_projectile.configuration.1.output.0.description=Block that is hit by the projectile
+
+rune.item.thebetweenlands.test_rune_projectile.configuration.2.title=<underline>Projectile</underline>
+rune.item.thebetweenlands.test_rune_projectile.configuration.2.description=Shoots a projectile from a marked position in the direction of a marked ray
+rune.item.thebetweenlands.test_rune_projectile.configuration.2.input.0.description=Position to shoot the projectile from
+rune.item.thebetweenlands.test_rune_projectile.configuration.2.input.1.description=Direction of the projectile
+rune.item.thebetweenlands.test_rune_projectile.configuration.2.output.0.description=Block that is hit by the projectile
+
+rune.item.thebetweenlands.test_rune_self.configuration.0.title=<underline>Self</underline>
+rune.item.thebetweenlands.test_rune_self.configuration.0.description=Marks the rune chain user
+rune.item.thebetweenlands.test_rune_self.configuration.0.output.0.description=Rune chain user
+
+rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.title=<underline>Pinpoint</underline>
+rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.description=Pinpoints a marked entity
+rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.input.0.description=Entity to pinpoint
+rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.output.0.description=Position of the entity
+rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.output.1.description=Eye position of the entity
+rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.output.2.description=Look direction of the entity
+
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.0.title=<underline>Mark Nearby</underline>
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.0.description=Marks nearby entities
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.0.output.0.description=Entities that are near the rune chain user
+
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.title=<underline>Mark Nearby</underline>
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.description=Marks entities that are near a marked block
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.input.0.description=Center block
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.output.0.description=Entities that are near a marked block
+
+rune.item.thebetweenlands.test_rune_branching.configuration.0.title=<underline>Branch</underline>
+rune.item.thebetweenlands.test_rune_branching.configuration.0.description=Branches the rune chain flow for the linked input token
+rune.item.thebetweenlands.test_rune_branching.configuration.0.input.0.description=Input token to branch on
+rune.item.thebetweenlands.test_rune_branching.configuration.1.title=<underline>Branch</underline>
+rune.item.thebetweenlands.test_rune_branching.configuration.1.description=Branches the rune chain flow for the linked input tokens
+rune.item.thebetweenlands.test_rune_branching.configuration.1.input.0.description=First input token to branch on
+rune.item.thebetweenlands.test_rune_branching.configuration.1.input.1.description=Second input token to branch on
+rune.item.thebetweenlands.test_rune_branching.configuration.2.title=<underline>Branch</underline>
+rune.item.thebetweenlands.test_rune_branching.configuration.2.description=Branches the rune chain flow for the linked input tokens
+rune.item.thebetweenlands.test_rune_branching.configuration.2.input.0.description=Firs token to branch on
+rune.item.thebetweenlands.test_rune_branching.configuration.2.input.1.description=Second token to branch on
+rune.item.thebetweenlands.test_rune_branching.configuration.2.input.2.description=Third token to branch on
+
+
 # Advancements
 
 # Adventures
@@ -1845,6 +1997,15 @@ config.thebetweenlands.portal_dimension_targets=Portales Personalizados
 config.thebetweenlands.portal_unsafe_biomes=Portal en Biomas peligrosos
 config.thebetweenlands.portal_biome_search_range=Rango de busqueda de biomas para el Portal
 config.thebetweenlands.generate_portal_in_end=Generar Árboles Portal en el End
+config.thebetweenlands.ore_gen_count_sulfur=Sulfur Ore Block Count
+config.thebetweenlands.ore_gen_count_bone=Bone Ore Block Count
+config.thebetweenlands.ore_gen_count_syrmorite=Syrmorite Ore Block Count
+config.thebetweenlands.ore_gen_count_octine=Octine Ore Block Count
+config.thebetweenlands.ore_gen_count_valonite=Valonite Ore Block Count
+config.thebetweenlands.ore_gen_count_scabyst=Scabyst Ore Block Count
+config.thebetweenlands.ore_gen_count_swamp_dirt=Underground Swamp Dirt Block Count
+config.thebetweenlands.ore_gen_count_limestone=Limestone Block Count
+config.thebetweenlands.ore_gen_chance_life_crystal=Life Crystal Gen Chance
 
 config.thebetweenlands.rendering=Renderizado
 config.thebetweenlands.wisp_quality=calidad de renderizado de Fuego fatuo
