@@ -35,6 +35,7 @@ import thebetweenlands.common.inventory.container.ContainerDraetonPouch;
 import thebetweenlands.common.inventory.container.ContainerDraetonUpgrades;
 import thebetweenlands.common.inventory.container.ContainerDraetonWorkbench;
 import thebetweenlands.common.inventory.container.ContainerDruidAltar;
+import thebetweenlands.common.inventory.container.ContainerFishingTackleBox;
 import thebetweenlands.common.inventory.container.ContainerItemNaming;
 import thebetweenlands.common.inventory.container.ContainerMortar;
 import thebetweenlands.common.inventory.container.ContainerPouch;
@@ -47,6 +48,7 @@ import thebetweenlands.common.tile.TileEntityBLFurnace;
 import thebetweenlands.common.tile.TileEntityBarrel;
 import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
+import thebetweenlands.common.tile.TileEntityFishingTackleBox;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
@@ -72,6 +74,7 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_DRAETON_CRAFTING = 19;
 	public static final int GUI_DRAETON_FURNACE = 20;
 	public static final int GUI_DRAETON_UPGRADES = 21;
+	public static final int GUI_FISHING_TACKLE_BOX = 30;
 	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -206,6 +209,11 @@ public class CommonProxy implements IGuiHandler {
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton)
 				return new ContainerDraetonUpgrades(player.inventory, (EntityDraeton)entity);
+			break;
+
+		case GUI_FISHING_TACKLE_BOX:
+			if (tile instanceof TileEntityFishingTackleBox)
+				return new ContainerFishingTackleBox(player, (TileEntityFishingTackleBox) tile);
 			break;
 		}
 		return null;

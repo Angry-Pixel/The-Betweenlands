@@ -54,6 +54,7 @@ import thebetweenlands.client.gui.inventory.GuiDraetonBurner;
 import thebetweenlands.client.gui.inventory.GuiDraetonCrafting;
 import thebetweenlands.client.gui.inventory.GuiDraetonUpgrades;
 import thebetweenlands.client.gui.inventory.GuiDruidAltar;
+import thebetweenlands.client.gui.inventory.GuiFishingTackleBox;
 import thebetweenlands.client.gui.inventory.GuiMortar;
 import thebetweenlands.client.gui.inventory.GuiPouch;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
@@ -452,6 +453,11 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton)
 				return new GuiDraetonUpgrades(player.inventory, (EntityDraeton)entity);
+			break;
+
+		case GUI_FISHING_TACKLE_BOX:
+			if (tile instanceof TileEntityFishingTackleBox)
+				return new GuiFishingTackleBox(player, (TileEntityFishingTackleBox) tile);
 			break;
 		}
 
