@@ -25,8 +25,10 @@ public class EntityFishingTackleBoxSeat extends Entity {
 	@Override
 	 public void onUpdate() {
 		super.onUpdate();
-		if (!getEntityWorld().isRemote && !isBeingRidden())
-			setDead();
+		if (!getEntityWorld().isRemote) {
+			if (!isBeingRidden() || world.isAirBlock(getPosition()))
+				setDead();
+		}
 	}
 
 	@Override
