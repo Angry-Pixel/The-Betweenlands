@@ -104,6 +104,7 @@ import thebetweenlands.client.render.tile.RenderDecayPitHangingChain;
 import thebetweenlands.client.render.tile.RenderDruidAltar;
 import thebetweenlands.client.render.tile.RenderDungeonDoorCombination;
 import thebetweenlands.client.render.tile.RenderDungeonDoorRunes;
+import thebetweenlands.client.render.tile.RenderFishingTackleBox;
 import thebetweenlands.client.render.tile.RenderGeckoCage;
 import thebetweenlands.client.render.tile.RenderGroundItem;
 import thebetweenlands.client.render.tile.RenderInfuser;
@@ -136,6 +137,7 @@ import thebetweenlands.common.entity.EntityAngryPebble;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
+import thebetweenlands.common.entity.EntityFishingTackleBoxSeat;
 import thebetweenlands.common.entity.EntityGalleryFrame;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.entity.EntityGreeblingCorpse;
@@ -269,6 +271,7 @@ import thebetweenlands.common.tile.TileEntityDecayPitHangingChain;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
+import thebetweenlands.common.tile.TileEntityFishingTackleBox;
 import thebetweenlands.common.tile.TileEntityGeckoCage;
 import thebetweenlands.common.tile.TileEntityGroundItem;
 import thebetweenlands.common.tile.TileEntityInfuser;
@@ -632,6 +635,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityAnadia.class, RenderAnadia::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBLFishHook.class, RenderBLFishHook::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFishingSpear.class, RenderFishingSpear::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFishingTackleBoxSeat.class, RenderNothing::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());
@@ -671,6 +675,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCenser.class, new RenderCenser());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBarrel.class, new RenderBarrel());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecayPitGroundChain.class, new RenderDecayPitGroundChain());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFishingTackleBox.class, new RenderFishingTackleBox());
 		
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
@@ -737,7 +742,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		Item.getItemFromBlock(BlockRegistry.WEEDWOOD_CHEST).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityChestBetweenlands.class));
 		Item.getItemFromBlock(BlockRegistry.CENSER).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityCenser.class));
 		Item.getItemFromBlock(BlockRegistry.WEEDWOOD_BARREL).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityBarrel.class));
-		
+		Item.getItemFromBlock(BlockRegistry.FISHING_TACKLE_BOX).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityFishingTackleBox.class));
+
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {
 			if (block instanceof ITintedBlock) {

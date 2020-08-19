@@ -47,6 +47,7 @@ import thebetweenlands.common.block.container.BlockCenser;
 import thebetweenlands.common.block.container.BlockChestBetweenlands;
 import thebetweenlands.common.block.container.BlockCompostBin;
 import thebetweenlands.common.block.container.BlockDruidAltar;
+import thebetweenlands.common.block.container.BlockFishingTackleBox;
 import thebetweenlands.common.block.container.BlockGeckoCage;
 import thebetweenlands.common.block.container.BlockHopperBetweenlands;
 import thebetweenlands.common.block.container.BlockInfuser;
@@ -843,6 +844,7 @@ public class BlockRegistry {
     public static final Block WAYSTONE = new BlockWaystone();
     public static final Block CAVING_ROPE_LIGHT = new BlockCavingRopeLight();
     public static final Block GROUND_ITEM = new BlockGroundItem();
+    public static final Block FISHING_TACKLE_BOX = new BlockFishingTackleBox();
     
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();

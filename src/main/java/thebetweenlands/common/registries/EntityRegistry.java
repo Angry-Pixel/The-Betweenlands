@@ -9,6 +9,7 @@ import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityFishBait;
+import thebetweenlands.common.entity.EntityFishingTackleBoxSeat;
 import thebetweenlands.common.entity.EntityGalleryFrame;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.entity.EntityGreeblingCorpse;
@@ -237,6 +238,7 @@ public class EntityRegistry {
 		registerEntity(EntityAnadia.class, "anadia", 0x243B0B, 0x00FFFF);
 		registerEntity(EntityBLFishHook.class, "betweenlands_fish_hook");
 		registerEntity(EntityFishingSpear.class, "fishing_spear", 64, 20, true);
+		registerEntity(EntityFishingTackleBoxSeat.class, "fishing_tackle_box_seat");
 	}
 
 	private static int id = 0;
