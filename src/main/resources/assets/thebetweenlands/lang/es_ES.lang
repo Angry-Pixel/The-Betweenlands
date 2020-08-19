@@ -1722,76 +1722,76 @@ rune.item.thebetweenlands.test_rune_fire.configuration.0.title=<underline>Bloque
 rune.item.thebetweenlands.test_rune_fire.configuration.0.description=Prende fuego al bloque marcado
 rune.item.thebetweenlands.test_rune_fire.configuration.0.input.0.description=Bloque para prender fuego
 
-rune.item.thebetweenlands.test_rune_fire.configuration.1.title=<underline>Criatura de Fuego</underline>
+rune.item.thebetweenlands.test_rune_fire.configuration.1.title=<underline>Prender Criatura</underline>
 rune.item.thebetweenlands.test_rune_fire.configuration.1.description=Prende fuego a la Criatura marcada
 rune.item.thebetweenlands.test_rune_fire.configuration.1.input.0.description=Criatura para prender fuego
 
-rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.title=<underline>Destroy Block</underline>
-rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.description=Destroys the marked block
-rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.input.0.description=Block to destroy
+rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.title=<underline>Destruir Bloque</underline>
+rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.description=Destruye el bloque marcado
+rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.input.0.description=Bloque a destruir
 
-rune.item.thebetweenlands.test_rune_mark_area.configuration.0.title=<underline>Mark Area</underline>
-rune.item.thebetweenlands.test_rune_mark_area.configuration.0.description=Marks block area around the rune chain user
-rune.item.thebetweenlands.test_rune_mark_area.configuration.0.output.0.description=Blocks in area around rune chain user
+rune.item.thebetweenlands.test_rune_mark_area.configuration.0.title=<underline>Marcar Area</underline>
+rune.item.thebetweenlands.test_rune_mark_area.configuration.0.description=Marca un area de bloques alrededor de la cadena de runas
+rune.item.thebetweenlands.test_rune_mark_area.configuration.0.output.0.description=Bloques en area alrededor de la cadena de runas
 
-rune.item.thebetweenlands.test_rune_mark_area.configuration.1.title=<underline>Mark Area</underline>
-rune.item.thebetweenlands.test_rune_mark_area.configuration.1.description=Marks block area around a marked center block
-rune.item.thebetweenlands.test_rune_mark_area.configuration.1.input.0.description=Center block
-rune.item.thebetweenlands.test_rune_mark_area.configuration.1.output.0.description=Blocks in the area around center block
+rune.item.thebetweenlands.test_rune_mark_area.configuration.1.title=<underline>Marcar Area</underline>
+rune.item.thebetweenlands.test_rune_mark_area.configuration.1.description=Marca un area de bloques alrededor de el bloque marcado
+rune.item.thebetweenlands.test_rune_mark_area.configuration.1.input.0.description=Bloque central marcado
+rune.item.thebetweenlands.test_rune_mark_area.configuration.1.output.0.description=Bloques en el area alrededor del centro
 
-rune.item.thebetweenlands.test_rune_select_grass.configuration.0.title=<underline>Select Grass</underline>
-rune.item.thebetweenlands.test_rune_select_grass.configuration.0.description=Only allows the block mark if the block is grass. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-rune.item.thebetweenlands.test_rune_select_grass.configuration.0.input.0.description=Block to filter
+rune.item.thebetweenlands.test_rune_select_grass.configuration.0.title=<underline>Seleccionar Hierba</underline>
+rune.item.thebetweenlands.test_rune_select_grass.configuration.0.description=Solo permite marcar el bloque si este es de hierba.
+rune.item.thebetweenlands.test_rune_select_grass.configuration.0.input.0.description=Bloque a marcar
 
-rune.item.thebetweenlands.test_rune_projectile.configuration.0.title=<underline>Projectile</underline>
-rune.item.thebetweenlands.test_rune_projectile.configuration.0.description=Shoots a projectile from a marked entity in the direction it is looking
-rune.item.thebetweenlands.test_rune_projectile.configuration.0.input.0.description=Entity to shoot the projectile from
-rune.item.thebetweenlands.test_rune_projectile.configuration.0.output.0.description=Block that is hit by the projectile
+rune.item.thebetweenlands.test_rune_projectile.configuration.0.title=<underline>Proyectil</underline>
+rune.item.thebetweenlands.test_rune_projectile.configuration.0.description=Dispara un proyectil desde una entidad marcada a la dirección en la que mira
+rune.item.thebetweenlands.test_rune_projectile.configuration.0.input.0.description=Entidad desde la que disparar el proyectil
+rune.item.thebetweenlands.test_rune_projectile.configuration.0.output.0.description=Bloque que es alcanzado por el proyectil
 
-rune.item.thebetweenlands.test_rune_projectile.configuration.1.title=<underline>Projectile</underline>
-rune.item.thebetweenlands.test_rune_projectile.configuration.1.description=Shoots a projectile from a marked entity in the direction of a marked ray
-rune.item.thebetweenlands.test_rune_projectile.configuration.1.input.0.description=Entity to shoot the projectile from
-rune.item.thebetweenlands.test_rune_projectile.configuration.1.input.1.description=Direction of the projectile
-rune.item.thebetweenlands.test_rune_projectile.configuration.1.output.0.description=Block that is hit by the projectile
+rune.item.thebetweenlands.test_rune_projectile.configuration.1.title=<underline>Proyectil</underline>
+rune.item.thebetweenlands.test_rune_projectile.configuration.1.description=Dispara un proyectil desde una entidad marcada en la dirección de un rayo marcado
+rune.item.thebetweenlands.test_rune_projectile.configuration.1.input.0.description=Entidad desde la que disparar el proyectil
+rune.item.thebetweenlands.test_rune_projectile.configuration.1.input.1.description=Dirección del proyectil
+rune.item.thebetweenlands.test_rune_projectile.configuration.1.output.0.description=Bloque que es alcanzado por el proyectil
 
-rune.item.thebetweenlands.test_rune_projectile.configuration.2.title=<underline>Projectile</underline>
-rune.item.thebetweenlands.test_rune_projectile.configuration.2.description=Shoots a projectile from a marked position in the direction of a marked ray
-rune.item.thebetweenlands.test_rune_projectile.configuration.2.input.0.description=Position to shoot the projectile from
-rune.item.thebetweenlands.test_rune_projectile.configuration.2.input.1.description=Direction of the projectile
-rune.item.thebetweenlands.test_rune_projectile.configuration.2.output.0.description=Block that is hit by the projectile
+rune.item.thebetweenlands.test_rune_projectile.configuration.2.title=<underline>Proyectil</underline>
+rune.item.thebetweenlands.test_rune_projectile.configuration.2.description=Dispara un proyectil desde una posición marcada en la dirección de un rayo marcado
+rune.item.thebetweenlands.test_rune_projectile.configuration.2.input.0.description=Posición desde la que disparar el proyectil
+rune.item.thebetweenlands.test_rune_projectile.configuration.2.input.1.description=Dirección del proyectil
+rune.item.thebetweenlands.test_rune_projectile.configuration.2.output.0.description=Bloque que es alcanzado por el proyectil
 
-rune.item.thebetweenlands.test_rune_self.configuration.0.title=<underline>Self</underline>
-rune.item.thebetweenlands.test_rune_self.configuration.0.description=Marks the rune chain user
-rune.item.thebetweenlands.test_rune_self.configuration.0.output.0.description=Rune chain user
+rune.item.thebetweenlands.test_rune_self.configuration.0.title=<underline>Yo</underline>
+rune.item.thebetweenlands.test_rune_self.configuration.0.description=Marca al portador de la cadena de runas
+rune.item.thebetweenlands.test_rune_self.configuration.0.output.0.description=Portador de la cadena de runas
 
-rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.title=<underline>Pinpoint</underline>
-rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.description=Pinpoints a marked entity
-rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.input.0.description=Entity to pinpoint
-rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.output.0.description=Position of the entity
-rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.output.1.description=Eye position of the entity
-rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.output.2.description=Look direction of the entity
+rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.title=<underline>Apuntar con precisión</underline>
+rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.description=Identifica una entidad marcada
+rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.input.0.description=Entidad para señalar
+rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.output.0.description=Posición de la entidad
+rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.output.1.description=Ojos de la entidad
+rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.output.2.description=Donde mira la entidad
 
-rune.item.thebetweenlands.test_rune_mark_nearby.configuration.0.title=<underline>Mark Nearby</underline>
-rune.item.thebetweenlands.test_rune_mark_nearby.configuration.0.description=Marks nearby entities
-rune.item.thebetweenlands.test_rune_mark_nearby.configuration.0.output.0.description=Entities that are near the rune chain user
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.0.title=<underline>Marca de proximidad</underline>
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.0.description=Marca entidades cercanas
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.0.output.0.description=Entidades que están cerca del portador de la cadena de runas
 
-rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.title=<underline>Mark Nearby</underline>
-rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.description=Marks entities that are near a marked block
-rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.input.0.description=Center block
-rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.output.0.description=Entities that are near a marked block
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.title=<underline>Marca de proximidad</underline>
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.description=Marca entidades que están cerca de un bloque marcado
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.input.0.description=Bloque central
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.output.0.description=Entidades que están cerca de un bloque marcado
 
-rune.item.thebetweenlands.test_rune_branching.configuration.0.title=<underline>Branch</underline>
-rune.item.thebetweenlands.test_rune_branching.configuration.0.description=Branches the rune chain flow for the linked input token
-rune.item.thebetweenlands.test_rune_branching.configuration.0.input.0.description=Input token to branch on
-rune.item.thebetweenlands.test_rune_branching.configuration.1.title=<underline>Branch</underline>
-rune.item.thebetweenlands.test_rune_branching.configuration.1.description=Branches the rune chain flow for the linked input tokens
-rune.item.thebetweenlands.test_rune_branching.configuration.1.input.0.description=First input token to branch on
-rune.item.thebetweenlands.test_rune_branching.configuration.1.input.1.description=Second input token to branch on
-rune.item.thebetweenlands.test_rune_branching.configuration.2.title=<underline>Branch</underline>
-rune.item.thebetweenlands.test_rune_branching.configuration.2.description=Branches the rune chain flow for the linked input tokens
-rune.item.thebetweenlands.test_rune_branching.configuration.2.input.0.description=Firs token to branch on
-rune.item.thebetweenlands.test_rune_branching.configuration.2.input.1.description=Second token to branch on
-rune.item.thebetweenlands.test_rune_branching.configuration.2.input.2.description=Third token to branch on
+rune.item.thebetweenlands.test_rune_branching.configuration.0.title=<underline>Bifurcación</underline>
+rune.item.thebetweenlands.test_rune_branching.configuration.0.description=Bifurca el flujo de la cadena de runas para la ficha de entrada vinculada
+rune.item.thebetweenlands.test_rune_branching.configuration.0.input.0.description=Ficha de entrada para bifurcar
+rune.item.thebetweenlands.test_rune_branching.configuration.1.title=<underline>Bifurcación</underline>
+rune.item.thebetweenlands.test_rune_branching.configuration.1.description=Bifurca el flujo de la cadena de runas para las fichas de entrada vinculadas
+rune.item.thebetweenlands.test_rune_branching.configuration.1.input.0.description=Primera ficha de entrada para bifurcar
+rune.item.thebetweenlands.test_rune_branching.configuration.1.input.1.description=Segunda ficha de entrada para bifurcar
+rune.item.thebetweenlands.test_rune_branching.configuration.2.title=<underline>Bifurcación</underline>
+rune.item.thebetweenlands.test_rune_branching.configuration.2.description=Bifurca el flujo de la cadena de runas para las fichas de entrada vinculadas
+rune.item.thebetweenlands.test_rune_branching.configuration.2.input.0.description=Primera ficha de entrada para bifurcar
+rune.item.thebetweenlands.test_rune_branching.configuration.2.input.1.description=Segunda ficha de entrada para bifurcar
+rune.item.thebetweenlands.test_rune_branching.configuration.2.input.2.description=Tercera ficha de entrada para bifurcar
 
 
 # Advancements
@@ -1997,15 +1997,15 @@ config.thebetweenlands.portal_dimension_targets=Portales Personalizados
 config.thebetweenlands.portal_unsafe_biomes=Portal en Biomas peligrosos
 config.thebetweenlands.portal_biome_search_range=Rango de busqueda de biomas para el Portal
 config.thebetweenlands.generate_portal_in_end=Generar Árboles Portal en el End
-config.thebetweenlands.ore_gen_count_sulfur=Sulfur Ore Block Count
-config.thebetweenlands.ore_gen_count_bone=Bone Ore Block Count
-config.thebetweenlands.ore_gen_count_syrmorite=Syrmorite Ore Block Count
-config.thebetweenlands.ore_gen_count_octine=Octine Ore Block Count
-config.thebetweenlands.ore_gen_count_valonite=Valonite Ore Block Count
-config.thebetweenlands.ore_gen_count_scabyst=Scabyst Ore Block Count
-config.thebetweenlands.ore_gen_count_swamp_dirt=Underground Swamp Dirt Block Count
-config.thebetweenlands.ore_gen_count_limestone=Limestone Block Count
-config.thebetweenlands.ore_gen_chance_life_crystal=Life Crystal Gen Chance
+config.thebetweenlands.ore_gen_count_sulfur=Cantidad de Menas de Azufre
+config.thebetweenlands.ore_gen_count_bone=Cantidad de Menas de Hueso
+config.thebetweenlands.ore_gen_count_syrmorite=Cantidad de Menas de Sirmorita
+config.thebetweenlands.ore_gen_count_octine=Cantidad de Menas de Octanio
+config.thebetweenlands.ore_gen_count_valonite=Cantidad de Menas de Valonita
+config.thebetweenlands.ore_gen_count_scabyst=Cantidad de Menas de Escabita
+config.thebetweenlands.ore_gen_count_swamp_dirt=Cantidad de bloques de Tierra de Pantano
+config.thebetweenlands.ore_gen_count_limestone=Cantidad de bloques de Caliza
+config.thebetweenlands.ore_gen_chance_life_crystal=Probabilidad de Generacion de Cristales de Vida
 
 config.thebetweenlands.rendering=Renderizado
 config.thebetweenlands.wisp_quality=calidad de renderizado de Fuego fatuo
