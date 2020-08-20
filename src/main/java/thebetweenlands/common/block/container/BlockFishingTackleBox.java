@@ -1,5 +1,6 @@
 package thebetweenlands.common.block.container;
 
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -11,10 +12,12 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -25,6 +28,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -32,10 +36,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.proxy.CommonProxy;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.tile.TileEntityFishingTackleBox;
 
 
-public class BlockFishingTackleBox extends BlockContainer {
+public class BlockFishingTackleBox extends BlockContainer implements ICustomItemBlock {
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 	
 	public BlockFishingTackleBox() {
@@ -173,5 +179,30 @@ public class BlockFishingTackleBox extends BlockContainer {
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
+
+	@Override
+	public ItemBlock getItemBlock() {
+		 ItemBlock FISHING_TACKLE_BOX_ITEM = new ItemBlock(BlockRegistry.FISHING_TACKLE_BOX) {
+			@Override
+			@SideOnly(Side.CLIENT)
+			public void addInformation(ItemStack stack, @Nullable World world, List<String> list, ITooltipFlag flag) {
+
+				if (stack.hasTagCompound() && stack.getTagCompound().getTagList("Items", 10) != null) {
+					NBTTagList tags = stack.getTagCompound().getTagList("Items", 10);
+
+					for (int i = 0; i < tags.tagCount(); i++) {
+						NBTTagCompound data = tags.getCompoundTagAt(i);
+						int j = data.getByte("Slot") & 255;
+
+						if (i >= 0 && i <= 15) {
+							list.add("Slot " + (j + 1) + ": " + TextFormatting.GREEN + new ItemStack(data).getDisplayName() + " x " + new ItemStack(data).getCount());
+
+						} 
+					}
+				}
+			}
+		};
+		return FISHING_TACKLE_BOX_ITEM;
+	}
 
 }

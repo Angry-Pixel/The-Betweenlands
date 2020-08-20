@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import thebetweenlands.common.entity.EntityFishingTackleBoxSeat;
 
 public class TileEntityFishingTackleBox extends TileEntity implements ITickable, IInventory {
@@ -99,7 +100,7 @@ public class TileEntityFishingTackleBox extends TileEntity implements ITickable,
 
 	@Override
 	public String getName() {
-		return "Fishing Tackle Box";
+		return new TextComponentTranslation("tile.thebetweenlands.fishing_tackle_box.name").getFormattedText();
 	}
 
 	@Override

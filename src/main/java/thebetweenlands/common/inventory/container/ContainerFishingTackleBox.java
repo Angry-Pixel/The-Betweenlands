@@ -24,11 +24,11 @@ public class ContainerFishingTackleBox extends Container {
 		InventoryPlayer playerInventory = player.inventory;
 		this.player = player;
 
-		addSlotToContainer(new SlotCrafting(playerInventory.player, craftMatrix, craftResult, 0, 154, 38));
+		addSlotToContainer(new SlotCrafting(playerInventory.player, craftMatrix, craftResult, 0, 152, 46));
 
 		for (int y = 0; y < 2; ++y)
 			for (int x = 0; x < 2; ++x)
-				addSlotToContainer(new Slot(craftMatrix, x + y * 2, 98 + x * 18, 28 + y * 18));
+				addSlotToContainer(new Slot(craftMatrix, x + y * 2, 98 + x * 18, 36 + y * 18));
 
 		for (int j = 0; j < 4; ++j)
 			for (int k = 0; k < 4; ++k)
