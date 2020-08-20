@@ -9,6 +9,8 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
+import thebetweenlands.common.inventory.slot.SlotExclusion;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityFishingTackleBox;
 
 public class ContainerFishingTackleBox extends Container {
@@ -16,11 +18,12 @@ public class ContainerFishingTackleBox extends Container {
     public InventoryCrafting craftMatrix = new InventoryCrafting(this, 2, 2);
     public InventoryCraftResult craftResult = new InventoryCraftResult();
 	private final EntityPlayer player;
+	public ItemStack fishingTackleBoxStack = new ItemStack(BlockRegistry.FISHING_TACKLE_BOX);
 
 	public ContainerFishingTackleBox(EntityPlayer player, TileEntityFishingTackleBox tile) {
 		InventoryPlayer playerInventory = player.inventory;
 		this.player = player;
-		
+
 		addSlotToContainer(new SlotCrafting(playerInventory.player, craftMatrix, craftResult, 0, 154, 38));
 
 		for (int y = 0; y < 2; ++y)
@@ -29,7 +32,7 @@ public class ContainerFishingTackleBox extends Container {
 
 		for (int j = 0; j < 4; ++j)
 			for (int k = 0; k < 4; ++k)
-				addSlotToContainer(new Slot(tile, k + j * 4, 8 + k * 18, 18 + j * 18));
+				addSlotToContainer(new SlotExclusion(tile, k + j * 4, 8 + k * 18, 18 + j * 18, fishingTackleBoxStack, 64, this));
 
 		for (int l = 0; l < 3; ++l)
             for (int j1 = 0; j1 < 9; ++j1)
@@ -38,7 +41,7 @@ public class ContainerFishingTackleBox extends Container {
         for (int i1 = 0; i1 < 9; ++i1)
             this.addSlotToContainer(new Slot(playerInventory, i1, 8 + i1 * 18, 162));
 	}
-	
+
     @Override
     public void onCraftMatrixChanged(IInventory inventoryIn) {
         slotChangedCraftingGrid(player.world, player, craftMatrix, craftResult);
