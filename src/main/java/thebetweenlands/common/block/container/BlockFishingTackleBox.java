@@ -27,6 +27,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
@@ -38,6 +39,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityFishingTackleBox;
 
 
@@ -111,6 +113,10 @@ public class BlockFishingTackleBox extends BlockContainer implements ICustomItem
 			if (player.isSneaking()) {
 				if (world.getTileEntity(pos) instanceof TileEntityFishingTackleBox) {
 					TileEntityFishingTackleBox tile = (TileEntityFishingTackleBox) world.getTileEntity(pos);
+					if(!tile.isOpen())
+						world.playSound(null, pos, SoundRegistry.FISHING_TACKLE_BOX_OPEN, SoundCategory.BLOCKS, 1F, 1F);
+					if(tile.isOpen())
+						world.playSound(null, pos, SoundRegistry.FISHING_TACKLE_BOX_CLOSE, SoundCategory.BLOCKS, 1F, 1F);
 					tile.setOpen(!tile.isOpen());
 					world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
 					tile.markDirty();

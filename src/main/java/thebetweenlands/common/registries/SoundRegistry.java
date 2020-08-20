@@ -299,6 +299,8 @@ public class SoundRegistry {
     public static final BLSoundEvent MUD_DOOR_LOCK = reg("mud_door_lock");
     public static final BLSoundEvent MUD_DOOR_TRAP = reg("mud_door_trap");
     public static final BLSoundEvent BEAM_SWITCH = reg("beam_switch");
+    public static final BLSoundEvent FISHING_TACKLE_BOX_OPEN = reg("fishing_tackle_box_open");
+    public static final BLSoundEvent FISHING_TACKLE_BOX_CLOSE = reg("fishing_tackle_box_close");
     
     private SoundRegistry() {
     }

@@ -1761,4 +1761,16 @@
       "thebetweenlands:chirobarb_erupter"
     ]
   }
+  ,
+  "fishing_tackle_box_open": {
+    "sounds": [
+      "thebetweenlands:fishing_tackle_box_open"
+    ]
+  }
+  ,
+  "fishing_tackle_box_close": {
+    "sounds": [
+      "thebetweenlands:fishing_tackle_box_close"
+    ]
+  }
 }
