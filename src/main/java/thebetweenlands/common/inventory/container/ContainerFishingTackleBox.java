@@ -66,16 +66,31 @@ public class ContainerFishingTackleBox extends Container {
 			ItemStack is1 = slot.getStack();
 			is = is1.copy();
 
-			if (slotIndex < 21) {
+			if (slotIndex == 0) {
+				if (!this.mergeItemStack(is1, 5, 57, true))
+					return ItemStack.EMPTY;
+				slot.onSlotChange(is1, is);
+			} else if (slotIndex >= 1 && slotIndex < 5) {
+				if (!this.mergeItemStack(is1, 5, 57, false))
+					return ItemStack.EMPTY;
+			} else if (slotIndex >= 5 && slotIndex < 21) {
 				if (!mergeItemStack(is1, 21, inventorySlots.size(), true))
 					return ItemStack.EMPTY;
 			} else if (!mergeItemStack(is1, 5, 21, false))
 				return ItemStack.EMPTY;
 
-			if (is1.getCount() == 0)
+			if (is1.isEmpty())
 				slot.putStack(ItemStack.EMPTY);
 			else
 				slot.onSlotChanged();
+
+			if (is1.getCount() == is.getCount())
+				return ItemStack.EMPTY;
+
+			ItemStack is2 = slot.onTake(player, is1);
+
+			if (slotIndex == 0)
+				player.dropItem(is2, false);
 		}
 
 		return is;
