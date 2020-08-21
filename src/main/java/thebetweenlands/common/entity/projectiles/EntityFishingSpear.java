@@ -18,7 +18,6 @@ import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -40,6 +39,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IThrowableEntity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -52,7 +53,8 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 				}
 			});
 
-	private static final DataParameter<Byte> CRITICAL = EntityDataManager.<Byte>createKey(EntityArrow.class, DataSerializers.BYTE);
+	private static final DataParameter<Byte> CRITICAL = EntityDataManager.<Byte>createKey(EntityFishingSpear.class, DataSerializers.BYTE);
+	private static final DataParameter<Integer> ITEMSTACK_DAMAGE = EntityDataManager.createKey(EntityFishingSpear.class, DataSerializers.VARINT);
 	protected int xTile;
 	protected int yTile;
 	protected int zTile;
@@ -65,6 +67,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 	protected int ticksInGround;
 	protected int ticksInAir;
 	protected double damage = 0;
+	private static final byte EVENT_DEAD = 111;
 
 	public EntityFishingSpear(World world) {
 		super(world);
@@ -106,7 +109,8 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 	}
 
 	protected void entityInit() {
-		dataManager.register(CRITICAL, Byte.valueOf((byte) 0));
+		dataManager.register(CRITICAL, (byte) 0);
+		dataManager.register(ITEMSTACK_DAMAGE, 0); //needs to match Item maxDamage
 	}
 	
 	public void shoot(Entity shooter, float pitch, float yaw, float p_184547_4_, float velocity, float inaccuracy) {
@@ -178,6 +182,13 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		
+		if(!world.isRemote) {
+			if(getItemStackDamage() >= 64) {
+				getEntityWorld().setEntityState(this, EVENT_DEAD);
+				setDead();
+			}
+		}
 
 		if (prevRotationPitch == 0.0F && prevRotationYaw == 0.0F) {
 			float f = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
@@ -333,7 +344,8 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 						EnchantmentHelper.applyArthropodEnchantments((EntityLivingBase) shootingEntity, entitylivingbase);
 					}
 
-					arrowHit(entitylivingbase);
+					if (!world.isRemote)
+						setItemStackDamage(getItemStackDamage() + 1);
 
 					if (shootingEntity != null && entitylivingbase != shootingEntity && entitylivingbase instanceof EntityPlayer && shootingEntity instanceof EntityPlayerMP)
 						((EntityPlayerMP) shootingEntity).connection.sendPacket(new SPacketChangeGameState(6, 0.0F));
@@ -347,13 +359,11 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 				rotationYaw += 180.0F;
 				prevRotationYaw += 180.0F;
 				ticksInAir = 0;
-
-				if (!world.isRemote && motionX * motionX + motionY * motionY + motionZ * motionZ < 0.0010000000474974513D) {
-					entityDropItem(getEntityItem(), 0.1F);
-					setDead();
-				}
 			}
 		} else {
+			if (!world.isRemote && !inGround && !isInWater())
+				setItemStackDamage(getItemStackDamage() + 2);
+
 			BlockPos blockpos = raytraceResultIn.getBlockPos();
 			xTile = blockpos.getX();
 			yTile = blockpos.getY();
@@ -377,8 +387,6 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 				inTile.onEntityCollision(world, blockpos, iblockstate, this);
 		}
 	}
-
-	protected void arrowHit(EntityLivingBase living) {}
 
 	@Override
 	public void move(MoverType type, double x, double y, double z) {
@@ -435,6 +443,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 		compound.setByte("inGround", (byte) (inGround ? 1 : 0));
 		compound.setDouble("damage", damage);
 		compound.setBoolean("crit", getIsCritical());
+		compound.setInteger("itemStackDamage", getItemStackDamage());
 	}
 
 	@Override
@@ -457,6 +466,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 			damage = compound.getDouble("damage");
 
 		setIsCritical(compound.getBoolean("crit"));
+		setItemStackDamage(compound.getInteger("itemStackDamage"));
 	}
 
 	@Override
@@ -472,8 +482,29 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void handleStatusUpdate(byte id) {
+		super.handleStatusUpdate(id);
+		if(id == EVENT_DEAD) {
+			for (int count = 0; count <= 10; ++count) {
+				BLParticles.ITEM_BREAKING.spawn(getEntityWorld(), posX + (getEntityWorld().rand.nextDouble() - 0.5D), posY + (getEntityWorld().rand.nextDouble() - 0.5D), posZ + (getEntityWorld().rand.nextDouble() - 0.5D), ParticleArgs.get().withData(new ItemStack(ItemRegistry.FISHING_SPEAR)));
+			}
+		}
+	}
+
 	protected ItemStack getEntityItem() {
-		return new ItemStack(ItemRegistry.FISHING_SPEAR);
+		ItemStack damagedStack = new ItemStack(ItemRegistry.FISHING_SPEAR);
+		damagedStack.setItemDamage(getItemStackDamage());
+		return damagedStack;
+	}
+
+	public void setItemStackDamage(int amount) {
+		dataManager.set(ITEMSTACK_DAMAGE, amount);
+	}
+
+	public int getItemStackDamage() {
+		return dataManager.get(ITEMSTACK_DAMAGE);
 	}
 
 	@Override

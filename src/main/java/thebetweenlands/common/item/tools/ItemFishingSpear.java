@@ -66,7 +66,7 @@ public class ItemFishingSpear extends Item {
 					if (!worldIn.isRemote) {
 						EntityFishingSpear entitySpear = new EntityFishingSpear(worldIn, entityplayer);
 						entitySpear.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 1.0F, f * 3.0F, 1.0F);
-						stack.damageItem(1, entityplayer);
+						entitySpear.setItemStackDamage(stack.getItemDamage());
 						worldIn.spawnEntity(entitySpear);
 					}
 
