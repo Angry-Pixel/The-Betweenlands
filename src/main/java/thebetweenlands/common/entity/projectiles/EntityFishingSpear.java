@@ -110,7 +110,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 
 	protected void entityInit() {
 		dataManager.register(CRITICAL, (byte) 0);
-		dataManager.register(ITEMSTACK_DAMAGE, 0); //needs to match Item maxDamage
+		dataManager.register(ITEMSTACK_DAMAGE, 0);
 	}
 	
 	public void shoot(Entity shooter, float pitch, float yaw, float p_184547_4_, float velocity, float inaccuracy) {
@@ -184,7 +184,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 		super.onUpdate();
 		
 		if(!world.isRemote) {
-			if(getItemStackDamage() >= 64) {
+			if(getItemStackDamage() >= 64) {  // needs to match or exceed Item maxDamage
 				getEntityWorld().setEntityState(this, EVENT_DEAD);
 				setDead();
 			}
