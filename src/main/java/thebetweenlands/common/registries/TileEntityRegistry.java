@@ -44,6 +44,7 @@ import thebetweenlands.common.tile.TileEntityPuffshroom;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityRepeller;
 import thebetweenlands.common.tile.TileEntityRubberTap;
+import thebetweenlands.common.tile.TileEntitySmokingRack;
 import thebetweenlands.common.tile.TileEntitySpikeTrap;
 import thebetweenlands.common.tile.TileEntityTarLootPot1;
 import thebetweenlands.common.tile.TileEntityTarLootPot2;
@@ -109,6 +110,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityCenser.class, "censer");
 		registerTileEntity(TileEntityBarrel.class, "tar_barrel");
 		registerTileEntity(TileEntityFishingTackleBox.class, "fishing_tackle_box");
+		registerTileEntity(TileEntitySmokingRack.class, "smoking_rack");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
