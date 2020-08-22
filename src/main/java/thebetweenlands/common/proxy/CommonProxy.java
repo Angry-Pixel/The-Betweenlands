@@ -40,6 +40,7 @@ import thebetweenlands.common.inventory.container.ContainerItemNaming;
 import thebetweenlands.common.inventory.container.ContainerMortar;
 import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
+import thebetweenlands.common.inventory.container.ContainerSmokingRack;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.tile.TileEntityAnimator;
@@ -51,6 +52,7 @@ import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityFishingTackleBox;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityPurifier;
+import thebetweenlands.common.tile.TileEntitySmokingRack;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 
 public class CommonProxy implements IGuiHandler {
@@ -75,6 +77,7 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_DRAETON_FURNACE = 20;
 	public static final int GUI_DRAETON_UPGRADES = 21;
 	public static final int GUI_FISHING_TACKLE_BOX = 30;
+	public static final int GUI_SMOKING_RACK = 31;
 	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -214,6 +217,11 @@ public class CommonProxy implements IGuiHandler {
 		case GUI_FISHING_TACKLE_BOX:
 			if (tile instanceof TileEntityFishingTackleBox)
 				return new ContainerFishingTackleBox(player, (TileEntityFishingTackleBox) tile);
+			break;
+
+		case GUI_SMOKING_RACK:
+			if (tile instanceof TileEntitySmokingRack)
+				return new ContainerSmokingRack(player, (TileEntitySmokingRack) tile);
 			break;
 		}
 		return null;

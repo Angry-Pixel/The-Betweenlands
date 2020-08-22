@@ -58,6 +58,7 @@ import thebetweenlands.client.gui.inventory.GuiFishingTackleBox;
 import thebetweenlands.client.gui.inventory.GuiMortar;
 import thebetweenlands.client.gui.inventory.GuiPouch;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
+import thebetweenlands.client.gui.inventory.GuiSmokingRack;
 import thebetweenlands.client.gui.inventory.GuiTarBarrel;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.client.gui.menu.GuiBLMainMenu;
@@ -460,6 +461,11 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		case GUI_FISHING_TACKLE_BOX:
 			if (tile instanceof TileEntityFishingTackleBox)
 				return new GuiFishingTackleBox(player, (TileEntityFishingTackleBox) tile);
+			break;
+			
+		case GUI_SMOKING_RACK:
+			if (tile instanceof TileEntitySmokingRack)
+				return new GuiSmokingRack(player, (TileEntitySmokingRack) tile);
 			break;
 		}
 

@@ -26,6 +26,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.tile.TileEntitySmokingRack;
 
 
@@ -79,7 +81,7 @@ public class BlockSmokingRack extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,  EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
-
+			player.openGui(TheBetweenlands.instance, CommonProxy.GUI_SMOKING_RACK, world, pos.getX(), pos.getY(), pos.getZ());
 		}
 		return true;
 	}
