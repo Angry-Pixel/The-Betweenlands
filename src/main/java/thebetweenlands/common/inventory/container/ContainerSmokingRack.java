@@ -4,9 +4,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.inventory.slot.SlotOutput;
 import thebetweenlands.common.inventory.slot.SlotSizeRestriction;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntitySmokingRack;
 
 public class ContainerSmokingRack extends Container {
@@ -40,41 +42,39 @@ public class ContainerSmokingRack extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
-		// TODO fix this shit 
-		ItemStack is = ItemStack.EMPTY;
+		ItemStack stack = ItemStack.EMPTY;
 		Slot slot = (Slot) inventorySlots.get(slotIndex);
 
 		if (slot != null && slot.getHasStack()) {
-			ItemStack is1 = slot.getStack();
-			is = is1.copy();
+			ItemStack stack1 = slot.getStack();
+			stack = stack1.copy();
 
-			if (slotIndex == 0) {
-				if (!this.mergeItemStack(is1, 6, 42, true))
+			if (slotIndex > 6) {
+				if (stack1.getItem() == Item.getItemFromBlock(BlockRegistry.MOSS) && stack1.getItemDamage() == 0) {
+					if (!this.mergeItemStack(stack1, 0, 1, false))
+						return ItemStack.EMPTY;
+				}
+				else if (!this.mergeItemStack(stack1, 1, 4, false))
 					return ItemStack.EMPTY;
-				slot.onSlotChange(is1, is);
-			} else if (slotIndex >= 1 && slotIndex < 6) {
-				if (!this.mergeItemStack(is1, 6, 42, false))
-					return ItemStack.EMPTY;
-			} else if (slotIndex >= 6 && slotIndex < 42) {
-				if (!mergeItemStack(is1, 42, inventorySlots.size(), true))
-					return ItemStack.EMPTY;
-			}
 
-			if (is1.isEmpty())
+			} else if (!mergeItemStack(stack1, 7, inventorySlots.size(), false))
+				return ItemStack.EMPTY;
+
+			if (stack1.isEmpty())
 				slot.putStack(ItemStack.EMPTY);
 			else
 				slot.onSlotChanged();
 
-			if (is1.getCount() == is.getCount())
+			if (stack1.getCount() == stack.getCount())
 				return ItemStack.EMPTY;
 
-			ItemStack is2 = slot.onTake(player, is1);
+			ItemStack stack2 = slot.onTake(player, stack1);
 
 			if (slotIndex == 4 || slotIndex == 5 || slotIndex == 6)
-				player.dropItem(is2, false);
+				player.dropItem(stack2, false);
 		}
 
-		return is;
+		return stack;
 	}
 
 	@Override
