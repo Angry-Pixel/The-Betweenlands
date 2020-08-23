@@ -38,9 +38,18 @@ public class GuiSmokingRack extends GuiContainer {
 		this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
 		
 		//if (smoking_rack.active) {
-			int progress = smoking_rack.getSmokingProgressScaled(0, 31);
-			this.drawTexturedModalRect(k +22, l + 49 - progress , 176, 31 - progress, 24, 31);
+			int progressSmoke = smoking_rack.getSmokeProgressScaled(0, 31);
+			this.drawTexturedModalRect(k + 22, l + 49 - progressSmoke, 176, 31 - progressSmoke, 24, progressSmoke);
 		//}
+			
+			int progress_1 = smoking_rack.getItemProgressScaledTop(0, 14);
+			this.drawTexturedModalRect(k + 99, l + 20, 176, 31, progress_1, 12);
+			
+			int progress_2 = smoking_rack.getItemProgressScaledMid(0, 14);
+			this.drawTexturedModalRect(k + 99, l + 38, 176, 31, progress_2, 12);
+			
+			int progress_3 = smoking_rack.getItemProgressScaledBottom(0, 14);
+			this.drawTexturedModalRect(k + 99, l + 56, 176, 31, progress_3, 12);
 
 	}
 
