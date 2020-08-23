@@ -6,6 +6,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.inventory.slot.SlotOutput;
+import thebetweenlands.common.inventory.slot.SlotSizeRestriction;
 import thebetweenlands.common.tile.TileEntitySmokingRack;
 
 public class ContainerSmokingRack extends Container {
@@ -20,9 +21,9 @@ public class ContainerSmokingRack extends Container {
 		addSlotToContainer(new Slot(tile, 0, 26, 54));
 		
 		//input
-		addSlotToContainer(new Slot(tile, 1, 62, 18));
-		addSlotToContainer(new Slot(tile, 2, 62, 36));
-		addSlotToContainer(new Slot(tile, 3, 62, 54));
+		addSlotToContainer(new SlotSizeRestriction(tile, 1, 62, 18, 1));
+		addSlotToContainer(new SlotSizeRestriction(tile, 2, 62, 36, 1));
+		addSlotToContainer(new SlotSizeRestriction(tile, 3, 62, 54, 1));
 		
 		//output
 		addSlotToContainer(new SlotOutput(tile, 4, 134, 18, this));
