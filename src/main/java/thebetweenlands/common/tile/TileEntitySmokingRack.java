@@ -3,6 +3,8 @@ package thebetweenlands.common.tile;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -25,7 +27,7 @@ import thebetweenlands.common.block.container.BlockSmokingRack;
 public class TileEntitySmokingRack extends TileEntity implements ITickable, IInventory {
 	public NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(7, ItemStack.EMPTY);
 	
-	public int MAX_SMOKING_TIME = 240;
+	public int MAX_SMOKING_TIME = 800;
 	public int CURING_MODIFIER_1 = 1;
 	public int CURING_MODIFIER_2 = 1;
 	public int CURING_MODIFIER_3 = 1;
@@ -106,7 +108,7 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 				setSlotProgress(3, 0);
 		}
     }
-    
+
     private void setSlotProgress(int slot, int counter) {
 		switch (slot) {
 		case 0:
@@ -138,6 +140,12 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 			return slot_3_progress;
 		}
 		return 0;
+	}
+
+	public Entity getRenderEntity(int slot) {
+		Entity entity = EntityList.createEntityFromNBT(getItems().get(slot).getTagCompound().getCompoundTag("Entity"), getWorld());
+		entity.setPositionAndRotation(0D, 0D, 0D, -90, 90F);
+		return entity;
 	}
 
 	public void consumeFuel() {
