@@ -13,15 +13,18 @@ import thebetweenlands.common.entity.mobs.EntityAnadia;
 public class RenderAnadia extends RenderLiving<EntityAnadia> {
 	private static final ResourceLocation[] TEXTURE_1 = new ResourceLocation[] {
 			new ResourceLocation("thebetweenlands:textures/entity/anadia_1_base.png"),
-			new ResourceLocation("thebetweenlands:textures/entity/anadia_1_silver.png") };
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_1_silver.png"),
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_1_smoked.png")};
 	
 	private static final ResourceLocation[] TEXTURE_2 = new ResourceLocation[] {
 			new ResourceLocation("thebetweenlands:textures/entity/anadia_2_base.png"),
-			new ResourceLocation("thebetweenlands:textures/entity/anadia_2_silver.png") };
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_2_silver.png"),
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_2_smoked.png")};
 	
 	private static final ResourceLocation[] TEXTURE_3 = new ResourceLocation[] {
 			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_base.png"),
-			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_silver.png") };
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_silver.png"),
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_smoked.png")};
 	
 	public final static ModelAnadia ANADIA_MODEL = new ModelAnadia();
 

@@ -7,7 +7,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -20,9 +19,12 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.container.BlockSmokingRack;
+import thebetweenlands.common.entity.mobs.EntityAnadia;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class TileEntitySmokingRack extends TileEntity implements ITickable, IInventory {
 	public NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(7, ItemStack.EMPTY);
@@ -163,6 +165,8 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 			return false;
 		if (!getItems().get(output).isEmpty())
 			return false;
+		if (getRenderEntity(input) instanceof EntityAnadia && ((EntityAnadia)getRenderEntity(input)).getFishColour() == 2)
+			return false;
 		return true;
 	}
     
@@ -175,15 +179,16 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 		return false;
 	}
 	
-    public void smokeItem(int input, int output) {
+    public void smokeItem(int input, int output) {	
 		if (canSmokeSlots(input, output)) {
 			ItemStack itemstack = getItems().get(input);
-			ItemStack result = new ItemStack(Items.DIAMOND); // temp result
+			ItemStack result = itemstack.copy(); // temp result
 			ItemStack itemstack2 = getItems().get(output);
-
 			if (itemstack2.isEmpty())
 				getItems().set(output, result);
-			//setSmokeProgress(0);
+			if(result.getItem() == ItemRegistry.ANADIA && result.getTagCompound() != null && result.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
+				result.getTagCompound().getCompoundTag("Entity").setByte("fishColour", (byte) 2);
+			}
 			setSlotProgress(input, 0);
 			itemstack.shrink(1);
 		}

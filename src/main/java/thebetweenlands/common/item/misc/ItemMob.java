@@ -187,6 +187,9 @@ public class ItemMob extends Item {
 		if(!world.isRemote) {
 			Entity entity = this.createCapturedEntity(world, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, stack);
 			if(entity != null) {
+				if(entity instanceof EntityAnadia && ((EntityAnadia) entity).getFishColour() == 2)
+					return EnumActionResult.PASS;
+				
 				if(facing.getXOffset() != 0) {
 					entity.setPosition(entity.posX + facing.getXOffset() * entity.width * 0.5f, entity.posY, entity.posZ);
 				}
@@ -218,7 +221,7 @@ public class ItemMob extends Item {
 	public void onCapturedByPlayer(EntityPlayer player, EnumHand hand, ItemStack captured) {
 		
 	}
-	
+
 	@Override
 	public String getTranslationKey(ItemStack stack) {
 		ResourceLocation id = this.getCapturedEntityId(stack);
@@ -244,6 +247,7 @@ public class ItemMob extends Item {
 					if(((EntityAnadia) living).isBeingRidden())
 						((EntityAnadia) living).removePassengers();
 					tooltip.add(I18n.format(living.getName()));
+					tooltip.add(I18n.format("Colour" + ((EntityAnadia) living).getFishColour(), ((EntityAnadia) living).getFishColour()));
 					tooltip.add(I18n.format("tooltip.bl.item_mob.health", MathHelper.ceil(living.getHealth()), MathHelper.ceil((living.getMaxHealth()))));
 					tooltip.add(I18n.format("tooltip.bl.item_mob.size", ((EntityAnadia) living).getFishSize()));
 					tooltip.add(I18n.format("tooltip.bl.item_mob.speed", (living.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue())));

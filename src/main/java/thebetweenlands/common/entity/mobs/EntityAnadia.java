@@ -64,7 +64,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	public EntityAnadia.AIFindHook aiFindHook;
 	public byte BASE = 0;
 	public byte SILVER = 1;
-	public byte SOOTY = 32;// NYI just making this higher so we can addd others inbetween
+	public byte SMOKED = 2;// NYI just making this higher so we can addd others inbetween
 	
 	public EntityAnadia(World world) {
 		super(world);
@@ -190,7 +190,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         return dataManager.get(FISH_COLOUR);
     }
 
-    private void setFishColour(byte colour) {
+    public void setFishColour(byte colour) {
         dataManager.set(FISH_COLOUR, colour);
     }
 

@@ -586,6 +586,12 @@ public class ModelAnadia extends MowzieModelBase {
     	setToInitPose();
     	
     	float frame = anadia.ticksExisted + partialRenderTicks;
+
+    	if(anadia.isAIDisabled()) {
+    		swing = 0;
+    		speed = 0;
+    		frame = 0;
+    	}
     	
     	switch (anadia.getHeadType()) {
 		case 0:

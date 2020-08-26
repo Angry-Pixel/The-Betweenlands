@@ -48,30 +48,55 @@ public class RenderSmokingRack extends TileEntitySpecialRenderer<TileEntitySmoki
 		GlStateManager.popMatrix();
 		
 		if (te != null) {
+			//inputs
 			if (!te.getStackInSlot(0).isEmpty()) {
 				
 				renderItemInSlot(te, te.getStackInSlot(0), 0F, 0.0F, 0F, 1F);
 			}
 
-			if (!te.getStackInSlot(1).isEmpty()) {
+			if (!te.getStackInSlot(1).isEmpty() && te.getStackInSlot(4).isEmpty()) {
 				if(te.getStackInSlot(1).getItem() == ItemRegistry.ANADIA && te.getStackInSlot(1).getTagCompound() != null && te.getStackInSlot(1).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
 					renderAnadiaInSlot(te, te.getRenderEntity(1), 0.525F, 0.5F, 0.0F, 0.5F);
 				else
 					renderItemInSlot(te, te.getStackInSlot(1), 0F, 1.525F, 0F, 0.5F);
 			}
 
-			if (!te.getStackInSlot(2).isEmpty()) {
+			if (!te.getStackInSlot(2).isEmpty() && te.getStackInSlot(5).isEmpty()) {
 				if(te.getStackInSlot(2).getItem() == ItemRegistry.ANADIA && te.getStackInSlot(2).getTagCompound() != null && te.getStackInSlot(2).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
 					renderAnadiaInSlot(te, te.getRenderEntity(2), 0.525F, -0.4F, 0.4F, 0.5F);
 				else
 					renderItemInSlot(te, te.getStackInSlot(2), 0F, 0.55F, 0.4F, 0.5F);
 			}
-			if (!te.getStackInSlot(3).isEmpty()) {
+
+			if (!te.getStackInSlot(3).isEmpty() && te.getStackInSlot(6).isEmpty()) {
 				if(te.getStackInSlot(3).getItem() == ItemRegistry.ANADIA && te.getStackInSlot(3).getTagCompound() != null && te.getStackInSlot(3).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
 					renderAnadiaInSlot(te, te.getRenderEntity(3), 0.525F, -0.4F, -0.4F, 0.5F);
 				else
 					renderItemInSlot(te, te.getStackInSlot(3), 0F, 0.55F, -0.4F, 0.5F);
 			}
+
+			//outputs
+			if (!te.getStackInSlot(4).isEmpty()) {
+				if(te.getStackInSlot(4).getItem() == ItemRegistry.ANADIA && te.getStackInSlot(4).getTagCompound() != null && te.getStackInSlot(4).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
+					renderAnadiaInSlot(te, te.getRenderEntity(4), 0.525F, 0.5F, 0.0F, 0.5F);
+				else
+					renderItemInSlot(te, te.getStackInSlot(4), 0F, 1.525F, 0F, 0.5F);
+			}
+
+			if (!te.getStackInSlot(5).isEmpty()) {
+				if(te.getStackInSlot(5).getItem() == ItemRegistry.ANADIA && te.getStackInSlot(5).getTagCompound() != null && te.getStackInSlot(5).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
+					renderAnadiaInSlot(te, te.getRenderEntity(5), 0.525F, -0.4F, 0.4F, 0.5F);
+				else
+					renderItemInSlot(te, te.getStackInSlot(5), 0F, 0.55F, 0.4F, 0.5F);
+			}
+
+			if (!te.getStackInSlot(6).isEmpty()) {
+				if(te.getStackInSlot(6).getItem() == ItemRegistry.ANADIA && te.getStackInSlot(6).getTagCompound() != null && te.getStackInSlot(6).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
+					renderAnadiaInSlot(te, te.getRenderEntity(6), 0.525F, -0.4F, -0.4F, 0.5F);
+				else
+					renderItemInSlot(te, te.getStackInSlot(6), 0F, 0.55F, -0.4F, 0.5F);
+			}
+
 		}
 
 		GlStateManager.popMatrix();
