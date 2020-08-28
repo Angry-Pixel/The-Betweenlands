@@ -13,7 +13,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -30,7 +29,6 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.entity.mobs.EntityAnadia;
 
 public class ItemMob extends Item {
 	private final Class<? extends Entity> defaultMob;
@@ -187,8 +185,6 @@ public class ItemMob extends Item {
 		if(!world.isRemote) {
 			Entity entity = this.createCapturedEntity(world, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, stack);
 			if(entity != null) {
-				if(entity instanceof EntityAnadia && ((EntityAnadia) entity).getFishColour() == 2)
-					return EnumActionResult.PASS;
 				
 				if(facing.getXOffset() != 0) {
 					entity.setPosition(entity.posX + facing.getXOffset() * entity.width * 0.5f, entity.posY, entity.posZ);
@@ -243,19 +239,7 @@ public class ItemMob extends Item {
 			Entity entity = this.createCapturedEntity(worldIn, 0, 0, 0, stack);
 			if(entity instanceof EntityLivingBase) {
 				EntityLivingBase living = (EntityLivingBase) entity;
-				if (living instanceof EntityAnadia) {
-					if(((EntityAnadia) living).isBeingRidden())
-						((EntityAnadia) living).removePassengers();
-					tooltip.add(I18n.format(living.getName()));
-					tooltip.add(I18n.format("Colour" + ((EntityAnadia) living).getFishColour(), ((EntityAnadia) living).getFishColour()));
-					tooltip.add(I18n.format("tooltip.bl.item_mob.health", MathHelper.ceil(living.getHealth()), MathHelper.ceil((living.getMaxHealth()))));
-					tooltip.add(I18n.format("tooltip.bl.item_mob.size", ((EntityAnadia) living).getFishSize()));
-					tooltip.add(I18n.format("tooltip.bl.item_mob.speed", (living.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue())));
-					tooltip.add(I18n.format("tooltip.bl.item_mob.strength", (living.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue())));
-					tooltip.add(I18n.format("tooltip.bl.item_mob.stamina", ((EntityAnadia) living).getStaminaMods()));
-				}
-				else
-					tooltip.add(I18n.format("tooltip.bl.item_mob.health", MathHelper.ceil(living.getHealth() / 2), MathHelper.ceil(living.getMaxHealth() / 2)));
+				tooltip.add(I18n.format("tooltip.bl.item_mob.health", MathHelper.ceil(living.getHealth() / 2), MathHelper.ceil(living.getMaxHealth() / 2)));
 			}
 		}
 	}

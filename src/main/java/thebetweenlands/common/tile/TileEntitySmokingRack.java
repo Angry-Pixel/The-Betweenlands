@@ -23,7 +23,6 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.container.BlockSmokingRack;
-import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class TileEntitySmokingRack extends TileEntity implements ITickable, IInventory {
@@ -145,8 +144,11 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 	}
 
 	public Entity getRenderEntity(int slot) {
-		Entity entity = EntityList.createEntityFromNBT(getItems().get(slot).getTagCompound().getCompoundTag("Entity"), getWorld());
-		entity.setPositionAndRotation(0D, 0D, 0D, -90, 90F);
+		Entity entity = null;
+		if (getItems().get(slot).getTagCompound() != null && getItems().get(slot).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
+			entity = EntityList.createEntityFromNBT(getItems().get(slot).getTagCompound().getCompoundTag("Entity"), getWorld());
+			entity.setPositionAndRotation(0D, 0D, 0D, -90, 90F);
+		}
 		return entity;
 	}
 
@@ -165,8 +167,10 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 			return false;
 		if (!getItems().get(output).isEmpty())
 			return false;
-		if (getRenderEntity(input) instanceof EntityAnadia && ((EntityAnadia)getRenderEntity(input)).getFishColour() == 2)
-			return false;
+		if (getItems().get(input).getTagCompound() != null && getItems().get(input).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
+			if(getItems().get(input).getTagCompound().getCompoundTag("Entity").hasKey("fishColour") && getItems().get(input).getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 2)
+				return false;
+
 		return true;
 	}
     
