@@ -10,6 +10,7 @@ import com.google.common.collect.Multimap;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -25,6 +26,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.crafting.IShapedRecipe;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -34,6 +36,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.recipes.IDruidAltarRecipe;
 import thebetweenlands.api.recipes.IPurifierRecipe;
+import thebetweenlands.api.recipes.ISmokingRackRecipe;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
@@ -80,6 +83,7 @@ import thebetweenlands.common.recipe.misc.RecipesCoating;
 import thebetweenlands.common.recipe.misc.RecipesFishBait;
 import thebetweenlands.common.recipe.misc.RecipesLifeCrystal;
 import thebetweenlands.common.recipe.misc.RecipesPlantTonic;
+import thebetweenlands.common.recipe.misc.SmokingRackRecipe;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
@@ -117,6 +121,7 @@ public class RecipeRegistry {
 		registerDruidAltarRecipes();
 		registerAnimatorRecipes();
 		registerCenserRecipes();
+		registerSmokingRackRecipes();
 
 		ElixirRecipes.init();
 
@@ -633,5 +638,36 @@ public class RecipeRegistry {
 		AbstractCenserRecipe.addRecipe(new CenserRecipeAspect());
 		AbstractCenserRecipe.addRecipe(new CenserRecipeCremains());
 		AbstractCenserRecipe.addRecipe(new CenserRecipeSwampWater());
+	}
+	
+	private static void registerSmokingRackRecipes() {
+		SmokingRackRecipe.addRecipe(new ItemStack(Items.DIAMOND), 800, new ItemStack(Blocks.DIRT));
+		SmokingRackRecipe.addRecipe(new ItemStack(Items.LEATHER), 800, new ItemStack(Items.ROTTEN_FLESH));
+
+		SmokingRackRecipe.addRecipe(new ISmokingRackRecipe() {
+			
+			@Override
+			public boolean matchesInput(ItemStack stack) {
+				return !stack.isEmpty() && stack.getItem() == ItemRegistry.ANADIA && stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND);
+			}
+
+			@Override
+			public ItemStack getOutput(ItemStack stack) {
+				ItemStack output = stack.copy();
+				if(output.getTagCompound() != null && output.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
+					output.getTagCompound().getCompoundTag("Entity").setByte("fishColour", (byte) 2);
+				return output;
+			}
+
+			@Override
+			public int getSmokingTime(ItemStack stack) {
+				return 800;
+			}
+
+			@Override
+			public ItemStack getInput() {
+				return new ItemStack(ItemRegistry.ANADIA);
+			}
+		});
 	}
 }

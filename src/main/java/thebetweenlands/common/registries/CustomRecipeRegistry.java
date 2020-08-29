@@ -16,6 +16,7 @@ import thebetweenlands.api.recipes.ICompostBinRecipe;
 import thebetweenlands.api.recipes.IDruidAltarRecipe;
 import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
 import thebetweenlands.api.recipes.IPurifierRecipe;
+import thebetweenlands.api.recipes.ISmokingRackRecipe;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.recipe.custom.CustomAnimatorRecipes;
@@ -26,6 +27,7 @@ import thebetweenlands.common.recipe.custom.CustomPestleAndMortarRecipes;
 import thebetweenlands.common.recipe.custom.CustomPurifierRecipes;
 import thebetweenlands.common.recipe.custom.CustomRecipes;
 import thebetweenlands.common.recipe.custom.CustomRecipes.InvalidRecipeException;
+import thebetweenlands.common.recipe.custom.CustomSmokingRackRecipes;
 
 public class CustomRecipeRegistry {
 	private CustomRecipeRegistry() { }
@@ -38,6 +40,7 @@ public class CustomRecipeRegistry {
 	public static CustomRecipes<ICompostBinRecipe> compostBinRecipes;
 	public static CustomRecipes<IDruidAltarRecipe> druidAltarRecipes;
 	public static CustomRecipes<IPestleAndMortarRecipe> pestleAndMortarRecipes;
+	public static CustomRecipes<ISmokingRackRecipe> smokingRackRecipes;
 
 	public static void preInit() {
 		RECIPE_TYPES.add(animatorRecipes = new CustomAnimatorRecipes());
@@ -46,6 +49,7 @@ public class CustomRecipeRegistry {
 		RECIPE_TYPES.add(compostBinRecipes = new CustomCompostBinRecipes());
 		RECIPE_TYPES.add(druidAltarRecipes = new CustomDruidAltarRecipes());
 		RECIPE_TYPES.add(pestleAndMortarRecipes = new CustomPestleAndMortarRecipes());
+		RECIPE_TYPES.add(smokingRackRecipes = new CustomSmokingRackRecipes());
 	}
 
 	public static boolean loadCustomRecipes() {

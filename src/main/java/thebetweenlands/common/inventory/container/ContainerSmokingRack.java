@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.inventory.slot.SlotOutput;
 import thebetweenlands.common.inventory.slot.SlotRestriction;
+import thebetweenlands.common.inventory.slot.SlotSizeRestriction;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntitySmokingRack;
@@ -16,7 +17,6 @@ public class ContainerSmokingRack extends Container {
 
 	private final EntityPlayer player;
 	public ItemStack moss = new ItemStack(Item.getItemFromBlock(BlockRegistry.MOSS));
-	public ItemStack fish = new ItemStack(ItemRegistry.ANADIA);
 
 	public ContainerSmokingRack(EntityPlayer player, TileEntitySmokingRack tile) {
 		InventoryPlayer playerInventory = player.inventory;
@@ -27,9 +27,9 @@ public class ContainerSmokingRack extends Container {
 		addSlotToContainer(new SlotRestriction(tile, 0, 26, 54, moss, 64, this));
 		
 		//input
-		addSlotToContainer(new SlotRestriction(tile, 1, 62, 18, fish, 1, this));
-		addSlotToContainer(new SlotRestriction(tile, 2, 62, 36, fish, 1, this));
-		addSlotToContainer(new SlotRestriction(tile, 3, 62, 54, fish, 1, this));
+		addSlotToContainer(new SlotSizeRestriction(tile, 1, 62, 18, 1));
+		addSlotToContainer(new SlotSizeRestriction(tile, 2, 62, 36, 1));
+		addSlotToContainer(new SlotSizeRestriction(tile, 3, 62, 54, 1));
 		
 		//output
 		addSlotToContainer(new SlotOutput(tile, 4, 134, 18, this));

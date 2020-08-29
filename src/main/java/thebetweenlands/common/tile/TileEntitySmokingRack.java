@@ -23,7 +23,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.container.BlockSmokingRack;
-import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.recipe.misc.SmokingRackRecipe;
 
 public class TileEntitySmokingRack extends TileEntity implements ITickable, IInventory {
 	public NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(7, ItemStack.EMPTY);
@@ -157,24 +157,32 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 		setSmokeProgress(0);
 		fuelStack.shrink(1);
     }
-    
+
 	private boolean canSmokeSlots(int input, int output) {
 		if (!active)
 			return false;
-		if (!hasFuel())
+		else if (!hasFuel())
 			return false;
-		if (getItems().get(input).isEmpty())
+		else if (getItems().get(input).isEmpty())
 			return false;
-		if (!getItems().get(output).isEmpty())
+		else if (!getItems().get(output).isEmpty())
 			return false;
-		if (getItems().get(input).getTagCompound() != null && getItems().get(input).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
-			if(getItems().get(input).getTagCompound().getCompoundTag("Entity").hasKey("fishColour") && getItems().get(input).getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 2)
-				return false;
-
-		return true;
+		else {
+			ItemStack fuckingThing = SmokingRackRecipe.getRecipeOutput(getItems().get(input));
+			if (!fuckingThing.isEmpty()) {
+				System.out.println("Thing: " + fuckingThing.getDisplayName());
+				if (!getItems().get(input).isEmpty() && getItems().get(input).getTagCompound() != null && getItems().get(input).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
+					if(getItems().get(input).getTagCompound().getCompoundTag("Entity").hasKey("fishColour") && getItems().get(input).getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 2) {
+						return false;
+					}
+				}
+				return true;
+			}
+		}
+		return false;
 	}
-    
-	private boolean hasFuel() { //temp debug
+
+	private boolean hasFuel() {
 		ItemStack fuelStack = getItems().get(0);
 		if (!fuelStack.isEmpty())
 			return true;
@@ -186,13 +194,10 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
     public void smokeItem(int input, int output) {	
 		if (canSmokeSlots(input, output)) {
 			ItemStack itemstack = getItems().get(input);
-			ItemStack result = itemstack.copy(); // temp result
+			ItemStack result = SmokingRackRecipe.getRecipeOutput(itemstack).copy();//itemstack.copy(); //temp result
 			ItemStack itemstack2 = getItems().get(output);
 			if (itemstack2.isEmpty())
 				getItems().set(output, result);
-			if(result.getItem() == ItemRegistry.ANADIA && result.getTagCompound() != null && result.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
-				result.getTagCompound().getCompoundTag("Entity").setByte("fishColour", (byte) 2);
-			}
 			setSlotProgress(input, 0);
 			itemstack.shrink(1);
 		}
