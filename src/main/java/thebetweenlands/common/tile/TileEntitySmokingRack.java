@@ -159,17 +159,13 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
     }
 
 	private boolean canSmokeSlots(int input, int output) {
-		if (!active)
-			return false;
-		else if (!hasFuel())
-			return false;
-		else if (getItems().get(input).isEmpty())
-			return false;
-		else if (!getItems().get(output).isEmpty())
+		if (!active || !hasFuel() || getItems().get(input).isEmpty() || !getItems().get(output).isEmpty())
 			return false;
 		else {
 			ItemStack fuckingThing = SmokingRackRecipe.getRecipeOutput(getItems().get(input));
-			if (!fuckingThing.isEmpty()) {
+			if (fuckingThing.isEmpty())
+				return false;
+			else {
 				System.out.println("Thing: " + fuckingThing.getDisplayName());
 				if (!getItems().get(input).isEmpty() && getItems().get(input).getTagCompound() != null && getItems().get(input).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
 					if(getItems().get(input).getTagCompound().getCompoundTag("Entity").hasKey("fishColour") && getItems().get(input).getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 2) {
@@ -179,7 +175,7 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 				return true;
 			}
 		}
-		return false;
+		//return false;
 	}
 
 	private boolean hasFuel() {
@@ -194,10 +190,10 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
     public void smokeItem(int input, int output) {	
 		if (canSmokeSlots(input, output)) {
 			ItemStack itemstack = getItems().get(input);
-			ItemStack result = SmokingRackRecipe.getRecipeOutput(itemstack).copy();//itemstack.copy(); //temp result
+			ItemStack result = SmokingRackRecipe.getRecipeOutput(itemstack);
 			ItemStack itemstack2 = getItems().get(output);
 			if (itemstack2.isEmpty())
-				getItems().set(output, result);
+				getItems().set(output, result.copy());
 			setSlotProgress(input, 0);
 			itemstack.shrink(1);
 		}
