@@ -3,12 +3,10 @@ package thebetweenlands.common.recipe.misc;
 import java.util.ArrayList;
 import java.util.List;
 
-import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import thebetweenlands.api.recipes.IPurifierRecipe;
 import thebetweenlands.api.recipes.ISmokingRackRecipe;
 
 public class SmokingRackRecipe implements ISmokingRackRecipe {

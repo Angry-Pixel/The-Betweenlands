@@ -641,8 +641,8 @@ public class RecipeRegistry {
 	}
 	
 	private static void registerSmokingRackRecipes() {
-		SmokingRackRecipe.addRecipe(new ItemStack(Items.DIAMOND), 800, new ItemStack(Blocks.DIRT));
-		SmokingRackRecipe.addRecipe(new ItemStack(Items.LEATHER), 800, new ItemStack(Items.ROTTEN_FLESH));
+		SmokingRackRecipe.addRecipe(new ItemStack(Items.DIAMOND), 1, new ItemStack(Blocks.DIRT));
+		SmokingRackRecipe.addRecipe(new ItemStack(Items.LEATHER), 1, new ItemStack(Items.ROTTEN_FLESH));
 
 		SmokingRackRecipe.addRecipe(new ISmokingRackRecipe() {
 			
@@ -661,7 +661,7 @@ public class RecipeRegistry {
 
 			@Override
 			public int getSmokingTime(ItemStack stack) {
-				return 800;
+				return 3;
 			}
 
 			@Override

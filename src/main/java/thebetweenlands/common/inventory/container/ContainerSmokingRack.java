@@ -10,7 +10,6 @@ import thebetweenlands.common.inventory.slot.SlotOutput;
 import thebetweenlands.common.inventory.slot.SlotRestriction;
 import thebetweenlands.common.inventory.slot.SlotSizeRestriction;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntitySmokingRack;
 
 public class ContainerSmokingRack extends Container {
@@ -58,11 +57,8 @@ public class ContainerSmokingRack extends Container {
 					if (!this.mergeItemStack(stack1, 0, 1, false))
 						return ItemStack.EMPTY;
 				}
-
-				if (stack1.getItem() == ItemRegistry.ANADIA) {
 					if (!this.mergeItemStack(stack1, 1, 4, false))
 						return ItemStack.EMPTY;
-				}
 
 			} else if (!mergeItemStack(stack1, 7, inventorySlots.size(), false))
 				return ItemStack.EMPTY;

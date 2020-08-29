@@ -1,7 +1,5 @@
 package thebetweenlands.api.recipes;
 
-import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
 public interface ISmokingRackRecipe {

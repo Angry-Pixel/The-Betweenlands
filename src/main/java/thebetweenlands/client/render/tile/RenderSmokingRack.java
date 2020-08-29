@@ -32,7 +32,7 @@ public class RenderSmokingRack extends TileEntitySpecialRenderer<TileEntitySmoki
 		int meta = te != null ? te.getBlockMetadata() : 0;
 
 		GlStateManager.pushMatrix();
-		
+
 		GlStateManager.translate((float) x + 0.5f, (float) y, (float) z + 0.5f);
 		GlStateManager.rotate(getRotation(meta), 0.0F, 1F, 0F);
 
@@ -46,7 +46,7 @@ public class RenderSmokingRack extends TileEntitySpecialRenderer<TileEntitySmoki
 		MODEL.render();
 	//	GlStateManager.enableCull();
 		GlStateManager.popMatrix();
-		
+
 		if (te != null) {
 			//inputs
 			if (!te.getStackInSlot(0).isEmpty()) {
@@ -117,7 +117,7 @@ public class RenderSmokingRack extends TileEntitySpecialRenderer<TileEntitySmoki
 			GlStateManager.popMatrix();
 		}
 	}
-	
+
 	public void renderItemInSlot(TileEntitySmokingRack smoking_rack, ItemStack stack, float x, float y, float z, float scale) {
 		if (!stack.isEmpty()) {
 			GlStateManager.pushMatrix();
