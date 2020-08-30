@@ -42,7 +42,7 @@ public class RenderSmokingRack extends TileEntitySpecialRenderer<TileEntitySmoki
 		GlStateManager.translate(0, 1.5f, 0);
 		GlStateManager.scale(1F, -1F, -1F);
 	//	GlStateManager.disableCull();
-		
+
 		if(te != null && te.active)
 			this.bindTexture(TEXTURE_SMOKED);
 		else
@@ -54,7 +54,6 @@ public class RenderSmokingRack extends TileEntitySpecialRenderer<TileEntitySmoki
 		if (te != null) {
 			//inputs
 			if (!te.getStackInSlot(0).isEmpty()) {
-				
 				renderItemInSlot(te, te.getStackInSlot(0), 0F, 0.0F, 0F, 1F);
 			}
 
@@ -100,7 +99,6 @@ public class RenderSmokingRack extends TileEntitySpecialRenderer<TileEntitySmoki
 				else
 					renderItemInSlot(te, te.getStackInSlot(6), 0F, 0.55F, -0.4F, 0.5F);
 			}
-
 		}
 
 		GlStateManager.popMatrix();
@@ -139,6 +137,7 @@ public class RenderSmokingRack extends TileEntitySpecialRenderer<TileEntitySmoki
 				GlStateManager.rotate(90F, 1.0F, 0.0F, 0.0F);
 				GlStateManager.rotate(0F, 0.0F, 0.0F, 1.0F);
 			}
+
 			bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 			Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
 			//RenderHelper.disableStandardItemLighting();
