@@ -152,7 +152,7 @@ public class BlockSmokingRack extends BlockContainer implements IStateMappedBloc
 
 	@Override
 	public boolean isFullCube(IBlockState state) {
-		return true;
+		return false;
 	}
 
 	@Override

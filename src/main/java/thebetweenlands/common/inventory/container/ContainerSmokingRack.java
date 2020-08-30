@@ -15,14 +15,14 @@ import thebetweenlands.common.tile.TileEntitySmokingRack;
 public class ContainerSmokingRack extends Container {
 
 	private final EntityPlayer player;
-	public ItemStack moss = new ItemStack(Item.getItemFromBlock(BlockRegistry.MOSS));
+	public ItemStack leaves = new ItemStack(Item.getItemFromBlock(BlockRegistry.FALLEN_LEAVES));
 
 	public ContainerSmokingRack(EntityPlayer player, TileEntitySmokingRack tile) {
 		InventoryPlayer playerInventory = player.inventory;
 		this.player = player;
 		
 		//fuel
-		addSlotToContainer(new SlotRestriction(tile, 0, 26, 54, moss, 64, this));
+		addSlotToContainer(new SlotRestriction(tile, 0, 26, 54, leaves, 64, this));
 		
 		//input
 		addSlotToContainer(new SlotSizeRestriction(tile, 1, 62, 18, 1));
@@ -52,7 +52,7 @@ public class ContainerSmokingRack extends Container {
 			stack = stack1.copy();
 
 			if (slotIndex > 6) {
-				if (stack1.getItem() == Item.getItemFromBlock(BlockRegistry.MOSS) && stack1.getItemDamage() == 0) {
+				if (stack1.getItem() == Item.getItemFromBlock(BlockRegistry.FALLEN_LEAVES) && stack1.getItemDamage() == 0) {
 					if (!this.mergeItemStack(stack1, 0, 1, false))
 						return ItemStack.EMPTY;
 				}

@@ -208,6 +208,7 @@ import thebetweenlands.common.block.terrain.BlockLogBetweenlands;
 import thebetweenlands.common.block.terrain.BlockLogSap;
 import thebetweenlands.common.block.terrain.BlockMud;
 import thebetweenlands.common.block.terrain.BlockPeat;
+import thebetweenlands.common.block.terrain.BlockPeatSmouldering;
 import thebetweenlands.common.block.terrain.BlockPuddle;
 import thebetweenlands.common.block.terrain.BlockRoot;
 import thebetweenlands.common.block.terrain.BlockRootUnderwater;
@@ -262,6 +263,7 @@ public class BlockRegistry {
     public static final Block GENERIC_STONE = new BlockGenericStone();
     public static final Block MUD = new BlockMud();
     public static final Block PEAT = new BlockPeat();
+    public static final Block PEAT_SMOULDERING = new BlockPeatSmouldering();
     public static final Block SLUDGY_DIRT = new BlockSludgyDirt();
     public static final Block SPREADING_SLUDGY_DIRT = new BlockSpreadingSludgyDirt();
     public static final Block SLIMY_DIRT = new BasicBlock(Material.GROUND)

@@ -13,6 +13,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.armor.ItemRubberBoots;
+import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockPeat extends Block {
 	private static final AxisAlignedBB PEAT_AABB = new AxisAlignedBB(0, 0, 0, 1, 1 - 0.125, 1);
@@ -48,5 +49,14 @@ public class BlockPeat extends Block {
 	@Override
 	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return 0;
+	}
+
+	@Override
+	public void onBlockClicked(World world, BlockPos pos, EntityPlayer playerIn) {
+		if (!world.isRemote) {
+			if (world.getBlockState(pos.up()).getMaterial() == Material.FIRE) {
+				world.setBlockState(pos, BlockRegistry.PEAT_SMOULDERING.getDefaultState());
+			}
+		}
 	}
 }

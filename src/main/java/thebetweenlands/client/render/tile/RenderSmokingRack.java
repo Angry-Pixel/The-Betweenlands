@@ -126,7 +126,7 @@ public class RenderSmokingRack extends TileEntitySpecialRenderer<TileEntitySmoki
 			GlStateManager.translate(x, y, z);
 			GlStateManager.scale(scale, scale, scale);
 
-			if(stack.getItem() != Item.getItemFromBlock(BlockRegistry.MOSS)) {
+			if(stack.getItem() != Item.getItemFromBlock(BlockRegistry.FALLEN_LEAVES)) {
 				GlStateManager.rotate(0F, 0.0F, 1.0F, 0.0F);
 				GlStateManager.rotate(0F, 1.0F, 0.0F, 0.0F);
 				GlStateManager.rotate(45F, 0.0F, 0.0F, 1.0F);

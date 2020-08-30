@@ -6,7 +6,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -25,6 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.container.BlockSmokingRack;
 import thebetweenlands.common.recipe.misc.SmokingRackRecipe;
+import thebetweenlands.common.registries.BlockRegistry;
 
 public class TileEntitySmokingRack extends TileEntity implements ITickable, IInventory {
 	public NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(7, ItemStack.EMPTY);
@@ -56,12 +56,12 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
         if (getWorld().isRemote) 
             return;
 
-        if (getWorld().getBlockState(pos.down()).getBlock() == Blocks.FIRE && !active) {
+        if (getWorld().getBlockState(pos.down()).getBlock() == BlockRegistry.PEAT_SMOULDERING && !active) {
         	active = true;
         	markForUpdate();
         }
 
-        if (getWorld().getBlockState(pos.down()).getBlock() != Blocks.FIRE && active) {
+        if (getWorld().getBlockState(pos.down()).getBlock() != BlockRegistry.PEAT_SMOULDERING && active) {
         	active = false;
         	markForUpdate();
         }
@@ -211,7 +211,7 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 		return modifier;
 	}
 
-	private boolean hasFuel() {
+	public boolean hasFuel() {
 		ItemStack fuelStack = getItems().get(0);
 		if (!fuelStack.isEmpty())
 			return true;
