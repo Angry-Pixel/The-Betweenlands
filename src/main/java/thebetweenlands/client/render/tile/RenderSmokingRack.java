@@ -42,7 +42,11 @@ public class RenderSmokingRack extends TileEntitySpecialRenderer<TileEntitySmoki
 		GlStateManager.translate(0, 1.5f, 0);
 		GlStateManager.scale(1F, -1F, -1F);
 	//	GlStateManager.disableCull();
-		this.bindTexture(TEXTURE_NORMAL);
+		
+		if(te != null && te.active)
+			this.bindTexture(TEXTURE_SMOKED);
+		else
+			this.bindTexture(TEXTURE_NORMAL);
 		MODEL.render();
 	//	GlStateManager.enableCull();
 		GlStateManager.popMatrix();

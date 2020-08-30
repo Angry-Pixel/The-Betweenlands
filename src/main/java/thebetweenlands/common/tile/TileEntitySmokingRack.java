@@ -56,11 +56,15 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
         if (getWorld().isRemote) 
             return;
 
-        if (getWorld().getBlockState(pos.down()).getBlock() == Blocks.FIRE && !active)
+        if (getWorld().getBlockState(pos.down()).getBlock() == Blocks.FIRE && !active) {
         	active = true;
+        	markForUpdate();
+        }
 
-        if (getWorld().getBlockState(pos.down()).getBlock() != Blocks.FIRE && active)
+        if (getWorld().getBlockState(pos.down()).getBlock() != Blocks.FIRE && active) {
         	active = false;
+        	markForUpdate();
+        }
 
 		if (getWorld().getBlockState(pos).getBlock() instanceof BlockSmokingRack && active) {
 			if (hasFuel()) {
@@ -284,6 +288,7 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 		inventory = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
 		if (nbt.hasKey("Items", 9))
 			ItemStackHelper.loadAllItems(nbt, inventory);
+		active = nbt.getBoolean("active");
 		smoke_progress = nbt.getInteger("smoke_progress");
 		slot_1_progress = nbt.getInteger("slot_1_progress");
 		slot_2_progress = nbt.getInteger("slot_2_progress");
@@ -296,6 +301,7 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 
 	public NBTTagCompound saveToNbt(NBTTagCompound nbt) {
 		ItemStackHelper.saveAllItems(nbt, inventory, false);
+		nbt.setBoolean("active", active);
 		nbt.setInteger("smoke_progress", smoke_progress);
 		nbt.setInteger("slot_1_progress", slot_1_progress);
 		nbt.setInteger("slot_2_progress", slot_2_progress);
