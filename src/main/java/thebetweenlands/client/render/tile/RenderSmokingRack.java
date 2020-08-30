@@ -34,7 +34,7 @@ public class RenderSmokingRack extends TileEntitySpecialRenderer<TileEntitySmoki
 		GlStateManager.pushMatrix();
 
 		GlStateManager.translate((float) x + 0.5f, (float) y, (float) z + 0.5f);
-		GlStateManager.rotate(getRotation(meta), 0.0F, 1F, 0F);
+		GlStateManager.rotate(getRotation(meta) - 90F, 0.0F, 1F, 0F);
 
 		GlStateManager.pushMatrix();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);

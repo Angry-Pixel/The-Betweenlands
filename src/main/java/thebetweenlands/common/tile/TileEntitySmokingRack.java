@@ -16,6 +16,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
@@ -255,6 +256,12 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
     public int getItemProgressScaledBottom(int index, int count) {
         return getSlotProgress(3) * count / (MAX_SMOKING_TIME * curing_modifier_3);
     }
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public AxisAlignedBB getRenderBoundingBox() {
+		return new AxisAlignedBB(getPos()).grow(0D, 1D, 0D);
+	}
 
     public void markForUpdate() {
         IBlockState state = this.getWorld().getBlockState(this.getPos());

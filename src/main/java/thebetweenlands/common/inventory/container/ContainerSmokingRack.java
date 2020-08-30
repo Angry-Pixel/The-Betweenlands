@@ -22,7 +22,6 @@ public class ContainerSmokingRack extends Container {
 		this.player = player;
 		
 		//fuel
-		//addSlotToContainer(new Slot(tile, 0, 26, 54));
 		addSlotToContainer(new SlotRestriction(tile, 0, 26, 54, moss, 64, this));
 		
 		//input
