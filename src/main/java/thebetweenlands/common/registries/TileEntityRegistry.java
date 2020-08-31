@@ -23,6 +23,7 @@ import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
+import thebetweenlands.common.tile.TileEntityFishTrimmingTable;
 import thebetweenlands.common.tile.TileEntityFishingTackleBox;
 import thebetweenlands.common.tile.TileEntityGeckoCage;
 import thebetweenlands.common.tile.TileEntityGroundItem;
@@ -111,6 +112,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityBarrel.class, "tar_barrel");
 		registerTileEntity(TileEntityFishingTackleBox.class, "fishing_tackle_box");
 		registerTileEntity(TileEntitySmokingRack.class, "smoking_rack");
+		registerTileEntity(TileEntityFishTrimmingTable.class, "fish_trimming_table");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

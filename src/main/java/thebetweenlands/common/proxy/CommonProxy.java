@@ -35,6 +35,7 @@ import thebetweenlands.common.inventory.container.ContainerDraetonPouch;
 import thebetweenlands.common.inventory.container.ContainerDraetonUpgrades;
 import thebetweenlands.common.inventory.container.ContainerDraetonWorkbench;
 import thebetweenlands.common.inventory.container.ContainerDruidAltar;
+import thebetweenlands.common.inventory.container.ContainerFishTrimmingTable;
 import thebetweenlands.common.inventory.container.ContainerFishingTackleBox;
 import thebetweenlands.common.inventory.container.ContainerItemNaming;
 import thebetweenlands.common.inventory.container.ContainerMortar;
@@ -49,6 +50,7 @@ import thebetweenlands.common.tile.TileEntityBLFurnace;
 import thebetweenlands.common.tile.TileEntityBarrel;
 import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
+import thebetweenlands.common.tile.TileEntityFishTrimmingTable;
 import thebetweenlands.common.tile.TileEntityFishingTackleBox;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityPurifier;
@@ -78,12 +80,13 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_DRAETON_UPGRADES = 21;
 	public static final int GUI_FISHING_TACKLE_BOX = 30;
 	public static final int GUI_SMOKING_RACK = 31;
+	public static final int GUI_FISH_TRIMMING_TABLE= 32;
 	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 		Entity entity = null;
-		
+
 		switch (id) {
 		case GUI_DRUID_ALTAR:
 			if (tile instanceof TileEntityDruidAltar) {
@@ -155,7 +158,7 @@ public class CommonProxy implements IGuiHandler {
 				return new ContainerCenser(player.inventory, (TileEntityCenser) tile);
 			}
 			break;
-			
+
 		case GUI_BARREL:
 			if (tile instanceof TileEntityBarrel) {
 				return new ContainerBarrel(player.inventory, (TileEntityBarrel) tile);
@@ -175,7 +178,7 @@ public class CommonProxy implements IGuiHandler {
 				}
 			}
 			break;
-			
+
 		case GUI_DRAETON_CRAFTING:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton) {
@@ -188,7 +191,7 @@ public class CommonProxy implements IGuiHandler {
 				}
 			}
 			break;
-			
+
 		case GUI_DRAETON_FURNACE:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton) {
@@ -201,13 +204,13 @@ public class CommonProxy implements IGuiHandler {
 				}
 			}
 			break;
-			
+
 		case GUI_DRAETON_BURNER:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton)
 				return new ContainerDraetonBurner(player.inventory, ((EntityDraeton)entity).getBurnerInventory(), (EntityDraeton)entity);
 			break;
-			
+
 		case GUI_DRAETON_UPGRADES:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton)
@@ -222,6 +225,11 @@ public class CommonProxy implements IGuiHandler {
 		case GUI_SMOKING_RACK:
 			if (tile instanceof TileEntitySmokingRack)
 				return new ContainerSmokingRack(player, (TileEntitySmokingRack) tile);
+			break;
+
+		case GUI_FISH_TRIMMING_TABLE:
+			if (tile instanceof TileEntityFishTrimmingTable)
+				return new ContainerFishTrimmingTable(player, (TileEntityFishTrimmingTable) tile);
 			break;
 		}
 		return null;

@@ -54,6 +54,7 @@ import thebetweenlands.client.gui.inventory.GuiDraetonBurner;
 import thebetweenlands.client.gui.inventory.GuiDraetonCrafting;
 import thebetweenlands.client.gui.inventory.GuiDraetonUpgrades;
 import thebetweenlands.client.gui.inventory.GuiDruidAltar;
+import thebetweenlands.client.gui.inventory.GuiFishTrimmingTable;
 import thebetweenlands.client.gui.inventory.GuiFishingTackleBox;
 import thebetweenlands.client.gui.inventory.GuiMortar;
 import thebetweenlands.client.gui.inventory.GuiPouch;
@@ -274,6 +275,7 @@ import thebetweenlands.common.tile.TileEntityDecayPitHangingChain;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
+import thebetweenlands.common.tile.TileEntityFishTrimmingTable;
 import thebetweenlands.common.tile.TileEntityFishingTackleBox;
 import thebetweenlands.common.tile.TileEntityGeckoCage;
 import thebetweenlands.common.tile.TileEntityGroundItem;
@@ -313,7 +315,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 		Entity entity = null;
-		
+
 		switch (id) {
 		case GUI_DRUID_ALTAR:
 			if (tile instanceof TileEntityDruidAltar) {
@@ -393,7 +395,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 
 		case GUI_LORE:
 			return new GuiLorePage(player.getHeldItem(x == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
-			
+
 		case GUI_CENSER:
 			if (tile instanceof TileEntityCenser) {
 				return new GuiCenser(player.inventory, (TileEntityCenser) tile);
@@ -419,7 +421,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 				}
 			}
 			break;
-			
+
 		case GUI_DRAETON_CRAFTING:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton) {
@@ -432,7 +434,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 				}
 			}
 			break;
-			
+
 		case GUI_DRAETON_FURNACE:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton) {
@@ -445,13 +447,13 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 				}
 			}
 			break;
-			
+
 		case GUI_DRAETON_BURNER:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton)
 				return new GuiDraetonBurner(player.inventory, ((EntityDraeton)entity).getBurnerInventory(), (EntityDraeton)entity);
 			break;
-			
+
 		case GUI_DRAETON_UPGRADES:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton)
@@ -462,10 +464,15 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			if (tile instanceof TileEntityFishingTackleBox)
 				return new GuiFishingTackleBox(player, (TileEntityFishingTackleBox) tile);
 			break;
-			
+
 		case GUI_SMOKING_RACK:
 			if (tile instanceof TileEntitySmokingRack)
 				return new GuiSmokingRack(player, (TileEntitySmokingRack) tile);
+			break;
+
+		case GUI_FISH_TRIMMING_TABLE:
+			if (tile instanceof TileEntityFishTrimmingTable)
+				return new GuiFishTrimmingTable(player, (TileEntityFishTrimmingTable) tile);
 			break;
 		}
 
