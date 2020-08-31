@@ -12,7 +12,7 @@ import thebetweenlands.common.tile.TileEntitySmokingRack;
 
 @SideOnly(Side.CLIENT)
 public class GuiSmokingRack extends GuiContainer {
-	private static final ResourceLocation GUI_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/smoking_rack_gui_alt.png");
+	private static final ResourceLocation GUI_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/smoking_rack.png");
 	private TileEntitySmokingRack smoking_rack;
 
 	public GuiSmokingRack(EntityPlayer inventory, TileEntitySmokingRack tile) {
