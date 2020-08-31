@@ -1,5 +1,8 @@
 package thebetweenlands.client.gui.inventory;
 
+import java.io.IOException;
+
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
@@ -20,6 +23,14 @@ public class GuiFishTrimmingTable extends GuiContainer {
 		fish_trimming_table = tile;
 		ySize = 222;
 		xSize = 176;
+	}
+	
+	@Override
+	public void initGui() {
+		super.initGui();
+		int xOffSet = (width - xSize) / 2;
+		int yOffSet = (height - ySize) / 2;
+		addButton(new GuiButton(0, xOffSet + 48, yOffSet + 106, 80, 20, I18n.format("gui.bl.fish_trimming_table.butcher")));
 	}
 
 	@Override
@@ -43,5 +54,13 @@ public class GuiFishTrimmingTable extends GuiContainer {
 		this.drawDefaultBackground();
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
+	}
+	
+	@Override
+	protected void actionPerformed(GuiButton button) throws IOException {
+		super.actionPerformed(button);
+		if(button.id == 0)
+			System.out.println("Chop, Chop, Chop!");
+			//TheBetweenlands.networkWrapper.sendToServer(new MessageButcherFish(mc.player, button.id, fish_trimming_table.getPos()));
 	}
 }

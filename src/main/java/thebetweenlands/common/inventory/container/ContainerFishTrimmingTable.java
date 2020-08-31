@@ -15,11 +15,12 @@ public class ContainerFishTrimmingTable extends Container {
 
 	private final EntityPlayer player;
 	public ItemStack anadia = new ItemStack(ItemRegistry.ANADIA);
+	public ItemStack axe = new ItemStack(ItemRegistry.BONE_AXE);
 
 	public ContainerFishTrimmingTable(EntityPlayer player, TileEntityFishTrimmingTable tile) {
 		InventoryPlayer playerInventory = player.inventory;
 		this.player = player;
-		
+
 		//input
 		addSlotToContainer(new SlotRestriction(tile, 0, 80, 22, anadia, 1, this));
 
@@ -28,6 +29,9 @@ public class ContainerFishTrimmingTable extends Container {
 		addSlotToContainer(new SlotOutput(tile, 2, 80, 72, this));
 		addSlotToContainer(new SlotOutput(tile, 3, 116, 72, this));
 		addSlotToContainer(new SlotOutput(tile, 4, 152, 108, this));
+
+		//tool
+		addSlotToContainer(new SlotRestriction(tile, 5, 8, 108, axe, 1, this));
 		
 		for (int l = 0; l < 3; ++l)
             for (int j1 = 0; j1 < 9; ++j1)
@@ -46,15 +50,21 @@ public class ContainerFishTrimmingTable extends Container {
 			ItemStack stack1 = slot.getStack();
 			stack = stack1.copy();
 
-			if (slotIndex > 4) {
+			if (slotIndex > 5) {
 				if (stack1.getItem() == ItemRegistry.ANADIA && stack1.getTagCompound() != null && stack1.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
 					if (!this.mergeItemStack(stack1, 0, 1, false))
 						return ItemStack.EMPTY;
 				}
-					if (!this.mergeItemStack(stack1, 1, 4, false))
+				
+				if (stack1.getItem() == ItemRegistry.BONE_AXE) {
+					if (!this.mergeItemStack(stack1, 5, 6, false))
 						return ItemStack.EMPTY;
+				}
 
-			} else if (!mergeItemStack(stack1, 5, inventorySlots.size(), false))
+				if (!this.mergeItemStack(stack1, 1, 5, false))
+					return ItemStack.EMPTY;
+
+			} else if (!mergeItemStack(stack1, 6, inventorySlots.size(), false))
 				return ItemStack.EMPTY;
 
 			if (stack1.isEmpty())

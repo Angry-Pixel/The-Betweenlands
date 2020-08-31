@@ -16,9 +16,11 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class TileEntityFishTrimmingTable extends TileEntity implements ITickable, IInventory {
-	public NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(5, ItemStack.EMPTY);
+	public NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(6, ItemStack.EMPTY);
 
 	public TileEntityFishTrimmingTable() {
 		super();
@@ -34,7 +36,25 @@ public class TileEntityFishTrimmingTable extends TileEntity implements ITickable
     	if(world.isRemote)
     		return;
 
+    	if(hasChopper()) {	
+    		System.out.println("Has Chopper!");
+    	}
+
+    	if(hasAnadia()) {	
+    		System.out.println("Has Fush!");
+    	}
+
 	}
+
+    public boolean hasAnadia() {
+    	ItemStack stack = getItems().get(0);
+    	return !stack.isEmpty() && stack.getItem() == ItemRegistry.ANADIA && stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND);
+    }
+
+    public boolean hasChopper() {
+    	ItemStack stack = getItems().get(5);
+    	return !stack.isEmpty() && stack.getItem() == ItemRegistry.BONE_AXE;
+    }
 
     public void markForUpdate() {
         IBlockState state = this.getWorld().getBlockState(this.getPos());

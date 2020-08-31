@@ -475,6 +475,7 @@ tile.thebetweenlands.syrmorite_barrel.name=Syrmorite Barrel
 tile.thebetweenlands.fishing_tackle_box.name=Fishing Tackle Box
 tile.thebetweenlands.fishing_tackle_box.name=Fishing Tackle Box
 tile.thebetweenlands.smoking_rack.name=Smoking Rack
+tile.thebetweenlands.fish_trimming_table.name=Fish Trimming Table
 
 # Items
 
@@ -1677,6 +1678,8 @@ gui.bl.draeton.burner.purge=Purge
 gui.bl.draeton.main.puller=Puller slot:\n§7 - Dragonfly\n§7 - Firefly\n§7 - Tamed Chiromaw
 gui.bl.draeton.main.upgrade_utility=Utility upgrade slot:\n§7 - Lurker Skin Pouch\n§7 - Draeton Crafting Upgrade\n§7 - Draeton Furnace Upgrade
 gui.bl.draeton.main.upgrade_anchor=Anchor upgrade slot:\n§7 - Draeton Anchor Upgrade
+
+gui.bl.fish_trimming_table.butcher=Chop!
 
 # Advancements
 
