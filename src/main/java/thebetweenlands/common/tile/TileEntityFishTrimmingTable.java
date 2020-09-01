@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class TileEntityFishTrimmingTable extends TileEntity implements ITickable, IInventory {
@@ -37,11 +38,11 @@ public class TileEntityFishTrimmingTable extends TileEntity implements ITickable
     		return;
 
     	if(hasChopper()) {	
-    		System.out.println("Has Chopper!");
+    		//System.out.println("Has Chopper!");
     	}
 
     	if(hasAnadia()) {	
-    		System.out.println("Has Fush!");
+    		//System.out.println("Has Fush!");
     	}
 
 	}
@@ -192,6 +193,20 @@ public class TileEntityFishTrimmingTable extends TileEntity implements ITickable
 	@Override
 	public void clear() {
 		inventory.clear();
+	}
+
+	public ItemStack getSlotresult(int slot) {
+			switch (slot) {
+			case 0:
+				return ItemStack.EMPTY;
+			case 1:
+				return EnumItemMisc.SLIMY_BONE.create(1);
+			case 2:
+				return new ItemStack(ItemRegistry.ANGLER_MEAT_RAW);
+			case 3:
+				return EnumItemMisc.DRAGONFLY_WING.create(1);
+			}
+			return ItemStack.EMPTY;
 	}
 
 }
