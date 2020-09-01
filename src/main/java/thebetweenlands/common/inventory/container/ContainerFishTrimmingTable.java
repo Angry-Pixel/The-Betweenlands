@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.inventory.slot.SlotOutput;
 import thebetweenlands.common.inventory.slot.SlotRestriction;
+import thebetweenlands.common.inventory.slot.SlotRestrictionNoMeta;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityFishTrimmingTable;
 
@@ -16,22 +17,24 @@ public class ContainerFishTrimmingTable extends Container {
 	private final EntityPlayer player;
 	public ItemStack anadia = new ItemStack(ItemRegistry.ANADIA);
 	public ItemStack axe = new ItemStack(ItemRegistry.BONE_AXE);
+	public TileEntityFishTrimmingTable fish_trimming_table;
 
 	public ContainerFishTrimmingTable(EntityPlayer player, TileEntityFishTrimmingTable tile) {
 		InventoryPlayer playerInventory = player.inventory;
 		this.player = player;
+		fish_trimming_table = tile;
 
 		//input
-		addSlotToContainer(new SlotRestriction(tile, 0, 80, 22, anadia, 1, this));
+		addSlotToContainer(new SlotRestriction(fish_trimming_table, 0, 80, 22, anadia, 1, this));
 
 		//output
-		addSlotToContainer(new SlotOutput(tile, 1, 44, 72, this));
-		addSlotToContainer(new SlotOutput(tile, 2, 80, 72, this));
-		addSlotToContainer(new SlotOutput(tile, 3, 116, 72, this));
-		addSlotToContainer(new SlotOutput(tile, 4, 152, 108, this));
+		addSlotToContainer(new SlotOutput(fish_trimming_table, 1, 44, 72, this));
+		addSlotToContainer(new SlotOutput(fish_trimming_table, 2, 80, 72, this));
+		addSlotToContainer(new SlotOutput(fish_trimming_table, 3, 116, 72, this));
+		addSlotToContainer(new SlotOutput(fish_trimming_table, 4, 152, 108, this));
 
 		//tool
-		addSlotToContainer(new SlotRestriction(tile, 5, 8, 108, axe, 1, this));
+		addSlotToContainer(new SlotRestrictionNoMeta(fish_trimming_table, 5, 8, 108, axe, 1));
 		
 		for (int l = 0; l < 3; ++l)
             for (int j1 = 0; j1 < 9; ++j1)

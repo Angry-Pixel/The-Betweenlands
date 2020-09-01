@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import thebetweenlands.common.entity.mobs.EntityAnadia.EnumAnadiaHeadParts;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -36,15 +37,6 @@ public class TileEntityFishTrimmingTable extends TileEntity implements ITickable
     public void update() {
     	if(world.isRemote)
     		return;
-
-    	if(hasChopper()) {	
-    		//System.out.println("Has Chopper!");
-    	}
-
-    	if(hasAnadia()) {	
-    		//System.out.println("Has Fush!");
-    	}
-
 	}
 
     public boolean hasAnadia() {
@@ -195,6 +187,45 @@ public class TileEntityFishTrimmingTable extends TileEntity implements ITickable
 		inventory.clear();
 	}
 
+	public int getAnadiaMeatQuantity() {
+		int amount = 1;
+		if(hasAnadia()) {
+			ItemStack stack = getItems().get(0);
+			int size = Math.round(stack.getTagCompound().getCompoundTag("Entity").getFloat("fishSize") * 5);
+			if(size >= 1)
+				amount = size;
+		}
+		return amount;
+	}
+
+	//NYI
+	public int getAnadiaMeatBuff() {
+		int saturation = 0;
+		if(hasAnadia()) {
+			ItemStack stack = getItems().get(0);
+			float size = stack.getTagCompound().getCompoundTag("Entity").getFloat("fishSize");
+			byte head = stack.getTagCompound().getCompoundTag("Entity").getByte("headType");
+			byte body = stack.getTagCompound().getCompoundTag("Entity").getByte("bodyType");
+			byte tail = stack.getTagCompound().getCompoundTag("Entity").getByte("tailType");
+			saturation = Math.round(getStrengthMods(size, head, body, tail) + getStaminaMods(size, head, body, tail));
+		}
+		return saturation;
+	}
+
+	public float getStrengthMods(float sizeIn, byte headIndex, byte bodyIndex, byte tailIndex) {
+		float head = EnumAnadiaHeadParts.values()[headIndex].getStrengthModifier();
+		float body = EnumAnadiaHeadParts.values()[bodyIndex].getStrengthModifier();
+		float tail = EnumAnadiaHeadParts.values()[tailIndex].getStrengthModifier();
+		return Math.round((sizeIn * 0.5F) * head + body + tail * 2F) / 2F;
+	}
+
+	public float getStaminaMods(float sizeIn, byte headIndex, byte bodyIndex, byte tailIndex) {
+		float head = EnumAnadiaHeadParts.values()[headIndex].getStaminaModifier();
+		float body = EnumAnadiaHeadParts.values()[bodyIndex].getStaminaModifier();
+		float tail = EnumAnadiaHeadParts.values()[tailIndex].getStaminaModifier();
+		return Math.round(sizeIn * head + body + tail * 2F) / 2F;
+	}
+
 	public ItemStack getSlotresult(int slot) {
 			switch (slot) {
 			case 0:
@@ -202,11 +233,17 @@ public class TileEntityFishTrimmingTable extends TileEntity implements ITickable
 			case 1:
 				return EnumItemMisc.SLIMY_BONE.create(1);
 			case 2:
-				return new ItemStack(ItemRegistry.ANGLER_MEAT_RAW);
+				return new ItemStack(ItemRegistry.ANGLER_MEAT_RAW, getAnadiaMeatQuantity());
 			case 3:
 				return EnumItemMisc.DRAGONFLY_WING.create(1);
+			case 4:
+				return new ItemStack(ItemRegistry.SHAMBLER_TONGUE);
 			}
 			return ItemStack.EMPTY;
+	}
+
+	public boolean allResultSlotsEmpty() {
+		return getItems().get(1).isEmpty() && getItems().get(2).isEmpty() && getItems().get(3).isEmpty() && getItems().get(4).isEmpty();
 	}
 
 }

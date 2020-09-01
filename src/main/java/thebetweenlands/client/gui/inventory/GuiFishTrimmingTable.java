@@ -11,7 +11,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.inventory.container.ContainerFishTrimmingTable;
+import thebetweenlands.common.network.serverbound.MessageButcherFish;
 import thebetweenlands.common.tile.TileEntityFishTrimmingTable;
 
 @SideOnly(Side.CLIENT)
@@ -54,9 +56,14 @@ public class GuiFishTrimmingTable extends GuiContainer {
 
 		if (!fish_trimming_table.getItems().get(0).isEmpty()) { //test
 			mc.getRenderItem().renderItemIntoGUI(fish_trimming_table.getSlotresult(1), guiLeft + 44, guiTop + 72);
+			mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, fish_trimming_table.getSlotresult(1), guiLeft + 44, guiTop + 72, null);
+
 			mc.getRenderItem().renderItemIntoGUI(fish_trimming_table.getSlotresult(2), guiLeft + 80, guiTop + 72);
+			mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, fish_trimming_table.getSlotresult(2), guiLeft + 80, guiTop + 72, null);
+
 			mc.getRenderItem().renderItemIntoGUI(fish_trimming_table.getSlotresult(3), guiLeft + 116, guiTop + 72);
-			
+			mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, fish_trimming_table.getSlotresult(3), guiLeft + 116, guiTop + 72, null);
+
 			GlStateManager.depthFunc(516);
 			drawRect(guiLeft + 44, guiTop + 72, guiLeft + 60, guiTop + 88, color.getRGB());
 			drawRect(guiLeft + 80, guiTop + 72, guiLeft + 96, guiTop + 88, color.getRGB());
@@ -71,12 +78,11 @@ public class GuiFishTrimmingTable extends GuiContainer {
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
 	}
-	
+
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
 		super.actionPerformed(button);
 		if(button.id == 0)
-			System.out.println("Chop, Chop, Chop!");
-			//TheBetweenlands.networkWrapper.sendToServer(new MessageButcherFish(mc.player, button.id, fish_trimming_table.getPos()));
+			TheBetweenlands.networkWrapper.sendToServer(new MessageButcherFish(mc.player, fish_trimming_table.getPos()));
 	}
 }

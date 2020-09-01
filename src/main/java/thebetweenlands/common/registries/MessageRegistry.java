@@ -41,6 +41,7 @@ import thebetweenlands.common.network.clientbound.MessageSyncLocalStorageReferen
 import thebetweenlands.common.network.clientbound.MessageSyncStaticAspects;
 import thebetweenlands.common.network.clientbound.MessageWeedwoodBushRustle;
 import thebetweenlands.common.network.clientbound.MessageWightVolatileParticles;
+import thebetweenlands.common.network.serverbound.MessageButcherFish;
 import thebetweenlands.common.network.serverbound.MessageChiromawDoubleJump;
 import thebetweenlands.common.network.serverbound.MessageConnectCavingRope;
 import thebetweenlands.common.network.serverbound.MessageEquipItem;
@@ -107,6 +108,7 @@ public class MessageRegistry {
 		registerMessage(MessageSetDraetonAnchorPos.class, Side.SERVER);
 		registerMessage(MessagePurgeDraetonBurner.class, Side.SERVER);
 		registerMessage(MessageChiromawDoubleJump.class, Side.SERVER);
+		registerMessage(MessageButcherFish.class, Side.SERVER);
 	}
 
 	private static void registerMessage(Class<? extends MessageBase> messageType, Side toSide) {
