@@ -18,17 +18,18 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 
 public class ItemMobAnadia extends ItemMob {
-	/**
-	 * @param maxStackSize Max stack size of the item. If this is > 1 then only the entity's ID and no additional NBT is stored.
-	 * @param defaultMob Default mob type of this item
-	 * @param defaultMobSetter Sets the properties of the default mob
-	 */
+	
+	// TODO Item property overrides for jsons to show types and colour status (brown, silver, smoked, rotten)
+	
+	public int decayTime = 12000;
+	
 	@SuppressWarnings("unchecked")
 	public <T extends Entity> ItemMobAnadia(int maxStackSize, @Nullable Class<T> defaultMob, @Nullable Consumer<T> defaultMobSetter) {
 		super(1, defaultMob, defaultMobSetter);
@@ -41,7 +42,7 @@ public class ItemMobAnadia extends ItemMob {
 		if(!world.isRemote) {
 			Entity entity = this.createCapturedEntity(world, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, stack);
 			if(entity != null) {
-				if(entity instanceof EntityAnadia && ((EntityAnadia) entity).getFishColour() == 2)
+				if(entity instanceof EntityAnadia && (((EntityAnadia) entity).getFishColour() == 2 || ((EntityAnadia) entity).getFishColour() == 3))
 					return EnumActionResult.PASS;
 				
 				if(facing.getXOffset() != 0) {
@@ -64,6 +65,31 @@ public class ItemMobAnadia extends ItemMob {
 		return EnumActionResult.SUCCESS;
 	}
 
+	@Override
+    public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
+			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 2  && stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 3)
+				if(stack.getTagCompound().getCompoundTag("Entity").hasKey("rottingTime"))
+					if(world.getTotalWorldTime() >= stack.getTagCompound().getCompoundTag("Entity").getLong("rottingTime"))
+						stack.getTagCompound().getCompoundTag("Entity").setByte("fishColour", (byte) 3);
+    }
+
+	@Override
+	public void onCapturedByPlayer(EntityPlayer player, EnumHand hand, ItemStack stack) {
+		if(!player.getEntityWorld().isRemote) {
+			if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
+				stack.getTagCompound().getCompoundTag("Entity").setLong("rottingTime", player.getEntityWorld().getTotalWorldTime() + decayTime);
+			Entity entity = this.createCapturedEntity(player.getEntityWorld(), 0, 0, 0, stack);
+			if (entity instanceof EntityLivingBase) {
+				EntityLivingBase living = (EntityLivingBase) entity;
+				if (living instanceof EntityAnadia) {
+					if (((EntityAnadia) living).isBeingRidden())
+						((EntityAnadia) living).removePassengers();
+				}
+			}
+		}
+	}
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
@@ -72,9 +98,26 @@ public class ItemMobAnadia extends ItemMob {
 			if(entity instanceof EntityLivingBase) {
 				EntityLivingBase living = (EntityLivingBase) entity;
 				if (living instanceof EntityAnadia) {
-					if(((EntityAnadia) living).isBeingRidden())
-						((EntityAnadia) living).removePassengers();
 					tooltip.add(I18n.format(living.getName()));
+					if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
+						if(stack.getTagCompound().getCompoundTag("Entity").hasKey("rottingTime")) {
+							long rottingTime = stack.getTagCompound().getCompoundTag("Entity").getLong("rottingTime");
+							//TODO localisation
+							if(rottingTime - worldIn.getTotalWorldTime() > 9600)
+								tooltip.add(I18n.format("Freshly Caught"));
+							else if(rottingTime - worldIn.getTotalWorldTime() <= 9600 && rottingTime - worldIn.getTotalWorldTime() > 7200)
+								tooltip.add(I18n.format("Recently Caught"));
+							else if(rottingTime - worldIn.getTotalWorldTime() <= 7200 && rottingTime - worldIn.getTotalWorldTime() > 4800)
+								tooltip.add(I18n.format("Starting to Ripen"));
+							else if(rottingTime - worldIn.getTotalWorldTime() <= 4800 && rottingTime - worldIn.getTotalWorldTime() > 2400)
+								tooltip.add(I18n.format("Getting Smelly"));
+							else if(rottingTime - worldIn.getTotalWorldTime() <= 2400 && rottingTime - worldIn.getTotalWorldTime() > 0)
+								tooltip.add(I18n.format("Getting Really Stinky"));
+							else if(rottingTime - worldIn.getTotalWorldTime() <= 0)
+								tooltip.add(I18n.format("Rotten"));
+						}
+					}
+
 					tooltip.add(I18n.format("Colour" + ((EntityAnadia) living).getFishColour(), ((EntityAnadia) living).getFishColour()));
 					tooltip.add(I18n.format("tooltip.bl.item_mob.health", MathHelper.ceil(living.getHealth()), MathHelper.ceil((living.getMaxHealth()))));
 					tooltip.add(I18n.format("tooltip.bl.item_mob.size", ((EntityAnadia) living).getFishSize()));

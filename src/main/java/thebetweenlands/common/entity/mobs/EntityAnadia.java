@@ -64,7 +64,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	public EntityAnadia.AIFindHook aiFindHook;
 	public byte BASE = 0;
 	public byte SILVER = 1;
-	public byte SMOKED = 2;// NYI just making this higher so we can addd others inbetween
+	public byte SMOKED = 2;
+	public byte ROTTEN = 3;
 	
 	public EntityAnadia(World world) {
 		super(world);
