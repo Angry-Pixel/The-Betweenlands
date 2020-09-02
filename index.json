@@ -164,6 +164,13 @@
 		},
 		{
 			"sha256": "2D0E2603D3098451F248AA09F8C1F61275B36EB8BE447E0C55E24DF9A751AD12",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/pedroralof_the_amazing_world_of_fungi.png",
+			"title": "The Amazing World of Fungi",
+			"author": "PedroRalof",
+			"description": "In this world you can find fungi with unique properties and adaptations"
+		},
+		{
+			"sha256": "E87C7EFD6672EE1990ADB1F9FF4020C7C88A07B460F1645147800B2D43F32CD2",
 			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/pedroralof_the_environmental_pressure.png",
 			"title": "The Environmental Pressure",
 			"author": "PedroRalof",
@@ -189,6 +196,30 @@
 			"title": "Effortless Resistance",
 			"author": "Støne",
 			"description": "An old acquaintance of mine from long ago had an interesting\nquirk, he used to consume the sap from the trees that grew nearby.\n He said to me 'The taste isn't that bad, it renews me in some way,\nlike I still feel like myself'.\n I always laughed it off and took it as a weird preference\nof his, or some silly superstition.\nI didn't laugh anymore when I was reading through his old\nstudies on that unfortunate night. I haven't laughed much since..."
+		},
+		{
+			"sha256": "35FF1FD7074A202F1976653750F4159A49C257C9431B072CA5F8659C6FCC3B61",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/ultrasquid_the_veteran.png",
+			"title": "The Veteran",
+			"author": "ultrasquid"
+		},
+		{
+			"sha256": "DFBD15CEA0F0881F40693C698D51030DD99DEF742E3EADC8E98AFB6BA33D484F",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/theenax_the_greebling_rider.png",
+			"title": "The Greebling Rider",
+			"author": "Theenax"
+		},
+		{
+			"sha256": "AE813389C141A027FE3A70EBFA93F8878E8E4E62A562D3A5AE4711FC926584E5",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/templar_br_aurora.png",
+			"title": "Aurora",
+			"author": "Templar_BR"
+		},
+		{
+			"sha256": "0FF7E5CA35F8E94694D63D7A8FCB0B94F8CA7D01A43959BA175423862B822E7B",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/templar_br_the_tower.png",
+			"title": "The Tower",
+			"author": "Templar_BR"
 		}
 	]
 }]
