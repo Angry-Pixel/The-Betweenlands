@@ -175,7 +175,7 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 				return false;
 			else {
 				if (!getItems().get(input).isEmpty() && getItems().get(input).getTagCompound() != null && getItems().get(input).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
-					if(getItems().get(input).getTagCompound().getCompoundTag("Entity").hasKey("fishColour") && getItems().get(input).getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 2)
+					if(getItems().get(input).getTagCompound().getCompoundTag("Entity").hasKey("fishColour") && (getItems().get(input).getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 2 ||getItems().get(input).getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 3))
 						return false;
 				return true;
 			}

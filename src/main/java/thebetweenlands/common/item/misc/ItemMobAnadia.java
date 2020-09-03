@@ -25,11 +25,11 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 
 public class ItemMobAnadia extends ItemMob {
-	
+
 	// TODO Item property overrides for jsons to show types and colour status (brown, silver, smoked, rotten)
-	
-	public int decayTime = 12000;
-	
+
+	public int decayTime = 12000; // 10 minutes
+
 	@SuppressWarnings("unchecked")
 	public <T extends Entity> ItemMobAnadia(int maxStackSize, @Nullable Class<T> defaultMob, @Nullable Consumer<T> defaultMobSetter) {
 		super(1, defaultMob, defaultMobSetter);
@@ -64,11 +64,22 @@ public class ItemMobAnadia extends ItemMob {
 		}
 		return EnumActionResult.SUCCESS;
 	}
+	
+	public boolean isRotten(World world, ItemStack stack) {
+		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
+			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 2)
+				if(stack.getTagCompound().getCompoundTag("Entity").hasKey("rottingTime")) {
+					long timeFished = stack.getTagCompound().getCompoundTag("Entity").getLong("rottingTime");
+					long worldTime = world.getTotalWorldTime();
+					return timeFished - worldTime <= 0;
+		}
+		return false;
+	}
 
 	@Override
     public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
 		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
-			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 2  && stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 3)
+			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 2 && stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 3)
 				if(stack.getTagCompound().getCompoundTag("Entity").hasKey("rottingTime"))
 					if(world.getTotalWorldTime() >= stack.getTagCompound().getCompoundTag("Entity").getLong("rottingTime"))
 						stack.getTagCompound().getCompoundTag("Entity").setByte("fishColour", (byte) 3);
@@ -100,21 +111,23 @@ public class ItemMobAnadia extends ItemMob {
 				if (living instanceof EntityAnadia) {
 					tooltip.add(I18n.format(living.getName()));
 					if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
-						if(stack.getTagCompound().getCompoundTag("Entity").hasKey("rottingTime")) {
-							long rottingTime = stack.getTagCompound().getCompoundTag("Entity").getLong("rottingTime");
-							//TODO localisation
-							if(rottingTime - worldIn.getTotalWorldTime() > 9600)
-								tooltip.add(I18n.format("Freshly Caught"));
-							else if(rottingTime - worldIn.getTotalWorldTime() <= 9600 && rottingTime - worldIn.getTotalWorldTime() > 7200)
-								tooltip.add(I18n.format("Recently Caught"));
-							else if(rottingTime - worldIn.getTotalWorldTime() <= 7200 && rottingTime - worldIn.getTotalWorldTime() > 4800)
-								tooltip.add(I18n.format("Starting to Ripen"));
-							else if(rottingTime - worldIn.getTotalWorldTime() <= 4800 && rottingTime - worldIn.getTotalWorldTime() > 2400)
-								tooltip.add(I18n.format("Getting Smelly"));
-							else if(rottingTime - worldIn.getTotalWorldTime() <= 2400 && rottingTime - worldIn.getTotalWorldTime() > 0)
-								tooltip.add(I18n.format("Getting Really Stinky"));
-							else if(rottingTime - worldIn.getTotalWorldTime() <= 0)
-								tooltip.add(I18n.format("Rotten"));
+						if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 2) {
+							if(stack.getTagCompound().getCompoundTag("Entity").hasKey("rottingTime")) {
+								long rottingTime = stack.getTagCompound().getCompoundTag("Entity").getLong("rottingTime");
+								//TODO localisation
+								if(rottingTime - worldIn.getTotalWorldTime() > 9600)
+									tooltip.add(I18n.format("Freshly Caught"));
+								else if(rottingTime - worldIn.getTotalWorldTime() <= 9600 && rottingTime - worldIn.getTotalWorldTime() > 7200)
+									tooltip.add(I18n.format("Recently Caught"));
+								else if(rottingTime - worldIn.getTotalWorldTime() <= 7200 && rottingTime - worldIn.getTotalWorldTime() > 4800)
+									tooltip.add(I18n.format("Starting to Ripen"));
+								else if(rottingTime - worldIn.getTotalWorldTime() <= 4800 && rottingTime - worldIn.getTotalWorldTime() > 2400)
+									tooltip.add(I18n.format("Getting Smelly"));
+								else if(rottingTime - worldIn.getTotalWorldTime() <= 2400 && rottingTime - worldIn.getTotalWorldTime() > 0)
+									tooltip.add(I18n.format("Getting Really Stinky"));
+								else if(rottingTime - worldIn.getTotalWorldTime() <= 0)
+									tooltip.add(I18n.format("Rotten"));
+							}
 						}
 					}
 
