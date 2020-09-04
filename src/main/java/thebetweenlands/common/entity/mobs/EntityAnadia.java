@@ -310,11 +310,11 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		nbt.setTag("headItem", headItem);
 		
 		NBTTagCompound bodyItem = new NBTTagCompound();
-		getHeadItem().writeToNBT(bodyItem);
+		getBodyItem().writeToNBT(bodyItem);
 		nbt.setTag("bodyItem", bodyItem);
 		
 		NBTTagCompound tailItem = new NBTTagCompound();
-		getHeadItem().writeToNBT(tailItem);
+		getTailItem().writeToNBT(tailItem);
 		nbt.setTag("tailItem", tailItem);
 	}
 
