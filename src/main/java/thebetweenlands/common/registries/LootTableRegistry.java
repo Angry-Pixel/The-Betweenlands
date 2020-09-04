@@ -33,6 +33,9 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.loot.EntityPropertyAnadiaBodyType;
+import thebetweenlands.common.loot.EntityPropertyAnadiaHeadType;
+import thebetweenlands.common.loot.EntityPropertyAnadiaTailType;
 import thebetweenlands.common.loot.EntityPropertyEventActive;
 import thebetweenlands.common.loot.EntityPropertyFrogType;
 import thebetweenlands.common.loot.EntityPropertyHasItem;
@@ -137,6 +140,9 @@ public class LootTableRegistry {
 
     //SPECIAL MOB LOOT FUNCTIONS
     public static final ResourceLocation CHIROMAW_HATCHLING = register("entities/chiromaw_hatchling");
+    public static final ResourceLocation ENTITY_PROPERTY_ANADIA_HEAD_TYPE = register(new EntityPropertyAnadiaHeadType.Serializer());
+    public static final ResourceLocation ENTITY_PROPERTY_ANADIA_BODY_TYPE = register(new EntityPropertyAnadiaBodyType.Serializer());
+    public static final ResourceLocation ENTITY_PROPERTY_ANADIA_TAIL_TYPE = register(new EntityPropertyAnadiaTailType.Serializer());
     
     //BOSSES
     public static final ResourceLocation FORTRESS_BOSS = register("entities/fortress_boss");

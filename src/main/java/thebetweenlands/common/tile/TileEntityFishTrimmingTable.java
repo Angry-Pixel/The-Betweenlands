@@ -3,6 +3,8 @@ package thebetweenlands.common.tile;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
@@ -17,8 +19,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityAnadia.EnumAnadiaHeadParts;
-import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class TileEntityFishTrimmingTable extends TileEntity implements ITickable, IInventory {
@@ -226,16 +228,24 @@ public class TileEntityFishTrimmingTable extends TileEntity implements ITickable
 		return Math.round(sizeIn * head + body + tail * 2F) / 2F;
 	}
 
+	public Entity getAndiaEntity() {
+		Entity entity = null;
+		if (getItems().get(0).getTagCompound() != null && getItems().get(0).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
+			entity = EntityList.createEntityFromNBT(getItems().get(0).getTagCompound().getCompoundTag("Entity"), getWorld());
+		}
+		return entity;
+	}
+
 	public ItemStack getSlotresult(int slot) {
 			switch (slot) {
 			case 0:
 				return ItemStack.EMPTY;
 			case 1:
-				return EnumItemMisc.SLIMY_BONE.create(1);
+				return ((EntityAnadia) getAndiaEntity()).getHeadItem();
 			case 2:
-				return new ItemStack(ItemRegistry.ANGLER_MEAT_RAW, getAnadiaMeatQuantity());
+				return ((EntityAnadia) getAndiaEntity()).getBodyItem();
 			case 3:
-				return EnumItemMisc.DRAGONFLY_WING.create(1);
+				return ((EntityAnadia) getAndiaEntity()).getTailItem();
 			case 4:
 				return new ItemStack(ItemRegistry.SHAMBLER_TONGUE);
 			}

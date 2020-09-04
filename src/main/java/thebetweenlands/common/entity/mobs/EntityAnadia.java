@@ -25,6 +25,7 @@ import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -42,10 +43,14 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootTable;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.EntityFishBait;
 import thebetweenlands.common.entity.projectiles.EntityBLFishHook;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.util.TranslationHelper;
 
 public class EntityAnadia extends EntityCreature implements IEntityBL {
@@ -58,6 +63,10 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	//private static final DataParameter<Integer> HUNGER_COOLDOWN = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> STAMINA_TICKS = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 	private static final DataParameter<Byte> FISH_COLOUR = EntityDataManager.<Byte>createKey(EntityAnadia.class, DataSerializers.BYTE);
+	
+	private static final DataParameter<ItemStack> HEAD_ITEM = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.ITEM_STACK);
+	private static final DataParameter<ItemStack> BODY_ITEM = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.ITEM_STACK);
+	private static final DataParameter<ItemStack> TAIL_ITEM = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.ITEM_STACK);
 
 	private static float BASE_MULTIPLE = 1F; // just a arbitrary number to increase the size multiplier
 	public EntityAnadia.AIFindBait aiFindBait;
@@ -112,6 +121,9 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
       //  dataManager.register(HUNGER_COOLDOWN, 0);
         dataManager.register(STAMINA_TICKS, 40);
         dataManager.register(FISH_COLOUR, (byte) 0);
+        dataManager.register(HEAD_ITEM, ItemStack.EMPTY);
+        dataManager.register(BODY_ITEM, ItemStack.EMPTY);
+        dataManager.register(TAIL_ITEM, ItemStack.EMPTY);
     }
 
 	@Override
@@ -129,6 +141,9 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         setFishSize(Math.round(Math.max(0.125F, rand.nextFloat()) * 16F) / 16F);
         setTailType((byte)rand.nextInt(3));
         setFishColour((byte)rand.nextInt(2)); // testing colours - TODO set this based on biome spawned in /other possible things
+        setHeadItem(getPartFromLootTable(LootTableRegistry.ENTITY_PROPERTY_ANADIA_HEAD_TYPE));
+        setBodyItem(getPartFromLootTable(LootTableRegistry.ENTITY_PROPERTY_ANADIA_BODY_TYPE));
+        setTailItem(getPartFromLootTable(LootTableRegistry.ENTITY_PROPERTY_ANADIA_TAIL_TYPE));
         return super.onInitialSpawn(difficulty, livingdata);
     }
 
@@ -219,6 +234,33 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         dataManager.set(STAMINA_TICKS, count);
     }
 
+	public void setHeadItem(ItemStack itemStack) {
+		dataManager.set(HEAD_ITEM, itemStack);
+		
+	}
+
+	public ItemStack getHeadItem() {
+		return dataManager.get(HEAD_ITEM);
+	}
+
+	public void setBodyItem(ItemStack itemStack) {
+		dataManager.set(BODY_ITEM, itemStack);
+		
+	}
+
+	public ItemStack getBodyItem() {
+		return dataManager.get(BODY_ITEM);
+	}
+
+	public void setTailItem(ItemStack itemStack) {
+		dataManager.set(TAIL_ITEM, itemStack);
+		
+	}
+
+	public ItemStack getTailItem() {
+		return dataManager.get(TAIL_ITEM);
+	}
+
 	@Override
     public void notifyDataManagerChange(DataParameter<?> key) {
         if (FISH_SIZE.equals(key)) {
@@ -240,6 +282,17 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		return body + " " + tail + " " + head;
     }
 
+	public ItemStack getPartFromLootTable(ResourceLocation lootTableIn) {
+		LootTable lootTable = getEntityWorld().getLootTableManager().getLootTableFromLocation(lootTableIn);
+		if (lootTable != null) {
+			LootContext.Builder lootBuilder = (new LootContext.Builder((WorldServer) getEntityWorld()).withLootedEntity(this));
+			List<ItemStack> loot = lootTable.generateLootForPools(getEntityWorld().rand, lootBuilder.build());
+			if (!loot.isEmpty())
+				return loot.get(0);
+		}
+		return ItemStack.EMPTY; // to stop null;
+	}
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
@@ -249,6 +302,18 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		nbt.setFloat("fishSize", getFishSize());
 //		nbt.setInteger("hunger", getHungerCooldown());
 		nbt.setByte("fishColour", getFishColour());
+		
+		NBTTagCompound headItem = new NBTTagCompound();
+		getHeadItem().writeToNBT(headItem);
+		nbt.setTag("headItem", headItem);
+		
+		NBTTagCompound bodyItem = new NBTTagCompound();
+		getHeadItem().writeToNBT(bodyItem);
+		nbt.setTag("bodyItem", bodyItem);
+		
+		NBTTagCompound tailItem = new NBTTagCompound();
+		getHeadItem().writeToNBT(tailItem);
+		nbt.setTag("tailItem", tailItem);
 	}
 
 	@Override
@@ -260,6 +325,24 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		setFishSize(nbt.getFloat("fishSize"));
 //		setHungerCooldown(nbt.getInteger("hunger"));
 		setFishColour(nbt.getByte("fishColour"));
+
+		NBTTagCompound headItem = (NBTTagCompound) nbt.getTag("headItem");
+		ItemStack stackHead = ItemStack.EMPTY;
+		if(headItem != null)
+			stackHead = new ItemStack(headItem);
+		setHeadItem(stackHead);
+
+		NBTTagCompound bodyItem = (NBTTagCompound) nbt.getTag("bodyItem");
+		ItemStack stackBody = ItemStack.EMPTY;
+		if(bodyItem != null)
+			stackBody = new ItemStack(bodyItem);
+		setBodyItem(stackBody);
+	
+		NBTTagCompound tailItem = (NBTTagCompound) nbt.getTag("tailItem");
+		ItemStack stackTail = ItemStack.EMPTY;
+		if(tailItem != null)
+			stackTail = new ItemStack(tailItem);
+		setTailItem(stackTail);
 	}
 
 	//cumulative speed, health, strength, & stamina modifiers
