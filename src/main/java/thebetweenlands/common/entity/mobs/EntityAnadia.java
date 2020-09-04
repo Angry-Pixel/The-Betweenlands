@@ -56,9 +56,9 @@ import thebetweenlands.util.TranslationHelper;
 public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 	private static final DataParameter<Float> FISH_SIZE = EntityDataManager.<Float>createKey(EntityAnadia.class, DataSerializers.FLOAT);
-	private static final DataParameter<Integer> HEAD_TYPE = EntityDataManager.<Integer>createKey(EntityAnadia.class, DataSerializers.VARINT);
-	private static final DataParameter<Integer> BODY_TYPE = EntityDataManager.<Integer>createKey(EntityAnadia.class, DataSerializers.VARINT);
-	private static final DataParameter<Integer> TAIL_TYPE = EntityDataManager.<Integer>createKey(EntityAnadia.class, DataSerializers.VARINT);
+	private static final DataParameter<Byte> HEAD_TYPE = EntityDataManager.<Byte>createKey(EntityAnadia.class, DataSerializers.BYTE);
+	private static final DataParameter<Byte> BODY_TYPE = EntityDataManager.<Byte>createKey(EntityAnadia.class, DataSerializers.BYTE);
+	private static final DataParameter<Byte> TAIL_TYPE = EntityDataManager.<Byte>createKey(EntityAnadia.class, DataSerializers.BYTE);
 	private static final DataParameter<Boolean> IS_LEAPING = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.BOOLEAN);
 	//private static final DataParameter<Integer> HUNGER_COOLDOWN = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> STAMINA_TICKS = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
@@ -114,9 +114,9 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
     protected void entityInit() {
         super.entityInit();
         dataManager.register(FISH_SIZE, 0.5F);
-        dataManager.register(HEAD_TYPE, 0);
-        dataManager.register(BODY_TYPE, 0);
-        dataManager.register(TAIL_TYPE, 0);
+        dataManager.register(HEAD_TYPE, (byte) 0);
+        dataManager.register(BODY_TYPE, (byte) 0);
+        dataManager.register(TAIL_TYPE, (byte) 0);
         dataManager.register(IS_LEAPING, false);
       //  dataManager.register(HUNGER_COOLDOWN, 0);
         dataManager.register(STAMINA_TICKS, 40);
@@ -136,9 +136,9 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	@Override
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
     	if(!getEntityWorld().isRemote) {
-	        setHeadType(rand.nextInt(3));
-	        setBodyType(rand.nextInt(3));
-	        setTailType(rand.nextInt(3));
+	        setHeadType((byte)rand.nextInt(3));
+	        setBodyType((byte)rand.nextInt(3));
+	        setTailType((byte)rand.nextInt(3));
 	        setFishSize(Math.round(Math.max(0.125F, rand.nextFloat()) * 16F) / 16F);
 	        setFishColour((byte)rand.nextInt(2)); // testing colours - TODO set this based on biome spawned in /other possible things
 	        setHeadItem(getPartFromLootTable(LootTableRegistry.ANADIA_HEAD));
@@ -166,40 +166,29 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         	//getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5D + getStrengthMods());
 
         setHealth(getMaxHealth());
-/*
-        if(!getEntityWorld().isRemote) {
-        	System.out.println("NAME: " + getName());
-        	System.out.println("HEALTH: " + getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue());
-        	System.out.println("FISH SIZE:" + getFishSize());
-        	System.out.println("HEAD: " + getHeadType() + " BODY: " + getBodyType() + " TAIL: " + getTailType());
-        	System.out.println("SPEED: " + getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
-        	System.out.println("STRENGTH: " + getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
-        	System.out.println("STAMINA: " + getStaminaMods());
-        }
- */
     }
 
-    public int getHeadType() {
+    public byte getHeadType() {
         return dataManager.get(HEAD_TYPE);
     }
 
-    private void setHeadType(int type) {
+    private void setHeadType(byte type) {
         dataManager.set(HEAD_TYPE, type);
     }
 
-    public int getBodyType() {
+    public byte getBodyType() {
         return dataManager.get(BODY_TYPE);
     }
 
-    private void setBodyType(int type) {
+    private void setBodyType(byte type) {
         dataManager.set(BODY_TYPE, type);
     }
 
-    public int getTailType() {
+    public byte getTailType() {
         return dataManager.get(TAIL_TYPE);
     }
 
-    private void setTailType(int type) {
+    private void setTailType(byte type) {
         dataManager.set(TAIL_TYPE, type);
     }
 
@@ -286,13 +275,10 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	public ItemStack getPartFromLootTable(ResourceLocation lootTableIn) {
 		LootTable lootTable = getEntityWorld().getLootTableManager().getLootTableFromLocation(lootTableIn);
 		if (lootTable != null) {
-			System.out.println("Loot Table: " + lootTable.toString());
 			LootContext.Builder lootBuilder = (new LootContext.Builder((WorldServer) getEntityWorld()).withLootedEntity(this));
 			List<ItemStack> loot = lootTable.generateLootForPools(getEntityWorld().rand, lootBuilder.build());
-			if (!loot.isEmpty()) {
-				System.out.println("Loot: " + loot.get(0).getDisplayName());
+			if (!loot.isEmpty()) 
 				return loot.get(0);
-			}
 		}
 		return ItemStack.EMPTY; // to stop null;
 	}
@@ -300,9 +286,9 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
-		nbt.setInteger("headType", getHeadType());
-		nbt.setInteger("bodyType", getBodyType());
-		nbt.setInteger("tailType", getTailType());
+		nbt.setByte("headType", getHeadType());
+		nbt.setByte("bodyType", getBodyType());
+		nbt.setByte("tailType", getTailType());
 		nbt.setFloat("fishSize", getFishSize());
 //		nbt.setInteger("hunger", getHungerCooldown());
 		nbt.setByte("fishColour", getFishColour());
@@ -323,9 +309,9 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		setHeadType(nbt.getInteger("headType"));
-		setBodyType(nbt.getInteger("bodyType"));
-		setTailType(nbt.getInteger("tailType"));
+		setHeadType(nbt.getByte("headType"));
+		setBodyType(nbt.getByte("bodyType"));
+		setTailType(nbt.getByte("tailType"));
 		setFishSize(nbt.getFloat("fishSize"));
 //		setHungerCooldown(nbt.getInteger("hunger"));
 		setFishColour(nbt.getByte("fishColour"));

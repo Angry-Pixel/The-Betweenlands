@@ -682,7 +682,7 @@ public class ModelAnadia extends MowzieModelBase {
     	//super.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
     }
 
-	public void renderHead(int headType, float scale) {
+	public void renderHead(byte headType, float scale) {
 		switch (headType) {
 		case 0:
 			set1_head_main.render(scale);
@@ -696,7 +696,7 @@ public class ModelAnadia extends MowzieModelBase {
 		}
 	}
 
-	public void renderBody(int bodyType, float scale) {
+	public void renderBody(byte bodyType, float scale) {
 		switch (bodyType) {
 		case 0:
 			set1_body_main.render(scale);
@@ -710,7 +710,7 @@ public class ModelAnadia extends MowzieModelBase {
 		}
 	}
 
-	public void renderTail(int tailType, float scale) {
+	public void renderTail(byte tailType, float scale) {
 		switch (tailType) {
 		case 0:
 			set1_tail_main.render(scale);
