@@ -1,6 +1,7 @@
 {
     "pools": [
         {
+            "name": "anadia_body",
             "rolls": 1,
             "entries": [
                 {

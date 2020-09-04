@@ -206,22 +206,22 @@ public class TileEntityFishTrimmingTable extends TileEntity implements ITickable
 		if(hasAnadia()) {
 			ItemStack stack = getItems().get(0);
 			float size = stack.getTagCompound().getCompoundTag("Entity").getFloat("fishSize");
-			byte head = stack.getTagCompound().getCompoundTag("Entity").getByte("headType");
-			byte body = stack.getTagCompound().getCompoundTag("Entity").getByte("bodyType");
-			byte tail = stack.getTagCompound().getCompoundTag("Entity").getByte("tailType");
+			int head = stack.getTagCompound().getCompoundTag("Entity").getInteger("headType");
+			int body = stack.getTagCompound().getCompoundTag("Entity").getInteger("bodyType");
+			int tail = stack.getTagCompound().getCompoundTag("Entity").getInteger("tailType");
 			saturation = Math.round(getStrengthMods(size, head, body, tail) + getStaminaMods(size, head, body, tail));
 		}
 		return saturation;
 	}
 
-	public float getStrengthMods(float sizeIn, byte headIndex, byte bodyIndex, byte tailIndex) {
+	public float getStrengthMods(float sizeIn, int headIndex, int bodyIndex, int tailIndex) {
 		float head = EnumAnadiaHeadParts.values()[headIndex].getStrengthModifier();
 		float body = EnumAnadiaHeadParts.values()[bodyIndex].getStrengthModifier();
 		float tail = EnumAnadiaHeadParts.values()[tailIndex].getStrengthModifier();
 		return Math.round((sizeIn * 0.5F) * head + body + tail * 2F) / 2F;
 	}
 
-	public float getStaminaMods(float sizeIn, byte headIndex, byte bodyIndex, byte tailIndex) {
+	public float getStaminaMods(float sizeIn, int headIndex, int bodyIndex, int tailIndex) {
 		float head = EnumAnadiaHeadParts.values()[headIndex].getStaminaModifier();
 		float body = EnumAnadiaHeadParts.values()[bodyIndex].getStaminaModifier();
 		float tail = EnumAnadiaHeadParts.values()[tailIndex].getStaminaModifier();
