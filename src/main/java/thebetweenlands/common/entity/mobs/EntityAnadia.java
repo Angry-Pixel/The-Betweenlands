@@ -226,7 +226,6 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 	public void setHeadItem(ItemStack itemStack) {
 		dataManager.set(HEAD_ITEM, itemStack);
-		
 	}
 
 	public ItemStack getHeadItem() {
@@ -235,7 +234,6 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 	public void setBodyItem(ItemStack itemStack) {
 		dataManager.set(BODY_ITEM, itemStack);
-		
 	}
 
 	public ItemStack getBodyItem() {
@@ -244,7 +242,6 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 	public void setTailItem(ItemStack itemStack) {
 		dataManager.set(TAIL_ITEM, itemStack);
-		
 	}
 
 	public ItemStack getTailItem() {
