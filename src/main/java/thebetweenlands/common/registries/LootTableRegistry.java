@@ -137,13 +137,13 @@ public class LootTableRegistry {
     public static final ResourceLocation EMBERLING_SHAMAN = register("entities/emberling_shaman");
     public static final ResourceLocation GREEBLING_CORPSE = register("entities/greebling_corpse");
     public static final ResourceLocation CHIROMAW_MATRIARCH = register("entities/chiromaw_matriarch");
+    public static final ResourceLocation ANADIA_HEAD = register("entities/anadia_head");
+    public static final ResourceLocation ANADIA_BODY = register("entities/anadia_body");
+    public static final ResourceLocation ANADIA_TAIL = register("entities/anadia_tail");
 
     //SPECIAL MOB LOOT FUNCTIONS
     public static final ResourceLocation CHIROMAW_HATCHLING = register("entities/chiromaw_hatchling");
-    public static final ResourceLocation ENTITY_PROPERTY_ANADIA_HEAD_TYPE = register(new EntityPropertyAnadiaHeadType.Serializer());
-    public static final ResourceLocation ENTITY_PROPERTY_ANADIA_BODY_TYPE = register(new EntityPropertyAnadiaBodyType.Serializer());
-    public static final ResourceLocation ENTITY_PROPERTY_ANADIA_TAIL_TYPE = register(new EntityPropertyAnadiaTailType.Serializer());
-    
+
     //BOSSES
     public static final ResourceLocation FORTRESS_BOSS = register("entities/fortress_boss");
     public static final ResourceLocation DREADFUL_PEAT_MUMMY = register("entities/dreadful_peat_mummy");
@@ -158,6 +158,9 @@ public class LootTableRegistry {
     public static final ResourceLocation ENTITY_PROPERTY_IS_EVENT_ACTIVE = register(new EntityPropertyEventActive.Serializer());
     public static final ResourceLocation ENTITY_PROPERTY_LOOT_MODIFIER = register(new EntityPropertyLootModifier.Serializer());
     public static final ResourceLocation ENTITY_PROPERTY_SLUDGE_WORM_SQUASHED = register(new EntityPropertySludgeWormSquashed.Serializer());
+    public static final ResourceLocation ENTITY_PROPERTY_ANADIA_HEAD_TYPE = register(new EntityPropertyAnadiaHeadType.Serializer());
+    public static final ResourceLocation ENTITY_PROPERTY_ANADIA_BODY_TYPE = register(new EntityPropertyAnadiaBodyType.Serializer());
+    public static final ResourceLocation ENTITY_PROPERTY_ANADIA_TAIL_TYPE = register(new EntityPropertyAnadiaTailType.Serializer());
     
     //LOOT CONDITIONS
     public static final ResourceLocation LOOT_CONDITION_OR = register(new LootConditionOr.Serializer());

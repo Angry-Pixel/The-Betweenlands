@@ -135,15 +135,17 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
     @Nullable
 	@Override
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-        setHeadType((byte)rand.nextInt(3));
-        setBodyType((byte)rand.nextInt(3));
-        setTailType((byte)rand.nextInt(3));
-        setFishSize(Math.round(Math.max(0.125F, rand.nextFloat()) * 16F) / 16F);
-        setTailType((byte)rand.nextInt(3));
-        setFishColour((byte)rand.nextInt(2)); // testing colours - TODO set this based on biome spawned in /other possible things
-        setHeadItem(getPartFromLootTable(LootTableRegistry.ENTITY_PROPERTY_ANADIA_HEAD_TYPE));
-        setBodyItem(getPartFromLootTable(LootTableRegistry.ENTITY_PROPERTY_ANADIA_BODY_TYPE));
-        setTailItem(getPartFromLootTable(LootTableRegistry.ENTITY_PROPERTY_ANADIA_TAIL_TYPE));
+    	if(!getEntityWorld().isRemote) {
+	        setHeadType((byte)rand.nextInt(3));
+	        setBodyType((byte)rand.nextInt(3));
+	        setTailType((byte)rand.nextInt(3));
+	        setFishSize(Math.round(Math.max(0.125F, rand.nextFloat()) * 16F) / 16F);
+	        setTailType((byte)rand.nextInt(3));
+	        setFishColour((byte)rand.nextInt(2)); // testing colours - TODO set this based on biome spawned in /other possible things
+	        setHeadItem(getPartFromLootTable(LootTableRegistry.ANADIA_HEAD));
+	        setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_BODY));
+	        setTailItem(getPartFromLootTable(LootTableRegistry.ANADIA_TAIL));
+    	}
         return super.onInitialSpawn(difficulty, livingdata);
     }
 
