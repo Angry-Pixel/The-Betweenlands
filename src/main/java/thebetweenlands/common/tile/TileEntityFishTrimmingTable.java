@@ -232,6 +232,7 @@ public class TileEntityFishTrimmingTable extends TileEntity implements ITickable
 		Entity entity = null;
 		if (getItems().get(0).getTagCompound() != null && getItems().get(0).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
 			entity = EntityList.createEntityFromNBT(getItems().get(0).getTagCompound().getCompoundTag("Entity"), getWorld());
+			entity.setPositionAndRotation(0D, 0D, 0D, 0F, 0F);
 		}
 		return entity;
 	}

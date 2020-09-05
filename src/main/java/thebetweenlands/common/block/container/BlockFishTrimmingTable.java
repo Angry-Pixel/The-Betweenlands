@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.container;
 
+import java.util.Random;
+
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -19,11 +21,15 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.item.misc.ItemMobAnadia;
 import thebetweenlands.common.proxy.CommonProxy;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityFishTrimmingTable;
 
 
@@ -82,7 +88,7 @@ public class BlockFishTrimmingTable extends BlockContainer {
 
 		}
 	}
-	
+
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		TileEntityFishTrimmingTable tile = (TileEntityFishTrimmingTable) world.getTileEntity(pos);
@@ -92,6 +98,21 @@ public class BlockFishTrimmingTable extends BlockContainer {
 		}
 		super.breakBlock(world, pos, state);
 	}
+	
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+		TileEntityFishTrimmingTable tile = (TileEntityFishTrimmingTable) world.getTileEntity(pos);
+		if (tile != null) {
+			if (rand.nextInt(5) == 0)
+				if (hasAnadia(world, tile, 0) && ((ItemMobAnadia) tile.getItems().get(0).getItem()).isRotten(world, tile.getItems().get(0)))
+					BLParticles.FLY.spawn(world, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D);
+		}
+	}
+
+    public boolean hasAnadia(World world, TileEntityFishTrimmingTable tile, int slot) {
+    	ItemStack stack = tile.getItems().get(slot);
+    	return !stack.isEmpty() && stack.getItem() == ItemRegistry.ANADIA && stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND);
+    }
 
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {

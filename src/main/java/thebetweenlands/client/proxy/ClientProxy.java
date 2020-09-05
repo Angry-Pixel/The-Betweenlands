@@ -107,6 +107,7 @@ import thebetweenlands.client.render.tile.RenderDecayPitHangingChain;
 import thebetweenlands.client.render.tile.RenderDruidAltar;
 import thebetweenlands.client.render.tile.RenderDungeonDoorCombination;
 import thebetweenlands.client.render.tile.RenderDungeonDoorRunes;
+import thebetweenlands.client.render.tile.RenderFishTrimmingTable;
 import thebetweenlands.client.render.tile.RenderFishingTackleBox;
 import thebetweenlands.client.render.tile.RenderGeckoCage;
 import thebetweenlands.client.render.tile.RenderGroundItem;
@@ -698,6 +699,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecayPitGroundChain.class, new RenderDecayPitGroundChain());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFishingTackleBox.class, new RenderFishingTackleBox());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySmokingRack.class, new RenderSmokingRack());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFishTrimmingTable.class, new RenderFishTrimmingTable());
 		
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
@@ -766,6 +768,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		Item.getItemFromBlock(BlockRegistry.WEEDWOOD_BARREL).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityBarrel.class));
 		Item.getItemFromBlock(BlockRegistry.FISHING_TACKLE_BOX).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityFishingTackleBox.class));
 		Item.getItemFromBlock(BlockRegistry.SMOKING_RACK).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntitySmokingRack.class));
+		Item.getItemFromBlock(BlockRegistry.FISH_TRIMMING_TABLE).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityFishTrimmingTable.class));
 
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {

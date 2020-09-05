@@ -31,10 +31,10 @@ public class ContainerFishTrimmingTable extends Container {
 		addSlotToContainer(new SlotOutput(fish_trimming_table, 1, 44, 72, this));
 		addSlotToContainer(new SlotOutput(fish_trimming_table, 2, 80, 72, this));
 		addSlotToContainer(new SlotOutput(fish_trimming_table, 3, 116, 72, this));
-		addSlotToContainer(new SlotOutput(fish_trimming_table, 4, 152, 108, this));
+		addSlotToContainer(new SlotOutput(fish_trimming_table, 4, 8, 108, this));
 
 		//tool
-		addSlotToContainer(new SlotRestrictionNoMeta(fish_trimming_table, 5, 8, 108, axe, 1));
+		addSlotToContainer(new SlotRestrictionNoMeta(fish_trimming_table, 5, 152, 108, axe, 1));
 		
 		for (int l = 0; l < 3; ++l)
             for (int j1 = 0; j1 < 9; ++j1)
