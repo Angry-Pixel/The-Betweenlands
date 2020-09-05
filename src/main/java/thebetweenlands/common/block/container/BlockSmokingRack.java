@@ -150,12 +150,15 @@ public class BlockSmokingRack extends BlockContainer implements IStateMappedBloc
 		if (!state.getValue(INVISIBLE)) {
 			TileEntitySmokingRack tile = (TileEntitySmokingRack) world.getTileEntity(pos);
 			if (tile != null) {
-				if(hasAnadia(world, tile, 1) && ((ItemMobAnadia)tile.getItems().get(1).getItem()).isRotten(world, tile.getItems().get(1)))
-					BLParticles.FLY.spawn(world, pos.getX() + 0.5D, pos.getY() + 1.25D, pos.getZ() + 0.5D);
-				if(hasAnadia(world, tile, 2) && ((ItemMobAnadia)tile.getItems().get(2).getItem()).isRotten(world, tile.getItems().get(2)))
-					BLParticles.FLY.spawn(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
-				if(hasAnadia(world, tile, 3) && ((ItemMobAnadia)tile.getItems().get(3).getItem()).isRotten(world, tile.getItems().get(3)))
-					BLParticles.FLY.spawn(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+				if (rand.nextInt(3) == 0)
+					if(hasAnadia(world, tile, 1) && ((ItemMobAnadia)tile.getItems().get(1).getItem()).isRotten(world, tile.getItems().get(1)))
+						BLParticles.FLY.spawn(world, pos.getX() + 0.5D, pos.getY() + 1.25D, pos.getZ() + 0.5D);
+				if (rand.nextInt(3) == 0)
+					if(hasAnadia(world, tile, 2) && ((ItemMobAnadia)tile.getItems().get(2).getItem()).isRotten(world, tile.getItems().get(2)))
+						BLParticles.FLY.spawn(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+				if (rand.nextInt(3) == 0)
+					if(hasAnadia(world, tile, 3) && ((ItemMobAnadia)tile.getItems().get(3).getItem()).isRotten(world, tile.getItems().get(3)))
+						BLParticles.FLY.spawn(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 			}
 		}
 	}
