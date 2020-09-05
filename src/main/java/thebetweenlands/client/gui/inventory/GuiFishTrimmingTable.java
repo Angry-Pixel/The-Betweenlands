@@ -54,7 +54,7 @@ public class GuiFishTrimmingTable extends GuiContainer {
 		int l = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
 
-		if (!fish_trimming_table.getItems().get(0).isEmpty()) { //test
+		if (fish_trimming_table.hasAnadia()) { //test
 			mc.getRenderItem().renderItemIntoGUI(fish_trimming_table.getSlotresult(1), guiLeft + 44, guiTop + 72);
 			mc.getRenderItem().renderItemIntoGUI(fish_trimming_table.getSlotresult(2), guiLeft + 80, guiTop + 72);
 			mc.getRenderItem().renderItemIntoGUI(fish_trimming_table.getSlotresult(3), guiLeft + 116, guiTop + 72);

@@ -237,6 +237,7 @@ public class TileEntityFishTrimmingTable extends TileEntity implements ITickable
 	}
 
 	public ItemStack getSlotresult(int slot) {
+		if (hasAnadia()) {
 			switch (slot) {
 			case 0:
 				return ItemStack.EMPTY;
@@ -249,7 +250,8 @@ public class TileEntityFishTrimmingTable extends TileEntity implements ITickable
 			case 4:
 				return new ItemStack(ItemRegistry.SHAMBLER_TONGUE);
 			}
-			return ItemStack.EMPTY;
+		}
+		return ItemStack.EMPTY;
 	}
 
 	public boolean allResultSlotsEmpty() {
