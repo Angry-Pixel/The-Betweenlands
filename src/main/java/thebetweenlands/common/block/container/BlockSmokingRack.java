@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.container;
 
+import java.util.Random;
+
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -22,12 +24,16 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.item.misc.ItemMobAnadia;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntitySmokingRack;
 import thebetweenlands.util.AdvancedStateMap.Builder;
 
@@ -138,6 +144,26 @@ public class BlockSmokingRack extends BlockContainer implements IStateMappedBloc
 		}
 		super.breakBlock(world, pos, state);
 	}
+
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+		if (!state.getValue(INVISIBLE)) {
+			TileEntitySmokingRack tile = (TileEntitySmokingRack) world.getTileEntity(pos);
+			if (tile != null) {
+				if(hasAnadia(world, tile, 1) && ((ItemMobAnadia)tile.getItems().get(1).getItem()).isRotten(world, tile.getItems().get(1)))
+					BLParticles.FLY.spawn(world, pos.getX() + 0.5D, pos.getY() + 1.25D, pos.getZ() + 0.5D);
+				if(hasAnadia(world, tile, 2) && ((ItemMobAnadia)tile.getItems().get(2).getItem()).isRotten(world, tile.getItems().get(2)))
+					BLParticles.FLY.spawn(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+				if(hasAnadia(world, tile, 3) && ((ItemMobAnadia)tile.getItems().get(3).getItem()).isRotten(world, tile.getItems().get(3)))
+					BLParticles.FLY.spawn(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+			}
+		}
+	}
+
+    public boolean hasAnadia(World world, TileEntitySmokingRack tile, int slot) {
+    	ItemStack stack = tile.getItems().get(slot);
+    	return !stack.isEmpty() && stack.getItem() == ItemRegistry.ANADIA && stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND);
+    }
 
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
