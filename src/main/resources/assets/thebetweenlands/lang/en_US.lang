@@ -1063,13 +1063,6 @@ tooltip.bl.item_mob_anadia.rotting_5=Getting Really Stinky
 tooltip.bl.item_mob_anadia.rotten=Rotten
 tooltip.bl.item_mob_anadia.smoked=Smoked
 
-tooltip.bl.item_mob_anadia.hue=Hue: %s
-tooltip.bl.item_mob_anadia.colour_null=Cheaty Fish Dont Work!
-tooltip.bl.item_mob_anadia.colour_0=Brown
-tooltip.bl.item_mob_anadia.colour_1=Silver
-tooltip.bl.item_mob_anadia.colour_2=Smokey Gray
-tooltip.bl.item_mob_anadia.colour_3=Rotten Green
-
 tooltip.bl.elixir.potency=§9Potency: %s
 tooltip.bl.elixir.duration=§9Duration: %s (%s)
 tooltip.bl.elixir.when_applied=§5When applied:

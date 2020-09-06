@@ -110,7 +110,6 @@ public class ItemMobAnadia extends ItemMob {
 				EntityLivingBase living = (EntityLivingBase) entity;
 				if (living instanceof EntityAnadia) {
 					tooltip.add(I18n.format(living.getName()));
-					tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.hue", ((EntityAnadia) living).getFishColourName()));
 					if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
 						if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 2) {
 							if(stack.getTagCompound().getCompoundTag("Entity").hasKey("rottingTime")) {
