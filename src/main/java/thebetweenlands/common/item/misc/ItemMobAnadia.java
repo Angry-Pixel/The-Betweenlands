@@ -148,6 +148,6 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 	@Override
 	public int getColorMultiplier(ItemStack stack, int tintIndex) {
 		// TODO
-		return 0xFFFF0000;
+		return 0x717A51;
 	}
 }
