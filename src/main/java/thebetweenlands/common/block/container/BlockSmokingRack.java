@@ -118,13 +118,6 @@ public class BlockSmokingRack extends BlockContainer implements IStateMappedBloc
 	}
 
 	@Override
-	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-		if (!world.isRemote && !player.capabilities.isCreativeMode) {
-			// left here just in case - dunno
-		}
-	}
-
-	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		if (!state.getValue(INVISIBLE)) {
 			TileEntitySmokingRack tile = (TileEntitySmokingRack) world.getTileEntity(pos);

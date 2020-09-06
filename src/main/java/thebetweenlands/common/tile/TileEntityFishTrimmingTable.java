@@ -13,7 +13,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -23,7 +22,7 @@ import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityAnadia.EnumAnadiaHeadParts;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class TileEntityFishTrimmingTable extends TileEntity implements ITickable, IInventory {
+public class TileEntityFishTrimmingTable extends TileEntity implements IInventory {
 	public NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(6, ItemStack.EMPTY);
 
 	public TileEntityFishTrimmingTable() {
@@ -35,12 +34,6 @@ public class TileEntityFishTrimmingTable extends TileEntity implements ITickable
 		return oldState.getBlock() != newState.getBlock();
 	}
 
-    @Override
-    public void update() {
-    	if(world.isRemote)
-    		return;
-	}
-
     public boolean hasAnadia() {
     	ItemStack stack = getItems().get(0);
     	return !stack.isEmpty() && stack.getItem() == ItemRegistry.ANADIA && stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND);
@@ -49,11 +42,6 @@ public class TileEntityFishTrimmingTable extends TileEntity implements ITickable
     public boolean hasChopper() {
     	ItemStack stack = getItems().get(5);
     	return !stack.isEmpty() && stack.getItem() == ItemRegistry.BONE_AXE;
-    }
-
-    public void markForUpdate() {
-        IBlockState state = this.getWorld().getBlockState(this.getPos());
-        this.getWorld().notifyBlockUpdate(this.getPos(), state, state, 3);
     }
 
     @Override
@@ -249,7 +237,7 @@ public class TileEntityFishTrimmingTable extends TileEntity implements ITickable
 			case 3:
 				return ((EntityAnadia) getAndiaEntity()).getTailItem();
 			case 4:
-				return new ItemStack(ItemRegistry.SHAMBLER_TONGUE);
+				return new ItemStack(ItemRegistry.SHAMBLER_TONGUE); // temp result (will be guts)
 			}
 		}
 		return ItemStack.EMPTY;

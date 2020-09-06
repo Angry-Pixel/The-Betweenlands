@@ -4,10 +4,12 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import thebetweenlands.common.network.MessageBase;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityFishTrimmingTable;
 
 public class MessageButcherFish extends MessageBase {
@@ -68,6 +70,7 @@ public class MessageButcherFish extends MessageBase {
 							
 							// set slot contents 0 to empty last so logic works in order
 							tile.getItems().set(0, tile.getSlotresult(0));
+							player.world.playSound(null, tilePos, SoundRegistry.FISH_CHOP, SoundCategory.BLOCKS, 1F, 1F);
 						}
 					}
 				});
