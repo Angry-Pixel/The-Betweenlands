@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.gui.GuiButtonNoClickSound;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.inventory.container.ContainerFishTrimmingTable;
 import thebetweenlands.common.network.serverbound.MessageButcherFish;
@@ -33,7 +34,7 @@ public class GuiFishTrimmingTable extends GuiContainer {
 		super.initGui();
 		int xOffSet = (width - xSize) / 2;
 		int yOffSet = (height - ySize) / 2;
-		addButton(new GuiButton(0, xOffSet + 48, yOffSet + 106, 80, 20, I18n.format("gui.bl.fish_trimming_table.butcher")));
+		addButton(new GuiButtonNoClickSound(0, xOffSet + 48, yOffSet + 106, 80, 20, I18n.format("gui.bl.fish_trimming_table.butcher")));
 	}
 
 	@Override
