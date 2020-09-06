@@ -65,7 +65,7 @@ public class ModelItemMultiPart implements IModel {
 		List<ResourceLocation> dependencies = new ArrayList<ResourceLocation>();
 		if(this.baseModelsMapping != null) {
 			for(Map<String, Pair<ResourceLocation, IModel>> map : this.baseModelsMapping.values()) {
-				dependencies = map.values().stream().map(pair -> pair.getLeft()).collect(Collectors.toList());
+				dependencies.addAll(map.values().stream().map(pair -> pair.getLeft()).collect(Collectors.toList()));
 			}
 		}
 		return dependencies;
