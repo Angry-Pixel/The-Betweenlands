@@ -23,11 +23,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
@@ -36,6 +38,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.EntityFishingTackleBoxSeat;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
@@ -108,31 +111,45 @@ public class BlockFishingTackleBox extends BlockContainer implements ICustomItem
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,  EnumFacing side, float hitX, float hitY, float hitZ) {
+	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
 		if (!world.isRemote) {
-			if (player.isSneaking()) {
-				if (world.getTileEntity(pos) instanceof TileEntityFishingTackleBox) {
+			if (world.getTileEntity(pos) instanceof TileEntityFishingTackleBox) {
+				if (!isStittingOnThisBox(world, pos)) {
 					TileEntityFishingTackleBox tile = (TileEntityFishingTackleBox) world.getTileEntity(pos);
-					if(!tile.isOpen())
+					if (!tile.isOpen())
 						world.playSound(null, pos, SoundRegistry.FISHING_TACKLE_BOX_OPEN, SoundCategory.BLOCKS, 1F, 1F);
-					if(tile.isOpen())
+					if (tile.isOpen())
 						world.playSound(null, pos, SoundRegistry.FISHING_TACKLE_BOX_CLOSE, SoundCategory.BLOCKS, 1F, 1F);
 					tile.setOpen(!tile.isOpen());
 					world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
 					tile.markDirty();
 				}
 			}
+		}
+	}
 
-			if (!player.isSneaking()) {
-				if (world.getTileEntity(pos) instanceof TileEntityFishingTackleBox) {
-					TileEntityFishingTackleBox tile = (TileEntityFishingTackleBox) world.getTileEntity(pos);
-					if (!tile.isOpen()) {
-						if(world.isAirBlock(pos.up()) && world.isAirBlock(pos.up(2)))
-							tile.seatPlayer(player, pos);
-					}
-					if (tile.isOpen())
-						player.openGui(TheBetweenlands.instance, CommonProxy.GUI_FISHING_TACKLE_BOX, world, pos.getX(), pos.getY(), pos.getZ());
+	private boolean isStittingOnThisBox(World world, BlockPos pos) {
+		AxisAlignedBB detectionbox = new AxisAlignedBB(pos);
+		List<EntityFishingTackleBoxSeat> list = world.<EntityFishingTackleBoxSeat>getEntitiesWithinAABB(EntityFishingTackleBoxSeat.class, detectionbox, EntitySelectors.IS_ALIVE);
+		for (EntityFishingTackleBoxSeat entity : list) {
+			if (!list.isEmpty())
+				if (list.get(0) instanceof EntityFishingTackleBoxSeat)
+					return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (!world.isRemote) {
+			if (world.getTileEntity(pos) instanceof TileEntityFishingTackleBox) {
+				TileEntityFishingTackleBox tile = (TileEntityFishingTackleBox) world.getTileEntity(pos);
+				if (!tile.isOpen()) {
+					if (world.isAirBlock(pos.up()) && world.isAirBlock(pos.up(2)))
+						tile.seatPlayer(player, pos);
 				}
+				if (tile.isOpen())
+					player.openGui(TheBetweenlands.instance, CommonProxy.GUI_FISHING_TACKLE_BOX, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 		}
 		return true;
