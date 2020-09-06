@@ -114,7 +114,7 @@ public class BlockFishingTackleBox extends BlockContainer implements ICustomItem
 	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
 		if (!world.isRemote) {
 			if (world.getTileEntity(pos) instanceof TileEntityFishingTackleBox) {
-				if (!isStittingOnThisBox(world, pos)) {
+				if (!isBoxSatOn(world, pos)) {
 					TileEntityFishingTackleBox tile = (TileEntityFishingTackleBox) world.getTileEntity(pos);
 					if (!tile.isOpen())
 						world.playSound(null, pos, SoundRegistry.FISHING_TACKLE_BOX_OPEN, SoundCategory.BLOCKS, 1F, 1F);
@@ -128,7 +128,7 @@ public class BlockFishingTackleBox extends BlockContainer implements ICustomItem
 		}
 	}
 
-	private boolean isStittingOnThisBox(World world, BlockPos pos) {
+	private boolean isBoxSatOn(World world, BlockPos pos) {
 		AxisAlignedBB detectionbox = new AxisAlignedBB(pos);
 		List<EntityFishingTackleBoxSeat> list = world.<EntityFishingTackleBoxSeat>getEntitiesWithinAABB(EntityFishingTackleBoxSeat.class, detectionbox, EntitySelectors.IS_ALIVE);
 		for (EntityFishingTackleBoxSeat entity : list) {
