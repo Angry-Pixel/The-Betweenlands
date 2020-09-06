@@ -23,8 +23,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
+import thebetweenlands.common.item.ITintedItem;
 
-public class ItemMobAnadia extends ItemMob {
+public class ItemMobAnadia extends ItemMob implements ITintedItem {
 
 	// TODO Item property overrides for jsons to show types and colour status (brown, silver, smoked, rotten)
 
@@ -142,5 +143,11 @@ public class ItemMobAnadia extends ItemMob {
 					tooltip.add(I18n.format("tooltip.bl.item_mob.health", MathHelper.ceil(living.getHealth() / 2), MathHelper.ceil(living.getMaxHealth() / 2)));
 			}
 		}
+	}
+
+	@Override
+	public int getColorMultiplier(ItemStack stack, int tintIndex) {
+		// TODO
+		return 0xFFFF0000;
 	}
 }

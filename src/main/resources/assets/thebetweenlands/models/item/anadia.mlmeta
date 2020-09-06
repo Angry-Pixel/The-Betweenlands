@@ -3,7 +3,21 @@
   "inherit_overrides": false,
   "custom": {
     "map": {
-      "thebetweenlands:anadia": "thebetweenlands:item/anadia_item"
+      "head": {
+        "0": { "model": "thebetweenlands:item/anadia_head_1" },
+        "1": { "model": "thebetweenlands:item/anadia_head_2" },
+        "2": { "model": "thebetweenlands:item/anadia_head_3" }
+      },
+      "body": {
+        "0": { "model": "thebetweenlands:item/anadia_body_1" },
+        "1": { "model": "thebetweenlands:item/anadia_body_2" },
+        "2": { "model": "thebetweenlands:item/anadia_body_3" }
+      },
+      "tail": {
+        "0": { "model": "thebetweenlands:item/anadia_tail_1" },
+        "1": { "model": "thebetweenlands:item/anadia_tail_2" },
+        "2": { "model": "thebetweenlands:item/anadia_tail_3" }
+      }
     }
   }
 }

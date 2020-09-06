@@ -16,6 +16,7 @@ import thebetweenlands.client.render.model.baked.ModelDynBucketBL;
 import thebetweenlands.client.render.model.baked.ModelEventSelection;
 import thebetweenlands.client.render.model.baked.ModelFromModelBase;
 import thebetweenlands.client.render.model.baked.ModelFromModelBase.IVertexProcessor;
+import thebetweenlands.client.render.model.baked.ModelItemAnadia;
 import thebetweenlands.client.render.model.baked.ModelLayerSelection;
 import thebetweenlands.client.render.model.baked.ModelLifeCrystalStalactite;
 import thebetweenlands.client.render.model.baked.ModelMobItem;
@@ -210,7 +211,8 @@ public class ModelRegistry {
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/syrmorite_block")).packer(MODEL_TEXTURE_PACKER).build();
 	public static final IModel DRAETON_UPGRADE_CRAFTING = new ModelFromModelBase.Builder(new ModelDraetonUpgradeCrafting(), new ResourceLocation("thebetweenlands:entity/draeton_upgrade_crafting"), 64, 32)
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/weedwood_planks")).packer(MODEL_TEXTURE_PACKER).build();
-
+	public static final IModel ANADIA = new ModelItemAnadia();
+	
 	//Misc
 	public static final IModel LIFE_CRYSTAL_STALACTITE = new ModelLifeCrystalStalactite();
 	public static final IModel STALACTITE = new ModelStalactite();
