@@ -40,6 +40,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -924,4 +925,18 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        anadia.getNavigator().tryMoveToXYZ(this.randPosX, this.randPosY, this.randPosZ, this.speed);
 	    }
 	}
+
+	public String getFishColourName() {
+		switch (getFishColour()) {
+				case 0:
+					return new TextComponentTranslation("tooltip.bl.item_mob_anadia.colour_0").getFormattedText();
+				case 1:
+					return new TextComponentTranslation("tooltip.bl.item_mob_anadia.colour_1").getFormattedText();
+				case 2:
+					return new TextComponentTranslation("tooltip.bl.item_mob_anadia.colour_2").getFormattedText();
+				case 3:
+					return new TextComponentTranslation("tooltip.bl.item_mob_anadia.colour_3").getFormattedText();
+				}
+			return new TextComponentTranslation("tooltip.bl.item_mob_anadia.colour_null").getFormattedText();
+		}
 }

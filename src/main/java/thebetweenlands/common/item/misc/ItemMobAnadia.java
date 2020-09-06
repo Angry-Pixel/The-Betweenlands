@@ -28,7 +28,7 @@ public class ItemMobAnadia extends ItemMob {
 
 	// TODO Item property overrides for jsons to show types and colour status (brown, silver, smoked, rotten)
 
-	public int decayTime = 12000; // 10 minutes
+	public int decayTime = 24000; // 20 minutes
 
 	@SuppressWarnings("unchecked")
 	public <T extends Entity> ItemMobAnadia(int maxStackSize, @Nullable Class<T> defaultMob, @Nullable Consumer<T> defaultMobSetter) {
@@ -110,33 +110,34 @@ public class ItemMobAnadia extends ItemMob {
 				EntityLivingBase living = (EntityLivingBase) entity;
 				if (living instanceof EntityAnadia) {
 					tooltip.add(I18n.format(living.getName()));
+					tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.hue", ((EntityAnadia) living).getFishColourName()));
 					if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
 						if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 2) {
 							if(stack.getTagCompound().getCompoundTag("Entity").hasKey("rottingTime")) {
 								long rottingTime = stack.getTagCompound().getCompoundTag("Entity").getLong("rottingTime");
 								//TODO localisation
-								if(rottingTime - worldIn.getTotalWorldTime() > 9600)
-									tooltip.add(I18n.format("Freshly Caught"));
-								else if(rottingTime - worldIn.getTotalWorldTime() <= 9600 && rottingTime - worldIn.getTotalWorldTime() > 7200)
-									tooltip.add(I18n.format("Recently Caught"));
-								else if(rottingTime - worldIn.getTotalWorldTime() <= 7200 && rottingTime - worldIn.getTotalWorldTime() > 4800)
-									tooltip.add(I18n.format("Starting to Ripen"));
-								else if(rottingTime - worldIn.getTotalWorldTime() <= 4800 && rottingTime - worldIn.getTotalWorldTime() > 2400)
-									tooltip.add(I18n.format("Getting Smelly"));
-								else if(rottingTime - worldIn.getTotalWorldTime() <= 2400 && rottingTime - worldIn.getTotalWorldTime() > 0)
-									tooltip.add(I18n.format("Getting Really Stinky"));
+								if(rottingTime - worldIn.getTotalWorldTime() > 19200)
+									tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.status") + I18n.format("tooltip.bl.item_mob_anadia.rotting_1"));
+								else if(rottingTime - worldIn.getTotalWorldTime() <= 19200 && rottingTime - worldIn.getTotalWorldTime() > 14400)
+									tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.status") + I18n.format("tooltip.bl.item_mob_anadia.rotting_2"));
+								else if(rottingTime - worldIn.getTotalWorldTime() <= 14400 && rottingTime - worldIn.getTotalWorldTime() > 9600)
+									tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.status") + I18n.format("tooltip.bl.item_mob_anadia.rotting_3"));
+								else if(rottingTime - worldIn.getTotalWorldTime() <= 9600 && rottingTime - worldIn.getTotalWorldTime() > 4800)
+									tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.status") + I18n.format("tooltip.bl.item_mob_anadia.rotting_4"));
+								else if(rottingTime - worldIn.getTotalWorldTime() <= 4800 && rottingTime - worldIn.getTotalWorldTime() > 0)
+									tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.status") + I18n.format("tooltip.bl.item_mob_anadia.rotting_5"));
 								else if(rottingTime - worldIn.getTotalWorldTime() <= 0)
-									tooltip.add(I18n.format("Rotten"));
+									tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.status") + I18n.format("tooltip.bl.item_mob_anadia.rotten"));
 							}
 						}
+						else
+							tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.status") + I18n.format("tooltip.bl.item_mob_anadia.smoked"));
 					}
-
-					tooltip.add(I18n.format("Colour" + ((EntityAnadia) living).getFishColour(), ((EntityAnadia) living).getFishColour()));
-					tooltip.add(I18n.format("tooltip.bl.item_mob.health", MathHelper.ceil(living.getHealth()), MathHelper.ceil((living.getMaxHealth()))));
-					tooltip.add(I18n.format("tooltip.bl.item_mob.size", ((EntityAnadia) living).getFishSize()));
-					tooltip.add(I18n.format("tooltip.bl.item_mob.speed", (living.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue())));
-					tooltip.add(I18n.format("tooltip.bl.item_mob.strength", (living.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue())));
-					tooltip.add(I18n.format("tooltip.bl.item_mob.stamina", ((EntityAnadia) living).getStaminaMods()));
+					tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.health", MathHelper.ceil(living.getHealth()), MathHelper.ceil((living.getMaxHealth()))));
+					tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.size", ((EntityAnadia) living).getFishSize()));
+					tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.speed", (living.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue())));
+					tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.strength", (living.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue())));
+					tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.stamina", ((EntityAnadia) living).getStaminaMods()));
 				}
 				else
 					tooltip.add(I18n.format("tooltip.bl.item_mob.health", MathHelper.ceil(living.getHealth() / 2), MathHelper.ceil(living.getMaxHealth() / 2)));
