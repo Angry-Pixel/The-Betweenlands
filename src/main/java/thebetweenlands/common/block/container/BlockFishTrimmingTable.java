@@ -83,13 +83,6 @@ public class BlockFishTrimmingTable extends BlockContainer {
 	}
 
 	@Override
-	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-		if (!world.isRemote && !player.capabilities.isCreativeMode) {
-
-		}
-	}
-
-	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		TileEntityFishTrimmingTable tile = (TileEntityFishTrimmingTable) world.getTileEntity(pos);
 		if (tile != null) {

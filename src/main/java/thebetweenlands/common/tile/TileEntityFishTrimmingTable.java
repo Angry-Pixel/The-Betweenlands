@@ -44,11 +44,6 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
     	return !stack.isEmpty() && stack.getItem() == ItemRegistry.BONE_AXE;
     }
 
-    public void markForUpdate() {
-        IBlockState state = this.getWorld().getBlockState(this.getPos());
-        this.getWorld().notifyBlockUpdate(this.getPos(), state, state, 3);
-    }
-
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
@@ -242,7 +237,7 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
 			case 3:
 				return ((EntityAnadia) getAndiaEntity()).getTailItem();
 			case 4:
-				return new ItemStack(ItemRegistry.SHAMBLER_TONGUE);
+				return new ItemStack(ItemRegistry.SHAMBLER_TONGUE); // temp result (will be guts)
 			}
 		}
 		return ItemStack.EMPTY;
