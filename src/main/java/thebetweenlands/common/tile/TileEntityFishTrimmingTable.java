@@ -13,7 +13,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -23,7 +22,7 @@ import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityAnadia.EnumAnadiaHeadParts;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class TileEntityFishTrimmingTable extends TileEntity implements ITickable, IInventory {
+public class TileEntityFishTrimmingTable extends TileEntity implements IInventory {
 	public NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(6, ItemStack.EMPTY);
 
 	public TileEntityFishTrimmingTable() {
@@ -33,12 +32,6 @@ public class TileEntityFishTrimmingTable extends TileEntity implements ITickable
 	@Override
 	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
 		return oldState.getBlock() != newState.getBlock();
-	}
-
-    @Override
-    public void update() {
-    	if(world.isRemote)
-    		return;
 	}
 
     public boolean hasAnadia() {
