@@ -226,7 +226,7 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
 			case 3:
 				return ((EntityAnadia) getAndiaEntity()).getTailItem();
 			case 4:
-				return new ItemStack(ItemRegistry.SHAMBLER_TONGUE, 4); // temp result (will be guts)
+				return new ItemStack(ItemRegistry.SHAMBLER_TONGUE, 3); // temp result (will be guts)
 			}
 		}
 		return ItemStack.EMPTY;
