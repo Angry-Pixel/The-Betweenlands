@@ -176,18 +176,7 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
 	public void clear() {
 		inventory.clear();
 	}
-
-	public int getAnadiaMeatQuantity() {
-		int amount = 1;
-		if(hasAnadia()) {
-			ItemStack stack = getItems().get(0);
-			int size = Math.round(stack.getTagCompound().getCompoundTag("Entity").getFloat("fishSize") * 5);
-			if(size >= 1)
-				amount = size;
-		}
-		return amount;
-	}
-
+/*
 	//NYI
 	public int getAnadiaMeatBuff() {
 		int saturation = 0;
@@ -215,7 +204,7 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
 		float tail = EnumAnadiaHeadParts.values()[tailIndex].getStaminaModifier();
 		return Math.round(sizeIn * head + body + tail * 2F) / 2F;
 	}
-
+*/
 	public Entity getAndiaEntity() {
 		Entity entity = null;
 		if (getItems().get(0).getTagCompound() != null && getItems().get(0).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
@@ -237,7 +226,7 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
 			case 3:
 				return ((EntityAnadia) getAndiaEntity()).getTailItem();
 			case 4:
-				return new ItemStack(ItemRegistry.SHAMBLER_TONGUE); // temp result (will be guts)
+				return new ItemStack(ItemRegistry.SHAMBLER_TONGUE, 4); // temp result (will be guts)
 			}
 		}
 		return ItemStack.EMPTY;

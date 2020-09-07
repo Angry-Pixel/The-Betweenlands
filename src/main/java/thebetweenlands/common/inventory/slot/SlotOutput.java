@@ -32,10 +32,24 @@ public class SlotOutput extends Slot {
         if (container instanceof ContainerPurifier && stack.getItem() instanceof ICorrodible && thePlayer instanceof EntityPlayerMP)
             AdvancementCriterionRegistry.PURIFY_TOOL.trigger((EntityPlayerMP) thePlayer);
         //temp item test
-        if (container instanceof ContainerFishTrimmingTable && getSlotIndex() == 4) {
-            ((TileEntityFishTrimmingTable) inventory).getItems().set(1, ItemStack.EMPTY);
-            ((TileEntityFishTrimmingTable) inventory).getItems().set(2, ItemStack.EMPTY);
-            ((TileEntityFishTrimmingTable) inventory).getItems().set(3, ItemStack.EMPTY);
+        if (container instanceof ContainerFishTrimmingTable) {
+			if (getSlotIndex() == 4) {
+				((TileEntityFishTrimmingTable) inventory).getItems().set(1, ItemStack.EMPTY);
+				((TileEntityFishTrimmingTable) inventory).getItems().set(2, ItemStack.EMPTY);
+				((TileEntityFishTrimmingTable) inventory).getItems().set(3, ItemStack.EMPTY);
+			}
+
+			if (getSlotIndex() == 1 && ((TileEntityFishTrimmingTable) inventory).getItems().get(1).isEmpty())
+				if (!((TileEntityFishTrimmingTable) inventory).getItems().get(4).isEmpty())
+					((TileEntityFishTrimmingTable) inventory).getItems().get(4).shrink(1);
+
+			if (getSlotIndex() == 2 && ((TileEntityFishTrimmingTable) inventory).getItems().get(2).isEmpty())
+				if (!((TileEntityFishTrimmingTable) inventory).getItems().get(4).isEmpty())
+					((TileEntityFishTrimmingTable) inventory).getItems().get(4).shrink(1);
+
+			if (getSlotIndex() == 3 && ((TileEntityFishTrimmingTable) inventory).getItems().get(3).isEmpty())
+				if (!((TileEntityFishTrimmingTable) inventory).getItems().get(4).isEmpty())
+					((TileEntityFishTrimmingTable) inventory).getItems().get(4).shrink(1);
         }
         return super.onTake(thePlayer, stack);
     }
