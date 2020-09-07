@@ -17,6 +17,15 @@
                                 "thebetweenlands:anadia_body_type": 0
                             }
                         }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 1,
+                            "max_count": 5
+                        }
                     ]
                 },
                  {
@@ -32,6 +41,15 @@
                                 "thebetweenlands:anadia_body_type": 1
                             }
                         }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 1,
+                            "max_count": 5
+                        }
                     ]
                 },
                 {
@@ -46,6 +64,15 @@
                             "properties": {
                                 "thebetweenlands:anadia_body_type": 2
                             }
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 1,
+                            "max_count": 5
                         }
                     ]
                 }

@@ -50,6 +50,7 @@ import thebetweenlands.common.loot.LootConditionKilledLootModifier;
 import thebetweenlands.common.loot.LootConditionOr;
 import thebetweenlands.common.loot.LootConditionSharedPool;
 import thebetweenlands.common.loot.LootFunctionSetMetaFromArray;
+import thebetweenlands.common.loot.LootFunctionSetCountFromAnadia;
 import thebetweenlands.util.FakeClientWorld;
 
 public class LootTableRegistry {
@@ -171,6 +172,7 @@ public class LootTableRegistry {
     
     //LOOT FUNCTIONS
     public static final ResourceLocation LOOT_FUNCTION_SET_META_FROM_ARRAY = register(new LootFunctionSetMetaFromArray.Serializer());
+    public static final ResourceLocation LOOT_FUNCTION_SET_COUNT_FROM_ANADIA = register(new LootFunctionSetCountFromAnadia.Serializer());
     
     public static void preInit() {
     	if(BetweenlandsConfig.DEBUG.debug) {
