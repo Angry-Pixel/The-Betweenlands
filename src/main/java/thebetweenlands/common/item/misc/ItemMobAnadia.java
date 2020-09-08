@@ -43,10 +43,12 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
     public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		if (!attacker.getEntityWorld().isRemote) {
 			if (target instanceof EntitySwampHag && !target.isRiding() && attacker instanceof EntityPlayer) {
-				EntityFishingTackleBoxSeat entitySeat = new EntityFishingTackleBoxSeat(attacker.getEntityWorld(), true);
-				entitySeat.setPosition(target.posX, target.posY - 0.55D, target.posZ);
-				attacker.getEntityWorld().spawnEntity(entitySeat);
-				target.startRiding(entitySeat, true);
+				if (attacker.getEntityWorld().getBlockState(target.getPosition().down()).getMaterial().blocksMovement()) {
+					EntityFishingTackleBoxSeat entitySeat = new EntityFishingTackleBoxSeat(attacker.getEntityWorld(), true);
+					entitySeat.setPosition(target.posX, target.posY - 0.55D, target.posZ);
+					attacker.getEntityWorld().spawnEntity(entitySeat);
+					target.startRiding(entitySeat, true);
+				}
 			}
 		}
 		return false;
