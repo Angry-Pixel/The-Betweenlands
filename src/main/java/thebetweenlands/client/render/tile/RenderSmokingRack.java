@@ -112,7 +112,7 @@ public class RenderSmokingRack extends TileEntitySpecialRenderer<TileEntitySmoki
 	public void renderAnadiaInSlot(TileEntitySmokingRack smoking_rack, ItemStack stack, Entity entity, float x, float y, float z, float scale) {
 		if (entity != null) {
 			if(stack.getItem() instanceof ItemMobAnadia && ((ItemMobAnadia)stack.getItem()).isRotten(Minecraft.getMinecraft().world, stack))
-				((EntityAnadia) entity).setFishColour((byte) 3);
+				((EntityAnadia) entity).setFishColour((byte) 1);
 			float scale2 = 1F / ((EntityAnadia) entity).getFishSize() * 0.5F;
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x, y, z);

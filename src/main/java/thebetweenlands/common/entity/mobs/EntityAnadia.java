@@ -71,10 +71,10 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	private static float BASE_MULTIPLE = 1F; // just a arbitrary number to increase the size multiplier
 	public EntityAnadia.AIFindBait aiFindBait;
 	public EntityAnadia.AIFindHook aiFindHook;
-	public byte BASE = 0;
-	public byte SILVER = 1;
-	public byte SMOKED = 2;
-	public byte ROTTEN = 3;
+	public byte BASE = 1;
+	public byte SILVER = 2;
+	public byte SMOKED = 0;
+	public byte ROTTEN = 1;
 	
 	public EntityAnadia(World world) {
 		super(world);
@@ -120,7 +120,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         dataManager.register(IS_LEAPING, false);
       //  dataManager.register(HUNGER_COOLDOWN, 0);
         dataManager.register(STAMINA_TICKS, 40);
-        dataManager.register(FISH_COLOUR, (byte) 0);
+        dataManager.register(FISH_COLOUR, (byte) 2);
         dataManager.register(HEAD_ITEM, ItemStack.EMPTY);
         dataManager.register(BODY_ITEM, ItemStack.EMPTY);
         dataManager.register(TAIL_ITEM, ItemStack.EMPTY);
@@ -140,7 +140,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        setBodyType((byte)rand.nextInt(3));
 	        setTailType((byte)rand.nextInt(3));
 	        setFishSize(Math.round(Math.max(0.125F, rand.nextFloat()) * 16F) / 16F);
-	        setFishColour((byte)rand.nextInt(2)); // testing colours - TODO set this based on biome spawned in /other possible things
+	        setFishColour((byte)(2 + (byte)rand.nextInt(2))); // testing colours - TODO set this based on biome spawned in /other possible things
 	        setHeadItem(getPartFromLootTable(LootTableRegistry.ANADIA_HEAD));
 	        setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_BODY));
 	        setTailItem(getPartFromLootTable(LootTableRegistry.ANADIA_TAIL));

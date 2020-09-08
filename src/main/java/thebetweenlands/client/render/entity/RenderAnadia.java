@@ -12,22 +12,25 @@ import thebetweenlands.common.entity.mobs.EntityAnadia;
 @SideOnly(Side.CLIENT)
 public class RenderAnadia extends RenderLiving<EntityAnadia> {
 	private static final ResourceLocation[] TEXTURE_1 = new ResourceLocation[] {
-			new ResourceLocation("thebetweenlands:textures/entity/anadia_1_base.png"),
-			new ResourceLocation("thebetweenlands:textures/entity/anadia_1_silver.png"),
 			new ResourceLocation("thebetweenlands:textures/entity/anadia_1_smoked.png"),
-			new ResourceLocation("thebetweenlands:textures/entity/anadia_1_rotten.png")};
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_1_rotten.png"),
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_1_base.png"),
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_1_silver.png")
+			};
 	
 	private static final ResourceLocation[] TEXTURE_2 = new ResourceLocation[] {
-			new ResourceLocation("thebetweenlands:textures/entity/anadia_2_base.png"),
-			new ResourceLocation("thebetweenlands:textures/entity/anadia_2_silver.png"),
 			new ResourceLocation("thebetweenlands:textures/entity/anadia_2_smoked.png"),
-			new ResourceLocation("thebetweenlands:textures/entity/anadia_2_rotten.png")};
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_2_rotten.png"),
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_2_base.png"),
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_2_silver.png")
+			};
 	
 	private static final ResourceLocation[] TEXTURE_3 = new ResourceLocation[] {
-			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_base.png"),
-			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_silver.png"),
 			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_smoked.png"),
-			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_rotten.png")};
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_rotten.png"),
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_base.png"),
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_silver.png")
+			};
 	
 	public final static ModelAnadia ANADIA_MODEL = new ModelAnadia();
 
@@ -37,7 +40,7 @@ public class RenderAnadia extends RenderLiving<EntityAnadia> {
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityAnadia entity) {
-		return TEXTURE_1[0];
+		return TEXTURE_1[2];
 	}
 
 	@Override

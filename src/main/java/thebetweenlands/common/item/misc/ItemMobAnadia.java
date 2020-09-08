@@ -68,7 +68,7 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 	
 	public boolean isRotten(World world, ItemStack stack) {
 		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
-			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 2)
+			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 0)
 				if(stack.getTagCompound().getCompoundTag("Entity").hasKey("rottingTime")) {
 					long timeFished = stack.getTagCompound().getCompoundTag("Entity").getLong("rottingTime");
 					long worldTime = world.getTotalWorldTime();
@@ -80,7 +80,7 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 	@Override
     public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
 		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
-			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 2 && stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 3)
+			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 0 && stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 1)
 				if(stack.getTagCompound().getCompoundTag("Entity").hasKey("rottingTime"))
 					if(world.getTotalWorldTime() >= stack.getTagCompound().getCompoundTag("Entity").getLong("rottingTime"))
 						stack.getTagCompound().getCompoundTag("Entity").setByte("fishColour", (byte) 3);
@@ -112,7 +112,7 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 				if (living instanceof EntityAnadia) {
 					tooltip.add(I18n.format(living.getName()));
 					if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
-						if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 2) {
+						if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 0) {
 							if(stack.getTagCompound().getCompoundTag("Entity").hasKey("rottingTime")) {
 								long rottingTime = stack.getTagCompound().getCompoundTag("Entity").getLong("rottingTime");
 								//TODO localisation
@@ -148,11 +148,11 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 	@Override
 	public int getColorMultiplier(ItemStack stack, int tintIndex) {
 		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
-			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 1)
-				return 0xC2B3DB;
 			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 2)
+				return 0xC2B3DB;
+			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 0)
 				return 0x747479;
-			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 3)
+			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 1)
 				return 0x5FB050;
 		}
 		return 0x717A51;
