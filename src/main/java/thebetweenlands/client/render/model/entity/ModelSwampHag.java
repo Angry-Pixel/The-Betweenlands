@@ -263,6 +263,16 @@ public class ModelSwampHag extends MowzieModelBase {
         flap(neck, 0.5f * globalSpeed, 0.1f * globalDegree, false, 0.5f, 0.1f, limbSwing, limbSwingAngle);
         flap(head1, 0.5f * globalSpeed, 0.1f * globalDegree, false, 0f, 0.1f, limbSwing, limbSwingAngle);
         body_base.rotationPointX -= Math.cos((limbSwing - 3) * 0.5 * globalSpeed) * limbSwingAngle;
+        
+        if (this.isRiding) {
+        	armright.rotateAngleX += -((float)Math.PI / 5F);
+            legright1.rotateAngleX = -1.4137167F;
+            legright1.rotateAngleY = ((float)Math.PI / 10F);
+            legright1.rotateAngleZ = 0.07853982F;
+            legleft1.rotateAngleX = -1.4137167F;
+            legleft1.rotateAngleY = -((float)Math.PI / 10F);
+            legleft1.rotateAngleZ = -0.07853982F;
+        }
     }
 
     @Override

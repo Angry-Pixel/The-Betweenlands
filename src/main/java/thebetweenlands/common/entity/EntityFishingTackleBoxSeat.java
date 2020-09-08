@@ -6,10 +6,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 public class EntityFishingTackleBoxSeat extends Entity {
-
+	public boolean tempSeat = false;
 	public EntityFishingTackleBoxSeat (World world) {
 		super(world);
 		setSize(0.0F, 0.0F);
+	}
+
+	public EntityFishingTackleBoxSeat(World entityWorld, boolean tempSeat) {
+		super(entityWorld);
+		this.tempSeat = tempSeat;
 	}
 
 	@Override
@@ -26,7 +31,7 @@ public class EntityFishingTackleBoxSeat extends Entity {
 	 public void onUpdate() {
 		super.onUpdate();
 		if (!getEntityWorld().isRemote) {
-			if (!isBeingRidden() || world.isAirBlock(getPosition()))
+			if (!isBeingRidden() || world.isAirBlock(getPosition()) || (tempSeat && ticksExisted >= 60))
 				setDead();
 		}
 	}

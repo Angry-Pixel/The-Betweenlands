@@ -6,7 +6,18 @@
             "entries": [
                 {
                     "type": "item",
-                    "name": "minecraft:dirt",
+                    "entryName": "head_type_0",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": 1
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 55
+                        }
+                    ],
                     "weight": 1,
                     "conditions": [
                         {
@@ -20,7 +31,18 @@
                 },
                  {
                     "type": "item",
-                    "name": "minecraft:cobblestone",
+                    "entryName": "head_type_1",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": 1
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 52
+                        }
+                    ],
                     "weight": 1,
                     "conditions": [
                         {
@@ -34,7 +56,18 @@
                 },
                 {
                     "type": "item",
-                    "name": "minecraft:diamond",
+                    "entryName": "head_type_2",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": 1
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 53
+                        }
+                    ],
                     "weight": 1,
                     "conditions": [
                         {

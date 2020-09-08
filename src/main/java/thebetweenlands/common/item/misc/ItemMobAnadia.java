@@ -22,7 +22,9 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.entity.EntityFishingTackleBoxSeat;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
+import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.item.ITintedItem;
 
 public class ItemMobAnadia extends ItemMob implements ITintedItem {
@@ -35,6 +37,19 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 	public <T extends Entity> ItemMobAnadia(int maxStackSize, @Nullable Class<T> defaultMob, @Nullable Consumer<T> defaultMobSetter) {
 		super(1, defaultMob, defaultMobSetter);
 		this.setCreativeTab(BLCreativeTabs.ITEMS);
+	}
+
+	@Override
+    public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+		if (!attacker.getEntityWorld().isRemote) {
+			if (target instanceof EntitySwampHag && attacker instanceof EntityPlayer) {
+				EntityFishingTackleBoxSeat entitySeat = new EntityFishingTackleBoxSeat(attacker.getEntityWorld(), true);
+				entitySeat.setPosition(target.posX, target.posY - 0.55D, target.posZ);
+				attacker.getEntityWorld().spawnEntity(entitySeat);
+				target.startRiding(entitySeat, true);
+			}
+		}
+		return false;
 	}
 
 	@Override
