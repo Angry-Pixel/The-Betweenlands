@@ -655,7 +655,7 @@ public class RecipeRegistry {
 			public ItemStack getOutput(ItemStack stack) {
 				ItemStack output = stack.copy();
 				if(output.getTagCompound() != null && output.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
-					output.getTagCompound().getCompoundTag("Entity").setByte("fishColour", (byte) 2);
+					output.getTagCompound().getCompoundTag("Entity").setByte("fishColour", (byte) 0);
 				return output;
 			}
 

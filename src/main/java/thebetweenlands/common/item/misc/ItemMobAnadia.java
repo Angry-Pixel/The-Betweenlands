@@ -83,7 +83,7 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 0 && stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 1)
 				if(stack.getTagCompound().getCompoundTag("Entity").hasKey("rottingTime"))
 					if(world.getTotalWorldTime() >= stack.getTagCompound().getCompoundTag("Entity").getLong("rottingTime"))
-						stack.getTagCompound().getCompoundTag("Entity").setByte("fishColour", (byte) 3);
+						stack.getTagCompound().getCompoundTag("Entity").setByte("fishColour", (byte) 1);
     }
 
 	@Override
@@ -148,12 +148,12 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 	@Override
 	public int getColorMultiplier(ItemStack stack, int tintIndex) {
 		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
-			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 2)
-				return 0xC2B3DB;
 			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 0)
 				return 0x747479;
 			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 1)
 				return 0x5FB050;
+			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 3)
+				return 0xC2B3DB;
 		}
 		return 0x717A51;
 	}
