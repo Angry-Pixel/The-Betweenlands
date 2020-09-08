@@ -19,7 +19,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
-import thebetweenlands.common.entity.mobs.EntityAnadia.EnumAnadiaHeadParts;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class TileEntityFishTrimmingTable extends TileEntity implements IInventory {
@@ -226,7 +226,7 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
 			case 3:
 				return ((EntityAnadia) getAndiaEntity()).getTailItem();
 			case 4:
-				return new ItemStack(ItemRegistry.SHAMBLER_TONGUE, 3); // temp result (will be guts)
+				return EnumItemMisc.ANADIA_REMAINS.create(3);
 			}
 		}
 		return ItemStack.EMPTY;

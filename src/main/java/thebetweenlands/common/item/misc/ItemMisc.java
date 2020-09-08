@@ -105,7 +105,14 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 		ANCIENT_REMNANT(47),
 		LOOT_SCRAPS(48),
 		FABRICATED_SCROLL(49),
-		BETWEENSTONE_PEBBLE(50);
+		BETWEENSTONE_PEBBLE(50),
+		ANADIA_SWIM_BLADDER(51),
+		ANADIA_EYE(52),
+		ANADIA_GILLS(53),
+		ANADIA_SCALES(54),
+		ANADIA_BONES(55),
+		ANADIA_REMAINS(56),
+		ANADIA_FINS(57);
 
 		private final int id;
 		private final String unlocalizedName;
