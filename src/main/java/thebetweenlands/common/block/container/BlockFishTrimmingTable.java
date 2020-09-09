@@ -32,10 +32,9 @@ import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityFishTrimmingTable;
 
-
 public class BlockFishTrimmingTable extends BlockContainer {
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
-	
+
 	public BlockFishTrimmingTable() {
 		super(Material.WOOD);
 		setHardness(2.0F);
@@ -91,7 +90,7 @@ public class BlockFishTrimmingTable extends BlockContainer {
 		}
 		super.breakBlock(world, pos, state);
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
 		TileEntityFishTrimmingTable tile = (TileEntityFishTrimmingTable) world.getTileEntity(pos);
@@ -127,7 +126,7 @@ public class BlockFishTrimmingTable extends BlockContainer {
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
-	
+
 	@Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
