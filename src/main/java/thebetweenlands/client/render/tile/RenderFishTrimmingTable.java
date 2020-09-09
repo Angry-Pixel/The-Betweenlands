@@ -60,16 +60,16 @@ public class RenderFishTrimmingTable extends TileEntitySpecialRenderer<TileEntit
 			}
 
 			if (!te.getStackInSlot(1).isEmpty())
-				renderItemInSlot(te.getStackInSlot(1), -0.25F, 0.75F, 0F, 0.1875F, (float)rand.nextDouble() * 60F - 30F);
+				renderItemInSlot(te.getStackInSlot(1), -0.25F, 0.75F, 0F, 0.25F, (float)rand.nextDouble() * 60F - 30F);
 
 			if (!te.getStackInSlot(2).isEmpty())
-				renderItemInSlot(te.getStackInSlot(2), 0F, 0.75F, -0.125F, 0.1875F, (float)rand.nextDouble() * 60F - 30F);
+				renderItemInSlot(te.getStackInSlot(2), 0F, 0.75F, -0.125F, 0.25F, (float)rand.nextDouble() * 60F - 30F);
 
 			if (!te.getStackInSlot(3).isEmpty())
-				renderItemInSlot(te.getStackInSlot(3), 0.25F, 0.75F, 0F, 0.1875F, (float)rand.nextDouble() * 60F - 30F);
+				renderItemInSlot(te.getStackInSlot(3), 0.25F, 0.75F, 0F, 0.25F, (float)rand.nextDouble() * 60F - 30F);
 
 			if (!te.getStackInSlot(4).isEmpty())
-				renderItemInSlot(te.getStackInSlot(4), -0.25F, 0.75F, 0.25F, 0.1875F, (float)rand.nextDouble() * 60F - 30F);
+				renderItemInSlot(te.getStackInSlot(4), -0.25F, 0.75F, 0.25F, 0.25F, (float)rand.nextDouble() * 60F - 30F);
 
 			// chopper
 			if (!te.getStackInSlot(5).isEmpty())
