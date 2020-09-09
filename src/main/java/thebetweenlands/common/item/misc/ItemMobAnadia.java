@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -163,15 +164,27 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public int getColorMultiplier(ItemStack stack, int tintIndex) {
+
 		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
+
+			// smoked
 			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 0)
 				return 0x747479;
-			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 1)
-				return 0x5FB050;
+
+			// rotten
+			if (stack.getTagCompound().getCompoundTag("Entity").hasKey("rottingTime")) {
+				long rottingTime = stack.getTagCompound().getCompoundTag("Entity").getLong("rottingTime");
+				if (rottingTime - Minecraft.getMinecraft().world.getTotalWorldTime() <= 0)
+					return 0x5FB050;
+			}
+
+			// silver
 			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 3)
 				return 0xC2B3DB;
 		}
-		return 0x717A51;
+
+		return 0x717A51; //default to base/brown
 	}
 }

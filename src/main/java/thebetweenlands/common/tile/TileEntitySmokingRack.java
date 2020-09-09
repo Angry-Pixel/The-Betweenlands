@@ -155,7 +155,7 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 		Entity entity = null;
 		if (getItems().get(slot).getTagCompound() != null && getItems().get(slot).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
 			entity = EntityList.createEntityFromNBT(getItems().get(slot).getTagCompound().getCompoundTag("Entity"), getWorld());
-			entity.setPositionAndRotation(0D, 0D, 0D, -90, 90F);
+			entity.setPositionAndRotation(0D, 0D, 0D, 90F, 90F);
 		}
 		return entity;
 	}
