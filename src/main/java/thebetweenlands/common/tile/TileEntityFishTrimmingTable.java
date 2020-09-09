@@ -38,6 +38,7 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
     	ItemStack stack = getItems().get(0);
     	return !stack.isEmpty() && stack.getItem() == ItemRegistry.ANADIA && stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND);
     }
+
 	private boolean isAnadiaRotten() {
 		ItemStack stack = getItems().get(0);
 		if (stack.getTagCompound().getCompoundTag("Entity").hasKey("rottingTime") && stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 0) {
@@ -53,7 +54,6 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
     	return !stack.isEmpty() && stack.getItem() == ItemRegistry.BONE_AXE;
     }
  
-
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);

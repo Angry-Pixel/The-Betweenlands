@@ -647,7 +647,7 @@ public class RecipeRegistry {
 		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.ANADIA_MEAT_SMOKED), 1, new ItemStack(ItemRegistry.ANADIA_MEAT_RAW));
 
 		SmokingRackRecipe.addRecipe(new ISmokingRackRecipe() {
-			
+
 			@Override
 			public boolean matchesInput(ItemStack stack) {
 				return !stack.isEmpty() && stack.getItem() == ItemRegistry.ANADIA && stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND);
@@ -696,7 +696,7 @@ public class RecipeRegistry {
 			public boolean isRawMeatStack(ItemStack stack) {
 				return stack.getItem() == ItemRegistry.ANADIA_MEAT_RAW;
 			}
-			
+
 			public ItemStack checkAndConvertNBTStack(NBTTagCompound nbt) {
 				ItemStack stackOld = new ItemStack(nbt);
 				int count = stackOld.getCount();
