@@ -38,11 +38,21 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
     	ItemStack stack = getItems().get(0);
     	return !stack.isEmpty() && stack.getItem() == ItemRegistry.ANADIA && stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND);
     }
+	private boolean isAnadiaRotten() {
+		ItemStack stack = getItems().get(0);
+		if (stack.getTagCompound().getCompoundTag("Entity").hasKey("rottingTime") && stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 0) {
+			long rottingTime = stack.getTagCompound().getCompoundTag("Entity").getLong("rottingTime");
+			if (rottingTime - getWorld().getTotalWorldTime() <= 0)
+				return true;
+		}
+		return false;
+	}
 
     public boolean hasChopper() {
     	ItemStack stack = getItems().get(5);
     	return !stack.isEmpty() && stack.getItem() == ItemRegistry.BONE_AXE;
     }
+ 
 
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
@@ -220,11 +230,11 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
 			case 0:
 				return ItemStack.EMPTY;
 			case 1:
-				return ((EntityAnadia) getAndiaEntity()).getHeadItem();
+				return !isAnadiaRotten() ? ((EntityAnadia) getAndiaEntity()).getHeadItem() : new ItemStack(ItemRegistry.ROTTEN_FOOD); // possible alt loot table?
 			case 2:
-				return ((EntityAnadia) getAndiaEntity()).getBodyItem();
+				return !isAnadiaRotten() ? ((EntityAnadia) getAndiaEntity()).getBodyItem() : new ItemStack(ItemRegistry.ROTTEN_FOOD); // possible alt loot table?
 			case 3:
-				return ((EntityAnadia) getAndiaEntity()).getTailItem();
+				return !isAnadiaRotten() ? ((EntityAnadia) getAndiaEntity()).getTailItem() : new ItemStack(ItemRegistry.ROTTEN_FOOD); // possible alt loot table?
 			case 4:
 				return EnumItemMisc.ANADIA_REMAINS.create(3);
 			}
