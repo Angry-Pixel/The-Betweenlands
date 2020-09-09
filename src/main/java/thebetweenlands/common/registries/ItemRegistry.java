@@ -252,6 +252,10 @@ public class ItemRegistry {
     public static final Item NIBBLESTICK = new ItemNibblestick();
     public static final Item SPIRIT_FRUIT = new ItemSpiritFruit();
     public static final Item SUSHI = new ItemBLFood(5, 1.0F, false);
+
+    public static final Item ANADIA_MEAT_RAW = new ItemBLFood(2, 0.2F, false); // temp
+    public static final Item ANADIA_MEAT_COOKED = new ItemBLFood(4, 0.4F, false);
+    public static final Item ANADIA_MEAT_SMOKED = new ItemBLFood(8, 0.8F, false);
     
     //armor
     public static final Item BONE_HELMET = new ItemBoneArmor(EntityEquipmentSlot.HEAD);

@@ -474,10 +474,12 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 		if (!world.isRemote && inGround && arrowShake <= 0 || !world.isRemote && isInWater()) {
 			if (entityIn.capabilities.isCreativeMode)
 				setDead();
-			else if (entityIn.inventory.addItemStackToInventory(getEntityItem())) {
+			else if (ticksExisted >= 20) {
+				if (entityIn.inventory.addItemStackToInventory(getEntityItem())) {
 				world.playSound(entityIn, entityIn.getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1F, 1F);
 				entityIn.onItemPickup(this, 1);
 				setDead();
+			}
 			}
 		}
 	}

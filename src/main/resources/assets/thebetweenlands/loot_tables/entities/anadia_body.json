@@ -7,7 +7,7 @@
                 {
                     "type": "item",
                     "entryName": "body_type_0",
-                    "name": "thebetweenlands:angler_meat_raw",
+                    "name": "thebetweenlands:anadia_meat_raw",
                     "weight": 1,
                     "conditions": [
                         {
@@ -31,7 +31,7 @@
                  {
                     "type": "item",
                     "entryName": "body_type_1",
-                    "name": "thebetweenlands:angler_meat_raw",
+                    "name": "thebetweenlands:anadia_meat_raw",
                     "weight": 1,
                     "conditions": [
                         {
@@ -55,7 +55,7 @@
                 {
                     "type": "item",
                     "entryName": "body_type_2",
-                    "name": "thebetweenlands:angler_meat_raw",
+                    "name": "thebetweenlands:anadia_meat_raw",
                     "weight": 1,
                     "conditions": [
                         {

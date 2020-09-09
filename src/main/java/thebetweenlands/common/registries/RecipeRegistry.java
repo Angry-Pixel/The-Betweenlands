@@ -266,6 +266,7 @@ public class RecipeRegistry {
 		GameRegistry.addSmelting(BlockRegistry.MOSS, new ItemStack(BlockRegistry.DEAD_MOSS), 0.1F);
 		GameRegistry.addSmelting(BlockRegistry.LICHEN, new ItemStack(BlockRegistry.DEAD_LICHEN), 0.1F);
 		GameRegistry.addSmelting(BlockRegistry.WEEDWOOD_BUSH, new ItemStack(BlockRegistry.DEAD_WEEDWOOD_BUSH), 0.1F);
+		GameRegistry.addSmelting(new ItemStack(ItemRegistry.ANADIA_MEAT_RAW), new ItemStack(ItemRegistry.ANADIA_MEAT_COOKED), 0.3F);
 		//smelt to nuggets
 		GameRegistry.addSmelting(ItemRegistry.VALONITE_AXE, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
 		GameRegistry.addSmelting(ItemRegistry.VALONITE_PICKAXE, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
@@ -643,6 +644,7 @@ public class RecipeRegistry {
 	private static void registerSmokingRackRecipes() {
 		SmokingRackRecipe.addRecipe(new ItemStack(Items.DIAMOND), 1, new ItemStack(Blocks.DIRT));
 		SmokingRackRecipe.addRecipe(new ItemStack(Items.LEATHER), 1, new ItemStack(Items.ROTTEN_FLESH));
+		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.ANADIA_MEAT_SMOKED), 1, new ItemStack(ItemRegistry.ANADIA_MEAT_RAW));
 
 		SmokingRackRecipe.addRecipe(new ISmokingRackRecipe() {
 			
@@ -654,8 +656,21 @@ public class RecipeRegistry {
 			@Override
 			public ItemStack getOutput(ItemStack stack) {
 				ItemStack output = stack.copy();
-				if(output.getTagCompound() != null && output.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
-					output.getTagCompound().getCompoundTag("Entity").setByte("fishColour", (byte) 0);
+				if (output.getTagCompound() != null && output.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
+					if (output.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 0) {
+						output.getTagCompound().getCompoundTag("Entity").setByte("fishColour", (byte) 0);
+						NBTTagCompound bodyItem = (NBTTagCompound) output.getTagCompound().getCompoundTag("Entity").getTag("bodyItem");
+						if (bodyItem != null) {
+							ItemStack stackBodyOld = new ItemStack(bodyItem);
+							int count = stackBodyOld.getCount();
+							if (stackBodyOld.getItem() == ItemRegistry.ANADIA_MEAT_RAW) {
+								ItemStack stackBodyNew = new ItemStack(ItemRegistry.ANADIA_MEAT_SMOKED, count);
+								stackBodyNew.writeToNBT(bodyItem);
+								output.getTagCompound().getCompoundTag("Entity").setTag("bodyItem", bodyItem);
+							}
+						}
+					}
+				}
 				return output;
 			}
 

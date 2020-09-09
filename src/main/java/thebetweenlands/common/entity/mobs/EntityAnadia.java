@@ -384,7 +384,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
     @Nullable
     @Override
     protected ResourceLocation getLootTable() {
-        return null;//LootTableRegistry.ANADIA;
+        return LootTableRegistry.ANADIA;
     }
 
     @Override

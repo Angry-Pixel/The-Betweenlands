@@ -49,8 +49,8 @@ import thebetweenlands.common.loot.LootConditionFromSharedPool;
 import thebetweenlands.common.loot.LootConditionKilledLootModifier;
 import thebetweenlands.common.loot.LootConditionOr;
 import thebetweenlands.common.loot.LootConditionSharedPool;
-import thebetweenlands.common.loot.LootFunctionSetMetaFromArray;
 import thebetweenlands.common.loot.LootFunctionSetCountFromAnadia;
+import thebetweenlands.common.loot.LootFunctionSetMetaFromArray;
 import thebetweenlands.util.FakeClientWorld;
 
 public class LootTableRegistry {
@@ -138,6 +138,7 @@ public class LootTableRegistry {
     public static final ResourceLocation EMBERLING_SHAMAN = register("entities/emberling_shaman");
     public static final ResourceLocation GREEBLING_CORPSE = register("entities/greebling_corpse");
     public static final ResourceLocation CHIROMAW_MATRIARCH = register("entities/chiromaw_matriarch");
+    public static final ResourceLocation ANADIA = register("entities/anadia");
     public static final ResourceLocation ANADIA_HEAD = register("entities/anadia_head");
     public static final ResourceLocation ANADIA_BODY = register("entities/anadia_body");
     public static final ResourceLocation ANADIA_TAIL = register("entities/anadia_tail");
