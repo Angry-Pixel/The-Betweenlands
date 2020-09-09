@@ -656,18 +656,27 @@ public class RecipeRegistry {
 			@Override
 			public ItemStack getOutput(ItemStack stack) {
 				ItemStack output = stack.copy();
-				if (output.getTagCompound() != null && output.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
+				if (output.getTagCompound() != null
+						&& output.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
 					if (output.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 0) {
 						output.getTagCompound().getCompoundTag("Entity").setByte("fishColour", (byte) 0);
+						NBTTagCompound headItem = (NBTTagCompound) output.getTagCompound().getCompoundTag("Entity").getTag("headItem");
 						NBTTagCompound bodyItem = (NBTTagCompound) output.getTagCompound().getCompoundTag("Entity").getTag("bodyItem");
+						NBTTagCompound tailItem = (NBTTagCompound) output.getTagCompound().getCompoundTag("Entity").getTag("tailItem");
+
+						if (headItem != null) {
+							checkAndConvertNBTStack(headItem).writeToNBT(headItem);
+							output.getTagCompound().getCompoundTag("Entity").setTag("headItem", headItem);
+						}
+
 						if (bodyItem != null) {
-							ItemStack stackBodyOld = new ItemStack(bodyItem);
-							int count = stackBodyOld.getCount();
-							if (stackBodyOld.getItem() == ItemRegistry.ANADIA_MEAT_RAW) {
-								ItemStack stackBodyNew = new ItemStack(ItemRegistry.ANADIA_MEAT_SMOKED, count);
-								stackBodyNew.writeToNBT(bodyItem);
-								output.getTagCompound().getCompoundTag("Entity").setTag("bodyItem", bodyItem);
-							}
+							checkAndConvertNBTStack(bodyItem).writeToNBT(bodyItem);
+							output.getTagCompound().getCompoundTag("Entity").setTag("bodyItem", bodyItem);
+						}
+
+						if (tailItem != null) {
+							checkAndConvertNBTStack(tailItem).writeToNBT(tailItem);
+							output.getTagCompound().getCompoundTag("Entity").setTag("tailItem", tailItem);
 						}
 					}
 				}
@@ -682,6 +691,18 @@ public class RecipeRegistry {
 			@Override
 			public ItemStack getInput() {
 				return new ItemStack(ItemRegistry.ANADIA);
+			}
+
+			public boolean isRawMeatStack(ItemStack stack) {
+				return stack.getItem() == ItemRegistry.ANADIA_MEAT_RAW;
+			}
+			
+			public ItemStack checkAndConvertNBTStack(NBTTagCompound nbt) {
+				ItemStack stackOld = new ItemStack(nbt);
+				int count = stackOld.getCount();
+				if (isRawMeatStack(stackOld))
+					return new ItemStack(ItemRegistry.ANADIA_MEAT_SMOKED, count);
+				return stackOld;
 			}
 		});
 	}
