@@ -95,7 +95,7 @@ public class LootTableRegistry {
     
     //MOBS
     public static final ResourceLocation ANGLER = register("entities/angler");
-    public static final ResourceLocation BLIND_CAVE_FISH = register("entities/blind_cave_fish");
+    public static final ResourceLocation OLM = register("entities/olm");
     public static final ResourceLocation BLOOD_SNAIL = register("entities/blood_snail");
     public static final ResourceLocation CHIROMAW = register("entities/chiromaw");
     public static final ResourceLocation DARK_DRUID = register("entities/dark_druid");

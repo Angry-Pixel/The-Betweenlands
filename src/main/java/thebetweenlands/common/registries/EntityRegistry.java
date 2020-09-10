@@ -37,7 +37,7 @@ import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityAshSprite;
 import thebetweenlands.common.entity.mobs.EntityBarrishee;
-import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
+import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
@@ -138,7 +138,7 @@ public class EntityRegistry {
 		registerEntity(EntityGecko.class, "gecko", 0xFF8000, 0x22E0B1, 64, 1, true);
 		registerEntity(EntityTermite.class, "termite", 0xD9D7A7, 0xD99830);
 		registerEntity(EntityGiantToad.class, "toad", 0x405C3B, 0x7ABA45);
-		registerEntity(EntityBlindCaveFish.class, "blind_cave_fish", 0xD0D1C2, 0xECEDDF);
+		registerEntity(EntityOlm.class, "olm", 0xD0D1C2, 0xECEDDF);
 		registerEntity(EntityChiromaw.class, "chiromaw", 0x3F5A69, 0xA16A77);
 		registerEntity(EntityFrog.class, "frog", 0x559653, 0xC72C2C, 64, 20, true);
 		registerEntity(EntitySwordEnergy.class, "sword_energy");

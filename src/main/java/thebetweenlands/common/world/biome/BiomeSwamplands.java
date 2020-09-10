@@ -7,7 +7,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.common.entity.mobs.EntityAngler;
-import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
+import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
@@ -79,7 +79,7 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 		entries.add(new SurfaceSpawnEntry(1, EntityGecko.class, EntityGecko::new, (short) 40).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(600));
 		entries.add(new SurfaceSpawnEntry(2, EntityMireSnail.class, EntityMireSnail::new, (short) 60).setGroupSize(1, 5).setSpawnCheckRadius(32.0D).setSpawningInterval(1000));
 		entries.add(new SurfaceSpawnEntry(3, EntityFrog.class, EntityFrog::new, (short) 26).setCanSpawnOnWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(1000));
-		entries.add(new CaveSpawnEntry(4, EntityBlindCaveFish.class, EntityBlindCaveFish::new, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
+		entries.add(new CaveSpawnEntry(4, EntityOlm.class, EntityOlm::new, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
 		entries.add(new SporelingSpawnEntry(5, EntitySporeling.class, EntitySporeling::new, (short) 120).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
 		entries.add(new SurfaceSpawnEntry(6, EntityGiantToad.class, EntityGiantToad::new, (short) 12).setSpawnCheckRadius(64.0D).setSpawningInterval(800));
 		entries.add(new CaveSpawnEntry(7, EntityGiantToad.class, EntityGiantToad::new, (short) 8).setSpawnCheckRadius(64.0D).setSpawningInterval(800));
