@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -32,7 +34,7 @@ public class EntityClimber extends EntityCreature implements IEntityBL, IPathObs
 	public EntityClimber(World world) {
 		super(world);
 		this.isImmuneToFire = true;
-		setSize(0.5F, 0.5F);
+		setSize(1.5F, 0.9F);
 
 		//tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, false));
@@ -41,7 +43,7 @@ public class EntityClimber extends EntityCreature implements IEntityBL, IPathObs
 		tasks.addTask(4, new EntityAIWander(this, 1.0D));
 		tasks.addTask(5, new EntityAILookIdle(this));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, true));*/
-		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, false));
+		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 1, false, false, null));
 
 		this.moveHelper = new ClimbMoveHelper(this);
 	}
@@ -49,7 +51,7 @@ public class EntityClimber extends EntityCreature implements IEntityBL, IPathObs
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.01D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(0.1D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(40.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
@@ -63,7 +65,7 @@ public class EntityClimber extends EntityCreature implements IEntityBL, IPathObs
 				BlockPos pos = new BlockPos(entityIn);
 
 				//Path to ceiling above target if possible
-				for(int i = 0; i < 6; i++) {
+				for(int i = 0; i <= 16; i++) {
 					if(!entityIn.world.isAirBlock(pos.up(i))) {
 						pos = pos.up(i - 1);
 						break;
@@ -97,7 +99,7 @@ public class EntityClimber extends EntityCreature implements IEntityBL, IPathObs
 				}
 			}
 
-			float penalty = Math.max(0, 6 - height) * 0.5f; 
+			float penalty = Math.max(0, 6 - height) * 1f; 
 
 			return priority + penalty;
 		}
@@ -153,14 +155,14 @@ public class EntityClimber extends EntityCreature implements IEntityBL, IPathObs
 
 		Vec3d weighting = new Vec3d(0, 0, 0);
 
-		float stickingDst = 1.0f;
+		float stickingDst = 2.0f;
 
 		for(EnumFacing facing : EnumFacing.VALUES) {
 			if(avoidPathingFacing == facing) {
 				continue;
 			}
 
-			List<AxisAlignedBB> collisionBoxes = this.world.getCollisionBoxes(this, entityBox.expand(facing.getXOffset() * stickingDst, facing.getYOffset() * stickingDst, facing.getZOffset() * stickingDst));
+			List<AxisAlignedBB> collisionBoxes = this.world.getCollisionBoxes(this, entityBox.grow(0.2f).expand(facing.getXOffset() * stickingDst, facing.getYOffset() * stickingDst, facing.getZOffset() * stickingDst));
 
 			double closestDst = Double.MAX_VALUE;
 
@@ -186,7 +188,7 @@ public class EntityClimber extends EntityCreature implements IEntityBL, IPathObs
 				closestFacing = facing;
 			}
 
-			if(closestDst < stickingDst + 0.1f) {
+			if(closestDst < Double.MAX_VALUE) {
 				weighting = weighting.add(new Vec3d(facing.getXOffset(), facing.getYOffset(), facing.getZOffset()).scale(1 - Math.min(closestDst, stickingDst) / stickingDst));
 			}
 		}
@@ -200,19 +202,6 @@ public class EntityClimber extends EntityCreature implements IEntityBL, IPathObs
 
 		this.setNoGravity(true);
 
-		Pair<EnumFacing, Vec3d> walkingSide = this.getWalkingSide();
-
-		if(!this.world.isRemote) {
-			//System.out.println("    Walk on: " + walkingSide);
-		}
-
-		//"Gravity"
-		this.motionX += walkingSide.getRight().x * 0.08D;
-		this.motionY += walkingSide.getRight().y * 0.08D;
-		this.motionZ += walkingSide.getRight().z * 0.08D;
-
-		//System.out.println(walkingSide.getRight());
-
 		//TODO Pathing debug
 		if(!this.world.isRemote) {
 			Path p = this.getNavigator().getPath();
@@ -224,6 +213,58 @@ public class EntityClimber extends EntityCreature implements IEntityBL, IPathObs
 					}
 				}
 				//this.setDead();
+			}
+		}
+	}
+
+	@Override
+	public void travel(float strafe, float vertical, float forward) {
+		//super.travel(strafe, vertical, forward);
+
+		if(this.isServerWorld() || this.canPassengerSteer()) {
+			Pair<EnumFacing, Vec3d> walkingSide = this.getWalkingSide();
+
+			if(!this.world.isRemote) {
+				//System.out.println("    Walk on: " + walkingSide.getLeft());
+			}
+
+			//"Gravity"
+			this.motionX += walkingSide.getRight().x * 0.04D;
+			this.motionY += walkingSide.getRight().y * 0.04D;
+			this.motionZ += walkingSide.getRight().z * 0.04D;
+
+			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
+
+			if(!this.world.isRemote) {
+				//System.out.println(walkingSide.getRight());
+			}
+
+			if(this.collidedHorizontally || this.collidedVertically) {
+				this.fallDistance = 0;
+
+				BlockPos offsetPos = new BlockPos(this).offset(walkingSide.getLeft());
+				IBlockState offsetState = this.world.getBlockState(offsetPos);
+				float blockSlipperiness = offsetState.getBlock().getSlipperiness(offsetState, this.world, offsetPos, this);
+
+				float slipperiness = blockSlipperiness * 0.91F;
+
+				switch(walkingSide.getLeft().getAxis()) {
+				case X:
+					this.motionZ *= slipperiness;
+					this.motionY *= slipperiness;
+					this.motionX = 0;
+					break;
+				case Y:
+					this.motionX *= slipperiness;
+					this.motionZ *= slipperiness;
+					this.motionY = 0;
+					break;
+				case Z:
+					this.motionX *= slipperiness;
+					this.motionY *= slipperiness;
+					this.motionZ = 0;
+					break;
+				}
 			}
 		}
 	}

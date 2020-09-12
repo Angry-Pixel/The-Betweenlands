@@ -1,10 +1,13 @@
 package thebetweenlands.common.entity.ai;
 
 import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.PathNodeType;
@@ -20,12 +23,17 @@ import net.minecraft.world.IBlockAccess;
 
 public class ObstructionAwareWalkNodeProcessor<T extends EntityLiving & IPathObstructionAwareEntity> extends WalkNodeProcessor {
 	protected T obstructionAwareEntity;
+	protected boolean startFromGround;
 	protected boolean checkObstructions;
 	protected int pathingSizeOffsetX, pathingSizeOffsetY, pathingSizeOffsetZ;
 	protected EnumSet<EnumFacing> pathableFacings = EnumSet.of(EnumFacing.DOWN);
 
 	public void setObstructionAwareEntity(T obstructionAwareEntity) {
 		this.obstructionAwareEntity = obstructionAwareEntity;
+	}
+
+	public void setStartPathOnGround(boolean startFromGround) {
+		this.startFromGround = startFromGround;
 	}
 
 	public void setCheckObstructions(boolean checkObstructions) {
@@ -62,13 +70,66 @@ public class ObstructionAwareWalkNodeProcessor<T extends EntityLiving & IPathObs
 		this.pathingSizeOffsetZ = Math.max(1, MathHelper.floor(this.entity.width / 2.0f + 1));
 	}
 
+	@Override
+	public PathPoint getStart() {
+		int startPosY;
+
+		if(this.getCanSwim() && this.entity.isInWater()) {
+			startPosY = (int)this.entity.getEntityBoundingBox().minY;
+			BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos(MathHelper.floor(this.entity.posX), startPosY, MathHelper.floor(this.entity.posZ));
+
+			for(Block block = this.blockaccess.getBlockState(blockpos$mutableblockpos).getBlock(); block == Blocks.FLOWING_WATER || block == Blocks.WATER; block = this.blockaccess.getBlockState(blockpos$mutableblockpos).getBlock()) {
+				++startPosY;
+				blockpos$mutableblockpos.setPos(MathHelper.floor(this.entity.posX), startPosY, MathHelper.floor(this.entity.posZ));
+			}
+		} else if(this.entity.onGround || !this.startFromGround) {
+			startPosY = MathHelper.floor(this.entity.getEntityBoundingBox().minY + 0.5D);
+		} else {
+			BlockPos checkPos;
+
+			for(checkPos = new BlockPos(this.entity); (this.blockaccess.getBlockState(checkPos).getMaterial() == Material.AIR || this.blockaccess.getBlockState(checkPos).getBlock().isPassable(this.blockaccess, checkPos)) && checkPos.getY() > 0; checkPos = checkPos.down()) { }
+
+			startPosY = checkPos.up().getY();
+		}
+
+		BlockPos startPosXZ = new BlockPos(this.entity);
+		PathNodeType nodeType = this.getPathNodeType(this.entity, startPosXZ.getX(), startPosY, startPosXZ.getZ());
+
+		if(this.entity.getPathPriority(nodeType) < 0.0F) {
+			Set<BlockPos> startPosOptions = new HashSet<>();
+			startPosOptions.add(new BlockPos(this.entity.getEntityBoundingBox().minX, (double)startPosY, this.entity.getEntityBoundingBox().minZ));
+			startPosOptions.add(new BlockPos(this.entity.getEntityBoundingBox().minX, (double)startPosY, this.entity.getEntityBoundingBox().maxZ));
+			startPosOptions.add(new BlockPos(this.entity.getEntityBoundingBox().maxX, (double)startPosY, this.entity.getEntityBoundingBox().minZ));
+			startPosOptions.add(new BlockPos(this.entity.getEntityBoundingBox().maxX, (double)startPosY, this.entity.getEntityBoundingBox().maxZ));
+
+			for(BlockPos startPosOption : startPosOptions) {
+				PathNodeType pathnodetype = this.getPathNodeType(this.entity, startPosOption.getX(), startPosOption.getY(), startPosOption.getZ());
+
+				if(this.entity.getPathPriority(pathnodetype) >= 0.0F) {
+					return this.openPoint(startPosOption.getX(), startPosOption.getY(), startPosOption.getZ());
+				}
+			}
+		}
+
+		return this.openPoint(startPosXZ.getX(), startPosY, startPosXZ.getZ());
+	}
+
 	private boolean shouldAvoidPathOptions(PathPoint[] options) {
 		return options == null || options.length == 0 || ((options[0] == null || options[0].nodeType == PathNodeType.OPEN || options[0].costMalus != 0.0F) && (options.length <= 1 || (options[1] == null || options[1].nodeType == PathNodeType.OPEN || options[1].costMalus != 0.0F)));
 	}
 
 	private boolean isPassableWithExemptions(IBlockAccess blockAccess, int x, int y, int z, EnumSet<EnumFacing> exemptions) {
-		PathNodeType nodeType = this.getPathNodeType(blockAccess, x, y, z, exemptions);
-		return nodeType != PathNodeType.OPEN && this.entity.getPathPriority(nodeType) >= 0.0f;
+		for(int xo = 0; xo < this.entitySizeX; xo++) {
+			for(int yo = 0; yo < this.entitySizeY; yo++) {
+				for(int zo = 0; zo < this.entitySizeZ; zo++) {
+					PathNodeType nodeType = this.getPathNodeType(blockAccess, x + xo, y + yo, z + zo, exemptions);
+					if(nodeType != PathNodeType.OPEN && this.entity.getPathPriority(nodeType) >= 0.0f) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -116,7 +177,7 @@ public class ObstructionAwareWalkNodeProcessor<T extends EntityLiving & IPathObs
 		}
 
 		PathPoint[] pathsNY = null;
-		if(this.checkObstructions || this.pathableFacings.size() > 1) {
+		if(this.checkObstructions || (this.pathableFacings.size() > 1)) {
 			pathsNY = this.getSafePoints(currentPoint.x, currentPoint.y - 1, currentPoint.z, stepHeight, height, EnumFacing.DOWN, this.checkObstructions);
 			for(int k = 0; k < pathsNY.length; k++) {
 				if(pathsNY[k] != null && !pathsNY[k].visited && pathsNY[k].distanceTo(targetPoint) < maxDistance) {
@@ -126,7 +187,7 @@ public class ObstructionAwareWalkNodeProcessor<T extends EntityLiving & IPathObs
 		}
 
 		PathPoint[] pathsPY = null;
-		if(this.pathableFacings.size() > 1) {
+		if(this.pathableFacings.size() > 1 && this.isPassableWithExemptions(this.blockaccess, currentPoint.x, currentPoint.y, currentPoint.z, EnumSet.of(EnumFacing.UP, EnumFacing.DOWN))) {
 			pathsPY = this.getSafePoints(currentPoint.x, currentPoint.y + 1, currentPoint.z, stepHeight, height, EnumFacing.UP, this.checkObstructions);
 			for(int k = 0; k < pathsPY.length; k++) {
 				if(pathsPY[k] != null && !pathsPY[k].visited && pathsPY[k].distanceTo(targetPoint) < maxDistance) {
@@ -377,7 +438,7 @@ public class ObstructionAwareWalkNodeProcessor<T extends EntityLiving & IPathObs
 
 					boolean hasPathUp = false;
 
-					if(this.pathableFacings.contains(EnumFacing.UP)) {
+					if(this.pathableFacings.size() > 1) {
 						nodeType = this.getPathNodeType(this.entity, x, preFallY, z);
 						malus = this.entity.getPathPriority(nodeType);
 

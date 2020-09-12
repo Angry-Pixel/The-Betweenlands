@@ -44,6 +44,7 @@ public class ObstructionAwarePathNavigateGround<T extends EntityLiving & IPathOb
 		if(this.nodeProcessor instanceof ObstructionAwareWalkNodeProcessor) {
 			ObstructionAwareWalkNodeProcessor<T> processor = (ObstructionAwareWalkNodeProcessor<T>) this.nodeProcessor;
 			processor.setObstructionAwareEntity(entity);
+			processor.setStartPathOnGround(startPathOnGround);
 			processor.setCheckObstructions(checkObstructions);
 			processor.setCanPathWalls(canPathWalls);
 			processor.setCanPathCeiling(canPathCeiling);
