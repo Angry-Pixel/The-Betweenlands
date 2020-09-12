@@ -63,7 +63,12 @@ public class ObstructionAwareWalkNodeProcessor<T extends EntityLiving & IPathObs
 	}
 
 	private boolean shouldAvoidPathOptions(PathPoint[] options) {
-		return options == null || options.length == 0 || (options[0] == null || options[0].nodeType == PathNodeType.OPEN || options[0].costMalus != 0.0F) || (options.length > 1 && (options[1] == null || options[1].nodeType == PathNodeType.OPEN || options[1].costMalus != 0.0F));
+		return options == null || options.length == 0 || ((options[0] == null || options[0].nodeType == PathNodeType.OPEN || options[0].costMalus != 0.0F) && (options.length <= 1 || (options[1] == null || options[1].nodeType == PathNodeType.OPEN || options[1].costMalus != 0.0F)));
+	}
+
+	private boolean isPassableWithExemptions(IBlockAccess blockAccess, int x, int y, int z, EnumSet<EnumFacing> exemptions) {
+		PathNodeType nodeType = this.getPathNodeType(blockAccess, x, y, z, exemptions);
+		return nodeType != PathNodeType.OPEN && this.entity.getPathPriority(nodeType) >= 0.0f;
 	}
 
 	@Override
@@ -179,7 +184,7 @@ public class ObstructionAwareWalkNodeProcessor<T extends EntityLiving & IPathObs
 			boolean avoidPathPY = this.shouldAvoidPathOptions(pathsPY);
 			boolean avoidPathNY = this.shouldAvoidPathOptions(pathsNY);
 
-			if(avoidPathNY && avoidPathNX) {
+			if(avoidPathNY && avoidPathNX && this.isPassableWithExemptions(this.blockaccess, currentPoint.x, currentPoint.y, currentPoint.z, EnumSet.of(EnumFacing.UP, EnumFacing.EAST, EnumFacing.WEST))) {
 				PathPoint[] pathsNYNX = this.getSafePoints(currentPoint.x - 1, currentPoint.y - 1, currentPoint.z, stepHeight, height, EnumFacing.WEST, this.checkObstructions);
 
 				for(int k = 0; k < pathsNYNX.length; k++) {
@@ -189,7 +194,7 @@ public class ObstructionAwareWalkNodeProcessor<T extends EntityLiving & IPathObs
 				}
 			}
 
-			if(avoidPathNY && avoidPathPX) {
+			if(avoidPathNY && avoidPathPX && this.isPassableWithExemptions(this.blockaccess, currentPoint.x, currentPoint.y, currentPoint.z, EnumSet.of(EnumFacing.UP, EnumFacing.EAST, EnumFacing.WEST))) {
 				PathPoint[] pathsNYPX = this.getSafePoints(currentPoint.x + 1, currentPoint.y - 1, currentPoint.z, stepHeight, height, EnumFacing.EAST, this.checkObstructions);
 
 				for(int k = 0; k < pathsNYPX.length; k++) {
@@ -199,7 +204,7 @@ public class ObstructionAwareWalkNodeProcessor<T extends EntityLiving & IPathObs
 				}
 			}
 
-			if(avoidPathNY && avoidPathNZ) {
+			if(avoidPathNY && avoidPathNZ && this.isPassableWithExemptions(this.blockaccess, currentPoint.x, currentPoint.y, currentPoint.z, EnumSet.of(EnumFacing.UP, EnumFacing.NORTH, EnumFacing.SOUTH))) {
 				PathPoint[] pathsNYNZ = this.getSafePoints(currentPoint.x, currentPoint.y - 1, currentPoint.z - 1, stepHeight, height, EnumFacing.NORTH, this.checkObstructions);
 
 				for(int k = 0; k < pathsNYNZ.length; k++) {
@@ -209,7 +214,7 @@ public class ObstructionAwareWalkNodeProcessor<T extends EntityLiving & IPathObs
 				}
 			}
 
-			if(avoidPathNY && avoidPathPZ) {
+			if(avoidPathNY && avoidPathPZ && this.isPassableWithExemptions(this.blockaccess, currentPoint.x, currentPoint.y, currentPoint.z, EnumSet.of(EnumFacing.UP, EnumFacing.NORTH, EnumFacing.SOUTH))) {
 				PathPoint[] pathsNYPZ = this.getSafePoints(currentPoint.x, currentPoint.y - 1, currentPoint.z + 1, stepHeight, height, EnumFacing.SOUTH, this.checkObstructions);
 
 				for(int k = 0; k < pathsNYPZ.length; k++) {
@@ -219,7 +224,7 @@ public class ObstructionAwareWalkNodeProcessor<T extends EntityLiving & IPathObs
 				}
 			}
 
-			if(avoidPathPY && avoidPathNX) {
+			if(avoidPathPY && avoidPathNX && this.isPassableWithExemptions(this.blockaccess, currentPoint.x, currentPoint.y, currentPoint.z, EnumSet.of(EnumFacing.DOWN, EnumFacing.EAST, EnumFacing.WEST))) {
 				PathPoint[] pathsPYNX = this.getSafePoints(currentPoint.x - 1, currentPoint.y + 1, currentPoint.z, stepHeight, height, EnumFacing.WEST, this.checkObstructions);
 
 				for(int k = 0; k < pathsPYNX.length; k++) {
@@ -229,7 +234,7 @@ public class ObstructionAwareWalkNodeProcessor<T extends EntityLiving & IPathObs
 				}
 			}
 
-			if(avoidPathPY && avoidPathPX) {
+			if(avoidPathPY && avoidPathPX && this.isPassableWithExemptions(this.blockaccess, currentPoint.x, currentPoint.y, currentPoint.z, EnumSet.of(EnumFacing.DOWN, EnumFacing.EAST, EnumFacing.WEST))) {
 				PathPoint[] pathsPYPX = this.getSafePoints(currentPoint.x + 1, currentPoint.y + 1, currentPoint.z, stepHeight, height, EnumFacing.EAST, this.checkObstructions);
 
 				for(int k = 0; k < pathsPYPX.length; k++) {
@@ -239,7 +244,7 @@ public class ObstructionAwareWalkNodeProcessor<T extends EntityLiving & IPathObs
 				}
 			}
 
-			if(avoidPathPY && avoidPathNZ) {
+			if(avoidPathPY && avoidPathNZ && this.isPassableWithExemptions(this.blockaccess, currentPoint.x, currentPoint.y, currentPoint.z, EnumSet.of(EnumFacing.DOWN, EnumFacing.NORTH, EnumFacing.SOUTH))) {
 				PathPoint[] pathsPYNZ = this.getSafePoints(currentPoint.x, currentPoint.y + 1, currentPoint.z - 1, stepHeight, height, EnumFacing.NORTH, this.checkObstructions);
 
 				for(int k = 0; k < pathsPYNZ.length; k++) {
@@ -249,7 +254,7 @@ public class ObstructionAwareWalkNodeProcessor<T extends EntityLiving & IPathObs
 				}
 			}
 
-			if(avoidPathPY && avoidPathPZ) {
+			if(avoidPathPY && avoidPathPZ && this.isPassableWithExemptions(this.blockaccess, currentPoint.x, currentPoint.y, currentPoint.z, EnumSet.of(EnumFacing.DOWN, EnumFacing.NORTH, EnumFacing.SOUTH))) {
 				PathPoint[] pathsPYPZ = this.getSafePoints(currentPoint.x, currentPoint.y + 1, currentPoint.z + 1, stepHeight, height, EnumFacing.SOUTH, this.checkObstructions);
 
 				for(int k = 0; k < pathsPYPZ.length; k++) {
@@ -300,7 +305,7 @@ public class ObstructionAwareWalkNodeProcessor<T extends EntityLiving & IPathObs
 				result[0] = directPathPoint;
 				return result;
 			} else {
-				if (directPathPoint == null && stepHeight > 0 && nodeType != PathNodeType.FENCE && nodeType != PathNodeType.TRAPDOOR) {
+				if (directPathPoint == null && stepHeight > 0 && nodeType != PathNodeType.FENCE && nodeType != PathNodeType.TRAPDOOR && facing.getAxis() != EnumFacing.Axis.Y) {
 					PathPoint[] pointsAbove = this.getSafePoints(x, y + 1, z, stepHeight - 1, height, facing, false);
 					directPathPoint = pointsAbove.length > 0 ? pointsAbove[0] : null;
 
@@ -434,35 +439,41 @@ public class ObstructionAwareWalkNodeProcessor<T extends EntityLiving & IPathObs
 
 	@Override
 	public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z) {
+		return this.getPathNodeType(blockaccessIn, x, y, z, EnumSet.noneOf(EnumFacing.class));
+	}
+
+	protected PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z, EnumSet<EnumFacing> exemptions) {
 		PathNodeType nodeType = this.getPathNodeTypeRaw(blockaccessIn, x, y, z);
 
 		if(nodeType == PathNodeType.OPEN && y >= 1) {
 			PooledMutableBlockPos pos = PooledMutableBlockPos.retain();
 
 			facings: for(EnumFacing pathableFacing : this.pathableFacings) {
-				int checkHeight = pathableFacing.getAxis() != Axis.Y ? Math.min(4, this.pathingSizeOffsetY - 1) : 0;
+				if(!exemptions.contains(pathableFacing)) {
+					int checkHeight = pathableFacing.getAxis() != Axis.Y ? Math.min(4, this.pathingSizeOffsetY - 1) : 0;
 
-				int cx = x + pathableFacing.getXOffset() * this.pathingSizeOffsetX;
-				int cy = y + (pathableFacing == EnumFacing.DOWN ? -1 : pathableFacing == EnumFacing.UP ? this.pathingSizeOffsetY : 0);
-				int cz = z + pathableFacing.getZOffset() * this.pathingSizeOffsetZ;
+					int cx = x + pathableFacing.getXOffset() * this.pathingSizeOffsetX;
+					int cy = y + (pathableFacing == EnumFacing.DOWN ? -1 : pathableFacing == EnumFacing.UP ? this.pathingSizeOffsetY : 0);
+					int cz = z + pathableFacing.getZOffset() * this.pathingSizeOffsetZ;
 
-				for(int yo = 0; yo <= checkHeight; yo++) {
-					pos.setPos(cx, cy + yo, cz);
+					for(int yo = 0; yo <= checkHeight; yo++) {
+						pos.setPos(cx, cy + yo, cz);
 
-					Block block = blockaccessIn.getBlockState(pos).getBlock();
-					PathNodeType offsetNodeType = this.getPathNodeTypeRaw(blockaccessIn, pos.getX(), pos.getY(), pos.getZ());
-					nodeType = offsetNodeType != PathNodeType.WALKABLE && offsetNodeType != PathNodeType.OPEN && offsetNodeType != PathNodeType.WATER && offsetNodeType != PathNodeType.LAVA ? PathNodeType.WALKABLE : PathNodeType.OPEN;
+						Block block = blockaccessIn.getBlockState(pos).getBlock();
+						PathNodeType offsetNodeType = this.getPathNodeTypeRaw(blockaccessIn, pos.getX(), pos.getY(), pos.getZ());
+						nodeType = offsetNodeType != PathNodeType.WALKABLE && offsetNodeType != PathNodeType.OPEN && offsetNodeType != PathNodeType.WATER && offsetNodeType != PathNodeType.LAVA ? PathNodeType.WALKABLE : PathNodeType.OPEN;
 
-					if(offsetNodeType == PathNodeType.DAMAGE_FIRE || block == Blocks.MAGMA) {
-						nodeType = PathNodeType.DAMAGE_FIRE;
-					}
+						if(offsetNodeType == PathNodeType.DAMAGE_FIRE || block == Blocks.MAGMA) {
+							nodeType = PathNodeType.DAMAGE_FIRE;
+						}
 
-					if(offsetNodeType == PathNodeType.DAMAGE_CACTUS) {
-						nodeType = PathNodeType.DAMAGE_CACTUS;
-					}
+						if(offsetNodeType == PathNodeType.DAMAGE_CACTUS) {
+							nodeType = PathNodeType.DAMAGE_CACTUS;
+						}
 
-					if(nodeType == PathNodeType.WALKABLE) {
-						break facings;
+						if(nodeType == PathNodeType.WALKABLE) {
+							break facings;
+						}
 					}
 				}
 			}
