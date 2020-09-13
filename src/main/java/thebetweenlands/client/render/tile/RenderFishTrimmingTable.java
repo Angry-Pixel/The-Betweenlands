@@ -25,7 +25,8 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityFishTrimmingTable;
 
 public class RenderFishTrimmingTable extends TileEntitySpecialRenderer<TileEntityFishTrimmingTable> {
-	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/fish_trimming_table.png");
+	public static final ResourceLocation TEXTURE_BASE = new ResourceLocation("thebetweenlands:textures/tiles/fish_trimming_table.png");
+	public static final ResourceLocation TEXTURE_USED = new ResourceLocation("thebetweenlands:textures/tiles/fish_trimming_table_used.png");
 	public static final ModelFishTrimmingTable MODEL = new ModelFishTrimmingTable();
 
 	@Override
@@ -44,8 +45,15 @@ public class RenderFishTrimmingTable extends TileEntitySpecialRenderer<TileEntit
 		GlStateManager.scale(1F, -1F, -1F);
 	//	GlStateManager.disableCull();
 
-		bindTexture(TEXTURE);
+		bindTexture(TEXTURE_BASE);
+		if (te != null) {
+			if (!te.getStackInSlot(4).isEmpty())
+				bindTexture(TEXTURE_USED);
+			if (!te.getStackInSlot(5).isEmpty())
+				MODEL.renderParts(te);
+		}
 		MODEL.render();
+
 	//	GlStateManager.enableCull();
 		GlStateManager.popMatrix();
 
@@ -71,9 +79,6 @@ public class RenderFishTrimmingTable extends TileEntitySpecialRenderer<TileEntit
 			if (!te.getStackInSlot(4).isEmpty())
 				renderItemInSlot(te.getStackInSlot(4), -0.25F, 0.75F, 0.25F, 0.25F, (float)rand.nextDouble() * 60F - 30F);
 
-			// chopper
-			if (!te.getStackInSlot(5).isEmpty())
-				renderItemInSlot(te.getStackInSlot(5), 0.425F, 0.9F, 0.25F, 0.5F, 0F);
 		}
 
 		GlStateManager.popMatrix();
