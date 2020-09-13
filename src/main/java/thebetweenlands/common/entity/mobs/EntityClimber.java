@@ -28,13 +28,20 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.IPathObstructionAwareEntity;
 import thebetweenlands.common.entity.ai.ObstructionAwarePathNavigateGround;
 import thebetweenlands.common.entity.movement.ClimbMoveHelper;
+import thebetweenlands.util.BoxSmoothingUtil;
 
 public class EntityClimber extends EntityCreature implements IEntityBL, IPathObstructionAwareEntity {
 
+	public double prevRenderOffsetX, prevRenderOffsetY, prevRenderOffsetZ;
+	public double renderOffsetX, renderOffsetY, renderOffsetZ;
+
+	public Vec3d renderNormal = new Vec3d(0, 1, 0);
+	public Vec3d prevRenderNormal = new Vec3d(0, 1, 0);
+	
 	public EntityClimber(World world) {
 		super(world);
 		this.isImmuneToFire = true;
-		setSize(1.5F, 0.9F);
+		setSize(0.9F, 0.9F);
 
 		//tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, false));
@@ -51,7 +58,7 @@ public class EntityClimber extends EntityCreature implements IEntityBL, IPathObs
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(0.1D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(40.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
@@ -137,7 +144,7 @@ public class EntityClimber extends EntityCreature implements IEntityBL, IPathObs
 
 					double distSigned = posPath + 0.5f - posEntity;
 					if(distSigned * (facing.getXOffset() + facing.getYOffset() + facing.getZOffset()) > 0) {
-						double dist = Math.abs(distSigned);
+						double dist = Math.abs(distSigned) - (facing.getAxis().isHorizontal() ? this.width / 2 : (facing == EnumFacing.DOWN ? 0 : this.height));
 
 						if(dist > maxDist) {
 							maxDist = dist;
@@ -209,12 +216,38 @@ public class EntityClimber extends EntityCreature implements IEntityBL, IPathObs
 				for(int i = 0; i < p.getCurrentPathLength(); i++) {
 					PathPoint po = p.getPathPointFromIndex(i);
 					if(this.world.isAirBlock(new BlockPos(po.x, po.y, po.z))) {
-						this.world.setBlockState(new BlockPos(po.x, po.y, po.z), Blocks.REEDS.getDefaultState(), 2);
+						//this.world.setBlockState(new BlockPos(po.x, po.y, po.z), Blocks.REEDS.getDefaultState(), 2);
 					}
 				}
 				//this.setDead();
 			}
 		}
+
+		float inclusionRange = 1.5f;
+
+		float smoothingRange = 1f;
+
+		Vec3d p = this.getPositionVector();
+
+		Vec3d s = p.add(0, this.height / 2, 0);
+		AxisAlignedBB inclusionBox = new AxisAlignedBB(s.x, s.y, s.z, s.x, s.y, s.z).grow(inclusionRange);
+
+		List<AxisAlignedBB> boxes = this.world.getCollisionBoxes(this, inclusionBox);
+
+
+
+		Pair<Vec3d, Vec3d> closestSmoothPoint = BoxSmoothingUtil.findClosestSmoothPoint(boxes, smoothingRange, 0.9f, 0.005f, 20, 0.05f, p);
+
+		this.prevRenderOffsetX = this.renderOffsetX;
+		this.prevRenderOffsetY = this.renderOffsetY;
+		this.prevRenderOffsetZ = this.renderOffsetZ;
+		
+		this.renderOffsetX = closestSmoothPoint.getLeft().x - p.x;
+		this.renderOffsetY = closestSmoothPoint.getLeft().y - p.y;
+		this.renderOffsetZ = closestSmoothPoint.getLeft().z - p.z;
+		
+		this.prevRenderNormal = this.renderNormal;
+		this.renderNormal = closestSmoothPoint.getRight();
 	}
 
 	@Override
