@@ -4,7 +4,7 @@
 		"normal": {
 			"model": "thebetweenlands:internal/winter_event",
 			"custom": {
-				"model_base": "thebetweenlands:block/peat",
+				"model_base": "thebetweenlands:block/peat_smouldering",
 				"model_active": "thebetweenlands:block/peat_frosty"
 			}
 		}
