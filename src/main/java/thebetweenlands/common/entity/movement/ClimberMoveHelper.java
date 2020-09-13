@@ -10,15 +10,15 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import thebetweenlands.common.entity.mobs.EntityClimber;
+import thebetweenlands.common.entity.mobs.EntityClimberBase;
 
-public class ClimbMoveHelper extends EntityMoveHelper {
+public class ClimberMoveHelper extends EntityMoveHelper {
 	protected int courseChangeCooldown;
 	protected boolean blocked = false;
 
-	protected final EntityClimber climber;
+	protected final EntityClimberBase climber;
 
-	public ClimbMoveHelper(EntityClimber entity) {
+	public ClimberMoveHelper(EntityClimberBase entity) {
 		super(entity);
 		this.climber = entity;
 	}
@@ -63,11 +63,11 @@ public class ClimbMoveHelper extends EntityMoveHelper {
 					this.entity.motionY += walkingDir.y / walkingDist * speed * f;
 					this.entity.motionZ += walkingDir.z / walkingDist * speed * f;
 
-					EntityClimber.Orientation orientation = this.climber.getOrientation(1);
+					EntityClimberBase.Orientation orientation = this.climber.getOrientation(1);
 
 					float rx = (float)orientation.forward.dotProduct(walkingDir.normalize());
 					float ry = (float)orientation.right.dotProduct(walkingDir.normalize());
-					
+
 					this.entity.rotationYaw = this.limitAngle(this.entity.rotationYaw, 270.0f - (float)Math.toDegrees(Math.atan2(rx, ry)), 90.0f);
 
 					this.entity.setAIMoveSpeed((float)speed);

@@ -242,8 +242,10 @@ public class ModelPeatMummy extends MowzieModelBase {
 	@Override
 	public void setLivingAnimations(EntityLivingBase entity, float yaw, float pitch, float delta) {
 		setToInitPose();
-		EntityPeatMummy mummy = (EntityPeatMummy)entity;
-		float spawningProgress = mummy.getInterpolatedSpawningProgress(delta);
+		
+		EntityPeatMummy mummy = entity instanceof EntityPeatMummy ? (EntityPeatMummy) entity : null;
+		
+		float spawningProgress = mummy != null ? mummy.getInterpolatedSpawningProgress(delta) : 1;
 		body_base.rotateAngleX -= 1 - spawningProgress;
 		armleftJoint.rotateAngleX -= 1.5 * (1 - spawningProgress);
 		armrightJoint.rotateAngleX -= 1.5 * (1 - spawningProgress);
@@ -289,34 +291,37 @@ public class ModelPeatMummy extends MowzieModelBase {
 			swing(armright2, 1 * globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f, 0.4f, f, f1);
 		}
 
-		float screamProgress = mummy.getScreamingProgress(delta);
-		if (screamProgress != 0) {
-			if (screamProgress > 1) screamProgress = 1;
-			float controller = 40 * (float) (-screamProgress * (screamProgress - 1) * (screamProgress - 0.1));
-			if (controller > 0.2f) controller = 0.2f;
-			float controller2 = controller;
-			if (controller2 < 0) controller2 = 0;
-
-			body_base.rotateAngleX -= 1.6f * controller;
-			body_base.rotationPointY -= 1.6f * controller;
-			body_base.rotationPointZ -= 1.6f * controller;
-			legleftJoint.rotateAngleX += 1.6f * controller;
-			legrightJoint.rotateAngleX += 1.6f * controller;
-			armleftJoint.rotateAngleX += 1.6f * controller;
-			armrightJoint.rotateAngleX += 1.6f * controller;
-			armleftJoint.rotationPointY += 10 * controller;
-			armrightJoint.rotationPointY += 10 * controller;
-			armleftJoint.rotationPointZ += 5 * controller;
-			armrightJoint.rotationPointZ += 5 * controller;
-			armleftJoint.rotateAngleZ += 0.5 * controller;
-			armrightJoint.rotateAngleZ -= 0.5 * controller;
-			armleft2.rotateAngleX += 1 * controller;
-			armright2.rotateAngleX += 1 * controller;
-			jaw.rotateAngleX += 2.4 * controller + controller2 * 0.5 * Math.cos(4 * (mummy.ticksExisted + delta));
-			cheecktissue2.rotateAngleX -= 2.4 * controller + controller2 * 0.5 * Math.cos(4 * (mummy.ticksExisted + delta));
-			cheecktissue2.rotationPointY += 10 * controller;
-			cheecktissueright.rotateAngleX -= 2.4 * controller + controller2 * 0.5 * Math.cos(4 * (mummy.ticksExisted + delta));
-			cheecktissueright.rotationPointY += 10 * controller;
+		if (mummy != null) {
+			float screamProgress = mummy.getScreamingProgress(delta);
+			
+			if(screamProgress != 0) {
+				if (screamProgress > 1) screamProgress = 1;
+				float controller = 40 * (float) (-screamProgress * (screamProgress - 1) * (screamProgress - 0.1));
+				if (controller > 0.2f) controller = 0.2f;
+				float controller2 = controller;
+				if (controller2 < 0) controller2 = 0;
+	
+				body_base.rotateAngleX -= 1.6f * controller;
+				body_base.rotationPointY -= 1.6f * controller;
+				body_base.rotationPointZ -= 1.6f * controller;
+				legleftJoint.rotateAngleX += 1.6f * controller;
+				legrightJoint.rotateAngleX += 1.6f * controller;
+				armleftJoint.rotateAngleX += 1.6f * controller;
+				armrightJoint.rotateAngleX += 1.6f * controller;
+				armleftJoint.rotationPointY += 10 * controller;
+				armrightJoint.rotationPointY += 10 * controller;
+				armleftJoint.rotationPointZ += 5 * controller;
+				armrightJoint.rotationPointZ += 5 * controller;
+				armleftJoint.rotateAngleZ += 0.5 * controller;
+				armrightJoint.rotateAngleZ -= 0.5 * controller;
+				armleft2.rotateAngleX += 1 * controller;
+				armright2.rotateAngleX += 1 * controller;
+				jaw.rotateAngleX += 2.4 * controller + controller2 * 0.5 * Math.cos(4 * (mummy.ticksExisted + delta));
+				cheecktissue2.rotateAngleX -= 2.4 * controller + controller2 * 0.5 * Math.cos(4 * (mummy.ticksExisted + delta));
+				cheecktissue2.rotationPointY += 10 * controller;
+				cheecktissueright.rotateAngleX -= 2.4 * controller + controller2 * 0.5 * Math.cos(4 * (mummy.ticksExisted + delta));
+				cheecktissueright.rotationPointY += 10 * controller;
+			}
 		}
 	}
 }
