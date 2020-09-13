@@ -1,0 +1,25 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:internal/model_combined",
+    "custom": { 
+      "model_base": "thebetweenlands:block/internal/layer_selection",
+      "model_base_data": {
+        "model": "thebetweenlands:block/crab_pot",
+        "layers": ["cutout", "none"]
+      },
+      
+      "model_additional": "thebetweenlands:block/internal/layer_selection",
+      "model_additional_data": {
+        "model": "forge:block/fluid",
+        "layers": ["translucent"],
+        "model_data": {
+          "fluid": "swamp_water"
+        }
+      }
+    }
+  },
+  "variants": {
+    "normal": [{ }]
+  }
+}

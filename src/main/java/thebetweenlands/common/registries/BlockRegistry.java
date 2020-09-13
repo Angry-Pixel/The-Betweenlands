@@ -46,6 +46,7 @@ import thebetweenlands.common.block.container.BlockBarrel;
 import thebetweenlands.common.block.container.BlockCenser;
 import thebetweenlands.common.block.container.BlockChestBetweenlands;
 import thebetweenlands.common.block.container.BlockCompostBin;
+import thebetweenlands.common.block.container.BlockCrabPot;
 import thebetweenlands.common.block.container.BlockDruidAltar;
 import thebetweenlands.common.block.container.BlockFishTrimmingTable;
 import thebetweenlands.common.block.container.BlockFishingTackleBox;
@@ -851,6 +852,7 @@ public class BlockRegistry {
     public static final Block FISHING_TACKLE_BOX = new BlockFishingTackleBox();
     public static final Block SMOKING_RACK = new BlockSmokingRack();
     public static final Block FISH_TRIMMING_TABLE = new BlockFishTrimmingTable();
+    public static final Block CRAB_POT = new BlockCrabPot();
     
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();

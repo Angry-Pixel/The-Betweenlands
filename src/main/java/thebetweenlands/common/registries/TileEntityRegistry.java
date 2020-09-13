@@ -16,6 +16,7 @@ import thebetweenlands.common.tile.TileEntityBeamRelay;
 import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
+import thebetweenlands.common.tile.TileEntityCrabPot;
 import thebetweenlands.common.tile.TileEntityDecayPitControl;
 import thebetweenlands.common.tile.TileEntityDecayPitGroundChain;
 import thebetweenlands.common.tile.TileEntityDecayPitHangingChain;
@@ -113,6 +114,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityFishingTackleBox.class, "fishing_tackle_box");
 		registerTileEntity(TileEntitySmokingRack.class, "smoking_rack");
 		registerTileEntity(TileEntityFishTrimmingTable.class, "fish_trimming_table");
+		registerTileEntity(TileEntityCrabPot.class, "crab_pot");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
