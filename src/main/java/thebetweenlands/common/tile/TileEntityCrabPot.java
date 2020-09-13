@@ -26,12 +26,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class TileEntityCrabPot extends TileEntity implements ITickable, IInventory {
 	public NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(1, ItemStack.EMPTY);
 	public boolean active;
-
+	public int fallCounter = 16;
 	public TileEntityCrabPot() {
 		super();
 	}
@@ -43,8 +44,16 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 
 	@Override
 	public void update() {
-		if(world.isRemote)
-			return;
+		if (world.isRemote) {
+			if (!hasBaitItem()) {
+				if (fallCounter > 0)
+					fallCounter--;
+				if (fallCounter <= 0)
+					fallCounter = 0;
+			}
+			if (hasBaitItem() && fallCounter != 16)
+				fallCounter = 16;
+		}
 
 		if(!world.isRemote) {
 			if(hasBaitItem() && !active)
@@ -56,9 +65,10 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 			if(active && world.getTotalWorldTime()%20 == 0) {
 				lureCloseCrab();
 				if(checkCatch() != null) {
+					ItemStack itemMob = ((ItemMob) new ItemStack(ItemRegistry.SILT_CRAB).getItem()).capture(checkCatch());
 					checkCatch().setDead();
-					 getItems().set(0, new ItemStack(ItemRegistry.SILT_CRAB_CLAW));
-					 markForUpdate();
+					getItems().set(0, itemMob);
+					markForUpdate();
 				}
 			}
 		}
@@ -88,7 +98,7 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 			foundCrab.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY() + 1D, pos.getZ(), 1D);
 		}
 	}
-	
+
 	public AxisAlignedBB extendRangeBox() {
 		return  new AxisAlignedBB(pos).grow(8D, 4D, 8D);
 	}

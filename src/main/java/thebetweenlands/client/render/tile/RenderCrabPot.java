@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.Constants;
+import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.tile.TileEntityCrabPot;
 
@@ -38,7 +39,7 @@ public class RenderCrabPot extends TileEntitySpecialRenderer<TileEntityCrabPot> 
 			// inputs
 			if (!te.getStackInSlot(0).isEmpty()) {
 				if (isSafeMobItem(te) && te.getEntity() != null)
-					renderMobInSlot(te.getEntity(), 0F, 0.25F, 0F);
+					renderMobInSlot(te.getEntity(), 0F, 0.0625F + (float)te.fallCounter * 0.0625F, 0F);
 				else
 					renderItemInSlot(te.getStackInSlot(0), 0F, 0.5F, 0F, 0.5F);
 			}
@@ -53,10 +54,18 @@ public class RenderCrabPot extends TileEntitySpecialRenderer<TileEntityCrabPot> 
 	public void renderMobInSlot(Entity entity, float x, float y, float z) {
 		if (entity != null) {
 			float scale2 = 1F / ((Entity) entity).width * 0.5F;
+			float offsetRotation = 180F;
+			float offsetY = 0F;
+
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(x, y, z);
+			if(entity instanceof EntitySiltCrab) {
+				offsetY = 0.0625F;
+				scale2 = 0.95F;
+				offsetRotation = 90F;
+			}
+			GlStateManager.translate(x, y + offsetY, z);
 			GlStateManager.scale(scale2, scale2, scale2);
-			GlStateManager.rotate(180F - Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+			GlStateManager.rotate(offsetRotation - Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
 			Render renderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entity);
 			renderer.doRender(entity, 0, 0, 0, 0, 0);
 			GlStateManager.popMatrix();
