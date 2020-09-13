@@ -13,7 +13,6 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
@@ -22,6 +21,7 @@ import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
@@ -29,15 +29,16 @@ import thebetweenlands.common.entity.ai.IPathObstructionAwareEntity;
 import thebetweenlands.common.entity.ai.ObstructionAwarePathNavigateGround;
 import thebetweenlands.common.entity.movement.ClimbMoveHelper;
 import thebetweenlands.util.BoxSmoothingUtil;
+import thebetweenlands.util.Matrix;
 
 public class EntityClimber extends EntityCreature implements IEntityBL, IPathObstructionAwareEntity {
 
 	public double prevRenderOffsetX, prevRenderOffsetY, prevRenderOffsetZ;
 	public double renderOffsetX, renderOffsetY, renderOffsetZ;
 
-	public Vec3d renderNormal = new Vec3d(0, 1, 0);
-	public Vec3d prevRenderNormal = new Vec3d(0, 1, 0);
-	
+	public Vec3d orientationNormal = new Vec3d(0, 1, 0);
+	public Vec3d prevOrientationNormal = new Vec3d(0, 1, 0);
+
 	public EntityClimber(World world) {
 		super(world);
 		this.isImmuneToFire = true;
@@ -58,8 +59,8 @@ public class EntityClimber extends EntityCreature implements IEntityBL, IPathObs
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(0.1D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(40.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 	}
@@ -223,9 +224,9 @@ public class EntityClimber extends EntityCreature implements IEntityBL, IPathObs
 			}
 		}
 
-		float inclusionRange = 1.5f;
+		float inclusionRange = 2.0f;
 
-		float smoothingRange = 1f;
+		float smoothingRange = 1.25f;
 
 		Vec3d p = this.getPositionVector();
 
@@ -234,20 +235,20 @@ public class EntityClimber extends EntityCreature implements IEntityBL, IPathObs
 
 		List<AxisAlignedBB> boxes = this.world.getCollisionBoxes(this, inclusionBox);
 
-
-
-		Pair<Vec3d, Vec3d> closestSmoothPoint = BoxSmoothingUtil.findClosestSmoothPoint(boxes, smoothingRange, 0.9f, 0.005f, 20, 0.05f, p);
+		Pair<Vec3d, Vec3d> closestSmoothPoint = BoxSmoothingUtil.findClosestSmoothPoint(boxes, smoothingRange, 1.0f, 0.005f, 20, 0.05f, s);
 
 		this.prevRenderOffsetX = this.renderOffsetX;
 		this.prevRenderOffsetY = this.renderOffsetY;
 		this.prevRenderOffsetZ = this.renderOffsetZ;
-		
+
 		this.renderOffsetX = closestSmoothPoint.getLeft().x - p.x;
 		this.renderOffsetY = closestSmoothPoint.getLeft().y - p.y;
 		this.renderOffsetZ = closestSmoothPoint.getLeft().z - p.z;
-		
-		this.prevRenderNormal = this.renderNormal;
-		this.renderNormal = closestSmoothPoint.getRight();
+
+		this.prevOrientationNormal = this.orientationNormal;
+		this.orientationNormal = closestSmoothPoint.getRight();
+
+		System.out.println(this.distanceWalkedModified);
 	}
 
 	@Override
@@ -257,10 +258,6 @@ public class EntityClimber extends EntityCreature implements IEntityBL, IPathObs
 		if(this.isServerWorld() || this.canPassengerSteer()) {
 			Pair<EnumFacing, Vec3d> walkingSide = this.getWalkingSide();
 
-			if(!this.world.isRemote) {
-				//System.out.println("    Walk on: " + walkingSide.getLeft());
-			}
-
 			//"Gravity"
 			this.motionX += walkingSide.getRight().x * 0.04D;
 			this.motionY += walkingSide.getRight().y * 0.04D;
@@ -268,11 +265,8 @@ public class EntityClimber extends EntityCreature implements IEntityBL, IPathObs
 
 			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 
-			if(!this.world.isRemote) {
-				//System.out.println(walkingSide.getRight());
-			}
-
 			if(this.collidedHorizontally || this.collidedVertically) {
+				this.onGround = true;
 				this.fallDistance = 0;
 
 				BlockPos offsetPos = new BlockPos(this).offset(walkingSide.getLeft());
@@ -300,6 +294,15 @@ public class EntityClimber extends EntityCreature implements IEntityBL, IPathObs
 				}
 			}
 		}
+
+		this.prevLimbSwingAmount = this.limbSwingAmount;
+		double traveledX = this.posX - this.prevPosX;
+		double traveledY = this.posY - this.prevPosY;
+		double traveledZ = this.posZ - this.prevPosZ;
+		float traveled = Math.min(MathHelper.sqrt(traveledX * traveledX + traveledY * traveledY + traveledZ * traveledZ) * 4.0f, 1.0f);
+
+		this.limbSwingAmount += (traveled - this.limbSwingAmount) * 0.4F;
+		this.limbSwing += this.limbSwingAmount;
 	}
 
 	@Override
@@ -315,5 +318,59 @@ public class EntityClimber extends EntityCreature implements IEntityBL, IPathObs
 	@Override
 	public float getBlockPathWeight(BlockPos pos) {
 		return 0.5F;
+	}
+
+	public static class Orientation {
+		public final Vec3d normal, forward, up, right;
+		public final float forwardComponent, upComponent, rightComponent, yaw, pitch;
+
+		private Orientation(Vec3d normal, Vec3d forward, Vec3d up, Vec3d right, float forwardComponent, float upComponent, float rightComponent, float yaw, float pitch) {
+			this.normal = normal;
+			this.forward = forward;
+			this.up = up;
+			this.right = right;
+			this.forwardComponent = forwardComponent;
+			this.upComponent = upComponent;
+			this.rightComponent = rightComponent;
+			this.yaw = yaw;
+			this.pitch = pitch;
+		}
+	}
+
+	public Orientation getOrientation(float partialTicks) {
+		//Big oof, please don't look at this
+
+		Vec3d orientationNormal = this.prevOrientationNormal.add(this.orientationNormal.subtract(this.prevOrientationNormal).scale(partialTicks));
+
+		Vec3d fwdAxis = new Vec3d(0, 0, 1);
+		Vec3d upAxis = new Vec3d(0, 1, 0);
+		Vec3d rightAxis = new Vec3d(1, 0, 0);
+
+		float fwd = (float)fwdAxis.dotProduct(orientationNormal);
+		float up = (float)upAxis.dotProduct(orientationNormal);
+		float right = (float)rightAxis.dotProduct(orientationNormal);
+
+		float yaw = (float)Math.toDegrees(Math.atan2(right, fwd));
+
+		fwdAxis = new Vec3d(Math.sin(Math.toRadians(yaw)), 0, Math.cos(Math.toRadians(yaw)));
+		upAxis = new Vec3d(0, 1, 0);
+		rightAxis = new Vec3d(Math.sin(Math.toRadians(yaw - 90)), 0, Math.cos(Math.toRadians(yaw - 90)));
+
+		fwd = (float)fwdAxis.dotProduct(orientationNormal);
+		up = (float)upAxis.dotProduct(orientationNormal);
+		right = (float)rightAxis.dotProduct(orientationNormal);
+
+		float pitch = (float)Math.toDegrees(Math.atan2(fwd, up)) * (float)Math.signum(fwd);
+
+		Matrix m = new Matrix();
+		m.rotate(Math.toRadians(yaw), 0, 1, 0);
+		m.rotate(Math.toRadians(pitch), 1, 0, 0);
+		m.rotate(Math.toRadians((float)Math.signum(0.1f - up) * yaw), 0, 1, 0);
+
+		Vec3d localFwd = m.transform(new Vec3d(0, 0, -1));
+		Vec3d localUp = m.transform(new Vec3d(0, 1, 0));
+		Vec3d localRight = m.transform(new Vec3d(1, 0, 0));
+
+		return new Orientation(orientationNormal, localFwd, localUp, localRight, fwd, up, right, yaw, pitch);
 	}
 }

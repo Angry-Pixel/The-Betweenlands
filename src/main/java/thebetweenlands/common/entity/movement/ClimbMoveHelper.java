@@ -56,18 +56,20 @@ public class ClimbMoveHelper extends EntityMoveHelper {
 
 				float f = (float)(speed * speed);
 				if(f >= 1.0E-4F) {
-					f = MathHelper.sqrt(f);
-					if (f < 1.0F) f = 1.0F;
+					f = Math.max(MathHelper.sqrt(f), 1.0f);
 					f = friction / f;
 
 					this.entity.motionX += walkingDir.x / walkingDist * speed * f;
 					this.entity.motionY += walkingDir.y / walkingDist * speed * f;
 					this.entity.motionZ += walkingDir.z / walkingDist * speed * f;
 
-					//TODO Make this work properly on walls
-					float yaw = (float)(MathHelper.atan2(dz, dx) * (180D / Math.PI)) - 90.0F;
-					this.entity.rotationYaw = this.limitAngle(this.entity.rotationYaw, yaw, 90.0F);
+					EntityClimber.Orientation orientation = this.climber.getOrientation(1);
+
+					float rx = (float)orientation.forward.dotProduct(walkingDir.normalize());
+					float ry = (float)orientation.right.dotProduct(walkingDir.normalize());
 					
+					this.entity.rotationYaw = this.limitAngle(this.entity.rotationYaw, 270.0f - (float)Math.toDegrees(Math.atan2(rx, ry)), 90.0f);
+
 					this.entity.setAIMoveSpeed((float)speed);
 				}
 			}

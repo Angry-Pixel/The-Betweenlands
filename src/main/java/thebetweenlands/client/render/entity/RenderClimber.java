@@ -5,9 +5,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
-import thebetweenlands.client.handler.DebugHandlerClient;
 import thebetweenlands.common.entity.mobs.EntityClimber;
 
 public class RenderClimber extends RenderLiving<EntityClimber> {
@@ -21,13 +18,15 @@ public class RenderClimber extends RenderLiving<EntityClimber> {
 		float roy = (float) (entity.prevRenderOffsetY + (entity.renderOffsetY - entity.prevRenderOffsetY) * partialTicks);
 		float roz = (float) (entity.prevRenderOffsetZ + (entity.renderOffsetZ - entity.prevRenderOffsetZ) * partialTicks);
 
-		x += rox;
-		y += roy;
-		z += roz;
+		EntityClimber.Orientation orientation = entity.getOrientation(partialTicks);
+
+		x += rox - orientation.normal.x * 0.55f;
+		y += roy - orientation.normal.y * 0.55f;
+		z += roz - orientation.normal.z * 0.55f;
 
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 
-		GlStateManager.pushMatrix();
+		/*GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, z);
 
 		GlStateManager.disableTexture2D();
@@ -35,37 +34,30 @@ public class RenderClimber extends RenderLiving<EntityClimber> {
 
 		DebugHandlerClient.drawBoundingBox(new AxisAlignedBB(0, 0, 0, 0, 0, 0).grow(0.2f));
 
-		if(entity.renderNormal != null) {
+		if(entity.orientationNormal != null) {
 			GlStateManager.color(1, 0, 0, 1);
-			DebugHandlerClient.drawBoundingBox(new AxisAlignedBB(0, 0, 0, 0, 0, 0).grow(0.1f).offset(entity.renderNormal));
+			DebugHandlerClient.drawBoundingBox(new AxisAlignedBB(0, 0, 0, 0, 0, 0).grow(0.1f).offset(entity.orientationNormal));
 		}
 
 		GlStateManager.color(1, 1, 1, 1);
 		GlStateManager.enableTexture2D();
 
-		GlStateManager.popMatrix();
+		GlStateManager.popMatrix();*/
 	}
 
 	@Override
 	protected void applyRotations(EntityClimber entity, float ageInTicks, float rotationYaw, float partialTicks) {
-		if(entity.prevRenderNormal != null) {
-			Vec3d renderNormal = entity.prevRenderNormal.add(entity.renderNormal.subtract(entity.prevRenderNormal).scale(partialTicks));
+		if(entity.prevOrientationNormal != null) {
+			EntityClimber.Orientation orientation = entity.getOrientation(partialTicks);
 
-			Vec3d fwdAxis = new Vec3d(0, 0, 1);
-			Vec3d upAxis = new Vec3d(0, 1, 0);
-			Vec3d rightAxis = new Vec3d(1, 0, 0);
+			GlStateManager.rotate(orientation.yaw, 0, 1, 0);
+			GlStateManager.rotate(orientation.pitch, 1, 0, 0);
 
-			double fwd = fwdAxis.dotProduct(renderNormal);
-			double up = upAxis.dotProduct(renderNormal);
-			double right = rightAxis.dotProduct(renderNormal);
+			float upThreshold = 0.1f;
 
-			float yaw = (float)Math.toDegrees(Math.atan2(right, fwd));
-			float pitch = (float)Math.toDegrees(Math.atan2(fwd, up)) * (float)Math.signum(fwd);
+			GlStateManager.rotate((float)Math.signum(upThreshold - orientation.upComponent) * orientation.yaw, 0, 1, 0);
 
-			GlStateManager.rotate(yaw, 0, 1, 0);
-			GlStateManager.rotate(pitch, 1, 0, 0);
-
-			GlStateManager.rotate((float)Math.signum(-up) * yaw + (up > 0 ? 180 - rotationYaw : rotationYaw), 0, 1, 0);
+			super.applyRotations(entity, ageInTicks, rotationYaw, partialTicks);
 		}
 	}
 
