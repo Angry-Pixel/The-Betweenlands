@@ -64,6 +64,10 @@ public class ClimbMoveHelper extends EntityMoveHelper {
 					this.entity.motionY += walkingDir.y / walkingDist * speed * f;
 					this.entity.motionZ += walkingDir.z / walkingDist * speed * f;
 
+					//TODO Make this work properly on walls
+					float yaw = (float)(MathHelper.atan2(dz, dx) * (180D / Math.PI)) - 90.0F;
+					this.entity.rotationYaw = this.limitAngle(this.entity.rotationYaw, yaw, 90.0F);
+					
 					this.entity.setAIMoveSpeed((float)speed);
 				}
 			}
