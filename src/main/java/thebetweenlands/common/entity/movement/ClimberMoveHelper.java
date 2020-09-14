@@ -25,27 +25,36 @@ public class ClimberMoveHelper extends EntityMoveHelper {
 
 	@Override
 	public void onUpdateMoveHelper() {
-		IAttributeInstance entityMoveSpeedAttribute = this.entity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED);
-		double speed = entityMoveSpeedAttribute != null ? this.speed * entityMoveSpeedAttribute.getAttributeValue() : this.speed;
+		double speed = this.climber.getMovementSpeed() * this.speed;
 
 		if(this.action == EntityMoveHelper.Action.MOVE_TO) {
-			double dx = this.posX + (this.posX < this.entity.posX ? -this.entity.width / 2 : this.entity.width / 2) - this.entity.posX;
-			double dy = this.posY + 0.5f - (this.posY < this.entity.posY ? this.entity.height : 0) - this.entity.posY;
-			double dz = this.posZ + (this.posZ < this.entity.posZ ? -this.entity.width / 2 : this.entity.width / 2) - this.entity.posZ;
-
-			Vec3d dir = new Vec3d(dx, dy, dz);
-
 			Pair<EnumFacing, Vec3d> walkingSide = this.climber.getWalkingSide();
 			Vec3d normal = new Vec3d(walkingSide.getLeft().getXOffset(), walkingSide.getLeft().getYOffset(), walkingSide.getLeft().getZOffset());
 
-			Vec3d walkingDir = dir.subtract(normal.scale(dir.dotProduct(normal)));
+			double dx = this.posX - this.entity.posX;
+			double dy = this.posY + 0.5f - (this.entity.posY + this.entity.height / 2.0f);
+			double dz = this.posZ - this.entity.posZ;
 
-			double walkingDist = walkingDir.length();
+			Vec3d dir = new Vec3d(dx, dy, dz);
 
-			if(walkingDist < 0.1D) {
+			Vec3d targetDir = dir.subtract(normal.scale(dir.dotProduct(normal)));
+
+			double targetDist = targetDir.length();
+
+			if(targetDist < 0.1D) {
 				this.entity.setMoveForward(0);
 				this.action = EntityMoveHelper.Action.WAIT;
 			} else {
+				double moveDx = this.posX + (this.posX < this.entity.posX ? -this.entity.width / 2 : this.entity.width / 2) - this.entity.posX;
+				double moveDy = this.posY + 0.5f - (this.posY < this.entity.posY ? this.entity.height : 0) - this.entity.posY;
+				double moveDz = this.posZ + (this.posZ < this.entity.posZ ? -this.entity.width / 2 : this.entity.width / 2) - this.entity.posZ;
+
+				Vec3d moveDir = new Vec3d(moveDx, moveDy, moveDz);
+
+				Vec3d walkingDir = moveDir.subtract(normal.scale(moveDir.dotProduct(normal)));
+
+				double walkingDist = walkingDir.length();
+
 				BlockPos offsetPos = new BlockPos(this.entity).offset(walkingSide.getLeft());
 				IBlockState offsetState = this.entity.world.getBlockState(offsetPos);
 				float blockSlipperiness = offsetState.getBlock().getSlipperiness(offsetState, this.entity.world, offsetPos, this.entity);

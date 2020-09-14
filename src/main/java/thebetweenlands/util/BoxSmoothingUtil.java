@@ -2,6 +2,8 @@ package thebetweenlands.util;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.util.math.AxisAlignedBB;
@@ -49,22 +51,21 @@ public class BoxSmoothingUtil {
 		return sdfDst;
 	}
 
+	@Nullable
 	public static Pair<Vec3d, Vec3d> findClosestSmoothPoint(List<AxisAlignedBB> boxes, float smoothingRange, float boxScale, float dx, int iters, float threshold, Vec3d p) {
-		Vec3d normal = null;
-
 		double px = p.x;
 		double py = p.y;
 		double pz = p.z;
 
 		for(int i = 0; i < iters; i++) {
+			float dst = sampleSdf(boxes, px, py, pz, smoothingRange, boxScale);
+
 			float fx1 = sampleSdf(boxes, px + dx, py, pz, smoothingRange, boxScale);
 			float fx2 = sampleSdf(boxes, px - dx, py, pz, smoothingRange, boxScale);
 			float fy1 = sampleSdf(boxes, px, py + dx, pz, smoothingRange, boxScale);
 			float fy2 = sampleSdf(boxes, px, py - dx, pz, smoothingRange, boxScale);
 			float fz1 = sampleSdf(boxes, px, py, pz + dx, smoothingRange, boxScale);
 			float fz2 = sampleSdf(boxes, px, py, pz - dx, smoothingRange, boxScale);
-
-			float dst = sampleSdf(boxes, px, py, pz, smoothingRange, boxScale);
 
 			float gx = fx2 - fx1;
 			float gy = fy2 - fy1;
@@ -74,16 +75,21 @@ public class BoxSmoothingUtil {
 			gy *= m;
 			gz *= m;
 
-			px += gx * dst;
-			py += gy * dst;
-			pz += gz * dst;
+			if(Float.isNaN(gx) || Float.isNaN(gy) || Float.isNaN(gz) || Double.isNaN(px) || Double.isNaN(py) || Double.isNaN(pz)) {
+				return null;
+			}
+			
+			float step = Math.max(dst, threshold / 2.0f);
 
-			if(dst < threshold || i == iters - 1) {
-				normal = new Vec3d(-gx, -gy, -gz).normalize();
-				break;
+			px += gx * step;
+			py += gy * step;
+			pz += gz * step;
+
+			if(dst < threshold) {
+				return Pair.of(new Vec3d(px, py, pz), new Vec3d(-gx, -gy, -gz).normalize());
 			}
 		}
 
-		return Pair.of(new Vec3d(px, py, pz), normal);
+		return null;
 	}
 }

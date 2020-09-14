@@ -5,13 +5,13 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -39,8 +39,6 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 	protected float collisionsInclusionRange = 2.0f;
 	protected float collisionsSmoothingRange = 1.25f;
 
-	protected int maxPathingTargetHeight = 0;
-
 	public EntityClimberBase(World world) {
 		super(world);
 		this.setSize(0.9F, 0.9F);
@@ -49,22 +47,7 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 
 	@Override
 	protected PathNavigate createNavigator(World worldIn) {
-		ObstructionAwarePathNavigateGround<EntityClimberBase> navigate = new ObstructionAwarePathNavigateGround<EntityClimberBase>(this, worldIn, false, true, true, false) {
-			@Override
-			public Path getPathToEntityLiving(Entity entityIn) {
-				BlockPos pos = new BlockPos(entityIn);
-
-				//Path to ceiling above target if possible
-				for(int i = 1; i <= EntityClimberBase.this.maxPathingTargetHeight; i++) {
-					if(this.getNodeProcessor().getPathNodeType(this.world, pos.getX(), pos.getY() + i, pos.getZ()) == PathNodeType.WALKABLE) {
-						pos = pos.up(i);
-						break;
-					}
-				}
-
-				return this.getPathToPos(pos);
-			}
-		};
+		ObstructionAwarePathNavigateGround<EntityClimberBase> navigate = new ObstructionAwarePathNavigateGround<EntityClimberBase>(this, worldIn, false, true, true, false);
 		navigate.setCanSwim(true);
 		return navigate;
 	}
@@ -81,7 +64,12 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 
 	@Override
 	public int getMaxFallHeight() {
-		return 1;
+		return 0;
+	}
+	
+	public float getMovementSpeed() {
+		IAttributeInstance attribute = this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED);
+		return attribute != null ? (float) attribute.getAttributeValue() : 1.0f;
 	}
 
 	public Pair<EnumFacing, Vec3d> getWalkingSide() {
@@ -228,18 +216,27 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 
 		List<AxisAlignedBB> boxes = this.world.getCollisionBoxes(this, inclusionBox);
 
-		Pair<Vec3d, Vec3d> closestSmoothPoint = BoxSmoothingUtil.findClosestSmoothPoint(boxes, this.collisionsSmoothingRange, 1.0f, 0.005f, 20, 0.05f, s);
+		this.prevOrientationNormal = this.orientationNormal;
 
 		this.prevRenderOffsetX = this.renderOffsetX;
 		this.prevRenderOffsetY = this.renderOffsetY;
 		this.prevRenderOffsetZ = this.renderOffsetZ;
 
-		this.renderOffsetX = MathHelper.clamp(closestSmoothPoint.getLeft().x - p.x, -this.width / 2, this.width / 2);
-		this.renderOffsetY = MathHelper.clamp(closestSmoothPoint.getLeft().y - p.y, 0, this.height);
-		this.renderOffsetZ = MathHelper.clamp(closestSmoothPoint.getLeft().z - p.z, -this.width / 2, this.width / 2);
+		Pair<Vec3d, Vec3d> closestSmoothPoint = BoxSmoothingUtil.findClosestSmoothPoint(boxes, this.collisionsSmoothingRange, 1.0f, 0.005f, 20, 0.05f, s);
 
-		this.prevOrientationNormal = this.orientationNormal;
-		this.orientationNormal = closestSmoothPoint.getRight();
+		if(closestSmoothPoint != null) {
+			this.renderOffsetX = MathHelper.clamp(closestSmoothPoint.getLeft().x - p.x, -this.width / 2, this.width / 2);
+			this.renderOffsetY = MathHelper.clamp(closestSmoothPoint.getLeft().y - p.y, 0, this.height);
+			this.renderOffsetZ = MathHelper.clamp(closestSmoothPoint.getLeft().z - p.z, -this.width / 2, this.width / 2);
+
+			this.orientationNormal = closestSmoothPoint.getRight();
+		} else {
+			this.renderOffsetX *= 0.6f;
+			this.renderOffsetY *= 0.6f;
+			this.renderOffsetZ *= 0.6f;
+
+			this.orientationNormal = new Vec3d(this.orientationNormal.x * 0.6f, this.orientationNormal.y + (1.0f - this.orientationNormal.y) * 0.4f, this.orientationNormal.z * 0.6f).normalize();
+		}
 	}
 
 	@Override
@@ -257,7 +254,6 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 
 			if(this.collidedHorizontally || this.collidedVertically) {
-				this.onGround = true;
 				this.fallDistance = 0;
 
 				BlockPos offsetPos = new BlockPos(this).offset(walkingSide.getLeft());
@@ -294,5 +290,12 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 
 		this.limbSwingAmount += (traveled - this.limbSwingAmount) * 0.4F;
 		this.limbSwing += this.limbSwingAmount;
+	}
+
+	@Override
+	public void move(MoverType type, double x, double y, double z) {
+		super.move(type, x, y, z);
+
+		this.onGround = this.collidedHorizontally || this.collidedVertically;
 	}
 }
