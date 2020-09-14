@@ -38,8 +38,11 @@ public class RenderCrabPot extends TileEntitySpecialRenderer<TileEntityCrabPot> 
 		if (te != null) {
 			// inputs
 			if (!te.getStackInSlot(0).isEmpty()) {
-				if (isSafeMobItem(te) && te.getEntity() != null)
-					renderMobInSlot(te.getEntity(), 0F, 0.0625F + (float)te.fallCounter * 0.0625F, 0F);
+				if (isSafeMobItem(te) && te.getEntity() != null) {
+					float smoothed = (float)te.fallCounter * 0.03125F + ((float)te.fallCounter * 0.03125F - (float)te.fallCounterPrev * 0.03125F) * partialTicks;
+					float smoothedTumble = (float)te.fallCounter + ((float)te.fallCounter  - (float)te.fallCounterPrev) * partialTicks;
+					renderMobInSlot(te.getEntity(), 0F, 0.0625F + smoothed, 0F, smoothedTumble);
+				}
 				else
 					renderItemInSlot(te.getStackInSlot(0), 0F, 0.5F, 0F, 0.5F);
 			}
@@ -51,9 +54,10 @@ public class RenderCrabPot extends TileEntitySpecialRenderer<TileEntityCrabPot> 
 		return te.getStackInSlot(0).getItem() instanceof ItemMob && te.getStackInSlot(0).getTagCompound() != null && te.getStackInSlot(0).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND);
 	}
 
-	public void renderMobInSlot(Entity entity, float x, float y, float z) {
+	public void renderMobInSlot(Entity entity, float x, float y, float z, float rotation) {
 		if (entity != null) {
 			float scale2 = 1F / ((Entity) entity).width * 0.5F;
+			float tumble = rotation * 11.25F;
 			float offsetRotation = 180F;
 			float offsetY = 0F;
 
@@ -65,6 +69,10 @@ public class RenderCrabPot extends TileEntitySpecialRenderer<TileEntityCrabPot> 
 			}
 			GlStateManager.translate(x, y + offsetY, z);
 			GlStateManager.scale(scale2, scale2, scale2);
+			if(tumble > 0F)
+				GlStateManager.rotate(tumble, 1.0F, 0.0F, 0.0F);
+			else
+				GlStateManager.rotate(0F, 1.0F, 0.0F, 0.0F);
 			GlStateManager.rotate(offsetRotation - Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
 			Render renderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entity);
 			renderer.doRender(entity, 0, 0, 0, 0, 0);

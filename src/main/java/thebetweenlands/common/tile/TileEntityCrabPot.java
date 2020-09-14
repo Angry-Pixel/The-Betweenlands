@@ -33,6 +33,7 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 	public NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(1, ItemStack.EMPTY);
 	public boolean active;
 	public int fallCounter = 16;
+	public int fallCounterPrev;
 	public TileEntityCrabPot() {
 		super();
 	}
@@ -45,14 +46,15 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 	@Override
 	public void update() {
 		if (world.isRemote) {
+			fallCounterPrev = fallCounter;
 			if (!hasBaitItem()) {
 				if (fallCounter > 0)
 					fallCounter--;
 				if (fallCounter <= 0)
 					fallCounter = 0;
 			}
-			if (hasBaitItem() && fallCounter != 16)
-				fallCounter = 16;
+			if (hasBaitItem() && fallCounter != 32)
+				fallCounter = 32;
 		}
 
 		if(!world.isRemote) {
@@ -76,7 +78,7 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 
 	private Entity checkCatch() {
 		Entity entity = null;
-		List<EntitySiltCrab> list = getWorld().getEntitiesWithinAABB(EntitySiltCrab.class, new AxisAlignedBB(pos.up()));
+		List<EntitySiltCrab> list = getWorld().getEntitiesWithinAABB(EntitySiltCrab.class, new AxisAlignedBB(pos.up()).grow(-0.25D, 0F, -0.25D));
 		if (!list.isEmpty())
 			entity = list.get(0);
 		return entity;
@@ -95,7 +97,7 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 		if (!list.isEmpty()) {
 			Collections.shuffle(list);
 			EntitySiltCrab foundCrab = list.get(0);
-			foundCrab.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY() + 1D, pos.getZ(), 1D);
+			foundCrab.getNavigator().tryMoveToXYZ(pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D, 1D);
 		}
 	}
 
@@ -103,7 +105,7 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 		return  new AxisAlignedBB(pos).grow(8D, 4D, 8D);
 	}
 
-	private boolean hasBaitItem() {
+	public boolean hasBaitItem() {
 		ItemStack baitItem = getItems().get(0);
 		return !baitItem.isEmpty() && baitItem.getItem() == EnumItemMisc.ANADIA_REMAINS.getItem();
 	}

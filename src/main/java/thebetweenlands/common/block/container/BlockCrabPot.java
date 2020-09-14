@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.container;
 
+import java.util.Random;
+
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
@@ -14,14 +16,18 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.FluidRegistry;
@@ -100,6 +106,19 @@ public class BlockCrabPot extends BlockSwampWater implements ITileEntityProvider
 		if (tile != null) 
 			InventoryHelper.dropInventoryItems(world, pos, tile);
 		super.breakBlock(world, pos, state);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+		TileEntityCrabPot tile = (TileEntityCrabPot) world.getTileEntity(pos);
+		if (tile != null)
+			if (!tile.hasBaitItem() && !tile.getItems().get(0).isEmpty() && tile.getEntity() != null) {
+				if (rand.nextInt(3) == 0)
+					world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, pos.getX() + 0.5D, pos.getY() + 0.5D + (float) tile.fallCounter * 0.03125F, pos.getZ() + 0.5D, 0.0D, 0.3D, 0.0D, new int[0]);
+				if (tile.fallCounter >= 1 && tile.fallCounter < 16)
+					for (int count = 0; count < 10; ++count)
+						BLParticles.ITEM_BREAKING.spawn(world, pos.getX() + 0.5D + (world.rand.nextDouble() - 0.5D), pos.getY() + 0.5D + world.rand.nextDouble(), pos.getZ() + 0.5D + (world.rand.nextDouble() - 0.5D), ParticleArgs.get().withData(EnumItemMisc.ANADIA_REMAINS.create(1)));
+			}
 	}
 
 	@Override
