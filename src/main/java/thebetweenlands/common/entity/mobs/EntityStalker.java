@@ -655,13 +655,9 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 					}
 				}
 
-				if(this.scurryingCooldown-- > 0) {
+				if(this.entity.isStalking || this.scurryingCooldown++ < 40) {
 					return false;
 				}
-			}
-
-			if(this.entity.isStalking) {
-				return false;
 			}
 
 			EntityLivingBase target = this.entity.getAttackTarget();
@@ -677,7 +673,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 		@Override
 		public void startExecuting() {
-			this.scurryingCooldown = 40;
+			this.scurryingCooldown = 0;
 
 			this.isScurrying = true;
 
