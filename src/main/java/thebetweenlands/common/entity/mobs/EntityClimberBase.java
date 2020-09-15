@@ -28,8 +28,8 @@ import thebetweenlands.util.Matrix;
 
 public abstract class EntityClimberBase extends EntityCreature implements IEntityBL, IPathObstructionAwareEntity {
 
-	public double prevRenderOffsetX, prevRenderOffsetY, prevRenderOffsetZ;
-	public double renderOffsetX, renderOffsetY, renderOffsetZ;
+	public double prevStickingOffsetX, prevStickingOffsetY, prevStickingOffsetZ;
+	public double stickingOffsetX, stickingOffsetY, stickingOffsetZ;
 
 	public Vec3d orientationNormal = new Vec3d(0, 1, 0);
 	public Vec3d prevOrientationNormal = new Vec3d(0, 1, 0);
@@ -41,7 +41,7 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 
 	public EntityClimberBase(World world) {
 		super(world);
-		this.setSize(0.9F, 0.9F);
+		this.setSize(0.85F, 0.85F);
 		this.moveHelper = new ClimberMoveHelper(this);
 	}
 
@@ -66,7 +66,7 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 	public int getMaxFallHeight() {
 		return 0;
 	}
-	
+
 	public float getMovementSpeed() {
 		IAttributeInstance attribute = this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED);
 		return attribute != null ? (float) attribute.getAttributeValue() : 1.0f;
@@ -218,25 +218,39 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 
 		this.prevOrientationNormal = this.orientationNormal;
 
-		this.prevRenderOffsetX = this.renderOffsetX;
-		this.prevRenderOffsetY = this.renderOffsetY;
-		this.prevRenderOffsetZ = this.renderOffsetZ;
+		this.prevStickingOffsetX = this.stickingOffsetX;
+		this.prevStickingOffsetY = this.stickingOffsetY;
+		this.prevStickingOffsetZ = this.stickingOffsetZ;
 
 		Pair<Vec3d, Vec3d> closestSmoothPoint = BoxSmoothingUtil.findClosestSmoothPoint(boxes, this.collisionsSmoothingRange, 1.0f, 0.005f, 20, 0.05f, s);
 
 		if(closestSmoothPoint != null) {
-			this.renderOffsetX = MathHelper.clamp(closestSmoothPoint.getLeft().x - p.x, -this.width / 2, this.width / 2);
-			this.renderOffsetY = MathHelper.clamp(closestSmoothPoint.getLeft().y - p.y, 0, this.height);
-			this.renderOffsetZ = MathHelper.clamp(closestSmoothPoint.getLeft().z - p.z, -this.width / 2, this.width / 2);
+			this.stickingOffsetX = MathHelper.clamp(closestSmoothPoint.getLeft().x - p.x, -this.width / 2, this.width / 2);
+			this.stickingOffsetY = MathHelper.clamp(closestSmoothPoint.getLeft().y - p.y, 0, this.height);
+			this.stickingOffsetZ = MathHelper.clamp(closestSmoothPoint.getLeft().z - p.z, -this.width / 2, this.width / 2);
 
 			this.orientationNormal = closestSmoothPoint.getRight();
 		} else {
-			this.renderOffsetX *= 0.6f;
-			this.renderOffsetY *= 0.6f;
-			this.renderOffsetZ *= 0.6f;
+			this.stickingOffsetX *= 0.6f;
+			this.stickingOffsetY *= 0.6f;
+			this.stickingOffsetZ *= 0.6f;
 
 			this.orientationNormal = new Vec3d(this.orientationNormal.x * 0.6f, this.orientationNormal.y + (1.0f - this.orientationNormal.y) * 0.4f, this.orientationNormal.z * 0.6f).normalize();
 		}
+	}
+
+	public Vec3d getStickingForce(Pair<EnumFacing, Vec3d> walkingSide) {
+		if(!this.hasNoGravity()) {
+			//1 on flat face, approaching 0 at edges
+			float alignedness = 1.0f - (float)Math.pow(Math.abs(new Vec3d(1, 0, 0).dotProduct(walkingSide.getRight()) * new Vec3d(0, 1, 0).dotProduct(walkingSide.getRight()) * new Vec3d(0, 0, 1).dotProduct(walkingSide.getRight())), 0.333f);
+
+			//Reduce sticking force at edges so it can easily move around them
+			float stickingForce = 0.08f * ((1.0f - alignedness) * 0.5f + 0.5f);
+
+			return walkingSide.getRight().scale(stickingForce);
+		}
+
+		return new Vec3d(0, 0, 0);
 	}
 
 	@Override
@@ -244,23 +258,25 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 		if(this.isServerWorld() || this.canPassengerSteer()) {
 			Pair<EnumFacing, Vec3d> walkingSide = this.getWalkingSide();
 
-			if(!this.hasNoGravity()) {
-				//"Gravity"
-				this.motionX += walkingSide.getRight().x * 0.04D;
-				this.motionY += walkingSide.getRight().y * 0.04D;
-				this.motionZ += walkingSide.getRight().z * 0.04D;
-			}
+			Vec3d stickingForce = this.getStickingForce(walkingSide);
+
+			this.motionX += stickingForce.x;
+			this.motionY += stickingForce.y;
+			this.motionZ += stickingForce.z;
 
 			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 
 			if(this.collidedHorizontally || this.collidedVertically) {
 				this.fallDistance = 0;
 
-				BlockPos offsetPos = new BlockPos(this).offset(walkingSide.getLeft());
-				IBlockState offsetState = this.world.getBlockState(offsetPos);
-				float blockSlipperiness = offsetState.getBlock().getSlipperiness(offsetState, this.world, offsetPos, this);
 
-				float slipperiness = blockSlipperiness * 0.91F;
+				float slipperiness = 0.91f;
+
+				if(this.onGround) {
+					BlockPos offsetPos = new BlockPos(this).offset(walkingSide.getLeft());
+					IBlockState offsetState = this.world.getBlockState(offsetPos);
+					slipperiness = offsetState.getBlock().getSlipperiness(offsetState, this.world, offsetPos, this) * 0.91F;
+				}
 
 				switch(walkingSide.getLeft().getAxis()) {
 				case X:

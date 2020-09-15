@@ -29,7 +29,7 @@ public class ClimberMoveHelper extends EntityMoveHelper {
 
 		if(this.action == EntityMoveHelper.Action.MOVE_TO) {
 			Pair<EnumFacing, Vec3d> walkingSide = this.climber.getWalkingSide();
-			Vec3d normal = new Vec3d(walkingSide.getLeft().getXOffset(), walkingSide.getLeft().getYOffset(), walkingSide.getLeft().getZOffset());
+			Vec3d normal = /*walkingSide.getRight();*/new Vec3d(walkingSide.getLeft().getXOffset(), walkingSide.getLeft().getYOffset(), walkingSide.getLeft().getZOffset());
 
 			double dx = this.posX - this.entity.posX;
 			double dy = this.posY + 0.5f - (this.entity.posY + this.entity.height / 2.0f);
@@ -67,10 +67,14 @@ public class ClimberMoveHelper extends EntityMoveHelper {
 				if(f >= 1.0E-4F) {
 					f = Math.max(MathHelper.sqrt(f), 1.0f);
 					f = friction / f;
-
-					this.entity.motionX += walkingDir.x / walkingDist * speed * f;
-					this.entity.motionY += walkingDir.y / walkingDist * speed * f;
-					this.entity.motionZ += walkingDir.z / walkingDist * speed * f;
+					
+					//Nullify sticking force along movement vector
+					Vec3d stickingForce = this.climber.getStickingForce(walkingSide);
+					Vec3d counterStickingForce = stickingForce.subtract(normal.scale(stickingForce.dotProduct(normal))).scale(-1);
+					
+					this.entity.motionX += walkingDir.x / walkingDist * speed * f + counterStickingForce.x;
+					this.entity.motionY += walkingDir.y / walkingDist * speed * f + counterStickingForce.y;
+					this.entity.motionZ += walkingDir.z / walkingDist * speed * f + counterStickingForce.z;
 
 					EntityClimberBase.Orientation orientation = this.climber.getOrientation(1);
 

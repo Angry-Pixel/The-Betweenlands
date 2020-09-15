@@ -15,9 +15,9 @@ public abstract class RenderClimberBase<T extends EntityClimberBase> extends Ren
 
 	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		float rox = (float) (entity.prevRenderOffsetX + (entity.renderOffsetX - entity.prevRenderOffsetX) * partialTicks);
-		float roy = (float) (entity.prevRenderOffsetY + (entity.renderOffsetY - entity.prevRenderOffsetY) * partialTicks);
-		float roz = (float) (entity.prevRenderOffsetZ + (entity.renderOffsetZ - entity.prevRenderOffsetZ) * partialTicks);
+		float rox = (float) (entity.prevStickingOffsetX + (entity.stickingOffsetX - entity.prevStickingOffsetX) * partialTicks);
+		float roy = (float) (entity.prevStickingOffsetY + (entity.stickingOffsetY - entity.prevStickingOffsetY) * partialTicks);
+		float roz = (float) (entity.prevStickingOffsetZ + (entity.stickingOffsetZ - entity.prevStickingOffsetZ) * partialTicks);
 
 		EntityClimberBase.Orientation orientation = entity.getOrientation(partialTicks);
 

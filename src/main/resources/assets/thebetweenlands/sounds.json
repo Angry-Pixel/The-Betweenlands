@@ -1127,6 +1127,32 @@
       "thebetweenlands:chirobaby_egg_5"
     ]
   },
+  "stalker_scream": {
+    "sounds": [
+      "thebetweenlands:stalker_scream"
+    ]
+  },
+  "stalker_step": {
+    "sounds": [
+      "thebetweenlands:stalker_step_1",
+      "thebetweenlands:stalker_step_2",
+      "thebetweenlands:stalker_step_3",
+      "thebetweenlands:stalker_step_4",
+      "thebetweenlands:stalker_step_5",
+      "thebetweenlands:stalker_step_6",
+      "thebetweenlands:stalker_step_7",
+      "thebetweenlands:stalker_step_8",
+      "thebetweenlands:stalker_step_9",
+      "thebetweenlands:stalker_step_10"
+    ]
+  },
+  "stalker_living": {
+    "sounds": [
+      "thebetweenlands:stalker_living_1",
+      "thebetweenlands:stalker_living_2",
+      "thebetweenlands:stalker_living_3"
+    ]
+  },
   "roof_collapse": {
     "sounds": [
       "thebetweenlands:roof_collapse"

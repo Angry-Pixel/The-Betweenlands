@@ -236,6 +236,9 @@ public class SoundRegistry {
     public static final BLSoundEvent CHIROMAW_HATCH = reg("chiromaw_hatch");
     public static final BLSoundEvent CHIROMAW_HATCHLING_TRANSFORM = reg("chiromaw_hatchling_transform");
     public static final BLSoundEvent CHIROMAW_HATCHLING_INSIDE_EGG = reg("chiromaw_hatchling_inside_egg");
+    public static final BLSoundEvent STALKER_SCREAM = reg("stalker_scream");
+    public static final BLSoundEvent STALKER_STEP = reg("stalker_step");
+    public static final BLSoundEvent STALKER_LIVING = reg("stalker_living");
 
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");
