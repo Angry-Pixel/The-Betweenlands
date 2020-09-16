@@ -1,4 +1,4 @@
-package thebetweenlands.common.entity.ai;
+package thebetweenlands.common.entity.movement;
 
 import javax.annotation.Nullable;
 

@@ -7,7 +7,7 @@ import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import thebetweenlands.common.entity.ai.PathNavigateFlyingBL;
+import thebetweenlands.common.entity.movement.PathNavigateFlyingBL;
 
 public class EntityFlyingMob extends EntityMob {
 	public EntityFlyingMob(World worldIn) {

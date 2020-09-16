@@ -1,6 +1,6 @@
-package thebetweenlands.common.entity.ai;
+package thebetweenlands.common.entity.movement;
 
-import net.minecraft.pathfinding.PathFinder;
+import net.minecraft.pathfinding.NodeProcessor;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.mobs.EntityBarrishee;
 
@@ -9,11 +9,11 @@ public class PathNavigateBarrishee extends ObstructionAwarePathNavigateGround<En
 		super(entity, worldIn);
 		this.setCanSwim(true);
 	}
-
+	
 	@Override
-	protected PathFinder getPathFinder() {
-		this.nodeProcessor = new WalkNodeProcessorBarrishee();
-		this.nodeProcessor.setCanEnterDoors(true);
-		return new PathFinder(this.nodeProcessor);
+	protected CustomPathFinder createPathFinder() {
+		NodeProcessor nodeProcessor = new WalkNodeProcessorBarrishee();
+		nodeProcessor.setCanEnterDoors(true);
+		return new CustomPathFinder(nodeProcessor);
 	}
 }

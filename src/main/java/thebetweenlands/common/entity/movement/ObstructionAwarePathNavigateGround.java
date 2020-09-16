@@ -1,4 +1,4 @@
-package thebetweenlands.common.entity.ai;
+package thebetweenlands.common.entity.movement;
 
 import javax.annotation.Nullable;
 
@@ -22,7 +22,7 @@ public class ObstructionAwarePathNavigateGround<T extends EntityLiving & IPathOb
 		public void onPathObstructed();
 	}
 
-	protected PathFinder pathFinder;
+	protected CustomPathFinder pathFinder;
 	protected long lastTimeUpdated;
 	protected BlockPos targetPos;
 
@@ -51,18 +51,28 @@ public class ObstructionAwarePathNavigateGround<T extends EntityLiving & IPathOb
 		}
 	}
 
-	@Override
-	protected PathFinder getPathFinder() {
-		this.nodeProcessor = new ObstructionAwareWalkNodeProcessor<T>();
-		this.nodeProcessor.setCanEnterDoors(true);
-		return this.pathFinder = new PathFinder(this.nodeProcessor);
+	public CustomPathFinder getAssignedPathFinder() {
+		return this.pathFinder;
 	}
-	
+
+	@Override
+	protected final PathFinder getPathFinder() {
+		this.pathFinder = this.createPathFinder();
+		this.nodeProcessor = this.pathFinder.getNodeProcessor();
+		return this.pathFinder;
+	}
+
+	protected CustomPathFinder createPathFinder() {
+		ObstructionAwareWalkNodeProcessor<T> nodeProcessor = new ObstructionAwareWalkNodeProcessor<>();
+		nodeProcessor.setCanEnterDoors(true);
+		return new CustomPathFinder(nodeProcessor);
+	}
+
 	@Override
 	protected boolean canNavigate() {
-        return !this.isInLiquid() || this.getCanSwim() && this.isInLiquid() || this.entity.isRiding();
-    }
-	
+		return !this.isInLiquid() || this.getCanSwim() && this.isInLiquid() || this.entity.isRiding();
+	}
+
 	@Override
 	@Nullable
 	public Path getPathToPos(BlockPos pos) {

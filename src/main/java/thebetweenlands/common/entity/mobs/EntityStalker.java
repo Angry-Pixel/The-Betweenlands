@@ -22,7 +22,6 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
@@ -30,6 +29,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -40,8 +40,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
-import thebetweenlands.common.entity.ai.ObstructionAwarePathNavigateGround;
-import thebetweenlands.common.entity.ai.ObstructionAwareWalkNodeProcessor;
+import thebetweenlands.common.entity.movement.CustomPathFinder;
+import thebetweenlands.common.entity.movement.ObstructionAwarePathNavigateGround;
+import thebetweenlands.common.entity.movement.ObstructionAwareWalkNodeProcessor;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityStalker extends EntityClimberBase implements IMob {
@@ -49,11 +50,11 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 	protected boolean isStalking = true;
 
-	protected float farAnglePathingPenalty = 2.0f;
-	protected float farAngle = 110.0f;
+	protected float farAnglePathingPenalty = 1.0f;
+	protected float farAngle = 90.0f;
 
-	protected float nearAnglePathingPenalty = 4.0f;
-	protected float nearAngle = 80.0f;
+	protected float nearAnglePathingPenalty = 2.0f;
+	protected float nearAngle = 65.0f;
 
 	protected float stalkingDistanceNear = 4.0f;
 	protected float stalkingDistanceFar = 8.0f;
@@ -65,9 +66,12 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 	protected boolean drop = false;
 
+	protected int checkSeenTimer = 20;
+	protected boolean canStalkerBeSeen = false;
+
 	public EntityStalker(World world) {
 		super(world);
-		this.maxPathingTargetHeight = 16;
+		this.maxPathingTargetHeight = 10;
 	}
 
 	@Override
@@ -112,25 +116,24 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 				}
 			}
 
-			float penalty = Math.max(0, 6 - height) * 0.1f; 
+			float penalty = Math.max(0, 6 - height) * 0.1f;
 
 			EntityLivingBase target = this.getAttackTarget();
 
 			if(target != null) {
 				Vec3d look = target.getLook(1);
-				Vec3d dir = new Vec3d(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f).subtract(target.getPositionEyes(1).subtract(look.scale(3))).normalize();
+				Vec3d dir = new Vec3d(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f).subtract(target.getPositionEyes(1).subtract(look)).normalize();
 				float dot = (float) look.dotProduct(dir);
 
 				float angle = (float) Math.toDegrees(Math.acos(dot));
 
-				penalty += Math.max(0, this.nearAngle - angle) / this.nearAnglePathingPenalty * this.nearAnglePathingPenalty;
+				penalty += Math.max(0, this.nearAngle - angle) / this.nearAngle * this.nearAnglePathingPenalty;
 				penalty += Math.max(0, (this.farAngle - this.nearAngle) - (angle - this.nearAngle)) / (this.farAngle - this.nearAngle) * this.farAnglePathingPenalty;
 
 				double dst = new Vec3d(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f).subtract(target.getPositionEyes(1)).length();
 
 				penalty += (1 - (MathHelper.clamp(dst, this.stalkingDistanceNear, this.stalkingDistanceFar) - this.stalkingDistanceNear) / (this.stalkingDistanceFar - this.stalkingDistanceNear)) * this.stalkingDistancePenalty;
 			}
-
 
 			return priority + penalty;
 		}
@@ -148,7 +151,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 				}
 
 				Vec3d look = target.getLook(1);
-				Vec3d dir = this.getPositionVector().subtract(target.getPositionEyes(1).subtract(look.scale(3))).normalize();
+				Vec3d dir = this.getPositionVector().subtract(target.getPositionEyes(1).subtract(look)).normalize();
 				float dot = (float) look.dotProduct(dir);
 				float angle = (float) Math.toDegrees(Math.acos(dot));
 				if(angle < this.nearAngle) {
@@ -183,8 +186,8 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 			}
 
 			@Override
-			protected PathFinder getPathFinder() {
-				this.nodeProcessor = new ObstructionAwareWalkNodeProcessor<EntityStalker>() {
+			protected CustomPathFinder createPathFinder() {
+				ObstructionAwareWalkNodeProcessor<EntityStalker> nodeProcessor = new ObstructionAwareWalkNodeProcessor<EntityStalker>() {
 					@Override
 					public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z) {
 						if(!EntityStalker.this.isPathNodeAllowed(x, y, z)) {
@@ -193,8 +196,28 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 						return super.getPathNodeType(blockaccessIn, x, y, z);
 					}
 				};
-				this.nodeProcessor.setCanEnterDoors(true);
-				return this.pathFinder = new PathFinder(this.nodeProcessor);
+
+				CustomPathFinder pathFinder = new CustomPathFinder(nodeProcessor);
+
+				pathFinder.setMaxExpansions(400);
+
+				pathFinder.setHeuristic((start, end, isTargetHeuristic) -> {
+					if(isTargetHeuristic && EntityStalker.this.isFleeingFromView) {
+						EntityLivingBase target = EntityStalker.this.getAttackTarget();
+
+						if(target != null) {
+							Vec3d look = target.getLook(1);
+							Vec3d diff = new Vec3d(start.x + 0.5f - target.posX, start.y + 0.5f - target.posY, start.z + 0.5f - target.posZ);
+							float dot = (float) look.dotProduct(diff);
+							diff = diff.subtract(look.scale(dot));
+							return 8.0f - (float)Math.abs(diff.x) - (float)Math.abs(diff.y) - (float)Math.abs(diff.z);
+						}
+					}
+
+					return CustomPathFinder.DEFAULT_HEURISTIC.compute(start, end, isTargetHeuristic);
+				});
+
+				return pathFinder;
 			}
 		};
 		navigate.setCanSwim(true);
@@ -208,6 +231,10 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 		}
 
 		return super.getStickingForce(walkingSide);
+	}
+
+	private boolean canSeePosition(Vec3d start, Vec3d end) {
+		return this.world.rayTraceBlocks(start, end, false, true, false) == null;
 	}
 
 	@Override
@@ -225,35 +252,84 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 				}
 			}*/
 
+			boolean wasFleeingFromView = this.isFleeingFromView;
 			this.isFleeingFromView = false;
 
 			EntityLivingBase target = this.getAttackTarget();
 
+			boolean isPotentiallySeen = false;
+
 			if(this.isStalking) {
 				if(target != null) {
 					Vec3d look = target.getLook(1);
-					Vec3d dir = this.getPositionVector().subtract(target.getPositionEyes(1).subtract(look.scale(3))).normalize();
+					Vec3d dir = this.getPositionVector().subtract(target.getPositionEyes(1).subtract(look)).normalize();
 					float dot = (float) look.dotProduct(dir);
 					float angle = (float) Math.toDegrees(Math.acos(dot));
 
 					if(angle < this.nearAngle) {
-						this.isFleeingFromView = true;
+						isPotentiallySeen = true;
 
-						if(this.getNavigator().noPath()) {
-							Vec3d right = look.crossProduct(new Vec3d(0, 1, 0));
-							Vec3d up = right.crossProduct(look);
+						if(this.checkSeenTimer++ >= 20) {
+							this.checkSeenTimer = 0;
 
-							float rot = this.rand.nextFloat() * (float)Math.PI * 2;
-							float radius = 8.0f;
+							this.canStalkerBeSeen = false;
 
-							Vec3d offset = right.scale(Math.cos(rot) * radius).add(up.scale(Math.sin(rot) * radius)).add(look.scale(-radius * 0.5f));
+							if(this.canSeePosition(target.getPositionEyes(1), this.getEntityBoundingBox().getCenter())) {
+								this.canStalkerBeSeen = true;
+							} else {
+								AxisAlignedBB checkAabb = this.getEntityBoundingBox().grow(1);
 
-							this.getNavigator().tryMoveToXYZ(this.posX + offset.x, this.posY + offset.y, this.posZ + offset.z, 1.0f);
+								for(int xo = 0; xo <= 1; xo++) {
+									for(int yo = 0; yo <= 1; yo++) {
+										for(int zo = 0; zo <= 1; zo++) {
+											Vec3d checkPos = new Vec3d(
+													(xo == 0 ? checkAabb.minX : checkAabb.maxX),
+													(yo == 0 ? checkAabb.minY : checkAabb.maxY),
+													(zo == 0 ? checkAabb.minZ : checkAabb.maxZ)
+													);
+
+											if(this.canSeePosition(target.getPositionEyes(1), checkPos)) {
+												this.canStalkerBeSeen = true;
+												break;
+											}
+										}
+									}
+								}
+							}
+						}
+
+						if(this.canStalkerBeSeen) {
+							this.isFleeingFromView = true;
+
+							if(this.getNavigator().noPath() && this.ticksExisted % 10 == 0) {
+								Vec3d right = look.crossProduct(new Vec3d(0, 1, 0));
+								Vec3d up = right.crossProduct(look);
+
+								float rot = this.rand.nextFloat() * (float)Math.PI * 2;
+								float radius = 8.0f;
+
+								Vec3d offset = right.scale(Math.cos(rot) * radius).add(up.scale(Math.sin(rot) * radius)).add(look.scale(-radius * 0.5f));
+
+								RayTraceResult result = this.world.rayTraceBlocks(this.getEntityBoundingBox().getCenter(), this.getEntityBoundingBox().getCenter().add(offset), false, true, false);
+								if(result != null && result.hitVec != null) {
+									offset = result.hitVec;
+								}
+
+								this.getNavigator().tryMoveToXYZ(this.posX + offset.x, this.posY + offset.y, this.posZ + offset.z, 1.0f);
+							}
 						}
 					}
 				}
 			} else if(target == null) {
 				this.isStalking = true;
+			}
+
+			if(!isPotentiallySeen) {
+				this.checkSeenTimer = 20;
+			}
+
+			if(wasFleeingFromView && !this.isFleeingFromView) {
+				this.getNavigator().clearPath();
 			}
 
 			if(this.isFleeingFromView && (target == null || this.getEntitySenses().canSee(target))) {
@@ -351,9 +427,9 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 					int sy = MathHelper.floor(start.y);
 					int sz = MathHelper.floor(start.z);
 					BlockPos pos = new BlockPos(sx, sy, sz);
+					IBlockState state = this.entity.world.getBlockState(pos);
 
-					if(this.entity.world.getLightFor(EnumSkyBlock.BLOCK, pos) > 0) {
-						IBlockState state = this.entity.world.getBlockState(pos);
+					if(this.entity.world.getLightFor(EnumSkyBlock.BLOCK, pos) > 0 || (state.getCollisionBoundingBox(this.entity.world, pos) != Block.NULL_AABB && state.getBlock().canCollideCheck(state, false))) {
 						RayTraceResult result = state.collisionRayTrace(this.entity.world, pos, start, end);
 
 						if(result != null) {
@@ -453,9 +529,9 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 						sy = MathHelper.floor(start.y) - (hitFacing == EnumFacing.UP ? 1 : 0);
 						sz = MathHelper.floor(start.z) - (hitFacing == EnumFacing.SOUTH ? 1 : 0);
 						pos = new BlockPos(sx, sy, sz);
+						IBlockState offsetState = this.entity.world.getBlockState(pos);
 
-						if(this.entity.world.getLightFor(EnumSkyBlock.BLOCK, pos) > 0) {
-							IBlockState offsetState = this.entity.world.getBlockState(pos);
+						if(this.entity.world.getLightFor(EnumSkyBlock.BLOCK, pos) > 0 || (offsetState.getCollisionBoundingBox(this.entity.world, pos) != Block.NULL_AABB && offsetState.getBlock().canCollideCheck(state, false))) {
 							RayTraceResult result = offsetState.collisionRayTrace(this.entity.world, pos, start, end);
 
 							if(result != null) {
@@ -521,7 +597,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 				}
 
 				Vec3d look = target.getLook(1);
-				Vec3d dir = new Vec3d(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f).subtract(target.getPositionEyes(1).subtract(look.scale(3))).normalize();
+				Vec3d dir = new Vec3d(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f).subtract(target.getPositionEyes(1).subtract(look)).normalize();
 				float dot = (float) look.dotProduct(dir);
 				float angle = (float) Math.toDegrees(Math.acos(dot));
 
@@ -682,12 +758,40 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 			PathPoint[] pathPoints = new PathPoint[this.pathMemory.size()];
 
+			double furthestPathPosDst = 0;
+			BlockPos furthestPathPos = null;
+
 			int i = 0;
 			for(BlockPos pos : this.pathMemory.values()) {
 				pathPoints[this.pathMemory.size() - ++i] = new PathPoint(pos.getX(), pos.getY(), pos.getZ());
+
+				double dst = pos.getDistance((int)this.scurryingStart.x, (int)this.scurryingStart.y, (int)this.scurryingStart.z);
+				if(dst > furthestPathPosDst) {
+					furthestPathPosDst = dst;
+					furthestPathPos = pos;
+				}
 			}
 
-			this.path = new Path(pathPoints);
+			if(furthestPathPos != null) {
+				this.path = this.entity.getNavigator().getPathToPos(furthestPathPos);
+			}
+
+			if(this.path == null) {
+				this.path = new Path(pathPoints);
+			}
+
+			for(int j = 0; (this.path == null || this.path.getCurrentPathLength() < 6 || this.path.getFinalPathPoint().distanceTo(new PathPoint((int)this.scurryingStart.x, (int)this.scurryingStart.y, (int)this.scurryingStart.z)) < 6) && j < 3; j++) {
+				Vec3d dir = this.entity.getPositionVector().subtract(this.scurryingStart).add(this.entity.getLookVec().scale(-0.25f)).normalize();
+
+				Vec3d right = dir.crossProduct(new Vec3d(0, 1, 0));
+				Vec3d up = right.crossProduct(dir);
+
+				Vec3d target = this.entity.getPositionVector().add(dir.scale(32.0f).add(right.scale((this.entity.rand.nextFloat() - 0.5f) * 16.0f)).add(up.scale((this.entity.rand.nextFloat() - 0.5f) * 16.0f)));
+
+				this.path = this.entity.getNavigator().getPathToXYZ(target.x, target.y, target.z);
+			}
+
+			this.entity.playLivingSound();
 		}
 
 		@Override
@@ -696,7 +800,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 				PathPoint finalPoint = this.path.getFinalPathPoint();
 
 				//Check if path still possible
-				if(finalPoint == null || this.entity.getNavigator().getPathToPos(new BlockPos(finalPoint.x, finalPoint.y, finalPoint.z)) == null) {
+				if(finalPoint == null || (this.entity.ticksExisted % 20 == 0 && this.entity.getNavigator().getPathToPos(new BlockPos(finalPoint.x, finalPoint.y, finalPoint.z)) == null)) {
 					this.isScurrying = false;
 				} else {
 					this.entity.getNavigator().setPath(this.path, this.speed);

@@ -20,9 +20,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
-import thebetweenlands.common.entity.ai.IPathObstructionAwareEntity;
-import thebetweenlands.common.entity.ai.ObstructionAwarePathNavigateGround;
 import thebetweenlands.common.entity.movement.ClimberMoveHelper;
+import thebetweenlands.common.entity.movement.IPathObstructionAwareEntity;
+import thebetweenlands.common.entity.movement.ObstructionAwarePathNavigateGround;
 import thebetweenlands.util.BoxSmoothingUtil;
 import thebetweenlands.util.Matrix;
 
@@ -73,7 +73,7 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 	}
 
 	public Pair<EnumFacing, Vec3d> getWalkingSide() {
-		EnumFacing avoidPathingFacing = EnumFacing.DOWN;
+		EnumFacing avoidPathingFacing = null;
 
 		Path path = this.getNavigator().getPath();
 		if(path != null) {
@@ -94,7 +94,14 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 
 						if(dist > maxDist) {
 							maxDist = dist;
-							avoidPathingFacing = facing.getOpposite();
+
+							if(dist < 1.732f) {
+								avoidPathingFacing = facing.getOpposite();
+							} else {
+								//Don't avoid facing if further away than 1 block diagonal, otherwise it could start floating around
+								//if next path point is still too far away
+								avoidPathingFacing = null;
+							}
 						}
 					}
 				}
