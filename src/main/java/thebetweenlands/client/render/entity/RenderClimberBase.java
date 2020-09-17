@@ -1,10 +1,13 @@
 package thebetweenlands.client.render.entity;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
 import thebetweenlands.client.handler.DebugHandlerClient;
 import thebetweenlands.common.entity.mobs.EntityClimberBase;
 
@@ -40,6 +43,18 @@ public abstract class RenderClimberBase<T extends EntityClimberBase> extends Ren
 
 			DebugHandlerClient.drawBoundingBox(new AxisAlignedBB(0, 0, 0, 0, 0, 0).grow(0.1f).offset(entity.orientationNormal));
 
+			GlStateManager.glLineWidth(3);
+			GlStateManager.color(0, 1, 0);
+			
+			Vec3d forward = orientation.getForward(entity.rotationYaw, 0);
+			
+			GL11.glBegin(GL11.GL_LINES);
+			GL11.glVertex3d(orientation.normal.x, orientation.normal.y, orientation.normal.z);
+			GL11.glVertex3d(orientation.normal.x * 2 + forward.x * 2, orientation.normal.y + forward.y * 2, orientation.normal.z + forward.z * 2);
+			GL11.glEnd();
+			
+			GlStateManager.glLineWidth(1);
+			
 			GlStateManager.color(1, 1, 1, 1);
 			GlStateManager.enableTexture2D();
 

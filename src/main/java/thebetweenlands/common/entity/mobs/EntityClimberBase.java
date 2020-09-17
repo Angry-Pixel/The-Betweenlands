@@ -34,8 +34,6 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 	public Vec3d orientationNormal = new Vec3d(0, 1, 0);
 	public Vec3d prevOrientationNormal = new Vec3d(0, 1, 0);
 
-	protected float stickingDistance = 2.0f;
-
 	protected float collisionsInclusionRange = 2.0f;
 	protected float collisionsSmoothingRange = 1.25f;
 
@@ -111,16 +109,18 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 		AxisAlignedBB entityBox = this.getEntityBoundingBox();
 
 		double closestFacingDst = Double.MAX_VALUE;
-		EnumFacing closestFacing = EnumFacing.DOWN;
+		EnumFacing closestFacing = null;
 
 		Vec3d weighting = new Vec3d(0, 0, 0);
 
+		float stickingDistance = this.moveForward != 0 ? 1.5f : 0.1f;
+		
 		for(EnumFacing facing : EnumFacing.VALUES) {
 			if(avoidPathingFacing == facing) {
 				continue;
 			}
 
-			List<AxisAlignedBB> collisionBoxes = this.world.getCollisionBoxes(this, entityBox.grow(0.2f).expand(facing.getXOffset() * this.stickingDistance, facing.getYOffset() * this.stickingDistance, facing.getZOffset() * this.stickingDistance));
+			List<AxisAlignedBB> collisionBoxes = this.world.getCollisionBoxes(this, entityBox.grow(0.2f).expand(facing.getXOffset() * stickingDistance, facing.getYOffset() * stickingDistance, facing.getZOffset() * stickingDistance));
 
 			double closestDst = Double.MAX_VALUE;
 
@@ -128,15 +128,15 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 				switch(facing) {
 				case EAST:
 				case WEST:
-					closestDst = Math.min(closestDst, Math.abs(entityBox.calculateXOffset(collisionBox, -facing.getXOffset() * this.stickingDistance)));
+					closestDst = Math.min(closestDst, Math.abs(entityBox.calculateXOffset(collisionBox, -facing.getXOffset() * stickingDistance)));
 					break;
 				case UP:
 				case DOWN:
-					closestDst = Math.min(closestDst, Math.abs(entityBox.calculateYOffset(collisionBox, -facing.getYOffset() * this.stickingDistance)));
+					closestDst = Math.min(closestDst, Math.abs(entityBox.calculateYOffset(collisionBox, -facing.getYOffset() * stickingDistance)));
 					break;
 				case NORTH:
 				case SOUTH:
-					closestDst = Math.min(closestDst, Math.abs(entityBox.calculateZOffset(collisionBox, -facing.getZOffset() * this.stickingDistance)));
+					closestDst = Math.min(closestDst, Math.abs(entityBox.calculateZOffset(collisionBox, -facing.getZOffset() * stickingDistance)));
 					break;
 				}
 			}
@@ -147,8 +147,12 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 			}
 
 			if(closestDst < Double.MAX_VALUE) {
-				weighting = weighting.add(new Vec3d(facing.getXOffset(), facing.getYOffset(), facing.getZOffset()).scale(1 - Math.min(closestDst, this.stickingDistance) / this.stickingDistance));
+				weighting = weighting.add(new Vec3d(facing.getXOffset(), facing.getYOffset(), facing.getZOffset()).scale(1 - Math.min(closestDst, stickingDistance) / stickingDistance));
 			}
+		}
+
+		if(closestFacing == null) {
+			return Pair.of(EnumFacing.DOWN, new Vec3d(0, -1, 0));
 		}
 
 		return Pair.of(closestFacing, weighting.normalize().add(0, -0.001f, 0).normalize());
@@ -168,6 +172,14 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 			this.rightComponent = rightComponent;
 			this.yaw = yaw;
 			this.pitch = pitch;
+		}
+		
+		public Vec3d getForward(float yaw, float pitch) {
+			float cosYaw = MathHelper.cos(yaw * 0.017453292F);
+	        float sinYaw = MathHelper.sin(yaw * 0.017453292F);
+	        float cosPitch = -MathHelper.cos(-pitch * 0.017453292F);
+	        float sinPitch = MathHelper.sin(-pitch * 0.017453292F);
+	        return this.right.scale(sinYaw * cosPitch).add(this.up.scale(sinPitch)).add(this.forward.scale(cosYaw * cosPitch));
 		}
 	}
 

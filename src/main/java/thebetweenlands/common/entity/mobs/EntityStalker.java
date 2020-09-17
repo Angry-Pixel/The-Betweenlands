@@ -90,7 +90,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.28D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(40.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
@@ -98,7 +98,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 	@Override
 	public float getMovementSpeed() {
-		return super.getMovementSpeed() + (this.isStalking && this.isFleeingFromView ? 0.1f : 0.0f);
+		return super.getMovementSpeed() + (this.isStalking && this.isFleeingFromView ? 0.15f : 0.0f);
 	}
 
 	@Override
