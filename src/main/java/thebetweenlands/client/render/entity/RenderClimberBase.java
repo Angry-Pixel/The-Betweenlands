@@ -43,10 +43,28 @@ public abstract class RenderClimberBase<T extends EntityClimberBase> extends Ren
 
 			DebugHandlerClient.drawBoundingBox(new AxisAlignedBB(0, 0, 0, 0, 0, 0).grow(0.1f).offset(entity.orientationNormal));
 
-			GlStateManager.glLineWidth(3);
-			GlStateManager.color(0, 1, 0);
+			GlStateManager.glLineWidth(4);
+			GlStateManager.color(0, 0, 1);
 			
 			Vec3d forward = orientation.getForward(entity.rotationYaw, 0);
+			
+			GL11.glBegin(GL11.GL_LINES);
+			GL11.glVertex3d(orientation.normal.x, orientation.normal.y, orientation.normal.z);
+			GL11.glVertex3d(orientation.normal.x * 2 + forward.x * 2, orientation.normal.y + forward.y * 2, orientation.normal.z + forward.z * 2);
+			GL11.glEnd();
+			
+			GlStateManager.color(0, 1, 0);
+			
+			forward = orientation.getForward(entity.rotationYaw, -90);
+			
+			GL11.glBegin(GL11.GL_LINES);
+			GL11.glVertex3d(orientation.normal.x, orientation.normal.y, orientation.normal.z);
+			GL11.glVertex3d(orientation.normal.x * 2 + forward.x * 2, orientation.normal.y + forward.y * 2, orientation.normal.z + forward.z * 2);
+			GL11.glEnd();
+			
+			GlStateManager.color(1, 0, 0);
+			
+			forward = orientation.getForward(entity.rotationYaw - 90, 0);
 			
 			GL11.glBegin(GL11.GL_LINES);
 			GL11.glVertex3d(orientation.normal.x, orientation.normal.y, orientation.normal.z);

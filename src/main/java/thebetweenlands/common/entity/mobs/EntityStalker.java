@@ -20,6 +20,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
@@ -244,13 +245,15 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 		super.onUpdate();
 
 		if(!this.world.isRemote) {
-			/*Path p = this.getNavigator().getPath();
-			if(p != null) {
-				for(int i = 0; i < p.getCurrentPathLength(); i++) {
-					PathPoint point = p.getPathPointFromIndex(i);
-					this.world.setBlockState(new BlockPos(point.x, point.y, point.z), Blocks.REEDS.getDefaultState(), 2);
+			if(false) {
+				Path p = this.getNavigator().getPath();
+				if(p != null) {
+					for(int i = 0; i < p.getCurrentPathLength(); i++) {
+						PathPoint point = p.getPathPointFromIndex(i);
+						this.world.setBlockState(new BlockPos(point.x, point.y, point.z), Blocks.REEDS.getDefaultState(), 2);
+					}
 				}
-			}*/
+			}
 
 			boolean wasFleeingFromView = this.isFleeingFromView;
 			this.isFleeingFromView = false;

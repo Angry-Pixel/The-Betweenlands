@@ -37,6 +37,9 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 	protected float collisionsInclusionRange = 2.0f;
 	protected float collisionsSmoothingRange = 1.25f;
 
+	protected Vec3d attachedSides = new Vec3d(0, 0, 0);
+	protected Vec3d prevAttachedSides = new Vec3d(0, 0, 0);
+
 	public EntityClimberBase(World world) {
 		super(world);
 		this.setSize(0.85F, 0.85F);
@@ -114,7 +117,7 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 		Vec3d weighting = new Vec3d(0, 0, 0);
 
 		float stickingDistance = this.moveForward != 0 ? 1.5f : 0.1f;
-		
+
 		for(EnumFacing facing : EnumFacing.VALUES) {
 			if(avoidPathingFacing == facing) {
 				continue;
@@ -173,13 +176,13 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 			this.yaw = yaw;
 			this.pitch = pitch;
 		}
-		
+
 		public Vec3d getForward(float yaw, float pitch) {
 			float cosYaw = MathHelper.cos(yaw * 0.017453292F);
-	        float sinYaw = MathHelper.sin(yaw * 0.017453292F);
-	        float cosPitch = -MathHelper.cos(-pitch * 0.017453292F);
-	        float sinPitch = MathHelper.sin(-pitch * 0.017453292F);
-	        return this.right.scale(sinYaw * cosPitch).add(this.up.scale(sinPitch)).add(this.forward.scale(cosYaw * cosPitch));
+			float sinYaw = MathHelper.sin(yaw * 0.017453292F);
+			float cosPitch = -MathHelper.cos(-pitch * 0.017453292F);
+			float sinPitch = MathHelper.sin(-pitch * 0.017453292F);
+			return this.right.scale(sinYaw * cosPitch).add(this.up.scale(sinPitch)).add(this.forward.scale(cosYaw * cosPitch));
 		}
 	}
 
@@ -260,13 +263,7 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 
 	public Vec3d getStickingForce(Pair<EnumFacing, Vec3d> walkingSide) {
 		if(!this.hasNoGravity()) {
-			//1 on flat face, approaching 0 at edges
-			float alignedness = 1.0f - (float)Math.pow(Math.abs(new Vec3d(1, 0, 0).dotProduct(walkingSide.getRight()) * new Vec3d(0, 1, 0).dotProduct(walkingSide.getRight()) * new Vec3d(0, 0, 1).dotProduct(walkingSide.getRight())), 0.333f);
-
-			//Reduce sticking force at edges so it can easily move around them
-			float stickingForce = 0.08f * ((1.0f - alignedness) * 0.5f + 0.5f);
-
-			return walkingSide.getRight().scale(stickingForce);
+			return walkingSide.getRight().scale(0.08f);
 		}
 
 		return new Vec3d(0, 0, 0);
@@ -279,15 +276,93 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 
 			Vec3d stickingForce = this.getStickingForce(walkingSide);
 
-			this.motionX += stickingForce.x;
-			this.motionY += stickingForce.y;
-			this.motionZ += stickingForce.z;
+			Orientation orientation = this.getOrientation(1);
+
+			Vec3d forwardVector = orientation.getForward(this.rotationYaw, 0);
+			Vec3d upVector = orientation.getForward(this.rotationYaw, -90);
+
+			Vec3d counterStickingForce = new Vec3d(0, 0, 0);
+
+			if(forward != 0) {
+				BlockPos offsetPos = new BlockPos(this).offset(walkingSide.getLeft());
+				IBlockState offsetState = this.world.getBlockState(offsetPos);
+				float blockSlipperiness = offsetState.getBlock().getSlipperiness(offsetState, this.world, offsetPos, this);
+
+				float slipperiness = blockSlipperiness * 0.91F;
+
+				float friction = (float)forward * 0.16277136F / (slipperiness * slipperiness * slipperiness);
+
+				float f = (float)(forward * forward);
+				if(f >= 1.0E-4F) {
+					f = Math.max(MathHelper.sqrt(f), 1.0f);
+					f = friction / f;
+
+					Vec3d forwardOffset = new Vec3d(forwardVector.x * forward * f, forwardVector.y * forward * f, forwardVector.z * forward * f);
+
+					double px = this.posX;
+					double py = this.posY;
+					double pz = this.posZ;
+					double mx = this.motionX;
+					double my = this.motionY;
+					double mz = this.motionZ;
+
+					//Probe actual movement vector
+					this.move(MoverType.SELF, forwardOffset.x, forwardOffset.y, forwardOffset.z);
+
+					Vec3d movementDir = new Vec3d(this.posX - px, this.posY - py, this.posZ - pz).normalize();
+
+					this.setEntityBoundingBox(this.getEntityBoundingBox().offset(px - this.posX, py - this.posY, pz - this.posZ));
+					this.resetPositionToBB();
+					this.motionX = mx;
+					this.motionY = my;
+					this.motionZ = mz;
+
+					//Nullify sticking force along movement vector
+					counterStickingForce = movementDir.scale(movementDir.normalize().dotProduct(stickingForce)).scale(-1);
+
+					float moveSpeed = forward * f;
+					this.motionX += movementDir.x * moveSpeed;
+					this.motionY += movementDir.y * moveSpeed;
+					this.motionZ += movementDir.z * moveSpeed;
+				}
+			}
+
+			this.motionX += stickingForce.x + counterStickingForce.x;
+			this.motionY += stickingForce.y + counterStickingForce.y;
+			this.motionZ += stickingForce.z + counterStickingForce.z;
+
+			double px = this.posX;
+			double py = this.posY;
+			double pz = this.posZ;
+			double mx = this.motionX;
+			double my = this.motionY;
+			double mz = this.motionZ;
 
 			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 
+			this.prevAttachedSides = this.attachedSides;
+			this.attachedSides = new Vec3d(this.posX == px ? -Math.signum(mx) : 0, this.posY == py ? -Math.signum(my) : 0, this.posZ == pz ? -Math.signum(mz) : 0);
+
+			boolean detachedX = this.attachedSides.x != this.prevAttachedSides.x;
+			boolean detachedY = this.attachedSides.y != this.prevAttachedSides.y;
+			boolean detachedZ = this.attachedSides.z != this.prevAttachedSides.z;
+
+			if((detachedX || detachedY || detachedZ) && this.prevAttachedSides.length() > 0.5f) {
+				this.move(MoverType.SELF, detachedX ? -this.prevAttachedSides.x * 0.05f : 0, detachedY ? -this.prevAttachedSides.y * 0.05f : 0, detachedZ ? -this.prevAttachedSides.z * 0.05f : 0);
+
+				Vec3d axis = this.prevAttachedSides.normalize();
+				Vec3d attachVector = upVector.scale(-1);
+				attachVector = attachVector.subtract(axis.scale(axis.dotProduct(attachVector))).normalize();
+
+				double attachDst = MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+
+				this.move(MoverType.SELF, attachVector.x * attachDst, attachVector.y * attachDst, attachVector.z * attachDst);
+
+				this.motionX = this.motionY = this.motionZ = 0;
+			}
+
 			if(this.collidedHorizontally || this.collidedVertically) {
 				this.fallDistance = 0;
-
 
 				float slipperiness = 0.91f;
 
@@ -297,23 +372,13 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 					slipperiness = offsetState.getBlock().getSlipperiness(offsetState, this.world, offsetPos, this) * 0.91F;
 				}
 
-				switch(walkingSide.getLeft().getAxis()) {
-				case X:
-					this.motionZ *= slipperiness;
-					this.motionY *= slipperiness;
-					this.motionX = 0;
-					break;
-				case Y:
-					this.motionX *= slipperiness;
-					this.motionZ *= slipperiness;
-					this.motionY = 0;
-					break;
-				case Z:
-					this.motionX *= slipperiness;
-					this.motionY *= slipperiness;
-					this.motionZ = 0;
-					break;
-				}
+				Vec3d motion = new Vec3d(this.motionX, this.motionY, this.motionZ);
+				Vec3d orthogonalMotion = upVector.scale(upVector.dotProduct(motion));
+				Vec3d tangentialMotion = motion.subtract(orthogonalMotion);
+
+				this.motionX = tangentialMotion.x * slipperiness + orthogonalMotion.x * 0.98f;
+				this.motionY = tangentialMotion.y * slipperiness + orthogonalMotion.y * 0.98f;
+				this.motionZ = tangentialMotion.z * slipperiness + orthogonalMotion.z * 0.98f;
 			}
 		}
 
@@ -329,7 +394,13 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 
 	@Override
 	public void move(MoverType type, double x, double y, double z) {
+		double py = this.posY;
+
 		super.move(type, x, y, z);
+
+		if(Math.abs(this.posY - py - y) > 0.000001D) {
+			this.motionY = 0.0D;
+		}
 
 		this.onGround = this.collidedHorizontally || this.collidedVertically;
 	}
