@@ -305,13 +305,14 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 					double mx = this.motionX;
 					double my = this.motionY;
 					double mz = this.motionZ;
+					AxisAlignedBB aabb = this.getEntityBoundingBox();
 
 					//Probe actual movement vector
 					this.move(MoverType.SELF, forwardOffset.x, forwardOffset.y, forwardOffset.z);
 
 					Vec3d movementDir = new Vec3d(this.posX - px, this.posY - py, this.posZ - pz).normalize();
 
-					this.setEntityBoundingBox(this.getEntityBoundingBox().offset(px - this.posX, py - this.posY, pz - this.posZ));
+					this.setEntityBoundingBox(aabb);
 					this.resetPositionToBB();
 					this.motionX = mx;
 					this.motionY = my;
