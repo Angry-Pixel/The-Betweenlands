@@ -617,7 +617,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 		@Override
 		public boolean shouldExecute() {
-			if(this.entity.isStalking && ForgeEventFactory.getMobGriefingEvent(this.entity.world, this.entity)) {
+			if(this.entity.isStalking && this.entity.ticksExisted % 10 == 0 && ForgeEventFactory.getMobGriefingEvent(this.entity.world, this.entity)) {
 				float checkRange = 32.0f;
 
 				Vec3d start = this.entity.getPositionEyes(1);
@@ -643,7 +643,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 		@Override
 		public boolean shouldContinueExecuting() {
-			return this.entity.isStalking && this.lightSourcePos != null && this.isTargetLightSource(this.lightSourcePos) && ForgeEventFactory.getMobGriefingEvent(this.entity.world, this.entity) && this.failCount < 10;
+			return this.entity.isStalking && this.lightSourcePos != null && this.isTargetLightSource(this.lightSourcePos) && ForgeEventFactory.getMobGriefingEvent(this.entity.world, this.entity) && this.failCount <= 5;
 		}
 
 		@Override
@@ -660,7 +660,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 					if(!this.entity.getNavigator().tryMoveToXYZ(this.lightSourcePos.getX() + 0.5f, this.lightSourcePos.getY() + 0.5f, this.lightSourcePos.getZ() + 0.5f, 1)) {
 						this.failCount++;
 					} else {
-						this.failCount = 0;
+						this.failCount = 1;
 					}
 				}
 
