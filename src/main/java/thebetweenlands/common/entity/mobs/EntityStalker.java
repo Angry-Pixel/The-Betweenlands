@@ -14,6 +14,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -22,6 +23,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNodeType;
@@ -35,19 +37,24 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.movement.CustomPathFinder;
 import thebetweenlands.common.entity.movement.ObstructionAwarePathNavigateClimber;
 import thebetweenlands.common.entity.movement.ObstructionAwarePathNavigateGround;
 import thebetweenlands.common.entity.movement.ObstructionAwareWalkNodeProcessor;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 public class EntityStalker extends EntityClimberBase implements IMob {
+	protected boolean restrictToPitstone = false;
+	
 	protected int maxPathingTargetHeight = 0;
 
 	protected boolean isStalking = true;
@@ -97,7 +104,27 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(40.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 	}
+	
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData data) {
+		if(this.posY < WorldProviderBetweenlands.PITSTONE_HEIGHT + 3 && this.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
+			this.restrictToPitstone = true;
+		}
+		return super.onInitialSpawn(difficulty, data);
+	}
+	
+	@Override
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
+		nbt.setBoolean("restrictToPitstone", this.restrictToPitstone);
+	}
 
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
+		this.restrictToPitstone = nbt.getBoolean("restrictToPitstone");
+	}
+	
 	@Override
 	public float getMovementSpeed() {
 		return super.getMovementSpeed() + (this.isStalking && this.isFleeingFromView ? 0.25f : 0.0f);
@@ -107,6 +134,12 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 	public float getPathingMalus(EntityLiving entity, PathNodeType nodeType, BlockPos pos) {
 		float priority = super.getPathPriority(nodeType);
 
+		float penalty = 0;
+		
+		if(this.restrictToPitstone && this.posY > WorldProviderBetweenlands.PITSTONE_HEIGHT + 3 && pos.getY() >= this.posY) {
+			penalty += Math.min((pos.getY() - this.posY) * 0.5f, 8);
+		}
+		
 		if(priority >= 0.0f && this.isStalking) {
 			int height = 0;
 
@@ -118,7 +151,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 				}
 			}
 
-			float penalty = Math.max(0, 6 - height) * 0.1f;
+			penalty += Math.max(0, 6 - height) * 0.1f;
 
 			EntityLivingBase target = this.getAttackTarget();
 
@@ -136,14 +169,16 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 				penalty += (1 - (MathHelper.clamp(dst, this.stalkingDistanceNear, this.stalkingDistanceFar) - this.stalkingDistanceNear) / (this.stalkingDistanceFar - this.stalkingDistanceNear)) * this.stalkingDistancePenalty;
 			}
-
-			return priority + penalty;
 		}
 
-		return priority;
+		return priority + penalty;
 	}
 
 	protected boolean isPathNodeAllowed(int x, int y, int z) {
+		if(this.restrictToPitstone && this.posY <= WorldProviderBetweenlands.PITSTONE_HEIGHT + 3 && y >= WorldProviderBetweenlands.PITSTONE_HEIGHT + 2) {
+			return false;
+		}
+		
 		if(this.isStalking) {
 			EntityLivingBase target = this.getAttackTarget();
 
