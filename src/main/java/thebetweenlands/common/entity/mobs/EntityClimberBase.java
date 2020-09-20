@@ -284,11 +284,13 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 			Vec3d counterStickingForce = new Vec3d(0, 0, 0);
 
 			if(forward != 0) {
-				BlockPos offsetPos = new BlockPos(this).offset(walkingSide.getLeft());
-				IBlockState offsetState = this.world.getBlockState(offsetPos);
-				float blockSlipperiness = offsetState.getBlock().getSlipperiness(offsetState, this.world, offsetPos, this);
+				float slipperiness = 0.91f;
 
-				float slipperiness = blockSlipperiness * 0.91F;
+				if(this.onGround) {
+					BlockPos offsetPos = new BlockPos(this).offset(walkingSide.getLeft());
+					IBlockState offsetState = this.world.getBlockState(offsetPos);
+					slipperiness = offsetState.getBlock().getSlipperiness(offsetState, this.world, offsetPos, this) * 0.91f;
+				}
 
 				float friction = (float)forward * 0.16277136F / (slipperiness * slipperiness * slipperiness);
 
@@ -307,6 +309,17 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 					double mz = this.motionZ;
 					AxisAlignedBB aabb = this.getEntityBoundingBox();
 
+					//Probe collision normal
+					this.move(MoverType.SELF, -upVector.x, -upVector.y, -upVector.z);
+
+					Vec3d collisionNormal = new Vec3d(Math.abs(this.posX - px + upVector.x) > 0.000001D ? Math.signum(upVector.x) : 0, Math.abs(this.posY - py + upVector.y) > 0.000001D ? Math.signum(upVector.y) : 0, Math.abs(this.posZ - pz + upVector.z) > 0.000001D ? Math.signum(upVector.z) : 0).normalize();
+
+					this.setEntityBoundingBox(aabb);
+					this.resetPositionToBB();
+					this.motionX = mx;
+					this.motionY = my;
+					this.motionZ = mz;
+
 					//Probe actual movement vector
 					this.move(MoverType.SELF, forwardOffset.x, forwardOffset.y, forwardOffset.z);
 
@@ -318,8 +331,18 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 					this.motionY = my;
 					this.motionZ = mz;
 
-					//Nullify sticking force along movement vector
-					counterStickingForce = movementDir.scale(movementDir.normalize().dotProduct(stickingForce)).scale(-1);
+					//Movement vector projected to surface
+					Vec3d surfaceMovementDir = movementDir.subtract(collisionNormal.scale(collisionNormal.dotProduct(movementDir))).normalize();
+
+					boolean isInnerCorner = Math.abs(collisionNormal.x) + Math.abs(collisionNormal.y) + Math.abs(collisionNormal.z) > 1.0001f;
+
+					//Only project movement vector to surface if not moving across inner corner, otherwise it'd get stuck in the corner
+					if(!isInnerCorner) {
+						movementDir = surfaceMovementDir;
+					}
+
+					//Nullify sticking force along movement vector projected to surface
+					counterStickingForce = surfaceMovementDir.scale(surfaceMovementDir.normalize().dotProduct(stickingForce)).scale(-1);
 
 					float moveSpeed = forward * f;
 					this.motionX += movementDir.x * moveSpeed;
@@ -348,39 +371,54 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 			boolean detachedY = this.attachedSides.y != this.prevAttachedSides.y;
 			boolean detachedZ = this.attachedSides.z != this.prevAttachedSides.z;
 
-			if((detachedX || detachedY || detachedZ) && this.prevAttachedSides.length() > 0.5f) {
-				this.move(MoverType.SELF, detachedX ? -this.prevAttachedSides.x * 0.05f : 0, detachedY ? -this.prevAttachedSides.y * 0.05f : 0, detachedZ ? -this.prevAttachedSides.z * 0.05f : 0);
+			if(detachedX || detachedY || detachedZ) {
+				//Offset so that AABB is moved above the new surface
+				this.move(MoverType.SELF, detachedX ? -this.prevAttachedSides.x * 0.1f : 0, detachedY ? -this.prevAttachedSides.y * 0.1f : 0, detachedZ ? -this.prevAttachedSides.z * 0.1f : 0);
 
 				Vec3d axis = this.prevAttachedSides.normalize();
 				Vec3d attachVector = upVector.scale(-1);
 				attachVector = attachVector.subtract(axis.scale(axis.dotProduct(attachVector))).normalize();
 
-				double attachDst = MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+				double attachDst = MathHelper.sqrt(mx * mx + my * my + mz * mz) + 0.1f;
 
-				this.move(MoverType.SELF, attachVector.x * attachDst, attachVector.y * attachDst, attachVector.z * attachDst);
+				AxisAlignedBB aabb = this.getEntityBoundingBox();
+				mx = this.motionX;
+				my = this.motionY;
+				mz = this.motionZ;
+
+				//Offset AABB towards new surface until it touches
+				for(int i = 0; i < 10 && !this.onGround; i++) {
+					this.move(MoverType.SELF, attachVector.x * attachDst, attachVector.y * attachDst, attachVector.z * attachDst);
+				}
+
+				if(!this.onGround) {
+					this.setEntityBoundingBox(aabb);
+					this.resetPositionToBB();
+					this.motionX = mx;
+					this.motionY = my;
+					this.motionZ = mz;
+				}
 
 				this.motionX = this.motionY = this.motionZ = 0;
 			}
 
-			if(this.collidedHorizontally || this.collidedVertically) {
+			float slipperiness = 0.91f;
+
+			if(this.onGround) {
 				this.fallDistance = 0;
 
-				float slipperiness = 0.91f;
-
-				if(this.onGround) {
-					BlockPos offsetPos = new BlockPos(this).offset(walkingSide.getLeft());
-					IBlockState offsetState = this.world.getBlockState(offsetPos);
-					slipperiness = offsetState.getBlock().getSlipperiness(offsetState, this.world, offsetPos, this) * 0.91F;
-				}
-
-				Vec3d motion = new Vec3d(this.motionX, this.motionY, this.motionZ);
-				Vec3d orthogonalMotion = upVector.scale(upVector.dotProduct(motion));
-				Vec3d tangentialMotion = motion.subtract(orthogonalMotion);
-
-				this.motionX = tangentialMotion.x * slipperiness + orthogonalMotion.x * 0.98f;
-				this.motionY = tangentialMotion.y * slipperiness + orthogonalMotion.y * 0.98f;
-				this.motionZ = tangentialMotion.z * slipperiness + orthogonalMotion.z * 0.98f;
+				BlockPos offsetPos = new BlockPos(this).offset(walkingSide.getLeft());
+				IBlockState offsetState = this.world.getBlockState(offsetPos);
+				slipperiness = offsetState.getBlock().getSlipperiness(offsetState, this.world, offsetPos, this) * 0.91F;
 			}
+
+			Vec3d motion = new Vec3d(this.motionX, this.motionY, this.motionZ);
+			Vec3d orthogonalMotion = upVector.scale(upVector.dotProduct(motion));
+			Vec3d tangentialMotion = motion.subtract(orthogonalMotion);
+
+			this.motionX = tangentialMotion.x * slipperiness + orthogonalMotion.x * 0.98f;
+			this.motionY = tangentialMotion.y * slipperiness + orthogonalMotion.y * 0.98f;
+			this.motionZ = tangentialMotion.z * slipperiness + orthogonalMotion.z * 0.98f;
 		}
 
 		this.prevLimbSwingAmount = this.limbSwingAmount;
@@ -403,6 +441,6 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 			this.motionY = 0.0D;
 		}
 
-		this.onGround = this.collidedHorizontally || this.collidedVertically;
+		this.onGround = this.collided;
 	}
 }
