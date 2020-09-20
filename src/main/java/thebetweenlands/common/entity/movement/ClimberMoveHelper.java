@@ -24,9 +24,9 @@ public class ClimberMoveHelper extends EntityMoveHelper {
 
 		if(this.action == EntityMoveHelper.Action.MOVE_TO) {
 			this.action = EntityMoveHelper.Action.WAIT;
-			
+
 			Pair<EnumFacing, Vec3d> walkingSide = this.climber.getWalkingSide();
-			Vec3d normal = /*walkingSide.getRight();*/new Vec3d(walkingSide.getLeft().getXOffset(), walkingSide.getLeft().getYOffset(), walkingSide.getLeft().getZOffset());
+			Vec3d normal = new Vec3d(walkingSide.getLeft().getXOffset(), walkingSide.getLeft().getYOffset(), walkingSide.getLeft().getZOffset());
 
 			double dx = this.posX - this.entity.posX;
 			double dy = this.posY + 0.5f - (this.entity.posY + this.entity.height / 2.0f);
@@ -35,24 +35,16 @@ public class ClimberMoveHelper extends EntityMoveHelper {
 			Vec3d dir = new Vec3d(dx, dy, dz);
 
 			Vec3d targetDir = dir.subtract(normal.scale(dir.dotProduct(normal)));
-
 			double targetDist = targetDir.length();
+			targetDir = targetDir.normalize();
 
 			if(targetDist < 0.0001D) {
 				this.entity.setMoveForward(0);
 			} else {
-				double moveDx = this.posX + (this.posX < this.entity.posX ? -this.entity.width / 2 : this.entity.width / 2) - this.entity.posX;
-				double moveDy = this.posY + 0.5f - (this.entity.posY + (this.posY < this.entity.posY ? this.entity.height : 0));
-				double moveDz = this.posZ + (this.posZ < this.entity.posZ ? -this.entity.width / 2 : this.entity.width / 2) - this.entity.posZ;
-
-				Vec3d moveDir = new Vec3d(moveDx, moveDy, moveDz);
-
-				Vec3d walkingDir = moveDir.subtract(normal.scale(moveDir.dotProduct(normal)));
-
 				EntityClimberBase.Orientation orientation = this.climber.getOrientation(1);
 
-				float rx = (float)orientation.forward.dotProduct(walkingDir.normalize());
-				float ry = (float)orientation.right.dotProduct(walkingDir.normalize());
+				float rx = (float)orientation.forward.dotProduct(targetDir);
+				float ry = (float)orientation.right.dotProduct(targetDir);
 
 				this.entity.rotationYaw = this.limitAngle(this.entity.rotationYaw, 270.0f - (float)Math.toDegrees(Math.atan2(rx, ry)), 90.0f);
 

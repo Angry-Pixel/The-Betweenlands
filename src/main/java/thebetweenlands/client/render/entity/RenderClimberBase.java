@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import thebetweenlands.client.handler.DebugHandlerClient;
 import thebetweenlands.common.entity.mobs.EntityClimberBase;
@@ -18,15 +19,15 @@ public abstract class RenderClimberBase<T extends EntityClimberBase> extends Ren
 
 	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		float rox = (float) (entity.prevStickingOffsetX + (entity.stickingOffsetX - entity.prevStickingOffsetX) * partialTicks);
-		float roy = (float) (entity.prevStickingOffsetY + (entity.stickingOffsetY - entity.prevStickingOffsetY) * partialTicks);
-		float roz = (float) (entity.prevStickingOffsetZ + (entity.stickingOffsetZ - entity.prevStickingOffsetZ) * partialTicks);
-
 		EntityClimberBase.Orientation orientation = entity.getOrientation(partialTicks);
+		
+		float rox = (float) (entity.prevStickingOffsetX + (entity.stickingOffsetX - entity.prevStickingOffsetX) * partialTicks) - (float) orientation.normal.x * 0.55f;
+		float roy = (float) (entity.prevStickingOffsetY + (entity.stickingOffsetY - entity.prevStickingOffsetY) * partialTicks) - (float) orientation.normal.y * 0.55f;
+		float roz = (float) (entity.prevStickingOffsetZ + (entity.stickingOffsetZ - entity.prevStickingOffsetZ) * partialTicks) - (float) orientation.normal.z * 0.55f;
 
-		x += rox - orientation.normal.x * 0.55f;
-		y += roy - orientation.normal.y * 0.55f;
-		z += roz - orientation.normal.z * 0.55f;
+		x += rox;
+		y += roy;
+		z += roz;
 
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 
@@ -72,6 +73,24 @@ public abstract class RenderClimberBase<T extends EntityClimberBase> extends Ren
 			GL11.glEnd();
 			
 			GlStateManager.glLineWidth(1);
+			
+			BlockPos pathingTarget = entity.getPathingTarget();
+			if(pathingTarget != null) {
+				double rx = entity.prevPosX + (entity.posX - entity.prevPosX) * partialTicks;
+				double ry = entity.prevPosY + (entity.posY - entity.prevPosY) * partialTicks;
+				double rz = entity.prevPosZ + (entity.posZ - entity.prevPosZ) * partialTicks;
+
+				GlStateManager.color(0, 0, 0, 1);
+				DebugHandlerClient.drawBoundingBoxOutline(new AxisAlignedBB(pathingTarget).offset(-rx - rox, -ry - roy, -rz - roz));
+				
+				GlStateManager.enableBlend();
+		        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		        
+				GlStateManager.color(1, 0, 0, 0.15f);
+				DebugHandlerClient.drawBoundingBox(new AxisAlignedBB(pathingTarget).offset(-rx - rox, -ry - roy, -rz - roz));
+				
+				GlStateManager.disableBlend();
+			}
 			
 			GlStateManager.color(1, 1, 1, 1);
 			GlStateManager.enableTexture2D();

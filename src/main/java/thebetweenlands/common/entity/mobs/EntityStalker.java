@@ -42,6 +42,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.movement.CustomPathFinder;
+import thebetweenlands.common.entity.movement.ObstructionAwarePathNavigateClimber;
 import thebetweenlands.common.entity.movement.ObstructionAwarePathNavigateGround;
 import thebetweenlands.common.entity.movement.ObstructionAwareWalkNodeProcessor;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -99,7 +100,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 	@Override
 	public float getMovementSpeed() {
-		return super.getMovementSpeed() + (this.isStalking && this.isFleeingFromView ? 0.15f : 0.0f);
+		return super.getMovementSpeed() + (this.isStalking && this.isFleeingFromView ? 0.25f : 0.0f);
 	}
 
 	@Override
@@ -168,7 +169,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 	@Override
 	protected PathNavigate createNavigator(World worldIn) {
-		ObstructionAwarePathNavigateGround<EntityStalker> navigate = new ObstructionAwarePathNavigateGround<EntityStalker>(this, worldIn, false, true, true, false) {
+		ObstructionAwarePathNavigateGround<EntityStalker> navigate = new ObstructionAwarePathNavigateClimber<EntityStalker>(this, worldIn, false, true, true) {
 			@Override
 			public Path getPathToEntityLiving(Entity entityIn) {
 				BlockPos pos = new BlockPos(entityIn);

@@ -2,7 +2,11 @@ package thebetweenlands.common.entity.mobs;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.tuple.Pair;
+
+import com.google.common.base.Optional;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityCreature;
@@ -10,6 +14,9 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathPoint;
@@ -22,11 +29,14 @@ import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.movement.ClimberMoveHelper;
 import thebetweenlands.common.entity.movement.IPathObstructionAwareEntity;
+import thebetweenlands.common.entity.movement.ObstructionAwarePathNavigateClimber;
 import thebetweenlands.common.entity.movement.ObstructionAwarePathNavigateGround;
 import thebetweenlands.util.BoxSmoothingUtil;
 import thebetweenlands.util.Matrix;
 
 public abstract class EntityClimberBase extends EntityCreature implements IEntityBL, IPathObstructionAwareEntity {
+
+	public static final DataParameter<Optional<BlockPos>> PATHING_TARGET = EntityDataManager.createKey(EntityClimberBase.class, DataSerializers.OPTIONAL_BLOCK_POS);
 
 	public double prevStickingOffsetX, prevStickingOffsetY, prevStickingOffsetZ;
 	public double stickingOffsetX, stickingOffsetY, stickingOffsetZ;
@@ -47,8 +57,14 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 	}
 
 	@Override
+	protected void entityInit() {
+		super.entityInit();
+		this.dataManager.register(PATHING_TARGET, Optional.absent());
+	}
+
+	@Override
 	protected PathNavigate createNavigator(World worldIn) {
-		ObstructionAwarePathNavigateGround<EntityClimberBase> navigate = new ObstructionAwarePathNavigateGround<EntityClimberBase>(this, worldIn, false, true, true, false);
+		ObstructionAwarePathNavigateGround<EntityClimberBase> navigate = new ObstructionAwarePathNavigateClimber<EntityClimberBase>(this, worldIn, false, true, true);
 		navigate.setCanSwim(true);
 		return navigate;
 	}
@@ -227,7 +243,20 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 	public void onUpdate() {
 		super.onUpdate();
 
-		this.updateOffsetsAndOrientation();
+		if(!this.world.isRemote) {
+			Path path = this.getNavigator().getPath();
+			if(path != null && path.getCurrentPathIndex() < path.getCurrentPathLength()) {
+				PathPoint point = path.getPathPointFromIndex(path.getCurrentPathIndex());
+				this.dataManager.set(PATHING_TARGET, Optional.of(new BlockPos(point.x, point.y, point.z)));
+			} else {
+				this.dataManager.set(PATHING_TARGET, Optional.absent());
+			}
+		}
+	}
+
+	@Nullable
+	public BlockPos getPathingTarget() {
+		return this.dataManager.get(PATHING_TARGET).orNull();
 	}
 
 	protected void updateOffsetsAndOrientation() {
@@ -271,17 +300,15 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 
 	@Override
 	public void travel(float strafe, float vertical, float forward) {
+		Orientation orientation = this.getOrientation(1);
+
+		Vec3d forwardVector = orientation.getForward(this.rotationYaw, 0);
+		Vec3d upVector = orientation.getForward(this.rotationYaw, -90);
+
 		if(this.isServerWorld() || this.canPassengerSteer()) {
 			Pair<EnumFacing, Vec3d> walkingSide = this.getWalkingSide();
 
 			Vec3d stickingForce = this.getStickingForce(walkingSide);
-
-			Orientation orientation = this.getOrientation(1);
-
-			Vec3d forwardVector = orientation.getForward(this.rotationYaw, 0);
-			Vec3d upVector = orientation.getForward(this.rotationYaw, -90);
-
-			Vec3d counterStickingForce = new Vec3d(0, 0, 0);
 
 			if(forward != 0) {
 				float slipperiness = 0.91f;
@@ -309,10 +336,10 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 					double mz = this.motionZ;
 					AxisAlignedBB aabb = this.getEntityBoundingBox();
 
-					//Probe collision normal
-					this.move(MoverType.SELF, -upVector.x, -upVector.y, -upVector.z);
+					//Probe actual movement vector
+					this.move(MoverType.SELF, forwardOffset.x, forwardOffset.y, forwardOffset.z);
 
-					Vec3d collisionNormal = new Vec3d(Math.abs(this.posX - px + upVector.x) > 0.000001D ? Math.signum(upVector.x) : 0, Math.abs(this.posY - py + upVector.y) > 0.000001D ? Math.signum(upVector.y) : 0, Math.abs(this.posZ - pz + upVector.z) > 0.000001D ? Math.signum(upVector.z) : 0).normalize();
+					Vec3d movementDir = new Vec3d(this.posX - px, this.posY - py, this.posZ - pz).normalize();
 
 					this.setEntityBoundingBox(aabb);
 					this.resetPositionToBB();
@@ -320,10 +347,11 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 					this.motionY = my;
 					this.motionZ = mz;
 
-					//Probe actual movement vector
-					this.move(MoverType.SELF, forwardOffset.x, forwardOffset.y, forwardOffset.z);
+					//Probe collision normal
+					Vec3d probeVector = new Vec3d(Math.abs(movementDir.x) < 0.001D ? -Math.signum(upVector.x) : 0, Math.abs(movementDir.y) < 0.001D ? -Math.signum(upVector.y) : 0, Math.abs(movementDir.z) < 0.001D ? -Math.signum(upVector.z) : 0).normalize().scale(0.0001D);
+					this.move(MoverType.SELF, probeVector.x, probeVector.y, probeVector.z);
 
-					Vec3d movementDir = new Vec3d(this.posX - px, this.posY - py, this.posZ - pz).normalize();
+					Vec3d collisionNormal = new Vec3d(Math.abs(this.posX - px - probeVector.x) > 0.000001D ? Math.signum(-probeVector.x) : 0, Math.abs(this.posY - py - probeVector.y) > 0.000001D ? Math.signum(-probeVector.y) : 0, Math.abs(this.posZ - pz - probeVector.z) > 0.000001D ? Math.signum(-probeVector.z) : 0).normalize();
 
 					this.setEntityBoundingBox(aabb);
 					this.resetPositionToBB();
@@ -342,7 +370,7 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 					}
 
 					//Nullify sticking force along movement vector projected to surface
-					counterStickingForce = surfaceMovementDir.scale(surfaceMovementDir.normalize().dotProduct(stickingForce)).scale(-1);
+					stickingForce = stickingForce.subtract(surfaceMovementDir.scale(surfaceMovementDir.normalize().dotProduct(stickingForce)));
 
 					float moveSpeed = forward * f;
 					this.motionX += movementDir.x * moveSpeed;
@@ -351,9 +379,9 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 				}
 			}
 
-			this.motionX += stickingForce.x + counterStickingForce.x;
-			this.motionY += stickingForce.y + counterStickingForce.y;
-			this.motionZ += stickingForce.z + counterStickingForce.z;
+			this.motionX += stickingForce.x;
+			this.motionY += stickingForce.y;
+			this.motionZ += stickingForce.z;
 
 			double px = this.posX;
 			double py = this.posY;
@@ -373,7 +401,7 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 
 			if(detachedX || detachedY || detachedZ) {
 				//Offset so that AABB is moved above the new surface
-				this.move(MoverType.SELF, detachedX ? -this.prevAttachedSides.x * 0.1f : 0, detachedY ? -this.prevAttachedSides.y * 0.1f : 0, detachedZ ? -this.prevAttachedSides.z * 0.1f : 0);
+				this.move(MoverType.SELF, detachedX ? -this.prevAttachedSides.x * 0.25f : 0, detachedY ? -this.prevAttachedSides.y * 0.25f : 0, detachedZ ? -this.prevAttachedSides.z * 0.25f : 0);
 
 				Vec3d axis = this.prevAttachedSides.normalize();
 				Vec3d attachVector = upVector.scale(-1);
@@ -420,6 +448,15 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 			this.motionY = tangentialMotion.y * slipperiness + orthogonalMotion.y * 0.98f;
 			this.motionZ = tangentialMotion.z * slipperiness + orthogonalMotion.z * 0.98f;
 		}
+
+		this.updateOffsetsAndOrientation();
+
+		orientation = this.getOrientation(1);
+
+		float rx = (float)orientation.forward.dotProduct(forwardVector);
+		float ry = (float)orientation.right.dotProduct(forwardVector);
+
+		this.rotationYaw = MathHelper.wrapDegrees(270.0f - (float)Math.toDegrees(Math.atan2(rx, ry)));
 
 		this.prevLimbSwingAmount = this.limbSwingAmount;
 		double traveledX = this.posX - this.prevPosX;

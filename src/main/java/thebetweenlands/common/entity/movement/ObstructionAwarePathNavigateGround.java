@@ -1,11 +1,7 @@
 package thebetweenlands.common.entity.movement;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathNodeType;
@@ -14,7 +10,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.ChunkCache;
 import net.minecraft.world.World;
 
 public class ObstructionAwarePathNavigateGround<T extends EntityLiving & IPathObstructionAwareEntity> extends PathNavigateGround {
@@ -27,27 +22,24 @@ public class ObstructionAwarePathNavigateGround<T extends EntityLiving & IPathOb
 	protected BlockPos targetPos;
 
 	protected final T obstructionAwareEntity;
-	protected final boolean startPathOnGround;
+	protected final boolean checkObstructions;
 
 	protected int stuckCheckTicks = 0;
 
 	public ObstructionAwarePathNavigateGround(T entity, World worldIn) {
-		this(entity, worldIn, true, false, false, true);
+		this(entity, worldIn, true);
 	}
 
 	@SuppressWarnings("unchecked")
-	public ObstructionAwarePathNavigateGround(T entity, World worldIn, boolean checkObstructions, boolean canPathWalls, boolean canPathCeiling, boolean startPathOnGround) {
+	public ObstructionAwarePathNavigateGround(T entity, World worldIn, boolean checkObstructions) {
 		super(entity, worldIn);
 		this.obstructionAwareEntity = entity;
-		this.startPathOnGround = startPathOnGround;
+		this.checkObstructions = checkObstructions;
 
 		if(this.nodeProcessor instanceof ObstructionAwareWalkNodeProcessor) {
 			ObstructionAwareWalkNodeProcessor<T> processor = (ObstructionAwareWalkNodeProcessor<T>) this.nodeProcessor;
 			processor.setObstructionAwareEntity(entity);
-			processor.setStartPathOnGround(startPathOnGround);
 			processor.setCheckObstructions(checkObstructions);
-			processor.setCanPathWalls(canPathWalls);
-			processor.setCanPathCeiling(canPathCeiling);
 		}
 	}
 
@@ -69,63 +61,6 @@ public class ObstructionAwarePathNavigateGround<T extends EntityLiving & IPathOb
 	}
 
 	@Override
-	protected boolean canNavigate() {
-		return !this.isInLiquid() || this.getCanSwim() && this.isInLiquid() || this.entity.isRiding();
-	}
-
-	@Override
-	@Nullable
-	public Path getPathToPos(BlockPos pos) {
-		if(this.startPathOnGround) {
-			return super.getPathToPos(pos);
-		} else {
-			if(!this.canNavigate()) {
-				return null;
-			} else if(this.currentPath != null && !this.currentPath.isFinished() && pos.equals(this.targetPos)) {
-				return this.currentPath;
-			} else {
-				this.targetPos = pos;
-				float searchRange = this.getPathSearchRange();
-				this.world.profiler.startSection("pathfind");
-				BlockPos cachePos = new BlockPos(this.entity);
-				int cacheSize = (int)(searchRange + 8.0F);
-				ChunkCache chunkCache = new ChunkCache(this.world, cachePos.add(-cacheSize, -cacheSize, -cacheSize), cachePos.add(cacheSize, cacheSize, cacheSize), 0);
-				Path path = this.pathFinder.findPath(chunkCache, this.entity, this.targetPos, searchRange);
-				this.world.profiler.endSection();
-				return path;
-			}
-		}
-	}
-
-	@Override
-	@Nullable
-	public Path getPathToEntityLiving(Entity entityIn) {
-		if(this.startPathOnGround) {
-			return super.getPathToEntityLiving(entityIn);
-		} else {
-			if(!this.canNavigate()) {
-				return null;
-			} else {
-				BlockPos pos = new BlockPos(entityIn);
-
-				if(this.currentPath != null && !this.currentPath.isFinished() && pos.equals(this.targetPos)) {
-					return this.currentPath;
-				} else {
-					this.targetPos = pos;
-					float searchRange = this.getPathSearchRange();
-					this.world.profiler.startSection("pathfind");
-					BlockPos cachePos = pos.up();
-					int cacheSize = (int)(searchRange + 16.0F);
-					ChunkCache chunkCache = new ChunkCache(this.world, cachePos.add(-cacheSize, -cacheSize, -cacheSize), cachePos.add(cacheSize, cacheSize, cacheSize), 0);
-					Path path = this.pathFinder.findPath(chunkCache, this.entity, entityIn, searchRange);
-					this.world.profiler.endSection();
-					return path;
-				}
-			}
-		}
-	}
-
-	@Override
 	public void updatePath() {
 		if(this.world.getTotalWorldTime() - this.lastTimeUpdated > 20L) {
 			if(this.targetPos != null) {
@@ -143,7 +78,7 @@ public class ObstructionAwarePathNavigateGround<T extends EntityLiving & IPathOb
 	protected void checkForStuck(Vec3d entityPos) {
 		super.checkForStuck(entityPos);
 
-		if(this.currentPath != null && !this.currentPath.isFinished()) {
+		if(this.checkObstructions && this.currentPath != null && !this.currentPath.isFinished()) {
 			Vec3d target = this.currentPath.getVectorFromIndex(this.obstructionAwareEntity, Math.min(this.currentPath.getCurrentPathLength() - 1, this.currentPath.getCurrentPathIndex() + 0));
 			Vec3d diff = target.subtract(entityPos);
 
