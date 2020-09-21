@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenChiromawNest;
+import thebetweenlands.common.entity.mobs.EntityRockSnot;
 
 
 //MINE!!
@@ -167,9 +167,7 @@ public class TestItemChimp extends Item {
 	
 			
 	
-			EntityTinyWormEggSac sac = new EntityTinyWormEggSac(worldIn);
-			sac.setPosition(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F);
-			worldIn.spawnEntity(sac);
+
 
 */
 	/*		EntitySplodeshroom trap = new EntitySplodeshroom(worldIn);
@@ -187,10 +185,14 @@ public class TestItemChimp extends Item {
 				wall.setPosition(pos.getX() + 0.5F, pos.getY() + 2F, pos.getZ() + 0.5F);
 				//wall.motionZ = 0.05F; //X or Z movement - renderer rotates automagic atm
 				worldIn.spawnEntity(wall);
-			*/	
+			
 				
 				WorldGenChiromawNest nest = new WorldGenChiromawNest();
 				nest .generate(worldIn, itemRand, pos.up());
+				*/
+				EntityRockSnot snot = new EntityRockSnot(worldIn);
+				snot.setPosition(pos.getX() + 0.5F, pos.getY() + -0.5F, pos.getZ() + 0.5F);
+				worldIn.spawnEntity(snot);
 				
 		}
 

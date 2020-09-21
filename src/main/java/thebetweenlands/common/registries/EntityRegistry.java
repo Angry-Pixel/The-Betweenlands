@@ -37,7 +37,6 @@ import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityAshSprite;
 import thebetweenlands.common.entity.mobs.EntityBarrishee;
-import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
@@ -74,8 +73,11 @@ import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
 import thebetweenlands.common.entity.mobs.EntityMovingSpawnerHole;
 import thebetweenlands.common.entity.mobs.EntityMultipartDummy;
 import thebetweenlands.common.entity.mobs.EntityMummyArm;
+import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
+import thebetweenlands.common.entity.mobs.EntityRockSnot;
+import thebetweenlands.common.entity.mobs.EntityRockSnotTendril;
 import thebetweenlands.common.entity.mobs.EntityRootSprite;
 import thebetweenlands.common.entity.mobs.EntityShambler;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
@@ -239,6 +241,9 @@ public class EntityRegistry {
 		registerEntity(EntityBLFishHook.class, "betweenlands_fish_hook");
 		registerEntity(EntityFishingSpear.class, "fishing_spear", 64, 20, true);
 		registerEntity(EntityFishingTackleBoxSeat.class, "fishing_tackle_box_seat");
+
+		registerEntity(EntityRockSnot.class, "rock_snot", 64, 20, true);
+		registerEntity(EntityRockSnotTendril.class, "rock_snot_tendril", 64, 20, true);
 	}
 
 	private static int id = 0;
