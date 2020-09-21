@@ -1,8 +1,11 @@
 package thebetweenlands.common.entity.mobs;
 
 import java.util.List;
+import java.util.Random;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
@@ -11,11 +14,13 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.util.PlayerUtil;
 
 public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSpawnData {
@@ -51,7 +56,7 @@ public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSp
 
 	@Override
 	public void onUpdate() {
-		if (!this.world.isRemote)
+		if (!this.getEntityWorld().isRemote)
 			if (getParentEntity() == null || getParentEntity().isDead)
 				setDead();
 
@@ -84,6 +89,9 @@ public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSp
 					setExtending(false);
 			}
 		}
+
+		if(getEntityWorld().isRemote && getEntityWorld().getTotalWorldTime()%5 == 0)
+			spawnDrips();
 
 		move(MoverType.SELF, motionX, motionY, motionZ);
 		motionX *= 1D;
@@ -182,5 +190,13 @@ public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSp
     public AxisAlignedBB getRenderBoundingBox() {
         return this.getEntityBoundingBox().grow(10D);
     }
+
+	@SideOnly(Side.CLIENT)
+	public void spawnDrips() {
+		double x = posX+ (double) rand.nextFloat() * 0.25F;
+		double y = posY;
+		double z = posZ+ (double) rand.nextFloat() * 0.25F;
+		BLParticles.RAIN.spawn(world, x, y,z).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+	}
 
 }
