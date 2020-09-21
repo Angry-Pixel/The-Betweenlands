@@ -440,6 +440,16 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 	protected SoundEvent getAmbientSound() {
 		return !this.isStalking ? SoundRegistry.STALKER_LIVING : null;
 	}
+	
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		return SoundRegistry.STALKER_HURT;
+	}
+	
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundRegistry.STALKER_DEATH;
+	}
 
 	public static class AIBreakLightSources extends EntityAIBase {
 		private final EntityStalker entity;

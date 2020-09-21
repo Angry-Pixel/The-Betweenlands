@@ -1153,6 +1153,18 @@
       "thebetweenlands:stalker_living_3"
     ]
   },
+  "stalker_hurt": {
+    "sounds": [
+      "thebetweenlands:stalker_hurt_1",
+      "thebetweenlands:stalker_hurt_2",
+      "thebetweenlands:stalker_hurt_3"
+    ]
+  },
+  "stalker_death": {
+    "sounds": [
+      "thebetweenlands:stalker_death"
+    ]
+  },
   "roof_collapse": {
     "sounds": [
       "thebetweenlands:roof_collapse"
