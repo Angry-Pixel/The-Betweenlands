@@ -25,8 +25,8 @@ import thebetweenlands.util.PlayerUtil;
 
 public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL {
 	
-	private static final DataParameter<Boolean> CAN_SHOOT_TENDRIL = EntityDataManager.createKey(EntityRockSnot.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> EXTEND_TENDRIL = EntityDataManager.createKey(EntityRockSnot.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> TENDRIL_COUNT = EntityDataManager.createKey(EntityRockSnot.class, DataSerializers.VARINT);
+	public int spawnDelayCounter = 20;
 
 	public EntityRockSnot(World world) {
 		super(world);
@@ -47,8 +47,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		dataManager.register(EXTEND_TENDRIL, false);
-		dataManager.register(CAN_SHOOT_TENDRIL, true);
+		dataManager.register(TENDRIL_COUNT, 0);
 	}
 
 	@Override
@@ -60,12 +59,8 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 	@Override
 	public void onLivingUpdate() {
 		if (!getEntityWorld().isRemote) {
-			if (getAttackTarget() == null)
-				if (getExtending())
-					setExtending(false);
-			if (getAttackTarget() != null)
-				if (!getExtending())
-					setExtending(true);
+			if (spawnDelayCounter > 0)
+				spawnDelayCounter--;
 		}
 		super.onLivingUpdate();
 	}
@@ -154,20 +149,16 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 		return false;
 	}
 
-	public boolean getExtending() {
-		return dataManager.get(EXTEND_TENDRIL);
-	}
-
-	public void setExtending(boolean tongueState) {
-		dataManager.set(EXTEND_TENDRIL, tongueState);
-	}
-
 	public boolean getCanShootTendril() {
-		return dataManager.get(CAN_SHOOT_TENDRIL);
+		return getTendrilCount() < 4;
 	}
 
-	public void setCanShootTendril(boolean shoot) {
-		dataManager.set(CAN_SHOOT_TENDRIL, shoot);
+	public int getTendrilCount() {
+		return dataManager.get(TENDRIL_COUNT);
+	}
+
+	public void setTendrilCount(int count) {
+		dataManager.set(TENDRIL_COUNT, count);
 	}
 
 	@Override
@@ -257,18 +248,16 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 
 			if (target == null)
 				return false;
-			else {
-				double distance = parentEntity.getDistanceSq(target);
-				if (distance >= 1D && distance <= 64D && parentEntity.getCanShootTendril()) {
-						return true;
-				} else
-					return false;
-			}
+			else if (parentEntity.spawnDelayCounter == 0)
+				return true;
+			else
+				return false;
+
 		}
 
 		@Override
 		public boolean shouldContinueExecuting() {
-			return target != null && parentEntity.recentlyHit <= 40 && parentEntity.getCanShootTendril();
+			return target != null && parentEntity.recentlyHit <= 40 && parentEntity.getCanShootTendril() && parentEntity.spawnDelayCounter == 0;
 		}
 
 		@Override
@@ -278,9 +267,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 
 		@Override
 		public void updateTask() {
-			if (!parentEntity.getExtending())
-				parentEntity.setExtending(true);
-			if (target != null) {
+			if (!parentEntity.getEntityWorld().isRemote && target != null) {
 				double targetX = target.posX - parentEntity.posX;
 				double targetY = target.getEntityBoundingBox().minY + (double) (target.height / 2.0F) - (parentEntity.posY + (double) (parentEntity.height / 2.0F));
 				double targetZ = target.posZ - parentEntity.posZ;
@@ -288,7 +275,10 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 				grabber.setPositionAndUpdate(parentEntity.posX, parentEntity.posY, parentEntity.posZ);
 				grabber.moveToTarget(targetX, targetY, targetZ, 0.3F);
 				parentEntity.getEntityWorld().spawnEntity(grabber);
-				parentEntity.setCanShootTendril(false);
+				if (!grabber.getExtending())
+					grabber.setExtending(true);
+				parentEntity.setTendrilCount(parentEntity.getTendrilCount() + 1);
+				parentEntity.spawnDelayCounter = 10;
 			}
 		}
 

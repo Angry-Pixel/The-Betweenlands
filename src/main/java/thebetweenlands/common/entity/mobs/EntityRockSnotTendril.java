@@ -7,6 +7,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -16,7 +19,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.util.PlayerUtil;
 
 public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSpawnData {
+
     public EntityRockSnot parent;
+	private static final DataParameter<Boolean> IS_EXTENDING = EntityDataManager.createKey(EntityRockSnotTendril.class, DataSerializers.BOOLEAN);
 
 	public EntityRockSnotTendril(World world) {
 		super(world);
@@ -33,6 +38,15 @@ public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSp
 
 	@Override
 	protected void entityInit() {
+		dataManager.register(IS_EXTENDING, false);
+	}
+	
+	public boolean getExtending() {
+		return dataManager.get(IS_EXTENDING);
+	}
+
+	public void setExtending(boolean extending) {
+		dataManager.set(IS_EXTENDING, extending);
 	}
 
 	@Override
@@ -43,7 +57,8 @@ public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSp
 
 		checkCollision();
 
-		if (parent != null && !parent.getExtending()) {
+		if (parent != null && !getExtending()) {
+				returnToParent();
 			if (getEntityBoundingBox().intersects(parent.getEntityBoundingBox())) {
 				if (posX != parent.posX || posZ != parent.posZ)
 					setPosition(parent.posX, parent.posY, parent.posZ);
@@ -57,18 +72,18 @@ public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSp
 						entity.startRiding(parent, true);
 					}
 					setDead();
-					parent.setCanShootTendril(true);
+					parent.setTendrilCount(parent.getTendrilCount() - 1);
 				}
 			}
 		}
 
-		if (parent != null && (!isBeingRidden() && ticksExisted > 120) || parent != null && collidedVertically)
-			if (!getEntityWorld().isRemote)
+		if (parent != null && (!isBeingRidden() && ticksExisted > 120) || parent != null && collidedVertically) {
+			if (!getEntityWorld().isRemote) {
 				parent.setAttackTarget(null);
-
-		if (parent != null && parent.getAttackTarget() == null && !parent.getExtending())
-			if (posX != parent.posX || posY != parent.posY || posZ != parent.posZ)
-				returnToParent();
+				if (getExtending())
+					setExtending(false);
+			}
+		}
 
 		move(MoverType.SELF, motionX, motionY, motionZ);
 		motionX *= 1D;
@@ -105,8 +120,8 @@ public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSp
 						if (!isBeingRidden()) {
 							entity.startRiding(this, true);
 							if (!getEntityWorld().isRemote)  {
-								if (parent.getExtending())
-									parent.setExtending(false);
+								if (getExtending())
+									setExtending(false);
 								returnToParent();
 							}
 						}
@@ -127,14 +142,8 @@ public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSp
 	@Override
 	public void updatePassenger(Entity entity) {
 		PlayerUtil.resetFloating(entity);
-		if (entity instanceof EntityLivingBase) {
-			double a = Math.toRadians(rotationYaw);
-			double offSetX = Math.sin(a) *  -0.125D;
-			double offSetZ = -Math.cos(a) * -0.125D;
+		if (entity instanceof EntityLivingBase)
 			entity.setPosition(posX, getEntityBoundingBox().minY - entity.height - height, posZ);
-			if (entity.isSneaking())
-				entity.setSneaking(false);
-		}
 	}
 
 	@Override
