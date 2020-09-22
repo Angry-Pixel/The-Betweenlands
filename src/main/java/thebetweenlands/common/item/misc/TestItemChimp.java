@@ -191,7 +191,7 @@ public class TestItemChimp extends Item {
 				nest .generate(worldIn, itemRand, pos.up());
 				*/
 				EntityRockSnot snot = new EntityRockSnot(worldIn);
-				snot.setPosition(pos.getX() + 0.5F, pos.getY() + -0.5F, pos.getZ() + 0.5F);
+				snot.setPosition(pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F);
 				worldIn.spawnEntity(snot);
 				
 		}

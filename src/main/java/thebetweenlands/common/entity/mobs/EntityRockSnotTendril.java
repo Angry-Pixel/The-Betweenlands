@@ -62,7 +62,7 @@ public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSp
 				returnToParent();
 			if (getEntityBoundingBox().intersects(parent.getEntityBoundingBox())) {
 				if (posX != parent.posX || posZ != parent.posZ)
-					setPosition(parent.posX, parent.posY, parent.posZ);
+					setPosition(parent.posX, parent.posY + parent.height * 0.5D, parent.posZ);
 				motionX = 0D;
 				motionY = 0D;
 				motionZ = 0D;
@@ -78,7 +78,7 @@ public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSp
 			}
 		}
 
-		if (parent != null && (!isBeingRidden() && ticksExisted > 120) || parent != null && collidedVertically) {
+		if (parent != null && (!isBeingRidden() && ticksExisted > 20) || parent != null && collidedVertically) {
 			if (!getEntityWorld().isRemote) {
 				parent.setAttackTarget(null);
 				if (getExtending())
@@ -115,19 +115,19 @@ public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSp
 	}
 
 	protected Entity checkCollision() {
-		if (parent != null && parent.getAttackTarget() != null) {
+		if (parent != null) {
 			List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox());
 			for (int i = 0; i < list.size(); i++) {
 				Entity entity = list.get(i);
-				if (entity != null && entity == parent.getAttackTarget()) {
+				if (entity != null) {
 					if (entity instanceof EntityLivingBase && !(entity instanceof EntityRockSnot) && !(entity instanceof EntityRockSnotTendril)) {
 						if (!isBeingRidden()) {
-							entity.startRiding(this, true);
-							if (!getEntityWorld().isRemote)  {
+							if (!getEntityWorld().isRemote) {
+								entity.startRiding(this, true);
 								if (getExtending())
 									setExtending(false);
-								returnToParent();
 							}
+							returnToParent();
 						}
 					}
 				}
@@ -138,7 +138,7 @@ public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSp
 
 	public void returnToParent() {
 		double targetX = parent.posX - posX;
-		double targetY = parent.posY - posY;
+		double targetY = parent.posY + parent.height * 0.5D - posY + height * 0.5D;
 		double targetZ = parent.posZ - posZ;
 		moveToTarget(targetX, targetY, targetZ, 0.25F);
 	}
@@ -147,7 +147,7 @@ public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSp
 	public void updatePassenger(Entity entity) {
 		PlayerUtil.resetFloating(entity);
 		if (entity instanceof EntityLivingBase)
-			entity.setPosition(posX, getEntityBoundingBox().minY - entity.height - height, posZ);
+			entity.setPosition(posX, posY + height, posZ);
 	}
 
 	@Override

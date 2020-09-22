@@ -76,7 +76,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 
 	@Override
     public float getEyeHeight(){
-        return this.height - height;
+        return this.height;
     }
 
 	@Nullable
@@ -136,7 +136,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 	public void updatePassenger(Entity entity) {
 		PlayerUtil.resetFloating(entity);
 		if (entity instanceof EntityLivingBase)
-			entity.setPosition(posX, getEntityBoundingBox().minY - entity.height, posZ);
+			entity.setPosition(posX, posY + height, posZ);
 	}
 
 	@Override
@@ -148,6 +148,11 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 	public boolean shouldRiderSit() {
 		return false;
 	}
+
+	@Override
+    public boolean shouldDismountInWater(Entity rider) {
+        return false;
+    }
 
 	public boolean getCanShootTendril() {
 		return getTendrilCount() < 4;
@@ -195,12 +200,12 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 
 	@Override
 	protected float getProximityVertical() {
-		return 4;
+		return 2;
 	}
 
 	@Override
 	protected AxisAlignedBB proximityBox() {
-		return new AxisAlignedBB(getPosition()).grow(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal()).offset(0D, - getProximityVertical () * 2 , 0D);
+		return new AxisAlignedBB(getPosition()).grow(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal()).offset(0D, + getProximityVertical () + 1D , 0D);
 	}
 
 	@Override
@@ -246,7 +251,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 		public boolean shouldExecute() {
 			target = parentEntity.getAttackTarget();
 
-			if (target == null)
+			if (target == null || parentEntity.isBeingRidden())
 				return false;
 			else if (parentEntity.spawnDelayCounter == 0)
 				return true;
@@ -257,7 +262,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 
 		@Override
 		public boolean shouldContinueExecuting() {
-			return target != null && parentEntity.recentlyHit <= 40 && parentEntity.getCanShootTendril() && parentEntity.spawnDelayCounter == 0;
+			return target != null && parentEntity.recentlyHit <= 40 && parentEntity.getCanShootTendril() && parentEntity.spawnDelayCounter == 0 &&  !parentEntity.isBeingRidden();
 		}
 
 		@Override
@@ -272,7 +277,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 				double targetY = target.getEntityBoundingBox().minY + (double) (target.height / 2.0F) - (parentEntity.posY + (double) (parentEntity.height / 2.0F));
 				double targetZ = target.posZ - parentEntity.posZ;
 				EntityRockSnotTendril grabber = new EntityRockSnotTendril(parentEntity);
-				grabber.setPositionAndUpdate(parentEntity.posX, parentEntity.posY, parentEntity.posZ);
+				grabber.setPositionAndUpdate(parentEntity.posX, parentEntity.posY + parentEntity.height * 0.5D, parentEntity.posZ);
 				grabber.moveToTarget(targetX, targetY, targetZ, 0.3F);
 				parentEntity.getEntityWorld().spawnEntity(grabber);
 				if (!grabber.getExtending())
