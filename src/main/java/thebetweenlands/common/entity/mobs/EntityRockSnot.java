@@ -26,6 +26,7 @@ import thebetweenlands.util.PlayerUtil;
 public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL {
 	
 	private static final DataParameter<Integer> TENDRIL_COUNT = EntityDataManager.createKey(EntityRockSnot.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> JAW_ANGLE = EntityDataManager.createKey(EntityRockSnot.class, DataSerializers.VARINT);
 	public int spawnDelayCounter = 20;
 
 	public EntityRockSnot(World world) {
@@ -48,6 +49,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 	protected void entityInit() {
 		super.entityInit();
 		dataManager.register(TENDRIL_COUNT, 0);
+		dataManager.register(JAW_ANGLE, 0);
 	}
 
 	@Override
@@ -70,6 +72,19 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 		if (!getEntityWorld().isRemote) {
 			if(getEntityWorld().getTotalWorldTime()%5 == 0)
 				checkArea();
+		}
+
+		if (!getEntityWorld().isRemote && getAttackTarget() != null) {
+			double distance = getDistance(getAttackTarget().posX, getAttackTarget().getEntityBoundingBox().minY, getAttackTarget().posZ);
+			if (getJawAngle() < 90)
+				setJawAngle(getJawAngle() + 9);
+			if (isBeingRidden() && getJawAngle() > 0)
+				setJawAngle(getJawAngle() - 9);
+		}
+		
+		if (!getEntityWorld().isRemote && getAttackTarget() == null) {
+			if (getJawAngle() > 0 && getTendrilCount() <= 0)
+				setJawAngle(getJawAngle() - 9);
 		}
 		super.onUpdate();
 	}
@@ -164,6 +179,14 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 
 	public void setTendrilCount(int count) {
 		dataManager.set(TENDRIL_COUNT, count);
+	}
+	
+	public void setJawAngle(int angle) {
+		dataManager.set(JAW_ANGLE, angle);
+	}
+
+	public int getJawAngle() {
+		return dataManager.get(JAW_ANGLE);
 	}
 
 	@Override

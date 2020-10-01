@@ -71,15 +71,15 @@ public class RenderRockSnotTendril extends Render<EntityRockSnotTendril> {
 		double offSetXIn2P = -Math.sin(endAngleP) * offsetXInnerP;
 		double offSetZIn2P = Math.cos(endAngleP) * offsetZInnerP;
 
-		buffer.pos(xp - offSetXIn1P, yp, zp + offSetZIn1P).tex(1, 1).endVertex();
+		buffer.pos(xp - offSetXIn1P, yp + 0.35F, zp + offSetZIn1P).tex(1, 1).endVertex();
 		buffer.pos(x - offSetXIn1, y + 0.125F, z + offSetZIn1).tex(1, 0).endVertex();
 		buffer.pos(x - offSetXIn2, y + 0.125F, z + offSetZIn2).tex(0, 0).endVertex();
-		buffer.pos(xp - offSetXIn2P, yp, zp + offSetZIn2P).tex(0, 1).endVertex();
+		buffer.pos(xp - offSetXIn2P, yp + 0.35F, zp + offSetZIn2P).tex(0, 1).endVertex();
 
-		buffer.pos(xp + offSetXIn1P, yp, zp + offSetZIn1P).tex(1, 1).endVertex();
+		buffer.pos(xp + offSetXIn1P, yp + 0.35F, zp + offSetZIn1P).tex(1, 1).endVertex();
 		buffer.pos(x + offSetXIn1, y + 0.125F, z + offSetZIn1).tex(1, 0).endVertex();
 		buffer.pos(x + offSetXIn2, y + 0.125F, z + offSetZIn2).tex(0, 0).endVertex();
-		buffer.pos(xp + offSetXIn2P, yp, zp + offSetZIn2P).tex(0, 1).endVertex();
+		buffer.pos(xp + offSetXIn2P, yp + 0.35F, zp + offSetZIn2P).tex(0, 1).endVertex();
 	}
 
 	@Override
