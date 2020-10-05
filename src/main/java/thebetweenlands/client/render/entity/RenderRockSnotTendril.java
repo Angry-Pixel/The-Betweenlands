@@ -2,7 +2,6 @@ package thebetweenlands.client.render.entity;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.model.ModelChicken;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -12,14 +11,14 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.model.entity.ModelRockSnotGrabber;
 import thebetweenlands.common.entity.mobs.EntityRockSnotTendril;
 
 @SideOnly(Side.CLIENT)
 public class RenderRockSnotTendril extends Render<EntityRockSnotTendril> {
-	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/blank.png");
-	//public static final ResourceLocation VERTICAL_RING_TEXTURE = new ResourceLocation("thebetweenlands:textures/blocks/cave_moss.png");
+	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/rock_snot_grabber.png");
 	public static final ResourceLocation VERTICAL_RING_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_vertical_ring.png");
-	public final ModelChicken model = new ModelChicken();
+	public final ModelRockSnotGrabber GRABBER_MODEL = new ModelRockSnotGrabber();
 
 	public RenderRockSnotTendril(RenderManager rendermanagerIn) {
 		super(rendermanagerIn);
@@ -28,11 +27,22 @@ public class RenderRockSnotTendril extends Render<EntityRockSnotTendril> {
 	@Override
 	public void doRender(EntityRockSnotTendril entity, double x, double y, double z, float yaw, float partialTicks) {
 		super.doRender(entity, x, y, z, yaw, partialTicks);
+		float smoothedYaw = entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks;
+		float smoothedPitch = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks;
+		GlStateManager.pushMatrix();
+		GlStateManager.translate((float) x, (float) y + 0.125F, (float) z);
+		if (entity.getExtending())
+			GlStateManager.rotate(smoothedYaw + 180F, 0F, 1F, 0F);
+		else
+			GlStateManager.rotate(smoothedYaw, 0F, 1F, 0F);
+		GlStateManager.rotate(smoothedPitch + 90F, 1F, 0F, 0F);
+		bindTexture(TEXTURE);
+		GRABBER_MODEL.render(entity, 0, 0, entity.ticksExisted, 0F, 0F, 0.0625F);
+		GlStateManager.popMatrix();
 
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
 		GlStateManager.disableLighting();
-
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GlStateManager.color(1F, 1F, 1F, 1F);
 
@@ -42,15 +52,13 @@ public class RenderRockSnotTendril extends Render<EntityRockSnotTendril> {
 		bindTexture(VERTICAL_RING_TEXTURE);
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 		for (int part = 0; part < 8; part++) {
-			buildRingQuads(buffer, x, y, z, x + entity.parent.posX - entity.posX, y + entity.parent.posY - entity.posY, z + entity.parent.posZ - entity.posZ, 45F * part, 0.125D, 0.125D, 0.35D, 0.35D);
+			buildRingQuads(buffer, x, y, z, x + entity.parent.posX - entity.posX, y + entity.parent.posY - entity.posY, z + entity.parent.posZ - entity.posZ, 45F * part, 0.125D, 0.125D, 0.25D, 0.25D);
 		}
 		tessellator.draw();
 
 		GlStateManager.depthMask(true);
-
 		GlStateManager.disableBlend();
 		GlStateManager.enableLighting();
-
 		GlStateManager.popMatrix();
 	}
 	
@@ -71,15 +79,15 @@ public class RenderRockSnotTendril extends Render<EntityRockSnotTendril> {
 		double offSetXIn2P = -Math.sin(endAngleP) * offsetXInnerP;
 		double offSetZIn2P = Math.cos(endAngleP) * offsetZInnerP;
 
-		buffer.pos(xp - offSetXIn1P, yp + 0.35F, zp + offSetZIn1P).tex(1, 1).endVertex();
+		buffer.pos(xp - offSetXIn1P, yp + 0.0625F, zp + offSetZIn1P).tex(1, 1).endVertex();
 		buffer.pos(x - offSetXIn1, y + 0.125F, z + offSetZIn1).tex(1, 0).endVertex();
 		buffer.pos(x - offSetXIn2, y + 0.125F, z + offSetZIn2).tex(0, 0).endVertex();
-		buffer.pos(xp - offSetXIn2P, yp + 0.35F, zp + offSetZIn2P).tex(0, 1).endVertex();
+		buffer.pos(xp - offSetXIn2P, yp + 0.0625F, zp + offSetZIn2P).tex(0, 1).endVertex();
 
-		buffer.pos(xp + offSetXIn1P, yp + 0.35F, zp + offSetZIn1P).tex(1, 1).endVertex();
+		buffer.pos(xp + offSetXIn1P, yp + 0.0625F, zp + offSetZIn1P).tex(1, 1).endVertex();
 		buffer.pos(x + offSetXIn1, y + 0.125F, z + offSetZIn1).tex(1, 0).endVertex();
 		buffer.pos(x + offSetXIn2, y + 0.125F, z + offSetZIn2).tex(0, 0).endVertex();
-		buffer.pos(xp + offSetXIn2P, yp + 0.35F, zp + offSetZIn2P).tex(0, 1).endVertex();
+		buffer.pos(xp + offSetXIn2P, yp + 0.0625F, zp + offSetZIn2P).tex(0, 1).endVertex();
 	}
 
 	@Override

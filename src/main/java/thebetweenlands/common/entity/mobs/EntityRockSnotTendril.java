@@ -41,13 +41,20 @@ public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSp
 	protected void entityInit() {
 		dataManager.register(IS_EXTENDING, false);
 	}
-	
+
 	public boolean getExtending() {
 		return dataManager.get(IS_EXTENDING);
 	}
 
 	public void setExtending(boolean extending) {
 		dataManager.set(IS_EXTENDING, extending);
+	}
+
+	@Override
+	public void notifyDataManagerChange(DataParameter<?> key) {
+		if (IS_EXTENDING.equals(key))
+			setExtending(getExtending());
+		super.notifyDataManagerChange(key);
 	}
 
 	@Override

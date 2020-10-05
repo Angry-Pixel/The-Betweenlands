@@ -76,15 +76,15 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 
 		if (!getEntityWorld().isRemote && getAttackTarget() != null) {
 			double distance = getDistance(getAttackTarget().posX, getAttackTarget().getEntityBoundingBox().minY, getAttackTarget().posZ);
-			if (getJawAngle() < 90)
-				setJawAngle(getJawAngle() + 9);
+			if (getJawAngle() < 80)
+				setJawAngle(getJawAngle() + 8);
 			if (isBeingRidden() && getJawAngle() > 0)
-				setJawAngle(getJawAngle() - 9);
+				setJawAngle(getJawAngle() - 8);
 		}
 		
 		if (!getEntityWorld().isRemote && getAttackTarget() == null) {
 			if (getJawAngle() > 0 && getTendrilCount() <= 0)
-				setJawAngle(getJawAngle() - 9);
+				setJawAngle(getJawAngle() - 8);
 		}
 		super.onUpdate();
 	}

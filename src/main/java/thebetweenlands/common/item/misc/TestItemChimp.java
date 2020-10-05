@@ -189,11 +189,15 @@ public class TestItemChimp extends Item {
 				
 				WorldGenChiromawNest nest = new WorldGenChiromawNest();
 				nest .generate(worldIn, itemRand, pos.up());
-				*/
+			*/	
 				EntityRockSnot snot = new EntityRockSnot(worldIn);
 				snot.setPosition(pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F);
 				worldIn.spawnEntity(snot);
-				
+			
+				/*	EntityAnimalBurrow burrow = new EntityAnimalBurrow(worldIn);
+				burrow.setPosition(pos.getX() + 0.5F, pos.getY() + 0.25F, pos.getZ() + 0.5F);
+				worldIn.spawnEntity(burrow);
+				*/
 		}
 
 		return EnumActionResult.SUCCESS;

@@ -9,18 +9,19 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
+import thebetweenlands.client.render.model.tile.ModelCrabPot;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.tile.TileEntityCrabPot;
 
 public class RenderCrabPot extends TileEntitySpecialRenderer<TileEntityCrabPot> {
-	//public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/crab_pot.png");
-	//public static final ModelCrabPot MODEL = new ModelCrabPot();
+	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/crab_pot.png");
+	public static final ModelCrabPot MODEL = new ModelCrabPot();
 
 	@Override
 	public void render(TileEntityCrabPot te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + 0.5f, (float) y, (float) z + 0.5f);
 		GlStateManager.pushMatrix();
@@ -28,11 +29,8 @@ public class RenderCrabPot extends TileEntitySpecialRenderer<TileEntityCrabPot> 
 		GlStateManager.color(1, 1, 1, 1);
 		GlStateManager.translate(0, 1.5f, 0);
 		GlStateManager.scale(1F, -1F, -1F);
-	//	GlStateManager.disableCull();
-
-	//	bindTexture(TEXTURE);
-	//	MODEL.render();
-	//	GlStateManager.enableCull();
+		bindTexture(TEXTURE);
+		MODEL.render();
 		GlStateManager.popMatrix();
 
 		if (te != null) {

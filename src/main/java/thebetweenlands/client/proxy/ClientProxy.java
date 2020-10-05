@@ -140,6 +140,7 @@ import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.entity.EntityAngryPebble;
+import thebetweenlands.common.entity.EntityAnimalBurrow;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
@@ -206,6 +207,7 @@ import thebetweenlands.common.entity.mobs.EntityMultipartDummy;
 import thebetweenlands.common.entity.mobs.EntityMummyArm;
 import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
+import thebetweenlands.common.entity.mobs.EntityPuffin;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.entity.mobs.EntityRockSnot;
 import thebetweenlands.common.entity.mobs.EntityRockSnotTendril;
@@ -664,6 +666,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityFishingTackleBoxSeat.class, RenderNothing::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityRockSnot.class, RenderRockSnot::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityRockSnotTendril.class, RenderRockSnotTendril::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityPuffin.class, RenderPuffin::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityAnimalBurrow.class, RenderAnimalBurrow::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());
@@ -776,6 +780,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		Item.getItemFromBlock(BlockRegistry.FISHING_TACKLE_BOX).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityFishingTackleBox.class));
 		Item.getItemFromBlock(BlockRegistry.SMOKING_RACK).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntitySmokingRack.class));
 		Item.getItemFromBlock(BlockRegistry.FISH_TRIMMING_TABLE).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityFishTrimmingTable.class));
+		Item.getItemFromBlock(BlockRegistry.CRAB_POT).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityCrabPot.class));
 
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {

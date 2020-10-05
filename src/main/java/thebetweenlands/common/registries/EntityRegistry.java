@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.EntityAngryPebble;
+import thebetweenlands.common.entity.EntityAnimalBurrow;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
@@ -75,6 +76,7 @@ import thebetweenlands.common.entity.mobs.EntityMultipartDummy;
 import thebetweenlands.common.entity.mobs.EntityMummyArm;
 import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
+import thebetweenlands.common.entity.mobs.EntityPuffin;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.entity.mobs.EntityRockSnot;
 import thebetweenlands.common.entity.mobs.EntityRockSnotTendril;
@@ -235,8 +237,8 @@ public class EntityRegistry {
 		registerEntity(EntityChiromawHatchling.class, "chiromaw_hatchling", 64, 3, true);
 		registerEntity(EntityChiromawTame.class, "chiromaw_tame", 128, 3, true);
 		registerEntity(EntityGreeblingCorpse.class, "greebling_corpse", 80, 20, false);
+
 		registerEntity(EntityFishBait.class, "fish_bait_item");
-		// TODO Re-enable when testing. Too early W.I.P. dev spoilers are getting on my nerves :P
 		registerEntity(EntityAnadia.class, "anadia", 0x243B0B, 0x00FFFF);
 		registerEntity(EntityBLFishHook.class, "betweenlands_fish_hook");
 		registerEntity(EntityFishingSpear.class, "fishing_spear", 64, 20, true);
@@ -244,6 +246,9 @@ public class EntityRegistry {
 
 		registerEntity(EntityRockSnot.class, "rock_snot", 64, 20, true);
 		registerEntity(EntityRockSnotTendril.class, "rock_snot_tendril", 64, 20, true);
+
+		registerEntity(EntityPuffin.class, "puffin", 0x3F5A69, 0xA16A77, 64, 3, true);
+		registerEntity(EntityAnimalBurrow.class, "animal_burrow");
 	}
 
 	private static int id = 0;
