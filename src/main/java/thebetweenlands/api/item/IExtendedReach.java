@@ -1,5 +1,8 @@
 package thebetweenlands.api.item;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+
 public interface IExtendedReach {
 
     /**
@@ -8,5 +11,8 @@ public interface IExtendedReach {
      */
     double getReach();
 
+    default void onLeftClick(EntityPlayer player, ItemStack stack) {
+    	
+    }
 }
 

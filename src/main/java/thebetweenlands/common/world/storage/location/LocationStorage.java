@@ -159,12 +159,7 @@ public class LocationStorage extends LocalStorageImpl {
 			int ez = MathHelper.floor(boundingBox.maxZ) >> 4;
 			for(int cx = sx; cx <= ex; cx++) {
 				for(int cz = sz; cz <= ez; cz++) {
-					Chunk chunk = this.getWorldStorage().getWorld().getChunkProvider().getLoadedChunk(cx, cz);
-					if(chunk != null) {
-						this.linkChunk(chunk);
-					} else {
-						this.linkChunkDeferred(new ChunkPos(cx, cz));
-					}
+					this.linkChunkSafely(new ChunkPos(cx, cz));
 				}
 			}
 		}

@@ -11,7 +11,6 @@ buildscript {
 	}
 	dependencies { 
 		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-		classpath 'com.wynprice.cursemaven:CurseMaven:2.1.1'
 	}
 }
 
@@ -82,7 +81,6 @@ allprojects {
 	if(!isDeploymentRelease) version = version + (!project.isDeploymentRelease ? ((project.isDeploymentEnv ? ('-' + project.buildnumber) : '') + '-SNAPSHOT') : '')
 
 	apply plugin: 'net.minecraftforge.gradle.forge'
-	apply plugin: 'com.wynprice.cursemaven'
 	
 	minecraft {
 		version = "1.12.2-14.23.5.2773"

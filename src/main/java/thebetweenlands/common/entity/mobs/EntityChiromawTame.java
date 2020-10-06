@@ -191,7 +191,7 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 		super.onUpdate();
 
 		Entity riding = this.getRidingEntity();
-
+		
 		if(this.doubleJumpTicks > 1) {
 			this.doubleJumpTicks--;
 		}
@@ -265,6 +265,7 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 		}
 	}
 
+	@Override
     public void setRevengeTarget(@Nullable EntityLivingBase entity) {
     	super.setRevengeTarget(entity);
     	if (entity instanceof EntityChiromawTame || entity instanceof EntityPullerChiromaw)
@@ -540,8 +541,9 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 			player.jump();
 			player.fallDistance = -2;
 
+			this.prevWingFlapTicks = this.wingFlapTicks = this.doubleJumpTicks = 20;
+			
 			if(!this.world.isRemote) {
-				this.prevWingFlapTicks = this.wingFlapTicks = this.doubleJumpTicks = 20;
 				this.world.setEntityState(this, EVENT_DOUBLE_JUMP);
 				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.CHIROMAW_MATRIARCH_FLAP, SoundCategory.NEUTRAL, 1, 1);
 			} else {

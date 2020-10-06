@@ -1,5 +1,9 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
@@ -69,7 +73,7 @@ public class ItemGemSinger extends Item {
 	public ItemGemSinger() {
 		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 		this.setMaxStackSize(1);
-		this.setMaxDamage(32);
+		this.setMaxDamage(28);
 	}
 
 	@Override
@@ -127,13 +131,25 @@ public class ItemGemSinger extends Item {
 							BetweenlandsChunkStorage storage = BetweenlandsChunkStorage.forChunk(worldIn, chunk);
 
 							if(storage != null) {
-								GemSingerTarget target = GemSingerTarget.values()[worldIn.rand.nextInt(GemSingerTarget.values().length)];
+								EnumMap<GemSingerTarget, BlockPos> foundGems = new EnumMap<GemSingerTarget, BlockPos>(GemSingerTarget.class);
 
-								gem = storage.findRandomGem(target, worldIn.rand, playerIn.getPosition(), chunkRange * 16);
+								for(GemSingerTarget target : GemSingerTarget.values()) {
+									BlockPos foundGem = storage.findRandomGem(target, worldIn.rand, playerIn.getPosition(), chunkRange * 16);
 
-								if(gem != null) {
-									this.setTarget(stack, gem, target);
+									if(foundGem != null) {
+										foundGems.put(target, foundGem);
+									}
+								}
+
+								if(!foundGems.isEmpty()) {
+									List<Entry<GemSingerTarget, BlockPos>> foundGemEntries = new ArrayList<>(foundGems.entrySet());
+									Entry<GemSingerTarget, BlockPos> picked = foundGemEntries.get(worldIn.rand.nextInt(foundGemEntries.size()));
+
+									gem = picked.getValue();
+									this.setTarget(stack, gem, picked.getKey());
 									this.spawnEffect(playerIn, gem, chunkRange * 16, maxDelay);
+
+									stack.damageItem(1, playerIn);
 									break;
 								}
 							}
@@ -141,9 +157,8 @@ public class ItemGemSinger extends Item {
 					}
 				} else {
 					this.spawnEffect(playerIn, gem, chunkRange * 16, maxDelay);
+					stack.damageItem(1, playerIn);
 				}
-
-				stack.damageItem(1, playerIn);
 
 				playerIn.getCooldownTracker().setCooldown(stack.getItem(), 60);
 			}

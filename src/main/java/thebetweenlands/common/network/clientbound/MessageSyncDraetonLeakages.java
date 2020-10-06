@@ -44,7 +44,7 @@ public class MessageSyncDraetonLeakages extends MessageEntity {
 	public static void deserialize(List<DraetonLeakage> leakages, PacketBuffer buf) {
 		int entries = buf.readVarInt();
 		for(int i = 0; i < entries; i++) {
-			leakages.add(new DraetonLeakage(new Vec3d(buf.readFloat(), buf.readFloat(), buf.readFloat()), new Vec3d(buf.readFloat(), buf.readFloat(), buf.readFloat())));
+			leakages.add(new DraetonLeakage(new Vec3d(buf.readFloat(), buf.readFloat(), buf.readFloat()), new Vec3d(buf.readFloat(), buf.readFloat(), buf.readFloat()), 0));
 		}
 	}
 
