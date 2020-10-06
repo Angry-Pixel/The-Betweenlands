@@ -1,16 +1,16 @@
 //Add dependencies
 repositories {
 	maven {
-		name = 'CurseForge'
-		url = 'https://minecraft.curseforge.com/api/maven/'
-	}
-	maven {
 		name = 'Progwml6 maven'
 		url = 'http://dvs1.progwml6.com/files/maven'
 	}
 	maven {
 		name = 'ModMaven'
 		url = 'modmaven.k-4u.nl'
+	}
+	maven {
+		name = 'CurseMaven'
+		url = 'https://www.cursemaven.com'
 	}
 	/*maven {
 		url 'http://tehnut.info/maven'
