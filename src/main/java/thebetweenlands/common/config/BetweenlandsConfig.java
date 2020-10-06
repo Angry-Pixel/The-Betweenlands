@@ -1,23 +1,11 @@
 package thebetweenlands.common.config;
 
-import java.io.File;
-
 import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.Config.Comment;
-import net.minecraftforge.common.config.Config.Ignore;
-import net.minecraftforge.common.config.Config.LangKey;
-import net.minecraftforge.common.config.Config.Name;
-import net.minecraftforge.common.config.Config.RangeDouble;
-import net.minecraftforge.common.config.Config.RangeInt;
-import net.minecraftforge.common.config.Config.RequiresMcRestart;
-import thebetweenlands.common.config.properties.BlockListProperty;
-import thebetweenlands.common.config.properties.IntSetProperty;
-import thebetweenlands.common.config.properties.ItemDecayFoodProperty;
-import thebetweenlands.common.config.properties.ItemListProperty;
-import thebetweenlands.common.config.properties.PortalDimensionWhitelist;
-import thebetweenlands.common.config.properties.PortalTargetList;
-import thebetweenlands.common.config.properties.StringSetProperty;
+import net.minecraftforge.common.config.Config.*;
+import thebetweenlands.common.config.properties.*;
 import thebetweenlands.common.lib.ModInfo;
+
+import java.io.File;
 
 @Config(modid = ModInfo.ID, category = "", name = ModInfo.ID + "/config")
 public class BetweenlandsConfig {
@@ -119,6 +107,69 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "generate_portal_in_end")
 		@Comment("Whether custom portals that teleport to the End should create a Portal Tree in the End")
 		public boolean generatePortalInEnd = false;
+
+		@Name("ore_gen_count_sulfur")
+		@LangKey(LANG_PREFIX + "ore_gen_count_sulfur")
+		@Comment("Sulfur ore block chance")
+		@RangeInt(min = 0, max = Integer.MAX_VALUE)
+		@RequiresMcRestart
+		public int oreGenBlockCountSulfur = 14;
+
+		@Name("ore_gen_count_bone")
+		@LangKey(LANG_PREFIX + "ore_gen_count_bone")
+		@Comment("Bone ore block chance")
+		@RangeInt(min = 0, max = Integer.MAX_VALUE)
+		@RequiresMcRestart
+		public int oreGenBlockCountBone = 11;
+
+		@Name("ore_gen_count_syrmorite")
+		@LangKey(LANG_PREFIX + "ore_gen_count_syrmorite")
+		@Comment("Syrmorite ore block chance")
+		@RangeInt(min = 0, max = Integer.MAX_VALUE)
+		@RequiresMcRestart
+		public int oreGenBlockCountSyrmorite = 7;
+
+		@Name("ore_gen_count_octine")
+		@LangKey(LANG_PREFIX + "ore_gen_count_octine")
+		@Comment("Octine ore block chance")
+		@RangeInt(min = 0, max = Integer.MAX_VALUE)
+		@RequiresMcRestart
+		public int oreGenBlockCountOctine = 6;
+
+		@Name("ore_gen_count_valonite")
+		@LangKey(LANG_PREFIX + "ore_gen_count_valonite")
+		@Comment("Valonite block chance")
+		@RangeInt(min = 0, max = Integer.MAX_VALUE)
+		@RequiresMcRestart
+		public int oreGenBlockCountValonite = 5;
+
+		@Name("ore_gen_count_scabyst")
+		@LangKey(LANG_PREFIX + "ore_gen_count_scabyst")
+		@Comment("Scabyst block chance")
+		@RangeInt(min = 0, max = Integer.MAX_VALUE)
+		@RequiresMcRestart
+		public int oreGenBlockCountScabyst = 6;
+
+		@Name("ore_gen_count_swamp_dirt")
+		@LangKey(LANG_PREFIX + "ore_gen_count_swamp_dirt")
+		@Comment("Swamp dirt block chance (caves)")
+		@RangeInt(min = 0, max = Integer.MAX_VALUE)
+		@RequiresMcRestart
+		public int oreGenBlockCountSwampDirt = 25;
+
+		@Name("ore_gen_count_limestone")
+		@LangKey(LANG_PREFIX + "ore_gen_count_limestone")
+		@Comment("Limestone block chance")
+		@RangeInt(min = 0, max = Integer.MAX_VALUE)
+		@RequiresMcRestart
+		public int oreGenBlockCountLimestone = 100;
+
+		@Name("ore_gen_chance_life_crystal")
+		@LangKey(LANG_PREFIX + "ore_gen_chance_life_crystal")
+		@Comment("Life Crystal Chance (lower values = higher chance")
+		@RangeInt(min = 0, max = Integer.MAX_VALUE)
+		@RequiresMcRestart
+		public int oreGenBlockChanceLifeCrystal = 35;
 	}
 
 	@Name("rendering")

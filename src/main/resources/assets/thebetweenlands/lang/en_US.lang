@@ -1896,6 +1896,15 @@ config.thebetweenlands.portal_dimension_targets=Custom Portals
 config.thebetweenlands.portal_unsafe_biomes=Portal Unsafe Biomes
 config.thebetweenlands.portal_biome_search_range=Portal Biome Search Range
 config.thebetweenlands.generate_portal_in_end=Generate Portal Tree in End
+config.thebetweenlands.ore_gen_count_sulfur=Sulfur Ore Block Count
+config.thebetweenlands.ore_gen_count_bone=Bone Ore Block Count
+config.thebetweenlands.ore_gen_count_syrmorite=Syrmorite Ore Block Count
+config.thebetweenlands.ore_gen_count_octine=Octine Ore Block Count
+config.thebetweenlands.ore_gen_count_valonite=Valonite Ore Block Count
+config.thebetweenlands.ore_gen_count_scabyst=Scabyst Ore Block Count
+config.thebetweenlands.ore_gen_count_swamp_dirt=Underground Swamp Dirt Block Count
+config.thebetweenlands.ore_gen_count_limestone=Limestone Block Count
+config.thebetweenlands.ore_gen_chance_life_crystal=Life Crystal Gen Chance
 
 config.thebetweenlands.rendering=Rendering
 config.thebetweenlands.wisp_quality=Wisp Rendering Quality

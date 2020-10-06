@@ -206,6 +206,22 @@ public interface ILocalStorage extends ICapabilityProvider {
 	public default void linkChunkDeferred(ChunkPos chunk) {
 		
 	}
+	
+	/**
+	 * Links the specified chunk to this local storage in a safe manner,
+	 * i.e. calls {@link #linkChunk(Chunk)} if the chunk already exists and is loaded,
+	 * and {@link #linkChunkDeferred(ChunkPos)} if the chunk does not yet exist
+	 * or is not loaded.
+	 * @param chunk
+	 */
+	public default void linkChunkSafely(ChunkPos chunk) {
+		Chunk instance = this.getWorldStorage().getWorld().getChunkProvider().getLoadedChunk(chunk.x, chunk.z);
+		if(instance != null) {
+			this.linkChunk(instance);
+		} else {
+			this.linkChunkDeferred(chunk);
+		}
+	}
 
 	/**
 	 * Unlinks the specified chunk from this local storage

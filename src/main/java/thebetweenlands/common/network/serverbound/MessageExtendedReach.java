@@ -1,44 +1,45 @@
 package thebetweenlands.common.network.serverbound;
 
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import thebetweenlands.api.item.IExtendedReach;
-import thebetweenlands.common.network.MessageBase;
+import thebetweenlands.common.network.MessageEntity;
 
-public class MessageExtendedReach extends MessageBase {
+public class MessageExtendedReach extends MessageEntity {
+	public MessageExtendedReach() {}
 
-    private int entityId;
+	public MessageExtendedReach(List<Entity> entities) {
+		for(Entity entity : entities) {
+			this.addEntity(entity);
+		}
+	}
 
-    public MessageExtendedReach() {}
+	@Override
+	public IMessage process(MessageContext ctx) {
+		super.process(ctx);
 
-    public MessageExtendedReach(Entity entity) {
-        entityId = entity.getEntityId();
-    }
+		EntityPlayer player = ctx.getServerHandler().player;
 
-    @Override
-    public void serialize(PacketBuffer buf) {
-        buf.writeInt(entityId);
-    }
+		ItemStack heldItem = player.getHeldItemMainhand();
 
-    @Override
-    public void deserialize(PacketBuffer buf) {
-        entityId = buf.readInt();
-    }
+		if (!heldItem.isEmpty() && heldItem.getItem() instanceof IExtendedReach) {
+			((IExtendedReach) heldItem.getItem()).onLeftClick(player, player.getHeldItemMainhand());
 
-    @Override
-    public IMessage process(MessageContext ctx) {
-        EntityPlayer player = ctx.getServerHandler().player;
-        Entity entity = player.getEntityWorld().getEntityByID(entityId);
-        if (entity != null && entity.isEntityAlive() && player.hasItemInSlot(EntityEquipmentSlot.MAINHAND) && player.getHeldItemMainhand().getItem() instanceof IExtendedReach) {
-            double reach = ((IExtendedReach) player.getHeldItemMainhand().getItem()).getReach();
-            if (reach * reach >= player.getDistanceSq(entity)) {
-                player.attackTargetEntityWithCurrentItem(entity);
-            }
-        }
-        return null;
-    }
+			List<Entity> entities = this.getEntities();
+			for(Entity entity : entities) {
+				if (entity != null && entity.isEntityAlive()) {
+					double reach = ((IExtendedReach) heldItem.getItem()).getReach();
+					if (reach * reach >= player.getDistanceSq(entity)) {
+						player.attackTargetEntityWithCurrentItem(entity);
+					}
+				}
+			}
+		}
+		return null;
+	}
 }

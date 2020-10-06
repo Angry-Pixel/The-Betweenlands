@@ -65,103 +65,97 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 	}
 
 	@Override
-	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
-		if(entityLiving instanceof EntityPlayer) {
-			boolean enemiesInReach = false;
+	public void onLeftClick(EntityPlayer player, ItemStack stack) {
+		boolean enemiesInReach = false;
 
-			EntityPlayer player = (EntityPlayer) entityLiving;
+		if(!player.world.isRemote && !player.isSwingInProgress) {
+			stack.setTagInfo(NBT_SWING_START_COOLDOWN, new NBTTagFloat(player.getCooledAttackStrength(0)));
+			stack.setTagInfo(NBT_SWING_START_TICKS, new NBTTagInt(player.ticksExisted));
+			stack.setTagInfo(NBT_LONG_SWING_STATE, new NBTTagByte((byte) 1));
+		}
 
-			if(!player.world.isRemote && !entityLiving.isSwingInProgress) {
-				stack.setTagInfo(NBT_SWING_START_COOLDOWN, new NBTTagFloat(player.getCooledAttackStrength(0)));
-				stack.setTagInfo(NBT_SWING_START_TICKS, new NBTTagInt(player.ticksExisted));
-				stack.setTagInfo(NBT_LONG_SWING_STATE, new NBTTagByte((byte) 1));
-			}
+		double aoeReach = this.getAoEReach(player, stack);
+		double aoeHalfAngle = this.getAoEHalfAngle(player, stack);
 
-			double aoeReach = this.getAoEReach(entityLiving, stack);
-			double aoeHalfAngle = this.getAoEHalfAngle(entityLiving, stack);
+		//oof
+		IAttributeInstance attackSpeed = player.getEntityAttribute(SharedMonsterAttributes.ATTACK_SPEED);
+		double baseAttackSpeed = attackSpeed.getBaseValue();
 
-			//oof
-			IAttributeInstance attackSpeed = player.getEntityAttribute(SharedMonsterAttributes.ATTACK_SPEED);
-			double baseAttackSpeed = attackSpeed.getBaseValue();
-			
-			Collection<AttributeModifier> attackSpeedModifiers = attackSpeed.getModifiers();
-			for(AttributeModifier modifier : attackSpeedModifiers) {
-				attackSpeed.removeModifier(modifier);
-			}
+		Collection<AttributeModifier> attackSpeedModifiers = attackSpeed.getModifiers();
+		for(AttributeModifier modifier : attackSpeedModifiers) {
+			attackSpeed.removeModifier(modifier);
+		}
 
-			float initialAttackStrength = Math.max(player.getCooledAttackStrength(0.5F), NBTHelper.getStackNBTSafe(stack).getFloat(NBT_HIT_COOLDOWN));
+		float initialAttackStrength = Math.max(player.getCooledAttackStrength(0.5F), NBTHelper.getStackNBTSafe(stack).getFloat(NBT_HIT_COOLDOWN));
 
-			List<EntityLivingBase> others = entityLiving.world.getEntitiesWithinAABB(EntityLivingBase.class, entityLiving.getEntityBoundingBox().grow(aoeReach));
-			for(EntityLivingBase target : others) {
-				if(target != entityLiving) {
-					Entity[] parts = target.getParts();
+		List<EntityLivingBase> others = player.world.getEntitiesWithinAABB(EntityLivingBase.class, player.getEntityBoundingBox().grow(aoeReach));
+		for(EntityLivingBase target : others) {
+			if(target != player) {
+				Entity[] parts = target.getParts();
 
-					for(int i = 0; i < 1 + (parts != null ? parts.length : 0); i++) {
-						Entity part;
-						if(i == 0) {
-							part = target;
-						} else {
-							part = parts[i - 1];
-						}
+				for(int i = 0; i < 1 + (parts != null ? parts.length : 0); i++) {
+					Entity part;
+					if(i == 0) {
+						part = target;
+					} else {
+						part = parts[i - 1];
+					}
 
-						double dist = part.getDistance(entityLiving);
+					double dist = part.getDistance(player);
 
-						if(dist < aoeReach) {
-							double angle = Math.min(
-									Math.toDegrees(Math.acos(part.getPositionVector().subtract(entityLiving.getPositionVector()).normalize().dotProduct(entityLiving.getLookVec()))),
-									Math.min(
-											Math.toDegrees(Math.acos(part.getPositionVector().subtract(entityLiving.getPositionEyes(1)).normalize().dotProduct(entityLiving.getLookVec()))),
-											Math.toDegrees(Math.acos(part.getPositionVector().add(0, part.height / 2, 0).subtract(entityLiving.getPositionEyes(1)).normalize().dotProduct(entityLiving.getLookVec())))
-											)
-									);
+					if(dist < aoeReach) {
+						double angle = Math.min(
+								Math.toDegrees(Math.acos(part.getPositionVector().subtract(player.getPositionVector()).normalize().dotProduct(player.getLookVec()))),
+								Math.min(
+										Math.toDegrees(Math.acos(part.getPositionVector().subtract(player.getPositionEyes(1)).normalize().dotProduct(player.getLookVec()))),
+										Math.toDegrees(Math.acos(part.getPositionVector().add(0, part.height / 2, 0).subtract(player.getPositionEyes(1)).normalize().dotProduct(player.getLookVec())))
+										)
+								);
 
-							if(angle < aoeHalfAngle) {
-								double distXZ = Math.sqrt((part.posX - entityLiving.posX)*(part.posX - entityLiving.posX) + (part.posZ - entityLiving.posZ)*(part.posZ - entityLiving.posZ));
+						if(angle < aoeHalfAngle) {
+							double distXZ = Math.sqrt((part.posX - player.posX)*(part.posX - player.posX) + (part.posZ - player.posZ)*(part.posZ - player.posZ));
 
-								double hitY = entityLiving.posY + entityLiving.getEyeHeight() + entityLiving.getLookVec().y / Math.sqrt(Math.pow(entityLiving.getLookVec().x, 2) + Math.pow(entityLiving.getLookVec().z, 2) + 0.1D) * distXZ;
+							double hitY = player.posY + player.getEyeHeight() + player.getLookVec().y / Math.sqrt(Math.pow(player.getLookVec().x, 2) + Math.pow(player.getLookVec().z, 2) + 0.1D) * distXZ;
 
-								if(hitY > part.getEntityBoundingBox().minY - 0.25D && hitY < part.getEntityBoundingBox().maxY + 0.25D) {
-									if(player.world.rayTraceBlocks(player.getPositionVector().add(0, player.getEyeHeight(), 0), part.getPositionVector().add(0, part.height / 2, 0), false, true, false) == null) {
-										if(!entityLiving.world.isRemote) {
-											//yikes
-											//Adjust attack speed such that the current attack strength becomes the same as the initial attack strength
-											player.resetCooldown();
-											attackSpeed.setBaseValue(20 * initialAttackStrength / 0.5f);
+							if(hitY > part.getEntityBoundingBox().minY - 0.25D && hitY < part.getEntityBoundingBox().maxY + 0.25D) {
+								if(player.world.rayTraceBlocks(player.getPositionVector().add(0, player.getEyeHeight(), 0), part.getPositionVector().add(0, part.height / 2, 0), false, true, false) == null) {
+									if(!player.world.isRemote) {
+										//yikes
+										//Adjust attack speed such that the current attack strength becomes the same as the initial attack strength
+										player.resetCooldown();
+										attackSpeed.setBaseValue(20 * initialAttackStrength / 0.5f);
 
-											player.attackTargetEntityWithCurrentItem(target);
-										}
-
-										enemiesInReach = true;
-
-										break;
+										player.attackTargetEntityWithCurrentItem(target);
 									}
+
+									enemiesInReach = true;
+
+									break;
 								}
 							}
 						}
 					}
 				}
 			}
+		}
 
-			//oof
-			attackSpeed.setBaseValue(baseAttackSpeed);
-			for(AttributeModifier modifier : attackSpeedModifiers) {
-				if(!attackSpeed.hasModifier(modifier)) {
-					attackSpeed.applyModifier(modifier);
-				}
-			}
-
-			if(entityLiving.world.isRemote && (!entityLiving.isSwingInProgress || entityLiving.swingProgressInt >= entityLiving.getArmSwingAnimationEnd() / 2 || entityLiving.swingProgressInt < 0)) {
-				this.playSwingSound(player, stack);
-
-				if(enemiesInReach) {
-					this.playSliceSound(player, stack);
-				}
+		//oof
+		attackSpeed.setBaseValue(baseAttackSpeed);
+		for(AttributeModifier modifier : attackSpeedModifiers) {
+			if(!attackSpeed.hasModifier(modifier)) {
+				attackSpeed.applyModifier(modifier);
 			}
 		}
-		
-		stack.setTagInfo(NBT_HIT_COOLDOWN, new NBTTagFloat(0));
 
-		return super.onEntitySwing(entityLiving, stack);
+		if(player.world.isRemote && (!player.isSwingInProgress || player.swingProgressInt >= player.getArmSwingAnimationEnd() / 2 || player.swingProgressInt < 0)) {
+			this.playSwingSound(player, stack);
+
+			if(enemiesInReach) {
+				this.playSliceSound(player, stack);
+			}
+		}
+
+		stack.setTagInfo(NBT_HIT_COOLDOWN, new NBTTagFloat(0));
 	}
 
 	@Override
@@ -277,12 +271,12 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 	public static void onAttack(AttackEntityEvent event) {
 		EntityPlayer player = event.getEntityPlayer();
 		ItemStack stack = player.getHeldItemMainhand();
-		
+
 		if(!stack.isEmpty() && stack.getItem() instanceof ItemGreatsword) {
 			stack.setTagInfo(NBT_HIT_COOLDOWN, new NBTTagFloat(Math.max(NBTHelper.getStackNBTSafe(stack).getFloat(NBT_HIT_COOLDOWN), player.getCooledAttackStrength(0.5f))));
 		}
 	}
-	
+
 	private static boolean renderingHand = false;
 
 	@SubscribeEvent
