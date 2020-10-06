@@ -34,6 +34,7 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 	public boolean active;
 	public int fallCounter = 16;
 	public int fallCounterPrev;
+	public int horizontalIndex = 0;
 	public TileEntityCrabPot() {
 		super();
 	}
@@ -123,6 +124,14 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 		}
 		return entity;
 	}
+	
+	public void setRotation(int horizontalIndexIn) {
+		horizontalIndex = horizontalIndexIn;
+	}
+	
+	public int getRotation() {
+		return horizontalIndex;
+	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
@@ -141,11 +150,13 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 		if (nbt.hasKey("Items", 9))
 			ItemStackHelper.loadAllItems(nbt, inventory);
 		active = nbt.getBoolean("active");
+		setRotation(nbt.getInteger("horizontalIndex"));
 	}
 
 	public NBTTagCompound saveToNbt(NBTTagCompound nbt) {
 		ItemStackHelper.saveAllItems(nbt, inventory, false);
 		nbt.setBoolean("active", active);
+		nbt.setInteger("horizontalIndex", getRotation());
 		return nbt;
 	}
 

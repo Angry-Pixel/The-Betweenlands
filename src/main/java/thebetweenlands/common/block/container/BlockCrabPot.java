@@ -6,6 +6,7 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
@@ -55,6 +56,17 @@ public class BlockCrabPot extends BlockSwampWater implements ITileEntityProvider
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		super.setStateMapper(builder);
 		builder.ignore(LEVEL);
+	}
+
+	@Override
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		if (!world.isRemote) {
+			if (world.getTileEntity(pos) instanceof TileEntityCrabPot) {
+				TileEntityCrabPot tile = (TileEntityCrabPot) world.getTileEntity(pos);
+				tile.setRotation(placer.getHorizontalFacing().rotateYCCW().getHorizontalIndex());
+				tile.markForUpdate();
+			}
+		}
 	}
 
 	@Override
