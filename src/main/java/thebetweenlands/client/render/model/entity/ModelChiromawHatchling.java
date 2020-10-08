@@ -170,35 +170,6 @@ public class ModelChiromawHatchling extends MowzieModelBase {
         egg_base.addChild(egg1);
         arm_right2.addChild(wing_right2);
 
-        parts = new MowzieModelRenderer[] {
-				egg_base,
-				chiromaw_base,
-				egg1,
-				egg2,
-				chiromaw_body,
-				wee_lil_tail1,
-				leg_left1,
-				leg_right1,
-				neck,
-				arm_left1,
-				arm_right1,
-				head1,
-				head2,
-				babytooth_left,
-				babytooth_right,
-				egg3,
-				jaw,
-				arm_left2,
-				wing_left1,
-				wing_left2,
-				arm_right2,
-				wing_right1,
-				wing_right2,
-				wee_lil_tail2,
-				leg_left2,
-				leg_right2
-        };
-
         partsJustBaby = new MowzieModelRenderer[] {
     			chiromaw_base,
     			chiromaw_body,

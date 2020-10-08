@@ -295,55 +295,6 @@ public class ModelChiromaw extends MowzieModelBase {
         head_main.addChild(jaw_back);
         chest.addChild(arm_right_upper);
 
-
-        parts = new MowzieModelRenderer[] {
-            body_base,
-            body_buttpart,
-            neck,
-            arm_left1,
-            arm_right1,
-            leg_left1,
-            leg_right1,
-            lil_tail1,
-            leg_left2,
-            leg_right2,
-            lil_tail2,
-            lil_tail3,
-            head_base,
-            head_connection,
-            head_jaw1,
-            fang_left,
-            fang_right,
-            teeth_upperjaw_left,
-            teeth_upperjaw_right,
-            teeth_upperjaw_front,
-            teeth_lowerjaw_left,
-            teeth_lowerjaw_right,
-            teeth_lowerjaw_front,
-            arm_left2,
-            wing_left1,
-            wing_left2,
-            arm_right2,
-            wing_right1,
-            wing_right2,
-
-            body,
-			chest,
-			legleft1,
-			legright1,
-			head_main,
-			arm_left_upper,
-			arm_right_upper,
-			nose,
-			jaw_back,
-			ear_right,
-			ear_left,
-			jaw_main,
-			arm_left_lower,
-			arm_right_lower,
-			leg_left_lower,
-			leg_right_lower
-        };
         setInitPose();
     }
 

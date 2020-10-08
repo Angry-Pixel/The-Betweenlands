@@ -174,7 +174,6 @@ public class ModelPeatMummy extends MowzieModelBase {
 		this.shoulderBase.addChild(this.armrightJoint);
 		modelBase.addChild(body_base);
 
-		parts = new MowzieModelRenderer[] {body_base, buttJoint, shoulderJoint, sexybutt, legright, legleft, legright2, legleft2, shoulderBase, shoulderright, shoulderleft, neck, armright, armleft, head1, head2, jaw, teeth2, hair, teeth1, cheecktissueright, cheecktissue2, armright2, armleft2, legleftJoint, legrightJoint, armleftJoint, armrightJoint, modelBase};
 		setInitPose();
 	}
 

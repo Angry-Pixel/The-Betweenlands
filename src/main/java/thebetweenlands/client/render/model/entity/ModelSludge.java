@@ -65,7 +65,6 @@ public class ModelSludge extends MowzieModelBase {
 		this.spine.addChild(this.spinepiece);
 		this.head2.addChild(this.head1);
 
-		parts = new MowzieModelRenderer[]{head1, head2, jaw, teeth, spine, spinepiece, slime1, slime2, slime3};
 		setInitPose();
 	}
 

@@ -198,26 +198,6 @@ public class ModelDragonFly extends MowzieModelBase {
         this.tail3.addChild(this.tail4);
         this.tail4.addChild(this.stinger);
         
-        parts = new MowzieModelRenderer[]{
-        		leftback1,
-                leftback2,
-                rightback1,
-                rightback2,
-                leftfront1,
-                leftfront2,
-                rightfront2,
-                rightfront1,
-                leftmid1,
-                leftmid2,
-                rightmid1,
-                rightmid2,
-        		tail1,
-        	    tail2,
-        	    tail3,
-        	    tail4,
-        	    stinger
-        };
-        
         this.setInitPose();
     }
 

@@ -249,7 +249,6 @@ public class ModelDreadfulMummy extends MowzieModelBase {
 		this.spiderleg2a.addChild(this.spiderleg2b);
 		this.spiderleg3a.addChild(this.spiderleg3b);
 
-		parts = new MowzieModelRenderer[] {shoulders, shoulderright, shoulderleft, neck, body_base, aestheticleg1, aestheticleg2, frontLeftArmJoint, frontRightArmJoint, backLeftLegJoint, armright1, armleft1, armleft2, head1, head2, tongue1, teeth_upper, jaw, teeth_lower, tongue2, tongue3, tongue4, tongue5, sexybutt, legright1, legleft1, legright2, aestheticleg1a, aestheticleg1b, aestheticleg2a, spiderleg1, spiderleg1a, spiderleg1b, spiderleg2, spiderleg2a, spiderleg2b, spiderleg3, spiderleg3a, spiderleg3b};
 		tongue = new MowzieModelRenderer[] {tongue1, tongue2, tongue3, tongue4, tongue5};
 		tentacle1 = new MowzieModelRenderer[] {aestheticleg1, aestheticleg1a, aestheticleg1b};
 		tentacle2 = new MowzieModelRenderer[] {aestheticleg2, aestheticleg2a};

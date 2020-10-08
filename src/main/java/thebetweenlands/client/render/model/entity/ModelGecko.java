@@ -117,7 +117,6 @@ public class ModelGecko extends MowzieModelBase {
 		tail1.addChild(tail2);
 
 		tail = new MowzieModelRenderer[] { tail3, tail2, tail1 };
-		parts = new MowzieModelRenderer[] { body_base, head, legleft_f1, legright_f1, legleft_b1, legright_b1, tail1, tail2, tail3, crane, tongue, legleft_f2, legright_f2, legleft_b2, legright_b2 };
 		setInitPose();
 	}
 

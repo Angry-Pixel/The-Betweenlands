@@ -52,7 +52,6 @@ public class ModelSmollSludge extends MowzieModelBase {
         this.skullbase.addChild(this.skull2);
         this.skull2.addChild(this.jaw);
         
-        parts = new MowzieModelRenderer[]{skullbase, sludge1, skull2, jaw, sludge2, sludge3};
 		setInitPose();
     }
 

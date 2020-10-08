@@ -169,7 +169,6 @@ public class ModelSwampHag extends MowzieModelBase {
 
         modelCore.addChild(body_base);
 
-        parts = new MowzieModelRenderer[]{body_base, neck, body_top, toadstool1, mushroomstem, armright, legright1, legleft1, body_inner, vines2, toadstool1b, toadstool2, toadstool3, vines1, toadstool2b, mushroomhat, mushroomhat2, legright2, legleft2, head1, head2, jaw, toadstool4, brain, modelCore};
         setInitPose();
     }
 
