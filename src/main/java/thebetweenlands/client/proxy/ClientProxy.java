@@ -197,6 +197,8 @@ import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.entity.mobs.EntityGiantToad;
 import thebetweenlands.common.entity.mobs.EntityGreebling;
 import thebetweenlands.common.entity.mobs.EntityGreeblingVolarpadFloater;
+import thebetweenlands.common.entity.mobs.EntityJellyfish;
+import thebetweenlands.common.entity.mobs.EntityJellyfishCave;
 import thebetweenlands.common.entity.mobs.EntityLargeSludgeWorm;
 import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityLurker;
@@ -664,10 +666,14 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityBLFishHook.class, RenderBLFishHook::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFishingSpear.class, RenderFishingSpear::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFishingTackleBoxSeat.class, RenderNothing::new);
+
+		//WIP
 		RenderingRegistry.registerEntityRenderingHandler(EntityRockSnot.class, RenderRockSnot::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityRockSnotTendril.class, RenderRockSnotTendril::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityPuffin.class, RenderPuffin::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityAnimalBurrow.class, RenderAnimalBurrow::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityJellyfish.class, RenderJellyfish::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityJellyfishCave.class, RenderJellyfishCave::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());

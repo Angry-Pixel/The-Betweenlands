@@ -66,6 +66,8 @@ import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.entity.mobs.EntityGiantToad;
 import thebetweenlands.common.entity.mobs.EntityGreebling;
 import thebetweenlands.common.entity.mobs.EntityGreeblingVolarpadFloater;
+import thebetweenlands.common.entity.mobs.EntityJellyfish;
+import thebetweenlands.common.entity.mobs.EntityJellyfishCave;
 import thebetweenlands.common.entity.mobs.EntityLargeSludgeWorm;
 import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityLurker;
@@ -249,6 +251,9 @@ public class EntityRegistry {
 
 		registerEntity(EntityPuffin.class, "puffin", 0x3F5A69, 0xA16A77, 64, 3, true);
 		registerEntity(EntityAnimalBurrow.class, "animal_burrow");
+		
+		registerEntity(EntityJellyfish.class, "jellyfish", 0x3F5A69, 0xA16A77, 64, 3, true);
+		registerEntity(EntityJellyfishCave.class, "jellyfish_cave", 0x3F5A69, 0xA16A77, 64, 3, true);
 	}
 
 	private static int id = 0;
