@@ -1,6 +1,8 @@
 package thebetweenlands.client.render.model.entity;
 
 import net.minecraft.client.model.ModelBox;
+import net.minecraft.entity.EntityLivingBase;
+import thebetweenlands.client.render.model.AdvancedModelRenderer;
 import thebetweenlands.client.render.model.MowzieModelBase;
 import thebetweenlands.client.render.model.MowzieModelRenderer;
 import net.minecraft.entity.Entity;
@@ -52,14 +54,14 @@ public class ModelStalker extends MowzieModelBase {
     private final MowzieModelRenderer sexy_facialhair_left1a;
     private final MowzieModelRenderer sexy_facialhair_right1a;
     private final MowzieModelRenderer bigeye;
-    private final MowzieModelRenderer bigEyelidTop;
-    private final MowzieModelRenderer bigEyelidBottom;
-    private final MowzieModelRenderer medEyelidTopRight;
-    private final MowzieModelRenderer medEyelidTopLeft;
-    private final MowzieModelRenderer medEyelidBottomRight;
-    private final MowzieModelRenderer medEyelidBottomLeft;
-    private final MowzieModelRenderer smallEyelidRight;
-    private final MowzieModelRenderer smallEyelidLeft;
+    private final AdvancedModelRenderer bigEyelidTop;
+    private final AdvancedModelRenderer bigEyelidBottom;
+    private final AdvancedModelRenderer medEyelidTopRight;
+    private final AdvancedModelRenderer medEyelidTopLeft;
+    private final AdvancedModelRenderer medEyelidBottomRight;
+    private final AdvancedModelRenderer medEyelidBottomLeft;
+    private final AdvancedModelRenderer smallEyelidRight;
+    private final AdvancedModelRenderer smallEyelidLeft;
     private final MowzieModelRenderer arm_right1a;
     private final MowzieModelRenderer arm_right1b;
     private final MowzieModelRenderer sexy_elbowhair_righta;
@@ -345,42 +347,42 @@ public class ModelStalker extends MowzieModelBase {
         setRotationAngle(bigeye, -0.0911F, 0.0F, 0.0F);
         bigeye.cubeList.add(new ModelBox(bigeye, 54, 67, -2.0F, -2.1737F, -2.1903F, 4, 4, 4, 0.0F, false));
 
-        bigEyelidTop = new MowzieModelRenderer(this);
+        bigEyelidTop = new AdvancedModelRenderer(this);
         bigEyelidTop.setRotationPoint(0.0F, 0.0F, 0.0F);
         bigeye.addChild(bigEyelidTop);
         bigEyelidTop.cubeList.add(new ModelBox(bigEyelidTop, 34, 58, -2.0F, -2.1737F, -2.1902F, 4, 2, 5, 0.0F, false));
 
-        bigEyelidBottom = new MowzieModelRenderer(this);
+        bigEyelidBottom = new AdvancedModelRenderer(this);
         bigEyelidBottom.setRotationPoint(0.0F, 0.0F, 0.0F);
         bigeye.addChild(bigEyelidBottom);
         bigEyelidBottom.cubeList.add(new ModelBox(bigEyelidBottom, 58, 58, -2.0F, -0.1737F, -2.1902F, 4, 2, 5, 0.0F, false));
 
-        medEyelidTopRight = new MowzieModelRenderer(this);
+        medEyelidTopRight = new AdvancedModelRenderer(this);
         medEyelidTopRight.setRotationPoint(0.0F, 0.0F, 0.0F);
         head_main.addChild(medEyelidTopRight);
         medEyelidTopRight.cubeList.add(new ModelBox(medEyelidTopRight, 0, 4, -4.0F, -3.9977F, -6.9318F, 1, 1, 1, 0.0F, false));
 
-        medEyelidTopLeft = new MowzieModelRenderer(this);
+        medEyelidTopLeft = new AdvancedModelRenderer(this);
         medEyelidTopLeft.setRotationPoint(0.0F, 0.0F, 0.0F);
         head_main.addChild(medEyelidTopLeft);
         medEyelidTopLeft.cubeList.add(new ModelBox(medEyelidTopLeft, 0, 4, 3.0F, -3.9977F, -6.9318F, 1, 1, 1, 0.0F, true));
 
-        medEyelidBottomRight = new MowzieModelRenderer(this);
+        medEyelidBottomRight = new AdvancedModelRenderer(this);
         medEyelidBottomRight.setRotationPoint(-1.0F, 1.0F, -1.0F);
         head_main.addChild(medEyelidBottomRight);
         medEyelidBottomRight.cubeList.add(new ModelBox(medEyelidBottomRight, 0, 2, -3.0F, -3.9977F, -5.9318F, 1, 1, 1, 0.0F, false));
 
-        medEyelidBottomLeft = new MowzieModelRenderer(this);
+        medEyelidBottomLeft = new AdvancedModelRenderer(this);
         medEyelidBottomLeft.setRotationPoint(0.0F, 1.0F, 0.0F);
         head_main.addChild(medEyelidBottomLeft);
         medEyelidBottomLeft.cubeList.add(new ModelBox(medEyelidBottomLeft, 0, 2, 3.0F, -3.9977F, -6.9318F, 1, 1, 1, 0.0F, true));
 
-        smallEyelidRight = new MowzieModelRenderer(this);
+        smallEyelidRight = new AdvancedModelRenderer(this);
         smallEyelidRight.setRotationPoint(0.0F, 0.0F, 2.0F);
         head_main.addChild(smallEyelidRight);
         smallEyelidRight.cubeList.add(new ModelBox(smallEyelidRight, 0, 11, -4.0F, -3.9977F, -6.9318F, 1, 1, 1, 0.0F, false));
 
-        smallEyelidLeft = new MowzieModelRenderer(this);
+        smallEyelidLeft = new AdvancedModelRenderer(this);
         smallEyelidLeft.setRotationPoint(0.0F, 0.0F, 2.0F);
         head_main.addChild(smallEyelidLeft);
         smallEyelidLeft.cubeList.add(new ModelBox(smallEyelidLeft, 0, 11, 3.0F, -3.9977F, -6.9318F, 1, 1, 1, 0.0F, true));
@@ -473,6 +475,78 @@ public class ModelStalker extends MowzieModelBase {
 
     @Override
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
+        super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+    }
+
+    @Override
+    public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
+        super.setLivingAnimations(entity, swing, speed, partialRenderTicks);
         setToInitPose();
+
+        float frame = entity.ticksExisted + partialRenderTicks;
+
+        float scale = 1.02f;
+        bigEyelidBottom.setScale(scale);
+        bigEyelidTop.setScale(scale);
+        medEyelidBottomLeft.setScale(scale);
+        medEyelidBottomRight.setScale(scale);
+        medEyelidTopLeft.setScale(scale);
+        medEyelidTopRight.setScale(scale);
+        smallEyelidLeft.setScale(scale);
+        smallEyelidRight.setScale(scale);
+
+        medEyelidTopRight.rotationPointX += 0.07;
+        medEyelidTopRight.rotationPointZ += 0.13;
+        medEyelidTopRight.rotationPointY += 0.085;
+        medEyelidTopLeft.rotationPointX -= 0.07;
+        medEyelidTopLeft.rotationPointZ += 0.13;
+        medEyelidTopLeft.rotationPointY += 0.085;
+        medEyelidBottomRight.rotationPointX += 0.05;
+        medEyelidBottomRight.rotationPointZ += 0.1;
+        medEyelidBottomLeft.rotationPointX -= 0.07;
+        medEyelidBottomLeft.rotationPointZ += 0.13;
+        medEyelidBottomLeft.rotationPointY += 0.06;
+        medEyelidBottomRight.rotationPointY += 0.06;
+        smallEyelidLeft.rotationPointX -= 0.07;
+        smallEyelidLeft.rotationPointZ += 0.12;
+        smallEyelidLeft.rotationPointY += 0.08;
+        smallEyelidRight.rotationPointX += 0.07;
+        smallEyelidRight.rotationPointZ += 0.12;
+        smallEyelidRight.rotationPointY += 0.08;
+
+        float blinkFrame = (float) (frame * Math.PI * 2);
+        float blinkSmallRight = 0;
+        float blinkSmallLeft = 0;
+        float blinkMedRight = 0;
+        float blinkMedLeft = 0;
+        float blinkBig = 0;
+        if ((int)(frame * 0.04) % 5 == 0) {
+            blinkSmallRight = (float) Math.pow(Math.sin(blinkFrame * 0.02 + 0.5), 50);
+            blinkSmallLeft = (float) Math.pow(Math.sin(blinkFrame * 0.02 + 0.7), 50);
+            blinkMedRight = (float) Math.pow(Math.sin(blinkFrame * 0.02 - 0.2), 50);
+            blinkMedLeft = (float) Math.pow(Math.sin(blinkFrame * 0.02 + 0.1), 50);
+            blinkBig = (float) Math.pow(Math.sin(blinkFrame * 0.02 + 0.35), 20);
+        }
+        smallEyelidLeft.rotationPointY -= 1 * (1 - blinkSmallLeft);
+        smallEyelidRight.rotationPointY -= 1 * (1 - blinkSmallRight);
+        medEyelidTopRight.rotationPointY -= 1 * (1 - blinkMedRight);
+        medEyelidTopLeft.rotationPointY -= 1 * (1 - blinkMedLeft);
+        medEyelidBottomRight.rotationPointY += 1 * (1 - blinkMedRight);
+        medEyelidBottomLeft.rotationPointY += 1 * (1 - blinkMedLeft);
+
+        float blinkAnim1 = (float) Math.pow(2 * (1 - blinkBig) - 1, 2);
+        if (1 - blinkBig < 0.5) blinkAnim1 *= -1;
+        float blinkAnim2 = 1 - (float) Math.pow(2 * (1 - blinkBig) - 1, 6);
+        float blinkAnim3 = (float) Math.pow(Math.sin((1 - blinkBig) - 1.8), 10) - 1;
+        float blinkAnim4 = (float) Math.pow(1 - blinkBig, 20);
+        bigEyelidTop.rotateAngleX -= 0.5 * (blinkAnim1 + 1) + 0.4 * blinkAnim4;
+        bigEyelidTop.rotationPointY -= 0.9 * blinkAnim2 - 0.3 * blinkAnim4;
+        bigEyelidTop.rotationPointZ -= 2 * blinkAnim3 + 0.6;
+        bigEyelidTop.scaleZ -= 0.4 * blinkAnim4;
+        bigEyelidBottom.rotateAngleX += 0.5 * (blinkAnim1 + 1) + 0.4 * blinkAnim4;
+        bigEyelidBottom.rotationPointY += 0.9 * blinkAnim2 - 0.2 * blinkAnim4;
+        bigEyelidBottom.rotationPointZ -= 1 * blinkAnim3 + 0.6;
+        bigEyelidBottom.scaleZ -= 0.4 * blinkAnim4;
+
     }
 }
