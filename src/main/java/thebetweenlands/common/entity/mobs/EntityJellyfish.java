@@ -181,17 +181,17 @@ public class EntityJellyfish extends EntityCreature implements IEntityBL {
 
 		prevRotationPitch = rotationPitch;
 		float speedAngle = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
-		if(motionX != 0D && motionZ != 0D)
+		//if(motionX != 0D && motionZ != 0D)
 			rotationPitch += (-((float)MathHelper.atan2((double)speedAngle, motionY)) * (180F / (float)Math.PI) - rotationPitch) * 0.1F;
-
+			
 		super.onLivingUpdate();
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-	//	 if (getMoveHelper().isUpdating() && motionY < 0) //only way I can figure to stop the pathfinding messing up rendering rotations when looking for a new path atm
-	//		 rotationYaw = 0F;
+		 if (getMoveHelper().isUpdating() && motionY < 0) //only way I can figure to stop the pathfinding messing up rendering rotations when looking for a new path atm
+			 rotationYaw = 0F;
 	}
 
     @Override

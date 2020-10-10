@@ -172,8 +172,8 @@ public class EntityJellyfishCave extends EntityCreature implements IEntityBL {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-	//	 if (getMoveHelper().isUpdating() && motionY < 0)  //only way I can figure to stop the pathfinding messing up rendering rotations when looking for a new path atm
-	//		 rotationYaw = 0F;
+		 if (getMoveHelper().isUpdating() && motionY < 0)  //only way I can figure to stop the pathfinding messing up rendering rotations when looking for a new path atm
+			 rotationYaw = 0F;
 	}
 
     @Override
