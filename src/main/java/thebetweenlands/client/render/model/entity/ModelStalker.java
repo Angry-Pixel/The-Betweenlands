@@ -14,6 +14,7 @@ public class ModelStalker extends MowzieModelBase {
     private final MowzieModelRenderer body_chest1;
     private final MowzieModelRenderer body_chest2_main;
     private final MowzieModelRenderer body_chest_right;
+    private final MowzieModelRenderer arm_leftaJoint;
     private final MowzieModelRenderer arm_lefta;
     private final MowzieModelRenderer arm_leftb;
     private final MowzieModelRenderer sexy_elbowhair_left1a;
@@ -21,8 +22,9 @@ public class ModelStalker extends MowzieModelBase {
     private final MowzieModelRenderer sexy_shoulderhair_left1a;
     private final MowzieModelRenderer sexy_shoulderhair_left1b;
     private final MowzieModelRenderer sexy_chesthair_right1a;
-    private final MowzieModelRenderer sexy_chesthair_left1b2;
+    private final MowzieModelRenderer sexy_chesthair_right1b;
     private final MowzieModelRenderer body_chest_left;
+    private final MowzieModelRenderer arm_rightaJoint;
     private final MowzieModelRenderer arm_righta;
     private final MowzieModelRenderer arm_rightb;
     private final MowzieModelRenderer sexy_elbowhair_right1a;
@@ -62,16 +64,20 @@ public class ModelStalker extends MowzieModelBase {
     private final AdvancedModelRenderer medEyelidBottomLeft;
     private final AdvancedModelRenderer smallEyelidRight;
     private final AdvancedModelRenderer smallEyelidLeft;
-    private final MowzieModelRenderer arm_right1a;
-    private final MowzieModelRenderer arm_right1b;
+    private final MowzieModelRenderer midarm_rightaJoint;
+    private final MowzieModelRenderer midarm_righta;
+    private final MowzieModelRenderer midarm_rightb;
     private final MowzieModelRenderer sexy_elbowhair_righta;
     private final MowzieModelRenderer sexy_elbowhair_rightb;
-    private final MowzieModelRenderer arm_left1a;
-    private final MowzieModelRenderer arm_left1b;
+    private final MowzieModelRenderer midarm_leftaJoint;
+    private final MowzieModelRenderer midarm_lefta;
+    private final MowzieModelRenderer midarm_leftb;
     private final MowzieModelRenderer sexy_elbowhair_lefta;
     private final MowzieModelRenderer sexy_elbowhair_leftb;
+    private final MowzieModelRenderer leg_right1aJoint;
     private final MowzieModelRenderer leg_right1a;
     private final MowzieModelRenderer leg_right1b;
+    private final MowzieModelRenderer leg_left1aJoint;
     private final MowzieModelRenderer leg_left1a;
     private final MowzieModelRenderer leg_left1b;
 
@@ -113,9 +119,13 @@ public class ModelStalker extends MowzieModelBase {
         setRotationAngle(body_chest_right, 0.0F, -0.1367F, 0.0F);
         body_chest_right.cubeList.add(new ModelBox(body_chest_right, 0, 38, -2.7988F, -2.0F, -5.6716F, 6, 6, 7, 0.0F, false));
 
+        arm_leftaJoint = new MowzieModelRenderer(this);
+        arm_leftaJoint.setRotationPoint(3.2012F, -1.0F, -0.6716F);
+        body_chest_right.addChild(arm_leftaJoint);
+
         arm_lefta = new MowzieModelRenderer(this);
-        arm_lefta.setRotationPoint(3.2012F, -1.0F, -0.6716F);
-        body_chest_right.addChild(arm_lefta);
+        arm_lefta.setRotationPoint(0, 0, 0);
+        arm_leftaJoint.addChild(arm_lefta);
         setRotationAngle(arm_lefta, -0.5463F, 0.0F, -0.6374F);
         arm_lefta.cubeList.add(new ModelBox(arm_lefta, 40, 0, -1.0F, 0.0F, -1.0F, 2, 10, 2, 0.0F, false));
 
@@ -155,11 +165,11 @@ public class ModelStalker extends MowzieModelBase {
         setRotationAngle(sexy_chesthair_right1a, -0.3643F, 0.0F, 0.0F);
         sexy_chesthair_right1a.cubeList.add(new ModelBox(sexy_chesthair_right1a, 0, 52, 0.0F, 0.0F, 0.0F, 6, 2, 0, 0.0F, false));
 
-        sexy_chesthair_left1b2 = new MowzieModelRenderer(this);
-        sexy_chesthair_left1b2.setRotationPoint(0.0F, 2.0F, 0.0F);
-        sexy_chesthair_right1a.addChild(sexy_chesthair_left1b2);
-        setRotationAngle(sexy_chesthair_left1b2, -0.3643F, 0.0F, 0.0F);
-        sexy_chesthair_left1b2.cubeList.add(new ModelBox(sexy_chesthair_left1b2, 0, 55, 0.0F, 0.0F, 0.0F, 6, 3, 0, 0.0F, false));
+        sexy_chesthair_right1b = new MowzieModelRenderer(this);
+        sexy_chesthair_right1b.setRotationPoint(0.0F, 2.0F, 0.0F);
+        sexy_chesthair_right1a.addChild(sexy_chesthair_right1b);
+        setRotationAngle(sexy_chesthair_right1b, -0.3643F, 0.0F, 0.0F);
+        sexy_chesthair_right1b.cubeList.add(new ModelBox(sexy_chesthair_right1b, 0, 55, 0.0F, 0.0F, 0.0F, 6, 3, 0, 0.0F, false));
 
         body_chest_left = new MowzieModelRenderer(this);
         body_chest_left.setRotationPoint(-2.0F, -3.0F, 6.0F);
@@ -167,9 +177,13 @@ public class ModelStalker extends MowzieModelBase {
         setRotationAngle(body_chest_left, 0.0F, 0.1367F, 0.0F);
         body_chest_left.cubeList.add(new ModelBox(body_chest_left, 27, 38, -3.2012F, -1.99F, -5.6716F, 6, 6, 7, 0.0F, false));
 
+        arm_rightaJoint = new MowzieModelRenderer(this);
+        arm_rightaJoint.setRotationPoint(-3.2012F, -1.0F, -0.6716F);
+        body_chest_left.addChild(arm_rightaJoint);
+
         arm_righta = new MowzieModelRenderer(this);
-        arm_righta.setRotationPoint(-3.2012F, -1.0F, -0.6716F);
-        body_chest_left.addChild(arm_righta);
+        arm_righta.setRotationPoint(0, 0, 0);
+        arm_rightaJoint.addChild(arm_righta);
         setRotationAngle(arm_righta, -0.5463F, 0.0F, 0.6374F);
         arm_righta.cubeList.add(new ModelBox(arm_righta, 49, 0, -1.0F, 0.0F, -1.0F, 2, 10, 2, 0.0F, false));
 
@@ -387,21 +401,25 @@ public class ModelStalker extends MowzieModelBase {
         head_main.addChild(smallEyelidLeft);
         smallEyelidLeft.cubeList.add(new ModelBox(smallEyelidLeft, 0, 11, 3.0F, -3.9977F, -6.9318F, 1, 1, 1, 0.0F, true));
 
-        arm_right1a = new MowzieModelRenderer(this);
-        arm_right1a.setRotationPoint(4.5F, -1.4551F, -1.9627F);
-        body_chest1.addChild(arm_right1a);
-        setRotationAngle(arm_right1a, -0.0456F, -0.2731F, -0.4098F);
-        arm_right1a.cubeList.add(new ModelBox(arm_right1a, 58, 0, -1.0F, 0.0F, -1.0F, 2, 8, 2, 0.0F, false));
+        midarm_rightaJoint = new MowzieModelRenderer(this);
+        midarm_rightaJoint.setRotationPoint(4.5F, -1.4551F, -1.9627F);
+        body_chest1.addChild(midarm_rightaJoint);
 
-        arm_right1b = new MowzieModelRenderer(this);
-        arm_right1b.setRotationPoint(0.0F, 8.0F, 1.0F);
-        arm_right1a.addChild(arm_right1b);
-        setRotationAngle(arm_right1b, -1.0472F, 0.0F, 0.0F);
-        arm_right1b.cubeList.add(new ModelBox(arm_right1b, 58, 11, -0.99F, 0.0F, -2.0F, 2, 9, 2, 0.0F, false));
+        midarm_righta = new MowzieModelRenderer(this);
+        midarm_righta.setRotationPoint(0, 0, 0);
+        midarm_rightaJoint.addChild(midarm_righta);
+        setRotationAngle(midarm_righta, -0.0456F, -0.2731F, -0.4098F);
+        midarm_righta.cubeList.add(new ModelBox(midarm_righta, 58, 0, -1.0F, 0.0F, -1.0F, 2, 8, 2, 0.0F, false));
+
+        midarm_rightb = new MowzieModelRenderer(this);
+        midarm_rightb.setRotationPoint(0.0F, 8.0F, 1.0F);
+        midarm_righta.addChild(midarm_rightb);
+        setRotationAngle(midarm_rightb, -1.0472F, 0.0F, 0.0F);
+        midarm_rightb.cubeList.add(new ModelBox(midarm_rightb, 58, 11, -0.99F, 0.0F, -2.0F, 2, 9, 2, 0.0F, false));
 
         sexy_elbowhair_righta = new MowzieModelRenderer(this);
         sexy_elbowhair_righta.setRotationPoint(0.0F, 0.0F, 0.0F);
-        arm_right1b.addChild(sexy_elbowhair_righta);
+        midarm_rightb.addChild(sexy_elbowhair_righta);
         setRotationAngle(sexy_elbowhair_righta, -1.1383F, 0.0F, 0.0F);
         sexy_elbowhair_righta.cubeList.add(new ModelBox(sexy_elbowhair_righta, 105, 5, -1.0F, 0.0F, 0.0F, 2, 0, 1, 0.0F, false));
 
@@ -411,21 +429,25 @@ public class ModelStalker extends MowzieModelBase {
         setRotationAngle(sexy_elbowhair_rightb, 0.3187F, 0.0F, 0.0F);
         sexy_elbowhair_rightb.cubeList.add(new ModelBox(sexy_elbowhair_rightb, 105, 7, -1.0F, 0.0F, 0.0F, 2, 0, 2, 0.0F, false));
 
-        arm_left1a = new MowzieModelRenderer(this);
-        arm_left1a.setRotationPoint(-4.5F, -1.4551F, -1.9627F);
-        body_chest1.addChild(arm_left1a);
-        setRotationAngle(arm_left1a, -0.0456F, 0.2731F, 0.4098F);
-        arm_left1a.cubeList.add(new ModelBox(arm_left1a, 67, 0, -1.0F, 0.0F, -1.0F, 2, 8, 2, 0.0F, false));
+        midarm_leftaJoint = new MowzieModelRenderer(this);
+        midarm_leftaJoint.setRotationPoint(-4.5F, -1.4551F, -1.9627F);
+        body_chest1.addChild(midarm_leftaJoint);
 
-        arm_left1b = new MowzieModelRenderer(this);
-        arm_left1b.setRotationPoint(0.0F, 8.0F, 1.0F);
-        arm_left1a.addChild(arm_left1b);
-        setRotationAngle(arm_left1b, -1.0472F, 0.0F, 0.0F);
-        arm_left1b.cubeList.add(new ModelBox(arm_left1b, 67, 11, -1.01F, 0.0F, -2.0F, 2, 9, 2, 0.0F, false));
+        midarm_lefta = new MowzieModelRenderer(this);
+        midarm_lefta.setRotationPoint(0, 0 ,0);
+        midarm_leftaJoint.addChild(midarm_lefta);
+        setRotationAngle(midarm_lefta, -0.0456F, 0.2731F, 0.4098F);
+        midarm_lefta.cubeList.add(new ModelBox(midarm_lefta, 67, 0, -1.0F, 0.0F, -1.0F, 2, 8, 2, 0.0F, false));
+
+        midarm_leftb = new MowzieModelRenderer(this);
+        midarm_leftb.setRotationPoint(0.0F, 8.0F, 1.0F);
+        midarm_lefta.addChild(midarm_leftb);
+        setRotationAngle(midarm_leftb, -1.0472F, 0.0F, 0.0F);
+        midarm_leftb.cubeList.add(new ModelBox(midarm_leftb, 67, 11, -1.01F, 0.0F, -2.0F, 2, 9, 2, 0.0F, false));
 
         sexy_elbowhair_lefta = new MowzieModelRenderer(this);
         sexy_elbowhair_lefta.setRotationPoint(0.0F, 0.0F, 0.0F);
-        arm_left1b.addChild(sexy_elbowhair_lefta);
+        midarm_leftb.addChild(sexy_elbowhair_lefta);
         setRotationAngle(sexy_elbowhair_lefta, -1.1383F, 0.0F, 0.0F);
         sexy_elbowhair_lefta.cubeList.add(new ModelBox(sexy_elbowhair_lefta, 110, 5, -1.0F, 0.0F, 0.0F, 2, 0, 1, 0.0F, false));
 
@@ -435,9 +457,13 @@ public class ModelStalker extends MowzieModelBase {
         setRotationAngle(sexy_elbowhair_leftb, 0.3187F, 0.0F, 0.0F);
         sexy_elbowhair_leftb.cubeList.add(new ModelBox(sexy_elbowhair_leftb, 110, 7, -1.0F, 0.0F, 0.0F, 2, 0, 2, 0.0F, false));
 
+        leg_right1aJoint = new MowzieModelRenderer(this);
+        leg_right1aJoint.setRotationPoint(3.5F, 1.9314F, 0.5303F);
+        body_base.addChild(leg_right1aJoint);
+
         leg_right1a = new MowzieModelRenderer(this);
-        leg_right1a.setRotationPoint(3.5F, 1.9314F, 0.5303F);
-        body_base.addChild(leg_right1a);
+        leg_right1a.setRotationPoint(0, 0, 0);
+        leg_right1aJoint.addChild(leg_right1a);
         setRotationAngle(leg_right1a, -0.6829F, 0.2731F, -1.0472F);
         leg_right1a.cubeList.add(new ModelBox(leg_right1a, 76, 0, -1.0F, -1.0F, -1.0F, 2, 9, 2, 0.0F, false));
 
@@ -447,9 +473,13 @@ public class ModelStalker extends MowzieModelBase {
         setRotationAngle(leg_right1b, 0.0F, 0.0F, 0.8652F);
         leg_right1b.cubeList.add(new ModelBox(leg_right1b, 76, 12, -2.0F, 0.0F, -0.99F, 2, 9, 2, 0.0F, false));
 
+        leg_left1aJoint = new MowzieModelRenderer(this);
+        leg_left1aJoint.setRotationPoint(-3.5F, 1.9314F, 0.5303F);
+        body_base.addChild(leg_left1aJoint);
+
         leg_left1a = new MowzieModelRenderer(this);
-        leg_left1a.setRotationPoint(-3.5F, 1.9314F, 0.5303F);
-        body_base.addChild(leg_left1a);
+        leg_left1a.setRotationPoint(0, 0, 0);
+        leg_left1aJoint.addChild(leg_left1a);
         setRotationAngle(leg_left1a, -0.6829F, -0.2731F, 1.0472F);
         leg_left1a.cubeList.add(new ModelBox(leg_left1a, 85, 0, -1.0F, -1.0F, -1.0F, 2, 9, 2, 0.0F, true));
 
@@ -476,6 +506,10 @@ public class ModelStalker extends MowzieModelBase {
     @Override
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
         super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
+        neck1a.rotateAngleZ -= (f3 / (180f / (float) Math.PI)) / 2;
+        head_main.rotateAngleZ -= (f3 / (180f / (float) Math.PI)) / 2;
+        neck1a.rotateAngleX += (f4 / (180f / (float) Math.PI)) / 2;
+        head_main.rotateAngleX += (f4 / (180f / (float) Math.PI)) / 2;
     }
 
     @Override
@@ -548,5 +582,67 @@ public class ModelStalker extends MowzieModelBase {
         bigEyelidBottom.rotationPointZ -= 1 * blinkAnim3 + 0.6;
         bigEyelidBottom.scaleZ -= 0.4 * blinkAnim4;
 
+        root.rotationPointY -= 2.2;
+
+//        swing = frame;
+//        speed = 1f;
+
+        float newf1 = speed;
+        if (newf1 > 0.4) newf1 = 0.4f;
+        float newf12 = speed;
+        if (newf12 > 0.7) newf12 = 0.7f;
+
+        float globalDegree = 1.5f;
+        float wiggleDegree = 2f;
+        float globalSpeed = 0.7f;
+        float globalHeight = 1f;
+
+        body_base.rotationPointX -= wiggleDegree * globalDegree * newf1 * 3f * Math.cos(globalSpeed * swing);
+        swing(body_base, globalSpeed, 0.2f * globalDegree * wiggleDegree, false, 1.6f, 0, swing, newf1);
+        flap(body_main, globalSpeed, 0.2f * globalDegree * wiggleDegree, false, 0.8f, 0, swing, newf1);
+        flap(body_chest1, globalSpeed, 0.3f * globalDegree * wiggleDegree, false, 0, 0, swing, newf1);
+        flap(neck1a, globalSpeed, 0.7f * globalDegree * wiggleDegree, true, -0.5f, 0, swing, newf1);
+        flap(head_main, globalSpeed, 0.35f * globalDegree * wiggleDegree, false, -1f, 0, swing, newf1);
+        swing(head_main, globalSpeed, 0.2f * globalDegree * wiggleDegree, true, 0, 0, swing, newf1);
+        head_main.rotationPointZ -= 1 * Math.cos(2 * swing * globalSpeed - 0.5f) * newf1 * globalDegree;
+
+        walk(body_main, 2 * globalSpeed, 0.1f * globalHeight, true, -1.5f, 0.1f, swing, speed);
+        walk(neck1a, 2 * globalSpeed, 0.1f * globalHeight, false, -1.5f, -0.1f, swing, speed);
+        walk(jaw_lower_main, 2 * globalSpeed, 0.15f * globalHeight, false, -0.7f, -0.1f, swing, speed);
+        walk(jaw_lower_left1a, 2 * globalSpeed, 0.1f * globalHeight, false, -0.7f, -0.1f, swing, speed);
+        walk(jaw_lower_right1a, 2 * globalSpeed, 0.1f * globalHeight, false, -0.7f, -0.1f, swing, speed);
+        bob(body_base, 2 * globalSpeed, 0.5f * globalHeight, false, swing, speed);
+
+        float legOffset = -0.4f;
+        flap(leg_left1aJoint, 1 * globalSpeed, 0.6f * globalDegree, false, 0- 0.8f + legOffset, 0.6f, swing, newf12);
+        walk(leg_left1a, 1 * globalSpeed, 0.2f * globalDegree, true, 0- 2f + legOffset, 0.5f, swing, newf12);
+        walk(leg_left1b, 1 * globalSpeed, 0.3f * globalDegree, true, -1.5f +0.2f + legOffset, -0.6f, swing, newf12);
+        flap(leg_left1b, 1 * globalSpeed, 0.5f * globalDegree, true, -1.5f+0.7f + legOffset, 0f, swing, newf12);
+
+        flap(leg_right1aJoint, 1 * globalSpeed, 0.6f * globalDegree, false, 0- 0.8f + legOffset, -0.6f, swing, newf12);
+        walk(leg_right1a, 1 * globalSpeed, 0.2f * globalDegree, false, 0- 2f + legOffset, 0.5f, swing, newf12);
+        walk(leg_right1b, 1 * globalSpeed, 0.3f * globalDegree, false, -1.5f +0.2f + legOffset, -0.6f, swing, newf12);
+        flap(leg_right1b, 1 * globalSpeed, 0.5f * globalDegree, true, -1.5f+0.7f + legOffset, 0f, swing, newf12);
+
+        walk(arm_leftaJoint, 1 * globalSpeed, 0.5f * globalDegree, true, -1.6f - 0.4f, -0.3f, swing, newf12);
+        walk(arm_leftb, 1 * globalSpeed, 0.5f * globalDegree, true, -0.1f - 0.4f, -0.2f, swing, newf12);
+        swing(arm_leftb, 1 * globalSpeed, 0.3f * globalDegree, false, -0.1f - 0.4f, -0f, swing, newf12);
+
+        walk(arm_rightaJoint, 1 * globalSpeed, 0.5f * globalDegree, false, -1.6f - 0.4f, -0.3f, swing, newf12);
+        walk(arm_rightb, 1 * globalSpeed, 0.5f * globalDegree, false, -0.1f - 0.4f, -0.2f, swing, newf12);
+        swing(arm_rightb, 1 * globalSpeed, 0.3f * globalDegree, false, -0.1f - 0.4f, 0f, swing, newf12);
+
+        float midLegOffset = 3.1415926f;
+        walk(midarm_leftaJoint, 1 * globalSpeed, 0.4f * globalDegree, true, -1.6f - 0.4f + midLegOffset, -0.3f, swing, newf12);
+        swing(midarm_leftaJoint, 1 * globalSpeed, 0.1f * globalDegree, false, -1.6f + 0.4f + midLegOffset, 0.5f, swing, newf12);
+        flap(midarm_leftaJoint, 1 * globalSpeed, 0.3f * globalDegree, false, -1.6f + 0.4f + midLegOffset, 0.5f, swing, newf12);
+        walk(midarm_leftb, 1 * globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f + midLegOffset, -0.2f, swing, newf12);
+        swing(midarm_leftb, 1 * globalSpeed, 0.3f * globalDegree, false, -0.1f - 0.4f + midLegOffset, -0f, swing, newf12);
+
+        walk(midarm_rightaJoint, 1 * globalSpeed, 0.4f * globalDegree, false, -1.6f - 0.4f + midLegOffset, -0.3f, swing, newf12);
+        swing(midarm_rightaJoint, 1 * globalSpeed, 0.1f * globalDegree, false, -1.6f + 0.4f + midLegOffset, -0.5f, swing, newf12);
+        flap(midarm_rightaJoint, 1 * globalSpeed, 0.3f * globalDegree, false, -1.6f + 0.4f + midLegOffset, -0.5f, swing, newf12);
+        walk(midarm_rightb, 1 * globalSpeed, 0.3f * globalDegree, false, -0.1f - 0.4f + midLegOffset, -0.2f, swing, newf12);
+        swing(midarm_rightb, 1 * globalSpeed, 0.3f * globalDegree, false, -0.1f - 0.4f + midLegOffset, -0f, swing, newf12);
     }
 }
