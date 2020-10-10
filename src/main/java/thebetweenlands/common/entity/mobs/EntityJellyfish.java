@@ -74,7 +74,12 @@ public class EntityJellyfish extends EntityCreature implements IEntityBL {
     	}
         return super.onInitialSpawn(difficulty, livingdata);
     }
-    
+
+	@Override
+    public float getEyeHeight(){
+        return this.height * 0.5F;
+    }
+
     public float getJellyfishSize() {
         return dataManager.get(JELLYFISH_SIZE);
     }
@@ -167,21 +172,13 @@ public class EntityJellyfish extends EntityCreature implements IEntityBL {
 
     @Override
 	public void onLivingUpdate() {	
-		if (getEntityWorld().isRemote) {
-		/*	if (isInWater()) {
-				Vec3d vec3d = getLook(0.0F);
-				for (int i = 0; i < 2; ++i)
-					getEntityWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX + (rand.nextDouble() - 0.5D) * (double) width - vec3d.x , posY + rand.nextDouble() * (double) height - vec3d.y , posZ + (rand.nextDouble() - 0.5D) * (double) width - vec3d.z, 0.0D, 0.0D, 0.0D, new int[0]);
-			}*/
-		}
-
 		if (inWater) {
 			setAir(300);
 		} else if (onGround) {
 			if(getEntityWorld().getTotalWorldTime()%20==0)
 				damageEntity(DamageSource.DROWN, 0.5F);
 		}
-		
+
 		prevRotationPitch = rotationPitch;
 		float speedAngle = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
 		if(motionX != 0D && motionZ != 0D)
@@ -193,15 +190,15 @@ public class EntityJellyfish extends EntityCreature implements IEntityBL {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if(motionY == 0D)
-			rotationYaw = 0F;
+	//	 if (getMoveHelper().isUpdating() && motionY < 0) //only way I can figure to stop the pathfinding messing up rendering rotations when looking for a new path atm
+	//		 rotationYaw = 0F;
 	}
 
     @Override
     public void travel(float strafe, float up, float forward) {
         if (isServerWorld()) {
             if (isInWater()) {
-                moveRelative(strafe, up, forward, 0.1F);
+                moveRelative(strafe, up, forward, 0.075F);
                 move(MoverType.SELF, motionX, motionY, motionZ);
 				motionX *= 0.75D;
 				motionY *= 0.75D;
@@ -238,39 +235,26 @@ public class EntityJellyfish extends EntityCreature implements IEntityBL {
 
         @Override
 		public void onUpdateMoveHelper() {
-        	super.onUpdateMoveHelper();
             if (action == EntityMoveHelper.Action.MOVE_TO && !jellyfish.getNavigator().noPath()) {
                 double targetX = posX - jellyfish.posX;
                 double targetY = posY - jellyfish.posY;
                 double targetZ = posZ - jellyfish.posZ;
                 double targetDistance = targetX * targetX + targetY * targetY + targetZ * targetZ;
-                
                 targetDistance = (double) MathHelper.sqrt(targetDistance);
-               // targetY = targetY / targetDistance;
+                targetY = targetY / targetDistance;
                 float targetAngle = (float) (MathHelper.atan2(targetZ, targetX) * (180D / Math.PI)) - 90.0F;
-
                 jellyfish.rotationYaw = limitAngle(jellyfish.rotationYaw, targetAngle, 180.0F);
-               
                 jellyfish.renderYawOffset = jellyfish.rotationYaw;
                 float travelSpeed = (float) (speed * jellyfish.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
                 jellyfish.setAIMoveSpeed(jellyfish.getAIMoveSpeed() + (travelSpeed - jellyfish.getAIMoveSpeed()) * 0.125F);
-            /*    double wiggleSpeed = Math.sin((double) (jellyfish.ticksExisted + jellyfish.getEntityId()) * 0.5D) * jellyfish.height * 0.05D;
-                double wiggleOffsetX = Math.cos((double) (jellyfish.rotationYaw * 0.017453292F));
-                double wiggleOffsetZ = Math.sin((double) (jellyfish.rotationYaw * 0.017453292F));
-                jellyfish.motionX += wiggleSpeed * wiggleOffsetX;
-                jellyfish.motionZ += wiggleSpeed * wiggleOffsetZ;
-                wiggleSpeed = Math.sin((double) (jellyfish.ticksExisted + jellyfish.getEntityId()) * 0.75D) * 0.05D;
-                jellyfish.motionY += wiggleSpeed * (wiggleOffsetZ + wiggleOffsetX) * 0.25D;
-            */
-               // jellyfish.motionY += (double) jellyfish.getAIMoveSpeed() * targetY * 0.1D;
-         
-            /*     EntityLookHelper entitylookhelper = jellyfish.getLookHelper();
-               double targetDirectionX = jellyfish.posX + targetX / targetDistance * 2.0D;
-                double targetDirectionY = (double) jellyfish.getEyeHeight() + jellyfish.posY + targetY / targetDistance;
-                double targetDirectionZ = jellyfish.posZ + targetZ / targetDistance * 2.0D;
-                double lookX = entitylookhelper.getLookPosX();
-                double lookY = entitylookhelper.getLookPosY();
-                double lookZ = entitylookhelper.getLookPosZ();
+                jellyfish.motionY += (double) jellyfish.getAIMoveSpeed() * targetY * 0.2D;
+				EntityLookHelper entitylookhelper = jellyfish.getLookHelper();
+				double targetDirectionX = jellyfish.posX + targetX / targetDistance * 2.0D;
+				double targetDirectionY = (double) jellyfish.getEyeHeight() + jellyfish.posY + targetY / targetDistance;
+				double targetDirectionZ = jellyfish.posZ + targetZ / targetDistance * 2.0D;
+				double lookX = entitylookhelper.getLookPosX();
+				double lookY = entitylookhelper.getLookPosY();
+				double lookZ = entitylookhelper.getLookPosZ();
 
                 if (!entitylookhelper.getIsLooking()) {
                 	lookX = targetDirectionX;
@@ -279,9 +263,10 @@ public class EntityJellyfish extends EntityCreature implements IEntityBL {
                 }
 
                 jellyfish.getLookHelper().setLookPosition(lookX + (targetDirectionX - lookX) * 0.125D, lookY + (targetDirectionY - lookY) * 0.125D, lookZ + (targetDirectionZ - lookZ) * 0.125D, 10.0F, 40.0F);
+            
             } else {
-                jellyfish.setAIMoveSpeed(0.0F);*/
-            }
+            	jellyfish.setAIMoveSpeed(0.0F);
+           }
         }
     }
 }

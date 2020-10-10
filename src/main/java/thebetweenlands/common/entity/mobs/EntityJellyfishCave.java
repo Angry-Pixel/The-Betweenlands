@@ -67,7 +67,7 @@ public class EntityJellyfishCave extends EntityCreature implements IEntityBL {
 	@Override
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
     	if(!getEntityWorld().isRemote) {
-    		setJellyfishSize(Math.round(Math.max(0.25F, rand.nextFloat()) * 16F) / 16F);
+    		setJellyfishSize(Math.round(Math.max(0.5F, rand.nextFloat()) * 16F) / 16F);
     	}
         return super.onInitialSpawn(difficulty, livingdata);
     }
@@ -172,13 +172,15 @@ public class EntityJellyfishCave extends EntityCreature implements IEntityBL {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+	//	 if (getMoveHelper().isUpdating() && motionY < 0)  //only way I can figure to stop the pathfinding messing up rendering rotations when looking for a new path atm
+	//		 rotationYaw = 0F;
 	}
 
     @Override
     public void travel(float strafe, float up, float forward) {
         if (isServerWorld()) {
             if (isInWater()) {
-                moveRelative(strafe, up, forward, 0.1F);
+                moveRelative(strafe, up, forward, 0.075F);
                 move(MoverType.SELF, motionX, motionY, motionZ);
 				motionX *= 0.75D;
 				motionY *= 0.75D;
@@ -227,14 +229,6 @@ public class EntityJellyfishCave extends EntityCreature implements IEntityBL {
                 jellyfish.renderYawOffset = jellyfish.rotationYaw;
                 float travelSpeed = (float) (speed * jellyfish.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
                 jellyfish.setAIMoveSpeed(jellyfish.getAIMoveSpeed() + (travelSpeed - jellyfish.getAIMoveSpeed()) * 0.125F);
-            /*    double wiggleSpeed = Math.sin((double) (jellyfish.ticksExisted + jellyfish.getEntityId()) * 0.5D) * jellyfish.height * 0.05D;
-                double wiggleOffsetX = Math.cos((double) (jellyfish.rotationYaw * 0.017453292F));
-                double wiggleOffsetZ = Math.sin((double) (jellyfish.rotationYaw * 0.017453292F));
-                jellyfish.motionX += wiggleSpeed * wiggleOffsetX;
-                jellyfish.motionZ += wiggleSpeed * wiggleOffsetZ;
-                wiggleSpeed = Math.sin((double) (jellyfish.ticksExisted + jellyfish.getEntityId()) * 0.75D) * 0.05D;
-                jellyfish.motionY += wiggleSpeed * (wiggleOffsetZ + wiggleOffsetX) * 0.25D;
-            */
                 jellyfish.motionY += (double) jellyfish.getAIMoveSpeed() * targetY * 0.1D;
                 EntityLookHelper entitylookhelper = jellyfish.getLookHelper();
                 double targetDirectionX = jellyfish.posX + targetX / targetDistance * 2.0D;

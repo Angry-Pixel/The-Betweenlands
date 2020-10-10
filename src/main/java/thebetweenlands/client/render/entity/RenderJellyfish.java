@@ -34,14 +34,14 @@ public class RenderJellyfish extends RenderLiving<EntityJellyfish> {
 	@Override
 	public void doRender(EntityJellyfish jellyfish, double x, double y, double z, float entityYaw, float partialTicks) {
 		float smoothedYaw = jellyfish.prevRotationYaw + (jellyfish.rotationYaw - jellyfish.prevRotationYaw) * partialTicks;
-		float smoothedPitch = jellyfish.prevRotationPitch + (jellyfish.rotationPitch - jellyfish.prevRotationPitch) * partialTicks;
+		float smoothedPitch = jellyfish.prevRotationPitch + (jellyfish.rotationPitch - jellyfish.prevRotationPitch) * partialTicks + 90F;
 		float scale = jellyfish.getJellyfishSize();
 		shadowSize = scale * 0.5F;
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y + scale * 0.5F, z);
 		GlStateManager.scale(scale, -scale, -scale);
 		GlStateManager.rotate(smoothedYaw, 0F, 1F, 0F);
-		GlStateManager.rotate(smoothedPitch, -1F, 0F, 0F);
+		GlStateManager.rotate(smoothedPitch, 1F, 0F, 0F);
 		bindTexture(TEXTURE[jellyfish.getJellyfishColour()]);
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
