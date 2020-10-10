@@ -181,7 +181,7 @@ public class EntityJellyfish extends EntityCreature implements IEntityBL {
 
 		prevRotationPitch = rotationPitch;
 		float speedAngle = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
-		//if(motionX != 0D && motionZ != 0D)
+		if(motionX != 0D && motionZ != 0D)
 			rotationPitch += (-((float)MathHelper.atan2((double)speedAngle, motionY)) * (180F / (float)Math.PI) - rotationPitch) * 0.1F;
 			
 		super.onLivingUpdate();
