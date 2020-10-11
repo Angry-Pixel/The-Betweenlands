@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.client.render.model.tile.ModelCrabPot;
+import thebetweenlands.common.entity.mobs.EntityBubblerCrab;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.tile.TileEntityCrabPot;
@@ -76,7 +77,7 @@ public class RenderCrabPot extends TileEntitySpecialRenderer<TileEntityCrabPot> 
 			float offsetY = 0F;
 
 			GlStateManager.pushMatrix();
-			if(entity instanceof EntitySiltCrab) {
+			if(entity instanceof EntitySiltCrab || entity instanceof EntityBubblerCrab) {
 				offsetY = 0.0625F;
 				scale2 = 0.95F;
 				offsetRotation = 90F;

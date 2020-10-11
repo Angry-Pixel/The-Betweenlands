@@ -40,6 +40,7 @@ import thebetweenlands.common.entity.mobs.EntityAshSprite;
 import thebetweenlands.common.entity.mobs.EntityBarrishee;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
+import thebetweenlands.common.entity.mobs.EntityBubblerCrab;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityChiromawGreeblingRider;
 import thebetweenlands.common.entity.mobs.EntityChiromawHatchling;
@@ -245,15 +246,18 @@ public class EntityRegistry {
 		registerEntity(EntityBLFishHook.class, "betweenlands_fish_hook");
 		registerEntity(EntityFishingSpear.class, "fishing_spear", 64, 20, true);
 		registerEntity(EntityFishingTackleBoxSeat.class, "fishing_tackle_box_seat");
-
+		
+		//WIP Stuffs
 		registerEntity(EntityRockSnot.class, "rock_snot", 64, 20, true);
 		registerEntity(EntityRockSnotTendril.class, "rock_snot_tendril", 64, 20, true);
 
 		registerEntity(EntityPuffin.class, "puffin", 0x3F5A69, 0xA16A77, 64, 3, true);
 		registerEntity(EntityAnimalBurrow.class, "animal_burrow");
-		
+
 		registerEntity(EntityJellyfish.class, "jellyfish", 0x3F5A69, 0xA16A77, 64, 3, true);
 		registerEntity(EntityJellyfishCave.class, "jellyfish_cave", 0x3F5A69, 0xA16A77, 64, 3, true);
+
+		registerEntity(EntityBubblerCrab.class, "bubbler_crab", 0x086A87, 0xB43104);
 	}
 
 	private static int id = 0;

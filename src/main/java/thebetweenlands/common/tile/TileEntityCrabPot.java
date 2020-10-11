@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
@@ -24,6 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import thebetweenlands.common.entity.mobs.EntityBubblerCrab;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemMob;
@@ -68,7 +70,11 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 			if(active && world.getTotalWorldTime()%20 == 0) {
 				lureCloseCrab();
 				if(checkCatch() != null) {
-					ItemStack itemMob = ((ItemMob) new ItemStack(ItemRegistry.SILT_CRAB).getItem()).capture(checkCatch());
+					ItemStack itemMob = ItemStack.EMPTY;
+					if(checkCatch() instanceof EntitySiltCrab)
+						itemMob = ((ItemMob) new ItemStack(ItemRegistry.SILT_CRAB).getItem()).capture(checkCatch());
+					if(checkCatch()  instanceof EntityBubblerCrab)
+						itemMob = ((ItemMob) new ItemStack(ItemRegistry.BUBBLER_CRAB).getItem()).capture(checkCatch());
 					checkCatch().setDead();
 					getItems().set(0, itemMob);
 					markForUpdate();
@@ -77,28 +83,32 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 		}
 	}
 
-	private Entity checkCatch() {
-		Entity entity = null;
-		List<EntitySiltCrab> list = getWorld().getEntitiesWithinAABB(EntitySiltCrab.class, new AxisAlignedBB(pos.up()).grow(-0.25D, 0F, -0.25D));
+	private EntityLiving checkCatch() {
+		EntityLiving entity = null;
+		List<EntityLiving> list = getWorld().getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(pos.up()).grow(-0.25D, 0F, -0.25D));
 		if (!list.isEmpty())
+			if(list.get(0) instanceof EntitySiltCrab || list.get(0) instanceof EntityBubblerCrab)
 			entity = list.get(0);
 		return entity;
 	}
 
 	@SuppressWarnings("unchecked")
 	public void lureCloseCrab() {
-		List<EntitySiltCrab> list = getWorld().getEntitiesWithinAABB(EntitySiltCrab.class, extendRangeBox());
-		for (Iterator<EntitySiltCrab> iterator = list.iterator(); iterator.hasNext();) {
-			EntitySiltCrab crab = iterator.next();
-			if (!crab.isInWater())
+		List<EntityLiving> list = getWorld().getEntitiesWithinAABB(EntityLiving.class, extendRangeBox());
+		for (Iterator<EntityLiving> iterator = list.iterator(); iterator.hasNext();) {
+			EntityLiving entity = iterator.next();
+			if (!entity.isInWater() || (!(entity instanceof EntitySiltCrab) && !(entity instanceof EntityBubblerCrab)))
 				iterator.remove();
 		}
 		if (list.isEmpty())
 			return;
 		if (!list.isEmpty()) {
+			EntityLiving foundCrab = list.get(0);
 			Collections.shuffle(list);
-			EntitySiltCrab foundCrab = list.get(0);
-			foundCrab.getNavigator().tryMoveToXYZ(pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D, 1D);
+			if(foundCrab instanceof EntitySiltCrab || foundCrab instanceof EntityBubblerCrab) {
+				foundCrab = list.get(0);
+				foundCrab.getNavigator().tryMoveToXYZ(pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D, 1D);
+			}
 		}
 	}
 
