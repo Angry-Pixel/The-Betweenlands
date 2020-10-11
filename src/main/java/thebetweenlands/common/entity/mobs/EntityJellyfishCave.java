@@ -52,7 +52,7 @@ public class EntityJellyfishCave extends EntityCreature implements IEntityBL {
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataManager.register(JELLYFISH_SIZE, 0.5F);
+        dataManager.register(JELLYFISH_SIZE, 0.75F);
     }
 
 	@Override
