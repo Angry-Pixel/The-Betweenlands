@@ -2,10 +2,12 @@ package thebetweenlands.client.render.model.entity;
 
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.Vec3d;
 import thebetweenlands.client.render.model.AdvancedModelRenderer;
 import thebetweenlands.client.render.model.MowzieModelBase;
 import thebetweenlands.client.render.model.MowzieModelRenderer;
 import net.minecraft.entity.Entity;
+import thebetweenlands.common.entity.mobs.EntityStalker;
 
 public class ModelStalker extends MowzieModelBase {
     private final MowzieModelRenderer root;
@@ -517,6 +519,7 @@ public class ModelStalker extends MowzieModelBase {
         super.setLivingAnimations(entity, swing, speed, partialRenderTicks);
         setToInitPose();
 
+        EntityStalker stalker = (EntityStalker) entity;
         float frame = entity.ticksExisted + partialRenderTicks;
 
         float scale = 1.02f;
@@ -580,7 +583,7 @@ public class ModelStalker extends MowzieModelBase {
         bigEyelidBottom.rotateAngleX += 0.5 * (blinkAnim1 + 1) + 0.4 * blinkAnim4;
         bigEyelidBottom.rotationPointY += 0.9 * blinkAnim2 - 0.2 * blinkAnim4;
         bigEyelidBottom.rotationPointZ -= 1 * blinkAnim3 + 0.6;
-        bigEyelidBottom.scaleZ -= 0.4 * blinkAnim4;
+        bigEyelidBottom.scaleZ -= 0.45 * blinkAnim4;
 
         root.rotationPointY -= 2.2;
 
@@ -592,9 +595,9 @@ public class ModelStalker extends MowzieModelBase {
         float newf12 = speed;
         if (newf12 > 0.7) newf12 = 0.7f;
 
-        float globalDegree = 1.5f;
+        float globalDegree = 1.4f;
         float wiggleDegree = 2f;
-        float globalSpeed = 0.7f;
+        float globalSpeed = 0.8f;
         float globalHeight = 1f;
 
         body_base.rotationPointX -= wiggleDegree * globalDegree * newf1 * 3f * Math.cos(globalSpeed * swing);
@@ -632,17 +635,34 @@ public class ModelStalker extends MowzieModelBase {
         walk(arm_rightb, 1 * globalSpeed, 0.5f * globalDegree, false, -0.1f - 0.4f, -0.2f, swing, newf12);
         swing(arm_rightb, 1 * globalSpeed, 0.3f * globalDegree, false, -0.1f - 0.4f, 0f, swing, newf12);
 
-        float midLegOffset = 3.1415926f;
-        walk(midarm_leftaJoint, 1 * globalSpeed, 0.4f * globalDegree, true, -1.6f - 0.4f + midLegOffset, -0.3f, swing, newf12);
-        swing(midarm_leftaJoint, 1 * globalSpeed, 0.1f * globalDegree, false, -1.6f + 0.4f + midLegOffset, 0.5f, swing, newf12);
-        flap(midarm_leftaJoint, 1 * globalSpeed, 0.3f * globalDegree, false, -1.6f + 0.4f + midLegOffset, 0.5f, swing, newf12);
-        walk(midarm_leftb, 1 * globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f + midLegOffset, -0.2f, swing, newf12);
-        swing(midarm_leftb, 1 * globalSpeed, 0.3f * globalDegree, false, -0.1f - 0.4f + midLegOffset, -0f, swing, newf12);
+        float midLegOffset = 3.1415926f - 3f;
+        float midLegDegree = 0.5f;
+        walk(midarm_leftaJoint, 1 * globalSpeed, 0.7f * globalDegree * midLegDegree, true, -1.6f - 0.4f + midLegOffset, 0.1f, swing, newf12);
+        swing(midarm_leftaJoint, 1 * globalSpeed, 0.2f * globalDegree * midLegDegree, false, -1.6f + 2.4f + midLegOffset, 0.3f, swing, newf12);
+        flap(midarm_leftaJoint, 1 * globalSpeed, 0.3f * globalDegree * midLegDegree, false, -1.6f + 0.4f + midLegOffset, 0.5f, swing, newf12);
+        walk(midarm_leftb, 1 * globalSpeed, 0.5f * globalDegree * midLegDegree, true, -0.1f - 0.4f + midLegOffset, 0.2f, swing, newf12);
+        swing(midarm_leftb, 1 * globalSpeed, 0.3f * globalDegree * midLegDegree, false, -0.1f - 0.4f + midLegOffset, -0f, swing, newf12);
 
-        walk(midarm_rightaJoint, 1 * globalSpeed, 0.4f * globalDegree, false, -1.6f - 0.4f + midLegOffset, -0.3f, swing, newf12);
-        swing(midarm_rightaJoint, 1 * globalSpeed, 0.1f * globalDegree, false, -1.6f + 0.4f + midLegOffset, -0.5f, swing, newf12);
-        flap(midarm_rightaJoint, 1 * globalSpeed, 0.3f * globalDegree, false, -1.6f + 0.4f + midLegOffset, -0.5f, swing, newf12);
-        walk(midarm_rightb, 1 * globalSpeed, 0.3f * globalDegree, false, -0.1f - 0.4f + midLegOffset, -0.2f, swing, newf12);
-        swing(midarm_rightb, 1 * globalSpeed, 0.3f * globalDegree, false, -0.1f - 0.4f + midLegOffset, -0f, swing, newf12);
+        walk(midarm_rightaJoint, 1 * globalSpeed, 0.7f * globalDegree * midLegDegree, false, -1.6f - 0.4f + midLegOffset, 0.1f, swing, newf12);
+        swing(midarm_rightaJoint, 1 * globalSpeed, 0.2f * globalDegree * midLegDegree, false, -1.6f + 2.4f + midLegOffset, -0.3f, swing, newf12);
+        flap(midarm_rightaJoint, 1 * globalSpeed, 0.3f * globalDegree * midLegDegree, false, -1.6f + 0.4f + midLegOffset, -0.5f, swing, newf12);
+        walk(midarm_rightb, 1 * globalSpeed, 0.5f * globalDegree * midLegDegree, false, -0.1f - 0.4f + midLegOffset, 0.2f, swing, newf12);
+        swing(midarm_rightb, 1 * globalSpeed, 0.3f * globalDegree * midLegDegree, false, -0.1f - 0.4f + midLegOffset, -0f, swing, newf12);
+
+        Vec3d eyeRot = stalker.prevEyeRotation.add(stalker.eyeRotation.subtract(stalker.prevEyeRotation).scale(partialRenderTicks));
+        eyeRot = eyeRot.scale(0.5);
+        bigeye.rotateAngleX += eyeRot.x * 0.5;
+        bigeye.rotateAngleY += eyeRot.y;
+        bigeye.rotateAngleZ += eyeRot.z;
+
+        walk(head_main, 4, 0.01f, false, 0, 0, frame, 1);
+        swing(head_main, 3, 0.01f, false, 0, 0, frame, 1);
+        flap(head_main, 5, 0.01f, false, 0, 0, frame, 1);
+
+        walk(jaw_lower_main, 0.4f, 0.2f, false, 0, 0, frame, 1);
+        walk(jaw_lower_right1a, 0.4f, 0.1f, false, -0.35f, 0, frame, 1);
+        walk(jaw_lower_left1a, 0.4f, 0.1f, false, -0.35f, 0, frame, 1);
+        swing(jaw_lower_right1a, 0.4f, 0.1f, true, -0.7f, 0, frame, 1);
+        swing(jaw_lower_left1a, 0.4f, 0.1f, false, -0.7f, 0, frame, 1);
     }
 }

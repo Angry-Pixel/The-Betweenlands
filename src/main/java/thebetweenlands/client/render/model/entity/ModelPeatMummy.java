@@ -208,34 +208,34 @@ public class ModelPeatMummy extends MowzieModelBase {
 		float globalSpeed = 0.6f;
 		float globalHeight = 1.5f;
 
-//		body_base.rotationPointX -= wiggleDegree * globalDegree * newf1 * 3f * Math.cos(globalSpeed * f);
-//		swing(sexybutt, globalSpeed, 0.2f * globalDegree * wiggleDegree, true, -1.6f, 0, f, newf1);
-//		swing(body_base, globalSpeed, 0.3f * globalDegree * wiggleDegree, true, -0.8f, 0, f, newf1);
-//		swing(shoulderBase, globalSpeed, 0.4f * globalDegree * wiggleDegree, true, 0, 0, f, newf1);
-//		swing(neck, globalSpeed, 0.6f * globalDegree * wiggleDegree, false, -0.5f, 0, f, newf1);
-//
-//		walk(body_base, 2 * globalSpeed, 0.1f * globalHeight, true, -1.5f, 0.1f, f, f1);
-//		walk(neck, 2 * globalSpeed, 0.1f * globalHeight, false, -1f, -0.1f, f, f1);
-//		walk(jaw, 2 * globalSpeed, 0.1f * globalHeight, false, -0.7f, -0.1f, f, f1);
-//		bob(body_base, 2 * globalSpeed, 0.5f * globalHeight, false, f, f1);
+		body_base.rotationPointX -= wiggleDegree * globalDegree * newf1 * 3f * Math.cos(globalSpeed * f);
+		swing(sexybutt, globalSpeed, 0.2f * globalDegree * wiggleDegree, true, -1.6f, 0, f, newf1);
+		swing(body_base, globalSpeed, 0.3f * globalDegree * wiggleDegree, true, -0.8f, 0, f, newf1);
+		swing(shoulderBase, globalSpeed, 0.4f * globalDegree * wiggleDegree, true, 0, 0, f, newf1);
+		swing(neck, globalSpeed, 0.6f * globalDegree * wiggleDegree, false, -0.5f, 0, f, newf1);
+
+		walk(body_base, 2 * globalSpeed, 0.1f * globalHeight, true, -1.5f, 0.1f, f, f1);
+		walk(neck, 2 * globalSpeed, 0.1f * globalHeight, false, -1f, -0.1f, f, f1);
+		walk(jaw, 2 * globalSpeed, 0.1f * globalHeight, false, -0.7f, -0.1f, f, f1);
+		bob(body_base, 2 * globalSpeed, 0.5f * globalHeight, false, f, f1);
 
 		flap(legleftJoint, 1 * globalSpeed, 0.3f * globalDegree, false, 0- 0.8f, -0.3f, f, newf12);
 		walk(legleftJoint, 1 * globalSpeed, 0.3f * globalDegree, false, 0- 0.8f, -0.5f, f, newf12);
-//		walk(legleft2, 1 * globalSpeed, 0.3f * globalDegree, false, -1.5f - 0.8f, 0.3f, f, newf12);
-//		swing(legleft2, 1 * globalSpeed, 0.3f * globalDegree, false, -1.5f - 0.8f, 0.3f, f, newf12);
+		walk(legleft2, 1 * globalSpeed, 0.3f * globalDegree, false, -1.5f - 0.8f, 0.3f, f, newf12);
+		swing(legleft2, 1 * globalSpeed, 0.3f * globalDegree, false, -1.5f - 0.8f, 0.3f, f, newf12);
 
 		flap(legrightJoint, 1 * globalSpeed, 0.3f * globalDegree, false, 0 - 0.8f, 0.3f, f, newf12);
 		walk(legrightJoint, 1 * globalSpeed, 0.3f * globalDegree, true, 0- 0.8f, -0.5f, f, newf12);
-//		walk(legright2, 1 * globalSpeed, 0.3f * globalDegree, true, -1.5f- 0.8f, 0.3f, f, newf12);
-//		swing(legright2, 1 * globalSpeed, 0.3f * globalDegree, false, -1.5f- 0.8f, -0.3f, f, newf12);
+		walk(legright2, 1 * globalSpeed, 0.3f * globalDegree, true, -1.5f- 0.8f, 0.3f, f, newf12);
+		swing(legright2, 1 * globalSpeed, 0.3f * globalDegree, false, -1.5f- 0.8f, -0.3f, f, newf12);
 
-//		walk(armleftJoint, 1 * globalSpeed, 0.5f * globalDegree, true, -1.6f - 0.4f, 0.3f, f, newf12);
-//		walk(armleft2, 1 * globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f, -0.4f, f, newf12);
-//		swing(armleft2, 1 * globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f, -0.4f, f, newf12);
-//
-//		walk(armrightJoint, 1 * globalSpeed, 0.5f * globalDegree, false, -1.6f - 0.4f, 0.3f, f, newf12);
-//		walk(armright2, 1 * globalSpeed, 0.3f * globalDegree, false, -0.1f - 0.4f, -0.4f, f, newf12);
-//		swing(armright2, 1 * globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f, 0.4f, f, newf12);
+		walk(armleftJoint, 1 * globalSpeed, 0.5f * globalDegree, true, -1.6f - 0.4f, 0.3f, f, newf12);
+		walk(armleft2, 1 * globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f, -0.4f, f, newf12);
+		swing(armleft2, 1 * globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f, -0.4f, f, newf12);
+
+		walk(armrightJoint, 1 * globalSpeed, 0.5f * globalDegree, false, -1.6f - 0.4f, 0.3f, f, newf12);
+		walk(armright2, 1 * globalSpeed, 0.3f * globalDegree, false, -0.1f - 0.4f, -0.4f, f, newf12);
+		swing(armright2, 1 * globalSpeed, 0.3f * globalDegree, true, -0.1f - 0.4f, 0.4f, f, newf12);
 	}
 
 	@Override

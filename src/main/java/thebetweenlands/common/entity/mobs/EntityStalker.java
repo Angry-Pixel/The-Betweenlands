@@ -7,6 +7,8 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.passive.EntitySheep;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.Block;
@@ -78,9 +80,21 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 	protected int checkSeenTimer = 20;
 	protected boolean canStalkerBeSeen = false;
 
+	public Vec3d eyeRotation;
+	public Vec3d prevEyeRotation;
+	public Vec3d eyeRotationTarget;
+	private int nextEyeRotate;
+
+	public int animationOffset;
+
 	public EntityStalker(World world) {
 		super(world);
 		this.maxPathingTargetHeight = 10;
+		eyeRotation = new Vec3d(0, 0, 0);
+		prevEyeRotation = new Vec3d(0, 0, 0);
+		eyeRotationTarget = new Vec3d(0, 0, 0);
+		animationOffset = rand.nextInt(200);
+		nextEyeRotate = 1;
 	}
 
 	@Override
@@ -389,6 +403,14 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 				this.setDead();
 			}
 		}
+
+		// Eye animation
+		prevEyeRotation = eyeRotation;
+		if ((ticksExisted + animationOffset) % nextEyeRotate == 0) {
+			eyeRotationTarget = new Vec3d(rand.nextFloat() - 0.5, rand.nextFloat() - 0.5, rand.nextFloat() - 0.5);
+			nextEyeRotate = rand.nextInt(15) + 20;
+		}
+		eyeRotation = eyeRotation.add(eyeRotationTarget.subtract(eyeRotation).scale(0.5));
 	}
 
 	@Override
