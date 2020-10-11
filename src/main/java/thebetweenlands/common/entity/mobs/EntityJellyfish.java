@@ -53,7 +53,7 @@ public class EntityJellyfish extends EntityCreature implements IEntityBL {
     @Override
     protected void entityInit() {
         super.entityInit();
-        dataManager.register(JELLYFISH_SIZE, 0.75F);
+        dataManager.register(JELLYFISH_SIZE, 0.5F);
         dataManager.register(JELLYFISH_COLOUR, (byte)0);
     }
 
@@ -69,7 +69,7 @@ public class EntityJellyfish extends EntityCreature implements IEntityBL {
 	@Override
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
     	if(!getEntityWorld().isRemote) {
-    		setJellyfishSize(Math.round(Math.max(0.75F, rand.nextFloat()) * 16F) / 16F);
+    		setJellyfishSize(Math.round(Math.max(0.5F, rand.nextFloat()) * 16F) / 16F);
 	        setJellyfishColour((byte)((byte)rand.nextInt(5)));
     	}
         return super.onInitialSpawn(difficulty, livingdata);
