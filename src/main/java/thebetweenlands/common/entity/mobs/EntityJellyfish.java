@@ -46,7 +46,7 @@ public class EntityJellyfish extends EntityCreature implements IEntityBL {
 
 	@Override
     protected void initEntityAI() {
-		tasks.addTask(3, new EntityAIWander(this, 0.5D, 20));
+		tasks.addTask(3, new EntityAIWander(this, 0.75D, 20));
         tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 0.4D));
     }
 

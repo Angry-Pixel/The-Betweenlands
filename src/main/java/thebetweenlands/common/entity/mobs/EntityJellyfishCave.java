@@ -67,7 +67,7 @@ public class EntityJellyfishCave extends EntityCreature implements IEntityBL {
 	@Override
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
     	if(!getEntityWorld().isRemote) {
-    		setJellyfishSize(Math.round(Math.max(0.5F, rand.nextFloat()) * 16F) / 16F);
+    		setJellyfishSize(Math.round(Math.max(0.75F, rand.nextFloat()) * 16F) / 16F);
     	}
         return super.onInitialSpawn(difficulty, livingdata);
     }
@@ -229,7 +229,7 @@ public class EntityJellyfishCave extends EntityCreature implements IEntityBL {
                 jellyfish.renderYawOffset = jellyfish.rotationYaw;
                 float travelSpeed = (float) (speed * jellyfish.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
                 jellyfish.setAIMoveSpeed(jellyfish.getAIMoveSpeed() + (travelSpeed - jellyfish.getAIMoveSpeed()) * 0.125F);
-                jellyfish.motionY += (double) jellyfish.getAIMoveSpeed() * targetY * 0.1D;
+                jellyfish.motionY += (double) jellyfish.getAIMoveSpeed() * targetY * 0.2D;
                 EntityLookHelper entitylookhelper = jellyfish.getLookHelper();
                 double targetDirectionX = jellyfish.posX + targetX / targetDistance * 2.0D;
                 double targetDirectionY = (double) jellyfish.getEyeHeight() + jellyfish.posY + targetY / targetDistance;
