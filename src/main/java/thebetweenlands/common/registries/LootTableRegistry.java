@@ -43,6 +43,7 @@ import thebetweenlands.common.loot.EntityPropertyIsBossPeatMummy;
 import thebetweenlands.common.loot.EntityPropertyLootModifier;
 import thebetweenlands.common.loot.EntityPropertyPeatMummyShimmerstone;
 import thebetweenlands.common.loot.EntityPropertyPyradCharging;
+import thebetweenlands.common.loot.EntityPropertyRockSnotType;
 import thebetweenlands.common.loot.EntityPropertySludgeWormSquashed;
 import thebetweenlands.common.loot.LootConditionEventActive;
 import thebetweenlands.common.loot.LootConditionFromSharedPool;
@@ -142,6 +143,7 @@ public class LootTableRegistry {
     public static final ResourceLocation ANADIA_HEAD = register("entities/anadia_head");
     public static final ResourceLocation ANADIA_BODY = register("entities/anadia_body");
     public static final ResourceLocation ANADIA_TAIL = register("entities/anadia_tail");
+    public static final ResourceLocation ROCK_SNOT = register("entities/rock_snot");
 
     //SPECIAL MOB LOOT FUNCTIONS
     public static final ResourceLocation CHIROMAW_HATCHLING = register("entities/chiromaw_hatchling");
@@ -163,7 +165,8 @@ public class LootTableRegistry {
     public static final ResourceLocation ENTITY_PROPERTY_ANADIA_HEAD_TYPE = register(new EntityPropertyAnadiaHeadType.Serializer());
     public static final ResourceLocation ENTITY_PROPERTY_ANADIA_BODY_TYPE = register(new EntityPropertyAnadiaBodyType.Serializer());
     public static final ResourceLocation ENTITY_PROPERTY_ANADIA_TAIL_TYPE = register(new EntityPropertyAnadiaTailType.Serializer());
-    
+    public static final ResourceLocation ENTITY_ROCK_SNOT_TYPE = register(new EntityPropertyRockSnotType.Serializer());
+
     //LOOT CONDITIONS
     public static final ResourceLocation LOOT_CONDITION_OR = register(new LootConditionOr.Serializer());
     public static final ResourceLocation LOOT_CONDITION_EVENT_ACTIVE = register(new LootConditionEventActive.Serializer());

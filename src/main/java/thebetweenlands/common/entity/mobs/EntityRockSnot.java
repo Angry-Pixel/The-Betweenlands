@@ -1,5 +1,6 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -10,23 +11,28 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.EntityProximitySpawner;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.util.PlayerUtil;
 
 public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL {
 	
 	private static final DataParameter<Integer> TENDRIL_COUNT = EntityDataManager.createKey(EntityRockSnot.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> JAW_ANGLE = EntityDataManager.createKey(EntityRockSnot.class, DataSerializers.VARINT);
+
+	public boolean placed_by_player;
 	public int spawnDelayCounter = 20;
 
 	public EntityRockSnot(World world) {
@@ -56,7 +62,14 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
+		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 	}
+
+    @Nullable
+    @Override
+    protected ResourceLocation getLootTable() {
+        return LootTableRegistry.ROCK_SNOT;
+    }
 
 	@Override
 	public void onLivingUpdate() {
@@ -71,20 +84,21 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 	public void onUpdate() {
 		if (!getEntityWorld().isRemote) {
 			if(getEntityWorld().getTotalWorldTime()%5 == 0)
-				checkArea();
+				checkAreaHere();
 		}
 
 		if (!getEntityWorld().isRemote && getAttackTarget() != null) {
-			double distance = getDistance(getAttackTarget().posX, getAttackTarget().getEntityBoundingBox().minY, getAttackTarget().posZ);
-			if (getJawAngle() < 80)
+			if (!isBeingRidden() && getJawAngle() < 80)
 				setJawAngle(getJawAngle() + 8);
-			if (isBeingRidden() && getJawAngle() > 0)
+			if (isBeingRidden() && getJawAngle() > 16)
 				setJawAngle(getJawAngle() - 8);
 		}
-		
-		if (!getEntityWorld().isRemote && getAttackTarget() == null) {
-			if (getJawAngle() > 0 && getTendrilCount() <= 0)
-				setJawAngle(getJawAngle() - 8);
+
+		if (!getEntityWorld().isRemote) {
+			if (getAttackTarget() == null) {
+				if (getJawAngle() > 0 && getTendrilCount() <= 0)
+					setJawAngle(getJawAngle() - 8);
+			}
 		}
 		super.onUpdate();
 	}
@@ -93,33 +107,42 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
     public float getEyeHeight(){
         return this.height;
     }
-
+	
 	@Nullable
 	@Override
 	protected Entity checkArea() {
+		return null;
+	}
+
+	public void checkAreaHere() {
 		if (!getEntityWorld().isRemote && getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL) {
 			List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, proximityBox());
-			for (int entityCount = 0; entityCount < list.size(); entityCount++) {
-				Entity entity = list.get(entityCount);
-				if (entity != null) {
-					//if (entity instanceof EntityPlayer && !((EntityPlayer) entity).isSpectator() && !((EntityPlayer) entity).isCreative()) {
-						if (canSneakPast() && entity.isSneaking())
-							return null;
-						else if (checkSight() && !canEntityBeSeen(entity))
-							return null;
-						else 
-							if(getCanShootTendril())
-								setAttackTarget((EntityLivingBase) entity);
+			for (Iterator<EntityLivingBase> iterator = list.iterator(); iterator.hasNext();) {
+				EntityLivingBase entity  = iterator.next();
+				if (entity != null && (entity instanceof EntityPlayer && getPlacedByPlayer() || entity instanceof EntityRockSnot))
+					iterator.remove();
+			}
+			if (list.isEmpty()) {
+				setAttackTarget(null);
+				return;
+			}
+			if (!list.isEmpty()) {
+				EntityLivingBase entity = list.get(0);
 
-							if (!isDead && isSingleUse())
-								setDead();
-						}
+					//if (entity instanceof EntityPlayer && !((EntityPlayer) entity).isSpectator() && !((EntityPlayer) entity).isCreative()) {
+
+					if (canSneakPast() && entity.isSneaking())
+						return;
+					else if (checkSight() && !canEntityBeSeen(entity))
+							return;
+					else 
+						if(getCanShootTendril())
+							setAttackTarget((EntityLivingBase) entity);
+					if (!isDead && isSingleUse())
+						setDead();
 					//}
 			}
-			if(list.isEmpty())
-				setAttackTarget(null);
 		}
-		return null;
 	}
 
 	@Override
@@ -134,12 +157,14 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
 		if(source instanceof EntityDamageSource) {
+			if(source == DamageSource.DROWN)
+				return false;
 			Entity sourceEntity = ((EntityDamageSource) source).getTrueSource();
 			if(sourceEntity instanceof EntityPlayer && ((EntityPlayer) sourceEntity).isCreative()) {
 				this.setDead();
 			}
 		}
-		return false;
+		return damageSnot(source, damage);
 	}
 
 	@Override
@@ -151,7 +176,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 	public void updatePassenger(Entity entity) {
 		PlayerUtil.resetFloating(entity);
 		if (entity instanceof EntityLivingBase)
-			entity.setPosition(posX, posY + height, posZ);
+			entity.setPosition(posX, posY + height * 0.5F, posZ);
 	}
 
 	@Override
@@ -187,6 +212,26 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 
 	public int getJawAngle() {
 		return dataManager.get(JAW_ANGLE);
+	}
+
+	public void setPlacedByPlayer(boolean placed) {
+		placed_by_player = placed;
+	}
+
+	public boolean getPlacedByPlayer() {
+		return placed_by_player;
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		setPlacedByPlayer(compound.getBoolean("placed_by_player"));
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+		compound.setBoolean("placed_by_player", getPlacedByPlayer());
 	}
 
 	@Override

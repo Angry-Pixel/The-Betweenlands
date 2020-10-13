@@ -1,0 +1,67 @@
+{
+  "pools": [
+    {
+      "name": "rock_snot",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:rock_snot_placed": false
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:items_misc",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 1
+            },
+            {
+              "function": "set_data",
+              "data": 58
+            },
+            {
+              "function": "looting_enchant",
+              "count": {
+                "min": 0,
+                "max": 1
+              }
+            }
+          ],
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "snot_pod",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:rock_snot_placed": true
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:snot_pod",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 1
+            }
+          ],
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

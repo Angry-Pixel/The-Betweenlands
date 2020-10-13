@@ -137,6 +137,7 @@ import thebetweenlands.common.item.misc.ItemRingOfGathering;
 import thebetweenlands.common.item.misc.ItemRope;
 import thebetweenlands.common.item.misc.ItemRuneDoorKey;
 import thebetweenlands.common.item.misc.ItemShimmerStone;
+import thebetweenlands.common.item.misc.ItemSnotPod;
 import thebetweenlands.common.item.misc.ItemSpiritTreeFaceMaskSmallAnimated;
 import thebetweenlands.common.item.misc.ItemSwampTalisman;
 import thebetweenlands.common.item.misc.ItemTarminion;
@@ -478,6 +479,7 @@ public class ItemRegistry {
     public static final Item DRAETON_UPGRADE_ANCHOR = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1);
     public static final Item DRAETON_UPGRADE_CRAFTING = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1);
     public static final Item WEEDWOOD_ROWBOAT_UPGRADE_LANTERN = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1);
+    public static final Item SNOT_POD = new ItemSnotPod();
     
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();

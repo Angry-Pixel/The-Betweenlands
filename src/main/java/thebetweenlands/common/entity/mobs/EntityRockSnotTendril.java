@@ -6,6 +6,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -75,7 +76,7 @@ public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSp
 				motionZ = 0D;
 
 				if (!getEntityWorld().isRemote) {
-					if (isBeingRidden()) {
+					if (isBeingRidden() && !parent.isBeingRidden()) {
 						Entity entity = getPassengers().get(0);
 						entity.startRiding(parent, true);
 					}
@@ -87,7 +88,6 @@ public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSp
 
 		if (parent != null && (!isBeingRidden() && ticksExisted > 20) || parent != null && collidedVertically) {
 			if (!getEntityWorld().isRemote) {
-				parent.setAttackTarget(null);
 				if (getExtending())
 					setExtending(false);
 			}
@@ -128,6 +128,8 @@ public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSp
 				Entity entity = list.get(i);
 				if (entity != null) {
 					if (entity instanceof EntityLivingBase && !(entity instanceof EntityRockSnot) && !(entity instanceof EntityRockSnotTendril)) {
+						if (entity instanceof EntityPlayer && parent.getPlacedByPlayer() || parent.isBeingRidden())
+							return null;
 						if (!isBeingRidden()) {
 							if (!getEntityWorld().isRemote) {
 								entity.startRiding(this, true);
@@ -155,6 +157,11 @@ public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSp
 		PlayerUtil.resetFloating(entity);
 		if (entity instanceof EntityLivingBase)
 			entity.setPosition(posX, posY + height, posZ);
+	}
+
+	@Override
+	public boolean shouldRiderSit() {
+		return false;
 	}
 
 	@Override

@@ -112,7 +112,8 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 		ANADIA_SCALES(54),
 		ANADIA_BONES(55),
 		ANADIA_REMAINS(56),
-		ANADIA_FINS(57);
+		ANADIA_FINS(57),
+		SNOT(58);
 
 		private final int id;
 		private final String unlocalizedName;

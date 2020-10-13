@@ -3,6 +3,8 @@ package thebetweenlands.client.render.model.entity;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.mobs.EntityRockSnot;
@@ -310,10 +312,28 @@ public class ModelRockSnot extends ModelBase {
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale, Entity entity) {
 		super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, scale, entity);
-		EntityRockSnot snot = (EntityRockSnot ) entity;
-		shell_right_main1a.rotateAngleZ = -0.136659280431156F + -convertDegtoRad(snot.getJawAngle());
-		shell_left_main1a.rotateAngleZ = 0.136659280431156F + convertDegtoRad(snot.getJawAngle());
 	}
+
+    @Override
+    public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
+		EntityRockSnot snot = (EntityRockSnot ) entity;
+		float chomp = MathHelper.sin((snot.ticksExisted + partialRenderTicks) * 0.5F) * 0.8F;
+		float chomp2 = MathHelper.sin((snot.ticksExisted + partialRenderTicks) * 0.25F) * 0.6F;
+		shell_right_main1a.rotateAngleX = 0F;
+		shell_left_main1a.rotateAngleX = 0F;
+		shell_right_main1a.rotationPointY = 24.0F;
+		shell_left_main1a.rotationPointY = 24.0F;
+		shell_right_main1a.rotateAngleZ = -0.136659280431156F -convertDegtoRad(snot.getJawAngle());
+		shell_left_main1a.rotateAngleZ = 0.136659280431156F + convertDegtoRad(snot.getJawAngle());
+		if(snot.isBeingRidden() && snot.getJawAngle() == 16) {
+			shell_right_main1a.rotateAngleX = 0F - chomp2 * 0.125F;
+			shell_left_main1a.rotateAngleX = 0F + chomp2 * 0.125F;
+			shell_right_main1a.rotationPointY = 24.0F + chomp2 * 1.5F;
+			shell_left_main1a.rotationPointY = 24.0F + chomp2 * 1.5F;
+			shell_right_main1a.rotateAngleZ = -0.136659280431156F -convertDegtoRad(snot.getJawAngle()) + chomp * 0.125F;
+			shell_left_main1a.rotateAngleZ = 0.136659280431156F + convertDegtoRad(snot.getJawAngle()) - chomp * 0.125F;
+		}
+    }
 
 	public float convertDegtoRad(float angleIn) {
 		return angleIn * ((float) Math.PI / 180F);
