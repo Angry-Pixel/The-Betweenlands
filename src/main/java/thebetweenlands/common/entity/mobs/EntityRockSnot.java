@@ -25,16 +25,15 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.EntityProximitySpawner;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
 import thebetweenlands.common.registries.LootTableRegistry;
-import thebetweenlands.util.PlayerUtil;
 
 public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL {
 	
 	private static final DataParameter<Integer> TENDRIL_COUNT = EntityDataManager.createKey(EntityRockSnot.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> JAW_ANGLE = EntityDataManager.createKey(EntityRockSnot.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> EATING_TIMER = EntityDataManager.createKey(EntityRockSnot.class, DataSerializers.VARINT);
 
 	public boolean placed_by_player;
 	public int spawnDelayCounter = 20;
-
 	public EntityRockSnot(World world) {
 		super(world);
 		setSize(1F, 0.5F);
@@ -56,6 +55,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 		super.entityInit();
 		dataManager.register(TENDRIL_COUNT, 0);
 		dataManager.register(JAW_ANGLE, 0);
+		dataManager.register(EATING_TIMER, 0);
 	}
 
 	@Override
@@ -88,18 +88,37 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 		}
 
 		if (!getEntityWorld().isRemote && getAttackTarget() != null) {
-			if (!isBeingRidden() && getJawAngle() < 80)
+			if (!isBeingRidden() && getJawAngle() < 80) {
 				setJawAngle(getJawAngle() + 8);
+				if (getEatingHeight() > 0)
+					setEatingHeight(0);
+			}
 			if (isBeingRidden() && getJawAngle() > 16)
 				setJawAngle(getJawAngle() - 8);
 		}
 
 		if (!getEntityWorld().isRemote) {
+			
 			if (getAttackTarget() == null) {
-				if (getJawAngle() > 0 && getTendrilCount() <= 0)
-					setJawAngle(getJawAngle() - 8);
+				if (!isBeingRidden()) {
+					if (getJawAngle() > 0 && getTendrilCount() <= 0)
+						setJawAngle(getJawAngle() - 8);
+				}
 			}
+
+			if (isBeingRidden() && getJawAngle() == 16 && getPlacedByPlayer()) {
+				if (getEntityWorld().getTotalWorldTime() %20 == 0) {
+					setEatingHeight(getEatingHeight() + 1);
+					getPassengers().get(0).attackEntityFrom(DamageSource.GENERIC, 0F);
+					if (getEatingHeight() == 10 && getPassengers().get(0) != null) {
+						getPassengers().get(0).setDead();
+						setEatingHeight(0);
+					}
+				}
+			}
+		//	System.out.println("Eating Ticks: " + getEatingHeight());
 		}
+			
 		super.onUpdate();
 	}
 
@@ -174,9 +193,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 
 	@Override
 	public void updatePassenger(Entity entity) {
-		PlayerUtil.resetFloating(entity);
-		if (entity instanceof EntityLivingBase)
-			entity.setPosition(posX, posY + height * 0.5F, posZ);
+		entity.setPosition(posX, posY + height * 0.5F - (entity.height / 10F * ((float) getEatingHeight())), posZ);
 	}
 
 	@Override
@@ -193,6 +210,14 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
     public boolean shouldDismountInWater(Entity rider) {
         return false;
     }
+
+	private int getEatingHeight() {
+		return dataManager.get(EATING_TIMER);
+	}
+
+	public void setEatingHeight(int count) {
+		dataManager.set(EATING_TIMER, count);
+	}
 
 	public boolean getCanShootTendril() {
 		return getTendrilCount() < 4;
