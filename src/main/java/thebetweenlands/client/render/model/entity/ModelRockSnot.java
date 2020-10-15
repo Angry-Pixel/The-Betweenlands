@@ -340,12 +340,12 @@ public class ModelRockSnot extends ModelBase {
 		}
 
 		if(snot.getPearlTimer() > 30 && snot.getEntityWorld().getTotalWorldTime()%2 == 0) {
-			shell_right_main1a.rotationPointX = -0.5F + (snot.getEntityWorld().rand.nextFloat())* 0.5F;
-			shell_left_main1a.rotationPointX = 0.5F + (snot.getEntityWorld().rand.nextFloat())* 0.5F;
-			shell_right_main1a.rotationPointZ = 0F + (snot.getEntityWorld().rand.nextFloat())* 0.5F;
-			shell_left_main1a.rotationPointZ = 0F + (snot.getEntityWorld().rand.nextFloat())* 0.5F;
-			shell_right_main1a.rotationPointY = 24F + (snot.getEntityWorld().rand.nextFloat())* 0.75F;
-			shell_left_main1a.rotationPointY = 24F + (snot.getEntityWorld().rand.nextFloat())* 0.75F;
+			shell_right_main1a.rotationPointX = -0.5F + (snot.getEntityWorld().rand.nextFloat()) * (120 - snot.getPearlTimer()) * 0.01F;
+			shell_left_main1a.rotationPointX = 0.5F + (snot.getEntityWorld().rand.nextFloat()) * (120 - snot.getPearlTimer()) * 0.01F;
+			shell_right_main1a.rotationPointZ = 0F + (snot.getEntityWorld().rand.nextFloat()) * (120 - snot.getPearlTimer()) * 0.01F;
+			shell_left_main1a.rotationPointZ = 0F + (snot.getEntityWorld().rand.nextFloat()) * (120 - snot.getPearlTimer()) * 0.01F;
+			shell_right_main1a.rotationPointY = 24F + (snot.getEntityWorld().rand.nextFloat()) * (120 - snot.getPearlTimer()) * 0.015F;
+			shell_left_main1a.rotationPointY = 24F + (snot.getEntityWorld().rand.nextFloat()) * (120 - snot.getPearlTimer()) * 0.015F;
 		}
 
 		if(snot.getPearlTimer() <= 30 && snot.getPearlTimer() > 10) {
