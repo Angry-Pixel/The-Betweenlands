@@ -321,10 +321,15 @@ public class ModelRockSnot extends ModelBase {
 		float chomp2 = MathHelper.sin((snot.ticksExisted + partialRenderTicks) * 0.25F) * 0.6F;
 		shell_right_main1a.rotateAngleX = 0F;
 		shell_left_main1a.rotateAngleX = 0F;
-		shell_right_main1a.rotationPointY = 24.0F;
-		shell_left_main1a.rotationPointY = 24.0F;
 		shell_right_main1a.rotateAngleZ = -0.136659280431156F -convertDegtoRad(snot.getJawAngle());
 		shell_left_main1a.rotateAngleZ = 0.136659280431156F + convertDegtoRad(snot.getJawAngle());
+		shell_right_main1a.rotationPointY = 24.0F;
+		shell_left_main1a.rotationPointY = 24.0F;
+		shell_right_main1a.rotationPointX = -0.5F;
+		shell_left_main1a.rotationPointX = 0.5F;
+		shell_right_main1a.rotationPointZ = 0F;
+		shell_left_main1a.rotationPointZ = 0F;
+
 		if(snot.isBeingRidden() && snot.getJawAngle() == 16) {
 			shell_right_main1a.rotateAngleX = 0F - chomp2 * 0.125F;
 			shell_left_main1a.rotateAngleX = 0F + chomp2 * 0.125F;
@@ -332,6 +337,29 @@ public class ModelRockSnot extends ModelBase {
 			shell_left_main1a.rotationPointY = 24.0F + chomp2 * 1.5F;
 			shell_right_main1a.rotateAngleZ = -0.136659280431156F -convertDegtoRad(snot.getJawAngle()) + chomp * 0.125F;
 			shell_left_main1a.rotateAngleZ = 0.136659280431156F + convertDegtoRad(snot.getJawAngle()) - chomp * 0.125F;
+		}
+
+		if(snot.getPearlTimer() > 30 && snot.getEntityWorld().getTotalWorldTime()%2 == 0) {
+			shell_right_main1a.rotationPointX = -0.5F + (snot.getEntityWorld().rand.nextFloat())* 0.5F;
+			shell_left_main1a.rotationPointX = 0.5F + (snot.getEntityWorld().rand.nextFloat())* 0.5F;
+			shell_right_main1a.rotationPointZ = 0F + (snot.getEntityWorld().rand.nextFloat())* 0.5F;
+			shell_left_main1a.rotationPointZ = 0F + (snot.getEntityWorld().rand.nextFloat())* 0.5F;
+			shell_right_main1a.rotationPointY = 24F + (snot.getEntityWorld().rand.nextFloat())* 0.75F;
+			shell_left_main1a.rotationPointY = 24F + (snot.getEntityWorld().rand.nextFloat())* 0.75F;
+		}
+
+		if(snot.getPearlTimer() <= 30 && snot.getPearlTimer() > 10) {
+			shell_right_main1a.rotateAngleZ = -0.136659280431156F - convertDegtoRad(30 -snot.getPearlTimer());
+			shell_left_main1a.rotateAngleZ = 0.136659280431156F + convertDegtoRad(30 -snot.getPearlTimer());
+			shell_right_main1a.rotationPointY = 24.0F + (30 - snot.getPearlTimer())* 0.1F;
+			shell_left_main1a.rotationPointY = 24.0F + (30 - snot.getPearlTimer()) * 0.1F;
+		}
+
+		if(snot.getPearlTimer() <= 10 && snot.getPearlTimer() >= 1) {
+			shell_right_main1a.rotateAngleZ = -0.136659280431156F - convertDegtoRad(10F) - convertDegtoRad(snot.getPearlTimer());
+			shell_left_main1a.rotateAngleZ = 0.136659280431156F + convertDegtoRad(10F) + convertDegtoRad(snot.getPearlTimer());
+			shell_right_main1a.rotationPointY = 25.0F + snot.getPearlTimer() * 0.1F;
+			shell_left_main1a.rotationPointY = 25.0F + snot.getPearlTimer() * 0.1F;
 		}
     }
 

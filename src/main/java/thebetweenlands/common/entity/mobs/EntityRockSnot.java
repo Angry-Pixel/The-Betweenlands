@@ -10,7 +10,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -21,9 +23,15 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.EntityProximitySpawner;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 
 public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL {
@@ -31,9 +39,12 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 	private static final DataParameter<Integer> TENDRIL_COUNT = EntityDataManager.createKey(EntityRockSnot.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> JAW_ANGLE = EntityDataManager.createKey(EntityRockSnot.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> EATING_TIMER = EntityDataManager.createKey(EntityRockSnot.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> PEARL_TIMER = EntityDataManager.createKey(EntityRockSnot.class, DataSerializers.VARINT);
 
 	public boolean placed_by_player;
 	public int spawnDelayCounter = 20;
+	public static final int PEARL_CREATION_TIME = 120; // 6 seconds
+
 	public EntityRockSnot(World world) {
 		super(world);
 		setSize(1F, 0.5F);
@@ -56,6 +67,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 		dataManager.register(TENDRIL_COUNT, 0);
 		dataManager.register(JAW_ANGLE, 0);
 		dataManager.register(EATING_TIMER, 0);
+		dataManager.register(PEARL_TIMER, -1);
 	}
 
 	@Override
@@ -82,43 +94,60 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 	
 	@Override
 	public void onUpdate() {
-		if (!getEntityWorld().isRemote) {
-			if(getEntityWorld().getTotalWorldTime()%5 == 0)
-				checkAreaHere();
-		}
-
-		if (!getEntityWorld().isRemote && getAttackTarget() != null) {
-			if (!isBeingRidden() && getJawAngle() < 80) {
-				setJawAngle(getJawAngle() + 8);
-				if (getEatingHeight() > 0)
-					setEatingHeight(0);
-			}
-			if (isBeingRidden() && getJawAngle() > 16)
-				setJawAngle(getJawAngle() - 8);
+		if (getEntityWorld().isRemote) {
+			if (isBeingRidden() && getJawAngle() == 16)
+				if (getEntityWorld().getTotalWorldTime() % 20 == 0)
+					spawnEatingParticles();
+			if (getPearlTimer() == 1)
+				spawnSpittingParticles();
 		}
 
 		if (!getEntityWorld().isRemote) {
-			
-			if (getAttackTarget() == null) {
-				if (!isBeingRidden()) {
-					if (getJawAngle() > 0 && getTendrilCount() <= 0)
+			if (getPearlTimer() <= 0) {
+				if (getEntityWorld().getTotalWorldTime() % 5 == 0)
+					checkAreaHere();
+
+				if (getAttackTarget() != null) {
+					if (!isBeingRidden() && getJawAngle() < 80) {
+						setJawAngle(getJawAngle() + 8);
+						if (getEatingHeight() > 0)
+							setEatingHeight(0);
+					}
+					if (isBeingRidden() && getJawAngle() > 16)
 						setJawAngle(getJawAngle() - 8);
 				}
-			}
 
-			if (isBeingRidden() && getJawAngle() == 16 && getPlacedByPlayer()) {
-				if (getEntityWorld().getTotalWorldTime() %20 == 0) {
-					setEatingHeight(getEatingHeight() + 1);
-					getPassengers().get(0).attackEntityFrom(DamageSource.GENERIC, 0F);
-					if (getEatingHeight() == 10 && getPassengers().get(0) != null) {
-						getPassengers().get(0).setDead();
-						setEatingHeight(0);
+				if (getAttackTarget() == null) {
+					if (!isBeingRidden()) {
+						if (getJawAngle() > 0 && getTendrilCount() <= 0)
+							setJawAngle(getJawAngle() - 8);
 					}
 				}
+				if (isBeingRidden() && getJawAngle() == 16 && getPlacedByPlayer()) {
+					if (getEntityWorld().getTotalWorldTime() % 20 == 0) {
+						setEatingHeight(getEatingHeight() + 1);
+						getPassengers().get(0).attackEntityFrom(DamageSource.GENERIC, 0F);
+						if (getEatingHeight() == 10 && getPassengers().get(0) != null) {
+							getPassengers().get(0).setDead();
+							setPearlTimer(PEARL_CREATION_TIME);
+							setEatingHeight(0);
+							setJawAngle(0);
+						}
+					}
+				}
+			} else {
+				if (getPearlTimer() >= 0)
+					setPearlTimer(getPearlTimer() - 1);
+
+				if (getPearlTimer() == 0) {
+					ItemStack pearl = new ItemStack(ItemRegistry.ROCK_SNOT_PEARL);
+					EntityItem item = new EntityItem(world, posX, posY + 0.5D, posZ, pearl);
+					item.motionX = item.motionZ = 0D;
+					item.motionY = 0.4D;
+					world.spawnEntity(item);
+				}
 			}
-		//	System.out.println("Eating Ticks: " + getEatingHeight());
 		}
-			
 		super.onUpdate();
 	}
 
@@ -175,9 +204,9 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
+		if(source == DamageSource.DROWN)
+			return false;
 		if(source instanceof EntityDamageSource) {
-			if(source == DamageSource.DROWN)
-				return false;
 			Entity sourceEntity = ((EntityDamageSource) source).getTrueSource();
 			if(sourceEntity instanceof EntityPlayer && ((EntityPlayer) sourceEntity).isCreative()) {
 				this.setDead();
@@ -194,6 +223,26 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 	@Override
 	public void updatePassenger(Entity entity) {
 		entity.setPosition(posX, posY + height * 0.5F - (entity.height / 10F * ((float) getEatingHeight())), posZ);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void spawnEatingParticles() {
+		double x = posX + (double) rand.nextFloat() * 0.25F;
+		double y = posY;
+		double z = posZ + (double) rand.nextFloat() * 0.25F;
+		BLParticles.RAIN.spawn(world, x, y,z).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+		for (int count = 0; count < 5; ++count)
+			BLParticles.ITEM_BREAKING.spawn(world, posX + (world.rand.nextDouble() - 0.5D), posY + world.rand.nextDouble(), posZ + (world.rand.nextDouble() - 0.5D), ParticleArgs.get().withData(EnumItemMisc.SNOT.create(1)));
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void spawnSpittingParticles() {
+		double x = posX + (double) rand.nextFloat() * 0.25F;
+		double y = posY;
+		double z = posZ + (double) rand.nextFloat() * 0.25F;
+		for (int count = 0; count < 5; ++count)
+			for (int more = 0; more < 5; ++more)
+				BLParticles.RAIN.spawn(world, x, y + count * 0.5D, z).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
 	}
 
 	@Override
@@ -217,6 +266,14 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 
 	public void setEatingHeight(int count) {
 		dataManager.set(EATING_TIMER, count);
+	}
+
+	public int getPearlTimer() {
+		return dataManager.get(PEARL_TIMER);
+	}
+
+	public void setPearlTimer(int count) {
+		dataManager.set(PEARL_TIMER, count);
 	}
 
 	public boolean getCanShootTendril() {
