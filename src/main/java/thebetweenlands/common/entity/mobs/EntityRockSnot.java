@@ -106,7 +106,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 		}
 
 		if (!getEntityWorld().isRemote) {
-			if (getPearlTimer() <= 0) {
+			if (getPearlTimer() < 0) {
 				if (getEntityWorld().getTotalWorldTime() % 5 == 0)
 					checkAreaHere();
 
@@ -292,7 +292,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 	}
 
 	public boolean getCanShootTendril() {
-		return getTendrilCount() < 4;
+		return getTendrilCount() < 4 && getPearlTimer() <= 0;
 	}
 
 	public int getTendrilCount() {
@@ -416,7 +416,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 		public boolean shouldExecute() {
 			target = parentEntity.getAttackTarget();
 
-			if (target == null || parentEntity.isBeingRidden())
+			if (target == null || parentEntity.isBeingRidden() || !parentEntity.getCanShootTendril())
 				return false;
 			else if (parentEntity.spawnDelayCounter == 0)
 				return true;
@@ -427,7 +427,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 
 		@Override
 		public boolean shouldContinueExecuting() {
-			return target != null && parentEntity.recentlyHit <= 40 && parentEntity.getCanShootTendril() && parentEntity.spawnDelayCounter == 0 &&  !parentEntity.isBeingRidden();
+			return target != null && parentEntity.recentlyHit <= 40 && parentEntity.getCanShootTendril() && parentEntity.spawnDelayCounter == 0 && !parentEntity.isBeingRidden();
 		}
 
 		@Override
