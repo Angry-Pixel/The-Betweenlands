@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -18,6 +19,7 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.PlayerUtil;
 
 public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSpawnData {
@@ -133,6 +135,7 @@ public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSp
 						if (!isBeingRidden()) {
 							if (!getEntityWorld().isRemote) {
 								entity.startRiding(this, true);
+								getEntityWorld().playSound(null, getPosition(), SoundRegistry.ROCK_SNOT_ATTACH, SoundCategory.HOSTILE, 1F, 1F);
 								if (getExtending())
 									setExtending(false);
 							}

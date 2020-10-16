@@ -21,6 +21,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -34,6 +35,7 @@ import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL {
 	private static final DataParameter<Integer> TENDRIL_COUNT = EntityDataManager.createKey(EntityRockSnot.class, DataSerializers.VARINT);
@@ -130,6 +132,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 				if (isBeingRidden() && getJawAngle() == 16 && getPlacedByPlayer()) {
 					if (getEntityWorld().getTotalWorldTime() % 20 == 0) {
 						setEatingHeight(getEatingHeight() + 1);
+						getEntityWorld().playSound(null, getPosition(), SoundRegistry.ROCK_SNOT_EAT, SoundCategory.HOSTILE, 1F, 1F);
 						getPassengers().get(0).attackEntityFrom(DamageSource.GENERIC, 0F);
 						if (getEatingHeight() == 10 && getPassengers().get(0) != null) {
 							getPassengers().get(0).setDead();
@@ -141,12 +144,17 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 				}
 
 				if (isBeingRidden() && getJawAngle() == 16 && !getPlacedByPlayer())
-					if (getEntityWorld().getTotalWorldTime() % 20 == 0)
+					if (getEntityWorld().getTotalWorldTime() % 20 == 0) {
+						getEntityWorld().playSound(null, getPosition(), SoundRegistry.ROCK_SNOT_EAT, SoundCategory.HOSTILE, 1F, 1F);
 						getPassengers().get(0).attackEntityFrom(DamageSource.causeMobDamage(this), (float) getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+					}
 
 			} else {
-				if (getPearlTimer() >= 0)
+				if (getPearlTimer() >= 0) {
 					setPearlTimer(getPearlTimer() - 1);
+					if (getEntityWorld().getTotalWorldTime() % 20 == 0 && getPearlTimer() >= 30)
+						getEntityWorld().playSound(null, getPosition(), SoundRegistry.ROCK_SNOT_DIGEST, SoundCategory.HOSTILE, 1F, 0.8F + rand.nextFloat() * 0.5F);
+				}
 
 				if (getPearlTimer() == 0) {
 					ItemStack pearl = new ItemStack(ItemRegistry.ROCK_SNOT_PEARL);
@@ -154,6 +162,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 					item.motionX = item.motionZ = 0D;
 					item.motionY = 0.4D;
 					world.spawnEntity(item);
+					getEntityWorld().playSound(null, getPosition(), SoundRegistry.ROCK_SNOT_SPIT, SoundCategory.HOSTILE, 1F, 1F);
 				}
 			}
 		}
@@ -445,6 +454,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 				grabber.setPositionAndUpdate(parentEntity.posX, parentEntity.posY + parentEntity.height * 0.5D, parentEntity.posZ);
 				grabber.moveToTarget(targetX, targetY, targetZ, 0.3F);
 				parentEntity.getEntityWorld().spawnEntity(grabber);
+				parentEntity.getEntityWorld().playSound(null, parentEntity.getPosition(), SoundRegistry.ROCK_SNOT_ATTACK, SoundCategory.HOSTILE, 1F, 1F);
 				if (!grabber.getExtending())
 					grabber.setExtending(true);
 				parentEntity.setTendrilCount(parentEntity.getTendrilCount() + 1);
