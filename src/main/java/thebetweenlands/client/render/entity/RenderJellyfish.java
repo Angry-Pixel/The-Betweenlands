@@ -1,6 +1,7 @@
 package thebetweenlands.client.render.entity;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -16,7 +17,7 @@ import thebetweenlands.common.entity.mobs.EntityJellyfish;
 import thebetweenlands.util.LightingUtil;
 
 @SideOnly(Side.CLIENT)
-public class RenderJellyfish extends RenderLiving<EntityJellyfish> {
+public class RenderJellyfish<T extends EntityJellyfish> extends RenderLiving<T> {
 	private static final ResourceLocation[] TEXTURE = new ResourceLocation[] {
 			new ResourceLocation("thebetweenlands:textures/entity/jellyfish_1.png"),
 			new ResourceLocation("thebetweenlands:textures/entity/jellyfish_2.png"),
@@ -33,10 +34,14 @@ public class RenderJellyfish extends RenderLiving<EntityJellyfish> {
 			{215 / 255.0f, 176 / 255.0f, 195 / 255.0f},
 	};
 
-	public final static ModelJellyfish MODEL = new ModelJellyfish();
+	private static final ModelJellyfish MODEL = new ModelJellyfish();
 
 	public RenderJellyfish(RenderManager manager) {
 		super(manager, MODEL, 0.5F);
+	}
+	
+	public RenderJellyfish(RenderManager manager, ModelBase model) {
+		super(manager, model, 0.5F);
 	}
 
 	@Override
@@ -45,17 +50,21 @@ public class RenderJellyfish extends RenderLiving<EntityJellyfish> {
 	}
 
 	@Override
-	public void doRender(EntityJellyfish jellyfish, double x, double y, double z, float entityYaw, float partialTicks) {
-		super.doRender(jellyfish, x, y + jellyfish.height * 0.5f, z, entityYaw, partialTicks);
+	public void doRender(T jellofooosh, double x, double y, double z, float entityYaw, float partialTicks) {
+		super.doRender(jellofooosh, x, y + jellofooosh.height * 0.5f, z, entityYaw, partialTicks);
 
+		this.addLighting(jellofooosh, partialTicks);
+	}
+
+	protected void addLighting(T jellofooosh, float partialTicks) {
 		if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
-			double interpX = jellyfish.lastTickPosX + (jellyfish.posX - jellyfish.lastTickPosX) * partialTicks;
-			double interpY = jellyfish.lastTickPosY + (jellyfish.posY - jellyfish.lastTickPosY) * partialTicks;
-			double interpZ = jellyfish.lastTickPosZ + (jellyfish.posZ - jellyfish.lastTickPosZ) * partialTicks;
+			double interpX = jellofooosh.lastTickPosX + (jellofooosh.posX - jellofooosh.lastTickPosX) * partialTicks;
+			double interpY = jellofooosh.lastTickPosY + (jellofooosh.posY - jellofooosh.lastTickPosY) * partialTicks;
+			double interpZ = jellofooosh.lastTickPosZ + (jellofooosh.posZ - jellofooosh.lastTickPosZ) * partialTicks;
 
-			float str = 5.0f * jellyfish.getJellyfishSize();
+			float str = 5.0f * jellofooosh.getJellyfishSize();
 
-			float[] colors = GLOW_COLORS[jellyfish.getJellyfishColour()];
+			float[] colors = GLOW_COLORS[jellofooosh.getJellyfishColour()];
 
 			ShaderHelper.INSTANCE.require();
 			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(interpX, interpY, interpZ, 8.0f, str * colors[0], str * colors[1], str * colors[2]));
@@ -63,13 +72,13 @@ public class RenderJellyfish extends RenderLiving<EntityJellyfish> {
 	}
 
 	@Override
-	public float prepareScale(EntityJellyfish entitylivingbaseIn, float partialTicks) {
-		float scale = entitylivingbaseIn.getJellyfishSize();
+	public float prepareScale(T jellofooosh, float partialTicks) {
+		float scale = jellofooosh.getJellyfishSize();
 
-		GlStateManager.scale(scale, scale * entitylivingbaseIn.getJellyfishLength(), scale);
+		GlStateManager.scale(scale, scale * jellofooosh.getJellyfishLength(), scale);
 
-		float limbSwingAmount = entitylivingbaseIn.prevLimbSwingAmount + (entitylivingbaseIn.limbSwingAmount - entitylivingbaseIn.prevLimbSwingAmount) * partialTicks;
-		float limbSwing = entitylivingbaseIn.limbSwing - entitylivingbaseIn.limbSwingAmount * (1.0F - partialTicks);
+		float limbSwingAmount = jellofooosh.prevLimbSwingAmount + (jellofooosh.limbSwingAmount - jellofooosh.prevLimbSwingAmount) * partialTicks;
+		float limbSwing = jellofooosh.limbSwing - jellofooosh.limbSwingAmount * (1.0F - partialTicks);
 
 		GlStateManager.scale(
 				1.0f + MathHelper.sin(limbSwing) * Math.min(limbSwingAmount, 0.2f) * 2.0f,
@@ -77,11 +86,11 @@ public class RenderJellyfish extends RenderLiving<EntityJellyfish> {
 				1.0f + MathHelper.sin(limbSwing) * Math.min(limbSwingAmount, 0.2f) * 2.0f
 				);
 
-		return super.prepareScale(entitylivingbaseIn, partialTicks);
+		return super.prepareScale(jellofooosh, partialTicks);
 	}
 
 	@Override
-	protected void renderModel(EntityJellyfish entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
+	protected void renderModel(T jellofooosh, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
 		GlStateManager.enableBlend();
 		GlStateManager.enableAlpha();
 		GlStateManager.color(1F, 1F, 1F, 1F);
@@ -93,13 +102,13 @@ public class RenderJellyfish extends RenderLiving<EntityJellyfish> {
 		GlStateManager.depthMask(false);
 		Minecraft.getMinecraft().entityRenderer.setupFogColor(true);
 
-		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+		super.renderModel(jellofooosh, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 
 		Minecraft.getMinecraft().entityRenderer.setupFogColor(false);
 		GlStateManager.depthMask(true);
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+		super.renderModel(jellofooosh, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 
 		LightingUtil.INSTANCE.revert();
 
@@ -113,7 +122,7 @@ public class RenderJellyfish extends RenderLiving<EntityJellyfish> {
 	}
 
 	@Override
-	protected void applyRotations(EntityJellyfish jellofooosh, float ageInTicks, float rotationYaw, float partialTicks) {
+	protected void applyRotations(T jellofooosh, float ageInTicks, float rotationYaw, float partialTicks) {
 		Vec3d weightPos = jellofooosh.getOrientationPos(partialTicks);
 
 		double dx = interpolate(jellofooosh.lastTickPosX, jellofooosh.posX, partialTicks) - weightPos.x;

@@ -208,7 +208,7 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 			break;
 		case SHOCK:
 			if(!this.world.isRemote) {
-				this.world.spawnEntity(new EntityShock(this.world, this, living, this.isWet() || this.isInWater() || this.world.isRainingAt(this.getPosition().up())));
+				this.world.spawnEntity(new EntityShock(this.world, this, living, 0, this.isWet() || this.isInWater() || this.world.isRainingAt(this.getPosition().up())));
 			}
 			break;
 		case CHIROMAW_BARB:
@@ -218,7 +218,7 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 			break;
 		case CHIROMAW_SHOCK_BARB:
 			if(!this.world.isRemote) {
-				this.world.spawnEntity(new EntityShock(this.world, this, living, this.isWet() || this.isInWater() || this.world.isRainingAt(this.getPosition().up())));
+				this.world.spawnEntity(new EntityShock(this.world, this, living, 0, this.isWet() || this.isInWater() || this.world.isRainingAt(this.getPosition().up())));
 			}
 			if(living.isNonBoss() && !(living instanceof EntityChiromawMatriarch)) {
 				living.addPotionEffect(ElixirEffectRegistry.EFFECT_PETRIFY.createEffect(40, 1));

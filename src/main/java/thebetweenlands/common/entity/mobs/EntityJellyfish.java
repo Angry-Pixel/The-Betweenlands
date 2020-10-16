@@ -21,6 +21,7 @@ import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -53,8 +54,8 @@ public class EntityJellyfish extends EntityCreature implements IEntityBL, IEntit
 
 	@Override
 	protected void initEntityAI() {
-		tasks.addTask(3, new EntityAIWander(this, 0.5D, 20));
-		tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 0.4D));
+		tasks.addTask(0, new EntityAIMoveTowardsRestriction(this, 0.4D));
+		tasks.addTask(1, new EntityAIWander(this, 0.5D, 20));
 	}
 
 	@Override
@@ -213,6 +214,15 @@ public class EntityJellyfish extends EntityCreature implements IEntityBL, IEntit
 		if(this.world.isRemote) {
 			this.updateOrientationPos();
 		}
+	}
+
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if(source instanceof EntityDamageSource && ((EntityDamageSource) source).getTrueSource() instanceof EntityJellyfish) {
+			return false;
+		}
+
+		return super.attackEntityFrom(source, amount);
 	}
 
 	protected void updateOrientationPos() {

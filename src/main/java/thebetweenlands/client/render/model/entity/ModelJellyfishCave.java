@@ -27,6 +27,7 @@ public class ModelJellyfishCave extends ModelBase {
     ModelRenderer tentacles_back1c;
     ModelRenderer tentacles_right1b;
     ModelRenderer tentacles_right1c;
+	ModelRenderer main;
 
     public ModelJellyfishCave() {
         textureWidth = 32;
@@ -120,14 +121,18 @@ public class ModelJellyfishCave extends ModelBase {
         tentacles_left1a.addChild(tentacles_left1b);
         oral_arm1c.addChild(oral_arm1d);
         tentacles_back1a.addChild(tentacles_back1b);
+
+		main = new ModelRenderer(this, 0, 0);
+		main.setRotationPoint(0.0F, 16.0F, 0.0F);
+		main.addChild(mouth);
+		main.addChild(mesoglea_base);
+		main.addChild(tentacles_right1a);
+		main.addChild(tentacles_back1a);
     }
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        mouth.render(scale);
-        mesoglea_base.render(scale);
-        tentacles_right1a.render(scale);
-        tentacles_back1a.render(scale);
+    	main.render(scale);
     }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
