@@ -10,6 +10,7 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -20,6 +21,7 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.EntityShock;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityJellyfishCave extends EntityJellyfish implements IMob {
 	protected static final byte EVENT_SPARK = 80;
@@ -57,6 +59,7 @@ public class EntityJellyfishCave extends EntityJellyfish implements IMob {
 
 				if(dst < 3.0f && this.ticksExisted % 20 == 0) {
 					this.world.spawnEntity(new EntityShock(this.world, this, this, 2.0f, true));
+					getEntityWorld().playSound(null, getPosition(), SoundRegistry.JELLYFISH_ZAP, SoundCategory.HOSTILE, 1F, 0.8F + rand.nextFloat());
 				}
 			}
 		}

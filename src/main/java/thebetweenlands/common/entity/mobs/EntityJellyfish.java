@@ -12,7 +12,6 @@ import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -33,6 +32,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityJellyfish extends EntityCreature implements IEntityBL, IEntityAdditionalSpawnData {
 	protected Vec3d prevOrientationPos = Vec3d.ZERO;
@@ -147,7 +147,7 @@ public class EntityJellyfish extends EntityCreature implements IEntityBL, IEntit
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return super.getHurtSound(source);
+		return SoundRegistry.JELLYFISH_HURT;
 	}
 	/*
     @Override
@@ -157,7 +157,7 @@ public class EntityJellyfish extends EntityCreature implements IEntityBL, IEntit
 	 */
 	@Override
 	protected SoundEvent getSwimSound() {
-		return SoundEvents.ENTITY_HOSTILE_SWIM;
+		return SoundRegistry.JELLYFISH_SWIM;
 	}
 
 	@Override
