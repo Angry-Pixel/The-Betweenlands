@@ -58,8 +58,10 @@ public class EntityJellyfishCave extends EntityJellyfish implements IMob {
 				}
 
 				if(dst < 3.0f && this.ticksExisted % 20 == 0) {
-					this.world.spawnEntity(new EntityShock(this.world, this, this, 2.0f, true));
-					getEntityWorld().playSound(null, getPosition(), SoundRegistry.JELLYFISH_ZAP, SoundCategory.HOSTILE, 1F, 0.8F + rand.nextFloat());
+					if(canEntityBeSeen(target) && target.isInWater()) {
+						this.world.spawnEntity(new EntityShock(this.world, this, this, 2.0f, true));
+						getEntityWorld().playSound(null, getPosition(), SoundRegistry.JELLYFISH_ZAP, SoundCategory.HOSTILE, 1F, 0.8F + rand.nextFloat());
+					}
 				}
 			}
 		}
