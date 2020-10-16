@@ -236,7 +236,11 @@ public class SoundRegistry {
     public static final BLSoundEvent CHIROMAW_HATCH = reg("chiromaw_hatch");
     public static final BLSoundEvent CHIROMAW_HATCHLING_TRANSFORM = reg("chiromaw_hatchling_transform");
     public static final BLSoundEvent CHIROMAW_HATCHLING_INSIDE_EGG = reg("chiromaw_hatchling_inside_egg");
-
+    public static final BLSoundEvent ROCK_SNOT_ATTACH = reg("rock_snot_attach");
+    public static final BLSoundEvent ROCK_SNOT_ATTACK = reg("rock_snot_attack");
+    public static final BLSoundEvent ROCK_SNOT_DIGEST= reg("rock_snot_digest");
+    public static final BLSoundEvent ROCK_SNOT_SPIT = reg("rock_snot_spit");
+    public static final BLSoundEvent ROCK_SNOT_EAT = reg("rock_snot_eat");
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");
     public static final BLSoundEvent FROG_DEATH = reg("frog_death");
@@ -269,6 +273,9 @@ public class SoundRegistry {
     public static final BLSoundEvent ROOT_SPRITE_LIVING = reg("root_sprite_living");
     public static final BLSoundEvent ROOT_SPRITE_HURT = reg("root_sprite_hurt");
     public static final BLSoundEvent GREEBLING_VANISH = reg("greebling_vanish");
+    public static final BLSoundEvent JELLYFISH_HURT = reg("jellyfish_hurt");
+    public static final BLSoundEvent JELLYFISH_SWIM = reg("jellyfish_swim");
+    public static final BLSoundEvent JELLYFISH_ZAP = reg("jellyfish_zap");
     // Items
     public static final BLSoundEvent ROWBOAT_ROW_STARBOARD = reg("rowboat_row_starboard");
     public static final BLSoundEvent ROWBOAT_ROW_PORT = reg("rowboat_row_port");
