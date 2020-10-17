@@ -38,6 +38,7 @@ public class ItemBLFishingRod extends Item {
 		setCreativeTab(CreativeTabs.TOOLS);
 
 		addPropertyOverride(new ResourceLocation("cast"), new IItemPropertyGetter() {
+			@Override
 			@SideOnly(Side.CLIENT)
 			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
 				if (entityIn == null) {

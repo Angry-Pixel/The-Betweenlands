@@ -37,6 +37,11 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 	private int ticksInAir;
 	private EntityBLFishHook.State currentState = State.FLYING;
 
+	protected double interpTargetX;
+    protected double interpTargetY;
+    protected double interpTargetZ;
+    protected int newPosRotationIncrements;
+	
 	static enum State {
 		FLYING, HOOKED_IN_ENTITY, BOBBING;
 	}
@@ -128,21 +133,43 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 	@SideOnly(Side.CLIENT)
 	@Override
 	public boolean isInRangeToRenderDist(double distance) {
-		double d0 = 64.0D;
 		return distance < 4096.0D;
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport) {}
+	public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport) {
+		this.interpTargetX = x;
+        this.interpTargetY = y;
+        this.interpTargetZ = z;
+        this.newPosRotationIncrements = posRotationIncrements;
+	}
 
 	@Override
 	public void onUpdate() {
         if (!this.world.isRemote)
             this.setFlag(6, this.isGlowing());
 
+        if(this.ticksExisted < 2) {
+			//Stupid EntityTrackerEntry is broken and desyncs server position.
+			//Tracker updates server side position but *does not* send the change to the client
+			//when tracker.updateCounter == 0, causing a desync until the next force teleport
+			//packet.......
+			//By not moving the entity until then it works.
+			return;
+		}
+        
         this.onEntityUpdate();
 
+        if (currentState != EntityBLFishHook.State.FLYING /*for smooth throwing*/ && this.newPosRotationIncrements > 0 && !this.canPassengerSteer())
+        {
+            double d0 = this.posX + (this.interpTargetX - this.posX) / (double)this.newPosRotationIncrements;
+            double d1 = this.posY + (this.interpTargetY - this.posY) / (double)this.newPosRotationIncrements;
+            double d2 = this.posZ + (this.interpTargetZ - this.posZ) / (double)this.newPosRotationIncrements;
+            --this.newPosRotationIncrements;
+            this.setPosition(d0, d1, d2);
+        }
+        
 		if (getAngler() == null) {
 			setDead();
 		} else if (world.isRemote || !shouldStopFishing()) {
@@ -203,7 +230,9 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 					return;
 				}
 
-				if (currentState == EntityBLFishHook.State.BOBBING) {
+				if (!world.isRemote && currentState == EntityBLFishHook.State.BOBBING) {
+					//Bobbing is random so only do it on server side to stay in sync
+					
 					motionX *= 0.9D;
 					motionZ *= 0.9D;
 					double d0 = posY + motionY - (double) blockpos.getY() - (double) f;
@@ -223,7 +252,6 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 
 			move(MoverType.SELF, motionX, motionY, motionZ);
 			updateRotation();
-			double d1 = 0.92D;
 			motionX *= 0.92D;
 			motionY *= 0.92D;
 			motionZ *= 0.92D;

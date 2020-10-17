@@ -149,20 +149,25 @@ public class EntityJellyfish extends EntityCreature implements IEntityBL, IEntit
 	protected SoundEvent getHurtSound(DamageSource source) {
 		return SoundRegistry.JELLYFISH_HURT;
 	}
-	/*
+	
     @Override
     protected SoundEvent getDeathSound() {
-       return SoundRegistry.JELLYFISH_DEATH;
+       return SoundRegistry.JELLYFISH_HURT;
     }
-	 */
+	 
 	@Override
 	protected SoundEvent getSwimSound() {
 		return SoundRegistry.JELLYFISH_SWIM;
 	}
 
 	@Override
+	public void playSound(SoundEvent soundIn, float volume, float pitch) {
+		super.playSound(soundIn, soundIn == this.getSwimSound() ? this.getSoundVolume() : volume, pitch);
+	}
+	
+	@Override
 	protected float getSoundVolume() {
-		return 0.4F;
+		return 0.35F;
 	}
 
 	@Nullable
