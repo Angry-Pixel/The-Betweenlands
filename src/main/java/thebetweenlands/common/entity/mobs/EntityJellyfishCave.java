@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -59,7 +60,7 @@ public class EntityJellyfishCave extends EntityJellyfish implements IMob {
 
 				if(dst < 3.0f && this.ticksExisted % 20 == 0) {
 					if(canEntityBeSeen(target) && target.isInWater()) {
-						this.world.spawnEntity(new EntityShock(this.world, this, this, 2.0f, true));
+						this.world.spawnEntity(new EntityShock(this.world, this, this, (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 0.75f, true));
 						getEntityWorld().playSound(null, getPosition(), SoundRegistry.JELLYFISH_ZAP, SoundCategory.HOSTILE, 1F, 0.8F + rand.nextFloat());
 					}
 				}

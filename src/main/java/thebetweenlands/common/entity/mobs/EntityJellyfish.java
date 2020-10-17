@@ -1,10 +1,14 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -12,6 +16,7 @@ import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -23,6 +28,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -34,7 +40,7 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityJellyfish extends EntityCreature implements IEntityBL, IEntityAdditionalSpawnData {
+public class EntityJellyfish extends EntityCreature implements IEntityBL, IEntityAdditionalSpawnData, IMob {
 	protected Vec3d prevOrientationPos = Vec3d.ZERO;
 	protected Vec3d orientationPos = Vec3d.ZERO;
 
@@ -68,6 +74,7 @@ public class EntityJellyfish extends EntityCreature implements IEntityBL, IEntit
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
+		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(12.0D);
@@ -218,9 +225,28 @@ public class EntityJellyfish extends EntityCreature implements IEntityBL, IEntit
 
 		if(this.world.isRemote) {
 			this.updateOrientationPos();
+		} else if(this.world.getDifficulty() != EnumDifficulty.PEACEFUL) {
+			AxisAlignedBB stingArea = this.getEntityBoundingBox().grow(0.25D);
+			
+			List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, stingArea, e -> e instanceof IEntityBL == false);
+			
+			for(EntityLivingBase entity : entities) {
+				if(entity.ticksExisted % 10 == 0)
+					entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+			}
 		}
 	}
 
+	@Override
+	public boolean canBePushed() {
+		return false;
+	}
+	
+	@Override
+	protected void collideWithEntity(Entity entityIn) {
+		//No pushing
+	}
+	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if(source instanceof EntityDamageSource && ((EntityDamageSource) source).getTrueSource() instanceof EntityJellyfish) {
