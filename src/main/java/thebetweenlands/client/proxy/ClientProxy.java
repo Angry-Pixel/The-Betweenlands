@@ -44,6 +44,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import thebetweenlands.client.gui.GuiFishStaminaBar;
 import thebetweenlands.client.gui.GuiItemNaming;
 import thebetweenlands.client.gui.GuiLorePage;
 import thebetweenlands.client.gui.inventory.GuiAnimator;
@@ -884,6 +885,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         MinecraftForge.EVENT_BUS.register(RenderUtils.class);
         MinecraftForge.EVENT_BUS.register(EntityChiromawTame.class);
         MinecraftForge.EVENT_BUS.register(EventHeavyRain.class);
+        MinecraftForge.EVENT_BUS.register(new GuiFishStaminaBar());
 	}
 
 	private static FontRenderer pixelLove;
