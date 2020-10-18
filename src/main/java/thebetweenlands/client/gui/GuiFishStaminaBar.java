@@ -25,17 +25,19 @@ public class GuiFishStaminaBar extends Gui {
 			if (player != null && player.fishEntity != null && player.fishEntity instanceof EntityBLFishHook) {
 				if (player.fishEntity.isRiding() && player.fishEntity.getRidingEntity() instanceof EntityAnadia) {
 					int fishpos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getStaminaTicks() * 256 / 100;
+					int escapepos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getEscapeTicks() * 256 / 480;
 					GlStateManager.color(1F, 1F, 1F, 1F);
 					mc.renderEngine.bindTexture(GUI_TEXTURE);
 					ScaledResolution res = new ScaledResolution(mc);
-					renderStaminaBar(fishpos, (float)res.getScaledWidth() * 0.5F - 128F, (float)res.getScaledHeight() * 0.5F - 120F);
+					renderStaminaBar(fishpos, escapepos, (float)res.getScaledWidth() * 0.5F - 128F, (float)res.getScaledHeight() * 0.5F - 120F);
 				}
 			}
 		}
 	}
 
-	private void renderStaminaBar(int staminaTicks, float posX, float posY) {
+	private void renderStaminaBar(int staminaTicks, int escapeTicks, float posX, float posY) {
 		drawTexturedModalRect(posX, posY, 0, 18, 256, 30);
 		drawTexturedModalRect(posX + staminaTicks, posY + 1, 0, 0, 17, 11);
+		drawTexturedModalRect(posX + escapeTicks, posY + 20, 0, 0, 17, 11);
 	}
 }

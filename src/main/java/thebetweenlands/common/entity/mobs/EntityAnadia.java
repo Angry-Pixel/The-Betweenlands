@@ -63,7 +63,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	//private static final DataParameter<Integer> HUNGER_COOLDOWN = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> STAMINA_TICKS = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 	private static final DataParameter<Byte> FISH_COLOUR = EntityDataManager.<Byte>createKey(EntityAnadia.class, DataSerializers.BYTE);
-	
+	private static final DataParameter<Integer> ESCAPE_TICKS = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 	private static final DataParameter<ItemStack> HEAD_ITEM = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.ITEM_STACK);
 	private static final DataParameter<ItemStack> BODY_ITEM = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.ITEM_STACK);
 	private static final DataParameter<ItemStack> TAIL_ITEM = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.ITEM_STACK);
@@ -120,6 +120,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         dataManager.register(IS_LEAPING, false);
       //  dataManager.register(HUNGER_COOLDOWN, 0);
         dataManager.register(STAMINA_TICKS, 40);
+        dataManager.register(ESCAPE_TICKS, 480);
         dataManager.register(FISH_COLOUR, (byte) 2);
         dataManager.register(HEAD_ITEM, ItemStack.EMPTY);
         dataManager.register(BODY_ITEM, ItemStack.EMPTY);
@@ -223,6 +224,14 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
     public void setStaminaTicks(int count) {
         dataManager.set(STAMINA_TICKS, count);
     }
+
+    public int getEscapeTicks() {
+		return dataManager.get(ESCAPE_TICKS);
+	}
+
+    public void setEscapeTicks(int count) {
+    	 dataManager.set(ESCAPE_TICKS, count);
+	}
 
 	public void setHeadItem(ItemStack itemStack) {
 		dataManager.set(HEAD_ITEM, itemStack);
@@ -452,8 +461,19 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 //				setHungerCooldown(getHungerCooldown() - 1);
 
 			//regains stamina over time whilst not hooked
-	        if(!isBeingRidden() && getStaminaTicks() < (int) (getStaminaMods() * 20))
-	        	setStaminaTicks(getStaminaTicks() + 1);
+	        if(!isBeingRidden() ) {
+	        	if(getStaminaTicks() < (int) (getStaminaMods() * 20))
+	        		setStaminaTicks(getStaminaTicks() + 1);
+	        	if(getEscapeTicks() < 480)
+	        		setEscapeTicks(480);
+	        }
+
+	        if(isBeingRidden() && getPassengers().get(0) instanceof EntityBLFishHook) {
+	        	if(getEscapeTicks() > 0)
+	        		setEscapeTicks(getEscapeTicks() -1);
+	        	if(getEscapeTicks() * 256 / 480 < getStaminaTicks() * 256 / 100)
+	        		System.out.println("Escaped!");
+	        }
 
 		}
 		super.onUpdate();
