@@ -220,6 +220,13 @@
 			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/templar_br_the_tower.png",
 			"title": "The Tower",
 			"author": "Templar_BR"
+		},
+		{
+			"sha256": "9A368A40484A8C3EEF8B03B077545C63B670D182D9AD9B1B4B093D43107642AE",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/the_royal_annoyer_wight_fortress.png",
+			"title": "Wight Fortress",
+			"author": "The Royal Annoyer",
+			"description": "A place of hatred."
 		}
 	]
 }]
