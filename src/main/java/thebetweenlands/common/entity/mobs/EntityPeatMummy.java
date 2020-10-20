@@ -312,6 +312,13 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 		}
 	}
 
+	@Override
+	public void updatePassenger(Entity entity) {
+		super.updatePassenger(entity);
+		if (entity instanceof EntitySwampHag)
+			entity.setPosition(posX, posY + 0.5D + entity.getYOffset(), posZ);
+	}
+
 	/**
 	 * Returns whether the spawning animation should be started
 	 * @return
