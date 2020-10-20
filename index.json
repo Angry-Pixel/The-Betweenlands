@@ -227,6 +227,19 @@
 			"title": "Wight Fortress",
 			"author": "The Royal Annoyer",
 			"description": "A place of hatred."
+		},
+		{
+			"sha256": "9F878A89E83867E5489FD83E14B7C7477666E745AF10621EFF6B555F7D528A42",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/epicnecromancer_dripping_terror.png",
+			"title": "Dripping Terror",
+			"author": "EpicNecromancer"
+		},
+		{
+			"sha256": "4CB7872450019DB35FC9EC11B3AD0E181B74B048BD0332AD92CA5E67688B2613",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/oscar_payn_shaman_of_embers.png",
+			"title": "Shaman of Embers",
+			"author": "Oscar Payn",
+			"description": "A violent creature born of fire and spite, found stalking the Sludgeon. Hunts in packs of four."
 		}
 	]
 }]
