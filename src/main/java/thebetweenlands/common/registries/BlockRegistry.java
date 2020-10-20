@@ -172,6 +172,7 @@ import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockPossessedBlock;
 import thebetweenlands.common.block.structure.BlockPuffshroom;
 import thebetweenlands.common.block.structure.BlockRottenBarkCarved;
+import thebetweenlands.common.block.structure.BlockSimulacrum;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.structure.BlockSpikeTrap;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
@@ -843,6 +844,9 @@ public class BlockRegistry {
     public static final Block WAYSTONE = new BlockWaystone();
     public static final Block CAVING_ROPE_LIGHT = new BlockCavingRopeLight();
     public static final Block GROUND_ITEM = new BlockGroundItem();
+    public static final Block SIMULACRUM_DEEPMAN = new BlockSimulacrum();
+    public static final Block SIMULACRUM_LAKE_CAVERN = new BlockSimulacrum();
+    public static final Block SIMULACRUM_ROOTMAN = new BlockSimulacrum();
     
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();
