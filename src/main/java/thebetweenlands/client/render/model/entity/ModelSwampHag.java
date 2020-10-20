@@ -173,28 +173,10 @@ public class ModelSwampHag extends MowzieModelBase {
     }
 
     @Override
-    public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
-        super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel);
-        setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
-        EntitySwampHag hag = (EntitySwampHag) entity;
-        //neck.render(unitPixel);
-        //legleft1.render(unitPixel);
-        //legright1.render(unitPixel);
-//		GL11.glPushMatrix();
-//		GL11.glTranslatef(0.F, -hag.breatheFloat * 0.15F, 0F);
-//		//mushroomstem.render(unitPixel);
-//		GL11.glPopMatrix();
-//		GL11.glPushMatrix();
-//		GL11.glTranslatef(0.F, -hag.breatheFloat * 0.2F, -hag.breatheFloat* 0.35F);
-//		//toadstool1.render(unitPixel);
-//		GL11.glPopMatrix();
-//		GL11.glPushMatrix();
-//		GL11.glTranslatef(0.F, -hag.breatheFloat * 0.05F, -hag.breatheFloat* 0.25F);
-//		GL11.glScalef(1.F, 1.F + hag.breatheFloat * 0.2F, 1.F + hag.breatheFloat);
-//		//body_top.render(unitPixel);
-//        GL11.glPopMatrix();
-//        body_base.render(unitPixel);
-        modelCore.render(unitPixel);
+    public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale) {
+        super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, scale);
+        setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, scale, entity);
+        modelCore.render(scale);
     }
 
     private void setRotation(ModelRenderer model, float x, float y, float z) {
@@ -211,7 +193,6 @@ public class ModelSwampHag extends MowzieModelBase {
         limbSwingAngle = Math.min(limbSwingAngle, 0.25F);
         
         jaw.rotateAngleX = hag.jawFloat;
-//		head2.rotateAngleX = hag.jawFloat - 0.8196066167365371F;
         head2.rotateAngleX = -0.8196066167365371F;
 
         head1.rotateAngleY = rotationYaw / (180F / (float) Math.PI) - 0.045553093477052F;
@@ -241,7 +222,6 @@ public class ModelSwampHag extends MowzieModelBase {
 
         limbSwing = limpSwing;
 
-//        bob(modelCore, 1 * globalSpeed, 1 * globalDegree, false, limbSwing, limbSwingAngle);
         walk(body_base, 1F * globalSpeed, 0.1F * globalDegree, true, 0, 0.05F * globalDegree, limbSwing, limbSwingAngle);
         walk(legleft1, 1F * globalSpeed, 0.1F * globalDegree, false, 0, 0F, limbSwing, limbSwingAngle);
         walk(legright1, 1F * globalSpeed, 0.1F * globalDegree, false, 0, 0F, limbSwing, limbSwingAngle);
@@ -264,19 +244,30 @@ public class ModelSwampHag extends MowzieModelBase {
         body_base.rotationPointX -= Math.cos((limbSwing - 3) * 0.5 * globalSpeed) * limbSwingAngle;
 
         if (this.isRiding) {
-        	armright.rotateAngleX += -((float)Math.PI / 5F);
+            if (hag.getThrowTimer() < 90) {
+            	armright.rotateAngleX += -((float)Math.PI / 5F) - convertDegtoRad(hag.getThrowTimer()) * 0.35F;
+            	armright.rotateAngleY = 0F + convertDegtoRad(hag.getThrowTimer());            	
+            }
             legright1.rotateAngleX = -1.4137167F;
             legright1.rotateAngleY = ((float)Math.PI / 10F);
             legright1.rotateAngleZ = 0.07853982F;
             legleft1.rotateAngleX = -1.4137167F;
             legleft1.rotateAngleY = -((float)Math.PI / 10F);
             legleft1.rotateAngleZ = -0.07853982F;
+            if (hag.getThrowTimer() >= 90) {
+            	armright.rotateAngleX += -((float)Math.PI / 5F);
+            	armright.rotateAngleY = convertDegtoRad(90F) - convertDegtoRad(hag.getThrowTimer() - 90F) * 9F;
+            }
         }
     }
 
-    @Override
-    public void setLivingAnimations(EntityLivingBase entity, float p_78086_2_, float p_78086_3_, float partialRenderTicks) {
-        super.setLivingAnimations(entity, p_78086_2_, p_78086_3_, partialRenderTicks);
+	public float convertDegtoRad(float angleIn) {
+		return angleIn * ((float) Math.PI / 180F);
+	}
+
+	@Override
+	public void setLivingAnimations(EntityLivingBase entity, float limbSwing, float limbSwingAngle, float partialRenderTicks) {
+        super.setLivingAnimations(entity, limbSwing, limbSwingAngle, partialRenderTicks);
         setToInitPose();
 
         float frame = entity.ticksExisted + partialRenderTicks;
