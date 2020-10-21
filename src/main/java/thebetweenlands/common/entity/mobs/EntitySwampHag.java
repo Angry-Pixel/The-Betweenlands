@@ -158,7 +158,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 		}
 	}
 
-	private boolean isRidingMummy() {
+	public boolean isRidingMummy() {
 		return isRiding() && getRidingEntity() instanceof EntityPeatMummy;
 	}
 

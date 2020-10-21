@@ -37,6 +37,17 @@ public class ModelSwampHag extends MowzieModelBase {
     MowzieModelRenderer toadstool4;
     MowzieModelRenderer brain;
     MowzieModelRenderer modelCore;
+    
+    MowzieModelRenderer dat_detailed_hot_bod;
+    MowzieModelRenderer dat_detailed_hot_bod_2;
+    MowzieModelRenderer head;
+    MowzieModelRenderer dat_detailed_hot_bod_3;
+    MowzieModelRenderer cute_lil_butt;
+    MowzieModelRenderer spoopy_stinger;
+    MowzieModelRenderer beak_right;
+    MowzieModelRenderer beak_left;
+    
+    MowzieModelRenderer[] partsWormWiggle;
 
     public ModelSwampHag() {
         textureWidth = 128;
@@ -134,6 +145,36 @@ public class ModelSwampHag extends MowzieModelBase {
         modelCore.addBox(0F, 0F, 0F, 0, 0, 0, 0.0F);
         setRotation(modelCore, 0, 0, 0);
 
+        dat_detailed_hot_bod_3 = new MowzieModelRenderer(this, 116, 10);
+        dat_detailed_hot_bod_3.setRotationPoint(0.0F, 0.0F, 3.0F);
+        dat_detailed_hot_bod_3.addBox(-1.5F, -1.5F, 0.0F, 3, 3, 3, 0.0F);
+        spoopy_stinger = new MowzieModelRenderer(this, 116, 21);
+        spoopy_stinger.setRotationPoint(0.0F, -1.3F, 2.0F);
+        spoopy_stinger.addBox(-0.5F, 0.0F, 0.0F, 1, 2, 2, 0.0F);
+        setRotation(spoopy_stinger, -0.18203784098300857F, 0.0F, 0.0F);
+        dat_detailed_hot_bod_2 = new MowzieModelRenderer(this, 116, 10);
+        dat_detailed_hot_bod_2.setRotationPoint(0.0F, 0.0F, 3.0F);
+        dat_detailed_hot_bod_2.addBox(-1.5F, -1.5F, 0.0F, 3, 3, 3, 0.0F);
+        dat_detailed_hot_bod = new MowzieModelRenderer(this, 116, 10);
+        dat_detailed_hot_bod.setRotationPoint(2.0F, 12.5F, -1.5F);
+        dat_detailed_hot_bod.addBox(-1.5F, -1.5F, 0.0F, 3, 3, 3, 0.0F);
+        beak_left = new MowzieModelRenderer(this, 103, 24);
+        beak_left.setRotationPoint(1.5F, 0.5F, -1.5F);
+        beak_left.addBox(-2.0F, -2.0F, -2.0F, 2, 3, 3, 0.0F);
+        setRotation(beak_left, 0.0F, -0.31869712141416456F, 0.0F);
+        head = new MowzieModelRenderer(this, 103, 10);
+        head.setRotationPoint(0.0F, 0.0F, -1.5F);
+        head.addBox(-1.5F, -1.5F, -1.5F, 3, 3, 3, 0.0F);
+        cute_lil_butt = new MowzieModelRenderer(this, 116, 17);
+        cute_lil_butt.setRotationPoint(0.0F, 0.0F, 3.0F);
+        cute_lil_butt.addBox(-1.0F, -1.0F, 0.0F, 2, 2, 2, 0.0F);
+        beak_right = new MowzieModelRenderer(this, 103, 17);
+        beak_right.setRotationPoint(-1.5F, 0.0F, -1.5F);
+        beak_right.addBox(0.0F, -1.5F, -2.0F, 2, 3, 3, 0.0F);
+        setRotation(beak_right, 0.0F, 0.31869712141416456F, 0.0F);
+        
+        
+
         head1.addChild(head2);
         head1.addChild(jaw);
         head1.addChild(toadstool4);
@@ -168,6 +209,24 @@ public class ModelSwampHag extends MowzieModelBase {
         body_top.addChild(toadstool1);
 
         modelCore.addChild(body_base);
+        
+        dat_detailed_hot_bod_2.addChild(dat_detailed_hot_bod_3);
+        cute_lil_butt.addChild(spoopy_stinger);
+        dat_detailed_hot_bod.addChild(dat_detailed_hot_bod_2);
+        armright.addChild(dat_detailed_hot_bod);
+        head.addChild(beak_left);
+        dat_detailed_hot_bod.addChild(head);
+        dat_detailed_hot_bod_3.addChild(cute_lil_butt);
+        head.addChild(beak_right);
+        
+		partsWormWiggle = new MowzieModelRenderer[] { 
+			head,
+			dat_detailed_hot_bod,
+			dat_detailed_hot_bod_3,
+			dat_detailed_hot_bod_2,
+			cute_lil_butt,
+			spoopy_stinger
+			};
 
         setInitPose();
     }
@@ -189,7 +248,7 @@ public class ModelSwampHag extends MowzieModelBase {
     public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
         super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
         EntitySwampHag hag = (EntitySwampHag) entity;
-
+        dat_detailed_hot_bod.showModel = false;
         limbSwingAngle = Math.min(limbSwingAngle, 0.25F);
         
         jaw.rotateAngleX = hag.jawFloat;
@@ -243,22 +302,31 @@ public class ModelSwampHag extends MowzieModelBase {
         flap(head1, 0.5f * globalSpeed, 0.1f * globalDegree, false, 0f, 0.1f, limbSwing, limbSwingAngle);
         body_base.rotationPointX -= Math.cos((limbSwing - 3) * 0.5 * globalSpeed) * limbSwingAngle;
 
-        if (this.isRiding) {
-            if (hag.getThrowTimer() < 90) {
-            	armright.rotateAngleX += -((float)Math.PI / 5F) - convertDegtoRad(hag.getThrowTimer()) * 0.35F;
-            	armright.rotateAngleY = 0F + convertDegtoRad(hag.getThrowTimer());            	
-            }
-            legright1.rotateAngleX = -1.4137167F;
-            legright1.rotateAngleY = ((float)Math.PI / 10F);
-            legright1.rotateAngleZ = 0.07853982F;
-            legleft1.rotateAngleX = -1.4137167F;
-            legleft1.rotateAngleY = -((float)Math.PI / 10F);
-            legleft1.rotateAngleZ = -0.07853982F;
-            if (hag.getThrowTimer() >= 90) {
-            	armright.rotateAngleX += -((float)Math.PI / 5F);
-            	armright.rotateAngleY = convertDegtoRad(90F) - convertDegtoRad(hag.getThrowTimer() - 90F) * 9F;
-            }
-        }
+        if (isRiding) {
+			legright1.rotateAngleX = -1.4137167F;
+			legright1.rotateAngleY = ((float) Math.PI / 10F);
+			legright1.rotateAngleZ = 0.07853982F;
+			legleft1.rotateAngleX = -1.4137167F;
+			legleft1.rotateAngleY = -((float) Math.PI / 10F);
+			legleft1.rotateAngleZ = -0.07853982F;
+			if (hag.isRidingMummy()) {
+				if (hag.getThrowTimer() < 90) {
+					armright.rotateAngleX += -((float) Math.PI / 5F) - convertDegtoRad(hag.getThrowTimer()) * 0.35F;
+					armright.rotateAngleY = 0F + convertDegtoRad(hag.getThrowTimer());
+				}
+
+				if (hag.getThrowTimer() >= 10 && hag.getThrowTimer() <= 99)
+					dat_detailed_hot_bod.showModel = true;
+
+				if (hag.getThrowTimer() >= 90) {
+					armright.rotateAngleX += -((float) Math.PI / 5F);
+					armright.rotateAngleY = convertDegtoRad(90F) - convertDegtoRad(hag.getThrowTimer() - 90F) * 9F;
+				}
+			} else {
+				armright.rotateAngleY = 0F;
+				armright.rotateAngleX += -((float) Math.PI / 5F);
+			}
+		}
     }
 
 	public float convertDegtoRad(float angleIn) {
@@ -288,5 +356,9 @@ public class ModelSwampHag extends MowzieModelBase {
         walk(head1, 0.07f, 0.05f, false, 0f, 0, frame, 1);
         walk(armright, 0.07f, 0.1f, false, 0.5f, -0.1f, frame, 1);
         flap(armright, 0.07f, 0.1f, true, 0.5f, 0.15f, frame, 1);
+        chainWave(partsWormWiggle, 0.3f, 0.2f, 2f, frame, 1);
+        chainSwing(partsWormWiggle, 0.2f, 0.2f, 2f, frame, 1);
+        swing(beak_right, 0.5f, 0.3f, false, 1, 0, frame, 1);
+        swing(beak_left, 0.5f, 0.3f, true, 1, 0, frame, 1);
     }
 }
