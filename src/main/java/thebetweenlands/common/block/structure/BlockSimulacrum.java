@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.structure;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -11,13 +13,17 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
@@ -28,6 +34,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -40,6 +47,7 @@ import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.BlockRegistry.ISubtypeItemBlockModelDefinition;
 import thebetweenlands.common.tile.TileEntitySimulacrum;
 import thebetweenlands.util.AdvancedStateMap.Builder;
+import thebetweenlands.util.NBTHelper;
 
 public class BlockSimulacrum extends BlockContainer implements IStateMappedBlock, ICustomItemBlock, ISubtypeItemBlockModelDefinition {
 	protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.15D, 0.0D, 0.15D, 0.85D, 1.0D, 0.85D);
@@ -49,7 +57,7 @@ public class BlockSimulacrum extends BlockContainer implements IStateMappedBlock
 
 	public BlockSimulacrum() {
 		super(Material.ROCK);
-		this.setHardness(25.0F);
+		this.setHardness(15.0F);
 		this.setResistance(10000.0F);
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 		this.setTickRandomly(true);
@@ -82,6 +90,12 @@ public class BlockSimulacrum extends BlockContainer implements IStateMappedBlock
 		state = state.withProperty(FACING, EnumFacing.byHorizontalIndex(rotation));
 		state = state.withProperty(VARIANT, Variant.byMetadata(stack.getItemDamage()));
 		worldIn.setBlockState(pos, state, 3);
+		
+		TileEntity tile = worldIn.getTileEntity(pos);
+		if(tile instanceof TileEntitySimulacrum) {
+			((TileEntitySimulacrum) tile).setEffect(TileEntitySimulacrum.Effect.byId(NBTHelper.getStackNBTSafe(stack).getInteger("simulacrumEffectId")));
+			((TileEntitySimulacrum) tile).setActive(true);
+		}
 	}
 
 	@Override
@@ -148,34 +162,10 @@ public class BlockSimulacrum extends BlockContainer implements IStateMappedBlock
 		return false;
 	}
 
-	/*@SideOnly(Side.CLIENT)
-	@Override
-	public boolean hasCustomBreakingProgress(IBlockState state) {
-		return true;
-	}*/
-
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileEntitySimulacrum();
 	}
-
-	@Override
-	public int quantityDropped(Random random) {
-		return 0;
-	}
-
-	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return Items.AIR;
-	}
-
-	/*@SideOnly(Side.CLIENT)
-	@Override
-	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-		for(int i = 0; i < 16; i++) {
-			worldIn.spawnParticle(EnumParticleTypes.SUSPENDED_DEPTH, pos.getX() + 0.5D + (rand.nextBoolean() ? -1 : 1) * Math.pow(rand.nextFloat(), 2) * 16, pos.getY() + 0.5D + rand.nextFloat() * 6 - 3, pos.getZ() + 0.5D + (rand.nextBoolean() ? -1 : 1) * Math.pow(rand.nextFloat(), 2) * 16, 0, 0.2D, 0);
-		}
-	}*/
 
 	@Override
 	public void setStateMapper(Builder builder) {
@@ -191,7 +181,39 @@ public class BlockSimulacrum extends BlockContainer implements IStateMappedBlock
 
 	@Override
 	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
-		return new ItemStack(this, 1, state.getValue(VARIANT).getMetadata(EnumFacing.NORTH));
+		ItemStack stack = new ItemStack(this, 1, state.getValue(VARIANT).getMetadata(EnumFacing.NORTH));
+
+		TileEntity tile = worldIn.getTileEntity(pos);
+		if(tile instanceof TileEntitySimulacrum) {
+			NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
+			nbt.setInteger("simulacrumEffectId", ((TileEntitySimulacrum) tile).getEffect().id);
+		}
+
+		return stack;
+	}
+
+	@Override
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+	}
+
+	@Override
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
+		if(!worldIn.isRemote && !player.isCreative() && worldIn.getGameRules().getBoolean("doTileDrops")) {
+			ItemStack stack = new ItemStack(this, 1, state.getValue(VARIANT).getMetadata(EnumFacing.NORTH));
+
+			TileEntity tile = worldIn.getTileEntity(pos);
+			if(tile instanceof TileEntitySimulacrum) {
+				NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
+				nbt.setInteger("simulacrumEffectId", ((TileEntitySimulacrum) tile).getEffect().id);
+			}
+
+			InventoryHelper.spawnItemStack(worldIn, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, stack);
+		}
 	}
 
 	@Override
@@ -206,7 +228,45 @@ public class BlockSimulacrum extends BlockContainer implements IStateMappedBlock
 
 	@Override
 	public ItemBlock getItemBlock() {
-		return ItemBlockEnum.create(this, Variant.class);
+		ItemBlock item = ItemBlockEnum.create(this, Variant.class);
+		item.setMaxStackSize(1);
+		return item;
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		super.addInformation(stack, worldIn, tooltip, flagIn);
+
+		if(Minecraft.getMinecraft().player != null && Minecraft.getMinecraft().player.isCreative()) {
+			tooltip.add(I18n.format("tooltip.bl.simulacrum.effect", I18n.format("tooltip.bl.simulacrum.effect." + TileEntitySimulacrum.Effect.byId(NBTHelper.getStackNBTSafe(stack).getInteger("simulacrumEffectId")).name)));
+		}
+	}
+
+	@Override
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if(hand == EnumHand.MAIN_HAND && playerIn.isCreative() && playerIn.isSneaking()) {
+
+			if(!worldIn.isRemote) {
+				TileEntity tile = worldIn.getTileEntity(pos);
+
+				if(tile instanceof TileEntitySimulacrum) {
+					TileEntitySimulacrum simulacrum = (TileEntitySimulacrum) tile;
+
+					TileEntitySimulacrum.Effect nextEffect = TileEntitySimulacrum.Effect.values()[(simulacrum.getEffect().ordinal() + 1) % TileEntitySimulacrum.Effect.values().length];
+
+					simulacrum.setEffect(nextEffect);
+
+					playerIn.sendStatusMessage(new TextComponentTranslation("chat.simulacrum.changed_effect", new TextComponentTranslation("tooltip.bl.simulacrum.effect." + nextEffect.name)), true);
+				}
+			}
+			
+			playerIn.swingArm(hand);
+
+			return true;
+		}
+
+		return false;
 	}
 
 	public enum Variant implements IStringSerializable, IGenericMetaSelector {

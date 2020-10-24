@@ -21,6 +21,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.RenderXPOrb;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResource;
@@ -118,6 +119,7 @@ import thebetweenlands.client.render.tile.RenderPestleAndMortar;
 import thebetweenlands.client.render.tile.RenderPossessedBlock;
 import thebetweenlands.client.render.tile.RenderPurifier;
 import thebetweenlands.client.render.tile.RenderRepeller;
+import thebetweenlands.client.render.tile.RenderSimulacrum;
 import thebetweenlands.client.render.tile.RenderSpawnerBetweenlands;
 import thebetweenlands.client.render.tile.RenderSpikeTrap;
 import thebetweenlands.client.render.tile.RenderTarLootPot1;
@@ -141,6 +143,8 @@ import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.entity.EntityGreeblingCorpse;
 import thebetweenlands.common.entity.EntityLurkerSkinRaft;
 import thebetweenlands.common.entity.EntityMovingWall;
+import thebetweenlands.common.entity.EntityFalseXPOrb;
+import thebetweenlands.common.entity.EntityResurrection;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityShock;
@@ -280,6 +284,7 @@ import thebetweenlands.common.tile.TileEntityPossessedBlock;
 import thebetweenlands.common.tile.TileEntityPuffshroom;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityRepeller;
+import thebetweenlands.common.tile.TileEntitySimulacrum;
 import thebetweenlands.common.tile.TileEntitySpikeTrap;
 import thebetweenlands.common.tile.TileEntityTarLootPot1;
 import thebetweenlands.common.tile.TileEntityTarLootPot2;
@@ -628,6 +633,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityChiromawTame.class, RenderChiromawTame::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGreeblingCorpse.class, RenderGreeblingCorpse::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityStalker.class, RenderStalker::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityResurrection.class, RenderNothing::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFalseXPOrb.class, RenderXPOrb::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());
@@ -667,6 +674,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCenser.class, new RenderCenser());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBarrel.class, new RenderBarrel());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecayPitGroundChain.class, new RenderDecayPitGroundChain());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySimulacrum.class, new RenderSimulacrum());
 		
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);

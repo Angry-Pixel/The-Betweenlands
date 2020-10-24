@@ -10,6 +10,7 @@ import thebetweenlands.api.capability.IEntityCustomCollisionsCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.capability.IFlightCapability;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
+import thebetweenlands.api.capability.ILastKilledCapability;
 import thebetweenlands.api.capability.IPortalCapability;
 import thebetweenlands.api.capability.IPuppetCapability;
 import thebetweenlands.api.capability.IPuppeteerCapability;
@@ -25,6 +26,7 @@ import thebetweenlands.common.capability.flight.FlightEntityCapability;
 import thebetweenlands.common.capability.foodsickness.FoodSicknessEntityCapability;
 import thebetweenlands.common.capability.item.ILivingWeedwoodShieldCapability;
 import thebetweenlands.common.capability.item.LivingWeedwoodShieldItemCapability;
+import thebetweenlands.common.capability.lastkilled.LastKilledCapability;
 import thebetweenlands.common.capability.playermounts.IPlayerMountsEntityCapability;
 import thebetweenlands.common.capability.playermounts.PlayerMountsEntityCapability;
 import thebetweenlands.common.capability.portal.PortalEntityCapability;
@@ -73,6 +75,9 @@ public class CapabilityRegistry {
 	
 	@CapabilityInject(IPlayerMountsEntityCapability.class)
 	public static final Capability<IPlayerMountsEntityCapability> CAPABILITY_PLAYER_MOUNTS = null;
+	
+	@CapabilityInject(ILastKilledCapability.class)
+	public static final Capability<ILastKilledCapability> CAPABILITY_LAST_KILLED = null;
 		
 	public static void preInit() {
 		EntityCapabilityHandler.registerEntityCapability(new DecayEntityCapability());
@@ -87,6 +92,7 @@ public class CapabilityRegistry {
 		EntityCapabilityHandler.registerEntityCapability(new CustomStepSoundCapability());
 		EntityCapabilityHandler.registerEntityCapability(new RingOfDispersionEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new PlayerMountsEntityCapability());
+		EntityCapabilityHandler.registerEntityCapability(new LastKilledCapability());
 		
 		ItemCapabilityHandler.registerItemCapability(new LivingWeedwoodShieldItemCapability());
 		
