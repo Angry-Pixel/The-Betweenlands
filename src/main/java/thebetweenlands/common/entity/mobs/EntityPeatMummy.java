@@ -701,6 +701,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
     	return true;
     }
 
+    @Override
     @Nullable
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
