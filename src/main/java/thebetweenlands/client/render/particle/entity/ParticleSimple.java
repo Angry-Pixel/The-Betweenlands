@@ -41,8 +41,9 @@ public class ParticleSimple extends Particle implements IParticleSpriteReceiver 
 		super.onUpdate();
 
 		if(this.fade) {
-			if(this.particleAge > this.particleMaxAge - 40) {
-				this.particleAlpha = (this.startAlpha * (this.particleMaxAge - this.particleAge) / 40.0F);
+			int fadeOutTime = Math.max(1, Math.min(40, (this.particleMaxAge - 10) / 2));
+			if(this.particleAge > this.particleMaxAge - fadeOutTime) {
+				this.particleAlpha = (this.startAlpha * (this.particleMaxAge - this.particleAge) / (float)fadeOutTime);
 			} else if(this.particleAge <= 10) {
 				this.particleAlpha = this.startAlpha * this.particleAge / 10.0f;
 			}

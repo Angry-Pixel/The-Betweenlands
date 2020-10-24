@@ -8,11 +8,13 @@ import thebetweenlands.common.entity.EntityAngryPebble;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
+import thebetweenlands.common.entity.EntityFalseXPOrb;
 import thebetweenlands.common.entity.EntityGalleryFrame;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.entity.EntityGreeblingCorpse;
 import thebetweenlands.common.entity.EntityLurkerSkinRaft;
 import thebetweenlands.common.entity.EntityMovingWall;
+import thebetweenlands.common.entity.EntityResurrection;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityShock;
@@ -42,7 +44,6 @@ import thebetweenlands.common.entity.mobs.EntityChiromawGreeblingRider;
 import thebetweenlands.common.entity.mobs.EntityChiromawHatchling;
 import thebetweenlands.common.entity.mobs.EntityChiromawMatriarch;
 import thebetweenlands.common.entity.mobs.EntityChiromawTame;
-import thebetweenlands.common.entity.mobs.EntityStalker;
 import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
 import thebetweenlands.common.entity.mobs.EntityDarkDruid;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
@@ -86,6 +87,7 @@ import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceLarge;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceSmall;
 import thebetweenlands.common.entity.mobs.EntitySporeJet;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
+import thebetweenlands.common.entity.mobs.EntityStalker;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.entity.mobs.EntityTamedSpiritTreeFace;
 import thebetweenlands.common.entity.mobs.EntityTarBeast;
@@ -211,6 +213,8 @@ public class EntityRegistry {
 		registerEntity(EntitySludgeMenace.DummyPart.class, "sludge_menace_multipart_dummy", 64, 20, false);
 		registerEntity(EntityShock.class, "shock", 64, 20, false);
 		registerEntity(EntityBLLightningBolt.class, "lightning", 100, 20, false);
+		registerEntity(EntityResurrection.class, "resurrection", 64, 6, true);
+		registerEntity(EntityFalseXPOrb.class, "false_xp", 64, 20, true);
 		
 		registerEntity(EntityMultipartDummy.class, "multipart_dummy", 64, 20, false);
 		
