@@ -64,7 +64,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 
 	public static final IAttribute CARRY_SHIMMERSTONE = (new BooleanAttribute(null, "bl.carryShimmerstone", false)).setDescription("Whether this Peat Mummy carries a Shimmerstone");
 	public static final IAttribute IS_BOSS = (new BooleanAttribute(null, "bl.isDreadfulPeatMummyBoss", false)).setDescription("Whether this Peat Mummy was spawned by a Dreadful Peat Mummy");
-	
+
 	private static final AxisAlignedBB ZERO_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
 
 	private static final int BREAK_COUNT = 5;
@@ -371,7 +371,6 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 		return super.canBePushed() && this.isSpawningFinished() && this.getChargingState() == 0;
 	}
 
-
 	@Override
 	public int getMaxSpawnedInChunk() {
 		return 2;
@@ -646,7 +645,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	public void setCarryShimmerstone(boolean shimmerStone) {
 		this.getEntityAttribute(CARRY_SHIMMERSTONE).setBaseValue(shimmerStone ? 1 : 0);
 	}
-	
+
 	/**
 	 * Returns whether the Peat Mummy is holding a Shimmerstone
 	 * @return
@@ -654,7 +653,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	public boolean doesCarryShimmerstone() {
 		return this.getEntityAttribute(CARRY_SHIMMERSTONE).getBaseValue() > 0;
 	}
-	
+
 	/**
 	 * Sets whether the peat mummy was spawned by a Dreadful Peat Mummy
 	 * @param shimmerStone
@@ -662,7 +661,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	public void setBossMummy(boolean boss) {
 		this.getEntityAttribute(IS_BOSS).setBaseValue(boss ? 1 : 0);
 	}
-	
+
 	/**
 	 * Returns whether the Peat Mummy was spawned by a Dreadful Peat Mummy
 	 * @return
