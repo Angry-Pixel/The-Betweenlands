@@ -40,6 +40,16 @@ public class EventSpoopy extends SeasonalEnvironmentEvent {
 		return 8;
 	}
 
+	public static boolean isSpoooopy(World world) {
+		if(world != null) {
+			WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(world);
+			if(provider != null) {
+				return provider.getEnvironmentEventRegistry().spoopy.isActive();
+			}
+		}
+		return false;
+	}
+
 	public void setSkyTransparency(float transparency) {
 		this.lastSkyTransparency = this.skyTransparency;
 		this.skyTransparency = transparency;
