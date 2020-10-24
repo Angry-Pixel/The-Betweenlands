@@ -163,6 +163,13 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	}
 
 	@Override
+	public boolean attackEntityFrom(DamageSource source, float damage) {
+		if (source.equals(DamageSource.IN_WALL) && isRidingMummy())
+			return false;
+		return super.attackEntityFrom(source, damage);
+	}
+
+	@Override
 	public void onLivingUpdate() {
 		breatheFloat = animationBreathe.swing(0.2F, 0.5F, false);
 		
