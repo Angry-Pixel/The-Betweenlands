@@ -3,9 +3,12 @@ package thebetweenlands.common.entity.mobs;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -33,6 +36,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -64,6 +68,9 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	protected static final DataParameter<Byte> SUCKING_STATE_DW = EntityDataManager.createKey(EntityTarBeast.class, DataSerializers.BYTE);
 	protected static final DataParameter<Boolean> SHEDDING_STATE_DW = EntityDataManager.createKey(EntityTarBeast.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> GROW_TIMER = EntityDataManager.createKey(EntityTarBeast.class, DataSerializers.VARINT);
+	
+	public int growCount, prevGrowCount;
 
 	public EntityTarBeast(World world) {
 		super(world);
@@ -94,6 +101,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 		super.entityInit();
 		this.getDataManager().register(SUCKING_STATE_DW, (byte) 0);
 		this.getDataManager().register(SHEDDING_STATE_DW, false);
+		dataManager.register(GROW_TIMER, 40);
 	}
 
 	@Override
@@ -166,6 +174,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 		nbt.setInteger("suckingPreparation", this.suckingPreparation);
 		nbt.setInteger("suckingProgress", this.suckingProgress);
 		nbt.setByte("suckingState", this.getDataManager().get(SUCKING_STATE_DW));
+		nbt.setInteger("grow_timer", getGrowTimer());
 
 		super.writeEntityToNBT(nbt);
 	}
@@ -194,6 +203,9 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 			this.getDataManager().set(SUCKING_STATE_DW, nbt.getByte("suckingState"));
 		}
 
+		if(nbt.hasKey("grow_timer"))
+			setGrowTimer(nbt.getInteger("grow_timer"));
+
 		super.readEntityFromNBT(nbt);
 	}
 
@@ -212,6 +224,8 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 		super.onUpdate();
 
 		if (world.isRemote) {
+			prevGrowCount = growCount;
+			growCount = getGrowTimer();
 			if(ticksExisted % 10 == 0) {
 				renderParticles(world, posX, posY, posZ, rand);
 			}
@@ -355,12 +369,16 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 					getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 				}
 			}
+
+			if (getGrowTimer() < 40) {
+				setGrowTimer(Math.min(40, getGrowTimer() + 1));
+			}
 		}
 	}
 
 	@Override
 	protected boolean isMovementBlocked() {
-		return super.isMovementBlocked() || this.isSucking();
+		return super.isMovementBlocked() || this.isSucking() || getGrowTimer() < 40;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -380,6 +398,10 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 			BLParticles.SPLASH_TAR.spawn(world , x, y + rand.nextDouble() * 1.9D, z, ParticleArgs.get().withMotion(velX * 0.15D, velY * 0.1D, velZ * 0.15D));
 			BLParticles.TAR_BEAST_DRIP.spawn(world , x + offSetX, y + 1.2D, z + offSetZ);
 		}
+	}
+	
+	public float getGrowthFactor(float partialTicks) {
+		return prevGrowCount + (growCount - prevGrowCount) * partialTicks;
 	}
 
 	@Override
@@ -434,6 +456,14 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 		this.getDataManager().set(SUCKING_STATE_DW, (byte)2);
 	}
 
+	public int getGrowTimer() {
+		return dataManager.get(GROW_TIMER);
+	}
+
+	public void setGrowTimer(int timer) {
+		dataManager.set(GROW_TIMER, timer);
+	}
+
 	@Override
     public float getBlockPathWeight(BlockPos pos) {
         return 0.5F;
@@ -442,5 +472,13 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
     @Override
     protected boolean isValidLightLevel() {
     	return true;
+    }
+
+    @Override
+    @Nullable
+    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+        if (!world.isRemote)
+            setGrowTimer(0);
+		return livingdata;
     }
 }
