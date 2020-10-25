@@ -66,11 +66,11 @@ public class EntityFalseXPOrb extends EntityXPOrb implements IEntityAdditionalSp
 
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {
-		buffer.writeInt(this.xpValue);
+		buffer.writeInt(Math.abs(this.xpValue));
 	}
 
 	@Override
 	public void readSpawnData(ByteBuf buffer) {
-		this.xpValue = Math.abs(buffer.readInt());
+		this.xpValue = buffer.readInt();
 	}
 }
