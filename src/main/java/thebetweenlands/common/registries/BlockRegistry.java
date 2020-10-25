@@ -845,9 +845,9 @@ public class BlockRegistry {
     public static final Block WAYSTONE = new BlockWaystone();
     public static final Block CAVING_ROPE_LIGHT = new BlockCavingRopeLight();
     public static final Block GROUND_ITEM = new BlockGroundItem();
-    public static final BlockSimulacrum SIMULACRUM_DEEPMAN = new BlockSimulacrum();
-    public static final BlockSimulacrum SIMULACRUM_LAKE_CAVERN = new BlockSimulacrum();
-    public static final BlockSimulacrum SIMULACRUM_ROOTMAN = new BlockSimulacrum();
+    public static final BlockSimulacrum SIMULACRUM_DEEPMAN = new BlockSimulacrum(Material.ROCK, SoundType.STONE);
+    public static final BlockSimulacrum SIMULACRUM_LAKE_CAVERN = new BlockSimulacrum(Material.ROCK, SoundType.STONE);
+    public static final BlockSimulacrum SIMULACRUM_ROOTMAN = new BlockSimulacrum(Material.WOOD, SoundType.WOOD);
     public static final Block OFFERING_TABLE = new BlockOfferingTable();
     
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();

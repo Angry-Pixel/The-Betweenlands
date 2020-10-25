@@ -7,6 +7,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
@@ -55,10 +56,11 @@ public class BlockSimulacrum extends BlockContainer implements IStateMappedBlock
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	public static final PropertyEnum<Variant> VARIANT = PropertyEnum.create("variant", Variant.class);
 
-	public BlockSimulacrum() {
-		super(Material.ROCK);
-		this.setHardness(15.0F);
+	public BlockSimulacrum(Material material, SoundType soundType) {
+		super(material);
+		this.setHardness(10.0F);
 		this.setResistance(10000.0F);
+		this.setSoundType(soundType);
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 		this.setTickRandomly(true);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));

@@ -618,7 +618,7 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 		if(simulacrum != null) {
 			double dst = simulacrum.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 
-			float multiplier = (float) (0.1f + 0.9f * dst / 256.0D);
+			float multiplier = (float) (0.075f + 0.925f * dst / 256.0D);
 
 			event.setNewSpeed(event.getNewSpeed() * multiplier);
 		}
