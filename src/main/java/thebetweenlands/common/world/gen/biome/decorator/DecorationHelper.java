@@ -25,9 +25,12 @@ import thebetweenlands.common.world.gen.feature.WorldGenCaveHangers;
 import thebetweenlands.common.world.gen.feature.WorldGenCaveMoss;
 import thebetweenlands.common.world.gen.feature.WorldGenCavePots;
 import thebetweenlands.common.world.gen.feature.WorldGenCaveThorns;
+import thebetweenlands.common.world.gen.feature.WorldGenDeepmanSimulacrum;
 import thebetweenlands.common.world.gen.feature.WorldGenFluidPool;
+import thebetweenlands.common.world.gen.feature.WorldGenLakeCavernSimulacrum;
 import thebetweenlands.common.world.gen.feature.WorldGenMossCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenPlantCluster;
+import thebetweenlands.common.world.gen.feature.WorldGenRootmanSimulacrum;
 import thebetweenlands.common.world.gen.feature.WorldGenRootsCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenRottenLogs;
 import thebetweenlands.common.world.gen.feature.WorldGenRottenWeedwoodTree;
@@ -123,6 +126,9 @@ public class DecorationHelper {
 	public static final WorldGenerator GEN_SPIRIT_TREE_STRUCTURE = new WorldGenSpiritTreeStructure();
 	public static final WorldGenerator GEN_SLUDGE_WORM_DUNGEON = new WorldGenSludgeWormDungeon();
 	public static final WorldGenerator GEN_CHIROMAW_MATRIARCH_NEST = new WorldGenChiromawNest();
+	public static final WorldGenerator GEN_LAKE_CAVERN_SIMULACRUM = new WorldGenLakeCavernSimulacrum();
+	public static final WorldGenerator GEN_DEEPMAN_SIMULACRUM = new WorldGenDeepmanSimulacrum();
+	public static final WorldGenerator GEN_ROOTMAN_SIMULACRUM = new WorldGenRootmanSimulacrum();
 	
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
@@ -157,6 +163,8 @@ public class DecorationHelper {
 		decorator.generate(25, DecorationHelper::generateUndergroundMossCluster);
 		decorator.generate(5, DecorationHelper::generateUndergroundLichenCluster);
 		decorator.generate(120, DecorationHelper::generateCaveGrassCluster);
+		decorator.generate(5, DecorationHelper::generateDeepmanSimulacrum);
+		decorator.generate(0.6f, DecorationHelper::generateLakeCavernSimulacrum);
 		return true;
 	}
 
@@ -239,6 +247,27 @@ public class DecorationHelper {
 		return GEN_CAVE_GRASS.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
 	}
 
+	public static boolean generateDeepmanSimulacrum(DecoratorPositionProvider decorator) {
+		int x = decorator.getRandomPosX();
+		int y = WorldProviderBetweenlands.CAVE_START - 10 + decorator.getRand().nextInt(WorldProviderBetweenlands.CAVE_START - 10 - WorldProviderBetweenlands.PITSTONE_HEIGHT);
+		int z = decorator.getRandomPosZ();
+		return GEN_DEEPMAN_SIMULACRUM.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
+	}
+	
+	public static boolean generateLakeCavernSimulacrum(DecoratorPositionProvider decorator) {
+		int x = decorator.getRandomPosX();
+		int y = WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 3;
+		int z = decorator.getRandomPosZ();
+		return GEN_LAKE_CAVERN_SIMULACRUM.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
+	}
+	
+	public static boolean generateRootmanSimulacrum(DecoratorPositionProvider decorator) {
+		int x = decorator.getRandomPosX();
+		int y = WorldProviderBetweenlands.LAYER_HEIGHT + 16 + decorator.getRand().nextInt(32);
+		int z = decorator.getRandomPosZ();
+		return GEN_ROOTMAN_SIMULACRUM.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
+	}
+	
 	public static boolean generateSpawner(DecoratorPositionProvider decorator) {
 		int x = decorator.getRandomPosX(13);
 		int y = decorator.getRand().nextInt(WorldProviderBetweenlands.CAVE_START - 20);

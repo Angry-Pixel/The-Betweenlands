@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.misc;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -23,161 +25,172 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityGroundItem;
 
-import javax.annotation.Nullable;
-
 public class BlockGroundItem extends Block implements BlockRegistry.ICustomItemBlock {
+	public static final AxisAlignedBB BOUNDING_AABB = new AxisAlignedBB(0.15F, 0.0F, 0.15F, 0.85F, 0.45F, 0.85F);
 
-    public static AxisAlignedBB BOUNDING_AABB = new AxisAlignedBB(0.15F, 0.0F, 0.15F, 0.85F, 0.45F, 0.85F);
+	protected BlockGroundItem(Material material) {
+		super(material);
+		setSoundType(SoundType.GROUND);
+		setHardness(0.1F);
+		setDefaultState(this.blockState.getBaseState());
+	}
 
-    public BlockGroundItem() {
-        super(Material.GROUND);
-        setSoundType(SoundType.GROUND);
-        setHardness(0.1F);
-        setDefaultState(this.blockState.getBaseState());
-    }
+	public BlockGroundItem() {
+		this(Material.GROUND);
+	}
 
-    public static void create(World world, BlockPos pos, ItemStack stack) {
-        Block block = BlockRegistry.GROUND_ITEM;
-        if (!world.isRemote && block.canPlaceBlockAt(world, pos)) {
-            world.setBlockState(pos, block.getDefaultState());
-            TileEntity tileEntity = world.getTileEntity(pos);
-            if (tileEntity instanceof TileEntityGroundItem) {
-                ((TileEntityGroundItem) tileEntity).setStack(stack);
-            }
-        }
-    }
+	public static void create(World world, BlockPos pos, ItemStack stack) {
+		Block block = BlockRegistry.GROUND_ITEM;
+		if (!world.isRemote && block.canPlaceBlockAt(world, pos)) {
+			world.setBlockState(pos, block.getDefaultState());
+			TileEntity tileEntity = world.getTileEntity(pos);
+			if (tileEntity instanceof TileEntityGroundItem) {
+				((TileEntityGroundItem) tileEntity).setStack(stack);
+			}
+		}
+	}
 
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState();
-    }
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState();
+	}
 
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return 0;
-    }
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return 0;
+	}
 
-    @Nullable
-    @Override
-    public ItemBlock getItemBlock() {
-        return null;
-    }
+	@Nullable
+	@Override
+	public ItemBlock getItemBlock() {
+		return null;
+	}
 
-    @Override
-    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-        TileEntity tileEntity = world.getTileEntity(pos);
-        if (tileEntity instanceof TileEntityGroundItem) {
-            return ((TileEntityGroundItem) tileEntity).getStack();
-        }
-        return ItemStack.EMPTY;
-    }
+	@Override
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if (tileEntity instanceof TileEntityGroundItem) {
+			return ((TileEntityGroundItem) tileEntity).getStack();
+		}
+		return ItemStack.EMPTY;
+	}
 
-    @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        TileEntity tileEntity = worldIn.getTileEntity(pos);
-        if (tileEntity instanceof TileEntityGroundItem && !worldIn.isRemote) {
-            ItemStack itemStack = ((TileEntityGroundItem) tileEntity).getStack();
-            ItemHandlerHelper.giveItemToPlayer(playerIn, itemStack);
-            worldIn.setBlockToAir(pos);
-        }
-        return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
-    }
+	@Override
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		TileEntity tileEntity = worldIn.getTileEntity(pos);
+		if (tileEntity instanceof TileEntityGroundItem && !worldIn.isRemote) {
+			ItemStack itemStack = ((TileEntityGroundItem) tileEntity).getStack();
+			ItemHandlerHelper.giveItemToPlayer(playerIn, itemStack);
+			((TileEntityGroundItem) tileEntity).setStack(ItemStack.EMPTY);
 
-    public boolean canStay(World world, BlockPos pos) {
-        IBlockState downState = world.getBlockState(pos);
-        return downState.isSideSolid(world, pos, EnumFacing.UP) || downState.getBlockFaceShape(world, pos, EnumFacing.UP) == BlockFaceShape.SOLID;
-    }
+			this.onItemTaken(worldIn, pos, playerIn, hand, itemStack);
+		}
+		return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
+	}
 
-    @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        if (!canStay(worldIn, pos.down())){
-            TileEntity tileEntity = worldIn.getTileEntity(pos);
-            harvestBlock(worldIn, null, pos, state, tileEntity, ItemStack.EMPTY);
-            worldIn.setBlockToAir(pos);
-        }
-    }
+	protected void onItemTaken(World world, BlockPos pos, EntityPlayer player, EnumHand hand, ItemStack stack) {
+		world.setBlockToAir(pos);
+	}
 
-    @Override
-    public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack) {
-        if (te instanceof TileEntityGroundItem && !worldIn.isRemote && !((TileEntityGroundItem) te).getStack().isEmpty()) {
-            spawnAsEntity(worldIn, pos, ((TileEntityGroundItem) te).getStack());
-        }
-    }
+	public boolean canStay(World world, BlockPos pos) {
+		IBlockState downState = world.getBlockState(pos);
+		return downState.isSideSolid(world, pos, EnumFacing.UP) || downState.getBlockFaceShape(world, pos, EnumFacing.UP) == BlockFaceShape.SOLID;
+	}
 
-    @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return BOUNDING_AABB;
-    }
+	@Override
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+		if (!canStay(worldIn, pos.down())){
+			TileEntity tileEntity = worldIn.getTileEntity(pos);
+			if (tileEntity instanceof TileEntityGroundItem && !worldIn.isRemote && !((TileEntityGroundItem) tileEntity).getStack().isEmpty()) {
+				spawnAsEntity(worldIn, pos, ((TileEntityGroundItem) tileEntity).getStack());
+			}
+			worldIn.setBlockToAir(pos);
+		}
+	}
 
-    @Nullable
-    @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-        return NULL_AABB;
-    }
+	@Override
+	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack) {
+		if (te instanceof TileEntityGroundItem && !worldIn.isRemote && !((TileEntityGroundItem) te).getStack().isEmpty()) {
+			spawnAsEntity(worldIn, pos, ((TileEntityGroundItem) te).getStack());
+		}
 
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this);
-    }
+		super.harvestBlock(worldIn, player, pos, state, te, stack);
+	}
 
-    @Override
-    public EnumBlockRenderType getRenderType(IBlockState state) {
-        return EnumBlockRenderType.MODEL;
-    }
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return BOUNDING_AABB;
+	}
 
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
+	@Nullable
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+		return NULL_AABB;
+	}
 
-    @Override
-    public BlockRenderLayer getRenderLayer() {
-        return BlockRenderLayer.TRANSLUCENT;
-    }
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this);
+	}
 
-    @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-        return false;
-    }
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.MODEL;
+	}
 
-    @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
-        return BlockFaceShape.UNDEFINED;
-    }
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
 
-    @Override
-    public boolean isBlockNormalCube(IBlockState state) {
-        return false;
-    }
+	@Override
+	public BlockRenderLayer getRenderLayer() {
+		return BlockRenderLayer.TRANSLUCENT;
+	}
 
-    @Override
-    public boolean isNormalCube(IBlockState state) {
-        return false;
-    }
+	@Override
+	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return false;
+	}
 
-    @Override
-    public boolean isFullBlock(IBlockState state) {
-        return false;
-    }
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+		return BlockFaceShape.UNDEFINED;
+	}
 
-    @Override
-    public boolean isFullCube(IBlockState state) {
-        return false;
-    }
+	@Override
+	public boolean isBlockNormalCube(IBlockState state) {
+		return false;
+	}
 
-    @Override
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        return super.canPlaceBlockAt(worldIn, pos) && canStay(worldIn, pos.down());
-    }
+	@Override
+	public boolean isNormalCube(IBlockState state) {
+		return false;
+	}
 
-    @Override
-    public boolean hasTileEntity(IBlockState state) {
-        return true;
-    }
+	@Override
+	public boolean isFullBlock(IBlockState state) {
+		return false;
+	}
 
-    @Nullable
-    @Override
-    public TileEntity createTileEntity(World world, IBlockState state) {
-        return new TileEntityGroundItem();
-    }
+	@Override
+	public boolean isFullCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+		return super.canPlaceBlockAt(worldIn, pos) && canStay(worldIn, pos.down());
+	}
+
+	@Override
+	public boolean hasTileEntity(IBlockState state) {
+		return true;
+	}
+
+	@Nullable
+	@Override
+	public TileEntity createTileEntity(World world, IBlockState state) {
+		return new TileEntityGroundItem();
+	}
 }

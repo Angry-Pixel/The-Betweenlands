@@ -25,6 +25,7 @@ import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.capability.base.ItemCapabilityHandler;
+import thebetweenlands.common.capability.blessing.BlessingEntityCapability;
 import thebetweenlands.common.capability.collision.RingOfDispersionEntityCapability;
 import thebetweenlands.common.capability.lastkilled.LastKilledCapability;
 import thebetweenlands.common.capability.playermounts.PlayerMountsEntityCapability;
@@ -276,5 +277,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(EntityUnmountHandler.class);
 		MinecraftForge.EVENT_BUS.register(LastKilledCapability.class);
 		MinecraftForge.EVENT_BUS.register(TileEntitySimulacrum.class);
+		MinecraftForge.EVENT_BUS.register(BlessingEntityCapability.class);
 	}
 }

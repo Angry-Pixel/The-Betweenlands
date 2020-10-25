@@ -80,6 +80,7 @@ import thebetweenlands.common.block.misc.BlockMossBed;
 import thebetweenlands.common.block.misc.BlockMudFlowerPot;
 import thebetweenlands.common.block.misc.BlockMudFlowerPotCandle;
 import thebetweenlands.common.block.misc.BlockOctine;
+import thebetweenlands.common.block.misc.BlockOfferingTable;
 import thebetweenlands.common.block.misc.BlockPaneBetweenlands;
 import thebetweenlands.common.block.misc.BlockPolishedDentrothyst;
 import thebetweenlands.common.block.misc.BlockPressurePlateBetweenlands;
@@ -844,9 +845,10 @@ public class BlockRegistry {
     public static final Block WAYSTONE = new BlockWaystone();
     public static final Block CAVING_ROPE_LIGHT = new BlockCavingRopeLight();
     public static final Block GROUND_ITEM = new BlockGroundItem();
-    public static final Block SIMULACRUM_DEEPMAN = new BlockSimulacrum();
-    public static final Block SIMULACRUM_LAKE_CAVERN = new BlockSimulacrum();
-    public static final Block SIMULACRUM_ROOTMAN = new BlockSimulacrum();
+    public static final BlockSimulacrum SIMULACRUM_DEEPMAN = new BlockSimulacrum();
+    public static final BlockSimulacrum SIMULACRUM_LAKE_CAVERN = new BlockSimulacrum();
+    public static final BlockSimulacrum SIMULACRUM_ROOTMAN = new BlockSimulacrum();
+    public static final Block OFFERING_TABLE = new BlockOfferingTable();
     
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();

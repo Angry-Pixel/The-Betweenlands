@@ -2,6 +2,7 @@ package thebetweenlands.common.registries;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
+import thebetweenlands.api.capability.IBlessingCapability;
 import thebetweenlands.api.capability.ICircleGemCapability;
 import thebetweenlands.api.capability.ICustomStepSoundCapability;
 import thebetweenlands.api.capability.IDecayCapability;
@@ -18,6 +19,7 @@ import thebetweenlands.api.capability.ISummoningCapability;
 import thebetweenlands.common.capability.CustomStepSoundCapability;
 import thebetweenlands.common.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.capability.base.ItemCapabilityHandler;
+import thebetweenlands.common.capability.blessing.BlessingEntityCapability;
 import thebetweenlands.common.capability.circlegem.CircleGemEntityCapability;
 import thebetweenlands.common.capability.collision.RingOfDispersionEntityCapability;
 import thebetweenlands.common.capability.decay.DecayEntityCapability;
@@ -78,6 +80,9 @@ public class CapabilityRegistry {
 	
 	@CapabilityInject(ILastKilledCapability.class)
 	public static final Capability<ILastKilledCapability> CAPABILITY_LAST_KILLED = null;
+	
+	@CapabilityInject(IBlessingCapability.class)
+	public static final Capability<IBlessingCapability> CAPABILITY_BLESSING = null;
 		
 	public static void preInit() {
 		EntityCapabilityHandler.registerEntityCapability(new DecayEntityCapability());
@@ -93,6 +98,7 @@ public class CapabilityRegistry {
 		EntityCapabilityHandler.registerEntityCapability(new RingOfDispersionEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new PlayerMountsEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new LastKilledCapability());
+		EntityCapabilityHandler.registerEntityCapability(new BlessingEntityCapability());
 		
 		ItemCapabilityHandler.registerItemCapability(new LivingWeedwoodShieldItemCapability());
 		

@@ -58,7 +58,7 @@ public class EventThunderstorm extends TimedEnvironmentEvent {
 						
 						BlockPos seedPos = new BlockPos(chunk.x * 16 + (l & 15), 0, chunk.z * 16 + (l >> 8 & 15));
 						
-						TileEntitySimulacrum simulacrum = TileEntitySimulacrum.getClosestTile(TileEntitySimulacrum.class, null, worldServer, seedPos.getX() + 0.5D, world.getHeight(seedPos).getY(), seedPos.getZ() + 0.5D, 64.0D, TileEntitySimulacrum.Effect.ATTRACTION);
+						TileEntitySimulacrum simulacrum = TileEntitySimulacrum.getClosestTile(TileEntitySimulacrum.class, null, worldServer, seedPos.getX() + 0.5D, world.getHeight(seedPos).getY(), seedPos.getZ() + 0.5D, 64.0D, TileEntitySimulacrum.Effect.ATTRACTION, null);
 						
 						BlockPos pos;
 						boolean isFlyingPlayerTarget = false;						
@@ -75,7 +75,7 @@ public class EventThunderstorm extends TimedEnvironmentEvent {
 						}
 						
 						if((pos.getY() > 150 || this.getWorld().rand.nextInt(8) == 0) && world.isRainingAt(pos)) {
-							world.spawnEntity(new EntityBLLightningBolt(world, (double)pos.getX() + 0.5D, (double)pos.getY(), (double)pos.getZ() + 0.5D, isFlyingPlayerTarget ? 50 : 400, isFlyingPlayerTarget));
+							world.spawnEntity(new EntityBLLightningBolt(world, (double)pos.getX() + 0.5D, (double)pos.getY(), (double)pos.getZ() + 0.5D, isFlyingPlayerTarget ? 50 : 400, isFlyingPlayerTarget, false));
 						}
 					}
 				}

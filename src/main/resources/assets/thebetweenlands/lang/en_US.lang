@@ -480,6 +480,7 @@ tile.thebetweenlands.simulacrum_deepman.3.name=Deepman Simulacrum
 tile.thebetweenlands.simulacrum_rootman.1.name=Rootman Simulacrum
 tile.thebetweenlands.simulacrum_rootman.2.name=Rootman Simulacrum
 tile.thebetweenlands.simulacrum_rootman.3.name=Rootman Simulacrum
+tile.thebetweenlands.offering_table.name=Offering Table
 
 # Items
 
@@ -1103,6 +1104,7 @@ tooltip.bl.simulacrum.effect.fertility=Fertility
 tooltip.bl.simulacrum.effect.attraction=Attraction
 tooltip.bl.simulacrum.effect.wisp=Wisp
 tooltip.bl.simulacrum.effect.wisdom=Wisdom
+tooltip.bl.simulacrum.effect.blessing=Blessing
 
 tooltip.bl.recipes.used_in=§5Used in: §7%s
 tooltip.bl.recipes.compost_bin=Compost Bin
@@ -1222,6 +1224,8 @@ chat.equipment.equipped=Equipped %s
 chat.equipment.unequipped=Unequipped %s
 
 chat.waystone.obstructed=Menhir is obstructed
+chat.simulacrum.obstructed=Simulacrum is obstructed
+chat.simulacrum.blessed=You feel blessed
 
 chat.dungeon_door_runes.locked=Dungeon door code set!
 
@@ -1307,6 +1311,8 @@ bl.elixir.duration.n=%s
 
 bl.potion.rootBound=Root Bound
 bl.potion.enlightened=Enlightened
+
+bl.effect.blessed=Blessed
 
 # Entities
 entity.thebetweenlands.dark_druid.name=Dark Druid

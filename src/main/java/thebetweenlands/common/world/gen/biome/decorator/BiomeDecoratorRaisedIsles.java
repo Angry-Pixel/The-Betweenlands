@@ -14,5 +14,9 @@ public class BiomeDecoratorRaisedIsles extends BiomeDecoratorCoarseIslands {
 		this.startProfilerSection("chiromawMatriarchNest");
 		this.generate(0.15F, DecorationHelper::generateChiromawMatriarchNest);
 		this.endProfilerSection();
+
+		this.startProfilerSection("rootmanSimulacrum");
+		this.generate(3, DecorationHelper::generateRootmanSimulacrum);
+		this.endProfilerSection();
 	}
 }

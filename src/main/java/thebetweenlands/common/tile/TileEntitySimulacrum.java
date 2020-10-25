@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
@@ -17,9 +18,14 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ITickable;
@@ -30,6 +36,7 @@ import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -39,16 +46,23 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.capability.IBlessingCapability;
 import thebetweenlands.api.capability.ILastKilledCapability;
 import thebetweenlands.client.handler.FogHandler;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.EntityFalseXPOrb;
 import thebetweenlands.common.entity.EntityResurrection;
+import thebetweenlands.common.handler.PlayerRespawnHandler;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.util.PlayerUtil;
 
 public class TileEntitySimulacrum extends TileEntityRepeller implements ITickable {
 	public static enum Effect {
@@ -62,7 +76,8 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 		FERTILITY("fertility", 7),
 		ATTRACTION("attraction", 8),
 		WISP("wisp", 9),
-		WISDOM("wisdom", 10);
+		WISDOM("wisdom", 10),
+		BLESSING("blessing", 11);
 
 		public final String name;
 		public final int id;
@@ -296,7 +311,7 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 		case SANCTUARY:
 			this.setRadiusState(3);
 
-			TileEntityRepeller repeller = getClosestTile(TileEntityRepeller.class, this, this.world, this.pos.getX(), this.pos.getY(), this.pos.getZ(), 18.0D, null);
+			TileEntityRepeller repeller = getClosestTile(TileEntityRepeller.class, this, this.world, this.pos.getX(), this.pos.getY(), this.pos.getZ(), 18.0D, null, null);
 
 			if(repeller != null && repeller.getDistanceSq(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) > repeller.getRadius(1) * repeller.getRadius(1)) {
 				repeller = null;
@@ -446,7 +461,56 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 					}
 				}
 			}
+			break;
+		case BLESSING:
+			if(this.world.getTotalWorldTime() % 4 == 0) {
+				EntityPlayer player = this.world.getClosestPlayer(this.pos.getX() + 0.5, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D, 4, e -> {
+					EntityPlayer p = (EntityPlayer) e;
+					if(!p.isSpectator()) {
+						IBlessingCapability cap = p.getCapability(CapabilityRegistry.CAPABILITY_BLESSING, null);
+						return cap != null && (!cap.isBlessed() || cap.getBlessingDimension() != p.dimension || !this.pos.equals(cap.getBlessingLocation()));
+					}
+					return false;
+				});
 
+				if(player != null) {
+					TileEntityOfferingTable offering = getClosestTile(TileEntityOfferingTable.class, null, this.world, player.posX, player.posY, player.posZ, 2.5f, null, stack -> !stack.isEmpty() && stack.getItem() == ItemRegistry.SPIRIT_FRUIT);
+
+					if(offering != null) {
+						if(!this.world.isRemote && this.world.rand.nextInt(40) == 0) {
+							IBlessingCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_BLESSING, null);
+
+							if(cap != null) {
+								ItemStack stack = offering.getStack();
+								stack.shrink(1);
+								offering.setStack(stack);
+
+								cap.setBlessed(player.dimension, this.pos);
+
+								player.sendStatusMessage(new TextComponentTranslation("chat.simulacrum.blessed"), true);
+							}
+						} else if(this.world.isRemote) {
+							this.spawnBlessingParticles(this.world.getTotalWorldTime() * 0.025f, offering.getPos().getX() + 0.5f, offering.getPos().getY() + 0.4f, offering.getPos().getZ() + 0.5f);
+						}
+					}
+				}
+			}
+
+			break;
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void spawnBlessingParticles(float rot, float x, float y, float z) {
+		float step = (float)Math.PI * 2 / 20;
+		for(int i = 0; i < 20; i++) {
+			float dx = (float)Math.cos(rot + step * i);
+			float dz = (float)Math.sin(rot + step * i);
+
+			BLParticles.CORRUPTED.spawn(this.world, x, y, z,
+					ParticleArgs.get()
+					.withMotion(dx * 0.05f, 0.2f, dz * 0.05f)
+					.withData(80, true, 0.1f, true));
 		}
 	}
 
@@ -511,7 +575,7 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 
 	@SuppressWarnings("unchecked")
 	@Nullable
-	public static <T extends TileEntity> T getClosestTile(Class<T> tileCls, @Nullable TileEntity exclude, World world, double x, double y, double z, double range, @Nullable Effect effect) {
+	public static <T extends TileEntity> T getClosestTile(Class<T> tileCls, @Nullable TileEntity exclude, World world, double x, double y, double z, double range, @Nullable Effect effect, @Nullable Predicate<ItemStack> offeringPredicate) {
 		int sx = (MathHelper.floor(x - range) >> 4);
 		int sz = (MathHelper.floor(z - range) >> 4);
 		int ex = (MathHelper.floor(x + range) >> 4);
@@ -530,7 +594,9 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 						if(tile != exclude && tileCls.isInstance(tile)) {
 							double dstSq = entry.getKey().distanceSq(x, y, z);
 
-							if(dstSq <= range * range && (closest == null || dstSq <= closest.getPos().distanceSq(x, y, z)) && (effect == null || tile instanceof TileEntitySimulacrum == false || ((TileEntitySimulacrum) tile).getEffect() == effect)) {
+							if(dstSq <= range * range && (closest == null || dstSq <= closest.getPos().distanceSq(x, y, z)) &&
+									(effect == null || tile instanceof TileEntitySimulacrum == false || ((TileEntitySimulacrum) tile).getEffect() == effect) &&
+									(offeringPredicate == null || tile instanceof TileEntityOfferingTable == false || offeringPredicate.test(((TileEntityOfferingTable) tile).getStack()))) {
 								closest = (T) tile;
 							}
 						}
@@ -547,7 +613,7 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 		BlockPos pos = event.getPos();
 		EntityPlayer player = event.getEntityPlayer();
 
-		TileEntitySimulacrum simulacrum = getClosestTile(TileEntitySimulacrum.class, null, player.world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 16.0D, Effect.WEAKNESS);
+		TileEntitySimulacrum simulacrum = getClosestTile(TileEntitySimulacrum.class, null, player.world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 16.0D, Effect.WEAKNESS, null);
 
 		if(simulacrum != null) {
 			double dst = simulacrum.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
@@ -562,20 +628,64 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 	public static void onLivingDeath(LivingDeathEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
 
-		if(!entity.world.isRemote && entity instanceof EntityPlayer == false && entity.world.rand.nextInt(5) == 0) {
-			TileEntitySimulacrum simulacrum = getClosestTile(TileEntitySimulacrum.class, null, entity.world, entity.posX, entity.posY, entity.posZ, 16.0D, Effect.RESURRECTION);
+		if(!entity.world.isRemote) {
+			if(entity instanceof EntityPlayer == false && entity.world.rand.nextInt(5) == 0) {
+				TileEntitySimulacrum simulacrum = getClosestTile(TileEntitySimulacrum.class, null, entity.world, entity.posX, entity.posY, entity.posZ, 16.0D, Effect.RESURRECTION, null);
 
-			if(simulacrum != null) {
-				entity.setDropItemsWhenDead(false);
+				if(simulacrum != null) {
+					entity.setDropItemsWhenDead(false);
 
-				NBTTagCompound nbt = new NBTTagCompound();
+					NBTTagCompound nbt = new NBTTagCompound();
 
-				if(entity.writeToNBTAtomically(nbt)) {
-					EntityResurrection resurrection = new EntityResurrection(entity.world, nbt, () -> !entity.isDead ? entity.getPositionVector() : null, 60 + entity.world.rand.nextInt(60));
-					resurrection.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
-					entity.world.spawnEntity(resurrection);
+					if(entity.writeToNBTAtomically(nbt)) {
+						EntityResurrection resurrection = new EntityResurrection(entity.world, nbt, () -> !entity.isDead ? entity.getPositionVector() : null, 60 + entity.world.rand.nextInt(60));
+						resurrection.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+						entity.world.spawnEntity(resurrection);
+					}
+				}
+			} else if(entity instanceof EntityPlayer) {
+				IBlessingCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_BLESSING, null);
+
+				if(cap != null && cap.isBlessed()) {
+					BlockPos location = cap.getBlessingLocation();
+
+					if(location != null && cap.getBlessingDimension() == entity.dimension) {
+						event.setCanceled(true);
+
+						entity.setHealth(entity.getMaxHealth() * 0.5f);
+
+						if(entity.world.rand.nextBoolean()) {
+							BlockPos spawnPoint = PlayerRespawnHandler.getSpawnPointNearPos(entity.world, location, 8, false, 4, 0);
+
+							if(spawnPoint != null) {
+								if(entity.getDistanceSq(spawnPoint) > 24) {
+									playThunderSounds(entity.world, entity.posX, entity.posY, entity.posZ);
+									entity.world.spawnEntity(new EntityBLLightningBolt(entity.world, entity.posX, entity.posY, entity.posZ, 1, false, true));
+								}
+
+								PlayerUtil.teleport(entity, spawnPoint.getX() + 0.5D, spawnPoint.getY(), spawnPoint.getZ() + 0.5D);
+
+								playThunderSounds(entity.world, entity.posX, entity.posY, entity.posZ);
+								entity.world.spawnEntity(new EntityBLLightningBolt(entity.world, entity.posX, entity.posY, entity.posZ, 1, false, true));
+
+								entity.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60, 1));
+							} else if(entity instanceof EntityPlayerMP) {
+								((EntityPlayerMP) entity).sendStatusMessage(new TextComponentTranslation("chat.simulacrum.obstructed"), true);
+							}
+						} else {
+							playThunderSounds(entity.world, entity.posX, entity.posY, entity.posZ);
+							entity.world.spawnEntity(new EntityBLLightningBolt(entity.world, entity.posX, entity.posY, entity.posZ, 1, false, true));
+						}
+
+						cap.clearBlessed();
+					}
 				}
 			}
 		}
+	}
+
+	protected static void playThunderSounds(World world, double x, double y, double z) {
+		world.playSound(null, x, y, z, SoundRegistry.RIFT_CREAK, SoundCategory.PLAYERS, 2, 1);
+		world.playSound(null, x, y, z, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.PLAYERS, 0.75F, 0.75F);
 	}
 }
