@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -15,6 +16,7 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityResurrection extends Entity {
 	protected static final byte EVENT_RESPAWN = 80;
@@ -90,6 +92,8 @@ public class EntityResurrection extends Entity {
 								entity.motionX = entity.motionY = entity.motionZ = 0;
 
 								this.world.spawnEntity(entity);
+
+								this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.RESURRECTION, SoundCategory.BLOCKS, 1, 1);
 							} else {
 								entity.setDead();
 							}

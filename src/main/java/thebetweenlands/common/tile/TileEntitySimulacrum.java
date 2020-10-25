@@ -629,7 +629,7 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 		EntityLivingBase entity = event.getEntityLiving();
 
 		if(!entity.world.isRemote) {
-			if(entity instanceof EntityPlayer == false && entity.world.rand.nextInt(5) == 0) {
+			if(entity instanceof EntityPlayer == false && entity.world.rand.nextInt(4) == 0) {
 				TileEntitySimulacrum simulacrum = getClosestTile(TileEntitySimulacrum.class, null, entity.world, entity.posX, entity.posY, entity.posZ, 16.0D, Effect.RESURRECTION, null);
 
 				if(simulacrum != null) {
