@@ -41,6 +41,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.ai.EntityAIFlyRandomly;
 import thebetweenlands.common.entity.ai.EntityAIMoveToDirect;
@@ -155,6 +156,9 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		if (this.world.isRemote) {
 			prevGrowCount = growCount;
 			growCount = getGrowTimer();
+			if (getGrowTimer() > 0 && getGrowTimer() < 40)
+				if (this.ticksExisted % 4 == 0)
+					this.spawnVolatileParticles(true);
 		}
 
         if (!this.world.isRemote) {
@@ -277,7 +281,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
         	}
 
             if (this.world.isRemote && (this.getRidingEntity() == null || this.ticksExisted % 4 == 0)) {
-                this.spawnVolatileParticles();
+                this.spawnVolatileParticles(false);
             }
 
             this.setSize(0.7F, 0.7F);
@@ -492,7 +496,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
     }
 
     @SideOnly(Side.CLIENT)
-    private void spawnVolatileParticles() {
+    private void spawnVolatileParticles(boolean tarred) {
         final double radius = 0.3F;
 
         final double cx = this.posX;
@@ -507,8 +511,13 @@ public class EntityWight extends EntityMob implements IEntityBL {
             px = cx + vec.x * radius;
             py = cy + vec.y * radius;
             pz = cz + vec.z * radius;
-            BLParticles.STEAM_PURIFIER.spawn(this.world, px, py, pz);
-        }
+			if (tarred) {
+				float tintChange = 1F / 40F * growCount;
+				BLParticles.STEAM_PURIFIER.spawn(this.world, px, py + 0.25D, pz).setRBGColorF(tintChange, tintChange,
+						tintChange);
+			} else
+				BLParticles.STEAM_PURIFIER.spawn(this.world, px, py, pz);
+		}
     }
 
     public boolean isHiding() {
