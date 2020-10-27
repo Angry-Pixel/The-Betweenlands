@@ -1803,5 +1803,12 @@
     "sounds": [
       "thebetweenlands:resurrection"
     ]
+  },
+  "worm_throw": {
+    "sounds": [
+      "thebetweenlands:worm_throw_1",
+      "thebetweenlands:worm_throw_2",
+      "thebetweenlands:worm_throw_3"
+    ]
   }
 }

@@ -321,7 +321,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 					worm.setPosition(hag.posX, hag.posY + (double) hag.getEyeHeight() - 0.10000000149011612D, hag.posZ);
 					throwWorm(worm, targetX, targetY + targetDistance * 0.2D, targetZ, 1.6F, 0F);
 					hag.getEntityWorld().spawnEntity(worm);
-					hag.getEntityWorld().playSound(null, hag.getPosition(), SoundRegistry.SLINGSHOT_SHOOT, SoundCategory.HOSTILE, 1F, 1F + (hag.getEntityWorld().rand.nextFloat() - hag.getEntityWorld().rand.nextFloat()) * 0.8F);
+					hag.getEntityWorld().playSound(null, hag.getPosition(), SoundRegistry.WORM_THROW, SoundCategory.HOSTILE, 1F, 1F + (hag.getEntityWorld().rand.nextFloat() - hag.getEntityWorld().rand.nextFloat()) * 0.8F);
 					hag.playPullSound = true;
 				}
 			}

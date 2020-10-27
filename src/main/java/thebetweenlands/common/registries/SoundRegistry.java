@@ -305,6 +305,7 @@ public class SoundRegistry {
     public static final BLSoundEvent MUD_DOOR_TRAP = reg("mud_door_trap");
     public static final BLSoundEvent BEAM_SWITCH = reg("beam_switch");
     public static final BLSoundEvent RESURRECTION = reg("resurrection");
+    public static final BLSoundEvent WORM_THROW = reg("worm_throw");
     
     private SoundRegistry() {
     }
