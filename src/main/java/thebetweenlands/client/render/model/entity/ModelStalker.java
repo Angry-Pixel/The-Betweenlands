@@ -558,18 +558,18 @@ public class ModelStalker extends MowzieModelBase {
         float blinkMedLeft = 0;
         float blinkBig = 0;
         if ((int)(frame * 0.04) % 5 == 0) {
-            blinkSmallRight = (float) Math.pow(Math.sin(blinkFrame * 0.02 + 0.5), 50);
-            blinkSmallLeft = (float) Math.pow(Math.sin(blinkFrame * 0.02 + 0.7), 50);
-            blinkMedRight = (float) Math.pow(Math.sin(blinkFrame * 0.02 - 0.2), 50);
-            blinkMedLeft = (float) Math.pow(Math.sin(blinkFrame * 0.02 + 0.1), 50);
+            blinkSmallRight = (float) Math.pow(Math.sin(blinkFrame * 0.02 + 0.5), 10);
+            blinkSmallLeft = (float) Math.pow(Math.sin(blinkFrame * 0.02 + 0.7), 10);
+            blinkMedRight = (float) Math.pow(Math.sin(blinkFrame * 0.02 - 0.2), 10);
+            blinkMedLeft = (float) Math.pow(Math.sin(blinkFrame * 0.02 + 0.1), 10);
             blinkBig = (float) Math.pow(Math.sin(blinkFrame * 0.02 + 0.35), 20);
         }
-        smallEyelidLeft.rotationPointY -= 1 * (1 - blinkSmallLeft);
-        smallEyelidRight.rotationPointY -= 1 * (1 - blinkSmallRight);
-        medEyelidTopRight.rotationPointY -= 1 * (1 - blinkMedRight);
-        medEyelidTopLeft.rotationPointY -= 1 * (1 - blinkMedLeft);
-        medEyelidBottomRight.rotationPointY += 1 * (1 - blinkMedRight);
-        medEyelidBottomLeft.rotationPointY += 1 * (1 - blinkMedLeft);
+        smallEyelidLeft.rotationPointY -= 1 * (blinkSmallLeft);
+        smallEyelidRight.rotationPointY -= 1 * (blinkSmallRight);
+        medEyelidTopRight.rotationPointY -= 1 * (blinkMedRight);
+        medEyelidTopLeft.rotationPointY -= 1 * (blinkMedLeft);
+        medEyelidBottomRight.rotationPointY += 1 * (blinkMedRight);
+        medEyelidBottomLeft.rotationPointY += 1 * (blinkMedLeft);
 
         float blinkAnim1 = (float) Math.pow(2 * (1 - blinkBig) - 1, 2);
         if (1 - blinkBig < 0.5) blinkAnim1 *= -1;

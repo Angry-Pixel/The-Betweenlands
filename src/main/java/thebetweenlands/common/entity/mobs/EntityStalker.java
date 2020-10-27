@@ -7,8 +7,6 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.passive.EntitySheep;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.block.Block;
@@ -20,10 +18,14 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.Path;
@@ -56,7 +58,7 @@ import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 public class EntityStalker extends EntityClimberBase implements IMob {
 	protected boolean restrictToPitstone = false;
-	
+
 	protected int maxPathingTargetHeight = 0;
 
 	protected boolean isStalking = true;
@@ -99,10 +101,16 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(0, new AIDropAttack(this));
-		this.tasks.addTask(1, new AIScurry(this, 1.75f));
-		this.tasks.addTask(2, new AIBreakLightSources(this));
-		this.tasks.addTask(3, new EntityAIAttackMelee(this, 1.0D, false));
+		this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(1, new AIDropAttack(this));
+		this.tasks.addTask(2, new AIScurry(this, 1.75f));
+		this.tasks.addTask(3, new AIBreakLightSources(this));
+		this.tasks.addTask(4, new EntityAIAttackMelee(this, 1.0D, false));
+		this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0D));
+		this.tasks.addTask(6, new EntityAIWander(this, 0.75D));
+		this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		this.tasks.addTask(8, new EntityAILookIdle(this));
+
 		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 1, false, false, null));
 	}
 
@@ -118,7 +126,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(40.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 	}
-	
+
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData data) {
 		if(this.posY < WorldProviderBetweenlands.PITSTONE_HEIGHT + 3 && this.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
@@ -126,7 +134,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 		}
 		return super.onInitialSpawn(difficulty, data);
 	}
-	
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
@@ -138,7 +146,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 		super.readEntityFromNBT(nbt);
 		this.restrictToPitstone = nbt.getBoolean("restrictToPitstone");
 	}
-	
+
 	@Override
 	public float getMovementSpeed() {
 		return super.getMovementSpeed() + (this.isStalking && this.isFleeingFromView ? 0.25f : 0.0f);
@@ -149,11 +157,11 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 		float priority = super.getPathPriority(nodeType);
 
 		float penalty = 0;
-		
+
 		if(this.restrictToPitstone && this.posY > WorldProviderBetweenlands.PITSTONE_HEIGHT + 3 && pos.getY() >= this.posY) {
 			penalty += Math.min((pos.getY() - this.posY) * 0.5f, 8);
 		}
-		
+
 		if(priority >= 0.0f && this.isStalking) {
 			int height = 0;
 
@@ -192,7 +200,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 		if(this.restrictToPitstone && this.posY <= WorldProviderBetweenlands.PITSTONE_HEIGHT + 3 && y >= WorldProviderBetweenlands.PITSTONE_HEIGHT + 2) {
 			return false;
 		}
-		
+
 		if(this.isStalking) {
 			EntityLivingBase target = this.getAttackTarget();
 
@@ -295,16 +303,6 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 		super.onUpdate();
 
 		if(!this.world.isRemote) {
-			if(false) {
-				Path p = this.getNavigator().getPath();
-				if(p != null) {
-					for(int i = 0; i < p.getCurrentPathLength(); i++) {
-						PathPoint point = p.getPathPointFromIndex(i);
-						this.world.setBlockState(new BlockPos(point.x, point.y, point.z), Blocks.REEDS.getDefaultState(), 2);
-					}
-				}
-			}
-
 			boolean wasFleeingFromView = this.isFleeingFromView;
 			this.isFleeingFromView = false;
 
@@ -462,12 +460,12 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 	protected SoundEvent getAmbientSound() {
 		return !this.isStalking ? SoundRegistry.STALKER_LIVING : null;
 	}
-	
+
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return SoundRegistry.STALKER_HURT;
 	}
-	
+
 	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundRegistry.STALKER_DEATH;

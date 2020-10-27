@@ -40,6 +40,7 @@ import thebetweenlands.client.render.particle.entity.ParticleSimple;
 import thebetweenlands.client.render.particle.entity.ParticleSonicScream;
 import thebetweenlands.client.render.particle.entity.ParticleSoundRipple;
 import thebetweenlands.client.render.particle.entity.ParticleSpiritButterfly;
+import thebetweenlands.client.render.particle.entity.ParticleSwarm;
 import thebetweenlands.client.render.particle.entity.ParticleTarBeastDrip;
 import thebetweenlands.client.render.particle.entity.ParticleThem;
 import thebetweenlands.client.render.particle.entity.ParticleWaterRipple;
@@ -151,7 +152,8 @@ public enum BLParticles {
 	CHIROMAW_TRANSFORM_LIGHTNING(new ParticleChiromawFeathers.Factory().getBaseArgsBuilder().withColor(0.420F, 0.565F, 0.553F, 1).buildBaseArgs()),
 	CHIROMAW_TRANSFORM_SWIRL(new ParticleEntitySwirl.FactoryChiromawSwirl()),
 	WATER_RIPPLE(new ParticleWaterRipple.Factory()),
-	RAIN(new ParticleBLRain.Factory());
+	RAIN(new ParticleBLRain.Factory()),
+	SWARM(new ParticleSwarm.Factory());
 	
 	private ParticleFactory<?, ?> factory;
 
