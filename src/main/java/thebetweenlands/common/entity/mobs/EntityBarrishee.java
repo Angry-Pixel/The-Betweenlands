@@ -43,7 +43,9 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.api.entity.IEntityMusic;
 import thebetweenlands.api.entity.IEntityScreenShake;
+import thebetweenlands.client.audio.EntityMusicLayers;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
@@ -55,11 +57,12 @@ import thebetweenlands.common.entity.movement.IPathObstructionAwareEntity;
 import thebetweenlands.common.entity.movement.PathNavigateBarrishee;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.sound.BLSoundEvent;
 import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
 
-public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IEntityBL, IPathObstructionAwareEntity {
+public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IEntityBL, IPathObstructionAwareEntity, IEntityMusic {
 	private static final DataParameter<Boolean> AMBUSH_SPAWNED = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> SCREAM = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> SCREAM_TIMER = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.VARINT);
@@ -727,5 +730,25 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		protected double getAttackReachSqr(EntityLivingBase attackTarget) {
 			return (double) (4.0F + attackTarget.width);
 		}
+	}
+
+	@Override
+	public BLSoundEvent getMusicFile(EntityPlayer listener) {
+		return SoundRegistry.BARRISHEE_THEME;
+	}
+
+	@Override
+	public double getMusicRange(EntityPlayer listener) {
+		return 32.0D;
+	}
+
+	@Override
+	public boolean isMusicActive(EntityPlayer listener) {
+		return this.isEntityAlive();
+	}
+
+	@Override
+	public int getMusicLayer(EntityPlayer listener) {
+		return EntityMusicLayers.BOSS;
 	}
 }

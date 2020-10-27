@@ -1377,6 +1377,14 @@
       }
     ]
   },
+  "barrishee_theme": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:boss/barrishee_theme",
+        "stream": true
+      }
+    ]
+  },
   "bl_menu": {
     "sounds": [
       {
