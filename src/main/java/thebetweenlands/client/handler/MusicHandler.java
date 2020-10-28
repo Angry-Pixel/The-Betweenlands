@@ -202,12 +202,18 @@ public class MusicHandler {
 	}
 	
 	private boolean isSoundContainedIn(SoundEvent track, ISound sound) {
-		SoundEventAccessor soundEventAccessor = this.mc.getSoundHandler().getAccessor(track.getSoundName());
-		if (soundEventAccessor != null) {
-			List<ISoundEventAccessor<Sound>> soundAccessors = soundEventAccessor.accessorList;
-			for (ISoundEventAccessor<Sound> accessor : soundAccessors) {
-				if (accessor instanceof Sound && Objects.equals(((Sound) accessor).getSoundLocation(), sound.getSoundLocation())) {
-					return true;
+		if(Objects.equals(sound.getSoundLocation(), track.getSoundName())) {
+			return true;
+		}
+		Sound soundInstance = sound.getSound();
+		if(soundInstance != null) {
+			SoundEventAccessor soundEventAccessor = this.mc.getSoundHandler().getAccessor(track.getSoundName());
+			if (soundEventAccessor != null) {
+				List<ISoundEventAccessor<Sound>> soundAccessors = soundEventAccessor.accessorList;
+				for (ISoundEventAccessor<Sound> accessor : soundAccessors) {
+					if (accessor instanceof Sound && Objects.equals(((Sound) accessor).getSoundLocation(), soundInstance.getSoundLocation())) {
+						return true;
+					}
 				}
 			}
 		}

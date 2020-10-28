@@ -11,6 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import thebetweenlands.client.handler.TextureStitchHandler.Frame;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.ParticleTextureStitcher;
 import thebetweenlands.client.render.particle.ParticleTextureStitcher.IParticleSpriteReceiver;
@@ -38,6 +39,27 @@ public class ParticleSwarm extends ParticleAnimated implements IParticleSpriteRe
 		this.particleAlpha = 0;
 	}
 
+	@Override
+	public void setStitchedSprites(Frame[][] frames) {
+		if (this.animation != null && frames != null) {
+			int variant = this.rand.nextInt(frames.length);
+			
+			this.animation.setFrames(frames[variant]);
+			
+			ResourceLocation location = frames[variant][0].getLocation();
+			if(location instanceof ResourceLocationWithScale) {
+				this.particleScale *= ((ResourceLocationWithScale) location).scale;
+			}
+			
+			if(this.particleMaxAge < 0) {
+				this.particleMaxAge = this.animation.getTotalDuration() - 1;
+			}
+			if (this.particleTexture == null) {
+				this.setParticleTexture(frames[variant][0].getSprite());
+			}
+		}
+	}
+	
 	@Override
 	public boolean shouldDisableDepth() {
 		return true;
@@ -175,9 +197,22 @@ public class ParticleSwarm extends ParticleAnimated implements IParticleSpriteRe
 		buff.pos((double)rpx + vertices[3].x, (double)rpy + vertices[3].y, (double)rpz + vertices[3].z).tex((double)minU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
 	}
 
+	public static class ResourceLocationWithScale extends ResourceLocation {
+		public final float scale;
+		
+		public ResourceLocationWithScale(String resourceName, float scale) {
+			super(resourceName);
+			this.scale = scale;
+		}
+	}
+	
+	public static final ParticleTextureStitcher<ParticleSwarm> SPRITES = ParticleTextureStitcher.create(ParticleSwarm.class,
+			new ResourceLocationWithScale("thebetweenlands:particle/swarm_1", 1), new ResourceLocationWithScale("thebetweenlands:particle/swarm_2", 1), new ResourceLocationWithScale("thebetweenlands:particle/swarm_3", 1), new ResourceLocationWithScale("thebetweenlands:particle/swarm_4", 2)
+			).setSplitAnimations(true);
+
 	public static final class Factory extends ParticleFactory<Factory, ParticleSwarm> {
 		public Factory() {
-			super(ParticleSwarm.class, ParticleTextureStitcher.create(ParticleSwarm.class, new ResourceLocation("thebetweenlands:particle/swarm_1")).setSplitAnimations(true));
+			super(ParticleSwarm.class, SPRITES);
 		}
 
 		@SuppressWarnings("unchecked")

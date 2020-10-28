@@ -53,6 +53,7 @@ import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.capability.IEntityCustomCollisionsCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.capability.IPortalCapability;
+import thebetweenlands.client.gui.CrawlerOverlayRenderer;
 import thebetweenlands.client.render.block.RingOfDispersionWorldRenderer;
 import thebetweenlands.client.render.shader.ResizableFramebuffer;
 import thebetweenlands.common.TheBetweenlands;
@@ -116,6 +117,8 @@ public class ScreenRenderHandler extends Gui {
 	public static final ResourceLocation CAVING_ROPE_CONNECTED = new ResourceLocation("thebetweenlands:textures/gui/caving_rope_connected.png");
 	public static final ResourceLocation CAVING_ROPE_DISCONNECTED = new ResourceLocation("thebetweenlands:textures/gui/caving_rope_disconnected.png");
 
+	private final CrawlerOverlayRenderer crawlerOverlayRenderer = new CrawlerOverlayRenderer();
+	
 	public static List<LocationStorage> getVisibleLocations(Entity entity) {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(entity.world);
 		return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, entity.posX, entity.posZ, location -> location.isInside(entity.getPositionEyes(1)) && location.isVisible(entity));
@@ -124,6 +127,8 @@ public class ScreenRenderHandler extends Gui {
 	@SubscribeEvent
 	public void onClientTick(ClientTickEvent event) {
 		if(event.phase == Phase.START && !Minecraft.getMinecraft().isGamePaused()) {
+			this.crawlerOverlayRenderer.update();
+			
 			this.updateCounter++;
 
 			if(this.titleTicks > 0) {
@@ -310,6 +315,8 @@ public class ScreenRenderHandler extends Gui {
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 
 			GlStateManager.popMatrix();*/
+			
+			this.crawlerOverlayRenderer.render(event.getPartialTicks());
 
 			if(BetweenlandsConfig.GENERAL.cavingRopeIndicator && player != null) {
 				boolean connected = false;

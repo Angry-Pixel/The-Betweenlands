@@ -16,6 +16,7 @@ import thebetweenlands.api.capability.IPortalCapability;
 import thebetweenlands.api.capability.IPuppetCapability;
 import thebetweenlands.api.capability.IPuppeteerCapability;
 import thebetweenlands.api.capability.ISummoningCapability;
+import thebetweenlands.api.capability.ISwarmedCapability;
 import thebetweenlands.common.capability.CustomStepSoundCapability;
 import thebetweenlands.common.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.capability.base.ItemCapabilityHandler;
@@ -35,6 +36,7 @@ import thebetweenlands.common.capability.portal.PortalEntityCapability;
 import thebetweenlands.common.capability.recruitment.EntityPuppetCapability;
 import thebetweenlands.common.capability.recruitment.EntityPuppeteerCapability;
 import thebetweenlands.common.capability.summoning.EntitySummoningCapability;
+import thebetweenlands.common.capability.swarmed.SwarmedCapability;
 
 public class CapabilityRegistry {
 	private CapabilityRegistry() { }
@@ -83,6 +85,9 @@ public class CapabilityRegistry {
 	
 	@CapabilityInject(IBlessingCapability.class)
 	public static final Capability<IBlessingCapability> CAPABILITY_BLESSING = null;
+	
+	@CapabilityInject(ISwarmedCapability.class)
+	public static final Capability<ISwarmedCapability> CAPABILITY_SWARMED = null;
 		
 	public static void preInit() {
 		EntityCapabilityHandler.registerEntityCapability(new DecayEntityCapability());
@@ -99,6 +104,7 @@ public class CapabilityRegistry {
 		EntityCapabilityHandler.registerEntityCapability(new PlayerMountsEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new LastKilledCapability());
 		EntityCapabilityHandler.registerEntityCapability(new BlessingEntityCapability());
+		EntityCapabilityHandler.registerEntityCapability(new SwarmedCapability());
 		
 		ItemCapabilityHandler.registerItemCapability(new LivingWeedwoodShieldItemCapability());
 		

@@ -29,6 +29,7 @@ import thebetweenlands.common.capability.blessing.BlessingEntityCapability;
 import thebetweenlands.common.capability.collision.RingOfDispersionEntityCapability;
 import thebetweenlands.common.capability.lastkilled.LastKilledCapability;
 import thebetweenlands.common.capability.playermounts.PlayerMountsEntityCapability;
+import thebetweenlands.common.capability.swarmed.SwarmedCapability;
 import thebetweenlands.common.command.CommandAspectDiscovery;
 import thebetweenlands.common.command.CommandBLEvent;
 import thebetweenlands.common.command.CommandDecay;
@@ -278,5 +279,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(LastKilledCapability.class);
 		MinecraftForge.EVENT_BUS.register(TileEntitySimulacrum.class);
 		MinecraftForge.EVENT_BUS.register(BlessingEntityCapability.class);
+		MinecraftForge.EVENT_BUS.register(SwarmedCapability.class);
 	}
 }

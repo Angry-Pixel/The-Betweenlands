@@ -1419,6 +1419,8 @@ entity.thebetweenlands.draeton_leakage.name=Draeton Leakage
 entity.thebetweenlands.draeton_upgrade_anchor.name=Draeton Anchor
 entity.thebetweenlands.draeton_upgrade_furnace.name=Draeton Furnace
 entity.thebetweenlands.draeton_upgrade_crafting.name=Draeton Crafting
+entity.thebetweenlands.stalker.name=Stalker
+entity.thebetweenlands.swarm.name=Infestation
 
 # Equipment
 equipment.menu.equip=Equip %s
@@ -1968,6 +1970,7 @@ config.thebetweenlands.dump_packed_textures=Dump packed textures
 # Damage sources
 death.attack.bl.shockwave=%1$s was killed by a shockwave
 death.attack.bl.spikewave=%1$s was impaled by roots
+death.attack.bl.swarm=%1$s was decomposed by infestation
 
 #Dev thing
 item.thebetweenlands.test_item_chimp_ruler.name=Test Ruler
