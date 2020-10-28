@@ -156,7 +156,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 	protected boolean split() {
 		float swarmSize = this.getSwarmSize();
 
-		if(swarmSize > 0.5f) {
+		if(swarmSize > 0.25f) {
 			float initialSwarmSize = swarmSize;
 
 			float fraction = initialSwarmSize * 0.25f + initialSwarmSize * (this.rand.nextFloat() - 0.5f) * 0.05f;
