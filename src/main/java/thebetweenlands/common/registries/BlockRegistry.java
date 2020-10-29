@@ -119,6 +119,7 @@ import thebetweenlands.common.block.plant.BlockPlantUnderwater;
 import thebetweenlands.common.block.plant.BlockPoisonIvy;
 import thebetweenlands.common.block.plant.BlockSaplingBetweenlands;
 import thebetweenlands.common.block.plant.BlockSaplingSpiritTree;
+import thebetweenlands.common.block.plant.BlockShelfFungus;
 import thebetweenlands.common.block.plant.BlockSludgeDungeonHangingPlant;
 import thebetweenlands.common.block.plant.BlockSludgeDungeonPlant;
 import thebetweenlands.common.block.plant.BlockSundew;
@@ -662,7 +663,7 @@ public class BlockRegistry {
     public static final Block WATER_WEEDS = new BlockWaterWeeds();
     public static final Block BULB_CAPPED_MUSHROOM_CAP = new BlockBulbCappedMushroomCap();
     public static final Block BULB_CAPPED_MUSHROOM_STALK = new BlockBulbCappedMushroomStalk();
-    public static final Block SHELF_FUNGUS = new BasicBlock(Material.WOOD).setSoundType2(SoundType.CLOTH).setHardness(0.2F);
+    public static final Block SHELF_FUNGUS = new BlockShelfFungus();
     public static final Block ALGAE = new BlockAlgae().setSickleDrop(EnumItemPlantDrop.ALGAE_ITEM.create(1));
     public static final Block POISON_IVY = new BlockPoisonIvy();
     public static final Block ROOT = new BlockRoot();
