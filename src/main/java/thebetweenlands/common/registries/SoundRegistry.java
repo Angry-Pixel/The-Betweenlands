@@ -242,6 +242,8 @@ public class SoundRegistry {
     public static final BLSoundEvent STALKER_HURT = reg("stalker_hurt");
     public static final BLSoundEvent STALKER_DEATH = reg("stalker_death");
     public static final BLSoundEvent BARRISHEE_THEME = reg("barrishee_theme");
+    public static final BLSoundEvent SWARM_ATTACK = reg("swarm_attack");
+    public static final BLSoundEvent SWARM_IDLE = reg("swarm_idle");
 
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");

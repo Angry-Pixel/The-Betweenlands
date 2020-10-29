@@ -8,6 +8,8 @@ import java.util.Random;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -19,9 +21,10 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.api.capability.ISwarmedCapability;
+import thebetweenlands.client.audio.SwarmAttackSound;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
-public class CrawlerOverlayRenderer {
+public class SwarmOverlayRenderer {
 	private static final ResourceLocation SWARM_INDICATOR_OVERLAY_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/overlay/swarm_indicator_overlay.png");
 
 	private final List<GuiCrawler> crawlers = new ArrayList<>();
@@ -35,6 +38,8 @@ public class CrawlerOverlayRenderer {
 
 	private int hurtTicks = 0;
 
+	private ISound swarmAttackSound = null;
+
 	public void update() {
 		Entity view = Minecraft.getMinecraft().getRenderViewEntity();
 
@@ -46,6 +51,15 @@ public class CrawlerOverlayRenderer {
 
 			if(cap != null) {
 				this.swarmStrength = cap.getSwarmedStrength();
+
+				if(this.swarmStrength > 0.05f) {
+					SoundHandler soundHandler = Minecraft.getMinecraft().getSoundHandler();
+
+					if(this.swarmAttackSound == null || !soundHandler.isSoundPlaying(this.swarmAttackSound)) {
+						this.swarmAttackSound = new SwarmAttackSound();
+						soundHandler.playSound(this.swarmAttackSound);
+					}
+				}
 
 				if(this.hurtTicks == -1 && cap.getHurtTimer() > 0) {
 					this.hurtTicks = 10;

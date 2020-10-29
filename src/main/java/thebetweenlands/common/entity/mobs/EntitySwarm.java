@@ -8,6 +8,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -21,6 +23,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -30,14 +33,19 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.ISwarmedCapability;
+import thebetweenlands.client.audio.EntitySound;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySwarm extends EntityClimberBase implements IMob {
 	public static final DataParameter<Float> SWARM_SIZE = EntityDataManager.createKey(EntitySwarm.class, DataSerializers.FLOAT);
+
+	@SideOnly(Side.CLIENT)
+	private ISound idleSound;
 
 	public EntitySwarm(World world) {
 		this(world, 1);
@@ -131,14 +139,14 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 					ISwarmedCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_SWARMED, null);
 
 					if(cap != null) {
-						cap.setSwarmedStrength(cap.getSwarmedStrength() + (1.0f - (float) dst / range) * 0.02f * MathHelper.clamp(this.getSwarmSize() * 1.5f, 0, 1));
+						cap.setSwarmedStrength(cap.getSwarmedStrength() + (1.0f - (float) dst / range) * 0.02f * MathHelper.clamp(this.getSwarmSize() * 1.75f, 0, 1));
 
 						cap.setDamage((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
 					}
 				}
 			}
 		} else {
-			this.spawnParticles();
+			this.updateClient();
 		}
 	}
 
@@ -203,10 +211,16 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 	}
 
 	@SideOnly(Side.CLIENT)
-	protected void spawnParticles() {
+	protected void updateClient() {
 		Entity view = Minecraft.getMinecraft().getRenderViewEntity();
 
 		if(view != null && view.getDistance(this) < 16) {
+			SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
+			if(this.idleSound == null || !handler.isSoundPlaying(this.idleSound)) {
+				this.idleSound = new EntitySound<Entity>(SoundRegistry.SWARM_IDLE, SoundCategory.HOSTILE, this, e -> e.isEntityAlive(), 0.8f);
+				handler.playSound(this.idleSound);
+			}
+
 			List<AxisAlignedBB> collisionBoxes = new ArrayList<>();
 
 			for(BlockPos offsetPos : BlockPos.getAllInBoxMutable(

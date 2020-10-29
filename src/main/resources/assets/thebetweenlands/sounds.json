@@ -1165,6 +1165,16 @@
       "thebetweenlands:stalker_death"
     ]
   },
+  "swarm_attack": {
+    "sounds": [
+      "thebetweenlands:swarm_attack"
+    ]
+  },
+  "swarm_idle": {
+    "sounds": [
+      "thebetweenlands:swarm_idle"
+    ]
+  },
   "roof_collapse": {
     "sounds": [
       "thebetweenlands:roof_collapse"

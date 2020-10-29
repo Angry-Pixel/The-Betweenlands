@@ -53,7 +53,7 @@ import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.capability.IEntityCustomCollisionsCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.capability.IPortalCapability;
-import thebetweenlands.client.gui.CrawlerOverlayRenderer;
+import thebetweenlands.client.gui.SwarmOverlayRenderer;
 import thebetweenlands.client.render.block.RingOfDispersionWorldRenderer;
 import thebetweenlands.client.render.shader.ResizableFramebuffer;
 import thebetweenlands.common.TheBetweenlands;
@@ -117,7 +117,7 @@ public class ScreenRenderHandler extends Gui {
 	public static final ResourceLocation CAVING_ROPE_CONNECTED = new ResourceLocation("thebetweenlands:textures/gui/caving_rope_connected.png");
 	public static final ResourceLocation CAVING_ROPE_DISCONNECTED = new ResourceLocation("thebetweenlands:textures/gui/caving_rope_disconnected.png");
 
-	private final CrawlerOverlayRenderer crawlerOverlayRenderer = new CrawlerOverlayRenderer();
+	private final SwarmOverlayRenderer crawlerOverlayRenderer = new SwarmOverlayRenderer();
 	
 	public static List<LocationStorage> getVisibleLocations(Entity entity) {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(entity.world);
