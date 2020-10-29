@@ -30,6 +30,7 @@ import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.BetweenstoneCaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.GreeblingSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.spawners.PitstoneCaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SkySpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SporelingSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
@@ -100,7 +101,7 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 		entries.add(new CaveSpawnEntry(18, EntityChiromaw.class, EntityChiromaw::new, (short) 60).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
 		entries.add(new BetweenstoneCaveSpawnEntry(19, EntityBoulderSprite.class, EntityBoulderSprite::new, (short) 60).setHostile(true).setSpawnCheckRadius(16.0D).setSpawnCheckRangeY(8));
 		entries.add(new SkySpawnEntry(18, EntityChiromawGreeblingRider.class, EntityChiromawGreeblingRider::new, (short) 20).setSpawnCheckRadius(64.0D).setGroupSize(1, 3).setSpawningInterval(600).setHostile(true));
-		entries.add(new CaveSpawnEntry(19, EntityStalker.class, EntityStalker::new, (short) 20).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(16).setSpawningInterval(6000));
+		entries.add(new PitstoneCaveSpawnEntry(19, EntityStalker.class, EntityStalker::new, (short) 20).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(16).setSpawningInterval(6000));
 		entries.add(new CaveSpawnEntry(20, EntitySwarm.class, EntitySwarm::new, (short) 140).setHostile(true).setSpawnCheckRadius(32.0D));
 	}
 }
