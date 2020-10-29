@@ -102,7 +102,7 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 	private static final Method m_getHurtSound;
 
 	static {
-		m_getAmbientSound = ReflectionHelper.findMethod(EntityLiving.class, "getAmbientSound", "func_192003_a");
+		m_getAmbientSound = ReflectionHelper.findMethod(EntityLiving.class, "getAmbientSound", "func_184639_G");
 		m_getAmbientSound.setAccessible(true);
 
 		m_getDeathSound = ReflectionHelper.findMethod(EntityLivingBase.class, "getDeathSound", "func_184615_bR");
