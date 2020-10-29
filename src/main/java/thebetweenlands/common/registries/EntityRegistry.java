@@ -8,11 +8,13 @@ import thebetweenlands.common.entity.EntityAngryPebble;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
+import thebetweenlands.common.entity.EntityFalseXPOrb;
 import thebetweenlands.common.entity.EntityGalleryFrame;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.entity.EntityGreeblingCorpse;
 import thebetweenlands.common.entity.EntityLurkerSkinRaft;
 import thebetweenlands.common.entity.EntityMovingWall;
+import thebetweenlands.common.entity.EntityResurrection;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityShock;
@@ -85,7 +87,9 @@ import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceLarge;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceSmall;
 import thebetweenlands.common.entity.mobs.EntitySporeJet;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
+import thebetweenlands.common.entity.mobs.EntityStalker;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
+import thebetweenlands.common.entity.mobs.EntitySwarm;
 import thebetweenlands.common.entity.mobs.EntityTamedSpiritTreeFace;
 import thebetweenlands.common.entity.mobs.EntityTarBeast;
 import thebetweenlands.common.entity.mobs.EntityTarminion;
@@ -210,6 +214,8 @@ public class EntityRegistry {
 		registerEntity(EntitySludgeMenace.DummyPart.class, "sludge_menace_multipart_dummy", 64, 20, false);
 		registerEntity(EntityShock.class, "shock", 64, 20, false);
 		registerEntity(EntityBLLightningBolt.class, "lightning", 100, 20, false);
+		registerEntity(EntityResurrection.class, "resurrection", 64, 6, true);
+		registerEntity(EntityFalseXPOrb.class, "false_xp", 64, 20, true);
 		
 		registerEntity(EntityMultipartDummy.class, "multipart_dummy", 64, 20, false);
 		
@@ -228,6 +234,9 @@ public class EntityRegistry {
 		registerEntity(EntityChiromawHatchling.class, "chiromaw_hatchling", 64, 3, true);
 		registerEntity(EntityChiromawTame.class, "chiromaw_tame", 128, 3, true);
 		registerEntity(EntityGreeblingCorpse.class, "greebling_corpse", 80, 20, false);
+	
+		registerEntity(EntityStalker.class, "stalker", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntitySwarm.class, "swarm", 0x0B3B0B, 0xDBA901);
 	}
 
 	private static int id = 0;

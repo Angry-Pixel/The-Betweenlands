@@ -10,6 +10,7 @@ import thebetweenlands.common.tile.TileEntityAspectVial;
 import thebetweenlands.common.tile.TileEntityAspectrusCrop;
 import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
+import thebetweenlands.common.tile.TileEntityBarrel;
 import thebetweenlands.common.tile.TileEntityBeamOrigin;
 import thebetweenlands.common.tile.TileEntityBeamRelay;
 import thebetweenlands.common.tile.TileEntityCenser;
@@ -36,14 +37,15 @@ import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
 import thebetweenlands.common.tile.TileEntityMudBricksSpikeTrap;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
 import thebetweenlands.common.tile.TileEntityMudTilesSpikeTrap;
+import thebetweenlands.common.tile.TileEntityOfferingTable;
 import thebetweenlands.common.tile.TileEntityPossessedBlock;
 import thebetweenlands.common.tile.TileEntityPresent;
 import thebetweenlands.common.tile.TileEntityPuffshroom;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityRepeller;
 import thebetweenlands.common.tile.TileEntityRubberTap;
+import thebetweenlands.common.tile.TileEntitySimulacrum;
 import thebetweenlands.common.tile.TileEntitySpikeTrap;
-import thebetweenlands.common.tile.TileEntityBarrel;
 import thebetweenlands.common.tile.TileEntityTarLootPot1;
 import thebetweenlands.common.tile.TileEntityTarLootPot2;
 import thebetweenlands.common.tile.TileEntityTarLootPot3;
@@ -107,6 +109,8 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityDecayPitGroundChain.class, "decay_pit_ground_chain");
 		registerTileEntity(TileEntityCenser.class, "censer");
 		registerTileEntity(TileEntityBarrel.class, "tar_barrel");
+		registerTileEntity(TileEntitySimulacrum.class, "simulacrum");
+		registerTileEntity(TileEntityOfferingTable.class, "offering_bowl");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

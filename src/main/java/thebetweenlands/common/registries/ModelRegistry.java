@@ -44,9 +44,19 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelMossBed;
 import thebetweenlands.client.render.model.baked.modelbase.ModelMudFlowerPot;
 import thebetweenlands.client.render.model.baked.modelbase.ModelMudFlowerPotCandle;
 import thebetweenlands.client.render.model.baked.modelbase.ModelMudTowerBrazier;
+import thebetweenlands.client.render.model.baked.modelbase.ModelOfferingTable;
 import thebetweenlands.client.render.model.baked.modelbase.ModelPitcherPlant;
 import thebetweenlands.client.render.model.baked.modelbase.ModelPresent;
 import thebetweenlands.client.render.model.baked.modelbase.ModelRubberTapPouring;
+import thebetweenlands.client.render.model.baked.modelbase.ModelSimulacrumDeepman1;
+import thebetweenlands.client.render.model.baked.modelbase.ModelSimulacrumDeepman2;
+import thebetweenlands.client.render.model.baked.modelbase.ModelSimulacrumDeepman3;
+import thebetweenlands.client.render.model.baked.modelbase.ModelSimulacrumLakeCavern1;
+import thebetweenlands.client.render.model.baked.modelbase.ModelSimulacrumLakeCavern2;
+import thebetweenlands.client.render.model.baked.modelbase.ModelSimulacrumLakeCavern3;
+import thebetweenlands.client.render.model.baked.modelbase.ModelSimulacrumRootman1;
+import thebetweenlands.client.render.model.baked.modelbase.ModelSimulacrumRootman2;
+import thebetweenlands.client.render.model.baked.modelbase.ModelSimulacrumRootman3;
 import thebetweenlands.client.render.model.baked.modelbase.ModelSundew;
 import thebetweenlands.client.render.model.baked.modelbase.ModelSwampPlant;
 import thebetweenlands.client.render.model.baked.modelbase.ModelVenusFlyTrap;
@@ -226,7 +236,7 @@ public class ModelRegistry {
 	public static final IModel MUD_FLOWER_POT_CANDLE = new ModelFromModelBase.Builder(new ModelMudFlowerPotCandle(), new ResourceLocation("thebetweenlands:blocks/mud_flower_pot_candle"), 32, 32)
 			.packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 	public static final IModel MOSS_BED = new ModelFromModelBase.Builder(new ModelMossBed(), new ResourceLocation("thebetweenlands:blocks/moss_bed"), 128, 128)
-			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/moss_bed_particle")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/moss_bed_particle")).packer(MODEL_TEXTURE_PACKER).build();
 	public static final IModel WALKWAY = new ModelWalkway(MODEL_TEXTURE_PACKER, true);
 	public static final IModel WALKWAY_NO_STANDS = new ModelWalkway(MODEL_TEXTURE_PACKER, false);
 	public static final IModel THATCH_ROOF = new ModelSlant(new ResourceLocation(ModInfo.ID, "blocks/thatch"));
@@ -274,8 +284,26 @@ public class ModelRegistry {
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/weedwood")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 	public static final ModelFromModelBase SYRMORITE_BARREL = new ModelFromModelBase.Builder(new ModelBarrel(), new ResourceLocation("thebetweenlands:blocks/syrmorite_barrel"), 128, 64)
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/syrmorite_block")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
-
-
+	public static final ModelFromModelBase SIMULACRUM_DEEPMAN_1 = new ModelFromModelBase.Builder(new ModelSimulacrumDeepman1(), new ResourceLocation("thebetweenlands:blocks/simulacrum_deepman_1"), 64, 64)
+			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/simulacrum_deepman_particle")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+	public static final ModelFromModelBase SIMULACRUM_DEEPMAN_2 = new ModelFromModelBase.Builder(new ModelSimulacrumDeepman2(), new ResourceLocation("thebetweenlands:blocks/simulacrum_deepman_2"), 64, 64)
+			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/simulacrum_deepman_particle")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+	public static final ModelFromModelBase SIMULACRUM_DEEPMAN_3 = new ModelFromModelBase.Builder(new ModelSimulacrumDeepman3(), new ResourceLocation("thebetweenlands:blocks/simulacrum_deepman_3"), 64, 64)
+			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/simulacrum_deepman_particle")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+	public static final ModelFromModelBase SIMULACRUM_LAKE_CAVERN_1 = new ModelFromModelBase.Builder(new ModelSimulacrumLakeCavern1(), new ResourceLocation("thebetweenlands:blocks/simulacrum_lake_cavern_1"), 32, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/simulacrum_lake_cavern_particle")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+	public static final ModelFromModelBase SIMULACRUM_LAKE_CAVERN_2 = new ModelFromModelBase.Builder(new ModelSimulacrumLakeCavern2(), new ResourceLocation("thebetweenlands:blocks/simulacrum_lake_cavern_2"), 32, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/simulacrum_lake_cavern_particle")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+	public static final ModelFromModelBase SIMULACRUM_LAKE_CAVERN_3 = new ModelFromModelBase.Builder(new ModelSimulacrumLakeCavern3(), new ResourceLocation("thebetweenlands:blocks/simulacrum_lake_cavern_3"), 64, 64)
+			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/simulacrum_lake_cavern_particle")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+	public static final ModelFromModelBase SIMULACRUM_ROOTMAN_1 = new ModelFromModelBase.Builder(new ModelSimulacrumRootman1(), new ResourceLocation("thebetweenlands:blocks/simulacrum_rootman_1"), 64, 64)
+			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/simulacrum_rootman_particle")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+	public static final ModelFromModelBase SIMULACRUM_ROOTMAN_2 = new ModelFromModelBase.Builder(new ModelSimulacrumRootman2(), new ResourceLocation("thebetweenlands:blocks/simulacrum_rootman_2"), 64, 64)
+			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/simulacrum_rootman_particle")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+	public static final ModelFromModelBase SIMULACRUM_ROOTMAN_3 = new ModelFromModelBase.Builder(new ModelSimulacrumRootman3(), new ResourceLocation("thebetweenlands:blocks/simulacrum_rootman_3"), 64, 64)
+			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/simulacrum_rootman_particle")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+	public static final ModelFromModelBase OFFERING_TABLE = new ModelFromModelBase.Builder(new ModelOfferingTable(), new ResourceLocation("thebetweenlands:blocks/offering_table"), 64, 64)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/smooth_cragrock")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 

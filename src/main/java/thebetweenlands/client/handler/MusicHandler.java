@@ -3,6 +3,7 @@ package thebetweenlands.client.handler;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -24,8 +25,10 @@ import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiWinGame;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -187,33 +190,31 @@ public class MusicHandler {
 	public void onPlaySound(PlaySoundEvent event) {
 		EntityPlayer player = getPlayer();
 
-		if((isInBlMainMenu || (player != null && player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId)) && event.getSound().getCategory() == SoundCategory.MUSIC && !this.isBetweenlandsMusic(event.getSound())) {
+		if((isInBlMainMenu || (player != null && player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId)) && event.getSound().getCategory() == SoundCategory.MUSIC && this.isVanillaMusic(event.getSound())) {
 			//Cancel non Betweenlands music
 			event.setResultSound(null);
 		}
 	}
 
-	/**
-	 * Returns whether the specified sound is a Betweenlands music track
-	 * @param sound
-	 * @return
-	 */
-	public boolean isBetweenlandsMusic(ISound sound) {
-		if(SoundRegistry.BL_MUSIC_DIMENSION.getSoundName().equals(sound.getSoundLocation()))
+	public boolean isVanillaMusic(ISound sound) {
+		return this.isSoundContainedIn(SoundEvents.MUSIC_CREATIVE, sound) || this.isSoundContainedIn(SoundEvents.MUSIC_CREDITS, sound) || this.isSoundContainedIn(SoundEvents.MUSIC_DRAGON, sound) || this.isSoundContainedIn(SoundEvents.MUSIC_END, sound) ||
+				this.isSoundContainedIn(SoundEvents.MUSIC_GAME, sound) || this.isSoundContainedIn(SoundEvents.MUSIC_MENU, sound) || this.isSoundContainedIn(SoundEvents.MUSIC_NETHER, sound);
+	}
+	
+	private boolean isSoundContainedIn(SoundEvent track, ISound sound) {
+		if(Objects.equals(sound.getSoundLocation(), track.getSoundName())) {
 			return true;
-		if (SoundRegistry.BL_MUSIC_MENU.getSoundName().equals(sound.getSoundLocation()))
-			return true;
-		if (SoundRegistry.FORTRESS_BOSS_LOOP.getSoundName().equals(sound.getSoundLocation()))
-			return true;
-		if (SoundRegistry.DREADFUL_PEAT_MUMMY_LOOP.getSoundName().equals(sound.getSoundLocation()))
-			return true;
-		if (SoundRegistry.PIT_OF_DECAY_LOOP.getSoundName().equals(sound.getSoundLocation()))
-			return true;
-		List<Sound> betweenlandsSoundTracks = new ArrayList<>(this.getBetweenlandsMusicTracks());
-		betweenlandsSoundTracks.addAll(getBetweenlandsMenuMusicTracks());
-		for(Sound blSound : betweenlandsSoundTracks) {
-			if(blSound.getSoundLocation().equals(sound.getSoundLocation())) {
-				return true;
+		}
+		Sound soundInstance = sound.getSound();
+		if(soundInstance != null) {
+			SoundEventAccessor soundEventAccessor = this.mc.getSoundHandler().getAccessor(track.getSoundName());
+			if (soundEventAccessor != null) {
+				List<ISoundEventAccessor<Sound>> soundAccessors = soundEventAccessor.accessorList;
+				for (ISoundEventAccessor<Sound> accessor : soundAccessors) {
+					if (accessor instanceof Sound && Objects.equals(((Sound) accessor).getSoundLocation(), soundInstance.getSoundLocation())) {
+						return true;
+					}
+				}
 			}
 		}
 		return false;

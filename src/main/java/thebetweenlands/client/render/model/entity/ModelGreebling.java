@@ -284,54 +284,6 @@ public class ModelGreebling extends MowzieModelBase{
         this.root_1.addChild(this.body_base_1);
         this.chest_1.addChild(this.armright1_1);
 
-        parts = new MowzieModelRenderer[] {
-                root_0,
-                body_base_0,
-                chest_0,
-                legleft1_0,
-                legright1_0,
-                head1_0,
-                armleft1_0,
-                armright1_0,
-                jaw_0,
-                head2_0,
-                nose_0,
-                earleft_0,
-                earright_0,
-                armleft2_0,
-                lutebase_0,
-                luteneck_0,
-                endpiece1_0,
-                armright2_0,
-                strokestick_0,
-                legleft2_0,
-                legright2_0,
-
-                cup_1,
-                root_1,
-                handle_1,
-                body_base_1,
-                chest_1,
-                legleft1_1,
-                legright1_1,
-                head1_1,
-                armright1_1,
-                armleft1_1,
-                jaw_1,
-                head2_1,
-                nose_1,
-                earleft_1,
-                earright_1,
-                beard_1,
-                armright2_1,
-                panflute1_1,
-                panflute2_1,
-                panflute3_1,
-                panflute4_1,
-                armleft2_1,
-                legleft2_1,
-                legright2_1
-        };
         setInitPose();
     }
 

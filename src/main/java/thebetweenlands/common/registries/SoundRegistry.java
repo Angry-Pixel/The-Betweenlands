@@ -236,6 +236,14 @@ public class SoundRegistry {
     public static final BLSoundEvent CHIROMAW_HATCH = reg("chiromaw_hatch");
     public static final BLSoundEvent CHIROMAW_HATCHLING_TRANSFORM = reg("chiromaw_hatchling_transform");
     public static final BLSoundEvent CHIROMAW_HATCHLING_INSIDE_EGG = reg("chiromaw_hatchling_inside_egg");
+    public static final BLSoundEvent STALKER_SCREAM = reg("stalker_scream");
+    public static final BLSoundEvent STALKER_STEP = reg("stalker_step");
+    public static final BLSoundEvent STALKER_LIVING = reg("stalker_living");
+    public static final BLSoundEvent STALKER_HURT = reg("stalker_hurt");
+    public static final BLSoundEvent STALKER_DEATH = reg("stalker_death");
+    public static final BLSoundEvent BARRISHEE_THEME = reg("barrishee_theme");
+    public static final BLSoundEvent SWARM_ATTACK = reg("swarm_attack");
+    public static final BLSoundEvent SWARM_IDLE = reg("swarm_idle");
 
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");
@@ -299,6 +307,8 @@ public class SoundRegistry {
     public static final BLSoundEvent MUD_DOOR_LOCK = reg("mud_door_lock");
     public static final BLSoundEvent MUD_DOOR_TRAP = reg("mud_door_trap");
     public static final BLSoundEvent BEAM_SWITCH = reg("beam_switch");
+    public static final BLSoundEvent RESURRECTION = reg("resurrection");
+    public static final BLSoundEvent WORM_THROW = reg("worm_throw");
     
     private SoundRegistry() {
     }

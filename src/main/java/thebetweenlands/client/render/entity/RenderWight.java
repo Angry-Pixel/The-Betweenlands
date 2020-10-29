@@ -30,13 +30,14 @@ public class RenderWight extends RenderLiving<EntityWight> {
 	}
 
 	@Override
-	protected void preRenderCallback(EntityWight entity, float partialTickTime) {
+	protected void preRenderCallback(EntityWight entity, float partialTicks) {
 		if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			ShaderHelper.INSTANCE.require();
 			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(entity.posX, entity.posY, entity.posZ, 10.0f, -1, -1, -1));
 		}
 
-		GlStateManager.scale(0.9F, 0.9F, 0.9F);
+		float scale = 0.9F / 40F * (entity.getGrowthFactor(partialTicks));
+		GlStateManager.scale(0.9F, scale, 0.9F);
 
 		if(entity.isVolatile()) {
 			GlStateManager.scale(0.5D, 0.5D, 0.5D);

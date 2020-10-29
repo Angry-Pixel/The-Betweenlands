@@ -3,6 +3,7 @@ package thebetweenlands.client.render.model.entity;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.MathHelper;
 import thebetweenlands.client.render.model.MowzieModelBase;
 import thebetweenlands.client.render.model.MowzieModelRenderer;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
@@ -174,7 +175,6 @@ public class ModelPeatMummy extends MowzieModelBase {
 		this.shoulderBase.addChild(this.armrightJoint);
 		modelBase.addChild(body_base);
 
-		parts = new MowzieModelRenderer[] {body_base, buttJoint, shoulderJoint, sexybutt, legright, legleft, legright2, legleft2, shoulderBase, shoulderright, shoulderleft, neck, armright, armleft, head1, head2, jaw, teeth2, hair, teeth1, cheecktissueright, cheecktissue2, armright2, armleft2, legleftJoint, legrightJoint, armleftJoint, armrightJoint, modelBase};
 		setInitPose();
 	}
 
@@ -194,11 +194,13 @@ public class ModelPeatMummy extends MowzieModelBase {
 	}
 
 	public void setRotationAngles(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-		//        f = entity.ticksExisted;
-		//        f1 = 1f;
-
-		faceTarget(neck, 1, f3, f4);
-
+		// f = entity.ticksExisted;
+		// f1 = 1f;
+		float heady = 0F + MathHelper.sin((f3/ (180F / (float) Math.PI)));
+		float headx = 0.9105382707654417F + MathHelper.sin((f4 / (180F / (float) Math.PI)));
+		//faceTarget(neck, 1, f3, f4); // <- this is shit btw 
+		neck.rotateAngleY = heady;
+		neck.rotateAngleX = headx;
 		float newf1 = f1;
 		if (newf1 > 0.4) newf1 = 0.4f;
 		float newf12 = f1;

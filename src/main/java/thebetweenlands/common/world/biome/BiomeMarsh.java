@@ -19,6 +19,8 @@ import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
+import thebetweenlands.common.entity.mobs.EntityStalker;
+import thebetweenlands.common.entity.mobs.EntitySwarm;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -26,11 +28,11 @@ import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.BetweenstoneCaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.GreeblingSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.spawners.PitstoneCaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SkySpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SporelingSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SwampHagCaveSpawnEntry;
-import thebetweenlands.common.world.biome.spawning.spawners.TreeSpawnEntry;
 import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorMarsh;
 import thebetweenlands.common.world.gen.biome.feature.Marsh1Feature;
 import thebetweenlands.common.world.gen.biome.feature.Marsh2Feature;
@@ -79,6 +81,8 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		entries.add(new SurfaceSpawnEntry(10, EntityGasCloud.class, EntityGasCloud::new, (short) 3).setCanSpawnOnWater(true).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(64.0D));
 		entries.add(new BetweenstoneCaveSpawnEntry(11, EntityBoulderSprite.class, EntityBoulderSprite::new, (short) 60).setHostile(true).setSpawnCheckRadius(16.0D).setSpawnCheckRangeY(8));
 		entries.add(new SkySpawnEntry(18, EntityChiromawGreeblingRider.class, EntityChiromawGreeblingRider::new, (short) 20).setSpawnCheckRadius(64.0D).setGroupSize(1, 3).setSpawningInterval(600).setHostile(true));
+		entries.add(new PitstoneCaveSpawnEntry(19, EntityStalker.class, EntityStalker::new, (short) 10).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(16).setSpawningInterval(6000));
+		entries.add(new CaveSpawnEntry(20, EntitySwarm.class, EntitySwarm::new, (short) 120).setHostile(true).setSpawnCheckRadius(32.0D));
 	}
 
 	private float fogRangeInterpolateStart = 0.0F;

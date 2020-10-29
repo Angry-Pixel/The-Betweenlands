@@ -26,6 +26,8 @@ import thebetweenlands.client.render.particle.entity.ParticleChiromawFeathers;
 import thebetweenlands.client.render.particle.entity.ParticleDamageReduction;
 import thebetweenlands.client.render.particle.entity.ParticleDraetonBurnerFlame;
 import thebetweenlands.client.render.particle.entity.ParticleDruidCasting;
+import thebetweenlands.client.render.particle.entity.ParticleEmissiveBug;
+import thebetweenlands.client.render.particle.entity.ParticleEmissiveSwarm;
 import thebetweenlands.client.render.particle.entity.ParticleEntitySwirl;
 import thebetweenlands.client.render.particle.entity.ParticleFish;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
@@ -40,6 +42,7 @@ import thebetweenlands.client.render.particle.entity.ParticleSimple;
 import thebetweenlands.client.render.particle.entity.ParticleSonicScream;
 import thebetweenlands.client.render.particle.entity.ParticleSoundRipple;
 import thebetweenlands.client.render.particle.entity.ParticleSpiritButterfly;
+import thebetweenlands.client.render.particle.entity.ParticleSwarm;
 import thebetweenlands.client.render.particle.entity.ParticleTarBeastDrip;
 import thebetweenlands.client.render.particle.entity.ParticleThem;
 import thebetweenlands.client.render.particle.entity.ParticleWaterRipple;
@@ -151,7 +154,10 @@ public enum BLParticles {
 	CHIROMAW_TRANSFORM_LIGHTNING(new ParticleChiromawFeathers.Factory().getBaseArgsBuilder().withColor(0.420F, 0.565F, 0.553F, 1).buildBaseArgs()),
 	CHIROMAW_TRANSFORM_SWIRL(new ParticleEntitySwirl.FactoryChiromawSwirl()),
 	WATER_RIPPLE(new ParticleWaterRipple.Factory()),
-	RAIN(new ParticleBLRain.Factory());
+	RAIN(new ParticleBLRain.Factory()),
+	SWARM(new ParticleSwarm.Factory()),
+	SWARM_EMISSIVE(new ParticleEmissiveSwarm.Factory()),
+	FLYING_SWARM_EMISSIVE(new ParticleEmissiveBug.Swarm());
 	
 	private ParticleFactory<?, ?> factory;
 

@@ -99,7 +99,6 @@ public class ModelGeckoGreen extends MowzieModelBase {
 		this.legright_f1.addChild(this.legright_f2);
 
 		tail = new MowzieModelRenderer[] { tail2, tail1 };
-		parts = new MowzieModelRenderer[] { body_base, head, legleft_f1, legright_f1, legleft_b1, legright_b1, tail1, tail2, crane, legleft_f2, legright_f2, legleft_b2, legright_b2 };
 		setInitPose();
 	}
 

@@ -26,7 +26,6 @@ public class ModelMummyArm extends MowzieModelBase {
 		this.setRotateAngle(armleft, 0.13735741213195374F, 0.7311184236604247F, -0.4316199240181977F);
 		this.armleft.addChild(this.armleft2);
 
-		parts = new MowzieModelRenderer[] {armleft, armleft2};
 		setInitPose();
 	}
 

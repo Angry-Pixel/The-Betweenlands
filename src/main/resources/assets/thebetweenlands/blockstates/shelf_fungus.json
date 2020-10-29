@@ -1,15 +1,28 @@
 {
 	"forge_marker": 1,
 	"variants": {
-		"normal": {
-			"model": "thebetweenlands:internal/winter_event",
-			"custom": {
-				"model_base": "thebetweenlands:block/internal/spook_event",
-				"model_base_data": {
-					"model_base": "thebetweenlands:block/shelf_fungus",
-					"model_active": "thebetweenlands:block/shelf_fungus_spook"
-				},
-				"model_active": "thebetweenlands:block/shelf_fungus_frosty"
+		"is_top": {
+			"true": {
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/spook_event",
+					"model_base_data": {
+						"model_base": "thebetweenlands:block/shelf_fungus_top",
+						"model_active": "thebetweenlands:block/shelf_fungus_top_spook"
+					},
+					"model_active": "thebetweenlands:block/shelf_fungus_top_frosty"
+				}
+			},
+			"false": {
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/spook_event",
+					"model_base_data": {
+						"model_base": "thebetweenlands:block/shelf_fungus_bottom",
+						"model_active": "thebetweenlands:block/shelf_fungus_bottom_spook"
+					},
+					"model_active": "thebetweenlands:block/shelf_fungus_bottom_frosty"
+				}
 			}
 		}
 	}

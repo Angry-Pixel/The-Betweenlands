@@ -193,7 +193,7 @@ public class TextureStitchHandler {
 							//Set sprites or split into seperate frames
 							if(!sprite.hasAnimationMetadata() || sprite.getFrameCount() == 1) {
 								//Single frame
-								frames[i] = new Frame[]{ new Frame(sprite, 0) };
+								frames[i] = new Frame[]{ new Frame(textures[i], sprite, 0) };
 							} else {
 								//Multiple frames, parse metadata and store seperate frames
 								AnimationMetadataSection animationMetadata = resource.getMetadata("animation");
@@ -206,7 +206,7 @@ public class TextureStitchHandler {
 									int frameData[] = sprite.getFrameTextureData(index)[0]; //Use original non-mipmap frame
 									TextureAtlasSprite frameSprite = new TextureFromData(sprite.getIconName() + "_frame_" + frame, frameData, sprite.getIconWidth(), sprite.getIconHeight());
 									e.getMap().setTextureEntry(frameSprite);
-									frames[i][frame] = new Frame(frameSprite, duration);
+									frames[i][frame] = new Frame(textures[i], frameSprite, duration);
 								}
 							}
 
@@ -216,7 +216,7 @@ public class TextureStitchHandler {
 						throw new RuntimeException("Failed splitting texture animation", ex);
 					}
 				} else {
-					frames[i] = new Frame[]{ new Frame(sprite, 0) };
+					frames[i] = new Frame[]{ new Frame(textures[i], sprite, 0) };
 				}
 			}
 
@@ -322,12 +322,22 @@ public class TextureStitchHandler {
 	}
 
 	public static final class Frame {
+		private final ResourceLocation location;
 		private final TextureAtlasSprite sprite;
 		private final int duration;
 
-		protected Frame(TextureAtlasSprite sprite, int duration) {
+		protected Frame(ResourceLocation location, TextureAtlasSprite sprite, int duration) {
+			this.location = location;
 			this.sprite = sprite;
 			this.duration = duration;
+		}
+		
+		/**
+		 * Returns the resource location that this frame belongs to
+		 * @return
+		 */
+		public ResourceLocation getLocation() {
+			return this.location;
 		}
 
 		/**
