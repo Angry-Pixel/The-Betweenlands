@@ -121,7 +121,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 
 		if(!this.world.isRemote) {
 			float range = 3.5f;
-			
+
 			List<EntityPlayer> players = this.world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(range));
 
 			for(EntityPlayer player : players) {
@@ -367,7 +367,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 			EntitySwarm leader = null;
 
 			for(EntitySwarm swarm : swarms) {
-				if(swarm.getEntityId() < minId) {
+				if(swarm.getEntityId() < minId && swarm.getSwarmSize() + this.entity.getSwarmSize() <= 1) {
 					minId = swarm.getEntityId();
 					leader = swarm;
 				}
@@ -378,7 +378,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 
 		@Override
 		public boolean shouldContinueExecuting() {
-			return this.leader != null && this.leader.isEntityAlive();
+			return this.leader != null && this.leader.isEntityAlive() && this.leader.getSwarmSize() + this.entity.getSwarmSize() <= 1;
 		}
 
 		@Override
