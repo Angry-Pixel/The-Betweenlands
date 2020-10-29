@@ -10,6 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import thebetweenlands.client.handler.TextureStitchHandler.Frame;
 import thebetweenlands.client.render.particle.ParticleFactory;
@@ -23,6 +24,8 @@ public class ParticleSwarm extends ParticleAnimated implements IParticleSpriteRe
 
 	protected Vec3d start;
 	protected Supplier<Vec3d> end;
+
+	protected int lightmapX, lightmapY;
 
 	protected ParticleSwarm(World world, double x, double y, double z, double mx, double my, double mz, EnumFacing face, float scale, int maxAge, Vec3d start, Supplier<Vec3d> end) {
 		super(world, x, y, z, 0, 0, 0, maxAge, scale, false);
@@ -43,14 +46,14 @@ public class ParticleSwarm extends ParticleAnimated implements IParticleSpriteRe
 	public void setStitchedSprites(Frame[][] frames) {
 		if (this.animation != null && frames != null) {
 			int variant = this.rand.nextInt(frames.length);
-			
+
 			this.animation.setFrames(frames[variant]);
-			
+
 			ResourceLocation location = frames[variant][0].getLocation();
 			if(location instanceof ResourceLocationWithScale) {
 				this.particleScale *= ((ResourceLocationWithScale) location).scale;
 			}
-			
+
 			if(this.particleMaxAge < 0) {
 				this.particleMaxAge = this.animation.getTotalDuration() - 1;
 			}
@@ -59,7 +62,7 @@ public class ParticleSwarm extends ParticleAnimated implements IParticleSpriteRe
 			}
 		}
 	}
-	
+
 	@Override
 	public boolean shouldDisableDepth() {
 		return true;
@@ -68,6 +71,10 @@ public class ParticleSwarm extends ParticleAnimated implements IParticleSpriteRe
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+
+		int brightness = this.getBrightnessForRender(1);
+		this.lightmapX = (brightness >> 16) & 65535;
+		this.lightmapY = brightness & 65535;
 
 		if(this.onGround) {
 			this.motionX /= 0.699999988079071D;
@@ -138,7 +145,7 @@ public class ParticleSwarm extends ParticleAnimated implements IParticleSpriteRe
 		float maxV = minV + 0.0624375F;
 		float scale = 0.1F * this.particleScale * 2;
 
-		if (this.particleTexture != null) {
+		if(this.particleTexture != null) {
 			minU = this.particleTexture.getMinU();
 			maxU = this.particleTexture.getMaxU();
 			minV = this.particleTexture.getMinV();
@@ -148,38 +155,81 @@ public class ParticleSwarm extends ParticleAnimated implements IParticleSpriteRe
 		float rpx = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)partialTicks - interpPosX);
 		float rpy = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)partialTicks - interpPosY);
 		float rpz = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTicks - interpPosZ);
-		int brightness = this.getBrightnessForRender(partialTicks);
-		int lightmapX = brightness >> 16 & 65535;
-		int lightmapY = brightness & 65535;
 
-		Vec3d normal = new Vec3d(this.face.getDirectionVec());
-		Vec3d perpendicular;
+		Vec3i normal = this.face.getDirectionVec();
+
+		float pp1x = 0, pp1y = 0, pp1z = 0;
 		switch(this.face) {
 		case UP:
-			perpendicular = new Vec3d(1, 0, 0);
+			pp1x = 1;
 			break;
 		case DOWN:
-			perpendicular = new Vec3d(-1, 0, 0);
+			pp1x = -1;
 			break;
 		default:
-			perpendicular = new Vec3d(0, 1, 0);
+			pp1y = 1;
+			break;
 		}
-		Vec3d perpendicular2 = perpendicular.crossProduct(normal);
 
-		double yOffset = 0.125D;
-		Vec3d[] vertices = new Vec3d[] {perpendicular.add(perpendicular2.scale(-1)).add(perpendicular.scale(yOffset)).scale(scale), perpendicular.scale(-1).add(perpendicular2.scale(-1)).add(perpendicular.scale(yOffset)).scale(scale), perpendicular.scale(-1).add(perpendicular2).add(perpendicular.scale(yOffset)).scale(scale), perpendicular.add(perpendicular2).add(perpendicular.scale(yOffset)).scale(scale)};
+		float pp2x = crossX(pp1x, pp1y, pp1z, (float) normal.getX(), (float) normal.getY(), (float) normal.getZ());
+		float pp2y = crossY(pp1x, pp1y, pp1z, (float) normal.getX(), (float) normal.getY(), (float) normal.getZ());
+		float pp2z = crossZ(pp1x, pp1y, pp1z, (float) normal.getX(), (float) normal.getY(), (float) normal.getZ());
 
-		if (this.particleAngle != 0.0F) {
-			float f8 = this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
-			float f9 = MathHelper.cos(f8 * 0.5F);
-			float f10 = MathHelper.sin(f8 * 0.5F) * this.face.getXOffset();
-			float f11 = MathHelper.sin(f8 * 0.5F) * this.face.getYOffset();
-			float f12 = MathHelper.sin(f8 * 0.5F) * this.face.getZOffset();
-			Vec3d vec3d = new Vec3d((double)f10, (double)f11, (double)f12);
+		float yOffset = 0.125f;
 
-			for (int l = 0; l < 4; ++l) {
-				vertices[l] = vec3d.scale(2.0D * vertices[l].dotProduct(vec3d)).add(vertices[l].scale((double)(f9 * f9) - vec3d.dotProduct(vec3d))).add(vec3d.crossProduct(vertices[l]).scale((double)(2.0F * f9)));
-			}
+		float v1x = (pp1x - pp2x + pp1x * yOffset) * scale;
+		float v1y = (pp1y - pp2y + pp1y * yOffset) * scale;
+		float v1z = (pp1z - pp2z + pp1z * yOffset) * scale;
+		float v2x = (-pp1x - pp2x + pp1x * yOffset) * scale;
+		float v2y = (-pp1y - pp2y + pp1y * yOffset) * scale;
+		float v2z = (-pp1z - pp2z + pp1z * yOffset) * scale;
+		float v3x = (-pp1x + pp2x + pp1x * yOffset) * scale;
+		float v3y = (-pp1y + pp2y + pp1y * yOffset) * scale;
+		float v3z = (-pp1z + pp2z + pp1z * yOffset) * scale;
+		float v4x = (pp1x + pp2x + pp1x * yOffset) * scale;
+		float v4y = (pp1y + pp2y + pp1y * yOffset) * scale;
+		float v4z = (pp1z + pp2z + pp1z * yOffset) * scale;
+
+		if(this.particleAngle != 0.0F) {
+			float angle = this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
+			float cos = MathHelper.cos(angle * 0.5F);
+			float rdx = MathHelper.sin(angle * 0.5F) * this.face.getXOffset();
+			float rdy = MathHelper.sin(angle * 0.5F) * this.face.getYOffset();
+			float rdz = MathHelper.sin(angle * 0.5F) * this.face.getZOffset();
+
+			float dotrdrd = cos * cos - dot(rdx, rdy, rdz, rdx, rdy, rdz);
+
+			float dotvrd = 2 * dot(v1x, v1y, v1z, rdx, rdy, rdz);
+			float nx = rdx * dotvrd + v1x * dotrdrd + crossX(rdx, rdy, rdz, v1x, v1y, v1z) * 2 * cos;
+			float ny = rdy * dotvrd + v1y * dotrdrd + crossY(rdx, rdy, rdz, v1x, v1y, v1z) * 2 * cos;
+			float nz = rdz * dotvrd + v1z * dotrdrd + crossZ(rdx, rdy, rdz, v1x, v1y, v1z) * 2 * cos;
+			v1x = nx;
+			v1y = ny;
+			v1z = nz;
+
+			dotvrd = 2 * dot(v2x, v2y, v2z, rdx, rdy, rdz);
+			nx = rdx * dotvrd + v2x * dotrdrd + crossX(rdx, rdy, rdz, v2x, v2y, v2z) * 2 * cos;
+			ny = rdy * dotvrd + v2y * dotrdrd + crossY(rdx, rdy, rdz, v2x, v2y, v2z) * 2 * cos;
+			nz = rdz * dotvrd + v2z * dotrdrd + crossZ(rdx, rdy, rdz, v2x, v2y, v2z) * 2 * cos;
+			v2x = nx;
+			v2y = ny;
+			v2z = nz;
+
+			dotvrd = 2 * dot(v3x, v3y, v3z, rdx, rdy, rdz);
+			nx = rdx * dotvrd + v3x * dotrdrd + crossX(rdx, rdy, rdz, v3x, v3y, v3z) * 2 * cos;
+			ny = rdy * dotvrd + v3y * dotrdrd + crossY(rdx, rdy, rdz, v3x, v3y, v3z) * 2 * cos;
+			nz = rdz * dotvrd + v3z * dotrdrd + crossZ(rdx, rdy, rdz, v3x, v3y, v3z) * 2 * cos;
+			v3x = nx;
+			v3y = ny;
+			v3z = nz;
+
+			dotvrd = 2 * dot(v4x, v4y, v4z, rdx, rdy, rdz);
+			nx = rdx * dotvrd + v4x * dotrdrd + crossX(rdx, rdy, rdz, v4x, v4y, v4z) * 2 * cos;
+			ny = rdy * dotvrd + v4y * dotrdrd + crossY(rdx, rdy, rdz, v4x, v4y, v4z) * 2 * cos;
+			nz = rdz * dotvrd + v4z * dotrdrd + crossZ(rdx, rdy, rdz, v4x, v4y, v4z) * 2 * cos;
+			v4x = nx;
+			v4y = ny;
+			v4z = nz;
 		}
 
 		float alpha;
@@ -191,21 +241,37 @@ public class ParticleSwarm extends ParticleAnimated implements IParticleSpriteRe
 			alpha = 1;
 		}
 
-		buff.pos((double)rpx + vertices[0].x, (double)rpy + vertices[0].y, (double)rpz + vertices[0].z).tex((double)maxU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
-		buff.pos((double)rpx + vertices[1].x, (double)rpy + vertices[1].y, (double)rpz + vertices[1].z).tex((double)maxU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
-		buff.pos((double)rpx + vertices[2].x, (double)rpy + vertices[2].y, (double)rpz + vertices[2].z).tex((double)minU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
-		buff.pos((double)rpx + vertices[3].x, (double)rpy + vertices[3].y, (double)rpz + vertices[3].z).tex((double)minU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
+		buff.pos((double)rpx + v1x, (double)rpy + v1y, (double)rpz + v1z).tex((double)maxU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(this.lightmapX, this.lightmapY).endVertex();
+		buff.pos((double)rpx + v2x, (double)rpy + v2y, (double)rpz + v2z).tex((double)maxU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(this.lightmapX, this.lightmapY).endVertex();
+		buff.pos((double)rpx + v3x, (double)rpy + v3y, (double)rpz + v3z).tex((double)minU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(this.lightmapX, this.lightmapY).endVertex();
+		buff.pos((double)rpx + v4x, (double)rpy + v4y, (double)rpz + v4z).tex((double)minU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(this.lightmapX, this.lightmapY).endVertex();
+	}
+
+	private static float crossX(float x1, float y1, float z1, float x2, float y2, float z2) {
+		return y1 * z2 - z1 * y2;
+	}
+
+	private static float crossY(float x1, float y1, float z1, float x2, float y2, float z2) {
+		return z1 * x2 - x1 * z2;
+	}
+
+	private static float crossZ(float x1, float y1, float z1, float x2, float y2, float z2) {
+		return x1 * y2 - y1 * x2;
+	}
+
+	private static float dot(float x1, float y1, float z1, float x2, float y2, float z2) {
+		return x1 * x2 + y1 * y2 + z1 * z2;
 	}
 
 	public static class ResourceLocationWithScale extends ResourceLocation {
 		public final float scale;
-		
+
 		public ResourceLocationWithScale(String resourceName, float scale) {
 			super(resourceName);
 			this.scale = scale;
 		}
 	}
-	
+
 	public static final ParticleTextureStitcher<ParticleSwarm> SPRITES = ParticleTextureStitcher.create(ParticleSwarm.class,
 			new ResourceLocationWithScale("thebetweenlands:particle/swarm_1", 1), new ResourceLocationWithScale("thebetweenlands:particle/swarm_2", 1), new ResourceLocationWithScale("thebetweenlands:particle/swarm_3", 1), new ResourceLocationWithScale("thebetweenlands:particle/swarm_4", 2)
 			).setSplitAnimations(true);

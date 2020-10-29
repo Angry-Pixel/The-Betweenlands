@@ -59,8 +59,17 @@ public class ParticleEmissiveSwarm extends ParticleSwarm {
 		this.setParticleTexture(this.animation.getCurrentSprite());
 		super.renderParticle(buff, entityIn, partialTicks, rx, rz, ryz, rxy, rxz);
 
+		int prevLightmapX = this.lightmapX;
+		int prevLightmapY = this.lightmapY;
+		
+		this.lightmapX = 15 << 4;
+		this.lightmapY = 15 << 4;
+		
 		this.setParticleTexture(this.emissiveAnimation.getCurrentSprite());
 		super.renderParticle(buff, entityIn, partialTicks, rx, rz, ryz, rxy, rxz);
+		
+		this.lightmapX = prevLightmapX;
+		this.lightmapY = prevLightmapY;
 	}
 
 	@Override

@@ -637,7 +637,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityStalker.class, RenderStalker::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityResurrection.class, RenderNothing::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFalseXPOrb.class, RenderXPOrb::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntitySwarm.class, RenderNothing::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySwarm.class, RenderSwarm::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());

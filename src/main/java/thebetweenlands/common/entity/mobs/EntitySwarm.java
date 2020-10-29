@@ -180,7 +180,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 				mz /= len;
 
 				swarm.motionX = mx * 0.5f;
-				swarm.motionY = 0.5f;
+				swarm.motionY = 0.3f;
 				swarm.motionZ = mz * 0.5f;
 
 				this.world.spawnEntity(swarm);
@@ -210,8 +210,8 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 			List<AxisAlignedBB> collisionBoxes = new ArrayList<>();
 
 			for(BlockPos offsetPos : BlockPos.getAllInBoxMutable(
-					new BlockPos(MathHelper.floor(this.posX - this.width - 0.25f), MathHelper.floor(this.posY - 0.25f), MathHelper.floor(this.posZ - this.width - 0.25f)),
-					new BlockPos(MathHelper.floor(this.posX + this.width + 0.25f), MathHelper.floor(this.posY + this.height + 0.25f), MathHelper.floor(this.posZ + this.width + 0.25f)))) {
+					new BlockPos(MathHelper.floor(this.posX - this.width - 2), MathHelper.floor(this.posY - 2), MathHelper.floor(this.posZ - this.width - 2)),
+					new BlockPos(MathHelper.floor(this.posX + this.width + 2), MathHelper.floor(this.posY + this.height + 2), MathHelper.floor(this.posZ + this.width + 2)))) {
 				IBlockState state = this.world.getBlockState(offsetPos);
 
 				if(state.isFullCube()) {
@@ -221,7 +221,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 
 			float swarmSize = this.getSwarmSize();
 
-			for(int i = 0; i < (Math.max(2 - Minecraft.getMinecraft().gameSettings.particleSetting, 1) * 2) * swarmSize + 1; i++) {
+			for(int i = 0; i < Math.max(2 - Minecraft.getMinecraft().gameSettings.particleSetting, 1) * swarmSize + 1; i++) {
 				float rx = (this.world.rand.nextFloat() - 0.5f) * this.width;
 				float ry = (this.world.rand.nextFloat() - 0.5f) * this.height;
 				float rz = (this.world.rand.nextFloat() - 0.5f) * this.width;
@@ -234,9 +234,9 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 
 				len = 0.333f + this.world.rand.nextFloat() * 0.666f;
 
-				double x = this.posX + rx * len * (this.width + 0.3f) * swarmSize * 0.5f;
-				double y = this.posY - 0.15f * swarmSize + (this.height + 0.3f) * swarmSize * 0.5f + ry * len * (this.height + 0.3f) * swarmSize;
-				double z = this.posZ + rz * len * (this.width + 0.3f) * swarmSize * 0.5f;
+				double x = this.posX + this.motionX * 5 + rx * len * (this.width + 0.3f) * swarmSize * 0.5f;
+				double y = this.posY + this.motionY * 5 - 0.15f * swarmSize + (this.height + 0.3f) * swarmSize * 0.5f + ry * len * (this.height + 0.3f) * swarmSize;
+				double z = this.posZ + this.motionZ * 5 + rz * len * (this.width + 0.3f) * swarmSize * 0.5f;
 
 				if(this.rand.nextInt(8) == 0) {
 					if(this.rand.nextInt(3) == 0) {
