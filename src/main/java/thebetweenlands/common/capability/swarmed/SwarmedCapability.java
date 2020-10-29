@@ -138,12 +138,14 @@ public class SwarmedCapability extends EntityCapability<SwarmedCapability, ISwar
 					cap.setHurtTimer(cap.getHurtTimer() - 1);
 				}
 
-				if(event.player.isInsideOfMaterial(Material.WATER)) {
-					cap.setSwarmedStrength(0);
-				} else if(event.player.isSwingInProgress || (event.player.posY - event.player.prevPosY) > 0.1f || event.player.isSneaking()) {
-					cap.setSwarmedStrength(cap.getSwarmedStrength() - 0.01f);
-					cap.setHurtTimer(5);
-					event.player.setSneaking(false);
+				if(cap.getSwarmedStrength() > 0) {
+					if(event.player.isInsideOfMaterial(Material.WATER)) {
+						cap.setSwarmedStrength(0);
+					} else if(event.player.isSwingInProgress || (event.player.posY - event.player.prevPosY) > 0.1f || event.player.isSneaking()) {
+						cap.setSwarmedStrength(cap.getSwarmedStrength() - 0.01f);
+						cap.setHurtTimer(5);
+						event.player.setSneaking(false);
+					}
 				}
 
 				if(cap.getSwarmedStrength() < 0.1f) {

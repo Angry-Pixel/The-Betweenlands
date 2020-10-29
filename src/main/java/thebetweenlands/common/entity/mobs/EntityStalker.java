@@ -320,12 +320,15 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 					if(angle < this.nearAngle) {
 						isPotentiallySeen = true;
 
+						AxisAlignedBB aabb = this.getEntityBoundingBox();
+						Vec3d center = new Vec3d((aabb.minX + aabb.maxX) * 0.5D, (aabb.minY + aabb.maxY) * 0.5D, (aabb.minZ + aabb.maxZ) * 0.5D);
+						
 						if(this.checkSeenTimer++ >= 20) {
 							this.checkSeenTimer = 0;
 
 							this.canStalkerBeSeen = false;
 
-							if(this.canSeePosition(target.getPositionEyes(1), this.getEntityBoundingBox().getCenter())) {
+							if(this.canSeePosition(target.getPositionEyes(1), center)) {
 								this.canStalkerBeSeen = true;
 							} else {
 								AxisAlignedBB checkAabb = this.getEntityBoundingBox().grow(1);
@@ -361,7 +364,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 								Vec3d offset = right.scale(Math.cos(rot) * radius).add(up.scale(Math.sin(rot) * radius)).add(look.scale(-radius * 0.5f));
 
-								RayTraceResult result = this.world.rayTraceBlocks(this.getEntityBoundingBox().getCenter(), this.getEntityBoundingBox().getCenter().add(offset), false, true, false);
+								RayTraceResult result = this.world.rayTraceBlocks(center, center.add(offset), false, true, false);
 								if(result != null && result.hitVec != null) {
 									offset = result.hitVec;
 								}
