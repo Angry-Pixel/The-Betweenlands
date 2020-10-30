@@ -15,6 +15,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,6 +24,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -53,7 +55,6 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 
 	public EntitySwarm(World world, float swarmSize) {
 		super(world);
-		this.isImmuneToFire = true;
 		this.setSwarmSize(swarmSize);
 	}
 
@@ -65,8 +66,9 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(0, new AIMerge(this, 50, 1.0D));
-		this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, false));
+		this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(1, new AIMerge(this, 50, 1.0D));
+		this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, false));
 		this.targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 1, false, false, null));
 	}
 
@@ -78,7 +80,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(24.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 	}
@@ -179,6 +181,10 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 				swarm.setHealth(this.getHealth());
 				swarm.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
 
+				if(this.isBurning()) {
+					swarm.setFire(40);
+				}
+				
 				float mx = this.rand.nextFloat() - 0.5f;
 				float mz = this.rand.nextFloat() - 0.5f;
 
@@ -214,7 +220,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 	protected void updateClient() {
 		Entity view = Minecraft.getMinecraft().getRenderViewEntity();
 
-		if(view != null && view.getDistance(this) < 16) {
+		if(view != null && view.getDistance(this) < 16 && !this.isInWater()) {
 			SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
 			if(this.idleSound == null || !handler.isSoundPlaying(this.idleSound)) {
 				this.idleSound = new EntitySound<Entity>(SoundRegistry.SWARM_IDLE, SoundCategory.HOSTILE, this, e -> e.isEntityAlive(), 0.8f);
@@ -252,6 +258,10 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 				double y = this.posY + this.motionY * 5 - 0.15f * swarmSize + (this.height + 0.3f) * swarmSize * 0.5f + ry * len * (this.height + 0.3f) * swarmSize;
 				double z = this.posZ + this.motionZ * 5 + rz * len * (this.width + 0.3f) * swarmSize * 0.5f;
 
+				if(this.isBurning() && this.rand.nextInt(3) == 0) {
+					this.world.spawnParticle(EnumParticleTypes.LAVA, x, y, z, 0, 0, 0);
+				}
+				
 				if(this.rand.nextInt(8) == 0) {
 					if(this.rand.nextInt(3) == 0) {
 						BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.FLYING_SWARM_EMISSIVE.create(this.world, x, y, z));
@@ -342,6 +352,12 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 				}
 			}
 		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean canRenderOnFire() {
+		return false;
 	}
 
 	public static class AIMerge extends EntityAIBase {

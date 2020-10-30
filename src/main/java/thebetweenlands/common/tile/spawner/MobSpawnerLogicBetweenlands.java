@@ -425,7 +425,7 @@ public abstract class MobSpawnerLogicBetweenlands {
     /**
      * Resets the timer
      */
-    private void resetTimer() {
+    public void resetTimer() {
         if (this.maxSpawnDelay <= this.minSpawnDelay) {
             this.spawnDelay = this.minSpawnDelay;
         } else {

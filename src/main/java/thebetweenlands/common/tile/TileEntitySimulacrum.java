@@ -202,6 +202,18 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 
 	private TileEntityRepeller sourceRepeller;
 
+	private boolean readFromNbt = false;
+
+	@Override
+	public void setWorld(World worldIn) {
+		super.setWorld(worldIn);
+
+		//Prevent spawner from spawning immediately after placement
+		if(!this.readFromNbt) { 
+			this.mireSnailSpawner.resetTimer();
+		}
+	}
+
 	@Override
 	public void update() {
 		this.updateEffects(this.effect);
@@ -224,6 +236,8 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
+
+		this.readFromNbt = true;
 
 		this.effect = Effect.byId(compound.getInteger("effectId"));
 		this.secondaryEffect = Effect.byId(compound.getInteger("secondaryEffectId"));
