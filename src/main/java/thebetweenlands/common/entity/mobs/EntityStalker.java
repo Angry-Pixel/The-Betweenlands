@@ -9,6 +9,8 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.google.common.collect.ImmutableSet;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -53,6 +55,7 @@ import thebetweenlands.common.entity.movement.CustomPathFinder;
 import thebetweenlands.common.entity.movement.ObstructionAwarePathNavigateClimber;
 import thebetweenlands.common.entity.movement.ObstructionAwarePathNavigateGround;
 import thebetweenlands.common.entity.movement.ObstructionAwareWalkNodeProcessor;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
@@ -322,7 +325,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 						AxisAlignedBB aabb = this.getEntityBoundingBox();
 						Vec3d center = new Vec3d((aabb.minX + aabb.maxX) * 0.5D, (aabb.minY + aabb.maxY) * 0.5D, (aabb.minZ + aabb.maxZ) * 0.5D);
-						
+
 						if(this.checkSeenTimer++ >= 20) {
 							this.checkSeenTimer = 0;
 
@@ -475,6 +478,8 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 	}
 
 	public static class AIBreakLightSources extends EntityAIBase {
+		private static final Set<Block> IGNORED_LIGHT_SOURCES = ImmutableSet.of(BlockRegistry.OCTINE_ORE, BlockRegistry.LIFE_CRYSTAL_STALACTITE, BlockRegistry.MOB_SPAWNER);
+
 		private final EntityStalker entity;
 
 		private BlockPos lightSourcePos = null;
@@ -679,8 +684,13 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 			}
 
 			IBlockState state = this.entity.world.getBlockState(pos);
-			float hardness = state.getBlockHardness(this.entity.world, pos);
-			return this.entity.world.getBlockState(pos).getLightValue(this.entity.world, pos) > 0 && hardness >= 0 && hardness <= 2.5F && state.getBlock().canEntityDestroy(state, this.entity.world, pos, this.entity);
+
+			if(!IGNORED_LIGHT_SOURCES.contains(state.getBlock())) {
+				float hardness = state.getBlockHardness(this.entity.world, pos);
+				return this.entity.world.getBlockState(pos).getLightValue(this.entity.world, pos) > 0 && hardness >= 0 && hardness <= 2.5F && state.getBlock().canEntityDestroy(state, this.entity.world, pos, this.entity);
+			}
+
+			return false;
 		}
 
 		@Override
