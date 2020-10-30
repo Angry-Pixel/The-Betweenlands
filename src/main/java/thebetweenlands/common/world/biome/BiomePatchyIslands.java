@@ -20,6 +20,7 @@ import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.mobs.EntityMireSnail;
+import thebetweenlands.common.entity.mobs.EntityShambler;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntityStalker;
@@ -95,5 +96,6 @@ public class BiomePatchyIslands extends BiomeBetweenlands {
 		entries.add(new SkySpawnEntry(18, EntityChiromawGreeblingRider.class, EntityChiromawGreeblingRider::new, (short) 20).setSpawnCheckRadius(64.0D).setGroupSize(1, 3).setSpawningInterval(600).setHostile(true));
 		entries.add(new PitstoneCaveSpawnEntry(22, EntityStalker.class, EntityStalker::new, (short) 13).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(16).setSpawningInterval(6000));
 		entries.add(new CaveSpawnEntry(23, EntitySwarm.class, EntitySwarm::new, (short) 80).setHostile(true).setSpawnCheckRadius(32.0D));
+		entries.add(new SurfaceSpawnEntry(10, EntityShambler.class, EntityShambler::new, (short) 30).setHostile(true));
 	}
 }
