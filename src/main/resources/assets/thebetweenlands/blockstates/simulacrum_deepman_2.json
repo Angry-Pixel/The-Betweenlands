@@ -28,14 +28,14 @@
 		"model": "thebetweenlands:internal/simulacrum_deepman_2",
 		"transform": {
 			"gui": {
-	            "rotation": [ 30, 45, 0 ],
+	            "rotation": [ 30, 225, 0 ],
 	            "translation": [ 0, 0, 0],
-	            "scale":[ 0.625, 0.625, 0.625 ]
+	            "scale":[ 0.65, 0.65, 0.65 ]
 	        },
 	        "ground": {
 	            "rotation": [ 0, 0, 0 ],
 	            "translation": [ 0, 0, 0],
-	            "scale":[ 0.25, 0.25, 0.25 ]
+	            "scale":[ 0.4, 0.4, 0.4 ]
 	        },
 	        "head": {
 	            "rotation": [ 0, 180, 0 ],
@@ -43,29 +43,29 @@
 	            "scale":[ 1, 1, 1]
 	        },
 	        "fixed": {
-	            "rotation": [ 0, 180, 0 ],
+	            "rotation": [ 0, 0, 0 ],
 	            "translation": [ 0, 0, 0],
-	            "scale":[ 0.5, 0.5, 0.5 ]
+	            "scale":[ 0.65, 0.65, 0.65 ]
 	        },
 	        "thirdperson_righthand": {
 	            "rotation": [ 75, 315, 0 ],
-	            "translation": [ 0, 0, 0],
-	            "scale": [ 0.375, 0.375, 0.375 ]
+	            "translation": [ 0, 0.15, 0.1],
+	            "scale": [ 0.5, 0.5, 0.5 ]
 	        },
 	        "firstperson_righthand": {
-	            "rotation": [ 0, 315, 0 ],
-	            "translation": [ 0, 0, 0],
-	            "scale": [ 0.4, 0.4, 0.4 ]
+	            "rotation": [ 0, 135, 0 ],
+	            "translation": [ 0, 0.15, 0],
+	            "scale": [ 0.35, 0.35, 0.35 ]
 	        },
 	        "thirdperson_lefthand": {
 	            "rotation": [ 75, 315, 0 ],
-	            "translation": [ 0, 0, 0],
-	            "scale": [ 0.375, 0.375, 0.375 ]
+	            "translation": [ 0, 0.15, 0.1],
+	            "scale": [ 0.5, 0.5, 0.5 ]
 	        },
 	        "firstperson_lefthand": {
-	            "rotation": [ 0, 315, 0 ],
-	            "translation": [ 0, 0, 0],
-	            "scale": [ 0.4, 0.4, 0.4 ]
+	            "rotation": [ 0, 135, 0 ],
+	            "translation": [ 0, 0.15, 0],
+	            "scale": [ 0.35, 0.35, 0.35 ]
 	        }
 		}
 	}
