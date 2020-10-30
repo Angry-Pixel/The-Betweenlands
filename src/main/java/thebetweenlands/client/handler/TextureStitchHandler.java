@@ -35,8 +35,8 @@ import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.render.sprite.TextureCorrosion;
 import thebetweenlands.client.render.sprite.TextureFromData;
-import thebetweenlands.client.render.tile.RenderCenser;
 import thebetweenlands.client.render.tile.RenderBarrel;
+import thebetweenlands.client.render.tile.RenderCenser;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.FluidRegistry;
@@ -65,18 +65,18 @@ public class TextureStitchHandler {
 			//Only stitch to the main texture map
 			return;
 		}
-		
+
 		//Stich fluid textures onto atlas
 		for(Fluid fluid : FluidRegistry.REGISTERED_FLUIDS) {
 			e.getMap().registerSprite(fluid.getFlowing());
 			e.getMap().registerSprite(fluid.getStill());
 		}
-		
-		
+
+
 		e.getMap().registerSprite(RenderBarrel.WHITE_SPRITE_PATH);
 		e.getMap().registerSprite(RenderCenser.CENSER_FOG_PATH);
 
-		
+
 		//Pack model textures and stitch onto atlas
 		long packingStartTime = System.nanoTime();
 		Map<ResourceLocation, BufferedImage> packedTextures = ModelRegistry.MODEL_TEXTURE_PACKER.pack(Minecraft.getMinecraft().getResourceManager());
@@ -190,23 +190,29 @@ public class TextureStitchHandler {
 							//Necessary to initialize animation metadata
 							sprite.loadSpriteFrames(resource, e.getMap().getMipmapLevels() + 1);
 
-							//Set sprites or split into seperate frames
-							if(!sprite.hasAnimationMetadata() || sprite.getFrameCount() == 1) {
-								//Single frame
-								frames[i] = new Frame[]{ new Frame(textures[i], sprite, 0) };
+							//Prevent frames smaller than 16x16 and log warning because otherwise OptiFine goes REEEEEEEEEEEEEEE
+							if(sprite.getIconWidth() < 16) {
+								TheBetweenlands.logger.warn("Sprite '" + textures[i] + "' has frames that are smaller than 16x16, this is not allowed!");
+								frames[i] = new Frame[] { new Frame(TextureMap.LOCATION_MISSING_TEXTURE, e.getMap().getMissingSprite(), 20) };
 							} else {
-								//Multiple frames, parse metadata and store seperate frames
-								AnimationMetadataSection animationMetadata = resource.getMetadata("animation");
-								boolean hasFrameMeta = animationMetadata.getFrameCount() > 0;
-								int frameCount = hasFrameMeta ? animationMetadata.getFrameCount() : sprite.getFrameCount();
-								frames[i] = new Frame[frameCount];
-								for(int frame = 0; frame < frameCount; frame++) {
-									int duration = hasFrameMeta ? animationMetadata.getFrameTimeSingle(frame) : animationMetadata.getFrameTime();
-									int index = hasFrameMeta ? animationMetadata.getFrameIndex(frame) : frame;
-									int frameData[] = sprite.getFrameTextureData(index)[0]; //Use original non-mipmap frame
-									TextureAtlasSprite frameSprite = new TextureFromData(sprite.getIconName() + "_frame_" + frame, frameData, sprite.getIconWidth(), sprite.getIconHeight());
-									e.getMap().setTextureEntry(frameSprite);
-									frames[i][frame] = new Frame(textures[i], frameSprite, duration);
+								//Set sprites or split into seperate frames
+								if(!sprite.hasAnimationMetadata() || sprite.getFrameCount() == 1) {
+									//Single frame
+									frames[i] = new Frame[]{ new Frame(textures[i], sprite, 0) };
+								} else {
+									//Multiple frames, parse metadata and store seperate frames
+									AnimationMetadataSection animationMetadata = resource.getMetadata("animation");
+									boolean hasFrameMeta = animationMetadata.getFrameCount() > 0;
+									int frameCount = hasFrameMeta ? animationMetadata.getFrameCount() : sprite.getFrameCount();
+									frames[i] = new Frame[frameCount];
+									for(int frame = 0; frame < frameCount; frame++) {
+										int duration = hasFrameMeta ? animationMetadata.getFrameTimeSingle(frame) : animationMetadata.getFrameTime();
+										int index = hasFrameMeta ? animationMetadata.getFrameIndex(frame) : frame;
+										int frameData[] = sprite.getFrameTextureData(index)[0]; //Use original non-mipmap frame
+										TextureAtlasSprite frameSprite = new TextureFromData(sprite.getIconName() + "_frame_" + frame, frameData, sprite.getIconWidth(), sprite.getIconHeight());
+										e.getMap().setTextureEntry(frameSprite);
+										frames[i][frame] = new Frame(textures[i], frameSprite, duration);
+									}
 								}
 							}
 
@@ -331,7 +337,7 @@ public class TextureStitchHandler {
 			this.sprite = sprite;
 			this.duration = duration;
 		}
-		
+
 		/**
 		 * Returns the resource location that this frame belongs to
 		 * @return
