@@ -139,7 +139,7 @@ public class SwarmedCapability extends EntityCapability<SwarmedCapability, ISwar
 				}
 
 				if(cap.getSwarmedStrength() > 0) {
-					if(event.player.isInsideOfMaterial(Material.WATER)) {
+					if(event.player.isInsideOfMaterial(Material.WATER) || event.player.isBurning()) {
 						cap.setSwarmedStrength(0);
 					} else if(event.player.isSwingInProgress || (event.player.posY - event.player.prevPosY) > 0.1f || event.player.isSneaking()) {
 						cap.setSwarmedStrength(cap.getSwarmedStrength() - 0.01f);

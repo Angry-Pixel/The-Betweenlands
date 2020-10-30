@@ -26,6 +26,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -130,7 +131,21 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 		super.onUpdate();
 
 		if(!this.world.isRemote) {
-			float range = 3.5f;
+			if(this.isBurning()) {
+				if(this.getSwarmSize() > 0.1f) {
+					this.setSwarmSize(Math.max(0.1f, this.getSwarmSize() - 0.005f));
+				}
+
+				if(this.rand.nextInt(10) == 0) {
+					List<EntitySwarm> swarms = this.world.getEntitiesWithinAABB(EntitySwarm.class, this.getEntityBoundingBox().grow(1), s -> !s.isBurning());
+
+					for(EntitySwarm swarm : swarms) {
+						swarm.setFire(2);
+					}
+				}
+			}
+
+			float range = 3.25f;
 
 			List<EntityPlayer> players = this.world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(range));
 
@@ -141,7 +156,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 					ISwarmedCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_SWARMED, null);
 
 					if(cap != null) {
-						cap.setSwarmedStrength(cap.getSwarmedStrength() + (1.0f - (float) dst / range) * 0.02f * MathHelper.clamp(this.getSwarmSize() * 1.75f, 0, 1));
+						cap.setSwarmedStrength(cap.getSwarmedStrength() + (1.0f - (float) dst / range) * 0.025f * MathHelper.clamp(this.getSwarmSize() * 1.75f, 0, 1));
 
 						cap.setDamage((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
 					}
@@ -153,7 +168,21 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 	}
 
 	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		return null;
+	}
+
+	@Override
+	protected SoundEvent getDeathSound() {
+		return null;
+	}
+
+	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if(source.isFireDamage()) {
+			amount *= 2;
+		}
+
 		boolean attacked = super.attackEntityFrom(source, amount);
 
 		if(this.isEntityAlive() && attacked && amount > 2 && (this.rand.nextFloat() * 16 < amount || this.getHealth() < this.getMaxHealth() * 0.25f)) {
@@ -166,7 +195,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 	protected boolean split() {
 		float swarmSize = this.getSwarmSize();
 
-		if(swarmSize > 0.25f) {
+		if(swarmSize > 0.3f) {
 			float initialSwarmSize = swarmSize;
 
 			float fraction = initialSwarmSize * 0.25f + initialSwarmSize * (this.rand.nextFloat() - 0.5f) * 0.05f;
@@ -178,13 +207,13 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 				EntitySwarm swarm = new EntitySwarm(this.world, fraction);
 				swarmSize -= fraction;
 
-				swarm.setHealth(this.getHealth());
+				swarm.setHealth(this.getHealth() * 0.66f);
 				swarm.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
 
 				if(this.isBurning()) {
 					swarm.setFire(40);
 				}
-				
+
 				float mx = this.rand.nextFloat() - 0.5f;
 				float mz = this.rand.nextFloat() - 0.5f;
 
@@ -200,6 +229,8 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 				this.world.spawnEntity(swarm);
 			}
 
+			this.setHealth(this.getHealth() * 0.5f);
+
 			return true;
 		}
 
@@ -210,7 +241,11 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 		swarm.setSwarmSize(swarm.getSwarmSize() + this.getSwarmSize());
 
 		if(this.getHealth() < swarm.getHealth()) {
-			swarm.setHealth((this.getHealth() + swarm.getHealth()) * 0.5f);
+			swarm.setHealth((this.getHealth() / 0.66f + swarm.getHealth()) * 0.5f);
+		}
+
+		if(this.isBurning()) {
+			swarm.setFire(2);
 		}
 
 		this.setDead();
@@ -261,7 +296,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 				if(this.isBurning() && this.rand.nextInt(3) == 0) {
 					this.world.spawnParticle(EnumParticleTypes.LAVA, x, y, z, 0, 0, 0);
 				}
-				
+
 				if(this.rand.nextInt(8) == 0) {
 					if(this.rand.nextInt(3) == 0) {
 						BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.FLYING_SWARM_EMISSIVE.create(this.world, x, y, z));
@@ -353,7 +388,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 			}
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public boolean canRenderOnFire() {
