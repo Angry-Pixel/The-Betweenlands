@@ -197,6 +197,7 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 	private Effect secondaryEffect = Effect.NONE;
 
 	private boolean isActive = false;
+	private String customName = "";
 
 	private int soundCooldown = 0;
 
@@ -216,8 +217,10 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 
 	@Override
 	public void update() {
-		this.updateEffects(this.effect);
-		this.updateEffects(this.secondaryEffect);
+		if(this.isActive()) {
+			this.updateEffects(this.effect);
+			this.updateEffects(this.secondaryEffect);
+		}		
 	}
 
 	@Override
@@ -227,7 +230,8 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 		compound.setInteger("effectId", this.effect.id);
 		compound.setInteger("secondaryEffectId", this.effect.id);
 		compound.setBoolean("isActive", this.isActive);
-
+		compound.setString("customName", this.customName);
+		
 		this.mireSnailSpawner.writeToNBT(compound);
 
 		return compound;
@@ -242,6 +246,7 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 		this.effect = Effect.byId(compound.getInteger("effectId"));
 		this.secondaryEffect = Effect.byId(compound.getInteger("secondaryEffectId"));
 		this.isActive = compound.getBoolean("isActive");
+		this.customName = compound.getString("customName");
 
 		this.mireSnailSpawner.readFromNBT(compound);
 	}
@@ -285,6 +290,14 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 		return this.isActive;
 	}
 
+	public void setCustomName(String name) {
+		this.customName = name;
+	}
+	
+	public String getCustomName() {
+		return this.customName;
+	}
+	
 	public Effect getEffect() {
 		return this.effect;
 	}
@@ -325,7 +338,7 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 		case SANCTUARY:
 			this.setRadiusState(3);
 
-			TileEntityRepeller repeller = getClosestTile(TileEntityRepeller.class, this, this.world, this.pos.getX(), this.pos.getY(), this.pos.getZ(), 18.0D, null, null);
+			TileEntityRepeller repeller = getClosestActiveTile(TileEntityRepeller.class, this, this.world, this.pos.getX(), this.pos.getY(), this.pos.getZ(), 18.0D, null, null);
 
 			if(repeller != null && repeller.getDistanceSq(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) > repeller.getRadius(1) * repeller.getRadius(1)) {
 				repeller = null;
@@ -488,7 +501,7 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 				});
 
 				if(player != null) {
-					TileEntityOfferingTable offering = getClosestTile(TileEntityOfferingTable.class, null, this.world, player.posX, player.posY, player.posZ, 2.5f, null, stack -> !stack.isEmpty() && stack.getItem() == ItemRegistry.SPIRIT_FRUIT);
+					TileEntityOfferingTable offering = getClosestActiveTile(TileEntityOfferingTable.class, null, this.world, player.posX, player.posY, player.posZ, 2.5f, null, stack -> !stack.isEmpty() && stack.getItem() == ItemRegistry.SPIRIT_FRUIT);
 
 					if(offering != null) {
 						if(!this.world.isRemote && this.world.rand.nextInt(40) == 0) {
@@ -589,7 +602,7 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 
 	@SuppressWarnings("unchecked")
 	@Nullable
-	public static <T extends TileEntity> T getClosestTile(Class<T> tileCls, @Nullable TileEntity exclude, World world, double x, double y, double z, double range, @Nullable Effect effect, @Nullable Predicate<ItemStack> offeringPredicate) {
+	public static <T extends TileEntity> T getClosestActiveTile(Class<T> tileCls, @Nullable TileEntity exclude, World world, double x, double y, double z, double range, @Nullable Effect effect, @Nullable Predicate<ItemStack> offeringPredicate) {
 		int sx = (MathHelper.floor(x - range) >> 4);
 		int sz = (MathHelper.floor(z - range) >> 4);
 		int ex = (MathHelper.floor(x + range) >> 4);
@@ -609,7 +622,7 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 							double dstSq = entry.getKey().distanceSq(x, y, z);
 
 							if(dstSq <= range * range && (closest == null || dstSq <= closest.getPos().distanceSq(x, y, z)) &&
-									(effect == null || tile instanceof TileEntitySimulacrum == false || ((TileEntitySimulacrum) tile).getEffect() == effect) &&
+									(effect == null || tile instanceof TileEntitySimulacrum == false || (((TileEntitySimulacrum) tile).getEffect() == effect && ((TileEntitySimulacrum) tile).isActive())) &&
 									(offeringPredicate == null || tile instanceof TileEntityOfferingTable == false || offeringPredicate.test(((TileEntityOfferingTable) tile).getStack()))) {
 								closest = (T) tile;
 							}
@@ -627,7 +640,7 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 		BlockPos pos = event.getPos();
 		EntityPlayer player = event.getEntityPlayer();
 
-		TileEntitySimulacrum simulacrum = getClosestTile(TileEntitySimulacrum.class, null, player.world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 16.0D, Effect.WEAKNESS, null);
+		TileEntitySimulacrum simulacrum = getClosestActiveTile(TileEntitySimulacrum.class, null, player.world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 16.0D, Effect.WEAKNESS, null);
 
 		if(simulacrum != null) {
 			double dst = simulacrum.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
@@ -644,7 +657,7 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 
 		if(!entity.world.isRemote) {
 			if(entity instanceof EntityPlayer == false && entity.world.rand.nextInt(4) == 0) {
-				TileEntitySimulacrum simulacrum = getClosestTile(TileEntitySimulacrum.class, null, entity.world, entity.posX, entity.posY, entity.posZ, 16.0D, Effect.RESURRECTION, null);
+				TileEntitySimulacrum simulacrum = getClosestActiveTile(TileEntitySimulacrum.class, null, entity.world, entity.posX, entity.posY, entity.posZ, 16.0D, Effect.RESURRECTION, null);
 
 				if(simulacrum != null) {
 					entity.setDropItemsWhenDead(false);

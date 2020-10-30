@@ -1822,6 +1822,11 @@
       "thebetweenlands:resurrection"
     ]
   },
+  "simulacrum_break": {
+    "sounds": [
+      "thebetweenlands:simulacrum_break"
+    ]
+  },
   "worm_throw": {
     "sounds": [
       "thebetweenlands:worm_throw_1",

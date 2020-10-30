@@ -32,6 +32,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -41,8 +42,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.item.ItemBlockEnum.IGenericMetaSelector;
+import thebetweenlands.common.item.ItemRenamableBlockEnum;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.BlockRegistry.ISubtypeItemBlockModelDefinition;
@@ -92,11 +94,14 @@ public class BlockSimulacrum extends BlockContainer implements IStateMappedBlock
 		state = state.withProperty(FACING, EnumFacing.byHorizontalIndex(rotation));
 		state = state.withProperty(VARIANT, Variant.byMetadata(stack.getItemDamage()));
 		worldIn.setBlockState(pos, state, 3);
-		
+
 		TileEntity tile = worldIn.getTileEntity(pos);
 		if(tile instanceof TileEntitySimulacrum) {
 			((TileEntitySimulacrum) tile).setEffect(TileEntitySimulacrum.Effect.byId(NBTHelper.getStackNBTSafe(stack).getInteger("simulacrumEffectId")));
 			((TileEntitySimulacrum) tile).setActive(true);
+			if(stack.hasDisplayName()) {
+				((TileEntitySimulacrum) tile).setCustomName(stack.getDisplayName());
+			}
 		}
 	}
 
@@ -210,8 +215,17 @@ public class BlockSimulacrum extends BlockContainer implements IStateMappedBlock
 
 			TileEntity tile = worldIn.getTileEntity(pos);
 			if(tile instanceof TileEntitySimulacrum) {
+				if(!((TileEntitySimulacrum) tile).isActive()) {
+					worldIn.playSound(null, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, SoundRegistry.SIMULACRUM_BREAK, SoundCategory.BLOCKS, 1, 0.95f + worldIn.rand.nextFloat() * 0.1f);
+				}
+				
 				NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
 				nbt.setInteger("simulacrumEffectId", ((TileEntitySimulacrum) tile).getEffect().id);
+
+				String customName = ((TileEntitySimulacrum) tile).getCustomName();
+				if(customName.length() > 0) {
+					stack.setStackDisplayName(customName);
+				}
 			}
 
 			InventoryHelper.spawnItemStack(worldIn, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, stack);
@@ -230,7 +244,7 @@ public class BlockSimulacrum extends BlockContainer implements IStateMappedBlock
 
 	@Override
 	public ItemBlock getItemBlock() {
-		ItemBlock item = ItemBlockEnum.create(this, Variant.class);
+		ItemBlock item = ItemRenamableBlockEnum.create(this, Variant.class);
 		item.setMaxStackSize(1);
 		return item;
 	}
@@ -262,7 +276,7 @@ public class BlockSimulacrum extends BlockContainer implements IStateMappedBlock
 					playerIn.sendStatusMessage(new TextComponentTranslation("chat.simulacrum.changed_effect", new TextComponentTranslation("tooltip.bl.simulacrum.effect." + nextEffect.name)), true);
 				}
 			}
-			
+
 			playerIn.swingArm(hand);
 
 			return true;
