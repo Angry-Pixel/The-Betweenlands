@@ -258,6 +258,10 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 	public BlockPos getPathingTarget() {
 		return this.dataManager.get(PATHING_TARGET).orNull();
 	}
+	
+	protected boolean canAttachToWalls() {
+		return !this.isInWater();
+	}
 
 	protected void updateOffsetsAndOrientation() {
 		Vec3d p = this.getPositionVector();
@@ -274,7 +278,7 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 		this.prevStickingOffsetZ = this.stickingOffsetZ;
 
 		Pair<Vec3d, Vec3d> closestSmoothPoint = null;
-		if(!this.isInWater()) closestSmoothPoint = BoxSmoothingUtil.findClosestSmoothPoint(boxes, this.collisionsSmoothingRange, 1.0f, 0.005f, 20, 0.05f, s);
+		if(this.canAttachToWalls()) closestSmoothPoint = BoxSmoothingUtil.findClosestSmoothPoint(boxes, this.collisionsSmoothingRange, 1.0f, 0.005f, 20, 0.05f, s);
 
 		if(closestSmoothPoint != null) {
 			this.stickingOffsetX = MathHelper.clamp(closestSmoothPoint.getLeft().x - p.x, -this.width / 2, this.width / 2);
@@ -284,7 +288,7 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 			this.orientationNormal = closestSmoothPoint.getRight();
 		} else {
 			this.stickingOffsetX *= 0.6f;
-			this.stickingOffsetY *= 0.6f;
+			this.stickingOffsetY = this.stickingOffsetY + (0.4f - this.stickingOffsetY) * 0.6f;
 			this.stickingOffsetZ *= 0.6f;
 
 			this.orientationNormal = new Vec3d(this.orientationNormal.x * 0.6f, this.orientationNormal.y + (1.0f - this.orientationNormal.y) * 0.4f, this.orientationNormal.z * 0.6f).normalize();

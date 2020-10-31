@@ -672,10 +672,46 @@ public class ModelStalker extends MowzieModelBase {
         body_main.rotateAngleX -= upright * 0.5f;
         head_main.rotateAngleX -= upright;
 
+        arm_lefta.rotateAngleX -= upright * 0.7f;
+        arm_righta.rotateAngleX -= upright * 0.7f;
+        
+        arm_lefta.rotateAngleY -= upright * 0.7f;
+        arm_righta.rotateAngleY += upright * 0.7f;
+
+        arm_lefta.rotateAngleZ += upright * 0.7f;
+        arm_righta.rotateAngleZ -= upright * 0.7f;
+        
+        midarm_lefta.rotateAngleX -= upright * 0.4f;
+        midarm_righta.rotateAngleX -= upright * 0.4f;
+        midarm_lefta.rotateAngleY -= upright * 0.4f;
+        midarm_righta.rotateAngleY += upright * 0.4f;
+        midarm_leftb.rotateAngleX += upright * 0.4f;
+        midarm_rightb.rotateAngleX += upright * 0.4f;
+        midarm_leftb.rotateAngleZ -= upright * 0.1f;
+        midarm_rightb.rotateAngleZ += upright * 0.1f;
+        
         float screeching = easeInOutBack(MathHelper.clamp((screechTicks - 20) / 30.0f, 0, 1));
         float screechingHeadRotationStrength = MathHelper.sin(frame * 0.4f) * screeching;
-        head_main.rotateAngleY += screechingHeadRotationStrength * 0.15f;
-        head_main.rotateAngleZ += screechingHeadRotationStrength * 0.15f;
+        head_main.rotateAngleY += screechingHeadRotationStrength * 0.13f;
+        head_main.rotateAngleZ += screechingHeadRotationStrength * 0.13f;
+        
+        body_chest1.rotateAngleY += screechingHeadRotationStrength * 0.04f;
+        body_chest1.rotateAngleZ += screechingHeadRotationStrength * 0.04f;
+        
+        midarm_lefta.rotateAngleZ -= screechingHeadRotationStrength * 0.04f;
+        midarm_righta.rotateAngleZ -= screechingHeadRotationStrength * 0.04f;
+        midarm_lefta.rotateAngleY -= screechingHeadRotationStrength * 0.04f;
+        midarm_righta.rotateAngleY -= screechingHeadRotationStrength * 0.04f;
+        
+        midarm_lefta.rotateAngleX -= screechingHeadRotationStrength * 0.04f;
+        midarm_leftb.rotateAngleX += screechingHeadRotationStrength * 0.075f;
+        
+        midarm_righta.rotateAngleX += screechingHeadRotationStrength * 0.04f;
+        midarm_rightb.rotateAngleX -= screechingHeadRotationStrength * 0.075f;
+        
+        float armShakeStrength = MathHelper.sin(frame * 4f) * screeching;
+        arm_lefta.rotateAngleZ += armShakeStrength * 0.025f;
+        arm_righta.rotateAngleZ -= armShakeStrength * 0.025f;
     }
     
     private static float easeInOutBack(float x) {

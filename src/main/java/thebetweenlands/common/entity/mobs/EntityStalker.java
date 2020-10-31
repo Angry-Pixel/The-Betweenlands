@@ -42,6 +42,7 @@ import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -72,6 +73,7 @@ import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 public class EntityStalker extends EntityClimberBase implements IMob {
 	public static final DataParameter<Boolean> SCREECHING = EntityDataManager.createKey(EntityStalker.class, DataSerializers.BOOLEAN);
+	public static final DataParameter<Boolean> DROP = EntityDataManager.createKey(EntityStalker.class, DataSerializers.BOOLEAN);
 
 	protected boolean restrictToPitstone = false;
 
@@ -92,8 +94,6 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 	protected boolean isFleeingFromView;
 
 	protected int inViewTimer = 0;
-
-	protected boolean drop = false;
 
 	protected int checkSeenTimer = 20;
 	protected boolean canStalkerBeSeen = false;
@@ -141,6 +141,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 	protected void entityInit() {
 		super.entityInit();
 		this.dataManager.register(SCREECHING, false);
+		this.dataManager.register(DROP, false);
 	}
 
 	@Override
@@ -192,6 +193,14 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 	public boolean isScreeching() {
 		return this.dataManager.get(SCREECHING);
+	}
+
+	public void setDropping(boolean dropping) {
+		this.dataManager.set(DROP, dropping);
+	}
+
+	public boolean isDropping() {
+		return this.dataManager.get(DROP);
 	}
 
 	@Override
@@ -332,11 +341,16 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 	@Override
 	public Vec3d getStickingForce(Pair<EnumFacing, Vec3d> walkingSide) {
-		if(this.drop) {
+		if(this.isDropping()) {
 			return new Vec3d(0, -0.08D, 0);
 		}
 
 		return super.getStickingForce(walkingSide);
+	}
+
+	@Override
+	protected boolean canAttachToWalls() {
+		return super.canAttachToWalls() && !this.isDropping();
 	}
 
 	private boolean canSeePosition(Vec3d start, Vec3d end) {
@@ -345,15 +359,21 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 	@Override
 	public void onUpdate() {
-		this.drop = false;
+		if(!this.world.isRemote) {
+			this.setDropping(false);
+		}
 
 		super.onUpdate();
 
 		this.prevScreechingTicks = this.screechingTicks;
 		if(this.isScreeching()) {
-			this.screechingTicks = Math.min(this.screechingTicks + 1, 100);
+			this.screechingTicks++;
+
+			if(this.screechingTicks == 40) {
+				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.STALKER_SCREECH, SoundCategory.HOSTILE, this.getSoundVolume(), 1);
+			}
 		} else {
-			this.screechingTicks = Math.min(Math.max(this.screechingTicks - 5, 0), 40);
+			this.screechingTicks = Math.min(Math.max(this.screechingTicks - 2, 0), 40);
 		}
 
 		if(!this.world.isRemote) {
@@ -471,22 +491,22 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 		}
 		eyeRotation = eyeRotation.add(eyeRotationTarget.subtract(eyeRotation).scale(0.5));
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	protected void spawnScreechingParticles() {
 		float angle = (float) Math.toRadians(-this.renderYawOffset);
 		float ox = MathHelper.sin(angle) * 0.725f;
 		float oz = MathHelper.cos(angle) * 0.725f;
-		
+
 		float screechingStrength = MathHelper.clamp((this.screechingTicks - 20) / 30.0f, 0, 1);
-        float screechingHeadRotationStrength = MathHelper.sin(this.ticksExisted * 0.4f) * screechingStrength;
+		float screechingHeadRotationStrength = MathHelper.sin(this.ticksExisted * 0.4f) * screechingStrength;
 		float osx = MathHelper.sin(angle + (float)Math.PI * 0.5f) * 0.05f * screechingHeadRotationStrength;
 		float osz = MathHelper.cos(angle + (float)Math.PI * 0.5f) * 0.05f * screechingHeadRotationStrength;
-		
+
 		Particle particle = BLParticles.SONIC_SCREAM.create(this.world, this.posX + ox, this.posY + 1.5f, this.posZ + oz, 
 				ParticleArgs.get().withMotion(osx, 0.3f, osz).withScale(10).withData(30, MathHelper.floor(this.ticksExisted * 3.3f))
 				.withColor(1.0f, 0.9f, 0.8f, 1.0f));
-		
+
 		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING, particle);
 	}
 
@@ -1045,7 +1065,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 		public void updateTask() {
 			this.entity.getNavigator().clearPath();
 			this.entity.getMoveHelper().setMoveTo(this.entity.posX, this.entity.posY, this.entity.posZ, 1);
-			this.entity.drop = true;
+			this.entity.setDropping(true);
 			this.entity.isStalking = false;
 
 			EntityLivingBase target = this.entity.getAttackTarget();
@@ -1080,7 +1100,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 		private final int minAllies, maxAllies;
 
 		private int cooldown;
-		
+
 		private int allies;
 		private boolean didSpawn;
 
@@ -1096,13 +1116,13 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 		@Override
 		public boolean shouldExecute() {
 			EntityLivingBase target = this.entity.getAttackTarget();
-			return this.cooldown <= 0 && !this.entity.isStalking && /*TODO Testing this.entity.getHealth() <= this.entity.getHealth() * 0.5f && */target != null && this.entity.getDistance(target) > /*TODO Testing 8*/ 1 && this.entity.canCallAllies();
+			return this.cooldown <= 0 && !this.entity.isStalking && this.entity.getHealth() <= this.entity.getMaxHealth() * 0.5f && target != null && this.entity.getDistance(target) > 8 && this.entity.canCallAllies();
 		}
 
 		@Override
 		public boolean shouldContinueExecuting() {
 			EntityLivingBase target = this.entity.getAttackTarget();
-			return !this.entity.isStalking && target != null && this.entity.canCallAllies() && this.entity.isScreeching() && this.allies > 0;
+			return !this.entity.isStalking && target != null && this.entity.canCallAllies() && this.entity.isScreeching() && this.allies > 0 && this.entity.screechingTicks < 160;
 		}
 
 		@Override
@@ -1122,6 +1142,8 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 		@Override
 		public void updateTask() {
+			this.entity.setDropping(true);
+
 			if(this.shouldContinueExecuting() && this.entity.screechingTicks >= 100) {
 				EntityLivingBase target = this.entity.getAttackTarget();
 				EntitySenses targetSenses = target instanceof EntityLiving ? ((EntityLiving) target).getEntitySenses() : null;
@@ -1129,19 +1151,19 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 				EntityStalker stalker = null;
 
-				for(int i = 0; i < 8 && this.allies > 0; i++) {
+				for(int i = 0; i < 32 && this.allies > 0; i++) {
 					float dx = this.entity.rand.nextFloat() - 0.5f;
 					float dy = this.entity.rand.nextFloat() - 0.5f;
 					float dz = this.entity.rand.nextFloat() - 0.5f;
 
-					float dst = 12 + this.entity.rand.nextFloat() * 12;
+					float dst = 8 + this.entity.rand.nextFloat() * 8;
 
 					float scale = dst / MathHelper.sqrt(dx * dx + dy * dy + dz * dz);
 					dx *= scale;
 					dy *= scale;
 					dz *= scale;
 
-					BlockPos pos = new BlockPos(this.entity.posX + dx, this.entity.posY + dy, this.entity.posZ + dz);
+					BlockPos pos = new BlockPos(target.posX + dx, target.posY + dy, target.posZ + dz);
 
 					for(int j = 0; j < 8 && this.entity.world.isAirBlock(pos); j++) {
 						pos = pos.down();
