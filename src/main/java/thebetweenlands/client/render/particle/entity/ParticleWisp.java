@@ -15,12 +15,12 @@ import thebetweenlands.client.render.particle.ParticleTextureStitcher.IParticleS
 import thebetweenlands.common.block.terrain.BlockWisp;
 import thebetweenlands.util.MathUtils;
 
-//TODO: Still a WIP
 public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 	private float prevFlameScale;
 	private float flameScale;
 	private int brightness;
 
+	private float alphaMultiplier;
 	private BlockPos wisp;
 	private boolean visible;
 
@@ -48,17 +48,7 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 
 	@Override
 	public void renderParticle(BufferBuilder buff, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		double currentX = this.prevPosX + (this.posX - this.prevPosX) * partialTicks;
-		double currentY = this.prevPosY + (this.posY - this.prevPosY) * partialTicks;
-		double currentZ = this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks;
-
 		this.particleScale = (this.prevFlameScale + (this.flameScale - this.prevFlameScale) * partialTicks);
-
-		float distance = 0.0F;
-		if(!this.visible) {
-			distance = MathHelper.clamp(getDistanceToViewer(currentX, currentY, currentZ, partialTicks), 10, 20);
-		}
-		this.setAlphaF(1.0F - MathHelper.sin(MathUtils.PI / 20 * distance));
 
 		float scale = 0.1F * this.particleScale;
 
@@ -76,9 +66,9 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 		minV += borderV;
 		maxV -= borderV;
 
-		float rpx = (float) (currentX - interpPosX);
-		float rpy = (float) (currentY - interpPosY);
-		float rpz = (float) (currentZ - interpPosZ);
+		float rpx = (float) (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpPosX);
+		float rpy = (float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpPosY);
+		float rpz = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks - interpPosZ);
 
 		int brightness = this.getBrightnessForRender(partialTicks);
 		int lightmapX = (brightness >> 16) & 65535;
@@ -139,10 +129,10 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 			v4z = nz;
 		}
 
-		buff.pos((double)rpx + v1x, (double)rpy + v1y, (double)rpz + v1z).tex((double)maxU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
-		buff.pos((double)rpx + v2x, (double)rpy + v2y, (double)rpz + v2z).tex((double)maxU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
-		buff.pos((double)rpx + v3x, (double)rpy + v3y, (double)rpz + v3z).tex((double)minU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
-		buff.pos((double)rpx + v4x, (double)rpy + v4y, (double)rpz + v4z).tex((double)minU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
+		buff.pos((double)rpx + v1x, (double)rpy + v1y, (double)rpz + v1z).tex((double)maxU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha * this.alphaMultiplier).lightmap(lightmapX, lightmapY).endVertex();
+		buff.pos((double)rpx + v2x, (double)rpy + v2y, (double)rpz + v2z).tex((double)maxU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha * this.alphaMultiplier).lightmap(lightmapX, lightmapY).endVertex();
+		buff.pos((double)rpx + v3x, (double)rpy + v3y, (double)rpz + v3z).tex((double)minU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha * this.alphaMultiplier).lightmap(lightmapX, lightmapY).endVertex();
+		buff.pos((double)rpx + v4x, (double)rpy + v4y, (double)rpz + v4z).tex((double)minU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha * this.alphaMultiplier).lightmap(lightmapX, lightmapY).endVertex();
 	}
 
 	private static float crossX(float x1, float y1, float z1, float x2, float y2, float z2) {
@@ -167,17 +157,6 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 			return super.getBrightnessForRender(partialTicks);
 		}
 		return this.brightness;
-	}
-
-	public static float getDistanceToViewer(double x, double y, double z, float partialRenderTicks) {
-		Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
-		if(entity != null) {
-			double dx = (float) (entity.prevPosX + (entity.posX - entity.prevPosX) * partialRenderTicks) - x;
-			double dy = (float) (entity.prevPosY + (entity.posY - entity.prevPosY) * partialRenderTicks) - y;
-			double dz = (float) (entity.prevPosZ + (entity.posZ - entity.prevPosZ) * partialRenderTicks) - z;
-			return MathHelper.sqrt((float) (dx * dx + dy * dy + dz * dz));
-		}
-		return 0.0F;
 	}
 
 	@Override
@@ -206,6 +185,24 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 
 		IBlockState state = this.world.getBlockState(this.wisp);
 		this.visible = state.getBlock() instanceof BlockWisp ? state.getValue(BlockWisp.VISIBLE) : false;
+
+		if(!this.visible) {
+			this.alphaMultiplier = 1.0f - MathHelper.sin(MathUtils.PI / 20 * MathHelper.clamp(getDistanceToViewer(this.posX, this.posY, this.posZ), 10, 20));
+		} else {
+			this.alphaMultiplier = 1.0f;
+		}
+		this.alphaMultiplier *= Math.min(this.particleAge * 0.2f, 1);
+	}
+
+	public static float getDistanceToViewer(double x, double y, double z) {
+		Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
+		if(entity != null) {
+			double dx = entity.posX - x;
+			double dy = entity.posY - y;
+			double dz = entity.posZ - z;
+			return MathHelper.sqrt((float) (dx * dx + dy * dy + dz * dz));
+		}
+		return 0.0F;
 	}
 
 	public static final class Factory extends ParticleFactory<Factory, ParticleWisp> {
