@@ -57,6 +57,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 	public EntitySwarm(World world, float swarmSize) {
 		super(world);
 		this.setSwarmSize(swarmSize);
+		this.experienceValue = 5;
 	}
 
 	@Override

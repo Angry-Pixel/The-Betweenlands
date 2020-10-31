@@ -28,7 +28,7 @@ public class ParticleSonicScream extends ParticleAnimated implements IParticleSp
 		this.posY = this.prevPosY = y;
 		this.posZ = this.prevPosZ = z;
 		this.dir = new Vec3d(mx, my, mz).normalize();
-		this.up = new Vec3d(0, 1, 0);
+		this.up = new Vec3d(1, 0, 0).crossProduct(this.dir).normalize();
 		this.initialFrame = initialFrame;
 	}
 

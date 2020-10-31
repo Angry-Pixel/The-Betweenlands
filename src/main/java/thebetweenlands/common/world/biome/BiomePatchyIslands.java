@@ -94,8 +94,8 @@ public class BiomePatchyIslands extends BiomeBetweenlands {
 		entries.add(new CaveSpawnEntry(20, EntityChiromaw.class, EntityChiromaw::new, (short) 60).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
 		entries.add(new BetweenstoneCaveSpawnEntry(21, EntityBoulderSprite.class, EntityBoulderSprite::new, (short) 60).setHostile(true).setSpawnCheckRadius(16.0D).setSpawnCheckRangeY(8));
 		entries.add(new SkySpawnEntry(22, EntityChiromawGreeblingRider.class, EntityChiromawGreeblingRider::new, (short) 20).setSpawnCheckRadius(64.0D).setGroupSize(1, 3).setSpawningInterval(600).setHostile(true));
-		entries.add(new PitstoneCaveSpawnEntry(23, EntityStalker.class, EntityStalker::new, (short) 13).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(16).setSpawningInterval(6000));
-		entries.add(new CaveSpawnEntry(24, EntitySwarm.class, EntitySwarm::new, (short) 80).setHostile(true).setSpawnCheckRadius(32.0D));
+		entries.add(new PitstoneCaveSpawnEntry(23, EntityStalker.class, EntityStalker::new, (short) 13).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(16).setSpawningInterval(6000));
+		entries.add(new CaveSpawnEntry(24, EntitySwarm.class, EntitySwarm::new, (short) 50).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(32.0D));
 		entries.add(new SurfaceSpawnEntry(25, EntityShambler.class, EntityShambler::new, (short) 30).setHostile(true));
 	}
 }
