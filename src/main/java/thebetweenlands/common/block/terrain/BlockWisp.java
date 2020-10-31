@@ -1,11 +1,11 @@
 package thebetweenlands.common.block.terrain;
 
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
@@ -24,49 +24,34 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.tile.TileEntitySimulacrum;
 import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
-import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
-import thebetweenlands.common.world.storage.location.LocationGuarded;
 import thebetweenlands.common.world.storage.location.LocationSpiritTree;
-import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.AdvancedStateMap.Builder;
 
 public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 	protected static final AxisAlignedBB WISP_AABB = new AxisAlignedBB(0.2F, 0.2F, 0.2F, 0.8F, 0.8F, 0.8F);
 
 	public static final PropertyInteger COLOR = PropertyInteger.create("color", 0, 3);
+	public static final PropertyBool VISIBLE = PropertyBool.create("visible");
 
 	public BlockWisp() {
 		super(BLMaterialRegistry.WISP);
-		this.setDefaultState(this.getBlockState().getBaseState().withProperty(COLOR, 0));
-		setSoundType(SoundType.STONE);
-		setCreativeTab(BLCreativeTabs.BLOCKS);
-		setHardness(0);
-	}
-
-	public static boolean canSee(World world, BlockPos pos) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
-		if(worldStorage.getEnvironmentEventRegistry().auroras.isActive()) {
-			return true;
-		}
-		if(!worldStorage.getLocalStorageHandler().getLocalStorages(LocationCragrockTower.class, pos.getX(), pos.getZ(), location -> location.isInside(pos)).isEmpty()) {
-			return true;
-		}
-		if(!worldStorage.getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, pos.getX(), pos.getZ(), location -> location.isInside(pos)).isEmpty()) {
-			return true;
-		}
-		return false;
+		this.setDefaultState(this.getBlockState().getBaseState().withProperty(COLOR, 0).withProperty(VISIBLE, false));
+		this.setSoundType(SoundType.STONE);
+		this.setCreativeTab(BLCreativeTabs.BLOCKS);
+		this.setHardness(0);
+		this.setTickRandomly(true);
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[]{COLOR});
+		return new BlockStateContainer(this, new IProperty[] { COLOR, VISIBLE });
 	}
 
 	@Override
@@ -77,8 +62,9 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 	@SuppressWarnings("deprecation")
 	@Override
 	public RayTraceResult collisionRayTrace(IBlockState blockState, World world, BlockPos pos, Vec3d start, Vec3d end){
-		if(canSee(world, pos))
+		if(blockState.getValue(VISIBLE)) {
 			return super.collisionRayTrace(blockState, world, pos, start, end);
+		}
 		return null;
 	}
 
@@ -89,7 +75,7 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 
 	@Override
 	public void onPlayerDestroy(World world, BlockPos pos, IBlockState state) {
-		if(!world.isRemote && canSee(world, pos)) {
+		if(!world.isRemote && state.getValue(VISIBLE)) {
 			EntityItem wispItem = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(Item.getItemFromBlock(this), 1));
 			world.spawnEntity(wispItem);
 		}
@@ -112,7 +98,10 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
-		world.setBlockState(pos, this.getDefaultState().withProperty(COLOR, world.rand.nextInt(COLORS.length / 2)), 2);
+		state = this.getDefaultState().withProperty(COLOR, world.rand.nextInt(COLORS.length / 2));
+		world.setBlockState(pos, state, 2);
+		this.updateVisibility(world, pos, state);
+		world.scheduleUpdate(pos, this, this.tickRate(world));
 	}
 
 	@Override
@@ -156,11 +145,48 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void setStateMapper(Builder builder) {
-		builder.ignore(COLOR);
+		builder.ignore(COLOR).ignore(VISIBLE);
 	}
-	
+
 	@Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
-    	return BlockFaceShape.UNDEFINED;
-    }
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+		return BlockFaceShape.UNDEFINED;
+	}
+
+	@Override
+	public int tickRate(World worldIn) {
+		return 40;
+	}
+
+	@Override
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+		this.updateVisibility(worldIn, pos, state);
+		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+	}
+
+	protected boolean checkVisibility(World world, BlockPos pos) {
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+
+		if(worldStorage.getEnvironmentEventRegistry().auroras.isActive()) {
+			return true;
+		}
+
+		if(!worldStorage.getLocalStorageHandler().getLocalStorages(LocationCragrockTower.class, pos.getX(), pos.getZ(), location -> location.isInside(pos)).isEmpty()) {
+			return true;
+		}
+
+		if(!worldStorage.getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, pos.getX(), pos.getZ(), location -> location.isInside(pos)).isEmpty()) {
+			return true;
+		}
+
+		if(TileEntitySimulacrum.getClosestActiveTile(TileEntitySimulacrum.class, null, world, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, 16, TileEntitySimulacrum.Effect.WISP, null) != null) {
+			return true;
+		}
+
+		return false;
+	}
+
+	protected void updateVisibility(World world, BlockPos pos, IBlockState state) {
+		world.setBlockState(pos, state.withProperty(VISIBLE, this.checkVisibility(world, pos)));
+	}
 }

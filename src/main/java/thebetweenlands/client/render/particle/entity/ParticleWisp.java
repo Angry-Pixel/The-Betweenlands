@@ -1,14 +1,13 @@
 package thebetweenlands.client.render.particle.entity;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.ParticleTextureStitcher;
@@ -21,6 +20,9 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 	private float prevFlameScale;
 	private float flameScale;
 	private int brightness;
+
+	private BlockPos wisp;
+	private boolean visible;
 
 	protected ParticleWisp(World world, double x, double y, double z, double mx, double my, double mz, float scale, int bright) {
 		super(world, x, y, z, mx, my, mz);
@@ -36,6 +38,7 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 		this.flameScale = scale;
 		this.particleMaxAge = (int) (8 / (Math.random() * 0.8 + 0.2)) + 1000;
 		this.brightness = bright;
+		this.wisp = new BlockPos(x, y, z);
 	}
 
 	@Override
@@ -45,12 +48,14 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 
 	@Override
 	public void renderParticle(BufferBuilder buff, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		float currentX = (float) (prevPosX + (posX - prevPosX) * partialTicks);
-		float currentY = (float) (prevPosY + (posY - prevPosY) * partialTicks);
-		float currentZ = (float) (prevPosZ + (posZ - prevPosZ) * partialTicks);
+		double currentX = this.prevPosX + (this.posX - this.prevPosX) * partialTicks;
+		double currentY = this.prevPosY + (this.posY - this.prevPosY) * partialTicks;
+		double currentZ = this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks;
+
 		this.particleScale = (this.prevFlameScale + (this.flameScale - this.prevFlameScale) * partialTicks);
+
 		float distance = 0.0F;
-		if(!BlockWisp.canSee(this.world, new BlockPos(this.posX, this.posY, this.posZ))) {
+		if(!this.visible) {
 			distance = MathHelper.clamp(getDistanceToViewer(currentX, currentY, currentZ, partialTicks), 10, 20);
 		}
 		this.setAlphaF(1.0F - MathHelper.sin(MathUtils.PI / 20 * distance));
@@ -61,7 +66,7 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 		float maxU = this.particleTexture.getMaxU();
 		float minV = this.particleTexture.getMinV();
 		float maxV = this.particleTexture.getMaxV();
-		
+
 		//remove 1px border to avoid artifacts from smooth filtering
 		float borderU = (maxU - minU) / this.particleTexture.getIconWidth();
 		float borderV = (maxV - minV) / this.particleTexture.getIconHeight();
@@ -70,34 +75,90 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 		maxU -= borderU;
 		minV += borderV;
 		maxV -= borderV;
-		
-		float f5 = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)partialTicks - interpPosX);
-		float f6 = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)partialTicks - interpPosY);
-		float f7 = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTicks - interpPosZ);
-		int i = this.getBrightnessForRender(partialTicks);
-		int j = i >> 16 & 65535;
-		int k = i & 65535;
-		Vec3d[] avec3d = new Vec3d[] {new Vec3d((double)(-rotationX * scale - rotationXY * scale), (double)(-rotationZ * scale), (double)(-rotationYZ * scale - rotationXZ * scale)), new Vec3d((double)(-rotationX * scale + rotationXY * scale), (double)(rotationZ * scale), (double)(-rotationYZ * scale + rotationXZ * scale)), new Vec3d((double)(rotationX * scale + rotationXY * scale), (double)(rotationZ * scale), (double)(rotationYZ * scale + rotationXZ * scale)), new Vec3d((double)(rotationX * scale - rotationXY * scale), (double)(-rotationZ * scale), (double)(rotationYZ * scale - rotationXZ * scale))};
 
-		if (this.particleAngle != 0.0F)
-		{
-			float f8 = this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
-			float f9 = MathHelper.cos(f8 * 0.5F);
-			float f10 = MathHelper.sin(f8 * 0.5F) * (float)cameraViewDir.x;
-			float f11 = MathHelper.sin(f8 * 0.5F) * (float)cameraViewDir.y;
-			float f12 = MathHelper.sin(f8 * 0.5F) * (float)cameraViewDir.z;
-			Vec3d vec3d = new Vec3d((double)f10, (double)f11, (double)f12);
+		float rpx = (float) (currentX - interpPosX);
+		float rpy = (float) (currentY - interpPosY);
+		float rpz = (float) (currentZ - interpPosZ);
 
-			for (int l = 0; l < 4; ++l)
-			{
-				avec3d[l] = vec3d.scale(2.0D * avec3d[l].dotProduct(vec3d)).add(avec3d[l].scale((double)(f9 * f9) - vec3d.dotProduct(vec3d))).add(vec3d.crossProduct(avec3d[l]).scale((double)(2.0F * f9)));
-			}
+		int brightness = this.getBrightnessForRender(partialTicks);
+		int lightmapX = (brightness >> 16) & 65535;
+		int lightmapY = brightness & 65535;
+
+		float v1x = -rotationX * scale - rotationXY * scale;
+		float v1y = -rotationZ * scale;
+		float v1z = -rotationYZ * scale - rotationXZ * scale;
+		float v2x = -rotationX * scale + rotationXY * scale;
+		float v2y = rotationZ * scale;
+		float v2z = -rotationYZ * scale + rotationXZ * scale;
+		float v3x = rotationX * scale + rotationXY * scale;
+		float v3y = rotationZ * scale;
+		float v3z = rotationYZ * scale + rotationXZ * scale;
+		float v4x = rotationX * scale - rotationXY * scale;
+		float v4y = -rotationZ * scale;
+		float v4z = rotationYZ * scale - rotationXZ * scale;
+
+		if(this.particleAngle != 0.0F) {
+			float angle = this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
+			float cos = MathHelper.cos(angle * 0.5F);
+			float rdx = MathHelper.sin(angle * 0.5F) * (float) cameraViewDir.x;
+			float rdy = MathHelper.sin(angle * 0.5F) * (float) cameraViewDir.y;
+			float rdz = MathHelper.sin(angle * 0.5F) * (float) cameraViewDir.z;
+
+			float dotrdrd = cos * cos - dot(rdx, rdy, rdz, rdx, rdy, rdz);
+
+			float dotvrd = 2 * dot(v1x, v1y, v1z, rdx, rdy, rdz);
+			float nx = rdx * dotvrd + v1x * dotrdrd + crossX(rdx, rdy, rdz, v1x, v1y, v1z) * 2 * cos;
+			float ny = rdy * dotvrd + v1y * dotrdrd + crossY(rdx, rdy, rdz, v1x, v1y, v1z) * 2 * cos;
+			float nz = rdz * dotvrd + v1z * dotrdrd + crossZ(rdx, rdy, rdz, v1x, v1y, v1z) * 2 * cos;
+			v1x = nx;
+			v1y = ny;
+			v1z = nz;
+
+			dotvrd = 2 * dot(v2x, v2y, v2z, rdx, rdy, rdz);
+			nx = rdx * dotvrd + v2x * dotrdrd + crossX(rdx, rdy, rdz, v2x, v2y, v2z) * 2 * cos;
+			ny = rdy * dotvrd + v2y * dotrdrd + crossY(rdx, rdy, rdz, v2x, v2y, v2z) * 2 * cos;
+			nz = rdz * dotvrd + v2z * dotrdrd + crossZ(rdx, rdy, rdz, v2x, v2y, v2z) * 2 * cos;
+			v2x = nx;
+			v2y = ny;
+			v2z = nz;
+
+			dotvrd = 2 * dot(v3x, v3y, v3z, rdx, rdy, rdz);
+			nx = rdx * dotvrd + v3x * dotrdrd + crossX(rdx, rdy, rdz, v3x, v3y, v3z) * 2 * cos;
+			ny = rdy * dotvrd + v3y * dotrdrd + crossY(rdx, rdy, rdz, v3x, v3y, v3z) * 2 * cos;
+			nz = rdz * dotvrd + v3z * dotrdrd + crossZ(rdx, rdy, rdz, v3x, v3y, v3z) * 2 * cos;
+			v3x = nx;
+			v3y = ny;
+			v3z = nz;
+
+			dotvrd = 2 * dot(v4x, v4y, v4z, rdx, rdy, rdz);
+			nx = rdx * dotvrd + v4x * dotrdrd + crossX(rdx, rdy, rdz, v4x, v4y, v4z) * 2 * cos;
+			ny = rdy * dotvrd + v4y * dotrdrd + crossY(rdx, rdy, rdz, v4x, v4y, v4z) * 2 * cos;
+			nz = rdz * dotvrd + v4z * dotrdrd + crossZ(rdx, rdy, rdz, v4x, v4y, v4z) * 2 * cos;
+			v4x = nx;
+			v4y = ny;
+			v4z = nz;
 		}
 
-		buff.pos((double)f5 + avec3d[0].x, (double)f6 + avec3d[0].y, (double)f7 + avec3d[0].z).tex((double)maxU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-		buff.pos((double)f5 + avec3d[1].x, (double)f6 + avec3d[1].y, (double)f7 + avec3d[1].z).tex((double)maxU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-		buff.pos((double)f5 + avec3d[2].x, (double)f6 + avec3d[2].y, (double)f7 + avec3d[2].z).tex((double)minU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
-		buff.pos((double)f5 + avec3d[3].x, (double)f6 + avec3d[3].y, (double)f7 + avec3d[3].z).tex((double)minU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		buff.pos((double)rpx + v1x, (double)rpy + v1y, (double)rpz + v1z).tex((double)maxU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
+		buff.pos((double)rpx + v2x, (double)rpy + v2y, (double)rpz + v2z).tex((double)maxU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
+		buff.pos((double)rpx + v3x, (double)rpy + v3y, (double)rpz + v3z).tex((double)minU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
+		buff.pos((double)rpx + v4x, (double)rpy + v4y, (double)rpz + v4z).tex((double)minU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
+	}
+
+	private static float crossX(float x1, float y1, float z1, float x2, float y2, float z2) {
+		return y1 * z2 - z1 * y2;
+	}
+
+	private static float crossY(float x1, float y1, float z1, float x2, float y2, float z2) {
+		return z1 * x2 - x1 * z2;
+	}
+
+	private static float crossZ(float x1, float y1, float z1, float x2, float y2, float z2) {
+		return x1 * y2 - y1 * x2;
+	}
+
+	private static float dot(float x1, float y1, float z1, float x2, float y2, float z2) {
+		return x1 * x2 + y1 * y2 + z1 * z2;
 	}
 
 	@Override
@@ -126,22 +187,25 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 		this.prevPosZ = this.posZ;
 		this.prevFlameScale = this.flameScale;
 
-		move(this.motionX, this.motionY, this.motionZ);
+		this.move(this.motionX, this.motionY, this.motionZ);
 
 		this.motionX *= 0.96;
 		this.motionZ *= 0.96;
 
-		if (this.particleAge++ >= this.particleMaxAge || this.flameScale <= 0) {
+		if(this.particleAge++ >= this.particleMaxAge || this.flameScale <= 0) {
 			this.setExpired();
 		}
-		if (this.particleAge != 0) {
-			if (this.flameScale > 0) {
+		if(this.particleAge != 0) {
+			if(this.flameScale > 0) {
 				this.flameScale -= 0.025;
 			}
 			this.motionY += 0.00008;
 		}
 
-		move(this.motionX, this.motionY, this.motionZ);
+		this.move(this.motionX, this.motionY, this.motionZ);
+
+		IBlockState state = this.world.getBlockState(this.wisp);
+		this.visible = state.getBlock() instanceof BlockWisp ? state.getValue(BlockWisp.VISIBLE) : false;
 	}
 
 	public static final class Factory extends ParticleFactory<Factory, ParticleWisp> {
@@ -160,4 +224,3 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 		}
 	}
 }
-
