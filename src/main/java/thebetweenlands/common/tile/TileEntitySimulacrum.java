@@ -17,6 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
@@ -231,7 +232,7 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 		compound.setInteger("secondaryEffectId", this.effect.id);
 		compound.setBoolean("isActive", this.isActive);
 		compound.setString("customName", this.customName);
-		
+
 		this.mireSnailSpawner.writeToNBT(compound);
 
 		return compound;
@@ -293,11 +294,11 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 	public void setCustomName(String name) {
 		this.customName = name;
 	}
-	
+
 	public String getCustomName() {
 		return this.customName;
 	}
-	
+
 	public Effect getEffect() {
 		return this.effect;
 	}
@@ -671,6 +672,7 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 					}
 				}
 			} else if(entity instanceof EntityPlayer) {
+				EntityPlayer player = (EntityPlayer) entity;
 				IBlessingCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_BLESSING, null);
 
 				if(cap != null && cap.isBlessed()) {
@@ -680,6 +682,18 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 						event.setCanceled(true);
 
 						entity.setHealth(entity.getMaxHealth() * 0.5f);
+
+						int droppedExperience = player.experienceTotal / 3;
+						player.experience = 0;
+						player.experienceLevel = 0;
+						player.experienceTotal = 0;
+						while(droppedExperience > 0) {
+							int xp = EntityXPOrb.getXPSplit(droppedExperience);
+							droppedExperience -= xp;
+							EntityXPOrb xpOrb = new EntityXPOrb(player.world, player.posX, player.posY, player.posZ, xp);
+							xpOrb.delayBeforeCanPickup = 40;
+							player.world.spawnEntity(xpOrb);
+						}
 
 						if(entity.world.rand.nextBoolean()) {
 							BlockPos spawnPoint = PlayerRespawnHandler.getSpawnPointNearPos(entity.world, location, 8, false, 4, 0);
