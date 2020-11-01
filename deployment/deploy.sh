@@ -30,7 +30,7 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     previous_release_tag=$(git describe --tags $(git rev-list --tags --max-count=1 --skip=1) --abbrev=0 --match *-release)
 	echo "Creating list of changes since ${previous_release_tag}..."
 	echo "<details><summary>Changes</summary>" >> release_notes
-    git log ${previous_release_tag}..HEAD --pretty=format:'%an, %ar (%ad):%n%B' --no-merges >> release_notes
+    git log '${previous_release_tag}'..HEAD --since="$(git log -1 --format=%ai '${previous_release_tag}')" --pretty=format:'%an, %ar (%ad):%n%B' --no-merges >> release_notes
 	echo "</details>" >> release_notes
   else
     #Use latest commit message as release note
