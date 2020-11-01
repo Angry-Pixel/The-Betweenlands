@@ -30,6 +30,7 @@ public class BlockShelfFungus extends BasicBlock {
 
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		return state.withProperty(IS_TOP, worldIn.getBlockState(pos.up()).getBlock() != this);
+		IBlockState stateAbove = worldIn.getBlockState(pos.up());
+		return state.withProperty(IS_TOP, stateAbove.getBlock() != this && !stateAbove.isFullCube());
 	}
 }
