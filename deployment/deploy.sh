@@ -25,9 +25,9 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   echo "" >> release_notes
 
   if [[ "$release_type" == "release" ]]; then
-    #Get latest release tag and then list commits since that release as release notes
-    latest_release_tag=$(git describe --tags $(git rev-list --tags --max-count=1) --abbrev=0 --match *-release --exclude ${latest_release_tag})
-    git log ${latest_release_tag}..HEAD --pretty=format:'%an, %ar (%ad):%n%B' --no-merges >> release_notes
+    #Get previous release tag and then list commits since that release as release notes
+    previous_release_tag=$(git describe --tags $(git rev-list --tags --max-count=1 --skip=1) --abbrev=0 --match *-release)
+    git log ${previous_release_tag}..HEAD --pretty=format:'%an, %ar (%ad):%n%B' --no-merges >> release_notes
   else
     #Use latest commit message as release note
     git log -1 --pretty=format:'%an, %ar (%ad):%n%B' >> release_notes
