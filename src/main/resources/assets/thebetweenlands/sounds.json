@@ -1132,6 +1132,11 @@
       "thebetweenlands:stalker_scream"
     ]
   },
+  "stalker_screech": {
+    "sounds": [
+      "thebetweenlands:stalker_screech"
+    ]
+  },
   "stalker_step": {
     "sounds": [
       "thebetweenlands:stalker_step_1",
@@ -1820,6 +1825,11 @@
   "resurrection": {
     "sounds": [
       "thebetweenlands:resurrection"
+    ]
+  },
+  "simulacrum_break": {
+    "sounds": [
+      "thebetweenlands:simulacrum_break"
     ]
   },
   "worm_throw": {

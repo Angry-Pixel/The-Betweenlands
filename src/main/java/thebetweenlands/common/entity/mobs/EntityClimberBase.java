@@ -258,6 +258,10 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 	public BlockPos getPathingTarget() {
 		return this.dataManager.get(PATHING_TARGET).orNull();
 	}
+	
+	protected boolean canAttachToWalls() {
+		return !this.isInWater();
+	}
 
 	protected void updateOffsetsAndOrientation() {
 		Vec3d p = this.getPositionVector();
@@ -273,7 +277,8 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 		this.prevStickingOffsetY = this.stickingOffsetY;
 		this.prevStickingOffsetZ = this.stickingOffsetZ;
 
-		Pair<Vec3d, Vec3d> closestSmoothPoint = BoxSmoothingUtil.findClosestSmoothPoint(boxes, this.collisionsSmoothingRange, 1.0f, 0.005f, 20, 0.05f, s);
+		Pair<Vec3d, Vec3d> closestSmoothPoint = null;
+		if(this.canAttachToWalls()) closestSmoothPoint = BoxSmoothingUtil.findClosestSmoothPoint(boxes, this.collisionsSmoothingRange, 1.0f, 0.005f, 20, 0.05f, s);
 
 		if(closestSmoothPoint != null) {
 			this.stickingOffsetX = MathHelper.clamp(closestSmoothPoint.getLeft().x - p.x, -this.width / 2, this.width / 2);
@@ -283,7 +288,7 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 			this.orientationNormal = closestSmoothPoint.getRight();
 		} else {
 			this.stickingOffsetX *= 0.6f;
-			this.stickingOffsetY *= 0.6f;
+			this.stickingOffsetY = this.stickingOffsetY + (0.4f - this.stickingOffsetY) * 0.6f;
 			this.stickingOffsetZ *= 0.6f;
 
 			this.orientationNormal = new Vec3d(this.orientationNormal.x * 0.6f, this.orientationNormal.y + (1.0f - this.orientationNormal.y) * 0.4f, this.orientationNormal.z * 0.6f).normalize();
@@ -305,148 +310,152 @@ public abstract class EntityClimberBase extends EntityCreature implements IEntit
 		Vec3d forwardVector = orientation.getForward(this.rotationYaw, 0);
 		Vec3d upVector = orientation.getForward(this.rotationYaw, -90);
 
-		if(this.isServerWorld() || this.canPassengerSteer()) {
-			Pair<EnumFacing, Vec3d> walkingSide = this.getWalkingSide();
+		if(this.isInWater()) {
+			super.travel(strafe, vertical, forward);
+		} else {
+			if(this.isServerWorld() || this.canPassengerSteer()) {
+				Pair<EnumFacing, Vec3d> walkingSide = this.getWalkingSide();
 
-			Vec3d stickingForce = this.getStickingForce(walkingSide);
+				Vec3d stickingForce = this.getStickingForce(walkingSide);
 
-			if(forward != 0) {
+				if(forward != 0) {
+					float slipperiness = 0.91f;
+
+					if(this.onGround) {
+						BlockPos offsetPos = new BlockPos(this).offset(walkingSide.getLeft());
+						IBlockState offsetState = this.world.getBlockState(offsetPos);
+						slipperiness = offsetState.getBlock().getSlipperiness(offsetState, this.world, offsetPos, this) * 0.91f;
+					}
+
+					float friction = (float)forward * 0.16277136F / (slipperiness * slipperiness * slipperiness);
+
+					float f = (float)(forward * forward);
+					if(f >= 1.0E-4F) {
+						f = Math.max(MathHelper.sqrt(f), 1.0f);
+						f = friction / f;
+
+						Vec3d forwardOffset = new Vec3d(forwardVector.x * forward * f, forwardVector.y * forward * f, forwardVector.z * forward * f);
+
+						double px = this.posX;
+						double py = this.posY;
+						double pz = this.posZ;
+						double mx = this.motionX;
+						double my = this.motionY;
+						double mz = this.motionZ;
+						AxisAlignedBB aabb = this.getEntityBoundingBox();
+
+						//Probe actual movement vector
+						this.move(MoverType.SELF, forwardOffset.x, forwardOffset.y, forwardOffset.z);
+
+						Vec3d movementDir = new Vec3d(this.posX - px, this.posY - py, this.posZ - pz).normalize();
+
+						this.setEntityBoundingBox(aabb);
+						this.resetPositionToBB();
+						this.motionX = mx;
+						this.motionY = my;
+						this.motionZ = mz;
+
+						//Probe collision normal
+						Vec3d probeVector = new Vec3d(Math.abs(movementDir.x) < 0.001D ? -Math.signum(upVector.x) : 0, Math.abs(movementDir.y) < 0.001D ? -Math.signum(upVector.y) : 0, Math.abs(movementDir.z) < 0.001D ? -Math.signum(upVector.z) : 0).normalize().scale(0.0001D);
+						this.move(MoverType.SELF, probeVector.x, probeVector.y, probeVector.z);
+
+						Vec3d collisionNormal = new Vec3d(Math.abs(this.posX - px - probeVector.x) > 0.000001D ? Math.signum(-probeVector.x) : 0, Math.abs(this.posY - py - probeVector.y) > 0.000001D ? Math.signum(-probeVector.y) : 0, Math.abs(this.posZ - pz - probeVector.z) > 0.000001D ? Math.signum(-probeVector.z) : 0).normalize();
+
+						this.setEntityBoundingBox(aabb);
+						this.resetPositionToBB();
+						this.motionX = mx;
+						this.motionY = my;
+						this.motionZ = mz;
+
+						//Movement vector projected to surface
+						Vec3d surfaceMovementDir = movementDir.subtract(collisionNormal.scale(collisionNormal.dotProduct(movementDir))).normalize();
+
+						boolean isInnerCorner = Math.abs(collisionNormal.x) + Math.abs(collisionNormal.y) + Math.abs(collisionNormal.z) > 1.0001f;
+
+						//Only project movement vector to surface if not moving across inner corner, otherwise it'd get stuck in the corner
+						if(!isInnerCorner) {
+							movementDir = surfaceMovementDir;
+						}
+
+						//Nullify sticking force along movement vector projected to surface
+						stickingForce = stickingForce.subtract(surfaceMovementDir.scale(surfaceMovementDir.normalize().dotProduct(stickingForce)));
+
+						float moveSpeed = forward * f;
+						this.motionX += movementDir.x * moveSpeed;
+						this.motionY += movementDir.y * moveSpeed;
+						this.motionZ += movementDir.z * moveSpeed;
+					}
+				}
+
+				this.motionX += stickingForce.x;
+				this.motionY += stickingForce.y;
+				this.motionZ += stickingForce.z;
+
+				double px = this.posX;
+				double py = this.posY;
+				double pz = this.posZ;
+				double mx = this.motionX;
+				double my = this.motionY;
+				double mz = this.motionZ;
+
+				this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
+
+				this.prevAttachedSides = this.attachedSides;
+				this.attachedSides = new Vec3d(this.posX == px ? -Math.signum(mx) : 0, this.posY == py ? -Math.signum(my) : 0, this.posZ == pz ? -Math.signum(mz) : 0);
+
+				boolean detachedX = this.attachedSides.x != this.prevAttachedSides.x;
+				boolean detachedY = this.attachedSides.y != this.prevAttachedSides.y;
+				boolean detachedZ = this.attachedSides.z != this.prevAttachedSides.z;
+
+				if(detachedX || detachedY || detachedZ) {
+					//Offset so that AABB is moved above the new surface
+					this.move(MoverType.SELF, detachedX ? -this.prevAttachedSides.x * 0.25f : 0, detachedY ? -this.prevAttachedSides.y * 0.25f : 0, detachedZ ? -this.prevAttachedSides.z * 0.25f : 0);
+
+					Vec3d axis = this.prevAttachedSides.normalize();
+					Vec3d attachVector = upVector.scale(-1);
+					attachVector = attachVector.subtract(axis.scale(axis.dotProduct(attachVector))).normalize();
+
+					double attachDst = MathHelper.sqrt(mx * mx + my * my + mz * mz) + 0.1f;
+
+					AxisAlignedBB aabb = this.getEntityBoundingBox();
+					mx = this.motionX;
+					my = this.motionY;
+					mz = this.motionZ;
+
+					//Offset AABB towards new surface until it touches
+					for(int i = 0; i < 10 && !this.onGround; i++) {
+						this.move(MoverType.SELF, attachVector.x * attachDst, attachVector.y * attachDst, attachVector.z * attachDst);
+					}
+
+					if(!this.onGround) {
+						this.setEntityBoundingBox(aabb);
+						this.resetPositionToBB();
+						this.motionX = mx;
+						this.motionY = my;
+						this.motionZ = mz;
+					}
+
+					this.motionX = this.motionY = this.motionZ = 0;
+				}
+
 				float slipperiness = 0.91f;
 
 				if(this.onGround) {
+					this.fallDistance = 0;
+
 					BlockPos offsetPos = new BlockPos(this).offset(walkingSide.getLeft());
 					IBlockState offsetState = this.world.getBlockState(offsetPos);
-					slipperiness = offsetState.getBlock().getSlipperiness(offsetState, this.world, offsetPos, this) * 0.91f;
+					slipperiness = offsetState.getBlock().getSlipperiness(offsetState, this.world, offsetPos, this) * 0.91F;
 				}
 
-				float friction = (float)forward * 0.16277136F / (slipperiness * slipperiness * slipperiness);
+				Vec3d motion = new Vec3d(this.motionX, this.motionY, this.motionZ);
+				Vec3d orthogonalMotion = upVector.scale(upVector.dotProduct(motion));
+				Vec3d tangentialMotion = motion.subtract(orthogonalMotion);
 
-				float f = (float)(forward * forward);
-				if(f >= 1.0E-4F) {
-					f = Math.max(MathHelper.sqrt(f), 1.0f);
-					f = friction / f;
-
-					Vec3d forwardOffset = new Vec3d(forwardVector.x * forward * f, forwardVector.y * forward * f, forwardVector.z * forward * f);
-
-					double px = this.posX;
-					double py = this.posY;
-					double pz = this.posZ;
-					double mx = this.motionX;
-					double my = this.motionY;
-					double mz = this.motionZ;
-					AxisAlignedBB aabb = this.getEntityBoundingBox();
-
-					//Probe actual movement vector
-					this.move(MoverType.SELF, forwardOffset.x, forwardOffset.y, forwardOffset.z);
-
-					Vec3d movementDir = new Vec3d(this.posX - px, this.posY - py, this.posZ - pz).normalize();
-
-					this.setEntityBoundingBox(aabb);
-					this.resetPositionToBB();
-					this.motionX = mx;
-					this.motionY = my;
-					this.motionZ = mz;
-
-					//Probe collision normal
-					Vec3d probeVector = new Vec3d(Math.abs(movementDir.x) < 0.001D ? -Math.signum(upVector.x) : 0, Math.abs(movementDir.y) < 0.001D ? -Math.signum(upVector.y) : 0, Math.abs(movementDir.z) < 0.001D ? -Math.signum(upVector.z) : 0).normalize().scale(0.0001D);
-					this.move(MoverType.SELF, probeVector.x, probeVector.y, probeVector.z);
-
-					Vec3d collisionNormal = new Vec3d(Math.abs(this.posX - px - probeVector.x) > 0.000001D ? Math.signum(-probeVector.x) : 0, Math.abs(this.posY - py - probeVector.y) > 0.000001D ? Math.signum(-probeVector.y) : 0, Math.abs(this.posZ - pz - probeVector.z) > 0.000001D ? Math.signum(-probeVector.z) : 0).normalize();
-
-					this.setEntityBoundingBox(aabb);
-					this.resetPositionToBB();
-					this.motionX = mx;
-					this.motionY = my;
-					this.motionZ = mz;
-
-					//Movement vector projected to surface
-					Vec3d surfaceMovementDir = movementDir.subtract(collisionNormal.scale(collisionNormal.dotProduct(movementDir))).normalize();
-
-					boolean isInnerCorner = Math.abs(collisionNormal.x) + Math.abs(collisionNormal.y) + Math.abs(collisionNormal.z) > 1.0001f;
-
-					//Only project movement vector to surface if not moving across inner corner, otherwise it'd get stuck in the corner
-					if(!isInnerCorner) {
-						movementDir = surfaceMovementDir;
-					}
-
-					//Nullify sticking force along movement vector projected to surface
-					stickingForce = stickingForce.subtract(surfaceMovementDir.scale(surfaceMovementDir.normalize().dotProduct(stickingForce)));
-
-					float moveSpeed = forward * f;
-					this.motionX += movementDir.x * moveSpeed;
-					this.motionY += movementDir.y * moveSpeed;
-					this.motionZ += movementDir.z * moveSpeed;
-				}
+				this.motionX = tangentialMotion.x * slipperiness + orthogonalMotion.x * 0.98f;
+				this.motionY = tangentialMotion.y * slipperiness + orthogonalMotion.y * 0.98f;
+				this.motionZ = tangentialMotion.z * slipperiness + orthogonalMotion.z * 0.98f;
 			}
-
-			this.motionX += stickingForce.x;
-			this.motionY += stickingForce.y;
-			this.motionZ += stickingForce.z;
-
-			double px = this.posX;
-			double py = this.posY;
-			double pz = this.posZ;
-			double mx = this.motionX;
-			double my = this.motionY;
-			double mz = this.motionZ;
-
-			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-
-			this.prevAttachedSides = this.attachedSides;
-			this.attachedSides = new Vec3d(this.posX == px ? -Math.signum(mx) : 0, this.posY == py ? -Math.signum(my) : 0, this.posZ == pz ? -Math.signum(mz) : 0);
-
-			boolean detachedX = this.attachedSides.x != this.prevAttachedSides.x;
-			boolean detachedY = this.attachedSides.y != this.prevAttachedSides.y;
-			boolean detachedZ = this.attachedSides.z != this.prevAttachedSides.z;
-
-			if(detachedX || detachedY || detachedZ) {
-				//Offset so that AABB is moved above the new surface
-				this.move(MoverType.SELF, detachedX ? -this.prevAttachedSides.x * 0.25f : 0, detachedY ? -this.prevAttachedSides.y * 0.25f : 0, detachedZ ? -this.prevAttachedSides.z * 0.25f : 0);
-
-				Vec3d axis = this.prevAttachedSides.normalize();
-				Vec3d attachVector = upVector.scale(-1);
-				attachVector = attachVector.subtract(axis.scale(axis.dotProduct(attachVector))).normalize();
-
-				double attachDst = MathHelper.sqrt(mx * mx + my * my + mz * mz) + 0.1f;
-
-				AxisAlignedBB aabb = this.getEntityBoundingBox();
-				mx = this.motionX;
-				my = this.motionY;
-				mz = this.motionZ;
-
-				//Offset AABB towards new surface until it touches
-				for(int i = 0; i < 10 && !this.onGround; i++) {
-					this.move(MoverType.SELF, attachVector.x * attachDst, attachVector.y * attachDst, attachVector.z * attachDst);
-				}
-
-				if(!this.onGround) {
-					this.setEntityBoundingBox(aabb);
-					this.resetPositionToBB();
-					this.motionX = mx;
-					this.motionY = my;
-					this.motionZ = mz;
-				}
-
-				this.motionX = this.motionY = this.motionZ = 0;
-			}
-
-			float slipperiness = 0.91f;
-
-			if(this.onGround) {
-				this.fallDistance = 0;
-
-				BlockPos offsetPos = new BlockPos(this).offset(walkingSide.getLeft());
-				IBlockState offsetState = this.world.getBlockState(offsetPos);
-				slipperiness = offsetState.getBlock().getSlipperiness(offsetState, this.world, offsetPos, this) * 0.91F;
-			}
-
-			Vec3d motion = new Vec3d(this.motionX, this.motionY, this.motionZ);
-			Vec3d orthogonalMotion = upVector.scale(upVector.dotProduct(motion));
-			Vec3d tangentialMotion = motion.subtract(orthogonalMotion);
-
-			this.motionX = tangentialMotion.x * slipperiness + orthogonalMotion.x * 0.98f;
-			this.motionY = tangentialMotion.y * slipperiness + orthogonalMotion.y * 0.98f;
-			this.motionZ = tangentialMotion.z * slipperiness + orthogonalMotion.z * 0.98f;
 		}
 
 		this.updateOffsetsAndOrientation();

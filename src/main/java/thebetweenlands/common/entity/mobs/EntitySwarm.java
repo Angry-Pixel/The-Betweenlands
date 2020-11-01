@@ -15,6 +15,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,7 +24,9 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -53,8 +56,8 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 
 	public EntitySwarm(World world, float swarmSize) {
 		super(world);
-		this.isImmuneToFire = true;
 		this.setSwarmSize(swarmSize);
+		this.experienceValue = 5;
 	}
 
 	@Override
@@ -65,8 +68,9 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(0, new AIMerge(this, 50, 1.0D));
-		this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, false));
+		this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(1, new AIMerge(this, 50, 1.0D));
+		this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, false));
 		this.targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 1, false, false, null));
 	}
 
@@ -78,7 +82,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(24.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 	}
@@ -128,7 +132,21 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 		super.onUpdate();
 
 		if(!this.world.isRemote) {
-			float range = 3.5f;
+			if(this.isBurning() || this.isInWater()) {
+				if(this.getSwarmSize() > 0.1f) {
+					this.setSwarmSize(Math.max(0.1f, this.getSwarmSize() - 0.005f));
+				}
+
+				if(this.isBurning() && this.rand.nextInt(10) == 0) {
+					List<EntitySwarm> swarms = this.world.getEntitiesWithinAABB(EntitySwarm.class, this.getEntityBoundingBox().grow(1), s -> !s.isBurning());
+
+					for(EntitySwarm swarm : swarms) {
+						swarm.setFire(2);
+					}
+				}
+			}
+
+			float range = 3.25f;
 
 			List<EntityPlayer> players = this.world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(range));
 
@@ -139,7 +157,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 					ISwarmedCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_SWARMED, null);
 
 					if(cap != null) {
-						cap.setSwarmedStrength(cap.getSwarmedStrength() + (1.0f - (float) dst / range) * 0.02f * MathHelper.clamp(this.getSwarmSize() * 1.75f, 0, 1));
+						cap.setSwarmedStrength(cap.getSwarmedStrength() + (1.0f - (float) dst / range) * 0.025f * MathHelper.clamp(this.getSwarmSize() * 1.75f, 0, 1));
 
 						cap.setDamage((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
 					}
@@ -151,7 +169,21 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 	}
 
 	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		return null;
+	}
+
+	@Override
+	protected SoundEvent getDeathSound() {
+		return null;
+	}
+
+	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if(source.isFireDamage()) {
+			amount *= 2;
+		}
+
 		boolean attacked = super.attackEntityFrom(source, amount);
 
 		if(this.isEntityAlive() && attacked && amount > 2 && (this.rand.nextFloat() * 16 < amount || this.getHealth() < this.getMaxHealth() * 0.25f)) {
@@ -164,7 +196,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 	protected boolean split() {
 		float swarmSize = this.getSwarmSize();
 
-		if(swarmSize > 0.25f) {
+		if(swarmSize > 0.3f) {
 			float initialSwarmSize = swarmSize;
 
 			float fraction = initialSwarmSize * 0.25f + initialSwarmSize * (this.rand.nextFloat() - 0.5f) * 0.05f;
@@ -176,8 +208,12 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 				EntitySwarm swarm = new EntitySwarm(this.world, fraction);
 				swarmSize -= fraction;
 
-				swarm.setHealth(this.getHealth());
+				swarm.setHealth(this.getHealth() * 0.66f);
 				swarm.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+
+				if(this.isBurning()) {
+					swarm.setFire(40);
+				}
 
 				float mx = this.rand.nextFloat() - 0.5f;
 				float mz = this.rand.nextFloat() - 0.5f;
@@ -194,6 +230,8 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 				this.world.spawnEntity(swarm);
 			}
 
+			this.setHealth(this.getHealth() * 0.5f);
+
 			return true;
 		}
 
@@ -204,7 +242,11 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 		swarm.setSwarmSize(swarm.getSwarmSize() + this.getSwarmSize());
 
 		if(this.getHealth() < swarm.getHealth()) {
-			swarm.setHealth((this.getHealth() + swarm.getHealth()) * 0.5f);
+			swarm.setHealth((this.getHealth() / 0.66f + swarm.getHealth()) * 0.5f);
+		}
+
+		if(this.isBurning()) {
+			swarm.setFire(2);
 		}
 
 		this.setDead();
@@ -214,7 +256,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 	protected void updateClient() {
 		Entity view = Minecraft.getMinecraft().getRenderViewEntity();
 
-		if(view != null && view.getDistance(this) < 16) {
+		if(view != null && view.getDistance(this) < 16 && !this.isInWater()) {
 			SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
 			if(this.idleSound == null || !handler.isSoundPlaying(this.idleSound)) {
 				this.idleSound = new EntitySound<Entity>(SoundRegistry.SWARM_IDLE, SoundCategory.HOSTILE, this, e -> e.isEntityAlive(), 0.8f);
@@ -251,6 +293,10 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 				double x = this.posX + this.motionX * 5 + rx * len * (this.width + 0.3f) * swarmSize * 0.5f;
 				double y = this.posY + this.motionY * 5 - 0.15f * swarmSize + (this.height + 0.3f) * swarmSize * 0.5f + ry * len * (this.height + 0.3f) * swarmSize;
 				double z = this.posZ + this.motionZ * 5 + rz * len * (this.width + 0.3f) * swarmSize * 0.5f;
+
+				if(this.isBurning() && this.rand.nextInt(3) == 0) {
+					this.world.spawnParticle(EnumParticleTypes.LAVA, x, y, z, 0, 0, 0);
+				}
 
 				if(this.rand.nextInt(8) == 0) {
 					if(this.rand.nextInt(3) == 0) {
@@ -342,6 +388,12 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 				}
 			}
 		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean canRenderOnFire() {
+		return false;
 	}
 
 	public static class AIMerge extends EntityAIBase {

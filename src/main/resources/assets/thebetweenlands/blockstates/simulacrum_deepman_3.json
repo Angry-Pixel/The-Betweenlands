@@ -28,14 +28,14 @@
 		"model": "thebetweenlands:internal/simulacrum_deepman_3",
 		"transform": {
 			"gui": {
-	            "rotation": [ 30, 45, 0 ],
-	            "translation": [ 0, 0, 0],
-	            "scale":[ 0.625, 0.625, 0.625 ]
+	            "rotation": [ 30, 225, 0 ],
+	            "translation": [ 0, 0.1, 0],
+	            "scale":[ 0.85, 0.85, 0.85 ]
 	        },
 	        "ground": {
 	            "rotation": [ 0, 0, 0 ],
 	            "translation": [ 0, 0, 0],
-	            "scale":[ 0.25, 0.25, 0.25 ]
+	            "scale":[ 0.5, 0.5, 0.5 ]
 	        },
 	        "head": {
 	            "rotation": [ 0, 180, 0 ],
@@ -43,29 +43,29 @@
 	            "scale":[ 1, 1, 1]
 	        },
 	        "fixed": {
-	            "rotation": [ 0, 180, 0 ],
-	            "translation": [ 0, 0, 0],
-	            "scale":[ 0.5, 0.5, 0.5 ]
+	            "rotation": [ 0, 0, 0 ],
+	            "translation": [ 0, 0.1, 0],
+	            "scale":[ 0.75, 0.75, 0.75 ]
 	        },
 	        "thirdperson_righthand": {
 	            "rotation": [ 75, 315, 0 ],
-	            "translation": [ 0, 0, 0],
-	            "scale": [ 0.375, 0.375, 0.375 ]
+	            "translation": [ 0, 0.15, 0.1],
+	            "scale": [ 0.5, 0.5, 0.5 ]
 	        },
 	        "firstperson_righthand": {
-	            "rotation": [ 0, 315, 0 ],
-	            "translation": [ 0, 0, 0],
-	            "scale": [ 0.4, 0.4, 0.4 ]
+	            "rotation": [ 0, 135, 0 ],
+	            "translation": [ 0, 0.15, 0],
+	            "scale": [ 0.5, 0.5, 0.5 ]
 	        },
 	        "thirdperson_lefthand": {
 	            "rotation": [ 75, 315, 0 ],
-	            "translation": [ 0, 0, 0],
-	            "scale": [ 0.375, 0.375, 0.375 ]
+	            "translation": [ 0, 0.15, 0.1],
+	            "scale": [ 0.5, 0.5, 0.5 ]
 	        },
 	        "firstperson_lefthand": {
-	            "rotation": [ 0, 315, 0 ],
-	            "translation": [ 0, 0, 0],
-	            "scale": [ 0.4, 0.4, 0.4 ]
+	            "rotation": [ 0, 135, 0 ],
+	            "translation": [ 0, 0.15, 0],
+	            "scale": [ 0.5, 0.5, 0.5 ]
 	        }
 		}
 	}

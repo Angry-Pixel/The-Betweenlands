@@ -50,6 +50,8 @@ public class SwarmedCapability extends EntityCapability<SwarmedCapability, ISwar
 	private int damageTimer;
 	private float damage;
 
+	private float lastYaw, lastPitch, lastYawDelta, lastPitchDelta;
+
 	@Override
 	public void setSwarmedStrength(float strength) {
 		float newStrength = MathHelper.clamp(strength, 0, 1);
@@ -98,6 +100,38 @@ public class SwarmedCapability extends EntityCapability<SwarmedCapability, ISwar
 	}
 
 	@Override
+	public void setLastRotations(float yaw, float pitch) {
+		this.lastYaw = yaw;
+		this.lastPitch = pitch;
+	}
+
+	@Override
+	public float getLastYaw() {
+		return this.lastYaw;
+	}
+
+	@Override
+	public float getLastPitch() {
+		return this.lastPitch;
+	}
+
+	@Override
+	public void setLastRotationDeltas(float yaw, float pitch) {
+		this.lastYawDelta = yaw;
+		this.lastPitchDelta = pitch;
+	}
+
+	@Override
+	public float getLastYawDelta() {
+		return this.lastYawDelta;
+	}
+
+	@Override
+	public float getLastPitchDelta() {
+		return this.lastPitchDelta;
+	}
+
+	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		nbt.setFloat("strength", this.strength);
 		nbt.setInteger("hurtTimer", this.hurtTimer);
@@ -139,13 +173,26 @@ public class SwarmedCapability extends EntityCapability<SwarmedCapability, ISwar
 				}
 
 				if(cap.getSwarmedStrength() > 0) {
-					if(event.player.isInsideOfMaterial(Material.WATER)) {
+					if(event.player.isInsideOfMaterial(Material.WATER) || event.player.isBurning()) {
 						cap.setSwarmedStrength(0);
 					} else if(event.player.isSwingInProgress || (event.player.posY - event.player.prevPosY) > 0.1f || event.player.isSneaking()) {
 						cap.setSwarmedStrength(cap.getSwarmedStrength() - 0.01f);
 						cap.setHurtTimer(5);
 						event.player.setSneaking(false);
 					}
+
+					float dYaw = MathHelper.wrapDegrees(event.player.rotationYaw - cap.getLastYaw());
+					float dPitch = MathHelper.wrapDegrees(event.player.rotationPitch - cap.getLastPitch());
+					float ddYaw = MathHelper.wrapDegrees(dYaw - cap.getLastYawDelta());
+					float ddPitch = MathHelper.wrapDegrees(dPitch - cap.getLastPitchDelta());
+					float ddRot = MathHelper.sqrt(ddYaw * ddYaw + ddPitch * ddPitch);
+
+					if(ddRot > 30) {
+						cap.setSwarmedStrength(cap.getSwarmedStrength() - (ddRot - 30) * 0.001f);
+					}
+
+					cap.setLastRotations(event.player.rotationYaw, event.player.rotationPitch);
+					cap.setLastRotationDeltas(dYaw, dPitch);
 				}
 
 				if(cap.getSwarmedStrength() < 0.1f) {

@@ -9,8 +9,11 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.google.common.collect.ImmutableSet;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -24,10 +27,14 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.EntitySenses;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNodeType;
@@ -35,6 +42,7 @@ import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -47,16 +55,26 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.movement.CustomPathFinder;
 import thebetweenlands.common.entity.movement.ObstructionAwarePathNavigateClimber;
 import thebetweenlands.common.entity.movement.ObstructionAwarePathNavigateGround;
 import thebetweenlands.common.entity.movement.ObstructionAwareWalkNodeProcessor;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 public class EntityStalker extends EntityClimberBase implements IMob {
+	public static final DataParameter<Boolean> SCREECHING = EntityDataManager.createKey(EntityStalker.class, DataSerializers.BOOLEAN);
+	public static final DataParameter<Boolean> DROP = EntityDataManager.createKey(EntityStalker.class, DataSerializers.BOOLEAN);
+
 	protected boolean restrictToPitstone = false;
 
 	protected int maxPathingTargetHeight = 0;
@@ -77,8 +95,6 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 	protected int inViewTimer = 0;
 
-	protected boolean drop = false;
-
 	protected int checkSeenTimer = 20;
 	protected boolean canStalkerBeSeen = false;
 
@@ -89,14 +105,20 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 	public int animationOffset;
 
+	private boolean canCallAllies = true;
+
+	public int screechingTicks = 0;
+	public int prevScreechingTicks = 0;
+
 	public EntityStalker(World world) {
 		super(world);
+		this.experienceValue = 30;
 		this.maxPathingTargetHeight = 10;
-		eyeRotation = new Vec3d(0, 0, 0);
-		prevEyeRotation = new Vec3d(0, 0, 0);
-		eyeRotationTarget = new Vec3d(0, 0, 0);
-		animationOffset = rand.nextInt(200);
-		nextEyeRotate = 1;
+		this.eyeRotation = new Vec3d(0, 0, 0);
+		this.prevEyeRotation = new Vec3d(0, 0, 0);
+		this.eyeRotationTarget = new Vec3d(0, 0, 0);
+		this.animationOffset = rand.nextInt(200);
+		this.nextEyeRotate = 1;
 	}
 
 	@Override
@@ -104,14 +126,22 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new AIDropAttack(this));
 		this.tasks.addTask(2, new AIScurry(this, 1.75f));
-		this.tasks.addTask(3, new AIBreakLightSources(this));
-		this.tasks.addTask(4, new EntityAIAttackMelee(this, 1.0D, false));
-		this.tasks.addTask(5, new EntityAIMoveTowardsRestriction(this, 1.0D));
-		this.tasks.addTask(6, new EntityAIWander(this, 0.75D));
+		this.tasks.addTask(3, new AIScreech(this, 80, 160, 1, 3));
+		this.tasks.addTask(4, new AIBreakLightSources(this));
+		this.tasks.addTask(5, new EntityAIAttackMelee(this, 1.1D, false));
+		this.tasks.addTask(6, new EntityAIMoveTowardsRestriction(this, 1.0D));
+		this.tasks.addTask(7, new EntityAIWander(this, 0.75D));
 		this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		this.tasks.addTask(8, new EntityAILookIdle(this));
 
 		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 1, false, false, null));
+	}
+
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+		this.dataManager.register(SCREECHING, false);
+		this.dataManager.register(DROP, false);
 	}
 
 	@Override
@@ -120,7 +150,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 
-		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(10.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(40.0D);
@@ -139,12 +169,38 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
 		nbt.setBoolean("restrictToPitstone", this.restrictToPitstone);
+		nbt.setBoolean("canCallAllies", this.canCallAllies);
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
 		this.restrictToPitstone = nbt.getBoolean("restrictToPitstone");
+		this.canCallAllies = nbt.getBoolean("canCallAllies");
+	}
+
+	public void setCanCallAllies(boolean canCall) {
+		this.canCallAllies = canCall;
+	}
+
+	public boolean canCallAllies() {
+		return this.canCallAllies;
+	}
+
+	public void setScreeching(boolean screeching) {
+		this.dataManager.set(SCREECHING, screeching);
+	}
+
+	public boolean isScreeching() {
+		return this.dataManager.get(SCREECHING);
+	}
+
+	public void setDropping(boolean dropping) {
+		this.dataManager.set(DROP, dropping);
+	}
+
+	public boolean isDropping() {
+		return this.dataManager.get(DROP);
 	}
 
 	@Override
@@ -285,11 +341,16 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 	@Override
 	public Vec3d getStickingForce(Pair<EnumFacing, Vec3d> walkingSide) {
-		if(this.drop) {
+		if(this.isDropping()) {
 			return new Vec3d(0, -0.08D, 0);
 		}
 
 		return super.getStickingForce(walkingSide);
+	}
+
+	@Override
+	protected boolean canAttachToWalls() {
+		return super.canAttachToWalls() && !this.isDropping();
 	}
 
 	private boolean canSeePosition(Vec3d start, Vec3d end) {
@@ -298,9 +359,22 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 	@Override
 	public void onUpdate() {
-		this.drop = false;
+		if(!this.world.isRemote) {
+			this.setDropping(false);
+		}
 
 		super.onUpdate();
+
+		this.prevScreechingTicks = this.screechingTicks;
+		if(this.isScreeching()) {
+			this.screechingTicks++;
+
+			if(this.screechingTicks == 40) {
+				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.STALKER_SCREECH, SoundCategory.HOSTILE, this.getSoundVolume(), 1);
+			}
+		} else {
+			this.screechingTicks = Math.min(Math.max(this.screechingTicks - 2, 0), 40);
+		}
 
 		if(!this.world.isRemote) {
 			boolean wasFleeingFromView = this.isFleeingFromView;
@@ -322,7 +396,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 						AxisAlignedBB aabb = this.getEntityBoundingBox();
 						Vec3d center = new Vec3d((aabb.minX + aabb.maxX) * 0.5D, (aabb.minY + aabb.maxY) * 0.5D, (aabb.minZ + aabb.maxZ) * 0.5D);
-						
+
 						if(this.checkSeenTimer++ >= 20) {
 							this.checkSeenTimer = 0;
 
@@ -403,6 +477,10 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 			if(this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
 				this.setDead();
 			}
+		} else {
+			if(this.screechingTicks > 40 && this.ticksExisted % 2 == 0) {
+				this.spawnScreechingParticles();
+			}
 		}
 
 		// Eye animation
@@ -412,6 +490,24 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 			nextEyeRotate = rand.nextInt(15) + 20;
 		}
 		eyeRotation = eyeRotation.add(eyeRotationTarget.subtract(eyeRotation).scale(0.5));
+	}
+
+	@SideOnly(Side.CLIENT)
+	protected void spawnScreechingParticles() {
+		float angle = (float) Math.toRadians(-this.renderYawOffset);
+		float ox = MathHelper.sin(angle) * 0.725f;
+		float oz = MathHelper.cos(angle) * 0.725f;
+
+		float screechingStrength = MathHelper.clamp((this.screechingTicks - 20) / 30.0f, 0, 1);
+		float screechingHeadRotationStrength = MathHelper.sin(this.ticksExisted * 0.4f) * screechingStrength;
+		float osx = MathHelper.sin(angle + (float)Math.PI * 0.5f) * 0.05f * screechingHeadRotationStrength;
+		float osz = MathHelper.cos(angle + (float)Math.PI * 0.5f) * 0.05f * screechingHeadRotationStrength;
+
+		Particle particle = BLParticles.SONIC_SCREAM.create(this.world, this.posX + ox, this.posY + 1.5f, this.posZ + oz, 
+				ParticleArgs.get().withMotion(osx, 0.3f, osz).withScale(10).withData(30, MathHelper.floor(this.ticksExisted * 3.3f))
+				.withColor(1.0f, 0.9f, 0.8f, 1.0f));
+
+		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING, particle);
 	}
 
 	@Override
@@ -424,6 +520,10 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 		if(super.attackEntityFrom(source, amount)) {
 			if(this.getAttackTarget() != null && source.getTrueSource() == this.getAttackTarget()) {
 				this.isStalking = false;
+			}
+
+			if(amount >= 5 && this.isScreeching()) {
+				this.setScreeching(false);
 			}
 
 			return true;
@@ -475,6 +575,8 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 	}
 
 	public static class AIBreakLightSources extends EntityAIBase {
+		private static final Set<Block> IGNORED_LIGHT_SOURCES = ImmutableSet.of(BlockRegistry.OCTINE_ORE, BlockRegistry.LIFE_CRYSTAL_STALACTITE, BlockRegistry.MOB_SPAWNER);
+
 		private final EntityStalker entity;
 
 		private BlockPos lightSourcePos = null;
@@ -679,8 +781,13 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 			}
 
 			IBlockState state = this.entity.world.getBlockState(pos);
-			float hardness = state.getBlockHardness(this.entity.world, pos);
-			return this.entity.world.getBlockState(pos).getLightValue(this.entity.world, pos) > 0 && hardness >= 0 && hardness <= 2.5F && state.getBlock().canEntityDestroy(state, this.entity.world, pos, this.entity);
+
+			if(!IGNORED_LIGHT_SOURCES.contains(state.getBlock())) {
+				float hardness = state.getBlockHardness(this.entity.world, pos);
+				return this.entity.world.getBlockState(pos).getLightValue(this.entity.world, pos) > 0 && hardness >= 0 && hardness <= 2.5F && state.getBlock().canEntityDestroy(state, this.entity.world, pos, this.entity);
+			}
+
+			return false;
 		}
 
 		@Override
@@ -958,7 +1065,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 		public void updateTask() {
 			this.entity.getNavigator().clearPath();
 			this.entity.getMoveHelper().setMoveTo(this.entity.posX, this.entity.posY, this.entity.posZ, 1);
-			this.entity.drop = true;
+			this.entity.setDropping(true);
 			this.entity.isStalking = false;
 
 			EntityLivingBase target = this.entity.getAttackTarget();
@@ -984,6 +1091,149 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 			this.dropTimer = 0;
 			this.waitingTimer = 0;
 			this.attacked = false;
+		}
+	}
+
+	public static class AIScreech extends EntityAIBase {
+		private final EntityStalker entity;
+		private final int minCooldown, maxCooldown;
+		private final int minAllies, maxAllies;
+
+		private int cooldown;
+
+		private int allies;
+		private boolean didSpawn;
+
+		public AIScreech(EntityStalker entity, int minCooldown, int maxCooldown, int minAllies, int maxAllies) {
+			this.entity = entity;
+			this.minCooldown = minCooldown;
+			this.maxCooldown = maxCooldown;
+			this.minAllies = minAllies;
+			this.maxAllies = maxAllies;
+			this.setMutexBits(0b11);
+		}
+
+		@Override
+		public boolean isInterruptible() {
+			return false;
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			EntityLivingBase target = this.entity.getAttackTarget();
+			return this.cooldown-- <= 0 && !this.entity.isStalking && this.entity.getHealth() <= this.entity.getMaxHealth() * 0.5f && target != null && this.entity.getDistance(target) > 8 && this.entity.canCallAllies();
+		}
+
+		@Override
+		public boolean shouldContinueExecuting() {
+			EntityLivingBase target = this.entity.getAttackTarget();
+			return !this.entity.isStalking && target != null && this.entity.canCallAllies() && this.entity.isScreeching() && this.allies > 0 && this.entity.screechingTicks < 160;
+		}
+
+		@Override
+		public void startExecuting() {
+			this.cooldown = this.minCooldown + this.entity.rand.nextInt(this.maxCooldown - this.minCooldown + 1);
+			this.entity.setScreeching(true);
+			this.allies = this.minAllies + this.entity.rand.nextInt(this.maxAllies - this.minAllies + 1);
+		}
+
+		@Override
+		public void resetTask() {
+			this.entity.setScreeching(false);
+			if(this.didSpawn) {
+				this.entity.setCanCallAllies(false);
+			}
+		}
+
+		@Override
+		public void updateTask() {
+			this.entity.setDropping(true);
+
+			if(this.shouldContinueExecuting() && this.entity.screechingTicks >= 80) {
+				EntityLivingBase target = this.entity.getAttackTarget();
+				EntitySenses targetSenses = target instanceof EntityLiving ? ((EntityLiving) target).getEntitySenses() : null;
+				Vec3d targetLook = target.getLookVec();
+
+				EntityStalker stalker = null;
+
+				for(int i = 0; i < 32 && this.allies > 0; i++) {
+					float dx = this.entity.rand.nextFloat() - 0.5f;
+					float dy = this.entity.rand.nextFloat() - 0.5f;
+					float dz = this.entity.rand.nextFloat() - 0.5f;
+
+					float dst = 8 + this.entity.rand.nextFloat() * 8;
+
+					float scale = dst / MathHelper.sqrt(dx * dx + dy * dy + dz * dz);
+					dx *= scale;
+					dy *= scale;
+					dz *= scale;
+
+					BlockPos pos = new BlockPos(target.posX + dx, target.posY + dy, target.posZ + dz);
+
+					for(int j = 0; j < 8 && this.entity.world.isAirBlock(pos); j++) {
+						pos = pos.down();
+					}
+
+					if(!this.entity.world.isAirBlock(pos) && this.entity.world.isAirBlock(pos.up())) {
+						pos = pos.up();
+
+						if(stalker == null) {
+							stalker = new EntityStalker(this.entity.world);
+						}
+
+						boolean isBlockedFromSight = true;
+						boolean isNotInView = true;
+
+						AxisAlignedBB visibilityBox = new AxisAlignedBB(pos).grow(2);
+						checks: for(int xo = 0; xo <= 1; xo++) {
+							for(int yo = 0; yo <= 1; yo++) {
+								for(int zo = 0; zo <= 1; zo++) {
+									double cx = xo == 0 ? visibilityBox.minX : visibilityBox.maxX;
+									double cy = yo == 0 ? visibilityBox.minY : visibilityBox.maxY;
+									double cz = zo == 0 ? visibilityBox.minZ : visibilityBox.maxZ;
+
+									Vec3d diff = new Vec3d(cx, cy, cz).subtract(target.getPositionEyes(1));
+
+									if(diff.normalize().dotProduct(targetLook) > 0.1f) {
+										isNotInView = false;
+									}
+
+									stalker.setLocationAndAngles(cx, cy + 0.1f - stalker.getEyeHeight() /*offset for canEntityBeSeen*/, cz, 0, 0);
+
+									if((targetSenses != null && targetSenses.canSee(stalker)) || (targetSenses == null && target.canEntityBeSeen(stalker))) {
+										isBlockedFromSight = false;
+									}
+
+									if(!isNotInView && !isBlockedFromSight) {
+										break checks;
+									}
+								}
+							}
+						}
+
+						if(isBlockedFromSight || isNotInView) {
+							stalker.setLocationAndAngles(pos.getX() + 0.5f, pos.getY(), pos.getZ() + 0.5f, this.entity.rand.nextFloat() * 360.0f, 0);
+
+							if(stalker.getCanSpawnHere() && stalker.isNotColliding()) {
+								stalker.setCanCallAllies(false);
+								stalker.setAttackTarget(this.entity.getAttackTarget());
+								stalker.isStalking = false;
+
+								this.entity.world.spawnEntity(stalker);
+
+								stalker = null;
+
+								this.allies--;
+								this.didSpawn = true;
+							}
+						}
+					}
+				}
+
+				if(stalker != null) {
+					stalker.setDead();
+				}
+			}
 		}
 	}
 }

@@ -113,6 +113,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 
 	public EntityBoulderSprite(World worldIn) {
 		super(worldIn);
+		this.experienceValue = 10;
 		this.setSize(0.9F, 1.2F);
 		this.setStalactitesSeed(worldIn.rand.nextLong());
 	}

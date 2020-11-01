@@ -99,6 +99,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 
 	public EntityPeatMummy(World world) {
 		super(world);
+		this.experienceValue = 12;
 		this.setSize(1.0F, 1.2F);
 		this.setSpawningTicks(0);
 	}
@@ -712,5 +713,10 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
             hag.startRiding(this);
         }
 		return livingdata;
+    }
+    
+    @Override
+    protected int getExperiencePoints(EntityPlayer player) {
+    	return !this.isBossMummy() ? super.getExperiencePoints(player) : 0;
     }
 }

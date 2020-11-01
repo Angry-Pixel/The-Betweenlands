@@ -53,6 +53,7 @@ public class EntityDarkDruid extends EntityMob {
 
     public EntityDarkDruid(World world) {
         super(world);
+        this.experienceValue = 10;
         ((PathNavigateGround) this.getNavigator()).setBreakDoors(true);
         setSize(0.9F, 1.9F);
     }

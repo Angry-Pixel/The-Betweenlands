@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "thebetweenlands:blocks/mossy_cragrock_side_2_2",
+    "top": "thebetweenlands:blocks/mossy_cragrock_side_2_2",
+    "bottom": "thebetweenlands:blocks/mossy_cragrock_side_2_2"
+  }
+}

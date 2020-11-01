@@ -67,7 +67,7 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 	public EntityWallLamprey(World world) {
 		super(world);
 		this.lookMoveSpeedMultiplier = 15.0F;
-		this.experienceValue = 5;
+		this.experienceValue = 7;
 	}
 
 	@Override

@@ -74,6 +74,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	public EntityTarBeast(World world) {
 		super(world);
+		this.experienceValue = 20;
 		setSize(1.25F, 2F);
 	}
 

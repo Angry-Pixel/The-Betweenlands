@@ -255,4 +255,9 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	protected ResourceLocation getLootTable() {
 		return LootTableRegistry.GECKO;
 	}
+	
+	@Override
+	protected int getExperiencePoints(EntityPlayer player) {
+		return 1 + this.rand.nextInt(3);
+	}
 }

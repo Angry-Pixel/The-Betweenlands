@@ -95,6 +95,7 @@ public class SoundRegistry {
     public static final BLSoundEvent SLINGSHOT_SHOOT = reg("slingshot_shoot");
     public static final BLSoundEvent ZAP = reg("zap");
     public static final BLSoundEvent CHIROBARB_ERUPTER = reg("chirobarb_erupter");
+    public static final BLSoundEvent SIMULACRUM_BREAK = reg("simulacrum_break");
     // Hostiles
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");
     public static final BLSoundEvent ANGLER_DEATH = reg("angler_death");
@@ -237,6 +238,7 @@ public class SoundRegistry {
     public static final BLSoundEvent CHIROMAW_HATCHLING_TRANSFORM = reg("chiromaw_hatchling_transform");
     public static final BLSoundEvent CHIROMAW_HATCHLING_INSIDE_EGG = reg("chiromaw_hatchling_inside_egg");
     public static final BLSoundEvent STALKER_SCREAM = reg("stalker_scream");
+    public static final BLSoundEvent STALKER_SCREECH = reg("stalker_screech");
     public static final BLSoundEvent STALKER_STEP = reg("stalker_step");
     public static final BLSoundEvent STALKER_LIVING = reg("stalker_living");
     public static final BLSoundEvent STALKER_HURT = reg("stalker_hurt");

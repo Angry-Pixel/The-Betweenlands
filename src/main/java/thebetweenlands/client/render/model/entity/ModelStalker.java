@@ -2,6 +2,7 @@ package thebetweenlands.client.render.model.entity;
 
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import thebetweenlands.client.render.model.AdvancedModelRenderer;
 import thebetweenlands.client.render.model.MowzieModelBase;
@@ -664,5 +665,61 @@ public class ModelStalker extends MowzieModelBase {
         walk(jaw_lower_left1a, 0.4f, 0.1f, false, -0.35f, 0, frame, 1);
         swing(jaw_lower_right1a, 0.4f, 0.1f, true, -0.7f, 0, frame, 1);
         swing(jaw_lower_left1a, 0.4f, 0.1f, false, -0.7f, 0, frame, 1);
+        
+        float screechTicks = stalker.prevScreechingTicks + (stalker.screechingTicks - stalker.prevScreechingTicks) * partialRenderTicks;
+        
+        float upright = easeInOutBack(Math.min(screechTicks / 40.0f, 1));
+        body_main.rotateAngleX -= upright * 0.5f;
+        head_main.rotateAngleX -= upright;
+
+        arm_lefta.rotateAngleX -= upright * 0.7f;
+        arm_righta.rotateAngleX -= upright * 0.7f;
+        
+        arm_lefta.rotateAngleY -= upright * 0.7f;
+        arm_righta.rotateAngleY += upright * 0.7f;
+
+        arm_lefta.rotateAngleZ += upright * 0.7f;
+        arm_righta.rotateAngleZ -= upright * 0.7f;
+        
+        midarm_lefta.rotateAngleX -= upright * 0.4f;
+        midarm_righta.rotateAngleX -= upright * 0.4f;
+        midarm_lefta.rotateAngleY -= upright * 0.4f;
+        midarm_righta.rotateAngleY += upright * 0.4f;
+        midarm_leftb.rotateAngleX += upright * 0.4f;
+        midarm_rightb.rotateAngleX += upright * 0.4f;
+        midarm_leftb.rotateAngleZ -= upright * 0.1f;
+        midarm_rightb.rotateAngleZ += upright * 0.1f;
+        
+        float screeching = easeInOutBack(MathHelper.clamp((screechTicks - 20) / 30.0f, 0, 1));
+        float screechingHeadRotationStrength = MathHelper.sin(frame * 0.4f) * screeching;
+        head_main.rotateAngleY += screechingHeadRotationStrength * 0.13f;
+        head_main.rotateAngleZ += screechingHeadRotationStrength * 0.13f;
+        
+        body_chest1.rotateAngleY += screechingHeadRotationStrength * 0.04f;
+        body_chest1.rotateAngleZ += screechingHeadRotationStrength * 0.04f;
+        
+        midarm_lefta.rotateAngleZ -= screechingHeadRotationStrength * 0.04f;
+        midarm_righta.rotateAngleZ -= screechingHeadRotationStrength * 0.04f;
+        midarm_lefta.rotateAngleY -= screechingHeadRotationStrength * 0.04f;
+        midarm_righta.rotateAngleY -= screechingHeadRotationStrength * 0.04f;
+        
+        midarm_lefta.rotateAngleX -= screechingHeadRotationStrength * 0.04f;
+        midarm_leftb.rotateAngleX += screechingHeadRotationStrength * 0.075f;
+        
+        midarm_righta.rotateAngleX += screechingHeadRotationStrength * 0.04f;
+        midarm_rightb.rotateAngleX -= screechingHeadRotationStrength * 0.075f;
+        
+        float armShakeStrength = MathHelper.sin(frame * 4f) * screeching;
+        arm_lefta.rotateAngleZ += armShakeStrength * 0.025f;
+        arm_righta.rotateAngleZ -= armShakeStrength * 0.025f;
     }
+    
+    private static float easeInOutBack(float x) {
+    	float c1 = 1.70158f;
+    	float c2 = c1 * 1.525f;
+
+    	return x < 0.5
+    	  ? ((float)Math.pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2
+    	  : ((float)Math.pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2;
+    	}
 }
