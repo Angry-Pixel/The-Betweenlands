@@ -132,12 +132,12 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 		super.onUpdate();
 
 		if(!this.world.isRemote) {
-			if(this.isBurning()) {
+			if(this.isBurning() || this.isInWater()) {
 				if(this.getSwarmSize() > 0.1f) {
 					this.setSwarmSize(Math.max(0.1f, this.getSwarmSize() - 0.005f));
 				}
 
-				if(this.rand.nextInt(10) == 0) {
+				if(this.isBurning() && this.rand.nextInt(10) == 0) {
 					List<EntitySwarm> swarms = this.world.getEntitiesWithinAABB(EntitySwarm.class, this.getEntityBoundingBox().grow(1), s -> !s.isBurning());
 
 					for(EntitySwarm swarm : swarms) {

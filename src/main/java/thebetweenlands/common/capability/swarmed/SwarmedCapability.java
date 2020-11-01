@@ -50,6 +50,8 @@ public class SwarmedCapability extends EntityCapability<SwarmedCapability, ISwar
 	private int damageTimer;
 	private float damage;
 
+	private float lastYaw, lastPitch, lastYawDelta, lastPitchDelta;
+
 	@Override
 	public void setSwarmedStrength(float strength) {
 		float newStrength = MathHelper.clamp(strength, 0, 1);
@@ -95,6 +97,38 @@ public class SwarmedCapability extends EntityCapability<SwarmedCapability, ISwar
 	@Override
 	public int getHurtTimer() {
 		return this.hurtTimer;
+	}
+
+	@Override
+	public void setLastRotations(float yaw, float pitch) {
+		this.lastYaw = yaw;
+		this.lastPitch = pitch;
+	}
+
+	@Override
+	public float getLastYaw() {
+		return this.lastYaw;
+	}
+
+	@Override
+	public float getLastPitch() {
+		return this.lastPitch;
+	}
+
+	@Override
+	public void setLastRotationDeltas(float yaw, float pitch) {
+		this.lastYawDelta = yaw;
+		this.lastPitchDelta = pitch;
+	}
+
+	@Override
+	public float getLastYawDelta() {
+		return this.lastYawDelta;
+	}
+
+	@Override
+	public float getLastPitchDelta() {
+		return this.lastPitchDelta;
 	}
 
 	@Override
@@ -146,6 +180,19 @@ public class SwarmedCapability extends EntityCapability<SwarmedCapability, ISwar
 						cap.setHurtTimer(5);
 						event.player.setSneaking(false);
 					}
+
+					float dYaw = MathHelper.wrapDegrees(event.player.rotationYaw - cap.getLastYaw());
+					float dPitch = MathHelper.wrapDegrees(event.player.rotationPitch - cap.getLastPitch());
+					float ddYaw = MathHelper.wrapDegrees(dYaw - cap.getLastYawDelta());
+					float ddPitch = MathHelper.wrapDegrees(dPitch - cap.getLastPitchDelta());
+					float ddRot = MathHelper.sqrt(ddYaw * ddYaw + ddPitch * ddPitch);
+
+					if(ddRot > 30) {
+						cap.setSwarmedStrength(cap.getSwarmedStrength() - (ddRot - 30) * 0.001f);
+					}
+
+					cap.setLastRotations(event.player.rotationYaw, event.player.rotationPitch);
+					cap.setLastRotationDeltas(dYaw, dPitch);
 				}
 
 				if(cap.getSwarmedStrength() < 0.1f) {
