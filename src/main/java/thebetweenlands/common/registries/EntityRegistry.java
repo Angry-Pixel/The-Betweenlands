@@ -120,14 +120,14 @@ public class EntityRegistry {
 
 	public static void preInit() {
 		registerEntity(EntityDarkDruid.class, "dark_druid", 0x000000, 0xFF0000);
-		registerEntity(EntityAngler.class, "angler", 0x243B0B, 0x00FFFF);
-		registerEntity(EntitySludge.class, "sludge", 0x3A2F0B, 0x5F4C0B);
-		registerEntity(EntitySwampHag.class, "swamp_hag", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntityAngler.class, "angler", 0x546332, 0x49FFFF);
+		registerEntity(EntitySludge.class, "sludge", 0x726459, 0x726459);
+		registerEntity(EntitySwampHag.class, "swamp_hag", 0x6E5B36, 0x226124);
 		registerEntity(EntityWight.class, "wight", 0xECF8E0, 0x243B0B);
-		registerEntity(EntityFirefly.class, "firefly", 0xFFB300, 0xFFD000);
+		registerEntity(EntityFirefly.class, "firefly", 0xDCFF51, 0x402A21);
 		registerEntity(EntitySporeling.class, "sporeling", 0x696144, 0xFFFB00, 64, 1, true);
 		registerEntity(EntityLeech.class, "leech", 0x804E3D, 0x635940);
-		registerEntity(EntityDragonFly.class, "dragonfly", 0x31B53C, 0x779E3C);
+		registerEntity(EntityDragonFly.class, "dragonfly", 0x356721, 0xC0FFEE);
 		registerEntity(EntityBloodSnail.class, "blood_snail", 0x8E9456, 0xB3261E);
 		registerEntity(EntityMireSnail.class, "mire_snail", 0x8E9456, 0xF2FA96);
 		registerEntity(EntityMireSnailEgg.class, "mire_snail_egg");
@@ -138,15 +138,15 @@ public class EntityRegistry {
 		registerEntity(EntityTermite.class, "termite", 0xD9D7A7, 0xD99830);
 		registerEntity(EntityGiantToad.class, "toad", 0x405C3B, 0x7ABA45);
 		registerEntity(EntityBlindCaveFish.class, "blind_cave_fish", 0xD0D1C2, 0xECEDDF);
-		registerEntity(EntityChiromaw.class, "chiromaw", 0x3F5A69, 0xA16A77);
-		registerEntity(EntityFrog.class, "frog", 0x559653, 0xC72C2C, 64, 20, true);
+		registerEntity(EntityChiromaw.class, "chiromaw", 0x142728, 0x7A4E42);
+		registerEntity(EntityFrog.class, "frog", 0x1E4921, 0x479219, 64, 20, true);
 		registerEntity(EntitySwordEnergy.class, "sword_energy");
 		registerEntity(EntityShockwaveSwordItem.class, "shockwave_sword_item");
 		registerEntity(EntityShockwaveBlock.class, "shockwave_block");
-		registerEntity(EntityGasCloud.class, "gas_cloud", 0xFFB300, 0xFFD000);
+		registerEntity(EntityGasCloud.class, "gas_cloud", 0x61988D, 0x4C7F76);
 		registerEntity(EntityVolatileSoul.class, "volatile_soul");
 		registerEntity(EntityTarBeast.class, "tar_beast", 0x000000, 0x202020);
-		registerEntity(EntitySiltCrab.class, "silt_crab", 0x086A87, 0xB43104);
+		registerEntity(EntitySiltCrab.class, "silt_crab", 0x468282, 0xBC4114);
 		registerEntity(EntityPyrad.class, "pyrad", 0x5E4726, 0x2D4231, 64, 3, true);
 		registerEntity(EntityPyradFlame.class, "pyrad_flame");
 		registerEntity(EntityPeatMummy.class, "peat_mummy", 0x524D3A, 0x69463F, 64, 1, true);
@@ -169,9 +169,9 @@ public class EntityRegistry {
 		registerEntity(EntitySludgeBall.class, "sludge_ball", 64, 20, true);
 		registerEntity(EntitySporeJet.class, "spore_jet", 64, 1, true);
 		//registerEntity(EntityDarkLight.class, "dark_light", 0xFFB300, 0xFFD000);
-		registerEntity(EntitySmollSludge.class, "smoll_sludge", 0x3A2F0B, 0x5F4C0B);
-		registerEntity(EntityGreebling.class, "greebling", 0xD9D7A7, 0xD99830);
-		registerEntity(EntityBoulderSprite.class, "boulder_sprite", 0x6f7784, 0x535559);
+		registerEntity(EntitySmollSludge.class, "smoll_sludge", 0x726459, 0x726459);
+		registerEntity(EntityGreebling.class, "greebling", 0x7CB2AA, 0xC3726C);
+		registerEntity(EntityBoulderSprite.class, "boulder_sprite", 0x799679, 0x879231);
 		registerEntity(EntitySpiritTreeFaceSmall.class, "spirit_tree_face_small");
 		registerEntity(EntitySpiritTreeFaceLarge.class, "spirit_tree_face_large");
 		registerEntity(EntityTamedSpiritTreeFace.class, "tamed_spirit_tree_face");
@@ -179,38 +179,38 @@ public class EntityRegistry {
 		registerEntity(EntitySpikeWave.class, "spike_wave");
 		registerEntity(EntityRootGrabber.class, "root_grabber");
 		registerEntity(EntitySpiritTreeFaceMask.class, "spirit_tree_face_mask", 64, 20, false);
-		registerEntity(EntityRootSprite.class, "root_sprite", 0x686868, 0x9fe530);
+		registerEntity(EntityRootSprite.class, "root_sprite", 0x5D533D, 0x8F952B);
 		registerEntity(EntityPredatorArrowGuide.class, "predator_arrow_guide");
 		
-		registerEntity(EntitySludgeWorm.class, "small_sludge_worm", 0x3A2F0B, 0x5F4C0B);
-		registerEntity(EntityTinySludgeWorm.class, "tiny_sludge_worm", 0x3A2F0B, 0x5F4C0B);
-		registerEntity(EntityLargeSludgeWorm.class, "large_sludge_worm", 0x3A2F0B, 0x5F4C0B);
+		registerEntity(EntitySludgeWorm.class, "small_sludge_worm", 0x6D3D39, 0x301411);
+		registerEntity(EntityTinySludgeWorm.class, "tiny_sludge_worm", 0xDAC2A7, 0x5C4639);
+		registerEntity(EntityLargeSludgeWorm.class, "large_sludge_worm", 0x726459, 0xE2DED9);
 		registerEntity(EntityTinyWormEggSac.class, "tiny_worm_egg_sac");
-		registerEntity(EntityTinySludgeWormHelper.class, "tiny_sludge_worm_helper", 0x3A2F0B, 0x5F4C0B);
+		registerEntity(EntityTinySludgeWormHelper.class, "tiny_sludge_worm_helper", 0xDAC2A7, 0x5C4639);
 
 		registerEntity(EntityLurkerSkinRaft.class, "lurker_skin_raft");
 		
-		registerEntity(EntityShambler.class, "shambler", 0x0B3B0B, 0xDBA901);
-		registerEntity(EntityWallLamprey.class, "wall_lamprey", 0x0B3B0B, 0xDBA901);
-		registerEntity(EntityMovingSpawnerHole.class, "moving_spawner_hole", 0x0B3B0B, 0xDBA901);
-		registerEntity(EntityWallLivingRoot.class, "wall_living_root", 0x0B3B0B, 0xDBA901);
-		registerEntity(EntityCryptCrawler.class, "crypt_crawler", 0x0B3B0B, 0xDBA901);
-		registerEntity(EntityBarrishee.class, "barrishee", 0x0B3B0B, 0xDBA901);
-		registerEntity(EntityAshSprite.class, "ash_sprite", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntityShambler.class, "shambler", 0x14331C, 0xCD5472);
+		registerEntity(EntityWallLamprey.class, "wall_lamprey", 0x646B3E, 0x4B4335);
+		registerEntity(EntityMovingSpawnerHole.class, "moving_spawner_hole", 0x6D3D39, 0x301411);
+		registerEntity(EntityWallLivingRoot.class, "wall_living_root", 0x30251C, 0x67614A);
+		registerEntity(EntityCryptCrawler.class, "crypt_crawler", 0xD9B88C, 0x8F5F44);
+		registerEntity(EntityBarrishee.class, "barrishee", 0x604C30, 0xFFD92C);
+		registerEntity(EntityAshSprite.class, "ash_sprite", 0x1B1F28, 0x721C16);
 		registerEntity(EntityDecayPitTarget.class, "decay_pit_target");
 		registerEntity(EntitySludgeJet.class, "sludge_jet", 64, 1, true);
 		registerEntity(EntityTriggeredFallingBlock.class, "triggered_falling_block");
-		registerEntity(EntityTriggeredSludgeWallJet.class, "triggered_sludge_wall_jet", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntityTriggeredSludgeWallJet.class, "triggered_sludge_wall_jet", 0x604C30, 0xFFD92C);
 		registerEntity(EntitySludgeWallJet.class, "sludge_wall_jet", 64, 1, true);
-		registerEntity(EntitySplodeshroom.class, "splodeshroom", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntitySplodeshroom.class, "splodeshroom", 0xC8527D, 0x792B48);
 		registerEntity(EntityCCGroundSpawner.class, "cc_ground_spawner");
-		registerEntity(EntityEmberlingShaman.class, "emberling_shaman", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntityEmberlingShaman.class, "emberling_shaman", 0xA43B2E, 0x391211);
 		registerEntity(EntityFlameJet.class, "flame_jet", 64, 1, true);
 		registerEntity(EntityMovingWall.class, "moving_wall", 64, 1, true);
-		registerEntity(EntityEmberling.class, "emberling");
+		registerEntity(EntityEmberling.class, "emberling", 0xA43B2E, 0x391211);
 		registerEntity(EntityEmberlingWild.class, "wild_emberling", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityGalleryFrame.class, "gallery_frame");
-		registerEntity(EntitySludgeMenace.class, "sludge_menace", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntitySludgeMenace.class, "sludge_menace", 0x726459, 0x726459);
 		registerEntity(EntitySludgeMenace.DummyPart.class, "sludge_menace_multipart_dummy", 64, 20, false);
 		registerEntity(EntityShock.class, "shock", 64, 20, false);
 		registerEntity(EntityBLLightningBolt.class, "lightning", 100, 20, false);
@@ -224,19 +224,19 @@ public class EntityRegistry {
 		registerEntity(EntityPullerFirefly.class, "draeton_firefly", 80, 3, true);
 		registerEntity(EntityPullerChiromaw.class, "draeton_chiromaw_tamed", 80, 3, true);
 		
-		registerEntity(EntityChiromawGreeblingRider.class, "chiromaw_greebling_rider", 0x3F5A69, 0xA16A77);
+		registerEntity(EntityChiromawGreeblingRider.class, "chiromaw_greebling_rider", 0x142728, 0x7CB2AA);
 		registerEntity(EntityGreeblingVolarpadFloater.class, "greebling_volarpad_floater", 64, 20, true);
 		registerEntity(EntityBetweenstonePebble.class, "betweenstone_pebble", 64, 20, true);
 		
 		registerEntity(EntityWormGroundSpawner.class, "worm_ground_spawner");
-		registerEntity(EntityChiromawMatriarch.class, "chiromaw_matriarch", 0x3F5A69, 0xA16A77, 128, 3, true);
+		registerEntity(EntityChiromawMatriarch.class, "chiromaw_matriarch", 0x142728, 0x4A2120, 128, 3, true);
 		registerEntity(EntityChiromawDroppings.class, "chiromaw_droppings", 64, 20, true);
 		registerEntity(EntityChiromawHatchling.class, "chiromaw_hatchling", 64, 3, true);
 		registerEntity(EntityChiromawTame.class, "chiromaw_tame", 128, 3, true);
 		registerEntity(EntityGreeblingCorpse.class, "greebling_corpse", 80, 20, false);
 	
-		registerEntity(EntityStalker.class, "stalker", 0x0B3B0B, 0xDBA901);
-		registerEntity(EntitySwarm.class, "swarm", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntityStalker.class, "stalker", 0xE4DCC9, 0xD58888);
+		registerEntity(EntitySwarm.class, "swarm", 0x292B3B, 0xE2D698);
 	}
 
 	private static int id = 0;

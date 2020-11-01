@@ -139,6 +139,7 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 
 	public EntityLargeSludgeWorm(World world) {
 		super(world, false);
+		this.experienceValue = 10;
 		setSize(0.8F, 0.8F);
 		isImmuneToFire = true;
 

@@ -80,6 +80,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
     public EntityWight(World world) {
         super(world);
+        this.experienceValue = 10;
         setSize(0.7F, 2.2F);
         this.setPathPriority(PathNodeType.WATER, 0.2F);
         this.flightMoveHelper = new FlightMoveHelper(this) {

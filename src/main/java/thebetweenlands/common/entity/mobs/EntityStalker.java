@@ -522,7 +522,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 				this.isStalking = false;
 			}
 
-			if(amount >= 6 && this.isScreeching()) {
+			if(amount >= 5 && this.isScreeching()) {
 				this.setScreeching(false);
 			}
 
@@ -1114,9 +1114,14 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 		}
 
 		@Override
+		public boolean isInterruptible() {
+			return false;
+		}
+
+		@Override
 		public boolean shouldExecute() {
 			EntityLivingBase target = this.entity.getAttackTarget();
-			return this.cooldown <= 0 && !this.entity.isStalking && this.entity.getHealth() <= this.entity.getMaxHealth() * 0.5f && target != null && this.entity.getDistance(target) > 8 && this.entity.canCallAllies();
+			return this.cooldown-- <= 0 && !this.entity.isStalking && this.entity.getHealth() <= this.entity.getMaxHealth() * 0.5f && target != null && this.entity.getDistance(target) > 8 && this.entity.canCallAllies();
 		}
 
 		@Override
@@ -1144,7 +1149,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 		public void updateTask() {
 			this.entity.setDropping(true);
 
-			if(this.shouldContinueExecuting() && this.entity.screechingTicks >= 100) {
+			if(this.shouldContinueExecuting() && this.entity.screechingTicks >= 80) {
 				EntityLivingBase target = this.entity.getAttackTarget();
 				EntitySenses targetSenses = target instanceof EntityLiving ? ((EntityLiving) target).getEntitySenses() : null;
 				Vec3d targetLook = target.getLookVec();
