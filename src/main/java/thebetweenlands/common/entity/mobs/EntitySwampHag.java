@@ -270,6 +270,24 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
     	return true;
     }
     
+    private boolean cancelRidingPathOverride;
+    
+    @Override
+    public boolean isRiding() {
+    	if(this.cancelRidingPathOverride && this.getRidingEntity() instanceof EntityPeatMummy) {
+    		//This cancels the pathing and movement overrides from the rider in updateEntityActionState
+    		this.cancelRidingPathOverride = false;
+    		return false;
+    	}
+    	return super.isRiding();
+    }
+    
+    @Override
+    protected void updateAITasks() {
+    	super.updateAITasks();
+    	this.cancelRidingPathOverride = true;
+    }
+    
     static class EntityAIThrowWorm extends EntityAIBase {
     	EntitySwampHag hag;
 		EntityLivingBase target;
