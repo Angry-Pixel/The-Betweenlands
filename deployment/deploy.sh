@@ -12,7 +12,7 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   #Check release type (release or dev build)
   if [[ "$TRAVIS_TAG" == *"release"* ]]; then
     release_type="release"
-	releaseTitle="Release Build ${TRAVIS_BRANCH}-${TRAVIS_BUILD_NUMBER}"
+	release_title="Release Build ${TRAVIS_BRANCH}-${TRAVIS_BUILD_NUMBER}"
   else
     release_type="development"
 	release_title="Development Build ${TRAVIS_BRANCH}-${TRAVIS_BUILD_NUMBER}"
