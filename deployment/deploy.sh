@@ -72,6 +72,10 @@ $(sed 's/\:/\\:/g' <<< "${TRAVIS_BRANCH}")
 $(sed 's/\:/\\:/g' <<< "${TRAVIS_COMMIT}")
 EOT
 
+  #Move release notes to dev build repo
+  rm -f release_notes
+  mv ../release_notes release_notes
+
   #Push to dev build repo
   git add release_notes
   git add build
