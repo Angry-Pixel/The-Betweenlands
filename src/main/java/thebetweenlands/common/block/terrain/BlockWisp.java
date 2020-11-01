@@ -134,12 +134,12 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(COLOR, meta);
+		return this.getDefaultState().withProperty(COLOR, (meta >> 1) & 0b111).withProperty(VISIBLE, (meta & 0b1) != 0);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(COLOR);
+		return ((state.getValue(COLOR) << 1) & 0b111) | (state.getValue(VISIBLE) ? 1 : 0);
 	}
 
 	@Override
