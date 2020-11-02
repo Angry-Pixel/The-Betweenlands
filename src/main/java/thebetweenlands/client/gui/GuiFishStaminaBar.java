@@ -24,8 +24,10 @@ public class GuiFishStaminaBar extends Gui {
 			EntityPlayerSP player = mc.player;
 			if (player != null && player.fishEntity != null && player.fishEntity instanceof EntityBLFishHook) {
 				if (player.fishEntity.isRiding() && player.fishEntity.getRidingEntity() instanceof EntityAnadia) {
+					if(((EntityAnadia) player.fishEntity.getRidingEntity()).getStaminaTicks() <= 0)
+						return;
 					int fishpos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getStaminaTicks() * 256 / 100;
-					int escapepos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getEscapeTicks() * 256 / 600;
+					int escapepos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getEscapeTicks() * 256 / 1024;
 					int obstructpos1 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction1Ticks();
 					int obstructpos2 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction2Ticks();
 					int obstructpos3 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction3Ticks();
@@ -40,12 +42,24 @@ public class GuiFishStaminaBar extends Gui {
 	}
 
 	private void renderStaminaBar(int staminaTicks, int escapeTicks, int obstructionTicks1, int obstructionTicks2, int obstructionTicks3, int obstructionTicks4, float posX, float posY) {
-		drawTexturedModalRect(posX, posY, 0, 18, 256, 30);
-		drawTexturedModalRect(posX - staminaTicks, posY + 1, 0, 0, 16, 11);
-		drawTexturedModalRect(posX - escapeTicks, posY + 20, 16, 0, 16, 16);
+		drawTexturedModalRect(posX, posY + 5, 0, 18, 256, 12);
+		drawTexturedModalRect(posX - staminaTicks, posY + 5, 0, 0, 16, 11);
+		drawTexturedModalRect(posX - escapeTicks, posY + 18, 0 + (getCrabScroll(escapeTicks) * 16), 32, 16, 48);
 		drawTexturedModalRect(posX - obstructionTicks1, posY + 1, 32, 0, 13, 16);
 		drawTexturedModalRect(posX - obstructionTicks2, posY + 1, 32, 0, 13, 16);
 		drawTexturedModalRect(posX - obstructionTicks3, posY + 1, 32, 0, 13, 16);
 		drawTexturedModalRect(posX - obstructionTicks4, posY + 1, 32, 0, 13, 16);
+	}
+
+	private int getCrabScroll(int escapeTicks) {
+		if (escapeTicks%4 == 0)
+			return 0;
+		if (escapeTicks%4 == -1)
+			return 1;
+		if (escapeTicks%4 == -2)
+			return 2;
+		if (escapeTicks%4 == -3)
+			return 3;
+		return 0;
 	}
 }

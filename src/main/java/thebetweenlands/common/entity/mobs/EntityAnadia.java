@@ -80,6 +80,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	public byte SMOKED = 0;
 	public byte ROTTEN = 1;
 	
+	public int ESCAPE_DELAY = 80;
+	
 	public EntityAnadia(World world) {
 		super(world);
         setSize(0.8F, 0.8F);
@@ -124,7 +126,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         dataManager.register(IS_LEAPING, false);
       //  dataManager.register(HUNGER_COOLDOWN, 0);
         dataManager.register(STAMINA_TICKS, 40);
-        dataManager.register(ESCAPE_TICKS, 600);
+        dataManager.register(ESCAPE_TICKS, 1024);
         dataManager.register(OBSTRUCTION_TICKS_1, 256);
         dataManager.register(OBSTRUCTION_TICKS_2, 256);
         dataManager.register(OBSTRUCTION_TICKS_3, 256);
@@ -505,10 +507,12 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 			//regains stamina over time whilst not hooked
 	        if(!isBeingRidden() ) {
+	        	if(ESCAPE_DELAY < 80)
+	        		ESCAPE_DELAY = 80;
 	        	if(getStaminaTicks() < (int) (getStaminaMods() * 20))
 	        		setStaminaTicks(getStaminaTicks() + 1);
-	        	if(getEscapeTicks() < 600)
-	        		setEscapeTicks(600);
+	        	if(getEscapeTicks() < 1024)
+	        		setEscapeTicks(1024);
 	        	if(getObstruction1Ticks() < 256)
 	        		setObstruction1Ticks(256);
 	        	if(getObstruction2Ticks() < 256)
@@ -519,32 +523,35 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        		setObstruction4Ticks(256);
 	        }
 
-	        if(isBeingRidden() && getPassengers().get(0) instanceof EntityBLFishHook) {
-	        	if(getEscapeTicks() > 0)
-	        		setEscapeTicks(getEscapeTicks() -1);
-	        	if(getEscapeTicks() * 256 / 600 < getStaminaTicks() * 256 / 100)
+	        if(isBeingRidden() && getPassengers().get(0) instanceof EntityBLFishHook && getStaminaTicks() > 0) {
+	        	if(ESCAPE_DELAY > 0)
+	        		ESCAPE_DELAY--;
+	        	
+	        	if(getEscapeTicks() > 0 && ESCAPE_DELAY <= 0)
+	        		setEscapeTicks(getEscapeTicks() -2);
+	        	if(getEscapeTicks() * 256 / 1024 < getStaminaTicks() * 256 / 100 && ESCAPE_DELAY <= 0)
 	        		getPassengers().get(0).dismountRidingEntity(); // this just releases the fish atm
 	        	
 	        // testing stuff WIP
-	        	if(getEscapeTicks() <= 600 && getObstruction1Ticks() >= 0) {
+	        	if(getEscapeTicks() <= 1024 && getObstruction1Ticks() >= 0) {
 	        		setObstruction1Ticks(getObstruction1Ticks() - 1);
 	        		if(getObstruction1Ticks() <= 0)
 	        			setObstruction1Ticks(256);
 	        		}
 	        	
-	        	if(getEscapeTicks() <= 485 && getObstruction2Ticks() >= 0) {
+	        	if(getEscapeTicks() <= 896 && getObstruction2Ticks() >= 0) {
 	        		setObstruction2Ticks(getObstruction2Ticks() - 1);
 	        		if(getObstruction2Ticks() <= 0)
 	        			setObstruction2Ticks(256);
 	        		}
 	        	
-	        	if(getEscapeTicks() <= 371 && getObstruction3Ticks() >= 0) {
+	        	if(getEscapeTicks() <= 768 && getObstruction3Ticks() >= 0) {
 	        		setObstruction3Ticks(getObstruction3Ticks() - 1);
 	        		if(getObstruction3Ticks() <= 0)
 	        			setObstruction3Ticks(256);
 	        		}
 	        	
-	        	if(getEscapeTicks() <= 256 && getObstruction4Ticks() >= 0) {
+	        	if(getEscapeTicks() <= 640 && getObstruction4Ticks() >= 0) {
 	        		setObstruction4Ticks(getObstruction4Ticks() - 1);
 	        		if(getObstruction4Ticks() <= 0)
 	        			setObstruction4Ticks(256);
