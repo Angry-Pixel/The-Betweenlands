@@ -351,8 +351,11 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 			double d1 = getAngler().posY - posY;
 			double d2 = getAngler().posZ - posZ;
 			if (caughtEntity != null) {
-					if(((EntityAnadia) caughtEntity).getStaminaTicks() > 0) { 
-						((EntityAnadia) caughtEntity).setStaminaTicks(((EntityAnadia) caughtEntity).getStaminaTicks() - 1);
+					if(((EntityAnadia) caughtEntity).getStaminaTicks() > 0) {
+						if(!((EntityAnadia) caughtEntity).isObstructed())
+							((EntityAnadia) caughtEntity).setStaminaTicks(((EntityAnadia) caughtEntity).getStaminaTicks() - 1);
+						if(((EntityAnadia) caughtEntity).isObstructed())
+							((EntityAnadia) caughtEntity).setEscapeTicks(((EntityAnadia) caughtEntity).getEscapeTicks() -10);
 						if (((EntityAnadia) caughtEntity).getStaminaTicks()%40 == 0) {
 							// consumes half a shank of hunger every 2 seconds or so whilst the fish has stamina
 							getAngler().getFoodStats().setFoodLevel(getAngler().getFoodStats().getFoodLevel() - 1);

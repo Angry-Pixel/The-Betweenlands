@@ -25,19 +25,27 @@ public class GuiFishStaminaBar extends Gui {
 			if (player != null && player.fishEntity != null && player.fishEntity instanceof EntityBLFishHook) {
 				if (player.fishEntity.isRiding() && player.fishEntity.getRidingEntity() instanceof EntityAnadia) {
 					int fishpos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getStaminaTicks() * 256 / 100;
-					int escapepos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getEscapeTicks() * 256 / 480;
+					int escapepos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getEscapeTicks() * 256 / 600;
+					int obstructpos1 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction1Ticks();
+					int obstructpos2 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction2Ticks();
+					int obstructpos3 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction3Ticks();
+					int obstructpos4 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction4Ticks();
 					GlStateManager.color(1F, 1F, 1F, 1F);
 					mc.renderEngine.bindTexture(GUI_TEXTURE);
 					ScaledResolution res = new ScaledResolution(mc);
-					renderStaminaBar(fishpos, escapepos, (float)res.getScaledWidth() * 0.5F - 128F, (float)res.getScaledHeight() * 0.5F - 120F);
+					renderStaminaBar(-256 + fishpos, -256 + Math.min(256, escapepos), 0 - obstructpos1, 0 - obstructpos2, 0 - obstructpos3, 0 - obstructpos4, (float)res.getScaledWidth() * 0.5F - 128F, (float)res.getScaledHeight() * 0.5F - 120F);
 				}
 			}
 		}
 	}
 
-	private void renderStaminaBar(int staminaTicks, int escapeTicks, float posX, float posY) {
+	private void renderStaminaBar(int staminaTicks, int escapeTicks, int obstructionTicks1, int obstructionTicks2, int obstructionTicks3, int obstructionTicks4, float posX, float posY) {
 		drawTexturedModalRect(posX, posY, 0, 18, 256, 30);
-		drawTexturedModalRect(posX + staminaTicks, posY + 1, 0, 0, 17, 11);
-		drawTexturedModalRect(posX + escapeTicks, posY + 20, 0, 0, 17, 11);
+		drawTexturedModalRect(posX - staminaTicks, posY + 1, 0, 0, 16, 11);
+		drawTexturedModalRect(posX - escapeTicks, posY + 20, 16, 0, 16, 16);
+		drawTexturedModalRect(posX - obstructionTicks1, posY + 1, 32, 0, 13, 16);
+		drawTexturedModalRect(posX - obstructionTicks2, posY + 1, 32, 0, 13, 16);
+		drawTexturedModalRect(posX - obstructionTicks3, posY + 1, 32, 0, 13, 16);
+		drawTexturedModalRect(posX - obstructionTicks4, posY + 1, 32, 0, 13, 16);
 	}
 }

@@ -64,6 +64,10 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	private static final DataParameter<Integer> STAMINA_TICKS = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 	private static final DataParameter<Byte> FISH_COLOUR = EntityDataManager.<Byte>createKey(EntityAnadia.class, DataSerializers.BYTE);
 	private static final DataParameter<Integer> ESCAPE_TICKS = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> OBSTRUCTION_TICKS_1 = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> OBSTRUCTION_TICKS_2 = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> OBSTRUCTION_TICKS_3 = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> OBSTRUCTION_TICKS_4 = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 	private static final DataParameter<ItemStack> HEAD_ITEM = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.ITEM_STACK);
 	private static final DataParameter<ItemStack> BODY_ITEM = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.ITEM_STACK);
 	private static final DataParameter<ItemStack> TAIL_ITEM = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.ITEM_STACK);
@@ -120,7 +124,11 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         dataManager.register(IS_LEAPING, false);
       //  dataManager.register(HUNGER_COOLDOWN, 0);
         dataManager.register(STAMINA_TICKS, 40);
-        dataManager.register(ESCAPE_TICKS, 480);
+        dataManager.register(ESCAPE_TICKS, 600);
+        dataManager.register(OBSTRUCTION_TICKS_1, 256);
+        dataManager.register(OBSTRUCTION_TICKS_2, 256);
+        dataManager.register(OBSTRUCTION_TICKS_3, 256);
+        dataManager.register(OBSTRUCTION_TICKS_4, 256);
         dataManager.register(FISH_COLOUR, (byte) 2);
         dataManager.register(HEAD_ITEM, ItemStack.EMPTY);
         dataManager.register(BODY_ITEM, ItemStack.EMPTY);
@@ -168,46 +176,48 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
         setHealth(getMaxHealth());
     }
-
-    public byte getHeadType() {
-        return dataManager.get(HEAD_TYPE);
-    }
-
+    
     private void setHeadType(byte type) {
         dataManager.set(HEAD_TYPE, type);
     }
 
-    public byte getBodyType() {
-        return dataManager.get(BODY_TYPE);
+    public byte getHeadType() {
+        return dataManager.get(HEAD_TYPE);
     }
 
     private void setBodyType(byte type) {
         dataManager.set(BODY_TYPE, type);
     }
 
-    public byte getTailType() {
-        return dataManager.get(TAIL_TYPE);
+    public byte getBodyType() {
+        return dataManager.get(BODY_TYPE);
     }
 
     private void setTailType(byte type) {
         dataManager.set(TAIL_TYPE, type);
     }
 
-    public byte getFishColour() {
-        return dataManager.get(FISH_COLOUR);
+    public byte getTailType() {
+        return dataManager.get(TAIL_TYPE);
     }
 
     public void setFishColour(byte colour) {
         dataManager.set(FISH_COLOUR, colour);
     }
 
-    public boolean isLeaping() {
-        return dataManager.get(IS_LEAPING);
+    public byte getFishColour() {
+        return dataManager.get(FISH_COLOUR);
     }
 
     private void setIsLeaping(boolean leaping) {
         dataManager.set(IS_LEAPING, leaping);
     }
+
+    public boolean isLeaping() {
+        return dataManager.get(IS_LEAPING);
+    }
+
+
 /*    
     public int getHungerCooldown() {
         return dataManager.get(HUNGER_COOLDOWN);
@@ -217,20 +227,53 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         dataManager.set(HUNGER_COOLDOWN, count);
     }
 */
-    public int getStaminaTicks() {
-        return dataManager.get(STAMINA_TICKS);
-    }
 
     public void setStaminaTicks(int count) {
         dataManager.set(STAMINA_TICKS, count);
     }
 
+    public int getStaminaTicks() {
+        return dataManager.get(STAMINA_TICKS);
+    }
+
+    public void setEscapeTicks(int count) {
+    	 dataManager.set(ESCAPE_TICKS, count);
+	}
+
     public int getEscapeTicks() {
 		return dataManager.get(ESCAPE_TICKS);
 	}
 
-    public void setEscapeTicks(int count) {
-    	 dataManager.set(ESCAPE_TICKS, count);
+    public void setObstruction1Ticks(int count) {
+		dataManager.set(OBSTRUCTION_TICKS_1, count);
+	}
+
+	public int getObstruction1Ticks() {
+		 return dataManager.get(OBSTRUCTION_TICKS_1);
+	}
+
+    public void setObstruction2Ticks(int count) {
+		dataManager.set(OBSTRUCTION_TICKS_2, count);
+	}
+
+	public int getObstruction2Ticks() {
+		 return dataManager.get(OBSTRUCTION_TICKS_2);
+	}
+
+    public void setObstruction3Ticks(int count) {
+		dataManager.set(OBSTRUCTION_TICKS_3, count);
+	}
+
+	public int getObstruction3Ticks() {
+		 return dataManager.get(OBSTRUCTION_TICKS_3);
+	}
+
+    public void setObstruction4Ticks(int count) {
+		dataManager.set(OBSTRUCTION_TICKS_4, count);
+	}
+
+	public int getObstruction4Ticks() {
+		 return dataManager.get(OBSTRUCTION_TICKS_4);
 	}
 
 	public void setHeadItem(ItemStack itemStack) {
@@ -464,19 +507,67 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        if(!isBeingRidden() ) {
 	        	if(getStaminaTicks() < (int) (getStaminaMods() * 20))
 	        		setStaminaTicks(getStaminaTicks() + 1);
-	        	if(getEscapeTicks() < 480)
-	        		setEscapeTicks(480);
+	        	if(getEscapeTicks() < 600)
+	        		setEscapeTicks(600);
+	        	if(getObstruction1Ticks() < 256)
+	        		setObstruction1Ticks(256);
+	        	if(getObstruction2Ticks() < 256)
+	        		setObstruction2Ticks(256);
+	        	if(getObstruction3Ticks() < 256)
+	        		setObstruction3Ticks(256);
+	        	if(getObstruction4Ticks() < 256)
+	        		setObstruction4Ticks(256);
 	        }
 
 	        if(isBeingRidden() && getPassengers().get(0) instanceof EntityBLFishHook) {
 	        	if(getEscapeTicks() > 0)
 	        		setEscapeTicks(getEscapeTicks() -1);
-	        	if(getEscapeTicks() * 256 / 480 < getStaminaTicks() * 256 / 100)
-	        		System.out.println("Escaped!");
+	        	if(getEscapeTicks() * 256 / 600 < getStaminaTicks() * 256 / 100)
+	        		getPassengers().get(0).dismountRidingEntity(); // this just releases the fish atm
+	        	
+	        // testing stuff WIP
+	        	if(getEscapeTicks() <= 600 && getObstruction1Ticks() >= 0) {
+	        		setObstruction1Ticks(getObstruction1Ticks() - 1);
+	        		if(getObstruction1Ticks() <= 0)
+	        			setObstruction1Ticks(256);
+	        		}
+	        	
+	        	if(getEscapeTicks() <= 485 && getObstruction2Ticks() >= 0) {
+	        		setObstruction2Ticks(getObstruction2Ticks() - 1);
+	        		if(getObstruction2Ticks() <= 0)
+	        			setObstruction2Ticks(256);
+	        		}
+	        	
+	        	if(getEscapeTicks() <= 371 && getObstruction3Ticks() >= 0) {
+	        		setObstruction3Ticks(getObstruction3Ticks() - 1);
+	        		if(getObstruction3Ticks() <= 0)
+	        			setObstruction3Ticks(256);
+	        		}
+	        	
+	        	if(getEscapeTicks() <= 256 && getObstruction4Ticks() >= 0) {
+	        		setObstruction4Ticks(getObstruction4Ticks() - 1);
+	        		if(getObstruction4Ticks() <= 0)
+	        			setObstruction4Ticks(256);
+	        		}
 	        }
 
 		}
 		super.onUpdate();
+	}
+
+
+
+	public boolean isObstructed() {
+		if(256 - getObstruction1Ticks() <= getStaminaTicks() * 256 / 100 && 256 - getObstruction1Ticks() >= getStaminaTicks() * 256 / 100 - 16 )
+			return true;
+		else if(256 - getObstruction2Ticks() <= getStaminaTicks() * 256 / 100 && 256 - getObstruction2Ticks() >= getStaminaTicks() * 256 / 100 - 16 )
+			return true;
+		else if(256 - getObstruction3Ticks() <= getStaminaTicks() * 256 / 100 && 256 - getObstruction3Ticks() >= getStaminaTicks() * 256 / 100 - 16 )
+			return true;
+		else if(256 - getObstruction4Ticks() <= getStaminaTicks() * 256 / 100 && 256 - getObstruction4Ticks() >= getStaminaTicks() * 256 / 100 - 16 )
+			return true;
+		else
+			return false;
 	}
 
 	@Override
