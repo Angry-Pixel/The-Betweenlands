@@ -68,7 +68,8 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 							target.setDropItemsWhenDead(false);
 							target.setDead();
 
-							player.world.spawnEntity(new EntityItem(player.world, player.posX, player.posY, player.posZ, mobItemStack));
+							if(!player.inventory.addItemStackToInventory(mobItemStack))
+								player.world.spawnEntity(new EntityItem(player.world, player.posX, player.posY, player.posZ, mobItemStack));
 
 							stack.damageItem(1, player);
 

@@ -1,5 +1,6 @@
 package thebetweenlands.common.entity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -111,17 +112,15 @@ public class EntityPlayerDelegate extends FakePlayer {
 
 		private final WorldServer world;
 		private final GameProfile profile;
-		private final List<NonNullList<ItemStack>> excess;
 
 		private Entity entity;
 		private InventoryPlayer playerInv;
 		private IInventory mainInv, armorInv, offhandInv;
 
-		protected Builder(Function<Builder, EntityPlayerDelegate> constructor, WorldServer world, GameProfile profile, List<NonNullList<ItemStack>> excess) {
+		protected Builder(Function<Builder, EntityPlayerDelegate> constructor, WorldServer world, GameProfile profile) {
 			this.constructor = constructor;
 			this.world = world;
 			this.profile = profile;
-			this.excess = excess;
 		}
 
 		public WorldServer world() {
@@ -130,10 +129,6 @@ public class EntityPlayerDelegate extends FakePlayer {
 
 		public GameProfile profile() {
 			return this.profile;
-		}
-
-		public List<NonNullList<ItemStack>> excess() {
-			return this.excess;
 		}
 
 		public Builder entity(@Nullable Entity entity) {
@@ -187,16 +182,18 @@ public class EntityPlayerDelegate extends FakePlayer {
 	}
 
 	private final Entity entity;
+	private final List<NonNullList<ItemStack>> excess;
 
-	public EntityPlayerDelegate(WorldServer world, GameProfile name, Entity entity) {
+	private EntityPlayerDelegate(WorldServer world, GameProfile name, Entity entity) {
 		super(world, name);
 		this.entity = entity;
+		this.excess = new ArrayList<>();
 		this.connection = new NetHandlerPlayServer(world.getMinecraftServer(), new NetworkManager(EnumPacketDirection.SERVERBOUND), this);
 	}
 
-	private EntityPlayerDelegate(WorldServer world, GameProfile name, @Nullable Entity parent, @Nullable IInventory main, @Nullable IInventory armor, @Nullable IInventory offhand, List<NonNullList<ItemStack>> excess) {
+	private EntityPlayerDelegate(WorldServer world, GameProfile name, @Nullable Entity parent, @Nullable IInventory main, @Nullable IInventory armor, @Nullable IInventory offhand) {
 		this(world, name, parent);
-		this.inventory = new DelegateInventoryPlayer(parent instanceof EntityPlayer ? (EntityPlayer)parent : this, main, armor, offhand, excess);
+		this.inventory = new DelegateInventoryPlayer(parent instanceof EntityPlayer ? (EntityPlayer)parent : this, main, armor, offhand, this.excess);
 	}
 
 	private EntityPlayerDelegate(WorldServer world, GameProfile name, @Nullable Entity entity, InventoryPlayer inv) {
@@ -209,9 +206,13 @@ public class EntityPlayerDelegate extends FakePlayer {
 			if(builder.playerInventory() != null) {
 				return new EntityPlayerDelegate(builder.world(), builder.profile(), builder.entity(), builder.playerInventory());
 			} else {
-				return new EntityPlayerDelegate(builder.world(), builder.profile(), builder.entity(), builder.mainInventory(), builder.armorInventory(), builder.offhandInventory(), builder.excess());
+				return new EntityPlayerDelegate(builder.world(), builder.profile(), builder.entity(), builder.mainInventory(), builder.armorInventory(), builder.offhandInventory());
 			}
-		}, world, profile, excess);
+		}, world, profile);
+	}
+
+	public List<NonNullList<ItemStack>> getExcessInventories() {
+		return this.excess;
 	}
 
 	@Override
