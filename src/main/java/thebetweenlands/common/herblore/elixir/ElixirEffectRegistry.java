@@ -60,6 +60,7 @@ public class ElixirEffectRegistry {
 	public static final ElixirEffect EFFECT_ISOLATEDSENSES = new ElixirEffect(33, "bl.elixir.isolatedSenses", new ResourceLocation("thebetweenlands:textures/items/strictly_herblore/misc/vial_green.png")).setAntiInfusion();
 	//Other Elixirs
 	public static final ElixirEffect EFFECT_PETRIFY = new ElixirPetrify(34, "bl.elixir.petrify", new ResourceLocation("thebetweenlands:textures/items/strictly_herblore/misc/vial_green.png"));
+	public static final ElixirEffect EFFECT_BLESSED = new ElixirEffect(35, "bl.effect.blessed", new ResourceLocation("thebetweenlands:textures/gui/effect_blessed.png"));
 	private static final List<ElixirEffect> EFFECTS = new ArrayList<ElixirEffect>();
 
 	//Potions

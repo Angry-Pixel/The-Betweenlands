@@ -41,6 +41,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.ai.EntityAIFlyRandomly;
 import thebetweenlands.common.entity.ai.EntityAIMoveToDirect;
@@ -48,6 +49,7 @@ import thebetweenlands.common.entity.ai.EntityAITargetNonSneaking;
 import thebetweenlands.common.entity.ai.EntityAIWightAttack;
 import thebetweenlands.common.entity.ai.EntityAIWightBuffSwampHag;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
+import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.network.clientbound.MessageWightVolatileParticles;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
@@ -73,9 +75,12 @@ public class EntityWight extends EntityMob implements IEntityBL {
     private boolean canTurnVolatile = true;
     private boolean canTurnVolatileOnTarget = false;
     private boolean didTurnVolatileOnPlayer = false;
+    private static final DataParameter<Integer> GROW_TIMER = EntityDataManager.createKey(EntityWight.class, DataSerializers.VARINT);
+    public int growCount, prevGrowCount;
 
     public EntityWight(World world) {
         super(world);
+        this.experienceValue = 10;
         setSize(0.7F, 2.2F);
         this.setPathPriority(PathNodeType.WATER, 0.2F);
         this.flightMoveHelper = new FlightMoveHelper(this) {
@@ -129,6 +134,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
         super.entityInit();
         this.dataManager.register(VOLATILE_STATE_DW, false);
         this.dataManager.register(HIDING_STATE_DW, false);
+        dataManager.register(GROW_TIMER, 40);
     }
 
     @Override
@@ -147,8 +153,31 @@ public class EntityWight extends EntityMob implements IEntityBL {
     }
 
     @Override
-    public void onUpdate() {
+	public void onUpdate() {
+		if (this.world.isRemote) {
+			prevGrowCount = growCount;
+			growCount = getGrowTimer();
+			if (getGrowTimer() > 0 && getGrowTimer() < 40)
+				if (this.ticksExisted % 4 == 0)
+					this.spawnVolatileParticles(true);
+		}
+
         if (!this.world.isRemote) {
+			if (isInTar()) {
+				if (getGrowTimer() > 0)
+					setGrowTimer(Math.max(0, getGrowTimer() - 1));
+				if (getGrowTimer() <= 0) {
+					EntityTarBeast tar_beast = new EntityTarBeast(getEntityWorld());
+					tar_beast.setPositionAndRotation(posX, posY, posZ, rotationYaw, rotationPitch);
+					tar_beast.setGrowTimer(0);
+					getEntityWorld().spawnEntity(tar_beast);
+					setDead();
+				}
+			}
+
+			if (!isInTar() && getGrowTimer() < 40)
+				setGrowTimer(Math.min(40, getGrowTimer() + 1));
+
             if (this.getAttackTarget() == null) {
                 this.setHiding(true);
 
@@ -253,7 +282,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
         	}
 
             if (this.world.isRemote && (this.getRidingEntity() == null || this.ticksExisted % 4 == 0)) {
-                this.spawnVolatileParticles();
+                this.spawnVolatileParticles(false);
             }
 
             this.setSize(0.7F, 0.7F);
@@ -278,7 +307,17 @@ public class EntityWight extends EntityMob implements IEntityBL {
         super.onUpdate();
     }
 
-    @Override
+	public boolean isInTar() {
+		//System.out.println("IN TAR!");
+		return this.world.isMaterialInBB(this.getEntityBoundingBox().grow(-0.10000000149011612D, -0.4000000059604645D, -0.10000000149011612D), BLMaterialRegistry.TAR);
+	}
+
+	@Override
+	protected boolean isMovementBlocked() {
+		return super.isMovementBlocked() || isInTar() || getGrowTimer() < 40;
+	}
+
+	@Override
     public void fall(float distance, float damageMultiplier) {
         if (!this.isVolatile()) {
             super.fall(distance, damageMultiplier);
@@ -424,6 +463,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
         nbt.setBoolean("canTurnVolatileOnTarget", this.canTurnVolatileOnTarget);
         nbt.setBoolean("canTurnVolatile", this.canTurnVolatile);
         nbt.setBoolean("turnVolatileOnPlayer", this.didTurnVolatileOnPlayer);
+        nbt.setInteger("grow_timer", getGrowTimer());
     }
 
     @Override
@@ -451,10 +491,13 @@ public class EntityWight extends EntityMob implements IEntityBL {
         if (nbt.hasKey("canTurnVolatile")) {
             this.canTurnVolatile = nbt.getBoolean("canTurnVolatile");
         }
+
+		if(nbt.hasKey("grow_timer"))
+			setGrowTimer(nbt.getInteger("grow_timer")); 
     }
 
     @SideOnly(Side.CLIENT)
-    private void spawnVolatileParticles() {
+    private void spawnVolatileParticles(boolean tarred) {
         final double radius = 0.3F;
 
         final double cx = this.posX;
@@ -469,8 +512,13 @@ public class EntityWight extends EntityMob implements IEntityBL {
             px = cx + vec.x * radius;
             py = cy + vec.y * radius;
             pz = cz + vec.z * radius;
-            BLParticles.STEAM_PURIFIER.spawn(this.world, px, py, pz);
-        }
+			if (tarred) {
+				float tintChange = 1F / 40F * growCount;
+				BLParticles.STEAM_PURIFIER.spawn(this.world, px, py + 0.25D, pz).setRBGColorF(tintChange, tintChange,
+						tintChange);
+			} else
+				BLParticles.STEAM_PURIFIER.spawn(this.world, px, py, pz);
+		}
     }
 
     public boolean isHiding() {
@@ -481,9 +529,21 @@ public class EntityWight extends EntityMob implements IEntityBL {
         this.getDataManager().set(HIDING_STATE_DW, hiding);
     }
 
+	public int getGrowTimer() {
+		return dataManager.get(GROW_TIMER);
+	}
+
+	public void setGrowTimer(int timer) {
+		dataManager.set(GROW_TIMER, timer);
+	}
+
     public float getHidingAnimation(float partialTicks) {
         return (this.lastHidingAnimationTicks + (this.hidingAnimationTicks - this.lastHidingAnimationTicks) * partialTicks) / 12.0F;
     }
+
+	public float getGrowthFactor(float partialTicks) {
+		return prevGrowCount + (growCount - prevGrowCount) * partialTicks;
+	}
 
     public boolean isVolatile() {
         return this.getDataManager().get(VOLATILE_STATE_DW);

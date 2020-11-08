@@ -1,15 +1,17 @@
 package thebetweenlands.client.render.model.entity;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.render.model.MowzieModelBase;
 import thebetweenlands.client.render.model.MowzieModelRenderer;
 import thebetweenlands.common.entity.mobs.EntitySludge;
+import thebetweenlands.common.world.event.EventSpoopy;
 
 @SideOnly(Side.CLIENT)
 public class ModelSludge extends MowzieModelBase {
@@ -65,7 +67,6 @@ public class ModelSludge extends MowzieModelBase {
 		this.spine.addChild(this.spinepiece);
 		this.head2.addChild(this.head1);
 
-		parts = new MowzieModelRenderer[]{head1, head2, jaw, teeth, spine, spinepiece, slime1, slime2, slime3};
 		setInitPose();
 	}
 
@@ -75,7 +76,8 @@ public class ModelSludge extends MowzieModelBase {
 		setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
 		GlStateManager.pushMatrix();
 		GlStateManager.scale(scale, scale, scale);
-		head2.render(unitPixel);
+		if(!EventSpoopy.isSpoooopy(entity.world))
+			head2.render(unitPixel);
 		GlStateManager.enableBlend();
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		slime1.render(unitPixel);

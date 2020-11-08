@@ -1127,6 +1127,59 @@
       "thebetweenlands:chirobaby_egg_5"
     ]
   },
+  "stalker_scream": {
+    "sounds": [
+      "thebetweenlands:stalker_scream"
+    ]
+  },
+  "stalker_screech": {
+    "sounds": [
+      "thebetweenlands:stalker_screech"
+    ]
+  },
+  "stalker_step": {
+    "sounds": [
+      "thebetweenlands:stalker_step_1",
+      "thebetweenlands:stalker_step_2",
+      "thebetweenlands:stalker_step_3",
+      "thebetweenlands:stalker_step_4",
+      "thebetweenlands:stalker_step_5",
+      "thebetweenlands:stalker_step_6",
+      "thebetweenlands:stalker_step_7",
+      "thebetweenlands:stalker_step_8",
+      "thebetweenlands:stalker_step_9",
+      "thebetweenlands:stalker_step_10"
+    ]
+  },
+  "stalker_living": {
+    "sounds": [
+      "thebetweenlands:stalker_living_1",
+      "thebetweenlands:stalker_living_2",
+      "thebetweenlands:stalker_living_3"
+    ]
+  },
+  "stalker_hurt": {
+    "sounds": [
+      "thebetweenlands:stalker_hurt_1",
+      "thebetweenlands:stalker_hurt_2",
+      "thebetweenlands:stalker_hurt_3"
+    ]
+  },
+  "stalker_death": {
+    "sounds": [
+      "thebetweenlands:stalker_death"
+    ]
+  },
+  "swarm_attack": {
+    "sounds": [
+      "thebetweenlands:swarm_attack"
+    ]
+  },
+  "swarm_idle": {
+    "sounds": [
+      "thebetweenlands:swarm_idle"
+    ]
+  },
   "roof_collapse": {
     "sounds": [
       "thebetweenlands:roof_collapse"
@@ -1335,6 +1388,14 @@
     "sounds": [
       {
         "name": "thebetweenlands:boss/pit_of_decay_loop",
+        "stream": true
+      }
+    ]
+  },
+  "barrishee_theme": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:boss/barrishee_theme",
         "stream": true
       }
     ]
@@ -1769,6 +1830,23 @@
   "chirobarb_erupter": {
     "sounds": [
       "thebetweenlands:chirobarb_erupter"
+    ]
+  },
+  "resurrection": {
+    "sounds": [
+      "thebetweenlands:resurrection"
+    ]
+  },
+  "simulacrum_break": {
+    "sounds": [
+      "thebetweenlands:simulacrum_break"
+    ]
+  },
+  "worm_throw": {
+    "sounds": [
+      "thebetweenlands:worm_throw_1",
+      "thebetweenlands:worm_throw_2",
+      "thebetweenlands:worm_throw_3"
     ]
   },
   "rune_connect_start": {

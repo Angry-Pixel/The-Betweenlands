@@ -28,19 +28,25 @@ public class RenderGroundItem extends TileEntitySpecialRenderer<TileEntityGround
                 double offX = (double)((float)(i >> 16 & 15L) / 15.0F);
                 double offZ = (double)((float)(i >> 24 & 15L) / 15.0F);
                 double offY = (double)((float)(i >> 20 & 15L) / 15.0F);
-                GlStateManager.translate(x + 0.5F + (offX - 0.5D) * 0.5D, y + 0.3F, z + 0.5F + (offZ - 0.5D) * 0.5D);
+                
+                if(te.hasRandomOffset()) {
+                	GlStateManager.translate(x + 0.5F + (offX - 0.5D) * 0.5D, y + te.getYOffset(), z + 0.5F + (offZ - 0.5D) * 0.5D);
+                } else {
+                	GlStateManager.translate(x + 0.5F, y + te.getYOffset(), z + 0.5F);
+                }
 
-                GlStateManager.rotate(((MathHelper.abs((float) offX) * 120F + MathHelper.abs((float) offZ) * 60F + MathHelper.abs((float) offY) * 180F) % 360F), 0.0F, 1.0F, 0.0F);
-                GlStateManager.rotate(150F, 0.0F, 0.0F, 1.0F);
-
-                GlStateManager.scale(1.4F, 1.4F, 1.4F);
+                GlStateManager.rotate(te.getYRotation((MathHelper.abs((float) offX) * 120F + MathHelper.abs((float) offZ) * 60F + MathHelper.abs((float) offY) * 180F) % 360F), 0.0F, 1.0F, 0.0F);
+            	GlStateManager.rotate(te.getTiltRotation(), 0.0F, 0.0F, 1.0F);
+                
+            	float scale = te.getItemScale();
+                GlStateManager.scale(scale, scale, scale);
                 RenderHelper.enableStandardItemLighting();
 
                 if (!renderItem.shouldRenderItemIn3D(stack) || stack.getItem() instanceof ItemSkull) {
                     GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
                 }
 
-                renderItem.renderItem(stack, ItemCameraTransforms.TransformType.GROUND);
+                renderItem.renderItem(stack, ItemCameraTransforms.TransformType.FIXED);
 
                 RenderHelper.disableStandardItemLighting();
                 GlStateManager.popAttrib();

@@ -7,6 +7,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -32,6 +33,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockCragrock extends BasicBlock implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeItemBlockModelDefinition {
 	public static final PropertyEnum<EnumCragrockType> VARIANT = PropertyEnum.<EnumCragrockType>create("variant", EnumCragrockType.class);
+	public static final PropertyBool IS_BOTTOM = PropertyBool.create("is_bottom");
 
 	public BlockCragrock(Material materialIn) {
 		super(materialIn);
@@ -87,8 +89,14 @@ public class BlockCragrock extends BasicBlock implements BlockRegistry.ICustomIt
 	}
 
 	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		IBlockState stateBelow = worldIn.getBlockState(pos.down());
+		return state.withProperty(IS_BOTTOM, stateBelow.getBlock() != this || stateBelow.getValue(VARIANT) != state.getValue(VARIANT));
+	}
+	
+	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] {VARIANT});
+		return new BlockStateContainer(this, new IProperty[] { VARIANT, IS_BOTTOM });
 	}
 
 	@Override

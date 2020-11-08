@@ -1,5 +1,6 @@
 package thebetweenlands.client.render.entity;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -20,6 +21,12 @@ public class RenderTarBeast extends RenderLiving<EntityTarBeast> {
 		super(manager, new ModelTarBeast(), 0.7F);
 		this.addLayer(new LayerOverlay<EntityTarBeast>(this, EYE_TEXTURE).setGlow(true));
 		this.addLayer(new LayerTarBeastEffects(this));
+	}
+
+	@Override
+	protected void preRenderCallback(EntityTarBeast entity, float partialTicks) {
+		float scale = 1.0F / 40F * (entity.getGrowthFactor(partialTicks));
+		GlStateManager.scale(1.0F, scale, 1.0F);
 	}
 
 	@Override

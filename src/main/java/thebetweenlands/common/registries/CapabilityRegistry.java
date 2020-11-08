@@ -2,6 +2,7 @@ package thebetweenlands.common.registries;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
+import thebetweenlands.api.capability.IBlessingCapability;
 import thebetweenlands.api.capability.ICircleGemCapability;
 import thebetweenlands.api.capability.ICustomStepSoundCapability;
 import thebetweenlands.api.capability.IDecayCapability;
@@ -10,6 +11,7 @@ import thebetweenlands.api.capability.IEntityCustomCollisionsCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.capability.IFlightCapability;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
+import thebetweenlands.api.capability.ILastKilledCapability;
 import thebetweenlands.api.capability.IPortalCapability;
 import thebetweenlands.api.capability.IPuppetCapability;
 import thebetweenlands.api.capability.IPuppeteerCapability;
@@ -17,10 +19,12 @@ import thebetweenlands.api.capability.IRuneCapability;
 import thebetweenlands.api.capability.IRuneChainCapability;
 import thebetweenlands.api.capability.IRuneChainUserCapability;
 import thebetweenlands.api.capability.ISummoningCapability;
+import thebetweenlands.api.capability.ISwarmedCapability;
 import thebetweenlands.common.capability.CustomStepSoundCapability;
 import thebetweenlands.common.capability.RuneChainUserPlayerCapability;
 import thebetweenlands.common.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.capability.base.ItemCapabilityHandler;
+import thebetweenlands.common.capability.blessing.BlessingEntityCapability;
 import thebetweenlands.common.capability.circlegem.CircleGemEntityCapability;
 import thebetweenlands.common.capability.collision.RingOfDispersionEntityCapability;
 import thebetweenlands.common.capability.decay.DecayEntityCapability;
@@ -31,12 +35,14 @@ import thebetweenlands.common.capability.item.ILivingWeedwoodShieldCapability;
 import thebetweenlands.common.capability.item.LivingWeedwoodShieldItemCapability;
 import thebetweenlands.common.capability.item.RuneChainItemCapability;
 import thebetweenlands.common.capability.item.RuneItemCapability;
+import thebetweenlands.common.capability.lastkilled.LastKilledCapability;
 import thebetweenlands.common.capability.playermounts.IPlayerMountsEntityCapability;
 import thebetweenlands.common.capability.playermounts.PlayerMountsEntityCapability;
 import thebetweenlands.common.capability.portal.PortalEntityCapability;
 import thebetweenlands.common.capability.recruitment.EntityPuppetCapability;
 import thebetweenlands.common.capability.recruitment.EntityPuppeteerCapability;
 import thebetweenlands.common.capability.summoning.EntitySummoningCapability;
+import thebetweenlands.common.capability.swarmed.SwarmedCapability;
 
 public class CapabilityRegistry {
 	private CapabilityRegistry() { }
@@ -88,6 +94,15 @@ public class CapabilityRegistry {
 	
 	@CapabilityInject(IPlayerMountsEntityCapability.class)
 	public static final Capability<IPlayerMountsEntityCapability> CAPABILITY_PLAYER_MOUNTS = null;
+	
+	@CapabilityInject(ILastKilledCapability.class)
+	public static final Capability<ILastKilledCapability> CAPABILITY_LAST_KILLED = null;
+	
+	@CapabilityInject(IBlessingCapability.class)
+	public static final Capability<IBlessingCapability> CAPABILITY_BLESSING = null;
+	
+	@CapabilityInject(ISwarmedCapability.class)
+	public static final Capability<ISwarmedCapability> CAPABILITY_SWARMED = null;
 		
 	public static void preInit() {
 		EntityCapabilityHandler.registerEntityCapability(new DecayEntityCapability());
@@ -103,6 +118,9 @@ public class CapabilityRegistry {
 		EntityCapabilityHandler.registerEntityCapability(new RingOfDispersionEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new RuneChainUserPlayerCapability());
 		EntityCapabilityHandler.registerEntityCapability(new PlayerMountsEntityCapability());
+		EntityCapabilityHandler.registerEntityCapability(new LastKilledCapability());
+		EntityCapabilityHandler.registerEntityCapability(new BlessingEntityCapability());
+		EntityCapabilityHandler.registerEntityCapability(new SwarmedCapability());
 		
 		ItemCapabilityHandler.registerItemCapability(new LivingWeedwoodShieldItemCapability());
 		ItemCapabilityHandler.registerItemCapability(new RuneChainItemCapability());

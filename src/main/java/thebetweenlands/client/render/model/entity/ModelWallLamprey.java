@@ -161,35 +161,6 @@ public class ModelWallLamprey extends MowzieModelBase {
 		this.head_mid.addChild(this.fancyflap_left1);
 		this.mouthpart_top.addChild(this.mouthpart_right);
 
-		parts = new MowzieModelRenderer[] {
-				body_base,
-				head_base,
-				head_mid,
-				eye_left,
-				eye_right,
-				head_front,
-				fancyflap_left1,
-				fancyflap_right1,
-				mouthpart_top,
-				teeth4,
-				nostril_left1,
-				nostril_right1,
-				mouthpart_bottom,
-				mouthpart_left,
-				mouthpart_right,
-				teeth1,
-				teeth2,
-				teeth3,
-				mouthpart_corner1,
-				mouthpart_corner2,
-				mouthpart_corner3,
-				mouthpart_corner4,
-				nostril_left2,
-				nostril_left3,
-				nostril_right2,
-				nostril_right3
-		};
-
 		setInitPose();
 	}
 

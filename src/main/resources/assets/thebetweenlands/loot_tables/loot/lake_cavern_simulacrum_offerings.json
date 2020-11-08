@@ -1,0 +1,45 @@
+{
+	"pools": [
+		{
+			"name": "offerings",
+			"rolls": 1,
+			"entries": [
+				{
+					"type": "item",
+					"name": "thebetweenlands:sap_ball",
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:reed_donut",
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:jam_donut",
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:middle_fruit",
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:weeping_blue_petal",
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:forbidden_fig",
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:spirit_fruit",
+					"weight": 1
+				}
+			]
+		}
+	]
+}

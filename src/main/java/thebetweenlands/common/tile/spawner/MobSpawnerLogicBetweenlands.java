@@ -257,6 +257,22 @@ public abstract class MobSpawnerLogicBetweenlands {
     }
 
     /**
+     * Sets the maximum number of entities to be spawned
+     * @param count
+     */
+    public void setMaxSpawnCount(int count) {
+    	this.spawnCount = count;
+    }
+    
+    /**
+     * Returns the maximum number of entities to be spawned
+     * @return
+     */
+    public int getMaxSpawnCount() {
+    	return this.spawnCount;
+    }
+    
+    /**
      * Updates the spawner logic
      */
     public void updateSpawner() {
@@ -409,7 +425,7 @@ public abstract class MobSpawnerLogicBetweenlands {
     /**
      * Resets the timer
      */
-    private void resetTimer() {
+    public void resetTimer() {
         if (this.maxSpawnDelay <= this.minSpawnDelay) {
             this.spawnDelay = this.minSpawnDelay;
         } else {

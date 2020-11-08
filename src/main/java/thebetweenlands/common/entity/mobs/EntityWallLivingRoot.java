@@ -116,7 +116,7 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 		super(world);
 
 		this.lookMoveSpeedMultiplier = 8.0F;
-		this.experienceValue = 5;
+		this.experienceValue = 7;
 
 		this.parts = new MultiPartEntityPart[this.getNumSegments() + 1];
 		this.parts[0] = this.rootTip = new MultiPartEntityPart(this, "rootTip", this.getNodeSize(0), this.getNodeSize(0));

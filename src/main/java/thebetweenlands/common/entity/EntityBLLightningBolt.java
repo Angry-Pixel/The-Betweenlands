@@ -38,20 +38,23 @@ public class EntityBLLightningBolt extends EntityLightningBolt implements IEntit
 	private BlockPos startPos = BlockPos.ORIGIN;
 	private int delay = 60;
 	private boolean isFloatingTarget;
-
+	
+	private boolean effectOnly;
+	
 	public EntityBLLightningBolt(World world) {
 		super(world, 0, 0, 0, true);
 		this.setSize(1, 1);
 		this.isImmuneToFire = true;
 	}
 
-	public EntityBLLightningBolt(World world, double x, double y, double z, int delay, boolean isFloatingTarget) {
+	public EntityBLLightningBolt(World world, double x, double y, double z, int delay, boolean isFloatingTarget, boolean effectOnly) {
 		super(world, x, y, z, true);
 		this.setSize(1, 1);
 		this.isImmuneToFire = true;
 		this.delay = Math.max(8, delay);
 		this.startPos = new BlockPos(x, y, z).add(world.rand.nextInt(40) - 20, 80, world.rand.nextInt(40) - 20);
 		this.isFloatingTarget = isFloatingTarget;
+		this.effectOnly = effectOnly;
 	}
 
 	@Override
@@ -134,7 +137,7 @@ public class EntityBLLightningBolt extends EntityLightningBolt implements IEntit
 		} else if(this.delay > 0 && this.delay <= 4) {
 			if(this.world.isRemote) {
 				this.world.setLastLightningBolt(2);
-			} else {
+			} else if(!this.effectOnly) {
 				if(this.delay == 4) {
 					BlockPos blockpos = new BlockPos(this);
 

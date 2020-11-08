@@ -41,7 +41,6 @@ public class ModelDarkLightSkull extends MowzieModelBase {
 		this.head1.addChild(this.teeth);
 		this.head2.addChild(this.head1);
 
-		parts = new MowzieModelRenderer[]{head1, head2, jaw, teeth};
 		setInitPose();
 	}
 

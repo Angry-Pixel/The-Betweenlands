@@ -1,22 +1,12 @@
 package thebetweenlands.client.render.tile;
 
-import java.util.List;
-
-import net.minecraft.client.renderer.BufferBuilder;
-import org.apache.commons.lang3.tuple.Pair;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.Vec3d;
-import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.client.render.particle.entity.ParticleWisp;
 import thebetweenlands.common.block.terrain.BlockWisp;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.tile.TileEntityWisp;
@@ -31,7 +21,7 @@ public class RenderWisp extends TileEntitySpecialRenderer<TileEntityWisp> {
 
 		Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
 
-		if(!BlockWisp.canSee(tileEntity.getWorld(), tileEntity.getPos())) {
+		if(!StatePropertyHelper.getStatePropertySafely(tileEntity, BlockWisp.class, BlockWisp.VISIBLE, false)) {
 			double dist = renderView != null ? renderView.getDistance(x + renderViewX, y + renderViewY, z + renderViewZ) : 0.0D;
 			if(dist > 50 || dist < 10) {
 				return;
@@ -48,7 +38,7 @@ public class RenderWisp extends TileEntitySpecialRenderer<TileEntityWisp> {
 				float r = (color >> 16 & 0xFF) / 255F;
 				float g = (color >> 8 & 0xFF) / 255F;
 				float b = (color & 0xFF) / 255F;
-				
+
 				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.WISPS, BLParticles.WISP.create(tileEntity.getWorld(), 
 						x + 0.5 + renderViewX, 
 						y + 0.5 + renderViewY, 
