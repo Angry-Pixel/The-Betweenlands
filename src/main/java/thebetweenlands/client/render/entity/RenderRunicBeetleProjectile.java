@@ -64,9 +64,10 @@ public class RenderRunicBeetleProjectile extends Render<EntityRunicBeetleProject
 			
 			RenderProperties properties = new RenderProperties();
 			properties.sizeX = properties.sizeY = properties.sizeZ = 0.5f;
+			properties.alpha = 0.3f;
 			
 			for(int i = 0; i < Math.min(3, modifier.getRendererCount(subject)); i++) {
-				modifier.render(subject, i, properties, partialTicks);
+				modifier.render(subject, i, properties, entity.getRenderState(), partialTicks);
 				
 				GlStateManager.translate(0, 0.5f, 0);
 			}

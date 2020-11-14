@@ -12,6 +12,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IThrowableEntity;
 import thebetweenlands.api.rune.impl.RuneEffectModifier;
+import thebetweenlands.api.rune.impl.RuneEffectModifier.RenderState;
 import thebetweenlands.api.rune.impl.RuneEffectModifier.Subject;
 
 public class EntityRunicBeetleProjectile extends EntityThrowable implements IThrowableEntity {
@@ -19,6 +20,8 @@ public class EntityRunicBeetleProjectile extends EntityThrowable implements IThr
 	private BlockPos hitBlock;
 
 	private Pair<RuneEffectModifier, Subject> visualModifier;
+	
+	private RenderState renderState = RenderState.none();
 
 	public EntityRunicBeetleProjectile(World worldIn) {
 		super(worldIn);
@@ -30,6 +33,15 @@ public class EntityRunicBeetleProjectile extends EntityThrowable implements IThr
 
 	public EntityRunicBeetleProjectile(World worldIn, double x, double y, double z) {
 		super(worldIn, x, y, z);
+	}
+	
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+
+		if(this.world.isRemote) {
+			this.renderState.update();
+		}
 	}
 
 	@Override
@@ -69,5 +81,9 @@ public class EntityRunicBeetleProjectile extends EntityThrowable implements IThr
 	@Nullable
 	public Pair<RuneEffectModifier, Subject> getVisualModifier() {
 		return this.visualModifier;
+	}
+	
+	public RenderState getRenderState() {
+		return this.renderState;
 	}
 }

@@ -521,78 +521,7 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 			}
 
 			if(!effects.isEmpty()) {
-				this.runeEffectModifier = new RuneEffectModifier() {
-					@Override
-					public boolean activate(AbstractRune<?> rune, IRuneChainUser user, RuneEffectModifier.Subject subject) {
-						boolean activated = false;
-						for(RuneEffectModifier effect : effects) {
-							activated |= effect.activate(rune, user, subject);
-						}
-						return activated;
-					}
-
-					@Override
-					public void update() {
-						for(RuneEffectModifier effect : effects) {
-							effect.update();
-						}
-					}
-
-					@Override
-					public int getColorModifier(RuneEffectModifier.Subject subject, int index) {
-						if(index < 0 || index > effects.size()) {
-							return 0xFFFFFFFF;
-						}
-
-						int accumulated = 0;
-
-						for(RuneEffectModifier effect : effects) {
-							int count = effect.getColorModifierCount(subject);
-
-							if(index >= accumulated && index < accumulated + count) {
-								return effect.getColorModifier(subject, index - accumulated);
-							}
-
-							accumulated += count;
-						}
-
-						return 0xFFFFFFFF;
-					}
-
-					@Override
-					public int getColorModifierCount(RuneEffectModifier.Subject subject) {
-						int count = 0;
-						for(RuneEffectModifier effect : effects) {
-							count += effect.getColorModifierCount(subject);
-						}
-						return count;
-					}
-
-					@Override
-					public void render( RuneEffectModifier.Subject subject, int index, RenderProperties properties, float partialTicks) {
-						int accumulated = 0;
-
-						for(RuneEffectModifier effect : effects) {
-							int count = effect.getRendererCount(subject);
-
-							if(index >= accumulated && index < accumulated + count) {
-								effect.render(subject, index - accumulated, properties, partialTicks);
-								return;
-							}
-
-							accumulated += count;
-						}
-					}
-
-					@Override
-					public int getRendererCount(RuneEffectModifier.Subject subject) {
-						int count = 0;
-						for(RuneEffectModifier effect : effects) {
-							count += effect.getRendererCount(subject);
-						}
-						return count;
-					}
-				};
+				this.runeEffectModifier = new CompoundRuneEffectModifier(effects);
 			};
 		}
 	}

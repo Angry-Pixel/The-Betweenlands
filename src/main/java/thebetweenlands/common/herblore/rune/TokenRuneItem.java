@@ -9,7 +9,13 @@ import com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -110,30 +116,61 @@ public final class TokenRuneItem extends AbstractRune<TokenRuneItem> {
 
 			return null;
 		}
-		
+
 		@Override
 		protected RuneEffectModifier createRuneEffectModifier(TokenRuneItem state, AbstractRune<?> target, AbstractRune<?> ioNode, int ioIndex) {
 			return new RuneEffectModifier() {
+				class State extends RenderState {
+					private int rotation;
+
+					@Override
+					protected void tick() {
+						this.rotation++;
+					}
+				}
+
 				@SideOnly(Side.CLIENT)
 				@Override
-				public void render(Subject subject, int index, RenderProperties properties, float partialTicks) {
+				public void render(Subject subject, int index, RenderProperties properties, RenderState state, float partialTicks) {
 					float scale = Math.min(properties.sizeX, Math.min(properties.sizeY, properties.sizeZ));
-					
+
 					GlStateManager.pushMatrix();
 					GlStateManager.scale(scale, scale, scale);
+
+					if(state != null && !properties.fixed) {
+						State rotationState = state.get(State.class, State::new);
+
+						GlStateManager.rotate((rotationState.rotation + partialTicks) * 10, 0, 1, 0);
+					}
+
+					TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+					RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+
+					IBakedModel model = renderItem.getItemModelMesher().getItemModel(TokenRuneItem.Blueprint.this.item);
+
+					textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+					ITextureObject texture = textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+					texture.setBlurMipmap(false, false);
+
+					GlStateManager.enableBlend();
+					GlStateManager.color(properties.red, properties.green, properties.blue, properties.alpha);
+					GlStateManager.tryBlendFuncSeparate(SourceFactor.ONE, DestFactor.ONE, SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 					
-					Minecraft.getMinecraft().getRenderItem().renderItem(TokenRuneItem.Blueprint.this.item, TransformType.FIXED);
-					
+					renderItem.renderItem(TokenRuneItem.Blueprint.this.item, model);
+
+					textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+					texture.restoreLastBlurMipmap();
+
 					GlStateManager.popMatrix();
 				}
-				
+
 				@Override
 				public int getRendererCount(Subject subject) {
 					return 1;
 				}
 			};
 		}
-		
+
 		@Override
 		protected boolean isDelegatedRuneEffectModifier(TokenRuneItem state, AbstractRune<?> target, AbstractRune<?> inputRune, int outputIndex) {
 			return true;
