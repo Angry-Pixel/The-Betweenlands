@@ -2,6 +2,8 @@ package thebetweenlands.api.rune.impl;
 
 import java.util.function.Predicate;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.api.rune.IRuneItemStackAccess;
@@ -18,6 +20,11 @@ public class InventoryRuneItemStackAccess implements IRuneItemStackAccess {
 		this.slot = slot;
 		this.outputPredicate = outputPredicate;
 		this.inputPredicate = inputPredicate;
+	}
+
+	@Override
+	public Pair<IInventory, Integer> getDelegatedSlot() {
+		return Pair.of(this.inventory, this.slot);
 	}
 
 	@Override

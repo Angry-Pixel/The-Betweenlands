@@ -1,12 +1,14 @@
 package thebetweenlands.util;
 
+import java.util.function.IntPredicate;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 
 public class InventoryUtil {
-	public static void addItemToInventory(IInventory inv, ItemStack stack) {
+	public static void addItemToInventory(IInventory inv, ItemStack stack, IntPredicate slotPredicate) {
 		if(stack.isItemDamaged()) {
-			int index = getFirstEmptyStack(inv);
+			int index = getFirstEmptyStack(inv, slotPredicate);
 
 			if(index >= 0) {
 				inv.setInventorySlotContents(index, stack.copy());
@@ -17,7 +19,7 @@ public class InventoryUtil {
 			while(true) {
 				int count = stack.getCount();
 
-				stack.setCount(storePartialItemStack(inv, stack));
+				stack.setCount(storePartialItemStack(inv, stack, slotPredicate));
 
 				if(stack.isEmpty() || stack.getCount() >= count) {
 					break;
@@ -26,28 +28,28 @@ public class InventoryUtil {
 		}
 	}
 
-	private static int getFirstEmptyStack(IInventory inv) {
+	private static int getFirstEmptyStack(IInventory inv, IntPredicate slotPredicate) {
 		for(int i = 0; i < inv.getSizeInventory(); ++i) {
-			if(inv.getStackInSlot(i).isEmpty()) {
+			if(slotPredicate.test(i) && inv.getStackInSlot(i).isEmpty()) {
 				return i;
 			}
 		}
 		return -1;
 	}
 
-	private static int storePartialItemStack(IInventory inv, ItemStack stack) {
-		int index = storeItemStack(inv, stack);
+	private static int storePartialItemStack(IInventory inv, ItemStack stack, IntPredicate slotPredicate) {
+		int index = storeItemStack(inv, stack, slotPredicate);
 
 		if(index == -1) {
-			index = getFirstEmptyStack(inv);
+			index = getFirstEmptyStack(inv, slotPredicate);
 		}
 
 		return index == -1 ? stack.getCount() : addResource(inv, index, stack);
 	}
 
-	private static int storeItemStack(IInventory inv, ItemStack stack) {
+	private static int storeItemStack(IInventory inv, ItemStack stack, IntPredicate slotPredicate) {
 		for(int i = 0; i < inv.getSizeInventory(); ++i) {
-			if(canMergeStacks(inv, inv.getStackInSlot(i), stack)) {
+			if(slotPredicate.test(i) && canMergeStacks(inv, inv.getStackInSlot(i), stack)) {
 				return i;
 			}
 		}

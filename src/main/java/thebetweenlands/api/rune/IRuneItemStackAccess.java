@@ -1,5 +1,9 @@
 package thebetweenlands.api.rune;
 
+import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -7,6 +11,14 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
 public interface IRuneItemStackAccess extends IInventory {
+	/**
+	 * Returns the inventory slot that this access refers to. May be null if unknown or if no such inventory or slot exists.
+	 * Access must not happen through the delegated inventory and may throw an exception.
+	 * @return
+	 */
+	@Nullable
+	public Pair<IInventory, Integer> getDelegatedSlot();
+
 	/**
 	 * Returns whether this access is valid.
 	 * If false none of the other operations have an effect.

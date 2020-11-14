@@ -10,6 +10,8 @@ import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 import io.netty.buffer.Unpooled;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
@@ -168,24 +170,50 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 		protected abstract RuneEffectModifier.Subject activate(T state, RuneExecutionContext context, INodeIO io);
 
 		/**
-		 * Creates a rune effect modifier to be applied to a previous rune linked to this rune
-		 * @param target previous rune to apply the rune effect modifier to
-		 * @param output output index of the target rune
-		 * @param input input index of this rune that the target rune is linked to
+		 * Creates a rune effect modifier to be applied to a target rune (recursively) linked to this rune
+		 * @param state - node instance created by {@link #create(INodeComposition, INodeConfiguration)}
+		 * @param target target rune to apply the rune effect modifier to
+		 * @param ioRune a rune that is linked to this rune or is delegating this rune
+		 * @param ioIndex input of this rune that is linked to the passed in rune or the output of this rune that the passed in rune is linked to
 		 * @return
 		 */
 		@Nullable
-		protected RuneEffectModifier createRuneEffectModifier(AbstractRune<?> target, int output, int input) {
+		protected RuneEffectModifier createRuneEffectModifier(T state, AbstractRune<?> target, AbstractRune<?> ioRune, int ioIndex) {
 			return null;
 		}
 
 		/**
 		 * Creates a rune effect modifier to be applied to only this rune itself
+		 * @param state - node instance created by {@link #create(INodeComposition, INodeConfiguration)}
 		 * @return
 		 */
 		@Nullable
-		protected RuneEffectModifier createRuneEffectModifier() {
+		protected RuneEffectModifier createRuneEffectModifier(T state) {
 			return null;
+		}
+
+		/**
+		 * Returns whether this rune delegates the rune effect modifier of one of its runes it's linked to
+		 * @param state - node instance created by {@link #create(INodeComposition, INodeConfiguration)}
+		 * @param target target rune to apply the rune effect modifier to
+		 * @param outputRune another rune this rune is linked to
+		 * @param inputIndex input of this rune that is linked to the outputRune
+		 * @return whether this rune delegates the rune effect modifier of one of its runes it's linked to
+		 */
+		protected boolean isDelegatingRuneEffectModifier(T state, AbstractRune<?> target, AbstractRune<?> outputRune, int inputIndex) {
+			return false;
+		}
+
+		/**
+		 * Returns whether this rune's rune effect modifier should be delegated by runes that are linked to this rune
+		 * @param state - node instance created by {@link #create(INodeComposition, INodeConfiguration)}
+		 * @param target target rune to apply the rune effect modifier to
+		 * @param inputRune another rune that is linked to this rune
+		 * @param outputIndex output of this rune that the inputRune is linked to
+		 * @return whether this rune delegates the rune effect modifier of one of its runes it's linked to
+		 */
+		protected boolean isDelegatedRuneEffectModifier(T state, AbstractRune<?> target, AbstractRune<?> inputRune, int outputIndex) {
+			return false;
 		}
 
 		/**
@@ -413,17 +441,19 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 	/**
 	 * Initializes the rune effect modifier applied to this rune. See {@link #getRuneEffectModifier()}.
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void initRuneEffectModifier() {
 		if(!this.runeEffectModifierSet) {
 			this.runeEffectModifierSet = true;
 
 			List<RuneEffectModifier> effects = new ArrayList<>();
 
+			IntSet checked = new IntOpenHashSet();
 			Deque<Integer> queue = new LinkedList<>();
 
 			queue.add(this.index);
 
-			RuneEffectModifier effect = this.getBlueprint().createRuneEffectModifier();
+			RuneEffectModifier effect = ((AbstractRune.Blueprint) this.getBlueprint()).createRuneEffectModifier(this);
 			if(effect != null) {
 				effects.add(effect);
 			}
@@ -431,25 +461,56 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 			if(this.blueprint.recursiveRuneEffectModifierCount > 0) {
 				effectsLoop: while(!queue.isEmpty()) {
 					int startIndex = queue.removeFirst();
+					AbstractRune<?> startRune = (AbstractRune<?>) this.composition.getNode(startIndex);
 
 					for(int runeIndex = startIndex + 1; runeIndex < this.composition.getBlueprint().getNodeBlueprints(); runeIndex++) {
-						INode<?, RuneExecutionContext> node = this.composition.getNode(runeIndex);
+						if(!checked.contains(runeIndex)) {
+							INode<?, RuneExecutionContext> node = this.composition.getNode(runeIndex);
 
-						if(node instanceof AbstractRune) {
-							AbstractRune<?> rune = (AbstractRune<?>) node;
+							if(node instanceof AbstractRune) {
+								AbstractRune<?> rune = (AbstractRune<?>) node;
 
-							for(int linkIndex : this.composition.getBlueprint().getLinkedSlots(runeIndex)) {
-								INodeLink link = this.composition.getBlueprint().getLink(runeIndex, linkIndex);
+								for(int linkIndex : this.composition.getBlueprint().getLinkedSlots(runeIndex)) {
+									INodeLink link = this.composition.getBlueprint().getLink(runeIndex, linkIndex);
 
-								if(link != null && link.getNode() == startIndex) {
-									queue.add(runeIndex);
+									if(link != null && link.getNode() == startIndex) {
+										queue.add(runeIndex);
+										checked.add(runeIndex);
 
-									effect = rune.getBlueprint().createRuneEffectModifier(this, link.getNode(), linkIndex);
-									if(effect != null) {
-										effects.add(effect);
+										effect = ((AbstractRune.Blueprint) rune.getBlueprint()).createRuneEffectModifier(rune, this, startRune, linkIndex);
+										if(effect != null) {
+											effects.add(effect);
 
-										if(effects.size() >= this.blueprint.recursiveRuneEffectModifierCount) {
-											break effectsLoop;
+											if(effects.size() >= this.blueprint.recursiveRuneEffectModifierCount) {
+												break effectsLoop;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+
+					if(startIndex != this.index) {
+						for(int linkIndex : this.composition.getBlueprint().getLinkedSlots(startIndex)) {
+							INodeLink link = this.composition.getBlueprint().getLink(startIndex, linkIndex);
+
+							if(link != null) {
+								INode<?, RuneExecutionContext> node = this.composition.getNode(link.getNode());
+
+								if(node instanceof AbstractRune) {
+									AbstractRune<?> rune = (AbstractRune<?>) node;
+
+									if(checked.add(link.getNode()) && (((AbstractRune.Blueprint) rune.getBlueprint()).isDelegatedRuneEffectModifier(rune, this, startRune, link.getOutput()) || ((AbstractRune.Blueprint) startRune.getBlueprint()).isDelegatingRuneEffectModifier(startRune, this, rune, linkIndex))) {
+										queue.add(link.getNode());
+
+										effect = ((AbstractRune.Blueprint) rune.getBlueprint()).createRuneEffectModifier(rune, this, (AbstractRune<?>) this.composition.getNode(startIndex), link.getOutput());
+										if(effect != null) {
+											effects.add(effect);
+
+											if(effects.size() >= this.blueprint.recursiveRuneEffectModifierCount) {
+												break effectsLoop;
+											}
 										}
 									}
 								}
@@ -508,18 +569,14 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 					}
 
 					@Override
-					public void render(
-							RuneEffectModifier.Subject subject, int index,
-							float red, float green, float blue, float alpha,
-							float sizeX, float sizeY, float sizeZ,
-							float partialTicks) {
+					public void render( RuneEffectModifier.Subject subject, int index, RenderProperties properties, float partialTicks) {
 						int accumulated = 0;
 
 						for(RuneEffectModifier effect : effects) {
 							int count = effect.getRendererCount(subject);
 
 							if(index >= accumulated && index < accumulated + count) {
-								effect.render(subject, index - accumulated, red, green, blue, alpha, sizeX, sizeY, sizeZ, partialTicks);
+								effect.render(subject, index - accumulated, properties, partialTicks);
 								return;
 							}
 

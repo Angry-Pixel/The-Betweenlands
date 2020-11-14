@@ -49,14 +49,33 @@ public class ItemTokenRuneItemProperties extends RuneItemProperties {
 		return null;
 	}
 
+	public int getItemDamage(ItemStack stack, boolean requiredOnly) {
+		NBTTagCompound nbt = stack.getTagCompound();
+
+		if(nbt != null && nbt.hasKey(NBT_ITEM_DATA, Constants.NBT.TAG_COMPOUND)) {
+			NBTTagCompound itemNbt = nbt.getCompoundTag(NBT_ITEM_DATA);
+
+			if(itemNbt.hasKey("meta", Constants.NBT.TAG_INT)) {
+				if(!requiredOnly || itemNbt.getBoolean("metaRequired")) {
+					return itemNbt.getInteger("meta");
+				}
+			}
+		}
+
+		return -1;
+	}
+
 	@Override
 	public IRuneContainerFactory getFactory(ItemStack stack) {
+		Item item = this.getItemType(stack);
+		int meta = this.getItemDamage(stack, true);
 		return new DefaultRuneContainerFactory(this.regName, () -> new TokenRuneItem.Blueprint(
 				RuneStats.builder()
 				.aspect(AspectRegistry.ORDANIIS, 1)
 				.duration(5.0f)
 				.build(),
-				this.getItemType(stack)));
+				new ItemStack(item, 1, meta == -1 ? 0 : meta),
+				s -> s.getItem() == item && (meta == -1 || s.getMetadata() == meta)));
 	}
 
 	@Override
@@ -116,8 +135,8 @@ public class ItemTokenRuneItemProperties extends RuneItemProperties {
 					NBTTagCompound itemNbt = new NBTTagCompound();
 
 					itemNbt.setString("id", hitStack.getItem().getRegistryName().toString());
-
-					//TODO Also filter meta?
+					itemNbt.setInteger("meta", hitStack.getMetadata());
+					itemNbt.setBoolean("metaRequired", stack.getHasSubtypes());
 
 					nbt.setTag(NBT_ITEM_DATA, itemNbt);
 				}
@@ -135,9 +154,10 @@ public class ItemTokenRuneItemProperties extends RuneItemProperties {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		Item itemType = this.getItemType(stack);
+		int meta = this.getItemDamage(stack, false);
 
 		if(itemType != null) {
-			String itemName = I18n.translateToLocal(itemType.getUnlocalizedNameInefficiently(new ItemStack(itemType)) + ".name").trim();
+			String itemName = I18n.translateToLocal(itemType.getUnlocalizedNameInefficiently(new ItemStack(itemType, 1, meta == -1 ? 0 : meta)) + ".name").trim();
 			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.translateToLocalFormatted("tooltip.thebetweenlands.rune.token_item.bound", itemName), 0));
 		} else {
 			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.translateToLocal("tooltip.thebetweenlands.rune.token_item.unbound"), 0));

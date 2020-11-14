@@ -7,6 +7,8 @@ import java.util.UUID;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.ImmutableList;
@@ -94,7 +96,7 @@ public final class ConductRuneInvoker extends AbstractRune<ConductRuneInvoker> {
 			return new ConductRuneInvoker(this, index, composition, (RuneConfiguration) configuration);
 		}
 
-		private void returnExcessItems(IRuneChainUser user, Vec3d pos, List<NonNullList<ItemStack>> excess) {
+		private void returnExcessItems(IRuneChainUser user, Vec3d pos, List<NonNullList<ItemStack>> excess, @Nullable IInventory accessInventory, int accessSlot) {
 			Entity entity = user.getEntity();
 
 			if(entity instanceof EntityPlayer) {
@@ -103,7 +105,9 @@ public final class ConductRuneInvoker extends AbstractRune<ConductRuneInvoker> {
 				for(NonNullList<ItemStack> stacks : excess) {
 					for(ItemStack stack : stacks) {
 						if(!stack.isEmpty()) {
-							if(!player.inventory.addItemStackToInventory(stack)) {
+							InventoryUtil.addItemToInventory(player.inventory, stack, slot -> accessInventory != player.inventory || accessSlot != slot);
+
+							if(!stack.isEmpty()) {	
 								InventoryHelper.spawnItemStack(user.getWorld(), pos.x, pos.y, pos.z, stack);
 							}
 						}
@@ -118,7 +122,7 @@ public final class ConductRuneInvoker extends AbstractRune<ConductRuneInvoker> {
 					for(ItemStack stack : stacks) {
 						if(!stack.isEmpty()) {
 							if(inv != null) {
-								InventoryUtil.addItemToInventory(inv, stack);
+								InventoryUtil.addItemToInventory(inv, stack, slot -> accessInventory != inv || accessSlot != slot);
 							}
 
 							if(!stack.isEmpty()) {
@@ -154,14 +158,15 @@ public final class ConductRuneInvoker extends AbstractRune<ConductRuneInvoker> {
 				ItemStack outputStack = delegate.getHeldItem(EnumHand.MAIN_HAND);
 
 				if(!access.set(outputStack)) {
-					this.returnExcessItems(user, pos, Arrays.asList(NonNullList.from(ItemStack.EMPTY, outputStack)));
+					this.returnExcessItems(user, pos, Arrays.asList(NonNullList.from(ItemStack.EMPTY, outputStack)), null, -1);
 				}
 
 				delegate.setHeldItem(EnumHand.MAIN_HAND, prevHeldStack);
 
 				delegate.setDead();
 
-				this.returnExcessItems(user, pos, delegate.getExcessInventories());
+				Pair<IInventory, Integer> delegatedSlot = access.getDelegatedSlot();
+				this.returnExcessItems(user, pos, delegate.getExcessInventories(), delegatedSlot != null ? delegatedSlot.getLeft() : null, delegatedSlot != null ? delegatedSlot.getRight() : -1);
 			}
 		}
 
@@ -191,12 +196,13 @@ public final class ConductRuneInvoker extends AbstractRune<ConductRuneInvoker> {
 					stack[0] = outputStack;
 
 					if(terminated && !access.set(outputStack)) {
-						this.returnExcessItems(user, pos, Arrays.asList(NonNullList.from(ItemStack.EMPTY, outputStack)));
+						this.returnExcessItems(user, pos, Arrays.asList(NonNullList.from(ItemStack.EMPTY, outputStack)), null, -1);
 					}
 
 					delegate.setHeldItem(EnumHand.MAIN_HAND, prevHeldStack);
 
-					this.returnExcessItems(user, pos, delegate.getExcessInventories());
+					Pair<IInventory, Integer> delegatedSlot = access.getDelegatedSlot();
+					this.returnExcessItems(user, pos, delegate.getExcessInventories(), delegatedSlot != null ? delegatedSlot.getLeft() : null, delegatedSlot != null ? delegatedSlot.getRight() : -1);
 
 					scheduler.sleep(1);
 				});
@@ -325,6 +331,17 @@ public final class ConductRuneInvoker extends AbstractRune<ConductRuneInvoker> {
 			}
 
 			return null;
+		}
+		
+		@Override
+		protected boolean isDelegatingRuneEffectModifier(ConductRuneInvoker state, AbstractRune<?> target, AbstractRune<?> outputRune, int inputIndex) {
+			if(state.getConfiguration() == CONFIGURATION_1) {
+				return inputIndex == IN_ITEM_1.getIndex();
+			} else if(state.getConfiguration() == CONFIGURATION_2) {
+				return inputIndex == IN_ITEM_2.getIndex();
+			} else {
+				return inputIndex == IN_ITEM_3.getIndex();
+			}
 		}
 	}
 

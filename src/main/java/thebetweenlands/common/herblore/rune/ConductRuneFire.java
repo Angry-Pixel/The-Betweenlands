@@ -108,9 +108,9 @@ public final class ConductRuneFire extends AbstractRune<ConductRuneFire> {
 		@Override
 		protected RuneEffectModifier.Subject activate(ConductRuneFire state, RuneExecutionContext context, INodeIO io) {
 
-			if(state.getConfiguration() == CONFIGURATION_1) {
+			if(state.getConfiguration() == CONFIGURATION_1 && IN_POSITION_1.get(io) != null) {
 				FIRE_EFFECT.apply(context.getUser().getWorld(), IN_POSITION_1.get(io));
-			} else if(state.getConfiguration() == CONFIGURATION_2) {
+			} else if(state.getConfiguration() == CONFIGURATION_2 && IN_ENTITY_2.get(io) != null) {
 				FIRE_EFFECT.apply(context.getUser().getWorld(), IN_ENTITY_2.get(io));
 			} else if(state.getConfiguration() == CONFIGURATION_3) {
 				OUT_EFFECT_3.set(io, FIRE_EFFECT);
@@ -120,7 +120,7 @@ public final class ConductRuneFire extends AbstractRune<ConductRuneFire> {
 		}
 
 		@Override
-		protected RuneEffectModifier createRuneEffectModifier(AbstractRune<?> target, int output, int input) {
+		protected RuneEffectModifier createRuneEffectModifier(ConductRuneFire state, AbstractRune<?> target, AbstractRune<?> ioNode, int ioIndex) {
 			return new RuneEffectModifier() {
 				private List<Entity> targets = new ArrayList<>();
 
@@ -170,6 +170,14 @@ public final class ConductRuneFire extends AbstractRune<ConductRuneFire> {
 					return 1;
 				}
 			};
+		}
+		
+		@Override
+		protected boolean isDelegatedRuneEffectModifier(ConductRuneFire state, AbstractRune<?> target, AbstractRune<?> inputRune, int outputIndex) {
+			if(state.getConfiguration() == CONFIGURATION_3) {
+				return outputIndex == OUT_EFFECT_3.getIndex();
+			}
+			return false;
 		}
 	}
 

@@ -275,6 +275,10 @@ public class RuneConfiguration implements INodeConfiguration {
 		public boolean isDescriptorWildcard() {
 			return this.descriptorWildcard;
 		}
+		
+		public int getIndex() {
+			return this.index;
+		}
 
 		/**
 		 * Returns the input value at this port, without doing any type checks
@@ -416,6 +420,10 @@ public class RuneConfiguration implements INodeConfiguration {
 			};
 		}
 
+		public int getIndex() {
+			return this.index;
+		}
+		
 		/**
 		 * Sets the output value at this port
 		 * @param io - node I/O

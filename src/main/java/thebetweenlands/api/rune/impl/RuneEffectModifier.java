@@ -133,25 +133,58 @@ public class RuneEffectModifier {
 		return 0;
 	}
 
+	public static class RenderProperties {
+		/**
+		 * Red color component multiplier
+		 */
+		public float red = 1;
+
+		/**
+		 * Green color component multiplier
+		 */
+		public float green = 1;
+
+		/**
+		 * Blue color component multiplier
+		 */
+		public float blue = 1;
+
+		/**
+		 * Alpha color component multiplier
+		 */
+		public float alpha = 1;
+
+		/**
+		 * X size the renderer should fit into, [-sizeX, sizeX]
+		 */
+		public float sizeX = 0.5f;
+
+		/**
+		 * Y size the renderer should fit into, [-sizeY, sizeY]
+		 */
+		public float sizeY = 0.5f;
+
+		/**
+		 * Z size the renderer should fit into, [-sizeZ, sizeZ]
+		 */
+		public float sizeZ = 0.5f;
+
+		/**
+		 * Whether the renderer should be rendered at a fixed position and not move
+		 */
+		public boolean fixed = false;
+	}
+
 	/**
 	 * Renders the effect modifier.
 	 * This method allows returning multiple different colors that may be used by multi colored effects.
+	 * Render state is expected to be the same as when rendering an entity, both before and after this method call.
 	 * @param subject subject this rune effect modifier applies to
 	 * @param index index of the renderer. May be any arbitrary number, but usually starts at 0.
-	 * @param red Red component multiplier
-	 * @param green Green component multiplier
-	 * @param blue Blue component multiplier
-	 * @param alpha Alpha component multiplier
-	 * @param sizeX X size the renderer should fit into, [-sizeX, sizeX]
-	 * @param sizeY Y size the renderer should fit into, [-sizeY, sizeY]
-	 * @param sizeZ Z size the renderer should fit into, [-sizeZ, sizeZ]
+	 * @param properties Properties that specify how the effect is supposed to be rendered
 	 * @param partialTicks Partial render ticks
 	 */
-	public void render(
-			@Nullable Subject subject, int index,
-			float red, float green, float blue, float alpha,
-			float sizeX, float sizeY, float sizeZ,
-			float partialTicks) {
+	public void render(@Nullable Subject subject, int index, RenderProperties properties, float partialTicks) {
 
 	}
 

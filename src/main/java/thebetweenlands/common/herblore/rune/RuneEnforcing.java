@@ -86,15 +86,26 @@ public final class RuneEnforcing extends AbstractRune<RuneEnforcing> {
 						}
 					}
 				});
-			} else if(state.getConfiguration() == CONFIGURATION_2) {
+			} else if(state.getConfiguration() == CONFIGURATION_2 && IN_POSITION_2.get(io) != null) {
 				IRuneEffect effect = IN_EFFECT_2.get(io);
 				effect.apply(context.getUser().getWorld(), IN_POSITION_2.get(io));
-			} else if(state.getConfiguration() == CONFIGURATION_3) {
+			} else if(state.getConfiguration() == CONFIGURATION_3 && IN_BLOCK_3.get(io) != null) {
 				IRuneEffect effect = IN_EFFECT_3.get(io);
 				effect.apply(context.getUser().getWorld(), IN_BLOCK_3.get(io));
 			}
 
 			return null;
+		}
+		
+		@Override
+		protected boolean isDelegatingRuneEffectModifier(RuneEnforcing state, AbstractRune<?> target, AbstractRune<?> outputRune, int inputIndex) {
+			if(state.getConfiguration() == CONFIGURATION_1) {
+				return inputIndex == IN_EFFECT_1.getIndex();
+			} else if(state.getConfiguration() == CONFIGURATION_2) {
+				return inputIndex == IN_EFFECT_2.getIndex();
+			} else {
+				return inputIndex == IN_EFFECT_3.getIndex();
+			}
 		}
 	}
 

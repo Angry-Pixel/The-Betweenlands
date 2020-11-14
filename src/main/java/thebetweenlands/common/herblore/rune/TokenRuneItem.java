@@ -3,13 +3,18 @@ package thebetweenlands.common.herblore.rune;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Predicate;
 
 import com.google.common.collect.ImmutableList;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.IRuneItemStackAccess;
@@ -25,11 +30,13 @@ import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 public final class TokenRuneItem extends AbstractRune<TokenRuneItem> {
 
 	public static final class Blueprint extends AbstractRune.Blueprint<TokenRuneItem> {
-		private final Item item;
+		private final ItemStack item;
+		private final Predicate<ItemStack> itemFilter;
 
-		public Blueprint(RuneStats stats, Item item) {
+		public Blueprint(RuneStats stats, ItemStack item, Predicate<ItemStack> itemFilter) {
 			super(stats);
 			this.item = item;
+			this.itemFilter = itemFilter;
 		}
 
 		public static final RuneConfiguration CONFIGURATION_1;
@@ -72,11 +79,11 @@ public final class TokenRuneItem extends AbstractRune<TokenRuneItem> {
 					if(i < inventory.getSizeInventory()) {
 						ItemStack stack = inventory.getStackInSlot(i);
 
-						if(!stack.isEmpty() && stack.getItem() == this.item) {
+						if(!stack.isEmpty() && this.itemFilter.test(stack)) {
 							Entity entity = context.getUser().getEntity();
 
 							IRuneItemStackAccess access = new InventoryRuneItemStackAccess(inventory, i,
-									s -> !s.isEmpty() && s.getItem() == this.item && (entity == null || entity.isEntityAlive()),
+									s -> !s.isEmpty() && this.itemFilter.test(s) && (entity == null || entity.isEntityAlive()),
 									s -> s.isEmpty() && (entity == null || entity.isEntityAlive()));
 
 							if(state.getConfiguration() == CONFIGURATION_1) {
@@ -102,6 +109,34 @@ public final class TokenRuneItem extends AbstractRune<TokenRuneItem> {
 			}
 
 			return null;
+		}
+		
+		@Override
+		protected RuneEffectModifier createRuneEffectModifier(TokenRuneItem state, AbstractRune<?> target, AbstractRune<?> ioNode, int ioIndex) {
+			return new RuneEffectModifier() {
+				@SideOnly(Side.CLIENT)
+				@Override
+				public void render(Subject subject, int index, RenderProperties properties, float partialTicks) {
+					float scale = Math.min(properties.sizeX, Math.min(properties.sizeY, properties.sizeZ));
+					
+					GlStateManager.pushMatrix();
+					GlStateManager.scale(scale, scale, scale);
+					
+					Minecraft.getMinecraft().getRenderItem().renderItem(TokenRuneItem.Blueprint.this.item, TransformType.FIXED);
+					
+					GlStateManager.popMatrix();
+				}
+				
+				@Override
+				public int getRendererCount(Subject subject) {
+					return 1;
+				}
+			};
+		}
+		
+		@Override
+		protected boolean isDelegatedRuneEffectModifier(TokenRuneItem state, AbstractRune<?> target, AbstractRune<?> inputRune, int outputIndex) {
+			return true;
 		}
 	}
 

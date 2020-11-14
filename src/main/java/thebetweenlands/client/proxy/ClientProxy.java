@@ -153,6 +153,7 @@ import thebetweenlands.common.entity.EntityMovingWall;
 import thebetweenlands.common.entity.EntityResurrection;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityRopeNode;
+import thebetweenlands.common.entity.EntityRunicBeetleProjectile;
 import thebetweenlands.common.entity.EntityShock;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.entity.EntityShockwaveSwordItem;
@@ -662,7 +663,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityResurrection.class, RenderNothing::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFalseXPOrb.class, RenderXPOrb::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySwarm.class, RenderSwarm::new);
-
+		RenderingRegistry.registerEntityRenderingHandler(EntityRunicBeetleProjectile.class, RenderRunicBeetleProjectile::new);
+		
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new RenderDruidAltar());

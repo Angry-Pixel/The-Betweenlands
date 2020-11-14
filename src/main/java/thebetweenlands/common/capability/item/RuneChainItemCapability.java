@@ -65,7 +65,7 @@ public class RuneChainItemCapability extends ItemCapability<RuneChainItemCapabil
 	private IRuneChainData data;
 	private RuneChainComposition.Blueprint blueprint;
 
-	private InitiationState initiationState;
+	private InitiationState<?> initiationState;
 
 	public static final String RUNE_CHAIN_BLUEPRINT_NBT_KEY = "thebetweenlands.runechain.blueprint";
 
@@ -258,12 +258,12 @@ public class RuneChainItemCapability extends ItemCapability<RuneChainItemCapabil
 	}
 
 	@Override
-	public void setInitiationState(InitiationState state) {
+	public void setInitiationState(InitiationState<?> state) {
 		this.initiationState = state;
 	}
 
 	@Override
-	public InitiationState getInitiationState() {
+	public InitiationState<?> getInitiationState() {
 		return this.initiationState;
 	}
 }
