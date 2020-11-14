@@ -136,7 +136,7 @@ public class ItemTokenRuneItemProperties extends RuneItemProperties {
 
 					itemNbt.setString("id", hitStack.getItem().getRegistryName().toString());
 					itemNbt.setInteger("meta", hitStack.getMetadata());
-					itemNbt.setBoolean("metaRequired", stack.getHasSubtypes());
+					itemNbt.setBoolean("metaRequired", hitStack.getHasSubtypes());
 
 					nbt.setTag(NBT_ITEM_DATA, itemNbt);
 				}
