@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.lwjgl.opengl.GL11;
+
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.Minecraft;
@@ -19,6 +21,8 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.rune.INodeComposition;
@@ -36,6 +40,8 @@ import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
 public final class TokenRuneItem extends AbstractRune<TokenRuneItem> {
 
 	public static final class Blueprint extends AbstractRune.Blueprint<TokenRuneItem> {
+		private static final ResourceLocation RES_ITEM_GLINT = new ResourceLocation("textures/misc/enchanted_item_glint.png");
+
 		private final ItemStack item;
 		private final Predicate<ItemStack> itemFilter;
 
@@ -154,9 +160,61 @@ public final class TokenRuneItem extends AbstractRune<TokenRuneItem> {
 
 					GlStateManager.enableBlend();
 					GlStateManager.color(properties.red, properties.green, properties.blue, properties.alpha);
-					GlStateManager.tryBlendFuncSeparate(SourceFactor.ONE, DestFactor.ONE, SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-					
-					renderItem.renderItem(TokenRuneItem.Blueprint.this.item, model);
+					GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+
+					ItemStack stack = TokenRuneItem.Blueprint.this.item;
+
+					//Modified RenderItem.renderItem
+					if(!stack.isEmpty()) {
+						GlStateManager.pushMatrix();
+						GlStateManager.translate(-0.5F, -0.5F, -0.5F);
+
+						if(model.isBuiltInRenderer()) {
+							GlStateManager.enableRescaleNormal();
+							stack.getItem().getTileEntityItemStackRenderer().renderByItem(stack);
+						} else {
+							int color =
+									((int)(MathHelper.clamp(properties.alpha, 0, 1) * 255) << 24) |
+									((int)(MathHelper.clamp(properties.red, 0, 1) * 255) << 16) |
+									((int)(MathHelper.clamp(properties.green, 0, 1) * 255) << 8) |
+									((int)(MathHelper.clamp(properties.blue, 0, 1) * 255));
+
+							renderItem.renderModel(model, color, stack);
+
+							if(stack.hasEffect()) {
+								color = ((int)(MathHelper.clamp(properties.alpha, 0, 1) * 255) << 24) | 8405196;
+
+								GlStateManager.depthMask(false);
+								GlStateManager.depthFunc(GL11.GL_EQUAL);
+								GlStateManager.disableLighting();
+								GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_COLOR, GlStateManager.DestFactor.ONE);
+								textureManager.bindTexture(RES_ITEM_GLINT);
+								GlStateManager.matrixMode(GL11.GL_TEXTURE);
+								GlStateManager.pushMatrix();
+								GlStateManager.scale(8.0F, 8.0F, 8.0F);
+								float offset1 = (float)(Minecraft.getSystemTime() % 3000L) / 3000.0F / 8.0F;
+								GlStateManager.translate(offset1, 0.0F, 0.0F);
+								GlStateManager.rotate(-50.0F, 0.0F, 0.0F, 1.0F);
+								renderItem.renderModel(model, color, ItemStack.EMPTY);
+								GlStateManager.popMatrix();
+								GlStateManager.pushMatrix();
+								GlStateManager.scale(8.0F, 8.0F, 8.0F);
+								float offset2 = (float)(Minecraft.getSystemTime() % 4873L) / 4873.0F / 8.0F;
+								GlStateManager.translate(-offset2, 0.0F, 0.0F);
+								GlStateManager.rotate(10.0F, 0.0F, 0.0F, 1.0F);
+								renderItem.renderModel(model, color, ItemStack.EMPTY);
+								GlStateManager.popMatrix();
+								GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+								GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+								GlStateManager.enableLighting();
+								GlStateManager.depthFunc(GL11.GL_LEQUAL);
+								GlStateManager.depthMask(true);
+								textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+							}
+						}
+
+						GlStateManager.popMatrix();
+					}
 
 					textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 					texture.restoreLastBlurMipmap();

@@ -50,6 +50,10 @@ public class RenderRunicBeetleProjectile extends Render<EntityRunicBeetleProject
 		
 		GlStateManager.translate(0, 0.125f, 0);
 		
+		float pitch = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks;
+		
+		MODEL.setRotationAngles(0, 0, entity.ticksExisted + partialTicks, 0, pitch, 0.0625f, entity);
+		
 		MODEL.render(entity, 0, 0, 0, 0, 0, 0.0625F);
 
 		Pair<RuneEffectModifier, Subject> visualModifier = entity.getVisualModifier();
