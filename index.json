@@ -240,6 +240,25 @@
 			"title": "Shaman of Embers",
 			"author": "Oscar Payn",
 			"description": "A violent creature born of fire and spite, found stalking the Sludgeon. Hunts in packs of four."
+		},
+		{
+			"sha256": "F40961C65D0DCF803466E5D7BC695128E0EE1CD4344C1F13183FDDC614073485",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/the_mask_master_the_mummy.png",
+			"title": "The Mummy",
+			"author": "The Mask Master",
+			"description": "His subjects always hear their master's call, even beyond death..."
+		},
+		{
+			"sha256": "31779FD70783FE456C39F64515481FD0ADDCF505AF4155BC9021144DF033F121",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/joosh_a_sporeling_at_the_riverbank.png",
+			"title": "A Sporeling at the Riverbank",
+			"author": "Joosh"
+		},
+		{
+			"sha256": "0698FC543D9743E00F7C225F84FCA67676FB9B609A49AB503E04F805901E7ADE",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/epicnecromancer_portal_tree.png",
+			"title": "Portal Tree",
+			"author": "EpicNecromancer"
 		}
 	]
 }]
