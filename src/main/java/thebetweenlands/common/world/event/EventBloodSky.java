@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
@@ -84,5 +85,10 @@ public class EventBloodSky extends TimedEnvironmentEvent {
 	@Override
 	public ResourceLocation getVisionTexture() {
 		return new ResourceLocation("thebetweenlands:textures/events/blood_sky.png");
+	}
+	
+	@Override
+	public SoundEvent getChimesSound() {
+		return SoundRegistry.CHIMES_BLOOD_SKY;
 	}
 }

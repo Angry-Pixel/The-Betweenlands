@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 
 public interface IPredictableEnvironmentEvent extends IEnvironmentEvent {
 	/**
@@ -67,4 +68,7 @@ public interface IPredictableEnvironmentEvent extends IEnvironmentEvent {
 
 	@Nullable
 	public ResourceLocation getVisionTexture();
+
+	@Nullable
+	public SoundEvent getChimesSound();
 }

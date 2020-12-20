@@ -11,6 +11,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -30,6 +31,7 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.sky.BLRainRenderer;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
@@ -200,5 +202,10 @@ public class EventHeavyRain extends TimedEnvironmentEvent {
 	@Override
 	public ResourceLocation getVisionTexture() {
 		return new ResourceLocation("thebetweenlands:textures/events/heavy_rain.png");
+	}
+	
+	@Override
+	public SoundEvent getChimesSound() {
+		return SoundRegistry.CHIMES_HEAVY_RAIN;
 	}
 }

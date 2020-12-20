@@ -5,6 +5,8 @@ import javax.annotation.Nullable;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -16,6 +18,7 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer.ParticleBatch;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.entity.ParticleVisionOrb;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
@@ -85,6 +88,7 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 			if(this.fadeOutTimer >= 20) {
 				this.fadeOutTimer = 0;
 				this.predictedEvent = nextEvent;
+				this.predictedTimeUntilActivation = -1;
 
 				if(eventVision != null) {
 					this.particleBatch = ParticleVisionOrb.createParticleBatch(() -> eventVision);
@@ -103,6 +107,14 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 		}
 
 		if(this.predictedEvent == nextEvent && nextEvent != null) {
+			if(this.predictedTimeUntilActivation == -1 || this.predictedTimeUntilActivation >= this.maxPredictionTime && nextPrediction < this.maxPredictionTime) {
+				this.playChimes(nextEvent);
+			} else if(this.predictedTimeUntilActivation >= this.maxPredictionTime * 0.4f && nextPrediction < this.maxPredictionTime * 0.4f) {
+				this.playChimes(nextEvent);
+			} else if(this.predictedTimeUntilActivation >= this.maxPredictionTime * 0.2f && nextPrediction < this.maxPredictionTime * 0.2f) {
+				this.playChimes(nextEvent);
+			}
+
 			this.predictedTimeUntilActivation = nextPrediction;
 
 			if(this.particleBatch != null) {
@@ -141,5 +153,15 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 		if(this.particleBatch != null) {
 			BatchedParticleRenderer.INSTANCE.updateBatch(this.particleBatch);
 		}
+	}
+
+	private void playChimes(IPredictableEnvironmentEvent event) {
+		SoundEvent chimes = event.getChimesSound();
+
+		if(chimes != null) {
+			this.world.playSound(this.getPos().getX() + 0.5f, this.getPos().getY() + 0.5f, this.getPos().getZ() + 0.5f, chimes, SoundCategory.BLOCKS, 2, 1, false);
+		}
+
+		this.world.playSound(this.getPos().getX() + 0.5f, this.getPos().getY() + 0.5f, this.getPos().getZ() + 0.5f, SoundRegistry.CHIMES_WIND, SoundCategory.BLOCKS, 2, 1, false);
 	}
 }

@@ -8,6 +8,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -18,6 +19,7 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.network.clientbound.MessageRiftSound;
 import thebetweenlands.common.network.clientbound.MessageRiftSound.RiftSoundType;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EventRift extends TimedEnvironmentEvent {
 	public static class RiftConfiguration {
@@ -289,5 +291,10 @@ public class EventRift extends TimedEnvironmentEvent {
 	@Override
 	public ResourceLocation getVisionTexture() {
 		return new ResourceLocation("thebetweenlands:textures/events/rift.png");
+	}
+	
+	@Override
+	public SoundEvent getChimesSound() {
+		return SoundRegistry.CHIMES_RIFT;
 	}
 }

@@ -311,6 +311,14 @@ public class SoundRegistry {
     public static final BLSoundEvent BEAM_SWITCH = reg("beam_switch");
     public static final BLSoundEvent RESURRECTION = reg("resurrection");
     public static final BLSoundEvent WORM_THROW = reg("worm_throw");
+    public static final BLSoundEvent CHIMES_WIND = reg("chimes_wind");
+    public static final BLSoundEvent CHIMES_AURORAS = reg("chimes_auroras");
+    public static final BLSoundEvent CHIMES_BLOOD_SKY = reg("chimes_blood_sky");
+    public static final BLSoundEvent CHIMES_DENSE_FOG = reg("chimes_dense_fog");
+    public static final BLSoundEvent CHIMES_HEAVY_RAIN = reg("chimes_heavy_rain");
+    public static final BLSoundEvent CHIMES_RIFT = reg("chimes_rift");
+    public static final BLSoundEvent CHIMES_THUNDERSTORM = reg("chimes_thunderstorm");
+    public static final BLSoundEvent CHIMES_SNOWFALL = reg("chimes_snowfall");
     
     private SoundRegistry() {
     }

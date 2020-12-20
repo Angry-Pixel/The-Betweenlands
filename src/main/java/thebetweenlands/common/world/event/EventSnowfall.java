@@ -10,6 +10,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.world.World;
@@ -22,6 +23,7 @@ import thebetweenlands.common.block.terrain.BlockSnowBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 public class EventSnowfall extends TimedEnvironmentEvent {
@@ -182,5 +184,10 @@ public class EventSnowfall extends TimedEnvironmentEvent {
 	@Override
 	public ResourceLocation getVisionTexture() {
 		return new ResourceLocation("thebetweenlands:textures/events/snowfall.png");
+	}
+
+	@Override
+	public SoundEvent getChimesSound() {
+		return SoundRegistry.CHIMES_SNOWFALL;
 	}
 }

@@ -5,10 +5,12 @@ import java.util.Random;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EventAuroras extends TimedEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "auroras");
@@ -92,5 +94,10 @@ public class EventAuroras extends TimedEnvironmentEvent {
 	@Override
 	public ResourceLocation getVisionTexture() {
 		return new ResourceLocation("thebetweenlands:textures/events/auroras.png");
+	}
+	
+	@Override
+	public SoundEvent getChimesSound() {
+		return SoundRegistry.CHIMES_AURORAS;
 	}
 }
