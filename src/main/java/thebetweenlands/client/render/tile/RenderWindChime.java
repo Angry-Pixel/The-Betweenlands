@@ -54,7 +54,7 @@ public class RenderWindChime extends TileEntitySpecialRenderer<TileEntityWindChi
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.popMatrix();
 
-		if(!isBreakingAnimation) {
+		if(!isBreakingAnimation && te != null) {
 			ParticleBatch batch = te.getParticleBatch();
 
 			if(batch != null) {
