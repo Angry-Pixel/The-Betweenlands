@@ -2,6 +2,8 @@ package thebetweenlands.common.tile;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
@@ -152,33 +154,37 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 			this.predictedTimeUntilActivation = nextPrediction;
 
 			if(this.particleBatch != null) {
-				double cx = this.pos.getX() + 0.5f;
-				double cy = this.pos.getY() + 0.2f;
-				double cz = this.pos.getZ() + 0.5f;
+				Entity view = Minecraft.getMinecraft().getRenderViewEntity();
 
-				double rx = this.world.rand.nextFloat() - 0.5f;
-				double ry = this.world.rand.nextFloat() - 0.5f;
-				double rz = this.world.rand.nextFloat() - 0.5f;
-				double len = MathHelper.sqrt(rx * rx + ry * ry + rz * rz);
-				rx /= len;
-				ry /= len;
-				rz /= len;
+				if(view != null && view.getDistanceSq(this.getPos()) < 256) {
+					double cx = this.pos.getX() + 0.5f;
+					double cy = this.pos.getY() + 0.2f;
+					double cz = this.pos.getZ() + 0.5f;
 
-				int size = this.world.rand.nextInt(3);
-				rx *= 0.6f + size * 0.1f;
-				ry *= 0.6f + size * 0.1f;
-				rz *= 0.6f + size * 0.1f;
+					double rx = this.world.rand.nextFloat() - 0.5f;
+					double ry = this.world.rand.nextFloat() - 0.5f;
+					double rz = this.world.rand.nextFloat() - 0.5f;
+					double len = MathHelper.sqrt(rx * rx + ry * ry + rz * rz);
+					rx /= len;
+					ry /= len;
+					rz /= len;
 
-				ParticleVisionOrb particle = (ParticleVisionOrb) BLParticles.WIND_CHIME_VISION
-						.create(this.world, cx + rx, cy + ry, cz + rz, ParticleFactory.ParticleArgs.get()
-								.withData(cx, cy, cz, 150)
-								.withMotion(0, 0, 0)
-								.withColor(1.0f, 1.0f, 1.0f, 0.85f)
-								.withScale(0.85f));
+					int size = this.world.rand.nextInt(3);
+					rx *= 0.6f + size * 0.1f;
+					ry *= 0.6f + size * 0.1f;
+					rz *= 0.6f + size * 0.1f;
 
-				particle.setAlphaFunction(() -> 1.0f - this.fadeOutTimer / 20.0f);
+					ParticleVisionOrb particle = (ParticleVisionOrb) BLParticles.WIND_CHIME_VISION
+							.create(this.world, cx + rx, cy + ry, cz + rz, ParticleFactory.ParticleArgs.get()
+									.withData(cx, cy, cz, 150)
+									.withMotion(0, 0, 0)
+									.withColor(1.0f, 1.0f, 1.0f, 0.85f)
+									.withScale(0.85f));
 
-				BatchedParticleRenderer.INSTANCE.addParticle(this.particleBatch, particle);
+					particle.setAlphaFunction(() -> 1.0f - this.fadeOutTimer / 20.0f);
+
+					BatchedParticleRenderer.INSTANCE.addParticle(this.particleBatch, particle);
+				}
 			}
 		} else {
 			this.predictedTimeUntilActivation = -1;
