@@ -38,6 +38,8 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 public class EventHeavyRain extends TimedEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "heavy_rain");
 
+	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[] { new ResourceLocation("thebetweenlands:textures/events/heavy_rain.png") };
+	
 	public EventHeavyRain(BLEnvironmentEventRegistry registry) {
 		super(registry);
 	}
@@ -200,8 +202,8 @@ public class EventHeavyRain extends TimedEnvironmentEvent {
 	}
 
 	@Override
-	public ResourceLocation getVisionTexture() {
-		return new ResourceLocation("thebetweenlands:textures/events/heavy_rain.png");
+	public ResourceLocation[] getVisionTextures() {
+		return VISION_TEXTURES;
 	}
 	
 	@Override

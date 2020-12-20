@@ -86,6 +86,9 @@ public class EventRift extends TimedEnvironmentEvent {
 	protected static final DataParameter<RiftConfiguration> RIFT_CONFIGURATION = GenericDataManager.createKey(EventRift.class, RiftConfiguration::write, RiftConfiguration::new);
 
 	protected static final DataParameter<Integer> ACTIVATION_TICKS = GenericDataManager.createKey(EventRift.class, DataSerializers.VARINT);
+
+	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[] { new ResourceLocation("thebetweenlands:textures/events/rift.png") };
+	
 	protected int lastActivationTicks;
 
 	protected int soundTicks;
@@ -289,8 +292,8 @@ public class EventRift extends TimedEnvironmentEvent {
 	}
 
 	@Override
-	public ResourceLocation getVisionTexture() {
-		return new ResourceLocation("thebetweenlands:textures/events/rift.png");
+	public ResourceLocation[] getVisionTextures() {
+		return VISION_TEXTURES;
 	}
 	
 	@Override

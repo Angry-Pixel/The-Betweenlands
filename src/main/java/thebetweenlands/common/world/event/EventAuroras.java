@@ -17,6 +17,8 @@ public class EventAuroras extends TimedEnvironmentEvent {
 
 	protected static final DataParameter<Integer> AURORA_TYPE = GenericDataManager.createKey(EventAuroras.class, DataSerializers.VARINT);
 
+	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[] { new ResourceLocation("thebetweenlands:textures/events/auroras.png") };
+	
 	public EventAuroras(BLEnvironmentEventRegistry registry) {
 		super(registry);
 	}
@@ -92,8 +94,8 @@ public class EventAuroras extends TimedEnvironmentEvent {
 	}
 
 	@Override
-	public ResourceLocation getVisionTexture() {
-		return new ResourceLocation("thebetweenlands:textures/events/auroras.png");
+	public ResourceLocation[] getVisionTextures() {
+		return VISION_TEXTURES;
 	}
 	
 	@Override

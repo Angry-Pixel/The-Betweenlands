@@ -13,6 +13,9 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 public class EventBloodSky extends TimedEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "blood_sky");
+
+	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[] { new ResourceLocation("thebetweenlands:textures/events/blood_sky.png") };
+	
 	private boolean soundPlayed = true;
 	private float skyTransparency = 0.0F;
 	private float lastSkyTransparency = 0.0F;
@@ -83,8 +86,8 @@ public class EventBloodSky extends TimedEnvironmentEvent {
 	}
 
 	@Override
-	public ResourceLocation getVisionTexture() {
-		return new ResourceLocation("thebetweenlands:textures/events/blood_sky.png");
+	public ResourceLocation[] getVisionTextures() {
+		return VISION_TEXTURES;
 	}
 	
 	@Override

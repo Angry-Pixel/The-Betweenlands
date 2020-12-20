@@ -67,7 +67,7 @@ public interface IPredictableEnvironmentEvent extends IEnvironmentEvent {
 	}
 
 	@Nullable
-	public ResourceLocation getVisionTexture();
+	public ResourceLocation[] getVisionTextures();
 
 	@Nullable
 	public SoundEvent getChimesSound();

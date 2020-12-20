@@ -27,6 +27,8 @@ public class EventThunderstorm extends TimedEnvironmentEvent {
 
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "thunderstorm");
 
+	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[] { new ResourceLocation("thebetweenlands:textures/events/thunderstorm.png") };
+	
 	public EventThunderstorm(BLEnvironmentEventRegistry registry) {
 		super(registry);
 	}
@@ -151,8 +153,8 @@ public class EventThunderstorm extends TimedEnvironmentEvent {
 	}
 
 	@Override
-	public ResourceLocation getVisionTexture() {
-		return new ResourceLocation("thebetweenlands:textures/events/thunderstorm.png");
+	public ResourceLocation[] getVisionTextures() {
+		return VISION_TEXTURES;
 	}
 	
 	@Override

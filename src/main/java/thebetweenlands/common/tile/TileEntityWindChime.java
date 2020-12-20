@@ -36,6 +36,7 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 
 	private IPredictableEnvironmentEvent predictedEvent;
 	private int predictedTimeUntilActivation;
+	private ResourceLocation predictedEventVision;
 
 	protected int maxPredictionTime = 9600;
 
@@ -51,6 +52,11 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 
 	public int getPredictedTimeUntilActivation() {
 		return this.predictedTimeUntilActivation;
+	}
+
+	@Nullable
+	public ResourceLocation getPredictedEventVision() {
+		return this.predictedEventVision;
 	}
 
 	@Override
@@ -81,27 +87,25 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 
 		int nextPrediction = Integer.MAX_VALUE;
 		IPredictableEnvironmentEvent nextEvent = null;
-		ResourceLocation nextEventVision = null;
+		ResourceLocation[] nextEventVisions = null;
 
 		for(IEnvironmentEvent event : registry.getEvents().values()) {
 			if(event instanceof IPredictableEnvironmentEvent) {
 				IPredictableEnvironmentEvent predictable = (IPredictableEnvironmentEvent) event;
 
-				ResourceLocation vision = predictable.getVisionTexture();
+				ResourceLocation[] visions = predictable.getVisionTextures();
 
-				if(vision != null) {
+				if(visions != null) {
 					int prediction = predictable.estimateTimeUntil(State.ACTIVE);
 
 					if(prediction > 0 && prediction < nextPrediction && prediction < this.maxPredictionTime) {
 						nextPrediction = prediction;
 						nextEvent = predictable;
-						nextEventVision = vision;
+						nextEventVisions = visions;
 					}
 				}
 			}
 		}
-
-		final ResourceLocation eventVision = nextEventVision;
 
 		if(this.predictedEvent != null && this.predictedEvent != nextEvent && this.fadeOutTimer < 20) {
 			this.fadeOutTimer++;
@@ -111,8 +115,10 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 				this.predictedEvent = nextEvent;
 				this.predictedTimeUntilActivation = -1;
 
-				if(eventVision != null) {
-					this.particleBatch = ParticleVisionOrb.createParticleBatch(() -> eventVision);
+				this.predictedEventVision = nextEventVisions != null && nextEventVisions.length >= 1 ? nextEventVisions[this.world.rand.nextInt(nextEventVisions.length)] : null;
+
+				if(this.predictedEventVision != null) {
+					this.particleBatch = ParticleVisionOrb.createParticleBatch(() -> this.predictedEventVision);
 				} else {
 					this.particleBatch = null;
 				}
@@ -120,9 +126,16 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 		} else if(this.predictedEvent == null) {
 			this.predictedEvent = nextEvent;
 
-			if(eventVision != null) {
-				this.particleBatch = ParticleVisionOrb.createParticleBatch(() -> eventVision);
+			if(nextEvent != null) {
+				this.predictedEventVision = nextEventVisions != null && nextEventVisions.length >= 1 ? nextEventVisions[this.world.rand.nextInt(nextEventVisions.length)] : null;
+
+				if(this.predictedEventVision != null) {
+					this.particleBatch = ParticleVisionOrb.createParticleBatch(() -> this.predictedEventVision);
+				} else {
+					this.particleBatch = null;
+				}
 			} else {
+				this.predictedEventVision = null;
 				this.particleBatch = null;
 			}
 		}
@@ -167,7 +180,7 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 
 				BatchedParticleRenderer.INSTANCE.addParticle(this.particleBatch, particle);
 			}
-		} else if(this.predictedEvent == null) {
+		} else {
 			this.predictedTimeUntilActivation = -1;
 		}
 
