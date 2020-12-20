@@ -37,7 +37,7 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 	private IPredictableEnvironmentEvent predictedEvent;
 	private int predictedTimeUntilActivation;
 
-	protected int maxPredictionTime = 6000;
+	protected int maxPredictionTime = 9600;
 
 	@Nullable
 	@SideOnly(Side.CLIENT)
@@ -92,7 +92,7 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 				if(vision != null) {
 					int prediction = predictable.estimateTimeUntil(State.ACTIVE);
 
-					if(prediction > 0 && prediction < nextPrediction) {
+					if(prediction > 0 && prediction < nextPrediction && prediction < this.maxPredictionTime) {
 						nextPrediction = prediction;
 						nextEvent = predictable;
 						nextEventVision = vision;
