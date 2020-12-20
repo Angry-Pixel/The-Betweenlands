@@ -178,7 +178,11 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
         setHealth(getMaxHealth());
     }
-    
+
+    public void setAsLootFish() {
+    	setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_TREASURE));
+    }
+
     private void setHeadType(byte type) {
         dataManager.set(HEAD_TYPE, type);
     }
@@ -532,7 +536,14 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        	if(getEscapeTicks() * 256 / 1024 < getStaminaTicks() * 256 / 100 && ESCAPE_DELAY <= 0)
 	        		getPassengers().get(0).dismountRidingEntity(); // this just releases the fish atm
 	        	
-	        // testing stuff WIP
+/* TODO
+	        	Testing stuff WIP!
+	        	Remove escape tick based scroll and move to a simple timed scroll counter.
+	        	Add 'object type' byte for obstruction so they can be random - makes it easier to add a chest etc and choose what sprite in gui. 
+	        	Check fish with RNG (because ease) replace one 'object type' with treasure chest if positive.
+part done     	Add Loot item to fish body part if chest opened (will need extra loot table and stuff) use setAsLootFish()
+	        	Change GuiFishStaminaBar to use new sprites and 'object type' byte and clean up that mess!
+*/
 	        	if(getEscapeTicks() <= 1024 && getObstruction1Ticks() >= 0) {
 	        		setObstruction1Ticks(getObstruction1Ticks() - 1);
 	        		if(getObstruction1Ticks() <= 0)

@@ -143,6 +143,7 @@ public class LootTableRegistry {
     public static final ResourceLocation ANADIA_HEAD = register("entities/anadia_head");
     public static final ResourceLocation ANADIA_BODY = register("entities/anadia_body");
     public static final ResourceLocation ANADIA_TAIL = register("entities/anadia_tail");
+    public static final ResourceLocation ANADIA_TREASURE = register("entities/anadia_treasure");
     public static final ResourceLocation ROCK_SNOT = register("entities/rock_snot");
 
     //SPECIAL MOB LOOT FUNCTIONS
