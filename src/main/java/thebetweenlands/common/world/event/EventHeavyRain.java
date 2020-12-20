@@ -196,4 +196,9 @@ public class EventHeavyRain extends TimedEnvironmentEvent {
 			event.setCanceled(true);
 		}
 	}
+
+	@Override
+	public ResourceLocation getVisionTexture() {
+		return new ResourceLocation("thebetweenlands:textures/events/heavy_rain.png");
+	}
 }

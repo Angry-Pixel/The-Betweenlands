@@ -285,4 +285,9 @@ public class EventRift extends TimedEnvironmentEvent {
 				variant.getMinRoll() + configuration.rollComponent * (variant.getMaxRoll() - variant.getMinRoll())
 		};
 	}
+
+	@Override
+	public ResourceLocation getVisionTexture() {
+		return new ResourceLocation("thebetweenlands:textures/events/rift.png");
+	}
 }

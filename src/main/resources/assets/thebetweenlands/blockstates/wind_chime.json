@@ -4,7 +4,7 @@
     "normal": {
 	  "model": "thebetweenlands:internal/blank",
       "custom": {
-        "particle_texture": "thebetweenlands:particle/block/alembic_particle"
+        "particle_texture": "thebetweenlands:particle/block/wind_chime_particle"
       }
 	}
   }

@@ -178,4 +178,9 @@ public class EventSnowfall extends TimedEnvironmentEvent {
 	public int getOnTime(Random rnd) {
 		return 4800 + rnd.nextInt(6000);
 	}
+
+	@Override
+	public ResourceLocation getVisionTexture() {
+		return new ResourceLocation("thebetweenlands:textures/events/snowfall.png");
+	}
 }

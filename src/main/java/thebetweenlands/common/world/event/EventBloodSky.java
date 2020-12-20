@@ -80,4 +80,9 @@ public class EventBloodSky extends TimedEnvironmentEvent {
 			this.soundPlayed = false;
 		}
 	}
+
+	@Override
+	public ResourceLocation getVisionTexture() {
+		return new ResourceLocation("thebetweenlands:textures/events/blood_sky.png");
+	}
 }

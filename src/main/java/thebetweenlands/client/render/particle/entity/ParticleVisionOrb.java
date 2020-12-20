@@ -7,6 +7,8 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.GlStateManager.TexGen;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -49,6 +51,8 @@ public class ParticleVisionOrb extends ParticleAnimated implements IParticleSpri
 	protected float prevDistortion3X, prevDistortion3Y, distortion3X, distortion3Y;
 	protected float prevDistortion4X, prevDistortion4Y, distortion4X, distortion4Y;
 
+	protected Supplier<Float> alphaSupplier = null;
+
 	protected ParticleVisionOrb(World world, double x, double y, double z, double mx, double my, double mz, double cx, double cy, double cz, float scale, int maxAge) {
 		super(world, x, y, z, 0, 0, 0, maxAge, scale, false);
 		this.posX = this.prevPosX = x;
@@ -65,6 +69,11 @@ public class ParticleVisionOrb extends ParticleAnimated implements IParticleSpri
 		this.cy = cy;
 		this.cz = cz;
 		this.prevParticleAngle = this.particleAngle = world.rand.nextFloat() * 360.0f;
+	}
+
+	public ParticleVisionOrb setAlphaFunction(Supplier<Float> alpha) {
+		this.alphaSupplier = alpha;
+		return this;
 	}
 
 	@Override
@@ -96,6 +105,10 @@ public class ParticleVisionOrb extends ParticleAnimated implements IParticleSpri
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+
+		if(this.alphaSupplier != null) {
+			this.particleAlpha = this.alphaSupplier.get();
+		}
 
 		int brightness = this.getBrightnessForRender(1);
 		this.lightmapX = (brightness >> 16) & 65535;
@@ -327,10 +340,12 @@ public class ParticleVisionOrb extends ParticleAnimated implements IParticleSpri
 				.format(ParticleVisionOrb.FORMAT)
 				.depthMask(false)
 				.blur(true)
+				.setBlend(true)
+				.blend(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA)
 				.preRenderPassCallback(() -> {
 					GlStateManager.setActiveTexture(OpenGlHelper.GL_TEXTURE2);
 					GlStateManager.enableTexture2D();
-					
+
 					GlStateManager.matrixMode(GL11.GL_TEXTURE);
 					GlStateManager.rotate(180, 1, 0, 0);
 					GlStateManager.matrixMode(GL11.GL_MODELVIEW);

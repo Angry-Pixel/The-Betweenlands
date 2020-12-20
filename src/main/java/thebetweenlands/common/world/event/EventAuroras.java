@@ -70,6 +70,11 @@ public class EventAuroras extends TimedEnvironmentEvent {
 		this.dataManager.set(AURORA_TYPE, (int)this.getData().getShort("auroraType"));
 	}
 
+	@Override
+	protected boolean canActivate() {
+		return this.canBeActive();
+	}
+	
 	public short getAuroraType() {
 		return (short)this.dataManager.get(AURORA_TYPE).intValue();
 	}
@@ -82,5 +87,10 @@ public class EventAuroras extends TimedEnvironmentEvent {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public ResourceLocation getVisionTexture() {
+		return new ResourceLocation("thebetweenlands:textures/events/auroras.png");
 	}
 }

@@ -147,4 +147,9 @@ public class EventThunderstorm extends TimedEnvironmentEvent {
 	public int getOnTime(Random rnd) {
 		return 4000 + rnd.nextInt(4000);
 	}
+
+	@Override
+	public ResourceLocation getVisionTexture() {
+		return new ResourceLocation("thebetweenlands:textures/events/thunderstorm.png");
+	}
 }

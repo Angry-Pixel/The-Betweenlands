@@ -69,4 +69,9 @@ public class EventDenseFog extends TimedEnvironmentEvent {
 		}
 		return false;
 	}
+
+	@Override
+	public ResourceLocation getVisionTexture() {
+		return new ResourceLocation("thebetweenlands:textures/events/dense_fog.png");
+	}
 }

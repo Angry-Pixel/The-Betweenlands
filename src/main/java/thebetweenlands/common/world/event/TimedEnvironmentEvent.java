@@ -4,11 +4,13 @@ import java.util.Random;
 
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import thebetweenlands.api.environment.IPredictableEnvironmentEvent;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.registries.GameruleRegistry;
 
-public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent {
+public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent implements IPredictableEnvironmentEvent {
 	public TimedEnvironmentEvent(BLEnvironmentEventRegistry registry) {
 		super(registry);
 	}
@@ -143,4 +145,22 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent {
 	 * @return
 	 */
 	public abstract int getOnTime(Random rnd);
+
+	@Override
+	public int estimateTimeUntil(State state) {
+		if(state == State.ACTIVE) {
+			if(this.isActive()) {
+				return 0;
+			} else if(this.canActivate()) {
+				return this.getTicks();
+			}
+		} else if(state == State.INACTIVE) {
+			if(!this.isActive()) {
+				return 0;
+			} else {
+				return this.getTicks();
+			}
+		}
+		return -1;
+	}
 }

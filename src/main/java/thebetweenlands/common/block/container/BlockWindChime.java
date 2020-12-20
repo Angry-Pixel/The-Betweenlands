@@ -2,12 +2,15 @@ package thebetweenlands.common.block.container;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -79,11 +82,25 @@ public class BlockWindChime extends BlockContainer {
 	}
 
 	@Override
-	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+		this.checkAndDropBlock(worldIn, pos, state);
 	}
 
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		return Collections.emptyList();
+	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+		return super.canPlaceBlockAt(worldIn, pos) && (worldIn.isSideSolid(pos.up(), EnumFacing.DOWN) || worldIn.getBlockState(pos.up()).getBlockFaceShape(worldIn, pos.up(), EnumFacing.DOWN) != BlockFaceShape.UNDEFINED);
+	}
+
+	@Override
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+		super.updateTick(worldIn, pos, state, rand);
+		this.checkAndDropBlock(worldIn, pos, state);
+	}
+
+	protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
+		if(!worldIn.isSideSolid(pos.up(), EnumFacing.DOWN) && worldIn.getBlockState(pos.up()).getBlockFaceShape(worldIn, pos.up(), EnumFacing.DOWN) == BlockFaceShape.UNDEFINED) {
+			this.dropBlockAsItem(worldIn, pos, state, 0);
+			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+		}
 	}
 }
