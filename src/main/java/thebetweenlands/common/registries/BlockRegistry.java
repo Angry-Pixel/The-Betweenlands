@@ -61,6 +61,7 @@ import thebetweenlands.common.block.container.BlockRepeller;
 import thebetweenlands.common.block.container.BlockTarLootPot;
 import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
 import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
+import thebetweenlands.common.block.container.BlockWindChime;
 import thebetweenlands.common.block.farming.BlockAspectrusCrop;
 import thebetweenlands.common.block.farming.BlockDugDirt;
 import thebetweenlands.common.block.farming.BlockDugGrass;
@@ -850,6 +851,7 @@ public class BlockRegistry {
     public static final BlockSimulacrum SIMULACRUM_LAKE_CAVERN = new BlockSimulacrum(Material.ROCK, SoundType.STONE);
     public static final BlockSimulacrum SIMULACRUM_ROOTMAN = new BlockSimulacrum(Material.WOOD, SoundType.WOOD);
     public static final Block OFFERING_TABLE = new BlockOfferingTable();
+    public static final Block WIND_CHIME = new BlockWindChime();
     
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();
