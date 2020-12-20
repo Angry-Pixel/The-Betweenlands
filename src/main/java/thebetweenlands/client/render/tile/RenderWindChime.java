@@ -41,7 +41,11 @@ public class RenderWindChime extends TileEntitySpecialRenderer<TileEntityWindChi
 			this.bindTexture(TEXTURE);
 		}
 
-		MODEL.render();
+		if(te != null) {
+			MODEL.render(te.renderTicks + partialTicks, Math.min((te.prevChimeTicks + (te.chimeTicks - te.prevChimeTicks) * partialTicks) / 100.0f, 1.5f));
+		} else {
+			MODEL.render(0, 0);
+		}
 
 		if(isBreakingAnimation) {
 			GlStateManager.matrixMode(GL11.GL_TEXTURE);

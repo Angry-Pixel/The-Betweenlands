@@ -23,6 +23,12 @@ import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class TileEntityWindChime extends TileEntity implements ITickable {
+	public int renderTicks;
+
+	public int ticksUntilChimes;
+	public int prevChimeTicks;
+	public int chimeTicks;
+
 	@SideOnly(Side.CLIENT)
 	private ParticleBatch particleBatch;
 
@@ -50,6 +56,21 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 	@Override
 	public void update() {
 		if(this.world.isRemote) {
+			this.renderTicks++;
+
+			if(this.ticksUntilChimes > 0) {
+				this.ticksUntilChimes--;
+
+				if(this.ticksUntilChimes <= 0) {
+					this.ticksUntilChimes = 0;
+				} else if(this.ticksUntilChimes <= 4) {
+					this.chimeTicks += 25;
+				}
+			}
+
+			this.prevChimeTicks = this.chimeTicks;
+			this.chimeTicks = Math.max(this.chimeTicks - 1, 0);
+
 			this.updateParticles();
 		}
 	}
@@ -71,7 +92,7 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 				if(vision != null) {
 					int prediction = predictable.estimateTimeUntil(State.ACTIVE);
 
-					if(prediction > 0 && prediction < nextPrediction && prediction < this.maxPredictionTime) {
+					if(prediction > 0 && prediction < nextPrediction) {
 						nextPrediction = prediction;
 						nextEvent = predictable;
 						nextEventVision = vision;
@@ -156,6 +177,8 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 	}
 
 	private void playChimes(IPredictableEnvironmentEvent event) {
+		this.ticksUntilChimes = 15;
+
 		SoundEvent chimes = event.getChimesSound();
 
 		if(chimes != null) {

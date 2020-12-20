@@ -3,6 +3,7 @@ package thebetweenlands.client.render.model.tile;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.MathHelper;
 
 /**
  * BLWindchime - TripleHeadedSheep
@@ -121,7 +122,113 @@ public class ModelWindChime extends ModelBase {
 		this.midstring.addChild(this.thingy);
 	}
 
-	public void render() {
+	public void render(float ticks, float strength) {
+		this.string1.rotateAngleX = 0;
+		this.string1.rotateAngleZ = 0;
+		this.rod1.rotateAngleZ = 0;
+
+		this.string2.rotateAngleX = 0;
+		this.string2.rotateAngleZ = 0;
+		this.rod2.rotateAngleZ = 0;
+
+		this.string3.rotateAngleX = 0;
+		this.string3.rotateAngleZ = 0;
+		this.rod3.rotateAngleZ = 0;
+
+		this.string4.rotateAngleX = -0;
+		this.string4.rotateAngleZ = 0;
+		this.rod4.rotateAngleZ = 0;
+
+		this.string5.rotateAngleX = 0;
+		this.string5.rotateAngleZ = 0;
+		this.rod5.rotateAngleZ = 0;
+
+		this.string6.rotateAngleX = 0;
+		this.string6.rotateAngleZ = 0;
+		this.rod6.rotateAngleZ = 0;
+
+		this.midstring.rotateAngleX = 0;
+		this.midstring.rotateAngleZ = 0;
+		this.thingy.rotateAngleZ = 0;
+
+		float frame2 = ticks * 0.1f;
+
+		float b1 = MathHelper.cos(frame2) * 2.0f * 0.15f;
+		float b2 = MathHelper.cos(frame2 - 0.1f) * 2.0f * b1 * 0.15f;
+		float b3 = MathHelper.sin(frame2 * 0.5f + 0.1f) * 1.5f * 0.15f;
+
+		float b4 = MathHelper.cos(frame2 * 0.94f + 0.5f) * 2.0f * 0.15f;
+		float b5 = MathHelper.cos(frame2 * 0.94f + 0.5f - 0.1f) * 2.0f * b4 * 0.15f;
+		float b6 = MathHelper.sin(frame2 * 0.94f * 0.5f + 0.5f + 0.1f) * 2.0f * 0.15f;
+
+		this.string1.rotateAngleX += -b3 * 0.1f;
+		this.string1.rotateAngleZ += b1 * 0.1f;
+		this.rod1.rotateAngleZ += b2 * 0.1f;
+
+		this.string2.rotateAngleX += -b6 * 0.1f;
+		this.string2.rotateAngleZ += -b4 * 0.1f;
+		this.rod2.rotateAngleZ += b5 * 0.1f;
+
+		this.string3.rotateAngleX += b3 * 0.1f;
+		this.string3.rotateAngleZ += b1 * 0.1f;
+		this.rod3.rotateAngleZ += b2 * 0.1f;
+
+		this.string4.rotateAngleX += -b6 * 0.1f;
+		this.string4.rotateAngleZ += b4 * 0.1f;
+		this.rod4.rotateAngleZ += b5 * 0.1f;
+
+		this.string5.rotateAngleX += -b6 * 0.1f;
+		this.string5.rotateAngleZ += -b4 * 0.1f;
+		this.rod5.rotateAngleZ += -b5 * 0.1f;
+
+		this.string6.rotateAngleX += b3 * 0.1f;
+		this.string6.rotateAngleZ += b1 * 0.1f;
+		this.rod6.rotateAngleZ += -b2 * 0.1f;
+
+		this.midstring.rotateAngleX += -b3 * 0.1f;
+		this.midstring.rotateAngleZ += -b4 * 0.1f;
+		this.thingy.rotateAngleZ += -b2 * 0.1f;
+
+		if(strength > 0.01f) {
+			float frame = ticks * 0.8f;
+
+			float a1 = MathHelper.cos(frame) * 2.0f * strength;
+			float a2 = MathHelper.cos(frame - 0.1f) * 2.0f * a1 * strength;
+			float a3 = MathHelper.sin(frame * 0.5f + 0.1f) * 1.5f * strength;
+
+			float a4 = MathHelper.cos(frame * 0.94f + 0.5f) * 2.0f * strength;
+			float a5 = MathHelper.cos(frame * 0.94f + 0.5f - 0.1f) * 2.0f * a4 * strength;
+			float a6 = MathHelper.sin(frame * 0.94f * 0.5f + 0.5f + 0.1f) * 2.0f * strength;
+
+			this.string1.rotateAngleX += -a3 * 0.1f;
+			this.string1.rotateAngleZ += a1 * 0.1f;
+			this.rod1.rotateAngleZ += a2 * 0.1f;
+
+			this.string2.rotateAngleX += -a6 * 0.1f;
+			this.string2.rotateAngleZ += -a4 * 0.1f;
+			this.rod2.rotateAngleZ += a5 * 0.1f;
+
+			this.string3.rotateAngleX += a3 * 0.1f;
+			this.string3.rotateAngleZ += a1 * 0.1f;
+			this.rod3.rotateAngleZ += a2 * 0.1f;
+
+			this.string4.rotateAngleX += -a6 * 0.1f;
+			this.string4.rotateAngleZ += a4 * 0.1f;
+			this.rod4.rotateAngleZ += a5 * 0.1f;
+
+			this.string5.rotateAngleX += -a6 * 0.1f;
+			this.string5.rotateAngleZ += -a4 * 0.1f;
+			this.rod5.rotateAngleZ += -a5 * 0.1f;
+
+			this.string6.rotateAngleX += a3 * 0.1f;
+			this.string6.rotateAngleZ += a1 * 0.1f;
+			this.rod6.rotateAngleZ += -a2 * 0.1f;
+
+			this.midstring.rotateAngleX += -a3 * 0.1f;
+			this.midstring.rotateAngleZ += -a4 * 0.1f;
+			this.thingy.rotateAngleZ += -a2 * 0.1f;
+		}
+
 		this.toprope.render(0.0625f);
 	}
 
