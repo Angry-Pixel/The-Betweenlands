@@ -31,6 +31,7 @@ public class EventThunderstorm extends TimedEnvironmentEvent {
 	
 	public EventThunderstorm(BLEnvironmentEventRegistry registry) {
 		super(registry);
+		this.getActiveStateEstimator().dependsOnEvent(() -> registry.heavyRain);
 	}
 
 	@Override

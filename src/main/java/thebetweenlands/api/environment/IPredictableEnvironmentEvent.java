@@ -54,10 +54,14 @@ public interface IPredictableEnvironmentEvent extends IEnvironmentEvent {
 
 			for(State other : this.getStates()) {
 				if(!Objects.equals(state, other)) {
-					int estimation = this.estimateTimeUntil(state);
-
+					int estimation = this.estimateTimeUntil(other);
+					
 					if(estimation > 0) {
-						remaining = Math.min(remaining, estimation);
+						if(remaining < 0) {
+							remaining = estimation;
+						} else {
+							remaining = Math.min(remaining, estimation);
+						}
 					}
 				}
 			}
