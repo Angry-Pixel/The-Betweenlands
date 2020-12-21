@@ -45,7 +45,13 @@ public class GuiFishStaminaBar extends Gui {
 	}
 
 	private void renderStaminaBar(int staminaTicks, int escapeTicks, int obstructionTicks1, int obstructionTicks2, int obstructionTicks3, int obstructionTicks4, int treasureTick, boolean hasTreasure, boolean treasureUnlocked,float posX, float posY) {
+		GlStateManager.pushMatrix();
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		drawTexturedModalRect(posX, posY + 5, 0, 18, 256, 21);
+		GlStateManager.disableBlend();
+		GlStateManager.popMatrix();
+
 		drawTexturedModalRect(posX - staminaTicks, posY + 5, 0, 0, 16, 11);
 		drawTexturedModalRect(posX - escapeTicks, posY, 0 + (getCrabScroll(escapeTicks) * 16), 48, 16, 64);
 		if(hasTreasure)
