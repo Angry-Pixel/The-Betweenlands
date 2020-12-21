@@ -52,7 +52,7 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 	private ResourceLocation attunedEvent;
 
 	public int getMaxPredictionTime() {
-		return this.attunedEvent == null ? 12000 : 6000;
+		return this.attunedEvent != null ? 12000 : 6000;
 	}
 
 	@Nullable
