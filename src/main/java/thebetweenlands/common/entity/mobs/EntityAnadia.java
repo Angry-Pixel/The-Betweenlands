@@ -71,6 +71,9 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	private static final DataParameter<ItemStack> HEAD_ITEM = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.ITEM_STACK);
 	private static final DataParameter<ItemStack> BODY_ITEM = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.ITEM_STACK);
 	private static final DataParameter<ItemStack> TAIL_ITEM = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.ITEM_STACK);
+	private static final DataParameter<Boolean> IS_TREASURE_FISH = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> TREASURE_TICKS = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
+	private static final DataParameter<Boolean> TREASURE_UNLOCKED = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.BOOLEAN);
 
 	private static float BASE_MULTIPLE = 1F; // just a arbitrary number to increase the size multiplier
 	public EntityAnadia.AIFindBait aiFindBait;
@@ -81,6 +84,11 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	public byte ROTTEN = 1;
 	
 	public int ESCAPE_DELAY = 80;
+	public int SCROLL_COUNTER = 256;
+	public boolean SCROLL_1 = false;
+	public boolean SCROLL_2 = false;
+	public boolean SCROLL_3 = false;
+	public boolean SCROLL_4 = false;
 	
 	public EntityAnadia(World world) {
 		super(world);
@@ -135,6 +143,9 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         dataManager.register(HEAD_ITEM, ItemStack.EMPTY);
         dataManager.register(BODY_ITEM, ItemStack.EMPTY);
         dataManager.register(TAIL_ITEM, ItemStack.EMPTY);
+        dataManager.register(IS_TREASURE_FISH, false);
+        dataManager.register(TREASURE_TICKS, 256);
+        dataManager.register(TREASURE_UNLOCKED, false);
     }
 
 	@Override
@@ -155,6 +166,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        setHeadItem(getPartFromLootTable(LootTableRegistry.ANADIA_HEAD));
 	        setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_BODY));
 	        setTailItem(getPartFromLootTable(LootTableRegistry.ANADIA_TAIL));
+	     //   if(getEntityWorld().rand.nextInt(50) == 0)
+	        	setIsTreasureFish(true);
     	}
         return super.onInitialSpawn(difficulty, livingdata);
     }
@@ -181,9 +194,10 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
     public void setAsLootFish() {
     	setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_TREASURE));
+    	setTreasureUnlocked(true);
     }
 
-    private void setHeadType(byte type) {
+	private void setHeadType(byte type) {
         dataManager.set(HEAD_TYPE, type);
     }
 
@@ -306,6 +320,30 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		return dataManager.get(TAIL_ITEM);
 	}
 
+    public void setIsTreasureFish(boolean treasure) {
+        dataManager.set(IS_TREASURE_FISH, treasure);
+    }
+
+    public boolean isTreasureFish() {
+        return dataManager.get(IS_TREASURE_FISH);
+    }
+
+    public void setTreasureTicks(int count) {
+		dataManager.set(TREASURE_TICKS, count);
+	}
+
+	public int getTreasureTicks() {
+		 return dataManager.get(TREASURE_TICKS);
+	}
+
+    public void setTreasureUnlocked(boolean unlocked) {
+    	dataManager.set(TREASURE_UNLOCKED, unlocked);
+	}
+
+	public boolean getTreasureUnlocked() {
+		 return dataManager.get(TREASURE_UNLOCKED);
+	}
+
 	@Override
     public void notifyDataManagerChange(DataParameter<?> key) {
         if (FISH_SIZE.equals(key)) {
@@ -347,6 +385,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		nbt.setFloat("fishSize", getFishSize());
 //		nbt.setInteger("hunger", getHungerCooldown());
 		nbt.setByte("fishColour", getFishColour());
+		nbt.setBoolean("isTreasureFish", isTreasureFish());
 		
 		NBTTagCompound headItem = new NBTTagCompound();
 		getHeadItem().writeToNBT(headItem);
@@ -370,6 +409,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		setFishSize(nbt.getFloat("fishSize"));
 //		setHungerCooldown(nbt.getInteger("hunger"));
 		setFishColour(nbt.getByte("fishColour"));
+		setIsTreasureFish(nbt.getBoolean("isTreasureFish"));
 
 		NBTTagCompound headItem = (NBTTagCompound) nbt.getTag("headItem");
 		ItemStack stackHead = ItemStack.EMPTY;
@@ -417,6 +457,18 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		float body = EnumAnadiaHeadParts.values()[getBodyType()].getStaminaModifier();
 		float tail = EnumAnadiaHeadParts.values()[getTailType()].getStaminaModifier();
 		return Math.round(getFishSize() * BASE_MULTIPLE * head + body + tail * 2F) / 2F;
+	}
+
+	public void playTreasureCollectedSound() {
+	//	getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.FISH_TREASURE_COLLECTED, SoundCategory.PLAYER, 1F, 1F);
+	}
+	
+	public void playAnadiaLostSound() {
+	//	getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ANADIA_LOST, SoundCategory.PLAYER, 1F, 1F);
+	}
+
+	public void playAnadiaWonSound() {
+	//	getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ANADIA_WON, SoundCategory.PLAYER, 1F, 1F);
 	}
 
 	@Override
@@ -513,6 +565,14 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        if(!isBeingRidden() ) {
 	        	if(ESCAPE_DELAY < 80)
 	        		ESCAPE_DELAY = 80;
+	        	if(SCROLL_COUNTER < 256) {
+	        		SCROLL_COUNTER = 256;
+	        		SCROLL_1 = false;
+	        		SCROLL_2 = false;
+	        		SCROLL_3 = false;
+	        		SCROLL_4 = false;
+	        	}
+
 	        	if(getStaminaTicks() < (int) (getStaminaMods() * 20))
 	        		setStaminaTicks(getStaminaTicks() + 1);
 	        	if(getEscapeTicks() < 1024)
@@ -525,55 +585,69 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        		setObstruction3Ticks(256);
 	        	if(getObstruction4Ticks() < 256)
 	        		setObstruction4Ticks(256);
+	        	if(getTreasureTicks() < 1024)
+	        		setTreasureTicks(1024);
 	        }
 
 	        if(isBeingRidden() && getPassengers().get(0) instanceof EntityBLFishHook && getStaminaTicks() > 0) {
 	        	if(ESCAPE_DELAY > 0)
 	        		ESCAPE_DELAY--;
-	        	
+
+	        	if(SCROLL_COUNTER == 256)
+	        		SCROLL_1 = true;
+	        	if(SCROLL_COUNTER == 192)
+	        		SCROLL_2 = true;
+	        	if(SCROLL_COUNTER == 128)
+	        		SCROLL_3 = true;
+	        	if(SCROLL_COUNTER == 64)
+	        		SCROLL_4 = true;
+
+	        	if(SCROLL_COUNTER > 0)
+	        		SCROLL_COUNTER --;
+
 	        	if(getEscapeTicks() > 0 && ESCAPE_DELAY <= 0)
 	        		setEscapeTicks(getEscapeTicks() -2);
-	        	if(getEscapeTicks() * 256 / 1024 < getStaminaTicks() * 256 / 100 && ESCAPE_DELAY <= 0)
+	        	if(getEscapeTicks() * 256 / 1024 < getStaminaTicks() * 256 / 100 && ESCAPE_DELAY <= 0) {
+	        		playAnadiaLostSound();
 	        		getPassengers().get(0).dismountRidingEntity(); // this just releases the fish atm
+	        	}
 	        	
-/* TODO
-	        	Testing stuff WIP!
-	        	Remove escape tick based scroll and move to a simple timed scroll counter.
-	        	Add 'object type' byte for obstruction so they can be random - makes it easier to add a chest etc and choose what sprite in gui. 
-	        	Check fish with RNG (because ease) replace one 'object type' with treasure chest if positive.
-part done     	Add Loot item to fish body part if chest opened (will need extra loot table and stuff) use setAsLootFish()
-	        	Change GuiFishStaminaBar to use new sprites and 'object type' byte and clean up that mess!
-*/
-	        	if(getEscapeTicks() <= 1024 && getObstruction1Ticks() >= 0) {
+	        	if(SCROLL_1 && getObstruction1Ticks() >= 0) {
 	        		setObstruction1Ticks(getObstruction1Ticks() - 1);
 	        		if(getObstruction1Ticks() <= 0)
 	        			setObstruction1Ticks(256);
 	        		}
 	        	
-	        	if(getEscapeTicks() <= 896 && getObstruction2Ticks() >= 0) {
+	        	if(SCROLL_2 && getObstruction2Ticks() >= 0) {
 	        		setObstruction2Ticks(getObstruction2Ticks() - 1);
 	        		if(getObstruction2Ticks() <= 0)
 	        			setObstruction2Ticks(256);
 	        		}
 	        	
-	        	if(getEscapeTicks() <= 768 && getObstruction3Ticks() >= 0) {
+	        	if(SCROLL_3 && getObstruction3Ticks() >= 0) {
 	        		setObstruction3Ticks(getObstruction3Ticks() - 1);
 	        		if(getObstruction3Ticks() <= 0)
 	        			setObstruction3Ticks(256);
 	        		}
 	        	
-	        	if(getEscapeTicks() <= 640 && getObstruction4Ticks() >= 0) {
+	        	if(SCROLL_4 && getObstruction4Ticks() >= 0) {
 	        		setObstruction4Ticks(getObstruction4Ticks() - 1);
 	        		if(getObstruction4Ticks() <= 0)
 	        			setObstruction4Ticks(256);
 	        		}
-	        }
 
+				if (isTreasureFish() && getTreasureTicks() >= 0) {
+					setTreasureTicks(getTreasureTicks() - 1);
+					if (getTreasureTicks() <= 0) {
+						if (getTreasureUnlocked())
+							setIsTreasureFish(false);
+						setTreasureTicks(1024);
+					}
+				}
+	        }
 		}
 		super.onUpdate();
 	}
-
-
 
 	public boolean isObstructed() {
 		if(256 - getObstruction1Ticks() <= getStaminaTicks() * 256 / 100 && 256 - getObstruction1Ticks() >= getStaminaTicks() * 256 / 100 - 16 )
@@ -586,6 +660,10 @@ part done     	Add Loot item to fish body part if chest opened (will need extra 
 			return true;
 		else
 			return false;
+	}
+
+	public boolean isObstructedTreasure() {
+		return (1024 - getTreasureTicks() <= getStaminaTicks() * 1024 / 100 && 1024 - getTreasureTicks() >= getStaminaTicks() * 1024 / 100 - 16 );
 	}
 
 	@Override

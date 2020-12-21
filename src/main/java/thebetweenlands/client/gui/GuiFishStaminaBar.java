@@ -32,19 +32,24 @@ public class GuiFishStaminaBar extends Gui {
 					int obstructpos2 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction2Ticks();
 					int obstructpos3 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction3Ticks();
 					int obstructpos4 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction4Ticks();
+					int treasurePos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getTreasureTicks() * 256 / 1024;
+					boolean showTreasure = ((EntityAnadia) player.fishEntity.getRidingEntity()).isTreasureFish();
+					boolean treasureUnlocked = ((EntityAnadia) player.fishEntity.getRidingEntity()).getTreasureUnlocked();
 					GlStateManager.color(1F, 1F, 1F, 1F);
 					mc.renderEngine.bindTexture(GUI_TEXTURE);
 					ScaledResolution res = new ScaledResolution(mc);
-					renderStaminaBar(-256 + fishpos, -256 + Math.min(256, escapepos), 0 - obstructpos1, 0 - obstructpos2, 0 - obstructpos3, 0 - obstructpos4, (float)res.getScaledWidth() * 0.5F - 128F, (float)res.getScaledHeight() * 0.5F - 120F);
+					renderStaminaBar(-256 + fishpos, -256 + Math.min(256, escapepos), 0 - obstructpos1, 0 - obstructpos2, 0 - obstructpos3, 0 - obstructpos4, 0 - treasurePos, showTreasure, treasureUnlocked, (float)res.getScaledWidth() * 0.5F - 128F, (float)res.getScaledHeight() * 0.5F - 120F);
 				}
 			}
 		}
 	}
 
-	private void renderStaminaBar(int staminaTicks, int escapeTicks, int obstructionTicks1, int obstructionTicks2, int obstructionTicks3, int obstructionTicks4, float posX, float posY) {
-		drawTexturedModalRect(posX, posY + 5, 0, 18, 256, 12);
+	private void renderStaminaBar(int staminaTicks, int escapeTicks, int obstructionTicks1, int obstructionTicks2, int obstructionTicks3, int obstructionTicks4, int treasureTick, boolean hasTreasure, boolean treasureUnlocked,float posX, float posY) {
+		drawTexturedModalRect(posX, posY + 5, 0, 18, 256, 21);
 		drawTexturedModalRect(posX - staminaTicks, posY + 5, 0, 0, 16, 11);
-		drawTexturedModalRect(posX - escapeTicks, posY + 18, 0 + (getCrabScroll(escapeTicks) * 16), 32, 16, 48);
+		drawTexturedModalRect(posX - escapeTicks, posY, 0 + (getCrabScroll(escapeTicks) * 16), 48, 16, 64);
+		if(hasTreasure)
+			drawTexturedModalRect(posX - treasureTick, posY + 1, treasureUnlocked ? 64 : 48, 0, 16, 16);
 		drawTexturedModalRect(posX - obstructionTicks1, posY + 1, 32, 0, 13, 16);
 		drawTexturedModalRect(posX - obstructionTicks2, posY + 1, 32, 0, 13, 16);
 		drawTexturedModalRect(posX - obstructionTicks3, posY + 1, 32, 0, 13, 16);
