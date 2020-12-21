@@ -1,43 +1,62 @@
 {
 	"pools": [
 		{
-			"name": "key",
+			"name": "rune_door_key",
 			"rolls": 1,
-			"conditions": [],
 			"entries": [
 				{
 					"type": "item",
-					"name": "thebetweenlands:rune_door_key",
-					"functions": [
-						{
-							"function": "set_count",
-							"count": {
-								"min": 1,
-								"max": 1
-							}
-						}
-					],
-					"weight": 1
+					"name": "thebetweenlands:rune_door_key"
 				}
 			]
 		},
 		{
 			"name": "life_crystal",
 			"rolls": 1,
-			"conditions": [],
 			"entries": [
 				{
 					"type": "item",
 					"name": "thebetweenlands:life_crystal",
-					"functions": [{
-						"function": "set_count",
-							"count": {
-								"min": 1,
-								"max": 1
-							}
+					"weight": 1,
+					"functions": [
+						{
+							"function": "set_damage",
+							"damage": 0.68
 						}
-					],
-					"weight": 1
+					]
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:life_crystal",
+					"weight": 3,
+					"functions": [
+						{
+							"function": "set_damage",
+							"damage": 0.50
+						}
+					]
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:life_crystal",
+					"weight": 2,
+					"functions": [
+						{
+							"function": "set_damage",
+							"damage": 0.25
+						}
+					]
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:life_crystal",
+					"weight": 1,
+					"functions": [
+						{
+							"function": "set_damage",
+							"damage": 0.20
+						}
+					]
 				}
 			]
 		}

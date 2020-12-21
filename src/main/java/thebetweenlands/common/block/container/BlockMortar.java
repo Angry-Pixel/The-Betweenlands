@@ -22,6 +22,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.item.misc.ItemLifeCrystal;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityMortar;
@@ -75,7 +76,7 @@ public class BlockMortar extends BlockContainer {
 					tile.setInventorySlotContents(1, playerIn.getHeldItem(hand));
 					tile.hasPestle = true;
 					playerIn.setHeldItem(hand, ItemStack.EMPTY);
-				} else if (playerIn.getHeldItem(hand).getItem() == ItemRegistry.LIFE_CRYSTAL && tile.getStackInSlot(3).isEmpty()) {
+				} else if (playerIn.getHeldItem(hand).getItem() instanceof ItemLifeCrystal && tile.getStackInSlot(3).isEmpty()) {
 					tile.setInventorySlotContents(3, playerIn.getHeldItem(hand));
 					playerIn.setHeldItem(hand, ItemStack.EMPTY);
 				} else {

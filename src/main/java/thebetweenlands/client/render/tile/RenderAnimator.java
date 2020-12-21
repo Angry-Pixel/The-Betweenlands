@@ -87,13 +87,13 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 			}
 
 			// Life crystal
-			if (!te.getStackInSlot(1).isEmpty()) {
+			ItemStack crystal = te.getStackInSlot(1);
+			if (!crystal.isEmpty()) {
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(x + 0.5D, y + 0.43D, z + 0.5D);
 				GlStateManager.scale(0.18D, 0.18D, 0.18D);
 				GlStateManager.rotate((float) viewRot + 180, 0, 1, 0);
-				ItemStack stack = new ItemStack(ItemRegistry.LIFE_CRYSTAL);
-				renderItem.renderItem(stack, TransformType.FIXED);
+				renderItem.renderItem(crystal, TransformType.FIXED);
 				GlStateManager.popMatrix();
 			}
 

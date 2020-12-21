@@ -18,6 +18,7 @@ import thebetweenlands.client.audio.AnimatorSound;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.inventory.container.ContainerAnimator;
+import thebetweenlands.common.item.misc.ItemLifeCrystal;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -143,7 +144,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
     }
 
     public boolean isCrystalInslot() {
-        return isSlotInUse(1) && inventory.get(1).getItem() == ItemRegistry.LIFE_CRYSTAL && inventory.get(1).getItemDamage() < inventory.get(1).getMaxDamage();
+        return isSlotInUse(1) && inventory.get(1).getItem() instanceof ItemLifeCrystal && inventory.get(1).getItemDamage() < inventory.get(1).getMaxDamage();
     }
 
     public int getCrystalPower() {
@@ -272,7 +273,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
 
     @Override
     public boolean canInsertItem(int slot, ItemStack stack, EnumFacing side) {
-        if (slot == 1 && !stack.isEmpty() && stack.getItem().equals(ItemRegistry.LIFE_CRYSTAL))
+        if (slot == 1 && !stack.isEmpty() && stack.getItem() instanceof ItemLifeCrystal)
             return true;
         else if (slot == 2 && !stack.isEmpty() && stack.getItem().equals(ItemRegistry.ITEMS_MISC) && stack.getItemDamage() == ItemMisc.EnumItemMisc.SULFUR.getID())
             return true;
