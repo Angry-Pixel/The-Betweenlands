@@ -1,15 +1,24 @@
 package thebetweenlands.common.tile;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
+
 import javax.annotation.Nullable;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.environment.IEnvironmentEvent;
@@ -40,7 +49,65 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 	private int predictedTimeUntilActivation;
 	private ResourceLocation predictedEventVision;
 
-	protected int maxPredictionTime = 9600;
+	private ResourceLocation attunedEvent;
+
+	public int getMaxPredictionTime() {
+		return this.attunedEvent == null ? 12000 : 6000;
+	}
+
+	@Nullable
+	public ResourceLocation getAttunedEvent() {
+		return this.attunedEvent;
+	}
+
+	public void setAttunedEvent(@Nullable ResourceLocation event) {
+		this.attunedEvent = event;
+		this.markDirty();
+		if(this.world != null) {
+			IBlockState stat = this.world.getBlockState(this.pos);
+			this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
+		}
+	}
+
+	@Nullable
+	public ResourceLocation cycleAttunedEvent() {
+		BLEnvironmentEventRegistry registry = BetweenlandsWorldStorage.forWorld(this.world).getEnvironmentEventRegistry();
+
+		List<IPredictableEnvironmentEvent> choices = new ArrayList<>();
+
+		int currentAttunedIndex = -1;
+
+		int i = 0;
+		for(Entry<ResourceLocation, IEnvironmentEvent> entry : registry.getEvents().entrySet()) {
+			if(entry.getValue() instanceof IPredictableEnvironmentEvent) {
+				choices.add((IPredictableEnvironmentEvent) entry.getValue());
+
+				if(this.attunedEvent != null && this.attunedEvent.equals(entry.getKey())) {
+					currentAttunedIndex = i;
+				}
+
+				i++;
+			}
+		}
+
+		ResourceLocation newAttunement;
+
+		if(currentAttunedIndex >= 0) {
+			if(currentAttunedIndex == choices.size() - 1) {
+				newAttunement = null;
+			} else {
+				newAttunement = choices.get(currentAttunedIndex + 1).getEventName();
+			}
+		} else if(choices.size() > 0) {
+			newAttunement = choices.get(0).getEventName();
+		} else {
+			newAttunement = null;
+		}
+
+		this.setAttunedEvent(newAttunement);
+
+		return newAttunement;
+	}
 
 	@Nullable
 	@SideOnly(Side.CLIENT)
@@ -87,12 +154,14 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 	private void updateParticles() {
 		BLEnvironmentEventRegistry registry = BetweenlandsWorldStorage.forWorld(this.world).getEnvironmentEventRegistry();
 
+		int maxPredictionTime = this.getMaxPredictionTime();
+
 		int nextPrediction = Integer.MAX_VALUE;
 		IPredictableEnvironmentEvent nextEvent = null;
 		ResourceLocation[] nextEventVisions = null;
 
 		for(IEnvironmentEvent event : registry.getEvents().values()) {
-			if(event instanceof IPredictableEnvironmentEvent) {
+			if(event instanceof IPredictableEnvironmentEvent && (this.attunedEvent == null || this.attunedEvent.equals(event.getEventName()))) {
 				IPredictableEnvironmentEvent predictable = (IPredictableEnvironmentEvent) event;
 
 				ResourceLocation[] visions = predictable.getVisionTextures();
@@ -100,7 +169,7 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 				if(visions != null) {
 					int prediction = predictable.estimateTimeUntil(State.ACTIVE);
 
-					if(prediction > 0 && prediction < nextPrediction && prediction < this.maxPredictionTime) {
+					if(prediction > 0 && prediction < nextPrediction && prediction < maxPredictionTime) {
 						nextPrediction = prediction;
 						nextEvent = predictable;
 						nextEventVisions = visions;
@@ -143,11 +212,11 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 		}
 
 		if(this.predictedEvent == nextEvent && nextEvent != null) {
-			if(this.predictedTimeUntilActivation == -1 || this.predictedTimeUntilActivation >= this.maxPredictionTime && nextPrediction < this.maxPredictionTime) {
+			if(this.predictedTimeUntilActivation == -1 || this.predictedTimeUntilActivation >= maxPredictionTime && nextPrediction < maxPredictionTime) {
 				this.playChimes(nextEvent);
-			} else if(this.predictedTimeUntilActivation >= this.maxPredictionTime * 0.4f && nextPrediction < this.maxPredictionTime * 0.4f) {
+			} else if(this.predictedTimeUntilActivation >= maxPredictionTime * 0.4f && nextPrediction < maxPredictionTime * 0.4f) {
 				this.playChimes(nextEvent);
-			} else if(this.predictedTimeUntilActivation >= this.maxPredictionTime * 0.2f && nextPrediction < this.maxPredictionTime * 0.2f) {
+			} else if(this.predictedTimeUntilActivation >= maxPredictionTime * 0.2f && nextPrediction < maxPredictionTime * 0.2f) {
 				this.playChimes(nextEvent);
 			}
 
@@ -205,5 +274,52 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 		}
 
 		this.world.playSound(this.getPos().getX() + 0.5f, this.getPos().getY() + 0.5f, this.getPos().getZ() + 0.5f, SoundRegistry.CHIMES_WIND, SoundCategory.BLOCKS, 2, 1, false);
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound nbt) {
+		super.readFromNBT(nbt);
+		if(nbt.hasKey("attunedEvent", Constants.NBT.TAG_STRING)) {
+			this.setAttunedEvent(new ResourceLocation(nbt.getString("attunedEvent")));
+		} else {
+			this.setAttunedEvent(null);
+		}
+	}
+
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		nbt = super.writeToNBT(nbt);
+		if(this.attunedEvent != null) {
+			nbt.setString("attunedEvent", this.attunedEvent.toString());
+		}
+		return nbt;
+	}
+
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		if(this.attunedEvent != null) {
+			nbt.setString("attunedEvent", this.attunedEvent.toString());
+		}
+		return new SPacketUpdateTileEntity(this.getPos(), 1, nbt);
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		NBTTagCompound nbt = pkt.getNbtCompound();
+		if(nbt.hasKey("attunedEvent", Constants.NBT.TAG_STRING)) {
+			this.setAttunedEvent(new ResourceLocation(nbt.getString("attunedEvent")));
+		} else {
+			this.setAttunedEvent(null);
+		}
+	}
+
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		NBTTagCompound nbt = super.getUpdateTag();
+		if(this.attunedEvent != null) {
+			nbt.setString("attunedEvent", this.attunedEvent.toString());
+		}
+		return nbt;
 	}
 }

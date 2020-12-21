@@ -1250,6 +1250,9 @@ chat.draeton_dismount_timer=Dismounting in %s...
 
 chat.simulacrum.changed_effect=Changed effect to '%s'
 
+chat.wind_chime.changed_attunement=Attuned to '%s'
+chat.wind_chime.removed_attunement=Attuned to any event
+
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath
 
@@ -1451,6 +1454,18 @@ sign.fortress.line1=Only The
 sign.fortress.line2=Sword Keeper
 sign.fortress.line3=May Pass
 sign.fortress.line4=This Point
+
+
+# Events
+event.thebetweenlands.dense_fog.name=Dense Fog
+event.thebetweenlands.heavy_rain.name=Heavy Rain
+event.thebetweenlands.auroras.name=Auroras
+event.thebetweenlands.blood_sky.name=Blood Sky
+event.thebetweenlands.spook.name=Spook
+event.thebetweenlands.winter.name=Winter
+event.thebetweenlands.snowfall.name=Snowfall
+event.thebetweenlands.thunderstorm.name=Thunderstorm
+event.thebetweenlands.rift.name=Rift
 
 
 # JEI

@@ -1,7 +1,5 @@
 package thebetweenlands.common.block.container;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -10,21 +8,25 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.tile.TileEntityWindChime;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class BlockWindChime extends BlockContainer {
 	protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.15D, 0.0D, 0.15D, 0.85D, 1.0D, 0.85D);
@@ -102,5 +104,40 @@ public class BlockWindChime extends BlockContainer {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
 			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 		}
+	}
+
+	@Override
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if(hand == EnumHand.MAIN_HAND && playerIn.isCreative() && playerIn.isSneaking()) {
+
+			if(!worldIn.isRemote) {
+				TileEntity tile = worldIn.getTileEntity(pos);
+
+				if(tile instanceof TileEntityWindChime) {
+					TileEntityWindChime chime = (TileEntityWindChime) tile;
+
+					ResourceLocation newAttunement = chime.cycleAttunedEvent();
+
+					IEnvironmentEvent attunedEvent;
+					if(newAttunement != null) {
+						attunedEvent = BetweenlandsWorldStorage.forWorld(worldIn).getEnvironmentEventRegistry().getEvent(newAttunement);
+					} else {
+						attunedEvent = null;
+					}
+
+					if(newAttunement != null) {
+						playerIn.sendStatusMessage(new TextComponentTranslation("chat.wind_chime.changed_attunement", new TextComponentTranslation(attunedEvent.getLocalizationEventName())), true);
+					} else {
+						playerIn.sendStatusMessage(new TextComponentTranslation("chat.wind_chime.removed_attunement"), true);
+					}
+				}
+			}
+
+			playerIn.swingArm(hand);
+
+			return true;
+		}
+
+		return false;
 	}
 }
