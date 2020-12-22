@@ -35,16 +35,17 @@ public class GuiFishStaminaBar extends Gui {
 					int treasurePos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getTreasureTicks() * 256 / 1024;
 					boolean showTreasure = ((EntityAnadia) player.fishEntity.getRidingEntity()).isTreasureFish();
 					boolean treasureUnlocked = ((EntityAnadia) player.fishEntity.getRidingEntity()).getTreasureUnlocked();
+					int aniFrame = ((EntityAnadia) player.fishEntity.getRidingEntity()).animationFrame;
 					GlStateManager.color(1F, 1F, 1F, 1F);
 					mc.renderEngine.bindTexture(GUI_TEXTURE);
 					ScaledResolution res = new ScaledResolution(mc);
-					renderStaminaBar(-256 + fishpos, -256 + Math.min(256, escapepos), 0 - obstructpos1, 0 - obstructpos2, 0 - obstructpos3, 0 - obstructpos4, 0 - treasurePos, showTreasure, treasureUnlocked, (float)res.getScaledWidth() * 0.5F - 128F, (float)res.getScaledHeight() * 0.5F - 120F);
+					renderStaminaBar(-256 + fishpos, -256 + Math.min(256, escapepos), 0 - obstructpos1, 0 - obstructpos2, 0 - obstructpos3, 0 - obstructpos4, 0 - treasurePos, showTreasure, treasureUnlocked, (float)res.getScaledWidth() * 0.5F - 128F, (float)res.getScaledHeight() * 0.5F - 120F, aniFrame);
 				}
 			}
 		}
 	}
 
-	private void renderStaminaBar(int staminaTicks, int escapeTicks, int obstructionTicks1, int obstructionTicks2, int obstructionTicks3, int obstructionTicks4, int treasureTick, boolean hasTreasure, boolean treasureUnlocked,float posX, float posY) {
+	private void renderStaminaBar(int staminaTicks, int escapeTicks, int obstructionTicks1, int obstructionTicks2, int obstructionTicks3, int obstructionTicks4, int treasureTick, boolean hasTreasure, boolean treasureUnlocked,float posX, float posY, int aniFrame) {
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -55,14 +56,14 @@ public class GuiFishStaminaBar extends Gui {
 		if(hasTreasure)
 			drawTexturedModalRect(posX - treasureTick, posY, treasureUnlocked ? 16 : 0, 160, 16, 16); // chest
 
-		drawTexturedModalRect(posX - staminaTicks, posY + 1, 0, 80, 16, 16); //fish
+		drawTexturedModalRect(posX - staminaTicks, posY + 1, 0 + aniFrame, 80, 16, 16); //fish
 
 		drawTexturedModalRect(posX - escapeTicks, posY + 2, 0 + (getCrabScroll(escapeTicks) * 16), 176, 16, 16); //crab
 
-		drawTexturedModalRect(posX - obstructionTicks1, posY, 0, 96, 16, 16); //objects
-		drawTexturedModalRect(posX - obstructionTicks2, posY, 0, 112, 16, 16);
-		drawTexturedModalRect(posX - obstructionTicks3, posY, 0, 128, 16, 16);
-		drawTexturedModalRect(posX - obstructionTicks4, posY, 0, 144, 16, 16);
+		drawTexturedModalRect(posX - obstructionTicks1, posY, 0 + aniFrame, 96, 16, 16); //objects
+		drawTexturedModalRect(posX - obstructionTicks2, posY, 0 + aniFrame, 112, 16, 16);
+		drawTexturedModalRect(posX - obstructionTicks3, posY, 0 + aniFrame, 128, 16, 16);
+		drawTexturedModalRect(posX - obstructionTicks4, posY, 0 + aniFrame, 144, 16, 16);
 	}
 
 	private int getCrabScroll(int escapeTicks) {

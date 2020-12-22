@@ -92,6 +92,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	public boolean SCROLL_4 = false;
 	public boolean PLAY_ANADIA_WON_SOUND = false;
 	
+	public int animationFrame = 0;
+	
 	public EntityAnadia(World world) {
 		super(world);
         setSize(0.8F, 0.8F);
@@ -551,8 +553,14 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 	@Override
 	public void onUpdate() {
-		if (getEntityWorld().isRemote)
+		if (getEntityWorld().isRemote) {
 			setSize(getFishSize(), getFishSize() * 0.75F);
+			
+			if(getEntityWorld().getTotalWorldTime()%4 == 0)
+				animationFrame += 16;
+			if(animationFrame > 48)
+				animationFrame = 0;
+		}
 
 		if(!getEntityWorld().isRemote) {
 			if(getAttackTarget() != null && !getEntityWorld().containsAnyLiquid(getAttackTarget().getEntityBoundingBox())) {
