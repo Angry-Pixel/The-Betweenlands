@@ -17,6 +17,7 @@
 				{
 					"type": "item",
 					"name": "thebetweenlands:life_crystal",
+                    "entryName": "life_crystal_1",
 					"weight": 1,
 					"functions": [
 						{
@@ -28,6 +29,7 @@
 				{
 					"type": "item",
 					"name": "thebetweenlands:life_crystal",
+                    "entryName": "life_crystal_2",
 					"weight": 3,
 					"functions": [
 						{
@@ -39,6 +41,7 @@
 				{
 					"type": "item",
 					"name": "thebetweenlands:life_crystal",
+                    "entryName": "life_crystal_3",
 					"weight": 2,
 					"functions": [
 						{
@@ -50,6 +53,7 @@
 				{
 					"type": "item",
 					"name": "thebetweenlands:life_crystal",
+                    "entryName": "life_crystal_4",
 					"weight": 1,
 					"functions": [
 						{

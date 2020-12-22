@@ -40,6 +40,9 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop2;
 import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop3;
 import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop4;
 import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop4Decayed;
+import thebetweenlands.client.render.model.baked.modelbase.ModelLanternPaper;
+import thebetweenlands.client.render.model.baked.modelbase.ModelLanternSiltGlassGlass;
+import thebetweenlands.client.render.model.baked.modelbase.ModelLanternSiltGlass;
 import thebetweenlands.client.render.model.baked.modelbase.ModelMossBed;
 import thebetweenlands.client.render.model.baked.modelbase.ModelMudFlowerPot;
 import thebetweenlands.client.render.model.baked.modelbase.ModelMudFlowerPotCandle;
@@ -220,6 +223,8 @@ public class ModelRegistry {
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/syrmorite_block")).packer(MODEL_TEXTURE_PACKER).build();
 	public static final IModel DRAETON_UPGRADE_CRAFTING = new ModelFromModelBase.Builder(new ModelDraetonUpgradeCrafting(), new ResourceLocation("thebetweenlands:entity/draeton_upgrade_crafting"), 64, 32)
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/weedwood_planks")).packer(MODEL_TEXTURE_PACKER).build();
+	public static final ModelFromModelBase LANTERN_SILT_GLASS_ITEM = new ModelFromModelBase.Builder(new ModelLanternSiltGlass(), new ResourceLocation("thebetweenlands:blocks/lantern_silt_glass"), 64, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/silt_glass")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 
 	//Misc
 	public static final IModel LIFE_CRYSTAL_STALACTITE = new ModelLifeCrystalStalactite();
@@ -304,6 +309,12 @@ public class ModelRegistry {
 			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/simulacrum_rootman_particle")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 	public static final ModelFromModelBase OFFERING_TABLE = new ModelFromModelBase.Builder(new ModelOfferingTable(), new ResourceLocation("thebetweenlands:blocks/offering_table"), 64, 64)
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/smooth_cragrock")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+	public static final ModelFromModelBase LANTERN_PAPER = new ModelFromModelBase.Builder(new ModelLanternPaper(), new ResourceLocation("thebetweenlands:blocks/lantern_paper_1"), 32, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/amate_paper_pane_1_ct_0")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+	public static final ModelFromModelBase LANTERN_SILT_GLASS_FRAME = new ModelFromModelBase.Builder(new ModelLanternSiltGlass(), new ResourceLocation("thebetweenlands:blocks/lantern_silt_glass_frame"), 64, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/silt_glass")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+	public static final ModelFromModelBase LANTERN_SILT_GLASS_GLASS = new ModelFromModelBase.Builder(new ModelLanternSiltGlassGlass(), new ResourceLocation("thebetweenlands:blocks/lantern_silt_glass_glass"), 64, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/silt_glass")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 

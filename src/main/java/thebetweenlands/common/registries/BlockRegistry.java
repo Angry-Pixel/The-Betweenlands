@@ -76,6 +76,8 @@ import thebetweenlands.common.block.misc.BlockDentrothystPane;
 import thebetweenlands.common.block.misc.BlockGlassBetweenlands;
 import thebetweenlands.common.block.misc.BlockGroundItem;
 import thebetweenlands.common.block.misc.BlockLadderBetweenlands;
+import thebetweenlands.common.block.misc.BlockLantern;
+import thebetweenlands.common.block.misc.BlockLanternSiltGlass;
 import thebetweenlands.common.block.misc.BlockLeverBetweenlands;
 import thebetweenlands.common.block.misc.BlockMossBed;
 import thebetweenlands.common.block.misc.BlockMudFlowerPot;
@@ -852,6 +854,10 @@ public class BlockRegistry {
     public static final BlockSimulacrum SIMULACRUM_ROOTMAN = new BlockSimulacrum(Material.WOOD, SoundType.WOOD);
     public static final Block OFFERING_TABLE = new BlockOfferingTable();
     public static final Block WIND_CHIME = new BlockWindChime();
+    public static final Block LANTERN_PAPER_1 = new BlockLantern();
+    public static final Block LANTERN_PAPER_2 = new BlockLantern();
+    public static final Block LANTERN_PAPER_3 = new BlockLantern();
+    public static final Block LANTERN_SILT_GLASS = new BlockLanternSiltGlass();
     
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();

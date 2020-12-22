@@ -482,6 +482,10 @@ tile.thebetweenlands.simulacrum_rootman.2.name=Rootman Simulacrum
 tile.thebetweenlands.simulacrum_rootman.3.name=Rootman Simulacrum
 tile.thebetweenlands.offering_table.name=Offering Table
 tile.thebetweenlands.wind_chime.name=Wind Chime
+tile.thebetweenlands.lantern_paper_1.name=Blank Amate Paper Lantern
+tile.thebetweenlands.lantern_paper_2.name=Checkered Amate Paper Lantern
+tile.thebetweenlands.lantern_paper_3.name=Framed Amate Paper Lantern
+tile.thebetweenlands.lantern_silt_glass.name=Silt Glass Lantern
 
 # Items
 

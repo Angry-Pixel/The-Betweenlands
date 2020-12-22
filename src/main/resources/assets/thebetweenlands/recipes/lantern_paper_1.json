@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "RFR",
+    "PPP"
+  ],
+  "key": {
+    "S": {
+      "item": "thebetweenlands:weedwood_plank_slab"
+    },
+    "R": [
+      { "item": "thebetweenlands:amate_paper_pane_1" },
+      { "item": "thebetweenlands:amate_paper_pane_2" },
+      { "item": "thebetweenlands:amate_paper_pane_3" }
+    ],
+    "F": {
+      "type": "thebetweenlands:mob_item",
+      "entity": "thebetweenlands:firefly"
+    },
+    "P": {
+      "item": "thebetweenlands:weedwood_planks"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:lantern_paper_1",
+    "count": 1
+  }
+}

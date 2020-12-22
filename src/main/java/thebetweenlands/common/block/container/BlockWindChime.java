@@ -108,7 +108,7 @@ public class BlockWindChime extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(hand == EnumHand.MAIN_HAND && playerIn.isCreative() && playerIn.isSneaking()) {
+		if(hand == EnumHand.MAIN_HAND && playerIn.isSneaking()) {
 
 			if(!worldIn.isRemote) {
 				TileEntity tile = worldIn.getTileEntity(pos);
