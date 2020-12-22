@@ -24,7 +24,7 @@
                             "size_start": 0.125,
                             "size_end": 0.95,
                             "min_count": 1,
-                            "max_count": 5
+                            "max_count": 1
                         }
                     ]
                 },
@@ -72,7 +72,7 @@
                             "size_start": 0.125,
                             "size_end": 0.95,
                             "min_count": 1,
-                            "max_count": 5
+                            "max_count": 1
                         }
                     ]
                 }
