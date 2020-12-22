@@ -464,15 +464,15 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	}
 
 	public void playTreasureCollectedSound(EntityPlayer player) {
-		getEntityWorld().playSound(player, posX, posY, posZ, SoundRegistry.ANADIA_TREASURE_COLLECTED, SoundCategory.PLAYERS, 1F, 1F);
+		getEntityWorld().playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.ANADIA_TREASURE_COLLECTED, SoundCategory.PLAYERS, 1F, 1F);
 	}
 
 	public void playAnadiaLostSound(EntityPlayer player) {
-		getEntityWorld().playSound(player, posX, posY, posZ, SoundRegistry.ANADIA_LOST, SoundCategory.PLAYERS, 1F, 1F);
+		getEntityWorld().playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.ANADIA_LOST, SoundCategory.PLAYERS, 1F, 1F);
 	}
 
 	public void playAnadiaWonSound(EntityPlayer player) {
-		getEntityWorld().playSound(player, posX, posY, posZ, SoundRegistry.ANADIA_WON, SoundCategory.PLAYERS, 1F, 1F);
+		getEntityWorld().playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.ANADIA_WON, SoundCategory.PLAYERS, 1F, 1F);
 	}
 
 	@Override
@@ -620,7 +620,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        		getPassengers().get(0).dismountRidingEntity(); // this just releases the fish atm
 	        	}
 
-	        	if(getStaminaTicks() == 0 && PLAY_ANADIA_WON_SOUND) {
+	        	if(getStaminaTicks() == 1 && PLAY_ANADIA_WON_SOUND) {
 	        		if(getPassengers().get(0) instanceof EntityBLFishHook) {
 	        			EntityBLFishHook hook = (EntityBLFishHook) getPassengers().get(0);
 	        			if(hook != null && hook.getAngler() != null)
