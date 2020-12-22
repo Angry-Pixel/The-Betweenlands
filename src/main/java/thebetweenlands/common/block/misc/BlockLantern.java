@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.misc;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -24,6 +26,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
 
 public class BlockLantern extends Block {
@@ -33,7 +36,7 @@ public class BlockLantern extends Block {
 	public BlockLantern() {
 		this(Material.CLOTH, SoundType.CLOTH);
 	}
-	
+
 	protected BlockLantern(Material material, SoundType soundType) {
 		super(material);
 		this.setHardness(0.1F);
@@ -77,7 +80,7 @@ public class BlockLantern extends Block {
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return this.getActualState(state, source, pos).getValue(HANGING) ? new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1.0D, 0.75D) : new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 0.6D, 0.75D);
 	}
-	
+
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		int rotation = MathHelper.floor(((placer.rotationYaw + 180.0F) * 8.0F / 360.0F) + 0.5D) & 7;
@@ -138,5 +141,25 @@ public class BlockLantern extends Block {
 	@Override
 	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return false;
+	}
+
+	@Override
+	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+		double px = (double)pos.getX() + 0.5D;
+		double py = (double)pos.getY() + 0.3D;
+		double pz = (double)pos.getZ() + 0.5D;
+
+		if(worldIn.rand.nextInt(20) == 0 && worldIn.canBlockSeeSky(pos)) {
+			int particle = rand.nextInt(2);
+			switch(particle) {
+			default:
+			case 0:
+				BLParticles.FLY.spawn(worldIn, px, py, pz);
+				break;
+			case 1:
+				BLParticles.MOTH.spawn(worldIn, px, py, pz);
+				break;
+			}
+		}
 	}
 }

@@ -291,6 +291,7 @@ tile.thebetweenlands.syrmorite_rubber_tap.name=Syrmorite Rubber Tap
 tile.thebetweenlands.weedwood_rubber_tap.name=Weedwood Rubber Tap
 tile.thebetweenlands.weedwood_chest.name=Weedwood Chest
 tile.thebetweenlands.sulfur_torch.name=Sulfur Torch
+tile.thebetweenlands.sulfur_torch_extinguished.name=Extinguished Sulfur Torch
 tile.thebetweenlands.weedwood_trapdoor.name=Weedwood Trapdoor
 tile.thebetweenlands.rubber_tree_plank_trapdoor.name=Rubber Tree Plank Trapdoor
 tile.thebetweenlands.syrmorite_trapdoor.name=Syrmorite Trapdoor

@@ -91,6 +91,7 @@ import thebetweenlands.common.block.misc.BlockRope;
 import thebetweenlands.common.block.misc.BlockRubberTap;
 import thebetweenlands.common.block.misc.BlockSludge;
 import thebetweenlands.common.block.misc.BlockSulfurTorch;
+import thebetweenlands.common.block.misc.BlockSulfurTorchExtinguished;
 import thebetweenlands.common.block.misc.BlockTrapDoorBetweenlands;
 import thebetweenlands.common.block.plant.BlockAlgae;
 import thebetweenlands.common.block.plant.BlockBlackHatMushroom;
@@ -819,6 +820,7 @@ public class BlockRegistry {
     public static final Block STANDING_WEEDWOOD_SIGN = new BlockStandingWeedwoodSign();
     public static final Block WALL_WEEDWOOD_SIGN = new BlockWallWeedwoodSign();
     public static final Block SULFUR_TORCH = new BlockSulfurTorch();
+    public static final Block SULFUR_TORCH_EXTINGUISHED = new BlockSulfurTorchExtinguished();
     public static final Block WEEDWOOD_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(2.0F).setResistance(5.0F);
     public static final Block RUBBER_TREE_PLANK_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
     public static final Block SYRMORITE_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.IRON).setSoundType(SoundType.METAL).setHardness(1.5F).setResistance(10.0F);

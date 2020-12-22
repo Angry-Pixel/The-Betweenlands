@@ -12,12 +12,21 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockSulfurTorch extends BlockTorch {
 	public BlockSulfurTorch() {
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 		this.setSoundType(SoundType.WOOD);
 		this.setLightLevel(0.9375F);
+		this.setTickRandomly(true);
+	}
+
+	@Override
+	public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random random) {
+		if(!worldIn.isRemote && worldIn.isRainingAt(pos)) {
+			worldIn.setBlockState(pos, BlockRegistry.SULFUR_TORCH_EXTINGUISHED.getDefaultState().withProperty(FACING, worldIn.getBlockState(pos).getValue(FACING)));
+		}
 	}
 
 	@Override
@@ -33,22 +42,6 @@ public class BlockSulfurTorch extends BlockTorch {
 			BLParticles.SULFUR_TORCH.spawn(world, px + 0.27D * (double)enumfacing1.getXOffset(), py + 0.22D, pz + 0.27D * (double)enumfacing1.getZOffset());
 		} else {
 			BLParticles.SULFUR_TORCH.spawn(world, px, py, pz);
-		}
-
-		if(world.rand.nextInt(20) == 0 && world.canBlockSeeSky(pos)) {
-			int particle = rand.nextInt(3);
-			switch(particle) {
-			default:
-			case 0:
-				BLParticles.MOSQUITO.spawn(world, px, py, pz);
-				break;
-			case 1:
-				BLParticles.FLY.spawn(world, px, py, pz);
-				break;
-			case 2:
-				BLParticles.MOTH.spawn(world, px, py, pz);
-				break;
-			}
 		}
 	}
 }

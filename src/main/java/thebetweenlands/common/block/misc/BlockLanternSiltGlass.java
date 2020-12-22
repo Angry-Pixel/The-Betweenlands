@@ -28,6 +28,8 @@ public class BlockLanternSiltGlass extends BlockLantern {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+		super.randomDisplayTick(stateIn, worldIn, pos, rand);
+
 		BatchedParticleRenderer.INSTANCE.addParticle(
 				DefaultParticleBatches.TRANSLUCENT_GLOWING,
 				BLParticles.WISP.create(worldIn, pos.getX() + 0.5f, pos.getY() + 0.325f, pos.getZ() + 0.5f,
