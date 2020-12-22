@@ -51,6 +51,7 @@ import thebetweenlands.common.entity.EntityFishBait;
 import thebetweenlands.common.entity.projectiles.EntityBLFishHook;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.TranslationHelper;
 
 public class EntityAnadia extends EntityCreature implements IEntityBL {
@@ -89,6 +90,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	public boolean SCROLL_2 = false;
 	public boolean SCROLL_3 = false;
 	public boolean SCROLL_4 = false;
+	public boolean PLAY_ANADIA_WON_SOUND = false;
 	
 	public EntityAnadia(World world) {
 		super(world);
@@ -461,16 +463,16 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		return Math.round(getFishSize() * BASE_MULTIPLE * head + body + tail * 2F) / 2F;
 	}
 
-	public void playTreasureCollectedSound() {
-	//	getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.FISH_TREASURE_COLLECTED, SoundCategory.PLAYER, 1F, 1F);
-	}
-	
-	public void playAnadiaLostSound() {
-	//	getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ANADIA_LOST, SoundCategory.PLAYER, 1F, 1F);
+	public void playTreasureCollectedSound(EntityPlayer player) {
+		getEntityWorld().playSound(player, posX, posY, posZ, SoundRegistry.ANADIA_TREASURE_COLLECTED, SoundCategory.PLAYERS, 1F, 1F);
 	}
 
-	public void playAnadiaWonSound() {
-	//	getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ANADIA_WON, SoundCategory.PLAYER, 1F, 1F);
+	public void playAnadiaLostSound(EntityPlayer player) {
+		getEntityWorld().playSound(player, posX, posY, posZ, SoundRegistry.ANADIA_LOST, SoundCategory.PLAYERS, 1F, 1F);
+	}
+
+	public void playAnadiaWonSound(EntityPlayer player) {
+		getEntityWorld().playSound(player, posX, posY, posZ, SoundRegistry.ANADIA_WON, SoundCategory.PLAYERS, 1F, 1F);
 	}
 
 	@Override
@@ -610,10 +612,23 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        	if(getEscapeTicks() > 0 && ESCAPE_DELAY <= 0)
 	        		setEscapeTicks(getEscapeTicks() -2);
 	        	if(getEscapeTicks() * 256 / 1024 < getStaminaTicks() * 256 / 100 && ESCAPE_DELAY <= 0) {
-	        		playAnadiaLostSound();
+	        		if(getPassengers().get(0) instanceof EntityBLFishHook) {
+	        			EntityBLFishHook hook = (EntityBLFishHook) getPassengers().get(0);
+	        			if(hook != null && hook.getAngler() != null)
+	        				playAnadiaLostSound(hook.getAngler());
+	        		}
 	        		getPassengers().get(0).dismountRidingEntity(); // this just releases the fish atm
 	        	}
-	        	
+
+	        	if(getStaminaTicks() == 0 && PLAY_ANADIA_WON_SOUND) {
+	        		if(getPassengers().get(0) instanceof EntityBLFishHook) {
+	        			EntityBLFishHook hook = (EntityBLFishHook) getPassengers().get(0);
+	        			if(hook != null && hook.getAngler() != null)
+	        				playAnadiaWonSound(hook.getAngler());
+	        			PLAY_ANADIA_WON_SOUND = false;
+	        		}
+	        	}
+
 	        	if(SCROLL_1 && getObstruction1Ticks() >= 0) {
 	        		setObstruction1Ticks(getObstruction1Ticks() - 1);
 	        		if(getObstruction1Ticks() <= 0)

@@ -1825,5 +1825,20 @@
          "thebetweenlands:jellyfish_zap_2",
          "thebetweenlands:jellyfish_zap_3"
       ]
+   },
+   "anadia_treasure_collected":{
+      "sounds":[
+         "thebetweenlands:anadia_treasure_collected"
+      ]
+   },
+   "anadia_lost":{
+      "sounds":[
+         "thebetweenlands:anadia_lost"
+      ]
+   },
+   "anadia_won":{
+      "sounds":[
+         "thebetweenlands:anadia_won"
+      ]
    }
 }

@@ -276,6 +276,11 @@ public class SoundRegistry {
     public static final BLSoundEvent JELLYFISH_HURT = reg("jellyfish_hurt");
     public static final BLSoundEvent JELLYFISH_SWIM = reg("jellyfish_swim");
     public static final BLSoundEvent JELLYFISH_ZAP = reg("jellyfish_zap");
+
+    public static final BLSoundEvent ANADIA_TREASURE_COLLECTED = reg("anadia_treasure_collected");
+    public static final BLSoundEvent ANADIA_LOST = reg("anadia_lost");
+    public static final BLSoundEvent ANADIA_WON = reg("anadia_won");
+
     // Items
     public static final BLSoundEvent ROWBOAT_ROW_STARBOARD = reg("rowboat_row_starboard");
     public static final BLSoundEvent ROWBOAT_ROW_PORT = reg("rowboat_row_port");

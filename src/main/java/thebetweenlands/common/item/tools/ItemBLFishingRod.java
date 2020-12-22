@@ -107,6 +107,8 @@ public class ItemBLFishingRod extends Item {
 					player.fishEntity.caughtEntity = null;
 				
 				if (player.fishEntity.caughtEntity != null && stack.getTagCompound().hasKey("baited")) {
+					if(((EntityAnadia) player.fishEntity.caughtEntity).getStaminaTicks() > 0 && !((EntityAnadia) player.fishEntity.caughtEntity).PLAY_ANADIA_WON_SOUND)
+						((EntityAnadia) player.fishEntity.caughtEntity).PLAY_ANADIA_WON_SOUND = true;
 					if (stack.getTagCompound().getBoolean("baited"))
 						stack.getTagCompound().setBoolean("baited", false);
 					if (((EntityAnadia) player.fishEntity.caughtEntity).getStaminaTicks() % 20 == 0 && ((EntityAnadia) player.fishEntity.caughtEntity).getStaminaTicks() != 0) {

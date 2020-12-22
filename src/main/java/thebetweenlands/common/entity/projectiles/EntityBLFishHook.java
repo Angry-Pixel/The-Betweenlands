@@ -358,7 +358,7 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 							((EntityAnadia) caughtEntity).setEscapeTicks(((EntityAnadia) caughtEntity).getEscapeTicks() -10);
 						if(((EntityAnadia) caughtEntity).isObstructedTreasure()) {
 							((EntityAnadia) caughtEntity).setAsLootFish(); //does the loot table changes
-							((EntityAnadia) caughtEntity).playTreasureCollectedSound();
+							((EntityAnadia) caughtEntity).playTreasureCollectedSound(getAngler());
 						}
 						if (((EntityAnadia) caughtEntity).getStaminaTicks()%40 == 0) {
 							// consumes half a shank of hunger every 2 seconds or so whilst the fish has stamina
