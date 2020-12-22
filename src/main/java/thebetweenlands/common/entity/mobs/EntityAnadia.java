@@ -386,6 +386,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 //		nbt.setInteger("hunger", getHungerCooldown());
 		nbt.setByte("fishColour", getFishColour());
 		nbt.setBoolean("isTreasureFish", isTreasureFish());
+		nbt.setBoolean("isTreasureUnlocked", getTreasureUnlocked());
 		
 		NBTTagCompound headItem = new NBTTagCompound();
 		getHeadItem().writeToNBT(headItem);
@@ -410,6 +411,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 //		setHungerCooldown(nbt.getInteger("hunger"));
 		setFishColour(nbt.getByte("fishColour"));
 		setIsTreasureFish(nbt.getBoolean("isTreasureFish"));
+		setTreasureUnlocked(nbt.getBoolean("isTreasureUnlocked"));
 
 		NBTTagCompound headItem = (NBTTagCompound) nbt.getTag("headItem");
 		ItemStack stackHead = ItemStack.EMPTY;
