@@ -48,18 +48,21 @@ public class GuiFishStaminaBar extends Gui {
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		drawTexturedModalRect(posX, posY + 5, 0, 18, 256, 21);
+		drawTexturedModalRect(posX, posY + 2, 0, 0, 256, 25); //bar
 		GlStateManager.disableBlend();
 		GlStateManager.popMatrix();
 
-		drawTexturedModalRect(posX - staminaTicks, posY + 5, 0, 0, 16, 11);
-		drawTexturedModalRect(posX - escapeTicks, posY, 0 + (getCrabScroll(escapeTicks) * 16), 48, 16, 64);
 		if(hasTreasure)
-			drawTexturedModalRect(posX - treasureTick, posY + 1, treasureUnlocked ? 64 : 48, 0, 16, 16);
-		drawTexturedModalRect(posX - obstructionTicks1, posY + 1, 32, 0, 13, 16);
-		drawTexturedModalRect(posX - obstructionTicks2, posY + 1, 32, 0, 13, 16);
-		drawTexturedModalRect(posX - obstructionTicks3, posY + 1, 32, 0, 13, 16);
-		drawTexturedModalRect(posX - obstructionTicks4, posY + 1, 32, 0, 13, 16);
+			drawTexturedModalRect(posX - treasureTick, posY, treasureUnlocked ? 16 : 0, 160, 16, 16); // chest
+
+		drawTexturedModalRect(posX - staminaTicks, posY + 1, 0, 80, 16, 16); //fish
+
+		drawTexturedModalRect(posX - escapeTicks, posY + 2, 0 + (getCrabScroll(escapeTicks) * 16), 176, 16, 16); //crab
+
+		drawTexturedModalRect(posX - obstructionTicks1, posY, 0, 96, 16, 16); //objects
+		drawTexturedModalRect(posX - obstructionTicks2, posY, 0, 112, 16, 16);
+		drawTexturedModalRect(posX - obstructionTicks3, posY, 0, 128, 16, 16);
+		drawTexturedModalRect(posX - obstructionTicks4, posY, 0, 144, 16, 16);
 	}
 
 	private int getCrabScroll(int escapeTicks) {

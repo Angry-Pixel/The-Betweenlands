@@ -168,7 +168,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        setHeadItem(getPartFromLootTable(LootTableRegistry.ANADIA_HEAD));
 	        setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_BODY));
 	        setTailItem(getPartFromLootTable(LootTableRegistry.ANADIA_TAIL));
-	     //   if(getEntityWorld().rand.nextInt(50) == 0)
+	        if(getEntityWorld().rand.nextInt(2) == 0)
 	        	setIsTreasureFish(true);
     	}
         return super.onInitialSpawn(difficulty, livingdata);

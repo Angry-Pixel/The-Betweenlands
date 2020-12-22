@@ -356,7 +356,7 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 							((EntityAnadia) caughtEntity).setStaminaTicks(((EntityAnadia) caughtEntity).getStaminaTicks() - 1);
 						if(((EntityAnadia) caughtEntity).isObstructed())
 							((EntityAnadia) caughtEntity).setEscapeTicks(((EntityAnadia) caughtEntity).getEscapeTicks() -10);
-						if(((EntityAnadia) caughtEntity).isObstructedTreasure()) {
+						if(((EntityAnadia) caughtEntity).isTreasureFish() && ((EntityAnadia) caughtEntity).isObstructedTreasure()) {
 							if(!((EntityAnadia) caughtEntity).getTreasureUnlocked())
 								((EntityAnadia) caughtEntity).playTreasureCollectedSound(getAngler());
 							((EntityAnadia) caughtEntity).setAsLootFish(); //does the loot table changes
