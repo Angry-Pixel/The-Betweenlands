@@ -7,7 +7,7 @@
                 {
                     "type": "item",
                     "entryName": "body_type_0",
-                    "name": "thebetweenlands:anadia_meat_raw",
+                    "name": "thebetweenlands:shimmer_stone",
                     "weight": 1,
                     "conditions": [
                         {
@@ -31,7 +31,7 @@
                  {
                     "type": "item",
                     "entryName": "body_type_1",
-                    "name": "thebetweenlands:anadia_meat_raw",
+                    "name": "thebetweenlands:wight_heart",
                     "weight": 1,
                     "conditions": [
                         {
@@ -55,7 +55,7 @@
                 {
                     "type": "item",
                     "entryName": "body_type_2",
-                    "name": "thebetweenlands:anadia_meat_raw",
+                    "name": "thebetweenlands:life_crystal",
                     "weight": 1,
                     "conditions": [
                         {
