@@ -103,6 +103,9 @@ public class SoundRegistry {
     public static final BLSoundEvent ASHSPRITE_HURT = reg("ashsprite_hurt");
     public static final BLSoundEvent ASHSPRITE_DEATH = reg("ashsprite_death");
     public static final BLSoundEvent ASHSPRITE_LIVING = reg("ashsprite_living");
+    public static final BLSoundEvent SLUDGE_TURRET_HURT = reg("sludge_turret_hurt");
+    public static final BLSoundEvent SLUDGE_TURRET_DEATH = reg("sludge_turret_death");
+    public static final BLSoundEvent SLUDGE_TURRET_LIVING = reg("sludge_turret_living");
     public static final BLSoundEvent DARK_DRUID_DEATH = reg("dark_druid_death");
     public static final BLSoundEvent DARK_DRUID_HIT = reg("dark_druid_hit");
     public static final BLSoundEvent DARK_DRUID_LIVING = reg("dark_druid_living");

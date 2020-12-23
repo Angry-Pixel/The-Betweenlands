@@ -176,6 +176,25 @@
       "thebetweenlands:ashsprite_living_3"
     ]
   },
+  "sludge_turret_death": {
+    "sounds": [
+      "thebetweenlands:sludge_turret_death"
+    ]
+  },
+  "sludge_turret_hurt": {
+    "sounds": [
+      "thebetweenlands:sludge_turret_hurt_1",
+      "thebetweenlands:sludge_turret_hurt_2"
+    ]
+  },
+  "sludge_turret_living": {
+    "sounds": [
+      "thebetweenlands:sludge_turret_living_1",
+      "thebetweenlands:sludge_turret_living_2",
+      "thebetweenlands:sludge_turret_living_3",
+      "thebetweenlands:sludge_turret_living_4"
+    ]
+  },
   "swamp_hag_living": {
     "sounds": [
       "thebetweenlands:swamp_hag_living_1",

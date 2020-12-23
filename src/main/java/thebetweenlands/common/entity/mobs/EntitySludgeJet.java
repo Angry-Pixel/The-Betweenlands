@@ -13,6 +13,8 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import net.minecraft.util.SoundEvent;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySludgeJet extends Entity {
 
@@ -66,6 +68,22 @@ public class EntitySludgeJet extends Entity {
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
 		return false;
+	}
+
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return SoundRegistry.SLUDGE_TURRET_LIVING;
+	}
+
+	@Nullable
+	@Override
+	protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+		return SoundRegistry.SLUDGE_TURRET_HURT;
+	}
+
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundRegistry.SLUDGE_TURRET_DEATH;
 	}
 
 	@Override
