@@ -181,6 +181,7 @@ import thebetweenlands.common.block.structure.BlockPuffshroom;
 import thebetweenlands.common.block.structure.BlockRottenBarkCarved;
 import thebetweenlands.common.block.structure.BlockSimulacrum;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
+import thebetweenlands.common.block.structure.BlockSmoothCragrock;
 import thebetweenlands.common.block.structure.BlockSpikeTrap;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
 import thebetweenlands.common.block.structure.BlockStandingWeedwoodSign;
@@ -429,7 +430,7 @@ public class BlockRegistry {
     public static final Block PITSTONE_TILES = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block POLISHED_LIMESTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block SMOOTH_BETWEENSTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
-    public static final Block SMOOTH_CRAGROCK = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+    public static final Block SMOOTH_CRAGROCK = new BlockSmoothCragrock();
     public static final Block OCTINE_BLOCK = new BlockOctine();
     public static final Block SYRMORITE_BLOCK = new BasicBlock(Material.IRON).setSoundType2(SoundType.METAL).setHardness(1.5F).setResistance(10.0F);
     public static final Block VALONITE_BLOCK = new BasicBlock(Material.IRON).setSoundType2(SoundType.METAL).setHardness(1.5F).setResistance(10.0F);

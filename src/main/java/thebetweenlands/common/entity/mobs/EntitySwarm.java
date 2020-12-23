@@ -132,6 +132,9 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 		super.onUpdate();
 
 		if(!this.world.isRemote) {
+			if(world.getDifficulty() == EnumDifficulty.PEACEFUL)
+				setDead();
+				
 			if(this.isBurning() || this.isInWater()) {
 				if(this.getSwarmSize() > 0.1f) {
 					this.setSwarmSize(Math.max(0.1f, this.getSwarmSize() - 0.005f));
@@ -153,7 +156,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 			for(EntityPlayer player : players) {
 				double dst = player.getDistance(this);
 
-				if(dst < range) {
+				if(dst < range && canEntityBeSeen(player)) {
 					ISwarmedCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_SWARMED, null);
 
 					if(cap != null) {

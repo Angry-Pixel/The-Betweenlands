@@ -135,6 +135,18 @@
       "thebetweenlands:druid_teleport"
     ]
   },
+  "fish_hurt": {
+    "sounds": [
+      "thebetweenlands:fish_hurt_1",
+      "thebetweenlands:fish_hurt_2",
+      "thebetweenlands:fish_hurt_3"
+    ]
+  },
+  "fish_death": {
+    "sounds": [
+      "thebetweenlands:fish_death"
+    ]
+  },
   "angler_death": {
     "sounds": [
       "thebetweenlands:angler_death"
@@ -144,6 +156,24 @@
     "sounds": [
       "thebetweenlands:angler_attack_1",
       "thebetweenlands:angler_attack_2"
+    ]
+  },
+  "ashsprite_death": {
+    "sounds": [
+      "thebetweenlands:ashsprite_death"
+    ]
+  },
+  "ashsprite_hurt": {
+    "sounds": [
+      "thebetweenlands:ashsprite_hurt_1",
+      "thebetweenlands:ashsprite_hurt_1"
+    ]
+  },
+  "ashsprite_living": {
+    "sounds": [
+      "thebetweenlands:ashsprite_living_1",
+      "thebetweenlands:ashsprite_living_2",
+      "thebetweenlands:ashsprite_living_3"
     ]
   },
   "swamp_hag_living": {

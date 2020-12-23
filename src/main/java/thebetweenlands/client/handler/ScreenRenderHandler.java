@@ -3,7 +3,6 @@ package thebetweenlands.client.handler;
 import java.util.List;
 import java.util.Random;
 
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import gnu.trove.iterator.TObjectIntIterator;
@@ -15,12 +14,10 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -31,7 +28,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
@@ -39,10 +35,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.client.config.GuiUtils;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -945,49 +942,64 @@ public class ScreenRenderHandler extends Gui {
 	}
 
 	@SubscribeEvent
-	public void onRenderScreen(DrawScreenEvent.Post event) {
-		Minecraft mc = Minecraft.getMinecraft();
-		if(GuiScreen.isShiftKeyDown() && mc.currentScreen instanceof GuiContainer && mc.player != null) {
-			GuiContainer container = (GuiContainer) mc.currentScreen;
+	public void onRenderScreen(RenderTooltipEvent.PostText event) {
+		if(GuiScreen.isShiftKeyDown()) {
+			Minecraft mc = Minecraft.getMinecraft();
+			FontRenderer fontRenderer = mc.fontRenderer;
 
-			//Render aspects tooltip
-			Slot selectedSlot = container.getSlotUnderMouse();
-			if(selectedSlot != null && selectedSlot.getHasStack()) {
-				ScaledResolution resolution = new ScaledResolution(mc);
-				FontRenderer fontRenderer = mc.fontRenderer;
-				double mouseX = (Mouse.getX() * resolution.getScaledWidth_double()) / mc.displayWidth;
-				double mouseY = resolution.getScaledHeight_double() - (Mouse.getY() * resolution.getScaledHeight_double()) / mc.displayHeight - 1;
+			int yOffset = 0;
+			int width = 0;
+
+			List<Aspect> aspects = ItemAspectContainer.fromItem(event.getStack(), AspectManager.get(mc.world)).getAspects(mc.player);
+
+			if(aspects != null && aspects.size() > 0) {
 				GlStateManager.pushMatrix();
-				GlStateManager.translate(mouseX + 8, mouseY - 38, 500);
-				int yOffset = 0;
-				int width = 0;
-				List<Aspect> aspects = ItemAspectContainer.fromItem(selectedSlot.getStack(), AspectManager.get(mc.world)).getAspects(mc.player);
-				GlStateManager.enableTexture2D();
-				GlStateManager.enableBlend();
-				RenderHelper.disableStandardItemLighting();
-				if(aspects != null && aspects.size() > 0) {
-					for(Aspect aspect : aspects) {
-						String aspectText = aspect.type.getName() + " (" + aspect.getRoundedDisplayAmount() + ")";
-						String aspectTypeText = aspect.type.getType();
-						GlStateManager.color(1, 1, 1, 1);
-						fontRenderer.drawString(aspectText, 2 + 17, 2 + yOffset, 0xFFFFFFFF);
-						fontRenderer.drawString(aspectTypeText, 2 + 17, 2 + 9 + yOffset, 0xFFFFFFFF);
-						AspectIconRenderer.renderIcon(2, 2 + yOffset, 16, 16, aspect.type.getIcon());
-						int entryWidth = Math.max(fontRenderer.getStringWidth(aspectText) + 19, fontRenderer.getStringWidth(aspectTypeText) + 19);
-						if(entryWidth > width) {
-							width = entryWidth;
-						}
-						yOffset -= 21;
+
+				GlStateManager.enableDepth();
+
+				GlStateManager.translate(event.getX(), event.getY() - 29, 300);
+
+				for(Aspect aspect : aspects) {
+					String aspectText = aspect.type.getName() + " (" + aspect.getRoundedDisplayAmount() + ")";
+					String aspectTypeText = aspect.type.getType();
+
+					GlStateManager.color(1, 1, 1, 1);
+
+					fontRenderer.drawString(aspectText, 6 + 17, 2 + yOffset, 0xFFFFFFFF);
+					fontRenderer.drawString(aspectTypeText, 6 + 17, 2 + 9 + yOffset, 0xFFFFFFFF);
+
+					AspectIconRenderer.renderIcon(2, 2 + yOffset, 16, 16, aspect.type.getIcon());
+
+					int entryWidth = Math.max(fontRenderer.getStringWidth(aspectText), fontRenderer.getStringWidth(aspectTypeText)) + 26;
+					if(entryWidth > width) {
+						width = entryWidth;
 					}
-					GlStateManager.translate(0, 0, -10);
-					Gui.drawRect(0, yOffset + 20, width + 1, 21, 0x90000000);
-					Gui.drawRect(1, yOffset + 21, width, 20, 0xAA000000);
+
+					yOffset -= 21;
 				}
-				RenderHelper.enableGUIStandardItemLighting();
-				GlStateManager.popMatrix();
-				GlStateManager.enableTexture2D();
-				GlStateManager.enableBlend();
+
+				GlStateManager.translate(0, 0, -1);
+
+				int height = -yOffset;
+				int rectX = 0;
+				int rectY = yOffset + 20;
+
+				int backgroundColor = 0xF0100010;
+				int borderColorStart = 0x505000FF;
+				int borderColorEnd = (borderColorStart & 0xFEFEFE) >> 1 | borderColorStart & 0xFF000000;
+				GuiUtils.drawGradientRect(0, rectX - 3,           rectY - 4,           rectX + width + 3,   rectY - 3,              backgroundColor, backgroundColor);
+				GuiUtils.drawGradientRect(0, rectX - 3,           rectY + height + 3,  rectX + width + 3,   rectY + height + 4,     backgroundColor, backgroundColor);
+				GuiUtils.drawGradientRect(0, rectX - 3,           rectY - 3,           rectX + width + 3,   rectY + height + 3,     backgroundColor, backgroundColor);
+				GuiUtils.drawGradientRect(0, rectX - 4,           rectY - 3,           rectX - 3,           rectY + height + 3,     backgroundColor, backgroundColor);
+				GuiUtils.drawGradientRect(0, rectX + width + 3,   rectY - 3,           rectX + width + 4,   rectY + height + 3,     backgroundColor, backgroundColor);
+				GuiUtils.drawGradientRect(0, rectX - 3,           rectY - 3 + 1,       rectX - 3 + 1,       rectY + height + 3 - 1, borderColorStart, borderColorEnd);
+				GuiUtils.drawGradientRect(0, rectX + width + 2,   rectY - 3 + 1,       rectX + width + 3,   rectY + height + 3 - 1, borderColorStart, borderColorEnd);
+				GuiUtils.drawGradientRect(0, rectX - 3,           rectY - 3,           rectX + width + 3,   rectY - 3 + 1,          borderColorStart, borderColorStart);
+				GuiUtils.drawGradientRect(0, rectX - 3,           rectY + height + 2,  rectX + width + 3,   rectY + height + 3,     borderColorEnd, borderColorEnd);
+
 				GlStateManager.color(1, 1, 1, 1);
+
+				GlStateManager.popMatrix();
 			}
 		}
 	}
