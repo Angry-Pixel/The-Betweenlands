@@ -112,11 +112,15 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 				float angleDiff = Math.abs(MathHelper.wrapDegrees(MathHelper.wrapDegrees(angle) - MathHelper.wrapDegrees(-this.rotationYaw)));
 
 				if (angleDiff < 55) {
-					if (!getEntityWorld().isRemote)
+					if (!getEntityWorld().isRemote) {
 						damageEntity(source, 5F);
+					}
+					this.playSound(SoundRegistry.SLUDGE_TURRET_DEATH, 1, 1);
 					return true;
-				} else
+				} else {
+					this.playSound(SoundRegistry.SLUDGE_TURRET_HURT, 1, 1);
 					return false;
+				}
 			}
 		}
 		return false;
