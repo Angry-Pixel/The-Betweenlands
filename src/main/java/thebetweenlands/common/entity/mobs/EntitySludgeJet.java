@@ -71,22 +71,6 @@ public class EntitySludgeJet extends Entity {
 	}
 
 	@Override
-	protected SoundEvent getAmbientSound() {
-		return SoundRegistry.SLUDGE_TURRET_LIVING;
-	}
-
-	@Nullable
-	@Override
-	protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-		return SoundRegistry.SLUDGE_TURRET_HURT;
-	}
-
-	@Override
-	protected SoundEvent getDeathSound() {
-		return SoundRegistry.SLUDGE_TURRET_DEATH;
-	}
-
-	@Override
 	public void onCollideWithPlayer(EntityPlayer player) {
 
 		if (player.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && player.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY)

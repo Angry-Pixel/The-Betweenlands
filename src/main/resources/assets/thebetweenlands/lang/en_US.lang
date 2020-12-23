@@ -1750,6 +1750,10 @@ advancements.thebetweenlands.adventurer.king_of_the_hill.title=King of the Hill
 advancements.thebetweenlands.adventurer.king_of_the_hill.description=Claim a Chiromaw Matriarch Nest
 advancements.thebetweenlands.adventurer.queen_of_the_hill.title=Queen of the Hill
 advancements.thebetweenlands.adventurer.queen_of_the_hill.description=Raid a Chiromaw Matriarch Nest without claiming it
+advancements.thebetweenlands.adventurer.gambling_addict.title=Gambling Addict
+advancements.thebetweenlands.adventurer.gambling_addict.description=Animate way too many Item Scrolls
+advancements.thebetweenlands.adventurer.thunderstruck.title=Thunderstruck!
+advancements.thebetweenlands.adventurer.thunderstruck.description=Fly into lightning while using a Volarkite or riding a Draeton
 
 # Fighter
 advancements.thebetweenlands.fighter.root.title=Fighter
@@ -1856,6 +1860,8 @@ advancements.thebetweenlands.survivalist.hardware_laundry.title=Hardware Laundry
 advancements.thebetweenlands.survivalist.hardware_laundry.description=Purify your tools
 advancements.thebetweenlands.survivalist.onions_have_layers.title=Onions Have Layers, Tools Alike
 advancements.thebetweenlands.survivalist.onions_have_layers.description=Coat your tools against corrosion
+advancements.thebetweenlands.survivalist.hashtag_blessed.title=#Blessed
+advancements.thebetweenlands.survivalist.hashtag_blessed.description=Get saved by the Blessed effect from a Simulacrum
 
 # Craftsman
 advancements.thebetweenlands.craftsman.root.title=Craftsman
@@ -1868,6 +1874,8 @@ advancements.thebetweenlands.craftsman.efficiency.title=Efficiency
 advancements.thebetweenlands.craftsman.efficiency.description=Create a Dual Sulfur Furnace
 advancements.thebetweenlands.craftsman.freebies.title=Freebies
 advancements.thebetweenlands.craftsman.freebies.description=Obtain extra ingots using Limestone Flux
+advancements.thebetweenlands.craftsman.feel_it_coming.title=In the Air Tonight
+advancements.thebetweenlands.craftsman.feel_it_coming.description=Predict a weather event with windchimes
 
 # Miner
 advancements.thebetweenlands.miner.root.title=Miner

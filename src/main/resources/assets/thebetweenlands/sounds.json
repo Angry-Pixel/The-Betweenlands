@@ -147,11 +147,6 @@
       "thebetweenlands:fish_death"
     ]
   },
-  "angler_death": {
-    "sounds": [
-      "thebetweenlands:angler_death"
-    ]
-  },
   "angler_attack": {
     "sounds": [
       "thebetweenlands:angler_attack_1",

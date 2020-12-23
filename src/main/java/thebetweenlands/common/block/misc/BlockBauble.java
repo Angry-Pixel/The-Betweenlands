@@ -42,7 +42,7 @@ public class BlockBauble extends Block implements ITintedBlock {
 	public BlockBauble() {
 		super(Material.GLASS);
 		this.setHardness(0.3F);
-		this.setCreativeTab(BLCreativeTabs.BLOCKS);
+		this.setCreativeTab(null);
 		this.setSoundType(SoundType.GLASS);
 		this.setLightLevel(1.0f);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(COLOR, 0).withProperty(DIAGONAL, false));

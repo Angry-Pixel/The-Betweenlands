@@ -1,0 +1,182 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:items_misc",
+	  "data": 40
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.gambling_addict.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.gambling_addict.description"
+    }
+  },
+  "parent": "thebetweenlands:adventurer/ruined_it",
+  "criteria": {
+    "animate_1": {
+      "trigger": "thebetweenlands:animate",
+      "conditions": {
+        "inputs": [
+          {
+            "item": "thebetweenlands:items_misc",
+			"data": 40
+          }
+        ]
+      }
+    },
+	"animate_2": {
+      "trigger": "thebetweenlands:animate",
+      "conditions": {
+        "inputs": [
+          {
+            "item": "thebetweenlands:items_misc",
+			"data": 40
+          }
+        ]
+      }
+    },
+	"animate_3": {
+      "trigger": "thebetweenlands:animate",
+      "conditions": {
+        "inputs": [
+          {
+            "item": "thebetweenlands:items_misc",
+			"data": 40
+          }
+        ]
+      }
+    },
+	"animate_4": {
+      "trigger": "thebetweenlands:animate",
+      "conditions": {
+        "inputs": [
+          {
+            "item": "thebetweenlands:items_misc",
+			"data": 40
+          }
+        ]
+      }
+    },
+	"animate_5": {
+      "trigger": "thebetweenlands:animate",
+      "conditions": {
+        "inputs": [
+          {
+            "item": "thebetweenlands:items_misc",
+			"data": 40
+          }
+        ]
+      }
+    },
+	"animate_6": {
+      "trigger": "thebetweenlands:animate",
+      "conditions": {
+        "inputs": [
+          {
+            "item": "thebetweenlands:items_misc",
+			"data": 40
+          }
+        ]
+      }
+    },
+	"animate_7": {
+      "trigger": "thebetweenlands:animate",
+      "conditions": {
+        "inputs": [
+          {
+            "item": "thebetweenlands:items_misc",
+			"data": 40
+          }
+        ]
+      }
+    },
+	"animate_8": {
+      "trigger": "thebetweenlands:animate",
+      "conditions": {
+        "inputs": [
+          {
+            "item": "thebetweenlands:items_misc",
+			"data": 40
+          }
+        ]
+      }
+    },
+	"animate_9": {
+      "trigger": "thebetweenlands:animate",
+      "conditions": {
+        "inputs": [
+          {
+            "item": "thebetweenlands:items_misc",
+			"data": 40
+          }
+        ]
+      }
+    },
+	"animate_10": {
+      "trigger": "thebetweenlands:animate",
+      "conditions": {
+        "inputs": [
+          {
+            "item": "thebetweenlands:items_misc",
+			"data": 40
+          }
+        ]
+      }
+    },
+	"animate_11": {
+      "trigger": "thebetweenlands:animate",
+      "conditions": {
+        "inputs": [
+          {
+            "item": "thebetweenlands:items_misc",
+			"data": 40
+          }
+        ]
+      }
+    },
+	"animate_12": {
+      "trigger": "thebetweenlands:animate",
+      "conditions": {
+        "inputs": [
+          {
+            "item": "thebetweenlands:items_misc",
+			"data": 40
+          }
+        ]
+      }
+    },
+	"animate_13": {
+      "trigger": "thebetweenlands:animate",
+      "conditions": {
+        "inputs": [
+          {
+            "item": "thebetweenlands:items_misc",
+			"data": 40
+          }
+        ]
+      }
+    },
+	"animate_14": {
+      "trigger": "thebetweenlands:animate",
+      "conditions": {
+        "inputs": [
+          {
+            "item": "thebetweenlands:items_misc",
+			"data": 40
+          }
+        ]
+      }
+    },
+	"animate_15": {
+      "trigger": "thebetweenlands:animate",
+      "conditions": {
+        "inputs": [
+          {
+            "item": "thebetweenlands:items_misc",
+			"data": 40
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:wind_chime"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.craftsman.feel_it_coming.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.craftsman.feel_it_coming.description"
+    }
+  },
+  "parent": "thebetweenlands:craftsman/all_over_again",
+ "criteria": {
+    "event": {
+      "trigger": "thebetweenlands:wind_chime_prediction"
+    }
+  }
+}

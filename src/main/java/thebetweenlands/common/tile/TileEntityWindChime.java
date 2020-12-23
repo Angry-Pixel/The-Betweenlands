@@ -9,14 +9,17 @@ import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
@@ -29,6 +32,7 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer.ParticleBatch;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.entity.ParticleVisionOrb;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
@@ -145,13 +149,8 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 
 			this.prevChimeTicks = this.chimeTicks;
 			this.chimeTicks = Math.max(this.chimeTicks - 1, 0);
-
-			this.updateParticles();
 		}
-	}
 
-	@SideOnly(Side.CLIENT)
-	private void updateParticles() {
 		BLEnvironmentEventRegistry registry = BetweenlandsWorldStorage.forWorld(this.world).getEnvironmentEventRegistry();
 
 		int maxPredictionTime = this.getMaxPredictionTime();
@@ -178,6 +177,43 @@ public class TileEntityWindChime extends TileEntity implements ITickable {
 			}
 		}
 
+		if(!this.world.isRemote) {
+			if(this.predictedEvent != null && this.predictedEvent != nextEvent) {
+				this.predictedEvent = nextEvent;
+				this.predictedTimeUntilActivation = -1;
+			} else if(this.predictedEvent == null) {
+				this.predictedEvent = nextEvent;
+			}
+			
+			if(this.predictedEvent == nextEvent && nextEvent != null) {
+				if(this.predictedTimeUntilActivation == -1 || this.predictedTimeUntilActivation >= maxPredictionTime && nextPrediction < maxPredictionTime) {
+					this.triggerAdvancement();
+				} else if(this.predictedTimeUntilActivation >= maxPredictionTime * 0.4f && nextPrediction < maxPredictionTime * 0.4f) {
+					this.triggerAdvancement();
+				} else if(this.predictedTimeUntilActivation >= maxPredictionTime * 0.2f && nextPrediction < maxPredictionTime * 0.2f) {
+					this.triggerAdvancement();
+				}
+
+				this.predictedTimeUntilActivation = nextPrediction;
+			} else {
+				this.predictedTimeUntilActivation = -1;
+			}
+		} else {
+			this.updateParticles(maxPredictionTime, nextPrediction, nextEvent, nextEventVisions);
+		}
+	}
+
+	private void triggerAdvancement() {
+		AxisAlignedBB aabb = new AxisAlignedBB(this.getPos()).grow(16);
+		for(EntityPlayerMP player : this.world.getEntitiesWithinAABB(EntityPlayerMP.class, aabb, EntitySelectors.NOT_SPECTATING)) {
+			if(player.getDistanceSq(this.getPos()) <= 256) {
+				AdvancementCriterionRegistry.WIND_CHIME_PREDICTION.trigger(player);
+			}
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void updateParticles(int maxPredictionTime, int nextPrediction, IPredictableEnvironmentEvent nextEvent, ResourceLocation[] nextEventVisions) {
 		if(this.predictedEvent != null && this.predictedEvent != nextEvent && this.fadeOutTimer < 20) {
 			this.fadeOutTimer++;
 

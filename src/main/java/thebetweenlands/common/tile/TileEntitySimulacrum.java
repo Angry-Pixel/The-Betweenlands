@@ -56,6 +56,7 @@ import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.EntityFalseXPOrb;
 import thebetweenlands.common.entity.EntityResurrection;
 import thebetweenlands.common.handler.PlayerRespawnHandler;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -716,6 +717,10 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 						} else {
 							playThunderSounds(entity.world, entity.posX, entity.posY, entity.posZ);
 							entity.world.spawnEntity(new EntityBLLightningBolt(entity.world, entity.posX, entity.posY, entity.posZ, 1, false, true));
+						}
+						
+						if(player instanceof EntityPlayerMP) {
+							AdvancementCriterionRegistry.REVIVED_BLESSED.trigger((EntityPlayerMP) player);
 						}
 
 						cap.clearBlessed();
