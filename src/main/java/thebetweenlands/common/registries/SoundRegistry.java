@@ -98,8 +98,8 @@ public class SoundRegistry {
     public static final BLSoundEvent SIMULACRUM_BREAK = reg("simulacrum_break");
     // Hostiles
     public static final BLSoundEvent FISH_HURT = reg("fish_hurt");
+    public static final BLSoundEvent FISH_DEATH = reg("fish_death");
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");
-    public static final BLSoundEvent ANGLER_DEATH = reg("angler_death");
     public static final BLSoundEvent DARK_DRUID_DEATH = reg("dark_druid_death");
     public static final BLSoundEvent DARK_DRUID_HIT = reg("dark_druid_hit");
     public static final BLSoundEvent DARK_DRUID_LIVING = reg("dark_druid_living");

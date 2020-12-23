@@ -98,7 +98,7 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundRegistry.ANGLER_DEATH;
+        return SoundRegistry.FISH_DEATH;
     }
 
     @Override

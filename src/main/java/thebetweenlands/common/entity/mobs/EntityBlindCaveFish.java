@@ -65,12 +65,12 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-        return SoundRegistry.ANGLER_ATTACK;
+        return SoundRegistry.FISH_HURT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundRegistry.ANGLER_DEATH;
+        return SoundRegistry.FISH_DEATH;
     }
 
     @Override

@@ -142,6 +142,11 @@
       "thebetweenlands:fish_hurt_3"
     ]
   },
+  "fish_death": {
+    "sounds": [
+      "thebetweenlands:fish_death"
+    ]
+  },
   "angler_death": {
     "sounds": [
       "thebetweenlands:angler_death"
