@@ -135,6 +135,13 @@
       "thebetweenlands:druid_teleport"
     ]
   },
+  "fish_hurt": {
+    "sounds": [
+      "thebetweenlands:fish_hurt_1",
+      "thebetweenlands:fish_hurt_2",
+      "thebetweenlands:fish_hurt_3"
+    ]
+  },
   "angler_death": {
     "sounds": [
       "thebetweenlands:angler_death"
