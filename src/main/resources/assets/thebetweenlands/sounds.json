@@ -158,6 +158,24 @@
       "thebetweenlands:angler_attack_2"
     ]
   },
+  "ashsprite_death": {
+    "sounds": [
+      "thebetweenlands:ashsprite_death"
+    ]
+  },
+  "ashsprite_hurt": {
+    "sounds": [
+      "thebetweenlands:ashsprite_hurt_1",
+      "thebetweenlands:ashsprite_hurt_1"
+    ]
+  },
+  "ashsprite_living": {
+    "sounds": [
+      "thebetweenlands:ashsprite_living_1",
+      "thebetweenlands:ashsprite_living_2",
+      "thebetweenlands:ashsprite_living_3"
+    ]
+  },
   "swamp_hag_living": {
     "sounds": [
       "thebetweenlands:swamp_hag_living_1",

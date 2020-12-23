@@ -32,6 +32,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityAshSprite extends EntityMob implements IEntityBL {
 	protected static final DataParameter<Byte> ASH_SPRITE_FLAGS = EntityDataManager.<Byte>createKey(EntityAshSprite.class, DataSerializers.BYTE);
@@ -99,6 +100,21 @@ public class EntityAshSprite extends EntityMob implements IEntityBL {
 		return LootTableRegistry.ASH_SPRITE;
 	}
 
+		@Override
+	protected SoundEvent getAmbientSound() {
+		return SoundRegistry.ASHSPRITE_LIVING;
+	}
+
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSource) {
+		return SoundRegistry.ASHSPRITE_HURT;
+	}
+
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundRegistry.ASHSPRITE_DEATH;
+	}
+
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
@@ -152,21 +168,6 @@ public class EntityAshSprite extends EntityMob implements IEntityBL {
 
 	public void setCharging(boolean charging) {
 		setAshSpriteFlag(1, charging);
-	}
-
-	@Override
-	protected SoundEvent getAmbientSound() {
-		return null;
-	}
-
-	@Override
-	protected SoundEvent getDeathSound() {
-		return null;
-	}
-
-	@Override
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return null;
 	}
 
 	@SideOnly(Side.CLIENT)
