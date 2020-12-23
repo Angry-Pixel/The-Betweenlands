@@ -16,11 +16,16 @@ public class RecipeClearBoneWayfinder extends IForgeRegistryEntry.Impl<IRecipe> 
 		boolean hasBoneWayfinder = false;
 		for (int i = 0; i < crafter.getSizeInventory(); ++i) {
 			ItemStack stack = crafter.getStackInSlot(i);
-			if(!stack.isEmpty() && stack.getItem() == ItemRegistry.BONE_WAYFINDER) {
-				if(hasBoneWayfinder) {
+			if(!stack.isEmpty()) {
+				if(stack.getItem() == ItemRegistry.BONE_WAYFINDER) {
+					if(hasBoneWayfinder) {
+						return false;
+					}
+					hasBoneWayfinder = true;
+				} else {
+					//Don't allow other items in grid
 					return false;
 				}
-				hasBoneWayfinder = true;
 			}
 		}
 		return hasBoneWayfinder;
