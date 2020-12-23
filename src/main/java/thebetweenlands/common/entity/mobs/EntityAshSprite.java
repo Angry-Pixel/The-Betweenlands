@@ -170,21 +170,6 @@ public class EntityAshSprite extends EntityMob implements IEntityBL {
 		setAshSpriteFlag(1, charging);
 	}
 
-	@Override
-	protected SoundEvent getAmbientSound() {
-		return null;
-	}
-
-	@Override
-	protected SoundEvent getDeathSound() {
-		return null;
-	}
-
-	@Override
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return null;
-	}
-
 	@SideOnly(Side.CLIENT)
 	@Override
 	public int getBrightnessForRender() {
