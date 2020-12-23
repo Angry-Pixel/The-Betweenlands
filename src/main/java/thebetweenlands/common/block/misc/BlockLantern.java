@@ -30,6 +30,9 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
 
 public class BlockLantern extends Block {
+	private static final AxisAlignedBB AABB_LARGE = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1.0D, 0.75D);
+	private static final AxisAlignedBB AABB_SMALL = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 0.6D, 0.75D);
+	
 	public static final PropertyInteger ROTATION = PropertyInteger.create("rotation", 0, 7);
 	public static final PropertyBool HANGING = PropertyBool.create("hanging");
 
@@ -78,7 +81,7 @@ public class BlockLantern extends Block {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return this.getActualState(state, source, pos).getValue(HANGING) ? new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1.0D, 0.75D) : new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 0.6D, 0.75D);
+		return this.getActualState(state, source, pos).getValue(HANGING) ? AABB_LARGE : AABB_SMALL;
 	}
 
 	@Override

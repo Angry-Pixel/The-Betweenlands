@@ -68,6 +68,7 @@ import thebetweenlands.common.block.farming.BlockDugGrass;
 import thebetweenlands.common.block.farming.BlockFungusCrop;
 import thebetweenlands.common.block.farming.BlockMiddleFruitBush;
 import thebetweenlands.common.block.misc.BlockAmatePaperPane;
+import thebetweenlands.common.block.misc.BlockBauble;
 import thebetweenlands.common.block.misc.BlockBouncyBetweenlands;
 import thebetweenlands.common.block.misc.BlockButtonBetweenlands;
 import thebetweenlands.common.block.misc.BlockCavingRopeLight;
@@ -860,6 +861,7 @@ public class BlockRegistry {
     public static final Block LANTERN_PAPER_2 = new BlockLantern();
     public static final Block LANTERN_PAPER_3 = new BlockLantern();
     public static final Block LANTERN_SILT_GLASS = new BlockLanternSiltGlass();
+    public static final Block BAUBLE = new BlockBauble();
     
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();

@@ -49,7 +49,7 @@ import thebetweenlands.util.Vec3UV;
 
 public class ModelFromModelBase implements IModel, ITexturePackable {
 	public static interface IVertexProcessor {
-		Vec3UV process(Vec3UV vertexIn, Quad quad, Box box, QuadBuilder builder);
+		Vec3UV process(Vec3UV vertexIn, Model model, Quad quad, Box box, QuadBuilder builder);
 	}
 
 	public final ResourceLocation texture;
@@ -316,7 +316,7 @@ public class ModelFromModelBase implements IModel, ITexturePackable {
 						float v = vert.getV(16.0F, height);
 
 						if(vertexProcessor != null) {
-							vert = vertexProcessor.process(vert, quad, box, builder);
+							vert = vertexProcessor.process(vert, convertedModel, quad, box, builder);
 						}
 
 						if(vert != null) {
