@@ -62,7 +62,7 @@ public class BlockDentrothyst extends BasicBlock implements BlockRegistry.ICusto
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, TYPE);
 	}
-	
+
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		return state.getValue(TYPE) == EnumDentrothyst.ORANGE ? new ItemStack(this, 1, EnumDentrothyst.ORANGE.getMeta()) : new ItemStack(this, 1, EnumDentrothyst.GREEN.getMeta());
