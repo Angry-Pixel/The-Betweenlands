@@ -203,7 +203,7 @@ public class MapGenFloatingIslands extends MapGenBase {
 					int water = -1;
 
 					int surface = center.getY();
-					for(; surface > 0; surface--) {
+					for(; surface > depth + 1; surface--) {
 						IBlockState state = primer.getBlockState(bx, surface, bz);
 
 						boolean liquid = state.getMaterial().isLiquid();
@@ -218,7 +218,7 @@ public class MapGenFloatingIslands extends MapGenBase {
 					}
 
 					for(int y = 0; y > -depth; y--) {
-						if(!primer.getBlockState(bx, surface, bz).getMaterial().isLiquid()) {
+						if(surface + y > 0 && !primer.getBlockState(bx, surface, bz).getMaterial().isLiquid()) {
 							if(surface + y <= WorldProviderBetweenlands.LAYER_HEIGHT) {
 								primer.setBlockState(bx, surface + y, bz, BlockRegistry.SWAMP_WATER.getDefaultState());
 							} else {
@@ -232,26 +232,28 @@ public class MapGenFloatingIslands extends MapGenBase {
 					for(int y = height - lowering; y > -depth - lowering; y--) {
 						int by = center.getY() + y;
 
-						if(isCrag) {
-							if(y == height - lowering) {
-								primer.setBlockState(bx, by, bz, BlockRegistry.CRAGROCK.getDefaultState().withProperty(BlockCragrock.VARIANT, EnumCragrockType.MOSSY_1));
-							} else if(y == height - lowering - 1) {
-								primer.setBlockState(bx, by, bz, BlockRegistry.CRAGROCK.getDefaultState().withProperty(BlockCragrock.VARIANT, EnumCragrockType.MOSSY_2));
-							} else if(y == height - lowering - 2) {
-								primer.setBlockState(bx, by, bz, BlockRegistry.CRAGROCK.getDefaultState());
-							} else {
-								primer.setBlockState(bx, by, bz, BlockRegistry.BETWEENSTONE.getDefaultState());
-							}
-						} else {
-							if(isPondColumn) {
-								primer.setBlockState(bx, by, bz, BlockRegistry.MUD.getDefaultState());
-							} else {
+						if(by > 0) {
+							if(isCrag) {
 								if(y == height - lowering) {
-									primer.setBlockState(bx, by, bz, BlockRegistry.SWAMP_GRASS.getDefaultState());
-								} else if(y >= height - lowering - 2) {
-									primer.setBlockState(bx, by, bz, BlockRegistry.SWAMP_DIRT.getDefaultState());
+									primer.setBlockState(bx, by, bz, BlockRegistry.CRAGROCK.getDefaultState().withProperty(BlockCragrock.VARIANT, EnumCragrockType.MOSSY_1));
+								} else if(y == height - lowering - 1) {
+									primer.setBlockState(bx, by, bz, BlockRegistry.CRAGROCK.getDefaultState().withProperty(BlockCragrock.VARIANT, EnumCragrockType.MOSSY_2));
+								} else if(y == height - lowering - 2) {
+									primer.setBlockState(bx, by, bz, BlockRegistry.CRAGROCK.getDefaultState());
 								} else {
 									primer.setBlockState(bx, by, bz, BlockRegistry.BETWEENSTONE.getDefaultState());
+								}
+							} else {
+								if(isPondColumn) {
+									primer.setBlockState(bx, by, bz, BlockRegistry.MUD.getDefaultState());
+								} else {
+									if(y == height - lowering) {
+										primer.setBlockState(bx, by, bz, BlockRegistry.SWAMP_GRASS.getDefaultState());
+									} else if(y >= height - lowering - 2) {
+										primer.setBlockState(bx, by, bz, BlockRegistry.SWAMP_DIRT.getDefaultState());
+									} else {
+										primer.setBlockState(bx, by, bz, BlockRegistry.BETWEENSTONE.getDefaultState());
+									}
 								}
 							}
 						}
@@ -261,7 +263,9 @@ public class MapGenFloatingIslands extends MapGenBase {
 						for(int y = 0; y > height - lowering; y--) {
 							int by = center.getY() + y;
 
-							primer.setBlockState(bx, by, bz, BlockRegistry.SWAMP_WATER.getDefaultState());
+							if(by > 0) {
+								primer.setBlockState(bx, by, bz, BlockRegistry.SWAMP_WATER.getDefaultState());
+							}
 						}
 					}
 
@@ -271,7 +275,9 @@ public class MapGenFloatingIslands extends MapGenBase {
 						for(int y = -depth - lowering; y > -depth - rootLength - lowering; y--) {
 							int by = center.getY() + y;
 
-							primer.setBlockState(bx, by, bz, BlockRegistry.ROOT.getDefaultState());
+							if(by > 0) {
+								primer.setBlockState(bx, by, bz, BlockRegistry.ROOT.getDefaultState());
+							}
 						}
 					} else if(rand.nextInt(13) == 0) {
 						int hangerLength = 1 + rand.nextInt(8);
@@ -279,13 +285,17 @@ public class MapGenFloatingIslands extends MapGenBase {
 						for(int y = -depth - lowering; y > -depth - hangerLength - lowering; y--) {
 							int by = center.getY() + y;
 
-							primer.setBlockState(bx, by, bz, BlockRegistry.HANGER.getDefaultState().withProperty(BlockHanger.CAN_GROW, false));
+							if(by > 0) {
+								primer.setBlockState(bx, by, bz, BlockRegistry.HANGER.getDefaultState().withProperty(BlockHanger.CAN_GROW, false));
+							}
 						}
-					} else if(rand.nextInt(400) == 0 && water > 0 && height + depth >= 4) {
+					} else if(rand.nextInt(400) == 0 && water > 0 && height + depth >= 4 && center.getY() - depth - lowering + 3 > 0) {
 						primer.setBlockState(bx, center.getY() - depth - lowering + 3, bz, BlockRegistry.SWAMP_WATER.getDefaultState());
 						for(int by = center.getY() - depth - lowering + 2; by > water; by--) {
-							//vertical flowing fluid has meta 1
-							primer.setBlockState(bx, by, bz, BlockRegistry.SWAMP_WATER.getDefaultState().withProperty(BlockSwampWater.LEVEL, 1));
+							if(by > 0) {
+								//vertical flowing fluid has meta 1
+								primer.setBlockState(bx, by, bz, BlockRegistry.SWAMP_WATER.getDefaultState().withProperty(BlockSwampWater.LEVEL, 1));
+							}
 						}
 					}
 				}
