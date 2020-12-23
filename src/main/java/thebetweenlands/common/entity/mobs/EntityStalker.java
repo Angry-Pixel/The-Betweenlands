@@ -67,6 +67,7 @@ import thebetweenlands.common.entity.movement.CustomPathFinder;
 import thebetweenlands.common.entity.movement.ObstructionAwarePathNavigateClimber;
 import thebetweenlands.common.entity.movement.ObstructionAwarePathNavigateGround;
 import thebetweenlands.common.entity.movement.ObstructionAwareWalkNodeProcessor;
+import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
@@ -548,8 +549,8 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 	}
 
 	public void useParalysisAttack(EntityLivingBase target) {
-		target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 80, 10));
-		target.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 80, -10));
+		target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 80, 3));
+		target.addPotionEffect(new PotionEffect(ElixirEffectRegistry.ROOT_BOUND, 80, 10));
 
 		this.playSound(SoundRegistry.STALKER_SCREAM, 0.6f, 1.0f);
 	}
