@@ -11,6 +11,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -30,12 +31,15 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.sky.BLRainRenderer;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class EventHeavyRain extends TimedEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "heavy_rain");
 
+	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[] { new ResourceLocation("thebetweenlands:textures/events/heavy_rain.png") };
+	
 	public EventHeavyRain(BLEnvironmentEventRegistry registry) {
 		super(registry);
 	}
@@ -195,5 +199,15 @@ public class EventHeavyRain extends TimedEnvironmentEvent {
 		if(world != null && view != null && BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry().heavyRain.isActiveAt(view.posX, view.posY, view.posZ)) {
 			event.setCanceled(true);
 		}
+	}
+
+	@Override
+	public ResourceLocation[] getVisionTextures() {
+		return VISION_TEXTURES;
+	}
+	
+	@Override
+	public SoundEvent getChimesSound() {
+		return SoundRegistry.CHIMES_HEAVY_RAIN;
 	}
 }

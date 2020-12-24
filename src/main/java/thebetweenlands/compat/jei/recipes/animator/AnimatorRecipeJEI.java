@@ -18,6 +18,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
+
+import com.google.common.collect.ImmutableList;
+
 import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.recipe.animator.ToolRepairAnimatorRecipe;
@@ -86,7 +89,7 @@ public class AnimatorRecipeJEI implements IRecipeWrapper {
         } else {
             l.add(Collections.singletonList(input));
         }
-        l.add(Collections.singletonList(new ItemStack(ItemRegistry.LIFE_CRYSTAL)));
+        l.add(ImmutableList.of(new ItemStack(ItemRegistry.LIFE_CRYSTAL), new ItemStack(ItemRegistry.LIFE_CRYSTAL_FRAGMENT)));
         l.add(Collections.singletonList(ItemMisc.EnumItemMisc.SULFUR.create(1)));
         ingredients.setInputLists(VanillaTypes.ITEM, l);
 

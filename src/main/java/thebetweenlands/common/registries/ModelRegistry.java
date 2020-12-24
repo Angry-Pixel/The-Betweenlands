@@ -28,6 +28,7 @@ import thebetweenlands.client.render.model.baked.ModelTransform;
 import thebetweenlands.client.render.model.baked.ModelWalkway;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodBush;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodShieldBurning;
+import thebetweenlands.client.render.model.baked.modelbase.ModelBauble;
 import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom1;
 import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom2;
 import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom3;
@@ -40,6 +41,9 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop2;
 import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop3;
 import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop4;
 import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop4Decayed;
+import thebetweenlands.client.render.model.baked.modelbase.ModelLanternPaper;
+import thebetweenlands.client.render.model.baked.modelbase.ModelLanternSiltGlass;
+import thebetweenlands.client.render.model.baked.modelbase.ModelLanternSiltGlassGlass;
 import thebetweenlands.client.render.model.baked.modelbase.ModelMossBed;
 import thebetweenlands.client.render.model.baked.modelbase.ModelMudFlowerPot;
 import thebetweenlands.client.render.model.baked.modelbase.ModelMudFlowerPotCandle;
@@ -96,6 +100,7 @@ import thebetweenlands.client.render.model.tile.ModelLootUrn2;
 import thebetweenlands.client.render.model.tile.ModelLootUrn3;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.ModelConverter.Box;
+import thebetweenlands.util.ModelConverter.Model;
 import thebetweenlands.util.ModelConverter.Quad;
 import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.TexturePacker;
@@ -178,7 +183,7 @@ public class ModelRegistry {
 	//Items
 	public static final IVertexProcessor SHIELD_VERTEX_PROCESSOR = new IVertexProcessor() {
 		@Override
-		public Vec3UV process(Vec3UV vertexIn, Quad quad, Box box, QuadBuilder builder) {
+		public Vec3UV process(Vec3UV vertexIn, Model model, Quad quad, Box box, QuadBuilder builder) {
 			return new Vec3UV(-vertexIn.x - 0.5D, vertexIn.y + 1.5D, -vertexIn.z - 0.5D, vertexIn.u, vertexIn.v, vertexIn.uw, vertexIn.vw);
 		}
 	};
@@ -220,6 +225,8 @@ public class ModelRegistry {
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/syrmorite_block")).packer(MODEL_TEXTURE_PACKER).build();
 	public static final IModel DRAETON_UPGRADE_CRAFTING = new ModelFromModelBase.Builder(new ModelDraetonUpgradeCrafting(), new ResourceLocation("thebetweenlands:entity/draeton_upgrade_crafting"), 64, 32)
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/weedwood_planks")).packer(MODEL_TEXTURE_PACKER).build();
+	public static final ModelFromModelBase LANTERN_SILT_GLASS_ITEM = new ModelFromModelBase.Builder(new ModelLanternSiltGlass(), new ResourceLocation("thebetweenlands:blocks/lantern_silt_glass"), 64, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/silt_glass")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 
 	//Misc
 	public static final IModel LIFE_CRYSTAL_STALACTITE = new ModelLifeCrystalStalactite();
@@ -245,7 +252,7 @@ public class ModelRegistry {
 	public static final IModel PRESENT = new ModelFromModelBase.Builder(new ModelPresent(), new ResourceLocation("thebetweenlands:blocks/present"), 64, 64)
 			.packer(MODEL_TEXTURE_PACKER).processor(new IVertexProcessor() {
 				@Override
-				public Vec3UV process(Vec3UV vertexIn, Quad quad, Box box, QuadBuilder builder) {
+				public Vec3UV process(Vec3UV vertexIn, Model model, Quad quad, Box box, QuadBuilder builder) {
 					builder.setTintIndex(0);
 					return vertexIn;
 				}
@@ -260,7 +267,7 @@ public class ModelRegistry {
 	public static final IModel WOODEN_SUPPORT_BEAM_ROTTEN_3 = new ModelFromModelBase.Builder(new ModelWoodSupportBeam3(), new ResourceLocation("thebetweenlands:blocks/wooden_support_beam_rotten_3"), 64, 64)
 			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/wood_support_beam_particle")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 	public static final IModel MUD_TOWER_BRAZIER = new ModelFromModelBase.Builder(new ModelMudTowerBrazier(), new ResourceLocation("thebetweenlands:blocks/mud_tower_brazier"), 128, 128)
-		.particleTexture(new ResourceLocation("thebetweenlands:particle/block/mud_tower_brazier_particle")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/mud_tower_brazier_particle")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 	public static final IModel MUD_BRICK_ALCOVE = new ModelAlcove(MODEL_TEXTURE_PACKER, new ResourceLocation[] {
 			new ResourceLocation("thebetweenlands:blocks/mud_brick_alcove_0"),
 			new ResourceLocation("thebetweenlands:blocks/mud_brick_alcove_1"),
@@ -304,6 +311,24 @@ public class ModelRegistry {
 			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/simulacrum_rootman_particle")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 	public static final ModelFromModelBase OFFERING_TABLE = new ModelFromModelBase.Builder(new ModelOfferingTable(), new ResourceLocation("thebetweenlands:blocks/offering_table"), 64, 64)
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/smooth_cragrock")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+	public static final ModelFromModelBase LANTERN_PAPER = new ModelFromModelBase.Builder(new ModelLanternPaper(), new ResourceLocation("thebetweenlands:blocks/lantern_paper_1"), 32, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/amate_paper_pane_1_ct_0")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+	public static final ModelFromModelBase LANTERN_SILT_GLASS_FRAME = new ModelFromModelBase.Builder(new ModelLanternSiltGlass(), new ResourceLocation("thebetweenlands:blocks/lantern_silt_glass_frame"), 64, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/silt_glass")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+	public static final ModelFromModelBase LANTERN_SILT_GLASS_GLASS = new ModelFromModelBase.Builder(new ModelLanternSiltGlassGlass(), new ResourceLocation("thebetweenlands:blocks/lantern_silt_glass_glass"), 64, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/silt_glass")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+	public static final ModelFromModelBase BAUBLE = new ModelFromModelBase.Builder(new ModelBauble(), new ResourceLocation("thebetweenlands:blocks/bauble"), 32, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/bauble")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).processor(new IVertexProcessor() {
+				@Override
+				public Vec3UV process(Vec3UV vertexIn, Model model, Quad quad, Box box, QuadBuilder builder) {
+					if(box.getModelRenderer() == ((ModelBauble) model.getModelBase()).toppiece) {
+						builder.setTintIndex(-1);
+					} else {
+						builder.setTintIndex(0);
+					}
+					return vertexIn;
+				}
+			}).build();
 
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 

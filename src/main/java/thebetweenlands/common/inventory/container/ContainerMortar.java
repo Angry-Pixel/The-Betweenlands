@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.inventory.slot.SlotOutput;
 import thebetweenlands.common.inventory.slot.SlotPestle;
-import thebetweenlands.common.inventory.slot.SlotRestrictionNoMeta;
+import thebetweenlands.common.item.misc.ItemLifeCrystal;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityMortar;
 
@@ -28,7 +28,7 @@ public class ContainerMortar  extends Container {
         addSlotToContainer(new Slot(tile, 0, 35, 36));
         addSlotToContainer(new SlotPestle(tile, 1, 79, 36));
         addSlotToContainer(new SlotOutput(tile, 2, 123, 36, this));
-        addSlotToContainer(new SlotRestrictionNoMeta(tile, 3, 79, 8, new ItemStack(ItemRegistry.LIFE_CRYSTAL), 1));
+        addSlotToContainer(new ContainerAnimator.SlotLifeCrystal(tile, 3, 79, 8));
 
         for (int j = 0; j < 3; j++)
             for (int k = 0; k < 9; k++)
@@ -55,10 +55,10 @@ public class ContainerMortar  extends Container {
                 if (stack1.getItem() == ItemRegistry.PESTLE)
                     if (!mergeItemStack(stack1, 1, 2, true))
                         return ItemStack.EMPTY;
-                if (stack1.getItem() != ItemRegistry.PESTLE && stack1.getItem() != ItemRegistry.LIFE_CRYSTAL)
+                if (stack1.getItem() != ItemRegistry.PESTLE && stack1.getItem() instanceof ItemLifeCrystal == false)
                     if (!mergeItemStack(stack1, 0, 1, true))
                         return ItemStack.EMPTY;
-                if (stack1.getItem() == ItemRegistry.LIFE_CRYSTAL)
+                if (stack1.getItem() instanceof ItemLifeCrystal)
                     if (!mergeItemStack(stack1, 3, 4, true))
                         return ItemStack.EMPTY;
             } else if (!mergeItemStack(stack1, 4, inventorySlots.size(), false))

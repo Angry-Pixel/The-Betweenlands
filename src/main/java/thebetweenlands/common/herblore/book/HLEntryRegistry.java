@@ -119,7 +119,7 @@ public class HLEntryRegistry {
         ArrayList<Page> antiInfusionPages = new ArrayList<>();
 
         for (ElixirEffect effect : ElixirEffectRegistry.getEffects()) {
-            if (effect != ElixirEffectRegistry.EFFECT_PETRIFY && effect != ElixirEffectRegistry.EFFECT_ISOLATEDSENSES && effect != ElixirEffectRegistry.EFFECT_LIMBLESS && effect != ElixirEffectRegistry.EFFECT_DEFORMED && effect != ElixirEffectRegistry.EFFECT_HUNTERSSENSEMASTER && effect != ElixirEffectRegistry.EFFECT_WINGS && effect != ElixirEffectRegistry.EFFECT_GILLSGROWTH) {
+            if (effect.shouldShowInBook()) {
                 if (effect.isAntiInfusion())
                     antiInfusionPages.addAll(PageCreators.elixirPages(ItemRegistry.ELIXIR.getElixirItem(effect, 1, 1, 0), manualType, effect));
                 else

@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -17,6 +18,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntitySimulacrum;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
@@ -25,8 +27,11 @@ public class EventThunderstorm extends TimedEnvironmentEvent {
 
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "thunderstorm");
 
+	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[] { new ResourceLocation("thebetweenlands:textures/events/thunderstorm.png") };
+	
 	public EventThunderstorm(BLEnvironmentEventRegistry registry) {
 		super(registry);
+		this.getActiveStateEstimator().dependsOnEvent(() -> registry.heavyRain);
 	}
 
 	@Override
@@ -146,5 +151,15 @@ public class EventThunderstorm extends TimedEnvironmentEvent {
 	@Override
 	public int getOnTime(Random rnd) {
 		return 4000 + rnd.nextInt(4000);
+	}
+
+	@Override
+	public ResourceLocation[] getVisionTextures() {
+		return VISION_TEXTURES;
+	}
+	
+	@Override
+	public SoundEvent getChimesSound() {
+		return SoundRegistry.CHIMES_THUNDERSTORM;
 	}
 }

@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
@@ -44,9 +45,10 @@ public class ItemVoodooDoll extends Item {
 			boolean attacked = false;
 			for (EntityLivingBase entity : living) {
 				if (entity.isEntityAlive() && !(entity instanceof IBLBoss) && entity instanceof EntityPlayer == false) {
+					DamageSource source = new EntityDamageSource("magic", user).setDamageBypassesArmor().setMagicDamage();
 					if (!world.isRemote) {
-						attacked |= entity.attackEntityFrom(DamageSource.MAGIC, 20);
-					} else if (!entity.isEntityInvulnerable(DamageSource.MAGIC)) {
+						attacked |= entity.attackEntityFrom(source, 20);
+					} else if (!entity.isEntityInvulnerable(source)) {
 						attacked = true;
 						for (int i = 0; i < 20; i++) {
 							BLParticles.SWAMP_SMOKE.spawn(world, entity.posX, entity.posY + entity.height / 2.0D, entity.posZ, ParticleFactory.ParticleArgs.get().withMotion((world.rand.nextFloat() - 0.5F) * 0.5F, (world.rand.nextFloat() - 0.5F) * 0.5F, (world.rand.nextFloat() - 0.5F) * 0.5F).withColor(1, 1, 1, 1));

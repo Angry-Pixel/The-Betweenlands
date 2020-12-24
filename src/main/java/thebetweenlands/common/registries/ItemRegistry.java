@@ -403,7 +403,8 @@ public class ItemRegistry {
     public static final Item CRIMSON_MIDDLE_GEM = new ItemGem(CircleGemType.CRIMSON);
     public static final Item AQUA_MIDDLE_GEM = new ItemGem(CircleGemType.AQUA);
     public static final Item GREEN_MIDDLE_GEM = new ItemGem(CircleGemType.GREEN);
-    public static final Item LIFE_CRYSTAL = new ItemLifeCrystal();
+    public static final Item LIFE_CRYSTAL = new ItemLifeCrystal(128, true);
+    public static final Item LIFE_CRYSTAL_FRAGMENT = new ItemLifeCrystal(64, false);
     public static final Item TEST_ITEM = new TestItem();
     public static final Item TEST_ITEM_CHIMP = new TestItemChimp();
     public static final Item TEST_ITEM_CHIMP_RULER = new TestItemChimpRuler();
@@ -569,6 +570,7 @@ public class ItemRegistry {
 		OreDictionary.registerOre("gemCrimsonMiddleGem", new ItemStack(ItemRegistry.CRIMSON_MIDDLE_GEM));
 		OreDictionary.registerOre("gemGreenMiddleGem", new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM));
 		OreDictionary.registerOre("gemLifeCrystal", new ItemStack(ItemRegistry.LIFE_CRYSTAL, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("gemLifeCrystal", new ItemStack(ItemRegistry.LIFE_CRYSTAL_FRAGMENT, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("gemScabyst", EnumItemMisc.SCABYST.create(1));
 
 		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE));

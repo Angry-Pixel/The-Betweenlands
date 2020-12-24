@@ -128,6 +128,7 @@ import thebetweenlands.client.render.tile.RenderTarLootPot3;
 import thebetweenlands.client.render.tile.RenderWaystone;
 import thebetweenlands.client.render.tile.RenderWeedwoodSign;
 import thebetweenlands.client.render.tile.RenderWeedwoodWorkbench;
+import thebetweenlands.client.render.tile.RenderWindChime;
 import thebetweenlands.client.render.tile.RenderWisp;
 import thebetweenlands.client.render.tile.TileEntityPuffshroomRenderer;
 import thebetweenlands.common.TheBetweenlands;
@@ -294,6 +295,7 @@ import thebetweenlands.common.tile.TileEntityTarLootPot3;
 import thebetweenlands.common.tile.TileEntityWaystone;
 import thebetweenlands.common.tile.TileEntityWeedwoodSign;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
+import thebetweenlands.common.tile.TileEntityWindChime;
 import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 import thebetweenlands.common.world.event.EventHeavyRain;
@@ -679,6 +681,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecayPitGroundChain.class, new RenderDecayPitGroundChain());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySimulacrum.class, new RenderSimulacrum());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityOfferingTable.class, new RenderGroundItem());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWindChime.class, new RenderWindChime());
 		
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
@@ -745,6 +748,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		Item.getItemFromBlock(BlockRegistry.WEEDWOOD_CHEST).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityChestBetweenlands.class));
 		Item.getItemFromBlock(BlockRegistry.CENSER).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityCenser.class));
 		Item.getItemFromBlock(BlockRegistry.WEEDWOOD_BARREL).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityBarrel.class));
+		Item.getItemFromBlock(BlockRegistry.WIND_CHIME).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityWindChime.class));
 		
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {

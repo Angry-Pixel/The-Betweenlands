@@ -12,6 +12,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import thebetweenlands.common.inventory.container.ContainerMortar;
+import thebetweenlands.common.item.misc.ItemLifeCrystal;
 import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -132,7 +133,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
     }
 
     public boolean isCrystalInstalled() {
-        return !getStackInSlot(3).isEmpty() && getStackInSlot(3).getItem() == ItemRegistry.LIFE_CRYSTAL && getStackInSlot(3).getItemDamage() <= getStackInSlot(3).getMaxDamage();
+        return !getStackInSlot(3).isEmpty() && getStackInSlot(3).getItem() instanceof ItemLifeCrystal && getStackInSlot(3).getItemDamage() <= getStackInSlot(3).getMaxDamage();
     }
 
     private boolean outputIsFull() {
@@ -210,7 +211,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-        return slot == 1 && itemstack.getItem() == ItemRegistry.PESTLE || slot == 3 && itemstack.getItem() == ItemRegistry.LIFE_CRYSTAL || slot != 1 && itemstack.getItem() != ItemRegistry.PESTLE && slot != 3 && itemstack.getItem() != ItemRegistry.LIFE_CRYSTAL;
+        return slot == 1 && itemstack.getItem() == ItemRegistry.PESTLE || slot == 3 && itemstack.getItem() instanceof ItemLifeCrystal || slot != 1 && itemstack.getItem() != ItemRegistry.PESTLE && slot != 3 && itemstack.getItem() != ItemRegistry.LIFE_CRYSTAL;
     }
 
 }

@@ -16,7 +16,7 @@ import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 	public final EventDenseFog denseFog;
-	public final IEnvironmentEvent heavyRain;
+	public final EventHeavyRain heavyRain;
 	public final EventAuroras auroras;
 	public final EventBloodSky bloodSky;
 	public final EventSpoopy spoopy;
