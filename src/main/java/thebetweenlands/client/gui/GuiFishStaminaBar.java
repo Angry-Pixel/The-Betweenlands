@@ -69,11 +69,16 @@ public class GuiFishStaminaBar extends Gui {
 		drawHangingRope(staminaTicks, posX - staminaTicks + 15, posY + 12, posX + 256 + 16, posY, 0.5F, 0D); //line
 
 		mc.renderEngine.bindTexture(GUI_TEXTURE); // because depth stuffs :p
-		drawTexturedModalRect(posX - obstructionTicks1, posY, 0 + aniFrame, 96, 16, 16); //objects
-		drawTexturedModalRect(posX - obstructionTicks2, posY, 0 + aniFrame, 112, 16, 16);
-		drawTexturedModalRect(posX - obstructionTicks3, posY, 0 + aniFrame, 128, 16, 16);
-		drawTexturedModalRect(posX - obstructionTicks4, posY, 0 + aniFrame, 144, 16, 16);
+		drawTexturedModalRect(posX - obstructionTicks1, posY, 0 + aniFrame, 96, 16, 16); // weed
+		drawTexturedModalRect(posX - obstructionTicks2, posY, 0 + aniFrame, 112, 16, 16); //rock
+		drawTexturedModalRect(posX - obstructionTicks3, posY, 0 + aniFrame, 128, 16, 16); //coral
 
+		GlStateManager.pushMatrix();
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		drawTexturedModalRect(posX - obstructionTicks4, posY + 3, 0 + aniFrame, 144, 16, 16); // jolly fush
+		GlStateManager.disableBlend();
+		GlStateManager.popMatrix();
 	}
 
 	private int getCrabScroll(int escapeTicks) {
