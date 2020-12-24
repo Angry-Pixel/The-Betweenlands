@@ -60,7 +60,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
         }
         if (!world.isRemote) {
             if (isCrystalInslot())
-                lifeCrystalLife = 128 - getCrystalPower();
+                lifeCrystalLife = getCrystalPower();
             if (!isSlotInUse(0) || !isSlotInUse(1) || !isSlotInUse(2)) {
                 fuelBurnProgress = 0;
                 fuelConsumed = 0;
@@ -159,7 +159,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
 
     public int getCrystalPower() {
         if (isCrystalInslot())
-            return inventory.get(1).getItemDamage();
+            return inventory.get(1).getMaxDamage() - inventory.get(1).getItemDamage();
         return 0;
     }
 

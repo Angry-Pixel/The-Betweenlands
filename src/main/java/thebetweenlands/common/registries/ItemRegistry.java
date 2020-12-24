@@ -404,7 +404,7 @@ public class ItemRegistry {
     public static final Item AQUA_MIDDLE_GEM = new ItemGem(CircleGemType.AQUA);
     public static final Item GREEN_MIDDLE_GEM = new ItemGem(CircleGemType.GREEN);
     public static final Item LIFE_CRYSTAL = new ItemLifeCrystal(128, true);
-    public static final Item LIFE_CRYSTAL_FRAGMENT = new ItemLifeCrystal(128, false);
+    public static final Item LIFE_CRYSTAL_FRAGMENT = new ItemLifeCrystal(64, false);
     public static final Item TEST_ITEM = new TestItem();
     public static final Item TEST_ITEM_CHIMP = new TestItemChimp();
     public static final Item TEST_ITEM_CHIMP_RULER = new TestItemChimpRuler();

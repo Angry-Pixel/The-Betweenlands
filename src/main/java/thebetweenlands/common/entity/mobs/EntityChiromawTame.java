@@ -283,14 +283,17 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if (this.isRiding() && (source.equals(DamageSource.IN_WALL) || source.equals(DamageSource.DROWN)))
+		if(this.isRiding() && (source.equals(DamageSource.IN_WALL) || source.equals(DamageSource.DROWN))) {
 			return false;
-		if (source instanceof EntityDamageSourceIndirect) {
-			if (source.getTrueSource() == this)
+		}
+		if(source.getTrueSource() == this) {
+			return false;
+		}
+		if(source.getImmediateSource() instanceof EntityBLArrow && ((EntityBLArrow) source.getImmediateSource()).getArrowType() == EnumArrowType.CHIROMAW_BARB) {
 				return false;
-			if (source.getImmediateSource() instanceof EntityBLArrow)
-				if (((EntityBLArrow) source.getImmediateSource()).getArrowType() == EnumArrowType.CHIROMAW_BARB)
-					return false;
+		}
+		if(this.getRidingEntity() != null && source.getTrueSource() == this.getRidingEntity() && !this.canRiderInteract()) {
+			return false;
 		}
 		if(super.attackEntityFrom(source, damage)) {
 			if(this.isSitting()) {
