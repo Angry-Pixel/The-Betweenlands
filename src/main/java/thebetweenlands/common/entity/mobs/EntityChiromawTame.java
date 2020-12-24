@@ -518,7 +518,7 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 
 	@Override
 	public boolean canRiderInteract() {
-		return this.getRidingEntity().isSneaking();
+		return this.getRidingEntity() != null && this.getRidingEntity().isSneaking();
 	}
 
 	@Override
