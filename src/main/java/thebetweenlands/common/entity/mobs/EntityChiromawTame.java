@@ -765,19 +765,55 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 
 		@Override
 		public void updateTask() {
-			EntityLivingBase entitylivingbase = chiromaw.getAttackTarget();
-			if (!chiromaw.getEntityWorld().isRemote && entitylivingbase != null) {
+			EntityLivingBase target = chiromaw.getAttackTarget();
+			if (!chiromaw.getEntityWorld().isRemote && target != null) {
 				World world = chiromaw.getEntityWorld();
-				if (entitylivingbase.getDistanceSq(chiromaw) < 576 && entitylivingbase.getDistanceSq(chiromaw) > 25 && chiromaw.canEntityBeSeen(entitylivingbase)) {
+				if (target.getDistanceSq(chiromaw) < 576 && target.getDistanceSq(chiromaw) > 25 && chiromaw.canEntityBeSeen(target)) {
 					++this.attackTimer;
 					if (attackTimer == 20) {
 						EntityBLArrow arrow = new EntityBLArrow(world, chiromaw);
-						arrow.setType(chiromaw.getElectricBoogaloo()? EnumArrowType.CHIROMAW_SHOCK_BARB: EnumArrowType.CHIROMAW_BARB);
-						double targetX = entitylivingbase.posX + entitylivingbase.motionX - chiromaw.posX;
-						double targetY = entitylivingbase.posY + entitylivingbase.getEyeHeight() - chiromaw.posY + chiromaw.getEyeHeight();
-						double targetZ = entitylivingbase.posZ + entitylivingbase.motionZ - chiromaw.posZ;
+						arrow.setType(chiromaw.getElectricBoogaloo()? EnumArrowType.CHIROMAW_SHOCK_BARB : EnumArrowType.CHIROMAW_BARB);
+						
+						double targetX = target.posX + target.motionX - chiromaw.posX;
+						double targetY = target.posY + target.getEyeHeight() - chiromaw.posY + chiromaw.getEyeHeight();
+						double targetZ = target.posZ + target.motionZ - chiromaw.posZ;
+						
 						arrow.shoot(targetX, targetY, targetZ, 1.2F, 0.0F);
+						
+						float g = -0.03f;
+
+						float vy0 = 0.35f;
+
+						float tmax = -vy0 / g;
+
+						float s = vy0 * tmax + 0.5f * g * tmax * tmax;
+
+						float h = (float)(target.posY + 0.5f - this.chiromaw.posY);
+
+						float fall = h - s;
+						
+						if(fall < 0) {
+							float tmin = MathHelper.sqrt(fall * 2 / g);
+
+							float t = tmax + tmin;
+
+							float dx = (float)(target.posX + (this.chiromaw.rand.nextFloat() - 0.5f) * 2.2f - this.chiromaw.posX) + (float)target.motionX * t * 0.75f;
+							float dz = (float)(target.posZ + (this.chiromaw.rand.nextFloat() - 0.5f) * 2.2f - this.chiromaw.posZ) + (float)target.motionZ * t * 0.75f;
+
+							float len = MathHelper.sqrt(dx*dx + dz*dz);
+
+							dx /= len;
+							dz /= len;
+
+							float speed = len / t * 1.5f /*constant adjustment for MC physics*/;
+
+							arrow.motionX = dx * speed;
+							arrow.motionY = vy0;
+							arrow.motionZ = dz * speed;
+						}
+						
 						world.spawnEntity(arrow);
+						
 						chiromaw.getEntityWorld().playSound(null, chiromaw.getPosition(), SoundRegistry.CHIROMAW_MATRIARCH_BARB_FIRE, SoundCategory.NEUTRAL, 0.5F, 1F + (chiromaw.getEntityWorld().rand.nextFloat() - chiromaw.getEntityWorld().rand.nextFloat()) * 0.8F);
 						attackTimer = -20;
 					}
