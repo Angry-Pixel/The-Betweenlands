@@ -35,6 +35,7 @@ public class BlockWindChime extends BlockContainer {
 		super(Material.WOOD);
 		this.setSoundType(SoundType.WOOD);
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
+		setHardness(0.5F);
 	}
 
 	@Override
