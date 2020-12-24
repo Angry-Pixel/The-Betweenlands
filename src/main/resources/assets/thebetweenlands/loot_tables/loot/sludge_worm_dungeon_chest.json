@@ -175,8 +175,8 @@
                 },
                 {
                     "type": "item",
-                    "entryName": "life_crystal",
-                    "name": "thebetweenlands:life_crystal",
+                    "entryName": "life_crystal_fragment",
+                    "name": "thebetweenlands:life_crystal_fragment",
                     "weight": 8
                 },
                 {

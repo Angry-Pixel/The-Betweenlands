@@ -135,15 +135,59 @@
       "thebetweenlands:druid_teleport"
     ]
   },
-  "angler_death": {
+  "fish_hurt": {
     "sounds": [
-      "thebetweenlands:angler_death"
+      "thebetweenlands:fish_hurt_1",
+      "thebetweenlands:fish_hurt_2",
+      "thebetweenlands:fish_hurt_3"
+    ]
+  },
+  "fish_death": {
+    "sounds": [
+      "thebetweenlands:fish_death"
     ]
   },
   "angler_attack": {
     "sounds": [
       "thebetweenlands:angler_attack_1",
       "thebetweenlands:angler_attack_2"
+    ]
+  },
+  "ashsprite_death": {
+    "sounds": [
+      "thebetweenlands:ashsprite_death"
+    ]
+  },
+  "ashsprite_hurt": {
+    "sounds": [
+      "thebetweenlands:ashsprite_hurt_1",
+      "thebetweenlands:ashsprite_hurt_1"
+    ]
+  },
+  "ashsprite_living": {
+    "sounds": [
+      "thebetweenlands:ashsprite_living_1",
+      "thebetweenlands:ashsprite_living_2",
+      "thebetweenlands:ashsprite_living_3"
+    ]
+  },
+  "sludge_turret_death": {
+    "sounds": [
+      "thebetweenlands:sludge_turret_death"
+    ]
+  },
+  "sludge_turret_hurt": {
+    "sounds": [
+      "thebetweenlands:sludge_turret_hurt_1",
+      "thebetweenlands:sludge_turret_hurt_2"
+    ]
+  },
+  "sludge_turret_living": {
+    "sounds": [
+      "thebetweenlands:sludge_turret_living_1",
+      "thebetweenlands:sludge_turret_living_2",
+      "thebetweenlands:sludge_turret_living_3",
+      "thebetweenlands:sludge_turret_living_4"
     ]
   },
   "swamp_hag_living": {
@@ -1847,6 +1891,48 @@
       "thebetweenlands:worm_throw_1",
       "thebetweenlands:worm_throw_2",
       "thebetweenlands:worm_throw_3"
+    ]
+  },
+  "chimes_wind": {
+    "sounds": [
+      "thebetweenlands:chimes_wind_1",
+      "thebetweenlands:chimes_wind_2",
+      "thebetweenlands:chimes_wind_3"
+    ]
+  },
+  "chimes_auroras": {
+    "sounds": [
+      "thebetweenlands:chimes_auroras"
+    ]
+  },
+  "chimes_blood_sky": {
+    "sounds": [
+      "thebetweenlands:chimes_blood_sky"
+    ]
+  },
+  "chimes_dense_fog": {
+    "sounds": [
+      "thebetweenlands:chimes_dense_fog"
+    ]
+  },
+  "chimes_heavy_rain": {
+    "sounds": [
+      "thebetweenlands:chimes_heavy_rain"
+    ]
+  },
+  "chimes_rift": {
+    "sounds": [
+      "thebetweenlands:chimes_rift"
+    ]
+  },
+  "chimes_thunderstorm": {
+    "sounds": [
+      "thebetweenlands:chimes_thunderstorm"
+    ]
+  },
+  "chimes_snowfall": {
+    "sounds": [
+      "thebetweenlands:chimes_snowfall"
     ]
   },
   "rune_connect_start": {

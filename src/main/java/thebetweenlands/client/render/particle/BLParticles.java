@@ -34,6 +34,7 @@ import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.client.render.particle.entity.ParticleLifeEssence;
 import thebetweenlands.client.render.particle.entity.ParticleLightningArc;
 import thebetweenlands.client.render.particle.entity.ParticleMoth;
+import thebetweenlands.client.render.particle.entity.ParticleVisionOrb;
 import thebetweenlands.client.render.particle.entity.ParticlePuzzleBeam;
 import thebetweenlands.client.render.particle.entity.ParticlePuzzleBeam2;
 import thebetweenlands.client.render.particle.entity.ParticleRingOfRecruitmentState;
@@ -157,7 +158,8 @@ public enum BLParticles {
 	RAIN(new ParticleBLRain.Factory()),
 	SWARM(new ParticleSwarm.Factory()),
 	SWARM_EMISSIVE(new ParticleEmissiveSwarm.Factory()),
-	FLYING_SWARM_EMISSIVE(new ParticleEmissiveBug.Swarm());
+	FLYING_SWARM_EMISSIVE(new ParticleEmissiveBug.Swarm()),
+	WIND_CHIME_VISION(new ParticleVisionOrb.Factory(new ResourceLocation("thebetweenlands:particle/wind_chime_vision_mask")));
 	
 	private ParticleFactory<?, ?> factory;
 

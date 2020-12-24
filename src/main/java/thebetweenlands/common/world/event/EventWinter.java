@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -28,6 +30,7 @@ import thebetweenlands.api.misc.Fog;
 import thebetweenlands.api.misc.FogState;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.BlockPresent;
+import thebetweenlands.common.block.misc.BlockBauble;
 import thebetweenlands.common.block.terrain.BlockSnowBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -119,6 +122,25 @@ public class EventWinter extends SeasonalEnvironmentEvent {
 							checkPos.release();
 							if(hasSuitableNeighbourBlock) {
 								world.setBlockState(pos, BlockRegistry.BLACK_ICE.getDefaultState());
+							}
+						}
+					} else if(world.rand.nextInt(3000) == 0) {
+						IBlockState state = world.getBlockState(pos);
+						if(state.getBlock().isLeaves(state, world, pos)) {
+							BlockPos offsetPos = pos;
+							
+							for(int i = 0; i < 6; i++) {
+								offsetPos = offsetPos.down();
+								state = world.getBlockState(offsetPos);
+								
+								if(!state.getBlock().isLeaves(state, world, offsetPos)) {
+									if(world.isAirBlock(offsetPos) && world.getLightFor(EnumSkyBlock.BLOCK, offsetPos) == 0 &&
+											(world.isSideSolid(offsetPos.up(), EnumFacing.DOWN) || world.getBlockState(offsetPos.up()).getBlockFaceShape(world, offsetPos.up(), EnumFacing.DOWN) != BlockFaceShape.UNDEFINED)) {
+										world.setBlockState(offsetPos, BlockRegistry.BAUBLE.getDefaultState().withProperty(BlockBauble.DIAGONAL, world.rand.nextBoolean()).withProperty(BlockBauble.COLOR, world.rand.nextInt(8)));
+									}
+									
+									break;
+								}
 							}
 						}
 					}

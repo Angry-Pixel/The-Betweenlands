@@ -128,7 +128,7 @@ public class BlockSimulacrum extends BlockContainer implements IStateMappedBlock
 
 	protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
 		if(!worldIn.isSideSolid(pos.down(), EnumFacing.UP)) {
-			this.dropBlockAsItem(worldIn, pos, state, 0);
+			this.dropAt(worldIn, pos, state);
 			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 		}
 	}
@@ -211,25 +211,29 @@ public class BlockSimulacrum extends BlockContainer implements IStateMappedBlock
 	@Override
 	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
 		if(!worldIn.isRemote && !player.isCreative() && worldIn.getGameRules().getBoolean("doTileDrops")) {
-			ItemStack stack = new ItemStack(this, 1, state.getValue(VARIANT).getMetadata(EnumFacing.NORTH));
-
-			TileEntity tile = worldIn.getTileEntity(pos);
-			if(tile instanceof TileEntitySimulacrum) {
-				if(!((TileEntitySimulacrum) tile).isActive()) {
-					worldIn.playSound(null, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, SoundRegistry.SIMULACRUM_BREAK, SoundCategory.BLOCKS, 1, 0.95f + worldIn.rand.nextFloat() * 0.1f);
-				}
-				
-				NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
-				nbt.setInteger("simulacrumEffectId", ((TileEntitySimulacrum) tile).getEffect().id);
-
-				String customName = ((TileEntitySimulacrum) tile).getCustomName();
-				if(customName.length() > 0) {
-					stack.setStackDisplayName(customName);
-				}
-			}
-
-			InventoryHelper.spawnItemStack(worldIn, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, stack);
+			this.dropAt(worldIn, pos, state);
 		}
+	}
+	
+	private void dropAt(World worldIn, BlockPos pos, IBlockState state) {
+		ItemStack stack = new ItemStack(this, 1, state.getValue(VARIANT).getMetadata(EnumFacing.NORTH));
+
+		TileEntity tile = worldIn.getTileEntity(pos);
+		if(tile instanceof TileEntitySimulacrum) {
+			if(!((TileEntitySimulacrum) tile).isActive()) {
+				worldIn.playSound(null, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, SoundRegistry.SIMULACRUM_BREAK, SoundCategory.BLOCKS, 1, 0.95f + worldIn.rand.nextFloat() * 0.1f);
+			}
+			
+			NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
+			nbt.setInteger("simulacrumEffectId", ((TileEntitySimulacrum) tile).getEffect().id);
+
+			String customName = ((TileEntitySimulacrum) tile).getCustomName();
+			if(customName.length() > 0) {
+				stack.setStackDisplayName(customName);
+			}
+		}
+
+		InventoryHelper.spawnItemStack(worldIn, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, stack);
 	}
 
 	@Override

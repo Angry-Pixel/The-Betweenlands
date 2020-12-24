@@ -30,7 +30,6 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
-import thebetweenlands.api.network.IGenericDataManagerAccess;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
@@ -546,8 +545,7 @@ public class LocationCragrockTower extends LocationGuarded {
 					IBlockState blockState = world.getBlockState(pos);
 
 					if(blockState.getBlock() != Blocks.AIR && world.isAirBlock(pos.down()) && world.isAirBlock(pos.down(2))) {
-						//TODO: Fix falling blocks and replace with falling smooth cragrock
-						EntityFallingBlock fallingBlock = new EntityFallingBlock(world, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, BlockRegistry.WEAK_BETWEENSTONE_TILES.getDefaultState());
+						EntityFallingBlock fallingBlock = new EntityFallingBlock(world, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, BlockRegistry.SMOOTH_CRAGROCK.getDefaultState());
 						fallingBlock.fallTime = -60;
 						fallingBlock.shouldDropItem = false;
 						fallingBlock.setHurtEntities(true);

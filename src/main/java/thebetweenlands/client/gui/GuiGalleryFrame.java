@@ -50,7 +50,7 @@ public class GuiGalleryFrame extends GuiScreen {
 
 	protected String discordName = "Discord";
 	protected String twitterName = "@BetweenlandsDev";
-	protected String discordUrl = "https://discord.gg/D6Eezzw";
+	protected String discordUrl = "https://discord.gg/5RwFZgT57p";
 	protected String twitterUrl = "https://twitter.com/BetweenlandsDev";
 
 	public GuiGalleryFrame(EntityGalleryFrame frame) {

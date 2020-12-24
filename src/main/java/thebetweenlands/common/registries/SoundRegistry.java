@@ -97,8 +97,15 @@ public class SoundRegistry {
     public static final BLSoundEvent CHIROBARB_ERUPTER = reg("chirobarb_erupter");
     public static final BLSoundEvent SIMULACRUM_BREAK = reg("simulacrum_break");
     // Hostiles
+    public static final BLSoundEvent FISH_HURT = reg("fish_hurt");
+    public static final BLSoundEvent FISH_DEATH = reg("fish_death");
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");
-    public static final BLSoundEvent ANGLER_DEATH = reg("angler_death");
+    public static final BLSoundEvent ASHSPRITE_HURT = reg("ashsprite_hurt");
+    public static final BLSoundEvent ASHSPRITE_DEATH = reg("ashsprite_death");
+    public static final BLSoundEvent ASHSPRITE_LIVING = reg("ashsprite_living");
+    public static final BLSoundEvent SLUDGE_TURRET_HURT = reg("sludge_turret_hurt");
+    public static final BLSoundEvent SLUDGE_TURRET_DEATH = reg("sludge_turret_death");
+    public static final BLSoundEvent SLUDGE_TURRET_LIVING = reg("sludge_turret_living");
     public static final BLSoundEvent DARK_DRUID_DEATH = reg("dark_druid_death");
     public static final BLSoundEvent DARK_DRUID_HIT = reg("dark_druid_hit");
     public static final BLSoundEvent DARK_DRUID_LIVING = reg("dark_druid_living");
@@ -312,6 +319,15 @@ public class SoundRegistry {
     public static final BLSoundEvent MUD_DOOR_LOCK = reg("mud_door_lock");
     public static final BLSoundEvent MUD_DOOR_TRAP = reg("mud_door_trap");
     public static final BLSoundEvent BEAM_SWITCH = reg("beam_switch");
+    public static final BLSoundEvent RESURRECTION = reg("resurrection");
+    public static final BLSoundEvent CHIMES_WIND = reg("chimes_wind");
+    public static final BLSoundEvent CHIMES_AURORAS = reg("chimes_auroras");
+    public static final BLSoundEvent CHIMES_BLOOD_SKY = reg("chimes_blood_sky");
+    public static final BLSoundEvent CHIMES_DENSE_FOG = reg("chimes_dense_fog");
+    public static final BLSoundEvent CHIMES_HEAVY_RAIN = reg("chimes_heavy_rain");
+    public static final BLSoundEvent CHIMES_RIFT = reg("chimes_rift");
+    public static final BLSoundEvent CHIMES_THUNDERSTORM = reg("chimes_thunderstorm");
+    public static final BLSoundEvent CHIMES_SNOWFALL = reg("chimes_snowfall");
     // GUI
     public static final BLSoundEvent RUNE_SLATE_MOVE = reg("rune_slate_move");
     public static final BLSoundEvent RUNE_SLOT_SHIFT = reg("rune_slot_shift");
@@ -320,7 +336,6 @@ public class SoundRegistry {
     public static final BLSoundEvent RUNE_DISCONNECT = reg("rune_disconnect");
     public static final BLSoundEvent RUNE_SELECT = reg("rune_select");
     public static final BLSoundEvent RUNE_CARVING = reg("rune_carving");
-    public static final BLSoundEvent RESURRECTION = reg("resurrection");
     
     private SoundRegistry() {
     }

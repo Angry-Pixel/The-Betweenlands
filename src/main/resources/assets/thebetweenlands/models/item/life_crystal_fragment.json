@@ -1,0 +1,38 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "thebetweenlands:items/life_crystal_fragment_0"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "remaining": 0
+      },
+      "model": "thebetweenlands:item/life_crystal_fragment"
+    },
+    {
+      "predicate": {
+        "remaining": 1
+      },
+      "model": "thebetweenlands:item/life_crystal_fragment_1"
+    },
+    {
+      "predicate": {
+        "remaining": 2
+      },
+      "model": "thebetweenlands:item/life_crystal_fragment_2"
+    },
+    {
+      "predicate": {
+        "remaining": 3
+      },
+      "model": "thebetweenlands:item/life_crystal_fragment_3"
+    },
+    {
+      "predicate": {
+        "remaining": 4
+      },
+      "model": "thebetweenlands:item/life_crystal_fragment_4"
+    }
+  ]
+}

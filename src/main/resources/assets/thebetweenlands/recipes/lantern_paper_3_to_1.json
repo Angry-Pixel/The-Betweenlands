@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:lantern_paper_3"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:lantern_paper_1"
+  }
+}

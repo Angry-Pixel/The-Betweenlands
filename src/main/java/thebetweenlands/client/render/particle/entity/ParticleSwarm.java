@@ -238,7 +238,7 @@ public class ParticleSwarm extends ParticleAnimated implements IParticleSpriteRe
 		} else if(this.particleAge <= 5) {
 			alpha = this.particleAlpha * this.particleAge / 5.0f;
 		} else {
-			alpha = 1;
+			alpha = this.particleAlpha;
 		}
 
 		buff.pos((double)rpx + v1x, (double)rpy + v1y, (double)rpz + v1z).tex((double)maxU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(this.lightmapX, this.lightmapY).endVertex();
