@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -17,6 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.projectiles.EntityBLFishHook;
+import thebetweenlands.util.Stencil;
 
 @SideOnly(Side.CLIENT)
 public class GuiFishStaminaBar extends Gui {
@@ -53,35 +55,54 @@ public class GuiFishStaminaBar extends Gui {
 
 	private void renderStaminaBar(int staminaTicks, int escapeTicks, int obstructionTicks1, int obstructionTicks2, int obstructionTicks3, int obstructionTicks4, int treasureTick, boolean hasTreasure, boolean treasureUnlocked,float posX, float posY, int aniFrame) {
 		Minecraft mc = Minecraft.getMinecraft();
+		Framebuffer fbo = mc.getFramebuffer();
 		GlStateManager.pushMatrix();
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		drawTexturedModalRect(posX, posY + 2, 0, 0, 256, 25); //bar
-		GlStateManager.disableBlend();
-		GlStateManager.popMatrix();
-
-		if(hasTreasure)
-			drawTexturedModalRect(posX - treasureTick, posY + 1, treasureUnlocked ? 16 : 0, 160, 16, 16); // chest
-
-		drawTexturedModalRect(posX - staminaTicks, posY + 1, 0 + aniFrame, 80, 16, 16); //fish
-		drawTexturedModalRect(posX - escapeTicks, posY + 2, 0 + (getCrabScroll(escapeTicks) * 16), 176, 16, 16); //crab
-
-		drawHangingRope(staminaTicks, posX - staminaTicks + 15, posY + 12, posX + 256 + 16, posY, 0.5F, 0D); //line
-
-		mc.renderEngine.bindTexture(GUI_TEXTURE); // because depth stuffs :p
 
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		drawTexturedModalRect(posX - obstructionTicks4, posY + 2, 0 + aniFrame, 144, 16, 16); // jolly fush
+		drawTexturedModalRect(posX, posY + 2, 0, 0, 256, 25); // background
 		GlStateManager.disableBlend();
 		GlStateManager.popMatrix();
 
-		drawTexturedModalRect(posX - obstructionTicks1, posY, 0 + aniFrame, 96, 16, 16); // weed
-		drawTexturedModalRect(posX - obstructionTicks2, posY, 0 + aniFrame, 112, 16, 16); //rock
-		drawTexturedModalRect(posX - obstructionTicks3, posY, 0 + aniFrame, 128, 16, 16); //coral
+		try (Stencil stencil = Stencil.reserve(fbo)) {
+			if (stencil.valid()) {
+				GL11.glEnable(GL11.GL_STENCIL_TEST);
+				stencil.clear(false);
+				stencil.func(GL11.GL_ALWAYS, true);
+				stencil.op(GL11.GL_REPLACE, GL11.GL_KEEP, GL11.GL_REPLACE);
+				GlStateManager.colorMask(false, false, false, false);
+				drawTexturedModalRect(posX + 4, posY, 4, 25, 248, 19); // bar stencil
+				GlStateManager.colorMask(true, true, true, true);
+				stencil.func(GL11.GL_EQUAL, true);
+				stencil.op(GL11.GL_KEEP);
+			}
 
+			if (hasTreasure)
+				drawTexturedModalRect(posX - treasureTick, posY + 1, treasureUnlocked ? 16 : 0, 128, 16, 16); // chest
 
+			drawTexturedModalRect(posX - staminaTicks, posY + 1, 0 + aniFrame, 48, 16, 16); // fish
+			drawTexturedModalRect(posX - escapeTicks, posY + 2, 0 + (getCrabScroll(escapeTicks) * 16), 144, 16, 16); // crab
+
+			drawHangingRope(staminaTicks, posX - staminaTicks + 15, posY + 12, posX + 256 + 16, posY, 0.5F, 0D); // line
+
+			mc.renderEngine.bindTexture(GUI_TEXTURE); // because depth // stuffs :p
+
+			GlStateManager.pushMatrix();
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+			drawTexturedModalRect(posX - obstructionTicks4, posY + 2, 0 + aniFrame, 112, 16, 16); // jolly fush
+			GlStateManager.disableBlend();
+			GlStateManager.popMatrix();
+
+			drawTexturedModalRect(posX - obstructionTicks1, posY, 0 + aniFrame, 64, 16, 16); // weed
+			drawTexturedModalRect(posX - obstructionTicks2, posY, 0 + aniFrame, 80, 16, 16); // rock
+			drawTexturedModalRect(posX - obstructionTicks3, posY, 0 + aniFrame, 96, 16, 16); // coral
+
+			GL11.glDisable(GL11.GL_STENCIL_TEST);
+		}
+
+		GlStateManager.popMatrix();
 	}
 
 	private int getCrabScroll(int escapeTicks) {
