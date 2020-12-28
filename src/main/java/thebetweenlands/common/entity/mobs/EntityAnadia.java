@@ -90,7 +90,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	public boolean SCROLL_2 = false;
 	public boolean SCROLL_3 = false;
 	public boolean SCROLL_4 = false;
-	public boolean PLAY_ANADIA_WON_SOUND = false;
+	public boolean PLAY_ANADIA_WON_SOUND = true;
 	
 	public int animationFrame = 0;
 	
@@ -601,34 +601,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        		setTreasureTicks(1024);
 	        }
 
-	        if(isBeingRidden() && getPassengers().get(0) instanceof EntityBLFishHook && getStaminaTicks() > 0) {
-	        	if(ESCAPE_DELAY > 0)
-	        		ESCAPE_DELAY--;
-
-	        	if(SCROLL_COUNTER == 256)
-	        		SCROLL_1 = true;
-	        	if(SCROLL_COUNTER == 192)
-	        		SCROLL_2 = true;
-	        	if(SCROLL_COUNTER == 128)
-	        		SCROLL_3 = true;
-	        	if(SCROLL_COUNTER == 64)
-	        		SCROLL_4 = true;
-
-	        	if(SCROLL_COUNTER > 0)
-	        		SCROLL_COUNTER --;
-
-	        	if(getEscapeTicks() > 0 && ESCAPE_DELAY <= 0)
-	        		setEscapeTicks(getEscapeTicks() -2);
-	        	if(getEscapeTicks() * 256 / 1024 < getStaminaTicks() * 256 / 100 && ESCAPE_DELAY <= 0) {
-	        		if(getPassengers().get(0) instanceof EntityBLFishHook) {
-	        			EntityBLFishHook hook = (EntityBLFishHook) getPassengers().get(0);
-	        			if(hook != null && hook.getAngler() != null)
-	        				playAnadiaLostSound(hook.getAngler());
-	        		}
-	        		getPassengers().get(0).dismountRidingEntity(); // this just releases the fish atm
-	        	}
-
-	        	if(getStaminaTicks() == 1 && PLAY_ANADIA_WON_SOUND) {
+	        if(isBeingRidden() && getPassengers().get(0) instanceof EntityBLFishHook) {
+	        	if(getStaminaTicks() == 0 && PLAY_ANADIA_WON_SOUND) {
 	        		if(getPassengers().get(0) instanceof EntityBLFishHook) {
 	        			EntityBLFishHook hook = (EntityBLFishHook) getPassengers().get(0);
 	        			if(hook != null && hook.getAngler() != null)
@@ -637,39 +611,67 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        		}
 	        	}
 
-	        	if(SCROLL_1 && getObstruction1Ticks() >= 0) {
-	        		setObstruction1Ticks(getObstruction1Ticks() - 1);
-	        		if(getObstruction1Ticks() <= 0)
-	        			setObstruction1Ticks(256);
-	        		}
-	        	
-	        	if(SCROLL_2 && getObstruction2Ticks() >= 0) {
-	        		setObstruction2Ticks(getObstruction2Ticks() - 1);
-	        		if(getObstruction2Ticks() <= 0)
-	        			setObstruction2Ticks(256);
-	        		}
-	        	
-	        	if(SCROLL_3 && getObstruction3Ticks() >= 0) {
-	        		setObstruction3Ticks(getObstruction3Ticks() - 1);
-	        		if(getObstruction3Ticks() <= 0)
-	        			setObstruction3Ticks(256);
-	        		}
-	        	
-	        	if(SCROLL_4 && getObstruction4Ticks() >= 0) {
-	        		setObstruction4Ticks(getObstruction4Ticks() - 1);
-	        		if(getObstruction4Ticks() <= 0)
-	        			setObstruction4Ticks(256);
-	        		}
-
-				if (isTreasureFish() && getTreasureTicks() >= 0) {
-					setTreasureTicks(getTreasureTicks() - 1);
-					if (getTreasureTicks() <= 0) {
-						if (getTreasureUnlocked())
-							setIsTreasureFish(false);
-						setTreasureTicks(1024);
+	        	if(getStaminaTicks() > 0) {	
+		        	if(ESCAPE_DELAY > 0)
+		        		ESCAPE_DELAY--;
+	
+		        	if(SCROLL_COUNTER == 256)
+		        		SCROLL_1 = true;
+		        	if(SCROLL_COUNTER == 192)
+		        		SCROLL_2 = true;
+		        	if(SCROLL_COUNTER == 128)
+		        		SCROLL_3 = true;
+		        	if(SCROLL_COUNTER == 64)
+		        		SCROLL_4 = true;
+	
+		        	if(SCROLL_COUNTER > 0)
+		        		SCROLL_COUNTER --;
+	/*
+		        	if(getEscapeTicks() > 0 && ESCAPE_DELAY <= 0)
+		        		setEscapeTicks(getEscapeTicks() -2);
+		        	if(getEscapeTicks() * 256 / 1024 < getStaminaTicks() * 256 / 100 && ESCAPE_DELAY <= 0) {
+		        		if(getPassengers().get(0) instanceof EntityBLFishHook) {
+		        			EntityBLFishHook hook = (EntityBLFishHook) getPassengers().get(0);
+		        			if(hook != null && hook.getAngler() != null)
+		        				playAnadiaLostSound(hook.getAngler());
+		        		}
+		        		getPassengers().get(0).dismountRidingEntity(); // this just releases the fish atm
+		        	}
+	*/
+		        	if(SCROLL_1 && getObstruction1Ticks() >= 0) {
+		        		setObstruction1Ticks(getObstruction1Ticks() - 1);
+		        		if(getObstruction1Ticks() <= 0)
+		        			setObstruction1Ticks(256);
+		        		}
+		        	
+		        	if(SCROLL_2 && getObstruction2Ticks() >= 0) {
+		        		setObstruction2Ticks(getObstruction2Ticks() - 1);
+		        		if(getObstruction2Ticks() <= 0)
+		        			setObstruction2Ticks(256);
+		        		}
+		        	
+		        	if(SCROLL_3 && getObstruction3Ticks() >= 0) {
+		        		setObstruction3Ticks(getObstruction3Ticks() - 1);
+		        		if(getObstruction3Ticks() <= 0)
+		        			setObstruction3Ticks(256);
+		        		}
+		        	
+		        	if(SCROLL_4 && getObstruction4Ticks() >= 0) {
+		        		setObstruction4Ticks(getObstruction4Ticks() - 1);
+		        		if(getObstruction4Ticks() <= 0)
+		        			setObstruction4Ticks(256);
+		        		}
+	
+					if (isTreasureFish() && getTreasureTicks() >= 0) {
+						setTreasureTicks(getTreasureTicks() - 1);
+						if (getTreasureTicks() <= 0) {
+							if (getTreasureUnlocked())
+								setIsTreasureFish(false);
+							setTreasureTicks(1024);
+						}
 					}
-				}
-	        }
+		        }
+			}
 		}
 		super.onUpdate();
 	}
@@ -677,18 +679,18 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	public boolean isObstructed() {
 		if(256 - getObstruction1Ticks() <= getStaminaTicks() * 256 / 100 && 256 - getObstruction1Ticks() >= getStaminaTicks() * 256 / 100 - 16 )
 			return true;
-		else if(256 - getObstruction2Ticks() <= getStaminaTicks() * 256 / 100 && 256 - getObstruction2Ticks() >= getStaminaTicks() * 256 / 100 - 16 )
+		else if(256 - getObstruction2Ticks() <= getStaminaTicks() * 256 / 100  && 256 - getObstruction2Ticks() >= getStaminaTicks() * 256 / 100 - 16 )
 			return true;
-		else if(256 - getObstruction3Ticks() <= getStaminaTicks() * 256 / 100 && 256 - getObstruction3Ticks() >= getStaminaTicks() * 256 / 100 - 16 )
+		else if(256 - getObstruction3Ticks() <= getStaminaTicks() * 256 / 100  && 256 - getObstruction3Ticks() >= getStaminaTicks() * 256 / 100 - 16 )
 			return true;
-		else if(256 - getObstruction4Ticks() <= getStaminaTicks() * 256 / 100 && 256 - getObstruction4Ticks() >= getStaminaTicks() * 256 / 100 - 16 )
+		else if(256 - getObstruction4Ticks() <= getStaminaTicks() * 256 / 100  && 256 - getObstruction4Ticks() >= getStaminaTicks() * 256 / 100 - 16 )
 			return true;
 		else
 			return false;
 	}
 
 	public boolean isObstructedTreasure() {
-		return (1024 - getTreasureTicks() <= getStaminaTicks() * 1024 / 100 && 1024 - getTreasureTicks() >= getStaminaTicks() * 1024 / 100 - 16 );
+		return (1024 - getTreasureTicks() <= getStaminaTicks() * 1024 / 100 + 8 && 1024 - getTreasureTicks() >= getStaminaTicks() * 1024 / 100 - 16 );
 	}
 
 	@Override
