@@ -5,22 +5,23 @@ import java.io.IOException;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import thebetweenlands.api.capability.IRuneChainUserCapability;
+import thebetweenlands.api.rune.IBlockTarget;
 import thebetweenlands.api.rune.IRuneChainUser;
+import thebetweenlands.api.rune.IVectorTarget;
 import thebetweenlands.api.rune.impl.RuneConfiguration.InputSerializer;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class InputSerializers {
-	public static final InputSerializer<BlockPos> BLOCK = new InputSerializer<BlockPos>() {
+	public static final InputSerializer<IBlockTarget> BLOCK = new InputSerializer<IBlockTarget>() {
 		@Override
-		public void write(BlockPos obj, PacketBuffer buffer) {
-			buffer.writeLong(obj.toLong());
+		public void write(IBlockTarget obj, PacketBuffer buffer) {
+			buffer.writeLong(obj.block().toLong());
 		}
 
 		@Override
-		public BlockPos read(IRuneChainUser user, PacketBuffer buffer) throws IOException {
-			return BlockPos.fromLong(buffer.readLong());
+		public IBlockTarget read(IRuneChainUser user, PacketBuffer buffer) throws IOException {
+			return new StaticBlockTarget(BlockPos.fromLong(buffer.readLong()));
 		}
 	};
 
@@ -37,7 +38,7 @@ public class InputSerializers {
 	};
 
 	//TODO Replace this with IRuneChainUser
-	public static final InputSerializer<?> USER = new InputSerializer<Object>() {
+	public static final InputSerializer<Object> USER = new InputSerializer<Object>() {
 		@Override
 		public void write(Object obj, PacketBuffer buffer) {
 			if(obj instanceof Entity) {
@@ -65,18 +66,18 @@ public class InputSerializers {
 			return null;
 		}		
 	};
-	
-	public static final InputSerializer<Vec3d> VECTOR = new InputSerializer<Vec3d>() {
+
+	public static final InputSerializer<IVectorTarget> VECTOR = new InputSerializer<IVectorTarget>() {
 		@Override
-		public void write(Vec3d obj, PacketBuffer buffer) {
-			buffer.writeDouble(obj.x);
-			buffer.writeDouble(obj.y);
-			buffer.writeDouble(obj.z);
+		public void write(IVectorTarget obj, PacketBuffer buffer) {
+			buffer.writeDouble(obj.x());
+			buffer.writeDouble(obj.y());
+			buffer.writeDouble(obj.z());
 		}
 
 		@Override
-		public Vec3d read(IRuneChainUser user, PacketBuffer buffer) throws IOException {
-			return new Vec3d(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
+		public IVectorTarget read(IRuneChainUser user, PacketBuffer buffer) throws IOException {
+			return new StaticVectorTarget(buffer.readDouble(), buffer.readDouble(), buffer.readDouble());
 		}		
 	};
 }

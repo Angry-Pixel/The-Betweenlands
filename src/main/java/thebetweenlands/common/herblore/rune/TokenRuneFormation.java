@@ -9,15 +9,17 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.api.rune.IBlockTarget;
 import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.impl.AbstractRune;
+import thebetweenlands.api.rune.impl.ISetter;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneConfiguration.OutputPort;
 import thebetweenlands.api.rune.impl.RuneEffectModifier;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
+import thebetweenlands.api.rune.impl.StaticBlockTarget;
 import thebetweenlands.common.block.misc.BlockBurntScrivenerMark;
 
 public final class TokenRuneFormation extends AbstractRune<TokenRuneFormation> {
@@ -32,12 +34,12 @@ public final class TokenRuneFormation extends AbstractRune<TokenRuneFormation> {
 
 		public static final RuneConfiguration CONFIGURATION;
 
-		private static final OutputPort<Collection<BlockPos>> OUT_POSITIONS;
+		private static final ISetter<Collection<IBlockTarget>> OUT_POSITIONS;
 
 		static {
-			RuneConfiguration.Builder builder = RuneConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.create();
 
-			OUT_POSITIONS = builder.multiOut(RuneTokenDescriptors.BLOCK, BlockPos.class);
+			OUT_POSITIONS = builder.out(RuneTokenDescriptors.BLOCK).type(IBlockTarget.class).collection().setter();
 
 			CONFIGURATION = builder.build();
 		}
@@ -57,7 +59,7 @@ public final class TokenRuneFormation extends AbstractRune<TokenRuneFormation> {
 
 			World world = context.getUser().getWorld();
 
-			List<BlockPos> positions = new ArrayList<>(this.formation.size());
+			List<IBlockTarget> positions = new ArrayList<>(this.formation.size());
 
 			IBlockState blockState;
 
@@ -66,11 +68,11 @@ public final class TokenRuneFormation extends AbstractRune<TokenRuneFormation> {
 					blockState = world.getBlockState(block);
 
 					if(blockState.getBlock() instanceof BlockBurntScrivenerMark && blockState.getValue(BlockBurntScrivenerMark.LINKED)) {
-						positions.add(block);
+						positions.add(new StaticBlockTarget(block));
 					}
 				}
 			}
-
+			
 			OUT_POSITIONS.set(io, positions);
 
 			io.schedule(scheduler -> {

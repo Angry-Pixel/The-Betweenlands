@@ -27,7 +27,7 @@ public final class InitiateRuneWater extends AbstractRune<InitiateRuneWater> {
 		public static final RuneConfiguration CONFIGURATION_1;
 
 		static {
-			RuneConfiguration.Builder builder = RuneConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.create();
 
 			CONFIGURATION_1 = builder.build();
 		}

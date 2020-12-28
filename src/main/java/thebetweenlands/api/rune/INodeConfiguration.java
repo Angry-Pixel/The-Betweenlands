@@ -12,26 +12,25 @@ public interface INodeConfiguration {
 		 * Returns the class of the type
 		 * @return class of the type
 		 */
-		public Class<?> getTypeClass();
-
+		public Class<?> getJavaType();
+		
 		/**
 		 * Returns the generic types of the type. These are optional and if not
-		 * specified, i.e. returning an empty list, no generic type checks will be done by {@link IConfigurationInput#test(IConfigurationOutput, IType)}.
+		 * specified, i.e. returning an empty list, no generic type checks will be done by {@link IConfigurationInput#isType(IConfigurationOutput, IType)}.
 		 * @return generic types of the type
 		 */
 		public List<IType> getTypeGenerics();
 	}
 
-	public static interface IConfigurationInput extends BiPredicate<IConfigurationOutput, IType> {
+	public static interface IConfigurationInput {
 		/**
 		 * Returns whether the specified configuration output and its output type are applicable to this input.
 		 * @param output configuration output to check
 		 * @param type type of the configuration output to check. The generic types {@link IType#getTypeGenerics()} are optional and
-		 * if not specified the predicate <b>must not</b> do any checks for the generic types.
+		 * if not specified this method <b>must not</b> do any checks for the generic types.
 		 * @return whether the specified type is applicable to this input
 		 */
-		@Override
-		public boolean test(IConfigurationOutput output, IType type);
+		public boolean isType(IConfigurationOutput output, IType type);
 
 		/**
 		 * Returns whether this input accepts multiple values of the input's type at once
@@ -48,6 +47,13 @@ public interface INodeConfiguration {
 		 */
 		@Nullable
 		public String getDescriptor();
+		
+		/**
+		 * Returns if the given input value is valid for this input, false otherwise.
+		 * @param value input value to check
+		 * @return whether the given input value is valid
+		 */
+		public boolean validate(Object value);
 	}
 
 	public static interface IConfigurationOutput {
@@ -87,6 +93,13 @@ public interface INodeConfiguration {
 		 */
 		@Nullable
 		public String getDescriptor();
+		
+		/**
+		 * Returns if the given output value is valid for this output, false otherwise.
+		 * @param value output value to check
+		 * @return whether the given output value is valid
+		 */
+		public boolean validate(Object value);
 	}
 
 	/**

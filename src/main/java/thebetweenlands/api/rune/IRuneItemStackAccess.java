@@ -4,13 +4,11 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import thebetweenlands.api.rune.impl.RuneItemStackAccessInventory;
 
-public interface IRuneItemStackAccess extends IInventory {
+public interface IRuneItemStackAccess {
 	/**
 	 * Returns the inventory slot that this access refers to. May be null if unknown or if no such inventory or slot exists.
 	 * Access must not happen through the delegated inventory and may throw an exception.
@@ -63,105 +61,7 @@ public interface IRuneItemStackAccess extends IInventory {
 	 */
 	public boolean isItemValid(ItemStack stack);
 
-	@Override
-	public default void clear() {
-		this.set(ItemStack.EMPTY);
+	public default IInventory inventory() {
+		return new RuneItemStackAccessInventory(this);
 	}
-
-	@Override
-	public default void closeInventory(EntityPlayer player) { }
-
-	@Override
-	public default void openInventory(EntityPlayer player) { }
-
-	@Override
-	public default ItemStack decrStackSize(int index, int count) {
-		if(index == 0) {
-			return this.remove(count);
-		}
-		return ItemStack.EMPTY;
-	}
-
-	@Override
-	public default String getName() {
-		return "Rune Item Stack Access";
-	}
-
-	@Override
-	public default ITextComponent getDisplayName() {
-		return new TextComponentString(this.getName());
-	}
-
-	@Override
-	public default boolean hasCustomName() {
-		return false;
-	}
-
-	@Override
-	public default int getField(int id) {
-		return 0;
-	}
-
-	@Override
-	public default int getFieldCount() {
-		return 0;
-	}
-
-	@Override
-	public default void setField(int id, int value) { }
-
-	@Override
-	public default int getInventoryStackLimit() {
-		return 64;
-	}
-
-	@Override
-	public default int getSizeInventory() {
-		return 1;
-	}
-
-	@Override
-	public default void setInventorySlotContents(int index, ItemStack stack) {
-		if(index == 0) {
-			this.set(stack);
-		}
-	}
-
-	@Override
-	public default ItemStack getStackInSlot(int index) {
-		if(index == 0) {
-			return this.get();
-		}
-		return ItemStack.EMPTY;
-	}
-
-	@Override
-	public default ItemStack removeStackFromSlot(int index) {
-		ItemStack result = this.get();
-		if(this.set(ItemStack.EMPTY)) {
-			return result;
-		}
-		return null;
-	}
-
-	@Override
-	public default boolean isEmpty() {
-		return this.get().isEmpty();
-	}
-
-	@Override
-	public default boolean isItemValidForSlot(int index, ItemStack stack) {
-		if(index == 0) {
-			return this.isItemValid(stack);
-		}
-		return false;
-	}
-
-	@Override
-	public default boolean isUsableByPlayer(EntityPlayer player) {
-		return true;
-	}
-
-	@Override
-	public default void markDirty() { }
 }

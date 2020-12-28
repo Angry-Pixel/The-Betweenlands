@@ -5,17 +5,17 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import thebetweenlands.api.rune.IBlockTarget;
 import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.IRuneChainUser;
 import thebetweenlands.api.rune.IRuneEffect;
+import thebetweenlands.api.rune.IVectorTarget;
 import thebetweenlands.api.rune.impl.AbstractRune;
+import thebetweenlands.api.rune.impl.IGetter;
 import thebetweenlands.api.rune.impl.InputSerializers;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneConfiguration.InputPort;
 import thebetweenlands.api.rune.impl.RuneEffectModifier;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
@@ -32,30 +32,30 @@ public final class RuneEnforcing extends AbstractRune<RuneEnforcing> {
 		}
 
 		public static final RuneConfiguration CONFIGURATION_1;
-		private static final InputPort<?> IN_ENTITY_1;
-		private static final InputPort<IRuneEffect> IN_EFFECT_1;
+		private static final IGetter<?> IN_ENTITY_1;
+		private static final IGetter<IRuneEffect> IN_EFFECT_1;
 
 		public static final RuneConfiguration CONFIGURATION_2;
-		private static final InputPort<Vec3d> IN_POSITION_2;
-		private static final InputPort<IRuneEffect> IN_EFFECT_2;
+		private static final IGetter<IVectorTarget> IN_POSITION_2;
+		private static final IGetter<IRuneEffect> IN_EFFECT_2;
 
 		public static final RuneConfiguration CONFIGURATION_3;
-		private static final InputPort<BlockPos> IN_BLOCK_3;
-		private static final InputPort<IRuneEffect> IN_EFFECT_3;
+		private static final IGetter<IBlockTarget> IN_BLOCK_3;
+		private static final IGetter<IRuneEffect> IN_EFFECT_3;
 
 		static {
-			RuneConfiguration.Builder builder = RuneConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.create();
 
-			IN_ENTITY_1 = builder.in(RuneTokenDescriptors.ENTITY, InputSerializers.USER, Entity.class, IRuneChainUser.class); //TODO Needs custom serializer
-			IN_EFFECT_1 = builder.in(RuneTokenDescriptors.EFFECT, null, IRuneEffect.class);
+			IN_ENTITY_1 = builder.in(RuneTokenDescriptors.ENTITY).type(Entity.class, IRuneChainUser.class).serializer(InputSerializers.USER).getter(); //TODO Needs custom serializer
+			IN_EFFECT_1 = builder.in(RuneTokenDescriptors.EFFECT).type(IRuneEffect.class).getter();
 			CONFIGURATION_1 = builder.build();
 
-			IN_POSITION_2 = builder.in(RuneTokenDescriptors.POSITION, InputSerializers.VECTOR, Vec3d.class);
-			IN_EFFECT_2 = builder.in(RuneTokenDescriptors.EFFECT, null, IRuneEffect.class);
+			IN_POSITION_2 = builder.in(RuneTokenDescriptors.POSITION).type(IVectorTarget.class).serializer(InputSerializers.VECTOR).getter();
+			IN_EFFECT_2 = builder.in(RuneTokenDescriptors.EFFECT).type(IRuneEffect.class).getter();
 			CONFIGURATION_2 = builder.build();
 
-			IN_BLOCK_3 = builder.in(RuneTokenDescriptors.BLOCK, InputSerializers.BLOCK, BlockPos.class);
-			IN_EFFECT_3 = builder.in(RuneTokenDescriptors.EFFECT, null, IRuneEffect.class);
+			IN_BLOCK_3 = builder.in(RuneTokenDescriptors.BLOCK).type(IBlockTarget.class).serializer(InputSerializers.BLOCK).getter();
+			IN_EFFECT_3 = builder.in(RuneTokenDescriptors.EFFECT).type(IRuneEffect.class).getter();
 			CONFIGURATION_3 = builder.build();
 		}
 
@@ -88,10 +88,10 @@ public final class RuneEnforcing extends AbstractRune<RuneEnforcing> {
 				});
 			} else if(state.getConfiguration() == CONFIGURATION_2 && IN_POSITION_2.get(io) != null) {
 				IRuneEffect effect = IN_EFFECT_2.get(io);
-				effect.apply(context.getUser().getWorld(), IN_POSITION_2.get(io));
+				effect.apply(context.getUser().getWorld(), IN_POSITION_2.get(io).vec());
 			} else if(state.getConfiguration() == CONFIGURATION_3 && IN_BLOCK_3.get(io) != null) {
 				IRuneEffect effect = IN_EFFECT_3.get(io);
-				effect.apply(context.getUser().getWorld(), IN_BLOCK_3.get(io));
+				effect.apply(context.getUser().getWorld(), IN_BLOCK_3.get(io).block());
 			}
 
 			return null;
@@ -100,11 +100,11 @@ public final class RuneEnforcing extends AbstractRune<RuneEnforcing> {
 		@Override
 		protected boolean isDelegatingRuneEffectModifier(RuneEnforcing state, AbstractRune<?> target, AbstractRune<?> outputRune, int inputIndex) {
 			if(state.getConfiguration() == CONFIGURATION_1) {
-				return inputIndex == IN_EFFECT_1.getIndex();
+				return inputIndex == IN_EFFECT_1.index();
 			} else if(state.getConfiguration() == CONFIGURATION_2) {
-				return inputIndex == IN_EFFECT_2.getIndex();
+				return inputIndex == IN_EFFECT_2.index();
 			} else {
-				return inputIndex == IN_EFFECT_3.getIndex();
+				return inputIndex == IN_EFFECT_3.index();
 			}
 		}
 	}

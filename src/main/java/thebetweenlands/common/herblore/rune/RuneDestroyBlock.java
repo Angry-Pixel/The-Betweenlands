@@ -5,15 +5,14 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.util.math.BlockPos;
+import thebetweenlands.api.rune.IBlockTarget;
 import thebetweenlands.api.rune.INodeComposition;
-import thebetweenlands.api.rune.INodeCompositionBlueprint;
 import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.INodeBlueprint.IConfigurationLinkAccess;
 import thebetweenlands.api.rune.impl.AbstractRune;
+import thebetweenlands.api.rune.impl.IGetter;
 import thebetweenlands.api.rune.impl.InputSerializers;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneConfiguration.InputPort;
 import thebetweenlands.api.rune.impl.RuneEffectModifier;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
@@ -31,12 +30,12 @@ public final class RuneDestroyBlock extends AbstractRune<RuneDestroyBlock> {
 
 		public static final RuneConfiguration CONFIGURATION_1;
 
-		private static final InputPort<BlockPos> IN_POSITION;
+		private static final IGetter<IBlockTarget> IN_POSITION;
 
 		static {
-			RuneConfiguration.Builder builder = RuneConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.create();
 
-			IN_POSITION = builder.in(RuneTokenDescriptors.BLOCK, InputSerializers.BLOCK, BlockPos.class);
+			IN_POSITION = builder.in(RuneTokenDescriptors.BLOCK).type(IBlockTarget.class).serializer(InputSerializers.BLOCK).getter();
 
 			CONFIGURATION_1 = builder.build();
 		}
@@ -55,7 +54,7 @@ public final class RuneDestroyBlock extends AbstractRune<RuneDestroyBlock> {
 		protected RuneEffectModifier.Subject activate(RuneDestroyBlock state, RuneExecutionContext context, INodeIO io) {
 
 			if (state.getConfiguration() == CONFIGURATION_1) {
-				BlockPos position = IN_POSITION.get(io);
+				BlockPos position = IN_POSITION.get(io).block();
 
 				context.getUser().getWorld().setBlockToAir(position);
 			}

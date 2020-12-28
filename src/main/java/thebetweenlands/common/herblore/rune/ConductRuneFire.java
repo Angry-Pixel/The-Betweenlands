@@ -13,16 +13,17 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import thebetweenlands.api.rune.IBlockTarget;
 import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.IRuneChainUser;
 import thebetweenlands.api.rune.IRuneEffect;
 import thebetweenlands.api.rune.impl.AbstractRune;
+import thebetweenlands.api.rune.impl.IGetter;
+import thebetweenlands.api.rune.impl.ISetter;
 import thebetweenlands.api.rune.impl.InputSerializers;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneConfiguration.InputPort;
-import thebetweenlands.api.rune.impl.RuneConfiguration.OutputPort;
 import thebetweenlands.api.rune.impl.RuneEffectModifier;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
@@ -39,13 +40,13 @@ public final class ConductRuneFire extends AbstractRune<ConductRuneFire> {
 		}
 
 		public static final RuneConfiguration CONFIGURATION_1;
-		private static final InputPort<BlockPos> IN_POSITION_1;
+		private static final IGetter<IBlockTarget> IN_POSITION_1;
 
 		public static final RuneConfiguration CONFIGURATION_2;
-		private static final InputPort<Entity> IN_ENTITY_2;
+		private static final IGetter<Entity> IN_ENTITY_2;
 
 		public static final RuneConfiguration CONFIGURATION_3;
-		private static final OutputPort<IRuneEffect> OUT_EFFECT_3;
+		private static final ISetter<IRuneEffect> OUT_EFFECT_3;
 
 		private static final IRuneEffect FIRE_EFFECT = new IRuneEffect() {
 			@Override
@@ -83,15 +84,15 @@ public final class ConductRuneFire extends AbstractRune<ConductRuneFire> {
 		};
 
 		static {
-			RuneConfiguration.Builder builder = RuneConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.create();
 
-			IN_POSITION_1 = builder.in(RuneTokenDescriptors.BLOCK, InputSerializers.BLOCK, BlockPos.class);
+			IN_POSITION_1 = builder.in(RuneTokenDescriptors.BLOCK).type(IBlockTarget.class).serializer(InputSerializers.BLOCK).getter();
 			CONFIGURATION_1 = builder.build();
 
-			IN_ENTITY_2 = builder.in(RuneTokenDescriptors.ENTITY, InputSerializers.ENTITY, Entity.class);
+			IN_ENTITY_2 = builder.in(RuneTokenDescriptors.ENTITY).type(Entity.class).serializer(InputSerializers.ENTITY).getter();
 			CONFIGURATION_2 = builder.build();
 
-			OUT_EFFECT_3 = builder.out(RuneTokenDescriptors.EFFECT, IRuneEffect.class);
+			OUT_EFFECT_3 = builder.out(RuneTokenDescriptors.EFFECT).type(IRuneEffect.class).setter();
 			CONFIGURATION_3 = builder.build();
 		}
 
@@ -109,7 +110,7 @@ public final class ConductRuneFire extends AbstractRune<ConductRuneFire> {
 		protected RuneEffectModifier.Subject activate(ConductRuneFire state, RuneExecutionContext context, INodeIO io) {
 
 			if(state.getConfiguration() == CONFIGURATION_1 && IN_POSITION_1.get(io) != null) {
-				FIRE_EFFECT.apply(context.getUser().getWorld(), IN_POSITION_1.get(io));
+				FIRE_EFFECT.apply(context.getUser().getWorld(), IN_POSITION_1.get(io).block());
 			} else if(state.getConfiguration() == CONFIGURATION_2 && IN_ENTITY_2.get(io) != null) {
 				FIRE_EFFECT.apply(context.getUser().getWorld(), IN_ENTITY_2.get(io));
 			} else if(state.getConfiguration() == CONFIGURATION_3) {
@@ -175,7 +176,7 @@ public final class ConductRuneFire extends AbstractRune<ConductRuneFire> {
 		@Override
 		protected boolean isDelegatedRuneEffectModifier(ConductRuneFire state, AbstractRune<?> target, AbstractRune<?> inputRune, int outputIndex) {
 			if(state.getConfiguration() == CONFIGURATION_3) {
-				return outputIndex == OUT_EFFECT_3.getIndex();
+				return outputIndex == OUT_EFFECT_3.index();
 			}
 			return false;
 		}

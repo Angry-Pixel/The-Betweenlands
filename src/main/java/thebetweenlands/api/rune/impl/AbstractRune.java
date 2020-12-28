@@ -230,13 +230,13 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 				Vec3d vector = subject.getPosition();
 				buffer.writeBoolean(entity == null && vector != null);
 				if(entity == null && vector != null) {
-					InputSerializers.VECTOR.write(vector, buffer);
+					InputSerializers.VECTOR.write(new StaticVectorTarget(vector), buffer);
 				}
 
 				BlockPos block = subject.getBlock();
 				buffer.writeBoolean(block != null);
 				if(block != null) {
-					InputSerializers.BLOCK.write(block, buffer);
+					InputSerializers.BLOCK.write(new StaticBlockTarget(block), buffer);
 				}
 
 				buffer.writeBoolean(entity != null);
@@ -261,12 +261,12 @@ public abstract class AbstractRune<T extends AbstractRune<T>> implements INode<T
 			if(buffer.readBoolean()) {
 				Vec3d position = null;
 				if(buffer.readBoolean()) {
-					position = InputSerializers.VECTOR.read(user, buffer);
+					position = InputSerializers.VECTOR.read(user, buffer).vec();
 				}
 
 				BlockPos block = null;
 				if(buffer.readBoolean()) {
-					block = InputSerializers.BLOCK.read(user, buffer);
+					block = InputSerializers.BLOCK.read(user, buffer).block();
 				}
 
 				Entity entity = null;

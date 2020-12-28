@@ -8,16 +8,15 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import thebetweenlands.api.rune.IBlockTarget;
 import thebetweenlands.api.rune.INodeComposition;
-import thebetweenlands.api.rune.INodeCompositionBlueprint;
 import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.INodeBlueprint.IConfigurationLinkAccess;
 import thebetweenlands.api.rune.impl.AbstractRune;
+import thebetweenlands.api.rune.impl.IGetter;
+import thebetweenlands.api.rune.impl.ISetter;
 import thebetweenlands.api.rune.impl.InputSerializers;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneConfiguration.InputPort;
-import thebetweenlands.api.rune.impl.RuneConfiguration.OutputPort;
 import thebetweenlands.api.rune.impl.RuneEffectModifier;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
@@ -36,20 +35,20 @@ public final class RuneMarkNearby extends AbstractRune<RuneMarkNearby> {
 		public static final RuneConfiguration CONFIGURATION_1;
 		public static final RuneConfiguration CONFIGURATION_2;
 
-		private static final InputPort<BlockPos> IN_POSITION_2;
-		private static final OutputPort<Collection<Entity>> OUT_ENTITIES_2;
+		private static final IGetter<IBlockTarget> IN_POSITION_2;
+		private static final ISetter<Collection<Entity>> OUT_ENTITIES_2;
 
-		private static final OutputPort<Collection<Entity>> OUT_ENTITIES;
+		private static final ISetter<Collection<Entity>> OUT_ENTITIES;
 
 		static {
-			RuneConfiguration.Builder builder = RuneConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.create();
 
-			OUT_ENTITIES = builder.multiOut(RuneTokenDescriptors.ENTITY, Entity.class);
+			OUT_ENTITIES = builder.out(RuneTokenDescriptors.ENTITY).type(Entity.class).collection().setter();
 
 			CONFIGURATION_1 = builder.build();
 
-			IN_POSITION_2 = builder.in(RuneTokenDescriptors.BLOCK, InputSerializers.BLOCK, BlockPos.class);
-			OUT_ENTITIES_2 = builder.multiOut(RuneTokenDescriptors.ENTITY, Entity.class);
+			IN_POSITION_2 = builder.in(RuneTokenDescriptors.BLOCK).type(IBlockTarget.class).serializer(InputSerializers.BLOCK).getter();
+			OUT_ENTITIES_2 = builder.out(RuneTokenDescriptors.ENTITY).type(Entity.class).collection().setter();
 
 			CONFIGURATION_2 = builder.build();
 		}
@@ -73,7 +72,7 @@ public final class RuneMarkNearby extends AbstractRune<RuneMarkNearby> {
 				
 				OUT_ENTITIES.set(io, context.getUser().getWorld().getEntitiesWithinAABB(Entity.class, aabb));
 			} else {
-				BlockPos center = IN_POSITION_2.get(io);
+				BlockPos center = IN_POSITION_2.get(io).block();
 
 				int range = 6;
 				AxisAlignedBB aabb = new AxisAlignedBB(center).grow(range);

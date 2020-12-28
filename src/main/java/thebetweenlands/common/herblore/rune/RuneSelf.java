@@ -5,14 +5,12 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import thebetweenlands.api.rune.INodeComposition;
-import thebetweenlands.api.rune.INodeCompositionBlueprint;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.IRuneChainUser;
-import thebetweenlands.api.rune.INodeBlueprint.IConfigurationLinkAccess;
 import thebetweenlands.api.rune.impl.AbstractRune;
+import thebetweenlands.api.rune.impl.ISetter;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneConfiguration.OutputPort;
 import thebetweenlands.api.rune.impl.RuneEffectModifier;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
@@ -29,12 +27,12 @@ public final class RuneSelf extends AbstractRune<RuneSelf> {
 
 		public static final RuneConfiguration CONFIGURATION_1;
 
-		private static final OutputPort<IRuneChainUser> OUT_ENTITY;
+		private static final ISetter<IRuneChainUser> OUT_ENTITY;
 
 		static {
-			RuneConfiguration.Builder builder = RuneConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.create();
 
-			OUT_ENTITY = builder.out(RuneTokenDescriptors.ENTITY, IRuneChainUser.class);
+			OUT_ENTITY = builder.out(RuneTokenDescriptors.ENTITY).type(IRuneChainUser.class).setter();
 
 			CONFIGURATION_1 = builder.build();
 		}

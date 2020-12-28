@@ -19,7 +19,7 @@ public final class NodeDummy implements INode<NodeDummy, RuneExecutionContext> {
 		public static final INodeConfiguration CONFIGURATION;
 
 		static {
-			RuneConfiguration.Builder builder = RuneConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.create();
 			CONFIGURATION = builder.build();
 		}
 

@@ -14,10 +14,10 @@ import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.INodeConfiguration.IConfigurationOutput;
 import thebetweenlands.api.rune.impl.AbstractRune;
+import thebetweenlands.api.rune.impl.InputKey;
+import thebetweenlands.api.rune.impl.OutputKey;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneConfiguration.InputPort;
-import thebetweenlands.api.rune.impl.RuneConfiguration.OutputPort;
 import thebetweenlands.api.rune.impl.RuneEffectModifier;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
@@ -36,14 +36,14 @@ public final class RuneCollecting extends AbstractRune<RuneCollecting> {
 		@Override
 		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess, boolean provisional) {
 
-			RuneConfiguration.Builder builder = RuneConfiguration.builder(RuneTokenDescriptors.ANY);
+			RuneConfiguration.Builder builder = RuneConfiguration.create(RuneTokenDescriptors.ANY);
 
 			ResourceLocation descriptor = RuneTokenDescriptors.ANY;
 
-			InputPort<Object> baseInput = null;
+			InputKey<?, ?> baseInput = null;
 
 			if(linkAccess != null) {
-				OutputPort<?> linkedOutputPort = null;
+				OutputKey<?, ?> linkedOutputPort = null;
 				int numInputs = 0;
 
 				for(int i = 0; i < 9; i++) {
@@ -52,30 +52,30 @@ public final class RuneCollecting extends AbstractRune<RuneCollecting> {
 					if(linkedOutput != null) {
 						numInputs = i + 1;
 
-						if(linkedOutput instanceof OutputPort) {
-							linkedOutputPort = (OutputPort<?>) linkedOutput;
+						if(linkedOutput instanceof OutputKey) {
+							linkedOutputPort = (OutputKey<?, ?>) linkedOutput;
 						}
 					}
 				}
 
 				if(linkedOutputPort != null) {
-					baseInput = builder.in(Object.class, linkedOutputPort);
+					baseInput = builder.in(linkedOutputPort.getDescriptor()).type(linkedOutputPort).key();
 
 					//TODO Temporary for testing
 					String[] split = linkedOutputPort.getDescriptor().split("\\.");
 					descriptor = new ResourceLocation(split[0], split[1]);
 
 					for(int i = 0; i < Math.min(numInputs + (provisional ? 0 : -1), 8); i++) {
-						builder.in(Object.class, linkedOutputPort);
+						builder.in(linkedOutputPort.getDescriptor()).type(linkedOutputPort).register();
 					}
 				}
 			}
 
 			if(baseInput == null) {
-				baseInput = builder.in(descriptor, null, Object.class);
+				baseInput = builder.in(descriptor).type(Object.class).key();
 			}
 
-			builder.multiOutFromIn(Object.class, baseInput);
+			builder.out(baseInput.getDescriptor()).type(baseInput).collection().register();
 
 			return ImmutableList.of(builder.build());
 		}

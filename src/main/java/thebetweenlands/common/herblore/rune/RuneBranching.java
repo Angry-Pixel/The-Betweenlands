@@ -31,18 +31,18 @@ public final class RuneBranching extends AbstractRune<RuneBranching> {
 		public static final RuneConfiguration CONFIGURATION_3;
 
 		static {
-			RuneConfiguration.Builder builder = RuneConfiguration.builder(RuneTokenDescriptors.ANY);
+			RuneConfiguration.Builder builder = RuneConfiguration.create(RuneTokenDescriptors.ANY);
 
-			builder.in(RuneTokenDescriptors.ANY, null, Object.class);
+			builder.in(RuneTokenDescriptors.ANY).type(Object.class).getter();
 			CONFIGURATION_1 = builder.build();
 
-			builder.in(RuneTokenDescriptors.ANY, null, Object.class);
-			builder.in(RuneTokenDescriptors.ANY, null, Object.class);
+			builder.in(RuneTokenDescriptors.ANY).type(Object.class).getter();
+			builder.in(RuneTokenDescriptors.ANY).type(Object.class).getter();
 			CONFIGURATION_2 = builder.build();
 
-			builder.in(RuneTokenDescriptors.ANY, null, Object.class);
-			builder.in(RuneTokenDescriptors.ANY, null, Object.class);
-			builder.in(RuneTokenDescriptors.ANY, null, Object.class);
+			builder.in(RuneTokenDescriptors.ANY).type(Object.class).getter();
+			builder.in(RuneTokenDescriptors.ANY).type(Object.class).getter();
+			builder.in(RuneTokenDescriptors.ANY).type(Object.class).getter();
 			CONFIGURATION_3 = builder.build();
 		}
 

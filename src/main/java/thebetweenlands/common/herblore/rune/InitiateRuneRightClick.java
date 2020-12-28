@@ -11,9 +11,9 @@ import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.IRuneChainUser;
 import thebetweenlands.api.rune.impl.AbstractRune;
+import thebetweenlands.api.rune.impl.ISetter;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneConfiguration.OutputPort;
 import thebetweenlands.api.rune.impl.RuneEffectModifier;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
@@ -31,18 +31,18 @@ public final class InitiateRuneRightClick extends AbstractRune<InitiateRuneRight
 		public static final RuneConfiguration CONFIGURATION_1;
 
 		public static final RuneConfiguration CONFIGURATION_2;
-		public static final OutputPort<BlockPos> BLOCK_2;
-		public static final OutputPort<Vec3d> POSITION_2;
-		public static final OutputPort<Vec3d> DIRECTION_2;
+		public static final ISetter<BlockPos> BLOCK_2;
+		public static final ISetter<Vec3d> POSITION_2;
+		public static final ISetter<Vec3d> DIRECTION_2;
 
 		static {
-			RuneConfiguration.Builder builder = RuneConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.create();
 
 			CONFIGURATION_1 = builder.build();
 
-			BLOCK_2 = builder.out(RuneTokenDescriptors.BLOCK, BlockPos.class);
-			POSITION_2 = builder.out(RuneTokenDescriptors.POSITION, Vec3d.class);
-			DIRECTION_2 = builder.out(RuneTokenDescriptors.DIRECTION, Vec3d.class);
+			BLOCK_2 = builder.out(RuneTokenDescriptors.BLOCK).type(BlockPos.class).setter();
+			POSITION_2 = builder.out(RuneTokenDescriptors.POSITION).type(Vec3d.class).setter();
+			DIRECTION_2 = builder.out(RuneTokenDescriptors.DIRECTION).type(Vec3d.class).setter();
 			CONFIGURATION_2 = builder.build();
 		}
 

@@ -75,7 +75,7 @@ public class RuneEffectModifier {
 		 * @return
 		 */
 		public boolean isActive() {
-			return this.getPosition() != null || this.getBlock() != null || this.getEntity() != null;
+			return this.position != null || this.block != null || (this.entity != null && !this.entity.isDead);
 		}
 	}
 
@@ -175,6 +175,11 @@ public class RuneEffectModifier {
 		 * Whether the renderer should be rendered at a fixed position and not move
 		 */
 		public boolean fixed = false;
+		
+		/**
+		 * Whether the renderer should be emissive/glow
+		 */
+		public boolean emissive = false;
 	}
 
 	public static class RenderState {

@@ -293,7 +293,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 							List<Entry<IConfigurationOutput, IType>> validOutputTypes = this.getValidOutputTypes(outNodeIndex, outputIndex);
 
 							for(Entry<IConfigurationOutput, IType> outputType : validOutputTypes) {
-								if(input.test(outputType.getKey(), outputType.getValue())) {
+								if(input.isType(outputType.getKey(), outputType.getValue())) {
 									return true;
 								}
 							}
@@ -375,7 +375,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 							if(link.getOutput() < outputs.size()) {
 								List<Entry<IConfigurationOutput, IType>> validOutputTypes = this.getValidOutputTypes(link.getNode(), link.getOutput());
 								for(Entry<IConfigurationOutput, IType> outputType : validOutputTypes) {
-									if(input.test(outputType.getKey(), outputType.getValue())) {
+									if(input.isType(outputType.getKey(), outputType.getValue())) {
 										validOutputConfiguration = true;
 										break;
 									}

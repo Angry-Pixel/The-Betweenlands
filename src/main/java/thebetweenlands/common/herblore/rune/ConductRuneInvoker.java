@@ -28,15 +28,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
+import thebetweenlands.api.rune.IBlockTarget;
 import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.IRuneChainUser;
 import thebetweenlands.api.rune.IRuneItemStackAccess;
+import thebetweenlands.api.rune.IVectorTarget;
 import thebetweenlands.api.rune.impl.AbstractRune;
+import thebetweenlands.api.rune.impl.IGetter;
 import thebetweenlands.api.rune.impl.InputSerializers;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneConfiguration.InputPort;
 import thebetweenlands.api.rune.impl.RuneEffectModifier;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
@@ -55,34 +57,34 @@ public final class ConductRuneInvoker extends AbstractRune<ConductRuneInvoker> {
 		}
 
 		public static final RuneConfiguration CONFIGURATION_1;
-		private static final InputPort<IRuneItemStackAccess> IN_ITEM_1;
-		private static final InputPort<BlockPos> IN_POSITION_1;
-		private static final InputPort<Vec3d> IN_DIRECTION_1;
+		private static final IGetter<IRuneItemStackAccess> IN_ITEM_1;
+		private static final IGetter<IBlockTarget> IN_POSITION_1;
+		private static final IGetter<IVectorTarget> IN_DIRECTION_1;
 
 		public static final RuneConfiguration CONFIGURATION_2;
-		private static final InputPort<IRuneItemStackAccess> IN_ITEM_2;
-		private static final InputPort<Vec3d> IN_POSITION_2;
-		private static final InputPort<Vec3d> IN_DIRECTION_2;
+		private static final IGetter<IRuneItemStackAccess> IN_ITEM_2;
+		private static final IGetter<IVectorTarget> IN_POSITION_2;
+		private static final IGetter<IVectorTarget> IN_DIRECTION_2;
 
 		public static final RuneConfiguration CONFIGURATION_3;
-		private static final InputPort<IRuneItemStackAccess> IN_ITEM_3;
-		private static final InputPort<Entity> IN_ENTITY_3;
+		private static final IGetter<IRuneItemStackAccess> IN_ITEM_3;
+		private static final IGetter<Entity> IN_ENTITY_3;
 
 		static {
-			RuneConfiguration.Builder builder = RuneConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.create();
 
-			IN_ITEM_1 = builder.in(RuneTokenDescriptors.ITEM, null, IRuneItemStackAccess.class);
-			IN_POSITION_1 = builder.in(RuneTokenDescriptors.BLOCK, InputSerializers.BLOCK, BlockPos.class);
-			IN_DIRECTION_1 = builder.in(RuneTokenDescriptors.DIRECTION, InputSerializers.VECTOR, Vec3d.class);
+			IN_ITEM_1 = builder.in(RuneTokenDescriptors.ITEM).type(IRuneItemStackAccess.class).getter();
+			IN_POSITION_1 = builder.in(RuneTokenDescriptors.BLOCK).type(IBlockTarget.class).serializer(InputSerializers.BLOCK).getter();
+			IN_DIRECTION_1 = builder.in(RuneTokenDescriptors.DIRECTION).type(IVectorTarget.class).serializer(InputSerializers.VECTOR).getter();
 			CONFIGURATION_1 = builder.build();
 
-			IN_ITEM_2 = builder.in(RuneTokenDescriptors.ITEM, null, IRuneItemStackAccess.class);
-			IN_POSITION_2 = builder.in(RuneTokenDescriptors.POSITION, InputSerializers.VECTOR, Vec3d.class);
-			IN_DIRECTION_2 = builder.in(RuneTokenDescriptors.DIRECTION, InputSerializers.VECTOR, Vec3d.class);
+			IN_ITEM_2 = builder.in(RuneTokenDescriptors.ITEM).type(IRuneItemStackAccess.class).getter();
+			IN_POSITION_2 = builder.in(RuneTokenDescriptors.POSITION).type(IVectorTarget.class).serializer(InputSerializers.VECTOR).getter();
+			IN_DIRECTION_2 = builder.in(RuneTokenDescriptors.DIRECTION).type(IVectorTarget.class).serializer(InputSerializers.VECTOR).getter();
 			CONFIGURATION_2 = builder.build();
 
-			IN_ITEM_3 = builder.in(RuneTokenDescriptors.ITEM, null, IRuneItemStackAccess.class);
-			IN_ENTITY_3 = builder.in(RuneTokenDescriptors.ENTITY, InputSerializers.ENTITY, Entity.class);
+			IN_ITEM_3 = builder.in(RuneTokenDescriptors.ITEM).type(IRuneItemStackAccess.class).getter();
+			IN_ENTITY_3 = builder.in(RuneTokenDescriptors.ENTITY).type(Entity.class).serializer(InputSerializers.ENTITY).getter();
 			CONFIGURATION_3 = builder.build();
 		}
 
@@ -235,8 +237,8 @@ public final class ConductRuneInvoker extends AbstractRune<ConductRuneInvoker> {
 				if(state.getConfiguration() == CONFIGURATION_1) {
 					IRuneItemStackAccess access = IN_ITEM_1.get(io);
 
-					BlockPos block = IN_POSITION_1.get(io);
-					Pair<Float, Float> rotations = getRotationsFromDir(IN_DIRECTION_1.get(io));
+					BlockPos block = IN_POSITION_1.get(io).block();
+					Pair<Float, Float> rotations = getRotationsFromDir(IN_DIRECTION_1.get(io).vec());
 
 					this.invokeImmediateUse(io, user, access, delegate, new Vec3d(block.getX() + 0.5f, block.getY() + 0.5f, block.getZ() + 0.5f), rotations.getLeft(), rotations.getRight(), d -> {
 						ItemStack stack = delegate.getHeldItemMainhand();
@@ -249,8 +251,8 @@ public final class ConductRuneInvoker extends AbstractRune<ConductRuneInvoker> {
 				} else if(state.getConfiguration() == CONFIGURATION_2) {
 					IRuneItemStackAccess access = IN_ITEM_2.get(io);
 
-					Vec3d pos = IN_POSITION_2.get(io);
-					Pair<Float, Float> rotations = getRotationsFromDir(IN_DIRECTION_2.get(io));
+					Vec3d pos = IN_POSITION_2.get(io).vec();
+					Pair<Float, Float> rotations = getRotationsFromDir(IN_DIRECTION_2.get(io).vec());
 
 					this.invokeContinuousUse(io, user, access, delegate, pos, rotations.getLeft(), rotations.getRight(), (d, i) -> {
 						ItemStack stack = delegate.getHeldItemMainhand();
@@ -336,11 +338,11 @@ public final class ConductRuneInvoker extends AbstractRune<ConductRuneInvoker> {
 		@Override
 		protected boolean isDelegatingRuneEffectModifier(ConductRuneInvoker state, AbstractRune<?> target, AbstractRune<?> outputRune, int inputIndex) {
 			if(state.getConfiguration() == CONFIGURATION_1) {
-				return inputIndex == IN_ITEM_1.getIndex();
+				return inputIndex == IN_ITEM_1.index();
 			} else if(state.getConfiguration() == CONFIGURATION_2) {
-				return inputIndex == IN_ITEM_2.getIndex();
+				return inputIndex == IN_ITEM_2.index();
 			} else {
-				return inputIndex == IN_ITEM_3.getIndex();
+				return inputIndex == IN_ITEM_3.index();
 			}
 		}
 	}

@@ -1011,7 +1011,7 @@ public class GuiRuneWeavingTable extends GuiContainer implements IRuneWeavingTab
 		for(IConfigurationOutput output : outputConfiguration.getOutputs()) {
 			List<IType> inputTypes = this.getInputTypes(outputRuneIndex, outputConfiguration);
 
-			if(output.isEnabled(inputTypes) && input.test(output, output.getType(inputTypes))) {
+			if(output.isEnabled(inputTypes) && input.isType(output, output.getType(inputTypes))) {
 				linkableOutputs.add(outputIndex);
 			}
 

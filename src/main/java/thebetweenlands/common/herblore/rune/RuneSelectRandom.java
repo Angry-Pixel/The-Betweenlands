@@ -14,10 +14,9 @@ import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.INodeBlueprint.IConfigurationLinkAccess;
 import thebetweenlands.api.rune.INodeConfiguration.IConfigurationOutput;
 import thebetweenlands.api.rune.impl.AbstractRune;
+import thebetweenlands.api.rune.impl.OutputKey;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneConfiguration.InputPort;
-import thebetweenlands.api.rune.impl.RuneConfiguration.OutputPort;
 import thebetweenlands.api.rune.impl.RuneEffectModifier;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
@@ -36,21 +35,21 @@ public final class RuneSelectRandom extends AbstractRune<RuneSelectRandom> {
 		@Override
 		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess, boolean provisional) {
 			
-			RuneConfiguration.Builder builder = RuneConfiguration.builder(RuneTokenDescriptors.ANY);
+			RuneConfiguration.Builder builder = RuneConfiguration.create(RuneTokenDescriptors.ANY);
 
 			ResourceLocation descriptor = RuneTokenDescriptors.ANY;
 			
 			if(linkAccess != null) {
 				IConfigurationOutput linkedOutput = linkAccess.getLinkedOutput(0);
 				
-				if(linkedOutput instanceof OutputPort) {
+				if(linkedOutput instanceof OutputKey) {
 					//TODO Temporary for testing
-					String[] split = ((OutputPort<?>) linkedOutput).getDescriptor().split("\\.");
+					String[] split = ((OutputKey<?, ?>) linkedOutput).getDescriptor().split("\\.");
 					descriptor = new ResourceLocation(split[0], split[1]);
 				}
 			}
 			
-			builder.out(Object.class, builder.multiIn(descriptor, null, Object.class));
+			builder.out(descriptor).type(builder.in(descriptor).type(Object.class).collection().key()).register();
 			
 			return ImmutableList.of(builder.build());
 		}
