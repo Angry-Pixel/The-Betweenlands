@@ -61,7 +61,7 @@ public class GuiFishStaminaBar extends Gui {
 		GlStateManager.popMatrix();
 
 		if(hasTreasure)
-			drawTexturedModalRect(posX - treasureTick, posY, treasureUnlocked ? 16 : 0, 160, 16, 16); // chest
+			drawTexturedModalRect(posX - treasureTick, posY + 1, treasureUnlocked ? 16 : 0, 160, 16, 16); // chest
 
 		drawTexturedModalRect(posX - staminaTicks, posY + 1, 0 + aniFrame, 80, 16, 16); //fish
 		drawTexturedModalRect(posX - escapeTicks, posY + 2, 0 + (getCrabScroll(escapeTicks) * 16), 176, 16, 16); //crab
