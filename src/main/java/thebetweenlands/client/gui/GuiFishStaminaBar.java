@@ -34,12 +34,12 @@ public class GuiFishStaminaBar extends Gui {
 				if (player.fishEntity.isRiding() && player.fishEntity.getRidingEntity() instanceof EntityAnadia) {
 					if(((EntityAnadia) player.fishEntity.getRidingEntity()).getStaminaTicks() <= 0)
 						return;
-					int fishpos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getStaminaTicks() * 256 / 100;
+					int fishpos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getStaminaTicks() * 256 / 180;
 					int escapepos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getEscapeTicks() * 256 / 1024;
 					int obstructpos1 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction1Ticks();
 					int obstructpos2 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction2Ticks();
 					int obstructpos3 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction3Ticks();
-					int obstructpos4 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction4Ticks();
+					int obstructpos4 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction4Ticks() * 256 / 512;
 					int treasurePos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getTreasureTicks() * 256 / 1024;
 					boolean showTreasure = ((EntityAnadia) player.fishEntity.getRidingEntity()).isTreasureFish();
 					boolean treasureUnlocked = ((EntityAnadia) player.fishEntity.getRidingEntity()).getTreasureUnlocked();
@@ -80,6 +80,8 @@ public class GuiFishStaminaBar extends Gui {
 
 			if (hasTreasure)
 				drawTexturedModalRect(posX - treasureTick, posY + 1, treasureUnlocked ? 16 : 0, 128, 16, 16); // chest
+			
+			
 
 			drawTexturedModalRect(posX - staminaTicks - 8, posY + 1, 0 + aniFrame, 48, 16, 16); // fish
 			drawTexturedModalRect(posX - escapeTicks - 8, posY + 2, 0 + (getCrabScroll(escapeTicks) * 16), 144, 16, 16); // crab
@@ -98,10 +100,12 @@ public class GuiFishStaminaBar extends Gui {
 
 			if(obstructionTicks1 > - 255)
 				drawTexturedModalRect(posX - obstructionTicks1 - 8, posY, 0 + aniFrame, 64, 16, 16); // weed
-			if(obstructionTicks2 > - 255)
-				drawTexturedModalRect(posX - obstructionTicks2 - 8, posY, 0 + aniFrame, 80, 16, 16); // rock
+
 			if(obstructionTicks3 > - 255)
 				drawTexturedModalRect(posX - obstructionTicks3 - 8, posY, 0 + aniFrame, 96, 16, 16); // coral
+
+			if(obstructionTicks2 > - 255)
+				drawTexturedModalRect(posX - obstructionTicks2 - 8, posY, 0 + aniFrame, 80, 16, 16); // rock
 
 			GL11.glDisable(GL11.GL_STENCIL_TEST);
 		}

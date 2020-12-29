@@ -1,5 +1,6 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -76,7 +77,6 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	private static final DataParameter<Integer> TREASURE_TICKS = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> TREASURE_UNLOCKED = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.BOOLEAN);
 
-	private static float BASE_MULTIPLE = 1F; // just a arbitrary number to increase the size multiplier
 	public EntityAnadia.AIFindBait aiFindBait;
 	public EntityAnadia.AIFindHook aiFindHook;
 	public byte BASE = 1;
@@ -84,15 +84,12 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	public byte SMOKED = 0;
 	public byte ROTTEN = 1;
 	
-	public int ESCAPE_DELAY = 80;
-	public int SCROLL_COUNTER = 256;
-	public boolean SCROLL_1 = false;
-	public boolean SCROLL_2 = false;
-	public boolean SCROLL_3 = false;
-	public boolean SCROLL_4 = false;
+	public int ESCAPE_DELAY;
 	public boolean PLAY_ANADIA_WON_SOUND = true;
 	
 	public int animationFrame = 0;
+	
+	List<Integer> obstructionList = new ArrayList<Integer>();
 	
 	public EntityAnadia(World world) {
 		super(world);
@@ -139,9 +136,9 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
       //  dataManager.register(HUNGER_COOLDOWN, 0);
         dataManager.register(STAMINA_TICKS, 40);
         dataManager.register(ESCAPE_TICKS, 1024);
-        dataManager.register(OBSTRUCTION_TICKS_1, 256);
-        dataManager.register(OBSTRUCTION_TICKS_2, 256);
-        dataManager.register(OBSTRUCTION_TICKS_3, 256);
+        dataManager.register(OBSTRUCTION_TICKS_1, 64);
+        dataManager.register(OBSTRUCTION_TICKS_2, 128);
+        dataManager.register(OBSTRUCTION_TICKS_3, 192);
         dataManager.register(OBSTRUCTION_TICKS_4, 256);
         dataManager.register(FISH_COLOUR, (byte) 2);
         dataManager.register(HEAD_ITEM, ItemStack.EMPTY);
@@ -170,8 +167,9 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        setHeadItem(getPartFromLootTable(LootTableRegistry.ANADIA_HEAD));
 	        setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_BODY));
 	        setTailItem(getPartFromLootTable(LootTableRegistry.ANADIA_TAIL));
-	        if(getEntityWorld().rand.nextInt(2) == 0)
+	        if(getStaminaMods() > 7F)
 	        	setIsTreasureFish(true);
+	        randomiseObstructionOrder();
     	}
         return super.onInitialSpawn(difficulty, livingdata);
     }
@@ -348,6 +346,17 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		 return dataManager.get(TREASURE_UNLOCKED);
 	}
 
+	public void randomiseObstructionOrder() {
+		List<Integer> obstructionList = new ArrayList<Integer>();
+        for(int i = 0; i < 4; i++)
+        	obstructionList.add(i, 64 + i * 64 + rand.nextInt(32) - rand.nextInt(32));
+        Collections.shuffle(obstructionList);
+        setObstruction1Ticks(obstructionList.get(0));
+        setObstruction2Ticks(obstructionList.get(1));
+        setObstruction3Ticks(obstructionList.get(2));
+        setObstruction4Ticks(obstructionList.get(3) * 2);
+	}
+
 	@Override
     public void notifyDataManagerChange(DataParameter<?> key) {
         if (FISH_SIZE.equals(key)) {
@@ -462,7 +471,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		float head = EnumAnadiaHeadParts.values()[getHeadType()].getStaminaModifier();
 		float body = EnumAnadiaHeadParts.values()[getBodyType()].getStaminaModifier();
 		float tail = EnumAnadiaHeadParts.values()[getTailType()].getStaminaModifier();
-		return Math.round(getFishSize() * BASE_MULTIPLE * head + body + tail * 2F) / 2F;
+		return Math.max(Math.round(getFishSize() * head + body + tail * 2F) / 2F, 3.5F);
 	}
 
 	public void playTreasureCollectedSound(EntityPlayer player) {
@@ -575,15 +584,11 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 			//regains stamina over time whilst not hooked
 	        if(!isBeingRidden() ) {
-	        	if(ESCAPE_DELAY < 80)
-	        		ESCAPE_DELAY = 80;
-	        	if(SCROLL_COUNTER < 256) {
-	        		SCROLL_COUNTER = 256;
-	        		SCROLL_1 = false;
-	        		SCROLL_2 = false;
-	        		SCROLL_3 = false;
-	        		SCROLL_4 = false;
-	        	}
+	        	if(!PLAY_ANADIA_WON_SOUND)
+	        		PLAY_ANADIA_WON_SOUND = true;
+
+	        	if(ESCAPE_DELAY < (int) getStaminaMods() * 10)
+	        		ESCAPE_DELAY = (int) (getStaminaMods() * 10);
 
 	        	if(getStaminaTicks() < (int) (getStaminaMods() * 20))
 	        		setStaminaTicks(getStaminaTicks() + 1);
@@ -595,8 +600,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        		setObstruction2Ticks(256);
 	        	if(getObstruction3Ticks() < 256)
 	        		setObstruction3Ticks(256);
-	        	if(getObstruction4Ticks() < 256)
-	        		setObstruction4Ticks(256);
+	        	if(getObstruction4Ticks() < 512)
+	        		setObstruction4Ticks(512);
 	        	if(getTreasureTicks() < 1024)
 	        		setTreasureTicks(1024);
 	        }
@@ -615,21 +620,9 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		        	if(ESCAPE_DELAY > 0)
 		        		ESCAPE_DELAY--;
 	
-		        	if(SCROLL_COUNTER == 256)
-		        		SCROLL_1 = true;
-		        	if(SCROLL_COUNTER == 192)
-		        		SCROLL_2 = true;
-		        	if(SCROLL_COUNTER == 128)
-		        		SCROLL_3 = true;
-		        	if(SCROLL_COUNTER == 64)
-		        		SCROLL_4 = true;
-	
-		        	if(SCROLL_COUNTER > 0)
-		        		SCROLL_COUNTER --;
-	/*
 		        	if(getEscapeTicks() > 0 && ESCAPE_DELAY <= 0)
-		        		setEscapeTicks(getEscapeTicks() -2);
-		        	if(getEscapeTicks() * 256 / 1024 < getStaminaTicks() * 256 / 100 && ESCAPE_DELAY <= 0) {
+		        		setEscapeTicks(getEscapeTicks() -3);
+		        	if(getEscapeTicks() * 256 / 1024 < getStaminaTicks() * 256 / 180 && ESCAPE_DELAY <= 0) {
 		        		if(getPassengers().get(0) instanceof EntityBLFishHook) {
 		        			EntityBLFishHook hook = (EntityBLFishHook) getPassengers().get(0);
 		        			if(hook != null && hook.getAngler() != null)
@@ -637,29 +630,29 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		        		}
 		        		getPassengers().get(0).dismountRidingEntity(); // this just releases the fish atm
 		        	}
-	*/
-		        	if(SCROLL_1 && getObstruction1Ticks() >= 0) {
+
+		        	if(getObstruction1Ticks() >= 0) {
 		        		setObstruction1Ticks(getObstruction1Ticks() - 1);
 		        		if(getObstruction1Ticks() <= 0)
 		        			setObstruction1Ticks(256);
 		        		}
 		        	
-		        	if(SCROLL_2 && getObstruction2Ticks() >= 0) {
-		        		setObstruction2Ticks(getObstruction2Ticks() - 1);
+		        	if(getObstruction2Ticks() >= 0) {
+		        		setObstruction2Ticks(getObstruction2Ticks() - 2);
 		        		if(getObstruction2Ticks() <= 0)
 		        			setObstruction2Ticks(256);
 		        		}
 		        	
-		        	if(SCROLL_3 && getObstruction3Ticks() >= 0) {
+		        	if(getObstruction3Ticks() >= 0) {
 		        		setObstruction3Ticks(getObstruction3Ticks() - 1);
 		        		if(getObstruction3Ticks() <= 0)
 		        			setObstruction3Ticks(256);
 		        		}
 		        	
-		        	if(SCROLL_4 && getObstruction4Ticks() >= 0) {
+		        	if(getObstruction4Ticks() >= 0) {
 		        		setObstruction4Ticks(getObstruction4Ticks() - 1);
 		        		if(getObstruction4Ticks() <= 0)
-		        			setObstruction4Ticks(256);
+		        			setObstruction4Ticks(512);
 		        		}
 	
 					if (isTreasureFish() && getTreasureTicks() >= 0) {
@@ -677,20 +670,20 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	}
 
 	public boolean isObstructed() {
-		if(256 - getObstruction1Ticks() <= getStaminaTicks() * 256 / 100 && 256 - getObstruction1Ticks() >= getStaminaTicks() * 256 / 100 - 16 )
+		if(256 - getObstruction1Ticks() <= getStaminaTicks() * 256 / 180 && 256 - getObstruction1Ticks() >= getStaminaTicks() * 256 / 180 - 16 )
 			return true;
-		else if(256 - getObstruction2Ticks() <= getStaminaTicks() * 256 / 100  && 256 - getObstruction2Ticks() >= getStaminaTicks() * 256 / 100 - 16 )
+		else if(256 - getObstruction2Ticks() <= getStaminaTicks() * 256 / 180  && 256 - getObstruction2Ticks() >= getStaminaTicks() * 256 / 180 - 16 )
 			return true;
-		else if(256 - getObstruction3Ticks() <= getStaminaTicks() * 256 / 100  && 256 - getObstruction3Ticks() >= getStaminaTicks() * 256 / 100 - 16 )
+		else if(256 - getObstruction3Ticks() <= getStaminaTicks() * 256 / 180  && 256 - getObstruction3Ticks() >= getStaminaTicks() * 256 / 180 - 16 )
 			return true;
-		else if(256 - getObstruction4Ticks() <= getStaminaTicks() * 256 / 100  && 256 - getObstruction4Ticks() >= getStaminaTicks() * 256 / 100 - 16 )
+		else if(512 - getObstruction4Ticks() <= getStaminaTicks() * 512 / 180  && 512 - getObstruction4Ticks() >= getStaminaTicks() * 512 / 180 - 16 )
 			return true;
 		else
 			return false;
 	}
 
 	public boolean isObstructedTreasure() {
-		return (1024 - getTreasureTicks() <= getStaminaTicks() * 1024 / 100 + 8 && 1024 - getTreasureTicks() >= getStaminaTicks() * 1024 / 100 - 16 );
+		return (1024 - getTreasureTicks() <= getStaminaTicks() * 1024 / 180 + 8 && 1024 - getTreasureTicks() >= getStaminaTicks() * 1024 / 180 - 16 );
 	}
 
 	@Override
@@ -1063,6 +1056,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 						//	anadia.setHungerCooldown(600);
 							anadia.setIsLeaping(false);
 							hook.caughtEntity = anadia;
+							anadia.randomiseObstructionOrder();
 							hook.startRiding(anadia, true);
 							hook.setBaited(false);
 							//resetTask();
