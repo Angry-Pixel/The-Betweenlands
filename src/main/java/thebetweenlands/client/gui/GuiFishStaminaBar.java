@@ -77,35 +77,27 @@ public class GuiFishStaminaBar extends Gui {
 				stencil.func(GL11.GL_EQUAL, true);
 				stencil.op(GL11.GL_KEEP);
 			}
-
+			
 			if (hasTreasure)
 				drawTexturedModalRect(posX - treasureTick, posY + 1, treasureUnlocked ? 16 : 0, 128, 16, 16); // chest
-			
-			
-
-			drawTexturedModalRect(posX - staminaTicks - 8, posY + 1, 0 + aniFrame, 48, 16, 16); // fish
-			drawTexturedModalRect(posX - escapeTicks - 8, posY + 2, 0 + (getCrabScroll(escapeTicks) * 16), 144, 16, 16); // crab
 
 			drawHangingRope(staminaTicks, posX - staminaTicks + 7, posY + 12, posX + 256 + 16, posY, 0.5F, 0D); // line
-
+			
 			mc.renderEngine.bindTexture(GUI_TEXTURE); // because depth // stuffs :p
+
+			drawTexturedModalRect(posX - staminaTicks - 8, posY + 1, 0 + aniFrame, 48, 16, 16); // fish
 
 			GlStateManager.pushMatrix();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-			if(obstructionTicks4 > - 255)
-				drawTexturedModalRect(posX - obstructionTicks4 - 8, posY + 2, 0 + aniFrame, 112, 16, 16); // jolly fush
+			drawTexturedModalRect(posX - obstructionTicks4 - 8, posY + 2, 0 + aniFrame, 112, 16, 16); // jolly fush
 			GlStateManager.disableBlend();
 			GlStateManager.popMatrix();
-
-			if(obstructionTicks1 > - 255)
-				drawTexturedModalRect(posX - obstructionTicks1 - 8, posY, 0 + aniFrame, 64, 16, 16); // weed
-
-			if(obstructionTicks3 > - 255)
-				drawTexturedModalRect(posX - obstructionTicks3 - 8, posY, 0 + aniFrame, 96, 16, 16); // coral
-
-			if(obstructionTicks2 > - 255)
-				drawTexturedModalRect(posX - obstructionTicks2 - 8, posY, 0 + aniFrame, 80, 16, 16); // rock
+			
+			drawTexturedModalRect(posX - escapeTicks - 8, posY + 2, 0 + (getCrabScroll(escapeTicks) * 16), 144, 16, 16); // crab
+			drawTexturedModalRect(posX - obstructionTicks1 - 8, posY, 0 + aniFrame, 64, 16, 16); // weed
+			drawTexturedModalRect(posX - obstructionTicks3 - 8, posY, 0 + aniFrame, 96, 16, 16); // coral
+			drawTexturedModalRect(posX - obstructionTicks2 - 8, posY, 0 + aniFrame, 80, 16, 16); // rock
 
 			GL11.glDisable(GL11.GL_STENCIL_TEST);
 		}
