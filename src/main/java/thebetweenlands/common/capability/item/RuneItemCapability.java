@@ -4,7 +4,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import thebetweenlands.api.capability.IRuneCapability;
-import thebetweenlands.api.rune.IRuneContainerFactory;
+import thebetweenlands.api.runechain.container.IRuneContainerFactory;
 import thebetweenlands.common.capability.base.ItemCapability;
 import thebetweenlands.common.item.herblore.rune.ItemRune;
 import thebetweenlands.common.item.herblore.rune.ItemRune.RuneItemProperties;

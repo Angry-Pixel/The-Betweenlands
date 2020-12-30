@@ -7,19 +7,21 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.util.math.BlockPos;
-import thebetweenlands.api.rune.IBlockTarget;
-import thebetweenlands.api.rune.INodeComposition;
-import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.api.rune.impl.IGetter;
-import thebetweenlands.api.rune.impl.ISetter;
-import thebetweenlands.api.rune.impl.InputSerializers;
-import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneEffectModifier;
-import thebetweenlands.api.rune.impl.RuneStats;
-import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
-import thebetweenlands.api.rune.impl.StaticBlockTarget;
+import thebetweenlands.api.runechain.base.IConfigurationLinkAccess;
+import thebetweenlands.api.runechain.base.INodeComposition;
+import thebetweenlands.api.runechain.base.INodeConfiguration;
+import thebetweenlands.api.runechain.base.INodeIO;
+import thebetweenlands.api.runechain.chain.IRuneExecutionContext;
+import thebetweenlands.api.runechain.io.IGetter;
+import thebetweenlands.api.runechain.io.ISetter;
+import thebetweenlands.api.runechain.io.InputSerializers;
+import thebetweenlands.api.runechain.io.types.IBlockTarget;
+import thebetweenlands.api.runechain.io.types.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.io.types.StaticBlockTarget;
+import thebetweenlands.api.runechain.modifier.Subject;
+import thebetweenlands.api.runechain.rune.AbstractRune;
+import thebetweenlands.api.runechain.rune.RuneConfiguration;
+import thebetweenlands.api.runechain.rune.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
 public final class RuneMarkArea extends AbstractRune<RuneMarkArea> {
@@ -57,12 +59,12 @@ public final class RuneMarkArea extends AbstractRune<RuneMarkArea> {
 		}
 
 		@Override
-		public RuneMarkArea create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+		public RuneMarkArea create(int index, INodeComposition<IRuneExecutionContext> composition, INodeConfiguration configuration) {
 			return new RuneMarkArea(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected RuneEffectModifier.Subject activate(RuneMarkArea state, RuneExecutionContext context, INodeIO io) {
+		protected Subject activate(RuneMarkArea state, IRuneExecutionContext context, INodeIO io) {
 			
 			if(state.getConfiguration() == CONFIGURATION_1) {
 				List<IBlockTarget> positions = new ArrayList<>();
@@ -102,7 +104,7 @@ public final class RuneMarkArea extends AbstractRune<RuneMarkArea> {
 		}
 	}
 
-	private RuneMarkArea(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+	private RuneMarkArea(Blueprint blueprint, int index, INodeComposition<IRuneExecutionContext> composition, RuneConfiguration configuration) {
 		super(blueprint, index, composition, configuration);
 	}
 }

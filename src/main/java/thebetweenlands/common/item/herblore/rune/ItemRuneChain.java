@@ -16,10 +16,11 @@ import thebetweenlands.api.aspect.AspectContainer;
 import thebetweenlands.api.capability.IRuneChainCapability;
 import thebetweenlands.api.capability.IRuneChainUserCapability;
 import thebetweenlands.api.item.IRenamableItem;
-import thebetweenlands.api.rune.impl.AbstractRune.Blueprint.InitiationPhase;
-import thebetweenlands.api.rune.impl.AbstractRune.Blueprint.InteractionInitiationPhase;
-import thebetweenlands.api.rune.impl.AbstractRune.Blueprint.UseInitiationPhase;
-import thebetweenlands.api.rune.impl.RuneChainComposition.IAspectBuffer;
+import thebetweenlands.api.runechain.IAspectBuffer;
+import thebetweenlands.api.runechain.initiation.InitiationPhase;
+import thebetweenlands.api.runechain.initiation.InitiationPhases;
+import thebetweenlands.api.runechain.initiation.InteractionInitiationPhase;
+import thebetweenlands.api.runechain.initiation.UseInitiationPhase;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.proxy.CommonProxy;
@@ -68,7 +69,7 @@ public class ItemRuneChain extends Item implements IRenamableItem {
 
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		this.updateRuneChainInitiation(stack, entityIn, InitiationPhase.TICK, !worldIn.isRemote);
+		this.updateRuneChainInitiation(stack, entityIn, InitiationPhases.TICK, !worldIn.isRemote);
 	}
 
 	protected boolean updateRuneChainInitiation(ItemStack stack, Entity user, InitiationPhase state, boolean runOnInitiation) {

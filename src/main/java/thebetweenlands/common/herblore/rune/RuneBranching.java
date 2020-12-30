@@ -4,16 +4,17 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
-import thebetweenlands.api.rune.INodeComposition;
-import thebetweenlands.api.rune.INodeCompositionBlueprint;
-import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.INodeBlueprint.IConfigurationLinkAccess;
-import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneEffectModifier;
-import thebetweenlands.api.rune.impl.RuneStats;
-import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.base.IConfigurationLinkAccess;
+import thebetweenlands.api.runechain.base.INodeComposition;
+import thebetweenlands.api.runechain.base.INodeCompositionBlueprint;
+import thebetweenlands.api.runechain.base.INodeConfiguration;
+import thebetweenlands.api.runechain.base.INodeIO;
+import thebetweenlands.api.runechain.chain.IRuneExecutionContext;
+import thebetweenlands.api.runechain.io.types.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.modifier.Subject;
+import thebetweenlands.api.runechain.rune.AbstractRune;
+import thebetweenlands.api.runechain.rune.RuneConfiguration;
+import thebetweenlands.api.runechain.rune.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
 public final class RuneBranching extends AbstractRune<RuneBranching> {
@@ -52,18 +53,18 @@ public final class RuneBranching extends AbstractRune<RuneBranching> {
 		}
 
 		@Override
-		public RuneBranching create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+		public RuneBranching create(int index, INodeComposition<IRuneExecutionContext> composition, INodeConfiguration configuration) {
 			return new RuneBranching(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected RuneEffectModifier.Subject activate(RuneBranching state, RuneExecutionContext context, INodeIO io) {
+		protected Subject activate(RuneBranching state, IRuneExecutionContext context, INodeIO io) {
 			io.branch();
 			return null;
 		}
 	}
 
-	private RuneBranching(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+	private RuneBranching(Blueprint blueprint, int index, INodeComposition<IRuneExecutionContext> composition, RuneConfiguration configuration) {
 		super(blueprint, index, composition, configuration);
 	}
 }

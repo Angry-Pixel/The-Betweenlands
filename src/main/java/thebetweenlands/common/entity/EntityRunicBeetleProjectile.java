@@ -17,11 +17,11 @@ import net.minecraftforge.fml.common.registry.IThrowableEntity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IRuneEffectModifierEntity;
-import thebetweenlands.api.rune.IBlockTarget;
-import thebetweenlands.api.rune.impl.RuneEffectModifier;
-import thebetweenlands.api.rune.impl.RuneEffectModifier.RenderState;
-import thebetweenlands.api.rune.impl.RuneEffectModifier.Subject;
-import thebetweenlands.api.rune.impl.StaticBlockTarget;
+import thebetweenlands.api.runechain.io.types.IBlockTarget;
+import thebetweenlands.api.runechain.io.types.StaticBlockTarget;
+import thebetweenlands.api.runechain.modifier.RenderState;
+import thebetweenlands.api.runechain.modifier.RuneEffectModifier;
+import thebetweenlands.api.runechain.modifier.Subject;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 

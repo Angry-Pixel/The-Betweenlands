@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.api.item.IRuneletItem;
-import thebetweenlands.api.rune.RuneCategory;
+import thebetweenlands.api.runechain.rune.RuneCategory;
 import thebetweenlands.client.tab.BLCreativeTabs;
 
 public class ItemRunelet extends Item implements IRuneletItem {

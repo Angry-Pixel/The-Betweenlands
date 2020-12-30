@@ -5,20 +5,22 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.entity.Entity;
-import thebetweenlands.api.rune.IBlockTarget;
-import thebetweenlands.api.rune.INodeComposition;
-import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.IRuneChainUser;
-import thebetweenlands.api.rune.IRuneEffect;
-import thebetweenlands.api.rune.IVectorTarget;
-import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.api.rune.impl.IGetter;
-import thebetweenlands.api.rune.impl.InputSerializers;
-import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneEffectModifier;
-import thebetweenlands.api.rune.impl.RuneStats;
-import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.IRuneChainUser;
+import thebetweenlands.api.runechain.base.IConfigurationLinkAccess;
+import thebetweenlands.api.runechain.base.INodeComposition;
+import thebetweenlands.api.runechain.base.INodeConfiguration;
+import thebetweenlands.api.runechain.base.INodeIO;
+import thebetweenlands.api.runechain.chain.IRuneExecutionContext;
+import thebetweenlands.api.runechain.io.IGetter;
+import thebetweenlands.api.runechain.io.InputSerializers;
+import thebetweenlands.api.runechain.io.types.IBlockTarget;
+import thebetweenlands.api.runechain.io.types.IRuneEffect;
+import thebetweenlands.api.runechain.io.types.IVectorTarget;
+import thebetweenlands.api.runechain.io.types.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.modifier.Subject;
+import thebetweenlands.api.runechain.rune.AbstractRune;
+import thebetweenlands.api.runechain.rune.RuneConfiguration;
+import thebetweenlands.api.runechain.rune.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
 public final class RuneEnforcing extends AbstractRune<RuneEnforcing> {
@@ -65,12 +67,12 @@ public final class RuneEnforcing extends AbstractRune<RuneEnforcing> {
 		}
 
 		@Override
-		public RuneEnforcing create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+		public RuneEnforcing create(int index, INodeComposition<IRuneExecutionContext> composition, INodeConfiguration configuration) {
 			return new RuneEnforcing(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected RuneEffectModifier.Subject activate(RuneEnforcing state, RuneExecutionContext context, INodeIO io) {
+		protected Subject activate(RuneEnforcing state, IRuneExecutionContext context, INodeIO io) {
 
 			if(state.getConfiguration() == CONFIGURATION_1) {
 				IRuneEffect effect = IN_EFFECT_1.get(io);
@@ -109,7 +111,7 @@ public final class RuneEnforcing extends AbstractRune<RuneEnforcing> {
 		}
 	}
 
-	private RuneEnforcing(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+	private RuneEnforcing(Blueprint blueprint, int index, INodeComposition<IRuneExecutionContext> composition, RuneConfiguration configuration) {
 		super(blueprint, index, composition, configuration);
 	}
 }

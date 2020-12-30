@@ -2,7 +2,7 @@ package thebetweenlands.api.capability;
 
 import javax.annotation.Nullable;
 
-import thebetweenlands.api.rune.IRuneContainerFactory;
+import thebetweenlands.api.runechain.container.IRuneContainerFactory;
 
 public interface IRuneCapability {
 	@Nullable

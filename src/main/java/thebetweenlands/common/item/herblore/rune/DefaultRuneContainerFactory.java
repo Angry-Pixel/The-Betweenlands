@@ -3,29 +3,29 @@ package thebetweenlands.common.item.herblore.rune;
 import java.util.function.Supplier;
 
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.api.rune.INodeBlueprint;
-import thebetweenlands.api.rune.IRuneContainer;
-import thebetweenlands.api.rune.IRuneContainerFactory;
-import thebetweenlands.api.rune.IRuneGui;
-import thebetweenlands.api.rune.RuneMenuType;
-import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
+import thebetweenlands.api.runechain.base.INodeBlueprint;
+import thebetweenlands.api.runechain.chain.IRuneExecutionContext;
+import thebetweenlands.api.runechain.container.IRuneContainer;
+import thebetweenlands.api.runechain.container.IRuneContainerFactory;
+import thebetweenlands.api.runechain.container.gui.IRuneGui;
+import thebetweenlands.api.runechain.container.gui.RuneMenuType;
 import thebetweenlands.client.gui.inventory.runeweavingtable.DefaultRuneGui;
 import thebetweenlands.common.inventory.container.runeweavingtable.DefaultRuneContainer;
 
 public class DefaultRuneContainerFactory implements IRuneContainerFactory {
 	private final ResourceLocation regName;
 
-	private final Supplier<INodeBlueprint<?, RuneExecutionContext>> blueprintFactory;
+	private final Supplier<INodeBlueprint<?, IRuneExecutionContext>> blueprintFactory;
 
 	private boolean blueprintSet = false;
-	private INodeBlueprint<?, RuneExecutionContext> blueprint;
+	private INodeBlueprint<?, IRuneExecutionContext> blueprint;
 
-	public DefaultRuneContainerFactory(ResourceLocation regName, Supplier<INodeBlueprint<?, RuneExecutionContext>> blueprintFactory) {
+	public DefaultRuneContainerFactory(ResourceLocation regName, Supplier<INodeBlueprint<?, IRuneExecutionContext>> blueprintFactory) {
 		this.regName = regName;
 		this.blueprintFactory = blueprintFactory;
 	}
 
-	public DefaultRuneContainerFactory(ResourceLocation regName, INodeBlueprint<?, RuneExecutionContext> blueprint) {
+	public DefaultRuneContainerFactory(ResourceLocation regName, INodeBlueprint<?, IRuneExecutionContext> blueprint) {
 		this(regName, () -> blueprint);
 	}
 

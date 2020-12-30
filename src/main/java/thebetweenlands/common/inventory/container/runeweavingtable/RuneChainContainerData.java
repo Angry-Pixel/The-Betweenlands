@@ -13,8 +13,8 @@ import javax.annotation.Nullable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
-import thebetweenlands.api.rune.IRuneChainContainerData;
-import thebetweenlands.api.rune.IRuneLink;
+import thebetweenlands.api.runechain.container.IRuneChainContainerData;
+import thebetweenlands.api.runechain.container.IRuneLink;
 
 public class RuneChainContainerData implements IRuneChainContainerData {
 	public static final class Link implements IRuneLink {

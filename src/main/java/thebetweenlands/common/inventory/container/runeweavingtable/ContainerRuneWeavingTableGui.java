@@ -1,8 +1,8 @@
 package thebetweenlands.common.inventory.container.runeweavingtable;
 
 import net.minecraft.entity.player.EntityPlayer;
-import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.IRuneWeavingTableGui;
+import thebetweenlands.api.runechain.base.INodeConfiguration;
+import thebetweenlands.api.runechain.container.gui.IRuneWeavingTableGui;
 import thebetweenlands.client.gui.inventory.runeweavingtable.GuiRuneWeavingTable;
 import thebetweenlands.common.tile.TileEntityRuneWeavingTable;
 

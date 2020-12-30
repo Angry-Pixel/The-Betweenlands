@@ -19,7 +19,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import thebetweenlands.api.rune.IRuneChainContainerData;
+import thebetweenlands.api.runechain.container.IRuneChainContainerData;
 import thebetweenlands.common.inventory.container.runeweavingtable.ContainerRuneWeavingTable;
 import thebetweenlands.common.inventory.container.runeweavingtable.RuneChainContainerData;
 import thebetweenlands.common.registries.CapabilityRegistry;

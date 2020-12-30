@@ -1,13 +1,13 @@
 package thebetweenlands.common.inventory.container.runeweavingtable;
 
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.api.rune.INodeBlueprint;
-import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.IRuneContainer;
-import thebetweenlands.api.rune.IRuneContainerContext;
-import thebetweenlands.api.rune.IRuneGui;
-import thebetweenlands.api.rune.IRuneLink;
-import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
+import thebetweenlands.api.runechain.base.INodeBlueprint;
+import thebetweenlands.api.runechain.base.INodeConfiguration;
+import thebetweenlands.api.runechain.chain.IRuneExecutionContext;
+import thebetweenlands.api.runechain.container.IRuneContainer;
+import thebetweenlands.api.runechain.container.IRuneContainerContext;
+import thebetweenlands.api.runechain.container.IRuneLink;
+import thebetweenlands.api.runechain.container.gui.IRuneGui;
 import thebetweenlands.client.gui.inventory.runeweavingtable.DefaultRuneGui;
 
 public class DefaultRuneContainer implements IRuneContainer {
@@ -15,11 +15,11 @@ public class DefaultRuneContainer implements IRuneContainer {
 
 	protected IRuneContainerContext context;
 
-	protected INodeBlueprint<?, RuneExecutionContext> blueprint;
+	protected INodeBlueprint<?, IRuneExecutionContext> blueprint;
 
 	protected IRuneGui gui;
 
-	public DefaultRuneContainer(ResourceLocation id, INodeBlueprint<?, RuneExecutionContext> blueprint) {
+	public DefaultRuneContainer(ResourceLocation id, INodeBlueprint<?, IRuneExecutionContext> blueprint) {
 		this.id = id;
 		this.blueprint = blueprint;
 	}
@@ -72,7 +72,7 @@ public class DefaultRuneContainer implements IRuneContainer {
 	}
 
 	@Override
-	public INodeBlueprint<?, RuneExecutionContext> getBlueprint() {
+	public INodeBlueprint<?, IRuneExecutionContext> getBlueprint() {
 		return this.blueprint;
 	}
 

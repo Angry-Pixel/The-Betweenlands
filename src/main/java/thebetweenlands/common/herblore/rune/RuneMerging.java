@@ -6,17 +6,18 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.api.rune.INodeBlueprint.INodeIO;
-import thebetweenlands.api.rune.INodeComposition;
-import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.INodeConfiguration.IConfigurationOutput;
-import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.api.rune.impl.OutputKey;
-import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneEffectModifier;
-import thebetweenlands.api.rune.impl.RuneStats;
-import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.base.IConfigurationLinkAccess;
+import thebetweenlands.api.runechain.base.IConfigurationOutput;
+import thebetweenlands.api.runechain.base.INodeComposition;
+import thebetweenlands.api.runechain.base.INodeConfiguration;
+import thebetweenlands.api.runechain.base.INodeIO;
+import thebetweenlands.api.runechain.chain.IRuneExecutionContext;
+import thebetweenlands.api.runechain.io.OutputKey;
+import thebetweenlands.api.runechain.io.types.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.modifier.Subject;
+import thebetweenlands.api.runechain.rune.AbstractRune;
+import thebetweenlands.api.runechain.rune.RuneConfiguration;
+import thebetweenlands.api.runechain.rune.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
 public final class RuneMerging extends AbstractRune<RuneMerging> {
@@ -52,12 +53,12 @@ public final class RuneMerging extends AbstractRune<RuneMerging> {
 		}
 
 		@Override
-		public RuneMerging create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+		public RuneMerging create(int index, INodeComposition<IRuneExecutionContext> composition, INodeConfiguration configuration) {
 			return new RuneMerging(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected RuneEffectModifier.Subject activate(RuneMerging state, RuneExecutionContext context, INodeIO io) {
+		protected Subject activate(RuneMerging state, IRuneExecutionContext context, INodeIO io) {
 			if(state.getConfiguration().getId() == 0) {
 				state.outputs.add(io);
 				state.outputValues.add(io.get(0));
@@ -78,7 +79,7 @@ public final class RuneMerging extends AbstractRune<RuneMerging> {
 	private List<INodeIO> outputs = new ArrayList<>();
 	private List<Object> outputValues = new ArrayList<>();
 	
-	private RuneMerging(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+	private RuneMerging(Blueprint blueprint, int index, INodeComposition<IRuneExecutionContext> composition, RuneConfiguration configuration) {
 		super(blueprint, index, composition, configuration);
 	}
 }

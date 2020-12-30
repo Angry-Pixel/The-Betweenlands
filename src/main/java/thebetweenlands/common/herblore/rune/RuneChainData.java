@@ -5,8 +5,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.util.Constants;
-import thebetweenlands.api.rune.IRuneChainContainerData;
-import thebetweenlands.api.rune.IRuneChainData;
+import thebetweenlands.api.runechain.chain.IRuneChainData;
+import thebetweenlands.api.runechain.container.IRuneChainContainerData;
 import thebetweenlands.common.inventory.container.runeweavingtable.RuneChainContainerData;
 
 public class RuneChainData implements IRuneChainData {
