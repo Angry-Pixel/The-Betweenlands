@@ -167,7 +167,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        setHeadItem(getPartFromLootTable(LootTableRegistry.ANADIA_HEAD));
 	        setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_BODY));
 	        setTailItem(getPartFromLootTable(LootTableRegistry.ANADIA_TAIL));
-	        if(getStaminaMods() > 7F)
+	        if(getStaminaMods() >= 6F)
 	        	setIsTreasureFish(true);
 	        randomiseObstructionOrder();
     	}
@@ -355,6 +355,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         setObstruction2Ticks(obstructionList.get(1));
         setObstruction3Ticks(obstructionList.get(2));
         setObstruction4Ticks(obstructionList.get(3) * 2);
+        setEscapeTicks((int) (124 + getStaminaMods() * 100));
 	}
 
 	@Override
@@ -587,13 +588,13 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        	if(!PLAY_ANADIA_WON_SOUND)
 	        		PLAY_ANADIA_WON_SOUND = true;
 
-	        	if(ESCAPE_DELAY < (int) getStaminaMods() * 10)
-	        		ESCAPE_DELAY = (int) (getStaminaMods() * 10);
+	        	if(ESCAPE_DELAY < (int) getStaminaMods() * 30)
+	        		ESCAPE_DELAY = (int) (getStaminaMods() * 30);
 
 	        	if(getStaminaTicks() < (int) (getStaminaMods() * 20))
 	        		setStaminaTicks(getStaminaTicks() + 1);
-	        	if(getEscapeTicks() < 1024)
-	        		setEscapeTicks(1024);
+	        	//if(getEscapeTicks() < 1024)
+	        	//	setEscapeTicks(1024);
 	        	if(getObstruction1Ticks() < 256)
 	        		setObstruction1Ticks(256);
 	        	if(getObstruction2Ticks() < 256)
