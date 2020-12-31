@@ -15,7 +15,6 @@ import thebetweenlands.api.runechain.io.IGetter;
 import thebetweenlands.api.runechain.io.ISetter;
 import thebetweenlands.api.runechain.io.InputSerializers;
 import thebetweenlands.api.runechain.io.types.DynamicBlockTarget;
-import thebetweenlands.api.runechain.io.types.DynamicVectorTarget;
 import thebetweenlands.api.runechain.io.types.IBlockTarget;
 import thebetweenlands.api.runechain.io.types.IVectorTarget;
 import thebetweenlands.api.runechain.io.types.RuneTokenDescriptors;
@@ -51,17 +50,13 @@ public final class RunePinpoint extends AbstractRune<RunePinpoint> {
 		private static final IGetter<IVectorTarget> IN_POSITION_3;
 		private static final ISetter<IBlockTarget> OUT_BLOCK_3;
 
-		public static final RuneConfiguration CONFIGURATION_4;
-		private static final IGetter<IBlockTarget> IN_BLOCK_4;
-		private static final ISetter<IVectorTarget> OUT_POSITION_4;
-
 		public static final RuneConfiguration CONFIGURATION_5;
 		private static final IGetter<IVectorTarget> IN_POSITION_5;
 		private static final ISetter<IVectorTarget> OUT_POSITION_5;
 
-		public static final RuneConfiguration CONFIGURATION_6;
-		private static final IGetter<IBlockTarget> IN_BLOCK_6;
-		private static final ISetter<IBlockTarget> OUT_BLOCK_6;
+		public static final RuneConfiguration CONFIGURATION_4;
+		private static final IGetter<IBlockTarget> IN_BLOCK_4;
+		private static final ISetter<IBlockTarget> OUT_BLOCK_4;
 
 		static {
 			RuneConfiguration.Builder builder = RuneConfiguration.create();
@@ -80,22 +75,18 @@ public final class RunePinpoint extends AbstractRune<RunePinpoint> {
 			OUT_BLOCK_3 = builder.out(RuneTokenDescriptors.BLOCK).type(IBlockTarget.class).setter();
 			CONFIGURATION_3 = builder.build();
 
-			IN_BLOCK_4 = builder.in(RuneTokenDescriptors.POSITION).type(IBlockTarget.class).serializer(InputSerializers.BLOCK).getter();
-			OUT_POSITION_4 = builder.out(RuneTokenDescriptors.BLOCK).type(IVectorTarget.class).setter();
+			IN_BLOCK_4 = builder.in(RuneTokenDescriptors.BLOCK).type(IBlockTarget.class).serializer(InputSerializers.BLOCK).getter();
+			OUT_BLOCK_4 = builder.out(RuneTokenDescriptors.BLOCK).type(IBlockTarget.class).setter();
 			CONFIGURATION_4 = builder.build();
 
 			IN_POSITION_5 = builder.in(RuneTokenDescriptors.POSITION).type(IVectorTarget.class).serializer(InputSerializers.VECTOR).getter();
 			OUT_POSITION_5 = builder.out(RuneTokenDescriptors.POSITION).type(IVectorTarget.class).setter();
 			CONFIGURATION_5 = builder.build();
-
-			IN_BLOCK_6 = builder.in(RuneTokenDescriptors.BLOCK).type(IBlockTarget.class).serializer(InputSerializers.BLOCK).getter();
-			OUT_BLOCK_6 = builder.out(RuneTokenDescriptors.BLOCK).type(IBlockTarget.class).setter();
-			CONFIGURATION_6 = builder.build();
 		}
 
 		@Override
 		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess, boolean provisional) {
-			return ImmutableList.of(CONFIGURATION_1, CONFIGURATION_2, CONFIGURATION_3, CONFIGURATION_4, CONFIGURATION_5, CONFIGURATION_6);
+			return ImmutableList.of(CONFIGURATION_1, CONFIGURATION_2, CONFIGURATION_3, CONFIGURATION_4, CONFIGURATION_5);
 		}
 
 		@Override
@@ -118,18 +109,16 @@ public final class RunePinpoint extends AbstractRune<RunePinpoint> {
 				});
 			} else if(state.getConfiguration() == CONFIGURATION_2) {
 				IBlockTarget block = IN_BLOCK_2.get(io);
-				OUT_POSITION_2.set(io, block.isDynamic() ? new DynamicVectorTarget(() -> block.x() + 0.5D, () -> block.y() + 0.5D, () -> block.z() + 0.5D) : new StaticVectorTarget(block.block()));
+				OUT_POSITION_2.set(io, block);
 			} else if(state.getConfiguration() == CONFIGURATION_3) {
 				IVectorTarget target = IN_POSITION_3.get(io);
 				OUT_BLOCK_3.set(io, target instanceof IBlockTarget ? (IBlockTarget) target : new DynamicBlockTarget(target));
 			} else if(state.getConfiguration() == CONFIGURATION_4) {
-				OUT_POSITION_4.set(io, IN_BLOCK_4.get(io));
+				IBlockTarget target = IN_BLOCK_4.get(io);
+				OUT_BLOCK_4.set(io, !target.isDynamic() ? target : new StaticBlockTarget(target));
 			} else if(state.getConfiguration() == CONFIGURATION_5) {
 				IVectorTarget target = IN_POSITION_5.get(io);
 				OUT_POSITION_5.set(io, !target.isDynamic() ? target : new StaticVectorTarget(target));
-			} else if(state.getConfiguration() == CONFIGURATION_6) {
-				IBlockTarget target = IN_BLOCK_6.get(io);
-				OUT_BLOCK_6.set(io, !target.isDynamic() ? target : new StaticBlockTarget(target));
 			}
 
 			return null;

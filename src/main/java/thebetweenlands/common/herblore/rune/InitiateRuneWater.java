@@ -12,6 +12,7 @@ import thebetweenlands.api.runechain.base.INodeConfiguration;
 import thebetweenlands.api.runechain.base.INodeIO;
 import thebetweenlands.api.runechain.chain.IRuneExecutionContext;
 import thebetweenlands.api.runechain.initiation.InitiationPhase;
+import thebetweenlands.api.runechain.initiation.InitiationPhases;
 import thebetweenlands.api.runechain.initiation.InitiationState;
 import thebetweenlands.api.runechain.modifier.Subject;
 import thebetweenlands.api.runechain.rune.AbstractRune;
@@ -53,27 +54,26 @@ public final class InitiateRuneWater extends AbstractRune<InitiateRuneWater> {
 
 		private static class WaterInitiationState extends InitiationState<InitiateRuneWater> {
 			public boolean wasInWater = true;
-
-			public void setSuccess() {
-				this.success = true;
-			}
 		}
 
 		@Override
 		public InitiationState<InitiateRuneWater> checkInitiation(IRuneChainUser user, InitiationPhase phase, InitiationState<InitiateRuneWater> state) {
-			if(state instanceof WaterInitiationState == false) {
-				return new WaterInitiationState();
-			} else {
-				Entity entity = user.getEntity();
-				if(entity != null) {
-					WaterInitiationState waterState = (WaterInitiationState) state;
-					if(!waterState.wasInWater && entity.isInWater()) {
-						return InitiationState.success();
+			if(phase == InitiationPhases.TICK) {
+				if(state instanceof WaterInitiationState == false) {
+					return new WaterInitiationState();
+				} else {
+					Entity entity = user.getEntity();
+					if(entity != null) {
+						WaterInitiationState waterState = (WaterInitiationState) state;
+						if(!waterState.wasInWater && entity.isInWater()) {
+							return InitiationState.success();
+						}
+						waterState.wasInWater = entity.isInWater();
 					}
-					waterState.wasInWater = entity.isInWater();
 				}
+				return state;
 			}
-			return state;
+			return null;
 		}
 	}
 
