@@ -32,11 +32,19 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityAshSprite extends EntityMob implements IEntityBL {
+	protected static final byte EVENT_ENABLE_NO_CLIP = 80;
+	protected static final byte EVENT_DISABLE_NO_CLIP = 81;
+	
 	protected static final DataParameter<Byte> ASH_SPRITE_FLAGS = EntityDataManager.<Byte>createKey(EntityAshSprite.class, DataSerializers.BYTE);
+	
 	@Nullable
 	private BlockPos boundOrigin;
+	
+	private boolean canNoClip = true;
+	private int noClipTimeout = 0;
 
 	public EntityAshSprite(World worldIn) {
 		super(worldIn);
@@ -54,7 +62,26 @@ public class EntityAshSprite extends EntityMob implements IEntityBL {
 
 	@Override
 	public void onUpdate() {
-		noClip = true;
+		if(!world.isRemote) {
+			if(noClipTimeout > 0) {
+				if(canNoClip) {
+					canNoClip = false;
+					world.setEntityState(this, EVENT_DISABLE_NO_CLIP);
+				}
+				noClipTimeout--;
+			} else {
+				if(!canNoClip) {
+					canNoClip = true;
+					world.setEntityState(this, EVENT_ENABLE_NO_CLIP);
+				}
+				noClipTimeout = 0;
+			}
+		}
+		if(canNoClip || !this.isNotColliding()) {
+			noClip = true;
+		} else {
+			noClip = false;
+		}
 		super.onUpdate();
 		noClip = false;
 		setNoGravity(true);
@@ -62,6 +89,17 @@ public class EntityAshSprite extends EntityMob implements IEntityBL {
 			spawnParticles(getEntityWorld(), getPosition(), rand);
 	}
 
+	@Override
+	public void handleStatusUpdate(byte id) {
+		super.handleStatusUpdate(id);
+		
+		if(id == EVENT_ENABLE_NO_CLIP) {
+			canNoClip = true;
+		} else if(id == EVENT_DISABLE_NO_CLIP) {
+			canNoClip = false;
+		}
+	}
+	
 	@SideOnly(Side.CLIENT)
 	public void spawnParticles(World worldIn, BlockPos pos, Random rand) {
 		for(int i = 0; i < 4; i++) {
@@ -99,6 +137,21 @@ public class EntityAshSprite extends EntityMob implements IEntityBL {
 		return LootTableRegistry.ASH_SPRITE;
 	}
 
+		@Override
+	protected SoundEvent getAmbientSound() {
+		return SoundRegistry.ASHSPRITE_LIVING;
+	}
+
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSource) {
+		return SoundRegistry.ASHSPRITE_HURT;
+	}
+
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundRegistry.ASHSPRITE_DEATH;
+	}
+
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
@@ -118,9 +171,14 @@ public class EntityAshSprite extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if (source.equals(DamageSource.IN_WALL) || source.equals(DamageSource.DROWN))
+		if (source.equals(DamageSource.IN_WALL) || source.equals(DamageSource.DROWN)) {
 			return false;
-		return super.attackEntityFrom(source, damage);
+		}
+		if(super.attackEntityFrom(source, damage)) {
+			this.noClipTimeout = 60;
+			return true;
+		}
+		return false;
 	}
 
 	@Nullable
@@ -152,21 +210,6 @@ public class EntityAshSprite extends EntityMob implements IEntityBL {
 
 	public void setCharging(boolean charging) {
 		setAshSpriteFlag(1, charging);
-	}
-
-	@Override
-	protected SoundEvent getAmbientSound() {
-		return null;
-	}
-
-	@Override
-	protected SoundEvent getDeathSound() {
-		return null;
-	}
-
-	@Override
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return null;
 	}
 
 	@SideOnly(Side.CLIENT)

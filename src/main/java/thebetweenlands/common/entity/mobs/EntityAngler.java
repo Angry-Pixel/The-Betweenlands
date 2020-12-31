@@ -93,12 +93,12 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return super.getHurtSound(source);
+        return SoundRegistry.FISH_HURT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundRegistry.ANGLER_DEATH;
+        return SoundRegistry.FISH_DEATH;
     }
 
     @Override
@@ -203,9 +203,8 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 				motionY *= 1D;
 				motionZ *= 0.8999999761581421D;
 
-				if (getAttackTarget() == null) {
+				if (getAttackTarget() == null)
 					motionY -= 0.005D;
-				}
 			} else {
 				super.travel(strafe, up, forward);
 			}

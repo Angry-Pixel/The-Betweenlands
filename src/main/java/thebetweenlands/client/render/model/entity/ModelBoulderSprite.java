@@ -214,30 +214,6 @@ public class ModelBoulderSprite extends MowzieModelBase {
 		this.stalactites = new StalactitesModelRenderer(this);
 		this.block_main.addChild(stalactites);
 
-		parts = new MowzieModelRenderer[]{
-				stalactites,
-				block_main,
-				brow1,
-				nosebridge,
-				mosstache_left1,
-				mosstache_right1,
-				lebushybeard,
-				leg_left,
-				leg_right,
-				brow_left,
-				brow_right,
-				nosetip,
-				nosewings,
-				mosstache_left2,
-				mossbush_left1,
-				mosstache_right2,
-				mossbush_right1,
-				lebushybeard_sideleft,
-				lebushybeard_sideright,
-				actualbush,
-				extrabush
-		};
-
 		setInitPose();
 	}
 

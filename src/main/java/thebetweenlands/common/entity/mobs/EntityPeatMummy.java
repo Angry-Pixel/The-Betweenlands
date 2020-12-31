@@ -3,11 +3,14 @@ package thebetweenlands.common.entity.mobs;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -34,6 +37,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -60,7 +64,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 
 	public static final IAttribute CARRY_SHIMMERSTONE = (new BooleanAttribute(null, "bl.carryShimmerstone", false)).setDescription("Whether this Peat Mummy carries a Shimmerstone");
 	public static final IAttribute IS_BOSS = (new BooleanAttribute(null, "bl.isDreadfulPeatMummyBoss", false)).setDescription("Whether this Peat Mummy was spawned by a Dreadful Peat Mummy");
-	
+
 	private static final AxisAlignedBB ZERO_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
 
 	private static final int BREAK_COUNT = 5;
@@ -95,6 +99,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 
 	public EntityPeatMummy(World world) {
 		super(world);
+		this.experienceValue = 12;
 		this.setSize(1.0F, 1.2F);
 		this.setSpawningTicks(0);
 	}
@@ -366,7 +371,6 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	public boolean canBePushed() {
 		return super.canBePushed() && this.isSpawningFinished() && this.getChargingState() == 0;
 	}
-
 
 	@Override
 	public int getMaxSpawnedInChunk() {
@@ -642,7 +646,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	public void setCarryShimmerstone(boolean shimmerStone) {
 		this.getEntityAttribute(CARRY_SHIMMERSTONE).setBaseValue(shimmerStone ? 1 : 0);
 	}
-	
+
 	/**
 	 * Returns whether the Peat Mummy is holding a Shimmerstone
 	 * @return
@@ -650,7 +654,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	public boolean doesCarryShimmerstone() {
 		return this.getEntityAttribute(CARRY_SHIMMERSTONE).getBaseValue() > 0;
 	}
-	
+
 	/**
 	 * Sets whether the peat mummy was spawned by a Dreadful Peat Mummy
 	 * @param shimmerStone
@@ -658,7 +662,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	public void setBossMummy(boolean boss) {
 		this.getEntityAttribute(IS_BOSS).setBaseValue(boss ? 1 : 0);
 	}
-	
+
 	/**
 	 * Returns whether the Peat Mummy was spawned by a Dreadful Peat Mummy
 	 * @return
@@ -695,5 +699,24 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
     @Override
     protected boolean isValidLightLevel() {
     	return true;
+    }
+
+    @Override
+    @Nullable
+    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+        livingdata = super.onInitialSpawn(difficulty, livingdata);
+        if (!world.isRemote && this.world.rand.nextInt(20) == 0) {
+            EntitySwampHag hag = new EntitySwampHag(this.world);
+            hag.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+            hag.onInitialSpawn(difficulty, (IEntityLivingData)null);
+            this.world.spawnEntity(hag);
+            hag.startRiding(this);
+        }
+		return livingdata;
+    }
+    
+    @Override
+    protected int getExperiencePoints(EntityPlayer player) {
+    	return !this.isBossMummy() ? super.getExperiencePoints(player) : 0;
     }
 }

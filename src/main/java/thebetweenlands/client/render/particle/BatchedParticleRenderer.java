@@ -149,6 +149,10 @@ public class BatchedParticleRenderer {
 		}
 	}
 	
+	public void clearBatch(ParticleBatch batch) {
+		batch.particles.clear();
+	}
+	
 	public void renderAll(Entity entity, float partialTicks) {
 		for(ParticleBatch batch : this.renderedBatches) {
 			this.renderBatch(batch, entity, partialTicks);

@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.world.gen.feature.WorldGenLakeCavernSimulacrum;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenSludgeWormDungeon;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenSpawner;
@@ -48,10 +49,14 @@ public class TestItem extends Item {
             WorldGenSpawnerStructure smallRuins = new WorldGenSpawnerStructure();
             smallRuins.generate(worldIn, itemRand, pos.up());
 		*/
-
+		/*
 			WorldGenWightFortress fortress = new WorldGenWightFortress();
 			fortress.generate(worldIn, itemRand, pos.up());
-
+		*/
+				
+			WorldGenLakeCavernSimulacrum gen = new WorldGenLakeCavernSimulacrum();
+			gen.generate(worldIn, itemRand, pos.up());
+			
 		/*
 			WorldGenSmallRuins ruins = new WorldGenSmallRuins();
 			ruins.generate(worldIn, itemRand, pos.up());

@@ -5,16 +5,20 @@ import java.util.Random;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EventAuroras extends TimedEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "auroras");
 
 	protected static final DataParameter<Integer> AURORA_TYPE = GenericDataManager.createKey(EventAuroras.class, DataSerializers.VARINT);
 
+	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[] { new ResourceLocation("thebetweenlands:textures/events/auroras.png") };
+	
 	public EventAuroras(BLEnvironmentEventRegistry registry) {
 		super(registry);
 	}
@@ -70,6 +74,11 @@ public class EventAuroras extends TimedEnvironmentEvent {
 		this.dataManager.set(AURORA_TYPE, (int)this.getData().getShort("auroraType"));
 	}
 
+	@Override
+	protected boolean canActivate() {
+		return this.canBeActive();
+	}
+	
 	public short getAuroraType() {
 		return (short)this.dataManager.get(AURORA_TYPE).intValue();
 	}
@@ -82,5 +91,15 @@ public class EventAuroras extends TimedEnvironmentEvent {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public ResourceLocation[] getVisionTextures() {
+		return VISION_TEXTURES;
+	}
+	
+	@Override
+	public SoundEvent getChimesSound() {
+		return SoundRegistry.CHIMES_AURORAS;
 	}
 }

@@ -10,6 +10,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.world.World;
@@ -22,11 +23,14 @@ import thebetweenlands.common.block.terrain.BlockSnowBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 public class EventSnowfall extends TimedEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "snowfall");
 
+	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[] { new ResourceLocation("thebetweenlands:textures/events/snowfall.png") };
+	
 	private float snowingStrength = 0.0F;
 	protected static final DataParameter<Float> TARGET_SNOWING_STRENGTH = GenericDataManager.createKey(EventSnowfall.class, DataSerializers.FLOAT);
 
@@ -177,5 +181,15 @@ public class EventSnowfall extends TimedEnvironmentEvent {
 	@Override
 	public int getOnTime(Random rnd) {
 		return 4800 + rnd.nextInt(6000);
+	}
+
+	@Override
+	public ResourceLocation[] getVisionTextures() {
+		return VISION_TEXTURES;
+	}
+
+	@Override
+	public SoundEvent getChimesSound() {
+		return SoundRegistry.CHIMES_SNOWFALL;
 	}
 }

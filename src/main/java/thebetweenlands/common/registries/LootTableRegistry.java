@@ -62,6 +62,9 @@ public class LootTableRegistry {
     public static final ResourceLocation FABRICATED_SCROLL = register("animator/fabricated_scroll");
     public static final ResourceLocation PRESENT = register("loot/present_loot");
     public static final ResourceLocation PUFFSHROOM = register("loot/puffshroom");
+    public static final ResourceLocation LAKE_CAVERN_SIMULACRUM_OFFERINGS = register("loot/lake_cavern_simulacrum_offerings");
+    public static final ResourceLocation DEEPMAN_SIMULACRUM_OFFERINGS = register("loot/deepman_simulacrum_offerings");
+    public static final ResourceLocation ROOTMAN_SIMULACRUM_OFFERINGS = register("loot/rootman_simulacrum_offerings");
     
     public static final ResourceLocation SHARED_LOOT_POOL_TEST = register("loot/shared_loot_pool_test");
     

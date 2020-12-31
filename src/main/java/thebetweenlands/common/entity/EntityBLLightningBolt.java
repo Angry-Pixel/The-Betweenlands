@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -29,6 +30,7 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleLightningArc;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -38,20 +40,23 @@ public class EntityBLLightningBolt extends EntityLightningBolt implements IEntit
 	private BlockPos startPos = BlockPos.ORIGIN;
 	private int delay = 60;
 	private boolean isFloatingTarget;
-
+	
+	private boolean effectOnly;
+	
 	public EntityBLLightningBolt(World world) {
 		super(world, 0, 0, 0, true);
 		this.setSize(1, 1);
 		this.isImmuneToFire = true;
 	}
 
-	public EntityBLLightningBolt(World world, double x, double y, double z, int delay, boolean isFloatingTarget) {
+	public EntityBLLightningBolt(World world, double x, double y, double z, int delay, boolean isFloatingTarget, boolean effectOnly) {
 		super(world, x, y, z, true);
 		this.setSize(1, 1);
 		this.isImmuneToFire = true;
 		this.delay = Math.max(8, delay);
 		this.startPos = new BlockPos(x, y, z).add(world.rand.nextInt(40) - 20, 80, world.rand.nextInt(40) - 20);
 		this.isFloatingTarget = isFloatingTarget;
+		this.effectOnly = effectOnly;
 	}
 
 	@Override
@@ -134,7 +139,7 @@ public class EntityBLLightningBolt extends EntityLightningBolt implements IEntit
 		} else if(this.delay > 0 && this.delay <= 4) {
 			if(this.world.isRemote) {
 				this.world.setLastLightningBolt(2);
-			} else {
+			} else if(!this.effectOnly) {
 				if(this.delay == 4) {
 					BlockPos blockpos = new BlockPos(this);
 
@@ -203,6 +208,10 @@ public class EntityBLLightningBolt extends EntityLightningBolt implements IEntit
 									
 								} else if(!net.minecraftforge.event.ForgeEventFactory.onEntityStruckByLightning(entity, this)) {
 									entity.onStruckByLightning(this);
+									
+									if(this.isFloatingTarget && entity instanceof EntityPlayerMP) {
+										AdvancementCriterionRegistry.STRUCK_BY_LIGHTNING_WHILE_FLYING.trigger((EntityPlayerMP) entity);
+									}
 								}
 
 							}

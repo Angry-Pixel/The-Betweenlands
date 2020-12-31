@@ -171,7 +171,6 @@ public class ModelTarBeast extends MowzieModelBase {
 		this.armleft_1.addChild(this.armleft_2);
 		this.headbase.addChild(this.teeth_keepstraight);
 
-		parts = new MowzieModelRenderer[] {waistJoint, waist, legleft1, legright1, body_base, drippingtar2_keepstraight, chestpiece_invisible, chestpiece_left, chestpiece_right, neckJoint, shoulder_left, armleft_1, armleft_2, shoulder_right, armright_1, armright_2, neck, headJoint, headbase, headconnection, nose1, teeth_keepstraight, jaw, drippingtar1_keepstraight, nosecrane, legleft2, legright2};
 		setInitPose();
 	}
 

@@ -15,6 +15,30 @@ public class TileEntityGroundItem extends TileEntity {
 
     private ItemStack stack = ItemStack.EMPTY;
 
+    public boolean hasRandomOffset() {
+    	return true;
+    }
+    
+    public float getYOffset() {
+    	return 0.4f;
+    }
+    
+    public boolean isItemUpsideDown() {
+    	return true;
+    }
+    
+    public float getYRotation(float randomRotation) {
+    	return randomRotation;
+    }
+    
+    public float getTiltRotation() {
+    	return this.isItemUpsideDown() ? -120.0f : 15.0f;
+    }
+    
+    public float getItemScale() {
+    	return 0.75f;
+    }
+    
     public ItemStack getStack() {
         return stack;
     }

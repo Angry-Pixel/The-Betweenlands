@@ -30,7 +30,7 @@ public class ItemBlockEnum<T extends Enum<T> & IStringSerializable> extends Item
 	private final char separator;
 	private final String[] unlocalizedNames;
 
-	private ItemBlockEnum(Block block, T[] values, char separator, boolean hasGenericMetaSelector) {
+	protected ItemBlockEnum(Block block, T[] values, char separator, boolean hasGenericMetaSelector) {
 		super(block);
 		this.setMaxDamage(0);
 		this.setHasSubtypes(true);

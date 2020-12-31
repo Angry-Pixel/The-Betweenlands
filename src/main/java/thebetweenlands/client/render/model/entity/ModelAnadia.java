@@ -97,6 +97,8 @@ public class ModelAnadia extends MowzieModelBase {
     MowzieModelRenderer set3_tail_back;
     MowzieModelRenderer set3_caudalfin1;
 
+    private MowzieModelRenderer[] parts;
+    
 	public ModelAnadia() {
 		textureWidth = 64;
 		textureHeight = 64;

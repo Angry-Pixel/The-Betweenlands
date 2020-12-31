@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
@@ -12,6 +13,9 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 public class EventBloodSky extends TimedEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "blood_sky");
+
+	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[] { new ResourceLocation("thebetweenlands:textures/events/blood_sky.png") };
+	
 	private boolean soundPlayed = true;
 	private float skyTransparency = 0.0F;
 	private float lastSkyTransparency = 0.0F;
@@ -79,5 +83,15 @@ public class EventBloodSky extends TimedEnvironmentEvent {
 		} else {
 			this.soundPlayed = false;
 		}
+	}
+
+	@Override
+	public ResourceLocation[] getVisionTextures() {
+		return VISION_TEXTURES;
+	}
+	
+	@Override
+	public SoundEvent getChimesSound() {
+		return SoundRegistry.CHIMES_BLOOD_SKY;
 	}
 }

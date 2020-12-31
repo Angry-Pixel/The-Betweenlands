@@ -155,69 +155,71 @@ public abstract class TileEntityAbstractBLFurnace extends TileEntityBasicInvento
 
     @Override
     public void update() {
-        boolean isDirty = false;
-
-        boolean wasBurning = false;
-        
-        for (FurnaceData data : furnaceData) {
-            wasBurning |= isBurning(data.index);
-        }
-        
-        boolean isBurning = false;
-        
-        for (FurnaceData data : furnaceData) {
-            if (data.furnaceBurnTime > 0)
-                data.furnaceBurnTime = Math.max(0, data.furnaceBurnTime - 1);
-            else if (data.furnaceBurnTime < 0)
-                data.furnaceBurnTime = 0;
-
-            if (!world.isRemote) {
-                ItemStack fuelStack = getStackInSlot(data.getFuelSlot());
-                if (data.furnaceBurnTime != 0 || !fuelStack.isEmpty() && !getStackInSlot(data.getInputSlot()).isEmpty()) {
-                    if (data.furnaceBurnTime == 0 && canSmelt(data)) {
-                        data.currentItemBurnTime = data.furnaceBurnTime = TileEntityFurnace.getItemBurnTime(fuelStack);
-
-                        if (data.furnaceBurnTime > 0) {
-                            isDirty = true;
-
-                            if (!fuelStack.isEmpty()) {
-                                ItemStack containerItem = fuelStack.getItem().getContainerItem(fuelStack);
-                                fuelStack.shrink(1);
-
-                                if (fuelStack.getCount() == 0) {
-                                    setInventorySlotContents(data.getFuelSlot(), containerItem);
-                                }
-                            }
-                        }
-                    }
-
-                    if (isBurning(data.index) && canSmelt(data)) {
-                        ++data.furnaceCookTime;
-
-                        if (data.furnaceCookTime == 200) {
-                            data.furnaceCookTime = 0;
-                            smeltItem(data);
-                            isDirty = true;
-                        }
-                    } else {
-                        data.furnaceCookTime = 0;
-                    }
-                }
-
-                if(data.furnaceBurnTime > 0) {
-                	isBurning = true;
-                }
-            }
-        }
-
-        if(wasBurning != isBurning) {
-        	updateState(isBurning);
-        	isDirty = true;
-        }
-        
-        if (isDirty) {
-            markDirty();
-        }
+    	if(!getWorld().isRemote) {
+	        boolean isDirty = false;
+	
+	        boolean wasBurning = false;
+	        
+	        for (FurnaceData data : furnaceData) {
+	            wasBurning |= isBurning(data.index);
+	        }
+	        
+	        boolean isBurning = false;
+	        
+	        for (FurnaceData data : furnaceData) {
+	            if (data.furnaceBurnTime > 0)
+	                data.furnaceBurnTime = Math.max(0, data.furnaceBurnTime - 1);
+	            else if (data.furnaceBurnTime < 0)
+	                data.furnaceBurnTime = 0;
+	
+	            if (!world.isRemote) {
+	                ItemStack fuelStack = getStackInSlot(data.getFuelSlot());
+	                if (data.furnaceBurnTime != 0 || !fuelStack.isEmpty() && !getStackInSlot(data.getInputSlot()).isEmpty()) {
+	                    if (data.furnaceBurnTime == 0 && canSmelt(data)) {
+	                        data.currentItemBurnTime = data.furnaceBurnTime = TileEntityFurnace.getItemBurnTime(fuelStack);
+	
+	                        if (data.furnaceBurnTime > 0) {
+	                            isDirty = true;
+	
+	                            if (!fuelStack.isEmpty()) {
+	                                ItemStack containerItem = fuelStack.getItem().getContainerItem(fuelStack);
+	                                fuelStack.shrink(1);
+	
+	                                if (fuelStack.getCount() == 0) {
+	                                    setInventorySlotContents(data.getFuelSlot(), containerItem);
+	                                }
+	                            }
+	                        }
+	                    }
+	
+	                    if (isBurning(data.index) && canSmelt(data)) {
+	                        ++data.furnaceCookTime;
+	
+	                        if (data.furnaceCookTime == 200) {
+	                            data.furnaceCookTime = 0;
+	                            smeltItem(data);
+	                            isDirty = true;
+	                        }
+	                    } else {
+	                        data.furnaceCookTime = 0;
+	                    }
+	                }
+	
+	                if(data.furnaceBurnTime > 0) {
+	                	isBurning = true;
+	                }
+	            }
+	        }
+	
+	        if(wasBurning != isBurning) {
+	        	updateState(isBurning);
+	        	isDirty = true;
+	        }
+	        
+	        if (isDirty) {
+	            markDirty();
+	        }
+    	}
     }
 
     private boolean canSmelt(FurnaceData data) {

@@ -2,22 +2,41 @@ package thebetweenlands.common.inventory.container;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.inventory.slot.SlotRestriction;
-import thebetweenlands.common.inventory.slot.SlotRestrictionNoMeta;
 import thebetweenlands.common.inventory.slot.SlotSizeRestriction;
+import thebetweenlands.common.item.misc.ItemLifeCrystal;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityAnimator;
-import net.minecraft.inventory.Container;
 
 
 public class ContainerAnimator extends Container {
 
+	public static class SlotLifeCrystal extends Slot {
+		public SlotLifeCrystal(IInventory inventory, int slotIndex, int x, int y) {
+	        super(inventory, slotIndex, x, y);
+	    }
+
+	    @Override
+	    public boolean isItemValid(ItemStack stack) {
+	        if (stack.getItem() instanceof ItemLifeCrystal)
+	            return true;
+	        return false;
+	    }
+
+	    @Override
+		public int getSlotStackLimit() {
+	        return 1;
+	    }
+	}
+	
     private final int numRows = 2;
     private TileEntityAnimator animator;
 
@@ -27,7 +46,7 @@ public class ContainerAnimator extends Container {
         animator = tile;
 
         addSlotToContainer(new SlotSizeRestriction(tile, 0, 79, 23, 1));
-        addSlotToContainer(new SlotRestrictionNoMeta(tile, 1, 34, 57, new ItemStack(ItemRegistry.LIFE_CRYSTAL), 1));
+        addSlotToContainer(new SlotLifeCrystal(tile, 1, 34, 57));
         addSlotToContainer(new SlotRestriction(tile, 2, 124, 57, new ItemStack(ItemRegistry.ITEMS_MISC, 1, ItemMisc.EnumItemMisc.SULFUR.getID()), 64, this));
 
         for (int j = 0; j < 3; j++)
@@ -49,10 +68,10 @@ public class ContainerAnimator extends Container {
                 if (stack1.getItem() == ItemRegistry.ITEMS_MISC && stack1.getItemDamage() == ItemMisc.EnumItemMisc.SULFUR.getID())
                     if (!mergeItemStack(stack1, 2, 3, true))
                         return ItemStack.EMPTY;
-                if (stack1.getItem() == ItemRegistry.LIFE_CRYSTAL)
+                if (stack1.getItem() instanceof ItemLifeCrystal)
                     if (!mergeItemStack(stack1, 1, 2, true))
                         return ItemStack.EMPTY;
-                if (stack1.getCount() == 1 && stack1 != new ItemStack(ItemRegistry.ITEMS_MISC, 1, ItemMisc.EnumItemMisc.SULFUR.getID()) && stack1.getItem() != ItemRegistry.LIFE_CRYSTAL)
+                if (stack1.getCount() == 1 && stack1 != new ItemStack(ItemRegistry.ITEMS_MISC, 1, ItemMisc.EnumItemMisc.SULFUR.getID()) && stack1.getItem() instanceof ItemLifeCrystal == false)
                     if (!mergeItemStack(stack1, 0, 1, true))
                         return ItemStack.EMPTY;
             } else if (!mergeItemStack(stack1, 3, inventorySlots.size(), false))

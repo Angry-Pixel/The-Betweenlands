@@ -527,17 +527,6 @@ public class ModelBarrishee extends MowzieModelBase {
 	        belly_2.addChild(greeble1_1);
 	        cog1_5.addChild(cog1_6);
 
-        
-		parts = new MowzieModelRenderer[] { base_rotation_bit, chest_right, chest_left, neck, belly_1, shoulder_right,
-				arm_right_1, arm_right_2, hand_right_1, finger_right_mid, finger_right_outer, finger_right_inner,
-				finger_right_thumb, finger_right_mid_1, finger_right_mid_2, finger_right_outer_1, finger_right_outer_2,
-				finger_right_inner_1, finger_right_inner_2, finger_right_thumb_1, finger_right_thumb_2, shoulder_left,
-				arm_left_1, arm_left_2, hand_left_1, finger_left_mid, finger_left_outer, finger_left_inner,
-				finger_left_thumb, finger_left_mid_1, finger_left_mid_2, finger_left_outer_1, finger_left_outer_2,
-				finger_left_inner_1, finger_left_inner_2, finger_left_thumb_1, finger_left_thumb_2, head_main, jaw_back,
-				teeth_top, jaw1, teeth_bottom, belly_2, greeble2_1, leg_1, greeble1_1,
-				greeble_back, greeble2_2, leg_2, leg_3, ski_1, ski_2, ski_3, greeble1_2 };//cogbeam 
-
         setInitPose();
     }
 

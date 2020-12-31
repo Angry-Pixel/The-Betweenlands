@@ -25,8 +25,8 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.model.ControlledAnimation;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.ai.EntityAIFlyingWander;
-import thebetweenlands.common.entity.ai.PathNavigateFlyingBL;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
+import thebetweenlands.common.entity.movement.PathNavigateFlyingBL;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {

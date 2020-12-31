@@ -266,6 +266,7 @@ public class RecipeRegistry {
 		GameRegistry.addSmelting(BlockRegistry.MOSS, new ItemStack(BlockRegistry.DEAD_MOSS), 0.1F);
 		GameRegistry.addSmelting(BlockRegistry.LICHEN, new ItemStack(BlockRegistry.DEAD_LICHEN), 0.1F);
 		GameRegistry.addSmelting(BlockRegistry.WEEDWOOD_BUSH, new ItemStack(BlockRegistry.DEAD_WEEDWOOD_BUSH), 0.1F);
+		GameRegistry.addSmelting(BlockRegistry.SULFUR_TORCH_EXTINGUISHED, new ItemStack(BlockRegistry.SULFUR_TORCH), 0.1F);
 		GameRegistry.addSmelting(new ItemStack(ItemRegistry.ANADIA_MEAT_RAW), new ItemStack(ItemRegistry.ANADIA_MEAT_COOKED), 0.3F);
 		//smelt to nuggets
 		GameRegistry.addSmelting(ItemRegistry.VALONITE_AXE, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);

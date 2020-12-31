@@ -198,6 +198,8 @@ public class ItemEquipmentHandler {
 							event.getDrops().add(equipmentDrop);
 						}
 					}
+					
+					inv.clear();
 				}
 			}
 		}

@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -17,6 +18,8 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.tile.TileEntitySimulacrum;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 public class EventThunderstorm extends TimedEnvironmentEvent {
@@ -24,8 +27,11 @@ public class EventThunderstorm extends TimedEnvironmentEvent {
 
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "thunderstorm");
 
+	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[] { new ResourceLocation("thebetweenlands:textures/events/thunderstorm.png") };
+	
 	public EventThunderstorm(BLEnvironmentEventRegistry registry) {
 		super(registry);
+		this.getActiveStateEstimator().dependsOnEvent(() -> registry.heavyRain);
 	}
 
 	@Override
@@ -57,17 +63,24 @@ public class EventThunderstorm extends TimedEnvironmentEvent {
 						
 						BlockPos seedPos = new BlockPos(chunk.x * 16 + (l & 15), 0, chunk.z * 16 + (l >> 8 & 15));
 						
-						boolean isFlyingPlayerTarget = false;
+						TileEntitySimulacrum simulacrum = TileEntitySimulacrum.getClosestActiveTile(TileEntitySimulacrum.class, null, worldServer, seedPos.getX() + 0.5D, world.getHeight(seedPos).getY(), seedPos.getZ() + 0.5D, 64.0D, TileEntitySimulacrum.Effect.ATTRACTION, null);
 						
-						BlockPos pos = this.getNearbyFlyingPlayer(worldServer, seedPos);
-						if(pos == null) {
-							pos = this.adjustPosToNearbyEntity(worldServer, seedPos);
+						BlockPos pos;
+						boolean isFlyingPlayerTarget = false;						
+						
+						if(simulacrum != null) {
+							pos = simulacrum.getPos().up();
 						} else {
-							isFlyingPlayerTarget = true;
+							pos = this.getNearbyFlyingPlayer(worldServer, seedPos);
+							if(pos == null) {
+								pos = this.adjustPosToNearbyEntity(worldServer, seedPos);
+							} else {
+								isFlyingPlayerTarget = true;
+							}
 						}
 						
 						if((pos.getY() > 150 || this.getWorld().rand.nextInt(8) == 0) && world.isRainingAt(pos)) {
-							world.spawnEntity(new EntityBLLightningBolt(world, (double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), isFlyingPlayerTarget ? 50 : 400, isFlyingPlayerTarget));
+							world.spawnEntity(new EntityBLLightningBolt(world, (double)pos.getX() + 0.5D, (double)pos.getY(), (double)pos.getZ() + 0.5D, isFlyingPlayerTarget ? 50 : 400, isFlyingPlayerTarget, false));
 						}
 					}
 				}
@@ -138,5 +151,15 @@ public class EventThunderstorm extends TimedEnvironmentEvent {
 	@Override
 	public int getOnTime(Random rnd) {
 		return 4000 + rnd.nextInt(4000);
+	}
+
+	@Override
+	public ResourceLocation[] getVisionTextures() {
+		return VISION_TEXTURES;
+	}
+	
+	@Override
+	public SoundEvent getChimesSound() {
+		return SoundRegistry.CHIMES_THUNDERSTORM;
 	}
 }
