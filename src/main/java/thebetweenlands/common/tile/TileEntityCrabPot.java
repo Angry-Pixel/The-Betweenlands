@@ -11,6 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -27,8 +28,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.entity.mobs.EntityBubblerCrab;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
+import thebetweenlands.common.item.BLMaterial;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemMob;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class TileEntityCrabPot extends TileEntity implements ITickable, IInventory {
@@ -80,7 +83,31 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 					markForUpdate();
 				}
 			}
+
+			if ((hasSiltCrab() || hasBubblerCrab()) && !active && world.getTotalWorldTime()%40 == 0) {
+				if(checkValidBlockAbove(getWorld(), getPos().up()))
+					if(checkValidBlockBelow(getWorld(), getPos().down())) {
+						if(hasSiltCrab()) {
+							world.setBlockState(getPos().up(), Blocks.AIR.getDefaultState(), 3);
+							world.setBlockState(getPos().down(), BlockRegistry.SILT.getDefaultState(), 3);
+							System.out.println("Doing Silt crab stuff.");
+						}
+						if(hasBubblerCrab()) {
+							world.setBlockState(getPos().up(), Blocks.AIR.getDefaultState(), 3);
+							world.setBlockState(getPos().down(), BlockRegistry.SILT_GLASS.getDefaultState(), 3);
+							System.out.println("Doing Bubbler crab stuff.");
+						}
+					}
+			}
 		}
+	}
+
+	private boolean checkValidBlockBelow(World world, BlockPos blockPos) {
+		return world.getBlockState(blockPos).getMaterial() == BLMaterial.WATER;
+	}
+
+	private boolean checkValidBlockAbove(World world, BlockPos blockPos) {
+		return !world.isAirBlock(blockPos) && (hasSiltCrab() && world.getBlockState(blockPos).getBlock() == BlockRegistry.MUD || hasBubblerCrab() && world.getBlockState(blockPos).getBlock() == BlockRegistry.SILT); //test
 	}
 
 	private EntityLiving checkCatch() {
@@ -119,6 +146,16 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 	public boolean hasBaitItem() {
 		ItemStack baitItem = getItems().get(0);
 		return !baitItem.isEmpty() && baitItem.getItem() == EnumItemMisc.ANADIA_REMAINS.getItem();
+	}
+
+	private boolean hasSiltCrab() {
+		ItemStack crabItem = getItems().get(0);
+		return !crabItem.isEmpty() && crabItem.getItem() == ItemRegistry.SILT_CRAB;
+	}
+
+	private boolean hasBubblerCrab() {
+		ItemStack crabItem = getItems().get(0);
+		return !crabItem.isEmpty() && crabItem.getItem() == ItemRegistry.BUBBLER_CRAB;
 	}
 
 	public void markForUpdate() {
