@@ -298,6 +298,7 @@ public class SoundRegistry {
     public static final BLSoundEvent ANADIA_TREASURE_COLLECTED = reg("anadia_treasure_collected");
     public static final BLSoundEvent ANADIA_LOST = reg("anadia_lost");
     public static final BLSoundEvent ANADIA_WON = reg("anadia_won");
+    public static final BLSoundEvent FISHING_CRAB = reg("fishing_crab");
 
     // Items
     public static final BLSoundEvent ROWBOAT_ROW_STARBOARD = reg("rowboat_row_starboard");

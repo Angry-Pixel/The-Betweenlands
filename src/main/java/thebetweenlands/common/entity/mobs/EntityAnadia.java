@@ -498,6 +498,10 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		getEntityWorld().playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.ANADIA_WON, SoundCategory.PLAYERS, 1F, 1F);
 	}
 
+	public void playAnadiaCrab(EntityPlayer player) {
+		getEntityWorld().playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.FISHING_CRAB, SoundCategory.PLAYERS, 1F, 1F);
+	}
+
 	@Override
     protected SoundEvent getHurtSound(DamageSource source) {
         return super.getHurtSound(source);
@@ -622,64 +626,65 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        		setTreasureTicks(1024);
 	        }
 
-	        if(isBeingRidden() && getPassengers().get(0) instanceof EntityBLFishHook) {
-	        	if(getStaminaTicks() == 0 && PLAY_ANADIA_WON_SOUND) {
-	        		if(getPassengers().get(0) instanceof EntityBLFishHook) {
-	        			EntityBLFishHook hook = (EntityBLFishHook) getPassengers().get(0);
-	        			if(hook != null && hook.getAngler() != null)
-	        				playAnadiaWonSound(hook.getAngler());
-	        			PLAY_ANADIA_WON_SOUND = false;
-	        		}
-	        	}
+			if (isBeingRidden() && getPassengers().get(0) instanceof EntityBLFishHook) {
+				EntityBLFishHook hook = (EntityBLFishHook) getPassengers().get(0);
 
-	        	if(getStaminaTicks() > 0) {	
-		        	if(getEscapeDelay() > 0)
-		        		setEscapeDelay(getEscapeDelay() - 1);
-	
-		        	if(getEscapeTicks() > 0 && getEscapeDelay() <= 0)
-		        		setEscapeTicks(getEscapeTicks() -3);
-		        	if(getEscapeTicks() * 256 / 1024 < getStaminaTicks() * 256 / 180 && getEscapeDelay() <= 0) {
-		        		if(getPassengers().get(0) instanceof EntityBLFishHook) {
-		        			EntityBLFishHook hook = (EntityBLFishHook) getPassengers().get(0);
-		        			if(hook != null && hook.getAngler() != null)
-		        				playAnadiaLostSound(hook.getAngler());
-		        		}
-		        		getPassengers().get(0).dismountRidingEntity(); // this just releases the fish atm
-		        	}
+				if (getStaminaTicks() == 0 && PLAY_ANADIA_WON_SOUND) {
+					if (hook != null && hook.getAngler() != null)
+						playAnadiaWonSound(hook.getAngler());
+					PLAY_ANADIA_WON_SOUND = false;
+				}
 
-		        	if(getObstruction1Ticks() >= 0) {
-		        		setObstruction1Ticks(getObstruction1Ticks() - 1);
-		        		if(getObstruction1Ticks() <= 0)
-		        			setObstruction1Ticks(256);
-		        		}
-		        	
-		        	if(getObstruction2Ticks() >= 0) {
-		        		setObstruction2Ticks(getObstruction2Ticks() - 2);
-		        		if(getObstruction2Ticks() <= 0)
-		        			setObstruction2Ticks(256);
-		        		}
-		        	
-		        	if(getObstruction3Ticks() >= 0) {
-		        		setObstruction3Ticks(getObstruction3Ticks() - 1);
-		        		if(getObstruction3Ticks() <= 0)
-		        			setObstruction3Ticks(256);
-		        		}
-		        	
-		        	if(getObstruction4Ticks() >= 0) {
-		        		setObstruction4Ticks(getObstruction4Ticks() - 1);
-		        		if(getObstruction4Ticks() <= 0)
-		        			setObstruction4Ticks(512);
-		        		}
-	
-					if (isTreasureFish() && getTreasureTicks() >= 0) {
-						setTreasureTicks(getTreasureTicks() - 1);
-						if (getTreasureTicks() <= 0) {
-							if (getTreasureUnlocked())
-								setIsTreasureFish(false);
-							setTreasureTicks(1024);
-						}
+				if (getStaminaTicks() > 0 && getEscapeDelay() > 0) {
+					setEscapeDelay(getEscapeDelay() - 1);
+
+					if (getEscapeDelay() == 10)
+						if (hook != null && hook.getAngler() != null)
+							playAnadiaCrab(hook.getAngler());
+				}
+
+				if (getEscapeTicks() > 0 && getEscapeDelay() <= 0)
+					setEscapeTicks(getEscapeTicks() - 3);
+
+				if (getEscapeTicks() * 256 / 1024 < getStaminaTicks() * 256 / 180 && getEscapeDelay() <= 0) {
+					if (hook != null && hook.getAngler() != null) {
+						playAnadiaLostSound(hook.getAngler());
+						getPassengers().get(0).dismountRidingEntity(); // this just  releases the fish atm
 					}
-		        }
+				}
+
+				if (getObstruction1Ticks() >= 0) {
+					setObstruction1Ticks(getObstruction1Ticks() - 1);
+					if (getObstruction1Ticks() <= 0)
+						setObstruction1Ticks(256);
+				}
+
+				if (getObstruction2Ticks() >= 0) {
+					setObstruction2Ticks(getObstruction2Ticks() - 2);
+					if (getObstruction2Ticks() <= 0)
+						setObstruction2Ticks(256);
+				}
+
+				if (getObstruction3Ticks() >= 0) {
+					setObstruction3Ticks(getObstruction3Ticks() - 1);
+					if (getObstruction3Ticks() <= 0)
+						setObstruction3Ticks(256);
+				}
+
+				if (getObstruction4Ticks() >= 0) {
+					setObstruction4Ticks(getObstruction4Ticks() - 1);
+					if (getObstruction4Ticks() <= 0)
+						setObstruction4Ticks(512);
+				}
+
+				if (isTreasureFish() && getTreasureTicks() >= 0) {
+					setTreasureTicks(getTreasureTicks() - 1);
+					if (getTreasureTicks() <= 0) {
+						if (getTreasureUnlocked())
+							setIsTreasureFish(false);
+						setTreasureTicks(1024);
+					}
+				}
 			}
 		}
 		super.onUpdate();

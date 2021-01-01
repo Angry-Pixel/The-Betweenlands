@@ -2007,5 +2007,10 @@
     "sounds": [
       "thebetweenlands:anadia_won"
     ]
+  },
+  "fishing_crab": {
+    "sounds": [
+      "thebetweenlands:fishing_crab"
+    ]
   }
 }
