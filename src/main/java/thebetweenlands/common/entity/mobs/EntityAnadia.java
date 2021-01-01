@@ -66,6 +66,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	private static final DataParameter<Integer> STAMINA_TICKS = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 	private static final DataParameter<Byte> FISH_COLOUR = EntityDataManager.<Byte>createKey(EntityAnadia.class, DataSerializers.BYTE);
 	private static final DataParameter<Integer> ESCAPE_TICKS = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> ESCAPE_DELAY = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> OBSTRUCTION_TICKS_1 = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> OBSTRUCTION_TICKS_2 = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> OBSTRUCTION_TICKS_3 = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
@@ -76,18 +77,19 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	private static final DataParameter<Boolean> IS_TREASURE_FISH = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> TREASURE_TICKS = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> TREASURE_UNLOCKED = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.BOOLEAN);
-
+	
+	
 	public EntityAnadia.AIFindBait aiFindBait;
 	public EntityAnadia.AIFindHook aiFindHook;
 	public byte BASE = 1;
 	public byte SILVER = 2;
 	public byte SMOKED = 0;
 	public byte ROTTEN = 1;
-	
-	public int ESCAPE_DELAY;
+
 	public boolean PLAY_ANADIA_WON_SOUND = true;
 	
 	public int animationFrame = 0;
+	public int animationFrameCrab = 0;
 	
 	List<Integer> obstructionList = new ArrayList<Integer>();
 	
@@ -136,6 +138,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
       //  dataManager.register(HUNGER_COOLDOWN, 0);
         dataManager.register(STAMINA_TICKS, 40);
         dataManager.register(ESCAPE_TICKS, 1024);
+        dataManager.register(ESCAPE_DELAY, 80);
         dataManager.register(OBSTRUCTION_TICKS_1, 64);
         dataManager.register(OBSTRUCTION_TICKS_2, 128);
         dataManager.register(OBSTRUCTION_TICKS_3, 192);
@@ -265,6 +268,14 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
     public int getEscapeTicks() {
 		return dataManager.get(ESCAPE_TICKS);
 	}
+
+    public void setEscapeDelay(int count) {
+        dataManager.set(ESCAPE_DELAY, count);
+    }
+
+    public int getEscapeDelay() {
+        return dataManager.get(ESCAPE_DELAY);
+    }
 
     public void setObstruction1Ticks(int count) {
 		dataManager.set(OBSTRUCTION_TICKS_1, count);
@@ -570,6 +581,10 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 				animationFrame += 16;
 			if(animationFrame > 48)
 				animationFrame = 0;
+			
+			animationFrameCrab += 16;
+			if(animationFrameCrab > 48)
+				animationFrameCrab = 0;
 		}
 
 		if(!getEntityWorld().isRemote) {
@@ -588,8 +603,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        	if(!PLAY_ANADIA_WON_SOUND)
 	        		PLAY_ANADIA_WON_SOUND = true;
 
-	        	if(ESCAPE_DELAY < (int) getStaminaMods() * 30)
-	        		ESCAPE_DELAY = (int) (getStaminaMods() * 30);
+	        	if(getEscapeDelay() < (int) getStaminaMods() * 30)
+	        		setEscapeDelay((int) (getStaminaMods() * 30));
 
 	        	if(getStaminaTicks() < (int) (getStaminaMods() * 20))
 	        		setStaminaTicks(getStaminaTicks() + 1);
@@ -618,12 +633,12 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        	}
 
 	        	if(getStaminaTicks() > 0) {	
-		        	if(ESCAPE_DELAY > 0)
-		        		ESCAPE_DELAY--;
+		        	if(getEscapeDelay() > 0)
+		        		setEscapeDelay(getEscapeDelay() - 1);
 	
-		        	if(getEscapeTicks() > 0 && ESCAPE_DELAY <= 0)
+		        	if(getEscapeTicks() > 0 && getEscapeDelay() <= 0)
 		        		setEscapeTicks(getEscapeTicks() -3);
-		        	if(getEscapeTicks() * 256 / 1024 < getStaminaTicks() * 256 / 180 && ESCAPE_DELAY <= 0) {
+		        	if(getEscapeTicks() * 256 / 1024 < getStaminaTicks() * 256 / 180 && getEscapeDelay() <= 0) {
 		        		if(getPassengers().get(0) instanceof EntityBLFishHook) {
 		        			EntityBLFishHook hook = (EntityBLFishHook) getPassengers().get(0);
 		        			if(hook != null && hook.getAngler() != null)

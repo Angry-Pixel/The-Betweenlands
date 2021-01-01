@@ -36,6 +36,8 @@ public class GuiFishStaminaBar extends Gui {
 						return;
 					int fishpos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getStaminaTicks() * 256 / 180;
 					int escapepos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getEscapeTicks() * 256 / 1024;
+					int helpMe = (int) ((EntityAnadia) player.fishEntity.getRidingEntity()).getStaminaMods() * 30;
+					int escapeDelay = ((EntityAnadia) player.fishEntity.getRidingEntity()).getEscapeDelay();
 					int obstructpos1 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction1Ticks();
 					int obstructpos2 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction2Ticks();
 					int obstructpos3 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction3Ticks();
@@ -44,16 +46,17 @@ public class GuiFishStaminaBar extends Gui {
 					boolean showTreasure = ((EntityAnadia) player.fishEntity.getRidingEntity()).isTreasureFish();
 					boolean treasureUnlocked = ((EntityAnadia) player.fishEntity.getRidingEntity()).getTreasureUnlocked();
 					int aniFrame = ((EntityAnadia) player.fishEntity.getRidingEntity()).animationFrame;
+					int aniFrameCrab = ((EntityAnadia) player.fishEntity.getRidingEntity()).animationFrameCrab;
 					GlStateManager.color(1F, 1F, 1F, 1F);
 					mc.renderEngine.bindTexture(GUI_TEXTURE);
 					ScaledResolution res = new ScaledResolution(mc);
-					renderStaminaBar(-256 + fishpos, -256 + Math.min(256, escapepos), 0 - obstructpos1, 0 - obstructpos2, 0 - obstructpos3, 0 - obstructpos4, 0 - treasurePos, showTreasure, treasureUnlocked, (float)res.getScaledWidth() * 0.5F - 128F, (float)res.getScaledHeight() * 0.5F - 120F, aniFrame);
+					renderStaminaBar(-256 + fishpos, -256 + Math.min(256, escapepos),  escapeDelay < 10 ? escapeDelay: 10, 0 - obstructpos1, 0 - obstructpos2, 0 - obstructpos3, 0 - obstructpos4, 0 - treasurePos, showTreasure, treasureUnlocked, (float)res.getScaledWidth() * 0.5F - 128F, (float)res.getScaledHeight() * 0.5F - 120F, aniFrame, aniFrameCrab);
 				}
 			}
 		}
 	}
 
-	private void renderStaminaBar(int staminaTicks, int escapeTicks, int obstructionTicks1, int obstructionTicks2, int obstructionTicks3, int obstructionTicks4, int treasureTick, boolean hasTreasure, boolean treasureUnlocked,float posX, float posY, int aniFrame) {
+	private void renderStaminaBar(int staminaTicks, int escapeTicks, int escapeDelay, int obstructionTicks1, int obstructionTicks2, int obstructionTicks3, int obstructionTicks4, int treasureTick, boolean hasTreasure, boolean treasureUnlocked,float posX, float posY, int aniFrame, int aniFrameCrab) {
 		Minecraft mc = Minecraft.getMinecraft();
 		Framebuffer fbo = mc.getFramebuffer();
 		GlStateManager.pushMatrix();
@@ -93,8 +96,8 @@ public class GuiFishStaminaBar extends Gui {
 			drawTexturedModalRect(posX - obstructionTicks4 - 8, posY + 2, 0 + aniFrame, 112, 16, 16); // jolly fush
 			GlStateManager.disableBlend();
 			GlStateManager.popMatrix();
-
-			drawTexturedModalRect(posX - escapeTicks - 8, posY + 2, 0 + (getCrabScroll(escapeTicks) * 16), 144, 16, 16); // crab
+			drawTexturedModalRect(posX - escapeTicks - 8, posY + 2 + escapeDelay, escapeDelay < 10 ? aniFrameCrab : aniFrame, 144, 16, 16); // crab
+			
 			drawTexturedModalRect(posX - obstructionTicks1 - 8, posY, 0 + aniFrame, 64, 16, 16); // weed
 			drawTexturedModalRect(posX - obstructionTicks3 - 8, posY, 0 + aniFrame, 96, 16, 16); // coral
 			drawTexturedModalRect(posX - obstructionTicks2 - 8, posY, 0 + aniFrame, 80, 16, 16); // rock
@@ -103,18 +106,6 @@ public class GuiFishStaminaBar extends Gui {
 		}
 
 		GlStateManager.popMatrix();
-	}
-
-	private int getCrabScroll(int escapeTicks) {
-		if (escapeTicks%4 == 0)
-			return 0;
-		if (escapeTicks%4 == -1)
-			return 1;
-		if (escapeTicks%4 == -2)
-			return 2;
-		if (escapeTicks%4 == -3)
-			return 3;
-		return 0;
 	}
 
 	public static void drawHangingRope(int updateCounter, float sx, float sy, float ex, float ey, float hang, double zLevel) {
