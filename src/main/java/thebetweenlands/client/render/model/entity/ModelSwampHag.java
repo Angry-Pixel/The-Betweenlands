@@ -324,8 +324,6 @@ public class ModelSwampHag extends MowzieModelBase {
 				}
 			} else {
 				armright.rotateAngleY = 0F;
-				armright.rotateAngleX += -((float) Math.PI / 5F);
-				
 	        	armright.rotateAngleX += -((float)Math.PI / 5F);
 	            legright1.rotateAngleX = -1.4137167F;
 	            legright1.rotateAngleY = ((float)Math.PI / 10F);
