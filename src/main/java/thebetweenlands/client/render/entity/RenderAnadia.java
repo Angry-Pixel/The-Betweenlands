@@ -111,13 +111,13 @@ public class RenderAnadia extends RenderLiving<EntityAnadia> {
 		GlStateManager.popMatrix();
 		ANADIA_MODEL.setLivingAnimations(anadia, anadia.limbSwing, anadia.limbSwingAmount, partialTicks);
 
-	//	if(anadia.getStaminaTicks() <= 0) {
+		if(anadia.getStaminaTicks() <= 0) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(anadia.posX - player.posX, anadia.posY - player.posY, anadia.posZ - player.posZ);
 			renderNetCaptureIcon(anadia, 0D, 1D, 0D);
 			GlStateManager.popMatrix();
-		//}
+		}
 	}
 
 	private void renderNetCaptureIcon(EntityAnadia anadia, double x, double y, double z) {
