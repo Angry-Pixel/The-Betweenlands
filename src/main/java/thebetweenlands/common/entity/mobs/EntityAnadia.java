@@ -631,7 +631,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 			if (isBeingRidden() && getPassengers().get(0) instanceof EntityBLFishHook) {
 				EntityBLFishHook hook = (EntityBLFishHook) getPassengers().get(0);
 
-				if (getStaminaTicks() == 0 && PLAY_ANADIA_WON_SOUND) {
+				if (getStaminaTicks() <= 0 && PLAY_ANADIA_WON_SOUND) {
 					if (hook != null && hook.getAngler() != null)
 						playAnadiaWonSound(hook.getAngler());
 					PLAY_ANADIA_WON_SOUND = false;
