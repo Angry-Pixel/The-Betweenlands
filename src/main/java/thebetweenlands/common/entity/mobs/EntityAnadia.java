@@ -90,6 +90,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	
 	public int animationFrame = 0;
 	public int animationFrameCrab = 0;
+	//public float waterHeight = 0.0F;
+	public int netCheck = 0;
 	
 	List<Integer> obstructionList = new ArrayList<Integer>();
 	
@@ -929,7 +931,11 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
             } else {
                 anadia.setAIMoveSpeed(0.0F);
             }
+            
+            if (anadia.getStaminaTicks() <= 0)
+            	action = EntityMoveHelper.Action.WAIT;
         }
+        
     }
 
     public class AIFindBait extends EntityAIBase {
