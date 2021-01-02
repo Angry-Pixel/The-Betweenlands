@@ -47,8 +47,14 @@ public class GuiFishStaminaBar extends Gui {
 					boolean treasureUnlocked = ((EntityAnadia) player.fishEntity.getRidingEntity()).getTreasureUnlocked();
 					int aniFrame = ((EntityAnadia) player.fishEntity.getRidingEntity()).animationFrame;
 					int aniFrameCrab = ((EntityAnadia) player.fishEntity.getRidingEntity()).animationFrameCrab;
-					GlStateManager.color(1F, 1F, 1F, 1F);
+					
 					mc.renderEngine.bindTexture(GUI_TEXTURE);
+					
+					GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+					GlStateManager.enableAlpha();
+					GlStateManager.enableBlend();
+					GlStateManager.color(1F, 1F, 1F, 1F);
+					
 					ScaledResolution res = new ScaledResolution(mc);
 					renderStaminaBar(-256 + fishpos, -256 + Math.min(256, escapepos),  escapeDelay < 10 ? escapeDelay: 10, 0 - obstructpos1, 0 - obstructpos2, 0 - obstructpos3, 0 - obstructpos4, 0 - treasurePos, showTreasure, treasureUnlocked, (float)res.getScaledWidth() * 0.5F - 128F, (float)res.getScaledHeight() * 0.5F - 120F, aniFrame, aniFrameCrab);
 				}
@@ -59,14 +65,8 @@ public class GuiFishStaminaBar extends Gui {
 	private void renderStaminaBar(int staminaTicks, int escapeTicks, int escapeDelay, int obstructionTicks1, int obstructionTicks2, int obstructionTicks3, int obstructionTicks4, int treasureTick, boolean hasTreasure, boolean treasureUnlocked,float posX, float posY, int aniFrame, int aniFrameCrab) {
 		Minecraft mc = Minecraft.getMinecraft();
 		Framebuffer fbo = mc.getFramebuffer();
-		GlStateManager.pushMatrix();
 
-		GlStateManager.pushMatrix();
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		drawTexturedModalRect(posX, posY + 2, 0, 0, 256, 25); // background
-		GlStateManager.disableBlend();
-		GlStateManager.popMatrix();
 
 		try (Stencil stencil = Stencil.reserve(fbo)) {
 			if (stencil.valid()) {
@@ -90,12 +90,8 @@ public class GuiFishStaminaBar extends Gui {
 
 			drawTexturedModalRect(posX - staminaTicks - 8, posY + 1, 0 + aniFrame, 48, 16, 16); // fish
 
-			GlStateManager.pushMatrix();
-			GlStateManager.enableBlend();
-			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			drawTexturedModalRect(posX - obstructionTicks4 - 8, posY + 2, 0 + aniFrame, 112, 16, 16); // jolly fush
-			GlStateManager.disableBlend();
-			GlStateManager.popMatrix();
+
 			drawTexturedModalRect(posX - escapeTicks - 8, posY + 2 + escapeDelay, escapeDelay < 10 ? aniFrameCrab : aniFrame, 144, 16, 16); // crab
 			
 			drawTexturedModalRect(posX - obstructionTicks1 - 8, posY, 0 + aniFrame, 64, 16, 16); // weed
@@ -104,8 +100,6 @@ public class GuiFishStaminaBar extends Gui {
 
 			GL11.glDisable(GL11.GL_STENCIL_TEST);
 		}
-
-		GlStateManager.popMatrix();
 	}
 
 	public static void drawHangingRope(int updateCounter, float sx, float sy, float ex, float ey, float hang, double zLevel) {
