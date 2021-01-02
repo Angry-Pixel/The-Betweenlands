@@ -95,7 +95,8 @@
   "rain_medium": {
     "sounds": [
         "thebetweenlands:ambience/rain_medium"
-    ]
+    ],
+    "subtitle": "blsubtitles.ambient.rain"
   },
   "rain_weak": {
     "sounds": [
@@ -116,7 +117,7 @@
     "sounds": [
       "thebetweenlands:druid_chant"
     ],
-    "subtitle": "blsubtitles.druid_chant"
+    "subtitle": "blsubtitles.misc.druid_chant"
   },
   "dark_druid_hit": {
     "sounds": [
@@ -280,8 +281,7 @@
       "thebetweenlands:tar_beast_step_1",
       "thebetweenlands:tar_beast_step_2",
       "thebetweenlands:tar_beast_step_3"
-    ],
-    "subtitle": "blsubtitles.entity.tar_beast.step"
+    ]
   },
   "tar_beast_death": {
     "sounds": [
@@ -412,7 +412,7 @@
     "sounds": [
       "thebetweenlands:sludge_menace_spawn"
     ],
-    "subtitle": "blsubtitles.entity.sludge_menace.spit"
+    "subtitle": "blsubtitles.entity.sludge_menace.spawn"
   },
   "sludge_menace_living": {
     "sounds": [
@@ -872,14 +872,12 @@
   "spirit_tree_face_large_emerge": {
     "sounds": [
       "thebetweenlands:spirit_tree_face_large_emerge"
-    ],
-    "subtitle": "blsubtitles.entity.spirit_tree_face_large.emerge"
+    ]
   },
   "spirit_tree_face_small_emerge": {
     "sounds": [
       "thebetweenlands:spirit_tree_face_small_emerge"
-    ],
-    "subtitle": "blsubtitles.entity.spirit_tree_face_small.emerge"
+    ]
   },
   "spirit_tree_face_suck": {
     "sounds": [
@@ -1520,8 +1518,7 @@
   "fortress_puzzle_orb": {
     "sounds": [
       "thebetweenlands:fortress_puzzle_orb"
-    ],
-    "subtitle": "blsubtitles.misc.fortress_puzzle_orb"
+    ]
   },
   "fortress_puzzle_sword": {
     "sounds": [
@@ -1738,7 +1735,7 @@
         "preload": true
       }
     ],
-    "subtitle": "blsubtitles.entity.greebling_music_1"
+    "subtitle": "blsubtitles.entity.greebling_music"
   },
   "greebling_music_2": {
     "sounds": [
@@ -1747,7 +1744,7 @@
         "preload": true
       }
     ],
-    "subtitle": "blsubtitles.entity.greebling_music_2"
+    "subtitle": "blsubtitles.entity.greebling_music"
   },
   "astatos": {
     "sounds": [
@@ -1907,8 +1904,7 @@
   "draeton_burner": {
     "sounds": [
       "thebetweenlands:draeton_burner"
-    ],
-    "subtitle": "blsubtitles.misc.draeton_burner"
+    ]
   },
   "draeton_anchor": {
     "sounds": [
@@ -1973,8 +1969,7 @@
   "ignite": {
     "sounds": [
       "thebetweenlands:ignite"
-    ],
-    "subtitle": "blsubtitles.misc.ignite"
+    ]
   },
   "damage_reduction": {
     "sounds": [
@@ -2020,16 +2015,14 @@
       "thebetweenlands:long_swing_1",
       "thebetweenlands:long_swing_2",
       "thebetweenlands:long_swing_3"
-    ],
-    "subtitle": "blsubtitles.misc.long_swing"
+    ]
   },
   "long_slice": {
     "sounds": [
       "thebetweenlands:long_slice_1",
       "thebetweenlands:long_slice_2",
       "thebetweenlands:long_slice_3"
-    ],
-    "subtitle": "blsubtitles.misc.long_slice"
+    ]
   },
   "plug_hit": {
     "sounds": [
@@ -2081,8 +2074,7 @@
   "pit_fall": {
     "sounds": [
       "thebetweenlands:pit_fall"
-    ],
-    "subtitle": "blsubtitles.misc.pit_fall"
+    ]
   },
   "zap": {
     "sounds": [
@@ -2106,8 +2098,7 @@
   "resurrection": {
     "sounds": [
       "thebetweenlands:resurrection"
-    ],
-    "subtitle":  "blsubtitles.misc.resurrection"
+    ]
   },
   "simulacrum_break": {
     "sounds": [
@@ -2120,8 +2111,7 @@
       "thebetweenlands:worm_throw_1",
       "thebetweenlands:worm_throw_2",
       "thebetweenlands:worm_throw_3"
-    ],
-    "subtitle":  "blsubtitles.misc.worm_throw"
+    ]
   },
   "chimes_wind": {
     "sounds": [
@@ -2134,43 +2124,36 @@
   "chimes_auroras": {
     "sounds": [
       "thebetweenlands:chimes_auroras"
-    ],
-    "subtitle":  "blsubtitles.misc.chimes.auroras"
+    ]
   },
   "chimes_blood_sky": {
     "sounds": [
       "thebetweenlands:chimes_blood_sky"
-    ],
-    "subtitle":  "blsubtitles.misc.chimes.blood_sky"
+    ]
   },
   "chimes_dense_fog": {
     "sounds": [
       "thebetweenlands:chimes_dense_fog"
-    ],
-    "subtitle":  "blsubtitles.misc.chimes.dense_fog"
+    ]
   },
   "chimes_heavy_rain": {
     "sounds": [
       "thebetweenlands:chimes_heavy_rain"
-    ],
-    "subtitle":  "blsubtitles.misc.chimes.heavy_rain"
+    ]
   },
   "chimes_rift": {
     "sounds": [
       "thebetweenlands:chimes_rift"
-    ],
-    "subtitle":  "blsubtitles.misc.chimes.rift"
+    ]
   },
   "chimes_thunderstorm": {
     "sounds": [
       "thebetweenlands:chimes_thunderstorm"
-    ],
-    "subtitle":  "blsubtitles.misc.chimes.thunderstorm"
+    ]
   },
   "chimes_snowfall": {
     "sounds": [
       "thebetweenlands:chimes_snowfall"
-    ],
-    "subtitle":  "blsubtitles.misc.chimes.snowfall"
+    ]
   }
 }
