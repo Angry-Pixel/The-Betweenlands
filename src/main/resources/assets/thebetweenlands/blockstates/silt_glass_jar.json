@@ -3,7 +3,7 @@
   "defaults": {
     "model": "thebetweenlands:internal/silt_glass_jar",
     "custom": {
-      "particle_texture": "thebetweenlands:particle/block/silt_glass_jar_particles"
+      "particle_texture": "thebetweenlands:particle/block/silt_glass_jar_particle"
     }
   },
   "variants": {
