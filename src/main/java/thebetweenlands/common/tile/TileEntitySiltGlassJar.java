@@ -17,6 +17,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 public class TileEntitySiltGlassJar extends TileEntity implements IInventory {
 
 	public NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(8, ItemStack.EMPTY);
+	public int itemCount = 0;
 
 	public TileEntitySiltGlassJar() {
 		super();
@@ -38,10 +39,12 @@ public class TileEntitySiltGlassJar extends TileEntity implements IInventory {
 		inventory = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
 		if (nbt.hasKey("Items", 9))
 			ItemStackHelper.loadAllItems(nbt, inventory);
+		itemCount = nbt.getInteger("itemCount");
 	}
 
 	public NBTTagCompound saveToNbt(NBTTagCompound nbt) {
 		ItemStackHelper.saveAllItems(nbt, inventory, false);
+		nbt.setInteger("itemCount", itemCount);
 		return nbt;
 	}
 
@@ -119,6 +122,27 @@ public class TileEntitySiltGlassJar extends TileEntity implements IInventory {
             stack.setCount(this.getInventoryStackLimit());
         this.markDirty();
     }
+
+	public int getItemCount() {
+		return itemCount;
+	}
+	
+	public void checkItemCount() {
+		int amount = 0;
+
+		for(int i = 0; i < getItems().size(); i++)
+			if (!getItems().get(i).isEmpty())
+				setItemCount(++amount);
+
+		if (isEmpty())
+			setItemCount(0);
+
+		markForUpdate();
+	}
+
+	public void setItemCount(int amount) {
+		itemCount = amount;
+	}
 
 	@Override
 	public int getInventoryStackLimit() {

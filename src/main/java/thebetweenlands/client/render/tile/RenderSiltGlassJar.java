@@ -19,10 +19,7 @@ public class RenderSiltGlassJar extends TileEntitySpecialRenderer<TileEntitySilt
 
 	@Override
 	public void render(TileEntitySiltGlassJar tile, double x, double y, double z, float partialTick, int destroyStage, float alpha) {
-		int wormLevel = tile.inventory.size();
-		for(int i = 0; i < tile.getItems().size(); i++)
-			if (tile.getItems().get(i).isEmpty())
-				wormLevel--;
+		int wormLevel = tile.getItemCount();
 		
 		if (wormLevel < 1)
 			return;

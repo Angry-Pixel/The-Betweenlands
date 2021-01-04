@@ -129,20 +129,20 @@ public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().rotateYCCW()), 2);
 		if(!world.isRemote && stack.hasTagCompound() && stack.getTagCompound().hasKey("Items")) {
-			TileEntity tileentity = world.getTileEntity(pos);
-			if (tileentity instanceof TileEntitySiltGlassJar) {
+			if (world.getTileEntity(pos) instanceof TileEntitySiltGlassJar) {
+				TileEntitySiltGlassJar tile = (TileEntitySiltGlassJar) world.getTileEntity(pos);
 				NBTTagList tags = stack.getTagCompound().getTagList("Items", 10);
-				((TileEntitySiltGlassJar) tileentity).inventory = NonNullList.<ItemStack>withSize(((TileEntitySiltGlassJar) tileentity).getSizeInventory(), ItemStack.EMPTY);
+				tile.inventory = NonNullList.<ItemStack>withSize(tile.getSizeInventory(), ItemStack.EMPTY);
 
 				for (int i = 0; i < tags.tagCount(); i++) {
 					NBTTagCompound data = tags.getCompoundTagAt(i);
 					int j = data.getByte("Slot") & 255;
 
-					if (j >= 0 && j < ((TileEntitySiltGlassJar) tileentity).inventory.size())
-						((TileEntitySiltGlassJar) tileentity).inventory.set(j, new ItemStack(data));
+					if (j >= 0 && j < tile.inventory.size())
+						tile.inventory.set(j, new ItemStack(data));
 				}
+				tile.checkItemCount();
 			}
-			world.notifyBlockUpdate(pos, state, state, 3);
 		}
 	}
 
@@ -161,7 +161,7 @@ public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider
 								else {
 									stack.getTagCompound().setBoolean("baited", true);
 									tile.getItems().set(i, ItemStack.EMPTY);
-									tile.markForUpdate();
+									tile.checkItemCount();
 									return;
 								}
 							}
@@ -183,7 +183,7 @@ public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider
 							ItemStack stack = player.getHeldItem(hand).splitStack(1);
 							if (!stack.isEmpty()) {
 								tile.getItems().set(i, stack);
-								tile.markForUpdate();
+								tile.checkItemCount();
 								return true;
 							}
 						}
@@ -196,12 +196,11 @@ public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider
 							item.motionX = item.motionY = item.motionZ = 0D;
 							world.spawnEntity(item);
 							tile.getItems().set(i, ItemStack.EMPTY);
-							tile.markForUpdate();
+							tile.checkItemCount();
 							return true;
 						}
 					}
 				}
-				
 			}
 		}
 		return false;
@@ -210,12 +209,12 @@ public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		if (!world.isRemote && !player.capabilities.isCreativeMode) {
-			TileEntity tileentity = world.getTileEntity(pos);
-			if (tileentity instanceof TileEntitySiltGlassJar) {
+			if (world.getTileEntity(pos) instanceof TileEntitySiltGlassJar) {
+				TileEntitySiltGlassJar tile = (TileEntitySiltGlassJar) world.getTileEntity(pos);
 				NBTTagCompound nbt = new NBTTagCompound();
-				tileentity.writeToNBT(nbt);
+				tile.writeToNBT(nbt);
 				ItemStack stack = new ItemStack(Item.getItemFromBlock(this), 1, 0);
-				if(((TileEntitySiltGlassJar) tileentity).getSizeInventory() > 0)
+				if(tile.getSizeInventory() > 0)
 					stack.setTagCompound(nbt);
 				InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), stack);
 				world.removeTileEntity(pos);
