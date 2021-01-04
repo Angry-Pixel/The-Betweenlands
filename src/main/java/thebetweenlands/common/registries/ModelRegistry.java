@@ -99,6 +99,7 @@ import thebetweenlands.client.render.model.tile.ModelLootPot3;
 import thebetweenlands.client.render.model.tile.ModelLootUrn1;
 import thebetweenlands.client.render.model.tile.ModelLootUrn2;
 import thebetweenlands.client.render.model.tile.ModelLootUrn3;
+import thebetweenlands.client.render.model.tile.ModelSiltGlassJar;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.ModelConverter.Box;
 import thebetweenlands.util.ModelConverter.Model;
@@ -331,6 +332,9 @@ public class ModelRegistry {
 					return vertexIn;
 				}
 			}).build();
+
+	public static final IModel SILT_GLASS_JAR = new ModelFromModelBase.Builder(new ModelSiltGlassJar(), new ResourceLocation("thebetweenlands:blocks/silt_glass_jar"), 64, 64)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/silt_glass_jar")).packer(MODEL_TEXTURE_PACKER).build();
 
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 
