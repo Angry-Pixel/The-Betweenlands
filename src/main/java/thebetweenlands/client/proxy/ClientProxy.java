@@ -199,6 +199,7 @@ import thebetweenlands.common.entity.mobs.EntityFortressBossProjectile;
 import thebetweenlands.common.entity.mobs.EntityFortressBossSpawner;
 import thebetweenlands.common.entity.mobs.EntityFortressBossTeleporter;
 import thebetweenlands.common.entity.mobs.EntityFortressBossTurret;
+import thebetweenlands.common.entity.mobs.EntityFreshwaterUrchin;
 import thebetweenlands.common.entity.mobs.EntityFrog;
 import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.entity.mobs.EntityGecko;
@@ -693,6 +694,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityJellyfish.class, RenderJellyfish::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityJellyfishCave.class, RenderJellyfishCave::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBubblerCrab.class, RenderBubblerCrab::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFreshwaterUrchin.class, RenderFreshwaterUrchin::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());

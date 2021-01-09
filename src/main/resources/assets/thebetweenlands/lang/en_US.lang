@@ -1468,6 +1468,15 @@ entity.thebetweenlands.stalker.name=Stalker
 entity.thebetweenlands.swarm.name=Infestation
 entity.thebetweenlands.anadia.name=Anadia
 entity.thebetweenlands.fish_bait_item.name=Fish Bait
+entity.thebetweenlands.betweenlands_fish_hook.name=Fishing Hook
+entity.thebetweenlands.fishing_spear.name=Fishing Spear
+entity.thebetweenlands.fishing_tackle_box_seat.name=Fishing Seat
+entity.thebetweenlands.rock_snot.name=Rock Snot
+entity.thebetweenlands.rock_snot_tendril.name=Rock Snot Tendril
+entity.thebetweenlands.jellyfish.name=Jellyfish
+entity.thebetweenlands.jellyfish_cave.name=Cave Jellyfish
+entity.thebetweenlands.bubbler_crab.name=Bubbler Crab
+entity.thebetweenlands.freshwater_urchin.name=Freshwater Urchin
 
 #Fish Parts
 entity.thebetweenlands.anadia_body_0=Skittish
