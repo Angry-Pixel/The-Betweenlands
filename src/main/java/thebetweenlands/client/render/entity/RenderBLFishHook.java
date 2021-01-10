@@ -88,14 +88,14 @@ public class RenderBLFishHook extends Render<EntityBLFishHook> {
 				d6 = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * (double) partialTicks + vec3d.z;
 				d7 = (double) entityplayer.getEyeHeight();
 			} else {
-				d4 = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * (double) partialTicks - d1 * d2 - d0 * 0.8D;
-				d5 = entityplayer.prevPosY + (double) entityplayer.getEyeHeight() + (entityplayer.posY - entityplayer.prevPosY) * (double) partialTicks - 0.45D;
-				d6 = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * (double) partialTicks - d0 * d2 + d1 * 0.8D;
+				d4 = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * (double) partialTicks - d1 * d2 - d0 * 0.95D;
+				d5 = entityplayer.prevPosY + (double) entityplayer.getEyeHeight() + (entityplayer.posY - entityplayer.prevPosY) * (double) partialTicks - 0.625D;
+				d6 = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * (double) partialTicks - d0 * d2 + d1 * 0.95D;
 				d7 = entityplayer.isSneaking() ? -0.1875D : 0.0D;
 			}
 
 			double d13 = entity.prevPosX + (entity.posX - entity.prevPosX) * (double) partialTicks;
-			double d8 = entity.prevPosY + (entity.posY - entity.prevPosY) * (double) partialTicks + 0.25D;
+			double d8 = entity.prevPosY + (entity.posY - entity.prevPosY) * (double) partialTicks + 0.235D;
 			double d9 = entity.prevPosZ + (entity.posZ - entity.prevPosZ) * (double) partialTicks;
 			double d10 = (double) ((float) (d4 - d13));
 			double d11 = (double) ((float) (d5 - d8)) + d7;
