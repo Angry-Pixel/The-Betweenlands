@@ -16,10 +16,11 @@ import thebetweenlands.api.aspect.AspectContainer;
 import thebetweenlands.api.capability.IRuneChainCapability;
 import thebetweenlands.api.capability.IRuneChainUserCapability;
 import thebetweenlands.api.item.IRenamableItem;
-import thebetweenlands.api.rune.impl.AbstractRune.Blueprint.InitiationPhase;
-import thebetweenlands.api.rune.impl.AbstractRune.Blueprint.InteractionInitiationPhase;
-import thebetweenlands.api.rune.impl.AbstractRune.Blueprint.UseInitiationPhase;
-import thebetweenlands.api.rune.impl.RuneChainComposition.IAspectBuffer;
+import thebetweenlands.api.runechain.IAspectBuffer;
+import thebetweenlands.api.runechain.initiation.InitiationPhase;
+import thebetweenlands.api.runechain.initiation.InitiationPhases;
+import thebetweenlands.api.runechain.initiation.InteractionInitiationPhase;
+import thebetweenlands.api.runechain.initiation.UseInitiationPhase;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.proxy.CommonProxy;
@@ -39,7 +40,7 @@ public class ItemRuneChain extends Item implements IRenamableItem {
 			return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 		}
 
-		if(this.updateRuneChainInitiation(player.getHeldItem(hand), player, new UseInitiationPhase(), !world.isRemote)) {
+		if(updateRuneChainInitiation(player.getHeldItem(hand), player, new UseInitiationPhase(), !world.isRemote)) {
 			player.swingArm(hand);
 			return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 		}
@@ -49,7 +50,7 @@ public class ItemRuneChain extends Item implements IRenamableItem {
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(this.updateRuneChainInitiation(player.getHeldItem(hand), player, new UseInitiationPhase(pos, facing, new Vec3d(pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ)), !worldIn.isRemote)) {
+		if(updateRuneChainInitiation(player.getHeldItem(hand), player, new UseInitiationPhase(pos, facing, new Vec3d(pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ)), !worldIn.isRemote)) {
 			player.swingArm(hand);
 			return EnumActionResult.SUCCESS;
 		}
@@ -59,7 +60,7 @@ public class ItemRuneChain extends Item implements IRenamableItem {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
-		if(this.updateRuneChainInitiation(stack, playerIn, new InteractionInitiationPhase(target), !playerIn.world.isRemote)) {
+		if(updateRuneChainInitiation(stack, playerIn, new InteractionInitiationPhase(target), !playerIn.world.isRemote)) {
 			playerIn.swingArm(hand);
 			return true;
 		}
@@ -68,10 +69,10 @@ public class ItemRuneChain extends Item implements IRenamableItem {
 
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		this.updateRuneChainInitiation(stack, entityIn, InitiationPhase.TICK, !worldIn.isRemote);
+		updateRuneChainInitiation(stack, entityIn, InitiationPhases.TICK, !worldIn.isRemote);
 	}
 
-	protected boolean updateRuneChainInitiation(ItemStack stack, Entity user, InitiationPhase state, boolean runOnInitiation) {
+	public static boolean updateRuneChainInitiation(ItemStack stack, Entity user, InitiationPhase state, boolean runOnInitiation) {
 		IRuneChainUserCapability userCap = user.getCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN_USER, null);
 
 		if(userCap != null) {

@@ -1,8 +1,8 @@
 package thebetweenlands.common.registries;
 
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.api.rune.RuneCategory;
-import thebetweenlands.api.rune.RuneTier;
+import thebetweenlands.api.runechain.rune.RuneCategory;
+import thebetweenlands.api.runechain.rune.RuneTier;
 import thebetweenlands.common.herblore.rune.ConductRuneFire;
 import thebetweenlands.common.herblore.rune.ConductRuneInvoker;
 import thebetweenlands.common.herblore.rune.InitiateRuneInteract;

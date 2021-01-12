@@ -31,6 +31,7 @@ import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.ElixirRecipes;
+import thebetweenlands.common.item.misc.ItemLifeCrystal;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -394,7 +395,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	}
 
 	public boolean isValidCrystalInstalled() {
-		return !inventory.get(MAX_INGREDIENTS + 1).isEmpty() && inventory.get(MAX_INGREDIENTS + 1).getItem() == ItemRegistry.LIFE_CRYSTAL && inventory.get(MAX_INGREDIENTS + 1).getItemDamage() < inventory.get(MAX_INGREDIENTS + 1).getMaxDamage();
+		return !inventory.get(MAX_INGREDIENTS + 1).isEmpty() && inventory.get(MAX_INGREDIENTS + 1).getItem() instanceof ItemLifeCrystal && inventory.get(MAX_INGREDIENTS + 1).getItemDamage() < inventory.get(MAX_INGREDIENTS + 1).getMaxDamage();
 	}
 
 	@Override
@@ -493,7 +494,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-		return !hasInfusion() && getStackInSlot(slot).isEmpty() && ((slot <= MAX_INGREDIENTS && ItemAspectContainer.fromItem(itemstack, AspectManager.get(world)).getAspects().size() > 0) || (slot == MAX_INGREDIENTS + 1 && itemstack.getItem() == ItemRegistry.LIFE_CRYSTAL));
+		return !hasInfusion() && getStackInSlot(slot).isEmpty() && ((slot <= MAX_INGREDIENTS && ItemAspectContainer.fromItem(itemstack, AspectManager.get(world)).getAspects().size() > 0) || (slot == MAX_INGREDIENTS + 1 && itemstack.getItem() instanceof ItemLifeCrystal));
 	}
 
 	@Override

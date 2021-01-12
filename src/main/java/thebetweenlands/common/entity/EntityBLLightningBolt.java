@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -29,6 +30,7 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleLightningArc;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -206,6 +208,10 @@ public class EntityBLLightningBolt extends EntityLightningBolt implements IEntit
 									
 								} else if(!net.minecraftforge.event.ForgeEventFactory.onEntityStruckByLightning(entity, this)) {
 									entity.onStruckByLightning(this);
+									
+									if(this.isFloatingTarget && entity instanceof EntityPlayerMP) {
+										AdvancementCriterionRegistry.STRUCK_BY_LIGHTNING_WHILE_FLYING.trigger((EntityPlayerMP) entity);
+									}
 								}
 
 							}

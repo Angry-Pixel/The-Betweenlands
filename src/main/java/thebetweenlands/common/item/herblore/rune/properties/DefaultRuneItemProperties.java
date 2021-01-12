@@ -4,20 +4,20 @@ import java.util.function.Supplier;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.api.rune.INodeBlueprint;
-import thebetweenlands.api.rune.IRuneContainerFactory;
-import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
+import thebetweenlands.api.runechain.base.INodeBlueprint;
+import thebetweenlands.api.runechain.chain.IRuneExecutionContext;
+import thebetweenlands.api.runechain.container.IRuneContainerFactory;
 import thebetweenlands.common.item.herblore.rune.DefaultRuneContainerFactory;
 import thebetweenlands.common.item.herblore.rune.ItemRune.RuneItemProperties;
 
 public class DefaultRuneItemProperties extends RuneItemProperties {
 	private final IRuneContainerFactory factory;
 
-	public DefaultRuneItemProperties(ResourceLocation regName, Supplier<INodeBlueprint<?, RuneExecutionContext>> blueprintFactory) {
+	public DefaultRuneItemProperties(ResourceLocation regName, Supplier<INodeBlueprint<?, IRuneExecutionContext>> blueprintFactory) {
 		this.factory = new DefaultRuneContainerFactory(regName, blueprintFactory);
 	}
 
-	public DefaultRuneItemProperties(ResourceLocation regName, INodeBlueprint<?, RuneExecutionContext> blueprint) {
+	public DefaultRuneItemProperties(ResourceLocation regName, INodeBlueprint<?, IRuneExecutionContext> blueprint) {
 		this.factory = new DefaultRuneContainerFactory(regName, blueprint);
 	}
 

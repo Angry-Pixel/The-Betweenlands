@@ -25,17 +25,23 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.api.rune.INodeComposition;
-import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.IRuneItemStackAccess;
-import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.api.rune.impl.InventoryRuneItemStackAccess;
-import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneConfiguration.OutputPort;
-import thebetweenlands.api.rune.impl.RuneEffectModifier;
-import thebetweenlands.api.rune.impl.RuneStats;
-import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.base.IConfigurationLinkAccess;
+import thebetweenlands.api.runechain.base.INodeComposition;
+import thebetweenlands.api.runechain.base.INodeConfiguration;
+import thebetweenlands.api.runechain.base.INodeIO;
+import thebetweenlands.api.runechain.chain.IRuneExecutionContext;
+import thebetweenlands.api.runechain.io.ISetter;
+import thebetweenlands.api.runechain.io.types.IRuneItemStackAccess;
+import thebetweenlands.api.runechain.io.types.InventoryRuneItemStackAccess;
+import thebetweenlands.api.runechain.io.types.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.modifier.RenderProperties;
+import thebetweenlands.api.runechain.modifier.RenderState;
+import thebetweenlands.api.runechain.modifier.RuneEffectModifier;
+import thebetweenlands.api.runechain.modifier.Subject;
+import thebetweenlands.api.runechain.rune.AbstractRune;
+import thebetweenlands.api.runechain.rune.RuneConfiguration;
+import thebetweenlands.api.runechain.rune.RuneStats;
+import thebetweenlands.util.LightingUtil;
 
 public final class TokenRuneItem extends AbstractRune<TokenRuneItem> {
 
@@ -52,18 +58,18 @@ public final class TokenRuneItem extends AbstractRune<TokenRuneItem> {
 		}
 
 		public static final RuneConfiguration CONFIGURATION_1;
-		private static final OutputPort<IRuneItemStackAccess> OUT_ITEM_1;
+		private static final ISetter<IRuneItemStackAccess> OUT_ITEM_1;
 
 		public static final RuneConfiguration CONFIGURATION_2;
-		private static final OutputPort<Collection<IRuneItemStackAccess>> OUT_ITEMS_2;
+		private static final ISetter<Collection<IRuneItemStackAccess>> OUT_ITEMS_2;
 
 		static {
-			RuneConfiguration.Builder builder = RuneConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.create();
 
-			OUT_ITEM_1 = builder.out(RuneTokenDescriptors.ITEM, IRuneItemStackAccess.class);
+			OUT_ITEM_1 = builder.out(RuneTokenDescriptors.ITEM).type(IRuneItemStackAccess.class).setter();
 			CONFIGURATION_1 = builder.build();
 
-			OUT_ITEMS_2 = builder.multiOut(RuneTokenDescriptors.ITEM, IRuneItemStackAccess.class);
+			OUT_ITEMS_2 = builder.out(RuneTokenDescriptors.ITEM).type(IRuneItemStackAccess.class).collection().setter();
 			CONFIGURATION_2 = builder.build();
 		}
 
@@ -73,12 +79,12 @@ public final class TokenRuneItem extends AbstractRune<TokenRuneItem> {
 		}
 
 		@Override
-		public TokenRuneItem create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+		public TokenRuneItem create(int index, INodeComposition<IRuneExecutionContext> composition, INodeConfiguration configuration) {
 			return new TokenRuneItem(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected RuneEffectModifier.Subject activate(TokenRuneItem state, RuneExecutionContext context, INodeIO io) {
+		protected Subject activate(TokenRuneItem state, IRuneExecutionContext context, INodeIO io) {
 
 			IInventory inventory = context.getUser().getInventory();
 
@@ -179,8 +185,16 @@ public final class TokenRuneItem extends AbstractRune<TokenRuneItem> {
 									((int)(MathHelper.clamp(properties.green, 0, 1) * 255) << 8) |
 									((int)(MathHelper.clamp(properties.blue, 0, 1) * 255));
 
+							if(properties.emissive) {
+								LightingUtil.INSTANCE.setLighting(255);
+							}
+							
 							renderItem.renderModel(model, color, stack);
-
+							
+							if(properties.emissive) {
+								LightingUtil.INSTANCE.revert();
+							}
+							
 							if(stack.hasEffect()) {
 								color = ((int)(MathHelper.clamp(properties.alpha, 0, 1) * 255) << 24) | 8405196;
 
@@ -226,6 +240,16 @@ public final class TokenRuneItem extends AbstractRune<TokenRuneItem> {
 				public int getRendererCount(Subject subject) {
 					return 1;
 				}
+				
+				@Override
+				public int getColorModifier(Subject subject, int index) {
+					return TokenRuneItem.Blueprint.this.getStats().getAspect().type.getColor();
+				}
+				
+				@Override
+				public int getColorModifierCount(Subject subject) {
+					return 1;
+				}
 			};
 		}
 
@@ -235,7 +259,7 @@ public final class TokenRuneItem extends AbstractRune<TokenRuneItem> {
 		}
 	}
 
-	private TokenRuneItem(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+	private TokenRuneItem(Blueprint blueprint, int index, INodeComposition<IRuneExecutionContext> composition, RuneConfiguration configuration) {
 		super(blueprint, index, composition, configuration);
 	}
 }

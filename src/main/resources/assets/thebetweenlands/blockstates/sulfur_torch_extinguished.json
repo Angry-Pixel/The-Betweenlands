@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "torch": "thebetweenlands:blocks/sulfur_torch_extinguished"
+    }
+  },
+  "variants": {
+    "facing=up": { "model": "normal_torch" },
+    "facing=east": { "model": "normal_torch_wall" },
+    "facing=south": { "model": "normal_torch_wall", "y": 90 },
+    "facing=west": { "model": "normal_torch_wall", "y": 180 },
+    "facing=north": { "model": "normal_torch_wall", "y": 270 }
+  }
+}

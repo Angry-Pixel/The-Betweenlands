@@ -9,15 +9,19 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thebetweenlands.api.rune.INodeComposition;
-import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneConfiguration.OutputPort;
-import thebetweenlands.api.rune.impl.RuneEffectModifier;
-import thebetweenlands.api.rune.impl.RuneStats;
-import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.base.IConfigurationLinkAccess;
+import thebetweenlands.api.runechain.base.INodeComposition;
+import thebetweenlands.api.runechain.base.INodeConfiguration;
+import thebetweenlands.api.runechain.base.INodeIO;
+import thebetweenlands.api.runechain.chain.IRuneExecutionContext;
+import thebetweenlands.api.runechain.io.ISetter;
+import thebetweenlands.api.runechain.io.types.IBlockTarget;
+import thebetweenlands.api.runechain.io.types.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.io.types.StaticBlockTarget;
+import thebetweenlands.api.runechain.modifier.Subject;
+import thebetweenlands.api.runechain.rune.AbstractRune;
+import thebetweenlands.api.runechain.rune.RuneConfiguration;
+import thebetweenlands.api.runechain.rune.RuneStats;
 import thebetweenlands.common.block.misc.BlockBurntScrivenerMark;
 
 public final class TokenRuneFormation extends AbstractRune<TokenRuneFormation> {
@@ -32,12 +36,12 @@ public final class TokenRuneFormation extends AbstractRune<TokenRuneFormation> {
 
 		public static final RuneConfiguration CONFIGURATION;
 
-		private static final OutputPort<Collection<BlockPos>> OUT_POSITIONS;
+		private static final ISetter<Collection<IBlockTarget>> OUT_POSITIONS;
 
 		static {
-			RuneConfiguration.Builder builder = RuneConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.create();
 
-			OUT_POSITIONS = builder.multiOut(RuneTokenDescriptors.BLOCK, BlockPos.class);
+			OUT_POSITIONS = builder.out(RuneTokenDescriptors.BLOCK).type(IBlockTarget.class).collection().setter();
 
 			CONFIGURATION = builder.build();
 		}
@@ -48,16 +52,16 @@ public final class TokenRuneFormation extends AbstractRune<TokenRuneFormation> {
 		}
 
 		@Override
-		public TokenRuneFormation create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+		public TokenRuneFormation create(int index, INodeComposition<IRuneExecutionContext> composition, INodeConfiguration configuration) {
 			return new TokenRuneFormation(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected RuneEffectModifier.Subject activate(TokenRuneFormation state, RuneExecutionContext context, INodeIO io) {
+		protected Subject activate(TokenRuneFormation state, IRuneExecutionContext context, INodeIO io) {
 
 			World world = context.getUser().getWorld();
 
-			List<BlockPos> positions = new ArrayList<>(this.formation.size());
+			List<IBlockTarget> positions = new ArrayList<>(this.formation.size());
 
 			IBlockState blockState;
 
@@ -66,11 +70,11 @@ public final class TokenRuneFormation extends AbstractRune<TokenRuneFormation> {
 					blockState = world.getBlockState(block);
 
 					if(blockState.getBlock() instanceof BlockBurntScrivenerMark && blockState.getValue(BlockBurntScrivenerMark.LINKED)) {
-						positions.add(block);
+						positions.add(new StaticBlockTarget(block));
 					}
 				}
 			}
-
+			
 			OUT_POSITIONS.set(io, positions);
 
 			io.schedule(scheduler -> {
@@ -82,7 +86,7 @@ public final class TokenRuneFormation extends AbstractRune<TokenRuneFormation> {
 		}
 	}
 
-	private TokenRuneFormation(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+	private TokenRuneFormation(Blueprint blueprint, int index, INodeComposition<IRuneExecutionContext> composition, RuneConfiguration configuration) {
 		super(blueprint, index, composition, configuration);
 	}
 }

@@ -8,16 +8,19 @@ import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
-import thebetweenlands.api.rune.INodeComposition;
-import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.api.rune.impl.InputSerializers;
-import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneConfiguration.InputPort;
-import thebetweenlands.api.rune.impl.RuneEffectModifier;
-import thebetweenlands.api.rune.impl.RuneStats;
-import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.base.IConfigurationLinkAccess;
+import thebetweenlands.api.runechain.base.INodeComposition;
+import thebetweenlands.api.runechain.base.INodeConfiguration;
+import thebetweenlands.api.runechain.base.INodeIO;
+import thebetweenlands.api.runechain.chain.IRuneExecutionContext;
+import thebetweenlands.api.runechain.io.IGetter;
+import thebetweenlands.api.runechain.io.InputSerializers;
+import thebetweenlands.api.runechain.io.types.IBlockTarget;
+import thebetweenlands.api.runechain.io.types.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.modifier.Subject;
+import thebetweenlands.api.runechain.rune.AbstractRune;
+import thebetweenlands.api.runechain.rune.RuneConfiguration;
+import thebetweenlands.api.runechain.rune.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
 public final class GatingRuneBlock extends AbstractRune<GatingRuneBlock> {
@@ -36,12 +39,12 @@ public final class GatingRuneBlock extends AbstractRune<GatingRuneBlock> {
 
 		public static final RuneConfiguration CONFIGURATION_1;
 
-		private static final InputPort<BlockPos> IN_POSITION;
+		private static final IGetter<IBlockTarget> IN_POSITION;
 
 		static {
-			RuneConfiguration.Builder builder = RuneConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.create();
 
-			IN_POSITION = builder.in(RuneTokenDescriptors.BLOCK, InputSerializers.BLOCK, BlockPos.class);
+			IN_POSITION = builder.in(RuneTokenDescriptors.BLOCK).type(IBlockTarget.class).serializer(InputSerializers.BLOCK).getter();
 
 			CONFIGURATION_1 = builder.build();
 		}
@@ -52,15 +55,15 @@ public final class GatingRuneBlock extends AbstractRune<GatingRuneBlock> {
 		}
 
 		@Override
-		public GatingRuneBlock create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+		public GatingRuneBlock create(int index, INodeComposition<IRuneExecutionContext> composition, INodeConfiguration configuration) {
 			return new GatingRuneBlock(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected RuneEffectModifier.Subject activate(GatingRuneBlock state, RuneExecutionContext context, INodeIO io) {
+		protected Subject activate(GatingRuneBlock state, IRuneExecutionContext context, INodeIO io) {
 
 			if (state.getConfiguration() == CONFIGURATION_1) {
-				BlockPos position = IN_POSITION.get(io);
+				BlockPos position = IN_POSITION.get(io).block();
 
 				Block block = context.getUser().getWorld().getBlockState(position).getBlock();
 				if(block != this.blockType) {
@@ -72,7 +75,7 @@ public final class GatingRuneBlock extends AbstractRune<GatingRuneBlock> {
 		}
 	}
 
-	private GatingRuneBlock(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+	private GatingRuneBlock(Blueprint blueprint, int index, INodeComposition<IRuneExecutionContext> composition, RuneConfiguration configuration) {
 		super(blueprint, index, composition, configuration);
 	}
 }

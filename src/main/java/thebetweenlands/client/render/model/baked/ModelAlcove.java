@@ -33,6 +33,7 @@ import thebetweenlands.client.render.model.baked.ModelFromModelBase.IVertexProce
 import thebetweenlands.client.render.model.baked.modelbase.ModelMudBricksAlcove;
 import thebetweenlands.common.block.container.BlockMudBrickAlcove;
 import thebetweenlands.util.ModelConverter.Box;
+import thebetweenlands.util.ModelConverter.Model;
 import thebetweenlands.util.ModelConverter.Quad;
 import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.StatePropertyHelper;
@@ -50,7 +51,7 @@ public class ModelAlcove implements IModel {
 		}
 
 		@Override
-		public Vec3UV process(Vec3UV vertexIn, Quad quad, Box box, QuadBuilder builder) {
+		public Vec3UV process(Vec3UV vertexIn, Model model, Quad quad, Box box, QuadBuilder builder) {
 			return this.partPredicate.test(box.getModelRenderer()) ? vertexIn : null;
 		}
 	}

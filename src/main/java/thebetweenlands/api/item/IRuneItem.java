@@ -4,8 +4,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
 import thebetweenlands.api.aspect.IAspectType;
-import thebetweenlands.api.rune.RuneCategory;
-import thebetweenlands.api.rune.RuneTier;
+import thebetweenlands.api.runechain.rune.RuneCategory;
+import thebetweenlands.api.runechain.rune.RuneTier;
 
 public interface IRuneItem {
 	public RuneCategory getRuneCategory(ItemStack stack);

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "RFR",
+    "PPP"
+  ],
+  "key": {
+    "S": {
+      "item": "thebetweenlands:weedwood_plank_slab"
+    },
+    "R": {
+      "item": "thebetweenlands:silt_glass_pane"
+    },
+    "F": {
+      "type": "thebetweenlands:mob_item",
+      "entity": "thebetweenlands:firefly"
+    },
+    "P": {
+      "item": "thebetweenlands:weedwood_planks"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:lantern_silt_glass",
+    "count": 1
+  }
+}

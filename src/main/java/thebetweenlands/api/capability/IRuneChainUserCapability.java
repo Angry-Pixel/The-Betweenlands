@@ -5,9 +5,10 @@ import javax.annotation.Nullable;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.api.rune.IRuneChainData;
-import thebetweenlands.api.rune.IRuneChainUser;
-import thebetweenlands.api.rune.impl.RuneChainComposition;
+import thebetweenlands.api.runechain.IRuneChainUser;
+import thebetweenlands.api.runechain.chain.IRuneChain;
+import thebetweenlands.api.runechain.chain.IRuneChainData;
+import thebetweenlands.common.herblore.rune.RuneChainComposition;
 
 public interface IRuneChainUserCapability extends ITickable {
 	/**
@@ -29,13 +30,13 @@ public interface IRuneChainUserCapability extends ITickable {
 	 * @param id Unique ID to be assigned to the rune chain instance
 	 */
 	@SideOnly(Side.CLIENT)
-	public void addRuneChain(RuneChainComposition chain, int id);
+	public void addRuneChain(IRuneChain chain, int id);
 	
 	/**
 	 * Sets whether the rune chain should automatically be updated by the capability holder
 	 * @param id ID that was assigned to the rune chain instance
 	 * @param updating Whether the rune chain should automatically be updated
-	 * @param removeOnFinish Whether the rune chain should automatically be removed from this capability once {@link RuneChainComposition#isRunning()} returns false. Only works if
+	 * @param removeOnFinish Whether the rune chain should automatically be removed from this capability once {@link IRuneChain#isRunning()} returns false. Only works if
 	 * <code>updating</code> is true. The rune chain must already be running otherwise it will be removed immediately in the first update.
 	 * @return True if <code>updating</code> was successfully set, false otherwise (i.e. when no rune chain instance exists with the specified ID)
 	 */
@@ -54,7 +55,7 @@ public interface IRuneChainUserCapability extends ITickable {
 	 * contain a rune chain instance with the specified ID
 	 */
 	@Nullable
-	public RuneChainComposition removeRuneChain(int id);
+	public IRuneChain removeRuneChain(int id);
 
 	/**
 	 * Returns the rune chain instance with the specified ID
@@ -63,5 +64,5 @@ public interface IRuneChainUserCapability extends ITickable {
 	 * not contain a rune chain instance with the specified ID
 	 */
 	@Nullable
-	public RuneChainComposition getRuneChain(int id);
+	public IRuneChain getRuneChain(int id);
 }

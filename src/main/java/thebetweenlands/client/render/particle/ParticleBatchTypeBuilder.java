@@ -62,9 +62,21 @@ public class ParticleBatchTypeBuilder {
 		private boolean blur = false;
 		private boolean setMipmap = true;
 		private boolean mipmap = false;
+		private Runnable preRenderPassCallback = null;
+		private Runnable postRenderPassCallback = null;
 
 		private Pass(ParticleBatchTypeBuilder builder) {
 			this.builder = builder;
+		}
+
+		public Pass preRenderPassCallback(@Nullable Runnable callback) {
+			this.preRenderPassCallback = callback;
+			return this;
+		}
+
+		public Pass postRenderPassCallback(@Nullable Runnable callback) {
+			this.postRenderPassCallback = callback;
+			return this;
 		}
 
 		public Pass maxParticles(int maxParticles) {
@@ -247,7 +259,12 @@ public class ParticleBatchTypeBuilder {
 				return true;
 			}
 
+			@Nullable
 			protected ResourceLocation preSetup(Pass pass) {
+				if(pass.preRenderPassCallback != null) {
+					pass.preRenderPassCallback.run();
+				}
+
 				if(pass.setCull) { 
 					if(pass.cull) {
 						GlStateManager.enableCull();
@@ -302,17 +319,17 @@ public class ParticleBatchTypeBuilder {
 					GlStateManager.blendFunc(pass.glBlendSrc, pass.glBlendDst);
 				}
 
-				if(pass.texture != null) {
+				if(pass.texture != null && pass.setTexture) {
 					ResourceLocation texLoc = pass.texture.get();
 
-					if(pass.setTexture) {
+					if(texLoc != null) {
 						Minecraft.getMinecraft().getTextureManager().bindTexture(texLoc);
-					}
 
-					if(pass.setBlur) {
-						ITextureObject tex = Minecraft.getMinecraft().getTextureManager().getTexture(texLoc);
-						if(tex != null) {
-							tex.setBlurMipmap(pass.blur, pass.mipmap);
+						if(pass.setBlur) {
+							ITextureObject tex = Minecraft.getMinecraft().getTextureManager().getTexture(texLoc);
+							if(tex != null) {
+								tex.setBlurMipmap(pass.blur, pass.mipmap);
+							}
 						}
 					}
 
@@ -323,10 +340,12 @@ public class ParticleBatchTypeBuilder {
 			}
 
 			protected void postSetup(Pass pass, @Nullable ResourceLocation texLoc) {
-				if(texLoc != null) {
-					if(pass.setTexture) {
-						Minecraft.getMinecraft().getTextureManager().bindTexture(texLoc);
-					}
+				if(pass.postRenderPassCallback != null) {
+					pass.postRenderPassCallback.run();
+				}
+
+				if(texLoc != null && pass.setTexture) {
+					Minecraft.getMinecraft().getTextureManager().bindTexture(texLoc);
 
 					if(pass.setBlur) {
 						ITextureObject tex = Minecraft.getMinecraft().getTextureManager().getTexture(texLoc);

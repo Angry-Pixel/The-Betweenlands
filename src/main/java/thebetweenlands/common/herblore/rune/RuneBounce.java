@@ -1,29 +1,28 @@
 package thebetweenlands.common.herblore.rune;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import thebetweenlands.api.rune.INodeComposition;
-import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.IRuneChainUser;
-import thebetweenlands.api.rune.IRuneEffect;
-import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.api.rune.impl.InputSerializers;
-import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneConfiguration.InputPort;
-import thebetweenlands.api.rune.impl.RuneConfiguration.OutputPort;
-import thebetweenlands.api.rune.impl.RuneEffectModifier;
-import thebetweenlands.api.rune.impl.RuneStats;
-import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.IRuneChainUser;
+import thebetweenlands.api.runechain.base.IConfigurationLinkAccess;
+import thebetweenlands.api.runechain.base.INodeComposition;
+import thebetweenlands.api.runechain.base.INodeConfiguration;
+import thebetweenlands.api.runechain.base.INodeIO;
+import thebetweenlands.api.runechain.chain.IRuneExecutionContext;
+import thebetweenlands.api.runechain.io.IGetter;
+import thebetweenlands.api.runechain.io.ISetter;
+import thebetweenlands.api.runechain.io.InputSerializers;
+import thebetweenlands.api.runechain.io.types.IRuneEffect;
+import thebetweenlands.api.runechain.io.types.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.modifier.Subject;
+import thebetweenlands.api.runechain.rune.AbstractRune;
+import thebetweenlands.api.runechain.rune.RuneConfiguration;
+import thebetweenlands.api.runechain.rune.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
 public final class RuneBounce extends AbstractRune<RuneBounce> {
@@ -37,10 +36,10 @@ public final class RuneBounce extends AbstractRune<RuneBounce> {
 		}
 
 		public static final RuneConfiguration CONFIGURATION_1;
-		private static final InputPort<Entity> IN_ENTITY_1;
+		private static final IGetter<Entity> IN_ENTITY_1;
 
 		public static final RuneConfiguration CONFIGURATION_2;
-		private static final OutputPort<IRuneEffect> OUT_EFFECT_2;
+		private static final ISetter<IRuneEffect> OUT_EFFECT_2;
 
 		private static final IRuneEffect BOUNCE_EFFECT = new IRuneEffect() {
 			@Override
@@ -71,12 +70,12 @@ public final class RuneBounce extends AbstractRune<RuneBounce> {
 		};
 
 		static {
-			RuneConfiguration.Builder builder = RuneConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.create();
 
-			IN_ENTITY_1 = builder.in(RuneTokenDescriptors.ENTITY, InputSerializers.ENTITY, Entity.class);
+			IN_ENTITY_1 = builder.in(RuneTokenDescriptors.ENTITY).type(Entity.class).serializer(InputSerializers.ENTITY).getter();
 			CONFIGURATION_1 = builder.build();
 
-			OUT_EFFECT_2 = builder.out(RuneTokenDescriptors.EFFECT, IRuneEffect.class);
+			OUT_EFFECT_2 = builder.out(RuneTokenDescriptors.EFFECT).type(IRuneEffect.class).setter();
 			CONFIGURATION_2 = builder.build();
 		}
 
@@ -86,12 +85,12 @@ public final class RuneBounce extends AbstractRune<RuneBounce> {
 		}
 
 		@Override
-		public RuneBounce create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+		public RuneBounce create(int index, INodeComposition<IRuneExecutionContext> composition, INodeConfiguration configuration) {
 			return new RuneBounce(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected RuneEffectModifier.Subject activate(RuneBounce state, RuneExecutionContext context, INodeIO io) {
+		protected Subject activate(RuneBounce state, IRuneExecutionContext context, INodeIO io) {
 
 			if(state.getConfiguration() == CONFIGURATION_1) {
 				BOUNCE_EFFECT.apply(context.getUser().getWorld(), IN_ENTITY_1.get(io));
@@ -103,7 +102,7 @@ public final class RuneBounce extends AbstractRune<RuneBounce> {
 		}
 	}
 
-	private RuneBounce(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+	private RuneBounce(Blueprint blueprint, int index, INodeComposition<IRuneExecutionContext> composition, RuneConfiguration configuration) {
 		super(blueprint, index, composition, configuration);
 	}
 }

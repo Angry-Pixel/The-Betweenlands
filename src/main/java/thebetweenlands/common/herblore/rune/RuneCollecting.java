@@ -9,18 +9,19 @@ import java.util.Set;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.api.rune.INodeBlueprint.INodeIO;
-import thebetweenlands.api.rune.INodeComposition;
-import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.INodeConfiguration.IConfigurationOutput;
-import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneConfiguration.InputPort;
-import thebetweenlands.api.rune.impl.RuneConfiguration.OutputPort;
-import thebetweenlands.api.rune.impl.RuneEffectModifier;
-import thebetweenlands.api.rune.impl.RuneStats;
-import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.base.IConfigurationLinkAccess;
+import thebetweenlands.api.runechain.base.IConfigurationOutput;
+import thebetweenlands.api.runechain.base.INodeComposition;
+import thebetweenlands.api.runechain.base.INodeConfiguration;
+import thebetweenlands.api.runechain.base.INodeIO;
+import thebetweenlands.api.runechain.chain.IRuneExecutionContext;
+import thebetweenlands.api.runechain.io.InputKey;
+import thebetweenlands.api.runechain.io.OutputKey;
+import thebetweenlands.api.runechain.io.types.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.modifier.Subject;
+import thebetweenlands.api.runechain.rune.AbstractRune;
+import thebetweenlands.api.runechain.rune.RuneConfiguration;
+import thebetweenlands.api.runechain.rune.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
 public final class RuneCollecting extends AbstractRune<RuneCollecting> {
@@ -36,14 +37,14 @@ public final class RuneCollecting extends AbstractRune<RuneCollecting> {
 		@Override
 		public List<RuneConfiguration> getConfigurations(IConfigurationLinkAccess linkAccess, boolean provisional) {
 
-			RuneConfiguration.Builder builder = RuneConfiguration.builder(RuneTokenDescriptors.ANY);
+			RuneConfiguration.Builder builder = RuneConfiguration.create(RuneTokenDescriptors.ANY);
 
 			ResourceLocation descriptor = RuneTokenDescriptors.ANY;
 
-			InputPort<Object> baseInput = null;
+			InputKey<?, ?> baseInput = null;
 
 			if(linkAccess != null) {
-				OutputPort<?> linkedOutputPort = null;
+				OutputKey<?, ?> linkedOutputPort = null;
 				int numInputs = 0;
 
 				for(int i = 0; i < 9; i++) {
@@ -52,41 +53,41 @@ public final class RuneCollecting extends AbstractRune<RuneCollecting> {
 					if(linkedOutput != null) {
 						numInputs = i + 1;
 
-						if(linkedOutput instanceof OutputPort) {
-							linkedOutputPort = (OutputPort<?>) linkedOutput;
+						if(linkedOutput instanceof OutputKey) {
+							linkedOutputPort = (OutputKey<?, ?>) linkedOutput;
 						}
 					}
 				}
 
 				if(linkedOutputPort != null) {
-					baseInput = builder.in(Object.class, linkedOutputPort);
+					baseInput = builder.in(linkedOutputPort.getDescriptor()).type(linkedOutputPort).key();
 
 					//TODO Temporary for testing
 					String[] split = linkedOutputPort.getDescriptor().split("\\.");
 					descriptor = new ResourceLocation(split[0], split[1]);
 
 					for(int i = 0; i < Math.min(numInputs + (provisional ? 0 : -1), 8); i++) {
-						builder.in(Object.class, linkedOutputPort);
+						builder.in(linkedOutputPort.getDescriptor()).type(linkedOutputPort).register();
 					}
 				}
 			}
 
 			if(baseInput == null) {
-				baseInput = builder.in(descriptor, null, Object.class);
+				baseInput = builder.in(descriptor).type(Object.class).key();
 			}
 
-			builder.multiOutFromIn(Object.class, baseInput);
+			builder.out(baseInput.getDescriptor()).type(baseInput).collection().register();
 
 			return ImmutableList.of(builder.build());
 		}
 
 		@Override
-		public RuneCollecting create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+		public RuneCollecting create(int index, INodeComposition<IRuneExecutionContext> composition, INodeConfiguration configuration) {
 			return new RuneCollecting(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected RuneEffectModifier.Subject activate(RuneCollecting state, RuneExecutionContext context, INodeIO io) {
+		protected Subject activate(RuneCollecting state, IRuneExecutionContext context, INodeIO io) {
 			if(state.getConfiguration().getId() == 0) {
 				state.outputs.add(io);
 				
@@ -113,7 +114,7 @@ public final class RuneCollecting extends AbstractRune<RuneCollecting> {
 	private List<INodeIO> outputs = new ArrayList<>();
 	private Set<Object> outputValues = new HashSet<>();
 
-	private RuneCollecting(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+	private RuneCollecting(Blueprint blueprint, int index, INodeComposition<IRuneExecutionContext> composition, RuneConfiguration configuration) {
 		super(blueprint, index, composition, configuration);
 	}
 }

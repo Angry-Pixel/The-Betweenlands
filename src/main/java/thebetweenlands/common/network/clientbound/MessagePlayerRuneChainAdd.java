@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.api.capability.IRuneChainUserCapability;
-import thebetweenlands.api.rune.IRuneChainData;
+import thebetweenlands.api.runechain.chain.IRuneChainData;
 import thebetweenlands.common.capability.item.RuneChainItemCapability;
 import thebetweenlands.common.herblore.rune.RuneChainData;
 import thebetweenlands.common.network.MessageEntity;

@@ -24,12 +24,13 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IRuneChainUserCapability;
-import thebetweenlands.api.rune.IRuneChainData;
-import thebetweenlands.api.rune.IRuneChainUser;
-import thebetweenlands.api.rune.impl.RuneChainComposition;
+import thebetweenlands.api.runechain.IRuneChainUser;
+import thebetweenlands.api.runechain.chain.IRuneChain;
+import thebetweenlands.api.runechain.chain.IRuneChainData;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.base.EntityCapability;
 import thebetweenlands.common.capability.item.RuneChainItemCapability;
+import thebetweenlands.common.herblore.rune.RuneChainComposition;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.network.clientbound.MessagePlayerRuneChainAdd;
 import thebetweenlands.common.network.clientbound.MessagePlayerRuneChainPacket;
@@ -65,11 +66,11 @@ public class RuneChainUserPlayerCapability extends EntityCapability<RuneChainUse
 
 	private static class RuneChainEntry {
 		private final int id;
-		private final RuneChainComposition runeChain;
+		private final IRuneChain runeChain;
 		private boolean ticking;
 		private boolean removeOnFinish;
 
-		private RuneChainEntry(int id, RuneChainComposition runeChain) {
+		private RuneChainEntry(int id, IRuneChain runeChain) {
 			this.id = id;
 			this.runeChain = runeChain;
 		}
@@ -79,8 +80,8 @@ public class RuneChainUserPlayerCapability extends EntityCapability<RuneChainUse
 
 	private IRuneChainUser user;
 	private final Int2ObjectMap<RuneChainEntry> entryById = new Int2ObjectOpenHashMap<>();
-	private final Object2ObjectMap<RuneChainComposition, RuneChainEntry> entryByObject = new Object2ObjectOpenHashMap<>();
-	private final Int2ObjectMap<RuneChainComposition> tickingRuneChains = new Int2ObjectOpenHashMap<>();
+	private final Object2ObjectMap<IRuneChain, RuneChainEntry> entryByObject = new Object2ObjectOpenHashMap<>();
+	private final Int2ObjectMap<IRuneChain> tickingRuneChains = new Int2ObjectOpenHashMap<>();
 
 	@Override
 	protected void init() {
@@ -123,13 +124,13 @@ public class RuneChainUserPlayerCapability extends EntityCapability<RuneChainUse
 			}
 
 			@Override
-			public boolean isActivatingRuneChain(RuneChainComposition runeChain) {
+			public boolean isActivatingRuneChain(IRuneChain runeChain) {
 				//TODO Implement this
 				return false;
 			}
 
 			@Override
-			public void sendPacket(RuneChainComposition runeChain, Consumer<PacketBuffer> serializer, @Nullable TargetPoint target) {
+			public void sendPacket(IRuneChain runeChain, Consumer<PacketBuffer> serializer, @Nullable TargetPoint target) {
 				RuneChainEntry entry = RuneChainUserPlayerCapability.this.entryByObject.get(runeChain);
 				if(entry != null) {
 					if(target != null) {
@@ -153,7 +154,7 @@ public class RuneChainUserPlayerCapability extends EntityCapability<RuneChainUse
 
 	@Override
 	public int addRuneChain(IRuneChainData data) {
-		RuneChainComposition chain = RuneChainItemCapability.createBlueprint(data).create();
+		IRuneChain chain = RuneChainItemCapability.createBlueprint(data).create();
 
 		int id = nextRuneChainID++;
 		RuneChainEntry entry = new RuneChainEntry(id, chain);
@@ -174,7 +175,7 @@ public class RuneChainUserPlayerCapability extends EntityCapability<RuneChainUse
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addRuneChain(RuneChainComposition chain, int id) {
+	public void addRuneChain(IRuneChain chain, int id) {
 		RuneChainEntry entry = new RuneChainEntry(id, chain);
 		this.entryById.put(id, entry);
 		this.entryByObject.put(chain, entry);
@@ -202,7 +203,7 @@ public class RuneChainUserPlayerCapability extends EntityCapability<RuneChainUse
 	}
 
 	@Override
-	public RuneChainComposition removeRuneChain(int id) {
+	public IRuneChain removeRuneChain(int id) {
 		this.tickingRuneChains.remove(id);
 
 		RuneChainEntry entry = this.entryById.remove(id);
@@ -224,7 +225,7 @@ public class RuneChainUserPlayerCapability extends EntityCapability<RuneChainUse
 	}
 
 	@Override
-	public RuneChainComposition getRuneChain(int id) {
+	public IRuneChain getRuneChain(int id) {
 		RuneChainEntry entry = this.entryById.get(id);
 		return entry != null ? entry.runeChain : null;
 	}
@@ -232,11 +233,11 @@ public class RuneChainUserPlayerCapability extends EntityCapability<RuneChainUse
 	@Override
 	public void update() {
 		if(!this.getEntity().world.isRemote) {
-			List<RuneChainComposition> finished = null;
+			List<IRuneChain> finished = null;
 
-			Iterator<RuneChainComposition> chainIT = this.tickingRuneChains.values().iterator();
+			Iterator<IRuneChain> chainIT = this.tickingRuneChains.values().iterator();
 			while(chainIT.hasNext()) {
-				RuneChainComposition chain = chainIT.next();
+				IRuneChain chain = chainIT.next();
 				if(chain.isRunning()) {
 					chain.update();
 					chain.updateRuneEffectModifiers();
@@ -249,13 +250,13 @@ public class RuneChainUserPlayerCapability extends EntityCapability<RuneChainUse
 			}
 
 			if(finished != null) {
-				for(RuneChainComposition chain : finished) {
+				for(IRuneChain chain : finished) {
 					this.removeRuneChain(this.entryByObject.get(chain).id);
 				}
 			}
 		} else {
 			//Update rune effect modifiers
-			for(RuneChainComposition chain : this.entryByObject.keySet()) {
+			for(IRuneChain chain : this.entryByObject.keySet()) {
 				chain.updateRuneEffectModifiers();
 			}
 		}

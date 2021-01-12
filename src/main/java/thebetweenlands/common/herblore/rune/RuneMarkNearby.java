@@ -8,19 +8,20 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import thebetweenlands.api.rune.INodeComposition;
-import thebetweenlands.api.rune.INodeCompositionBlueprint;
-import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.INodeBlueprint.IConfigurationLinkAccess;
-import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.api.rune.impl.InputSerializers;
-import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneConfiguration.InputPort;
-import thebetweenlands.api.rune.impl.RuneConfiguration.OutputPort;
-import thebetweenlands.api.rune.impl.RuneEffectModifier;
-import thebetweenlands.api.rune.impl.RuneStats;
-import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.base.IConfigurationLinkAccess;
+import thebetweenlands.api.runechain.base.INodeComposition;
+import thebetweenlands.api.runechain.base.INodeConfiguration;
+import thebetweenlands.api.runechain.base.INodeIO;
+import thebetweenlands.api.runechain.chain.IRuneExecutionContext;
+import thebetweenlands.api.runechain.io.IGetter;
+import thebetweenlands.api.runechain.io.ISetter;
+import thebetweenlands.api.runechain.io.InputSerializers;
+import thebetweenlands.api.runechain.io.types.IBlockTarget;
+import thebetweenlands.api.runechain.io.types.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.modifier.Subject;
+import thebetweenlands.api.runechain.rune.AbstractRune;
+import thebetweenlands.api.runechain.rune.RuneConfiguration;
+import thebetweenlands.api.runechain.rune.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
 public final class RuneMarkNearby extends AbstractRune<RuneMarkNearby> {
@@ -36,20 +37,20 @@ public final class RuneMarkNearby extends AbstractRune<RuneMarkNearby> {
 		public static final RuneConfiguration CONFIGURATION_1;
 		public static final RuneConfiguration CONFIGURATION_2;
 
-		private static final InputPort<BlockPos> IN_POSITION_2;
-		private static final OutputPort<Collection<Entity>> OUT_ENTITIES_2;
+		private static final IGetter<IBlockTarget> IN_POSITION_2;
+		private static final ISetter<Collection<Entity>> OUT_ENTITIES_2;
 
-		private static final OutputPort<Collection<Entity>> OUT_ENTITIES;
+		private static final ISetter<Collection<Entity>> OUT_ENTITIES;
 
 		static {
-			RuneConfiguration.Builder builder = RuneConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.create();
 
-			OUT_ENTITIES = builder.multiOut(RuneTokenDescriptors.ENTITY, Entity.class);
+			OUT_ENTITIES = builder.out(RuneTokenDescriptors.ENTITY).type(Entity.class).collection().setter();
 
 			CONFIGURATION_1 = builder.build();
 
-			IN_POSITION_2 = builder.in(RuneTokenDescriptors.BLOCK, InputSerializers.BLOCK, BlockPos.class);
-			OUT_ENTITIES_2 = builder.multiOut(RuneTokenDescriptors.ENTITY, Entity.class);
+			IN_POSITION_2 = builder.in(RuneTokenDescriptors.BLOCK).type(IBlockTarget.class).serializer(InputSerializers.BLOCK).getter();
+			OUT_ENTITIES_2 = builder.out(RuneTokenDescriptors.ENTITY).type(Entity.class).collection().setter();
 
 			CONFIGURATION_2 = builder.build();
 		}
@@ -60,12 +61,12 @@ public final class RuneMarkNearby extends AbstractRune<RuneMarkNearby> {
 		}
 
 		@Override
-		public RuneMarkNearby create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+		public RuneMarkNearby create(int index, INodeComposition<IRuneExecutionContext> composition, INodeConfiguration configuration) {
 			return new RuneMarkNearby(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected RuneEffectModifier.Subject activate(RuneMarkNearby state, RuneExecutionContext context, INodeIO io) {
+		protected Subject activate(RuneMarkNearby state, IRuneExecutionContext context, INodeIO io) {
 
 			if(state.getConfiguration() == CONFIGURATION_1) {
 				int range = 6;
@@ -73,7 +74,7 @@ public final class RuneMarkNearby extends AbstractRune<RuneMarkNearby> {
 				
 				OUT_ENTITIES.set(io, context.getUser().getWorld().getEntitiesWithinAABB(Entity.class, aabb));
 			} else {
-				BlockPos center = IN_POSITION_2.get(io);
+				BlockPos center = IN_POSITION_2.get(io).block();
 
 				int range = 6;
 				AxisAlignedBB aabb = new AxisAlignedBB(center).grow(range);
@@ -85,7 +86,7 @@ public final class RuneMarkNearby extends AbstractRune<RuneMarkNearby> {
 		}
 	}
 
-	private RuneMarkNearby(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+	private RuneMarkNearby(Blueprint blueprint, int index, INodeComposition<IRuneExecutionContext> composition, RuneConfiguration configuration) {
 		super(blueprint, index, composition, configuration);
 	}
 }

@@ -23,8 +23,9 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 	private float alphaMultiplier;
 	private BlockPos wisp;
 	private boolean visible;
+	private boolean hidden;
 
-	protected ParticleWisp(World world, double x, double y, double z, double mx, double my, double mz, float scale, int bright) {
+	protected ParticleWisp(World world, double x, double y, double z, double mx, double my, double mz, float scale, int bright, boolean hidden) {
 		super(world, x, y, z, mx, my, mz);
 		this.motionX = this.motionX * 0.01D + mx;
 		this.motionY = this.motionY * 0.01D + my;
@@ -39,6 +40,7 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 		this.particleMaxAge = (int) (8 / (Math.random() * 0.8 + 0.2)) + 1000;
 		this.brightness = bright;
 		this.wisp = new BlockPos(x, y, z);
+		this.hidden = hidden;
 	}
 
 	@Override
@@ -183,11 +185,15 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 
 		this.move(this.motionX, this.motionY, this.motionZ);
 
-		IBlockState state = this.world.getBlockState(this.wisp);
-		this.visible = state.getBlock() instanceof BlockWisp ? state.getValue(BlockWisp.VISIBLE) : false;
-
-		if(!this.visible) {
-			this.alphaMultiplier = 1.0f - MathHelper.sin(MathUtils.PI / 20 * MathHelper.clamp(getDistanceToViewer(this.posX, this.posY, this.posZ), 10, 20));
+		if(this.hidden) {
+			IBlockState state = this.world.getBlockState(this.wisp);
+			this.visible = state.getBlock() instanceof BlockWisp ? state.getValue(BlockWisp.VISIBLE) : false;
+	
+			if(!this.visible) {
+				this.alphaMultiplier = 1.0f - MathHelper.sin(MathUtils.PI / 20 * MathHelper.clamp(getDistanceToViewer(this.posX, this.posY, this.posZ), 10, 20));
+			} else {
+				this.alphaMultiplier = 1.0f;
+			}
 		} else {
 			this.alphaMultiplier = 1.0f;
 		}
@@ -212,12 +218,12 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 
 		@Override
 		public ParticleWisp createParticle(ImmutableParticleArgs args) {
-			return new ParticleWisp(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.scale, args.data.getInt(0));
+			return new ParticleWisp(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.scale, args.data.getInt(0), args.data.getBool(1));
 		}
 
 		@Override
 		protected void setBaseArguments(ParticleArgs<?> args) {
-			args.withData(255);
+			args.withData(255, true);
 		}
 	}
 }

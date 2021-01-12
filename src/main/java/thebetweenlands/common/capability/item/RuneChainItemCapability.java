@@ -1,34 +1,17 @@
 package thebetweenlands.common.capability.item;
 
-import java.util.List;
-
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
-import thebetweenlands.api.capability.IRuneCapability;
 import thebetweenlands.api.capability.IRuneChainCapability;
-import thebetweenlands.api.rune.INodeBlueprint;
-import thebetweenlands.api.rune.INodeBlueprint.IConfigurationLinkAccess;
-import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.INodeConfiguration.IConfigurationOutput;
-import thebetweenlands.api.rune.IRuneChainContainerData;
-import thebetweenlands.api.rune.IRuneChainData;
-import thebetweenlands.api.rune.IRuneContainer;
-import thebetweenlands.api.rune.IRuneContainerContext;
-import thebetweenlands.api.rune.IRuneContainerFactory;
-import thebetweenlands.api.rune.IRuneLink;
-import thebetweenlands.api.rune.IRuneWeavingTableContainer;
-import thebetweenlands.api.rune.IRuneWeavingTableGui;
-import thebetweenlands.api.rune.impl.AbstractRune.Blueprint.InitiationState;
-import thebetweenlands.api.rune.impl.NodeDummy;
-import thebetweenlands.api.rune.impl.RuneChainComposition;
-import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
+import thebetweenlands.api.runechain.chain.IRuneChainBlueprint;
+import thebetweenlands.api.runechain.chain.IRuneChainData;
+import thebetweenlands.api.runechain.chain.RuneChainFactory;
+import thebetweenlands.api.runechain.initiation.InitiationState;
 import thebetweenlands.common.capability.base.ItemCapability;
+import thebetweenlands.common.herblore.rune.RuneChainComposition;
 import thebetweenlands.common.herblore.rune.RuneChainData;
 import thebetweenlands.common.item.herblore.rune.ItemRuneChain;
 import thebetweenlands.common.lib.ModInfo;
@@ -63,7 +46,7 @@ public class RuneChainItemCapability extends ItemCapability<RuneChainItemCapabil
 	}
 
 	private IRuneChainData data;
-	private RuneChainComposition.Blueprint blueprint;
+	private IRuneChainBlueprint blueprint;
 
 	private InitiationState<?> initiationState;
 
@@ -99,137 +82,8 @@ public class RuneChainItemCapability extends ItemCapability<RuneChainItemCapabil
 		}
 	}
 
-	public static RuneChainComposition.Blueprint createBlueprint(IRuneChainData data) {
-		RuneChainComposition.Blueprint blueprint = new RuneChainComposition.Blueprint();
-
-		NonNullList<ItemStack> runes = data.getRuneItems();
-		IRuneChainContainerData containerData = data.getContainerData();
-
-		for(int i = 0; i < runes.size(); i++) {
-			ItemStack stack = runes.get(i);
-
-			IRuneCapability runeCap = null;
-			IRuneContainerFactory factory = null;
-			
-			if(!stack.isEmpty() && (runeCap = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE, null)) != null && (factory = runeCap.getRuneContainerFactory()) != null) {
-				final int runeIndex = i;
-
-				IRuneContainer container = factory.createContainer();
-
-				IRuneContainerContext context = new IRuneContainerContext() {
-					@Override
-					public IRuneWeavingTableContainer getRuneWeavingTableContainer() {
-						return null;
-					}
-
-					@Override
-					public IRuneWeavingTableGui getRuneWeavingTableGui() {
-						return null;
-					}
-
-					@Override
-					public int getRuneIndex() {
-						return runeIndex;
-					}
-
-					@Override
-					public ItemStack getRuneItemStack() {
-						return stack;
-					}
-
-					@Override
-					public NBTTagCompound getData() {
-						IRuneChainContainerData info = containerData;
-						NBTTagCompound nbt = info.getContainerNbt(runeIndex);
-						if(nbt == null) {
-							nbt = new NBTTagCompound();
-						}
-						return nbt;
-					}
-
-					@Override
-					public void setData(NBTTagCompound nbt) { }
-
-					@Override
-					public void addSlot(Slot slot) { }
-
-					@Override
-					public INodeConfiguration getConfiguration() {
-						return null;
-					}
-
-					@Override
-					public INodeConfiguration getProvisionalConfiguration() {
-						return null;
-					}
-					
-					@Override
-					public void setConfiguration(INodeConfiguration configuration) { }
-
-					@Override
-					public IConfigurationLinkAccess getLinkAccess() {
-						return null;
-					}
-				};
-
-				container.setContext(context);
-
-				INodeBlueprint<?, RuneExecutionContext> nodeBlueprint = container.getBlueprint();
-
-				INodeConfiguration nodeConfiguration = null;
-
-				IConfigurationLinkAccess linkAccess = input -> {
-					IRuneLink link = containerData.getLink(runeIndex, input);
-					if(link != null && link.getOutputRune() >= 0 && link.getOutputRune() < runeIndex && link.getOutput() >= 0) {
-						INodeConfiguration configuration = blueprint.getNodeConfiguration(link.getOutputRune());
-						if(configuration != null) {
-							List<? extends IConfigurationOutput> outputs = configuration.getOutputs();
-							if(link.getOutput() < outputs.size()) {
-								return outputs.get(link.getOutput());
-							}
-						}
-					}
-					return null;
-				};
-
-				if(containerData.hasConfigurationId(runeIndex)) {
-					int savedConfigurationId = containerData.getConfigurationId(runeIndex);
-
-					for(INodeConfiguration configuration : nodeBlueprint.getConfigurations(linkAccess, false)) {
-						if(configuration.getId() == savedConfigurationId) {
-							nodeConfiguration = configuration;
-							break;
-						}
-					}
-				}
-
-				if(nodeConfiguration == null) {
-					nodeConfiguration = nodeBlueprint.getConfigurations(linkAccess, false).get(0);
-				}
-
-				//Always specify the used configuration
-				blueprint.addNodeBlueprint(nodeBlueprint, nodeConfiguration);
-			} else {
-				blueprint.addNodeBlueprint(NodeDummy.Blueprint.INSTANCE);
-			}
-		}
-
-		for(int nodeIndex = 0; nodeIndex < blueprint.getNodeBlueprints(); nodeIndex++) {
-			INodeConfiguration configuration = blueprint.getNodeConfiguration(nodeIndex);
-
-			//Configuration should not be null for any node except for dummy nodes where we don't have links anyways
-			if(configuration != null) {
-				for(int inputIndex = 0; inputIndex < configuration.getInputs().size(); inputIndex++) {
-					IRuneLink link = containerData.getLink(nodeIndex, inputIndex);
-
-					if(link != null) {
-						blueprint.link(nodeIndex, inputIndex, link.getOutputRune(), link.getOutput());
-					}
-				}
-			}
-		}
-
-		return blueprint;
+	public static IRuneChainBlueprint createBlueprint(IRuneChainData data) {
+		return RuneChainFactory.INSTANCE.create(data);
 	}
 
 	protected void initFromNbt() {
@@ -252,7 +106,7 @@ public class RuneChainItemCapability extends ItemCapability<RuneChainItemCapabil
 	}
 
 	@Override
-	public RuneChainComposition.Blueprint getBlueprint() {
+	public IRuneChainBlueprint getBlueprint() {
 		this.initFromNbt();
 		return this.blueprint;
 	}

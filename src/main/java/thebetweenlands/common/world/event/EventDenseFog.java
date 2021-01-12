@@ -3,12 +3,16 @@ package thebetweenlands.common.world.event;
 import java.util.Random;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 public class EventDenseFog extends TimedEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "dense_fog");
+
+	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[] { new ResourceLocation("thebetweenlands:textures/events/dense_fog.png") };
 	
 	private float fade = 1.0F;
 	private float lastFade = 1.0F;
@@ -68,5 +72,15 @@ public class EventDenseFog extends TimedEnvironmentEvent {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public ResourceLocation[] getVisionTextures() {
+		return VISION_TEXTURES;
+	}
+	
+	@Override
+	public SoundEvent getChimesSound() {
+		return SoundRegistry.CHIMES_DENSE_FOG;
 	}
 }

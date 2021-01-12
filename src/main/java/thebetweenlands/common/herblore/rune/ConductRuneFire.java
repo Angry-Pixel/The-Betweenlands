@@ -13,19 +13,23 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import thebetweenlands.api.rune.INodeComposition;
-import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.IRuneChainUser;
-import thebetweenlands.api.rune.IRuneEffect;
-import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.api.rune.impl.InputSerializers;
-import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneConfiguration.InputPort;
-import thebetweenlands.api.rune.impl.RuneConfiguration.OutputPort;
-import thebetweenlands.api.rune.impl.RuneEffectModifier;
-import thebetweenlands.api.rune.impl.RuneStats;
-import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.IRuneChainUser;
+import thebetweenlands.api.runechain.base.IConfigurationLinkAccess;
+import thebetweenlands.api.runechain.base.INodeComposition;
+import thebetweenlands.api.runechain.base.INodeConfiguration;
+import thebetweenlands.api.runechain.base.INodeIO;
+import thebetweenlands.api.runechain.chain.IRuneExecutionContext;
+import thebetweenlands.api.runechain.io.IGetter;
+import thebetweenlands.api.runechain.io.ISetter;
+import thebetweenlands.api.runechain.io.InputSerializers;
+import thebetweenlands.api.runechain.io.types.IBlockTarget;
+import thebetweenlands.api.runechain.io.types.IRuneEffect;
+import thebetweenlands.api.runechain.io.types.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.modifier.RuneEffectModifier;
+import thebetweenlands.api.runechain.modifier.Subject;
+import thebetweenlands.api.runechain.rune.AbstractRune;
+import thebetweenlands.api.runechain.rune.RuneConfiguration;
+import thebetweenlands.api.runechain.rune.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
 public final class ConductRuneFire extends AbstractRune<ConductRuneFire> {
@@ -39,13 +43,13 @@ public final class ConductRuneFire extends AbstractRune<ConductRuneFire> {
 		}
 
 		public static final RuneConfiguration CONFIGURATION_1;
-		private static final InputPort<BlockPos> IN_POSITION_1;
+		private static final IGetter<IBlockTarget> IN_POSITION_1;
 
 		public static final RuneConfiguration CONFIGURATION_2;
-		private static final InputPort<Entity> IN_ENTITY_2;
+		private static final IGetter<Entity> IN_ENTITY_2;
 
 		public static final RuneConfiguration CONFIGURATION_3;
-		private static final OutputPort<IRuneEffect> OUT_EFFECT_3;
+		private static final ISetter<IRuneEffect> OUT_EFFECT_3;
 
 		private static final IRuneEffect FIRE_EFFECT = new IRuneEffect() {
 			@Override
@@ -83,15 +87,15 @@ public final class ConductRuneFire extends AbstractRune<ConductRuneFire> {
 		};
 
 		static {
-			RuneConfiguration.Builder builder = RuneConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.create();
 
-			IN_POSITION_1 = builder.in(RuneTokenDescriptors.BLOCK, InputSerializers.BLOCK, BlockPos.class);
+			IN_POSITION_1 = builder.in(RuneTokenDescriptors.BLOCK).type(IBlockTarget.class).serializer(InputSerializers.BLOCK).getter();
 			CONFIGURATION_1 = builder.build();
 
-			IN_ENTITY_2 = builder.in(RuneTokenDescriptors.ENTITY, InputSerializers.ENTITY, Entity.class);
+			IN_ENTITY_2 = builder.in(RuneTokenDescriptors.ENTITY).type(Entity.class).serializer(InputSerializers.ENTITY).getter();
 			CONFIGURATION_2 = builder.build();
 
-			OUT_EFFECT_3 = builder.out(RuneTokenDescriptors.EFFECT, IRuneEffect.class);
+			OUT_EFFECT_3 = builder.out(RuneTokenDescriptors.EFFECT).type(IRuneEffect.class).setter();
 			CONFIGURATION_3 = builder.build();
 		}
 
@@ -101,15 +105,15 @@ public final class ConductRuneFire extends AbstractRune<ConductRuneFire> {
 		}
 
 		@Override
-		public ConductRuneFire create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+		public ConductRuneFire create(int index, INodeComposition<IRuneExecutionContext> composition, INodeConfiguration configuration) {
 			return new ConductRuneFire(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected RuneEffectModifier.Subject activate(ConductRuneFire state, RuneExecutionContext context, INodeIO io) {
+		protected Subject activate(ConductRuneFire state, IRuneExecutionContext context, INodeIO io) {
 
 			if(state.getConfiguration() == CONFIGURATION_1 && IN_POSITION_1.get(io) != null) {
-				FIRE_EFFECT.apply(context.getUser().getWorld(), IN_POSITION_1.get(io));
+				FIRE_EFFECT.apply(context.getUser().getWorld(), IN_POSITION_1.get(io).block());
 			} else if(state.getConfiguration() == CONFIGURATION_2 && IN_ENTITY_2.get(io) != null) {
 				FIRE_EFFECT.apply(context.getUser().getWorld(), IN_ENTITY_2.get(io));
 			} else if(state.getConfiguration() == CONFIGURATION_3) {
@@ -161,12 +165,12 @@ public final class ConductRuneFire extends AbstractRune<ConductRuneFire> {
 				}
 				
 				@Override
-				public int getColorModifier(RuneEffectModifier.Subject subject, int index) {
+				public int getColorModifier(Subject subject, int index) {
 					return 0xFFE8440E;
 				}
 				
 				@Override
-				public int getColorModifierCount(RuneEffectModifier.Subject subject) {
+				public int getColorModifierCount(Subject subject) {
 					return 1;
 				}
 			};
@@ -175,13 +179,13 @@ public final class ConductRuneFire extends AbstractRune<ConductRuneFire> {
 		@Override
 		protected boolean isDelegatedRuneEffectModifier(ConductRuneFire state, AbstractRune<?> target, AbstractRune<?> inputRune, int outputIndex) {
 			if(state.getConfiguration() == CONFIGURATION_3) {
-				return outputIndex == OUT_EFFECT_3.getIndex();
+				return outputIndex == OUT_EFFECT_3.index();
 			}
 			return false;
 		}
 	}
 
-	private ConductRuneFire(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+	private ConductRuneFire(Blueprint blueprint, int index, INodeComposition<IRuneExecutionContext> composition, RuneConfiguration configuration) {
 		super(blueprint, index, composition, configuration);
 	}
 }

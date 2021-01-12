@@ -1,0 +1,6 @@
+{ 
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "thebetweenlands:blocks/crimson_middle_gem_ore_frosty"
+  } 
+}

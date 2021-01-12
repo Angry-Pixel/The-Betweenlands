@@ -1,7 +1,14 @@
 {
-  "variants": { 
-    "normal": {
-      "model": "thebetweenlands:crimson_middle_gem_ore"
-    } 
-  } 
+	"forge_marker": 1,
+	"variants": {
+		"normal": [
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/crimson_middle_gem_ore",
+					"model_active": "thebetweenlands:block/crimson_middle_gem_ore_frosty"
+				}
+			}
+		]
+	}
 }

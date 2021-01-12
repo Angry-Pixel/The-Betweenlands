@@ -1,8 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "thebetweenlands:items_misc",
-      "data": 13
+      "item": "thebetweenlands:log_weedwood"
     },
     "title": {
       "translate": "advancements.thebetweenlands.craftsman.getting_harder_wood.title"

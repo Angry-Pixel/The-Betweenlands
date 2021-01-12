@@ -8,6 +8,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -18,6 +19,7 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.network.clientbound.MessageRiftSound;
 import thebetweenlands.common.network.clientbound.MessageRiftSound.RiftSoundType;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EventRift extends TimedEnvironmentEvent {
 	public static class RiftConfiguration {
@@ -84,6 +86,9 @@ public class EventRift extends TimedEnvironmentEvent {
 	protected static final DataParameter<RiftConfiguration> RIFT_CONFIGURATION = GenericDataManager.createKey(EventRift.class, RiftConfiguration::write, RiftConfiguration::new);
 
 	protected static final DataParameter<Integer> ACTIVATION_TICKS = GenericDataManager.createKey(EventRift.class, DataSerializers.VARINT);
+
+	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[] { new ResourceLocation("thebetweenlands:textures/events/rift.png") };
+	
 	protected int lastActivationTicks;
 
 	protected int soundTicks;
@@ -284,5 +289,15 @@ public class EventRift extends TimedEnvironmentEvent {
 				variant.getMinPitch() + configuration.pitchComponent * (variant.getMaxPitch() - variant.getMinPitch()), 
 				variant.getMinRoll() + configuration.rollComponent * (variant.getMaxRoll() - variant.getMinRoll())
 		};
+	}
+
+	@Override
+	public ResourceLocation[] getVisionTextures() {
+		return VISION_TEXTURES;
+	}
+	
+	@Override
+	public SoundEvent getChimesSound() {
+		return SoundRegistry.CHIMES_RIFT;
 	}
 }

@@ -20,18 +20,18 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import thebetweenlands.api.capability.IRuneCapability;
 import thebetweenlands.api.capability.IRuneChainCapability;
-import thebetweenlands.api.rune.INodeBlueprint;
-import thebetweenlands.api.rune.INodeBlueprint.IConfigurationLinkAccess;
-import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.IRuneChainContainerData;
-import thebetweenlands.api.rune.IRuneChainData;
-import thebetweenlands.api.rune.IRuneContainer;
-import thebetweenlands.api.rune.IRuneContainerContext;
-import thebetweenlands.api.rune.IRuneContainerFactory;
-import thebetweenlands.api.rune.IRuneLink;
-import thebetweenlands.api.rune.IRuneWeavingTableContainer;
-import thebetweenlands.api.rune.IRuneWeavingTableGui;
-import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
+import thebetweenlands.api.runechain.base.IConfigurationLinkAccess;
+import thebetweenlands.api.runechain.base.INodeBlueprint;
+import thebetweenlands.api.runechain.base.INodeConfiguration;
+import thebetweenlands.api.runechain.chain.IRuneChainData;
+import thebetweenlands.api.runechain.chain.IRuneExecutionContext;
+import thebetweenlands.api.runechain.container.IRuneChainContainerData;
+import thebetweenlands.api.runechain.container.IRuneContainer;
+import thebetweenlands.api.runechain.container.IRuneContainerContext;
+import thebetweenlands.api.runechain.container.IRuneContainerFactory;
+import thebetweenlands.api.runechain.container.IRuneLink;
+import thebetweenlands.api.runechain.container.IRuneWeavingTableContainer;
+import thebetweenlands.api.runechain.container.gui.IRuneWeavingTableGui;
 import thebetweenlands.common.herblore.rune.RuneChainData;
 import thebetweenlands.common.inventory.slot.SlotRuneWeavingTableInput;
 import thebetweenlands.common.inventory.slot.SlotRuneWeavingTableOutput;
@@ -189,7 +189,7 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 	}
 
 	@Nullable
-	public INodeBlueprint<?, RuneExecutionContext> getRuneBlueprint(int slotIndex) {
+	public INodeBlueprint<?, IRuneExecutionContext> getRuneBlueprint(int slotIndex) {
 		IRuneContainer container = this.getRuneContainer(slotIndex - this.table.getChainStart());
 		return container != null ? container.getBlueprint() : null;
 	}
@@ -711,7 +711,7 @@ public class ContainerRuneWeavingTable extends Container implements IRuneWeaving
 		};
 	}
 
-	protected Pair<INodeConfiguration, INodeConfiguration> getConfigurations(@Nullable IConfigurationLinkAccess access, INodeBlueprint<?, RuneExecutionContext> blueprint, INodeConfiguration configuration) {
+	protected Pair<INodeConfiguration, INodeConfiguration> getConfigurations(@Nullable IConfigurationLinkAccess access, INodeBlueprint<?, IRuneExecutionContext> blueprint, INodeConfiguration configuration) {
 		INodeConfiguration finalConfiguration = null;
 		for(INodeConfiguration config : blueprint.getConfigurations(access, false)) {
 			if(config.getId() == configuration.getId()) {

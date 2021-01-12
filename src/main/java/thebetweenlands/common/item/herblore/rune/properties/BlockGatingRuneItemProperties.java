@@ -18,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import thebetweenlands.api.rune.IRuneContainerFactory;
+import thebetweenlands.api.runechain.container.IRuneContainerFactory;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.common.herblore.rune.GatingRuneBlock;
 import thebetweenlands.common.item.herblore.rune.DefaultRuneContainerFactory;

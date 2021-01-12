@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.api.capability.IRuneChainUserCapability;
-import thebetweenlands.api.rune.impl.RuneChainComposition;
+import thebetweenlands.api.runechain.chain.IRuneChain;
 import thebetweenlands.common.network.MessageEntity;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
@@ -62,7 +62,7 @@ public class MessagePlayerRuneChainPacket extends MessageEntity {
 				IRuneChainUserCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN_USER, null);
 
 				if(cap != null) {
-					RuneChainComposition runeChain = cap.getRuneChain(this.runeChainId);
+					IRuneChain runeChain = cap.getRuneChain(this.runeChainId);
 
 					if(runeChain != null) {
 						try {

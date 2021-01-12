@@ -35,9 +35,8 @@ public class GuiMortar extends GuiContainer {
         int progress = mortar.progress;
         drawTexturedModalRect(xx + 45, yy + 69, 0, 166, progress, 6);
 
-        if (mortar.getStackInSlot(3) == null) {
-            renderSlot(new ItemStack(ItemRegistry.LIFE_CRYSTAL), 79 + xx, 8 + yy);
-        }
+        if(this.mortar.getStackInSlot(3).isEmpty())
+        	renderSlot(new ItemStack(ItemRegistry.LIFE_CRYSTAL), 79 + xx, 8 + yy);
     }
 
     @Override

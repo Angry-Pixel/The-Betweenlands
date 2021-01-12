@@ -1,6 +1,8 @@
 package thebetweenlands.common.entity;
 
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,6 +11,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
@@ -20,6 +23,7 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.projectiles.EntitySludgeWallJet;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 	private static final DataParameter<Integer> ANIMATION_TICKS_SYNC = EntityDataManager.createKey(EntityTriggeredSludgeWallJet.class, DataSerializers.VARINT);
@@ -108,11 +112,15 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 				float angleDiff = Math.abs(MathHelper.wrapDegrees(MathHelper.wrapDegrees(angle) - MathHelper.wrapDegrees(-this.rotationYaw)));
 
 				if (angleDiff < 55) {
-					if (!getEntityWorld().isRemote)
+					if (!getEntityWorld().isRemote) {
 						damageEntity(source, 5F);
+					}
+					this.playSound(SoundRegistry.SLUDGE_TURRET_DEATH, 1, 1);
 					return true;
-				} else
+				} else {
+					this.playSound(SoundRegistry.SLUDGE_TURRET_HURT, 1, 1);
 					return false;
+				}
 			}
 		}
 		return false;
@@ -194,5 +202,21 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 	@Override
 	protected int maxUseCount() {
 		return 0;
+	}
+	
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return SoundRegistry.SLUDGE_TURRET_LIVING;
+	}
+
+	@Nullable
+	@Override
+	protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+		return SoundRegistry.SLUDGE_TURRET_HURT;
+	}
+
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundRegistry.SLUDGE_TURRET_DEATH;
 	}
 }

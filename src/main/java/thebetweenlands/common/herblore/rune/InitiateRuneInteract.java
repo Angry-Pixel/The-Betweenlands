@@ -5,16 +5,22 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.entity.Entity;
-import thebetweenlands.api.rune.INodeComposition;
-import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.IRuneChainUser;
-import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
-import thebetweenlands.api.rune.impl.RuneConfiguration;
-import thebetweenlands.api.rune.impl.RuneConfiguration.OutputPort;
-import thebetweenlands.api.rune.impl.RuneEffectModifier;
-import thebetweenlands.api.rune.impl.RuneStats;
-import thebetweenlands.api.rune.impl.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.IRuneChainUser;
+import thebetweenlands.api.runechain.base.IConfigurationLinkAccess;
+import thebetweenlands.api.runechain.base.INodeComposition;
+import thebetweenlands.api.runechain.base.INodeConfiguration;
+import thebetweenlands.api.runechain.base.INodeIO;
+import thebetweenlands.api.runechain.chain.IRuneExecutionContext;
+import thebetweenlands.api.runechain.initiation.InitiationPhase;
+import thebetweenlands.api.runechain.initiation.InitiationState;
+import thebetweenlands.api.runechain.initiation.InteractionInitiationPhase;
+import thebetweenlands.api.runechain.io.ISetter;
+import thebetweenlands.api.runechain.io.OutputKey;
+import thebetweenlands.api.runechain.io.types.RuneTokenDescriptors;
+import thebetweenlands.api.runechain.modifier.Subject;
+import thebetweenlands.api.runechain.rune.AbstractRune;
+import thebetweenlands.api.runechain.rune.RuneConfiguration;
+import thebetweenlands.api.runechain.rune.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
 public final class InitiateRuneInteract extends AbstractRune<InitiateRuneInteract> {
@@ -27,12 +33,12 @@ public final class InitiateRuneInteract extends AbstractRune<InitiateRuneInterac
 		}
 
 		public static final RuneConfiguration CONFIGURATION_1;
-		public static final OutputPort<Entity> OUT_ENTITY_1;
+		public static final ISetter<Entity> OUT_ENTITY_1;
 
 		static {
-			RuneConfiguration.Builder builder = RuneConfiguration.builder();
+			RuneConfiguration.Builder builder = RuneConfiguration.create();
 
-			OUT_ENTITY_1 = builder.out(RuneTokenDescriptors.ENTITY, Entity.class);
+			OUT_ENTITY_1 = builder.out(RuneTokenDescriptors.ENTITY).type(Entity.class).setter();
 			CONFIGURATION_1 = builder.build();
 		}
 
@@ -42,12 +48,12 @@ public final class InitiateRuneInteract extends AbstractRune<InitiateRuneInterac
 		}
 
 		@Override
-		public InitiateRuneInteract create(int index, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+		public InitiateRuneInteract create(int index, INodeComposition<IRuneExecutionContext> composition, INodeConfiguration configuration) {
 			return new InitiateRuneInteract(this, index, composition, (RuneConfiguration) configuration);
 		}
 
 		@Override
-		protected RuneEffectModifier.Subject activate(InitiateRuneInteract state, RuneExecutionContext context, INodeIO io) {
+		protected Subject activate(InitiateRuneInteract state, IRuneExecutionContext context, INodeIO io) {
 			OUT_ENTITY_1.set(io, state.target);
 			return null;
 		}
@@ -62,7 +68,7 @@ public final class InitiateRuneInteract extends AbstractRune<InitiateRuneInterac
 
 	private Entity target;
 
-	private InitiateRuneInteract(Blueprint blueprint, int index, INodeComposition<RuneExecutionContext> composition, RuneConfiguration configuration) {
+	private InitiateRuneInteract(Blueprint blueprint, int index, INodeComposition<IRuneExecutionContext> composition, RuneConfiguration configuration) {
 		super(blueprint, index, composition, configuration);
 	}
 }

@@ -4,13 +4,14 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
-import thebetweenlands.api.rune.INodeBlueprint;
-import thebetweenlands.api.rune.IRuneChainData;
-import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.api.rune.impl.AbstractRune.Blueprint.InitiationPhase;
-import thebetweenlands.api.rune.impl.AbstractRune.Blueprint.InitiationState;
-import thebetweenlands.api.rune.impl.RuneChainComposition;
-import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
+import thebetweenlands.api.runechain.base.INodeBlueprint;
+import thebetweenlands.api.runechain.chain.IRuneChain;
+import thebetweenlands.api.runechain.chain.IRuneChainBlueprint;
+import thebetweenlands.api.runechain.chain.IRuneChainData;
+import thebetweenlands.api.runechain.chain.IRuneExecutionContext;
+import thebetweenlands.api.runechain.initiation.InitiationPhase;
+import thebetweenlands.api.runechain.initiation.InitiationState;
+import thebetweenlands.api.runechain.rune.AbstractRune;
 
 public interface IRuneChainCapability {
 	public void setData(@Nullable IRuneChainData data);
@@ -19,7 +20,7 @@ public interface IRuneChainCapability {
 	public IRuneChainData getData();
 
 	@Nullable
-	public RuneChainComposition.Blueprint getBlueprint();
+	public IRuneChainBlueprint getBlueprint();
 
 	public void setInitiationState(@Nullable InitiationState<?> state);
 
@@ -35,12 +36,12 @@ public interface IRuneChainCapability {
 	 * @return If runOnInitiation is true: ID of the initiated rune chain if initiation state is true or else -1. If runOnInitiation is false: 0 if initiation state is true or else -1.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public default int checkInitiation(IRuneChainUserCapability userCap, InitiationPhase initiationPhase, Consumer<RuneChainComposition> initializer, boolean runOnInitiation) {
+	public default int checkInitiation(IRuneChainUserCapability userCap, InitiationPhase initiationPhase, Consumer<IRuneChain> initializer, boolean runOnInitiation) {
 		IRuneChainData data = this.getData();
-		RuneChainComposition.Blueprint blueprint = this.getBlueprint();
+		IRuneChainBlueprint blueprint = this.getBlueprint();
 
 		if(data != null && blueprint != null && blueprint.getNodeBlueprints() > 0) {
-			INodeBlueprint<?, RuneExecutionContext> node = blueprint.getNodeBlueprint(0);
+			INodeBlueprint<?, IRuneExecutionContext> node = blueprint.getNodeBlueprint(0);
 
 			if(node instanceof AbstractRune.Blueprint) {
 				InitiationState initiation = ((AbstractRune.Blueprint) node).checkInitiation(userCap.getUser(), initiationPhase, this.getInitiationState());
@@ -51,7 +52,7 @@ public interface IRuneChainCapability {
 					if(runOnInitiation) {
 						int id = userCap.addRuneChain(data);
 
-						RuneChainComposition composition = userCap.getRuneChain(id);
+						IRuneChain composition = userCap.getRuneChain(id);
 
 						initializer.accept(composition);
 

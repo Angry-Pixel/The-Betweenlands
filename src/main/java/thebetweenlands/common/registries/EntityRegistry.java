@@ -18,6 +18,7 @@ import thebetweenlands.common.entity.EntityResurrection;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityRunicBeetleProjectile;
+import thebetweenlands.common.entity.EntityRunicBeetleWalking;
 import thebetweenlands.common.entity.EntityShock;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.entity.EntityShockwaveSwordItem;
@@ -240,6 +241,7 @@ public class EntityRegistry {
 		registerEntity(EntitySwarm.class, "swarm", 0x292B3B, 0xE2D698);
 		
 		registerEntity(EntityRunicBeetleProjectile.class, "runic_beetle_projectile", 64, 20, true);
+		registerEntity(EntityRunicBeetleWalking.class, "runic_beetle_walking");
 	}
 
 	private static int id = 0;

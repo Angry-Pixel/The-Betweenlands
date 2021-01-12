@@ -148,11 +148,13 @@ public class ModelConverter {
 	}
 
 	public static class Model {
+		private final ModelBase model;
 		private final Vec3UV fwdVec;
 		private final Vec3UV upVec;
 		private List<Box> modelBoxes = new ArrayList<Box>();
 
-		private Model(List<Box> modelBoxList, Vec3UV fwdVec, Vec3UV upVec) {
+		private Model(ModelBase model, List<Box> modelBoxList, Vec3UV fwdVec, Vec3UV upVec) {
+			this.model = model;
 			//Old, New
 			Map<Box, Box> copyReference = new HashMap<Box, Box>();
 			this.fwdVec = new Vec3UV(fwdVec);
@@ -282,13 +284,17 @@ public class ModelConverter {
 		public List<Box> getBoxes() {
 			return this.modelBoxes;
 		}
+		
+		public ModelBase getModelBase() {
+			return this.model;
+		}
 
 		/**
 		 * Returns a copy of this model
 		 * @return
 		 */
 		public Model copy() {
-			return new Model(this.modelBoxes, this.fwdVec, this.upVec);
+			return new Model(this.model, this.modelBoxes, this.fwdVec, this.upVec);
 		}
 	}
 
@@ -555,7 +561,7 @@ public class ModelConverter {
 			}
 		}
 
-		this.model = new Model(this.modelBoxList, this.fwdVec, this.upVec);
+		this.model = new Model(modelBase, this.modelBoxList, this.fwdVec, this.upVec);
 
 		if(this.packing != null) {
 			this.packing.packer.addTextureMap(new TextureQuadMap(this.packing.texture, this.packing.width, this.packing.height, packerQuads, this.packing.owner));
