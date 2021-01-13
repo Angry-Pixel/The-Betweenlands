@@ -10,12 +10,14 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.tile.TileEntitySiltGlassJar;
 
 @SideOnly(Side.CLIENT)
 public class RenderSiltGlassJar extends TileEntitySpecialRenderer<TileEntitySiltGlassJar> {
+	public static final ResourceLocation WORM_WIGGLE = new ResourceLocation("thebetweenlands:blocks/worm_wiggle");
 
 	@Override
 	public void render(TileEntitySiltGlassJar tile, double x, double y, double z, float partialTick, int destroyStage, float alpha) {
@@ -26,7 +28,7 @@ public class RenderSiltGlassJar extends TileEntitySpecialRenderer<TileEntitySilt
 
 		float height = (0.6875F / 8) * wormLevel;
 		
-		TextureAtlasSprite wormSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("worms_in_jar");
+		TextureAtlasSprite wormSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("thebetweenlands:blocks/worm_wiggle");
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 
@@ -86,12 +88,6 @@ public class RenderSiltGlassJar extends TileEntitySpecialRenderer<TileEntitySilt
 		addVertexWithUV(buffer, xMin, height, zMax, uMin, vMin + (vHeight * height));
 		addVertexWithUV(buffer, xMin, height, zMin, uMax, vMin + (vHeight * height));
 		addVertexWithUV(buffer, xMin, yMin, zMin, uMax, vMin);
-
-		// down
-		addVertexWithUV(buffer, xMax, yMin, zMin, uMax, vMin);
-		addVertexWithUV(buffer, xMax, yMin, zMax, uMin, vMin);
-		addVertexWithUV(buffer, xMin, yMin, zMax, uMin, vMax);
-		addVertexWithUV(buffer, xMin, yMin, zMin, uMax, vMax);
 
 	}
 
