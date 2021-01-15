@@ -237,6 +237,23 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 	}
 
 	@Override
+	@SuppressWarnings("rawtypes")
+	public boolean canAttackClass(Class entity) {
+		if(entity == EntityPlayer.class && getPlacedByPlayer() || entity == EntityRockSnot.class)
+			return false;
+		return super.canAttackClass(entity);
+	}
+
+	@Override
+	public void setAttackTarget(EntityLivingBase entity) {
+		if (getPlacedByPlayer()) {
+			if (entity instanceof EntityPlayer)
+				super.setAttackTarget(null);
+		} else
+			super.setAttackTarget(entity);
+	}
+
+	@Override
 	public void onKillCommand() {
 		this.setDead();
 	}
