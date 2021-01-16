@@ -25,7 +25,7 @@ import thebetweenlands.common.herblore.book.widgets.text.TextWidget;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.ElixirRecipes;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
-import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
+import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipe;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.TranslationHelper;
 

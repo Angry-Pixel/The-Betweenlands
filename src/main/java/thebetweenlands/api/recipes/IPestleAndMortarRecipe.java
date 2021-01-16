@@ -9,6 +9,17 @@ public interface IPestleAndMortarRecipe {
 	 * @return
 	 */
 	public ItemStack getOutput(ItemStack input);
+	
+	/**
+	 * Returns the output slot for the given input slot stack and output slot stack, can be used to create recipes
+	 * that need a certain item in the output slot
+	 * @param inputStack
+	 * @param outputStack
+	 * @return
+	 */
+	public default ItemStack getOutput(ItemStack inputStack, ItemStack outputStack) {
+		return this.getOutput(inputStack);
+	}
 
 	/**
 	 * Returns the inputs of the recipe
@@ -29,4 +40,20 @@ public interface IPestleAndMortarRecipe {
 	 * @return
 	 */
 	public boolean matchesInput(ItemStack stack);
+	
+	/**
+	 * Returns whether this recipe matches the given input slot stack and output slot stack, can be used to create recipes
+	 * that need a certain item in the output slot
+	 * @param inputStack
+	 * @param outputStack
+	 * @param inputOnly
+	 * @return
+	 */
+	public default boolean matchesInput(ItemStack inputStack, ItemStack outputStack, boolean inputOnly) {
+		return this.matchesInput(inputStack);
+	}
+	
+	public default boolean replacesOutput() {
+		return false;
+	}
 }
