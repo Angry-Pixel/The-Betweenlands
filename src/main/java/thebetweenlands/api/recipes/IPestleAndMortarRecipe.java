@@ -53,6 +53,17 @@ public interface IPestleAndMortarRecipe {
 		return this.matchesInput(inputStack);
 	}
 	
+	/**
+	 * Returns whether this recipe requires or uses the given stack in the output slot.
+	 * If {@link #matchesInput(ItemStack, ItemStack, boolean)} depends on an output slot stack then this method should 
+	 * reflect that.
+	 * @param outputStack
+	 * @return
+	 */
+	public default boolean isOutputUsed(ItemStack outputStack) {
+		return false;
+	}
+	
 	public default boolean replacesOutput() {
 		return false;
 	}

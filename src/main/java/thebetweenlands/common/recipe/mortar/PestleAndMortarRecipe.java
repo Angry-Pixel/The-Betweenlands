@@ -34,6 +34,15 @@ public class PestleAndMortarRecipe implements IPestleAndMortarRecipe {
     	recipes.remove(recipe);
     }
 
+    public static boolean isOutputUsedInAnyRecipe(ItemStack output) {
+    	 for (IPestleAndMortarRecipe recipe : recipes) {
+             if (recipe.isOutputUsed(output)) {
+                 return true;
+             }
+         }
+    	 return false;
+    }
+    
     public static ItemStack getResult(ItemStack input, ItemStack output, boolean inputOnly) {
         for (IPestleAndMortarRecipe recipe : recipes) {
             if (recipe.matchesInput(input, output, inputOnly)) {

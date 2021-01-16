@@ -12,6 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.inventory.slot.SlotOutput;
 import thebetweenlands.common.inventory.slot.SlotPestle;
 import thebetweenlands.common.item.misc.ItemLifeCrystal;
+import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipe;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityMortar;
 
@@ -30,7 +31,13 @@ public class ContainerMortar  extends Container {
         addSlotToContainer(new SlotOutput(tile, 2, 123, 36, this) {
         	@Override
         	public boolean isItemValid(ItemStack stack) {
-        		return !stack.isEmpty() && (stack.getItem() == ItemRegistry.DENTROTHYST_VIAL || stack.getItem() == ItemRegistry.ASPECT_VIAL);
+        		return !stack.isEmpty() && PestleAndMortarRecipe.isOutputUsedInAnyRecipe(stack);
+        	}
+        	
+        	@Override
+        	public int getSlotStackLimit() {
+        		//Only for the vials and recipes that also use the output slot
+        		return 1;
         	}
         });
         addSlotToContainer(new ContainerAnimator.SlotLifeCrystal(tile, 3, 79, 8));
