@@ -67,6 +67,8 @@ import thebetweenlands.common.recipe.censer.CenserRecipeWeepingBluePetal;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.recipe.misc.BookMergeRecipe;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
+import thebetweenlands.common.recipe.misc.CrabPotFilterRecipeBubbler;
+import thebetweenlands.common.recipe.misc.CrabPotFilterRecipeSilt;
 import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
 import thebetweenlands.common.recipe.misc.HearthgroveTarringRecipe;
 import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
@@ -122,6 +124,8 @@ public class RecipeRegistry {
 		registerAnimatorRecipes();
 		registerCenserRecipes();
 		registerSmokingRackRecipes();
+		registerCrabPotFilterRecipesSilt();
+		registerCrabPotFilterRecipesBubbler();
 
 		ElixirRecipes.init();
 
@@ -707,5 +711,17 @@ public class RecipeRegistry {
 				return stackOld;
 			}
 		});
+	}
+
+	private static void registerCrabPotFilterRecipesSilt() {
+		CrabPotFilterRecipeSilt.addRecipe(new ItemStack(BlockRegistry.SILT), new ItemStack(BlockRegistry.MUD));
+		CrabPotFilterRecipeSilt.addRecipe(new ItemStack(Items.LEATHER), new ItemStack(Items.ROTTEN_FLESH));
+	}
+	
+	private static void registerCrabPotFilterRecipesBubbler() {
+		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(BlockRegistry.SILT_GLASS), new ItemStack(BlockRegistry.SILT));
+		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(ItemRegistry.CRIMSON_MIDDLE_GEM), new ItemStack(BlockRegistry.CRIMSON_MIDDLE_GEM_ORE));
+		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(ItemRegistry.AQUA_MIDDLE_GEM), new ItemStack(BlockRegistry.AQUA_MIDDLE_GEM_ORE));
+		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM), new ItemStack(BlockRegistry.GREEN_MIDDLE_GEM_ORE));
 	}
 }

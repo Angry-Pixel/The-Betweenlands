@@ -52,6 +52,7 @@ import thebetweenlands.client.gui.inventory.GuiAnimator;
 import thebetweenlands.client.gui.inventory.GuiBLDualFurnace;
 import thebetweenlands.client.gui.inventory.GuiBLFurnace;
 import thebetweenlands.client.gui.inventory.GuiCenser;
+import thebetweenlands.client.gui.inventory.GuiCrabPotFilter;
 import thebetweenlands.client.gui.inventory.GuiDraetonBurner;
 import thebetweenlands.client.gui.inventory.GuiDraetonCrafting;
 import thebetweenlands.client.gui.inventory.GuiDraetonUpgrades;
@@ -289,6 +290,7 @@ import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
 import thebetweenlands.common.tile.TileEntityCrabPot;
+import thebetweenlands.common.tile.TileEntityCrabPotFilter;
 import thebetweenlands.common.tile.TileEntityDecayPitControl;
 import thebetweenlands.common.tile.TileEntityDecayPitGroundChain;
 import thebetweenlands.common.tile.TileEntityDecayPitHangingChain;
@@ -497,6 +499,11 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		case GUI_FISH_TRIMMING_TABLE:
 			if (tile instanceof TileEntityFishTrimmingTable)
 				return new GuiFishTrimmingTable(player, (TileEntityFishTrimmingTable) tile);
+			break;
+			
+		case GUI_CRAB_POT_FILTER:
+			if (tile instanceof TileEntityCrabPotFilter)
+				return new GuiCrabPotFilter(player, (TileEntityCrabPotFilter) tile);
 			break;
 		}
 

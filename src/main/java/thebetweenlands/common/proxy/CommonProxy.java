@@ -29,6 +29,7 @@ import thebetweenlands.common.inventory.container.ContainerBLDualFurnace;
 import thebetweenlands.common.inventory.container.ContainerBLFurnace;
 import thebetweenlands.common.inventory.container.ContainerBarrel;
 import thebetweenlands.common.inventory.container.ContainerCenser;
+import thebetweenlands.common.inventory.container.ContainerCrabPotFilter;
 import thebetweenlands.common.inventory.container.ContainerDraetonBurner;
 import thebetweenlands.common.inventory.container.ContainerDraetonFurnace;
 import thebetweenlands.common.inventory.container.ContainerDraetonPouch;
@@ -49,6 +50,7 @@ import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
 import thebetweenlands.common.tile.TileEntityBarrel;
 import thebetweenlands.common.tile.TileEntityCenser;
+import thebetweenlands.common.tile.TileEntityCrabPotFilter;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityFishTrimmingTable;
 import thebetweenlands.common.tile.TileEntityFishingTackleBox;
@@ -80,7 +82,8 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_DRAETON_UPGRADES = 21;
 	public static final int GUI_FISHING_TACKLE_BOX = 30;
 	public static final int GUI_SMOKING_RACK = 31;
-	public static final int GUI_FISH_TRIMMING_TABLE= 32;
+	public static final int GUI_FISH_TRIMMING_TABLE = 32;
+	public static final int GUI_CRAB_POT_FILTER = 33;
 	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -230,6 +233,11 @@ public class CommonProxy implements IGuiHandler {
 		case GUI_FISH_TRIMMING_TABLE:
 			if (tile instanceof TileEntityFishTrimmingTable)
 				return new ContainerFishTrimmingTable(player, (TileEntityFishTrimmingTable) tile);
+			break;
+			
+		case GUI_CRAB_POT_FILTER:
+			if (tile instanceof TileEntityCrabPotFilter)
+				return new ContainerCrabPotFilter(player, (TileEntityCrabPotFilter) tile);
 			break;
 		}
 		return null;

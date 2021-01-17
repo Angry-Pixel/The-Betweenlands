@@ -17,6 +17,7 @@ import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
 import thebetweenlands.common.tile.TileEntityCrabPot;
+import thebetweenlands.common.tile.TileEntityCrabPotFilter;
 import thebetweenlands.common.tile.TileEntityDecayPitControl;
 import thebetweenlands.common.tile.TileEntityDecayPitGroundChain;
 import thebetweenlands.common.tile.TileEntityDecayPitHangingChain;
@@ -48,8 +49,8 @@ import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityRepeller;
 import thebetweenlands.common.tile.TileEntityRubberTap;
 import thebetweenlands.common.tile.TileEntitySiltGlassJar;
-import thebetweenlands.common.tile.TileEntitySmokingRack;
 import thebetweenlands.common.tile.TileEntitySimulacrum;
+import thebetweenlands.common.tile.TileEntitySmokingRack;
 import thebetweenlands.common.tile.TileEntitySpikeTrap;
 import thebetweenlands.common.tile.TileEntityTarLootPot1;
 import thebetweenlands.common.tile.TileEntityTarLootPot2;
@@ -122,6 +123,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntitySmokingRack.class, "smoking_rack");
 		registerTileEntity(TileEntityFishTrimmingTable.class, "fish_trimming_table");
 		registerTileEntity(TileEntityCrabPot.class, "crab_pot");
+		registerTileEntity(TileEntityCrabPotFilter.class, "crab_pot_filter");
 		registerTileEntity(TileEntitySiltGlassJar.class, "silt_glass_jar");
 	}
 
