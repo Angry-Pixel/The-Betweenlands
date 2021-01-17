@@ -27,7 +27,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 public class TileEntityCrabPotFilter extends TileEntity implements ITickable, IInventory {
 	public NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(3, ItemStack.EMPTY);
 	
-	public int MAX_FILTERING_TIME = 200; // 10 seconds per moss for a 64 stack = over 10.6 min IRL
+	public int MAX_FILTERING_TIME = 200; // 10 seconds per item for a 64 stack = over 10.6 min IRL
 
 	public int bait_progress = 0;
 	public int filtering_progress = 0;
@@ -52,7 +52,7 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, II
         if (getWorld().isRemote) 
             return;
 
-        if (getWorld().getBlockState(pos.up()).getBlock() == BlockRegistry.CRAB_POT && !active) { //add checks for stuff like crabs etc later
+        if (getWorld().getBlockState(pos.up()).getBlock() == BlockRegistry.CRAB_POT && !active) {
         	if(hasCrabInTile()) {
         		active = true;
         		markForUpdate();
