@@ -101,7 +101,7 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, II
 		markForUpdate();
 	}
 
-	private int getSlotProgress() {
+	public int getSlotProgress() {
 		return filtering_progress;
 	}
 

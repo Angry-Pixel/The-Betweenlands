@@ -25,6 +25,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.proxy.CommonProxy;
@@ -106,8 +110,17 @@ public class BlockCrabPotFilter extends Block implements ITileEntityProvider, IS
 	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
 		TileEntityCrabPotFilter tile = (TileEntityCrabPotFilter) world.getTileEntity(pos);
 		if (tile != null) {
-			if (rand.nextInt(5) == 0)
-				;
+			if (rand.nextInt(3) == 0)
+				if (tile.active && tile.getSlotProgress() > 0) {
+					for (int i = 0; i < 5 + rand.nextInt(5); i++) {
+						BatchedParticleRenderer.INSTANCE.addParticle(
+								DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR,
+								BLParticles.SMOOTH_SMOKE.create(world, pos.getX() + 0.5F, pos.getY() + 0.99F, pos.getZ() + 0.5F,
+										ParticleArgs.get().withMotion((rand.nextFloat() - 0.5f) * 0.01f, -rand.nextFloat() * -0.05F - 0.05F, (rand.nextFloat() - 0.5f) * 0.01f)
+												.withScale(0.5f + rand.nextFloat() * 8.0F)
+												.withColor(0.59F, 0.29F, 0F, 0.3f).withData(80, true, 0.01F, true)));
+					}
+				}
 		}
 	}
 
