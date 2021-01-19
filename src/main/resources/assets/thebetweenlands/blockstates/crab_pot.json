@@ -5,10 +5,9 @@
     "custom": { 
       "model_base": "thebetweenlands:block/internal/layer_selection",
       "model_base_data": {
-        "model": "thebetweenlands:block/crab_pot",
+        "model": "thebetweenlands:block/internal/blank",
         "layers": ["cutout", "none"]
       },
-      
       "model_additional": "thebetweenlands:block/internal/layer_selection",
       "model_additional_data": {
         "model": "forge:block/fluid",

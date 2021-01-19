@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "thebetweenlands:crab_pot_filter" },
+        "facing=south": { "model": "thebetweenlands:crab_pot_filter", "y": 180 },
+        "facing=west":  { "model": "thebetweenlands:crab_pot_filter", "y": 270 },
+        "facing=east":  { "model": "thebetweenlands:crab_pot_filter", "y": 90 }
+    }
+}

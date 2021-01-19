@@ -70,6 +70,11 @@ public class BlockCrabPot extends BlockSwampWater implements ITileEntityProvider
 	}
 
 	@Override
+	public boolean canPlaceBlockAt(World world, BlockPos pos) {
+		return super.canPlaceBlockAt(world, pos) && !(world.getBlockState(pos).getBlock() instanceof BlockCrabPotFilter);
+	}
+
+	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileEntityCrabPot();
 	}
@@ -136,12 +141,6 @@ public class BlockCrabPot extends BlockSwampWater implements ITileEntityProvider
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.TRANSLUCENT;
 	}
 
 	@SideOnly(Side.CLIENT)
