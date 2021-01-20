@@ -57,11 +57,11 @@ public class RenderCrabPot extends TileEntitySpecialRenderer<TileEntityCrabPot> 
 			return 180F;
 		case 2:
 		default:
-			return 90F;
+			return -90F;
 		case 1:
 			return 0F;
 		case 0:
-			return -90F;
+			return 90F;
 		}
 	}
 
