@@ -129,10 +129,10 @@ public class BlockCrabPotFilter extends Block implements ITileEntityProvider, IS
 		return EnumBlockRenderType.MODEL;
 	}
 
-	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.CUTOUT;
+	@Override
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+		return layer == BlockRenderLayer.TRANSLUCENT || layer == BlockRenderLayer.CUTOUT;
 	}
 
 	@Override
