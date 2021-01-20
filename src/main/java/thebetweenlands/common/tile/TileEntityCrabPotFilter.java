@@ -34,6 +34,7 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, II
 	public int items_to_filter_count = 3; // logic here means 1 already in the chamber + this 
 
 	public boolean active;
+	public int horizontalIndex = 0;
 
 	public TileEntityCrabPotFilter() {
 		super();
@@ -182,6 +183,14 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, II
         this.getWorld().notifyBlockUpdate(this.getPos(), state, state, 3);
     }
 
+	public void setRotation(int horizontalIndexIn) {
+		horizontalIndex = horizontalIndexIn;
+	}
+
+	public int getRotation() {
+		return horizontalIndex;
+	}
+
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
@@ -201,7 +210,7 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, II
 		active = nbt.getBoolean("active");
 		bait_progress = nbt.getInteger("bait_progress");
 		filtering_progress = nbt.getInteger("filtering_progress");
-		
+		setRotation(nbt.getInteger("horizontalIndex"));
 	}
 
 	public NBTTagCompound saveToNbt(NBTTagCompound nbt) {
@@ -209,7 +218,7 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, II
 		nbt.setBoolean("active", active);
 		nbt.setInteger("bait_progress", bait_progress);
 		nbt.setInteger("filtering_progress", filtering_progress);
-
+		nbt.setInteger("horizontalIndex", getRotation());
 		return nbt;
 	}
 

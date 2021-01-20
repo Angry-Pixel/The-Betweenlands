@@ -2,17 +2,14 @@ package thebetweenlands.common.block.container;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -22,7 +19,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.BlockFluidBase;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
@@ -31,36 +28,35 @@ import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.proxy.CommonProxy;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.tile.TileEntityCrabPotFilter;
 import thebetweenlands.util.AdvancedStateMap;
 
-public class BlockCrabPotFilter extends Block implements ITileEntityProvider, IStateMappedBlock {
-	public static final PropertyDirection FACING = BlockHorizontal.FACING;
-
+public class BlockCrabPotFilter extends BlockSwampWater implements ITileEntityProvider, IStateMappedBlock {
+	
 	public BlockCrabPotFilter() {
-		super(Material.WATER);
+		this(FluidRegistry.SWAMP_WATER, Material.WATER);
+		setHardness(2.0F);
+	}
+
+	public BlockCrabPotFilter(Fluid fluid, Material materialIn) {
+		super(fluid, materialIn);
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
-		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(BlockFluidBase.LEVEL, 0));
+		setUnderwaterBlock(true);
+		setDefaultState(blockState.getBaseState().withProperty(LEVEL, 0));
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
-		builder.ignore(BlockFluidBase.LEVEL);
-	}
-
-	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, FACING, BlockFluidBase.LEVEL);
-	}
-
-	@Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
-		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+		super.setStateMapper(builder);
+		builder.ignore(LEVEL);
 	}
 
 	@Override
@@ -70,23 +66,18 @@ public class BlockCrabPotFilter extends Block implements ITileEntityProvider, IS
 
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+		if (!world.isRemote) {
+			if (world.getTileEntity(pos) instanceof TileEntityCrabPotFilter) {
+				TileEntityCrabPotFilter tile = (TileEntityCrabPotFilter) world.getTileEntity(pos);
+				tile.setRotation(placer.getHorizontalFacing().rotateYCCW().getHorizontalIndex());
+				tile.markForUpdate();
+			}
+		}
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileEntityCrabPotFilter();
-	}
-
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing facing = EnumFacing.byHorizontalIndex(meta);
-		return getDefaultState().withProperty(FACING, facing.getAxis().isHorizontal() ? facing: EnumFacing.NORTH);
-	}
-
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		return state.getValue(FACING).getIndex();
 	}
 
 	@Override
@@ -149,5 +140,10 @@ public class BlockCrabPotFilter extends Block implements ITileEntityProvider, IS
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
+
+	@Override
+	public ItemBlock getItemBlock() {
+		return ICustomItemBlock.getDefaultItemBlock(this);
+	}
 
 }

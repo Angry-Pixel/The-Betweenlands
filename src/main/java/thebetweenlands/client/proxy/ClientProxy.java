@@ -105,6 +105,7 @@ import thebetweenlands.client.render.tile.RenderCenser;
 import thebetweenlands.client.render.tile.RenderChestBetweenlands;
 import thebetweenlands.client.render.tile.RenderCompostBin;
 import thebetweenlands.client.render.tile.RenderCrabPot;
+import thebetweenlands.client.render.tile.RenderCrabPotFilter;
 import thebetweenlands.client.render.tile.RenderDecayPitControl;
 import thebetweenlands.client.render.tile.RenderDecayPitGroundChain;
 import thebetweenlands.client.render.tile.RenderDecayPitHangingChain;
@@ -749,6 +750,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFishTrimmingTable.class, new RenderFishTrimmingTable());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrabPot.class, new RenderCrabPot());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySiltGlassJar.class, new RenderSiltGlassJar());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrabPotFilter.class, new RenderCrabPotFilter());
 		
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
@@ -820,6 +822,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		Item.getItemFromBlock(BlockRegistry.SMOKING_RACK).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntitySmokingRack.class));
 		Item.getItemFromBlock(BlockRegistry.FISH_TRIMMING_TABLE).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityFishTrimmingTable.class));
 		Item.getItemFromBlock(BlockRegistry.CRAB_POT).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityCrabPot.class));
+		Item.getItemFromBlock(BlockRegistry.CRAB_POT_FILTER).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityCrabPotFilter.class));
 
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {

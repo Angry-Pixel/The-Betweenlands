@@ -1,123 +1,24 @@
 {
-   "forge_marker":1,
-   "defaults":{
-      "model":"thebetweenlands:internal/model_combined",
-      "custom":{
-         "model_base":"thebetweenlands:block/internal/layer_selection",
-         "model_base_data":{
-            "model":"thebetweenlands:block/internal/blank",
-            "layers":[
-               "cutout",
-               "none"
-            ]
-         },
-         "model_additional":"thebetweenlands:block/internal/layer_selection",
-         "model_additional_data":{
-            "model":"forge:block/fluid",
-            "layers":[
-               "translucent"
-            ],
-            "model_data":{
-               "fluid":"swamp_water"
-            }
-         }
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:internal/model_combined",
+    "custom": { 
+      "model_base": "thebetweenlands:block/internal/layer_selection",
+      "model_base_data": {
+        "model": "thebetweenlands:block/internal/blank",
+        "layers": ["cutout", "none"]
+      },
+      "model_additional": "thebetweenlands:block/internal/layer_selection",
+      "model_additional_data": {
+        "model": "forge:block/fluid",
+        "layers": ["translucent"],
+        "model_data": {
+          "fluid": "swamp_water"
+        }
       }
-   },
-   "variants":{
-      "facing=north":{
-         "model":"thebetweenlands:internal/model_combined",
-         "custom":{
-            "model_base":"thebetweenlands:block/internal/layer_selection",
-            "model_base_data":{
-               "model":"thebetweenlands:block/crab_pot_filter",
-               "layers":[
-                  "cutout",
-                  "none"
-               ]
-            },
-            "model_additional":"thebetweenlands:block/internal/layer_selection",
-            "model_additional_data":{
-               "model":"forge:block/fluid",
-               "layers":[
-                  "translucent"
-               ],
-               "model_data":{
-                  "fluid":"swamp_water"
-               }
-            }
-         }
-      },
-      "facing=south":{
-         "model":"thebetweenlands:internal/model_combined",
-         "custom":{
-            "model_base":"thebetweenlands:block/internal/layer_selection",
-            "model_base_data":{
-               "model":"thebetweenlands:block/crab_pot_filter",
-               "layers":[
-                  "cutout",
-                  "none"
-               ]
-            },
-            "model_additional":"thebetweenlands:block/internal/layer_selection",
-            "model_additional_data":{
-               "model":"forge:block/fluid",
-               "layers":[
-                  "translucent"
-               ],
-               "model_data":{
-                  "fluid":"swamp_water"
-               }
-            }
-         },
-         "y":180
-      },
-      "facing=west":{
-         "model":"thebetweenlands:internal/model_combined",
-         "custom":{
-            "model_base":"thebetweenlands:block/internal/layer_selection",
-            "model_base_data":{
-               "model":"thebetweenlands:block/crab_pot_filter",
-               "layers":[
-                  "cutout",
-                  "none"
-               ]
-            },
-            "model_additional":"thebetweenlands:block/internal/layer_selection",
-            "model_additional_data":{
-               "model":"forge:block/fluid",
-               "layers":[
-                  "translucent"
-               ],
-               "model_data":{
-                  "fluid":"swamp_water"
-               }
-            }
-         },
-         "y":270
-      },
-      "facing=east":{
-         "model":"thebetweenlands:internal/model_combined",
-         "custom":{
-            "model_base":"thebetweenlands:block/internal/layer_selection",
-            "model_base_data":{
-               "model":"thebetweenlands:block/crab_pot_filter",
-               "layers":[
-                  "cutout",
-                  "none"
-               ]
-            },
-            "model_additional":"thebetweenlands:block/internal/layer_selection",
-            "model_additional_data":{
-               "model":"forge:block/fluid",
-               "layers":[
-                  "translucent"
-               ],
-               "model_data":{
-                  "fluid":"swamp_water"
-               }
-            }
-         },
-         "y":90
-      }
-   }
+    }
+  },
+  "variants": {
+    "normal": [{ }]
+  }
 }

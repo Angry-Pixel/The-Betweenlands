@@ -29,7 +29,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.ITintedBlock;
-import thebetweenlands.common.block.container.BlockCrabPotFilter;
 import thebetweenlands.common.item.armor.ItemMarshRunnerBoots;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
@@ -85,10 +84,6 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 		if (state.getBlock() instanceof BlockSwampWater) {
 			return false;
 		}
-		
-		if (state.getBlock() instanceof BlockCrabPotFilter) {
-			return false;
-		}
 
 		if (displacements.containsKey(state.getBlock())) {
 			return displacements.get(state.getBlock());
@@ -122,10 +117,6 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
 		if (block instanceof BlockSwampWater) {
-			return false;
-		}
-		
-		if (block instanceof BlockCrabPotFilter) {
 			return false;
 		}
 
@@ -274,10 +265,6 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 		IBlockState state = world.getBlockState(pos);
 		if (state.getBlock() instanceof BlockSwampWater) {
 			return true;
-		}
-		
-		if (state.getBlock() instanceof BlockCrabPotFilter) {
-			return false;
 		}
 
 		if (displacements.containsKey(state.getBlock())) {
