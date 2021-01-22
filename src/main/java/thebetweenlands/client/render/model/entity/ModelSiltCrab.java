@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -173,8 +174,8 @@ public class ModelSiltCrab extends ModelBase {
 	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
 		super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel);
 		setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
-		GL11.glPushMatrix();
-		GL11.glRotatef(90.0F, 0.0F, -1.0F, 0.0F);
+		GlStateManager.pushMatrix();
+		GlStateManager.rotate(90.0F, 0.0F, -1.0F, 0.0F);
 		legleft_b1.render(unitPixel);
 		legright_m1.render(unitPixel);
 		legright_b1.render(unitPixel);
@@ -184,7 +185,7 @@ public class ModelSiltCrab extends ModelBase {
 		legleft_m1.render(unitPixel);
 		legright_f1.render(unitPixel);
 		body_base.render(unitPixel);
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {
