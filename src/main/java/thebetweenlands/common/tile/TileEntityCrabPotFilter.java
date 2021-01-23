@@ -4,13 +4,14 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -20,11 +21,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.container.BlockCrabPotFilter;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.recipe.misc.CrabPotFilterRecipeBubbler;
 import thebetweenlands.common.recipe.misc.CrabPotFilterRecipeSilt;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class TileEntityCrabPotFilter extends TileEntity implements ITickable, IInventory {
+public class TileEntityCrabPotFilter extends TileEntity implements ITickable, ISidedInventory {
 	public NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(3, ItemStack.EMPTY);
 	
 	public int MAX_FILTERING_TIME = 200; // 10 seconds per item for a 64 stack = over 10.6 min IRL
@@ -35,6 +37,12 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, II
 
 	public boolean active;
 	public int horizontalIndex = 0;
+
+    private final int baitSlot = 0;
+    private final int inputSlot = 1;
+    private final int outputSlot = 2;
+    private final int[] resultSideSlot = { 2 };
+    private final int allSideSlots[] = { 0, 1 };
 
 	public TileEntityCrabPotFilter() {
 		super();
@@ -329,7 +337,11 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, II
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack is) {
+	public boolean isItemValidForSlot(int slot, ItemStack stack) {
+		if(slot == baitSlot && EnumItemMisc.ANADIA_REMAINS.isItemOf(stack))
+			return true;
+		if (slot == inputSlot && !EnumItemMisc.ANADIA_REMAINS.isItemOf(stack))
+			return true;
 		return false;
 	}
 
@@ -350,6 +362,21 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, II
 	@Override
 	public void clear() {
 		inventory.clear();
+	}
+
+	@Override
+	public int[] getSlotsForFace(EnumFacing side) {
+		return side == EnumFacing.DOWN ? resultSideSlot : allSideSlots;
+	}
+
+	@Override
+	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing direction) {
+        return direction == EnumFacing.DOWN  && slot == outputSlot;
+	}
+
+	@Override
+	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing direction) {
+		return isItemValidForSlot(slot, stack);
 	}
 
 }
