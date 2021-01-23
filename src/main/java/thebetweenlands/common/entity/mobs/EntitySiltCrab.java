@@ -93,11 +93,6 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 			if (this.aggroCooldown < 201)
 				this.aggroCooldown++;
 		}
-
-		if(inWater && onGround) {
-			motionX *= 1.2D;
-			motionZ *= 1.2D;
-		}
 	}
 
 	@Override

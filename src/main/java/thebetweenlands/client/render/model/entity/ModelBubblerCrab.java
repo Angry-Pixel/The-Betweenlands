@@ -1,9 +1,8 @@
 package thebetweenlands.client.render.model.entity;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -208,30 +207,45 @@ public class ModelBubblerCrab extends ModelBase {
 	        body_main.addChild(leg_right_front1a);
 	    }
 
-
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale) {
 		super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, scale);
 		setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, scale, entity);
-		GL11.glPushMatrix();
-		GL11.glRotatef(90.0F, 0.0F, -1.0F, 0.0F);
+		GlStateManager.pushMatrix();
+		GlStateManager.rotate(90.0F, 0.0F, -1.0F, 0.0F);
         body_base.render(scale);
-		GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
-    /**
-     * This is a helper function from Tabula to set the rotation of model parts
-     */
+	public void renderEating(float animationTick, float scale) {
+		setRotationAnglesEating(animationTick);
+		GlStateManager.pushMatrix();
+		GlStateManager.rotate(90.0F, 0.0F, -1.0F, 0.0F);
+		body_base.render(scale);
+		GlStateManager.popMatrix();
+	}
+
+	private void setRotationAnglesEating(float animationTick) {
+		float flap2 = MathHelper.sin((animationTick) * 0.15F) * 0.6F;
+		float flap = MathHelper.cos((animationTick) * 0.15F) * 0.6F;
+		arm_right1a.rotateAngleX = flap * 0.5F - 0.9105382707654417F;
+		arm_left1a.rotateAngleX = flap2 * 0.5F - 0.9105382707654417F;
+		claw_right_bottom1a.rotateAngleY = -flap * 0.5F;
+		claw_left_bottom1a.rotateAngleY = - flap2 * 0.5F;
+		claw_right_top1a.rotateAngleY = 0.36425021489121656F * 0.5F  + flap * 0.5F;
+		claw_left_top1a.rotateAngleY = - 0.36425021489121656F * 0.5F  - flap2 * 0.5F;
+
+	}
+
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
     }
-    
+
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
 		super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
-
 		float movement = MathHelper.cos(limbSwing * 1.5F + (float) Math.PI) * 1.5F * limbSwingAngle *0.5F;
 		arm_right1a.rotateAngleX = -movement * 0.2F -0.9105382707654417F;
 		arm_left1a.rotateAngleX = movement * 0.2F -0.9105382707654417F;
@@ -241,7 +255,9 @@ public class ModelBubblerCrab extends ModelBase {
 		leg_left_front1a.rotateAngleZ = movement -1.6845917940249266F;
 		leg_left_mid1a.rotateAngleZ = -movement -1.4570008595648662F;
 		leg_left_back1a.rotateAngleZ = movement -1.0016444577195458F;
-
-
+		claw_right_bottom1a.rotateAngleY = 0.36425021489121656F;;
+		claw_left_bottom1a.rotateAngleY = - 0.36425021489121656F;
+		claw_right_top1a.rotateAngleY = 0.36425021489121656F;
+		claw_left_top1a.rotateAngleY = - 0.36425021489121656F;
 	}
 }

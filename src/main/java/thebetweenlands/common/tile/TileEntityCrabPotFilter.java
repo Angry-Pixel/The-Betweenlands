@@ -59,6 +59,12 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, II
         		markForUpdate();
         	}
         }
+        
+        if (getWorld().getBlockState(pos.up()).getBlock() == BlockRegistry.CRAB_POT) {
+        	if(hasCrabInTile()) {
+        		checkForAnmation();
+        	}
+        }
 
         if (getWorld().getBlockState(pos.up()).getBlock() != BlockRegistry.CRAB_POT && active || active && !hasCrabInTile()) {
         	active = false;
@@ -83,7 +89,21 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, II
 		}
     }
 
-    private boolean hasCrabInTile() {
+    private void checkForAnmation() {
+    	TileEntityCrabPot tile = (TileEntityCrabPot) world.getTileEntity(pos.up());
+    	if(tile != null && (tile.hasSiltCrab() || tile.hasBubblerCrab())) {
+    		if(canFilterSlots(1, 2) && !tile.animate) {
+    			tile.animate = true;
+    			tile.markForUpdate();
+    		}
+    		if(!canFilterSlots(1, 2) && tile.animate) {
+    			tile.animate = false;
+    			tile.markForUpdate();
+    		}
+    	}
+	}
+
+	private boolean hasCrabInTile() {
     	TileEntityCrabPot tile = (TileEntityCrabPot) world.getTileEntity(pos.up());
 		return tile != null && (tile.hasSiltCrab() || tile.hasBubblerCrab());
 	}

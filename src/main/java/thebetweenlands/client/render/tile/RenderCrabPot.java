@@ -10,7 +10,8 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.Constants;
+import thebetweenlands.client.render.model.entity.ModelBubblerCrab;
+import thebetweenlands.client.render.model.entity.ModelSiltCrab;
 import thebetweenlands.client.render.model.tile.ModelCrabPot;
 import thebetweenlands.common.entity.mobs.EntityBubblerCrab;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
@@ -19,7 +20,11 @@ import thebetweenlands.common.tile.TileEntityCrabPot;
 
 public class RenderCrabPot extends TileEntitySpecialRenderer<TileEntityCrabPot> {
 	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/crab_pot.png");
+	public static final ResourceLocation TEXTURE_SILT = new ResourceLocation("thebetweenlands:textures/entity/silt_crab.png");
+	public static final ResourceLocation TEXTURE_BUBBLER = new ResourceLocation("thebetweenlands:textures/entity/bubbler_crab.png");
 	public static final ModelCrabPot MODEL = new ModelCrabPot();
+	public static final ModelSiltCrab MODEL_SILT = new ModelSiltCrab();
+	public static final ModelBubblerCrab MODEL_BUBBLER = new ModelBubblerCrab();
 
 	@Override
 	public void render(TileEntityCrabPot te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -40,9 +45,41 @@ public class RenderCrabPot extends TileEntitySpecialRenderer<TileEntityCrabPot> 
 			// inputs
 			if (!te.getStackInSlot(0).isEmpty()) {
 				if (isSafeMobItem(te) && te.getEntity() != null) {
-					float smoothed = (float)te.fallCounter * 0.03125F + ((float)te.fallCounter * 0.03125F - (float)te.fallCounterPrev * 0.03125F) * partialTicks;
-					float smoothedTumble = (float)te.fallCounter + ((float)te.fallCounter  - (float)te.fallCounterPrev) * partialTicks;
-					renderMobInSlot(te.getEntity(), 0F, 0.0625F + smoothed, 0F, smoothedTumble);
+					if (te.fallCounter > 0) {
+						float smoothed = (float) te.fallCounter * 0.03125F + ((float) te.fallCounter * 0.03125F - (float) te.fallCounterPrev * 0.03125F) * partialTicks;
+						float smoothedTumble = (float) te.fallCounter + ((float) te.fallCounter - (float) te.fallCounterPrev) * partialTicks;
+						renderMobInSlot(te.getEntity(), 0F, 0.0625F + smoothed, 0F, smoothedTumble);
+					}
+					if (te.fallCounter <= 0) {
+						GlStateManager.pushMatrix();
+						GlStateManager.translate(0F, 1.5F, 0F);
+						if(!te.animate)
+							GlStateManager.rotate(90F - Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+						else
+							GlStateManager.rotate(90F, 0.0F, 1.0F, 0.0F);
+
+						if (te.getEntity() instanceof EntitySiltCrab) {
+							GlStateManager.pushMatrix();
+							bindTexture(TEXTURE_SILT);
+							GlStateManager.scale(0.95F, -0.95F, -0.95F);
+							if(te.animate)
+								MODEL_SILT.renderEating(te.animationTicks, 0.0625F);
+							else
+								MODEL_SILT.render(te.getEntity(), 0F, 0F, 0F, 0F, 0F, 0.0625F);
+							GlStateManager.popMatrix();
+						}
+						if (te.getEntity() instanceof EntityBubblerCrab) {
+							GlStateManager.pushMatrix();
+							bindTexture(TEXTURE_BUBBLER);
+							GlStateManager.scale(0.95F, -0.95F, -0.95F);
+							if(te.animate)
+								MODEL_BUBBLER.renderEating(te.animationTicks, 0.0625F);
+							else
+								MODEL_BUBBLER.render(te.getEntity(), 0F, 0F, 0F, 0F, 0F, 0.0625F);
+							GlStateManager.popMatrix();
+						}
+						GlStateManager.popMatrix();
+					}
 				}
 				else
 					renderItemInSlot(te.getStackInSlot(0), 0F, 0.5F, 0F, 0.5F);
@@ -66,24 +103,18 @@ public class RenderCrabPot extends TileEntitySpecialRenderer<TileEntityCrabPot> 
 	}
 
 	public boolean isSafeMobItem(TileEntityCrabPot te) {
-		return te.getStackInSlot(0).getItem() instanceof ItemMob && te.getStackInSlot(0).getTagCompound() != null && te.getStackInSlot(0).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND);
+		return te.getStackInSlot(0).getItem() instanceof ItemMob && (te.getEntity() instanceof EntitySiltCrab || te.getEntity() instanceof EntityBubblerCrab);
 	}
 
 	public void renderMobInSlot(Entity entity, float x, float y, float z, float rotation) {
 		if (entity != null) {
-			float scale2 = 1F / ((Entity) entity).width * 0.5F;
+			float scale = 0.95F;
 			float tumble = rotation * 11.25F;
-			float offsetRotation = 180F;
-			float offsetY = 0F;
-
+			float offsetRotation = 90F;
+			float offsetY = 0.0625F;
 			GlStateManager.pushMatrix();
-			if(entity instanceof EntitySiltCrab || entity instanceof EntityBubblerCrab) {
-				offsetY = 0.0625F;
-				scale2 = 0.95F;
-				offsetRotation = 90F;
-			}
 			GlStateManager.translate(x, y + offsetY, z);
-			GlStateManager.scale(scale2, scale2, scale2);
+			GlStateManager.scale(scale, scale, scale);
 			if(tumble > 0F)
 				GlStateManager.rotate(tumble, 1.0F, 0.0F, 0.0F);
 			else

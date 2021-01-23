@@ -29,6 +29,7 @@ import thebetweenlands.common.entity.mobs.EntityBubblerCrab;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemMob;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class TileEntityCrabPot extends TileEntity implements ITickable, IInventory {
@@ -37,6 +38,8 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 	public int fallCounter = 16;
 	public int fallCounterPrev;
 	public int horizontalIndex = 0;
+	public float animationTicks;
+	public boolean animate = false;
 	public TileEntityCrabPot() {
 		super();
 	}
@@ -58,6 +61,11 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 			}
 			if (hasBaitItem() && fallCounter != 32)
 				fallCounter = 32;
+
+			if(animate)
+				animationTicks++;
+			if(!animate && animationTicks > 0)
+				animationTicks = 0;
 		}
 
 		if(!world.isRemote) {
@@ -80,6 +88,10 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 					markForUpdate();
 				}
 			}
+	        if (getWorld().getBlockState(pos.down()).getBlock() != BlockRegistry.CRAB_POT_FILTER && animate) {
+	        	animate = false;
+	        	markForUpdate();
+	        }
 		}
 	}
 
@@ -170,6 +182,7 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 		if (nbt.hasKey("Items", 9))
 			ItemStackHelper.loadAllItems(nbt, inventory);
 		active = nbt.getBoolean("active");
+		animate = nbt.getBoolean("animate");
 		setRotation(nbt.getInteger("horizontalIndex"));
 	}
 
@@ -177,6 +190,7 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 		ItemStackHelper.saveAllItems(nbt, inventory, false);
 		nbt.setBoolean("active", active);
 		nbt.setInteger("horizontalIndex", getRotation());
+		nbt.setBoolean("animate", animate);
 		return nbt;
 	}
 
