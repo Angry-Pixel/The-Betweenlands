@@ -56,7 +56,7 @@ public class RenderCrabPot extends TileEntitySpecialRenderer<TileEntityCrabPot> 
 						if(!te.animate)
 							GlStateManager.rotate(90F - Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
 						else
-							GlStateManager.rotate(90F, 0.0F, 1.0F, 0.0F);
+							GlStateManager.rotate(-90F + getRotation(index), 0.0F, 1.0F, 0.0F);
 
 						if (te.getEntity() instanceof EntitySiltCrab) {
 							GlStateManager.pushMatrix();
