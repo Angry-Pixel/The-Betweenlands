@@ -24,7 +24,7 @@ public class ContainerCrabPotFilter extends Container {
 		addSlotToContainer(new SlotRestriction(tile, 0, 43, 61, anadia_remains, 64, this));
 		
 		//input
-		addSlotToContainer(new SlotExclusion(tile, 1, 43, 25, anadia_remains, 64, null));
+		addSlotToContainer(new SlotExclusion(tile, 1, 43, 25, anadia_remains, 64, this));
 		
 		//output
 		addSlotToContainer(new SlotOutput(tile, 2, 112, 43, this));
