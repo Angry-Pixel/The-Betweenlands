@@ -1,5 +1,6 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -25,6 +27,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
@@ -45,6 +49,8 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 	public boolean placed_by_player;
 	public int spawnDelayCounter = 20;
 	public static final int PEARL_CREATION_TIME = 120; // 6 seconds
+	public static final Method XP_POINTS = getExperiencePoints();
+	public int xpStored = 0;
 
 	public EntityRockSnot(World world) {
 		super(world);
@@ -131,12 +137,15 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 
 				if (isBeingRidden() && getJawAngle() == 16 && getPlacedByPlayer()) {
 					if (getEntityWorld().getTotalWorldTime() % 20 == 0) {
+
 						setEatingHeight(getEatingHeight() + 1);
 						getEntityWorld().playSound(null, getPosition(), SoundRegistry.ROCK_SNOT_EAT, SoundCategory.HOSTILE, 1F, 1F);
 						getPassengers().get(0).attackEntityFrom(DamageSource.GENERIC, 0F);
 						if (getEatingHeight() == 10 && getPassengers().get(0) != null) {
+							setContainedXP(getContainedXP() + getXPEaten((EntityLivingBase) getPassengers().get(0)));
 							getPassengers().get(0).setDead();
-							setPearlTimer(PEARL_CREATION_TIME);
+							if(getContainedXP() >= 10)
+								setPearlTimer(PEARL_CREATION_TIME);
 							setEatingHeight(0);
 							setJawAngle(0);
 						}
@@ -157,7 +166,10 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 				}
 
 				if (getPearlTimer() == 0) {
-					ItemStack pearl = new ItemStack(ItemRegistry.ROCK_SNOT_PEARL);
+					int quotient = getContainedXP() / 10;
+				    int result = getContainedXP() - quotient * 10;
+					setContainedXP(result);
+					ItemStack pearl = new ItemStack(ItemRegistry.ROCK_SNOT_PEARL, quotient);
 					EntityItem item = new EntityItem(world, posX, posY + 0.5D, posZ, pearl);
 					item.motionX = item.motionZ = 0D;
 					item.motionY = 0.4D;
@@ -167,6 +179,40 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 			}
 		}
 		super.onUpdate();
+	}
+
+	public int getXPEaten(EntityLivingBase entity) {
+		int xp = 0;
+		if (entity != null) {
+			try {
+				xp = (Integer) XP_POINTS.invoke(entity, FakePlayerFactory.getMinecraft((WorldServer) getEntityWorld()));
+			} catch (Exception e) {
+			}
+		}
+		return xp;
+	}
+
+	public static Method getExperiencePoints() {
+		Method method = null;
+		try {
+			method = EntityLiving.class.getDeclaredMethod("getExperiencePoints", EntityPlayer.class);
+			method.setAccessible(true);
+		} catch (Exception e) {
+		}
+		try {
+			method = EntityLiving.class.getDeclaredMethod("func_70693_a", EntityPlayer.class);
+			method.setAccessible(true);
+		} catch (Exception e) {
+		}
+		return method;
+	}
+
+	public int getContainedXP() {
+		return xpStored;
+	}
+
+	public void setContainedXP(int amount) {
+		xpStored = amount;
 	}
 
 	@Override
@@ -349,12 +395,14 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
 		setPlacedByPlayer(compound.getBoolean("placed_by_player"));
+		setContainedXP(compound.getInteger("xpStored"));
 	}
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
 		compound.setBoolean("placed_by_player", getPlacedByPlayer());
+		compound.setInteger("xpStored", getContainedXP());
 	}
 
 	@Override
@@ -396,7 +444,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 
 	@Override
 	protected AxisAlignedBB proximityBox() {
-		return new AxisAlignedBB(getPosition()).grow(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal()).offset(0D, + getProximityVertical () + 1D , 0D);
+		return new AxisAlignedBB(getPosition()).grow(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal()).offset(0D, getProximityVertical() + height , 0D);
 	}
 
 	@Override
