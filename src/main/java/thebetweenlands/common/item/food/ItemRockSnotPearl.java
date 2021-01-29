@@ -41,8 +41,8 @@ public class ItemRockSnotPearl extends ItemBLFood {
 	@Override
     public int getMaxItemUseDuration(ItemStack stack) {
 		if (pearledPear)
-			return 16;
-        return 32;
+			return 32;
+        return 16;
     }
 
 	@Override
