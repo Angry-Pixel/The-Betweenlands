@@ -1081,8 +1081,8 @@ tooltip.bl.simple_slingshot=Shoots Betweenstone Pebbles
 tooltip.bl.lurker_skin_patch=Fixes Draeton leakages
 tooltip.bl.chirobarb_erupter.usage=Right-click to fire 360 degree volley of barbs.\nHas 3 second cooldown.
 tooltip.bl.ancient_armor.usage=Reduces Magic Damage.\nUp to half magic damage reduction\nwith a full set equipped.
-tooltip.bl.rock_snot_pearl=Always consumable.\nGrants 10 xp when consumed.
-tooltip.bl.pearled_pear=Always edible.\nGrants 80 xp when consumed.
+tooltip.bl.rock_snot_pearl=Grants 10 experience when consumed.
+tooltip.bl.pearled_pear=Grants 80 experience when consumed.
 
 # Anadia item mob stats
 tooltip.bl.item_mob_anadia.health=Health: %s / %s
