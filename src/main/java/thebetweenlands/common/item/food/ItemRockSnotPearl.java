@@ -1,7 +1,11 @@
 package thebetweenlands.common.item.food;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -9,12 +13,24 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.render.particle.BLParticles;
 
 public class ItemRockSnotPearl extends ItemBLFood {
-	public ItemRockSnotPearl() {
-		super(0, 0F, false);
+	public boolean pearledPear;
+	public ItemRockSnotPearl(int healAmount, float saturationModifier, boolean isWolfsFavoriteMeat, boolean isPearledPear) {
+		super(healAmount, saturationModifier, isWolfsFavoriteMeat);
 		setAlwaysEdible();
+		this.pearledPear = isPearledPear;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flag) {
+		if (!pearledPear)
+			list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.rock_snot_pearl"), 0));
+		else
+			list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.pearled_pear"), 0));
 	}
 
 	@Override
@@ -23,8 +39,15 @@ public class ItemRockSnotPearl extends ItemBLFood {
 	}
 
 	@Override
+    public int getMaxItemUseDuration(ItemStack stack) {
+		if (pearledPear)
+			return 16;
+        return 32;
+    }
+
+	@Override
 	protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
-		int xp = 10 + worldIn.rand.nextInt(10);
+		int xp = !pearledPear ? 10 : 80;
 		if (xp > 0)
 			if (!worldIn.isRemote) {
 				player.addExperience(xp);

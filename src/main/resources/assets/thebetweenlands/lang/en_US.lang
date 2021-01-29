@@ -495,6 +495,7 @@ tile.thebetweenlands.smoking_rack.name=Smoking Rack
 tile.thebetweenlands.fish_trimming_table.name=Fish Trimming Table
 tile.thebetweenlands.crab_pot.name=Crab pot
 tile.thebetweenlands.silt_glass_jar.name=Silt Glass Jar
+tile.thebetweenlands.crab_pot_filter.name=Crab Pot Filter
 
 # Items
 
@@ -902,6 +903,20 @@ item.thebetweenlands.ancient_leggings.name=Ancient Leggings
 item.thebetweenlands.fish_bait.name=Fish Bait
 item.thebetweenlands.fishing_spear.name=Fishing Spear
 item.thebetweenlands.weedwood_fishing_rod.name=Weedwood Fishing Rod
+item.thebetweenlands.snot_pod.name=Rocksnot Pod
+item.thebetweenlands.snot.name=Snot
+item.thebetweenlands.rock_snot_pearl.name=Rocksnot Pearl
+item.thebetweenlands.pearled_pear.name=Pearled Pear
+item.thebetweenlands.anadia_swim_bladder.name=Anadia Swim Bladder
+item.thebetweenlands.anadia_eye.name=Anadia Eye
+item.thebetweenlands.anadia_gills.name=Anadia Gills
+item.thebetweenlands.anadia_scales.name=Anadia Scales
+item.thebetweenlands.anadia_bones.name=Anadia Bones
+item.thebetweenlands.anadia_remains.name=Anadia Remains
+item.thebetweenlands.anadia_fins.name=Anadia Fins
+item.thebetweenlands.anadia_meat_raw.name=Raw Anadia Meat
+item.thebetweenlands.anadia_meat_cooked.name=Cooked Anadia Meat
+item.thebetweenlands.anadia_meat_smoked.name=Smoked Anadia Meat
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -1066,6 +1081,8 @@ tooltip.bl.simple_slingshot=Shoots Betweenstone Pebbles
 tooltip.bl.lurker_skin_patch=Fixes Draeton leakages
 tooltip.bl.chirobarb_erupter.usage=Right-click to fire 360 degree volley of barbs.\nHas 3 second cooldown.
 tooltip.bl.ancient_armor.usage=Reduces Magic Damage.\nUp to half magic damage reduction\nwith a full set equipped.
+tooltip.bl.rock_snot_pearl=Always consumable.\nGrants 10 xp when consumed.
+tooltip.bl.pearled_pear=Always edible.\nGrants 80 xp when consumed.
 
 # Anadia item mob stats
 tooltip.bl.item_mob_anadia.health=Health: %s / %s
