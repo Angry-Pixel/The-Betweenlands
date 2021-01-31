@@ -1,15 +1,8 @@
 package thebetweenlands.client.render.entity;
 
-import org.lwjgl.opengl.GL11;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -38,8 +31,6 @@ public class RenderAnadia extends RenderLiving<EntityAnadia> {
 			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_base.png"),
 			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_silver.png")
 			};
-	
-	public static final ResourceLocation NET_TEXTURE = new ResourceLocation("thebetweenlands:textures/items/net.png");
 	
 	public final static ModelAnadia ANADIA_MODEL = new ModelAnadia();
 
@@ -110,38 +101,5 @@ public class RenderAnadia extends RenderLiving<EntityAnadia> {
 		} 
 		GlStateManager.popMatrix();
 		ANADIA_MODEL.setLivingAnimations(anadia, anadia.limbSwing, anadia.limbSwingAmount, partialTicks);
-
-		if(anadia.getStaminaTicks() <= 0) {
-		EntityPlayer player = Minecraft.getMinecraft().player;
-			GlStateManager.pushMatrix();
-			GlStateManager.translate(anadia.posX - player.posX, anadia.posY - player.posY, anadia.posZ - player.posZ);
-			renderNetCaptureIcon(anadia, 0D, 1D, 0D);
-			GlStateManager.popMatrix();
-		}
 	}
-
-	private void renderNetCaptureIcon(EntityAnadia anadia, double x, double y, double z) {
-		Minecraft mc = Minecraft.getMinecraft();
-		mc.getTextureManager().bindTexture(NET_TEXTURE);
-			GlStateManager.translate(x, y, z + 0.25D);
-			GlStateManager.scale(0.5D, 0.5D, 0.5D);
-			GlStateManager.rotate(mc.getRenderManager().playerViewY, 0.0F, -1.0F, 0.0F);
-			GlStateManager.disableLighting();
-			GlStateManager.enableBlend();
-			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-			Tessellator tessellator = Tessellator.getInstance();
-			BufferBuilder vertexbuffer = tessellator.getBuffer();
-			vertexbuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-			double widthX = 0.5D;
-			double heightY = 0.5D;
-			vertexbuffer.pos(x - widthX, y - heightY, z).tex(1, 1).endVertex();
-			vertexbuffer.pos(x - widthX, y + heightY, z).tex(1, 0).endVertex();
-			vertexbuffer.pos(x + widthX, y + heightY, z).tex(0, 0).endVertex();
-			vertexbuffer.pos(x + widthX, y - heightY, z).tex(0, 1).endVertex();
-			GlStateManager.rotate(90 - anadia.animationFrame, 0.0F, 0.0F, 1.0F);
-			tessellator.draw();
-			GlStateManager.enableLighting();
-			GlStateManager.disableBlend();
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		}
 }

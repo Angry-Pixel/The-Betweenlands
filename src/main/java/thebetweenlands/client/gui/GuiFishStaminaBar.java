@@ -32,8 +32,7 @@ public class GuiFishStaminaBar extends Gui {
 			EntityPlayerSP player = mc.player;
 			if (player != null && player.fishEntity != null && player.fishEntity instanceof EntityBLFishHook) {
 				if (player.fishEntity.isRiding() && player.fishEntity.getRidingEntity() instanceof EntityAnadia) {
-					if(((EntityAnadia) player.fishEntity.getRidingEntity()).getStaminaTicks() <= 0)
-						return;
+			
 					int fishpos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getStaminaTicks() * 256 / 180;
 					int escapepos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getEscapeTicks() * 256 / 1024;
 					int helpMe = (int) ((EntityAnadia) player.fishEntity.getRidingEntity()).getStaminaMods() * 30;
@@ -56,10 +55,17 @@ public class GuiFishStaminaBar extends Gui {
 					GlStateManager.color(1F, 1F, 1F, 1F);
 					
 					ScaledResolution res = new ScaledResolution(mc);
-					renderStaminaBar(-256 + fishpos, -256 + Math.min(256, escapepos),  escapeDelay < 10 ? escapeDelay: 10, 0 - obstructpos1, 0 - obstructpos2, 0 - obstructpos3, 0 - obstructpos4, 0 - treasurePos, showTreasure, treasureUnlocked, (float)res.getScaledWidth() * 0.5F - 128F, (float)res.getScaledHeight() * 0.5F - 120F, aniFrame, aniFrameCrab);
+					if(((EntityAnadia) player.fishEntity.getRidingEntity()).getStaminaTicks() <= 0)
+						renderNetBar((float)res.getScaledWidth() * 0.5F - 128F, (float)res.getScaledHeight() * 0.5F - 120F, 240, 4, aniFrame);
+					else
+						renderStaminaBar(-256 + fishpos, -256 + Math.min(256, escapepos),  escapeDelay < 10 ? escapeDelay: 10, 0 - obstructpos1, 0 - obstructpos2, 0 - obstructpos3, 0 - obstructpos4, 0 - treasurePos, showTreasure, treasureUnlocked, (float)res.getScaledWidth() * 0.5F - 128F, (float)res.getScaledHeight() * 0.5F - 120F, aniFrame, aniFrameCrab);
 				}
 			}
 		}
+	}
+
+	private void renderNetBar(float posX, float posY, int netIconX, int netIconY, int netframe) {
+		drawTexturedModalRect(posX + netIconX, posY + netIconY, 0 + netframe * 2, 160, 32, 16);
 	}
 
 	private void renderStaminaBar(int staminaTicks, int escapeTicks, int escapeDelay, int obstructionTicks1, int obstructionTicks2, int obstructionTicks3, int obstructionTicks4, int treasureTick, boolean hasTreasure, boolean treasureUnlocked,float posX, float posY, int aniFrame, int aniFrameCrab) {
