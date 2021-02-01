@@ -218,8 +218,51 @@ public class ModelFreshwaterUrchin extends MowzieModelBase {
     
     @Override
     public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
+    	setToInitPose();
         EntityFreshwaterUrchin urchin = (EntityFreshwaterUrchin) entity;
-        setToInitPose();
+        float pulse = MathHelper.sin((urchin.ticksExisted + partialRenderTicks) * 0.0625F) * 0.125F;
+
+        spike_f2.rotateAngleY += pulse;
+        spike_l2.rotateAngleY += pulse;
+        spike_r2.rotateAngleY += pulse;
+        spike_b2.rotateAngleY += pulse;
+        spike_f4.rotateAngleY += pulse;
+        spike_l4.rotateAngleY += pulse;
+        spike_r4.rotateAngleY += pulse;
+        spike_b4.rotateAngleY += pulse;
+        spike_f1.rotateAngleY += pulse;
+        spike_l1.rotateAngleY += pulse;
+        spike_r1.rotateAngleY += pulse;
+        spike_b1.rotateAngleY += pulse;
+        spike_f3.rotateAngleY += pulse;
+        spike_l3.rotateAngleY += pulse;
+        spike_r3.rotateAngleY += pulse;
+        spike_b3.rotateAngleY += pulse;
+        spike_f5.rotateAngleY += pulse;
+        spike_l5.rotateAngleY += pulse;
+        spike_r5.rotateAngleY += pulse;
+        spike_b5.rotateAngleY += pulse;
+        
+        spike_f2.rotateAngleX += pulse;
+        spike_l2.rotateAngleX += pulse;
+        spike_r2.rotateAngleX += pulse;
+        spike_b2.rotateAngleX += pulse;
+        spike_f4.rotateAngleX += pulse;
+        spike_l4.rotateAngleX += pulse;
+        spike_r4.rotateAngleX += pulse;
+        spike_b4.rotateAngleX += pulse;
+        spike_f1.rotateAngleX += pulse;
+        spike_l1.rotateAngleX += pulse;
+        spike_r1.rotateAngleX += pulse;
+        spike_b1.rotateAngleX += pulse;
+        spike_f3.rotateAngleX += pulse;
+        spike_l3.rotateAngleX += pulse;
+        spike_r3.rotateAngleX += pulse;
+        spike_b3.rotateAngleX += pulse;
+        spike_f5.rotateAngleX += pulse;
+        spike_l5.rotateAngleX += pulse;
+        spike_r5.rotateAngleX += pulse;
+        spike_b5.rotateAngleX += pulse;
     }
 
     public void setRotateAngle(MowzieModelRenderer modelRenderer, float x, float y, float z) {
