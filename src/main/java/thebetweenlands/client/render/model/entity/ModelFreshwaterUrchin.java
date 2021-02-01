@@ -1,5 +1,7 @@
 package thebetweenlands.client.render.model.entity;
 
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -152,7 +154,54 @@ public class ModelFreshwaterUrchin extends MowzieModelBase {
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        GlStateManager.pushMatrix();
+        GlStateManager.enableCull();
+        GlStateManager.cullFace(CullFace.FRONT);
+        spike_f2.showModel = false;
+        spike_l2.showModel = false;
+        spike_r2.showModel = false;
+        spike_b2.showModel = false;
+        spike_f4.showModel = false;
+        spike_l4.showModel = false;
+        spike_r4.showModel = false;
+        spike_b4.showModel = false;
+        spike_f1.showModel = false;
+        spike_l1.showModel = false;
+        spike_r1.showModel = false;
+        spike_b1.showModel = false;
+        spike_f3.showModel = false;
+        spike_l3.showModel = false;
+        spike_r3.showModel = false;
+        spike_b3.showModel = false;
+        spike_f5.showModel = false;
+        spike_l5.showModel = false;
+        spike_r5.showModel = false;
+        spike_b5.showModel = false;
         base.render(scale);
+        spike_f2.showModel = true;
+        spike_l2.showModel = true;
+        spike_r2.showModel = true;
+        spike_b2.showModel = true;
+        spike_f4.showModel = true;
+        spike_l4.showModel = true;
+        spike_r4.showModel = true;
+        spike_b4.showModel = true;
+        spike_f1.showModel = true;
+        spike_l1.showModel = true;
+        spike_r1.showModel = true;
+        spike_b1.showModel = true;
+        spike_f3.showModel = true;
+        spike_l3.showModel = true;
+        spike_r3.showModel = true;
+        spike_b3.showModel = true;
+        spike_f5.showModel = true;
+        spike_l5.showModel = true;
+        spike_r5.showModel = true;
+        spike_b5.showModel = true;
+        GlStateManager.cullFace(CullFace.BACK);
+        base.render(scale);
+        GlStateManager.disableCull();
+        GlStateManager.popMatrix();
     }
 
     public void setRotateAngle(MowzieModelRenderer modelRenderer, float x, float y, float z) {
