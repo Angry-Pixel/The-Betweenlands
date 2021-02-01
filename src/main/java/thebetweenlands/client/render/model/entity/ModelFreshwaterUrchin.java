@@ -3,10 +3,13 @@ package thebetweenlands.client.render.model.entity;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.MowzieModelBase;
 import thebetweenlands.client.render.model.MowzieModelRenderer;
+import thebetweenlands.common.entity.mobs.EntityFreshwaterUrchin;
 
 @SideOnly(Side.CLIENT)
 public class ModelFreshwaterUrchin extends MowzieModelBase {
@@ -150,11 +153,13 @@ public class ModelFreshwaterUrchin extends MowzieModelBase {
         base.addChild(spike_b2);
         base.addChild(spike_l4);
         spike_rotationpoint.addChild(spike_l3);
+        setInitPose();
     }
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        GlStateManager.pushMatrix();
+    	float pulse = MathHelper.sin((ageInTicks) * 0.0625F) * 0.125F;
+    	GlStateManager.pushMatrix();
         GlStateManager.enableCull();
         GlStateManager.cullFace(CullFace.FRONT);
         spike_f2.showModel = false;
@@ -198,10 +203,23 @@ public class ModelFreshwaterUrchin extends MowzieModelBase {
         spike_l5.showModel = true;
         spike_r5.showModel = true;
         spike_b5.showModel = true;
+        anal_sac.showModel = false;
         GlStateManager.cullFace(CullFace.BACK);
         base.render(scale);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0F, 1.5F, 0F);
+        GlStateManager.scale(0.75F + pulse, 1F + pulse * 0.25F, 0.75F + pulse);
+        anal_sac.showModel = true;
+        anal_sac.render(0.0625F);
+        GlStateManager.popMatrix();
         GlStateManager.disableCull();
         GlStateManager.popMatrix();
+    }
+    
+    @Override
+    public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
+        EntityFreshwaterUrchin urchin = (EntityFreshwaterUrchin) entity;
+        setToInitPose();
     }
 
     public void setRotateAngle(MowzieModelRenderer modelRenderer, float x, float y, float z) {
