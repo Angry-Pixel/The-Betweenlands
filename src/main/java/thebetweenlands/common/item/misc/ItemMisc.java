@@ -5,19 +5,31 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import thebetweenlands.common.entity.mobs.EntityEmberling;
 import thebetweenlands.common.entity.mobs.EntityEmberlingWild;
 import thebetweenlands.common.item.IGenericItem;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDefinition {
@@ -172,4 +184,49 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 			return false;
 		}
 	}
+
+	@Override
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (!player.getHeldItem(hand).isEmpty() && player.getHeldItem(hand).getItem() == EnumItemMisc.BETWEENSTONE_PEBBLE.getItem()) {
+			IBlockState iblockstate = world.getBlockState(pos);
+			Block block = iblockstate.getBlock();
+
+			if (!block.isReplaceable(world, pos))
+				pos = pos.offset(facing);
+
+			ItemStack itemstack = player.getHeldItem(hand);
+
+			if (!itemstack.isEmpty() && player.canPlayerEdit(pos, facing, itemstack) && world.mayPlace(BlockRegistry.BETWEENSTONE_PEBBLE_PILE, pos, false, facing, (Entity) null)) {
+				int i = this.getMetadata(itemstack.getMetadata());
+				IBlockState iblockstate1 = BlockRegistry.BETWEENSTONE_PEBBLE_PILE.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, i, player, hand);
+
+				if (placeBlockAt(itemstack, player, world, pos, facing, hitX, hitY, hitZ, iblockstate1)) {
+					iblockstate1 = world.getBlockState(pos);
+					SoundType soundtype = iblockstate1.getBlock().getSoundType(iblockstate1, world, pos, player);
+					world.playSound(player, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+					itemstack.shrink(1);
+				}
+				return EnumActionResult.SUCCESS;
+			}
+
+			else {
+				return EnumActionResult.FAIL;
+			}
+		}
+		else {
+			return EnumActionResult.FAIL;
+		}
+	}
+	
+    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
+        if (!world.setBlockState(pos, newState, 11)) return false;
+
+        IBlockState state = world.getBlockState(pos);
+        if (state.getBlock() == BlockRegistry.BETWEENSTONE_PEBBLE_PILE) {
+        	BlockRegistry.BETWEENSTONE_PEBBLE_PILE.onBlockPlacedBy(world, pos, state, player, stack);
+            if (player instanceof EntityPlayerMP)
+                CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP)player, pos, stack);
+        }
+        return true;
+    }
 }

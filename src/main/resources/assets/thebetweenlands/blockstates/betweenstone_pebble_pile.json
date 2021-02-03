@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "stone_count=one": { "model": "thebetweenlands:betweenstone_pebble_pile_1" },
+    "stone_count=two": { "model": "thebetweenlands:betweenstone_pebble_pile_2" },
+    "stone_count=three": { "model": "thebetweenlands:betweenstone_pebble_pile_3" },
+    "stone_count=four": { "model": "thebetweenlands:betweenstone_pebble_pile_4" }
+  }
+}
