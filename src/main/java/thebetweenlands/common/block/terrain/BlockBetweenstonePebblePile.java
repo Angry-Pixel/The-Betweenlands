@@ -3,6 +3,7 @@ package thebetweenlands.common.block.terrain;
 import java.util.Locale;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -34,11 +35,14 @@ import thebetweenlands.common.registries.BlockRegistry.ISubtypeItemBlockModelDef
 public class BlockBetweenstonePebblePile extends BasicBlock implements ICustomItemBlock, ISubtypeItemBlockModelDefinition {
 
 	public static final PropertyEnum<EnumPileType> PILE_TYPE = PropertyEnum.<EnumPileType>create("pile_type", EnumPileType.class);
-
 	private static final AxisAlignedBB AABB = new AxisAlignedBB(0D, 0.0D, 0D, 1D, 0.5D, 1D);
+
 	public BlockBetweenstonePebblePile() {
 		super(Material.ROCK);
-		this.setDefaultState(this.getDefaultState().withProperty(PILE_TYPE, EnumPileType.ONE));
+		setHardness(0.5F);
+		setResistance(2.0F);
+		setSoundType(SoundType.STONE);
+		setDefaultState(getDefaultState().withProperty(PILE_TYPE, EnumPileType.ONE));
 	}
 
 	@Override
