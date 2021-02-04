@@ -38,7 +38,7 @@ public class BlockBetweenstonePebblePile extends BasicBlock implements ICustomIt
 	private static final AxisAlignedBB AABB = new AxisAlignedBB(0D, 0.0D, 0D, 1D, 0.5D, 1D);
 
 	public BlockBetweenstonePebblePile() {
-		super(Material.ROCK);
+		super(Material.GROUND);
 		setHardness(0.5F);
 		setResistance(2.0F);
 		setSoundType(SoundType.STONE);
@@ -161,8 +161,23 @@ public class BlockBetweenstonePebblePile extends BasicBlock implements ICustomIt
     }
 
 	@Override
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		int dropCount = 0;
+		int meta = state.getValue(PILE_TYPE).getMetadata();
+		if(meta <= 3)
+			dropCount = meta;
+		if(meta >= 4 && meta <= 7)
+			dropCount = meta - 4;
+		if(meta >= 8 && meta <= 11)
+			dropCount = meta - 8;
+		if(meta >= 12 && meta <= 15)
+			dropCount = meta - 12;
+		drops.add(EnumItemMisc.BETWEENSTONE_PEBBLE.create(1 + dropCount));
+	}
+
+	@Override
 	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
-		return new ItemStack(this, 1, ((EnumPileType)state.getValue(PILE_TYPE)).getMetadata());
+		return EnumItemMisc.BETWEENSTONE_PEBBLE.create(1);
 	}
 
 	@Override
