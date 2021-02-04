@@ -1,8 +1,8 @@
 {
   "variants": {
-    "stone_count=one": { "model": "thebetweenlands:betweenstone_pebble_pile_1" },
-    "stone_count=two": { "model": "thebetweenlands:betweenstone_pebble_pile_2" },
-    "stone_count=three": { "model": "thebetweenlands:betweenstone_pebble_pile_3" },
-    "stone_count=four": { "model": "thebetweenlands:betweenstone_pebble_pile_4" }
+    "pile_type=one": [{ "model": "thebetweenlands:betweenstone_pebble_pile_1" }, { "model": "thebetweenlands:betweenstone_pebble_pile_1" , "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_1" , "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_1", "y": 270 }],
+    "pile_type=two": [{ "model": "thebetweenlands:betweenstone_pebble_pile_2" }, { "model": "thebetweenlands:betweenstone_pebble_pile_2" , "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_2" , "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_2", "y": 270 }],
+    "pile_type=three": [{ "model": "thebetweenlands:betweenstone_pebble_pile_3" }, { "model": "thebetweenlands:betweenstone_pebble_pile_3" , "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_3" , "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_3", "y": 270 }],
+    "pile_type=four": [{ "model": "thebetweenlands:betweenstone_pebble_pile_4" }, { "model": "thebetweenlands:betweenstone_pebble_pile_4" , "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_4" , "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_4", "y": 270 }]
   }
 }
