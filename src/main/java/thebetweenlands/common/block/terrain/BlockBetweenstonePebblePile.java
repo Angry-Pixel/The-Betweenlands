@@ -16,6 +16,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
@@ -63,6 +64,12 @@ public class BlockBetweenstonePebblePile extends BasicBlock implements ICustomIt
     public Block.EnumOffsetType getOffsetType() {
         return Block.EnumOffsetType.XZ;
     }
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+		return layer == BlockRenderLayer.TRANSLUCENT || layer == BlockRenderLayer.CUTOUT;
+	}
 
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {

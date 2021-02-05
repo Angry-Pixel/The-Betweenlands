@@ -1,20 +1,62 @@
 {
+  "forge_marker": 1,
   "variants": {
-    "pile_type=one": [{ "model": "thebetweenlands:betweenstone_pebble_pile_1" }, { "model": "thebetweenlands:betweenstone_pebble_pile_1" , "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_1" , "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_1", "y": 270 }],
-    "pile_type=two": [{ "model": "thebetweenlands:betweenstone_pebble_pile_2" }, { "model": "thebetweenlands:betweenstone_pebble_pile_2" , "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_2" , "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_2", "y": 270 }],
-    "pile_type=three": [{ "model": "thebetweenlands:betweenstone_pebble_pile_3" }, { "model": "thebetweenlands:betweenstone_pebble_pile_3" , "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_3" , "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_3", "y": 270 }],
-    "pile_type=four": [{ "model": "thebetweenlands:betweenstone_pebble_pile_4" }, { "model": "thebetweenlands:betweenstone_pebble_pile_4" , "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_4" , "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_4", "y": 270 }],
-    "pile_type=one_water": [{ "model": "thebetweenlands:betweenstone_pebble_pile_1" }, { "model": "thebetweenlands:betweenstone_pebble_pile_1" , "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_1" , "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_1", "y": 270 }],
-    "pile_type=two_water": [{ "model": "thebetweenlands:betweenstone_pebble_pile_2" }, { "model": "thebetweenlands:betweenstone_pebble_pile_2" , "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_2" , "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_2", "y": 270 }],
-    "pile_type=three_water": [{ "model": "thebetweenlands:betweenstone_pebble_pile_3" }, { "model": "thebetweenlands:betweenstone_pebble_pile_3" , "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_3" , "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_3", "y": 270 }],
-    "pile_type=four_water": [{ "model": "thebetweenlands:betweenstone_pebble_pile_4" }, { "model": "thebetweenlands:betweenstone_pebble_pile_4" , "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_4" , "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_4", "y": 270 }],
-    "pile_type=one_plant": [{ "model": "thebetweenlands:betweenstone_pebble_pile_1" }, { "model": "thebetweenlands:betweenstone_pebble_pile_1" , "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_1" , "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_1", "y": 270 }],
-    "pile_type=two_plant": [{ "model": "thebetweenlands:betweenstone_pebble_pile_2" }, { "model": "thebetweenlands:betweenstone_pebble_pile_2" , "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_2" , "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_2", "y": 270 }],
-    "pile_type=three_plant": [{ "model": "thebetweenlands:betweenstone_pebble_pile_3" }, { "model": "thebetweenlands:betweenstone_pebble_pile_3" , "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_3" , "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_3", "y": 270 }],
-    "pile_type=four_plant": [{ "model": "thebetweenlands:betweenstone_pebble_pile_4" }, { "model": "thebetweenlands:betweenstone_pebble_pile_4" , "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_4" , "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_4", "y": 270 }],
-    "pile_type=one_plant_water": [{ "model": "thebetweenlands:betweenstone_pebble_pile_1" }, { "model": "thebetweenlands:betweenstone_pebble_pile_1" , "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_1" , "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_1", "y": 270 }],
-    "pile_type=two_plant_water": [{ "model": "thebetweenlands:betweenstone_pebble_pile_2" }, { "model": "thebetweenlands:betweenstone_pebble_pile_2" , "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_2" , "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_2", "y": 270 }],
-    "pile_type=three_plant_water": [{ "model": "thebetweenlands:betweenstone_pebble_pile_3" }, { "model": "thebetweenlands:betweenstone_pebble_pile_3" , "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_3" , "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_3", "y": 270 }],
-    "pile_type=four_plant_water": [{ "model": "thebetweenlands:betweenstone_pebble_pile_4" }, { "model": "thebetweenlands:betweenstone_pebble_pile_4" , "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_4" , "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_4", "y": 270 }]
+   "pile_type=one": [
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_one" },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_one", "y": 90 },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_one", "y": 180 },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_one", "y": 270 }],
+            
+   "pile_type=two": [
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_two" },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_two", "y": 90 },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_two", "y": 180 },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_two", "y": 270 }],
+            
+   "pile_type=three": [
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_three" },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_three", "y": 90 },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_three", "y": 180 },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_three", "y": 270 }],
+
+   "pile_type=four": [
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_four" },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_four", "y": 90 },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_four", "y": 180 },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_four", "y": 270 }],
+
+    "pile_type=one_water": [{ "model": "thebetweenlands:betweenstone_pebble_pile_1" }, { "model": "thebetweenlands:betweenstone_pebble_pile_1", "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_1", "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_1", "y": 270 }],
+    "pile_type=two_water": [{ "model": "thebetweenlands:betweenstone_pebble_pile_2" }, { "model": "thebetweenlands:betweenstone_pebble_pile_2", "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_2", "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_2", "y": 270 }],
+    "pile_type=three_water": [{ "model": "thebetweenlands:betweenstone_pebble_pile_3" }, { "model": "thebetweenlands:betweenstone_pebble_pile_3", "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_3", "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_3", "y": 270 }],
+    "pile_type=four_water": [{ "model": "thebetweenlands:betweenstone_pebble_pile_4" }, { "model": "thebetweenlands:betweenstone_pebble_pile_4", "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_4", "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_4", "y": 270 }],
+    
+    "pile_type=one_plant": [
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_one_plant },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_one_plant", "y": 90 },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_one_plant", "y": 180 },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_one_plant", "y": 270 }],
+            
+   "pile_type=two_plant": [
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_two_plant" },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_two_plant", "y": 90 },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_two_plant", "y": 180 },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_two_plant", "y": 270 }],
+            
+   "pile_type=three_plant": [
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_three_plant" },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_three_plant", "y": 90 },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_three_plant", "y": 180 },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_three_plant", "y": 270 }],
+
+   "pile_type=four_plant": [
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_four_plant" },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_four_plant", "y": 90 },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_four_plant", "y": 180 },
+            { "model": "thebetweenlands:internal/betweenstone_pebble_pile_four_plant", "y": 270 }],
+
+    "pile_type=one_plant_water": [{ "model": "thebetweenlands:betweenstone_pebble_pile_1" }, { "model": "thebetweenlands:betweenstone_pebble_pile_1", "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_1", "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_1", "y": 270 }],
+    "pile_type=two_plant_water": [{ "model": "thebetweenlands:betweenstone_pebble_pile_2" }, { "model": "thebetweenlands:betweenstone_pebble_pile_2", "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_2", "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_2", "y": 270 }],
+    "pile_type=three_plant_water": [{ "model": "thebetweenlands:betweenstone_pebble_pile_3" }, { "model": "thebetweenlands:betweenstone_pebble_pile_3", "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_3", "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_3", "y": 270 }],
+    "pile_type=four_plant_water": [{ "model": "thebetweenlands:betweenstone_pebble_pile_4" }, { "model": "thebetweenlands:betweenstone_pebble_pile_4", "y": 90 }, { "model": "thebetweenlands:betweenstone_pebble_pile_4", "y": 180 }, { "model": "thebetweenlands:betweenstone_pebble_pile_4", "y": 270 }]
   }
 }
