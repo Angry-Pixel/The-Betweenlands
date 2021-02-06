@@ -203,6 +203,7 @@ import thebetweenlands.common.block.structure.BlockWoodenSupportBeam;
 import thebetweenlands.common.block.structure.BlockWormDungeonPillar;
 import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePile;
+import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePileWater;
 import thebetweenlands.common.block.terrain.BlockBlackIce;
 import thebetweenlands.common.block.terrain.BlockCircleGem;
 import thebetweenlands.common.block.terrain.BlockCragrock;
@@ -890,6 +891,7 @@ public class BlockRegistry {
     public static final Block CRAB_POT_FILTER = new BlockCrabPotFilter();
     public static final Block SILT_GLASS_JAR = new BlockSiltGlassJar();
     public static final Block BETWEENSTONE_PEBBLE_PILE = new BlockBetweenstonePebblePile();
+    public static final Block BETWEENSTONE_PEBBLE_PILE_WATER = new BlockBetweenstonePebblePileWater();
 
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();

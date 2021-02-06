@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -25,6 +26,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePileWater;
 import thebetweenlands.common.entity.mobs.EntityEmberling;
 import thebetweenlands.common.entity.mobs.EntityEmberlingWild;
 import thebetweenlands.common.item.IGenericItem;
@@ -190,15 +192,21 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 		if (!player.getHeldItem(hand).isEmpty() && player.getHeldItem(hand).getItem() == EnumItemMisc.BETWEENSTONE_PEBBLE.getItem()) {
 			IBlockState iblockstate = world.getBlockState(pos);
 			Block block = iblockstate.getBlock();
+			Block blockType;
 
-			if (!block.isReplaceable(world, pos))
+			if (!block.isReplaceable(world, pos) && !(block instanceof BlockBetweenstonePebblePileWater))
 				pos = pos.offset(facing);
+			
+			if(world.getBlockState(pos).getMaterial() == Material.WATER)
+				blockType = BlockRegistry.BETWEENSTONE_PEBBLE_PILE_WATER;
+			else
+				blockType = BlockRegistry.BETWEENSTONE_PEBBLE_PILE;
 
 			ItemStack itemstack = player.getHeldItem(hand);
-
-			if (!itemstack.isEmpty() && player.canPlayerEdit(pos, facing, itemstack) && world.mayPlace(BlockRegistry.BETWEENSTONE_PEBBLE_PILE, pos, false, facing, (Entity) null)) {
+			
+			if (!itemstack.isEmpty() && player.canPlayerEdit(pos, facing, itemstack) && world.mayPlace(blockType, pos, false, facing, (Entity) null)) {
 				int i = this.getMetadata(itemstack.getMetadata());
-				IBlockState iblockstate1 = BlockRegistry.BETWEENSTONE_PEBBLE_PILE.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, i, player, hand);
+				IBlockState iblockstate1 = blockType.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, i, player, hand);
 
 				if (placeBlockAt(itemstack, player, world, pos, facing, hitX, hitY, hitZ, iblockstate1)) {
 					iblockstate1 = world.getBlockState(pos);
@@ -224,6 +232,11 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
         IBlockState state = world.getBlockState(pos);
         if (state.getBlock() == BlockRegistry.BETWEENSTONE_PEBBLE_PILE) {
         	BlockRegistry.BETWEENSTONE_PEBBLE_PILE.onBlockPlacedBy(world, pos, state, player, stack);
+            if (player instanceof EntityPlayerMP)
+                CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP)player, pos, stack);
+        }
+        if (state.getBlock() == BlockRegistry.BETWEENSTONE_PEBBLE_PILE_WATER) {
+        	BlockRegistry.BETWEENSTONE_PEBBLE_PILE_WATER.onBlockPlacedBy(world, pos, state, player, stack);
             if (player instanceof EntityPlayerMP)
                 CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP)player, pos, stack);
         }
