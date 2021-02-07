@@ -344,24 +344,6 @@ public class ModelRegistry {
 	public static final IModel SILT_GLASS_JAR = new ModelFromModelBase.Builder(new ModelSiltGlassJar(), new ResourceLocation("thebetweenlands:blocks/silt_glass_jar"), 64, 64)
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/silt_glass_jar")).packer(MODEL_TEXTURE_PACKER).build();
 
-	//pebble models
-	/*		ONE,
-			TWO,
-			THREE,
-			FOUR,
-			ONE_WATER,
-			TWO_WATER,
-			THREE_WATER,
-			FOUR_WATER,
-			ONE_PLANT,
-			TWO_PLANT,
-			THREE_PLANT,
-			FOUR_PLANT,
-			ONE_PLANT_WATER,
-			TWO_PLANT_WATER,
-			THREE_PLANT_WATER,
-			FOUR_PLANT_WATER;
-			*/
 	public static final IModel BETWEENSTONE_PEBBLE_PILE_ONE = new ModelFromModelBase.Builder(new ModelPebblePile1(), new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile"), 32, 32)
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile")).packer(MODEL_TEXTURE_PACKER).build();
 
