@@ -98,6 +98,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	public EntityAnadia(World world) {
 		super(world);
         setSize(0.8F, 0.8F);
+        experienceValue = 3;
         moveHelper = new EntityAnadia.AnadiaMoveHelper(this);
 		setPathPriority(PathNodeType.WALKABLE, -8.0F);
 		setPathPriority(PathNodeType.BLOCKED, -8.0F);
