@@ -261,8 +261,9 @@ public class EntityRegistry {
 		registerEntity(EntityRockSnot.class, "rock_snot", 0x3F5A69, 0xA16A77, 64, 20, true);
 		registerEntity(EntityRockSnotTendril.class, "rock_snot_tendril", 64, 20, true);
 
-		registerEntity(EntityPuffin.class, "puffin", 0x3F5A69, 0xA16A77, 64, 3, true);
-		registerEntity(EntityAnimalBurrow.class, "animal_burrow");
+		// TODO Shit that will be added onedayTM
+		//registerEntity(EntityPuffin.class, "puffin", 0x3F5A69, 0xA16A77, 64, 3, true);
+		//registerEntity(EntityAnimalBurrow.class, "animal_burrow");
 
 		registerEntity(EntityJellyfish.class, "jellyfish", 0x3F5A69, 0xA16A77, 64, 3, true);
 		registerEntity(EntityJellyfishCave.class, "jellyfish_cave", 0x3F5A69, 0xA16A77, 64, 3, true);
