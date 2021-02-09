@@ -258,7 +258,7 @@ public class EntityRegistry {
 		registerEntity(EntityFishingTackleBoxSeat.class, "fishing_tackle_box_seat");
 		
 		//WIP Stuffs
-		registerEntity(EntityRockSnot.class, "rock_snot", 64, 20, true);
+		registerEntity(EntityRockSnot.class, "rock_snot", 0x3F5A69, 0xA16A77, 64, 20, true);
 		registerEntity(EntityRockSnotTendril.class, "rock_snot_tendril", 64, 20, true);
 
 		registerEntity(EntityPuffin.class, "puffin", 0x3F5A69, 0xA16A77, 64, 3, true);
