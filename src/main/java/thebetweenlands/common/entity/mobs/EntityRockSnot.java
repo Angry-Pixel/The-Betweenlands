@@ -231,7 +231,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 			List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, proximityBox());
 			for (Iterator<EntityLivingBase> iterator = list.iterator(); iterator.hasNext();) {
 				EntityLivingBase entity  = iterator.next();
-				if (entity != null && (entity instanceof EntityPlayer && getPlacedByPlayer() || entity instanceof EntityRockSnot))
+				if (entity != null && (entity instanceof EntityPlayer && getPlacedByPlayer() || entity instanceof EntityRockSnot) || entity instanceof EntityPlayer && ((EntityPlayer) entity).isSpectator() || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative())
 					iterator.remove();
 			}
 			if (list.isEmpty()) {
@@ -240,8 +240,6 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 			}
 			if (!list.isEmpty()) {
 				EntityLivingBase entity = list.get(0);
-
-					//if (entity instanceof EntityPlayer && !((EntityPlayer) entity).isSpectator() && !((EntityPlayer) entity).isCreative()) {
 
 					if (canSneakPast() && entity.isSneaking())
 						return;
@@ -252,7 +250,6 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 							setAttackTarget((EntityLivingBase) entity);
 					if (!isDead && isSingleUse())
 						setDead();
-					//}
 			}
 		}
 	}
