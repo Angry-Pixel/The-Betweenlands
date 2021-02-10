@@ -220,7 +220,7 @@ public class ModelFreshwaterUrchin extends MowzieModelBase {
     public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
     	setToInitPose();
         EntityFreshwaterUrchin urchin = (EntityFreshwaterUrchin) entity;
-        float pulse = MathHelper.sin((urchin.ticksExisted + partialRenderTicks) * 0.0625F) * 0.125F;
+        float pulse = MathHelper.sin((urchin.ticksExisted + partialRenderTicks) * 0.125F) * 0.03125F;
 
         spike_f2.rotateAngleY += pulse;
         spike_l2.rotateAngleY += pulse;
