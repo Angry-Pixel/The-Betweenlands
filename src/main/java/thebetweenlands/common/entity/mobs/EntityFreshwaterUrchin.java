@@ -1,17 +1,29 @@
 package thebetweenlands.common.entity.mobs;
 
-import net.minecraft.entity.EntityCreature;
+import java.util.Iterator;
+import java.util.List;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.entity.EntityProximitySpawner;
 
-public class EntityFreshwaterUrchin extends EntityCreature implements IEntityBL {
+public class EntityFreshwaterUrchin extends EntityProximitySpawner {
+	private static final DataParameter<Integer> SPIKE_COOLDOWN = EntityDataManager.createKey(EntityFreshwaterUrchin.class, DataSerializers.VARINT);
+	public boolean placed_by_player;
 
 	public EntityFreshwaterUrchin(World world) {
 		super(world);
@@ -29,6 +41,7 @@ public class EntityFreshwaterUrchin extends EntityCreature implements IEntityBL 
 	@Override
 	protected void entityInit() {
 		super.entityInit();
+		dataManager.register(SPIKE_COOLDOWN, 80);
 	}
 
 	@Override
@@ -38,9 +51,78 @@ public class EntityFreshwaterUrchin extends EntityCreature implements IEntityBL 
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.05D);
 	}
 
+	public int getSpikeTimer() {
+		return dataManager.get(SPIKE_COOLDOWN);
+	}
+
+	public void setSpikeTimer(int count) {
+		dataManager.set(SPIKE_COOLDOWN, count);
+	}
+
+	public void setPlacedByPlayer(boolean placed) {
+		placed_by_player = placed;
+	}
+
+	public boolean getPlacedByPlayer() {
+		return placed_by_player;
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		setPlacedByPlayer(compound.getBoolean("placed_by_player"));
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+		compound.setBoolean("placed_by_player", getPlacedByPlayer());
+	}
+
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		if (!getEntityWorld().isRemote) {
+
+			if (getSpikeTimer() < 80)
+				setSpikeTimer(getSpikeTimer() + 1);
+
+			if (getSpikeTimer() >= 80)
+				if (getEntityWorld().getTotalWorldTime() % 5 == 0)
+					checkAreaHere();
+		}
+	}
+
+	public void checkAreaHere() {
+		if (!getEntityWorld().isRemote && getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL) {
+			List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, proximityBox());
+			for (Iterator<EntityLivingBase> iterator = list.iterator(); iterator.hasNext();) {
+				EntityLivingBase entity  = iterator.next();
+				if (entity != null && (entity instanceof EntityPlayer && getPlacedByPlayer() || entity instanceof EntityFreshwaterUrchin) || entity instanceof EntityPlayer && ((EntityPlayer) entity).isSpectator() || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative())
+					iterator.remove();
+			}
+			if (list.isEmpty()) {
+				return;
+			}
+			if (!list.isEmpty()) {
+				EntityLivingBase entity = list.get(0);
+
+					if (canSneakPast() && entity.isSneaking())
+						return;
+					else if (checkSight() && !canEntityBeSeen(entity))
+						return;
+					else 
+						shootSpikes();
+					if (!isDead && isSingleUse())
+						setDead();
+			}
+		}
+	}
+
+	private void shootSpikes() {
+		//TODO add particles and damage to mobs hit by spikes
+		System.out.println("SHOOTING SPIKES!");
+		setSpikeTimer(0);
 	}
 
 	@Override
@@ -71,4 +153,54 @@ public class EntityFreshwaterUrchin extends EntityCreature implements IEntityBL 
             super.travel(strafe, up, forward);
         }
     }
+
+	@Override
+    public float getEyeHeight(){
+        return this.height;
+    }
+
+	@Override
+	protected float getProximityHorizontal() {
+		return 1;
+	}
+
+	@Override
+	protected float getProximityVertical() {
+		return 1;
+	}
+
+	@Override
+	protected AxisAlignedBB proximityBox() {
+		return new AxisAlignedBB(getPosition()).grow(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal()).offset(0D, getProximityVertical() + height , 0D);
+	}
+
+	@Override
+	protected boolean canSneakPast() {
+		return true;
+	}
+
+	@Override
+	protected boolean checkSight() {
+		return true;
+	}
+
+	@Override
+	protected Entity getEntitySpawned() {
+		return null;
+	}
+
+	@Override
+	protected int getEntitySpawnCount() {
+		return 0;
+	}
+
+	@Override
+	protected boolean isSingleUse() {
+		return false;
+	}
+
+	@Override
+	protected int maxUseCount() {
+		return 0;
+	}
 }

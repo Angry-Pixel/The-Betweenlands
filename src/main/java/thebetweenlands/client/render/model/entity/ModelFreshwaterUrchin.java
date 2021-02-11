@@ -158,6 +158,8 @@ public class ModelFreshwaterUrchin extends MowzieModelBase {
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    	EntityFreshwaterUrchin urchin = (EntityFreshwaterUrchin) entity;
+    	float scaleSpikes = 1F/80F * urchin.getSpikeTimer();
     	float pulse = MathHelper.sin((ageInTicks) * 0.0625F) * 0.125F;
     	GlStateManager.pushMatrix();
         GlStateManager.enableCull();
@@ -183,7 +185,20 @@ public class ModelFreshwaterUrchin extends MowzieModelBase {
         spike_r5.showModel = false;
         spike_b5.showModel = false;
         base.render(scale);
-        spike_f2.showModel = true;
+        anal_sac.showModel = false;
+        spike_rotationpoint.showModel  = false;
+        GlStateManager.cullFace(CullFace.BACK);
+        base.render(scale);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0F, 1.5F, 0F);
+        GlStateManager.scale(0.75F + pulse, 1F + pulse * 0.25F, 0.75F + pulse);
+        anal_sac.showModel = true;
+        anal_sac.render(0.0625F);
+        GlStateManager.popMatrix();
+        
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0F, 1.5F, 0F);
+        GlStateManager.scale(scaleSpikes, scaleSpikes, scaleSpikes);
         spike_l2.showModel = true;
         spike_r2.showModel = true;
         spike_b2.showModel = true;
@@ -203,15 +218,11 @@ public class ModelFreshwaterUrchin extends MowzieModelBase {
         spike_l5.showModel = true;
         spike_r5.showModel = true;
         spike_b5.showModel = true;
-        anal_sac.showModel = false;
+        spike_rotationpoint.showModel = true;
         GlStateManager.cullFace(CullFace.BACK);
-        base.render(scale);
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(0F, 1.5F, 0F);
-        GlStateManager.scale(0.75F + pulse, 1F + pulse * 0.25F, 0.75F + pulse);
-        anal_sac.showModel = true;
-        anal_sac.render(0.0625F);
+        spike_rotationpoint.render(0.0625F);
         GlStateManager.popMatrix();
+        
         GlStateManager.disableCull();
         GlStateManager.popMatrix();
     }
