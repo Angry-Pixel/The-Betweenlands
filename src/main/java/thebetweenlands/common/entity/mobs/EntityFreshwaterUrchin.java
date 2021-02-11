@@ -23,8 +23,10 @@ import thebetweenlands.common.entity.EntityProximitySpawner;
 
 public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 	private static final DataParameter<Integer> SPIKE_COOLDOWN = EntityDataManager.createKey(EntityFreshwaterUrchin.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> SPIKE_BOX_SIZE = EntityDataManager.createKey(EntityFreshwaterUrchin.class, DataSerializers.VARINT);
 	public boolean placed_by_player;
-
+	private boolean shootSpikes;
+	public int MAX_SPIKE_TIMER = 10;
 	public EntityFreshwaterUrchin(World world) {
 		super(world);
 		setSize(0.6875F, 0.4375F);
@@ -42,6 +44,7 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 	protected void entityInit() {
 		super.entityInit();
 		dataManager.register(SPIKE_COOLDOWN, 80);
+		dataManager.register(SPIKE_BOX_SIZE, 0);
 	}
 
 	@Override
@@ -51,12 +54,20 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.05D);
 	}
 
-	public int getSpikeTimer() {
+	public int getSpikeGrowTimer() {
 		return dataManager.get(SPIKE_COOLDOWN);
 	}
 
-	public void setSpikeTimer(int count) {
+	public void setSpikeGrowTimer(int count) {
 		dataManager.set(SPIKE_COOLDOWN, count);
+	}
+
+	public int getSpikeBoxTimer() {
+		return dataManager.get(SPIKE_BOX_SIZE);
+	}
+
+	public void setSpikeBoxTimer(int count) {
+		dataManager.set(SPIKE_BOX_SIZE, count);
 	}
 
 	public void setPlacedByPlayer(boolean placed) {
@@ -84,12 +95,21 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 		super.onUpdate();
 		if (!getEntityWorld().isRemote) {
 
-			if (getSpikeTimer() < 80)
-				setSpikeTimer(getSpikeTimer() + 1);
+			if (getSpikeGrowTimer() < 80)
+				setSpikeGrowTimer(getSpikeGrowTimer() + 1);
 
-			if (getSpikeTimer() >= 80)
+			if (getSpikeGrowTimer() >= 80)
 				if (getEntityWorld().getTotalWorldTime() % 5 == 0)
 					checkAreaHere();
+			
+			if(shootSpikes) {
+				if (getSpikeBoxTimer() < MAX_SPIKE_TIMER)
+					setSpikeBoxTimer(getSpikeBoxTimer() + 1);
+				if (getSpikeBoxTimer() >= MAX_SPIKE_TIMER) {
+					shootSpikes = false;
+					setSpikeBoxTimer(0);
+				}
+			}
 		}
 	}
 
@@ -122,7 +142,8 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 	private void shootSpikes() {
 		//TODO add particles and damage to mobs hit by spikes
 		System.out.println("SHOOTING SPIKES!");
-		setSpikeTimer(0);
+		setSpikeGrowTimer(0);
+		shootSpikes = true;
 	}
 
 	@Override
@@ -161,17 +182,24 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 
 	@Override
 	protected float getProximityHorizontal() {
-		return 1;
+		return 2;
 	}
 
 	@Override
 	protected float getProximityVertical() {
-		return 1;
+		return 1F;
 	}
 
 	@Override
-	protected AxisAlignedBB proximityBox() {
-		return new AxisAlignedBB(getPosition()).grow(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal()).offset(0D, getProximityVertical() + height , 0D);
+	public AxisAlignedBB proximityBox() {
+		return new AxisAlignedBB(posX -0.5D, posY, posZ - 0.5D, posX + 0.5D, posY + 1D, posZ + 0.5D).grow(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal()).offset(0D, getProximityVertical() + height , 0D);
+	}
+
+	public AxisAlignedBB spikesBox() {
+		float x = (getProximityHorizontal() / MAX_SPIKE_TIMER) * getSpikeBoxTimer();
+		float y = (getProximityVertical() / MAX_SPIKE_TIMER) * getSpikeBoxTimer();
+		float z = (getProximityHorizontal() / MAX_SPIKE_TIMER) * getSpikeBoxTimer();
+		return new AxisAlignedBB(posX, posY, posZ, posX, posY, posZ).grow(x, y, z).offset(0D, y , 0D);
 	}
 
 	@Override

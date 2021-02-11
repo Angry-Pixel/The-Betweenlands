@@ -159,7 +159,7 @@ public class ModelFreshwaterUrchin extends MowzieModelBase {
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
     	EntityFreshwaterUrchin urchin = (EntityFreshwaterUrchin) entity;
-    	float scaleSpikes = 1F/80F * urchin.getSpikeTimer();
+    	float scaleSpikes = 1F/80F * urchin.getSpikeGrowTimer();
     	float pulse = MathHelper.sin((ageInTicks) * 0.0625F) * 0.125F;
     	GlStateManager.pushMatrix();
         GlStateManager.enableCull();
