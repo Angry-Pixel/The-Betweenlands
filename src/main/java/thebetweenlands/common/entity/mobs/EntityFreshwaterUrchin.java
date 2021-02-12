@@ -10,12 +10,12 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -24,9 +24,9 @@ import thebetweenlands.common.entity.EntityProximitySpawner;
 public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 	private static final DataParameter<Integer> SPIKE_COOLDOWN = EntityDataManager.createKey(EntityFreshwaterUrchin.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> SPIKE_BOX_SIZE = EntityDataManager.createKey(EntityFreshwaterUrchin.class, DataSerializers.VARINT);
-	public boolean placed_by_player;
 	private boolean shootSpikes;
 	public int MAX_SPIKE_TIMER = 10;
+
 	public EntityFreshwaterUrchin(World world) {
 		super(world);
 		setSize(0.6875F, 0.4375F);
@@ -50,6 +50,7 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
+		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(3.0D);
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.05D);
 	}
@@ -70,30 +71,11 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 		dataManager.set(SPIKE_BOX_SIZE, count);
 	}
 
-	public void setPlacedByPlayer(boolean placed) {
-		placed_by_player = placed;
-	}
-
-	public boolean getPlacedByPlayer() {
-		return placed_by_player;
-	}
-
-	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
-		super.readEntityFromNBT(compound);
-		setPlacedByPlayer(compound.getBoolean("placed_by_player"));
-	}
-
-	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
-		super.writeEntityToNBT(compound);
-		compound.setBoolean("placed_by_player", getPlacedByPlayer());
-	}
-
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
 		if (!getEntityWorld().isRemote) {
+				checkAOEDamage();
 
 			if (getSpikeGrowTimer() < 80)
 				setSpikeGrowTimer(getSpikeGrowTimer() + 1);
@@ -113,12 +95,35 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 		}
 	}
 
-	public void checkAreaHere() {
+	private void checkAOEDamage() {
 		if (!getEntityWorld().isRemote && getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL) {
+			List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, spikesBox());
+			for (Iterator<EntityLivingBase> iterator = list.iterator(); iterator.hasNext();) {
+				EntityLivingBase entity  = iterator.next();
+				if (entity != null && (entity instanceof EntityFreshwaterUrchin) || entity instanceof EntityPlayer && ((EntityPlayer) entity).isSpectator() || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative())
+					iterator.remove();
+			}
+			if (list.isEmpty()) {
+				return;
+			}
+			if (!list.isEmpty()) {
+				EntityLivingBase entity = list.get(0);
+				if(entity.hurtResistantTime <= 0) {
+					entity.attackEntityFrom(new EntityDamageSource("cactus", this), 2F);
+					shootSpikes = false;
+					setSpikeBoxTimer(0);
+				}
+			}
+		}
+		
+	}
+
+	public void checkAreaHere() {
+		if (!getEntityWorld().isRemote && getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL && isInWater()) {
 			List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, proximityBox());
 			for (Iterator<EntityLivingBase> iterator = list.iterator(); iterator.hasNext();) {
 				EntityLivingBase entity  = iterator.next();
-				if (entity != null && (entity instanceof EntityPlayer && getPlacedByPlayer() || entity instanceof EntityFreshwaterUrchin) || entity instanceof EntityPlayer && ((EntityPlayer) entity).isSpectator() || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative())
+				if (entity != null && (entity instanceof EntityFreshwaterUrchin) || entity instanceof EntityPlayer && ((EntityPlayer) entity).isSpectator() || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative())
 					iterator.remove();
 			}
 			if (list.isEmpty()) {
@@ -140,8 +145,7 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 	}
 
 	private void shootSpikes() {
-		//TODO add particles and damage to mobs hit by spikes
-		System.out.println("SHOOTING SPIKES!");
+		//TODO add particles
 		setSpikeGrowTimer(0);
 		shootSpikes = true;
 	}
@@ -199,7 +203,7 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 		float x = (getProximityHorizontal() / MAX_SPIKE_TIMER) * getSpikeBoxTimer();
 		float y = (getProximityVertical() / MAX_SPIKE_TIMER) * getSpikeBoxTimer();
 		float z = (getProximityHorizontal() / MAX_SPIKE_TIMER) * getSpikeBoxTimer();
-		return new AxisAlignedBB(posX, posY, posZ, posX, posY, posZ).grow(x, y, z).offset(0D, y , 0D);
+		return new AxisAlignedBB(posX -0.5D, posY, posZ - 0.5D, posX + 0.5D, posY + 0.5D, posZ + 0.5D).grow(x, y, z).offset(0D, y , 0D);
 	}
 
 	@Override
