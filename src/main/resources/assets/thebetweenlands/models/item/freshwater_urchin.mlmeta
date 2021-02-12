@@ -1,0 +1,9 @@
+{
+  "source": "thebetweenlands:freshwater_urchin",
+  "inherit_overrides": false,
+  "custom": {
+    "map": {
+      "thebetweenlands:freshwater_urchin": "thebetweenlands:item/freshwater_urchin_item"
+    }
+  }
+}

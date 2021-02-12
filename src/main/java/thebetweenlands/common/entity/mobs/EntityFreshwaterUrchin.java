@@ -3,6 +3,8 @@ package thebetweenlands.common.entity.mobs;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
@@ -16,10 +18,12 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.EntityProximitySpawner;
+import thebetweenlands.common.registries.LootTableRegistry;
 
 public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 	private static final DataParameter<Integer> SPIKE_COOLDOWN = EntityDataManager.createKey(EntityFreshwaterUrchin.class, DataSerializers.VARINT);
@@ -70,6 +74,12 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 	public void setSpikeBoxTimer(int count) {
 		dataManager.set(SPIKE_BOX_SIZE, count);
 	}
+
+    @Nullable
+    @Override
+    protected ResourceLocation getLootTable() {
+        return LootTableRegistry.FRESHWATER_URCHIN;
+    }
 
 	@Override
 	public void onUpdate() {
