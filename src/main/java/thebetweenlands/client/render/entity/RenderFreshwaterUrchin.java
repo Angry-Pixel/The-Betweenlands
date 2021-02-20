@@ -19,7 +19,8 @@ public class RenderFreshwaterUrchin extends RenderLiving<EntityFreshwaterUrchin>
 	public RenderFreshwaterUrchin(RenderManager renderManager) {
 		super(renderManager, new ModelFreshwaterUrchin(), 0.2F);
 	}
-
+	
+//TODO (start) remove once particles are properly sorted
 	@Override
 	protected void preRenderCallback(EntityFreshwaterUrchin entity, float partialTickTime) {
 		// may need some GL scaling here
@@ -29,7 +30,7 @@ public class RenderFreshwaterUrchin extends RenderLiving<EntityFreshwaterUrchin>
 	public void doRender(EntityFreshwaterUrchin entity, double x, double y, double z, float yaw, float partialTicks) {
 		super.doRender(entity, x, y, z, yaw, partialTicks);
 
-		renderDebugBoundingBox(entity, x, y, z, yaw, partialTicks, 0, 0, 0);
+	//	renderDebugBoundingBox(entity, x, y, z, yaw, partialTicks, 0, 0, 0); 
 	}
 
 	private void renderDebugBoundingBox(EntityFreshwaterUrchin entity, double x, double y, double z, float yaw, float partialTicks, double xOff, double yOff, double zOff) {
@@ -47,6 +48,7 @@ public class RenderFreshwaterUrchin extends RenderLiving<EntityFreshwaterUrchin>
 		GlStateManager.disableBlend();
 		GlStateManager.depthMask(true);
 	}
+// TODO (end)
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityFreshwaterUrchin entity) {

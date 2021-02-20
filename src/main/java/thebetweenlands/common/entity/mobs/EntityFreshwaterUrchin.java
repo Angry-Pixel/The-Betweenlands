@@ -2,6 +2,7 @@ package thebetweenlands.common.entity.mobs;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Nullable;
 
@@ -20,8 +21,14 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.client.render.particle.entity.ParticleRootSpike;
 import thebetweenlands.common.entity.EntityProximitySpawner;
 import thebetweenlands.common.registries.LootTableRegistry;
 
@@ -30,6 +37,7 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 	private static final DataParameter<Integer> SPIKE_BOX_SIZE = EntityDataManager.createKey(EntityFreshwaterUrchin.class, DataSerializers.VARINT);
 	private boolean shootSpikes;
 	public int MAX_SPIKE_TIMER = 10;
+	public static final byte EVENT_ATTACK = 66;
 
 	public EntityFreshwaterUrchin(World world) {
 		super(world);
@@ -155,9 +163,28 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 	}
 
 	private void shootSpikes() {
-		//TODO add particles
 		setSpikeGrowTimer(0);
 		shootSpikes = true;
+		getEntityWorld().setEntityState(this, EVENT_ATTACK);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void handleStatusUpdate(byte id) {
+		super.handleStatusUpdate(id);               
+		if (id == EVENT_ATTACK) {
+			Vec3d frontCenter = new Vec3d(posX, posY, posZ);
+			for (int i = 0; i < 64; i++) {
+				Random rnd = world.rand;
+				float rx = rnd.nextFloat() * 4.0F - 2.0F;
+				float ry = rnd.nextFloat() * 4.0F - 2.0F;
+				float rz = rnd.nextFloat() * 4.0F - 2.0F;
+				Vec3d vec = new Vec3d(rx, ry, rz);
+				vec = vec.normalize();
+				ParticleRootSpike particle = (ParticleRootSpike) BLParticles.ROOT_SPIKE.spawn(world, frontCenter.x, frontCenter.y - 0.25D, frontCenter.z, ParticleArgs.get().withMotion(vec.x * 0.175F, vec.y * 0.15F + 0.35F, vec.z * 0.175F).withScale(0.2F));
+				particle.setUseSound(this.rand.nextInt(15) == 0);
+			}
+		}
 	}
 
 	@Override
