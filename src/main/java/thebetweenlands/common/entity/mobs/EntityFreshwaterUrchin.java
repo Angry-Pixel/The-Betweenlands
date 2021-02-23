@@ -28,7 +28,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.client.render.particle.entity.ParticleRootSpike;
+import thebetweenlands.client.render.particle.entity.ParticleUrchinSpike;
 import thebetweenlands.common.entity.EntityProximitySpawner;
 import thebetweenlands.common.registries.LootTableRegistry;
 
@@ -181,7 +181,7 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 				float rz = rnd.nextFloat() * 4.0F - 2.0F;
 				Vec3d vec = new Vec3d(rx, ry, rz);
 				vec = vec.normalize();
-				ParticleRootSpike particle = (ParticleRootSpike) BLParticles.ROOT_SPIKE.spawn(world, frontCenter.x, frontCenter.y - 0.25D, frontCenter.z, ParticleArgs.get().withMotion(vec.x * 0.175F, vec.y * 0.15F + 0.35F, vec.z * 0.175F).withScale(0.2F));
+				ParticleUrchinSpike particle = (ParticleUrchinSpike) BLParticles.URCHIN_SPIKE.spawn(world, frontCenter.x, frontCenter.y - 0.25D, frontCenter.z, ParticleArgs.get().withMotion(vec.x * 0.175F, vec.y * 0.15F + 0.35F, vec.z * 0.175F).withScale(0.2F));
 				particle.setUseSound(this.rand.nextInt(15) == 0);
 			}
 		}
