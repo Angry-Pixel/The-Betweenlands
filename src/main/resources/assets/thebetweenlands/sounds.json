@@ -2012,5 +2012,12 @@
     "sounds": [
       "thebetweenlands:fishing_crab"
     ]
+  },
+  "urchin_shoot": {
+    "sounds": [
+      "thebetweenlands:urchin_shoot_1",
+      "thebetweenlands:urchin_shoot_2",
+      "thebetweenlands:urchin_shoot_3"
+    ]
   }
 }

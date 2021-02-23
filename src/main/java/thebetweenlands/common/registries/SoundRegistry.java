@@ -294,6 +294,7 @@ public class SoundRegistry {
     public static final BLSoundEvent JELLYFISH_HURT = reg("jellyfish_hurt");
     public static final BLSoundEvent JELLYFISH_SWIM = reg("jellyfish_swim");
     public static final BLSoundEvent JELLYFISH_ZAP = reg("jellyfish_zap");
+    public static final BLSoundEvent URCHIN_SHOOT = reg("urchin_shoot");
 
     public static final BLSoundEvent ANADIA_TREASURE_COLLECTED = reg("anadia_treasure_collected");
     public static final BLSoundEvent ANADIA_LOST = reg("anadia_lost");

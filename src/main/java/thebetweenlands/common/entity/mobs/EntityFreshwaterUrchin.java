@@ -20,6 +20,7 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
@@ -31,6 +32,7 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleUrchinSpike;
 import thebetweenlands.common.entity.EntityProximitySpawner;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 	private static final DataParameter<Integer> SPIKE_COOLDOWN = EntityDataManager.createKey(EntityFreshwaterUrchin.class, DataSerializers.VARINT);
@@ -163,6 +165,7 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 	}
 
 	private void shootSpikes() {
+		getEntityWorld().playSound(null, getPosition(), SoundRegistry.URCHIN_SHOOT, SoundCategory.NEUTRAL, 1F, 1.5F + (getEntityWorld().rand.nextFloat() - getEntityWorld().rand.nextFloat()) * 0.5F);
 		setSpikeGrowTimer(0);
 		shootSpikes = true;
 		getEntityWorld().setEntityState(this, EVENT_ATTACK);
