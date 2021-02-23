@@ -119,6 +119,7 @@ import thebetweenlands.common.item.misc.ItemDoorBetweenlands;
 import thebetweenlands.common.item.misc.ItemDraeton;
 import thebetweenlands.common.item.misc.ItemEmptyAmateMap;
 import thebetweenlands.common.item.misc.ItemFishBait;
+import thebetweenlands.common.item.misc.ItemFreshwaterUrchin;
 import thebetweenlands.common.item.misc.ItemGalleryFrame;
 import thebetweenlands.common.item.misc.ItemGem;
 import thebetweenlands.common.item.misc.ItemGemSinger;
@@ -441,7 +442,7 @@ public class ItemRegistry {
     public static final ItemMob ANADIA = new ItemMobAnadia(1, EntityAnadia.class, null);
     public static final ItemMob SILT_CRAB = new ItemMob(1, EntitySiltCrab.class, null);
     public static final ItemMob BUBBLER_CRAB = new ItemMob(1, EntityBubblerCrab.class, null);
-    public static final ItemMob FRESHWATER_URCHIN = new ItemMob(1, EntityFreshwaterUrchin.class, null);
+    public static final ItemMob FRESHWATER_URCHIN = new ItemFreshwaterUrchin(1, EntityFreshwaterUrchin.class, null);
     public static final ItemMob CHIROMAW_EGG = new ItemChiromawEgg(false);
     public static final ItemMob CHIROMAW_EGG_LIGHTNING = new ItemChiromawEgg(true);
     public static final ItemMob CHIROMAW_TAME = new ItemChiromawTame(false);

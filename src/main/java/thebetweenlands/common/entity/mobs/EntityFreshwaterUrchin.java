@@ -135,7 +135,6 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 				}
 			}
 		}
-		
 	}
 
 	public void checkAreaHere() {
