@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
@@ -51,6 +52,11 @@ public class ParticleUrchinSpike extends Particle implements IParticleSpriteRece
 		this.particleGravity = 1;
 		this.particleMaxAge = 20 * 3;
 	}
+	
+	@Override
+	public void setParticleTexture(TextureAtlasSprite texture) {
+	    this.particleTexture = texture;
+	}
 
 	public void setUseSound(boolean sound) {
 		this.sound = sound;
@@ -84,7 +90,7 @@ public class ParticleUrchinSpike extends Particle implements IParticleSpriteRece
 	@Override
 	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		if(this.renderer == null) {
-			this.renderer = new SpikeRenderer(this.length, this.width, 1.0F, 1, this.seed).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(SPRITE.toString()));
+			this.renderer = new SpikeRenderer(this.length, this.width, 1.0F, 1, this.seed).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, particleTexture);
 		}
 
 		int i = this.getBrightnessForRender(partialTicks);
