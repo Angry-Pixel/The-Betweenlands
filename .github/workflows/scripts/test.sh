@@ -1,3 +1,3 @@
 #!/bin/bash
 
-echo "$(SECRET_TEST)"
+echo "$SECRET_TEST"
