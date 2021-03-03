@@ -100,6 +100,7 @@ import thebetweenlands.common.entity.mobs.EntityVolatileSoul;
 import thebetweenlands.common.entity.mobs.EntityWallLamprey;
 import thebetweenlands.common.entity.mobs.EntityWallLivingRoot;
 import thebetweenlands.common.entity.mobs.EntityWight;
+import thebetweenlands.common.entity.mobs.EntityGreeblingCoracle;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.entity.projectiles.EntityChiromawDroppings;
@@ -233,10 +234,11 @@ public class EntityRegistry {
 		registerEntity(EntityChiromawDroppings.class, "chiromaw_droppings", 64, 20, true);
 		registerEntity(EntityChiromawHatchling.class, "chiromaw_hatchling", 64, 3, true);
 		registerEntity(EntityChiromawTame.class, "chiromaw_tame", 128, 3, true);
-		registerEntity(EntityGreeblingCorpse.class, "greebling_corpse", 80, 20, false);
-	
+		registerEntity(EntityGreeblingCorpse.class, "greebling_corpse", 80, 3, true);
+
 		registerEntity(EntityStalker.class, "stalker", 0xE4DCC9, 0xD58888);
 		registerEntity(EntitySwarm.class, "swarm", 0x292B3B, 0xE2D698);
+		registerEntity(EntityGreeblingCoracle.class, "greebling_coracle", 0x142728, 0x7CB2AA);
 	}
 
 	private static int id = 0;
