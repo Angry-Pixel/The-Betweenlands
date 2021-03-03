@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Sets up the deployment enviroment, i.e. environment variables and cloning the deployment repository and setting up all of its files
+# Sets up the deployment environment variables
 
-chmod +x .github/workflows/main/config/vars.sh
-./.github/workflows/main/config/vars.sh
+chmod +x ".github/workflows/${GITHUB_WORKFLOW}/config/config.sh"
+."/.github/workflows/${GITHUB_WORKFLOW}/config/config.sh"

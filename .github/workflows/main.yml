@@ -14,23 +14,26 @@ jobs:
       with:
         java-version: 1.8
         
-    - run: chmod +x ./.github/workflows/main/setup.sh
     - name: Setting up environment
-      run: ./.github/workflows/main/setup.sh
+      run: |
+        chmod +x ."/.github/workflows/${GITHUB_WORKFLOW}/setup.sh
+        ."/.github/workflows/${GITHUB_WORKFLOW}/setup.sh"
       env:
-        DECR_KEY_SECRET: ${{ secrets.DECR_KEY_SECRET }}
-        PULL_REQUEST: false
+        BS_DECR_KEY_SECRET: ${{ secrets.DECR_KEY_SECRET }}
+        BS_PULL_REQUEST: 'false'
         
-    - run: chmod +x ./.github/workflows/main/build.sh
     - name: Building
-      run: ./.github/workflows/main/build.sh
+      run: |
+        chmod +x ."/.github/workflows/${GITHUB_WORKFLOW}/build.sh"
+        ."/.github/workflows/${GITHUB_WORKFLOW}/build.sh"
       env:
-        DECR_KEY_SECRET: ${{ secrets.DECR_KEY_SECRET }}
-        PULL_REQUEST: false
+        BS_DECR_KEY_SECRET: ${{ secrets.DECR_KEY_SECRET }}
+        BS_PULL_REQUEST: 'false'
         
-    - run: chmod +x ./.github/workflows/main/deploy.sh
     - name: Deploying
-      run: ./.github/workflows/main/deploy.sh
+      run: |
+        chmod +x ."/.github/workflows/${GITHUB_WORKFLOW}/deploy.sh"
+        ."/.github/workflows/${GITHUB_WORKFLOW}/deploy.sh"
       env:
-        DECR_KEY_SECRET: ${{ secrets.DECR_KEY_SECRET }}
-        PULL_REQUEST: false
+        BS_DECR_KEY_SECRET: ${{ secrets.DECR_KEY_SECRET }}
+        BS_PULL_REQUEST: 'false'
