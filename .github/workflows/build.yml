@@ -16,8 +16,8 @@ jobs:
         
     - name: Setting up environment
       run: |
-        chmod +x ".github/workflows/build/setup.sh
-        ."/.github/workflows/build/setup.sh"
+        chmod +x ".github/workflows/${GITHUB_WORKFLOW}/setup.sh
+        ."/.github/workflows/${GITHUB_WORKFLOW}/setup.sh"
       env:
         BS_DECR_KEY_SECRET: ${{ secrets.DECR_KEY_SECRET }}
         BS_PULL_REQUEST: 'false'
