@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Running deployment"
+
 if [ "$BS_PULL_REQUEST" == 'false' ]; then
 
   openssl aes-256-cbc -k "$BS_DECR_KEY_SECRET" -in "$BS_ENC_DEPLOY_KEY_FILE" -out ".github/workflows/${GITHUB_WORKFLOW}/deployment/depkey.pem" -d

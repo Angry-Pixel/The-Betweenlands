@@ -16,24 +16,24 @@ jobs:
         
     - name: Setting up environment
       run: |
-        chmod +x ".github/workflows/${GITHUB_WORKFLOW}/setup.sh
-        ."/.github/workflows/${GITHUB_WORKFLOW}/setup.sh"
+        chmod +x "./.github/workflows/${GITHUB_WORKFLOW}/setup.sh
+        "./.github/workflows/${GITHUB_WORKFLOW}/setup.sh"
       env:
         BS_DECR_KEY_SECRET: ${{ secrets.DECR_KEY_SECRET }}
         BS_PULL_REQUEST: 'false'
         
     - name: Building
       run: |
-        chmod +x ".github/workflows/${GITHUB_WORKFLOW}/build.sh"
-        ."/.github/workflows/${GITHUB_WORKFLOW}/build.sh"
+        chmod +x "./.github/workflows/${GITHUB_WORKFLOW}/build.sh"
+        "./.github/workflows/${GITHUB_WORKFLOW}/build.sh"
       env:
         BS_DECR_KEY_SECRET: ${{ secrets.DECR_KEY_SECRET }}
         BS_PULL_REQUEST: 'false'
         
     - name: Deploying
       run: |
-        chmod +x ".github/workflows/${GITHUB_WORKFLOW}/deploy.sh"
-        ."/.github/workflows/${GITHUB_WORKFLOW}/deploy.sh"
+        chmod +x "./.github/workflows/${GITHUB_WORKFLOW}/deploy.sh"
+        "./.github/workflows/${GITHUB_WORKFLOW}/deploy.sh"
       env:
         BS_DECR_KEY_SECRET: ${{ secrets.DECR_KEY_SECRET }}
         BS_PULL_REQUEST: 'false'
