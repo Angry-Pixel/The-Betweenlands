@@ -1,5 +1,6 @@
 package thebetweenlands.client.render.model.entity;
 
+import thebetweenlands.client.render.model.AdvancedModelRenderer;
 import thebetweenlands.client.render.model.MowzieModelBase;
 import thebetweenlands.client.render.model.MowzieModelRenderer;
 import net.minecraft.entity.Entity;
@@ -375,13 +376,18 @@ public class ModelGreeblingCoracle extends MowzieModelBase {
         this.head_main.addChild(this.cloth1a);
         this.net_weightline.addChild(this.net_weight);
         this.leg_left1a.addChild(this.leg_left1b);
+        this.coracle_base.addChild(body_base);
+
+        body_base.rotationPointY -= 23;
+        body_base.rotateAngleY -= Math.PI / 4f;
+        body_base.rotationPointZ -= 2.8;
+        body_base.rotationPointX -= 0.3;
 
         setInitPose();
     }
 
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
-        this.body_base.render(f5);
         this.coracle_base.render(f5);
     }
 
@@ -396,12 +402,99 @@ public class ModelGreeblingCoracle extends MowzieModelBase {
 
     @Override
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-
+        faceTarget(head_connect, 1, f3, f4);
     }
 
     @Override
     public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
         super.setLivingAnimations(entity, swing, speed, partialRenderTicks);
         setToInitPose();
+        float frame = entity.ticksExisted + partialRenderTicks;
+
+        if (entity.isInWater()) {
+            // Boat idle
+            bob(coracle_base, 0.1f, 0.2f, false, frame, 1f);
+            walk(coracle_base, 0.06f, 0.05f, false, 0, 0, frame, 1f);
+            swing(coracle_base, 0.08f, 0.05f, false, 0.3f, 0, frame, 1f);
+            flap(coracle_base, 0.04f, 0.05f, false, 1.2f, 0, frame, 1f);
+            walk(netrope1a, 0.06f, 0.05f, true, 0, -0.025f, frame, 1f);
+            swing(netrope1a, 0.08f, 0.05f, true, 0.3f, 0, frame, 1f);
+            flap(netrope1a, 0.04f, 0.05f, true, 1.2f, 0, frame, 1f);
+            walk(body_base, 0.06f, 0.05f, true, 0, 0, frame, 1f);
+            swing(body_base, 0.08f, 0.05f, true, 0.3f, 0, frame, 1f);
+            flap(body_base, 0.04f, 0.05f, true, 1.2f, 0, frame, 1f);
+
+            MowzieModelRenderer netting[] = {netrope1a, netrope1b, net_netting1, net_netting2, net_netting3};
+            float offsetAmount = 1.2f;
+            for (int i = 0; i < netting.length; i++) {
+                walk(netting[i], 0.08f, 0.05f, false, 2 - offsetAmount * i, 0, frame, 1f);
+                swing(netting[i], 0.06f, 0.05f, false, 1.8f - offsetAmount * i, 0, frame, 1f);
+                flap(netting[i], 0.05f, 0.05f, false, 1.3f - offsetAmount * i, 0, frame, 1f);
+            }
+            walk(net_weightline, 0.08f, 0.15f, false, 2 - offsetAmount * 2, 0, frame, 1f);
+            swing(net_weightline, 0.06f, 0.15f, false, 1.8f - offsetAmount * 2, 0, frame, 1f);
+            flap(net_weightline, 0.05f, 0.15f, false, 1.3f - offsetAmount * 2, 0, frame, 1f);
+
+            walk(hook_front, 0.16f, 0.1f + (float) Math.sin(frame * 0.04f) * 0.1f, false, 0, 0, frame, 1f);
+            walk(hook_left, 0.16f, 0.1f + (float) Math.sin(frame * 0.04f + 0.6) * 0.1f, false, 1.7f, 0, frame, 1f);
+            flap(side_rope1, 0.08f, 0.15f, false, 2.3f, 0, frame, 1f);
+            // Greebling idle
+            walk(chest, 0.1f, 0.05f, false, 1, 0, frame, 1f);
+            walk(head_connect, 0.1f, 0.05f, true, 1, 0, frame, 1f);
+            walk(jaw, 0.1f, 0.05f, true, 1, -0.2f, frame, 1f);
+            walk(cloth1a, 0.1f, 0.05f, false, 1.5f, 0.025f, frame, 1f);
+            walk(cloth1b, 0.1f, 0.05f, false, 1f, 0.025f, frame, 1f);
+
+            // Paddling
+//            swing = frame;
+//            speed = 1f;
+
+            float globalDegree = 0.6f;
+            float globalSpeed = 1.4f;
+            walk(body_base, 0.15f * globalSpeed, 0.3f * globalDegree, false, 0, 0.9f, swing, speed);
+            walk(leg_left1a, 0.15f * globalSpeed, 0.3f * globalDegree, true, 0, -0.2f, swing, speed);
+            walk(leg_right1a, 0.15f * globalSpeed, 0.3f * globalDegree, true, 0, -0.2f, swing, speed);
+            walk(arm_left1a, 0.15f * globalSpeed, 0.3f * globalDegree, true, 0, -0.2f, swing, speed);
+            walk(arm_right1a, 0.15f * globalSpeed, 0.3f * globalDegree, true, 0, -0.2f, swing, speed);
+            walk(head_connect, 0.15f * globalSpeed, 0.25f * globalDegree, true, 0, -0.2f, swing, speed);
+            walk(chest, 0.15f * globalSpeed, 0.3f * globalDegree, false, -1f, 0, swing, speed);
+            walk(arm_right1a, 0.15f * globalSpeed, 0.3f * globalDegree, true, -1f, 0, swing, speed);
+            walk(arm_left1a, 0.15f * globalSpeed, 0.3f * globalDegree, true, -1f, 0, swing, speed);
+            walk(head_connect, 0.15f * globalSpeed, 0.25f * globalDegree, true, -1f, 0, swing, speed);
+
+            walk(arm_left1a, 0.15f * globalSpeed, 0.8f * globalDegree, false, 2.5f, 0.4f, swing, speed);
+            walk(arm_left1b, 0.15f * globalSpeed, 0.8f * globalDegree, true, 2.5f - 0.8f, 0.2f, swing, speed);
+
+            float paddleDelay = -0.4f;
+            flap(paddle_main, 0.15f * globalSpeed, 0.45f * globalDegree, false, 2.5f - 0.8f + paddleDelay, -0.1f, swing, speed);
+            flap(arm_left1a, 0.15f * globalSpeed, 0.4f * globalDegree, false, 2.5f - 0.8f + paddleDelay, 0.3f, swing, speed);
+            flap(chest, 0.15f * globalSpeed, 0.4f * globalDegree, false, 2.5f - 1.3f + paddleDelay, 0f, swing, speed);
+            flap(head_connect, 0.15f * globalSpeed, 0.4f * globalDegree, true, 2.5f - 1.3f + paddleDelay, 0f, swing, speed);
+            swing(paddle_main, 0.15f * globalSpeed, 0.2f * globalDegree, true, -0.5f + paddleDelay, -0.2f, swing, speed);
+
+            swing(chest, 0.15f * globalSpeed, 0.6f * globalDegree, false, 2.5f + paddleDelay, -0.2f, swing, speed);
+            swing(head_connect, 0.15f * globalSpeed, 0.6f * globalDegree, true, 2.5f + paddleDelay, -0.2f, swing, speed);
+
+            flap(body_base, 0.15f * globalSpeed, 0.1f * globalDegree, false, 2.5f + paddleDelay, -0.7f, swing, speed);
+            flap(chest, 0.15f * globalSpeed, 0.1f * globalDegree, false, 2.5f + paddleDelay, 0.4f, swing, speed);
+            flap(leg_left1a, 0.15f * globalSpeed, 0.1f * globalDegree, true, 2.5f + paddleDelay, 0.4f, swing, speed);
+            flap(leg_right1a, 0.15f * globalSpeed, 0.1f * globalDegree, true, 2.5f + paddleDelay, 0.4f, swing, speed);
+
+            walk(arm_right1a, 0.15f * globalSpeed, 0.7f * globalDegree, false, 2.5f + paddleDelay, 0.25f, swing, speed);
+            walk(arm_right1b, 0.15f * globalSpeed, 1.0f * globalDegree, true, 2.5f - 0.9f + paddleDelay, -0.2f, swing, speed);
+            walk(arm_right1b, 0.15f * globalSpeed, 0.3f * globalDegree, false, 2.5f + paddleDelay, 0f, swing, speed);
+            swing(arm_right1a, 0.15f * globalSpeed, 0.5f * globalDegree, true, 2.5f + paddleDelay, 0.4f, swing, speed);
+            flap(arm_right1a, 0.15f * globalSpeed, 0.6f * globalDegree, false, 2.5f - 0.8f + paddleDelay, 0f, swing, speed);
+            flap(arm_right1b, 0.15f * globalSpeed, 0.4f * globalDegree, true, 2.5f + paddleDelay, -0.2f, swing, speed);
+            arm_right1a.rotationPointZ += (float) Math.cos((swing + 2.5f + 0.8f + paddleDelay) * 0.15 * globalSpeed) * globalDegree * speed + 0.2f;
+
+            walk(cloth1a, 0.15f * globalSpeed, 0.3f * globalDegree, false, 2.5f + paddleDelay, 0.3f, swing, speed);
+            walk(cloth1b, 0.15f * globalSpeed, 0.3f * globalDegree, false, 2.5f - 1f + paddleDelay, 0.25f, swing, speed);
+
+            flap(ear_left, 0.3f * globalSpeed, 0.1f * globalDegree, false, 2.5f - 1f + paddleDelay, 0f, swing, speed);
+            flap(ear_right, 0.3f * globalSpeed, 0.1f * globalDegree, true, 2.5f - 1f + paddleDelay, 0f, swing, speed);
+
+            body_base.rotationPointZ -= 1 * speed;
+        }
     }
 }
