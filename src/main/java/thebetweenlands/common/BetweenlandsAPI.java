@@ -26,7 +26,7 @@ import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
 import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
-import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
+import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipe;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 
 public class BetweenlandsAPI implements IBetweenlandsAPI {

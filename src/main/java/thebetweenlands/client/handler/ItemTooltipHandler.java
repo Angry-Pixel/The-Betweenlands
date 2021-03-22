@@ -31,7 +31,7 @@ import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.recipe.censer.AbstractCenserRecipe;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
-import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
+import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipe;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
@@ -89,7 +89,7 @@ public class ItemTooltipHandler {
 				}
 			}
 			
-			if(!PestleAndMortarRecipe.getResult(stack).isEmpty()) {
+			if(!PestleAndMortarRecipe.getResult(stack, stack.copy(), true).isEmpty()) {
 				usedInMachines.add(I18n.format("tooltip.bl.recipes.mortar"));
 			}
 

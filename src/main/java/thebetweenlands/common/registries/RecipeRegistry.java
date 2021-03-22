@@ -71,7 +71,6 @@ import thebetweenlands.common.recipe.misc.CrabPotFilterRecipeBubbler;
 import thebetweenlands.common.recipe.misc.CrabPotFilterRecipeSilt;
 import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
 import thebetweenlands.common.recipe.misc.HearthgroveTarringRecipe;
-import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
 import thebetweenlands.common.recipe.misc.RecipeClearBoneWayfinder;
 import thebetweenlands.common.recipe.misc.RecipeGrapplingHookUpgrades;
 import thebetweenlands.common.recipe.misc.RecipeLurkerSkinPouchUpgrades;
@@ -86,6 +85,8 @@ import thebetweenlands.common.recipe.misc.RecipesFishBait;
 import thebetweenlands.common.recipe.misc.RecipesLifeCrystal;
 import thebetweenlands.common.recipe.misc.RecipesPlantTonic;
 import thebetweenlands.common.recipe.misc.SmokingRackRecipe;
+import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipe;
+import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipeAspectrus;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
@@ -537,10 +538,14 @@ public class RecipeRegistry {
 		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.RING_OF_SUMMONING));
 		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.RING_OF_GATHERING));
 		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.CRITTER));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.GEM_SINGER));
 		
 		//Fishing
 		PestleAndMortarRecipe.addRecipe(new ItemStack(ItemRegistry.FISH_BAIT, 1), new ItemStack(ItemRegistry.TINY_SLUDGE_WORM));
 		PestleAndMortarRecipe.addRecipe(new ItemStack(ItemRegistry.FISH_BAIT, 1), new ItemStack(ItemRegistry.TINY_SLUDGE_WORM_HELPER));
+		
+		//Misc
+		PestleAndMortarRecipe.addRecipe(new PestleAndMortarRecipeAspectrus());
 	}
 
 	private static void registerAnimatorRecipes() {

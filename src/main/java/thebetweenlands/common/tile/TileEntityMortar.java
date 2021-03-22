@@ -11,9 +11,10 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
+import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
 import thebetweenlands.common.inventory.container.ContainerMortar;
 import thebetweenlands.common.item.misc.ItemLifeCrystal;
-import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
+import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipe;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -58,44 +59,68 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
             }
             return;
         }
-        ItemStack output = PestleAndMortarRecipe.getResult(inventory.get(0));
-        if (pestleInstalled() && !outputIsFull()) {
-
-            if (isCrystalInstalled() && getStackInSlot(3).getItemDamage() < getStackInSlot(3).getMaxDamage() || manualGrinding) {
-                if ((!output.isEmpty() && inventory.get(2).isEmpty()) || (!output.isEmpty() && inventory.get(2).isItemEqual(output) && inventory.get(2).getCount() + output.getCount() <= output.getMaxStackSize())) {
-                    progress++;
-                    if (progress == 1)
-                        world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundRegistry.GRIND, SoundCategory.BLOCKS, 1F, 1F);
-                    if (progress == 64 || progress == 84) {
-                        world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundEvents.BLOCK_GRASS_BREAK, SoundCategory.BLOCKS, 0.3F, 1F);
-                        world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 0.3F, 1F);
-                    }
-                    if (!inventory.get(1).isEmpty() && !getStackInSlot(1).getTagCompound().getBoolean("active"))
-                        getStackInSlot(1).getTagCompound().setBoolean("active", true);
-                    if (progress > 84) {
-                        if (!inventory.get(0).isEmpty())
-                            if (inventory.get(0).getCount() - 1 <= 0)
-                                inventory.set(0, ItemStack.EMPTY);
-                            else
-                                inventory.get(0).shrink(1);
-                        if (inventory.get(2).isEmpty())
-                            inventory.set(2,output.copy());
-                        else if (inventory.get(2).isItemEqual(output))
-                            inventory.get(2).grow(output.getCount());
-                        inventory.get(1).setItemDamage(inventory.get(1).getItemDamage() + 1);
-                        if (!manualGrinding)
-                            inventory.get(3).setItemDamage(inventory.get(3).getItemDamage() + 1);
-                        progress = 0;
-                        manualGrinding = false;
-                        if (inventory.get(1).getItemDamage() >= inventory.get(1).getMaxDamage()) {
-                            inventory.set(1, ItemStack.EMPTY);
-                            hasPestle = false;
-                        }
-                        if (!inventory.get(1).isEmpty() && getStackInSlot(1).getTagCompound().getBoolean("active"))
-                            getStackInSlot(1).getTagCompound().setBoolean("active", false);
-                        markDirty();
-                    }
-                }
+        
+        boolean validRecipe = false;
+        boolean outputFull = outputIsFull();
+        
+        if (pestleInstalled()) {
+            IPestleAndMortarRecipe recipe = PestleAndMortarRecipe.getRecipe(inventory.get(0), inventory.get(2), false);
+            
+            if(recipe != null) {
+	            ItemStack output = recipe.getOutput(inventory.get(0), inventory.get(2).copy());
+	            boolean replacesOutput = recipe.replacesOutput();
+	            
+	            outputFull &= !replacesOutput;
+	            
+	            if ((isCrystalInstalled() && getStackInSlot(3).getItemDamage() < getStackInSlot(3).getMaxDamage()) || manualGrinding) {
+	                if (!output.isEmpty() && (replacesOutput || inventory.get(2).isEmpty() || (inventory.get(2).isItemEqual(output) && inventory.get(2).getCount() + output.getCount() <= output.getMaxStackSize()))) {
+	                	validRecipe = true;
+	                	
+	                	progress++;
+	                    
+	                    if (progress == 1)
+	                        world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundRegistry.GRIND, SoundCategory.BLOCKS, 1F, 1F);
+	                    
+	                    if (progress == 64 || progress == 84) {
+	                        world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundEvents.BLOCK_GRASS_BREAK, SoundCategory.BLOCKS, 0.3F, 1F);
+	                        world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 0.3F, 1F);
+	                    }
+	                    
+	                    if (!inventory.get(1).isEmpty() && !getStackInSlot(1).getTagCompound().getBoolean("active"))
+	                        getStackInSlot(1).getTagCompound().setBoolean("active", true);
+	                    
+	                    if (progress > 84) {
+	                        if (!inventory.get(0).isEmpty())
+	                            if (inventory.get(0).getCount() - 1 <= 0)
+	                                inventory.set(0, ItemStack.EMPTY);
+	                            else
+	                                inventory.get(0).shrink(1);
+	                        
+	                        if (replacesOutput || inventory.get(2).isEmpty())
+	                            inventory.set(2, output.copy());
+	                        else if (inventory.get(2).isItemEqual(output))
+	                            inventory.get(2).grow(output.getCount());
+	                        
+	                        inventory.get(1).setItemDamage(inventory.get(1).getItemDamage() + 1);
+	                        
+	                        if (!manualGrinding)
+	                            inventory.get(3).setItemDamage(inventory.get(3).getItemDamage() + 1);
+	                        
+	                        progress = 0;
+	                        manualGrinding = false;
+	                        
+	                        if (inventory.get(1).getItemDamage() >= inventory.get(1).getMaxDamage()) {
+	                            inventory.set(1, ItemStack.EMPTY);
+	                            hasPestle = false;
+	                        }
+	                        
+	                        if (!inventory.get(1).isEmpty() && getStackInSlot(1).getTagCompound().getBoolean("active"))
+	                            getStackInSlot(1).getTagCompound().setBoolean("active", false);
+	                        
+	                        markDirty();
+	                    }
+	                }
+	            }
             }
         }
         if (progress > 0)
@@ -107,7 +132,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
             hasPestle = false;
             world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
         }
-        if (getStackInSlot(0).isEmpty() || getStackInSlot(1).isEmpty() || outputIsFull()) {
+        if (!validRecipe || getStackInSlot(0).isEmpty() || getStackInSlot(1).isEmpty() || outputFull) {
             if (!inventory.get(1).isEmpty() && getStackInSlot(1).getTagCompound().getBoolean("active"))
                 getStackInSlot(1).getTagCompound().setBoolean("active", false);
             progress = 0;
