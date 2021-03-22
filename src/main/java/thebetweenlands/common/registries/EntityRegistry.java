@@ -238,7 +238,7 @@ public class EntityRegistry {
 
 		registerEntity(EntityStalker.class, "stalker", 0xE4DCC9, 0xD58888);
 		registerEntity(EntitySwarm.class, "swarm", 0x292B3B, 0xE2D698);
-		registerEntity(EntityGreeblingCoracle.class, "greebling_coracle", 0x142728, 0x7CB2AA);
+		//registerEntity(EntityGreeblingCoracle.class, "greebling_coracle", 0x142728, 0x7CB2AA);
 	}
 
 	private static int id = 0;
