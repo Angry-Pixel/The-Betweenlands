@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.item.ItemStack;
 import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
-import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
+import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipe;
 
 public class CustomPestleAndMortarRecipes extends CustomRecipes<IPestleAndMortarRecipe> {
 	public CustomPestleAndMortarRecipes() {

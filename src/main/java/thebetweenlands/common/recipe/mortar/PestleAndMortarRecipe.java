@@ -1,4 +1,4 @@
-package thebetweenlands.common.recipe.misc;
+package thebetweenlands.common.recipe.mortar;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +10,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class PestleAndMortarRecipe implements IPestleAndMortarRecipe {
     private static final List<IPestleAndMortarRecipe> recipes = new ArrayList<IPestleAndMortarRecipe>();
@@ -33,16 +34,34 @@ public class PestleAndMortarRecipe implements IPestleAndMortarRecipe {
     	recipes.remove(recipe);
     }
 
-    @MethodsReturnNonnullByDefault
-    public static ItemStack getResult(ItemStack input) {
+    public static boolean isOutputUsedInAnyRecipe(ItemStack output) {
+    	 for (IPestleAndMortarRecipe recipe : recipes) {
+             if (recipe.isOutputUsed(output)) {
+                 return true;
+             }
+         }
+    	 return false;
+    }
+    
+    public static ItemStack getResult(ItemStack input, ItemStack output, boolean inputOnly) {
         for (IPestleAndMortarRecipe recipe : recipes) {
-            if (recipe.matchesInput(input)) {
-                return recipe.getOutput(input);
+            if (recipe.matchesInput(input, output, inputOnly)) {
+                return recipe.getOutput(input, output);
             }
         }
         return ItemStack.EMPTY;
     }
 
+    @Nullable
+    public static IPestleAndMortarRecipe getRecipe(ItemStack input, ItemStack output, boolean inputOnly) {
+    	 for (IPestleAndMortarRecipe recipe : recipes) {
+             if (recipe.matchesInput(input, output, inputOnly)) {
+                 return recipe;
+             }
+         }
+    	 return null;
+    }
+    
     public static ItemStack getInput(ItemStack output) {
         for (IPestleAndMortarRecipe recipe : recipes) {
             if (recipe.matchesOutput(output))

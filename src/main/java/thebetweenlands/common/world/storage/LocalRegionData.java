@@ -15,15 +15,15 @@ import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.TheBetweenlands;
 
 public class LocalRegionData {
-	private String id;
+	private LocalRegion region;
 	private NBTTagCompound nbt;
 	private int refCounter;
 	private boolean dirty;
 
 	private final LocalRegionCache cache;
-	
-	public LocalRegionData(LocalRegionCache cache, String id, NBTTagCompound nbt) {
-		this.id = id;
+
+	private LocalRegionData(LocalRegionCache cache, LocalRegion region, NBTTagCompound nbt) {
+		this.region = region;
 		this.nbt = nbt;
 		this.refCounter = 0;
 		this.dirty = false;
@@ -31,11 +31,57 @@ public class LocalRegionData {
 	}
 
 	/**
+	 * Tries to read the region from a file and if it doesn't exist and {@code create} is true a new region is created
+	 * @param cache
+	 * @param dir
+	 * @param region
+	 * @param 
+	 * @return
+	 */
+	@Nullable
+	public static LocalRegionData getOrCreateRegion(LocalRegionCache cache, File dir, LocalRegion region, boolean create) {
+		NBTTagCompound regionNbt = null;
+		File file = new File(dir, region.getFileName() + ".dat");
+		try {
+			regionNbt = cache.getLocalStorageHandler().getSaveHandler().loadFileNbt(file);
+		} catch(Exception ex) {
+			TheBetweenlands.logger.error("Failed loading local region cache", ex);
+			File backup = new File(file.getAbsolutePath() + ".backup");
+			try {
+				FileUtils.copyFile(file, backup);
+				TheBetweenlands.logger.info(String.format("Created a backup of local region cache at %s", backup.getAbsolutePath()));
+			} catch (IOException e) {
+				TheBetweenlands.logger.error("Failed creating backup of local region cache", e);
+			}
+			try {
+				file.delete();
+			} catch(Exception e) {}
+			regionNbt = null;
+		}
+		if(regionNbt == null) {
+			if(!create) {
+				return null;
+			}
+			
+			regionNbt = new NBTTagCompound();
+		}
+		return new LocalRegionData(cache, region, regionNbt);
+	}
+
+	/**
 	 * Returns the region ID
 	 * @return
 	 */
 	public String getID() {
-		return this.id;
+		return this.region.getFileName();
+	}
+	
+	/**
+	 * Returns the region this data belongs to
+	 * @return
+	 */
+	public LocalRegion getRegion() {
+		return this.region;
 	}
 
 	/**
@@ -82,22 +128,25 @@ public class LocalRegionData {
 	 * Removes a shared storage from this region
 	 * @param dir
 	 * @param id
+	 * @return true if something was removed
 	 */
-	public void deleteLocalStorage(File dir, StorageID id) {
+	public boolean deleteLocalStorage(File dir, StorageID id) {
 		if(this.nbt.hasKey(id.getStringID(), Constants.NBT.TAG_COMPOUND)) {
 			this.dirty = true;
 			this.nbt.removeTag(id.getStringID());
 			if(this.nbt.getSize() == 0) {
 				this.deleteRegionFile(dir);
 			}
+			return true;
 		}
+		return false;
 	}
 
 	public void setChunkNBT(ChunkPos chunk, NBTTagCompound nbt) {
 		this.nbt.setTag("ChunkData." + chunk.x + "." + chunk.z, nbt);
 		this.dirty = true;
 	}
-	
+
 	@Nullable
 	public NBTTagCompound getChunkNBT(ChunkPos chunk) {
 		if(this.nbt.hasKey("ChunkData." + chunk.x + "." + chunk.z, Constants.NBT.TAG_COMPOUND)) {
@@ -112,38 +161,6 @@ public class LocalRegionData {
 	 */
 	public boolean isDirty() {
 		return this.dirty;
-	}
-	
-	/**
-	 * Tries to read the region from a file and if it doesn't exist a new region is created
-	 * @param cache
-	 * @param dir
-	 * @param region
-	 * @return
-	 */
-	public static LocalRegionData getOrCreateRegion(LocalRegionCache cache, File dir, LocalRegion region) {
-		NBTTagCompound regionNbt = null;
-		File file = new File(dir, region.getFileName() + ".dat");
-		try {
-			regionNbt = cache.getLocalStorageHandler().getSaveHandler().loadFileNbt(file);
-		} catch(Exception ex) {
-			TheBetweenlands.logger.error("Failed loading local region cache", ex);
-			File backup = new File(file.getAbsolutePath() + ".backup");
-			try {
-				FileUtils.copyFile(file, backup);
-				TheBetweenlands.logger.info(String.format("Created a backup of local region cache at %s", backup.getAbsolutePath()));
-			} catch (IOException e) {
-				TheBetweenlands.logger.error("Failed creating backup of local region cache", e);
-			}
-			try {
-				file.delete();
-			} catch(Exception e) {}
-			regionNbt = null;
-		}
-		if(regionNbt == null) {
-			regionNbt = new NBTTagCompound();
-		}
-		return new LocalRegionData(cache, region.getFileName(), regionNbt);
 	}
 
 	/**
