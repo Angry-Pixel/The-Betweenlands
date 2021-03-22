@@ -234,6 +234,7 @@ import thebetweenlands.common.entity.mobs.EntityVolatileSoul;
 import thebetweenlands.common.entity.mobs.EntityWallLamprey;
 import thebetweenlands.common.entity.mobs.EntityWallLivingRoot;
 import thebetweenlands.common.entity.mobs.EntityWight;
+import thebetweenlands.common.entity.mobs.EntityGreeblingCoracle;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.entity.projectiles.EntityChiromawDroppings;
@@ -661,6 +662,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityChiromawHatchling.class, RenderChiromawHatchling::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityChiromawTame.class, RenderChiromawTame::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGreeblingCorpse.class, RenderGreeblingCorpse::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityGreeblingCoracle.class, RenderGreeblingCoracle::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityStalker.class, RenderStalker::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityResurrection.class, RenderNothing::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFalseXPOrb.class, RenderXPOrb::new);
