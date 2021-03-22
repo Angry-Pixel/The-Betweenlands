@@ -259,6 +259,27 @@
 			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/epicnecromancer_portal_tree.png",
 			"title": "Portal Tree",
 			"author": "EpicNecromancer"
+		},
+		{
+			"sha256": "5EC1EE3ADE1920F2FAAC7DB756624F5F73C47837897F1B668650AF0CEFBCAAA7",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/mightygoat_ambush.png",
+			"title": "Ambush",
+			"author": "MightyGoat",
+			"description": "A termite stalking a clueless firefly, waiting for the moment to strike"
+		},
+		{
+			"sha256": "0D9A2BB24F0EFA3150BB6264793B19E58AA3323B341D290D3F99B7DF89C5FD46",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/firestarplayz_hill_by_the_cragrock_spires.png",
+			"title": "Hill by the Cragrock Spires",
+			"author": "Firestarplayz",
+			"description": "A small island gives you a safe view of the far off Cragrock mountains surrounded by infested sea"
+		},
+		{
+			"sha256": "0F2612806203AF7D8E5B430CCC1755998A455C2512B97419B787649F97089189",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/firestarplayz_stars_of_a_shattered_sky.png",
+			"title": "Stars of a Shattered Sky",
+			"author": "Firestarplayz",
+			"description": "Despite the vile world and horrors that roam it, you can still find beauty among the terrible marshes of your new hope"
 		}
 	]
 }]
