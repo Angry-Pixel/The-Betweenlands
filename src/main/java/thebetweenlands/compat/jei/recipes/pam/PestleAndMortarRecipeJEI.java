@@ -15,7 +15,7 @@ public class PestleAndMortarRecipeJEI implements IRecipeWrapper {
 
     public PestleAndMortarRecipeJEI(IPestleAndMortarRecipe recipe){
         input = recipe.getInputs();
-        output = recipe.getOutput(input);
+        output = recipe.getOutput(input, ItemStack.EMPTY);
     }
 
     @Override

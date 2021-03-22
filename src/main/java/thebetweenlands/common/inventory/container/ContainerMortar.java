@@ -12,6 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.inventory.slot.SlotOutput;
 import thebetweenlands.common.inventory.slot.SlotPestle;
 import thebetweenlands.common.item.misc.ItemLifeCrystal;
+import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipe;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityMortar;
 
@@ -27,7 +28,18 @@ public class ContainerMortar  extends Container {
 
         addSlotToContainer(new Slot(tile, 0, 35, 36));
         addSlotToContainer(new SlotPestle(tile, 1, 79, 36));
-        addSlotToContainer(new SlotOutput(tile, 2, 123, 36, this));
+        addSlotToContainer(new SlotOutput(tile, 2, 123, 36, this) {
+        	@Override
+        	public boolean isItemValid(ItemStack stack) {
+        		return !stack.isEmpty() && PestleAndMortarRecipe.isOutputUsedInAnyRecipe(stack);
+        	}
+        	
+        	@Override
+        	public int getSlotStackLimit() {
+        		//Only for the vials and recipes that also use the output slot
+        		return 1;
+        	}
+        });
         addSlotToContainer(new ContainerAnimator.SlotLifeCrystal(tile, 3, 79, 8));
 
         for (int j = 0; j < 3; j++)
@@ -56,7 +68,7 @@ public class ContainerMortar  extends Container {
                     if (!mergeItemStack(stack1, 1, 2, true))
                         return ItemStack.EMPTY;
                 if (stack1.getItem() != ItemRegistry.PESTLE && stack1.getItem() instanceof ItemLifeCrystal == false)
-                    if (!mergeItemStack(stack1, 0, 1, true))
+                    if (!mergeItemStack(stack1, 2, 3, true) && !mergeItemStack(stack1, 0, 1, true))
                         return ItemStack.EMPTY;
                 if (stack1.getItem() instanceof ItemLifeCrystal)
                     if (!mergeItemStack(stack1, 3, 4, true))

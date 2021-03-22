@@ -203,9 +203,8 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 				motionY *= 1D;
 				motionZ *= 0.8999999761581421D;
 
-				if (getAttackTarget() == null) {
+				if (getAttackTarget() == null)
 					motionY -= 0.005D;
-				}
 			} else {
 				super.travel(strafe, up, forward);
 			}

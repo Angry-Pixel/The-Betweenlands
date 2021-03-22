@@ -40,9 +40,11 @@ public final class WorldEventHandler {
 		if(cap != null) {
 			cap.loadChunk(event.getChunk());
 			
-			IChunkStorage chunkStorage = cap.getChunkStorage(event.getChunk());
-			if(chunkStorage != null) {
-				cap.getLocalStorageHandler().loadDeferredOperations(chunkStorage);
+			if(!event.getWorld().isRemote) {
+				IChunkStorage chunkStorage = cap.getChunkStorage(event.getChunk());
+				if(chunkStorage != null) {
+					cap.getLocalStorageHandler().loadDeferredOperations(chunkStorage);
+				}
 			}
 		}
 	}

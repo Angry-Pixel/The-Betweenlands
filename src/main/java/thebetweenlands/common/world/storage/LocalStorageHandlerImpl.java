@@ -14,6 +14,9 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Predicate;
 
+import gnu.trove.iterator.TObjectLongIterator;
+import gnu.trove.map.TObjectLongMap;
+import gnu.trove.map.hash.TObjectLongHashMap;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -44,9 +47,11 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	private final World world;
 	private final File localStorageDir;
 
-	private final Map<StorageID, ILocalStorage> localStorage = new HashMap<StorageID, ILocalStorage>();
+	private final Map<StorageID, ILocalStorage> localStorage = new HashMap<>();
 	private final List<ILocalStorage> tickableLocalStorage = new ArrayList<>();
 	private final List<ILocalStorage> pendingUnreferencedStorages = new ArrayList<>();
+
+	private final TObjectLongMap<LocalRegionData> pendingUnreferencedRegions = new TObjectLongHashMap<>();
 
 	private final LocalRegionCache regionCache;
 
@@ -143,13 +148,26 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 				}
 			}
 
+			boolean wasSavedToRegion = false;
+
 			if(!this.world.isRemote) {
-				this.deleteLocalStorageFile(storage);
+				wasSavedToRegion = this.deleteLocalStorageFileInternal(storage);
 			}
 
 			storage.onUnloaded();
 
 			storage.onRemoved();
+
+			//A region only has a reference from a storage if that storage was new and saved to that
+			//region or if it was loaded from that region. Only in those cases the region reference
+			//counter needs to be decremented and the region unloaded if no longer referenced.
+			if(wasSavedToRegion && !this.world.isRemote) {
+				LocalRegion region = storage.getRegion();
+
+				if(region != null) {
+					this.decrRegionRef(this.regionCache.getCachedRegion(region), null, true);
+				}
+			}
 
 			return true;
 		}
@@ -213,26 +231,68 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 
 	@Override
 	public void deleteLocalStorageFile(ILocalStorage storage) {
+		this.deleteLocalStorageFileInternal(storage);
+	}
+
+	private boolean deleteLocalStorageFileInternal(ILocalStorage storage) {
 		if(storage.getRegion() == null) {
 			File file = new File(this.getLocalStorageDirectory(), storage.getID().getStringID() + ".dat");
 			this.saveHandler.queueLocalStorage(file, null);
 		} else {
-			LocalRegionData regionData = this.regionCache.getOrCreateRegion(storage.getRegion());
-			if(regionData != null) {
-				regionData.deleteLocalStorage(this.regionCache.getDir(), storage.getID());
+			LocalRegionData data = this.regionCache.getOrCreateRegion(storage.getRegion(), false);
+
+			if(data != null) {
+				this.incrRegionRef(data);
+
+				try {
+					return data.deleteLocalStorage(this.regionCache.getDir(), storage.getID());
+				} finally {
+					this.decrRegionRef(data, null, true);
+				}
 			}
 		}
+
+		return false;
 	}
 
 	@Override
 	public void saveLocalStorageFile(ILocalStorage storage) {
+		this.saveLocalStorageFile(storage, false);
+	}
+
+	private void saveLocalStorageFile(ILocalStorage storage, boolean skipRegionUnloading) {
 		NBTTagCompound nbt = this.saveLocalStorageToNBT(new NBTTagCompound(), storage);
 		if(storage.getRegion() == null) {
 			File file = new File(this.getLocalStorageDirectory(), storage.getID().getStringID() + ".dat");
 			this.saveHandler.queueLocalStorage(file, nbt);
 		} else {
-			LocalRegionData region = this.regionCache.getOrCreateRegion(storage.getRegion());
-			region.setLocalStorageNBT(storage.getID(), nbt);
+			LocalRegion region = storage.getRegion();
+			LocalRegionData data = this.regionCache.getOrCreateRegion(region);
+
+			boolean isLoaded = !storage.getLoadedReferences().isEmpty() && this.getLocalStorage(storage.getID()) != null;
+			boolean isFromRegion = data.getLocalStorageNBT(storage.getID()) != null;
+			boolean isNewStorage = isLoaded && !isFromRegion;
+
+			this.incrRegionRef(data);
+
+			try {
+				data.setLocalStorageNBT(storage.getID(), nbt);
+			} finally {
+				if(skipRegionUnloading) {
+					this.decrRegionRef(data, null, false);
+				} else {
+					//If the region is new, i.e. was properly added but not loaded from a region, then
+					//the region need not be unloaded or the region reference counter need not be decreased,
+					//because we can be sure that this will happen later on.
+					//In all other cases this should normally not cause the region to be unloaded unless the local storage
+					//is a dangling instance or the region was not loaded properly, because when loaded properly the region
+					//should also be loaded and be referenced accordingly. The only safe way to proceed if the region was
+					//not loaded or not referenced properly is to immediately unload the region again to prevent a dangling region.
+					if(!isNewStorage && this.decrRegionRef(data, null, true)) {
+						TheBetweenlands.logger.warn(String.format("Saving local storage with ID %s, but its region %s was not loaded. This should not happen...", storage.getID().getStringID(), data.getID()));
+					}
+				}
+			}
 		}
 	}
 
@@ -244,9 +304,10 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 				if(storage != null) {
 					this.addLocalStorageInternal(storage, false);
 
-					if(storage.getRegion() != null) {
-						LocalRegionData data = this.regionCache.getOrCreateRegion(reference.getRegion());
-						data.incrRefCounter();
+					LocalRegion region = storage.getRegion();
+					if(region != null) {
+						LocalRegionData data = this.regionCache.getOrCreateRegion(region);
+						this.incrRegionRef(data);
 					}
 				}
 				return storage;
@@ -306,12 +367,40 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 		return null;
 	}
 
+	private void incrRegionRef(@Nullable LocalRegionData data) {
+		if(data != null) {
+			data.incrRefCounter();
+
+			if(data.hasReferences()) {
+				this.pendingUnreferencedRegions.remove(data);
+			}
+		}
+	}
+
+	private boolean decrRegionRef(@Nullable LocalRegionData data, @Nullable StorageID checkID, boolean saveAndUnload) {
+		if(data != null && (checkID == null || data.getLocalStorageNBT(checkID) != null)) {
+			data.decrRefCounter();
+
+			if(!data.hasReferences()) {
+				if(saveAndUnload) {
+					this.pendingUnreferencedRegions.put(data, this.world.getTotalWorldTime());
+				}
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 	@Override
 	public boolean unloadLocalStorage(ILocalStorage storage) {
 		if(this.localStorage.containsKey(storage.getID())) {
 			//Only save if dirty
 			if(!this.world.isRemote && storage.isDirty()) {
-				this.saveLocalStorageFile(storage);
+				//Skip region unloading because that'll be handled after
+				//unloading the local storage
+				this.saveLocalStorageFile(storage, true);
 				storage.setDirty(false);
 			}
 
@@ -335,15 +424,15 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 
 			storage.onUnloaded();
 
-			if(!this.world.isRemote && storage.getRegion() != null) {
-				LocalRegionData data = this.regionCache.getOrCreateRegion(storage.getRegion());
-				data.decrRefCounter();
+			if(!this.world.isRemote) {
+				LocalRegion region = storage.getRegion();
 
-				if(!data.hasReferences()) {
-					if(data.isDirty()) {
-						data.saveRegion(this.regionCache.getDir());
-					}
-					this.regionCache.removeRegion(storage.getRegion());
+				if(region != null) {
+					//A region only has a reference from a storage if that storage was new and saved to that
+					//region or if it was loaded from that region. Only in those cases the region reference
+					//counter needs to be decremented and the region unloaded if no longer referenced, hence
+					//decrRegionRef needs to check if the region data contains that storage.
+					this.decrRegionRef(this.regionCache.getCachedRegion(region), storage.getID(), true);
 				}
 			}
 
@@ -390,6 +479,23 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 					this.unloadLocalStorage(localStorage);
 				}
 			}
+
+			TObjectLongIterator<LocalRegionData> pendingUnreferencedRegionsIT = this.pendingUnreferencedRegions.iterator();
+			while(pendingUnreferencedRegionsIT.hasNext()) {
+				pendingUnreferencedRegionsIT.advance();
+
+				if(this.world.getTotalWorldTime() - pendingUnreferencedRegionsIT.value() > 20) {
+					LocalRegionData data = pendingUnreferencedRegionsIT.key();
+
+					pendingUnreferencedRegionsIT.remove();
+
+					if(data.isDirty()) {
+						data.saveRegion(this.regionCache.getDir());
+					}
+
+					this.regionCache.removeRegion(data.getRegion());
+				}
+			}
 		}
 		this.pendingUnreferencedStorages.clear();
 	}
@@ -434,63 +540,79 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 			return;
 		}
 
-		LocalRegionData region = this.regionCache.getOrCreateRegion(LocalRegion.getFromBlockPos(chunk.x * 16, chunk.z * 16));
+		LocalRegion region = LocalRegion.getFromBlockPos(chunk.x * 16, chunk.z * 16);
+		LocalRegionData data = this.regionCache.getOrCreateRegion(region);
 
-		NBTTagCompound chunkNbt = region.getChunkNBT(chunk);
-		if(chunkNbt == null) {
-			chunkNbt = new NBTTagCompound();
+		this.incrRegionRef(data);
+
+		try {
+			NBTTagCompound chunkNbt = data.getChunkNBT(chunk);
+			if(chunkNbt == null) {
+				chunkNbt = new NBTTagCompound();
+			}
+
+			NBTTagList operationsNbt = chunkNbt.getTagList("DeferredOperations", Constants.NBT.TAG_COMPOUND);
+
+			ResourceLocation type = StorageRegistry.getDeferredOperationId(operation.getClass());
+			if (type == null) {
+				throw new RuntimeException("Deferred storage operation type not mapped: " + operation);
+			}
+
+			NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setString("type", type.toString());
+			nbt.setTag("data", operation.writeToNBT(new NBTTagCompound()));
+
+			operationsNbt.appendTag(nbt);
+			chunkNbt.setTag("DeferredOperations", operationsNbt);
+
+			data.setChunkNBT(chunk, chunkNbt);
+		} finally {
+			this.decrRegionRef(data, null, true);
 		}
-
-		NBTTagList operationsNbt = chunkNbt.getTagList("DeferredOperations", Constants.NBT.TAG_COMPOUND);
-
-		ResourceLocation type = StorageRegistry.getDeferredOperationId(operation.getClass());
-		if (type == null) {
-			throw new RuntimeException("Deferred storage operation type not mapped: " + operation);
-		}
-
-		NBTTagCompound data = new NBTTagCompound();
-		data.setString("type", type.toString());
-		data.setTag("data", operation.writeToNBT(new NBTTagCompound()));
-
-		operationsNbt.appendTag(data);
-		chunkNbt.setTag("DeferredOperations", operationsNbt);
-
-		region.setChunkNBT(chunk, chunkNbt);
 	}
 
 	@Override
 	public void loadDeferredOperations(IChunkStorage storage) {
 		ChunkPos chunk = storage.getChunk().getPos();
 
-		LocalRegionData region = this.regionCache.getOrCreateRegion(LocalRegion.getFromBlockPos(chunk.x * 16, chunk.z * 16));
+		LocalRegion region = LocalRegion.getFromBlockPos(chunk.x * 16, chunk.z * 16);
+		LocalRegionData data = this.regionCache.getOrCreateRegion(region, false);
 
-		NBTTagCompound chunkNbt = region.getChunkNBT(chunk);
+		if(data != null) {
+			this.incrRegionRef(data);
 
-		if(chunkNbt != null && chunkNbt.hasKey("DeferredOperations", Constants.NBT.TAG_LIST)) {
-			NBTTagList operationsNbt = chunkNbt.getTagList("DeferredOperations", Constants.NBT.TAG_COMPOUND);
+			try {
+				NBTTagCompound chunkNbt = data.getChunkNBT(chunk);
 
-			for(int i = 0; i < operationsNbt.tagCount(); i++) {
-				NBTTagCompound data = operationsNbt.getCompoundTagAt(i);
+				if(chunkNbt != null && chunkNbt.hasKey("DeferredOperations", Constants.NBT.TAG_LIST)) {
+					NBTTagList operationsNbt = chunkNbt.getTagList("DeferredOperations", Constants.NBT.TAG_COMPOUND);
 
-				ResourceLocation type = new ResourceLocation(data.getString("type"));
+					for(int i = 0; i < operationsNbt.tagCount(); i++) {
+						NBTTagCompound nbt = operationsNbt.getCompoundTagAt(i);
 
-				Supplier<? extends IDeferredStorageOperation> factory = StorageRegistry.getDeferredOperationFactory(type);
-				if (factory == null) {
-					TheBetweenlands.logger.error("Deferred storage operation type not mapped: " + type + ". Skipping...");
-					continue;
+						ResourceLocation type = new ResourceLocation(nbt.getString("type"));
+
+						Supplier<? extends IDeferredStorageOperation> factory = StorageRegistry.getDeferredOperationFactory(type);
+						if (factory == null) {
+							TheBetweenlands.logger.error("Deferred storage operation type not mapped: " + type + ". Skipping...");
+							continue;
+						}
+
+						IDeferredStorageOperation operation = factory.get();
+
+						operation.readFromNBT(nbt.getCompoundTag("data"));
+
+						operation.apply(storage);
+					}
+
+					//Clear deferred operations
+					chunkNbt.removeTag("DeferredOperations");
+
+					data.setChunkNBT(chunk, chunkNbt);
 				}
-
-				IDeferredStorageOperation operation = factory.get();
-
-				operation.readFromNBT(data.getCompoundTag("data"));
-
-				operation.apply(storage);
+			} finally {
+				this.decrRegionRef(data, null, true);
 			}
-
-			//Clear deferred operations
-			chunkNbt.removeTag("DeferredOperations");
-
-			region.setChunkNBT(chunk, chunkNbt);
 		}
 	}
 
@@ -509,7 +631,17 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 			}
 		}
 
-		//Save regional cache
+		//Save and unload all unreferenced regions
+		for(LocalRegionData data : this.pendingUnreferencedRegions.keySet()) {
+			if(data.isDirty()) {
+				data.saveRegion(this.regionCache.getDir());
+			}
+
+			this.regionCache.removeRegion(data.getRegion());
+		}
+		this.pendingUnreferencedRegions.clear();
+
+		//Save rest of regional cache
 		this.regionCache.saveAllRegions();
 	}
 }
