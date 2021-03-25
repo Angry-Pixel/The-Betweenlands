@@ -34,7 +34,7 @@ public class TestItemChimp extends Item {
 			gen.generate(worldIn, itemRand, pos.up());
 		*/
 				WorldGenUnderwaterRuins ruins = new WorldGenUnderwaterRuins();
-				ruins.generate(worldIn, itemRand, pos);
+				ruins.generate(worldIn, itemRand, pos.up());
 		/*
 			WorldGenDruidCircle worldGenDruidCircle = new WorldGenDruidCircle();
 			worldGenDruidCircle.generateStructure(worldIn, itemRand, pos.up());

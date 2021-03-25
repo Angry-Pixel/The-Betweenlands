@@ -1,7 +1,10 @@
 package thebetweenlands.common.world.gen.feature.structure;
 
-import net.minecraft.block.BlockStairs;
+import java.util.Random;
+import java.util.UUID;
+
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.api.storage.LocalRegion;
@@ -11,13 +14,9 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.world.gen.feature.WorldGenHelper;
-import thebetweenlands.common.world.gen.feature.WorldGenHelper.EnumRotationSequence;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationStorage;
-
-import java.util.Random;
-import java.util.UUID;
 
 public class WorldGenUnderwaterRuins extends WorldGenHelper {
 
@@ -184,26 +183,26 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 
 	//generate some arches
 	//FIXME: NOT GENERATING
-	private boolean structureArch(World world, Random rand, BlockPos position) {
-		if (rand.nextBoolean()) buildArch(world, rand, position, position.add(0, 1, -3)); //north
-		if (rand.nextBoolean()) buildArch(world, rand, position, position.add(3, 1, 0)); //east
-		if (rand.nextBoolean()) buildArch(world, rand, position, position.add(0, 1, 3)); //south
-		if (rand.nextBoolean()) buildArch(world, rand, position, position.add(-3, 1, 0)); //west
+	private boolean structureArch(World world, Random rand, BlockPos pos) {
+		if (rand.nextBoolean()) buildArch(world, rand, pos.add(1, 0, 1), EnumFacing.NORTH); //north
+		if (rand.nextBoolean()) buildArch(world, rand, pos.add(1, 0, 0), EnumFacing.EAST); //east
+		if (rand.nextBoolean()) buildArch(world, rand, pos, EnumFacing.SOUTH); //south
+		if (rand.nextBoolean()) buildArch(world, rand, pos.add(0, 0, 1), EnumFacing.WEST); //west
 
 		return true;
 	}
 
-	private void buildArch(World world, Random rand, BlockPos root, BlockPos pos) {
-		int direction = rand.nextInt(4);
-		int x = root.getX();
-		int y = root.getY();
-		int z = root.getZ();
+	private void buildArch(World world, Random rand, BlockPos pos, EnumFacing directionIn) {
+		int direction = directionIn.getHorizontalIndex();
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
 
-		rotatedCubeVolume(world, x, y, z, pos.getX(), pos.getY(), pos.getZ(), getBrickGrade(rand), 1, 3, 1, direction);
-		rotatedCubeVolume(world, x, y, z, pos.getX(), pos.getY() + 4, pos.getZ(), getStateFromRotation(0, direction, cragrockBrickStairs, EnumRotationSequence.STAIR), 1, 1, 1, direction);
-		rotatedCubeVolume(world, x, y, z, pos.getX(), pos.getY() + 4, pos.getZ() + 1, getStateFromRotation(0, direction, cragrockBrickStairs.withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP), EnumRotationSequence.STAIR), 1, 1, 1, direction);
-		rotatedCubeVolume(world, x, y, z, pos.getX(), pos.getY() + 5, pos.getZ() + 1, getStateFromRotation(0, direction, cragrockBrickStairs, EnumRotationSequence.STAIR), 1, 1, 1, direction);
-		rotatedCubeVolume(world, x, y, z, pos.getX(), pos.getY() + 5, pos.getZ() + 2, getStateFromRotation(0, direction, cragrockBrickStairs.withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP), EnumRotationSequence.STAIR), 1, 1, 1, direction);
+		rotatedCubeVolume(world, x, y, z, 0, 0, -3, getBrickGrade(rand), 1, 4, 1, direction);
+		rotatedCubeVolume(world, x, y, z, 0, 4, -3, getStateFromRotation(3, direction, cragrockBrickStairs, EnumRotationSequence.STAIR), 1, 1, 1, direction);
+		rotatedCubeVolume(world, x, y, z, 0, 4, -2, getStateFromRotation(1, direction, cragrockBrickStairs, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
+		rotatedCubeVolume(world, x, y, z, 0, 5, -2, getStateFromRotation(3, direction, cragrockBrickStairs, EnumRotationSequence.STAIR), 1, 1, 1, direction);
+		rotatedCubeVolume(world, x, y, z, 0, 5, -1, getStateFromRotation(1, direction, cragrockBrickStairs, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
 	}
 
 	//generate a shelter
