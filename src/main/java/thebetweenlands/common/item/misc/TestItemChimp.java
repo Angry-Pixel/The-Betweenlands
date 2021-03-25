@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.mobs.EntityRockSnot;
-import thebetweenlands.common.world.gen.feature.WorldGenUnderwaterRuins;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenUnderwaterRuins;
 
 
 //MINE!!
