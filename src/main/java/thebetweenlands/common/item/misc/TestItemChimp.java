@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.mobs.EntityRockSnot;
+import thebetweenlands.common.world.gen.feature.WorldGenUnderwaterRuins;
 
 
 //MINE!!
@@ -27,11 +28,13 @@ public class TestItemChimp extends Item {
 				TileEntityDugSoil te = (TileEntityDugSoil) worldIn.getTileEntity(pos);
 				te.setDecay(20);
 			}
-		/*	
+		/*
 		/*
 			WorldGenTarPoolDungeon gen = new WorldGenTarPoolDungeon();
 			gen.generate(worldIn, itemRand, pos.up());
 		*/
+				WorldGenUnderwaterRuins ruins = new WorldGenUnderwaterRuins();
+				ruins.generate(worldIn, itemRand, pos);
 		/*
 			WorldGenDruidCircle worldGenDruidCircle = new WorldGenDruidCircle();
 			worldGenDruidCircle.generateStructure(worldIn, itemRand, pos.up());
@@ -190,9 +193,9 @@ public class TestItemChimp extends Item {
 				WorldGenChiromawNest nest = new WorldGenChiromawNest();
 				nest .generate(worldIn, itemRand, pos.up());
 			*/	
-				EntityRockSnot snot = new EntityRockSnot(worldIn);
-				snot.setPosition(pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F);
-				worldIn.spawnEntity(snot);
+//				EntityRockSnot snot = new EntityRockSnot(worldIn);
+//				snot.setPosition(pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F);
+//				worldIn.spawnEntity(snot);
 			
 				/*	EntityAnimalBurrow burrow = new EntityAnimalBurrow(worldIn);
 				burrow.setPosition(pos.getX() + 0.5F, pos.getY() + 0.25F, pos.getZ() + 0.5F);
