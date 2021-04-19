@@ -4,8 +4,10 @@ import java.util.Random;
 import java.util.UUID;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
@@ -13,6 +15,8 @@ import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityLootPot;
+import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
+import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 import thebetweenlands.common.world.gen.feature.WorldGenHelper;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
@@ -38,9 +42,20 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 		LocationStorage locationStorage = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(position), "underwater_ruins", EnumLocationType.RUINS);
 
-		boolean generated;
+		/*
+		 * 1. Check that we are placing under sufficient amount of water as well as surface. (test)
+		 * 2. Generation (done)
+		 * 3. Decorate with plants
+		 * 4. LocationStorage placement
+		 *
+		 * 4a. WorldStorage (done), x (pos.getX), y (pos.getY), z (pos.getZ), offsetX 0, offsetY 0 , offsetZ 0, width (X), height (Y), depth (Z), Direction
+		 * 4b. Grow or Expand is for resizing the box. Dynamic size or Static size?
+		 * 4c. Direction isn't randomly determined. Find out a way to make use of it
+		 */
 
-		switch (rand.nextInt(4)) {
+		//Pick a random feature
+		boolean generated;
+		switch (rand.nextInt(5)) {
 			case 1:
 				generated = structureArch(world, rand, position);
 				break;
@@ -49,6 +64,9 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 				break;
 			case 3:
 				generated = structureRing(world, rand, position);
+				break;
+			case 4:
+				generated = structureShrine(world, rand, position);
 				break;
 			case 0:
 			default:
@@ -61,10 +79,12 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 
 	//generate a ring with 4 corner pillars
 	private boolean structureRing(World world, Random rand, BlockPos position) {
-		//NOTE: Ring size is 3, 5, 7. Generate 2-7, add 1 if even number, ring size 7 has a middle pillar
-		int ringsize = rand.nextInt(6) + 2; // 0, 1, 2, 3, 4, 5 -> 2, 3, 4, 5, 6, 7
-		ringsize = ringsize % 2 == 0 ? ringsize + 1 : ringsize;
-		int center = (ringsize - 1) / 2;
+		//NOTE: Ring size is 3, 5, 7. Generate 2-7, ring size 7 has a middle pillar
+		int ringsize = MathHelper.clamp(rand.nextInt(6) + 2, 4, 7); // 0, 1, 2, 3, 4, 5 -> 2, 3, 4, 5, 6, 7
+		int center = ringsize / 2;
+		int pillarheight = ringsize + rand.nextInt(3); // + 0, 1, 2
+
+		checkValidSpace(world, position.getX(), position.getY(), position.getZ(), ringsize, pillarheight + 1, ringsize);
 
 		//floor
 		for (int fx = -center; fx <= center; fx++) {
@@ -94,8 +114,6 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 					}
 				} else {
 					//pillar
-					int pillarbase = ringsize;
-					int pillarheight = pillarbase + rand.nextInt(3); // + 0, 1, 2
 					buildPillar(world, rand, new BlockPos(position.getX() + fx, position.getY() + 1, position.getZ() + fz), pillarheight);
 				}
 
@@ -120,8 +138,9 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 	}
 
 	//generate a pillar ring
-	//FIXME: Radius too small. Investigate.
 	private boolean structurePillars(World world, Random rand, BlockPos position) {
+		checkValidSpace(world, position.getX(), position.getY(), position.getZ(), 7, 9, 7);
+
 		//7x7 grid, 5x5 grid of tiles
 		int basepillar = 3; //max height 8
 
@@ -143,27 +162,19 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 		position.add(0, 1, 0);
 
 		//north
-		buildPillar2(world, rand, position.add(-1, 0, -3), rand.nextInt(6) + basepillar);
 		buildPillar2(world, rand, position.add(0, 0, -3), rand.nextInt(6) + basepillar);
-		buildPillar2(world, rand, position.add(1, 0, -3), rand.nextInt(6) + basepillar);
 		//ne
 		buildPillar2(world, rand, position.add(2, 0, -2), rand.nextInt(6) + basepillar);
 		//east
-		buildPillar2(world, rand, position.add(3, 0, -1), rand.nextInt(6) + basepillar);
 		buildPillar2(world, rand, position.add(3, 0, 0), rand.nextInt(6) + basepillar);
-		buildPillar2(world, rand, position.add(3, 0, 1), rand.nextInt(6) + basepillar);
 		//se
 		buildPillar2(world, rand, position.add(2, 0, 2), rand.nextInt(6) + basepillar);
 		//south
-		buildPillar2(world, rand, position.add(1, 0, 3), rand.nextInt(6) + basepillar);
 		buildPillar2(world, rand, position.add(0, 0, 3), rand.nextInt(6) + basepillar);
-		buildPillar2(world, rand, position.add(-1, 0, 3), rand.nextInt(6) + basepillar);
 		//sw
 		buildPillar2(world, rand, position.add(-2, 0, 2), rand.nextInt(6) + basepillar);
 		//west
-		buildPillar2(world, rand, position.add(-3, 0, 1), rand.nextInt(6) + basepillar);
 		buildPillar2(world, rand, position.add(-3, 0, 0), rand.nextInt(6) + basepillar);
-		buildPillar2(world, rand, position.add(-3, 0, -1), rand.nextInt(6) + basepillar);
 		//nw
 		buildPillar2(world, rand, position.add(-2, 0, -2), rand.nextInt(6) + basepillar);
 
@@ -177,13 +188,14 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 		}
 		//put a pot on top
 		if (rand.nextInt(4) == 0) {
-			setLootPot(world, rand, new BlockPos(pos.getX(), pos.getY() + height + 2, pos.getZ()));
+			setLootPot(world, rand, new BlockPos(pos.getX(), pos.getY() + height + 1, pos.getZ()));
 		}
 	}
 
 	//generate some arches
-	//FIXME: NOT GENERATING
 	private boolean structureArch(World world, Random rand, BlockPos pos) {
+		checkValidSpace(world, pos.getX(), pos.getY(), pos.getZ(), 7, 7, 7);
+
 		if (rand.nextBoolean()) buildArch(world, rand, pos.add(1, 0, 1), EnumFacing.NORTH); //north
 		if (rand.nextBoolean()) buildArch(world, rand, pos.add(1, 0, 0), EnumFacing.EAST); //east
 		if (rand.nextBoolean()) buildArch(world, rand, pos, EnumFacing.SOUTH); //south
@@ -206,17 +218,20 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 	}
 
 	//generate a shelter
-	//TODO: Maths seems to be not ok. Spice it up, too.
+	//TODO: Pretty sure it did generate, but check that basements do generate.
 	private boolean structureShelter(World world, Random random, BlockPos pos) {
 		int length = (random.nextInt(3) + 7) / 2;
 		int width = (random.nextInt(3) + 7) / 2;
+		boolean basement = random.nextInt(5) == 0;
+
+		checkValidSpace(world, pos.getX(), pos.getY(), pos.getZ(), length * 2, 5, width * 2);
 
 		for (int x = -length; x <= length; x++) {
 			for (int z = -width; z <= width; z++) {
 				world.setBlockState(pos.add(x, 0, z), getTileGrade(random), 2 | 16);
 
 				//build wall
-				if (Math.abs(x) == 3 || Math.abs(z) == 3) {
+				if (Math.abs(x) == length || Math.abs(z) == width) {
 					int height = random.nextInt(3) + 2;
 					for (int y = 0; y <= height; y++) {
 						world.setBlockState(pos.add(x, y + 1, z), getBrickGrade(random), 2 | 16);
@@ -225,6 +240,141 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 					//fill with pots
 					if (random.nextInt(10) == 0) {
 						setLootPot(world, random, pos.add(0, 1, 0));
+					}
+				}
+
+				//basement
+				if (basement) {
+					for (int y = -1; y >= -3; y--) {
+
+						if (Math.abs(x) == length || Math.abs(z) == width) { //underground wall
+							world.setBlockState(pos.add(x, y, z), getBrickGrade(random), 2 | 16);
+						} else if (y == -3) { //floor
+							world.setBlockState(pos.add(x, y, z), getTileGrade(random), 2 | 16);
+						} else { //clear, make it water
+							world.setBlockState(pos.add(x, y, z), BlockRegistry.SWAMP_WATER.getDefaultState());
+						}
+
+						//pots
+						if ((Math.abs(x) != length || Math.abs(z) != width) && y == -2) {
+							if (random.nextInt(3) == 0) {
+								setLootPot(world, random, pos.add(x, y, z));
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
+	//generate a large ring of pillars with a small shrine. Spawner?
+	private boolean structureShrine(World world, Random random, BlockPos pos) {
+		int basepillar = 5;
+
+		checkValidSpace(world, pos.getX(), pos.getY(), pos.getZ(), 10, basepillar + 5, 10);
+
+		//make floor
+		for (int fx = -4; fx <= 4; fx++) {
+			for (int fz = -4; fz <= 4; fz++) {
+				if (random.nextBoolean()) {
+					world.setBlockState(pos.add(fx, 0, fz), getTileGrade(random), 2 | 16);
+				}
+			}
+		}
+
+		//make pillar ring
+		//n
+		buildPillar3(world, random, pos.add(-2 , 0, -5), random.nextInt(4) + basepillar);
+		buildPillar3(world, random, pos.add(0, 0, -5), random.nextInt(4) + basepillar);
+		buildPillar3(world, random, pos.add(2, 0, -5), random.nextInt(4) + basepillar);
+		//e
+		buildPillar3(world, random, pos.add(-5, 0, -2), random.nextInt(4) + basepillar);
+		buildPillar3(world, random, pos.add(-5, 0, 0), random.nextInt(4) + basepillar);
+		buildPillar3(world, random, pos.add(-5, 0, 2), random.nextInt(4) + basepillar);
+		//s
+		buildPillar3(world, random, pos.add(-2 , 0, 5), random.nextInt(4) + basepillar);
+		buildPillar3(world, random, pos.add(0, 0, 5), random.nextInt(4) + basepillar);
+		buildPillar3(world, random, pos.add(2, 0, 5), random.nextInt(4) + basepillar);
+		//w
+		buildPillar3(world, random, pos.add(5, 0, -2), random.nextInt(4) + basepillar);
+		buildPillar3(world, random, pos.add(5, 0, 0), random.nextInt(4) + basepillar);
+		buildPillar3(world, random, pos.add(5, 0, 2), random.nextInt(4) + basepillar);
+		//corners
+		buildPillar3(world, random, pos.add(-4, 0, -4), random.nextInt(4) + basepillar);
+		buildPillar3(world, random, pos.add(4, 0, -4), random.nextInt(4) + basepillar);
+		buildPillar3(world, random, pos.add(-4, 0, 4), random.nextInt(4) + basepillar);
+		buildPillar3(world, random, pos.add(4, 0, 4), random.nextInt(4) + basepillar);
+
+		//shrine
+		for (int sx = -2; sx <= 2; sx++) {
+			for (int sz = -2; sz <= 2; sz++) {
+				for (int sy = 1; sy <= 5; sy++) {
+					if ((Math.abs(sx) != 2 || Math.abs(sz) != 2) && sy == 1) {
+						world.setBlockState(pos.add(sx, sy, sz), getTileGrade(random), 2 | 16);
+					}
+
+					if ((Math.abs(sx) == 2 && Math.abs(sz) == 2) && sy <= 3) {
+						world.setBlockState(pos.add(sx, sy, sz), getBrickGrade(random), 2 | 16);
+					}
+
+					if (!(Math.abs(sx) == 2 && Math.abs(sz) == 2) && sy == 4) {
+						if (Math.abs(sx) == 2 || Math.abs(sz) == 2) {
+							world.setBlockState(pos.add(sx, sy, sz), getBrickGrade(random), 2 | 16);
+						}
+					}
+
+					if (((Math.abs(sx) == 2 && Math.abs(sz) == 0) || (Math.abs(sx) == 0 && Math.abs(sz) == 2)) && sy == 5) {
+						world.setBlockState(pos.add(sx, sy, sz), getBrickGrade(random), 2 | 16);
+					}
+
+					if (sx == 0 && sz == 0 && sy == 2) {
+						BlockPos spawnerpos = pos.add(sx, sy, sz);
+						world.setBlockState(spawnerpos, BlockRegistry.MOB_SPAWNER.getDefaultState());
+						TileEntity te = world.getTileEntity(spawnerpos);
+						if (te instanceof TileEntityMobSpawnerBetweenlands) {
+							MobSpawnerLogicBetweenlands logic = ((TileEntityMobSpawnerBetweenlands)te).getSpawnerLogic();
+							logic.setNextEntityName("thebetweenlands:angler").setCheckRange(32.0D).setSpawnRange(6).setSpawnInAir(false/*TODO: is water "air"?*/).setMaxEntities(1 + world.rand.nextInt(3));
+						}
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
+	private void buildPillar3(World world, Random rand, BlockPos pos, int height) {
+		for (int y = 0; y <= height; y++) {
+			world.setBlockState(pos.add(0, y, 0), getBrickGrade(rand), 2 | 16);
+		}
+		if (rand.nextInt(4) == 0) {
+			setLootPot(world, rand, pos.add(0, height + 1, 0));
+		}
+	}
+
+	/**
+	 * @param world World
+	 * @param posX start position x
+	 * @param posY start position y
+	 * @param posZ start position z
+	 * @param width x size
+	 * @param height y size
+	 * @param depth z size
+	 */
+	private boolean checkValidSpace(World world, int posX, int posY, int posZ, int width, int height, int depth) {
+		int x = width / 2;
+		int z = depth / 2;
+
+		//Check the area for suitable placement.
+		BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
+		for (int mx = posX - x; mx <= posX + x; mx++) {
+			for (int mz = posZ - z; mz <= posZ + z; mz++) {
+				for (int my = posY; my <= posY + height; my++) {
+					mutable.setPos(mx, my, mz);
+					if (!world.isAirBlock(mutable) && !world.getBlockState(mutable).getBlock().isReplaceable(world, mutable)) {
+						return false;
 					}
 				}
 			}
