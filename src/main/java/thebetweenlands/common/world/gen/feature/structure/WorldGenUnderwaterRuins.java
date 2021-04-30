@@ -84,7 +84,8 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 		int center = ringsize / 2;
 		int pillarheight = ringsize + rand.nextInt(3); // + 0, 1, 2
 
-		checkValidSpace(world, position.getX(), position.getY(), position.getZ(), ringsize, pillarheight + 1, ringsize);
+		if (!checkValidSpace(world, position.getX(), position.getY(), position.getZ(), ringsize, pillarheight + 1, ringsize))
+			return false;
 
 		//floor
 		for (int fx = -center; fx <= center; fx++) {
@@ -139,7 +140,8 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 
 	//generate a pillar ring
 	private boolean structurePillars(World world, Random rand, BlockPos position) {
-		checkValidSpace(world, position.getX(), position.getY(), position.getZ(), 7, 9, 7);
+		if (!checkValidSpace(world, position.getX(), position.getY(), position.getZ(), 7, 9, 7))
+			return false;
 
 		//7x7 grid, 5x5 grid of tiles
 		int basepillar = 3; //max height 8
@@ -194,7 +196,8 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 
 	//generate some arches
 	private boolean structureArch(World world, Random rand, BlockPos pos) {
-		checkValidSpace(world, pos.getX(), pos.getY(), pos.getZ(), 7, 7, 7);
+		if (!checkValidSpace(world, pos.getX(), pos.getY(), pos.getZ(), 7, 7, 7))
+			return false;
 
 		if (rand.nextBoolean()) buildArch(world, rand, pos.add(1, 0, 1), EnumFacing.NORTH); //north
 		if (rand.nextBoolean()) buildArch(world, rand, pos.add(1, 0, 0), EnumFacing.EAST); //east
@@ -224,7 +227,8 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 		int width = (random.nextInt(3) + 7) / 2;
 		boolean basement = random.nextInt(5) == 0;
 
-		checkValidSpace(world, pos.getX(), pos.getY(), pos.getZ(), length * 2, 5, width * 2);
+		if (!checkValidSpace(world, pos.getX(), pos.getY(), pos.getZ(), length * 2, 5, width * 2))
+			return false;
 
 		for (int x = -length; x <= length; x++) {
 			for (int z = -width; z <= width; z++) {
@@ -273,7 +277,8 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 	private boolean structureShrine(World world, Random random, BlockPos pos) {
 		int basepillar = 5;
 
-		checkValidSpace(world, pos.getX(), pos.getY(), pos.getZ(), 10, basepillar + 5, 10);
+		if (!checkValidSpace(world, pos.getX(), pos.getY(), pos.getZ(), 10, basepillar + 5, 10))
+			return false;
 
 		//make floor
 		for (int fx = -4; fx <= 4; fx++) {
@@ -373,8 +378,14 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 			for (int mz = posZ - z; mz <= posZ + z; mz++) {
 				for (int my = posY; my <= posY + height; my++) {
 					mutable.setPos(mx, my, mz);
-					if (!world.isAirBlock(mutable) && !world.getBlockState(mutable).getBlock().isReplaceable(world, mutable)) {
-						return false;
+					if (my == posY) {
+						if (!world.getBlockState(mutable.down()).isFullCube()) {
+							return false;
+						}
+					} else {
+						if (!world.isAirBlock(mutable) && !world.getBlockState(mutable).getBlock().isReplaceable(world, mutable)) {
+							return false;
+						}
 					}
 				}
 			}
