@@ -36,7 +36,7 @@ import thebetweenlands.common.registries.BlockRegistry.ISubtypeItemBlockModelDef
 public class BlockBetweenstonePebblePile extends BasicBlock implements ICustomItemBlock, ISubtypeItemBlockModelDefinition {
 
 	public static final PropertyEnum<EnumPileType> PILE_TYPE = PropertyEnum.<EnumPileType>create("pile_type", EnumPileType.class);
-	private static final AxisAlignedBB AABB = new AxisAlignedBB(0D, 0.0D, 0D, 1D, 0.5D, 1D);
+	private static final AxisAlignedBB AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 0.5D, 0.875D);
 
 	public BlockBetweenstonePebblePile() {
 		super(Material.GROUND);
@@ -126,6 +126,11 @@ public class BlockBetweenstonePebblePile extends BasicBlock implements ICustomIt
 		}
 		return false;
 	}
+
+	@Override
+    public boolean canPlaceBlockAt(World world, BlockPos pos) {
+        return world.getBlockState(pos).getBlock().isReplaceable(world, pos) && world.getBlockState(pos.down()).isFullBlock();
+    }
 
 	@Override
     public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {

@@ -511,14 +511,14 @@ tile.thebetweenlands.betweenstone_pebble_pile.one_plant.name=Betweenstone Pebble
 tile.thebetweenlands.betweenstone_pebble_pile.two_plant.name=Betweenstone Pebble Pile
 tile.thebetweenlands.betweenstone_pebble_pile.three_plant.name=Betweenstone Pebble Pile
 tile.thebetweenlands.betweenstone_pebble_pile.four_plant.name=Betweenstone Pebble Pile
-tile.thebetweenlands.betweenstone_pebble_pile_water.one_water.name=Betweenstone Pebble Pile
-tile.thebetweenlands.betweenstone_pebble_pile_water.two_water.name=Betweenstone Pebble Pile
-tile.thebetweenlands.betweenstone_pebble_pile_water.three_water.name=Betweenstone Pebble Pile
-tile.thebetweenlands.betweenstone_pebble_pile_water.four_water.name=Betweenstone Pebble Pile
-tile.thebetweenlands.betweenstone_pebble_pile_water.one_plant_water.name=Betweenstone Pebble Pile
-tile.thebetweenlands.betweenstone_pebble_pile_water.two_plant_water.name=Betweenstone Pebble Pile
-tile.thebetweenlands.betweenstone_pebble_pile_water.three_plant_water.name=Betweenstone Pebble Pile
-tile.thebetweenlands.betweenstone_pebble_pile_water.four_plant_water.name=Betweenstone Pebble Pile
+tile.thebetweenlands.betweenstone_pebble_pile_water.one.name=Betweenstone Pebble Pile Water
+tile.thebetweenlands.betweenstone_pebble_pile_water.two.name=Betweenstone Pebble Pile Water
+tile.thebetweenlands.betweenstone_pebble_pile_water.three.name=Betweenstone Pebble Pile Water
+tile.thebetweenlands.betweenstone_pebble_pile_water.four.name=Betweenstone Pebble Pile Water
+tile.thebetweenlands.betweenstone_pebble_pile_water.one_plant.name=Betweenstone Pebble Pile Water
+tile.thebetweenlands.betweenstone_pebble_pile_water.two_plant.name=Betweenstone Pebble Pile Water
+tile.thebetweenlands.betweenstone_pebble_pile_water.three_plant.name=Betweenstone Pebble Pile Water
+tile.thebetweenlands.betweenstone_pebble_pile_water.four_plant.name=Betweenstone Pebble Pile Water
 
 # Items
 

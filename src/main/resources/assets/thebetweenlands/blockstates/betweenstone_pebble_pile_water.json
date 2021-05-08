@@ -1,7 +1,7 @@
 {
    "forge_marker":1,
    "variants":{
-      "pile_type=one_water":[
+      "pile_type=one":[
          {
             "model":"thebetweenlands:internal/model_combined",
             "custom":{
@@ -98,7 +98,7 @@
             "y":270
          }
       ],
-      "pile_type=two_water":[
+      "pile_type=two":[
          {
             "model":"thebetweenlands:internal/model_combined",
             "custom":{
@@ -195,7 +195,7 @@
             "y":270
          }
       ],
-      "pile_type=three_water":[
+      "pile_type=three":[
          {
             "model":"thebetweenlands:internal/model_combined",
             "custom":{
@@ -292,7 +292,7 @@
             "y":270
          }
       ],
-      "pile_type=four_water":[
+      "pile_type=four":[
          {
             "model":"thebetweenlands:internal/model_combined",
             "custom":{
@@ -389,7 +389,7 @@
             "y":270
          }
       ],
-      "pile_type=one_plant_water":[
+      "pile_type=one_plant":[
          {
             "model":"thebetweenlands:internal/model_combined",
             "custom":{
@@ -486,7 +486,7 @@
             "y":270
          }
       ],
-      "pile_type=two_plant_water":[
+      "pile_type=two_plant":[
          {
             "model":"thebetweenlands:internal/model_combined",
             "custom":{
@@ -583,7 +583,7 @@
             "y":270
          }
       ],
-      "pile_type=three_plant_water":[
+      "pile_type=three_plant":[
          {
             "model":"thebetweenlands:internal/model_combined",
             "custom":{
@@ -680,7 +680,7 @@
             "y":270
          }
       ],
-      "pile_type=four_plant_water":[
+      "pile_type=four_plant":[
          {
             "model":"thebetweenlands:internal/model_combined",
             "custom":{

@@ -26,6 +26,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePile;
 import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePileWater;
 import thebetweenlands.common.entity.mobs.EntityEmberling;
 import thebetweenlands.common.entity.mobs.EntityEmberlingWild;
@@ -228,7 +229,11 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 	}
 	
     public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
-        if (!world.setBlockState(pos, newState, 11)) return false;
+        if ((world.getBlockState(pos.down()).getBlock() instanceof BlockBetweenstonePebblePileWater || world.getBlockState(pos.down()).getBlock() instanceof BlockBetweenstonePebblePile) && side == EnumFacing.UP)
+        	return false;
+    	
+        if (!world.setBlockState(pos, newState, 11))
+    		return false;
 
         IBlockState state = world.getBlockState(pos);
         if (state.getBlock() == BlockRegistry.BETWEENSTONE_PEBBLE_PILE) {

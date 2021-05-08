@@ -9,6 +9,7 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -27,6 +28,7 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
@@ -38,7 +40,7 @@ import thebetweenlands.util.AdvancedStateMap;
 public class BlockBetweenstonePebblePileWater extends BlockSwampWater implements IStateMappedBlock, ICustomItemBlock, ISubtypeItemBlockModelDefinition {
 
 	public static final PropertyEnum<EnumPileType> PILE_TYPE = PropertyEnum.<EnumPileType>create("pile_type", EnumPileType.class);
-	private static final AxisAlignedBB AABB = new AxisAlignedBB(0D, 0.0D, 0D, 1D, 0.5D, 1D);
+	private static final AxisAlignedBB AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 0.5D, 0.875D);
 
 	public BlockBetweenstonePebblePileWater() {
 		this(FluidRegistry.SWAMP_WATER, Material.WATER);
@@ -51,7 +53,8 @@ public class BlockBetweenstonePebblePileWater extends BlockSwampWater implements
 		setResistance(2.0F);
 		setSoundType(SoundType.STONE);
 		setUnderwaterBlock(true);
-		setDefaultState(getDefaultState().withProperty(PILE_TYPE, EnumPileType.ONE_WATER).withProperty(LEVEL, 0));
+		setDefaultState(getDefaultState().withProperty(PILE_TYPE, EnumPileType.ONE).withProperty(LEVEL, 0));
+		setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 	
 	@Override
@@ -69,6 +72,12 @@ public class BlockBetweenstonePebblePileWater extends BlockSwampWater implements
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return AABB;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> list) {
+		list.add(new ItemStack(this, 1, EnumPileType.ONE.getMetadata()));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -99,7 +108,7 @@ public class BlockBetweenstonePebblePileWater extends BlockSwampWater implements
 
 		if (!world.isRemote) {
 			if (!player.getHeldItem(hand).isEmpty() && player.getHeldItem(hand).getItem() == EnumItemMisc.BETWEENSTONE_PEBBLE.getItem() && player.getHeldItem(hand).getItemDamage() == EnumItemMisc.BETWEENSTONE_PEBBLE.getID()) {
-				if(state.getValue(PILE_TYPE) == EnumPileType.FOUR_WATER || state.getValue(PILE_TYPE) == EnumPileType.FOUR_PLANT_WATER)
+				if(state.getValue(PILE_TYPE) == EnumPileType.FOUR || state.getValue(PILE_TYPE) == EnumPileType.FOUR_PLANT)
 					return false;
 				ItemStack stack = player.getHeldItem(hand).splitStack(1);
 				if (!stack.isEmpty()) {
@@ -113,22 +122,22 @@ public class BlockBetweenstonePebblePileWater extends BlockSwampWater implements
 				item.motionX = item.motionY = item.motionZ = 0D;
 				world.spawnEntity(item);
 
-				if(state.getValue(PILE_TYPE) == EnumPileType.FOUR_WATER)
-					world.setBlockState(pos, state.withProperty(PILE_TYPE, EnumPileType.THREE_WATER));
-				if(state.getValue(PILE_TYPE) == EnumPileType.THREE_WATER)
-					world.setBlockState(pos, state.withProperty(PILE_TYPE, EnumPileType.TWO_WATER));
-				if(state.getValue(PILE_TYPE) == EnumPileType.TWO_WATER)
-					world.setBlockState(pos, state.withProperty(PILE_TYPE, EnumPileType.ONE_WATER));
-				if(state.getValue(PILE_TYPE) == EnumPileType.ONE_WATER)
+				if(state.getValue(PILE_TYPE) == EnumPileType.FOUR)
+					world.setBlockState(pos, state.withProperty(PILE_TYPE, EnumPileType.THREE));
+				if(state.getValue(PILE_TYPE) == EnumPileType.THREE)
+					world.setBlockState(pos, state.withProperty(PILE_TYPE, EnumPileType.TWO));
+				if(state.getValue(PILE_TYPE) == EnumPileType.TWO)
+					world.setBlockState(pos, state.withProperty(PILE_TYPE, EnumPileType.ONE));
+				if(state.getValue(PILE_TYPE) == EnumPileType.ONE)
 					world.setBlockToAir(pos);
 
-				if(state.getValue(PILE_TYPE) == EnumPileType.FOUR_PLANT_WATER)
-					world.setBlockState(pos, state.withProperty(PILE_TYPE, EnumPileType.THREE_PLANT_WATER));
-				if(state.getValue(PILE_TYPE) == EnumPileType.THREE_PLANT_WATER)
-					world.setBlockState(pos, state.withProperty(PILE_TYPE, EnumPileType.TWO_PLANT_WATER));
-				if(state.getValue(PILE_TYPE) == EnumPileType.TWO_PLANT_WATER)
-					world.setBlockState(pos, state.withProperty(PILE_TYPE, EnumPileType.ONE_PLANT_WATER));
-				if(state.getValue(PILE_TYPE) == EnumPileType.ONE_PLANT_WATER)
+				if(state.getValue(PILE_TYPE) == EnumPileType.FOUR_PLANT)
+					world.setBlockState(pos, state.withProperty(PILE_TYPE, EnumPileType.THREE_PLANT));
+				if(state.getValue(PILE_TYPE) == EnumPileType.THREE_PLANT)
+					world.setBlockState(pos, state.withProperty(PILE_TYPE, EnumPileType.TWO_PLANT));
+				if(state.getValue(PILE_TYPE) == EnumPileType.TWO_PLANT)
+					world.setBlockState(pos, state.withProperty(PILE_TYPE, EnumPileType.ONE_PLANT));
+				if(state.getValue(PILE_TYPE) == EnumPileType.ONE_PLANT)
 					world.setBlockToAir(pos);
 				return true;
 			}
@@ -137,12 +146,17 @@ public class BlockBetweenstonePebblePileWater extends BlockSwampWater implements
 	}
 
 	@Override
+    public boolean canPlaceBlockAt(World world, BlockPos pos) {
+        return world.getBlockState(pos).getBlock().isReplaceable(world, pos) && world.getBlockState(pos.down()).isFullBlock();
+    }
+
+	@Override
     public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
 		if (!(world.getBlockState(pos).getBlock() instanceof BlockBetweenstonePebblePileWater)) {
 				if (world.rand.nextBoolean())
-					return getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer) .withProperty(PILE_TYPE, EnumPileType.ONE_PLANT_WATER);
+					return getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer) .withProperty(PILE_TYPE, EnumPileType.ONE_PLANT);
 				else
-					return getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer) .withProperty(PILE_TYPE, EnumPileType.ONE_WATER);
+					return getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer) .withProperty(PILE_TYPE, EnumPileType.ONE);
 		}
     	return getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer);
     }
@@ -184,14 +198,14 @@ public class BlockBetweenstonePebblePileWater extends BlockSwampWater implements
 	}
 
 	public static enum EnumPileType implements IStringSerializable {
-		ONE_WATER,
-		TWO_WATER,
-		THREE_WATER,
-		FOUR_WATER,
-		ONE_PLANT_WATER,
-		TWO_PLANT_WATER,
-		THREE_PLANT_WATER,
-		FOUR_PLANT_WATER;
+		ONE,
+		TWO,
+		THREE,
+		FOUR,
+		ONE_PLANT,
+		TWO_PLANT,
+		THREE_PLANT,
+		FOUR_PLANT;
 
 		private final String name;
 
