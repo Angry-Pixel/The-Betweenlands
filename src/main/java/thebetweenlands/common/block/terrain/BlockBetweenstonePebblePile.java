@@ -55,9 +55,6 @@ public class BlockBetweenstonePebblePile extends BasicBlock implements ICustomIt
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> list) {
 		list.add(new ItemStack(this, 1, EnumPileType.ONE.getMetadata()));
-		list.add(new ItemStack(this, 1, EnumPileType.TWO.getMetadata()));
-		list.add(new ItemStack(this, 1, EnumPileType.THREE.getMetadata()));
-		list.add(new ItemStack(this, 1, EnumPileType.FOUR.getMetadata()));
 	}
 
 	@Override

@@ -25,6 +25,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.projectiles.EntityBLFishHook;
 import thebetweenlands.util.NBTHelper;
@@ -35,7 +36,7 @@ public class ItemBLFishingRod extends Item {
 	public ItemBLFishingRod() {
 		setMaxDamage(128);
 		setMaxStackSize(1);
-		setCreativeTab(CreativeTabs.TOOLS);
+		setCreativeTab(BLCreativeTabs.GEARS);
 
 		addPropertyOverride(new ResourceLocation("cast"), new IItemPropertyGetter() {
 			@Override

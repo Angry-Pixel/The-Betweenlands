@@ -9,7 +9,6 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -70,15 +69,6 @@ public class BlockBetweenstonePebblePileWater extends BlockSwampWater implements
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return AABB;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> list) {
-		list.add(new ItemStack(this, 1, EnumPileType.ONE_WATER.getMetadata()));
-		list.add(new ItemStack(this, 1, EnumPileType.TWO_WATER.getMetadata()));
-		list.add(new ItemStack(this, 1, EnumPileType.THREE_WATER.getMetadata()));
-		list.add(new ItemStack(this, 1, EnumPileType.FOUR_WATER.getMetadata()));
 	}
 
 	@SideOnly(Side.CLIENT)

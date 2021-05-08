@@ -21,6 +21,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.projectiles.EntityFishingSpear;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -46,6 +47,7 @@ public class ItemFishingSpear extends Item {
 				return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
 			}
 		});
+		setCreativeTab(BLCreativeTabs.GEARS);
 	}
 
 	@Override

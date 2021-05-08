@@ -1,3 +1,6 @@
-{ 
-  "parent":"thebetweenlands:block/betweenstone_pebble_pile_3" 
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "thebetweenlands:items/betweenstone_pebble_pile_item"
+  }
 }
