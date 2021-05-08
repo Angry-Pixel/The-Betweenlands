@@ -549,6 +549,7 @@ item.thebetweenlands.compost.name=Compost
 item.thebetweenlands.copper_iris_petals.name=Copper Iris Petals
 item.thebetweenlands.crab_stick.name=Crabstick
 item.thebetweenlands.deep_water_coral_item.name=Deep Water Coral
+item.thebetweenlands.deep_water_theme.name=Deep Water
 item.thebetweenlands.dj_wights_mixtape.name=DJ Wight's Hot New Mixtape
 item.thebetweenlands.dragonfly_wing.name=Dragonfly Wing
 item.thebetweenlands.dried_swamp_reed.name=Dried Swamp Reed
@@ -1531,6 +1532,7 @@ item.thebetweenlands.record.stuck_in_the_mud.desc=Voog2 - Stuck In The Mud
 item.thebetweenlands.record.waterlogged.desc=Voog2 - Waterlogged
 item.thebetweenlands.record.wandering_wisps.desc=Voog2 - Wandering Wisps
 item.thebetweenlands.record.ancient.desc=Voog2 - Ancient
+item.thebetweenlands.record.deep_water_theme.desc=Mr.Owltkins - Deep Water
 
 
 # Signs

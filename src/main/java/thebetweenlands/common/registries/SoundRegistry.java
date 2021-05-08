@@ -31,6 +31,7 @@ public class SoundRegistry {
     public static final BLSoundEvent THE_EXPLORER = reg("the_explorer");
     public static final BLSoundEvent WANDERING_WISPS = reg("wandering_wisps");
     public static final BLSoundEvent WATERLOGGED = reg("waterlogged");
+    public static final BLSoundEvent DEEP_WATER_THEME = reg("deep_water_theme");
     // Ambience
     public static final BLSoundEvent AMBIENT_BLOOD_SKY_ROAR = reg("ambient_blood_sky_roar");
     public static final BLSoundEvent AMBIENT_BLOOD_SKY = reg("ambient_blood_sky");

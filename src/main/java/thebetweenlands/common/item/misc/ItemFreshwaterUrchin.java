@@ -34,7 +34,7 @@ public class ItemFreshwaterUrchin extends ItemMob {
 		if(!world.isRemote) {
 			if (iblockstate.getBlock() instanceof BlockWeedwoodJukebox && !iblockstate.getValue(BlockJukebox.HAS_RECORD)) {
 				((BlockJukebox) iblockstate.getBlock()).insertRecord(world, pos, iblockstate, stack);
-				world.playEvent(null, 1010, pos, Item.getIdFromItem(ItemRegistry.DJ_WIGHTS_MIXTAPE)); //TODO add other music
+				world.playEvent(null, 1010, pos, Item.getIdFromItem(ItemRegistry.DEEP_WATER_THEME));
 				stack.shrink(stack.getCount());
 				player.addStat(StatList.RECORD_PLAYED);
 				return EnumActionResult.SUCCESS;

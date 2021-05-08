@@ -1858,6 +1858,14 @@
       }
     ]
   },
+  "deep_water_theme": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:records/deep_water_theme",
+        "stream": true
+      }
+    ]
+  },
   "rowboat_row_starboard": {
     "sounds": [
       "thebetweenlands:boat_row_1"

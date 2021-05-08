@@ -381,6 +381,7 @@ public class ItemRegistry {
     public static final Item STUCK_IN_THE_MUD = new ItemBLRecord(SoundRegistry.STUCK_IN_THE_MUD);
     public static final Item WANDERING_WISPS = new ItemBLRecord(SoundRegistry.WANDERING_WISPS);
     public static final Item WATERLOGGED = new ItemBLRecord(SoundRegistry.WATERLOGGED);
+    public static final Item DEEP_WATER_THEME = new ItemBLRecord(SoundRegistry.DEEP_WATER_THEME);
     //MISC
     public static final Item WEEDWOOD_DOOR_ITEM = new ItemDoorBetweenlands() {
         @Override
@@ -684,6 +685,7 @@ public class ItemRegistry {
 		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.STUCK_IN_THE_MUD));
 		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.WANDERING_WISPS));
 		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.WATERLOGGED));
+		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.DEEP_WATER_THEME));
 	}
 
     private static boolean containsItem(List<ItemStack> lst, ItemStack stack) {
