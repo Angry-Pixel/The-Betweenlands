@@ -30,8 +30,6 @@ import thebetweenlands.common.item.ITintedItem;
 
 public class ItemMobAnadia extends ItemMob implements ITintedItem {
 
-	// TODO Item property overrides for jsons to show types and colour status (brown, silver, smoked, rotten)
-
 	public int decayTime = 24000; // 20 minutes
 
 	@SuppressWarnings("unchecked")
@@ -133,7 +131,6 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 						if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 0) {
 							if(stack.getTagCompound().getCompoundTag("Entity").hasKey("rottingTime")) {
 								long rottingTime = stack.getTagCompound().getCompoundTag("Entity").getLong("rottingTime");
-								//TODO localisation
 								if(rottingTime - worldIn.getTotalWorldTime() > 19200)
 									tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.status") + I18n.format("tooltip.bl.item_mob_anadia.rotting_1"));
 								else if(rottingTime - worldIn.getTotalWorldTime() <= 19200 && rottingTime - worldIn.getTotalWorldTime() > 14400)

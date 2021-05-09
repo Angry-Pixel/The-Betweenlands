@@ -91,7 +91,6 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	
 	public int animationFrame = 0;
 	public int animationFrameCrab = 0;
-	//public float waterHeight = 0.0F;
 	public int netCheck = 0;
 	
 	List<Integer> obstructionList = new ArrayList<Integer>();
@@ -118,17 +117,12 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 0.4D));
         tasks.addTask(3, new EntityAnadia.EntityAIAFishCalledWander(this, 0.5D, 20));
         tasks.addTask(4, new EntityAIPanicWhenHooked(this));
-        tasks.addTask(5, new EntityAIAvoidEntity(this, EntityLurker.class, 8F, 4D, 8D));
-       // tasks.addTask(3, new EntityAnadia.EntityAIAvoidWhenHooked(this, EntityPlayer.class, 16));
         aiFindBait = new EntityAnadia.AIFindBait(this, 2D);
         aiFindHook = new EntityAnadia.AIFindHook(this, 2D);
         tasks.addTask(6, aiFindBait);
         tasks.addTask(7, aiFindHook);
         tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         tasks.addTask(9, new EntityAILookIdle(this));
-        // TODO leaving this for future hostile code
-        // targetTasks.addTask(0, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, 0, true, true, null));
-       // targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
     }
 
     @Override
@@ -171,13 +165,13 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        setTailType((byte)rand.nextInt(3));
 	        setFishSize(Math.round(Math.max(0.125F, rand.nextFloat()) * 16F) / 16F);
 	        if(getEntityWorld().getBiome(getPosition()) == BiomeRegistry.DEEP_WATERS)
-	        	setFishColour((byte)(3)); // setFishColour((byte)(2 + (byte)rand.nextInt(2))) testing colours - TODO set this based on biome spawned in /other possible things
+	        	setFishColour((byte)(3)); // testing colours - set this based on biome spawned in/other possible things
 	        else
 	        	setFishColour((byte)(2));
 	        setHeadItem(getPartFromLootTable(LootTableRegistry.ANADIA_HEAD));
 	        setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_BODY));
 	        setTailItem(getPartFromLootTable(LootTableRegistry.ANADIA_TAIL));
-	        if(getStaminaMods() >= 6F)
+	        if(getStaminaMods() >= 5F && getFishSize() >= 0.875F)
 	        	setIsTreasureFish(true);
 	        randomiseObstructionOrder();
     	}
@@ -763,7 +757,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         return false;
     }
 
-	//TODO Made separate methods so we can maintain ordering if new parts are added rather than ordinal juggling
+	// Made separate methods so we can maintain ordering if new parts are added rather than ordinal juggling
 	public enum EnumAnadiaHeadParts {
 		// part (speedModifier, healthModifier, strengthModifier, stamina)
 		HEAD_1(0.125F, 1F, 1F, 1F),
@@ -1133,25 +1127,6 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		@Override
 	    public boolean shouldContinueExecuting(){
 	        return !entity.getNavigator().noPath() && !isBeingRidden();
-	    }
-	}
-	
-	public class EntityAIAvoidWhenHooked extends EntityAIAvoidEntity {
-		private final EntityAnadia anadia;
-		
-		public EntityAIAvoidWhenHooked(EntityAnadia entity, Class classToAvoidIn, float avoidDistanceIn) {
-			super(entity, classToAvoidIn, avoidDistanceIn, entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue(), entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
-			anadia = entity;
-		}
-
-		@Override
-		public boolean shouldExecute() {
-			return super.shouldExecute() && anadia.isBeingRidden() && anadia.getStaminaTicks() >= 1;
-		}
-
-		@Override
-	    public boolean shouldContinueExecuting(){
-	        return !entity.getNavigator().noPath() && anadia.isBeingRidden() && anadia.getStaminaTicks() >= 1;
 	    }
 	}
 
