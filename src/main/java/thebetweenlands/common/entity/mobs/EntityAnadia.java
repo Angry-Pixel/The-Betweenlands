@@ -50,6 +50,7 @@ import net.minecraft.world.storage.loot.LootTable;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.EntityFishBait;
 import thebetweenlands.common.entity.projectiles.EntityBLFishHook;
+import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -81,8 +82,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	
 	public EntityAnadia.AIFindBait aiFindBait;
 	public EntityAnadia.AIFindHook aiFindHook;
-	public byte BASE = 1;
-	public byte SILVER = 2;
+	public byte BASE = 2;
+	public byte SILVER = 3;
 	public byte SMOKED = 0;
 	public byte ROTTEN = 1;
 
@@ -169,7 +170,10 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        setBodyType((byte)rand.nextInt(3));
 	        setTailType((byte)rand.nextInt(3));
 	        setFishSize(Math.round(Math.max(0.125F, rand.nextFloat()) * 16F) / 16F);
-	        setFishColour((byte)(2 + (byte)rand.nextInt(2))); // testing colours - TODO set this based on biome spawned in /other possible things
+	        if(getEntityWorld().getBiome(getPosition()) == BiomeRegistry.DEEP_WATERS)
+	        	setFishColour((byte)(3)); // setFishColour((byte)(2 + (byte)rand.nextInt(2))) testing colours - TODO set this based on biome spawned in /other possible things
+	        else
+	        	setFishColour((byte)(2));
 	        setHeadItem(getPartFromLootTable(LootTableRegistry.ANADIA_HEAD));
 	        setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_BODY));
 	        setTailItem(getPartFromLootTable(LootTableRegistry.ANADIA_TAIL));

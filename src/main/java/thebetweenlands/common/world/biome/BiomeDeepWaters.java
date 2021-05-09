@@ -6,6 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
+import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
@@ -74,5 +75,6 @@ public class BiomeDeepWaters extends BiomeBetweenlands {
 		entries.add(new SkySpawnEntry(10, EntityChiromawGreeblingRider.class, EntityChiromawGreeblingRider::new, (short) 20).setSpawnCheckRadius(64.0D).setGroupSize(1, 3).setSpawningInterval(600).setHostile(true));
 		entries.add(new PitstoneCaveSpawnEntry(11, EntityStalker.class, EntityStalker::new, (short) 12).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(16).setSpawningInterval(6000));
 		entries.add(new CaveSpawnEntry(12, EntitySwarm.class, EntitySwarm::new, (short) 60).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(32.0D));
+		entries.add(new SurfaceSpawnEntry(13, EntityAnadia.class, EntityAnadia::new, (short) 60).setCanSpawnInWater(true).setHostile(false).setGroupSize(1, 5));
 	}
 }

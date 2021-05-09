@@ -18,15 +18,15 @@ public class GuiSmokingRack extends GuiContainer {
 	public GuiSmokingRack(EntityPlayer inventory, TileEntitySmokingRack tile) {
 		super(new ContainerSmokingRack(inventory, tile));
 		smoking_rack = tile;
-		ySize = 168;
+		ySize = 183;
 		xSize = 176;
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y) {
 		String s = smoking_rack.hasCustomName() ? smoking_rack.getName() : I18n.format(smoking_rack.getName(), new Object[0]);
-		this.fontRenderer.drawString(s, this.xSize / 2 - this.fontRenderer.getStringWidth(s) / 2, 6, 4210752);
-		this.fontRenderer.drawString(I18n.format("container.inventory", new Object[0]), 8, this.ySize - 96 + 2, 4210752);
+		this.fontRenderer.drawString(s, this.xSize / 2 - this.fontRenderer.getStringWidth(s) / 2, 8, 4210752);
+		this.fontRenderer.drawString(I18n.format("container.inventory", new Object[0]), 8, this.ySize - 93, 4210752);
 	}
 
 	@Override
@@ -39,17 +39,17 @@ public class GuiSmokingRack extends GuiContainer {
 		
 		//if (smoking_rack.active) {
 			int progressSmoke = smoking_rack.getSmokeProgressScaled(0, 31);
-			this.drawTexturedModalRect(k + 22, l + 49 - progressSmoke, 176, 31 - progressSmoke, 24, progressSmoke);
+			this.drawTexturedModalRect(k + 22, l + 65 - progressSmoke, 176, 31 - progressSmoke, 24, progressSmoke);
 		//}
 			
-			int progress_1 = smoking_rack.getItemProgressScaledTop(0, 14);
-			this.drawTexturedModalRect(k + 99, l + 20, 176, 31, progress_1, 12);
+			int progress_1 = smoking_rack.getItemProgressScaledTop(0, 18);
+			this.drawTexturedModalRect(k + 97, l + 38, 176, 33, progress_1, 8);
 			
-			int progress_2 = smoking_rack.getItemProgressScaledMid(0, 14);
-			this.drawTexturedModalRect(k + 99, l + 38, 176, 31, progress_2, 12);
+			int progress_2 = smoking_rack.getItemProgressScaledMid(0, 18);
+			this.drawTexturedModalRect(k + 97, l + 56, 176, 33, progress_2, 8);
 			
-			int progress_3 = smoking_rack.getItemProgressScaledBottom(0, 14);
-			this.drawTexturedModalRect(k + 99, l + 56, 176, 31, progress_3, 12);
+			int progress_3 = smoking_rack.getItemProgressScaledBottom(0, 18);
+			this.drawTexturedModalRect(k + 97, l + 74, 176, 33, progress_3, 8);
 
 	}
 

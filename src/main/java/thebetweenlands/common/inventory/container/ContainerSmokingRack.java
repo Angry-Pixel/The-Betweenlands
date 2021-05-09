@@ -22,24 +22,24 @@ public class ContainerSmokingRack extends Container {
 		this.player = player;
 		
 		//fuel
-		addSlotToContainer(new SlotRestriction(tile, 0, 26, 54, leaves, 64, this));
+		addSlotToContainer(new SlotRestriction(tile, 0, 26, 70, leaves, 64, this));
 		
 		//input
-		addSlotToContainer(new SlotSizeRestriction(tile, 1, 62, 18, 1));
-		addSlotToContainer(new SlotSizeRestriction(tile, 2, 62, 36, 1));
-		addSlotToContainer(new SlotSizeRestriction(tile, 3, 62, 54, 1));
+		addSlotToContainer(new SlotSizeRestriction(tile, 1, 62, 34, 1));
+		addSlotToContainer(new SlotSizeRestriction(tile, 2, 62, 52, 1));
+		addSlotToContainer(new SlotSizeRestriction(tile, 3, 62, 70, 1));
 		
 		//output
-		addSlotToContainer(new SlotOutput(tile, 4, 134, 18, this));
-		addSlotToContainer(new SlotOutput(tile, 5, 134, 36, this));
-		addSlotToContainer(new SlotOutput(tile, 6, 134, 54, this));
+		addSlotToContainer(new SlotOutput(tile, 4, 134, 34, this));
+		addSlotToContainer(new SlotOutput(tile, 5, 134, 52, this));
+		addSlotToContainer(new SlotOutput(tile, 6, 134, 70, this));
 		
 		for (int l = 0; l < 3; ++l)
             for (int j1 = 0; j1 < 9; ++j1)
-                this.addSlotToContainer(new Slot(playerInventory, j1 + (l + 1) * 9, 8 + j1 * 18, 86 + l * 18));
+                this.addSlotToContainer(new Slot(playerInventory, j1 + (l + 1) * 9, 8 + j1 * 18, 102 + l * 18));
 
         for (int i1 = 0; i1 < 9; ++i1)
-            this.addSlotToContainer(new Slot(playerInventory, i1, 8 + i1 * 18, 144));
+            this.addSlotToContainer(new Slot(playerInventory, i1, 8 + i1 * 18, 160));
 	}
 
 	@Override

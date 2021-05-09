@@ -25,7 +25,7 @@ public class GuiFishTrimmingTable extends GuiContainer {
 	public GuiFishTrimmingTable(EntityPlayer inventory, TileEntityFishTrimmingTable tile) {
 		super(new ContainerFishTrimmingTable(inventory, tile));
 		fish_trimming_table = tile;
-		ySize = 222;
+		ySize = 226;
 		xSize = 176;
 	}
 	
@@ -34,17 +34,14 @@ public class GuiFishTrimmingTable extends GuiContainer {
 		super.initGui();
 		int xOffSet = (width - xSize) / 2;
 		int yOffSet = (height - ySize) / 2;
-		addButton(new GuiButtonNoClickSound(0, xOffSet + 48, yOffSet + 106, 80, 20, I18n.format("gui.bl.fish_trimming_table.butcher")));
+		addButton(new GuiButtonNoClickSound(0, xOffSet + 48, yOffSet + 111, 80, 20, I18n.format("gui.bl.fish_trimming_table.butcher")));
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y) {
 		String s = fish_trimming_table.hasCustomName() ? fish_trimming_table.getName() : I18n.format(fish_trimming_table.getName(), new Object[0]);
-		this.fontRenderer.drawString(s, this.xSize / 2 - this.fontRenderer.getStringWidth(s) / 2, 6, 4210752);
-		this.fontRenderer.drawString(I18n.format("container.inventory", new Object[0]), 8, this.ySize - 96 + 2, 4210752);
-		GlStateManager.depthFunc(516);
-		drawRect(guiLeft + 44, guiTop + 72, guiLeft + 44 + 16, guiTop + 72 + 16, 822083583);
-		GlStateManager.depthFunc(515);
+		this.fontRenderer.drawString(s, this.xSize / 2 - this.fontRenderer.getStringWidth(s) / 2, 11, 4210752);
+		this.fontRenderer.drawString(I18n.format("container.inventory", new Object[0]), 8, this.ySize - 93, 4210752);
 	}
 
 	@Override
@@ -56,19 +53,19 @@ public class GuiFishTrimmingTable extends GuiContainer {
 		this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
 
 		if (fish_trimming_table.hasAnadia()) { //test
-			mc.getRenderItem().renderItemIntoGUI(fish_trimming_table.getSlotresult(1), guiLeft + 44, guiTop + 72);
-			mc.getRenderItem().renderItemIntoGUI(fish_trimming_table.getSlotresult(2), guiLeft + 80, guiTop + 72);
-			mc.getRenderItem().renderItemIntoGUI(fish_trimming_table.getSlotresult(3), guiLeft + 116, guiTop + 72);
+			mc.getRenderItem().renderItemIntoGUI(fish_trimming_table.getSlotresult(1), guiLeft + 44, guiTop + 77);
+			mc.getRenderItem().renderItemIntoGUI(fish_trimming_table.getSlotresult(2), guiLeft + 80, guiTop + 77);
+			mc.getRenderItem().renderItemIntoGUI(fish_trimming_table.getSlotresult(3), guiLeft + 116, guiTop + 77);
 
 			GlStateManager.depthFunc(516);
-			drawRect(guiLeft + 44, guiTop + 72, guiLeft + 60, guiTop + 88, color.getRGB());
-			drawRect(guiLeft + 80, guiTop + 72, guiLeft + 96, guiTop + 88, color.getRGB());
-			drawRect(guiLeft + 116, guiTop + 72, guiLeft + 132, guiTop + 88, color.getRGB());
+			drawRect(guiLeft + 44, guiTop + 77, guiLeft + 60, guiTop + 93, color.getRGB());
+			drawRect(guiLeft + 80, guiTop + 77, guiLeft + 96, guiTop + 93, color.getRGB());
+			drawRect(guiLeft + 116, guiTop + 77, guiLeft + 132, guiTop + 93, color.getRGB());
 			GlStateManager.depthFunc(515);
 
-			mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, fish_trimming_table.getSlotresult(1), guiLeft + 44, guiTop + 72, null);
-			mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, fish_trimming_table.getSlotresult(2), guiLeft + 80, guiTop + 72, null);
-			mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, fish_trimming_table.getSlotresult(3), guiLeft + 116, guiTop + 72, null);
+			mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, fish_trimming_table.getSlotresult(1), guiLeft + 44, guiTop + 77, null);
+			mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, fish_trimming_table.getSlotresult(2), guiLeft + 80, guiTop + 77, null);
+			mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, fish_trimming_table.getSlotresult(3), guiLeft + 116, guiTop + 77, null);
 		}
 	}
 

@@ -25,23 +25,23 @@ public class ContainerFishTrimmingTable extends Container {
 		fish_trimming_table = tile;
 
 		//input
-		addSlotToContainer(new SlotRestriction(fish_trimming_table, 0, 80, 22, anadia, 1, this));
+		addSlotToContainer(new SlotRestriction(fish_trimming_table, 0, 80, 27, anadia, 1, this));
 
 		//output
-		addSlotToContainer(new SlotOutput(fish_trimming_table, 1, 44, 72, this));
-		addSlotToContainer(new SlotOutput(fish_trimming_table, 2, 80, 72, this));
-		addSlotToContainer(new SlotOutput(fish_trimming_table, 3, 116, 72, this));
-		addSlotToContainer(new SlotOutput(fish_trimming_table, 4, 8, 108, this));
+		addSlotToContainer(new SlotOutput(fish_trimming_table, 1, 44, 77, this));
+		addSlotToContainer(new SlotOutput(fish_trimming_table, 2, 80, 77, this));
+		addSlotToContainer(new SlotOutput(fish_trimming_table, 3, 116, 77, this));
+		addSlotToContainer(new SlotOutput(fish_trimming_table, 4, 8, 113, this));
 
 		//tool
-		addSlotToContainer(new SlotRestrictionNoMeta(fish_trimming_table, 5, 152, 108, axe, 1));
+		addSlotToContainer(new SlotRestrictionNoMeta(fish_trimming_table, 5, 152, 113, axe, 1));
 		
 		for (int l = 0; l < 3; ++l)
             for (int j1 = 0; j1 < 9; ++j1)
-                this.addSlotToContainer(new Slot(playerInventory, j1 + (l + 1) * 9, 8 + j1 * 18, 140 + l * 18));
+                this.addSlotToContainer(new Slot(playerInventory, j1 + (l + 1) * 9, 8 + j1 * 18, 145 + l * 18));
 
         for (int i1 = 0; i1 < 9; ++i1)
-            this.addSlotToContainer(new Slot(playerInventory, i1, 8 + i1 * 18, 198));
+            this.addSlotToContainer(new Slot(playerInventory, i1, 8 + i1 * 18, 203));
 	}
 
 	@Override

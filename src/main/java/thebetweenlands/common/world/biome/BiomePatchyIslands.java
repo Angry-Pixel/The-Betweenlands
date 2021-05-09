@@ -6,6 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
+import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
@@ -97,5 +98,6 @@ public class BiomePatchyIslands extends BiomeBetweenlands {
 		entries.add(new PitstoneCaveSpawnEntry(23, EntityStalker.class, EntityStalker::new, (short) 13).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(16).setSpawningInterval(6000));
 		entries.add(new CaveSpawnEntry(24, EntitySwarm.class, EntitySwarm::new, (short) 50).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(32.0D));
 		entries.add(new SurfaceSpawnEntry(25, EntityShambler.class, EntityShambler::new, (short) 30).setHostile(true));
+		entries.add(new SurfaceSpawnEntry(26, EntityAnadia.class, EntityAnadia::new, (short) 60).setCanSpawnInWater(true).setHostile(false).setGroupSize(1, 5));
 	}
 }
