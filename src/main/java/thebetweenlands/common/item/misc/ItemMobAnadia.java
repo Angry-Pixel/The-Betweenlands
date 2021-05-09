@@ -154,7 +154,7 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 					tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.health", MathHelper.ceil(living.getHealth()), MathHelper.ceil((living.getMaxHealth()))));
 					tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.size", ((EntityAnadia) living).getFishSize()));
 					tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.speed", (living.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue())));
-					tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.strength", (living.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue())));
+					tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.strength", (Math.floor(((EntityAnadia) living).getStrengthMods() + 0.5D))));
 					tooltip.add(I18n.format("tooltip.bl.item_mob_anadia.stamina", ((EntityAnadia) living).getStaminaMods()));
 				}
 				else

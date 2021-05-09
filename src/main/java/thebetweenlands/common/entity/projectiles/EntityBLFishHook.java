@@ -5,7 +5,6 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.item.ItemStack;
@@ -332,7 +331,7 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 			if (caughtEntity != null) {
 				bringInHookedEntity();
 				world.setEntityState(this, (byte) 31);
-				i = (int) ((EntityAnadia) caughtEntity).getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+				i = (int) Math.floor(((EntityAnadia) caughtEntity).getStrengthMods() + 0.5D);
 			}
 
 			if (inGround)

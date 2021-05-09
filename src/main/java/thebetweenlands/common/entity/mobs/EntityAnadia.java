@@ -192,15 +192,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         dataManager.set(FISH_SIZE, size);
         setSize(getFishSize(), getFishSize() * 0.75F);
         setPosition(posX, posY, posZ);
-
         getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D + getSpeedMods());
         getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D + getHealthMods());
-
-        if(getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE) == null)
-        	getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5D + getStrengthMods());
-       // else
-        	//getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5D + getStrengthMods());
-
         setHealth(getMaxHealth());
     }
 
