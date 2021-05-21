@@ -1,9 +1,12 @@
 package thebetweenlands.common.world.gen.feature.structure;
 
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -17,6 +20,7 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
+import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.feature.WorldGenHelper;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
@@ -32,6 +36,7 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 	private final IBlockState cragrockTileMossy = BlockRegistry.CRAGROCK_TILES_MOSSY.getDefaultState();
 	private final IBlockState cragrockChisel = BlockRegistry.CRAGROCK_CHISELED.getDefaultState();
 	private final IBlockState cragrockBrickStairs = BlockRegistry.CRAGROCK_BRICK_STAIRS.getDefaultState();
+	private static final List<IBlockState> UNDERWATER_PLANTS = ImmutableList.of(BlockRegistry.SWAMP_REED_UNDERWATER.getDefaultState(), BlockRegistry.WATER_WEEDS.getDefaultState(), BlockRegistry.SWAMP_KELP.getDefaultState());
 
 	public WorldGenUnderwaterRuins() {
 		super(); //TODO: Replace the dirt underwater and the water
@@ -72,6 +77,38 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 			default:
 				generated = structureShelter(world, rand, position);
 				break;
+		}
+
+		if (generated) {
+			//Decorate some plants
+			for (int x = -8; x <= 8; x++) {
+				for (int z = -8; z <= 8; z++) {
+					if (rand.nextInt(4) == 0) {
+						IBlockState plant = UNDERWATER_PLANTS.get(rand.nextInt(UNDERWATER_PLANTS.size()));
+
+						if (plant == BlockRegistry.SWAMP_REED_UNDERWATER.getDefaultState() || plant == BlockRegistry.SWAMP_KELP.getDefaultState()) {
+							if (SurfaceType.DIRT.matches(world.getBlockState(position))) {
+								int height = rand.nextInt(4) + 2;
+								for (int y = 0; y <= height; y++) {
+									BlockPos plantPos = position.add(x, y + 1, z);
+									IBlockState state = world.getBlockState(plantPos);
+									if(state.getBlock() != Blocks.AIR && !SurfaceType.WATER.matches(state)) {
+										break;
+									}
+									if(SurfaceType.WATER.matches(state)) {
+										world.setBlockState(plantPos, plant, 2 | 16);
+									}
+								}
+							}
+						} else {
+							//We assume that other plants do not have a stacking height
+							if (SurfaceType.DIRT.matches(world.getBlockState(position)) && SurfaceType.WATER.matches(world.getBlockState(position.up()))) {
+								world.setBlockState(position.add(x, 1, z), plant, 2 | 16);
+							}
+						}
+					}
+				}
+			}
 		}
 
 		return generated;
