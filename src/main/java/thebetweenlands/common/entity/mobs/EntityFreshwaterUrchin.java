@@ -22,6 +22,8 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -31,6 +33,7 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleUrchinSpike;
 import thebetweenlands.common.entity.EntityProximitySpawner;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -68,6 +71,11 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(3.0D);
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.05D);
 	}
+
+    @Override
+    public boolean getCanSpawnHere() {
+        return world.getDifficulty() != EnumDifficulty.PEACEFUL && world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
+    }
 
 	public int getSpikeGrowTimer() {
 		return dataManager.get(SPIKE_COOLDOWN);
