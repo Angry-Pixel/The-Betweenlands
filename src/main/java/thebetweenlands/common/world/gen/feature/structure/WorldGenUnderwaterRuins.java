@@ -91,14 +91,14 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 		for (int fx = -center; fx <= center; fx++) {
 			for (int fz = -center; fz <= center; fz++) {
 				//floor
-				world.setBlockState(new BlockPos(position.getX() + fx, position.getY(), position.getZ() + fz), getTileGrade(rand), 2 | 16);
+				world.setBlockState(position.add(fx, 0, fz), getTileGrade(rand), 2 | 16);
 
 				//put a pot in the middle of the ring
 				if (fx > -center + 1 && fx < center - 1) {
 					//do not put a pot in the middle, especially for ringsize = 7
 					if (fx != 0 && fz != 0) {
 						if (rand.nextInt(7) == 0) {
-							setLootPot(world, rand, new BlockPos(position.getX() + fx, position.getY() + 1, position.getZ() + fz));
+							setLootPot(world, rand, position.add(fx, 1, fz));
 						}
 					}
 				}
@@ -106,21 +106,21 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 				//ring
 				if (!(Math.abs(fx) == center && Math.abs(fz) == center)) {
 					if (Math.abs(fx) == center || Math.abs(fz) == center) {
-						world.setBlockState(new BlockPos(position.getX() + fx, position.getY() + 1, position.getZ() + fz), getBrickGrade(rand), 2 | 16);
+						world.setBlockState(position.add(fz, 1, fz), getBrickGrade(rand), 2 | 16);
 
 						//put a pot on the ring
 						if (rand.nextInt(5) == 0) {
-							setLootPot(world, rand, new BlockPos(position.getX() + fx, position.getY() + 2, position.getZ() + fz));
+							setLootPot(world, rand, position.add(fx, 2, fz));
 						}
 					}
 				} else {
 					//pillar
-					buildPillar(world, rand, new BlockPos(position.getX() + fx, position.getY() + 1, position.getZ() + fz), pillarheight);
+					buildPillar(world, rand, position.add(fx, 1, fz), pillarheight);
 				}
 
 				//middle pillar
 				if (ringsize >= 7 && (fx == 0 && fz == 0)) {
-					buildPillar(world, rand, new BlockPos(position.getX() + fx, position.getY() + 1, position.getZ() + fz), ringsize);
+					buildPillar(world, rand, position.add(fx, 1, fz), ringsize);
 				}
 			}
 		}
@@ -130,11 +130,11 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 
 	private void buildPillar(World world, Random rand, BlockPos pos, int height) {
 		for (int y = 0; y <= height; y++) {
-			world.setBlockState(new BlockPos(pos.getX(), pos.getY() + y, pos.getZ()), getTileGrade(rand), 2 | 16);
+			world.setBlockState(pos.add(0, y, 0), getTileGrade(rand), 2 | 16);
 		}
 		//put a pot on top
 		if (rand.nextInt(4) == 0) {
-			setLootPot(world, rand, new BlockPos(pos.getX(), pos.getY() + height + 1, pos.getZ()));
+			setLootPot(world, rand, pos.add(0, height + 1, 0));
 		}
 	}
 
@@ -149,10 +149,10 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 		for (int x = -2; x <= 2; x++) {
 			for (int z = -2; z <= 2; z++) {
 				if (rand.nextInt(3) == 0) {
-					world.setBlockState(new BlockPos(position.getX() + x, position.getY(), position.getZ() + z), getTileGrade(rand), 2 | 16);
+					world.setBlockState(position.add(x, 0, z), getTileGrade(rand), 2 | 16);
 				}
 				if (rand.nextInt(8) == 0) {
-					setLootPot(world, rand, new BlockPos(position.getX() + x, position.getY() + 1, position.getZ() + z));
+					setLootPot(world, rand, position.add(x, 1, z));
 				}
 			}
 		}
@@ -186,11 +186,11 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 	private void buildPillar2(World world, Random rand, BlockPos pos, int height) {
 		for (int y = 0; y <= height; y++) {
 			//if we hit the top, make it chiselled
-			world.setBlockState(new BlockPos(pos.getX(), pos.getY() + y, pos.getZ()), y == height ? cragrockChisel : getTileGrade(rand), 2 | 16);
+			world.setBlockState(pos.add(0, y, 0), y == height ? cragrockChisel : getTileGrade(rand), 2 | 16);
 		}
 		//put a pot on top
 		if (rand.nextInt(4) == 0) {
-			setLootPot(world, rand, new BlockPos(pos.getX(), pos.getY() + height + 1, pos.getZ()));
+			setLootPot(world, rand, pos.add(0, height + 1, 0));
 		}
 	}
 
