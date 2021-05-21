@@ -106,7 +106,7 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 				//ring
 				if (!(Math.abs(fx) == center && Math.abs(fz) == center)) {
 					if (Math.abs(fx) == center || Math.abs(fz) == center) {
-						world.setBlockState(position.add(fz, 1, fz), getBrickGrade(rand), 2 | 16);
+						world.setBlockState(position.add(fx, 1, fz), getBrickGrade(rand), 2 | 16);
 
 						//put a pot on the ring
 						if (rand.nextInt(5) == 0) {
