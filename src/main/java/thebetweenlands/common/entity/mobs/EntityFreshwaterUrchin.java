@@ -9,7 +9,6 @@ import javax.annotation.Nullable;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
@@ -27,7 +26,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -52,7 +50,6 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 		setSize(0.6875F, 0.4375F);
 		setPathPriority(PathNodeType.WATER, 4.0F);
 		stepHeight = 1F;
-		setGlowing(true);
 	}
 
 	@Override
@@ -86,12 +83,9 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
         return world.getBlockState(pos).getMaterial() == Material.WATER ? 10.0F + world.getLightBrightness(pos) - 0.5F : super.getBlockPathWeight(pos);
     }
 
-    @Nullable
 	@Override
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-    	if(!getEntityWorld().isRemote)
-    		System.out.println("Urchin Spawned at:" + getPosition());
-    	return super.onInitialSpawn(difficulty, livingdata);
+    public boolean isNotColliding() {
+		 return getEntityWorld().checkNoEntityCollision(getEntityBoundingBox(), this) && getEntityWorld().getCollisionBoxes(this, getEntityBoundingBox()).isEmpty();
     }
 
 	public int getSpikeGrowTimer() {
@@ -120,7 +114,7 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 	public void onUpdate() {
 		super.onUpdate();
 		if (!getEntityWorld().isRemote) {
-				checkAOEDamage();
+			checkAOEDamage();
 
 			if (getSpikeGrowTimer() < 80)
 				setSpikeGrowTimer(getSpikeGrowTimer() + 1);
