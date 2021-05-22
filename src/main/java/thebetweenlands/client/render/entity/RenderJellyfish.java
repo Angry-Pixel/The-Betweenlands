@@ -67,7 +67,7 @@ public class RenderJellyfish<T extends EntityJellyfish> extends RenderLiving<T> 
 			float[] colors = GLOW_COLORS[jellofooosh.getJellyfishColour()];
 
 			ShaderHelper.INSTANCE.require();
-			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(interpX, interpY, interpZ, 8.0f, str * colors[0], str * colors[1], str * colors[2]));
+			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(interpX, interpY, interpZ, 3.0f, str * colors[0], str * colors[1], str * colors[2]));
 		}
 	}
 

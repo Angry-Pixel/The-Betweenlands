@@ -41,7 +41,7 @@ public class RenderJellyfishCave extends RenderJellyfish<EntityJellyfishCave> {
 			float str = 2.0f * jellofooosh.getJellyfishSize();
 
 			ShaderHelper.INSTANCE.require();
-			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(interpX, interpY, interpZ, 8.0f, str * 0.49f, str, str));
+			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(interpX, interpY, interpZ, 3.0f, str * 0.49f, str, str));
 		}
 	}
 }
