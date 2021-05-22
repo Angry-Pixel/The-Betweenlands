@@ -260,7 +260,7 @@ public class EntityRegistry {
 		registerEntity(EntityFishingTackleBoxSeat.class, "fishing_tackle_box_seat");
 		
 		//WIP Stuffs
-		registerEntity(EntityRockSnot.class, "rock_snot", 0x3F5A69, 0xA16A77, 64, 20, true);
+		registerEntity(EntityRockSnot.class, "rock_snot", 0x3F5A69, 0xA16A77, 64, 3, true);
 		registerEntity(EntityRockSnotTendril.class, "rock_snot_tendril", 64, 20, true);
 
 		// TODO Shit that will be added onedayTM
@@ -272,7 +272,7 @@ public class EntityRegistry {
 
 		registerEntity(EntityBubblerCrab.class, "bubbler_crab", 0x086A87, 0xB43104);
 
-		registerEntity(EntityFreshwaterUrchin.class, "freshwater_urchin", 0x086A87, 0xB43104);
+		registerEntity(EntityFreshwaterUrchin.class, "freshwater_urchin", 0x086A87, 0xB43104, 64, 3, true);
 		registerEntity(EntityGreeblingCoracle.class, "greebling_coracle", 0x142728, 0x7CB2AA);
 	}
 
