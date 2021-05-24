@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.material.EnumPushReaction;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -25,6 +26,8 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -37,6 +40,7 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.EntityProximitySpawner;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -55,7 +59,6 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 	public EntityRockSnot(World world) {
 		super(world);
 		setSize(1F, 0.5F);
-		setNoGravity(true);
 	}
 
 	public World getWorld() {
@@ -84,6 +87,21 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1D);
 	}
+
+    @Override
+    public boolean getCanSpawnHere() {
+        return world.getDifficulty() != EnumDifficulty.PEACEFUL && world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
+    }
+ 
+    @Override
+    public float getBlockPathWeight(BlockPos pos) {
+        return world.getBlockState(pos).getMaterial() == Material.WATER ? 10.0F + world.getLightBrightness(pos) - 0.5F : super.getBlockPathWeight(pos);
+    }
+
+	@Override
+    public boolean isNotColliding() {
+		 return getEntityWorld().checkNoEntityCollision(getEntityBoundingBox(), this) && getEntityWorld().getCollisionBoxes(this, getEntityBoundingBox()).isEmpty();
+    }
 
     @Nullable
     @Override
@@ -407,11 +425,6 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 		motionX = 0;
 		motionY = 0;
 		motionZ = 0;
-	}
-
-	@Override
-	public boolean isNotColliding() {
-		return true;
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import thebetweenlands.common.entity.mobs.EntityJellyfish;
 import thebetweenlands.common.entity.mobs.EntityJellyfishCave;
 import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.mobs.EntityOlm;
+import thebetweenlands.common.entity.mobs.EntityRockSnot;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntityStalker;
 import thebetweenlands.common.entity.mobs.EntitySwarm;
@@ -82,5 +83,6 @@ public class BiomeDeepWaters extends BiomeBetweenlands {
 		entries.add(new SurfaceSpawnEntry(14, EntityFreshwaterUrchin.class, EntityFreshwaterUrchin::new, (short) 60).setSurfacePredicate(SurfaceType.DIRT).setCanSpawnInWater(true).setHostile(false).setGroupSize(1, 3));
 		entries.add(new SurfaceSpawnEntry(15, EntityJellyfish.class, EntityJellyfish::new, (short) 60).setCanSpawnInWater(true).setHostile(false).setGroupSize(1, 3));
 		entries.add(new CaveSpawnEntry(16, EntityJellyfishCave.class, EntityJellyfishCave::new, (short) 30).setCanSpawnInWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D));
+		entries.add(new SurfaceSpawnEntry(17, EntityRockSnot.class, EntityRockSnot::new, (short) 30).setSurfacePredicate(SurfaceType.MIXED_GROUND).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 1));
 	}
 }
