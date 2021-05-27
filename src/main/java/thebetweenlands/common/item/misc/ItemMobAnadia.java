@@ -22,11 +22,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.capability.IRotSmellCapability;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.EntityFishingTackleBoxSeat;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.item.ITintedItem;
+import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class ItemMobAnadia extends ItemMob implements ITintedItem {
 
@@ -100,7 +102,22 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 				if(stack.getTagCompound().getCompoundTag("Entity").hasKey("rottingTime"))
 					if(world.getTotalWorldTime() >= stack.getTagCompound().getCompoundTag("Entity").getLong("rottingTime"))
 						stack.getTagCompound().getCompoundTag("Entity").setByte("fishColour", (byte) 1);
+		
+		if(isRotten(world, stack) & entity instanceof EntityPlayer) {
+			if(!world.isRemote)
+				addSmell((EntityLivingBase) entity);
+		}
     }
+
+	public static void addSmell(EntityLivingBase entity) {
+		IRotSmellCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_ROT_SMELL, null);
+		if(cap != null) {
+			if(!cap.isSmellingBad()) {
+				cap.setIsSmellingBad(true);
+				System.out.println("You Smell!");
+			}
+		}
+	}
 
 	@Override
 	public void onCapturedByPlayer(EntityPlayer player, EnumHand hand, ItemStack stack) {

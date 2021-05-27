@@ -120,6 +120,7 @@ import thebetweenlands.common.item.misc.ItemDraeton;
 import thebetweenlands.common.item.misc.ItemEmptyAmateMap;
 import thebetweenlands.common.item.misc.ItemFishBait;
 import thebetweenlands.common.item.misc.ItemFreshwaterUrchin;
+import thebetweenlands.common.item.misc.ItemFumigant;
 import thebetweenlands.common.item.misc.ItemGalleryFrame;
 import thebetweenlands.common.item.misc.ItemGem;
 import thebetweenlands.common.item.misc.ItemGemSinger;
@@ -205,6 +206,7 @@ public class ItemRegistry {
     public static final Item DENTROTHYST_SHARD_ORANGE = new ItemDentrothystShard(EnumDentrothyst.ORANGE);
     public static final Item DENTROTHYST_SHARD_GREEN = new ItemDentrothystShard(EnumDentrothyst.GREEN);
     public static final Item FISH_BAIT = new ItemFishBait();
+    public static final Item FUMIGANT= new ItemFumigant();
 
     //food
     public static final Item SAP_BALL = new ItemSapBall();

@@ -942,6 +942,7 @@ item.thebetweenlands.anadia_meat_raw.name=Raw Anadia Meat
 item.thebetweenlands.anadia_meat_cooked.name=Cooked Anadia Meat
 item.thebetweenlands.anadia_meat_smoked.name=Smoked Anadia Meat
 item.thebetweenlands.urchin_spike.name=Urchin Spike
+item.thebetweenlands.fumigant.name=Fumigant
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -1200,6 +1201,8 @@ tooltip.bl.fish_bait.range=Range: %s
 tooltip.bl.fish_bait.glowing=Glowing: %s
 
 tooltip.bl.fishing_rod.baited=Has Worm: %s
+
+tooltip.bl.fumigant=Removes the Stench of Rot on a Player
 
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing
