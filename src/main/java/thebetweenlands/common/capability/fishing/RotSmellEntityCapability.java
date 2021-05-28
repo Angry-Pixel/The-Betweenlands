@@ -63,6 +63,16 @@ public class RotSmellEntityCapability extends EntityCapability<RotSmellEntityCap
 		this.isSmelly = isSmellyIn;
 	}
 
+	@Override
+	public void writeTrackingDataToNBT(NBTTagCompound nbt) {
+		this.writeToNBT(nbt);
+	}
+
+	@Override
+	public void readTrackingDataFromNBT(NBTTagCompound nbt) {
+		this.readFromNBT(nbt);
+	}
+
 	@SubscribeEvent
 	public static void onPlayerTick(PlayerTickEvent event) {
 		if(event.phase == TickEvent.Phase.END && !event.player.world.isRemote) {
