@@ -46,9 +46,9 @@ public class ItemFumigant extends Item {
 		if (cap != null) {
 			if (cap.isSmellingBad()) {
 				cap.setNotSmellingBad();
+				cap.setImmune(Math.max(cap.getRemainingImmunityTicks(), 600));
 				if (!player.capabilities.isCreativeMode)
 					stack.shrink(1);
-				System.out.println("You Dont Smell Anymore!");
 			}
 		}
 	}
