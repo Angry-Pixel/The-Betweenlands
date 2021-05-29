@@ -20,7 +20,6 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
-import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -28,7 +27,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.pathfinding.PathNodeType;
@@ -43,6 +41,7 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
+import thebetweenlands.common.entity.ai.EntityAINearestAttackableSmellyTarget;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -120,9 +119,10 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
         tasks.addTask(5, new EntityAILookIdle(this));
 
         targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
-        targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityDragonFly.class, true));
-        targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityAngler.class, true));
-        targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityAnadia.class, true));
+        targetTasks.addTask(1, new EntityAINearestAttackableSmellyTarget<>(this, EntityPlayer.class, false));
+        targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityDragonFly.class, true));
+        targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityAngler.class, true));
+        targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityAnadia.class, true));
     }
 
     @Override
