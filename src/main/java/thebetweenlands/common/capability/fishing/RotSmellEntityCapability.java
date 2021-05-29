@@ -8,6 +8,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IRotSmellCapability;
 import thebetweenlands.api.capability.ISerializableCapability;
 import thebetweenlands.client.render.particle.BLParticles;
@@ -41,26 +43,49 @@ public class RotSmellEntityCapability extends EntityCapability<RotSmellEntityCap
 		return entity instanceof EntityPlayer;
 	}
 
-	private boolean isSmelly = false;
+	private long smellyStart = -1;
+	private int smellyDuration = 0;
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
-		nbt.setBoolean("isSmelly", this.isSmelly);
+		nbt.setLong("smellyStart", this.smellyStart);
+		nbt.setInteger("smellyDuration", this.smellyDuration);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
-		this.isSmelly = nbt.getBoolean("isSmelly");
+		this.smellyStart = nbt.getLong("smellyStart");
+		this.smellyDuration = nbt.getInteger("smellyDuration");
 	}
 
 	@Override
 	public boolean isSmellingBad() {
-		return this.isSmelly;
+		return this.getRemainingSmellyTicks() > 0;
 	}
-
+	
 	@Override
-	public void setIsSmellingBad(boolean isSmellyIn) {
-		this.isSmelly = isSmellyIn;
+	public int getRemainingSmellyTicks() {
+		return this.smellyStart >= 0 ? Math.max(this.smellyDuration - (int)Math.min(this.getEntity().world.getTotalWorldTime() - this.smellyStart, this.smellyDuration), 0) : 0;
+	}
+	
+	@Override
+	public void setSmellingBad(int duration) {
+		if(duration <= 0) {
+			this.setNotSmellingBad();
+		} else {
+			this.smellyStart = this.getEntity().world.getTotalWorldTime();
+			this.smellyDuration = duration;
+			this.markDirty();
+		}
+	}
+	
+	@Override
+	public void setNotSmellingBad() {
+		if(this.smellyStart != -1 || this.smellyDuration != 0) {
+			this.smellyStart = -1;
+			this.smellyDuration = 0;
+			this.markDirty();
+		}
 	}
 
 	@Override
@@ -72,14 +97,22 @@ public class RotSmellEntityCapability extends EntityCapability<RotSmellEntityCap
 	public void readTrackingDataFromNBT(NBTTagCompound nbt) {
 		this.readFromNBT(nbt);
 	}
+	
+	@Override
+	public int getTrackingTime() {
+		return 20;
+	}
 
+	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public static void onPlayerTick(PlayerTickEvent event) {
-		if(event.phase == TickEvent.Phase.END && !event.player.world.isRemote) {
+		if(event.phase == TickEvent.Phase.END && event.player.world.isRemote) {
 			IRotSmellCapability cap = event.player.getCapability(CapabilityRegistry.CAPABILITY_ROT_SMELL, null);
-			if (cap != null && event.player.world.rand.nextInt(4) == 0)
-				if (cap.isSmellingBad())
+			if (cap != null && event.player.world.rand.nextInt(4) == 0) {
+				if (cap.isSmellingBad()) {
 					BLParticles.FLY.spawn(event.player.world, event.player.posX, event.player.posY + 1D, event.player.posZ);
+				}
+			}
 		}
 	}
 

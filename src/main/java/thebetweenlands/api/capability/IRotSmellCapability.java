@@ -8,8 +8,19 @@ public interface IRotSmellCapability {
 	public boolean isSmellingBad();
 
 	/**
-	 * Sets whether the entity smells bad
-	 * @param isSmelly
+	 * Returns for how many ticks the entity will remain smelly
+	 * @return
 	 */
-	public void setIsSmellingBad(boolean isSmelly);
+	public int getRemainingSmellyTicks();
+	
+	/**
+	 * Makes the entity smell bad
+	 * @param duration Duration in ticks
+	 */
+	public void setSmellingBad(int duration);
+	
+	/**
+	 * Makes the entity no longer smell bad
+	 */
+	public void setNotSmellingBad();
 }

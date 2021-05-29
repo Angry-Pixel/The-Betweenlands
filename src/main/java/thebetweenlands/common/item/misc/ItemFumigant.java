@@ -45,7 +45,7 @@ public class ItemFumigant extends Item {
 		IRotSmellCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_ROT_SMELL, null);
 		if (cap != null) {
 			if (cap.isSmellingBad()) {
-				cap.setIsSmellingBad(false);
+				cap.setNotSmellingBad();
 				if (!player.capabilities.isCreativeMode)
 					stack.shrink(1);
 				System.out.println("You Dont Smell Anymore!");
