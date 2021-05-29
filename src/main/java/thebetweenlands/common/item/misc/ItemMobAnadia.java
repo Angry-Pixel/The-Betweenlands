@@ -111,12 +111,9 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 
 	public static void addSmell(EntityLivingBase entity) {
 		IRotSmellCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_ROT_SMELL, null);
-		if(cap != null) {
-			if(!cap.isSmellingBad()) {
-				cap.setSmellingBad(Math.max(cap.getRemainingSmellyTicks(), 1000)); //TODO Testing duration
-				System.out.println("You Smell!");
-			}
-		}
+		if(cap != null)
+			if(!cap.isSmellingBad())
+				cap.setSmellingBad(Math.max(cap.getRemainingSmellyTicks(), 24000));
 	}
 
 	@Override
