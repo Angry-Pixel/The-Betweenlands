@@ -114,7 +114,6 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 		if(cap != null) {
 			if(!cap.isSmellingBad()) {
 				cap.setSmellingBad(Math.max(cap.getRemainingSmellyTicks(), 1000)); //TODO Testing duration
-				System.out.println("You Smell!");
 			}
 		}
 	}

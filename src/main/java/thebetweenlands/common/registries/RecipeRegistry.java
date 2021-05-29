@@ -59,6 +59,7 @@ import thebetweenlands.common.recipe.censer.CenserRecipeAspect;
 import thebetweenlands.common.recipe.censer.CenserRecipeCremains;
 import thebetweenlands.common.recipe.censer.CenserRecipeDungeonFog;
 import thebetweenlands.common.recipe.censer.CenserRecipeElixir;
+import thebetweenlands.common.recipe.censer.CenserRecipeFumigant;
 import thebetweenlands.common.recipe.censer.CenserRecipePlantTonic;
 import thebetweenlands.common.recipe.censer.CenserRecipeSapBall;
 import thebetweenlands.common.recipe.censer.CenserRecipeStagnantWater;
@@ -650,6 +651,7 @@ public class RecipeRegistry {
 		AbstractCenserRecipe.addRecipe(new CenserRecipeAspect());
 		AbstractCenserRecipe.addRecipe(new CenserRecipeCremains());
 		AbstractCenserRecipe.addRecipe(new CenserRecipeSwampWater());
+		AbstractCenserRecipe.addRecipe(new CenserRecipeFumigant());
 	}
 	
 	private static void registerSmokingRackRecipes() {

@@ -43,47 +43,63 @@ public class RotSmellEntityCapability extends EntityCapability<RotSmellEntityCap
 		return entity instanceof EntityPlayer;
 	}
 
-	private long smellyStart = -1;
-	private int smellyDuration = 0;
+	private long smellyTime = -1;
+	private long immunityTime = -1;
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
-		nbt.setLong("smellyStart", this.smellyStart);
-		nbt.setInteger("smellyDuration", this.smellyDuration);
+		nbt.setLong("smellyTime", this.smellyTime);
+		nbt.setLong("immunityTime", this.immunityTime);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
-		this.smellyStart = nbt.getLong("smellyStart");
-		this.smellyDuration = nbt.getInteger("smellyDuration");
+		this.smellyTime = nbt.getLong("smellyTime");
+		this.immunityTime = nbt.getLong("immunityTime");
 	}
 
 	@Override
 	public boolean isSmellingBad() {
-		return this.getRemainingSmellyTicks() > 0;
+		return this.getRemainingSmellyTicks() > 0 && this.getRemainingImmunityTicks() <= 0;
 	}
-	
+
 	@Override
 	public int getRemainingSmellyTicks() {
-		return this.smellyStart >= 0 ? Math.max(this.smellyDuration - (int)Math.min(this.getEntity().world.getTotalWorldTime() - this.smellyStart, this.smellyDuration), 0) : 0;
+		return this.smellyTime >= 0 ? Math.max(0, (int)(this.smellyTime - this.getEntity().world.getTotalWorldTime())) : 0;
 	}
-	
+
 	@Override
 	public void setSmellingBad(int duration) {
 		if(duration <= 0) {
 			this.setNotSmellingBad();
 		} else {
-			this.smellyStart = this.getEntity().world.getTotalWorldTime();
-			this.smellyDuration = duration;
+			this.smellyTime = this.getEntity().world.getTotalWorldTime() + duration;
 			this.markDirty();
 		}
 	}
-	
+
 	@Override
 	public void setNotSmellingBad() {
-		if(this.smellyStart != -1 || this.smellyDuration != 0) {
-			this.smellyStart = -1;
-			this.smellyDuration = 0;
+		if(this.smellyTime != -1) {
+			this.smellyTime = -1;
+			this.markDirty();
+		}
+	}
+
+	@Override
+	public int getRemainingImmunityTicks() {
+		return this.immunityTime >= 0 ? Math.max(0, (int)(this.immunityTime - this.getEntity().world.getTotalWorldTime())) : 0;
+	}
+
+	@Override
+	public void setImmune(int duration) {
+		if(duration <= 0) {
+			if(this.immunityTime != -1) {
+				this.immunityTime = -1;
+				this.markDirty();
+			}
+		} else {
+			this.immunityTime = this.getEntity().world.getTotalWorldTime() + duration;
 			this.markDirty();
 		}
 	}
@@ -97,7 +113,7 @@ public class RotSmellEntityCapability extends EntityCapability<RotSmellEntityCap
 	public void readTrackingDataFromNBT(NBTTagCompound nbt) {
 		this.readFromNBT(nbt);
 	}
-	
+
 	@Override
 	public int getTrackingTime() {
 		return 20;
