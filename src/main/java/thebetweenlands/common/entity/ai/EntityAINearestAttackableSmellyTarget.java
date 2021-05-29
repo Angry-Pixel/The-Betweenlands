@@ -10,7 +10,7 @@ public class EntityAINearestAttackableSmellyTarget<T extends EntityLivingBase> e
 	private EntityCreature taskOwner;
 
 	public EntityAINearestAttackableSmellyTarget(EntityCreature creature, Class<T> classTarget, boolean checkSight) {
-		super(creature, classTarget, true);
+		super(creature, classTarget, checkSight);
 		this.taskOwner = creature;
 	}
 
