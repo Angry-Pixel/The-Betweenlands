@@ -5,7 +5,6 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.EntityAngryPebble;
-import thebetweenlands.common.entity.EntityAnimalBurrow;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
@@ -69,6 +68,7 @@ import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.entity.mobs.EntityGiantToad;
 import thebetweenlands.common.entity.mobs.EntityGreebling;
+import thebetweenlands.common.entity.mobs.EntityGreeblingCoracle;
 import thebetweenlands.common.entity.mobs.EntityGreeblingVolarpadFloater;
 import thebetweenlands.common.entity.mobs.EntityJellyfish;
 import thebetweenlands.common.entity.mobs.EntityJellyfishCave;
@@ -82,7 +82,6 @@ import thebetweenlands.common.entity.mobs.EntityMultipartDummy;
 import thebetweenlands.common.entity.mobs.EntityMummyArm;
 import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
-import thebetweenlands.common.entity.mobs.EntityPuffin;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.entity.mobs.EntityRockSnot;
 import thebetweenlands.common.entity.mobs.EntityRockSnotTendril;
@@ -111,10 +110,10 @@ import thebetweenlands.common.entity.mobs.EntityVolatileSoul;
 import thebetweenlands.common.entity.mobs.EntityWallLamprey;
 import thebetweenlands.common.entity.mobs.EntityWallLivingRoot;
 import thebetweenlands.common.entity.mobs.EntityWight;
-import thebetweenlands.common.entity.mobs.EntityGreeblingCoracle;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityBLFishHook;
 import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
+import thebetweenlands.common.entity.projectiles.EntityBubblerCrabBubble;
 import thebetweenlands.common.entity.projectiles.EntityChiromawDroppings;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
 import thebetweenlands.common.entity.projectiles.EntityFishingSpear;
@@ -274,6 +273,8 @@ public class EntityRegistry {
 
 		registerEntity(EntityFreshwaterUrchin.class, "freshwater_urchin", 0x086A87, 0xB43104, 64, 3, true);
 		registerEntity(EntityGreeblingCoracle.class, "greebling_coracle", 0x142728, 0x7CB2AA);
+		
+		registerEntity(EntityBubblerCrabBubble.class, "bubbler_crab_bubble", 64, 1, true);
 	}
 
 	private static int id = 0;

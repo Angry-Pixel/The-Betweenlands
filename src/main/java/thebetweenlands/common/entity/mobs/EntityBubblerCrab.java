@@ -2,9 +2,11 @@ package thebetweenlands.common.entity.mobs;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
+import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -18,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
+import thebetweenlands.common.entity.projectiles.EntityBubblerCrabBubble;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -26,7 +29,7 @@ public class EntityBubblerCrab extends EntityMob implements IEntityBL {
 	private EntityAIAttackMelee aiAttack;
 	private EntityAIAvoidEntity<EntityPlayer> aiRunAway;
 	private EntityAINearestAttackableTarget<EntityPlayer> aiTarget;
-
+	private AIBubbleAttack aiBubbleAttack;
 	private int aggroCooldown = 200;
 	private boolean canAttack = false;
 
@@ -41,12 +44,15 @@ public class EntityBubblerCrab extends EntityMob implements IEntityBL {
 		this.aiAttack = new EntityAIAttackMelee(this, 1.0D, true);
 		this.aiRunAway = new EntityAIAvoidEntity<EntityPlayer>(this, EntityPlayer.class, 10.0F, 0.7D, 0.7D);
 		this.aiTarget =  new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, true);
+		
+		this.aiBubbleAttack = new AIBubbleAttack(this);
 
 		this.tasks.addTask(0, this.aiAttack);
 		this.tasks.addTask(1, this.aiRunAway);
-		this.tasks.addTask(2, new EntityAIWander(this, 1.0D));
-		this.tasks.addTask(3, new EntityAILookIdle(this));
-		this.tasks.addTask(4, new EntityAIAttackOnCollide(this));
+		this.tasks.addTask(2, aiBubbleAttack);
+		this.tasks.addTask(3, new EntityAIWander(this, 1.0D));
+		this.tasks.addTask(4, new EntityAILookIdle(this));
+		this.tasks.addTask(5, new EntityAIAttackOnCollide(this));
 
 		this.targetTasks.addTask(0, new EntityAIHurtByTarget(this, true));
 		this.targetTasks.addTask(1, this.aiTarget);
@@ -135,4 +141,54 @@ public class EntityBubblerCrab extends EntityMob implements IEntityBL {
     protected boolean isValidLightLevel() {
     	return true;
     }
+    
+    static class AIBubbleAttack extends EntityAIBase {
+		private final EntityBubblerCrab crab;
+		private int attackStep;
+		private int attackTime;
+
+		public AIBubbleAttack(EntityBubblerCrab crabIn) {
+			crab = crabIn;
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			EntityLivingBase entitylivingbase = crab.getAttackTarget();
+			return entitylivingbase != null && entitylivingbase.isEntityAlive();
+		}
+
+		@Override
+		public void startExecuting() {
+			attackStep = 0;
+		}
+
+		@Override
+		public void updateTask() {
+			--attackTime;
+			EntityLivingBase entitylivingbase = crab.getAttackTarget();
+			double d0 = crab.getDistanceSq(entitylivingbase);
+			if (d0 < 25D) {
+				double d1 = entitylivingbase.posX - crab.posX;
+				double d2 = entitylivingbase.posY - crab.posY;
+				double d3 = entitylivingbase.posZ - crab.posZ;
+				if (attackTime <= 0) {
+					++attackStep;
+					if (attackStep == 1)
+						attackTime = 40;
+					else {
+						attackTime = 40;
+						attackStep = 0;
+					}
+					if (attackStep == 1) {
+						EntityBubblerCrabBubble entityBubble = new EntityBubblerCrabBubble(crab.getEntityWorld(), crab);
+						entityBubble.setPosition(crab.posX, crab.posY + crab.height + 0.5D , crab.posZ);
+						entityBubble.shoot(d1, d2, d3, 0.5F, 0F);
+						crab.getEntityWorld().spawnEntity(entityBubble);
+						crab.aggroCooldown = 0;
+					}
+				}
+			}
+			super.updateTask();
+		}
+	}
 }
