@@ -1,13 +1,23 @@
 package thebetweenlands.common.entity.projectiles;
 
+import java.util.Iterator;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -20,6 +30,7 @@ public class EntityBubblerCrabBubble extends EntityThrowable {
 	private boolean playedSound = false;
 	private static final byte EVENT_TRAIL_PARTICLES = 105;
 	private static final byte EVENT_HIT_PARTICLES = 106;
+	public int swell = 0;
 
 	public EntityBubblerCrabBubble(World world) {
 		super(world);
@@ -42,10 +53,44 @@ public class EntityBubblerCrabBubble extends EntityThrowable {
 	public void onUpdate() {
 		super.onUpdate();
 		if(!getEntityWorld().isRemote) {
-			//if(!inGround)
-				//getEntityWorld().setEntityState(this, EVENT_TRAIL_PARTICLES);
-			if(ticksExisted > 120)
+			if(!hasNoGravity())
+				getEntityWorld().setEntityState(this, EVENT_TRAIL_PARTICLES);
+			
+			if(ticksExisted >= 120) {
+				explode();
+				getEntityWorld().setEntityState(this, EVENT_HIT_PARTICLES);
+				getEntityWorld().playSound((EntityPlayer) null, getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.HOSTILE, 1F, 0.25F);
 				setDead();
+			}
+		}
+
+		if(getEntityWorld().isRemote)
+			if(hasNoGravity()) {
+				swell++;
+				motionX = 0;
+				motionY = 0;
+				motionZ = 0;
+			}
+	}
+
+	private void explode() {
+		AxisAlignedBB aoe = new AxisAlignedBB(getPosition()).grow(1D);
+		if (!getEntityWorld().isRemote && getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL) {
+			List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, aoe);
+			for (Iterator<EntityLivingBase> iterator = list.iterator(); iterator.hasNext();) {
+				EntityLivingBase entity  = iterator.next();
+				if (entity != null && (entity instanceof EntityBubblerCrab) || entity instanceof EntityPlayer && ((EntityPlayer) entity).isSpectator() || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative())
+					iterator.remove();
+			}
+			if (list.isEmpty()) {
+				return;
+			}
+			if (!list.isEmpty()) {
+				EntityLivingBase entity = list.get(0);
+				if(entity.hurtResistantTime <= 0) {
+					entity.attackEntityFrom(new EntityDamageSource("generic", thrower), 2F);
+				}
+			}
 		}
 	}
 
@@ -69,7 +114,7 @@ public class EntityBubblerCrabBubble extends EntityThrowable {
 
 		if(id == EVENT_HIT_PARTICLES)
 			for(int i = 0; i < 16; ++i)
-				BLParticles.BUBBLE_PURIFIER.spawn(getEntityWorld(), posX + (getEntityWorld().rand.nextDouble() - 0.5D), posY + 2D + getEntityWorld().rand.nextDouble(), posZ + (getEntityWorld().rand.nextDouble() - 0.5D), ParticleArgs.get().withColor(0xFFFFFFFF));
+				BLParticles.BUBBLE_PURIFIER.spawn(getEntityWorld(), posX + (getEntityWorld().rand.nextDouble() - 0.5D), posY + getEntityWorld().rand.nextDouble(), posZ + (getEntityWorld().rand.nextDouble() - 0.5D), ParticleArgs.get().withColor(0xFFFFFFFF));
 	}
 
 	@Override
@@ -81,27 +126,45 @@ public class EntityBubblerCrabBubble extends EntityThrowable {
 	protected void onImpact(RayTraceResult mop) {
 		if (!getEntityWorld().isRemote) {
 			if (!playedSound) {
-				getEntityWorld().playSound((EntityPlayer) null, getPosition(), getSplashSound(), SoundCategory.HOSTILE, 0.25F, 2.0F);
+				getEntityWorld().playSound((EntityPlayer) null, getPosition(), getSplashSound(), SoundCategory.HOSTILE, 0.125F, 3.0F);
 				playedSound = true;
 			}
 			if (mop.typeOfHit != null && mop.typeOfHit == RayTraceResult.Type.BLOCK) {
 				setPositionAndRotation(mop.getBlockPos().getX() + 0.5D, mop.getBlockPos().getY() + 1D + height * 0.5D, mop.getBlockPos().getZ() + 0.5D, 0F, 0F);
+				setNoGravity(true);
 				inGround = true;
+				onGround = true;
+				markVelocityChanged();
 			}
 
 			if (mop.entityHit != null) {
 				if (mop.typeOfHit != null && mop.typeOfHit == RayTraceResult.Type.ENTITY && mop.entityHit != thrower && !(mop.entityHit instanceof EntityBubblerCrab)) {
 					setPositionAndRotation(mop.entityHit.getPosition().getX() + 0.5D, mop.entityHit.getPosition().getY() + height * 0.5D, mop.entityHit.getPosition().getZ() + 0.5D, 0F, 0F);
+					setNoGravity(true);
 					inGround = true;
+					onGround = true;
+					markVelocityChanged();
 				}
-				//getEntityWorld().setEntityState(this, EVENT_HIT_PARTICLES);
 			}
+			getEntityWorld().setEntityState(this, EVENT_HIT_PARTICLES);
 		}
 	}
 
 	@Override
+    @Nullable
+    public AxisAlignedBB getCollisionBox(Entity entity) {
+    	return entity.getEntityBoundingBox();
+    }
+
+	@Override
+	@Nullable
+	public AxisAlignedBB getCollisionBoundingBox() {
+		return null;
+	}
+
+	@Override
 	public boolean canBeCollidedWith() {
-		return true;
+		return false;
 	}
 
 	public boolean attackEntityFrom(DamageSource source, int amount) {

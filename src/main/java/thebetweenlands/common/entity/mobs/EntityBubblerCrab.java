@@ -16,6 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
@@ -184,6 +185,7 @@ public class EntityBubblerCrab extends EntityMob implements IEntityBL {
 						entityBubble.setPosition(crab.posX, crab.posY + crab.height + 0.5D , crab.posZ);
 						entityBubble.shoot(d1, d2, d3, 0.5F, 0F);
 						crab.getEntityWorld().spawnEntity(entityBubble);
+						crab.getEntityWorld().playSound((EntityPlayer) null, crab.getPosition(), SoundRegistry.SPIRIT_TREE_FACE_SMALL_SPIT, SoundCategory.HOSTILE, 1F, 2.0F);
 						crab.aggroCooldown = 0;
 					}
 				}

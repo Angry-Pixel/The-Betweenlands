@@ -2,9 +2,9 @@ package thebetweenlands.client.render.entity;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -28,9 +28,9 @@ public class RenderBubblerCrabBubble extends Render<EntityBubblerCrabBubble> {
 		GlStateManager.pushMatrix();
 		
 		this.bindEntityTexture(entity);
-		GlStateManager.translate((float)x, (float)y + 0.25D, (float)z);
+		GlStateManager.translate((float)x, (float)y + 0.25D + entity.swell * 0.0025D, (float)z);
 		GlStateManager.enableRescaleNormal();
-		GlStateManager.scale(this.scale, this.scale, this.scale);
+		GlStateManager.scale(this.scale + entity.swell * 0.01D, this.scale + entity.swell * 0.01D, this.scale + entity.swell * 0.01D);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder vertexbuffer = tessellator.getBuffer();
 		float minU = 0;
