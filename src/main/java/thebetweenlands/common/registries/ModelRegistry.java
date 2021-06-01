@@ -342,31 +342,31 @@ public class ModelRegistry {
 			}).build();
 
 	public static final IModel SILT_GLASS_JAR = new ModelFromModelBase.Builder(new ModelSiltGlassJar(), new ResourceLocation("thebetweenlands:blocks/silt_glass_jar"), 64, 64)
-			.particleTexture(new ResourceLocation("thebetweenlands:blocks/silt_glass_jar")).packer(MODEL_TEXTURE_PACKER).build();
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/silt_glass_jar")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 
 	public static final IModel BETWEENSTONE_PEBBLE_PILE_ONE = new ModelFromModelBase.Builder(new ModelPebblePile1(), new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile"), 32, 32)
-			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile")).packer(MODEL_TEXTURE_PACKER).build();
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 
 	public static final IModel BETWEENSTONE_PEBBLE_PILE_TWO = new ModelFromModelBase.Builder(new ModelPebblePile2(), new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile"), 32, 32)
-			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile")).packer(MODEL_TEXTURE_PACKER).build();
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 
 	public static final IModel BETWEENSTONE_PEBBLE_PILE_THREE = new ModelFromModelBase.Builder(new ModelPebblePile3(), new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile"), 32, 32)
-			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile")).packer(MODEL_TEXTURE_PACKER).build();
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 
 	public static final IModel BETWEENSTONE_PEBBLE_PILE_FOUR = new ModelFromModelBase.Builder(new ModelPebblePile4(), new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile"), 32, 32)
-			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile")).packer(MODEL_TEXTURE_PACKER).build();
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 
 	public static final IModel BETWEENSTONE_PEBBLE_PILE_ONE_PLANT = new ModelFromModelBase.Builder(new ModelPebblePile1Plants(), new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile"), 32, 32)
-			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile")).packer(MODEL_TEXTURE_PACKER).build();
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 
 	public static final IModel BETWEENSTONE_PEBBLE_PILE_TWO_PLANT = new ModelFromModelBase.Builder(new ModelPebblePile2Plants(), new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile"), 32, 32)
-			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile")).packer(MODEL_TEXTURE_PACKER).build();
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 
 	public static final IModel BETWEENSTONE_PEBBLE_PILE_THREE_PLANT = new ModelFromModelBase.Builder(new ModelPebblePile3Plants(), new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile"), 32, 32)
-			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile")).packer(MODEL_TEXTURE_PACKER).build();
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 
 	public static final IModel BETWEENSTONE_PEBBLE_PILE_FOUR_PLANT = new ModelFromModelBase.Builder(new ModelPebblePile4Plants(), new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile"), 32, 32)
-			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile")).packer(MODEL_TEXTURE_PACKER).build();
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 

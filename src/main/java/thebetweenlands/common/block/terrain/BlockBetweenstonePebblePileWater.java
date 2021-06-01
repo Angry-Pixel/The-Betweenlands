@@ -37,7 +37,7 @@ import thebetweenlands.common.registries.BlockRegistry.ISubtypeItemBlockModelDef
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.util.AdvancedStateMap;
 
-public class BlockBetweenstonePebblePileWater extends BlockSwampWater implements IStateMappedBlock, ICustomItemBlock, ISubtypeItemBlockModelDefinition {
+public class BlockBetweenstonePebblePileWater extends BlockSwampWater implements IStateMappedBlock, ICustomItemBlock {
 
 	public static final PropertyEnum<EnumPileType> PILE_TYPE = PropertyEnum.<EnumPileType>create("pile_type", EnumPileType.class);
 	private static final AxisAlignedBB AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 0.5D, 0.875D);
@@ -237,17 +237,7 @@ public class BlockBetweenstonePebblePileWater extends BlockSwampWater implements
 
 	@Override
 	public ItemBlock getItemBlock() {
-		return ItemBlockEnum.create(this, EnumPileType.class);
-	}
-
-	@Override
-	public int getSubtypeNumber() {
-		return EnumPileType.values().length;
-	}
-
-	@Override
-	public String getSubtypeName(int meta) {
-		return "%s_" + EnumPileType.values()[meta].getName();
+		return null;
 	}
 
 }

@@ -33,7 +33,7 @@ import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.ISubtypeItemBlockModelDefinition;
 
-public class BlockBetweenstonePebblePile extends BasicBlock implements ICustomItemBlock, ISubtypeItemBlockModelDefinition {
+public class BlockBetweenstonePebblePile extends BasicBlock implements ICustomItemBlock {
 
 	public static final PropertyEnum<EnumPileType> PILE_TYPE = PropertyEnum.<EnumPileType>create("pile_type", EnumPileType.class);
 	private static final AxisAlignedBB AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 0.5D, 0.875D);
@@ -219,17 +219,7 @@ public class BlockBetweenstonePebblePile extends BasicBlock implements ICustomIt
 
 	@Override
 	public ItemBlock getItemBlock() {
-		return ItemBlockEnum.create(this, EnumPileType.class);
-	}
-
-	@Override
-	public int getSubtypeNumber() {
-		return EnumPileType.values().length;
-	}
-
-	@Override
-	public String getSubtypeName(int meta) {
-		return "%s_" + EnumPileType.values()[meta].getName();
+		return null;
 	}
 
 }
