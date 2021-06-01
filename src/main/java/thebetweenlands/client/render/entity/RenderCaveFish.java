@@ -36,6 +36,8 @@ public class RenderCaveFish extends RenderLiving<EntityCaveFish> {
 			GlStateManager.scale(0.5f, 0.5f, 0.5f);
 		}
 		GlStateManager.translate(0, 0.5f, 0);
+		float smoothedPitch = entitylivingbaseIn.prevRotationPitch + (entitylivingbaseIn.rotationPitch - entitylivingbaseIn.prevRotationPitch) * partialTickTime;
+		GlStateManager.rotate(smoothedPitch, 1F, 0F, 0F);
 	}
 
 	@Override
