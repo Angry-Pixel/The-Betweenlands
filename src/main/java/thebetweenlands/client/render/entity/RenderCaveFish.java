@@ -15,7 +15,6 @@ import thebetweenlands.common.entity.mobs.EntityCaveFish;
 @SideOnly(Side.CLIENT)
 public class RenderCaveFish extends RenderLiving<EntityCaveFish> {
     public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/cave_fish.png");
-    public static final ResourceLocation TEXTURE_LEADER = new ResourceLocation("thebetweenlands:textures/entity/cave_fish_leader.png");
     public final static ModelCaveFish CAVE_FISH_MODEL = new ModelCaveFish();
 
     public RenderCaveFish(RenderManager rendermanagerIn) {
@@ -52,8 +51,6 @@ public class RenderCaveFish extends RenderLiving<EntityCaveFish> {
 	
     @Override
     protected ResourceLocation getEntityTexture(EntityCaveFish entity) {
-    	if(entity.isLeader())
-    		return TEXTURE_LEADER;
     	return TEXTURE;
     }
 }
