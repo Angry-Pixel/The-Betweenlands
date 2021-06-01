@@ -12,6 +12,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAIWander;
@@ -47,7 +48,8 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
 	protected static final DataParameter<Boolean> IS_LEADER = EntityDataManager.<Boolean>createKey(EntityCaveFish.class, DataSerializers.BOOLEAN);
 	private EntityAIWander wanderAbout;
 	private EntityAIFollowTarget followLeader;
-
+	private EntityAIAvoidEntity<EntityLivingBase> aiAvoidFollowers;
+	
     public EntityCaveFish(World world) {
         super(world);
         setSize(0.6F, 0.4F);
@@ -66,11 +68,13 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
 
     @Override
     protected void initEntityAI() {
-    	wanderAbout = new EntityAIWander(this, 0.5D, 10);
-    	followLeader = new EntityAIFollowTarget(this, new EntityAIFollowTarget.FollowClosest(this, EntityCaveFish.class, entity -> entity instanceof EntityCaveFish && ((EntityCaveFish) entity).isLeader(), 16), 14D, 0.5F, 16.0F, false);
-        tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.4D));
-        tasks.addTask(2, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-        tasks.addTask(3, new EntityAILookIdle(this));
+    	aiAvoidFollowers = new EntityAIAvoidEntity<EntityLivingBase>(this, EntityLivingBase.class, entity -> entity instanceof EntityCaveFish, 10.0F, 0.5D, 1.0D);
+    	wanderAbout = new EntityAIWander(this, 0.5D, 5);
+    	followLeader = new EntityAIFollowTarget(this, new EntityAIFollowTarget.FollowClosest(this, EntityCaveFish.class, entity -> entity instanceof EntityCaveFish && ((EntityCaveFish) entity).isLeader(), 16), 14D, 1F, 16.0F, false);
+    	tasks.addTask(1, aiAvoidFollowers);
+    	tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 0.4D));
+        tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        tasks.addTask(4, new EntityAILookIdle(this));
     }
 
     @Override
@@ -105,9 +109,11 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
 		if(isLeader) {
 			tasks.removeTask(followLeader);
 			tasks.addTask(0, wanderAbout);
+			//tasks.addTask(1, aiAvoidFollowers);
 		}
 		else {
 			tasks.removeTask(wanderAbout);
+			//tasks.removeTask(aiAvoidFollowers);
 			tasks.addTask(0, followLeader);
 		}
 	}
@@ -247,6 +253,11 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
 
 	private void promoteThisFish() {
 		setIsLeader(true);
+	}
+
+	@Override
+	public boolean canBeCollidedWith() {
+		return isLeader();
 	}
 
 	@Override

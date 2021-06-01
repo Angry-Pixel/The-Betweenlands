@@ -14,10 +14,20 @@ import thebetweenlands.common.entity.mobs.EntityCaveFish;
 @SideOnly(Side.CLIENT)
 public class RenderCaveFish extends RenderLiving<EntityCaveFish> {
     public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/cave_fish.png");
+    public static final ResourceLocation TEXTURE_LEADER = new ResourceLocation("thebetweenlands:textures/entity/cave_fish_leader.png");
     public final static ModelCaveFish CAVE_FISH_MODEL = new ModelCaveFish();
 
     public RenderCaveFish(RenderManager rendermanagerIn) {
         super(rendermanagerIn, CAVE_FISH_MODEL, 0.5f);
+     /*   addLayer(new LayerOverlay<EntityCaveFish>(this, new ResourceLocation("thebetweenlands:textures/entity/cave_fish_leader_glow.png")) {
+        	@Override
+        	public void doRenderLayer(EntityCaveFish entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        		if(entity.isLeader())
+        			super.doRenderLayer(entity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
+
+        	}
+        }.setGlow(true));
+        */ //hhhhhnnnnnnnggggggggggnnnnnnnnnn!
     }
 
 	@Override
@@ -41,6 +51,8 @@ public class RenderCaveFish extends RenderLiving<EntityCaveFish> {
 
     @Override
     protected ResourceLocation getEntityTexture(EntityCaveFish entity) {
-        return TEXTURE;
+    	if(entity.isLeader())
+    		return TEXTURE_LEADER;
+    	return TEXTURE;
     }
 }
