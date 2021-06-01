@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.entity.layer.LayerOverlay;
 import thebetweenlands.client.render.model.entity.ModelCaveFish;
 import thebetweenlands.common.entity.mobs.EntityCaveFish;
 
@@ -19,36 +20,34 @@ public class RenderCaveFish extends RenderLiving<EntityCaveFish> {
 
     public RenderCaveFish(RenderManager rendermanagerIn) {
         super(rendermanagerIn, CAVE_FISH_MODEL, 0.5f);
-     /*   addLayer(new LayerOverlay<EntityCaveFish>(this, new ResourceLocation("thebetweenlands:textures/entity/cave_fish_leader_glow.png")) {
+        addLayer(new LayerOverlay<EntityCaveFish>(this, new ResourceLocation("thebetweenlands:textures/entity/cave_fish_leader_glow.png")) {
         	@Override
         	public void doRenderLayer(EntityCaveFish entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        		if(entity.isLeader())
+        		if(entity.isLeader()) {
         			super.doRenderLayer(entity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
-
+        		}
         	}
         }.setGlow(true));
-        */ //hhhhhnnnnnnnggggggggggnnnnnnnnnn!
     }
-
+	
 	@Override
-	public void doRender(EntityCaveFish cave_fish, double x, double y, double z, float entityYaw, float partialTicks) {
-		super.doRender(cave_fish, x, y, z, entityYaw, partialTicks);
-		float smoothedYaw = cave_fish.prevRotationYaw + (cave_fish.rotationYaw - cave_fish.prevRotationYaw) * partialTicks;
-		float smoothedPitch = cave_fish.prevRotationPitch + (cave_fish.rotationPitch - cave_fish.prevRotationPitch) * partialTicks;
-		GlStateManager.pushMatrix();
-		float scale = cave_fish.isLeader() ? 1F : 0.5F;
-		GlStateManager.translate(x, y + scale, z);
-		GlStateManager.scale(scale, -scale, -scale);
-		GlStateManager.rotate(smoothedYaw, 0F, 1F, 0F);
-		GlStateManager.rotate(smoothedPitch, 1F, 0F, 0F);
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-		CAVE_FISH_MODEL.render(0.0625F);
-		GlStateManager.disableBlend();
-		GlStateManager.popMatrix();
-		CAVE_FISH_MODEL.setLivingAnimations(cave_fish, cave_fish.limbSwing, cave_fish.limbSwingAmount, partialTicks);
+	protected void preRenderCallback(EntityCaveFish entitylivingbaseIn, float partialTickTime) {
+		if(!entitylivingbaseIn.isLeader()) {
+			GlStateManager.scale(0.5f, 0.5f, 0.5f);
+		}
+		GlStateManager.translate(0, 0.5f, 0);
 	}
 
+	@Override
+	protected void renderModel(EntityCaveFish entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
+		GlStateManager.enableCull();
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+		GlStateManager.disableBlend();
+		GlStateManager.disableCull();
+	}
+	
     @Override
     protected ResourceLocation getEntityTexture(EntityCaveFish entity) {
     	if(entity.isLeader())

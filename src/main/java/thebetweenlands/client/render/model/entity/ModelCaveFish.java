@@ -162,10 +162,7 @@ public class ModelCaveFish extends MowzieModelBase {
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-    }
-
-    public void render(float scale) {
-        this.head.render(scale);
+    	this.head.render(scale);
         this.body.render(scale);
     }
 
