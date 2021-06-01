@@ -1,10 +1,14 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.Iterator;
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -16,6 +20,10 @@ import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.pathfinding.PathNodeType;
@@ -23,17 +31,23 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.entity.ai.EntityAIFollowTarget;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 public class EntityCaveFish extends EntityCreature implements IEntityBL {
-	
+
+	protected static final DataParameter<Boolean> IS_LEADER = EntityDataManager.<Boolean>createKey(EntityCaveFish.class, DataSerializers.BOOLEAN);
+	private EntityAIWander wanderAbout;
+	private EntityAIFollowTarget followLeader;
+
     public EntityCaveFish(World world) {
         super(world);
         setSize(0.6F, 0.4F);
@@ -44,9 +58,16 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
         setPathPriority(PathNodeType.WATER, 16.0F);
     }
 
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+		dataManager.register(IS_LEADER, false);
+	}
+
     @Override
     protected void initEntityAI() {
-    	tasks.addTask(0, new EntityAIWander(this, 0.5D, 10));
+    	wanderAbout = new EntityAIWander(this, 0.5D, 10);
+    	followLeader = new EntityAIFollowTarget(this, new EntityAIFollowTarget.FollowClosest(this, EntityCaveFish.class, entity -> entity instanceof EntityCaveFish && ((EntityCaveFish) entity).isLeader(), 16), 14D, 0.5F, 16.0F, false);
         tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.4D));
         tasks.addTask(2, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         tasks.addTask(3, new EntityAILookIdle(this));
@@ -68,13 +89,54 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
 		if (!getEntityWorld().isRemote) {
+			setIsLeader(true);
 			for (int x = 0; x < 3 + world.rand.nextInt(4); x++) {
-				EntityCaveFishSmall fish = new EntityCaveFishSmall(world);
+				EntityCaveFish fish = new EntityCaveFish(world);
 				fish.setLocationAndAngles(posX, posY, posZ, world.rand.nextFloat() * 360, 0);
+				fish.setIsLeader(false);
 				world.spawnEntity(fish);
 			}
 		}
 		return livingdata;
+	}
+
+	public void setIsLeader(boolean isLeader) {
+		dataManager.set(IS_LEADER, isLeader);
+		if(isLeader) {
+			tasks.removeTask(followLeader);
+			tasks.addTask(0, wanderAbout);
+		}
+		else {
+			tasks.removeTask(wanderAbout);
+			tasks.addTask(0, followLeader);
+		}
+	}
+
+	public boolean isLeader() {
+		return dataManager.get(IS_LEADER);
+	}
+
+	@Override
+	public void notifyDataManagerChange(DataParameter<?> key) {
+		if (IS_LEADER.equals(key)) {
+			if(isLeader())
+				setSize(0.6F, 0.4F);
+			else
+				setSize(0.3F, 0.2F);
+		}
+		super.notifyDataManagerChange(key);
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
+		nbt.setBoolean("isLeader", isLeader());
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
+		setIsLeader(nbt.getBoolean("isLeader"));
 	}
 
 	@Nullable
@@ -144,8 +206,9 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
     public void onLivingUpdate() {
         super.onLivingUpdate();
 
-		if (world.isRemote) {
-			// maybe 
+		if (!world.isRemote) {
+			if(world.getTotalWorldTime()%200 == 0)
+				checkIfCanBeLeader(); // just in case there is no leader
 		}
 
 		if (inWater) {
@@ -162,6 +225,29 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
 			this.damageEntity(DamageSource.DROWN, 0.5F);
 		}
     }
+
+	private void checkIfCanBeLeader() {
+		AxisAlignedBB aoe = new AxisAlignedBB(getPosition()).grow(10D);
+		if (!getEntityWorld().isRemote) {
+			List<EntityCaveFish> list = getEntityWorld().getEntitiesWithinAABB(EntityCaveFish.class, aoe);
+			for (Iterator<EntityCaveFish> iterator = list.iterator(); iterator.hasNext();) {
+				EntityLivingBase entity  = iterator.next();
+				if (entity != null && entity instanceof EntityCaveFish && !((EntityCaveFish) entity).isLeader())
+					iterator.remove();
+			}
+			if (list.isEmpty())
+				promoteThisFish();
+
+			if (!list.isEmpty()) {
+				return;
+			}
+		}
+
+	}
+
+	private void promoteThisFish() {
+		setIsLeader(true);
+	}
 
 	@Override
     public boolean isNotColliding() {

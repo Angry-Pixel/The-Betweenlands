@@ -7,7 +7,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.MowzieModelBase;
 import thebetweenlands.client.render.model.MowzieModelRenderer;
 import thebetweenlands.common.entity.mobs.EntityCaveFish;
-import thebetweenlands.common.entity.mobs.EntityCaveFishSmall;
 
 @SideOnly(Side.CLIENT)
 public class ModelCaveFish extends MowzieModelBase {
@@ -172,12 +171,9 @@ public class ModelCaveFish extends MowzieModelBase {
 
 	@Override
     public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
-		EntityLivingBase fish;
-		if(entity instanceof EntityCaveFishSmall)
-			fish = (EntityCaveFishSmall) entity;
-		else
-			fish = (EntityCaveFish) entity;
-		
+
+		EntityCaveFish fish = (EntityCaveFish) entity;
+
 		setToInitPose();
 
     	float frame = fish.ticksExisted + partialRenderTicks;

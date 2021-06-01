@@ -26,7 +26,7 @@ public class RenderCaveFish extends RenderLiving<EntityCaveFish> {
 		float smoothedYaw = cave_fish.prevRotationYaw + (cave_fish.rotationYaw - cave_fish.prevRotationYaw) * partialTicks;
 		float smoothedPitch = cave_fish.prevRotationPitch + (cave_fish.rotationPitch - cave_fish.prevRotationPitch) * partialTicks;
 		GlStateManager.pushMatrix();
-		float scale = 1F;
+		float scale = cave_fish.isLeader() ? 1F : 0.5F;
 		GlStateManager.translate(x, y + scale, z);
 		GlStateManager.scale(scale, -scale, -scale);
 		GlStateManager.rotate(smoothedYaw, 0F, 1F, 0F);
