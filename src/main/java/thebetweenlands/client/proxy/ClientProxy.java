@@ -180,6 +180,8 @@ import thebetweenlands.common.entity.mobs.EntityBarrishee;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
 import thebetweenlands.common.entity.mobs.EntityBubblerCrab;
+import thebetweenlands.common.entity.mobs.EntityCaveFish;
+import thebetweenlands.common.entity.mobs.EntityCaveFishSmall;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityChiromawGreeblingRider;
 import thebetweenlands.common.entity.mobs.EntityChiromawHatchling;
@@ -207,6 +209,7 @@ import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.entity.mobs.EntityGiantToad;
 import thebetweenlands.common.entity.mobs.EntityGreebling;
+import thebetweenlands.common.entity.mobs.EntityGreeblingCoracle;
 import thebetweenlands.common.entity.mobs.EntityGreeblingVolarpadFloater;
 import thebetweenlands.common.entity.mobs.EntityJellyfish;
 import thebetweenlands.common.entity.mobs.EntityJellyfishCave;
@@ -248,7 +251,6 @@ import thebetweenlands.common.entity.mobs.EntityVolatileSoul;
 import thebetweenlands.common.entity.mobs.EntityWallLamprey;
 import thebetweenlands.common.entity.mobs.EntityWallLivingRoot;
 import thebetweenlands.common.entity.mobs.EntityWight;
-import thebetweenlands.common.entity.mobs.EntityGreeblingCoracle;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityBLFishHook;
 import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
@@ -707,6 +709,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityBubblerCrab.class, RenderBubblerCrab::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFreshwaterUrchin.class, RenderFreshwaterUrchin::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBubblerCrabBubble.class, RenderBubblerCrabBubble::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCaveFish.class, RenderCaveFish::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCaveFishSmall.class, RenderCaveFishSmall::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());

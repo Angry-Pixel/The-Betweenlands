@@ -42,6 +42,8 @@ import thebetweenlands.common.entity.mobs.EntityBarrishee;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
 import thebetweenlands.common.entity.mobs.EntityBubblerCrab;
+import thebetweenlands.common.entity.mobs.EntityCaveFish;
+import thebetweenlands.common.entity.mobs.EntityCaveFishSmall;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityChiromawGreeblingRider;
 import thebetweenlands.common.entity.mobs.EntityChiromawHatchling;
@@ -275,6 +277,8 @@ public class EntityRegistry {
 		registerEntity(EntityGreeblingCoracle.class, "greebling_coracle", 0x142728, 0x7CB2AA);
 		
 		registerEntity(EntityBubblerCrabBubble.class, "bubbler_crab_bubble", 64, 1, true);
+		registerEntity(EntityCaveFish.class, "cave_fish", 0xD0D1C2, 0xECEDDF);
+		registerEntity(EntityCaveFishSmall.class, "cave_fish_small", 0xD0D1C2, 0xECEDDF);
 	}
 
 	private static int id = 0;
