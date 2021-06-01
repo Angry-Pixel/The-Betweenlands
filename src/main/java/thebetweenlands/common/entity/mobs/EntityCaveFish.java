@@ -7,14 +7,17 @@ import javax.annotation.Nullable;
 
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.EntityLookHelper;
@@ -49,7 +52,9 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
 	private EntityAIWander wanderAbout;
 	private EntityAIFollowTarget followLeader;
 	private EntityAIAvoidEntity<EntityLivingBase> aiAvoidFollowers;
-	
+	private EntityAINearestAttackableTarget targetRivalLeader;
+	private AICaveFishMeleeAttack attackLeader;
+
     public EntityCaveFish(World world) {
         super(world);
         setSize(0.6F, 0.4F);
@@ -71,10 +76,13 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
     	aiAvoidFollowers = new EntityAIAvoidEntity<EntityLivingBase>(this, EntityLivingBase.class, entity -> entity instanceof EntityCaveFish, 10.0F, 0.5D, 1.0D);
     	wanderAbout = new EntityAIWander(this, 0.5D, 5);
     	followLeader = new EntityAIFollowTarget(this, new EntityAIFollowTarget.FollowClosest(this, EntityCaveFish.class, entity -> entity instanceof EntityCaveFish && ((EntityCaveFish) entity).isLeader(), 16), 14D, 1F, 16.0F, false);
-    	tasks.addTask(1, aiAvoidFollowers);
-    	tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 0.4D));
-        tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-        tasks.addTask(4, new EntityAILookIdle(this));
+    	targetRivalLeader = new EntityAINearestAttackableTarget<>(this, EntityCaveFish.class, 0, false, true, entity -> entity instanceof EntityCaveFish && ((EntityCaveFish) entity).isLeader());
+    	attackLeader = new AICaveFishMeleeAttack(this);
+
+    	tasks.addTask(2, aiAvoidFollowers);
+    	tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 0.4D));
+        tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        tasks.addTask(5, new EntityAILookIdle(this));
     }
 
     @Override
@@ -82,6 +90,7 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
         super.applyEntityAttributes();
         getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
         getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(3.0D);
+        getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
     }
 
     @Override
@@ -107,14 +116,18 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
 	public void setIsLeader(boolean isLeader) {
 		dataManager.set(IS_LEADER, isLeader);
 		if(isLeader) {
+			targetTasks.addTask(0, targetRivalLeader);
 			tasks.removeTask(followLeader);
 			tasks.addTask(0, wanderAbout);
+			tasks.addTask(1, attackLeader);
 			//tasks.addTask(1, aiAvoidFollowers);
 		}
 		else {
+			targetTasks.removeTask(targetRivalLeader);
 			tasks.removeTask(wanderAbout);
 			//tasks.removeTask(aiAvoidFollowers);
 			tasks.addTask(0, followLeader);
+			tasks.removeTask(attackLeader);
 		}
 	}
 
@@ -143,6 +156,14 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
 		setIsLeader(nbt.getBoolean("isLeader"));
+	}
+
+	@Override
+	public boolean attackEntityAsMob(Entity entity) {
+		boolean hitTarget = entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float)((int)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+		if (hitTarget)
+			this.applyEnchantments(this, entity);
+		return hitTarget;
 	}
 
 	@Nullable
@@ -320,4 +341,16 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
               }
           }
     }
+
+	static class AICaveFishMeleeAttack extends EntityAIAttackMelee {
+
+		public AICaveFishMeleeAttack(EntityCaveFish cave_fish) {
+			super(cave_fish, 0.65D, false);
+		}
+
+		@Override
+		protected double getAttackReachSqr(EntityLivingBase attackTarget) {
+			return 0.75D;
+		}
+	}
 }
