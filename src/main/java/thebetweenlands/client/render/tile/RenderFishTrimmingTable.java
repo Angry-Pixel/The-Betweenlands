@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
@@ -99,7 +100,7 @@ public class RenderFishTrimmingTable extends TileEntitySpecialRenderer<TileEntit
 			GlStateManager.rotate(90F, 0F, 0F, 1F);
 			GlStateManager.rotate(45F, 1F, 0F, 0F);
 			GlStateManager.scale(scale2, scale2, scale2);
-			Render renderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entity);
+			Render<Entity> renderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entity);
 			renderer.doRender(entity, 0, 0, 0, 0, 0);
 			GlStateManager.popMatrix();
 		}
@@ -124,7 +125,8 @@ public class RenderFishTrimmingTable extends TileEntitySpecialRenderer<TileEntit
 			}
 
 			bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+			ITextureObject tex = Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+			tex.setBlurMipmap(false, false);
 			RenderHelper.disableStandardItemLighting();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -133,6 +135,8 @@ public class RenderFishTrimmingTable extends TileEntitySpecialRenderer<TileEntit
 			GlStateManager.disableBlend();
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			GlStateManager.popMatrix();
+			bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+			tex.restoreLastBlurMipmap();
 		}
 	}
 
