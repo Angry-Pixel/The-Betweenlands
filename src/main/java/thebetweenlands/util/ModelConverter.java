@@ -553,9 +553,11 @@ public class ModelConverter {
 			List<ModelRenderer> childModels = childModelMap.get(box.modelRenderer);
 			for(ModelRenderer childModel : childModels) {
 				List<Box> childBoxes = this.modelRendererBoxMap.get(childModel);
-				for(Box childBox : childBoxes) {
-					if(!box.childBoxes.contains(childBox)) {
-						box.childBoxes.add(childBox);
+				if(childBoxes != null) {
+					for(Box childBox : childBoxes) {
+						if(!box.childBoxes.contains(childBox)) {
+							box.childBoxes.add(childBox);
+						}
 					}
 				}
 			}
