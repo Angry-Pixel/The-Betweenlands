@@ -29,6 +29,10 @@ import thebetweenlands.client.render.model.baked.ModelTransform;
 import thebetweenlands.client.render.model.baked.ModelWalkway;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodBush;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodShieldBurning;
+import thebetweenlands.client.render.model.baked.modelbase.ModelBarnacle1;
+import thebetweenlands.client.render.model.baked.modelbase.ModelBarnacle2;
+import thebetweenlands.client.render.model.baked.modelbase.ModelBarnacle3;
+import thebetweenlands.client.render.model.baked.modelbase.ModelBarnacle4;
 import thebetweenlands.client.render.model.baked.modelbase.ModelBauble;
 import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom1;
 import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom2;
@@ -363,6 +367,18 @@ public class ModelRegistry {
 
 	public static final IModel BETWEENSTONE_PEBBLE_PILE_FOUR_PLANT = new ModelFromModelBase.Builder(new ModelPebblePile4Plants(), new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile"), 32, 32)
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+
+	public static final IModel BARNACLE_1 = new ModelFromModelBase.Builder(new ModelBarnacle1(), new ResourceLocation("thebetweenlands:blocks/barnacle_1"), 16, 16)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/barnacle_1")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+
+	public static final IModel BARNACLE_2 = new ModelFromModelBase.Builder(new ModelBarnacle2(), new ResourceLocation("thebetweenlands:blocks/barnacle_2"), 32, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/barnacle_2")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+
+	public static final IModel BARNACLE_3 = new ModelFromModelBase.Builder(new ModelBarnacle3(), new ResourceLocation("thebetweenlands:blocks/barnacle_3"), 32, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/barnacle_3")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+
+	public static final IModel BARNACLE_4 = new ModelFromModelBase.Builder(new ModelBarnacle4(), new ResourceLocation("thebetweenlands:blocks/barnacle_4"), 64, 64)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/barnacle_4")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 

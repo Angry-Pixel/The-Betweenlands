@@ -69,6 +69,8 @@ import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
 import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
 import thebetweenlands.common.block.container.BlockWindChime;
 import thebetweenlands.common.block.farming.BlockAspectrusCrop;
+import thebetweenlands.common.block.farming.BlockBarnacle_1_2;
+import thebetweenlands.common.block.farming.BlockBarnacle_3_4;
 import thebetweenlands.common.block.farming.BlockDugDirt;
 import thebetweenlands.common.block.farming.BlockDugGrass;
 import thebetweenlands.common.block.farming.BlockFungusCrop;
@@ -892,6 +894,8 @@ public class BlockRegistry {
     public static final Block SILT_GLASS_JAR = new BlockSiltGlassJar();
     public static final Block BETWEENSTONE_PEBBLE_PILE = new BlockBetweenstonePebblePile();
     public static final Block BETWEENSTONE_PEBBLE_PILE_WATER = new BlockBetweenstonePebblePileWater();
+    public static final Block BARNACLE_1_2 = new BlockBarnacle_1_2();
+    public static final Block BARNACLE_3_4 = new BlockBarnacle_3_4();
 
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();

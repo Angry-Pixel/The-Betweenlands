@@ -1,0 +1,17 @@
+{
+  "forge_marker": 1,
+  "variants": {
+      "barnacle_type_late=down_three": { "model": "thebetweenlands:internal/barnacle_3" },
+      "barnacle_type_late=up_three": { "model": "thebetweenlands:internal/barnacle_3", "x": 180 },
+      "barnacle_type_late=north_three": { "model": "thebetweenlands:internal/barnacle_3", "x": 270 },
+      "barnacle_type_late=east_three": { "model": "thebetweenlands:internal/barnacle_3", "x": 270, "y": 90 },
+      "barnacle_type_late=south_three": { "model": "thebetweenlands:internal/barnacle_3", "x": 270, "y": 180 },
+      "barnacle_type_late=west_three": { "model": "thebetweenlands:internal/barnacle_3", "x": 270, "y": 270 },
+      "barnacle_type_late=down_four": { "model": "thebetweenlands:internal/barnacle_4" },
+      "barnacle_type_late=up_four": { "model": "thebetweenlands:internal/barnacle_4", "x": 180 },
+      "barnacle_type_late=north_four": { "model": "thebetweenlands:internal/barnacle_4", "x": 270 },
+      "barnacle_type_late=east_four": { "model": "thebetweenlands:internal/barnacle_4", "x": 270, "y": 90 },
+      "barnacle_type_late=south_four": { "model": "thebetweenlands:internal/barnacle_4", "x": 270, "y": 180 },
+      "barnacle_type_late=west_four": { "model": "thebetweenlands:internal/barnacle_4", "x": 270, "y": 270 },
+  }
+}
