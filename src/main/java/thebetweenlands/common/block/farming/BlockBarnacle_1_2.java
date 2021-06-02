@@ -37,6 +37,7 @@ public class BlockBarnacle_1_2 extends BasicBlock implements ICustomItemBlock {
 		super(Material.ROCK);
 		setTickRandomly(true);
 		setHardness(0.2F);
+		setCreativeTab(BLCreativeTabs.BLOCKS);
 		setDefaultState(blockState.getBaseState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.NORTH_ONE));
 	}
 	
@@ -244,6 +245,6 @@ public class BlockBarnacle_1_2 extends BasicBlock implements ICustomItemBlock {
 
 	@Override
 	public ItemBlock getItemBlock() {
-		return null;
+		return new ItemBlock(this);
 	}
 }

@@ -12,6 +12,6 @@
       "barnacle_type_late=north_four": { "model": "thebetweenlands:internal/barnacle_4", "x": 270 },
       "barnacle_type_late=east_four": { "model": "thebetweenlands:internal/barnacle_4", "x": 270, "y": 90 },
       "barnacle_type_late=south_four": { "model": "thebetweenlands:internal/barnacle_4", "x": 270, "y": 180 },
-      "barnacle_type_late=west_four": { "model": "thebetweenlands:internal/barnacle_4", "x": 270, "y": 270 },
+      "barnacle_type_late=west_four": { "model": "thebetweenlands:internal/barnacle_4", "x": 270, "y": 270 }
   }
 }
