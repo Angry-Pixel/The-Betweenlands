@@ -89,6 +89,9 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	public int animationFrameCrab = 0;
 	public int netCheck = 0;
 	
+	private static final int MAX_NETTABLE_TIME = 20;
+	private int nettableTimer = 0;
+	
 	public EntityAnadia(World world) {
 		super(world);
         setSize(0.8F, 0.8F);
@@ -110,7 +113,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         tasks.addTask(1, new EntityAIAvoidEntity<>(this, EntityLurker.class, 8F, 4D, 8D));
         tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 0.4D));
         tasks.addTask(3, new EntityAnadia.EntityAIAFishCalledWander(this, 0.5D, 20));
-        tasks.addTask(4, new EntityAIPanicWhenHooked(this));
+        tasks.addTask(4, new EntityAIPanicWhenUnhooked(this));
+        tasks.addTask(5, new EntityAIPanicWhenHooked(this));
         aiFindBait = new EntityAnadia.AIFindBait(this, 2D);
         aiFindHook = new EntityAnadia.AIFindHook(this, 2D);
         tasks.addTask(6, aiFindBait);
@@ -344,6 +348,10 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	public boolean getTreasureUnlocked() {
 		 return dataManager.get(TREASURE_UNLOCKED);
 	}
+	
+	public int getNettableTimer() {
+		return this.nettableTimer;
+	}
 
 	public void randomiseObstructionOrder() {
 		List<Integer> obstructionList = new ArrayList<Integer>();
@@ -566,6 +574,12 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 	@Override
 	public void onUpdate() {
+		if(getStaminaTicks() <= 0 && isBeingRidden() && getPassengers().get(0) instanceof EntityBLFishHook) {
+			this.nettableTimer = MAX_NETTABLE_TIME;
+		} else if(this.nettableTimer > 0) {
+			this.nettableTimer--;
+		}
+		
 		if (getEntityWorld().isRemote) {
 			setSize(getFishSize(), getFishSize() * 0.75F);
 			
@@ -620,6 +634,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 					if (hook != null && hook.getAngler() != null)
 						playAnadiaWonSound(hook.getAngler());
 					playAnadiaWonSound = false;
+	            	this.getNavigator().clearPath();
 				}
 
 				if (getStaminaTicks() > 0 && getEscapeDelay() > 0) {
@@ -878,8 +893,9 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
         @Override
 		public void onUpdateMoveHelper() {
-            if (anadia.getStaminaTicks() <= 0) {
+            if (anadia.getStaminaTicks() <= 0 || anadia.getNettableTimer() > 0) {
             	action = EntityMoveHelper.Action.WAIT;
+            	anadia.setAIMoveSpeed(0);
             	return;
             }
         	
@@ -1133,12 +1149,63 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 		@Override
 		public boolean shouldExecute() {
-			return findRandomPosition() && anadia.isBeingRidden() && anadia.getStaminaTicks() >= 1;
+			return anadia.isBeingRidden() && anadia.getStaminaTicks() >= 1 && findRandomPosition();
 		}
 
 		@Override
 	    public boolean shouldContinueExecuting(){
 	        return !anadia.getNavigator().noPath() && anadia.isBeingRidden() && anadia.getStaminaTicks() >= 1;
+	    }
+	    
+		@Override
+	    public void startExecuting() {
+	        anadia.getNavigator().tryMoveToXYZ(this.randPosX, this.randPosY, this.randPosZ, this.speed);
+	    }
+	}
+	
+	public class EntityAIPanicWhenUnhooked extends EntityAIPanic {
+		private final EntityAnadia anadia;
+		private int timeSinceUnhook = 0;
+		
+		public EntityAIPanicWhenUnhooked(EntityAnadia entity) {
+			super(entity, 2.0D);
+			anadia = entity;
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			if(anadia.isBeingRidden() && anadia.getStaminaTicks() > 0) {
+				this.timeSinceUnhook = 0;
+			} else if(anadia.isBeingRidden() && anadia.getStaminaTicks() <= 0) {
+				this.timeSinceUnhook = 1;
+			} else if(this.timeSinceUnhook == 1 && this.anadia.getNettableTimer() <= 0) {
+				this.timeSinceUnhook = 2;
+			} else if(this.timeSinceUnhook >= 2) {
+				this.timeSinceUnhook += 2;
+				
+				if(anadia.isBeingRidden() || this.timeSinceUnhook >= 60) {
+					this.timeSinceUnhook = 0;
+					return false;
+				}
+				
+				if(findRandomPosition()) {
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		@Override
+	    public boolean shouldContinueExecuting() {
+			this.timeSinceUnhook++;
+			
+			if(anadia.isBeingRidden() || this.timeSinceUnhook >= 60) {
+				this.timeSinceUnhook = 0;
+				return false;
+			}
+			
+	        return !anadia.getNavigator().noPath() && !anadia.isBeingRidden();
 	    }
 	    
 		@Override

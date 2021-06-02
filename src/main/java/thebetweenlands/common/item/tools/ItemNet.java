@@ -52,7 +52,7 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 		register(EntityTinySludgeWorm.class, () -> ItemRegistry.TINY_SLUDGE_WORM, (p, e) -> true);
 		register(EntityTinySludgeWormHelper.class, () -> ItemRegistry.TINY_SLUDGE_WORM_HELPER, (p, e) -> true);
 		register(EntityMireSnail.class, () -> ItemRegistry.CRITTER, (p, e) -> true);
-		register(EntityAnadia.class, () -> ItemRegistry.ANADIA, (p, e) -> e.getStaminaTicks() <= 0);
+		register(EntityAnadia.class, () -> ItemRegistry.ANADIA, (p, e) -> e.getNettableTimer() > 0);
 		register(EntityFreshwaterUrchin.class, () -> ItemRegistry.FRESHWATER_URCHIN, (p, e) -> true);
 	}
 
@@ -67,11 +67,13 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 		Collection<Pair<Supplier<? extends ItemMob>, BiPredicate<EntityPlayer, Entity>>> entries = CATCHABLE_ENTITIES.get(target.getClass());
 
 		if(entries != null) {
-			if(!player.world.isRemote) {
-				for(Pair<Supplier<? extends ItemMob>, BiPredicate<EntityPlayer, Entity>> entry : entries) {
-					if(entry.getRight().test(player, target)) {
-						ItemMob item = entry.getLeft().get();
+			for(Pair<Supplier<? extends ItemMob>, BiPredicate<EntityPlayer, Entity>> entry : entries) {
+				if(entry.getRight().test(player, target)) {
+					ItemMob item = entry.getLeft().get();
 
+					player.swingArm(hand);
+
+					if(!player.world.isRemote) {
 						ItemStack mobItemStack = item.capture(target);
 
 						if(!mobItemStack.isEmpty()) {
@@ -83,19 +85,16 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 							stack.damageItem(1, player);
 
 							item.onCapturedByPlayer(player, hand, mobItemStack);
-							
-							break;
+
+							return true;
 						}
+					} else {
+						return true;
 					}
 				}
 			}
-			
-			if(target instanceof EntityAnadia && ((EntityAnadia)target).getStaminaTicks() > 0)
-				;
-			else
-				player.swingArm(hand);
-			
 		}
+		
 		return false;
 	}
 
