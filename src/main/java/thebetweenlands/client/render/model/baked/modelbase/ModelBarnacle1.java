@@ -6,7 +6,7 @@ import net.minecraft.entity.Entity;
 public class ModelBarnacle1 extends ModelBase {
 	public ModelRenderer bone;
 	public ModelRenderer Bornacle1;
-	public final ModelRenderer Bornacle2;
+	public ModelRenderer Bornacle2;
 
 	public ModelBarnacle1() {
 		textureWidth = 16;
