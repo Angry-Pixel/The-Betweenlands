@@ -45,7 +45,6 @@ import thebetweenlands.common.tile.TileEntitySiltGlassJar;
 
 public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider, ICustomItemBlock {
 
-	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 	private static final AxisAlignedBB AABB = new AxisAlignedBB(0.1875D, 0.0D, 0.1875D, 0.8125D, 1.0D, 0.8125D);
 
 	public BlockSiltGlassJar() {
@@ -54,7 +53,6 @@ public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider
 		setHardness(1.0F);
 		setResistance(5.0F);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
-		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	}
 
 	@Override
@@ -65,32 +63,6 @@ public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return AABB;
-	}
-
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing facing = EnumFacing.byIndex(meta);
-
-		if (facing.getAxis() == EnumFacing.Axis.Y) {
-			facing = EnumFacing.NORTH;
-		}
-
-		return this.getDefaultState().withProperty(FACING, facing);
-	}
-
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		return state.getValue(FACING).getIndex();
-	}
-
-	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, FACING);
-	}
-
-	@Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
-		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().rotateYCCW());
 	}
 
 	@Override
@@ -127,7 +99,6 @@ public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider
 
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().rotateYCCW()), 2);
 		if(!world.isRemote && stack.hasTagCompound() && stack.getTagCompound().hasKey("Items")) {
 			if (world.getTileEntity(pos) instanceof TileEntitySiltGlassJar) {
 				TileEntitySiltGlassJar tile = (TileEntitySiltGlassJar) world.getTileEntity(pos);
@@ -174,31 +145,38 @@ public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!world.isRemote) {
-			if (world.getTileEntity(pos) instanceof TileEntitySiltGlassJar) {
-				TileEntitySiltGlassJar tile = (TileEntitySiltGlassJar) world.getTileEntity(pos);
-				if (!player.getHeldItem(hand).isEmpty() && (player.getHeldItem(hand).getItem() == ItemRegistry.TINY_SLUDGE_WORM || player.getHeldItem(hand).getItem() == ItemRegistry.TINY_SLUDGE_WORM_HELPER)) {
+		if (world.getTileEntity(pos) instanceof TileEntitySiltGlassJar) {
+			TileEntitySiltGlassJar tile = (TileEntitySiltGlassJar) world.getTileEntity(pos);
+			if (!player.getHeldItem(hand).isEmpty() && (player.getHeldItem(hand).getItem() == ItemRegistry.TINY_SLUDGE_WORM || player.getHeldItem(hand).getItem() == ItemRegistry.TINY_SLUDGE_WORM_HELPER)) {
+				if (!world.isRemote) {
 					for(int i = 0; i < tile.getItems().size(); i++) {
 						if (tile.getItems().get(i).isEmpty()) {
 							ItemStack stack = player.getHeldItem(hand).splitStack(1);
 							if (!stack.isEmpty()) {
+								if(player.isCreative()) {
+									player.setHeldItem(hand, stack.copy());
+								}
 								tile.getItems().set(i, stack);
 								tile.checkItemCount();
-								return true;
+								break;
 							}
 						}
 					}
-				} else if(player.isSneaking() && hand == EnumHand.MAIN_HAND) {
-					for(int i = 0; i < tile.getItems().size(); i++) {
-						if(!tile.getItems().get(i).isEmpty()) {
+				}
+				return true; //needed to prevent accidental worm spawning
+			} else if(player.isSneaking() && hand == EnumHand.MAIN_HAND) {
+				for(int i = 0; i < tile.getItems().size(); i++) {
+					if(!tile.getItems().get(i).isEmpty()) {
+						if (!world.isRemote) {
 							ItemStack extracted = tile.getItems().get(i);
 							EntityItem item = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, extracted);
 							item.motionX = item.motionY = item.motionZ = 0D;
 							world.spawnEntity(item);
 							tile.getItems().set(i, ItemStack.EMPTY);
 							tile.checkItemCount();
-							return true;
 						}
+						player.swingArm(hand);
+						return true;
 					}
 				}
 			}

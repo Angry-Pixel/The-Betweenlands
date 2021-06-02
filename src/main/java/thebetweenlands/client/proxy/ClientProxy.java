@@ -829,6 +829,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		Item.getItemFromBlock(BlockRegistry.FISH_TRIMMING_TABLE).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityFishTrimmingTable.class));
 		Item.getItemFromBlock(BlockRegistry.CRAB_POT).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityCrabPot.class));
 		Item.getItemFromBlock(BlockRegistry.CRAB_POT_FILTER).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityCrabPotFilter.class));
+		Item.getItemFromBlock(BlockRegistry.SILT_GLASS_JAR).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntitySiltGlassJar.class));
 
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {

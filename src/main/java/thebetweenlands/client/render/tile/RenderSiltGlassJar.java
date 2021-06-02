@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -13,41 +14,60 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.model.tile.ModelSiltGlassJar;
+import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.tile.TileEntitySiltGlassJar;
 
 @SideOnly(Side.CLIENT)
 public class RenderSiltGlassJar extends TileEntitySpecialRenderer<TileEntitySiltGlassJar> {
 	public static final ResourceLocation WORM_WIGGLE = new ResourceLocation("thebetweenlands:blocks/worm_wiggle");
 
+	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/blocks/silt_glass_jar.png");
+	private final ModelSiltGlassJar model = new ModelSiltGlassJar();
+	
 	@Override
 	public void render(TileEntitySiltGlassJar tile, double x, double y, double z, float partialTick, int destroyStage, float alpha) {
-		int wormLevel = tile.getItemCount();
+		if(tile != null) {
+			int wormLevel = tile.getItemCount();
+			if (wormLevel >= 1) {
+				float height = (0.6875F / 8) * wormLevel;
+				
+				TextureAtlasSprite wormSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("thebetweenlands:blocks/worm_wiggle");
+				Tessellator tessellator = Tessellator.getInstance();
+				BufferBuilder buffer = tessellator.getBuffer();
 		
-		if (wormLevel < 1)
-			return;
-
-		float height = (0.6875F / 8) * wormLevel;
+				GlStateManager.disableLighting();
+		        GlStateManager.pushMatrix();
+				GlStateManager.translate(x, y, z);
+				Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+				float xMax, zMax, xMin, zMin, yMin = 0;
+				xMax = 1.5F;
+				zMax = 1.5F;
+				xMin = 0.5F;
+				zMin = 0.5F;
+				yMin = 0.0625F;
 		
-		TextureAtlasSprite wormSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("thebetweenlands:blocks/worm_wiggle");
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buffer = tessellator.getBuffer();
-
-		GlStateManager.disableLighting();
-        GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y, z);
-		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-		float xMax, zMax, xMin, zMin, yMin = 0;
-		xMax = 1.5F;
-		zMax = 1.5F;
-		xMin = 0.5F;
-		zMin = 0.5F;
-		yMin = 0.0625F;
-
-		renderCuboid(buffer, xMax, xMin, yMin, height, zMin, zMax, wormSprite);
-		tessellator.draw();
+				renderCuboid(buffer, xMax, xMin, yMin, height, zMin, zMax, wormSprite);
+				tessellator.draw();
+				GlStateManager.popMatrix();
+				GlStateManager.enableLighting();
+			}
+		}
+		
+		bindTexture(TEXTURE);
+		GlStateManager.pushMatrix();
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
+		GlStateManager.scale(1F, -1F, -1F);
+		GlStateManager.enableCull();
+		GlStateManager.cullFace(CullFace.FRONT);
+		model.render();
+		GlStateManager.cullFace(CullFace.BACK);
+		model.render();
 		GlStateManager.popMatrix();
-		GlStateManager.enableLighting();
 	}
 
 	private void renderCuboid(BufferBuilder buffer, float xMax, float xMin, float yMin, float height, float zMin, float zMax, TextureAtlasSprite textureAtlasSprite) {
