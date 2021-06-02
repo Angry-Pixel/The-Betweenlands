@@ -76,7 +76,6 @@ public class EntityFishBait extends EntityItem {
 		return  new AxisAlignedBB(posX - 0.125D, posY - 0.125D, posZ - 0.125D, posX + 0.125D, posY + 0.125D, posZ + 0.125D).grow(getBaitRange()* 0.5D, getBaitRange()* 0.5D, getBaitRange()* 0.5D);
 	}
 
-	@SuppressWarnings("unchecked")
 	public void lureCloseFish() {
 		List<EntityAnadia> list = getEntityWorld().getEntitiesWithinAABB(EntityAnadia.class, extendRangeBox());
 		for (Iterator<EntityAnadia> iterator = list.iterator(); iterator.hasNext();) {

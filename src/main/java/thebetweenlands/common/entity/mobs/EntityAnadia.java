@@ -82,18 +82,15 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	
 	public EntityAnadia.AIFindBait aiFindBait;
 	public EntityAnadia.AIFindHook aiFindHook;
-	public byte BASE = 2;
-	public byte SILVER = 3;
-	public byte SMOKED = 0;
-	public byte ROTTEN = 1;
 
-	public boolean PLAY_ANADIA_WON_SOUND = true;
+	public boolean playAnadiaWonSound = true;
 	
 	public int animationFrame = 0;
 	public int animationFrameCrab = 0;
 	public int netCheck = 0;
 	
-	List<Integer> obstructionList = new ArrayList<Integer>();
+	private static final int MAX_NETTABLE_TIME = 20;
+	private int nettableTimer = 0;
 	
 	public EntityAnadia(World world) {
 		super(world);
@@ -113,10 +110,11 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
                 return 0.75D + attackTarget.width;
             }
         });
-        tasks.addTask(1, new EntityAIAvoidEntity(this, EntityLurker.class, 8F, 4D, 8D));
+        tasks.addTask(1, new EntityAIAvoidEntity<>(this, EntityLurker.class, 8F, 4D, 8D));
         tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 0.4D));
         tasks.addTask(3, new EntityAnadia.EntityAIAFishCalledWander(this, 0.5D, 20));
-        tasks.addTask(4, new EntityAIPanicWhenHooked(this));
+        tasks.addTask(4, new EntityAIPanicWhenUnhooked(this));
+        tasks.addTask(5, new EntityAIPanicWhenHooked(this));
         aiFindBait = new EntityAnadia.AIFindBait(this, 2D);
         aiFindHook = new EntityAnadia.AIFindHook(this, 2D);
         tasks.addTask(6, aiFindBait);
@@ -350,6 +348,10 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	public boolean getTreasureUnlocked() {
 		 return dataManager.get(TREASURE_UNLOCKED);
 	}
+	
+	public int getNettableTimer() {
+		return this.nettableTimer;
+	}
 
 	public void randomiseObstructionOrder() {
 		List<Integer> obstructionList = new ArrayList<Integer>();
@@ -572,6 +574,12 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 	@Override
 	public void onUpdate() {
+		if(getStaminaTicks() <= 0 && isBeingRidden() && getPassengers().get(0) instanceof EntityBLFishHook) {
+			this.nettableTimer = MAX_NETTABLE_TIME;
+		} else if(this.nettableTimer > 0) {
+			this.nettableTimer--;
+		}
+		
 		if (getEntityWorld().isRemote) {
 			setSize(getFishSize(), getFishSize() * 0.75F);
 			
@@ -598,8 +606,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 			//regains stamina over time whilst not hooked
 	        if(!isBeingRidden() ) {
-	        	if(!PLAY_ANADIA_WON_SOUND)
-	        		PLAY_ANADIA_WON_SOUND = true;
+        		playAnadiaWonSound = true;
 
 	        	if(getEscapeDelay() < (int) getStaminaMods() * 30)
 	        		setEscapeDelay((int) (getStaminaMods() * 30));
@@ -623,10 +630,11 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 			if (isBeingRidden() && getPassengers().get(0) instanceof EntityBLFishHook) {
 				EntityBLFishHook hook = (EntityBLFishHook) getPassengers().get(0);
 
-				if (getStaminaTicks() <= 0 && PLAY_ANADIA_WON_SOUND) {
+				if (getStaminaTicks() <= 0 && playAnadiaWonSound) {
 					if (hook != null && hook.getAngler() != null)
 						playAnadiaWonSound(hook.getAngler());
-					PLAY_ANADIA_WON_SOUND = false;
+					playAnadiaWonSound = false;
+	            	this.getNavigator().clearPath();
 				}
 
 				if (getStaminaTicks() > 0 && getEscapeDelay() > 0) {
@@ -842,10 +850,10 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		TAIL_2(0.25F, 2F, 2F, 2F),
 		TAIL_3(0.5F, 3F, 3F, 3F);
 
-		float speed; // added to movement speed
-		float health; // added to health
-		float strength; // added to attack if aggressive, and/or rod damage per catch
-		float stamina; // possible use for how much it pulls or time taken to catch once hooked
+		private float speed; // added to movement speed
+		private float health; // added to health
+		private float strength; // added to attack if aggressive, and/or rod damage per catch
+		private float stamina; // possible use for how much it pulls or time taken to catch once hooked
 
 		EnumAnadiaTailParts(float speedModifier, float healthModifier, float strengthModifier, float staminaModifier) {
 			speed = speedModifier;
@@ -885,6 +893,12 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
         @Override
 		public void onUpdateMoveHelper() {
+            if (anadia.getStaminaTicks() <= 0 || anadia.getNettableTimer() > 0) {
+            	action = EntityMoveHelper.Action.WAIT;
+            	anadia.setAIMoveSpeed(0);
+            	return;
+            }
+        	
             if (action == EntityMoveHelper.Action.MOVE_TO && !anadia.getNavigator().noPath()) {
                 double targetX = posX - anadia.posX;
                 double targetY = posY - anadia.posY;
@@ -923,9 +937,6 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
             } else {
                 anadia.setAIMoveSpeed(0.0F);
             }
-            
-            if (anadia.getStaminaTicks() <= 0)
-            	action = EntityMoveHelper.Action.WAIT;
         }
         
     }
@@ -997,7 +1008,6 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 			bait = null;
 		}
 
-    	@SuppressWarnings("unchecked")
     	public EntityFishBait getClosestBait(double distance) {
     		List<EntityFishBait> list = anadia.getEntityWorld().getEntitiesWithinAABB(EntityFishBait.class, anadia.getEntityBoundingBox().grow(distance, distance, distance));
     		for (Iterator<EntityFishBait> iterator = list.iterator(); iterator.hasNext();) {
@@ -1089,7 +1099,6 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 			hook = null;
 		}
 
-    	@SuppressWarnings("unchecked")
     	public EntityBLFishHook getClosestHook(double distance) {
     		List<EntityBLFishHook> list = anadia.getEntityWorld().getEntitiesWithinAABB(EntityBLFishHook.class, anadia.getEntityBoundingBox().grow(distance, distance, distance));
     		for (Iterator<EntityBLFishHook> iterator = list.iterator(); iterator.hasNext();) {
@@ -1140,7 +1149,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 		@Override
 		public boolean shouldExecute() {
-			return findRandomPosition() && anadia.isBeingRidden() && anadia.getStaminaTicks() >= 1;
+			return anadia.isBeingRidden() && anadia.getStaminaTicks() >= 1 && findRandomPosition();
 		}
 
 		@Override
@@ -1148,6 +1157,58 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	        return !anadia.getNavigator().noPath() && anadia.isBeingRidden() && anadia.getStaminaTicks() >= 1;
 	    }
 	    
+		@Override
+	    public void startExecuting() {
+	        anadia.getNavigator().tryMoveToXYZ(this.randPosX, this.randPosY, this.randPosZ, this.speed);
+	    }
+	}
+	
+	public class EntityAIPanicWhenUnhooked extends EntityAIPanic {
+		private final EntityAnadia anadia;
+		private int timeSinceUnhook = 0;
+		
+		public EntityAIPanicWhenUnhooked(EntityAnadia entity) {
+			super(entity, 2.0D);
+			anadia = entity;
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			if(anadia.isBeingRidden() && anadia.getStaminaTicks() > 0) {
+				this.timeSinceUnhook = 0;
+			} else if(anadia.isBeingRidden() && anadia.getStaminaTicks() <= 0) {
+				this.timeSinceUnhook = 1;
+			} else if(this.timeSinceUnhook == 1 && this.anadia.getNettableTimer() <= 0) {
+				this.timeSinceUnhook = 2;
+			} else if(this.timeSinceUnhook >= 2) {
+				this.timeSinceUnhook += 2;
+				
+				if(anadia.isBeingRidden() || this.timeSinceUnhook >= 60) {
+					this.timeSinceUnhook = 0;
+					return false;
+				}
+				
+				if(findRandomPosition()) {
+					return true;
+				}
+			}
+			
+			return false;
+		}
+		
+		@Override
+	    public boolean shouldContinueExecuting() {
+			this.timeSinceUnhook++;
+			
+			if(anadia.isBeingRidden() || this.timeSinceUnhook >= 60) {
+				this.timeSinceUnhook = 0;
+				return false;
+			}
+			
+	        return !anadia.getNavigator().noPath() && !anadia.isBeingRidden();
+	    }
+	    
+		@Override
 	    public void startExecuting() {
 	        anadia.getNavigator().tryMoveToXYZ(this.randPosX, this.randPosY, this.randPosZ, this.speed);
 	    }

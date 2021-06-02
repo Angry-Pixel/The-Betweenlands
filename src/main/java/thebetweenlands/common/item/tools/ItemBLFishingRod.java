@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,6 +29,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.projectiles.EntityBLFishHook;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.NBTHelper;
 import thebetweenlands.util.TranslationHelper;
 
@@ -76,12 +78,55 @@ public class ItemBLFishingRod extends Item {
 	}
 
 	@Override
-	   public void onUpdate(ItemStack stack, World world, Entity entityIn, int itemSlot, boolean isSelected) {
+	public void onUpdate(ItemStack stack, World world, Entity entityIn, int itemSlot, boolean isSelected) {
 		if(!world.isRemote) {
-			if (!stack.hasTagCompound())
-				stack.setTagCompound(new NBTTagCompound());
-			if (!stack.getTagCompound().hasKey("baited"))
-				stack.getTagCompound().setBoolean("baited", false);
+			NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
+			
+			if(!nbt.hasKey("baited")) {
+				nbt.setBoolean("baited", false);
+			}
+			
+			if(entityIn instanceof EntityPlayer) {
+				EntityPlayer player = (EntityPlayer) entityIn;
+				
+				if(player.getHeldItemMainhand() == stack) {
+					if(!nbt.getBoolean("bl.fishing_rod.equipped") && player.getHeldItemOffhand().isEmpty()) {
+						nbt.setInteger("bl.fishing_rod.equipped_slot", -1);
+						
+						for(int i = 0; i < player.inventory.getSizeInventory(); i++) {
+							ItemStack invStack = player.inventory.getStackInSlot(i);
+							
+							if(!invStack.isEmpty() && invStack.getItem() == ItemRegistry.NET) {
+								player.setHeldItem(EnumHand.OFF_HAND, invStack);
+								player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
+								
+								nbt.setInteger("bl.fishing_rod.equipped_slot", i);
+								
+								break;
+							}
+						}
+					}
+					
+					nbt.setBoolean("bl.fishing_rod.equipped", true);
+				} else if(nbt.getBoolean("bl.fishing_rod.equipped")) {
+					int equippedSlot = nbt.getInteger("bl.fishing_rod.equipped_slot");
+					if(equippedSlot >= 0 && equippedSlot < player.inventory.getSizeInventory() && !player.getHeldItemOffhand().isEmpty() && player.getHeldItemOffhand().getItem() == ItemRegistry.NET) {
+						if(player.inventory.getStackInSlot(equippedSlot).isEmpty()) {
+							player.inventory.setInventorySlotContents(equippedSlot, player.getHeldItemOffhand());
+							player.setHeldItem(EnumHand.OFF_HAND, ItemStack.EMPTY);
+						} else {
+							ItemStack net = player.getHeldItemOffhand();
+							player.setHeldItem(EnumHand.OFF_HAND, ItemStack.EMPTY);
+							if(!player.inventory.addItemStackToInventory(net)) {
+								player.setHeldItem(EnumHand.OFF_HAND, net);
+							}
+						}
+					}
+					
+					nbt.setBoolean("bl.fishing_rod.equipped", false);
+					nbt.setInteger("bl.fishing_rod.equipped_slot", -1);
+				}
+			}
 		}
 	}
 
