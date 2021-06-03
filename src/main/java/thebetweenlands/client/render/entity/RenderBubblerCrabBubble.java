@@ -18,6 +18,7 @@ public class RenderBubblerCrabBubble extends Render<EntityBubblerCrabBubble> {
 	public final static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/bubbler_crab_bubble.png");
 	
 	private final float scale;
+	
 	public RenderBubblerCrabBubble(RenderManager renderManagerIn) {
 		super(renderManagerIn);
 		this.scale = 1.0F;
@@ -26,11 +27,13 @@ public class RenderBubblerCrabBubble extends Render<EntityBubblerCrabBubble> {
 	@Override
 	public void doRender(EntityBubblerCrabBubble entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
+
+		float radius = Math.min(entity.swell, 120) * 0.0065f;
 		
 		this.bindEntityTexture(entity);
-		GlStateManager.translate((float)x, (float)y + 0.25D + entity.swell * 0.0025D, (float)z);
+		GlStateManager.translate((float)x, (float)y + (1 + radius) * 0.25f - 0.05f, (float)z);
 		GlStateManager.enableRescaleNormal();
-		GlStateManager.scale(this.scale + entity.swell * 0.01D, this.scale + entity.swell * 0.01D, this.scale + entity.swell * 0.01D);
+		GlStateManager.scale(this.scale + radius, this.scale + radius, this.scale + radius);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder vertexbuffer = tessellator.getBuffer();
 		float minU = 0;

@@ -29,6 +29,8 @@ import thebetweenlands.client.render.particle.entity.ParticleDruidCasting;
 import thebetweenlands.client.render.particle.entity.ParticleEmissiveBug;
 import thebetweenlands.client.render.particle.entity.ParticleEmissiveSwarm;
 import thebetweenlands.client.render.particle.entity.ParticleEntitySwirl;
+import thebetweenlands.client.render.particle.entity.ParticleFancyBubble;
+import thebetweenlands.client.render.particle.entity.ParticleFancyDrip;
 import thebetweenlands.client.render.particle.entity.ParticleFish;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.client.render.particle.entity.ParticleLifeEssence;
@@ -161,7 +163,9 @@ public enum BLParticles {
 	SWARM_EMISSIVE(new ParticleEmissiveSwarm.Factory()),
 	FLYING_SWARM_EMISSIVE(new ParticleEmissiveBug.Swarm()),
 	WIND_CHIME_VISION(new ParticleVisionOrb.Factory(new ResourceLocation("thebetweenlands:particle/wind_chime_vision_mask"))),
-	URCHIN_SPIKE(new ParticleUrchinSpike.Factory());
+	URCHIN_SPIKE(new ParticleUrchinSpike.Factory()),
+	FANCY_DRIP(new ParticleFancyDrip.Factory()),
+	FANCY_BUBBLE(new ParticleFancyBubble.Factory());
 	
 	private ParticleFactory<?, ?> factory;
 
