@@ -714,9 +714,10 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		super.updatePassenger(entity);
 		if (entity instanceof EntityBLFishHook) {
 			double a = Math.toRadians(rotationYaw);
-			double offSetX = -Math.sin(a) * width * 0.5D + entity.width * 0.5D;
-			double offSetZ = Math.cos(a) * width * 0.5D + entity.width * 0.5D;
-			entity.setPosition(posX + offSetX, posY + height* 0.5D, posZ + offSetZ);
+			double offSetX = -Math.sin(a) * width * 0.5D;
+			double offSetZ = Math.cos(a) * width * 0.5D;
+			entity.setPosition(posX + offSetX, posY + height + 0.125f, posZ + offSetZ);
+			this.rotationPitch = -20.0f;
 		}
 	}
 
