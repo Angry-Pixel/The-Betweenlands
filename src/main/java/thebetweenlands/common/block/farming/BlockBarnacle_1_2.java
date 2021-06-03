@@ -14,7 +14,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
@@ -22,32 +22,62 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.farming.BlockBarnacle_3_4.EnumBarnacleTypeLate;
+import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
+import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.util.AdvancedStateMap;
 
-public class BlockBarnacle_1_2 extends BasicBlock implements ICustomItemBlock {
+public class BlockBarnacle_1_2 extends BlockSwampWater implements IStateMappedBlock, ICustomItemBlock {
 	public static final PropertyEnum<EnumBarnacleTypeEarly> BARNACLE_TYPE_EARLY = PropertyEnum.<EnumBarnacleTypeEarly>create("barnacle_type_early", EnumBarnacleTypeEarly.class);
 
 	public BlockBarnacle_1_2() {
-		super(Material.ROCK);
-		setTickRandomly(true);
+		this(FluidRegistry.SWAMP_WATER, Material.WATER);
 		setHardness(0.2F);
-		setCreativeTab(BLCreativeTabs.BLOCKS);
-		setDefaultState(blockState.getBaseState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.NORTH_ONE));
 	}
 	
-	@Override
-	public boolean isOpaqueCube(IBlockState state) {
-		return false;
+	public BlockBarnacle_1_2(Fluid fluid, Material materialIn) {
+		super(fluid, materialIn);
+		setTickRandomly(true);
+		setHardness(0.2F);
+		setUnderwaterBlock(true);
+		setDefaultState(blockState.getBaseState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.NORTH_ONE).withProperty(LEVEL, 0));
+		setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
 	@Override
-	public boolean isFullBlock(IBlockState state) {
+	@SideOnly(Side.CLIENT)
+	public void setStateMapper(AdvancedStateMap.Builder builder) {
+		super.setStateMapper(builder);
+		builder.ignore(LEVEL);
+	}
+
+	@Override
+    public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
+        return false;
+    }
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> list) {
+		list.add(new ItemStack(this, 1, EnumBarnacleTypeEarly.NORTH_ONE.ordinal()));
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+		return layer == BlockRenderLayer.TRANSLUCENT || layer == BlockRenderLayer.CUTOUT;
+	}
+
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
@@ -57,9 +87,9 @@ public class BlockBarnacle_1_2 extends BasicBlock implements ICustomItemBlock {
 	}
 
 	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.MODEL;
-	}
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    	return BlockFaceShape.UNDEFINED;
+    }
 	
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
@@ -130,23 +160,16 @@ public class BlockBarnacle_1_2 extends BasicBlock implements ICustomItemBlock {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { BARNACLE_TYPE_EARLY });
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-		if (tab == BLCreativeTabs.BLOCKS)
-			list.add(new ItemStack(this, 1, EnumBarnacleTypeEarly.NORTH_ONE.ordinal()));
+        return new BlockStateContainer.Builder(this).add(LEVEL).add(new IProperty[] { BARNACLE_TYPE_EARLY }).add(FLUID_RENDER_PROPS.toArray(new IUnlistedProperty<?>[0])).build();
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.values()[meta]);
+		return getDefaultState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.byMetadata(meta));
 	}
-	
+
 	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+    public void randomTick(World world, BlockPos pos, IBlockState state, Random random) {
 		if (world.isRemote)
 			return;
 		IBlockState LATE_BARNACLE_BLOCK = BlockRegistry.BARNACLE_3_4.getDefaultState();
@@ -196,8 +219,7 @@ public class BlockBarnacle_1_2 extends BasicBlock implements ICustomItemBlock {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		EnumBarnacleTypeEarly type = state.getValue(BARNACLE_TYPE_EARLY);
-		return type.ordinal();
+		return ((EnumBarnacleTypeEarly)state.getValue(BARNACLE_TYPE_EARLY)).getMetadata();
 	}
 	
 	public static enum EnumBarnacleTypeEarly implements IStringSerializable {

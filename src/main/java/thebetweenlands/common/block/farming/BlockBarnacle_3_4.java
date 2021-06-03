@@ -14,7 +14,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
@@ -22,30 +22,60 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
+import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.util.AdvancedStateMap;
 
-public class BlockBarnacle_3_4 extends BasicBlock implements ICustomItemBlock {
+public class BlockBarnacle_3_4 extends BlockSwampWater implements IStateMappedBlock, ICustomItemBlock {
 	public static final PropertyEnum<EnumBarnacleTypeLate> BARNACLE_TYPE_LATE = PropertyEnum.<EnumBarnacleTypeLate>create("barnacle_type_late", EnumBarnacleTypeLate.class);
 
 	public BlockBarnacle_3_4() {
-		super(Material.ROCK);
-		setTickRandomly(true);
+		this(FluidRegistry.SWAMP_WATER, Material.WATER);
 		setHardness(0.2F);
-		setCreativeTab(BLCreativeTabs.BLOCKS);
-		setDefaultState(blockState.getBaseState().withProperty(BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.NORTH_THREE));
 	}
 	
-	@Override
-	public boolean isOpaqueCube(IBlockState state) {
-		return false;
+	public BlockBarnacle_3_4(Fluid fluid, Material materialIn) {
+		super(fluid, materialIn);
+		setTickRandomly(true);
+		setHardness(0.2F);
+		setUnderwaterBlock(true);
+		setDefaultState(blockState.getBaseState().withProperty(BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.NORTH_THREE));
+		setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
 	@Override
-	public boolean isFullBlock(IBlockState state) {
+	@SideOnly(Side.CLIENT)
+	public void setStateMapper(AdvancedStateMap.Builder builder) {
+		super.setStateMapper(builder);
+		builder.ignore(LEVEL);
+	}
+
+	@Override
+    public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
+        return false;
+    }
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
+		list.add(new ItemStack(this, 1, EnumBarnacleTypeLate.NORTH_THREE.ordinal()));
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+		return layer == BlockRenderLayer.TRANSLUCENT || layer == BlockRenderLayer.CUTOUT;
+	}
+
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
@@ -55,15 +85,15 @@ public class BlockBarnacle_3_4 extends BasicBlock implements ICustomItemBlock {
 	}
 
 	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.MODEL;
-	}
-	
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    	return BlockFaceShape.UNDEFINED;
+    }
+
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return NULL_AABB;
 	}
-	
+
 	@Override
     public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
         return canPlaceBlock(world, pos, side);
@@ -128,23 +158,18 @@ public class BlockBarnacle_3_4 extends BasicBlock implements ICustomItemBlock {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { BARNACLE_TYPE_LATE });
+		return new BlockStateContainer.Builder(this).add(LEVEL).add(new IProperty[] { BARNACLE_TYPE_LATE }).add(FLUID_RENDER_PROPS.toArray(new IUnlistedProperty<?>[0])).build();
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-		if (tab == BLCreativeTabs.BLOCKS)
-			list.add(new ItemStack(this, 1, EnumBarnacleTypeLate.NORTH_THREE.ordinal()));
-	}
+
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.values()[meta]);
+		return getDefaultState().withProperty(BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.byMetadata(meta));
 	}
-	
+
 	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+    public void randomTick(World world, BlockPos pos, IBlockState state, Random random) {
 		if (world.isRemote)
 			return;
 
@@ -183,8 +208,7 @@ public class BlockBarnacle_3_4 extends BasicBlock implements ICustomItemBlock {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		EnumBarnacleTypeLate type = state.getValue(BARNACLE_TYPE_LATE);
-		return type.ordinal();
+		return ((EnumBarnacleTypeLate)state.getValue(BARNACLE_TYPE_LATE)).getMetadata();
 	}
 	
 	public static enum EnumBarnacleTypeLate implements IStringSerializable {

@@ -1,17 +1,30 @@
 {
   "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:internal/layer_selection",
+    "custom": {
+      "model": "forge:block/fluid",
+      "layers": [
+        "translucent"
+      ],
+      "model_data": {
+        "fluid": "swamp_water"
+      }
+    }
+  },
   "variants": {
-      "barnacle_type_early=down_one": { "model": "thebetweenlands:internal/barnacle_1" },
-      "barnacle_type_early=up_one": { "model": "thebetweenlands:internal/barnacle_1", "x": 180 },
-      "barnacle_type_early=north_one": { "model": "thebetweenlands:internal/barnacle_1", "x": 270 },
-      "barnacle_type_early=east_one": { "model": "thebetweenlands:internal/barnacle_1", "x": 270, "y": 90 },
-      "barnacle_type_early=south_one": { "model": "thebetweenlands:internal/barnacle_1", "x": 270, "y": 180 },
-      "barnacle_type_early=west_one": { "model": "thebetweenlands:internal/barnacle_1", "x": 270, "y": 270 },
-      "barnacle_type_early=down_two": { "model": "thebetweenlands:internal/barnacle_2" },
-      "barnacle_type_early=up_two": { "model": "thebetweenlands:internal/barnacle_2", "x": 180 },
-      "barnacle_type_early=north_two": { "model": "thebetweenlands:internal/barnacle_2", "x": 270 },
-      "barnacle_type_early=east_two": { "model": "thebetweenlands:internal/barnacle_2", "x": 270, "y": 90 },
-      "barnacle_type_early=south_two": { "model": "thebetweenlands:internal/barnacle_2", "x": 270, "y": 180 },
-      "barnacle_type_early=west_two": { "model": "thebetweenlands:internal/barnacle_2", "x": 270, "y": 270 }
+  "barnacle_type_early=down_one": [{ "submodel": { "down_one_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/barnacle_1", "layers": [ "cutout", "none" ] } } } }],
+  "barnacle_type_early=up_one": [{ "submodel": { "up_one_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/barnacle_1", "layers": [ "cutout", "none" ] }, "x": 180 } } }],
+  "barnacle_type_early=north_one": [{ "submodel": { "north_one_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/barnacle_1", "layers": [ "cutout", "none" ] }, "x": 270 } } }],   
+  "barnacle_type_early=east_one": [{ "submodel": { "east_one_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/barnacle_1", "layers": [ "cutout", "none" ] }, "x": 270, "y": 90 } } }],   
+  "barnacle_type_early=south_one": [{ "submodel": { "south_one_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/barnacle_1", "layers": [ "cutout", "none" ] }, "x": 270, "y": 180 } } }],   
+  "barnacle_type_early=west_one": [{ "submodel": { "west_one_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/barnacle_1", "layers": [ "cutout", "none" ] }, "x": 270, "y": 270 } } }],   
+
+  "barnacle_type_early=down_two": [{ "submodel": { "down_two_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/barnacle_2", "layers": [ "cutout", "none" ] } } } }],
+  "barnacle_type_early=up_two": [{ "submodel": { "up_two_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/barnacle_2", "layers": [ "cutout", "none" ] }, "x": 180 } } }],
+  "barnacle_type_early=north_two": [{ "submodel": { "north_two_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/barnacle_2", "layers": [ "cutout", "none" ] }, "x": 270 } } }],   
+  "barnacle_type_early=east_two": [{ "submodel": { "east_two_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/barnacle_2", "layers": [ "cutout", "none" ] }, "x": 270, "y": 90 } } }],   
+  "barnacle_type_early=south_two": [{ "submodel": { "south_two_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/barnacle_2", "layers": [ "cutout", "none" ] }, "x": 270, "y": 180 } } }],   
+  "barnacle_type_early=west_two": [{ "submodel": { "west_two_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/barnacle_2", "layers": [ "cutout", "none" ] }, "x": 270, "y": 270 } } }]
   }
 }
