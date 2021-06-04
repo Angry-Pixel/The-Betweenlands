@@ -107,6 +107,7 @@ import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemAmateMap;
 import thebetweenlands.common.item.misc.ItemAmuletSlot;
 import thebetweenlands.common.item.misc.ItemAngryPebble;
+import thebetweenlands.common.item.misc.ItemBLNameTag;
 import thebetweenlands.common.item.misc.ItemBLRecord;
 import thebetweenlands.common.item.misc.ItemBarkAmulet;
 import thebetweenlands.common.item.misc.ItemBoneWayfinder;
@@ -491,6 +492,7 @@ public class ItemRegistry {
     public static final Item DRAETON_UPGRADE_CRAFTING = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1);
     public static final Item WEEDWOOD_ROWBOAT_UPGRADE_LANTERN = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1);
     public static final Item SNOT_POD = new ItemSnotPod();
+    public static final Item BL_NAME_TAG = new ItemBLNameTag();
     
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();

@@ -943,6 +943,7 @@ item.thebetweenlands.anadia_meat_cooked.name=Cooked Anadia Meat
 item.thebetweenlands.anadia_meat_smoked.name=Smoked Anadia Meat
 item.thebetweenlands.urchin_spike.name=Urchin Spike
 item.thebetweenlands.fumigant.name=Fumigant
+item.thebetweenlands.bl_name_tag.name=Amate Name Tag
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
