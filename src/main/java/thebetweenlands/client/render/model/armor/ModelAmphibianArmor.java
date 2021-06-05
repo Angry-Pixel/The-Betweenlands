@@ -2,6 +2,8 @@ package thebetweenlands.client.render.model.armor;
 
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EntityEquipmentSlot;
 
 // Made with Blockbench 3.8.4
@@ -522,6 +524,13 @@ public class ModelAmphibianArmor extends ModelBodyAttachment {
 		Bootfin_left1c.cubeList.add(new ModelBox(Bootfin_left1c, 40, 85, -2.5F, 0.0F, 0.0F, 5, 3, 0, 0.0F, false));
 	}
 
+	@Override
+	public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+		GlStateManager.enableCull();
+		super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+		GlStateManager.disableCull();
+	}
+	
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
 		modelRenderer.rotateAngleX = x;
 		modelRenderer.rotateAngleY = y;
