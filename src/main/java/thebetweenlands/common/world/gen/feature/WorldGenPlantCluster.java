@@ -42,7 +42,9 @@ public class WorldGenPlantCluster extends WorldGenerator {
 		for (int i = 0; i < this.attempts; ++i) {
 			BlockPos blockpos = position.add(rand.nextInt(this.offset) - rand.nextInt(this.offset), rand.nextInt(this.offset/2+1) - rand.nextInt(this.offset/2+1), rand.nextInt(this.offset) - rand.nextInt(this.offset));
 
-			if ((worldIn.isAirBlock(blockpos) || (this.isUnderwater && worldIn.getBlockState(blockpos).getMaterial().isLiquid())) && this.block.canPlaceBlockAt(worldIn, blockpos)) {
+			IBlockState state = worldIn.getBlockState(blockpos);
+			
+			if ((state.getBlock().isAir(state, worldIn, blockpos) || (this.isUnderwater && state.getMaterial().isLiquid() && state.getBlock().isReplaceable(worldIn, blockpos))) && this.block.canPlaceBlockAt(worldIn, blockpos)) {
 				this.setBlockAndNotifyAdequately(worldIn, blockpos, this.blockState);
 				generated = true;
 			}
