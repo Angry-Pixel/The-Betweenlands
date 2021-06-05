@@ -97,6 +97,63 @@ public class BlockBarnacle_3_4 extends BlockSwampWater implements IStateMappedBl
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return NULL_AABB;
 	}
+	
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
+		float widthMin = 0, heightMin = 0, depthMin = 0;
+		float widthMax = 0, heightMax = 0, depthMax = 0;
+		switch (getFacingForAttachedSide(state.getValue(BARNACLE_TYPE_LATE))) {
+		case DOWN:
+			widthMin = 0.125F;
+			heightMin = 0F;
+			depthMin = 0.125F;
+			widthMax = 0.125F;
+			heightMax = 0.5F;
+			depthMax = 0.125F;
+			break;
+		case UP:
+			widthMin = 0.125F;
+			heightMin = 0.5F;
+			depthMin = 0.125F;
+			widthMax = 0.125F;
+			heightMax = 0F;
+			depthMax = 0.125F;
+			break;
+		case SOUTH:
+			widthMin = 0.125F;
+			heightMin = 0.125F;
+			depthMin = 0.5F;
+			widthMax = 0.125F;
+			heightMax = 0.125F;
+			depthMax = 0F;
+			break;
+		case EAST:
+			widthMin = 0.5F;
+			heightMin = 0.125F;
+			depthMin = 0.125F;
+			widthMax = 0F;
+			heightMax = 0.125F;
+			depthMax = 0.125F;
+			break;
+		case NORTH:
+			widthMin = 0.125F;
+			heightMin = 0.125F;
+			depthMin = 0F;
+			widthMax = 0.125F;
+			heightMax = 0.125F;
+			depthMax = 0.5F;
+			break;
+		case WEST:
+			widthMin = 0F;
+			heightMin = 0.125F;
+			depthMin = 0.125F;
+			widthMax = 0.5F;
+			heightMax = 0.125F;
+			depthMax = 0.125F;
+			break;
+		}
+		return new AxisAlignedBB(0F + widthMin, 0F + heightMin, 0F + depthMin, 1F - widthMax, 1F - heightMax, 1F - depthMax);
+	}
 
 	@Override
     public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
