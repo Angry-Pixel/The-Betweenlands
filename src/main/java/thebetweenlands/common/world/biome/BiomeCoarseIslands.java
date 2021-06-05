@@ -8,8 +8,8 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityAngler;
-import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
+import thebetweenlands.common.entity.mobs.EntityCaveFish;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityChiromawGreeblingRider;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
@@ -17,6 +17,7 @@ import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityFrog;
 import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.entity.mobs.EntityLurker;
+import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityRootSprite;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntityStalker;
@@ -88,5 +89,6 @@ public class BiomeCoarseIslands extends BiomeBetweenlands {
 		entries.add(new PitstoneCaveSpawnEntry(19, EntityStalker.class, EntityStalker::new, (short) 15).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(16).setSpawningInterval(6000));
 		entries.add(new CaveSpawnEntry(20, EntitySwarm.class, EntitySwarm::new, (short) 60).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(32.0D));
 		entries.add(new SurfaceSpawnEntry(21, EntityAnadia.class, EntityAnadia::new, (short) 60).setCanSpawnInWater(true).setHostile(false).setGroupSize(1, 5));
+		entries.add(new CaveSpawnEntry(22, EntityCaveFish.class, EntityCaveFish::new, (short) 30).setCanSpawnInWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D));
 	}
 }

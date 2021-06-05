@@ -8,9 +8,9 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityAngler;
-import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
+import thebetweenlands.common.entity.mobs.EntityCaveFish;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityChiromawGreeblingRider;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
@@ -21,6 +21,7 @@ import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.mobs.EntityMireSnail;
+import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityShambler;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
@@ -99,5 +100,6 @@ public class BiomePatchyIslands extends BiomeBetweenlands {
 		entries.add(new CaveSpawnEntry(24, EntitySwarm.class, EntitySwarm::new, (short) 50).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(32.0D));
 		entries.add(new SurfaceSpawnEntry(25, EntityShambler.class, EntityShambler::new, (short) 30).setHostile(true));
 		entries.add(new SurfaceSpawnEntry(26, EntityAnadia.class, EntityAnadia::new, (short) 60).setCanSpawnInWater(true).setHostile(false).setGroupSize(1, 5));
+		entries.add(new CaveSpawnEntry(27, EntityCaveFish.class, EntityCaveFish::new, (short) 30).setCanSpawnInWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D));
 	}
 }

@@ -7,9 +7,9 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.common.entity.mobs.EntityAngler;
-import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
+import thebetweenlands.common.entity.mobs.EntityCaveFish;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityChiromawGreeblingRider;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
@@ -18,6 +18,7 @@ import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.entity.mobs.EntityGiantToad;
 import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityMireSnail;
+import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityShambler;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntityStalker;
@@ -37,7 +38,6 @@ import thebetweenlands.common.world.biome.spawning.spawners.SporelingSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SwampHagCaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.TarSpawnEntry;
-import thebetweenlands.common.world.biome.spawning.spawners.TreeSpawnEntry;
 import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorSwamplands;
 import thebetweenlands.common.world.gen.biome.feature.AlgaeFeature;
 import thebetweenlands.common.world.gen.biome.feature.FlatLandFeature;
@@ -105,5 +105,6 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 		entries.add(new PitstoneCaveSpawnEntry(22, EntityStalker.class, EntityStalker::new, (short) 20).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(16).setSpawningInterval(6000));
 		entries.add(new CaveSpawnEntry(23, EntitySwarm.class, EntitySwarm::new, (short) 65).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(32.0D));
 		entries.add(new SurfaceSpawnEntry(24, EntityShambler.class, EntityShambler::new, (short) 30).setHostile(true));
+		entries.add(new CaveSpawnEntry(25, EntityCaveFish.class, EntityCaveFish::new, (short) 30).setCanSpawnInWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D));
 	}
 }
