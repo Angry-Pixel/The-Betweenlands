@@ -268,7 +268,9 @@ public class ItemRegistry {
     public static final Item ANADIA_MEAT_RAW = new ItemBLFood(2, 0.2F, false); // temp
     public static final Item ANADIA_MEAT_COOKED = new ItemBLFood(4, 0.4F, false);
     public static final Item ANADIA_MEAT_SMOKED = new ItemBLFood(8, 0.8F, false);
-    
+
+    public static final Item BARNACLE = new ItemBLFood(1, 0.2F, false);
+
     //armor
     public static final Item BONE_HELMET = new ItemBoneArmor(EntityEquipmentSlot.HEAD);
     public static final Item BONE_CHESTPLATE = new ItemBoneArmor(EntityEquipmentSlot.CHEST);

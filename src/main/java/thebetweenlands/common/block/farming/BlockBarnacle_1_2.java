@@ -3,6 +3,8 @@ package thebetweenlands.common.block.farming;
 import java.util.Locale;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -12,6 +14,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
@@ -29,6 +32,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.farming.BlockBarnacle_3_4.EnumBarnacleTypeLate;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
+import thebetweenlands.common.item.ItemBlockBarnacle;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
@@ -48,8 +52,8 @@ public class BlockBarnacle_1_2 extends BlockSwampWater implements IStateMappedBl
 		setTickRandomly(true);
 		setHardness(0.2F);
 		setUnderwaterBlock(true);
-		setDefaultState(blockState.getBaseState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.NORTH_ONE).withProperty(LEVEL, 0));
-		setCreativeTab(BLCreativeTabs.BLOCKS);
+		setDefaultState(blockState.getBaseState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.BARNACLE_DOWN_ONE).withProperty(LEVEL, 0));
+		setCreativeTab(BLCreativeTabs.ITEMS);
 	}
 
 	@Override
@@ -67,7 +71,7 @@ public class BlockBarnacle_1_2 extends BlockSwampWater implements IStateMappedBl
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> list) {
-		list.add(new ItemStack(this, 1, EnumBarnacleTypeEarly.NORTH_ONE.ordinal()));
+		list.add(new ItemStack(this, 1, EnumBarnacleTypeEarly.BARNACLE_DOWN_ONE.ordinal()));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -122,35 +126,41 @@ public class BlockBarnacle_1_2 extends BlockSwampWater implements IStateMappedBl
 	@Override
     public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 
-		EnumBarnacleTypeEarly newFacing = EnumBarnacleTypeEarly.NORTH_ONE;
-		if (facing == EnumFacing.UP)
-			newFacing = EnumBarnacleTypeEarly.DOWN_ONE;
+		EnumBarnacleTypeEarly newFacing = EnumBarnacleTypeEarly.BARNACLE_DOWN_ONE;
 
-		else if (facing == EnumFacing.DOWN)
-				newFacing = EnumBarnacleTypeEarly.UP_ONE;
-		else {
 			switch (facing) {
+			case DOWN:
+				newFacing = EnumBarnacleTypeEarly.BARNACLE_UP_ONE;
+				break;
+			case UP:
+				newFacing = EnumBarnacleTypeEarly.BARNACLE_DOWN_ONE;
+				break;
 			case SOUTH:
-				newFacing = EnumBarnacleTypeEarly.NORTH_ONE;
+				newFacing = EnumBarnacleTypeEarly.BARNACLE_NORTH_ONE;
 				break;
 			case EAST:
-				newFacing = EnumBarnacleTypeEarly.WEST_ONE;
+				newFacing = EnumBarnacleTypeEarly.BARNACLE_WEST_ONE;
 				break;
 			case NORTH:
-				newFacing = EnumBarnacleTypeEarly.SOUTH_ONE;
+				newFacing = EnumBarnacleTypeEarly.BARNACLE_SOUTH_ONE;
 				break;
 			case WEST:
-				newFacing = EnumBarnacleTypeEarly.EAST_ONE;
+				newFacing = EnumBarnacleTypeEarly.BARNACLE_EAST_ONE;
 				break;
-			}
 		}
 
 		return getDefaultState().withProperty(BARNACLE_TYPE_EARLY, newFacing);
     }
 
 	@Override
+	@Nullable
+	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		return Item.getItemFromBlock(this);
+	}
+
+	@Override
 	public int damageDropped(IBlockState state) {
-		return EnumBarnacleTypeEarly.NORTH_ONE.ordinal();
+		return 0;
 	}
 
 	@Override
@@ -176,41 +186,41 @@ public class BlockBarnacle_1_2 extends BlockSwampWater implements IStateMappedBl
 		EnumBarnacleTypeEarly stage = state.getValue(BARNACLE_TYPE_EARLY);
 
 		switch (stage) {
-		case DOWN_ONE:
-			world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.DOWN_TWO), 2);
+		case BARNACLE_DOWN_ONE:
+			world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.BARNACLE_DOWN_TWO), 2);
 			break;
-		case DOWN_TWO:
-			world.setBlockState(pos, LATE_BARNACLE_BLOCK.withProperty(BlockBarnacle_3_4.BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.DOWN_THREE), 2);
+		case BARNACLE_DOWN_TWO:
+			world.setBlockState(pos, LATE_BARNACLE_BLOCK.withProperty(BlockBarnacle_3_4.BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.BARNACLE_DOWN_THREE), 2);
 			break;
-		case UP_ONE:
-			world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.UP_TWO), 2);
+		case BARNACLE_UP_ONE:
+			world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.BARNACLE_UP_TWO), 2);
 			break;
-		case UP_TWO:
-			world.setBlockState(pos, LATE_BARNACLE_BLOCK.withProperty(BlockBarnacle_3_4.BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.UP_THREE), 2);
+		case BARNACLE_UP_TWO:
+			world.setBlockState(pos, LATE_BARNACLE_BLOCK.withProperty(BlockBarnacle_3_4.BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.BARNACLE_UP_THREE), 2);
 			break;
-		case EAST_ONE:
-			world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.EAST_TWO), 2);
+		case BARNACLE_EAST_ONE:
+			world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.BARNACLE_EAST_TWO), 2);
 			break;
-		case EAST_TWO:
-			world.setBlockState(pos, LATE_BARNACLE_BLOCK.withProperty(BlockBarnacle_3_4.BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.EAST_THREE));
+		case BARNACLE_EAST_TWO:
+			world.setBlockState(pos, LATE_BARNACLE_BLOCK.withProperty(BlockBarnacle_3_4.BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.BARNACLE_EAST_THREE));
 			break;
-		case NORTH_ONE:
-			world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.NORTH_TWO), 2);
+		case BARNACLE_NORTH_ONE:
+			world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.BARNACLE_NORTH_TWO), 2);
 			break;
-		case NORTH_TWO:
-			world.setBlockState(pos, LATE_BARNACLE_BLOCK.withProperty(BlockBarnacle_3_4.BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.NORTH_THREE));
+		case BARNACLE_NORTH_TWO:
+			world.setBlockState(pos, LATE_BARNACLE_BLOCK.withProperty(BlockBarnacle_3_4.BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.BARNACLE_NORTH_THREE));
 			break;
-		case SOUTH_ONE:
-			world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.SOUTH_TWO), 2);
+		case BARNACLE_SOUTH_ONE:
+			world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.BARNACLE_SOUTH_TWO), 2);
 			break;
-		case SOUTH_TWO:
-			world.setBlockState(pos, LATE_BARNACLE_BLOCK.withProperty(BlockBarnacle_3_4.BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.SOUTH_THREE));
+		case BARNACLE_SOUTH_TWO:
+			world.setBlockState(pos, LATE_BARNACLE_BLOCK.withProperty(BlockBarnacle_3_4.BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.BARNACLE_SOUTH_THREE));
 			break;
-		case WEST_ONE:
-			world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.WEST_TWO), 2);
+		case BARNACLE_WEST_ONE:
+			world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.BARNACLE_WEST_TWO), 2);
 			break;
-		case WEST_TWO:
-			world.setBlockState(pos, LATE_BARNACLE_BLOCK.withProperty(BlockBarnacle_3_4.BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.WEST_THREE));
+		case BARNACLE_WEST_TWO:
+			world.setBlockState(pos, LATE_BARNACLE_BLOCK.withProperty(BlockBarnacle_3_4.BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.BARNACLE_WEST_THREE));
 			break;
 		default:
 			break;
@@ -224,18 +234,18 @@ public class BlockBarnacle_1_2 extends BlockSwampWater implements IStateMappedBl
 	
 	public static enum EnumBarnacleTypeEarly implements IStringSerializable {
 		
-		DOWN_ONE,
-		UP_ONE,
-		NORTH_ONE,
-		SOUTH_ONE,
-		WEST_ONE,
-		EAST_ONE,
-		DOWN_TWO,
-		UP_TWO,
-		NORTH_TWO,
-		SOUTH_TWO,
-		WEST_TWO,
-		EAST_TWO;
+		BARNACLE_DOWN_ONE,
+		BARNACLE_UP_ONE,
+		BARNACLE_NORTH_ONE,
+		BARNACLE_SOUTH_ONE,
+		BARNACLE_WEST_ONE,
+		BARNACLE_EAST_ONE,
+		BARNACLE_DOWN_TWO,
+		BARNACLE_UP_TWO,
+		BARNACLE_NORTH_TWO,
+		BARNACLE_SOUTH_TWO,
+		BARNACLE_WEST_TWO,
+		BARNACLE_EAST_TWO;
 
 		private final String name;
 
@@ -267,6 +277,6 @@ public class BlockBarnacle_1_2 extends BlockSwampWater implements IStateMappedBl
 
 	@Override
 	public ItemBlock getItemBlock() {
-		return new ItemBlock(this);
+		return new ItemBlockBarnacle(this);
 	}
 }

@@ -519,6 +519,8 @@ tile.thebetweenlands.betweenstone_pebble_pile_water.one_plant.name=Betweenstone 
 tile.thebetweenlands.betweenstone_pebble_pile_water.two_plant.name=Betweenstone Pebble Pile Water
 tile.thebetweenlands.betweenstone_pebble_pile_water.three_plant.name=Betweenstone Pebble Pile Water
 tile.thebetweenlands.betweenstone_pebble_pile_water.four_plant.name=Betweenstone Pebble Pile Water
+tile.thebetweenlands.barnacle_1_2.name=Barnacle Cluster
+tile.thebetweenlands.barnacle_3_4.name=Barnacle Cluster
 
 # Items
 
@@ -944,6 +946,8 @@ item.thebetweenlands.anadia_meat_smoked.name=Smoked Anadia Meat
 item.thebetweenlands.urchin_spike.name=Urchin Spike
 item.thebetweenlands.fumigant.name=Fumigant
 item.thebetweenlands.bl_name_tag.name=Amate Name Tag
+item.thebetweenlands.barnacle_larvae.name=Barnacle Larvae
+item.thebetweenlands.barnacle.name=Barnacle Flesh
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -1804,6 +1808,12 @@ gui.bl.draeton.main.upgrade_utility=Utility upgrade slot:\n§7 - Lurker Skin Pou
 gui.bl.draeton.main.upgrade_anchor=Anchor upgrade slot:\n§7 - Draeton Anchor Upgrade
 
 gui.bl.fish_trimming_table.butcher=Chop!
+
+# HWYLA Alt Block names
+tooltip.thebetweenlands.barnacle_stage_1.name=Barnacle Cluster (Newly Established)
+tooltip.thebetweenlands.barnacle_stage_2.name=Barnacle Cluster (Early Development)
+tooltip.thebetweenlands.barnacle_stage_3.name=Barnacle Cluster (Starting to Mature)
+tooltip.thebetweenlands.barnacle_stage_4.name=Barnacle Cluster (Ready to Harvest)
 
 # Advancements
 
