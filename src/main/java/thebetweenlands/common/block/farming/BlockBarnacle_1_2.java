@@ -177,7 +177,7 @@ public class BlockBarnacle_1_2 extends BlockSwampWater implements IStateMappedBl
         boolean flag = iblockstate.getBlockFaceShape(world, blockpos, direction) == BlockFaceShape.SOLID;
         Block block = iblockstate.getBlock();
 
-        return world.isBlockNormalCube(blockpos, true) && block.isOpaqueCube(iblockstate) && flag;
+        return world.isBlockNormalCube(blockpos, true) && block.isOpaqueCube(iblockstate) && flag && world.getBlockState(pos).getMaterial() == Material.WATER;
     }
 
 	@SuppressWarnings("incomplete-switch")
