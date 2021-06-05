@@ -25,6 +25,8 @@ public class HwylaProvider  {
         registrar.registerHeadProvider(underwaterPlantProvider, BlockCrabPotFilter.class);
         
         UnderwaterBarnacleProvider underwaterBarnacleProvider = new UnderwaterBarnacleProvider();
+        registrar.registerStackProvider(underwaterBarnacleProvider, BlockBarnacle_1_2.class);
+        registrar.registerStackProvider(underwaterBarnacleProvider, BlockBarnacle_3_4.class);
         registrar.registerHeadProvider(underwaterBarnacleProvider, BlockBarnacle_1_2.class);
         registrar.registerHeadProvider(underwaterBarnacleProvider, BlockBarnacle_3_4.class);
     }

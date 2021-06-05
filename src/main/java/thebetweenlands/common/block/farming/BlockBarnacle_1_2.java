@@ -31,6 +31,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.farming.BlockBarnacle_3_4.EnumBarnacleTypeLate;
+import thebetweenlands.common.block.terrain.BlockHearthgroveLog;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.item.ItemBlockBarnacle;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -176,6 +177,34 @@ public class BlockBarnacle_1_2 extends BlockSwampWater implements IStateMappedBl
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.byMetadata(meta));
+	}
+
+	@Override
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+    	if (!world.isRemote)
+    		if(checkForLog (world, pos, state))
+    			world.scheduleUpdate(pos, this, 400);
+    }
+
+	private boolean checkForLog(World world, BlockPos pos, IBlockState state) {
+		for (EnumFacing facing : EnumFacing.values()) {
+			IBlockState offsetState = world.getBlockState(pos.offset(facing));
+			Block offsetBlock = offsetState.getBlock();
+			if (offsetBlock instanceof BlockHearthgroveLog)
+				if(offsetState.getValue(BlockHearthgroveLog.TARRED))
+					return true;
+			}
+		return false;
+	}
+
+	@Override
+    public void updateTick(World world, BlockPos pos, IBlockState state, Random random) {
+		if (world.isRemote)
+			return;
+			if (checkForLog(world, pos, state)) {
+				randomTick(world, pos, state, random);
+				world.scheduleUpdate(pos, this, 400);
+		}
 	}
 
 	@Override

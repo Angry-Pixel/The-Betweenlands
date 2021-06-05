@@ -3,7 +3,6 @@ package thebetweenlands.common.block.terrain;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -30,8 +29,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.BlockStateContainerHelper;
-import thebetweenlands.common.block.farming.BlockBarnacle_1_2;
-import thebetweenlands.common.block.farming.BlockBarnacle_3_4;
 
 public class BlockHearthgroveLog extends BlockLogBetweenlands {
 	public static final PropertyBool TARRED = PropertyBool.create("tarred");
@@ -47,56 +44,6 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 		if (stack.getMetadata() == 5 || stack.getMetadata() == 7)
 			strings.remove(strings.size() - 1);
 		tooltip.addAll(strings);
-	}
-
-	@Override
-    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
-    	if (!world.isRemote)
-    		if(state.getValue(TARRED))
-    			world.scheduleUpdate(pos, this, 20);
-    }
-
-	@Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random random) {
-		if (world.isRemote)
-			return;
-		if (state.getValue(TARRED)) {
-			if (checkForAttached(world, pos, state, random))
-				checkForBarnaclesandUpdate(world, pos, state, random);
-			world.scheduleUpdate(pos, this, 20);
-		}
-	}
-	
-	private boolean checkForAttached(World world, BlockPos pos, IBlockState state, Random random) {
-		for (EnumFacing facing : EnumFacing.values()) {
-			IBlockState offsetState = world.getBlockState(pos.offset(facing));
-			Block offsetBlock = offsetState.getBlock();
-			if (offsetBlock instanceof BlockBarnacle_1_2)
-				return true;
-			else if (offsetBlock instanceof BlockBarnacle_3_4)
-				if (offsetBlock.getMetaFromState(offsetState) <= 5)
-					return true;
-		}
-		return false;
-	}
-
-	public void checkForBarnaclesandUpdate(World world, BlockPos pos, IBlockState state, Random random) {
-		System.out.println("Hello?");
-		for (EnumFacing facing : EnumFacing.values()) {
-			System.out.println("Checking Direction : " + facing.getName());
-			IBlockState offsetState = world.getBlockState(pos.offset(facing));
-			Block offsetBlock = offsetState.getBlock();
-			if (offsetBlock instanceof BlockBarnacle_1_2) {
-				offsetBlock.randomTick(world, pos.offset(facing), offsetState, random);
-				System.out.println("Ticked Early Barnacle: " + facing.getName());
-			}
-			else if (offsetBlock instanceof BlockBarnacle_3_4) {
-				if (offsetBlock.getMetaFromState(offsetState) <= 5) {
-					offsetBlock.randomTick(world, pos.offset(facing), offsetState, random);
-					System.out.println("Ticked Late Barnacle: " + facing.getName());
-				}
-			}
-		}
 	}
 
 	@Override
