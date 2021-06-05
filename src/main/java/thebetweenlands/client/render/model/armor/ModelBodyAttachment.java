@@ -13,12 +13,14 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 public class ModelBodyAttachment extends ModelBiped {
 	public final ModelRenderer bipedRightBoot = new ModelRenderer(this, 0, 0);
 	public final ModelRenderer bipedLeftBoot = new ModelRenderer(this, 0, 0);
+	public final ModelRenderer bipedWaist = new ModelRenderer(this, 0, 0);
 
-	private final List<ModelRenderer> baseParts = ImmutableList.of(bipedHead, bipedHeadwear, bipedBody, bipedRightArm, bipedLeftArm, bipedRightLeg, bipedLeftLeg, bipedRightBoot, bipedLeftBoot);
+	private final List<ModelRenderer> baseParts = ImmutableList.of(bipedHead, bipedHeadwear, bipedBody, bipedRightArm, bipedLeftArm, bipedRightLeg, bipedLeftLeg, bipedRightBoot, bipedLeftBoot, bipedWaist);
 
 	public ModelBodyAttachment() {
 		bipedLeftLeg.addChild(bipedLeftBoot);
 		bipedRightLeg.addChild(bipedRightBoot);
+		bipedBody.addChild(bipedWaist);
 		clear(baseParts);
 	}
 
@@ -32,7 +34,7 @@ public class ModelBodyAttachment extends ModelBiped {
 		for(ModelRenderer basePart : baseParts) {
 			if(basePart.childModels != null) {
 				for(ModelRenderer childPart : basePart.childModels) {
-					if(childPart != bipedRightBoot && childPart != bipedLeftBoot) {
+					if(childPart != bipedRightBoot && childPart != bipedLeftBoot && childPart != bipedWaist) {
 						childPart.showModel = false;
 					}
 				}
@@ -54,7 +56,9 @@ public class ModelBodyAttachment extends ModelBiped {
 		case CHEST:
 			if(bipedBody.childModels != null) {
 				for(ModelRenderer childPart : bipedBody.childModels) {
-					childPart.showModel = true;
+					if(childPart != bipedWaist) {
+						childPart.showModel = true;
+					}
 				}
 			}
 			if(bipedRightArm.childModels != null) {
@@ -81,6 +85,11 @@ public class ModelBodyAttachment extends ModelBiped {
 					if(childPart != bipedRightBoot && childPart != bipedLeftBoot) {
 						childPart.showModel = true;
 					}
+				}
+			}
+			if(bipedWaist.childModels != null) {
+				for(ModelRenderer childPart : bipedWaist.childModels) {
+					childPart.showModel = true;
 				}
 			}
 			break;
