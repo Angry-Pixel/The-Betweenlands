@@ -1,0 +1,11 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "thebetweenlands:items/amphibian_helmet"
+  },
+  "overrides": [
+        { "predicate": { "gem": 1.0 }, "model": "thebetweenlands:item/amphibian_helmet_aqua_gem" },
+        { "predicate": { "gem": 2.0 }, "model": "thebetweenlands:item/amphibian_helmet_crimson_gem" },
+        { "predicate": { "gem": 3.0 }, "model": "thebetweenlands:item/amphibian_helmet_green_gem" }
+    ]
+}
