@@ -49,6 +49,7 @@ import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWormHelper;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.item.BLMaterialRegistry;
+import thebetweenlands.common.item.armor.ItemAmphibianArmor;
 import thebetweenlands.common.item.armor.ItemAncientArmor;
 import thebetweenlands.common.item.armor.ItemBoneArmor;
 import thebetweenlands.common.item.armor.ItemExplorersHat;
@@ -292,6 +293,10 @@ public class ItemRegistry {
     public static final Item ANCIENT_CHESTPLATE = new ItemAncientArmor(EntityEquipmentSlot.CHEST);
     public static final Item ANCIENT_LEGGINGS = new ItemAncientArmor(EntityEquipmentSlot.LEGS);
     public static final Item ANCIENT_BOOTS = new ItemAncientArmor(EntityEquipmentSlot.FEET);
+    public static final Item AMPHIBIAN_HELMET = new ItemAmphibianArmor(EntityEquipmentSlot.HEAD);
+    public static final Item AMPHIBIAN_CHESTPLATE = new ItemAmphibianArmor(EntityEquipmentSlot.CHEST);
+    public static final Item AMPHIBIAN_LEGGINGS = new ItemAmphibianArmor(EntityEquipmentSlot.LEGS);
+    public static final Item AMPHIBIAN_BOOTS = new ItemAmphibianArmor(EntityEquipmentSlot.FEET);
     public static final Item RUBBER_BOOTS = new ItemRubberBoots();
     public static final Item MARSH_RUNNER_BOOTS = new ItemMarshRunnerBoots();
     public static final Item SKULL_MASK = new ItemSkullMask();
