@@ -5,7 +5,6 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.inventory.EntityEquipmentSlot;
 
 // Made with Blockbench 3.8.4
 // Exported for Minecraft version 1.7 - 1.12
@@ -531,7 +530,7 @@ public class ModelAmphibianArmor extends ModelBodyAttachment {
 		super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 		GlStateManager.disableCull();
 	}
-	
+
 	@Override
 	public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
 		setRotationAngle(Whisker_l1a, -0.1309F, 0.2618F, 0.3927F);
@@ -548,39 +547,59 @@ public class ModelAmphibianArmor extends ModelBodyAttachment {
 		setRotationAngle(Chestfin_left1a, -0.1309F, 0.0F, 0.0F);
 		setRotationAngle(Chestfin_right1a, -0.1309F, 0.0F, 0.0F);
 		setRotationAngle(Chestfin_back1a, 0.1745F, 0.0F, 0.0F);
-		
+		setRotationAngle(Helmet_gill_l2a, 0.0F, 0.1309F, 0.0F);
+		setRotationAngle(Helmet_gill_l2b, 0.0F, 0.3491F, 0.0F);
+		setRotationAngle(Helmet_gill_l2c, 0.0F, 0.1745F, 0.0F);
+		setRotationAngle(Helmet_gill_l2a2, 0.0F, -0.1309F, 0.0F);
+		setRotationAngle(Helmet_gill_l2b2, 0.0F, -0.3491F, 0.0F);
+		setRotationAngle(Helmet_gill_l2c2, 0.0F, -0.1745F, 0.0F);
+
 		float blend1 = (float)Math.pow(((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 0.0666f) + 1.0f) * 0.5f, 0.01f) * 0.5f + 0.5f;
 		float blend2 = (float)Math.pow(((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 0.0555f) + 1.0f) * 0.5f, 0.01f) * 0.5f + 0.5f;
 		float blend3 = (float)Math.pow(((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 0.0333f) + 1.0f) * 0.5f, 0.01f) * 0.5f + 0.5f;
-		
+
 		float angle1 = ((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 0.05f) + 1.0f) * 0.15f;
 		float angle2 = ((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 2.5f) + 1.0f) * 0.35f;
-		
+
 		float whisker1 = blend1 * angle1 + (1 - blend1) * angle2;
 		float whisker2 = blend2 * angle1 + (1 - blend2) * angle2;
 		float whisker3 = blend3 * angle1 + (1 - blend3) * angle2;
-		
+
 		Whisker_l1a.rotateAngleZ += whisker1 - 0.25f;
 		Whisker_l1a2.rotateAngleZ -= whisker2 - 0.25f;
-		
+
 		Bootfin_right1b.rotateAngleZ -= whisker2 * 0.5f;
 		Bootfin_left1b.rotateAngleZ += whisker1 * 0.5f;
-		
+
 		Bootfin_right1a.rotateAngleX -= whisker2 * 0.5f;
 		Bootfin_left1a.rotateAngleX -= whisker1 * 0.5f;
-		
+
 		Bootfin_right1c.rotateAngleX += whisker2 * 0.5f;
 		Bootfin_left1c.rotateAngleX += whisker1 * 0.5f;
-		
+
 		Beltfin_right1a.rotateAngleZ += whisker2 * 0.5f;
 		Beltfin_left1a.rotateAngleZ -= whisker1 * 0.5f;
-		
+
 		Chestfin_mid1a.rotateAngleX -= whisker3 * 0.5f - 0.15f;
 		Chestfin_left1a.rotateAngleX -= whisker1 * 0.5f - 0.15f;
 		Chestfin_right1a.rotateAngleX -= whisker2 * 0.5f - 0.15f;
 		Chestfin_back1a.rotateAngleX += whisker3 * 0.5f - 0.15f;
+
+		Helmet_gill_l2a.rotateAngleY -= whisker1 * 0.5f;
+		Helmet_gill_l2b.rotateAngleY -= whisker1 * 0.5f;
+		Helmet_gill_l2c.rotateAngleY -= whisker1 * 0.5f;
+		Helmet_gill_l2a.rotateAngleZ += whisker1 * 0.25f;
+		Helmet_gill_l2b.rotateAngleZ += whisker1 * 0.25f;
+		Helmet_gill_l2c.rotateAngleZ += whisker1 * 0.25f;
+
+		Helmet_gill_l2a2.rotateAngleY += whisker2 * 0.5f;
+		Helmet_gill_l2b2.rotateAngleY += whisker2 * 0.5f;
+		Helmet_gill_l2c2.rotateAngleY += whisker2 * 0.5f;
+		Helmet_gill_l2a2.rotateAngleZ -= whisker2 * 0.25f;
+		Helmet_gill_l2b2.rotateAngleZ -= whisker2 * 0.25f;
+		Helmet_gill_l2c2.rotateAngleZ -= whisker2 * 0.25f;
 	}
-	
+
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
 		modelRenderer.rotateAngleX = x;
 		modelRenderer.rotateAngleY = y;
