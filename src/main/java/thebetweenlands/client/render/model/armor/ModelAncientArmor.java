@@ -465,6 +465,7 @@ public class ModelAncientArmor extends ModelBodyAttachment {
 		modelRenderer.rotateAngleZ = z;
 	}
 
+	@Override
 	public void resetVisibilities() {
 		helmet_mainrotation.showModel = false;
 		chestplate_mainrotation.showModel = false;
@@ -477,6 +478,7 @@ public class ModelAncientArmor extends ModelBodyAttachment {
 		chainmail_leg_left.showModel = false;
 	}
 
+	@Override
 	public void setVisibilities(EntityEquipmentSlot slot) {
 		this.resetVisibilities();
 

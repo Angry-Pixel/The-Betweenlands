@@ -1,26 +1,101 @@
 package thebetweenlands.client.render.model.armor;
 
+import java.util.List;
+
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
+import net.minecraft.inventory.EntityEquipmentSlot;
 
 public class ModelBodyAttachment extends ModelBiped {
+	public final ModelRenderer bipedRightBoot = new ModelRenderer(this, 0, 0);
+	public final ModelRenderer bipedLeftBoot = new ModelRenderer(this, 0, 0);
+
+	private final List<ModelRenderer> baseParts = ImmutableList.of(bipedHead, bipedHeadwear, bipedBody, bipedRightArm, bipedLeftArm, bipedRightLeg, bipedLeftLeg, bipedRightBoot, bipedLeftBoot);
+
 	public ModelBodyAttachment() {
-		clear(
-			bipedHead,
-			bipedHeadwear,
-			bipedBody,
-			bipedRightArm,
-			bipedLeftArm,
-			bipedRightLeg,
-			bipedLeftLeg
-		);
+		bipedLeftLeg.addChild(bipedLeftBoot);
+		bipedRightLeg.addChild(bipedRightBoot);
+		clear(baseParts);
 	}
 
-	private void clear(ModelRenderer... renderers) {
+	private void clear(List<ModelRenderer> renderers) {
 		for (ModelRenderer renderer : renderers) {
 			renderer.cubeList.clear();
+		}
+	}
+
+	public void resetVisibilities() {
+		for(ModelRenderer basePart : baseParts) {
+			if(basePart.childModels != null) {
+				for(ModelRenderer childPart : basePart.childModels) {
+					if(childPart != bipedRightBoot && childPart != bipedLeftBoot) {
+						childPart.showModel = false;
+					}
+				}
+			}
+		}
+	}
+
+	public void setVisibilities(EntityEquipmentSlot slot) {
+		resetVisibilities();
+
+		switch(slot) {
+		case HEAD:
+			if(bipedHead.childModels != null) {
+				for(ModelRenderer childPart : bipedHead.childModels) {
+					childPart.showModel = true;
+				}
+			}
+			break;
+		case CHEST:
+			if(bipedBody.childModels != null) {
+				for(ModelRenderer childPart : bipedBody.childModels) {
+					childPart.showModel = true;
+				}
+			}
+			if(bipedRightArm.childModels != null) {
+				for(ModelRenderer childPart : bipedRightArm.childModels) {
+					childPart.showModel = true;
+				}
+			}
+			if(bipedLeftArm.childModels != null) {
+				for(ModelRenderer childPart : bipedLeftArm.childModels) {
+					childPart.showModel = true;
+				}
+			}
+			break;
+		case LEGS:
+			if(bipedRightLeg.childModels != null) {
+				for(ModelRenderer childPart : bipedRightLeg.childModels) {
+					if(childPart != bipedRightBoot && childPart != bipedLeftBoot) {
+						childPart.showModel = true;
+					}
+				}
+			}
+			if(bipedLeftLeg.childModels != null) {
+				for(ModelRenderer childPart : bipedLeftLeg.childModels) {
+					if(childPart != bipedRightBoot && childPart != bipedLeftBoot) {
+						childPart.showModel = true;
+					}
+				}
+			}
+			break;
+		case FEET:
+			if(bipedRightBoot.childModels != null) {
+				for(ModelRenderer childPart : bipedRightBoot.childModels) {
+					childPart.showModel = true;
+				}
+			}
+			if(bipedLeftBoot.childModels != null) {
+				for(ModelRenderer childPart : bipedLeftBoot.childModels) {
+					childPart.showModel = true;
+				}
+			}
+			break;
 		}
 	}
 
