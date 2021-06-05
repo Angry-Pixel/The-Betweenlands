@@ -46,7 +46,7 @@ public class BlockBarnacle_3_4 extends BlockSwampWater implements IStateMappedBl
 		this(FluidRegistry.SWAMP_WATER, Material.WATER);
 		setHardness(0.2F);
 	}
-	
+
 	public BlockBarnacle_3_4(Fluid fluid, Material materialIn) {
 		super(fluid, materialIn);
 		setTickRandomly(true);
@@ -119,7 +119,7 @@ public class BlockBarnacle_3_4 extends BlockSwampWater implements IStateMappedBl
 
         return world.isBlockNormalCube(blockpos, true) && block.isOpaqueCube(iblockstate) && flag;
     }
-    
+
     @Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
     	List<ItemStack> ret = new ArrayList<ItemStack>();
@@ -238,31 +238,45 @@ public class BlockBarnacle_3_4 extends BlockSwampWater implements IStateMappedBl
 		switch (type) {
 		case BARNACLE_UP_THREE:
 		case BARNACLE_UP_FOUR:
-			return EnumFacing.DOWN;
+			return EnumFacing.UP;
 		case BARNACLE_DOWN_THREE:
 		case BARNACLE_DOWN_FOUR:
-			return EnumFacing.UP;
+			return EnumFacing.DOWN;
 		case BARNACLE_NORTH_THREE:
 		case BARNACLE_NORTH_FOUR:
-			return EnumFacing.SOUTH;
+			return EnumFacing.NORTH;
 		case BARNACLE_WEST_THREE:
 		case BARNACLE_WEST_FOUR:
-			return EnumFacing.EAST;
+			return EnumFacing.WEST;
 		case BARNACLE_SOUTH_THREE:
 		case BARNACLE_SOUTH_FOUR:
-			return EnumFacing.NORTH;
+			return EnumFacing.SOUTH;
 		case BARNACLE_EAST_THREE:
 		case BARNACLE_EAST_FOUR:
-			return EnumFacing.WEST;
+			return EnumFacing.EAST;
 		}
 		return EnumFacing.DOWN;
+	}
+
+	@Override
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
+		boolean flag = false;
+
+		if (world.isSideSolid(pos.offset(getFacingForAttachedSide(state.getValue(BARNACLE_TYPE_LATE))), getFacingForAttachedSide(state.getValue(BARNACLE_TYPE_LATE)).getOpposite()))
+			flag = true;
+
+		if (!flag) {
+			dropBlockAsItem(world, pos, state, 0);
+			world.setBlockToAir(pos);
+		}
+		super.neighborChanged(state, world, pos, block, fromPos);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return ((EnumBarnacleTypeLate)state.getValue(BARNACLE_TYPE_LATE)).getMetadata();
 	}
-	
+
 	public static enum EnumBarnacleTypeLate implements IStringSerializable {
 		
 		BARNACLE_DOWN_THREE,

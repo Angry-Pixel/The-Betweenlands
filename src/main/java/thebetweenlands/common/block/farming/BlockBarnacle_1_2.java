@@ -95,12 +95,12 @@ public class BlockBarnacle_1_2 extends BlockSwampWater implements IStateMappedBl
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
-	
+
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return NULL_AABB;
 	}
-	
+
 	@Override
     public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
         return canPlaceBlock(world, pos, side);
@@ -157,24 +157,38 @@ public class BlockBarnacle_1_2 extends BlockSwampWater implements IStateMappedBl
 		switch (type) {
 		case BARNACLE_UP_ONE:
 		case BARNACLE_UP_TWO:
-			return EnumFacing.DOWN;
+			return EnumFacing.UP;
 		case BARNACLE_DOWN_ONE:
 		case BARNACLE_DOWN_TWO:
-			return EnumFacing.UP;
+			return EnumFacing.DOWN;
 		case BARNACLE_NORTH_ONE:
 		case BARNACLE_NORTH_TWO:
-			return EnumFacing.SOUTH;
+			return EnumFacing.NORTH;
 		case BARNACLE_WEST_ONE:
 		case BARNACLE_WEST_TWO:
-			return EnumFacing.EAST;
+			return EnumFacing.WEST;
 		case BARNACLE_SOUTH_ONE:
 		case BARNACLE_SOUTH_TWO:
-			return EnumFacing.NORTH;
+			return EnumFacing.SOUTH;
 		case BARNACLE_EAST_ONE:
 		case BARNACLE_EAST_TWO:
-			return EnumFacing.WEST;
+			return EnumFacing.EAST;
 		}
 		return EnumFacing.DOWN;
+	}
+
+	@Override
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
+		boolean flag = false;
+
+		if (world.isSideSolid(pos.offset(getFacingForAttachedSide(state.getValue(BARNACLE_TYPE_EARLY))), getFacingForAttachedSide(state.getValue(BARNACLE_TYPE_EARLY)).getOpposite()))
+			flag = true;
+
+		if (!flag) {
+			dropBlockAsItem(world, pos, state, 0);
+			world.setBlockToAir(pos);
+		}
+		super.neighborChanged(state, world, pos, block, fromPos);
 	}
 
 	@Override
@@ -282,9 +296,9 @@ public class BlockBarnacle_1_2 extends BlockSwampWater implements IStateMappedBl
 	public int getMetaFromState(IBlockState state) {
 		return ((EnumBarnacleTypeEarly)state.getValue(BARNACLE_TYPE_EARLY)).getMetadata();
 	}
-	
+
 	public static enum EnumBarnacleTypeEarly implements IStringSerializable {
-		
+
 		BARNACLE_DOWN_ONE,
 		BARNACLE_UP_ONE,
 		BARNACLE_NORTH_ONE,
