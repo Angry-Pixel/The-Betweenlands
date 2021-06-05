@@ -31,6 +31,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.farming.BlockBarnacle_3_4.EnumBarnacleTypeLate;
+import thebetweenlands.common.block.terrain.BlockHearthgroveLog;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.item.ItemBlockBarnacle;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -152,6 +153,30 @@ public class BlockBarnacle_1_2 extends BlockSwampWater implements IStateMappedBl
 		return getDefaultState().withProperty(BARNACLE_TYPE_EARLY, newFacing);
     }
 
+	public EnumFacing getFacingForAttachedSide(EnumBarnacleTypeEarly type) {
+		switch (type) {
+		case BARNACLE_UP_ONE:
+		case BARNACLE_UP_TWO:
+			return EnumFacing.DOWN;
+		case BARNACLE_DOWN_ONE:
+		case BARNACLE_DOWN_TWO:
+			return EnumFacing.UP;
+		case BARNACLE_NORTH_ONE:
+		case BARNACLE_NORTH_TWO:
+			return EnumFacing.SOUTH;
+		case BARNACLE_WEST_ONE:
+		case BARNACLE_WEST_TWO:
+			return EnumFacing.EAST;
+		case BARNACLE_SOUTH_ONE:
+		case BARNACLE_SOUTH_TWO:
+			return EnumFacing.NORTH;
+		case BARNACLE_EAST_ONE:
+		case BARNACLE_EAST_TWO:
+			return EnumFacing.WEST;
+		}
+		return EnumFacing.DOWN;
+	}
+
 	@Override
 	@Nullable
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
@@ -176,6 +201,32 @@ public class BlockBarnacle_1_2 extends BlockSwampWater implements IStateMappedBl
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(BARNACLE_TYPE_EARLY, EnumBarnacleTypeEarly.byMetadata(meta));
+	}
+
+	@Override
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+    	if (!world.isRemote)
+    		if(checkForLog (world, pos, state))
+    			world.scheduleUpdate(pos, this, 400);
+    }
+
+	private boolean checkForLog(World world, BlockPos pos, IBlockState state) {
+		IBlockState offsetState = world.getBlockState(pos.offset(getFacingForAttachedSide(state.getValue(BARNACLE_TYPE_EARLY))));
+		Block offsetBlock = offsetState.getBlock();
+		if (offsetBlock instanceof BlockHearthgroveLog)
+			if (offsetState.getValue(BlockHearthgroveLog.TARRED))
+				return true;
+		return false;
+	}
+
+	@Override
+    public void updateTick(World world, BlockPos pos, IBlockState state, Random random) {
+		if (world.isRemote)
+			return;
+			if (checkForLog(world, pos, state)) {
+				randomTick(world, pos, state, random);
+				world.scheduleUpdate(pos, this, 400);
+		}
 	}
 
 	@Override

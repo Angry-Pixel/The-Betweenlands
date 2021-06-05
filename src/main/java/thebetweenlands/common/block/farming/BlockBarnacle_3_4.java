@@ -30,6 +30,7 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.block.terrain.BlockHearthgroveLog;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
@@ -167,6 +168,35 @@ public class BlockBarnacle_3_4 extends BlockSwampWater implements IStateMappedBl
 	}
 
 	@Override
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+    	if (!world.isRemote)
+    		if(checkForLog (world, pos, state))
+    			world.scheduleUpdate(pos, this, 400);
+    }
+
+	private boolean checkForLog(World world, BlockPos pos, IBlockState state) {
+		if (getMetaFromState(state) > 5 && getMetaFromState(state) <= 11)
+			return false;
+		IBlockState offsetState = world.getBlockState(pos.offset(getFacingForAttachedSide(state.getValue(BARNACLE_TYPE_LATE))));
+		Block offsetBlock = offsetState.getBlock();
+		if (offsetBlock instanceof BlockHearthgroveLog)
+			if (offsetState.getValue(BlockHearthgroveLog.TARRED))
+				return true;
+
+		return false;
+	}
+
+	@Override
+    public void updateTick(World world, BlockPos pos, IBlockState state, Random random) {
+		if (world.isRemote)
+			return;
+			if (checkForLog(world, pos, state)) {
+				randomTick(world, pos, state, random);
+				world.scheduleUpdate(pos, this, 400);
+		}
+	}
+
+	@Override
     public void randomTick(World world, BlockPos pos, IBlockState state, Random random) {
 		if (world.isRemote)
 			return;
@@ -202,6 +232,30 @@ public class BlockBarnacle_3_4 extends BlockSwampWater implements IStateMappedBl
 		default:
 			break;
 		}
+	}
+
+	public EnumFacing getFacingForAttachedSide(EnumBarnacleTypeLate type) {
+		switch (type) {
+		case BARNACLE_UP_THREE:
+		case BARNACLE_UP_FOUR:
+			return EnumFacing.DOWN;
+		case BARNACLE_DOWN_THREE:
+		case BARNACLE_DOWN_FOUR:
+			return EnumFacing.UP;
+		case BARNACLE_NORTH_THREE:
+		case BARNACLE_NORTH_FOUR:
+			return EnumFacing.SOUTH;
+		case BARNACLE_WEST_THREE:
+		case BARNACLE_WEST_FOUR:
+			return EnumFacing.EAST;
+		case BARNACLE_SOUTH_THREE:
+		case BARNACLE_SOUTH_FOUR:
+			return EnumFacing.NORTH;
+		case BARNACLE_EAST_THREE:
+		case BARNACLE_EAST_FOUR:
+			return EnumFacing.WEST;
+		}
+		return EnumFacing.DOWN;
 	}
 
 	@Override
