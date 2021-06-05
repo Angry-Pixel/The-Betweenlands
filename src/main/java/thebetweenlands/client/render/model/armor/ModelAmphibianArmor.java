@@ -4,6 +4,7 @@ import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 
 // Made with Blockbench 3.8.4
@@ -322,7 +323,7 @@ public class ModelAmphibianArmor extends ModelBodyAttachment {
 
 		Leggings_base = new ModelRenderer(this);
 		Leggings_base.setRotationPoint(0.0F, 12.0F, 0.0F);
-		bipedBody.addChild(Leggings_base);
+		bipedWaist.addChild(Leggings_base);
 		setRotationAngle(Leggings_base, 0.0873F, 0.0F, 0.0F);
 
 
@@ -529,6 +530,55 @@ public class ModelAmphibianArmor extends ModelBodyAttachment {
 		GlStateManager.enableCull();
 		super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 		GlStateManager.disableCull();
+	}
+	
+	@Override
+	public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
+		setRotationAngle(Whisker_l1a, -0.1309F, 0.2618F, 0.3927F);
+		setRotationAngle(Whisker_l1a2, -0.1309F, -0.2618F, -0.3927F);
+		setRotationAngle(Bootfin_right1b, 0.0F, 0.0F, 0.1745F);
+		setRotationAngle(Bootfin_left1b, 0.0F, 0.0F, -0.1745F);
+		setRotationAngle(Beltfin_left1a, 0.0F, 0.0F, -0.2618F);
+		setRotationAngle(Beltfin_right1a, 0.0F, 0.0F, 0.2618F);
+		setRotationAngle(Bootfin_right1a, 0.3054F, 0.0F, 0.0F);
+		setRotationAngle(Bootfin_right1c, 0.1745F, 0.0F, 0.0F);
+		setRotationAngle(Bootfin_left1a, 0.3054F, 0.0F, 0.0F);
+		setRotationAngle(Bootfin_left1c, 0.1745F, 0.0F, 0.0F);
+		setRotationAngle(Chestfin_mid1a, -0.1745F, 0.0F, 0.0F);
+		setRotationAngle(Chestfin_left1a, -0.1309F, 0.0F, 0.0F);
+		setRotationAngle(Chestfin_right1a, -0.1309F, 0.0F, 0.0F);
+		setRotationAngle(Chestfin_back1a, 0.1745F, 0.0F, 0.0F);
+		
+		float blend1 = (float)Math.pow(((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 0.0666f) + 1.0f) * 0.5f, 0.01f) * 0.5f + 0.5f;
+		float blend2 = (float)Math.pow(((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 0.0555f) + 1.0f) * 0.5f, 0.01f) * 0.5f + 0.5f;
+		float blend3 = (float)Math.pow(((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 0.0333f) + 1.0f) * 0.5f, 0.01f) * 0.5f + 0.5f;
+		
+		float angle1 = ((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 0.05f) + 1.0f) * 0.15f;
+		float angle2 = ((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 2.5f) + 1.0f) * 0.35f;
+		
+		float whisker1 = blend1 * angle1 + (1 - blend1) * angle2;
+		float whisker2 = blend2 * angle1 + (1 - blend2) * angle2;
+		float whisker3 = blend3 * angle1 + (1 - blend3) * angle2;
+		
+		Whisker_l1a.rotateAngleZ += whisker1 - 0.25f;
+		Whisker_l1a2.rotateAngleZ -= whisker2 - 0.25f;
+		
+		Bootfin_right1b.rotateAngleZ -= whisker2 * 0.5f;
+		Bootfin_left1b.rotateAngleZ += whisker1 * 0.5f;
+		
+		Bootfin_right1a.rotateAngleX -= whisker2 * 0.5f;
+		Bootfin_left1a.rotateAngleX -= whisker1 * 0.5f;
+		
+		Bootfin_right1c.rotateAngleX += whisker2 * 0.5f;
+		Bootfin_left1c.rotateAngleX += whisker1 * 0.5f;
+		
+		Beltfin_right1a.rotateAngleZ += whisker2 * 0.5f;
+		Beltfin_left1a.rotateAngleZ -= whisker1 * 0.5f;
+		
+		Chestfin_mid1a.rotateAngleX -= whisker3 * 0.5f - 0.15f;
+		Chestfin_left1a.rotateAngleX -= whisker1 * 0.5f - 0.15f;
+		Chestfin_right1a.rotateAngleX -= whisker2 * 0.5f - 0.15f;
+		Chestfin_back1a.rotateAngleX += whisker3 * 0.5f - 0.15f;
 	}
 	
 	public void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {
