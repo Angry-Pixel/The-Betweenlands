@@ -48,6 +48,7 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import thebetweenlands.client.gui.GuiFishStaminaBar;
 import thebetweenlands.client.gui.GuiItemNaming;
 import thebetweenlands.client.gui.GuiLorePage;
+import thebetweenlands.client.gui.inventory.GuiAmphibiousArmour;
 import thebetweenlands.client.gui.inventory.GuiAnimator;
 import thebetweenlands.client.gui.inventory.GuiBLDualFurnace;
 import thebetweenlands.client.gui.inventory.GuiBLFurnace;
@@ -269,9 +270,11 @@ import thebetweenlands.common.handler.ExtendedReachHandler;
 import thebetweenlands.common.herblore.book.GuiManualHerblore;
 import thebetweenlands.common.herblore.book.HLEntryRegistry;
 import thebetweenlands.common.inventory.InventoryItem;
+import thebetweenlands.common.inventory.container.ContainerAmphibiousArmour;
 import thebetweenlands.common.inventory.container.ContainerDraetonPouch;
 import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.item.ITintedItem;
+import thebetweenlands.common.item.armor.ItemAmphibianArmor;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.item.misc.ItemBarkAmulet;
@@ -509,8 +512,15 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			if (tile instanceof TileEntityCrabPotFilter)
 				return new GuiCrabPotFilter(player, (TileEntityCrabPotFilter) tile);
 			break;
+			
+		case GUI_AMPHIBIOUS_ARMOUR: {
+			ItemStack item = player.getHeldItemMainhand();
+			String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.amphibious_armour";
+			if (!item.isEmpty() && item.getItem() instanceof ItemAmphibianArmor)
+				return new GuiAmphibiousArmour(new ContainerAmphibiousArmour(player, new InventoryItem(item, 3, name)));
+			break;
+			}
 		}
-
 		return null;
 	}
 

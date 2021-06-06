@@ -1006,6 +1006,7 @@ container.bl.draeton_inventory=Draeton
 container.bl.draeton_storage=Draeton Storage
 container.bl.draeton_furnace=Draeton Furnace
 container.bl.draeton_burner=Burner
+container.bl.amphibious_armour=Amphibious Armour
 
 # Locations
 location.wilderness.name=80:<scale:1.75>Wilderness</scale>

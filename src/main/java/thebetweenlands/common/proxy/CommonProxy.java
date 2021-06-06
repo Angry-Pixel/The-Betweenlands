@@ -24,6 +24,7 @@ import thebetweenlands.client.render.sky.RiftVariant;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.inventory.InventoryItem;
+import thebetweenlands.common.inventory.container.ContainerAmphibiousArmour;
 import thebetweenlands.common.inventory.container.ContainerAnimator;
 import thebetweenlands.common.inventory.container.ContainerBLDualFurnace;
 import thebetweenlands.common.inventory.container.ContainerBLFurnace;
@@ -44,6 +45,7 @@ import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
 import thebetweenlands.common.inventory.container.ContainerSmokingRack;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
+import thebetweenlands.common.item.armor.ItemAmphibianArmor;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.common.tile.TileEntityBLDualFurnace;
@@ -84,6 +86,7 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_SMOKING_RACK = 31;
 	public static final int GUI_FISH_TRIMMING_TABLE = 32;
 	public static final int GUI_CRAB_POT_FILTER = 33;
+	public static final int GUI_AMPHIBIOUS_ARMOUR = 34;
 	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -239,6 +242,14 @@ public class CommonProxy implements IGuiHandler {
 			if (tile instanceof TileEntityCrabPotFilter)
 				return new ContainerCrabPotFilter(player, (TileEntityCrabPotFilter) tile);
 			break;
+			
+		case GUI_AMPHIBIOUS_ARMOUR: {
+			ItemStack item = player.getHeldItemMainhand();
+			String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.amphibious_armour";
+			if (!item.isEmpty() && item.getItem() instanceof ItemAmphibianArmor)
+				return new ContainerAmphibiousArmour(player, new InventoryItem(item, 3, name));
+			break;
+			}
 		}
 		return null;
 	}
