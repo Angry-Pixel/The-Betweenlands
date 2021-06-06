@@ -8,6 +8,8 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.inventory.InventoryItem;
+import thebetweenlands.common.item.armor.ItemAmphibianArmor;
+import transportterminal.ModItems;
 
 public class ContainerAmphibiousArmour extends Container {
 	@Nullable
@@ -39,8 +41,10 @@ public class ContainerAmphibiousArmour extends Container {
 			stack = stack1.copy();
 
 			if (slotIndex > 2) {
-				if (!this.mergeItemStack(stack1, 0, 3, false))
-					return ItemStack.EMPTY;
+				if (!(stack1.getItem() instanceof ItemAmphibianArmor)) {
+					if (!this.mergeItemStack(stack1, 0, 3, false))
+						return ItemStack.EMPTY;
+				}
 
 			} else if (!mergeItemStack(stack1, 3, inventorySlots.size(), false))
 				return ItemStack.EMPTY;
