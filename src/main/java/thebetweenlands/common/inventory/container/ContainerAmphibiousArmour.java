@@ -9,7 +9,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.item.armor.ItemAmphibianArmor;
-import transportterminal.ModItems;
 
 public class ContainerAmphibiousArmour extends Container {
 	@Nullable
