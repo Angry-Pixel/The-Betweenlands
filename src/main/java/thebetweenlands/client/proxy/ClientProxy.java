@@ -513,13 +513,13 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 				return new GuiCrabPotFilter(player, (TileEntityCrabPotFilter) tile);
 			break;
 			
-		case GUI_AMPHIBIOUS_ARMOUR: {
+		case GUI_AMPHIBIAN_ARMOR: {
 			ItemStack item = player.getHeldItemMainhand();
 			String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.amphibious_armour";
 			if (!item.isEmpty() && item.getItem() instanceof ItemAmphibianArmor)
 				return new GuiAmphibiousArmour(new ContainerAmphibiousArmour(player, new InventoryItem(item, 3, name)));
 			break;
-			}
+		}
 		}
 		return null;
 	}

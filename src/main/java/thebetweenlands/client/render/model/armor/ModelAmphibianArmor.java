@@ -534,7 +534,14 @@ public class ModelAmphibianArmor extends ModelBodyAttachment {
 	@Override
 	public void setLivingAnimations(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTickTime) {
 		setRotationAngle(Whisker_l1a, -0.1309F, 0.2618F, 0.3927F);
+		setRotationAngle(Whisker_l1b, 0.0F, -0.3927F, 0.0F);
+		setRotationAngle(Whisker_l1c, 0.0F, -0.3927F, 0.0F);
+		setRotationAngle(Whisker_l1d, 0.0F, 0.0F, -0.3927F);
 		setRotationAngle(Whisker_l1a2, -0.1309F, -0.2618F, -0.3927F);
+		setRotationAngle(Whisker_l1b2, 0.0F, 0.3927F, 0.0F);
+		setRotationAngle(Whisker_l1c2, 0.0F, 0.3927F, 0.0F);
+		setRotationAngle(Whisker_l1d2, 0.0F, 0.0F, 0.3927F);
+		
 		setRotationAngle(Bootfin_right1b, 0.0F, 0.0F, 0.1745F);
 		setRotationAngle(Bootfin_left1b, 0.0F, 0.0F, -0.1745F);
 		setRotationAngle(Beltfin_left1a, 0.0F, 0.0F, -0.2618F);
@@ -554,19 +561,28 @@ public class ModelAmphibianArmor extends ModelBodyAttachment {
 		setRotationAngle(Helmet_gill_l2b2, 0.0F, -0.3491F, 0.0F);
 		setRotationAngle(Helmet_gill_l2c2, 0.0F, -0.1745F, 0.0F);
 
-		float blend1 = (float)Math.pow(((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 0.0666f) + 1.0f) * 0.5f, 0.01f) * 0.5f + 0.5f;
-		float blend2 = (float)Math.pow(((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 0.0555f) + 1.0f) * 0.5f, 0.01f) * 0.5f + 0.5f;
-		float blend3 = (float)Math.pow(((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 0.0333f) + 1.0f) * 0.5f, 0.01f) * 0.5f + 0.5f;
+		float blend1 = (float)Math.max(0, Math.pow(((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 0.0666f) + 1.0f) * 0.5f, 10f) - 0.95f) * 0.5f;
+		float blend2 = (float)Math.max(0, Math.pow(((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 0.0555f) + 1.0f) * 0.5f, 10f) - 0.95f) * 0.5f;
+		float blend3 = (float)Math.max(0, Math.pow(((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 0.0333f) + 1.0f) * 0.5f, 10f) - 0.95f) * 0.5f;
+		
+		float angle0 = (float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 0.091f) * 0.025f;
+		float angle1 = ((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 0.05f) + 1.0f) * 0.15f + angle0;
+		float angle2 = ((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 0.05f + 0.35f) + 1.0f) * 0.15f + angle0;
+		float angle3 = ((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 3.0f) + 1.0f) + angle0;
 
-		float angle1 = ((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 0.05f) + 1.0f) * 0.15f;
-		float angle2 = ((float)Math.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 2.5f) + 1.0f) * 0.35f;
+		float whisker1 = (1 - blend1) * angle1 + blend1 * angle3;
+		float whisker2 = (1 - blend2) * angle2 + blend2 * angle3;
+		float whisker3 = (1 - blend3) * angle1 + blend3 * angle3;
 
-		float whisker1 = blend1 * angle1 + (1 - blend1) * angle2;
-		float whisker2 = blend2 * angle1 + (1 - blend2) * angle2;
-		float whisker3 = blend3 * angle1 + (1 - blend3) * angle2;
-
-		Whisker_l1a.rotateAngleZ += whisker1 - 0.25f;
-		Whisker_l1a2.rotateAngleZ -= whisker2 - 0.25f;
+		Whisker_l1a.rotateAngleZ += whisker1 - 0.16f;
+		Whisker_l1b.rotateAngleY -= (whisker1 - whisker2) * 0.75f;
+		Whisker_l1c.rotateAngleY -= (whisker1 - whisker2) * 0.75f;
+		Whisker_l1d.rotateAngleY -= (whisker1 - whisker2) * 0.75f;
+		
+		Whisker_l1a2.rotateAngleZ -= whisker2 - 0.16f;
+		Whisker_l1b2.rotateAngleY += (whisker2 - whisker1) * 0.75f;
+		Whisker_l1c2.rotateAngleY += (whisker2 - whisker1) * 0.75f;
+		Whisker_l1d2.rotateAngleY += (whisker2 - whisker1) * 0.75f;
 
 		Bootfin_right1b.rotateAngleZ -= whisker2 * 0.5f;
 		Bootfin_left1b.rotateAngleZ += whisker1 * 0.5f;

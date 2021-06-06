@@ -8,6 +8,10 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.model.armor.ModelAmphibianArmor;
+import thebetweenlands.client.render.model.armor.ModelBodyAttachment;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.item.BLMaterialRegistry;
@@ -23,13 +27,19 @@ public class ItemAmphibianArmor extends Item3DArmor {
 		this.setGemArmorTextureOverride(CircleGemType.GREEN, "amphibian_green");
 	}
 
+	@SideOnly(Side.CLIENT)
+	@Override
+	public ModelBodyAttachment createModel() {
+		return new ModelAmphibianArmor();
+	}
+
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand){
 		ItemStack itemstack = player.getHeldItem(hand);
 		EntityEquipmentSlot entityequipmentslot = EntityLiving.getSlotForItemStack(itemstack);
 		ItemStack itemstack1 = player.getItemStackFromSlot(entityequipmentslot);
 		if (player.isSneaking()) {
-			player.openGui(TheBetweenlands.instance, CommonProxy.GUI_AMPHIBIOUS_ARMOUR, world, 0, 0, 0);
+			player.openGui(TheBetweenlands.instance, CommonProxy.GUI_AMPHIBIAN_ARMOR, world, 0, 0, 0);
 		} else {
 			if (itemstack1.isEmpty()) {
 				player.setItemStackToSlot(entityequipmentslot, itemstack.copy());
@@ -40,5 +50,5 @@ public class ItemAmphibianArmor extends Item3DArmor {
 			}
 		}
 		return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
-    }
+	}
 }

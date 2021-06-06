@@ -86,7 +86,7 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_SMOKING_RACK = 31;
 	public static final int GUI_FISH_TRIMMING_TABLE = 32;
 	public static final int GUI_CRAB_POT_FILTER = 33;
-	public static final int GUI_AMPHIBIOUS_ARMOUR = 34;
+	public static final int GUI_AMPHIBIAN_ARMOR = 34;
 	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -154,6 +154,7 @@ public class CommonProxy implements IGuiHandler {
 				String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.lurker_skin_pouch";
 				return new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name));
 			}
+			break;
 		}
 
 		case GUI_ITEM_RENAMING:
@@ -243,13 +244,13 @@ public class CommonProxy implements IGuiHandler {
 				return new ContainerCrabPotFilter(player, (TileEntityCrabPotFilter) tile);
 			break;
 			
-		case GUI_AMPHIBIOUS_ARMOUR: {
+		case GUI_AMPHIBIAN_ARMOR: {
 			ItemStack item = player.getHeldItemMainhand();
 			String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.amphibious_armour";
 			if (!item.isEmpty() && item.getItem() instanceof ItemAmphibianArmor)
 				return new ContainerAmphibiousArmour(player, new InventoryItem(item, 3, name));
 			break;
-			}
+		}
 		}
 		return null;
 	}
