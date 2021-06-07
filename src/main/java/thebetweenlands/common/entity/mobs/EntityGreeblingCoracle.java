@@ -4,40 +4,57 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.entity.movement.PathNavigateAboveWater;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.util.NonNullDelegateList;
 
 public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL {
 	protected static final byte EVENT_DISAPPEAR = 41;
 	protected static final byte EVENT_SPOUT = 42;
 	private static final DataParameter<Integer> SINKING_TICKS = EntityDataManager.createKey(EntityGreeblingCoracle.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> LOOT_CLICKS = EntityDataManager.createKey(EntityGreeblingCoracle.class, DataSerializers.VARINT);
+	EntityAIAvoidEntity avoidPlayer;
 	AIWaterWander waterWander;
 	EntityAILookIdle lookIdle;
 	boolean hasSetAIForEmptyBoat = false;
+	private boolean looted = false;
+	private NonNullList<ItemStack> loot = NonNullList.create();
 
     public EntityGreeblingCoracle(World worldIn) {
         super(worldIn);
@@ -53,12 +70,15 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
     protected void entityInit() {
         super.entityInit();
         dataManager.register(SINKING_TICKS, 0);
+        dataManager.register(LOOT_CLICKS, 0);
     }
 
     @Override
     protected void initEntityAI() {
-    	waterWander = new EntityGreeblingCoracle.AIWaterWander(this, 0.5D, 10);
+    	avoidPlayer = new EntityAIAvoidEntity<>(this, EntityPlayer.class, 16F, 4D, 8D);
+    	waterWander = new EntityGreeblingCoracle.AIWaterWander(this, 0.5D, 30);
     	lookIdle = new EntityAILookIdle(this);
+    	tasks.addTask(0, avoidPlayer);
     	tasks.addTask(1, waterWander);
         tasks.addTask(3, lookIdle);
     }
@@ -107,17 +127,18 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 		if (posX != lastTickPosX && posZ != lastTickPosZ)
 			limbSwingAmount += 0.5D;
 
-		if(!this.world.isRemote) {
+		if(!getEntityWorld().isRemote) {
 			if (getSinkingTicks() > 0 && getSinkingTicks() < 400)
 				setSinkingTicks(getSinkingTicks() + 1);
 
 			if (getSinkingTicks() == 5)
-				this.world.setEntityState(this, EVENT_DISAPPEAR);
+				getEntityWorld().setEntityState(this, EVENT_DISAPPEAR);
 			
 			if (getSinkingTicks() >= 200 && getSinkingTicks() <= 400 && isGreeblingAboveWater())
-				this.world.setEntityState(this, EVENT_SPOUT);
+				getEntityWorld().setEntityState(this, EVENT_SPOUT);
 
 			if (getSinkingTicks() > 0 && !hasSetAIForEmptyBoat) {
+				tasks.removeTask(avoidPlayer);
 				tasks.removeTask(waterWander);
 				tasks.removeTask(lookIdle);
 				if(getNavigator().getPath() != null) {
@@ -129,10 +150,10 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 			if (getSinkingTicks() >= 400)
 				setDead();
 
-			List<EntityPlayer> nearPlayers = world.getEntitiesWithinAABB(EntityPlayer.class, getEntityBoundingBox().grow(2.5, 2.5, 2.5), e -> !e.capabilities.isCreativeMode && !e.isInvisible());
+			List<EntityPlayer> nearPlayers = getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class, getEntityBoundingBox().grow(2.5, 2.5, 2.5), e -> !e.capabilities.isCreativeMode && !e.isInvisible());
 			if (getSinkingTicks() == 0 && !nearPlayers.isEmpty()) {
 				setSinkingTicks(getSinkingTicks() + 1);
-				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.GREEBLING_VANISH, SoundCategory.NEUTRAL, 1, 1);
+				getEntityWorld().playSound(null, posX, posY, posZ, SoundRegistry.GREEBLING_VANISH, SoundCategory.NEUTRAL, 1, 1);
 			}
 		}
 	}
@@ -150,16 +171,32 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
         return dataManager.get(SINKING_TICKS);
     }
 
+    public void setLootClicks(int count) {
+        dataManager.set(LOOT_CLICKS, count);
+    }
+
+    public int getLootClicks() {
+        return dataManager.get(LOOT_CLICKS);
+    }
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
 		nbt.setInteger("sinkingTicks", getSinkingTicks());
+		nbt.setBoolean("Looted", looted);
+		nbt.setInteger("LootCount", loot.size());
+		nbt.setInteger("LootClicks", getLootClicks());
+		nbt.setTag("Loot", ItemStackHelper.saveAllItems(new NBTTagCompound(), loot, false));
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
 		setSinkingTicks(nbt.getInteger("sinkingTicks"));
+		looted = nbt.getBoolean("Looted");
+		loot = NonNullList.withSize(nbt.getInteger("LootCount"), ItemStack.EMPTY);
+		setLootClicks(nbt.getInteger("lootClicks"));
+		ItemStackHelper.loadAllItems(nbt.getCompoundTag("Loot"), loot);
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -173,36 +210,36 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 	}
 
 	private void doSpoutEffects() {
-		if(world.isRemote) {
+		if(getEntityWorld().isRemote) {
 			int count = getSinkingTicks() <= 240 ? 40 : 10;
 			float x = (float) (posX);
 			float y = (float) (posY + 0.25F);
 			float z = (float) (posZ);
 			while (count-- > 0) {
-				float dx = world.rand.nextFloat() * 0.25F - 0.1255f;
-				float dy = world.rand.nextFloat() * 0.25F - 0.1255f;
-				float dz = world.rand.nextFloat() * 0.25F - 0.1255f;
-				float mag = 0.08F + world.rand.nextFloat() * 0.07F;
+				float dx = getEntityWorld().rand.nextFloat() * 0.25F - 0.1255f;
+				float dy = getEntityWorld().rand.nextFloat() * 0.25F - 0.1255f;
+				float dz = getEntityWorld().rand.nextFloat() * 0.25F - 0.1255f;
+				float mag = 0.08F + getEntityWorld().rand.nextFloat() * 0.07F;
 				if(getSinkingTicks() <= 240)
-					BLParticles.SPLASH.spawn(world, x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
+					BLParticles.SPLASH.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
 				else if(getSinkingTicks() > 240 && getSinkingTicks() <= 400 && getSinkingTicks()%5 == 0)
-					BLParticles.BUBBLE_PURIFIER.spawn(world, x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
+					BLParticles.BUBBLE_PURIFIER.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
 			}
 		}
 	}
 
 	private void doLeafEffects() {
-		if(world.isRemote) {
+		if(getEntityWorld().isRemote) {
 			int leafCount = 40;
 			float x = (float) (posX);
 			float y = (float) (posY + 1.3F);
 			float z = (float) (posZ);
 			while (leafCount-- > 0) {
-				float dx = world.rand.nextFloat() * 1 - 0.5f;
-				float dy = world.rand.nextFloat() * 1f - 0.1F;
-				float dz = world.rand.nextFloat() * 1 - 0.5f;
-				float mag = 0.08F + world.rand.nextFloat() * 0.07F;
-				BLParticles.WEEDWOOD_LEAF.spawn(world, x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
+				float dx = getEntityWorld().rand.nextFloat() * 1 - 0.5f;
+				float dy = getEntityWorld().rand.nextFloat() * 1f - 0.1F;
+				float dz = getEntityWorld().rand.nextFloat() * 1 - 0.5f;
+				float mag = 0.08F + getEntityWorld().rand.nextFloat() * 0.07F;
+				BLParticles.WEEDWOOD_LEAF.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
 			}
 		}
 	}
@@ -212,6 +249,51 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 		return 1;
 	}
 
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float damage) {
+		if (source.getTrueSource() instanceof EntityLivingBase)
+			if (getSinkingTicks() == 0)
+				if (!getEntityWorld().isRemote)
+					setSinkingTicks(getSinkingTicks() + 1);
+		return false;
+	}
+
+	@Override
+	public boolean processInteract(EntityPlayer player, EnumHand hand) {
+		if (getSinkingTicks() > 0 && getSinkingTicks() < 200 && hand == EnumHand.MAIN_HAND) {
+			if (!getEntityWorld().isRemote) {
+				dropLoot((EntityPlayer) player);
+				setLootClicks(getLootClicks() +1);
+				if(getLootClicks() >= loot.size())
+					setSinkingTicks(200);
+				SoundType soundType = SoundType.WOOD;
+				getEntityWorld().playSound((EntityPlayer)null,posX, posY, posZ, soundType.getHitSound(), SoundCategory.NEUTRAL, (soundType.getVolume() + 1.0F) / 4.0F, soundType.getPitch() * 0.5F);
+				return true;
+			}
+		}
+		return super.processInteract(player, hand);
+	}
+
+	//temp C&P loot thing with tweaks
+	public void dropLoot(EntityPlayer player) {
+		if(!getEntityWorld().isRemote) {
+			if(!looted) {
+				looted = true;
+
+				LootTable lootTable = getEntityWorld().getLootTableManager().getLootTableFromLocation(LootTableRegistry.GREEBLING_CORPSE);
+				LootContext.Builder builder = (new LootContext.Builder((WorldServer)getEntityWorld())).withLootedEntity(this).withPlayer(player).withLuck(player.getLuck());
+
+				loot = new NonNullDelegateList<ItemStack>(lootTable.generateLootForPools(rand, builder.build()), ItemStack.EMPTY);
+			}
+
+			ItemStack stack = loot.get(getLootClicks());
+			if (!stack.isEmpty()) {
+				entityDropItem(stack, 0.0F);
+				loot.set(getLootClicks(), ItemStack.EMPTY);
+			}
+		}
+	}
+
 	public class AIWaterWander extends EntityAIWander {
 
 		private final EntityGreeblingCoracle coracle;
@@ -219,7 +301,7 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 		public AIWaterWander(EntityGreeblingCoracle coracleIn, double speedIn, int chance) {
 			super(coracleIn, speedIn, chance);
 			setMutexBits(1);
-			this.coracle = coracleIn;
+			coracle = coracleIn;
 		}
 
 		@Nullable
