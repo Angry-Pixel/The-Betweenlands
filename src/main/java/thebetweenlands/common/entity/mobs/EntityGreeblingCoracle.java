@@ -174,7 +174,7 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 
 	private void doSpoutEffects() {
 		if(world.isRemote) {
-			int count = 20;
+			int count = getSinkingTicks() <= 240 ? 40 : 10;
 			float x = (float) (posX);
 			float y = (float) (posY + 0.25F);
 			float z = (float) (posZ);
