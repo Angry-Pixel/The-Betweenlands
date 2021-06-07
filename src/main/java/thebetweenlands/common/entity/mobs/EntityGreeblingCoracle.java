@@ -114,7 +114,7 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 			if (getSinkingTicks() == 5)
 				this.world.setEntityState(this, EVENT_DISAPPEAR);
 			
-			if (getSinkingTicks() >= 200 && getSinkingTicks() <= 400)
+			if (getSinkingTicks() >= 200 && getSinkingTicks() <= 400 && isGreeblingAboveWater())
 				this.world.setEntityState(this, EVENT_SPOUT);
 
 			if (getSinkingTicks() > 0 && !hasSetAIForEmptyBoat) {
