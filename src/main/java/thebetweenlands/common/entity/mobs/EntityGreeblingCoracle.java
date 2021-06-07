@@ -33,6 +33,7 @@ import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL {
 	protected static final byte EVENT_DISAPPEAR = 41;
+	protected static final byte EVENT_SPOUT = 42;
 	private static final DataParameter<Integer> SINKING_TICKS = EntityDataManager.createKey(EntityGreeblingCoracle.class, DataSerializers.VARINT);
 	AIWaterWander waterWander;
 	EntityAILookIdle lookIdle;
@@ -112,6 +113,9 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 
 			if (getSinkingTicks() == 5)
 				this.world.setEntityState(this, EVENT_DISAPPEAR);
+			
+			if (getSinkingTicks() >= 200 && getSinkingTicks() <= 400)
+				this.world.setEntityState(this, EVENT_SPOUT);
 
 			if (getSinkingTicks() > 0 && !hasSetAIForEmptyBoat) {
 				tasks.removeTask(waterWander);
@@ -164,6 +168,27 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 		super.handleStatusUpdate(id);
 		if(id == EVENT_DISAPPEAR)
 			doLeafEffects();
+		if(id == EVENT_SPOUT)
+			doSpoutEffects();
+	}
+
+	private void doSpoutEffects() {
+		if(world.isRemote) {
+			int count = 20;
+			float x = (float) (posX);
+			float y = (float) (posY + 0.25F);
+			float z = (float) (posZ);
+			while (count-- > 0) {
+				float dx = world.rand.nextFloat() * 0.25F - 0.1255f;
+				float dy = world.rand.nextFloat() * 0.25F - 0.1255f;
+				float dz = world.rand.nextFloat() * 0.25F - 0.1255f;
+				float mag = 0.08F + world.rand.nextFloat() * 0.07F;
+				if(getSinkingTicks() <= 240)
+					BLParticles.SPLASH.spawn(world, x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
+				else if(getSinkingTicks() > 240 && getSinkingTicks() <= 400 && getSinkingTicks()%5 == 0)
+					BLParticles.BUBBLE_PURIFIER.spawn(world, x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
+			}
+		}
 	}
 
 	private void doLeafEffects() {
