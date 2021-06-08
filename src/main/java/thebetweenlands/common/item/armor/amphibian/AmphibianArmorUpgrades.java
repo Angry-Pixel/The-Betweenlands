@@ -33,7 +33,7 @@ public enum AmphibianArmorUpgrades implements IAmphibianArmorUpgrade {
 	MINING_SPEED(new ResourceLocation(ModInfo.ID, "mining_speed"), EnumItemMisc.SNOT::isItemOf, EntityEquipmentSlot.CHEST),
 	MOVEMENT_SPEED(new ResourceLocation(ModInfo.ID, "movement_speed"), EnumItemMisc.ANADIA_FINS::isItemOf, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
 	BUOYANCY(new ResourceLocation(ModInfo.ID, "buoyancy"), EnumItemMisc.ANADIA_SWIM_BLADDER::isItemOf, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS),
-	KNOCKBACK_RESISTANCE(new ResourceLocation(ModInfo.ID, "knockback_resistance"), EnumItemMisc.LURKER_SKIN::isItemOf, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS),
+	KNOCKBACK_RESISTANCE(new ResourceLocation(ModInfo.ID, "knockback_resistance"), EnumItemMisc.LURKER_SKIN::isItemOf, AdditiveAttributeUpgrade.KNOCKBACK_RESISTANCE, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS),
 	MUD_WALKING(new ResourceLocation(ModInfo.ID, "mud_walking"), s -> s.getItem() == ItemRegistry.RUBBER_BOOTS, EntityEquipmentSlot.FEET);
 
 	private static final Map<ResourceLocation, IAmphibianArmorUpgrade> ID_TO_UPGRADE = new HashMap<>();
