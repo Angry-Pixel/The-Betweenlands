@@ -51,6 +51,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.capability.equipment.EquipmentHelper;
 import thebetweenlands.common.inventory.InventoryItem;
+import thebetweenlands.common.inventory.InventoryPouch;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -134,7 +135,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
     		ItemStack heldItem = player.getHeldItem(hand);
     		if(!heldItem.isEmpty() && heldItem.getItem() == this) {
     			if(!world.isRemote) {
-	    			InventoryItem inventory = new InventoryItem(heldItem, 9 + (heldItem.getItemDamage() * 9), "Lurker Skin Pouch");
+	    			InventoryItem inventory = new InventoryPouch(heldItem, 9 + (heldItem.getItemDamage() * 9), "Lurker Skin Pouch");
 	    			TileEntity tile = world.getTileEntity(pos);
 	        		if(tile != null) {
 	        			IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side);

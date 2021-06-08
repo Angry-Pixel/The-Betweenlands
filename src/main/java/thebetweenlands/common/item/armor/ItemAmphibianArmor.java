@@ -1,23 +1,29 @@
 package thebetweenlands.common.item.armor;
 
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.item.AmphibianArmorUpgrades;
+import thebetweenlands.api.item.IAmphibianArmorUpgrade;
 import thebetweenlands.client.render.model.armor.ModelAmphibianArmor;
 import thebetweenlands.client.render.model.armor.ModelBodyAttachment;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.proxy.CommonProxy;
+import thebetweenlands.util.NBTHelper;
 
 public class ItemAmphibianArmor extends Item3DArmor {
+
+	private static final String NBT_UPGRADE_MAP_KEY = "thebetweenlands.amphibian_armor_upgrades";
 
 	public ItemAmphibianArmor(EntityEquipmentSlot slot) {
 		super(BLMaterialRegistry.ARMOR_AMPHIBIAN, 3, slot, "amphibian");
@@ -35,20 +41,48 @@ public class ItemAmphibianArmor extends Item3DArmor {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand){
-		ItemStack itemstack = player.getHeldItem(hand);
-		EntityEquipmentSlot entityequipmentslot = EntityLiving.getSlotForItemStack(itemstack);
-		ItemStack itemstack1 = player.getItemStackFromSlot(entityequipmentslot);
+		ItemStack stack = player.getHeldItem(hand);
+
+		//TODO Testing
+		for(IAmphibianArmorUpgrade upgrade : AmphibianArmorUpgrades.values()) {
+			System.out.println(upgrade.getId() + ": " + this.getUpgradeCount(stack, upgrade));
+		}
+		
 		if (player.isSneaking()) {
 			player.openGui(TheBetweenlands.instance, CommonProxy.GUI_AMPHIBIAN_ARMOR, world, 0, 0, 0);
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 		} else {
-			if (itemstack1.isEmpty()) {
-				player.setItemStackToSlot(entityequipmentslot, itemstack.copy());
-				itemstack.setCount(0);
-				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
-			} else {
-				return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
+			return super.onItemRightClick(world, player, hand);
+		}
+	}
+
+	public void setUpgradeCounts(ItemStack stack, IInventory inv) {
+		NBTTagCompound upgradesMap = new NBTTagCompound();
+
+		for(int i = 0; i < inv.getSizeInventory(); i++) {
+			ItemStack upgradeItem = inv.getStackInSlot(i);
+
+			if(!upgradeItem.isEmpty()) {
+				IAmphibianArmorUpgrade upgrade = AmphibianArmorUpgrades.getUpgrade(this.armorType, upgradeItem);
+
+				if(upgrade != null) {
+					String idStr = upgrade.getId().toString();
+					upgradesMap.setInteger(idStr, upgradesMap.getInteger(idStr) + 1);
+				}
 			}
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
+
+		NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
+		nbt.setTag(NBT_UPGRADE_MAP_KEY, upgradesMap);
+	}
+
+	public int getUpgradeCount(ItemStack stack, IAmphibianArmorUpgrade upgrade) {
+		NBTTagCompound nbt = stack.getTagCompound();
+
+		if(nbt != null) {
+			return nbt.getCompoundTag(NBT_UPGRADE_MAP_KEY).getInteger(upgrade.getId().toString());
+		}
+
+		return 0;
 	}
 }

@@ -6,13 +6,13 @@ import net.minecraft.item.ItemStack;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 
-public class SlotPouch extends Slot {
+public class SlotPouch extends SlotInvRestriction {
 	public SlotPouch(IInventory inventory, int slotIndex, int x, int y) {
 		super(inventory, slotIndex, x, y);
 	}
 
 	@Override
 	public boolean isItemValid(ItemStack stack) {
-		return !(stack.getItem() instanceof ItemLurkerSkinPouch) && !BetweenlandsConfig.GENERAL.pouchBlacklist.isListed(stack);
+		return super.isItemValid(stack) && !BetweenlandsConfig.GENERAL.pouchBlacklist.isListed(stack);
 	}
 }

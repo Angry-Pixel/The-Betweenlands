@@ -8,7 +8,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.inventory.InventoryItem;
-import thebetweenlands.common.item.armor.ItemAmphibianArmor;
+import thebetweenlands.common.inventory.slot.SlotInvRestriction;
 
 public class ContainerAmphibiousArmour extends Container {
 	@Nullable
@@ -18,16 +18,16 @@ public class ContainerAmphibiousArmour extends Container {
 		InventoryPlayer playerInventory = player.inventory;
 		this.inventory = inventoryItem;
 
-		addSlotToContainer(new Slot(inventoryItem, 0, 43, 43));
-		addSlotToContainer(new Slot(inventoryItem, 1, 79, 43));
-		addSlotToContainer(new Slot(inventoryItem, 2, 115, 43));
-		
-		for (int l = 0; l < 3; ++l)
-            for (int j1 = 0; j1 < 9; ++j1)
-                this.addSlotToContainer(new Slot(playerInventory, j1 + (l + 1) * 9, 7 + j1 * 18, 101 + l * 18));
+		addSlotToContainer(new SlotInvRestriction(inventoryItem, 0, 43, 43));
+		addSlotToContainer(new SlotInvRestriction(inventoryItem, 1, 79, 43));
+		addSlotToContainer(new SlotInvRestriction(inventoryItem, 2, 115, 43));
 
-        for (int i1 = 0; i1 < 9; ++i1)
-            this.addSlotToContainer(new Slot(playerInventory, i1, 7 + i1 * 18, 159));
+		for (int l = 0; l < 3; ++l)
+			for (int j1 = 0; j1 < 9; ++j1)
+				this.addSlotToContainer(new Slot(playerInventory, j1 + (l + 1) * 9, 7 + j1 * 18, 101 + l * 18));
+
+		for (int i1 = 0; i1 < 9; ++i1)
+			this.addSlotToContainer(new Slot(playerInventory, i1, 7 + i1 * 18, 159));
 	}
 
 	@Override
@@ -40,10 +40,8 @@ public class ContainerAmphibiousArmour extends Container {
 			stack = stack1.copy();
 
 			if (slotIndex > 2) {
-				if (!(stack1.getItem() instanceof ItemAmphibianArmor)) {
-					if (!this.mergeItemStack(stack1, 0, 3, false))
-						return ItemStack.EMPTY;
-				}
+				if (!this.mergeItemStack(stack1, 0, 3, false))
+					return ItemStack.EMPTY;
 
 			} else if (!mergeItemStack(stack1, 3, inventorySlots.size(), false))
 				return ItemStack.EMPTY;
@@ -64,7 +62,18 @@ public class ContainerAmphibiousArmour extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer playerIn) {
-		return true;
+	public boolean canInteractWith(EntityPlayer player) {
+		if(this.getItemInventory().getInventoryItemStack().isEmpty()) {
+			return false;
+		}
+
+		//Check if armor is in main inventory
+		for(int i = 0; i < player.inventory.getSizeInventory(); i++) {
+			if(player.inventory.getStackInSlot(i) == this.inventory.getInventoryItemStack()) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

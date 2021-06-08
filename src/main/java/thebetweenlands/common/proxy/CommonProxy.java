@@ -23,7 +23,9 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 import thebetweenlands.client.render.sky.RiftVariant;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
+import thebetweenlands.common.inventory.InventoryAmphibianArmor;
 import thebetweenlands.common.inventory.InventoryItem;
+import thebetweenlands.common.inventory.InventoryPouch;
 import thebetweenlands.common.inventory.container.ContainerAmphibiousArmour;
 import thebetweenlands.common.inventory.container.ContainerAnimator;
 import thebetweenlands.common.inventory.container.ContainerBLDualFurnace;
@@ -143,7 +145,7 @@ public class CommonProxy implements IGuiHandler {
 			}
 			if(!item.isEmpty() && item.getItem() instanceof ItemLurkerSkinPouch) {
 				String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.lurker_skin_pouch";
-				return new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name));
+				return new ContainerPouch(player, player.inventory, new InventoryPouch(item, 9 + (item.getItemDamage() * 9), name));
 			}
 			break;
 		}
@@ -152,7 +154,7 @@ public class CommonProxy implements IGuiHandler {
 			ItemStack item = ItemLurkerSkinPouch.getFirstPouch(player);
 			if(item != null) {
 				String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.lurker_skin_pouch";
-				return new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name));
+				return new ContainerPouch(player, player.inventory, new InventoryPouch(item, 9 + (item.getItemDamage() * 9), name));
 			}
 			break;
 		}
@@ -180,7 +182,7 @@ public class CommonProxy implements IGuiHandler {
 					ItemStack stack = upgrades.getStackInSlot(y);
 					if(!stack.isEmpty() && ((EntityDraeton) entity).isStorageUpgrade(stack)) {
 						String name = stack.hasDisplayName() ? stack.getDisplayName(): "container.bl.draeton_storage";
-						return new ContainerDraetonPouch(player, player.inventory, new InventoryItem(stack, 9 + (stack.getItemDamage() * 9), name), (EntityDraeton)entity, y);
+						return new ContainerDraetonPouch(player, player.inventory, new InventoryPouch(stack, 9 + (stack.getItemDamage() * 9), name), (EntityDraeton)entity, y);
 					}
 				}
 			}
@@ -248,7 +250,7 @@ public class CommonProxy implements IGuiHandler {
 			ItemStack item = player.getHeldItemMainhand();
 			String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.amphibious_armour";
 			if (!item.isEmpty() && item.getItem() instanceof ItemAmphibianArmor)
-				return new ContainerAmphibiousArmour(player, new InventoryItem(item, 3, name));
+				return new ContainerAmphibiousArmour(player, new InventoryAmphibianArmor(item, name));
 			break;
 		}
 		}

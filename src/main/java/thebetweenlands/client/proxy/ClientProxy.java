@@ -269,7 +269,9 @@ import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.handler.ExtendedReachHandler;
 import thebetweenlands.common.herblore.book.GuiManualHerblore;
 import thebetweenlands.common.herblore.book.HLEntryRegistry;
+import thebetweenlands.common.inventory.InventoryAmphibianArmor;
 import thebetweenlands.common.inventory.InventoryItem;
+import thebetweenlands.common.inventory.InventoryPouch;
 import thebetweenlands.common.inventory.container.ContainerAmphibiousArmour;
 import thebetweenlands.common.inventory.container.ContainerDraetonPouch;
 import thebetweenlands.common.inventory.container.ContainerPouch;
@@ -407,7 +409,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			}
 			if(!item.isEmpty() && item.getItem() instanceof ItemLurkerSkinPouch) {
 				String name = item.hasDisplayName() ? item.getDisplayName(): I18n.format("container.bl.lurker_skin_pouch");
-				return new GuiPouch(new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name)));
+				return new GuiPouch(new ContainerPouch(player, player.inventory, new InventoryPouch(item, 9 + (item.getItemDamage() * 9), name)));
 			}
 			break;
 		}
@@ -416,7 +418,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			ItemStack item = ItemLurkerSkinPouch.getFirstPouch(player);
 			if(!item.isEmpty()) {
 				String name = item.hasDisplayName() ? item.getDisplayName(): I18n.format("container.bl.lurker_skin_pouch");
-				return new GuiPouch(new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name)));
+				return new GuiPouch(new ContainerPouch(player, player.inventory, new InventoryPouch(item, 9 + (item.getItemDamage() * 9), name)));
 			}
 		}
 
@@ -449,7 +451,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 					ItemStack stack = upgrades.getStackInSlot(y);
 					if(!stack.isEmpty() && ((EntityDraeton) entity).isStorageUpgrade(stack)) {
 						String name = stack.hasDisplayName() ? stack.getDisplayName(): I18n.format("container.bl.draeton_storage");
-						return new GuiPouch(new ContainerDraetonPouch(player, player.inventory, new InventoryItem(stack, 9 + (stack.getItemDamage() * 9), name), (EntityDraeton)entity, y));
+						return new GuiPouch(new ContainerDraetonPouch(player, player.inventory, new InventoryPouch(stack, 9 + (stack.getItemDamage() * 9), name), (EntityDraeton)entity, y));
 					}
 				}
 			}
@@ -517,7 +519,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			ItemStack item = player.getHeldItemMainhand();
 			String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.amphibious_armour";
 			if (!item.isEmpty() && item.getItem() instanceof ItemAmphibianArmor)
-				return new GuiAmphibiousArmour(new ContainerAmphibiousArmour(player, new InventoryItem(item, 3, name)));
+				return new GuiAmphibiousArmour(new ContainerAmphibiousArmour(player, new InventoryAmphibianArmor(item, name)));
 			break;
 		}
 		}
