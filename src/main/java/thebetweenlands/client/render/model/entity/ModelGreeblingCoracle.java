@@ -386,7 +386,7 @@ public class ModelGreeblingCoracle extends MowzieModelBase {
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        this.coracle_base.render(scale); 
+      this.coracle_base.render(scale); 
     }
 
     public void setRotateAngle(MowzieModelRenderer MowzieModelRenderer, float x, float y, float z) {
@@ -407,46 +407,10 @@ public class ModelGreeblingCoracle extends MowzieModelBase {
         EntityGreeblingCoracle coracle = (EntityGreeblingCoracle) entity;
         float frame = coracle.ticksExisted + partialRenderTicks;
 
-        if(coracle.getSinkingTicks() > 5 ) {
+        if(coracle.getSinkingTicks() > 10)
 			body_base.showModel = false;
-			chest.showModel = false;
-			leg_left1a.showModel = false;
-			leg_right1a.showModel = false;
-			head_connect.showModel = false;
-			arm_left1a.showModel = false;
-			arm_right1a.showModel = false;
-			head_main.showModel = false;
-			jaw.showModel = false;
-			nose.showModel = false;
-			ear_left.showModel = false;
-			ear_right.showModel = false;
-			cloth1a.showModel = false;
-			cloth1b.showModel = false;
-			arm_left1b.showModel = false;
-			arm_right1b.showModel = false;
-			leg_left1b.showModel = false;
-			leg_right1b.showModel = false;
-        }
-        else {
+        else
 			body_base.showModel = true;
-			chest.showModel = true;
-			leg_left1a.showModel = true;
-			leg_right1a.showModel = true;
-			head_connect.showModel = true;
-			arm_left1a.showModel = true;;
-			arm_right1a.showModel = true;
-			head_main.showModel = true;
-			jaw.showModel = true;;
-			nose.showModel = true;
-			ear_left.showModel = true;
-			ear_right.showModel = true;
-			cloth1a.showModel = true;
-			cloth1b.showModel = true;
-			arm_left1b.showModel = true;
-			arm_right1b.showModel = true;
-			leg_left1b.showModel = true;
-			leg_right1b.showModel = true;
-        }
 
         if (coracle.isGreeblingAboveWater()) {
             // Boat idle

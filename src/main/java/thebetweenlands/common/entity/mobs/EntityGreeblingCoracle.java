@@ -232,7 +232,7 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 		if(getEntityWorld().isRemote) {
 			int leafCount = 40;
 			float x = (float) (posX);
-			float y = (float) (posY + 1.3F);
+			float y = (float) (posY + 0.75F);
 			float z = (float) (posZ);
 			while (leafCount-- > 0) {
 				float dx = getEntityWorld().rand.nextFloat() * 1 - 0.5f;
