@@ -9,7 +9,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.RandomPositionGenerator;
@@ -27,6 +26,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -38,6 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
+import thebetweenlands.common.entity.ai.EntityAvoidEntityFlatPath;
 import thebetweenlands.common.entity.movement.PathNavigateAboveWater;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -49,7 +50,7 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 	protected static final byte EVENT_SPOUT = 42;
 	private static final DataParameter<Integer> SINKING_TICKS = EntityDataManager.createKey(EntityGreeblingCoracle.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> LOOT_CLICKS = EntityDataManager.createKey(EntityGreeblingCoracle.class, DataSerializers.VARINT);
-	EntityAIAvoidEntity avoidPlayer;
+	EntityAvoidEntityFlatPath avoidPlayer;
 	AIWaterWander waterWander;
 	EntityAILookIdle lookIdle;
 	boolean hasSetAIForEmptyBoat = false;
@@ -75,7 +76,7 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 
     @Override
     protected void initEntityAI() {
-    	avoidPlayer = new EntityAIAvoidEntity<>(this, EntityPlayer.class, 16F, 4D, 8D);
+    	avoidPlayer = new EntityAvoidEntityFlatPath<>(this, EntityPlayer.class, 16F, 4D, 8D);
     	waterWander = new EntityGreeblingCoracle.AIWaterWander(this, 0.5D, 30);
     	lookIdle = new EntityAILookIdle(this);
     	tasks.addTask(0, avoidPlayer);
@@ -93,6 +94,11 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
     protected PathNavigate createNavigator(World world) {
 		return new PathNavigateAboveWater(this, world); 
 	}
+
+    @Override
+    public float getBlockPathWeight(BlockPos pos) {
+        return world.getBlockState(pos).getMaterial() == Material.WATER ? 10.0F + world.getLightBrightness(pos) - 0.5F : super.getBlockPathWeight(pos);
+    }
 
 	@Override
 	public boolean getCanSpawnHere() {
