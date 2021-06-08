@@ -47,7 +47,7 @@ import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
 import thebetweenlands.common.inventory.container.ContainerSmokingRack;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
-import thebetweenlands.common.item.armor.ItemAmphibianArmor;
+import thebetweenlands.common.item.armor.amphibian.ItemAmphibianArmor;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.common.tile.TileEntityBLDualFurnace;

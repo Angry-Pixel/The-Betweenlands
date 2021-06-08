@@ -2,8 +2,8 @@ package thebetweenlands.common.inventory;
 
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import thebetweenlands.api.item.AmphibianArmorUpgrades;
-import thebetweenlands.common.item.armor.ItemAmphibianArmor;
+import thebetweenlands.common.item.armor.amphibian.AmphibianArmorUpgrades;
+import thebetweenlands.common.item.armor.amphibian.ItemAmphibianArmor;
 
 public class InventoryAmphibianArmor extends InventoryItem {
 

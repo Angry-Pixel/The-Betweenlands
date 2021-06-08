@@ -1,4 +1,4 @@
-package thebetweenlands.api.item;
+package thebetweenlands.common.item.armor.amphibian;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,9 +14,12 @@ import javax.annotation.Nullable;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import thebetweenlands.api.item.IAmphibianArmorAttributeUpgrade;
+import thebetweenlands.api.item.IAmphibianArmorUpgrade;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -24,7 +27,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 public enum AmphibianArmorUpgrades implements IAmphibianArmorUpgrade {
 	VISIBILITY(new ResourceLocation(ModInfo.ID, "visibility"), EnumItemMisc.ANADIA_EYE::isItemOf, EntityEquipmentSlot.HEAD),
 	BREATHING(new ResourceLocation(ModInfo.ID, "breathing"), EnumItemMisc.ANADIA_GILLS::isItemOf, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST),
-	TOUGHNESS(new ResourceLocation(ModInfo.ID, "toughness"), EnumItemMisc.SLIMY_BONE::isItemOf, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
+	TOUGHNESS(new ResourceLocation(ModInfo.ID, "toughness"), EnumItemMisc.SLIMY_BONE::isItemOf, AdditiveAttributeUpgrade.TOUGHNESS, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
 	THORNS(new ResourceLocation(ModInfo.ID, "thorns"), EnumItemMisc.URCHIN_SPIKE::isItemOf, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
 	DECAY_DECREASE(new ResourceLocation(ModInfo.ID, "decay_decrease"), EnumItemMisc.ANADIA_SCALES::isItemOf, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
 	MINING_SPEED(new ResourceLocation(ModInfo.ID, "mining_speed"), EnumItemMisc.SNOT::isItemOf, EntityEquipmentSlot.CHEST),
@@ -53,7 +56,7 @@ public enum AmphibianArmorUpgrades implements IAmphibianArmorUpgrade {
 	@Nullable
 	public static IAmphibianArmorUpgrade getUpgrade(EntityEquipmentSlot armorType, ItemStack stack) {
 		for(IAmphibianArmorUpgrade upgrade : getUpgrades(armorType)) {
-			if(upgrade.matches(stack)) {
+			if(upgrade.matches(armorType, stack)) {
 				return upgrade;
 			}
 		}
@@ -73,17 +76,23 @@ public enum AmphibianArmorUpgrades implements IAmphibianArmorUpgrade {
 
 	private final ResourceLocation id;
 	private final Predicate<ItemStack> matcher;
+	private final IAmphibianArmorAttributeUpgrade attributeUpgrade;
 	private final Set<EntityEquipmentSlot> armorTypes;
 
 	private AmphibianArmorUpgrades(ResourceLocation id, Predicate<ItemStack> matcher, EntityEquipmentSlot... armorTypes) {
+		this(id, matcher, null, armorTypes);
+	}
+
+	private AmphibianArmorUpgrades(ResourceLocation id, Predicate<ItemStack> matcher, @Nullable IAmphibianArmorAttributeUpgrade attributeUpgrade, EntityEquipmentSlot... armorTypes) {
 		this.id = id;
 		this.matcher = matcher;
+		this.attributeUpgrade = attributeUpgrade;
 		this.armorTypes = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(armorTypes)));
 	}
 
 	@Override
-	public boolean matches(ItemStack stack) {
-		return !stack.isEmpty() && this.matcher.test(stack);
+	public boolean matches(EntityEquipmentSlot armorType, ItemStack stack) {
+		return !stack.isEmpty() && this.armorTypes.contains(armorType) && this.matcher.test(stack);
 	}
 
 	@Override
@@ -94,5 +103,12 @@ public enum AmphibianArmorUpgrades implements IAmphibianArmorUpgrade {
 	@Override
 	public ResourceLocation getId() {
 		return this.id;
+	}
+
+	@Override
+	public void applyAttributeModifiers(EntityEquipmentSlot armorType, ItemStack stack, int count, Multimap<String, AttributeModifier> modifiers) {
+		if(this.attributeUpgrade != null) {
+			this.attributeUpgrade.applyAttributeModifiers(armorType, stack, count, modifiers);
+		}
 	}
 }

@@ -276,7 +276,7 @@ import thebetweenlands.common.inventory.container.ContainerAmphibiousArmour;
 import thebetweenlands.common.inventory.container.ContainerDraetonPouch;
 import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.item.ITintedItem;
-import thebetweenlands.common.item.armor.ItemAmphibianArmor;
+import thebetweenlands.common.item.armor.amphibian.ItemAmphibianArmor;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.item.misc.ItemBarkAmulet;

@@ -1,5 +1,8 @@
-package thebetweenlands.common.item.armor;
+package thebetweenlands.common.item.armor.amphibian;
 
+import com.google.common.collect.Multimap;
+
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.IInventory;
@@ -11,13 +14,13 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.api.item.AmphibianArmorUpgrades;
 import thebetweenlands.api.item.IAmphibianArmorUpgrade;
 import thebetweenlands.client.render.model.armor.ModelAmphibianArmor;
 import thebetweenlands.client.render.model.armor.ModelBodyAttachment;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.item.BLMaterialRegistry;
+import thebetweenlands.common.item.armor.Item3DArmor;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.util.NBTHelper;
 
@@ -47,13 +50,30 @@ public class ItemAmphibianArmor extends Item3DArmor {
 		for(IAmphibianArmorUpgrade upgrade : AmphibianArmorUpgrades.values()) {
 			System.out.println(upgrade.getId() + ": " + this.getUpgradeCount(stack, upgrade));
 		}
-		
+
 		if (player.isSneaking()) {
 			player.openGui(TheBetweenlands.instance, CommonProxy.GUI_AMPHIBIAN_ARMOR, world, 0, 0, 0);
 			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 		} else {
 			return super.onItemRightClick(world, player, hand);
 		}
+	}
+
+	@Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+		Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
+
+		if(slot == this.armorType) {
+			for(IAmphibianArmorUpgrade upgrade : AmphibianArmorUpgrades.getUpgrades(this.armorType)) {
+				int count = this.getUpgradeCount(stack, upgrade);
+
+				if(count > 0) {
+					upgrade.applyAttributeModifiers(this.armorType, stack, count, modifiers);
+				}
+			}
+		}
+
+		return modifiers;
 	}
 
 	public void setUpgradeCounts(ItemStack stack, IInventory inv) {
