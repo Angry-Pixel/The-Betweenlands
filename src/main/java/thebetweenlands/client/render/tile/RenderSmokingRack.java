@@ -61,21 +61,21 @@ public class RenderSmokingRack extends TileEntitySpecialRenderer<TileEntitySmoki
 
 			if (!te.getStackInSlot(1).isEmpty() && te.getStackInSlot(4).isEmpty()) {
 				if(isSafeAnadiaMobItem(te, 1) && te.getRenderEntity(1) != null)
-						renderAnadiaInSlot(te, te.getStackInSlot(1), te.getRenderEntity(1), -0.525F, 0.5F, 0.0F, 0.5F);
+						renderAnadiaInSlot(te, te.getStackInSlot(1), te.getRenderEntity(1), 0, 1F, 0.0F, 0.5F);
 				else
 					renderItemInSlot(te, te.getStackInSlot(1), 0F, 1.525F, 0F, 0.5F);
 			}
 
 			if (!te.getStackInSlot(2).isEmpty() && te.getStackInSlot(5).isEmpty()) {
 				if(isSafeAnadiaMobItem(te, 2) && te.getRenderEntity(2) != null)
-					renderAnadiaInSlot(te, te.getStackInSlot(2), te.getRenderEntity(2), -0.525F, -0.4F, 0.4F, 0.5F);
+					renderAnadiaInSlot(te, te.getStackInSlot(2), te.getRenderEntity(2), 0F, 0.125F, 0.4F, 0.5F);
 				else
 					renderItemInSlot(te, te.getStackInSlot(2), 0F, 0.55F, 0.4F, 0.5F);
 			}
 
 			if (!te.getStackInSlot(3).isEmpty() && te.getStackInSlot(6).isEmpty()) {
 				if(isSafeAnadiaMobItem(te, 3) && te.getRenderEntity(3) != null)
-					renderAnadiaInSlot(te, te.getStackInSlot(3), te.getRenderEntity(3), -0.525F, -0.4F, -0.4F, 0.5F);
+					renderAnadiaInSlot(te, te.getStackInSlot(3), te.getRenderEntity(3), 0F, 0.125F, -0.4F, 0.5F);
 				else
 					renderItemInSlot(te, te.getStackInSlot(3), 0F, 0.55F, -0.4F, 0.5F);
 			}
@@ -83,21 +83,21 @@ public class RenderSmokingRack extends TileEntitySpecialRenderer<TileEntitySmoki
 			//outputs
 			if (!te.getStackInSlot(4).isEmpty()) {
 				if(isSafeAnadiaMobItem(te, 4)&& te.getRenderEntity(4) != null)
-					renderAnadiaInSlot(te, te.getStackInSlot(4), te.getRenderEntity(4), -0.525F, 0.5F, 0.0F, 0.5F);
+					renderAnadiaInSlot(te, te.getStackInSlot(4), te.getRenderEntity(4), 0F, 1F, 0.0F, 0.5F);
 				else
 					renderItemInSlot(te, te.getStackInSlot(4), 0F, 1.525F, 0F, 0.5F);
 			}
 
 			if (!te.getStackInSlot(5).isEmpty()) {
 				if(isSafeAnadiaMobItem(te, 5) && te.getRenderEntity(5) != null)
-					renderAnadiaInSlot(te, te.getStackInSlot(5), te.getRenderEntity(5), -0.525F, -0.4F, 0.4F, 0.5F);
+					renderAnadiaInSlot(te, te.getStackInSlot(5), te.getRenderEntity(5), 0F, 0.125F, 0.4F, 0.5F);
 				else
 					renderItemInSlot(te, te.getStackInSlot(5), 0F, 0.55F, 0.4F, 0.5F);
 			}
 
 			if (!te.getStackInSlot(6).isEmpty()) {
 				if(isSafeAnadiaMobItem(te, 6) && te.getRenderEntity(6) != null)
-					renderAnadiaInSlot(te, te.getStackInSlot(6), te.getRenderEntity(6), -0.525F, -0.4F, -0.4F, 0.5F);
+					renderAnadiaInSlot(te, te.getStackInSlot(6), te.getRenderEntity(6), 0F, 0.125F, -0.4F, 0.5F);
 				else
 					renderItemInSlot(te, te.getStackInSlot(6), 0F, 0.55F, -0.4F, 0.5F);
 			}
