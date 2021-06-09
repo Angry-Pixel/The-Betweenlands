@@ -267,6 +267,7 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 	@Override
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
 		if (getSinkingTicks() > 0 && getSinkingTicks() < 200 && hand == EnumHand.MAIN_HAND) {
+			player.swingArm(hand);
 			if (!getEntityWorld().isRemote) {
 				dropLoot((EntityPlayer) player);
 				setLootClicks(getLootClicks() +1);
