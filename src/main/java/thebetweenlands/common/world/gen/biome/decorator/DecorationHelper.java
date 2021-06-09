@@ -18,6 +18,7 @@ import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
+import thebetweenlands.common.world.gen.feature.WorldGenBarnacleCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenBigBulbCappedMushroom;
 import thebetweenlands.common.world.gen.feature.WorldGenBladderwortCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenCaveGrass;
@@ -129,6 +130,7 @@ public class DecorationHelper {
 	public static final WorldGenerator GEN_LAKE_CAVERN_SIMULACRUM = new WorldGenLakeCavernSimulacrum();
 	public static final WorldGenerator GEN_DEEPMAN_SIMULACRUM = new WorldGenDeepmanSimulacrum();
 	public static final WorldGenerator GEN_ROOTMAN_SIMULACRUM = new WorldGenRootmanSimulacrum();
+	public static final WorldGenerator GEN_BARNACLE_CLUSTER = new WorldGenBarnacleCluster(BlockRegistry.BARNACLE_1_2.getDefaultState());
 	
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
@@ -946,5 +948,13 @@ public class DecorationHelper {
 	
 	public static boolean generateSludgePlainsClearingDungeon(DecoratorPositionProvider decorator) {
 		return generateSubBiomeStructure(decorator, GEN_SLUDGE_WORM_DUNGEON, 16, 16, 45, BiomeRegistry.SLUDGE_PLAINS_CLEARING, SurfaceType.MIXED_GROUND);
+	}
+	
+	public static boolean generateBarnacleCluster(DecoratorPositionProvider decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(decorator.getWorld().isAirBlock(pos) && decorator.getWorld().getBlockState(pos.down()).isNormalCube()) {
+			return GEN_BARNACLE_CLUSTER.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
 	}
 }

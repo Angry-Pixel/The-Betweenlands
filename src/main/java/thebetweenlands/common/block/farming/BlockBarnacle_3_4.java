@@ -228,7 +228,7 @@ public class BlockBarnacle_3_4 extends BlockSwampWater implements IStateMappedBl
     public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
     	if (!world.isRemote)
     		if(checkForLog (world, pos, state))
-    			world.scheduleUpdate(pos, this, 400);
+    			world.scheduleUpdate(pos, this, 100);
     }
 
 	private boolean checkForLog(World world, BlockPos pos, IBlockState state) {
@@ -249,7 +249,7 @@ public class BlockBarnacle_3_4 extends BlockSwampWater implements IStateMappedBl
 			return;
 			if (checkForLog(world, pos, state)) {
 				randomTick(world, pos, state, random);
-				world.scheduleUpdate(pos, this, 400);
+				world.scheduleUpdate(pos, this, 100);
 		}
 	}
 
@@ -257,37 +257,38 @@ public class BlockBarnacle_3_4 extends BlockSwampWater implements IStateMappedBl
     public void randomTick(World world, BlockPos pos, IBlockState state, Random random) {
 		if (world.isRemote)
 			return;
-
-		EnumBarnacleTypeLate stage = state.getValue(BARNACLE_TYPE_LATE);
-
-		switch (stage) {
-		case BARNACLE_DOWN_THREE:
-			world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.BARNACLE_DOWN_FOUR), 2);
-			break;
-		case BARNACLE_UP_THREE:
-			world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.BARNACLE_UP_FOUR), 2);
-			break;
-		case BARNACLE_EAST_THREE:
-			world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.BARNACLE_EAST_FOUR), 2);
-			break;
-		case BARNACLE_NORTH_THREE:
-			world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.BARNACLE_NORTH_FOUR), 2);
-			break;
-		case BARNACLE_SOUTH_THREE:
-			world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.BARNACLE_SOUTH_FOUR), 2);
-			break;
-		case BARNACLE_WEST_THREE:
-			world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.BARNACLE_WEST_FOUR), 2);
-			break;
-		case BARNACLE_DOWN_FOUR:
-		case BARNACLE_UP_FOUR:
-		case BARNACLE_EAST_FOUR:
-		case BARNACLE_NORTH_FOUR:
-		case BARNACLE_SOUTH_FOUR:
-		case BARNACLE_WEST_FOUR:
-			break;
-		default:
-			break;
+		if(world.rand.nextInt(4) == 0) {
+			EnumBarnacleTypeLate stage = state.getValue(BARNACLE_TYPE_LATE);
+	
+			switch (stage) {
+			case BARNACLE_DOWN_THREE:
+				world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.BARNACLE_DOWN_FOUR), 2);
+				break;
+			case BARNACLE_UP_THREE:
+				world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.BARNACLE_UP_FOUR), 2);
+				break;
+			case BARNACLE_EAST_THREE:
+				world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.BARNACLE_EAST_FOUR), 2);
+				break;
+			case BARNACLE_NORTH_THREE:
+				world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.BARNACLE_NORTH_FOUR), 2);
+				break;
+			case BARNACLE_SOUTH_THREE:
+				world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.BARNACLE_SOUTH_FOUR), 2);
+				break;
+			case BARNACLE_WEST_THREE:
+				world.setBlockState(pos, getDefaultState().withProperty(BARNACLE_TYPE_LATE, EnumBarnacleTypeLate.BARNACLE_WEST_FOUR), 2);
+				break;
+			case BARNACLE_DOWN_FOUR:
+			case BARNACLE_UP_FOUR:
+			case BARNACLE_EAST_FOUR:
+			case BARNACLE_NORTH_FOUR:
+			case BARNACLE_SOUTH_FOUR:
+			case BARNACLE_WEST_FOUR:
+				break;
+			default:
+				break;
+			}
 		}
 	}
 
