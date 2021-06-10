@@ -171,8 +171,8 @@ public class DecorationHelper {
 		decorator.generate(120, DecorationHelper::generateCaveGrassCluster);
 		decorator.generate(5, DecorationHelper::generateDeepmanSimulacrum);
 		decorator.generate(0.6f, DecorationHelper::generateLakeCavernSimulacrum);
-		decorator.generate(5, DecorationHelper::generateUndergroundPebbleClusterLand);
-		decorator.generate(5, DecorationHelper::generateUndergroundPebbleClusterWater);
+		decorator.generate(10, DecorationHelper::generateUndergroundPebbleClusterLand);
+		decorator.generate(10, DecorationHelper::generateUndergroundPebbleClusterWater);
 		return true;
 	}
 
