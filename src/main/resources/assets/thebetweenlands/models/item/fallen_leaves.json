@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "thebetweenlands:blocks/fallen_leaves"
+        "layer0": "thebetweenlands:items/fallen_leaves"
     }
 }
