@@ -74,5 +74,13 @@ public class BiomeDecoratorCoarseIslands extends BiomeDecoratorBetweenlands {
 		this.startProfilerSection("swampKelpCluster");
 		this.generate(4, DecorationHelper::generateSwampKelpCluster);
 		this.endProfilerSection();
+
+        this.startProfilerSection("pebbleClusterLand");
+        this.generate(4, DecorationHelper::generatePebbleClusterLand);
+        this.endProfilerSection();
+
+        this.startProfilerSection("pebbleClusterWater");
+        this.generate(10, DecorationHelper::generatePebbleClusterWater);
+        this.endProfilerSection();
 	}
 }

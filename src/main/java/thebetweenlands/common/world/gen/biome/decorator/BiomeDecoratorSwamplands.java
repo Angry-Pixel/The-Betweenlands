@@ -106,5 +106,13 @@ public class BiomeDecoratorSwamplands extends BiomeDecoratorBetweenlands {
 		this.startProfilerSection("fallenLeaves");
 		this.generate(DecorationHelper::generateFallenLeaves);
 		this.endProfilerSection();
+
+        this.startProfilerSection("pebbleClusterLand");
+        this.generate(4, DecorationHelper::generatePebbleClusterLand);
+        this.endProfilerSection();
+
+        this.startProfilerSection("pebbleClusterWater");
+        this.generate(10, DecorationHelper::generatePebbleClusterWater);
+        this.endProfilerSection();
 	}
 }

@@ -42,5 +42,9 @@ public class BiomeDecoratorDeepWaters extends BiomeDecoratorBetweenlands {
 		this.startProfilerSection("barnacleCluster");
 		this.generate(500, DecorationHelper::generateBarnacleCluster);
 		this.endProfilerSection();
+
+        this.startProfilerSection("pebbleClusterWater");
+        this.generate(200, DecorationHelper::generatePebbleClusterWater);
+        this.endProfilerSection();
 	}
 }

@@ -86,5 +86,13 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBetweenlands {
 		this.startProfilerSection("bogBean");
 		this.generate(6, DecorationHelper::generateBogBean);
 		this.endProfilerSection();
+
+        this.startProfilerSection("pebbleClusterLand");
+        this.generate(4, DecorationHelper::generatePebbleClusterLand);
+        this.endProfilerSection();
+
+        this.startProfilerSection("pebbleClusterWater");
+        this.generate(10, DecorationHelper::generatePebbleClusterWater);
+        this.endProfilerSection();
 	}
 }

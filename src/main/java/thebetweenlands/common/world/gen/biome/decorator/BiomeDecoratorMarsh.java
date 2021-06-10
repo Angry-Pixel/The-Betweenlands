@@ -101,5 +101,13 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBetweenlands {
 		this.startProfilerSection("bottleBrushGrassCluster");
 		this.generate(5, DecorationHelper::generateBottleBrushGrassCluster);
 		this.endProfilerSection();
+		
+        this.startProfilerSection("pebbleClusterLand");
+        this.generate(2, DecorationHelper::generatePebbleClusterLand);
+        this.endProfilerSection();
+
+        this.startProfilerSection("pebbleClusterWater");
+        this.generate(4, DecorationHelper::generatePebbleClusterWater);
+        this.endProfilerSection();
 	}
 }
