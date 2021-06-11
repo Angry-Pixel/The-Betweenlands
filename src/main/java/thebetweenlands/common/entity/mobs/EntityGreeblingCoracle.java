@@ -156,14 +156,14 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 			limbSwingAmount += 0.5D;
 
 		if(!getEntityWorld().isRemote) {
+			if (getSinkingTicks() == 200 && isGreeblingAboveWater())
+				world.playSound(null, getPosition(), SoundRegistry.CORACLE_SINK, SoundCategory.NEUTRAL, 1F, 1F);
+
 			if (getSinkingTicks() > 0 && getSinkingTicks() < 400)
 				setSinkingTicks(getSinkingTicks() + 1);
 
 			if (getSinkingTicks() == 5)
 				getEntityWorld().setEntityState(this, EVENT_DISAPPEAR);
-
-			if (getSinkingTicks() == 200 && isGreeblingAboveWater())
-				world.playSound(null, getPosition(), SoundRegistry.CORACLE_SINK, SoundCategory.NEUTRAL, 1F, 1F);
 
 			if (getSinkingTicks() >= 200 && getSinkingTicks() <= 400 && isGreeblingAboveWater())
 				getEntityWorld().setEntityState(this, EVENT_SPOUT);
