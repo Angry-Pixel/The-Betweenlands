@@ -13,6 +13,7 @@ import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,6 +26,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -56,6 +58,9 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 	boolean hasSetAIForEmptyBoat = false;
 	private boolean looted = false;
 	private NonNullList<ItemStack> loot = NonNullList.create();
+	private int shutUpFFSTime;
+	public int rowTicks;
+	public float rowSpeed = 0.5f;
 
     public EntityGreeblingCoracle(World worldIn) {
         super(worldIn);
@@ -112,9 +117,26 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 	public void onUpdate() {
 		super.onUpdate();
 
+		if (world.isRemote && getSinkingTicks() <= 0) {
+			this.rowTicks++;
+
+			if (!isSilent() && posX != lastTickPosX && posZ != lastTickPosZ) {
+				float rowAngle1 = MathHelper.cos(this.rowTicks * rowSpeed);
+				float rowAngle2 = MathHelper.cos((this.rowTicks + 1) * rowSpeed);
+				if(rowAngle1 <= 0.8f && rowAngle2 > 0.8f) {
+					world.playSound(posX, posY, posZ, SoundEvents.ENTITY_GENERIC_SWIM, getSoundCategory(), 0.2F, 0.8F + 0.4F * this.rand.nextFloat(), false);
+				}
+			}
+		}
+
+		if(shutUpFFSTime > 0) {
+			shutUpFFSTime--;
+			livingSoundTime = -getTalkInterval();
+		}
+
 		if (getEntityWorld().containsAnyLiquid(getEntityBoundingBox()) && getSinkingTicks() <= 200)
 			motionY += 0.06D;
-		
+
 		if (getSinkingTicks() > 0) {
 			motionX *= 0.975D;
 			motionZ *= 0.975D;
@@ -139,7 +161,10 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 
 			if (getSinkingTicks() == 5)
 				getEntityWorld().setEntityState(this, EVENT_DISAPPEAR);
-			
+
+			if (getSinkingTicks() == 200 && isGreeblingAboveWater())
+				world.playSound(null, getPosition(), SoundRegistry.CORACLE_SINK, SoundCategory.NEUTRAL, 1F, 1F);
+
 			if (getSinkingTicks() >= 200 && getSinkingTicks() <= 400 && isGreeblingAboveWater())
 				getEntityWorld().setEntityState(this, EVENT_SPOUT);
 
@@ -159,7 +184,7 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 			List<EntityPlayer> nearPlayers = getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class, getEntityBoundingBox().grow(2.5, 2.5, 2.5), e -> !e.capabilities.isCreativeMode && !e.isInvisible());
 			if (getSinkingTicks() == 0 && !nearPlayers.isEmpty()) {
 				setSinkingTicks(getSinkingTicks() + 1);
-				getEntityWorld().playSound(null, posX, posY, posZ, SoundRegistry.GREEBLING_VANISH, SoundCategory.NEUTRAL, 1, 1);
+				getEntityWorld().playSound(null, posX, posY, posZ, SoundRegistry.GREEBLING_VANISH, SoundCategory.NEUTRAL, 1F, 1F);
 			}
 		}
 	}
@@ -251,6 +276,24 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 	}
 
 	@Override
+    protected float getSoundVolume() {
+        return 0.75F;
+    }
+
+	@Override
+	protected SoundEvent getAmbientSound() {
+		if(getSinkingTicks() <= 0) {
+			if(this.rand.nextInt(4) == 0 && shutUpFFSTime <= 0) {
+				shutUpFFSTime = 120;
+				return SoundRegistry.GREEBLING_HUM;
+			}
+			else
+				return SoundRegistry.GREEBLING_GIGGLE;
+		}
+		return null;
+	}
+
+	@Override
 	public int getMaxSpawnedInChunk() {
 		return 1;
 	}
@@ -259,8 +302,10 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 	public boolean attackEntityFrom(DamageSource source, float damage) {
 		if (source.getTrueSource() instanceof EntityLivingBase)
 			if (getSinkingTicks() == 0)
-				if (!getEntityWorld().isRemote)
+				if (!getEntityWorld().isRemote) {
 					setSinkingTicks(getSinkingTicks() + 1);
+					getEntityWorld().playSound(null, posX, posY, posZ, SoundRegistry.GREEBLING_VANISH, SoundCategory.NEUTRAL, 1F, 1F);
+				}
 		return false;
 	}
 

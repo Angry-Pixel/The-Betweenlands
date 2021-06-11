@@ -1532,7 +1532,10 @@ entity.thebetweenlands.rock_snot_tendril.name=Rock Snot Tendril
 entity.thebetweenlands.jellyfish.name=Jellyfish
 entity.thebetweenlands.jellyfish_cave.name=Cave Jellyfish
 entity.thebetweenlands.bubbler_crab.name=Bubbler Crab
+entity.thebetweenlands.bubbler_crab_bubble.name=Bubbler Crab Bubble
 entity.thebetweenlands.freshwater_urchin.name=Freshwater Urchin
+entity.thebetweenlands.greebling_coracle.name=Greebling Coracle
+entity.thebetweenlands.cave_fish.name=Cave Fish
 
 #Fish Parts
 entity.thebetweenlands.anadia_body_0=Skittish
@@ -2279,6 +2282,8 @@ blsubtitles.entity.greebling.giggle=Greebling giggles
 blsubtitles.entity.greebling.whistle=Greebling whistles
 blsubtitles.entity.greebling.fall=Greebling falls
 blsubtitles.entity.greebling.vanish=Greebling vanishes
+blsubtitles.entity.greebling.hum=Greebling hums
+blsubtitles.entity.greebling.coracle_sink=Coracle sinks
 blsubtitles.entity.chiromaw_matriarch.barbs=Chiromaw Matriarch shoots barbs
 blsubtitles.entity.chiromaw_matriarch.living=Chiromaw Matriarch chatters
 blsubtitles.entity.chiromaw_matriarch.hurt=Chiromaw Matriarch shoots hurts

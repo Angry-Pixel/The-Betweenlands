@@ -1183,6 +1183,18 @@
     ],
     "subtitle": "blsubtitles.entity.greebling.vanish"
   },
+  "greebling_hum": {
+    "sounds": [
+      "thebetweenlands:greebling_hum"
+    ],
+    "subtitle": "blsubtitles.entity.greebling.hum"
+  },
+  "coracle_sink": {
+    "sounds": [
+      "thebetweenlands:coracle_sink"
+    ],
+    "subtitle": "blsubtitles.entity.greebling.coracle_sink"
+  },
    "chiromaw_matriarch_barb_fire": {
     "sounds": [
       "thebetweenlands:chiromaw_matriarch_barb_fire_1",

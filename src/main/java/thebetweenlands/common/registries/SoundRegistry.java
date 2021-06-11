@@ -97,6 +97,8 @@ public class SoundRegistry {
     public static final BLSoundEvent ZAP = reg("zap");
     public static final BLSoundEvent CHIROBARB_ERUPTER = reg("chirobarb_erupter");
     public static final BLSoundEvent SIMULACRUM_BREAK = reg("simulacrum_break");
+    public static final BLSoundEvent GREEBLING_HUM = reg("greebling_hum");
+    public static final BLSoundEvent CORACLE_SINK = reg("coracle_sink");
     // Hostiles
     public static final BLSoundEvent FISH_HURT = reg("fish_hurt");
     public static final BLSoundEvent FISH_DEATH = reg("fish_death");
