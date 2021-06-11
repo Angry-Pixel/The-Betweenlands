@@ -165,7 +165,7 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 	}
 
 	public boolean isGreeblingAboveWater() {
-		AxisAlignedBB floatingBox = new AxisAlignedBB(getEntityBoundingBox().minX + 0.25D, getEntityBoundingBox().minY - 0.01F, getEntityBoundingBox().minZ + 0.25D, getEntityBoundingBox().maxX - 0.25D, getEntityBoundingBox().minY + 0.0625D, getEntityBoundingBox().maxZ - 0.25D);
+		AxisAlignedBB floatingBox = new AxisAlignedBB(getEntityBoundingBox().minX + 0.25D, getEntityBoundingBox().minY + 0.12F, getEntityBoundingBox().minZ + 0.25D, getEntityBoundingBox().maxX - 0.25D, getEntityBoundingBox().minY + 0.0625D, getEntityBoundingBox().maxZ - 0.25D);
 		return getEntityWorld().containsAnyLiquid(floatingBox);
 	}
 
