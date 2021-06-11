@@ -249,7 +249,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 			List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, proximityBox());
 			for (Iterator<EntityLivingBase> iterator = list.iterator(); iterator.hasNext();) {
 				EntityLivingBase entity  = iterator.next();
-				if (entity != null && (entity instanceof EntityPlayer && getPlacedByPlayer() || entity instanceof EntityRockSnot) || entity instanceof EntityPlayer && ((EntityPlayer) entity).isSpectator() || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative())
+				if (entity != null && !canTarget(entity))
 					iterator.remove();
 			}
 			if (list.isEmpty()) {
@@ -297,10 +297,26 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 		return damageSnot(source, damage);
 	}
 
+	public boolean canTarget(EntityLivingBase entity) {
+		if((entity instanceof EntityPlayer && getPlacedByPlayer() ||  entity instanceof EntityPlayer && ((EntityPlayer) entity).isSpectator() || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative()))
+			return false;
+		if(entity instanceof EntityRockSnot)
+			return false;
+		if(entity instanceof EntityLurker)
+			return false;
+		if(!entity.isNonBoss())
+			return false;
+		return true;
+	}
+
 	@Override
 	@SuppressWarnings("rawtypes")
 	public boolean canAttackClass(Class entity) {
-		if(entity == EntityPlayer.class && getPlacedByPlayer() || entity == EntityRockSnot.class || entity == EntityRockSnotTendril.class)
+		if(entity == EntityPlayer.class && getPlacedByPlayer())
+			return false;
+		if(entity == EntityRockSnot.class || entity == EntityRockSnotTendril.class)
+			return false;
+		if(entity == EntityLurker.class)
 			return false;
 		return super.canAttackClass(entity);
 	}

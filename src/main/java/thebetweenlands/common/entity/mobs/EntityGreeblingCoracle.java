@@ -81,7 +81,7 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
     	lookIdle = new EntityAILookIdle(this);
     	tasks.addTask(0, avoidPlayer);
     	tasks.addTask(1, waterWander);
-        tasks.addTask(3, lookIdle);
+        tasks.addTask(2, lookIdle);
     }
 
 	@Override
@@ -103,7 +103,7 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 	@Override
 	public boolean getCanSpawnHere() {
 		int y = MathHelper.floor(getEntityBoundingBox().minY);
-		if(y <= WorldProviderBetweenlands.LAYER_HEIGHT)
+		if(y <= WorldProviderBetweenlands.LAYER_HEIGHT && y > WorldProviderBetweenlands.CAVE_START)
 			return getEntityWorld().checkNoEntityCollision(getEntityBoundingBox()) && getEntityWorld().getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && getEntityWorld().isMaterialInBB(getEntityBoundingBox(), Material.WATER);
 		return false;
 	}
@@ -165,7 +165,7 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 	}
 
 	public boolean isGreeblingAboveWater() {
-		AxisAlignedBB floatingBox = new AxisAlignedBB(getEntityBoundingBox().minX + 0.25D, getEntityBoundingBox().minY, getEntityBoundingBox().minZ + 0.25D, getEntityBoundingBox().maxX - 0.25D, getEntityBoundingBox().minY + 0.0625D, getEntityBoundingBox().maxZ - 0.25D);
+		AxisAlignedBB floatingBox = new AxisAlignedBB(getEntityBoundingBox().minX + 0.25D, getEntityBoundingBox().minY - 0.01F, getEntityBoundingBox().minZ + 0.25D, getEntityBoundingBox().maxX - 0.25D, getEntityBoundingBox().minY + 0.0625D, getEntityBoundingBox().maxZ - 0.25D);
 		return getEntityWorld().containsAnyLiquid(floatingBox);
 	}
 
