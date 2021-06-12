@@ -14,59 +14,59 @@
   },
   "variants": {
     "pile_type=one": [
-      { "submodel": { "one_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_one", "layers": [ "cutout", "none" ] } } } },
-      { "submodel": { "one_2": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_one", "layers": [ "cutout", "none" ] }, "y": 90 } } },
-      { "submodel": { "one_3": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_one", "layers": [ "cutout", "none" ] }, "y": 180 } } },
-      { "submodel": { "one_4": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_one", "layers": [ "cutout", "none" ] }, "y": 270 } } }
+      { "submodel": { "one_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_one_water", "layers": [ "cutout", "none" ] } } } },
+      { "submodel": { "one_2": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_one_water", "layers": [ "cutout", "none" ] }, "y": 90 } } },
+      { "submodel": { "one_3": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_one_water", "layers": [ "cutout", "none" ] }, "y": 180 } } },
+      { "submodel": { "one_4": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_one_water", "layers": [ "cutout", "none" ] }, "y": 270 } } }
     ],
              
     "pile_type=two": [
-      { "submodel": { "two_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_two", "layers": [ "cutout", "none" ] } } } },
-      { "submodel": { "two_2": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_two", "layers": [ "cutout", "none" ] }, "y": 90 } } },
-      { "submodel": { "two_3": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_two", "layers": [ "cutout", "none" ] }, "y": 180 } } },
-      { "submodel": { "two_4": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_two", "layers": [ "cutout", "none" ] }, "y": 270 } } }
+      { "submodel": { "two_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_two_water", "layers": [ "cutout", "none" ] } } } },
+      { "submodel": { "two_2": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_two_water", "layers": [ "cutout", "none" ] }, "y": 90 } } },
+      { "submodel": { "two_3": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_two_water", "layers": [ "cutout", "none" ] }, "y": 180 } } },
+      { "submodel": { "two_4": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_two_water", "layers": [ "cutout", "none" ] }, "y": 270 } } }
     ],
              
     "pile_type=three": [
-      { "submodel": { "three_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_three", "layers": [ "cutout", "none" ] } } } },
-      { "submodel": { "three_2": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_three", "layers": [ "cutout", "none" ] }, "y": 90 } } },
-      { "submodel": { "three_3": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_three", "layers": [ "cutout", "none" ] }, "y": 180 } } },
-      { "submodel": { "three_4": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_three", "layers": [ "cutout", "none" ] }, "y": 270 } } }
+      { "submodel": { "three_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_three_water", "layers": [ "cutout", "none" ] } } } },
+      { "submodel": { "three_2": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_three_water", "layers": [ "cutout", "none" ] }, "y": 90 } } },
+      { "submodel": { "three_3": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_three_water", "layers": [ "cutout", "none" ] }, "y": 180 } } },
+      { "submodel": { "three_4": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_three_water", "layers": [ "cutout", "none" ] }, "y": 270 } } }
     ],
     
     "pile_type=four": [
-      { "submodel": { "four_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_four", "layers": [ "cutout", "none" ] } } } },
-      { "submodel": { "four_2": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_four", "layers": [ "cutout", "none" ] }, "y": 90 } } },
-      { "submodel": { "four_3": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_four", "layers": [ "cutout", "none" ] }, "y": 180 } } },
-      { "submodel": { "four_4": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_four", "layers": [ "cutout", "none" ] }, "y": 270 } } }
+      { "submodel": { "four_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_four_water", "layers": [ "cutout", "none" ] } } } },
+      { "submodel": { "four_2": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_four_water", "layers": [ "cutout", "none" ] }, "y": 90 } } },
+      { "submodel": { "four_3": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_four_water", "layers": [ "cutout", "none" ] }, "y": 180 } } },
+      { "submodel": { "four_4": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_four_water", "layers": [ "cutout", "none" ] }, "y": 270 } } }
     ],
     
     "pile_type=one_plant": [
-      { "submodel": { "one_plant_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_one_plant", "layers": [ "cutout", "none" ] } } } },
-      { "submodel": { "one_plant_2": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_one_plant", "layers": [ "cutout", "none" ] }, "y": 90 } } },
-      { "submodel": { "one_plant_3": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_one_plant", "layers": [ "cutout", "none" ] }, "y": 180 } } },
-      { "submodel": { "one_plant_4": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_one_plant", "layers": [ "cutout", "none" ] }, "y": 270 } } }
+      { "submodel": { "one_plant_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_one_plant_water", "layers": [ "cutout", "none" ] } } } },
+      { "submodel": { "one_plant_2": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_one_plant_water", "layers": [ "cutout", "none" ] }, "y": 90 } } },
+      { "submodel": { "one_plant_3": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_one_plant_water", "layers": [ "cutout", "none" ] }, "y": 180 } } },
+      { "submodel": { "one_plant_4": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_one_plant_water", "layers": [ "cutout", "none" ] }, "y": 270 } } }
     ],
              
     "pile_type=two_plant": [
-      { "submodel": { "two_plant_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_two_plant", "layers": [ "cutout", "none" ] } } } },
-      { "submodel": { "two_plant_2": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_two_plant", "layers": [ "cutout", "none" ] }, "y": 90 } } },
-      { "submodel": { "two_plant_3": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_two_plant", "layers": [ "cutout", "none" ] }, "y": 180 } } },
-      { "submodel": { "two_plant_4": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_two_plant", "layers": [ "cutout", "none" ] }, "y": 270 } } }
+      { "submodel": { "two_plant_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_two_plant_water", "layers": [ "cutout", "none" ] } } } },
+      { "submodel": { "two_plant_2": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_two_plant_water", "layers": [ "cutout", "none" ] }, "y": 90 } } },
+      { "submodel": { "two_plant_3": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_two_plant_water", "layers": [ "cutout", "none" ] }, "y": 180 } } },
+      { "submodel": { "two_plant_4": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_two_plant_water", "layers": [ "cutout", "none" ] }, "y": 270 } } }
     ],
              
     "pile_type=three_plant": [
-      { "submodel": { "three_plant_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_three_plant", "layers": [ "cutout", "none" ] } } } },
-      { "submodel": { "three_plant_2": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_three_plant", "layers": [ "cutout", "none" ] }, "y": 90 } } },
-      { "submodel": { "three_plant_3": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_three_plant", "layers": [ "cutout", "none" ] }, "y": 180 } } },
-      { "submodel": { "three_plant_4": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_three_plant", "layers": [ "cutout", "none" ] }, "y": 270 } } }
+      { "submodel": { "three_plant_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_three_plant_water", "layers": [ "cutout", "none" ] } } } },
+      { "submodel": { "three_plant_2": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_three_plant_water", "layers": [ "cutout", "none" ] }, "y": 90 } } },
+      { "submodel": { "three_plant_3": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_three_plant_water", "layers": [ "cutout", "none" ] }, "y": 180 } } },
+      { "submodel": { "three_plant_4": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_three_plant_water", "layers": [ "cutout", "none" ] }, "y": 270 } } }
     ],
     
     "pile_type=four_plant": [
-      { "submodel": { "four_plant_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_four_plant", "layers": [ "cutout", "none" ] } } } },
-      { "submodel": { "four_plant_2": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_four_plant", "layers": [ "cutout", "none" ] }, "y": 90 } } },
-      { "submodel": { "four_plant_3": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_four_plant", "layers": [ "cutout", "none" ] }, "y": 180 } } },
-      { "submodel": { "four_plant_4": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_four_plant", "layers": [ "cutout", "none" ] }, "y": 270 } } }
+      { "submodel": { "four_plant_1": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_four_plant_water", "layers": [ "cutout", "none" ] } } } },
+      { "submodel": { "four_plant_2": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_four_plant_water", "layers": [ "cutout", "none" ] }, "y": 90 } } },
+      { "submodel": { "four_plant_3": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_four_plant_water", "layers": [ "cutout", "none" ] }, "y": 180 } } },
+      { "submodel": { "four_plant_4": { "model": "thebetweenlands:internal/layer_selection", "custom": { "model": "thebetweenlands:block/internal/betweenstone_pebble_pile_four_plant_water", "layers": [ "cutout", "none" ] }, "y": 270 } } }
     ]
   }
 }

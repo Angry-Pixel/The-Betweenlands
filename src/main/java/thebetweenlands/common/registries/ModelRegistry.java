@@ -367,6 +367,30 @@ public class ModelRegistry {
 
 	public static final IModel BETWEENSTONE_PEBBLE_PILE_FOUR_PLANT = new ModelFromModelBase.Builder(new ModelPebblePile4Plants(), new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile"), 32, 32)
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+	
+	public static final IModel BETWEENSTONE_PEBBLE_PILE_ONE_WATER = new ModelFromModelBase.Builder(new ModelPebblePile1(), new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile_water"), 32, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile_water")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+
+	public static final IModel BETWEENSTONE_PEBBLE_PILE_TWO_WATER = new ModelFromModelBase.Builder(new ModelPebblePile2(), new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile_water"), 32, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile_water")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+
+	public static final IModel BETWEENSTONE_PEBBLE_PILE_THREE_WATER = new ModelFromModelBase.Builder(new ModelPebblePile3(), new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile_water"), 32, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile_water")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+
+	public static final IModel BETWEENSTONE_PEBBLE_PILE_FOUR_WATER = new ModelFromModelBase.Builder(new ModelPebblePile4(), new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile_water"), 32, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile_water")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+
+	public static final IModel BETWEENSTONE_PEBBLE_PILE_ONE_PLANT_WATER = new ModelFromModelBase.Builder(new ModelPebblePile1Plants(), new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile_water"), 32, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile_water")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+
+	public static final IModel BETWEENSTONE_PEBBLE_PILE_TWO_PLANT_WATER = new ModelFromModelBase.Builder(new ModelPebblePile2Plants(), new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile_water"), 32, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile_water")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+
+	public static final IModel BETWEENSTONE_PEBBLE_PILE_THREE_PLANT_WATER = new ModelFromModelBase.Builder(new ModelPebblePile3Plants(), new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile_water"), 32, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile_water")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+
+	public static final IModel BETWEENSTONE_PEBBLE_PILE_FOUR_PLANT_WATER = new ModelFromModelBase.Builder(new ModelPebblePile4Plants(), new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile_water"), 32, 32)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone_pebble_pile_water")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 
 	public static final IModel BARNACLE_1 = new ModelFromModelBase.Builder(new ModelBarnacle1(), new ResourceLocation("thebetweenlands:blocks/barnacle_1"), 16, 16)
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/barnacle_1")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
