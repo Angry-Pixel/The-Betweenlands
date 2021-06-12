@@ -1067,6 +1067,7 @@ tooltip.bl.press.shift=Hold 'shift' to view more
 tooltip.bl.life_crystal.remaining=%d remaining
 tooltip.bl.shockwave_sword.usage=Right-click on the ground\nto create a shockwave
 tooltip.bl.tool.broken=\n%s is broken\nand needs to be repaired in\nan Animator.
+tooltip.bl.tool.broken_rod=\n%s is broken\nand needs a new line, float, and hook.\n
 tooltip.bl.food_sickness.state.fine=Tastes good
 tooltip.bl.food_sickness.state.half=Tastes plain
 tooltip.bl.food_sickness.state.sick=Can't eat this anymore

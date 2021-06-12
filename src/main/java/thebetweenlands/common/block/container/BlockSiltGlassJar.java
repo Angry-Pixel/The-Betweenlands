@@ -5,13 +5,10 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
@@ -124,6 +121,8 @@ public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider
 				TileEntitySiltGlassJar tile = (TileEntitySiltGlassJar) world.getTileEntity(pos);
 				if (!player.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && player.getHeldItem(EnumHand.MAIN_HAND).getItem() == ItemRegistry.WEEDWOOD_FISHING_ROD) {
 					ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
+					if(stack.getItemDamage() == stack.getMaxDamage())
+						return;
 					for (int i = 0; i < tile.getItems().size(); i++) {
 						if (!tile.getItems().get(i).isEmpty()) {
 							if (stack.getItem() == ItemRegistry.WEEDWOOD_FISHING_ROD && stack.hasTagCompound()) { // no need for double item check - but may expand

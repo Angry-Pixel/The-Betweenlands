@@ -6,13 +6,12 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,6 +25,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.projectiles.EntityBLFishHook;
@@ -36,7 +36,7 @@ import thebetweenlands.util.TranslationHelper;
 public class ItemBLFishingRod extends Item {
 
 	public ItemBLFishingRod() {
-		setMaxDamage(128);
+		setMaxDamage(256);
 		setMaxStackSize(1);
 		setCreativeTab(BLCreativeTabs.GEARS);
 
@@ -60,6 +60,9 @@ public class ItemBLFishingRod extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flag) {
+		if(stack.getItemDamage() == stack.getMaxDamage()) {
+			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.tool.broken_rod", stack.getDisplayName()), 0));
+		}
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("baited")) {
 			tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.fishing_rod.baited", stack.getTagCompound().getBoolean("baited")));
 		}
@@ -82,7 +85,7 @@ public class ItemBLFishingRod extends Item {
 		if(!world.isRemote) {
 			NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
 			
-			if(!nbt.hasKey("baited")) {
+			if(!nbt.hasKey("baited") || stack.getItemDamage() == getMaxDamage(stack)) {
 				nbt.setBoolean("baited", false);
 			}
 			
@@ -133,6 +136,14 @@ public class ItemBLFishingRod extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand handIn) {
 		ItemStack stack = player.getHeldItem(handIn);
+		
+		if(stack.getItemDamage() == getMaxDamage(stack)) {
+			if (!world.isRemote && player.fishEntity != null) {
+				player.fishEntity.setDead();
+				world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.AMBIENT, 1F, 1F);
+			}
+			return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
+		}
 
 		if(!world.isRemote) {
 			if (!stack.hasTagCompound())
@@ -181,6 +192,16 @@ public class ItemBLFishingRod extends Item {
 			player.addStat(StatList.getObjectUseStats(this));
 		}
 		return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
+	}
+
+	@Override
+	public void setDamage(ItemStack stack, int damage) {
+		int maxDamage = stack.getMaxDamage();
+		if(damage > maxDamage) {
+			//Don't let the rod break
+			damage = maxDamage;
+		}
+		super.setDamage(stack, damage);
 	}
 
 	private static final ImmutableList<String> STACK_NBT_EXCLUSIONS = ImmutableList.of("baited");
