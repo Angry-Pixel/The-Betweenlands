@@ -17,6 +17,7 @@ import thebetweenlands.common.item.misc.ItemLifeCrystal;
 import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipe;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.util.NBTHelper;
 
 public class TileEntityMortar extends TileEntityBasicInventory implements ITickable {
 
@@ -57,6 +58,11 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
                         countUp = true;
                 }
             }
+            
+            if(this.progress > 0 && this.progress < 84) {
+            	this.progress++;
+            }
+            
             return;
         }
         
@@ -78,16 +84,20 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
 	                	
 	                	progress++;
 	                    
-	                    if (progress == 1)
+	                    if (progress == 1) {
 	                        world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundRegistry.GRIND, SoundCategory.BLOCKS, 1F, 1F);
+	                    
+	                        //Makes sure client knows that new grinding cycle has started
+	                        world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+	                    }
 	                    
 	                    if (progress == 64 || progress == 84) {
 	                        world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundEvents.BLOCK_GRASS_BREAK, SoundCategory.BLOCKS, 0.3F, 1F);
 	                        world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 0.3F, 1F);
 	                    }
 	                    
-	                    if (!inventory.get(1).isEmpty() && !getStackInSlot(1).getTagCompound().getBoolean("active"))
-	                        getStackInSlot(1).getTagCompound().setBoolean("active", true);
+	                    if (!inventory.get(1).isEmpty())
+	                    	NBTHelper.getStackNBTSafe(getStackInSlot(1)).setBoolean("active", true);
 	                    
 	                    if (progress > 84) {
 	                        if (!inventory.get(0).isEmpty())
@@ -114,8 +124,8 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
 	                            hasPestle = false;
 	                        }
 	                        
-	                        if (!inventory.get(1).isEmpty() && getStackInSlot(1).getTagCompound().getBoolean("active"))
-	                            getStackInSlot(1).getTagCompound().setBoolean("active", false);
+	                        if (!inventory.get(1).isEmpty())
+	                            NBTHelper.getStackNBTSafe(getStackInSlot(1)).setBoolean("active", false);
 	                        
 	                        markDirty();
 	                    }
@@ -123,33 +133,47 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
 	            }
             }
         }
-        if (progress > 0)
-            markDirty();
+        if (progress > 0) {
+        	markDirty();
+        }
         if (pestleInstalled()) {
-            hasPestle = true;
-            world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+        	if(!hasPestle) {
+        		hasPestle = true;
+        		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+        	}
         } else {
-            hasPestle = false;
-            world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+        	if(hasPestle) {
+        		hasPestle = false;
+        		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+        	}
         }
         if (!validRecipe || getStackInSlot(0).isEmpty() || getStackInSlot(1).isEmpty() || outputFull) {
-            if (!inventory.get(1).isEmpty() && getStackInSlot(1).getTagCompound().getBoolean("active"))
-                getStackInSlot(1).getTagCompound().setBoolean("active", false);
-            progress = 0;
-            markDirty();
+            if (!inventory.get(1).isEmpty())
+                NBTHelper.getStackNBTSafe(getStackInSlot(1)).setBoolean("active", false);
+            
+            if(progress > 0) {
+            	progress = 0;
+            	world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+            	markDirty();
+            }
         }
         if (getStackInSlot(3).isEmpty() && progress > 0 && !manualGrinding) {
-            if (!inventory.get(1).isEmpty() && getStackInSlot(1).getTagCompound().getBoolean("active"))
-                getStackInSlot(1).getTagCompound().setBoolean("active", false);
+            if (!inventory.get(1).isEmpty())
+                NBTHelper.getStackNBTSafe(getStackInSlot(1)).setBoolean("active", false);
             progress = 0;
             markDirty();
+            world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
         }
         if (isCrystalInstalled()) {
-            hasCrystal = true;
-            world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+        	if(!hasCrystal) {
+        		hasCrystal = true;
+        		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+        	}
         } else {
-            hasCrystal = false;
-            world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+        	if(hasCrystal) {
+        		hasCrystal = false;
+        		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+        	}
         }
     }
 
