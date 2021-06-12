@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LL",
+    "OR"
+  ],
+  "key": {
+    "L": {
+      "item": "thebetweenlands:items_plant_drop",
+      "data": 0
+    },
+    "O": {
+      "item": "thebetweenlands:items_misc",
+      "data": 42
+    },
+    "R": {
+      "item": "thebetweenlands:items_misc",
+      "data": 23
+    }
+  },
+  "result": {
+     "item": "thebetweenlands:items_misc",
+      "data": 60
+  }
+}
