@@ -10,7 +10,7 @@
 	tile.thebetweenlands.cave_grass.name=Herbe des Cavernes
 	tile.thebetweenlands.cattail.name=Roseau à Massette
 	tile.thebetweenlands.cardinal_flower.name=Fleur Cardinale
-	tile.thebetweenlands.button_bush.name=Cephalanthe
+	tile.thebetweenlands.button_bush.name=Céphalanthe
 	tile.thebetweenlands.broomsedge.name=Barbon des Marais
 	tile.thebetweenlands.bottle_brush_grass.name=Herbe Graminée
 	tile.thebetweenlands.boneset.name=Eupatoire Perfoliée
@@ -577,7 +577,7 @@
 	item.thebetweenlands.ground_bottle_brush_grass.name=Herbe Graminée (Pilée)
 	item.thebetweenlands.ground_broom_sedge.name=Barbon des Marais (Pilé)
 	item.thebetweenlands.ground_bulb_capped_mushroom.name=Champignon Bulbeux (Pilé)
-	item.thebetweenlands.ground_button_bush.name=Cephalanthe (Pilé)
+	item.thebetweenlands.ground_button_bush.name=Céphalanthe (Pilé)
 	item.thebetweenlands.ground_cardinal_flower.name=Fleur Cardinale (Pilée)
 	item.thebetweenlands.ground_cattail.name=Roseau à Massette (Pilé)
 	item.thebetweenlands.ground_cave_grass.name=Herbe des Cavernes (Pilée)
@@ -1791,7 +1791,7 @@ Octroi la capacité de rappeler un familier perdu\nlorsque vous portiez cet anne
 
 	manual.item.thebetweenlands.ground_broom_sedge.description=Les Barbons des Marais sont de grandes plantes qui peuvent être trouvées dans les Marécages.
 
-	manual.item.thebetweenlands.ground_button_bush.description=Les Cephalanthes sont de petites plantes qui poussent dans les Marécages.
+	manual.item.thebetweenlands.ground_button_bush.description=Les Céphalanthes sont de petites plantes qui poussent dans les Marécages.
 
 	manual.item.thebetweenlands.ground_cattail.description=Les Roseaux à Massettes sont des plantes très communes qui poussent sur les Terres Embourbées, les Iles Eparses et les Iles Stériles.
 
