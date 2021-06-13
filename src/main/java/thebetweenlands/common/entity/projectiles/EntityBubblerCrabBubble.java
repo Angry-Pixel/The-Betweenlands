@@ -1,6 +1,5 @@
 package thebetweenlands.common.entity.projectiles;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -18,9 +17,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SPacketSetPassengers;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -34,7 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.mobs.EntityBubblerCrab;
-import thebetweenlands.common.entity.mobs.EntityPyrad;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityBubblerCrabBubble extends EntityThrowable {
 
@@ -170,7 +167,7 @@ public class EntityBubblerCrabBubble extends EntityThrowable {
 			if(ticksExisted >= 120) {
 				explode(2.0D);
 				getEntityWorld().setEntityState(this, EVENT_EXPLODE);
-				getEntityWorld().playSound((EntityPlayer) null, getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.HOSTILE, 1F, 0.25F);
+				getEntityWorld().playSound((EntityPlayer) null, getPosition(), SoundRegistry.BUBBLER_POP, SoundCategory.HOSTILE, 1F, 1F);
 				setDead();
 			} else if(this.isRiding() && this.ticksExisted >= 100) {
 				Entity riding = this.getRidingEntity();
@@ -331,7 +328,7 @@ public class EntityBubblerCrabBubble extends EntityThrowable {
 
 	@Override
 	protected SoundEvent getSplashSound() {
-		return SoundEvents.ENTITY_BOBBER_SPLASH;
+		return SoundRegistry.BUBBLER_LAND;
 	}
 
 	@Override
@@ -366,7 +363,7 @@ public class EntityBubblerCrabBubble extends EntityThrowable {
 			
 			if (!this.impacted) {
 				getEntityWorld().setEntityState(this, EVENT_IMPACT);
-				getEntityWorld().playSound((EntityPlayer) null, getPosition(), getSplashSound(), SoundCategory.HOSTILE, 0.125F, 3.0F);
+				getEntityWorld().playSound((EntityPlayer) null, getPosition(), getSplashSound(), SoundCategory.HOSTILE, 0.5F, 1.0F);
 				impacted = true;
 			}
 		}
@@ -392,7 +389,7 @@ public class EntityBubblerCrabBubble extends EntityThrowable {
 			} else {
 				explode(2.75D);
 				getEntityWorld().setEntityState(this, EVENT_BIG_EXPLODE);
-				getEntityWorld().playSound((EntityPlayer) null, getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.HOSTILE, 1F, 0.15F);
+				getEntityWorld().playSound((EntityPlayer) null, getPosition(), SoundRegistry.BUBBLER_POP, SoundCategory.HOSTILE, 1F, 0.5F);
 				setDead();
 			}
 		}

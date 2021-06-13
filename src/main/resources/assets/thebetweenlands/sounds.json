@@ -2287,5 +2287,26 @@
       "thebetweenlands:bl_fishing_rod_creak_2",
       "thebetweenlands:bl_fishing_rod_creak_3"
     ]
+  },
+  "bubbler_spit": {
+    "sounds": [
+      "thebetweenlands:bubbler_spit_1",
+      "thebetweenlands:bubbler_spit_2",
+      "thebetweenlands:bubbler_spit_3"
+    ]
+  },
+  "bubbler_land": {
+    "sounds": [
+      "thebetweenlands:bubbler_land_1",
+      "thebetweenlands:bubbler_land_2",
+      "thebetweenlands:bubbler_land_3"
+    ]
+  },
+  "bubbler_pop": {
+    "sounds": [
+      "thebetweenlands:bubbler_pop_1",
+      "thebetweenlands:bubbler_pop_2",
+      "thebetweenlands:bubbler_pop_3"
+    ]
   }
 }

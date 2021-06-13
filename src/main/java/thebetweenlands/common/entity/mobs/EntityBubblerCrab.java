@@ -185,7 +185,7 @@ public class EntityBubblerCrab extends EntityMob implements IEntityBL {
 						entityBubble.setPosition(crab.posX, crab.posY + crab.height + 0.5D , crab.posZ);
 						entityBubble.shoot(d1, d2, d3, 0.5F, 0F);
 						crab.getEntityWorld().spawnEntity(entityBubble);
-						crab.getEntityWorld().playSound((EntityPlayer) null, crab.getPosition(), SoundRegistry.SPIRIT_TREE_FACE_SMALL_SPIT, SoundCategory.HOSTILE, 1F, 2.0F);
+						crab.getEntityWorld().playSound((EntityPlayer) null, crab.getPosition(), SoundRegistry.BUBBLER_SPIT, SoundCategory.HOSTILE, 1F, 1.0F);
 						crab.aggroCooldown = 0;
 					}
 				}
