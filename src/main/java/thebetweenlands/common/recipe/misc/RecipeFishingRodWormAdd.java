@@ -7,7 +7,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class RecipeWeedwoodFishingRod extends net.minecraftforge.registries.IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
+public class RecipeFishingRodWormAdd extends net.minecraftforge.registries.IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
     private ItemStack resultItem = ItemStack.EMPTY;
 
     @Override

@@ -1,6 +1,15 @@
 package thebetweenlands.compat.jei;
 
-import mezz.jei.api.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+
+import mezz.jei.api.IJeiHelpers;
+import mezz.jei.api.IJeiRuntime;
+import mezz.jei.api.IModPlugin;
+import mezz.jei.api.IModRegistry;
+import mezz.jei.api.ISubtypeRegistry;
+import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.ingredients.IIngredientBlacklist;
 import mezz.jei.api.ingredients.IIngredientRegistry;
@@ -21,7 +30,13 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import thebetweenlands.client.gui.inventory.*;
+import thebetweenlands.client.gui.inventory.GuiAnimator;
+import thebetweenlands.client.gui.inventory.GuiBLDualFurnace;
+import thebetweenlands.client.gui.inventory.GuiBLFurnace;
+import thebetweenlands.client.gui.inventory.GuiDruidAltar;
+import thebetweenlands.client.gui.inventory.GuiMortar;
+import thebetweenlands.client.gui.inventory.GuiPurifier;
+import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
 import thebetweenlands.common.item.misc.ItemBoneWayfinder;
@@ -30,7 +45,15 @@ import thebetweenlands.common.item.misc.ItemWeedwoodRowboat;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe;
 import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe.ShapedOverrideDummyRecipe;
-import thebetweenlands.common.recipe.misc.*;
+import thebetweenlands.common.recipe.misc.BookMergeRecipe;
+import thebetweenlands.common.recipe.misc.HearthgroveTarringRecipe;
+import thebetweenlands.common.recipe.misc.RecipeFishingRodWormAdd;
+import thebetweenlands.common.recipe.misc.RecipeMarshRunnerBoots;
+import thebetweenlands.common.recipe.misc.RecipeMummyBait;
+import thebetweenlands.common.recipe.misc.RecipeSapSpitCleanTool;
+import thebetweenlands.common.recipe.misc.RecipesCircleGems;
+import thebetweenlands.common.recipe.misc.RecipesCoating;
+import thebetweenlands.common.recipe.misc.RecipesLifeCrystal;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -41,15 +64,21 @@ import thebetweenlands.compat.jei.recipes.compost.CompostRecipeCategory;
 import thebetweenlands.compat.jei.recipes.compost.CompostRecipeMaker;
 import thebetweenlands.compat.jei.recipes.druid_altar.DruidAltarRecipeCategory;
 import thebetweenlands.compat.jei.recipes.druid_altar.DruidAltarRecipeMaker;
-import thebetweenlands.compat.jei.recipes.misc.*;
+import thebetweenlands.compat.jei.recipes.misc.BookMergeRecipeJEI;
+import thebetweenlands.compat.jei.recipes.misc.CircleGemsRecipeJEI;
+import thebetweenlands.compat.jei.recipes.misc.CoatingRecipeJEI;
+import thebetweenlands.compat.jei.recipes.misc.FishingRodWormAddRecipeJEI;
+import thebetweenlands.compat.jei.recipes.misc.LifeCrystalRecipeJEI;
+import thebetweenlands.compat.jei.recipes.misc.MarshRunnerBootsRecipeJEI;
+import thebetweenlands.compat.jei.recipes.misc.MummyBaitRecipeJEI;
+import thebetweenlands.compat.jei.recipes.misc.SapCleanRecipeJEI;
+import thebetweenlands.compat.jei.recipes.misc.ShapedOverrideRecipeJEI;
+import thebetweenlands.compat.jei.recipes.misc.ShapelessOverrideRecipeJEI;
+import thebetweenlands.compat.jei.recipes.misc.TarringRecipeJEI;
 import thebetweenlands.compat.jei.recipes.pam.PestleAndMortarCategory;
 import thebetweenlands.compat.jei.recipes.pam.PestleAndMortarRecipeMaker;
 import thebetweenlands.compat.jei.recipes.purifier.PurifierRecipeCategory;
 import thebetweenlands.compat.jei.recipes.purifier.PurifierRecipeMaker;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
 
 @JEIPlugin
 public class BetweenlandsJEIPlugin implements IModPlugin {
@@ -131,6 +160,9 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
 
         //MummyBait
         registry.handleRecipes(RecipeMummyBait.class, recipe -> new MummyBaitRecipeJEI(), VanillaRecipeCategoryUid.CRAFTING);
+        
+        //Weedwood Fishing Rod Bait
+        registry.handleRecipes(RecipeFishingRodWormAdd.class, recipe -> new FishingRodWormAddRecipeJEI(), VanillaRecipeCategoryUid.CRAFTING);
 
         //Vials
         recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 0), new ItemStack(ItemRegistry.ASPECT_VIAL,  1, 0)).setRegistryName(ModInfo.ID, RecipeRegistry.ASPECT_VIAL.getPath() + "_green"));
