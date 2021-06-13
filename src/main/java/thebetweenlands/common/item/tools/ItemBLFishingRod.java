@@ -30,6 +30,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.projectiles.EntityBLFishHook;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.NBTHelper;
 import thebetweenlands.util.TranslationHelper;
 
@@ -154,9 +155,7 @@ public class ItemBLFishingRod extends Item {
 
 		if (player.fishEntity != null) {
 			int i = player.fishEntity.handleHookRetraction();
-			world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_RETRIEVE, SoundCategory.NEUTRAL, 1.0F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
-			//TODO
-			//else play creaking sound
+			world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundRegistry.BL_FISHING_REEL, SoundCategory.NEUTRAL, 1.0F, 1F);
 
 			if (!world.isRemote && player.fishEntity != null) {
 				//fixes stupid entity MobItem still being ridden after netted
@@ -168,6 +167,7 @@ public class ItemBLFishingRod extends Item {
 						stack.getTagCompound().setBoolean("baited", false);
 					if (((EntityAnadia) player.fishEntity.caughtEntity).getStaminaTicks() % 20 == 0 && ((EntityAnadia) player.fishEntity.caughtEntity).getStaminaTicks() != 0) {
 						stack.damageItem(i, player);
+						world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundRegistry.BL_FISHING_ROD_CREAK, SoundCategory.NEUTRAL, 0.2F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 					}
 				}
 				if (player.fishEntity.caughtEntity == null && (int)player.fishEntity.getDistance(player.fishEntity.getAngler()) > 0)
@@ -179,7 +179,7 @@ public class ItemBLFishingRod extends Item {
 			}
 			return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 		} else {
-			world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_BOBBER_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+			world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundRegistry.BL_FISHING_CAST, SoundCategory.NEUTRAL, 0.2F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
 			if (!world.isRemote && player.fishEntity == null) {
 				EntityBLFishHook entityFishHook = new EntityBLFishHook(world, player);

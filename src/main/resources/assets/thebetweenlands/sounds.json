@@ -2270,5 +2270,22 @@
       "thebetweenlands:urchin_shoot_2",
       "thebetweenlands:urchin_shoot_3"
     ]
+  },
+  "bl_fishing_cast": {
+    "sounds": [
+      "thebetweenlands:bl_fishing_cast"
+    ]
+  },
+  "bl_fishing_reel": {
+    "sounds": [
+      "thebetweenlands:bl_fishing_reel"
+    ]
+  },
+  "bl_fishing_rod_creak": {
+    "sounds": [
+      "thebetweenlands:bl_fishing_rod_creak_1",
+      "thebetweenlands:bl_fishing_rod_creak_2",
+      "thebetweenlands:bl_fishing_rod_creak_3"
+    ]
   }
 }

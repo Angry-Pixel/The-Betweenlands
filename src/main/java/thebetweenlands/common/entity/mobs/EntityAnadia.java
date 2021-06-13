@@ -483,19 +483,19 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	}
 
 	public void playTreasureCollectedSound(EntityPlayer player) {
-		getEntityWorld().playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.ANADIA_TREASURE_COLLECTED, SoundCategory.PLAYERS, 1F, 1F);
+		getEntityWorld().playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.ANADIA_TREASURE_COLLECTED, SoundCategory.PLAYERS, 0.25F, 1F);
 	}
 
 	public void playAnadiaLostSound(EntityPlayer player) {
-		getEntityWorld().playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.ANADIA_LOST, SoundCategory.PLAYERS, 1F, 1F);
+		getEntityWorld().playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.ANADIA_LOST, SoundCategory.PLAYERS, 0.25F, 1F);
 	}
 
 	public void playAnadiaWonSound(EntityPlayer player) {
-		getEntityWorld().playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.ANADIA_WON, SoundCategory.PLAYERS, 1F, 1F);
+		getEntityWorld().playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.ANADIA_WON, SoundCategory.PLAYERS, 0.25F, 1F);
 	}
 
 	public void playAnadiaCrab(EntityPlayer player) {
-		getEntityWorld().playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.FISHING_CRAB, SoundCategory.PLAYERS, 1F, 1F);
+		getEntityWorld().playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.FISHING_CRAB, SoundCategory.PLAYERS, 0.25F, 1F);
 	}
 
 	@Override
