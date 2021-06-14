@@ -1,5 +1,5 @@
 {
-  "parent": "thebetweenlands:block/filtered_silt_base",
+  "parent": "thebetweenlands:block/filtered_silt_glass_base",
   "textures": {
     "up": "#all",
     "down": "#all",
