@@ -344,6 +344,7 @@ public class BlockRegistry {
     public static final Block LIFE_CRYSTAL_STALACTITE = new BlockLifeCrystalStalactite(FluidRegistry.SWAMP_WATER, Material.WATER);
     public static final Block STALACTITE = new BlockStalactite();
     public static final Block SILT = new BlockSilt();
+    public static final Block SILT_FILTERED = new BlockSilt();
     public static final Block DEAD_GRASS = new BlockDeadGrass();
     public static final Block TAR_SOLID = new BasicBlock(Material.ROCK)
             .setDefaultCreativeTab()
