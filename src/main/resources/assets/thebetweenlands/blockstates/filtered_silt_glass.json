@@ -40,8 +40,7 @@
     "inventory": {
       "model": "thebetweenlands:filtered_silt_glass_inventory",
       "textures": {
-        "all": "thebetweenlands:blocks/filtered_silt_glass_0",
-        "top": "thebetweenlands:blocks/filtered_silt_glass_0"
+        "all": "thebetweenlands:blocks/filtered_silt_glass_0"
       }
     }
   } 

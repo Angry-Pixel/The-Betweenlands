@@ -6,6 +6,6 @@
     "south": "#all",
     "east": "#all",
     "west": "#all",
-    "up": "#top"
+    "up": "#all"
   }
 }
