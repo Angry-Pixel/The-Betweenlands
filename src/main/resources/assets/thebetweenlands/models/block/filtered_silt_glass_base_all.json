@@ -1,0 +1,12 @@
+{
+  "parent": "thebetweenlands:block/filtered_silt_base",
+  "textures": {
+    "up": "#all",
+    "down": "#all",
+    "north": "#all",
+    "south": "#all",
+    "east": "#all",
+    "west": "#all",
+    "particle": "#all"
+  }
+}

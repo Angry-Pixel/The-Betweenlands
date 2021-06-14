@@ -1,0 +1,49 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+      "model": "thebetweenlands:internal/model_combined",
+      "custom": {
+        "model_base": "thebetweenlands:block/filtered_silt_glass_base",
+        "model_additional": "thebetweenlands:block/internal/connected_texture",
+        "model_additional_data": {
+          "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+          "ambient_occlusion": true,
+          "connected_texture_faces": [
+            {
+              "cullface": "up",
+              "connected_textures": [
+                "thebetweenlands:blocks/filtered_silt_glass_0",
+                "thebetweenlands:blocks/filtered_silt_glass_1",
+                "thebetweenlands:blocks/filtered_silt_glass_2",
+                "thebetweenlands:blocks/filtered_silt_glass_3",
+                "thebetweenlands:blocks/filtered_silt_glass_4"
+              ],
+              "indices": [
+                "top_north_west_index",
+                "top_south_west_index",
+                "top_south_east_index",
+                "top_north_east_index"
+              ],
+              "vertices": [
+                { "x": 0.0, "y": 1.0, "z": 0.0, "u": 0, "v": 0 },
+                { "x": 0.0, "y": 1.0, "z": 1.0, "u": 0, "v": 1 },
+                { "x": 1.0, "y": 1.0, "z": 1.0, "u": 1, "v": 1 },
+                { "x": 1.0, "y": 1.0, "z": 0.0, "u": 1, "v": 0 }
+              ]
+            }
+          ]
+        }
+      }
+  },
+  "variants": { 
+    "normal": {
+    },
+    "inventory": {
+      "model": "thebetweenlands:filtered_silt_glass_inventory",
+      "textures": {
+        "all": "thebetweenlands:blocks/filtered_silt_glass_0",
+        "top": "thebetweenlands:blocks/filtered_silt_glass_0"
+      }
+    }
+  } 
+}
