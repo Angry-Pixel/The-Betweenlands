@@ -82,6 +82,7 @@ import thebetweenlands.common.block.misc.BlockButtonBetweenlands;
 import thebetweenlands.common.block.misc.BlockCavingRopeLight;
 import thebetweenlands.common.block.misc.BlockDampTorch;
 import thebetweenlands.common.block.misc.BlockDentrothystPane;
+import thebetweenlands.common.block.misc.BlockFilteredSiltGlass;
 import thebetweenlands.common.block.misc.BlockGlassBetweenlands;
 import thebetweenlands.common.block.misc.BlockGroundItem;
 import thebetweenlands.common.block.misc.BlockLadderBetweenlands;
@@ -344,7 +345,7 @@ public class BlockRegistry {
     public static final Block LIFE_CRYSTAL_STALACTITE = new BlockLifeCrystalStalactite(FluidRegistry.SWAMP_WATER, Material.WATER);
     public static final Block STALACTITE = new BlockStalactite();
     public static final Block SILT = new BlockSilt();
-    public static final Block SILT_FILTERED = new BlockSilt();
+    public static final Block FILTERED_SILT = new BlockSilt();
     public static final Block DEAD_GRASS = new BlockDeadGrass();
     public static final Block TAR_SOLID = new BasicBlock(Material.ROCK)
             .setDefaultCreativeTab()
@@ -501,6 +502,7 @@ public class BlockRegistry {
     public static final Block POLISHED_DENTROTHYST = new BlockPolishedDentrothyst().setHardness(0.3F);
     public static final Block SILT_GLASS = new BlockGlassBetweenlands(Material.GLASS).setHardness(0.3F);
     public static final Block SILT_GLASS_PANE = new BlockPaneBetweenlands(Material.GLASS).setHardness(0.3F);
+    public static final Block FILTERED_SILT_GLASS = new BlockFilteredSiltGlass();
     public static final Block POLISHED_DENTROTHYST_PANE = new BlockDentrothystPane().setHardness(0.3F);
     public static final Block AMATE_PAPER_PANE_1 = new BlockAmatePaperPane();
     public static final Block AMATE_PAPER_PANE_2 = new BlockAmatePaperPane();
