@@ -36,6 +36,7 @@ import thebetweenlands.client.gui.inventory.GuiBLFurnace;
 import thebetweenlands.client.gui.inventory.GuiDruidAltar;
 import thebetweenlands.client.gui.inventory.GuiMortar;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
+import thebetweenlands.client.gui.inventory.GuiSmokingRack;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
@@ -81,6 +82,8 @@ import thebetweenlands.compat.jei.recipes.pam.PestleAndMortarCategory;
 import thebetweenlands.compat.jei.recipes.pam.PestleAndMortarRecipeMaker;
 import thebetweenlands.compat.jei.recipes.purifier.PurifierRecipeCategory;
 import thebetweenlands.compat.jei.recipes.purifier.PurifierRecipeMaker;
+import thebetweenlands.compat.jei.recipes.smoking_rack.SmokingRackRecipeCategory;
+import thebetweenlands.compat.jei.recipes.smoking_rack.SmokingRackRecipeMaker;
 
 @JEIPlugin
 public class BetweenlandsJEIPlugin implements IModPlugin {
@@ -90,6 +93,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
     public static final String DRUID_ALTAR_CATEGORY_UID = ModInfo.ID + ":druid_altar";
     public static final String ANIMATOR_CATEGORY_UID = ModInfo.ID + ":animator";
     public static final String COMPOST_CATEGORY_UID = ModInfo.ID + ":compost";
+    public static final String SMOKING_RACK_CATEGORY_UID = ModInfo.ID + ":smoking_rack";
 
     public static IJeiHelpers jeiHelper;
     public static IJeiRuntime jeiRuntime;
@@ -108,12 +112,14 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.WEEDWOOD_WORKBENCH), VanillaRecipeCategoryUid.CRAFTING);
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.SULFUR_FURNACE), VanillaRecipeCategoryUid.SMELTING);
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.SULFUR_FURNACE_DUAL), VanillaRecipeCategoryUid.SMELTING);
+        registry.addRecipeCatalyst(new ItemStack(BlockRegistry.SMOKING_RACK), SMOKING_RACK_CATEGORY_UID);
 
         registry.addRecipes(CompostRecipeMaker.getRecipes(), COMPOST_CATEGORY_UID);
         registry.addRecipes(AnimatorRecipeMaker.getRecipes(), ANIMATOR_CATEGORY_UID);
         registry.addRecipes(DruidAltarRecipeMaker.getRecipes(), DRUID_ALTAR_CATEGORY_UID);
         registry.addRecipes(PestleAndMortarRecipeMaker.getRecipes(), POM_CATEGORY_UID);
         registry.addRecipes(PurifierRecipeMaker.getRecipes(), PURIFIER_CATEGORY_UID);
+        registry.addRecipes(SmokingRackRecipeMaker.getRecipes(), SMOKING_RACK_CATEGORY_UID);
 
         registry.handleRecipes(ShapelessOverrideDummyRecipe.class, recipe -> new ShapelessOverrideRecipeJEI(jeiHelper, recipe), VanillaRecipeCategoryUid.CRAFTING);
         registry.handleRecipes(ShapedOverrideDummyRecipe.class, recipe -> new ShapedOverrideRecipeJEI(jeiHelper, recipe), VanillaRecipeCategoryUid.CRAFTING);
@@ -131,6 +137,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
         registry.addRecipeClickArea(GuiDruidAltar.class, 52, 24, 27, 38, DRUID_ALTAR_CATEGORY_UID);
         registry.addRecipeClickArea(GuiDruidAltar.class, 99, 24, 27, 38, DRUID_ALTAR_CATEGORY_UID);
         registry.addRecipeClickArea(GuiDruidAltar.class, 70, 51, 38, 27, DRUID_ALTAR_CATEGORY_UID);
+        registry.addRecipeClickArea(GuiSmokingRack.class, 99, 34, 16, 52, SMOKING_RACK_CATEGORY_UID);
 
         IRecipeTransferRegistry recipeTranferRegistry = registry.getRecipeTransferRegistry();
         recipeTranferRegistry.addRecipeTransferHandler(ContainerWeedwoodWorkbench.class, VanillaRecipeCategoryUid.CRAFTING, 1, 9, 10, 36);
@@ -256,7 +263,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
     @Override
 	public void registerCategories(IRecipeCategoryRegistration registry) {
         jeiHelper = registry.getJeiHelpers();
-        registry.addRecipeCategories(new CompostRecipeCategory(), new AnimatorRecipeCategory(), new DruidAltarRecipeCategory(), new PestleAndMortarCategory(), new PurifierRecipeCategory());
+        registry.addRecipeCategories(new CompostRecipeCategory(), new AnimatorRecipeCategory(), new DruidAltarRecipeCategory(), new PestleAndMortarCategory(), new PurifierRecipeCategory(), new SmokingRackRecipeCategory());
     }
 
     public static void addRecipeName(ResourceLocation registryName, IGuiItemStackGroup guiItemStacks, int ouputIndex) {
