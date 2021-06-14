@@ -95,14 +95,15 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 									if(state.getBlock() != Blocks.AIR && !SurfaceType.WATER.matches(state)) {
 										break;
 									}
-									if(SurfaceType.WATER.matches(state)) {
+									if(SurfaceType.WATER.matches(state) && state.getBlock().isReplaceable(world, plantPos)) {
 										world.setBlockState(plantPos, plant, 2 | 16);
 									}
 								}
 							}
 						} else {
 							//We assume that other plants do not have a stacking height
-							if (SurfaceType.DIRT.matches(world.getBlockState(position)) && SurfaceType.WATER.matches(world.getBlockState(position.up()))) {
+							IBlockState state = world.getBlockState(position.up());
+							if (SurfaceType.DIRT.matches(world.getBlockState(position)) && SurfaceType.WATER.matches(state) && state.getBlock().isReplaceable(world, position.up())) {
 								world.setBlockState(position.add(x, 1, z), plant, 2 | 16);
 							}
 						}
@@ -258,7 +259,7 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 	}
 
 	//generate a shelter
-	//TODO: Pretty sure it did generate, but check that basements do generate.
+	//TODO: Scatter Pots inside it
 	private boolean structureShelter(World world, Random random, BlockPos pos) {
 		int length = (random.nextInt(3) + 7) / 2;
 		int width = (random.nextInt(3) + 7) / 2;
