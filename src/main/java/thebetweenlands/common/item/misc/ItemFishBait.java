@@ -34,6 +34,14 @@ public class ItemFishBait extends Item {
 			tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.fish_bait.range", stack.getTagCompound().getInteger("range")));
 			tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.fish_bait.glowing", stack.getTagCompound().getBoolean("glowing")));
 		}
+
+		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("jei_tooltip")) {
+			switch(stack.getTagCompound().getInteger("jei_tooltip")) {
+			case 1:
+				tooltip.add("Secondary items modify attributes. Use the tooltips when crafting to see."); //TODO Temp Crap
+				break;
+			}
+		}
 	}
 
 	@Override

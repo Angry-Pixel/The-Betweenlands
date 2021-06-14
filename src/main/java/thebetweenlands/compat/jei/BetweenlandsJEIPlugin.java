@@ -53,6 +53,7 @@ import thebetweenlands.common.recipe.misc.RecipeMummyBait;
 import thebetweenlands.common.recipe.misc.RecipeSapSpitCleanTool;
 import thebetweenlands.common.recipe.misc.RecipesCircleGems;
 import thebetweenlands.common.recipe.misc.RecipesCoating;
+import thebetweenlands.common.recipe.misc.RecipesFishBait;
 import thebetweenlands.common.recipe.misc.RecipesLifeCrystal;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
@@ -64,6 +65,7 @@ import thebetweenlands.compat.jei.recipes.compost.CompostRecipeCategory;
 import thebetweenlands.compat.jei.recipes.compost.CompostRecipeMaker;
 import thebetweenlands.compat.jei.recipes.druid_altar.DruidAltarRecipeCategory;
 import thebetweenlands.compat.jei.recipes.druid_altar.DruidAltarRecipeMaker;
+import thebetweenlands.compat.jei.recipes.fishbait.FishBaitRecipeJEI;
 import thebetweenlands.compat.jei.recipes.misc.BookMergeRecipeJEI;
 import thebetweenlands.compat.jei.recipes.misc.CircleGemsRecipeJEI;
 import thebetweenlands.compat.jei.recipes.misc.CoatingRecipeJEI;
@@ -163,6 +165,9 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
         
         //Weedwood Fishing Rod Bait
         registry.handleRecipes(RecipeFishingRodWormAdd.class, recipe -> new FishingRodWormAddRecipeJEI(), VanillaRecipeCategoryUid.CRAFTING);
+       
+        //Fish Bait
+        registry.handleRecipes(RecipesFishBait.class, recipe -> new FishBaitRecipeJEI(), VanillaRecipeCategoryUid.CRAFTING);
 
         //Vials
         recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 0), new ItemStack(ItemRegistry.ASPECT_VIAL,  1, 0)).setRegistryName(ModInfo.ID, RecipeRegistry.ASPECT_VIAL.getPath() + "_green"));
