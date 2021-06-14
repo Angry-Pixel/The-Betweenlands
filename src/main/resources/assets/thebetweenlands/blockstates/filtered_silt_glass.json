@@ -1,47 +1,149 @@
 {
   "forge_marker": 1,
-  "defaults": {
-      "model": "thebetweenlands:internal/model_combined",
-      "custom": {
-        "model_base": "thebetweenlands:block/filtered_silt_glass_base",
-        "model_additional": "thebetweenlands:block/internal/connected_texture",
-        "model_additional_data": {
-          "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
-          "ambient_occlusion": true,
-          "connected_texture_faces": [
-            {
-              "cullface": "up",
-              "connected_textures": [
-                "thebetweenlands:blocks/filtered_silt_glass_0",
-                "thebetweenlands:blocks/filtered_silt_glass_1",
-                "thebetweenlands:blocks/filtered_silt_glass_2",
-                "thebetweenlands:blocks/filtered_silt_glass_3",
-                "thebetweenlands:blocks/filtered_silt_glass_4"
-              ],
-              "indices": [
-                "top_north_west_index",
-                "top_south_west_index",
-                "top_south_east_index",
-                "top_north_east_index"
-              ],
-              "vertices": [
-                { "x": 0.0, "y": 1.0, "z": 0.0, "u": 0, "v": 0 },
-                { "x": 0.0, "y": 1.0, "z": 1.0, "u": 0, "v": 1 },
-                { "x": 1.0, "y": 1.0, "z": 1.0, "u": 1, "v": 1 },
-                { "x": 1.0, "y": 1.0, "z": 0.0, "u": 1, "v": 0 }
-              ]
-            }
-          ]
-        }
-      }
-  },
   "variants": { 
-    "normal": {},
-    "inventory": {
-      "model": "thebetweenlands:filtered_silt_glass_inventory",
-      "textures": {
-        "all": "thebetweenlands:blocks/filtered_silt_glass_0"
+    "normal": {
+      "model": "thebetweenlands:internal/connected_texture",
+      "custom": {
+        "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+        "ambient_occlusion": true,
+        "connected_texture_faces": [
+          {
+            "cullface": "up",
+            "connected_textures": [
+              "thebetweenlands:blocks/filtered_silt_glass_0",
+              "thebetweenlands:blocks/filtered_silt_glass_1",
+              "thebetweenlands:blocks/filtered_silt_glass_2",
+              "thebetweenlands:blocks/filtered_silt_glass_3",
+              "thebetweenlands:blocks/filtered_silt_glass_4"
+            ],
+            "indices": [
+              "top_north_west_index",
+              "top_south_west_index",
+              "top_south_east_index",
+              "top_north_east_index"
+            ],
+            "vertices": [
+              { "x": 0.0, "y": 1.0, "z": 0.0, "u": 0, "v": 0 },
+              { "x": 0.0, "y": 1.0, "z": 1.0, "u": 0, "v": 1 },
+              { "x": 1.0, "y": 1.0, "z": 1.0, "u": 1, "v": 1 },
+              { "x": 1.0, "y": 1.0, "z": 0.0, "u": 1, "v": 0 }
+            ]
+          },
+          {
+            "cullface": "north",
+            "connected_textures": [
+              "thebetweenlands:blocks/filtered_silt_glass_0",
+              "thebetweenlands:blocks/filtered_silt_glass_1",
+              "thebetweenlands:blocks/filtered_silt_glass_2",
+              "thebetweenlands:blocks/filtered_silt_glass_3",
+              "thebetweenlands:blocks/filtered_silt_glass_4"
+            ],
+            "indices": [
+              "north_up_east_index",
+              "north_down_east_index",
+              "north_down_west_index",
+              "north_up_west_index"
+            ],
+            "vertices": [
+              { "x": 1.0, "y": 1.0, "z": 0.0, "u": 0, "v": 0 },
+              { "x": 1.0, "y": 0.0, "z": 0.0, "u": 0, "v": 1 },
+              { "x": 0.0, "y": 0.0, "z": 0.0, "u": 1, "v": 1 },
+              { "x": 0.0, "y": 1.0, "z": 0.0, "u": 1, "v": 0 }
+            ]
+          },
+          {
+            "cullface": "south",
+            "connected_textures": [
+              "thebetweenlands:blocks/filtered_silt_glass_0",
+              "thebetweenlands:blocks/filtered_silt_glass_1",
+              "thebetweenlands:blocks/filtered_silt_glass_2",
+              "thebetweenlands:blocks/filtered_silt_glass_3",
+              "thebetweenlands:blocks/filtered_silt_glass_4"
+            ],
+            "indices": [
+              "south_up_west_index",
+              "south_down_west_index",
+              "south_down_east_index",
+              "south_up_east_index"
+            ],
+            "vertices": [
+              { "x": 0.0, "y": 1.0, "z": 1.0, "u": 0, "v": 0 },
+              { "x": 0.0, "y": 0.0, "z": 1.0, "u": 0, "v": 1 },
+              { "x": 1.0, "y": 0.0, "z": 1.0, "u": 1, "v": 1 },
+              { "x": 1.0, "y": 1.0, "z": 1.0, "u": 1, "v": 0 }
+            ]
+          },
+          {
+            "cullface": "down",
+            "connected_textures": [
+              "thebetweenlands:blocks/filtered_silt_glass_0",
+              "thebetweenlands:blocks/filtered_silt_glass_1",
+              "thebetweenlands:blocks/filtered_silt_glass_2",
+              "thebetweenlands:blocks/filtered_silt_glass_3",
+              "thebetweenlands:blocks/filtered_silt_glass_4"
+            ],
+            "indices": [
+              "bottom_north_west_index",
+              "bottom_north_east_index",
+              "bottom_south_east_index",
+              "bottom_south_west_index"
+            ],
+            "vertices": [
+              { "x": 0.0, "y": 0.0, "z": 0.0, "u": 0, "v": 0 },
+              { "x": 1.0, "y": 0.0, "z": 0.0, "u": 0, "v": 1 },
+              { "x": 1.0, "y": 0.0, "z": 1.0, "u": 1, "v": 1 },
+              { "x": 0.0, "y": 0.0, "z": 1.0, "u": 1, "v": 0 }
+            ]
+          },
+          {
+            "cullface": "west",
+            "connected_textures": [
+              "thebetweenlands:blocks/filtered_silt_glass_0",
+              "thebetweenlands:blocks/filtered_silt_glass_1",
+              "thebetweenlands:blocks/filtered_silt_glass_2",
+              "thebetweenlands:blocks/filtered_silt_glass_3",
+              "thebetweenlands:blocks/filtered_silt_glass_4"
+            ],
+            "indices": [
+              "west_up_north_index",
+              "west_down_north_index",
+              "west_down_south_index",
+              "west_up_south_index"
+            ],
+            "vertices": [
+              { "x": 0.0, "y": 1.0, "z": 0.0, "u": 0, "v": 0 },
+              { "x": 0.0, "y": 0.0, "z": 0.0, "u": 0, "v": 1 },
+              { "x": 0.0, "y": 0.0, "z": 1.0, "u": 1, "v": 1 },
+              { "x": 0.0, "y": 1.0, "z": 1.0, "u": 1, "v": 0 }
+            ]
+          },
+          {
+            "cullface": "east",
+            "connected_textures": [
+              "thebetweenlands:blocks/filtered_silt_glass_0",
+              "thebetweenlands:blocks/filtered_silt_glass_1",
+              "thebetweenlands:blocks/filtered_silt_glass_2",
+              "thebetweenlands:blocks/filtered_silt_glass_3",
+              "thebetweenlands:blocks/filtered_silt_glass_4"
+            ],
+            "indices": [
+              "east_up_south_index",
+              "east_down_south_index",
+              "east_down_north_index",
+              "east_up_north_index"
+            ],
+            "vertices": [
+              { "x": 1.0, "y": 1.0, "z": 1.0, "u": 0, "v": 0 },
+              { "x": 1.0, "y": 0.0, "z": 1.0, "u": 0, "v": 1 },
+              { "x": 1.0, "y": 0.0, "z": 0.0, "u": 1, "v": 1 },
+              { "x": 1.0, "y": 1.0, "z": 0.0, "u": 1, "v": 0 }
+            ]
+          }
+        ]
       }
+    },
+    "inventory": {
+      "model": "thebetweenlands:item/filtered_silt_glass"
     }
   } 
 }

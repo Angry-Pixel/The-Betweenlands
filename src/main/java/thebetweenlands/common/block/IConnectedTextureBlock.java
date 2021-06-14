@@ -38,7 +38,7 @@ public interface IConnectedTextureBlock {
 		 * @param to The position that it tries to connect to
 		 * @return
 		 */
-		public boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing face, MutableBlockPos to);
+		public boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing face, BlockPos to);
 
 		/**
 		 * Returns whether the face can connect through the specified block pos.
@@ -50,7 +50,7 @@ public interface IConnectedTextureBlock {
 		 * @param to The position that it tries to connect through
 		 * @return
 		 */
-		public default boolean canConnectThrough(IBlockAccess world, BlockPos pos, EnumFacing face, MutableBlockPos to) {
+		public default boolean canConnectThrough(IBlockAccess world, BlockPos pos, EnumFacing face, BlockPos to) {
 			//The block tries to connect to one of its own other sides
 			Axis axis = face.getAxis();
 			BlockPos planeOffset = new BlockPos(axis == Axis.X ? 0 : (to.getX() - pos.getX()), axis == Axis.Y ? 0 : (to.getY() - pos.getY()), axis == Axis.Z ? 0 : (to.getZ() - pos.getZ()));
@@ -218,15 +218,15 @@ public interface IConnectedTextureBlock {
 	 * @param connectToSelf Whether the block can connect to its own faces
 	 * @return
 	 */
-	public default IBlockState getExtendedConnectedTextureState(IExtendedBlockState state, IBlockAccess world, BlockPos pos, Predicate<MutableBlockPos> canConnectTo, boolean connectToSelf) {
+	public default IBlockState getExtendedConnectedTextureState(IExtendedBlockState state, IBlockAccess world, BlockPos pos, Predicate<BlockPos> canConnectTo, boolean connectToSelf) {
 		IConnectionRules connectionRules = new IConnectionRules() {
 			@Override
-			public boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing face, MutableBlockPos to) {
+			public boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing face, BlockPos to) {
 				return canConnectTo.apply(to);
 			}
 
 			@Override
-			public boolean canConnectThrough(IBlockAccess world, BlockPos pos, EnumFacing face, MutableBlockPos to) {
+			public boolean canConnectThrough(IBlockAccess world, BlockPos pos, EnumFacing face, BlockPos to) {
 				if(connectToSelf) {
 					return IConnectionRules.super.canConnectThrough(world, pos, face, to);
 				}
