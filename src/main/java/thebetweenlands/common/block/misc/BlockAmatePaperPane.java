@@ -50,12 +50,12 @@ public class BlockAmatePaperPane extends BlockPaneBetweenlands implements IConne
 		IExtendedBlockState state = (IExtendedBlockState) oldState;
 		IConnectionRules connectionState = new IConnectionRules() {
 			@Override
-			public boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing face, MutableBlockPos to) {
+			public boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing face, BlockPos to) {
 				return Math.abs(to.getX() - pos.getX() - face.getXOffset()) + Math.abs(to.getY() - pos.getY() - face.getYOffset()) + Math.abs(to.getZ() - pos.getZ() - face.getZOffset()) != 1 && world.getBlockState(to).getBlock() == BlockAmatePaperPane.this;
 			}
 
 			@Override
-			public boolean canConnectThrough(IBlockAccess world, BlockPos pos, EnumFacing face, MutableBlockPos to) {
+			public boolean canConnectThrough(IBlockAccess world, BlockPos pos, EnumFacing face, BlockPos to) {
 				Axis axis = face.getAxis();
 				if((axis == Axis.X && to.getX() - pos.getX() != 0) || (axis == Axis.Y && to.getY() - pos.getY() != 0) || (axis == Axis.Z && to.getZ() - pos.getZ() != 0)) {
 					return true;
