@@ -8,6 +8,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -41,6 +42,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityRootSprite;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
@@ -92,6 +94,7 @@ import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
+import thebetweenlands.util.NBTHelper;
 
 public class RecipeRegistry {
 
@@ -655,10 +658,6 @@ public class RecipeRegistry {
 	}
 	
 	private static void registerSmokingRackRecipes() {
-		SmokingRackRecipe.addRecipe(new ItemStack(Items.DIAMOND), 3, new ItemStack(Blocks.DIRT));
-		SmokingRackRecipe.addRecipe(new ItemStack(Items.LEATHER), 1, new ItemStack(Items.ROTTEN_FLESH));
-		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.ANADIA_MEAT_SMOKED), 1, new ItemStack(ItemRegistry.ANADIA_MEAT_RAW));
-
 		SmokingRackRecipe.addRecipe(new ISmokingRackRecipe() {
 
 			@Override
@@ -668,9 +667,18 @@ public class RecipeRegistry {
 
 			@Override
 			public ItemStack getOutput(ItemStack stack) {
+				NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
 				ItemStack output = stack.copy();
-				if (output.getTagCompound() != null
-						&& output.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
+				// never called in legit caught anadia, but helps display correct item in JEI smoking recipe ;)
+				if (output.getTagCompound() != null && !output.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
+					ResourceLocation id = EntityList.getKey(EntityAnadia.class);
+					if(id != null) {
+						nbt.setString("id", id.toString());
+						output.setTagInfo("Entity", nbt);
+					}
+				}
+
+				if (output.getTagCompound() != null && output.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
 					if (output.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 0) {
 						output.getTagCompound().getCompoundTag("Entity").setByte("fishColour", (byte) 0);
 						NBTTagCompound headItem = (NBTTagCompound) output.getTagCompound().getCompoundTag("Entity").getTag("headItem");
@@ -718,6 +726,11 @@ public class RecipeRegistry {
 				return stackOld;
 			}
 		});
+
+		SmokingRackRecipe.addRecipe(new ItemStack(Items.DIAMOND), 3, new ItemStack(Blocks.DIRT));
+		SmokingRackRecipe.addRecipe(new ItemStack(Items.LEATHER), 1, new ItemStack(Items.ROTTEN_FLESH));
+		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.ANADIA_MEAT_SMOKED), 1, new ItemStack(ItemRegistry.ANADIA_MEAT_RAW));
+
 	}
 
 	private static void registerCrabPotFilterRecipesSilt() {
