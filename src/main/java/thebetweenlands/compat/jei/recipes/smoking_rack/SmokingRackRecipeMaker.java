@@ -15,8 +15,10 @@ public class SmokingRackRecipeMaker {
     public static List<IRecipeWrapper> getRecipes() {
         ArrayList<IRecipeWrapper> recipes = new ArrayList<>();
         for (ISmokingRackRecipe recipe : SmokingRackRecipe.getRecipeList()) {
-            if (recipe instanceof SmokingRackRecipe)
-                recipes.add(new SmokingRackRecipeJEI((SmokingRackRecipe) recipe));
+          //  if (recipe instanceof SmokingRackRecipe)
+            //    recipes.add(new SmokingRackRecipeJEI((SmokingRackRecipe) recipe));
+            if (recipe instanceof ISmokingRackRecipe)
+                recipes.add(new SmokingRackRecipeJEI(recipe));
         }
         return recipes;
     }
