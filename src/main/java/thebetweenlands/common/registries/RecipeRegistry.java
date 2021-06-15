@@ -655,7 +655,7 @@ public class RecipeRegistry {
 	}
 	
 	private static void registerSmokingRackRecipes() {
-		SmokingRackRecipe.addRecipe(new ItemStack(Items.DIAMOND), 1, new ItemStack(Blocks.DIRT));
+		SmokingRackRecipe.addRecipe(new ItemStack(Items.DIAMOND), 3, new ItemStack(Blocks.DIRT));
 		SmokingRackRecipe.addRecipe(new ItemStack(Items.LEATHER), 1, new ItemStack(Items.ROTTEN_FLESH));
 		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.ANADIA_MEAT_SMOKED), 1, new ItemStack(ItemRegistry.ANADIA_MEAT_RAW));
 
