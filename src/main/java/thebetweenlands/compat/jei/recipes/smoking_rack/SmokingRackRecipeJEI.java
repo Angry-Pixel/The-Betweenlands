@@ -35,7 +35,7 @@ public class SmokingRackRecipeJEI implements IRecipeWrapper {
 
     @Override
     public void drawInfo(@Nonnull Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-      String time = String.format("%ds", 10 * smokingTime );
+      String time = String.format("%ds", Math.max(10, 10 * smokingTime));
       int x = 66;
       x -= minecraft.fontRenderer.getStringWidth(time) / 2;
       minecraft.fontRenderer.drawStringWithShadow(time, x, 8, 0xFFFFFF);
