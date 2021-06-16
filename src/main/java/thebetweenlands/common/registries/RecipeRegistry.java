@@ -11,7 +11,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -727,21 +726,27 @@ public class RecipeRegistry {
 			}
 		});
 
-		SmokingRackRecipe.addRecipe(new ItemStack(Items.DIAMOND), 3, new ItemStack(Blocks.DIRT));
-		SmokingRackRecipe.addRecipe(new ItemStack(Items.LEATHER), 1, new ItemStack(Items.ROTTEN_FLESH));
 		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.ANADIA_MEAT_SMOKED), 1, new ItemStack(ItemRegistry.ANADIA_MEAT_RAW));
-
+		SmokingRackRecipe.addRecipe(EnumItemMisc.DRY_BARK.create(1), 2, new ItemStack(BlockRegistry.LOG_WEEDWOOD));
 	}
 
 	private static void registerCrabPotFilterRecipesSilt() {
 		CrabPotFilterRecipeSilt.addRecipe(new ItemStack(BlockRegistry.SILT), new ItemStack(BlockRegistry.MUD));
-		CrabPotFilterRecipeSilt.addRecipe(new ItemStack(Items.LEATHER), new ItemStack(Items.ROTTEN_FLESH));
+		CrabPotFilterRecipeSilt.addRecipe(new ItemStack(BlockRegistry.MUD), new ItemStack(BlockRegistry.SWAMP_DIRT));
+		CrabPotFilterRecipeSilt.addRecipe(new ItemStack(BlockRegistry.PEAT), new ItemStack(BlockRegistry.MOSS));
+		CrabPotFilterRecipeSilt.addRecipe(new ItemStack(BlockRegistry.SILT), new ItemStack(BlockRegistry.FILTERED_SILT));
+		CrabPotFilterRecipeSilt.addRecipe(new ItemStack(BlockRegistry.LOG_ROTTEN_BARK), new ItemStack(BlockRegistry.LOG_WEEDWOOD, 1, 12));
+		CrabPotFilterRecipeSilt.addRecipe(new ItemStack(ItemRegistry.SLUDGE_BALL), new ItemStack(ItemRegistry.SAP_BALL));
+		CrabPotFilterRecipeSilt.addRecipe(EnumItemMisc.SULFUR.create(1), EnumItemMisc.CREMAINS.create(1));
 	}
-	
+
 	private static void registerCrabPotFilterRecipesBubbler() {
-		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(BlockRegistry.SILT_GLASS), new ItemStack(BlockRegistry.SILT));
+		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(BlockRegistry.FILTERED_SILT), new ItemStack(BlockRegistry.SILT));
+		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(BlockRegistry.SWAMP_DIRT), new ItemStack(BlockRegistry.MUD));
+		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(BlockRegistry.PURIFIED_SWAMP_DIRT), new ItemStack(BlockRegistry.SWAMP_DIRT));
 		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(ItemRegistry.CRIMSON_MIDDLE_GEM), new ItemStack(BlockRegistry.CRIMSON_MIDDLE_GEM_ORE));
 		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(ItemRegistry.AQUA_MIDDLE_GEM), new ItemStack(BlockRegistry.AQUA_MIDDLE_GEM_ORE));
 		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM), new ItemStack(BlockRegistry.GREEN_MIDDLE_GEM_ORE));
+		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(ItemRegistry.SAP_BALL), new ItemStack(ItemRegistry.SLUDGE_BALL));
 	}
 }
