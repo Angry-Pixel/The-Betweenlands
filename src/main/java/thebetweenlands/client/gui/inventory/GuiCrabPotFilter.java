@@ -64,7 +64,7 @@ public class GuiCrabPotFilter extends GuiContainer {
 				this.drawTexturedModalRect(k + 73, l + 28, 174, 28, 16, 16);
 			if (mouseX >= k + 73 && mouseX <= k + 95 && mouseY >= l + 58 && mouseY <= l + 73)
 				this.drawTexturedModalRect(k + 73, l + 58, 174, 44, 16, 16);
-			RenderHelper.enableGUIStandardItemLighting();
+			RenderHelper.enableStandardItemLighting();
 			GlStateManager.popMatrix();
 		}
 
