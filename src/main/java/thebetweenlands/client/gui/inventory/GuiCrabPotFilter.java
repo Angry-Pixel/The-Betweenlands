@@ -2,9 +2,11 @@ package thebetweenlands.client.gui.inventory;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.inventory.container.ContainerCrabPotFilter;
@@ -50,6 +52,22 @@ public class GuiCrabPotFilter extends GuiContainer {
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
 		super.drawScreen(mouseX, mouseY, partialTicks);
+
+		if (Loader.isModLoaded("jei")) { // stuff so people know what recipe they are looking at
+			int k = (this.width - this.xSize) / 2;
+			int l = (this.height - this.ySize) / 2;
+			this.mc.getTextureManager().bindTexture(GUI_TEXTURE);
+			GlStateManager.pushMatrix();
+			RenderHelper.disableStandardItemLighting();
+			GlStateManager.color(1, 1, 1, 1F);
+			if (mouseX >= k + 73 && mouseX <= k + 95 && mouseY >= l + 28 && mouseY <= l + 43)
+				this.drawTexturedModalRect(k + 73, l + 28, 174, 28, 16, 16);
+			if (mouseX >= k + 73 && mouseX <= k + 95 && mouseY >= l + 58 && mouseY <= l + 73)
+				this.drawTexturedModalRect(k + 73, l + 58, 174, 44, 16, 16);
+			RenderHelper.enableGUIStandardItemLighting();
+			GlStateManager.popMatrix();
+		}
+
 		this.renderHoveredToolTip(mouseX, mouseY);
 	}
 }

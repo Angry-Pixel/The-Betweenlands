@@ -267,7 +267,7 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, IS
 
 	@Override
 	public String getName() {
-		return new TextComponentTranslation("tile.thebetweenlands.crab_pot_filter").getFormattedText();
+		return new TextComponentTranslation("tile.thebetweenlands.crab_pot_filter.name").getFormattedText();
 	}
 
 	@Override

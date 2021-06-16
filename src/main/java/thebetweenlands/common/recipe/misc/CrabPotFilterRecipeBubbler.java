@@ -1,6 +1,7 @@
 package thebetweenlands.common.recipe.misc;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -78,5 +79,9 @@ public class CrabPotFilterRecipeBubbler implements ICrabPotFilterRecipeBubbler {
 	@Override
 	public ItemStack getOutput(ItemStack stack) {
 		return this.output;
+	}
+	
+	public static List<ICrabPotFilterRecipeBubbler> getRecipeList() {
+		return Collections.unmodifiableList(RECIPES);
 	}
 }
