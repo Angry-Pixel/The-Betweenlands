@@ -18,4 +18,6 @@ public interface IAmphibianArmorUpgrade extends IAmphibianArmorAttributeUpgrade 
 	
 	@Override
 	public default void applyAttributeModifiers(EntityEquipmentSlot armorType, ItemStack stack, int count, Multimap<String, AttributeModifier> modifiers) { }
+	
+	public int getMaxDamage();
 }

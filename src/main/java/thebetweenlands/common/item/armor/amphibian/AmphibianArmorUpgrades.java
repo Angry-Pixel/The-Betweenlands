@@ -25,16 +25,16 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public enum AmphibianArmorUpgrades implements IAmphibianArmorUpgrade {
-	VISIBILITY(new ResourceLocation(ModInfo.ID, "visibility"), EnumItemMisc.ANADIA_EYE::isItemOf, EntityEquipmentSlot.HEAD),
-	BREATHING(new ResourceLocation(ModInfo.ID, "breathing"), EnumItemMisc.ANADIA_GILLS::isItemOf, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST),
-	TOUGHNESS(new ResourceLocation(ModInfo.ID, "toughness"), EnumItemMisc.SLIMY_BONE::isItemOf, AdditiveAttributeUpgrade.TOUGHNESS, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
-	THORNS(new ResourceLocation(ModInfo.ID, "thorns"), EnumItemMisc.URCHIN_SPIKE::isItemOf, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
-	DECAY_DECREASE(new ResourceLocation(ModInfo.ID, "decay_decrease"), EnumItemMisc.ANADIA_SCALES::isItemOf, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
-	MINING_SPEED(new ResourceLocation(ModInfo.ID, "mining_speed"), EnumItemMisc.SNOT::isItemOf, EntityEquipmentSlot.CHEST),
-	MOVEMENT_SPEED(new ResourceLocation(ModInfo.ID, "movement_speed"), EnumItemMisc.ANADIA_FINS::isItemOf, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
-	BUOYANCY(new ResourceLocation(ModInfo.ID, "buoyancy"), EnumItemMisc.ANADIA_SWIM_BLADDER::isItemOf, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS),
-	KNOCKBACK_RESISTANCE(new ResourceLocation(ModInfo.ID, "knockback_resistance"), EnumItemMisc.LURKER_SKIN::isItemOf, AdditiveAttributeUpgrade.KNOCKBACK_RESISTANCE, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS),
-	MUD_WALKING(new ResourceLocation(ModInfo.ID, "mud_walking"), s -> s.getItem() == ItemRegistry.RUBBER_BOOTS, EntityEquipmentSlot.FEET);
+	VISIBILITY(new ResourceLocation(ModInfo.ID, "visibility"), 64, EnumItemMisc.ANADIA_EYE::isItemOf, EntityEquipmentSlot.HEAD),
+	BREATHING(new ResourceLocation(ModInfo.ID, "breathing"), 64, EnumItemMisc.ANADIA_GILLS::isItemOf, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST),
+	TOUGHNESS(new ResourceLocation(ModInfo.ID, "toughness"), 64, EnumItemMisc.SLIMY_BONE::isItemOf, AdditiveAttributeUpgrade.TOUGHNESS, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
+	THORNS(new ResourceLocation(ModInfo.ID, "thorns"), 64, EnumItemMisc.URCHIN_SPIKE::isItemOf, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
+	DECAY_DECREASE(new ResourceLocation(ModInfo.ID, "decay_decrease"), 64, EnumItemMisc.ANADIA_SCALES::isItemOf, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
+	MINING_SPEED(new ResourceLocation(ModInfo.ID, "mining_speed"), 64, EnumItemMisc.SNOT::isItemOf, EntityEquipmentSlot.CHEST),
+	MOVEMENT_SPEED(new ResourceLocation(ModInfo.ID, "movement_speed"), 64, EnumItemMisc.ANADIA_FINS::isItemOf, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
+	BUOYANCY(new ResourceLocation(ModInfo.ID, "buoyancy"), 64, EnumItemMisc.ANADIA_SWIM_BLADDER::isItemOf, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS),
+	KNOCKBACK_RESISTANCE(new ResourceLocation(ModInfo.ID, "knockback_resistance"), 64, EnumItemMisc.LURKER_SKIN::isItemOf, AdditiveAttributeUpgrade.KNOCKBACK_RESISTANCE, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS),
+	MUD_WALKING(new ResourceLocation(ModInfo.ID, "mud_walking"), 64, s -> s.getItem() == ItemRegistry.RUBBER_BOOTS, EntityEquipmentSlot.FEET);
 
 	private static final Map<ResourceLocation, IAmphibianArmorUpgrade> ID_TO_UPGRADE = new HashMap<>();
 	private static final Multimap<EntityEquipmentSlot, IAmphibianArmorUpgrade> TYPE_TO_UPGRADES = MultimapBuilder.enumKeys(EntityEquipmentSlot.class).arrayListValues().build();
@@ -75,16 +75,18 @@ public enum AmphibianArmorUpgrades implements IAmphibianArmorUpgrade {
 	}
 
 	private final ResourceLocation id;
+	private final int maxDamage;
 	private final Predicate<ItemStack> matcher;
 	private final IAmphibianArmorAttributeUpgrade attributeUpgrade;
 	private final Set<EntityEquipmentSlot> armorTypes;
 
-	private AmphibianArmorUpgrades(ResourceLocation id, Predicate<ItemStack> matcher, EntityEquipmentSlot... armorTypes) {
-		this(id, matcher, null, armorTypes);
+	private AmphibianArmorUpgrades(ResourceLocation id, int maxDamage, Predicate<ItemStack> matcher, EntityEquipmentSlot... armorTypes) {
+		this(id, maxDamage, matcher, null, armorTypes);
 	}
 
-	private AmphibianArmorUpgrades(ResourceLocation id, Predicate<ItemStack> matcher, @Nullable IAmphibianArmorAttributeUpgrade attributeUpgrade, EntityEquipmentSlot... armorTypes) {
+	private AmphibianArmorUpgrades(ResourceLocation id, int maxDamage, Predicate<ItemStack> matcher, @Nullable IAmphibianArmorAttributeUpgrade attributeUpgrade, EntityEquipmentSlot... armorTypes) {
 		this.id = id;
+		this.maxDamage = maxDamage;
 		this.matcher = matcher;
 		this.attributeUpgrade = attributeUpgrade;
 		this.armorTypes = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(armorTypes)));
@@ -110,5 +112,10 @@ public enum AmphibianArmorUpgrades implements IAmphibianArmorUpgrade {
 		if(this.attributeUpgrade != null) {
 			this.attributeUpgrade.applyAttributeModifiers(armorType, stack, count, modifiers);
 		}
+	}
+
+	@Override
+	public int getMaxDamage() {
+		return this.maxDamage;
 	}
 }
