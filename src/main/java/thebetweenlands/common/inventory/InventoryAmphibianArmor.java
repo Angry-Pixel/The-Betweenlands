@@ -26,9 +26,27 @@ public class InventoryAmphibianArmor extends InventoryItem {
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		return stack.getItem() instanceof ItemAmphibianArmor == false &&
-				AmphibianArmorUpgrades.getUpgrade(this.armorType, stack) != null &&
-				(this.getStackInSlot(slot).isEmpty() || (ItemStack.areItemStacksEqual(this.getStackInSlot(slot).copy().splitStack(1), stack.copy().splitStack(1)) && ItemAmphibianArmor.getUpgradeItemStoredDamage(stack) == 0)) /*needed to preserve upgrade damage*/;
+		IAmphibianArmorUpgrade upgrade = AmphibianArmorUpgrades.getUpgrade(this.armorType, stack);
+
+		if(stack.getItem() instanceof ItemAmphibianArmor == false && upgrade != null &&
+				(this.getStackInSlot(slot).isEmpty() || (ItemStack.areItemStacksEqual(this.getStackInSlot(slot).copy().splitStack(1), stack.copy().splitStack(1)) && ItemAmphibianArmor.getUpgradeItemStoredDamage(stack) == 0)) /*needed to preserve upgrade damage*/) {
+
+			for(int i = 0; i < this.getSizeInventory(); i++) {
+				ItemStack otherStack = this.getStackInSlot(i);
+
+				if(otherStack != null) {
+					IAmphibianArmorUpgrade otherUpgrade = AmphibianArmorUpgrades.getUpgrade(this.armorType, otherStack);
+
+					if(otherUpgrade != null && (otherUpgrade.isBlacklisted(upgrade) || upgrade.isBlacklisted(otherUpgrade))) {
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override

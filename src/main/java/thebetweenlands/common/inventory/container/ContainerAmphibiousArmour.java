@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.api.item.IAmphibianArmorUpgrade;
@@ -19,9 +20,12 @@ public class ContainerAmphibiousArmour extends Container {
 
 		private final InventoryItem inventoryItem;
 
+		private ItemStack prevStack;
+
 		public SlotUpgrade(InventoryItem inventory, int slotIndex, int x, int y) {
 			super(inventory, slotIndex, x, y);
 			this.inventoryItem = inventory;
+			this.prevStack = inventory.getStackInSlot(slotIndex).copy();
 		}
 
 		@Override
@@ -66,6 +70,31 @@ public class ContainerAmphibiousArmour extends Container {
 			}
 
 			return ret;
+		}
+
+		@Override
+		public void onSlotChanged() {
+			ItemStack armorStack = this.inventoryItem.getInventoryItemStack();
+
+			if(armorStack.getItem() instanceof ItemAmphibianArmor) {
+				EntityEquipmentSlot armorType = ((ItemAmphibianArmor) armorStack.getItem()).armorType;
+
+				ItemStack currentStack = this.inventory.getStackInSlot(this.getSlotIndex());
+
+				if(!ItemStack.areItemStacksEqual(this.prevStack, currentStack)) {
+					IAmphibianArmorUpgrade prevUpgrade = AmphibianArmorUpgrades.getUpgrade(armorType, this.prevStack);
+					if(prevUpgrade != null) {
+						prevUpgrade.onChanged(armorType, armorStack, this.prevStack);
+					}
+
+					IAmphibianArmorUpgrade newUpgrade = AmphibianArmorUpgrades.getUpgrade(armorType, currentStack);
+					if(newUpgrade != null) {
+						newUpgrade.onChanged(armorType, armorStack, currentStack);
+					}
+				}
+
+				this.prevStack = currentStack.copy();
+			}
 		}
 
 	}

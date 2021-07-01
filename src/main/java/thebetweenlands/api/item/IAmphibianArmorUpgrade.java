@@ -15,9 +15,15 @@ public interface IAmphibianArmorUpgrade extends IAmphibianArmorAttributeUpgrade 
 	public boolean matches(EntityEquipmentSlot armorType, ItemStack stack);
 
 	public Set<EntityEquipmentSlot> getArmorTypes();
-	
+
 	@Override
-	public default void applyAttributeModifiers(EntityEquipmentSlot armorType, ItemStack stack, int count, Multimap<String, AttributeModifier> modifiers) { }
+	public default void applyAttributeModifiers(EntityEquipmentSlot armorType, ItemStack armor, int count, Multimap<String, AttributeModifier> modifiers) { }
+
+	public default void onChanged(EntityEquipmentSlot armorType, ItemStack armor, ItemStack stack) { }
+
+	public default boolean isBlacklisted(IAmphibianArmorUpgrade other) {
+		return false;
+	}
 	
 	public int getMaxDamage();
 }

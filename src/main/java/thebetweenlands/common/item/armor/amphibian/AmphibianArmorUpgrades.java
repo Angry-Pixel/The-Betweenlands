@@ -7,10 +7,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
@@ -20,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.api.item.IAmphibianArmorAttributeUpgrade;
 import thebetweenlands.api.item.IAmphibianArmorUpgrade;
+import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -34,7 +38,9 @@ public enum AmphibianArmorUpgrades implements IAmphibianArmorUpgrade {
 	MOVEMENT_SPEED(new ResourceLocation(ModInfo.ID, "movement_speed"), 64, EnumItemMisc.ANADIA_FINS::isItemOf, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
 	BUOYANCY(new ResourceLocation(ModInfo.ID, "buoyancy"), 64, EnumItemMisc.ANADIA_SWIM_BLADDER::isItemOf, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS),
 	KNOCKBACK_RESISTANCE(new ResourceLocation(ModInfo.ID, "knockback_resistance"), 64, EnumItemMisc.LURKER_SKIN::isItemOf, AdditiveAttributeUpgrade.KNOCKBACK_RESISTANCE, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS),
-	MUD_WALKING(new ResourceLocation(ModInfo.ID, "mud_walking"), 64, s -> s.getItem() == ItemRegistry.RUBBER_BOOTS, EntityEquipmentSlot.FEET);
+	AQUA_GEM(new ResourceLocation(ModInfo.ID, "aqua_gem"), 64, s -> s.getItem() == ItemRegistry.AQUA_MIDDLE_GEM, null, CircleGemType.AQUA.getAmphibianArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "green_gem"), new ResourceLocation(ModInfo.ID, "crimson_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
+	GREEN_GEM(new ResourceLocation(ModInfo.ID, "green_gem"), 64, s -> s.getItem() == ItemRegistry.GREEN_MIDDLE_GEM, null, CircleGemType.GREEN.getAmphibianArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "aqua_gem"), new ResourceLocation(ModInfo.ID, "crimson_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
+	CRIMSON_GEM(new ResourceLocation(ModInfo.ID, "crimson_gem"), 64, s -> s.getItem() == ItemRegistry.CRIMSON_MIDDLE_GEM, null, CircleGemType.CRIMSON.getAmphibianArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "aqua_gem"), new ResourceLocation(ModInfo.ID, "green_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET);
 
 	private static final Map<ResourceLocation, IAmphibianArmorUpgrade> ID_TO_UPGRADE = new HashMap<>();
 	private static final Multimap<EntityEquipmentSlot, IAmphibianArmorUpgrade> TYPE_TO_UPGRADES = MultimapBuilder.enumKeys(EntityEquipmentSlot.class).arrayListValues().build();
@@ -79,16 +85,24 @@ public enum AmphibianArmorUpgrades implements IAmphibianArmorUpgrade {
 	private final Predicate<ItemStack> matcher;
 	private final IAmphibianArmorAttributeUpgrade attributeUpgrade;
 	private final Set<EntityEquipmentSlot> armorTypes;
+	private final Consumer<ItemStack> onChanged;
+	private final Set<ResourceLocation> blacklist;
 
 	private AmphibianArmorUpgrades(ResourceLocation id, int maxDamage, Predicate<ItemStack> matcher, EntityEquipmentSlot... armorTypes) {
 		this(id, maxDamage, matcher, null, armorTypes);
 	}
 
 	private AmphibianArmorUpgrades(ResourceLocation id, int maxDamage, Predicate<ItemStack> matcher, @Nullable IAmphibianArmorAttributeUpgrade attributeUpgrade, EntityEquipmentSlot... armorTypes) {
+		this(id, maxDamage, matcher, attributeUpgrade, null, ImmutableSet.of(), armorTypes);
+	}
+
+	private AmphibianArmorUpgrades(ResourceLocation id, int maxDamage, Predicate<ItemStack> matcher, @Nullable IAmphibianArmorAttributeUpgrade attributeUpgrade, Consumer<ItemStack> onChanged, Set<ResourceLocation> blacklist, EntityEquipmentSlot... armorTypes) {
 		this.id = id;
 		this.maxDamage = maxDamage;
 		this.matcher = matcher;
 		this.attributeUpgrade = attributeUpgrade;
+		this.onChanged = onChanged;
+		this.blacklist = blacklist;
 		this.armorTypes = Collections.unmodifiableSet(new HashSet<>(Arrays.asList(armorTypes)));
 	}
 
@@ -112,6 +126,18 @@ public enum AmphibianArmorUpgrades implements IAmphibianArmorUpgrade {
 		if(this.attributeUpgrade != null) {
 			this.attributeUpgrade.applyAttributeModifiers(armorType, stack, count, modifiers);
 		}
+	}
+
+	@Override
+	public void onChanged(EntityEquipmentSlot armorType, ItemStack armor, ItemStack stack) {
+		if(this.onChanged != null) {
+			this.onChanged.accept(armor);
+		}
+	}
+	
+	@Override
+	public boolean isBlacklisted(IAmphibianArmorUpgrade other) {
+		return this.blacklist.contains(other.getId());
 	}
 
 	@Override

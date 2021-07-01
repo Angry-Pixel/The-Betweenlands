@@ -1,14 +1,20 @@
 package thebetweenlands.common.capability.circlegem;
 
+import java.util.function.Consumer;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
+import thebetweenlands.api.item.IAmphibianArmorUpgrade;
+import thebetweenlands.common.item.armor.amphibian.AmphibianArmorUpgrades;
+import thebetweenlands.common.item.armor.amphibian.ItemAmphibianArmor;
 import thebetweenlands.common.item.misc.ItemGemSinger;
 
 public enum CircleGemType {
@@ -19,7 +25,7 @@ public enum CircleGemType {
 
 	public final String name;
 	public final int id;
-	
+
 	@Nullable
 	public final ItemGemSinger.GemSingerTarget gemSingerTarget;
 
@@ -188,5 +194,29 @@ public enum CircleGemType {
 			}
 		}
 		return NONE;
+	}
+
+	public final IAmphibianArmorUpgrade getAmphibianArmorUpgrade() {
+		switch(this) {
+		case AQUA:
+			return AmphibianArmorUpgrades.AQUA_GEM;
+		case GREEN:
+			return AmphibianArmorUpgrades.GREEN_GEM;
+		case CRIMSON:
+			return AmphibianArmorUpgrades.CRIMSON_GEM;
+		}
+		return null;
+	}
+
+	public final Consumer<ItemStack> getAmphibianArmorOnChangedHandler() {
+		return armor -> {
+			if(armor.getItem() instanceof ItemAmphibianArmor) {
+				if(((ItemAmphibianArmor) armor.getItem()).getUpgradeCount(armor, this.getAmphibianArmorUpgrade()) > 0) {
+					CircleGemHelper.setGem(armor, this);
+				} else {
+					CircleGemHelper.setGem(armor, CircleGemType.NONE);
+				}
+			}
+		};
 	}
 }
