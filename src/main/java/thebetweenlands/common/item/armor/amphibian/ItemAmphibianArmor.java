@@ -34,6 +34,7 @@ public class ItemAmphibianArmor extends Item3DArmor {
 
 	private static final String NBT_UPGRADE_MAP_KEY = "thebetweenlands.amphibian_armor_upgrades";
 	private static final String NBT_DAMAGE_MAP_KEY = "thebetweenlands.amphibian_armor_damage";
+	private static final String NBT_UPGRADE_FILTER_KEY = "thebetweenlands.amphibian_armor_upgrade_filters";
 
 	private static final String NBT_AMPHIBIAN_UPGRADE_HAD_NO_NBT_KEY = "thebetweenlands.amphibian_armor_upgrade_had_no_nbt";
 	private static final String NBT_AMPHIBIAN_UPGRADE_DAMAGE_KEY = "thebetweenlands.amphibian_armor_upgrade_damage";
@@ -96,6 +97,30 @@ public class ItemAmphibianArmor extends Item3DArmor {
 		for(IAmphibianArmorUpgrade upgrade : AmphibianArmorUpgrades.values()) {
 			this.damageUpgrade(stack, upgrade, 1, true);
 		}
+	}
+
+	public void setUpgradeFilter(ItemStack stack, int slot, ItemStack filter) {
+		NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
+		if(filter.isEmpty()) {
+			nbt.removeTag(NBT_UPGRADE_FILTER_KEY + "." + slot);
+		} else {
+			NBTTagCompound filterNbt = nbt.getCompoundTag(NBT_UPGRADE_FILTER_KEY + "." + slot);
+			filter = filter.copy().splitStack(1);
+			setUpgradeItemStoredDamage(filter, 0, 0);
+			filter.writeToNBT(filterNbt);
+			nbt.setTag(NBT_UPGRADE_FILTER_KEY + "." + slot, filterNbt);
+		}
+	}
+
+	public ItemStack getUpgradeFilter(ItemStack stack, int slot) {
+		NBTTagCompound nbt = stack.getTagCompound();
+		if(nbt != null) {
+			NBTTagCompound filterNbt = nbt.getCompoundTag(NBT_UPGRADE_FILTER_KEY + "." + slot);
+			if(!filterNbt.isEmpty()) {
+				return new ItemStack(filterNbt);
+			}
+		}
+		return ItemStack.EMPTY;
 	}
 
 	public void setUpgradeCounts(ItemStack stack, IInventory inv) {

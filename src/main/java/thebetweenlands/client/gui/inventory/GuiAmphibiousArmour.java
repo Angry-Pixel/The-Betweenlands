@@ -1,8 +1,13 @@
 package thebetweenlands.client.gui.inventory;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
@@ -47,30 +52,53 @@ public class GuiAmphibiousArmour extends GuiContainer {
 
 		if(invItem.getItem() instanceof ItemAmphibianArmor) {
 			for(Slot slot : this.inventorySlots.inventorySlots) {
-				if(slot instanceof ContainerAmphibiousArmour.SlotUpgrade && slot.getHasStack()) {
-					int damage = ((ItemAmphibianArmor) invItem.getItem()).getUpgradeDamage(invItem, slot.getSlotIndex());
+				if(slot instanceof ContainerAmphibiousArmour.SlotUpgrade) {
+					if(slot.getHasStack()) {
+						int damage = ((ItemAmphibianArmor) invItem.getItem()).getUpgradeDamage(invItem, slot.getSlotIndex());
 
-					if(damage > 0) {
-						int maxDamage = ((ItemAmphibianArmor) invItem.getItem()).getUpgradeMaxDamage(invItem, slot.getSlotIndex());
+						if(damage > 0) {
+							int maxDamage = ((ItemAmphibianArmor) invItem.getItem()).getUpgradeMaxDamage(invItem, slot.getSlotIndex());
 
-						GlStateManager.disableTexture2D();
+							GlStateManager.disableTexture2D();
 
-						Tessellator tessellator = Tessellator.getInstance();
-						BufferBuilder buffer = tessellator.getBuffer();
+							Tessellator tessellator = Tessellator.getInstance();
+							BufferBuilder buffer = tessellator.getBuffer();
 
-						double durability = damage / (double)maxDamage;
-						int bar = Math.round(16.0F - (float)durability * 16.0F);
+							double durability = damage / (double)maxDamage;
+							int bar = Math.round(16.0F - (float)durability * 16.0F);
 
-						int color = MathHelper.hsvToRGB(Math.max(0.0F, (float) (1.0F - durability)) / 3.0F, 1.0F, 1.0F);
+							int color = MathHelper.hsvToRGB(Math.max(0.0F, (float) (1.0F - durability)) / 3.0F, 1.0F, 1.0F);
 
-						this.draw(buffer, this.guiLeft + slot.xPos, this.guiTop + slot.yPos - 4, 16, 2, 0, 0, 0, 255);
-						this.draw(buffer, this.guiLeft + slot.xPos, this.guiTop + slot.yPos - 4, bar, 1, color >> 16 & 255, color >> 8 & 255, color & 255, 255);
+							this.draw(buffer, this.guiLeft + slot.xPos, this.guiTop + slot.yPos - 4, 16, 2, 0, 0, 0, 255);
+							this.draw(buffer, this.guiLeft + slot.xPos, this.guiTop + slot.yPos - 4, bar, 1, color >> 16 & 255, color >> 8 & 255, color & 255, 255);
 
-						GlStateManager.enableTexture2D();
+							GlStateManager.enableTexture2D();
+						}
+					} else {
+						ItemStack filter = ((ItemAmphibianArmor) invItem.getItem()).getUpgradeFilter(invItem, slot.getSlotIndex());
+
+						if(!filter.isEmpty()) {
+							this.renderSlot(filter, this.guiLeft + slot.xPos, this.guiTop + slot.yPos);
+						}
 					}
 				}
 			}
 		}
+	}
+
+	private void renderSlot(ItemStack stack, int x, int y) {
+		GlStateManager.pushMatrix();
+		GlStateManager.enableBlend();
+		GL14.glBlendColor(0, 0, 0, 0.35f);
+		GL11.glBlendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA); //ugly hack
+		GlStateManager.pushMatrix();
+		this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
+		GlStateManager.popMatrix();
+		GL14.glBlendColor(1, 1, 1, 1);
+		GlStateManager.blendFunc(SourceFactor.CONSTANT_ALPHA, DestFactor.ONE_MINUS_CONSTANT_ALPHA); //ugly
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.disableBlend();
+		GlStateManager.popMatrix();
 	}
 
 	private void draw(BufferBuilder renderer, int x, int y, int width, int height, int red, int green, int blue, int alpha) {

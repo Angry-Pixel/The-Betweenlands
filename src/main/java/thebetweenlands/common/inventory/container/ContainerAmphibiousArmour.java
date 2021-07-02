@@ -129,9 +129,21 @@ public class ContainerAmphibiousArmour extends Container {
 			ItemStack merge = slot.getStack();
 			stack = merge.copy();
 
+			InventoryAmphibianArmor inv = this.inventory instanceof InventoryAmphibianArmor ? (InventoryAmphibianArmor) this.inventory : null;
+
 			if(slotIndex >= this.numSlots) {
-				if(!this.mergeItemStack(merge, 0, this.numSlots, false)) {
-					return ItemStack.EMPTY;
+				try {
+					if(inv != null) {
+						inv.setUseUpgradeFilter(true);
+					}
+
+					if(!this.mergeItemStack(merge, 0, this.numSlots, false)) {
+						return ItemStack.EMPTY;
+					}
+				} finally {
+					if(inv != null) {
+						inv.setUseUpgradeFilter(false);
+					}
 				}
 			} else {
 				//Try to merge all but last item
@@ -144,8 +156,6 @@ public class ContainerAmphibiousArmour extends Container {
 					lastItem.setCount(1 + merge.getCount());
 					merge = lastItem;
 					stack = merge.copy();
-
-					InventoryAmphibianArmor inv = this.inventory instanceof InventoryAmphibianArmor ? (InventoryAmphibianArmor) this.inventory : null;
 
 					try {
 						if(inv != null) {
