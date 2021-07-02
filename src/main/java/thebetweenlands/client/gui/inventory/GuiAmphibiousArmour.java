@@ -74,7 +74,7 @@ public class GuiAmphibiousArmour extends GuiContainer {
 
 							GlStateManager.enableTexture2D();
 						}
-					} else {
+					} else if(isShiftKeyDown()) {
 						ItemStack filter = ((ItemAmphibianArmor) invItem.getItem()).getUpgradeFilter(invItem, slot.getSlotIndex());
 
 						if(!filter.isEmpty()) {
