@@ -19,11 +19,13 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
@@ -37,7 +39,6 @@ import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.tile.TileEntityCrabPotFilter;
 import thebetweenlands.util.AdvancedStateMap;
-import thebetweenlands.util.TranslationHelper;
 
 public class BlockCrabPotFilter extends BlockSwampWater implements ITileEntityProvider, IStateMappedBlock {
 	
@@ -64,7 +65,7 @@ public class BlockCrabPotFilter extends BlockSwampWater implements ITileEntityPr
 
 	@Override
     public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.crab_pot_filter_item"));
+		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.translateToLocalFormatted("tooltip.bl.crab_pot_filter_item"), 0));
         super.addInformation(stack, player, tooltip, advanced);
     }
 

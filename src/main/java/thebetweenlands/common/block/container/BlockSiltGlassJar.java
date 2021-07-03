@@ -29,17 +29,18 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntitySiltGlassJar;
-import thebetweenlands.util.TranslationHelper;
 
 public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider, ICustomItemBlock {
 
@@ -79,12 +80,6 @@ public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		return true;
 	}
-
-	@Override
-    public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.silt_glass_jar_item"));
-        super.addInformation(stack, player, tooltip, advanced);
-    }
 
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
@@ -218,7 +213,7 @@ public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider
 			@Override
 			@SideOnly(Side.CLIENT)
 			public void addInformation(ItemStack stack, @Nullable World world, List<String> list, ITooltipFlag flag) {
-
+				list.addAll(ItemTooltipHandler.splitTooltip(I18n.translateToLocalFormatted("tooltip.bl.silt_glass_jar_item"), 0));
 				if (stack.hasTagCompound() && stack.getTagCompound().getTagList("Items", 10) != null) {
 					NBTTagList tags = stack.getTagCompound().getTagList("Items", 10);
 
