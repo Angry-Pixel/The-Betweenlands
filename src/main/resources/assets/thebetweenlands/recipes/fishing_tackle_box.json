@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "RCR",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "thebetweenlands:swamp_reed_item"
+    },
+    "R": {
+      "item": "thebetweenlands:items_misc",
+      "data": 7
+    },
+    "C": {
+      "item": "thebetweenlands:weedwood_chest"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:fishing_tackle_box"
+  }
+}

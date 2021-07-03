@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:items_misc",
+	  "data": 32
+    },
+    {
+      "item": "thebetweenlands:items_misc",
+	  "data": 7
+    }
+  ],
+  "result": {
+    "item": "thebetweenlands:bl_name_tag"
+  }
+}

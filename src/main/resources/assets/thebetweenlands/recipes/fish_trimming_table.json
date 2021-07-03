@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X",
+    "O"
+  ],
+  "key": {
+    "X": {
+      "item": "thebetweenlands:smooth_betweenstone_slab"
+    },
+    "O": {
+      "item": "thebetweenlands:log_weedwood"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:alembic"
+  }
+}
