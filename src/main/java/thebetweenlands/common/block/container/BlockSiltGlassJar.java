@@ -39,6 +39,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntitySiltGlassJar;
+import thebetweenlands.util.TranslationHelper;
 
 public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider, ICustomItemBlock {
 
@@ -78,6 +79,12 @@ public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		return true;
 	}
+
+	@Override
+    public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.silt_glass_jar_item"));
+        super.addInformation(stack, player, tooltip, advanced);
+    }
 
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {

@@ -38,7 +38,7 @@ public class ItemFishBait extends Item {
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("jei_tooltip")) {
 			switch(stack.getTagCompound().getInteger("jei_tooltip")) {
 			case 1:
-				tooltip.add("Secondary items modify attributes. Use the tooltips when crafting to see."); //TODO Temp Crap
+				tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.fish_bait_jei"));//TODO Temp Crap
 				break;
 			}
 		}

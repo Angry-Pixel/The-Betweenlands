@@ -1,11 +1,13 @@
 package thebetweenlands.common.block.container;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
@@ -35,6 +37,7 @@ import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.tile.TileEntityCrabPotFilter;
 import thebetweenlands.util.AdvancedStateMap;
+import thebetweenlands.util.TranslationHelper;
 
 public class BlockCrabPotFilter extends BlockSwampWater implements ITileEntityProvider, IStateMappedBlock {
 	
@@ -58,6 +61,12 @@ public class BlockCrabPotFilter extends BlockSwampWater implements ITileEntityPr
 		super.setStateMapper(builder);
 		builder.ignore(LEVEL);
 	}
+
+	@Override
+    public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.crab_pot_filter_item"));
+        super.addInformation(stack, player, tooltip, advanced);
+    }
 
 	@Override
     public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
