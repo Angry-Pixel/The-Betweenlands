@@ -500,7 +500,7 @@ public class ItemRegistry {
     public static final Item WEEDWOOD_ROWBOAT_UPGRADE_LANTERN = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1);
     public static final Item SNOT_POD = new ItemSnotPod();
     public static final Item BL_NAME_TAG = new ItemBLNameTag();
-    
+
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
     private static final List<ItemStack> NUGGETS = new ArrayList<ItemStack>();

@@ -1,4 +1,4 @@
-package thebetweenlands.common.entity;
+package thebetweenlands.common.entity.projectiles;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityThrowable;

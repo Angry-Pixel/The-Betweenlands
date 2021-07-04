@@ -84,6 +84,7 @@ import thebetweenlands.common.block.misc.BlockDampTorch;
 import thebetweenlands.common.block.misc.BlockDentrothystPane;
 import thebetweenlands.common.block.misc.BlockFilteredSiltGlass;
 import thebetweenlands.common.block.misc.BlockGlassBetweenlands;
+import thebetweenlands.common.block.misc.BlockGlowingGoop;
 import thebetweenlands.common.block.misc.BlockGroundItem;
 import thebetweenlands.common.block.misc.BlockLadderBetweenlands;
 import thebetweenlands.common.block.misc.BlockLantern;
@@ -899,6 +900,7 @@ public class BlockRegistry {
     public static final Block BETWEENSTONE_PEBBLE_PILE_WATER = new BlockBetweenstonePebblePileWater();
     public static final Block BARNACLE_1_2 = new BlockBarnacle_1_2();
     public static final Block BARNACLE_3_4 = new BlockBarnacle_3_4();
+    public static final Block GLOWING_GOOP = new BlockGlowingGoop();
 
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();

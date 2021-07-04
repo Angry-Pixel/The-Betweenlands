@@ -522,6 +522,7 @@ tile.thebetweenlands.betweenstone_pebble_pile_water.three_plant.name=Betweenston
 tile.thebetweenlands.betweenstone_pebble_pile_water.four_plant.name=Betweenstone Pebble Pile Water
 tile.thebetweenlands.barnacle_1_2.name=Barnacle Cluster
 tile.thebetweenlands.barnacle_3_4.name=Barnacle Cluster
+tile.thebetweenlands.glowing_goop.name=Glowing Goop
 
 # Items
 
@@ -1544,6 +1545,7 @@ entity.thebetweenlands.bubbler_crab_bubble.name=Bubbler Crab Bubble
 entity.thebetweenlands.freshwater_urchin.name=Freshwater Urchin
 entity.thebetweenlands.greebling_coracle.name=Greebling Coracle
 entity.thebetweenlands.cave_fish.name=Cave Fish
+entity.thebetweenlands.glowing_goop.name=Glowing Goop
 
 #Fish Parts
 entity.thebetweenlands.anadia_body_0=Skittish
