@@ -1,6 +1,6 @@
 {
     "variants": {
-        "facing=down": { "model": "thebetweenlands:glowing_goop", "x": 180 },
+        "facing=down": { "model": "thebetweenlands:glowing_goop_down", "x": 180 },
         "facing=up": { "model": "thebetweenlands:glowing_goop"},
         "facing=north": { "model": "thebetweenlands:glowing_goop_side", "x": 270, "y": 180 },
         "facing=south": { "model": "thebetweenlands:glowing_goop_side", "x": 270 },
