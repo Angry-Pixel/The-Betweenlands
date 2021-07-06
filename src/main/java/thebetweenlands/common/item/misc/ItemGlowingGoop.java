@@ -1,24 +1,32 @@
 package thebetweenlands.common.item.misc;
 
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.entity.projectiles.EntityAngryPebble;
 import thebetweenlands.common.entity.projectiles.EntityGlowingGoop;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.SoundRegistry;
 
-public class ItemBlockGlowingGoop extends ItemBlock {
-	public ItemBlockGlowingGoop() {
+public class ItemGlowingGoop extends ItemBlock {
+	public ItemGlowingGoop() {
 		super(BlockRegistry.GLOWING_GOOP);
 		this.setCreativeTab(BLCreativeTabs.ITEMS);
 	}
@@ -73,5 +81,31 @@ public class ItemBlockGlowingGoop extends ItemBlock {
 				}
 			}
 		}
+	}
+
+	@Override
+	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
+		Block block = this.block;
+		
+		if(world.getBlockState(pos).getMaterial() == Material.WATER) {
+			block = BlockRegistry.GLOWING_GOOP_UNDERWATER;
+			newState = block.getStateForPlacement(world, pos, side, hitX, hitY, hitZ, 0, player, EnumHand.MAIN_HAND);
+		}
+
+		if(!world.setBlockState(pos, newState, 11)) {
+			return false;
+		}
+
+		IBlockState state = world.getBlockState(pos);
+		if(state.getBlock() == block) {
+			setTileEntityNBT(world, player, pos, stack);
+			this.block.onBlockPlacedBy(world, pos, state, player, stack);
+
+			if(player instanceof EntityPlayerMP) {
+				CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP)player, pos, stack);
+			}
+		}
+
+		return true;
 	}
 }

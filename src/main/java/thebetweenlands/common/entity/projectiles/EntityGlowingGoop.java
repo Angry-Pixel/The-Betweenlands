@@ -1,5 +1,7 @@
 package thebetweenlands.common.entity.projectiles;
 
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.SoundEvents;
@@ -44,16 +46,25 @@ public class EntityGlowingGoop extends EntityThrowable {
 					world.spawnParticle(EnumParticleTypes.SLIME, particleX, particleY, particleZ, 0, 0, 0);
 				}
 			} else {
-				if (result.typeOfHit == result.typeOfHit.BLOCK) {
+				if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
 					EnumFacing facing = result.sideHit;
 					BlockPos pos = result.getBlockPos();
-					if (BlockRegistry.GLOWING_GOOP.canPlaceBlockAt(world, pos.offset(facing))){
-						world.setBlockState(pos.offset(facing), BlockRegistry.GLOWING_GOOP.getDefaultState().withProperty(BlockGlowingGoop.FACING, facing));
+					pos = pos.offset(facing);
+					IBlockState state = this.world.getBlockState(pos);
+					
+					if (state.getBlock().isReplaceable(this.world, pos) && BlockRegistry.GLOWING_GOOP.canPlaceBlockAt(this.world, pos)){
+						if(state.getMaterial() == Material.WATER) {
+							world.setBlockState(pos, BlockRegistry.GLOWING_GOOP_UNDERWATER.getDefaultState().withProperty(BlockGlowingGoop.FACING, facing));
+						} else {
+							world.setBlockState(pos, BlockRegistry.GLOWING_GOOP.getDefaultState().withProperty(BlockGlowingGoop.FACING, facing));
+						}
+						
 						world.playSound(null, pos, SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.NEUTRAL, 1F, 1F);	
 					}
 					else {
 						InventoryHelper.spawnItemStack(world, posX, posY, posZ, new ItemStack(BlockRegistry.GLOWING_GOOP));
 					}
+					
 					setDead();
 				}
 			}

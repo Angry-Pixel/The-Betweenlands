@@ -27,6 +27,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.block.IWaterDisplacementHandler;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.item.armor.ItemMarshRunnerBoots;
@@ -117,6 +118,10 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
 		if (block instanceof BlockSwampWater) {
+			return false;
+		}
+		
+		if(block instanceof IWaterDisplacementHandler && ((IWaterDisplacementHandler) block).onWaterDisplacement(world, pos, this)) {
 			return false;
 		}
 

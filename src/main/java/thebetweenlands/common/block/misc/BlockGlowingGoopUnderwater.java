@@ -1,74 +1,71 @@
 package thebetweenlands.common.block.misc;
 
+import java.util.Random;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.api.block.IWaterDisplacementHandler;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.block.BlockStateContainerHelper;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.item.misc.ItemGlowingGoop;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
+import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 
-public class BlockGlowingGoop extends BlockDirectional implements ICustomItemBlock, IWaterDisplacementHandler {
+public class BlockGlowingGoopUnderwater extends BlockSwampWater {
 
-	public BlockGlowingGoop() {
-		super(Material.GLASS);
+	public static final PropertyDirection FACING = PropertyDirection.create("facing");
+
+	public BlockGlowingGoopUnderwater() {
+		super(FluidRegistry.SWAMP_WATER, Material.WATER);
+		this.setUnderwaterBlock(true);
 		setDefaultState(this.getBlockState().getBaseState());
 		setLightLevel(1.0F);
-		setHardness(0.0F);
+		setHardness(0.025F);
 		setResistance(2.0F);
 		setSoundType(SoundType.SLIME);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
+
+	@Override
+	@Nullable
+	public ItemBlock getItemBlock() {
+		return null;
+	}
+
+	@Override
+	public int quantityDropped(Random rng) {
+		return 1;
+	}
 	
 	@Override
-    @Nullable
-    public ItemBlock getItemBlock() {
-        return new ItemGlowingGoop();
-    }
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.TRANSLUCENT;
+	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		return Item.getItemFromBlock(BlockRegistry.GLOWING_GOOP);
 	}
-
-	@Override
-	public boolean isOpaqueCube(IBlockState state) {
-		return false;
-	}
-
-	@Override
-	public boolean isFullBlock(IBlockState state) {
-		return false;
-	}
-
-	@Override
-	public boolean isFullCube(IBlockState state) {
-		return false;
-	}
-
+	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
@@ -147,25 +144,25 @@ public class BlockGlowingGoop extends BlockDirectional implements ICustomItemBlo
 	}
 
 	@Override
-    public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
-        return canPlaceBlock(world, pos, side);
-    }
+	public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
+		return canPlaceBlock(world, pos, side);
+	}
 
 	@Override
-    public boolean canPlaceBlockAt(World world, BlockPos pos) {
-        for (EnumFacing enumfacing : EnumFacing.values())
-            if (canPlaceBlock(world, pos, enumfacing))
-                return true;
-        return false;
-    }
+	public boolean canPlaceBlockAt(World world, BlockPos pos) {
+		for (EnumFacing enumfacing : EnumFacing.values())
+			if (canPlaceBlock(world, pos, enumfacing))
+				return true;
+		return false;
+	}
 
 	public boolean canPlaceBlock(World world, BlockPos pos, EnumFacing direction) {
-        BlockPos blockpos = pos.offset(direction.getOpposite());
-        IBlockState state = world.getBlockState(blockpos);
-        boolean isSolid = state.getBlockFaceShape(world, blockpos, direction) == BlockFaceShape.SOLID;
+		BlockPos blockpos = pos.offset(direction.getOpposite());
+		IBlockState state = world.getBlockState(blockpos);
+		boolean isSolid = state.getBlockFaceShape(world, blockpos, direction) == BlockFaceShape.SOLID;
 
-        return world.isBlockNormalCube(blockpos, true) && state.isOpaqueCube() && isSolid;
-    }
+		return world.isBlockNormalCube(blockpos, true) && state.isOpaqueCube() && isSolid;
+	}
 
 	@Override
 	public IBlockState withRotation(IBlockState state, Rotation rot) {
@@ -179,11 +176,13 @@ public class BlockGlowingGoop extends BlockDirectional implements ICustomItemBlo
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { FACING });
+		return BlockStateContainerHelper.extendBlockstateContainer((ExtendedBlockState) super.createBlockState(), new IProperty[] { FACING }, new IUnlistedProperty[0]);
 	}
 
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
+		super.neighborChanged(state, world, fromPos, block, fromPos);
+
 		boolean shouldStay = false;
 
 		if (world.isSideSolid(pos.offset(state.getValue(FACING).getOpposite()), state.getValue(FACING)))
@@ -196,9 +195,15 @@ public class BlockGlowingGoop extends BlockDirectional implements ICustomItemBlo
 
 		super.neighborChanged(state, world, pos, block, fromPos);
 	}
-
+	
 	@Override
-	public boolean onWaterDisplacement(World world, BlockPos pos, BlockSwampWater block) {
-		return world.setBlockState(pos, BlockRegistry.GLOWING_GOOP_UNDERWATER.getDefaultState().withProperty(BlockGlowingGoopUnderwater.FACING, world.getBlockState(pos).getValue(FACING)), 2);
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		this.onBlockHarvested(world, pos, state, player);
+		return world.setBlockState(pos, BlockRegistry.SWAMP_WATER.getDefaultState(), world.isRemote ? 11 : 3);
+	}
+	
+	@Override
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+		return new ItemStack(BlockRegistry.GLOWING_GOOP);
 	}
 }
