@@ -220,15 +220,15 @@ public class ItemRegistry {
     public static final Item MIRE_SNAIL_EGG_COOKED = new ItemBLFood(8, 1, false);
     public static final Item ANGLER_MEAT_RAW = new ItemBLFood(4, 0.4F, false);
     public static final Item ANGLER_MEAT_COOKED = new ItemBLFood(8, 0.8F, false);
-    public static final Item FROG_LEGS_RAW = new ItemBLFood(3, 0.4F, false);
-    public static final Item FROG_LEGS_COOKED = new ItemBLFood(6, 0.8F, false);
+    public static final Item FROG_LEGS_RAW = new ItemBLFood(2, 0.4F, false);
+    public static final Item FROG_LEGS_COOKED = new ItemBLFood(4, 0.6F, false);
     public static final Item SNAIL_FLESH_RAW = new ItemBLFood(3, 0.4F, false);
-    public static final Item SNAIL_FLESH_COOKED = new ItemBLFood(6, 0.9F, false);
+    public static final Item SNAIL_FLESH_COOKED = new ItemBLFood(5, 0.7F, false);
     public static final Item REED_DONUT = new ItemBLFood(6, 0.6F, false);
     public static final Item JAM_DONUT = new ItemBLFood(10, 0.6F, false);
     public static final Item GERTS_DONUT = new ItemGertsDonut();
     public static final Item ASPECTRUS_FRUIT = new ItemAspectrusFruit();
-    public static final Item PUFFSHROOM_TENDRIL = new ItemBLFood(8, 0.9F, false);
+    public static final Item PUFFSHROOM_TENDRIL = new ItemBLFood(6, 0.6F, false);
     public static final Item KRAKEN_TENTACLE = new ItemBLFood(8, 0.9F, false);
     public static final Item KRAKEN_CALAMARI = new ItemBLFood(14, 1.2F, false);
     public static final Item MIDDLE_FRUIT = new ItemBLFood(6, 0.6F, false);
@@ -271,6 +271,14 @@ public class ItemRegistry {
     public static final Item ANADIA_MEAT_SMOKED = new ItemBLFood(8, 0.8F, false);
 
     public static final Item BARNACLE = new ItemBLFood(1, 0.2F, false);
+    public static final Item BARNACLE_COOKED = new ItemBLFood(2, 0.3F, false);
+    public static final Item BARNACLE_SMOKED = new ItemBLFood(4, 0.4F, false);
+    
+    public static final Item CRAB_STICK_SMOKED = new ItemBLFood(6, 1F, false);
+    public static final Item FROG_LEGS_SMOKED = new ItemBLFood(6, 0.8F, false);
+    public static final Item PUFSHROOM_TENDRIL_SMOKED = new ItemBLFood(8, 0.8F, false);
+    public static final Item SILT_CRAB_CLAW_SMOKED = new ItemBLFood(4, 0.8F, false);
+    public static final Item SNAIL_FLESH_SMOKED = new ItemBLFood(6, 0.9F, false);
 
     //armor
     public static final Item BONE_HELMET = new ItemBoneArmor(EntityEquipmentSlot.HEAD);

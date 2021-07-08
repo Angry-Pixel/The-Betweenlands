@@ -281,6 +281,7 @@ public class RecipeRegistry {
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.CRAGROCK_BRICKS), new ItemStack(BlockRegistry.CRAGROCK_BRICKS_CRACKED), 0.1F);
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.MUD_TILES, 1, 0), new ItemStack(BlockRegistry.MUD_TILES, 1, 2), 0.1F);
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.FILTERED_SILT), new ItemStack(BlockRegistry.FILTERED_SILT_GLASS), 0.3F);
+		GameRegistry.addSmelting(new ItemStack(ItemRegistry.BARNACLE), new ItemStack(ItemRegistry.BARNACLE_COOKED), 0.1F);
 
 		//smelt to nuggets
 		GameRegistry.addSmelting(ItemRegistry.VALONITE_AXE, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
@@ -733,6 +734,12 @@ public class RecipeRegistry {
 		});
 
 		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.ANADIA_MEAT_SMOKED), 1, new ItemStack(ItemRegistry.ANADIA_MEAT_RAW));
+		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.BARNACLE_SMOKED), 1, new ItemStack(ItemRegistry.BARNACLE));
+		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.CRAB_STICK_SMOKED), 1, new ItemStack(ItemRegistry.CRAB_STICK));
+		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.FROG_LEGS_SMOKED), 1, new ItemStack(ItemRegistry.FROG_LEGS_RAW));
+		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.PUFSHROOM_TENDRIL_SMOKED), 1, new ItemStack(ItemRegistry.PUFFSHROOM_TENDRIL));
+		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.SILT_CRAB_CLAW_SMOKED), 1, new ItemStack(ItemRegistry.SILT_CRAB_CLAW));
+		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.SNAIL_FLESH_SMOKED), 1, new ItemStack(ItemRegistry.SNAIL_FLESH_RAW));
 		SmokingRackRecipe.addRecipe(EnumItemMisc.DRY_BARK.create(1), 2, new ItemStack(BlockRegistry.LOG_WEEDWOOD));
 	}
 
