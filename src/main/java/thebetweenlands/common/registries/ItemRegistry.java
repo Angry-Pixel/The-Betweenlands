@@ -276,7 +276,7 @@ public class ItemRegistry {
     
     public static final Item CRAB_STICK_SMOKED = new ItemBLFood(6, 1F, false);
     public static final Item FROG_LEGS_SMOKED = new ItemBLFood(6, 0.8F, false);
-    public static final Item PUFSHROOM_TENDRIL_SMOKED = new ItemBLFood(8, 0.8F, false);
+    public static final Item PUFFSHROOM_TENDRIL_SMOKED = new ItemBLFood(8, 0.8F, false);
     public static final Item SILT_CRAB_CLAW_SMOKED = new ItemBLFood(4, 0.8F, false);
     public static final Item SNAIL_FLESH_SMOKED = new ItemBLFood(6, 0.9F, false);
 

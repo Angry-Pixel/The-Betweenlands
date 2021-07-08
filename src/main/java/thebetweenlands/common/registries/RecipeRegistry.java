@@ -737,7 +737,7 @@ public class RecipeRegistry {
 		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.BARNACLE_SMOKED), 1, new ItemStack(ItemRegistry.BARNACLE));
 		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.CRAB_STICK_SMOKED), 1, new ItemStack(ItemRegistry.CRAB_STICK));
 		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.FROG_LEGS_SMOKED), 1, new ItemStack(ItemRegistry.FROG_LEGS_RAW));
-		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.PUFSHROOM_TENDRIL_SMOKED), 1, new ItemStack(ItemRegistry.PUFFSHROOM_TENDRIL));
+		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.PUFFSHROOM_TENDRIL_SMOKED), 1, new ItemStack(ItemRegistry.PUFFSHROOM_TENDRIL));
 		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.SILT_CRAB_CLAW_SMOKED), 1, new ItemStack(ItemRegistry.SILT_CRAB_CLAW));
 		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.SNAIL_FLESH_SMOKED), 1, new ItemStack(ItemRegistry.SNAIL_FLESH_RAW));
 		SmokingRackRecipe.addRecipe(EnumItemMisc.DRY_BARK.create(1), 2, new ItemStack(BlockRegistry.LOG_WEEDWOOD));
