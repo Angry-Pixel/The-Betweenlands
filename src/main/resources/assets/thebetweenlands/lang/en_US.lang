@@ -955,6 +955,13 @@ item.thebetweenlands.fumigant.name=Fumigant
 item.thebetweenlands.bl_name_tag.name=Amate Name Tag
 item.thebetweenlands.barnacle_larvae.name=Barnacle Larvae
 item.thebetweenlands.barnacle.name=Barnacle Flesh
+item.thebetweenlands.barnacle_cooked.name=Cooked Barnacle Flesh
+item.thebetweenlands.barnacle_smoked.name=Smoked Barnacle Flesh
+item.thebetweenlands.crab_stick_smoked.name=Smoked Crabstick
+item.thebetweenlands.frog_legs_smoked.name=Smoked Frog's Leg
+item.thebetweenlands.puffshroom_tendril_smoked.name=Smoked Puffshroom Tendril
+item.thebetweenlands.silt_crab_claw_smoked.name=Smoked Silt Crab Claw
+item.thebetweenlands.snail_flesh_smoked.name=Smoked Snail Flesh
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
