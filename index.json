@@ -312,6 +312,41 @@
 			"title": "This is Where it Starts",
 			"author": "Wayrail",
 			"description": "The Ground is Bogged and Slimy, The Air is stale and thin,\nbut at least the rift in the sky will always be there to remind me of Home."
+		},
+		{
+			"sha256": "8F22F20E8E7BA8370B44F8A7785656649593D2D924E3FB8EF32824D04FC4CAD0",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/firestarplayz_promiseless_world.png",
+			"title": "Promiseless World",
+			"author": "Firestarplayz",
+			"description": "This dimension shows no signs of peaceful life, only a swampy\nwasteland full of monsters. Survival here will be more than challenging."
+		},
+		{
+			"sha256": "686E56ED0AFF897EF45C1B193DC99E857C448C359148DB38A17B625F98331797",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/firestarplayz_flying_fiend.png",
+			"title": "Flying Fiend",
+			"author": "Firestarplayz",
+			"description": "The Chiromaw roams the skies, preying on carrion and lost adventurers."
+		},
+		{
+			"sha256": "B673D1DEB029C7D0E6C641D972F595F8796229A72D7E26E6ABD4B43D23B22EBB",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/firestarplayz_monster_of_the_marsh.png",
+			"title": "Monster of the Marsh",
+			"author": "Firestarplayz",
+			"description": "Any adventurer should beware when exploring the marshes.\nHideous creatures will crawl out and drag you into the peat."
+		},
+		{
+			"sha256": "98FCAAFD10989EA0252B66D654B06987D64B7F7FBD949217C64681F79AEE460D",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/firestarplayz_sludge_and_muck.png",
+			"title": "Sludge and Muck",
+			"author": "Firestarplayz",
+			"description": "Slime covers the room as a tendril rises up from the\ncenter of the pit. This monster is the core of the decay around the\ndungeon, and now it will be slain."
+		},
+		{
+			"sha256": "31427E802CD6D4461CF1B7318634AEED92320E82D6B4DF2B52B6907003FFE3EF",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/firestarplayz_isle_over_the_great_bog.png",
+			"title": "Isle Over The Great Bog",
+			"author": "Firestarplayz",
+			"description": "Amidst the hostile marshlands, great islands float above\nthe dangers of the sea. But beware, they are not entirely without threat..."
 		}
 	]
 }]
