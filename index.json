@@ -272,14 +272,46 @@
 			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/firestarplayz_hill_by_the_cragrock_spires.png",
 			"title": "Hill by the Cragrock Spires",
 			"author": "Firestarplayz",
-			"description": "A small island gives you a safe view of the far off Cragrock mountains surrounded by infested sea"
+			"description": "A small island gives you a safe view of the far off Cragrock\nmountains surrounded by infested sea"
 		},
 		{
 			"sha256": "0F2612806203AF7D8E5B430CCC1755998A455C2512B97419B787649F97089189",
 			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/firestarplayz_stars_of_a_shattered_sky.png",
 			"title": "Stars of a Shattered Sky",
 			"author": "Firestarplayz",
-			"description": "Despite the vile world and horrors that roam it, you can still find beauty among the terrible marshes of your new hope"
+			"description": "Despite the vile world and horrors that roam it, you can\nstill find beauty among the terrible marshes of your new hope"
+		},
+		{
+			"sha256": "A19AFCC6FE35B5F62FFB938C9157F58EFD700141D4FC4910D332374F1BA54DC7",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/yari9_wandering_soul.png",
+			"title": "Wandering Soul",
+			"author": "yari9"
+		},
+		{
+			"sha256": "7E3204AD584B615718A510D6C9534B2754470A0C4097DB17D7783BB49B50E706",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/scottish_madman_a_little_bit_of_mold.png",
+			"title": "A Little Bit of Mold",
+			"author": "Scotting Madman"
+		},
+		{
+			"sha256": "42ADAA3282109B04BB3F16F9C94632259FE4E6A1E3D8629175BD6CDF6F3DA417",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/bonniethebunny_silt_crab.png",
+			"title": "Silt Crab",
+			"author": "Bonniethebunny"
+		},
+		{
+			"sha256": "1CE34D844119EDD22C0E91DA568F2C51071562DCB2924E9C29798D86C56F287A",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/oktacek1_curious_or_spaced_out.png",
+			"title": "Curious? Or spaced out?",
+			"author": "oktacek1",
+			"description": "These noisy little guys love to wear all of the fancy floral\nfashion. I hear Cryptweed is especially popular lately.\nUm, so, how DO they get the Sludgeon stuff!?"
+		},
+		{
+			"sha256": "0E62BFC8F4F487B5B81E4723626661A0A79D3A48DECB3D397F206852627E5D7A",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/wayrail_this_is_where_it_starts.png",
+			"title": "This is Where it Starts",
+			"author": "Wayrail",
+			"description": "The Ground is Bogged and Slimy, The Air is stale and thin,\nbut at least the rift in the sky will always be there to remind me of Home."
 		}
 	]
 }]
