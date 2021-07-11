@@ -30,7 +30,7 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent implement
 		}
 
 		public ActiveStateEstimator dependsOnEvent(Supplier<TimedEnvironmentEvent> event) {
-			return this.dependsOn(event.get().getActiveStateEstimator());
+			return this.dependsOn(() -> event.get().getActiveStateEstimator());
 		}
 
 		public ActiveStateEstimator dependsOn(ActiveStateEstimator dependency) {

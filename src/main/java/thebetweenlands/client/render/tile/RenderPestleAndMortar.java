@@ -52,17 +52,20 @@ public class RenderPestleAndMortar extends TileEntitySpecialRenderer<TileEntityM
 
 		if(te != null && te.hasPestle) {
 			GlStateManager.pushMatrix();
-			float rise = (float)(te.progress -42F) * -0.03F;
-			if(te.progress <= 42)
-				GlStateManager.rotate(te.progress * 4.2857142857142857142857142857143F * 2F, 0.0F, 1F, 0F);
-			if(te.progress > 42 && te.progress < 54)
-				GlStateManager.translate(0F, rise, 0F);
-			if(te.progress >= 54 && te.progress < 64)
-				GlStateManager.translate(0F, -0.63F - rise, 0F);
-			if(te.progress >= 64 && te.progress < 74)
-				GlStateManager.translate(0F, 0.63F + rise, 0F);
-			if(te.progress >= 74 && te.progress < 84)
-				GlStateManager.translate(0F, -1.23F - rise, 0F);
+			if(te.progress > 0 && te.progress < 84) {
+				float interpProgress = te.progress - 1 + partialTicks;
+				float rise = (float)(interpProgress - 42F) * -0.03F;
+				//GlStateManager.rotate(Math.min(interpProgress * 8.6747f, 360.0f), 0.0F, 1F, 0F);
+				GlStateManager.rotate(Math.min((float)Math.pow(((float)Math.tanh(interpProgress * 1.5f / 8.3f - 5.0f) + 1) * 0.5f, 0.5f) * 360.0f, 360.0f), 0.0F, 1F, 0F);
+				if(interpProgress > 42 && interpProgress < 53)
+					GlStateManager.translate(0F, rise, 0F);
+				if(interpProgress >= 53 && interpProgress < 63)
+					GlStateManager.translate(0F, -0.33F + Math.pow((-0.332f - rise) / 0.2975f, 3) * 0.33f, 0F);
+				if(interpProgress >= 63 && interpProgress < 73)
+					GlStateManager.translate(0F, 0.63f + rise, 0F);
+				if(interpProgress >= 73 && interpProgress < 83)
+					GlStateManager.translate(0F, -0.31F + Math.pow((-0.9323952 - rise) / 0.2975f, 3) * 0.31f, 0F);
+			}
 			model.renderPestle();
 			GlStateManager.popMatrix();
 		}
