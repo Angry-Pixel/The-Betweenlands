@@ -270,13 +270,13 @@ import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.handler.ExtendedReachHandler;
 import thebetweenlands.common.herblore.book.GuiManualHerblore;
 import thebetweenlands.common.herblore.book.HLEntryRegistry;
-import thebetweenlands.common.inventory.InventoryAmphibianArmor;
+import thebetweenlands.common.inventory.InventoryAmphibiousArmor;
 import thebetweenlands.common.inventory.InventoryPouch;
 import thebetweenlands.common.inventory.container.ContainerAmphibiousArmour;
 import thebetweenlands.common.inventory.container.ContainerDraetonPouch;
 import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.item.ITintedItem;
-import thebetweenlands.common.item.armor.amphibian.ItemAmphibianArmor;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.item.misc.ItemBarkAmulet;
@@ -515,11 +515,11 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 				return new GuiCrabPotFilter(player, (TileEntityCrabPotFilter) tile);
 			break;
 			
-		case GUI_AMPHIBIAN_ARMOR: {
+		case GUI_AMPHIBIOUS_ARMOR: {
 			ItemStack item = player.getHeldItemMainhand();
 			String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.amphibious_armour";
-			if (!item.isEmpty() && item.getItem() instanceof ItemAmphibianArmor)
-				return new GuiAmphibiousArmour(new ContainerAmphibiousArmour(player, new InventoryAmphibianArmor(item, name)));
+			if (!item.isEmpty() && item.getItem() instanceof ItemAmphibiousArmor)
+				return new GuiAmphibiousArmour(new ContainerAmphibiousArmour(player, new InventoryAmphibiousArmor(item, name)));
 			break;
 		}
 		}

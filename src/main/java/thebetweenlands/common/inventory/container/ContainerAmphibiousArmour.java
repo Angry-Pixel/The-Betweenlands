@@ -8,12 +8,12 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import thebetweenlands.api.item.IAmphibianArmorUpgrade;
-import thebetweenlands.common.inventory.InventoryAmphibianArmor;
+import thebetweenlands.api.item.IAmphibiousArmorUpgrade;
+import thebetweenlands.common.inventory.InventoryAmphibiousArmor;
 import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.inventory.slot.SlotInvRestriction;
-import thebetweenlands.common.item.armor.amphibian.AmphibianArmorUpgrades;
-import thebetweenlands.common.item.armor.amphibian.ItemAmphibianArmor;
+import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorUpgrades;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 
 public class ContainerAmphibiousArmour extends Container {
 	public static class SlotUpgrade extends SlotInvRestriction {
@@ -32,7 +32,7 @@ public class ContainerAmphibiousArmour extends Container {
 		public ItemStack onTake(EntityPlayer player, ItemStack stack) {
 			ItemStack ret = super.onTake(player, stack);
 
-			InventoryAmphibianArmor inv = this.inventory instanceof InventoryAmphibianArmor ? (InventoryAmphibianArmor) this.inventory : null;
+			InventoryAmphibiousArmor inv = this.inventory instanceof InventoryAmphibiousArmor ? (InventoryAmphibiousArmor) this.inventory : null;
 
 			try {
 				if(inv != null) {
@@ -41,11 +41,11 @@ public class ContainerAmphibiousArmour extends Container {
 
 				ItemStack invItem = this.inventoryItem.getInventoryItemStack();
 
-				if(invItem.getItem() instanceof ItemAmphibianArmor) {
-					IAmphibianArmorUpgrade upgrade = AmphibianArmorUpgrades.getUpgrade(((ItemAmphibianArmor) invItem.getItem()).armorType, stack);
+				if(invItem.getItem() instanceof ItemAmphibiousArmor) {
+					IAmphibiousArmorUpgrade upgrade = AmphibiousArmorUpgrades.getUpgrade(((ItemAmphibiousArmor) invItem.getItem()).armorType, stack);
 
 					if(upgrade != null) {
-						int damage = ((ItemAmphibianArmor) invItem.getItem()).getUpgradeDamage(invItem, this.getSlotIndex());
+						int damage = ((ItemAmphibiousArmor) invItem.getItem()).getUpgradeDamage(invItem, this.getSlotIndex());
 
 						if(damage > 0) {
 
@@ -56,8 +56,8 @@ public class ContainerAmphibiousArmour extends Container {
 								this.inventory.setInventorySlotContents(this.getSlotIndex(), ret.splitStack(1));
 							} else if(invCount == 0 && stack.getCount() == 1) {
 								//Transfer upgrade damage of armor to stored damage on stack
-								ItemAmphibianArmor.setUpgradeItemStoredDamage(ret, damage, upgrade.getMaxDamage());
-								((ItemAmphibianArmor) invItem.getItem()).setUpgradeDamage(invItem, this.getSlotIndex(), 0, 0);
+								ItemAmphibiousArmor.setUpgradeItemStoredDamage(ret, damage, upgrade.getMaxDamage());
+								((ItemAmphibiousArmor) invItem.getItem()).setUpgradeDamage(invItem, this.getSlotIndex(), 0, 0);
 							}
 
 						}
@@ -76,18 +76,18 @@ public class ContainerAmphibiousArmour extends Container {
 		public void onSlotChanged() {
 			ItemStack armorStack = this.inventoryItem.getInventoryItemStack();
 
-			if(armorStack.getItem() instanceof ItemAmphibianArmor) {
-				EntityEquipmentSlot armorType = ((ItemAmphibianArmor) armorStack.getItem()).armorType;
+			if(armorStack.getItem() instanceof ItemAmphibiousArmor) {
+				EntityEquipmentSlot armorType = ((ItemAmphibiousArmor) armorStack.getItem()).armorType;
 
 				ItemStack currentStack = this.inventory.getStackInSlot(this.getSlotIndex());
 
 				if(!ItemStack.areItemStacksEqual(this.prevStack, currentStack)) {
-					IAmphibianArmorUpgrade prevUpgrade = AmphibianArmorUpgrades.getUpgrade(armorType, this.prevStack);
+					IAmphibiousArmorUpgrade prevUpgrade = AmphibiousArmorUpgrades.getUpgrade(armorType, this.prevStack);
 					if(prevUpgrade != null) {
 						prevUpgrade.onChanged(armorType, armorStack, this.prevStack);
 					}
 
-					IAmphibianArmorUpgrade newUpgrade = AmphibianArmorUpgrades.getUpgrade(armorType, currentStack);
+					IAmphibiousArmorUpgrade newUpgrade = AmphibiousArmorUpgrades.getUpgrade(armorType, currentStack);
 					if(newUpgrade != null) {
 						newUpgrade.onChanged(armorType, armorStack, currentStack);
 					}
@@ -129,7 +129,7 @@ public class ContainerAmphibiousArmour extends Container {
 			ItemStack merge = slot.getStack();
 			stack = merge.copy();
 
-			InventoryAmphibianArmor inv = this.inventory instanceof InventoryAmphibianArmor ? (InventoryAmphibianArmor) this.inventory : null;
+			InventoryAmphibiousArmor inv = this.inventory instanceof InventoryAmphibiousArmor ? (InventoryAmphibiousArmor) this.inventory : null;
 
 			if(slotIndex >= this.numSlots) {
 				try {
@@ -175,26 +175,26 @@ public class ContainerAmphibiousArmour extends Container {
 				if(merge.getCount() == 1) {
 					ItemStack invItem = this.inventory.getInventoryItemStack();
 
-					if(invItem.getItem() instanceof ItemAmphibianArmor) {
-						IAmphibianArmorUpgrade upgrade = AmphibianArmorUpgrades.getUpgrade(((ItemAmphibianArmor) invItem.getItem()).armorType, stack);
+					if(invItem.getItem() instanceof ItemAmphibiousArmor) {
+						IAmphibiousArmorUpgrade upgrade = AmphibiousArmorUpgrades.getUpgrade(((ItemAmphibiousArmor) invItem.getItem()).armorType, stack);
 
 						if(upgrade != null) {
-							int damage = ((ItemAmphibianArmor) invItem.getItem()).getUpgradeDamage(invItem, slotIndex);
+							int damage = ((ItemAmphibiousArmor) invItem.getItem()).getUpgradeDamage(invItem, slotIndex);
 
 							if(damage > 0) {
 								//Store upgrade damage in item before merging
-								ItemAmphibianArmor.setUpgradeItemStoredDamage(merge, damage, upgrade.getMaxDamage());
+								ItemAmphibiousArmor.setUpgradeItemStoredDamage(merge, damage, upgrade.getMaxDamage());
 							}
 						}
 					}
 
 					if(!this.mergeItemStack(merge, this.numSlots, this.inventorySlots.size(), false)) {
 						//Undo stored damage because merge failed
-						ItemAmphibianArmor.setUpgradeItemStoredDamage(merge, 0, 0);
+						ItemAmphibiousArmor.setUpgradeItemStoredDamage(merge, 0, 0);
 						return ItemStack.EMPTY;
-					} else if(invItem.getItem() instanceof ItemAmphibianArmor) {
+					} else if(invItem.getItem() instanceof ItemAmphibiousArmor) {
 						//Remove upgrade damage since it is now stored in item
-						((ItemAmphibianArmor) invItem.getItem()).setUpgradeDamage(invItem, slotIndex, 0, 0);
+						((ItemAmphibiousArmor) invItem.getItem()).setUpgradeDamage(invItem, slotIndex, 0, 0);
 					}
 				}
 			}

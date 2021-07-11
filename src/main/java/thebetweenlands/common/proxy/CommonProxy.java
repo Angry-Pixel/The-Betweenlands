@@ -23,7 +23,7 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 import thebetweenlands.client.render.sky.RiftVariant;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
-import thebetweenlands.common.inventory.InventoryAmphibianArmor;
+import thebetweenlands.common.inventory.InventoryAmphibiousArmor;
 import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.inventory.InventoryPouch;
 import thebetweenlands.common.inventory.container.ContainerAmphibiousArmour;
@@ -47,7 +47,7 @@ import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
 import thebetweenlands.common.inventory.container.ContainerSmokingRack;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
-import thebetweenlands.common.item.armor.amphibian.ItemAmphibianArmor;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.common.tile.TileEntityBLDualFurnace;
@@ -88,7 +88,7 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_SMOKING_RACK = 31;
 	public static final int GUI_FISH_TRIMMING_TABLE = 32;
 	public static final int GUI_CRAB_POT_FILTER = 33;
-	public static final int GUI_AMPHIBIAN_ARMOR = 34;
+	public static final int GUI_AMPHIBIOUS_ARMOR = 34;
 	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -246,11 +246,11 @@ public class CommonProxy implements IGuiHandler {
 				return new ContainerCrabPotFilter(player, (TileEntityCrabPotFilter) tile);
 			break;
 			
-		case GUI_AMPHIBIAN_ARMOR: {
+		case GUI_AMPHIBIOUS_ARMOR: {
 			ItemStack item = player.getHeldItemMainhand();
 			String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.amphibious_armour";
-			if (!item.isEmpty() && item.getItem() instanceof ItemAmphibianArmor)
-				return new ContainerAmphibiousArmour(player, new InventoryAmphibianArmor(item, name));
+			if (!item.isEmpty() && item.getItem() instanceof ItemAmphibiousArmor)
+				return new ContainerAmphibiousArmour(player, new InventoryAmphibiousArmor(item, name));
 			break;
 		}
 		}
