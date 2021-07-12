@@ -42,6 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
+import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityFishingSpear extends Entity implements IProjectile, IThrowableEntity {
@@ -68,6 +69,8 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 	protected int ticksInGround;
 	protected int ticksInAir;
 	protected double damage = 0;
+	private boolean returnHome;
+	public int returningTicks;
 
 	private static final byte EVENT_DEAD = 111;
 
@@ -181,6 +184,19 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 		if (!inGround)
 			super.setPosition(x, y, z);
 	}
+	
+	public void moveToTarget(double targetX, double targetY, double targetZ, float velocity) {
+		float distSq = MathHelper.sqrt(targetX * targetX + targetY * targetY + targetZ * targetZ);
+		targetX = targetX / (double) distSq;
+		targetY = targetY / (double) distSq;
+		targetZ = targetZ / (double) distSq;
+		targetX = targetX * (double) velocity;
+		targetY = targetY * (double) velocity;
+		targetZ = targetZ * (double) velocity;
+		motionX = targetX;
+		motionY = targetY;
+		motionZ = targetZ;
+	}
 
 	@Override
 	public void onUpdate() {
@@ -192,7 +208,29 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 				setDead();
 			}
 		}
+		
+		 if (this.timeInGround > 4 && getType() == 2) {
+	         this.returnHome = true;
+	      }
 
+	      Entity entityOwner = getThrower();
+	      if ((this.returnHome || this.noClip) && entityOwner != null && getType() == 2) {
+	        	this.noClip = true;
+	        	inGround = false;
+	     		double targetX = entityOwner.posX - posX;
+	    		double targetY = entityOwner.posY + entityOwner.height * 0.5D - posY + height * 0.5D;
+	    		double targetZ = entityOwner.posZ - posZ;
+	    		moveToTarget(targetX, targetY, targetZ, 0.5F);
+	            if (this.world.isRemote) {
+	               this.lastTickPosY = this.posY;
+	            }
+
+	            if (this.returningTicks == 0) {
+	              // Play return sound?
+	            }
+	            ++this.returningTicks;
+	      }
+	      
 		if (prevRotationPitch == 0.0F && prevRotationYaw == 0.0F) {
 			float f = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
 			rotationYaw = (float) (MathHelper.atan2(motionX, motionZ) * (180D / Math.PI));
@@ -205,7 +243,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 		IBlockState iblockstate = world.getBlockState(blockpos);
 		Block block = iblockstate.getBlock();
 
-		if (iblockstate.getMaterial() != Material.AIR) {
+		if (iblockstate.getMaterial() != Material.AIR && noClip == false) {
 			AxisAlignedBB axisalignedbb = iblockstate.getCollisionBoundingBox(world, blockpos);
 			if (axisalignedbb != Block.NULL_AABB&& axisalignedbb.offset(blockpos).contains(new Vec3d(posX, posY, posZ)))
 				inGround = true;
@@ -243,6 +281,8 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 				vec3d = new Vec3d(raytraceresult.hitVec.x, raytraceresult.hitVec.y, raytraceresult.hitVec.z);
 
 			Entity entity = findEntityOnPath(vec3d1, vec3d);
+			if (noClip)
+				raytraceresult = null;
 
 			if (entity != null)
 				raytraceresult = new RayTraceResult(entity);
@@ -271,10 +311,14 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 			
 			float f4 = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
 			rotationYaw = (float) (MathHelper.atan2(motionX, motionZ) * (180D / Math.PI));
-
-			for (rotationPitch = (float) (MathHelper.atan2(motionY, (double) f4) * (180D / Math.PI)); rotationPitch - prevRotationPitch < -180.0F; prevRotationPitch -= 360.0F) {
-				;
-			}
+			if (!noClip)
+				for (rotationPitch = (float) (MathHelper.atan2(motionY, (double) f4) * (180D / Math.PI)); rotationPitch - prevRotationPitch < -180.0F; prevRotationPitch -= 360.0F) {
+					;
+				}
+			else
+				for (rotationPitch = (float) (MathHelper.atan2(motionY, (double) -f4) * (180D / Math.PI)); rotationPitch - prevRotationPitch < -180.0F; prevRotationPitch -= 360.0F) {
+					;
+				}
 
 			while (rotationPitch - prevRotationPitch >= 180.0F)
 				prevRotationPitch += 360.0F;
@@ -306,9 +350,10 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 			motionZ *= (double) drag;
 
 			setPosition(posX, posY, posZ);
-			doBlockCollisions();
-		}
 
+			 if(!noClip)
+				 doBlockCollisions();
+		}
 	}
 
 	public float getWaterDrag() {
@@ -329,7 +374,9 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 
 			if (entity instanceof EntityAnadia)
 				setDamage(((EntityAnadia) entity).getMaxHealth());
-			else
+			else if (entity instanceof EntityAngler)
+				setDamage(((EntityAngler) entity).getMaxHealth());
+			else if (returningTicks > 0 && entity != shootingEntity )
 				setDamage(4);
 
 			float f = MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
@@ -495,7 +542,18 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 				entityIn.onItemPickup(this, 1);
 				setDead();
 			}
+		}
+		}
+		else if (!world.isRemote && !inGround && arrowShake <= 0 || !world.isRemote && isInWater()) {
+			if (entityIn.capabilities.isCreativeMode)
+				setDead();
+			else if (ticksExisted >= 4 && entityIn == getThrower() && getType() == 2) {
+				if (entityIn.inventory.addItemStackToInventory(getEntityItem())) {
+				world.playSound(entityIn, entityIn.getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1F, 1F);
+				entityIn.onItemPickup(this, 1);
+				setDead();
 			}
+		}
 		}
 	}
 
