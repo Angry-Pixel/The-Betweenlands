@@ -54,6 +54,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 			});
 
 	private static final DataParameter<Byte> CRITICAL = EntityDataManager.<Byte>createKey(EntityFishingSpear.class, DataSerializers.BYTE);
+	private static final DataParameter<Byte> TYPE = EntityDataManager.<Byte>createKey(EntityFishingSpear.class, DataSerializers.BYTE);
 	private static final DataParameter<Integer> ITEMSTACK_DAMAGE = EntityDataManager.createKey(EntityFishingSpear.class, DataSerializers.VARINT);
 	protected int xTile;
 	protected int yTile;
@@ -67,6 +68,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 	protected int ticksInGround;
 	protected int ticksInAir;
 	protected double damage = 0;
+
 	private static final byte EVENT_DEAD = 111;
 
 	public EntityFishingSpear(World world) {
@@ -111,6 +113,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 	protected void entityInit() {
 		dataManager.register(CRITICAL, (byte) 0);
 		dataManager.register(ITEMSTACK_DAMAGE, 0);
+		dataManager.register(TYPE, (byte) 0);
 	}
 	
 	public void shoot(Entity shooter, float pitch, float yaw, float p_184547_4_, float velocity, float inaccuracy) {
@@ -284,13 +287,12 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 
 			rotationPitch = prevRotationPitch + (rotationPitch - prevRotationPitch) * 0.2F;
 			rotationYaw = prevRotationYaw + (rotationYaw - prevRotationYaw) * 0.2F;
-			float f1 = 0.99F;
-
+			float drag = 0.99F;
 
 			if (isInWater()) {
 				for (int i = 0; i < 4; ++i)
 					world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX - motionX * 0.25D, posY - motionY * 0.25D, posZ - motionZ * 0.25D, motionX, motionY, motionZ, new int[0]);
-				f1 = 0.6F;
+				drag = getWaterDrag();
 			}
 
 			if (isWet())
@@ -299,14 +301,25 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 			if (!hasNoGravity())
 				motionY -= 0.05000000074505806D;
 
-			motionX *= (double) f1;
-			motionY *= (double) f1;
-			motionZ *= (double) f1;
+			motionX *= (double) drag;
+			motionY *= (double) drag;
+			motionZ *= (double) drag;
 
 			setPosition(posX, posY, posZ);
 			doBlockCollisions();
 		}
 
+	}
+
+	public float getWaterDrag() {
+		switch(getType()) {
+		case 0:
+			return 0.6F;
+		case 1:
+		case 2:
+			return 0.99F;
+		}
+		return 0.99F;
 	}
 
 	protected void onHit(RayTraceResult raytraceResultIn) {
@@ -444,6 +457,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 		compound.setDouble("damage", damage);
 		compound.setBoolean("crit", getIsCritical());
 		compound.setInteger("itemStackDamage", getItemStackDamage());
+		compound.setByte("type", getType());
 	}
 
 	@Override
@@ -467,6 +481,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 
 		setIsCritical(compound.getBoolean("crit"));
 		setItemStackDamage(compound.getInteger("itemStackDamage"));
+		setType(compound.getByte("type"));
 	}
 
 	@Override
@@ -496,7 +511,18 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 	}
 
 	protected ItemStack getEntityItem() {
-		ItemStack damagedStack = new ItemStack(ItemRegistry.FISHING_SPEAR);
+		ItemStack damagedStack = ItemStack.EMPTY;
+		switch(getType()) {
+		case 0:
+			damagedStack = new ItemStack(ItemRegistry.FISHING_SPEAR);
+			break;
+		case 1:
+			damagedStack = new ItemStack(ItemRegistry.FISHING_SPEAR_UNDERWATER);
+			break;
+		case 2:
+			damagedStack = new ItemStack(ItemRegistry.FISHING_SPEAR_UNDERWATER_RETURNS);
+			break;
+		}
 		damagedStack.setItemDamage(getItemStackDamage());
 		return damagedStack;
 	}
@@ -543,6 +569,14 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 	public boolean getIsCritical() {
 		byte b0 = ((Byte) dataManager.get(CRITICAL)).byteValue();
 		return (b0 & 1) != 0;
+	}
+
+	public void setType(byte type) {
+		dataManager.set(TYPE, type);
+	}
+
+	public byte getType() {
+		return dataManager.get(TYPE).byteValue();
 	}
 
 	public void setEnchantmentEffectsFromEntity(EntityLivingBase entity, float amount) {

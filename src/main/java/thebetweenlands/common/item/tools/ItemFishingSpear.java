@@ -26,9 +26,11 @@ import thebetweenlands.common.entity.projectiles.EntityFishingSpear;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemFishingSpear extends Item {
+	public final byte type;
 	
-	public ItemFishingSpear() {
+	public ItemFishingSpear(byte type) {
 		maxStackSize = 1;
+		this.type = type;
 		setMaxDamage(64);
 		this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
 			@SideOnly(Side.CLIENT)
@@ -69,6 +71,7 @@ public class ItemFishingSpear extends Item {
 						EntityFishingSpear entitySpear = new EntityFishingSpear(worldIn, entityplayer);
 						entitySpear.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 1.0F, f * 3.0F, 1.0F);
 						entitySpear.setItemStackDamage(stack.getItemDamage());
+						entitySpear.setType(type);
 						worldIn.spawnEntity(entitySpear);
 					}
 
