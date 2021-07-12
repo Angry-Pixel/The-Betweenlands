@@ -17,7 +17,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
-import thebetweenlands.api.item.IAmphibianArmorUpgrade;
+import thebetweenlands.api.item.IAmphibiousArmorUpgrade;
 import thebetweenlands.api.item.IDecayFood;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.api.item.IFoodSicknessItem;
@@ -29,8 +29,8 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.handler.FoodSicknessHandler;
 import thebetweenlands.common.handler.OverworldItemHandler;
 import thebetweenlands.common.herblore.aspect.AspectManager;
-import thebetweenlands.common.item.armor.amphibian.AmphibianArmorUpgrades;
-import thebetweenlands.common.item.armor.amphibian.ItemAmphibianArmor;
+import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorUpgrades;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 import thebetweenlands.common.recipe.censer.AbstractCenserRecipe;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
@@ -51,9 +51,9 @@ public class ItemTooltipHandler {
 		List<String> toolTip = event.getToolTip();
 		EntityPlayer player = event.getEntityPlayer();
 
-		int armorUpgradeDamage = ItemAmphibianArmor.getUpgradeItemStoredDamage(stack);
+		int armorUpgradeDamage = ItemAmphibiousArmor.getUpgradeItemStoredDamage(stack);
 		if(armorUpgradeDamage > 0) {
-			int maxArmorUpgradeDamage = ItemAmphibianArmor.getUpgradeItemMaxStoredDamage(stack);
+			int maxArmorUpgradeDamage = ItemAmphibiousArmor.getUpgradeItemMaxStoredDamage(stack);
 			toolTip.add(I18n.format("tooltip.bl.damaged_armor_upgrade", Math.max(0, maxArmorUpgradeDamage - armorUpgradeDamage), maxArmorUpgradeDamage));
 		}
 		

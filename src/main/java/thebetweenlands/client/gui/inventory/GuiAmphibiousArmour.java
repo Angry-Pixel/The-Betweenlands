@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.inventory.container.ContainerAmphibiousArmour;
-import thebetweenlands.common.item.armor.amphibian.ItemAmphibianArmor;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 
 @SideOnly(Side.CLIENT)
 public class GuiAmphibiousArmour extends GuiContainer {
@@ -50,14 +50,14 @@ public class GuiAmphibiousArmour extends GuiContainer {
 
 		ItemStack invItem = this.inventory.getInventoryItemStack();
 
-		if(invItem.getItem() instanceof ItemAmphibianArmor) {
+		if(invItem.getItem() instanceof ItemAmphibiousArmor) {
 			for(Slot slot : this.inventorySlots.inventorySlots) {
 				if(slot instanceof ContainerAmphibiousArmour.SlotUpgrade) {
 					if(slot.getHasStack()) {
-						int damage = ((ItemAmphibianArmor) invItem.getItem()).getUpgradeDamage(invItem, slot.getSlotIndex());
+						int damage = ((ItemAmphibiousArmor) invItem.getItem()).getUpgradeDamage(invItem, slot.getSlotIndex());
 
 						if(damage > 0) {
-							int maxDamage = ((ItemAmphibianArmor) invItem.getItem()).getUpgradeMaxDamage(invItem, slot.getSlotIndex());
+							int maxDamage = ((ItemAmphibiousArmor) invItem.getItem()).getUpgradeMaxDamage(invItem, slot.getSlotIndex());
 
 							GlStateManager.disableTexture2D();
 
@@ -75,7 +75,7 @@ public class GuiAmphibiousArmour extends GuiContainer {
 							GlStateManager.enableTexture2D();
 						}
 					} else if(isShiftKeyDown()) {
-						ItemStack filter = ((ItemAmphibianArmor) invItem.getItem()).getUpgradeFilter(invItem, slot.getSlotIndex());
+						ItemStack filter = ((ItemAmphibiousArmor) invItem.getItem()).getUpgradeFilter(invItem, slot.getSlotIndex());
 
 						if(!filter.isEmpty()) {
 							this.renderSlot(filter, this.guiLeft + slot.xPos, this.guiTop + slot.yPos);

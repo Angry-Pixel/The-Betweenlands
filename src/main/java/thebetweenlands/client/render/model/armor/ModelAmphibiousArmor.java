@@ -11,7 +11,7 @@ import net.minecraft.entity.EntityLivingBase;
 // Paste this class into your mod and generate all required imports
 
 
-public class ModelAmphibianArmor extends ModelBodyAttachment {
+public class ModelAmphibiousArmor extends ModelBodyAttachment {
 	//private final ModelRenderer bipedHead;
 	private final ModelRenderer Helmet_main;
 	private final ModelRenderer Helmet_base;
@@ -89,7 +89,7 @@ public class ModelAmphibianArmor extends ModelBodyAttachment {
 	private final ModelRenderer Bootfin_left1a;
 	private final ModelRenderer Bootfin_left1c;
 
-	public ModelAmphibianArmor() {
+	public ModelAmphibiousArmor() {
 		textureWidth = 128;
 		textureHeight = 128;
 

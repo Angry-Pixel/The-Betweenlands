@@ -6,6 +6,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 
-public interface IAmphibianArmorAttributeUpgrade {
+public interface IAmphibiousArmorAttributeUpgrade {
 	public void applyAttributeModifiers(EntityEquipmentSlot armorType, ItemStack armor, int count, Multimap<String, AttributeModifier> modifiers);
 }
