@@ -218,7 +218,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 	        	this.noClip = true;
 	        	inGround = false;
 	     		double targetX = entityOwner.posX - posX;
-	    		double targetY = entityOwner.posY + entityOwner.height * 0.5D - posY + height * 0.5D;
+	    		double targetY = entityOwner.posY + entityOwner.getEyeHeight() - posY + height * 0.5D;
 	    		double targetZ = entityOwner.posZ - posZ;
 	    		moveToTarget(targetX, targetY, targetZ, 0.5F);
 	            if (this.world.isRemote) {
@@ -311,7 +311,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 			
 			float f4 = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
 			rotationYaw = (float) (MathHelper.atan2(motionX, motionZ) * (180D / Math.PI));
-			if (!noClip)
+			if (getDistance(shootingEntity) > 4)
 				for (rotationPitch = (float) (MathHelper.atan2(motionY, (double) f4) * (180D / Math.PI)); rotationPitch - prevRotationPitch < -180.0F; prevRotationPitch -= 360.0F) {
 					;
 				}
