@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:crab_pot"
+    },
+    "title": {
+      "translate": "It's A Trap!"
+    },
+    "description": {
+      "translate": "Obtain a Crab Pot and lure a crab into it"
+    }
+  },
+  "parent": "thebetweenlands:craftsman/fish_guts",
+  "criteria": {
+    "event": {
+      "trigger": "thebetweenlands:crab_in_pot"
+    }
+  }
+}

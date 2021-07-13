@@ -1,0 +1,29 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:barnacle_1_2"
+    },
+    "title": {
+      "translate": "Bountiful Barnacles"
+    },
+    "description": {
+      "translate": "Harvest and replace a cluster of Barnacles"
+    }
+  },
+  "parent": "thebetweenlands:farmer/root",
+  "criteria": {
+    "barnacle": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:barnacle_1_2"
+          },
+          {
+            "item": "thebetweenlands:barnacle"
+          }
+        ]
+      }
+    }
+  }
+}

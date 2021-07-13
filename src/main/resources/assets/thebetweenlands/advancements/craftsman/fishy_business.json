@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:anadia"
+    },
+    "title": {
+      "translate": "Fishy Business"
+    },
+    "description": {
+      "translate": "Catch an Anadia using a Weedwood Fishing Rod"
+    }
+  },
+  "parent": "thebetweenlands:craftsman/teach_a_man_to_fish",
+  "criteria": {
+    "fish": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:anadia"
+          }
+        ]
+      }
+    }
+  }
+}

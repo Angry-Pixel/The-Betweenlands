@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:critter_cruncher"
+    },
+    "title": {
+      "translate": "Shake It Off"
+    },
+    "description": {
+      "translate": "Get overrun by an Infestation"
+    }
+  },
+  "parent": "thebetweenlands:adventurer/bouldery_bois",
+  "criteria": {
+    "event": {
+      "trigger": "thebetweenlands:infested"
+    }
+  }
+}

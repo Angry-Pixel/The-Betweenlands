@@ -1,0 +1,20 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:fish_trimming_table"
+    },
+    "title": {
+      "translate": "Fish Guts"
+    },
+    "description": {
+      "translate": "Craft and use a Fish Trimming Table"
+    }
+  },
+  "parent": "thebetweenlands:craftsman/fishy_business",
+  "criteria": {
+    "event": {
+      "trigger": "thebetweenlands:take_item_from_output_trimming_table"
+    }
+  }
+}
+

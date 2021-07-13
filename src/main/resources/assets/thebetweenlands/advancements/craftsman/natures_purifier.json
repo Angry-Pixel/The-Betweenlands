@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:crab_pot_filter"
+    },
+    "title": {
+      "translate": "Nature's Purifier"
+    },
+    "description": {
+      "translate": "Use a Crab Pot Filter to convert an item"
+    }
+  },
+  "parent": "thebetweenlands:craftsman/its_a_trap",
+  "criteria": {
+    "event": {
+      "trigger": "thebetweenlands:take_item_from_output_crab_pot_filter"
+    }
+  }
+}

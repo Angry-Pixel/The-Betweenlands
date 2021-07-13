@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:fumigant"
+    },
+    "title": {
+      "translate": "Uh Oh, Stinky"
+    },
+    "description": {
+      "translate": "Use a Fumigant to remove your stench"
+    }
+  },
+  "parent": "thebetweenlands:survivalist/hardcore_muchies",
+  "criteria": {
+    "have_sap": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "item": "thebetweenlands:fumigant"
+        }
+      }
+    }
+  }
+}

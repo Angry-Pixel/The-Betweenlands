@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:silt_glass_jar"
+    },
+    "title": {
+      "translate": "Jar O' Worms"
+    },
+    "description": {
+      "translate": "Bait your rod from a Silt Glass Jar full of worms"
+    }
+  },
+  "parent": "thebetweenlands:craftsman/teach_a_man_to_fish",
+  "criteria": {
+    "event": {
+      "trigger": "thebetweenlands:use_worm_jar"
+    }
+  }
+}

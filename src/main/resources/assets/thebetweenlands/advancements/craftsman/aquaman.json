@@ -1,0 +1,57 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:amphibian_leggings"
+    },
+    "title": {
+      "translate": "Aquaman"
+    },
+    "description": {
+      "translate": "Obtain a full suit of Amphibious armor"
+    },
+    "frame": "challenge"
+  },
+  "parent": "thebetweenlands:craftsman/fish_guts",
+  "criteria": {
+    "amphibian_helmet": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+              "item": "thebetweenlands:amphibian_helmet"
+          }
+        ]
+      }
+    },
+    "amphibian_chestplate": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+              "item": "thebetweenlands:amphibian_chestplate"
+          }
+        ]
+      }
+    },
+    "amphibian_leggings": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+              "item": "thebetweenlands:amphibian_leggings"
+          }
+        ]
+      }
+    },
+    "amphibian_boots": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+              "item": "thebetweenlands:amphibian_boots"
+          }
+        ]
+      }
+    }
+  }
+}

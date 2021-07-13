@@ -1,0 +1,158 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:wandering_wisps"
+    },
+    "title": {
+      "translate": "Vinyl Enthusiast"
+    },
+    "description": {
+      "translate": "Collect all Betweenlands music discs"
+    },
+    "frame": "challenge",
+    "hidden": true
+  },
+  "parent": "thebetweenlands:adventurer/gambling_addict",
+  "criteria": {
+    "ancient": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:ancient"
+          }
+        ]
+      }
+    },
+    "astatos": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:astatos"
+          }
+        ]
+      }
+    },
+    "beneath_a_green_sky": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:beneath_a_green_sky"
+          }
+        ]
+      }
+    },
+    "between_you_and_me": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:between_you_and_me"
+          }
+        ]
+      }
+    },
+    "christmas_on_the_marsh": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:christmas_on_the_marsh"
+          }
+        ]
+      }
+    },
+    "the_explorer": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:the_explorer"
+          }
+        ]
+      }
+    },
+    "hag_dance": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:hag_dance"
+          }
+        ]
+      }
+    },
+    "lonely_fire": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:lonely_fire"
+          }
+        ]
+      }
+    },
+    "mysterious_record": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:mysterious_record"
+          }
+        ]
+      }
+    },
+    "onwards": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:onwards"
+          }
+        ]
+      }
+    },
+    "dj_wights_mixtape": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:dj_wights_mixtape"
+          }
+        ]
+      }
+    },
+    "stuck_in_the_mud": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:stuck_in_the_mud"
+          }
+        ]
+      }
+    },
+    "wandering_wisps": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:wandering_wisps"
+          }
+        ]
+      }
+    },
+    "waterlogged": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:waterlogged"
+          }
+        ]
+      }
+    }
+  }
+}

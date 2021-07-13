@@ -1,0 +1,24 @@
+{
+    "display": {
+      "icon": {
+        "item": "thebetweenlands:rock_snot_pearl"
+      },
+      "title": {
+        "translate": "Pearls of Wisdom"
+      },
+      "description": {
+        "translate": "Swallow a Rock Snot Pearl"
+      }
+    },
+    "parent": "thebetweenlands:survivalist/say_nay_to_decay",
+    "criteria": {
+      "swallow_pearl": {
+        "trigger": "minecraft:consume_item",
+        "conditions": {
+          "item": {
+            "item": "thebetweenlands:rock_snot_pearl"
+          }
+        }
+      }
+    }
+  }
