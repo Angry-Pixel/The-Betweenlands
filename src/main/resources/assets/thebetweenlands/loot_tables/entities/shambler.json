@@ -2,10 +2,7 @@
   "pools": [
     {
       "name": "shambler",
-      "rolls": {
-        "min": 1,
-        "max": 2
-      },
+      "rolls": 1,
       "conditions": [],
       "entries": [
         {
@@ -15,8 +12,8 @@
             {
               "function": "set_count",
               "count": {
-                "min": 1,
-                "max": 2
+                "min": 0,
+                "max": 1
               }
             },
             {

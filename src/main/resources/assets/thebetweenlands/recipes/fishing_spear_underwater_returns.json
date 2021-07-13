@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " XX",
+    " #X",
+    "Y  "
+  ],
+  "key": {
+    "X": {
+      "item": "thebetweenlands:items_misc",
+      "data": 59
+    },
+    "#": {
+      "item": "thebetweenlands:fishing_spear_underwater"
+    },
+    "Y": {
+      "item": "thebetweenlands:shambler_tongue"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:fishing_spear_underwater_returns"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " X",
+    "X#X"
+  ],
+  "key": {
+    "X": {
+      "item": "thebetweenlands:items_misc",
+      "data": 57
+    },
+    "#": {
+      "item": "thebetweenlands:fishing_spear"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:fishing_spear_underwater"
+  }
+}
