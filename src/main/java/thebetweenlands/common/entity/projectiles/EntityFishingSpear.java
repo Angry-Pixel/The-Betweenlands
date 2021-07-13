@@ -56,6 +56,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 
 	private static final DataParameter<Byte> CRITICAL = EntityDataManager.<Byte>createKey(EntityFishingSpear.class, DataSerializers.BYTE);
 	private static final DataParameter<Byte> TYPE = EntityDataManager.<Byte>createKey(EntityFishingSpear.class, DataSerializers.BYTE);
+	private static final DataParameter<Boolean> ANIMATED = EntityDataManager.<Boolean>createKey(EntityFishingSpear.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> ITEMSTACK_DAMAGE = EntityDataManager.createKey(EntityFishingSpear.class, DataSerializers.VARINT);
 	protected int xTile;
 	protected int yTile;
@@ -117,6 +118,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 		dataManager.register(CRITICAL, (byte) 0);
 		dataManager.register(ITEMSTACK_DAMAGE, 0);
 		dataManager.register(TYPE, (byte) 0);
+		dataManager.register(ANIMATED, false);
 	}
 	
 	public void shoot(Entity shooter, float pitch, float yaw, float p_184547_4_, float velocity, float inaccuracy) {
@@ -209,7 +211,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 			}
 		}
 		
-		 if (this.timeInGround > 4 && getType() == 2) {
+		 if (this.timeInGround > 4 && getType() == 2 && getAnimated()) {
 	         this.returnHome = true;
 	      }
 
@@ -505,6 +507,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 		compound.setBoolean("crit", getIsCritical());
 		compound.setInteger("itemStackDamage", getItemStackDamage());
 		compound.setByte("type", getType());
+		compound.setBoolean("animated", getAnimated());
 	}
 
 	@Override
@@ -529,6 +532,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 		setIsCritical(compound.getBoolean("crit"));
 		setItemStackDamage(compound.getInteger("itemStackDamage"));
 		setType(compound.getByte("type"));
+		setAnimated(compound.getBoolean("animated"));
 	}
 
 	@Override
@@ -538,22 +542,21 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 				setDead();
 			else if (ticksExisted >= 20) {
 				if (entityIn.inventory.addItemStackToInventory(getEntityItem())) {
-				world.playSound(entityIn, entityIn.getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1F, 1F);
-				entityIn.onItemPickup(this, 1);
-				setDead();
+					world.playSound(entityIn, entityIn.getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1F, 1F);
+					entityIn.onItemPickup(this, 1);
+					setDead();
+				}
 			}
-		}
-		}
-		else if (!world.isRemote && !inGround && arrowShake <= 0 || !world.isRemote && isInWater()) {
+		} else if (!world.isRemote && !inGround && arrowShake <= 0 || !world.isRemote && isInWater()) {
 			if (entityIn.capabilities.isCreativeMode)
 				setDead();
-			else if (ticksExisted >= 4 && entityIn == getThrower() && getType() == 2) {
+			else if (ticksExisted >= 4 && entityIn == getThrower() && getType() == 2 && getAnimated()) {
 				if (entityIn.inventory.addItemStackToInventory(getEntityItem())) {
-				world.playSound(entityIn, entityIn.getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1F, 1F);
-				entityIn.onItemPickup(this, 1);
-				setDead();
+					world.playSound(entityIn, entityIn.getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1F, 1F);
+					entityIn.onItemPickup(this, 1);
+					setDead();
+				}
 			}
-		}
 		}
 	}
 
@@ -579,6 +582,9 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 			break;
 		case 2:
 			damagedStack = new ItemStack(ItemRegistry.FISHING_SPEAR_UNDERWATER_RETURNS);
+			if (!damagedStack.hasTagCompound())
+				damagedStack.setTagCompound(new NBTTagCompound());
+			damagedStack.getTagCompound().setBoolean("animated", getAnimated());
 			break;
 		}
 		damagedStack.setItemDamage(getItemStackDamage());
@@ -635,6 +641,14 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 
 	public byte getType() {
 		return dataManager.get(TYPE).byteValue();
+	}
+
+	public void setAnimated(boolean animated) {
+		dataManager.set(ANIMATED, animated);
+	}
+
+	public boolean getAnimated() {
+		return dataManager.get(ANIMATED);
 	}
 
 	public void setEnchantmentEffectsFromEntity(EntityLivingBase entity, float amount) {

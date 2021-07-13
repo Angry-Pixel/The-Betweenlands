@@ -612,6 +612,15 @@ public class RecipeRegistry {
 		AnimatorRecipe.addRecipe(new RingOfGatheringRespawnAnimatorRecipe());
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.SNOT.create(1), 10, 6, new ItemStack(ItemRegistry.SNOT_POD)));
 
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.FISHING_SPEAR_UNDERWATER_RETURNS), 2, 1) {
+					@Override
+					public ItemStack onAnimated(World world, BlockPos pos, ItemStack stack) {
+						if (stack.getMaxDamage() - stack.getItemDamage() == stack.getMaxDamage() && stack.hasTagCompound() && stack.getTagCompound().hasKey("animated") && !stack.getTagCompound().getBoolean("animated"))
+							stack.getTagCompound().setBoolean("animated", true);
+						return stack;
+					}
+				});
+
 		for(Item item : ItemRegistry.ITEMS) {
 			if(item instanceof IAnimatorRepairable) {
 				AnimatorRecipe.addRecipe(new ToolRepairAnimatorRecipe((IAnimatorRepairable)item));

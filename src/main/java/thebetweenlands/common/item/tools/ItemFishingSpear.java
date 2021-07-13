@@ -1,8 +1,12 @@
 package thebetweenlands.common.item.tools;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
@@ -12,6 +16,7 @@ import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -21,17 +26,25 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.projectiles.EntityFishingSpear;
+import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.util.TranslationHelper;
 
-public class ItemFishingSpear extends Item {
+public class ItemFishingSpear extends Item implements IAnimatorRepairable{
 	public final byte type;
 	
 	public ItemFishingSpear(byte type) {
 		maxStackSize = 1;
 		this.type = type;
-		setMaxDamage(64);
+
+		if(type == 2)
+			setMaxDamage(128);
+		else
+			setMaxDamage(64);
+
 		this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
 			@SideOnly(Side.CLIENT)
 			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
@@ -50,6 +63,28 @@ public class ItemFishingSpear extends Item {
 			}
 		});
 		setCreativeTab(BLCreativeTabs.GEARS);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flag) {
+		if (type == 2 && stack.hasTagCompound() && stack.getTagCompound().hasKey("animated")) {
+			tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.fishing_spear_animated") + stack.getTagCompound().getBoolean("animated"));
+		}
+	}
+
+	@Override
+	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean isHeldItem) {
+		if(!world.isRemote) {
+			if (!stack.hasTagCompound())
+				stack.setTagCompound(new NBTTagCompound());
+			if (!stack.getTagCompound().hasKey("animated"))
+				stack.getTagCompound().setBoolean("animated", false);
+		}
+	}
+
+	public boolean isAnimated(ItemStack stack) {
+		return stack.hasTagCompound() && stack.getTagCompound().hasKey("animated") && stack.getTagCompound().getBoolean("animated");
 	}
 
 	@Override
@@ -72,6 +107,7 @@ public class ItemFishingSpear extends Item {
 						entitySpear.shoot(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 1.0F, f * 3.0F, 1.0F);
 						entitySpear.setItemStackDamage(stack.getItemDamage());
 						entitySpear.setType(type);
+						entitySpear.setAnimated(isAnimated(stack));
 						worldIn.spawnEntity(entitySpear);
 					}
 
@@ -102,5 +138,25 @@ public class ItemFishingSpear extends Item {
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		player.setActiveHand(hand);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+	}
+
+	@Override
+	public int getMinRepairFuelCost(ItemStack stack) {
+		return BLMaterialRegistry.getMinRepairFuelCost(BLMaterialRegistry.TOOL_WEEDWOOD);
+	}
+
+	@Override
+	public int getFullRepairFuelCost(ItemStack stack) {
+		return BLMaterialRegistry.getFullRepairFuelCost(BLMaterialRegistry.TOOL_WEEDWOOD);
+	}
+
+	@Override
+	public int getMinRepairLifeCost(ItemStack stack) {
+		return BLMaterialRegistry.getMinRepairLifeCost(BLMaterialRegistry.TOOL_WEEDWOOD);
+	}
+
+	@Override
+	public int getFullRepairLifeCost(ItemStack stack) {
+		return BLMaterialRegistry.getFullRepairLifeCost(BLMaterialRegistry.TOOL_WEEDWOOD);
 	}
 }
