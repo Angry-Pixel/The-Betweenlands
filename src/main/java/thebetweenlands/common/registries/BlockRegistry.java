@@ -99,6 +99,7 @@ import thebetweenlands.common.block.misc.BlockOfferingTable;
 import thebetweenlands.common.block.misc.BlockPaneBetweenlands;
 import thebetweenlands.common.block.misc.BlockPolishedDentrothyst;
 import thebetweenlands.common.block.misc.BlockPressurePlateBetweenlands;
+import thebetweenlands.common.block.misc.BlockReedMat;
 import thebetweenlands.common.block.misc.BlockRope;
 import thebetweenlands.common.block.misc.BlockRubberTap;
 import thebetweenlands.common.block.misc.BlockSludge;
@@ -903,6 +904,7 @@ public class BlockRegistry {
     public static final Block BARNACLE_3_4 = new BlockBarnacle_3_4();
     public static final Block GLOWING_GOOP = new BlockGlowingGoop();
     public static final Block GLOWING_GOOP_UNDERWATER = new BlockGlowingGoopUnderwater();
+    public static final Block REED_MAT = new BlockReedMat();
 
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();
