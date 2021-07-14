@@ -47,10 +47,9 @@ public class BlockReedMat extends BasicBlock {
     }
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
-			if (world.isAirBlock(pos.up()) && world.isAirBlock(pos.up(2)) && !isSatOn(world, pos))
+			if (world.isAirBlock(pos.up()) && world.isAirBlock(pos.up(2)) && !isSatOn(world, pos) && side == EnumFacing.UP && !player.isRiding())
 				seatPlayer(world, player, pos);
 		}
 		return true;
