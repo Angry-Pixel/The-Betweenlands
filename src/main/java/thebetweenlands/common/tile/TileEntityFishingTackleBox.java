@@ -93,7 +93,8 @@ public class TileEntityFishingTackleBox extends TileEntity implements ITickable,
 
 	public void seatPlayer(EntityPlayer player, BlockPos pos) {
 		EntityFishingTackleBoxSeat entitySeat = new EntityFishingTackleBoxSeat(world);
-		entitySeat.setPosition(pos.getX() + 0.5D, pos.getY() + 0.2D, pos.getZ()  + 0.5D);
+		entitySeat.setPosition(pos.getX() + 0.5D, pos.getY(), pos.getZ()  + 0.5D);
+		entitySeat.setSeatOffset(0.1F);
 		world.spawnEntity(entitySeat);
 		player.startRiding(entitySeat, true);
 	}

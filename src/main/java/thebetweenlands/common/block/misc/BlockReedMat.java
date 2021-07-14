@@ -58,7 +58,8 @@ public class BlockReedMat extends BasicBlock {
 
 	public void seatPlayer(World world, EntityPlayer player, BlockPos pos) {
 		EntityFishingTackleBoxSeat entitySeat = new EntityFishingTackleBoxSeat(world);
-		entitySeat.setPosition(pos.getX() + 0.5D, pos.getY() + 0.2D, pos.getZ()  + 0.5D);
+		entitySeat.setPosition(pos.getX() + 0.5D, pos.getY(), pos.getZ()  + 0.5D);
+		entitySeat.setSeatOffset(-0.45F);
 		world.spawnEntity(entitySeat);
 		player.startRiding(entitySeat, true);
 	}
