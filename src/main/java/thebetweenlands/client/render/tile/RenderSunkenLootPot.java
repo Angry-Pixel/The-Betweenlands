@@ -44,19 +44,19 @@ public abstract class RenderSunkenLootPot extends TileEntitySpecialRenderer<Tile
 		case POT_1:
 			if (te.getBlockType() instanceof BlockTarLootPot)
 				bindTexture(TEXTURE_1);
-			if (te.getBlockType() instanceof BlockMudLootPot)
+			else if (te.getBlockType() instanceof BlockMudLootPot)
 				bindTexture(TEXTURE_4);
 			break;
 		case POT_2:
 			if (te.getBlockType() instanceof BlockTarLootPot)
 				bindTexture(TEXTURE_2);
-			if (te.getBlockType() instanceof BlockMudLootPot)
+			else if (te.getBlockType() instanceof BlockMudLootPot)
 				bindTexture(TEXTURE_5);
 			break;
 		case POT_3:
 			if (te.getBlockType() instanceof BlockTarLootPot)
 				bindTexture(TEXTURE_3);
-			if (te.getBlockType() instanceof BlockMudLootPot)
+			else if (te.getBlockType() instanceof BlockMudLootPot)
 				bindTexture(TEXTURE_6);
 			break;
 		}
