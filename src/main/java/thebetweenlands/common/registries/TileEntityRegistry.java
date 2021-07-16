@@ -40,6 +40,9 @@ import thebetweenlands.common.tile.TileEntityMossBed;
 import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
 import thebetweenlands.common.tile.TileEntityMudBricksSpikeTrap;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
+import thebetweenlands.common.tile.TileEntityMudLootPot1;
+import thebetweenlands.common.tile.TileEntityMudLootPot2;
+import thebetweenlands.common.tile.TileEntityMudLootPot3;
 import thebetweenlands.common.tile.TileEntityMudTilesSpikeTrap;
 import thebetweenlands.common.tile.TileEntityOfferingTable;
 import thebetweenlands.common.tile.TileEntityPossessedBlock;
@@ -125,6 +128,9 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityCrabPot.class, "crab_pot");
 		registerTileEntity(TileEntityCrabPotFilter.class, "crab_pot_filter");
 		registerTileEntity(TileEntitySiltGlassJar.class, "silt_glass_jar");
+		registerTileEntity(TileEntityMudLootPot1.class, "mud_loot_pot_1");
+		registerTileEntity(TileEntityMudLootPot2.class, "mud_loot_pot_2");
+		registerTileEntity(TileEntityMudLootPot3.class, "mud_loot_pot_3");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

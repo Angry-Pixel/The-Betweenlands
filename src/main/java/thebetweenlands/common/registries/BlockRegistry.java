@@ -59,6 +59,7 @@ import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.container.BlockMortar;
 import thebetweenlands.common.block.container.BlockMudBrickAlcove;
+import thebetweenlands.common.block.container.BlockMudLootPot;
 import thebetweenlands.common.block.container.BlockPresent;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockRepeller;
@@ -599,6 +600,7 @@ public class BlockRegistry {
     public static final Block BETWEENSTONE_BUTTON = new BlockButtonBetweenlands(false);
     public static final Block WEEDWOOD_LADDER = new BlockLadderBetweenlands();
     public static final Block WEEDWOOD_LEVER = new BlockLeverBetweenlands();
+    public static final Block MUD_LOOT_POT = new BlockMudLootPot();
     
     //Worm Dungeon
     public static final Block WORM_DUNGEON_PILLAR = new BlockWormDungeonPillar();

@@ -6,7 +6,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelTarLootPot1 extends ModelBase {
+public class ModelSunkenLootPot1 extends ModelBase {
 	ModelRenderer foot;
 	ModelRenderer tarBlock;
 	ModelRenderer footChild;
@@ -16,7 +16,7 @@ public class ModelTarLootPot1 extends ModelBase {
 	ModelRenderer footChild_4;
 	ModelRenderer footChildChild;
 
-	public ModelTarLootPot1() {
+	public ModelSunkenLootPot1() {
 		textureWidth = 128;
 		textureHeight = 64;
 		foot = new ModelRenderer(this, 0, 0);

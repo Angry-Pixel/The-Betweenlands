@@ -124,6 +124,9 @@ import thebetweenlands.client.render.tile.RenderItemStackAsTileEntity;
 import thebetweenlands.client.render.tile.RenderLivingWeedwoodShield;
 import thebetweenlands.client.render.tile.RenderMudBrickSpikeTrap;
 import thebetweenlands.client.render.tile.RenderMudFlowerPot;
+import thebetweenlands.client.render.tile.RenderMudLootPot1;
+import thebetweenlands.client.render.tile.RenderMudLootPot2;
+import thebetweenlands.client.render.tile.RenderMudLootPot3;
 import thebetweenlands.client.render.tile.RenderMudTilesSpikeTrap;
 import thebetweenlands.client.render.tile.RenderPestleAndMortar;
 import thebetweenlands.client.render.tile.RenderPossessedBlock;
@@ -316,6 +319,9 @@ import thebetweenlands.common.tile.TileEntityItemShelf;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityMudBricksSpikeTrap;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
+import thebetweenlands.common.tile.TileEntityMudLootPot1;
+import thebetweenlands.common.tile.TileEntityMudLootPot2;
+import thebetweenlands.common.tile.TileEntityMudLootPot3;
 import thebetweenlands.common.tile.TileEntityMudTilesSpikeTrap;
 import thebetweenlands.common.tile.TileEntityOfferingTable;
 import thebetweenlands.common.tile.TileEntityPossessedBlock;
@@ -770,6 +776,9 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrabPot.class, new RenderCrabPot());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySiltGlassJar.class, new RenderSiltGlassJar());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrabPotFilter.class, new RenderCrabPotFilter());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudLootPot1.class, new RenderMudLootPot1());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudLootPot2.class, new RenderMudLootPot2());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudLootPot3.class, new RenderMudLootPot3());
 		
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
@@ -843,7 +852,13 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		Item.getItemFromBlock(BlockRegistry.CRAB_POT).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityCrabPot.class));
 		Item.getItemFromBlock(BlockRegistry.CRAB_POT_FILTER).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityCrabPotFilter.class));
 		Item.getItemFromBlock(BlockRegistry.SILT_GLASS_JAR).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntitySiltGlassJar.class));
-
+		Item.getItemFromBlock(BlockRegistry.MUD_LOOT_POT).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(renderer -> {
+			for(EnumFacing facing : EnumFacing.HORIZONTALS) {
+				renderer.add(EnumLootPot.POT_1.getMetadata(facing), TileEntityMudLootPot1.class);
+				renderer.add(EnumLootPot.POT_2.getMetadata(facing), TileEntityMudLootPot2.class);
+				renderer.add(EnumLootPot.POT_3.getMetadata(facing), TileEntityMudLootPot3.class);
+			}
+		}));
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {
 			if (block instanceof ITintedBlock) {

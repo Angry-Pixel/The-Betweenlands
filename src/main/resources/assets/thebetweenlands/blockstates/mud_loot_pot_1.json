@@ -1,0 +1,17 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:internal/blank",
+    "custom": {
+      "particle_texture": "thebetweenlands:blocks/mud"
+    }
+  },
+  "variants": {
+    "facing": {
+      "north": { },
+      "east": { },
+      "south": { },
+      "west": { }
+    }
+  }
+}

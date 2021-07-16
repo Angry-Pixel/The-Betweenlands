@@ -9,7 +9,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 
 @SideOnly(Side.CLIENT)
-public class ModelTarLootPot2 extends ModelBase {
+public class ModelSunkenLootPot2 extends ModelBase {
 	ModelRenderer foot;
 	ModelRenderer tarBlock;
 	ModelRenderer footChild;
@@ -23,7 +23,7 @@ public class ModelTarLootPot2 extends ModelBase {
 	ModelRenderer footChildChild_2;
 	ModelRenderer footChildChild_3;
 
-	public ModelTarLootPot2() {
+	public ModelSunkenLootPot2() {
 		textureWidth = 128;
 		textureHeight = 64;
 		footChild_5 = new ModelRenderer(this, 0, 11);

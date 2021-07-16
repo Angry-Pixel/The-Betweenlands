@@ -524,6 +524,9 @@ tile.thebetweenlands.barnacle_1_2.name=Barnacle Cluster
 tile.thebetweenlands.barnacle_3_4.name=Barnacle Cluster
 tile.thebetweenlands.glowing_goop.name=Glowing Goop
 tile.thebetweenlands.reed_mat.name=Reed Mat
+tile.thebetweenlands.mud_loot_pot.1.name=Mud Pot of Chance
+tile.thebetweenlands.mud_loot_pot.2.name=Mud Pot of Chance
+tile.thebetweenlands.mud_loot_pot.3.name=Mud Pot of Chance
 
 # Items
 
