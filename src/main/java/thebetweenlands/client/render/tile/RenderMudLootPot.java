@@ -12,53 +12,41 @@ import thebetweenlands.client.render.model.tile.ModelSunkenLootPot3;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.block.container.BlockMudLootPot;
-import thebetweenlands.common.block.container.BlockTarLootPot;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.util.StatePropertyHelper;
 
-public abstract class RenderSunkenLootPot extends TileEntitySpecialRenderer<TileEntityLootPot> {
+public abstract class RenderMudLootPot extends TileEntitySpecialRenderer<TileEntityLootPot> {
 	private static final ModelSunkenLootPot1 LOOT_POT = new ModelSunkenLootPot1();
 	private static final ModelSunkenLootPot2 LOOT_POT_2 = new ModelSunkenLootPot2();
 	private static final ModelSunkenLootPot3 LOOT_POT_3 = new ModelSunkenLootPot3();
 
-	private static final ResourceLocation TEXTURE_1 = new ResourceLocation("thebetweenlands:textures/tiles/tar_loot_pot_1.png");
-	private static final ResourceLocation TEXTURE_2 = new ResourceLocation("thebetweenlands:textures/tiles/tar_loot_pot_2.png");
-	private static final ResourceLocation TEXTURE_3 = new ResourceLocation("thebetweenlands:textures/tiles/tar_loot_pot_3.png");
-	private static final ResourceLocation TEXTURE_4 = new ResourceLocation("thebetweenlands:textures/tiles/mud_loot_pot_1.png");
-	private static final ResourceLocation TEXTURE_5 = new ResourceLocation("thebetweenlands:textures/tiles/mud_loot_pot_2.png");
-	private static final ResourceLocation TEXTURE_6 = new ResourceLocation("thebetweenlands:textures/tiles/mud_loot_pot_3.png");
+	private static final ResourceLocation TEXTURE_1 = new ResourceLocation("thebetweenlands:textures/tiles/mud_loot_pot_1.png");
+	private static final ResourceLocation TEXTURE_2 = new ResourceLocation("thebetweenlands:textures/tiles/mud_loot_pot_2.png");
+	private static final ResourceLocation TEXTURE_3 = new ResourceLocation("thebetweenlands:textures/tiles/mud_loot_pot_3.png");
 
 	public abstract EnumLootPot getType();
 
 	@Override
 	public void render(TileEntityLootPot te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		EnumLootPot type = this.getType();
-		EnumFacing rotation = this.getRotation(type, te);
+		EnumFacing rotation = StatePropertyHelper.getStatePropertySafely(te, BlockMudLootPot.class, BlockLootPot.FACING, EnumFacing.NORTH);
 		int offset = 0;
 
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		
-		switch (type){
+
+		switch (type) {
 		default:
 		case POT_1:
-			if (te.getBlockType() instanceof BlockTarLootPot)
-				bindTexture(TEXTURE_1);
-			else if (te.getBlockType() instanceof BlockMudLootPot)
-				bindTexture(TEXTURE_4);
+			bindTexture(TEXTURE_1);
 			break;
 		case POT_2:
-			if (te.getBlockType() instanceof BlockTarLootPot)
-				bindTexture(TEXTURE_2);
-			else if (te.getBlockType() instanceof BlockMudLootPot)
-				bindTexture(TEXTURE_5);
+			bindTexture(TEXTURE_2);
 			break;
 		case POT_3:
-			if (te.getBlockType() instanceof BlockTarLootPot)
-				bindTexture(TEXTURE_3);
-			else if (te.getBlockType() instanceof BlockMudLootPot)
-				bindTexture(TEXTURE_6);
+			bindTexture(TEXTURE_3);
 			break;
+
 		}
 
 		switch (rotation) {
@@ -96,14 +84,6 @@ public abstract class RenderSunkenLootPot extends TileEntitySpecialRenderer<Tile
 			GlStateManager.popMatrix();
 			break;
 		}
-	}
-
-	private EnumFacing getRotation(EnumLootPot type, TileEntityLootPot te) {
-		if(te.getBlockType() instanceof BlockTarLootPot)
-			return StatePropertyHelper.getStatePropertySafely(te, BlockTarLootPot.class, BlockLootPot.FACING, EnumFacing.NORTH);
-		if(te.getBlockType() instanceof BlockMudLootPot)
-			return StatePropertyHelper.getStatePropertySafely(te, BlockMudLootPot.class, BlockLootPot.FACING, EnumFacing.NORTH);
-		return EnumFacing.NORTH;
 	}
 
 	private void renderType(EnumLootPot type){
