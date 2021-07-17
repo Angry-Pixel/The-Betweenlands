@@ -93,6 +93,8 @@ public class RenderFishTrimmingTable extends TileEntitySpecialRenderer<TileEntit
 		if (entity != null) {
 			if(stack.getItem() instanceof ItemMobAnadia && ((ItemMobAnadia)stack.getItem()).isRotten(Minecraft.getMinecraft().world, stack))
 				((EntityAnadia) entity).setFishColour((byte) 1);
+			entity.prevRotationPitch = entity.rotationPitch = 0;
+			entity.prevRotationYaw = entity.rotationYaw = 0;
 			float scale2 = 1F / ((EntityAnadia) entity).getFishSize() * 0.5F;
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x, y, z);
