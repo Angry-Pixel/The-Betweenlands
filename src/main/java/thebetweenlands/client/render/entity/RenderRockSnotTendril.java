@@ -27,39 +27,41 @@ public class RenderRockSnotTendril extends Render<EntityRockSnotTendril> {
 	@Override
 	public void doRender(EntityRockSnotTendril entity, double x, double y, double z, float yaw, float partialTicks) {
 		super.doRender(entity, x, y, z, yaw, partialTicks);
-		float smoothedYaw = entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks;
-		float smoothedPitch = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks;
-		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x, (float) y + 0.125F, (float) z);
-		if (entity.getExtending())
-			GlStateManager.rotate(smoothedYaw + 180F, 0F, 1F, 0F);
-		else
-			GlStateManager.rotate(smoothedYaw, 0F, 1F, 0F);
-		GlStateManager.rotate(smoothedPitch + 90F, 1F, 0F, 0F);
-		bindTexture(TEXTURE);
-		GRABBER_MODEL.render(entity, 0, 0, entity.ticksExisted, 0F, 0F, 0.0625F);
-		GlStateManager.popMatrix();
-
-		GlStateManager.pushMatrix();
-		GlStateManager.enableBlend();
-		GlStateManager.disableLighting();
-		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color(1F, 1F, 1F, 1F);
-
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buffer = tessellator.getBuffer();
-
-		bindTexture(VERTICAL_RING_TEXTURE);
-		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-		for (int part = 0; part < 8; part++) {
-			buildRingQuads(buffer, x, y, z, x + entity.parent.posX - entity.posX, y + entity.parent.posY - entity.posY, z + entity.parent.posZ - entity.posZ, 45F * part, 0.125D, 0.125D, 0.25D, 0.25D);
+		if(entity.getParentEntity() != null) {
+			float smoothedYaw = entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks;
+			float smoothedPitch = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks;
+			GlStateManager.pushMatrix();
+			GlStateManager.translate((float) x, (float) y + 0.125F, (float) z);
+			if (entity.getExtending())
+				GlStateManager.rotate(smoothedYaw + 180F, 0F, 1F, 0F);
+			else
+				GlStateManager.rotate(smoothedYaw, 0F, 1F, 0F);
+			GlStateManager.rotate(smoothedPitch + 90F, 1F, 0F, 0F);
+			bindTexture(TEXTURE);
+			GRABBER_MODEL.render(entity, 0, 0, entity.ticksExisted, 0F, 0F, 0.0625F);
+			GlStateManager.popMatrix();
+	
+			GlStateManager.pushMatrix();
+			GlStateManager.enableBlend();
+			GlStateManager.disableLighting();
+			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GlStateManager.color(1F, 1F, 1F, 1F);
+	
+			Tessellator tessellator = Tessellator.getInstance();
+			BufferBuilder buffer = tessellator.getBuffer();
+	
+			bindTexture(VERTICAL_RING_TEXTURE);
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+			for (int part = 0; part < 8; part++) {
+				buildRingQuads(buffer, x, y, z, x + entity.getParentEntity().posX - entity.posX, y + entity.getParentEntity().posY - entity.posY, z + entity.getParentEntity().posZ - entity.posZ, 45F * part, 0.125D, 0.125D, 0.25D, 0.25D);
+			}
+			tessellator.draw();
+	
+			GlStateManager.depthMask(true);
+			GlStateManager.disableBlend();
+			GlStateManager.enableLighting();
+			GlStateManager.popMatrix();
 		}
-		tessellator.draw();
-
-		GlStateManager.depthMask(true);
-		GlStateManager.disableBlend();
-		GlStateManager.enableLighting();
-		GlStateManager.popMatrix();
 	}
 	
 	public static void buildRingQuads(BufferBuilder buffer, double x, double y, double z, double xp, double yp, double zp, double angle, double offsetXInner, double offsetZInner, double offsetXInnerP, double offsetZInnerP) {
