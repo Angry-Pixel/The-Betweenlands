@@ -115,19 +115,20 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
 
 	public void setIsLeader(boolean isLeader) {
 		dataManager.set(IS_LEADER, isLeader);
-		if(isLeader) {
-			targetTasks.addTask(0, targetRivalLeader);
-			tasks.removeTask(followLeader);
-			tasks.addTask(0, wanderAbout);
-			tasks.addTask(1, attackLeader);
-			//tasks.addTask(1, aiAvoidFollowers);
-		}
-		else {
-			targetTasks.removeTask(targetRivalLeader);
-			tasks.removeTask(wanderAbout);
-			//tasks.removeTask(aiAvoidFollowers);
-			tasks.addTask(0, followLeader);
-			tasks.removeTask(attackLeader);
+		if(!this.world.isRemote) {
+			if(isLeader) {
+				targetTasks.addTask(0, targetRivalLeader);
+				tasks.removeTask(followLeader);
+				tasks.addTask(0, wanderAbout);
+				tasks.addTask(1, attackLeader);
+				//tasks.addTask(1, aiAvoidFollowers);
+			} else {
+				targetTasks.removeTask(targetRivalLeader);
+				tasks.removeTask(wanderAbout);
+				//tasks.removeTask(aiAvoidFollowers);
+				tasks.addTask(0, followLeader);
+				tasks.removeTask(attackLeader);
+			}
 		}
 	}
 
