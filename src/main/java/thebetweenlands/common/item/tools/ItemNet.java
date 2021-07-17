@@ -20,6 +20,7 @@ import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.EntityTinyWormEggSac;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
+import thebetweenlands.common.entity.mobs.EntityCaveFish;
 import thebetweenlands.common.entity.mobs.EntityChiromawHatchling;
 import thebetweenlands.common.entity.mobs.EntityChiromawTame;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
@@ -27,6 +28,7 @@ import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityFreshwaterUrchin;
 import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.entity.mobs.EntityMireSnail;
+import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWormHelper;
 import thebetweenlands.common.item.misc.ItemMob;
@@ -54,6 +56,8 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 		register(EntityMireSnail.class, () -> ItemRegistry.CRITTER, (p, e) -> true);
 		register(EntityAnadia.class, () -> ItemRegistry.ANADIA, (p, e) -> e.getNettableTimer() > 0);
 		register(EntityFreshwaterUrchin.class, () -> ItemRegistry.FRESHWATER_URCHIN, (p, e) -> true);
+		register(EntityCaveFish.class, () -> ItemRegistry.CRITTER, (p, e) -> true);
+		register(EntityOlm.class, () -> ItemRegistry.CRITTER, (p, e) -> true);
 	}
 
 	public ItemNet() {
