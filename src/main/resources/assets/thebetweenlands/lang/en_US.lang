@@ -2150,6 +2150,7 @@ config.thebetweenlands.debug_mode=Debug mode
 config.thebetweenlands.debug_model_loader=Model loader debug
 config.thebetweenlands.debug_recipe_overrides=Recipe overrides debug
 config.thebetweenlands.dump_packed_textures=Dump packed textures
+config.thebetweenlands.biome_list=Biome list
 
 # Damage sources
 death.attack.bl.shockwave=%1$s was killed by a shockwave

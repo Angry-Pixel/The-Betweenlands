@@ -619,5 +619,13 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "dump_packed_textures")
 		@Comment("If true, mod will dump the packed model textures on startup")
 		public boolean dumpPackedTextures = false;
+		
+		@Name("biome_list")
+		@LangKey(LANG_PREFIX + "biome_list")
+		@Comment("A list of biomes used during generation. Ignored if empty")
+		@RequiresMcRestart
+		public String[] biomeListUnparsed = {};
+		@Ignore
+		public final StringSetProperty biomeList = new StringSetProperty(() -> DEBUG.biomeListUnparsed);
 	}
 }
