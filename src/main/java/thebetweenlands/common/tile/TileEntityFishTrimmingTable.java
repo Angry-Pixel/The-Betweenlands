@@ -19,6 +19,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
+import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -216,13 +217,13 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
 	}
 */
 	public Entity getAndiaEntity() {
-		Entity entity = null;
-		if (getItems().get(0).getTagCompound() != null && getItems().get(0).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
-			entity = EntityList.createEntityFromNBT(getItems().get(0).getTagCompound().getCompoundTag("Entity"), getWorld());
-			entity.setPositionAndRotation(0D, 0D, 0D, 0F, 0F);
+		ItemStack stack = this.getItems().get(0);
+		if(!stack.isEmpty() && stack.getItem() instanceof ItemMob && ((ItemMob) stack.getItem()).hasEntityData(stack)) {
+			return ((ItemMob) stack.getItem()).createCapturedEntity(this.world, 0, 0, 0, stack);
 		}
-		return entity;
+		return null;
 	}
+	
 
 	public ItemStack getSlotresult(int slot) {
 		if (hasAnadia()) {

@@ -5,10 +5,10 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.inventory.slot.SlotOutput;
 import thebetweenlands.common.inventory.slot.SlotRestriction;
 import thebetweenlands.common.inventory.slot.SlotRestrictionNoMeta;
+import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityFishTrimmingTable;
 
@@ -54,7 +54,7 @@ public class ContainerFishTrimmingTable extends Container {
 			stack = stack1.copy();
 
 			if (slotIndex > 5) {
-				if (stack1.getItem() == ItemRegistry.ANADIA && stack1.getTagCompound() != null && stack1.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
+				if (stack1.getItem() == ItemRegistry.ANADIA && ((ItemMob) stack1.getItem()).hasEntityData(stack1)) {
 					if (!this.mergeItemStack(stack1, 0, 1, false))
 						return ItemStack.EMPTY;
 				}

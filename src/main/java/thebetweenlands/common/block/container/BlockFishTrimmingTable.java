@@ -21,12 +21,12 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.item.misc.ItemMobAnadia;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -103,7 +103,7 @@ public class BlockFishTrimmingTable extends BlockContainer {
 
     public boolean hasAnadia(World world, TileEntityFishTrimmingTable tile, int slot) {
     	ItemStack stack = tile.getItems().get(slot);
-    	return !stack.isEmpty() && stack.getItem() == ItemRegistry.ANADIA && stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND);
+    	return !stack.isEmpty() && stack.getItem() == ItemRegistry.ANADIA && ((ItemMob) stack.getItem()).hasEntityData(stack);
     }
 
 	@Override

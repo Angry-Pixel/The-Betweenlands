@@ -23,6 +23,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.container.BlockSmokingRack;
+import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.recipe.misc.SmokingRackRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
 
@@ -152,12 +153,11 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 	}
 
 	public Entity getRenderEntity(int slot) {
-		Entity entity = null;
-		if (getItems().get(slot).getTagCompound() != null && getItems().get(slot).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
-			entity = EntityList.createEntityFromNBT(getItems().get(slot).getTagCompound().getCompoundTag("Entity"), getWorld());
-			entity.setPositionAndRotation(0D, 0D, 0D, 90F, 90F);
+		ItemStack stack = this.getItems().get(slot);
+		if(!stack.isEmpty() && stack.getItem() instanceof ItemMob && ((ItemMob) stack.getItem()).hasEntityData(stack)) {
+			return ((ItemMob) stack.getItem()).createCapturedEntity(this.world, 0, 0, 0, stack);
 		}
-		return entity;
+		return null;
 	}
 
 	public void consumeFuel() {
@@ -174,9 +174,14 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 			if (result.isEmpty())
 				return false;
 			else {
-				if (!getItems().get(input).isEmpty() && getItems().get(input).getTagCompound() != null && getItems().get(input).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
-					if(getItems().get(input).getTagCompound().getCompoundTag("Entity").hasKey("fishColour") && (getItems().get(input).getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 0 ||getItems().get(input).getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 1))
+				ItemStack stack = this.getItems().get(input);
+				if(!stack.isEmpty() && stack.getItem() instanceof ItemMob && ((ItemMob) stack.getItem()).hasEntityData(stack)) {
+					NBTTagCompound entityNbt = ((ItemMob) stack.getItem()).getEntityData(stack);
+					
+					if(entityNbt != null && entityNbt.hasKey("fishColour") && (entityNbt.getByte("fishColour") == 0 || entityNbt.getByte("fishColour") == 1)) {
 						return false;
+					}
+				}
 				return true;
 			}
 		}

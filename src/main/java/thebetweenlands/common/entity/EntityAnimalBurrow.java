@@ -191,12 +191,11 @@ public class EntityAnimalBurrow extends Entity {
 	}
 
 	public Entity getEntity() {
-		Entity entity = null;
-		if (getBurrowItem() != null && getBurrowItem().getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
-			entity = EntityList.createEntityFromNBT(getBurrowItem().getTagCompound().getCompoundTag("Entity"), getEntityWorld());
-			//entity.setPositionAndRotation(0D, 0D, 0D, 0F, 0F);
+		ItemStack stack = this.getBurrowItem();
+		if(!stack.isEmpty() && stack.getItem() instanceof ItemMob && ((ItemMob) stack.getItem()).hasEntityData(stack)) {
+			return ((ItemMob) stack.getItem()).createCapturedEntity(this.world, 0, 0, 0, stack);
 		}
-		return entity;
+		return null;
 	}
 
 	@Override

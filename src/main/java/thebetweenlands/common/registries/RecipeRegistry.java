@@ -50,6 +50,7 @@ import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.item.misc.ItemSwampTalisman.EnumTalisman;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe;
@@ -677,45 +678,49 @@ public class RecipeRegistry {
 
 			@Override
 			public boolean matchesInput(ItemStack stack) {
-				return !stack.isEmpty() && stack.getItem() == ItemRegistry.ANADIA && stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND);
+				return !stack.isEmpty() && stack.getItem() == ItemRegistry.ANADIA && ((ItemMob) stack.getItem()).hasEntityData(stack);
 			}
 
 			@Override
 			public ItemStack getOutput(ItemStack stack) {
-				NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
 				ItemStack output = stack.copy();
+				
+				NBTTagCompound entityNbt = ((ItemMob) output.getItem()).getEntityData(output);
+				
 				// never called in legit caught anadia, but helps display correct item in JEI smoking recipe ;)
-				if (output.getTagCompound() != null && !output.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
+				if(entityNbt == null) {
+					entityNbt = new NBTTagCompound();
 					ResourceLocation id = EntityList.getKey(EntityAnadia.class);
 					if(id != null) {
-						nbt.setString("id", id.toString());
-						output.setTagInfo("Entity", nbt);
+						entityNbt.setString("id", id.toString());
 					}
 				}
 
-				if (output.getTagCompound() != null && output.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
-					if (output.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 0) {
-						output.getTagCompound().getCompoundTag("Entity").setByte("fishColour", (byte) 0);
-						NBTTagCompound headItem = (NBTTagCompound) output.getTagCompound().getCompoundTag("Entity").getTag("headItem");
-						NBTTagCompound bodyItem = (NBTTagCompound) output.getTagCompound().getCompoundTag("Entity").getTag("bodyItem");
-						NBTTagCompound tailItem = (NBTTagCompound) output.getTagCompound().getCompoundTag("Entity").getTag("tailItem");
+				if (entityNbt.getByte("fishColour") != 0) {
+					entityNbt.setByte("fishColour", (byte) 0);
+					
+					NBTTagCompound headItem = entityNbt.getCompoundTag("headItem");
+					NBTTagCompound bodyItem = entityNbt.getCompoundTag("bodyItem");
+					NBTTagCompound tailItem = entityNbt.getCompoundTag("tailItem");
 
-						if (headItem != null) {
-							checkAndConvertNBTStack(headItem).writeToNBT(headItem);
-							output.getTagCompound().getCompoundTag("Entity").setTag("headItem", headItem);
-						}
+					if (headItem != null) {
+						checkAndConvertNBTStack(headItem).writeToNBT(headItem);
+						entityNbt.setTag("headItem", headItem);
+					}
 
-						if (bodyItem != null) {
-							checkAndConvertNBTStack(bodyItem).writeToNBT(bodyItem);
-							output.getTagCompound().getCompoundTag("Entity").setTag("bodyItem", bodyItem);
-						}
+					if (bodyItem != null) {
+						checkAndConvertNBTStack(bodyItem).writeToNBT(bodyItem);
+						entityNbt.setTag("bodyItem", bodyItem);
+					}
 
-						if (tailItem != null) {
-							checkAndConvertNBTStack(tailItem).writeToNBT(tailItem);
-							output.getTagCompound().getCompoundTag("Entity").setTag("tailItem", tailItem);
-						}
+					if (tailItem != null) {
+						checkAndConvertNBTStack(tailItem).writeToNBT(tailItem);
+						entityNbt.setTag("tailItem", tailItem);
 					}
 				}
+				
+				((ItemMob) output.getItem()).setEntityData(output, entityNbt);
+				
 				return output;
 			}
 

@@ -61,9 +61,6 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 		if(!world.isRemote) {
 			Entity entity = this.createCapturedEntity(world, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, stack);
 			if(entity != null) {
-				if(entity instanceof EntityAnadia && (((EntityAnadia) entity).getFishColour() == 0 || ((EntityAnadia) entity).getFishColour() == 1))
-					return EnumActionResult.PASS;
-				
 				if(facing.getXOffset() != 0) {
 					entity.setPosition(entity.posX + facing.getXOffset() * entity.width * 0.5f, entity.posY, entity.posZ);
 				}

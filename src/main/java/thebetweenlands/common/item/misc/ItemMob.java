@@ -29,6 +29,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.util.NBTHelper;
 
 public class ItemMob extends Item {
 	private final Class<? extends Entity> defaultMob;
@@ -114,7 +115,30 @@ public class ItemMob extends Item {
 
 		return this.defaultMob != null && cls.isAssignableFrom(this.defaultMob);
 	}
+	
+	public boolean hasEntityData(ItemStack stack) {
+		NBTTagCompound nbt = stack.getTagCompound();
+		return nbt != null && nbt.hasKey("Entity", Constants.NBT.TAG_COMPOUND);
+	}
 
+	@Nullable
+	public NBTTagCompound getEntityData(ItemStack stack) {
+		NBTTagCompound nbt = stack.getTagCompound();
+		if(nbt != null) {
+			return nbt.getCompoundTag("Entity");
+		}
+		return null;
+	}
+	
+	public void setEntityData(ItemStack stack, @Nullable NBTTagCompound entityData) {
+		NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
+		if(entityData == null) {
+			nbt.removeTag("Entity");
+		} else {
+			nbt.setTag("Entity", entityData);
+		}
+	}
+	
 	@Nullable
 	public ResourceLocation getCapturedEntityId(ItemStack stack) {
 		if(stack.getItem() != this) {
@@ -138,6 +162,11 @@ public class ItemMob extends Item {
 
 	@Nullable
 	public Entity createCapturedEntity(World world, double x, double y, double z, ItemStack stack) {
+		return this.createCapturedEntity(world, x, y, z, stack, true);
+	}
+	
+	@Nullable
+	public Entity createCapturedEntity(World world, double x, double y, double z, ItemStack stack, boolean allowOnInitialSpawn) {
 		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
 			return this.createCapturedEntityFromNBT(world, x, y, z, stack.getTagCompound().getCompoundTag("Entity"));
 		}
@@ -145,13 +174,17 @@ public class ItemMob extends Item {
 		if(this.defaultMob != null) {
 			ResourceLocation id = EntityList.getKey(this.defaultMob);
 			if(id != null) {
-				NBTTagCompound nbt = new NBTTagCompound();
-				nbt.setString("id", id.toString());
-				Entity entity = this.createCapturedEntityFromNBT(world, x, y, z, nbt);
-				if(this.defaultMobSetter != null) {
-					this.defaultMobSetter.accept(entity);
-				}
-				return entity;
+		        Entity entity = EntityList.createEntityByIDFromName(id, world);
+		        if(entity != null) {
+		        	entity.setLocationAndAngles(x, y, z, world.rand.nextFloat() * 360.0f, 0);
+					if(this.defaultMobSetter != null) {
+						this.defaultMobSetter.accept(entity);
+					}
+					if(!world.isRemote && allowOnInitialSpawn && entity instanceof EntityLiving) {
+						((EntityLiving) entity).onInitialSpawn(world.getDifficultyForLocation(new BlockPos(entity)), null);
+					}
+					return entity;
+		        }
 			}
 		}
 
@@ -236,7 +269,7 @@ public class ItemMob extends Item {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if(worldIn != null) {
-			Entity entity = this.createCapturedEntity(worldIn, 0, 0, 0, stack);
+			Entity entity = this.createCapturedEntity(worldIn, 0, 0, 0, stack, false);
 			if(entity instanceof EntityLivingBase) {
 				EntityLivingBase living = (EntityLivingBase) entity;
 				tooltip.add(I18n.format("tooltip.bl.item_mob.health", MathHelper.ceil(living.getHealth() / 2), MathHelper.ceil(living.getMaxHealth() / 2)));

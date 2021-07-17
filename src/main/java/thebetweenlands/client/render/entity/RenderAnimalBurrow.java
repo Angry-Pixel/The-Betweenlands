@@ -41,7 +41,7 @@ public class RenderAnimalBurrow extends Render<EntityAnimalBurrow> {
 		GlStateManager.scale(1F, -1F, -1F);
 		GlStateManager.popMatrix();
 			if (!entity.getBurrowItem().isEmpty()) {
-				if (isSafeMobItem(entity) && entity.getEntity() != null)
+				if (shouldRenderAsEntity(entity) && entity.getEntity() != null)
 					renderMobInSlot(entity.getEntity(), 0F, 0.0625F, 0F, 0F);
 				else
 					renderItemInSlot(entity.getBurrowItem(), 0F, 0.25F, 0F, 0.5F);
@@ -130,8 +130,8 @@ public class RenderAnimalBurrow extends Render<EntityAnimalBurrow> {
 
 	}
 
-	public boolean isSafeMobItem(EntityAnimalBurrow  entity) {
-		return entity.getBurrowItem().getItem() instanceof ItemMob && entity.getBurrowItem().getTagCompound() != null && entity.getBurrowItem().getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND);
+	public boolean shouldRenderAsEntity(EntityAnimalBurrow  entity) {
+		return entity.getBurrowItem().getItem() instanceof ItemMob && ((ItemMob) entity.getBurrowItem().getItem()).hasEntityData(entity.getBurrowItem());
 	}
 
 	public void renderMobInSlot(Entity entity, float x, float y, float z, float rotation) {
@@ -154,7 +154,7 @@ public class RenderAnimalBurrow extends Render<EntityAnimalBurrow> {
 			else
 				GlStateManager.rotate(0F, 1.0F, 0.0F, 0.0F);
 			GlStateManager.rotate(offsetRotation - Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
-			Render renderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entity);
+			Render<Entity> renderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entity);
 			renderer.doRender(entity, 0, 0, 0, 0, 0);
 			GlStateManager.popMatrix();
 		}

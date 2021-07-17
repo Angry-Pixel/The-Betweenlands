@@ -120,7 +120,7 @@ public class RenderCrabPot extends TileEntitySpecialRenderer<TileEntityCrabPot> 
 			else
 				GlStateManager.rotate(0F, 1.0F, 0.0F, 0.0F);
 			GlStateManager.rotate(offsetRotation - Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
-			Render renderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entity);
+			Render<Entity> renderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entity);
 			renderer.doRender(entity, 0, 0, 0, 0, 0);
 			GlStateManager.popMatrix();
 		}

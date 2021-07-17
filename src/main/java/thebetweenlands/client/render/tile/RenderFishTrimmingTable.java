@@ -18,9 +18,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 import thebetweenlands.client.render.model.tile.ModelFishTrimmingTable;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
+import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.item.misc.ItemMobAnadia;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityFishTrimmingTable;
@@ -62,7 +62,7 @@ public class RenderFishTrimmingTable extends TileEntitySpecialRenderer<TileEntit
 			// inputs
 			SplittableRandom rand = new SplittableRandom((long) (te.getPos().getX() + te.getPos().getY() + te.getPos().getZ()));
 			if (!te.getStackInSlot(0).isEmpty()) {
-				if (isSafeAnadiaMobItem(te, 0) && te.getAndiaEntity() != null)
+				if (shouldRenderAsEntity(te, 0) && te.getAndiaEntity() != null)
 					renderAnadiaInSlot(te.getStackInSlot(0), te.getAndiaEntity(), 0.0625F, 0.85F, 0.1875F, 1F);
 				else
 					renderItemInSlot(te.getStackInSlot(0), 0F, 0.75F, 0F, 0.5F, 0F);
@@ -85,8 +85,8 @@ public class RenderFishTrimmingTable extends TileEntitySpecialRenderer<TileEntit
 		GlStateManager.popMatrix();
 	}
 
-	public boolean isSafeAnadiaMobItem(TileEntityFishTrimmingTable te, int slot) {
-		return te.getStackInSlot(slot).getItem() == ItemRegistry.ANADIA && te.getStackInSlot(slot).getTagCompound() != null && te.getStackInSlot(slot).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND);
+	public boolean shouldRenderAsEntity(TileEntityFishTrimmingTable te, int slot) {
+		return te.getStackInSlot(slot).getItem() == ItemRegistry.ANADIA && ((ItemMob) te.getStackInSlot(slot).getItem()).hasEntityData(te.getStackInSlot(slot));
 	}
 
 	public void renderAnadiaInSlot(ItemStack stack, Entity entity, float x, float y, float z, float scale) {

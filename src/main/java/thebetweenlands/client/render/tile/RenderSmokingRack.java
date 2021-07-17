@@ -16,9 +16,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 import thebetweenlands.client.render.model.tile.ModelSmokingRack;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
+import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.item.misc.ItemMobAnadia;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -60,21 +60,21 @@ public class RenderSmokingRack extends TileEntitySpecialRenderer<TileEntitySmoki
 			}
 
 			if (!te.getStackInSlot(1).isEmpty() && te.getStackInSlot(4).isEmpty()) {
-				if(isSafeAnadiaMobItem(te, 1) && te.getRenderEntity(1) != null)
+				if(shouldRenderAsEntity(te, 1) && te.getRenderEntity(1) != null)
 						renderAnadiaInSlot(te, te.getStackInSlot(1), te.getRenderEntity(1), 0, 1F, 0.0F, 0.5F);
 				else
 					renderItemInSlot(te, te.getStackInSlot(1), 0F, 1.525F, 0F, 0.5F);
 			}
 
 			if (!te.getStackInSlot(2).isEmpty() && te.getStackInSlot(5).isEmpty()) {
-				if(isSafeAnadiaMobItem(te, 2) && te.getRenderEntity(2) != null)
+				if(shouldRenderAsEntity(te, 2) && te.getRenderEntity(2) != null)
 					renderAnadiaInSlot(te, te.getStackInSlot(2), te.getRenderEntity(2), 0F, 0.125F, 0.4F, 0.5F);
 				else
 					renderItemInSlot(te, te.getStackInSlot(2), 0F, 0.55F, 0.4F, 0.5F);
 			}
 
 			if (!te.getStackInSlot(3).isEmpty() && te.getStackInSlot(6).isEmpty()) {
-				if(isSafeAnadiaMobItem(te, 3) && te.getRenderEntity(3) != null)
+				if(shouldRenderAsEntity(te, 3) && te.getRenderEntity(3) != null)
 					renderAnadiaInSlot(te, te.getStackInSlot(3), te.getRenderEntity(3), 0F, 0.125F, -0.4F, 0.5F);
 				else
 					renderItemInSlot(te, te.getStackInSlot(3), 0F, 0.55F, -0.4F, 0.5F);
@@ -82,21 +82,21 @@ public class RenderSmokingRack extends TileEntitySpecialRenderer<TileEntitySmoki
 
 			//outputs
 			if (!te.getStackInSlot(4).isEmpty()) {
-				if(isSafeAnadiaMobItem(te, 4)&& te.getRenderEntity(4) != null)
+				if(shouldRenderAsEntity(te, 4)&& te.getRenderEntity(4) != null)
 					renderAnadiaInSlot(te, te.getStackInSlot(4), te.getRenderEntity(4), 0F, 1F, 0.0F, 0.5F);
 				else
 					renderItemInSlot(te, te.getStackInSlot(4), 0F, 1.525F, 0F, 0.5F);
 			}
 
 			if (!te.getStackInSlot(5).isEmpty()) {
-				if(isSafeAnadiaMobItem(te, 5) && te.getRenderEntity(5) != null)
+				if(shouldRenderAsEntity(te, 5) && te.getRenderEntity(5) != null)
 					renderAnadiaInSlot(te, te.getStackInSlot(5), te.getRenderEntity(5), 0F, 0.125F, 0.4F, 0.5F);
 				else
 					renderItemInSlot(te, te.getStackInSlot(5), 0F, 0.55F, 0.4F, 0.5F);
 			}
 
 			if (!te.getStackInSlot(6).isEmpty()) {
-				if(isSafeAnadiaMobItem(te, 6) && te.getRenderEntity(6) != null)
+				if(shouldRenderAsEntity(te, 6) && te.getRenderEntity(6) != null)
 					renderAnadiaInSlot(te, te.getStackInSlot(6), te.getRenderEntity(6), 0F, 0.125F, -0.4F, 0.5F);
 				else
 					renderItemInSlot(te, te.getStackInSlot(6), 0F, 0.55F, -0.4F, 0.5F);
@@ -106,14 +106,15 @@ public class RenderSmokingRack extends TileEntitySpecialRenderer<TileEntitySmoki
 		GlStateManager.popMatrix();
 	}
 
-	public boolean isSafeAnadiaMobItem(TileEntitySmokingRack te, int slot) {
-		return te.getStackInSlot(slot).getItem() == ItemRegistry.ANADIA && te.getStackInSlot(slot).getTagCompound() != null && te.getStackInSlot(slot).getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND);
+	public boolean shouldRenderAsEntity(TileEntitySmokingRack te, int slot) {
+		return te.getStackInSlot(slot).getItem() == ItemRegistry.ANADIA && ((ItemMob) te.getStackInSlot(slot).getItem()).hasEntityData(te.getStackInSlot(slot));
 	}
 
 	public void renderAnadiaInSlot(TileEntitySmokingRack smoking_rack, ItemStack stack, Entity entity, float x, float y, float z, float scale) {
 		if (entity != null) {
 			if(stack.getItem() instanceof ItemMobAnadia && ((ItemMobAnadia)stack.getItem()).isRotten(Minecraft.getMinecraft().world, stack))
 				((EntityAnadia) entity).setFishColour((byte) 1);
+			entity.prevRotationPitch = entity.rotationPitch = 90;
 			float scale2 = 1F / ((EntityAnadia) entity).getFishSize() * 0.475F;
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x, y, z);
