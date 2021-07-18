@@ -14,6 +14,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -37,6 +38,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -134,6 +136,8 @@ public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider
 									stack.getTagCompound().setBoolean("baited", true);
 									tile.getItems().set(i, ItemStack.EMPTY);
 									tile.checkItemCount();
+							        if (player instanceof EntityPlayerMP)
+							        	AdvancementCriterionRegistry.USED_ROD_ON_JAR.trigger((EntityPlayerMP) player);
 									return;
 								}
 							}

@@ -74,6 +74,8 @@ public class BlockCrabPot extends BlockSwampWater implements ITileEntityProvider
 			if (world.getTileEntity(pos) instanceof TileEntityCrabPot) {
 				TileEntityCrabPot tile = (TileEntityCrabPot) world.getTileEntity(pos);
 				tile.setRotation(placer.getHorizontalFacing().rotateYCCW().getHorizontalIndex());
+				if(placer instanceof EntityPlayer)
+					tile.setPlacer((EntityPlayer) placer);
 				tile.markForUpdate();
 			}
 		}

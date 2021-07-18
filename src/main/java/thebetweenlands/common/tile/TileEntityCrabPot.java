@@ -3,14 +3,15 @@ package thebetweenlands.common.tile;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -24,11 +25,11 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.entity.mobs.EntityBubblerCrab;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemMob;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -40,6 +41,9 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 	public int horizontalIndex = 0;
 	public float animationTicks;
 	public boolean animate = false;
+	public boolean hasUpdated = false;
+	EntityPlayer placer;
+	public String placerUUID;
 	public TileEntityCrabPot() {
 		super();
 	}
@@ -69,6 +73,16 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 		}
 
 		if(!world.isRemote) {
+			// because the player is always null unless the world is loaded but block NBT is loaded before grrrrr
+			if(!hasUpdated && !placerUUID.isEmpty()) {
+		        UUID id = UUID.fromString(placerUUID);
+				EntityPlayer player = this.world.getPlayerEntityByUUID(id);
+				if(player != null) {
+					setPlacer(player);
+					hasUpdated = true;
+				}
+			}
+
 			if(hasBaitItem() && !active)
 				active = true;
 
@@ -86,6 +100,9 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 					checkCatch().setDead();
 					getItems().set(0, itemMob);
 					markForUpdate();
+			        if (hasSiltCrab() || hasBubblerCrab() && getPlacer() != null)
+			        	if (getPlacer() instanceof EntityPlayerMP)
+			        		AdvancementCriterionRegistry.CRAB_POT.trigger((EntityPlayerMP) getPlacer());
 				}
 			}
 	        if (getWorld().getBlockState(pos.down()).getBlock() != BlockRegistry.CRAB_POT_FILTER && animate) {
@@ -183,6 +200,9 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 		active = nbt.getBoolean("active");
 		animate = nbt.getBoolean("animate");
 		setRotation(nbt.getInteger("horizontalIndex"));
+
+        if (nbt.hasKey("OwnerUUID", 8))
+        	placerUUID = nbt.getString("OwnerUUID");
 	}
 
 	public NBTTagCompound saveToNbt(NBTTagCompound nbt) {
@@ -190,6 +210,11 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 		nbt.setBoolean("active", active);
 		nbt.setInteger("horizontalIndex", getRotation());
 		nbt.setBoolean("animate", animate);
+
+		if (getPlacer() != null)
+			nbt.setString("OwnerUUID", getPlacer().getUniqueID().toString());
+        else
+        	nbt.setString("OwnerUUID", "");
 		return nbt;
 	}
 
@@ -301,6 +326,14 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 	@Override
 	public void clear() {
 		inventory.clear();
+	}
+	
+	private EntityPlayer getPlacer() {
+		return this.placer;
+	}
+
+	public void setPlacer(EntityPlayer player) {
+		this.placer = player;
 	}
 
 }

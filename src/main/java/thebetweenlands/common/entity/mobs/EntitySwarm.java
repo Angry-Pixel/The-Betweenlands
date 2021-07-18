@@ -18,6 +18,7 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -41,6 +42,7 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -125,7 +127,10 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 	}
 
 	@Override
-	protected void collideWithEntity(Entity entityIn) { }
+	protected void collideWithEntity(Entity entity) {
+		if (entity instanceof EntityPlayerMP)
+			AdvancementCriterionRegistry.INFESTED.trigger((EntityPlayerMP) entity);
+	}
 
 	@Override
 	public void onUpdate() {
