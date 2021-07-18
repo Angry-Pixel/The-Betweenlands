@@ -38,6 +38,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityJellyfish extends EntityCreature implements IEntityBL, IEntityAdditionalSpawnData, IMob {
@@ -180,7 +181,7 @@ public class EntityJellyfish extends EntityCreature implements IEntityBL, IEntit
 	@Nullable
 	@Override
 	protected ResourceLocation getLootTable() {
-		return null;//LootTableRegistry.JELLYFISH;
+		return LootTableRegistry.JELLYFISH;
 	}
 
 	@Override
