@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:items_misc",
+      "data": 6
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:reed_mat",
+    "count": 1
+  }
+}
