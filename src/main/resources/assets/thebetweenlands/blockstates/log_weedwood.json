@@ -12,18 +12,119 @@
 		}
 	},
 	"variants": {
-		"axis": {
-			"y": {
-				
+		"axis=y": [
+			{
+				"model": "thebetweenlands:log_weedwood",
+				"weight": 100
 			},
-			"z": {
-				"x": 90
+			{
+				"model": "thebetweenlands:log_weedwood_1",
+				"weight": 100
 			},
-			"x": {
+			{
+				"model": "thebetweenlands:log_weedwood_2",
+				"weight": 100
+			},
+			{
+				"model": "thebetweenlands:log_weedwood_3",
+				"weight": 10
+			},
+			{
+				"model": "thebetweenlands:log_weedwood_4",
+				"weight": 10
+			},
+			{
+				"model": "thebetweenlands:log_weedwood_5",
+				"weight": 5
+			},
+			{
+				"model": "thebetweenlands:log_weedwood_6",
+				"weight": 5
+			}
+		],
+		"axis=z"	: [
+			{
+				"model": "thebetweenlands:log_weedwood",
 				"x": 90,
-				"y": 90
+				"weight": 100
 			},
-			"none": {
+			{
+				"model": "thebetweenlands:log_weedwood_1",
+				"x": 90,
+				"weight": 100
+			},
+			{
+				"model": "thebetweenlands:log_weedwood_2",
+				"x": 90,
+				"weight": 100
+			},
+			{
+				"model": "thebetweenlands:log_weedwood_3",
+				"x": 90,
+				"weight": 10
+			},
+			{
+				"model": "thebetweenlands:log_weedwood_4",
+				"x": 90,
+				"weight": 10
+			},
+			{
+				"model": "thebetweenlands:log_weedwood_5",
+				"x": 90,
+				"weight": 5
+			},
+			{
+				"model": "thebetweenlands:log_weedwood_6",
+				"x": 90,
+				"weight": 5
+			}
+		],
+		"axis=x": [
+			{
+				"model": "thebetweenlands:log_weedwood",
+				"x": 90,
+				"y": 90,
+				"weight": 100
+			},
+			{
+				"model": "thebetweenlands:log_weedwood_1",
+				"x": 90,
+				"y": 90,
+				"weight": 100
+			},
+			{
+				"model": "thebetweenlands:log_weedwood_2",
+				"x": 90,
+				"y": 90,
+				"weight": 100
+			},
+			{
+				"model": "thebetweenlands:log_weedwood_3",
+				"x": 90,
+				"y": 90,
+				"weight": 10
+			},
+			{
+				"model": "thebetweenlands:log_weedwood_4",
+				"x": 90,
+				"y": 90,
+				"weight": 10
+			},
+			{
+				"model": "thebetweenlands:log_weedwood_5",
+				"x": 90,
+				"y": 90,
+				"weight": 5
+			},
+			{
+				"model": "thebetweenlands:log_weedwood_6",
+				"x": 90,
+				"y": 90,
+				"weight": 5
+			}
+		],
+			"axis=none": [
+				{
 				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/internal/spook_event",
@@ -32,8 +133,65 @@
 						"model_active": "thebetweenlands:block/log_weedwood_bark_spook"
 					},
 					"model_active": "thebetweenlands:block/log_weedwood_bark_frosty"
+					},
+					"weight": 100
+				},
+				{
+					"model": "thebetweenlands:log_weedwood_bark_1",
+					"weight": 100
+				},
+				{
+					"model": "thebetweenlands:log_weedwood_bark_2",
+					"weight": 100
+				},
+				{
+					"model": "thebetweenlands:log_weedwood_bark_3",
+					"weight": 10
+				},
+				{
+					"model": "thebetweenlands:log_weedwood_bark_4",
+					"weight": 10
+				},
+				{
+					"model": "thebetweenlands:log_weedwood_bark_5",
+					"weight": 5
+				},
+				{
+					"model": "thebetweenlands:log_weedwood_bark_6",
+					"weight": 5
+				},
+				{
+				    "model": "thebetweenlands:log_weedwood_bark_7",
+				    "weight": 1
+				},
+				{
+					"model": "thebetweenlands:log_weedwood_bark_8",
+					"weight": 1
+				},
+				{
+					"model": "thebetweenlands:log_weedwood_bark_9",
+					"weight": 1
+				},
+				{
+					"model": "thebetweenlands:log_weedwood_bark_10",
+					"weight": 1
+				},
+				{
+				    "model": "thebetweenlands:log_weedwood_bark_11",
+				    "weight": 1
+				},
+				{
+					"model": "thebetweenlands:log_weedwood_bark_12",
+					"weight": 1
+				},
+				{
+					"model": "thebetweenlands:log_weedwood_bark_13",
+					"weight": 1
+				},
+				{
+					"model": "thebetweenlands:log_weedwood_bark_14",
+					"weight": 1
 				}
-			}
-		}
+		]
 	}
 }
