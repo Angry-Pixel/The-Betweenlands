@@ -14,6 +14,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
+import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
@@ -85,12 +86,13 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 				for (int z = -8; z <= 8; z++) {
 					if (rand.nextInt(4) == 0) {
 						IBlockState plant = UNDERWATER_PLANTS.get(rand.nextInt(UNDERWATER_PLANTS.size()));
+						BlockPos pos = position.add(x, 0, z);
 
 						if (plant == BlockRegistry.SWAMP_REED_UNDERWATER.getDefaultState() || plant == BlockRegistry.SWAMP_KELP.getDefaultState()) {
-							if (SurfaceType.DIRT.matches(world.getBlockState(position))) {
-								int height = rand.nextInt(4) + 2;
+							if (SurfaceType.DIRT.matches(world.getBlockState(pos))) {
+								int height = rand.nextInt(6) + 3;
 								for (int y = 0; y <= height; y++) {
-									BlockPos plantPos = position.add(x, y + 1, z);
+									BlockPos plantPos = pos.up(y + 1);
 									IBlockState state = world.getBlockState(plantPos);
 									if(state.getBlock() != Blocks.AIR && !SurfaceType.WATER.matches(state)) {
 										break;
@@ -102,9 +104,9 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 							}
 						} else {
 							//We assume that other plants do not have a stacking height
-							IBlockState state = world.getBlockState(position.up());
-							if (SurfaceType.DIRT.matches(world.getBlockState(position)) && SurfaceType.WATER.matches(state) && state.getBlock().isReplaceable(world, position.up())) {
-								world.setBlockState(position.add(x, 1, z), plant, 2 | 16);
+							IBlockState state = world.getBlockState(pos.up());
+							if (SurfaceType.DIRT.matches(world.getBlockState(pos)) && SurfaceType.WATER.matches(state) && state.getBlock().isReplaceable(world, pos.up())) {
+								world.setBlockState(pos.up(), plant, 2 | 16);
 							}
 						}
 					}
