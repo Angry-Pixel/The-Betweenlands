@@ -3,6 +3,7 @@ package thebetweenlands.common.tile;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -15,6 +16,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import thebetweenlands.common.entity.EntityFishingTackleBoxSeat;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 
 public class TileEntityFishingTackleBox extends TileEntity implements ITickable, IInventory {
 
@@ -97,6 +99,8 @@ public class TileEntityFishingTackleBox extends TileEntity implements ITickable,
 		entitySeat.setSeatOffset(0.1F);
 		world.spawnEntity(entitySeat);
 		player.startRiding(entitySeat, true);
+		if (player instanceof EntityPlayerMP)
+        	AdvancementCriterionRegistry.SIT_ON_TACKLE_BOX.trigger((EntityPlayerMP) player);
 	}
 
 	@Override

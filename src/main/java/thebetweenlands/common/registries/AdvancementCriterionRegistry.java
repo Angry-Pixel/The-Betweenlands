@@ -53,7 +53,9 @@ public class AdvancementCriterionRegistry {
 	public static final NoCriteriaTrigger CRAB_FILTER = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "take_item_from_output_crab_pot_filter")));
 	public static final NoCriteriaTrigger CRAB_POT = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "crab_in_pot")));
 	public static final NoCriteriaTrigger USED_ROD_ON_JAR = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "use_worm_jar")));
+	public static final NoCriteriaTrigger WORM_FROM_DIRT = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "worm_from_dirt")));
 	public static final NoCriteriaTrigger INFESTED = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "infested")));
-
+	public static final NoCriteriaTrigger SIT_ON_TACKLE_BOX = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "sit_on_tackle_box")));
+			
 	public static void preInit() { }
 }
