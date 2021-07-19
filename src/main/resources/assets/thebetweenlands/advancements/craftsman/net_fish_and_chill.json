@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:fishing_tackle_box"
+    },
+    "title": {
+      "translate": "Net Fish and Chill"
+    },
+    "description": {
+      "translate": "Sit back and relax on a Fishing Tackle Box"
+    }
+  },
+  "parent": "thebetweenlands:craftsman/jar_o_worms",
+  "criteria": {
+    "event": {
+      "trigger": "thebetweenlands:sit_on_tackle_box"
+    }
+  }
+}

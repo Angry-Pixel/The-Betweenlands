@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:tiny_sludge_worm"
+    },
+    "title": {
+      "translate": "Fertile Soil"
+    },
+    "description": {
+      "translate": "Dig up a worm while making holes for crops"
+    }
+  },
+  "parent": "thebetweenlands:farmer/root",
+  "criteria": {
+    "event": {
+      "trigger": "thebetweenlands:worm_from_dirt"
+    }
+  }
+}
