@@ -14,8 +14,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
-import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.block.container.BlockLootPot;
+import thebetweenlands.common.block.container.BlockMudLootPot;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityLootPot;
@@ -186,13 +186,14 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 		//7x7 grid, 5x5 grid of tiles
 		int basepillar = 3; //max height 8
 
+		//floor
 		for (int x = -2; x <= 2; x++) {
 			for (int z = -2; z <= 2; z++) {
 				if (rand.nextInt(3) == 0) {
 					world.setBlockState(position.add(x, 0, z), getTileGrade(rand), 2 | 16);
 				}
 				if (rand.nextInt(8) == 0) {
-					setLootPot(world, rand, position.add(x, 1, z));
+					setMudLootPot(world, rand, position.add(x, 0, z));
 				}
 			}
 		}
@@ -234,7 +235,7 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 		}
 	}
 
-	//generate some arches
+	//generate some arches TODO: Prevent no-shows
 	private boolean structureArch(World world, Random rand, BlockPos pos) {
 		if (!checkValidSpace(world, pos.getX(), pos.getY(), pos.getZ(), 7, 7, 7))
 			return false;
@@ -261,7 +262,6 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 	}
 
 	//generate a shelter
-	//TODO: Scatter Pots inside it
 	private boolean structureShelter(World world, Random random, BlockPos pos) {
 		int length = (random.nextInt(3) + 7) / 2;
 		int width = (random.nextInt(3) + 7) / 2;
@@ -280,10 +280,12 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 					for (int y = 0; y <= height; y++) {
 						world.setBlockState(pos.add(x, y + 1, z), getBrickGrade(random), 2 | 16);
 					}
-				} else {
-					//fill with pots
+				}
+
+				//floor pots
+				if ((Math.abs(x) != length || Math.abs(z) != width)) {
 					if (random.nextInt(10) == 0) {
-						setLootPot(world, random, pos.add(0, 1, 0));
+						setMudLootPot(world, random, pos.add(x, 0, z));
 					}
 				}
 
@@ -469,7 +471,7 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 		}
 	}
 
-	//get a random pot variant, TODO: Underwater exclusive pots?
+	//get a random pot variant
 	private IBlockState getRandomPot(Random rand) {
 		switch (rand.nextInt(3)) {
 			case 1:
@@ -479,6 +481,28 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 			case 0:
 			default:
 				return BlockRegistry.LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, BlockLootPot.EnumLootPot.POT_1);
+		}
+	}
+
+	//creates a pot of mud loot
+	private void setMudLootPot(World world, Random random, BlockPos pos) {
+		this.setBlockAndNotifyAdequately(world, pos, this.getRandomMudPot(random));
+		TileEntityLootPot lootPot = BlockLootPot.getTileEntity(world, pos);
+		if(lootPot != null) {
+			lootPot.setLootTable(LootTableRegistry.CAVE_POT, random.nextLong()); //TODO: replace
+		}
+	}
+
+	//get a random mud pot variant
+	private IBlockState getRandomMudPot(Random rand) {
+		switch (rand.nextInt(3)) {
+			case 1:
+				return BlockRegistry.MUD_LOOT_POT.getDefaultState().withProperty(BlockMudLootPot.VARIANT, BlockMudLootPot.EnumLootPot.POT_2);
+			case 2:
+				return BlockRegistry.MUD_LOOT_POT.getDefaultState().withProperty(BlockMudLootPot.VARIANT, BlockMudLootPot.EnumLootPot.POT_3);
+			case 0:
+			default:
+				return BlockRegistry.MUD_LOOT_POT.getDefaultState().withProperty(BlockMudLootPot.VARIANT, BlockMudLootPot.EnumLootPot.POT_1);
 		}
 	}
 }
