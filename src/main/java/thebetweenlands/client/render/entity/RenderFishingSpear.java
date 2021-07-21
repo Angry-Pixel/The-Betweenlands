@@ -45,8 +45,17 @@ public class RenderFishingSpear extends Render<EntityFishingSpear> {
 			GlStateManager.enableOutlineMode(this.getTeamColor(entity));
 		}
 
-		// render the spear model
-		SPEAR_MODEL.render(entity, partialTicks);
+		switch (entity.getType()) {
+		case 0:
+			SPEAR_MODEL.renderBasic(entity, partialTicks);
+			break;
+		case 1:
+			SPEAR_MODEL.renderAmphibious(entity, partialTicks);
+			break;
+		case 2:
+			SPEAR_MODEL.renderRobustAmphibious(entity, partialTicks);
+			break;
+		}
 
 		if (this.renderOutlines) {
 			GlStateManager.disableOutlineMode();

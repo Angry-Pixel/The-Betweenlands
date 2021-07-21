@@ -223,6 +223,13 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 	    		double targetY = entityOwner.posY + entityOwner.getEyeHeight() - posY + height * 0.5D;
 	    		double targetZ = entityOwner.posZ - posZ;
 	    		moveToTarget(targetX, targetY, targetZ, 0.5F);
+
+                double wiggleSpeed = Math.sin((double) (ticksExisted + getEntityId()) * 0.5D) * 0.05D;
+                double wiggleOffsetX = Math.cos((double) (rotationYaw * 0.01F));
+                double wiggleOffsetZ = Math.sin((double) (rotationYaw * 0.01F));
+                motionX += wiggleSpeed * wiggleOffsetX;
+                motionZ += wiggleSpeed * wiggleOffsetZ;
+
 	            if (this.world.isRemote) {
 	               this.lastTickPosY = this.posY;
 	            }
