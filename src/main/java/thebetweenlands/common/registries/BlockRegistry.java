@@ -208,6 +208,7 @@ import thebetweenlands.common.block.structure.BlockWallWeedwoodSign;
 import thebetweenlands.common.block.structure.BlockWaystone;
 import thebetweenlands.common.block.structure.BlockWoodenSupportBeam;
 import thebetweenlands.common.block.structure.BlockWormDungeonPillar;
+import thebetweenlands.common.block.terrain.BlockAnimalBurrow;
 import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePile;
 import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePileWater;
@@ -253,6 +254,7 @@ import thebetweenlands.common.block.terrain.BlockTintedLeaves;
 import thebetweenlands.common.block.terrain.BlockWisp;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
@@ -907,6 +909,9 @@ public class BlockRegistry {
     public static final Block GLOWING_GOOP = new BlockGlowingGoop();
     public static final Block GLOWING_GOOP_UNDERWATER = new BlockGlowingGoopUnderwater();
     public static final Block REED_MAT = new BlockReedMat();
+    //WIP
+    public static final Block ANIMAL_BURROW_SILT = new BlockAnimalBurrow(Material.SAND);
+    public static final Block ANIMAL_BURROW_MUD = new BlockAnimalBurrow(BLMaterialRegistry.MUD);
 
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();

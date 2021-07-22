@@ -7,37 +7,38 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.block.ICritterBurrowEnabled;
+import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityAnimalBurrow extends Entity {
+public class EntityAnimalBurrow extends EntityCreature implements IEntityBL {
 
 	private static final DataParameter<ItemStack> BURROW_ITEM = EntityDataManager.createKey(EntityAnimalBurrow.class, DataSerializers.ITEM_STACK);
 	private static final DataParameter<Integer> RESTING_COOLDOWN = EntityDataManager.createKey(EntityAnimalBurrow.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> RECALL_COOLDOWN = EntityDataManager.createKey(EntityAnimalBurrow.class, DataSerializers.VARINT);
-
-	@SideOnly(Side.CLIENT)
-	private TextureAtlasSprite wallSprite = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(Blocks.STONE.getDefaultState());
 
 	public EntityAnimalBurrow (World world) {
 		super(world);
@@ -46,33 +47,22 @@ public class EntityAnimalBurrow extends Entity {
 
 	@Override
 	protected void entityInit() {
+		super.entityInit();
 		dataManager.register(BURROW_ITEM, ItemStack.EMPTY);
 		dataManager.register(RESTING_COOLDOWN, 0);
 		dataManager.register(RECALL_COOLDOWN, 0);
 	}
-	
-	@SideOnly(Side.CLIENT)
-	protected void updateWallSprite() {
-		BlockPos pos = this.getPosition();
-		IBlockState state = this.world.getBlockState(pos);
-		state = state.getActualState(this.world, pos);
-		if(state.isFullCube()) {
-			this.wallSprite = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state);
-		}
-	}
 
-	@Nullable
-	@SideOnly(Side.CLIENT)
-	public TextureAtlasSprite getWallSprite() {
-		return this.wallSprite;
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
 	}
 
 	@Override
 	 public void onUpdate() {
 		super.onUpdate();
-		if(world.isRemote) {
-			updateWallSprite();
-		}
 
 		if(!world.isRemote) {
 			if(getBurrowItem().isEmpty() && world.getTotalWorldTime()%20 == 0 && getRecallTimer() <= 0) {
@@ -137,7 +127,7 @@ public class EntityAnimalBurrow extends Entity {
     }
 
 	@Override
-	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+	public boolean processInteract(EntityPlayer player, EnumHand hand) {
 		if (!world.isRemote) {
 				if (!player.getHeldItem(hand).isEmpty() && getBurrowItem().isEmpty()) {
 					ItemStack stack = player.getHeldItem(hand).splitStack(1);
@@ -192,14 +182,61 @@ public class EntityAnimalBurrow extends Entity {
 
 	public Entity getEntity() {
 		ItemStack stack = this.getBurrowItem();
-		if(!stack.isEmpty() && stack.getItem() instanceof ItemMob && ((ItemMob) stack.getItem()).hasEntityData(stack)) {
+		if(!stack.isEmpty() && stack.getItem() instanceof ItemMob) {
 			return ((ItemMob) stack.getItem()).createCapturedEntity(this.world, 0, 0, 0, stack);
 		}
 		return null;
 	}
+	
+	@Nullable
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+		if (!getEntityWorld().isRemote) {
+			getOriginBlocks(getEntityWorld(), getPosition());
+			IBlockState state = world.getBlockState(getPosition());
+			if(ICritterBurrowEnabled.isSuitableBurrowBlock(state.getBlock())) {
+				IBlockState burrow = ICritterBurrowEnabled.getBurrowBlock(state.getBlock());
+				Class entity = ICritterBurrowEnabled.getEntityForBlockType(world, state.getBlock());
+				setBurrowItem(((ItemMob) new ItemStack(ItemRegistry.CRITTER).getItem()).capture(entity));
+				world.setBlockState(getPosition(), burrow, 3);
+				System.out.println("Block Set to: " + burrow.getBlock());
+				System.out.println("Entity: " + entity.getName());
+				System.out.println("Item: " + getBurrowItem());
+			}
+		}
+		return livingdata;
+	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbt) {
+    public void setDead() {
+		if(!getEntityWorld().isRemote) {
+			if(getEntityData().hasKey("tempBlockTypes"))
+				loadOriginBlocks(getEntityWorld(), getEntityData());
+		}
+        super.setDead();
+    }
+	
+	private void getOriginBlocks(World world, BlockPos pos) {
+		NBTTagCompound entityNbt = getEntityData();
+		IBlockState state = world.getBlockState(pos);
+		NBTTagCompound tag = new NBTTagCompound();
+		NBTUtil.writeBlockState(tag, state);
+		entityNbt.setTag("tempBlockTypes", tag);
+		entityNbt.setTag("originPos", NBTUtil.createPosTag(pos));
+		writeEntityToNBT(entityNbt);
+	}
+
+	public void loadOriginBlocks(World world, NBTTagCompound tag) {
+		NBTTagCompound entityNbt = getEntityData();
+		BlockPos origin = NBTUtil.getPosFromTag(entityNbt.getCompoundTag("originPos"));
+		IBlockState state = NBTUtil.readBlockState((NBTTagCompound) entityNbt.getTag("tempBlockTypes"));
+		world.setBlockState(origin, state, 3);
+		getEntityWorld().playSound((EntityPlayer)null, origin, SoundRegistry.ROOF_COLLAPSE, SoundCategory.BLOCKS, 1F, 1.0F);
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
 		NBTTagCompound burrowItem = (NBTTagCompound) nbt.getTag("burrowItem");
 		ItemStack stackBurrow = ItemStack.EMPTY;
 		if(burrowItem != null)
@@ -208,15 +245,31 @@ public class EntityAnimalBurrow extends Entity {
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbt) {
-		NBTTagCompound burrowItem= new NBTTagCompound();
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
+		NBTTagCompound burrowItem = new NBTTagCompound();
 		getBurrowItem().writeToNBT(burrowItem);
-		nbt.setTag("headItem", burrowItem);
+		nbt.setTag("burrowItem", burrowItem);
 	}
 
 	@Override
 	public void onKillCommand() {
 		this.setDead();
+	}
+
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float damage) {
+		if(source == DamageSource.DROWN)
+			return false;
+		if(source instanceof EntityDamageSource) {
+			Entity sourceEntity = ((EntityDamageSource) source).getTrueSource();
+			if(!(sourceEntity instanceof EntityPlayer))
+				return false;
+			if(sourceEntity instanceof EntityPlayer && ((EntityPlayer) sourceEntity).isCreative()) {
+				this.setDead();
+			}
+		}
+		return false; //super.attackEntityFrom(source, damage);
 	}
 
 }
