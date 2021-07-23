@@ -1,0 +1,33 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "thebetweenlands:items/fishing_spear_amphibious_robust"
+    },
+    "display": {
+        "thirdperson_righthand": {
+           "rotation": [ 180, 260, -40 ],
+            "translation": [ 0, 1, 2.5 ],
+            "scale": [ 1.5, 1.5, 1.0 ]
+        },
+        "thirdperson_lefthand": {
+            "rotation": [ 180, -280, 40 ],
+            "translation": [ 0, 1, 2.5 ],
+            "scale": [ 1.5, 1.5, 1.0 ]
+        },
+        "firstperson_righthand": {
+            "rotation": [ -90, -90, 25 ],
+            "translation": [ 1.2, 3.4, 1.2 ],
+            "scale": [ 1.1, 1.1, 0.7 ]
+        },
+        "firstperson_lefthand": {
+            "rotation": [ -90, 90, -25 ],
+            "translation": [ 1.2, 3.4, 1.2 ],
+            "scale": [ 1.1, 1.1, 0.7 ]
+        },
+        "ground": {
+            "rotation": [ 0, 0, 0 ],
+            "translation": [ 0, 3, 0],
+            "scale":[ 0.8, 0.8, 0.6 ]
+        }
+    }
+}

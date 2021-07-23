@@ -585,10 +585,10 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 			damagedStack = new ItemStack(ItemRegistry.FISHING_SPEAR);
 			break;
 		case 1:
-			damagedStack = new ItemStack(ItemRegistry.FISHING_SPEAR_UNDERWATER);
+			damagedStack = new ItemStack(ItemRegistry.FISHING_SPEAR_AMPHIBIOUS);
 			break;
 		case 2:
-			damagedStack = new ItemStack(ItemRegistry.FISHING_SPEAR_UNDERWATER_RETURNS);
+			damagedStack = new ItemStack(ItemRegistry.FISHING_SPEAR_AMPHIBIOUS_ROBUST);
 			if (!damagedStack.hasTagCompound())
 				damagedStack.setTagCompound(new NBTTagCompound());
 			damagedStack.getTagCompound().setBoolean("animated", getAnimated());

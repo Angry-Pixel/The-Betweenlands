@@ -51,7 +51,7 @@ public class ItemFishingSpear extends Item implements IAnimatorRepairable{
 				if (entityIn == null) {
 					return 0.0F;
 				} else {
-					return entityIn.getActiveItemStack().getItem() != ItemRegistry.FISHING_SPEAR ? 0.0F : (float) (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F;
+					return !(entityIn.getActiveItemStack().getItem() instanceof ItemFishingSpear) ? 0.0F : (float) (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F;
 				}
 			}
 		});

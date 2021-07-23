@@ -11,13 +11,13 @@
       "data": 59
     },
     "#": {
-      "item": "thebetweenlands:fishing_spear_underwater"
+      "item": "thebetweenlands:fishing_spear_amphibious"
     },
     "Y": {
       "item": "thebetweenlands:shambler_tongue"
     }
   },
   "result": {
-    "item": "thebetweenlands:fishing_spear_underwater_returns"
+    "item": "thebetweenlands:fishing_spear_amphibious_robust"
   }
 }

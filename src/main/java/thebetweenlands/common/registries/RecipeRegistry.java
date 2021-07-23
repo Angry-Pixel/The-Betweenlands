@@ -26,7 +26,6 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.crafting.IShapedRecipe;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -94,7 +93,6 @@ import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
-import thebetweenlands.util.NBTHelper;
 
 public class RecipeRegistry {
 
@@ -613,7 +611,7 @@ public class RecipeRegistry {
 		AnimatorRecipe.addRecipe(new RingOfGatheringRespawnAnimatorRecipe());
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.SNOT.create(1), 10, 6, new ItemStack(ItemRegistry.SNOT_POD)));
 
-		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.FISHING_SPEAR_UNDERWATER_RETURNS), 2, 1) {
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.FISHING_SPEAR_AMPHIBIOUS), 2, 1) {
 					@Override
 					public ItemStack onAnimated(World world, BlockPos pos, ItemStack stack) {
 						if (stack.getMaxDamage() - stack.getItemDamage() == stack.getMaxDamage() && stack.hasTagCompound() && stack.getTagCompound().hasKey("animated") && !stack.getTagCompound().getBoolean("animated"))

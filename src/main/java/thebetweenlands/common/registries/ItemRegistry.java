@@ -377,8 +377,8 @@ public class ItemRegistry {
     public static final Item WEEDWOOD_FISHING_ROD = new ItemBLFishingRod();
  // TODO W.I.P. Spear changes
     public static final Item FISHING_SPEAR = new ItemFishingSpear((byte) 0);
-    public static final Item FISHING_SPEAR_UNDERWATER = new ItemFishingSpear((byte) 1);
-    public static final Item FISHING_SPEAR_UNDERWATER_RETURNS = new ItemFishingSpear((byte) 2); //TODO Return to player code
+    public static final Item FISHING_SPEAR_AMPHIBIOUS = new ItemFishingSpear((byte) 1);
+    public static final Item FISHING_SPEAR_AMPHIBIOUS_ROBUST = new ItemFishingSpear((byte) 2);
     //BUCKETS
     public static final ItemBLBucket BL_BUCKET = new ItemBLBucket();
     public static final Item BL_BUCKET_RUBBER = new ItemSpecificBucket(FluidRegistry.RUBBER);
