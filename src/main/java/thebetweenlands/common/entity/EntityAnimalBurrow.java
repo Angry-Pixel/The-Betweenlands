@@ -200,9 +200,9 @@ public class EntityAnimalBurrow extends EntityCreature implements IEntityBL {
 				Class entity = ICritterBurrowEnabled.getEntityForBlockType(world, state.getBlock());
 				setBurrowItem(ItemRegistry.CRITTER.capture(entity));
 				world.setBlockState(getPosition(), burrow, 3);
-				System.out.println("Block Set to: " + burrow.getBlock());
-				System.out.println("Entity: " + entity.getName());
-				System.out.println("Item: " + getBurrowItem());
+				//System.out.println("Block Set to: " + burrow.getBlock());
+			//	System.out.println("Entity: " + entity.getName());
+			//	System.out.println("Item: " + getBurrowItem());
 			}
 		}
 		return livingdata;

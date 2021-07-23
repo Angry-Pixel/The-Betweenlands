@@ -8,6 +8,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.api.block.ICritterBurrowEnabled;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.EntityAnimalBurrow;
@@ -195,11 +196,12 @@ public class TestItemChimp extends Item {
 //				EntityRockSnot snot = new EntityRockSnot(worldIn);
 //				snot.setPosition(pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F);
 //				worldIn.spawnEntity(snot);
-			
+			if (ICritterBurrowEnabled.isSuitableBurrowBlock(worldIn.getBlockState(pos).getBlock())) {
 				EntityAnimalBurrow burrow = new EntityAnimalBurrow(worldIn);
 				burrow.setPosition(pos.getX() + 0.5F, pos.getY() + 0.25F, pos.getZ() + 0.5F);
 				burrow.onInitialSpawn(worldIn.getDifficultyForLocation(burrow.getPosition()), null);
 				worldIn.spawnEntity(burrow);
+			}
 				
 		}
 
