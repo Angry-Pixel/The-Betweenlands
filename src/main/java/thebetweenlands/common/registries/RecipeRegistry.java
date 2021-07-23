@@ -611,7 +611,7 @@ public class RecipeRegistry {
 		AnimatorRecipe.addRecipe(new RingOfGatheringRespawnAnimatorRecipe());
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.SNOT.create(1), 10, 6, new ItemStack(ItemRegistry.SNOT_POD)));
 
-		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.FISHING_SPEAR_AMPHIBIOUS), 2, 1) {
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.FISHING_SPEAR_AMPHIBIOUS_ROBUST), 2, 1) {
 					@Override
 					public ItemStack onAnimated(World world, BlockPos pos, ItemStack stack) {
 						if (stack.getMaxDamage() - stack.getItemDamage() == stack.getMaxDamage() && stack.hasTagCompound() && stack.getTagCompound().hasKey("animated") && !stack.getTagCompound().getBoolean("animated"))
