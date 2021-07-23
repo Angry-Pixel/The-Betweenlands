@@ -1,7 +1,6 @@
 package thebetweenlands.common.entity;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -9,6 +8,7 @@ import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
@@ -29,7 +29,6 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import thebetweenlands.api.block.ICritterBurrowEnabled;
 import thebetweenlands.api.entity.IEntityBL;
-import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -49,7 +48,7 @@ public class EntityAnimalBurrow extends EntityCreature implements IEntityBL {
 	protected void entityInit() {
 		super.entityInit();
 		dataManager.register(BURROW_ITEM, ItemStack.EMPTY);
-		dataManager.register(RESTING_COOLDOWN, 0);
+		dataManager.register(RESTING_COOLDOWN, 100);
 		dataManager.register(RECALL_COOLDOWN, 0);
 	}
 
@@ -65,21 +64,24 @@ public class EntityAnimalBurrow extends EntityCreature implements IEntityBL {
 		super.onUpdate();
 
 		if(!world.isRemote) {
+			if (world.isAirBlock(getPosition()))
+				setDead();
+
 			if(getBurrowItem().isEmpty() && world.getTotalWorldTime()%20 == 0 && getRecallTimer() <= 0) {
-				lureCloseCrab();
+				lureCloseEntity();
 				if(checkCatch() != null) {
-					ItemStack itemMob = ((ItemMob) new ItemStack(ItemRegistry.CRITTER).getItem()).capture(checkCatch());
+					ItemStack itemMob = ItemRegistry.CRITTER.capture(checkCatch());
 					checkCatch().setDead();
 					setBurrowItem(itemMob);
 					setRestingTimer(120);
 				}
 			}
-			
+
 			if(!getBurrowItem().isEmpty() && getRestingTimer() <= 0) {
 				if(getEntity() != null) {
-					getEntityWorld().spawnEntity(getEntity());
-					getEntity().setPositionAndRotation(posX, posY + 1D, posZ, 0F, 0F);
+					world.spawnEntity(getEntity());
 					setBurrowItem(ItemStack.EMPTY);
+					System.out.println("Spawn?");
 					setRecallTimer(360);
 				}
 			}
@@ -92,28 +94,27 @@ public class EntityAnimalBurrow extends EntityCreature implements IEntityBL {
 		}
 	}
 	
-	private Entity checkCatch() {
-		Entity entity = null;
-		List<EntityGecko> list = getEntityWorld().getEntitiesWithinAABB(EntityGecko.class, new AxisAlignedBB(getPosition()).grow(0.125D));
+	private EntityLiving checkCatch() {
+		IBlockState state = NBTUtil.readBlockState((NBTTagCompound) getEntityData().getTag("tempBlockTypes"));
+		Class entity = ICritterBurrowEnabled.getEntityForBlockType(world, state.getBlock());
+		EntityLiving mob = null;
+		List<EntityLiving> list = getEntityWorld().getEntitiesWithinAABB(entity, new AxisAlignedBB(getPosition()).grow(0.125D));
 		if (!list.isEmpty())
-			entity = list.get(0);
-		return entity;
+			mob = list.get(0);
+		return mob;
 	}
 
 	@SuppressWarnings("unchecked")
-	public void lureCloseCrab() {
-		List<EntityGecko> list = getEntityWorld().getEntitiesWithinAABB(EntityGecko.class, extendRangeBox());
-		for (Iterator<EntityGecko> iterator = list.iterator(); iterator.hasNext();) {
-			EntityGecko gecko = iterator.next();
-			if (gecko.isInWater())
-				iterator.remove();
-		}
+	public void lureCloseEntity() {
+		IBlockState state = NBTUtil.readBlockState((NBTTagCompound) getEntityData().getTag("tempBlockTypes"));
+		Class entity = ICritterBurrowEnabled.getEntityForBlockType(world, state.getBlock());
+		List<EntityLiving> list = getEntityWorld().getEntitiesWithinAABB(entity, extendRangeBox());
 		if (list.isEmpty())
 			return;
 		if (!list.isEmpty()) {
 			Collections.shuffle(list);
-			EntityGecko gecko = list.get(0);
-			gecko.getNavigator().tryMoveToXYZ(posX, posY, posZ, 1D);
+			EntityLiving mob = list.get(0);
+			mob.getNavigator().tryMoveToXYZ(posX, posY, posZ, 1D);
 		}
 	}
 
@@ -182,8 +183,8 @@ public class EntityAnimalBurrow extends EntityCreature implements IEntityBL {
 
 	public Entity getEntity() {
 		ItemStack stack = this.getBurrowItem();
-		if(!stack.isEmpty() && stack.getItem() instanceof ItemMob) {
-			return ((ItemMob) stack.getItem()).createCapturedEntity(this.world, 0, 0, 0, stack);
+		if(!stack.isEmpty() && stack.getItem() instanceof ItemMob && ((ItemMob) stack.getItem()).hasEntityData(stack)) {
+			return ((ItemMob) stack.getItem()).createCapturedEntity(this.world, posX, posY + 1D, posZ, stack);
 		}
 		return null;
 	}
@@ -197,7 +198,7 @@ public class EntityAnimalBurrow extends EntityCreature implements IEntityBL {
 			if(ICritterBurrowEnabled.isSuitableBurrowBlock(state.getBlock())) {
 				IBlockState burrow = ICritterBurrowEnabled.getBurrowBlock(state.getBlock());
 				Class entity = ICritterBurrowEnabled.getEntityForBlockType(world, state.getBlock());
-				setBurrowItem(((ItemMob) new ItemStack(ItemRegistry.CRITTER).getItem()).capture(entity));
+				setBurrowItem(ItemRegistry.CRITTER.capture(entity));
 				world.setBlockState(getPosition(), burrow, 3);
 				System.out.println("Block Set to: " + burrow.getBlock());
 				System.out.println("Entity: " + entity.getName());
@@ -239,7 +240,7 @@ public class EntityAnimalBurrow extends EntityCreature implements IEntityBL {
 		super.readEntityFromNBT(nbt);
 		NBTTagCompound burrowItem = (NBTTagCompound) nbt.getTag("burrowItem");
 		ItemStack stackBurrow = ItemStack.EMPTY;
-		if(burrowItem != null)
+		if(!burrowItem.isEmpty())
 			stackBurrow = new ItemStack(burrowItem);
 		setBurrowItem(stackBurrow);
 	}

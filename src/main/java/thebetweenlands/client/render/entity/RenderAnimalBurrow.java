@@ -42,7 +42,7 @@ public class RenderAnimalBurrow extends Render<EntityAnimalBurrow> {
 	public void renderMobInSlot(Entity entity, float x, float y, float z, float rotation) {
 		if (entity != null) {
 			
-			float scale2 = 1F / ((Entity) entity).width * 0.5F;
+			float scale2 = 1F / ((Entity) entity).width * 0.75F;
 			float offsetRotation = 180F;
 			float offsetY = 0F;
 
