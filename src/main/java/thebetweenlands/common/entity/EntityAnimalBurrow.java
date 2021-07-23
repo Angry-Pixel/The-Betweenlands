@@ -81,7 +81,7 @@ public class EntityAnimalBurrow extends EntityCreature implements IEntityBL {
 				if(getEntity() != null) {
 					world.spawnEntity(getEntity());
 					setBurrowItem(ItemStack.EMPTY);
-					System.out.println("Spawn?");
+					//System.out.println("Spawn?");
 					setRecallTimer(360);
 				}
 			}
