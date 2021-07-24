@@ -2308,5 +2308,25 @@
       "thebetweenlands:bubbler_pop_2",
       "thebetweenlands:bubbler_pop_3"
     ]
+  },
+  "spear_throw": {
+    "sounds": [
+      "thebetweenlands:spear_throw"
+    ]
+  },
+  "spear_land": {
+    "sounds": [
+      "thebetweenlands:spear_land"
+    ]
+  },
+  "spear_return_1": {
+    "sounds": [
+      "thebetweenlands:spear_return_1"
+    ]
+  },
+  "spear_return_2": {
+    "sounds": [
+      "thebetweenlands:spear_return_2"
+    ]
   }
 }

@@ -99,6 +99,10 @@ public class SoundRegistry {
     public static final BLSoundEvent SIMULACRUM_BREAK = reg("simulacrum_break");
     public static final BLSoundEvent GREEBLING_HUM = reg("greebling_hum");
     public static final BLSoundEvent CORACLE_SINK = reg("coracle_sink");
+    public static final BLSoundEvent SPEAR_THROW = reg("spear_throw");
+    public static final BLSoundEvent SPEAR_LAND = reg("spear_land");
+    public static final BLSoundEvent SPEAR_RETURN_1 = reg("spear_return_1");
+    public static final BLSoundEvent SPEAR_RETURN_2 = reg("spear_return_2");
     // Hostiles
     public static final BLSoundEvent FISH_HURT = reg("fish_hurt");
     public static final BLSoundEvent FISH_DEATH = reg("fish_death");

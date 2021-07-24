@@ -44,6 +44,7 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityFishingSpear extends Entity implements IProjectile, IThrowableEntity {
 	@SuppressWarnings("unchecked")
@@ -235,7 +236,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 	            }
 
 	            if (this.returningTicks == 0) {
-	              // Play return sound?
+	            	playSound(SoundRegistry.SPEAR_RETURN_1, 1F, 1F);
 	            }
 	            ++this.returningTicks;
 	      }
@@ -419,8 +420,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 					if (shootingEntity != null && entitylivingbase != shootingEntity && entitylivingbase instanceof EntityPlayer && shootingEntity instanceof EntityPlayerMP)
 						((EntityPlayerMP) shootingEntity).connection.sendPacket(new SPacketChangeGameState(6, 0.0F));
 				}
-
-				playSound(SoundEvents.ENTITY_ARROW_HIT, 0.5F, 0.5F);
+				playSound(SoundRegistry.SPEAR_LAND, 1F, 1F);
 			} else {
 				motionX *= -0.10000000149011612D;
 				motionY *= -0.10000000149011612D;
@@ -447,7 +447,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 			posX -= motionX / (double) f2 * 0.05000000074505806D;
 			posY -= motionY / (double) f2 * 0.05000000074505806D;
 			posZ -= motionZ / (double) f2 * 0.05000000074505806D;
-			playSound(SoundEvents.ENTITY_ARROW_HIT, 0.5F, 0.5F);
+			playSound(SoundRegistry.SPEAR_LAND, 1F, 1F);
 			playSound(iblockstate.getBlock().getSoundType(iblockstate, world, blockpos, null).getBreakSound(), 1.5F, 1.5F);
 			inGround = true;
 			arrowShake = 7;
@@ -549,7 +549,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 				setDead();
 			else if (ticksExisted >= 20) {
 				if (entityIn.inventory.addItemStackToInventory(getEntityItem())) {
-					world.playSound(entityIn, entityIn.getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1F, 1F);
+					world.playSound(null, entityIn.getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1F, 1F);
 					entityIn.onItemPickup(this, 1);
 					setDead();
 				}
@@ -559,7 +559,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 				setDead();
 			else if (ticksExisted >= 4 && entityIn == getThrower() && getType() == 2 && getAnimated()) {
 				if (entityIn.inventory.addItemStackToInventory(getEntityItem())) {
-					world.playSound(entityIn, entityIn.getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1F, 1F);
+					world.playSound(null, entityIn.getPosition(), SoundRegistry.SPEAR_RETURN_2, SoundCategory.PLAYERS, 1F, 1F);
 					entityIn.onItemPickup(this, 1);
 					setDead();
 				}

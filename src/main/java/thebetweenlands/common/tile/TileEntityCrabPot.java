@@ -79,6 +79,7 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 				EntityPlayer player = this.world.getPlayerEntityByUUID(id);
 				if(player != null) {
 					setPlacer(player);
+					markForUpdate();
 					hasUpdated = true;
 				}
 			}
