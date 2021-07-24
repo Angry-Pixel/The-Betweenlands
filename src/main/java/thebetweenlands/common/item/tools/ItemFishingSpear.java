@@ -107,6 +107,17 @@ public class ItemFishingSpear extends Item implements IAnimatorRepairable{
 						entitySpear.setItemStackDamage(stack.getItemDamage());
 						entitySpear.setType(type);
 						entitySpear.setAnimated(isAnimated(stack));
+						switch(type) {
+						case 0:
+							entitySpear.setDamage(2);
+							break;
+						case 1:
+							entitySpear.setDamage(3);
+							break;
+						case 2:
+							entitySpear.setDamage(4);
+							break;
+						}
 						worldIn.spawnEntity(entitySpear);
 					}
 					worldIn.playSound((EntityPlayer) null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundRegistry.SPEAR_THROW, SoundCategory.PLAYERS, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
