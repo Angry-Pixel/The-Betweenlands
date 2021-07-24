@@ -274,7 +274,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 				ticksInAir = 0;
 			} else {
 				++ticksInGround;
-				if (ticksInGround >= 1200)
+				if (ticksInGround >= 6000)
 					setDead();
 			}
 			++timeInGround;
