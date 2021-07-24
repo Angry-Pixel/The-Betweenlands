@@ -31,7 +31,7 @@ public class BlockAnimalBurrow extends BasicBlock {
 		setSoundType(SoundType.GROUND);
 		setHarvestLevel("shovel", 0);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
-		setLightOpacity(255);
+		setLightOpacity(12);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	}
 

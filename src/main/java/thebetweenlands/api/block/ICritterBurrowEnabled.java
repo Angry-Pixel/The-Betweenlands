@@ -4,8 +4,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
@@ -26,7 +24,6 @@ public interface ICritterBurrowEnabled {
 			if (blocks.getOriginalBlock() == blockIn)
 				if (blocks.getBurrowEntityClass() != null)
 					return blocks.getBurrowEntityClass();
-					//return EntityList.newEntity(blocks.getBurrowEntityClass(), world);
 		return null;
 	};
 
