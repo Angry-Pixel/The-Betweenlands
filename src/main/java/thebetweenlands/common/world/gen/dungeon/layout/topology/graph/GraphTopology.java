@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.gen.dungeon.layout.topology;
+package thebetweenlands.common.world.gen.dungeon.layout.topology.graph;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -6,6 +6,8 @@ import java.util.Random;
 import java.util.Set;
 
 import thebetweenlands.common.world.gen.dungeon.layout.grid.Grid;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.Topology;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.TopologyMeta;
 import thebetweenlands.common.world.gen.dungeon.structure.Tileset;
 
 public class GraphTopology extends Topology<TopologyMeta> {
