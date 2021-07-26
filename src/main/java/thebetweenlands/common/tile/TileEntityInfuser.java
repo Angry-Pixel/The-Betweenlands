@@ -5,7 +5,6 @@ import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -32,6 +31,7 @@ import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.ElixirRecipes;
 import thebetweenlands.common.item.misc.ItemLifeCrystal;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -276,13 +276,13 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			}
 			evaporation = 0;
 		}
-		if (world.getBlockState(pos.down()).getBlock() == Blocks.FIRE && temp < 100 && getWaterAmount() > 0) {
+		if (world.getBlockState(pos.down()).getBlock() == BlockRegistry.PEAT_SMOULDERING && temp < 100 && getWaterAmount() > 0) {
 			if (world.getTotalWorldTime() % 12 == 0) {
 				temp++;
 				this.markForUpdate();
 			}
 		}
-		if (world.getBlockState(pos.down()).getBlock() != Blocks.FIRE && temp > 0) {
+		if (world.getBlockState(pos.down()).getBlock() != BlockRegistry.PEAT_SMOULDERING && temp > 0) {
 			if (world.getTotalWorldTime() % 6 == 0) {
 				temp--;
 				this.markForUpdate();
