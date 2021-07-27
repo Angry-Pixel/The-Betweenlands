@@ -3,6 +3,7 @@ package thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -157,8 +158,19 @@ public class Grammar {
 				//Get tagged RHS node(s). May be up to 2 nodes to allow splitting a single tagged LHS node into two tagged RHS nodes.
 				String tag = ruleLhsNode.getTag();
 				List<Node> ruleRhsNodes = tag != null ? rhs.getNodesByTag(tag) : Collections.emptyList();
-				Node graphRhsNode1 = ruleRhsNodes.size() >= 1 ? merge.get(ruleRhsNodes.get(0)) : null;
-				Node graphRhsNode2 = ruleRhsNodes.size() >= 2 ? merge.get(ruleRhsNodes.get(1)) : null;
+				Node graphRhsNode1 = null;
+				Node graphRhsNode2 = null;
+				int i = 0;
+				for(Node rhsNode : ruleRhsNodes) {
+					if(i == 0) {
+						graphRhsNode1 = merge.get(rhsNode);
+					} else if(i == 1) {
+						graphRhsNode2 = merge.get(rhsNode);
+					} else {
+						throw new IllegalStateException("RHS can have at most 2 nodes with the same tag '" + tag + "'");
+					}
+					i++;
+				}
 
 				if(graphRhsNode1 != null) {
 					//Copy edges of the tagged LHS node to the tagged RHS node(s)
@@ -193,11 +205,14 @@ public class Grammar {
 		}
 	}
 
-	public Map<Node, List<Match>> match(Graph graph) {
-		Map<Node, List<Match>> matches = new HashMap<>();
+	public LinkedHashMap<Node, List<Match>> match(Graph graph) {
+		LinkedHashMap<Node, List<Match>> matches = new LinkedHashMap<>();
 
 		for(Node node : graph.getNodes()) {
-			matches.put(node, this.match(node));
+			List<Match> nodeMatches = this.match(node);
+			if(!nodeMatches.isEmpty()) {
+				matches.put(node, nodeMatches);
+			}
 		}
 
 		return matches;

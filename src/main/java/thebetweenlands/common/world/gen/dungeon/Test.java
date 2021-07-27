@@ -1,5 +1,6 @@
 package thebetweenlands.common.world.gen.dungeon;
 
+import java.util.HashSet;
 import java.util.Random;
 
 import thebetweenlands.common.world.gen.dungeon.layout.LayoutGenerator;
@@ -12,12 +13,13 @@ import thebetweenlands.common.world.gen.dungeon.layout.grid.Link;
 import thebetweenlands.common.world.gen.dungeon.layout.pathfinder.SimplePathfinder;
 import thebetweenlands.common.world.gen.dungeon.layout.postprocessor.CompactionPostprocessor;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.RandomWalkTopology;
-import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.Edge;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.Grammar;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.Graph;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.GraphPrinter;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.Mutator;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.Node;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.TopologicalSort;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.TopologicalSort.GroupedGraph;
 
 public class Test {
 	public static Test TEST = new Test();
@@ -369,12 +371,87 @@ public class Test {
 				.addMutation(grammar, true)
 				.build();
 
+		long seed = new Random().nextLong();
+
+		//seed = -3882572050713031964L;
+		//seed = -2220811479062544325L;
+		//seed = -8981807003221640430L;
+		//seed = 1824453356624892194L;
+		//seed = 4864012680087479409L;
+		//seed = -1374954073690921752L;
+
 		long start = System.nanoTime();
-		int n = mutator.mutate(graph, new Random(), 50);
+		int n = mutator.mutate(graph, new Random(seed), 50);
+
+		/*graph = new Graph();
+		Node a = graph.addNode("a");
+		Node b = graph.addNode("b");
+		Node c = graph.addNode("c");
+		Node d = graph.addNode("d");
+		Node e = graph.addNode("e");
+		Node f = graph.addNode("f");
+		Node g = graph.addNode("g");
+		Node h = graph.addNode("h");
+		Node i = graph.addNode("i");
+		Node j = graph.addNode("j");
+		Node k = graph.addNode("k");
+		Node l = graph.addNode("l");
+
+		a.chain(a, "double").chain(b, "double").chain(f, "double").chain(k, "double");
+		a.chain(e, "double").chain(l, "double");
+		b.connect(d);
+		d.connect(j, "double");
+		j.connect(l);
+		d.connect(g);
+		g.connect(h, "double");
+		h.connect(j);
+		c.connect(i, "double");
+		c.connect(g);
+		h.connect(i);*/
+
+		/*graph = new Graph();
+		Node a = graph.addNode("a");
+		Node b = graph.addNode("b");
+		Node c = graph.addNode("c");
+		Node d = graph.addNode("d");
+		Node e = graph.addNode("e");
+		Node f = graph.addNode("f");
+		Node g = graph.addNode("g");
+		Node h = graph.addNode("h");
+
+		a.chain(b).chain(e, "double").chain(h);
+		a.chain(c, "double").chain(f, "double").chain(h, "double");
+		a.chain(d).chain(g, "double").chain(h);*/
+
+		System.out.println("Seed: " + seed);
 		System.out.println("Run time: " + (((System.nanoTime() - start) % 10000000000L) / 1000000.0f) + "ms");
 		System.out.println("Mutated in: " + n + " steps");
-		System.out.println("Nodes: " + graph.getNodes().size());
+		System.out.println("Graph nodes: " + graph.getNodes().size());
 		System.out.println("Graph: \n" + GraphPrinter.toEdgeListString(graph));
 		System.out.println("Tree: \n" + GraphPrinter.toSpanningTreeString(graph.getNodesByType("e").get(0)));
+
+		try {
+			start = System.nanoTime();
+
+			TopologicalSort.Properties properties = new TopologicalSort.Properties();
+			properties.groupingPredicate = edge -> edge.getType().equals("double");
+			properties.nodeWeight.put(node -> node.getType().equals("g"), 100);
+			properties.groupSizeWeight = -1;
+
+			GroupedGraph sorted = TopologicalSort.sort(graph, properties);
+
+			System.out.println("Sort time: " + (((System.nanoTime() - start) % 10000000000L) / 1000000.0f) + "ms");
+			System.out.println("Sorted nodes: " + sorted.getNodes().size());
+			System.out.println("Groups:");
+			for(GroupedGraph.Group group : new HashSet<>(sorted.getGroups().values())) {
+				System.out.println(group);
+			}
+			System.out.println("Node order:");
+			for(Node node : sorted.getNodes()) {
+				System.out.println(node.getType() + " (" + node.getID() + ")");
+			}
+		} catch(Throwable ex) {
+			ex.printStackTrace();
+		}
 	}
 }

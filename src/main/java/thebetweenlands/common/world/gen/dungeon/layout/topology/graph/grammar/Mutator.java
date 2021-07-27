@@ -2,8 +2,8 @@ package thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.function.Function;
 
@@ -91,7 +91,7 @@ public class Mutator {
 
 				graph.setMutated(false);
 
-				Map<Node, List<Match>> graphMatches = grammar.match(graph);
+				LinkedHashMap<Node, List<Match>> graphMatches = grammar.match(graph);
 
 				List<Node> matchedNodes = new ArrayList<>(graphMatches.keySet());
 				Collections.shuffle(matchedNodes, rng);
@@ -101,7 +101,7 @@ public class Mutator {
 
 					//TODO Instead of random shuffle it should use the rule weights
 					//to select matches randomly
-					Collections.shuffle(matches);
+					Collections.shuffle(matches, rng);
 
 					for(Match match : matches) {
 						if(match.apply()) {

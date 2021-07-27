@@ -14,7 +14,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
 public class Graph {
-	private final Set<Node> nodes = new HashSet<>();
+	private final List<Node> nodes = new ArrayList<>();
 	private final Map<String, List<Node>> typeMap = new HashMap<>();
 	private final Map<String, List<Node>> tagMap = new HashMap<>();
 
@@ -34,15 +34,19 @@ public class Graph {
 	}
 
 	public Map<Node, Node> merge(Graph graph, boolean mergeTags) {
+		return this.merge(graph.nodes, false);
+	}
+
+	protected Map<Node, Node> merge(List<Node> nodes, boolean mergeTags) {
 		Map<Node, Node> merge = new HashMap<>();
 
-		for(Node node : graph.nodes) {
+		for(Node node : nodes) {
 			merge.put(node, this.addNode(node.getType(), mergeTags ? node.getTag() : null));
 		}
 
 		Set<Edge> edges = new HashSet<>();
 
-		for(Node node : graph.nodes) {
+		for(Node node : nodes) {
 			for(Edge edge : node.getEdges()) {
 				if(edges.add(edge)) {
 					Node left = merge.get(edge.getLeft());
@@ -84,11 +88,23 @@ public class Graph {
 	public void removeNode(Node node) {
 		this.nodes.remove(node);
 
-		this.typeMap.remove(node.getType());
+		List<Node> typeNodes = this.typeMap.get(node.getType());
+		if(typeNodes != null) {
+			typeNodes.remove(node);
+			if(typeNodes.isEmpty()) {
+				this.typeMap.remove(node.getType());
+			}
+		}
 
 		String tag = node.getTag();
 		if(tag != null) {
-			this.tagMap.remove(tag);
+			List<Node> tagNodes = this.tagMap.get(tag);
+			if(tagNodes != null) {
+				tagNodes.remove(node);
+				if(tagNodes.isEmpty()) {
+					this.tagMap.remove(tag);
+				}
+			}
 		}
 
 		for(Edge edge : node.getEdges()) {
@@ -96,7 +112,7 @@ public class Graph {
 		}
 	}
 
-	public Set<Node> getNodes() {
+	public List<Node> getNodes() {
 		return this.nodes;
 	}
 

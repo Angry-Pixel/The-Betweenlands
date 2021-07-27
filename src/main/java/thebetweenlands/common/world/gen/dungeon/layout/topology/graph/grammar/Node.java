@@ -1,10 +1,13 @@
 package thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.annotation.Nullable;
+
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 
 public class Node {
 	private final Graph graph;
@@ -12,7 +15,7 @@ public class Node {
 	private final String type;
 	private final String tag;
 
-	private final Map<Node, Edge> edges = new HashMap<>();
+	private final Map<Node, Edge> edges = new LinkedHashMap<>();
 
 	Node(Graph graph, String type, @Nullable String tag) {
 		this.graph = graph;
@@ -108,5 +111,14 @@ public class Node {
 
 	public boolean isSameTag(Node node) {
 		return (this.tag == null && node.tag == null) || (this.tag != null && this.tag.equals(node.tag));
+	}
+
+	@Override
+	public String toString() {
+		ToStringHelper str = MoreObjects.toStringHelper(this);
+		str.add("id", this.getID());
+		str.add("type", this.getType());
+		str.add("tag", this.getTag());
+		return str.toString();
 	}
 }
