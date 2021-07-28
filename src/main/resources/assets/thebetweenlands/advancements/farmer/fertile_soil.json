@@ -4,10 +4,10 @@
       "item": "thebetweenlands:tiny_sludge_worm"
     },
     "title": {
-      "translate": "Fertile Soil"
+      "translate": "advancements.thebetweenlands.farmer.fertile_soil.title"
     },
     "description": {
-      "translate": "Dig up a worm while making holes for crops"
+      "translate": "advancements.thebetweenlands.farmer.fertile_soil.description"
     }
   },
   "parent": "thebetweenlands:farmer/root",

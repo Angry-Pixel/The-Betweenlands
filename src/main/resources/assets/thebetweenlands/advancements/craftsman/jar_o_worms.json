@@ -4,10 +4,10 @@
       "item": "thebetweenlands:silt_glass_jar"
     },
     "title": {
-      "translate": "Jar O' Worms"
+      "translate": "advancements.thebetweenlands.craftsman.jar_o_worms.title"
     },
     "description": {
-      "translate": "Bait your rod from a Silt Glass Jar full of worms"
+      "translate": "advancements.thebetweenlands.craftsman.jar_o_worms.description"
     }
   },
   "parent": "thebetweenlands:craftsman/teach_a_man_to_fish",

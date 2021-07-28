@@ -4,10 +4,10 @@
       "item": "thebetweenlands:anadia"
     },
     "title": {
-      "translate": "Fishy Business"
+      "translate": "advancements.thebetweenlands.craftsman.fishy_business.title"
     },
     "description": {
-      "translate": "Catch an Anadia using a Weedwood Fishing Rod"
+      "translate": "advancements.thebetweenlands.craftsman.fishy_business.description"
     }
   },
   "parent": "thebetweenlands:craftsman/teach_a_man_to_fish",

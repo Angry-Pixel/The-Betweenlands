@@ -4,10 +4,10 @@
       "item": "thebetweenlands:crab_pot"
     },
     "title": {
-      "translate": "It's A Trap!"
+      "translate": "advancements.thebetweenlands.craftsman.its_a_trap.title"
     },
     "description": {
-      "translate": "Obtain a Crab Pot and lure a crab into it"
+      "translate": "advancements.thebetweenlands.craftsman.its_a_trap.description"
     }
   },
   "parent": "thebetweenlands:craftsman/fish_guts",

@@ -4,10 +4,10 @@
       "item": "thebetweenlands:barnacle_1_2"
     },
     "title": {
-      "translate": "Bountiful Barnacles"
+      "translate": "advancements.thebetweenlands.farmer.bountiful_barnacles.title"
     },
     "description": {
-      "translate": "Harvest and replace a cluster of Barnacles"
+      "translate": "advancements.thebetweenlands.farmer.bountiful_barnacles.description"
     }
   },
   "parent": "thebetweenlands:farmer/root",

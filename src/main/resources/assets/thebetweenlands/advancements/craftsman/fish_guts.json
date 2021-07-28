@@ -4,10 +4,10 @@
       "item": "thebetweenlands:fish_trimming_table"
     },
     "title": {
-      "translate": "Fish Guts"
+      "translate": "advancements.thebetweenlands.craftsman.fish_guts.title"
     },
     "description": {
-      "translate": "Craft and use a Fish Trimming Table"
+      "translate": "advancements.thebetweenlands.craftsman.fish_guts.description"
     }
   },
   "parent": "thebetweenlands:craftsman/fishy_business",

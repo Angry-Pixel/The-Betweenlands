@@ -4,10 +4,10 @@
       "item": "thebetweenlands:critter_cruncher"
     },
     "title": {
-      "translate": "Shake It Off"
+      "translate": "advancements.thebetweenlands.adventurer.shake_it_off.title"
     },
     "description": {
-      "translate": "Get overrun by an Infestation"
+      "translate": "advancements.thebetweenlands.adventurer.shake_it_off.description"
     }
   },
   "parent": "thebetweenlands:adventurer/bouldery_bois",

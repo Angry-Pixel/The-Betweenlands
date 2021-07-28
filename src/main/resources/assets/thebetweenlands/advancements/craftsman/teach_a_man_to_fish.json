@@ -4,10 +4,10 @@
       "item": "thebetweenlands:weedwood_fishing_rod"
     },
     "title": {
-      "translate": "Teach a Man to Fish"
+      "translate": "advancements.thebetweenlands.craftsman.teach_a_man_to_fish.title"
     },
     "description": {
-      "translate": "Obtain a Weedwood Fishing Rod"
+      "translate": "advancements.thebetweenlands.craftsman.teach_a_man_to_fish.description"
     }
   },
   "parent": "thebetweenlands:craftsman/all_over_again",

@@ -4,10 +4,10 @@
       "item": "thebetweenlands:wandering_wisps"
     },
     "title": {
-      "translate": "Vinyl Enthusiast"
+      "translate": "advancements.thebetweenlands.adventurer.vinyl_enthusiast.title"
     },
     "description": {
-      "translate": "Collect all Betweenlands music discs"
+      "translate": "advancements.thebetweenlands.adventurer.vinyl_enthusiast.description"
     },
     "frame": "challenge",
     "hidden": true

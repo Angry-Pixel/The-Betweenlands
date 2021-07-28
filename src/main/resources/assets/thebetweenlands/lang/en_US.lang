@@ -1853,7 +1853,7 @@ tooltip.thebetweenlands.barnacle_stage_4.name=Barnacle Cluster (Ready to Harvest
 
 # Advancements
 
-# Adventures
+# Adventurer
 advancements.thebetweenlands.adventurer.root.title=Adventurer
 advancements.thebetweenlands.adventurer.root.description=The beginning of The Betweenlands Adventure
 advancements.thebetweenlands.adventurer.give_me_that.title=Give Me That
@@ -1908,6 +1908,10 @@ advancements.thebetweenlands.adventurer.gambling_addict.title=Gambling Addict
 advancements.thebetweenlands.adventurer.gambling_addict.description=Animate way too many Item Scrolls
 advancements.thebetweenlands.adventurer.thunderstruck.title=Thunderstruck!
 advancements.thebetweenlands.adventurer.thunderstruck.description=Fly into lightning while using a Volarkite or riding a Draeton
+advancements.thebetweenlands.adventurer.shake_it_off.title=Shake It Off
+advancements.thebetweenlands.adventurer.shake_it_off.description=Get overrun by an Infestation
+advancements.thebetweenlands.adventurer.vinyl_enthusiast.title=Vinyl Enthusiast
+advancements.thebetweenlands.adventurer.vinyl_enthusiast.description=Collect all Betweenlands music discs
 
 # Fighter
 advancements.thebetweenlands.fighter.root.title=Fighter
@@ -1976,6 +1980,10 @@ advancements.thebetweenlands.farmer.flower_power.title=Flower Power
 advancements.thebetweenlands.farmer.flower_power.description=Grow some flowers on your farm
 advancements.thebetweenlands.farmer.pure_and_dirty.title=Pure and Dirty
 advancements.thebetweenlands.farmer.pure_and_dirty.description=Use Purified Swamp Dirt for your farm
+advancements.thebetweenlands.farmer.fertile_soil.title=Fertile Soil
+advancements.thebetweenlands.farmer.fertile_soil.description=Dig up a worm while making holes for crops
+advancements.thebetweenlands.farmer.bountiful_barnacles.title=Bountiful Barnacles
+advancements.thebetweenlands.farmer.bountiful_barnacles.description=Harvest and replace a cluster of Barnacles
 
 # Herbalist
 advancements.thebetweenlands.herbalist.root.title=Herbalist
@@ -2016,6 +2024,10 @@ advancements.thebetweenlands.survivalist.onions_have_layers.title=Onions Have La
 advancements.thebetweenlands.survivalist.onions_have_layers.description=Coat your tools against corrosion
 advancements.thebetweenlands.survivalist.hashtag_blessed.title=#Blessed
 advancements.thebetweenlands.survivalist.hashtag_blessed.description=Get saved by the Blessed effect from a Simulacrum
+advancements.thebetweenlands.survivalist.uh_oh_stinky.title=Uh Oh, Stinky
+advancements.thebetweenlands.survivalist.uh_oh_stinky.description=Use a Fumigant to remove your stench
+advancements.thebetweenlands.survivalist.pearls_of_wisdom.title=Pearls of Wisdom
+advancements.thebetweenlands.survivalist.pearls_of_wisdom.description=Swallow a Rock Snot Pearl
 
 # Craftsman
 advancements.thebetweenlands.craftsman.root.title=Craftsman
@@ -2030,6 +2042,24 @@ advancements.thebetweenlands.craftsman.freebies.title=Freebies
 advancements.thebetweenlands.craftsman.freebies.description=Obtain extra ingots using Limestone Flux
 advancements.thebetweenlands.craftsman.feel_it_coming.title=In the Air Tonight
 advancements.thebetweenlands.craftsman.feel_it_coming.description=Predict a weather event with windchimes
+advancements.thebetweenlands.craftsman.teach_a_man_to_fish.title=Teach a Man to Fish
+advancements.thebetweenlands.craftsman.teach_a_man_to_fish.description=Craft a Weedwood Fishing Rod
+advancements.thebetweenlands.craftsman.fishy_business.title=Fishy Business
+advancements.thebetweenlands.craftsman.fishy_business.description=Catch an Anadia using a Weedwood Fishing Rod
+advancements.thebetweenlands.craftsman.jar_o_worms.title=Jar O' Worms
+advancements.thebetweenlands.craftsman.jar_o_worms.description=Bait your rod from a Silt Glass Jar full of worms
+advancements.thebetweenlands.craftsman.net_fish_and_chill.title=Net Fish and Chill
+advancements.thebetweenlands.craftsman.net_fish_and_chill.description=Sit back and relax on a Fishing Tackle Box
+advancements.thebetweenlands.craftsman.fish_guts.title=Fish Guts
+advancements.thebetweenlands.craftsman.fish_guts.description=Craft and use a Fish Trimming Table
+advancements.thebetweenlands.craftsman.authentic_flavor.title=Authentic Flavor
+advancements.thebetweenlands.craftsman.authentic_flavor.description=Use a Smoking Rack to smoke some food
+advancements.thebetweenlands.craftsman.its_a_trap.title=It's A Trap!
+advancements.thebetweenlands.craftsman.its_a_trap.description=Obtain a Crab Pot and lure a crab into it
+advancements.thebetweenlands.craftsman.natures_purifier.title=Nature's Purifier
+advancements.thebetweenlands.craftsman.natures_purifier.description=Use a Crab Pot Filter to convert an item
+advancements.thebetweenlands.craftsman.aquaman.title=Aquaman
+advancements.thebetweenlands.craftsman.aquaman.description=Obtain a full suit of Amphibious armor
 
 # Miner
 advancements.thebetweenlands.miner.root.title=Miner

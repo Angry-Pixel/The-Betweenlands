@@ -4,10 +4,10 @@
       "item": "thebetweenlands:amphibious_leggings"
     },
     "title": {
-      "translate": "Aquaman"
+      "translate": "advancements.thebetweenlands.craftsman.aquaman.title"
     },
     "description": {
-      "translate": "Obtain a full suit of Amphibious armor"
+      "translate": "advancements.thebetweenlands.craftsman.aquaman.description"
     },
     "frame": "challenge"
   },

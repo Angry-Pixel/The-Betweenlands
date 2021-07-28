@@ -4,10 +4,10 @@
       "item": "thebetweenlands:smoking_rack"
     },
     "title": {
-      "translate": "Authentic Flavor"
+      "translate": "advancements.thebetweenlands.craftsman.authentic_flavor.title"
     },
     "description": {
-      "translate": "Use a Smoking Rack to smoke some food"
+      "translate": "advancements.thebetweenlands.craftsman.authentic_flavor.description"
     }
   },
   "parent": "thebetweenlands:craftsman/fish_guts",

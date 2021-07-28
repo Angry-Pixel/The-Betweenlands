@@ -4,10 +4,10 @@
       "item": "thebetweenlands:fishing_tackle_box"
     },
     "title": {
-      "translate": "Net Fish and Chill"
+      "translate": "advancements.thebetweenlands.craftsman.net_fish_and_chill.title"
     },
     "description": {
-      "translate": "Sit back and relax on a Fishing Tackle Box"
+      "translate": "advancements.thebetweenlands.craftsman.net_fish_and_chill.description"
     }
   },
   "parent": "thebetweenlands:craftsman/jar_o_worms",
