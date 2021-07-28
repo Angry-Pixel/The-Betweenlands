@@ -1,7 +1,8 @@
 package thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -15,7 +16,8 @@ public class Node {
 	private final String type;
 	private final String tag;
 
-	private final Map<Node, Edge> edges = new LinkedHashMap<>();
+	private final List<Edge> edges = new ArrayList<>();
+	private final Map<Node, Edge> edgeMap = new HashMap<>();
 
 	Node(Graph graph, String type, @Nullable String tag) {
 		this.graph = graph;
@@ -25,11 +27,12 @@ public class Node {
 	}
 
 	void removeEdge(Edge edge) {
-		this.edges.remove(edge.getOther(this));
+		this.edges.remove(edge);
+		this.edgeMap.remove(edge.getOther(this));
 	}
 
 	public void disconnect(Node node) {
-		Edge edge = this.edges.get(node);
+		Edge edge = this.edgeMap.get(node);
 		if(edge != null) {
 			this.removeEdge(edge);
 			node.removeEdge(edge);
@@ -70,22 +73,20 @@ public class Node {
 
 	public Edge connect(Node node, String type, boolean bidirectional) {
 		Edge edge = new Edge(this, node, type, bidirectional);
-		this.edges.put(node, edge);
-		node.edges.put(this, edge);
+		this.edges.add(edge);
+		this.edgeMap.put(node, edge);
+		node.edges.add(edge);
+		node.edgeMap.put(this, edge);
 		return edge;
-	}
-
-	public Collection<Node> getNeighbors() {
-		return this.edges.keySet();
 	}
 
 	@Nullable
 	public Edge getEdge(Node node) {
-		return this.edges.get(node);
+		return this.edgeMap.get(node);
 	}
 
-	public Collection<Edge> getEdges() {
-		return this.edges.values();
+	public List<Edge> getEdges() {
+		return this.edges;
 	}
 
 	public Graph getGraph() {

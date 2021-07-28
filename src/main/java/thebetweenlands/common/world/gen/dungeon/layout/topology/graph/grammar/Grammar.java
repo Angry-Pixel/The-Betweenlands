@@ -3,10 +3,14 @@ package thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.function.Consumer;
+
+import javax.annotation.Nullable;
 
 public class Grammar {
 	public static class Builder {
@@ -63,18 +67,16 @@ public class Grammar {
 			this.rule = rule;
 			this.graph = graph;
 			this.lhs2graph = new HashMap<>();
-			this.lhs2graph.put(lhsNode, graphNode);
 			this.graph2lhs = new HashMap<>();
-			this.graph2lhs.put(graphNode, lhsNode);
+			this.visit(lhsNode, graphNode);
 		}
 
 		private Match(Match parent, Node lhsNode, Node graphNode) {
 			this.rule = parent.rule;
 			this.graph = parent.graph;
 			this.lhs2graph = new HashMap<>(parent.lhs2graph);
-			this.lhs2graph.put(lhsNode, graphNode);
 			this.graph2lhs = new HashMap<>(parent.graph2lhs);
-			this.graph2lhs.put(graphNode, lhsNode);
+			this.visit(lhsNode, graphNode);
 		}
 
 		private void visit(Node lhsNode, Node graphNode) {
@@ -206,34 +208,19 @@ public class Grammar {
 	}
 
 	public LinkedHashMap<Node, List<Match>> match(Graph graph) {
-		LinkedHashMap<Node, List<Match>> matches = new LinkedHashMap<>();
-
-		for(Node node : graph.getNodes()) {
-			List<Match> nodeMatches = this.match(node);
-			if(!nodeMatches.isEmpty()) {
-				matches.put(node, nodeMatches);
-			}
-		}
-
-		return matches;
+		return this.match(graph, false, false, false, null);
 	}
 
-	public List<Match> match(Node node) {
-		Graph graph = node.getGraph();
-		Node graphNode = node;
+	public LinkedHashMap<Node, List<Match>> match(Graph graph, boolean firstMatchPerGraph, boolean firstMatchPerNode, boolean firstMatchPerRule, @Nullable Random rng) {
+		LinkedHashMap<Node, List<Match>> matches = new LinkedHashMap<>();
 
-		List<Match> matches = new ArrayList<>();
+		for(Node node : randomIterable(graph.getNodes(), rng)) {
+			List<Match> nodeMatches = this.match(node, firstMatchPerGraph || firstMatchPerNode, firstMatchPerGraph || firstMatchPerRule, rng);
+			if(!nodeMatches.isEmpty()) {
+				matches.put(node, nodeMatches);
 
-		for(Rule rule : this.rules) {
-			for(Node lhsNode : rule.getLHS().getNodesByType(graphNode.getType())) {
-				Match match = new Match(rule, graph, lhsNode, graphNode);
-
-				if(match.isFinished()) {
-					if(match.isFullMatch()) {
-						matches.add(match);
-					}
-				} else if(this.traverse(lhsNode, graphNode, match) == 1) {
-					matches.add(match);
+				if(firstMatchPerGraph) {
+					return matches;
 				}
 			}
 		}
@@ -241,29 +228,63 @@ public class Grammar {
 		return matches;
 	}
 
-	private int traverse(Node lhsNode, Node graphNode, Match match) {
-		for(Edge lhsEdge : lhsNode.getEdges()) {
+	public List<Match> match(Node node, boolean firstMatchPerNode, boolean firstMatchPerRule, @Nullable Random rng) {
+		Graph graph = node.getGraph();
+		Node graphNode = node;
+
+		List<Match> matches = new ArrayList<>();
+
+		for(Rule rule : randomIterable(this.rules, rng)) {
+			for(Node lhsNode : randomIterable(rule.getLHS().getNodesByType(graphNode.getType()), rng)) {
+				Match match = new Match(rule, graph, lhsNode, graphNode);
+
+				if(match.isFinished()) {
+					if(match.isFullMatch()) {
+						matches.add(match);
+
+						if(firstMatchPerNode) {
+							return matches;
+						}
+					}
+				} else if(this.traverse(matches, lhsNode, graphNode, match, firstMatchPerNode || firstMatchPerRule, rng)) {
+					if(firstMatchPerNode) {
+						return matches;
+					}
+				}
+			}
+		}
+
+		return matches;
+	}
+
+	private boolean traverse(List<Match> matches, Node lhsNode, Node graphNode, Match match, boolean firstMatchPerRule, @Nullable Random rng) {
+		for(Edge lhsEdge : randomIterable(lhsNode.getEdges(), rng)) {
 			Node lhsNeighbor = lhsEdge.getOther(lhsNode);
 
 			if(!match.hasVisited(lhsNeighbor)) {
-				for(Edge graphEdge : graphNode.getEdges()) {
+				for(Edge graphEdge : randomIterable(graphNode.getEdges(), rng)) {
 					if(lhsEdge.isSameType(graphEdge) && lhsEdge.isSameDirection(lhsNode, graphEdge, graphNode)) {
 						Node graphNeighbor = graphEdge.getOther(graphNode);
 
 						if(lhsNeighbor.isSameType(graphNeighbor)) {
-							match.visit(lhsNeighbor, graphNeighbor);
-
-							if(match.isFinished()) {
-								if(match.isFullMatch()) {
-									return 1;
-								} else {
-									return 0;
-								}
+							Match newMatch;
+							if(firstMatchPerRule) {
+								newMatch = match;
+								newMatch.visit(lhsNeighbor, graphNeighbor);
+							} else {
+								newMatch = new Match(match, lhsNeighbor, graphNeighbor);
 							}
 
-							int result = this.traverse(lhsNeighbor, graphNeighbor, match);
-							if(result >= 0) {
-								return result;
+							if(newMatch.isFinished()) {
+								if(newMatch.isFullMatch()) {
+									matches.add(newMatch);
+
+									if(firstMatchPerRule) {
+										return true;
+									}
+								}
+							} else if(this.traverse(matches, lhsNeighbor, graphNeighbor, newMatch, firstMatchPerRule, rng)) {
+								return true;
 							}
 						}
 					}
@@ -271,6 +292,73 @@ public class Grammar {
 			}
 		}
 
-		return -1;
+		return false;
+	}
+
+	private static <T, F extends List<T>> Iterable<T> randomIterable(F list, @Nullable Random rng) {
+		final int n = list.size();
+		if(rng == null || n <= 1) {
+			return list;
+		} else {
+			return new Iterable<T>() {
+				@Override
+				public Iterator<T> iterator() {
+					return new Iterator<T>() {
+						/*
+						 * 1. m and c need to be relatively prime.
+						 * 2. a - 1 is divisible by all prime factors of m.
+						 * 3. a - 1 is divisible by 4, if m is also divisible by 4.
+						 * Implements a full period LCG, i.e., it returns every number
+						 * between 0 and m (exclusive) exactly once before looping.
+						 */
+
+						private static final int c = 1013904223;
+						private static final int a = 1664525;
+						private final int seed, m;
+						private int next;
+						private boolean hasNext;
+
+						{
+							if(n > 0) {
+								this.hasNext = true;
+								//Set m to smallest power of 2 larger or equal n so
+								//that condition 2 holds
+								int i = n - 1;
+								i = i | i >> 1;
+								i = i | i >> 2;
+								i = i | i >> 4;
+								i = i | i >> 8;
+								i = i | i >> 16;
+								this.m = i + 1;
+								this.next = this.seed = rng.nextInt(n);
+							} else {
+								this.hasNext = false;
+								this.m = 1;
+								this.next = this.seed = 0;
+							}
+						}
+
+						@Override
+						public boolean hasNext() {
+							return this.hasNext;
+						}
+
+						@Override
+						public T next() {
+							final int m = this.m;
+							int next = this.next;
+							do {
+								next = (a * next + c) % m;
+							} while(next >= n);
+							if(next == this.seed) {
+								this.hasNext = false;
+							}
+							this.next = next;
+							return list.get(next);
+						}
+					};
+				}
+			};
+		}
 	}
 }
