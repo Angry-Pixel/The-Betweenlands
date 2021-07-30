@@ -1984,6 +1984,8 @@ advancements.thebetweenlands.farmer.fertile_soil.title=Fertile Soil
 advancements.thebetweenlands.farmer.fertile_soil.description=Dig up a worm while making holes for crops
 advancements.thebetweenlands.farmer.bountiful_barnacles.title=Bountiful Barnacles
 advancements.thebetweenlands.farmer.bountiful_barnacles.description=Harvest and replace a cluster of Barnacles
+advancements.thebetweenlands.survivalist.premium_produce.title=Premium Produce
+advancements.thebetweenlands.survivalist.premium_produce.description=Craft and consume a Pearled Pear
 
 # Herbalist
 advancements.thebetweenlands.herbalist.root.title=Herbalist
@@ -2026,8 +2028,6 @@ advancements.thebetweenlands.survivalist.hashtag_blessed.title=#Blessed
 advancements.thebetweenlands.survivalist.hashtag_blessed.description=Get saved by the Blessed effect from a Simulacrum
 advancements.thebetweenlands.survivalist.uh_oh_stinky.title=Uh Oh, Stinky
 advancements.thebetweenlands.survivalist.uh_oh_stinky.description=Use a Fumigant to remove your stench
-advancements.thebetweenlands.survivalist.pearls_of_wisdom.title=Pearls of Wisdom
-advancements.thebetweenlands.survivalist.pearls_of_wisdom.description=Swallow a Rock Snot Pearl
 
 # Craftsman
 advancements.thebetweenlands.craftsman.root.title=Craftsman
