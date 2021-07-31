@@ -272,7 +272,7 @@ public class EntityVolarkite extends Entity {
 					this.downdraftTicks = 25;
 					hasSource = true;
 				}
-			} else if(state.getMaterial() == Material.FIRE || state.getMaterial() == Material.LAVA || block instanceof BlockFire || block == BlockRegistry.OCTINE_ORE || block == BlockRegistry.OCTINE_BLOCK) {
+			} else if(state.getMaterial() == Material.FIRE || state.getMaterial() == Material.LAVA || block instanceof BlockFire || block == BlockRegistry.OCTINE_ORE || block == BlockRegistry.OCTINE_BLOCK || block == BlockRegistry.PEAT_SMOULDERING) {
 				this.updraftTicks = 25;
 				hasSource = true;
 			} else if(state.getMaterial() == Material.ICE || state.getMaterial() == Material.SNOW || state.getMaterial() == Material.CRAFTED_SNOW || state.getMaterial() == Material.PACKED_ICE) {
