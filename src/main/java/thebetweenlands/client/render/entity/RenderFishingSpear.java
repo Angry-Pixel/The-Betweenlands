@@ -38,7 +38,7 @@ public class RenderFishingSpear extends Render<EntityFishingSpear> {
 		GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(-45.0F, 1.0F, 0.0F, 0.0F);
 		GlStateManager.scale(-1F, -1F, 1F);
-		GlStateManager.translate(0F, 0F, 0F);
+		GlStateManager.translate(0F, 0.25F, 0F);
 
 		if (this.renderOutlines) {
 			GlStateManager.enableColorMaterial();
