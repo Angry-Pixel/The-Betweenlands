@@ -21,6 +21,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.StringUtils;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -74,7 +75,7 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 
 		if(!world.isRemote) {
 			// because the player is always null unless the world is loaded but block NBT is loaded before grrrrr
-			if(!hasUpdated && !placerUUID.isEmpty()) {
+			if(!hasUpdated && !StringUtils.isNullOrEmpty(placerUUID)) {
 		        UUID id = UUID.fromString(placerUUID);
 				EntityPlayer player = this.world.getPlayerEntityByUUID(id);
 				if(player != null) {
@@ -101,7 +102,7 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 					checkCatch().setDead();
 					getItems().set(0, itemMob);
 					markForUpdate();
-			        if (hasSiltCrab() || hasBubblerCrab() && getPlacer() != null)
+			        if (hasSiltCrab() || hasBubblerCrab() && getPlacer() != null && !StringUtils.isNullOrEmpty(placerUUID))
 			        	if (getPlacer() instanceof EntityPlayerMP)
 			        		AdvancementCriterionRegistry.CRAB_POT.trigger((EntityPlayerMP) getPlacer());
 				}
