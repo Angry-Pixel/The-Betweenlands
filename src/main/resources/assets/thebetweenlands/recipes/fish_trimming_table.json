@@ -9,7 +9,8 @@
       "item": "thebetweenlands:smooth_betweenstone_slab"
     },
     "O": {
-      "item": "thebetweenlands:log_weedwood"
+      "item": "thebetweenlands:log_weedwood",
+      "data": 0
     }
   },
   "result": {
