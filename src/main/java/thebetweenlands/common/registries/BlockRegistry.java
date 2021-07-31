@@ -508,7 +508,7 @@ public class BlockRegistry {
     public static final Block POLISHED_DENTROTHYST = new BlockPolishedDentrothyst().setHardness(0.3F);
     public static final Block SILT_GLASS = new BlockGlassBetweenlands(Material.GLASS).setHardness(0.3F);
     public static final Block SILT_GLASS_PANE = new BlockPaneBetweenlands(Material.GLASS).setHardness(0.3F);
-    public static final Block FILTERED_SILT_GLASS = new BlockFilteredSiltGlass();
+    public static final Block FILTERED_SILT_GLASS = new BlockFilteredSiltGlass().setHardness(0.3F);
     public static final Block POLISHED_DENTROTHYST_PANE = new BlockDentrothystPane().setHardness(0.3F);
     public static final Block AMATE_PAPER_PANE_1 = new BlockAmatePaperPane();
     public static final Block AMATE_PAPER_PANE_2 = new BlockAmatePaperPane();
