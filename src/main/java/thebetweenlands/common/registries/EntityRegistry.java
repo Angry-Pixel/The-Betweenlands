@@ -153,7 +153,7 @@ public class EntityRegistry {
 		registerEntity(EntityGecko.class, "gecko", 0xFF8000, 0x22E0B1, 64, 1, true);
 		registerEntity(EntityTermite.class, "termite", 0xD9D7A7, 0xD99830);
 		registerEntity(EntityGiantToad.class, "toad", 0x405C3B, 0x7ABA45);
-		registerEntity(EntityOlm.class, "olm", 0xD0D1C2, 0xECEDDF);
+		registerEntity(EntityOlm.class, "olm", 0xE8D8B8, 0xE79B7B);
 		registerEntity(EntityChiromaw.class, "chiromaw", 0x142728, 0x7A4E42);
 		registerEntity(EntityFrog.class, "frog", 0x1E4921, 0x479219, 64, 20, true);
 		registerEntity(EntitySwordEnergy.class, "sword_energy");
@@ -250,31 +250,31 @@ public class EntityRegistry {
 		registerEntity(EntityChiromawHatchling.class, "chiromaw_hatchling", 64, 3, true);
 		registerEntity(EntityChiromawTame.class, "chiromaw_tame", 128, 3, true);
 		registerEntity(EntityGreeblingCorpse.class, "greebling_corpse", 80, 20, false);
-		registerEntity(EntityGreeblingCoracle.class, "greebling_coracle", 0x142728, 0x7CB2AA);
+		registerEntity(EntityGreeblingCoracle.class, "greebling_coracle", 0x7CB2AA, 0xC3726C);
 
 		registerEntity(EntityStalker.class, "stalker", 0xE4DCC9, 0xD58888);
 		registerEntity(EntitySwarm.class, "swarm", 0x292B3B, 0xE2D698);
 
 		registerEntity(EntityFishBait.class, "fish_bait_item");
-		registerEntity(EntityAnadia.class, "anadia", 0x243B0B, 0x00FFFF);
+		registerEntity(EntityAnadia.class, "anadia", 0x5D633A, 0xB53D2F);
 		registerEntity(EntityBLFishHook.class, "betweenlands_fish_hook");
 		registerEntity(EntityFishingSpear.class, "fishing_spear", 64, 20, true);
 		registerEntity(EntityFishingTackleBoxSeat.class, "fishing_tackle_box_seat");
 		
 		//WIP Stuffs
-		registerEntity(EntityRockSnot.class, "rock_snot", 0x3F5A69, 0xA16A77, 64, 3, true);
+		registerEntity(EntityRockSnot.class, "rock_snot", 0xC4B7DB, 0x2D0000, 64, 3, true);
 		registerEntity(EntityRockSnotTendril.class, "rock_snot_tendril", 64, 20, true);
 
 		// TODO Shit that will be added onedayTM
 		//registerEntity(EntityPuffin.class, "puffin", 0x3F5A69, 0xA16A77, 64, 3, true);
 		registerEntity(EntityAnimalBurrow.class, "animal_burrow");
 
-		registerEntity(EntityJellyfish.class, "jellyfish", 0x3F5A69, 0xA16A77, 64, 3, true);
-		registerEntity(EntityJellyfishCave.class, "jellyfish_cave", 0x3F5A69, 0xA16A77, 64, 3, true);
+		registerEntity(EntityJellyfish.class, "jellyfish", 0xFFEBE5, 0xFF506B, 64, 3, true);
+		registerEntity(EntityJellyfishCave.class, "jellyfish_cave", 0xE0FFF6, 0x7CFFFF, 64, 3, true);
 
-		registerEntity(EntityBubblerCrab.class, "bubbler_crab", 0x086A87, 0xB43104);
+		registerEntity(EntityBubblerCrab.class, "bubbler_crab", 0xD8D5CB, 0xC7692C);
 
-		registerEntity(EntityFreshwaterUrchin.class, "freshwater_urchin", 0x086A87, 0xB43104, 64, 3, true);
+		registerEntity(EntityFreshwaterUrchin.class, "freshwater_urchin", 0x612E2E, 0x13363F, 64, 3, true);
 
 		registerEntity(EntityBubblerCrabBubble.class, "bubbler_crab_bubble", 64, 1, true);
 		registerEntity(EntityCaveFish.class, "cave_fish", 0xD0D1C2, 0xECEDDF);
