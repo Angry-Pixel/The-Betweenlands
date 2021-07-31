@@ -386,21 +386,21 @@ public class ItemRegistry {
     public static final Item BL_BUCKET_PLANT_TONIC = new ItemPlantTonic();
     public static final Item SYRMORITE_BUCKET_SOLID_RUBBER = new ItemSyrmoriteBucketSolidRubber();
     //RECORDS
-    public static final Item ASTATOS = new ItemBLRecord(SoundRegistry.ASTATOS);
-    public static final Item BETWEEN_YOU_AND_ME = new ItemBLRecord(SoundRegistry.BETWEEN_YOU_AND_ME);
-    public static final Item CHRISTMAS_ON_THE_MARSH = new ItemBLRecord(SoundRegistry.CHRISTMAS_ON_THE_MARSH);
-    public static final Item THE_EXPLORER = new ItemBLRecord(SoundRegistry.THE_EXPLORER);
-    public static final Item HAG_DANCE = new ItemBLRecord(SoundRegistry.HAG_DANCE);
-    public static final Item LONELY_FIRE = new ItemBLRecord(SoundRegistry.LONELY_FIRE);
-    public static final Item MYSTERIOUS_RECORD = new ItemBLRecord(SoundRegistry._16612);
-    public static final Item ANCIENT = new ItemBLRecord(SoundRegistry.ACIENT);
-    public static final Item BENEATH_A_GREEN_SKY = new ItemBLRecord(SoundRegistry.BENEATH_A_GREEN_SKY);
-    public static final Item DJ_WIGHTS_MIXTAPE = new ItemBLRecord(SoundRegistry.DJ_WIGHTS_MIXTAPE);
-    public static final Item ONWARDS = new ItemBLRecord(SoundRegistry.ONWARD);
-    public static final Item STUCK_IN_THE_MUD = new ItemBLRecord(SoundRegistry.STUCK_IN_THE_MUD);
-    public static final Item WANDERING_WISPS = new ItemBLRecord(SoundRegistry.WANDERING_WISPS);
-    public static final Item WATERLOGGED = new ItemBLRecord(SoundRegistry.WATERLOGGED);
-    public static final Item DEEP_WATER_THEME = new ItemBLRecord(SoundRegistry.DEEP_WATER_THEME);
+    public static final Item ASTATOS = new ItemBLRecord(SoundRegistry.ASTATOS, true);
+    public static final Item BETWEEN_YOU_AND_ME = new ItemBLRecord(SoundRegistry.BETWEEN_YOU_AND_ME, true);
+    public static final Item CHRISTMAS_ON_THE_MARSH = new ItemBLRecord(SoundRegistry.CHRISTMAS_ON_THE_MARSH, true);
+    public static final Item THE_EXPLORER = new ItemBLRecord(SoundRegistry.THE_EXPLORER, true);
+    public static final Item HAG_DANCE = new ItemBLRecord(SoundRegistry.HAG_DANCE, true);
+    public static final Item LONELY_FIRE = new ItemBLRecord(SoundRegistry.LONELY_FIRE, true);
+    public static final Item MYSTERIOUS_RECORD = new ItemBLRecord(SoundRegistry._16612, true);
+    public static final Item ANCIENT = new ItemBLRecord(SoundRegistry.ANCIENT, true);
+    public static final Item BENEATH_A_GREEN_SKY = new ItemBLRecord(SoundRegistry.BENEATH_A_GREEN_SKY, true);
+    public static final Item DJ_WIGHTS_MIXTAPE = new ItemBLRecord(SoundRegistry.DJ_WIGHTS_MIXTAPE, true);
+    public static final Item ONWARDS = new ItemBLRecord(SoundRegistry.ONWARD, true);
+    public static final Item STUCK_IN_THE_MUD = new ItemBLRecord(SoundRegistry.STUCK_IN_THE_MUD, true);
+    public static final Item WANDERING_WISPS = new ItemBLRecord(SoundRegistry.WANDERING_WISPS, true);
+    public static final Item WATERLOGGED = new ItemBLRecord(SoundRegistry.WATERLOGGED, true);
+    public static final Item DEEP_WATER_THEME = new ItemBLRecord(SoundRegistry.DEEP_WATER_THEME, false);
     //MISC
     public static final Item WEEDWOOD_DOOR_ITEM = new ItemDoorBetweenlands() {
         @Override

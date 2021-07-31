@@ -18,7 +18,7 @@ public class SoundRegistry {
     public static final BLSoundEvent GREEBLING_MUSIC_2 = reg("greebling_music_2");
     // Records
     public static final BLSoundEvent _16612 = reg("16612");
-    public static final BLSoundEvent ACIENT = reg("ancient");
+    public static final BLSoundEvent ANCIENT = reg("ancient");
     public static final BLSoundEvent ASTATOS = reg("astatos");
     public static final BLSoundEvent BENEATH_A_GREEN_SKY = reg("beneath_a_green_sky");
     public static final BLSoundEvent BETWEEN_YOU_AND_ME = reg("between_you_and_me");
