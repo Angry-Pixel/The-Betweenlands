@@ -3,11 +3,15 @@ package thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
@@ -114,7 +118,7 @@ public class Grammar {
 							return false;
 						}
 
-						if(!graphEdge.isSameType(lhsEdge)) {
+						if(!graphEdge.isTypeEqual(lhsEdge)) {
 							return false;
 						}
 					}
@@ -138,7 +142,8 @@ public class Grammar {
 			return this.graph2lhs.get(graphNode);
 		}
 
-		public boolean apply() {
+		@Nullable
+		public Map<Node, Set<Node>> apply() {
 			Graph lhs = this.rule.getLHS();
 			Graph rhs = this.rule.getRHS();
 
@@ -147,15 +152,33 @@ public class Grammar {
 				Node graphLhsNode = this.getGraphNode(ruleLhsNode);
 
 				if(graphLhsNode == null || !this.graph.getNodes().contains(graphLhsNode)) {
-					return false;
+					return null;
 				}
 			}
 
-			Map<Node, Node> merge = this.graph.merge(rhs);
+			Map<Node, Node> merge = this.graph.merge(rhs).getLeft();
+
+			//Store which nodes have been replaced by which nodes
+			//Null maps to all additions that don't have a corresponding
+			//LHS side.
+			Map<Node, Set<Node>> replacements = new HashMap<>();
+
+			//Find and store additions
+			Set<Node> additions = new HashSet<>();
+			replacements.put(null, additions);
+			for(Entry<Node, Node> entry : merge.entrySet()) {
+				if(entry.getKey().getTag() == null) {
+					additions.add(entry.getValue());
+				}
+			}
 
 			//Reconnect edges and remove old nodes
 			for(Node ruleLhsNode : lhs.getNodes()) {
 				Node graphLhsNode = this.getGraphNode(ruleLhsNode);
+
+				//Store replacements for the graph node that matched the LHS node
+				Set<Node> graphRhsNodes = new HashSet<>();
+				replacements.put(graphLhsNode, graphRhsNodes);
 
 				//Get tagged RHS node(s). May be up to 2 nodes to allow splitting a single tagged LHS node into two tagged RHS nodes.
 				String tag = ruleLhsNode.getTag();
@@ -166,8 +189,10 @@ public class Grammar {
 				for(Node rhsNode : ruleRhsNodes) {
 					if(i == 0) {
 						graphRhsNode1 = merge.get(rhsNode);
+						graphRhsNodes.add(graphRhsNode1);
 					} else if(i == 1) {
 						graphRhsNode2 = merge.get(rhsNode);
+						graphRhsNodes.add(graphRhsNode2);
 					} else {
 						throw new IllegalStateException("RHS can have at most 2 nodes with the same tag '" + tag + "'");
 					}
@@ -203,7 +228,49 @@ public class Grammar {
 				this.graph.removeNode(graphLhsNode);
 			}
 
-			return true;
+			//Store substitution in graph's RHS nodes
+			Substitution newSubstitution = new Substitution(this.rule);
+			for(Entry<Node, Set<Node>> replacement : replacements.entrySet()) {
+				Node graphLhsNode = replacement.getKey();
+				Set<Node> graphRhsNodes = replacement.getValue();
+
+				//Graph node that matched LHS node may already be part of one ore more substitutions,
+				//so the graph's LHS node must be replaced with the new RHS node(s)
+				if(graphLhsNode != null) {
+					LinkedHashSet<Substitution> predecessors = graphLhsNode.predecessorSubstitutions;
+
+					for(Substitution predecessor : predecessors) {
+						if(predecessor.nodes.remove(graphLhsNode)) {
+							predecessor.nodes.addAll(graphRhsNodes);
+
+							//Add the old substitutions as predecessors to the new
+							//RHS graph node
+							for(Node graphRhsNode : graphRhsNodes) {
+								graphRhsNode.predecessorSubstitutions.add(predecessor);
+							}
+						}
+					}
+				}
+
+				newSubstitution.nodes.addAll(graphRhsNodes);
+
+				Substitution sourceSubstitution = graphLhsNode != null ? graphLhsNode.getSourceSubstitution() : null;
+
+				for(Node graphRhsNode : graphRhsNodes) {
+					//If the RHS node that replaces the LHS node are semantically equal then
+					//the source substitution should stay the same, since there wasn't really
+					//a substitution/replacement
+					if(sourceSubstitution != null && graphLhsNode.isSemanticallyEqual(graphRhsNode)) {
+						graphRhsNode.sourceSubstitution = sourceSubstitution;
+					} else {
+						graphRhsNode.sourceSubstitution = newSubstitution;
+					}
+					graphRhsNode.finalSubstitution = newSubstitution;
+					graphRhsNode.predecessorSubstitutions.add(newSubstitution);
+				}
+			}
+
+			return replacements;
 		}
 	}
 
@@ -263,10 +330,10 @@ public class Grammar {
 
 			if(!match.hasVisited(lhsNeighbor)) {
 				for(Edge graphEdge : randomIterable(graphNode.getEdges(), rng)) {
-					if(lhsEdge.isSameType(graphEdge) && lhsEdge.isSameDirection(lhsNode, graphEdge, graphNode)) {
+					if(lhsEdge.isTypeEqual(graphEdge) && lhsEdge.isDirectionEqual(lhsNode, graphEdge, graphNode)) {
 						Node graphNeighbor = graphEdge.getOther(graphNode);
 
-						if(lhsNeighbor.isSameType(graphNeighbor)) {
+						if(lhsNeighbor.isTypeEqual(graphNeighbor)) {
 							Match newMatch;
 							if(firstMatchPerRule) {
 								newMatch = match;

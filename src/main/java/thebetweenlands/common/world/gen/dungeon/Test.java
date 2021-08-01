@@ -13,20 +13,29 @@ import thebetweenlands.common.world.gen.dungeon.layout.grid.Link;
 import thebetweenlands.common.world.gen.dungeon.layout.pathfinder.SimplePathfinder;
 import thebetweenlands.common.world.gen.dungeon.layout.postprocessor.CompactionPostprocessor;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.RandomWalkTopology;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.Topology;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.TopologyMeta;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.GraphTopology;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.Grammar;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.Graph;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.GraphPrinter;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.Mutator;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.Node;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.Substitution;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.SourceSubstitutionPattern;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.TopologicalSort;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.TopologicalSort.GroupedGraph;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.placement.RandomPlacementStrategy;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.placement.GraphNodeGrid;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.placement.GraphNodeGrid.GridNode;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.placement.GraphPlacement;
 
 public class Test {
 	public static Test TEST = new Test();
 
 	public Grid grid = new Grid(new Random(), 16);
 
-	public RandomWalkTopology topology = new RandomWalkTopology();
+	public Topology<TopologyMeta> topology = new RandomWalkTopology();
 	public CompactionPostprocessor postprocessor = new CompactionPostprocessor();
 	public SimplePathfinder pathfinder = new SimplePathfinder();
 
@@ -37,6 +46,9 @@ public class Test {
 
 	public void init() {
 		System.out.println("---------------------------- Generate ----------------------------");
+
+		this.topology = new GraphTopology(this.graph());
+		//this.topology = new RandomWalkTopology();
 
 		this.isShrinking = false;
 		this.counter = 0;
@@ -101,7 +113,7 @@ public class Test {
 		}*/
 	}
 
-	public void graph() {
+	public GraphNodeGrid graph() {
 		Graph graph = new Graph();
 		graph.addNode("S"); //Axiom
 
@@ -119,9 +131,28 @@ public class Test {
 					Node CF = rhs.addNode("CF");
 					Node g = rhs.addNode("g");
 
-					e.chain(C).chain(G).chain(bm, "double")
+
+					Node n = rhs.addNode("n");
+					Node r1s = rhs.addNode("r1s");
+					Node r1e = rhs.addNode("r1e");
+					Node C2 = rhs.addNode("C");
+					Node G2 = rhs.addNode("G");
+					Node r2s = rhs.addNode("r2s");
+					Node r2e = rhs.addNode("r2e");
+					Node C3 = rhs.addNode("C");
+					Node G3 = rhs.addNode("G");
+
+					e.chain(n).chain(C, "double").chain(G).chain(bm, "double")
 					.chain(iq, "double").chain(ti, "double")
 					.chain(CF, "double").chain(g);
+					n.chain(r1s).chain(r1e, "double");
+					n.chain(r2s).chain(r2e, "double");
+					r1s.chain(C2, "double").chain(G2).chain(r1e);
+					r2s.chain(C3, "double").chain(G3).chain(r2e);
+
+					/*e.chain(C).chain(G).chain(bm, "double")
+					.chain(iq, "double").chain(ti, "double")
+					.chain(CF, "double").chain(g);*/
 				})
 				//Create Final Chain
 				.rule(1, lhs -> {
@@ -379,6 +410,7 @@ public class Test {
 		//seed = 1824453356624892194L;
 		//seed = 4864012680087479409L;
 		//seed = -1374954073690921752L;
+		//seed = 195479986408876174L;
 
 		long start = System.nanoTime();
 		int n = mutator.mutate(graph, new Random(seed), 50);
@@ -426,6 +458,15 @@ public class Test {
 		System.out.println("Seed: " + seed);
 		System.out.println("Run time: " + (((System.nanoTime() - start) % 10000000000L) / 1000000.0f) + "ms");
 		System.out.println("Mutated in: " + n + " steps");
+		System.out.println("Substitutions:");
+		for(Node node : graph.getNodes()) {
+			Substitution sub = node.getSourceSubstitution();
+			if(sub != null) {
+				System.out.println(node.toString() + ": " + sub.hashCode() + " " + sub);
+			}
+		}
+		SourceSubstitutionPattern multiLockPattern = SourceSubstitutionPattern.builder().with("lm").with("km", 3).build();
+		System.out.println("Num multi lock patterns: " + multiLockPattern.find(graph).size());
 		System.out.println("Graph nodes: " + graph.getNodes().size());
 		System.out.println("Graph: \n" + GraphPrinter.toEdgeListString(graph));
 		System.out.println("Tree: \n" + GraphPrinter.toSpanningTreeString(graph.getNodesByType("e").get(0)));
@@ -443,15 +484,37 @@ public class Test {
 			System.out.println("Sort time: " + (((System.nanoTime() - start) % 10000000000L) / 1000000.0f) + "ms");
 			System.out.println("Sorted nodes: " + sorted.getNodes().size());
 			System.out.println("Groups:");
-			for(GroupedGraph.Group group : new HashSet<>(sorted.getGroups().values())) {
+			for(GroupedGraph.Group group : new HashSet<>(sorted.getNodeGroups().values())) {
 				System.out.println(group);
 			}
 			System.out.println("Node order:");
 			for(Node node : sorted.getNodes()) {
 				System.out.println(node.getType() + " (" + node.getID() + ")");
 			}
+
+			start = System.nanoTime();
+			GraphNodeGrid nodeGrid = GraphPlacement.generate(sorted, new RandomPlacementStrategy(), new Random(seed));
+			System.out.println("Placement time: " + (((System.nanoTime() - start) % 10000000000L) / 1000000.0f) + "ms");
+			System.out.println("Placed nodes: " + nodeGrid.get().size());
+			for(GridNode gridNode : nodeGrid.get()) {
+				String str = gridNode.getGraphNode().toString();
+				if(!gridNode.getSpaceTags().isEmpty()) {
+					str += " (";
+					str += gridNode.getPrimarySpaceTag() + "; ";
+					for(String tag : gridNode.getSpaceTags()) {
+						str += tag + ", ";
+					}
+					str = str.substring(0, str.length() - 2);
+					str += ")";
+				}
+				System.out.println(str);
+			}
+
+			return nodeGrid;
 		} catch(Throwable ex) {
 			ex.printStackTrace();
 		}
+
+		return null;
 	}
 }

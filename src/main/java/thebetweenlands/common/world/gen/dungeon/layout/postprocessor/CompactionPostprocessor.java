@@ -20,6 +20,8 @@ import thebetweenlands.common.world.gen.dungeon.layout.grid.Tile;
 public class CompactionPostprocessor extends Postprocessor<Object> {
 	private final int maxIterations;
 	
+	private int thresholdCounter = 0;
+	
 	private Map<Connector, Set<Cell>> trees = new HashMap<>();
 	private int prevTotalLinkLength;
 	private int treeTagsStart;
@@ -98,9 +100,13 @@ public class CompactionPostprocessor extends Postprocessor<Object> {
 		}
 
 		if(this.prevTotalLinkLength - newTotalLinkLength < 2) {
-			return false;
+			if(++this.thresholdCounter >= 3) {
+				return false;
+			}
+		} else {
+			this.thresholdCounter = 0;
 		}
-
+		
 		this.prevTotalLinkLength = newTotalLinkLength;
 
 		return true;

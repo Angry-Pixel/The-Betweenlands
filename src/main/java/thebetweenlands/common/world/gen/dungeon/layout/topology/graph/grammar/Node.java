@@ -1,9 +1,13 @@
 package thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -19,11 +23,29 @@ public class Node {
 	private final List<Edge> edges = new ArrayList<>();
 	private final Map<Node, Edge> edgeMap = new HashMap<>();
 
+	final LinkedHashSet<Substitution> predecessorSubstitutions = new LinkedHashSet<>();
+	Substitution sourceSubstitution;
+	Substitution finalSubstitution;
+
 	Node(Graph graph, String type, @Nullable String tag) {
 		this.graph = graph;
 		this.id = graph.nodeIdCounter++;
 		this.type = type;
 		this.tag = tag;
+	}
+
+	@Nullable
+	public Substitution getSourceSubstitution() {
+		return this.sourceSubstitution;
+	}
+
+	@Nullable
+	public Substitution getFinalSubstitution() {
+		return this.finalSubstitution;
+	}
+
+	public Set<Substitution> getPredecessorSubstitutions() {
+		return Collections.unmodifiableSet(this.predecessorSubstitutions);
 	}
 
 	void removeEdge(Edge edge) {
@@ -106,12 +128,16 @@ public class Node {
 		return this.tag;
 	}
 
-	public boolean isSameType(Node node) {
-		return (this.type == null && node.type == null) || (this.type != null && this.type.equals(node.type));
+	public boolean isTypeEqual(Node node) {
+		return Objects.equals(this.type, node.type);
 	}
 
-	public boolean isSameTag(Node node) {
-		return (this.tag == null && node.tag == null) || (this.tag != null && this.tag.equals(node.tag));
+	public boolean isTagEqual(Node node) {
+		return Objects.equals(this.tag, node.tag);
+	}
+
+	public boolean isSemanticallyEqual(Node node) {
+		return this.isTypeEqual(node) && this.isTagEqual(node);
 	}
 
 	@Override

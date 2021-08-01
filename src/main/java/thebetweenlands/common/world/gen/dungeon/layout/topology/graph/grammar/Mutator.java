@@ -104,7 +104,7 @@ public class Mutator {
 					Collections.shuffle(matches, rng);
 
 					for(Match match : matches) {
-						if(match.apply()) {
+						if(match.apply() != null) {
 							graph.setMutated(true);
 						}
 					}

@@ -1,5 +1,8 @@
 package thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
+
 public class Rule {
 	private final Graph lhs;
 	private final Graph rhs;
@@ -40,5 +43,33 @@ public class Rule {
 
 	public int getWeight() {
 		return this.weight;
+	}
+
+	@Override
+	public String toString() {
+		ToStringHelper str = MoreObjects.toStringHelper(this);
+		StringBuilder lhs = new StringBuilder();
+		for(Node node : this.lhs.getNodes()) {
+			String tag = node.getTag();
+			lhs.append(node.getType());
+			if(tag != null) {
+				lhs.append(" (");
+				lhs.append(tag);
+				lhs.append(")");
+			}
+			lhs.append(", ");
+		}
+		StringBuilder rhs = new StringBuilder();
+		for(Node node : this.rhs.getNodes()) {
+			String tag = node.getTag();
+			rhs.append(node.getType());
+			if(tag != null) {
+				rhs.append(" (");
+				rhs.append(tag);
+				rhs.append(")");
+			}
+			rhs.append(", ");
+		}
+		return str.add("lhs", lhs.substring(0, Math.max(0, lhs.length() - 2))).add("rhs", rhs.substring(0, Math.max(0, rhs.length() - 2))).add("weight", this.weight).toString();
 	}
 }

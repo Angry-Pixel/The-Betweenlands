@@ -43,7 +43,7 @@ public class TestItem extends Item {
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		if(worldIn.isRemote && handIn == EnumHand.MAIN_HAND) {
 			try {
-				/*if(playerIn.isSneaking()) {
+				if(playerIn.isSneaking()) {
 					long start = System.currentTimeMillis();
 					int runs = 1;
 					for(int i = 0; i < runs; i++) {
@@ -58,8 +58,8 @@ public class TestItem extends Item {
 						Test.TEST.step();
 					}
 					System.out.println("Time: " + ((System.currentTimeMillis() - start) / runs) + "ms, Cells: " + Test.TEST.grid.getCells().size());
-				}*/
-				Test.TEST.graph();
+				}
+				//Test.TEST.graph();
 			} catch(Exception ex) {
 				ex.printStackTrace();
 			}

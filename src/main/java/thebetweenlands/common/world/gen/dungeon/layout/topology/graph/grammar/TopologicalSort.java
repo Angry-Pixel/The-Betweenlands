@@ -14,6 +14,8 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.google.common.base.MoreObjects;
 
 public class TopologicalSort {
@@ -307,20 +309,27 @@ public class TopologicalSort {
 			}
 		}
 
-		private final Map<Node, Group> groups = new HashMap<>();
+		private final Map<Node, Group> nodeGroups = new HashMap<>();
+		private final Map<Edge, Group> edgeGroups = new HashMap<>();
 
-		private GroupedGraph(List<Node> nodes, Map<Node, Group> groups) {
-			Map<Node, Node> merge = this.merge(nodes, true);
+		private GroupedGraph(List<Node> nodes, Map<Node, Group> nodeGroups, Map<Edge, Group> edgeGroups) {
+			Pair<Map<Node, Node>, Map<Edge, Edge>> merge = this.merge(nodes, true);
+			Map<Node, Node> nodeMerge = merge.getLeft();
+			Map<Edge, Edge> edgeMerge = merge.getRight();
 
-			if(!groups.isEmpty()) {
+			if(!nodeGroups.isEmpty()) {
 				for(Node node : nodes) {
-					Group group = groups.get(node);
+					Group group = nodeGroups.get(node);
 
 					if(group != null) {
-						Node mergedNode = merge.get(node);
+						Node mergedNode = nodeMerge.get(node);
 						group.nodes.add(mergedNode);
-						this.groups.put(mergedNode, group);
+						this.nodeGroups.put(mergedNode, group);
 					}
+				}
+
+				for(Entry<Edge, Group> edgeGroup : edgeGroups.entrySet()) {
+					this.edgeGroups.put(edgeMerge.get(edgeGroup.getKey()), edgeGroup.getValue());
 				}
 			}
 		}
@@ -329,14 +338,18 @@ public class TopologicalSort {
 		public void removeNode(Node node) {
 			super.removeNode(node);
 
-			Group group = this.groups.remove(node);
+			Group group = this.nodeGroups.remove(node);
 			if(group != null) {
 				group.nodes.remove(node);
 			}
 		}
 
-		public Map<Node, Group> getGroups() {
-			return Collections.unmodifiableMap(this.groups);
+		public Map<Node, Group> getNodeGroups() {
+			return Collections.unmodifiableMap(this.nodeGroups);
+		}
+
+		public Map<Edge, Group> getEdgeGroups() {
+			return Collections.unmodifiableMap(this.edgeGroups);
 		}
 	}
 
@@ -390,7 +403,9 @@ public class TopologicalSort {
 
 		final int n = graph.getNodes().size();
 
-		Map<Node, GroupedGraph.Group> groups = new HashMap<>();
+		Map<Node, GroupedGraph.Group> nodeGroups = new HashMap<>();
+		Map<Edge, GroupedGraph.Group> edgeGroups = new HashMap<>();
+		
 		Map<Node, Hypernode> hypergraph = new HashMap<>();
 		List<Hypernode> hypernodeList = new ArrayList<>();
 
@@ -405,7 +420,13 @@ public class TopologicalSort {
 
 					for(Hypernode child : hypernode.children) {
 						if(child.isSingleNode()) {
-							groups.put(child.node, group);
+							nodeGroups.put(child.node, group);
+							
+							for(Edge edge : child.node.getEdges()) {
+								if(properties.groupingPredicate.test(edge)) {
+									edgeGroups.put(edge, group);
+								}
+							}
 						} else {
 							throw new IllegalStateException();
 						}
@@ -435,7 +456,7 @@ public class TopologicalSort {
 			}
 		}
 
-		return new GroupedGraph(graphHypernode.sort(hypergraph, properties), groups);
+		return new GroupedGraph(graphHypernode.sort(hypergraph, properties), nodeGroups, edgeGroups);
 	}
 
 	/**

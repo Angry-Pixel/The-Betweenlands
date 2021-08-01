@@ -10,6 +10,8 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
@@ -29,19 +31,20 @@ public class Graph {
 		return graph;
 	}
 
-	public Map<Node, Node> merge(Graph graph) {
+	public Pair<Map<Node, Node>, Map<Edge, Edge>> merge(Graph graph) {
 		return this.merge(graph, false);
 	}
 
-	public Map<Node, Node> merge(Graph graph, boolean mergeTags) {
+	public Pair<Map<Node, Node>, Map<Edge, Edge>> merge(Graph graph, boolean mergeTags) {
 		return this.merge(graph.nodes, false);
 	}
 
-	protected Map<Node, Node> merge(List<Node> nodes, boolean mergeTags) {
-		Map<Node, Node> merge = new HashMap<>();
+	protected Pair<Map<Node, Node>, Map<Edge, Edge>> merge(List<Node> nodes, boolean mergeTags) {
+		Map<Node, Node> nodeMerge = new HashMap<>();
+		Map<Edge, Edge> edgeMerge = new HashMap<>();
 
 		for(Node node : nodes) {
-			merge.put(node, this.addNode(node.getType(), mergeTags ? node.getTag() : null));
+			nodeMerge.put(node, this.addNode(node.getType(), mergeTags ? node.getTag() : null));
 		}
 
 		Set<Edge> edges = new HashSet<>();
@@ -49,14 +52,14 @@ public class Graph {
 		for(Node node : nodes) {
 			for(Edge edge : node.getEdges()) {
 				if(edges.add(edge)) {
-					Node left = merge.get(edge.getLeft());
-					Node right = merge.get(edge.getRight());
-					left.connect(right, edge.getType(), edge.isBidirectional());
+					Node left = nodeMerge.get(edge.getLeft());
+					Node right = nodeMerge.get(edge.getRight());
+					edgeMerge.put(edge, left.connect(right, edge.getType(), edge.isBidirectional()));
 				}
 			}
 		}
 
-		return merge;
+		return Pair.of(nodeMerge, edgeMerge);
 	}
 
 	public Node addNode(String type) {
