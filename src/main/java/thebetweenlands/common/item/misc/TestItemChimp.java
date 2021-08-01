@@ -1,16 +1,21 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.List;
+
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.entity.EntityAnimalBurrow;
+import thebetweenlands.common.entity.EntityFishVortex;
 
 
 //MINE!!
@@ -191,7 +196,7 @@ public class TestItemChimp extends Item {
 				
 				WorldGenChiromawNest nest = new WorldGenChiromawNest();
 				nest .generate(worldIn, itemRand, pos.up());
-			*/	
+			
 //				EntityRockSnot snot = new EntityRockSnot(worldIn);
 //				snot.setPosition(pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F);
 //				worldIn.spawnEntity(snot);
@@ -202,10 +207,35 @@ public class TestItemChimp extends Item {
 				burrow.onInitialSpawn(worldIn.getDifficultyForLocation(burrow.getPosition()), null);
 				worldIn.spawnEntity(burrow);
 			}
+			*/
+
+				makeSomethingHere(worldIn, player);
 	
 		}
 
 		return EnumActionResult.SUCCESS;
+	}
+
+	//Test code for things
+	private void makeSomethingHere(World world, EntityPlayer player) {
+			if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
+				List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, proximityBox(player));
+				for (int entityCount = 0; entityCount < list.size(); entityCount++) {
+					EntityLivingBase entity = list.get(entityCount);
+					if (entity != null) {
+						if (!(entity instanceof EntityPlayer)) {
+							EntityFishVortex vortex = new EntityFishVortex(world);
+							vortex.setPosition(entity.posX, entity.posY + 0.25D, entity.posZ);
+							world.spawnEntity(vortex);
+							entity.startRiding(vortex, true);
+						}
+					}
+				}
+			}
+	}
+
+	protected AxisAlignedBB proximityBox(EntityPlayer player) {
+		return new AxisAlignedBB(player.getPosition()).grow(8D, 2D, 8D);
 	}
 
 	@Override

@@ -165,7 +165,8 @@ public enum BLParticles {
 	WIND_CHIME_VISION(new ParticleVisionOrb.Factory(new ResourceLocation("thebetweenlands:particle/wind_chime_vision_mask"))),
 	URCHIN_SPIKE(new ParticleUrchinSpike.Factory()),
 	FANCY_DRIP(new ParticleFancyDrip.Factory()),
-	FANCY_BUBBLE(new ParticleFancyBubble.Factory());
+	FANCY_BUBBLE(new ParticleFancyBubble.Factory()),
+	FISH_VORTEX(new ParticleEntitySwirl.FactoryFishSwirl());
 	
 	private ParticleFactory<?, ?> factory;
 

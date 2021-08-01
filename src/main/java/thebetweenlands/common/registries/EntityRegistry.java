@@ -10,6 +10,7 @@ import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityFalseXPOrb;
 import thebetweenlands.common.entity.EntityFishBait;
+import thebetweenlands.common.entity.EntityFishVortex;
 import thebetweenlands.common.entity.EntityFishingTackleBoxSeat;
 import thebetweenlands.common.entity.EntityGalleryFrame;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
@@ -280,6 +281,8 @@ public class EntityRegistry {
 		registerEntity(EntityCaveFish.class, "cave_fish", 0xD0D1C2, 0xECEDDF);
 
 		registerEntity(EntityGlowingGoop.class, "glowing_goop");
+
+		registerEntity(EntityFishVortex.class, "fish_vortex");
 	}
 
 	private static int id = 0;
