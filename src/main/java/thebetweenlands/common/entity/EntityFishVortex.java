@@ -48,11 +48,11 @@ public class EntityFishVortex extends Entity {
 	
 	@SideOnly(Side.CLIENT)
 	protected void spawnFishParticles() {
-		if(this.rand.nextInt(4) == 0) {
+		if(this.rand.nextInt(6) == 0) {
 			ParticleArgs<?> args = ParticleArgs.get().withDataBuilder().setData(2, this).buildData();
-				args.withColor(1F, 0.65F, 0.25F, 0.75F);
-				args.withScale(2F + rand.nextFloat() * 1.5F);
-			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.FISH_VORTEX.create(this.world, this.posX, this.posY, this.posZ, args));
+				//args.withColor(1F, 0.65F, 0.25F, 0.75F);
+				args.withScale(1.5F + rand.nextFloat() * 1.5F);
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.FISH_VORTEX.create(this.world, this.posX + rand.nextFloat() * 4F, this.posY, this.posZ + rand.nextFloat() * 4F, args));
 		}
 	}
 

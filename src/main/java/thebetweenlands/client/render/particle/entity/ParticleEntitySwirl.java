@@ -130,7 +130,7 @@ public class ParticleEntitySwirl extends ParticleSwirl implements IParticleSprit
 
 	public static final class FactoryFishSwirl extends ParticleFactory<FactoryFishSwirl, ParticleEntitySwirl> {
 		public FactoryFishSwirl() {
-			super(ParticleEntitySwirl.class, ParticleTextureStitcher.create(ParticleEntitySwirl.class, new ResourceLocation("thebetweenlands:particle/leaf")).setSplitAnimations(true));
+			super(ParticleEntitySwirl.class, ParticleTextureStitcher.create(ParticleEntitySwirl.class, new ResourceLocation("thebetweenlands:particle/fish_swirl")).setSplitAnimations(true));
 		}
 
 		@Override
