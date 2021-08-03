@@ -185,69 +185,39 @@ public class GraphPlacement {
 	}
 
 	private static Placement generateGroupNodes(Context ctx, int index, GroupedGraph.Group group, Stack<SpaceInstance> spaces) {
-		/*Stack<SpaceInstance> groupSpaces = new Stack<>();
-		groupSpaces.addAll(spaces);
-
-		int generated = 0;
-		for(Node graphNode : ctx.graph.getNodes()) {
-			//Must handle spaces for all nodes, even those not in the group,
-			//because some of the group's nodes could be after these nodes
-			//in the topological sort
-			if(graphNode.getID() >= index) {
-				handleSpace(ctx, graphNode, groupSpaces);
-			}
-
-			Group graphNodeGroup = ctx.nodeGroups.get(graphNode);
-			if(graphNodeGroup == group) {
-				//The first node may be placed freely because it is only connected
-				//via non-grouped edges. The nodes afterwards must be structured
-				//like in the graph.
-				boolean structured = generated > 0;
-				GridNode predecessor = getPredecessor(ctx, graphNode, group);
-				GridNode node = placeNode(ctx, graphNode, group, predecessor, structured, groupSpaces);
-				node.setReservedSpace(true);
-
-				generated++;
-			}
-
-			if(generated >= group.getNodes().size()) {
-				break;
-			}
-		}
-
-		if(groupSpaces.size() > spaces.size()) {
-			throw new IllegalStateException();
-		}*/
-
 		Stack<SpaceInstance> groupSpaces = new Stack<>();
 		groupSpaces.addAll(spaces);
 
 		Placement firstPlacement = null;
 
-		for(Node graphNode : group.getNodes()) {
-			boolean isFirstNode = firstPlacement == null;
+		if(!group.getNodes().isEmpty()) {
+			boolean isFirstNode = true;
 
-			boolean structured = graphNode.getID() == index;
+			for(Node graphNode : group.getNodes()) {
+				boolean structured = !isFirstNode;
 
-			GridNode predecessor = getPredecessor(ctx, graphNode, group);
+				GridNode predecessor = getPredecessor(ctx, graphNode, group);
 
-			Placement placement = findPlacement(ctx, graphNode, group, predecessor, structured, groupSpaces);
-			if(firstPlacement == null) {
-				firstPlacement = placement;
+				Placement placement = findPlacement(ctx, graphNode, group, predecessor, structured, groupSpaces);
+				if(firstPlacement == null) {
+					firstPlacement = placement;
+				}
+
+				if(handleSpace(ctx, graphNode, placement, groupSpaces, isFirstNode) && isFirstNode) {
+					spaces.push(groupSpaces.peek());
+				}
+
+				isFirstNode = false;
+
+				GridNode node = placeNode(ctx, placement, graphNode, group, groupSpaces);
+
+				node.setReservedSpace(true, false);
+				if(!groupSpaces.isEmpty()) {
+					node.confirmSpaceTags(groupSpaces.peek());
+				}
+
+				updateSpaces(ctx, node, groupSpaces);
 			}
-
-			if(handleSpace(ctx, graphNode, placement, groupSpaces, isFirstNode) && isFirstNode) {
-				spaces.push(groupSpaces.peek());
-			}
-
-			GridNode node = placeNode(ctx, placement, graphNode, group, groupSpaces);
-
-			node.setReservedSpace(true, false);
-			if(!groupSpaces.isEmpty()) {
-				node.confirmSpaceTags(groupSpaces.peek());
-			}
-
-			updateSpaces(ctx, node, groupSpaces);
 		}
 
 		return firstPlacement;

@@ -5,7 +5,7 @@ public class Connector {
 	private final int offsetX, offsetY, offsetZ;
 	private final Direction dir;
 	private final int index;
-	
+
 	Connector(Cell cell, int x, int y, int z, Direction dir, int index) {
 		this.cell = cell;
 		this.offsetX = x;
@@ -14,7 +14,7 @@ public class Connector {
 		this.dir = dir;
 		this.index = index;
 	}
-	
+
 	public int getIndex() {
 		return this.index;
 	}
@@ -49,10 +49,5 @@ public class Connector {
 
 	public Direction getDir() {
 		return this.dir;
-	}
-	
-	//TODO Must be removed because this can cause collisions to occur because link collisions are skipped
-	public boolean checkCollision(Connector other) {
-		return this.getTileX() == other.getTileX() && this.getTileY() == other.getTileY() && this.getTileZ() == other.getTileZ();
 	}
 }

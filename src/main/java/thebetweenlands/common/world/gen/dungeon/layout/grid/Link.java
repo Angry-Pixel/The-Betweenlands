@@ -831,9 +831,6 @@ public class Link extends GridObject {
 
 		final int regionSize = this.accelerator.getRegionSize();
 
-		//TODO All the Connector.checkCollision(Connector) checks must be removed because they can
-		//cause collisions to occur because link collisions are skipped
-
 		return this.iterateBounds((minX, minY, minZ, maxX, maxY, maxZ) -> {
 			//Need to check at least the connected tiles because those could always potentially
 			//collide and may not yet be in the correct accelerator regions because the
@@ -851,18 +848,14 @@ public class Link extends GridObject {
 			//Same for the links connected to the start and/or end tile, if they have moved
 			if(tag < 0 || !startTile.getTag(tag)) {
 				for(Link link : startTile.getCell().getLinks()) {
-					Connector start2 = link.getStart();
-					Connector end2 = link.getEnd();
-					if(link != this && this.isColliding(link) && (start.getDir() != start2.getDir() || !start.checkCollision(start2)) && (start.getDir() != end2.getDir() || !start.checkCollision(end2)) && (end.getDir() != start2.getDir() || !end.checkCollision(start2)) && (end.getDir() != end2.getDir() || !end.checkCollision(end2))) {
+					if(link != this && this.isColliding(link)) {
 						return true;
 					}
 				}
 			}
 			if(tag < 0 || !endTile.getTag(tag)) {
 				for(Link link : endTile.getCell().getLinks()) {
-					Connector start2 = link.getStart();
-					Connector end2 = link.getEnd();
-					if(link != this && this.isColliding(link) && (start.getDir() != start2.getDir() || !start.checkCollision(start2)) && (start.getDir() != end2.getDir() || !start.checkCollision(end2)) && (end.getDir() != start2.getDir() || !end.checkCollision(start2)) && (end.getDir() != end2.getDir() || !end.checkCollision(end2))) {
+					if(link != this && this.isColliding(link)) {
 						return true;
 					}
 				}
@@ -897,20 +890,15 @@ public class Link extends GridObject {
 								} else if(obj instanceof Link && obj != this) {
 									Link link = (Link) obj;
 
-									Connector start2 = link.getStart();
-									Connector end2 = link.getEnd();
-
-									if((start.getDir() != start2.getDir() || !start.checkCollision(start2)) && (start.getDir() != end2.getDir() || !start.checkCollision(end2)) && (end.getDir() != start2.getDir() || !end.checkCollision(start2)) && (end.getDir() != end2.getDir() || !end.checkCollision(end2))) {
-										if(link.iterateBounds((minX2, minY2, minZ2, maxX2, maxY2, maxZ2) -> {
-											if(minX <= maxX2 && maxX >= minX2 &&
-													minY <= maxY2 && maxY >= minY2 &&
-													minZ <= maxZ2 && maxZ >= minZ2) {
-												return true;
-											}
-											return false;
-										})) {
+									if(link.iterateBounds((minX2, minY2, minZ2, maxX2, maxY2, maxZ2) -> {
+										if(minX <= maxX2 && maxX >= minX2 &&
+												minY <= maxY2 && maxY >= minY2 &&
+												minZ <= maxZ2 && maxZ >= minZ2) {
 											return true;
 										}
+										return false;
+									})) {
+										return true;
 									}
 								}
 							}
@@ -948,20 +936,15 @@ public class Link extends GridObject {
 											continue;
 										}
 
-										Connector start2 = link.getStart();
-										Connector end2 = link.getEnd();
-
-										if((start.getDir() != start2.getDir() || !start.checkCollision(start2)) && (start.getDir() != end2.getDir() || !start.checkCollision(end2)) && (end.getDir() != start2.getDir() || !end.checkCollision(start2)) && (end.getDir() != end2.getDir() || !end.checkCollision(end2))) {
-											if(link.iterateBounds((minX2, minY2, minZ2, maxX2, maxY2, maxZ2) -> {
-												if(minX <= maxX2 && maxX >= minX2 &&
-														minY <= maxY2 && maxY >= minY2 &&
-														minZ <= maxZ2 && maxZ >= minZ2) {
-													return true;
-												}
-												return false;
-											})) {
+										if(link.iterateBounds((minX2, minY2, minZ2, maxX2, maxY2, maxZ2) -> {
+											if(minX <= maxX2 && maxX >= minX2 &&
+													minY <= maxY2 && maxY >= minY2 &&
+													minZ <= maxZ2 && maxZ >= minZ2) {
 												return true;
 											}
+											return false;
+										})) {
+											return true;
 										}
 									}
 								}

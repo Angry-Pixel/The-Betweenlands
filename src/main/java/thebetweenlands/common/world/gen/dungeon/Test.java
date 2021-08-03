@@ -1,6 +1,8 @@
 package thebetweenlands.common.world.gen.dungeon;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
 import thebetweenlands.common.world.gen.dungeon.layout.LayoutGenerator;
@@ -12,33 +14,35 @@ import thebetweenlands.common.world.gen.dungeon.layout.grid.Grid;
 import thebetweenlands.common.world.gen.dungeon.layout.grid.Link;
 import thebetweenlands.common.world.gen.dungeon.layout.pathfinder.SimplePathfinder;
 import thebetweenlands.common.world.gen.dungeon.layout.postprocessor.CompactionPostprocessor;
-import thebetweenlands.common.world.gen.dungeon.layout.topology.RandomWalkTopology;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.Topology;
-import thebetweenlands.common.world.gen.dungeon.layout.topology.TopologyMeta;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.GraphTopology;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.GraphTopologyMeta;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.Grammar;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.Graph;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.GraphPrinter;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.Mutator;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.Node;
-import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.Substitution;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.SourceSubstitutionPattern;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.SourceSubstitutionPattern.Pattern;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.Substitution;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.TopologicalSort;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.TopologicalSort.GroupedGraph;
-import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.placement.RandomPlacementStrategy;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.placement.GraphNodeGrid;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.placement.GraphNodeGrid.GridNode;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.placement.GraphPlacement;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.placement.RandomPlacementStrategy;
 
 public class Test {
 	public static Test TEST = new Test();
 
 	public Grid grid = new Grid(new Random(), 16);
 
-	public Topology<TopologyMeta> topology = new RandomWalkTopology();
+	public Topology<GraphTopologyMeta> topology;
 	public CompactionPostprocessor postprocessor = new CompactionPostprocessor();
 	public SimplePathfinder pathfinder = new SimplePathfinder();
 
+	public List<Pattern> patterns = new ArrayList<>();
+	
 	private boolean isShrinking = false;
 	private int counter = 0;
 
@@ -47,16 +51,17 @@ public class Test {
 	public void init() {
 		System.out.println("---------------------------- Generate ----------------------------");
 
+		this.patterns.clear();
+		
 		this.topology = new GraphTopology(this.graph());
-		//this.topology = new RandomWalkTopology();
-
+		
 		this.isShrinking = false;
 		this.counter = 0;
 
 		this.grid = new Grid(new Random(), 8);
 
 		this.isShrinking = false;
-		LayoutGenerator.sequence()
+		boolean generated = LayoutGenerator.sequence()
 		.watchdog(() -> new PhaseLimitCriterion(9))
 		.watchdog(() -> new LoggingCriterion())
 		.topology(() -> this.topology)
@@ -64,9 +69,10 @@ public class Test {
 		.postprocessor(() -> this.postprocessor)
 		.criterion(() -> new RetryCriterion(3, false, true))
 		.pathfinder(() -> this.pathfinder)
-		.criterion(() -> new PathPercentageCriterion(0.5f, 3, true))
+		.criterion(() -> new PathPercentageCriterion(0.2f, 3, true))
 		.finish()
 		.generate(this.grid, new Random());
+		System.out.println("Generated: " + generated);
 	}
 
 	public void step() {
@@ -137,18 +143,20 @@ public class Test {
 					Node r1e = rhs.addNode("r1e");
 					Node C2 = rhs.addNode("C");
 					Node G2 = rhs.addNode("G");
+					Node ib1 = rhs.addNode("ib");
 					Node r2s = rhs.addNode("r2s");
 					Node r2e = rhs.addNode("r2e");
 					Node C3 = rhs.addNode("C");
 					Node G3 = rhs.addNode("G");
+					Node ib2 = rhs.addNode("ib");
 
 					e.chain(n).chain(C, "double").chain(G).chain(bm, "double")
 					.chain(iq, "double").chain(ti, "double")
 					.chain(CF, "double").chain(g);
 					n.chain(r1s).chain(r1e, "double");
 					n.chain(r2s).chain(r2e, "double");
-					r1s.chain(C2, "double").chain(G2).chain(r1e);
-					r2s.chain(C3, "double").chain(G3).chain(r2e);
+					r1s.chain(C2, "double").chain(G2).chain(ib1, "double").chain(r1e);
+					r2s.chain(C3, "double").chain(G3).chain(ib2, "double").chain(r2e);
 
 					/*e.chain(C).chain(G).chain(bm, "double")
 					.chain(iq, "double").chain(ti, "double")
@@ -465,8 +473,6 @@ public class Test {
 				System.out.println(node.toString() + ": " + sub.hashCode() + " " + sub);
 			}
 		}
-		SourceSubstitutionPattern multiLockPattern = SourceSubstitutionPattern.builder().with("lm").with("km", 3).build();
-		System.out.println("Num multi lock patterns: " + multiLockPattern.find(graph).size());
 		System.out.println("Graph nodes: " + graph.getNodes().size());
 		System.out.println("Graph: \n" + GraphPrinter.toEdgeListString(graph));
 		System.out.println("Tree: \n" + GraphPrinter.toSpanningTreeString(graph.getNodesByType("e").get(0)));
@@ -509,6 +515,11 @@ public class Test {
 				}
 				System.out.println(str);
 			}
+			
+			this.patterns.addAll(SourceSubstitutionPattern.builder().hub("lm").contains("lm").contains("km", 3).build().find(sorted));
+			this.patterns.addAll(SourceSubstitutionPattern.builder().hub("l").contains("l").contains("k").build().find(sorted));
+			this.patterns.addAll(SourceSubstitutionPattern.builder().hub("lf").contains("lf").contains("kf").build().find(sorted));
+			System.out.println("Patterns: " + this.patterns.size());
 
 			return nodeGrid;
 		} catch(Throwable ex) {

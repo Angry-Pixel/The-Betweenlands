@@ -13,7 +13,7 @@ import thebetweenlands.common.world.gen.dungeon.layout.topology.TopologyMeta;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.placement.GraphNodeGrid;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.placement.GraphNodeGrid.GridNode;
 
-public class GraphTopology extends Topology<TopologyMeta> {
+public class GraphTopology extends Topology<GraphTopologyMeta> {
 
 	/*private static class Node {
 		private final Set<Node> outEdges = new HashSet<>();
@@ -74,7 +74,7 @@ public class GraphTopology extends Topology<TopologyMeta> {
 	public void init(Grid grid, Random rng, TagSupplier tagSupplier) {
 		super.init(grid, rng, tagSupplier);
 
-		this.setMeta(TopologyMeta.class, TopologyMeta::new, false);
+		this.setMeta(GraphTopologyMeta.class, GraphTopologyMeta::new, false);
 	}
 
 	@Override
@@ -83,7 +83,8 @@ public class GraphTopology extends Topology<TopologyMeta> {
 		Map<Cell, Direction> connectionDirs = new HashMap<>();
 
 		for(GridNode node : this.graphGrid.get()) {
-			Cell cell = this.grid.setCell(node.getPos().x, node.getPos().y, node.getPos().z, 4, 2, 4);
+			//Cell cell = this.grid.setCell(node.getPos().x, node.getPos().y, node.getPos().z, 2 + this.rng.nextInt(4), 2 + this.rng.nextInt(2), 2 + this.rng.nextInt(4)).getTile().updateOrCreateMeta(this, meta -> meta.node = node).getCell();
+			Cell cell = this.grid.setCell(node.getPos().x, node.getPos().y, node.getPos().z, 4, 2, 4).getTile().updateOrCreateMeta(this, meta -> meta.node = node).getCell();
 			if(node.getSourceConnection() != null) {
 				connectionDirs.put(cell, node.getSourceConnection());
 			}
@@ -115,6 +116,70 @@ public class GraphTopology extends Topology<TopologyMeta> {
 				Connector c1 = null;
 				Connector c2 = null;
 
+				/*switch(dir) {
+				default:
+				case 0:
+					c1 = source.addTileConnector(source.getTileSizeX() - 1, this.rng.nextInt(source.getTileSizeY()), this.rng.nextInt(source.getTileSizeZ()), Direction.POS_X);
+					c2 = cell.addTileConnector(0, this.rng.nextInt(cell.getTileSizeY()), this.rng.nextInt(cell.getTileSizeZ()), Direction.NEG_X);
+					break;
+				case 1:
+					if(connectionDirs.containsKey(cell)) {
+						switch(connectionDirs.get(cell)) {
+						case POS_X:
+							c1 = source.addTileConnector(0, this.rng.nextInt(source.getTileSizeY()), this.rng.nextInt(source.getTileSizeZ()), Direction.NEG_X);
+							c2 = cell.addTileConnector(cell.getTileSizeX() - 1, this.rng.nextInt(cell.getTileSizeY()), this.rng.nextInt(cell.getTileSizeZ()), Direction.POS_X);
+							break;
+						case POS_Z:
+							c1 = source.addTileConnector(this.rng.nextInt(source.getTileSizeX()), this.rng.nextInt(source.getTileSizeY()), 0, Direction.NEG_Z);
+							c2 = cell.addTileConnector(this.rng.nextInt(cell.getTileSizeX()), this.rng.nextInt(cell.getTileSizeY()), cell.getTileSizeZ() - 1, Direction.POS_Z);
+							break;
+						case NEG_X:
+							c1 = source.addTileConnector(source.getTileSizeX() - 1, this.rng.nextInt(source.getTileSizeY()), this.rng.nextInt(source.getTileSizeZ()), Direction.POS_X);
+							c2 = cell.addTileConnector(0, this.rng.nextInt(cell.getTileSizeY()), this.rng.nextInt(cell.getTileSizeZ()), Direction.NEG_X);
+							break;
+						case NEG_Z:
+							c1 = source.addTileConnector(this.rng.nextInt(source.getTileSizeX()), this.rng.nextInt(source.getTileSizeY()), source.getTileSizeZ() - 1, Direction.POS_Z);
+							c2 = cell.addTileConnector(this.rng.nextInt(cell.getTileSizeX()), this.rng.nextInt(cell.getTileSizeY()), 0, Direction.NEG_Z);
+							break;
+						}
+					}
+					break;
+				case 2:
+					c1 = source.addTileConnector(this.rng.nextInt(source.getTileSizeX()), this.rng.nextInt(source.getTileSizeY()), source.getTileSizeZ() - 1, Direction.POS_Z);
+					c2 = cell.addTileConnector(this.rng.nextInt(cell.getTileSizeX()), this.rng.nextInt(cell.getTileSizeY()), 0, Direction.NEG_Z);
+					break;
+				case 3:
+					c1 = source.addTileConnector(0, this.rng.nextInt(source.getTileSizeY()), this.rng.nextInt(source.getTileSizeZ()), Direction.NEG_X);
+					c2 = cell.addTileConnector(cell.getTileSizeX() - 1, this.rng.nextInt(cell.getTileSizeY()), this.rng.nextInt(cell.getTileSizeZ()), Direction.POS_X);
+					break;
+				case 4:
+					if(connectionDirs.containsKey(cell)) {
+						switch(connectionDirs.get(cell)) {
+						case POS_X:
+							c1 = source.addTileConnector(0, this.rng.nextInt(source.getTileSizeY()), this.rng.nextInt(source.getTileSizeZ()), Direction.NEG_X);
+							c2 = cell.addTileConnector(cell.getTileSizeX() - 1, this.rng.nextInt(cell.getTileSizeY()), this.rng.nextInt(cell.getTileSizeZ()), Direction.POS_X);
+							break;
+						case POS_Z:
+							c1 = source.addTileConnector(this.rng.nextInt(source.getTileSizeX()), this.rng.nextInt(source.getTileSizeY()), 0, Direction.NEG_Z);
+							c2 = cell.addTileConnector(this.rng.nextInt(cell.getTileSizeX()), this.rng.nextInt(cell.getTileSizeY()), cell.getTileSizeZ() - 1, Direction.POS_Z);
+							break;
+						case NEG_X:
+							c1 = source.addTileConnector(source.getTileSizeX() - 1, this.rng.nextInt(source.getTileSizeY()), this.rng.nextInt(source.getTileSizeZ()), Direction.POS_X);
+							c2 = cell.addTileConnector(0, this.rng.nextInt(cell.getTileSizeY()), this.rng.nextInt(cell.getTileSizeZ()), Direction.NEG_X);
+							break;
+						case NEG_Z:
+							c1 = source.addTileConnector(this.rng.nextInt(source.getTileSizeX()), this.rng.nextInt(source.getTileSizeY()), source.getTileSizeZ() - 1, Direction.POS_Z);
+							c2 = cell.addTileConnector(this.rng.nextInt(cell.getTileSizeX()), this.rng.nextInt(cell.getTileSizeY()), 0, Direction.NEG_Z);
+							break;
+						}
+					}
+					break;
+				case 5:
+					c1 = source.addTileConnector(this.rng.nextInt(source.getTileSizeX()), this.rng.nextInt(source.getTileSizeY()), 0, Direction.NEG_Z);
+					c2 = cell.addTileConnector(this.rng.nextInt(cell.getTileSizeX()), this.rng.nextInt(cell.getTileSizeY()), cell.getTileSizeZ() - 1, Direction.POS_Z);
+					break;
+				}*/
+				
 				switch(dir) {
 				default:
 				case 0:

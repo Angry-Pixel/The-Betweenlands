@@ -20,7 +20,7 @@ import thebetweenlands.common.world.gen.dungeon.layout.grid.Tile;
 public class CompactionPostprocessor extends Postprocessor<Object> {
 	private final int maxIterations;
 	
-	private int thresholdCounter = 0;
+	private int thresholdCounter;
 	
 	private Map<Connector, Set<Cell>> trees = new HashMap<>();
 	private int prevTotalLinkLength;
@@ -37,15 +37,20 @@ public class CompactionPostprocessor extends Postprocessor<Object> {
 	@Override
 	public void init(Grid grid, Random rng, TagSupplier tagSupplier) {
 		super.init(grid, rng, tagSupplier);
-
-		this.trees.clear();
-
+		
 		int numConnectors = 0;
 
 		for(Cell cell : grid.getCells()) {
 			cell.getTile().updateAccelerator(0, 0, 0, true);
 			numConnectors += cell.getTile().getConnectors().size();
 		}
+		
+		this.treeTagsStart = tagSupplier.reserve(numConnectors);
+	}
+
+	@Override
+	public boolean process() {
+		this.trees.clear();
 
 		for(Link link : grid.getLinks()) {
 			link.updateAccelerator(0, 0, 0, Collections.emptySet(), -1, true);
@@ -53,11 +58,8 @@ public class CompactionPostprocessor extends Postprocessor<Object> {
 
 		this.prevTotalLinkLength = 1000000000;
 
-		this.treeTagsStart = tagSupplier.reserve(numConnectors);
-	}
-
-	@Override
-	public boolean process() {
+		this.thresholdCounter = 0;
+		
 		int maxLinkLen = 1;
 		for(Link l : this.grid.getLinks()) {
 			maxLinkLen = Math.max(maxLinkLen, l.getApproximateLength());

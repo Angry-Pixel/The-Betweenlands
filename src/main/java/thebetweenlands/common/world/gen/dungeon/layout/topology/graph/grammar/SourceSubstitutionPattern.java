@@ -9,37 +9,71 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.annotation.Nullable;
+
 public class SourceSubstitutionPattern {
 	public static class Builder {
+		private String hub = null;
 		private final Map<String, Integer> pattern = new HashMap<>();
-
+		
 		private Builder() { }
 
-		public Builder with(String type, int count) {
+		public Builder hub(String type) {
+			this.hub = type;
+			return this;
+		}
+		
+		public Builder contains(String type, int count) {
 			this.pattern.put(type, count);
 			return this;
 		}
 
-		public Builder with(String type) {
-			return this.with(type, 1);
+		public Builder contains(String type) {
+			return this.contains(type, 1);
 		}
 
 		public SourceSubstitutionPattern build() {
-			return new SourceSubstitutionPattern(this.pattern);
+			return new SourceSubstitutionPattern(this.hub, this.pattern);
 		}
 	}
 
+	private final String hub;
 	private final Map<String, Integer> pattern;
 
-	private SourceSubstitutionPattern(Map<String, Integer> pattern) {
+	private SourceSubstitutionPattern(String hub, Map<String, Integer> pattern) {
+		this.hub = hub;
 		this.pattern = pattern;
 	}
 
 	public static Builder builder() {
 		return new Builder();
 	}
+	
+	public static class Pattern {
+		private final String hub;
+		private final Map<String, List<Node>> pattern;
+		
+		private Pattern(String hub, Map<String, List<Node>> pattern) {
+			this.hub = hub;
+			this.pattern = pattern;
+		}
+		
+		public Set<String> getTypes() {
+			return this.pattern.keySet();
+		}
+		
+		@Nullable
+		public String getHubType() {
+			return this.hub;
+		}
+		
+		@Nullable
+		public List<Node> getNodes(String type) {
+			return this.pattern.get(type);
+		}
+	}
 
-	public List<Map<String, List<Node>>> find(Graph graph) {
+	public List<Pattern> find(Graph graph) {
 		if(this.pattern.isEmpty()) {
 			return Collections.emptyList();
 		}
@@ -48,7 +82,7 @@ public class SourceSubstitutionPattern {
 
 		List<Node> nodes = graph.getNodesByType(searchType);
 
-		List<Map<String, List<Node>>> matches = new ArrayList<>();
+		List<Pattern> matches = new ArrayList<>();
 
 		Set<Node> checked = new HashSet<>();
 
@@ -88,7 +122,7 @@ public class SourceSubstitutionPattern {
 			}
 
 			if(fullMatch) {
-				matches.add(currentMatch);
+				matches.add(new Pattern(this.hub, currentMatch));
 			}
 		}
 

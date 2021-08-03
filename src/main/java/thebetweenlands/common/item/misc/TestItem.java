@@ -28,8 +28,10 @@ import thebetweenlands.common.world.gen.dungeon.layout.grid.Connector;
 import thebetweenlands.common.world.gen.dungeon.layout.grid.Grid;
 import thebetweenlands.common.world.gen.dungeon.layout.grid.Link;
 import thebetweenlands.common.world.gen.dungeon.layout.grid.Link.Bound;
-import thebetweenlands.common.world.gen.dungeon.layout.grid.Link.Constraint;
 import thebetweenlands.common.world.gen.dungeon.layout.pathfinder.PathfinderLinkMeta;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.GraphTopologyMeta;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.Node;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.SourceSubstitutionPattern.Pattern;
 
 
 public class TestItem extends Item {
@@ -172,7 +174,63 @@ public class TestItem extends Item {
 							}
 						}
 
+						GlStateManager.depthMask(false);
+
+						GlStateManager.glLineWidth(4.0f);
+
+						buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+
+						for(Pattern pattern : Test.TEST.patterns) {
+							String hubType = pattern.getHubType();
+
+							for(String t1 : pattern.getTypes()) {
+								if(hubType != null && !t1.equals(hubType)) {
+									continue;
+								}
+
+								for(Node n1 : pattern.getNodes(t1)) {
+									Cell n1c = null; 
+									for(Cell c1 : grid.getCells()) {
+										GraphTopologyMeta meta = c1.getTile().getMeta(Test.TEST.topology);
+										if(meta != null && meta.node.getGraphNode() == n1) {
+											n1c = c1;
+										}
+									}
+
+									if(n1c != null) {
+										for(String t2 : pattern.getTypes()) {
+											for(Node n2 : pattern.getNodes(t2)) {
+												Cell n2c = null; 
+												for(Cell c2 : grid.getCells()) {
+													GraphTopologyMeta meta = c2.getTile().getMeta(Test.TEST.topology);
+													if(meta != null && meta.node.getGraphNode() == n2) {
+														n2c = c2;
+													}
+												}
+
+												if(n2c != null) {
+													double sx = n1c.getTileX() + 0.5D * n1c.getTileSizeX();
+													double sy = n1c.getTileY() + 0.5D * n1c.getTileSizeY();
+													double sz = n1c.getTileZ() + 0.5D * n1c.getTileSizeZ();
+													double ex = n2c.getTileX() + 0.5D * n2c.getTileSizeX(); 
+													double ey = n2c.getTileY() + 0.5D * n2c.getTileSizeY(); 
+													double ez = n2c.getTileZ() + 0.5D * n2c.getTileSizeZ(); 
+
+													buffer.pos(xo - rm.viewerPosX + sx * scale, yo - rm.viewerPosY + sy * scale, zo - rm.viewerPosZ + sz * scale).color(0, 0, 0, 1.0f).endVertex();
+													buffer.pos(xo - rm.viewerPosX + ex * scale, yo - rm.viewerPosY + ey * scale, zo - rm.viewerPosZ + ez * scale).color(0, 0, 0, 1.0f).endVertex();
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+
+						tessellator.draw();
+
 						GlStateManager.depthMask(true);
+
+						GlStateManager.shadeModel(GL11.GL_SMOOTH);
 
 						GlStateManager.glLineWidth(2.0f);
 
@@ -188,7 +246,63 @@ public class TestItem extends Item {
 							}
 						}
 
+						for(Pattern pattern : Test.TEST.patterns) {
+							String hubType = pattern.getHubType();
+
+							for(String t1 : pattern.getTypes()) {
+								if(hubType != null && !t1.equals(hubType)) {
+									continue;
+								}
+
+								for(Node n1 : pattern.getNodes(t1)) {
+									Cell n1c = null; 
+									for(Cell c1 : grid.getCells()) {
+										GraphTopologyMeta meta = c1.getTile().getMeta(Test.TEST.topology);
+										if(meta != null && meta.node.getGraphNode() == n1) {
+											n1c = c1;
+										}
+									}
+
+									if(n1c != null) {
+										for(String t2 : pattern.getTypes()) {
+											for(Node n2 : pattern.getNodes(t2)) {
+												Cell n2c = null; 
+												for(Cell c2 : grid.getCells()) {
+													GraphTopologyMeta meta = c2.getTile().getMeta(Test.TEST.topology);
+													if(meta != null && meta.node.getGraphNode() == n2) {
+														n2c = c2;
+													}
+												}
+
+												if(n2c != null) {
+													double sx = n1c.getTileX() + 0.5D * n1c.getTileSizeX();
+													double sy = n1c.getTileY() + 0.5D * n1c.getTileSizeY();
+													double sz = n1c.getTileZ() + 0.5D * n1c.getTileSizeZ();
+													double ex = n2c.getTileX() + 0.5D * n2c.getTileSizeX(); 
+													double ey = n2c.getTileY() + 0.5D * n2c.getTileSizeY(); 
+													double ez = n2c.getTileZ() + 0.5D * n2c.getTileSizeZ(); 
+
+													if(hubType != null && t1.equals(hubType)) {
+														buffer.pos(xo - rm.viewerPosX + sx * scale, yo - rm.viewerPosY + sy * scale, zo - rm.viewerPosZ + sz * scale).color(1, 0.2f, 0.2f, 1.0f).endVertex();
+													} else {
+														buffer.pos(xo - rm.viewerPosX + sx * scale, yo - rm.viewerPosY + sy * scale, zo - rm.viewerPosZ + sz * scale).color(0.2f, 0.2f, 1, 1.0f).endVertex();
+													}
+													if(hubType != null && t2.equals(hubType)) {
+														buffer.pos(xo - rm.viewerPosX + ex * scale, yo - rm.viewerPosY + ey * scale, zo - rm.viewerPosZ + ez * scale).color(1, 0.2f, 0.2f, 1.0f).endVertex();
+													} else {
+														buffer.pos(xo - rm.viewerPosX + ex * scale, yo - rm.viewerPosY + ey * scale, zo - rm.viewerPosZ + ez * scale).color(0.2f, 0.2f, 1, 1.0f).endVertex();
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+
 						tessellator.draw();
+
+						GlStateManager.shadeModel(GL11.GL_FLAT);
 
 						buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
 
@@ -322,6 +436,7 @@ public class TestItem extends Item {
 							}
 						}
 
+						boolean firstCell = true;
 						for(Cell cell : grid.getCells()) {
 							if(cell != null) {
 								double scaleX = scale * cell.getTileSizeX();
@@ -386,17 +501,26 @@ public class TestItem extends Item {
 								b = 1.0f;
 								a = 0.5f;
 
+
 								/*if(cell.getTileX() < 0 || cell.getTileY() < 0 || cell.getTileZ() < 0) {
 									r = 1.0f;
 									g = 0.0f;
 									b = 0.0f;
 								}*/
-								
+
 								/*if(cell.getTile().getTag((int)((System.currentTimeMillis() / 500) % 200L))) {
 									r = 0.0f;
 									g = 1.0f;
 									b = 0.0f;
 								}*/
+
+								if(firstCell) {
+									r = 1.0f;
+									g = 0.85f;
+									b = 0.1f;
+									a = 0.7f;
+								}
+								firstCell = false;
 
 								buffer.pos(0, 0, scaleZ).tex(0, 0).color(r, g, b, a).normal(0, 0, 1).endVertex();
 								buffer.pos(scaleX, 0, scaleZ).tex(1, 0).color(r, g, b, a).normal(0, 0, 1).endVertex();

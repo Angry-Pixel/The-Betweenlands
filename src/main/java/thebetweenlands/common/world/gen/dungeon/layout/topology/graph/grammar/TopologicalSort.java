@@ -332,6 +332,36 @@ public class TopologicalSort {
 					this.edgeGroups.put(edgeMerge.get(edgeGroup.getKey()), edgeGroup.getValue());
 				}
 			}
+			
+			Map<Substitution, Substitution> substitutionMap = new HashMap<>();
+			for(Node node : nodes) {
+				Node mergedNode = nodeMerge.get(node);
+				
+				for(Substitution substitution : node.predecessorSubstitutions) {
+					mergedNode.predecessorSubstitutions.add(this.copySubstitution(substitution, substitutionMap, nodeMerge));
+				}
+				
+				if(node.sourceSubstitution != null) {
+					mergedNode.sourceSubstitution = this.copySubstitution(node.sourceSubstitution, substitutionMap, nodeMerge);
+				}
+				
+				if(node.finalSubstitution != null) {
+					mergedNode.finalSubstitution = this.copySubstitution(node.finalSubstitution, substitutionMap, nodeMerge);
+				}
+			}
+		}
+		
+		private Substitution copySubstitution(Substitution substitution, Map<Substitution, Substitution> substitutionMap, Map<Node, Node> nodeMerge) {
+			Substitution copy = substitutionMap.get(substitution);
+			if(copy != null) {
+				return copy;
+			}
+			copy = new Substitution(substitution.rule);
+			for(Node node : substitution.nodes) {
+				copy.nodes.add(nodeMerge.get(node));
+			}
+			substitutionMap.put(substitution, copy);
+			return copy;
 		}
 
 		@Override
