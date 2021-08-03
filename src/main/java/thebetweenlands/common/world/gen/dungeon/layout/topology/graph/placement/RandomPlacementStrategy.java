@@ -57,7 +57,25 @@ public class RandomPlacementStrategy extends PlacementStrategy {
 					offset = Direction.NEG_Z;
 					break;
 				case 4:
-					offset = Direction.NEG_Y;
+					if(rng.nextInt(3) == 0) {
+						offset = Direction.NEG_Y;
+					} else {
+						switch(rng.nextInt(4)) {
+						default:
+						case 0:
+							offset = Direction.POS_X;
+							break;
+						case 1:
+							offset = Direction.POS_Z;
+							break;
+						case 2:
+							offset = Direction.NEG_X;
+							break;
+						case 3:
+							offset = Direction.NEG_Z;
+							break;
+						}
+					}
 					break;
 				}
 
@@ -124,7 +142,25 @@ public class RandomPlacementStrategy extends PlacementStrategy {
 					offset = Direction.NEG_Z;
 					break;
 				case 4:
-					offset = Direction.NEG_Y;
+					if(rng.nextInt(3) == 0) {
+						offset = Direction.NEG_Y;
+					} else {
+						switch(rng.nextInt(4)) {
+						default:
+						case 0:
+							offset = Direction.POS_X;
+							break;
+						case 1:
+							offset = Direction.POS_Z;
+							break;
+						case 2:
+							offset = Direction.NEG_X;
+							break;
+						case 3:
+							offset = Direction.NEG_Z;
+							break;
+						}
+					}
 					break;
 				}
 
