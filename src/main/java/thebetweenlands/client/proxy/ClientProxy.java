@@ -48,7 +48,7 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import thebetweenlands.client.gui.GuiFishStaminaBar;
 import thebetweenlands.client.gui.GuiItemNaming;
 import thebetweenlands.client.gui.GuiLorePage;
-import thebetweenlands.client.gui.inventory.GuiAmphibiousArmour;
+import thebetweenlands.client.gui.inventory.GuiAmphibiousArmor;
 import thebetweenlands.client.gui.inventory.GuiAnimator;
 import thebetweenlands.client.gui.inventory.GuiBLDualFurnace;
 import thebetweenlands.client.gui.inventory.GuiBLFurnace;
@@ -275,7 +275,7 @@ import thebetweenlands.common.herblore.book.GuiManualHerblore;
 import thebetweenlands.common.herblore.book.HLEntryRegistry;
 import thebetweenlands.common.inventory.InventoryAmphibiousArmor;
 import thebetweenlands.common.inventory.InventoryPouch;
-import thebetweenlands.common.inventory.container.ContainerAmphibiousArmour;
+import thebetweenlands.common.inventory.container.ContainerAmphibiousArmor;
 import thebetweenlands.common.inventory.container.ContainerDraetonPouch;
 import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.item.ITintedItem;
@@ -525,7 +525,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			ItemStack item = player.getHeldItemMainhand();
 			String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.amphibious_armour";
 			if (!item.isEmpty() && item.getItem() instanceof ItemAmphibiousArmor)
-				return new GuiAmphibiousArmour(new ContainerAmphibiousArmour(player, new InventoryAmphibiousArmor(item, name)));
+				return new GuiAmphibiousArmor(new ContainerAmphibiousArmor(player, new InventoryAmphibiousArmor(item, name)));
 			break;
 		}
 		}

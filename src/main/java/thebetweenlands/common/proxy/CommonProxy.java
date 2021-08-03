@@ -26,7 +26,7 @@ import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.inventory.InventoryAmphibiousArmor;
 import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.inventory.InventoryPouch;
-import thebetweenlands.common.inventory.container.ContainerAmphibiousArmour;
+import thebetweenlands.common.inventory.container.ContainerAmphibiousArmor;
 import thebetweenlands.common.inventory.container.ContainerAnimator;
 import thebetweenlands.common.inventory.container.ContainerBLDualFurnace;
 import thebetweenlands.common.inventory.container.ContainerBLFurnace;
@@ -250,7 +250,7 @@ public class CommonProxy implements IGuiHandler {
 			ItemStack item = player.getHeldItemMainhand();
 			String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.amphibious_armour";
 			if (!item.isEmpty() && item.getItem() instanceof ItemAmphibiousArmor)
-				return new ContainerAmphibiousArmour(player, new InventoryAmphibiousArmor(item, name));
+				return new ContainerAmphibiousArmor(player, new InventoryAmphibiousArmor(item, name));
 			break;
 		}
 		}

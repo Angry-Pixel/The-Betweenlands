@@ -15,7 +15,7 @@ import thebetweenlands.common.inventory.slot.SlotInvRestriction;
 import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorUpgrades;
 import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 
-public class ContainerAmphibiousArmour extends Container {
+public class ContainerAmphibiousArmor extends Container {
 	public static class SlotUpgrade extends SlotInvRestriction {
 
 		private final InventoryItem inventoryItem;
@@ -102,22 +102,35 @@ public class ContainerAmphibiousArmour extends Container {
 	@Nullable
 	private final InventoryItem inventory;
 
-	private final int numSlots = 3;
+	private final int numSlots;
 
-	public ContainerAmphibiousArmour(EntityPlayer player, InventoryItem inventoryItem) {
+	public ContainerAmphibiousArmor(EntityPlayer player, InventoryItem inventoryItem) {
 		InventoryPlayer playerInventory = player.inventory;
 		this.inventory = inventoryItem;
+		this.numSlots = this.inventory.getSizeInventory();
 
-		addSlotToContainer(new SlotUpgrade(inventoryItem, 0, 43, 43));
-		addSlotToContainer(new SlotUpgrade(inventoryItem, 1, 79, 43));
-		addSlotToContainer(new SlotUpgrade(inventoryItem, 2, 115, 43));
+		if(this.numSlots >= 1) {
+			addSlotToContainer(new SlotUpgrade(inventoryItem, 0, 57, 73));
+		}
+		if(this.numSlots >= 2) {
+			addSlotToContainer(new SlotUpgrade(inventoryItem, 1, 93, 73));
+		}
+		if(this.numSlots >= 3) {
+			addSlotToContainer(new SlotUpgrade(inventoryItem, 2, 129, 73));
+		}
+		if(this.numSlots >= 4) {
+			addSlotToContainer(new SlotUpgrade(inventoryItem, 3, 75, 99));
+		}
+		if(this.numSlots >= 5) {
+			addSlotToContainer(new SlotUpgrade(inventoryItem, 4, 111, 99));
+		}
 
 		for (int l = 0; l < 3; ++l)
 			for (int j1 = 0; j1 < 9; ++j1)
-				this.addSlotToContainer(new Slot(playerInventory, j1 + (l + 1) * 9, 7 + j1 * 18, 101 + l * 18));
+				this.addSlotToContainer(new Slot(playerInventory, j1 + (l + 1) * 9, 21 + j1 * 18, 139 + l * 18));
 
 		for (int i1 = 0; i1 < 9; ++i1)
-			this.addSlotToContainer(new Slot(playerInventory, i1, 7 + i1 * 18, 159));
+			this.addSlotToContainer(new Slot(playerInventory, i1, 21 + i1 * 18, 197));
 	}
 
 	@Override

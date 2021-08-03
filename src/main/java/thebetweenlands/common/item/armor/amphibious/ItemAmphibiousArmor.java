@@ -52,7 +52,7 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 
 	private static final String NBT_ASCENT_BOOST_TICKS = "thebetweenlands.ascent_boost_ticks";
 	private static final String NBT_ASCENT_BOOST = "thebetweenlands.ascent_boost";
-	
+
 	public ItemAmphibiousArmor(EntityEquipmentSlot slot) {
 		super(BLMaterialRegistry.ARMOR_AMPHIBIOUS, 3, slot, "amphibious");
 
@@ -67,6 +67,19 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 		return new ModelAmphibiousArmor();
 	}
 
+	public int getUpgradeSlotCount(ItemStack stack) {
+		switch(this.armorType) {
+		case HEAD:
+		case FEET:
+			return 3;
+		case CHEST:
+		case LEGS:
+			return 5;
+		default:
+			return 0;
+		}
+	}
+
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		if(!player.isSpectator()) {
@@ -78,10 +91,10 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 					armorPieces += 1;
 				}
 			}
-			
+
 			NBTTagCompound nbt = player.getEntityData();
 			int ascentBoostTicks = nbt.getInteger(NBT_ASCENT_BOOST_TICKS);
-			
+
 			if(itemStack.getItem() == ItemRegistry.AMPHIBIOUS_LEGGINGS) {
 				if(this.getUpgradeCount(itemStack, AmphibiousArmorUpgrades.ASCENT_BOOST) >= 1) {
 					if(player.isSneaking() && player.onGround) {
@@ -90,18 +103,18 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 						if(ascentBoostTicks > 10 && !nbt.getBoolean(NBT_ASCENT_BOOST)) {
 							ascentBoostTicks = 30;
 							nbt.setInteger(NBT_ASCENT_BOOST_TICKS, ascentBoostTicks);
-							
+
 							nbt.setBoolean(NBT_ASCENT_BOOST, true);
-							
+
 							player.motionY += 0.75D;
-							
+
 							Vec3d lookVec = player.getLookVec().normalize();
 							double speed = 1.2D;
 							player.motionX += lookVec.x * speed;
 							player.motionZ += lookVec.z * speed;
 							player.motionY += lookVec.y * 0.5D;
 						}
-						
+
 						ascentBoostTicks = Math.max(0, ascentBoostTicks - 1);
 						nbt.setInteger(NBT_ASCENT_BOOST_TICKS, ascentBoostTicks);
 					}
@@ -109,16 +122,16 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 					nbt.setInteger(NBT_ASCENT_BOOST_TICKS, 0);
 				}
 			}
-			
+
 			if(ascentBoostTicks <= 0 || !player.isInWater()) {
 				nbt.setInteger(NBT_ASCENT_BOOST_TICKS, ascentBoostTicks = 0);
 				nbt.setBoolean(NBT_ASCENT_BOOST, false);
 			}
-			
+
 			if(nbt.getBoolean(NBT_ASCENT_BOOST) && player.isInWater() && player.motionY < 2.0D) {
 				player.motionY += 0.05D;
 			}
-			
+
 			if (itemStack.getItem() == ItemRegistry.AMPHIBIOUS_BOOTS && player.isInWater()) {
 				IBlockState blockState = player.world.getBlockState(new BlockPos(player.posX, player.getEntityBoundingBox().maxY + 0.1D, player.posZ));
 				boolean fullyInWater = blockState.getMaterial().isLiquid();
@@ -139,7 +152,7 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 							}
 							player.getFoodStats().addExhaustion(0.0024F);
 						}
-						
+
 						if(!player.isSneaking()) {
 							player.motionY += 0.02D;
 						}

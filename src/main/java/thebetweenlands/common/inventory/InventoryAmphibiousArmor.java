@@ -15,7 +15,7 @@ public class InventoryAmphibiousArmor extends InventoryItem {
 	private boolean useUpgradeFilter = false;
 
 	public InventoryAmphibiousArmor(ItemStack stack, String inventoryName) {
-		super(stack, 3, inventoryName);
+		super(stack, ((ItemAmphibiousArmor) stack.getItem()).getUpgradeSlotCount(stack), inventoryName);
 		this.item = (ItemAmphibiousArmor) stack.getItem();
 		this.armorType = this.item.armorType;
 	}
