@@ -12,7 +12,7 @@
   },
   "parent": "thebetweenlands:survivalist/hardcore_muchies",
   "criteria": {
-    "have_sap": {
+    "use_fumigant": {
       "trigger": "minecraft:consume_item",
       "conditions": {
         "item": {
