@@ -1,7 +1,7 @@
 {
 	"forge_marker": 1,
 	"variants": {
-		"normal": [
+		"in_water=false": [
 			{
 				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
@@ -33,6 +33,39 @@
 				},
 				"y": 270
 			}
-		]
+		],
+		"in_water=true": [
+            {
+                "model": "thebetweenlands:internal/winter_event",
+                "custom": {
+                    "model_base": "thebetweenlands:block/mud_in_water",
+                    "model_active": "thebetweenlands:block/mud_frosty"
+                }
+            },
+            {
+                "model": "thebetweenlands:internal/winter_event",
+                "custom": {
+                    "model_base": "thebetweenlands:block/mud_in_water",
+                    "model_active": "thebetweenlands:block/mud_frosty"
+                },
+                "y": 90
+            },
+            {
+                "model": "thebetweenlands:internal/winter_event",
+                "custom": {
+                    "model_base": "thebetweenlands:block/mud_in_water",
+                    "model_active": "thebetweenlands:block/mud_frosty"
+                },
+                "y": 180
+            },
+            {
+                "model": "thebetweenlands:internal/winter_event",
+                "custom": {
+                    "model_base": "thebetweenlands:block/mud_in_water",
+                    "model_active": "thebetweenlands:block/mud_frosty"
+                },
+                "y": 270
+            }
+        ]
 	}
 }

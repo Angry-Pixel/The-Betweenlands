@@ -7,11 +7,16 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -31,6 +36,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockMud extends Block {
 	protected static final AxisAlignedBB MUD_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D);
+	public static final PropertyBool IN_WATER = PropertyBool.create("in_water");
 	
 	public BlockMud() {
 		super(BLMaterialRegistry.MUD);
@@ -39,6 +45,7 @@ public class BlockMud extends Block {
 		setHarvestLevel("shovel", 0);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
 		setLightOpacity(255);
+		setDefaultState(this.blockState.getBaseState().withProperty(IN_WATER, false));
 	}
 
 	public boolean canEntityWalkOnMud(Entity entity) {
@@ -122,4 +129,31 @@ public class BlockMud extends Block {
 			}
 		}
 	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public BlockRenderLayer getRenderLayer() {
+		return BlockRenderLayer.CUTOUT;
+	}
+
+	@Override
+    public int getMetaFromState(IBlockState state) {
+        return 0;
+    }
+
+	@Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, new IProperty[] {IN_WATER});
+    }
+
+	@Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+        return state.withProperty(IN_WATER, isUnderwater(worldIn, pos.up()));
+    }
+
+    public boolean isUnderwater(IBlockAccess worldIn, BlockPos pos) {
+        IBlockState iblockstate = worldIn.getBlockState(pos);
+        boolean inWater = iblockstate.getMaterial() == Material.WATER;
+        return inWater;
+    }
 }
