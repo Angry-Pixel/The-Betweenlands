@@ -67,9 +67,20 @@ public class SourceSubstitutionPattern {
 			return this.hub;
 		}
 		
-		@Nullable
 		public List<Node> getNodes(String type) {
-			return this.pattern.get(type);
+			List<Node> nodes = this.pattern.get(type);
+			if(nodes == null) {
+				return Collections.emptyList();
+			}
+			return nodes;
+		}
+
+		public List<Node> getNodes() {
+			List<Node> nodes = new ArrayList<>();
+			for(String type : this.getTypes()) {
+				nodes.addAll(this.getNodes(type));
+			}
+			return nodes;
 		}
 	}
 

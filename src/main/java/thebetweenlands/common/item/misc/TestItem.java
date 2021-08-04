@@ -436,7 +436,6 @@ public class TestItem extends Item {
 							}
 						}
 
-						boolean firstCell = true;
 						for(Cell cell : grid.getCells()) {
 							if(cell != null) {
 								double scaleX = scale * cell.getTileSizeX();
@@ -514,13 +513,25 @@ public class TestItem extends Item {
 									b = 0.0f;
 								}*/
 
-								if(firstCell) {
+								if(Test.TEST.entrancePatterns.stream().anyMatch(p -> p.getNodes().stream().anyMatch(node -> {
+									GraphTopologyMeta meta = cell.getTile().getMeta(Test.TEST.topology);
+									return meta != null && meta.node.getGraphNode() == node;	
+								}))) {
 									r = 1.0f;
 									g = 0.85f;
 									b = 0.1f;
 									a = 0.7f;
 								}
-								firstCell = false;
+
+								if(Test.TEST.goalPatterns.stream().anyMatch(p -> p.getNodes().stream().anyMatch(node -> {
+									GraphTopologyMeta meta = cell.getTile().getMeta(Test.TEST.topology);
+									return meta != null && meta.node.getGraphNode() == node;	
+								}))) {
+									r = 1.0f;
+									g = 0.15f;
+									b = 0.25f;
+									a = 0.7f;
+								}
 
 								buffer.pos(0, 0, scaleZ).tex(0, 0).color(r, g, b, a).normal(0, 0, 1).endVertex();
 								buffer.pos(scaleX, 0, scaleZ).tex(1, 0).color(r, g, b, a).normal(0, 0, 1).endVertex();

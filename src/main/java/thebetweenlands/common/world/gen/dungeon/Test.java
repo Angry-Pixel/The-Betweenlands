@@ -42,6 +42,8 @@ public class Test {
 	public SimplePathfinder pathfinder = new SimplePathfinder();
 
 	public List<Pattern> patterns = new ArrayList<>();
+	public List<Pattern> entrancePatterns = new ArrayList<>();
+	public List<Pattern> goalPatterns = new ArrayList<>();
 	
 	private boolean isShrinking = false;
 	private int counter = 0;
@@ -153,8 +155,8 @@ public class Test {
 					e.chain(n).chain(C, "double").chain(G).chain(bm, "double")
 					.chain(iq, "double").chain(ti, "double")
 					.chain(CF, "double").chain(g);
-					n.chain(r1s).chain(r1e, "double");
-					n.chain(r2s).chain(r2e, "double");
+					n.chain(r1s).chain(r1e, "double").chain(CF);
+					n.chain(r2s).chain(r2e, "double").chain(CF);
 					r1s.chain(C2, "double").chain(G2).chain(ib1, "double").chain(r1e);
 					r2s.chain(C3, "double").chain(G3).chain(ib2, "double").chain(r2e);
 
@@ -519,6 +521,8 @@ public class Test {
 			this.patterns.addAll(SourceSubstitutionPattern.builder().hub("lm").contains("lm").contains("km", 3).build().find(sorted));
 			this.patterns.addAll(SourceSubstitutionPattern.builder().hub("l").contains("l").contains("k").build().find(sorted));
 			this.patterns.addAll(SourceSubstitutionPattern.builder().hub("lf").contains("lf").contains("kf").build().find(sorted));
+			this.entrancePatterns.addAll(SourceSubstitutionPattern.builder().hub("e").contains("e").build().find(sorted));
+			this.goalPatterns.addAll(SourceSubstitutionPattern.builder().hub("g").contains("g").build().find(sorted));
 			System.out.println("Patterns: " + this.patterns.size());
 
 			return nodeGrid;
