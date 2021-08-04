@@ -1227,6 +1227,7 @@ tooltip.bl.recipes.censer_primary=Censer
 tooltip.bl.recipes.censer_secondary=Censer (secondary)
 tooltip.bl.recipes.purifier=Purifier
 tooltip.bl.recipes.mortar=Mortar
+tooltip.bl.recipes.offering_table=Offering Table
 
 tooltip.bl.fish_bait.saturation=Saturation: %s
 tooltip.bl.fish_bait.sink_speed=Sinking Speed: %s
@@ -1346,6 +1347,7 @@ chat.equipment.equipped=Equipped %s
 chat.equipment.unequipped=Unequipped %s
 
 chat.waystone.obstructed=Menhir is obstructed
+chat.bone_wayfinder.sky_obstructed=Sky is obstructed
 chat.simulacrum.obstructed=Simulacrum is obstructed
 chat.simulacrum.blessed=You feel blessed
 

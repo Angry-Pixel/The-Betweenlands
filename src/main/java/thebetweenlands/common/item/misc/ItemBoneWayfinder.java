@@ -164,6 +164,15 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 	@Override
 	public void onUsingTick(ItemStack stack, EntityLivingBase entity, int count) {
 		if(!entity.world.isRemote) {
+			if(count < 80 && !entity.world.canSeeSky(new BlockPos(entity.getPosition()))) {
+				if(entity instanceof EntityPlayerMP) {
+					((EntityPlayerMP) entity).sendStatusMessage(new TextComponentTranslation("chat.bone_wayfinder.sky_obstructed"), true);
+				}
+				entity.stopActiveHand();
+				entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1, 1);
+				return;
+			}
+			
 			if(entity.hurtTime > 0) {
 				entity.stopActiveHand();
 				entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1, 1);

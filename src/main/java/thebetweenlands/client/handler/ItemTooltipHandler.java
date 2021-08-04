@@ -37,6 +37,7 @@ import thebetweenlands.common.recipe.misc.CompostRecipe;
 import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipe;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemTooltipHandler {
 	public static final DecimalFormat COMPOST_AMOUNT_FORMAT = new DecimalFormat("#.##");
@@ -127,6 +128,10 @@ public class ItemTooltipHandler {
 				usedInMachines.add(I18n.format("tooltip.bl.recipes.compost_bin") + debug);
 			}
 
+			if(stack.getItem() == ItemRegistry.SPIRIT_FRUIT || stack.getItem() == ItemRegistry.BONE_WAYFINDER) {
+				usedInMachines.add(I18n.format("tooltip.bl.recipes.offering_table"));
+			}
+			
 			if(!usedInMachines.isEmpty()) {
 				toolTip.add(I18n.format("tooltip.bl.recipes.used_in", usedInMachines.stream().collect(Collectors.joining(", "))));
 			}
