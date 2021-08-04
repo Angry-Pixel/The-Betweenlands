@@ -30,7 +30,7 @@ import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.To
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.placement.GraphNodeGrid;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.placement.GraphNodeGrid.GridNode;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.placement.GraphPlacement;
-import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.placement.RandomPlacementStrategy;
+import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.placement.WeightedPlacementStrategy;
 
 public class Test {
 	public static Test TEST = new Test();
@@ -499,7 +499,7 @@ public class Test {
 			}
 
 			start = System.nanoTime();
-			GraphNodeGrid nodeGrid = GraphPlacement.generate(sorted, new RandomPlacementStrategy(), new Random(seed));
+			GraphNodeGrid nodeGrid = GraphPlacement.generate(sorted, new WeightedPlacementStrategy(), new Random(seed));
 			System.out.println("Placement time: " + (((System.nanoTime() - start) % 10000000000L) / 1000000.0f) + "ms");
 			System.out.println("Placed nodes: " + nodeGrid.get().size());
 			for(GridNode gridNode : nodeGrid.get()) {

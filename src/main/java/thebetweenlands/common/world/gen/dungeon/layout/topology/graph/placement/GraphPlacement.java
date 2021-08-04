@@ -142,18 +142,19 @@ public class GraphPlacement {
 	}
 
 	@Nullable
-	private static GridNode getPredecessor(Context ctx, Node graphNode, @Nullable GroupedGraph.Group group) {
+	private static GridNode getPredecessor(Context ctx, Node graphNode, @Nullable GroupedGraph.Group structureGroup) {
 		//If grouped then try to find the direct predecessor in
 		//the graph and return that if it already exists in order
-		//to enforce the same structure as in the graph
-		if(group != null) {
-
+		//to enforce the same structure as in the graph (this doesn't
+		//apply to the first node in the group because it needn't use
+		//structured placement)
+		if(structureGroup != null) {
 			//Find earliest (w.r.t. the topological sort) neighbor
 			//in the graph
 			Node parentGroupNode = null;
-			for(Node groupNode : group.getNodes()) {
+			for(Node groupNode : structureGroup.getNodes()) {
 				Edge edge = groupNode.getEdge(graphNode);
-				if(edge != null && edge.isFrom(groupNode) && ctx.edgeGroups.get(edge) == group) {
+				if(edge != null && edge.isFrom(groupNode) && ctx.edgeGroups.get(edge) == structureGroup) {
 					if(parentGroupNode == null || groupNode.getID() < parentGroupNode.getID()) {
 						parentGroupNode = groupNode;
 					}
@@ -196,7 +197,7 @@ public class GraphPlacement {
 			for(Node graphNode : group.getNodes()) {
 				boolean structured = !isFirstNode;
 
-				GridNode predecessor = getPredecessor(ctx, graphNode, group);
+				GridNode predecessor = getPredecessor(ctx, graphNode, structured ? group : null);
 
 				Placement placement = findPlacement(ctx, graphNode, group, predecessor, structured, groupSpaces);
 				if(firstPlacement == null) {
