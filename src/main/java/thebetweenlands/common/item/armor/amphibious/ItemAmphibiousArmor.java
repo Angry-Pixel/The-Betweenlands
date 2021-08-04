@@ -1,10 +1,12 @@
 package thebetweenlands.common.item.armor.amphibious;
 
+import java.util.List;
 import java.util.Random;
 
 import com.google.common.collect.Multimap;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
@@ -19,9 +21,11 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
@@ -31,6 +35,7 @@ import thebetweenlands.client.render.model.armor.ModelAmphibiousArmor;
 import thebetweenlands.client.render.model.armor.ModelBodyAttachment;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
+import thebetweenlands.common.entity.EntityFishVortex;
 import thebetweenlands.common.inventory.InventoryAmphibiousArmor;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.Item3DArmor;
@@ -80,6 +85,17 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 		}
 	}
 
+	protected AxisAlignedBB proximityBox(EntityPlayer player, double xSize, double ySize, double zSize) {
+		return new AxisAlignedBB(player.getPosition()).grow(xSize, ySize, zSize);
+	}
+
+	private void spawnFishVortex(World world, EntityLivingBase entity) {
+		EntityFishVortex vortex = new EntityFishVortex(world);
+		vortex.setPosition(entity.posX, entity.posY + 0.25D, entity.posZ);
+		world.spawnEntity(vortex);
+		entity.startRiding(vortex, true);
+	}
+
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		if(!player.isSpectator()) {
@@ -89,6 +105,22 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 			for (ItemStack anArmor : armor) {
 				if (anArmor != null && anArmor.getItem() instanceof ItemAmphibiousArmor) {
 					armorPieces += 1;
+				}
+			}
+
+			if(itemStack.getItem() == ItemRegistry.AMPHIBIOUS_CHESTPLATE) {
+				if(this.getUpgradeCount(itemStack, AmphibiousArmorUpgrades.FISH_VORTEX) >= 1) {
+					if(world.getTotalWorldTime()%200 == 0) {
+						if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
+							List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, proximityBox(player, 8D, 2D, 8D));
+							for (int entityCount = 0; entityCount < list.size(); entityCount++) {
+								EntityLivingBase entity = list.get(entityCount);
+								if (entity != null)
+									if (!(entity instanceof EntityPlayer))
+										spawnFishVortex (world, entity);
+							}
+						}
+					}
 				}
 			}
 

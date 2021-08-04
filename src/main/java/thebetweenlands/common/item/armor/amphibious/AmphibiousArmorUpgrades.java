@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -43,6 +42,7 @@ public enum AmphibiousArmorUpgrades implements IAmphibiousArmorUpgrade {
 	CRIMSON_GEM(new ResourceLocation(ModInfo.ID, "crimson_gem"), 64, s -> s.getItem() == ItemRegistry.CRIMSON_MIDDLE_GEM, null, CircleGemType.CRIMSON.getAmphibiousArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "aqua_gem"), new ResourceLocation(ModInfo.ID, "green_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET);*/
 
 	ASCENT_BOOST(new ResourceLocation(ModInfo.ID, "ascent_boost"), 64, EnumItemMisc.ANADIA_SWIM_BLADDER::isItemOf, EntityEquipmentSlot.LEGS),
+	FISH_VORTEX(new ResourceLocation(ModInfo.ID, "fish_vortex"), 1, EnumItemMisc.WEEDWOOD_STICK::isItemOf, EntityEquipmentSlot.CHEST), // TODO temp Item
 	
 	AQUA_GEM(new ResourceLocation(ModInfo.ID, "aqua_gem"), 64, s -> s.getItem() == ItemRegistry.AQUA_MIDDLE_GEM, null, CircleGemType.AQUA.getAmphibiousArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "green_gem"), new ResourceLocation(ModInfo.ID, "crimson_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
 	GREEN_GEM(new ResourceLocation(ModInfo.ID, "green_gem"), 64, s -> s.getItem() == ItemRegistry.GREEN_MIDDLE_GEM, null, CircleGemType.GREEN.getAmphibiousArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "aqua_gem"), new ResourceLocation(ModInfo.ID, "crimson_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
