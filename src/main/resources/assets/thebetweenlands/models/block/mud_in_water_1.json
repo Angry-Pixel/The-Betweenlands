@@ -2,7 +2,7 @@
     "parent": "block/cube",
     "textures": {
         "0": "thebetweenlands:blocks/mud",
-        "1": "thebetweenlands:blocks/silt_strands",
+        "1": "thebetweenlands:blocks/silt_strands_1",
         "particle": "thebetweenlands:blocks/mud"
     },
     "elements": [
