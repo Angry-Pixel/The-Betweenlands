@@ -23,6 +23,7 @@
             "name": "e_strands",
             "from": [13, 16, 0],
             "to": [13, 24, 16],
+            "shade": false,
             "faces": {
                 "east": {"uv": [0, 8, 16, 16], "texture": "#1"},
                 "west": {"uv": [0, 8, 16, 16], "texture": "#1"}
@@ -32,6 +33,7 @@
             "name": "w_strands",
             "from": [3, 16, 0],
             "to": [3, 24, 16],
+            "shade": false,
             "faces": {
                 "east": {"uv": [0, 8, 16, 16], "texture": "#1"},
                 "west": {"uv": [0, 8, 16, 16], "texture": "#1"}
@@ -41,6 +43,7 @@
             "name": "s_strands",
             "from": [0, 16, 13],
             "to": [16, 24, 13],
+            "shade": false,
             "faces": {
                 "north": {"uv": [0, 8, 16, 16], "texture": "#1"},
                 "south": {"uv": [0, 8, 16, 16], "texture": "#1"}
@@ -50,6 +53,7 @@
             "name": "n_strands",
             "from": [0, 16, 3],
             "to": [16, 24, 3],
+            "shade": false,
             "faces": {
                 "north": {"uv": [0, 8, 16, 16], "texture": "#1"},
                 "south": {"uv": [0, 8, 16, 16], "texture": "#1"}
