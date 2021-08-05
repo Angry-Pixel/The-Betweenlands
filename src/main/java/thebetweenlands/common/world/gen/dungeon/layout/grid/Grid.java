@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
@@ -19,12 +20,12 @@ import it.unimi.dsi.fastutil.ints.IntSortedSet;
 import thebetweenlands.common.world.gen.dungeon.layout.LayoutPhase;
 import thebetweenlands.common.world.gen.dungeon.layout.grid.Link.Constraint;
 
-public class Grid {
+public class Grid extends MetaObject {
 	private final Random rng;
 	private final int stairsRotationDir;
 	private final Accelerator accelerator;
 	private final int maxIterations;
-	
+
 	private TLongObjectMap<Cell> cells;
 	private List<Link> linkList;
 	private List<Cell> cellList;
@@ -38,7 +39,7 @@ public class Grid {
 		this.maxIterations = maxIterations;
 		this.reset();
 	}
-	
+
 	public Grid(Random rng, int regionSize) {
 		this(rng, regionSize, 100);
 	}
@@ -170,6 +171,8 @@ public class Grid {
 
 	public void clearMeta(LayoutPhase<?> phase) {
 		if(phase.getMeta() != null) {
+			this.setMeta(phase, null);
+
 			for(Cell cell : this.cellList) {
 				cell.getTile().setMeta(phase, null);
 			}
@@ -365,5 +368,15 @@ public class Grid {
 		this.setCellSizes();
 
 		return !cellCorrections.isEmpty();
+	}
+
+	@Override
+	public <TMeta> Grid updateOrCreateMeta(LayoutPhase<TMeta> phase, Consumer<TMeta> update) {
+		return (Grid) super.updateOrCreateMeta(phase, update);
+	}
+
+	@Override
+	public <TMeta> Grid setMeta(LayoutPhase<TMeta> phase, @Nullable TMeta meta) {
+		return (Grid) super.setMeta(phase, meta);
 	}
 }

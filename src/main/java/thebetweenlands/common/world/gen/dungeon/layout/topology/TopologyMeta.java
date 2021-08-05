@@ -1,6 +1,6 @@
 package thebetweenlands.common.world.gen.dungeon.layout.topology;
 
-import thebetweenlands.common.world.gen.dungeon.layout.grid.GridObject;
+import thebetweenlands.common.world.gen.dungeon.layout.grid.MetaObject;
 import thebetweenlands.common.world.gen.dungeon.structure.TileInfo;
 
 public class TopologyMeta {
@@ -8,5 +8,5 @@ public class TopologyMeta {
 	//needed for generation later
 	public TileInfo info;
 	
-	public TopologyMeta(GridObject obj) { }
+	public TopologyMeta(MetaObject obj) { }
 }

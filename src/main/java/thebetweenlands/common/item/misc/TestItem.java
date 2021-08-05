@@ -29,7 +29,6 @@ import thebetweenlands.common.world.gen.dungeon.layout.grid.Grid;
 import thebetweenlands.common.world.gen.dungeon.layout.grid.Link;
 import thebetweenlands.common.world.gen.dungeon.layout.grid.Link.Bound;
 import thebetweenlands.common.world.gen.dungeon.layout.pathfinder.PathfinderLinkMeta;
-import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.GraphTopologyMeta;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.Node;
 import thebetweenlands.common.world.gen.dungeon.layout.topology.graph.grammar.SourceSubstitutionPattern.Pattern;
 
@@ -191,8 +190,7 @@ public class TestItem extends Item {
 								for(Node n1 : pattern.getNodes(t1)) {
 									Cell n1c = null; 
 									for(Cell c1 : grid.getCells()) {
-										GraphTopologyMeta meta = c1.getTile().getMeta(Test.TEST.topology);
-										if(meta != null && meta.node.getGraphNode() == n1) {
+										if(c1.getTile().getMeta(Test.TEST.topology, meta -> meta.node.getGraphNode() == n1, false)) {
 											n1c = c1;
 										}
 									}
@@ -202,8 +200,7 @@ public class TestItem extends Item {
 											for(Node n2 : pattern.getNodes(t2)) {
 												Cell n2c = null; 
 												for(Cell c2 : grid.getCells()) {
-													GraphTopologyMeta meta = c2.getTile().getMeta(Test.TEST.topology);
-													if(meta != null && meta.node.getGraphNode() == n2) {
+													if(c2.getTile().getMeta(Test.TEST.topology, meta -> meta.node.getGraphNode() == n2, false)) {
 														n2c = c2;
 													}
 												}
@@ -257,8 +254,7 @@ public class TestItem extends Item {
 								for(Node n1 : pattern.getNodes(t1)) {
 									Cell n1c = null; 
 									for(Cell c1 : grid.getCells()) {
-										GraphTopologyMeta meta = c1.getTile().getMeta(Test.TEST.topology);
-										if(meta != null && meta.node.getGraphNode() == n1) {
+										if(c1.getTile().getMeta(Test.TEST.topology, meta -> meta.node.getGraphNode() == n1, false)) {
 											n1c = c1;
 										}
 									}
@@ -268,8 +264,7 @@ public class TestItem extends Item {
 											for(Node n2 : pattern.getNodes(t2)) {
 												Cell n2c = null; 
 												for(Cell c2 : grid.getCells()) {
-													GraphTopologyMeta meta = c2.getTile().getMeta(Test.TEST.topology);
-													if(meta != null && meta.node.getGraphNode() == n2) {
+													if(c2.getTile().getMeta(Test.TEST.topology, meta -> meta.node.getGraphNode() == n2, false)) {
 														n2c = c2;
 													}
 												}
@@ -513,20 +508,14 @@ public class TestItem extends Item {
 									b = 0.0f;
 								}*/
 
-								if(Test.TEST.entrancePatterns.stream().anyMatch(p -> p.getNodes().stream().anyMatch(node -> {
-									GraphTopologyMeta meta = cell.getTile().getMeta(Test.TEST.topology);
-									return meta != null && meta.node.getGraphNode() == node;	
-								}))) {
+								if(Test.TEST.entrancePatterns.stream().anyMatch(p -> p.getNodes().stream().anyMatch(node -> cell.getTile().getMeta(Test.TEST.topology, meta -> meta.node.getGraphNode() == node, false)))) {
 									r = 1.0f;
 									g = 0.85f;
 									b = 0.1f;
 									a = 0.7f;
 								}
 
-								if(Test.TEST.goalPatterns.stream().anyMatch(p -> p.getNodes().stream().anyMatch(node -> {
-									GraphTopologyMeta meta = cell.getTile().getMeta(Test.TEST.topology);
-									return meta != null && meta.node.getGraphNode() == node;	
-								}))) {
+								if(Test.TEST.goalPatterns.stream().anyMatch(p -> p.getNodes().stream().anyMatch(node -> cell.getTile().getMeta(Test.TEST.topology, meta -> meta.node.getGraphNode() == node, false)))) {
 									r = 1.0f;
 									g = 0.15f;
 									b = 0.25f;

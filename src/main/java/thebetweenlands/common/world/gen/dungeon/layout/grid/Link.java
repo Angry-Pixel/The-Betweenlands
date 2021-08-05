@@ -47,7 +47,6 @@ public class Link extends GridObject {
 
 	private Collection<Region> regions = Collections.emptyList();
 	private BitSet regionTags = new BitSet();
-	private Object[] meta = null;
 
 	Link(Connector start, Connector end, Accelerator accelerator, int xzPerY, int stairsRotationDir) {
 		this.start = start;
@@ -1021,14 +1020,12 @@ public class Link extends GridObject {
 
 	@Override
 	public Link setTag(int tag) {
-		super.setTag(tag);
-		return this;
+		return (Link) super.setTag(tag);
 	}
 
 	@Override
 	public Link setTag(int tag, boolean value) {
-		super.setTag(tag, value);
-		return this;
+		return (Link) super.setTag(tag, value);
 	}
 
 	@Override
@@ -1043,41 +1040,13 @@ public class Link extends GridObject {
 		return this;
 	}
 
-	private void ensureMetaCapacity(int id) {
-		if(this.meta == null) {
-			this.meta = new Object[id + 1];
-		} else if(id >= this.meta.length) {
-			Object[] newMeta = new Object[id + 1];
-			System.arraycopy(this.meta, 0, newMeta, 0, this.meta.length);
-			this.meta = newMeta;
-		}
-	}
-
 	@Override
 	public <TMeta> Link updateOrCreateMeta(LayoutPhase<TMeta> phase, Consumer<TMeta> update) {
-		super.updateOrCreateMeta(phase, update);
-		return this;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	@Nullable
-	public <TMeta> TMeta getMeta(LayoutPhase<TMeta> phase) {
-		int id = phase.getMetaId();
-		if(id < 0 || this.meta == null || id >= this.meta.length) {
-			return null;
-		}
-		return (TMeta) this.meta[id];
+		return (Link) super.updateOrCreateMeta(phase, update);
 	}
 
 	@Override
 	public <TMeta> Link setMeta(LayoutPhase<TMeta> phase, @Nullable TMeta meta) {
-		int id = phase.getMetaId();
-		if(id < 0) {
-			return this;
-		}
-		this.ensureMetaCapacity(id);
-		this.meta[id] = meta;
-		return this;
+		return (Link) super.setMeta(phase, meta);
 	}
 }

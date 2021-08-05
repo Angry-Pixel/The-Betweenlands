@@ -24,7 +24,6 @@ public class Tile extends GridObject {
 	private Map<Direction, Connector> connectors = new HashMap<>();
 	private Collection<Region> regions = Collections.emptyList();
 	private BitSet regionTags = new BitSet();
-	private Object[] meta = null;
 
 	private boolean tentative;
 	private int prevX, prevY, prevZ;
@@ -335,14 +334,12 @@ public class Tile extends GridObject {
 
 	@Override
 	public Tile setTag(int tag) {
-		super.setTag(tag);
-		return this;
+		return (Tile) super.setTag(tag);
 	}
 
 	@Override
 	public Tile setTag(int tag, boolean value) {
-		super.setTag(tag, value);
-		return this;
+		return (Tile) super.setTag(tag, value);
 	}
 
 	@Override
@@ -357,41 +354,13 @@ public class Tile extends GridObject {
 		return this;
 	}
 
-	private void ensureMetaCapacity(int id) {
-		if(this.meta == null) {
-			this.meta = new Object[id + 1];
-		} else if(id >= this.meta.length) {
-			Object[] newMeta = new Object[id + 1];
-			System.arraycopy(this.meta, 0, newMeta, 0, this.meta.length);
-			this.meta = newMeta;
-		}
-	}
-
 	@Override
 	public <TMeta> Tile updateOrCreateMeta(LayoutPhase<TMeta> phase, Consumer<TMeta> update) {
-		super.updateOrCreateMeta(phase, update);
-		return this;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	@Nullable
-	public <TMeta> TMeta getMeta(LayoutPhase<TMeta> phase) {
-		int id = phase.getMetaId();
-		if(id < 0 || this.meta == null || id >= this.meta.length) {
-			return null;
-		}
-		return (TMeta) this.meta[id];
+		return (Tile) super.updateOrCreateMeta(phase, update);
 	}
 
 	@Override
 	public <TMeta> Tile setMeta(LayoutPhase<TMeta> phase, @Nullable TMeta meta) {
-		int id = phase.getMetaId();
-		if(id < 0) {
-			return this;
-		}
-		this.ensureMetaCapacity(id);
-		this.meta[id] = meta;
-		return this;
+		return (Tile) super.setMeta(phase, meta);
 	}
 }

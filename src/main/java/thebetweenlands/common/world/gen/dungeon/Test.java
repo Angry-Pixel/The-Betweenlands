@@ -59,8 +59,12 @@ public class Test {
 		
 		this.isShrinking = false;
 		this.counter = 0;
+		
+		long seed = 123L;
+		
+		Random rng = new Random(seed);
 
-		this.grid = new Grid(new Random(), 8);
+		this.grid = new Grid(rng, 8);
 
 		this.isShrinking = false;
 		boolean generated = LayoutGenerator.sequence()
@@ -73,7 +77,7 @@ public class Test {
 		.pathfinder(() -> this.pathfinder)
 		.criterion(() -> new PathPercentageCriterion(0.2f, 3, true))
 		.finish()
-		.generate(this.grid, new Random());
+		.generate(this.grid, rng);
 		System.out.println("Generated: " + generated);
 	}
 

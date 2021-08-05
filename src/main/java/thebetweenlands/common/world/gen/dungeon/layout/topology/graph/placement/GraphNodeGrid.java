@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -233,8 +232,8 @@ public class GraphNodeGrid implements INodeGridHandle, INodeGrid {
 		}
 	}
 
-	private final Map<Pos, GridNode> pos2gn = new LinkedHashMap<>();
-	private final Map<Node, GridNode> n2gn = new LinkedHashMap<>();
+	private final LinkedHashMap<Pos, GridNode> pos2gn = new LinkedHashMap<>();
+	private final LinkedHashMap<Node, GridNode> n2gn = new LinkedHashMap<>();
 
 	void removeReservedNodes() {
 		Iterator<GridNode> nodes = this.pos2gn.values().iterator();

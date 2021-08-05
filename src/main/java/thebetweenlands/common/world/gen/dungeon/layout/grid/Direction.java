@@ -1,6 +1,10 @@
 package thebetweenlands.common.world.gen.dungeon.layout.grid;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
+
+import com.google.common.collect.ImmutableList;
 
 public enum Direction {
 	POS_X(1, 0, 0),
@@ -10,6 +14,12 @@ public enum Direction {
 	NEG_Y(0, -1, 0),
 	NEG_Z(0, 0, -1);
 
+	public static final List<Direction> ALL = ImmutableList.of(POS_X, POS_Y, POS_Z, NEG_X, NEG_Y, NEG_Z);
+	public static final List<Direction> HORIZONTAL = ImmutableList.of(POS_X, POS_Z, NEG_X, NEG_Z);
+	public static final List<Direction> X = ImmutableList.of(POS_X, NEG_X);
+	public static final List<Direction> Y = ImmutableList.of(POS_Y, NEG_Y);
+	public static final List<Direction> Z = ImmutableList.of(POS_Z, NEG_Z);
+
 	public final int x, y, z;
 
 	private Direction(int x, int y, int z) {
@@ -17,7 +27,7 @@ public enum Direction {
 		this.y = y;
 		this.z = z;
 	}
-	
+
 	@Nullable
 	public static Direction of(int x, int y, int z) {
 		if(x > 0) {

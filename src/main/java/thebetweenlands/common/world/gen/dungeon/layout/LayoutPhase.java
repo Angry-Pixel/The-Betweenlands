@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 
 import thebetweenlands.common.world.gen.dungeon.layout.grid.Grid;
 import thebetweenlands.common.world.gen.dungeon.layout.grid.GridObject;
+import thebetweenlands.common.world.gen.dungeon.layout.grid.MetaObject;
 
 public abstract class LayoutPhase<TMeta> {
 	public static interface TagSupplier {
@@ -21,7 +22,7 @@ public abstract class LayoutPhase<TMeta> {
 	private boolean metaSet = false;
 	private boolean isMetaShared;
 	private Class<TMeta> metaClass;
-	private Function<GridObject, TMeta> meta;
+	private Function<MetaObject, TMeta> meta;
 	private int metaId = -1;
 
 	public void init(Grid grid, Random rng, TagSupplier tagSupplier) {
@@ -51,7 +52,7 @@ public abstract class LayoutPhase<TMeta> {
 		return this.tagsMask;
 	}
 
-	protected final void setMeta(Class<TMeta> cls, Function<GridObject, TMeta> factory, boolean share) {
+	protected final void setMeta(Class<TMeta> cls, Function<MetaObject, TMeta> factory, boolean share) {
 		if(this.metaSet) {
 			throw new IllegalStateException("Cannot set meta after it has already been used");
 		}
@@ -64,7 +65,7 @@ public abstract class LayoutPhase<TMeta> {
 	}
 
 	@Nullable
-	public final Function<GridObject, TMeta> getMeta() {
+	public final Function<MetaObject, TMeta> getMeta() {
 		this.metaSet = true;
 		return this.meta;
 	}

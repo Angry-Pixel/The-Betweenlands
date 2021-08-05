@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.google.common.base.MoreObjects;
 
-import thebetweenlands.common.world.gen.dungeon.layout.grid.GridObject;
+import thebetweenlands.common.world.gen.dungeon.layout.grid.MetaObject;
 
 public class PathfinderLinkMeta {
 	public static enum Shape {
@@ -195,5 +195,5 @@ public class PathfinderLinkMeta {
 
 	public final List<Piece> pieces = new ArrayList<>();
 
-	public PathfinderLinkMeta(GridObject obj) { }
+	public PathfinderLinkMeta(MetaObject obj) { }
 }
