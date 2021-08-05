@@ -305,6 +305,16 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 		nbt.setTag(NBT_UPGRADE_MAP_KEY, upgradesMap);
 	}
 
+	public static int getUpgradeCount(EntityLivingBase entity, IAmphibiousArmorUpgrade upgrade) {
+		int count = 0;
+		for(ItemStack stack : entity.getArmorInventoryList()) {
+			if(!stack.isEmpty() && stack.getItem() instanceof ItemAmphibiousArmor) {
+				count += ((ItemAmphibiousArmor) stack.getItem()).getUpgradeCount(stack, upgrade);
+			}
+		}
+		return count;
+	}
+	
 	public int getUpgradeCount(ItemStack stack, IAmphibiousArmorUpgrade upgrade) {
 		NBTTagCompound nbt = stack.getTagCompound();
 
@@ -313,6 +323,19 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 		}
 
 		return 0;
+	}
+	
+	public static boolean damageUpgrade(EntityLivingBase entity, IAmphibiousArmorUpgrade upgrade, int amount, boolean damageAll) {
+		boolean damaged = false;
+		for(ItemStack stack : entity.getArmorInventoryList()) {
+			if(!stack.isEmpty() && stack.getItem() instanceof ItemAmphibiousArmor) {
+				damaged |= ((ItemAmphibiousArmor) stack.getItem()).damageUpgrade(stack, upgrade, amount, damageAll);
+				if(damaged && !damageAll) {
+					break;
+				}
+			}
+		}
+		return damaged;
 	}
 
 	public boolean damageUpgrade(ItemStack stack, IAmphibiousArmorUpgrade upgrade, int amount, boolean damageAll) {

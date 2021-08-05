@@ -6,7 +6,7 @@
             "entries": [
                 {
                     "type": "item",
-                    "entryName": "body_type_0",
+                    "entryName": "shimmerstone",
                     "name": "thebetweenlands:shimmer_stone",
                     "weight": 1,
                     "conditions": [
@@ -28,10 +28,118 @@
                         }
                     ]
                 },
+                {
+                    "type": "item",
+                    "entryName": "rubber_boots",
+                    "name": "thebetweenlands:rubber_boots",
+                    "weight": 1,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 0
+                            }
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 1,
+                            "max_count": 1
+                        },
+                        {
+							"function": "set_damage",
+							"damage": 0.45
+						}
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "pearls_0",
+                    "name": "thebetweenlands:rock_snot_pearl",
+                    "weight": 3,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 0
+                            }
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 1,
+                            "max_count": 3
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "loot_scraps_0",
+                    "name": "thebetweenlands:items_misc",
+                    "weight": 3,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 0
+                            }
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 1,
+                            "max_count": 2
+                        },
+                        {
+                            "function":"set_data",
+                            "data": 48
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "syrmorite_nuggets_0",
+                    "name": "thebetweenlands:items_misc",
+                    "weight": 3,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 0
+                            }
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 4,
+                            "max_count": 8
+                        },
+                        {
+                            "function":"set_data",
+                            "data": 41
+                        }
+                    ]
+                },
                  {
                     "type": "item",
-                    "entryName": "body_type_1",
-                    "name": "thebetweenlands:wight_heart",
+                    "entryName": "aqua_middle_gem_1",
+                    "name": "thebetweenlands:aqua_middle_gem",
                     "weight": 1,
                     "conditions": [
                         {
@@ -48,14 +156,170 @@
                             "size_start": 0.125,
                             "size_end": 0.95,
                             "min_count": 1,
-                            "max_count": 5
+                            "max_count": 1
                         }
                     ]
                 },
                 {
                     "type": "item",
-                    "entryName": "body_type_2",
-                    "name": "thebetweenlands:life_crystal",
+                    "entryName": "green_middle_gem_1",
+                    "name": "thebetweenlands:green_middle_gem",
+                    "weight": 1,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 1
+                            }
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 1,
+                            "max_count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "crimson_middle_gem_1",
+                    "name": "thebetweenlands:crimson_middle_gem",
+                    "weight": 1,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 1
+                            }
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 1,
+                            "max_count": 1
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "pearls_1",
+                    "name": "thebetweenlands:rock_snot_pearl",
+                    "weight": 1,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 1
+                            }
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 3,
+                            "max_count": 6
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "loot_scraps_1",
+                    "name": "thebetweenlands:items_misc",
+                    "weight": 1,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 1
+                            }
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 2,
+                            "max_count": 3
+                        },
+                        {
+                            "function":"set_data",
+                            "data": 48
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "syrmorite_nuggets_1",
+                    "name": "thebetweenlands:items_misc",
+                    "weight": 3,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 1
+                            }
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 8,
+                            "max_count": 16
+                        },
+                        {
+                            "function":"set_data",
+                            "data": 41
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "valonite_splinter",
+                    "name": "thebetweenlands:items_misc",
+                    "weight": 1,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 2
+                            }
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 4,
+                            "max_count": 9
+                        },
+                        {
+                            "function":"set_data",
+                            "data": 43
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "aqua_middle_gem_2",
+                    "name": "thebetweenlands:aqua_middle_gem",
                     "weight": 1,
                     "conditions": [
                         {
@@ -72,7 +336,135 @@
                             "size_start": 0.125,
                             "size_end": 0.95,
                             "min_count": 1,
-                            "max_count": 1
+                            "max_count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "green_middle_gem_2",
+                    "name": "thebetweenlands:green_middle_gem",
+                    "weight": 1,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 2
+                            }
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 1,
+                            "max_count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "crimson_middle_gem_2",
+                    "name": "thebetweenlands:crimson_middle_gem",
+                    "weight": 1,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 2
+                            }
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 1,
+                            "max_count": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "pearls_2",
+                    "name": "thebetweenlands:rock_snot_pearl",
+                    "weight": 1,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 2
+                            }
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 5,
+                            "max_count": 8
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "loot_scraps_2",
+                    "name": "thebetweenlands:items_misc",
+                    "weight": 2,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 2
+                            }
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 2,
+                            "max_count": 4
+                        },
+                        {
+                            "function":"set_data",
+                            "data": 48
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "syrmorite_nuggets_2",
+                    "name": "thebetweenlands:items_misc",
+                    "weight": 2,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 2
+                            }
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 12,
+                            "max_count": 24
+                        },
+                        {
+                            "function":"set_data",
+                            "data": 41
                         }
                     ]
                 }

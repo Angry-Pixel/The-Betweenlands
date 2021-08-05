@@ -9,6 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -40,24 +41,13 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 	private static final List<IBlockState> UNDERWATER_PLANTS = ImmutableList.of(BlockRegistry.SWAMP_REED_UNDERWATER.getDefaultState(), BlockRegistry.WATER_WEEDS.getDefaultState(), BlockRegistry.SWAMP_KELP.getDefaultState());
 
 	public WorldGenUnderwaterRuins() {
-		super(); //TODO: Replace the dirt underwater and the water
+		super();
 	}
 
 	@Override
 	public boolean generate(World world, Random rand, BlockPos position) {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 		LocationStorage locationStorage = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(position), "underwater_ruins", EnumLocationType.RUINS);
-
-		/*
-		 * 1. Check that we are placing under sufficient amount of water as well as surface. (test)
-		 * 2. Generation (done)
-		 * 3. Decorate with plants
-		 * 4. LocationStorage placement
-		 *
-		 * 4a. WorldStorage (done), x (pos.getX), y (pos.getY), z (pos.getZ), offsetX 0, offsetY 0 , offsetZ 0, width (X), height (Y), depth (Z), Direction
-		 * 4b. Grow or Expand is for resizing the box. Dynamic size or Static size?
-		 * 4c. Direction isn't randomly determined. Find out a way to make use of it
-		 */
 
 		//Pick a random feature
 		boolean generated;
@@ -112,6 +102,14 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 					}
 				}
 			}
+
+			//location storage
+			locationStorage.addBounds(new AxisAlignedBB(position.up(4)).grow(8.0D, 4.0D, 8.0D));
+			locationStorage.setLayer(0);
+			locationStorage.setSeed(world.getSeed());
+			locationStorage.setVisible(true);
+			locationStorage.setDirty(true);
+			worldStorage.getLocalStorageHandler().addLocalStorage(locationStorage);
 		}
 
 		return generated;
@@ -235,30 +233,39 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 		}
 	}
 
-	//generate some arches TODO: Prevent no-shows
+	//generate some arches
 	private boolean structureArch(World world, Random rand, BlockPos pos) {
 		if (!checkValidSpace(world, pos.getX(), pos.getY(), pos.getZ(), 7, 7, 7))
 			return false;
 
-		if (rand.nextBoolean()) buildArch(world, rand, pos.add(1, 0, 1), EnumFacing.NORTH); //north
-		if (rand.nextBoolean()) buildArch(world, rand, pos.add(1, 0, 0), EnumFacing.EAST); //east
-		if (rand.nextBoolean()) buildArch(world, rand, pos, EnumFacing.SOUTH); //south
-		if (rand.nextBoolean()) buildArch(world, rand, pos.add(0, 0, 1), EnumFacing.WEST); //west
+		boolean north, south, east, west;
+		do {
+			north = buildArch(world, rand, pos.add(1, 0, 1), EnumFacing.NORTH); //north
+			east = buildArch(world, rand, pos.add(1, 0, 0), EnumFacing.EAST); //east
+			south = buildArch(world, rand, pos, EnumFacing.SOUTH); //south
+			west = buildArch(world, rand, pos.add(0, 0, 1), EnumFacing.WEST); //west
+		} while (!north && !south && !east && !west);
 
 		return true;
 	}
 
-	private void buildArch(World world, Random rand, BlockPos pos, EnumFacing directionIn) {
-		int direction = directionIn.getHorizontalIndex();
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
+	private boolean buildArch(World world, Random rand, BlockPos pos, EnumFacing directionIn) {
+		if (rand.nextBoolean()) {
+			int direction = directionIn.getHorizontalIndex();
+			int x = pos.getX();
+			int y = pos.getY();
+			int z = pos.getZ();
 
-		rotatedCubeVolume(world, x, y, z, 0, 0, -3, getBrickGrade(rand), 1, 4, 1, direction);
-		rotatedCubeVolume(world, x, y, z, 0, 4, -3, getStateFromRotation(3, direction, cragrockBrickStairs, EnumRotationSequence.STAIR), 1, 1, 1, direction);
-		rotatedCubeVolume(world, x, y, z, 0, 4, -2, getStateFromRotation(1, direction, cragrockBrickStairs, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
-		rotatedCubeVolume(world, x, y, z, 0, 5, -2, getStateFromRotation(3, direction, cragrockBrickStairs, EnumRotationSequence.STAIR), 1, 1, 1, direction);
-		rotatedCubeVolume(world, x, y, z, 0, 5, -1, getStateFromRotation(1, direction, cragrockBrickStairs, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
+			rotatedCubeVolume(world, x, y, z, 0, 0, -3, getBrickGrade(rand), 1, 4, 1, direction);
+			rotatedCubeVolume(world, x, y, z, 0, 4, -3, getStateFromRotation(3, direction, cragrockBrickStairs, EnumRotationSequence.STAIR), 1, 1, 1, direction);
+			rotatedCubeVolume(world, x, y, z, 0, 4, -2, getStateFromRotation(1, direction, cragrockBrickStairs, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
+			rotatedCubeVolume(world, x, y, z, 0, 5, -2, getStateFromRotation(3, direction, cragrockBrickStairs, EnumRotationSequence.STAIR), 1, 1, 1, direction);
+			rotatedCubeVolume(world, x, y, z, 0, 5, -1, getStateFromRotation(1, direction, cragrockBrickStairs, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
+
+			return true;
+		}
+
+		return false;
 	}
 
 	//generate a shelter
@@ -382,7 +389,8 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 						TileEntity te = world.getTileEntity(spawnerpos);
 						if (te instanceof TileEntityMobSpawnerBetweenlands) {
 							MobSpawnerLogicBetweenlands logic = ((TileEntityMobSpawnerBetweenlands)te).getSpawnerLogic();
-							logic.setNextEntityName("thebetweenlands:angler").setCheckRange(32.0D).setSpawnRange(6).setSpawnInAir(false/*TODO: is water "air"?*/).setMaxEntities(1 + world.rand.nextInt(3));
+							//TODO: Check spawn
+							logic.setNextEntityName("thebetweenlands:angler").setCheckRange(32.0D).setSpawnRange(6).setSpawnInAir(false).setMaxEntities(1 + world.rand.nextInt(3));
 						}
 					}
 				}
