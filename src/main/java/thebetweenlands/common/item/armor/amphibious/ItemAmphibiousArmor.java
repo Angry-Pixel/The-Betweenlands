@@ -1,9 +1,8 @@
 package thebetweenlands.common.item.armor.amphibious;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-
-import javax.annotation.Nullable;
 
 import com.google.common.collect.Multimap;
 
@@ -19,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -98,6 +98,15 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 		world.spawnEntity(vortex);
 		entity.startRiding(vortex, true);
 	}
+	
+	private List findNearbyEntities(World world, EntityPlayer player, AxisAlignedBB box) {
+		return world.getEntitiesWithinAABB(EntityLivingBase.class, box, EntitySelectors.IS_STANDALONE);
+	}
+	
+	private EntityLivingBase pickRandomEntityFromList(List<EntityLivingBase> list) {
+		Collections.shuffle(list);
+		return list.get(0);
+	}
 
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
@@ -111,16 +120,19 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 				}
 			}
 
-			if(itemStack.getItem() == ItemRegistry.AMPHIBIOUS_CHESTPLATE) {
-				if(this.getUpgradeCount(itemStack, AmphibiousArmorUpgrades.FISH_VORTEX) >= 1) {
-					if(world.getTotalWorldTime()%200 == 0) {
+			if (itemStack.getItem() == ItemRegistry.AMPHIBIOUS_CHESTPLATE) {
+				int vortexCount = getUpgradeCount(itemStack, AmphibiousArmorUpgrades.FISH_VORTEX);
+				if (vortexCount >= 1) {
+					if (world.getTotalWorldTime() % 200 == 0) {
 						if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
-							List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, proximityBox(player, 8D, 2D, 8D));
-							for (int entityCount = 0; entityCount < list.size(); entityCount++) {
-								EntityLivingBase entity = list.get(entityCount);
+							List<EntityLivingBase> list = findNearbyEntities(world, player, proximityBox(player, 8D, 4D, 8D));
+							for (int entityCount = 0; entityCount < Math.min(vortexCount, list.size()); entityCount++) {
+								EntityLivingBase entity = pickRandomEntityFromList(list);
 								if (entity != null)
-									if (!(entity instanceof EntityPlayer))
-										spawnFishVortex (world, entity);
+									if (!(entity instanceof EntityPlayer)) {
+										spawnFishVortex(world, entity);
+										list.remove(0);
+									}
 							}
 						}
 					}
