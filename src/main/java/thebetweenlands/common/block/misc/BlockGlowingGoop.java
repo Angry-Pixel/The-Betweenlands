@@ -13,7 +13,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
@@ -35,7 +34,7 @@ public class BlockGlowingGoop extends BlockDirectional implements ICustomItemBlo
 	public BlockGlowingGoop() {
 		super(Material.GLASS);
 		setDefaultState(this.getBlockState().getBaseState());
-		setLightLevel(1.0F);
+		setLightLevel(0.8F);
 		setHardness(0.0F);
 		setResistance(2.0F);
 		setSoundType(SoundType.SLIME);

@@ -14,6 +14,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.misc.BlockGlowingGoop;
 import thebetweenlands.common.registries.BlockRegistry;
 
@@ -34,6 +36,12 @@ public class EntityGlowingGoop extends EntityThrowable {
 			setDead();
 		}
 	}
+
+	@Override
+    @SideOnly(Side.CLIENT)
+    public int getBrightnessForRender() {
+    	return 15728880;
+    }
 
 	@Override
 	protected void onImpact(RayTraceResult result) {
