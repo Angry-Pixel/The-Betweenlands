@@ -3,6 +3,8 @@ package thebetweenlands.common.item.armor.amphibious;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Multimap;
 
 import net.minecraft.block.state.IBlockState;
@@ -31,6 +33,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.item.IAmphibiousArmorUpgrade;
+import thebetweenlands.api.item.IAmphibiousArmorUpgrade.DamageEvent;
 import thebetweenlands.client.render.model.armor.ModelAmphibiousArmor;
 import thebetweenlands.client.render.model.armor.ModelBodyAttachment;
 import thebetweenlands.common.TheBetweenlands;
@@ -255,9 +258,8 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 	public void setDamage(ItemStack stack, int damage) {
 		super.setDamage(stack, damage);
 
-		//TODO Testing
 		for(IAmphibiousArmorUpgrade upgrade : AmphibiousArmorUpgrades.values()) {
-			this.damageUpgrade(stack, upgrade, 1, true);
+			this.damageUpgrade(stack, upgrade, 1, DamageEvent.ON_DAMAGE, true);
 		}
 	}
 
@@ -325,11 +327,11 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 		return 0;
 	}
 	
-	public static boolean damageUpgrade(EntityLivingBase entity, IAmphibiousArmorUpgrade upgrade, int amount, boolean damageAll) {
+	public static boolean damageUpgrade(EntityLivingBase entity, IAmphibiousArmorUpgrade upgrade, int amount, DamageEvent damageEvent, boolean damageAll) {
 		boolean damaged = false;
 		for(ItemStack stack : entity.getArmorInventoryList()) {
 			if(!stack.isEmpty() && stack.getItem() instanceof ItemAmphibiousArmor) {
-				damaged |= ((ItemAmphibiousArmor) stack.getItem()).damageUpgrade(stack, upgrade, amount, damageAll);
+				damaged |= ((ItemAmphibiousArmor) stack.getItem()).damageUpgrade(stack, upgrade, amount, damageEvent, damageAll);
 				if(damaged && !damageAll) {
 					break;
 				}
@@ -338,7 +340,11 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 		return damaged;
 	}
 
-	public boolean damageUpgrade(ItemStack stack, IAmphibiousArmorUpgrade upgrade, int amount, boolean damageAll) {
+	public boolean damageUpgrade(ItemStack stack, IAmphibiousArmorUpgrade upgrade, int amount, DamageEvent damageEvent, boolean damageAll) {
+		if(damageEvent == DamageEvent.NONE) {
+			return false;
+		}
+		
 		boolean damaged = false;
 
 		IInventory inv = new InventoryAmphibiousArmor(stack, "");
@@ -349,14 +355,16 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 			if(!upgradeItem.isEmpty()) {
 				IAmphibiousArmorUpgrade itemUpgrade = AmphibiousArmorUpgrades.getUpgrade(this.armorType, upgradeItem);
 
-				if(itemUpgrade == upgrade) {
+				if(itemUpgrade == upgrade && (damageEvent == DamageEvent.ALL || itemUpgrade.isApplicableDamageEvent(damageEvent))) {
 					int damage = this.getUpgradeDamage(stack, i);
 					int maxDamage = this.getUpgradeMaxDamage(stack, i);
 
 					if(damage + amount > maxDamage) {
-						upgradeItem.shrink(1);
-						inv.setInventorySlotContents(i, upgradeItem);
-						this.setUpgradeDamage(stack, i, 0, itemUpgrade.getMaxDamage());
+						if(itemUpgrade.canBreak()) {
+							upgradeItem.shrink(1);
+							inv.setInventorySlotContents(i, upgradeItem);
+							this.setUpgradeDamage(stack, i, 0, itemUpgrade.getMaxDamage());
+						}
 					} else {
 						this.setUpgradeDamage(stack, i, damage + amount);
 					}

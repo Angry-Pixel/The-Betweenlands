@@ -22,6 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.api.item.IAmphibiousArmorAttributeUpgrade;
 import thebetweenlands.api.item.IAmphibiousArmorUpgrade;
+import thebetweenlands.api.item.IAmphibiousArmorUpgrade.DamageEvent;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
@@ -41,12 +42,12 @@ public enum AmphibiousArmorUpgrades implements IAmphibiousArmorUpgrade {
 	GREEN_GEM(new ResourceLocation(ModInfo.ID, "green_gem"), 64, s -> s.getItem() == ItemRegistry.GREEN_MIDDLE_GEM, null, CircleGemType.GREEN.getAmphibiousArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "aqua_gem"), new ResourceLocation(ModInfo.ID, "crimson_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
 	CRIMSON_GEM(new ResourceLocation(ModInfo.ID, "crimson_gem"), 64, s -> s.getItem() == ItemRegistry.CRIMSON_MIDDLE_GEM, null, CircleGemType.CRIMSON.getAmphibiousArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "aqua_gem"), new ResourceLocation(ModInfo.ID, "green_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET);*/
 
-	ASCENT_BOOST(new ResourceLocation(ModInfo.ID, "ascent_boost"), 64, EnumItemMisc.ANADIA_SWIM_BLADDER::isItemOf, EntityEquipmentSlot.LEGS),
-	FISH_VORTEX(new ResourceLocation(ModInfo.ID, "fish_vortex"), 1, EnumItemMisc.WEEDWOOD_STICK::isItemOf, EntityEquipmentSlot.CHEST), // TODO temp Item
+	ASCENT_BOOST(new ResourceLocation(ModInfo.ID, "ascent_boost"), 64, DamageEvent.ON_USE, EnumItemMisc.ANADIA_SWIM_BLADDER::isItemOf, EntityEquipmentSlot.LEGS),
+	FISH_VORTEX(new ResourceLocation(ModInfo.ID, "fish_vortex"), 1, DamageEvent.ON_USE, EnumItemMisc.WEEDWOOD_STICK::isItemOf, EntityEquipmentSlot.CHEST), // TODO temp Item
 	
-	AQUA_GEM(new ResourceLocation(ModInfo.ID, "aqua_gem"), 64, s -> s.getItem() == ItemRegistry.AQUA_MIDDLE_GEM, null, CircleGemType.AQUA.getAmphibiousArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "green_gem"), new ResourceLocation(ModInfo.ID, "crimson_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
-	GREEN_GEM(new ResourceLocation(ModInfo.ID, "green_gem"), 64, s -> s.getItem() == ItemRegistry.GREEN_MIDDLE_GEM, null, CircleGemType.GREEN.getAmphibiousArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "aqua_gem"), new ResourceLocation(ModInfo.ID, "crimson_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
-	CRIMSON_GEM(new ResourceLocation(ModInfo.ID, "crimson_gem"), 64, s -> s.getItem() == ItemRegistry.CRIMSON_MIDDLE_GEM, null, CircleGemType.CRIMSON.getAmphibiousArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "aqua_gem"), new ResourceLocation(ModInfo.ID, "green_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET);
+	AQUA_GEM(new ResourceLocation(ModInfo.ID, "aqua_gem"), 64, DamageEvent.ON_DAMAGE, s -> s.getItem() == ItemRegistry.AQUA_MIDDLE_GEM, null, CircleGemType.AQUA.getAmphibiousArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "green_gem"), new ResourceLocation(ModInfo.ID, "crimson_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
+	GREEN_GEM(new ResourceLocation(ModInfo.ID, "green_gem"), 64, DamageEvent.ON_DAMAGE, s -> s.getItem() == ItemRegistry.GREEN_MIDDLE_GEM, null, CircleGemType.GREEN.getAmphibiousArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "aqua_gem"), new ResourceLocation(ModInfo.ID, "crimson_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
+	CRIMSON_GEM(new ResourceLocation(ModInfo.ID, "crimson_gem"), 64, DamageEvent.ON_DAMAGE, s -> s.getItem() == ItemRegistry.CRIMSON_MIDDLE_GEM, null, CircleGemType.CRIMSON.getAmphibiousArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "aqua_gem"), new ResourceLocation(ModInfo.ID, "green_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET);
 	
 	private static final Map<ResourceLocation, IAmphibiousArmorUpgrade> ID_TO_UPGRADE = new HashMap<>();
 	private static final Multimap<EntityEquipmentSlot, IAmphibiousArmorUpgrade> TYPE_TO_UPGRADES = MultimapBuilder.enumKeys(EntityEquipmentSlot.class).arrayListValues().build();
@@ -88,23 +89,25 @@ public enum AmphibiousArmorUpgrades implements IAmphibiousArmorUpgrade {
 
 	private final ResourceLocation id;
 	private final int maxDamage;
+	private final DamageEvent damageEvent;
 	private final Predicate<ItemStack> matcher;
 	private final IAmphibiousArmorAttributeUpgrade attributeUpgrade;
 	private final Set<EntityEquipmentSlot> armorTypes;
 	private final Consumer<ItemStack> onChanged;
 	private final Set<ResourceLocation> blacklist;
 
-	private AmphibiousArmorUpgrades(ResourceLocation id, int maxDamage, Predicate<ItemStack> matcher, EntityEquipmentSlot... armorTypes) {
-		this(id, maxDamage, matcher, null, armorTypes);
+	private AmphibiousArmorUpgrades(ResourceLocation id, int maxDamage, DamageEvent damageEvent, Predicate<ItemStack> matcher, EntityEquipmentSlot... armorTypes) {
+		this(id, maxDamage, damageEvent, matcher, null, armorTypes);
 	}
 
-	private AmphibiousArmorUpgrades(ResourceLocation id, int maxDamage, Predicate<ItemStack> matcher, @Nullable IAmphibiousArmorAttributeUpgrade attributeUpgrade, EntityEquipmentSlot... armorTypes) {
-		this(id, maxDamage, matcher, attributeUpgrade, null, ImmutableSet.of(), armorTypes);
+	private AmphibiousArmorUpgrades(ResourceLocation id, int maxDamage, DamageEvent damageEvent, Predicate<ItemStack> matcher, @Nullable IAmphibiousArmorAttributeUpgrade attributeUpgrade, EntityEquipmentSlot... armorTypes) {
+		this(id, maxDamage, damageEvent, matcher, attributeUpgrade, null, ImmutableSet.of(), armorTypes);
 	}
 
-	private AmphibiousArmorUpgrades(ResourceLocation id, int maxDamage, Predicate<ItemStack> matcher, @Nullable IAmphibiousArmorAttributeUpgrade attributeUpgrade, Consumer<ItemStack> onChanged, Set<ResourceLocation> blacklist, EntityEquipmentSlot... armorTypes) {
+	private AmphibiousArmorUpgrades(ResourceLocation id, int maxDamage, DamageEvent damageEvent, Predicate<ItemStack> matcher, @Nullable IAmphibiousArmorAttributeUpgrade attributeUpgrade, Consumer<ItemStack> onChanged, Set<ResourceLocation> blacklist, EntityEquipmentSlot... armorTypes) {
 		this.id = id;
 		this.maxDamage = maxDamage;
+		this.damageEvent = damageEvent;
 		this.matcher = matcher;
 		this.attributeUpgrade = attributeUpgrade;
 		this.onChanged = onChanged;
@@ -149,5 +152,15 @@ public enum AmphibiousArmorUpgrades implements IAmphibiousArmorUpgrade {
 	@Override
 	public int getMaxDamage() {
 		return this.maxDamage;
+	}
+
+	@Override
+	public boolean isApplicableDamageEvent(DamageEvent event) {
+		return this.damageEvent != DamageEvent.NONE && (this.damageEvent == DamageEvent.ALL || event == this.damageEvent);
+	}
+
+	@Override
+	public boolean canBreak() {
+		return true;
 	}
 }
