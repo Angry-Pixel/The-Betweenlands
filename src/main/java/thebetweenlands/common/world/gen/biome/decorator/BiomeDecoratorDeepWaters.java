@@ -15,6 +15,10 @@ public class BiomeDecoratorDeepWaters extends BiomeDecoratorBetweenlands {
 		this.generate(1, DecorationHelper::generateWisp);
 		this.endProfilerSection();
 
+		this.startProfilerSection("underwaterRuins");
+		this.generate(0.3F, DecorationHelper::generateUnderwaterRuins);
+		this.endProfilerSection();
+
 		this.startProfilerSection("bladderwortCluster");
 		this.generate(2, DecorationHelper::generateBladderwortCluster);
 		this.endProfilerSection();
