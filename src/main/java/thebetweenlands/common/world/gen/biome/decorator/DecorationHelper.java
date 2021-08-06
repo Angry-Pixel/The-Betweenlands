@@ -52,6 +52,7 @@ import thebetweenlands.common.world.gen.feature.structure.WorldGenSpawner;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenSpawnerStructure;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenTarPoolDungeon;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenUndergroundRuins;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenUnderwaterRuins;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenGiantTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenGiantTreeDead;
@@ -134,6 +135,7 @@ public class DecorationHelper {
 	public static final WorldGenerator GEN_BARNACLE_CLUSTER = new WorldGenBarnacleCluster(BlockRegistry.BARNACLE_1_2.getDefaultState());
 	public static final WorldGenerator GEN_PEBBLE_CLUSTER_LAND = new WorldGenPebbleCluster(BlockRegistry.BETWEENSTONE_PEBBLE_PILE.getDefaultState());
 	public static final WorldGenerator GEN_PEBBLE_CLUSTER_WATER = new WorldGenPebbleCluster(BlockRegistry.BETWEENSTONE_PEBBLE_PILE_WATER.getDefaultState()).setUnderwater(true);
+	public static final WorldGenerator GEN_UNDERWATER_RUINS = new WorldGenUnderwaterRuins();
 	
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
@@ -800,6 +802,18 @@ public class DecorationHelper {
 		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down())) {
 			return GEN_SMALL_RUINS.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
+		return false;
+	}
+
+	public static boolean generateUnderwaterRuins(DecoratorPositionProvider decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down()) &&
+				SurfaceType.WATER.matches(decorator.getWorld(), pos.up())) {
+			System.out.println("Generating at " + pos.getX() + " " + pos.getY() + " " + pos.getZ());
+			return GEN_UNDERWATER_RUINS.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+
+		System.out.println("Failed: Mixed Ground: " + SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down()) + ", Water: " + SurfaceType.WATER.matches(decorator.getWorld(), pos.up()));
 		return false;
 	}
 
