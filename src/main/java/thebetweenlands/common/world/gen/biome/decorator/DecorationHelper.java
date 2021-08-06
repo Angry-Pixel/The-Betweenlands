@@ -809,11 +809,8 @@ public class DecorationHelper {
 		BlockPos pos = decorator.getRandomPos();
 		if(SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down()) &&
 				SurfaceType.WATER.matches(decorator.getWorld(), pos.up())) {
-			System.out.println("Generating at " + pos.getX() + " " + pos.getY() + " " + pos.getZ());
 			return GEN_UNDERWATER_RUINS.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
-
-		System.out.println("Failed: Mixed Ground: " + SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down()) + ", Water: " + SurfaceType.WATER.matches(decorator.getWorld(), pos.up()));
 		return false;
 	}
 
