@@ -23,7 +23,6 @@ import net.minecraft.util.ResourceLocation;
 import thebetweenlands.api.item.IAmphibiousArmorAttributeUpgrade;
 import thebetweenlands.api.item.IAmphibiousArmorUpgrade;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
-import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -41,9 +40,12 @@ public enum AmphibiousArmorUpgrades implements IAmphibiousArmorUpgrade {
 	GREEN_GEM(new ResourceLocation(ModInfo.ID, "green_gem"), 64, s -> s.getItem() == ItemRegistry.GREEN_MIDDLE_GEM, null, CircleGemType.GREEN.getAmphibiousArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "aqua_gem"), new ResourceLocation(ModInfo.ID, "crimson_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
 	CRIMSON_GEM(new ResourceLocation(ModInfo.ID, "crimson_gem"), 64, s -> s.getItem() == ItemRegistry.CRIMSON_MIDDLE_GEM, null, CircleGemType.CRIMSON.getAmphibiousArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "aqua_gem"), new ResourceLocation(ModInfo.ID, "green_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET);*/
 
-	ASCENT_BOOST(new ResourceLocation(ModInfo.ID, "ascent_boost"), 64, EnumItemMisc.ANADIA_SWIM_BLADDER::isItemOf, EntityEquipmentSlot.LEGS),
-	FISH_VORTEX(new ResourceLocation(ModInfo.ID, "fish_vortex"), 1, EnumItemMisc.WEEDWOOD_STICK::isItemOf, EntityEquipmentSlot.CHEST), // TODO temp Item
-	
+	ASCENT_BOOST(new ResourceLocation(ModInfo.ID, "ascent_boost"), 64,  s -> s.getItem() == ItemRegistry.AA_UPGRADE_LEAP, EntityEquipmentSlot.LEGS),
+	FISH_VORTEX(new ResourceLocation(ModInfo.ID, "fish_vortex"), 256, s -> s.getItem() == ItemRegistry.AA_UPGRADE_VORTEX, EntityEquipmentSlot.CHEST),
+	ELECTRIC(new ResourceLocation(ModInfo.ID, "electric"), 256, s -> s.getItem() == ItemRegistry.AA_UPGRADE_ELECTRIC, EntityEquipmentSlot.LEGS),
+	URCHIN(new ResourceLocation(ModInfo.ID, "urchin"), 256, s -> s.getItem() == ItemRegistry.AA_UPGRADE_URCHIN, EntityEquipmentSlot.CHEST),
+	GLIDE(new ResourceLocation(ModInfo.ID, "glide"), 256, s -> s.getItem() == ItemRegistry.AA_UPGRADE_GLIDE, EntityEquipmentSlot.CHEST),
+
 	AQUA_GEM(new ResourceLocation(ModInfo.ID, "aqua_gem"), 64, s -> s.getItem() == ItemRegistry.AQUA_MIDDLE_GEM, null, CircleGemType.AQUA.getAmphibiousArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "green_gem"), new ResourceLocation(ModInfo.ID, "crimson_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
 	GREEN_GEM(new ResourceLocation(ModInfo.ID, "green_gem"), 64, s -> s.getItem() == ItemRegistry.GREEN_MIDDLE_GEM, null, CircleGemType.GREEN.getAmphibiousArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "aqua_gem"), new ResourceLocation(ModInfo.ID, "crimson_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
 	CRIMSON_GEM(new ResourceLocation(ModInfo.ID, "crimson_gem"), 64, s -> s.getItem() == ItemRegistry.CRIMSON_MIDDLE_GEM, null, CircleGemType.CRIMSON.getAmphibiousArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "aqua_gem"), new ResourceLocation(ModInfo.ID, "green_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET);
