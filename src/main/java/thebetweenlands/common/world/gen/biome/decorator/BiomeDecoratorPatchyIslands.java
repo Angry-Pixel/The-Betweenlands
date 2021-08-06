@@ -27,6 +27,10 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBetweenlands {
 		this.generate(0.3F, DecorationHelper::generateSunkenIdolHead);
 		this.endProfilerSection();
 
+		this.startProfilerSection("underwaterRuins");
+		this.generate(0.3F, DecorationHelper::generateUnderwaterRuins);
+		this.endProfilerSection();
+
 		this.startProfilerSection("cattailCluster");
 		this.generate(5, DecorationHelper::generateCattailCluster);
 		this.endProfilerSection();

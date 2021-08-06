@@ -61,6 +61,7 @@ import thebetweenlands.common.item.armor.ItemSpiritTreeFaceMaskSmall;
 import thebetweenlands.common.item.armor.ItemSyrmoriteArmor;
 import thebetweenlands.common.item.armor.ItemValoniteArmor;
 import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmorSpecialUpgrade;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.item.equipment.ItemRingOfDispersion;
@@ -375,7 +376,6 @@ public class ItemRegistry {
     public static final Item CHIROBARB_ERUPTER = new ItemChirobarbErupter(false);
     public static final Item CHIROBARB_SHOCK_ERUPTER = new ItemChirobarbErupter(true);
     public static final Item WEEDWOOD_FISHING_ROD = new ItemBLFishingRod();
- // TODO W.I.P. Spear changes
     public static final Item FISHING_SPEAR = new ItemFishingSpear((byte) 0);
     public static final Item FISHING_SPEAR_AMPHIBIOUS = new ItemFishingSpear((byte) 1);
     public static final Item FISHING_SPEAR_AMPHIBIOUS_ROBUST = new ItemFishingSpear((byte) 2);
@@ -509,6 +509,12 @@ public class ItemRegistry {
     public static final Item WEEDWOOD_ROWBOAT_UPGRADE_LANTERN = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1);
     public static final Item SNOT_POD = new ItemSnotPod();
     public static final Item BL_NAME_TAG = new ItemBLNameTag();
+    public static final Item AA_UPGRADE_ELECTRIC = new ItemAmphibiousArmorSpecialUpgrade().setCreativeTab(BLCreativeTabs.GEARS);
+    public static final Item AA_UPGRADE_GLIDE = new ItemAmphibiousArmorSpecialUpgrade().setCreativeTab(BLCreativeTabs.GEARS);
+    public static final Item AA_UPGRADE_LEAP = new ItemAmphibiousArmorSpecialUpgrade().setCreativeTab(BLCreativeTabs.GEARS);
+    public static final Item AA_UPGRADE_URCHIN = new ItemAmphibiousArmorSpecialUpgrade().setCreativeTab(BLCreativeTabs.GEARS);
+    public static final Item AA_UPGRADE_VORTEX = new ItemAmphibiousArmorSpecialUpgrade().setCreativeTab(BLCreativeTabs.GEARS);
+    
 
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();

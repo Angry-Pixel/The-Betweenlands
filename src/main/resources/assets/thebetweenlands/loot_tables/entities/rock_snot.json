@@ -38,6 +38,38 @@
       ]
     },
     {
+      "name": "rock_snot_special",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:rock_snot_placed": false
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:rock_snot_pearl",
+          "functions": [
+            {
+              "function":"looting_enchant",
+              "count": {
+                "min": 0,
+                "max": 2
+              }
+            }
+          ]
+        },
+        {
+          "type": "empty",
+          "weight": 20
+        }
+      ]
+    },
+    {
       "name": "snot_pod",
       "rolls": 1,
       "conditions": [

@@ -428,7 +428,7 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 			for (int mz = posZ - z; mz <= posZ + z; mz++) {
 				for (int my = posY; my <= posY + height; my++) {
 					mutable.setPos(mx, my, mz);
-					if (my == posY) {
+					if (my <= posY + 1) {
 						if (!world.getBlockState(mutable.down()).isFullCube()) {
 							return false;
 						}
