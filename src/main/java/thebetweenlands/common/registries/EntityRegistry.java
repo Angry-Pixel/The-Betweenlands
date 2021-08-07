@@ -30,6 +30,7 @@ import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.entity.EntityTinyWormEggSac;
 import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
 import thebetweenlands.common.entity.EntityTriggeredSludgeWallJet;
+import thebetweenlands.common.entity.EntityUrchinSpikeAOE;
 import thebetweenlands.common.entity.EntityVolarkite;
 import thebetweenlands.common.entity.EntityWormGroundSpawner;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
@@ -283,6 +284,7 @@ public class EntityRegistry {
 		registerEntity(EntityGlowingGoop.class, "glowing_goop");
 
 		registerEntity(EntityFishVortex.class, "fish_vortex");
+		registerEntity(EntityUrchinSpikeAOE.class, "urchin_spike_aoe");
 	}
 
 	private static int id = 0;

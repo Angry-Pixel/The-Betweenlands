@@ -39,6 +39,7 @@ import thebetweenlands.client.render.model.armor.ModelBodyAttachment;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.entity.EntityFishVortex;
+import thebetweenlands.common.entity.EntityUrchinSpikeAOE;
 import thebetweenlands.common.inventory.InventoryAmphibiousArmor;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.Item3DArmor;
@@ -99,6 +100,13 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 		entity.startRiding(vortex, true);
 	}
 	
+	private void spawnUrchinSpikes(World world, EntityPlayer player, int damage) {
+		EntityUrchinSpikeAOE urchinSpikes = new EntityUrchinSpikeAOE(world, player, damage);
+		urchinSpikes.setPosition(player.posX, player.posY + player.height * 0.5D, player.posZ);
+		world.spawnEntity(urchinSpikes);
+		urchinSpikes.shootSpikes();
+	}
+	
 	private List findNearbyEntities(World world, EntityPlayer player, AxisAlignedBB box) {
 		return world.getEntitiesWithinAABB(EntityLivingBase.class, box, EntitySelectors.IS_STANDALONE);
 	}
@@ -122,8 +130,10 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 
 			if (itemStack.getItem() == ItemRegistry.AMPHIBIOUS_CHESTPLATE) {
 				int vortexCount = getUpgradeCount(itemStack, AmphibiousArmorUpgrades.FISH_VORTEX);
+				int urchinCount = getUpgradeCount(itemStack, AmphibiousArmorUpgrades.URCHIN);
+				
 				if (vortexCount >= 1) {
-					if (world.getTotalWorldTime() % 200 == 0) {
+					if (world.getTotalWorldTime() % 200 == 0) { //TODO dunno about timings yet
 						if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
 							List<EntityLivingBase> list = findNearbyEntities(world, player, proximityBox(player, 8D, 4D, 8D));
 							for (int entityCount = 0; entityCount < Math.min(vortexCount, list.size()); entityCount++) {
@@ -132,6 +142,21 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 									if (!(entity instanceof EntityPlayer)) {
 										spawnFishVortex(world, entity);
 										list.remove(0);
+									}
+							}
+						}
+					}
+				}
+				
+				if (urchinCount >= 1) { // more upgrades do more damage at 2F * urchinCount ;)
+					if (world.getTotalWorldTime() % 100 == 0) { // TODO cooldown
+						if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
+							List<EntityLivingBase> list = findNearbyEntities(world, player, proximityBox(player, 2D, 2D, 2D));
+							if (!list.isEmpty()) {
+								EntityLivingBase entity = list.get(0);
+								if (entity != null)
+									if (!(entity instanceof EntityPlayer)) {
+										spawnUrchinSpikes(world, player, urchinCount);
 									}
 							}
 						}
