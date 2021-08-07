@@ -61,6 +61,8 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 
 	private static final String NBT_ASCENT_BOOST_TICKS = "thebetweenlands.ascent_boost_ticks";
 	private static final String NBT_ASCENT_BOOST = "thebetweenlands.ascent_boost";
+	
+	private static final String NBT_URCHIN_AOE_COOLDOWN = "thebetweenlands.urchin_aoe_cooldown";
 
 	public ItemAmphibiousArmor(EntityEquipmentSlot slot) {
 		super(BLMaterialRegistry.ARMOR_AMPHIBIOUS, 3, slot, "amphibious");
@@ -128,6 +130,8 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 				}
 			}
 
+			NBTTagCompound nbt = player.getEntityData();
+			
 			if (itemStack.getItem() == ItemRegistry.AMPHIBIOUS_CHESTPLATE) {
 				int vortexCount = getUpgradeCount(itemStack, AmphibiousArmorUpgrades.FISH_VORTEX);
 				int urchinCount = getUpgradeCount(itemStack, AmphibiousArmorUpgrades.URCHIN);
@@ -148,8 +152,10 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 					}
 				}
 				
+				long urchinAOEcooldown = nbt.getLong(NBT_URCHIN_AOE_COOLDOWN);
+
 				if (urchinCount >= 1) { // more upgrades do more damage at 2F * urchinCount ;)
-					if (world.getTotalWorldTime() % 100 == 0) { // TODO cooldown
+					if (world.getTotalWorldTime() %10 == 0 && world.getTotalWorldTime() >= urchinAOEcooldown) { // TODO cooldown balancing
 						if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
 							List<EntityLivingBase> list = findNearbyEntities(world, player, proximityBox(player, 2D, 2D, 2D));
 							if (!list.isEmpty()) {
@@ -157,6 +163,7 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 								if (entity != null)
 									if (!(entity instanceof EntityPlayer)) {
 										spawnUrchinSpikes(world, player, urchinCount);
+										nbt.setLong(NBT_URCHIN_AOE_COOLDOWN, world.getTotalWorldTime() + 200);
 									}
 							}
 						}
@@ -164,7 +171,6 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 				}
 			}
 
-			NBTTagCompound nbt = player.getEntityData();
 			int ascentBoostTicks = nbt.getInteger(NBT_ASCENT_BOOST_TICKS);
 
 			if(itemStack.getItem() == ItemRegistry.AMPHIBIOUS_LEGGINGS) {
