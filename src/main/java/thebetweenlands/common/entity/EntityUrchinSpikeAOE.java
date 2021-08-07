@@ -83,7 +83,7 @@ public class EntityUrchinSpikeAOE extends Entity {
 			if (!list.isEmpty()) {
 				EntityLivingBase entity = list.get(0);
 				if(entity.hurtResistantTime <= 0) {
-					entity.attackEntityFrom(new EntityDamageSource("cactus", this), 2F * damage);
+					entity.attackEntityFrom(new EntityDamageSource("cactus", owner !=null ? owner : this), 2F * damage);
 				}
 			}
 		}
