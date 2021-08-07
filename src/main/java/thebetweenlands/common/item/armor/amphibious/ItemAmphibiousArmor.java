@@ -9,6 +9,7 @@ import com.google.common.collect.Multimap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -18,7 +19,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -110,7 +110,7 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 	}
 	
 	private List findNearbyEntities(World world, EntityPlayer player, AxisAlignedBB box) {
-		return world.getEntitiesWithinAABB(EntityLivingBase.class, box, EntitySelectors.IS_STANDALONE);
+		return world.getEntitiesWithinAABB(EntityLivingBase.class, box, e -> e instanceof IMob);
 	}
 	
 	private EntityLivingBase pickRandomEntityFromList(List<EntityLivingBase> list) {
