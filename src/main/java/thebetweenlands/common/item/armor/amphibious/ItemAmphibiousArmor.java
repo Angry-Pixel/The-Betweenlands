@@ -112,7 +112,7 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 	}
 
 	private void spawnElecticEntity(World world, EntityPlayer player, EntityLivingBase entity, int electricCount) {
-		EntityShock electric = new EntityShock(world, player, entity, 0, entity.isWet() || entity.isInWater() || world.isRainingAt(entity.getPosition().up()));
+		EntityShock electric = new EntityShock(world, player, entity, electricCount, entity.isWet() || entity.isInWater() || world.isRainingAt(entity.getPosition().up()));
 		world.spawnEntity(electric);
 	}
 
