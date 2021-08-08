@@ -171,7 +171,7 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 								if (entity != null)
 									if (!(entity instanceof EntityPlayer)) {
 										spawnUrchinSpikes(world, player, urchinCount);
-										nbt.setLong(NBT_URCHIN_AOE_COOLDOWN, world.getTotalWorldTime() + 200);
+										nbt.setLong(NBT_URCHIN_AOE_COOLDOWN, world.getTotalWorldTime() + 50);
 									}
 							}
 						}
