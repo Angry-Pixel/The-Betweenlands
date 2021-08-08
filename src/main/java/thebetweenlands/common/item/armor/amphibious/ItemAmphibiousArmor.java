@@ -39,6 +39,7 @@ import thebetweenlands.client.render.model.armor.ModelBodyAttachment;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.entity.EntityFishVortex;
+import thebetweenlands.common.entity.EntityShock;
 import thebetweenlands.common.entity.EntityUrchinSpikeAOE;
 import thebetweenlands.common.inventory.InventoryAmphibiousArmor;
 import thebetweenlands.common.item.BLMaterialRegistry;
@@ -63,6 +64,7 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 	private static final String NBT_ASCENT_BOOST = "thebetweenlands.ascent_boost";
 	
 	private static final String NBT_URCHIN_AOE_COOLDOWN = "thebetweenlands.urchin_aoe_cooldown";
+	private static final String NBT_ELECTRIC_COOLDOWN = "thebetweenlands.electric_cooldown";
 
 	public ItemAmphibiousArmor(EntityEquipmentSlot slot) {
 		super(BLMaterialRegistry.ARMOR_AMPHIBIOUS, 3, slot, "amphibious");
@@ -108,7 +110,12 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 		world.spawnEntity(urchinSpikes);
 		urchinSpikes.shootSpikes();
 	}
-	
+
+	private void spawnElecticEntity(World world, EntityPlayer player, EntityLivingBase entity, int electricCount) {
+		EntityShock electric = new EntityShock(world, player, entity, 0, entity.isWet() || entity.isInWater() || world.isRainingAt(entity.getPosition().up()));
+		world.spawnEntity(electric);
+	}
+
 	private List findNearbyEntities(World world, EntityPlayer player, AxisAlignedBB box) {
 		return world.getEntitiesWithinAABB(EntityLivingBase.class, box, e -> e instanceof IMob);
 	}
@@ -135,7 +142,10 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 			if (itemStack.getItem() == ItemRegistry.AMPHIBIOUS_CHESTPLATE) {
 				int vortexCount = getUpgradeCount(itemStack, AmphibiousArmorUpgrades.FISH_VORTEX);
 				int urchinCount = getUpgradeCount(itemStack, AmphibiousArmorUpgrades.URCHIN);
-				
+				int electricCount = getUpgradeCount(itemStack, AmphibiousArmorUpgrades.ELECTRIC);
+				long urchinAOECooldown = nbt.getLong(NBT_URCHIN_AOE_COOLDOWN);
+				long electricCooldown = nbt.getLong(NBT_ELECTRIC_COOLDOWN);
+
 				if (vortexCount >= 1) {
 					if (world.getTotalWorldTime() % 200 == 0) { //TODO dunno about timings yet
 						if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
@@ -151,11 +161,9 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 						}
 					}
 				}
-				
-				long urchinAOEcooldown = nbt.getLong(NBT_URCHIN_AOE_COOLDOWN);
 
 				if (urchinCount >= 1) { // more upgrades do more damage at 2F * urchinCount ;)
-					if (world.getTotalWorldTime() %10 == 0 && world.getTotalWorldTime() >= urchinAOEcooldown) { // TODO cooldown balancing
+					if (world.getTotalWorldTime() %10 == 0 && world.getTotalWorldTime() >= urchinAOECooldown) { // TODO cooldown balancing
 						if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
 							List<EntityLivingBase> list = findNearbyEntities(world, player, proximityBox(player, 2D, 2D, 2D));
 							if (!list.isEmpty()) {
@@ -169,6 +177,20 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 						}
 					}
 				}
+				
+				if (electricCount >= 1) { // dunno what more will do
+					if (player.hurtResistantTime == player.maxHurtResistantTime && world.getTotalWorldTime() >= electricCooldown) { // TODO cooldown balancing
+						if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
+							if (player.getRevengeTarget() != null) {
+								if (!(player.getRevengeTarget() instanceof EntityPlayer)) {
+									spawnElecticEntity(world, player, player.getRevengeTarget(), electricCount);
+									nbt.setLong(NBT_ELECTRIC_COOLDOWN, world.getTotalWorldTime() + 50);
+								}
+							}
+						}
+					}
+				}
+
 			}
 
 			int ascentBoostTicks = nbt.getInteger(NBT_ASCENT_BOOST_TICKS);

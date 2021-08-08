@@ -44,7 +44,7 @@ public enum AmphibiousArmorUpgrades implements IAmphibiousArmorUpgrade {
 
 	ASCENT_BOOST(new ResourceLocation(ModInfo.ID, "ascent_boost"), 64, DamageEvent.ON_USE,  s -> s.getItem() == ItemRegistry.AA_UPGRADE_LEAP, EntityEquipmentSlot.LEGS),
 	FISH_VORTEX(new ResourceLocation(ModInfo.ID, "fish_vortex"), 256, DamageEvent.ON_USE, s -> s.getItem() == ItemRegistry.AA_UPGRADE_VORTEX, EntityEquipmentSlot.CHEST),
-	ELECTRIC(new ResourceLocation(ModInfo.ID, "electric"), 256, DamageEvent.ON_USE, s -> s.getItem() == ItemRegistry.AA_UPGRADE_ELECTRIC, EntityEquipmentSlot.LEGS),
+	ELECTRIC(new ResourceLocation(ModInfo.ID, "electric"), 256, DamageEvent.ON_USE, s -> s.getItem() == ItemRegistry.AA_UPGRADE_ELECTRIC, EntityEquipmentSlot.CHEST),
 	URCHIN(new ResourceLocation(ModInfo.ID, "urchin"), 256, DamageEvent.ON_USE, s -> s.getItem() == ItemRegistry.AA_UPGRADE_URCHIN, EntityEquipmentSlot.CHEST),
 	GLIDE(new ResourceLocation(ModInfo.ID, "glide"), 256, DamageEvent.ON_USE, s -> s.getItem() == ItemRegistry.AA_UPGRADE_GLIDE, EntityEquipmentSlot.CHEST),
 
