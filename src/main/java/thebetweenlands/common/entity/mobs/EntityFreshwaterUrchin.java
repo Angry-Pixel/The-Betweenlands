@@ -161,7 +161,7 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 			List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, proximityBox());
 			for (Iterator<EntityLivingBase> iterator = list.iterator(); iterator.hasNext();) {
 				EntityLivingBase entity  = iterator.next();
-				if (entity != null && (entity instanceof EntityFreshwaterUrchin) || entity instanceof EntityPlayer && ((EntityPlayer) entity).isSpectator() || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative())
+				if (entity != null && (entity instanceof EntityFreshwaterUrchin) || entity instanceof EntityAnadia || entity instanceof EntityPlayer && ((EntityPlayer) entity).isSpectator() || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative())
 					iterator.remove();
 			}
 			if (list.isEmpty()) {

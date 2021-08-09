@@ -48,15 +48,15 @@
 		"in_water=true": [
             {
                 "model": "thebetweenlands:mud_in_water_1",
-                "weight": 20
+                "weight": 15
             },
              {
                 "model": "thebetweenlands:mud_in_water_2",
-                "weight": 20
+                "weight": 15
             },
              {
                 "model": "thebetweenlands:mud_in_water_3",
-                "weight": 20
+                "weight": 15
             },
             {
                 "model": "thebetweenlands:mud",
@@ -64,17 +64,17 @@
             },
             {
                 "model": "thebetweenlands:mud_in_water_1",
-                "weight": 20,
+                "weight": 15,
                 "y": 90
             },
             {
                 "model": "thebetweenlands:mud_in_water_2",
-                "weight": 20,
+                "weight": 15,
                 "y": 90
             },
             {
                 "model": "thebetweenlands:mud_in_water_3",
-                "weight": 20,
+                "weight": 15,
                 "y": 90
             },
             {
@@ -84,17 +84,17 @@
             },
             {
                 "model": "thebetweenlands:mud_in_water_1",
-                "weight": 20,
+                "weight": 15,
                 "y": 180
             },
             {
                 "model": "thebetweenlands:mud_in_water_2",
-                "weight": 20,
+                "weight": 15,
                 "y": 180
             },
             {
                 "model": "thebetweenlands:mud_in_water_3",
-                "weight": 20,
+                "weight": 15,
                 "y": 180
             },
             {
@@ -104,17 +104,17 @@
             },
             {
                 "model": "thebetweenlands:mud_in_water_1",
-                "weight": 20,
+                "weight": 15,
                 "y": 270
             },
             {
                 "model": "thebetweenlands:mud_in_water_2",
-                "weight": 20,
+                "weight": 15,
                 "y": 270
             },
             {
                 "model": "thebetweenlands:mud_in_water_3",
-                "weight": 20,
+                "weight": 15,
                 "y": 270
             },
             {
