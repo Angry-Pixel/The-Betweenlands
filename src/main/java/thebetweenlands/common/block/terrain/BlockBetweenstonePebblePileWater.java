@@ -2,6 +2,7 @@ package thebetweenlands.common.block.terrain;
 
 import java.util.Locale;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -29,11 +30,9 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
-import thebetweenlands.common.registries.BlockRegistry.ISubtypeItemBlockModelDefinition;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.util.AdvancedStateMap;
 
@@ -148,6 +147,15 @@ public class BlockBetweenstonePebblePileWater extends BlockSwampWater implements
 	@Override
     public boolean canPlaceBlockAt(World world, BlockPos pos) {
         return world.getBlockState(pos).getBlock().isReplaceable(world, pos) && world.getBlockState(pos.down()).isFullBlock();
+    }
+
+	@Override
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
+		IBlockState stateDown = world.getBlockState(pos.down());
+		if (state.getBlock() == null || world.isAirBlock(pos.down())) {
+            this.dropBlockAsItem((World) world, pos, world.getBlockState(pos), 0);
+            (world).setBlockToAir(pos);
+        }
     }
 
 	@Override
