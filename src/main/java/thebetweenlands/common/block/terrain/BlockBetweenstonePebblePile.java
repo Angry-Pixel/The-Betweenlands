@@ -34,8 +34,11 @@ import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 public class BlockBetweenstonePebblePile extends BasicBlock implements ICustomItemBlock {
 
 	public static final PropertyEnum<EnumPileType> PILE_TYPE = PropertyEnum.<EnumPileType>create("pile_type", EnumPileType.class);
-	private static final AxisAlignedBB AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 0.5D, 0.875D);
-
+	private static final AxisAlignedBB AABB_1_STONE = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 0.1875D, 0.75D);
+	private static final AxisAlignedBB AABB_2_STONE = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 0.1875D, 0.75D);
+	private static final AxisAlignedBB AABB_3_STONE = new AxisAlignedBB(0.1875D, 0.0D, 0.1875D, 0.8125D, 0.1875D, 0.8125D);
+	private static final AxisAlignedBB AABB_4_STONE = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 0.1875D, 0.875D);
+	
 	public BlockBetweenstonePebblePile() {
 		super(Material.GROUND);
 		setHardness(0.5F);
@@ -46,7 +49,22 @@ public class BlockBetweenstonePebblePile extends BasicBlock implements ICustomIt
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return AABB;
+		state = state.getActualState(source, pos);
+		switch ((EnumPileType) state.getValue(PILE_TYPE)) {
+		default:
+		case ONE:
+		case ONE_PLANT:
+			return AABB_1_STONE;
+		case TWO:
+		case TWO_PLANT:
+			return AABB_2_STONE;
+		case THREE:
+		case THREE_PLANT:
+			return AABB_3_STONE;
+		case FOUR:
+		case FOUR_PLANT:
+			return AABB_4_STONE;
+		}
 	}
 
 	@Override
