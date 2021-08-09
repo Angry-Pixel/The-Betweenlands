@@ -6,7 +6,11 @@
         "min": 1,
         "max": 2
       },
-      "conditions": [],
+      "conditions": [
+        {
+          "condition": "killed_by_player"
+        }
+      ],
       "entries": [
         {
           "type": "item",
