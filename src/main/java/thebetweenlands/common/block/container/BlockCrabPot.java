@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
@@ -51,6 +52,7 @@ public class BlockCrabPot extends BlockSwampWater implements ITileEntityProvider
 		super(fluid, materialIn);
 		setHardness(0.5F);
 		setResistance(5.0F);
+		setSoundType(SoundType.WOOD);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
 		this.setUnderwaterBlock(true);
 		this.setDefaultState(blockState.getBaseState().withProperty(LEVEL, 0));
