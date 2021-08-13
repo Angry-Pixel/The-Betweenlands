@@ -1,0 +1,237 @@
+{
+   "pools":[
+      {
+         "name":"greebling_coracle",
+         "rolls": 1,
+         "entries":[
+            {
+               "type":"item",
+               "name":"thebetweenlands:anadia_meat_raw",
+               "weight": 2
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:tiny_sludge_worm",
+               "weight": 2
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_misc",
+               "entryName": "anadia_bones",
+               "weight": 2,
+               "functions": [
+                  {
+                     "function": "set_data",
+                     "data": 55
+                  }
+               ]
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_misc",
+               "entryName": "anadia_remains",
+               "weight": 2,
+               "functions": [
+                  {
+                     "function": "set_data",
+                     "data": 56
+                  }
+               ]
+            },
+            {
+               "type":"item",
+               "name": "thebetweenlands:anadia",
+               "entryName": "anadia_normal",
+               "weight": 2,
+               "functions": []
+            },
+            {
+               "type":"item",
+               "name": "thebetweenlands:anadia",
+               "entryName": "anadia_rotten",
+               "weight": 1,
+               "functions": []
+            },
+            {
+               "type":"item",
+               "name": "thebetweenlands:anadia",
+               "entryName": "anadia_treasure",
+               "weight": 1,
+               "functions": []
+            }
+         ]
+      },
+      {
+         "name":"greebling_coracle_junk",
+         "rolls": 1,
+         "entries":[
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_misc",
+               "entryName": "angler_tooth",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data": 21
+                  }
+               ]
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_misc",
+               "entryName": "lurker_skin",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data": 4
+                  }
+               ]
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:swamp_kelp_item",
+               "functions":[
+                  {
+                     "function":"set_count",
+                     "count": {
+                        "min": 1,
+                        "max": 3
+                     }
+                  }
+               ]
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_misc",
+               "entryName": "reed_rope",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data": 7
+                  },
+                  {
+                     "function":"set_count",
+                     "count": {
+                        "min": 1,
+                        "max": 3
+                     }
+                  }
+               ]
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_plant_drop",
+               "entryName": "algae_clump",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data": 1
+                  },
+                  {
+                     "function":"set_count",
+                     "count": {
+                        "min": 1,
+                        "max": 3
+                     }
+                  }
+               ]
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_plant_drop",
+               "entryName": "water_weeds",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data": 34
+                  },
+                  {
+                     "function":"set_count",
+                     "count": {
+                        "min": 1,
+                        "max": 3
+                     }
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "name": "greebling_coracle_gear",
+         "rolls": {
+            "min": 0,
+            "max": 1
+         },
+         "entries":[
+            {
+               "type":"item",
+               "name":"thebetweenlands:net",
+               "weight": 4
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_misc",
+               "entryName": "fishing_float",
+               "weight": 4,
+               "functions": [
+                  {
+                     "function": "set_data",
+                     "data": 60
+                  }
+               ]
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_misc",
+               "entryName": "weedwood_bowl",
+               "weight": 4,
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data": 22
+                  }
+               ]
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:amate_map",
+               "weight": 2
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:fishing_spear",
+               "weight": 1,
+               "functions": [
+                  {
+                     "function": "set_damage",
+                     "damage": 0.72
+                  }
+               ]
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:fishing_spear",
+               "weight": 1,
+               "functions": [
+                  {
+                     "function": "set_damage",
+                     "damage": 0.2
+                  }
+               ]
+            },
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_misc",
+               "entryName": "fabricated_scroll",
+               "weight": 1,
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data": 49
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
