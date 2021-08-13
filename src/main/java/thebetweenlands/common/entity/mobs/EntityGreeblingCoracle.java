@@ -4,8 +4,10 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -13,6 +15,7 @@ import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -42,6 +45,7 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.entity.ai.EntityAvoidEntityFlatPath;
 import thebetweenlands.common.entity.movement.PathNavigateAboveWater;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
@@ -243,6 +247,7 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 	private void doSpoutEffects() {
 		if(getEntityWorld().isRemote) {
 			int count = getSinkingTicks() <= 240 ? 40 : 10;
+			int waterColorMultiplier = getWaterColor();
 			float x = (float) (posX);
 			float y = (float) (posY + 0.25F);
 			float z = (float) (posZ);
@@ -252,12 +257,44 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 				float dz = getEntityWorld().rand.nextFloat() * 0.25F - 0.1255f;
 				float mag = 0.08F + getEntityWorld().rand.nextFloat() * 0.07F;
 				if(getSinkingTicks() <= 240)
-					BLParticles.RAIN.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+					BLParticles.RAIN.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag).withColor(waterColorMultiplier));
 				else if(getSinkingTicks() > 240 && getSinkingTicks() <= 400 && getSinkingTicks()%5 == 0)
 					BLParticles.BUBBLE_PURIFIER.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
 			}
 		}
 	}
+
+    private int getWaterColor() {
+        int blockX = MathHelper.floor(posX), blockZ = MathHelper.floor(posZ);
+        int y = 0;
+        while (getRelativeBlock(y--) == Blocks.AIR && posY - y > 0) ;
+        int blockY = MathHelper.floor(getEntityBoundingBox().minY + y);
+        IBlockState blockState = getEntityWorld().getBlockState(new BlockPos(blockX, blockY, blockZ));
+        if (blockState.getMaterial().isLiquid()) {
+            int r = 255, g = 255, b = 255;
+            // TODO: automatically build a map of all liquid blocks to the average color of there texture to get color from
+            if (blockState.getBlock() == BlockRegistry.SWAMP_WATER) {
+                r = 147;
+                g = 132;
+                b = 83;
+            } else if (blockState.getBlock() == Blocks.WATER || blockState.getBlock() == Blocks.FLOWING_WATER) {
+                r = 49;
+                g = 70;
+                b = 245;
+            } else if (blockState.getBlock() == Blocks.LAVA || blockState.getBlock() == Blocks.FLOWING_LAVA) {
+                r = 207;
+                g = 85;
+                b = 16;
+            }
+            int multiplier = blockState.getMapColor(getEntityWorld(), new BlockPos(blockX, blockY, blockZ)).getMapColor(1);
+            return 0xFF000000 | (r * (multiplier >> 16 & 0xFF) / 255) << 16 | (g * (multiplier >> 8 & 0xFF) / 255) << 8 | (b * (multiplier & 0xFF) / 255);
+        }
+        return 0xFFFFFFFF;
+    }
+
+    private Block getRelativeBlock(int offsetY) {
+        return getEntityWorld().getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(getEntityBoundingBox().minY) + offsetY, MathHelper.floor(posZ))).getBlock();
+    }
 
 	private void doLeafEffects() {
 		if(getEntityWorld().isRemote) {

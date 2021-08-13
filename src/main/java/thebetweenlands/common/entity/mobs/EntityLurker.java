@@ -252,7 +252,7 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
                 r = 49;
                 g = 70;
                 b = 245;
-            } else if (blockState.getBlock() == Blocks.WATER || blockState.getBlock() == Blocks.FLOWING_LAVA) {
+            } else if (blockState.getBlock() == Blocks.LAVA || blockState.getBlock() == Blocks.FLOWING_LAVA) {
                 r = 207;
                 g = 85;
                 b = 16;
