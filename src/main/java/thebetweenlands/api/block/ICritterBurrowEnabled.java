@@ -1,16 +1,7 @@
 package thebetweenlands.api.block;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.world.World;
-import thebetweenlands.common.entity.mobs.EntityGecko;
-import thebetweenlands.common.entity.mobs.EntitySiltCrab;
-import thebetweenlands.common.registries.BlockRegistry;
-
 public interface ICritterBurrowEnabled {
-
+/*
 	public static boolean isSuitableBurrowBlock(Block blockIn) {
 		for(EnumBurrowParts blocks : EnumBurrowParts.values())
 			if (blocks.getOriginalBlock() == blockIn)
@@ -61,4 +52,5 @@ public interface ICritterBurrowEnabled {
 			return entityClass;
 		}
 	}
+	*/
 }

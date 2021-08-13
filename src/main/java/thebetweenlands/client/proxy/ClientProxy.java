@@ -150,7 +150,6 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
-import thebetweenlands.common.entity.EntityAnimalBurrow;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
@@ -720,7 +719,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityRockSnot.class, RenderRockSnot::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityRockSnotTendril.class, RenderRockSnotTendril::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityPuffin.class, RenderPuffin::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityAnimalBurrow.class, RenderAnimalBurrow::new);
+		//RenderingRegistry.registerEntityRenderingHandler(EntityAnimalBurrow.class, RenderAnimalBurrow::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityJellyfish.class, RenderJellyfish::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityJellyfishCave.class, RenderJellyfishCave::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBubblerCrab.class, RenderBubblerCrab::new);

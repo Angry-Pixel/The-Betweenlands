@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -13,6 +14,7 @@ import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -42,6 +44,7 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.entity.ai.EntityAvoidEntityFlatPath;
 import thebetweenlands.common.entity.movement.PathNavigateAboveWater;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
@@ -243,6 +246,26 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 	private void doSpoutEffects() {
 		if(getEntityWorld().isRemote) {
 			int count = getSinkingTicks() <= 240 ? 40 : 10;
+			float r = 255, g = 255, b = 255;
+			float base = 1F / 255F;
+			int blockX = MathHelper.floor(posX), blockZ = MathHelper.floor(posZ);
+			int blockY = MathHelper.floor(getEntityBoundingBox().minY);
+			IBlockState blockState = getEntityWorld().getBlockState(new BlockPos(blockX, blockY, blockZ));
+			if (blockState.getMaterial().isLiquid()) {
+				if (blockState.getBlock() == BlockRegistry.SWAMP_WATER) {
+					r = 147;
+					g = 132;
+					b = 83;
+				} else if (blockState.getBlock() == Blocks.WATER || blockState.getBlock() == Blocks.FLOWING_WATER) {
+					r = 49;
+					g = 70;
+					b = 245;
+				} else if (blockState.getBlock() == Blocks.LAVA || blockState.getBlock() == Blocks.FLOWING_LAVA) {
+					r = 207;
+					g = 85;
+					b = 16;
+				}
+			}
 			float x = (float) (posX);
 			float y = (float) (posY + 0.25F);
 			float z = (float) (posZ);
@@ -252,7 +275,7 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 				float dz = getEntityWorld().rand.nextFloat() * 0.25F - 0.1255f;
 				float mag = 0.08F + getEntityWorld().rand.nextFloat() * 0.07F;
 				if(getSinkingTicks() <= 240)
-					BLParticles.SPLASH.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
+					BLParticles.RAIN.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag)).setRBGColorF(base * r, base * g, base * b);
 				else if(getSinkingTicks() > 240 && getSinkingTicks() <= 400 && getSinkingTicks()%5 == 0)
 					BLParticles.BUBBLE_PURIFIER.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
 			}

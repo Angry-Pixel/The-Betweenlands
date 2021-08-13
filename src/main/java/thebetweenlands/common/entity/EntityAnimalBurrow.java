@@ -1,40 +1,12 @@
 package thebetweenlands.common.entity;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.block.material.EnumPushReaction;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import thebetweenlands.api.block.ICritterBurrowEnabled;
 import thebetweenlands.api.entity.IEntityBL;
-import thebetweenlands.common.block.terrain.BlockAnimalBurrow;
-import thebetweenlands.common.item.misc.ItemMob;
-import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityAnimalBurrow extends EntityCreature implements IEntityBL {
 
@@ -46,7 +18,7 @@ public class EntityAnimalBurrow extends EntityCreature implements IEntityBL {
 		super(world);
 		setSize(0.5F, 0.5F);
 	}
-
+/*
 	@Override
 	protected void entityInit() {
 		super.entityInit();
@@ -312,5 +284,5 @@ public class EntityAnimalBurrow extends EntityCreature implements IEntityBL {
 		}
 		return false;
 	}
-
+*/
 }
