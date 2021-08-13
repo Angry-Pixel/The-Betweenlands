@@ -247,26 +247,25 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 		if(getEntityWorld().isRemote) {
 			int count = getSinkingTicks() <= 240 ? 40 : 10;
 			float r = 255, g = 255, b = 255;
-			float base = 1F/255F;
-			 int blockX = MathHelper.floor(posX), blockZ = MathHelper.floor(posZ);
-		        int blockY = MathHelper.floor(getEntityBoundingBox().minY);
-		        IBlockState blockState = getEntityWorld().getBlockState(new BlockPos(blockX, blockY, blockZ));
-		        if (blockState.getMaterial().isLiquid()) {
-		            if (blockState.getBlock() == BlockRegistry.SWAMP_WATER) {
-		            	
-		                r = 147;
-		                g = 132;
-		                b = 83;
-		            } else if (blockState.getBlock() == Blocks.WATER || blockState.getBlock() == Blocks.FLOWING_WATER) {
-		                r = 49;
-		                g = 70;
-		                b = 245;
-		            } else if (blockState.getBlock() == Blocks.LAVA || blockState.getBlock() == Blocks.FLOWING_LAVA) {
-		                r = 207;
-		                g = 85;
-		                b = 16;
-		            }
-		        }
+			float base = 1F / 255F;
+			int blockX = MathHelper.floor(posX), blockZ = MathHelper.floor(posZ);
+			int blockY = MathHelper.floor(getEntityBoundingBox().minY);
+			IBlockState blockState = getEntityWorld().getBlockState(new BlockPos(blockX, blockY, blockZ));
+			if (blockState.getMaterial().isLiquid()) {
+				if (blockState.getBlock() == BlockRegistry.SWAMP_WATER) {
+					r = 147;
+					g = 132;
+					b = 83;
+				} else if (blockState.getBlock() == Blocks.WATER || blockState.getBlock() == Blocks.FLOWING_WATER) {
+					r = 49;
+					g = 70;
+					b = 245;
+				} else if (blockState.getBlock() == Blocks.LAVA || blockState.getBlock() == Blocks.FLOWING_LAVA) {
+					r = 207;
+					g = 85;
+					b = 16;
+				}
+			}
 			float x = (float) (posX);
 			float y = (float) (posY + 0.25F);
 			float z = (float) (posZ);
