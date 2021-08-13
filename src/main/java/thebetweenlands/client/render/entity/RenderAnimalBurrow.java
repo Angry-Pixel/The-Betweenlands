@@ -1,25 +1,18 @@
 package thebetweenlands.client.render.entity;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.EntityAnimalBurrow;
-import thebetweenlands.common.entity.mobs.EntitySiltCrab;
-import thebetweenlands.common.item.misc.ItemMob;
 @SideOnly(Side.CLIENT)
 public class RenderAnimalBurrow extends Render<EntityAnimalBurrow> {
 
 	public RenderAnimalBurrow(RenderManager renderManager) {
 		super(renderManager);
 	}
-
+/*
 	@Override
 	public void doRender(EntityAnimalBurrow entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		
@@ -72,7 +65,7 @@ public class RenderAnimalBurrow extends Render<EntityAnimalBurrow> {
 			GlStateManager.popMatrix();
 		}
 	}
-	
+	*/
 	@Override
 	protected ResourceLocation getEntityTexture(EntityAnimalBurrow entity) {
 		return null;

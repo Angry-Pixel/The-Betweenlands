@@ -4,7 +4,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.EntityAnimalBurrow;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
@@ -269,7 +268,7 @@ public class EntityRegistry {
 
 		// TODO Shit that will be added onedayTM
 		//registerEntity(EntityPuffin.class, "puffin", 0x3F5A69, 0xA16A77, 64, 3, true);
-		registerEntity(EntityAnimalBurrow.class, "animal_burrow");
+		//registerEntity(EntityAnimalBurrow.class, "animal_burrow");
 
 		registerEntity(EntityJellyfish.class, "jellyfish", 0xFFEBE5, 0xFF506B, 64, 3, true);
 		registerEntity(EntityJellyfishCave.class, "jellyfish_cave", 0xE0FFF6, 0x7CFFFF, 64, 3, true);
