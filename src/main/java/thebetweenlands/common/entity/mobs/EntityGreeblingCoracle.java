@@ -252,7 +252,7 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 				float dz = getEntityWorld().rand.nextFloat() * 0.25F - 0.1255f;
 				float mag = 0.08F + getEntityWorld().rand.nextFloat() * 0.07F;
 				if(getSinkingTicks() <= 240)
-					BLParticles.SPLASH.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
+					BLParticles.RAIN.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
 				else if(getSinkingTicks() > 240 && getSinkingTicks() <= 400 && getSinkingTicks()%5 == 0)
 					BLParticles.BUBBLE_PURIFIER.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
 			}
