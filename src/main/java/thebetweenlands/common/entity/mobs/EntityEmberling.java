@@ -221,9 +221,9 @@ public class EntityEmberling extends EntityTameableBL implements IEntityMultiPar
 
 		if (!getEntityWorld().isRemote && isSitting()) {
 			if (getHealth() < getMaxHealth())
-				if (ticksExisted % 1200 == 0)
+				if (ticksExisted % 600 == 0)
 					if (getEntityWorld().getBlockState(getPosition().down()).getBlock() instanceof BlockOctine) {
-						heal(1); // passive heal, 1 health a minute whilst sleeping on an octine block.
+						heal(1); // passive heal, 1 health every 30s whilst sleeping on an octine block.
 						playTameEffect(true);
 						world.setEntityState(this, (byte)7);
 					}
