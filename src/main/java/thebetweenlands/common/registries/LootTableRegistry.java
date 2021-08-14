@@ -82,6 +82,7 @@ public class LootTableRegistry {
     public static final ResourceLocation IDOL_HEADS_CHEST = register("loot/idol_heads_chest");
     public static final ResourceLocation TAR_POOL_POT = register("loot/tar_pool_pot");
     public static final ResourceLocation UNDERGROUND_RUINS_POT = register("loot/underground_ruins_pot");
+    public static final ResourceLocation UNDERWATER_RUINS_POT = register("loot/underwater_ruins_pot");
     //Sludge worm dungeon
     public static final ResourceLocation SLUDGE_WORM_DUNGEON_CHEST = register("loot/sludge_worm_dungeon_chest");
     public static final ResourceLocation SLUDGE_WORM_DUNGEON_URN = register("loot/sludge_worm_dungeon_urn");

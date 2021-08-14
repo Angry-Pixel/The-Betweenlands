@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import com.google.common.collect.ImmutableList;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
@@ -475,7 +476,7 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 		this.setBlockAndNotifyAdequately(world, pos, this.getRandomPot(random));
 		TileEntityLootPot lootPot = BlockLootPot.getTileEntity(world, pos);
 		if(lootPot != null) {
-			lootPot.setLootTable(LootTableRegistry.CAVE_POT, random.nextLong()); //TODO: replace
+			lootPot.setLootTable(LootTableRegistry.CAVE_POT, random.nextLong()); //TODO: replace?
 		}
 	}
 
@@ -497,7 +498,7 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 		this.setBlockAndNotifyAdequately(world, pos, this.getRandomMudPot(random));
 		TileEntityLootPot lootPot = BlockLootPot.getTileEntity(world, pos);
 		if(lootPot != null) {
-			lootPot.setLootTable(LootTableRegistry.CAVE_POT, random.nextLong()); //TODO: replace
+			lootPot.setLootTable(LootTableRegistry.UNDERWATER_RUINS_POT, random.nextLong()); //TODO: replace
 		}
 	}
 
