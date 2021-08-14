@@ -4,7 +4,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
@@ -19,8 +18,8 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
-import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class TileEntityFishTrimmingTable extends TileEntity implements IInventory {
@@ -49,6 +48,16 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
 		}
 		return false;
 	}
+
+    public boolean hasSiltCrab() {
+    	ItemStack stack = getItems().get(0);
+    	return !stack.isEmpty() && stack.getItem() == ItemRegistry.SILT_CRAB && stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND);
+    }
+
+    public boolean hasBubblerCrab() {
+    	ItemStack stack = getItems().get(0);
+    	return !stack.isEmpty() && stack.getItem() == ItemRegistry.BUBBLER_CRAB && stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND);
+    }
 
     public boolean hasChopper() {
     	ItemStack stack = getItems().get(5);
@@ -238,6 +247,36 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
 				return !isAnadiaRotten() ? ((EntityAnadia) getAndiaEntity()).getTailItem() : new ItemStack(ItemRegistry.ROTTEN_FOOD); // possible alt loot table?
 			case 4:
 				return EnumItemMisc.ANADIA_REMAINS.create(3);
+			}
+		}
+
+		if (hasSiltCrab()) {
+			switch (slot) {
+			case 0:
+				return ItemStack.EMPTY;
+			case 1:
+				return new ItemStack(ItemRegistry.SILT_CRAB_CLAW);
+			case 2:
+				return new ItemStack(ItemRegistry.CRAB_STICK, 3);
+			case 3:
+				return new ItemStack(ItemRegistry.SILT_CRAB_CLAW);
+			case 4:
+				return ItemStack.EMPTY;
+			}
+		}
+
+		if (hasBubblerCrab()) {
+			switch (slot) {
+			case 0:
+				return ItemStack.EMPTY;
+			case 1:
+				return new ItemStack(ItemRegistry.SILT_CRAB_CLAW);
+			case 2:
+				return new ItemStack(ItemRegistry.CRAB_STICK, 3);
+			case 3:
+				return new ItemStack(ItemRegistry.SILT_CRAB_CLAW);
+			case 4:
+				return ItemStack.EMPTY;
 			}
 		}
 		return ItemStack.EMPTY;

@@ -55,7 +55,7 @@ public class MessageButcherFish extends MessageBase {
 				player.getServer().addScheduledTask(new Runnable() {
 					public void run() {
 						TileEntityFishTrimmingTable tile = (TileEntityFishTrimmingTable) player.world.getTileEntity(tilePos);
-						if (tile != null && tile.hasAnadia() && tile.hasChopper() && tile.allResultSlotsEmpty()) {
+						if (tile != null && (tile.hasAnadia() || tile.hasSiltCrab() || tile.hasBubblerCrab()) && tile.hasChopper() && tile.allResultSlotsEmpty()) {
 
 							// set slot contents 1, 2, 3 to butcher items
 							tile.getItems().set(1, tile.getSlotresult(1));

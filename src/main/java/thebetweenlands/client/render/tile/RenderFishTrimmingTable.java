@@ -63,7 +63,7 @@ public class RenderFishTrimmingTable extends TileEntitySpecialRenderer<TileEntit
 			SplittableRandom rand = new SplittableRandom((long) (te.getPos().getX() + te.getPos().getY() + te.getPos().getZ()));
 			if (!te.getStackInSlot(0).isEmpty()) {
 				if (shouldRenderAsEntity(te, 0) && te.getAndiaEntity() != null)
-					renderAnadiaInSlot(te.getStackInSlot(0), te.getAndiaEntity(), 0.0625F, 0.85F, 0.1875F, 1F);
+					renderAnadiaInSlot(te.getStackInSlot(0), te.getAndiaEntity(), 0, 0.8F, 0, 1F);
 				else
 					renderItemInSlot(te.getStackInSlot(0), 0F, 0.75F, 0F, 0.5F, 0F);
 			}
@@ -86,7 +86,11 @@ public class RenderFishTrimmingTable extends TileEntitySpecialRenderer<TileEntit
 	}
 
 	public boolean shouldRenderAsEntity(TileEntityFishTrimmingTable te, int slot) {
-		return te.getStackInSlot(slot).getItem() == ItemRegistry.ANADIA && ((ItemMob) te.getStackInSlot(slot).getItem()).hasEntityData(te.getStackInSlot(slot));
+		if(te.getStackInSlot(slot).getItem() == ItemRegistry.ANADIA && ((ItemMob) te.getStackInSlot(slot).getItem()).hasEntityData(te.getStackInSlot(slot)))
+			return true;
+		if(te.getStackInSlot(slot).getItem() == ItemRegistry.SILT_CRAB || te.getStackInSlot(slot).getItem() == ItemRegistry.BUBBLER_CRAB)
+			return true;
+		return false;
 	}
 
 	public void renderAnadiaInSlot(ItemStack stack, Entity entity, float x, float y, float z, float scale) {
@@ -95,12 +99,21 @@ public class RenderFishTrimmingTable extends TileEntitySpecialRenderer<TileEntit
 				((EntityAnadia) entity).setFishColour((byte) 1);
 			entity.prevRotationPitch = entity.rotationPitch = 0;
 			entity.prevRotationYaw = entity.rotationYaw = 0;
-			float scale2 = 1F / ((EntityAnadia) entity).getFishSize() * 0.5F;
+			float scale2 = 1F / entity.width * 0.5F;
+			if(stack.getItem() instanceof ItemMobAnadia)
+				scale2 = 1F / ((EntityAnadia) entity).getFishSize() * 0.5F;
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(x, y, z);
+			GlStateManager.translate(x, y, z);		
 			GlStateManager.rotate(-90F, 0F, 1F, 0F);
-			GlStateManager.rotate(90F, 0F, 0F, 1F);
-			GlStateManager.rotate(45F, 1F, 0F, 0F);
+			if(stack.getItem() instanceof ItemMobAnadia) {
+				GlStateManager.translate(0.1875F, 0F, -0.0625F);
+				GlStateManager.rotate(90F, 0F, 0F, 1F);
+				GlStateManager.rotate(45F, 1F, 0F, 0F);
+			}
+			else {
+				GlStateManager.translate(0F, 0.1875F, 0F);
+				GlStateManager.rotate(180F, 0F, 0F, 1F);
+			}
 			GlStateManager.scale(scale2, scale2, scale2);
 			Render<Entity> renderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entity);
 			renderer.doRender(entity, 0, 0, 0, 0, 0);
