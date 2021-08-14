@@ -3,11 +3,13 @@
   "defaults": {
     "model": "thebetweenlands:internal/model_combined",
     "custom": { 
-      "particle_texture": "thebetweenlands:particle/block/crab_pot_particle",
       "model_base": "thebetweenlands:block/internal/layer_selection",
       "model_base_data": {
         "model": "thebetweenlands:block/internal/blank",
-        "layers": ["cutout", "none"]
+        "layers": ["cutout", "none"],
+        "custom": {
+         "particle_texture": "thebetweenlands:particle/block/crab_pot_particle"
+        }
       },
       "model_additional": "thebetweenlands:block/internal/layer_selection",
       "model_additional_data": {
