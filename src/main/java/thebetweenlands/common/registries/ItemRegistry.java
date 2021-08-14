@@ -80,6 +80,7 @@ import thebetweenlands.common.item.food.ItemBLFood;
 import thebetweenlands.common.item.food.ItemBlackHatMushroom;
 import thebetweenlands.common.item.food.ItemBulbCappedMushroom;
 import thebetweenlands.common.item.food.ItemChiromawWing;
+import thebetweenlands.common.item.food.ItemCrabClaw;
 import thebetweenlands.common.item.food.ItemFlatHeadMushroom;
 import thebetweenlands.common.item.food.ItemForbiddenFig;
 import thebetweenlands.common.item.food.ItemGertsDonut;
@@ -239,7 +240,7 @@ public class ItemRegistry {
     public static final Item WEEPING_BLUE_PETAL = new ItemWeepingBluePetal();
     public static final Item WIGHT_HEART = new ItemWightHeart();
     public static final Item YELLOW_DOTTED_FUNGUS = new ItemBLFood(8, 0.6F, false);
-    public static final Item SILT_CRAB_CLAW = new ItemBLFood(2, 0.6F, false);
+    public static final Item SILT_CRAB_CLAW = new ItemCrabClaw();
     public static final Item CRAB_STICK = new ItemBLFood(6, 0.9F, false);
     public static final Item NETTLE_SOUP = new ItemNettleSoup();
     public static final Item SLUDGE_JELLO = new ItemBLFood(4, 0.9F, false);
