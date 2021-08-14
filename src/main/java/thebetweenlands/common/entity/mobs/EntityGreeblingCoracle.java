@@ -349,13 +349,12 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 		return super.processInteract(player, hand);
 	}
 
-	//temp C&P loot thing with tweaks
 	public void dropLoot(EntityPlayer player) {
 		if(!getEntityWorld().isRemote) {
 			if(!looted) {
 				looted = true;
 
-				LootTable lootTable = getEntityWorld().getLootTableManager().getLootTableFromLocation(LootTableRegistry.GREEBLING_CORPSE);
+				LootTable lootTable = getEntityWorld().getLootTableManager().getLootTableFromLocation(LootTableRegistry.GREEBLING_CORACLE);
 				LootContext.Builder builder = (new LootContext.Builder((WorldServer)getEntityWorld())).withLootedEntity(this).withPlayer(player).withLuck(player.getLuck());
 
 				loot = new NonNullDelegateList<ItemStack>(lootTable.generateLootForPools(rand, builder.build()), ItemStack.EMPTY);

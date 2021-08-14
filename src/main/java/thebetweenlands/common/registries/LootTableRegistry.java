@@ -150,6 +150,7 @@ public class LootTableRegistry {
     public static final ResourceLocation ROCK_SNOT = register("entities/rock_snot");
     public static final ResourceLocation FRESHWATER_URCHIN = register("entities/freshwater_urchin");
     public static final ResourceLocation JELLYFISH = register("entities/jellyfish");
+    public static final ResourceLocation GREEBLING_CORACLE = register("entities/greebling_coracle");
 
     //SPECIAL MOB LOOT FUNCTIONS
     public static final ResourceLocation CHIROMAW_HATCHLING = register("entities/chiromaw_hatchling");
