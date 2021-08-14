@@ -220,8 +220,8 @@ public class ItemRegistry {
     public static final Item ASPECTRUS_SEEDS = new ItemAspectrusSeeds();
     public static final Item MIRE_SNAIL_EGG = new ItemMireSnailEgg();
     public static final Item MIRE_SNAIL_EGG_COOKED = new ItemBLFood(8, 1, false);
-    public static final Item ANGLER_MEAT_RAW = new ItemBLFood(4, 0.4F, false);
-    public static final Item ANGLER_MEAT_COOKED = new ItemBLFood(8, 0.8F, false);
+   // public static final Item ANGLER_MEAT_RAW = new ItemBLFood(4, 0.4F, false);
+  //  public static final Item ANGLER_MEAT_COOKED = new ItemBLFood(8, 0.8F, false);
     public static final Item FROG_LEGS_RAW = new ItemBLFood(2, 0.4F, false);
     public static final Item FROG_LEGS_COOKED = new ItemBLFood(4, 0.6F, false);
     public static final Item SNAIL_FLESH_RAW = new ItemBLFood(3, 0.4F, false);
