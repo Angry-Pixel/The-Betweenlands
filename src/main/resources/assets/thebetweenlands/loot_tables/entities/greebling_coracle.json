@@ -43,21 +43,36 @@
                "name": "thebetweenlands:anadia",
                "entryName": "anadia_normal",
                "weight": 2,
-               "functions": []
+               "functions": [
+                    {
+                     "function":"set_nbt",
+                     "tag":"{Entity: {id: \"thebetweenlands:anadia\", fishColour:3}}"
+                  }
+              ]
             },
             {
                "type":"item",
                "name": "thebetweenlands:anadia",
                "entryName": "anadia_rotten",
                "weight": 1,
-               "functions": []
+               "functions": [
+                    {
+                     "function":"set_nbt",
+                     "tag":"{Entity: {id: \"thebetweenlands:anadia\", fishColour:1, rottingTime:0}}"
+                  }
+              ]
             },
             {
                "type":"item",
                "name": "thebetweenlands:anadia",
                "entryName": "anadia_treasure",
                "weight": 1,
-               "functions": []
+               "functions": [
+                    {
+                     "function":"set_nbt",
+                     "tag":"{Entity: {id: \"thebetweenlands:anadia\", fishColour:3, isTreasureFish:1, isTreasureUnlocked:1}}"
+                  }
+              ]
             }
          ]
       },
@@ -200,6 +215,7 @@
             {
                "type":"item",
                "name":"thebetweenlands:fishing_spear",
+               "entryName": "fishing_spear_1",
                "weight": 1,
                "functions": [
                   {
@@ -211,6 +227,7 @@
             {
                "type":"item",
                "name":"thebetweenlands:fishing_spear",
+               "entryName": "fishing_spear_2",
                "weight": 1,
                "functions": [
                   {
