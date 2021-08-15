@@ -75,13 +75,19 @@ tile.thebetweenlands.cracked_betweenstone_brick_wall.name=Mur en Briques de Pier
 tile.thebetweenlands.cracked_betweenstone_tiles.name=Carrelage en Pierre des Betweenlands Craquelée
 tile.thebetweenlands.cracked_betweenstone_brick_stairs.name=Escalier en Briques de Pierre des Betweenlands Craquelée
 tile.thebetweenlands.cragrock.default.name=Crageroche
-tile.thebetweenlands.cragrock.mossy_1.name=Crageroche Moussue Dessus
-tile.thebetweenlands.cragrock.mossy_2.name=Crageroche Moussue Dessous
+tile.thebetweenlands.cragrock.mossy_1.name=Crageroche Moussue (Dessus)
+tile.thebetweenlands.cragrock.mossy_2.name=Crageroche Moussue (Dessous)
 tile.thebetweenlands.cragrock_bricks.name=Briques en Crageroche
+tile.thebetweenlands.cragrock_bricks_cracked.name=Briques en Crageroche Craquelée
+tile.thebetweenlands.cragrock_bricks_mossy.name=Briques en Crageroche Moussue
 tile.thebetweenlands.cragrock_brick_stairs.name=Escalier en Briques de Crageroche
 tile.thebetweenlands.cragrock_chiseled.name=Crageroche Sculptée
+tile.thebetweenlands.cragrock_chiseled_mossy.name=Crageroche Moussue Sculptée
+tile.thebetweenlands.cragrock_chiseled_cracked.name=Crageroche Craquelée Sculptée
 tile.thebetweenlands.cragrock_pillar.name=Pillier en Crageroche
 tile.thebetweenlands.cragrock_tiles.name=Carrelage en Crageroche
+tile.thebetweenlands.cragrock_tiles_cracked.name=Carrelage en Crageroche Craquelée
+tile.thebetweenlands.cragrock_tiles_mossy.name=Carrelage en Crageroche Moussue
 tile.thebetweenlands.cragrock_wall.name=Mur en Crageroche
 tile.thebetweenlands.cragrock_slab.name=Dalle en Crageroche
 tile.thebetweenlands.cragrock_stairs.name=Escalier en Crageroche
@@ -107,9 +113,9 @@ tile.thebetweenlands.leaves_sap_tree.name=Feuilles d’Arbre à Sève
 tile.thebetweenlands.leaves_weedwood_tree.name=Feuilles d’Harbres
 tile.thebetweenlands.leaves_hearthgrove_tree.name=Feuilles de Foyebrûche
 tile.thebetweenlands.leaves_nibbletwig_tree.name=Feuilles de Saulegrigne
-tile.thebetweenlands.leaves_spirit_tree_top.name=Feuilles d’Arbre Spirituel
-tile.thebetweenlands.leaves_spirit_tree_middle.name=Feuilles d’Arbre Spirituel
-tile.thebetweenlands.leaves_spirit_tree_bottom.name=Feuilles d’Arbre Spirituel
+tile.thebetweenlands.leaves_spirit_tree_top.name=Feuilles d’Arbre Spirituel (Dessus)
+tile.thebetweenlands.leaves_spirit_tree_middle.name=Feuilles d’Arbre Spirituel (Milieu)
+tile.thebetweenlands.leaves_spirit_tree_bottom.name=Feuilles d’Arbre Spirituel (Dessous)
 tile.thebetweenlands.life_crystal_stalactite.default.name=Stalactite de Cristal de Vie
 tile.thebetweenlands.life_crystal_stalactite.ore.name=Minerais de Cristal de Vie
 tile.thebetweenlands.limestone.name=Calcaire
@@ -158,6 +164,7 @@ tile.thebetweenlands.mud_brick_shingle_wall.name=Mur de Bardeaux en Briques de B
 tile.thebetweenlands.octine_block.name=Bloc d’Octine
 tile.thebetweenlands.octine_ore.name=Minerais d’Octine
 tile.thebetweenlands.peat.name=Tourbe
+tile.thebetweenlands.peat_smouldering.name=Tourbe Fumante
 tile.thebetweenlands.pitcher_plant.name=Sarracénie
 tile.thebetweenlands.pitstone.name=Fosseroche
 tile.thebetweenlands.pitstone_stairs.name=Escalier en Fosseroche
@@ -192,6 +199,7 @@ tile.thebetweenlands.sapling_spirit_tree.name=Pousse d’Arbre Spirituel
 tile.thebetweenlands.scabyst_ore.name=Minerais de Scabysthe
 tile.thebetweenlands.shelf_fungus.name=Polypore
 tile.thebetweenlands.silt.name=Limon
+tile.thebetweenlands.filtered_silt.name=Limon Filtré
 tile.thebetweenlands.slimy_bone_ore.name=Minerais d’Os Visqueux
 tile.thebetweenlands.slimy_dirt.name=Terre Visqueuse
 tile.thebetweenlands.slimy_grass.name=Herbe Visqueuse
@@ -320,6 +328,7 @@ tile.thebetweenlands.smooth_pitstone_slab.name=Dalle en Fosseroche Polie
 tile.thebetweenlands.temple_brick_wall.name=Mur en Briques de Temple
 tile.thebetweenlands.deep_water_coral_block.name=Bloc de Corail des Profondeurs
 tile.thebetweenlands.silt_glass.name=Verre en Limon
+tile.thebetweenlands.filtered_silt_glass.name=Verre en Limon Filtré
 tile.thebetweenlands.mire_coral_block.name=Bloc de Corail des Tourbières
 tile.thebetweenlands.crimson_middle_gem_block.name=Bloc de Gemme Carmin
 tile.thebetweenlands.tar_solid_wall.name=Mur en Goudron Solide
@@ -488,12 +497,40 @@ tile.thebetweenlands.lantern_paper_2.name=Lanterne en Papier d’Amate à Carrea
 tile.thebetweenlands.lantern_paper_3.name=Lanterne en Papier d’Amate Arrondi
 tile.thebetweenlands.lantern_silt_glass.name=Lanterne en Verre de Limon
 tile.thebetweenlands.bauble.name=Babiole
-tile.thebetweenlands.rune_weaving_table.name=Rune Weaving Table
-tile.thebetweenlands.rune_carving_table.name=Rune Carving Table
-tile.thebetweenlands.scrivener_sulfur_mark.name=Scrivener's Sulfur Mark
-tile.thebetweenlands.scrivener_burnt_mark.name=Scrivener's Burnt Mark
+tile.thebetweenlands.fishing_tackle_box.name=Coffre à Pêche
+tile.thebetweenlands.fishing_tackle_box.name=Coffre à Pêche
+tile.thebetweenlands.smoking_rack.name=Fumoir
+tile.thebetweenlands.fish_trimming_table.name=Table de Découpe
+tile.thebetweenlands.crab_pot.name=Pot pour Crabe
+tile.thebetweenlands.silt_glass_jar.name=Jarre en Verre de Limon
+tile.thebetweenlands.crab_pot_filter.name=Filtre de Pot pour Crabe 
+tile.thebetweenlands.pearl_block.name=Bloc de Perles
+tile.thebetweenlands.betweenstone_pebble_pile.one.name=Pile de Cailloux en Pierre des Betweenlands
+tile.thebetweenlands.betweenstone_pebble_pile.two.name=Pile de Cailloux en Pierre des Betweenlands
+tile.thebetweenlands.betweenstone_pebble_pile.three.name=Pile de Cailloux en Pierre des Betweenlands
+tile.thebetweenlands.betweenstone_pebble_pile.four.name=Pile de Cailloux en Pierre des Betweenlands
+tile.thebetweenlands.betweenstone_pebble_pile.one_plant.name=Pile de Cailloux en Pierre des Betweenlands
+tile.thebetweenlands.betweenstone_pebble_pile.two_plant.name=Pile de Cailloux en Pierre des Betweenlands
+tile.thebetweenlands.betweenstone_pebble_pile.three_plant.name=Pile de Cailloux en Pierre des Betweenlands
+tile.thebetweenlands.betweenstone_pebble_pile.four_plant.name=Pile de Cailloux en Pierre des Betweenlands
+tile.thebetweenlands.betweenstone_pebble_pile_water.one.name=Pile de Cailloux Submergés en Pierre des Betweenlands
+tile.thebetweenlands.betweenstone_pebble_pile_water.two.name=Pile de Cailloux Submergés en Pierre des Betweenlands
+tile.thebetweenlands.betweenstone_pebble_pile_water.three.name=Pile de Cailloux Submergés en Pierre des Betweenlands
+tile.thebetweenlands.betweenstone_pebble_pile_water.four.name=Pile de Cailloux Submergés en Pierre des Betweenlands
+tile.thebetweenlands.betweenstone_pebble_pile_water.one_plant.name=Pile de Cailloux Submergés en Pierre des Betweenlands
+tile.thebetweenlands.betweenstone_pebble_pile_water.two_plant.name=Pile de Cailloux Submergés en Pierre des Betweenlands
+tile.thebetweenlands.betweenstone_pebble_pile_water.three_plant.name=Pile de Cailloux Submergés en Pierre des Betweenlands
+tile.thebetweenlands.betweenstone_pebble_pile_water.four_plant.name=Pile de Cailloux Submergés en Pierre des Betweenlands
+tile.thebetweenlands.barnacle_1_2.name=Groupement de Bernacles
+tile.thebetweenlands.barnacle_3_4.name=Groupement de Bernacles
+tile.thebetweenlands.glowing_goop.name=Gelée Luminescente
+tile.thebetweenlands.reed_mat.name=Tapis en Roseau
+tile.thebetweenlands.mud_loot_pot.1.name=Pot de Fortune Embourbé
+tile.thebetweenlands.mud_loot_pot.2.name=Pot de Fortune Embourbé
+tile.thebetweenlands.mud_loot_pot.3.name=Pot de Fortune Embourbé
 
 # Items
+
 item.thebetweenlands.enum.unknown.name=Quelque chose à mal tourné :(
 item.thebetweenlands.algae_item.name=Touffe d’Algue
 item.thebetweenlands.amulet_socket.name=Orbite d’Amulette
@@ -543,6 +580,7 @@ item.thebetweenlands.compost.name=Terreau
 item.thebetweenlands.copper_iris_petals.name=Pétale d’Iris Cuivrée
 item.thebetweenlands.crab_stick.name=Bâtonnet de Crabe
 item.thebetweenlands.deep_water_coral_item.name=Corail des Profondeurs
+item.thebetweenlands.deep_water_theme.name=Disque de Musique
 item.thebetweenlands.dj_wights_mixtape.name=Disque de Musique
 item.thebetweenlands.dragonfly_wing.name=Aile de Libellule
 item.thebetweenlands.dried_swamp_reed.name=Roseau Séché des Marais
@@ -622,6 +660,7 @@ item.thebetweenlands.ground_rotbulb.name=Bolet Fétide (Pilé)
 item.thebetweenlands.ground_pale_grass.name=Herbe Pâle (Pilée)
 item.thebetweenlands.ground_string_roots.name=Racines Rampantes (Pilées)
 item.thebetweenlands.ground_cryptweed.name=Herbe des Cryptes (Pilée)
+item.thebetweenlands.ground_betweenstone_pebble.name=Cailloux en Pierre des Betweenlands (Pilés)
 item.thebetweenlands.hag_dance.name=Disque de Musique
 item.thebetweenlands.hanger_item.name=Liane
 item.thebetweenlands.inanimate_tarminion.name=Serviteur en Goudron Inannimé
@@ -894,24 +933,47 @@ item.thebetweenlands.ancient_boots.name=Bottes Anciennes
 item.thebetweenlands.ancient_chestplate.name=Plastron Ancien
 item.thebetweenlands.ancient_helmet.name=Heaume Ancien
 item.thebetweenlands.ancient_leggings.name=Jambières Anciennes
-
-item.thebetweenlands.rune_chain.name=Rune Chain
-item.thebetweenlands.scrivener_tool.name=Scrivener's Tool
-item.thebetweenlands.weedwood_runelet.name=Weedwood Runelet
-item.thebetweenlands.pitstone_runelet.name=Pitstone Runelet
-item.thebetweenlands.dentrothyst_orange_runelet.name=Orange Dentrothyst Runelet
-item.thebetweenlands.dentrothyst_green_runelet.name=Green Dentrothyst Runelet
-item.thebetweenlands.bone_runelet.name=Bone Runelet
-item.thebetweenlands.ancient_runelet.name=Ancient Runelet
-item.thebetweenlands.unknown_rune.name=Unknown Rune
-item.thebetweenlands.initiate_rune.carved.name=Initiate Rune
-item.thebetweenlands.token_rune.carved.name=Token Rune
-item.thebetweenlands.gating_rune.carved.name=Gating Rune
-item.thebetweenlands.conduct_rune.carved.name=Conduct Rune
-item.thebetweenlands.initiate_rune.infused.name=Initiate Rune - %1$s
-item.thebetweenlands.token_rune.infused.name=Token Rune - %1$s
-item.thebetweenlands.gating_rune.infused.name=Gating Rune - %1$s
-item.thebetweenlands.conduct_rune.infused.name=Conduct Rune - %1$s
+item.thebetweenlands.amphibious_boots.name=Bottes Amphibies
+item.thebetweenlands.amphibious_chestplate.name=Plastron Amphibie
+item.thebetweenlands.amphibious_helmet.name=Heame Amphibie
+item.thebetweenlands.amphibious_leggings.name=Jambières Amphibies
+item.thebetweenlands.fish_bait.name=Appât à Poisson
+item.thebetweenlands.fishing_spear.name=Lance de Pêche
+item.thebetweenlands.fishing_spear_amphibious.name=Lance de Pêche Amphibie
+item.thebetweenlands.fishing_spear_amphibious_robust.name=Lance de Pêche Amphibie Robuste
+item.thebetweenlands.weedwood_fishing_rod.name=Canne à Pêche en Harbre
+item.thebetweenlands.fishing_float.name=Floteur et Crochet de Pêche
+item.thebetweenlands.snot_pod.name=Cosse de Morve des Rochers
+item.thebetweenlands.snot.name=Morve
+item.thebetweenlands.rock_snot_pearl.name=Perle de Morve des Rochers
+item.thebetweenlands.pearled_pear.name=Poire Perlée
+item.thebetweenlands.anadia_swim_bladder.name=Vessie Natatoire d'Unidée
+item.thebetweenlands.anadia_eye.name=Oeil d'Unidée
+item.thebetweenlands.anadia_gills.name=Branchies d'Unidée
+item.thebetweenlands.anadia_scales.name=Ecailles d'Unidée
+item.thebetweenlands.anadia_bones.name=Os d'Unidée
+item.thebetweenlands.anadia_remains.name=Restes d'Unidée
+item.thebetweenlands.anadia_fins.name=Nageoires d'Unidée
+item.thebetweenlands.anadia_meat_raw.name=Chaire d'Unidée Crue
+item.thebetweenlands.anadia_meat_cooked.name=Chaire d'Unidée Cuite
+item.thebetweenlands.anadia_meat_smoked.name=Chaire d'Unidée Fumée
+item.thebetweenlands.urchin_spike.name=Piquent d'Oursin
+item.thebetweenlands.fumigant.name=Fumigant
+item.thebetweenlands.bl_name_tag.name=Etiquette en Amate
+item.thebetweenlands.barnacle_larvae.name=Larve de Bernacle
+item.thebetweenlands.barnacle.name=Chaire de Bernacle
+item.thebetweenlands.barnacle_cooked.name=Chaire de Bernacle Cuite
+item.thebetweenlands.barnacle_smoked.name=Chaire de Bernacle Fumée
+item.thebetweenlands.crab_stick_smoked.name=Bâtonnet de Crabe Fumé
+item.thebetweenlands.frog_legs_smoked.name=Cuisse de Grenouille Fumée
+item.thebetweenlands.puffshroom_tendril_smoked.name=Vrille de Champisouffle Fumée
+item.thebetweenlands.silt_crab_claw_smoked.name=Pince de Crabe Fumée
+item.thebetweenlands.snail_flesh_smoked.name=Chaire d'Escargot Fumée
+item.thebetweenlands.aa_upgrade_electric.name=Electrique
+item.thebetweenlands.aa_upgrade_glide.name=Planer
+item.thebetweenlands.aa_upgrade_leap.name=Ascension
+item.thebetweenlands.aa_upgrade_urchin.name=Piquants d'Oursin
+item.thebetweenlands.aa_upgrade_vortex.name=Vortex à Poisson
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Fiole en Dendrotisthe Verte
@@ -944,6 +1006,7 @@ itemGroup.thebetweenlands.special=Objets Spéciaux des Betweenlands
 itemGroup.thebetweenlands.plants=Flore des Betweenlands
 itemGroup.thebetweenlands.herblore=Herboristerie des Betweenlands
 
+
 # Container
 container.bl.syrmorite_hopper=Entonnoir en Syrmorithe
 container.bl.animator=Animateur
@@ -965,6 +1028,7 @@ container.bl.draeton_inventory=Dirigeable
 container.bl.draeton_storage=Stockage de Dirigeable
 container.bl.draeton_furnace=Fourneau de Dirigeable
 container.bl.draeton_burner=Brûleur
+container.bl.amphibious_armour=Armure Amphibie
 
 # Locations
 location.wilderness.name=120:<scale:1.75>Etendue Sauvage</scale>
@@ -988,6 +1052,9 @@ location.sludge_worm_dungeon_maze.name=120:Caveaux Labyrinthiques
 location.sludge_worm_dungeon.name=120:Donjon Envasé
 location.sludge_worm_dungeon_pit.name=120:Fosse du Pourrissement
 location.chiromaw_matriarch_nest.name=120:Nid de Matriarche Hurlante
+location.underwater_ruins.name=80:Ruines Sous-marines
+
+
 
 # Tooltips
 tooltip.bl.arrow.octine=Utilisez avec précaution !
@@ -1023,6 +1090,7 @@ tooltip.bl.press.shift=Maintenez ‘maj’ pour en savoir plus
 tooltip.bl.life_crystal.remaining=%d restant
 tooltip.bl.shockwave_sword.usage=Clic-droit sur le sol pour\ncréer une onde sismique
 tooltip.bl.tool.broken=\n%s est cassé\net doit être réparé\ndans un Animateur.
+tooltip.bl.tool.broken_rod=\n%s is broken\net a besoin d'une nouvelle ligne\net d'un d'un nouveau flotteur.\n
 tooltip.bl.food_sickness.state.fine=Ça a bon goût
 tooltip.bl.food_sickness.state.half=C’est un peu fade
 tooltip.bl.food_sickness.state.sick=Je ne peux plus manger ça
@@ -1073,6 +1141,29 @@ tooltip.bl.simple_slingshot=Tire des cailloux
 tooltip.bl.lurker_skin_patch=Répare les fuites du Dirigeable
 tooltip.bl.chirobarb_erupter.usage=Clic-droit pour tirer une volée de barbillons sur 360 degrés \nPossède un cooldown de 3 secondes.
 tooltip.bl.ancient_armor.usage=Réduit les Dégâts Magiques subits.\nRéduit jusqu’à la moitié des dégâts magique\navec la tenue entièrement équipée.
+tooltip.bl.rock_snot_pearl=Octroie 10 d'expérience lorsqu'elle est consommée
+tooltip.bl.pearled_pear=Octroie 80 d'expérience lorsqu'elle est consommée
+tooltip.bl.damaged_armor_upgrade=Amélioration d'Armure Amphibie Endommagée (%d/%d).
+tooltip.bl.crab_pot_item=Ajouter des Restes d'Unidée\npour attirer les Crabes.\nPeut être placé au dessus d'un\nFiltre de Pot pour Crabe pour plus\nd'utilisations.
+tooltip.bl.crab_pot_filter_item=A utiliser avec un Pot pour Crabes.\nLes Pots pour Crabes contenants un Crabe\nde Limon ou un Barboteur, lorsque placés\nau-dessus, possèdent plus d'utilités.
+tooltip.bl.silt_glass_jar_item=Contenant pour Vermisseaux de Vase.\nUtiliser une Canne à Pêche en Harbre\n sur la jarre permet d'y accrocher un appât.
+tooltip.bl.fish_bait_jei=Les objets secondaires modifient les attribus.\nUtilisez l'info-bulle en fabricant pour les voir.
+
+# Anadia item mob stats
+tooltip.bl.item_mob_anadia.health=Santé: %s / %s
+tooltip.bl.item_mob_anadia.size=Taille: %s
+tooltip.bl.item_mob_anadia.speed=Vitesse: %s
+tooltip.bl.item_mob_anadia.strength=Force: %s
+tooltip.bl.item_mob_anadia.stamina=Endurance: %s
+
+tooltip.bl.item_mob_anadia.status=Statut: 
+tooltip.bl.item_mob_anadia.rotting_1=Fraichement Attrapée
+tooltip.bl.item_mob_anadia.rotting_2=Attrapée Récemment
+tooltip.bl.item_mob_anadia.rotting_3=Commence à Pourrir
+tooltip.bl.item_mob_anadia.rotting_4=Commence à Sentir Fort
+tooltip.bl.item_mob_anadia.rotting_5=Empeste
+tooltip.bl.item_mob_anadia.rotten=Pourrie
+tooltip.bl.item_mob_anadia.smoked=Fumée
 
 tooltip.bl.elixir.potency=§9Potentiel: %s
 tooltip.bl.elixir.duration=§9Durée: %s (%s)
@@ -1117,6 +1208,7 @@ tooltip.bl.censer.effect.dungeon_fog=Accélère la pousse des plantes et\npermet
 tooltip.bl.censer.effect.aspect=Imbue les pousses d’Essence avec\nl’Essence utilisée et permet la pousse de ces\nplantes sur une petite étendue.
 tooltip.bl.censer.effect.cremains=Incinère n’importe quelle créature\nvivante sur une petite étendue.
 tooltip.bl.censer.effect.swamp_water=Diffuse une vapeur portant les effets\nde l’objet avec lequel elle est imbuée\nsur une large étendue.\nPeut être imbuée d’une Amulette d’Ecorce.
+tooltip.bl.censer.effect.fumigant=Ôte l'odeur du Pourrissement sur une grande étendue.
 
 tooltip.bl.simulacrum.effect=Effet: %s
 tooltip.bl.simulacrum.effect.none=Aucun
@@ -1141,21 +1233,18 @@ tooltip.bl.recipes.censer_primary=Encensoir
 tooltip.bl.recipes.censer_secondary=Encensoir (Secondaire)
 tooltip.bl.recipes.purifier=Purificateur
 tooltip.bl.recipes.mortar=Mortier
+tooltip.bl.recipes.offering_table=Table d'Offrande
 
-tooltip.thebetweenlands.initiate_rune.carved=Material: %1$s
-tooltip.thebetweenlands.initiate_rune.infused=Material: %1$s\nAspect: %2$s\nTier: %3$s\nEffect: %4$s
-tooltip.thebetweenlands.token_rune.carved=Material: %1$s
-tooltip.thebetweenlands.token_rune.infused=Material: %1$s\nAspect: %2$s\nTier: %3$s\nEffect: %4$s
-tooltip.thebetweenlands.gating_rune.carved=Material: %1$s
-tooltip.thebetweenlands.gating_rune.infused=Material: %1$s\nAspect: %2$s\nTier: %3$s\nEffect: %4$s
-tooltip.thebetweenlands.conduct_rune.carved=Material: %1$s
-tooltip.thebetweenlands.conduct_rune.infused=Material: %1$s\nAspect: %2$s\nTier: %3$s\nEffect: %4$s
+tooltip.bl.fish_bait.saturation=Saturation: %s
+tooltip.bl.fish_bait.sink_speed=Vitesse de Submersion: %s
+tooltip.bl.fish_bait.dissolve_time=Temps de Dissolution: %s
+tooltip.bl.fish_bait.range=Portée: %s
+tooltip.bl.fish_bait.glowing=Luminescence: %s
 
-tooltip.thebetweenlands.rune.gating_block.unbound=Unbound
-tooltip.thebetweenlands.rune.gating_block.bound=Bound block: %s
+tooltip.bl.fishing_rod.baited=Possède un Vermisseau: %s
 
-tooltip.thebetweenlands.rune.token_item.unbound=Unbound
-tooltip.thebetweenlands.rune.token_item.bound=Bound item: %s
+tooltip.bl.fumigant=Ôte la Puanteur du Pourrissement sur un Joueur.
+tooltip.bl.fishing_spear_animated=Animée: 
 
 # Chat
 chat.foodSickness.fine.0=Ah, ça fait du bien
@@ -1174,7 +1263,6 @@ chat.foodSickness.fine.12=C’est plutôt savoureux
 chat.foodSickness.fine.13=Ça ne vaut pas une pomme dorée, mais ça fera l’affaire
 chat.foodSickness.fine.14=C’était très bon
 chat.foodSickness.fine.15=Ça n’était pas si mal, j’espère que ce n’est pas vénéneux
-
 chat.foodSickness.half.0=Je commence à en avoir marre de toujours manger la même chose
 chat.foodSickness.half.1=Je dois surement pouvoir trouver quelque chose d’autre à manger par ici
 chat.foodSickness.half.2=C’est comestible, je suppose
@@ -1191,7 +1279,6 @@ chat.foodSickness.half.12=Ça me rend malade de manger cette nourriture
 chat.foodSickness.half.13=Je ne me sens vraiment pas bien, n’y a-t-il rien d’autre à manger ?
 chat.foodSickness.half.14=C’est fade, il me quelque chose de plus varié
 chat.foodSickness.half.15=C’est probablement mauvais pour ma santé de toujours manger la même chose
-
 chat.foodSickness.sick.0=Je ne peux plus avaler ça
 chat.foodSickness.sick.1=Je me sens très mal, je ne peux pas manger ça
 chat.foodSickness.sick.2=Pouah, hors de question que j’en mange
@@ -1266,6 +1353,7 @@ chat.equipment.equipped=Equipé %s
 chat.equipment.unequipped=Déséquippé %s
 
 chat.waystone.obstructed=Le Menhir est obstrué
+chat.bone_wayfinder.sky_obstructed=Le Ciel est obstrué
 chat.simulacrum.obstructed=Le Simulacre est obstrué
 chat.simulacrum.blessed=Vous vous sentez béni
 
@@ -1278,6 +1366,7 @@ chat.not_enough_fog_for_vial=Il n’y a pas assez de brume à cet étage pour re
 
 chat.ring_of_gathering.not_enough_xp=Vous n’avez pas assez d’XP pour utiliser l’Anneau de Rassemblement
 chat.ring_of_gathering.animator=Les familiers mort doivent être ressuscités dans l’Animateur
+
 chat.ring_of_recruitment.not_enough_power=L’Anneau ne possède pas suffisamment de puissance pour recruter cette créature
 chat.ring_of_recruitment.state.stay=Votre %s est à présent immobile
 chat.ring_of_recruitment.state.guard=Votre %s est à présent en patrouille
@@ -1290,12 +1379,8 @@ chat.draeton_dismount_timer=Descente dans %s...
 
 chat.simulacrum.changed_effect=Effet passé à '%s'
 
-<<<<<<< HEAD
-chat.pattern_rune_set_origin=Set the origin first by sneaking
-	=======
 chat.wind_chime.changed_attunement=Sensible à '%s'
-chat.wind_chime.removed_attunement=Sensible à n’importe quel évènement
->>>>>>> 1.12-fixes
+chat.wind_chime.removed_attunement=Sensible à n'importe quelle météo
 
 # Damage Source
 death.attack.suffocation=%s a été étouffée.e par un Coursouffle
@@ -1469,11 +1554,40 @@ entity.thebetweenlands.draeton_upgrade_furnace.name=Fourneau de Dirigeable
 entity.thebetweenlands.draeton_upgrade_crafting.name=Etabli de Dirigeable
 entity.thebetweenlands.stalker.name=Stalker
 entity.thebetweenlands.swarm.name=Infestation
+entity.thebetweenlands.anadia.name=Unidée
+entity.thebetweenlands.fish_bait_item.name=Appât à Poisson
+entity.thebetweenlands.betweenlands_fish_hook.name=Crochet de Pêche
+entity.thebetweenlands.fishing_spear.name=Lance de Pêche
+entity.thebetweenlands.fishing_tackle_box_seat.name=Coffre de Pêche
+entity.thebetweenlands.rock_snot.name=Morve des Rochers
+entity.thebetweenlands.rock_snot_tendril.name=Vrille de Morve des Rochers
+entity.thebetweenlands.jellyfish.name=Méduse
+entity.thebetweenlands.jellyfish_cave.name=Méduse des Cavernes
+entity.thebetweenlands.bubbler_crab.name=Crabe Barboteur
+entity.thebetweenlands.bubbler_crab_bubble.name=Bulle de Crabe Barboteur
+entity.thebetweenlands.freshwater_urchin.name=Oursin des Eaux Fraiches
+entity.thebetweenlands.greebling_coracle.name=Greblin sur un Coracle
+entity.thebetweenlands.cave_fish.name=Poisson des Cavernes
+entity.thebetweenlands.glowing_goop.name=Morve Luminescente
+
+#Fish Parts
+entity.thebetweenlands.anadia_body_0=Espiègle
+entity.thebetweenlands.anadia_body_1=Trapue
+entity.thebetweenlands.anadia_body_2=Mince
+
+entity.thebetweenlands.anadia_tail_0=Queue Courte
+entity.thebetweenlands.anadia_tail_1=Queue en Eventail
+entity.thebetweenlands.anadia_tail_2=Queue Longue
+
+entity.thebetweenlands.anadia_head_0=Brouteur
+entity.thebetweenlands.anadia_head_1=Cogneur
+entity.thebetweenlands.anadia_head_2=Rôdeur
 
 # Equipment
 equipment.menu.equip=Equiper %s
 equipment.menu.unequip=Déséquiper %s
 equipment.menu.page=Page %d
+
 
 # Music Discs
 item.thebetweenlands.record.astatos.desc=Voog2 - Astatos
@@ -1490,12 +1604,15 @@ item.thebetweenlands.record.stuck_in_the_mud.desc=Voog2 – Embourbé dans le Bo
 item.thebetweenlands.record.waterlogged.desc=Voog2 - Waterlogged
 item.thebetweenlands.record.wandering_wisps.desc=Voog2 – Feu Follet Frivole
 item.thebetweenlands.record.ancient.desc=Voog2 - Ancien
+item.thebetweenlands.record.deep_water_theme.desc=Mr.Owltkins - Eaux Profondes
+
 
 # Signs
 sign.fortress.line1=Seul Le
 sign.fortress.line2=Détenteur de l’Epée
 sign.fortress.line3=Peut Emprunter
 sign.fortress.line4=Cette Voie
+
 
 # Events
 event.thebetweenlands.dense_fog.name=Brouillard Epais
@@ -1508,14 +1625,18 @@ event.thebetweenlands.snowfall.name=Chute de Neige
 event.thebetweenlands.thunderstorm.name=Orage
 event.thebetweenlands.rift.name=Fissure
 
+
 # JEI
 jei.thebetweenlands.animator.entity_spawn=Cette recette créera %s
 jei.thebetweenlands.recipe.animator=Animateur
 jei.thebetweenlands.recipe.pestle_and_mortar=Mortier et Pilon
 jei.thebetweenlands.recipe.druid_altar=Altar de Druide
 jei.thebetweenlands.recipe.purifier=Purificateur
-jei.thebetweenlands.recipe.compost=Compost
-jei.thebetweenlands.compost.amount=Quantité de Compost: %d
+jei.thebetweenlands.recipe.compost=Terreau
+jei.thebetweenlands.recipe.smoking_rack=Fumoir
+jei.thebetweenlands.recipe.crab_pot_filter_bubbler=Filtre de Pot pour Crabe (Crabe Barboteur)
+jei.thebetweenlands.recipe.crab_pot_filter_silt=Filtre de Pot pour Crabe (Crabe de Limon)
+jei.thebetweenlands.compost.amount=Quantité de Terreau: %d
 jei.thebetweenlands.time=Temps de traitement: %d minutes et %d secondes
 jei.thebetweenlands.time.minutes=Temps de traitement: %d minutes
 jei.thebetweenlands.time.seconds=Temps de traitement: %d secondes
@@ -1532,10 +1653,12 @@ command.blevent.success.off=The event '%s' is no longer taking place
 command.blevent.success.alloff=All events are no longer taking place
 command.blevent.success.enable=Events are enabled
 command.blevent.success.disable=Events are disabled
+
 command.blevent.usage=Usage: /blevent <toggle|on|off|list|enable|disable>
 command.blevent.usage.toggle=Usage: /blevent toggle <event name>
 command.blevent.usage.on=Usage: /blevent on <event name>
 command.blevent.usage.off=Usage: /blevent off [event name]
+
 command.blevent.failure.unknown=Unknown event '%s'
 command.blevent.failure.wrongdimension=You must be in a Betweenlands world to toggle events
 command.blevent.failure.alreadyon=The event '%s' is already on
@@ -1599,6 +1722,7 @@ manual.form=Forme
 manual.wind=Vent
 manual.soul=Ame
 manual.chaos=Chaos
+
 
 manual.azuwynn.description=L’essence qui affecte les muscles.<nl> Essence de Rang I.
 manual.armaniis.description=L’essence qui influe sur le désir d’un être ou de sa pensée.<nl> Essence de Rang II.
@@ -1725,118 +1849,19 @@ gui.bl.draeton.burner.fuel=Le Brûleur nécessite du Coursouffle en Bouteille
 gui.bl.draeton.burner.purge=Purger
 gui.bl.draeton.main.puller=Place d’Attelage:\n§7 - Libellule\n§7 - Luciole\n§7 – Chiroptère Apprivoisée
 gui.bl.draeton.main.upgrade_utility=Place d’Amélioration Utilitaire:\n§7 – Sac en Peau de Rôdeur\n§7 – Amélioration d’Etabli pour Dirigeable\n§7 – Amélioration de Fourneau pour Dirigeable
-
 gui.bl.draeton.main.upgrade_anchor=Place d’Amélioration d’Ancre:\n§7 – Amélioration d’Ancre pour Dirigeable
 
-# Runes
-rune.token.unknown=Rune Token
-rune.token.thebetweenlands.any.singular=Any Token
-rune.token.thebetweenlands.any.plural=Any Tokens
-rune.token.thebetweenlands.block.singular=Block Token
-rune.token.thebetweenlands.block.plural=Block Tokens
-rune.token.thebetweenlands.entity.singular=Entity Token
-rune.token.thebetweenlands.entity.plural=Entity Tokens
-rune.token.thebetweenlands.position.singular=Position Token
-rune.token.thebetweenlands.position.plural=Position Tokens
-rune.token.thebetweenlands.direction.singular=Direction Token
-rune.token.thebetweenlands.direction.plural=Direction Tokens
+gui.bl.fish_trimming_table.butcher=Chop!
 
-rune.input=Input
-rune.output=Output
-
-rune.gui.inputs=In:
-rune.gui.outputs=Out:
-
-rune_tier.tier_1.name=I
-rune_tier.tier_2.name=II
-rune_tier.tier_3.name=III
-
-rune_material.thebetweenlands.weedwood.name=Weedwood
-rune_material.thebetweenlands.pitstone.name=Pitstone
-rune_material.thebetweenlands.dentrothyst_green.name=Green Dentrothyst
-rune_material.thebetweenlands.dentrothyst_orange.name=Orange Dentrothyst
-rune_material.thebetweenlands.bone.name=Bone
-rune_material.thebetweenlands.ancient.name=Ancient
-
-rune.thebetweenlands.no_effect.name=No effect
-
-rune.thebetweenlands.initiate_water.name=Water
-rune.thebetweenlands.initiate_water.configuration.0.title=<underline>Water</underline>
-rune.thebetweenlands.initiate_water.configuration.0.description=Activates when entering water
-
-rune.item.thebetweenlands.test_rune_fire.configuration.0.title=<underline>Block Fire</underline>
-rune.item.thebetweenlands.test_rune_fire.configuration.0.description=Sets the marked block on fire
-rune.item.thebetweenlands.test_rune_fire.configuration.0.input.0.description=Block to set on fire
-rune.item.thebetweenlands.test_rune_fire.configuration.1.title=<underline>Mob Fire</underline>
-rune.item.thebetweenlands.test_rune_fire.configuration.1.description=Sets the marked mob on fire
-rune.item.thebetweenlands.test_rune_fire.configuration.1.input.0.description=Mob to set on fire
-
-rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.title=<underline>Destroy Block</underline>
-rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.description=Destroys the marked block
-rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.input.0.description=Block to destroy
-
-rune.item.thebetweenlands.test_rune_mark_area.configuration.0.title=<underline>Mark Area</underline>
-rune.item.thebetweenlands.test_rune_mark_area.configuration.0.description=Marks block area around the rune chain user
-rune.item.thebetweenlands.test_rune_mark_area.configuration.0.output.0.description=Blocks in area around rune chain user
-rune.item.thebetweenlands.test_rune_mark_area.configuration.1.title=<underline>Mark Area</underline>
-rune.item.thebetweenlands.test_rune_mark_area.configuration.1.description=Marks block area around a marked center block
-rune.item.thebetweenlands.test_rune_mark_area.configuration.1.input.0.description=Center block
-rune.item.thebetweenlands.test_rune_mark_area.configuration.1.output.0.description=Blocks in the area around center block
-
-rune.item.thebetweenlands.test_rune_select_grass.configuration.0.title=<underline>Select Grass</underline>
-rune.item.thebetweenlands.test_rune_select_grass.configuration.0.description=Only allows the block mark if the block is grass. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-rune.item.thebetweenlands.test_rune_select_grass.configuration.0.input.0.description=Block to filter
-
-rune.item.thebetweenlands.test_rune_projectile.configuration.0.title=<underline>Projectile</underline>
-rune.item.thebetweenlands.test_rune_projectile.configuration.0.description=Shoots a projectile from a marked entity in the direction it is looking
-rune.item.thebetweenlands.test_rune_projectile.configuration.0.input.0.description=Entity to shoot the projectile from
-rune.item.thebetweenlands.test_rune_projectile.configuration.0.output.0.description=Block that is hit by the projectile
-rune.item.thebetweenlands.test_rune_projectile.configuration.1.title=<underline>Projectile</underline>
-rune.item.thebetweenlands.test_rune_projectile.configuration.1.description=Shoots a projectile from a marked entity in the direction of a marked ray
-rune.item.thebetweenlands.test_rune_projectile.configuration.1.input.0.description=Entity to shoot the projectile from
-rune.item.thebetweenlands.test_rune_projectile.configuration.1.input.1.description=Direction of the projectile
-rune.item.thebetweenlands.test_rune_projectile.configuration.1.output.0.description=Block that is hit by the projectile
-rune.item.thebetweenlands.test_rune_projectile.configuration.2.title=<underline>Projectile</underline>
-rune.item.thebetweenlands.test_rune_projectile.configuration.2.description=Shoots a projectile from a marked position in the direction of a marked ray
-rune.item.thebetweenlands.test_rune_projectile.configuration.2.input.0.description=Position to shoot the projectile from
-rune.item.thebetweenlands.test_rune_projectile.configuration.2.input.1.description=Direction of the projectile
-rune.item.thebetweenlands.test_rune_projectile.configuration.2.output.0.description=Block that is hit by the projectile
-
-rune.item.thebetweenlands.test_rune_self.configuration.0.title=<underline>Self</underline>
-rune.item.thebetweenlands.test_rune_self.configuration.0.description=Marks the rune chain user
-rune.item.thebetweenlands.test_rune_self.configuration.0.output.0.description=Rune chain user
-
-rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.title=<underline>Pinpoint</underline>
-rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.description=Pinpoints a marked entity
-rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.input.0.description=Entity to pinpoint
-rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.output.0.description=Position of the entity
-rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.output.1.description=Eye position of the entity
-rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.output.2.description=Look direction of the entity
-
-rune.item.thebetweenlands.test_rune_mark_nearby.configuration.0.title=<underline>Mark Nearby</underline>
-rune.item.thebetweenlands.test_rune_mark_nearby.configuration.0.description=Marks nearby entities
-rune.item.thebetweenlands.test_rune_mark_nearby.configuration.0.output.0.description=Entities that are near the rune chain user
-rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.title=<underline>Mark Nearby</underline>
-rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.description=Marks entities that are near a marked block
-rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.input.0.description=Center block
-rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.output.0.description=Entities that are near a marked block
-
-rune.item.thebetweenlands.test_rune_branching.configuration.0.title=<underline>Branch</underline>
-rune.item.thebetweenlands.test_rune_branching.configuration.0.description=Branches the rune chain flow for the linked input token
-rune.item.thebetweenlands.test_rune_branching.configuration.0.input.0.description=Input token to branch on
-rune.item.thebetweenlands.test_rune_branching.configuration.1.title=<underline>Branch</underline>
-rune.item.thebetweenlands.test_rune_branching.configuration.1.description=Branches the rune chain flow for the linked input tokens
-rune.item.thebetweenlands.test_rune_branching.configuration.1.input.0.description=First input token to branch on
-rune.item.thebetweenlands.test_rune_branching.configuration.1.input.1.description=Second input token to branch on
-rune.item.thebetweenlands.test_rune_branching.configuration.2.title=<underline>Branch</underline>
-rune.item.thebetweenlands.test_rune_branching.configuration.2.description=Branches the rune chain flow for the linked input tokens
-rune.item.thebetweenlands.test_rune_branching.configuration.2.input.0.description=Firs token to branch on
-rune.item.thebetweenlands.test_rune_branching.configuration.2.input.1.description=Second token to branch on
-rune.item.thebetweenlands.test_rune_branching.configuration.2.input.2.description=Third token to branch on
+# HWYLA Alt Block names
+tooltip.thebetweenlands.barnacle_stage_1.name=Groupement de Bernacles (Récemment Apparu)
+tooltip.thebetweenlands.barnacle_stage_2.name=Groupement de Bernacles (En début de Croissance)
+tooltip.thebetweenlands.barnacle_stage_3.name=Groupement de Bernacles (Arrive bientôt à Maturation)
+tooltip.thebetweenlands.barnacle_stage_4.name=Groupement de Bernacles (Prêt pour la Récolte)
 
 # Advancements
 
-# Aventures
+# Aventurier
 advancements.thebetweenlands.adventurer.root.title=Aventurier
 advancements.thebetweenlands.adventurer.root.description=Le début de l’Aventure dans les Betweenlands
 advancements.thebetweenlands.adventurer.give_me_that.title=Donnez Moi Ça
@@ -1891,6 +1916,10 @@ advancements.thebetweenlands.adventurer.gambling_addict.title=Addiction au Jeu
 advancements.thebetweenlands.adventurer.gambling_addict.description=Animer une quantité absurde de Parchemins de Fortune
 advancements.thebetweenlands.adventurer.thunderstruck.title=La foudre toujours épargne le bois tendre
 advancements.thebetweenlands.adventurer.thunderstruck.description=Etre frappé par la foudre en utilisant une Paravoile ou un Dirigeable
+advancements.thebetweenlands.adventurer.shake_it_off.title=Secouez Moi Ça
+advancements.thebetweenlands.adventurer.shake_it_off.description=Se faire submerger par une Infestation
+advancements.thebetweenlands.adventurer.vinyl_enthusiast.title=Connaisseu en Vinyles
+advancements.thebetweenlands.adventurer.vinyl_enthusiast.description=Collectionner tous les Disques de Musique des Betweenlands
 
 # Combattant
 advancements.thebetweenlands.fighter.root.title=Bagarreur
@@ -1959,6 +1988,12 @@ advancements.thebetweenlands.farmer.flower_power.title=Flower Power
 advancements.thebetweenlands.farmer.flower_power.description=Faire pousser des fleurs dans sa ferme
 advancements.thebetweenlands.farmer.pure_and_dirty.title=Comme un Sou Neuf
 advancements.thebetweenlands.farmer.pure_and_dirty.description=Utiliser de la Terre Purifiée dans sa ferme
+advancements.thebetweenlands.farmer.fertile_soil.title=Sol Fertile
+advancements.thebetweenlands.farmer.fertile_soil.description=Dénicher un Vermisseaux en creusant un trou pour vos pousses
+advancements.thebetweenlands.farmer.bountiful_barnacles.title=Bienfaisant Bernacles
+advancements.thebetweenlands.farmer.bountiful_barnacles.description=Récolter et Replacer un Groupement de Bernacles
+advancements.thebetweenlands.survivalist.premium_produce.title=Produit Premium
+advancements.thebetweenlands.survivalist.premium_produce.description=Frabiquer et Consommer une Poire Perlée
 
 # Herboriste
 advancements.thebetweenlands.herbalist.root.title=Herboriste
@@ -1999,6 +2034,8 @@ advancements.thebetweenlands.survivalist.onions_have_layers.title=Les oignons on
 advancements.thebetweenlands.survivalist.onions_have_layers.description=Enduir ses outils pour les protéger de la corrosion
 advancements.thebetweenlands.survivalist.hashtag_blessed.title=#Blessed
 advancements.thebetweenlands.survivalist.hashtag_blessed.description=Etre sauvé par la Bénédiction accordée par un Simulacre
+advancements.thebetweenlands.survivalist.uh_oh_stinky.title=Uh Oh, Ça Pue
+advancements.thebetweenlands.survivalist.uh_oh_stinky.description=Utiliser un Fumigant pour ôter votre Puanteur
 
 # Bricoleur
 advancements.thebetweenlands.craftsman.root.title=Bricoleur
@@ -2013,6 +2050,24 @@ advancements.thebetweenlands.craftsman.freebies.title=Prime
 advancements.thebetweenlands.craftsman.freebies.description=Obtenir des lingots supplémentaires en utilisant des Cristaux de Calcaire
 advancements.thebetweenlands.craftsman.feel_it_coming.title=”In the Air Tonight”
 advancements.thebetweenlands.craftsman.feel_it_coming.description=Prédire la météo grave à un Carillon à Vent
+advancements.thebetweenlands.craftsman.teach_a_man_to_fish.title=Apprenez à un Homme à Pêcher
+advancements.thebetweenlands.craftsman.teach_a_man_to_fish.description=Fabriquer une Canne à Pêche en Harbre
+advancements.thebetweenlands.craftsman.fishy_business.title=Affaire Ecailleuse
+advancements.thebetweenlands.craftsman.fishy_business.description=Attraper une Unidée avec une Canne à Pêche en Harbre
+advancements.thebetweenlands.craftsman.jar_o_worms.title=Un Bocal de Vers
+advancements.thebetweenlands.craftsman.jar_o_worms.description=Accrocher un Appât sur votre Canne à Pêche grâce à une Jarre en Verre de Limon pleine de Vermisseaux
+advancements.thebetweenlands.craftsman.net_fish_and_chill.title=Net Fish et Chill
+advancements.thebetweenlands.craftsman.net_fish_and_chill.description=S'assoir et se détendre sur un Coffre à Pêche
+advancements.thebetweenlands.craftsman.fish_guts.title=Entrailles de Poisson
+advancements.thebetweenlands.craftsman.fish_guts.description=Frabriquer et utiliser une Table à Découpe
+advancements.thebetweenlands.craftsman.authentic_flavor.title=Saveur Authentique
+advancements.thebetweenlands.craftsman.authentic_flavor.description=Utiliser un Fumoir pour fumer de la nourriture
+advancements.thebetweenlands.craftsman.its_a_trap.title=C'est Un Piège!
+advancements.thebetweenlands.craftsman.its_a_trap.description=Obtenir un Pot pour Crabe et attirer un Crab dedans
+advancements.thebetweenlands.craftsman.natures_purifier.title=Purificateur Naturel
+advancements.thebetweenlands.craftsman.natures_purifier.description=Utiliser un Filtre à Pot pour Craber pour filtrer un objet
+advancements.thebetweenlands.craftsman.aquaman.title=Aquaman
+advancements.thebetweenlands.craftsman.aquaman.description=Obtenir la tenue complète d'Armure Amphibie
 
 # Mineur
 advancements.thebetweenlands.miner.root.title=Mineur
@@ -2134,6 +2189,7 @@ config.thebetweenlands.debug_mode=Debug mode
 config.thebetweenlands.debug_model_loader=Model loader debug
 config.thebetweenlands.debug_recipe_overrides=Recipe overrides debug
 config.thebetweenlands.dump_packed_textures=Dump packed textures
+config.thebetweenlands.biome_list=Biome list
 
 # Damage sources
 death.attack.bl.shockwave=%1$s a été tué.e par une onde sismique
@@ -2293,6 +2349,8 @@ blsubtitles.entity.greebling.giggle=Greblin qui ricane
 blsubtitles.entity.greebling.whistle=Greblin qui sifflote
 blsubtitles.entity.greebling.fall=Greblin qui tombe
 blsubtitles.entity.greebling.vanish=Greblin qui disparaît
+blsubtitles.entity.greebling.hum=Greblin qui fredonne
+blsubtitles.entity.greebling.coracle_sink=Coracle qui coule
 blsubtitles.entity.chiromaw_matriarch.barbs=Chiroptère Matriarche qui expulse des barbillons
 blsubtitles.entity.chiromaw_matriarch.living=Chiroptère Matriarche qui cri
 blsubtitles.entity.chiromaw_matriarch.hurt=Chiroptère Matriarche blessée
