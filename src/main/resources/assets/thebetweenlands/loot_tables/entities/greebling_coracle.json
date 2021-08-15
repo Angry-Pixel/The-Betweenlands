@@ -44,9 +44,10 @@
                "entryName": "anadia_normal",
                "weight": 2,
                "functions": [
-                    {
-                     "function":"set_nbt",
-                     "tag":"{Entity: {id: \"thebetweenlands:anadia\", fishColour:3}}"
+                  {
+                     "function": "thebetweenlands:set_anadia_properties",
+                     "randomize": true,
+                     "loot_fish": false
                   }
               ]
             },
@@ -56,11 +57,13 @@
                "entryName": "anadia_rotten",
                "weight": 1,
                "functions": [
-                    {
-                     "function":"set_nbt",
-                     "tag":"{Entity: {id: \"thebetweenlands:anadia\", fishColour:1, rottingTime:0}}"
+                  {
+                     "function": "thebetweenlands:set_anadia_properties",
+                     "randomize": true,
+                     "loot_fish": false,
+                     "rotten": true
                   }
-              ]
+               ]
             },
             {
                "type":"item",
@@ -68,11 +71,12 @@
                "entryName": "anadia_treasure",
                "weight": 1,
                "functions": [
-                    {
-                     "function":"set_nbt",
-                     "tag":"{Entity: {id: \"thebetweenlands:anadia\", fishColour:3, isTreasureFish:1, isTreasureUnlocked:1}}"
+                  {
+                     "function": "thebetweenlands:set_anadia_properties",
+                     "randomize": true,
+                     "loot_fish": true
                   }
-              ]
+               ]
             }
          ]
       },

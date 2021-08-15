@@ -48,9 +48,20 @@ public class ParticleBubbleBL extends ParticleBubble implements IParticleSpriteR
 		//nope.avi
     }
 	
-	public static final class Factory extends ParticleFactory<Factory, ParticleBubbleBL> {
-		public Factory() {
+	public static final class InfuserFactory extends ParticleFactory<InfuserFactory, ParticleBubbleBL> {
+		public InfuserFactory() {
 			super(ParticleBubbleBL.class, ParticleTextureStitcher.create(ParticleBubbleBL.class, new ResourceLocation("thebetweenlands:particle/bubble_infuser")));
+		}
+
+		@Override
+		public ParticleBubbleBL createParticle(ImmutableParticleArgs args) {
+			return new ParticleBubbleBL(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.scale);
+		}
+	}
+	
+	public static final class WaterFactory extends ParticleFactory<WaterFactory, ParticleBubbleBL> {
+		public WaterFactory() {
+			super(ParticleBubbleBL.class, ParticleTextureStitcher.create(ParticleBubbleBL.class, new ResourceLocation("thebetweenlands:particle/bubble")));
 		}
 
 		@Override

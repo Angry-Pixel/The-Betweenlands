@@ -458,7 +458,7 @@ public class ItemRegistry {
     public static final ItemMob SLUDGE_WORM_EGG_SAC = new ItemMob(16, EntityTinyWormEggSac.class, null);
     public static final ItemMob TINY_SLUDGE_WORM = new ItemMob(1, EntityTinySludgeWorm.class, null);
     public static final ItemMob TINY_SLUDGE_WORM_HELPER = new ItemMob(1, EntityTinySludgeWormHelper.class, null);
-    public static final ItemMob ANADIA = new ItemMobAnadia(1, EntityAnadia.class, null);
+    public static final ItemMobAnadia ANADIA = new ItemMobAnadia(1, EntityAnadia.class, null);
     public static final ItemMob SILT_CRAB = new ItemMob(1, EntitySiltCrab.class, null);
     public static final ItemMob BUBBLER_CRAB = new ItemMob(1, EntityBubblerCrab.class, null);
     public static final ItemMob FRESHWATER_URCHIN = new ItemFreshwaterUrchin(1, EntityFreshwaterUrchin.class, null);

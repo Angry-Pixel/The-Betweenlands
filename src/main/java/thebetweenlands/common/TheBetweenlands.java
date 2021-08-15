@@ -42,6 +42,7 @@ import thebetweenlands.common.entity.EntityVolarkite;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.entity.mobs.EntityChiromawMatriarch;
 import thebetweenlands.common.entity.mobs.EntitySludgeMenace;
+import thebetweenlands.common.entity.mobs.EntitySwarm;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.handler.AdvancementHandler;
 import thebetweenlands.common.handler.AnvilEventHandler;
@@ -282,5 +283,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(BlessingEntityCapability.class);
 		MinecraftForge.EVENT_BUS.register(SwarmedCapability.class);
 		MinecraftForge.EVENT_BUS.register(RotSmellEntityCapability.class);
+		MinecraftForge.EVENT_BUS.register(EntitySwarm.class);
 	}
 }
