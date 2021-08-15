@@ -158,29 +158,33 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	@Override
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
     	if(!getEntityWorld().isRemote) {
-	        setHeadType((byte)rand.nextInt(3));
-	        setBodyType((byte)rand.nextInt(3));
-	        setTailType((byte)rand.nextInt(3));
-	        setFishSize(Math.round(Math.max(0.125F, rand.nextFloat()) * 16F) / 16F);
-	        if(getEntityWorld().getBiome(getPosition()) == BiomeRegistry.DEEP_WATERS)
-	        	setFishColour((byte)(3)); // testing colours - set this based on biome spawned in/other possible things
-	        else
-	        	setFishColour((byte)(2));
-	        setHeadItem(getPartFromLootTable(LootTableRegistry.ANADIA_HEAD));
-	        setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_BODY));
-	        setTailItem(getPartFromLootTable(LootTableRegistry.ANADIA_TAIL));
-	        if(getStaminaMods() >= 5F && getFishSize() >= 0.875F)
-	        	setIsTreasureFish(true);
+    		this.randomizeAnadiaProperties();
 	        randomiseObstructionOrder();
     	}
         return super.onInitialSpawn(difficulty, livingdata);
+    }
+    
+    public void randomizeAnadiaProperties() {
+    	setHeadType((byte)rand.nextInt(3));
+    	setBodyType((byte)rand.nextInt(3));
+    	setTailType((byte)rand.nextInt(3));
+    	setFishSize(Math.round(Math.max(0.125F, rand.nextFloat()) * 16F) / 16F);
+    	if(getEntityWorld().getBiome(getPosition()) == BiomeRegistry.DEEP_WATERS)
+    		setFishColour((byte)(3)); // testing colours - set this based on biome spawned in/other possible things
+    	else
+    		setFishColour((byte)(2));
+    	setHeadItem(getPartFromLootTable(LootTableRegistry.ANADIA_HEAD));
+    	setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_BODY));
+    	setTailItem(getPartFromLootTable(LootTableRegistry.ANADIA_TAIL));
+    	if(getStaminaMods() >= 5F && getFishSize() >= 0.875F)
+    		setIsTreasureFish(true);
     }
 
     public float getFishSize() {
         return dataManager.get(FISH_SIZE);
     }
 
-    private void setFishSize(float size) {
+    public void setFishSize(float size) {
         dataManager.set(FISH_SIZE, size);
         setSize(getFishSize(), getFishSize() * 0.75F);
         setPosition(posX, posY, posZ);
@@ -189,12 +193,17 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         setHealth(getMaxHealth());
     }
 
-    public void setAsLootFish() {
-    	setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_TREASURE));
-    	setTreasureUnlocked(true);
+    public void setAsLootFish(boolean lootFish) {
+    	if(lootFish) {
+	    	setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_TREASURE));
+	    	setTreasureUnlocked(true);
+    	} else {
+    		setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_BODY));
+        	setTreasureUnlocked(false);
+    	}
     }
 
-	private void setHeadType(byte type) {
+	public void setHeadType(byte type) {
         dataManager.set(HEAD_TYPE, type);
     }
 
@@ -202,7 +211,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         return dataManager.get(HEAD_TYPE);
     }
 
-    private void setBodyType(byte type) {
+    public void setBodyType(byte type) {
         dataManager.set(BODY_TYPE, type);
     }
 
@@ -210,7 +219,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
         return dataManager.get(BODY_TYPE);
     }
 
-    private void setTailType(byte type) {
+    public void setTailType(byte type) {
         dataManager.set(TAIL_TYPE, type);
     }
 

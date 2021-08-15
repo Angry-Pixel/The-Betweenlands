@@ -33,14 +33,15 @@ import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class ItemMobAnadia extends ItemMob implements ITintedItem {
 
-	public int decayTime = 24000; // 20 minutes
-
-	@SuppressWarnings("unchecked")
 	public <T extends Entity> ItemMobAnadia(int maxStackSize, @Nullable Class<T> defaultMob, @Nullable Consumer<T> defaultMobSetter) {
 		super(1, defaultMob, defaultMobSetter);
 		this.setCreativeTab(BLCreativeTabs.ITEMS);
 	}
 
+	public int getDecayTime(ItemStack stack) {
+		return 24000; // 20 minutes
+	}
+	
 	@Override
     public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		if (!attacker.getEntityWorld().isRemote) {
@@ -82,6 +83,18 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 		return EnumActionResult.SUCCESS;
 	}
 	
+	public void setRotten(World world, ItemStack stack, boolean rotten) {
+		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
+			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 0) {
+				if(rotten) {
+					stack.getTagCompound().getCompoundTag("Entity").setLong("rottingTime", world.getTotalWorldTime());
+				} else {
+					stack.getTagCompound().getCompoundTag("Entity").setLong("rottingTime", world.getTotalWorldTime() + this.getDecayTime(stack));
+				}
+			}
+		}
+	}
+	
 	public boolean isRotten(World world, ItemStack stack) {
 		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
 			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") != 0)
@@ -120,7 +133,7 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 	public void onCapturedByPlayer(EntityPlayer player, EnumHand hand, ItemStack stack) {
 		if(!player.getEntityWorld().isRemote) {
 			if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
-				stack.getTagCompound().getCompoundTag("Entity").setLong("rottingTime", player.getEntityWorld().getTotalWorldTime() + decayTime);
+				stack.getTagCompound().getCompoundTag("Entity").setLong("rottingTime", player.getEntityWorld().getTotalWorldTime() + this.getDecayTime(stack));
 			Entity entity = this.createCapturedEntity(player.getEntityWorld(), 0, 0, 0, stack);
 			if (entity instanceof EntityLivingBase) {
 				EntityLivingBase living = (EntityLivingBase) entity;
