@@ -1,5 +1,7 @@
 package thebetweenlands.common.entity.ai;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -80,8 +82,36 @@ public class EntityAIAttackOnCollide extends EntityAIBase {
 	 * @param target
 	 * @return
 	 */
+	public static boolean useStandardAttack(EntityLiving attacker, Entity target, @Nullable DamageSource damageSource) {
+		return useStandardAttack(attacker, target, true, damageSource);
+	}
+	
+	/**
+	 * See {@link #useStandardAttack(EntityLiving, Entity, float)}
+	 * @param attacker
+	 * @param target
+	 * @return
+	 */
 	public static boolean useStandardAttack(EntityLiving attacker, Entity target) {
-		return useStandardAttack(attacker, target, true);
+		return useStandardAttack(attacker, target, null);
+	}
+	
+	/**
+	 * See {@link #useStandardAttack(EntityLiving, Entity, float)}
+	 * @param attacker
+	 * @param target
+	 * @return
+	 */
+	public static boolean useStandardAttack(EntityLiving attacker, Entity target, boolean knockback, @Nullable DamageSource damageSource) {
+		float attackDamage;
+		
+		if(attacker.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE) != null) {
+			attackDamage = (float)attacker.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+		} else {
+			attackDamage = 2.0F;
+		}
+		
+		return useStandardAttack(attacker, target, attackDamage, knockback, damageSource);
 	}
 	
 	/**
@@ -91,15 +121,7 @@ public class EntityAIAttackOnCollide extends EntityAIBase {
 	 * @return
 	 */
 	public static boolean useStandardAttack(EntityLiving attacker, Entity target, boolean knockback) {
-		float attackDamage;
-		
-		if(attacker.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE) != null) {
-			attackDamage = (float)attacker.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
-		} else {
-			attackDamage = 2.0F;
-		}
-		
-		return useStandardAttack(attacker, target, attackDamage, knockback);
+		return useStandardAttack(attacker, target, knockback, null);
 	}
 	
 	/**
@@ -108,7 +130,7 @@ public class EntityAIAttackOnCollide extends EntityAIBase {
 	 * @param target
 	 * @return
 	 */
-	public static boolean useStandardAttack(EntityLiving attacker, Entity target, float attackDamage, boolean knockback) {
+	public static boolean useStandardAttack(EntityLiving attacker, Entity target, float attackDamage, boolean knockback, @Nullable DamageSource damageSource) {
 		int knockBackModifier = 0;
 
 		if (target instanceof EntityLivingBase) {
@@ -120,7 +142,7 @@ public class EntityAIAttackOnCollide extends EntityAIBase {
 		double prevMotionY = target.motionY;
 		double prevMotionZ = target.motionZ;
 		
-		boolean attacked = target.attackEntityFrom(DamageSource.causeMobDamage(attacker), attackDamage);
+		boolean attacked = target.attackEntityFrom(damageSource != null ? damageSource : DamageSource.causeMobDamage(attacker), attackDamage);
 
 		if(!knockback) {
 			target.motionX = prevMotionX;
@@ -158,5 +180,15 @@ public class EntityAIAttackOnCollide extends EntityAIBase {
 		}
 
 		return attacked;
+	}
+	
+	/**
+	 * Attacks the target with the standard attack implementation of {@link EntityMob#attackEntityAsMob(Entity)}
+	 * @param attacker
+	 * @param target
+	 * @return
+	 */
+	public static boolean useStandardAttack(EntityLiving attacker, Entity target, float attackDamage, boolean knockback) {
+		return useStandardAttack(attacker, target, attackDamage, knockback, null);
 	}
 }
