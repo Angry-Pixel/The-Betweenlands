@@ -7,12 +7,15 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMoveToBlock;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityJumpHelper;
+import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
@@ -48,6 +51,14 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 	public float animTime, prevAnimTime;
 	public int flapTicks;
 	public float flapSpeed = 1f;
+    private int jumpTicks;
+    private int jumpDuration;
+	
+	private EntityMoveHelper moveHelperAir;
+	private EntityMoveHelper moveHelperLand;
+	private PathNavigateFlyingBL pathNavigatorAir;
+	private PathNavigateGround pathNavigatorGround;
+	
 
 	public final ControlledAnimation landingTimer = new ControlledAnimation(10); // base pose
 	public final ControlledAnimation divingTimer = new ControlledAnimation(10); // diving pose
@@ -56,22 +67,37 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 	
 	public EntityPuffin(World world) {
 		super(world);
-		setSize(0.5F, 0.9F);
+		setSize(0.75F, 0.9F);
 		setIsHovering(false);
+		stepHeight= 1F;
 
-		moveHelper = new FlightMoveHelper(this);
+		moveHelperAir = new FlightMoveHelper(this);
+		moveHelperLand = new PuffinMoveHelper(this);
+		jumpHelper = new PuffinJumpHelper(this);
+		
+		pathNavigatorGround = new PathNavigateGround(this, world);
+		pathNavigatorGround.setCanSwim(true);
+		
+		pathNavigatorAir = new PathNavigateFlyingBL(this, world, 0);
 		//setPathPriority(PathNodeType.WATER, -8F);
 		//setPathPriority(PathNodeType.BLOCKED, -8.0F);
 		setPathPriority(PathNodeType.OPEN, 8.0F);
 		//setPathPriority(PathNodeType.FENCE, -8.0F);
 	}
+	
+    public void startJumping(){
+        setJumping(true);
+        jumpDuration = 10;
+        jumpTicks = 0;
+    }
 
 	@Override
 	protected void initEntityAI() {
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityPuffin.EntityAIPuffinLandRandomly(this, 1.5D));
-		tasks.addTask(3, new EntityAIAttackMelee(this, 1.0D, true));
-		tasks.addTask(2, new EntityPuffin.EntityAIFlyingWanderPuffin(this, 1D, 3));
+		tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, true));
+		tasks.addTask(3, new EntityPuffin.EntityAIFlyingWanderPuffin(this, 1D, 10));
+		tasks.addTask(4, new EntityAILookIdle(this));
 	}
 
 	@Override
@@ -94,26 +120,30 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
 		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.095D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.1D);
 	}
-	
-	@Override
-	protected PathNavigate createNavigator(World world) {
-		return new PathNavigateFlyingBL(this, world, 1);
-	}
+
+    public void setMovementSpeed(double newSpeed) {
+        getNavigator().setSpeed(newSpeed);
+        moveHelper.setMoveTo(moveHelper.getX(), moveHelper.getY(), moveHelper.getZ(), newSpeed);
+    }
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
 
+		updateMovementAndPathfinding();
+
 		if (!getEntityWorld().isRemote) {
 			
 			if(getIsFlying()) {
+				isAirBorne = true;
+				onGround = false;
 				if(getFlyingTimer() < MAX_FLIGHT_TIME)
 					setFlyingTimer(getFlyingTimer() + 1);
 				if(getFlyingTimer() >= MAX_FLIGHT_TIME) {
-					if(!getShouldLand()){
-						setShouldLand(true);
+					if(!getCanLand()){
+						setCanLand(true);
 						setRestingTimer(0);
 						//System.out.println("SHOULD FLY ABOUT NOW!");
 					}
@@ -121,11 +151,13 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 			}
 			
 			if(!getIsFlying()) {
+				isAirBorne = false;
+				onGround = true;
 				if(getRestingTimer() < MAX_RESTING_TIME)
 					setRestingTimer(getRestingTimer() + 1);
 				if(getRestingTimer() >= MAX_RESTING_TIME) {
-					if(getShouldLand()) {
-						setShouldLand(false);
+					if(getCanLand()) {
+						setCanLand(false);
 						setFlyingTimer(0);
 						//System.out.println("SHOULD FUCKING LAND!");
 					}
@@ -153,8 +185,8 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 		*/	
 		}
 		
-		if (getIsLanding() && !onGround) {
-			motionY -= 0.05D;
+		if (getIsLanding() && getEntityWorld().isAirBlock(getPosition())) {
+			motionY -= 0.04D;
 		}
 
 	//	if (isJumping && isInWater()) {
@@ -182,10 +214,10 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 			landingTimer.updateTimer();
 			divingTimer.updateTimer();
 
-			if (this.getIsDiving()) {
+			if (getIsDiving()) {
 				divingTimer.increaseTimer();
 				landingTimer.decreaseTimer();
-			} else if (!this.getIsFlying()) {
+			} else if (!getIsFlying()) {
 				landingTimer.increaseTimer();
 				divingTimer.decreaseTimer();
 			} else {
@@ -194,22 +226,42 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 			}
 		}
 	}
+	
+	protected void updateMovementAndPathfinding() {
+		if (getIsFlying())
+			moveHelper = moveHelperAir;
+		else
+			moveHelper = moveHelperLand;
+
+		if (getIsFlying())
+			navigator = pathNavigatorAir;
+		else
+			navigator = pathNavigatorGround;
+	}
 
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		if (world.isRemote) {
-			this.flapTicks++;
+			flapTicks++;
 
 			if (!isSilent() && getIsFlying()) {
-				float flapAngle1 = MathHelper.cos(this.flapTicks * this.flapSpeed);
-				float flapAngle2 = MathHelper.cos((this.flapTicks + 1) * this.flapSpeed);
+				float flapAngle1 = MathHelper.cos(flapTicks * flapSpeed);
+				float flapAngle2 = MathHelper.cos((flapTicks + 1) * flapSpeed);
 				if (flapAngle1 <= 0.3f && flapAngle2 > 0.3f) {
 					world.playSound(posX, posY, posZ, getFlySound(), getSoundCategory(), getIsLanding() ? 0.25F : 0.5F, getIsLanding() ? 2.5F + rand.nextFloat() * 0.3F : 1.8F + rand.nextFloat() * 0.3F, false);
 				}
 			}
-
+			
+			if (jumpTicks != jumpDuration) {
+				++jumpTicks;
+			} else if (jumpDuration != 0) {
+				jumpTicks = 0;
+				jumpDuration = 0;
+				setJumping(false);
+			}
 		}
+
 	}
 
 	@Override
@@ -226,11 +278,11 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 		dataManager.set(SHOULD_TAKE_OFF, take_off);
 	}
 	
-	public boolean getShouldLand() {
+	public boolean getCanLand() {
 		return dataManager.get(SHOULD_LAND);
 	}
 
-	private void setShouldLand(boolean land) {
+	private void setCanLand(boolean land) {
 		dataManager.set(SHOULD_LAND, land);
 	}
 
@@ -335,7 +387,8 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 
 		public EntityAIFlyingWanderPuffin(EntityPuffin puffinIn, double speedIn, int chance) {
 			super(puffinIn, speedIn, chance);
-			this.puffin = puffinIn;
+			puffin = puffinIn;
+			setMutexBits(3);
 		}
 
 		@Override
@@ -345,7 +398,7 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 
 		@Override
 		public boolean shouldContinueExecuting() {
-			return !puffin.getShouldLand() && super.shouldContinueExecuting();
+			return !puffin.getCanLand() && super.shouldContinueExecuting();
 		}
 
 		@Override
@@ -369,12 +422,13 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 
 		public EntityAIPuffinLandRandomly(EntityPuffin puffinIn, double speed) {
 			super(puffinIn, speed, 16);
-			this.puffin = puffinIn;
+			puffin = puffinIn;
+			setMutexBits(3);
 		}
 
 		@Override
 		public boolean shouldExecute() {
-			return puffin.getShouldLand() && super.shouldExecute();
+			return puffin.getCanLand() && super.shouldExecute();
 		}
 
 		@Override
@@ -384,7 +438,7 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 
 		@Override
 		public boolean shouldContinueExecuting() {
-			return puffin.getShouldLand() && super.shouldContinueExecuting();
+			return puffin.getCanLand() && super.shouldContinueExecuting();
 		}
 
 		@Override
@@ -398,8 +452,9 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 			if (getIsAboveDestination()) {
 				if (puffin.getIsFlying())
 					puffin.setIsFlying(false);
-				if (!puffin.getIsLanding())
+				if (!puffin.getIsLanding()) {
 					puffin.setIsLanding(true);
+				}
 			}
 		}
 
@@ -417,4 +472,60 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 			}
 		}
 	}
+	
+	public class PuffinJumpHelper extends EntityJumpHelper {
+		private final EntityPuffin puffin;
+		private boolean canJump;
+
+		public PuffinJumpHelper(EntityPuffin puffin) {
+			super(puffin);
+			this.puffin = puffin;
+		}
+
+		public boolean getIsJumping() {
+			return isJumping;
+		}
+
+		public boolean canJump() {
+			return canJump;
+		}
+
+		public void setCanJump(boolean canJumpIn) {
+			canJump = canJumpIn;
+		}
+
+		public void doJump() {
+			if (isJumping) {
+				puffin.startJumping();
+				isJumping = false;
+			}
+		}
+    }
+
+	static class PuffinMoveHelper extends EntityMoveHelper {
+		private final EntityPuffin puffin;
+		private double nextJumpSpeed;
+
+		public PuffinMoveHelper(EntityPuffin puffin) {
+			super(puffin);
+			this.puffin = puffin;
+		}
+
+		public void onUpdateMoveHelper() {
+			if (puffin.onGround && !puffin.isJumping && !((PuffinJumpHelper) puffin.jumpHelper).getIsJumping())
+				puffin.setMovementSpeed(0.0D);
+			else if (isUpdating()) 
+				puffin.setMovementSpeed(nextJumpSpeed);
+			super.onUpdateMoveHelper();
+		}
+
+		public void setMoveTo(double x, double y, double z, double speedIn) {
+			if (puffin.isInWater())
+				speedIn = 1.5D;
+			super.setMoveTo(x, y, z, speedIn);
+			if (speedIn > 0.0D)
+				nextJumpSpeed = speedIn;
+		}
+	}
+
 }
