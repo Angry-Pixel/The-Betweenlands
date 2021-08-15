@@ -103,15 +103,16 @@ public enum BLParticles {
 			.getBaseArgsBuilder()
 			.withColor(0.306F, 0.576F, 0.192F, 1.0F)
 			.buildBaseArgs()),
-	BUBBLE_PURIFIER(new ParticleBubbleBL.Factory()
+	BUBBLE_WATER(new ParticleBubbleBL.WaterFactory()),
+	BUBBLE_PURIFIER(new ParticleBubbleBL.InfuserFactory()
 			.getBaseArgsBuilder()
 			.withColor(0.306F, 0.576F, 0.192F, 1.0F)
 			.buildBaseArgs()),
-	BUBBLE_INFUSION(new ParticleBubbleBL.Factory()
+	BUBBLE_INFUSION(new ParticleBubbleBL.InfuserFactory()
 			.getBaseArgsBuilder()
 			.withColor(0.5F, 0F, 0.125F, 1.0F)
 			.buildBaseArgs()),
-	BUBBLE_TAR(new ParticleBubbleBL.Factory()
+	BUBBLE_TAR(new ParticleBubbleBL.InfuserFactory()
 			.getBaseArgsBuilder()
 			.withColor(0, 0, 0, 1.0F)
 			.buildBaseArgs()),

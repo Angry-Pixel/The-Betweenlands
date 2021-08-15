@@ -35,6 +35,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.fml.relauncher.Side;
@@ -53,12 +54,14 @@ import thebetweenlands.util.NonNullDelegateList;
 public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL {
 	protected static final byte EVENT_DISAPPEAR = 41;
 	protected static final byte EVENT_SPOUT = 42;
+	
 	private static final DataParameter<Integer> SINKING_TICKS = EntityDataManager.createKey(EntityGreeblingCoracle.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> LOOT_CLICKS = EntityDataManager.createKey(EntityGreeblingCoracle.class, DataSerializers.VARINT);
-	EntityAvoidEntityFlatPath avoidPlayer;
-	AIWaterWander waterWander;
-	EntityAILookIdle lookIdle;
-	boolean hasSetAIForEmptyBoat = false;
+	
+	private EntityAvoidEntityFlatPath<EntityPlayer> avoidPlayer;
+	private AIWaterWander waterWander;
+	private EntityAILookIdle lookIdle;
+	private boolean hasSetAIForEmptyBoat = false;
 	private boolean looted = false;
 	private NonNullList<ItemStack> loot = NonNullList.create();
 	private int shutUpFFSTime;
@@ -243,45 +246,36 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 			doSpoutEffects();
 	}
 
+	@SideOnly(Side.CLIENT)
 	private void doSpoutEffects() {
 		if(getEntityWorld().isRemote) {
 			int count = getSinkingTicks() <= 240 ? 40 : 10;
-			float r = 255, g = 255, b = 255;
-			float base = 1F / 255F;
-			int blockX = MathHelper.floor(posX), blockZ = MathHelper.floor(posZ);
-			int blockY = MathHelper.floor(getEntityBoundingBox().minY);
-			IBlockState blockState = getEntityWorld().getBlockState(new BlockPos(blockX, blockY, blockZ));
-			if (blockState.getMaterial().isLiquid()) {
-				if (blockState.getBlock() == BlockRegistry.SWAMP_WATER) {
-					r = 147;
-					g = 132;
-					b = 83;
-				} else if (blockState.getBlock() == Blocks.WATER || blockState.getBlock() == Blocks.FLOWING_WATER) {
-					r = 49;
-					g = 70;
-					b = 245;
-				} else if (blockState.getBlock() == Blocks.LAVA || blockState.getBlock() == Blocks.FLOWING_LAVA) {
-					r = 207;
-					g = 85;
-					b = 16;
-				}
-			}
 			float x = (float) (posX);
 			float y = (float) (posY + 0.25F);
 			float z = (float) (posZ);
+			
 			while (count-- > 0) {
 				float dx = getEntityWorld().rand.nextFloat() * 0.25F - 0.1255f;
 				float dy = getEntityWorld().rand.nextFloat() * 0.25F - 0.1255f;
 				float dz = getEntityWorld().rand.nextFloat() * 0.25F - 0.1255f;
 				float mag = 0.08F + getEntityWorld().rand.nextFloat() * 0.07F;
-				if(getSinkingTicks() <= 240)
-					BLParticles.RAIN.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag)).setRBGColorF(base * r, base * g, base * b);
-				else if(getSinkingTicks() > 240 && getSinkingTicks() <= 400 && getSinkingTicks()%5 == 0)
-					BLParticles.BUBBLE_PURIFIER.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
+				
+				int waterColor = BiomeColorHelper.getWaterColorAtPos(this.world, new BlockPos(this));
+
+				float r = (waterColor >> 16 & 255) / 255.0f;
+				float g = (waterColor >> 8 & 255) / 255.0f;
+				float b = (waterColor & 255) / 255.0f;
+				
+				if(getSinkingTicks() <= 240) {
+					BLParticles.RAIN.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag).withColor(r, g, b + 0.075f, 1.0f));
+				} else if(getSinkingTicks() > 240 && getSinkingTicks() <= 400 && getSinkingTicks()%5 == 0) {
+					BLParticles.BUBBLE_WATER.spawn(getEntityWorld(), x, y, z, ParticleFactory.ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag).withColor(r + 0.05f, g + 0.15f, b + 0.05f, 1.0f));
+				}
 			}
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	private void doLeafEffects() {
 		if(getEntityWorld().isRemote) {
 			int leafCount = 40;
