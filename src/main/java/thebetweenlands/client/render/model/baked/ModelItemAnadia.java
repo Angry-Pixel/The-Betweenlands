@@ -25,9 +25,9 @@ public class ModelItemAnadia extends ModelItemMultiPart {
 						EntityAnadia anadia = (EntityAnadia) itemEntity;
 
 						Map<String, String> mapping = new HashMap<>();
-						mapping.put("head", String.valueOf(anadia.getHeadType()));
-						mapping.put("body", String.valueOf(anadia.getBodyType()));
-						mapping.put("tail", String.valueOf(anadia.getTailType()));
+						mapping.put("head", String.valueOf(anadia.getHeadType().ordinal()));
+						mapping.put("body", String.valueOf(anadia.getBodyType().ordinal()));
+						mapping.put("tail", String.valueOf(anadia.getTailType().ordinal()));
 						return mapping;
 					}
 				}
