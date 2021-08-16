@@ -52,10 +52,10 @@ public class GuiFishTrimmingTable extends GuiContainer {
 		int l = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
 
-		if (fish_trimming_table.hasAnadia() ||fish_trimming_table.hasSiltCrab() ||fish_trimming_table.hasBubblerCrab()) { //test
-			mc.getRenderItem().renderItemIntoGUI(fish_trimming_table.getSlotresult(1), guiLeft + 44, guiTop + 77);
-			mc.getRenderItem().renderItemIntoGUI(fish_trimming_table.getSlotresult(2), guiLeft + 80, guiTop + 77);
-			mc.getRenderItem().renderItemIntoGUI(fish_trimming_table.getSlotresult(3), guiLeft + 116, guiTop + 77);
+		if (fish_trimming_table.hasAnadia() || fish_trimming_table.hasSiltCrab() || fish_trimming_table.hasBubblerCrab()) { //test
+			mc.getRenderItem().renderItemIntoGUI(fish_trimming_table.getSlotResult(1, 0), guiLeft + 44, guiTop + 77);
+			mc.getRenderItem().renderItemIntoGUI(fish_trimming_table.getSlotResult(2, 0), guiLeft + 80, guiTop + 77);
+			mc.getRenderItem().renderItemIntoGUI(fish_trimming_table.getSlotResult(3, 0), guiLeft + 116, guiTop + 77);
 
 			GlStateManager.depthFunc(516);
 			drawRect(guiLeft + 44, guiTop + 77, guiLeft + 60, guiTop + 93, color.getRGB());
@@ -63,9 +63,9 @@ public class GuiFishTrimmingTable extends GuiContainer {
 			drawRect(guiLeft + 116, guiTop + 77, guiLeft + 132, guiTop + 93, color.getRGB());
 			GlStateManager.depthFunc(515);
 
-			mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, fish_trimming_table.getSlotresult(1), guiLeft + 44, guiTop + 77, null);
-			mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, fish_trimming_table.getSlotresult(2), guiLeft + 80, guiTop + 77, null);
-			mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, fish_trimming_table.getSlotresult(3), guiLeft + 116, guiTop + 77, null);
+			mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, fish_trimming_table.getSlotResult(1, 0), guiLeft + 44, guiTop + 77, null);
+			mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, fish_trimming_table.getSlotResult(2, 0), guiLeft + 80, guiTop + 77, null);
+			mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, fish_trimming_table.getSlotResult(3, 0), guiLeft + 116, guiTop + 77, null);
 		}
 	}
 
@@ -80,6 +80,6 @@ public class GuiFishTrimmingTable extends GuiContainer {
 	protected void actionPerformed(GuiButton button) throws IOException {
 		super.actionPerformed(button);
 		if(button.id == 0)
-			TheBetweenlands.networkWrapper.sendToServer(new MessageButcherFish(mc.player, fish_trimming_table.getPos()));
+			TheBetweenlands.networkWrapper.sendToServer(new MessageButcherFish());
 	}
 }

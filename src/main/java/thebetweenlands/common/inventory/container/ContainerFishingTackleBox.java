@@ -9,6 +9,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import thebetweenlands.common.inventory.slot.SlotExclusion;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityFishingTackleBox;
@@ -20,9 +21,12 @@ public class ContainerFishingTackleBox extends Container {
 	private final EntityPlayer player;
 	public ItemStack fishingTackleBoxStack = new ItemStack(BlockRegistry.FISHING_TACKLE_BOX);
 
+	private final TileEntityFishingTackleBox tile;
+	
 	public ContainerFishingTackleBox(EntityPlayer player, TileEntityFishingTackleBox tile) {
 		InventoryPlayer playerInventory = player.inventory;
 		this.player = player;
+		this.tile = tile;
 
 		addSlotToContainer(new SlotCrafting(playerInventory.player, craftMatrix, craftResult, 0, 152, 46));
 
@@ -56,9 +60,14 @@ public class ContainerFishingTackleBox extends Container {
     }
 
     @Override
-    public boolean canInteractWith(EntityPlayer playerIn){
-        return true;
-    }
+	public boolean canInteractWith(EntityPlayer playerIn) {
+		BlockPos pos = this.tile.getPos();
+		if(playerIn.world.getTileEntity(pos) != this.tile) {
+			return false;
+		} else {
+			return playerIn.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
+		}
+	}
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {

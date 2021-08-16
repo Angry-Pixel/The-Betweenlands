@@ -116,11 +116,11 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, IS
 		return tile != null && (tile.hasSiltCrab() || tile.hasBubblerCrab());
 	}
     
-    public ItemStack getRecipeOutput(ItemStack input) {
+    public ItemStack getRecipeOutput(ItemStack input, boolean checkForCrab) {
     	TileEntityCrabPot tile = (TileEntityCrabPot) world.getTileEntity(pos.up());
-    	if(tile != null && tile.hasSiltCrab())
+    	if(!checkForCrab || (tile != null && tile.hasSiltCrab()))
     		return CrabPotFilterRecipeSilt.getRecipeOutput(input);
-    	if(tile != null && tile.hasBubblerCrab())
+    	if(!checkForCrab || (tile != null && tile.hasBubblerCrab()))
     		return CrabPotFilterRecipeBubbler.getRecipeOutput(input);
 		return ItemStack.EMPTY;
     }
@@ -141,10 +141,10 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, IS
     }
 
 	private boolean canFilterSlots(int input, int output) {
-		if (!active || !hasBait() || getItems().get(input).isEmpty() || (!getItems().get(output).isEmpty() && getItems().get(output).getItem() != getRecipeOutput(getItems().get(input)).getItem()))
+		if (!active || !hasBait() || getItems().get(input).isEmpty() || (!getItems().get(output).isEmpty() && getItems().get(output).getItem() != getRecipeOutput(getItems().get(input), true).getItem()))
 			return false;
 		else {
-			ItemStack result = getRecipeOutput(getItems().get(input));
+			ItemStack result = getRecipeOutput(getItems().get(input), true);
 			if (result.isEmpty())
 				return false;
 			else {
@@ -165,7 +165,7 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, IS
     public void filterItem(int input, int output) {	
 		if (canFilterSlots(input, output)) {
 			ItemStack itemstack = getItems().get(input);
-			ItemStack result = getRecipeOutput(itemstack);
+			ItemStack result = getRecipeOutput(itemstack, true);
 			ItemStack itemstack2 = getItems().get(output);
 			if(!itemstack2.isEmpty() && result.getItem() == itemstack2.getItem()) { // better matching needed here, wip
 				itemstack2.grow(1);

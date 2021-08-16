@@ -123,7 +123,6 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 		return entity;
 	}
 
-	@SuppressWarnings("unchecked")
 	public void lureCloseCrab() {
 		List<EntityLiving> list = getWorld().getEntitiesWithinAABB(EntityLiving.class, extendRangeBox());
 		for (Iterator<EntityLiving> iterator = list.iterator(); iterator.hasNext();) {

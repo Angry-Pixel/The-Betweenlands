@@ -234,7 +234,7 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
 	}
 	
 
-	public ItemStack getSlotresult(int slot) {
+	public ItemStack getSlotResult(int slot, int numItems) {
 		if (hasAnadia()) {
 			switch (slot) {
 			case 0:
@@ -246,7 +246,7 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
 			case 3:
 				return !isAnadiaRotten() ? ((EntityAnadia) getAndiaEntity()).getTailItem() : new ItemStack(ItemRegistry.ROTTEN_FOOD); // possible alt loot table?
 			case 4:
-				return EnumItemMisc.ANADIA_REMAINS.create(3);
+				return EnumItemMisc.ANADIA_REMAINS.create(numItems);
 			}
 		}
 
