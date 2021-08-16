@@ -1,6 +1,8 @@
 package thebetweenlands.common.block.container;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -10,6 +12,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -30,7 +33,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -170,7 +172,7 @@ public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider
 				}
 				return true; //needed to prevent accidental worm spawning
 			} else if(player.isSneaking() && hand == EnumHand.MAIN_HAND) {
-				for(int i = 0; i < tile.getItems().size(); i++) {
+				for(int i = tile.getItems().size() - 1; i >= 0; i--) {
 					if(!tile.getItems().get(i).isEmpty()) {
 						if (!world.isRemote) {
 							ItemStack extracted = tile.getItems().get(i);
@@ -213,27 +215,40 @@ public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider
 
 	@Override
 	public ItemBlock getItemBlock() {
-		 ItemBlock SILT_GLASS_JAR_ITEM = new ItemBlock(BlockRegistry.SILT_GLASS_JAR) {
+		 ItemBlock item = new ItemBlock(BlockRegistry.SILT_GLASS_JAR) {
 			@Override
 			@SideOnly(Side.CLIENT)
 			public void addInformation(ItemStack stack, @Nullable World world, List<String> list, ITooltipFlag flag) {
-				list.addAll(ItemTooltipHandler.splitTooltip(I18n.translateToLocalFormatted("tooltip.bl.silt_glass_jar_item"), 0));
+				list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.silt_glass_jar_item"), 0));
 				if (stack.hasTagCompound() && stack.getTagCompound().getTagList("Items", 10) != null) {
 					NBTTagList tags = stack.getTagCompound().getTagList("Items", 10);
 
+					LinkedHashMap<String, Integer> counts = new LinkedHashMap<>();
+					
 					for (int i = 0; i < tags.tagCount(); i++) {
 						NBTTagCompound data = tags.getCompoundTagAt(i);
 						int j = data.getByte("Slot") & 255;
 
 						if (i >= 0 && i <= 7) {
-							list.add("Slot " + (j + 1) + ": " + TextFormatting.GREEN + new ItemStack(data).getDisplayName() + " x " + new ItemStack(data).getCount());
-
+							ItemStack content = new ItemStack(data);
+							String name = content.getDisplayName();
+							if(!counts.containsKey(name)) {
+								counts.put(name, content.getCount());
+							} else {
+								counts.put(name, counts.get(name) + content.getCount());
+							}
 						} 
+					}
+					
+					int j = 0;
+					for(Entry<String, Integer> entry : counts.entrySet()) {
+						j++;
+						list.add(I18n.format("tooltip.bl.silt_glass_jar_content", j, entry.getKey(), entry.getValue()));
 					}
 				}
 			}
 		};
-		return SILT_GLASS_JAR_ITEM;
+		return item;
 	}
 
 }
