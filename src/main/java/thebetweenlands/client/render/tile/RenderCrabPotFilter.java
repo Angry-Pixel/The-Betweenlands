@@ -29,7 +29,7 @@ public class RenderCrabPotFilter extends TileEntitySpecialRenderer<TileEntityCra
 		GlStateManager.color(1, 1, 1, 1);
 		GlStateManager.translate(0, 1.5f, 0);
 		GlStateManager.rotate(getRotation(index), 0.0F, 1F, 0F);
-		GlStateManager.scale(1F, -1F, -1F);
+		GlStateManager.scale(1.005F, -1F, -1.005F);
 		bindTexture(TEXTURE);
 		MODEL.render();
 		GlStateManager.popMatrix();
