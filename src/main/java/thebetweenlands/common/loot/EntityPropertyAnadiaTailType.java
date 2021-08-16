@@ -23,7 +23,7 @@ public class EntityPropertyAnadiaTailType implements EntityProperty {
 
 	@Override
 	public boolean testProperty(Random random, Entity entity) {
-		return entity instanceof EntityAnadia && ((EntityAnadia)entity).getTailType() == this.type;
+		return entity instanceof EntityAnadia && ((EntityAnadia)entity).getTailType().ordinal() == this.type;
 	}
 
 	public static class Serializer extends EntityProperty.Serializer<EntityPropertyAnadiaTailType> {

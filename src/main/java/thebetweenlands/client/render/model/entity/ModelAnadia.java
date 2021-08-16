@@ -7,6 +7,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.MowzieModelBase;
 import thebetweenlands.client.render.model.MowzieModelRenderer;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
+import thebetweenlands.common.entity.mobs.EntityAnadia.EnumAnadiaBodyParts;
+import thebetweenlands.common.entity.mobs.EntityAnadia.EnumAnadiaHeadParts;
+import thebetweenlands.common.entity.mobs.EntityAnadia.EnumAnadiaTailParts;
 
 @SideOnly(Side.CLIENT)
 public class ModelAnadia extends MowzieModelBase {
@@ -596,29 +599,31 @@ public class ModelAnadia extends MowzieModelBase {
     	}
     	
     	switch (anadia.getHeadType()) {
-		case 0:
+    	default:
+		case HEAD_1:
 			walk(set1_jaw, (1.5F - anadia.getFishSize()) * 0.25F, 0.35F, false, 0.0F, 0F, frame, 1F - speed);
 			break;
-		case 1:
+		case HEAD_2:
 			walk(set2_head_jaw, (1.5F - anadia.getFishSize()) * 0.25F, 0.35F, false, 0.0F, 0F, frame, 1F - speed);
 			break;
-		case 2:
+		case HEAD_3:
 			walk(set3_head_jaw, (1.5F - anadia.getFishSize()) * 0.25F, 0.35F, false, 0.0F, 0F, frame, 1F - speed);
 			break;
 		}
     	
     	switch (anadia.getTailType()) {
-		case 0:
+    	default:
+		case TAIL_1:
 			swing(set1_tail_bass, 0.5F, 0.5F, false, 0.0F, 0F, frame, 0.0625F + speed);
 			swing(set1_tail_back, 0.5F, 0.5F, false, 1.0F, 0F, frame, 0.0625F + speed);
 			swing(set1_caudalfin1, 0.5F, 0.5F, false, 2.0F, 0F, frame, 0.0625F + speed);
 			break;
-		case 1:
+		case TAIL_2:
 			swing(set2_tail_bass, 0.75F, 0.35F, false, 0.0F, 0F, frame, 0.0625F + speed);
 			swing(set2_tail_back, 0.75F, 0.35F, false, 1.0F, 0F, frame, 0.0625F + speed);
 			swing(set2_caudalfin1, 0.75F, 0.35F, false, 2.0F, 0F, frame, 0.0625F + speed);
 			break;
-		case 2:
+		case TAIL_3:
 			swing(set3_tail_bass, 1F, 0.25F, false, 0.0F, 0F, frame, 0.0625F + speed);
 			swing(set3_tail_back, 1F, 0.25F, false, 1.0F, 0F, frame, 0.0625F + speed);
 			swing(set3_caudalfin1, 1F, 0.25F, false, 2.0F, 0F, frame, 0.0625F + speed);
@@ -626,7 +631,8 @@ public class ModelAnadia extends MowzieModelBase {
 		}
     	
     	switch (anadia.getBodyType()) {
-		case 0:
+    	default:
+		case BODY_1:
 			swing(set1_pelvicfin_left1, 0.25F, 0.5F, false, 2.0F, 0F, frame, 0.125F + speed);
 			swing(set1_pelvicfin_right1, 0.25F, 0.5F, true, 2.0F, 0F, frame, 0.125F + speed);
 			
@@ -643,7 +649,7 @@ public class ModelAnadia extends MowzieModelBase {
 			flap(set1_pectoralfin_right1a, 0.25F, 0.5F, true, 0.0F, 0F, frame, 0.125F + speed);
 
 			break;
-		case 1:
+		case BODY_2:
 			swing(set2_pelvicfin_left1, 0.5F, 0.5F, false, 2.0F, 0F, frame, 0.125F + speed);
 			swing(set2_pelvicfin_right1, 0.5F, 0.5F, true, 2.0F, 0F, frame, 0.125F + speed);
 			
@@ -660,7 +666,7 @@ public class ModelAnadia extends MowzieModelBase {
 			flap(set2_pectoralfin_right1a, 0.5F, 0.5F, true, 0.0F, 0F, frame, 0.125F + speed);
 
 			break;
-		case 2:
+		case BODY_3:
 			swing(set3_pelvicfin_left1, 0.5F, 0.5F, false, 2.0F, 0F, frame, 0.125F + speed);
 			swing(set3_pelvicfin_right1, 0.5F, 0.5F, true, 2.0F, 0F, frame, 0.125F + speed);
 			
@@ -684,43 +690,46 @@ public class ModelAnadia extends MowzieModelBase {
     	//super.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
     }
 
-	public void renderHead(byte headType, float scale) {
+	public void renderHead(EnumAnadiaHeadParts headType, float scale) {
 		switch (headType) {
-		case 0:
+		default:
+		case HEAD_1:
 			set1_head_main.render(scale);
 			break;
-		case 1:
+		case HEAD_2:
 			set2_head_main.render(scale);
 			break;
-		case 2:
+		case HEAD_3:
 			set3_head_main.render(scale);
 			break;
 		}
 	}
 
-	public void renderBody(byte bodyType, float scale) {
+	public void renderBody(EnumAnadiaBodyParts bodyType, float scale) {
 		switch (bodyType) {
-		case 0:
+		default:
+		case BODY_1:
 			set1_body_main.render(scale);
 			break;
-		case 1:
+		case BODY_2:
 			set2_body_main.render(scale);
 			break;
-		case 2:
+		case BODY_3:
 			set3_body_main.render(scale);
 			break;
 		}
 	}
 
-	public void renderTail(byte tailType, float scale) {
+	public void renderTail(EnumAnadiaTailParts tailType, float scale) {
 		switch (tailType) {
-		case 0:
+		default:
+		case TAIL_1:
 			set1_tail_main.render(scale);
 			break;
-		case 1:
+		case TAIL_2:
 			set2_tail_main.render(scale);
 			break;
-		case 2:
+		case TAIL_3:
 			set3_tail_main.render(scale);
 			break;
 		}

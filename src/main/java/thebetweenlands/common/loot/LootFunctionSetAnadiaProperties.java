@@ -22,6 +22,10 @@ import net.minecraft.world.storage.loot.RandomValueRange;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
+import thebetweenlands.common.entity.mobs.EntityAnadia.EnumAnadiaBodyParts;
+import thebetweenlands.common.entity.mobs.EntityAnadia.EnumAnadiaColor;
+import thebetweenlands.common.entity.mobs.EntityAnadia.EnumAnadiaHeadParts;
+import thebetweenlands.common.entity.mobs.EntityAnadia.EnumAnadiaTailParts;
 import thebetweenlands.common.item.misc.ItemMobAnadia;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -76,7 +80,7 @@ public class LootFunctionSetAnadiaProperties extends LootFunction {
 				}
 
 				if(this.fishColour.isPresent()) {
-					anadia.setFishColour((byte) this.fishColour.get().generateInt(rand));
+					anadia.setFishColour(EnumAnadiaColor.get(this.fishColour.get().generateInt(rand)));
 				}
 
 				if(this.fishSize.isPresent()) {
@@ -88,15 +92,15 @@ public class LootFunctionSetAnadiaProperties extends LootFunction {
 				}
 
 				if(this.headType.isPresent()) {
-					anadia.setHeadType((byte) this.headType.get().generateInt(rand));
+					anadia.setHeadType(EnumAnadiaHeadParts.get(this.headType.get().generateInt(rand)));
 				}
 
 				if(this.bodyType.isPresent()) {
-					anadia.setBodyType((byte) this.bodyType.get().generateInt(rand));
+					anadia.setBodyType(EnumAnadiaBodyParts.get(this.bodyType.get().generateInt(rand)));
 				}
 
 				if(this.tailType.isPresent()) {
-					anadia.setTailType((byte) this.tailType.get().generateInt(rand));
+					anadia.setTailType(EnumAnadiaTailParts.get(this.tailType.get().generateInt(rand)));
 				}
 
 				if(this.headItem.isPresent()) {

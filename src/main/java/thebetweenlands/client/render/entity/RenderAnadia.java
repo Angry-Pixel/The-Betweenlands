@@ -10,6 +10,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelAnadia;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
+import thebetweenlands.common.entity.mobs.EntityAnadia.EnumAnadiaColor;
 
 @SideOnly(Side.CLIENT)
 public class RenderAnadia extends RenderLiving<EntityAnadia> {
@@ -92,46 +93,49 @@ public class RenderAnadia extends RenderLiving<EntityAnadia> {
 			GlStateManager.enableCull();
 			
 			switch (entity.getHeadType()) {
-			case 0:
-				bindTexture(TEXTURE_1[entity.getFishColour()]);
+			default:
+			case HEAD_1:
+				bindTexture(getTextureForColor(TEXTURE_1, entity.getFishColour()));
 				ANADIA_MODEL.renderHead(entity.getHeadType(), 0.0625F);
 				break;
-			case 1:
-				bindTexture(TEXTURE_2[entity.getFishColour()]);
+			case HEAD_2:
+				bindTexture(getTextureForColor(TEXTURE_2, entity.getFishColour()));
 				ANADIA_MODEL.renderHead(entity.getHeadType(), 0.0625F);
 				break;
-			case 2:
-				bindTexture(TEXTURE_3[entity.getFishColour()]);
+			case HEAD_3:
+				bindTexture(getTextureForColor(TEXTURE_3, entity.getFishColour()));
 				ANADIA_MODEL.renderHead(entity.getHeadType(), 0.0625F);
 				break;
 			}
 
 			switch (entity.getBodyType()) {
-			case 0:
-				bindTexture(TEXTURE_1[entity.getFishColour()]);
+			default:
+			case BODY_1:
+				bindTexture(getTextureForColor(TEXTURE_1, entity.getFishColour()));
 				ANADIA_MODEL.renderBody(entity.getBodyType(), 0.0625F);
 				break;
-			case 1:
-				bindTexture(TEXTURE_2[entity.getFishColour()]);
+			case BODY_2:
+				bindTexture(getTextureForColor(TEXTURE_2, entity.getFishColour()));
 				ANADIA_MODEL.renderBody(entity.getBodyType(), 0.0625F);
 				break;
-			case 2:
-				bindTexture(TEXTURE_3[entity.getFishColour()]);
+			case BODY_3:
+				bindTexture(getTextureForColor(TEXTURE_3, entity.getFishColour()));
 				ANADIA_MODEL.renderBody(entity.getBodyType(), 0.0625F);
 				break;
 			}
 
 			switch (entity.getTailType()) {
-			case 0:
-				bindTexture(TEXTURE_1[entity.getFishColour()]);
+			default:
+			case TAIL_1:
+				bindTexture(getTextureForColor(TEXTURE_1, entity.getFishColour()));
 				ANADIA_MODEL.renderTail(entity.getTailType(), 0.0625F);
 				break;
-			case 1:
-				bindTexture(TEXTURE_2[entity.getFishColour()]);
+			case TAIL_2:
+				bindTexture(getTextureForColor(TEXTURE_2, entity.getFishColour()));
 				ANADIA_MODEL.renderTail(entity.getTailType(), 0.0625F);
 				break;
-			case 2:
-				bindTexture(TEXTURE_3[entity.getFishColour()]);
+			case TAIL_3:
+				bindTexture(getTextureForColor(TEXTURE_3, entity.getFishColour()));
 				ANADIA_MODEL.renderTail(entity.getTailType(), 0.0625F);
 				break;
 			} 
@@ -141,6 +145,21 @@ public class RenderAnadia extends RenderLiving<EntityAnadia> {
 			if(isTransparent) {
 				GlStateManager.disableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
 			}
+		}
+	}
+	
+	private static ResourceLocation getTextureForColor(ResourceLocation[] textures, EnumAnadiaColor color) {
+		switch(color) {
+		default:
+			return textures[2];
+		case SMOKED:
+			return textures[0];
+		case ROTTEN:
+			return textures[1];
+		case BASE:
+			return textures[2];
+		case SILVER:
+			return textures[3];
 		}
 	}
 }

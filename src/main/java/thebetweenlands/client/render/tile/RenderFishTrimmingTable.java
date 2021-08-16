@@ -20,6 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.model.tile.ModelFishTrimmingTable;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
+import thebetweenlands.common.entity.mobs.EntityAnadia.EnumAnadiaColor;
 import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.item.misc.ItemMobAnadia;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -96,7 +97,7 @@ public class RenderFishTrimmingTable extends TileEntitySpecialRenderer<TileEntit
 	public void renderAnadiaInSlot(ItemStack stack, Entity entity, float x, float y, float z, float scale) {
 		if (entity != null) {
 			if(stack.getItem() instanceof ItemMobAnadia && ((ItemMobAnadia)stack.getItem()).isRotten(Minecraft.getMinecraft().world, stack))
-				((EntityAnadia) entity).setFishColour((byte) 1);
+				((EntityAnadia) entity).setFishColour(EnumAnadiaColor.ROTTEN);
 			entity.prevRotationPitch = entity.rotationPitch = 0;
 			entity.prevRotationYaw = entity.rotationYaw = 0;
 			float scale2 = 1F / entity.width * 0.5F;

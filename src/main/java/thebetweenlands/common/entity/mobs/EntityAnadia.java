@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Nullable;
 
@@ -78,173 +79,173 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	private static final DataParameter<Boolean> IS_TREASURE_FISH = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> TREASURE_TICKS = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> TREASURE_UNLOCKED = EntityDataManager.createKey(EntityAnadia.class, DataSerializers.BOOLEAN);
-	
-	
+
+
 	public EntityAnadia.AIFindBait aiFindBait;
 	public EntityAnadia.AIFindHook aiFindHook;
 
 	public boolean playAnadiaWonSound = true;
-	
+
 	public int animationFrame = 0;
 	public int animationFrameCrab = 0;
 	public int netCheck = 0;
-	
+
 	private static final int MAX_NETTABLE_TIME = 20;
 	private int nettableTimer = 0;
-	
+
 	public EntityAnadia(World world) {
 		super(world);
-        setSize(0.8F, 0.8F);
-        experienceValue = 3;
-        moveHelper = new EntityAnadia.AnadiaMoveHelper(this);
+		setSize(0.8F, 0.8F);
+		experienceValue = 3;
+		moveHelper = new EntityAnadia.AnadiaMoveHelper(this);
 		setPathPriority(PathNodeType.WALKABLE, -8.0F);
 		setPathPriority(PathNodeType.BLOCKED, -8.0F);
 		setPathPriority(PathNodeType.WATER, 16.0F);
 	}
 
 	@Override
-    protected void initEntityAI() {
-        tasks.addTask(0, new EntityAIAttackMelee(this, 0.7D, true) {
-            @Override
-            protected double getAttackReachSqr(EntityLivingBase attackTarget) {
-                return 0.75D + attackTarget.width;
-            }
-        });
-        tasks.addTask(1, new EntityAIAvoidEntity<>(this, EntityLurker.class, 8F, 4D, 8D));
-        tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 0.4D));
-        tasks.addTask(3, new EntityAnadia.EntityAIAFishCalledWander(this, 0.5D, 20));
-        tasks.addTask(4, new EntityAIPanicWhenUnhooked(this));
-        tasks.addTask(5, new EntityAIPanicWhenHooked(this));
-        aiFindBait = new EntityAnadia.AIFindBait(this, 2D);
-        aiFindHook = new EntityAnadia.AIFindHook(this, 2D);
-        tasks.addTask(6, aiFindBait);
-        tasks.addTask(7, aiFindHook);
-        tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-        tasks.addTask(9, new EntityAILookIdle(this));
-    }
-
-    @Override
-    protected void entityInit() {
-        super.entityInit();
-        dataManager.register(FISH_SIZE, 0.5F);
-        dataManager.register(HEAD_TYPE, (byte) 0);
-        dataManager.register(BODY_TYPE, (byte) 0);
-        dataManager.register(TAIL_TYPE, (byte) 0);
-        dataManager.register(IS_LEAPING, false);
-      //  dataManager.register(HUNGER_COOLDOWN, 0);
-        dataManager.register(STAMINA_TICKS, 40);
-        dataManager.register(ESCAPE_TICKS, 1024);
-        dataManager.register(ESCAPE_DELAY, 80);
-        dataManager.register(OBSTRUCTION_TICKS_1, 64);
-        dataManager.register(OBSTRUCTION_TICKS_2, 128);
-        dataManager.register(OBSTRUCTION_TICKS_3, 192);
-        dataManager.register(OBSTRUCTION_TICKS_4, 256);
-        dataManager.register(FISH_COLOUR, (byte) 2);
-        dataManager.register(HEAD_ITEM, ItemStack.EMPTY);
-        dataManager.register(BODY_ITEM, ItemStack.EMPTY);
-        dataManager.register(TAIL_ITEM, ItemStack.EMPTY);
-        dataManager.register(IS_TREASURE_FISH, false);
-        dataManager.register(TREASURE_TICKS, 256);
-        dataManager.register(TREASURE_UNLOCKED, false);
-    }
+	protected void initEntityAI() {
+		tasks.addTask(0, new EntityAIAttackMelee(this, 0.7D, true) {
+			@Override
+			protected double getAttackReachSqr(EntityLivingBase attackTarget) {
+				return 0.75D + attackTarget.width;
+			}
+		});
+		tasks.addTask(1, new EntityAIAvoidEntity<>(this, EntityLurker.class, 8F, 4D, 8D));
+		tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 0.4D));
+		tasks.addTask(3, new EntityAnadia.EntityAIAFishCalledWander(this, 0.5D, 20));
+		tasks.addTask(4, new EntityAIPanicWhenUnhooked(this));
+		tasks.addTask(5, new EntityAIPanicWhenHooked(this));
+		aiFindBait = new EntityAnadia.AIFindBait(this, 2D);
+		aiFindHook = new EntityAnadia.AIFindHook(this, 2D);
+		tasks.addTask(6, aiFindBait);
+		tasks.addTask(7, aiFindHook);
+		tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+		tasks.addTask(9, new EntityAILookIdle(this));
+	}
 
 	@Override
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
-        getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(12.0D);
-    }
+	protected void entityInit() {
+		super.entityInit();
+		dataManager.register(FISH_SIZE, 0.5F);
+		dataManager.register(HEAD_TYPE, (byte) EnumAnadiaHeadParts.HEAD_1.ordinal());
+		dataManager.register(BODY_TYPE, (byte) EnumAnadiaBodyParts.BODY_1.ordinal());
+		dataManager.register(TAIL_TYPE, (byte) EnumAnadiaTailParts.TAIL_1.ordinal());
+		dataManager.register(IS_LEAPING, false);
+		//  dataManager.register(HUNGER_COOLDOWN, 0);
+		dataManager.register(STAMINA_TICKS, 40);
+		dataManager.register(ESCAPE_TICKS, 1024);
+		dataManager.register(ESCAPE_DELAY, 80);
+		dataManager.register(OBSTRUCTION_TICKS_1, 64);
+		dataManager.register(OBSTRUCTION_TICKS_2, 128);
+		dataManager.register(OBSTRUCTION_TICKS_3, 192);
+		dataManager.register(OBSTRUCTION_TICKS_4, 256);
+		dataManager.register(FISH_COLOUR, (byte) EnumAnadiaColor.BASE.ordinal());
+		dataManager.register(HEAD_ITEM, ItemStack.EMPTY);
+		dataManager.register(BODY_ITEM, ItemStack.EMPTY);
+		dataManager.register(TAIL_ITEM, ItemStack.EMPTY);
+		dataManager.register(IS_TREASURE_FISH, false);
+		dataManager.register(TREASURE_TICKS, 256);
+		dataManager.register(TREASURE_UNLOCKED, false);
+	}
 
-    @Nullable
 	@Override
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-    	if(!getEntityWorld().isRemote) {
-    		this.randomizeAnadiaProperties();
-	        randomiseObstructionOrder();
-    	}
-        return super.onInitialSpawn(difficulty, livingdata);
-    }
-    
-    public void randomizeAnadiaProperties() {
-    	setHeadType((byte)rand.nextInt(3));
-    	setBodyType((byte)rand.nextInt(3));
-    	setTailType((byte)rand.nextInt(3));
-    	setFishSize(Math.round(Math.max(0.125F, rand.nextFloat()) * 16F) / 16F);
-    	if(getEntityWorld().getBiome(getPosition()) == BiomeRegistry.DEEP_WATERS)
-    		setFishColour((byte)(3)); // testing colours - set this based on biome spawned in/other possible things
-    	else
-    		setFishColour((byte)(2));
-    	setHeadItem(getPartFromLootTable(LootTableRegistry.ANADIA_HEAD));
-    	setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_BODY));
-    	setTailItem(getPartFromLootTable(LootTableRegistry.ANADIA_TAIL));
-    	if(getStaminaMods() >= 5F && getFishSize() >= 0.875F)
-    		setIsTreasureFish(true);
-    }
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(12.0D);
+	}
 
-    public float getFishSize() {
-        return dataManager.get(FISH_SIZE);
-    }
+	@Nullable
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+		if(!getEntityWorld().isRemote) {
+			this.randomizeAnadiaProperties();
+			randomiseObstructionOrder();
+		}
+		return super.onInitialSpawn(difficulty, livingdata);
+	}
 
-    public void setFishSize(float size) {
-        dataManager.set(FISH_SIZE, size);
-        setSize(getFishSize(), getFishSize() * 0.75F);
-        setPosition(posX, posY, posZ);
-        getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D + getSpeedMods());
-        getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D + getHealthMods());
-        setHealth(getMaxHealth());
-    }
+	public void randomizeAnadiaProperties() {
+		setHeadType(EnumAnadiaHeadParts.random(this.rand));
+		setBodyType(EnumAnadiaBodyParts.random(this.rand));
+		setTailType(EnumAnadiaTailParts.random(this.rand));
+		setFishSize(Math.round(Math.max(0.125F, rand.nextFloat()) * 16F) / 16F);
+		if(getEntityWorld().getBiome(getPosition()) == BiomeRegistry.DEEP_WATERS)
+			setFishColour(EnumAnadiaColor.SILVER); // testing colours - set this based on biome spawned in/other possible things
+		else
+			setFishColour(EnumAnadiaColor.BASE);
+		setHeadItem(getPartFromLootTable(LootTableRegistry.ANADIA_HEAD));
+		setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_BODY));
+		setTailItem(getPartFromLootTable(LootTableRegistry.ANADIA_TAIL));
+		if(getStaminaMods() >= 5F && getFishSize() >= 0.875F)
+			setIsTreasureFish(true);
+	}
 
-    public void setAsLootFish(boolean lootFish) {
-    	if(lootFish) {
-	    	setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_TREASURE));
-	    	setTreasureUnlocked(true);
-    	} else {
-    		setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_BODY));
-        	setTreasureUnlocked(false);
-    	}
-    }
+	public float getFishSize() {
+		return dataManager.get(FISH_SIZE);
+	}
 
-	public void setHeadType(byte type) {
-        dataManager.set(HEAD_TYPE, type);
-    }
+	public void setFishSize(float size) {
+		dataManager.set(FISH_SIZE, size);
+		setSize(getFishSize(), getFishSize() * 0.75F);
+		setPosition(posX, posY, posZ);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D + getSpeedMods());
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D + getHealthMods());
+		setHealth(getMaxHealth());
+	}
 
-    public byte getHeadType() {
-        return dataManager.get(HEAD_TYPE);
-    }
+	public void setAsLootFish(boolean lootFish) {
+		if(lootFish) {
+			setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_TREASURE));
+			setTreasureUnlocked(true);
+		} else {
+			setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_BODY));
+			setTreasureUnlocked(false);
+		}
+	}
 
-    public void setBodyType(byte type) {
-        dataManager.set(BODY_TYPE, type);
-    }
+	public void setHeadType(EnumAnadiaHeadParts type) {
+		dataManager.set(HEAD_TYPE, (byte) type.ordinal());
+	}
 
-    public byte getBodyType() {
-        return dataManager.get(BODY_TYPE);
-    }
+	public EnumAnadiaHeadParts getHeadType() {
+		return EnumAnadiaHeadParts.get(dataManager.get(HEAD_TYPE));
+	}
 
-    public void setTailType(byte type) {
-        dataManager.set(TAIL_TYPE, type);
-    }
+	public void setBodyType(EnumAnadiaBodyParts type) {
+		dataManager.set(BODY_TYPE, (byte) type.ordinal());
+	}
 
-    public byte getTailType() {
-        return dataManager.get(TAIL_TYPE);
-    }
+	public EnumAnadiaBodyParts getBodyType() {
+		return EnumAnadiaBodyParts.get(dataManager.get(BODY_TYPE));
+	}
 
-    public void setFishColour(byte colour) {
-        dataManager.set(FISH_COLOUR, colour);
-    }
+	public void setTailType(EnumAnadiaTailParts type) {
+		dataManager.set(TAIL_TYPE, (byte) type.ordinal());
+	}
 
-    public byte getFishColour() {
-        return dataManager.get(FISH_COLOUR);
-    }
+	public EnumAnadiaTailParts getTailType() {
+		return EnumAnadiaTailParts.get(dataManager.get(TAIL_TYPE));
+	}
 
-    private void setIsLeaping(boolean leaping) {
-        dataManager.set(IS_LEAPING, leaping);
-    }
+	public void setFishColour(EnumAnadiaColor colour) {
+		dataManager.set(FISH_COLOUR, (byte) colour.ordinal());
+	}
 
-    public boolean isLeaping() {
-        return dataManager.get(IS_LEAPING);
-    }
+	public EnumAnadiaColor getFishColour() {
+		return EnumAnadiaColor.get(dataManager.get(FISH_COLOUR));
+	}
+
+	private void setIsLeaping(boolean leaping) {
+		dataManager.set(IS_LEAPING, leaping);
+	}
+
+	public boolean isLeaping() {
+		return dataManager.get(IS_LEAPING);
+	}
 
 
-/*    
+	/*    
     public int getHungerCooldown() {
         return dataManager.get(HUNGER_COOLDOWN);
     }
@@ -252,62 +253,62 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
     private void setHungerCooldown(int count) {
         dataManager.set(HUNGER_COOLDOWN, count);
     }
-*/
+	 */
 
-    public void setStaminaTicks(int count) {
-        dataManager.set(STAMINA_TICKS, count);
-    }
-
-    public int getStaminaTicks() {
-        return dataManager.get(STAMINA_TICKS);
-    }
-
-    public void setEscapeTicks(int count) {
-    	 dataManager.set(ESCAPE_TICKS, count);
+	public void setStaminaTicks(int count) {
+		dataManager.set(STAMINA_TICKS, count);
 	}
 
-    public int getEscapeTicks() {
+	public int getStaminaTicks() {
+		return dataManager.get(STAMINA_TICKS);
+	}
+
+	public void setEscapeTicks(int count) {
+		dataManager.set(ESCAPE_TICKS, count);
+	}
+
+	public int getEscapeTicks() {
 		return dataManager.get(ESCAPE_TICKS);
 	}
 
-    public void setEscapeDelay(int count) {
-        dataManager.set(ESCAPE_DELAY, count);
-    }
+	public void setEscapeDelay(int count) {
+		dataManager.set(ESCAPE_DELAY, count);
+	}
 
-    public int getEscapeDelay() {
-        return dataManager.get(ESCAPE_DELAY);
-    }
+	public int getEscapeDelay() {
+		return dataManager.get(ESCAPE_DELAY);
+	}
 
-    public void setObstruction1Ticks(int count) {
+	public void setObstruction1Ticks(int count) {
 		dataManager.set(OBSTRUCTION_TICKS_1, count);
 	}
 
 	public int getObstruction1Ticks() {
-		 return dataManager.get(OBSTRUCTION_TICKS_1);
+		return dataManager.get(OBSTRUCTION_TICKS_1);
 	}
 
-    public void setObstruction2Ticks(int count) {
+	public void setObstruction2Ticks(int count) {
 		dataManager.set(OBSTRUCTION_TICKS_2, count);
 	}
 
 	public int getObstruction2Ticks() {
-		 return dataManager.get(OBSTRUCTION_TICKS_2);
+		return dataManager.get(OBSTRUCTION_TICKS_2);
 	}
 
-    public void setObstruction3Ticks(int count) {
+	public void setObstruction3Ticks(int count) {
 		dataManager.set(OBSTRUCTION_TICKS_3, count);
 	}
 
 	public int getObstruction3Ticks() {
-		 return dataManager.get(OBSTRUCTION_TICKS_3);
+		return dataManager.get(OBSTRUCTION_TICKS_3);
 	}
 
-    public void setObstruction4Ticks(int count) {
+	public void setObstruction4Ticks(int count) {
 		dataManager.set(OBSTRUCTION_TICKS_4, count);
 	}
 
 	public int getObstruction4Ticks() {
-		 return dataManager.get(OBSTRUCTION_TICKS_4);
+		return dataManager.get(OBSTRUCTION_TICKS_4);
 	}
 
 	public void setHeadItem(ItemStack itemStack) {
@@ -334,66 +335,66 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		return dataManager.get(TAIL_ITEM);
 	}
 
-    public void setIsTreasureFish(boolean treasure) {
-        dataManager.set(IS_TREASURE_FISH, treasure);
-    }
+	public void setIsTreasureFish(boolean treasure) {
+		dataManager.set(IS_TREASURE_FISH, treasure);
+	}
 
-    public boolean isTreasureFish() {
-        return dataManager.get(IS_TREASURE_FISH);
-    }
+	public boolean isTreasureFish() {
+		return dataManager.get(IS_TREASURE_FISH);
+	}
 
-    public void setTreasureTicks(int count) {
+	public void setTreasureTicks(int count) {
 		dataManager.set(TREASURE_TICKS, count);
 	}
 
 	public int getTreasureTicks() {
-		 return dataManager.get(TREASURE_TICKS);
+		return dataManager.get(TREASURE_TICKS);
 	}
 
-    public void setTreasureUnlocked(boolean unlocked) {
-    	dataManager.set(TREASURE_UNLOCKED, unlocked);
+	public void setTreasureUnlocked(boolean unlocked) {
+		dataManager.set(TREASURE_UNLOCKED, unlocked);
 	}
 
 	public boolean getTreasureUnlocked() {
-		 return dataManager.get(TREASURE_UNLOCKED);
+		return dataManager.get(TREASURE_UNLOCKED);
 	}
-	
+
 	public int getNettableTimer() {
 		return this.nettableTimer;
 	}
 
 	public void randomiseObstructionOrder() {
 		List<Integer> obstructionList = new ArrayList<Integer>();
-        for(int i = 0; i < 4; i++)
-        	obstructionList.add(i, 64 + i * 64 + rand.nextInt(32) - rand.nextInt(32));
-        Collections.shuffle(obstructionList);
-        setObstruction1Ticks(obstructionList.get(0));
-        setObstruction2Ticks(obstructionList.get(1));
-        setObstruction3Ticks(obstructionList.get(2));
-        setObstruction4Ticks(obstructionList.get(3) * 2);
-        setEscapeTicks((int) (124 + getStaminaMods() * 100));
+		for(int i = 0; i < 4; i++)
+			obstructionList.add(i, 64 + i * 64 + rand.nextInt(32) - rand.nextInt(32));
+		Collections.shuffle(obstructionList);
+		setObstruction1Ticks(obstructionList.get(0));
+		setObstruction2Ticks(obstructionList.get(1));
+		setObstruction3Ticks(obstructionList.get(2));
+		setObstruction4Ticks(obstructionList.get(3) * 2);
+		setEscapeTicks((int) (124 + getStaminaMods() * 100));
 	}
 
 	@Override
-    public void notifyDataManagerChange(DataParameter<?> key) {
-        if (FISH_SIZE.equals(key)) {
-            setSize(getFishSize(), getFishSize());
-            rotationYaw = rotationYawHead;
-            renderYawOffset = rotationYawHead;
-        }
-        if (FISH_COLOUR.equals(key)) {
-            setFishColour(getFishColour());
-        }
-        super.notifyDataManagerChange(key);
-    }
- 
+	public void notifyDataManagerChange(DataParameter<?> key) {
+		if (FISH_SIZE.equals(key)) {
+			setSize(getFishSize(), getFishSize());
+			rotationYaw = rotationYawHead;
+			renderYawOffset = rotationYawHead;
+		}
+		if (FISH_COLOUR.equals(key)) {
+			setFishColour(getFishColour());
+		}
+		super.notifyDataManagerChange(key);
+	}
+
 	@Override
-    public String getName() {
-		String body = TranslationHelper.translateToLocal("entity.thebetweenlands.anadia_body" + "_" + EnumAnadiaBodyParts.values()[getBodyType()].ordinal());
-		String tail = TranslationHelper.translateToLocal("entity.thebetweenlands.anadia_tail" + "_" + EnumAnadiaTailParts.values()[getTailType()].ordinal());
-		String head = TranslationHelper.translateToLocal("entity.thebetweenlands.anadia_head" + "_" + EnumAnadiaHeadParts.values()[getHeadType()].ordinal());
+	public String getName() {
+		String body = TranslationHelper.translateToLocal("entity.thebetweenlands.anadia_body" + "_" + getBodyType().ordinal());
+		String tail = TranslationHelper.translateToLocal("entity.thebetweenlands.anadia_tail" + "_" + getTailType().ordinal());
+		String head = TranslationHelper.translateToLocal("entity.thebetweenlands.anadia_head" + "_" + getHeadType().ordinal());
 		return body + " " + tail + " " + head;
-    }
+	}
 
 	public ItemStack getPartFromLootTable(ResourceLocation lootTableIn) {
 		LootTable lootTable = getEntityWorld().getLootTableManager().getLootTableFromLocation(lootTableIn);
@@ -409,23 +410,23 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
-		nbt.setByte("headType", getHeadType());
-		nbt.setByte("bodyType", getBodyType());
-		nbt.setByte("tailType", getTailType());
+		nbt.setByte("headType", (byte) getHeadType().ordinal());
+		nbt.setByte("bodyType", (byte) getBodyType().ordinal());
+		nbt.setByte("tailType", (byte) getTailType().ordinal());
 		nbt.setFloat("fishSize", getFishSize());
-//		nbt.setInteger("hunger", getHungerCooldown());
-		nbt.setByte("fishColour", getFishColour());
+		//		nbt.setInteger("hunger", getHungerCooldown());
+		nbt.setByte("fishColour", (byte) getFishColour().ordinal());
 		nbt.setBoolean("isTreasureFish", isTreasureFish());
 		nbt.setBoolean("isTreasureUnlocked", getTreasureUnlocked());
-		
+
 		NBTTagCompound headItem = new NBTTagCompound();
 		getHeadItem().writeToNBT(headItem);
 		nbt.setTag("headItem", headItem);
-		
+
 		NBTTagCompound bodyItem = new NBTTagCompound();
 		getBodyItem().writeToNBT(bodyItem);
 		nbt.setTag("bodyItem", bodyItem);
-		
+
 		NBTTagCompound tailItem = new NBTTagCompound();
 		getTailItem().writeToNBT(tailItem);
 		nbt.setTag("tailItem", tailItem);
@@ -434,12 +435,12 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		setHeadType(nbt.getByte("headType"));
-		setBodyType(nbt.getByte("bodyType"));
-		setTailType(nbt.getByte("tailType"));
+		setHeadType(EnumAnadiaHeadParts.get(nbt.getByte("headType")));
+		setBodyType(EnumAnadiaBodyParts.get(nbt.getByte("bodyType")));
+		setTailType(EnumAnadiaTailParts.get(nbt.getByte("tailType")));
 		setFishSize(nbt.getFloat("fishSize"));
-//		setHungerCooldown(nbt.getInteger("hunger"));
-		setFishColour(nbt.getByte("fishColour"));
+		//		setHungerCooldown(nbt.getInteger("hunger"));
+		setFishColour(EnumAnadiaColor.get(nbt.getByte("fishColour")));
 		setIsTreasureFish(nbt.getBoolean("isTreasureFish"));
 		setTreasureUnlocked(nbt.getBoolean("isTreasureUnlocked"));
 
@@ -454,7 +455,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		if(bodyItem != null)
 			stackBody = new ItemStack(bodyItem);
 		setBodyItem(stackBody);
-	
+
 		NBTTagCompound tailItem = (NBTTagCompound) nbt.getTag("tailItem");
 		ItemStack stackTail = ItemStack.EMPTY;
 		if(tailItem != null)
@@ -464,30 +465,30 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 	//cumulative speed, health, strength, & stamina modifiers
 	public float getSpeedMods() {
-		float head = EnumAnadiaHeadParts.values()[getHeadType()].getSpeedModifier();
-		float body = EnumAnadiaHeadParts.values()[getBodyType()].getSpeedModifier();
-		float tail = EnumAnadiaHeadParts.values()[getTailType()].getSpeedModifier();
+		float head = getHeadType().getSpeedModifier();
+		float body = getBodyType().getSpeedModifier();
+		float tail = getTailType().getSpeedModifier();
 		return Math.round((getFishSize() * 0.5F) * head + body + tail * 16F) / 16F;
 	}
 
 	public float getHealthMods() {
-		float head = EnumAnadiaHeadParts.values()[getHeadType()].getHealthModifier();
-		float body = EnumAnadiaHeadParts.values()[getBodyType()].getHealthModifier();
-		float tail = EnumAnadiaHeadParts.values()[getTailType()].getHealthModifier();
+		float head = getHeadType().getHealthModifier();
+		float body = getBodyType().getHealthModifier();
+		float tail = getTailType().getHealthModifier();
 		return Math.round(getFishSize() * head + body + tail * 2F) / 2F;
 	}
 
 	public float getStrengthMods() {
-		float head = EnumAnadiaHeadParts.values()[getHeadType()].getStrengthModifier();
-		float body = EnumAnadiaHeadParts.values()[getBodyType()].getStrengthModifier();
-		float tail = EnumAnadiaHeadParts.values()[getTailType()].getStrengthModifier();
+		float head = getHeadType().getStrengthModifier();
+		float body = getBodyType().getStrengthModifier();
+		float tail = getTailType().getStrengthModifier();
 		return Math.round((getFishSize() * 0.5F) * head + body + tail * 2F) / 2F;
 	}
 
 	public float getStaminaMods() {
-		float head = EnumAnadiaHeadParts.values()[getHeadType()].getStaminaModifier();
-		float body = EnumAnadiaHeadParts.values()[getBodyType()].getStaminaModifier();
-		float tail = EnumAnadiaHeadParts.values()[getTailType()].getStaminaModifier();
+		float head = getHeadType().getStaminaModifier();
+		float body = getBodyType().getStaminaModifier();
+		float tail = getTailType().getStaminaModifier();
 		return Math.max(Math.round(getFishSize() * head + body + tail * 2F) / 2F, 3.5F);
 	}
 
@@ -508,54 +509,54 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-    protected SoundEvent getHurtSound(DamageSource source) {
-        return super.getHurtSound(source);
-    }
-/*
+	protected SoundEvent getHurtSound(DamageSource source) {
+		return super.getHurtSound(source);
+	}
+	/*
     @Override
     protected SoundEvent getDeathSound() {
        return SoundRegistry.ANADIA_DEATH;
     }
-*/
-    @Override
-    protected SoundEvent getSwimSound() {
-        return SoundEvents.ENTITY_HOSTILE_SWIM;
-    }
-
-    @Override
-    protected float getSoundVolume() {
-        return 0.4F;
-    }
-
-    @Nullable
-    @Override
-    protected ResourceLocation getLootTable() {
-        return LootTableRegistry.ANADIA;
-    }
-
-    @Override
-    public boolean getCanSpawnHere() {
-        return world.getDifficulty() != EnumDifficulty.PEACEFUL && world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
-    }
-
-    public boolean isGrounded() {
-        return !isInWater() && world.isAirBlock(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY + 1), MathHelper.floor(posZ))) && world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ))).getBlock().isCollidable();
-    }
+	 */
+	@Override
+	protected SoundEvent getSwimSound() {
+		return SoundEvents.ENTITY_HOSTILE_SWIM;
+	}
 
 	@Override
-    protected PathNavigate createNavigator(World world){
-        return new PathNavigateSwimmer(this, world);
-    }
+	protected float getSoundVolume() {
+		return 0.4F;
+	}
 
-    @Override
-    public float getBlockPathWeight(BlockPos pos) {
-        return world.getBlockState(pos).getMaterial() == Material.WATER ? 10.0F + world.getLightBrightness(pos) - 0.5F : super.getBlockPathWeight(pos);
-    }
+	@Nullable
+	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.ANADIA;
+	}
+
+	@Override
+	public boolean getCanSpawnHere() {
+		return world.getDifficulty() != EnumDifficulty.PEACEFUL && world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
+	}
+
+	public boolean isGrounded() {
+		return !isInWater() && world.isAirBlock(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY + 1), MathHelper.floor(posZ))) && world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ))).getBlock().isCollidable();
+	}
+
+	@Override
+	protected PathNavigate createNavigator(World world){
+		return new PathNavigateSwimmer(this, world);
+	}
+
+	@Override
+	public float getBlockPathWeight(BlockPos pos) {
+		return world.getBlockState(pos).getMaterial() == Material.WATER ? 10.0F + world.getLightBrightness(pos) - 0.5F : super.getBlockPathWeight(pos);
+	}
 
 	@Override
 	public void onLivingUpdate() {
 		if (getEntityWorld().isRemote) {
-		/*	if (isInWater()) {
+			/*	if (isInWater()) {
 				Vec3d vec3d = getLook(0.0F);
 				for (int i = 0; i < 2; ++i)
 					getEntityWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX + (rand.nextDouble() - 0.5D) * (double) width - vec3d.x , posY + rand.nextDouble() * (double) height - vec3d.y , posZ + (rand.nextDouble() - 0.5D) * (double) width - vec3d.z, 0.0D, 0.0D, 0.0D, new int[0]);
@@ -575,7 +576,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 			isAirBorne = true;
 			if(getEntityWorld().getTotalWorldTime()%5==0)
 				getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
-				damageEntity(DamageSource.DROWN, 0.5F);
+			damageEntity(DamageSource.DROWN, 0.5F);
 		}
 
 		super.onLivingUpdate();
@@ -588,15 +589,15 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		} else if(this.nettableTimer > 0) {
 			this.nettableTimer--;
 		}
-		
+
 		if (getEntityWorld().isRemote) {
 			setSize(getFishSize(), getFishSize() * 0.75F);
-			
+
 			if(getEntityWorld().getTotalWorldTime()%4 == 0)
 				animationFrame += 16;
 			if(animationFrame > 48)
 				animationFrame = 0;
-			
+
 			animationFrameCrab += 16;
 			if(animationFrameCrab > 48)
 				animationFrameCrab = 0;
@@ -610,31 +611,31 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 						leapAtTarget(getAttackTarget().posX, getAttackTarget().posY, getAttackTarget().posZ);
 			}
 
-//			if(getHungerCooldown() >= 0)
-//				setHungerCooldown(getHungerCooldown() - 1);
+			//			if(getHungerCooldown() >= 0)
+			//				setHungerCooldown(getHungerCooldown() - 1);
 
 			//regains stamina over time whilst not hooked
-	        if(!isBeingRidden() ) {
-        		playAnadiaWonSound = true;
+			if(!isBeingRidden() ) {
+				playAnadiaWonSound = true;
 
-	        	if(getEscapeDelay() < (int) getStaminaMods() * 30)
-	        		setEscapeDelay((int) (getStaminaMods() * 30));
+				if(getEscapeDelay() < (int) getStaminaMods() * 30)
+					setEscapeDelay((int) (getStaminaMods() * 30));
 
-	        	if(getStaminaTicks() < (int) (getStaminaMods() * 20))
-	        		setStaminaTicks(getStaminaTicks() + 1);
-	        	//if(getEscapeTicks() < 1024)
-	        	//	setEscapeTicks(1024);
-	        	if(getObstruction1Ticks() < 256)
-	        		setObstruction1Ticks(256);
-	        	if(getObstruction2Ticks() < 256)
-	        		setObstruction2Ticks(256);
-	        	if(getObstruction3Ticks() < 256)
-	        		setObstruction3Ticks(256);
-	        	if(getObstruction4Ticks() < 512)
-	        		setObstruction4Ticks(512);
-	        	if(getTreasureTicks() < 1024)
-	        		setTreasureTicks(1024);
-	        }
+				if(getStaminaTicks() < (int) (getStaminaMods() * 20))
+					setStaminaTicks(getStaminaTicks() + 1);
+				//if(getEscapeTicks() < 1024)
+				//	setEscapeTicks(1024);
+				if(getObstruction1Ticks() < 256)
+					setObstruction1Ticks(256);
+				if(getObstruction2Ticks() < 256)
+					setObstruction2Ticks(256);
+				if(getObstruction3Ticks() < 256)
+					setObstruction3Ticks(256);
+				if(getObstruction4Ticks() < 512)
+					setObstruction4Ticks(512);
+				if(getTreasureTicks() < 1024)
+					setTreasureTicks(1024);
+			}
 
 			if (isBeingRidden() && getPassengers().get(0) instanceof EntityBLFishHook) {
 				EntityBLFishHook hook = (EntityBLFishHook) getPassengers().get(0);
@@ -643,7 +644,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 					if (hook != null && hook.getAngler() != null)
 						playAnadiaWonSound(hook.getAngler());
 					playAnadiaWonSound = false;
-	            	this.getNavigator().clearPath();
+					this.getNavigator().clearPath();
 				}
 
 				if (getStaminaTicks() > 0 && getEscapeDelay() > 0) {
@@ -741,7 +742,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		motionX = distanceX / distanceSqrRoot * 0.1D + motionX * getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue();
 		motionZ = distanceZ / distanceSqrRoot * 0.1D + motionZ * getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue();
 		motionY = 0.3F;
-		
+
 	}
 
 	@Override
@@ -766,219 +767,101 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-    public boolean isNotColliding() {
-		 return getEntityWorld().checkNoEntityCollision(getEntityBoundingBox(), this) && getEntityWorld().getCollisionBoxes(this, getEntityBoundingBox()).isEmpty();
-    }
-
-    @Override
-    public boolean isPushedByWater() {
-        return false;
-    }
-
-	// Made separate methods so we can maintain ordering if new parts are added rather than ordinal juggling
-	public enum EnumAnadiaHeadParts {
-		// part (speedModifier, healthModifier, strengthModifier, stamina)
-		HEAD_1(0.125F, 1F, 1F, 1F),
-		HEAD_2(0.25F, 2F, 2F, 2F),
-		HEAD_3(0.5F, 3F, 3F, 3F);
-
-		float speed; // added to movement speed
-		float health; // added to health
-		float strength; // added to attack if aggressive, and/or rod damage per catch
-		float stamina; // possible use for how much it pulls or time taken to catch once hooked
-
-		EnumAnadiaHeadParts(float speedModifier, float healthModifier, float strengthModifier, float staminaModifier) {
-			speed = speedModifier;
-			health = healthModifier;
-			strength = strengthModifier;
-			stamina = staminaModifier;
-		}
-
-		EnumAnadiaHeadParts() {
-			this(0.0F, 0.0F, 0.0F, 0.0F); // just in case no modifiers need to be added
-		}
-
-		public float getSpeedModifier() {
-			return speed;
-		}
-
-		public float getHealthModifier() {
-			return health;
-		}
-
-		public float getStrengthModifier() {
-			return strength;
-		}
-
-		public float getStaminaModifier() {
-			return stamina;
-		}
+	public boolean isNotColliding() {
+		return getEntityWorld().checkNoEntityCollision(getEntityBoundingBox(), this) && getEntityWorld().getCollisionBoxes(this, getEntityBoundingBox()).isEmpty();
 	}
 
-	public enum EnumAnadiaBodyParts {
-		// part (speedModifier, healthModifier, strengthModifier, stamina)
-		BODY_1(0.125F, 1F, 1F, 1F),
-		BODY_2(0.25F, 2F, 2F, 2F),
-		BODY_3(0.5F, 3F, 3F, 3F);
-
-		float speed; // added to movement speed
-		float health; // added to health
-		float strength; // added to attack if aggressive, and/or rod damage per catch
-		float stamina; // possible use for how much it pulls or time taken to catch once hooked
-
-		EnumAnadiaBodyParts(float speedModifier, float healthModifier, float strengthModifier, float staminaModifier) {
-			speed = speedModifier;
-			health = healthModifier;
-			strength = strengthModifier;
-			stamina = staminaModifier;
-		}
-
-		EnumAnadiaBodyParts() {
-			this(0.0F, 0.0F, 0.0F, 0.0F); // just in case no modifiers need to be added
-		}
-
-		public float getSpeedModifier() {
-			return speed;
-		}
-
-		public float getHealthModifier() {
-			return health;
-		}
-
-		public float getStrengthModifier() {
-			return strength;
-		}
-
-		public float getStaminaModifier() {
-			return stamina;
-		}
+	@Override
+	public boolean isPushedByWater() {
+		return false;
 	}
 
-	public enum EnumAnadiaTailParts {
-		// part (speedModifier, healthModifier, strengthModifier, stamina)
-		TAIL_1(0.125F, 1F, 1F, 1F),
-		TAIL_2(0.25F, 2F, 2F, 2F),
-		TAIL_3(0.5F, 3F, 3F, 3F);
+	static class AnadiaMoveHelper extends EntityMoveHelper {
+		private final EntityAnadia anadia;
 
-		private float speed; // added to movement speed
-		private float health; // added to health
-		private float strength; // added to attack if aggressive, and/or rod damage per catch
-		private float stamina; // possible use for how much it pulls or time taken to catch once hooked
-
-		EnumAnadiaTailParts(float speedModifier, float healthModifier, float strengthModifier, float staminaModifier) {
-			speed = speedModifier;
-			health = healthModifier;
-			strength = strengthModifier;
-			stamina = staminaModifier;
+		public AnadiaMoveHelper(EntityAnadia anadia) {
+			super(anadia);
+			this.anadia = anadia;
 		}
 
-		EnumAnadiaTailParts() {
-			this(0.0F, 0.0F, 0.0F, 0.0F); // just in case no modifiers need to be added
-		}
-
-		public float getSpeedModifier() {
-			return speed;
-		}
-
-		public float getHealthModifier() {
-			return health;
-		}
-
-		public float getStrengthModifier() {
-			return strength;
-		}
-
-		public float getStaminaModifier() {
-			return stamina;
-		}
-	}
-
-    static class AnadiaMoveHelper extends EntityMoveHelper {
-        private final EntityAnadia anadia;
-
-        public AnadiaMoveHelper(EntityAnadia anadia) {
-            super(anadia);
-            this.anadia = anadia;
-        }
-
-        @Override
+		@Override
 		public void onUpdateMoveHelper() {
-            if (anadia.getStaminaTicks() <= 0 || anadia.getNettableTimer() > 0) {
-            	action = EntityMoveHelper.Action.WAIT;
-            	anadia.setAIMoveSpeed(0);
-            	return;
-            }
-        	
-            if (action == EntityMoveHelper.Action.MOVE_TO && !anadia.getNavigator().noPath()) {
-                double targetX = posX - anadia.posX;
-                double targetY = posY - anadia.posY;
-                double targetZ = posZ - anadia.posZ;
-                double targetDistance = targetX * targetX + targetY * targetY + targetZ * targetZ;
-                targetDistance = (double) MathHelper.sqrt(targetDistance);
-                targetY = targetY / targetDistance;
-                float targetAngle = (float) (MathHelper.atan2(targetZ, targetX) * (180D / Math.PI)) - 90.0F;
-                anadia.rotationYaw = limitAngle(anadia.rotationYaw, targetAngle, 90.0F);
-                anadia.renderYawOffset = anadia.rotationYaw;
-                float travelSpeed = (float) (speed * anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
-                anadia.setAIMoveSpeed(anadia.getAIMoveSpeed() + (travelSpeed - anadia.getAIMoveSpeed()) * 0.125F);
-                double wiggleSpeed = Math.sin((double) (anadia.ticksExisted + anadia.getEntityId()) * 0.5D) * anadia.getFishSize()* 0.05D;
-                double wiggleOffsetX = Math.cos((double) (anadia.rotationYaw * anadia.getFishSize() * 0.01F));
-                double wiggleOffsetZ = Math.sin((double) (anadia.rotationYaw * anadia.getFishSize() * 0.01F));
-                anadia.motionX += wiggleSpeed * wiggleOffsetX;
-                anadia.motionZ += wiggleSpeed * wiggleOffsetZ;
-                wiggleSpeed = Math.sin((double) (anadia.ticksExisted + anadia.getEntityId()) * 0.75D) * 0.05D;
-                anadia.motionY += wiggleSpeed * (wiggleOffsetZ + wiggleOffsetX) * 0.25D;
-                anadia.motionY += (double) anadia.getAIMoveSpeed() * targetY * 0.1D;
-                EntityLookHelper entitylookhelper = anadia.getLookHelper();
-                double targetDirectionX = anadia.posX + targetX / targetDistance * 2.0D;
-                double targetDirectionY = (double) anadia.getEyeHeight() + anadia.posY + targetY / targetDistance;
-                double targetDirectionZ = anadia.posZ + targetZ / targetDistance * 2.0D;
-                double lookX = entitylookhelper.getLookPosX();
-                double lookY = entitylookhelper.getLookPosY();
-                double lookZ = entitylookhelper.getLookPosZ();
+			if (anadia.getStaminaTicks() <= 0 || anadia.getNettableTimer() > 0) {
+				action = EntityMoveHelper.Action.WAIT;
+				anadia.setAIMoveSpeed(0);
+				return;
+			}
 
-                if (!entitylookhelper.getIsLooking()) {
-                	lookX = targetDirectionX;
-                	lookY = targetDirectionY;
-                	lookZ = targetDirectionZ;
-                }
+			if (action == EntityMoveHelper.Action.MOVE_TO && !anadia.getNavigator().noPath()) {
+				double targetX = posX - anadia.posX;
+				double targetY = posY - anadia.posY;
+				double targetZ = posZ - anadia.posZ;
+				double targetDistance = targetX * targetX + targetY * targetY + targetZ * targetZ;
+				targetDistance = (double) MathHelper.sqrt(targetDistance);
+				targetY = targetY / targetDistance;
+				float targetAngle = (float) (MathHelper.atan2(targetZ, targetX) * (180D / Math.PI)) - 90.0F;
+				anadia.rotationYaw = limitAngle(anadia.rotationYaw, targetAngle, 90.0F);
+				anadia.renderYawOffset = anadia.rotationYaw;
+				float travelSpeed = (float) (speed * anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+				anadia.setAIMoveSpeed(anadia.getAIMoveSpeed() + (travelSpeed - anadia.getAIMoveSpeed()) * 0.125F);
+				double wiggleSpeed = Math.sin((double) (anadia.ticksExisted + anadia.getEntityId()) * 0.5D) * anadia.getFishSize()* 0.05D;
+				double wiggleOffsetX = Math.cos((double) (anadia.rotationYaw * anadia.getFishSize() * 0.01F));
+				double wiggleOffsetZ = Math.sin((double) (anadia.rotationYaw * anadia.getFishSize() * 0.01F));
+				anadia.motionX += wiggleSpeed * wiggleOffsetX;
+				anadia.motionZ += wiggleSpeed * wiggleOffsetZ;
+				wiggleSpeed = Math.sin((double) (anadia.ticksExisted + anadia.getEntityId()) * 0.75D) * 0.05D;
+				anadia.motionY += wiggleSpeed * (wiggleOffsetZ + wiggleOffsetX) * 0.25D;
+				anadia.motionY += (double) anadia.getAIMoveSpeed() * targetY * 0.1D;
+				EntityLookHelper entitylookhelper = anadia.getLookHelper();
+				double targetDirectionX = anadia.posX + targetX / targetDistance * 2.0D;
+				double targetDirectionY = (double) anadia.getEyeHeight() + anadia.posY + targetY / targetDistance;
+				double targetDirectionZ = anadia.posZ + targetZ / targetDistance * 2.0D;
+				double lookX = entitylookhelper.getLookPosX();
+				double lookY = entitylookhelper.getLookPosY();
+				double lookZ = entitylookhelper.getLookPosZ();
 
-                anadia.getLookHelper().setLookPosition(lookX + (targetDirectionX - lookX) * 0.125D, lookY + (targetDirectionY - lookY) * 0.125D, lookZ + (targetDirectionZ - lookZ) * 0.125D, 10.0F, 40.0F);
-            } else {
-                anadia.setAIMoveSpeed(0.0F);
-            }
-        }
-        
-    }
+				if (!entitylookhelper.getIsLooking()) {
+					lookX = targetDirectionX;
+					lookY = targetDirectionY;
+					lookZ = targetDirectionZ;
+				}
 
-    public class AIFindBait extends EntityAIBase {
+				anadia.getLookHelper().setLookPosition(lookX + (targetDirectionX - lookX) * 0.125D, lookY + (targetDirectionY - lookY) * 0.125D, lookZ + (targetDirectionZ - lookZ) * 0.125D, 10.0F, 40.0F);
+			} else {
+				anadia.setAIMoveSpeed(0.0F);
+			}
+		}
 
-    	private final EntityAnadia anadia;
-    	private double searchRange;
-    	public EntityFishBait bait = null;
+	}
 
-    	public AIFindBait(EntityAnadia anadiaIn, double searchRangeIn) {
-    		anadia = anadiaIn;
-    		searchRange = searchRangeIn;
-    	}
+	public class AIFindBait extends EntityAIBase {
 
-    	@Override
-    	public boolean shouldExecute() {
-    		return bait == null;
-    		//return anadia.getHungerCooldown() <= 0 && bait == null;
-    	}
+		private final EntityAnadia anadia;
+		private double searchRange;
+		public EntityFishBait bait = null;
 
-    	@Override
-    	public void startExecuting() {
-    		if(bait == null)
-    			bait = getClosestBait(searchRange);
-    	}
+		public AIFindBait(EntityAnadia anadiaIn, double searchRangeIn) {
+			anadia = anadiaIn;
+			searchRange = searchRangeIn;
+		}
 
-    	@Override
-    	public boolean shouldContinueExecuting() {
-    		return bait != null && !bait.isDead;
-    	//	return anadia.getHungerCooldown() <= 0 && bait != null && !bait.isDead;
-        }
+		@Override
+		public boolean shouldExecute() {
+			return bait == null;
+			//return anadia.getHungerCooldown() <= 0 && bait == null;
+		}
+
+		@Override
+		public void startExecuting() {
+			if(bait == null)
+				bait = getClosestBait(searchRange);
+		}
+
+		@Override
+		public boolean shouldContinueExecuting() {
+			return bait != null && !bait.isDead;
+			//	return anadia.getHungerCooldown() <= 0 && bait != null && !bait.isDead;
+		}
 
 		@Override
 		public void updateTask() {
@@ -1012,64 +895,64 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 				}
 			}
 		}
- 
+
 		@Override
 		public void resetTask() {
 			bait = null;
 		}
 
-    	public EntityFishBait getClosestBait(double distance) {
-    		List<EntityFishBait> list = anadia.getEntityWorld().getEntitiesWithinAABB(EntityFishBait.class, anadia.getEntityBoundingBox().grow(distance, distance, distance));
-    		for (Iterator<EntityFishBait> iterator = list.iterator(); iterator.hasNext();) {
-    			EntityFishBait bait = iterator.next();
-    			if (bait.getAge() >= bait.lifespan || !bait.isInWater())
-    				iterator.remove();
-    		}
-    		if (list.isEmpty())
-    			return null;
-    		if (!list.isEmpty())
+		public EntityFishBait getClosestBait(double distance) {
+			List<EntityFishBait> list = anadia.getEntityWorld().getEntitiesWithinAABB(EntityFishBait.class, anadia.getEntityBoundingBox().grow(distance, distance, distance));
+			for (Iterator<EntityFishBait> iterator = list.iterator(); iterator.hasNext();) {
+				EntityFishBait bait = iterator.next();
+				if (bait.getAge() >= bait.lifespan || !bait.isInWater())
+					iterator.remove();
+			}
+			if (list.isEmpty())
+				return null;
+			if (!list.isEmpty())
 				Collections.shuffle(list);
-    		return list.get(0);
-    	}
+			return list.get(0);
+		}
 
-    	public void moveToItem(EntityFishBait bait) {
-    		Path pathentity = anadia.getNavigator().getPath();
-    		if (pathentity != null) {
-    			//entity.getNavigator().setPath(pathentity, 0.5D);
-    			anadia.getNavigator().tryMoveToXYZ(bait.posX, bait.posY, bait.posZ, anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
-    		}
-    	}
-    }
-    
-    
-    public class AIFindHook extends EntityAIBase {
+		public void moveToItem(EntityFishBait bait) {
+			Path pathentity = anadia.getNavigator().getPath();
+			if (pathentity != null) {
+				//entity.getNavigator().setPath(pathentity, 0.5D);
+				anadia.getNavigator().tryMoveToXYZ(bait.posX, bait.posY, bait.posZ, anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+			}
+		}
+	}
 
-    	private final EntityAnadia anadia;
-    	private double searchRange;
-    	public EntityBLFishHook hook = null;
 
-    	public AIFindHook(EntityAnadia anadiaIn, double searchRangeIn) {
-    		anadia = anadiaIn;
-    		searchRange = searchRangeIn;
-    	}
+	public class AIFindHook extends EntityAIBase {
 
-    	@Override
-    	public boolean shouldExecute() {
-    		return hook == null;
- //   		return anadia.getHungerCooldown() <= 0 && hook == null;
-    	}
+		private final EntityAnadia anadia;
+		private double searchRange;
+		public EntityBLFishHook hook = null;
 
-    	@Override
-    	public void startExecuting() {
-    		if(hook == null)
-    			hook = getClosestHook(searchRange);
-    	}
+		public AIFindHook(EntityAnadia anadiaIn, double searchRangeIn) {
+			anadia = anadiaIn;
+			searchRange = searchRangeIn;
+		}
 
-    	@Override
-    	public boolean shouldContinueExecuting() {
-    		return   hook != null && !hook.isDead &&  hook.getBaited() ? true : hook != null && !hook.isDead && (anadia.getEntityWorld().rand.nextInt(50) == 0 && !hook.getBaited());
-//    		return  anadia.getHungerCooldown() <= 0 && hook != null && !hook.isDead &&  hook.getBaited() ? true : anadia.getHungerCooldown() <= 0 && hook != null && !hook.isDead && (anadia.getEntityWorld().rand.nextInt(50) == 0 && !hook.getBaited());
-        }
+		@Override
+		public boolean shouldExecute() {
+			return hook == null;
+			//   		return anadia.getHungerCooldown() <= 0 && hook == null;
+		}
+
+		@Override
+		public void startExecuting() {
+			if(hook == null)
+				hook = getClosestHook(searchRange);
+		}
+
+		@Override
+		public boolean shouldContinueExecuting() {
+			return   hook != null && !hook.isDead &&  hook.getBaited() ? true : hook != null && !hook.isDead && (anadia.getEntityWorld().rand.nextInt(50) == 0 && !hook.getBaited());
+			//    		return  anadia.getHungerCooldown() <= 0 && hook != null && !hook.isDead &&  hook.getBaited() ? true : anadia.getHungerCooldown() <= 0 && hook != null && !hook.isDead && (anadia.getEntityWorld().rand.nextInt(50) == 0 && !hook.getBaited());
+		}
 
 		@Override
 		public void updateTask() {
@@ -1081,57 +964,57 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 					double y = hook.posY;
 					double z = hook.posZ;
 
-						if (distance >= 1F) {
-							anadia.getLookHelper().setLookPosition(x, y, z, 20.0F, 8.0F);
-							moveToEntity(hook);
-						}
-
-						if (distance <= 2F)
-							if (anadia.isInWater() && anadia.getEntityWorld().isAirBlock(new BlockPos(x, y + 1D, z)) && anadia.canEntityBeSeen(hook))
-								anadia.leapAtTarget(x, y, z);
-
-						if (distance <= 1F) {
-							anadia.getMoveHelper().setMoveTo(x, y, z, anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
-						//	anadia.setHungerCooldown(600);
-							anadia.setIsLeaping(false);
-							hook.caughtEntity = anadia;
-							anadia.randomiseObstructionOrder();
-							hook.startRiding(anadia, true);
-							hook.setBaited(false);
-							//resetTask();
-						}
+					if (distance >= 1F) {
+						anadia.getLookHelper().setLookPosition(x, y, z, 20.0F, 8.0F);
+						moveToEntity(hook);
 					}
+
+					if (distance <= 2F)
+						if (anadia.isInWater() && anadia.getEntityWorld().isAirBlock(new BlockPos(x, y + 1D, z)) && anadia.canEntityBeSeen(hook))
+							anadia.leapAtTarget(x, y, z);
+
+					if (distance <= 1F) {
+						anadia.getMoveHelper().setMoveTo(x, y, z, anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+						//	anadia.setHungerCooldown(600);
+						anadia.setIsLeaping(false);
+						hook.caughtEntity = anadia;
+						anadia.randomiseObstructionOrder();
+						hook.startRiding(anadia, true);
+						hook.setBaited(false);
+						//resetTask();
+					}
+				}
 			}
 		}
- 
+
 		@Override
 		public void resetTask() {
 			hook = null;
 		}
 
-    	public EntityBLFishHook getClosestHook(double distance) {
-    		List<EntityBLFishHook> list = anadia.getEntityWorld().getEntitiesWithinAABB(EntityBLFishHook.class, anadia.getEntityBoundingBox().grow(distance, distance, distance));
-    		for (Iterator<EntityBLFishHook> iterator = list.iterator(); iterator.hasNext();) {
-    			EntityBLFishHook hook = iterator.next();
-    			if (!hook.isInWater())
-    				iterator.remove();
-    		}
-    		if (list.isEmpty())
-    			return null;
-    		if (!list.isEmpty())
+		public EntityBLFishHook getClosestHook(double distance) {
+			List<EntityBLFishHook> list = anadia.getEntityWorld().getEntitiesWithinAABB(EntityBLFishHook.class, anadia.getEntityBoundingBox().grow(distance, distance, distance));
+			for (Iterator<EntityBLFishHook> iterator = list.iterator(); iterator.hasNext();) {
+				EntityBLFishHook hook = iterator.next();
+				if (!hook.isInWater())
+					iterator.remove();
+			}
+			if (list.isEmpty())
+				return null;
+			if (!list.isEmpty())
 				Collections.shuffle(list);
-    		return list.get(0);
-    	}
+			return list.get(0);
+		}
 
-    	public void moveToEntity(EntityBLFishHook hook) {
-    		Path pathentity = anadia.getNavigator().getPath();
-    		if (pathentity != null) {
-    			//entity.getNavigator().setPath(pathentity, 0.5D);
-    			anadia.getNavigator().tryMoveToXYZ(hook.posX, hook.posY, hook.posZ, anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
-    		}
-    	}
-    }
-    
+		public void moveToEntity(EntityBLFishHook hook) {
+			Path pathentity = anadia.getNavigator().getPath();
+			if (pathentity != null) {
+				//entity.getNavigator().setPath(pathentity, 0.5D);
+				anadia.getNavigator().tryMoveToXYZ(hook.posX, hook.posY, hook.posZ, anadia.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+			}
+		}
+	}
+
 	public class EntityAIAFishCalledWander extends EntityAIWander {
 
 		public EntityAIAFishCalledWander(EntityCreature creatureIn, double speedIn, int chance) {
@@ -1144,14 +1027,14 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		}
 
 		@Override
-	    public boolean shouldContinueExecuting(){
-	        return !entity.getNavigator().noPath() && !isBeingRidden();
-	    }
+		public boolean shouldContinueExecuting(){
+			return !entity.getNavigator().noPath() && !isBeingRidden();
+		}
 	}
 
 	public class EntityAIPanicWhenHooked extends EntityAIPanic {
 		private final EntityAnadia anadia;
-		
+
 		public EntityAIPanicWhenHooked(EntityAnadia entity) {
 			super(entity, entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 2D);
 			anadia = entity;
@@ -1163,20 +1046,20 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		}
 
 		@Override
-	    public boolean shouldContinueExecuting(){
-	        return !anadia.getNavigator().noPath() && anadia.isBeingRidden() && anadia.getStaminaTicks() >= 1;
-	    }
-	    
+		public boolean shouldContinueExecuting(){
+			return !anadia.getNavigator().noPath() && anadia.isBeingRidden() && anadia.getStaminaTicks() >= 1;
+		}
+
 		@Override
-	    public void startExecuting() {
-	        anadia.getNavigator().tryMoveToXYZ(this.randPosX, this.randPosY, this.randPosZ, this.speed);
-	    }
+		public void startExecuting() {
+			anadia.getNavigator().tryMoveToXYZ(this.randPosX, this.randPosY, this.randPosZ, this.speed);
+		}
 	}
-	
+
 	public class EntityAIPanicWhenUnhooked extends EntityAIPanic {
 		private final EntityAnadia anadia;
 		private int timeSinceUnhook = 0;
-		
+
 		public EntityAIPanicWhenUnhooked(EntityAnadia entity) {
 			super(entity, 2.0D);
 			anadia = entity;
@@ -1192,35 +1075,213 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 				this.timeSinceUnhook = 2;
 			} else if(this.timeSinceUnhook >= 2) {
 				this.timeSinceUnhook += 2;
-				
+
 				if(anadia.isBeingRidden() || this.timeSinceUnhook >= 60) {
 					this.timeSinceUnhook = 0;
 					return false;
 				}
-				
+
 				if(findRandomPosition()) {
 					return true;
 				}
 			}
-			
+
 			return false;
 		}
-		
+
 		@Override
-	    public boolean shouldContinueExecuting() {
+		public boolean shouldContinueExecuting() {
 			this.timeSinceUnhook++;
-			
+
 			if(anadia.isBeingRidden() || this.timeSinceUnhook >= 60) {
 				this.timeSinceUnhook = 0;
 				return false;
 			}
-			
-	        return !anadia.getNavigator().noPath() && !anadia.isBeingRidden();
-	    }
-	    
+
+			return !anadia.getNavigator().noPath() && !anadia.isBeingRidden();
+		}
+
 		@Override
-	    public void startExecuting() {
-	        anadia.getNavigator().tryMoveToXYZ(this.randPosX, this.randPosY, this.randPosZ, this.speed);
-	    }
+		public void startExecuting() {
+			anadia.getNavigator().tryMoveToXYZ(this.randPosX, this.randPosY, this.randPosZ, this.speed);
+		}
+	}
+
+	// Made separate methods so we can maintain ordering if new parts are added rather than ordinal juggling
+	public static enum EnumAnadiaHeadParts {
+		// part (speedModifier, healthModifier, strengthModifier, stamina)
+		HEAD_1(0.125F, 1F, 1F, 1F),
+		HEAD_2(0.25F, 2F, 2F, 2F),
+		HEAD_3(0.5F, 3F, 3F, 3F),
+		
+		UNKNOWN(0.25F, 1F, 1F, 1F);
+
+		private static final EnumAnadiaHeadParts[] VALUES = values();
+		
+		float speed; // added to movement speed
+		float health; // added to health
+		float strength; // added to attack if aggressive, and/or rod damage per catch
+		float stamina; // possible use for how much it pulls or time taken to catch once hooked
+
+		EnumAnadiaHeadParts(float speedModifier, float healthModifier, float strengthModifier, float staminaModifier) {
+			speed = speedModifier;
+			health = healthModifier;
+			strength = strengthModifier;
+			stamina = staminaModifier;
+		}
+
+		EnumAnadiaHeadParts() {
+			this(0.0F, 0.0F, 0.0F, 0.0F); // just in case no modifiers need to be added
+		}
+
+		public float getSpeedModifier() {
+			return speed;
+		}
+
+		public float getHealthModifier() {
+			return health;
+		}
+
+		public float getStrengthModifier() {
+			return strength;
+		}
+
+		public float getStaminaModifier() {
+			return stamina;
+		}
+		
+		public static EnumAnadiaHeadParts random(Random rng) {
+			return VALUES[rng.nextInt(VALUES.length - 1)];
+		}
+		
+		public static EnumAnadiaHeadParts get(int id) {
+			if(id >= 0 && id < VALUES.length) {
+				return VALUES[id];
+			}
+			return EnumAnadiaHeadParts.UNKNOWN;
+		}
+	}
+
+	public static enum EnumAnadiaBodyParts {
+		// part (speedModifier, healthModifier, strengthModifier, stamina)
+		BODY_1(0.125F, 1F, 1F, 1F),
+		BODY_2(0.25F, 2F, 2F, 2F),
+		BODY_3(0.5F, 3F, 3F, 3F),
+		
+		UNKNOWN(0.25F, 1F, 1F, 1F);
+
+		private static final EnumAnadiaBodyParts[] VALUES = values();
+
+		float speed; // added to movement speed
+		float health; // added to health
+		float strength; // added to attack if aggressive, and/or rod damage per catch
+		float stamina; // possible use for how much it pulls or time taken to catch once hooked
+
+		EnumAnadiaBodyParts(float speedModifier, float healthModifier, float strengthModifier, float staminaModifier) {
+			speed = speedModifier;
+			health = healthModifier;
+			strength = strengthModifier;
+			stamina = staminaModifier;
+		}
+
+		EnumAnadiaBodyParts() {
+			this(0.0F, 0.0F, 0.0F, 0.0F); // just in case no modifiers need to be added
+		}
+
+		public float getSpeedModifier() {
+			return speed;
+		}
+
+		public float getHealthModifier() {
+			return health;
+		}
+
+		public float getStrengthModifier() {
+			return strength;
+		}
+
+		public float getStaminaModifier() {
+			return stamina;
+		}
+		
+		public static EnumAnadiaBodyParts random(Random rng) {
+			return VALUES[rng.nextInt(VALUES.length - 1)];
+		}
+		
+		public static EnumAnadiaBodyParts get(int id) {
+			if(id >= 0 && id < VALUES.length) {
+				return VALUES[id];
+			}
+			return EnumAnadiaBodyParts.UNKNOWN;
+		}
+	}
+
+	public static enum EnumAnadiaTailParts {
+		// part (speedModifier, healthModifier, strengthModifier, stamina)
+		TAIL_1(0.125F, 1F, 1F, 1F),
+		TAIL_2(0.25F, 2F, 2F, 2F),
+		TAIL_3(0.5F, 3F, 3F, 3F),
+		
+		UNKNOWN(0.25F, 1F, 1F, 1F);
+
+		private static final EnumAnadiaTailParts[] VALUES = values();
+
+		private float speed; // added to movement speed
+		private float health; // added to health
+		private float strength; // added to attack if aggressive, and/or rod damage per catch
+		private float stamina; // possible use for how much it pulls or time taken to catch once hooked
+
+		EnumAnadiaTailParts(float speedModifier, float healthModifier, float strengthModifier, float staminaModifier) {
+			speed = speedModifier;
+			health = healthModifier;
+			strength = strengthModifier;
+			stamina = staminaModifier;
+		}
+
+		EnumAnadiaTailParts() {
+			this(0.0F, 0.0F, 0.0F, 0.0F); // just in case no modifiers need to be added
+		}
+
+		public float getSpeedModifier() {
+			return speed;
+		}
+
+		public float getHealthModifier() {
+			return health;
+		}
+
+		public float getStrengthModifier() {
+			return strength;
+		}
+
+		public float getStaminaModifier() {
+			return stamina;
+		}
+		
+		public static EnumAnadiaTailParts random(Random rng) {
+			return VALUES[rng.nextInt(VALUES.length - 1)];
+		}
+		
+		public static EnumAnadiaTailParts get(int id) {
+			if(id >= 0 && id < VALUES.length) {
+				return VALUES[id];
+			}
+			return EnumAnadiaTailParts.UNKNOWN;
+		}
+	}
+
+	public static enum EnumAnadiaColor {
+		SMOKED, ROTTEN, BASE, SILVER,
+		
+		UNKNOWN;
+
+		private static final EnumAnadiaColor[] VALUES = values();
+		
+		public static EnumAnadiaColor get(int id) {
+			if(id >= 0 && id < VALUES.length) {
+				return VALUES[id];
+			}
+			return EnumAnadiaColor.UNKNOWN;
+		}
 	}
 }

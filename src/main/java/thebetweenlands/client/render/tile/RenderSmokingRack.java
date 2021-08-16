@@ -18,6 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.model.tile.ModelSmokingRack;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
+import thebetweenlands.common.entity.mobs.EntityAnadia.EnumAnadiaColor;
 import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.item.misc.ItemMobAnadia;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -113,7 +114,7 @@ public class RenderSmokingRack extends TileEntitySpecialRenderer<TileEntitySmoki
 	public void renderAnadiaInSlot(TileEntitySmokingRack smoking_rack, ItemStack stack, Entity entity, float x, float y, float z, float scale) {
 		if (entity != null) {
 			if(stack.getItem() instanceof ItemMobAnadia && ((ItemMobAnadia)stack.getItem()).isRotten(Minecraft.getMinecraft().world, stack))
-				((EntityAnadia) entity).setFishColour((byte) 1);
+				((EntityAnadia) entity).setFishColour(EnumAnadiaColor.ROTTEN);
 			entity.prevRotationPitch = entity.rotationPitch = 90;
 			float scale2 = 1F / ((EntityAnadia) entity).getFishSize() * 0.475F;
 			GlStateManager.pushMatrix();

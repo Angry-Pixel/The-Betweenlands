@@ -23,7 +23,7 @@ public class EntityPropertyAnadiaBodyType implements EntityProperty {
 
 	@Override
 	public boolean testProperty(Random random, Entity entity) {
-		return entity instanceof EntityAnadia && ((EntityAnadia)entity).getBodyType() == this.type;
+		return entity instanceof EntityAnadia && ((EntityAnadia)entity).getBodyType().ordinal() == this.type;
 	}
 
 	public static class Serializer extends EntityProperty.Serializer<EntityPropertyAnadiaBodyType> {
