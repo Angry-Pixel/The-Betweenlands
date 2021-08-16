@@ -8,6 +8,7 @@ import com.google.common.collect.Multimap;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -75,9 +76,16 @@ public class ItemBLShovel extends ItemSpade implements ICorrodible, IAnimatorRep
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		IBlockState blockState = world.getBlockState(pos);
+		
+		if(blockState.getMaterial() == Material.PLANTS) {
+			pos = pos.down();
+			blockState = world.getBlockState(pos);
+			facing = EnumFacing.UP;
+		}
+		
 		if(facing == EnumFacing.UP) {
 			boolean dug = false;
-			IBlockState blockState = world.getBlockState(pos);
 
 			if(blockState.getBlock() == BlockRegistry.COARSE_SWAMP_DIRT) {
 				world.setBlockState(pos, BlockRegistry.DUG_SWAMP_DIRT.getDefaultState());
