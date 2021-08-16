@@ -50,13 +50,11 @@ public class BlockPeat extends Block {
 	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return 0;
 	}
-
+	
 	@Override
-	public void onBlockClicked(World world, BlockPos pos, EntityPlayer playerIn) {
-		if (!world.isRemote) {
-			if (world.getBlockState(pos.up()).getMaterial() == Material.FIRE) {
-				world.setBlockState(pos, BlockRegistry.PEAT_SMOULDERING.getDefaultState());
-			}
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+		if(!worldIn.isRemote && fromPos.getY() > pos.getY() && blockIn.getDefaultState().getMaterial() == Material.FIRE && worldIn.getBlockState(fromPos).getMaterial() != Material.FIRE) {
+			worldIn.setBlockState(pos, BlockRegistry.PEAT_SMOULDERING.getDefaultState());
 		}
 	}
 }

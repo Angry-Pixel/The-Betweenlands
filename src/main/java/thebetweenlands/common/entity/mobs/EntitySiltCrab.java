@@ -18,6 +18,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -37,12 +38,12 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySiltCrab extends EntityMob implements IEntityBL {
 
-	private EntityAIAttackMelee aiAttack;
-	private EntityAIAvoidEntity<EntityPlayer> aiRunAway;
-	private EntityAINearestAttackableTarget<EntityPlayer> aiTarget;
+	protected EntityAIAttackMelee aiAttack;
+	protected EntityAIAvoidEntity<EntityPlayer> aiRunAway;
+	protected EntityAINearestAttackableTarget<EntityPlayer> aiTarget;
 
-	private int aggroCooldown = 200;
-	private boolean canAttack = false;
+	protected int aggroCooldown = 200;
+	protected boolean canAttack = false;
 
 	private static final DataParameter<ItemStack> TRIM_ITEM_1 = EntityDataManager.createKey(EntitySiltCrab.class, DataSerializers.ITEM_STACK);
 	private static final DataParameter<ItemStack> TRIM_ITEM_2 = EntityDataManager.createKey(EntitySiltCrab.class, DataSerializers.ITEM_STACK);
@@ -132,43 +133,54 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
 
-		NBTTagCompound item1 = (NBTTagCompound) nbt.getTag("item1");
+		NBTBase item1 = nbt.getTag("item1");
 		ItemStack stack1 = ItemStack.EMPTY;
-		if(item1 != null)
-			stack1 = new ItemStack(item1);
+		if(item1 instanceof NBTTagCompound)
+			stack1 = new ItemStack((NBTTagCompound) item1);
 		setItem1(stack1);
 
-		NBTTagCompound item2 = (NBTTagCompound) nbt.getTag("item2");
+		NBTBase item2 = nbt.getTag("item2");
 		ItemStack stack2 = ItemStack.EMPTY;
-		if(item2 != null)
-			stack2 = new ItemStack(item2);
+		if(item2 instanceof NBTTagCompound)
+			stack2 = new ItemStack((NBTTagCompound) item2);
 		setItem2(stack2);
 
-		NBTTagCompound item3 = (NBTTagCompound) nbt.getTag("item3");
+		NBTBase item3 = nbt.getTag("item3");
 		ItemStack stack3 = ItemStack.EMPTY;
-		if(item3 != null)
-			stack3 = new ItemStack(item3);
+		if(item3 instanceof NBTTagCompound)
+			stack3 = new ItemStack((NBTTagCompound) item3);
 		setItem3(stack3);
+		
+		//Giving legacy silt crabs items
+		if(!this.world.isRemote && item1 == null && item2 == null && item3 == null) {
+			this.randomizeSiltCrabProperties();
+		}
 	}
 
 	@Nullable
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
 		if(!getEntityWorld().isRemote) {
-			setItem1(getPartFromLootTable(LootTableRegistry.SILT_CRAB_TRIM_1));
-			setItem2(getPartFromLootTable(LootTableRegistry.SILT_CRAB_TRIM_2));
-			setItem3(getPartFromLootTable(LootTableRegistry.SILT_CRAB_TRIM_3));
+			this.randomizeSiltCrabProperties();
 		}
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
 
+	public void randomizeSiltCrabProperties() {
+		setItem1(getPartFromLootTable(LootTableRegistry.SILT_CRAB_TRIM_1));
+		setItem2(getPartFromLootTable(LootTableRegistry.SILT_CRAB_TRIM_2));
+		setItem3(getPartFromLootTable(LootTableRegistry.SILT_CRAB_TRIM_3));
+	}
+	
 	public ItemStack getPartFromLootTable(ResourceLocation lootTableIn) {
-		LootTable lootTable = getEntityWorld().getLootTableManager().getLootTableFromLocation(lootTableIn);
-		if (lootTable != null) {
-			LootContext.Builder lootBuilder = (new LootContext.Builder((WorldServer) getEntityWorld()).withLootedEntity(this));
-			List<ItemStack> loot = lootTable.generateLootForPools(getEntityWorld().rand, lootBuilder.build());
-			if (!loot.isEmpty()) 
-				return loot.get(0);
+		if(this.world instanceof WorldServer) {
+			LootTable lootTable = this.world.getLootTableManager().getLootTableFromLocation(lootTableIn);
+			if (lootTable != null) {
+				LootContext.Builder lootBuilder = (new LootContext.Builder((WorldServer) this.world).withLootedEntity(this));
+				List<ItemStack> loot = lootTable.generateLootForPools(this.world.rand, lootBuilder.build());
+				if (!loot.isEmpty()) 
+					return loot.get(0);
+			}
 		}
 		return ItemStack.EMPTY; // to stop null;
 	}

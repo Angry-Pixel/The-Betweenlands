@@ -2,6 +2,7 @@ package thebetweenlands.common.block.container;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -12,6 +13,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -63,10 +65,20 @@ public class BlockSmokingRack extends BlockContainer implements IStateMappedBloc
 
 	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos) {
-		IBlockState state = world.getBlockState(pos.down());
-		if (!world.isAirBlock(pos) || !world.isAirBlock(pos.up()))
-			return false;
-		return true;
+		return world.isSideSolid(pos.down(), EnumFacing.UP) && world.getBlockState(pos).getBlock().isReplaceable(world, pos) && world.getBlockState(pos.up()).getBlock().isReplaceable(world, pos.up());
+	}
+	
+	@Override
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+        super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
+        this.checkAndDropBlock(worldIn, pos, state);
+    }
+	
+	protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
+		if((!state.getValue(INVISIBLE) && !worldIn.isSideSolid(pos.down(), EnumFacing.UP)) || (state.getValue(INVISIBLE) && worldIn.getBlockState(pos.down()).getBlock() != this)) {
+			this.dropBlockAsItem(worldIn, pos, state, 0);
+			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+		}
 	}
 
 	@Override

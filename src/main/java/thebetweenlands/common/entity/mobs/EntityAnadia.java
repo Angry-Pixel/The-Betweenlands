@@ -28,6 +28,7 @@ import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -397,12 +398,14 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	}
 
 	public ItemStack getPartFromLootTable(ResourceLocation lootTableIn) {
-		LootTable lootTable = getEntityWorld().getLootTableManager().getLootTableFromLocation(lootTableIn);
-		if (lootTable != null) {
-			LootContext.Builder lootBuilder = (new LootContext.Builder((WorldServer) getEntityWorld()).withLootedEntity(this));
-			List<ItemStack> loot = lootTable.generateLootForPools(getEntityWorld().rand, lootBuilder.build());
-			if (!loot.isEmpty()) 
-				return loot.get(0);
+		if(this.world instanceof WorldServer) {
+			LootTable lootTable = this.world.getLootTableManager().getLootTableFromLocation(lootTableIn);
+			if (lootTable != null) {
+				LootContext.Builder lootBuilder = (new LootContext.Builder((WorldServer) this.world).withLootedEntity(this));
+				List<ItemStack> loot = lootTable.generateLootForPools(this.world.rand, lootBuilder.build());
+				if (!loot.isEmpty()) 
+					return loot.get(0);
+			}
 		}
 		return ItemStack.EMPTY; // to stop null;
 	}
@@ -444,22 +447,22 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		setIsTreasureFish(nbt.getBoolean("isTreasureFish"));
 		setTreasureUnlocked(nbt.getBoolean("isTreasureUnlocked"));
 
-		NBTTagCompound headItem = (NBTTagCompound) nbt.getTag("headItem");
+		NBTBase headItem = nbt.getTag("headItem");
 		ItemStack stackHead = ItemStack.EMPTY;
-		if(headItem != null)
-			stackHead = new ItemStack(headItem);
+		if(headItem instanceof NBTTagCompound)
+			stackHead = new ItemStack((NBTTagCompound) headItem);
 		setHeadItem(stackHead);
 
-		NBTTagCompound bodyItem = (NBTTagCompound) nbt.getTag("bodyItem");
+		NBTBase bodyItem = nbt.getTag("bodyItem");
 		ItemStack stackBody = ItemStack.EMPTY;
-		if(bodyItem != null)
-			stackBody = new ItemStack(bodyItem);
+		if(bodyItem instanceof NBTTagCompound)
+			stackBody = new ItemStack((NBTTagCompound) bodyItem);
 		setBodyItem(stackBody);
 
-		NBTTagCompound tailItem = (NBTTagCompound) nbt.getTag("tailItem");
+		NBTBase tailItem = nbt.getTag("tailItem");
 		ItemStack stackTail = ItemStack.EMPTY;
-		if(tailItem != null)
-			stackTail = new ItemStack(tailItem);
+		if(tailItem instanceof NBTTagCompound)
+			stackTail = new ItemStack((NBTTagCompound) tailItem);
 		setTailItem(stackTail);
 	}
 

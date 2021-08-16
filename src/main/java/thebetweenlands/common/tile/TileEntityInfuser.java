@@ -3,6 +3,7 @@ package thebetweenlands.common.tile;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -276,13 +277,13 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			}
 			evaporation = 0;
 		}
-		if (world.getBlockState(pos.down()).getBlock() == BlockRegistry.PEAT_SMOULDERING && temp < 100 && getWaterAmount() > 0) {
+		if (this.isHeatSource(world.getBlockState(pos.down())) && temp < 100 && getWaterAmount() > 0) {
 			if (world.getTotalWorldTime() % 12 == 0) {
 				temp++;
 				this.markForUpdate();
 			}
 		}
-		if (world.getBlockState(pos.down()).getBlock() != BlockRegistry.PEAT_SMOULDERING && temp > 0) {
+		if (!this.isHeatSource(world.getBlockState(pos.down())) && temp > 0) {
 			if (world.getTotalWorldTime() % 6 == 0) {
 				temp--;
 				this.markForUpdate();
@@ -316,6 +317,10 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		}
 	}
 
+	private boolean isHeatSource(IBlockState state) {
+		return state.getBlock() == BlockRegistry.PEAT_SMOULDERING || state.getBlock().getMaterial(state) == Material.FIRE;
+	}
+	
 	/**
 	 * Returns the current infusing state:
 	 * 0 = no progress, 1 = in progress, 2 = finished, 3 = failed
