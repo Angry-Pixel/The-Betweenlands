@@ -18,6 +18,8 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
+import thebetweenlands.common.entity.mobs.EntityBubblerCrab;
+import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -225,7 +227,7 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
 		return Math.round(sizeIn * head + body + tail * 2F) / 2F;
 	}
 */
-	public Entity getAndiaEntity() {
+	public Entity getInputEntity() {
 		ItemStack stack = this.getItems().get(0);
 		if(!stack.isEmpty() && stack.getItem() instanceof ItemMob && ((ItemMob) stack.getItem()).hasEntityData(stack)) {
 			return ((ItemMob) stack.getItem()).createCapturedEntity(this.world, 0, 0, 0, stack);
@@ -240,11 +242,11 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
 			case 0:
 				return ItemStack.EMPTY;
 			case 1:
-				return !isAnadiaRotten() ? ((EntityAnadia) getAndiaEntity()).getHeadItem() : new ItemStack(ItemRegistry.ROTTEN_FOOD); // possible alt loot table?
+				return !isAnadiaRotten() ? ((EntityAnadia) getInputEntity()).getHeadItem() : new ItemStack(ItemRegistry.ROTTEN_FOOD); // possible alt loot table?
 			case 2:
-				return !isAnadiaRotten() ? ((EntityAnadia) getAndiaEntity()).getBodyItem() : new ItemStack(ItemRegistry.ROTTEN_FOOD); // possible alt loot table?
+				return !isAnadiaRotten() ? ((EntityAnadia) getInputEntity()).getBodyItem() : new ItemStack(ItemRegistry.ROTTEN_FOOD); // possible alt loot table?
 			case 3:
-				return !isAnadiaRotten() ? ((EntityAnadia) getAndiaEntity()).getTailItem() : new ItemStack(ItemRegistry.ROTTEN_FOOD); // possible alt loot table?
+				return !isAnadiaRotten() ? ((EntityAnadia) getInputEntity()).getTailItem() : new ItemStack(ItemRegistry.ROTTEN_FOOD); // possible alt loot table?
 			case 4:
 				return EnumItemMisc.ANADIA_REMAINS.create(numItems);
 			}
@@ -255,11 +257,11 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
 			case 0:
 				return ItemStack.EMPTY;
 			case 1:
-				return new ItemStack(ItemRegistry.SILT_CRAB_CLAW);
+				return ((EntitySiltCrab) getInputEntity()).getItem1();
 			case 2:
-				return new ItemStack(ItemRegistry.CRAB_STICK, 3);
+				return ((EntitySiltCrab) getInputEntity()).getItem2();
 			case 3:
-				return new ItemStack(ItemRegistry.SILT_CRAB_CLAW);
+				return ((EntitySiltCrab) getInputEntity()).getItem3();
 			case 4:
 				return ItemStack.EMPTY;
 			}
@@ -270,11 +272,11 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
 			case 0:
 				return ItemStack.EMPTY;
 			case 1:
-				return new ItemStack(ItemRegistry.SILT_CRAB_CLAW);
+				return ((EntityBubblerCrab) getInputEntity()).getItem1();
 			case 2:
-				return new ItemStack(ItemRegistry.CRAB_STICK, 3);
+				return ((EntityBubblerCrab) getInputEntity()).getItem2();
 			case 3:
-				return new ItemStack(ItemRegistry.SILT_CRAB_CLAW);
+				return ((EntityBubblerCrab) getInputEntity()).getItem3();
 			case 4:
 				return ItemStack.EMPTY;
 			}

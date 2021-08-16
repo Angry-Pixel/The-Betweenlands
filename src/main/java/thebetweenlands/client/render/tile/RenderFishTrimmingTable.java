@@ -63,8 +63,8 @@ public class RenderFishTrimmingTable extends TileEntitySpecialRenderer<TileEntit
 			// inputs
 			SplittableRandom rand = new SplittableRandom((long) (te.getPos().getX() + te.getPos().getY() + te.getPos().getZ()));
 			if (!te.getStackInSlot(0).isEmpty()) {
-				if (shouldRenderAsEntity(te, 0) && te.getAndiaEntity() != null)
-					renderAnadiaInSlot(te.getStackInSlot(0), te.getAndiaEntity(), 0, 0.8F, 0, 1F);
+				if (shouldRenderAsEntity(te, 0) && te.getInputEntity() != null)
+					renderAnadiaInSlot(te.getStackInSlot(0), te.getInputEntity(), 0, 0.8F, 0, 1F);
 				else
 					renderItemInSlot(te.getStackInSlot(0), 0F, 0.75F, 0F, 0.5F, 0F);
 			}

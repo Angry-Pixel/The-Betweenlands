@@ -153,6 +153,12 @@ public class LootTableRegistry {
     public static final ResourceLocation FRESHWATER_URCHIN = register("entities/freshwater_urchin");
     public static final ResourceLocation JELLYFISH = register("entities/jellyfish");
     public static final ResourceLocation GREEBLING_CORACLE = register("entities/greebling_coracle");
+    public static final ResourceLocation SILT_CRAB_TRIM_1 = register("entities/silt_crab_trim_1");
+    public static final ResourceLocation SILT_CRAB_TRIM_2 = register("entities/silt_crab_trim_2");
+    public static final ResourceLocation SILT_CRAB_TRIM_3 = register("entities/silt_crab_trim_3");
+    public static final ResourceLocation BUBBLER_CRAB_TRIM_1 = register("entities/bubbler_crab_trim_1");
+    public static final ResourceLocation BUBBLER_CRAB_TRIM_2 = register("entities/bubbler_crab_trim_2");
+    public static final ResourceLocation BUBBLER_CRAB_TRIM_3 = register("entities/bubbler_crab_trim_3");
 
     //SPECIAL MOB LOOT FUNCTIONS
     public static final ResourceLocation CHIROMAW_HATCHLING = register("entities/chiromaw_hatchling");

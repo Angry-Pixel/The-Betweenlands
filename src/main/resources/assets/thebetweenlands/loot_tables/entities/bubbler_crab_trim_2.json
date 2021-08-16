@@ -1,0 +1,24 @@
+{
+   "pools":[
+      {
+         "name":"bubbler_crab_trim_2",
+         "rolls":1,
+         "conditions":[
+            
+         ],
+         "entries":[
+            {
+               "type":"item",
+               "name":"thebetweenlands:crab_stick",
+               "functions":[
+                  {
+                     "function":"set_count",
+                     "count":3
+                  }
+               ],
+               "weight":1
+            }
+         ]
+      }
+   ]
+}
