@@ -340,7 +340,7 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, IS
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		if(slot == baitSlot && EnumItemMisc.ANADIA_REMAINS.isItemOf(stack))
 			return true;
-		if (slot == inputSlot && !EnumItemMisc.ANADIA_REMAINS.isItemOf(stack))
+		if (slot == inputSlot && !this.getRecipeOutput(stack, false).isEmpty())
 			return true;
 		return false;
 	}

@@ -8,6 +8,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import thebetweenlands.common.inventory.slot.SlotExclusion;
+import thebetweenlands.common.inventory.slot.SlotInvRestriction;
 import thebetweenlands.common.inventory.slot.SlotOutput;
 import thebetweenlands.common.inventory.slot.SlotRestriction;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -30,12 +31,7 @@ public class ContainerCrabPotFilter extends Container {
 		addSlotToContainer(new SlotRestriction(tile, 0, 43, 61, anadia_remains, 64, this));
 
 		//input
-		addSlotToContainer(new SlotExclusion(tile, 1, 43, 25, anadia_remains, 64, this) {
-			@Override
-			public boolean isItemValid(ItemStack stack) {
-				return super.isItemValid(stack) && !tile.getRecipeOutput(stack, false).isEmpty();
-			}
-		});
+		addSlotToContainer(new SlotInvRestriction(tile, 1, 43, 25));
 
 		//output
 		addSlotToContainer(new SlotOutput(tile, 2, 112, 43, this) {
