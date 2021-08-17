@@ -88,7 +88,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
 	                        world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundRegistry.GRIND, SoundCategory.BLOCKS, 1F, 1F);
 	                    
 	                        //Makes sure client knows that new grinding cycle has started
-	                        world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+	                        world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 2);
 	                    }
 	                    
 	                    if (progress == 64 || progress == 84) {
@@ -139,12 +139,12 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
         if (pestleInstalled()) {
         	if(!hasPestle) {
         		hasPestle = true;
-        		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+        		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 2);
         	}
         } else {
         	if(hasPestle) {
         		hasPestle = false;
-        		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+        		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 2);
         	}
         }
         if (!validRecipe || getStackInSlot(0).isEmpty() || getStackInSlot(1).isEmpty() || outputFull) {
@@ -153,7 +153,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
             
             if(progress > 0) {
             	progress = 0;
-            	world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+            	world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 2);
             	markDirty();
             }
         }
@@ -162,17 +162,17 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
                 NBTHelper.getStackNBTSafe(getStackInSlot(1)).setBoolean("active", false);
             progress = 0;
             markDirty();
-            world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+            world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 2);
         }
         if (isCrystalInstalled()) {
         	if(!hasCrystal) {
         		hasCrystal = true;
-        		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+        		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 2);
         	}
         } else {
         	if(hasCrystal) {
         		hasCrystal = false;
-        		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+        		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 2);
         	}
         }
     }

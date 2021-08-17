@@ -65,7 +65,7 @@ public class TileEntitySiltGlassJar extends TileEntity implements IInventory {
 
 	public void markForUpdate() {
 		IBlockState state = this.getWorld().getBlockState(this.getPos());
-		this.getWorld().notifyBlockUpdate(this.getPos(), state, state, 3);
+		this.getWorld().notifyBlockUpdate(this.getPos(), state, state, 2);
 	}
 
     @Override
@@ -127,17 +127,23 @@ public class TileEntitySiltGlassJar extends TileEntity implements IInventory {
 		return itemCount;
 	}
 	
-	public void checkItemCount() {
+	public void updateItemCount() {
+		int prevCount = this.getItemCount();
+		
 		int amount = 0;
-
-		for(int i = 0; i < getItems().size(); i++)
-			if (!getItems().get(i).isEmpty())
+		for(int i = 0; i < getItems().size(); i++) {
+			if (!getItems().get(i).isEmpty()) {
 				setItemCount(++amount);
+			}
+		}
 
-		if (isEmpty())
+		if (isEmpty()) {
 			setItemCount(0);
-
-		markForUpdate();
+		}
+		
+		if(prevCount != getItemCount()) {
+			markForUpdate();
+		}
 	}
 
 	public void setItemCount(int amount) {

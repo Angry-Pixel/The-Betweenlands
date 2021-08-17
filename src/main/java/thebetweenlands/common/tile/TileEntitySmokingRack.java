@@ -68,54 +68,47 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
         }
 
 		if (getWorld().getBlockState(pos).getBlock() instanceof BlockSmokingRack && active) {
-			if (hasFuel()) {
+			if (updateFuelState()) {
 				setSmokeProgress(getSmokeProgress() + 1);
-				if (getSmokeProgress() > MAX_SMOKING_TIME) // not equal because stuff needs to work on 1 fuel item use
+				
+				if(this.getSmokeProgress() % 10 == 0) {
+					markForUpdate();
+				}
+				
+				if (getSmokeProgress() > MAX_SMOKING_TIME) { // not equal because stuff needs to work on 1 fuel item use
 					consumeFuel();
+				}
 			}
 
-			if (canSmokeSlots(1, 4)) {
-				getCuringModifier(1);
-				setSlotProgress(1, getSlotProgress(1) + 1);
-				if (getSlotProgress(1) >= MAX_SMOKING_TIME * curing_modifier_1)
-					smokeItem(1, 4);
-			} else {
-				if (getSlotProgress(1) > 0)
-					setSlotProgress(1, 0);
-			}
-
-			if (canSmokeSlots(2, 5)) {
-				getCuringModifier(2);
-				setSlotProgress(2, getSlotProgress(2) + 1);
-				if (getSlotProgress(2) >= MAX_SMOKING_TIME * curing_modifier_2)
-					smokeItem(2, 5);
-			} else {
-				if (getSlotProgress(2) > 0)
-					setSlotProgress(2, 0);
-			}
-
-			if (canSmokeSlots(3, 6)) {
-				getCuringModifier(3);
-				setSlotProgress(3, getSlotProgress(3) + 1);
-				if (getSlotProgress(3) >= MAX_SMOKING_TIME * curing_modifier_3)
-					smokeItem(3, 6);
-			} else {
-				if (getSlotProgress(3) > 0)
-					setSlotProgress(3, 0);
+			for(int i = 0; i < 3; i++) {
+				if (canSmokeSlots(1 + i, 4 + i)) {
+					updateCuringModifier(1 + i);
+					
+					setSlotProgress(1 + i, getSlotProgress(1 + i) + 1);
+					
+					if (getSlotProgress(1 + i) >= MAX_SMOKING_TIME * curing_modifier_1) {
+						smokeItem(1 + i, 4 + i);
+					}
+				} else {
+					if (getSlotProgress(1 + i) > 0) {
+						setSlotProgress(1 + i, 0);
+						markForUpdate();
+					}
+				}
 			}
 
 		} else { // just reset all progress if the fuel runs out or inactive I suppose
-			if (getSmokeProgress() > 0)
+			if (getSmokeProgress() > 0) {
 				setSmokeProgress(0);
+				markForUpdate();
+			}
 
-			if (getSlotProgress(1) > 0)
-				setSlotProgress(1, 0);
-
-			if (getSlotProgress(2) > 0)
-				setSlotProgress(2, 0);
-
-			if (getSlotProgress(3) > 0)
-				setSlotProgress(3, 0);
+			for(int i = 0; i < 3; i++) {
+				if (getSlotProgress(1 + i) > 0) {
+					setSlotProgress(1 + i, 0);
+					markForUpdate();
+				}
+			}
 		}
     }
 
@@ -125,15 +118,12 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 			break;
 		case 1:
 			slot_1_progress = counter;
-			markForUpdate();
 			break;
 		case 2:
 			slot_2_progress = counter;
-			markForUpdate();
 			break;
 		case 3:
 			slot_3_progress = counter;
-			markForUpdate();
 			break;
 		}
 	}
@@ -163,11 +153,12 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 	public void consumeFuel() {
     	ItemStack fuelStack = getItems().get(0);
 		setSmokeProgress(0);
+		markForUpdate();
 		fuelStack.shrink(1);
     }
 
 	private boolean canSmokeSlots(int input, int output) {
-		if (!active || !hasFuel() || getItems().get(input).isEmpty() || !getItems().get(output).isEmpty())
+		if (!active || !updateFuelState() || getItems().get(input).isEmpty() || !getItems().get(output).isEmpty())
 			return false;
 		else {
 			ItemStack result = SmokingRackRecipe.getRecipeOutput(getItems().get(input));
@@ -187,7 +178,7 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 		}
 	}
 
-	private int getCuringModifier(int slot) {
+	private int updateCuringModifier(int slot) {
 		int modifier = SmokingRackRecipe.getSmokingRecipe(getItems().get(slot)).getSmokingTime(getItems().get(slot));
 		if(modifier <= 0) // just in case
 			modifier = 1;
@@ -195,33 +186,35 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 		case 0:
 			break;
 		case 1:
-			if (curing_modifier_1 == modifier)
-				break;
-			curing_modifier_1 = modifier;
-			markForUpdate();
-			return modifier;
+			if (curing_modifier_1 != modifier) {
+				curing_modifier_1 = modifier;
+				markForUpdate();
+			}
+			break;
 		case 2:
-			if (curing_modifier_2 == modifier)
-				break;
-			curing_modifier_2 = modifier;
-			markForUpdate();
-			return modifier;
+			if (curing_modifier_2 != modifier) {
+				curing_modifier_2 = modifier;
+				markForUpdate();
+			}
+			break;
 		case 3:
-			if (curing_modifier_3 == modifier)
-				break;
-			curing_modifier_3 = modifier;
-			markForUpdate();
-			return modifier;
+			if (curing_modifier_3 != modifier) {
+				curing_modifier_3 = modifier;
+				markForUpdate();
+			}
+			break;
 		}
 		return modifier;
 	}
 
-	public boolean hasFuel() {
+	public boolean updateFuelState() {
 		ItemStack fuelStack = getItems().get(0);
-		if (!fuelStack.isEmpty())
+		if (!fuelStack.isEmpty()) {
 			return true;
-		else if (getSmokeProgress() > 0)
+		} else if (getSmokeProgress() > 0) {
 			setSmokeProgress(0);
+			markForUpdate();
+		}
 		return false;
 	}
 
@@ -233,13 +226,13 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 			if (itemstack2.isEmpty())
 				getItems().set(output, result.copy());
 			setSlotProgress(input, 0);
+			markForUpdate();
 			itemstack.shrink(1);
 		}
     }
 
 	public void setSmokeProgress(int duration) {
 		smoke_progress = duration;
-		markForUpdate();
 	}
 
 	private int getSmokeProgress() {
@@ -274,7 +267,7 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 
     public void markForUpdate() {
         IBlockState state = this.getWorld().getBlockState(this.getPos());
-        this.getWorld().notifyBlockUpdate(this.getPos(), state, state, 3);
+        this.getWorld().notifyBlockUpdate(this.getPos(), state, state, 2);
     }
 
     @Override

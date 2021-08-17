@@ -115,7 +115,7 @@ public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider
 					if (j >= 0 && j < tile.inventory.size())
 						tile.inventory.set(j, new ItemStack(data));
 				}
-				tile.checkItemCount();
+				tile.updateItemCount();
 			}
 		}
 	}
@@ -137,7 +137,7 @@ public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider
 								else {
 									stack.getTagCompound().setBoolean("baited", true);
 									tile.getItems().set(i, ItemStack.EMPTY);
-									tile.checkItemCount();
+									tile.updateItemCount();
 							        if (player instanceof EntityPlayerMP)
 							        	AdvancementCriterionRegistry.USED_ROD_ON_JAR.trigger((EntityPlayerMP) player);
 									return;
@@ -164,7 +164,7 @@ public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider
 									player.setHeldItem(hand, stack.copy());
 								}
 								tile.getItems().set(i, stack);
-								tile.checkItemCount();
+								tile.updateItemCount();
 								break;
 							}
 						}
@@ -180,7 +180,7 @@ public class BlockSiltGlassJar extends BasicBlock implements ITileEntityProvider
 							item.motionX = item.motionY = item.motionZ = 0D;
 							world.spawnEntity(item);
 							tile.getItems().set(i, ItemStack.EMPTY);
-							tile.checkItemCount();
+							tile.updateItemCount();
 						}
 						player.swingArm(hand);
 						return true;

@@ -85,7 +85,7 @@ public class BlockPeatSmouldering extends BlockPeat {
 		
 		if (worldIn.getBlockState(pos.up()).getBlock() instanceof BlockSmokingRack) {
 			TileEntitySmokingRack tile = (TileEntitySmokingRack) worldIn.getTileEntity(pos.up());
-			if (tile != null && tile.hasFuel()) {
+			if (tile != null && tile.updateFuelState()) {
 				for(int i = 0; i < 3 + rand.nextInt(5); i++) {
 					BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(worldIn, pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F, 
 							ParticleArgs.get()

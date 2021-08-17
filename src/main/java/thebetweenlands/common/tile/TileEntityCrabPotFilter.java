@@ -58,41 +58,48 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, IS
 
         BlockPos pos = this.getPos();
 
-        if (getWorld().isRemote) 
+        if (getWorld().isRemote)  {
             return;
+        }
 
-        if (getWorld().getBlockState(pos.up()).getBlock() == BlockRegistry.CRAB_POT && !active) {
-        	if(hasCrabInTile()) {
-        		active = true;
-        		markForUpdate();
-        	}
+        if (getWorld().getBlockState(pos.up()).getBlock() == BlockRegistry.CRAB_POT && !active && hasCrabInTile()) {
+    		active = true;
+    		markForUpdate();
         }
         
-        if (getWorld().getBlockState(pos.up()).getBlock() == BlockRegistry.CRAB_POT) {
-        	if(hasCrabInTile()) {
-        		checkForAnmation();
-        	}
+        if (getWorld().getBlockState(pos.up()).getBlock() == BlockRegistry.CRAB_POT && hasCrabInTile()) {
+    		checkForAnmation();
         }
 
-        if (getWorld().getBlockState(pos.up()).getBlock() != BlockRegistry.CRAB_POT && active || active && !hasCrabInTile()) {
+        if (active && (getWorld().getBlockState(pos.up()).getBlock() != BlockRegistry.CRAB_POT || !hasCrabInTile())) {
         	active = false;
         	markForUpdate();
         }
 
 		if (getWorld().getBlockState(pos).getBlock() instanceof BlockCrabPotFilter && active) {
 			if (hasBait() && canFilterSlots(1, 2)) {
-				if (getBaitProgress() == 0)
+				if (getBaitProgress() == 0) {
 					consumeBait();
+				}
+				
 				setBaitProgress(getBaitProgress() + 1);
 			}
 
 			if (canFilterSlots(1, 2)) {
 				setSlotProgress(getSlotProgress() + 1);
-				if (getSlotProgress() >= MAX_FILTERING_TIME)
+				
+				if (getSlotProgress() >= MAX_FILTERING_TIME) {
 					filterItem(1, 2);
+				}
+				
+				if(this.getSlotProgress() % 10 == 0) {
+					markForUpdate();
+				}
 			} else {
-				if (getSlotProgress() > 0)
+				if (getSlotProgress() > 0) {
 					setSlotProgress(0);
+					markForUpdate();
+				}
 			}
 		}
     }
@@ -127,7 +134,6 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, IS
 
 	private void setSlotProgress(int counter) {
 		filtering_progress = counter;
-		markForUpdate();
 	}
 
 	public int getSlotProgress() {
@@ -137,6 +143,7 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, IS
 	public void consumeBait() {
     	ItemStack baitStack = getItems().get(0);
 		setBaitProgress(0);
+		markForUpdate();
 		baitStack.shrink(1);
     }
 
@@ -174,15 +181,17 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, IS
 			if (itemstack2.isEmpty())
 				getItems().set(output, result.copy());
 			setSlotProgress(0);
-			if (getBaitProgress() > MAX_FILTERING_TIME * items_to_filter_count) 
+			markForUpdate();
+			if (getBaitProgress() > MAX_FILTERING_TIME * items_to_filter_count) {
 				setBaitProgress(0);
+				markForUpdate();
+			}
 			itemstack.shrink(1);
 		}
     }
 
 	public void setBaitProgress(int duration) {
 		bait_progress = duration;
-		markForUpdate();
 	}
 
 	public int getBaitProgress() {
@@ -208,7 +217,7 @@ public class TileEntityCrabPotFilter extends TileEntity implements ITickable, IS
 
     public void markForUpdate() {
         IBlockState state = this.getWorld().getBlockState(this.getPos());
-        this.getWorld().notifyBlockUpdate(this.getPos(), state, state, 3);
+        this.getWorld().notifyBlockUpdate(this.getPos(), state, state, 2);
     }
 
 	public void setRotation(int horizontalIndexIn) {

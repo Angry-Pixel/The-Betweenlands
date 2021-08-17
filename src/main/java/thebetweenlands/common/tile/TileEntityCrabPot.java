@@ -163,7 +163,7 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 
 	public void markForUpdate() {
 		IBlockState state = this.getWorld().getBlockState(this.getPos());
-		this.getWorld().notifyBlockUpdate(this.getPos(), state, state, 3);
+		this.getWorld().notifyBlockUpdate(this.getPos(), state, state, 2);
 	}
 
 	public Entity getEntity() {
