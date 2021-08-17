@@ -2228,7 +2228,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 			//Add new puller part and entity
 			ItemStack stack = this.getPullersInventory().getStackInSlot(index);
 			if(!stack.isEmpty() && stack.getItem() instanceof ItemMob) {
-				Entity capturedEntity = ((ItemMob) stack.getItem()).createCapturedEntity(this.world, this.posX, this.posY, this.posZ, stack);
+				Entity capturedEntity = ((ItemMob) stack.getItem()).createCapturedEntity(this.world, this.posX, this.posY, this.posZ, stack, true);
 
 				Entity spawnedEntity = null;
 

@@ -210,8 +210,15 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if(source == DamageSource.DROWN)
+		if(source == DamageSource.DROWN) {
 			return false;
+		}
+		
+		Entity attacker = source.getImmediateSource();
+		if(attacker instanceof EntityLivingBase && attacker.hurtResistantTime <= 0 && ((EntityLivingBase) attacker).getHeldItemMainhand().isEmpty()) {
+			attacker.attackEntityFrom(new EntityDamageSource("cactus", this), 2F);
+		}
+		
 		return super.attackEntityFrom(source, damage);
 	}
 

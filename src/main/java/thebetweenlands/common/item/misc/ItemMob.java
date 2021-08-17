@@ -2,6 +2,7 @@ package thebetweenlands.common.item.misc;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
@@ -115,7 +116,7 @@ public class ItemMob extends Item {
 
 		return this.defaultMob != null && cls.isAssignableFrom(this.defaultMob);
 	}
-	
+
 	public boolean hasEntityData(ItemStack stack) {
 		NBTTagCompound nbt = stack.getTagCompound();
 		return nbt != null && nbt.hasKey("Entity", Constants.NBT.TAG_COMPOUND);
@@ -129,7 +130,7 @@ public class ItemMob extends Item {
 		}
 		return null;
 	}
-	
+
 	public void setEntityData(ItemStack stack, @Nullable NBTTagCompound entityData) {
 		NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
 		if(entityData == null) {
@@ -138,7 +139,7 @@ public class ItemMob extends Item {
 			nbt.setTag("Entity", entityData);
 		}
 	}
-	
+
 	@Nullable
 	public ResourceLocation getCapturedEntityId(ItemStack stack) {
 		if(stack.getItem() != this) {
@@ -160,13 +161,23 @@ public class ItemMob extends Item {
 		return null;
 	}
 
-	@Nullable
-	public Entity createCapturedEntity(World world, double x, double y, double z, ItemStack stack) {
-		return this.createCapturedEntity(world, x, y, z, stack, true);
+	protected static void handleOnInitialSpawn(Entity entity) {
+		if(!entity.world.isRemote && entity instanceof EntityLiving) {
+			((EntityLiving) entity).onInitialSpawn(entity.world.getDifficultyForLocation(new BlockPos(entity)), null);
+		}
 	}
-	
+
 	@Nullable
 	public Entity createCapturedEntity(World world, double x, double y, double z, ItemStack stack, boolean allowOnInitialSpawn) {
+		return this.createCapturedEntity(world, x, y, z, stack, entity -> {
+			if(allowOnInitialSpawn) {
+				handleOnInitialSpawn(entity);
+			}
+		}); 
+	}
+
+	@Nullable
+	public Entity createCapturedEntity(World world, double x, double y, double z, ItemStack stack, @Nullable Consumer<Entity> onNewEntityCreated) {
 		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
 			return this.createCapturedEntityFromNBT(world, x, y, z, stack.getTagCompound().getCompoundTag("Entity"));
 		}
@@ -174,17 +185,17 @@ public class ItemMob extends Item {
 		if(this.defaultMob != null) {
 			ResourceLocation id = EntityList.getKey(this.defaultMob);
 			if(id != null) {
-		        Entity entity = EntityList.createEntityByIDFromName(id, world);
-		        if(entity != null) {
-		        	entity.setLocationAndAngles(x, y, z, world.rand.nextFloat() * 360.0f, 0);
+				Entity entity = EntityList.createEntityByIDFromName(id, world);
+				if(entity != null) {
+					entity.setLocationAndAngles(x, y, z, world.rand.nextFloat() * 360.0f, 0);
 					if(this.defaultMobSetter != null) {
 						this.defaultMobSetter.accept(entity);
 					}
-					if(!world.isRemote && allowOnInitialSpawn && entity instanceof EntityLiving) {
-						((EntityLiving) entity).onInitialSpawn(world.getDifficultyForLocation(new BlockPos(entity)), null);
+					if(onNewEntityCreated != null) {
+						onNewEntityCreated.accept(entity);
 					}
 					return entity;
-		        }
+				}
 			}
 		}
 
@@ -215,40 +226,57 @@ public class ItemMob extends Item {
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		ItemStack stack = player.getHeldItem(hand);
-		if(!world.isRemote) {
-			Entity entity = this.createCapturedEntity(world, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, stack);
-			if(entity != null) {
-				
-				if(facing.getXOffset() != 0) {
-					entity.setPosition(entity.posX + facing.getXOffset() * entity.width * 0.5f, entity.posY, entity.posZ);
-				}
-				if(facing.getYOffset() < 0) {
-					entity.setPosition(entity.posX, entity.posY - entity.height, entity.posZ);
-				}
-				if(facing.getZOffset() != 0) {
-					entity.setPosition(entity.posX, entity.posY, entity.posZ + facing.getZOffset() * entity.width * 0.5f);
+
+		final AtomicBoolean isNewEntity = new AtomicBoolean();
+
+		Entity entity = this.createCapturedEntity(world, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, stack, e -> isNewEntity.set(true));
+		if(entity != null) {
+			if(facing.getXOffset() != 0) {
+				entity.setPosition(entity.posX + facing.getXOffset() * entity.width * 0.5f, entity.posY, entity.posZ);
+			}
+			if(facing.getYOffset() < 0) {
+				entity.setPosition(entity.posX, entity.posY - entity.height, entity.posZ);
+			}
+			if(facing.getZOffset() != 0) {
+				entity.setPosition(entity.posX, entity.posY, entity.posZ + facing.getZOffset() * entity.width * 0.5f);
+			}
+
+			if(world.getCollisionBoxes(entity, entity.getEntityBoundingBox()).isEmpty()) {
+				EnumActionResult result = this.spawnCapturedEntity(player, world, pos, hand, facing, hitX, hitY, hitZ, entity, isNewEntity.get());
+
+				if(result == EnumActionResult.SUCCESS) {
+					if(!world.isRemote) {
+						stack.shrink(1);
+					}
 				}
 
-				if(world.getCollisionBoxes(entity, entity.getEntityBoundingBox()).isEmpty()) {
-					this.spawnCapturedEntity(player, world, entity);
-					stack.shrink(1);
-					return EnumActionResult.SUCCESS;
-				}
+				return result;
+			}
+
+			return EnumActionResult.FAIL;
+		}
+
+		return EnumActionResult.PASS;
+	}
+
+	protected EnumActionResult spawnCapturedEntity(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ, Entity entity, boolean isNewEntity) {
+		if(!world.isRemote) {
+			if(isNewEntity) {
+				handleOnInitialSpawn(entity);
+			}
+
+			world.spawnEntity(entity);
+
+			if(entity instanceof EntityLiving) {
+				((EntityLiving) entity).playLivingSound();
 			}
 		}
+
 		return EnumActionResult.SUCCESS;
 	}
 
-	protected void spawnCapturedEntity(EntityPlayer player, World world, Entity entity) {
-		world.spawnEntity(entity);
+	public void onCapturedByPlayer(EntityPlayer player, EnumHand hand, ItemStack captured, EntityLivingBase entity) {
 
-		if(entity instanceof EntityLiving) {
-			((EntityLiving) entity).playLivingSound();
-		}
-	}
-
-	public void onCapturedByPlayer(EntityPlayer player, EnumHand hand, ItemStack captured) {
-		
 	}
 
 	@Override

@@ -145,7 +145,7 @@ public class TileEntitySmokingRack extends TileEntity implements ITickable, IInv
 	public Entity getRenderEntity(int slot) {
 		ItemStack stack = this.getItems().get(slot);
 		if(!stack.isEmpty() && stack.getItem() instanceof ItemMob && ((ItemMob) stack.getItem()).hasEntityData(stack)) {
-			return ((ItemMob) stack.getItem()).createCapturedEntity(this.world, 0, 0, 0, stack);
+			return ((ItemMob) stack.getItem()).createCapturedEntity(this.world, 0, 0, 0, stack, false);
 		}
 		return null;
 	}

@@ -169,7 +169,7 @@ public class TileEntityCrabPot extends TileEntity implements ITickable, IInvento
 	public Entity getEntity() {
 		ItemStack stack = this.getItems().get(0);
 		if(!stack.isEmpty() && stack.getItem() instanceof ItemMob && ((ItemMob) stack.getItem()).hasEntityData(stack)) {
-			return ((ItemMob) stack.getItem()).createCapturedEntity(this.world, 0, 0, 0, stack);
+			return ((ItemMob) stack.getItem()).createCapturedEntity(this.world, 0, 0, 0, stack, false);
 		}
 		return null;
 	}

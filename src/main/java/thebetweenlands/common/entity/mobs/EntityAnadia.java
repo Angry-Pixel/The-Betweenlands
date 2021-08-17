@@ -1274,11 +1274,21 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	}
 
 	public static enum EnumAnadiaColor {
-		SMOKED, ROTTEN, BASE, SILVER,
+		SMOKED(false), ROTTEN(false), BASE(true), SILVER(true),
 		
-		UNKNOWN;
+		UNKNOWN(false);
 
 		private static final EnumAnadiaColor[] VALUES = values();
+		
+		private final boolean isAlive;
+		
+		private EnumAnadiaColor(boolean isAlive) {
+			this.isAlive = isAlive;
+		}
+		
+		public boolean isAlive() {
+			return this.isAlive;
+		}
 		
 		public static EnumAnadiaColor get(int id) {
 			if(id >= 0 && id < VALUES.length) {

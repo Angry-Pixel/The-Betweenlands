@@ -88,7 +88,7 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 
 							stack.damageItem(1, player);
 
-							item.onCapturedByPlayer(player, hand, mobItemStack);
+							item.onCapturedByPlayer(player, hand, mobItemStack, target);
 
 							return true;
 						}

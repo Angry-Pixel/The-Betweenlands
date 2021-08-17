@@ -27,6 +27,7 @@ import thebetweenlands.api.capability.IRotSmellCapability;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.EntityFishingTackleBoxSeat;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
+import thebetweenlands.common.entity.mobs.EntityAnadia.EnumAnadiaColor;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.item.ITintedItem;
 import thebetweenlands.common.registries.CapabilityRegistry;
@@ -56,31 +57,13 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 		}
 		return false;
 	}
-
+	
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		ItemStack stack = player.getHeldItem(hand);
-		if(!world.isRemote) {
-			Entity entity = this.createCapturedEntity(world, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, stack);
-			if(entity != null) {
-				if(facing.getXOffset() != 0) {
-					entity.setPosition(entity.posX + facing.getXOffset() * entity.width * 0.5f, entity.posY, entity.posZ);
-				}
-				if(facing.getYOffset() < 0) {
-					entity.setPosition(entity.posX, entity.posY - entity.height, entity.posZ);
-				}
-				if(facing.getZOffset() != 0) {
-					entity.setPosition(entity.posX, entity.posY, entity.posZ + facing.getZOffset() * entity.width * 0.5f);
-				}
-
-				if(world.getCollisionBoxes(entity, entity.getEntityBoundingBox()).isEmpty()) {
-					this.spawnCapturedEntity(player, world, entity);
-					stack.shrink(1);
-					return EnumActionResult.SUCCESS;
-				}
-			}
+	protected EnumActionResult spawnCapturedEntity(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ, Entity entity, boolean isNewEntity) {
+		if(entity instanceof EntityAnadia && !((EntityAnadia) entity).getFishColour().isAlive()) {
+			return EnumActionResult.PASS;
 		}
-		return EnumActionResult.SUCCESS;
+		return super.spawnCapturedEntity(player, world, pos, hand, facing, hitX, hitY, hitZ, entity, isNewEntity);
 	}
 	
 	public void setRotten(World world, ItemStack stack, boolean rotten) {
@@ -130,11 +113,10 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 	}
 
 	@Override
-	public void onCapturedByPlayer(EntityPlayer player, EnumHand hand, ItemStack stack) {
+	public void onCapturedByPlayer(EntityPlayer player, EnumHand hand, ItemStack stack, EntityLivingBase entity) {
 		if(!player.getEntityWorld().isRemote) {
 			if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND))
 				stack.getTagCompound().getCompoundTag("Entity").setLong("rottingTime", player.getEntityWorld().getTotalWorldTime() + this.getDecayTime(stack));
-			Entity entity = this.createCapturedEntity(player.getEntityWorld(), 0, 0, 0, stack);
 			if (entity instanceof EntityLivingBase) {
 				EntityLivingBase living = (EntityLivingBase) entity;
 				if (living instanceof EntityAnadia) {
@@ -149,7 +131,7 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if(worldIn != null) {
-			Entity entity = this.createCapturedEntity(worldIn, 0, 0, 0, stack);
+			Entity entity = this.createCapturedEntity(worldIn, 0, 0, 0, stack, false);
 			if(entity instanceof EntityLivingBase) {
 				EntityLivingBase living = (EntityLivingBase) entity;
 				if (living instanceof EntityAnadia) {

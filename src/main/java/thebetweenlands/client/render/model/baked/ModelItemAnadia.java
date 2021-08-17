@@ -19,7 +19,7 @@ public class ModelItemAnadia extends ModelItemMultiPart {
 			@Override
 			public Map<String, String> getPartsMapping(ItemStack stack, World world, EntityLivingBase entity) {
 				if(stack.getItem() == ItemRegistry.ANADIA) {
-					Entity itemEntity = ((ItemMobAnadia) stack.getItem()).createCapturedEntity(Minecraft.getMinecraft().world, 0, 0, 0, stack);
+					Entity itemEntity = ((ItemMobAnadia) stack.getItem()).createCapturedEntity(Minecraft.getMinecraft().world, 0, 0, 0, stack, false);
 
 					if(itemEntity instanceof EntityAnadia) {
 						EntityAnadia anadia = (EntityAnadia) itemEntity;
