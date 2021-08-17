@@ -242,11 +242,11 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
 			case 0:
 				return ItemStack.EMPTY;
 			case 1:
-				return !isAnadiaRotten() ? ((EntityAnadia) getInputEntity()).getHeadItem() : new ItemStack(ItemRegistry.ROTTEN_FOOD); // possible alt loot table?
+				return !isAnadiaRotten() ? ((EntityAnadia) getInputEntity()).getHeadItem() : EnumItemMisc.ANADIA_REMAINS.create(1);
 			case 2:
-				return !isAnadiaRotten() ? ((EntityAnadia) getInputEntity()).getBodyItem() : new ItemStack(ItemRegistry.ROTTEN_FOOD); // possible alt loot table?
+				return !isAnadiaRotten() ? ((EntityAnadia) getInputEntity()).getBodyItem() : EnumItemMisc.ANADIA_REMAINS.create(1);
 			case 3:
-				return !isAnadiaRotten() ? ((EntityAnadia) getInputEntity()).getTailItem() : new ItemStack(ItemRegistry.ROTTEN_FOOD); // possible alt loot table?
+				return !isAnadiaRotten() ? ((EntityAnadia) getInputEntity()).getTailItem() : EnumItemMisc.ANADIA_REMAINS.create(1);
 			case 4:
 				return EnumItemMisc.ANADIA_REMAINS.create(numItems);
 			}
