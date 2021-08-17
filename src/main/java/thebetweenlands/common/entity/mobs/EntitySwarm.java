@@ -123,7 +123,20 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
-		return EntityAIAttackOnCollide.useStandardAttack(this, entityIn, new EntityDamageSource("bl.swarm", this));
+		if(EntityAIAttackOnCollide.useStandardAttack(this, entityIn, new EntityDamageSource("bl.swarm", this))) {
+			ISwarmedCapability cap = entityIn.getCapability(CapabilityRegistry.CAPABILITY_SWARMED, null);
+
+			if(cap != null) {
+				cap.setSwarmedStrength(cap.getSwarmedStrength() + 0.33f);
+
+				cap.setDamage((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+
+				cap.setSwarmSource(this);
+			}
+			
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -175,7 +188,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 					ISwarmedCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_SWARMED, null);
 
 					if(cap != null) {
-						cap.setSwarmedStrength(cap.getSwarmedStrength() + (1.0f - (float) dst / range) * 0.025f * MathHelper.clamp(this.getSwarmSize() * 1.75f, 0, 1));
+						cap.setSwarmedStrength(cap.getSwarmedStrength() + (1.0f - (float) dst / range) * 0.03f * MathHelper.clamp(this.getSwarmSize() * 1.75f, 0, 1));
 
 						cap.setDamage((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
 
