@@ -142,7 +142,7 @@ public class ItemMob extends Item {
 
 	@Nullable
 	public ResourceLocation getCapturedEntityId(ItemStack stack) {
-		if(stack.getItem() != this) {
+		if(stack.getItem() instanceof ItemMob == false) {
 			return null;
 		}
 

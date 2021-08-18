@@ -13,6 +13,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.projectiles.EntityBubblerCrabBubble;
+import thebetweenlands.common.item.misc.ItemMob;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -50,10 +52,10 @@ public class EntityBubblerCrab extends EntitySiltCrab {
 		setItem2(getPartFromLootTable(LootTableRegistry.BUBBLER_CRAB_TRIM_2));
 		setItem3(getPartFromLootTable(LootTableRegistry.BUBBLER_CRAB_TRIM_3));
 	}
-
+	
 	@Override
-	protected boolean canDespawn() {
-		return false;
+	public ItemMob getCrabPotItem() {
+		return ItemRegistry.BUBBLER_CRAB;
 	}
 
 	static class AIBubbleAttack extends EntityAIBase {

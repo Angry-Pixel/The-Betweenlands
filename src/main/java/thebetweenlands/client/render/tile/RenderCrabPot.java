@@ -58,26 +58,30 @@ public class RenderCrabPot extends TileEntitySpecialRenderer<TileEntityCrabPot> 
 						else
 							GlStateManager.rotate(-90F + getRotation(index), 0.0F, 1.0F, 0.0F);
 
+						float animationTicks = te.prevAnimationTicks + (te.animationTicks - te.prevAnimationTicks) * partialTicks;
+						
 						if (te.getEntity() instanceof EntitySiltCrab) {
 							GlStateManager.pushMatrix();
 							bindTexture(TEXTURE_SILT);
 							GlStateManager.scale(0.95F, -0.95F, -0.95F);
 							if(te.animate)
-								MODEL_SILT.renderEating(te.animationTicks, 0.0625F);
+								MODEL_SILT.renderEating(animationTicks, 0.0625F);
 							else
 								MODEL_SILT.render(te.getEntity(), 0F, 0F, 0F, 0F, 0F, 0.0625F);
 							GlStateManager.popMatrix();
 						}
+						
 						if (te.getEntity() instanceof EntityBubblerCrab) {
 							GlStateManager.pushMatrix();
 							bindTexture(TEXTURE_BUBBLER);
 							GlStateManager.scale(0.95F, -0.95F, -0.95F);
 							if(te.animate)
-								MODEL_BUBBLER.renderEating(te.animationTicks, 0.0625F);
+								MODEL_BUBBLER.renderEating(animationTicks, 0.0625F);
 							else
 								MODEL_BUBBLER.render(te.getEntity(), 0F, 0F, 0F, 0F, 0F, 0.0625F);
 							GlStateManager.popMatrix();
 						}
+						
 						GlStateManager.popMatrix();
 					}
 				}

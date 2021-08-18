@@ -109,20 +109,20 @@ public class BlockCrabPot extends BlockSwampWater implements ITileEntityProvider
 		if (!world.isRemote) {
 			if (world.getTileEntity(pos) instanceof TileEntityCrabPot) {
 				TileEntityCrabPot tile = (TileEntityCrabPot) world.getTileEntity(pos);
-				if (!player.getHeldItem(hand).isEmpty() && tile.getItems().get(0).isEmpty()) {
+				if (!player.getHeldItem(hand).isEmpty() && tile.getStackInSlot(0).isEmpty()) {
 					ItemStack stack = player.getHeldItem(hand).splitStack(1);
 					if (!stack.isEmpty()) {
-						tile.getItems().set(0, stack);
+						tile.setInventorySlotContents(0, stack);
 						tile.markForUpdate();
 						return true;
 					}
-				} else if (!tile.getItems().get(0).isEmpty()) {
-					ItemStack extracted = tile.getItems().get(0);
+				} else if (!tile.getStackInSlot(0).isEmpty()) {
+					ItemStack extracted = tile.getStackInSlot(0);
 					if (!extracted.isEmpty()) {
 						EntityItem item = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, extracted);
 						item.motionX = item.motionY = item.motionZ = 0D;
 						world.spawnEntity(item);
-						tile.getItems().set(0, ItemStack.EMPTY);
+						tile.setInventorySlotContents(0, ItemStack.EMPTY);
 						tile.markForUpdate();
 						return true;
 					}
@@ -141,10 +141,11 @@ public class BlockCrabPot extends BlockSwampWater implements ITileEntityProvider
 	}
 
 	@SideOnly(Side.CLIENT)
+	@Override
 	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
 		TileEntityCrabPot tile = (TileEntityCrabPot) world.getTileEntity(pos);
 		if (tile != null)
-			if (!tile.hasBaitItem() && !tile.getItems().get(0).isEmpty() && tile.getEntity() != null) {
+			if (!tile.hasBaitItem() && !tile.getStackInSlot(0).isEmpty() && tile.getEntity() != null) {
 				if (rand.nextInt(3) == 0)
 					world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, pos.getX() + 0.5D, pos.getY() + 0.5D + (float) tile.fallCounter * 0.03125F, pos.getZ() + 0.5D, 0.0D, 0.3D, 0.0D, new int[0]);
 				if (tile.fallCounter >= 1 && tile.fallCounter < 16)

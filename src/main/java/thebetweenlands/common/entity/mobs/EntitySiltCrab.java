@@ -33,6 +33,8 @@ import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
+import thebetweenlands.common.item.misc.ItemMob;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -258,5 +260,14 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
     @Override
     protected boolean isValidLightLevel() {
     	return true;
+    }
+    
+    public boolean lureToCrabPot(BlockPos pos) {
+    	return this.getNavigator().tryMoveToXYZ(pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D, 1D);
+    }
+    
+    @Nullable
+    public ItemMob getCrabPotItem() {
+    	return ItemRegistry.SILT_CRAB;
     }
 }
