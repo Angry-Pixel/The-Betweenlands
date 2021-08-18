@@ -514,4 +514,14 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	public ItemBlock getItemBlock() {
 		return null;
 	}
+	
+	@Override
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		if(this.isUnderwaterBlock) {
+			this.onBlockHarvested(world, pos, state, player);
+			return world.setBlockState(pos, BlockRegistry.SWAMP_WATER.getDefaultState(), world.isRemote ? 11 : 3);
+		} else {
+			return super.removedByPlayer(state, world, pos, player, willHarvest);
+		}
+	}
 }
