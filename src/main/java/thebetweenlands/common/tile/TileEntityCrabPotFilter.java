@@ -20,14 +20,19 @@ import thebetweenlands.common.recipe.misc.CrabPotFilterRecipeSilt;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class TileEntityCrabPotFilter extends TileEntityBasicInventory implements ITickable, ISidedInventory {
-	public int MAX_FILTERING_TIME = 200; // 10 seconds per item for a 64 stack = over 10.6 min IRL
+	private static final int EVENT_RESET_FILTERING_PROGRESS = 80;
+	
+	protected int maxFilteringTime = 200; // 10 seconds per item for a 64 stack = over 10.6 min IRL
 
-	public int bait_progress = 0;
-	public int filtering_progress = 0;
-	public int items_to_filter_count = 3; // logic here means 1 already in the chamber + this 
+	private int baitProgress = 0;
+	private int filteringProgress = 0;
+	private int itemsToFilterCount = 3; // logic here means 1 already in the chamber + this 
 
-	public boolean active;
-	public int horizontalIndex = 0;
+	private int prevFilteringAnimationTicks;
+	private int filteringAnimationTicks;
+	
+	private boolean active;
+	private int horizontalIndex = 0;
 
 	private final int baitSlot = 0;
 	private final int inputSlot = 1;
@@ -50,6 +55,14 @@ public class TileEntityCrabPotFilter extends TileEntityBasicInventory implements
 		BlockPos pos = this.getPos();
 
 		if (getWorld().isRemote)  {
+			this.prevFilteringAnimationTicks = this.filteringAnimationTicks;
+			
+			if(getWorld().getBlockState(pos).getBlock() instanceof BlockCrabPotFilter && active && canFilterSlots(1, 2)) {
+				this.filteringAnimationTicks = Math.min(this.filteringAnimationTicks + 1, this.maxFilteringTime);
+			} else {
+				this.prevFilteringAnimationTicks = this.filteringAnimationTicks = 0;
+			}
+			
 			return;
 		}
 
@@ -79,8 +92,9 @@ public class TileEntityCrabPotFilter extends TileEntityBasicInventory implements
 			if (canFilterSlots(1, 2)) {
 				setSlotProgress(getSlotProgress() + 1);
 
-				if (getSlotProgress() >= MAX_FILTERING_TIME) {
+				if (getSlotProgress() >= maxFilteringTime) {
 					filterItem(1, 2);
+					this.world.addBlockEvent(this.pos, this.getBlockType(), EVENT_RESET_FILTERING_PROGRESS, 0);
 				}
 
 				if(this.getSlotProgress() % 10 == 0) {
@@ -93,6 +107,23 @@ public class TileEntityCrabPotFilter extends TileEntityBasicInventory implements
 				}
 			}
 		}
+	}
+	
+	@Override
+	public boolean receiveClientEvent(int id, int type) {
+		if(id == EVENT_RESET_FILTERING_PROGRESS) {
+			if(this.world.isRemote) {
+				this.prevFilteringAnimationTicks = this.filteringAnimationTicks = 0;
+			}
+			
+			return true;
+		}
+		
+		return super.receiveClientEvent(id, type);
+	}
+	
+	public boolean isActive() {
+		return this.active;
 	}
 
 	private void checkForAnmation() {
@@ -143,11 +174,11 @@ public class TileEntityCrabPotFilter extends TileEntityBasicInventory implements
 	}
 
 	private void setSlotProgress(int counter) {
-		filtering_progress = counter;
+		filteringProgress = counter;
 	}
 
 	public int getSlotProgress() {
-		return filtering_progress;
+		return filteringProgress;
 	}
 
 	public void consumeBait() {
@@ -192,7 +223,7 @@ public class TileEntityCrabPotFilter extends TileEntityBasicInventory implements
 				setInventorySlotContents(output, result.copy());
 			setSlotProgress(0);
 			markForUpdate();
-			if (getBaitProgress() > MAX_FILTERING_TIME * items_to_filter_count) {
+			if (getBaitProgress() > maxFilteringTime * itemsToFilterCount) {
 				setBaitProgress(0);
 				markForUpdate();
 			}
@@ -201,21 +232,23 @@ public class TileEntityCrabPotFilter extends TileEntityBasicInventory implements
 	}
 
 	public void setBaitProgress(int duration) {
-		bait_progress = duration;
+		baitProgress = duration;
 	}
 
 	public int getBaitProgress() {
-		return bait_progress;
+		return baitProgress;
 	}
 
-	@SideOnly(Side.CLIENT)
 	public int getBaitProgressScaled(int count) {
-		return getBaitProgress() * count / (MAX_FILTERING_TIME * items_to_filter_count);
+		return getBaitProgress() * count / (maxFilteringTime * itemsToFilterCount);
 	}
 
-	@SideOnly(Side.CLIENT)
 	public int getFilteringProgressScaled(int count) {
-		return getSlotProgress() * count / (MAX_FILTERING_TIME);
+		return getSlotProgress() * count / (maxFilteringTime);
+	}
+	
+	public float getFilteringAnimationScaled(int count, float partialTicks) {
+		return (this.prevFilteringAnimationTicks + (this.filteringAnimationTicks - this.prevFilteringAnimationTicks) * partialTicks) * count / (maxFilteringTime);
 	}
 
 	@Override
@@ -242,8 +275,8 @@ public class TileEntityCrabPotFilter extends TileEntityBasicInventory implements
 		super.readFromNBT(nbt);
 
 		active = nbt.getBoolean("active");
-		bait_progress = nbt.getInteger("bait_progress");
-		filtering_progress = nbt.getInteger("filtering_progress");
+		baitProgress = nbt.getInteger("bait_progress");
+		filteringProgress = nbt.getInteger("filtering_progress");
 		setRotation(nbt.getInteger("horizontalIndex"));
 	}
 
@@ -252,8 +285,8 @@ public class TileEntityCrabPotFilter extends TileEntityBasicInventory implements
 		super.writeToNBT(nbt);
 
 		nbt.setBoolean("active", active);
-		nbt.setInteger("bait_progress", bait_progress);
-		nbt.setInteger("filtering_progress", filtering_progress);
+		nbt.setInteger("bait_progress", baitProgress);
+		nbt.setInteger("filtering_progress", filteringProgress);
 		nbt.setInteger("horizontalIndex", getRotation());
 
 		return nbt;

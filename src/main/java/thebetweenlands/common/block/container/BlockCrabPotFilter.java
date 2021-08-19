@@ -115,7 +115,7 @@ public class BlockCrabPotFilter extends BlockSwampWater implements ITileEntityPr
 		TileEntityCrabPotFilter tile = (TileEntityCrabPotFilter) world.getTileEntity(pos);
 		if (tile != null) {
 			if (rand.nextInt(3) == 0)
-				if (tile.active && tile.getSlotProgress() > 0) {
+				if (tile.isActive() && tile.getSlotProgress() > 0) {
 					for (int i = 0; i < 5 + rand.nextInt(5); i++) {
 						BatchedParticleRenderer.INSTANCE.addParticle(
 								DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR,
@@ -163,5 +163,13 @@ public class BlockCrabPotFilter extends BlockSwampWater implements ITileEntityPr
 	public ItemBlock getItemBlock() {
 		return ICustomItemBlock.getDefaultItemBlock(this);
 	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean eventReceived(IBlockState state, World worldIn, BlockPos pos, int id, int param) {
+        super.eventReceived(state, worldIn, pos, id, param);
+        TileEntity tileentity = worldIn.getTileEntity(pos);
+        return tileentity == null ? false : tileentity.receiveClientEvent(id, param);
+    }
 
 }

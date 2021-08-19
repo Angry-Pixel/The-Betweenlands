@@ -40,13 +40,13 @@ public class RenderCrabPotFilter extends TileEntitySpecialRenderer<TileEntityCra
 			SplittableRandom rand = new SplittableRandom((long) (te.getPos().getX() + te.getPos().getY() + te.getPos().getZ()));
 			
 			// input rendering
-			if (!te.getStackInSlot(1).isEmpty() && te.active && te.hasBait() && te.getSlotProgress() > 0) {
+			if (!te.getStackInSlot(1).isEmpty() && te.isActive() && te.hasBait() && te.getSlotProgress() > 0) {
 				GlStateManager.pushMatrix();
-				GlStateManager.translate(x + 0.5D + getItemOffsetX(index), y + 1.25D - (double) (te.getFilteringProgressScaled(200) * 0.000625D), z + 0.5D + getItemOffsetZ(index));
+				GlStateManager.translate(x + 0.5D + getItemOffsetX(index), y + 1.25D - (double) (te.getFilteringAnimationScaled(200, partialTicks) * 0.000625D), z + 0.5D + getItemOffsetZ(index));
 				GlStateManager.pushMatrix();
-				GlStateManager.scale(0.5D - (float) (te.getFilteringProgressScaled(200) * 0.0025F), 0.5D - (float) (te.getFilteringProgressScaled(200) * 0.0025F), 0.5D - (float) (te.getFilteringProgressScaled(200) * 0.0025F));
+				GlStateManager.scale(0.5D - (float) (te.getFilteringAnimationScaled(200, partialTicks) * 0.0025F), 0.5D - (float) (te.getFilteringAnimationScaled(200, partialTicks) * 0.0025F), 0.5D - (float) (te.getFilteringAnimationScaled(200, partialTicks) * 0.0025F));
 				GlStateManager.rotate(-90F - index * 90F, 0, 1, 0);
-				GlStateManager.rotate((float) (te.getFilteringProgressScaled(200) * 2F), 1, 0, 1);
+				GlStateManager.rotate((float) (te.getFilteringAnimationScaled(200, partialTicks) * 2F), 1, 0, 1);
 				ItemStack stack = te.getStackInSlot(1);
 				renderItem.renderItem(stack, TransformType.FIXED);
 				GlStateManager.popMatrix();
