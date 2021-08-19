@@ -143,6 +143,8 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 				int vortexCount = getUpgradeCount(itemStack, AmphibiousArmorUpgrades.FISH_VORTEX);
 				int urchinCount = getUpgradeCount(itemStack, AmphibiousArmorUpgrades.URCHIN);
 				int electricCount = getUpgradeCount(itemStack, AmphibiousArmorUpgrades.ELECTRIC);
+				int glideCount = getUpgradeCount(itemStack, AmphibiousArmorUpgrades.GLIDE);
+
 				long urchinAOECooldown = nbt.getLong(NBT_URCHIN_AOE_COOLDOWN);
 				long electricCooldown = nbt.getLong(NBT_ELECTRIC_COOLDOWN);
 
@@ -191,6 +193,14 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 					}
 				}
 
+				if (glideCount >= 1) { // dunno what more will do maybe a glider timer?
+					if (player.isSprinting() && !player.onGround) {
+							player.fallDistance = 0.0F;
+							player.motionX *= 1.05D;
+							player.motionZ *= 1.05D;
+							player.motionY *= 0.5D;
+						}
+				}
 			}
 
 			int ascentBoostTicks = nbt.getInteger(NBT_ASCENT_BOOST_TICKS);
