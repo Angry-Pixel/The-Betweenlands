@@ -194,7 +194,7 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 				}
 
 				if (glideCount >= 1) {
-					if (player.isSprinting() && !player.onGround) {
+					if (player.isSprinting() && !player.onGround && !player.isJumping) {
 							player.fallDistance = 0.0F;
 							player.motionX *= 1.05D;
 							player.motionZ *= 1.05D;
