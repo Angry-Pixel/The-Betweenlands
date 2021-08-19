@@ -24,6 +24,7 @@ import thebetweenlands.common.world.storage.location.LocationPortal;
 import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
 import thebetweenlands.common.world.storage.location.LocationSpiritTree;
 import thebetweenlands.common.world.storage.location.LocationStorage;
+import thebetweenlands.common.world.storage.location.LocationTokenBucket;
 import thebetweenlands.common.world.storage.operation.DeferredLinkOperation;
 
 public class StorageRegistry {
@@ -46,6 +47,7 @@ public class StorageRegistry {
 		register(new ResourceLocation(ModInfo.ID, "spirit_tree"), LocationSpiritTree.class, LocationSpiritTree::new);
 		register(new ResourceLocation(ModInfo.ID, "sludge_worm_dungeon"), LocationSludgeWormDungeon.class, LocationSludgeWormDungeon::new);
 		register(new ResourceLocation(ModInfo.ID, "chiromaw_matriarch_nest"), LocationChiromawMatriarchNest.class, LocationChiromawMatriarchNest::new);
+		register(new ResourceLocation(ModInfo.ID, "token_bucket"), LocationTokenBucket.class, LocationTokenBucket::new);
 		
 		register(new ResourceLocation(ModInfo.ID, "deferred_link"), DeferredLinkOperation.class, DeferredLinkOperation::new);
 	}

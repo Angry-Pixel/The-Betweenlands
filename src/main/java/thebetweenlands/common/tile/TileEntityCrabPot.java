@@ -21,23 +21,29 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.common.entity.mobs.EntityBubblerCrab;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemMob;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.world.storage.location.TokenBucket;
 
 public class TileEntityCrabPot extends TileEntityBasicInventory implements ITickable {
+	public static final ResourceLocation CRAB_POT_SPAWNING_TOKEN_BUCKET_ID = new ResourceLocation(ModInfo.ID, "crab_pot_spawning");
+
 	private boolean active;
 	public int fallCounter = 16;
 	public int fallCounterPrev;
@@ -49,8 +55,8 @@ public class TileEntityCrabPot extends TileEntityBasicInventory implements ITick
 	private UUID placerUUID;
 	private int catchTimer;
 	private int catchTimerMax;
-	private long lastCheckedTime;
 
+	private TokenBucket tokenBucket = new TokenBucket(CRAB_POT_SPAWNING_TOKEN_BUCKET_ID, 64, 48, 64, 1, 4, 0.99D, 1);
 
 	public TileEntityCrabPot() {
 		super(1, "container.bl.crab_pot");
@@ -66,6 +72,15 @@ public class TileEntityCrabPot extends TileEntityBasicInventory implements ITick
 		super.setWorld(worldIn);
 
 		this.updatePlacerFromUUID();
+
+		this.tokenBucket.setWorld(this.world);
+	}
+
+	@Override
+	public void setPos(BlockPos posIn) {
+		super.setPos(posIn);
+
+		this.tokenBucket.setPos(posIn);
 	}
 
 	@Override
@@ -85,7 +100,7 @@ public class TileEntityCrabPot extends TileEntityBasicInventory implements ITick
 			}
 
 			prevAnimationTicks = animationTicks;
-			
+
 			if(animate) {
 				animationTicks++;
 			}
@@ -95,7 +110,7 @@ public class TileEntityCrabPot extends TileEntityBasicInventory implements ITick
 		}
 
 		if(!world.isRemote) {
-			if(this.lastCheckedTime == 0 || this.catchTimerMax == 0) {
+			if(this.catchTimerMax == 0) {
 				this.resetCatchTimer();
 			}
 
@@ -218,14 +233,13 @@ public class TileEntityCrabPot extends TileEntityBasicInventory implements ITick
 	}
 
 	public void resetCatchTimer() {
-		this.catchTimerMax = 12000 + this.world.rand.nextInt(12000);
+		this.catchTimerMax = 24000 + this.world.rand.nextInt(36000);
 		this.catchTimer = 0;
-		this.lastCheckedTime = this.world.getTotalWorldTime();
 	}
 
 	private void updateCatchTimer() {
-		this.catchTimer = MathHelper.clamp(this.catchTimer + (int)(this.world.getTotalWorldTime() - this.lastCheckedTime), 0, this.catchTimerMax);
-		this.lastCheckedTime = this.world.getTotalWorldTime();
+		long increment = this.tokenBucket.consume();
+		this.catchTimer = MathHelper.clamp(this.catchTimer + (int)increment, 0, this.catchTimerMax);
 	}
 
 	public int getRemainingCatchTicks() {
@@ -336,7 +350,10 @@ public class TileEntityCrabPot extends TileEntityBasicInventory implements ITick
 
 		catchTimer = nbt.getInteger("catchTimer");
 		catchTimerMax = nbt.getInteger("catchTimerMax");
-		lastCheckedTime = nbt.getLong("lastLoadedTime");
+		
+		if(nbt.hasKey("tokenBucket", Constants.NBT.TAG_COMPOUND)) {
+			tokenBucket = new TokenBucket(nbt.getCompoundTag("tokenBucket"));
+		}
 	}
 
 	@Override
@@ -354,7 +371,7 @@ public class TileEntityCrabPot extends TileEntityBasicInventory implements ITick
 
 		nbt.setInteger("catchTimer", catchTimer);
 		nbt.setInteger("catchTimerMax", catchTimerMax);
-		nbt.setLong("lastLoadedTime", lastCheckedTime);
+		nbt.setTag("tokenBucket", this.tokenBucket.writeToNBT(new NBTTagCompound()));
 
 		return nbt;
 	}

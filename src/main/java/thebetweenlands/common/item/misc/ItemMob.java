@@ -67,16 +67,13 @@ public class ItemMob extends Item {
 		Function<Entity, EnumActionResult> current = SPAWN_HANDLERS.get(cls);
 		if(current != null) {
 			SPAWN_HANDLERS.put(cls, entity -> {
-				EnumActionResult result1 = current.apply(entity);
-				if(result1 == EnumActionResult.FAIL) {
-					return EnumActionResult.FAIL;
+				EnumActionResult result1 = handler.apply(entity);
+				if(result1 == EnumActionResult.SUCCESS || result1 == EnumActionResult.FAIL) {
+					return result1;
 				}
-				EnumActionResult result2 = handler.apply(entity);
-				if(result2 == EnumActionResult.FAIL) {
-					return EnumActionResult.FAIL;
-				}
-				if(result1 == EnumActionResult.SUCCESS || result2 == EnumActionResult.SUCCESS) {
-					return EnumActionResult.SUCCESS;
+				EnumActionResult result2 = current.apply(entity);
+				if(result2 == EnumActionResult.SUCCESS || result2 == EnumActionResult.FAIL) {
+					return result2;
 				}
 				return EnumActionResult.PASS;
 			});
