@@ -193,12 +193,12 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 					}
 				}
 
-				if (glideCount >= 1) { // dunno what more will do maybe a glider timer?
+				if (glideCount >= 1) {
 					if (player.isSprinting() && !player.onGround) {
 							player.fallDistance = 0.0F;
 							player.motionX *= 1.05D;
 							player.motionZ *= 1.05D;
-							player.motionY *= 0.5D;
+							player.motionY *= 0.6D - glideCount * 0.1F;
 						}
 				}
 			}
