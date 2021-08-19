@@ -245,13 +245,19 @@ public class TileEntityCrabPot extends TileEntityBasicInventory implements ITick
 
 	@Nullable
 	private EntitySiltCrab createRandomCatch(Set<Biome> biomes) {
+		EntitySiltCrab crab = null;
 		switch(this.world.rand.nextInt(2)) {
 		case 0:
-			return new EntitySiltCrab(this.world);
+			crab = new EntitySiltCrab(this.world);
+			break;
 		case 1:
-			return new EntityBubblerCrab(this.world);
+			crab = new EntityBubblerCrab(this.world);
+			break;
 		}
-		return null;
+		if(crab != null) {
+			crab.randomizeSiltCrabProperties();
+		}
+		return crab;
 	}
 
 	@Nullable

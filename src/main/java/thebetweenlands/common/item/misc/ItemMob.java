@@ -1,9 +1,12 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
@@ -14,6 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,6 +29,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
@@ -33,6 +38,15 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.util.NBTHelper;
 
 public class ItemMob extends Item {
+	private static final Map<Class<? extends Entity>, Function<Entity, EnumActionResult>> SPAWN_HANDLERS = new HashMap<>();
+
+	public static final Function<Entity, EnumActionResult> DEFAULT_SPAWN_HANDLER = entity -> {
+		if((entity.world.getDifficulty() != EnumDifficulty.PEACEFUL || entity instanceof IMob == false) && entity.world.getCollisionBoxes(entity, entity.getEntityBoundingBox()).isEmpty()) {
+			return EnumActionResult.SUCCESS;
+		}
+		return EnumActionResult.FAIL;
+	};
+
 	private final Class<? extends Entity> defaultMob;
 	private final Consumer<Entity> defaultMobSetter;
 
@@ -47,6 +61,28 @@ public class ItemMob extends Item {
 		this.defaultMob = defaultMob;
 		this.defaultMobSetter = (Consumer<Entity>) defaultMobSetter;
 		this.setCreativeTab(BLCreativeTabs.ITEMS);
+	}
+
+	public static void registerSpawnHandler(Class<? extends Entity> cls, Function<Entity, EnumActionResult> handler) {
+		Function<Entity, EnumActionResult> current = SPAWN_HANDLERS.get(cls);
+		if(current != null) {
+			SPAWN_HANDLERS.put(cls, entity -> {
+				EnumActionResult result1 = current.apply(entity);
+				if(result1 == EnumActionResult.FAIL) {
+					return EnumActionResult.FAIL;
+				}
+				EnumActionResult result2 = handler.apply(entity);
+				if(result2 == EnumActionResult.FAIL) {
+					return EnumActionResult.FAIL;
+				}
+				if(result1 == EnumActionResult.SUCCESS || result2 == EnumActionResult.SUCCESS) {
+					return EnumActionResult.SUCCESS;
+				}
+				return EnumActionResult.PASS;
+			});
+		} else {
+			SPAWN_HANDLERS.put(cls, handler);
+		}
 	}
 
 	public ItemStack capture(Class<? extends Entity> cls) {
@@ -241,19 +277,24 @@ public class ItemMob extends Item {
 				entity.setPosition(entity.posX, entity.posY, entity.posZ + facing.getZOffset() * entity.width * 0.5f);
 			}
 
-			if(world.getCollisionBoxes(entity, entity.getEntityBoundingBox()).isEmpty()) {
-				EnumActionResult result = this.spawnCapturedEntity(player, world, pos, hand, facing, hitX, hitY, hitZ, entity, isNewEntity.get());
+			Function<Entity, EnumActionResult> spawnHandler = SPAWN_HANDLERS.get(entity.getClass());
+			if(spawnHandler == null) {
+				spawnHandler = DEFAULT_SPAWN_HANDLER;
+			}
+
+			EnumActionResult result = spawnHandler.apply(entity);
+
+			if(result == EnumActionResult.SUCCESS) {
+				result = this.spawnCapturedEntity(player, world, pos, hand, facing, hitX, hitY, hitZ, entity, isNewEntity.get());
 
 				if(result == EnumActionResult.SUCCESS) {
 					if(!world.isRemote) {
 						stack.shrink(1);
 					}
 				}
-
-				return result;
 			}
 
-			return EnumActionResult.FAIL;
+			return result;
 		}
 
 		return EnumActionResult.PASS;
