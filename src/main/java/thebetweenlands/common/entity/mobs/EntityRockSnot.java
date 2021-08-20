@@ -121,6 +121,9 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 	@Override
 	public void onUpdate() {
 		if (getEntityWorld().isRemote) {
+	            if (isInWater() && !getEntityWorld().getBlockState(getPosition().down()).getMaterial().isSolid())
+					motionY -= 0.2D;
+
 			if (isBeingRidden() && getJawAngle() == 16)
 				if (getEntityWorld().getTotalWorldTime() % 20 == 0)
 					spawnEatingParticles();
