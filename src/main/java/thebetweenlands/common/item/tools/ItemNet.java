@@ -27,6 +27,7 @@ import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityFreshwaterUrchin;
 import thebetweenlands.common.entity.mobs.EntityGecko;
+import thebetweenlands.common.entity.mobs.EntityJellyfish;
 import thebetweenlands.common.entity.mobs.EntityMireSnail;
 import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
@@ -58,6 +59,7 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 		register(EntityFreshwaterUrchin.class, () -> ItemRegistry.FRESHWATER_URCHIN, (p, e) -> true);
 		register(EntityCaveFish.class, () -> ItemRegistry.CRITTER, (p, e) -> true);
 		register(EntityOlm.class, () -> ItemRegistry.CRITTER, (p, e) -> true);
+		register(EntityJellyfish.class, () -> ItemRegistry.JELLYFISH, (p, e) -> true);
 	}
 
 	public ItemNet() {

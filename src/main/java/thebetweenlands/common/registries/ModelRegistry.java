@@ -17,6 +17,7 @@ import thebetweenlands.client.render.model.baked.ModelEventSelection;
 import thebetweenlands.client.render.model.baked.ModelFromModelBase;
 import thebetweenlands.client.render.model.baked.ModelFromModelBase.IVertexProcessor;
 import thebetweenlands.client.render.model.baked.ModelItemAnadia;
+import thebetweenlands.client.render.model.baked.ModelItemJellyfish;
 import thebetweenlands.client.render.model.baked.ModelLayerSelection;
 import thebetweenlands.client.render.model.baked.ModelLifeCrystalStalactite;
 import thebetweenlands.client.render.model.baked.ModelMobItem;
@@ -241,7 +242,8 @@ public class ModelRegistry {
 	public static final ModelFromModelBase LANTERN_SILT_GLASS_ITEM = new ModelFromModelBase.Builder(new ModelLanternSiltGlass(), new ResourceLocation("thebetweenlands:blocks/lantern_silt_glass"), 64, 32)
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/silt_glass")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 	public static final IModel ANADIA = new ModelItemAnadia();
-	
+	public static final IModel JELLYFISH = new ModelItemJellyfish();
+
 	//Misc
 	public static final IModel LIFE_CRYSTAL_STALACTITE = new ModelLifeCrystalStalactite();
 	public static final IModel STALACTITE = new ModelStalactite();

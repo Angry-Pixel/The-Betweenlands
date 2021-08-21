@@ -8,7 +8,8 @@
       "thebetweenlands:dragonfly": "thebetweenlands:item/dragonfly",
       "thebetweenlands:mire_snail": "thebetweenlands:item/mire_snail",
       "thebetweenlands:cave_fish": "thebetweenlands:item/cave_fish",
-      "thebetweenlands:olm": "thebetweenlands:item/olm"
+      "thebetweenlands:olm": "thebetweenlands:item/olm",
+      "thebetweenlands:jellyfish": "thebetweenlands:item/jellyfish"
     }
   }
 }
