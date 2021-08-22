@@ -21,7 +21,7 @@ if [ "$BS_IS_DEPLOYMENT" == 'false' ]; then
     git fetch --all --tags
     previous_release_tag=$(git describe $(git rev-list --tags --max-count=1)^ --tags --abbrev=0 --match *-release)
     echo "Creating list of changes since ${previous_release_tag}..."
-	echo "Commit: <a href="\""https://${BS_BUILD_URL}/commit/${GITHUB_SHA}"\"">https://${BS_BUILD_URL}/commit/${GITHUB_SHA}</a>" >> build_notes
+	echo "Commit: <a href="\""${BS_BUILD_URL}/commit/${GITHUB_SHA}"\"">https://${BS_BUILD_URL}/commit/${GITHUB_SHA}</a>" >> build_notes
     echo "<details><summary>Changes</summary>" >> build_notes
     git log ${previous_release_tag}..HEAD --since="$(git log -1 --format=%ai ${previous_release_tag})" --pretty=format:'%an, %ad:%n%B' --no-merges >> build_notes
     echo "</details>" >> build_notes
@@ -34,7 +34,7 @@ if [ "$BS_IS_DEPLOYMENT" == 'false' ]; then
 
     echo "Creating build notes"
     #Use latest commit message as release note
-	echo "Commit: <a href="\""https://${BS_BUILD_URL}/commit/${GITHUB_SHA}"\"">https://${BS_BUILD_URL}/commit/${GITHUB_SHA}</a>" >> build_notes
+	echo "Commit: <a href="\""${BS_BUILD_URL}/commit/${GITHUB_SHA}"\"">https://${BS_BUILD_URL}/commit/${GITHUB_SHA}</a>" >> build_notes
     git log -1 --pretty=format:'%an, %ad:%n%B' >> build_notes
   fi
 fi
