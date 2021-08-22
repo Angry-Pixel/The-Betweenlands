@@ -12,6 +12,9 @@
     "frame": "challenge",
     "hidden": true
   },
+  "rewards": {
+    "experience": 5345
+},
   "parent": "thebetweenlands:adventurer/gambling_addict",
   "criteria": {
     "ancient": {
