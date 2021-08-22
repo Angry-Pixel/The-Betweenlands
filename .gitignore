@@ -15,7 +15,7 @@ classes
 .idea
 
 # gradle
-build
+/build
 .gradle
 
 # other
