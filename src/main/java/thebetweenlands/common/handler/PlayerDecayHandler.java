@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.google.common.collect.ImmutableList;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -22,6 +23,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import thebetweenlands.api.capability.IDecayCapability;
+import thebetweenlands.api.capability.IRotSmellCapability;
 import thebetweenlands.common.capability.decay.DecayStats;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.config.properties.ItemDecayFoodProperty.DecayFoodStats;
@@ -109,7 +111,7 @@ public class PlayerDecayHandler {
 					if(!event.player.isRiding()) {
 						EnumDifficulty difficulty = player.world.getDifficulty();
 
-						float decayBaseSpeed = getDecayBaseSpeed(difficulty);
+						float decayBaseSpeed = isTargetSmelly(player) ? getDecayBaseSpeed(difficulty) * 1.5F : getDecayBaseSpeed(difficulty); 
 
 						float decaySpeed = 0;
 
@@ -216,5 +218,13 @@ public class PlayerDecayHandler {
 				}
 			}
 		}
+	}
+
+	private static boolean isTargetSmelly(EntityLivingBase entity) {
+		IRotSmellCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_ROT_SMELL, null);
+		if(cap != null)
+			if(cap.isSmellingBad())
+				return true;
+		return false;
 	}
 }
