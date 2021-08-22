@@ -18,7 +18,7 @@ if [ "$BS_IS_DEPLOYMENT" == 'false' ]; then
 
     echo "Creating release notes"
     #Get previous release tag and then list commits since that release as release notes
-    git fetch --all --tags
+    git fetch --all --tags -f
     previous_release_tag=$(git describe $(git rev-list --tags --max-count=1)^ --tags --abbrev=0 --match *-release)
     echo "Creating list of changes since ${previous_release_tag}..."
 	echo "Commit: <a href="\""${BS_BUILD_URL}/commit/${GITHUB_SHA}"\"">${BS_BUILD_URL}/commit/${GITHUB_SHA}</a>" >> build_notes
