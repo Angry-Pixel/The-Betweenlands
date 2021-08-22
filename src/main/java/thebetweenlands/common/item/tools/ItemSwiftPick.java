@@ -2,6 +2,9 @@ package thebetweenlands.common.item.tools;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.api.item.CorrosionHelper;
@@ -34,7 +37,21 @@ public class ItemSwiftPick extends ItemBLPickaxe {
 		}
 		return false;
 	}
-	
+
+	@Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+		if(enchantment == Enchantments.UNBREAKING || enchantment == Enchantments.MENDING)
+			return false;
+        return true;
+    }
+
+	@Override
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book)  {
+		if(EnchantmentHelper.getEnchantments(book).containsKey(Enchantments.UNBREAKING) || EnchantmentHelper.getEnchantments(book).containsKey(Enchantments.MENDING))
+			return false;
+        return true;
+    }
+
 	@Override
 	public boolean isRepairableByAnimator(ItemStack stack) {
 		return false;

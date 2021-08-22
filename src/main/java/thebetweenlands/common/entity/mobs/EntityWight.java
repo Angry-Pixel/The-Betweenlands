@@ -41,7 +41,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
-import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.ai.EntityAIFlyRandomly;
 import thebetweenlands.common.entity.ai.EntityAIMoveToDirect;
@@ -308,7 +307,6 @@ public class EntityWight extends EntityMob implements IEntityBL {
     }
 
 	public boolean isInTar() {
-		//System.out.println("IN TAR!");
 		return this.world.isMaterialInBB(this.getEntityBoundingBox().grow(-0.10000000149011612D, -0.4000000059604645D, -0.10000000149011612D), BLMaterialRegistry.TAR);
 	}
 

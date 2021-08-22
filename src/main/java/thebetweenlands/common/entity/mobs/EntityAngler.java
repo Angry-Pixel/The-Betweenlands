@@ -200,11 +200,11 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 				moveRelative(strafe, up,  forward, 0.1F);
 				move(MoverType.SELF, motionX, motionY, motionZ);
 				motionX *= 0.8999999761581421D;
-				motionY *= 1D;
+				motionY *= 0.9D;
 				motionZ *= 0.8999999761581421D;
 
 				if (getAttackTarget() == null)
-					motionY -= 0.005D;
+					motionY -= 0.0015D;
 			} else {
 				super.travel(strafe, up, forward);
 			}

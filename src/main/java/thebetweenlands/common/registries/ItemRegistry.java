@@ -37,6 +37,7 @@ import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityFreshwaterUrchin;
+import thebetweenlands.common.entity.mobs.EntityJellyfish;
 import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityMireSnail;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
@@ -459,6 +460,7 @@ public class ItemRegistry {
     public static final ItemMob TINY_SLUDGE_WORM = new ItemMob(1, EntityTinySludgeWorm.class, null);
     public static final ItemMob TINY_SLUDGE_WORM_HELPER = new ItemMob(1, EntityTinySludgeWormHelper.class, null);
     public static final ItemMobAnadia ANADIA = new ItemMobAnadia(1, EntityAnadia.class, null);
+    public static final ItemMob JELLYFISH = new ItemMob(1, EntityJellyfish.class, null);
     public static final ItemMob SILT_CRAB = new ItemMob(1, EntitySiltCrab.class, null);
     public static final ItemMob BUBBLER_CRAB = new ItemMob(1, EntityBubblerCrab.class, null);
     public static final ItemMob FRESHWATER_URCHIN = new ItemFreshwaterUrchin(1, EntityFreshwaterUrchin.class, null);
