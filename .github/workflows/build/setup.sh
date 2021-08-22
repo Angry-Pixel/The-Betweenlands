@@ -62,10 +62,10 @@ if [ -f "build_config" ]; then
   export BS_BUILD_COMMIT=${table['commit']}
   echo "BS_BUILD_COMMIT=${BS_BUILD_COMMIT}" >> $GITHUB_ENV
 
-  export BS_BUILD_NOTES=$(cat build_notes)
-  echo 'BS_BUILD_NOTES<<EOF' >> $GITHUB_ENV
-  cat build_notes >> $GITHUB_ENV
-  echo 'EOF' >> $GITHUB_ENV
+  export BS_BUILD_NOTES="$(cat build_notes)"
+  echo 'BS_BUILD_NOTES<<BUILD_NOTES_EOF' >> $GITHUB_ENV
+  echo "$(cat build_notes)" >> $GITHUB_ENV
+  echo 'BUILD_NOTES_EOF' >> $GITHUB_ENV
   
   export BS_BUILD_WORKSPACE=${GITHUB_WORKSPACE}/repository
   echo "BS_BUILD_WORKSPACE=${BS_BUILD_WORKSPACE}" >> $GITHUB_ENV
