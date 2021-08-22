@@ -116,7 +116,7 @@ public class BlockMortar extends BlockContainer {
 	@Override
 	public void randomDisplayTick(IBlockState stateIn, World world, BlockPos pos, Random rand) {
 		TileEntityMortar tile = (TileEntityMortar) world.getTileEntity(pos);
-		if (tile.progress > 0 && rand.nextInt(3) == 0) {
+		if (tile.progress > 0 && tile.progress < 84 && rand.nextInt(3) == 0) {
 			float f = pos.getX() + 0.5F;
 			float f1 = pos.getY() + 1.1F + rand.nextFloat() * 6.0F / 16.0F;
 			float f2 = pos.getZ() + 0.5F;

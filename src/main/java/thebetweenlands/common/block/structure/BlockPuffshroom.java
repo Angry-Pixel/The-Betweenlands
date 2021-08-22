@@ -60,18 +60,30 @@ public class BlockPuffshroom extends Block implements ITileEntityProvider {
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
-
+	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		return this.tryHarvestWithShears(world, pos, state, player, player.getHeldItem(hand));
+		return this.tryHarvestWithShears(world, pos, state, player, player.getHeldItem(hand), true);
+	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public float getPlayerRelativeBlockHardness(IBlockState state, EntityPlayer player, World worldIn, BlockPos pos) {
+		ItemStack stack = player.getHeldItemMainhand();
+		
+		if(!stack.isEmpty() && stack.getItem() instanceof ItemShears) {
+			return 1.0f;
+		} else {
+			return super.getPlayerRelativeBlockHardness(state, player, worldIn, pos);
+		}
 	}
 	
 	@Override
-	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
-		this.tryHarvestWithShears(world, pos, world.getBlockState(pos), player, player.getHeldItemMainhand());
+	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
+		this.tryHarvestWithShears(worldIn, pos, state, player, player.getHeldItemMainhand(), false);
 	}
 	
-	protected boolean tryHarvestWithShears(World world, BlockPos pos, IBlockState state, EntityPlayer player, ItemStack stack) {
+	protected boolean tryHarvestWithShears(World world, BlockPos pos, IBlockState state, EntityPlayer player, ItemStack stack, boolean effects) {
 		if(!stack.isEmpty() && stack.getItem() instanceof ItemShears) {
 			TileEntity tile = world.getTileEntity(pos);
 			
@@ -91,8 +103,9 @@ public class BlockPuffshroom extends Block implements ITileEntityProvider {
 						
 						world.setBlockState(pos, BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_CRACKED), 3);
 						
-						world.playSound(null, pos, blockSoundType.getBreakSound(), SoundCategory.BLOCKS, 0.5F, 1F);
-						world.playEvent(null, 2001, pos, Block.getIdFromBlock(BlockRegistry.MUD_FLOWER_POT));
+						if(effects) {
+							world.playEvent(null, 2001, pos, Block.getIdFromBlock(this));
+						}
 						
 						world.notifyBlockUpdate(pos, state, state, 3);
 						
