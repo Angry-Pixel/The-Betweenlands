@@ -25,7 +25,7 @@ if [ "$BS_IS_DEPLOYMENT" == 'false' ]; then
     echo "<details><summary>Changes</summary><ul>" >> build_notes
 	echo "Fetching commits"
 	git fetch --shallow-since=$(git log -1 --format=%ct ${previous_release_tag})
-    git log --since="$(git log -1 --format=%ai ${previous_release_tag})" --pretty=format:'<li>%n%an, %ad:%n<pre>%B</pre></li>' --no-merges
+    git log --since="$(git log -1 --format=%ai ${previous_release_tag})" --pretty=format:'<li>%n%an, %ad:%n<pre>%B</pre></li>' --no-merges >> build_notes
     echo "</ul></details>" >> build_notes
     cat build_notes
   else
@@ -37,7 +37,7 @@ if [ "$BS_IS_DEPLOYMENT" == 'false' ]; then
     echo "Creating build notes"
     #Use latest commit message as release note
 	echo "Commit: <a href="\""${BS_BUILD_URL}/commit/${GITHUB_SHA}"\"">${BS_BUILD_URL}/commit/${GITHUB_SHA}</a>" >> build_notes
-    git log -1 --pretty=format:'%an, %ad:%n%B' >> build_notes
+    git log -1 --pretty=format:'%an, %ad:%n<pre>%B</pre>' >> build_notes
   fi
 fi
 
