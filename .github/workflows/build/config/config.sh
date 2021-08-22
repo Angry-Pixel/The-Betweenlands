@@ -18,13 +18,15 @@ if [ "$BS_IS_DEPLOYMENT" == 'false' ]; then
 
     echo "Creating release notes"
     #Get previous release tag and then list commits since that release as release notes
-    git fetch --all --tags
-    previous_release_tag=$(git describe $(git rev-list --tags --max-count=1)^ --tags --abbrev=0 --match *-release)
+    git fetch --all --tags -f
+    previous_release_tag=$(git describe $(git for-each-ref --sort=-taggerdate --format '%(objectname)' refs/tags) --tags --abbrev=0 --match *-release | sed -n 2p)
     echo "Creating list of changes since ${previous_release_tag}..."
 	echo "Commit: <a href="\""${BS_BUILD_URL}/commit/${GITHUB_SHA}"\"">${BS_BUILD_URL}/commit/${GITHUB_SHA}</a>" >> build_notes
-    echo "<details><summary>Changes</summary>" >> build_notes
-    git log ${previous_release_tag}..HEAD --since="$(git log -1 --format=%ai ${previous_release_tag})" --pretty=format:'%an, %ad:%n%B' --no-merges >> build_notes
-    echo "</details>" >> build_notes
+    echo "<details><summary>Changes</summary><ul>" >> build_notes
+	echo "Fetching commits"
+	git fetch --shallow-since=$(git log -1 --format=%ct ${previous_release_tag})
+    git log --since="$(git log -1 --format=%ai ${previous_release_tag})" --pretty=format:'<li>%n%an, %ad:%n<pre>%B</pre></li>' --no-merges >> build_notes
+    echo "</ul></details>" >> build_notes
     cat build_notes
   else
     echo "BS_BUILD_TYPE=development" >> $GITHUB_ENV
@@ -35,7 +37,7 @@ if [ "$BS_IS_DEPLOYMENT" == 'false' ]; then
     echo "Creating build notes"
     #Use latest commit message as release note
 	echo "Commit: <a href="\""${BS_BUILD_URL}/commit/${GITHUB_SHA}"\"">${BS_BUILD_URL}/commit/${GITHUB_SHA}</a>" >> build_notes
-    git log -1 --pretty=format:'%an, %ad:%n%B' >> build_notes
+    git log -1 --pretty=format:'%an, %ad:%n<pre>%B</pre>' >> build_notes
   fi
 fi
 
