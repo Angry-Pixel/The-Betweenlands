@@ -321,7 +321,7 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 			
 			float f4 = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
 			rotationYaw = (float) (MathHelper.atan2(motionX, motionZ) * (180D / Math.PI));
-			if (getDistance(shootingEntity) > 4)
+			if (shootingEntity != null && getDistance(shootingEntity) > 4)
 				for (rotationPitch = (float) (MathHelper.atan2(motionY, (double) f4) * (180D / Math.PI)); rotationPitch - prevRotationPitch < -180.0F; prevRotationPitch -= 360.0F) {
 					;
 				}
