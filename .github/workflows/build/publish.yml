@@ -1,0 +1,70 @@
+name: publish
+
+on: push
+
+jobs:
+  publish:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+        
+    - name: Setting up environment
+      run: |
+        echo "Preparing setup"
+        chmod +x "./.github/workflows/${GITHUB_WORKFLOW}/setup.sh"
+        source "./.github/workflows/${GITHUB_WORKFLOW}/setup.sh"
+      env:
+        BS_SSH_KEY_SECRET: ${{ secrets.SSH_KEY_SECRET }}
+        BS_ENC_KEY_SECRET: ${{ secrets.ENC_KEY_SECRET }}
+        BS_PULL_REQUEST: 'false'
+        BS_IS_DEPLOYMENT: 'true'
+        
+    - name: Setting outputs
+      run: |
+        echo "Setting outputs"
+        echo "::set-output name=build_number::${BS_BUILD_NUMBER}"
+        echo "::set-output name=build_type::${BS_BUILD_TYPE}"
+        echo "::set-output name=build_release::${BS_BUILD_RELEASE}"
+        echo "::set-output name=build_prerelease::${BS_BUILD_PRERELEASE}"
+        echo "::set-output name=build_title::${BS_BUILD_TITLE}"
+        echo "::set-output name=build_tag::${BS_BUILD_TAG}"
+        echo "::set-output name=build_url::${BS_BUILD_URL}"
+        echo "::set-output name=build_branch::${BS_BUILD_BRANCH}"
+        echo "::set-output name=build_commit::${BS_BUILD_COMMIT}"
+        echo "::set-output name=build_notes::${BS_BUILD_NOTES}"
+        echo "::set-output name=build_workspace::${BS_BUILD_WORKSPACE}"
+        echo "::set-output name=deploy_repository_uri::${BS_DEPLOY_REPOSITORY_URI}"
+        echo "::set-output name=deploy_repository_branch::${BS_DEPLOY_REPOSITORY_BRANCH}"
+        echo "::set-output name=deploy_name::${BS_DEPLOY_NAME}"
+        echo "::set-output name=is_deployment::true"
+      id: "env"
+        
+    - name: Building
+      run: |
+        echo "Preparing build"
+        chmod +x "./.github/workflows/${GITHUB_WORKFLOW}/build.sh"
+        source "./.github/workflows/${GITHUB_WORKFLOW}/build.sh"
+      env:
+        BS_SSH_KEY_SECRET: ${{ secrets.SSH_KEY_SECRET }}
+        BS_ENC_KEY_SECRET: ${{ secrets.ENC_KEY_SECRET }}
+        BS_PULL_REQUEST: 'false'
+        BS_IS_DEPLOYMENT: 'true'
+        
+    - name: Publishing
+      uses: softprops/action-gh-release@v1
+      with:
+        name: ${{ steps.env.outputs.build_title }}
+        body_path: "build_notes"
+        prerelease: ${{ steps.env.outputs.build_prerelease }}
+        tag_name: ${{ steps.env.outputs.build_tag }}
+        files: |
+          ./repository/build/libs/TheBetweenlands-*-server.jar
+          ./repository/build/libs/TheBetweenlands-*-universal.jar
