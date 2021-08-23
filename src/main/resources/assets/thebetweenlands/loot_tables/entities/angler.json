@@ -4,7 +4,7 @@
 			"name": "angler",
 			"rolls": {
 				"min": 0,
-				"max": 2
+				"max": 1
 			},
 			"conditions": [
 				{
