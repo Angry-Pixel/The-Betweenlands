@@ -129,7 +129,7 @@ public class EntityRockSnotTendril extends Entity implements IEntityAdditionalSp
 			for (int i = 0; i < list.size(); i++) {
 				Entity entity = list.get(i);
 				if (entity != null) {
-					if (entity instanceof EntityLivingBase && !(entity instanceof EntityRockSnot) && !(entity instanceof EntityRockSnotTendril)) {
+					if (entity instanceof EntityLivingBase && !(entity instanceof EntityRockSnot) && !(entity instanceof EntityRockSnotTendril) && !(entity instanceof EntityLurker) && entity.isNonBoss()) {
 						if (entity instanceof EntityPlayer && parent.getPlacedByPlayer() || parent.isBeingRidden())
 							return null;
 						if (!isBeingRidden()) {

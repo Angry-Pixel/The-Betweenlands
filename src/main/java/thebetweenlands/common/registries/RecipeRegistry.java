@@ -275,7 +275,7 @@ public class RecipeRegistry {
 		GameRegistry.addSmelting(BlockRegistry.SULFUR_TORCH_EXTINGUISHED, new ItemStack(BlockRegistry.SULFUR_TORCH), 0.1F);
 		GameRegistry.addSmelting(new ItemStack(ItemRegistry.ANADIA_MEAT_RAW), new ItemStack(ItemRegistry.ANADIA_MEAT_COOKED), 0.3F);
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.CRAGROCK_CHISELED), new ItemStack(BlockRegistry.CRAGROCK_CHISELED_CRACKED), 0.1F);
-		GameRegistry.addSmelting(new ItemStack(BlockRegistry.CRAGROCK_TILES), new ItemStack(BlockRegistry.CRACKED_BETWEENSTONE_TILES), 0.1F);
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.CRAGROCK_TILES), new ItemStack(BlockRegistry.CRAGROCK_TILES_CRACKED), 0.1F);
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.CRAGROCK_BRICKS), new ItemStack(BlockRegistry.CRAGROCK_BRICKS_CRACKED), 0.1F);
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.MUD_TILES, 1, 0), new ItemStack(BlockRegistry.MUD_TILES, 1, 2), 0.1F);
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.FILTERED_SILT), new ItemStack(BlockRegistry.FILTERED_SILT_GLASS), 0.3F);

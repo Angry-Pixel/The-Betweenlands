@@ -83,7 +83,7 @@ public class BiomeDeepWaters extends BiomeBetweenlands {
 		entries.add(new SurfaceSpawnEntry(13, EntityAnadia.class, EntityAnadia::new, (short) 60).setCanSpawnInWater(true).setHostile(false).setGroupSize(1, 5));
 		entries.add(new SurfaceSpawnEntry(14, EntityFreshwaterUrchin.class, EntityFreshwaterUrchin::new, (short) 60).setSurfacePredicate(SurfaceType.DIRT).setCanSpawnInWater(true).setHostile(false).setGroupSize(1, 3));
 		entries.add(new SurfaceSpawnEntry(15, EntityJellyfish.class, EntityJellyfish::new, (short) 60).setCanSpawnInWater(true).setHostile(false).setGroupSize(1, 3));
-		entries.add(new CaveSpawnEntry(16, EntityJellyfishCave.class, EntityJellyfishCave::new, (short) 30).setCanSpawnInWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D));
+		entries.add(new CaveSpawnEntry(16, EntityJellyfishCave.class, EntityJellyfishCave::new, (short) 25).setCanSpawnInWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D));
 		entries.add(new SurfaceSpawnEntry(17, EntityRockSnot.class, EntityRockSnot::new, (short) 30).setSurfacePredicate(SurfaceType.MIXED_GROUND).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 1));
 		entries.add(new CaveSpawnEntry(18, EntityCaveFish.class, EntityCaveFish::new, (short) 30).setCanSpawnInWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D));
 	}
