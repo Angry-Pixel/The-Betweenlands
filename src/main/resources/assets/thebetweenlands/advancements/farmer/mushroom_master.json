@@ -51,6 +51,26 @@
           }
         ]
       }
+    },
+    "rotbulb": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:rotbulb"
+          }
+        ]
+      }
+    },
+    "edge_shroom": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:edge_shroom"
+          }
+        ]
+      }
     }
   }
 }
