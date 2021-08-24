@@ -84,6 +84,7 @@ import thebetweenlands.common.block.misc.BlockCavingRopeLight;
 import thebetweenlands.common.block.misc.BlockDampTorch;
 import thebetweenlands.common.block.misc.BlockDentrothystPane;
 import thebetweenlands.common.block.misc.BlockFilteredSiltGlass;
+import thebetweenlands.common.block.misc.BlockFilteredSiltGlassPane;
 import thebetweenlands.common.block.misc.BlockGlassBetweenlands;
 import thebetweenlands.common.block.misc.BlockGlowingGoop;
 import thebetweenlands.common.block.misc.BlockGlowingGoopUnderwater;
@@ -507,6 +508,7 @@ public class BlockRegistry {
     public static final Block SILT_GLASS = new BlockGlassBetweenlands(Material.GLASS).setHardness(0.3F);
     public static final Block SILT_GLASS_PANE = new BlockPaneBetweenlands(Material.GLASS).setHardness(0.3F);
     public static final Block FILTERED_SILT_GLASS = new BlockFilteredSiltGlass().setHardness(0.3F);
+    public static final Block FILTERED_SILT_GLASS_PANE = new BlockFilteredSiltGlassPane();
     public static final Block POLISHED_DENTROTHYST_PANE = new BlockDentrothystPane().setHardness(0.3F);
     public static final Block AMATE_PAPER_PANE_1 = new BlockAmatePaperPane();
     public static final Block AMATE_PAPER_PANE_2 = new BlockAmatePaperPane();

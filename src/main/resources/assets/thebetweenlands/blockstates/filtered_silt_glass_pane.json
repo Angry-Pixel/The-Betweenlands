@@ -1,0 +1,539 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:internal/layer_selection",
+    "custom": {
+      "model": "thebetweenlands:block/thick_pane_post_filtered_silt_glass",
+      "layers": [
+        "translucent",
+        "none"
+      ]
+    }
+  },
+  "variants": {
+    "north": {
+      "true": {
+        "submodel": {
+          "post_north": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/thick_pane_post_north_filtered_silt_glass",
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }
+          },
+          "side_north_east": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/internal/connected_texture",
+              "model_data": {
+                "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+                "ambient_occlusion": true,
+                "connected_texture_faces": [
+                  {
+                    "connected_textures": [
+                      "thebetweenlands:blocks/filtered_silt_glass_0",
+                      "thebetweenlands:blocks/filtered_silt_glass_1",
+                      "thebetweenlands:blocks/filtered_silt_glass_2",
+                      "thebetweenlands:blocks/filtered_silt_glass_3",
+                      "thebetweenlands:blocks/filtered_silt_glass_4"
+                    ],
+                    "indices": [
+                      "east_up_south_index",
+                      "east_down_south_index",
+                      "east_down_north_index",
+                      "east_up_north_index"
+                    ],
+                    "vertices": [
+                      { "x": 0.625, "y": 1.0, "z": 0.375, "u": 0.625, "v": 0 },
+                      { "x": 0.625, "y": 0.0, "z": 0.375, "u": 0.625, "v": 1 },
+                      { "x": 0.625, "y": 0.0, "z": 0.0, "u": 1, "v": 1 },
+                      { "x": 0.625, "y": 1.0, "z": 0.0, "u": 1, "v": 0 }
+                    ]
+                  }
+                ]
+              },
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }
+          },
+          "side_north_south": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/internal/connected_texture",
+              "model_data": {
+                "particle_texture": "thebetweenlands:blocks/filtered_silt_glass__0",
+                "ambient_occlusion": true,
+                "connected_texture_faces": [
+                  {
+                    "connected_textures": [
+                      "thebetweenlands:blocks/filtered_silt_glass_0",
+                      "thebetweenlands:blocks/filtered_silt_glass_1",
+                      "thebetweenlands:blocks/filtered_silt_glass_2",
+                      "thebetweenlands:blocks/filtered_silt_glass_3",
+                      "thebetweenlands:blocks/filtered_silt_glass_4"
+                    ],
+                    "indices": [
+                      "west_up_north_index",
+                      "west_down_north_index",
+                      "west_down_south_index",
+                      "west_up_south_index"
+                    ],
+                    "vertices": [
+                      { "x": 0.375, "y": 1.0, "z": 0.0, "u": 0, "v": 0 },
+                      { "x": 0.375, "y": 0.0, "z": 0.0, "u": 0, "v": 1 },
+                      { "x": 0.375, "y": 0.0, "z": 0.375, "u": 0.375, "v": 1 },
+                      { "x": 0.375, "y": 1.0, "z": 0.375, "u": 0.375, "v": 0 }
+                    ]
+                  }
+                ]
+              },
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }
+          }
+        }
+      },
+      "false": {
+        "submodel": {
+          "no_side_north": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/internal/connected_texture",
+              "model_data": {
+                "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+                "ambient_occlusion": true,
+                "connected_texture_faces": [
+                  {
+                    "connected_textures": [
+                      "thebetweenlands:blocks/filtered_silt_glass_0",
+                      "thebetweenlands:blocks/filtered_silt_glass_1",
+                      "thebetweenlands:blocks/filtered_silt_glass_2",
+                      "thebetweenlands:blocks/filtered_silt_glass_3",
+                      "thebetweenlands:blocks/filtered_silt_glass_4"
+                    ],
+                    "indices": [
+                      "north_up_east_index",
+                      "north_down_east_index",
+                      "north_down_west_index",
+                      "north_up_west_index"
+                    ],
+                    "vertices": [
+                      { "x": 0.625, "y": 1.0, "z": 0.375, "u": 0.375, "v": 0 },
+                      { "x": 0.625, "y": 0.0, "z": 0.375, "u": 0.375, "v": 1 },
+                      { "x": 0.375, "y": 0.0, "z": 0.375, "u": 0.625, "v": 1 },
+                      { "x": 0.375, "y": 1.0, "z": 0.375, "u": 0.625, "v": 0 }
+                    ]
+                  }
+                ]
+              },
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "east": {
+      "true": {
+        "submodel": {
+          "post_east": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/thick_pane_post_east_filtered_silt_glass",
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }
+          },
+          "side_east_south": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/internal/connected_texture",
+              "model_data": {
+                "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+                "ambient_occlusion": true,
+                "connected_texture_faces": [
+                  {
+                    "connected_textures": [
+                      "thebetweenlands:blocks/filtered_silt_glass_0",
+                      "thebetweenlands:blocks/filtered_silt_glass_1",
+                      "thebetweenlands:blocks/filtered_silt_glass_2",
+                      "thebetweenlands:blocks/filtered_silt_glass_3",
+                      "thebetweenlands:blocks/filtered_silt_glass_4"
+                    ],
+                    "indices": [
+                      "south_up_west_index",
+                      "south_down_west_index",
+                      "south_down_east_index",
+                      "south_up_east_index"
+                    ],
+                    "vertices": [
+                      { "x": 0.625, "y": 1.0, "z": 0.625, "u": 0.625, "v": 0 },
+                      { "x": 0.625, "y": 0.0, "z": 0.625, "u": 0.625, "v": 1 },
+                      { "x": 1.0, "y": 0.0, "z": 0.625, "u": 1, "v": 1 },
+                      { "x": 1.0, "y": 1.0, "z": 0.625, "u": 1, "v": 0 }
+                    ]
+                  }
+                ]
+              },
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }
+          },
+          "side_east_north": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/internal/connected_texture",
+              "model_data": {
+                "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+                "ambient_occlusion": true,
+                "connected_texture_faces": [
+                  {
+                    "connected_textures": [
+                      "thebetweenlands:blocks/filtered_silt_glass_0",
+                      "thebetweenlands:blocks/filtered_silt_glass_1",
+                      "thebetweenlands:blocks/filtered_silt_glass_2",
+                      "thebetweenlands:blocks/filtered_silt_glass_3",
+                      "thebetweenlands:blocks/filtered_silt_glass_4"
+                    ],
+                    "indices": [
+                      "north_up_east_index",
+                      "north_down_east_index",
+                      "north_down_west_index",
+                      "north_up_west_index"
+                    ],
+                    "vertices": [
+                      { "x": 1.0, "y": 1.0, "z": 0.375, "u": 0.0, "v": 0 },
+                      { "x": 1.0, "y": 0.0, "z": 0.375, "u": 0.0, "v": 1 },
+                      { "x": 0.625, "y": 0.0, "z": 0.375, "u": 0.375, "v": 1 },
+                      { "x": 0.625, "y": 1.0, "z": 0.375, "u": 0.375, "v": 0 }
+                    ]
+                  }
+                ]
+              },
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }
+          }
+        }
+      },
+      "false": {
+        "submodel": {
+          "no_side_east": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/internal/connected_texture",
+              "model_data": {
+                "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+                "ambient_occlusion": true,
+                "connected_texture_faces": [
+                  {
+                    "connected_textures": [
+                      "thebetweenlands:blocks/filtered_silt_glass_0",
+                      "thebetweenlands:blocks/filtered_silt_glass_1",
+                      "thebetweenlands:blocks/filtered_silt_glass_2",
+                      "thebetweenlands:blocks/filtered_silt_glass_3",
+                      "thebetweenlands:blocks/filtered_silt_glass_4"
+                    ],
+                    "indices": [
+                      "east_up_south_index",
+                      "east_down_south_index",
+                      "east_down_north_index",
+                      "east_up_north_index"
+                    ],
+                    "vertices": [
+                      { "x": 0.625, "y": 1.0, "z": 0.625, "u": 0.375, "v": 0 },
+                      { "x": 0.625, "y": 0.0, "z": 0.625, "u": 0.375, "v": 1 },
+                      { "x": 0.625, "y": 0.0, "z": 0.375, "u": 0.625, "v": 1 },
+                      { "x": 0.625, "y": 1.0, "z": 0.375, "u": 0.625, "v": 0 }
+                    ]
+                  }
+                ]
+              },
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "south": {
+      "true": {
+        "submodel": {
+          "post_south": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/thick_pane_post_south_filtered_silt_glass",
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }
+          },
+          "side_south_west": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/internal/connected_texture",
+              "model_data": {
+                "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+                "ambient_occlusion": true,
+                "connected_texture_faces": [
+                  {
+                    "connected_textures": [
+                      "thebetweenlands:blocks/filtered_silt_glass_0",
+                      "thebetweenlands:blocks/filtered_silt_glass_1",
+                      "thebetweenlands:blocks/filtered_silt_glass_2",
+                      "thebetweenlands:blocks/filtered_silt_glass_3",
+                      "thebetweenlands:blocks/filtered_silt_glass_4"
+                    ],
+                    "indices": [
+                      "west_up_north_index",
+                      "west_down_north_index",
+                      "west_down_south_index",
+                      "west_up_south_index"
+                    ],
+                    "vertices": [
+                      { "x": 0.375, "y": 1.0, "z": 0.625, "u": 0.625, "v": 0 },
+                      { "x": 0.375, "y": 0.0, "z": 0.625, "u": 0.625, "v": 1 },
+                      { "x": 0.375, "y": 0.0, "z": 1.0, "u": 1, "v": 1 },
+                      { "x": 0.375, "y": 1.0, "z": 1.0, "u": 1, "v": 0 }
+                    ]
+                  }
+                ]
+              },
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }
+          },
+          "side_south_east": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/internal/connected_texture",
+              "model_data": {
+                "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+                "ambient_occlusion": true,
+                "connected_texture_faces": [
+                  {
+                    "connected_textures": [
+                      "thebetweenlands:blocks/filtered_silt_glass_0",
+                      "thebetweenlands:blocks/filtered_silt_glass_1",
+                      "thebetweenlands:blocks/filtered_silt_glass_2",
+                      "thebetweenlands:blocks/filtered_silt_glass_3",
+                      "thebetweenlands:blocks/filtered_silt_glass_4"
+                    ],
+                    "indices": [
+                      "east_up_south_index",
+                      "east_down_south_index",
+                      "east_down_north_index",
+                      "east_up_north_index"
+                    ],
+                    "vertices": [
+                      { "x": 0.625, "y": 1.0, "z": 1.0, "u": 0.0, "v": 0 },
+                      { "x": 0.625, "y": 0.0, "z": 1.0, "u": 0.0, "v": 1 },
+                      { "x": 0.625, "y": 0.0, "z": 0.625, "u": 0.375, "v": 1 },
+                      { "x": 0.625, "y": 1.0, "z": 0.625, "u": 0.375, "v": 0 }
+                    ]
+                  }
+                ]
+              },
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }
+          }
+        }
+      },
+      "false": {
+        "submodel": {
+          "no_side_south": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/internal/connected_texture",
+              "model_data": {
+                "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+                "ambient_occlusion": true,
+                "connected_texture_faces": [
+                  {
+                    "connected_textures": [
+                      "thebetweenlands:blocks/filtered_silt_glass_0",
+                      "thebetweenlands:blocks/filtered_silt_glass_1",
+                      "thebetweenlands:blocks/filtered_silt_glass_2",
+                      "thebetweenlands:blocks/filtered_silt_glass_3",
+                      "thebetweenlands:blocks/filtered_silt_glass_4"
+                    ],
+                    "indices": [
+                      "south_up_west_index",
+                      "south_down_west_index",
+                      "south_down_east_index",
+                      "south_up_east_index"
+                    ],
+                    "vertices": [
+                      { "x": 0.375, "y": 1.0, "z": 0.625, "u": 0.375, "v": 0 },
+                      { "x": 0.375, "y": 0.0, "z": 0.625, "u": 0.375, "v": 1 },
+                      { "x": 0.625, "y": 0.0, "z": 0.625, "u": 0.625, "v": 1 },
+                      { "x": 0.625, "y": 1.0, "z": 0.625, "u": 0.625, "v": 0 }
+                    ]
+                  }
+                ]
+              },
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "west": {
+      "true": {
+        "submodel": {
+          "post_west": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/thick_pane_post_west_filtered_silt_glass",
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }
+          },
+          "side_west_north": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/internal/connected_texture",
+              "model_data": {
+                "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+                "ambient_occlusion": true,
+                "connected_texture_faces": [
+                  {
+                    "connected_textures": [
+                      "thebetweenlands:blocks/filtered_silt_glass_0",
+                      "thebetweenlands:blocks/filtered_silt_glass_1",
+                      "thebetweenlands:blocks/filtered_silt_glass_2",
+                      "thebetweenlands:blocks/filtered_silt_glass_3",
+                      "thebetweenlands:blocks/filtered_silt_glass_4"
+                    ],
+                    "indices": [
+                      "north_up_east_index",
+                      "north_down_east_index",
+                      "north_down_west_index",
+                      "north_up_west_index"
+                    ],
+                    "vertices": [
+                      { "x": 0.375, "y": 1.0, "z": 0.375, "u": 0.625, "v": 0 },
+                      { "x": 0.375, "y": 0.0, "z": 0.375, "u": 0.625, "v": 1 },
+                      { "x": 0.0, "y": 0.0, "z": 0.375, "u": 1.0, "v": 1 },
+                      { "x": 0.0, "y": 1.0, "z": 0.375, "u": 1.0, "v": 0 }
+                    ]
+                  }
+                ]
+              },
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }
+          },
+          "side_west_south": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/internal/connected_texture",
+              "model_data": {
+                "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+                "ambient_occlusion": true,
+                "connected_texture_faces": [
+                  {
+                    "connected_textures": [
+                      "thebetweenlands:blocks/filtered_silt_glass_0",
+                      "thebetweenlands:blocks/filtered_silt_glass_1",
+                      "thebetweenlands:blocks/filtered_silt_glass_2",
+                      "thebetweenlands:blocks/filtered_silt_glass_3",
+                      "thebetweenlands:blocks/filtered_silt_glass_4"
+                    ],
+                    "indices": [
+                      "south_up_west_index",
+                      "south_down_west_index",
+                      "south_down_east_index",
+                      "south_up_east_index"
+                    ],
+                    "vertices": [
+                      { "x": 0.0, "y": 1.0, "z": 0.625, "u": 0.0, "v": 0 },
+                      { "x": 0.0, "y": 0.0, "z": 0.625, "u": 0.0, "v": 1 },
+                      { "x": 0.375, "y": 0.0, "z": 0.625, "u": 0.375, "v": 1 },
+                      { "x": 0.375, "y": 1.0, "z": 0.625, "u": 0.375, "v": 0 }
+                    ]
+                  }
+                ]
+              },
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }
+          }
+        }
+      },
+      "false": {
+        "submodel": {
+          "no_side_west": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/internal/connected_texture",
+              "model_data": {
+                "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+                "ambient_occlusion": true,
+                "connected_texture_faces": [
+                  {
+                    "connected_textures": [
+                      "thebetweenlands:blocks/filtered_silt_glass_0",
+                      "thebetweenlands:blocks/filtered_silt_glass_1",
+                      "thebetweenlands:blocks/filtered_silt_glass_2",
+                      "thebetweenlands:blocks/filtered_silt_glass_3",
+                      "thebetweenlands:blocks/filtered_silt_glass_4"
+                    ],
+                    "indices": [
+                      "west_up_north_index",
+                      "west_down_north_index",
+                      "west_down_south_index",
+                      "west_up_south_index"
+                    ],
+                    "vertices": [
+                      { "x": 0.375, "y": 1.0, "z": 0.375, "u": 0.375, "v": 0 },
+                      { "x": 0.375, "y": 0.0, "z": 0.375, "u": 0.375, "v": 1 },
+                      { "x": 0.375, "y": 0.0, "z": 0.625, "u": 0.625, "v": 1 },
+                      { "x": 0.375, "y": 1.0, "z": 0.625, "u": 0.625, "v": 0 }
+                    ]
+                  }
+                ]
+              },
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}
