@@ -316,6 +316,7 @@ tile.thebetweenlands.aqua_middle_gem_block.name=Aqua Middle Gem Block
 tile.thebetweenlands.sulfur_block.name=Block of Sulfur
 tile.thebetweenlands.inactive_glowing_smooth_cragrock.name=Inactive Glowing Smooth Cragrock
 tile.thebetweenlands.silt_glass_pane.name=Silt Glass Pane
+tile.thebetweenlands.filtered_silt_glass_pane.name=Filtered Silt Glass Pane
 tile.thebetweenlands.polished_limestone_wall.name=Polished Limestone Wall
 tile.thebetweenlands.smooth_pitstone_wall.name=Smooth Pitstone Wall
 tile.thebetweenlands.polished_dentrothyst_pane.green.name=Green Polished Dentrothyst Pane

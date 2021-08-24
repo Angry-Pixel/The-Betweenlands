@@ -7,8 +7,8 @@
         {   "from": [ 6, 0, 10 ],
             "to": [ 10, 16, 16 ],
             "faces": {
-                "down":  { "uv": [  6, 10,  10,  16 ], "texture": "#pane" },
-                "up":    { "uv": [  6, 10,  10,  16 ], "texture": "#pane" }
+                "down":  { "uv": [  6, 10,  10,  16 ], "texture": "#pane", "cullface": "down" },
+                "up":    { "uv": [  6, 10,  10,  16 ], "texture": "#pane", "cullface": "up" }
             }
         }
     ]
