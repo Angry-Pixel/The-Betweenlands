@@ -1148,7 +1148,7 @@ tooltip.bl.crab_pot_item=Add Anadia Remains to tempt Crabs.\nCan be placed on to
 tooltip.bl.crab_pot_filter_item=Used with a Crab Pot.\nCrab Pots placed above,\ncontaining Silt or Bubbler Crabs,\nprovide extra functions.
 tooltip.bl.silt_glass_jar_item=Storage for Tiny Sludge Worms.\nUsing a Weedwood Fishing Rod on the jar\nadds a worm to the rod.
 tooltip.bl.silt_glass_jar_content=- §a%2$s x %3$d
-tooltip.bl.fish_bait_jei=Secondary items modify attributes.\nUse the tooltips when crafting to see.
+tooltip.bl.fish_bait_jei=Secondary items modify attributes. Use the tooltips when crafting to see.
 
 # Anadia item mob stats
 tooltip.bl.item_mob_anadia.health=Health: %s / %s
