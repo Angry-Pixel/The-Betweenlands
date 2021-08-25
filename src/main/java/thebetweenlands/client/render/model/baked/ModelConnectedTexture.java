@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.Function;
 
+import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -71,20 +72,27 @@ public class ModelConnectedTexture implements IModel {
 
 	protected static class ConnectedTextureQuad {
 		protected final ResourceLocation[] textures;
-		protected final String[] indices;
+		protected final String[] indexNames;
+		protected final int[] indices;
 		protected final Vertex[] verts;
 		protected final EnumFacing cullFace;
+		protected final String cullFaceName;
 		protected final int tintIndex;
 		protected final float minU, minV, maxU, maxV;
 
 		protected final BakedQuad[][] quads;
 
-		protected ConnectedTextureQuad(ResourceLocation[] textures, String[] indices, Vertex[] verts, EnumFacing cullFace, int tintIndex,
+		protected IUnlistedProperty<?>[] indexProperties;
+		protected IUnlistedProperty<?> cullFaceProperty;
+
+		protected ConnectedTextureQuad(ResourceLocation[] textures, String[] indexNames, int[] indices, Vertex[] verts, @Nullable EnumFacing cullFace, @Nullable String cullFaceName, int tintIndex,
 				float minU, float minV, float maxU, float maxV) {
 			this.textures = textures;
+			this.indexNames = indexNames;
 			this.indices = indices;
 			this.verts = verts;
 			this.cullFace = cullFace;
+			this.cullFaceName = cullFaceName;
 			this.tintIndex = tintIndex;
 			this.quads = new BakedQuad[4][this.textures.length];
 			this.minU = minU;
@@ -237,36 +245,54 @@ public class ModelConnectedTexture implements IModel {
 			}
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public List<BakedQuad> getQuads(IBlockState stateOld, EnumFacing side, long rand) {
-			IExtendedBlockState state = (IExtendedBlockState) stateOld;
-			ImmutableMap<IUnlistedProperty<?>, Optional<?>> properties = state.getUnlistedProperties();
 			int faceIndex = side == null ? 0 : side.getIndex() + 1;
 			ConnectedTextureQuad[] connectedTextures = this.connectedTextures[faceIndex];
 
 			if(connectedTextures.length > 0) {
+				IExtendedBlockState state = (IExtendedBlockState) stateOld;
+				ImmutableMap<IUnlistedProperty<?>, Optional<?>> properties = state.getUnlistedProperties();
+
 				ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 
 				for(ConnectedTextureQuad tex : connectedTextures) {
-					int[] indices = new int[4];
-
-					findIndices: for(Entry<IUnlistedProperty<?>, Optional<?>> entry : properties.entrySet()) {
-						String property = entry.getKey().getName();
+					if(tex.indexProperties == null) {
+						tex.indexProperties = new IUnlistedProperty[4];
 
 						for(int i = 0; i < 4; i++) {
-							if(tex.indices[i].equals(property)) {
-								if(entry.getValue().isPresent()) {
-									indices[i] = (Integer) entry.getValue().get();
-								} else {
-									indices[0] = indices[1] = indices[2] = indices[3] = 0;
-									break findIndices;
+							String indexName = tex.indexNames[i];
+							if(indexName != null) {
+								for(Entry<IUnlistedProperty<?>, Optional<?>> entry : properties.entrySet()) {
+									if(indexName.equals(entry.getKey().getName())) {
+										tex.indexProperties[i] = entry.getKey();
+										break;
+									}
 								}
 							}
 						}
 					}
 
+					if(tex.cullFaceName != null && tex.cullFaceProperty == null) {
+						for(Entry<IUnlistedProperty<?>, Optional<?>> entry : properties.entrySet()) {
+							if(tex.cullFaceName.equals(entry.getKey().getName())) {
+								tex.cullFaceProperty = entry.getKey();
+								break;
+							}
+						}
+					}
+
 					for(int i = 0; i < 4; i++) {
-						builder.add(tex.quads[i][indices[i]]);
+						IUnlistedProperty<?> cullFaceProperty = tex.cullFaceProperty;
+						if(cullFaceProperty == null || ((Optional<Boolean>) properties.get(cullFaceProperty)).orElse(false)) {
+							IUnlistedProperty<?> indexProperty = tex.indexProperties[i];
+							if(indexProperty != null) {
+								builder.add(tex.quads[i][((Optional<Integer>) properties.get(indexProperty)).orElse(0)]);
+							} else {
+								builder.add(tex.quads[i][tex.indices[i]]);
+							}
+						}
 					}
 				}
 
@@ -331,10 +357,16 @@ public class ModelConnectedTexture implements IModel {
 				JsonObject ctJson = element.getAsJsonObject();
 
 				Preconditions.checkState(ctJson.has("indices") && ctJson.get("indices").isJsonArray() && ctJson.get("indices").getAsJsonArray().size() == 4, "Connected texture face must provide 4 indices");
-				String[] indices = new String[4];
+				String[] indexNames = new String[4];
+				int[] indices = new int[4];
 				JsonArray indicesArray = ctJson.get("indices").getAsJsonArray();
 				for(int i = 0; i < 4; i++) {
-					indices[i] = indicesArray.get(i).getAsString();
+					String indexName = indicesArray.get(i).getAsString();
+					try {
+						indices[i] = Integer.parseInt(indexName);
+					} catch(NumberFormatException ex) {
+						indexNames[i] = indexName;
+					}
 				}
 
 				Preconditions.checkState(ctJson.has("vertices") && ctJson.get("vertices").isJsonArray() && ctJson.get("vertices").getAsJsonArray().size() == 4, "Connected texture face must provide 4 vertices");
@@ -357,9 +389,14 @@ public class ModelConnectedTexture implements IModel {
 					tintIndex = ctJson.get("tintindex").getAsInt();
 				}
 
+				String cullFaceProperty = null;
 				EnumFacing cullFace = null;
 				if(ctJson.has("cullface")) {
-					cullFace = EnumFacing.byName(ctJson.get("cullface").getAsString());
+					String cullFaceName = ctJson.get("cullface").getAsString();
+					cullFace = EnumFacing.byName(cullFaceName);
+					if(cullFace == null) {
+						cullFaceProperty = cullFaceName;
+					}
 				}
 
 				float minU = 0, minV = 0, maxU = 1, maxV = 1;
@@ -376,7 +413,7 @@ public class ModelConnectedTexture implements IModel {
 					maxV = ctJson.get("maxV").getAsFloat();
 				}
 
-				connectedTextures.add(new ConnectedTextureQuad(textures, indices, vertices, cullFace, tintIndex,
+				connectedTextures.add(new ConnectedTextureQuad(textures, indexNames, indices, vertices, cullFace, cullFaceProperty, tintIndex,
 						minU, minV, maxU, maxV));
 			}
 		}
