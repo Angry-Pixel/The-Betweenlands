@@ -3,6 +3,8 @@ package thebetweenlands.common.entity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -43,9 +45,17 @@ public class EntityFishVortex extends Entity {
 			this.spawnFishParticles();
 		}
 
-		posY += 0.05D;
+		if(isBeingRidden()) {
+			Entity rider = getPassengers().get(0);
+			AxisAlignedBB box = rider.getEntityBoundingBox().grow(0D, 0.1D, 0D);
+			BlockPos pos = new BlockPos(box.minX + rider.width * 0.5F, box.maxY, box.minZ + rider.width * 0.5F);
+			 if(world.getBlockState(pos).getCollisionBoundingBox(world, pos) != null && !box.intersects(world.getBlockState(pos).getCollisionBoundingBox(world, pos)))
+				return;
+			 else
+				 posY += 0.05D;
+		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	protected void spawnFishParticles() {
 		if(this.rand.nextInt(6) == 0) {
