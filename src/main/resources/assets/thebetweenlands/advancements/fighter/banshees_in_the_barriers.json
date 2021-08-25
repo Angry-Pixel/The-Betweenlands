@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:rune_door_key"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.fighter.banshees_in_the_barriers.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.fighter.banshees_in_the_barriers.description"
+    },
+    "frame": "goal"
+  },
+  "parent": "thebetweenlands:fighter/chopping_boy",
+  "criteria": {
+    "barrishee": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:barrishee"
+        }
+      }
+    }
+  }
+}
