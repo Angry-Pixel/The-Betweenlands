@@ -13,7 +13,7 @@
                "functions":[
                   {
                      "function":"set_count",
-                     "count":3
+                     "count":2
                   }
                ],
                "weight":1

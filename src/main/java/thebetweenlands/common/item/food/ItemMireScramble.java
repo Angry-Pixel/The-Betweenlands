@@ -7,7 +7,7 @@ import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 
 public class ItemMireScramble extends ItemBLFood {
 	public ItemMireScramble() {
-		super(12, 1.2F, false);
+		super(12, 1F, false);
 	}
 
 	@Override
