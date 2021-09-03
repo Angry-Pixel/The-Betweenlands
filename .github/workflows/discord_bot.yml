@@ -39,7 +39,9 @@ jobs:
         echo 'PREVIOUS_INDEX_REVISION_EOF' >> $GITHUB_ENV
         
     - name: Building
-      run: ./discord_bot/gradlew build
+      run: |
+        chmod +x ./discord_bot/gradlew
+        ./discord_bot/gradlew build
         
     - name: Running
       run: java -jar "discord_bot/build/libs/Discord Gallery Bot-1.0.jar"
