@@ -40,11 +40,12 @@ jobs:
         
     - name: Building
       run: |
-        chmod +x ./discord_bot/gradlew
-        ./discord_bot/gradlew build
+        cd ./discord_bot
+        chmod +x ./gradlew
+        ./gradlew build
         
     - name: Running
-      run: java -jar "discord_bot/build/libs/Discord Gallery Bot-1.0.jar"
+      run: java -jar "./discord_bot/build/libs/Discord Gallery Bot-1.0.jar"
       env:
         DISCORD_CHANNEL_ID: '614072971291525130'
         DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_GALLERY_BOT_TOKEN }}
