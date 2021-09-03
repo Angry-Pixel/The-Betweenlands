@@ -1,6 +1,11 @@
 name: discord_bot
 
-on: push
+on:
+  push:
+    branches:
+      - 'online_picture_gallery'
+    paths:
+      - 'index.json'
 
 jobs:
   build:
