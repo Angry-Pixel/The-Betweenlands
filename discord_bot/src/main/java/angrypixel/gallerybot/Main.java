@@ -1,8 +1,19 @@
 package angrypixel.gallerybot;
 
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -21,8 +32,13 @@ public class Main {
 	private static final String ENV_CHANNEL_TOKEN = "DISCORD_CHANNEL_ID";
 	private static final String ENV_CURRENT_INDEX_REVISION = "CURRENT_INDEX_REVISION";
 	private static final String ENV_PREVIOUS_INDEX_REVISION = "PREVIOUS_INDEX_REVISION";
+	private static final String ENV_URL_PREFIX = "URL_PREFIX";
+	private static final String ENV_GALLERY_PATH = "GALLERY_PATH";
 
 	public static void main(String[] args) {
+		String urlPrefix = System.getenv(ENV_URL_PREFIX);
+		String galleryPath = System.getenv(ENV_GALLERY_PATH);
+
 		String token = System.getenv(ENV_BOT_TOKEN);
 		if(token == null) {
 			System.out.println(ENV_BOT_TOKEN + " environment variable does not exist");
@@ -92,11 +108,11 @@ public class Main {
 		}
 
 		System.out.println("New submissions:");
-		
+
 		for(Submission submission : currentIndex.values()) {
 			if(!previousIndex.containsKey(submission.url)) {
 				System.out.println(submission.url);
-				
+
 				String description;
 				if(submission.description != null) {
 					if(!submission.description.startsWith("\"")) {
@@ -108,17 +124,55 @@ public class Main {
 					description = null;
 				}
 
-				channel.createEmbed(spec -> {
-					spec
-					.setColor(Color.BLUE)
-					.setTitle(submission.title)
-					.setDescription("by " + submission.author)
-					.setImage(submission.url)
-					.setTimestamp(Instant.now());
-					if(description != null) {
-						spec.addField("Description:", description, false);
+				final String imgName;
+				final String imgPath;
+				final InputStream imgStream;
+
+				if(urlPrefix != null && galleryPath != null && submission.url.startsWith(urlPrefix)) {
+					System.out.println("Using local image as attachment");
+					imgName = submission.url.substring(submission.url.lastIndexOf("/") + 1);
+					imgPath = submission.url.substring(urlPrefix.length());
+					imgStream = resizeImage(new File(galleryPath, imgPath), 512);
+				} else {
+					imgName = null;
+					imgPath = null;
+					imgStream = null;
+				}
+
+				try {
+					channel.createMessage(msgSpec -> {
+						if(imgStream != null) {
+							System.out.println("Adding local image to attachments");
+							msgSpec.addFile(imgName, imgStream);
+						}
+
+						msgSpec.addEmbed(embedSpec -> {
+							embedSpec
+							.setColor(Color.BLUE)
+							.setTitle(submission.title)
+							.setDescription("by " + submission.author)
+							.setTimestamp(Instant.now());
+
+							if(description != null) {
+								embedSpec.addField("Description:", description, false);
+							}
+
+							if(imgStream != null) {
+								embedSpec.setImage("attachment://" + imgName);
+							} else {
+								embedSpec.setImage(submission.url);
+							}
+						});
+					}).block();
+				} finally {
+					if(imgStream != null) {
+						try {
+							imgStream.close();
+						} catch(IOException e) {
+							e.printStackTrace();
+						}
 					}
-				}).block();
+				}
 			}
 		}
 
@@ -156,5 +210,49 @@ public class Main {
 		});
 
 		return submissions;
+	}
+
+	private static BufferedImage readBufferedImage(InputStream imageStream) throws IOException {
+		BufferedImage bufferedimage;
+
+		try {
+			bufferedimage = ImageIO.read(imageStream);
+		} finally {
+			imageStream.close();
+		}
+
+		return bufferedimage;
+	}
+
+	private static InputStream resizeImage(File file, int size) {
+		try(FileInputStream fio = new FileInputStream(file)) {
+			BufferedImage image = readBufferedImage(fio);
+
+			if(image != null) {
+				System.out.println("Resizing local image");
+
+				int maxDim = Math.max(image.getWidth(), image.getHeight());
+				float relWidth = (1.0F - (maxDim - image.getWidth()) / (float) maxDim);
+				float relHeight = (1.0F - (maxDim - image.getHeight()) / (float) maxDim);
+				int drawnWidth = (int) Math.floor(size * relWidth);
+				int drawnHeight = (int) Math.floor(size * relHeight);
+
+				BufferedImage resized = new BufferedImage(drawnWidth, drawnHeight, image.getType());
+
+				Graphics2D g = resized.createGraphics();
+				g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+				g.drawImage(image, 0, 0, drawnWidth, drawnHeight, 0, 0, image.getWidth(), image.getHeight(), null);
+				g.dispose();
+
+				ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+				ImageIO.write(resized, "png", outStream);
+				return new ByteArrayInputStream(outStream.toByteArray(), 0, outStream.size());
+			}
+		} catch(IOException ex) {
+			System.out.println("Unable to resize local image");
+			ex.printStackTrace();
+		}
+
+		return null;
 	}
 }

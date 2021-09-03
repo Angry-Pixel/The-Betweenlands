@@ -54,3 +54,5 @@ jobs:
       env:
         DISCORD_CHANNEL_ID: '614072971291525130'
         DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_GALLERY_BOT_TOKEN }}
+        URL_PREFIX: 'https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery'
+        GALLERY_PATH: ${{ github.workspace }}
