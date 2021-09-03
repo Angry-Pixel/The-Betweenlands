@@ -56,6 +56,7 @@ public class AdvancementCriterionRegistry {
 	public static final NoCriteriaTrigger WORM_FROM_DIRT = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "worm_from_dirt")));
 	public static final NoCriteriaTrigger INFESTED = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "infested")));
 	public static final NoCriteriaTrigger SIT_ON_TACKLE_BOX = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "sit_on_tackle_box")));
+	public static final NoCriteriaTrigger USED_FUMIGANT = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "used_fumigant")));
 			
 	public static void preInit() { }
 }

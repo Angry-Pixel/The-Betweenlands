@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -18,6 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IRotSmellCapability;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class ItemFumigant extends Item {
@@ -49,6 +51,8 @@ public class ItemFumigant extends Item {
 				cap.setImmune(Math.max(cap.getRemainingImmunityTicks(), 600));
 				if (!player.capabilities.isCreativeMode)
 					stack.shrink(1);
+				if(player instanceof EntityPlayerMP)
+					AdvancementCriterionRegistry.USED_FUMIGANT.trigger((EntityPlayerMP) player);
 			}
 		}
 	}
