@@ -18,15 +18,17 @@ public class ItemSnotPod extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		ItemStack stack = player.getHeldItem(hand);
-		if (!worldIn.isRemote) {
-			EntityRockSnot snot = new EntityRockSnot(worldIn);
+		if (!world.isRemote && facing == EnumFacing.UP) {
+			EntityRockSnot snot = new EntityRockSnot(world);
 			snot.setPlacedByPlayer(true);
 			snot.setPosition(pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F);
-			worldIn.spawnEntity(snot);
-			if (!player.capabilities.isCreativeMode)
-				stack.shrink(1);
+			if (snot.getCanSpawnHere()) {
+				world.spawnEntity(snot);
+				if (!player.capabilities.isCreativeMode)
+					stack.shrink(1);
+			}
 		}
 		return EnumActionResult.SUCCESS;
 	}

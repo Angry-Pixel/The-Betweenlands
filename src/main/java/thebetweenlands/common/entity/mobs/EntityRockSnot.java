@@ -40,7 +40,6 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.EntityProximitySpawner;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -84,13 +83,14 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1D);
 	}
 
     @Override
     public boolean getCanSpawnHere() {
-        return world.getDifficulty() != EnumDifficulty.PEACEFUL && world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
+        return world.getDifficulty() != EnumDifficulty.PEACEFUL && world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ))).getMaterial() == Material.WATER;
     }
  
     @Override
@@ -163,7 +163,7 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 						getEntityWorld().playSound(null, getPosition(), SoundRegistry.ROCK_SNOT_EAT, SoundCategory.HOSTILE, 1F, 1F);
 						getPassengers().get(0).attackEntityFrom(DamageSource.GENERIC, 0F);
 						if (getEatingHeight() == 10 && getPassengers().get(0) != null) {
-							setContainedXP(getContainedXP() + getXPEaten((EntityLivingBase) getPassengers().get(0)));
+							setContainedXP(getContainedXP() + Math.round(getXPEaten((EntityLivingBase) getPassengers().get(0)) * 0.5F));
 							getPassengers().get(0).setDead();
 							if(getContainedXP() >= 10)
 								setPearlTimer(PEARL_CREATION_TIME);
@@ -308,6 +308,8 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 		if(entity instanceof EntityLurker)
 			return false;
 		if(!entity.isNonBoss())
+			return false;
+		if(!inWater)
 			return false;
 		return true;
 	}
