@@ -22,11 +22,13 @@ jobs:
       run: |
         INDEX_FILE='index.json'
         CURRENT_INDEX_REVISION=$(git show $(git log --abbrev=0 --format=%H --skip=0 --max-count=1 ${INDEX_FILE}):${INDEX_FILE})
-        echo "$CURRENT_INDEX_REVISION"
-        echo "$CURRENT_INDEX_REVISION" >> $GITHUB_ENV
+        echo "Current index:"
+        echo "$(echo """$CURRENT_INDEX_REVISION""" | tail --bytes=1000)"
+        echo "CURRENT_INDEX_REVISION=$CURRENT_INDEX_REVISION" >> $GITHUB_ENV
         PREVIOUS_INDEX_REVISION=$(git show $(git log --abbrev=0 --format=%H --skip=1 --max-count=1 ${INDEX_FILE}):${INDEX_FILE})
-        echo "$PREVIOUS_INDEX_REVISION"
-        echo "$PREVIOUS_INDEX_REVISION" >> $GITHUB_ENV
+        echo "Previous index:"
+        echo "$(echo """$PREVIOUS_INDEX_REVISION""" | tail --bytes=1000)"
+        echo "PREVIOUS_INDEX_REVISION=$PREVIOUS_INDEX_REVISION" >> $GITHUB_ENV
         
     - name: Building
       run: ./discord_bot/gradlew build
