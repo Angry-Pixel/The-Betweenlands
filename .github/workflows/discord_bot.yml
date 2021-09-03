@@ -21,14 +21,22 @@ jobs:
     - name: Getting index revisions
       run: |
         INDEX_FILE='index.json'
+        
         CURRENT_INDEX_REVISION=$(git show $(git log --abbrev=0 --format=%H --skip=0 --max-count=1 ${INDEX_FILE}):${INDEX_FILE})
         echo "Current index:"
         echo "$(echo """$CURRENT_INDEX_REVISION""" | tail --bytes=1000)"
-        echo "CURRENT_INDEX_REVISION=$CURRENT_INDEX_REVISION" >> $GITHUB_ENV
+        
+        echo 'CURRENT_INDEX_REVISION<<CURRENT_INDEX_REVISION_EOF' >> $GITHUB_ENV
+        echo "$CURRENT_INDEX_REVISION" >> $GITHUB_ENV
+        echo 'CURRENT_INDEX_REVISION_EOF' >> $GITHUB_ENV
+        
         PREVIOUS_INDEX_REVISION=$(git show $(git log --abbrev=0 --format=%H --skip=1 --max-count=1 ${INDEX_FILE}):${INDEX_FILE})
         echo "Previous index:"
         echo "$(echo """$PREVIOUS_INDEX_REVISION""" | tail --bytes=1000)"
-        echo "PREVIOUS_INDEX_REVISION=$PREVIOUS_INDEX_REVISION" >> $GITHUB_ENV
+        
+        echo 'PREVIOUS_INDEX_REVISION<<PREVIOUS_INDEX_REVISION_EOF' >> $GITHUB_ENV
+        echo "$PREVIOUS_INDEX_REVISION" >> $GITHUB_ENV
+        echo 'PREVIOUS_INDEX_REVISION_EOF' >> $GITHUB_ENV
         
     - name: Building
       run: ./discord_bot/gradlew build
