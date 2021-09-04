@@ -12,13 +12,8 @@
   },
   "parent": "thebetweenlands:survivalist/hardcore_muchies",
   "criteria": {
-    "use_fumigant": {
-      "trigger": "minecraft:consume_item",
-      "conditions": {
-        "item": {
-          "item": "thebetweenlands:fumigant"
-        }
-      }
+    "event": {
+      "trigger": "thebetweenlands:used_fumigant"
     }
   }
 }
