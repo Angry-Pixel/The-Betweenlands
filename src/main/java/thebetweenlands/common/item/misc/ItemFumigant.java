@@ -18,6 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IRotSmellCapability;
 import thebetweenlands.client.handler.ItemTooltipHandler;
+import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
@@ -40,6 +41,10 @@ public class ItemFumigant extends Item {
 		ItemStack stack = player.getHeldItem(hand);
 		if (!world.isRemote)
 			removeSmell(player, stack);
+		if (world.isRemote)
+			for (int count = 0; count <= 5; ++count)
+				BLParticles.FANCY_BUBBLE.spawn(world, player.posX + (world.rand.nextDouble() - 0.5D), player.posY + 1D + world.rand.nextDouble(), player.posZ + (world.rand.nextDouble() - 0.5D));
+
 		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 	}
 
