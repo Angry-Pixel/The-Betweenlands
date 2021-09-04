@@ -11,6 +11,9 @@ import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketMaps;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -21,11 +24,13 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.MapData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.item.IRenamableItem;
 import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.network.clientbound.MessageAmateMap;
+import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.ItemRegistry.ICustomMeshCallback;
@@ -39,7 +44,7 @@ import thebetweenlands.common.world.storage.location.LocationStorage;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class ItemAmateMap extends ItemMap implements ICustomMeshCallback {
+public class ItemAmateMap extends ItemMap implements ICustomMeshCallback, IRenamableItem {
 
     public static final String STR_ID = "amatemap";
     private static final Map<ResourceLocation, BiomeColor> BIOME_COLORS = new HashMap<>();
@@ -60,6 +65,19 @@ public class ItemAmateMap extends ItemMap implements ICustomMeshCallback {
         mapdata.unlimitedTracking = unlimitedTracking;
         mapdata.markDirty();
         return itemstack;
+    }
+
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+
+        if(player.isSneaking()) {
+            if (!world.isRemote) {
+                player.openGui(TheBetweenlands.instance, CommonProxy.GUI_ITEM_RENAMING, world, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
+            }
+        }
+
+        return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
     }
 
     @Nullable
