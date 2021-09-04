@@ -1,8 +1,11 @@
 package thebetweenlands.client.render.model.entity;
 
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.MowzieModelBase;
@@ -206,8 +209,31 @@ public class ModelOlm extends MowzieModelBase {
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+        GlStateManager.pushMatrix();
+        GlStateManager.enableCull();
+        GlStateManager.cullFace(CullFace.FRONT);
+	    gills_left1a.showModel = false;
+	    gills_right1a.showModel = false;
+	    gills_top.showModel = false;
+	    gills_left1b.showModel = false;
+	    gills_right1b.showModel = false;
         body_main.render(scale);
+	    gills_left1a.showModel = true;
+	    gills_right1a.showModel = true;
+	    gills_top.showModel = true;
+	    gills_left1b.showModel = true;
+	    gills_right1b.showModel = true;
+        GlStateManager.cullFace(CullFace.BACK);
+        body_main.render(scale);
+        GlStateManager.disableCull();
+        GlStateManager.popMatrix();
+
     }
+    
+	@Override
+	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
+		head1.rotateAngleX = (float)MathHelper.clamp(Math.toRadians(headPitch), -5, 5);
+	}
 
 	@Override
     public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
@@ -217,15 +243,14 @@ public class ModelOlm extends MowzieModelBase {
         float frame = olm.ticksExisted + partialRenderTicks;
 		setToInitPose();
 		swing(gills_left1a, rippleSpeed * 0.125F, globalDegree * 0.5F, true, 0F, 0F, frame, 1F);
-		swing(gills_right1a, rippleSpeed * 0.125F, globalDegree *0.5F, false, 0F, 0F, frame, 1F);
-		walk(gills_top, rippleSpeed * 0.125F, globalDegree, false, 0F, 0F, frame, 1F);
-		chainSwing(parts, rippleSpeed * 0.5F, globalDegree, 1F, swing, speed);
-		chainFlap(parts, rippleSpeed, -globalDegree * 0.25F, 1F,  swing, speed);
+		swing(gills_right1a, rippleSpeed * 0.125F, globalDegree * 0.5F, false, 0F, 0F, frame, 1F);
+		walk(gills_top, rippleSpeed * 0.125F, globalDegree * 0.5F, false, 0F, 0F, frame, 1F);
+		chainSwing(parts, rippleSpeed * 0.5F, globalDegree, 1.5F, swing, speed);
+		chainFlap(parts, rippleSpeed, -globalDegree * 0.25F, 1.5F,  swing, speed);
 		swing(leg_back_left1a, rippleSpeed, globalDegree * 3F, true, 1F, 0F, swing, speed);
 		swing(leg_back_right1a, rippleSpeed, globalDegree * 3F, true, 1F, 0F, swing, speed);
 		swing(leg_front_left1a, rippleSpeed, globalDegree * 3F, false, 1F, 0F, swing, speed);
 		swing(leg_front_right1a, rippleSpeed, globalDegree * 3F, false, 1F, 0F, swing, speed);
-		
 	}
 
 	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
