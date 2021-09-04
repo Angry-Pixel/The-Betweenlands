@@ -10,7 +10,7 @@
       "translate": "advancements.thebetweenlands.survivalist.uh_oh_stinky.description"
     }
   },
-  "parent": "thebetweenlands:survivalist/hardcore_muchies",
+  "parent": "thebetweenlands:survivalist/hardcore_munchies",
   "criteria": {
     "event": {
       "trigger": "thebetweenlands:used_fumigant"
