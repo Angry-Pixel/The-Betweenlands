@@ -314,6 +314,8 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 			
 			if (!hag.isRidingMummy())
 				return false;
+			if (hag.isRidingMummy() && !hag.getMummyMount().isSpawningFinished())
+				return false;
 			if (target == null)
 				return false;
 			else {
