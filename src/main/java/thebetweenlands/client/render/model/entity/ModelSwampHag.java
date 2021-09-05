@@ -303,13 +303,18 @@ public class ModelSwampHag extends MowzieModelBase {
         body_base.rotationPointX -= Math.cos((limbSwing - 3) * 0.5 * globalSpeed) * limbSwingAngle;
 
         if (isRiding) {
-			legright1.rotateAngleX = -1.4137167F;
-			legright1.rotateAngleY = ((float) Math.PI / 10F);
-			legright1.rotateAngleZ = 0.07853982F;
-			legleft1.rotateAngleX = -1.4137167F;
-			legleft1.rotateAngleY = -((float) Math.PI / 10F);
-			legleft1.rotateAngleZ = -0.07853982F;
-			if (hag.isRidingMummy()) {
+			if (hag.isRidingMummy() && !hag.getMummyMount().isSpawningFinished())
+				;
+			else {
+				legright1.rotateAngleX = -1.4137167F;
+				legright1.rotateAngleY = ((float) Math.PI / 10F);
+				legright1.rotateAngleZ = 0.07853982F;
+				legleft1.rotateAngleX = -1.4137167F;
+				legleft1.rotateAngleY = -((float) Math.PI / 10F);
+				legleft1.rotateAngleZ = -0.07853982F;
+			}
+
+			if (hag.isRidingMummy() && hag.getMummyMount().isSpawningFinished()) {
 				if (hag.getThrowTimer() < 90) {
 					armright.rotateAngleX += -((float) Math.PI / 5F) - convertDegtoRad(hag.getThrowTimer()) * 0.35F;
 					armright.rotateAngleY = 0F + convertDegtoRad(hag.getThrowTimer());
@@ -325,12 +330,6 @@ public class ModelSwampHag extends MowzieModelBase {
 			} else {
 				armright.rotateAngleY = 0F;
 	        	armright.rotateAngleX += -((float)Math.PI / 5F);
-	            legright1.rotateAngleX = -1.4137167F;
-	            legright1.rotateAngleY = ((float)Math.PI / 10F);
-	            legright1.rotateAngleZ = 0.07853982F;
-	            legleft1.rotateAngleX = -1.4137167F;
-	            legleft1.rotateAngleY = -((float)Math.PI / 10F);
-	            legleft1.rotateAngleZ = -0.07853982F;
 			}
 		}
     }
