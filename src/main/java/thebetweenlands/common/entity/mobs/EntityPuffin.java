@@ -5,16 +5,20 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMoveToBlock;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityJumpHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
@@ -23,6 +27,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.model.ControlledAnimation;
@@ -32,7 +37,7 @@ import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.entity.movement.PathNavigateFlyingBL;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
+public class EntityPuffin extends EntityCreature implements IEntityBL {
 
 	private static final DataParameter<Boolean> IS_HOVERING = EntityDataManager.createKey(EntityPuffin.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_DIVING = EntityDataManager.createKey(EntityPuffin.class, DataSerializers.BOOLEAN);
@@ -53,13 +58,14 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 	public float flapSpeed = 1f;
     private int jumpTicks;
     private int jumpDuration;
-	
+    private int currentMoveTypeDuration;
+    private boolean wasOnGround;
+
 	private EntityMoveHelper moveHelperAir;
 	private EntityMoveHelper moveHelperLand;
 	private PathNavigateFlyingBL pathNavigatorAir;
 	private PathNavigateGround pathNavigatorGround;
 	
-
 	public final ControlledAnimation landingTimer = new ControlledAnimation(10); // base pose
 	public final ControlledAnimation divingTimer = new ControlledAnimation(10); // diving pose
 	public int MAX_RESTING_TIME = 120; //ticks
@@ -68,35 +74,28 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 	public EntityPuffin(World world) {
 		super(world);
 		setSize(0.75F, 0.9F);
-		setIsHovering(false);
 		stepHeight= 1F;
-
 		moveHelperAir = new FlightMoveHelper(this);
 		moveHelperLand = new PuffinMoveHelper(this);
 		jumpHelper = new PuffinJumpHelper(this);
-		
 		pathNavigatorGround = new PathNavigateGround(this, world);
 		pathNavigatorGround.setCanSwim(true);
-		
 		pathNavigatorAir = new PathNavigateFlyingBL(this, world, 0);
-		//setPathPriority(PathNodeType.WATER, -8F);
-		//setPathPriority(PathNodeType.BLOCKED, -8.0F);
+		setPathPriority(PathNodeType.WATER, -8F);
+		setPathPriority(PathNodeType.BLOCKED, -8.0F);
 		setPathPriority(PathNodeType.OPEN, 8.0F);
-		//setPathPriority(PathNodeType.FENCE, -8.0F);
+		setPathPriority(PathNodeType.FENCE, -8.0F);
+		setPathPriority(PathNodeType.DANGER_CACTUS, -8.0F);
+		updateMovementAndPathfinding();
 	}
-	
-    public void startJumping(){
-        setJumping(true);
-        jumpDuration = 10;
-        jumpTicks = 0;
-    }
 
 	@Override
 	protected void initEntityAI() {
 		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityPuffin.EntityAIPuffinLandRandomly(this, 1.5D));
+		tasks.addTask(1, new EntityPuffin.EntityAIPuffinLandRandomly(this, 0.5D));
 		tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, true));
-		tasks.addTask(3, new EntityPuffin.EntityAIFlyingWanderPuffin(this, 1D, 10));
+		tasks.addTask(3, new EntityPuffin.EntityAIFlyingWanderPuffin(this, 0.5D, 10));
+		tasks.addTask(3, new EntityAIWander(this, 1D, 10));
 		tasks.addTask(4, new EntityAILookIdle(this));
 	}
 
@@ -120,13 +119,8 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
 		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.1D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
 	}
-
-    public void setMovementSpeed(double newSpeed) {
-        getNavigator().setSpeed(newSpeed);
-        moveHelper.setMoveTo(moveHelper.getX(), moveHelper.getY(), moveHelper.getZ(), newSpeed);
-    }
 
 	@Override
 	public void onUpdate() {
@@ -162,53 +156,20 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 						//System.out.println("SHOULD FUCKING LAND!");
 					}
 				}
-			}
-			
-			/*if (!getEntityWorld().getBlockState(getPosition().down()).isSideSolid(getEntityWorld(), getPosition().down(), EnumFacing.UP)) {
-				if (!getIsFlying())
-					setIsFlying(true);
-				if (getIsLanding())
-					setIsLanding(false);
-
-			} else {
-				if (getIsFlying())
-					setIsFlying(false);
-			}
-			
-			
-			if(!getIsFlying()) {
-				if(getRestingTimer() < MAX_RESTING_TIME) {
-					setRestingTimer(getRestingTimer() + 1);
-					System.out.println("Resting Time: " + getRestingTimer());
-					}
-			}
-		*/	
+			}	
 		}
 		
 		if (getIsLanding() && getEntityWorld().isAirBlock(getPosition())) {
 			motionY -= 0.04D;
 		}
 
-	//	if (isJumping && isInWater()) {
-			// Moving out of water
-	//		getMoveHelper().setMoveTo(posX, posY + 1, posZ, 1.0D);
+		if (isJumping && isInWater()) {
+			getMoveHelper().setMoveTo(posX, posY + 1, posZ, 1.0D);
+		}
+
+//		if (getIsHovering()) {
+	//		motionX = motionY = motionZ = 0.0D;
 	//	}
-
-		if (getIsHovering()) {
-			motionX = motionY = motionZ = 0.0D;
-		}
-
-		if (motionY < 0.0D && getAttackTarget() == null) {
-			motionY *= 1.1D;
-		}
-
-		// if
-		// (getEntityWorld().getBlockState(getPosition().down()).isSideSolid(getEntityWorld(),
-		// getPosition().down(), EnumFacing.UP)) {
-		// if (getIsFlying())
-		// setIsFlying(false);
-		// getMoveHelper().setMoveTo(posX, posY + 1, posZ, 1.0D);
-		// }
 
 		if (getEntityWorld().isRemote) {
 			landingTimer.updateTimer();
@@ -268,6 +229,109 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 	protected void updateAITasks() {
 		super.updateAITasks();
 		// stuff
+		if (currentMoveTypeDuration > 0)
+			--currentMoveTypeDuration;
+
+		if (onGround) {
+			PuffinJumpHelper puffinjumphelper = (PuffinJumpHelper) jumpHelper;
+			if (!wasOnGround) {
+				setJumping(false);
+				if (this.moveHelper.getSpeed() < 2.2D)
+					this.currentMoveTypeDuration = 10;
+				else
+					this.currentMoveTypeDuration = 1;
+				puffinjumphelper.setCanJump(false);
+			}
+
+			if (!puffinjumphelper.getIsJumping()) {
+				if (moveHelper.isUpdating() && currentMoveTypeDuration == 0) {
+					Path path = navigator.getPath();
+					Vec3d vec3d = new Vec3d(moveHelper.getX(), moveHelper.getY(), moveHelper.getZ());
+
+					if (path != null && path.getCurrentPathIndex() < path.getCurrentPathLength())
+						vec3d = path.getPosition(this);
+
+					calculateRotationYaw(vec3d.x, vec3d.z);
+					startJumping();
+				}
+			} else if (!puffinjumphelper.canJump())
+				puffinjumphelper.setCanJump(true);
+		}
+		wasOnGround = onGround;
+	}
+
+    public void setMovementSpeed(double newSpeed) {
+        getNavigator().setSpeed(newSpeed);
+        moveHelper.setMoveTo(moveHelper.getX(), moveHelper.getY(), moveHelper.getZ(), newSpeed);
+    }
+
+    public void startJumping(){
+        setJumping(true);
+        jumpDuration = 10;
+        jumpTicks = 0;
+    }
+
+	@Override
+    protected float getJumpUpwardsMotion() {
+        return 0.2F;
+    }
+	
+	@Override
+	public void travel(float strafe, float vertical, float forward) {
+		if (this.isInWater()) {
+			this.moveRelative(strafe, vertical, forward, 0.02F);
+			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
+			this.motionX *= 0.800000011920929D;
+			this.motionY *= 0.800000011920929D;
+			this.motionZ *= 0.800000011920929D;
+		} else if (this.isInLava()) {
+			this.moveRelative(strafe, vertical, forward, 0.02F);
+			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
+			this.motionX *= 0.5D;
+			this.motionY *= 0.5D;
+			this.motionZ *= 0.5D;
+		} else if (getIsFlying()) {
+			float f = 0.91F;
+
+			if (this.onGround) {
+				BlockPos underPos = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ));
+				IBlockState underState = this.world.getBlockState(underPos);
+				f = underState.getBlock().getSlipperiness(underState, this.world, underPos, this) * 0.91F;
+			}
+
+			float f1 = 0.16277136F / (f * f * f);
+			this.moveRelative(strafe, vertical, forward, this.onGround ? 0.1F * f1 : 0.02F);
+			f = 0.91F;
+
+			if (this.onGround) {
+				BlockPos underPos = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ));
+				IBlockState underState = this.world.getBlockState(underPos);
+				f = underState.getBlock().getSlipperiness(underState, this.world, underPos, this) * 0.91F;
+			}
+
+			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
+			this.motionX *= (double) f;
+			this.motionY *= (double) f;
+			this.motionZ *= (double) f;
+		}
+		else
+			super.travel(strafe, vertical, forward);
+
+		this.prevLimbSwingAmount = this.limbSwingAmount;
+		double d1 = this.posX - this.prevPosX;
+		double d0 = this.posZ - this.prevPosZ;
+		float f2 = MathHelper.sqrt(d1 * d1 + d0 * d0) * 4.0F;
+
+		if (f2 > 1.0F) {
+			f2 = 1.0F;
+		}
+
+		this.limbSwingAmount += (f2 - this.limbSwingAmount) * 0.4F;
+		this.limbSwing += this.limbSwingAmount;
+	}
+
+	private void calculateRotationYaw(double x, double z) {
+		rotationYaw = (float) (MathHelper.atan2(z - posZ, x - posX) * (180D / Math.PI)) - 90.0F;
 	}
 
 	public boolean getShouldTakeOff() {
@@ -366,6 +430,9 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 	protected SoundEvent getDeathSound() {
 		return null; // SoundRegistry.PUFFIN_DEATH;
 	}
+
+	@Override
+    public void fall(float distance, float damageMultiplier) {}
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
@@ -512,8 +579,10 @@ public class EntityPuffin extends EntityFlyingCreature implements IEntityBL {
 		}
 
 		public void onUpdateMoveHelper() {
-			if (puffin.onGround && !puffin.isJumping && !((PuffinJumpHelper) puffin.jumpHelper).getIsJumping())
+			if (puffin.onGround && !puffin.isJumping && !((PuffinJumpHelper) puffin.jumpHelper).getIsJumping()) {
 				puffin.setMovementSpeed(0.0D);
+			}
+			
 			else if (isUpdating()) 
 				puffin.setMovementSpeed(nextJumpSpeed);
 			super.onUpdateMoveHelper();
