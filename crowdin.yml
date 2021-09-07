@@ -1,0 +1,3 @@
+files:
+  - source: src/main/resources/assets/thebetweenlands/lang/en_US.lang
+    translation: src/main/resources/assets/thebetweenlands/%locale_with_underscore%.lang
