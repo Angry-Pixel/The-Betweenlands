@@ -910,8 +910,9 @@ public class BlockRegistry {
     public static final Block GLOWING_GOOP_UNDERWATER = new BlockGlowingGoopUnderwater();
     public static final Block REED_MAT = new BlockReedMat();
     //WIP
-   // public static final Block ANIMAL_BURROW_SILT = new BlockAnimalBurrow(Material.SAND);
-  //  public static final Block ANIMAL_BURROW_MUD = new BlockAnimalBurrow(BLMaterialRegistry.MUD);
+    //public static final Block ANIMAL_BURROW_SILT = new BlockAnimalBurrow(Material.SAND);
+    //public static final Block ANIMAL_BURROW_MUD = new BlockAnimalBurrow(BLMaterialRegistry.MUD);
+    //public static final Block ANIMAL_BURROW_CRAGROCK = new BlockAnimalBurrow(Material.ROCK);
 
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();

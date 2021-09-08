@@ -26,7 +26,7 @@ public interface ICritterBurrowEnabled {
 	};
 
 	public enum EnumBurrowParts {
-		//CRAGROCK(BlockRegistry.CRAGROCK, EntityPuffin.class),
+		CRAGROCK(BlockRegistry.CRAGROCK, EntityPuffin.class,BlockRegistry.ANIMAL_BURROW_CRAGROCK.getDefaultState()),
 		SILT(BlockRegistry.SILT, EntitySiltCrab.class, BlockRegistry.ANIMAL_BURROW_SILT.getDefaultState()),
 		MUD(BlockRegistry.MUD, EntityGecko.class, BlockRegistry.ANIMAL_BURROW_MUD.getDefaultState());
 
@@ -52,5 +52,5 @@ public interface ICritterBurrowEnabled {
 			return entityClass;
 		}
 	}
-	*/
+*/
 }

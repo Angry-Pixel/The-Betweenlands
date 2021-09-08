@@ -1,5 +1,6 @@
 package thebetweenlands.common.entity;
 
+
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
@@ -93,7 +94,7 @@ public class EntityAnimalBurrow extends EntityCreature implements IEntityBL {
 	}
 
 	public AxisAlignedBB extendRangeBox() {
-		return new AxisAlignedBB(getPosition()).grow(8D, 1D, 8D);
+		return new AxisAlignedBB(getPosition()).grow(16D, 16D, 16D);
 	}
 
 	@Override
@@ -171,7 +172,7 @@ public class EntityAnimalBurrow extends EntityCreature implements IEntityBL {
 	public Entity getEntity() {
 		ItemStack stack = this.getBurrowItem();
 		if(!stack.isEmpty() && stack.getItem() instanceof ItemMob && ((ItemMob) stack.getItem()).hasEntityData(stack))
-			return ((ItemMob) stack.getItem()).createCapturedEntity(this.world, getBurrowEntrancePos().getX() + 0.5D, getBurrowEntrancePos().getY(), getBurrowEntrancePos().getZ() + 0.5D, stack);
+			return ((ItemMob) stack.getItem()).createCapturedEntity(this.world, getBurrowEntrancePos().getX() + 0.5D, getBurrowEntrancePos().getY(), getBurrowEntrancePos().getZ() + 0.5D, stack, true);
 		return null;
 	}
 

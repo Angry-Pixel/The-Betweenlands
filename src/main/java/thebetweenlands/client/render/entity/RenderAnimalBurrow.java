@@ -65,7 +65,7 @@ public class RenderAnimalBurrow extends Render<EntityAnimalBurrow> {
 			GlStateManager.popMatrix();
 		}
 	}
-	*/
+*/
 	@Override
 	protected ResourceLocation getEntityTexture(EntityAnimalBurrow entity) {
 		return null;
