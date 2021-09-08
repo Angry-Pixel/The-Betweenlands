@@ -705,7 +705,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
     @Nullable
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
         livingdata = super.onInitialSpawn(difficulty, livingdata);
-       if (!world.isRemote) {// && this.world.rand.nextInt(20) == 0) {
+       if (!world.isRemote && this.world.rand.nextInt(20) == 0) {
             EntitySwampHag hag = new EntitySwampHag(this.world);
             hag.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
             hag.onInitialSpawn(difficulty, (IEntityLivingData)null);
