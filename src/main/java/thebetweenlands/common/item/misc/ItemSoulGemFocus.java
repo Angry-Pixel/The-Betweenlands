@@ -8,6 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorEffectsHelper;
@@ -29,6 +30,7 @@ public class ItemSoulGemFocus extends Item {
 		if (player.isSneaking()) {
 			// scroll stuff (add 1 to counter or something)
 			// display name active/toggle
+			player.sendStatusMessage(new TextComponentTranslation("Test Message for Scroll selection"), true);
 			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 		} else {
 			//TODO activate effect based on armour upgrade and counter selection
