@@ -57,6 +57,7 @@ public class AdvancementCriterionRegistry {
 	public static final NoCriteriaTrigger INFESTED = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "infested")));
 	public static final NoCriteriaTrigger SIT_ON_TACKLE_BOX = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "sit_on_tackle_box")));
 	public static final NoCriteriaTrigger USED_FUMIGANT = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "used_fumigant")));
+	public static final NoCriteriaTrigger BREAK_ALCOVE_URN = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "break_alcove_urn")));
 			
 	public static void preInit() { }
 }
