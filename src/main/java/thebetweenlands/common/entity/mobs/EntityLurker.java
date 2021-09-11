@@ -72,6 +72,7 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
     private Entity entityBeingBit;
 
     private int anger;
+    public int huntingTimerAnadia;
 
     private boolean prevInWater;
 
@@ -122,7 +123,12 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
         targetTasks.addTask(1, new EntityAINearestAttackableSmellyTarget<>(this, EntityPlayer.class, false));
         targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityDragonFly.class, true));
         targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityAngler.class, true));
-        targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityAnadia.class, true));
+        targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityAnadia.class, true) {
+    		@Override
+    		public boolean shouldExecute() {
+    			return super.shouldExecute() && huntingTimerAnadia <= 0;
+    		}
+        });
     }
 
     @Override
@@ -375,6 +381,10 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
         }
         tailPitch *= 0.5F;
         tailYaw *= (1 - movementSpeed);
+        
+        if(!world.isRemote)
+        	if(huntingTimerAnadia > 0)
+        		huntingTimerAnadia--;
     }
 
 
