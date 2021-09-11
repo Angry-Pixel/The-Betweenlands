@@ -62,7 +62,7 @@ public class AmphibiousArmorEffectsHelper {
 		entity.startRiding(vortex, true);
 	}
 
-	private void spawnUrchinSpikes(World world, EntityPlayer player, int damage) {
+	public void spawnUrchinSpikes(World world, EntityPlayer player, int damage) {
 		EntityUrchinSpikeAOE urchinSpikes = new EntityUrchinSpikeAOE(world, player, damage);
 		urchinSpikes.setPosition(player.posX, player.posY + player.height * 0.5D, player.posZ);
 		world.spawnEntity(urchinSpikes);

@@ -148,6 +148,7 @@ import thebetweenlands.common.item.misc.ItemRope;
 import thebetweenlands.common.item.misc.ItemRuneDoorKey;
 import thebetweenlands.common.item.misc.ItemShimmerStone;
 import thebetweenlands.common.item.misc.ItemSnotPod;
+import thebetweenlands.common.item.misc.ItemSoulGemFocus;
 import thebetweenlands.common.item.misc.ItemSpiritTreeFaceMaskSmallAnimated;
 import thebetweenlands.common.item.misc.ItemSwampTalisman;
 import thebetweenlands.common.item.misc.ItemTarminion;
@@ -515,6 +516,7 @@ public class ItemRegistry {
     public static final Item AA_UPGRADE_LEAP = new ItemAmphibiousArmorSpecialUpgrade().setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item AA_UPGRADE_URCHIN = new ItemAmphibiousArmorSpecialUpgrade().setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item AA_UPGRADE_VORTEX = new ItemAmphibiousArmorSpecialUpgrade().setCreativeTab(BLCreativeTabs.GEARS);
+    public static final Item SOUL_GEM_FOCUS = new ItemSoulGemFocus().setCreativeTab(BLCreativeTabs.GEARS);
     
 
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();

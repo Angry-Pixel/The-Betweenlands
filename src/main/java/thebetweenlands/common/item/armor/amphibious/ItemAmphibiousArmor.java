@@ -120,15 +120,15 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 				}
 
 				if (urchinCount >= 1) { // more upgrades do more damage at 2F * urchinCount ;)
-					if (world.getTotalWorldTime() %10 == 0 && world.getTotalWorldTime() >= urchinAOECooldown) { // TODO cooldown balancing
+					if (world.getTotalWorldTime() %10 == 0 && world.getTotalWorldTime() >= urchinAOECooldown) {
 						if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
-							armorEffectsHelper.activateUrchinSpikes(world, player, urchinCount, nbt);
+						//	armorEffectsHelper.activateUrchinSpikes(world, player, urchinCount, nbt);
 						}
 					}
 				}
 
 				if (electricCount >= 1) { // count increases damage
-					if (player.hurtResistantTime == player.maxHurtResistantTime && world.getTotalWorldTime() >= electricCooldown) { // TODO cooldown balancing
+					if (player.hurtResistantTime == player.maxHurtResistantTime && world.getTotalWorldTime() >= electricCooldown) {
 						if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
 							armorEffectsHelper.activateElectricEntity(world, player, electricCount, nbt);
 						}
