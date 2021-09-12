@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
+import thebetweenlands.api.entity.IBLBoss;
 import thebetweenlands.common.entity.EntityFishVortex;
 import thebetweenlands.common.entity.EntityShock;
 import thebetweenlands.common.entity.EntityUrchinSpikeAOE;
@@ -26,7 +27,7 @@ public class AmphibiousArmorEffectsHelper {
 		List<EntityLivingBase> list = findNearbyEntities(world, player, proximityBox(player, 8D, 4D, 8D));
 		for (int entityCount = 0; entityCount < Math.min(vortexCount, list.size()); entityCount++) {
 			EntityLivingBase entity = pickRandomEntityFromList(list);
-			if (entity != null)
+			if (entity != null && entity instanceof IBLBoss == false)
 				if (!(entity instanceof EntityPlayer)) {
 					spawnFishVortex(world, entity);
 					list.remove(0);

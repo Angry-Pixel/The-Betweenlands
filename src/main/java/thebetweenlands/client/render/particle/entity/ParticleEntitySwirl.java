@@ -21,8 +21,39 @@ public class ParticleEntitySwirl extends ParticleSwirl implements IParticleSprit
 
 		this.target = target;
 
-		//this.setOffset(0, -1.6D, 0);
+		this.setOffset(0, -1.6D, 0);
+		
 		this.updateTarget();
+	}
+	
+	@Override
+	public ParticleEntitySwirl setOffset(double x, double y, double z) {
+		super.setOffset(x, y, z);
+		return this;
+	}
+	
+	@Override
+	public ParticleEntitySwirl setTarget(double x, double y, double z) {
+		super.setTarget(x, y, z);
+		return this;
+	}
+	
+	@Override
+	public ParticleEntitySwirl setTargetMotion(double x, double y, double z) {
+		super.setTargetMotion(x, y, z);
+		return this;
+	}
+	
+	@Override
+	public ParticleEntitySwirl setRotationSpeed(double speed) {
+		super.setRotationSpeed(speed);
+		return this;
+	}
+	
+	@Override
+	public ParticleEntitySwirl setRotate3D(boolean rotate3d) {
+		super.setRotate3D(rotate3d);
+		return this;
 	}
 	
 	public ParticleEntitySwirl setTargetOffset(double x, double y, double z) {
@@ -71,7 +102,7 @@ public class ParticleEntitySwirl extends ParticleSwirl implements IParticleSprit
 
 		@Override
 		public ParticleEntitySwirl createParticle(ImmutableParticleArgs args) {
-			return new ParticleEntitySwirl(args.world, args.x, args.y, args.z, args.data.getInt(0), args.scale, args.data.getFloat(1), args.data.getObject(Entity.class, 2)).setTargetOffset(0D, -1.6D, 0D);
+			return new ParticleEntitySwirl(args.world, args.x, args.y, args.z, args.data.getInt(0), args.scale, args.data.getFloat(1), args.data.getObject(Entity.class, 2));
 		}
 
 		@Override
@@ -87,7 +118,7 @@ public class ParticleEntitySwirl extends ParticleSwirl implements IParticleSprit
 
 		@Override
 		public ParticleEntitySwirl createParticle(ImmutableParticleArgs args) {
-			return new ParticleEntitySwirl(args.world, args.x, args.y, args.z, args.data.getInt(0), args.scale, args.data.getFloat(1), args.data.getObject(Entity.class, 2)).setTargetOffset(0D, -1.6D, 0D);
+			return new ParticleEntitySwirl(args.world, args.x, args.y, args.z, args.data.getInt(0), args.scale, args.data.getFloat(1), args.data.getObject(Entity.class, 2));
 		}
 
 		@Override
@@ -103,7 +134,7 @@ public class ParticleEntitySwirl extends ParticleSwirl implements IParticleSprit
 
 		@Override
 		public ParticleEntitySwirl createParticle(ImmutableParticleArgs args) {
-			return new ParticleEntitySwirl(args.world, args.x, args.y, args.z, args.data.getInt(0), args.scale, args.data.getFloat(1), args.data.getObject(Entity.class, 2)).setTargetOffset(0D, -1.6D, 0D);
+			return new ParticleEntitySwirl(args.world, args.x, args.y, args.z, args.data.getInt(0), args.scale, args.data.getFloat(1), args.data.getObject(Entity.class, 2));
 		}
 
 		@Override
@@ -119,23 +150,7 @@ public class ParticleEntitySwirl extends ParticleSwirl implements IParticleSprit
 
 		@Override
 		public ParticleEntitySwirl createParticle(ImmutableParticleArgs args) {
-			return new ParticleEntitySwirl(args.world, args.x, args.y, args.z, args.data.getInt(0), args.scale, args.data.getFloat(1), args.data.getObject(Entity.class, 2)).setTargetOffset(0D, -1.6D, 0D);
-		}
-
-		@Override
-		protected void setBaseArguments(ParticleArgs<?> args) {
-			args.withData(400, 0.0F, null);
-		}
-	}
-
-	public static final class FactoryFishSwirl extends ParticleFactory<FactoryFishSwirl, ParticleEntitySwirl> {
-		public FactoryFishSwirl() {
-			super(ParticleEntitySwirl.class, ParticleTextureStitcher.create(ParticleEntitySwirl.class, new ResourceLocation("thebetweenlands:particle/fish_swirl")).setSplitAnimations(true));
-		}
-
-		@Override
-		public ParticleEntitySwirl createParticle(ImmutableParticleArgs args) {
-			return new ParticleEntitySwirl(args.world, args.x, args.y, args.z, args.data.getInt(0), args.scale, args.data.getFloat(1), args.data.getObject(Entity.class, 2)).setTargetOffset(0D, 0D, 0D);
+			return new ParticleEntitySwirl(args.world, args.x, args.y, args.z, args.data.getInt(0), args.scale, args.data.getFloat(1), args.data.getObject(Entity.class, 2));
 		}
 
 		@Override

@@ -32,6 +32,7 @@ import thebetweenlands.client.render.particle.entity.ParticleEntitySwirl;
 import thebetweenlands.client.render.particle.entity.ParticleFancyBubble;
 import thebetweenlands.client.render.particle.entity.ParticleFancyDrip;
 import thebetweenlands.client.render.particle.entity.ParticleFish;
+import thebetweenlands.client.render.particle.entity.ParticleFishVortex;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.client.render.particle.entity.ParticleLifeEssence;
 import thebetweenlands.client.render.particle.entity.ParticleLightningArc;
@@ -167,7 +168,7 @@ public enum BLParticles {
 	URCHIN_SPIKE(new ParticleUrchinSpike.Factory()),
 	FANCY_DRIP(new ParticleFancyDrip.Factory()),
 	FANCY_BUBBLE(new ParticleFancyBubble.Factory()),
-	FISH_VORTEX(new ParticleEntitySwirl.FactoryFishSwirl());
+	FISH_VORTEX(new ParticleFishVortex.Factory());
 	
 	private ParticleFactory<?, ?> factory;
 

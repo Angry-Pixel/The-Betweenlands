@@ -4,6 +4,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class ParticleSwirl extends Particle {
@@ -16,10 +17,19 @@ public class ParticleSwirl extends Particle {
 	protected double targetX, targetY, targetZ;
 	protected double targetMotionX, targetMotionY, targetMotionZ;
 
+	protected boolean rotate3D = false;
+	
 	private boolean firstUpdate = true;
 
 	private static final float VELOCITY_OFFSET_MULTIPLIER = 4.0F;
 
+	protected double prevRotSinX;
+	protected double prevRotCosZ;
+	protected double rotSinX;
+	protected double rotCosZ;
+	
+	protected double rotationSpeed = 4.0D;
+	
 	public ParticleSwirl(World world, double x, double y, double z, int maxAge, float scale, float progress) {
 		super(world, x, y, z, 0, 0, 0);
 		this.motionX = this.motionY = this.motionZ = 0.0D;
@@ -33,13 +43,14 @@ public class ParticleSwirl extends Particle {
 		this.particleScale = scale;
 	}
 
-	public void setOffset(double x, double y, double z) {
+	public ParticleSwirl setOffset(double x, double y, double z) {
 		this.offsetX = x;
 		this.offsetY = y;
 		this.offsetZ = z;
+		return this;
 	}
 	
-	public void setTarget(double x, double y, double z) {
+	public ParticleSwirl setTarget(double x, double y, double z) {
 		this.targetX = x;
 		this.targetY = y;
 		this.targetZ = z;
@@ -50,9 +61,11 @@ public class ParticleSwirl extends Particle {
 			this.prevPosY = this.posY;
 			this.prevPosZ = this.posZ;
 		}
+		
+		return this;
 	}
 
-	public void setTargetMotion(double x, double y, double z) {
+	public ParticleSwirl setTargetMotion(double x, double y, double z) {
 		this.targetMotionX = x;
 		this.targetMotionY = y;
 		this.targetMotionZ = z;
@@ -67,12 +80,96 @@ public class ParticleSwirl extends Particle {
 			this.dragY = MathHelper.clamp(my, -0.3D, 1);
 			this.dragZ = MathHelper.clamp(tmz * VELOCITY_OFFSET_MULTIPLIER, -1, 1);
 		}
+		
+		return this;
 	}
 
+	public ParticleSwirl setRotationSpeed(double speed) {
+		this.rotationSpeed = speed;
+		return this;
+	}
+	
+	public ParticleSwirl setRotate3D(boolean rotate3D) {
+		this.rotate3D = rotate3D;
+		return this;
+	}
+	
 	@Override
-	public void renderParticle(BufferBuilder worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		if(this.particleAge > 2) {
-			super.renderParticle(worldRendererIn, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
+			if(this.rotate3D) {
+				float minU = (float)this.particleTextureIndexX / 16.0F;
+		        float maxU = minU + 0.0624375F;
+		        float minV = (float)this.particleTextureIndexY / 16.0F;
+		        float maxV = minV + 0.0624375F;
+		        float scale = 0.1F * this.particleScale;
+
+		        if (this.particleTexture != null) {
+		            minU = this.particleTexture.getMinU();
+		            maxU = this.particleTexture.getMaxU();
+		            minV = this.particleTexture.getMinV();
+		            maxV = this.particleTexture.getMaxV();
+		        }
+
+		        float rx = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)partialTicks - interpPosX);
+		        float ry = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)partialTicks - interpPosY);
+		        float rz = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTicks - interpPosZ);
+		        int brightness = this.getBrightnessForRender(partialTicks);
+		        int lightmapX = brightness >> 16 & 65535;
+		        int lightmapY = brightness & 65535;
+		        /*Vec3d[] vertices = new Vec3d[] {new Vec3d((double)(-rotationX * scale - rotationXY * scale), (double)(-rotationZ * scale), (double)(-rotationYZ * scale - rotationXZ * scale)), new Vec3d((double)(-rotationX * scale + rotationXY * scale), (double)(rotationZ * scale), (double)(-rotationYZ * scale + rotationXZ * scale)), new Vec3d((double)(rotationX * scale + rotationXY * scale), (double)(rotationZ * scale), (double)(rotationYZ * scale + rotationXZ * scale)), new Vec3d((double)(rotationX * scale - rotationXY * scale), (double)(-rotationZ * scale), (double)(rotationYZ * scale - rotationXZ * scale))};
+
+		        if(this.particleAngle != 0.0F) {
+		            float f8 = this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
+		            float f9 = MathHelper.cos(f8 * 0.5F);
+		            float f10 = MathHelper.sin(f8 * 0.5F) * (float)cameraViewDir.x;
+		            float f11 = MathHelper.sin(f8 * 0.5F) * (float)cameraViewDir.y;
+		            float f12 = MathHelper.sin(f8 * 0.5F) * (float)cameraViewDir.z;
+		            Vec3d vec3d = new Vec3d((double)f10, (double)f11, (double)f12);
+
+		            for(int l = 0; l < 4; ++l) {
+		                vertices[l] = vec3d.scale(2.0D * vertices[l].dotProduct(vec3d)).add(vertices[l].scale((double)(f9 * f9) - vec3d.dotProduct(vec3d))).add(vec3d.crossProduct(vertices[l]).scale((double)(2.0F * f9)));
+		            }
+		        }*/
+
+
+		        float irx = (float)(this.prevRotSinX + (this.rotSinX - this.prevRotSinX) * (double)partialTicks);
+		        float irz = (float)(this.prevRotCosZ + (this.rotCosZ - this.prevRotCosZ) * (double)partialTicks);
+		        
+		        
+		        
+		        double tilt = -30.0D;
+		        
+		        double h = Math.cos(tilt / 360.0f * 2 * Math.PI);
+		        double v = Math.sin(tilt / 360.0f * 2 * Math.PI);
+		        
+		        double side = h;
+		        double out = v;
+
+		        double sidex = -irz * scale;
+		        double sidez = irx * scale;
+		        double outx = irx * scale;
+		        double outz = irz * scale;
+		        
+		        Vec3d[] vertices = new Vec3d[] {
+		        		new Vec3d(-sidex * side + (outx * out - sidex * (1 - side)), -scale * side, -sidez * side + (outz * out - sidez * (1 - side))),
+		        		new Vec3d(-sidex * side + (-outx * out - sidex * (1 - side)), scale * side, -sidez * side + (-outz * out - sidez * (1 - side))),
+		        		new Vec3d(sidex * side + (-outx * out + sidex * (1 - side)), scale * side, sidez * side + (-outz * out + sidez * (1 - side))),
+		        		new Vec3d(sidex * side + (outx * out + sidex * (1 - side)), -scale * side, sidez * side + (outz * out + sidez * (1 - side)))
+		        };
+
+		        buffer.pos((double)rx + vertices[0].x, (double)ry + vertices[0].y, (double)rz + vertices[0].z).tex((double)maxU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
+		        buffer.pos((double)rx + vertices[1].x, (double)ry + vertices[1].y, (double)rz + vertices[1].z).tex((double)maxU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
+		        buffer.pos((double)rx + vertices[2].x, (double)ry + vertices[2].y, (double)rz + vertices[2].z).tex((double)minU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
+		        buffer.pos((double)rx + vertices[3].x, (double)ry + vertices[3].y, (double)rz + vertices[3].z).tex((double)minU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
+
+		        buffer.pos((double)rx + vertices[3].x, (double)ry + vertices[3].y, (double)rz + vertices[3].z).tex((double)minU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
+		        buffer.pos((double)rx + vertices[2].x, (double)ry + vertices[2].y, (double)rz + vertices[2].z).tex((double)minU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
+		        buffer.pos((double)rx + vertices[1].x, (double)ry + vertices[1].y, (double)rz + vertices[1].z).tex((double)maxU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
+		        buffer.pos((double)rx + vertices[0].x, (double)ry + vertices[0].y, (double)rz + vertices[0].z).tex((double)maxU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
+			} else {
+				super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
+			}
 		}
 	}
 
@@ -145,8 +242,13 @@ public class ParticleSwirl extends Particle {
 		double dy = this.targetY - sy;
 		double dz = this.targetZ - sz;
 
-		this.posX = sx + dx * (1 - Math.pow(1 - this.progress, 3)) + Math.sin(this.startRotation + this.progress * 4.0F * Math.PI * 2.0F) * this.progress * this.endRadius;
+		this.prevRotSinX = this.rotSinX;
+		this.prevRotCosZ = this.rotCosZ;
+		this.rotSinX = Math.sin(this.startRotation + this.progress * this.rotationSpeed * Math.PI * 2.0F);
+		this.rotCosZ = Math.cos(this.startRotation + this.progress * this.rotationSpeed * Math.PI * 2.0F);
+		
+		this.posX = sx + dx * (1 - Math.pow(1 - this.progress, 3)) + this.rotSinX * this.progress * this.endRadius;
 		this.posY = sy + dy * this.progress;
-		this.posZ = sz + dz * (1 - Math.pow(1 - this.progress, 3)) + Math.cos(this.startRotation + this.progress * 4.0F * Math.PI * 2.0F) * this.progress * this.endRadius;
+		this.posZ = sz + dz * (1 - Math.pow(1 - this.progress, 3)) + this.rotCosZ * this.progress * this.endRadius;
 	}
 }
