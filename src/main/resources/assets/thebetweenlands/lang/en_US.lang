@@ -528,6 +528,23 @@ tile.thebetweenlands.reed_mat.name=Reed Mat
 tile.thebetweenlands.mud_loot_pot.1.name=Mud Pot of Chance
 tile.thebetweenlands.mud_loot_pot.2.name=Mud Pot of Chance
 tile.thebetweenlands.mud_loot_pot.3.name=Mud Pot of Chance
+tile.thebetweenlands.filtered_silt_glass_stained.white.name=White Stained Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.red=Red Stained Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.blue.name=Blue Stained Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.magenta.name=Magenta Stained Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.yellow.name=Yellow Stained Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.cyan.name=Cyan Stained Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.pink.name=Pink Stained Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.orange.name=Orange Stained Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.black.name=Black Stained Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.lime.name=Lime Stained Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.light_blue.name=Light Blue Stained Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.green.name=Green Stained Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.gray.name=Gray Stained Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.brown.name=Brown Stained Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.purple.name=Purple Stained Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.silver.name=Light Gray Stained Filtered Silt Glass
+
 
 # Items
 
