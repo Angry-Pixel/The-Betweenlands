@@ -27,6 +27,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 
@@ -119,13 +120,17 @@ public class BlockRope extends Block implements ICustomItemBlock {
 		state = state.withProperty(VARIANT, EnumRopeVariant.MIDDLE);
 
 		if(worldIn.getBlockState(pos.up()).getBlock() != this) {
-			if(worldIn.getBlockState(pos.down()).getBlock() == this) {
+			if(worldIn.getBlockState(pos.down()).getBlock() == this || worldIn.getBlockState(pos.down()).getBlock() instanceof BlockLantern) {
 				state = state.withProperty(VARIANT, EnumRopeVariant.TOP);
 			} else {
 				state = state.withProperty(VARIANT, EnumRopeVariant.SINGLE);
 			}
 		} else if(worldIn.getBlockState(pos.down()).getBlock() != this){
-			state = state.withProperty(VARIANT, EnumRopeVariant.BOTTOM);
+			if(worldIn.getBlockState(pos.down()).getBlock() instanceof BlockLantern) {
+				state = state.withProperty(VARIANT, EnumRopeVariant.MIDDLE);
+			} else {
+				state = state.withProperty(VARIANT, EnumRopeVariant.BOTTOM);
+			}
 		}
 
 		return state;
