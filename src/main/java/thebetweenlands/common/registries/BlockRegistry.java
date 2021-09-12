@@ -229,6 +229,7 @@ import thebetweenlands.common.block.terrain.BlockLeavesSpiritTree;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.block.terrain.BlockLogBetweenlands;
 import thebetweenlands.common.block.terrain.BlockLogSap;
+import thebetweenlands.common.block.terrain.BlockLyestone;
 import thebetweenlands.common.block.terrain.BlockMud;
 import thebetweenlands.common.block.terrain.BlockPeat;
 import thebetweenlands.common.block.terrain.BlockPeatSmouldering;
@@ -913,6 +914,7 @@ public class BlockRegistry {
     //public static final Block ANIMAL_BURROW_SILT = new BlockAnimalBurrow(Material.SAND);
     //public static final Block ANIMAL_BURROW_MUD = new BlockAnimalBurrow(BLMaterialRegistry.MUD);
     //public static final Block ANIMAL_BURROW_CRAGROCK = new BlockAnimalBurrow(Material.ROCK);
+    public static final Block LYESTONE = new BlockLyestone(Material.ROCK);
 
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();

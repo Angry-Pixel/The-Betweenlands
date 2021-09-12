@@ -51,6 +51,7 @@ import thebetweenlands.common.handler.AspectSyncHandler;
 import thebetweenlands.common.handler.AttackDamageHandler;
 import thebetweenlands.common.handler.BlockBreakHandler;
 import thebetweenlands.common.handler.BossHandler;
+import thebetweenlands.common.handler.CorrosiveBootsHandler;
 import thebetweenlands.common.handler.CustomEntityCollisionsHandler;
 import thebetweenlands.common.handler.ElixirCommonHandler;
 import thebetweenlands.common.handler.EntitySpawnHandler;
@@ -284,5 +285,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(SwarmedCapability.class);
 		MinecraftForge.EVENT_BUS.register(RotSmellEntityCapability.class);
 		MinecraftForge.EVENT_BUS.register(EntitySwarm.class);
+		MinecraftForge.EVENT_BUS.register(CorrosiveBootsHandler.class);
 	}
 }
