@@ -137,6 +137,7 @@ import thebetweenlands.common.item.misc.ItemLurkerSkinPatch;
 import thebetweenlands.common.item.misc.ItemMagicItemMagnet;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.item.misc.ItemMistStaff;
 import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.item.misc.ItemMobAnadia;
 import thebetweenlands.common.item.misc.ItemMossBed;
@@ -380,6 +381,7 @@ public class ItemRegistry {
     public static final Item FISHING_SPEAR = new ItemFishingSpear((byte) 0);
     public static final Item FISHING_SPEAR_AMPHIBIOUS = new ItemFishingSpear((byte) 1);
     public static final Item FISHING_SPEAR_AMPHIBIOUS_ROBUST = new ItemFishingSpear((byte) 2);
+    public static final Item MIST_STAFF = new ItemMistStaff();
     //BUCKETS
     public static final ItemBLBucket BL_BUCKET = new ItemBLBucket();
     public static final Item BL_BUCKET_RUBBER = new ItemSpecificBucket(FluidRegistry.RUBBER);
