@@ -278,7 +278,7 @@ public class EntityRegistry {
 		registerEntity(EntityFreshwaterUrchin.class, "freshwater_urchin", 0x612E2E, 0x13363F, 64, 3, true);
 
 		registerEntity(EntityBubblerCrabBubble.class, "bubbler_crab_bubble", 64, 1, true);
-		registerEntity(EntityCaveFish.class, "cave_fish", 0xD0D1C2, 0xECEDDF);
+		registerEntity(EntityCaveFish.class, "cave_fish", 0xFF8000, 0xE6E6E6);
 
 		registerEntity(EntityGlowingGoop.class, "glowing_goop");
 
