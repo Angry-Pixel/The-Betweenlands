@@ -285,6 +285,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(SwarmedCapability.class);
 		MinecraftForge.EVENT_BUS.register(RotSmellEntityCapability.class);
 		MinecraftForge.EVENT_BUS.register(EntitySwarm.class);
-		MinecraftForge.EVENT_BUS.register(CorrosiveBootsHandler.class);
+		//MinecraftForge.EVENT_BUS.register(CorrosiveBootsHandler.class);
 	}
 }
