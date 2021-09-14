@@ -154,6 +154,7 @@ import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityFalseXPOrb;
+import thebetweenlands.common.entity.EntityFishVortex;
 import thebetweenlands.common.entity.EntityFishingTackleBoxSeat;
 import thebetweenlands.common.entity.EntityGalleryFrame;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
@@ -714,6 +715,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityFalseXPOrb.class, RenderXPOrb::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySwarm.class, RenderSwarm::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGreeblingCoracle.class, RenderGreeblingCoracle::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFishVortex.class, RenderNothing::new);
 
 		//WIP
 		RenderingRegistry.registerEntityRenderingHandler(EntityRockSnot.class, RenderRockSnot::new);

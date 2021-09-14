@@ -15,6 +15,7 @@ import thebetweenlands.common.entity.EntityGalleryFrame;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.entity.EntityGreeblingCorpse;
 import thebetweenlands.common.entity.EntityLurkerSkinRaft;
+import thebetweenlands.common.entity.EntityMistBridge;
 import thebetweenlands.common.entity.EntityMovingWall;
 import thebetweenlands.common.entity.EntityResurrection;
 import thebetweenlands.common.entity.EntityRootGrabber;
@@ -269,6 +270,8 @@ public class EntityRegistry {
 		// TODO Shit that will be added onedayTM
 		//registerEntity(EntityPuffin.class, "puffin", 0x3F5A69, 0xA16A77, 64, 3, true);
 		//registerEntity(EntityAnimalBurrow.class, "animal_burrow");
+		
+		registerEntity(EntityMistBridge.class, "mist_brige");
 
 		registerEntity(EntityJellyfish.class, "jellyfish", 0xFFEBE5, 0xFF506B, 64, 3, true);
 		registerEntity(EntityJellyfishCave.class, "jellyfish_cave", 0xE0FFF6, 0x7CFFFF, 64, 3, true);
@@ -278,7 +281,7 @@ public class EntityRegistry {
 		registerEntity(EntityFreshwaterUrchin.class, "freshwater_urchin", 0x612E2E, 0x13363F, 64, 3, true);
 
 		registerEntity(EntityBubblerCrabBubble.class, "bubbler_crab_bubble", 64, 1, true);
-		registerEntity(EntityCaveFish.class, "cave_fish", 0xD0D1C2, 0xECEDDF);
+		registerEntity(EntityCaveFish.class, "cave_fish", 0xFF8000, 0xE6E6E6);
 
 		registerEntity(EntityGlowingGoop.class, "glowing_goop");
 

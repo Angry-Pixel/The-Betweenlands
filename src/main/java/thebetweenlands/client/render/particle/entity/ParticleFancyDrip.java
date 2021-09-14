@@ -17,6 +17,9 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 
 @SideOnly(Side.CLIENT)
 public class ParticleFancyDrip extends Particle {
+	protected boolean spawnSplashes = true;
+	protected boolean spawnRipples = true;
+	
 	protected ParticleFancyDrip(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double mx, double my, double mz, float scale) {
 		super(worldIn, xCoordIn, yCoordIn, zCoordIn, mx, my, mz);
 		this.particleScale = scale;
@@ -27,6 +30,16 @@ public class ParticleFancyDrip extends Particle {
 		this.setSize(0.01F, 0.01F);
 		this.particleGravity = 0.06F;
 		this.particleMaxAge = (int)(64.0D / (Math.random() * 0.8D + 0.2D));
+	}
+	
+	public ParticleFancyDrip setSpawnSplashes(boolean spawn) {
+		this.spawnSplashes = spawn;
+		return this;
+	}
+	
+	public ParticleFancyDrip setSpawnRipples(boolean spawn) {
+		this.spawnRipples = spawn;
+		return this;
 	}
 
 	@Override
@@ -49,15 +62,19 @@ public class ParticleFancyDrip extends Particle {
 		if(this.onGround) {
 			this.setExpired();
 
-			BLParticles.RAIN.spawn(world, this.posX, this.posY, this.posZ, ParticleArgs.get()
-					.withColor(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha));
+			if(this.spawnSplashes) {
+				BLParticles.RAIN.spawn(world, this.posX, this.posY, this.posZ, ParticleArgs.get()
+						.withColor(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha));
+			}
 
-			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR,
-					BLParticles.WATER_RIPPLE.create(world, this.posX, this.posY + 0.1f, this.posZ,
-							ParticleArgs.get()
-							.withScale(this.particleScale * 1.5f)
-							.withColor(this.particleRed * 1.25f, this.particleGreen * 1.25f, this.particleBlue * 1.5f, Math.min(1, 2 * this.particleAlpha))
-							));
+			if(this.spawnRipples) {
+				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR,
+						BLParticles.WATER_RIPPLE.create(world, this.posX, this.posY + 0.1f, this.posZ,
+								ParticleArgs.get()
+								.withScale(this.particleScale * 1.5f)
+								.withColor(this.particleRed * 1.25f, this.particleGreen * 1.25f, this.particleBlue * 1.5f, Math.min(1, 2 * this.particleAlpha))
+								));
+			}
 
 			this.motionX *= 0.699999988079071D;
 			this.motionZ *= 0.699999988079071D;

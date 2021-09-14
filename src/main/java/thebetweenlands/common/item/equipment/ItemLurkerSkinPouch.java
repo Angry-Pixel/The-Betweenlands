@@ -206,17 +206,17 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
         IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
         if(cap != null) {
 			IInventory inv = cap.getInventory(EnumEquipmentInventory.MISC);
-			ItemStack pouch = null;
+			ItemStack pouch = ItemStack.EMPTY;
 
 			for(int i = 0; i < inv.getSizeInventory(); i++) {
 				ItemStack stack = inv.getStackInSlot(i);
-				if(stack != null && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
+				if(!stack.isEmpty() && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
 					pouch = stack;
 					break;
 				}
 			}
 
-			if(pouch != null) {
+			if(!pouch.isEmpty()) {
 				TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
 				RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 

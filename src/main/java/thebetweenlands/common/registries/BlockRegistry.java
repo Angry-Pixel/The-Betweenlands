@@ -93,6 +93,7 @@ import thebetweenlands.common.block.misc.BlockLadderBetweenlands;
 import thebetweenlands.common.block.misc.BlockLantern;
 import thebetweenlands.common.block.misc.BlockLanternSiltGlass;
 import thebetweenlands.common.block.misc.BlockLeverBetweenlands;
+import thebetweenlands.common.block.misc.BlockMistBridge;
 import thebetweenlands.common.block.misc.BlockMossBed;
 import thebetweenlands.common.block.misc.BlockMudFlowerPot;
 import thebetweenlands.common.block.misc.BlockMudFlowerPotCandle;
@@ -913,6 +914,8 @@ public class BlockRegistry {
     //public static final Block ANIMAL_BURROW_SILT = new BlockAnimalBurrow(Material.SAND);
     //public static final Block ANIMAL_BURROW_MUD = new BlockAnimalBurrow(BLMaterialRegistry.MUD);
     //public static final Block ANIMAL_BURROW_CRAGROCK = new BlockAnimalBurrow(Material.ROCK);
+    //public static final Block LYESTONE = new BlockLyestone(Material.ROCK);
+    public static final Block MIST_BRIDGE = new BlockMistBridge(Material.ROCK);
 
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();
