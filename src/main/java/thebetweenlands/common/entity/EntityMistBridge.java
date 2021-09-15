@@ -12,26 +12,42 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer.ParticleBatch;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
+import thebetweenlands.client.render.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityMistBridge extends EntityCreature implements IEntityBL {
+	private static final DataParameter<Integer> DELAY = EntityDataManager.<Integer>createKey(EntityMistBridge.class, DataSerializers.VARINT);
+
+	@SideOnly(Side.CLIENT)
+	private ParticleBatch particleBatch;
 
 	public EntityMistBridge (World world) {
 		super(world);
-		setSize(0.5F, 0.5F);
+		setSize(0.9F, 0.9F);
 	}
 
 	@Override
 	protected void entityInit() {
 		super.entityInit();
+		getDataManager().register(DELAY, 0);
 	}
 
 	@Override
@@ -45,9 +61,16 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 	 public void onUpdate() {
 		super.onUpdate();
 
-		if(!world.isRemote)
-			if (world.isAirBlock(getPosition()) || ticksExisted >= 200)
+		if (this.world.isRemote) {
+			spawnCloudParticle();
+		}
+
+		if(!world.isRemote) {
+			if(ticksExisted >= getDelay() && world.getBlockState(getPosition()).getBlock() != BlockRegistry.MIST_BRIDGE)
+				world.setBlockState(getPosition(), BlockRegistry.MIST_BRIDGE.getDefaultState(), 3);
+			if (world.isAirBlock(getPosition()) || ticksExisted - getDelay() >= 200)
 				setDead();
+		}
 	}
 
 	@Override
@@ -92,9 +115,6 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
 		if (!getEntityWorld().isRemote) {
 			getOriginBlocks(getEntityWorld(), getPosition());
-			IBlockState state = world.getBlockState(getPosition());
-			world.setBlockState(getPosition(), BlockRegistry.MIST_BRIDGE.getDefaultState(), 3);
-
 		}
 		return livingdata;
 	}
@@ -152,4 +172,46 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 		return false;
 	}
 
+	public void setDelay(int distance) {
+		dataManager.set(DELAY, distance);
+	}
+
+	public int getDelay() {
+		return dataManager.get(DELAY);
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void spawnCloudParticle() {
+		double x = this.posX + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+		double y = this.posY + 0.5D;
+		double z = this.posZ + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+		double mx = (this.world.rand.nextFloat() - 0.5F) / 12.0F;
+		double my = (this.world.rand.nextFloat() - 0.5F) / 16.0F * 0.1F;
+		double mz = (this.world.rand.nextFloat() - 0.5F) / 12.0F;
+		int[] color = {255, 255, 255, 255};
+
+		ParticleGasCloud hazeParticle = (ParticleGasCloud) BLParticles.GAS_CLOUD
+				.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
+						.withData(null)
+						.withMotion(mx, my, mz)
+						.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F)
+						.withScale(8f));
+		
+	//	BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS_HEAT_HAZE, hazeParticle);
+		
+		ParticleGasCloud particle = (ParticleGasCloud) BLParticles.GAS_CLOUD
+				.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
+						.withData(null)
+						.withMotion(mx, my, mz)
+						.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F)
+						.withScale(5f));
+
+		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS_TEXTURED, particle);
+	}
+
+	@Override
+	public boolean shouldRenderInPass(int pass) {
+		return pass == 1;
+	}
+		
 }

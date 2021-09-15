@@ -160,6 +160,7 @@ import thebetweenlands.common.entity.EntityGalleryFrame;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.entity.EntityGreeblingCorpse;
 import thebetweenlands.common.entity.EntityLurkerSkinRaft;
+import thebetweenlands.common.entity.EntityMistBridge;
 import thebetweenlands.common.entity.EntityMovingWall;
 import thebetweenlands.common.entity.EntityResurrection;
 import thebetweenlands.common.entity.EntityRootGrabber;
@@ -729,6 +730,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityBubblerCrabBubble.class, RenderBubblerCrabBubble::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCaveFish.class, RenderCaveFish::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGlowingGoop.class, manager -> new RenderGlowingGoop(manager, Minecraft.getMinecraft().getRenderItem()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityMistBridge.class, RenderMistBridge::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());
