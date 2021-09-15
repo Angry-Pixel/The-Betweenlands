@@ -224,7 +224,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
 				ITextureObject texture = textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 				texture.setBlurMipmap(false, false);
 
-				IBakedModel model = renderItem.getItemModelMesher().getItemModel(pouch);
+				IBakedModel model = renderItem.getItemModelWithOverrides(pouch, null, null);
 
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(x, y + 1.0D, z);
