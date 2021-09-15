@@ -178,8 +178,13 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		setHeadItem(getPartFromLootTable(LootTableRegistry.ANADIA_HEAD));
 		setBodyItem(getPartFromLootTable(LootTableRegistry.ANADIA_BODY));
 		setTailItem(getPartFromLootTable(LootTableRegistry.ANADIA_TAIL));
-		if(getStaminaMods() >= 5F && getFishSize() >= 0.875F)
+
+		if (getEntityWorld().getBiome(getPosition()) != BiomeRegistry.DEEP_WATERS) {
+			if (getStaminaMods() >= 5F && getFishSize() >= 0.875F)
+				setIsTreasureFish(true);
+		} else if (getStaminaMods() >= 4.5F && getFishSize() >= 0.5F) // will happen on smaller && less stamina fish more often in deep waters
 			setIsTreasureFish(true);
+
 	}
 
 	public float getFishSize() {
