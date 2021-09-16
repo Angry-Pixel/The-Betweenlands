@@ -114,7 +114,7 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 				if (vortexCount >= 1) {
 					if (world.getTotalWorldTime() % 200 == 0) { //TODO dunno about timings yet
 						if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
-							armorEffectsHelper.activateFishVortex(world, player, vortexCount);
+							//armorEffectsHelper.activateFishVortex(world, player, vortexCount);
 						}
 					}
 				}
