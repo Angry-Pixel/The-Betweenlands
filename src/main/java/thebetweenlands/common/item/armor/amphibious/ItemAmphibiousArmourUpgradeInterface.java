@@ -1,4 +1,4 @@
-package thebetweenlands.common.item.misc;
+package thebetweenlands.common.item.armor.amphibious;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -11,12 +11,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorEffectsHelper;
-import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorUpgrades;
-import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class ItemSoulGemFocus extends Item {
+public class ItemAmphibiousArmourUpgradeInterface extends Item {
 
 	AmphibiousArmorEffectsHelper armorEffectsHelper = new AmphibiousArmorEffectsHelper();
 	private static final String NBT_URCHIN_AOE_COOLDOWN = "thebetweenlands.urchin_aoe_cooldown";
