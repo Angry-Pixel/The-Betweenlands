@@ -10,11 +10,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.EntityMistBridge;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class ItemMistStaff extends Item {
 
@@ -53,6 +55,7 @@ public class ItemMistStaff extends Item {
 					}
 				}
 			}
+			world.playSound((EntityPlayer)null, pos, SoundRegistry.MIST_STAFF_CAST, SoundCategory.BLOCKS, 1F, 1.0F);
 		}
 
 		return EnumActionResult.SUCCESS;

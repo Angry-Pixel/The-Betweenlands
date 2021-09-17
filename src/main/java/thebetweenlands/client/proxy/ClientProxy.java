@@ -730,7 +730,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityBubblerCrabBubble.class, RenderBubblerCrabBubble::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCaveFish.class, RenderCaveFish::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGlowingGoop.class, manager -> new RenderGlowingGoop(manager, Minecraft.getMinecraft().getRenderItem()));
-		RenderingRegistry.registerEntityRenderingHandler(EntityMistBridge.class, RenderMistBridge::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityMistBridge.class, RenderNothing::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());

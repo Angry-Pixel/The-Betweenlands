@@ -329,6 +329,8 @@ public class SoundRegistry {
     public static final BLSoundEvent BL_FISHING_CAST = reg("bl_fishing_cast");
     public static final BLSoundEvent BL_FISHING_REEL = reg("bl_fishing_reel");
     public static final BLSoundEvent BL_FISHING_ROD_CREAK = reg("bl_fishing_rod_creak");
+    public static final BLSoundEvent MIST_STAFF_CAST = reg("mist_staff_cast");
+    public static final BLSoundEvent MIST_STAFF_VANISH = reg("mist_staff_vanish");
     
     
     // Blocks

@@ -21,27 +21,16 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
-import thebetweenlands.client.render.particle.BLParticles;
-import thebetweenlands.client.render.particle.BatchedParticleRenderer;
-import thebetweenlands.client.render.particle.BatchedParticleRenderer.ParticleBatch;
-import thebetweenlands.client.render.particle.DefaultParticleBatches;
-import thebetweenlands.client.render.particle.ParticleFactory;
-import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityMistBridge extends EntityCreature implements IEntityBL {
 	private static final DataParameter<Integer> DELAY = EntityDataManager.<Integer>createKey(EntityMistBridge.class, DataSerializers.VARINT);
 
-	@SideOnly(Side.CLIENT)
-	private ParticleBatch particleBatch;
-
 	public EntityMistBridge (World world) {
 		super(world);
-		setSize(0.9F, 0.9F);
+		setSize(0.0F, 0.0F);
 	}
 
 	@Override
@@ -61,13 +50,14 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 	 public void onUpdate() {
 		super.onUpdate();
 
-		if (this.world.isRemote) {
-			spawnCloudParticle();
-		}
+	//	if (this.world.isRemote) {
+	//		spawnCloudParticle();
+	//	}
 
 		if(!world.isRemote) {
 			if(ticksExisted >= getDelay() && world.getBlockState(getPosition()).getBlock() != BlockRegistry.MIST_BRIDGE)
 				world.setBlockState(getPosition(), BlockRegistry.MIST_BRIDGE.getDefaultState(), 3);
+
 			if (world.isAirBlock(getPosition()) || ticksExisted - getDelay() >= 200)
 				setDead();
 		}
@@ -143,7 +133,7 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 		BlockPos origin = NBTUtil.getPosFromTag(entityNbt.getCompoundTag("originPos"));
 		IBlockState state = NBTUtil.readBlockState((NBTTagCompound) entityNbt.getTag("tempBlockTypes"));
 		world.setBlockState(origin, state, 3);
-		getEntityWorld().playSound((EntityPlayer)null, origin, SoundRegistry.GAS_CLOUD_DEATH, SoundCategory.BLOCKS, 1F, 1.0F);
+		world.playSound((EntityPlayer)null, origin, SoundRegistry.MIST_STAFF_VANISH, SoundCategory.BLOCKS, 1F, 1.0F);
 	}
 
 	@Override
@@ -179,7 +169,7 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 	public int getDelay() {
 		return dataManager.get(DELAY);
 	}
-
+/*
 	@SideOnly(Side.CLIENT)
 	private void spawnCloudParticle() {
 		double x = this.posX + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
@@ -213,5 +203,5 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 	public boolean shouldRenderInPass(int pass) {
 		return pass == 1;
 	}
-		
+	*/	
 }

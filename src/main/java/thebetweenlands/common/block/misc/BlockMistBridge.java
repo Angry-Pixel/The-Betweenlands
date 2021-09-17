@@ -5,10 +5,15 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockFaceShape;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -20,6 +25,11 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
 
 public class BlockMistBridge extends Block {
+	
+	public static final PropertyBool NORTH = PropertyBool.create("north");
+	public static final PropertyBool EAST = PropertyBool.create("east");
+	public static final PropertyBool SOUTH = PropertyBool.create("south");
+	public static final PropertyBool WEST = PropertyBool.create("west");
 
 	public BlockMistBridge(Material materialIn) {
 		super(materialIn);
@@ -27,8 +37,13 @@ public class BlockMistBridge extends Block {
 		setSoundType(SoundType.STONE);
 		setHardness(1.2F);
 		setResistance(8.0F);
+		setDefaultState(this.blockState.getBaseState()
+				.withProperty(NORTH, false)
+				.withProperty(EAST, false)
+				.withProperty(SOUTH, false)
+				.withProperty(WEST, false));
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
@@ -44,6 +59,59 @@ public class BlockMistBridge extends Block {
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
+	}
+
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		PooledMutableBlockPos offset = PooledMutableBlockPos.retain();
+		PooledMutableBlockPos offsetDown = PooledMutableBlockPos.retain();
+
+		for(EnumFacing facing : EnumFacing.HORIZONTALS) {
+			offset.setPos(pos.getX() + facing.getXOffset(), pos.getY(), pos.getZ() + facing.getZOffset());
+			IBlockState offsetState = worldIn.getBlockState(offset);
+
+			offsetDown.setPos(pos.getX() + facing.getXOffset(), pos.getY() - 1, pos.getZ() + facing.getZOffset());
+			IBlockState offsetDownState = worldIn.getBlockState(offsetDown);
+
+			PropertyBool prop;
+			switch(facing) {
+			default:
+			case NORTH:
+				prop = NORTH;
+				break;
+			case EAST:
+				prop = EAST;
+				break;
+			case SOUTH:
+				prop = SOUTH;
+				break;
+			case WEST:
+				prop = WEST;
+				break;
+			}
+
+			state = state.withProperty(prop, offsetState.getBlock() instanceof BlockMistBridge == false && offsetDownState.isSideSolid(worldIn, offsetDown, EnumFacing.UP) && offsetDownState.getBlockFaceShape(worldIn, offsetDown, EnumFacing.UP) == BlockFaceShape.SOLID);
+		}
+
+		offset.release();
+		offsetDown.release();
+
+		return state;
+	}
+
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[] { NORTH, EAST, SOUTH, WEST });
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState();
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return 0;
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -1,7 +1,40 @@
 {
-  "variants": { 
-    "normal": {
-      "model": "thebetweenlands:energy_barrier"
-    } 
-  } 
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:mist_bridge"
+  },
+  "variants": {
+    "north": {
+      "true": {
+        "submodel": "thebetweenlands:mist_bridge_north"
+      },
+      "false": {
+      
+      }
+    },
+    "east": {
+      "true": {
+        "submodel": "thebetweenlands:mist_bridge_east"
+      },
+      "false": {
+      
+      }
+    },
+    "south": {
+      "true": {
+        "submodel": "thebetweenlands:mist_bridge_south"
+      },
+      "false": {
+      
+      }
+    },
+    "west": {
+      "true": {
+        "submodel": "thebetweenlands:mist_bridge_west"
+      },
+      "false": {
+      
+      }
+    }
+  }
 }

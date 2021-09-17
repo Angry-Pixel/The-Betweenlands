@@ -1,3 +1,9 @@
 {
   "parent": "thebetweenlands:block/limestone"
 }
+{ 
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "thebetweenlands:blocks/mist_bridge_0"
+  } 
+}

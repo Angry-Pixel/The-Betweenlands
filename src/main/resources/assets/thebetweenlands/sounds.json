@@ -2328,5 +2328,15 @@
     "sounds": [
       "thebetweenlands:spear_return_2"
     ]
+  },
+  "mist_staff_cast": {
+    "sounds": [
+      "thebetweenlands:mist_staff_cast"
+    ]
+  },
+  "mist_staff_vanish": {
+    "sounds": [
+      "thebetweenlands:mist_staff_vanish"
+    ]
   }
 }
