@@ -18,21 +18,27 @@ public class RenderAnadia extends RenderLiving<EntityAnadia> {
 			new ResourceLocation("thebetweenlands:textures/entity/anadia_1_smoked.png"),
 			new ResourceLocation("thebetweenlands:textures/entity/anadia_1_rotten.png"),
 			new ResourceLocation("thebetweenlands:textures/entity/anadia_1_base.png"),
-			new ResourceLocation("thebetweenlands:textures/entity/anadia_1_silver.png")
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_1_silver.png"),
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_1_purple.png"),
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_1_green.png")
 	};
 
 	private static final ResourceLocation[] TEXTURE_2 = new ResourceLocation[] {
 			new ResourceLocation("thebetweenlands:textures/entity/anadia_2_smoked.png"),
 			new ResourceLocation("thebetweenlands:textures/entity/anadia_2_rotten.png"),
 			new ResourceLocation("thebetweenlands:textures/entity/anadia_2_base.png"),
-			new ResourceLocation("thebetweenlands:textures/entity/anadia_2_silver.png")
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_2_silver.png"),
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_2_purple.png"),
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_2_green.png")
 	};
 
 	private static final ResourceLocation[] TEXTURE_3 = new ResourceLocation[] {
 			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_smoked.png"),
 			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_rotten.png"),
 			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_base.png"),
-			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_silver.png")
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_silver.png"),
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_purple.png"),
+			new ResourceLocation("thebetweenlands:textures/entity/anadia_3_green.png")
 	};
 
 	public final static ModelAnadia ANADIA_MODEL = new ModelAnadia();
@@ -160,6 +166,10 @@ public class RenderAnadia extends RenderLiving<EntityAnadia> {
 			return textures[2];
 		case SILVER:
 			return textures[3];
+		case PURPLE:
+			return textures[4];
+		case GREEN:
+			return textures[5];
 		}
 	}
 }

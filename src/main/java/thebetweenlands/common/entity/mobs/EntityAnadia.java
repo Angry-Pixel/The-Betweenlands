@@ -44,7 +44,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
@@ -172,7 +171,11 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		setTailType(EnumAnadiaTailParts.random(this.rand));
 		setFishSize(Math.round(Math.max(0.125F, rand.nextFloat()) * 16F) / 16F);
 		if(getEntityWorld().getBiome(getPosition()) == BiomeRegistry.DEEP_WATERS)
-			setFishColour(EnumAnadiaColor.SILVER); // testing colours - set this based on biome spawned in/other possible things
+			setFishColour(EnumAnadiaColor.SILVER);
+		else if(getEntityWorld().getBiome(getPosition()) == BiomeRegistry.PATCHY_ISLANDS)
+			setFishColour(EnumAnadiaColor.GREEN);
+		else if(getEntityWorld().getBiome(getPosition()) == BiomeRegistry.COARSE_ISLANDS)
+			setFishColour(EnumAnadiaColor.PURPLE);
 		else
 			setFishColour(EnumAnadiaColor.BASE);
 		setHeadItem(getPartFromLootTable(LootTableRegistry.ANADIA_HEAD));
@@ -544,7 +547,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return world.getDifficulty() != EnumDifficulty.PEACEFUL && world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
+		return world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
 	}
 
 	public boolean isGrounded() {
@@ -1290,7 +1293,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 	}
 
 	public static enum EnumAnadiaColor {
-		SMOKED(false), ROTTEN(false), BASE(true), SILVER(true),
+		SMOKED(false), ROTTEN(false), BASE(true), SILVER(true), PURPLE(true), GREEN(true),
 		
 		UNKNOWN(false);
 

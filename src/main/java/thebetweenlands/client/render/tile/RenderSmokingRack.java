@@ -116,6 +116,7 @@ public class RenderSmokingRack extends TileEntitySpecialRenderer<TileEntitySmoki
 			if(stack.getItem() instanceof ItemMobAnadia && ((ItemMobAnadia)stack.getItem()).isRotten(Minecraft.getMinecraft().world, stack))
 				((EntityAnadia) entity).setFishColour(EnumAnadiaColor.ROTTEN);
 			entity.prevRotationPitch = entity.rotationPitch = 90;
+			entity.prevRotationYaw = entity.rotationYaw = 90;
 			float scale2 = 1F / ((EntityAnadia) entity).getFishSize() * 0.475F;
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x, y, z);

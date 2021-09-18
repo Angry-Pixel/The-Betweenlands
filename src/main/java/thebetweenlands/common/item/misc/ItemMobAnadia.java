@@ -27,7 +27,6 @@ import thebetweenlands.api.capability.IRotSmellCapability;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.EntityFishingTackleBoxSeat;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
-import thebetweenlands.common.entity.mobs.EntityAnadia.EnumAnadiaColor;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.item.ITintedItem;
 import thebetweenlands.common.registries.CapabilityRegistry;
@@ -193,6 +192,14 @@ public class ItemMobAnadia extends ItemMob implements ITintedItem {
 			// silver
 			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 3)
 				return 0xC2B3DB;
+
+			// purple
+			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 4)
+				return 0x714147;
+
+			// green
+			if(stack.getTagCompound().getCompoundTag("Entity").getByte("fishColour") == 5)
+				return 0x415432;
 		}
 
 		return 0x717A51; //default to base/brown
