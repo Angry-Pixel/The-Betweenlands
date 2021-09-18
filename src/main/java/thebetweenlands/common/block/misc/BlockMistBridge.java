@@ -94,7 +94,7 @@ public class BlockMistBridge extends Block {
 				break;
 			}
 
-			state = state.withProperty(prop, offsetState.getBlock() instanceof BlockMistBridge == false && offsetDownState.isSideSolid(worldIn, offsetDown, EnumFacing.UP) && offsetDownState.getBlockFaceShape(worldIn, offsetDown, EnumFacing.UP) == BlockFaceShape.SOLID);
+			state = state.withProperty(prop, offsetState.getBlock() instanceof BlockMistBridge == false);// && offsetDownState.isSideSolid(worldIn, offsetDown, EnumFacing.UP) && offsetDownState.getBlockFaceShape(worldIn, offsetDown, EnumFacing.UP) == BlockFaceShape.SOLID);
 		}
 
 		offset.release();
