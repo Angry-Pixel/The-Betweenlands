@@ -31,6 +31,7 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 	public EntityMistBridge (World world) {
 		super(world);
 		setSize(0.0F, 0.0F);
+		setNoGravity(true);
 	}
 
 	@Override
@@ -58,7 +59,7 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 			if(ticksExisted >= getDelay() && world.getBlockState(getPosition()).getBlock() != BlockRegistry.MIST_BRIDGE)
 				world.setBlockState(getPosition(), BlockRegistry.MIST_BRIDGE.getDefaultState(), 3);
 
-			if (world.isAirBlock(getPosition()) || ticksExisted - getDelay() >= 200)
+			if (ticksExisted - getDelay() > 1 && world.getBlockState(getPosition()).getBlock() != BlockRegistry.MIST_BRIDGE || ticksExisted - getDelay() >= 200)
 				setDead();
 		}
 	}
@@ -133,7 +134,8 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 		BlockPos origin = NBTUtil.getPosFromTag(entityNbt.getCompoundTag("originPos"));
 		IBlockState state = NBTUtil.readBlockState((NBTTagCompound) entityNbt.getTag("tempBlockTypes"));
 		world.setBlockState(origin, state, 3);
-		world.playSound((EntityPlayer)null, origin, SoundRegistry.MIST_STAFF_VANISH, SoundCategory.BLOCKS, 1F, 1.0F);
+		if(getDelay() == 0)
+			world.playSound((EntityPlayer)null, origin, SoundRegistry.MIST_STAFF_VANISH, SoundCategory.BLOCKS, 1F, 1.0F);
 	}
 
 	@Override

@@ -43,6 +43,10 @@ public class BlockMistBridge extends Block {
 				.withProperty(SOUTH, false)
 				.withProperty(WEST, false));
 	}
+	@Override
+    public boolean causesSuffocation(IBlockState state) {
+        return false;
+    }
 
 	@Override
 	@SideOnly(Side.CLIENT)
