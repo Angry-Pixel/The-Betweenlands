@@ -37,6 +37,7 @@ public class ItemMistStaff extends Item {
 				Vec3d diag = new Vec3d(Math.sin(direction + Math.PI / 2.0D), 0, Math.cos(direction + Math.PI / 2.0D)).normalize();
 				List<BlockPos> spawnedPos = new ArrayList<BlockPos>();
 				List<BlockPos> convertPos = new ArrayList<BlockPos>();
+				List<Integer> blockDistance = new ArrayList<Integer>();
 				for (int distance = -1; distance <= 16; distance++) {
 					for (int distance2 = -distance; distance2 <= distance; distance2++) {
 						for (int yo = 0; yo <= 1; yo++) {
@@ -54,12 +55,13 @@ public class ItemMistStaff extends Item {
 
 							if (isMistifiableBlock(world, origin, block)) {
 								convertPos.add(origin);
+								blockDistance.add(distance);
 								break;
 							}
 						}
 					}
 				}
-				spawnEntity(world, pos, 0, convertPos);
+				spawnEntity(world, pos, blockDistance, convertPos);
 				world.playSound((EntityPlayer) null, pos, SoundRegistry.MIST_STAFF_CAST, SoundCategory.BLOCKS, 1F, 1.0F);
 			}
 		}
@@ -70,12 +72,11 @@ public class ItemMistStaff extends Item {
 		return (state.isNormalCube() || state.getBlock().isReplaceable(world, pos)) && !state.getBlock().hasTileEntity(state) && state.getBlockHardness(world, pos) <= 5.0F && state.getBlockHardness(world, pos) >= 0.0F && !world.getBlockState(pos.up()).isOpaqueCube() && !(state.getBlock() instanceof BlockMistBridge);
 	}
 
-	private void spawnEntity(World world, BlockPos pos, int distance, List<BlockPos> convertPos) {
+	private void spawnEntity(World world, BlockPos pos, List<Integer> blockDistance, List<BlockPos> convertPos) {
 		if (!world.isRemote) {// && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
 			EntityMistBridge mist_bridge = new EntityMistBridge(world);
 			mist_bridge.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
-			//mist_bridge.setDelay(distance);
-			mist_bridge.setBlockList(convertPos);
+			mist_bridge.setBlockList(blockDistance, convertPos);
 			if (mist_bridge.getCanSpawnHere()) {
 				mist_bridge.onInitialSpawn(world.getDifficultyForLocation(mist_bridge.getPosition()), null);
 				world.spawnEntity(mist_bridge);

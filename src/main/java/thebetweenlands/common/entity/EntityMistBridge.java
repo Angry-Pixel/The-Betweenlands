@@ -1,6 +1,7 @@
 package thebetweenlands.common.entity;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -15,9 +16,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.SoundCategory;
@@ -30,7 +28,9 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityMistBridge extends EntityCreature implements IEntityBL {
-	private static final DataParameter<Integer> DELAY = EntityDataManager.<Integer>createKey(EntityMistBridge.class, DataSerializers.VARINT);
+	public boolean startExtention;
+	public boolean startRetraction;
+	private int matchDistance = 0;
 
 	public EntityMistBridge (World world) {
 		super(world);
@@ -41,7 +41,6 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		getDataManager().register(DELAY, 0);
 	}
 
 	@Override
@@ -59,9 +58,43 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 	//		spawnCloudParticle();
 	//	}
 
-		if(!world.isRemote) {
-			if (ticksExisted - getDelay() > 1 && world.getBlockState(getPosition()).getBlock() != BlockRegistry.MIST_BRIDGE || ticksExisted - getDelay() >= 200)
-				setDead();
+		if (!world.isRemote) {
+			if (startExtention && world.getTotalWorldTime() % 1 == 0) {
+				List<BlockPos> pos = matchDistance(world, matchDistance);
+				if (!pos.isEmpty()) {
+					for (int index = 0; index < pos.size(); index++)
+						world.setBlockState(pos.get(index), BlockRegistry.MIST_BRIDGE.getDefaultState(), 2);
+				}
+
+				if (matchDistance < 16)
+					matchDistance++;
+
+				if (matchDistance >= 16) {
+					startExtention = false;
+					matchDistance = 0;
+				}
+	
+			}
+
+			if(startRetraction) {
+				List<BlockPos> pos = matchDistance(world, matchDistance);
+				if (!pos.isEmpty()) {
+					for (int index = 0; index < pos.size(); index++)
+						restoreBlocks(pos.get(index));
+				}
+
+				if (matchDistance < 16)
+					matchDistance++;
+
+				if (matchDistance >= 16)
+					setDead();
+			}	
+
+			if (ticksExisted > 1 && world.getBlockState(getPosition()).getBlock() != BlockRegistry.MIST_BRIDGE || ticksExisted >= 200) {
+				if(!startRetraction)
+					world.playSound((EntityPlayer)null, getPosition(), SoundRegistry.MIST_STAFF_VANISH, SoundCategory.BLOCKS, 1F, 1.0F);
+				startRetraction = true;
+			}
 		}
 	}
 
@@ -106,59 +139,63 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
 		if (!getEntityWorld().isRemote) {
-			generateBridgeBlocks(getEntityWorld(), getEntityData());
+			startExtention = true;
 		}
 		return livingdata;
 	}
 
-	@Override
-    public void setDead() {
-		if(!getEntityWorld().isRemote) {
-			if(getEntityData().hasKey("tempBlockTypes"))
-				loadOriginBlocks(getEntityWorld(), getEntityData());
-		}
-        super.setDead();
-    }
-
-	public void setBlockList(List<BlockPos> convertPos) {
+	public void setBlockList(List<Integer> blockDistance, List<BlockPos> convertPos) {
+		NBTTagList distanceList = new NBTTagList();
 		NBTTagList posList = new NBTTagList();
 		NBTTagList stateList = new NBTTagList();
 		NBTTagCompound entityNbt = getEntityData();
 		for (int blockCount = 0; blockCount < convertPos.size(); blockCount++) {
+			
 			NBTTagCompound tagPos = NBTUtil.createPosTag(convertPos.get(blockCount));
 			posList.appendTag(tagPos);
+			
 			IBlockState state = world.getBlockState(convertPos.get(blockCount));
 			NBTTagCompound tagState = new NBTTagCompound();
 			NBTUtil.writeBlockState(tagState, state);
 			stateList.appendTag(tagState);
+			
+			int distance = blockDistance.get(blockCount);
+			NBTTagCompound tagDistance = new NBTTagCompound();
+			tagDistance.setInteger("distance", distance);
+			distanceList.appendTag(tagDistance);
 		}
 
 		if (!posList.isEmpty() && !stateList.isEmpty()) {
 			entityNbt.setTag("originPos", posList);
 			entityNbt.setTag("tempBlockTypes", stateList);
+			entityNbt.setTag("distance", distanceList);
 		}
 		writeEntityToNBT(entityNbt);
 	}
 
-	public void generateBridgeBlocks(World world, NBTTagCompound tag) {
+	public List<BlockPos> matchDistance(World world, int distanceIn) {
 		NBTTagCompound entityNbt = getEntityData();
+		List<BlockPos> posList = new ArrayList<BlockPos>(); 
 		NBTTagList posTagList = entityNbt.getTagList("originPos", Constants.NBT.TAG_COMPOUND);
-		for (int indexCount = 0; indexCount < posTagList.tagCount(); ++indexCount) {
-			BlockPos origin = NBTUtil.getPosFromTag(posTagList.getCompoundTagAt(indexCount));
-			world.setBlockState(origin, BlockRegistry.MIST_BRIDGE.getDefaultState(), 3);
+		NBTTagList distanceTagList = entityNbt.getTagList("distance", Constants.NBT.TAG_COMPOUND);
+		for (int indexCount = 0; indexCount < distanceTagList.tagCount(); ++indexCount) {
+			if(distanceTagList.getCompoundTagAt(indexCount).getInteger("distance") == distanceIn)
+				posList.add(NBTUtil.getPosFromTag(posTagList.getCompoundTagAt(indexCount)));
 		}
+		return posList;
 	}
 
-	public void loadOriginBlocks(World world, NBTTagCompound tag) {
+	private void restoreBlocks(BlockPos blockPos) {
 		NBTTagCompound entityNbt = getEntityData();
 		NBTTagList posTagList = entityNbt.getTagList("originPos", Constants.NBT.TAG_COMPOUND);
 		NBTTagList stateTagList = entityNbt.getTagList("tempBlockTypes", Constants.NBT.TAG_COMPOUND);
 		for (int indexCount = 0; indexCount < posTagList.tagCount(); ++indexCount) {
 			BlockPos origin = NBTUtil.getPosFromTag(posTagList.getCompoundTagAt(indexCount));
-			IBlockState state = NBTUtil.readBlockState(stateTagList.getCompoundTagAt(indexCount));
-			world.setBlockState(origin, state, 3);
+			if (origin.getX() == blockPos.getX() && origin.getY() == blockPos.getY() && origin.getZ() == blockPos.getZ()) {
+				IBlockState state = NBTUtil.readBlockState(stateTagList.getCompoundTagAt(indexCount));
+				world.setBlockState(origin, state, 3);
+			}
 		}
-		world.playSound((EntityPlayer)null, NBTUtil.getPosFromTag(posTagList.getCompoundTagAt(0)), SoundRegistry.MIST_STAFF_VANISH, SoundCategory.BLOCKS, 1F, 1.0F);
 	}
 
 	@Override
@@ -187,13 +224,6 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 		return false;
 	}	
 
-	public void setDelay(int distance) {
-		dataManager.set(DELAY, distance);
-	}
-
-	public int getDelay() {
-		return dataManager.get(DELAY);
-	}
 /*
 	@SideOnly(Side.CLIENT)
 	private void spawnCloudParticle() {
