@@ -9,8 +9,11 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -22,13 +25,16 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.util.AdvancedStateMap;
 
-public class BlockMistBridge extends Block {
+public class BlockMistBridge extends Block implements IStateMappedBlock {
 	
 	public static final PropertyBool NORTH = PropertyBool.create("north");
 	public static final PropertyBool EAST = PropertyBool.create("east");
 	public static final PropertyBool SOUTH = PropertyBool.create("south");
 	public static final PropertyBool WEST = PropertyBool.create("west");
+	public static final PropertyBool SOLID = PropertyBool.create("solid");
 
 	public BlockMistBridge(Material materialIn) {
 		super(materialIn);
@@ -40,7 +46,20 @@ public class BlockMistBridge extends Block {
 				.withProperty(NORTH, false)
 				.withProperty(EAST, false)
 				.withProperty(SOUTH, false)
-				.withProperty(WEST, false));
+				.withProperty(WEST, false)
+				.withProperty(SOLID, true));
+	}
+
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return FULL_BLOCK_AABB;
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		if(!state.getValue(SOLID))
+			return NULL_AABB;
+		return FULL_BLOCK_AABB;
 	}
 
 	@Override
@@ -58,6 +77,11 @@ public class BlockMistBridge extends Block {
 	@Override
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
+	}
+
+	@Override
+	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		return Items.AIR;
 	}
 
 	@Override
@@ -105,18 +129,29 @@ public class BlockMistBridge extends Block {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { NORTH, EAST, SOUTH, WEST });
+		return new BlockStateContainer(this, new IProperty[] { NORTH, EAST, SOUTH, WEST, SOLID });
 	}
-	
+
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState();
+		return this.getDefaultState().withProperty(SOLID, meta == 0 ? true : false);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return 0;
+		return state.getValue(SOLID) ? 0 : 1;
 	}
+
+	@Override
+	public void setStateMapper(AdvancedStateMap.Builder builder) {
+		builder.ignore(SOLID);
+	}
+
+	@Override
+    public void onPlayerDestroy(World world, BlockPos pos, IBlockState state) {
+		if (!world.isRemote)
+			world.setBlockState(pos, getDefaultState().withProperty(SOLID, false), 3);
+    }
 
 	@SideOnly(Side.CLIENT)
 	@Override

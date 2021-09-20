@@ -24,6 +24,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.block.misc.BlockMistBridge;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -90,7 +91,7 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 					setDead();
 			}	
 
-			if (ticksExisted > 1 && world.getBlockState(getPosition()).getBlock() != BlockRegistry.MIST_BRIDGE || ticksExisted >= 200) {
+			if (ticksExisted > 1 && (world.getBlockState(getPosition()).getBlock() != BlockRegistry.MIST_BRIDGE || world.getBlockState(getPosition()).getBlock() == BlockRegistry.MIST_BRIDGE && !world.getBlockState(getPosition()).getValue(BlockMistBridge.SOLID)) || ticksExisted >= 200) {
 				if(!startRetraction)
 					world.playSound((EntityPlayer)null, getPosition(), SoundRegistry.MIST_STAFF_VANISH, SoundCategory.BLOCKS, 1F, 1.0F);
 				startRetraction = true;
