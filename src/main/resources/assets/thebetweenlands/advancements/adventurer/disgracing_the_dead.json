@@ -214,9 +214,6 @@
           }
         ]
       }
-    },
-    "urn21": {
-      "trigger": "thebetweenlands:break_alcove_urn"
     }
   }
 }
