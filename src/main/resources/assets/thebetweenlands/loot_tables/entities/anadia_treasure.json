@@ -32,7 +32,7 @@
                     "type": "item",
                     "entryName": "rubber_boots",
                     "name": "thebetweenlands:rubber_boots",
-                    "weight": 1,
+                    "weight": 2,
                     "conditions": [
                         {
                             "condition": "entity_properties",
@@ -133,6 +133,36 @@
                         {
                             "function":"set_data",
                             "data": 41
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "vortex_upgrade",
+                    "name": "thebetweenlands:aa_upgrade_vortex",
+                    "weight": 2,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 0
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "urchin_upgrade",
+                    "name": "thebetweenlands:aa_upgrade_urchin",
+                    "weight": 2,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 0
+                            }
                         }
                     ]
                 },
@@ -285,6 +315,36 @@
                         {
                             "function":"set_data",
                             "data": 41
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "glide_upgrade",
+                    "name": "thebetweenlands:aa_upgrade_glide",
+                    "weight": 2,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 1
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "electric_upgrade",
+                    "name": "thebetweenlands:aa_upgrade_electric",
+                    "weight": 2,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 1
+                            }
                         }
                     ]
                 },
@@ -465,6 +525,21 @@
                         {
                             "function":"set_data",
                             "data": 41
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "leap_upgrade",
+                    "name": "thebetweenlands:aa_upgrade_leap",
+                    "weight": 3,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 2
+                            }
                         }
                     ]
                 }
