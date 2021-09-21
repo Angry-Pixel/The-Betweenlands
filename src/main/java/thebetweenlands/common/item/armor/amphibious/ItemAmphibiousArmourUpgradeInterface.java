@@ -22,7 +22,6 @@ import thebetweenlands.common.registries.ItemRegistry;
 public class ItemAmphibiousArmourUpgradeInterface extends Item {
 
 	AmphibiousArmorEffectsHelper armorEffectsHelper = new AmphibiousArmorEffectsHelper();
-	private static final String NBT_URCHIN_AOE_COOLDOWN = "thebetweenlands.urchin_aoe_cooldown";
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand){
@@ -61,12 +60,12 @@ public class ItemAmphibiousArmourUpgradeInterface extends Item {
 					//URCHIN
 					if (getUpgradeList(chest, EntityEquipmentSlot.CHEST).get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.URCHIN) {
 						int urchinCount = ((ItemAmphibiousArmor) chest.getItem()).getUpgradeCount(chest, AmphibiousArmorUpgrades.URCHIN);
-						long urchinAOECooldown = nbt.getLong(NBT_URCHIN_AOE_COOLDOWN);
+						long urchinAOECooldown = nbt.getLong(armorEffectsHelper.NBT_URCHIN_AOE_COOLDOWN);
 						if (urchinCount >= 1) {
 							if (world.getTotalWorldTime() >= urchinAOECooldown) {
 								if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
 									armorEffectsHelper.spawnUrchinSpikes(world, player, urchinCount);
-									nbt.setLong(NBT_URCHIN_AOE_COOLDOWN, world.getTotalWorldTime() + 50);
+									nbt.setLong(armorEffectsHelper.NBT_URCHIN_AOE_COOLDOWN, world.getTotalWorldTime() + 50);
 								}
 							}
 						}
@@ -78,6 +77,18 @@ public class ItemAmphibiousArmourUpgradeInterface extends Item {
 						if (vortexCount >= 1)
 							if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL)
 								armorEffectsHelper.activateFishVortex(world, player, vortexCount);
+					}
+
+					if (getUpgradeList(chest, EntityEquipmentSlot.CHEST).get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.ELECTRIC) {
+						int electricCount = ((ItemAmphibiousArmor) chest.getItem()).getUpgradeCount(chest, AmphibiousArmorUpgrades.ELECTRIC);
+						long electricCooldown = nbt.getLong(armorEffectsHelper.NBT_ELECTRIC_COOLDOWN);
+						if (electricCount >= 1) {
+							if (world.getTotalWorldTime() >= electricCooldown) {
+								if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL)
+									armorEffectsHelper.spawnElectricEntity(world, player, player, electricCount); // shoots self atm for testng
+									nbt.setLong(armorEffectsHelper.NBT_ELECTRIC_COOLDOWN, world.getTotalWorldTime() + 50);
+							}
+						}
 					}
 
 					// OTHER STUFFS HERE?

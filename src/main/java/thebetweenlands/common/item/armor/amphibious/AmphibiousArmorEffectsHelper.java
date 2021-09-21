@@ -16,8 +16,8 @@ import thebetweenlands.common.entity.EntityUrchinSpikeAOE;
 
 public class AmphibiousArmorEffectsHelper {
 
-	private static final String NBT_URCHIN_AOE_COOLDOWN = "thebetweenlands.urchin_aoe_cooldown";
-	private static final String NBT_ELECTRIC_COOLDOWN = "thebetweenlands.electric_cooldown";
+	public static final String NBT_URCHIN_AOE_COOLDOWN = "thebetweenlands.urchin_aoe_cooldown";
+	public static final String NBT_ELECTRIC_COOLDOWN = "thebetweenlands.electric_cooldown";
 
 	protected AxisAlignedBB proximityBox(EntityPlayer player, double xSize, double ySize, double zSize) {
 		return new AxisAlignedBB(player.getPosition()).grow(xSize, ySize, zSize);
@@ -70,7 +70,7 @@ public class AmphibiousArmorEffectsHelper {
 		urchinSpikes.shootSpikes();
 	}
 
-	private void spawnElectricEntity(World world, EntityPlayer player, EntityLivingBase entity, int electricCount) {
+	public void spawnElectricEntity(World world, EntityPlayer player, EntityLivingBase entity, int electricCount) {
 		EntityShock electric = new EntityShock(world, player, entity, electricCount, entity.isWet() || entity.isInWater() || world.isRainingAt(entity.getPosition().up()));
 		world.spawnEntity(electric);
 	}
