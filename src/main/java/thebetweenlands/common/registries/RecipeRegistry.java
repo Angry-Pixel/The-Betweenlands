@@ -529,6 +529,7 @@ public class RecipeRegistry {
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_PALE_GRASS.create(1)), (ItemPlantDrop.EnumItemPlantDrop.PALE_GRASS_BLADES.create(1)));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_STRING_ROOTS.create(1)), (ItemPlantDrop.EnumItemPlantDrop.STRING_ROOT_FIBERS.create(1)));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_CRYPTWEED.create(1)), (ItemPlantDrop.EnumItemPlantDrop.CRYPTWEED_BLADES.create(1)));
+		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_BETWEENSTONE_PEBBLE.create(1)), (EnumItemMisc.BETWEENSTONE_PEBBLE.create(1)));
 		
 		//Loot scraps
 		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.SKULL_MASK));
