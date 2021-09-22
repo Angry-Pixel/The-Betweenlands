@@ -773,5 +773,6 @@ public class RecipeRegistry {
 		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(ItemRegistry.AQUA_MIDDLE_GEM), new ItemStack(BlockRegistry.AQUA_MIDDLE_GEM_ORE));
 		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM), new ItemStack(BlockRegistry.GREEN_MIDDLE_GEM_ORE));
 		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(ItemRegistry.SAP_BALL), new ItemStack(ItemRegistry.SLUDGE_BALL));
+		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(BlockRegistry.ROOT, 4), new ItemStack(BlockRegistry.ROOT_POD));
 	}
 }
