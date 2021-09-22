@@ -1,14 +1,17 @@
 package thebetweenlands.common.block.terrain;
 
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -19,16 +22,20 @@ import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.block.ISickleHarvestable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
+import thebetweenlands.common.block.plant.BlockMoss;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.common.world.gen.biome.decorator.DecorationHelper;
 import thebetweenlands.common.world.gen.biome.decorator.DecoratorPositionProvider;
 
-public class BlockSwampGrass extends BasicBlock implements IGrowable, ITintedBlock {
+public class BlockSwampGrass extends BasicBlock implements IGrowable, ITintedBlock, ISickleHarvestable {
+	protected ItemStack sickleHarvestableDrop;
+
 	public BlockSwampGrass() {
 		super(Material.GRASS);
 		this.setTickRandomly(true);
@@ -196,5 +203,19 @@ public class BlockSwampGrass extends BasicBlock implements IGrowable, ITintedBlo
 		default:
 			return false;
 		}
+	}
+
+	@Override
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, BlockPos pos) {
+		return true;
+	}
+
+	@Override
+	public List<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
+		if(this.sickleHarvestableDrop == null) {
+			this.sickleHarvestableDrop = new ItemStack(BlockRegistry.DEAD_GRASS);
+		}
+
+		return ImmutableList.of(this.sickleHarvestableDrop.copy());
 	}
 }
