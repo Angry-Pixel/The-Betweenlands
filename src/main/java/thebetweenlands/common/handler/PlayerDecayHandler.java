@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemFood;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.SPacketEntityProperties;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.EnumDifficulty;
@@ -27,6 +28,8 @@ import thebetweenlands.api.capability.IRotSmellCapability;
 import thebetweenlands.common.capability.decay.DecayStats;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.config.properties.ItemDecayFoodProperty.DecayFoodStats;
+import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorUpgrades;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.MathUtils;
@@ -129,6 +132,12 @@ public class PlayerDecayHandler {
 						}
 
 						if(decaySpeed > 0.0F) {
+							int armorDecayReduction = getArmorDecayReduction(player);
+
+							if(armorDecayReduction > 0) {
+								decaySpeed -= decaySpeed * (armorDecayReduction / 4f);
+							}
+
 							stats.addDecayAcceleration(decaySpeed);
 						}
 					}
@@ -226,5 +235,19 @@ public class PlayerDecayHandler {
 			if(cap.isSmellingBad())
 				return true;
 		return false;
+	}
+
+	private static int getArmorDecayReduction(EntityLivingBase entity) {
+		int armorCount = 0;
+
+		for (ItemStack armor : entity.getArmorInventoryList()) {
+			if (armor.getItem() instanceof ItemAmphibiousArmor) {
+				if (((ItemAmphibiousArmor) armor.getItem()).getUpgradeCount(armor, AmphibiousArmorUpgrades.DECAY_DECREASE) >= 1) {
+					armorCount++;
+				}
+			}
+		}
+
+		return armorCount;
 	}
 }

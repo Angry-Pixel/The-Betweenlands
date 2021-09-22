@@ -24,23 +24,27 @@ import thebetweenlands.api.item.IAmphibiousArmorAttributeUpgrade;
 import thebetweenlands.api.item.IAmphibiousArmorUpgrade;
 import thebetweenlands.api.item.IAmphibiousArmorUpgrade.DamageEvent;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
+import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public enum AmphibiousArmorUpgrades implements IAmphibiousArmorUpgrade {
-	/*VISIBILITY(new ResourceLocation(ModInfo.ID, "visibility"), 64, EnumItemMisc.ANADIA_EYE::isItemOf, EntityEquipmentSlot.HEAD),
+	/*
 	BREATHING(new ResourceLocation(ModInfo.ID, "breathing"), 64, EnumItemMisc.ANADIA_GILLS::isItemOf, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST),
 	TOUGHNESS(new ResourceLocation(ModInfo.ID, "toughness"), 64, EnumItemMisc.SLIMY_BONE::isItemOf, AdditiveAttributeUpgrade.TOUGHNESS, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
-	THORNS(new ResourceLocation(ModInfo.ID, "thorns"), 64, EnumItemMisc.URCHIN_SPIKE::isItemOf, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
-	DECAY_DECREASE(new ResourceLocation(ModInfo.ID, "decay_decrease"), 64, EnumItemMisc.ANADIA_SCALES::isItemOf, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
-	MINING_SPEED(new ResourceLocation(ModInfo.ID, "mining_speed"), 64, EnumItemMisc.SNOT::isItemOf, EntityEquipmentSlot.CHEST),
 	MOVEMENT_SPEED(new ResourceLocation(ModInfo.ID, "movement_speed"), 64, EnumItemMisc.ANADIA_FINS::isItemOf, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
 	BUOYANCY(new ResourceLocation(ModInfo.ID, "buoyancy"), 64, EnumItemMisc.ANADIA_SWIM_BLADDER::isItemOf, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS),
 	KNOCKBACK_RESISTANCE(new ResourceLocation(ModInfo.ID, "knockback_resistance"), 64, EnumItemMisc.LURKER_SKIN::isItemOf, AdditiveAttributeUpgrade.KNOCKBACK_RESISTANCE, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS),
-	AQUA_GEM(new ResourceLocation(ModInfo.ID, "aqua_gem"), 64, s -> s.getItem() == ItemRegistry.AQUA_MIDDLE_GEM, null, CircleGemType.AQUA.getAmphibiousArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "green_gem"), new ResourceLocation(ModInfo.ID, "crimson_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
-	GREEN_GEM(new ResourceLocation(ModInfo.ID, "green_gem"), 64, s -> s.getItem() == ItemRegistry.GREEN_MIDDLE_GEM, null, CircleGemType.GREEN.getAmphibiousArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "aqua_gem"), new ResourceLocation(ModInfo.ID, "crimson_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
-	CRIMSON_GEM(new ResourceLocation(ModInfo.ID, "crimson_gem"), 64, s -> s.getItem() == ItemRegistry.CRIMSON_MIDDLE_GEM, null, CircleGemType.CRIMSON.getAmphibiousArmorOnChangedHandler(), ImmutableSet.of(new ResourceLocation(ModInfo.ID, "aqua_gem"), new ResourceLocation(ModInfo.ID, "green_gem")), EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET);*/
+	*/
 
+	// gives night vision if you have at least 1 eye
+	VISIBILITY(new ResourceLocation(ModInfo.ID, "visibility"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.ANADIA_EYE::isItemOf, EntityEquipmentSlot.HEAD),
+	// each piece of armor that has a thorns upgrades increases thorns damage
+	THORNS(new ResourceLocation(ModInfo.ID, "thorns"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.URCHIN_SPIKE::isItemOf, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
+	// each piece of armor that has decay decrease, reduces the decay rate by 25%
+	DECAY_DECREASE(new ResourceLocation(ModInfo.ID, "decay_decrease"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.ANADIA_SCALES::isItemOf, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
+	// having 1 of the upgrade item gives full mining speed underwater, similar to how owning all 4
+	MINING_SPEED(new ResourceLocation(ModInfo.ID, "mining_speed"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.SNOT::isItemOf, EntityEquipmentSlot.CHEST),
 
 	ASCENT_BOOST(new ResourceLocation(ModInfo.ID, "ascent_boost"), 64, DamageEvent.ON_USE,  s -> s.getItem() == ItemRegistry.AA_UPGRADE_LEAP, EntityEquipmentSlot.LEGS),
 	FISH_VORTEX(new ResourceLocation(ModInfo.ID, "fish_vortex"), 256, DamageEvent.ON_USE, s -> s.getItem() == ItemRegistry.AA_UPGRADE_VORTEX, EntityEquipmentSlot.CHEST),

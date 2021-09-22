@@ -93,11 +93,17 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 		if(!player.isSpectator()) {
 			NonNullList<ItemStack> armor = player.inventory.armorInventory;
 			int armorPieces = 0;
+			boolean fullyInWater = false;
 
 			for (ItemStack anArmor : armor) {
 				if (anArmor != null && anArmor.getItem() instanceof ItemAmphibiousArmor) {
 					armorPieces += 1;
 				}
+			}
+
+			if(player.isInWater()) {
+				IBlockState blockState = player.world.getBlockState(new BlockPos(player.posX, player.getEntityBoundingBox().maxY + 0.1D, player.posZ));
+				fullyInWater = blockState.getMaterial().isLiquid();
 			}
 
 			NBTTagCompound nbt = player.getEntityData();
@@ -184,10 +190,15 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 				player.motionY += 0.05D;
 			}
 
-			if (itemStack.getItem() == ItemRegistry.AMPHIBIOUS_BOOTS && player.isInWater()) {
-				IBlockState blockState = player.world.getBlockState(new BlockPos(player.posX, player.getEntityBoundingBox().maxY + 0.1D, player.posZ));
-				boolean fullyInWater = blockState.getMaterial().isLiquid();
+			if(itemStack.getItem() == ItemRegistry.AMPHIBIOUS_HELMET && player.isInWater()) {
+				int visibilityCount = this.getUpgradeCount(itemStack, AmphibiousArmorUpgrades.VISIBILITY);
 
+				if(visibilityCount >= 1 && fullyInWater) {
+					player.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 10, 0));
+				}
+			}
+
+			if (itemStack.getItem() == ItemRegistry.AMPHIBIOUS_BOOTS && player.isInWater()) {
 				if(fullyInWater) {
 					if(ascentBoostTicks <= 0 && !player.isSneaking() && player.moveForward == 0) {
 						player.motionY = Math.sin(player.ticksExisted / 5.0F) * 0.016D;
