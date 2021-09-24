@@ -51,7 +51,6 @@ public class ItemAmphibiousArmourUpgradeToggle extends Item {
 
 		} else {
 			//activate effect based on armour upgrade and counter selection
-			//testing single type here - auto effect is disabled in armour atm
 			if (chest.getItem() instanceof ItemAmphibiousArmor && chest.getItem() == ItemRegistry.AMPHIBIOUS_CHESTPLATE) {
 
 				if (stack.getTagCompound().getInteger("scrollPos") != -1 && !getUpgradeList(chest, EntityEquipmentSlot.CHEST).isEmpty()) {
@@ -59,36 +58,35 @@ public class ItemAmphibiousArmourUpgradeToggle extends Item {
 					if (getUpgradeList(chest, EntityEquipmentSlot.CHEST).get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.URCHIN) {
 						int urchinCount = ((ItemAmphibiousArmor) chest.getItem()).getUpgradeCount(chest, AmphibiousArmorUpgrades.URCHIN);
 						if (urchinCount >= 1) {
-							//Toggle Urchin Boolean in armour
-							System.out.println("Toggle Urchin Stuff");
+							chest.getTagCompound().setBoolean("urchinAuto", !chest.getTagCompound().getBoolean("urchinAuto"));
+							player.sendStatusMessage(new TextComponentTranslation("Urchin Active: " + chest.getTagCompound().getBoolean("urchinAuto")), true);
 						}
 					}
 
 					if (getUpgradeList(chest, EntityEquipmentSlot.CHEST).get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.FISH_VORTEX) {
 						int vortexCount = ((ItemAmphibiousArmor) chest.getItem()).getUpgradeCount(chest, AmphibiousArmorUpgrades.FISH_VORTEX);
 						if (vortexCount >= 1) {
-							//Toggle Vortex Boolean in armour
-							System.out.println("Toggle Vortex Stuff");
+							chest.getTagCompound().setBoolean("vortexAuto", !chest.getTagCompound().getBoolean("vortexAuto"));
+							player.sendStatusMessage(new TextComponentTranslation("Vortex Active: " + chest.getTagCompound().getBoolean("vortexAuto")), true);
 						}
 					}
 
 					if (getUpgradeList(chest, EntityEquipmentSlot.CHEST).get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.ELECTRIC) {
 						int electricCount = ((ItemAmphibiousArmor) chest.getItem()).getUpgradeCount(chest, AmphibiousArmorUpgrades.ELECTRIC);
 						if (electricCount >= 1) {
-							//Toggle Electric Boolean in armour
-							System.out.println("Toggle Electric Stuff");
+							chest.getTagCompound().setBoolean("electricAuto", !chest.getTagCompound().getBoolean("electricAuto"));
+							player.sendStatusMessage(new TextComponentTranslation("Electric Active: " + chest.getTagCompound().getBoolean("electricAuto")), true);
 						}
 					}
 
 					if (getUpgradeList(chest, EntityEquipmentSlot.CHEST).get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.GLIDE) {
 						int glideCount = ((ItemAmphibiousArmor) chest.getItem()).getUpgradeCount(chest, AmphibiousArmorUpgrades.GLIDE);
 						if (glideCount >= 1) {
-							//Toggle Glide Boolean in armour
-							System.out.println("Toggle Glide Stuff");
+							chest.getTagCompound().setBoolean("glideAuto", !chest.getTagCompound().getBoolean("glideAuto"));
+							player.sendStatusMessage(new TextComponentTranslation("Glide Active: " + chest.getTagCompound().getBoolean("glideAuto")), true);
 						}
 					}
 
-					player.sendStatusMessage( new TextComponentTranslation("Test On/Off Message: " + getUpgradeList(chest, EntityEquipmentSlot.CHEST).get(stack.getTagCompound().getInteger("scrollPos")) + " : whatever boolean it is."), true);
 				}
 			}
 

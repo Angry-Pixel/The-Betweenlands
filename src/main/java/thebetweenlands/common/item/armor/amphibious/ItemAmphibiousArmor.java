@@ -23,7 +23,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
@@ -109,6 +108,14 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 			NBTTagCompound nbt = player.getEntityData();
 
 			if (itemStack.getItem() == ItemRegistry.AMPHIBIOUS_CHESTPLATE) {
+		        if (!itemStack.hasTagCompound()) {
+		        	itemStack.setTagCompound(new NBTTagCompound());
+		        	itemStack.getTagCompound().setBoolean("vortexAuto", true);
+		        	itemStack.getTagCompound().setBoolean("urchinAuto", true);
+		        	itemStack.getTagCompound().setBoolean("electricAuto", true);
+		        	itemStack.getTagCompound().setBoolean("glideAuto", true);
+		            }
+
 				int vortexCount = getUpgradeCount(itemStack, AmphibiousArmorUpgrades.FISH_VORTEX);
 				int urchinCount = getUpgradeCount(itemStack, AmphibiousArmorUpgrades.URCHIN);
 				int electricCount = getUpgradeCount(itemStack, AmphibiousArmorUpgrades.ELECTRIC);
@@ -117,31 +124,31 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 				long urchinAOECooldown = nbt.getLong(NBT_URCHIN_AOE_COOLDOWN);
 				long electricCooldown = nbt.getLong(NBT_ELECTRIC_COOLDOWN);
 
-				if (vortexCount >= 1) {
+				if (vortexCount >= 1 && itemStack.getTagCompound().getBoolean("vortexAuto")) {
 					if (world.getTotalWorldTime() % 200 == 0) { //TODO dunno about timings yet
-						if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
-							//armorEffectsHelper.activateFishVortex(world, player, vortexCount);
+						if (!world.isRemote) {// && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
+							armorEffectsHelper.activateFishVortex(world, player, vortexCount);
 						}
 					}
 				}
 
-				if (urchinCount >= 1) { // more upgrades do more damage at 2F * urchinCount ;)
+				if (urchinCount >= 1 && itemStack.getTagCompound().getBoolean("urchinAuto")) { // more upgrades do more damage at 2F * urchinCount ;)
 					if (world.getTotalWorldTime() %10 == 0 && world.getTotalWorldTime() >= urchinAOECooldown) {
-						if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
-						//	armorEffectsHelper.activateUrchinSpikes(world, player, urchinCount, nbt);
+						if (!world.isRemote) {// && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
+							armorEffectsHelper.activateUrchinSpikes(world, player, urchinCount, nbt);
 						}
 					}
 				}
 
-				if (electricCount >= 1) { // count increases damage
+				if (electricCount >= 1 && itemStack.getTagCompound().getBoolean("electricAuto")) { // count increases damage
 					if (player.hurtResistantTime == player.maxHurtResistantTime && world.getTotalWorldTime() >= electricCooldown) {
-						if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
+						if (!world.isRemote) {// && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
 							armorEffectsHelper.activateElectricEntity(world, player, electricCount, nbt);
 						}
 					}
 				}
 
-				if (glideCount >= 1) {
+				if (glideCount >= 1 && itemStack.getTagCompound().getBoolean("glideAuto")) {
 					if (player.isSprinting() && !player.onGround && !player.isJumping) {
 							player.fallDistance = 0.0F;
 							player.motionX *= 1.05D;
