@@ -60,7 +60,6 @@ public class ItemAmphibiousArmourUpgradeTrigger extends Item {
 
 		} else {
 			//activate effect based on armour upgrade and counter selection
-			//testing - auto effect is disabled in armour atm
 			if (chest.getItem() instanceof ItemAmphibiousArmor && chest.getItem() == ItemRegistry.AMPHIBIOUS_CHESTPLATE) {
 
 				if (stack.getTagCompound().getInteger("scrollPos") != -1 && !upgradeListChest.isEmpty()) {
@@ -91,7 +90,7 @@ public class ItemAmphibiousArmourUpgradeTrigger extends Item {
 						if (electricCount >= 1) {
 							if (world.getTotalWorldTime() >= electricCooldown) {
 								if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL)
-									armorEffectsHelper.spawnElectricEntity(world, player, player, electricCount); // shoots self atm for testng
+									armorEffectsHelper.spawnElectricEntity(world, player, player, electricCount);
 									nbt.setLong(armorEffectsHelper.NBT_ELECTRIC_COOLDOWN, world.getTotalWorldTime() + 50);
 							}
 						}
