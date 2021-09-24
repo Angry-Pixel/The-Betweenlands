@@ -28,6 +28,16 @@ public class ItemAmphibiousArmourUpgradeTrigger extends Item {
 		ItemStack stack = player.getHeldItem(hand);
 		ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 		NBTTagCompound nbt = player.getEntityData();
+		List<IAmphibiousArmorUpgrade> upgradeListChest = new ArrayList<>();
+
+		if (chest.getItem() instanceof ItemAmphibiousArmor && chest.getItem() == ItemRegistry.AMPHIBIOUS_CHESTPLATE) {
+			if (!getUpgradeList(chest, EntityEquipmentSlot.CHEST).isEmpty()) {
+				for (IAmphibiousArmorUpgrade upgrade : getUpgradeList(chest, EntityEquipmentSlot.CHEST))
+					if (!upgrade.matches(EntityEquipmentSlot.CHEST, new ItemStack(ItemRegistry.AA_UPGRADE_GLIDE))) { // no need for glider here
+						upgradeListChest.add(upgrade);
+					}
+			}
+		}
 
         if (!stack.hasTagCompound()) {
             stack.setTagCompound(new NBTTagCompound());
@@ -35,16 +45,14 @@ public class ItemAmphibiousArmourUpgradeTrigger extends Item {
             }
 
 		if (player.isSneaking()) {
-			// scroll stuff (add 1 to counter or something)
-			// display name active/toggle
 			if (chest.getItem() instanceof ItemAmphibiousArmor && chest.getItem() == ItemRegistry.AMPHIBIOUS_CHESTPLATE) {
-				int scrollSize = getUpgradeList(chest, EntityEquipmentSlot.CHEST).size();
-				if (!getUpgradeList(chest, EntityEquipmentSlot.CHEST).isEmpty()) {
+				int scrollSize = upgradeListChest.size();
+				if (!upgradeListChest.isEmpty()) {
 					if (stack.getTagCompound().getInteger("scrollPos") < scrollSize)
 						stack.getTagCompound().setInteger("scrollPos", stack.getTagCompound().getInteger("scrollPos") + 1);
 					if (stack.getTagCompound().getInteger("scrollPos") >= scrollSize)
 						stack.getTagCompound().setInteger("scrollPos", 0);
-					player.sendStatusMessage( new TextComponentTranslation("Selected Effect: " + getUpgradeList(chest, EntityEquipmentSlot.CHEST).get(stack.getTagCompound().getInteger("scrollPos"))), true);
+					player.sendStatusMessage( new TextComponentTranslation("Selected Effect: " + upgradeListChest.get(stack.getTagCompound().getInteger("scrollPos"))), true);
 				}
 			}
 
@@ -52,12 +60,12 @@ public class ItemAmphibiousArmourUpgradeTrigger extends Item {
 
 		} else {
 			//activate effect based on armour upgrade and counter selection
-			//testing single type here - auto effect is disabled in armour atm
+			//testing - auto effect is disabled in armour atm
 			if (chest.getItem() instanceof ItemAmphibiousArmor && chest.getItem() == ItemRegistry.AMPHIBIOUS_CHESTPLATE) {
 
-				if (stack.getTagCompound().getInteger("scrollPos") != -1 && !getUpgradeList(chest, EntityEquipmentSlot.CHEST).isEmpty()) {
+				if (stack.getTagCompound().getInteger("scrollPos") != -1 && !upgradeListChest.isEmpty()) {
 
-					if (getUpgradeList(chest, EntityEquipmentSlot.CHEST).get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.URCHIN) {
+					if (upgradeListChest.get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.URCHIN) {
 						int urchinCount = ((ItemAmphibiousArmor) chest.getItem()).getUpgradeCount(chest, AmphibiousArmorUpgrades.URCHIN);
 						long urchinAOECooldown = nbt.getLong(armorEffectsHelper.NBT_URCHIN_AOE_COOLDOWN);
 						if (urchinCount >= 1) {
@@ -70,14 +78,14 @@ public class ItemAmphibiousArmourUpgradeTrigger extends Item {
 						}
 					}
 
-					if (getUpgradeList(chest, EntityEquipmentSlot.CHEST).get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.FISH_VORTEX) {
+					if (upgradeListChest.get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.FISH_VORTEX) {
 						int vortexCount = ((ItemAmphibiousArmor) chest.getItem()).getUpgradeCount(chest, AmphibiousArmorUpgrades.FISH_VORTEX);
 						if (vortexCount >= 1)
 							if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL)
 								armorEffectsHelper.activateFishVortex(world, player, vortexCount);
 					}
 
-					if (getUpgradeList(chest, EntityEquipmentSlot.CHEST).get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.ELECTRIC) {
+					if (upgradeListChest.get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.ELECTRIC) {
 						int electricCount = ((ItemAmphibiousArmor) chest.getItem()).getUpgradeCount(chest, AmphibiousArmorUpgrades.ELECTRIC);
 						long electricCooldown = nbt.getLong(armorEffectsHelper.NBT_ELECTRIC_COOLDOWN);
 						if (electricCount >= 1) {
