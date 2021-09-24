@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import thebetweenlands.api.item.IAmphibiousArmorUpgrade;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class ItemAmphibiousArmourUpgradeInterface extends Item {
+public class ItemAmphibiousArmourUpgradeTrigger extends Item {
 
 	AmphibiousArmorEffectsHelper armorEffectsHelper = new AmphibiousArmorEffectsHelper();
 
@@ -44,7 +44,7 @@ public class ItemAmphibiousArmourUpgradeInterface extends Item {
 						stack.getTagCompound().setInteger("scrollPos", stack.getTagCompound().getInteger("scrollPos") + 1);
 					if (stack.getTagCompound().getInteger("scrollPos") >= scrollSize)
 						stack.getTagCompound().setInteger("scrollPos", 0);
-					player.sendStatusMessage( new TextComponentTranslation("Test: " + getUpgradeList(chest, EntityEquipmentSlot.CHEST).get(stack.getTagCompound().getInteger("scrollPos"))), true);
+					player.sendStatusMessage( new TextComponentTranslation("Selected Effect: " + getUpgradeList(chest, EntityEquipmentSlot.CHEST).get(stack.getTagCompound().getInteger("scrollPos"))), true);
 				}
 			}
 
@@ -57,7 +57,6 @@ public class ItemAmphibiousArmourUpgradeInterface extends Item {
 
 				if (stack.getTagCompound().getInteger("scrollPos") != -1 && !getUpgradeList(chest, EntityEquipmentSlot.CHEST).isEmpty()) {
 
-					//URCHIN
 					if (getUpgradeList(chest, EntityEquipmentSlot.CHEST).get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.URCHIN) {
 						int urchinCount = ((ItemAmphibiousArmor) chest.getItem()).getUpgradeCount(chest, AmphibiousArmorUpgrades.URCHIN);
 						long urchinAOECooldown = nbt.getLong(armorEffectsHelper.NBT_URCHIN_AOE_COOLDOWN);
@@ -71,7 +70,6 @@ public class ItemAmphibiousArmourUpgradeInterface extends Item {
 						}
 					}
 
-					//VORTEX
 					if (getUpgradeList(chest, EntityEquipmentSlot.CHEST).get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.FISH_VORTEX) {
 						int vortexCount = ((ItemAmphibiousArmor) chest.getItem()).getUpgradeCount(chest, AmphibiousArmorUpgrades.FISH_VORTEX);
 						if (vortexCount >= 1)

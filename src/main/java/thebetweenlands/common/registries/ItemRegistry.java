@@ -63,7 +63,8 @@ import thebetweenlands.common.item.armor.ItemSyrmoriteArmor;
 import thebetweenlands.common.item.armor.ItemValoniteArmor;
 import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmorSpecialUpgrade;
-import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmourUpgradeInterface;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmourUpgradeToggle;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmourUpgradeTrigger;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.item.equipment.ItemRingOfDispersion;
@@ -518,8 +519,8 @@ public class ItemRegistry {
     public static final Item AA_UPGRADE_LEAP = new ItemAmphibiousArmorSpecialUpgrade().setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item AA_UPGRADE_URCHIN = new ItemAmphibiousArmorSpecialUpgrade().setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item AA_UPGRADE_VORTEX = new ItemAmphibiousArmorSpecialUpgrade().setCreativeTab(BLCreativeTabs.GEARS);
-    public static final Item AA_UPGRADE_INTERFACE = new ItemAmphibiousArmourUpgradeInterface().setCreativeTab(BLCreativeTabs.GEARS);
-    
+    public static final Item AA_UPGRADE_TRIGGER = new ItemAmphibiousArmourUpgradeTrigger().setCreativeTab(BLCreativeTabs.GEARS);
+    public static final Item AA_UPGRADE_TOGGLE = new ItemAmphibiousArmourUpgradeToggle().setCreativeTab(BLCreativeTabs.GEARS);
 
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
