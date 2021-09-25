@@ -13,15 +13,53 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.api.item.IAmphibiousArmorUpgrade;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemAmphibiousArmourUpgradeTrigger extends Item {
 
 	AmphibiousArmorEffectsHelper armorEffectsHelper = new AmphibiousArmorEffectsHelper();
+	
+	public ItemAmphibiousArmourUpgradeTrigger() {
+		this.maxStackSize = 1;
+		this.setMaxDamage(600);
+		this.setCreativeTab(BLCreativeTabs.GEARS);
+
+		this.addPropertyOverride(new ResourceLocation("selected_effect"), (stack, world, entity) -> {
+			if (entity instanceof EntityPlayer) {
+				ItemStack chest = entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+
+				List<IAmphibiousArmorUpgrade> upgradeListChest = new ArrayList<>();
+
+				if (chest.getItem() instanceof ItemAmphibiousArmor && chest.getItem() == ItemRegistry.AMPHIBIOUS_CHESTPLATE) {
+					if (!getUpgradeList(chest, EntityEquipmentSlot.CHEST).isEmpty()) {
+						for (IAmphibiousArmorUpgrade upgrade : getUpgradeList(chest, EntityEquipmentSlot.CHEST))
+							if (!upgrade.matches(EntityEquipmentSlot.CHEST, new ItemStack(ItemRegistry.AA_UPGRADE_GLIDE))) { // no need for glider here
+								upgradeListChest.add(upgrade);
+							}
+					}
+				}
+
+				if (!upgradeListChest.isEmpty() && stack.hasTagCompound() && stack.getTagCompound().hasKey("scrollPos") && stack.getTagCompound().getInteger("scrollPos") != -1) {
+					if (upgradeListChest.get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.URCHIN)
+						return 1;
+
+					if (upgradeListChest.get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.FISH_VORTEX)
+						return 2;
+
+					if (upgradeListChest.get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.ELECTRIC)
+						return 3;
+				}
+				return 0;
+			}
+			return 0;
+		});
+	}
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand){

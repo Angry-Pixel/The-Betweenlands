@@ -2,5 +2,31 @@
 	"parent": "item/generated",
 	"textures": {
 		"layer0": "thebetweenlands:items/aa_upgrade_trigger"
-	}
+	},
+    "overrides": [
+        {
+            "model": "thebetweenlands:item/aa_upgrade_trigger_base",
+            "predicate": {
+                "selected_effect": 0
+            }
+        },
+        {
+            "model": "thebetweenlands:item/aa_upgrade_trigger_urchin",
+            "predicate": {
+                "selected_effect": 1
+            }
+        },
+        {
+            "model": "thebetweenlands:item/aa_upgrade_trigger_vortex",
+            "predicate": {
+                "selected_effect": 2
+            }
+        },
+        {
+            "model": "thebetweenlands:item/aa_upgrade_trigger_electric",
+            "predicate": {
+                "selected_effect": 3
+            }
+        }
+    ]
 }

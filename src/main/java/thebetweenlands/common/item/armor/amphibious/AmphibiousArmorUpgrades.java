@@ -22,7 +22,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.api.item.IAmphibiousArmorAttributeUpgrade;
 import thebetweenlands.api.item.IAmphibiousArmorUpgrade;
-import thebetweenlands.api.item.IAmphibiousArmorUpgrade.DamageEvent;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.lib.ModInfo;
