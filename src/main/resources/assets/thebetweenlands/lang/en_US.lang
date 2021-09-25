@@ -1387,7 +1387,7 @@ chat.simulacrum.changed_effect=Changed effect to '%s'
 chat.wind_chime.changed_attunement=Attuned to '%s'
 chat.wind_chime.removed_attunement=Attuned to any event
 
-chat.aa_trigger.selected_effect=Selected Effect: %s
+chat.aa_trigger.selected_effect=Attuned to: %s
 
 chat.aa_toggle.selected_effect=Selected Effect: %s
 chat.aa_toggle.urchin_active=Urchin Active: %s
