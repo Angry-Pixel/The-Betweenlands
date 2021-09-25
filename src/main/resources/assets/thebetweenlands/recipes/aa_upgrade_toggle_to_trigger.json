@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:aa_upgrade_toggle"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:aa_upgrade_trigger"
+  }
+}
