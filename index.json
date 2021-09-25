@@ -511,6 +511,34 @@
         "url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/ron_the_swamplands_rift.png",
         "title": "The Swamplands Rift",
         "author": "Ron"
+      },
+      {
+        "sha256": "cf31315db503e73e0f883d5b0a7f8ccffcd420c4ea8cf790c75d654a0b8291cb",
+        "url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/darkus_shadow_just_a_moment_to_realise.png",
+        "title": "Just a moment to realise",
+        "author": "Darkus_Shadow",
+        "description": "Wanderer on the mud"
+      },
+      {
+        "sha256": "2605e2ad9e7d630a78f802ff1e73a9d353593ee8807554a93a5161a926822b4f",
+        "url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/darkus_shadow_swamp_raid.png",
+        "title": "Swamp Raid",
+        "author": "Darkus_Shadow",
+        "description": "Maybe it was not a good idea to go outside for a walk"
+      },
+      {
+        "sha256": "782e31e7353d146ae99aed05cb0e2d62def17fd2945d13fbbcfcaccc75a343f9",
+        "url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/darkus_shadow_harmonious_music.png",
+        "title": "Harmonious Music",
+        "author": "Darkus_Shadow",
+        "description": "I would like to hear them more."
+      },
+      {
+        "sha256": "1a55591aaa7e0abb89216fba6c05286fe51af562a38b6523aefb10fa237dd836",
+        "url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/darkus_shadow_the_rift_and_the_auroras.png",
+        "title": "The Rift and the Auroras",
+        "author": "Darkus_Shadow",
+        "description": "3 adventurers observing the unknown"
       }
     ]
   }
