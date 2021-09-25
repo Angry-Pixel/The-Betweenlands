@@ -1385,6 +1385,14 @@ chat.simulacrum.changed_effect=Changed effect to '%s'
 chat.wind_chime.changed_attunement=Attuned to '%s'
 chat.wind_chime.removed_attunement=Attuned to any event
 
+chat.aa_trigger.selected_effect=Selected Effect: %s
+
+chat.aa_toggle.selected_effect=Selected Effect: %s
+chat.aa_toggle.urchin_active=Urchin Active: %s
+chat.aa_toggle.vortex_active=Vortex Active: %s
+chat.aa_toggle.electric_active=Electric Active: %s
+chat.aa_toggle.glide_active=Glide Active: %s
+
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath
 

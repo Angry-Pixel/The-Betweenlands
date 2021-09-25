@@ -52,7 +52,7 @@ public class ItemAmphibiousArmourUpgradeTrigger extends Item {
 						stack.getTagCompound().setInteger("scrollPos", stack.getTagCompound().getInteger("scrollPos") + 1);
 					if (stack.getTagCompound().getInteger("scrollPos") >= scrollSize)
 						stack.getTagCompound().setInteger("scrollPos", 0);
-					player.sendStatusMessage( new TextComponentTranslation("Selected Effect: " + upgradeListChest.get(stack.getTagCompound().getInteger("scrollPos"))), true);
+					player.sendStatusMessage(new TextComponentTranslation("chat.aa_trigger.selected_effect", new TextComponentTranslation("" + upgradeListChest.get(stack.getTagCompound().getInteger("scrollPos")))), true);
 				}
 			}
 
