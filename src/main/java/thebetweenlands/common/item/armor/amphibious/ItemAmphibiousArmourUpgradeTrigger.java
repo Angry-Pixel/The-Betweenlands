@@ -3,7 +3,9 @@ package thebetweenlands.common.item.armor.amphibious;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -24,11 +26,13 @@ import thebetweenlands.common.registries.ItemRegistry;
 public class ItemAmphibiousArmourUpgradeTrigger extends Item {
 
 	AmphibiousArmorEffectsHelper armorEffectsHelper = new AmphibiousArmorEffectsHelper();
-	
+	public final Map<IAmphibiousArmorUpgrade, Boolean> ALLOWED_UPGRADES = new HashMap<IAmphibiousArmorUpgrade, Boolean>();
+
 	public ItemAmphibiousArmourUpgradeTrigger() {
 		this.maxStackSize = 1;
 		this.setMaxDamage(600);
 		this.setCreativeTab(BLCreativeTabs.GEARS);
+		initAllowedUpgradeMap();
 
 		this.addPropertyOverride(new ResourceLocation("selected_effect"), (stack, world, entity) -> {
 			if (entity instanceof EntityPlayer) {
@@ -36,14 +40,11 @@ public class ItemAmphibiousArmourUpgradeTrigger extends Item {
 
 				List<IAmphibiousArmorUpgrade> upgradeListChest = new ArrayList<>();
 
-				if (chest.getItem() instanceof ItemAmphibiousArmor && chest.getItem() == ItemRegistry.AMPHIBIOUS_CHESTPLATE) {
-					if (!getUpgradeList(chest, EntityEquipmentSlot.CHEST).isEmpty()) {
+				if (chest.getItem() instanceof ItemAmphibiousArmor && chest.getItem() == ItemRegistry.AMPHIBIOUS_CHESTPLATE)
+					if (!getUpgradeList(chest, EntityEquipmentSlot.CHEST).isEmpty())
 						for (IAmphibiousArmorUpgrade upgrade : getUpgradeList(chest, EntityEquipmentSlot.CHEST))
-							if (!upgrade.matches(EntityEquipmentSlot.CHEST, new ItemStack(ItemRegistry.AA_UPGRADE_GLIDE))) { // no need for glider here
+							if (isValidUpgrade(upgrade))
 								upgradeListChest.add(upgrade);
-							}
-					}
-				}
 
 				if (!upgradeListChest.isEmpty() && stack.hasTagCompound() && stack.getTagCompound().hasKey("scrollPos") && stack.getTagCompound().getInteger("scrollPos") != -1) {
 					if (upgradeListChest.get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.URCHIN)
@@ -61,6 +62,10 @@ public class ItemAmphibiousArmourUpgradeTrigger extends Item {
 		});
 	}
 
+	public boolean isValidUpgrade(IAmphibiousArmorUpgrade upgradeIn) {
+		return ALLOWED_UPGRADES.get(upgradeIn) != null;
+	}
+
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand){
 		ItemStack stack = player.getHeldItem(hand);
@@ -68,14 +73,11 @@ public class ItemAmphibiousArmourUpgradeTrigger extends Item {
 		NBTTagCompound nbt = player.getEntityData();
 		List<IAmphibiousArmorUpgrade> upgradeListChest = new ArrayList<>();
 
-		if (chest.getItem() instanceof ItemAmphibiousArmor && chest.getItem() == ItemRegistry.AMPHIBIOUS_CHESTPLATE) {
-			if (!getUpgradeList(chest, EntityEquipmentSlot.CHEST).isEmpty()) {
+		if (chest.getItem() instanceof ItemAmphibiousArmor && chest.getItem() == ItemRegistry.AMPHIBIOUS_CHESTPLATE)
+			if (!getUpgradeList(chest, EntityEquipmentSlot.CHEST).isEmpty())
 				for (IAmphibiousArmorUpgrade upgrade : getUpgradeList(chest, EntityEquipmentSlot.CHEST))
-					if (!upgrade.matches(EntityEquipmentSlot.CHEST, new ItemStack(ItemRegistry.AA_UPGRADE_GLIDE))) { // no need for glider here
+					if (isValidUpgrade(upgrade))
 						upgradeListChest.add(upgrade);
-					}
-			}
-		}
 
         if (!stack.hasTagCompound()) {
             stack.setTagCompound(new NBTTagCompound());
@@ -159,4 +161,12 @@ public class ItemAmphibiousArmourUpgradeTrigger extends Item {
         }
         return true;
     }
+
+	private void initAllowedUpgradeMap() {
+		if (ALLOWED_UPGRADES.isEmpty()) {
+			ALLOWED_UPGRADES.put(AmphibiousArmorUpgrades.FISH_VORTEX.getUpgrade(EntityEquipmentSlot.CHEST, new ItemStack(ItemRegistry.AA_UPGRADE_VORTEX)), true);
+			ALLOWED_UPGRADES.put(AmphibiousArmorUpgrades.URCHIN.getUpgrade(EntityEquipmentSlot.CHEST, new ItemStack(ItemRegistry.AA_UPGRADE_URCHIN)), true);
+			ALLOWED_UPGRADES.put(AmphibiousArmorUpgrades.ELECTRIC.getUpgrade(EntityEquipmentSlot.CHEST, new ItemStack(ItemRegistry.AA_UPGRADE_ELECTRIC)), true);
+		}
+	}
 }
