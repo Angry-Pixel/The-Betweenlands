@@ -8,7 +8,7 @@ import thebetweenlands.common.recipe.misc.CrabPotFilterRecipeBubbler;
 
 public class CustomCrabPotFilterRecipesBubbler extends CustomRecipes<ICrabPotFilterRecipeBubbler> {
 	public CustomCrabPotFilterRecipesBubbler() {
-		super("crab_pot_filter", ImmutableMap.of("input/item", RecipeArg.ITEM_INPUT, "output/item", RecipeArg.ITEM_OUTPUT), ImmutableMap.of());
+		super("crab_pot_filter_bubbler", ImmutableMap.of("input/item", RecipeArg.ITEM_INPUT, "output/item", RecipeArg.ITEM_OUTPUT), ImmutableMap.of());
 	}
 
 	@Override
