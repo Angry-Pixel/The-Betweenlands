@@ -149,6 +149,7 @@ import thebetweenlands.common.item.misc.ItemPyradFlame;
 import thebetweenlands.common.item.misc.ItemRingOfGathering;
 import thebetweenlands.common.item.misc.ItemRope;
 import thebetweenlands.common.item.misc.ItemRuneDoorKey;
+import thebetweenlands.common.item.misc.ItemShadowStaff;
 import thebetweenlands.common.item.misc.ItemShimmerStone;
 import thebetweenlands.common.item.misc.ItemSnotPod;
 import thebetweenlands.common.item.misc.ItemSpiritTreeFaceMaskSmallAnimated;
@@ -383,6 +384,7 @@ public class ItemRegistry {
     public static final Item FISHING_SPEAR_AMPHIBIOUS = new ItemFishingSpear((byte) 1);
     public static final Item FISHING_SPEAR_AMPHIBIOUS_ROBUST = new ItemFishingSpear((byte) 2);
     public static final Item MIST_STAFF = new ItemMistStaff();
+    public static final Item SHADOW_STAFF = new ItemShadowStaff();
     //BUCKETS
     public static final ItemBLBucket BL_BUCKET = new ItemBLBucket();
     public static final Item BL_BUCKET_RUBBER = new ItemSpecificBucket(FluidRegistry.RUBBER);

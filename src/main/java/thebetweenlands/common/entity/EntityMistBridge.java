@@ -64,7 +64,7 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 				List<BlockPos> pos = matchDistance(world, matchDistance);
 				if (!pos.isEmpty()) {
 					for (int index = 0; index < pos.size(); index++)
-						world.setBlockState(pos.get(index), BlockRegistry.MIST_BRIDGE.getDefaultState(), 2);
+						world.setBlockState(pos.get(index), getTempBlock(), 2);
 				}
 
 				if (matchDistance < 16)
@@ -91,10 +91,21 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 					setDead();
 			}	
 
-			if (ticksExisted > 1 && (world.getBlockState(getPosition()).getBlock() != BlockRegistry.MIST_BRIDGE || world.getBlockState(getPosition()).getBlock() == BlockRegistry.MIST_BRIDGE && !world.getBlockState(getPosition()).getValue(BlockMistBridge.SOLID)) || ticksExisted >= 200) {
-				if(!startRetraction)
-					world.playSound((EntityPlayer)null, getPosition(), SoundRegistry.MIST_STAFF_VANISH, SoundCategory.BLOCKS, 1F, 1.0F);
-				startRetraction = true;
+			if (ticksExisted > 1) {
+				if(isMist()) {
+					if(world.getBlockState(getPosition()).getBlock() != BlockRegistry.MIST_BRIDGE || world.getBlockState(getPosition()).getBlock() == BlockRegistry.MIST_BRIDGE && !world.getBlockState(getPosition()).getValue(BlockMistBridge.SOLID) || ticksExisted >= 200) {
+						if(!startRetraction)
+							world.playSound((EntityPlayer)null, getPosition(), SoundRegistry.MIST_STAFF_VANISH, SoundCategory.BLOCKS, 1F, 1.0F);
+						startRetraction = true;
+					}
+				}
+				if(!isMist()) {
+					if(world.getBlockState(getPosition()).getBlock() != BlockRegistry.SHADOW_WALKER || ticksExisted >= 200) {
+						if(!startRetraction)
+							world.playSound((EntityPlayer)null, getPosition(), SoundRegistry.MIST_STAFF_VANISH, SoundCategory.BLOCKS, 1F, 1.0F);
+						startRetraction = true;
+					}
+				}
 			}
 		}
 	}
@@ -136,6 +147,19 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
         return true;
     }
 
+    public boolean isMist() {
+    	NBTTagCompound entityNbt = getEntityData();
+    	if(!entityNbt.getBoolean("isMist"))
+    		return false;
+    	return true;
+    }
+
+    public IBlockState getTempBlock() {
+    	if (!isMist())
+    		 return BlockRegistry.SHADOW_WALKER.getDefaultState();
+        return BlockRegistry.MIST_BRIDGE.getDefaultState();
+    }
+
 	@Nullable
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
@@ -145,7 +169,7 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 		return livingdata;
 	}
 
-	public void setBlockList(List<Integer> blockDistance, List<BlockPos> convertPos) {
+	public void setBlockList(List<Integer> blockDistance, List<BlockPos> convertPos, boolean isMist) {
 		NBTTagList distanceList = new NBTTagList();
 		NBTTagList posList = new NBTTagList();
 		NBTTagList stateList = new NBTTagList();
@@ -170,6 +194,7 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 			entityNbt.setTag("originPos", posList);
 			entityNbt.setTag("tempBlockTypes", stateList);
 			entityNbt.setTag("distance", distanceList);
+			entityNbt.setBoolean("isMist", isMist);
 		}
 		writeEntityToNBT(entityNbt);
 	}

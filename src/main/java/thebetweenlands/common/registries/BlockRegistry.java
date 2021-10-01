@@ -105,6 +105,7 @@ import thebetweenlands.common.block.misc.BlockPressurePlateBetweenlands;
 import thebetweenlands.common.block.misc.BlockReedMat;
 import thebetweenlands.common.block.misc.BlockRope;
 import thebetweenlands.common.block.misc.BlockRubberTap;
+import thebetweenlands.common.block.misc.BlockShadowWalker;
 import thebetweenlands.common.block.misc.BlockSludge;
 import thebetweenlands.common.block.misc.BlockSulfurTorch;
 import thebetweenlands.common.block.misc.BlockSulfurTorchExtinguished;
@@ -916,6 +917,7 @@ public class BlockRegistry {
     //public static final Block ANIMAL_BURROW_CRAGROCK = new BlockAnimalBurrow(Material.ROCK);
     //public static final Block LYESTONE = new BlockLyestone(Material.ROCK);
     public static final Block MIST_BRIDGE = new BlockMistBridge(Material.ROCK);
+    public static final Block SHADOW_WALKER = new BlockShadowWalker(Material.AIR);
 
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();
