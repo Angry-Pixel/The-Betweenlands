@@ -2,12 +2,18 @@ package thebetweenlands.common.block.misc;
 
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -23,7 +29,6 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
 
 public class BlockShadowWalker extends Block  {
-	
 
 	public BlockShadowWalker(Material materialIn) {
 		super(materialIn);
@@ -31,7 +36,7 @@ public class BlockShadowWalker extends Block  {
 		setSoundType(SoundType.STONE);
 		setHardness(1.2F);
 		setResistance(8.0F);
-		setLightOpacity(0);
+		setLightOpacity(255);
 	}
 
 	@Override
@@ -52,6 +57,21 @@ public class BlockShadowWalker extends Block  {
 	@Override
     public boolean isReplaceable(IBlockAccess world, BlockPos pos) {
         return false;
+    }
+
+    @Override
+    public int getLightOpacity(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return  255;
+    }
+
+    @Nullable
+    public Boolean isEntityInsideMaterial(IBlockAccess world, BlockPos blockpos, IBlockState iblockstate, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
+        if(entity instanceof EntityLivingBase) {
+        	if(testingHead)
+        		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 20));
+        	((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 20, 1));
+        }
+    	return null;
     }
 
 	@Override
