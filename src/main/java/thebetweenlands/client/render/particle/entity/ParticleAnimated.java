@@ -126,4 +126,20 @@ public class ParticleAnimated extends Particle implements IParticleSpriteReceive
 			args.withData(80);
 		}
 	}
+	
+	public static final class ShadowGhostFactory extends ParticleFactory<PortalFactory, ParticleAnimated> {
+		public ShadowGhostFactory() {
+			super(ParticleAnimated.class, ParticleTextureStitcher.create(ParticleAnimated.class, new ResourceLocation("thebetweenlands:particle/shadow_ghosts")).setSplitAnimations(true));
+		}
+
+		@Override
+		public ParticleAnimated createParticle(ImmutableParticleArgs args) {
+			return new ParticleAnimated(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.scale);
+		}
+
+		@Override
+		protected void setBaseArguments(ParticleArgs<?> args) {
+			args.withData(40);
+		}
+	}
 }
