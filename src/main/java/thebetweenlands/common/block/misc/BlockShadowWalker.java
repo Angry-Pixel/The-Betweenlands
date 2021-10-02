@@ -31,6 +31,7 @@ public class BlockShadowWalker extends Block  {
 		setSoundType(SoundType.STONE);
 		setHardness(1.2F);
 		setResistance(8.0F);
+		setLightOpacity(0);
 	}
 
 	@Override
@@ -47,7 +48,8 @@ public class BlockShadowWalker extends Block  {
     public boolean canCollideCheck(IBlockState state, boolean hitIfLiquid) {
         return false;
     }
-	
+
+	@Override
     public boolean isReplaceable(IBlockAccess world, BlockPos pos) {
         return false;
     }
@@ -79,7 +81,7 @@ public class BlockShadowWalker extends Block  {
 	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
 		if (world.isAirBlock(pos.up())) {
 			for(int i = 0; i < 3 + rand.nextInt(5); i++) {
-				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(world, pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F, 
+				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 
 						ParticleArgs.get()
 						.withMotion((rand.nextFloat() - 0.5f) * 0.08f, rand.nextFloat() * 0.01F + 0.01F, (rand.nextFloat() - 0.5f) * 0.08f)
 						.withScale(1f + rand.nextFloat() * 8.0F)

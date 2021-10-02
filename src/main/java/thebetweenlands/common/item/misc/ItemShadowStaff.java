@@ -29,7 +29,7 @@ public class ItemShadowStaff extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {	
 	ItemStack stack = player.getHeldItem(hand);
-	BlockPos pos = player.getPosition().down();
+	BlockPos pos = player.getPosition();
 	IBlockState blockStart = world.getBlockState(pos);
 		if (!world.isRemote) {
 			if (isShadowableBlock(world, pos, blockStart)) {
@@ -41,10 +41,10 @@ public class ItemShadowStaff extends Item {
 				List<Integer> blockDistance = new ArrayList<Integer>();
 				for (int distance = -1; distance <= 16; distance++) {
 					for (int distance2 = -distance; distance2 <= distance; distance2++) {
-						for (int yo = -1; yo <= 1; yo++) {
-							int originX = MathHelper.floor( pos.getX() + 0.5D - Math.sin(direction) * distance - diag.x * distance2 * 0.25D);
+						for (int yo = 0; yo <= 1; yo++) {
+							int originX = MathHelper.floor(pos.getX() + 0.5D - Math.sin(direction) * distance - diag.x * distance2 * 0.25D);
 							int originY = pos.getY() + yo;
-							int originZ = MathHelper.floor( pos.getZ() + 0.5D + Math.cos(direction) * distance + diag.z * distance2 * 0.25D);
+							int originZ = MathHelper.floor(pos.getZ() + 0.5D + Math.cos(direction) * distance + diag.z * distance2 * 0.25D);
 							BlockPos origin = new BlockPos(originX, originY, originZ);
 
 							if (spawnedPos.contains(origin))
@@ -70,7 +70,7 @@ public class ItemShadowStaff extends Item {
 	}
 
 	private boolean isShadowableBlock (World world, BlockPos pos, IBlockState state) {
-		return (state.isNormalCube() || state.getBlock().isReplaceable(world, pos)) && !state.getBlock().hasTileEntity(state) && state.getBlockHardness(world, pos) <= 5.0F && state.getBlockHardness(world, pos) >= 0.0F && !world.getBlockState(pos.up()).isOpaqueCube() && !(state.getBlock() instanceof BlockMistBridge) && !(state.getBlock() instanceof BlockShadowWalker);
+		return (state.isNormalCube() || state.getBlock().isReplaceable(world, pos)) && !state.getBlock().hasTileEntity(state) && state.getBlockHardness(world, pos) <= 5.0F && state.getBlockHardness(world, pos) >= 0.0F && !(state.getBlock() instanceof BlockMistBridge) && !(state.getBlock() instanceof BlockShadowWalker);
 	}
 
 	private void spawnEntity(World world, BlockPos pos, List<Integer> blockDistance, List<BlockPos> convertPos) {
