@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "FLF",
+    "FBF"
+  ],
+  "key": {
+    "S": {
+      "item": "thebetweenlands:items_misc",
+      "data": 54
+    },
+    "L": {
+      "item": "thebetweenlands:lurker_skin_leggings"
+    },
+    "F": {
+      "item": "thebetweenlands:items_misc",
+      "data": 57
+    },
+    "B": {
+      "item": "thebetweenlands:items_misc",
+      "data": 55
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:amphibious_leggings"
+  }
+}

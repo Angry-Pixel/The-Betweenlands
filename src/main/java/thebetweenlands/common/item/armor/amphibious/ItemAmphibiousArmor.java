@@ -1,11 +1,13 @@
 package thebetweenlands.common.item.armor.amphibious;
 
 import java.util.Random;
+import java.util.UUID;
 
 import com.google.common.collect.Multimap;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
@@ -24,6 +26,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -37,6 +40,7 @@ import thebetweenlands.common.inventory.InventoryAmphibiousArmor;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.Item3DArmor;
 import thebetweenlands.common.proxy.CommonProxy;
+import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.NBTHelper;
 
@@ -57,7 +61,10 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 	
 	private static final String NBT_URCHIN_AOE_COOLDOWN = "thebetweenlands.urchin_aoe_cooldown";
 	private static final String NBT_ELECTRIC_COOLDOWN = "thebetweenlands.electric_cooldown";
-	
+
+	final UUID ARMOR_TOUGHNESS_MODIFIER = MathHelper.getRandomUUID();
+
+
 	AmphibiousArmorEffectsHelper armorEffectsHelper = new AmphibiousArmorEffectsHelper();
 
 	public ItemAmphibiousArmor(EntityEquipmentSlot slot) {
@@ -114,6 +121,7 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 		        	itemStack.getTagCompound().setBoolean("urchinAuto", true);
 		        	itemStack.getTagCompound().setBoolean("electricAuto", true);
 		        	itemStack.getTagCompound().setBoolean("glideAuto", true);
+					itemStack.getTagCompound().setBoolean("ascentAuto", true);
 		            }
 
 				int vortexCount = getUpgradeCount(itemStack, AmphibiousArmorUpgrades.FISH_VORTEX);
@@ -158,11 +166,26 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 				}
 			}
 
+			// movement speed
+			if(itemStack.getItem() != ItemRegistry.AMPHIBIOUS_HELMET && player.moveForward > 0.0F && !player.capabilities.isFlying) {
+				int finCount = getUpgradeCount(itemStack, AmphibiousArmorUpgrades.MOVEMENT_SPEED);
+
+				if(finCount > 0) {
+					float bonusSpeed = 0.0125f * (Math.min(4, finCount));
+
+					if(player.onGround && !player.isInWater()) {
+						bonusSpeed /= 2f;
+					}
+
+					player.moveRelative(0.0F, 0.0F, bonusSpeed, 1.0F);
+				}
+			}
+
 			int ascentBoostTicks = nbt.getInteger(NBT_ASCENT_BOOST_TICKS);
 
 			if(itemStack.getItem() == ItemRegistry.AMPHIBIOUS_LEGGINGS) {
-				if(this.getUpgradeCount(itemStack, AmphibiousArmorUpgrades.ASCENT_BOOST) >= 1) {
-					if(player.isSneaking() && player.onGround) {
+				if(this.getUpgradeCount(itemStack, AmphibiousArmorUpgrades.ASCENT_BOOST) >= 1 && itemStack.getTagCompound().getBoolean("ascentAuto")) {
+					if(player.isSneaking() && player.onGround && !nbt.getBoolean(NBT_ASCENT_BOOST)) {
 						nbt.setInteger(NBT_ASCENT_BOOST_TICKS, ++ascentBoostTicks);
 					} else if(!player.isSneaking()) {
 						if(ascentBoostTicks > 10 && !nbt.getBoolean(NBT_ASCENT_BOOST)) {
@@ -178,6 +201,8 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 							player.motionX += lookVec.x * speed;
 							player.motionZ += lookVec.z * speed;
 							player.motionY += lookVec.y * 0.5D;
+
+							damageUpgrade(itemStack, AmphibiousArmorUpgrades.ASCENT_BOOST, 1, DamageEvent.ON_USE, false);
 						}
 
 						ascentBoostTicks = Math.max(0, ascentBoostTicks - 1);
@@ -188,7 +213,15 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 				}
 			}
 
-			if(ascentBoostTicks <= 0 || !player.isInWater()) {
+			if(nbt.getBoolean(NBT_ASCENT_BOOST)) {
+				player.fallDistance = 0;
+
+				if(player.onGround) {
+					ascentBoostTicks = 0;
+				}
+			}
+
+			if(ascentBoostTicks <= 0) {
 				nbt.setInteger(NBT_ASCENT_BOOST_TICKS, ascentBoostTicks = 0);
 				nbt.setBoolean(NBT_ASCENT_BOOST, false);
 			}
@@ -227,16 +260,54 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 							player.motionY += 0.02D;
 						}
 					}
-				}
 
-				if(armorPieces >= 4) {
+					int bladderCount = getUpgradeCount(player, AmphibiousArmorUpgrades.BUOYANCY);
+
+					if(bladderCount > 0) {
+						double speedMod = bladderCount * 0.01D;
+
+						if(player.moveForward != 0) {
+							speedMod *= 0.5D;
+						}
+
+						if(player.isSneaking()) {
+							player.motionY -= speedMod;
+						} else if(player.isJumping) {
+							player.motionY += speedMod + 0.02D;
+						}
+					}
+				}
+			}
+
+			int breathingCount = Math.min(getUpgradeCount(itemStack, AmphibiousArmorUpgrades.BREATHING), 2);
+
+			if(player.isInWater()) {
+				boolean  hasBreathingUpgrade = false;
+
+				if (armorPieces >= 4) {
 					player.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 10));
 
-					if(player.ticksExisted % 3 == 0) {
+					if (breathingCount >= 2) {
+						player.setAir(300);
+					} else {
+						if (player.ticksExisted % (10 + (breathingCount * 10)) == 0) {
+							player.setAir(player.getAir() - 1);
+						}
+					}
+
+					hasBreathingUpgrade = true;
+				} else if(breathingCount > 0) {
+					player.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 10));
+
+					if (player.ticksExisted % (4 + breathingCount) == 0) {
 						player.setAir(player.getAir() - 1);
 					}
 
-					if(player.getAir() <= -20) {
+					hasBreathingUpgrade = true;
+				}
+
+				if(hasBreathingUpgrade) {
+					if (player.getAir() <= -20) {
 						player.setAir(0);
 
 						for (int i = 0; i < 8; ++i) {
@@ -245,7 +316,7 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 							float ry = rand.nextFloat() - rand.nextFloat();
 							float rz = rand.nextFloat() - rand.nextFloat();
 
-							player.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, player.posX + (double)rx, player.posY + (double)ry, player.posZ + (double)rz, player.motionX, player.motionY, player.motionZ);
+							player.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, player.posX + (double) rx, player.posY + (double) ry, player.posZ + (double) rz, player.motionX, player.motionY, player.motionZ);
 						}
 
 						player.attackEntityFrom(DamageSource.DROWN, 2.0F);

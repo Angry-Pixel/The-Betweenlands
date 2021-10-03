@@ -1394,6 +1394,7 @@ chat.aa_toggle.urchin_active=Urchin Active: %s
 chat.aa_toggle.vortex_active=Vortex Active: %s
 chat.aa_toggle.electric_active=Electric Active: %s
 chat.aa_toggle.glide_active=Glide Active: %s
+chat.aa_toggle.ascent_active=Ascent Active: %s
 
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath

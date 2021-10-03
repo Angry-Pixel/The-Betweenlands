@@ -40,13 +40,20 @@ public class ItemAmphibiousArmourUpgradeToggle extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand){
 		ItemStack stack = player.getHeldItem(hand);
+		ItemStack legs = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
 		ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 		NBTTagCompound nbt = player.getEntityData();
 		List<IAmphibiousArmorUpgrade> upgradeListChest = new ArrayList<>();
-		
+
 		if (chest.getItem() instanceof ItemAmphibiousArmor && chest.getItem() == ItemRegistry.AMPHIBIOUS_CHESTPLATE)
 			if (!getUpgradeList(chest, EntityEquipmentSlot.CHEST).isEmpty())
 				for (IAmphibiousArmorUpgrade upgrade : getUpgradeList(chest, EntityEquipmentSlot.CHEST))
+					if (isValidUpgrade(upgrade))
+						upgradeListChest.add(upgrade);
+
+		if (legs.getItem() instanceof ItemAmphibiousArmor && legs.getItem() == ItemRegistry.AMPHIBIOUS_LEGGINGS)
+			if (!getUpgradeList(legs, EntityEquipmentSlot.LEGS).isEmpty())
+				for (IAmphibiousArmorUpgrade upgrade : getUpgradeList(legs, EntityEquipmentSlot.LEGS))
 					if (isValidUpgrade(upgrade))
 						upgradeListChest.add(upgrade);
 
@@ -58,7 +65,8 @@ public class ItemAmphibiousArmourUpgradeToggle extends Item {
 		if (player.isSneaking()) {
 			// scroll stuff (add 1 to counter or something)
 			// display name active/toggle
-			if (chest.getItem() instanceof ItemAmphibiousArmor && chest.getItem() == ItemRegistry.AMPHIBIOUS_CHESTPLATE) {
+			if (chest.getItem() instanceof ItemAmphibiousArmor && chest.getItem() == ItemRegistry.AMPHIBIOUS_CHESTPLATE ||
+				legs.getItem() instanceof ItemAmphibiousArmor && legs.getItem() == ItemRegistry.AMPHIBIOUS_LEGGINGS) {
 				int scrollSize = upgradeListChest.size();
 				if (!upgradeListChest.isEmpty()) {
 					if (stack.getTagCompound().getInteger("scrollPos") < scrollSize)
@@ -112,6 +120,18 @@ public class ItemAmphibiousArmourUpgradeToggle extends Item {
 				}
 			}
 
+			if (legs.getItem() instanceof ItemAmphibiousArmor && legs.getItem() == ItemRegistry.AMPHIBIOUS_LEGGINGS) {
+				if (stack.getTagCompound().getInteger("scrollPos") != -1 && !upgradeListChest.isEmpty()) {
+					if (upgradeListChest.get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.ASCENT_BOOST) {
+						int legCount = ((ItemAmphibiousArmor) legs.getItem()).getUpgradeCount(legs, AmphibiousArmorUpgrades.ASCENT_BOOST);
+						if (legCount >= 1) {
+							legs.getTagCompound().setBoolean("ascentAuto", !legs.getTagCompound().getBoolean("ascentAuto"));
+							player.sendStatusMessage(new TextComponentTranslation("chat.aa_toggle.ascent_active", new TextComponentTranslation("" + legs.getTagCompound().getBoolean("ascentAuto"))), true);
+						}
+					}
+				}
+			}
+
 			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 		}
 	}
@@ -140,6 +160,7 @@ public class ItemAmphibiousArmourUpgradeToggle extends Item {
 			ALLOWED_UPGRADES.put(AmphibiousArmorUpgrades.URCHIN.getUpgrade(EntityEquipmentSlot.CHEST, new ItemStack(ItemRegistry.AA_UPGRADE_URCHIN)), true);
 			ALLOWED_UPGRADES.put(AmphibiousArmorUpgrades.ELECTRIC.getUpgrade(EntityEquipmentSlot.CHEST, new ItemStack(ItemRegistry.AA_UPGRADE_ELECTRIC)), true);
 			ALLOWED_UPGRADES.put(AmphibiousArmorUpgrades.GLIDE.getUpgrade(EntityEquipmentSlot.CHEST, new ItemStack(ItemRegistry.AA_UPGRADE_GLIDE)), true);
+			ALLOWED_UPGRADES.put(AmphibiousArmorUpgrades.ASCENT_BOOST.getUpgrade(EntityEquipmentSlot.LEGS, new ItemStack(ItemRegistry.AA_UPGRADE_LEAP)), true);
 		}
 	}
 }

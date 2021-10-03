@@ -28,14 +28,6 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public enum AmphibiousArmorUpgrades implements IAmphibiousArmorUpgrade {
-	/*
-	BREATHING(new ResourceLocation(ModInfo.ID, "breathing"), 64, EnumItemMisc.ANADIA_GILLS::isItemOf, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST),
-	TOUGHNESS(new ResourceLocation(ModInfo.ID, "toughness"), 64, EnumItemMisc.SLIMY_BONE::isItemOf, AdditiveAttributeUpgrade.TOUGHNESS, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
-	MOVEMENT_SPEED(new ResourceLocation(ModInfo.ID, "movement_speed"), 64, EnumItemMisc.ANADIA_FINS::isItemOf, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
-	BUOYANCY(new ResourceLocation(ModInfo.ID, "buoyancy"), 64, EnumItemMisc.ANADIA_SWIM_BLADDER::isItemOf, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS),
-	KNOCKBACK_RESISTANCE(new ResourceLocation(ModInfo.ID, "knockback_resistance"), 64, EnumItemMisc.LURKER_SKIN::isItemOf, AdditiveAttributeUpgrade.KNOCKBACK_RESISTANCE, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS),
-	*/
-
 	// gives night vision if you have at least 1 eye
 	VISIBILITY(new ResourceLocation(ModInfo.ID, "visibility"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.ANADIA_EYE::isItemOf, EntityEquipmentSlot.HEAD),
 	// each piece of armor that has a thorns upgrades increases thorns damage
@@ -44,6 +36,13 @@ public enum AmphibiousArmorUpgrades implements IAmphibiousArmorUpgrade {
 	DECAY_DECREASE(new ResourceLocation(ModInfo.ID, "decay_decrease"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.ANADIA_SCALES::isItemOf, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
 	// having 1 of the upgrade item gives full mining speed underwater, similar to how owning all 4
 	MINING_SPEED(new ResourceLocation(ModInfo.ID, "mining_speed"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.SNOT::isItemOf, EntityEquipmentSlot.CHEST),
+	// if wearing full armor, 2 or more gills give full water breathing. otherwise it just improves water breathing
+	BREATHING(new ResourceLocation(ModInfo.ID, "breathing"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.ANADIA_GILLS::isItemOf, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST),
+	// each piece gives 0.125 speed increase up to 4 times, speed is halfed on ground. 4 pieces lets player walk on mud
+	MOVEMENT_SPEED(new ResourceLocation(ModInfo.ID, "movement_speed"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.ANADIA_FINS::isItemOf, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
+	TOUGHNESS(new ResourceLocation(ModInfo.ID, "toughness"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.SLIMY_BONE::isItemOf, AdditiveAttributeUpgrade.TOUGHNESS, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
+	KNOCKBACK_RESISTANCE(new ResourceLocation(ModInfo.ID, "knockback_resistance"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.LURKER_SKIN::isItemOf, AdditiveAttributeUpgrade.KNOCKBACK_RESISTANCE, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS),
+	BUOYANCY(new ResourceLocation(ModInfo.ID, "buoyancy"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.ANADIA_SWIM_BLADDER::isItemOf, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS),
 
 	ASCENT_BOOST(new ResourceLocation(ModInfo.ID, "ascent_boost"), 64, DamageEvent.ON_USE,  s -> s.getItem() == ItemRegistry.AA_UPGRADE_LEAP, EntityEquipmentSlot.LEGS),
 	FISH_VORTEX(new ResourceLocation(ModInfo.ID, "fish_vortex"), 256, DamageEvent.ON_USE, s -> s.getItem() == ItemRegistry.AA_UPGRADE_VORTEX, EntityEquipmentSlot.CHEST),

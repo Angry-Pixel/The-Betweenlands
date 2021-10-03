@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "EHE",
+    "GBG"
+  ],
+  "key": {
+    "S": {
+      "item": "thebetweenlands:items_misc",
+      "data": 54
+    },
+    "H": {
+      "item": "thebetweenlands:lurker_skin_helmet"
+    },
+    "G": {
+      "item": "thebetweenlands:items_misc",
+      "data": 53
+    },
+    "E": {
+      "item": "thebetweenlands:items_misc",
+      "data": 52
+    },
+    "B": {
+      "item": "thebetweenlands:items_misc",
+      "data": 55
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:amphibious_helmet"
+  }
+}
