@@ -99,6 +99,13 @@ public class BlockShadowWalker extends Block  {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+		if(rand.nextInt(10) == 0) {
+			double x = (double)pos.getX() + 0.5D;
+			double y = (double)pos.getY();
+			double z = (double)pos.getZ() + 0.5D;
+			BLParticles.SHADOW_GHOSTS.spawn(world, x, y, z, ParticleArgs.get().withColor(0.5F, 0.5F, 0.5F, 0.75F).withMotion((rand.nextFloat() - 0.5f) * 0.08f, rand.nextFloat() * 0.01F + 0.01F, (rand.nextFloat() - 0.5f) * 0.08f));
+		}
+
 		if (world.isAirBlock(pos.up())) {
 			for(int i = 0; i < 3 + rand.nextInt(5); i++) {
 				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(world, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 

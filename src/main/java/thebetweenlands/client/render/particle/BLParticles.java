@@ -168,7 +168,8 @@ public enum BLParticles {
 	URCHIN_SPIKE(new ParticleUrchinSpike.Factory()),
 	FANCY_DRIP(new ParticleFancyDrip.Factory()),
 	FANCY_BUBBLE(new ParticleFancyBubble.Factory()),
-	FISH_VORTEX(new ParticleFishVortex.Factory());
+	FISH_VORTEX(new ParticleFishVortex.Factory()),
+	SHADOW_GHOSTS(new ParticleAnimated.ShadowGhostFactory());
 	
 	private ParticleFactory<?, ?> factory;
 
