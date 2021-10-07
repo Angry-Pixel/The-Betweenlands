@@ -46,8 +46,6 @@ public class ItemShadowStaff extends Item {
 				List<BlockPos> spawnedPos = new ArrayList<BlockPos>();
 				List<BlockPos> convertPos = new ArrayList<BlockPos>();
 				List<Integer> blockDistance = new ArrayList<Integer>();
-				convertPos.add(pos);
-				blockDistance.add(0);
 				for (int distance = -1; distance <= 16; distance++) {
 					for (int distance2 = -distance; distance2 <= distance; distance2++) {
 						for (int yo = 0; yo <= 1; yo++) {
