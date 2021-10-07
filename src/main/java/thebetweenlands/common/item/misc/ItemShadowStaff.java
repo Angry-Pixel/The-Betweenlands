@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.misc.BlockMistBridge;
 import thebetweenlands.common.block.misc.BlockShadowWalker;
 import thebetweenlands.common.entity.EntityMistBridge;
@@ -24,6 +25,8 @@ public class ItemShadowStaff extends Item {
 
 	public ItemShadowStaff() {
 		setMaxStackSize(1);
+		setMaxDamage(64);
+		setCreativeTab(BLCreativeTabs.SPECIALS);
 	}
 
 	@Override
@@ -31,6 +34,10 @@ public class ItemShadowStaff extends Item {
 	ItemStack stack = player.getHeldItem(hand);
 	BlockPos pos = player.getPosition();
 	IBlockState blockStart = world.getBlockState(pos);
+
+		if(player.getCooldownTracker().hasCooldown(this))
+			return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
+
 		if (!world.isRemote) {
 			if (isShadowableBlock(world, player, pos, blockStart)) {
 				stack.damageItem(2, player);
@@ -39,6 +46,8 @@ public class ItemShadowStaff extends Item {
 				List<BlockPos> spawnedPos = new ArrayList<BlockPos>();
 				List<BlockPos> convertPos = new ArrayList<BlockPos>();
 				List<Integer> blockDistance = new ArrayList<Integer>();
+				convertPos.add(pos);
+				blockDistance.add(0);
 				for (int distance = -1; distance <= 16; distance++) {
 					for (int distance2 = -distance; distance2 <= distance; distance2++) {
 						for (int yo = 0; yo <= 1; yo++) {
@@ -54,7 +63,7 @@ public class ItemShadowStaff extends Item {
 
 							IBlockState block = world.getBlockState(new BlockPos(originX, originY, originZ));
 
-							if (isShadowableBlock(world, player, origin, block) && !world.isAirBlock(pos)) {
+							if (isShadowableBlock(world, player, origin, block)) {
 								convertPos.add(origin);
 								blockDistance.add(distance);
 								break;
@@ -64,6 +73,7 @@ public class ItemShadowStaff extends Item {
 				}
 				spawnEntity(world, pos, blockDistance, convertPos);
 				world.playSound((EntityPlayer) null, pos, SoundRegistry.MIST_STAFF_CAST, SoundCategory.BLOCKS, 1F, 1.0F);
+				player.getCooldownTracker().setCooldown(this, 200);
 			}
 		}
 		return new ActionResult<>(EnumActionResult.SUCCESS, stack);

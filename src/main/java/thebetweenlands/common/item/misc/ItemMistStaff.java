@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.misc.BlockMistBridge;
 import thebetweenlands.common.block.misc.BlockShadowWalker;
 import thebetweenlands.common.entity.EntityMistBridge;
@@ -24,6 +25,8 @@ public class ItemMistStaff extends Item {
 
 	public ItemMistStaff() {
 		setMaxStackSize(1);
+		setMaxDamage(64);
+		setCreativeTab(BLCreativeTabs.SPECIALS);
 	}
 
 	@Override
@@ -31,6 +34,11 @@ public class ItemMistStaff extends Item {
 	ItemStack stack = player.getHeldItem(hand);
 	BlockPos pos = player.getPosition().down();
 	IBlockState blockStart = world.getBlockState(pos);
+	
+
+	if(player.getCooldownTracker().hasCooldown(this))
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
+
 		if (!world.isRemote) {
 			if (isMistifiableBlock(world, player, pos, blockStart)) {
 				stack.damageItem(2, player);
@@ -64,6 +72,7 @@ public class ItemMistStaff extends Item {
 				}
 				spawnEntity(world, pos, blockDistance, convertPos);
 				world.playSound((EntityPlayer) null, pos, SoundRegistry.MIST_STAFF_CAST, SoundCategory.BLOCKS, 1F, 1.0F);
+				player.getCooldownTracker().setCooldown(this, 200);
 			}
 		}
 		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
