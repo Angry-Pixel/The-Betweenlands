@@ -68,6 +68,11 @@ public class BlockMistBridge extends Block implements IStateMappedBlock {
     }
 
 	@Override
+    public boolean isReplaceable(IBlockAccess world, BlockPos pos) {
+        return false;
+    }
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		return blockAccess.getBlockState(pos.offset(side)).getBlock() != this && super.shouldSideBeRendered(blockState, blockAccess, pos, side);

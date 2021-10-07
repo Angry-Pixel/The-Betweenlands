@@ -32,7 +32,7 @@ public class ItemMistStaff extends Item {
 	BlockPos pos = player.getPosition().down();
 	IBlockState blockStart = world.getBlockState(pos);
 		if (!world.isRemote) {
-			if (isMistifiableBlock(world, pos, blockStart)) {
+			if (isMistifiableBlock(world, player, pos, blockStart)) {
 				stack.damageItem(2, player);
 				double direction = Math.toRadians(player.rotationYaw);
 				Vec3d diag = new Vec3d(Math.sin(direction + Math.PI / 2.0D), 0, Math.cos(direction + Math.PI / 2.0D)).normalize();
@@ -54,7 +54,7 @@ public class ItemMistStaff extends Item {
 
 							IBlockState block = world.getBlockState(new BlockPos(originX, originY, originZ));
 
-							if (isMistifiableBlock(world, origin, block)) {
+							if (isMistifiableBlock(world, player, origin, block)) {
 								convertPos.add(origin);
 								blockDistance.add(distance);
 								break;
@@ -69,8 +69,8 @@ public class ItemMistStaff extends Item {
 		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 	}
 
-	private boolean isMistifiableBlock (World world, BlockPos pos, IBlockState state) {
-		return (state.isNormalCube() || state.getBlock().isReplaceable(world, pos)) && !state.getBlock().hasTileEntity(state) && state.getBlockHardness(world, pos) <= 5.0F && state.getBlockHardness(world, pos) >= 0.0F && !world.getBlockState(pos.up()).isOpaqueCube() && !(state.getBlock() instanceof BlockMistBridge) && !(state.getBlock() instanceof BlockShadowWalker);
+	private boolean isMistifiableBlock (World world, EntityPlayer player, BlockPos pos, IBlockState state) {
+		return (state.isNormalCube() || state.getBlock().isReplaceable(world, pos)) && !state.getBlock().hasTileEntity(state) && state.getPlayerRelativeBlockHardness(player, world, pos) > 0.0001 && !world.getBlockState(pos.up()).isOpaqueCube() && !(state.getBlock() instanceof BlockMistBridge) && !(state.getBlock() instanceof BlockShadowWalker);
 	}
 
 	private void spawnEntity(World world, BlockPos pos, List<Integer> blockDistance, List<BlockPos> convertPos) {
