@@ -218,6 +218,11 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 	}
 
 	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
+
+	@Override
 	public void update() {
 		if(this.isActive()) {
 			this.updateEffects(this.effect);
