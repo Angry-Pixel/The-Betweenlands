@@ -55,10 +55,6 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 	 public void onUpdate() {
 		super.onUpdate();
 
-	//	if (this.world.isRemote) {
-	//		spawnCloudParticle();
-	//	}
-
 		if (!world.isRemote) {
 			if (startExtention && world.getTotalWorldTime() % 1 == 0) {
 				List<BlockPos> pos = matchDistance(world, matchDistance);
@@ -249,42 +245,4 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 		}
 		return false;
 	}	
-
-/*
-	@SideOnly(Side.CLIENT)
-	private void spawnCloudParticle() {
-		double x = this.posX + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
-		double y = this.posY + 0.5D;
-		double z = this.posZ + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
-		double mx = (this.world.rand.nextFloat() - 0.5F) / 12.0F;
-		double my = (this.world.rand.nextFloat() - 0.5F) / 16.0F * 0.1F;
-		double mz = (this.world.rand.nextFloat() - 0.5F) / 12.0F;
-		int[] color = {255, 255, 255, 255};
-
-		ParticleGasCloud hazeParticle = (ParticleGasCloud) BLParticles.GAS_CLOUD
-				.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
-						.withData(null)
-						.withMotion(mx, my, mz)
-						.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F)
-						.withScale(8f));
-		
-	//	BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS_HEAT_HAZE, hazeParticle);
-		
-		ParticleGasCloud particle = (ParticleGasCloud) BLParticles.GAS_CLOUD
-				.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
-						.withData(null)
-						.withMotion(mx, my, mz)
-						.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F)
-						.withScale(5f));
-
-		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS_TEXTURED, particle);
-	}
-
-	@Override
-	public boolean shouldRenderInPass(int pass) {
-		return pass == 1;
-	}
-	*/
-
-
 }

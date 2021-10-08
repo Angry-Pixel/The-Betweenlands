@@ -2,6 +2,7 @@ package thebetweenlands.common.tile;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.item.ItemStack;
@@ -11,6 +12,8 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
 import thebetweenlands.common.inventory.container.ContainerMortar;
 import thebetweenlands.common.item.misc.ItemLifeCrystal;
@@ -34,6 +37,10 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
         super(4, "container.bl.mortar");
     }
 
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
 
     @Override
     public void update() {
