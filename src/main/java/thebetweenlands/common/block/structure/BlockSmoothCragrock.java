@@ -49,4 +49,13 @@ public class BlockSmoothCragrock extends BlockFalling {
 			world.setBlockToAir(pos);
 		}
 	}
+
+	@Override
+    public void onBroken(World world, BlockPos pos) {
+		if(!world.isRemote) {
+			world.playSound((double) ((float) pos.getX() + 0.5F), (double) ((float) pos.getY() + 0.5F), (double) ((float) pos.getZ() + 0.5F), blockSoundType.getStepSound(), SoundCategory.BLOCKS, (blockSoundType.getVolume() + 1.0F) / 2.0F, blockSoundType.getPitch() * 0.8F, false);
+			world.playEvent(null, 2001, pos.up(), Block.getIdFromBlock(world.getBlockState(pos).getBlock()));
+			world.setBlockToAir(pos);
+		}
+    }
 }
