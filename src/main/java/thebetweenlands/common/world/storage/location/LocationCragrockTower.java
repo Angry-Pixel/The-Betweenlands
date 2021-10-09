@@ -545,7 +545,7 @@ public class LocationCragrockTower extends LocationGuarded {
 					IBlockState blockState = world.getBlockState(pos);
 
 					if(blockState.getBlock() != Blocks.AIR && world.isAirBlock(pos.down()) && world.isAirBlock(pos.down(2))) {
-						EntityFallingBlock fallingBlock = new EntityFallingBlock(world, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, BlockRegistry.SMOOTH_CRAGROCK.getDefaultState());
+						EntityFallingBlock fallingBlock = new EntityFallingBlock(world, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, BlockRegistry.WEAK_SMOOTH_CRAGROCK.getDefaultState());
 						fallingBlock.fallTime = -60;
 						fallingBlock.shouldDropItem = false;
 						fallingBlock.setHurtEntities(true);

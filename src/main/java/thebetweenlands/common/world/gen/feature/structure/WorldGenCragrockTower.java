@@ -76,8 +76,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 
 	protected boolean isProtectedBlock(IBlockState state) {
 		Block block = state.getBlock();
-		if(block != Blocks.AIR && block != BlockRegistry.MOB_SPAWNER && block != BlockRegistry.LOOT_POT
-				&& block != BlockRegistry.ROOT) {
+		if(block != Blocks.AIR && block != BlockRegistry.MOB_SPAWNER && block != BlockRegistry.LOOT_POT && block != BlockRegistry.ROOT && block != BlockRegistry.WEAK_SMOOTH_CRAGROCK) {
 			return true;
 		}
 		return false;

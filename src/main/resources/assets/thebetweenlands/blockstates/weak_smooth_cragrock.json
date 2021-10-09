@@ -1,0 +1,7 @@
+{ 
+  "variants": { 
+    "normal": {
+      "model": "thebetweenlands:weak_smooth_cragrock"
+    } 
+  } 
+}
