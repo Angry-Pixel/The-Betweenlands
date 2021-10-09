@@ -161,6 +161,22 @@
                     "functions": [],
                     "weight": 5,
                     "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:shadow_staff",
+                    "functions": [],
+                    "weight": 10,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:mist_staff",
+                    "functions": [],
+                    "weight": 10,
+                    "quality": 0
                 }
             ],
             "rolls": 1
