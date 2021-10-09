@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " B ",
+    "BHB",
+    " C "
+  ],
+  "key": {
+    "C": {
+      "item": "thebetweenlands:cragrock",
+      "data": 0
+    },
+    "H": {
+      "item": "thebetweenlands:wight_heart"
+    },
+    "B": {
+      "item": "thebetweenlands:items_misc",
+      "data": 55
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:aa_upgrade_toggle"
+  }
+}
