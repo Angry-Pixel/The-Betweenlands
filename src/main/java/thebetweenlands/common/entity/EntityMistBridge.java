@@ -96,7 +96,7 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 					}
 				}
 				if(!isMist()) {
-					if(world.getBlockState(getPosition()).getBlock() != BlockRegistry.SHADOW_WALKER || ticksExisted >= 200) {
+					if(ticksExisted >= 200) {
 						if(!startRetraction)
 							world.playSound((EntityPlayer)null, getPosition(), SoundRegistry.MIST_STAFF_VANISH, SoundCategory.BLOCKS, 1F, 1.0F);
 						startRetraction = true;
@@ -159,9 +159,8 @@ public class EntityMistBridge extends EntityCreature implements IEntityBL {
 	@Nullable
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-		if (!getEntityWorld().isRemote) {
+		if (!getEntityWorld().isRemote)
 			startExtention = true;
-		}
 		return livingdata;
 	}
 

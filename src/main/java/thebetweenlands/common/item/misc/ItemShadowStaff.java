@@ -39,7 +39,7 @@ public class ItemShadowStaff extends Item {
 			return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 
 		if (!world.isRemote) {
-			if (isShadowableBlock(world, player, pos, blockStart)) {
+			if (world.isAirBlock(pos)) {
 				stack.damageItem(2, player);
 				double direction = Math.toRadians(player.rotationYaw);
 				Vec3d diag = new Vec3d(Math.sin(direction + Math.PI / 2.0D), 0, Math.cos(direction + Math.PI / 2.0D)).normalize();
@@ -60,7 +60,7 @@ public class ItemShadowStaff extends Item {
 							spawnedPos.add(origin);
 
 							IBlockState block = world.getBlockState(new BlockPos(originX, originY, originZ));
-
+							
 							if (isShadowableBlock(world, player, origin, block)) {
 								convertPos.add(origin);
 								blockDistance.add(distance);
@@ -78,7 +78,7 @@ public class ItemShadowStaff extends Item {
 	}
 
 	private boolean isShadowableBlock (World world, EntityPlayer player, BlockPos pos, IBlockState state) {
-		return (state.isNormalCube() || state.getBlock().isReplaceable(world, pos)) && !state.getBlock().hasTileEntity(state) && state.getPlayerRelativeBlockHardness(player, world, pos) > 0.0001 && !(state.getBlock() instanceof BlockMistBridge) && !(state.getBlock() instanceof BlockShadowWalker);
+		return (state.isNormalCube() || state.getBlock().isReplaceable(world, pos)) && !state.getBlock().hasTileEntity(state) && state.getPlayerRelativeBlockHardness(player, world, pos) > 0.0001 && !(state.getBlock() instanceof BlockMistBridge) && !(state.getBlock() instanceof BlockShadowWalker) && !world.isAirBlock(pos);
 	}
 
 	private void spawnEntity(World world, BlockPos pos, List<Integer> blockDistance, List<BlockPos> convertPos) {
