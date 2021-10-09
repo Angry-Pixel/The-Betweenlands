@@ -32,6 +32,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
     public float crystalRotation;
     public int itemBob;
     public boolean countUp = true;
+    public boolean hasUpdated = false;
 
     public TileEntityMortar() {
         super(4, "container.bl.mortar");
@@ -154,6 +155,12 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
         		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 2);
         	}
         }
+
+        if(!hasUpdated) {
+            hasUpdated = true;
+            world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 2);
+        }
+
         if (!validRecipe || getStackInSlot(0).isEmpty() || getStackInSlot(1).isEmpty() || outputFull) {
             if (!inventory.get(1).isEmpty())
                 NBTHelper.getStackNBTSafe(getStackInSlot(1)).setBoolean("active", false);
