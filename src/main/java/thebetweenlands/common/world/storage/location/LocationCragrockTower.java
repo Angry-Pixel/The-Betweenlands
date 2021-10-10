@@ -35,7 +35,6 @@ import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.terrain.BlockWisp;
-import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -545,19 +544,12 @@ public class LocationCragrockTower extends LocationGuarded {
 					BlockPos pos = this.getRandomPosInTower();
 					IBlockState blockState = world.getBlockState(pos);
 
-					if(blockState.getBlock() != Blocks.AIR && world.isAirBlock(pos.up()) && world.isAirBlock(pos.down()) && world.isAirBlock(pos.down(2))) {
-						EntityTriggeredFallingBlock falling_block = new EntityTriggeredFallingBlock(world);
-						falling_block.setPosition(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
-						falling_block.setHanging(true);
-						world.spawnEntity(falling_block);
-
-						/*
-						EntityFallingBlock fallingBlock = new EntityFallingBlock(world, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, blockState);
+					if(blockState.getBlock() != Blocks.AIR && world.isAirBlock(pos.down()) && world.isAirBlock(pos.down(2))) {
+						EntityFallingBlock fallingBlock = new EntityFallingBlock(world, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, BlockRegistry.WEAK_SMOOTH_CRAGROCK.getDefaultState());
 						fallingBlock.fallTime = -60;
 						fallingBlock.shouldDropItem = false;
 						fallingBlock.setHurtEntities(true);
 						world.spawnEntity(fallingBlock);
-						 */
 
 						world.playSound(null, pos, SoundRegistry.CRUMBLE, SoundCategory.BLOCKS, 0.2F, 0.5F + world.rand.nextFloat() * 0.4F);
 					}

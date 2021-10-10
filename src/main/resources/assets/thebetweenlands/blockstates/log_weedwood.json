@@ -14,113 +14,281 @@
 	"variants": {
 		"axis=y": [
 			{
-				"model": "thebetweenlands:log_weedwood",
-				"weight": 100
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"weight": 100
+				}
 			},
 			{
-				"model": "thebetweenlands:log_weedwood_1",
-				"weight": 100
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood_1",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"weight": 100
+				}
 			},
 			{
-				"model": "thebetweenlands:log_weedwood_2",
-				"weight": 100
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood_2",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"weight": 100
+				}
 			},
 			{
-				"model": "thebetweenlands:log_weedwood_3",
-				"weight": 10
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood_3",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"weight": 10
+				}
 			},
 			{
-				"model": "thebetweenlands:log_weedwood_4",
-				"weight": 10
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood_4",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"weight": 10
+				}
 			},
 			{
-				"model": "thebetweenlands:log_weedwood_5",
-				"weight": 5
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood_5",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"weight": 5
+				}
 			},
 			{
-				"model": "thebetweenlands:log_weedwood_6",
-				"weight": 5
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood_6",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"weight": 5
+				}
 			}
 		],
 		"axis=z"	: [
 			{
-				"model": "thebetweenlands:log_weedwood",
-				"x": 90,
-				"weight": 100
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"x": 90,
+			"weight": 100
+				}
 			},
 			{
-				"model": "thebetweenlands:log_weedwood_1",
-				"x": 90,
-				"weight": 100
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood_1",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"x": 90,
+			"weight": 100
+				}
 			},
 			{
-				"model": "thebetweenlands:log_weedwood_2",
-				"x": 90,
-				"weight": 100
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood_2",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"x": 90,
+			"weight": 100
+				}
 			},
 			{
-				"model": "thebetweenlands:log_weedwood_3",
-				"x": 90,
-				"weight": 10
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood_3",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"x": 90,
+			"weight": 10
+				}
 			},
 			{
-				"model": "thebetweenlands:log_weedwood_4",
-				"x": 90,
-				"weight": 10
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood_4",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"x": 90,
+			"weight": 10
+				}
 			},
 			{
-				"model": "thebetweenlands:log_weedwood_5",
-				"x": 90,
-				"weight": 5
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood_5",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"x": 90,
+			"weight": 5
+				}
 			},
 			{
-				"model": "thebetweenlands:log_weedwood_6",
-				"x": 90,
-				"weight": 5
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood_6",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"x": 90,
+			"weight": 5
+				}
 			}
 		],
 		"axis=x": [
 			{
-				"model": "thebetweenlands:log_weedwood",
-				"x": 90,
-				"y": 90,
-				"weight": 100
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"x": 90,
+			"y": 90,
+			"weight": 100
+				}
 			},
 			{
-				"model": "thebetweenlands:log_weedwood_1",
-				"x": 90,
-				"y": 90,
-				"weight": 100
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood_1",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"x": 90,
+			"y": 90,
+			"weight": 100
+				}
 			},
 			{
-				"model": "thebetweenlands:log_weedwood_2",
-				"x": 90,
-				"y": 90,
-				"weight": 100
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood_2",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"x": 90,
+			"y": 90,
+			"weight": 100
+				}
 			},
 			{
-				"model": "thebetweenlands:log_weedwood_3",
-				"x": 90,
-				"y": 90,
-				"weight": 10
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood_3",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"x": 90,
+			"y": 90,
+			"weight": 10
+				}
 			},
 			{
-				"model": "thebetweenlands:log_weedwood_4",
-				"x": 90,
-				"y": 90,
-				"weight": 10
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood_4",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"x": 90,
+			"y": 90,
+			"weight": 10
+				}
 			},
 			{
-				"model": "thebetweenlands:log_weedwood_5",
-				"x": 90,
-				"y": 90,
-				"weight": 5
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood_5",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"x": 90,
+			"y": 90,
+			"weight": 5
+				}
 			},
 			{
-				"model": "thebetweenlands:log_weedwood_6",
-				"x": 90,
-				"y": 90,
-				"weight": 5
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood_6",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty",
+			"x": 90,
+			"y": 90,
+			"weight": 5
+				}
 			}
 		],
 			"axis=none": [
@@ -137,60 +305,164 @@
 					"weight": 100
 				},
 				{
-					"model": "thebetweenlands:log_weedwood_bark_1",
-					"weight": 100
+					"model": "thebetweenlands:internal/winter_event",
+					"custom": {
+						"model_base": "thebetweenlands:block/internal/spook_event",
+						"model_base_data": {
+							"model_base": "thebetweenlands:block/log_weedwood_bark_1",
+							"model_active": "thebetweenlands:block/log_weedwood_bark_spook"
+						},
+						"model_active": "thebetweenlands:block/log_weedwood_bark_frosty"
+						},
+						"weight": 100
 				},
 				{
-					"model": "thebetweenlands:log_weedwood_bark_2",
-					"weight": 100
+					"model": "thebetweenlands:internal/winter_event",
+					"custom": {
+						"model_base": "thebetweenlands:block/internal/spook_event",
+						"model_base_data": {
+							"model_base": "thebetweenlands:block/log_weedwood_bark_2",
+							"model_active": "thebetweenlands:block/log_weedwood_bark_spook"
+						},
+						"model_active": "thebetweenlands:block/log_weedwood_bark_frosty"
+						},
+						"weight": 100
 				},
 				{
-					"model": "thebetweenlands:log_weedwood_bark_3",
-					"weight": 10
+					"model": "thebetweenlands:internal/winter_event",
+					"custom": {
+						"model_base": "thebetweenlands:block/internal/spook_event",
+						"model_base_data": {
+							"model_base": "thebetweenlands:block/log_weedwood_bark_3",
+							"model_active": "thebetweenlands:block/log_weedwood_bark_spook"
+						},
+						"model_active": "thebetweenlands:block/log_weedwood_bark_frosty"
+						},
+						"weight": 10
 				},
 				{
-					"model": "thebetweenlands:log_weedwood_bark_4",
-					"weight": 10
+					"model": "thebetweenlands:internal/winter_event",
+					"custom": {
+						"model_base": "thebetweenlands:block/internal/spook_event",
+						"model_base_data": {
+							"model_base": "thebetweenlands:block/log_weedwood_bark_4",
+							"model_active": "thebetweenlands:block/log_weedwood_bark_spook"
+						},
+						"model_active": "thebetweenlands:block/log_weedwood_bark_frosty"
+						},
+						"weight": 10
 				},
 				{
-					"model": "thebetweenlands:log_weedwood_bark_5",
-					"weight": 5
+					"model": "thebetweenlands:internal/winter_event",
+					"custom": {
+						"model_base": "thebetweenlands:block/internal/spook_event",
+						"model_base_data": {
+							"model_base": "thebetweenlands:block/log_weedwood_bark_5",
+							"model_active": "thebetweenlands:block/log_weedwood_bark_spook"
+						},
+						"model_active": "thebetweenlands:block/log_weedwood_bark_frosty"
+						},
+						"weight": 5
 				},
 				{
-					"model": "thebetweenlands:log_weedwood_bark_6",
-					"weight": 5
+					"model": "thebetweenlands:internal/winter_event",
+					"custom": {
+						"model_base": "thebetweenlands:block/internal/spook_event",
+						"model_base_data": {
+							"model_base": "thebetweenlands:block/log_weedwood_bark_6",
+							"model_active": "thebetweenlands:block/log_weedwood_bark_spook"
+						},
+						"model_active": "thebetweenlands:block/log_weedwood_bark_frosty"
+						},
+						"weight": 5
 				},
 				{
-				    "model": "thebetweenlands:log_weedwood_bark_7",
-				    "weight": 1
+					"model": "thebetweenlands:internal/winter_event",
+					"custom": {
+						"model_base": "thebetweenlands:block/internal/spook_event",
+						"model_base_data": {
+							"model_base": "thebetweenlands:block/log_weedwood_bark_7",
+							"model_active": "thebetweenlands:block/log_weedwood_bark_spook"
+						},
+						"model_active": "thebetweenlands:block/log_weedwood_bark_frosty"
+						}
 				},
 				{
-					"model": "thebetweenlands:log_weedwood_bark_8",
-					"weight": 1
+					"model": "thebetweenlands:internal/winter_event",
+					"custom": {
+						"model_base": "thebetweenlands:block/internal/spook_event",
+						"model_base_data": {
+							"model_base": "thebetweenlands:block/log_weedwood_bark_8",
+							"model_active": "thebetweenlands:block/log_weedwood_bark_spook"
+						},
+						"model_active": "thebetweenlands:block/log_weedwood_bark_frosty"
+						}
 				},
 				{
-					"model": "thebetweenlands:log_weedwood_bark_9",
-					"weight": 1
+					"model": "thebetweenlands:internal/winter_event",
+					"custom": {
+						"model_base": "thebetweenlands:block/internal/spook_event",
+						"model_base_data": {
+							"model_base": "thebetweenlands:block/log_weedwood_bark_9",
+							"model_active": "thebetweenlands:block/log_weedwood_bark_spook"
+						},
+						"model_active": "thebetweenlands:block/log_weedwood_bark_frosty"
+						}
 				},
 				{
-					"model": "thebetweenlands:log_weedwood_bark_10",
-					"weight": 1
+					"model": "thebetweenlands:internal/winter_event",
+					"custom": {
+						"model_base": "thebetweenlands:block/internal/spook_event",
+						"model_base_data": {
+							"model_base": "thebetweenlands:block/log_weedwood_bark_10",
+							"model_active": "thebetweenlands:block/log_weedwood_bark_spook"
+						},
+						"model_active": "thebetweenlands:block/log_weedwood_bark_frosty"
+						}
 				},
 				{
-				    "model": "thebetweenlands:log_weedwood_bark_11",
-				    "weight": 1
+					"model": "thebetweenlands:internal/winter_event",
+					"custom": {
+						"model_base": "thebetweenlands:block/internal/spook_event",
+						"model_base_data": {
+							"model_base": "thebetweenlands:block/log_weedwood_bark_11",
+							"model_active": "thebetweenlands:block/log_weedwood_bark_spook"
+						},
+						"model_active": "thebetweenlands:block/log_weedwood_bark_frosty"
+						}
 				},
 				{
-					"model": "thebetweenlands:log_weedwood_bark_12",
-					"weight": 1
+					"model": "thebetweenlands:internal/winter_event",
+					"custom": {
+						"model_base": "thebetweenlands:block/internal/spook_event",
+						"model_base_data": {
+							"model_base": "thebetweenlands:block/log_weedwood_bark_12",
+							"model_active": "thebetweenlands:block/log_weedwood_bark_spook"
+						},
+						"model_active": "thebetweenlands:block/log_weedwood_bark_frosty"
+						}
 				},
 				{
-					"model": "thebetweenlands:log_weedwood_bark_13",
-					"weight": 1
+					"model": "thebetweenlands:internal/winter_event",
+					"custom": {
+						"model_base": "thebetweenlands:block/internal/spook_event",
+						"model_base_data": {
+							"model_base": "thebetweenlands:block/log_weedwood_bark_13",
+							"model_active": "thebetweenlands:block/log_weedwood_bark_spook"
+						},
+						"model_active": "thebetweenlands:block/log_weedwood_bark_frosty"
+						}
 				},
 				{
-					"model": "thebetweenlands:log_weedwood_bark_14",
-					"weight": 1
+					"model": "thebetweenlands:internal/winter_event",
+					"custom": {
+						"model_base": "thebetweenlands:block/internal/spook_event",
+						"model_base_data": {
+							"model_base": "thebetweenlands:block/log_weedwood_bark_14",
+							"model_active": "thebetweenlands:block/log_weedwood_bark_spook"
+						},
+						"model_active": "thebetweenlands:block/log_weedwood_bark_frosty"
+						}
 				}
 		]
 	}
