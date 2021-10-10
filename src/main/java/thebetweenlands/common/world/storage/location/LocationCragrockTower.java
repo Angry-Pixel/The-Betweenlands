@@ -35,6 +35,7 @@ import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.terrain.BlockWisp;
+import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -550,6 +551,10 @@ public class LocationCragrockTower extends LocationGuarded {
 						fallingBlock.shouldDropItem = false;
 						fallingBlock.setHurtEntities(true);
 						world.spawnEntity(fallingBlock);
+
+						if(world.rand.nextInt(25) == 0) {
+							world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+						}
 
 						world.playSound(null, pos, SoundRegistry.CRUMBLE, SoundCategory.BLOCKS, 0.2F, 0.5F + world.rand.nextFloat() * 0.4F);
 					}
