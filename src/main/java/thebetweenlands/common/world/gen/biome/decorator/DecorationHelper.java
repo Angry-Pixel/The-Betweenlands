@@ -29,6 +29,7 @@ import thebetweenlands.common.world.gen.feature.WorldGenCaveThorns;
 import thebetweenlands.common.world.gen.feature.WorldGenDeepmanSimulacrum;
 import thebetweenlands.common.world.gen.feature.WorldGenFluidPool;
 import thebetweenlands.common.world.gen.feature.WorldGenLakeCavernSimulacrum;
+import thebetweenlands.common.world.gen.feature.WorldGenLyestone;
 import thebetweenlands.common.world.gen.feature.WorldGenMossCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenPebbleCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenPlantCluster;
@@ -137,6 +138,8 @@ public class DecorationHelper {
 	public static final WorldGenerator GEN_PEBBLE_CLUSTER_WATER = new WorldGenPebbleCluster(BlockRegistry.BETWEENSTONE_PEBBLE_PILE_WATER.getDefaultState()).setUnderwater(true);
 	public static final WorldGenerator GEN_UNDERWATER_RUINS = new WorldGenUnderwaterRuins();
 	
+	public static final WorldGenerator LYESTONE = new WorldGenLyestone();
+	
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
 	private static final CubicBezier THORNS_Y_CDF = new CubicBezier(1, 0.5F, 1, -0.25F);
@@ -165,6 +168,7 @@ public class DecorationHelper {
 	public static boolean populateCaves(BiomeDecoratorBetweenlands decorator) {
 		decorator.generate(2 + getSpeleothemAttemptAdditive(decorator), DecorationHelper::generateSpeleothemCluster);
 		decorator.generate(decorator.getRand().nextInt(3) == 0 ? 2 : 1, DecorationHelper::generateCavePotsCluster);
+		decorator.generate(100, DecorationHelper::generateLyestone);
 		decorator.generate(140, DecorationHelper::generateCaveThornsCluster);
 		decorator.generate(120, DecorationHelper::generateCaveMossCluster);
 		decorator.generate(120, DecorationHelper::generateCaveHangersCluster);
@@ -207,6 +211,13 @@ public class DecorationHelper {
 		int y = (int) (v * (WorldProviderBetweenlands.CAVE_START - 5.0F - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 		int z = decorator.getRandomPosZ();
 		return GEN_CAVE_POTS.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
+	}
+	
+	public static boolean generateLyestone(DecoratorPositionProvider decorator) {
+		int x = decorator.getRandomPosX();
+		int y = WorldProviderBetweenlands.CAVE_START - decorator.getRand().nextInt(WorldProviderBetweenlands.CAVE_START - WorldProviderBetweenlands.PITSTONE_HEIGHT);
+		int z = decorator.getRandomPosZ();
+		return LYESTONE.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
 	}
 
 	public static boolean generateCaveThornsCluster(DecoratorPositionProvider decorator) {

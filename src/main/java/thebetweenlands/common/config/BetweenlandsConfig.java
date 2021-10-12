@@ -1,11 +1,23 @@
 package thebetweenlands.common.config;
 
-import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.Config.*;
-import thebetweenlands.common.config.properties.*;
-import thebetweenlands.common.lib.ModInfo;
-
 import java.io.File;
+
+import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.config.Config.Comment;
+import net.minecraftforge.common.config.Config.Ignore;
+import net.minecraftforge.common.config.Config.LangKey;
+import net.minecraftforge.common.config.Config.Name;
+import net.minecraftforge.common.config.Config.RangeDouble;
+import net.minecraftforge.common.config.Config.RangeInt;
+import net.minecraftforge.common.config.Config.RequiresMcRestart;
+import thebetweenlands.common.config.properties.BlockListProperty;
+import thebetweenlands.common.config.properties.IntSetProperty;
+import thebetweenlands.common.config.properties.ItemDecayFoodProperty;
+import thebetweenlands.common.config.properties.ItemListProperty;
+import thebetweenlands.common.config.properties.PortalDimensionWhitelist;
+import thebetweenlands.common.config.properties.PortalTargetList;
+import thebetweenlands.common.config.properties.StringSetProperty;
+import thebetweenlands.common.lib.ModInfo;
 
 @Config(modid = ModInfo.ID, category = "", name = ModInfo.ID + "/config")
 public class BetweenlandsConfig {
@@ -170,6 +182,13 @@ public class BetweenlandsConfig {
 		@RangeInt(min = 0, max = Integer.MAX_VALUE)
 		@RequiresMcRestart
 		public int oreGenBlockChanceLifeCrystal = 35;
+		
+		@Name("ore_gen_chance_lyestone")
+		@LangKey(LANG_PREFIX + "ore_gen_chance_lyestone")
+		@Comment("Lyestone block chance")
+		@RangeInt(min = 0, max = Integer.MAX_VALUE)
+		@RequiresMcRestart
+		public int oreGenBlockChanceLyestone = 5;
 	}
 
 	@Name("rendering")
