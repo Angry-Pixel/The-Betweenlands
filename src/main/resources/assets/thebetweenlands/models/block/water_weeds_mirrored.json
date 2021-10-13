@@ -1,0 +1,6 @@
+{
+    "parent": "thebetweenlands:block/cross_mirrored",
+    "textures": {
+        "cross": "thebetweenlands:blocks/water_weeds"
+    }
+}
