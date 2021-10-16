@@ -268,7 +268,18 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 		NBTTagCompound nbt = super.getUpdateTag();
 		nbt.setInteger("effectId", this.effect.id);
 		nbt.setInteger("secondaryEffectId", this.secondaryEffect.id);
+		nbt.setBoolean("isActive", this.isActive);
+		nbt.setString("customName", this.customName);
 		return nbt;
+	}
+
+	@Override
+	public void handleUpdateTag(NBTTagCompound tag) {
+		super.handleUpdateTag(tag);
+		this.effect = Effect.byId(tag.getInteger("effectId"));
+		this.secondaryEffect = Effect.byId(tag.getInteger("secondaryEffectId"));
+		this.isActive = tag.getBoolean("isActive");
+		this.customName = tag.getString("customName");
 	}
 
 	@Override
