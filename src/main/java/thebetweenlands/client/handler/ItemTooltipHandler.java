@@ -120,20 +120,26 @@ public class ItemTooltipHandler {
 				usedInMachines.add(I18n.format("tooltip.bl.recipes.purifier"));
 			}
 
+			List<String> amphibiousUpgrades = new ArrayList<>();
+
 			if(AmphibiousArmorUpgrades.getUpgrade(EntityEquipmentSlot.HEAD, stack) != null) {
-				usedInMachines.add(I18n.format("item.thebetweenlands.amphibious_helmet.name"));
+				amphibiousUpgrades.add(I18n.format("tooltip.bl.amphibious_upgrade.helmet"));
 			}
 
 			if(AmphibiousArmorUpgrades.getUpgrade(EntityEquipmentSlot.CHEST, stack) != null) {
-				usedInMachines.add(I18n.format("item.thebetweenlands.amphibious_chestplate.name"));
+				amphibiousUpgrades.add(I18n.format("tooltip.bl.amphibious_upgrade.chestplate"));
 			}
 
 			if(AmphibiousArmorUpgrades.getUpgrade(EntityEquipmentSlot.LEGS, stack) != null) {
-				usedInMachines.add(I18n.format("item.thebetweenlands.amphibious_leggings.name"));
+				amphibiousUpgrades.add(I18n.format("tooltip.bl.amphibious_upgrade.leggings"));
 			}
 
 			if(AmphibiousArmorUpgrades.getUpgrade(EntityEquipmentSlot.FEET, stack) != null) {
-				usedInMachines.add(I18n.format("item.thebetweenlands.amphibious_boots.name"));
+				amphibiousUpgrades.add(I18n.format("tooltip.bl.amphibious_upgrade.boots"));
+			}
+
+			if(amphibiousUpgrades.size() > 0) {
+				usedInMachines.add(I18n.format("tooltip.bl.amphibious_upgrade.format", amphibiousUpgrades.stream().collect(Collectors.joining("/"))));
 			}
 
 			ICompostBinRecipe compostRecipe = CompostRecipe.getCompostRecipe(stack);

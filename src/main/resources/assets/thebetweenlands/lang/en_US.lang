@@ -1266,6 +1266,11 @@ tooltip.bl.item_misc.anadia_swim_bladder=Keeps the fish from sinking... and floa
 tooltip.bl.item_misc.urchin_spike=Offence as defence.
 tooltip.bl.item_misc.lurker_skin=Tough and grounded.
 
+tooltip.bl.amphibious_upgrade.format=Amphibious %s
+tooltip.bl.amphibious_upgrade.helmet=Helmet
+tooltip.bl.amphibious_upgrade.chestplate=Chestplate
+tooltip.bl.amphibious_upgrade.leggings=Leggings
+tooltip.bl.amphibious_upgrade.boots=Boots
 
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing
