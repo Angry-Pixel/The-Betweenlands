@@ -40,7 +40,7 @@ public enum AmphibiousArmorUpgrades implements IAmphibiousArmorUpgrade {
 	BREATHING(new ResourceLocation(ModInfo.ID, "breathing"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.ANADIA_GILLS::isItemOf, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST),
 	// each piece gives 0.125 speed increase up to 4 times, speed is halfed on ground. 4 pieces lets player walk on mud
 	MOVEMENT_SPEED(new ResourceLocation(ModInfo.ID, "movement_speed"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.ANADIA_FINS::isItemOf, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
-	TOUGHNESS(new ResourceLocation(ModInfo.ID, "toughness"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.SLIMY_BONE::isItemOf, AdditiveAttributeUpgrade.TOUGHNESS, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
+	TOUGHNESS(new ResourceLocation(ModInfo.ID, "toughness"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.ANADIA_BONES::isItemOf, AdditiveAttributeUpgrade.TOUGHNESS, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
 	KNOCKBACK_RESISTANCE(new ResourceLocation(ModInfo.ID, "knockback_resistance"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.LURKER_SKIN::isItemOf, AdditiveAttributeUpgrade.KNOCKBACK_RESISTANCE, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS),
 	BUOYANCY(new ResourceLocation(ModInfo.ID, "buoyancy"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.ANADIA_SWIM_BLADDER::isItemOf, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS),
 
