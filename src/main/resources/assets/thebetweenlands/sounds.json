@@ -1451,6 +1451,14 @@
       }
     ]
   },
+  "ambient_deep_waters": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:ambience/ambient_deep_waters",
+        "stream": true
+      }
+    ]
+  },
   "ambient_cave": {
     "sounds": [
       {

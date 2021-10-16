@@ -88,7 +88,7 @@ public class ItemAmphibiousArmourUpgradeToggle extends Item {
 						stack.getTagCompound().setInteger("scrollPos", stack.getTagCompound().getInteger("scrollPos") + 1);
 					if (stack.getTagCompound().getInteger("scrollPos") >= scrollSize)
 						stack.getTagCompound().setInteger("scrollPos", 0);
-					player.sendStatusMessage(new TextComponentTranslation("chat.aa_toggle.selected_effect", new TextComponentTranslation("" + upgradeListChest.get(stack.getTagCompound().getInteger("scrollPos")))), true);
+					player.sendStatusMessage(new TextComponentTranslation("chat.aa_toggle.selected_effect", getUpgradeName((AmphibiousArmorUpgrades) upgradeListChest.get(stack.getTagCompound().getInteger("scrollPos")))), true);
 				}
 			}
 
@@ -167,6 +167,37 @@ public class ItemAmphibiousArmourUpgradeToggle extends Item {
             return false;
         }
         return true;
+    }
+    
+    private TextComponentTranslation getUpgradeName(AmphibiousArmorUpgrades upgrade) {
+    	switch (upgrade) {
+		case AQUA_GEM:
+		case BREATHING:
+		case BUOYANCY:
+		case CRIMSON_GEM:
+		case DECAY_DECREASE:
+		case GREEN_GEM:
+		case KNOCKBACK_RESISTANCE:
+		case MINING_SPEED:
+		case MOVEMENT_SPEED:
+		case THORNS:
+		case TOUGHNESS:
+		case VISIBILITY:
+		break;
+		case ASCENT_BOOST:
+			return new TextComponentTranslation("chat.aa_item.ascent");
+		case ELECTRIC:
+			return new TextComponentTranslation("chat.aa_item.electric");
+		case FISH_VORTEX:
+			return new TextComponentTranslation("chat.aa_item.vortex");
+		case GLIDE:
+			return new TextComponentTranslation("chat.aa_item.glide");
+		case URCHIN:
+			return new TextComponentTranslation("chat.aa_item.urchin_spikes");
+		default:
+			break;
+    	}
+		return new TextComponentTranslation("");
     }
 
 	private void initAllowedUpgradeMap() {
