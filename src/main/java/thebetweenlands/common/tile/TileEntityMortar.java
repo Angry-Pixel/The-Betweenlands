@@ -234,6 +234,27 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
         manualGrinding = nbt.getBoolean("manualGrinding");
     }
 
+    @Override
+    public NBTTagCompound getUpdateTag() {
+    	NBTTagCompound nbt = super.getUpdateTag();
+        nbt.setInteger("progress", progress);
+        nbt.setBoolean("hasPestle", hasPestle);
+        nbt.setBoolean("hasCrystal", hasCrystal);
+        nbt.setBoolean("manualGrinding", manualGrinding);
+        this.writeInventoryNBT(nbt);
+    	return nbt;
+    }
+
+    @Override
+    public void handleUpdateTag(NBTTagCompound tag) {
+    	super.handleUpdateTag(tag);
+    	progress = tag.getInteger("progress");
+        hasPestle = tag.getBoolean("hasPestle");
+        hasCrystal = tag.getBoolean("hasCrystal");
+        manualGrinding = tag.getBoolean("manualGrinding");
+        this.readInventoryNBT(tag);
+    }
+    
     @Nullable
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
@@ -254,7 +275,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
         manualGrinding = packet.getNbtCompound().getBoolean("manualGrinding");
         this.readInventoryNBT(packet.getNbtCompound());
     }
-
+    
     @Override
     public int[] getSlotsForFace(EnumFacing side) {
         switch(side) {
