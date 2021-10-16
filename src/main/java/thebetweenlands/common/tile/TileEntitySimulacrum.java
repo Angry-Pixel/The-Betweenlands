@@ -235,7 +235,7 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 		compound = super.writeToNBT(compound);
 
 		compound.setInteger("effectId", this.effect.id);
-		compound.setInteger("secondaryEffectId", this.effect.id);
+		compound.setInteger("secondaryEffectId", this.secondaryEffect.id);
 		compound.setBoolean("isActive", this.isActive);
 		compound.setString("customName", this.customName);
 
