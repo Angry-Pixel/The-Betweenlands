@@ -978,8 +978,8 @@ item.thebetweenlands.aa_upgrade_glide.name=Glide
 item.thebetweenlands.aa_upgrade_leap.name=Ascent
 item.thebetweenlands.aa_upgrade_urchin.name=Urchin Spikes
 item.thebetweenlands.aa_upgrade_vortex.name=Fish Vortex
-item.thebetweenlands.aa_upgrade_trigger.name=Carved Talisman Stone of Amphibious Armour Shooty Stuff (temp name ofc)
-item.thebetweenlands.aa_upgrade_toggle.name=Carved Talisman Stone of Amphibious Armour Toggle Stuff (temp name ofc)
+item.thebetweenlands.aa_upgrade_trigger.name=Biopathic Linkstone Activator
+item.thebetweenlands.aa_upgrade_toggle.name=Biopathic Linkstone Controller
 item.thebetweenlands.mist_staff.name=Staff of the Mist walker
 item.thebetweenlands.shadow_staff.name=Staff of the Shadow walker
 
