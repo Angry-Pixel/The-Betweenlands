@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -117,6 +118,28 @@ public class ItemTooltipHandler {
 
 			if(!PurifierRecipe.getRecipeOutput(stack).isEmpty()) {
 				usedInMachines.add(I18n.format("tooltip.bl.recipes.purifier"));
+			}
+
+			List<String> amphibiousUpgrades = new ArrayList<>();
+
+			if(AmphibiousArmorUpgrades.getUpgrade(EntityEquipmentSlot.HEAD, stack) != null) {
+				amphibiousUpgrades.add(I18n.format("tooltip.bl.amphibious_upgrade.helmet"));
+			}
+
+			if(AmphibiousArmorUpgrades.getUpgrade(EntityEquipmentSlot.CHEST, stack) != null) {
+				amphibiousUpgrades.add(I18n.format("tooltip.bl.amphibious_upgrade.chestplate"));
+			}
+
+			if(AmphibiousArmorUpgrades.getUpgrade(EntityEquipmentSlot.LEGS, stack) != null) {
+				amphibiousUpgrades.add(I18n.format("tooltip.bl.amphibious_upgrade.leggings"));
+			}
+
+			if(AmphibiousArmorUpgrades.getUpgrade(EntityEquipmentSlot.FEET, stack) != null) {
+				amphibiousUpgrades.add(I18n.format("tooltip.bl.amphibious_upgrade.boots"));
+			}
+
+			if(amphibiousUpgrades.size() > 0) {
+				usedInMachines.add(I18n.format("tooltip.bl.amphibious_upgrade.format", amphibiousUpgrades.stream().collect(Collectors.joining("/"))));
 			}
 
 			ICompostBinRecipe compostRecipe = CompostRecipe.getCompostRecipe(stack);

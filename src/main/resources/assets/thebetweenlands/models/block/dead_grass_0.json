@@ -1,0 +1,53 @@
+{
+	"parent": "block/block",
+	"textures": {
+		"top": "thebetweenlands:blocks/dead_grass_top",
+		"particle": "thebetweenlands:blocks/swamp_dirt",
+		"bottom": "thebetweenlands:blocks/swamp_dirt",
+		"extra": "thebetweenlands:blocks/dead_grass_extra",
+		"side": "thebetweenlands:blocks/dead_grass_side",
+		"overlay": "thebetweenlands:blocks/dead_grass_side"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#side"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#side"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#side"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#side"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#top" },
+				"down": {"uv": [0, 0, 16, 16], "texture": "#bottom"}
+			}
+		},
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#overlay"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#overlay"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#overlay"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#overlay"}
+			}
+		},
+		{
+			"from": [8, 16, 0],
+			"to": [8, 20, 16],
+			"shade": false,
+			"faces": {
+				"east": {"uv": [0, 12, 16, 16], "texture": "#extra"},
+				"west": {"uv": [0, 12, 16, 16], "texture": "#extra"}
+			}
+		},
+		{
+			"from": [0, 16, 8],
+			"to": [16, 20, 8],
+			"shade": false,
+			"faces": {
+				"north": {"uv": [0, 12, 16, 16], "texture": "#extra"},
+				"south": {"uv": [0, 12, 16, 16], "texture": "#extra"}
+			}
+		}
+	]
+}

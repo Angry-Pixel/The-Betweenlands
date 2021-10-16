@@ -978,8 +978,8 @@ item.thebetweenlands.aa_upgrade_glide.name=Glide
 item.thebetweenlands.aa_upgrade_leap.name=Ascent
 item.thebetweenlands.aa_upgrade_urchin.name=Urchin Spikes
 item.thebetweenlands.aa_upgrade_vortex.name=Fish Vortex
-item.thebetweenlands.aa_upgrade_trigger.name=Carved Talisman Stone of Amphibious Armour Shooty Stuff (temp name ofc)
-item.thebetweenlands.aa_upgrade_toggle.name=Carved Talisman Stone of Amphibious Armour Toggle Stuff (temp name ofc)
+item.thebetweenlands.aa_upgrade_trigger.name=Biopathic Linkstone Activator
+item.thebetweenlands.aa_upgrade_toggle.name=Biopathic Linkstone Controller
 item.thebetweenlands.mist_staff.name=Staff of the Mist walker
 item.thebetweenlands.shadow_staff.name=Staff of the Shadow walker
 
@@ -1254,7 +1254,23 @@ tooltip.bl.fish_bait.glowing=Glowing: %s
 tooltip.bl.fishing_rod.baited=Has Worm: %s
 
 tooltip.bl.fumigant=Removes the Stench of Rot on a Player
-tooltip.bl.fishing_spear_animated=Animated: 
+tooltip.bl.fishing_spear_animated=Animated:
+
+tooltip.bl.item_misc.snot=Seems to barely have drag in water.
+tooltip.bl.item_misc.anadia_eye=Made for aquatic sight.
+tooltip.bl.item_misc.anadia_gills=Fish don't hold their breath.
+tooltip.bl.item_misc.anadia_scales=Forms a protective layer.
+tooltip.bl.item_misc.anadia_bones=Thin, but resilient.
+tooltip.bl.item_misc.anadia_fins=They glide through the water like wings through air.
+tooltip.bl.item_misc.anadia_swim_bladder=Keeps the fish from sinking... and floating.
+tooltip.bl.item_misc.urchin_spike=Offence as defence.
+tooltip.bl.item_misc.lurker_skin=Tough and grounded.
+
+tooltip.bl.amphibious_upgrade.format=Amphibious %s
+tooltip.bl.amphibious_upgrade.helmet=Helmet
+tooltip.bl.amphibious_upgrade.chestplate=Chestplate
+tooltip.bl.amphibious_upgrade.leggings=Leggings
+tooltip.bl.amphibious_upgrade.boots=Boots
 
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing
@@ -1393,6 +1409,12 @@ chat.wind_chime.changed_attunement=Attuned to '%s'
 chat.wind_chime.removed_attunement=Attuned to any event
 
 chat.aa_trigger.selected_effect=Attuned to: %s
+
+chat.aa_item.ascent=Ascent
+chat.aa_item.electric=Electric
+chat.aa_item.vortex=Vortex
+chat.aa_item.glide=Glide
+chat.aa_item.urchin_spikes=Urchin Spikes
 
 chat.aa_toggle.selected_effect=Selected Effect: %s
 chat.aa_toggle.urchin_active=Urchin Active: %s
