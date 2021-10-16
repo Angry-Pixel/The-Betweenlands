@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -19,9 +21,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.item.IAmphibiousArmorUpgrade;
+import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.ItemRegistry;
+
+import javax.annotation.Nullable;
 
 public class ItemAmphibiousArmourUpgradeTrigger extends Item {
 
@@ -60,6 +67,12 @@ public class ItemAmphibiousArmourUpgradeTrigger extends Item {
 			}
 			return 0;
 		});
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.amphibious_ability.trigger"), 0));
 	}
 
 	public boolean isValidUpgrade(IAmphibiousArmorUpgrade upgradeIn) {

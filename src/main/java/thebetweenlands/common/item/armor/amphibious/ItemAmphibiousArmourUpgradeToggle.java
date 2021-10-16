@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -17,9 +19,16 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.item.IAmphibiousArmorUpgrade;
+import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.item.IGenericItem;
+import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
+
+import javax.annotation.Nullable;
 
 public class ItemAmphibiousArmourUpgradeToggle extends Item {
 
@@ -31,6 +40,12 @@ public class ItemAmphibiousArmourUpgradeToggle extends Item {
 		this.setMaxDamage(600);
 		this.setCreativeTab(BLCreativeTabs.GEARS);
 		initAllowedUpgradeMap();
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.amphibious_ability.toggle"), 0));
 	}
 
 	public boolean isValidUpgrade(IAmphibiousArmorUpgrade upgradeIn) {
