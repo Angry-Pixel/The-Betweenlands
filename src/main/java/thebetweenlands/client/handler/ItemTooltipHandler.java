@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -117,6 +118,22 @@ public class ItemTooltipHandler {
 
 			if(!PurifierRecipe.getRecipeOutput(stack).isEmpty()) {
 				usedInMachines.add(I18n.format("tooltip.bl.recipes.purifier"));
+			}
+
+			if(AmphibiousArmorUpgrades.getUpgrade(EntityEquipmentSlot.HEAD, stack) != null) {
+				usedInMachines.add(I18n.format("item.thebetweenlands.amphibious_helmet.name"));
+			}
+
+			if(AmphibiousArmorUpgrades.getUpgrade(EntityEquipmentSlot.CHEST, stack) != null) {
+				usedInMachines.add(I18n.format("item.thebetweenlands.amphibious_chestplate.name"));
+			}
+
+			if(AmphibiousArmorUpgrades.getUpgrade(EntityEquipmentSlot.LEGS, stack) != null) {
+				usedInMachines.add(I18n.format("item.thebetweenlands.amphibious_leggings.name"));
+			}
+
+			if(AmphibiousArmorUpgrades.getUpgrade(EntityEquipmentSlot.FEET, stack) != null) {
+				usedInMachines.add(I18n.format("item.thebetweenlands.amphibious_boots.name"));
 			}
 
 			ICompostBinRecipe compostRecipe = CompostRecipe.getCompostRecipe(stack);
