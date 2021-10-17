@@ -206,7 +206,7 @@ public class ItemAmphibiousArmourUpgradeToggle extends Item {
 			ALLOWED_UPGRADES.put(AmphibiousArmorUpgrades.URCHIN.getUpgrade(EntityEquipmentSlot.CHEST, new ItemStack(ItemRegistry.AA_UPGRADE_URCHIN)), true);
 			ALLOWED_UPGRADES.put(AmphibiousArmorUpgrades.ELECTRIC.getUpgrade(EntityEquipmentSlot.CHEST, new ItemStack(ItemRegistry.AA_UPGRADE_ELECTRIC)), true);
 			ALLOWED_UPGRADES.put(AmphibiousArmorUpgrades.GLIDE.getUpgrade(EntityEquipmentSlot.CHEST, new ItemStack(ItemRegistry.AA_UPGRADE_GLIDE)), true);
-			ALLOWED_UPGRADES.put(AmphibiousArmorUpgrades.ASCENT_BOOST.getUpgrade(EntityEquipmentSlot.LEGS, new ItemStack(ItemRegistry.AA_UPGRADE_LEAP)), true);
+			//ALLOWED_UPGRADES.put(AmphibiousArmorUpgrades.ASCENT_BOOST.getUpgrade(EntityEquipmentSlot.LEGS, new ItemStack(ItemRegistry.AA_UPGRADE_LEAP)), true);
 		}
 	}
 }

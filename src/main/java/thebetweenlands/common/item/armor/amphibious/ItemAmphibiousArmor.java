@@ -184,10 +184,10 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 			int ascentBoostTicks = nbt.getInteger(NBT_ASCENT_BOOST_TICKS);
 
 			if(itemStack.getItem() == ItemRegistry.AMPHIBIOUS_LEGGINGS) {
-				if(this.getUpgradeCount(itemStack, AmphibiousArmorUpgrades.ASCENT_BOOST) >= 1 && itemStack.getTagCompound().getBoolean("ascentAuto")) {
+				if(this.getUpgradeCount(itemStack, AmphibiousArmorUpgrades.ASCENT_BOOST) >= 1) {
 					if(player.isSneaking() && player.onGround && !nbt.getBoolean(NBT_ASCENT_BOOST)) {
 						nbt.setInteger(NBT_ASCENT_BOOST_TICKS, ++ascentBoostTicks);
-					} else if(!player.isSneaking()) {
+					} else if(!player.isSneaking() && player.isInWater()) {
 						if(ascentBoostTicks > 10 && !nbt.getBoolean(NBT_ASCENT_BOOST)) {
 							ascentBoostTicks = 30;
 							nbt.setInteger(NBT_ASCENT_BOOST_TICKS, ascentBoostTicks);
@@ -213,6 +213,7 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 				}
 			}
 
+			/*
 			if(nbt.getBoolean(NBT_ASCENT_BOOST)) {
 				player.fallDistance = 0;
 
@@ -220,8 +221,9 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 					ascentBoostTicks = 0;
 				}
 			}
+			*/
 
-			if(ascentBoostTicks <= 0) {
+			if(ascentBoostTicks <= 0 || !player.isInWater()) {
 				nbt.setInteger(NBT_ASCENT_BOOST_TICKS, ascentBoostTicks = 0);
 				nbt.setBoolean(NBT_ASCENT_BOOST, false);
 			}
