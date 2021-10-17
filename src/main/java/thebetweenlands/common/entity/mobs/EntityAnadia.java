@@ -55,6 +55,7 @@ import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.util.TranslationHelper;
 
 public class EntityAnadia extends EntityCreature implements IEntityBL {
@@ -174,7 +175,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 			setFishColour(EnumAnadiaColor.SILVER);
 		else if(getEntityWorld().getBiome(getPosition()) == BiomeRegistry.PATCHY_ISLANDS)
 			setFishColour(EnumAnadiaColor.GREEN);
-		else if(getEntityWorld().getBiome(getPosition()) == BiomeRegistry.COARSE_ISLANDS)
+		else if(getEntityWorld().getBiome(getPosition()) == BiomeRegistry.COARSE_ISLANDS || getEntityWorld().getBiome(getPosition()) == BiomeRegistry.RAISED_ISLES)
 			setFishColour(EnumAnadiaColor.PURPLE);
 		else
 			setFishColour(EnumAnadiaColor.BASE);
@@ -547,7 +548,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
+		return world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ))).getBlock() == BlockRegistry.SWAMP_WATER && MathHelper.floor(posY) <= WorldProviderBetweenlands.LAYER_HEIGHT;
 	}
 
 	public boolean isGrounded() {
