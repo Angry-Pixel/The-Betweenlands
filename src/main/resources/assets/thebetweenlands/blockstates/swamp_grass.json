@@ -40,14 +40,14 @@
 			{
 				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
-					"model_base": "thebetweenlands:block/swamp_grass_0",
+					"model_base": "thebetweenlands:block/swamp_grass_2",
 					"model_active": "thebetweenlands:block/swamp_grass_frosty"
 				}
 			},
 			{
 				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
-					"model_base": "thebetweenlands:block/swamp_grass_0",
+					"model_base": "thebetweenlands:block/swamp_grass_2",
 					"model_active": "thebetweenlands:block/swamp_grass_frosty"
 				},
 				"y": 90
@@ -55,7 +55,7 @@
 			{
 				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
-					"model_base": "thebetweenlands:block/swamp_grass_0",
+					"model_base": "thebetweenlands:block/swamp_grass_2",
 					"model_active": "thebetweenlands:block/swamp_grass_frosty"
 				},
 				"y": 180
@@ -63,7 +63,7 @@
 			{
 				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
-					"model_base": "thebetweenlands:block/swamp_grass_0",
+					"model_base": "thebetweenlands:block/swamp_grass_2",
 					"model_active": "thebetweenlands:block/swamp_grass_frosty"
 				},
 				"y": 270
@@ -71,14 +71,14 @@
 			{
 				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
-					"model_base": "thebetweenlands:block/swamp_grass_1",
+					"model_base": "thebetweenlands:block/swamp_grass_2",
 					"model_active": "thebetweenlands:block/swamp_grass_frosty"
 				}
 			},
 			{
 				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
-					"model_base": "thebetweenlands:block/swamp_grass_1",
+					"model_base": "thebetweenlands:block/swamp_grass_2",
 					"model_active": "thebetweenlands:block/swamp_grass_frosty"
 				},
 				"y": 90
@@ -86,7 +86,7 @@
 			{
 				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
-					"model_base": "thebetweenlands:block/swamp_grass_1",
+					"model_base": "thebetweenlands:block/swamp_grass_2",
 					"model_active": "thebetweenlands:block/swamp_grass_frosty"
 				},
 				"y": 180
@@ -94,7 +94,7 @@
 			{
 				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
-					"model_base": "thebetweenlands:block/swamp_grass_1",
+					"model_base": "thebetweenlands:block/swamp_grass_2",
 					"model_active": "thebetweenlands:block/swamp_grass_frosty"
 				},
 				"y": 270
