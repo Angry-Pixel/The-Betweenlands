@@ -1,13 +1,19 @@
 package thebetweenlands.common.item.armor.amphibious;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.UUID;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.Multimap;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
@@ -15,6 +21,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
@@ -22,11 +29,11 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -40,13 +47,14 @@ import thebetweenlands.common.inventory.InventoryAmphibiousArmor;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.Item3DArmor;
 import thebetweenlands.common.proxy.CommonProxy;
-import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.NBTHelper;
 
 public class ItemAmphibiousArmor extends Item3DArmor {
 	private static final Random UID_RNG = new Random();
 
+	private static final String NBT_WORN_UPGRADE_MAP_KEY = "thebetweenlands.worn_amphibious_armor_upgrades";
+	
 	private static final String NBT_UPGRADE_MAP_KEY = "thebetweenlands.amphibious_armor_upgrades";
 	private static final String NBT_DAMAGE_MAP_KEY = "thebetweenlands.amphibious_armor_damage";
 	private static final String NBT_UPGRADE_FILTER_KEY = "thebetweenlands.amphibious_armor_upgrade_filters";
@@ -96,6 +104,47 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+		if(!world.isRemote) {
+			Map<IAmphibiousArmorUpgrade, Map<EntityEquipmentSlot, Integer>> wornUpgrades = getWornUpgradeCounts(player);
+			
+			NBTTagCompound nbt = itemStack.getTagCompound();
+			
+			if(!wornUpgrades.isEmpty()) {
+				if(nbt == null) {
+					nbt = new NBTTagCompound();
+				}
+				
+				NBTTagList wornUpgradesNbt = new NBTTagList();
+				
+				for(Entry<IAmphibiousArmorUpgrade, Map<EntityEquipmentSlot, Integer>> upgrade : wornUpgrades.entrySet()) {
+					NBTTagCompound upgradeNbt = new NBTTagCompound();
+					
+					upgradeNbt.setString("id", upgrade.getKey().getId().toString());
+					
+					NBTTagList countsNbt = new NBTTagList();
+					
+					for(Entry<EntityEquipmentSlot, Integer> count : upgrade.getValue().entrySet()) {
+						NBTTagCompound countNbt = new NBTTagCompound();
+						
+						countNbt.setString("slot", count.getKey().getName());
+						countNbt.setInteger("count", count.getValue());
+						
+						countsNbt.appendTag(countNbt);
+					}
+					
+					upgradeNbt.setTag("counts", countsNbt);
+					
+					wornUpgradesNbt.appendTag(upgradeNbt);
+				}
+				
+				nbt.setTag(NBT_WORN_UPGRADE_MAP_KEY, wornUpgradesNbt);
+				
+				itemStack.setTagCompound(nbt);
+			} else if(nbt != null) {
+				nbt.removeTag(NBT_WORN_UPGRADE_MAP_KEY);
+			}
+		}
+		
 		if(!player.isSpectator()) {
 			NonNullList<ItemStack> armor = player.inventory.armorInventory;
 			int armorPieces = 0;
@@ -334,7 +383,17 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 
 		//TODO Testing
 		for(IAmphibiousArmorUpgrade upgrade : AmphibiousArmorUpgrades.values()) {
-			System.out.println(upgrade.getId() + ": " + this.getUpgradeCount(stack, upgrade));
+			int count = this.getUpgradeCount(stack, upgrade);
+			if(count > 0) {
+				Map<IAmphibiousArmorUpgrade, Map<EntityEquipmentSlot, Integer>> counts = getWornUpgradeCounts(stack);
+				int wornCount = 0;
+				if(counts.containsKey(upgrade)) {
+					for(Entry<EntityEquipmentSlot, Integer> entry : counts.get(upgrade).entrySet()) {
+						wornCount += entry.getValue();
+					}
+				}
+				System.out.println(upgrade.getId() + ": " + count + " / " + wornCount);
+			}
 		}
 
 		if (player.isSneaking()) {
@@ -354,7 +413,7 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 				int count = this.getUpgradeCount(stack, upgrade);
 
 				if(count > 0) {
-					upgrade.applyAttributeModifiers(this.armorType, stack, count, modifiers);
+					upgrade.applyAttributeModifiers(this.armorType, stack, count, getWornUpgradeCounts(stack), modifiers);
 				}
 			}
 		}
@@ -425,6 +484,60 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 		return count;
 	}
 
+
+	public static Map<IAmphibiousArmorUpgrade, Map<EntityEquipmentSlot, Integer>> getWornUpgradeCounts(EntityLivingBase entity) {
+		Map<IAmphibiousArmorUpgrade, Map<EntityEquipmentSlot, Integer>> upgrades = new HashMap<>();
+		for(EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+			if(slot.getSlotType() == EntityEquipmentSlot.Type.ARMOR) {
+				ItemStack stack = entity.getItemStackFromSlot(slot);
+				if(!stack.isEmpty() && stack.getItem() instanceof ItemAmphibiousArmor) {
+					for(IAmphibiousArmorUpgrade upgrade : AmphibiousArmorUpgrades.getUpgrades(slot)) {
+						int count = ((ItemAmphibiousArmor) stack.getItem()).getUpgradeCount(stack, upgrade);
+						if(count > 0) {
+							Map<EntityEquipmentSlot, Integer> counts = upgrades.get(upgrade);
+							if(counts == null) {
+								upgrades.put(upgrade, counts = new HashMap<>());
+							}
+							counts.put(slot, count);
+						}
+					}
+				}
+			}
+		}
+		return upgrades;
+	}
+	
+	public static Map<IAmphibiousArmorUpgrade, Map<EntityEquipmentSlot, Integer>> getWornUpgradeCounts(ItemStack stack) {
+		Map<IAmphibiousArmorUpgrade, Map<EntityEquipmentSlot, Integer>> wornUpgrades = new HashMap<>();
+		
+		NBTTagCompound nbt = stack.getTagCompound();
+		
+		if(nbt != null && nbt.hasKey(NBT_WORN_UPGRADE_MAP_KEY, Constants.NBT.TAG_LIST)) {
+			NBTTagList wornUpgradesNbt = nbt.getTagList(NBT_WORN_UPGRADE_MAP_KEY, Constants.NBT.TAG_COMPOUND);
+			
+			for(int i = 0; i < wornUpgradesNbt.tagCount(); i++) {
+				NBTTagCompound upgradeNbt = wornUpgradesNbt.getCompoundTagAt(i);
+				
+				IAmphibiousArmorUpgrade upgrade = AmphibiousArmorUpgrades.getUpgrade(new ResourceLocation(upgradeNbt.getString("id")));
+				
+				if(upgrade != null) {
+					NBTTagList countsNbt = upgradeNbt.getTagList("counts", Constants.NBT.TAG_COMPOUND);
+
+					Map<EntityEquipmentSlot, Integer> counts = new HashMap<>();
+					
+					for(int j = 0; j < countsNbt.tagCount(); j++) {
+						NBTTagCompound countNbt = countsNbt.getCompoundTagAt(j);
+						counts.put(EntityEquipmentSlot.fromString(countNbt.getString("slot")), countNbt.getInteger("count"));
+					}
+					
+					wornUpgrades.put(upgrade, counts);
+				}
+			}
+		}
+		
+		return wornUpgrades;
+	}
+	
 	public int getUpgradeCount(ItemStack stack, IAmphibiousArmorUpgrade upgrade) {
 		NBTTagCompound nbt = stack.getTagCompound();
 

@@ -1,6 +1,9 @@
 package thebetweenlands.api.item;
 
+import java.util.Map;
 import java.util.Set;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.Multimap;
 
@@ -24,7 +27,7 @@ public interface IAmphibiousArmorUpgrade extends IAmphibiousArmorAttributeUpgrad
 	public Set<EntityEquipmentSlot> getArmorTypes();
 
 	@Override
-	public default void applyAttributeModifiers(EntityEquipmentSlot armorType, ItemStack armor, int count, Multimap<String, AttributeModifier> modifiers) { }
+	public default void applyAttributeModifiers(EntityEquipmentSlot armorType, ItemStack armor, int count, Map<IAmphibiousArmorUpgrade, Map<EntityEquipmentSlot, Integer>> counts, Multimap<String, AttributeModifier> modifiers) { }
 
 	public default void onChanged(EntityEquipmentSlot armorType, ItemStack armor, ItemStack stack) { }
 
