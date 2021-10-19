@@ -1,6 +1,9 @@
 package thebetweenlands.common.item.armor.amphibious;
 
+import java.util.Map;
 import java.util.UUID;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.Multimap;
 
@@ -10,6 +13,7 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.api.item.IAmphibiousArmorAttributeUpgrade;
+import thebetweenlands.api.item.IAmphibiousArmorUpgrade;
 
 public class AdditiveAttributeUpgrade implements IAmphibiousArmorAttributeUpgrade {
 	public static final AdditiveAttributeUpgrade TOUGHNESS = new AdditiveAttributeUpgrade(SharedMonsterAttributes.ARMOR_TOUGHNESS, UUID.fromString("37b0ef4b-7e67-4734-a281-cb02d5a154a1"), "Armor toughness", 0.5D);
@@ -29,7 +33,7 @@ public class AdditiveAttributeUpgrade implements IAmphibiousArmorAttributeUpgrad
 	}
 
 	@Override
-	public void applyAttributeModifiers(EntityEquipmentSlot armorType, ItemStack stack, int count, Multimap<String, AttributeModifier> modifiers) {
+	public void applyAttributeModifiers(EntityEquipmentSlot armorType, ItemStack stack, int count, Map<IAmphibiousArmorUpgrade, Map<EntityEquipmentSlot, Integer>> counts, Multimap<String, AttributeModifier> modifiers) {
 		modifiers.put(this.attribute.getName(), new AttributeModifier(this.uuid, this.name, this.amount * count, 0));
 	}
 }

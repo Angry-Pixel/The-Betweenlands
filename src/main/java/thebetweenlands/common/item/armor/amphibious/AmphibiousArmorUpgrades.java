@@ -12,6 +12,8 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
@@ -136,9 +138,9 @@ public enum AmphibiousArmorUpgrades implements IAmphibiousArmorUpgrade {
 	}
 
 	@Override
-	public void applyAttributeModifiers(EntityEquipmentSlot armorType, ItemStack stack, int count, Multimap<String, AttributeModifier> modifiers) {
+	public void applyAttributeModifiers(EntityEquipmentSlot armorType, ItemStack stack, int count, Map<IAmphibiousArmorUpgrade, Map<EntityEquipmentSlot, Integer>> counts, Multimap<String, AttributeModifier> modifiers) {
 		if(this.attributeUpgrade != null) {
-			this.attributeUpgrade.applyAttributeModifiers(armorType, stack, count, modifiers);
+			this.attributeUpgrade.applyAttributeModifiers(armorType, stack, count, counts, modifiers);
 		}
 	}
 
