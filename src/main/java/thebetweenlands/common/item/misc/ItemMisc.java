@@ -147,7 +147,8 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 		ANADIA_FINS(57),
 		SNOT(58),
 		URCHIN_SPIKE(59),
-		FISHING_FLOAT(60);
+		FISHING_FLOAT(60),
+		OLMLETTE_MIXTURE(61);
 
 		private final int id;
 		private final String unlocalizedName;

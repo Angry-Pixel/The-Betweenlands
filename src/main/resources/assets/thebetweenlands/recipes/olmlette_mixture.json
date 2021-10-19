@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FB",
+    "EE"
+  ],
+  "key": {
+    "F": {
+      "item": "thebetweenlands:flat_head_mushroom_item"
+    },
+    "B": {
+      "item": "thebetweenlands:black_hat_mushroom_item"
+    },
+    "E": {
+      "item": "thebetweenlands:olm_egg_raw"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:items_misc",
+    "data": 61
+  }
+}

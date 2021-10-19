@@ -982,6 +982,10 @@ item.thebetweenlands.aa_upgrade_trigger.name=Biopathic Triggerstone
 item.thebetweenlands.aa_upgrade_toggle.name=Biopathic Linkstone
 item.thebetweenlands.mist_staff.name=Staff of the Mist walker
 item.thebetweenlands.shadow_staff.name=Staff of the Shadow walker
+item.thebetweenlands.olm_egg_raw.name=Raw Olm Egg
+item.thebetweenlands.olm_egg_cooked.name=Baked Olm Egg
+item.thebetweenlands.olmlette_mixture.name=Olmlette Mixture
+item.thebetweenlands.olmlette.name=Olmlette
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial

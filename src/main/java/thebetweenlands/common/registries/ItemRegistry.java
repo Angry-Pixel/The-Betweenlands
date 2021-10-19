@@ -284,6 +284,10 @@ public class ItemRegistry {
     public static final Item PUFFSHROOM_TENDRIL_SMOKED = new ItemBLFood(8, 0.8F, false);
     public static final Item SILT_CRAB_CLAW_SMOKED = new ItemBLFood(4, 0.8F, false);
     public static final Item SNAIL_FLESH_SMOKED = new ItemBLFood(6, 0.9F, false);
+    
+    public static final Item OLM_EGG_RAW = new ItemBLFood(1, 0.2F, false);
+    public static final Item OLM_EGG_COOKED = new ItemBLFood(2, 0.2F, false);
+    public static final Item OLMLETTE = new ItemBLFood(8, 0.6F, false);
 
     //armor
     public static final Item BONE_HELMET = new ItemBoneArmor(EntityEquipmentSlot.HEAD);

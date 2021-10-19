@@ -280,6 +280,8 @@ public class RecipeRegistry {
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.MUD_TILES, 1, 0), new ItemStack(BlockRegistry.MUD_TILES, 1, 2), 0.1F);
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.FILTERED_SILT), new ItemStack(BlockRegistry.FILTERED_SILT_GLASS), 0.3F);
 		GameRegistry.addSmelting(new ItemStack(ItemRegistry.BARNACLE), new ItemStack(ItemRegistry.BARNACLE_COOKED), 0.1F);
+		GameRegistry.addSmelting(new ItemStack(ItemRegistry.OLM_EGG_RAW), new ItemStack(ItemRegistry.OLM_EGG_COOKED), 0.1F);
+		GameRegistry.addSmelting(EnumItemMisc.OLMLETTE_MIXTURE.create(1), new ItemStack(ItemRegistry.OLMLETTE), 0.1F);
 
 		//smelt to nuggets
 		GameRegistry.addSmelting(ItemRegistry.VALONITE_AXE, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);

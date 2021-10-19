@@ -14,22 +14,28 @@ import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 public class EntityOlm extends EntityCreature implements IEntityBL {
+	public long egg_cooldown;
 
     public EntityOlm(World world) {
         super(world);
@@ -39,6 +45,11 @@ public class EntityOlm extends EntityCreature implements IEntityBL {
         setPathPriority(PathNodeType.BLOCKED, -8.0F);
         setPathPriority(PathNodeType.WATER, 16.0F);
     }
+
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+	}
 
     @Override
     protected void initEntityAI() {
@@ -112,8 +123,49 @@ public class EntityOlm extends EntityCreature implements IEntityBL {
 	public void onUpdate() {
 		super.onUpdate();
 	}
+	
+	@Override
+	public boolean processInteract(EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.getHeldItem(hand);
+		player.swingArm(hand);
+		if (!getEntityWorld().isRemote && !stack.isEmpty() && EnumItemMisc.SNOT.isItemOf(stack) && getCanLayEgg()) {
+			if (!player.capabilities.isCreativeMode) {
+				stack.shrink(1);
+				if (stack.getCount() <= 0)
+					player.setHeldItem(hand, ItemStack.EMPTY);
+			}
+			setEggCooldown(getEntityWorld().getTotalWorldTime() + 24000);
+			entityDropItem(new ItemStack(ItemRegistry.OLM_EGG_RAW), 0F);
+			return true;
+		}
+		return super.processInteract(player, hand);
+	}
 
-    @Override
+    private boolean getCanLayEgg() {
+		return getEntityWorld().getTotalWorldTime() >= getEggCooldown();
+	}
+
+	public void setEggCooldown(long cooldownTime) {
+		egg_cooldown = cooldownTime;
+	}
+
+	public long getEggCooldown() {
+		return egg_cooldown;
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
+		nbt.setLong("egg_cooldown", getEggCooldown());
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
+		setEggCooldown(nbt.getLong("egg_cooldown"));
+	}
+
+	@Override
     public void travel(float strafe, float up, float forward) {
         if (isServerWorld()) {
             if (isInWater()) {
