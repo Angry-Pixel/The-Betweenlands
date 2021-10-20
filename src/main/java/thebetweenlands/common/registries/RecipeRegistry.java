@@ -79,6 +79,7 @@ import thebetweenlands.common.recipe.misc.RecipeGrapplingHookUpgrades;
 import thebetweenlands.common.recipe.misc.RecipeLurkerSkinPouchUpgrades;
 import thebetweenlands.common.recipe.misc.RecipeMarshRunnerBoots;
 import thebetweenlands.common.recipe.misc.RecipeMummyBait;
+import thebetweenlands.common.recipe.misc.RecipeOlmletteMixture;
 import thebetweenlands.common.recipe.misc.RecipeSapSpitCleanTool;
 import thebetweenlands.common.recipe.misc.RecipesAspectVials;
 import thebetweenlands.common.recipe.misc.RecipesCircleGems;
@@ -111,6 +112,7 @@ public class RecipeRegistry {
 	public static final ResourceLocation GRAPPLING_HOOK_UPGRADE = new ResourceLocation(ModInfo.ID, "grappling_hook_upgrade");
 	public static final ResourceLocation FISH_BAIT = new ResourceLocation(ModInfo.ID, "recipe_fish_bait");
 	public static final ResourceLocation FISHING_ROD_WORM_ADD = new ResourceLocation(ModInfo.ID, "fishing_rod_worm_add");
+	public static final ResourceLocation OLMLETTE_MIXTURE = new ResourceLocation(ModInfo.ID, "olmlette_mixture");
 
 	private RecipeRegistry() { }
 
@@ -243,6 +245,7 @@ public class RecipeRegistry {
 		registry.register(new RecipeGrapplingHookUpgrades().setRegistryName(GRAPPLING_HOOK_UPGRADE));
 		registry.register(new RecipesFishBait().setRegistryName(FISH_BAIT));
 		registry.register(new RecipeFishingRodWormAdd().setRegistryName(FISHING_ROD_WORM_ADD));
+		registry.register(new RecipeOlmletteMixture().setRegistryName(OLMLETTE_MIXTURE));
 	}
 
 	private static void registerSmelting() {
