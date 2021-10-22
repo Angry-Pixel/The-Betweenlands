@@ -43,6 +43,7 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
 import thebetweenlands.common.item.misc.ItemBoneWayfinder;
 import thebetweenlands.common.item.misc.ItemMisc;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemWeedwoodRowboat;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe;
@@ -225,7 +226,15 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
             output.setItemDamage(3);
             recipes.add(new ShapelessOreRecipe(null, output, tooth, tooth.copy(), tongue, input).setRegistryName(ModInfo.ID, RecipeRegistry.GRAPPLING_HOOK_UPGRADE.getPath() + "_0"));
         }
-        
+
+        //Olmlette Mix
+        recipes.add(new ShapelessOreRecipe(null, EnumItemMisc.OLMLETTE_MIXTURE.create(1),
+        		new ItemStack(ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM),
+        		new ItemStack(ItemRegistry.BLACK_HAT_MUSHROOM_ITEM),
+        		new ItemStack(ItemRegistry.OLM_EGG_RAW),
+        		new ItemStack(ItemRegistry.OLM_EGG_RAW),
+                EnumItemMisc.WEEDWOOD_BOWL.create(1), EnumItemMisc.WEEDWOOD_STICK.create(1)).setRegistryName(RecipeRegistry.OLMLETTE_MIXTURE));
+
         //Reset the active container
         loader.setActiveModContainer(activeModContainer);
 

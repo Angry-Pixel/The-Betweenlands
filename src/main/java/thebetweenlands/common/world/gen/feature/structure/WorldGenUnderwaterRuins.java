@@ -247,6 +247,14 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 			west = buildArch(world, rand, pos.add(0, 0, 1), EnumFacing.WEST); //west
 		} while (!north && !south && !east && !west);
 
+		for (int x = -3; x <= 3; x++) {
+			for (int z = -3; z <= 3; z++) {
+				if (rand.nextInt(9) == 0) {
+					world.setBlockState(pos.add(x, 0, z), BlockRegistry.PEARL_BLOCK.getDefaultState(), 2 | 16);
+				}
+			}
+		}
+
 		return true;
 	}
 
@@ -390,7 +398,6 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 						TileEntity te = world.getTileEntity(spawnerpos);
 						if (te instanceof TileEntityMobSpawnerBetweenlands) {
 							MobSpawnerLogicBetweenlands logic = ((TileEntityMobSpawnerBetweenlands)te).getSpawnerLogic();
-							//TODO: Check spawn
 							logic.setNextEntityName("thebetweenlands:angler").setCheckRange(32.0D).setSpawnRange(6).setSpawnInAir(false).setMaxEntities(1 + world.rand.nextInt(3));
 						}
 					}
@@ -473,9 +480,19 @@ public class WorldGenUnderwaterRuins extends WorldGenHelper {
 
 	//creates a pot of loot
 	private void setLootPot(World world, Random random, BlockPos pos) {
-		this.setBlockAndNotifyAdequately(world, pos, this.getRandomPot(random));
+		IBlockState loot;
+		if (world.getBlockState(pos) == BlockRegistry.SWAMP_WATER.getDefaultState()) {
+			if (random.nextInt(4) == 0) {
+				loot = BlockRegistry.PEARL_BLOCK.getDefaultState();
+			} else {
+				loot = this.getRandomMudPot(random);
+			}
+		} else {
+			loot = this.getRandomPot(random);
+		}
+		this.setBlockAndNotifyAdequately(world, pos, loot);
 		TileEntityLootPot lootPot = BlockLootPot.getTileEntity(world, pos);
-		if(lootPot != null) {
+		if (lootPot != null) {
 			lootPot.setLootTable(LootTableRegistry.CAVE_POT, random.nextLong()); //TODO: replace?
 		}
 	}
