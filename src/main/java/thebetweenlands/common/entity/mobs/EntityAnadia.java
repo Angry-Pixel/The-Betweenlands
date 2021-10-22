@@ -117,8 +117,8 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		tasks.addTask(3, new EntityAnadia.EntityAIAFishCalledWander(this, 0.5D, 20));
 		tasks.addTask(4, new EntityAIPanicWhenUnhooked(this));
 		tasks.addTask(5, new EntityAIPanicWhenHooked(this));
-		aiFindBait = new EntityAnadia.AIFindBait(this, 2D);
-		aiFindHook = new EntityAnadia.AIFindHook(this, 2D);
+		aiFindBait = new EntityAnadia.AIFindBait(this, 3D);
+		aiFindHook = new EntityAnadia.AIFindHook(this, 3D);
 		tasks.addTask(6, aiFindBait);
 		tasks.addTask(7, aiFindHook);
 		tasks.addTask(8, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
@@ -928,7 +928,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 			List<EntityFishBait> list = anadia.getEntityWorld().getEntitiesWithinAABB(EntityFishBait.class, anadia.getEntityBoundingBox().grow(distance, distance, distance));
 			for (Iterator<EntityFishBait> iterator = list.iterator(); iterator.hasNext();) {
 				EntityFishBait bait = iterator.next();
-				if (bait.getAge() >= bait.lifespan || !bait.isInWater())
+				if (bait.ticksExisted >= bait.lifespan || !bait.isInWater())
 					iterator.remove();
 			}
 			if (list.isEmpty())
