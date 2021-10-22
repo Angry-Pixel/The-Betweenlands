@@ -570,7 +570,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		if (!getEntityWorld().isRemote) {
 			if (getAttackingEntity() instanceof EntityLurker) {
 				EntityLurker lurker = (EntityLurker) getAttackingEntity();
-				lurker.huntingTimerAnadia = 1200; // 1 minute cooldown
+				lurker.huntingTimer = 1200; // 1 minute cooldown
 			}
 		}
 		super.setDead();

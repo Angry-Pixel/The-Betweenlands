@@ -109,6 +109,17 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
     protected ResourceLocation getLootTable() {
         return LootTableRegistry.FRESHWATER_URCHIN;
     }
+    
+	@Override
+	public void setDead() {
+		if (!getEntityWorld().isRemote) {
+			if (getAttackingEntity() instanceof EntityLurker) {
+				EntityLurker lurker = (EntityLurker) getAttackingEntity();
+				lurker.huntingTimer = 1200; // 1 minute cooldown
+			}
+		}
+		super.setDead();
+	}
 
 	@Override
 	public void onUpdate() {
