@@ -10,7 +10,7 @@
       "translate": "advancements.thebetweenlands.adventurer.i_think_you_urned_this.description"
     }
   },
-  "parent": "thebetweenlands:adventurer/pothead",
+  "parent": "thebetweenlands:adventurer/disgracing_the_dead",
   "criteria": {
      "urn1": {
           "trigger": "thebetweenlands:break_alcove_urn"

@@ -59,6 +59,7 @@ public class BlockMobSpawnerBetweenlands extends BlockMobSpawner {
 
 	public BlockMobSpawnerBetweenlands(){
 		super();
+		this.setSoundType(SoundType.GLASS);
 		this.setHardness(10.0F);
 		this.setHarvestLevel("pickaxe", 0);
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
