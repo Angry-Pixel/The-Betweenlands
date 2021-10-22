@@ -528,6 +528,10 @@ tile.thebetweenlands.reed_mat.name=Tapis en Roseau
 tile.thebetweenlands.mud_loot_pot.1.name=Pot de Fortune Embourbé
 tile.thebetweenlands.mud_loot_pot.2.name=Pot de Fortune Embourbé
 tile.thebetweenlands.mud_loot_pot.3.name=Pot de Fortune Embourbé
+tile.thebetweenlands.lyestone.name=Pierre d'Alkalie
+tile.thebetweenlands.mist_bridge.name=Pont de Brume
+tile.thebetweenlands.shadow_walker.name=Marcheur d'Ombre
+tile.thebetweenlands.weak_smooth_cragrock.name=Crageroche Polie Fragile
 
 # Items
 
@@ -969,11 +973,19 @@ item.thebetweenlands.frog_legs_smoked.name=Cuisse de Grenouille Fumée
 item.thebetweenlands.puffshroom_tendril_smoked.name=Vrille de Champisouffle Fumée
 item.thebetweenlands.silt_crab_claw_smoked.name=Pince de Crabe Fumée
 item.thebetweenlands.snail_flesh_smoked.name=Chaire d'Escargot Fumée
-item.thebetweenlands.aa_upgrade_electric.name=Electrique
-item.thebetweenlands.aa_upgrade_glide.name=Planer
+item.thebetweenlands.aa_upgrade_electric.name=Electricité
+item.thebetweenlands.aa_upgrade_glide.name=Planage
 item.thebetweenlands.aa_upgrade_leap.name=Ascension
 item.thebetweenlands.aa_upgrade_urchin.name=Piquants d'Oursin
 item.thebetweenlands.aa_upgrade_vortex.name=Vortex à Poisson
+item.thebetweenlands.aa_upgrade_trigger.name=Pierre de Stimulus Biopathique
+item.thebetweenlands.aa_upgrade_toggle.name=Pierre de Lien Biopathique
+item.thebetweenlands.mist_staff.name=Sceptre du Marcheur de Brume
+item.thebetweenlands.shadow_staff.name=Sceptre du Marcheur d'Ombre
+item.thebetweenlands.olm_egg_raw.name=Œuf d'Olm Cru
+item.thebetweenlands.olm_egg_cooked.name=Œuf d'Olm Frit
+item.thebetweenlands.olmlette_mixture.name=Mixture d'Olmelette
+item.thebetweenlands.olmlette.name=Olmelette
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Fiole en Dendrotisthe Verte
@@ -1029,6 +1041,7 @@ container.bl.draeton_storage=Stockage de Dirigeable
 container.bl.draeton_furnace=Fourneau de Dirigeable
 container.bl.draeton_burner=Brûleur
 container.bl.amphibious_armour=Armure Amphibie
+container.bl.crab_pot_filter=Pot à Crabe
 
 # Locations
 location.wilderness.name=120:<scale:1.75>Etendue Sauvage</scale>
@@ -1147,7 +1160,8 @@ tooltip.bl.damaged_armor_upgrade=Amélioration d'Armure Amphibie Endommagée (%d
 tooltip.bl.crab_pot_item=Ajouter des Restes d'Unidée\npour attirer les Crabes.\nPeut être placé au dessus d'un\nFiltre pour Pot à Crabe pour plus\nd'utilisations.
 tooltip.bl.crab_pot_filter_item=A utiliser avec un Pot à Crabes.\nLes Pots à Crabes contenants un Crabe\nde Limon ou un Barboteur, lorsque placés\nau-dessus, possèdent plus d'utilités.
 tooltip.bl.silt_glass_jar_item=Contenant pour Vermisseaux de Vase.\nUtiliser une Canne à Pêche en Harbre\n sur la jarre permet d'y accrocher un appât.
-tooltip.bl.fish_bait_jei=Les objets secondaires modifient les attribus.\nUtilisez l'info-bulle en fabricant pour les voir.
+tooltip.bl.silt_glass_jar_content=- §a%2$s x %3$d
+tooltip.bl.fish_bait_jei=Les objets secondaires modifient les attribus.\nUtiliser l'info-bulle en fabricant pour les voir.
 
 # Anadia item mob stats
 tooltip.bl.item_mob_anadia.health=Santé: %s / %s
@@ -1244,7 +1258,26 @@ tooltip.bl.fish_bait.glowing=Luminescence: %s
 tooltip.bl.fishing_rod.baited=Possède un Vermisseau: %s
 
 tooltip.bl.fumigant=Ôte la Puanteur du Pourrissement sur un Joueur.
-tooltip.bl.fishing_spear_animated=Animée: 
+tooltip.bl.fishing_spear_animated=Animée:
+
+tooltip.bl.item_misc.snot=Il manque d'eau pour fonctionner.
+tooltip.bl.item_misc.anadia_eye=Fait pour la vue sous-marine.
+tooltip.bl.item_misc.anadia_gills=Les poissons ne font pas d'apnée.
+tooltip.bl.item_misc.anadia_scales=Fait office de protection.
+tooltip.bl.item_misc.anadia_bones=Fins, mais résilients.
+tooltip.bl.item_misc.anadia_fins=Elle écument les mers telles des ailes dans le vent.
+tooltip.bl.item_misc.anadia_swim_bladder=Empêche un poisson de couler... ou de floter.
+tooltip.bl.item_misc.urchin_spike=La meilleure défense est l'attaque.
+tooltip.bl.item_misc.lurker_skin=Solide et flexible.
+
+tooltip.bl.amphibious_upgrade.format=Amphibie %s
+tooltip.bl.amphibious_upgrade.helmet=Casque
+tooltip.bl.amphibious_upgrade.chestplate=Plastron
+tooltip.bl.amphibious_upgrade.leggings=Jambières
+tooltip.bl.amphibious_upgrade.boots=Bottes
+tooltip.bl.amphibious_ability.toggle=Sélectionne la capacité de l'Armure Amphibie\nS'accroupir + Clic-droit pour Faire défiller\nClic-droit pour Sélectionner
+tooltip.bl.amphibious_ability.trigger=Active la capacité de l'Armure Amphibie\nS'accroupir + Clic-droit pour Faire défiller\nClic-droit pour Activer
+
 
 # Chat
 chat.foodSickness.fine.0=Ah, ça fait du bien
@@ -1381,6 +1414,21 @@ chat.simulacrum.changed_effect=Effet passé à '%s'
 
 chat.wind_chime.changed_attunement=Sensible à '%s'
 chat.wind_chime.removed_attunement=Sensible à n'importe quelle météo
+
+chat.aa_trigger.selected_effect=Attuned to: %s
+
+chat.aa_item.ascent=Ascension
+chat.aa_item.electric=Electricité
+chat.aa_item.vortex=Vortex à Poisson
+chat.aa_item.glide=Planage
+chat.aa_item.urchin_spikes=Piquants d'Oursin
+
+chat.aa_toggle.selected_effect=Effet Sélectionné: %s
+chat.aa_toggle.urchin_active=Piquants Actifs: %s
+chat.aa_toggle.vortex_active=Vortex Actif: %s
+chat.aa_toggle.electric_active=Electricité Active: %s
+chat.aa_toggle.glide_active=Planage Actif: %s
+chat.aa_toggle.ascent_active=Ascension Active: %s
 
 # Damage Source
 death.attack.suffocation=%s a été étouffée.e par un Coursouffle
@@ -1604,7 +1652,7 @@ item.thebetweenlands.record.stuck_in_the_mud.desc=Voog2 – Embourbé dans le Bo
 item.thebetweenlands.record.waterlogged.desc=Voog2 - Waterlogged
 item.thebetweenlands.record.wandering_wisps.desc=Voog2 – Feu Follet Frivole
 item.thebetweenlands.record.ancient.desc=Voog2 - Ancien
-item.thebetweenlands.record.deep_water_theme.desc=Mr.Owltkins - Eaux Profondes
+item.thebetweenlands.record.deep_water_theme.desc=Rotch Gwylt - Eaux Profondes
 
 
 # Signs
@@ -1920,6 +1968,8 @@ advancements.thebetweenlands.adventurer.shake_it_off.title=Secouez Moi Ça
 advancements.thebetweenlands.adventurer.shake_it_off.description=Se faire submerger par une Infestation
 advancements.thebetweenlands.adventurer.vinyl_enthusiast.title=Discographie de Platine
 advancements.thebetweenlands.adventurer.vinyl_enthusiast.description=Collectionner tous les Disques de Musique des Betweenlands
+advancements.thebetweenlands.adventurer.i_think_you_urned_this.title=Je pense que tu l'as mérité
+advancements.thebetweenlands.adventurer.i_think_you_urned_this.description=Fouiller 20 Urnes d'Alcove
 
 # Combattant
 advancements.thebetweenlands.fighter.root.title=Bagarreur
@@ -2036,8 +2086,10 @@ advancements.thebetweenlands.survivalist.onions_have_layers.title=Les oignons on
 advancements.thebetweenlands.survivalist.onions_have_layers.description=Enduir ses outils pour les protéger de la corrosion
 advancements.thebetweenlands.survivalist.hashtag_blessed.title=#Blessed
 advancements.thebetweenlands.survivalist.hashtag_blessed.description=Etre sauvé par la Bénédiction accordée par un Simulacre
-advancements.thebetweenlands.survivalist.uh_oh_stinky.title=Oh Oh, Ça Pue
+advancements.thebetweenlands.survivalist.uh_oh_stinky.title=Oh Oh... Ça Pue
 advancements.thebetweenlands.survivalist.uh_oh_stinky.description=Utiliser un Fumigant pour ôter votre Puanteur
+advancements.thebetweenlands.survivalist.sacrifices_were_made.title=Il a Fallu Faire des Sacrifices
+advancements.thebetweenlands.survivalist.sacrifices_were_made.description=On ne fait pas d'olmelette sans casser d'œufs
 
 # Bricoleur
 advancements.thebetweenlands.craftsman.root.title=Bricoleur
