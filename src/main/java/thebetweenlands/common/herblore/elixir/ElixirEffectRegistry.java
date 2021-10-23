@@ -66,6 +66,7 @@ public class ElixirEffectRegistry {
 	//Potions
 	public static final Potion ROOT_BOUND = new PotionRootBound();
 	public static final Potion ENLIGHTENED = new PotionEnlightened();
+	public static final Potion SHOCKED = new PotionShocked();
 	
 	static {
 		//Add elixirs to list
@@ -89,6 +90,7 @@ public class ElixirEffectRegistry {
 		
 		event.getRegistry().register(ROOT_BOUND);
 		event.getRegistry().register(ENLIGHTENED);
+		event.getRegistry().register(SHOCKED);
 	}
 
 	private static void register(ElixirEffect effect, String fieldName) {

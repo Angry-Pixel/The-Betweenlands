@@ -69,6 +69,7 @@ import thebetweenlands.common.entity.draeton.EntityPullerChiromaw;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.entity.movement.PathNavigateFlyingBL;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
+import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.tools.bow.EnumArrowType;
 import thebetweenlands.common.network.serverbound.MessageChiromawDoubleJump;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -289,8 +290,8 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 		if(source.getTrueSource() == this) {
 			return false;
 		}
-		if(source.getImmediateSource() instanceof EntityBLArrow && ((EntityBLArrow) source.getImmediateSource()).getArrowType() == EnumArrowType.CHIROMAW_BARB) {
-				return false;
+		if(source.getImmediateSource() instanceof EntityBLArrow && (((EntityBLArrow) source.getImmediateSource()).getArrowType() == EnumArrowType.CHIROMAW_BARB || this.getElectricBoogaloo() && ((EntityBLArrow) source.getImmediateSource()).getArrowType() == EnumArrowType.CHIROMAW_SHOCK_BARB)) {
+			return false;
 		}
 		if(this.getRidingEntity() != null && source.getTrueSource() == this.getRidingEntity() && !this.canRiderInteract()) {
 			return false;
@@ -302,6 +303,12 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public boolean isServerWorld() {
+		// Returning false disables AI updating (method name is weird)
+		return super.isServerWorld() && this.getActivePotionEffect(ElixirEffectRegistry.SHOCKED) == null;
 	}
 
 	@Override

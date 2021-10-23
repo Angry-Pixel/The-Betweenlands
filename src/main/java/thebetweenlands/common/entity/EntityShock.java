@@ -11,13 +11,16 @@ import org.apache.commons.lang3.tuple.Pair;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
+import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.armor.ItemRubberBoots;
 import thebetweenlands.common.network.clientbound.MessageShockArrowHit;
 
@@ -161,8 +164,10 @@ public class EntityShock extends Entity {
 											}
 										}
 
+										boolean wasShocked = false;
+										
 										if(!blocked) {
-											newTarget.attackEntityFrom(damageSource, isWet ? 2 * damage : damage);
+											wasShocked = newTarget.attackEntityFrom(damageSource, isWet ? 2 * damage : damage);
 
 											//Also zap all passengers >:)
 											for(Entity passenger : newTarget.getRecursivePassengers()) {
@@ -171,6 +176,10 @@ public class EntityShock extends Entity {
 													newTargets.add((EntityLivingBase) passenger);
 												}
 											}
+										}
+										
+										if(!wasShocked) {
+											newTarget.addPotionEffect(new PotionEffect(ElixirEffectRegistry.SHOCKED, newTarget instanceof EntityPlayer ? 30 : 80));
 										}
 
 										continue entityLoop;
