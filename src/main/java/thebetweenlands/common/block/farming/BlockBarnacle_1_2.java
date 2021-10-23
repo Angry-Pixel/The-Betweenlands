@@ -14,11 +14,14 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -34,6 +37,7 @@ import thebetweenlands.common.block.farming.BlockBarnacle_3_4.EnumBarnacleTypeLa
 import thebetweenlands.common.block.terrain.BlockHearthgroveLog;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.item.ItemBlockBarnacle;
+import thebetweenlands.common.item.tools.ItemBLBucket;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
@@ -250,6 +254,14 @@ public class BlockBarnacle_1_2 extends BlockSwampWater implements IStateMappedBl
 			return EnumFacing.EAST;
 		}
 		return EnumFacing.DOWN;
+	}
+
+	@Override
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack stack = player.getHeldItem(hand);
+		if (!(stack.getItem() instanceof ItemBucket) || !(stack.getItem() instanceof ItemBLBucket))
+			return true;
+		return false;
 	}
 
 	@Override
