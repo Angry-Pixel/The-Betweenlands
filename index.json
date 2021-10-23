@@ -548,7 +548,21 @@
         "description": "* gecko sound *"
       },
       {
-        "sha256": "b6c736afcb48b447e9db1a0c691e850fcd1d22fdbb43c8dabf2f74a0669b2bef",
+        "sha256": "154547d43989264a85f5db9f66b747da8bfa6883e244c9059844ed4cfd687b78",
+        "url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/rival_the_face_of_woods.png",
+        "title": "The Face of the Woods",
+        "author": "Rival",
+        "description": "In the heart of the swamp, a tree unlike any other stands,\ntheir bark older than the mountains, their leaves of the\nmost pure white, their fruit magical and mysterious; their\nthousand faces, spirits imprisoned in masks, forever in\nsuffering. Now decayed, twisted and scary; yet keeps some\nof the splendour of what it once was."
+      },
+      {
+        "sha256": "979e7dba78c7a92096968f718c7a236feb30fecd3d5a805eb93fab25b4c79310",
+        "url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/rival_the_crypt.png",
+        "title": "The Crypt",
+        "author": "Rival",
+        "description": "Deep Below the marsh stands this room filled with ancient\ntreasures and the grudge of a thousand souls buried in\nsludge, beware thou who adventures beyond the doors of\nthe labyrinth, the darkness crawls trough the walls,\ndeformed, covered in blood..."
+      },
+      {
+        "sha256": "9be59f41fbf3b45816b63fe4e78c52b9b5dad0b26ade1a620d2ec04e433c589b",
         "url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/foxbug_creepy_crawlies.png",
         "title": "Creepy Crawlies",
         "author": "-FoxBug-",
