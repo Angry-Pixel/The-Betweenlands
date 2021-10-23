@@ -1933,6 +1933,11 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 			if (source instanceof EntityDamageSource && ((source.getTrueSource() != null && this.isPassenger(source.getTrueSource())) || (source.getImmediateSource() != null && this.isPassenger(source.getImmediateSource())))) {
 				return false;
 			} else {
+				Entity sourceEntity = source.getTrueSource();
+				if(sourceEntity instanceof IPullerEntity && ((IPullerEntity) sourceEntity).getCarriage() == this) {
+					return false;
+				}
+				
 				boolean isPlayerHit = source.getImmediateSource() instanceof EntityPlayer;
 
 				if(!this.world.isRemote) {
