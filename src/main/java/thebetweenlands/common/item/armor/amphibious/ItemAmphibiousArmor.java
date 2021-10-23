@@ -1,13 +1,9 @@
 package thebetweenlands.common.item.armor.amphibious;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Random;
-import java.util.UUID;
 
+import net.minecraft.util.math.AxisAlignedBB;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.Multimap;
@@ -43,6 +39,7 @@ import thebetweenlands.client.render.model.armor.ModelAmphibiousArmor;
 import thebetweenlands.client.render.model.armor.ModelBodyAttachment;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
+import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.inventory.InventoryAmphibiousArmor;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.Item3DArmor;
@@ -281,11 +278,26 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 				player.motionY += 0.05D;
 			}
 
-			if(itemStack.getItem() == ItemRegistry.AMPHIBIOUS_HELMET && player.isInWater()) {
-				int visibilityCount = this.getUpgradeCount(itemStack, AmphibiousArmorUpgrades.VISIBILITY);
+			if(itemStack.getItem() == ItemRegistry.AMPHIBIOUS_HELMET) {
+				if(player.isInWater()) {
+					int visibilityCount = this.getUpgradeCount(itemStack, AmphibiousArmorUpgrades.VISIBILITY);
 
-				if(visibilityCount >= 1 && fullyInWater) {
-					player.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 10, 0));
+					if (visibilityCount >= 1 && fullyInWater) {
+						player.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 10, 0));
+					}
+				} else {
+					if(this.getUpgradeCount(itemStack, AmphibiousArmorUpgrades.FISH_SIGHT) > 0 && player.ticksExisted % 40 == 0) {
+						int radius = this.getUpgradeCount(itemStack, AmphibiousArmorUpgrades.FISH_SIGHT) * 8;
+
+						AxisAlignedBB aabb = new AxisAlignedBB(player.getPosition()).grow(radius);
+
+						for(EntityAnadia anadia : world.getEntitiesWithinAABB(EntityAnadia.class, aabb, a -> a.getDistanceSq(player.getPosition().getX() + 0.5f, player.getPosition().getY() + 0.5f, player.getPosition().getZ() + 0.5f) <= radius * radius)) {
+							if(!anadia.isGlowing()) {
+								anadia.setGlowTimer(200);
+								damageUpgrade(itemStack, AmphibiousArmorUpgrades.FISH_SIGHT, 1, DamageEvent.ON_USE, false);
+							}
+						}
+					}
 				}
 			}
 

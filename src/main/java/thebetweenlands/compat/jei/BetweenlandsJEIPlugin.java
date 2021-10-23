@@ -188,7 +188,8 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
         registry.handleRecipes(RecipeFishingRodWormAdd.class, recipe -> new FishingRodWormAddRecipeJEI(), VanillaRecipeCategoryUid.CRAFTING);
        
         //Fish Bait
-        registry.handleRecipes(RecipesFishBait.class, recipe -> new FishBaitRecipeJEI(), VanillaRecipeCategoryUid.CRAFTING);
+        registry.handleRecipes(RecipesFishBait.class, recipe -> new FishBaitRecipeJEI(jeiHelper.getGuiHelper()), VanillaRecipeCategoryUid.CRAFTING);
+
 
         //Vials
         recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 0), new ItemStack(ItemRegistry.ASPECT_VIAL,  1, 0)).setRegistryName(ModInfo.ID, RecipeRegistry.ASPECT_VIAL.getPath() + "_green"));

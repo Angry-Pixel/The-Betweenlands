@@ -93,6 +93,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 	private static final int MAX_NETTABLE_TIME = 20;
 	private int nettableTimer = 0;
+	private int glowTimer = 0;
 
 	public EntityAnadia(World world) {
 		super(world);
@@ -373,6 +374,11 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 		return this.nettableTimer;
 	}
 
+	public void setGlowTimer(int time) {
+		glowTimer = time;
+		setGlowing(true);
+	}
+
 	public void randomiseObstructionOrder() {
 		List<Integer> obstructionList = new ArrayList<Integer>();
 		for(int i = 0; i < 4; i++)
@@ -584,6 +590,14 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 				for (int i = 0; i < 2; ++i)
 					getEntityWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX + (rand.nextDouble() - 0.5D) * (double) width - vec3d.x , posY + rand.nextDouble() * (double) height - vec3d.y , posZ + (rand.nextDouble() - 0.5D) * (double) width - vec3d.z, 0.0D, 0.0D, 0.0D, new int[0]);
 			}*/
+		}
+
+		if(glowTimer > 0) {
+			glowTimer--;
+
+			if(glowTimer <= 0) {
+				setGlowing(false);
+			}
 		}
 
 		if (inWater) {
