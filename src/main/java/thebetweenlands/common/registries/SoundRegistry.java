@@ -362,6 +362,7 @@ public class SoundRegistry {
     public static final BLSoundEvent FISHING_TACKLE_BOX_OPEN = reg("fishing_tackle_box_open");
     public static final BLSoundEvent FISHING_TACKLE_BOX_CLOSE = reg("fishing_tackle_box_close");
     public static final BLSoundEvent FISH_CHOP = reg("fish_chop");
+    public static final BLSoundEvent LYESTONE_FIZZ = reg("lyestone_fizz");
     
     private SoundRegistry() {
     }

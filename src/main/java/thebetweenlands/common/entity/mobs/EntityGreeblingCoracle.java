@@ -111,9 +111,14 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 	@Override
 	public boolean getCanSpawnHere() {
 		int y = MathHelper.floor(getEntityBoundingBox().minY);
-		if(y <= WorldProviderBetweenlands.LAYER_HEIGHT && y > WorldProviderBetweenlands.CAVE_START)
-			return getEntityWorld().checkNoEntityCollision(getEntityBoundingBox()) && getEntityWorld().getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && getEntityWorld().isMaterialInBB(getEntityBoundingBox(), Material.WATER);
+		if(y <= WorldProviderBetweenlands.LAYER_HEIGHT + 1 && y > WorldProviderBetweenlands.CAVE_START)
+			return getEntityWorld().checkNoEntityCollision(getEntityBoundingBox()) && getEntityWorld().getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && getEntityWorld().isMaterialInBB(getEntityBoundingBox().offset(0D, -0.5D, 0D), Material.WATER);
 		return false;
+	}
+
+	@Override
+	public void onKillCommand() {
+		this.setDead();
 	}
 
 	@Override

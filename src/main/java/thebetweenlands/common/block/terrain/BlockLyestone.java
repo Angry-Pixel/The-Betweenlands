@@ -10,7 +10,6 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,6 +21,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class BlockLyestone extends Block {
 
@@ -35,8 +35,8 @@ public class BlockLyestone extends Block {
 
 	@Override
 	public void onEntityWalk(World world, BlockPos pos, Entity entity) {
-		if(!world.isRemote && world.getTotalWorldTime()% 20 == 0)
-			world.playSound(null, pos, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1F, 1F);
+		if(!world.isRemote && world.getTotalWorldTime()% 40 == 0)
+			world.playSound(null, pos, SoundRegistry.LYESTONE_FIZZ, SoundCategory.BLOCKS, 1F, 1F);
 		
 		if (entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
