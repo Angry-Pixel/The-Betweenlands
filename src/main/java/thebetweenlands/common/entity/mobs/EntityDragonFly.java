@@ -25,7 +25,6 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
-import thebetweenlands.api.entity.IPullerEntity;
 import thebetweenlands.api.entity.IPullerEntityProvider;
 import thebetweenlands.common.entity.draeton.DraetonPhysicsPart;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
@@ -198,6 +197,17 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL,
 
 	private boolean isInLurkersMouth() {
 		return getRidingEntity() instanceof EntityLurker;
+	}
+
+	@Override
+	public void setDead() {
+		if (!getEntityWorld().isRemote) {
+			if (getAttackingEntity() instanceof EntityLurker) {
+				EntityLurker lurker = (EntityLurker) getAttackingEntity();
+				lurker.setHuntingTimer(1200); // 1 minute cooldown
+			}
+		}
+		super.setDead();
 	}
 
 	@Override

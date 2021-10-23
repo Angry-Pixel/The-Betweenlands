@@ -513,6 +513,10 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
     public void setMouthMoveSpeed(float mouthMoveSpeed) {
         dataManager.set(MOUTH_MOVE_SPEED, mouthMoveSpeed);
     }
+    
+    public void setHuntingTimer(int cooldownIn) {
+        huntingTimer = cooldownIn;
+    }
 
     public float getRotationPitch(float partialRenderTicks) {
         return rotationPitchBody * partialRenderTicks + prevRotationPitchBody * (1 - partialRenderTicks);
