@@ -117,6 +117,11 @@ public class EntityGreeblingCoracle extends EntityCreature implements IEntityBL 
 	}
 
 	@Override
+	public void onKillCommand() {
+		this.setDead();
+	}
+
+	@Override
 	public void onUpdate() {
 		super.onUpdate();
 
