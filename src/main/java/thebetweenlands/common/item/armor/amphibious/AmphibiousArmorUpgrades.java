@@ -12,6 +12,7 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.item.Item;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.ImmutableSet;
@@ -25,8 +26,10 @@ import net.minecraft.util.ResourceLocation;
 import thebetweenlands.api.item.IAmphibiousArmorAttributeUpgrade;
 import thebetweenlands.api.item.IAmphibiousArmorUpgrade;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
+import thebetweenlands.common.item.misc.ItemGlowingGoop;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public enum AmphibiousArmorUpgrades implements IAmphibiousArmorUpgrade {
@@ -45,6 +48,7 @@ public enum AmphibiousArmorUpgrades implements IAmphibiousArmorUpgrade {
 	TOUGHNESS(new ResourceLocation(ModInfo.ID, "toughness"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.ANADIA_BONES::isItemOf, AdditiveAttributeUpgrade.TOUGHNESS, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET),
 	KNOCKBACK_RESISTANCE(new ResourceLocation(ModInfo.ID, "knockback_resistance"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.LURKER_SKIN::isItemOf, AdditiveAttributeUpgrade.KNOCKBACK_RESISTANCE, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS),
 	BUOYANCY(new ResourceLocation(ModInfo.ID, "buoyancy"), 64, DamageEvent.ON_DAMAGE, ItemMisc.EnumItemMisc.ANADIA_SWIM_BLADDER::isItemOf, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS),
+	FISH_SIGHT(new ResourceLocation(ModInfo.ID, "fish_sight"), 64, DamageEvent.ON_USE, s -> s.getItem() == Item.getItemFromBlock(BlockRegistry.GLOWING_GOOP), EntityEquipmentSlot.HEAD),
 
 	ASCENT_BOOST(new ResourceLocation(ModInfo.ID, "ascent_boost"), 64, DamageEvent.ON_USE,  s -> s.getItem() == ItemRegistry.AA_UPGRADE_LEAP, EntityEquipmentSlot.LEGS),
 	FISH_VORTEX(new ResourceLocation(ModInfo.ID, "fish_vortex"), 256, DamageEvent.ON_USE, s -> s.getItem() == ItemRegistry.AA_UPGRADE_VORTEX, EntityEquipmentSlot.CHEST),
