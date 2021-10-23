@@ -2346,5 +2346,11 @@
     "sounds": [
       "thebetweenlands:mist_staff_vanish"
     ]
+  },
+  "lyestone_fizz": {
+    "sounds": [
+      "thebetweenlands:lyestone_fizz"
+    ],
+    "subtitle":  "blsubtitles.misc.lyestone_fizzes"
   }
 }
