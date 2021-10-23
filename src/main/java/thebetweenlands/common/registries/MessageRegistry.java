@@ -28,6 +28,7 @@ import thebetweenlands.common.network.clientbound.MessagePowerRingParticles;
 import thebetweenlands.common.network.clientbound.MessageRemoveLocalStorage;
 import thebetweenlands.common.network.clientbound.MessageRiftSound;
 import thebetweenlands.common.network.clientbound.MessageShockArrowHit;
+import thebetweenlands.common.network.clientbound.MessageShockParticle;
 import thebetweenlands.common.network.clientbound.MessageShowFoodSicknessLine;
 import thebetweenlands.common.network.clientbound.MessageSoundRipple;
 import thebetweenlands.common.network.clientbound.MessageSummonPeatMummyParticles;
@@ -93,6 +94,7 @@ public class MessageRegistry {
 		registerMessage(MessageUpdateDraetonPhysicsPart.class, Side.CLIENT);
 		registerMessage(MessageSyncDraetonLeakages.class, Side.CLIENT);
 		registerMessage(MessageShockArrowHit.class, Side.CLIENT);
+		registerMessage(MessageShockParticle.class, Side.CLIENT);
 
 		registerMessage(MessageEquipItem.class, Side.SERVER);
 		registerMessage(MessageOpenPouch.class, Side.SERVER);

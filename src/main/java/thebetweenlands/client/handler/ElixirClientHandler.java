@@ -12,7 +12,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -20,7 +19,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -28,14 +26,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.event.ArmSwingSpeedEvent;
 import thebetweenlands.client.render.particle.BLParticles;
-import thebetweenlands.client.render.particle.BatchedParticleRenderer;
-import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory;
-import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.client.render.particle.entity.ParticleLightningArc;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
-import thebetweenlands.common.herblore.elixir.PotionShocked;
-import thebetweenlands.common.registries.SoundRegistry;
 
 public class ElixirClientHandler {
 
@@ -268,43 +260,6 @@ public class ElixirClientHandler {
 		//NBT is necessary so that FOV doesn't flicker when potion wears off .-.
 		if(entity.getActivePotionEffect(ElixirEffectRegistry.SHOCKED) != null || entity.getActivePotionEffect(ElixirEffectRegistry.ROOT_BOUND) != null || ElixirEffectRegistry.EFFECT_BASILISK.isActive(entity) || ElixirEffectRegistry.EFFECT_PETRIFY.isActive(entity) || nbt.hasKey("thebetweenlands.stuckTicks")) {
 			event.setNewfov(1);
-		}
-	}
-	
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public void onEntityUpdate(LivingUpdateEvent event) {
-		EntityLivingBase entity = event.getEntityLiving();
-		if(entity.world.isRemote && entity.getActivePotionEffect(ElixirEffectRegistry.SHOCKED) != null && entity.world.rand.nextInt(20) == 0) {
-			Entity view = Minecraft.getMinecraft().getRenderViewEntity();
-
-			if(view != null) {
-				float dst = view.getDistance(entity);
-
-				if(dst < 100) {
-					float ox = (entity.world.rand.nextFloat() - 0.5f) * 4;
-					float oy = (entity.world.rand.nextFloat() - 0.5f) * 4;
-					float oz = (entity.world.rand.nextFloat() - 0.5f) * 4;
-
-					ParticleLightningArc particle = (ParticleLightningArc) BLParticles.LIGHTNING_ARC.create(entity.world, entity.posX, entity.posY, entity.posZ, 
-							ParticleArgs.get()
-							.withColor(0.5f, 0.4f, 1.0f, 0.9f)
-							.withData(new Vec3d(entity.posX + ox, entity.posY + oy, entity.posZ + oz)));
-
-					if(dst > 30) {
-						//lower quality
-						particle.setBaseSize(0.1f);
-						particle.setSubdivs(2, 1);
-						particle.setSplits(2);
-					}
-
-					BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, particle);
-
-					if(dst < 16) {
-						entity.world.playSound(entity.posX, entity.posY, entity.posZ, SoundRegistry.ZAP, SoundCategory.AMBIENT, 0.85f, 1, false);
-					}
-				}
-			}
 		}
 	}
 }

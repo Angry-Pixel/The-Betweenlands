@@ -179,7 +179,7 @@ public class EntityShock extends Entity {
 										}
 										
 										if(!wasShocked) {
-											newTarget.addPotionEffect(new PotionEffect(ElixirEffectRegistry.SHOCKED, newTarget instanceof EntityPlayer ? 30 : 80));
+											newTarget.addPotionEffect(new PotionEffect(ElixirEffectRegistry.SHOCKED, newTarget instanceof EntityPlayer ? 20 : 80, 0, false, false));
 										}
 
 										continue entityLoop;

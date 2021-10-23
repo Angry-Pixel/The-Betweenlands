@@ -3,11 +3,14 @@ package thebetweenlands.common.herblore.elixir;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.SPacketEntityEffect;
+import net.minecraft.network.play.server.SPacketSetPassengers;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
@@ -21,6 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.network.clientbound.MessageShockParticle;
 
 public class PotionShocked extends Potion {
 	public PotionShocked() {
@@ -44,5 +48,17 @@ public class PotionShocked extends Potion {
 	@Override
 	public List<ItemStack> getCurativeItems() {
 		return Collections.emptyList();
+	}
+	
+	@Override
+	public boolean isReady(int duration, int amplifier) {
+		return true;
+	}
+	
+	@Override
+	public void performEffect(EntityLivingBase entityLivingBaseIn, int amplifier) {
+		if(entityLivingBaseIn.world.rand.nextInt(20) == 0) {
+			TheBetweenlands.networkWrapper.sendToAllTracking(new MessageShockParticle(entityLivingBaseIn), entityLivingBaseIn);
+		}
 	}
 }
