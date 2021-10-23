@@ -262,7 +262,7 @@ public class EntityJellyfish extends EntityCreature implements IEntityBL, IEntit
 		if (!getEntityWorld().isRemote) {
 			if (getAttackingEntity() instanceof EntityLurker) {
 				EntityLurker lurker = (EntityLurker) getAttackingEntity();
-				lurker.huntingTimer = 2400; // 2 minute cooldown
+				lurker.setHuntingTimer(2400); // 2 minute cooldown
 			}
 		}
 		super.setDead();

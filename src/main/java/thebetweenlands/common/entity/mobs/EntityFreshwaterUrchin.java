@@ -115,7 +115,7 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 		if (!getEntityWorld().isRemote) {
 			if (getAttackingEntity() instanceof EntityLurker) {
 				EntityLurker lurker = (EntityLurker) getAttackingEntity();
-				lurker.huntingTimer = 2400; // 2 minute cooldown
+				lurker.setHuntingTimer(2400); // 2 minute cooldown
 			}
 		}
 		super.setDead();
