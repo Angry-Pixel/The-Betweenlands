@@ -57,7 +57,7 @@ public class PotionShocked extends Potion {
 	
 	@Override
 	public void performEffect(EntityLivingBase entityLivingBaseIn, int amplifier) {
-		if(entityLivingBaseIn.world.rand.nextInt(20) == 0) {
+		if(!entityLivingBaseIn.world.isRemote && entityLivingBaseIn.world.rand.nextInt(20) == 0) {
 			TheBetweenlands.networkWrapper.sendToAllTracking(new MessageShockParticle(entityLivingBaseIn), entityLivingBaseIn);
 		}
 	}
