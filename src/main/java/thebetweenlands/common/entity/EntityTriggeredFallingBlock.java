@@ -25,6 +25,7 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 
 	private static final DataParameter<Boolean> IS_WALK_WAY = EntityDataManager.createKey(EntityTriggeredFallingBlock.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_HANGING = EntityDataManager.createKey(EntityTriggeredFallingBlock.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IS_TEMP = EntityDataManager.createKey(EntityTriggeredFallingBlock.class, DataSerializers.BOOLEAN);
 	public EntityTriggeredFallingBlock(World world) {
 		super(world);
 		setSize(0.5F, 0.5F);
@@ -36,18 +37,24 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 		super.entityInit();
 		dataManager.register(IS_WALK_WAY, false);
 		dataManager.register(IS_HANGING, false);
+		dataManager.register(IS_TEMP, false);
 	}
 
 	@Override
 	public void onUpdate() {
-		if (!getEntityWorld().isRemote && getEntityWorld().getTotalWorldTime()%5 == 0) {
-			if(!isHanging())
-				checkArea();
-			else
-				checkBlockAbove();
+		if (!getEntityWorld().isRemote) {
+			if (isTemporary() && ticksExisted > 20)
+				setDead();
+			if (getEntityWorld().getTotalWorldTime() % 5 == 0) {
+				if (!isHanging())
+					checkArea();
+				else
+					checkBlockAbove();
+			}
 		}
-			if (getEntityWorld().isRemote)
-				dustParticles();
+
+		if (getEntityWorld().isRemote)
+			dustParticles();
 	}
 
 	private void checkBlockAbove() {
@@ -207,12 +214,21 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 	public void setHanging(boolean walkway) {
 		dataManager.set(IS_HANGING, walkway);
 	}
+	
+	public boolean isTemporary() {
+		return dataManager.get(IS_TEMP);
+	}
+
+	public void setTemporary(boolean temp) {
+		dataManager.set(IS_TEMP, temp);
+	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
 		setWalkway(nbt.getBoolean("walk_way"));
 		setHanging(nbt.getBoolean("hanging"));
+		setTemporary(nbt.getBoolean("temp"));
 	}
 
 	@Override
@@ -220,5 +236,6 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 		super.writeEntityToNBT(nbt);
 		nbt.setBoolean("walk_way", isWalkway());
 		nbt.setBoolean("hanging", isHanging());
+		nbt.setBoolean("temp", isTemporary());
 	}
 }
