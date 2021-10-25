@@ -202,6 +202,18 @@ public class ItemBLFishingRod extends Item {
 			player.addStat(StatList.getObjectUseStats(this));
 		}
 		
+		ItemStack otherStack;
+		if(handIn == EnumHand.MAIN_HAND) {
+			otherStack = player.getHeldItemOffhand();
+		} else {
+			otherStack = player.getHeldItemMainhand();
+		}
+		
+		if(!otherStack.isEmpty() && otherStack.getItem() == ItemRegistry.NET) {
+			// Allow net to be used to catch fish
+			return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
+		}
+		
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
 
