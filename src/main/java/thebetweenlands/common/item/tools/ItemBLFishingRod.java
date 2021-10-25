@@ -239,17 +239,10 @@ public class ItemBLFishingRod extends Item {
 		return 1;
 	}
 	
-	private static final Field f_ItemRenderer_equippedProgressMainHand;
-	private static final Field f_ItemRenderer_prevEquippedProgressMainHand;
-	private static final Field f_ItemRenderer_equippedProgressOffHand;
-	private static final Field f_ItemRenderer_prevEquippedProgressOffHand;
-
-	static {
-		f_ItemRenderer_equippedProgressMainHand = ReflectionHelper.findField(ItemRenderer.class, "equippedProgressMainHand", "field_187469_f", "f");
-		f_ItemRenderer_prevEquippedProgressMainHand = ReflectionHelper.findField(ItemRenderer.class, "prevEquippedProgressMainHand", "field_187470_g", "g");
-		f_ItemRenderer_equippedProgressOffHand = ReflectionHelper.findField(ItemRenderer.class, "equippedProgressOffHand", "field_187471_h", "h");
-		f_ItemRenderer_prevEquippedProgressOffHand = ReflectionHelper.findField(ItemRenderer.class, "prevEquippedProgressOffHand", "field_187472_i", "i");
-	}
+	private static Field f_ItemRenderer_equippedProgressMainHand;
+	private static Field f_ItemRenderer_prevEquippedProgressMainHand;
+	private static Field f_ItemRenderer_equippedProgressOffHand;
+	private static Field f_ItemRenderer_prevEquippedProgressOffHand;
 	
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
@@ -260,6 +253,13 @@ public class ItemBLFishingRod extends Item {
         	ItemRenderer itemRenderer = Minecraft.getMinecraft().entityRenderer.itemRenderer;
         	
         	try {
+        		if(f_ItemRenderer_equippedProgressMainHand == null) {
+        			f_ItemRenderer_equippedProgressMainHand = ReflectionHelper.findField(ItemRenderer.class, "equippedProgressMainHand", "field_187469_f", "f");
+        			f_ItemRenderer_prevEquippedProgressMainHand = ReflectionHelper.findField(ItemRenderer.class, "prevEquippedProgressMainHand", "field_187470_g", "g");
+        			f_ItemRenderer_equippedProgressOffHand = ReflectionHelper.findField(ItemRenderer.class, "equippedProgressOffHand", "field_187471_h", "h");
+        			f_ItemRenderer_prevEquippedProgressOffHand = ReflectionHelper.findField(ItemRenderer.class, "prevEquippedProgressOffHand", "field_187472_i", "i");
+        		}
+        		
 		        ItemStack stackMainhand = player.getHeldItemMainhand();
 		        if(!stackMainhand.isEmpty() && stackMainhand.getItem() instanceof ItemBLFishingRod) {
 					f_ItemRenderer_equippedProgressMainHand.set(itemRenderer, 1.0f);
