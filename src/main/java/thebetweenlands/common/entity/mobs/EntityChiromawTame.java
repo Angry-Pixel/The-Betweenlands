@@ -308,7 +308,7 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 	@Override
 	public boolean isServerWorld() {
 		// Returning false disables AI updating (method name is weird)
-		return super.isServerWorld() && this.getActivePotionEffect(ElixirEffectRegistry.SHOCKED) == null;
+		return super.isServerWorld() && this.getActivePotionEffect(ElixirEffectRegistry.EFFECT_SHOCKED.getPotionEffect()) == null;
 	}
 
 	@Override

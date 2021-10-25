@@ -1494,6 +1494,7 @@ bl.potion.rootBound=Root Bound
 bl.potion.enlightened=Enlightened
 
 bl.effect.blessed=Blessed
+bl.effect.shocked=Shocked
 
 # Entities
 entity.thebetweenlands.dark_druid.name=Dark Druid

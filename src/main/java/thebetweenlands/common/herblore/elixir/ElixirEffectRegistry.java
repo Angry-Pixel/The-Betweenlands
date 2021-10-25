@@ -18,6 +18,7 @@ import thebetweenlands.common.herblore.elixir.effects.ElixirHealing;
 import thebetweenlands.common.herblore.elixir.effects.ElixirMasking;
 import thebetweenlands.common.herblore.elixir.effects.ElixirPetrify;
 import thebetweenlands.common.herblore.elixir.effects.ElixirRipening;
+import thebetweenlands.common.herblore.elixir.effects.ElixirShocked;
 import thebetweenlands.common.herblore.elixir.effects.ElixirStarvation;
 import thebetweenlands.common.herblore.elixir.effects.ElixirSwiftarm;
 
@@ -61,12 +62,12 @@ public class ElixirEffectRegistry {
 	//Other Elixirs
 	public static final ElixirEffect EFFECT_PETRIFY = new ElixirPetrify(34, "bl.elixir.petrify", new ResourceLocation("thebetweenlands:textures/items/strictly_herblore/misc/vial_green.png"));
 	public static final ElixirEffect EFFECT_BLESSED = new ElixirEffect(35, "bl.effect.blessed", new ResourceLocation("thebetweenlands:textures/gui/effect_blessed.png"));
+	public static final ElixirEffect EFFECT_SHOCKED = new ElixirShocked(36, "bl.effect.shocked", new ResourceLocation("thebetweenlands:textures/gui/effect_shocked.png"));
 	private static final List<ElixirEffect> EFFECTS = new ArrayList<ElixirEffect>();
 
 	//Potions
 	public static final Potion ROOT_BOUND = new PotionRootBound();
 	public static final Potion ENLIGHTENED = new PotionEnlightened();
-	public static final Potion SHOCKED = new PotionShocked();
 	
 	static {
 		//Add elixirs to list
@@ -90,7 +91,6 @@ public class ElixirEffectRegistry {
 		
 		event.getRegistry().register(ROOT_BOUND);
 		event.getRegistry().register(ENLIGHTENED);
-		event.getRegistry().register(SHOCKED);
 	}
 
 	private static void register(ElixirEffect effect, String fieldName) {
