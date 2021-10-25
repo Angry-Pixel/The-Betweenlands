@@ -1,11 +1,15 @@
 package thebetweenlands.common.item.tools;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -23,6 +27,13 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootEntry;
+import net.minecraft.world.storage.loot.LootPool;
+import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.client.event.RenderHandEvent;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.handler.ItemTooltipHandler;
@@ -177,7 +188,6 @@ public class ItemBLFishingRod extends Item {
 					player.fishEntity.setDead();
 				}
 			}
-			return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 		} else {
 			world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundRegistry.BL_FISHING_CAST, SoundCategory.NEUTRAL, 0.2F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
@@ -191,7 +201,8 @@ public class ItemBLFishingRod extends Item {
 			player.swingArm(handIn);
 			player.addStat(StatList.getObjectUseStats(this));
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
+		
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
 
 	@Override
@@ -214,5 +225,43 @@ public class ItemBLFishingRod extends Item {
 	@Override
 	public int getItemEnchantability() {
 		return 1;
+	}
+	
+	private static final Field f_ItemRenderer_equippedProgressMainHand;
+	private static final Field f_ItemRenderer_prevEquippedProgressMainHand;
+	private static final Field f_ItemRenderer_equippedProgressOffHand;
+	private static final Field f_ItemRenderer_prevEquippedProgressOffHand;
+
+	static {
+		f_ItemRenderer_equippedProgressMainHand = ReflectionHelper.findField(ItemRenderer.class, "equippedProgressMainHand", "field_187469_f", "f");
+		f_ItemRenderer_prevEquippedProgressMainHand = ReflectionHelper.findField(ItemRenderer.class, "prevEquippedProgressMainHand", "field_187470_g", "g");
+		f_ItemRenderer_equippedProgressOffHand = ReflectionHelper.findField(ItemRenderer.class, "equippedProgressOffHand", "field_187471_h", "h");
+		f_ItemRenderer_prevEquippedProgressOffHand = ReflectionHelper.findField(ItemRenderer.class, "prevEquippedProgressOffHand", "field_187472_i", "i");
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public static void onRenderHand(RenderHandEvent event) {
+        EntityPlayerSP player = Minecraft.getMinecraft().player;
+        
+        if(player != null && player.fishEntity != null) {
+        	ItemRenderer itemRenderer = Minecraft.getMinecraft().entityRenderer.itemRenderer;
+        	
+        	try {
+		        ItemStack stackMainhand = player.getHeldItemMainhand();
+		        if(!stackMainhand.isEmpty() && stackMainhand.getItem() instanceof ItemBLFishingRod) {
+					f_ItemRenderer_equippedProgressMainHand.set(itemRenderer, 1.0f);
+					f_ItemRenderer_prevEquippedProgressMainHand.set(itemRenderer, 1.0f);
+		        }
+		        
+		        ItemStack stackOffhand = player.getHeldItemOffhand();
+		        if(!stackOffhand.isEmpty() && stackOffhand.getItem() instanceof ItemBLFishingRod) {
+		        	f_ItemRenderer_equippedProgressOffHand.set(itemRenderer, 1.0f);
+		        	f_ItemRenderer_prevEquippedProgressOffHand.set(itemRenderer, 1.0f);
+		        }
+			} catch(IllegalArgumentException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
+        }
 	}
 }

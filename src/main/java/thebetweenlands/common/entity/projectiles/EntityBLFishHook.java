@@ -1,9 +1,14 @@
 package thebetweenlands.common.entity.projectiles;
 
+import java.util.UUID;
+
+import com.mojang.authlib.GameProfile;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFishHook;
@@ -12,18 +17,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.item.tools.ItemBLFishingRod;
 
@@ -37,10 +38,10 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 	private EntityBLFishHook.State currentState = State.FLYING;
 
 	protected double interpTargetX;
-    protected double interpTargetY;
-    protected double interpTargetZ;
-    protected int newPosRotationIncrements;
-	
+	protected double interpTargetY;
+	protected double interpTargetZ;
+	protected int newPosRotationIncrements;
+
 	static enum State {
 		FLYING, HOOKED_IN_ENTITY, BOBBING;
 	}
@@ -58,34 +59,35 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 	public EntityBLFishHook(World world, EntityPlayer player) {
 		super(world, player);
 		init(player);
-		shoot();
+		shoot(player);
 	}
 
 	public EntityBLFishHook(World world) {
-		super(world, getPlayer(world));
-		setSize(0.25F, 0.25F);
-		ignoreFrustumCheck = true;
-	}
-
-	private static EntityPlayer getPlayer(World world) {
-		if (world.isRemote)
-			return TheBetweenlands.proxy.getClientPlayer();
-
-		if (FMLCommonHandler.instance().getMinecraftServerInstance() != null) {
-			PlayerList players = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList();
-			if (!players.getPlayers().isEmpty()) {
-				return (EntityPlayer) players.getPlayers().get(0);
+		super(world, new EntityPlayer(world, new GameProfile(UUID.randomUUID(), "[FishHookDummy]")) {
+			@Override
+			public boolean isSpectator() {
+				return false;
 			}
-		}
 
-		throw new IllegalStateException("Can't create Betweenlands Fish Hook Entity without a player.");
+			@Override
+			public boolean isCreative() {
+				return false;
+			}
+		});
+		this.motionX = 0;
+		this.motionY = 0;
+		this.motionZ = 0;
+		this.rotationYaw = 0;
+		this.rotationPitch = 0;
+		this.prevRotationYaw = this.rotationYaw;
+		this.prevRotationPitch = this.rotationPitch;
 	}
 
 	private void init(EntityPlayer player) {
 		setSize(0.25F, 0.25F);
 		ignoreFrustumCheck = true;
-        angler = player;
-        angler.fishEntity = this;
+		angler = player;
+		angler.fishEntity = this;
 	}
 
 	@Override
@@ -99,21 +101,21 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 	}
 
 	@Override
-    public void setLureSpeed(int speed) {}
-	
-	@Override
-    public void setLuck(int luck) {}
+	public void setLureSpeed(int speed) {}
 
-	public void shoot() {
-		float f = getAngler().prevRotationPitch + (getAngler().rotationPitch - getAngler().prevRotationPitch);
-		float f1 = getAngler().prevRotationYaw + (getAngler().rotationYaw - getAngler().prevRotationYaw);
+	@Override
+	public void setLuck(int luck) {}
+
+	public void shoot(EntityPlayer angler) {
+		float f = angler.prevRotationPitch + (angler.rotationPitch - angler.prevRotationPitch);
+		float f1 = angler.prevRotationYaw + (angler.rotationYaw - angler.prevRotationYaw);
 		float f2 = MathHelper.cos(-f1 * 0.017453292F - (float) Math.PI);
 		float f3 = MathHelper.sin(-f1 * 0.017453292F - (float) Math.PI);
 		float f4 = -MathHelper.cos(-f * 0.017453292F);
 		float f5 = MathHelper.sin(-f * 0.017453292F);
-		double d0 = getAngler().prevPosX + (getAngler().posX - getAngler().prevPosX) - (double) f3 * 0.3D;
-		double d1 = getAngler().prevPosY + (getAngler().posY - getAngler().prevPosY) + (double) getAngler().getEyeHeight();
-		double d2 = getAngler().prevPosZ + (getAngler().posZ - getAngler().prevPosZ) - (double) f2 * 0.3D;
+		double d0 = angler.prevPosX + (angler.posX - angler.prevPosX) - (double) f3 * 0.3D;
+		double d1 = angler.prevPosY + (angler.posY - angler.prevPosY) + (double) angler.getEyeHeight();
+		double d2 = angler.prevPosZ + (angler.posZ - angler.prevPosZ) - (double) f2 * 0.3D;
 		setLocationAndAngles(d0, d1, d2, f1, f);
 		motionX = (double) (-f3);
 		motionY = (double) MathHelper.clamp(-(f5 / f4), -5.0F, 5.0F);
@@ -139,17 +141,17 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 	@Override
 	public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport) {
 		this.interpTargetX = x;
-        this.interpTargetY = y;
-        this.interpTargetZ = z;
-        this.newPosRotationIncrements = posRotationIncrements;
+		this.interpTargetY = y;
+		this.interpTargetZ = z;
+		this.newPosRotationIncrements = posRotationIncrements;
 	}
 
 	@Override
 	public void onUpdate() {
-        if (!this.world.isRemote)
-            this.setFlag(6, this.isGlowing());
+		if (!this.world.isRemote)
+			this.setFlag(6, this.isGlowing());
 
-        if(this.ticksExisted < 2) {
+		if(this.ticksExisted < 2) {
 			//Stupid EntityTrackerEntry is broken and desyncs server position.
 			//Tracker updates server side position but *does not* send the change to the client
 			//when tracker.updateCounter == 0, causing a desync until the next force teleport
@@ -157,20 +159,22 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 			//By not moving the entity until then it works.
 			return;
 		}
-        
-        this.onEntityUpdate();
 
-        if (currentState != EntityBLFishHook.State.FLYING /*for smooth throwing*/ && this.newPosRotationIncrements > 0 && !this.canPassengerSteer())
-        {
-            double d0 = this.posX + (this.interpTargetX - this.posX) / (double)this.newPosRotationIncrements;
-            double d1 = this.posY + (this.interpTargetY - this.posY) / (double)this.newPosRotationIncrements;
-            double d2 = this.posZ + (this.interpTargetZ - this.posZ) / (double)this.newPosRotationIncrements;
-            --this.newPosRotationIncrements;
-            this.setPosition(d0, d1, d2);
-        }
-        
-		if (getAngler() == null) {
-			setDead();
+		this.onEntityUpdate();
+
+		if (currentState != EntityBLFishHook.State.FLYING /*for smooth throwing*/ && this.newPosRotationIncrements > 0 && !this.canPassengerSteer())
+		{
+			double d0 = this.posX + (this.interpTargetX - this.posX) / (double)this.newPosRotationIncrements;
+			double d1 = this.posY + (this.interpTargetY - this.posY) / (double)this.newPosRotationIncrements;
+			double d2 = this.posZ + (this.interpTargetZ - this.posZ) / (double)this.newPosRotationIncrements;
+			--this.newPosRotationIncrements;
+			this.setPosition(d0, d1, d2);
+		}
+
+		EntityPlayer angler = this.getAngler();
+
+		if (angler == null || angler.fishEntity != this) {
+			this.setDead();
 		} else if (world.isRemote || !shouldStopFishing()) {
 			if (inGround) {
 				++ticksInGround;
@@ -205,10 +209,10 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 					currentState = EntityBLFishHook.State.BOBBING;
 					return;
 				}
-				
-                if (!world.isRemote) {
-                    checkCollision();
-                }
+
+				if (!world.isRemote) {
+					checkCollision();
+				}
 
 				if (!inGround && !onGround && !collidedHorizontally) {
 					++ticksInAir;
@@ -231,7 +235,7 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 
 				if (!world.isRemote && currentState == EntityBLFishHook.State.BOBBING) {
 					//Bobbing is random so only do it on server side to stay in sync
-					
+
 					motionX *= 0.9D;
 					motionZ *= 0.9D;
 					double d0 = posY + motionY - (double) blockpos.getY() - (double) f;
@@ -270,15 +274,21 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 
 		if (raytraceresult != null && raytraceresult.typeOfHit != RayTraceResult.Type.MISS)
 			inGround = true;
-    }
+	}
 
 	private boolean shouldStopFishing() {
-		ItemStack stack = getAngler().getHeldItemMainhand();
-		ItemStack stack1 = getAngler().getHeldItemOffhand();
+		EntityPlayer angler = this.getAngler();
+
+		if(angler == null) {
+			return true;
+		}
+
+		ItemStack stack = angler.getHeldItemMainhand();
+		ItemStack stack1 = angler.getHeldItemOffhand();
 		boolean mainHandHeld = stack.getItem() instanceof ItemBLFishingRod;
 		boolean offHandHeld = stack1.getItem() instanceof ItemBLFishingRod;
 
-		if (!getAngler().isDead && getAngler().isEntityAlive() && (mainHandHeld || offHandHeld) && (int) getDistance(getAngler()) <= 32) {
+		if (!angler.isDead && angler.isEntityAlive() && (mainHandHeld || offHandHeld) && (int) getDistance(angler) <= 32) {
 			return false;
 		} else {
 			setDead();
@@ -313,7 +323,7 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 	public void setBaited(boolean hasBait) {
 		dataManager.set(IS_BAITED, hasBait);
 	}
-	
+
 	public boolean getBaited() {
 		return dataManager.get(IS_BAITED);
 	}
@@ -321,8 +331,8 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 	@Override
 	public int handleHookRetraction() {
 		if (!world.isRemote && getAngler() != null) {
-			int i = 0;
-			
+			int i = 1;
+
 			if (caughtEntity == null) {
 				bringInHookedEntity();
 				world.setEntityState(this, (byte) 31);
@@ -331,11 +341,15 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 			if (caughtEntity != null) {
 				bringInHookedEntity();
 				world.setEntityState(this, (byte) 31);
-				i = (int) Math.floor(((EntityAnadia) caughtEntity).getStrengthMods() + 0.5D);
+
+				if(caughtEntity instanceof EntityAnadia) {
+					i = (int) Math.floor(((EntityAnadia) caughtEntity).getStrengthMods() + 0.5D);
+				}
 			}
 
-			if (inGround)
+			if (inGround) {
 				i = 2;
+			}
 
 			return i;
 		} else {
@@ -345,29 +359,45 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 
 	@Override
 	protected void bringInHookedEntity() {
-		if (getAngler() != null) {
-			double d0 = getAngler().posX - posX;
-			double d1 = getAngler().posY - posY;
-			double d2 = getAngler().posZ - posZ;
-			if (caughtEntity != null) {
-					if(((EntityAnadia) caughtEntity).getStaminaTicks() > 0) {
-						if(!((EntityAnadia) caughtEntity).isObstructed())
-							((EntityAnadia) caughtEntity).setStaminaTicks(((EntityAnadia) caughtEntity).getStaminaTicks() - 2);
-						if(((EntityAnadia) caughtEntity).isObstructed())
-							((EntityAnadia) caughtEntity).setEscapeTicks(((EntityAnadia) caughtEntity).getEscapeTicks() -16);
-						if(((EntityAnadia) caughtEntity).isTreasureFish() && ((EntityAnadia) caughtEntity).isObstructedTreasure()) {
-							if(!((EntityAnadia) caughtEntity).getTreasureUnlocked())
-								((EntityAnadia) caughtEntity).playTreasureCollectedSound(getAngler());
-							((EntityAnadia) caughtEntity).setAsLootFish(true); //does the loot table changes
-						}
-						if (((EntityAnadia) caughtEntity).getStaminaTicks()%40 == 0) {
-							// consumes half a shank of hunger every 2 seconds or so whilst the fish has stamina
-							getAngler().getFoodStats().setFoodLevel(getAngler().getFoodStats().getFoodLevel() - 1);
-						}
+		EntityPlayer angler = this.getAngler();
+
+		if (angler != null) {
+			double d0 = angler.posX - posX;
+			double d1 = angler.posY - posY;
+			double d2 = angler.posZ - posZ;
+
+			if (caughtEntity instanceof EntityAnadia) {
+				EntityAnadia anadia = (EntityAnadia) caughtEntity;
+
+				if(anadia.getStaminaTicks() > 0) {
+					if(!anadia.isObstructed()) {
+						anadia.setStaminaTicks(anadia.getStaminaTicks() - 2);
 					}
-				caughtEntity.motionX += d0 * (0.045D - ((EntityAnadia) caughtEntity).getStrengthMods() * 0.005D);
-				caughtEntity.motionY += d1 * (0.045D - ((EntityAnadia) caughtEntity).getStrengthMods() * 0.005D);
-				caughtEntity.motionZ += d2 * (0.045D - ((EntityAnadia) caughtEntity).getStrengthMods() * 0.005D);
+
+					if(anadia.isObstructed()) {
+						anadia.setEscapeTicks(anadia.getEscapeTicks() -16);
+					}
+
+					if(anadia.isTreasureFish() && anadia.isObstructedTreasure()) {
+						if(!anadia.getTreasureUnlocked()) {
+							anadia.playTreasureCollectedSound(angler);
+						}
+						anadia.setAsLootFish(true); //does the loot table changes
+					}
+
+					if (anadia.getStaminaTicks() % 40 == 0) {
+						// consumes half a shank of hunger every 2 seconds or so whilst the fish has stamina
+						angler.getFoodStats().setFoodLevel(angler.getFoodStats().getFoodLevel() - 1);
+					}
+				}
+
+				caughtEntity.motionX += d0 * (0.045D - anadia.getStrengthMods() * 0.005D);
+				caughtEntity.motionY += d1 * (0.045D - anadia.getStrengthMods() * 0.005D);
+				caughtEntity.motionZ += d2 * (0.045D - anadia.getStrengthMods() * 0.005D);
+			} else if(caughtEntity != null) {
+				caughtEntity.motionX += d0 * 0.02D;
+				caughtEntity.motionY += d1 * 0.02D;
+				caughtEntity.motionZ += d2 * 0.02D;
 			} else {
 				motionX += d0 * 0.06D;
 				motionY += d1 * 0.06D;
@@ -384,32 +414,38 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 	@Override
 	public void setDead() {
 		super.setDead();
-		if (getAngler() != null)
-			getAngler().fishEntity = null;
+
+		EntityPlayer angler = this.getAngler();
+		if (angler != null) {
+			angler.fishEntity = null;
+		}
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
-	}
-
-	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
+	public boolean writeToNBTOptional(NBTTagCompound compound) {
+		return false;
 	}
 
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {
-		if (getAngler() != null)
-			buffer.writeInt(getAngler().getEntityId());
+		EntityPlayer angler = this.getAngler();
+		buffer.writeBoolean(angler != null);
+		if(angler != null) {
+			buffer.writeInt(angler.getEntityId());
+		}
 	}
 
 	@Override
 	public void readSpawnData(ByteBuf buffer) {
-		if(buffer.isReadable()) {
-			int entityPlayerID = buffer.readInt();
-			EntityPlayer playerIn = (EntityPlayer) world.getEntityByID(entityPlayerID);
-			EntityBLFishHook entityFishHookIn = (EntityBLFishHook) ((EntityPlayer) world.getEntityByID(entityPlayerID)).fishEntity;
-			ObfuscationReflectionHelper.setPrivateValue(EntityBLFishHook.class, entityFishHookIn, playerIn, new String[] { "angler", "field_146042_b" });
+		if(buffer.readBoolean()) {
+			int entityId = buffer.readInt();
+			Entity angler = world.getEntityByID(entityId);
+			if(angler instanceof EntityPlayer) {
+				((EntityPlayer) angler).fishEntity = this;
+				this.angler = (EntityPlayer) angler;
+			} else {
+				this.angler = null;
+			}
 		}
 	}
-
 }

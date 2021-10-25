@@ -285,6 +285,7 @@ import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.item.misc.ItemBarkAmulet;
 import thebetweenlands.common.item.shields.ItemSwatShield;
+import thebetweenlands.common.item.tools.ItemBLFishingRod;
 import thebetweenlands.common.item.tools.bow.ItemBLBow;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
@@ -957,6 +958,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         MinecraftForge.EVENT_BUS.register(EntityChiromawTame.class);
         MinecraftForge.EVENT_BUS.register(EventHeavyRain.class);
         MinecraftForge.EVENT_BUS.register(new GuiFishStaminaBar());
+        MinecraftForge.EVENT_BUS.register(ItemBLFishingRod.class);
 	}
 
 	private static FontRenderer pixelLove;
