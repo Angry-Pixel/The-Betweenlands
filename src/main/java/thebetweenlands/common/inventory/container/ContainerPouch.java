@@ -14,9 +14,10 @@ import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.inventory.InventoryItem;
-import thebetweenlands.common.inventory.slot.SlotPouch;
+import thebetweenlands.common.inventory.slot.SlotInvRestriction;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.util.InventoryUtils;
 
 public class ContainerPouch extends Container {
 	@Nullable
@@ -42,7 +43,7 @@ public class ContainerPouch extends Container {
 
 		for (int row = 0; row < this.numRows; ++row) {
 			for (int column = 0; column < 9; ++column) {
-				this.addSlotToContainer(new SlotPouch(itemInventory, column + row * 9, 8 + column * 18, 18 + row * 18));
+				this.addSlotToContainer(new SlotInvRestriction(itemInventory, column + row * 9, 8 + column * 18, 18 + row * 18));
 			}
 		}
 
@@ -115,7 +116,7 @@ public class ContainerPouch extends Container {
 			ItemStack slotStack = slot.getStack();
 			stack = slotStack.copy();
 
-			if (slotStack.getItem() instanceof ItemLurkerSkinPouch) {
+			if (InventoryUtils.isDisallowedInInventories(slotStack)) {
 				return ItemStack.EMPTY;
 			}
 

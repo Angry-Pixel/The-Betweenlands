@@ -2,6 +2,7 @@ package thebetweenlands.common.inventory;
 
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
+import thebetweenlands.util.InventoryUtils;
 
 public class InventoryPouch extends InventoryItem {
 
@@ -11,7 +12,7 @@ public class InventoryPouch extends InventoryItem {
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-		return !(itemstack.getItem() instanceof ItemLurkerSkinPouch);
+		return !InventoryUtils.isDisallowedInInventories(itemstack);
 	}
 
 }

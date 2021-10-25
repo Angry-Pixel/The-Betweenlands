@@ -11,8 +11,10 @@ import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import thebetweenlands.common.inventory.slot.SlotExclusion;
+import thebetweenlands.common.inventory.slot.SlotInvRestriction;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityFishingTackleBox;
+import thebetweenlands.util.InventoryUtils;
 
 public class ContainerFishingTackleBox extends Container {
 
@@ -36,7 +38,7 @@ public class ContainerFishingTackleBox extends Container {
 
 		for (int j = 0; j < 4; ++j)
 			for (int k = 0; k < 4; ++k)
-				addSlotToContainer(new SlotExclusion(tile, k + j * 4, 8 + k * 18, 18 + j * 18, fishingTackleBoxStack, 64, this));
+				addSlotToContainer(new SlotInvRestriction(tile, k + j * 4, 8 + k * 18, 18 + j * 18));
 
 		for (int l = 0; l < 3; ++l)
             for (int j1 = 0; j1 < 9; ++j1)
@@ -77,6 +79,10 @@ public class ContainerFishingTackleBox extends Container {
 		if (slot != null && slot.getHasStack()) {
 			ItemStack is1 = slot.getStack();
 			is = is1.copy();
+			
+			if (InventoryUtils.isDisallowedInInventories(is1)) {
+				return ItemStack.EMPTY;
+			}
 
 			if (slotIndex == 0) {
 				if (!this.mergeItemStack(is1, 5, 57, true))

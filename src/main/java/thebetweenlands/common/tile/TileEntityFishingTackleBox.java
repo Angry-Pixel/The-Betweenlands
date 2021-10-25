@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import thebetweenlands.common.entity.EntityFishingTackleBoxSeat;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
+import thebetweenlands.util.InventoryUtils;
 
 public class TileEntityFishingTackleBox extends TileEntity implements ITickable, IInventory {
 
@@ -173,8 +174,8 @@ public class TileEntityFishingTackleBox extends TileEntity implements ITickable,
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack is) {
-		return false;
+	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
+		return !InventoryUtils.isDisallowedInInventories(itemstack);
 	}
 
 	@Override
