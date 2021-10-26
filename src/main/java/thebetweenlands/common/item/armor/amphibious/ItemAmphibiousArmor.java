@@ -212,21 +212,6 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 				}
 			}
 
-			// movement speed
-			if(itemStack.getItem() != ItemRegistry.AMPHIBIOUS_HELMET && player.moveForward > 0.0F && !player.capabilities.isFlying) {
-				int finCount = getUpgradeCount(itemStack, AmphibiousArmorUpgrades.MOVEMENT_SPEED);
-
-				if(finCount > 0) {
-					float bonusSpeed = 0.0125f * (Math.min(4, finCount));
-
-					if(player.onGround && !player.isInWater()) {
-						bonusSpeed /= 2f;
-					}
-
-					player.moveRelative(0.0F, 0.0F, bonusSpeed, 1.0F);
-				}
-			}
-
 			int ascentBoostTicks = nbt.getInteger(NBT_ASCENT_BOOST_TICKS);
 
 			if(itemStack.getItem() == ItemRegistry.AMPHIBIOUS_LEGGINGS) {
