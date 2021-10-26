@@ -32,6 +32,7 @@ public class CorrosiveBootsHandler {
 										EntityTriggeredFallingBlock falling_block = new EntityTriggeredFallingBlock(world);
 										falling_block.setPosition(e.player.getPosition().getX() + 0.5D, e.player.getPosition().getY() - 1D, e.player.getPosition().getZ() + 0.5D);
 										falling_block.setWalkway(true);
+										falling_block.setTemporary(true);
 										world.spawnEntity(falling_block);
 									}
 								}

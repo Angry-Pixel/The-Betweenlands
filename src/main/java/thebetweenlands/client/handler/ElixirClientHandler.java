@@ -238,7 +238,7 @@ public class ElixirClientHandler {
 	@SideOnly(Side.CLIENT)
 	private void updatePlayerRootboundTicks(EntityLivingBase entity) {
 		NBTTagCompound nbt = entity.getEntityData();
-		if(entity.getActivePotionEffect(ElixirEffectRegistry.SHOCKED) != null || entity.getActivePotionEffect(ElixirEffectRegistry.ROOT_BOUND) != null || ElixirEffectRegistry.EFFECT_BASILISK.isActive(entity) || ElixirEffectRegistry.EFFECT_PETRIFY.isActive(entity)) {
+		if(entity.getActivePotionEffect(ElixirEffectRegistry.EFFECT_SHOCKED.getPotionEffect()) != null || entity.getActivePotionEffect(ElixirEffectRegistry.ROOT_BOUND) != null || ElixirEffectRegistry.EFFECT_BASILISK.isActive(entity) || ElixirEffectRegistry.EFFECT_PETRIFY.isActive(entity)) {
 			nbt.setInteger("thebetweenlands.stuckTicks", 5);
 		} else {
 			int rootBoundTicks = nbt.getInteger("thebetweenlands.stuckTicks");
@@ -258,7 +258,7 @@ public class ElixirClientHandler {
 		NBTTagCompound nbt = entity.getEntityData();
 		
 		//NBT is necessary so that FOV doesn't flicker when potion wears off .-.
-		if(entity.getActivePotionEffect(ElixirEffectRegistry.SHOCKED) != null || entity.getActivePotionEffect(ElixirEffectRegistry.ROOT_BOUND) != null || ElixirEffectRegistry.EFFECT_BASILISK.isActive(entity) || ElixirEffectRegistry.EFFECT_PETRIFY.isActive(entity) || nbt.hasKey("thebetweenlands.stuckTicks")) {
+		if(entity.getActivePotionEffect(ElixirEffectRegistry.EFFECT_SHOCKED.getPotionEffect()) != null || entity.getActivePotionEffect(ElixirEffectRegistry.ROOT_BOUND) != null || ElixirEffectRegistry.EFFECT_BASILISK.isActive(entity) || ElixirEffectRegistry.EFFECT_PETRIFY.isActive(entity) || nbt.hasKey("thebetweenlands.stuckTicks")) {
 			event.setNewfov(1);
 		}
 	}

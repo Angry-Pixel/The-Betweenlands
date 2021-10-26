@@ -72,7 +72,7 @@ public class CameraPositionHandler {
 			
 			//Shock
 			if(renderViewEntity instanceof EntityLivingBase) {
-				PotionEffect effect = ((EntityLivingBase) renderViewEntity).getActivePotionEffect(ElixirEffectRegistry.SHOCKED);
+				PotionEffect effect = ((EntityLivingBase) renderViewEntity).getActivePotionEffect(ElixirEffectRegistry.EFFECT_SHOCKED.getPotionEffect());
 				if(effect != null) {
 					screenShake += Math.min(0.1f, effect.getDuration() / 30.0f * 0.1f);
 				}

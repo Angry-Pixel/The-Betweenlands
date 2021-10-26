@@ -973,15 +973,15 @@ item.thebetweenlands.frog_legs_smoked.name=Smoked Frog's Leg
 item.thebetweenlands.puffshroom_tendril_smoked.name=Smoked Puffshroom Tendril
 item.thebetweenlands.silt_crab_claw_smoked.name=Smoked Crab Claw
 item.thebetweenlands.snail_flesh_smoked.name=Smoked Snail Flesh
-item.thebetweenlands.aa_upgrade_electric.name=Electric
-item.thebetweenlands.aa_upgrade_glide.name=Glide
-item.thebetweenlands.aa_upgrade_leap.name=Ascent
-item.thebetweenlands.aa_upgrade_urchin.name=Urchin Spikes
-item.thebetweenlands.aa_upgrade_vortex.name=Fish Vortex
+item.thebetweenlands.aa_upgrade_electric.name=Electric Upgrade
+item.thebetweenlands.aa_upgrade_glide.name=Glide Upgrade
+item.thebetweenlands.aa_upgrade_leap.name=Ascent Upgrade
+item.thebetweenlands.aa_upgrade_urchin.name=Urchin Spike Upgrade
+item.thebetweenlands.aa_upgrade_vortex.name=Fish Vortex Upgrade
 item.thebetweenlands.aa_upgrade_trigger.name=Biopathic Triggerstone
 item.thebetweenlands.aa_upgrade_toggle.name=Biopathic Linkstone
-item.thebetweenlands.mist_staff.name=Staff of the Mist walker
-item.thebetweenlands.shadow_staff.name=Staff of the Shadow walker
+item.thebetweenlands.mist_staff.name=Staff of the Mist Walker
+item.thebetweenlands.shadow_staff.name=Staff of the Shadow Walker
 item.thebetweenlands.olm_egg_raw.name=Olm Egg Cluster
 item.thebetweenlands.olm_egg_cooked.name=Baked Olm Egg Cluster
 item.thebetweenlands.olmlette_mixture.name=Olmlette Mixture
@@ -1494,6 +1494,7 @@ bl.potion.rootBound=Root Bound
 bl.potion.enlightened=Enlightened
 
 bl.effect.blessed=Blessed
+bl.effect.shocked=Shocked
 
 # Entities
 entity.thebetweenlands.dark_druid.name=Dark Druid
