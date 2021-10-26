@@ -1,9 +1,13 @@
 package thebetweenlands.client.handler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Sphere;
@@ -36,6 +40,7 @@ import thebetweenlands.client.render.shader.GeometryBuffer;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
@@ -298,5 +303,33 @@ public class WorldRenderHandler {
 		playerRenderer.doRender(player, d0 - MC.getRenderManager().renderPosX, d1 - MC.getRenderManager().renderPosY, d2 - MC.getRenderManager().renderPosZ, f, partialTicks);
 
 		GlStateManager.disablePolygonOffset();
+	}
+
+	private static HashMap<EntityLivingBase, Boolean> tempAnadiaList = new HashMap<EntityLivingBase, Boolean>();
+
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
+	public static void AmphibiousGlowRenderPre(RenderLivingEvent.Pre event) {
+		EntityLivingBase livingBase = event.getEntity();
+
+		if(livingBase instanceof EntityAnadia) {
+			if(tempAnadiaList.containsKey(livingBase)) {
+				if(tempAnadiaList.get(livingBase) != null) {
+					livingBase.setGlowing(tempAnadiaList.get(livingBase));
+					tempAnadiaList.remove(livingBase);
+				}
+			}
+		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
+	public static void AmphibiousGlowRenderPost(RenderLivingEvent.Post event) {
+		EntityLivingBase livingBase = event.getEntity();
+
+		if(livingBase instanceof EntityAnadia) {
+			if(((EntityAnadia) livingBase).getGlowTimer() > 0 && !tempAnadiaList.containsKey(livingBase)) {
+				tempAnadiaList.put(livingBase, livingBase.isGlowing());
+				livingBase.setGlowing(true);
+			}
+		}
 	}
 }

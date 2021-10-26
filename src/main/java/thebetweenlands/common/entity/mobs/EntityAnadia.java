@@ -376,7 +376,10 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 	public void setGlowTimer(int time) {
 		glowTimer = time;
-		setGlowing(true);
+	}
+
+	public float getGlowTimer() {
+		return glowTimer;
 	}
 
 	public void randomiseObstructionOrder() {
@@ -594,10 +597,6 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 		if(glowTimer > 0) {
 			glowTimer--;
-
-			if(glowTimer <= 0) {
-				setGlowing(false);
-			}
 		}
 
 		if (inWater) {
