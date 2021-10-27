@@ -155,12 +155,14 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
 		nbt.setBoolean("isLeader", isLeader());
+		nbt.setBoolean("spawnedChildren", this.spawnedChildren);
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
 		setIsLeader(nbt.getBoolean("isLeader"));
+		this.spawnedChildren = nbt.getBoolean("spawnedChildren");
 	}
 
 	@Override
@@ -243,15 +245,8 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
 				checkIfCanBeLeader(); // just in case there is no leader
 		}
 
-		if(!spawnedChildren) {
-			if(isLeader()) {
-				AxisAlignedBB aabb = new AxisAlignedBB(getPosition()).grow(16);
-
-				for (EntityPlayer player : world.getEntitiesWithinAABB(EntityPlayer.class, aabb, a -> a.getDistanceSq(getPosition().getX() + 0.5f, getPosition().getY() + 0.5f, getPosition().getZ() + 0.5f) <= 16 * 16)) {
-					checkSpawnChildren();
-					break;
-				}
-			}
+		if(!spawnedChildren && this.ticksExisted % 20 == 0 && isLeader() && this.world.getClosestPlayer(this.posX, this.posY, this.posZ, 16, false) != null) {
+			checkSpawnChildren();
 		}
 
 		if (inWater) {
