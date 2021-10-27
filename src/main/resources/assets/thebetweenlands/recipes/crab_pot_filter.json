@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "WWW",
+    "R R",
+    "WWW"
+  ],
+  "key": {
+    "R": {
+      "item": "thebetweenlands:items_misc",
+      "data": 7
+    },
+    "W": {
+      "item": "thebetweenlands:rotten_planks"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:crab_pot_filter"
+  }
+}

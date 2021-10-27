@@ -11,7 +11,7 @@
       "translate": "advancements.thebetweenlands.farmer.mr_compost.description"
     }
   },
-  "parent": "thebetweenlands:farmer/root",
+  "parent": "thebetweenlands:farmer/fertile_soil",
   "criteria": {
     "use_compost": {
       "trigger": "thebetweenlands:right_click_block",

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X",
+    "O"
+  ],
+  "key": {
+    "X": {
+      "item": "thebetweenlands:smooth_betweenstone_slab"
+    },
+    "O": {
+      "item": "thebetweenlands:log_weedwood",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:fish_trimming_table"
+  }
+}

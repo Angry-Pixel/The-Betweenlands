@@ -1,7 +1,18 @@
 {
 	"forge_marker": 1,
+	
+	   "defaults": {
+        "model": "thebetweenlands:internal/winter_event",
+        "custom": {
+            "model_base": "thebetweenlands:block/mud",
+            "model_base_data": {
+                "model_base": "thebetweenlands:block/thebetweenlands:block/mud",
+                "model_active": "thebetweenlands:block/thebetweenlands:block/mud_frosty"
+            }
+        }
+    },
 	"variants": {
-		"normal": [
+		"in_water=false": [
 			{
 				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
@@ -33,6 +44,84 @@
 				},
 				"y": 270
 			}
-		]
+		],
+		"in_water=true": [
+            {
+                "model": "thebetweenlands:mud_in_water_1",
+                "weight": 15
+            },
+             {
+                "model": "thebetweenlands:mud_in_water_2",
+                "weight": 15
+            },
+             {
+                "model": "thebetweenlands:mud_in_water_3",
+                "weight": 15
+            },
+            {
+                "model": "thebetweenlands:mud",
+                "weight": 100
+            },
+            {
+                "model": "thebetweenlands:mud_in_water_1",
+                "weight": 15,
+                "y": 90
+            },
+            {
+                "model": "thebetweenlands:mud_in_water_2",
+                "weight": 15,
+                "y": 90
+            },
+            {
+                "model": "thebetweenlands:mud_in_water_3",
+                "weight": 15,
+                "y": 90
+            },
+            {
+                "model": "thebetweenlands:mud",
+                "weight": 100,
+                "y": 90
+            },
+            {
+                "model": "thebetweenlands:mud_in_water_1",
+                "weight": 15,
+                "y": 180
+            },
+            {
+                "model": "thebetweenlands:mud_in_water_2",
+                "weight": 15,
+                "y": 180
+            },
+            {
+                "model": "thebetweenlands:mud_in_water_3",
+                "weight": 15,
+                "y": 180
+            },
+            {
+                "model": "thebetweenlands:mud",
+                "weight": 100,
+                "y": 180
+            },
+            {
+                "model": "thebetweenlands:mud_in_water_1",
+                "weight": 15,
+                "y": 270
+            },
+            {
+                "model": "thebetweenlands:mud_in_water_2",
+                "weight": 15,
+                "y": 270
+            },
+            {
+                "model": "thebetweenlands:mud_in_water_3",
+                "weight": 15,
+                "y": 270
+            },
+            {
+                "model": "thebetweenlands:mud",
+                "weight": 100,
+                "y": 270
+            }
+        ]
 	}
 }

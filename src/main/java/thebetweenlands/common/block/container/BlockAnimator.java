@@ -176,6 +176,11 @@ public class BlockAnimator extends BlockContainer {
 	
 	@Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
-    	return BlockFaceShape.UNDEFINED;
+    	return face == EnumFacing.DOWN ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
     }
+	
+	@Override
+	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return side == EnumFacing.DOWN;
+	}
 }

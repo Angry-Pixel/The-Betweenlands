@@ -218,6 +218,11 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 	}
 
 	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
+
+	@Override
 	public void update() {
 		if(this.isActive()) {
 			this.updateEffects(this.effect);
@@ -230,7 +235,7 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 		compound = super.writeToNBT(compound);
 
 		compound.setInteger("effectId", this.effect.id);
-		compound.setInteger("secondaryEffectId", this.effect.id);
+		compound.setInteger("secondaryEffectId", this.secondaryEffect.id);
 		compound.setBoolean("isActive", this.isActive);
 		compound.setString("customName", this.customName);
 
@@ -263,7 +268,18 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 		NBTTagCompound nbt = super.getUpdateTag();
 		nbt.setInteger("effectId", this.effect.id);
 		nbt.setInteger("secondaryEffectId", this.secondaryEffect.id);
+		nbt.setBoolean("isActive", this.isActive);
+		nbt.setString("customName", this.customName);
 		return nbt;
+	}
+
+	@Override
+	public void handleUpdateTag(NBTTagCompound tag) {
+		super.handleUpdateTag(tag);
+		this.effect = Effect.byId(tag.getInteger("effectId"));
+		this.secondaryEffect = Effect.byId(tag.getInteger("secondaryEffectId"));
+		this.isActive = tag.getBoolean("isActive");
+		this.customName = tag.getString("customName");
 	}
 
 	@Override
@@ -653,78 +669,83 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 		}
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void onLivingDeath(LivingDeathEvent event) {
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public static void onLivingDeathFirst(LivingDeathEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
 
-		if(!entity.world.isRemote) {
-			if(entity instanceof EntityPlayer == false && entity.world.rand.nextInt(4) == 0) {
-				TileEntitySimulacrum simulacrum = getClosestActiveTile(TileEntitySimulacrum.class, null, entity.world, entity.posX, entity.posY, entity.posZ, 16.0D, Effect.RESURRECTION, null);
+		if(!entity.world.isRemote && entity instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) entity;
+			IBlessingCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_BLESSING, null);
 
-				if(simulacrum != null) {
-					entity.setDropItemsWhenDead(false);
+			if(cap != null && cap.isBlessed()) {
+				BlockPos location = cap.getBlessingLocation();
 
-					NBTTagCompound nbt = new NBTTagCompound();
+				if(location != null && cap.getBlessingDimension() == entity.dimension) {
+					event.setCanceled(true);
 
-					if(entity.writeToNBTAtomically(nbt)) {
-						EntityResurrection resurrection = new EntityResurrection(entity.world, nbt, () -> !entity.isDead ? entity.getPositionVector() : null, 60 + entity.world.rand.nextInt(60));
-						resurrection.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
-						entity.world.spawnEntity(resurrection);
+					entity.setHealth(entity.getMaxHealth() * 0.5f);
+
+					int droppedExperience = player.experienceTotal / 3;
+					player.experience = 0;
+					player.experienceLevel = 0;
+					player.experienceTotal = 0;
+					while(droppedExperience > 0) {
+						int xp = EntityXPOrb.getXPSplit(droppedExperience);
+						droppedExperience -= xp;
+						EntityXPOrb xpOrb = new EntityXPOrb(player.world, player.posX, player.posY, player.posZ, xp);
+						xpOrb.delayBeforeCanPickup = 40;
+						player.world.spawnEntity(xpOrb);
 					}
-				}
-			} else if(entity instanceof EntityPlayer) {
-				EntityPlayer player = (EntityPlayer) entity;
-				IBlessingCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_BLESSING, null);
 
-				if(cap != null && cap.isBlessed()) {
-					BlockPos location = cap.getBlessingLocation();
+					if(entity.world.rand.nextBoolean()) {
+						BlockPos spawnPoint = PlayerRespawnHandler.getSpawnPointNearPos(entity.world, location, 8, false, 4, 0);
 
-					if(location != null && cap.getBlessingDimension() == entity.dimension) {
-						event.setCanceled(true);
-
-						entity.setHealth(entity.getMaxHealth() * 0.5f);
-
-						int droppedExperience = player.experienceTotal / 3;
-						player.experience = 0;
-						player.experienceLevel = 0;
-						player.experienceTotal = 0;
-						while(droppedExperience > 0) {
-							int xp = EntityXPOrb.getXPSplit(droppedExperience);
-							droppedExperience -= xp;
-							EntityXPOrb xpOrb = new EntityXPOrb(player.world, player.posX, player.posY, player.posZ, xp);
-							xpOrb.delayBeforeCanPickup = 40;
-							player.world.spawnEntity(xpOrb);
-						}
-
-						if(entity.world.rand.nextBoolean()) {
-							BlockPos spawnPoint = PlayerRespawnHandler.getSpawnPointNearPos(entity.world, location, 8, false, 4, 0);
-
-							if(spawnPoint != null) {
-								if(entity.getDistanceSq(spawnPoint) > 24) {
-									playThunderSounds(entity.world, entity.posX, entity.posY, entity.posZ);
-									entity.world.spawnEntity(new EntityBLLightningBolt(entity.world, entity.posX, entity.posY, entity.posZ, 1, false, true));
-								}
-
-								PlayerUtil.teleport(entity, spawnPoint.getX() + 0.5D, spawnPoint.getY(), spawnPoint.getZ() + 0.5D);
-
+						if(spawnPoint != null) {
+							if(entity.getDistanceSq(spawnPoint) > 24) {
 								playThunderSounds(entity.world, entity.posX, entity.posY, entity.posZ);
 								entity.world.spawnEntity(new EntityBLLightningBolt(entity.world, entity.posX, entity.posY, entity.posZ, 1, false, true));
-
-								entity.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60, 1));
-							} else if(entity instanceof EntityPlayerMP) {
-								((EntityPlayerMP) entity).sendStatusMessage(new TextComponentTranslation("chat.simulacrum.obstructed"), true);
 							}
-						} else {
+
+							PlayerUtil.teleport(entity, spawnPoint.getX() + 0.5D, spawnPoint.getY(), spawnPoint.getZ() + 0.5D);
+
 							playThunderSounds(entity.world, entity.posX, entity.posY, entity.posZ);
 							entity.world.spawnEntity(new EntityBLLightningBolt(entity.world, entity.posX, entity.posY, entity.posZ, 1, false, true));
-						}
-						
-						if(player instanceof EntityPlayerMP) {
-							AdvancementCriterionRegistry.REVIVED_BLESSED.trigger((EntityPlayerMP) player);
-						}
 
-						cap.clearBlessed();
+							entity.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60, 1));
+						} else if(entity instanceof EntityPlayerMP) {
+							((EntityPlayerMP) entity).sendStatusMessage(new TextComponentTranslation("chat.simulacrum.obstructed"), true);
+						}
+					} else {
+						playThunderSounds(entity.world, entity.posX, entity.posY, entity.posZ);
+						entity.world.spawnEntity(new EntityBLLightningBolt(entity.world, entity.posX, entity.posY, entity.posZ, 1, false, true));
 					}
+
+					if(player instanceof EntityPlayerMP) {
+						AdvancementCriterionRegistry.REVIVED_BLESSED.trigger((EntityPlayerMP) player);
+					}
+
+					cap.clearBlessed();
+				}
+			}
+		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void onLivingDeathLast(LivingDeathEvent event) {
+		EntityLivingBase entity = event.getEntityLiving();
+
+		if(!entity.world.isRemote && entity instanceof EntityPlayer == false && entity.world.rand.nextInt(4) == 0) {
+			TileEntitySimulacrum simulacrum = getClosestActiveTile(TileEntitySimulacrum.class, null, entity.world, entity.posX, entity.posY, entity.posZ, 16.0D, Effect.RESURRECTION, null);
+
+			if(simulacrum != null) {
+				entity.setDropItemsWhenDead(false);
+
+				NBTTagCompound nbt = new NBTTagCompound();
+
+				if(entity.writeToNBTAtomically(nbt)) {
+					EntityResurrection resurrection = new EntityResurrection(entity.world, nbt, () -> !entity.isDead ? entity.getPositionVector() : null, 60 + entity.world.rand.nextInt(60));
+					resurrection.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+					entity.world.spawnEntity(resurrection);
 				}
 			}
 		}

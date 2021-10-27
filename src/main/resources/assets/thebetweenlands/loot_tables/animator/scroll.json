@@ -120,7 +120,7 @@
                             "data": 38
                         }
                     ],
-                    "weight": 16,
+                    "weight": 10,
                     "quality": 0
                 },
                 {
@@ -160,6 +160,22 @@
                     "name": "thebetweenlands:loot/music_disc",
                     "functions": [],
                     "weight": 5,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:shadow_staff",
+                    "functions": [],
+                    "weight": 10,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:mist_staff",
+                    "functions": [],
+                    "weight": 10,
                     "quality": 0
                 }
             ],

@@ -10,7 +10,7 @@ import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 
 public class ItemNettleSoup extends ItemBLFood {
 	public ItemNettleSoup() {
-		super(10, 1F, false);
+		super(6, 1F, false);
 	}
 
 	@Override

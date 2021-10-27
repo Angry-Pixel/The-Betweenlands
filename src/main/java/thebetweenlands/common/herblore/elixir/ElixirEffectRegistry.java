@@ -18,6 +18,7 @@ import thebetweenlands.common.herblore.elixir.effects.ElixirHealing;
 import thebetweenlands.common.herblore.elixir.effects.ElixirMasking;
 import thebetweenlands.common.herblore.elixir.effects.ElixirPetrify;
 import thebetweenlands.common.herblore.elixir.effects.ElixirRipening;
+import thebetweenlands.common.herblore.elixir.effects.ElixirShocked;
 import thebetweenlands.common.herblore.elixir.effects.ElixirStarvation;
 import thebetweenlands.common.herblore.elixir.effects.ElixirSwiftarm;
 
@@ -61,6 +62,7 @@ public class ElixirEffectRegistry {
 	//Other Elixirs
 	public static final ElixirEffect EFFECT_PETRIFY = new ElixirPetrify(34, "bl.elixir.petrify", new ResourceLocation("thebetweenlands:textures/items/strictly_herblore/misc/vial_green.png"));
 	public static final ElixirEffect EFFECT_BLESSED = new ElixirEffect(35, "bl.effect.blessed", new ResourceLocation("thebetweenlands:textures/gui/effect_blessed.png"));
+	public static final ElixirEffect EFFECT_SHOCKED = new ElixirShocked(36, "bl.effect.shocked", new ResourceLocation("thebetweenlands:textures/gui/effect_shocked.png"));
 	private static final List<ElixirEffect> EFFECTS = new ArrayList<ElixirEffect>();
 
 	//Potions

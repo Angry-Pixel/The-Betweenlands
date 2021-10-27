@@ -1183,6 +1183,18 @@
     ],
     "subtitle": "blsubtitles.entity.greebling.vanish"
   },
+  "greebling_hum": {
+    "sounds": [
+      "thebetweenlands:greebling_hum"
+    ],
+    "subtitle": "blsubtitles.entity.greebling.hum"
+  },
+  "coracle_sink": {
+    "sounds": [
+      "thebetweenlands:coracle_sink"
+    ],
+    "subtitle": "blsubtitles.entity.greebling.coracle_sink"
+  },
    "chiromaw_matriarch_barb_fire": {
     "sounds": [
       "thebetweenlands:chiromaw_matriarch_barb_fire_1",
@@ -1435,6 +1447,14 @@
     "sounds": [
       {
         "name": "thebetweenlands:ambience/ambient_swamp_dense_fog",
+        "stream": true
+      }
+    ]
+  },
+  "ambient_deep_waters": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:ambience/ambient_deep_waters",
         "stream": true
       }
     ]
@@ -1858,6 +1878,14 @@
       }
     ]
   },
+  "deep_water_theme": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:records/deep_water_theme",
+        "stream": true
+      }
+    ]
+  },
   "rowboat_row_starboard": {
     "sounds": [
       "thebetweenlands:boat_row_1"
@@ -2155,5 +2183,174 @@
     "sounds": [
       "thebetweenlands:chimes_snowfall"
     ]
+  },
+  "fishing_tackle_box_open": {
+    "sounds": [
+      "thebetweenlands:fishing_tackle_box_open"
+    ]
+  },
+  "fishing_tackle_box_close": {
+    "sounds": [
+      "thebetweenlands:fishing_tackle_box_close"
+    ]
+  },
+  "fish_chop": {
+    "sounds": [
+      "thebetweenlands:fish_chop"
+    ]
+  },
+  "rock_snot_attach": {
+    "sounds": [
+      "thebetweenlands:rock_snot_attach"
+    ]
+  },
+  "rock_snot_attack": {
+    "sounds": [
+      "thebetweenlands:rock_snot_attack"
+    ]
+  },
+  "rock_snot_digest": {
+    "sounds": [
+      "thebetweenlands:rock_snot_digest"
+    ]
+  },
+  "rock_snot_spit": {
+    "sounds": [
+      "thebetweenlands:rock_snot_spit"
+    ]
+  },
+  "rock_snot_eat": {
+    "sounds": [
+      "thebetweenlands:rock_snot_eat_1",
+      "thebetweenlands:rock_snot_eat_2",
+      "thebetweenlands:rock_snot_eat_3",
+      "thebetweenlands:rock_snot_eat_4",
+      "thebetweenlands:rock_snot_eat_5"
+    ]
+  },
+  "jellyfish_hurt": {
+    "sounds": [
+      "thebetweenlands:jellyfish_hurt_1",
+      "thebetweenlands:jellyfish_hurt_2",
+      "thebetweenlands:jellyfish_hurt_3",
+      "thebetweenlands:jellyfish_hurt_4"
+    ]
+  },
+  "jellyfish_swim": {
+    "sounds": [
+      "thebetweenlands:jellyfish_swim_1",
+      "thebetweenlands:jellyfish_swim_2",
+      "thebetweenlands:jellyfish_swim_3",
+      "thebetweenlands:jellyfish_swim_4",
+      "thebetweenlands:jellyfish_swim_5"
+    ]
+  },
+  "jellyfish_zap": {
+    "sounds": [
+      "thebetweenlands:jellyfish_zap_1",
+      "thebetweenlands:jellyfish_zap_2",
+      "thebetweenlands:jellyfish_zap_3"
+    ]
+  },
+  "anadia_treasure_collected": {
+    "sounds": [
+      "thebetweenlands:anadia_treasure_collected"
+    ]
+  },
+  "anadia_lost": {
+    "sounds": [
+      "thebetweenlands:anadia_lost"
+    ]
+  },
+  "anadia_won": {
+    "sounds": [
+      "thebetweenlands:anadia_won"
+    ]
+  },
+  "fishing_crab": {
+    "sounds": [
+      "thebetweenlands:fishing_crab"
+    ]
+  },
+  "urchin_shoot": {
+    "sounds": [
+      "thebetweenlands:urchin_shoot_1",
+      "thebetweenlands:urchin_shoot_2",
+      "thebetweenlands:urchin_shoot_3"
+    ]
+  },
+  "bl_fishing_cast": {
+    "sounds": [
+      "thebetweenlands:bl_fishing_cast"
+    ]
+  },
+  "bl_fishing_reel": {
+    "sounds": [
+      "thebetweenlands:bl_fishing_reel"
+    ]
+  },
+  "bl_fishing_rod_creak": {
+    "sounds": [
+      "thebetweenlands:bl_fishing_rod_creak_1",
+      "thebetweenlands:bl_fishing_rod_creak_2",
+      "thebetweenlands:bl_fishing_rod_creak_3"
+    ]
+  },
+  "bubbler_spit": {
+    "sounds": [
+      "thebetweenlands:bubbler_spit_1",
+      "thebetweenlands:bubbler_spit_2",
+      "thebetweenlands:bubbler_spit_3"
+    ]
+  },
+  "bubbler_land": {
+    "sounds": [
+      "thebetweenlands:bubbler_land_1",
+      "thebetweenlands:bubbler_land_2",
+      "thebetweenlands:bubbler_land_3"
+    ]
+  },
+  "bubbler_pop": {
+    "sounds": [
+      "thebetweenlands:bubbler_pop_1",
+      "thebetweenlands:bubbler_pop_2",
+      "thebetweenlands:bubbler_pop_3"
+    ]
+  },
+  "spear_throw": {
+    "sounds": [
+      "thebetweenlands:spear_throw"
+    ]
+  },
+  "spear_land": {
+    "sounds": [
+      "thebetweenlands:spear_land"
+    ]
+  },
+  "spear_return_1": {
+    "sounds": [
+      "thebetweenlands:spear_return_1"
+    ]
+  },
+  "spear_return_2": {
+    "sounds": [
+      "thebetweenlands:spear_return_2"
+    ]
+  },
+  "mist_staff_cast": {
+    "sounds": [
+      "thebetweenlands:mist_staff_cast"
+    ]
+  },
+  "mist_staff_vanish": {
+    "sounds": [
+      "thebetweenlands:mist_staff_vanish"
+    ]
+  },
+  "lyestone_fizz": {
+    "sounds": [
+      "thebetweenlands:lyestone_fizz"
+    ],
+    "subtitle":  "blsubtitles.misc.lyestone_fizzes"
   }
 }

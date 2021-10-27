@@ -1,0 +1,11 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": {
+      "model": "thebetweenlands:internal/blank",
+      "custom": {
+        "particle_texture": "thebetweenlands:particle/block/silt_glass_jar_particle"
+      }
+    }
+  }
+}

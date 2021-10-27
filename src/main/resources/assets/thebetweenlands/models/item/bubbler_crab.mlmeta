@@ -1,0 +1,9 @@
+{
+  "source": "thebetweenlands:bubbler_crab",
+  "inherit_overrides": false,
+  "custom": {
+    "map": {
+      "thebetweenlands:bubbler_crab": "thebetweenlands:item/bubbler_crab_item"
+    }
+  }
+}

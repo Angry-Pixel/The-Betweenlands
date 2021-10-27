@@ -1,29 +1,61 @@
 package thebetweenlands.common.item.misc;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePile;
+import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePileWater;
 import thebetweenlands.common.entity.mobs.EntityEmberling;
 import thebetweenlands.common.entity.mobs.EntityEmberlingWild;
 import thebetweenlands.common.item.IGenericItem;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDefinition {
 	public ItemMisc() {
 		setMaxDamage(0);
 		setHasSubtypes(true);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		String key = "tooltip.bl.item_misc." + IGenericItem.getFromStack(EnumItemMisc.class, stack).getTranslationKey();
+
+		if(I18n.hasKey(key)) {
+			tooltip.add(I18n.format(key));
+		}
 	}
 
 	@Override
@@ -105,7 +137,18 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 		ANCIENT_REMNANT(47),
 		LOOT_SCRAPS(48),
 		FABRICATED_SCROLL(49),
-		BETWEENSTONE_PEBBLE(50);
+		BETWEENSTONE_PEBBLE(50),
+		ANADIA_SWIM_BLADDER(51),
+		ANADIA_EYE(52),
+		ANADIA_GILLS(53),
+		ANADIA_SCALES(54),
+		ANADIA_BONES(55),
+		ANADIA_REMAINS(56),
+		ANADIA_FINS(57),
+		SNOT(58),
+		URCHIN_SPIKE(59),
+		FISHING_FLOAT(60),
+		OLMLETTE_MIXTURE(61);
 
 		private final int id;
 		private final String unlocalizedName;
@@ -164,4 +207,64 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 			return false;
 		}
 	}
+
+	@Override
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (!player.getHeldItem(hand).isEmpty() && player.getHeldItem(hand).getItem() == EnumItemMisc.BETWEENSTONE_PEBBLE.getItem() && player.getHeldItem(hand).getItemDamage() == EnumItemMisc.BETWEENSTONE_PEBBLE.getID()) {
+			IBlockState iblockstate = world.getBlockState(pos);
+			Block block = iblockstate.getBlock();
+			Block blockType;
+
+			if (!block.isReplaceable(world, pos) && !(block instanceof BlockBetweenstonePebblePileWater))
+				pos = pos.offset(facing);
+			
+			if(world.getBlockState(pos).getMaterial() == Material.WATER)
+				blockType = BlockRegistry.BETWEENSTONE_PEBBLE_PILE_WATER;
+			else
+				blockType = BlockRegistry.BETWEENSTONE_PEBBLE_PILE;
+
+			ItemStack itemstack = player.getHeldItem(hand);
+			
+			if (!itemstack.isEmpty() && player.canPlayerEdit(pos, facing, itemstack) && world.mayPlace(blockType, pos, false, facing, (Entity) null)) {
+				int i = this.getMetadata(itemstack.getMetadata());
+				IBlockState iblockstate1 = blockType.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, i, player, hand);
+
+				if (placeBlockAt(itemstack, player, world, pos, facing, hitX, hitY, hitZ, iblockstate1)) {
+					iblockstate1 = world.getBlockState(pos);
+					SoundType soundtype = iblockstate1.getBlock().getSoundType(iblockstate1, world, pos, player);
+					world.playSound(player, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+					itemstack.shrink(1);
+				}
+				return EnumActionResult.SUCCESS;
+			}
+
+			else {
+				return EnumActionResult.FAIL;
+			}
+		}
+		else {
+			return EnumActionResult.FAIL;
+		}
+	}
+	
+    public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
+        if ((world.getBlockState(pos.down()).getBlock() instanceof BlockBetweenstonePebblePileWater || world.getBlockState(pos.down()).getBlock() instanceof BlockBetweenstonePebblePile) && side == EnumFacing.UP)
+        	return false;
+    	
+        if (!world.setBlockState(pos, newState, 11))
+    		return false;
+
+        IBlockState state = world.getBlockState(pos);
+        if (state.getBlock() == BlockRegistry.BETWEENSTONE_PEBBLE_PILE) {
+        	BlockRegistry.BETWEENSTONE_PEBBLE_PILE.onBlockPlacedBy(world, pos, state, player, stack);
+            if (player instanceof EntityPlayerMP)
+                CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP)player, pos, stack);
+        }
+        if (state.getBlock() == BlockRegistry.BETWEENSTONE_PEBBLE_PILE_WATER) {
+        	BlockRegistry.BETWEENSTONE_PEBBLE_PILE_WATER.onBlockPlacedBy(world, pos, state, player, stack);
+            if (player instanceof EntityPlayerMP)
+                CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP)player, pos, stack);
+        }
+        return true;
+    }
 }

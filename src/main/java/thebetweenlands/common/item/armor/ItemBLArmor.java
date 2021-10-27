@@ -27,7 +27,7 @@ import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.lib.ModInfo;
 
 public class ItemBLArmor extends ItemArmor implements IAnimatorRepairable {
-	protected final String armorTexture1, armorTexture2;
+	protected final String armorTextures[];
 	protected final String gemArmorTextures[][] = new String[CircleGemType.values().length][2];
 	protected final String armorName;
 
@@ -38,8 +38,7 @@ public class ItemBLArmor extends ItemArmor implements IAnimatorRepairable {
 
 		this.armorName = armorName;
 
-		this.armorTexture1 = ModInfo.ASSETS_PREFIX + "textures/armor/" + armorName + "_1.png";
-		this.armorTexture2 = ModInfo.ASSETS_PREFIX + "textures/armor/" + armorName + "_2.png";
+		this.armorTextures = new String[] { ModInfo.ASSETS_PREFIX + "textures/armor/" + armorName + "_1.png", ModInfo.ASSETS_PREFIX + "textures/armor/" + armorName + "_2.png" };
 
 		CircleGemHelper.addGemPropertyOverrides(this);
 	}
@@ -59,8 +58,8 @@ public class ItemBLArmor extends ItemArmor implements IAnimatorRepairable {
 
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-		String texture1 = this.armorTexture1;
-		String texture2 = this.armorTexture2;
+		String texture1 = this.armorTextures[0];
+		String texture2 = this.armorTextures[1];
 
 		CircleGemType gem = CircleGemHelper.getGem(stack);
 

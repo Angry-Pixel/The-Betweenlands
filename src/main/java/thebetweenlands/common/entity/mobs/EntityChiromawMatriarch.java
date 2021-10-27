@@ -84,7 +84,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		super(world);
 		setSize(1.75F, 2F);
 		setIsNesting(false);
-		experienceValue = 500;
+		experienceValue = 150;
 		moveHelper = new FlightMoveHelper(this);
 		setPathPriority(PathNodeType.WATER, -8F);
 		setPathPriority(PathNodeType.BLOCKED, -8.0F);

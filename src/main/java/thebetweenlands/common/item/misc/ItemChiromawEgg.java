@@ -3,11 +3,15 @@ package thebetweenlands.common.item.misc;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -25,7 +29,7 @@ public class ItemChiromawEgg extends ItemMob {
 	}
 
 	@Override
-	public void onCapturedByPlayer(EntityPlayer player, EnumHand hand, ItemStack captured) {
+	public void onCapturedByPlayer(EntityPlayer player, EnumHand hand, ItemStack captured, EntityLivingBase chiromaw) {
 		if(player instanceof EntityPlayerMP) {
 			AxisAlignedBB checkBox = player.getEntityBoundingBox().grow(8);
 
@@ -48,15 +52,15 @@ public class ItemChiromawEgg extends ItemMob {
 	}
 
 	@Override
-	protected void spawnCapturedEntity(EntityPlayer player, World world, Entity entity) {
-		if (entity instanceof EntityChiromawHatchling) {
+	protected EnumActionResult spawnCapturedEntity(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ, Entity entity, boolean isNewEntity) {
+		if (!world.isRemote && entity instanceof EntityChiromawHatchling) {
 			((EntityChiromawHatchling) entity).setOwnerId(player.getUniqueID());
 			((EntityChiromawHatchling) entity).setFoodCraved(((EntityChiromawHatchling) entity).chooseNewFoodFromLootTable());
 		}
-
-		super.spawnCapturedEntity(player, world, entity);
+		
+		return super.spawnCapturedEntity(player, world, pos, hand, facing, hitX, hitY, hitZ, entity, isNewEntity);
 	}
-
+	
 	@Override
 	public String getTranslationKey(ItemStack stack) {
 		return getTranslationKey();

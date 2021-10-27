@@ -1,10 +1,15 @@
 package thebetweenlands.common.capability.swarmed;
 
+import java.lang.ref.WeakReference;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.capabilities.Capability;
@@ -51,6 +56,9 @@ public class SwarmedCapability extends EntityCapability<SwarmedCapability, ISwar
 	private float damage;
 
 	private float lastYaw, lastPitch, lastYawDelta, lastPitchDelta;
+
+	@Nullable
+	private WeakReference<Entity> source;
 
 	@Override
 	public void setSwarmedStrength(float strength) {
@@ -132,6 +140,20 @@ public class SwarmedCapability extends EntityCapability<SwarmedCapability, ISwar
 	}
 
 	@Override
+	public void setSwarmSource(Entity entity) {
+		if(entity == null) {
+			this.source = null;
+		} else {
+			this.source = new WeakReference<>(entity);
+		}
+	}
+
+	@Override
+	public Entity getSwarmSource() {
+		return this.source == null ? null : this.source.get();
+	}
+
+	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		nbt.setFloat("strength", this.strength);
 		nbt.setInteger("hurtTimer", this.hurtTimer);
@@ -168,6 +190,12 @@ public class SwarmedCapability extends EntityCapability<SwarmedCapability, ISwar
 			ISwarmedCapability cap = event.player.getCapability(CapabilityRegistry.CAPABILITY_SWARMED, null);
 
 			if(cap != null) {
+				Entity source = cap.getSwarmSource();
+				if(source != null && !source.isEntityAlive()) {
+					source = null;
+					cap.setSwarmSource(null);
+				}
+
 				if(cap.getHurtTimer() > 0) {
 					cap.setHurtTimer(cap.getHurtTimer() - 1);
 				}
@@ -203,7 +231,15 @@ public class SwarmedCapability extends EntityCapability<SwarmedCapability, ISwar
 					if(cap.getDamageTimer() > 15 + (1.0f - cap.getSwarmedStrength()) * 75) {
 						cap.setDamageTimer(0);
 
-						event.player.attackEntityFrom(new DamageSource("bl.swarm").setDamageBypassesArmor(), cap.getDamage());
+						float damage = Math.max(0, Math.min(event.player.getHealth() - 1.0f, cap.getDamage()));
+
+						if(damage > 0) {
+							if(source != null) {
+								event.player.attackEntityFrom(new EntityDamageSource("bl.swarm", source).setDamageBypassesArmor(), damage);
+							} else {
+								event.player.attackEntityFrom(new DamageSource("bl.swarm").setDamageBypassesArmor(), damage);
+							}
+						}
 					}
 				}
 			}

@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -18,11 +19,13 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
@@ -33,6 +36,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.ISwarmedCapability;
@@ -41,6 +46,8 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -70,7 +77,12 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new AIMerge(this, 50, 1.0D));
-		this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, false));
+		this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, false) {
+			@Override
+			protected double getAttackReachSqr(EntityLivingBase attackTarget) {
+				return attackTarget.width + 0.15f;
+			}
+		});
 		this.targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 1, false, false, null));
 	}
 
@@ -111,6 +123,19 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
+		if(EntityAIAttackOnCollide.useStandardAttack(this, entityIn, new EntityDamageSource("bl.swarm", this))) {
+			ISwarmedCapability cap = entityIn.getCapability(CapabilityRegistry.CAPABILITY_SWARMED, null);
+
+			if(cap != null) {
+				cap.setSwarmedStrength(cap.getSwarmedStrength() + 0.33f);
+
+				cap.setDamage((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+
+				cap.setSwarmSource(this);
+			}
+			
+			return true;
+		}
 		return false;
 	}
 
@@ -125,7 +150,10 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 	}
 
 	@Override
-	protected void collideWithEntity(Entity entityIn) { }
+	protected void collideWithEntity(Entity entity) {
+		if (entity instanceof EntityPlayerMP)
+			AdvancementCriterionRegistry.INFESTED.trigger((EntityPlayerMP) entity);
+	}
 
 	@Override
 	public void onUpdate() {
@@ -134,7 +162,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 		if(!this.world.isRemote) {
 			if(world.getDifficulty() == EnumDifficulty.PEACEFUL)
 				setDead();
-				
+
 			if(this.isBurning() || this.isInWater()) {
 				if(this.getSwarmSize() > 0.1f) {
 					this.setSwarmSize(Math.max(0.1f, this.getSwarmSize() - 0.005f));
@@ -160,9 +188,11 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 					ISwarmedCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_SWARMED, null);
 
 					if(cap != null) {
-						cap.setSwarmedStrength(cap.getSwarmedStrength() + (1.0f - (float) dst / range) * 0.025f * MathHelper.clamp(this.getSwarmSize() * 1.75f, 0, 1));
+						cap.setSwarmedStrength(cap.getSwarmedStrength() + (1.0f - (float) dst / range) * 0.03f * MathHelper.clamp(this.getSwarmSize() * 1.75f, 0, 1));
 
 						cap.setDamage((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+
+						cap.setSwarmSource(this);
 					}
 				}
 			}
@@ -477,6 +507,13 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 					}
 				}
 			}
+		}
+	}
+
+	@SubscribeEvent
+	public static void onKnockback(LivingKnockBackEvent event) {
+		if(event.getOriginalAttacker() instanceof EntitySwarm) {
+			event.setCanceled(true);
 		}
 	}
 }

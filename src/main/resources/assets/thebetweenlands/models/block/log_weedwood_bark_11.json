@@ -1,0 +1,11 @@
+{
+    "parent": "thebetweenlands:block/cube_individual_faces",
+    "textures": {
+        "up": "thebetweenlands:blocks/log_weedwood",
+        "down": "thebetweenlands:blocks/log_weedwood",
+        "north": "thebetweenlands:blocks/log_weedwood",
+        "south": "thebetweenlands:blocks/log_weedwood",
+        "east": "thebetweenlands:blocks/log_weedwood_7",
+        "west": "thebetweenlands:blocks/log_weedwood"
+    }
+}

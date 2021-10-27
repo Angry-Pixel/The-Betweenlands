@@ -1,0 +1,6 @@
+{
+    "parent": "item/handheld_rod",
+    "textures": {
+        "layer0": "thebetweenlands:items/weedwood_fishing_rod_cast"
+    }
+}

@@ -24,9 +24,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.block.IWaterDisplacementHandler;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.item.armor.ItemMarshRunnerBoots;
@@ -117,6 +120,10 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
 		if (block instanceof BlockSwampWater) {
+			return false;
+		}
+		
+		if(block instanceof IWaterDisplacementHandler && ((IWaterDisplacementHandler) block).onWaterDisplacement(world, pos, this)) {
 			return false;
 		}
 
@@ -508,5 +515,50 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	@Override
 	public ItemBlock getItemBlock() {
 		return null;
+	}
+	
+	@Override
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		if(this.isUnderwaterBlock) {
+			this.onBlockHarvested(world, pos, state, player);
+			return world.setBlockState(pos, BlockRegistry.SWAMP_WATER.getDefaultState(), world.isRemote ? 11 : 3);
+		} else {
+			return super.removedByPlayer(state, world, pos, player, willHarvest);
+		}
+	}
+	
+	@Override
+	public int place(World world, BlockPos pos, FluidStack fluidStack, boolean doPlace) {
+		if(fluidStack.amount < Fluid.BUCKET_VOLUME) {
+            return 0;
+        }
+		IBlockState state = world.getBlockState(pos);
+		boolean replaceable = state.getBlock().isReplaceable(world, pos);
+		boolean isUnderwaterBlock = false;
+		Fluid fluid = null;
+		if(state.getBlock() instanceof BlockSwampWater) {
+			fluid = ((BlockSwampWater) state.getBlock()).getFluid();
+			isUnderwaterBlock = ((BlockSwampWater) state.getBlock()).isUnderwaterBlock;
+		}
+		if(!replaceable && isUnderwaterBlock && fluid != fluidStack.getFluid()) {
+			return 0;
+		}
+        if(doPlace && (replaceable || !isUnderwaterBlock)) {
+            FluidUtil.destroyBlockOnFluidPlacement(world, pos);
+            world.setBlockState(pos, this.getDefaultState(), 11);
+        }
+        return Fluid.BUCKET_VOLUME;
+	}
+	
+	@Override
+	public FluidStack drain(World world, BlockPos pos, boolean doDrain) {
+		if(this.isUnderwaterBlock) {
+			if(world.getBlockState(pos).getMaterial() == Material.WATER) {
+				// allow draining water but don't remove block
+				return stack.copy();
+			}
+			return null;
+		}
+		return super.drain(world, pos, doDrain);
 	}
 }

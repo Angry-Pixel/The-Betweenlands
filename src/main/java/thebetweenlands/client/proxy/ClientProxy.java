@@ -45,19 +45,25 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import thebetweenlands.client.gui.GuiFishStaminaBar;
 import thebetweenlands.client.gui.GuiItemNaming;
 import thebetweenlands.client.gui.GuiLorePage;
+import thebetweenlands.client.gui.inventory.GuiAmphibiousArmor;
 import thebetweenlands.client.gui.inventory.GuiAnimator;
 import thebetweenlands.client.gui.inventory.GuiBLDualFurnace;
 import thebetweenlands.client.gui.inventory.GuiBLFurnace;
 import thebetweenlands.client.gui.inventory.GuiCenser;
+import thebetweenlands.client.gui.inventory.GuiCrabPotFilter;
 import thebetweenlands.client.gui.inventory.GuiDraetonBurner;
 import thebetweenlands.client.gui.inventory.GuiDraetonCrafting;
 import thebetweenlands.client.gui.inventory.GuiDraetonUpgrades;
 import thebetweenlands.client.gui.inventory.GuiDruidAltar;
+import thebetweenlands.client.gui.inventory.GuiFishTrimmingTable;
+import thebetweenlands.client.gui.inventory.GuiFishingTackleBox;
 import thebetweenlands.client.gui.inventory.GuiMortar;
 import thebetweenlands.client.gui.inventory.GuiPouch;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
+import thebetweenlands.client.gui.inventory.GuiSmokingRack;
 import thebetweenlands.client.gui.inventory.GuiTarBarrel;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.client.gui.menu.GuiBLMainMenu;
@@ -99,12 +105,16 @@ import thebetweenlands.client.render.tile.RenderBeamOrigin;
 import thebetweenlands.client.render.tile.RenderCenser;
 import thebetweenlands.client.render.tile.RenderChestBetweenlands;
 import thebetweenlands.client.render.tile.RenderCompostBin;
+import thebetweenlands.client.render.tile.RenderCrabPot;
+import thebetweenlands.client.render.tile.RenderCrabPotFilter;
 import thebetweenlands.client.render.tile.RenderDecayPitControl;
 import thebetweenlands.client.render.tile.RenderDecayPitGroundChain;
 import thebetweenlands.client.render.tile.RenderDecayPitHangingChain;
 import thebetweenlands.client.render.tile.RenderDruidAltar;
 import thebetweenlands.client.render.tile.RenderDungeonDoorCombination;
 import thebetweenlands.client.render.tile.RenderDungeonDoorRunes;
+import thebetweenlands.client.render.tile.RenderFishTrimmingTable;
+import thebetweenlands.client.render.tile.RenderFishingTackleBox;
 import thebetweenlands.client.render.tile.RenderGeckoCage;
 import thebetweenlands.client.render.tile.RenderGroundItem;
 import thebetweenlands.client.render.tile.RenderInfuser;
@@ -114,12 +124,17 @@ import thebetweenlands.client.render.tile.RenderItemStackAsTileEntity;
 import thebetweenlands.client.render.tile.RenderLivingWeedwoodShield;
 import thebetweenlands.client.render.tile.RenderMudBrickSpikeTrap;
 import thebetweenlands.client.render.tile.RenderMudFlowerPot;
+import thebetweenlands.client.render.tile.RenderMudLootPot1;
+import thebetweenlands.client.render.tile.RenderMudLootPot2;
+import thebetweenlands.client.render.tile.RenderMudLootPot3;
 import thebetweenlands.client.render.tile.RenderMudTilesSpikeTrap;
 import thebetweenlands.client.render.tile.RenderPestleAndMortar;
 import thebetweenlands.client.render.tile.RenderPossessedBlock;
 import thebetweenlands.client.render.tile.RenderPurifier;
 import thebetweenlands.client.render.tile.RenderRepeller;
+import thebetweenlands.client.render.tile.RenderSiltGlassJar;
 import thebetweenlands.client.render.tile.RenderSimulacrum;
+import thebetweenlands.client.render.tile.RenderSmokingRack;
 import thebetweenlands.client.render.tile.RenderSpawnerBetweenlands;
 import thebetweenlands.client.render.tile.RenderSpikeTrap;
 import thebetweenlands.client.render.tile.RenderTarLootPot1;
@@ -135,15 +150,17 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
-import thebetweenlands.common.entity.EntityAngryPebble;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityFalseXPOrb;
+import thebetweenlands.common.entity.EntityFishVortex;
+import thebetweenlands.common.entity.EntityFishingTackleBoxSeat;
 import thebetweenlands.common.entity.EntityGalleryFrame;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.entity.EntityGreeblingCorpse;
 import thebetweenlands.common.entity.EntityLurkerSkinRaft;
+import thebetweenlands.common.entity.EntityMistBridge;
 import thebetweenlands.common.entity.EntityMovingWall;
 import thebetweenlands.common.entity.EntityResurrection;
 import thebetweenlands.common.entity.EntityRootGrabber;
@@ -160,12 +177,14 @@ import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
 import thebetweenlands.common.entity.EntityTriggeredSludgeWallJet;
 import thebetweenlands.common.entity.EntityVolarkite;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
+import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityAshSprite;
 import thebetweenlands.common.entity.mobs.EntityBarrishee;
-import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
+import thebetweenlands.common.entity.mobs.EntityBubblerCrab;
+import thebetweenlands.common.entity.mobs.EntityCaveFish;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityChiromawGreeblingRider;
 import thebetweenlands.common.entity.mobs.EntityChiromawHatchling;
@@ -187,12 +206,16 @@ import thebetweenlands.common.entity.mobs.EntityFortressBossProjectile;
 import thebetweenlands.common.entity.mobs.EntityFortressBossSpawner;
 import thebetweenlands.common.entity.mobs.EntityFortressBossTeleporter;
 import thebetweenlands.common.entity.mobs.EntityFortressBossTurret;
+import thebetweenlands.common.entity.mobs.EntityFreshwaterUrchin;
 import thebetweenlands.common.entity.mobs.EntityFrog;
 import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.entity.mobs.EntityGiantToad;
 import thebetweenlands.common.entity.mobs.EntityGreebling;
+import thebetweenlands.common.entity.mobs.EntityGreeblingCoracle;
 import thebetweenlands.common.entity.mobs.EntityGreeblingVolarpadFloater;
+import thebetweenlands.common.entity.mobs.EntityJellyfish;
+import thebetweenlands.common.entity.mobs.EntityJellyfishCave;
 import thebetweenlands.common.entity.mobs.EntityLargeSludgeWorm;
 import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityLurker;
@@ -201,8 +224,12 @@ import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
 import thebetweenlands.common.entity.mobs.EntityMovingSpawnerHole;
 import thebetweenlands.common.entity.mobs.EntityMultipartDummy;
 import thebetweenlands.common.entity.mobs.EntityMummyArm;
+import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
+import thebetweenlands.common.entity.mobs.EntityPuffin;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
+import thebetweenlands.common.entity.mobs.EntityRockSnot;
+import thebetweenlands.common.entity.mobs.EntityRockSnotTendril;
 import thebetweenlands.common.entity.mobs.EntityRootSprite;
 import thebetweenlands.common.entity.mobs.EntityShambler;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
@@ -227,11 +254,15 @@ import thebetweenlands.common.entity.mobs.EntityVolatileSoul;
 import thebetweenlands.common.entity.mobs.EntityWallLamprey;
 import thebetweenlands.common.entity.mobs.EntityWallLivingRoot;
 import thebetweenlands.common.entity.mobs.EntityWight;
-import thebetweenlands.common.entity.mobs.EntityGreeblingCoracle;
+import thebetweenlands.common.entity.projectiles.EntityAngryPebble;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
+import thebetweenlands.common.entity.projectiles.EntityBLFishHook;
 import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
+import thebetweenlands.common.entity.projectiles.EntityBubblerCrabBubble;
 import thebetweenlands.common.entity.projectiles.EntityChiromawDroppings;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
+import thebetweenlands.common.entity.projectiles.EntityFishingSpear;
+import thebetweenlands.common.entity.projectiles.EntityGlowingGoop;
 import thebetweenlands.common.entity.projectiles.EntityPredatorArrowGuide;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
@@ -243,14 +274,18 @@ import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.handler.ExtendedReachHandler;
 import thebetweenlands.common.herblore.book.GuiManualHerblore;
 import thebetweenlands.common.herblore.book.HLEntryRegistry;
-import thebetweenlands.common.inventory.InventoryItem;
+import thebetweenlands.common.inventory.InventoryAmphibiousArmor;
+import thebetweenlands.common.inventory.InventoryPouch;
+import thebetweenlands.common.inventory.container.ContainerAmphibiousArmor;
 import thebetweenlands.common.inventory.container.ContainerDraetonPouch;
 import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.item.ITintedItem;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.item.misc.ItemBarkAmulet;
 import thebetweenlands.common.item.shields.ItemSwatShield;
+import thebetweenlands.common.item.tools.ItemBLFishingRod;
 import thebetweenlands.common.item.tools.bow.ItemBLBow;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
@@ -268,12 +303,16 @@ import thebetweenlands.common.tile.TileEntityBeamOrigin;
 import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
+import thebetweenlands.common.tile.TileEntityCrabPot;
+import thebetweenlands.common.tile.TileEntityCrabPotFilter;
 import thebetweenlands.common.tile.TileEntityDecayPitControl;
 import thebetweenlands.common.tile.TileEntityDecayPitGroundChain;
 import thebetweenlands.common.tile.TileEntityDecayPitHangingChain;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
+import thebetweenlands.common.tile.TileEntityFishTrimmingTable;
+import thebetweenlands.common.tile.TileEntityFishingTackleBox;
 import thebetweenlands.common.tile.TileEntityGeckoCage;
 import thebetweenlands.common.tile.TileEntityGroundItem;
 import thebetweenlands.common.tile.TileEntityInfuser;
@@ -282,13 +321,18 @@ import thebetweenlands.common.tile.TileEntityItemShelf;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityMudBricksSpikeTrap;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
+import thebetweenlands.common.tile.TileEntityMudLootPot1;
+import thebetweenlands.common.tile.TileEntityMudLootPot2;
+import thebetweenlands.common.tile.TileEntityMudLootPot3;
 import thebetweenlands.common.tile.TileEntityMudTilesSpikeTrap;
 import thebetweenlands.common.tile.TileEntityOfferingTable;
 import thebetweenlands.common.tile.TileEntityPossessedBlock;
 import thebetweenlands.common.tile.TileEntityPuffshroom;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityRepeller;
+import thebetweenlands.common.tile.TileEntitySiltGlassJar;
 import thebetweenlands.common.tile.TileEntitySimulacrum;
+import thebetweenlands.common.tile.TileEntitySmokingRack;
 import thebetweenlands.common.tile.TileEntitySpikeTrap;
 import thebetweenlands.common.tile.TileEntityTarLootPot1;
 import thebetweenlands.common.tile.TileEntityTarLootPot2;
@@ -314,7 +358,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 		Entity entity = null;
-		
+
 		switch (id) {
 		case GUI_DRUID_ALTAR:
 			if (tile instanceof TileEntityDruidAltar) {
@@ -373,7 +417,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			}
 			if(!item.isEmpty() && item.getItem() instanceof ItemLurkerSkinPouch) {
 				String name = item.hasDisplayName() ? item.getDisplayName(): I18n.format("container.bl.lurker_skin_pouch");
-				return new GuiPouch(new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name)));
+				return new GuiPouch(new ContainerPouch(player, player.inventory, new InventoryPouch(item, 9 + (item.getItemDamage() * 9), name)));
 			}
 			break;
 		}
@@ -382,7 +426,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			ItemStack item = ItemLurkerSkinPouch.getFirstPouch(player);
 			if(!item.isEmpty()) {
 				String name = item.hasDisplayName() ? item.getDisplayName(): I18n.format("container.bl.lurker_skin_pouch");
-				return new GuiPouch(new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name)));
+				return new GuiPouch(new ContainerPouch(player, player.inventory, new InventoryPouch(item, 9 + (item.getItemDamage() * 9), name)));
 			}
 		}
 
@@ -394,7 +438,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 
 		case GUI_LORE:
 			return new GuiLorePage(player.getHeldItem(x == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
-			
+
 		case GUI_CENSER:
 			if (tile instanceof TileEntityCenser) {
 				return new GuiCenser(player.inventory, (TileEntityCenser) tile);
@@ -415,12 +459,12 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 					ItemStack stack = upgrades.getStackInSlot(y);
 					if(!stack.isEmpty() && ((EntityDraeton) entity).isStorageUpgrade(stack)) {
 						String name = stack.hasDisplayName() ? stack.getDisplayName(): I18n.format("container.bl.draeton_storage");
-						return new GuiPouch(new ContainerDraetonPouch(player, player.inventory, new InventoryItem(stack, 9 + (stack.getItemDamage() * 9), name), (EntityDraeton)entity, y));
+						return new GuiPouch(new ContainerDraetonPouch(player, player.inventory, new InventoryPouch(stack, 9 + (stack.getItemDamage() * 9), name), (EntityDraeton)entity, y));
 					}
 				}
 			}
 			break;
-			
+
 		case GUI_DRAETON_CRAFTING:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton) {
@@ -433,7 +477,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 				}
 			}
 			break;
-			
+
 		case GUI_DRAETON_FURNACE:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton) {
@@ -446,20 +490,47 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 				}
 			}
 			break;
-			
+
 		case GUI_DRAETON_BURNER:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton)
 				return new GuiDraetonBurner(player.inventory, ((EntityDraeton)entity).getBurnerInventory(), (EntityDraeton)entity);
 			break;
-			
+
 		case GUI_DRAETON_UPGRADES:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton)
 				return new GuiDraetonUpgrades(player.inventory, (EntityDraeton)entity);
 			break;
-		}
 
+		case GUI_FISHING_TACKLE_BOX:
+			if (tile instanceof TileEntityFishingTackleBox)
+				return new GuiFishingTackleBox(player, (TileEntityFishingTackleBox) tile);
+			break;
+
+		case GUI_SMOKING_RACK:
+			if (tile instanceof TileEntitySmokingRack)
+				return new GuiSmokingRack(player, (TileEntitySmokingRack) tile);
+			break;
+
+		case GUI_FISH_TRIMMING_TABLE:
+			if (tile instanceof TileEntityFishTrimmingTable)
+				return new GuiFishTrimmingTable(player, (TileEntityFishTrimmingTable) tile);
+			break;
+			
+		case GUI_CRAB_POT_FILTER:
+			if (tile instanceof TileEntityCrabPotFilter)
+				return new GuiCrabPotFilter(player, (TileEntityCrabPotFilter) tile);
+			break;
+			
+		case GUI_AMPHIBIOUS_ARMOR: {
+			ItemStack item = player.getHeldItemMainhand();
+			String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.amphibious_armour";
+			if (!item.isEmpty() && item.getItem() instanceof ItemAmphibiousArmor)
+				return new GuiAmphibiousArmor(new ContainerAmphibiousArmor(player, new InventoryAmphibiousArmor(item, name)));
+			break;
+		}
+		}
 		return null;
 	}
 
@@ -538,7 +609,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 	@Override
 	public void preInit() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityAngler.class, RenderAngler::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityBlindCaveFish.class, RenderBlindCaveFish::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityOlm.class, RenderOlm::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityMireSnail.class, RenderMireSnail::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityMireSnailEgg.class, RenderMireSnailEgg::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBloodSnail.class, RenderBloodSnail::new);
@@ -637,11 +708,30 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityChiromawHatchling.class, RenderChiromawHatchling::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityChiromawTame.class, RenderChiromawTame::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGreeblingCorpse.class, RenderGreeblingCorpse::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityAnadia.class, RenderAnadia::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityBLFishHook.class, RenderBLFishHook::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFishingSpear.class, RenderFishingSpear::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFishingTackleBoxSeat.class, RenderNothing::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityStalker.class, RenderStalker::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityResurrection.class, RenderNothing::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFalseXPOrb.class, RenderXPOrb::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySwarm.class, RenderSwarm::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGreeblingCoracle.class, RenderGreeblingCoracle::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFishVortex.class, RenderNothing::new);
+
+		//WIP
+		RenderingRegistry.registerEntityRenderingHandler(EntityRockSnot.class, RenderRockSnot::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityRockSnotTendril.class, RenderRockSnotTendril::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityPuffin.class, RenderPuffin::new);
+		//RenderingRegistry.registerEntityRenderingHandler(EntityAnimalBurrow.class, RenderAnimalBurrow::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityJellyfish.class, RenderJellyfish::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityJellyfishCave.class, RenderJellyfishCave::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityBubblerCrab.class, RenderBubblerCrab::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFreshwaterUrchin.class, RenderFreshwaterUrchin::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityBubblerCrabBubble.class, RenderBubblerCrabBubble::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCaveFish.class, RenderCaveFish::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityGlowingGoop.class, manager -> new RenderGlowingGoop(manager, Minecraft.getMinecraft().getRenderItem()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityMistBridge.class, RenderNothing::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());
@@ -684,6 +774,15 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySimulacrum.class, new RenderSimulacrum());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityOfferingTable.class, new RenderGroundItem());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWindChime.class, new RenderWindChime());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFishingTackleBox.class, new RenderFishingTackleBox());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySmokingRack.class, new RenderSmokingRack());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFishTrimmingTable.class, new RenderFishTrimmingTable());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrabPot.class, new RenderCrabPot());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySiltGlassJar.class, new RenderSiltGlassJar());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrabPotFilter.class, new RenderCrabPotFilter());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudLootPot1.class, new RenderMudLootPot1());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudLootPot2.class, new RenderMudLootPot2());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudLootPot3.class, new RenderMudLootPot3());
 		
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
@@ -751,7 +850,19 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		Item.getItemFromBlock(BlockRegistry.CENSER).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityCenser.class));
 		Item.getItemFromBlock(BlockRegistry.WEEDWOOD_BARREL).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityBarrel.class));
 		Item.getItemFromBlock(BlockRegistry.WIND_CHIME).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityWindChime.class));
-		
+		Item.getItemFromBlock(BlockRegistry.FISHING_TACKLE_BOX).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityFishingTackleBox.class));
+		Item.getItemFromBlock(BlockRegistry.SMOKING_RACK).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntitySmokingRack.class));
+		Item.getItemFromBlock(BlockRegistry.FISH_TRIMMING_TABLE).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityFishTrimmingTable.class));
+		Item.getItemFromBlock(BlockRegistry.CRAB_POT).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityCrabPot.class));
+		Item.getItemFromBlock(BlockRegistry.CRAB_POT_FILTER).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityCrabPotFilter.class));
+		Item.getItemFromBlock(BlockRegistry.SILT_GLASS_JAR).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntitySiltGlassJar.class));
+		Item.getItemFromBlock(BlockRegistry.MUD_LOOT_POT).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(renderer -> {
+			for(EnumFacing facing : EnumFacing.HORIZONTALS) {
+				renderer.add(EnumLootPot.POT_1.getMetadata(facing), TileEntityMudLootPot1.class);
+				renderer.add(EnumLootPot.POT_2.getMetadata(facing), TileEntityMudLootPot2.class);
+				renderer.add(EnumLootPot.POT_3.getMetadata(facing), TileEntityMudLootPot3.class);
+			}
+		}));
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {
 			if (block instanceof ITintedBlock) {
@@ -846,6 +957,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         MinecraftForge.EVENT_BUS.register(RenderUtils.class);
         MinecraftForge.EVENT_BUS.register(EntityChiromawTame.class);
         MinecraftForge.EVENT_BUS.register(EventHeavyRain.class);
+        MinecraftForge.EVENT_BUS.register(new GuiFishStaminaBar());
+        MinecraftForge.EVENT_BUS.register(ItemBLFishingRod.class);
 	}
 
 	private static FontRenderer pixelLove;

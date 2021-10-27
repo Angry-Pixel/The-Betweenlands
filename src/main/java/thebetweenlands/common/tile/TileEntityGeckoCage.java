@@ -29,18 +29,18 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 				--this.recoverTicks;
 				if(this.recoverTicks == 0) {
 					IBlockState state = this.world.getBlockState(this.pos);
-					this.world.notifyBlockUpdate(this.pos, state, state, 3);
+					this.world.notifyBlockUpdate(this.pos, state, state, 2);
 				}
 			} else {
 				if(this.aspectType != null && this.geckoUsages == 0) {
 					this.geckoName = "";
 					IBlockState state = this.world.getBlockState(this.pos);
-					this.world.notifyBlockUpdate(this.pos, state, state, 3);
+					this.world.notifyBlockUpdate(this.pos, state, state, 2);
 				}
 				if(this.aspectType != null) {
 					this.aspectType = null;
 					IBlockState state = this.world.getBlockState(this.pos);
-					this.world.notifyBlockUpdate(this.pos, state, state, 3);
+					this.world.notifyBlockUpdate(this.pos, state, state, 2);
 				}
 			}
 		}
@@ -63,7 +63,7 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 		this.aspectType = type;
 		this.recoverTicks = recoverTime;
 		IBlockState state = this.world.getBlockState(this.pos);
-		this.world.notifyBlockUpdate(this.pos, state, state, 3);
+		this.world.notifyBlockUpdate(this.pos, state, state, 2);
 		if (!hasGecko())
 			this.recoverTicks = 0;
 	}
@@ -76,7 +76,7 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 		this.geckoUsages = usages;
 		this.markDirty();
 		IBlockState state = this.world.getBlockState(this.pos);
-		this.world.notifyBlockUpdate(this.pos, state, state, 3);
+		this.world.notifyBlockUpdate(this.pos, state, state, 2);
 	}
 	
 	public int getGeckoUsages() {
@@ -94,7 +94,7 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 		this.ticks = 0;
 		this.markDirty();
 		IBlockState state = this.world.getBlockState(this.pos);
-		this.world.notifyBlockUpdate(this.pos, state, state, 3);
+		this.world.notifyBlockUpdate(this.pos, state, state, 2);
 	}
 
 	@Override

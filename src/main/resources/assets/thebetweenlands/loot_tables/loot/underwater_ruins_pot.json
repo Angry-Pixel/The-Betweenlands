@@ -1,0 +1,210 @@
+{
+    "pools": [
+        {
+            "name": "underwater_ruins_pot",
+            "rolls": {
+                "min": 1,
+                "max": 2
+            },
+            "entries": [
+                {
+                    "type": "item",
+                    "entryName": "sulfur",
+                    "name": "thebetweenlands:items_misc",
+                    "weight": 2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 2,
+                                "max": 5
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 18
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "thebetweenlands:swamp_kelp_item",
+                    "weight": 2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "thebetweenlands:dentrothyst_shard_green",
+                    "weight": 2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 2,
+                                "max": 5
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "lurker_skin",
+                    "name": "thebetweenlands:items_misc",
+                    "weight": 2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 4
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "angler_tooth",
+                    "name": "thebetweenlands:items_misc",
+                    "weight": 2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 21
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName":"dragonfly_wing",
+                    "name": "thebetweenlands:items_misc",
+                    "weight": 2,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        },
+                        {
+                            "function":"set_data",
+                            "data": 3
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "syrmorite_nugget",
+                    "name": "thebetweenlands:items_misc",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 2,
+                                "max": 8
+                            }
+                        },
+                        {
+                            "function":"set_data",
+                            "data": 41
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "thebetweenlands:rock_snot_pearl",
+                    "weight": 1
+                },
+                {
+                    "type": "item",
+                    "name": "thebetweenlands:wight_heart",
+                    "weight": 1
+                },
+                {
+                    "type": "item",
+                    "entryName": "anadia_bones",
+                    "name": "thebetweenlands:items_misc",
+                    "weight": 1,
+                    "functions": [
+						{
+                            "function": "set_data",
+                            "data": 55
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "thebetweenlands:dentrothyst_shard_orange",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "slimy_bone",
+                    "name": "thebetweenlands:items_misc",
+                    "weight": 1,
+                    "functions": [
+						{
+                            "function": "set_data",
+                            "data": 14
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "item_scroll",
+                    "name": "thebetweenlands:items_misc",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_data",
+                            "data": 40
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "thebetweenlands:basilisk_arrow",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

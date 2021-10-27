@@ -1,0 +1,15 @@
+{
+  "source": "thebetweenlands:jellyfish",
+  "inherit_overrides": false,
+  "custom": {
+    "map": {
+      "colour": {
+        "0": { "model": "thebetweenlands:item/jellyfish_1" },
+        "1": { "model": "thebetweenlands:item/jellyfish_2" },
+        "2": { "model": "thebetweenlands:item/jellyfish_3" },
+        "3": { "model": "thebetweenlands:item/jellyfish_4" },
+        "4": { "model": "thebetweenlands:item/jellyfish_5" }
+      }
+    }
+  }
+}

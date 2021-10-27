@@ -18,7 +18,7 @@ public class SoundRegistry {
     public static final BLSoundEvent GREEBLING_MUSIC_2 = reg("greebling_music_2");
     // Records
     public static final BLSoundEvent _16612 = reg("16612");
-    public static final BLSoundEvent ACIENT = reg("ancient");
+    public static final BLSoundEvent ANCIENT = reg("ancient");
     public static final BLSoundEvent ASTATOS = reg("astatos");
     public static final BLSoundEvent BENEATH_A_GREEN_SKY = reg("beneath_a_green_sky");
     public static final BLSoundEvent BETWEEN_YOU_AND_ME = reg("between_you_and_me");
@@ -31,6 +31,7 @@ public class SoundRegistry {
     public static final BLSoundEvent THE_EXPLORER = reg("the_explorer");
     public static final BLSoundEvent WANDERING_WISPS = reg("wandering_wisps");
     public static final BLSoundEvent WATERLOGGED = reg("waterlogged");
+    public static final BLSoundEvent DEEP_WATER_THEME = reg("deep_water_theme");
     // Ambience
     public static final BLSoundEvent AMBIENT_BLOOD_SKY_ROAR = reg("ambient_blood_sky_roar");
     public static final BLSoundEvent AMBIENT_BLOOD_SKY = reg("ambient_blood_sky");
@@ -40,6 +41,7 @@ public class SoundRegistry {
     public static final BLSoundEvent AMBIENT_SPOOPY = reg("ambient_spoopy");
     public static final BLSoundEvent AMBIENT_SWAMP = reg("ambient_swamp");
     public static final BLSoundEvent AMBIENT_SWAMP_DENSE_FOG = reg("ambient_swamp_dense_fog");
+    public static final BLSoundEvent AMBIENT_DEEP_WATERS = reg("ambient_deep_waters");
     public static final BLSoundEvent AMBIENT_WATER = reg("ambient_water");
     public static final BLSoundEvent AMBIENT_FROSTY = reg("ambient_frosty");
     public static final BLSoundEvent AMBIENT_SNOWFALL = reg("ambient_snowfall");
@@ -96,6 +98,12 @@ public class SoundRegistry {
     public static final BLSoundEvent ZAP = reg("zap");
     public static final BLSoundEvent CHIROBARB_ERUPTER = reg("chirobarb_erupter");
     public static final BLSoundEvent SIMULACRUM_BREAK = reg("simulacrum_break");
+    public static final BLSoundEvent GREEBLING_HUM = reg("greebling_hum");
+    public static final BLSoundEvent CORACLE_SINK = reg("coracle_sink");
+    public static final BLSoundEvent SPEAR_THROW = reg("spear_throw");
+    public static final BLSoundEvent SPEAR_LAND = reg("spear_land");
+    public static final BLSoundEvent SPEAR_RETURN_1 = reg("spear_return_1");
+    public static final BLSoundEvent SPEAR_RETURN_2 = reg("spear_return_2");
     // Hostiles
     public static final BLSoundEvent FISH_HURT = reg("fish_hurt");
     public static final BLSoundEvent FISH_DEATH = reg("fish_death");
@@ -253,6 +261,14 @@ public class SoundRegistry {
     public static final BLSoundEvent BARRISHEE_THEME = reg("barrishee_theme");
     public static final BLSoundEvent SWARM_ATTACK = reg("swarm_attack");
     public static final BLSoundEvent SWARM_IDLE = reg("swarm_idle");
+    public static final BLSoundEvent ROCK_SNOT_ATTACH = reg("rock_snot_attach");
+    public static final BLSoundEvent ROCK_SNOT_ATTACK = reg("rock_snot_attack");
+    public static final BLSoundEvent ROCK_SNOT_DIGEST= reg("rock_snot_digest");
+    public static final BLSoundEvent ROCK_SNOT_SPIT = reg("rock_snot_spit");
+    public static final BLSoundEvent ROCK_SNOT_EAT = reg("rock_snot_eat");
+    public static final BLSoundEvent BUBBLER_SPIT = reg("bubbler_spit");
+    public static final BLSoundEvent BUBBLER_LAND = reg("bubbler_land");
+    public static final BLSoundEvent BUBBLER_POP = reg("bubbler_pop");
 
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");
@@ -286,6 +302,16 @@ public class SoundRegistry {
     public static final BLSoundEvent ROOT_SPRITE_LIVING = reg("root_sprite_living");
     public static final BLSoundEvent ROOT_SPRITE_HURT = reg("root_sprite_hurt");
     public static final BLSoundEvent GREEBLING_VANISH = reg("greebling_vanish");
+    public static final BLSoundEvent JELLYFISH_HURT = reg("jellyfish_hurt");
+    public static final BLSoundEvent JELLYFISH_SWIM = reg("jellyfish_swim");
+    public static final BLSoundEvent JELLYFISH_ZAP = reg("jellyfish_zap");
+    public static final BLSoundEvent URCHIN_SHOOT = reg("urchin_shoot");
+
+    public static final BLSoundEvent ANADIA_TREASURE_COLLECTED = reg("anadia_treasure_collected");
+    public static final BLSoundEvent ANADIA_LOST = reg("anadia_lost");
+    public static final BLSoundEvent ANADIA_WON = reg("anadia_won");
+    public static final BLSoundEvent FISHING_CRAB = reg("fishing_crab");
+
     // Items
     public static final BLSoundEvent ROWBOAT_ROW_STARBOARD = reg("rowboat_row_starboard");
     public static final BLSoundEvent ROWBOAT_ROW_PORT = reg("rowboat_row_port");
@@ -301,6 +327,13 @@ public class SoundRegistry {
     public static final BLSoundEvent RING_OF_DISPERSION_TELEPORT = reg("ring_of_dispersion_teleport");
     public static final BLSoundEvent LONG_SWING = reg("long_swing");
     public static final BLSoundEvent LONG_SLICE = reg("long_slice");
+    public static final BLSoundEvent BL_FISHING_CAST = reg("bl_fishing_cast");
+    public static final BLSoundEvent BL_FISHING_REEL = reg("bl_fishing_reel");
+    public static final BLSoundEvent BL_FISHING_ROD_CREAK = reg("bl_fishing_rod_creak");
+    public static final BLSoundEvent MIST_STAFF_CAST = reg("mist_staff_cast");
+    public static final BLSoundEvent MIST_STAFF_VANISH = reg("mist_staff_vanish");
+    
+    
     // Blocks
     public static final BLSoundEvent GRIND = reg("grind");
     public static final BLSoundEvent INFUSER_FINISHED = reg("infuser_finished");
@@ -326,6 +359,10 @@ public class SoundRegistry {
     public static final BLSoundEvent CHIMES_RIFT = reg("chimes_rift");
     public static final BLSoundEvent CHIMES_THUNDERSTORM = reg("chimes_thunderstorm");
     public static final BLSoundEvent CHIMES_SNOWFALL = reg("chimes_snowfall");
+    public static final BLSoundEvent FISHING_TACKLE_BOX_OPEN = reg("fishing_tackle_box_open");
+    public static final BLSoundEvent FISHING_TACKLE_BOX_CLOSE = reg("fishing_tackle_box_close");
+    public static final BLSoundEvent FISH_CHOP = reg("fish_chop");
+    public static final BLSoundEvent LYESTONE_FIZZ = reg("lyestone_fizz");
     
     private SoundRegistry() {
     }

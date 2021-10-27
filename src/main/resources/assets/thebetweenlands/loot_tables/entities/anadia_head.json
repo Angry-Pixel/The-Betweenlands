@@ -1,0 +1,85 @@
+{
+    "pools": [
+        {
+            "name": "anadia_head",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "item",
+                    "entryName": "head_type_0",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": 1
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 55
+                        }
+                    ],
+                    "weight": 1,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_head_type": 0
+                            }
+                        }
+                    ]
+                },
+                 {
+                    "type": "item",
+                    "entryName": "head_type_1",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": 1
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 52
+                        }
+                    ],
+                    "weight": 1,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_head_type": 1
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "head_type_2",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": 1
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 53
+                        }
+                    ],
+                    "weight": 1,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_head_type": 2
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

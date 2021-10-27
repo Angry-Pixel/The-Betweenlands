@@ -1,0 +1,82 @@
+{
+    "pools": [
+        {
+            "name": "anadia_body",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "item",
+                    "entryName": "body_type_0",
+                    "name": "thebetweenlands:anadia_meat_raw",
+                    "weight": 1,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 0
+                            }
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 1,
+                            "max_count": 5
+                        }
+                    ]
+                },
+                 {
+                    "type": "item",
+                    "entryName": "body_type_1",
+                    "name": "thebetweenlands:anadia_meat_raw",
+                    "weight": 1,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 1
+                            }
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 1,
+                            "max_count": 5
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "entryName": "body_type_2",
+                    "name": "thebetweenlands:anadia_meat_raw",
+                    "weight": 1,
+                    "conditions": [
+                        {
+                            "condition": "entity_properties",
+                            "entity": "this",
+                            "properties": {
+                                "thebetweenlands:anadia_body_type": 2
+                            }
+                        }
+                    ],
+                    "functions": [
+                        {
+                            "function": "thebetweenlands:set_count_from_anadia",
+                            "size_start": 0.125,
+                            "size_end": 0.95,
+                            "min_count": 1,
+                            "max_count": 5
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -14,6 +14,7 @@ import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IDecayCapability;
+import thebetweenlands.api.capability.IRotSmellCapability;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
@@ -35,6 +36,13 @@ public class BlockStagnantWater extends BlockFluidClassic implements IStateMappe
 			IDecayCapability cap = entityIn.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 			if (cap != null) {
 				cap.getDecayStats().addDecayAcceleration(0.1F);
+			}
+			
+			if (entityIn instanceof EntityPlayer) {
+				IRotSmellCapability capSmell = entityIn.getCapability(CapabilityRegistry.CAPABILITY_ROT_SMELL, null);
+				if(capSmell != null)
+					if(!capSmell.isSmellingBad())
+						capSmell.setSmellingBad(Math.max(capSmell.getRemainingSmellyTicks(), 24000));
 			}
 		}
 	}

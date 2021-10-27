@@ -1,0 +1,10 @@
+{
+  "pools": [
+    {
+      "name": "olm",
+      "rolls": 0,
+      "conditions": [],
+      "entries": []
+    }
+  ]
+}

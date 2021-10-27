@@ -1,5 +1,9 @@
 package thebetweenlands.api.capability;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.entity.Entity;
+
 public interface ISwarmedCapability {
 	public void setSwarmedStrength(float strength);
 
@@ -39,5 +43,12 @@ public interface ISwarmedCapability {
 
 	public default float getLastPitchDelta() {
 		return 0;
+	}
+	
+	public default void setSwarmSource(@Nullable Entity entity) { }
+	
+	@Nullable
+	public default Entity getSwarmSource() {
+		return null;
 	}
 }

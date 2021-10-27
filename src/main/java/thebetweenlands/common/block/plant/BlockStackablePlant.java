@@ -125,15 +125,6 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 	}
 
 	/**
-	 * Returns true if the specified block should be considered as the same plant
-	 * @param blockState
-	 * @return
-	 */
-	protected boolean isSamePlant(IBlockState blockState) {
-		return blockState.getBlock() == this;
-	}
-
-	/**
 	 * Sets the maximum height this plant should naturally grow
 	 * @param maxHeight
 	 * @return

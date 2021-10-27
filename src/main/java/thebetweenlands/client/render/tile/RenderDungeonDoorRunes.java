@@ -113,6 +113,7 @@ public class RenderDungeonDoorRunes extends TileEntitySpecialRenderer<TileEntity
 			GlStateManager.disableBlend();
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			
+			bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 			texture.restoreLastBlurMipmap();
 		}
 		GlStateManager.disableBlend();

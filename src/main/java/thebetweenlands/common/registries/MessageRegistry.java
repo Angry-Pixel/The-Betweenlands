@@ -28,6 +28,7 @@ import thebetweenlands.common.network.clientbound.MessagePowerRingParticles;
 import thebetweenlands.common.network.clientbound.MessageRemoveLocalStorage;
 import thebetweenlands.common.network.clientbound.MessageRiftSound;
 import thebetweenlands.common.network.clientbound.MessageShockArrowHit;
+import thebetweenlands.common.network.clientbound.MessageShockParticle;
 import thebetweenlands.common.network.clientbound.MessageShowFoodSicknessLine;
 import thebetweenlands.common.network.clientbound.MessageSoundRipple;
 import thebetweenlands.common.network.clientbound.MessageSummonPeatMummyParticles;
@@ -41,6 +42,7 @@ import thebetweenlands.common.network.clientbound.MessageSyncLocalStorageReferen
 import thebetweenlands.common.network.clientbound.MessageSyncStaticAspects;
 import thebetweenlands.common.network.clientbound.MessageWeedwoodBushRustle;
 import thebetweenlands.common.network.clientbound.MessageWightVolatileParticles;
+import thebetweenlands.common.network.serverbound.MessageButcherFish;
 import thebetweenlands.common.network.serverbound.MessageChiromawDoubleJump;
 import thebetweenlands.common.network.serverbound.MessageConnectCavingRope;
 import thebetweenlands.common.network.serverbound.MessageEquipItem;
@@ -92,7 +94,8 @@ public class MessageRegistry {
 		registerMessage(MessageUpdateDraetonPhysicsPart.class, Side.CLIENT);
 		registerMessage(MessageSyncDraetonLeakages.class, Side.CLIENT);
 		registerMessage(MessageShockArrowHit.class, Side.CLIENT);
-		
+		registerMessage(MessageShockParticle.class, Side.CLIENT);
+
 		registerMessage(MessageEquipItem.class, Side.SERVER);
 		registerMessage(MessageOpenPouch.class, Side.SERVER);
 		registerMessage(MessageItemNaming.class, Side.SERVER);
@@ -107,6 +110,7 @@ public class MessageRegistry {
 		registerMessage(MessageSetDraetonAnchorPos.class, Side.SERVER);
 		registerMessage(MessagePurgeDraetonBurner.class, Side.SERVER);
 		registerMessage(MessageChiromawDoubleJump.class, Side.SERVER);
+		registerMessage(MessageButcherFish.class, Side.SERVER);
 	}
 
 	private static void registerMessage(Class<? extends MessageBase> messageType, Side toSide) {

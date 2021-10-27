@@ -7,12 +7,47 @@
 				"custom": {
 					"model_base": "thebetweenlands:block/dead_grass",
 					"model_active": "thebetweenlands:block/dead_grass_frosty"
-				}
+				},
+				"weight": 2
 			},
 			{
 				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/dead_grass",
+					"model_active": "thebetweenlands:block/dead_grass_frosty"
+				},
+				"y": 90,
+				"weight": 2
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/dead_grass",
+					"model_active": "thebetweenlands:block/dead_grass_frosty"
+				},
+				"y": 180,
+				"weight": 2
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/dead_grass",
+					"model_active": "thebetweenlands:block/dead_grass_frosty"
+				},
+				"y": 270,
+				"weight": 2
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/dead_grass_0",
+					"model_active": "thebetweenlands:block/dead_grass_frosty"
+				}
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/dead_grass_0",
 					"model_active": "thebetweenlands:block/dead_grass_frosty"
 				},
 				"y": 90
@@ -20,7 +55,7 @@
 			{
 				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
-					"model_base": "thebetweenlands:block/dead_grass",
+					"model_base": "thebetweenlands:block/dead_grass_0",
 					"model_active": "thebetweenlands:block/dead_grass_frosty"
 				},
 				"y": 180
@@ -28,7 +63,38 @@
 			{
 				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
-					"model_base": "thebetweenlands:block/dead_grass",
+					"model_base": "thebetweenlands:block/dead_grass_0",
+					"model_active": "thebetweenlands:block/dead_grass_frosty"
+				},
+				"y": 270
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/dead_grass_1",
+					"model_active": "thebetweenlands:block/dead_grass_frosty"
+				}
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/dead_grass_1",
+					"model_active": "thebetweenlands:block/dead_grass_frosty"
+				},
+				"y": 90
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/dead_grass_1",
+					"model_active": "thebetweenlands:block/dead_grass_frosty"
+				},
+				"y": 180
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/dead_grass_1",
 					"model_active": "thebetweenlands:block/dead_grass_frosty"
 				},
 				"y": 270

@@ -24,6 +24,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.capability.IRotSmellCapability;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
@@ -32,6 +33,7 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.entity.EntitySplodeshroom;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
+import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityChiromawDroppings extends Entity {
@@ -222,10 +224,14 @@ public class EntityChiromawDroppings extends Entity {
 						if(!player.isSpectator() && !player.isCreative()) {
 							player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60));
 							player.addPotionEffect(ElixirEffectRegistry.EFFECT_DECAY.createEffect(40, 1));
+								IRotSmellCapability capSmell = player.getCapability(CapabilityRegistry.CAPABILITY_ROT_SMELL, null);
+								if(capSmell != null)
+									if(!capSmell.isSmellingBad())
+										capSmell.setSmellingBad(Math.max(capSmell.getRemainingSmellyTicks(), 24000));
+							}
 						}
 					}
 				}
-			}
 		return entity;
 	}
 

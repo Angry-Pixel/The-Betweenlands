@@ -1,0 +1,18 @@
+{
+   "pools":[
+      {
+         "name":"bubbler_crab_trim_1",
+         "rolls":1,
+         "conditions":[
+            
+         ],
+         "entries":[
+            {
+               "type":"item",
+               "name":"thebetweenlands:silt_crab_claw",
+               "weight":1
+            }
+         ]
+      }
+   ]
+}

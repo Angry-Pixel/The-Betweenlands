@@ -1,35 +1,134 @@
 {
 	"forge_marker": 1,
 	"variants": {
-		"normal": [
+	    "layers=1": [
 			{
 				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
-					"model_base": "thebetweenlands:block/fallen_leaves",
-					"model_active": "thebetweenlands:block/fallen_leaves_frosty"
+					"model_base": "thebetweenlands:block/fallen_leaves_1",
+					"model_active": "thebetweenlands:block/fallen_leaves_1_frosty"
 				}
 			},
 			{
 				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
-					"model_base": "thebetweenlands:block/fallen_leaves",
-					"model_active": "thebetweenlands:block/fallen_leaves_frosty"
+					"model_base": "thebetweenlands:block/fallen_leaves_1",
+					"model_active": "thebetweenlands:block/fallen_leaves_1_frosty"
 				},
 				"y": 90
 			},
 			{
 				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
-					"model_base": "thebetweenlands:block/fallen_leaves",
-					"model_active": "thebetweenlands:block/fallen_leaves_frosty"
+					"model_base": "thebetweenlands:block/fallen_leaves_1",
+					"model_active": "thebetweenlands:block/fallen_leaves_1_frosty"
 				},
 				"y": 180
 			},
 			{
 				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
-					"model_base": "thebetweenlands:block/fallen_leaves",
-					"model_active": "thebetweenlands:block/fallen_leaves_frosty"
+					"model_base": "thebetweenlands:block/fallen_leaves_1",
+					"model_active": "thebetweenlands:block/fallen_leaves_1_frosty"
+				},
+				"y": 270
+			}
+		],
+		"layers=2": [
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/fallen_leaves_2",
+					"model_active": "thebetweenlands:block/fallen_leaves_2_frosty"
+				}
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/fallen_leaves_2",
+					"model_active": "thebetweenlands:block/fallen_leaves_2_frosty"
+				},
+				"y": 90
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/fallen_leaves_2",
+					"model_active": "thebetweenlands:block/fallen_leaves_2_frosty"
+				},
+				"y": 180
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/fallen_leaves_2",
+					"model_active": "thebetweenlands:block/fallen_leaves_2_frosty"
+				},
+				"y": 270
+			}
+		],
+		"layers=3": [
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/fallen_leaves_3",
+					"model_active": "thebetweenlands:block/fallen_leaves_3_frosty"
+				}
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/fallen_leaves_3",
+					"model_active": "thebetweenlands:block/fallen_leaves_3_frosty"
+				},
+				"y": 90
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/fallen_leaves_3",
+					"model_active": "thebetweenlands:block/fallen_leaves_3_frosty"
+				},
+				"y": 180
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/fallen_leaves_3",
+					"model_active": "thebetweenlands:block/fallen_leaves_3_frosty"
+				},
+				"y": 270
+			}
+		],
+		"layers=4": [
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/fallen_leaves_4",
+					"model_active": "thebetweenlands:block/fallen_leaves_4_frosty"
+				}
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/fallen_leaves_4",
+					"model_active": "thebetweenlands:block/fallen_leaves_4_frosty"
+				},
+				"y": 90
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/fallen_leaves_4",
+					"model_active": "thebetweenlands:block/fallen_leaves_4_frosty"
+				},
+				"y": 180
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/fallen_leaves_4",
+					"model_active": "thebetweenlands:block/fallen_leaves_4_frosty"
 				},
 				"y": 270
 			}

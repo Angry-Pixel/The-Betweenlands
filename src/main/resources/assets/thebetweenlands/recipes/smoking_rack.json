@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SRS",
+    "STS",
+    "S S"
+  ],
+  "key": {
+    "S": {
+      "item": "thebetweenlands:items_misc",
+	  "data": 20
+    },
+    "R": {
+      "item": "thebetweenlands:items_misc",
+      "data": 7
+    },
+    "T": {
+      "item": "thebetweenlands:items_misc",
+      "data": 21
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:smoking_rack"
+  }
+}

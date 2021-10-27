@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    [
+      {
+        "item": "thebetweenlands:items_plant_drop",
+        "data": 30
+      },
+      {
+        "item": "thebetweenlands:items_plant_drop",
+        "data": 29
+      },
+      {
+        "item": "thebetweenlands:cave_moss"
+      },
+      {
+        "item": "thebetweenlands:moss"
+      }
+    ],
+    {
+      "item": "thebetweenlands:cragrock_tiles"
+    }
+  ],
+  "result": {
+    "item": "thebetweenlands:cragrock_tiles_mossy"
+  }
+}

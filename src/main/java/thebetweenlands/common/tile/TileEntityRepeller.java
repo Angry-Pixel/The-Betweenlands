@@ -41,12 +41,16 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 	public int renderTicks = 0;
 
 	public void setRadiusState(int state) {
-		if(this.running && state % 4 != this.radiusState)
-			this.deployTicks = 0;
-		this.radiusState = state % 4;
-		this.markDirty();
-		IBlockState blockState = this.world.getBlockState(this.pos);
-		this.world.notifyBlockUpdate(this.pos, blockState, blockState, 3);
+		state = state % 4;
+		if(state != this.radiusState) {
+			if(this.running) {
+				this.deployTicks = 0;
+			}
+			this.radiusState = state;
+			this.markDirty();
+			IBlockState blockState = this.world.getBlockState(this.pos);
+			this.world.notifyBlockUpdate(this.pos, blockState, blockState, 2);
+		}
 	}
 	
 	public int getRadiusState() {
@@ -59,14 +63,16 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 			this.deployTicks = 0;
 		this.markDirty();
 		IBlockState blockState = this.world.getBlockState(this.pos);
-		this.world.notifyBlockUpdate(this.pos, blockState, blockState, 3);
+		this.world.notifyBlockUpdate(this.pos, blockState, blockState, 2);
 	}
 
 	public void addShimmerstone() {
-		this.hasShimmerstone = true;
-		this.markDirty();
-		IBlockState blockState = this.world.getBlockState(this.pos);
-		this.world.notifyBlockUpdate(this.pos, blockState, blockState, 3);
+		if(!this.hasShimmerstone) {
+			this.hasShimmerstone = true;
+			this.markDirty();
+			IBlockState blockState = this.world.getBlockState(this.pos);
+			this.world.notifyBlockUpdate(this.pos, blockState, blockState, 2);
+		}
 	}
 
 	public boolean hasShimmerstone() {
@@ -74,10 +80,12 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 	}
 
 	public void removeShimmerstone() {
-		this.hasShimmerstone = false;
-		this.markDirty();
-		IBlockState blockState = this.world.getBlockState(this.pos);
-		this.world.notifyBlockUpdate(this.pos, blockState, blockState, 3);
+		if(this.hasShimmerstone) {
+			this.hasShimmerstone = false;
+			this.markDirty();
+			IBlockState blockState = this.world.getBlockState(this.pos);
+			this.world.notifyBlockUpdate(this.pos, blockState, blockState, 2);
+		}
 	}
 
 	public int getMaxFuel() {
@@ -91,7 +99,7 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 				int added = Math.min(canAdd, amount);
 				this.fuel += added;
 				IBlockState blockState = this.world.getBlockState(this.pos);
-				this.world.notifyBlockUpdate(this.pos, blockState, blockState, 3);
+				this.world.notifyBlockUpdate(this.pos, blockState, blockState, 2);
 				this.markDirty();
 				return added;
 			}
@@ -104,7 +112,7 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 		if(amount != 0) {
 			this.fuel -= amount;
 			IBlockState blockState = this.world.getBlockState(this.pos);
-			this.world.notifyBlockUpdate(this.pos, blockState, blockState, 3);
+			this.world.notifyBlockUpdate(this.pos, blockState, blockState, 2);
 			this.markDirty();
 		}
 		return removed;
@@ -139,21 +147,21 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 				if(!this.running) {
 					this.running = true;
 					IBlockState blockState = this.world.getBlockState(this.pos);
-					this.world.notifyBlockUpdate(this.pos, blockState, blockState, 3);
+					this.world.notifyBlockUpdate(this.pos, blockState, blockState, 2);
 					this.markDirty();
 				}
 			} else if(this.fuel <= 0 || !this.hasShimmerstone) {
 				if(this.running) {
 					this.running = false;
 					IBlockState blockState = this.world.getBlockState(this.pos);
-					this.world.notifyBlockUpdate(this.pos, blockState, blockState, 3);
+					this.world.notifyBlockUpdate(this.pos, blockState, blockState, 2);
 					this.markDirty();
 				}
 			}
 			if(this.fuel < 0) {
 				this.fuel = 0;
 				IBlockState blockState = this.world.getBlockState(this.pos);
-				this.world.notifyBlockUpdate(this.pos, blockState, blockState, 3);
+				this.world.notifyBlockUpdate(this.pos, blockState, blockState, 2);
 				this.markDirty();
 			} else {
 				float fuelCost = 0;

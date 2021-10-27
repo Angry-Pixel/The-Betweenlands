@@ -276,6 +276,11 @@ public class BlockInfuser extends BlockContainer {
     }
 	
 	@Override
+	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return false;
+	}
+	
+	@Override
 	public void fillWithRain(World world, BlockPos pos) {
 		if (world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && world.getTileEntity(pos) instanceof TileEntityInfuser) {
 			TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(pos);

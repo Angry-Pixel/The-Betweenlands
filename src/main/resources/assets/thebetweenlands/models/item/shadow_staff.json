@@ -1,6 +1,32 @@
 {
-  "parent": "item/handheld",
-  "textures": {
-    "layer0": "thebetweenlands:items/shadow_staff"
-  }
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "thebetweenlands:items/staff_of_shadow_walker"
+    },
+    "display": {
+        "thirdperson_righthand": {
+            "rotation": [ 0, -90, 55 ],
+            "translation": [ 0, 4.0, 0.5 ],
+            "scale": [ 1.7, 1.7, 0.85 ]
+        },
+        "thirdperson_lefthand": {
+            "rotation": [ 0, 90, -55 ],
+            "translation": [ 0, 4.0, 0.5 ],
+            "scale": [ 1.7, 1.7, 0.85 ]
+        },
+        "firstperson_righthand": {
+            "rotation": [ 0, -90, 25 ],
+            "translation": [ 1.13, 3.2, 1.13 ],
+            "scale": [ 1.36, 1.36, 0.68 ]
+        },
+        "firstperson_lefthand": {
+            "rotation": [ 0, 90, -25 ],
+            "translation": [ 1.13, 3.2, 1.13 ],
+            "scale": [ 1.36, 1.36, 0.68 ]
+        },
+        "ground": {
+            "translation": [ 0, 4, 0],
+            "scale": [1, 1, 0.5]
+        }
+    }
 }

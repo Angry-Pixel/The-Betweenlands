@@ -7,12 +7,13 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.common.entity.mobs.EntityAngler;
-import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
+import thebetweenlands.common.entity.mobs.EntityCaveFish;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityChiromawGreeblingRider;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityLeech;
+import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntitySludge;
 import thebetweenlands.common.entity.mobs.EntitySmollSludge;
@@ -61,7 +62,7 @@ public class BiomeSludgePlainsClearing extends BiomeBetweenlands {
 		super.addSpawnEntries(entries);
 
 		entries.add(new SurfaceSpawnEntry(0, EntityFirefly.class, EntityFirefly::new, (short) 25).setCanSpawnOnWater(true).setSpawnCheckRadius(32.0D).setGroupSize(1, 3));
-		entries.add(new CaveSpawnEntry(1, EntityBlindCaveFish.class, EntityBlindCaveFish::new, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5));
+		entries.add(new CaveSpawnEntry(1, EntityOlm.class, EntityOlm::new, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5));
 
 		entries.add(new TarSpawnEntry(2, EntityTarBeast.class, EntityTarBeast::new, (short) 120).setHostile(true).setGroupSize(1, 2).setSpawnCheckRadius(14.0D));
 		entries.add(new SurfaceSpawnEntry(3, EntityLeech.class, EntityLeech::new, (short) 50).setHostile(true).setSpawnCheckRadius(18.0D).setSpawningInterval(800));
@@ -78,5 +79,6 @@ public class BiomeSludgePlainsClearing extends BiomeBetweenlands {
 		entries.add(new SkySpawnEntry(14, EntityChiromawGreeblingRider.class, EntityChiromawGreeblingRider::new, (short) 20).setSpawnCheckRadius(64.0D).setGroupSize(1, 3).setSpawningInterval(600).setHostile(true));
 		entries.add(new PitstoneCaveSpawnEntry(15, EntityStalker.class, EntityStalker::new, (short) 13).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(16).setSpawningInterval(6000));
 		entries.add(new CaveSpawnEntry(16, EntitySwarm.class, EntitySwarm::new, (short) 65).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(32.0D));
+		entries.add(new CaveSpawnEntry(17, EntityCaveFish.class, EntityCaveFish::new, (short) 30).setCanSpawnInWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D));
 	}
 }

@@ -68,6 +68,10 @@ public class ElixirEffect {
 	public PotionEffect createEffect(int duration, int strength) {
 		return new PotionEffect(Potion.getPotionFromResourceLocation(this.potionID.toString()), duration, strength);
 	}
+	
+	public PotionEffect createEffect(int duration, int strength, boolean ambient, boolean showParticles) {
+		return new PotionEffect(Potion.getPotionFromResourceLocation(this.potionID.toString()), duration, strength, ambient, showParticles);
+	}
 
 	public void registerPotion(String name) {
 		this.potionEffect = (ElixirPotionEffect) new ElixirPotionEffect(this, this.effectName, this.color, this.icon).setRegistryName(ModInfo.ID, name);

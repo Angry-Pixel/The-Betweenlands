@@ -3,7 +3,11 @@
 		{
 			"name": "lurker",
 			"rolls": 1,
-			"conditions": [],
+			"conditions": [
+				{
+					"condition": "killed_by_player"
+				}
+			],
 			"entries": [
 				{
 					"type": "item",

@@ -122,7 +122,7 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
     @Override
     public void markDirty() {
         IBlockState state = world.getBlockState(pos);
-        world.notifyBlockUpdate(getPos(), state, state, 3);
+        world.notifyBlockUpdate(getPos(), state, state, 2);
         world.markBlockRangeForRenderUpdate(getPos(), getPos());
         super.markDirty();
     }

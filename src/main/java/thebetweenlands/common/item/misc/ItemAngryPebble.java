@@ -11,7 +11,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.entity.EntityAngryPebble;
+import thebetweenlands.common.entity.projectiles.EntityAngryPebble;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class ItemAngryPebble extends Item {

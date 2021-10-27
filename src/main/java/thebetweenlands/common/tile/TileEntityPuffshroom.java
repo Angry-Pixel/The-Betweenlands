@@ -151,7 +151,7 @@ public class TileEntityPuffshroom extends TileEntity implements ITickable {
 
 	public void markForUpdate() {
         IBlockState state = this.getWorld().getBlockState(this.getPos());
-        this.getWorld().notifyBlockUpdate(this.getPos(), state, state, 3);
+        this.getWorld().notifyBlockUpdate(this.getPos(), state, state, 2);
     }
 
 	protected Entity findEnemyToAttack() {
