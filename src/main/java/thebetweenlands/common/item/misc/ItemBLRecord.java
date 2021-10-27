@@ -22,10 +22,13 @@ import thebetweenlands.common.sound.BLSoundEvent;
 public class ItemBLRecord extends ItemRecord {
     private String name;
 
-    public ItemBLRecord(BLSoundEvent soundIn) {
+    public ItemBLRecord(BLSoundEvent soundIn, boolean showCreative) {
         super(soundIn.name, soundIn);
         name = soundIn.name;
-        this.setCreativeTab(BLCreativeTabs.SPECIALS);
+        if (showCreative)
+        	this.setCreativeTab(BLCreativeTabs.SPECIALS);
+        else
+        	this.setCreativeTab(null);
     }
 
     @Override

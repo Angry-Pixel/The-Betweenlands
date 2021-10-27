@@ -1,19 +1,17 @@
 package thebetweenlands.common.block.structure;
 
-import java.util.Objects;
 import java.util.Random;
 import java.util.function.Consumer;
 
 import net.minecraft.block.BlockMobSpawner;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -59,6 +57,7 @@ public class BlockMobSpawnerBetweenlands extends BlockMobSpawner {
 
 	public BlockMobSpawnerBetweenlands(){
 		super();
+		this.setSoundType(SoundType.GLASS);
 		this.setHardness(10.0F);
 		this.setHarvestLevel("pickaxe", 0);
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);

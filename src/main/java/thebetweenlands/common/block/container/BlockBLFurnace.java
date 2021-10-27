@@ -254,8 +254,13 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
 
 	@Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
-    	return face == EnumFacing.UP ? BlockFaceShape.CENTER_SMALL : BlockFaceShape.UNDEFINED;
+    	return face == EnumFacing.UP ? BlockFaceShape.CENTER_SMALL : face == EnumFacing.DOWN ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
     }
+	
+	@Override
+	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return side == EnumFacing.DOWN;
+	}
 	
 	@Override
 	public ItemBlock getItemBlock() {

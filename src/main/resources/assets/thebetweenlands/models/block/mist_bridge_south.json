@@ -1,0 +1,16 @@
+{
+  "parent": "block/thin_block",
+  "textures": {
+    "particle": "thebetweenlands:blocks/mist_bridge",
+    "edge": "thebetweenlands:blocks/mist_bridge_horizontal"
+  },
+  "elements": [
+    {
+      "from": [ 0, 16.02, 16 ],
+      "to": [ 16, 16.02, 19 ],
+      "faces": {
+        "up":    { "uv": [ 0,  0, 16, 3 ], "texture": "#edge", "tintindex": 0 }
+      }
+    }
+  ]
+}

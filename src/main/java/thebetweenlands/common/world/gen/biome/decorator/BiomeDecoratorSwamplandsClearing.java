@@ -46,5 +46,13 @@ public class BiomeDecoratorSwamplandsClearing extends BiomeDecoratorBetweenlands
 		this.startProfilerSection("mossCluster");
 		this.generate(5, DecorationHelper::generateMossCluster);
 		this.endProfilerSection();
+		
+        this.startProfilerSection("pebbleClusterLand");
+        this.generate(6, DecorationHelper::generatePebbleClusterLand);
+        this.endProfilerSection();
+
+        this.startProfilerSection("pebbleClusterWater");
+        this.generate(8, DecorationHelper::generatePebbleClusterWater);
+        this.endProfilerSection();
 	}
 }

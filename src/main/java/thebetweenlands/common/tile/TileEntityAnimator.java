@@ -150,7 +150,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
     public void markDirty() {
         super.markDirty();
         if (world != null)
-            world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+            world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 2);
     }
 
     public boolean isCrystalInslot() {

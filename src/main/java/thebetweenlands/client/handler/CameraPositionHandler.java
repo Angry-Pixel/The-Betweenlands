@@ -6,7 +6,9 @@ import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -19,6 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.ISummoningCapability;
 import thebetweenlands.api.entity.IEntityCameraOffset;
 import thebetweenlands.api.entity.IEntityScreenShake;
+import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.equipment.ItemRingOfSummoning;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
@@ -64,6 +67,14 @@ public class CameraPositionHandler {
 					if(cap.isActive()) {
 						screenShake += (ItemRingOfSummoning.MAX_USE_TIME - cap.getActiveTicks()) / (float)ItemRingOfSummoning.MAX_USE_TIME * 0.1F + 0.01F;
 					}
+				}
+			}
+			
+			//Shock
+			if(renderViewEntity instanceof EntityLivingBase) {
+				PotionEffect effect = ((EntityLivingBase) renderViewEntity).getActivePotionEffect(ElixirEffectRegistry.EFFECT_SHOCKED.getPotionEffect());
+				if(effect != null) {
+					screenShake += Math.min(0.1f, effect.getDuration() / 30.0f * 0.1f);
 				}
 			}
 		}

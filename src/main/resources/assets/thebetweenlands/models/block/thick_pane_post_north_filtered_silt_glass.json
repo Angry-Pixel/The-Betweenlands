@@ -1,0 +1,6 @@
+{
+    "parent": "thebetweenlands:block/thick_pane_post_north",
+    "textures": {
+        "pane": "thebetweenlands:blocks/filtered_silt_glass_0"
+    }
+}

@@ -1,0 +1,36 @@
+{
+  "pools": [
+    {
+      "name": "jellyfish",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "killed_by_player"
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:glowing_goop",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            },
+            {
+              "function": "looting_enchant",
+              "count": {
+                "min": 0,
+                "max": 1
+              }
+            }
+          ],
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

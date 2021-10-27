@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "LCL",
+    "FBF"
+  ],
+  "key": {
+    "S": {
+      "item": "thebetweenlands:items_misc",
+      "data": 54
+    },
+    "C": {
+      "item": "thebetweenlands:lurker_skin_chestplate"
+    },
+    "L": {
+      "item": "thebetweenlands:items_misc",
+      "data": 53
+    },
+    "F": {
+      "item": "thebetweenlands:items_misc",
+      "data": 57
+    },
+    "B": {
+      "item": "thebetweenlands:items_misc",
+      "data": 55
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:amphibious_chestplate"
+  }
+}

@@ -16,7 +16,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -36,6 +36,7 @@ import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.property.PropertyBoolUnlisted;
 import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
 import thebetweenlands.common.entity.mobs.EntityAshSprite;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
 import thebetweenlands.util.StatePropertyHelper;
@@ -189,6 +190,8 @@ public class BlockMudBrickAlcove extends BasicBlock implements ITileEntityProvid
 					
 					tile.hasUrn = false;
 					world.notifyBlockUpdate(pos, state, state, 2);
+					if(player instanceof EntityPlayerMP)
+						AdvancementCriterionRegistry.BREAK_ALCOVE_URN.trigger((EntityPlayerMP) player);
 				}
 			}
 		}

@@ -2,9 +2,13 @@ package thebetweenlands.common.block.terrain;
 
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -17,6 +21,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.block.ISickleHarvestable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
+import thebetweenlands.common.item.misc.ItemFallenLeaves;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 
 import javax.annotation.Nullable;
 
@@ -24,8 +30,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class BlockFallenLeaves extends BlockBush implements IShearable, ISickleHarvestable {
-	private static final AxisAlignedBB BOUNDS = new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 0.05F, 1.0F);
+public class BlockFallenLeaves extends BlockBush implements IShearable, ISickleHarvestable, ICustomItemBlock {
+	public static final PropertyInteger LAYERS = PropertyInteger.create("layers", 1, 4);
+	
+	private static final AxisAlignedBB BOUNDS[] = new AxisAlignedBB[] { new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 0.0625F, 1.0F), new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F), new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 0.1875F, 1.0F), new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 0.25F, 1.0F) };
 
 	private String type;
 
@@ -38,8 +46,23 @@ public class BlockFallenLeaves extends BlockBush implements IShearable, ISickleH
 	}
 
 	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, LAYERS);
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(LAYERS) - 1;
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(LAYERS, (meta & 0b11) + 1);
+	}
+	
+	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return BOUNDS;
+		return BOUNDS[state.getValue(LAYERS) - 1];
 	}
 
 	@Override
@@ -56,12 +79,13 @@ public class BlockFallenLeaves extends BlockBush implements IShearable, ISickleH
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-		return blockAccess.getBlockState(pos.offset(side)).getBlock() != this && super.shouldSideBeRendered(state, blockAccess, pos, side);
+		IBlockState offsetState = blockAccess.getBlockState(pos.offset(side));
+		return (offsetState.getBlock() != this || state.getValue(LAYERS) > offsetState.getValue(LAYERS)) && super.shouldSideBeRendered(state, blockAccess, pos, side);
 	}
 
 	@Override
 	public boolean isReplaceable(IBlockAccess world, BlockPos pos) {
-		return true;
+		return world.getBlockState(pos).getValue(LAYERS) == 1;
 	}
 
 	@Nullable
@@ -77,7 +101,7 @@ public class BlockFallenLeaves extends BlockBush implements IShearable, ISickleH
 
 	@Override
 	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
-		return Collections.singletonList(new ItemStack(this));
+		return Collections.singletonList(new ItemStack(this, world.getBlockState(pos).getValue(LAYERS)));
 	}
 
 	@Override
@@ -87,6 +111,11 @@ public class BlockFallenLeaves extends BlockBush implements IShearable, ISickleH
 
 	@Override
 	public List<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
-		return Collections.singletonList(EnumItemPlantDrop.GENERIC_LEAF.create(1));
+		return Collections.singletonList(EnumItemPlantDrop.GENERIC_LEAF.create(world.getBlockState(pos).getValue(LAYERS)));
+	}
+	
+	@Override
+	public ItemBlock getItemBlock() {
+		return new ItemFallenLeaves(this);
 	}
 }

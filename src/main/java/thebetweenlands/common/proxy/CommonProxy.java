@@ -23,32 +23,44 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 import thebetweenlands.client.render.sky.RiftVariant;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
+import thebetweenlands.common.inventory.InventoryAmphibiousArmor;
 import thebetweenlands.common.inventory.InventoryItem;
+import thebetweenlands.common.inventory.InventoryPouch;
+import thebetweenlands.common.inventory.container.ContainerAmphibiousArmor;
 import thebetweenlands.common.inventory.container.ContainerAnimator;
 import thebetweenlands.common.inventory.container.ContainerBLDualFurnace;
 import thebetweenlands.common.inventory.container.ContainerBLFurnace;
 import thebetweenlands.common.inventory.container.ContainerBarrel;
 import thebetweenlands.common.inventory.container.ContainerCenser;
+import thebetweenlands.common.inventory.container.ContainerCrabPotFilter;
 import thebetweenlands.common.inventory.container.ContainerDraetonBurner;
 import thebetweenlands.common.inventory.container.ContainerDraetonFurnace;
 import thebetweenlands.common.inventory.container.ContainerDraetonPouch;
 import thebetweenlands.common.inventory.container.ContainerDraetonUpgrades;
 import thebetweenlands.common.inventory.container.ContainerDraetonWorkbench;
 import thebetweenlands.common.inventory.container.ContainerDruidAltar;
+import thebetweenlands.common.inventory.container.ContainerFishTrimmingTable;
+import thebetweenlands.common.inventory.container.ContainerFishingTackleBox;
 import thebetweenlands.common.inventory.container.ContainerItemNaming;
 import thebetweenlands.common.inventory.container.ContainerMortar;
 import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
+import thebetweenlands.common.inventory.container.ContainerSmokingRack;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
 import thebetweenlands.common.tile.TileEntityBarrel;
 import thebetweenlands.common.tile.TileEntityCenser;
+import thebetweenlands.common.tile.TileEntityCrabPotFilter;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
+import thebetweenlands.common.tile.TileEntityFishTrimmingTable;
+import thebetweenlands.common.tile.TileEntityFishingTackleBox;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityPurifier;
+import thebetweenlands.common.tile.TileEntitySmokingRack;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 
 public class CommonProxy implements IGuiHandler {
@@ -72,12 +84,17 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_DRAETON_CRAFTING = 19;
 	public static final int GUI_DRAETON_FURNACE = 20;
 	public static final int GUI_DRAETON_UPGRADES = 21;
+	public static final int GUI_FISHING_TACKLE_BOX = 30;
+	public static final int GUI_SMOKING_RACK = 31;
+	public static final int GUI_FISH_TRIMMING_TABLE = 32;
+	public static final int GUI_CRAB_POT_FILTER = 33;
+	public static final int GUI_AMPHIBIOUS_ARMOR = 34;
 	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 		Entity entity = null;
-		
+
 		switch (id) {
 		case GUI_DRUID_ALTAR:
 			if (tile instanceof TileEntityDruidAltar) {
@@ -128,7 +145,7 @@ public class CommonProxy implements IGuiHandler {
 			}
 			if(!item.isEmpty() && item.getItem() instanceof ItemLurkerSkinPouch) {
 				String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.lurker_skin_pouch";
-				return new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name));
+				return new ContainerPouch(player, player.inventory, new InventoryPouch(item, 9 + (item.getItemDamage() * 9), name));
 			}
 			break;
 		}
@@ -137,8 +154,9 @@ public class CommonProxy implements IGuiHandler {
 			ItemStack item = ItemLurkerSkinPouch.getFirstPouch(player);
 			if(item != null) {
 				String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.lurker_skin_pouch";
-				return new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name));
+				return new ContainerPouch(player, player.inventory, new InventoryPouch(item, 9 + (item.getItemDamage() * 9), name));
 			}
+			break;
 		}
 
 		case GUI_ITEM_RENAMING:
@@ -149,7 +167,7 @@ public class CommonProxy implements IGuiHandler {
 				return new ContainerCenser(player.inventory, (TileEntityCenser) tile);
 			}
 			break;
-			
+
 		case GUI_BARREL:
 			if (tile instanceof TileEntityBarrel) {
 				return new ContainerBarrel(player.inventory, (TileEntityBarrel) tile);
@@ -164,12 +182,12 @@ public class CommonProxy implements IGuiHandler {
 					ItemStack stack = upgrades.getStackInSlot(y);
 					if(!stack.isEmpty() && ((EntityDraeton) entity).isStorageUpgrade(stack)) {
 						String name = stack.hasDisplayName() ? stack.getDisplayName(): "container.bl.draeton_storage";
-						return new ContainerDraetonPouch(player, player.inventory, new InventoryItem(stack, 9 + (stack.getItemDamage() * 9), name), (EntityDraeton)entity, y);
+						return new ContainerDraetonPouch(player, player.inventory, new InventoryPouch(stack, 9 + (stack.getItemDamage() * 9), name), (EntityDraeton)entity, y);
 					}
 				}
 			}
 			break;
-			
+
 		case GUI_DRAETON_CRAFTING:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton) {
@@ -182,7 +200,7 @@ public class CommonProxy implements IGuiHandler {
 				}
 			}
 			break;
-			
+
 		case GUI_DRAETON_FURNACE:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton) {
@@ -195,18 +213,46 @@ public class CommonProxy implements IGuiHandler {
 				}
 			}
 			break;
-			
+
 		case GUI_DRAETON_BURNER:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton)
 				return new ContainerDraetonBurner(player.inventory, ((EntityDraeton)entity).getBurnerInventory(), (EntityDraeton)entity);
 			break;
-			
+
 		case GUI_DRAETON_UPGRADES:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton)
 				return new ContainerDraetonUpgrades(player.inventory, (EntityDraeton)entity);
 			break;
+
+		case GUI_FISHING_TACKLE_BOX:
+			if (tile instanceof TileEntityFishingTackleBox)
+				return new ContainerFishingTackleBox(player, (TileEntityFishingTackleBox) tile);
+			break;
+
+		case GUI_SMOKING_RACK:
+			if (tile instanceof TileEntitySmokingRack)
+				return new ContainerSmokingRack(player, (TileEntitySmokingRack) tile);
+			break;
+
+		case GUI_FISH_TRIMMING_TABLE:
+			if (tile instanceof TileEntityFishTrimmingTable)
+				return new ContainerFishTrimmingTable(player, (TileEntityFishTrimmingTable) tile);
+			break;
+			
+		case GUI_CRAB_POT_FILTER:
+			if (tile instanceof TileEntityCrabPotFilter)
+				return new ContainerCrabPotFilter(player, (TileEntityCrabPotFilter) tile);
+			break;
+			
+		case GUI_AMPHIBIOUS_ARMOR: {
+			ItemStack item = player.getHeldItemMainhand();
+			String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.amphibious_armour";
+			if (!item.isEmpty() && item.getItem() instanceof ItemAmphibiousArmor)
+				return new ContainerAmphibiousArmor(player, new InventoryAmphibiousArmor(item, name));
+			break;
+		}
 		}
 		return null;
 	}

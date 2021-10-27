@@ -1,8 +1,12 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
@@ -13,6 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,13 +29,24 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.util.NBTHelper;
 
 public class ItemMob extends Item {
+	private static final Map<Class<? extends Entity>, Function<Entity, EnumActionResult>> SPAWN_HANDLERS = new HashMap<>();
+
+	public static final Function<Entity, EnumActionResult> DEFAULT_SPAWN_HANDLER = entity -> {
+		if((entity.world.getDifficulty() != EnumDifficulty.PEACEFUL || entity instanceof IMob == false) && entity.world.getCollisionBoxes(entity, entity.getEntityBoundingBox()).isEmpty()) {
+			return EnumActionResult.SUCCESS;
+		}
+		return EnumActionResult.FAIL;
+	};
+
 	private final Class<? extends Entity> defaultMob;
 	private final Consumer<Entity> defaultMobSetter;
 
@@ -45,6 +61,25 @@ public class ItemMob extends Item {
 		this.defaultMob = defaultMob;
 		this.defaultMobSetter = (Consumer<Entity>) defaultMobSetter;
 		this.setCreativeTab(BLCreativeTabs.ITEMS);
+	}
+
+	public static void registerSpawnHandler(Class<? extends Entity> cls, Function<Entity, EnumActionResult> handler) {
+		Function<Entity, EnumActionResult> current = SPAWN_HANDLERS.get(cls);
+		if(current != null) {
+			SPAWN_HANDLERS.put(cls, entity -> {
+				EnumActionResult result1 = handler.apply(entity);
+				if(result1 == EnumActionResult.SUCCESS || result1 == EnumActionResult.FAIL) {
+					return result1;
+				}
+				EnumActionResult result2 = current.apply(entity);
+				if(result2 == EnumActionResult.SUCCESS || result2 == EnumActionResult.FAIL) {
+					return result2;
+				}
+				return EnumActionResult.PASS;
+			});
+		} else {
+			SPAWN_HANDLERS.put(cls, handler);
+		}
 	}
 
 	public ItemStack capture(Class<? extends Entity> cls) {
@@ -115,9 +150,32 @@ public class ItemMob extends Item {
 		return this.defaultMob != null && cls.isAssignableFrom(this.defaultMob);
 	}
 
+	public boolean hasEntityData(ItemStack stack) {
+		NBTTagCompound nbt = stack.getTagCompound();
+		return nbt != null && nbt.hasKey("Entity", Constants.NBT.TAG_COMPOUND);
+	}
+
+	@Nullable
+	public NBTTagCompound getEntityData(ItemStack stack) {
+		NBTTagCompound nbt = stack.getTagCompound();
+		if(nbt != null) {
+			return nbt.getCompoundTag("Entity");
+		}
+		return null;
+	}
+
+	public void setEntityData(ItemStack stack, @Nullable NBTTagCompound entityData) {
+		NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
+		if(entityData == null) {
+			nbt.removeTag("Entity");
+		} else {
+			nbt.setTag("Entity", entityData);
+		}
+	}
+
 	@Nullable
 	public ResourceLocation getCapturedEntityId(ItemStack stack) {
-		if(stack.getItem() != this) {
+		if(stack.getItem() instanceof ItemMob == false) {
 			return null;
 		}
 
@@ -136,8 +194,23 @@ public class ItemMob extends Item {
 		return null;
 	}
 
+	protected static void handleOnInitialSpawn(Entity entity) {
+		if(!entity.world.isRemote && entity instanceof EntityLiving) {
+			((EntityLiving) entity).onInitialSpawn(entity.world.getDifficultyForLocation(new BlockPos(entity)), null);
+		}
+	}
+
 	@Nullable
-	public Entity createCapturedEntity(World world, double x, double y, double z, ItemStack stack) {
+	public Entity createCapturedEntity(World world, double x, double y, double z, ItemStack stack, boolean allowOnInitialSpawn) {
+		return this.createCapturedEntity(world, x, y, z, stack, entity -> {
+			if(allowOnInitialSpawn) {
+				handleOnInitialSpawn(entity);
+			}
+		}); 
+	}
+
+	@Nullable
+	public Entity createCapturedEntity(World world, double x, double y, double z, ItemStack stack, @Nullable Consumer<Entity> onNewEntityCreated) {
 		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
 			return this.createCapturedEntityFromNBT(world, x, y, z, stack.getTagCompound().getCompoundTag("Entity"));
 		}
@@ -145,13 +218,17 @@ public class ItemMob extends Item {
 		if(this.defaultMob != null) {
 			ResourceLocation id = EntityList.getKey(this.defaultMob);
 			if(id != null) {
-				NBTTagCompound nbt = new NBTTagCompound();
-				nbt.setString("id", id.toString());
-				Entity entity = this.createCapturedEntityFromNBT(world, x, y, z, nbt);
-				if(this.defaultMobSetter != null) {
-					this.defaultMobSetter.accept(entity);
+				Entity entity = EntityList.createEntityByIDFromName(id, world);
+				if(entity != null) {
+					entity.setLocationAndAngles(x, y, z, world.rand.nextFloat() * 360.0f, 0);
+					if(this.defaultMobSetter != null) {
+						this.defaultMobSetter.accept(entity);
+					}
+					if(onNewEntityCreated != null) {
+						onNewEntityCreated.accept(entity);
+					}
+					return entity;
 				}
-				return entity;
 			}
 		}
 
@@ -182,41 +259,64 @@ public class ItemMob extends Item {
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		ItemStack stack = player.getHeldItem(hand);
-		if(!world.isRemote) {
-			Entity entity = this.createCapturedEntity(world, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, stack);
-			if(entity != null) {
-				if(facing.getXOffset() != 0) {
-					entity.setPosition(entity.posX + facing.getXOffset() * entity.width * 0.5f, entity.posY, entity.posZ);
-				}
-				if(facing.getYOffset() < 0) {
-					entity.setPosition(entity.posX, entity.posY - entity.height, entity.posZ);
-				}
-				if(facing.getZOffset() != 0) {
-					entity.setPosition(entity.posX, entity.posY, entity.posZ + facing.getZOffset() * entity.width * 0.5f);
-				}
 
-				if(world.getCollisionBoxes(entity, entity.getEntityBoundingBox()).isEmpty()) {
-					this.spawnCapturedEntity(player, world, entity);
-					stack.shrink(1);
-					return EnumActionResult.SUCCESS;
+		final AtomicBoolean isNewEntity = new AtomicBoolean();
+
+		Entity entity = this.createCapturedEntity(world, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, stack, e -> isNewEntity.set(true));
+		if(entity != null) {
+			if(facing.getXOffset() != 0) {
+				entity.setPosition(entity.posX + facing.getXOffset() * entity.width * 0.5f, entity.posY, entity.posZ);
+			}
+			if(facing.getYOffset() < 0) {
+				entity.setPosition(entity.posX, entity.posY - entity.height, entity.posZ);
+			}
+			if(facing.getZOffset() != 0) {
+				entity.setPosition(entity.posX, entity.posY, entity.posZ + facing.getZOffset() * entity.width * 0.5f);
+			}
+
+			Function<Entity, EnumActionResult> spawnHandler = SPAWN_HANDLERS.get(entity.getClass());
+			if(spawnHandler == null) {
+				spawnHandler = DEFAULT_SPAWN_HANDLER;
+			}
+
+			EnumActionResult result = spawnHandler.apply(entity);
+
+			if(result == EnumActionResult.SUCCESS) {
+				result = this.spawnCapturedEntity(player, world, pos, hand, facing, hitX, hitY, hitZ, entity, isNewEntity.get());
+
+				if(result == EnumActionResult.SUCCESS) {
+					if(!world.isRemote) {
+						stack.shrink(1);
+					}
 				}
 			}
+
+			return result;
 		}
+
+		return EnumActionResult.PASS;
+	}
+
+	protected EnumActionResult spawnCapturedEntity(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ, Entity entity, boolean isNewEntity) {
+		if(!world.isRemote) {
+			if(isNewEntity) {
+				handleOnInitialSpawn(entity);
+			}
+
+			world.spawnEntity(entity);
+
+			if(entity instanceof EntityLiving) {
+				((EntityLiving) entity).playLivingSound();
+			}
+		}
+
 		return EnumActionResult.SUCCESS;
 	}
 
-	protected void spawnCapturedEntity(EntityPlayer player, World world, Entity entity) {
-		world.spawnEntity(entity);
+	public void onCapturedByPlayer(EntityPlayer player, EnumHand hand, ItemStack captured, EntityLivingBase entity) {
 
-		if(entity instanceof EntityLiving) {
-			((EntityLiving) entity).playLivingSound();
-		}
 	}
 
-	public void onCapturedByPlayer(EntityPlayer player, EnumHand hand, ItemStack captured) {
-		
-	}
-	
 	@Override
 	public String getTranslationKey(ItemStack stack) {
 		ResourceLocation id = this.getCapturedEntityId(stack);
@@ -235,7 +335,7 @@ public class ItemMob extends Item {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if(worldIn != null) {
-			Entity entity = this.createCapturedEntity(worldIn, 0, 0, 0, stack);
+			Entity entity = this.createCapturedEntity(worldIn, 0, 0, 0, stack, false);
 			if(entity instanceof EntityLivingBase) {
 				EntityLivingBase living = (EntityLivingBase) entity;
 				tooltip.add(I18n.format("tooltip.bl.item_mob.health", MathHelper.ceil(living.getHealth() / 2), MathHelper.ceil(living.getMaxHealth() / 2)));

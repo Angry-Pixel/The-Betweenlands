@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:aa_upgrade_trigger"
+    }
+  ],
+  "result": {
+    "item": "thebetweenlands:aa_upgrade_toggle"
+  }
+}

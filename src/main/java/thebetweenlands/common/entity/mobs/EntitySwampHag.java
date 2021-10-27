@@ -162,6 +162,17 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 		return isRiding() && getRidingEntity() instanceof EntityPeatMummy;
 	}
 
+	public EntityPeatMummy getMummyMount() {
+		return isRidingMummy() ? (EntityPeatMummy)getRidingEntity() : null;
+	}
+
+	@Override
+    public double getYOffset() {
+    	if(isRidingMummy() && !getMummyMount().isSpawningFinished())
+    		return -0.4D;
+        return 0.0D;
+    }
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
 		if (source.equals(DamageSource.IN_WALL) && isRidingMummy())
@@ -302,6 +313,8 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 			target = hag.getAttackTarget();
 			
 			if (!hag.isRidingMummy())
+				return false;
+			if (hag.isRidingMummy() && !hag.getMummyMount().isSpawningFinished())
 				return false;
 			if (target == null)
 				return false;

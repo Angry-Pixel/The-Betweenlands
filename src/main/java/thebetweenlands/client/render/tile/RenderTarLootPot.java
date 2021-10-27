@@ -6,9 +6,9 @@ import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.client.render.model.tile.ModelTarLootPot1;
-import thebetweenlands.client.render.model.tile.ModelTarLootPot2;
-import thebetweenlands.client.render.model.tile.ModelTarLootPot3;
+import thebetweenlands.client.render.model.tile.ModelSunkenLootPot1;
+import thebetweenlands.client.render.model.tile.ModelSunkenLootPot2;
+import thebetweenlands.client.render.model.tile.ModelSunkenLootPot3;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.block.container.BlockTarLootPot;
@@ -16,9 +16,9 @@ import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.util.StatePropertyHelper;
 
 public abstract class RenderTarLootPot extends TileEntitySpecialRenderer<TileEntityLootPot> {
-	private static final ModelTarLootPot1 LOOT_POT = new ModelTarLootPot1();
-	private static final ModelTarLootPot2 LOOT_POT_2 = new ModelTarLootPot2();
-	private static final ModelTarLootPot3 LOOT_POT_3 = new ModelTarLootPot3();
+	private static final ModelSunkenLootPot1 LOOT_POT = new ModelSunkenLootPot1();
+	private static final ModelSunkenLootPot2 LOOT_POT_2 = new ModelSunkenLootPot2();
+	private static final ModelSunkenLootPot3 LOOT_POT_3 = new ModelSunkenLootPot3();
 
 	private static final ResourceLocation TEXTURE_1 = new ResourceLocation("thebetweenlands:textures/tiles/tar_loot_pot_1.png");
 	private static final ResourceLocation TEXTURE_2 = new ResourceLocation("thebetweenlands:textures/tiles/tar_loot_pot_2.png");
@@ -34,21 +34,18 @@ public abstract class RenderTarLootPot extends TileEntitySpecialRenderer<TileEnt
 
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		
-		switch (type){
+
+		switch (type) {
 		default:
-		case POT_1: {
+		case POT_1:
 			bindTexture(TEXTURE_1);
 			break;
-		}
-		case POT_2: {
+		case POT_2:
 			bindTexture(TEXTURE_2);
 			break;
-		}
-		case POT_3: {
+		case POT_3:
 			bindTexture(TEXTURE_3);
 			break;
-		}
 		}
 
 		switch (rotation) {
@@ -90,18 +87,15 @@ public abstract class RenderTarLootPot extends TileEntitySpecialRenderer<TileEnt
 
 	private void renderType(EnumLootPot type){
 		switch (type){
-		case POT_1: {
+		case POT_1:
 			LOOT_POT.render();
 			break;
-		}
-		case POT_2: {
+		case POT_2:
 			LOOT_POT_2.render();
 			break;
-		}
-		case POT_3: {
+		case POT_3:
 			LOOT_POT_3.render();
 			break;
-		}
 		}
 	}
 }

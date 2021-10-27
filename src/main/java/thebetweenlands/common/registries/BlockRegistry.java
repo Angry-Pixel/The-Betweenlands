@@ -46,7 +46,11 @@ import thebetweenlands.common.block.container.BlockBarrel;
 import thebetweenlands.common.block.container.BlockCenser;
 import thebetweenlands.common.block.container.BlockChestBetweenlands;
 import thebetweenlands.common.block.container.BlockCompostBin;
+import thebetweenlands.common.block.container.BlockCrabPot;
+import thebetweenlands.common.block.container.BlockCrabPotFilter;
 import thebetweenlands.common.block.container.BlockDruidAltar;
+import thebetweenlands.common.block.container.BlockFishTrimmingTable;
+import thebetweenlands.common.block.container.BlockFishingTackleBox;
 import thebetweenlands.common.block.container.BlockGeckoCage;
 import thebetweenlands.common.block.container.BlockHopperBetweenlands;
 import thebetweenlands.common.block.container.BlockInfuser;
@@ -55,14 +59,19 @@ import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.container.BlockMortar;
 import thebetweenlands.common.block.container.BlockMudBrickAlcove;
+import thebetweenlands.common.block.container.BlockMudLootPot;
 import thebetweenlands.common.block.container.BlockPresent;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockRepeller;
+import thebetweenlands.common.block.container.BlockSiltGlassJar;
+import thebetweenlands.common.block.container.BlockSmokingRack;
 import thebetweenlands.common.block.container.BlockTarLootPot;
 import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
 import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
 import thebetweenlands.common.block.container.BlockWindChime;
 import thebetweenlands.common.block.farming.BlockAspectrusCrop;
+import thebetweenlands.common.block.farming.BlockBarnacle_1_2;
+import thebetweenlands.common.block.farming.BlockBarnacle_3_4;
 import thebetweenlands.common.block.farming.BlockDugDirt;
 import thebetweenlands.common.block.farming.BlockDugGrass;
 import thebetweenlands.common.block.farming.BlockFungusCrop;
@@ -74,12 +83,17 @@ import thebetweenlands.common.block.misc.BlockButtonBetweenlands;
 import thebetweenlands.common.block.misc.BlockCavingRopeLight;
 import thebetweenlands.common.block.misc.BlockDampTorch;
 import thebetweenlands.common.block.misc.BlockDentrothystPane;
+import thebetweenlands.common.block.misc.BlockFilteredSiltGlass;
+import thebetweenlands.common.block.misc.BlockFilteredSiltGlassPane;
 import thebetweenlands.common.block.misc.BlockGlassBetweenlands;
+import thebetweenlands.common.block.misc.BlockGlowingGoop;
+import thebetweenlands.common.block.misc.BlockGlowingGoopUnderwater;
 import thebetweenlands.common.block.misc.BlockGroundItem;
 import thebetweenlands.common.block.misc.BlockLadderBetweenlands;
 import thebetweenlands.common.block.misc.BlockLantern;
 import thebetweenlands.common.block.misc.BlockLanternSiltGlass;
 import thebetweenlands.common.block.misc.BlockLeverBetweenlands;
+import thebetweenlands.common.block.misc.BlockMistBridge;
 import thebetweenlands.common.block.misc.BlockMossBed;
 import thebetweenlands.common.block.misc.BlockMudFlowerPot;
 import thebetweenlands.common.block.misc.BlockMudFlowerPotCandle;
@@ -88,8 +102,10 @@ import thebetweenlands.common.block.misc.BlockOfferingTable;
 import thebetweenlands.common.block.misc.BlockPaneBetweenlands;
 import thebetweenlands.common.block.misc.BlockPolishedDentrothyst;
 import thebetweenlands.common.block.misc.BlockPressurePlateBetweenlands;
+import thebetweenlands.common.block.misc.BlockReedMat;
 import thebetweenlands.common.block.misc.BlockRope;
 import thebetweenlands.common.block.misc.BlockRubberTap;
+import thebetweenlands.common.block.misc.BlockShadowWalker;
 import thebetweenlands.common.block.misc.BlockSludge;
 import thebetweenlands.common.block.misc.BlockSulfurTorch;
 import thebetweenlands.common.block.misc.BlockSulfurTorchExtinguished;
@@ -181,7 +197,6 @@ import thebetweenlands.common.block.structure.BlockPuffshroom;
 import thebetweenlands.common.block.structure.BlockRottenBarkCarved;
 import thebetweenlands.common.block.structure.BlockSimulacrum;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
-import thebetweenlands.common.block.structure.BlockSmoothCragrock;
 import thebetweenlands.common.block.structure.BlockSpikeTrap;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
 import thebetweenlands.common.block.structure.BlockStandingWeedwoodSign;
@@ -196,6 +211,8 @@ import thebetweenlands.common.block.structure.BlockWaystone;
 import thebetweenlands.common.block.structure.BlockWoodenSupportBeam;
 import thebetweenlands.common.block.structure.BlockWormDungeonPillar;
 import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
+import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePile;
+import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePileWater;
 import thebetweenlands.common.block.terrain.BlockBlackIce;
 import thebetweenlands.common.block.terrain.BlockCircleGem;
 import thebetweenlands.common.block.terrain.BlockCragrock;
@@ -213,8 +230,10 @@ import thebetweenlands.common.block.terrain.BlockLeavesSpiritTree;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.block.terrain.BlockLogBetweenlands;
 import thebetweenlands.common.block.terrain.BlockLogSap;
+import thebetweenlands.common.block.terrain.BlockLyestone;
 import thebetweenlands.common.block.terrain.BlockMud;
 import thebetweenlands.common.block.terrain.BlockPeat;
+import thebetweenlands.common.block.terrain.BlockPeatSmouldering;
 import thebetweenlands.common.block.terrain.BlockPuddle;
 import thebetweenlands.common.block.terrain.BlockRoot;
 import thebetweenlands.common.block.terrain.BlockRootUnderwater;
@@ -269,6 +288,7 @@ public class BlockRegistry {
     public static final Block GENERIC_STONE = new BlockGenericStone();
     public static final Block MUD = new BlockMud();
     public static final Block PEAT = new BlockPeat();
+    public static final Block PEAT_SMOULDERING = new BlockPeatSmouldering();
     public static final Block SLUDGY_DIRT = new BlockSludgyDirt();
     public static final Block SPREADING_SLUDGY_DIRT = new BlockSpreadingSludgyDirt();
     public static final Block SLIMY_DIRT = new BasicBlock(Material.GROUND)
@@ -332,6 +352,7 @@ public class BlockRegistry {
     public static final Block LIFE_CRYSTAL_STALACTITE = new BlockLifeCrystalStalactite(FluidRegistry.SWAMP_WATER, Material.WATER);
     public static final Block STALACTITE = new BlockStalactite();
     public static final Block SILT = new BlockSilt();
+    public static final Block FILTERED_SILT = new BlockSilt();
     public static final Block DEAD_GRASS = new BlockDeadGrass();
     public static final Block TAR_SOLID = new BasicBlock(Material.ROCK)
             .setDefaultCreativeTab()
@@ -339,6 +360,11 @@ public class BlockRegistry {
             .setHardness(1.5F)
             .setResistance(10.0F);
     public static final Block PUDDLE = new BlockPuddle();
+    public static final Block PEARL_BLOCK = new BasicBlock(Material.ROCK)
+            .setDefaultCreativeTab()
+            .setSoundType2(SoundType.STONE)
+            .setHardness(1.2F)
+            .setResistance(8.0F);
     //TREES
     public static final Block LOG_WEEDWOOD = new BlockLogBetweenlands();
     public static final Block LOG_ROTTEN_BARK = new BlockRottenLog();
@@ -401,6 +427,8 @@ public class BlockRegistry {
     public static final Block BETWEENSTONE_TILES = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block BETWEENSTONE_CHISELED = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block CRAGROCK_CHISELED = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+    public static final Block CRAGROCK_CHISELED_CRACKED = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+    public static final Block CRAGROCK_CHISELED_MOSSY = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block LIMESTONE_CHISELED = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block PITSTONE_CHISELED = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block SCABYST_CHISELED_1 = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
@@ -413,7 +441,11 @@ public class BlockRegistry {
     public static final Block CRACKED_BETWEENSTONE_TILES = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block CRACKED_LIMESTONE_BRICKS = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block CRAGROCK_BRICKS = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+    public static final Block CRAGROCK_BRICKS_CRACKED = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+    public static final Block CRAGROCK_BRICKS_MOSSY = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block CRAGROCK_TILES = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+    public static final Block CRAGROCK_TILES_CRACKED = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+    public static final Block CRAGROCK_TILES_MOSSY = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block GLOWING_BETWEENSTONE_TILE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F).setLightLevel(0.875F);
     public static final Block INACTIVE_GLOWING_SMOOTH_CRAGROCK = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block GLOWING_SMOOTH_CRAGROCK = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F).setLightLevel(0.875F);
@@ -430,7 +462,7 @@ public class BlockRegistry {
     public static final Block PITSTONE_TILES = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block POLISHED_LIMESTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block SMOOTH_BETWEENSTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
-    public static final Block SMOOTH_CRAGROCK = new BlockSmoothCragrock();
+    public static final Block SMOOTH_CRAGROCK = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block OCTINE_BLOCK = new BlockOctine();
     public static final Block SYRMORITE_BLOCK = new BasicBlock(Material.IRON).setSoundType2(SoundType.METAL).setHardness(1.5F).setResistance(10.0F);
     public static final Block VALONITE_BLOCK = new BasicBlock(Material.IRON).setSoundType2(SoundType.METAL).setHardness(1.5F).setResistance(10.0F);
@@ -438,6 +470,7 @@ public class BlockRegistry {
     public static final Block WEAK_BETWEENSTONE_TILES = new BlockGenericCollapsing(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block WEAK_POLISHED_LIMESTONE = new BlockGenericCollapsing(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block WEAK_MOSSY_BETWEENSTONE_TILES = new BlockGenericCollapsing(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+    public static final Block WEAK_SMOOTH_CRAGROCK = new BlockGenericCollapsing(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block DENTROTHYST = new BlockDentrothyst(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block LOOT_POT = new BlockLootPot();
     public static final Block MOB_SPAWNER = new BlockMobSpawnerBetweenlands();
@@ -477,6 +510,8 @@ public class BlockRegistry {
     public static final Block POLISHED_DENTROTHYST = new BlockPolishedDentrothyst().setHardness(0.3F);
     public static final Block SILT_GLASS = new BlockGlassBetweenlands(Material.GLASS).setHardness(0.3F);
     public static final Block SILT_GLASS_PANE = new BlockPaneBetweenlands(Material.GLASS).setHardness(0.3F);
+    public static final Block FILTERED_SILT_GLASS = new BlockFilteredSiltGlass().setHardness(0.3F);
+    public static final Block FILTERED_SILT_GLASS_PANE = new BlockFilteredSiltGlassPane();
     public static final Block POLISHED_DENTROTHYST_PANE = new BlockDentrothystPane().setHardness(0.3F);
     public static final Block AMATE_PAPER_PANE_1 = new BlockAmatePaperPane();
     public static final Block AMATE_PAPER_PANE_2 = new BlockAmatePaperPane();
@@ -570,6 +605,7 @@ public class BlockRegistry {
     public static final Block BETWEENSTONE_BUTTON = new BlockButtonBetweenlands(false);
     public static final Block WEEDWOOD_LADDER = new BlockLadderBetweenlands();
     public static final Block WEEDWOOD_LEVER = new BlockLeverBetweenlands();
+    public static final Block MUD_LOOT_POT = new BlockMudLootPot();
     
     //Worm Dungeon
     public static final Block WORM_DUNGEON_PILLAR = new BlockWormDungeonPillar();
@@ -863,7 +899,27 @@ public class BlockRegistry {
     public static final Block LANTERN_PAPER_3 = new BlockLantern();
     public static final Block LANTERN_SILT_GLASS = new BlockLanternSiltGlass();
     public static final Block BAUBLE = new BlockBauble();
-    
+    public static final Block FISHING_TACKLE_BOX = new BlockFishingTackleBox();
+    public static final Block SMOKING_RACK = new BlockSmokingRack();
+    public static final Block FISH_TRIMMING_TABLE = new BlockFishTrimmingTable();
+    public static final Block CRAB_POT = new BlockCrabPot();
+    public static final Block CRAB_POT_FILTER = new BlockCrabPotFilter();
+    public static final Block SILT_GLASS_JAR = new BlockSiltGlassJar();
+    public static final Block BETWEENSTONE_PEBBLE_PILE = new BlockBetweenstonePebblePile();
+    public static final Block BETWEENSTONE_PEBBLE_PILE_WATER = new BlockBetweenstonePebblePileWater();
+    public static final Block BARNACLE_1_2 = new BlockBarnacle_1_2();
+    public static final Block BARNACLE_3_4 = new BlockBarnacle_3_4();
+    public static final Block GLOWING_GOOP = new BlockGlowingGoop();
+    public static final Block GLOWING_GOOP_UNDERWATER = new BlockGlowingGoopUnderwater();
+    public static final Block REED_MAT = new BlockReedMat();
+    //WIP
+    //public static final Block ANIMAL_BURROW_SILT = new BlockAnimalBurrow(Material.SAND);
+    //public static final Block ANIMAL_BURROW_MUD = new BlockAnimalBurrow(BLMaterialRegistry.MUD);
+    //public static final Block ANIMAL_BURROW_CRAGROCK = new BlockAnimalBurrow(Material.ROCK);
+    public static final Block LYESTONE = new BlockLyestone(Material.ROCK);
+    public static final Block MIST_BRIDGE = new BlockMistBridge(Material.ROCK);
+    public static final Block SHADOW_WALKER = new BlockShadowWalker(Material.AIR);
+
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();
 

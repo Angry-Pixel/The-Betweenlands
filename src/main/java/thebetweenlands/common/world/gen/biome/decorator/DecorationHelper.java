@@ -18,6 +18,7 @@ import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
+import thebetweenlands.common.world.gen.feature.WorldGenBarnacleCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenBigBulbCappedMushroom;
 import thebetweenlands.common.world.gen.feature.WorldGenBladderwortCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenCaveGrass;
@@ -28,7 +29,9 @@ import thebetweenlands.common.world.gen.feature.WorldGenCaveThorns;
 import thebetweenlands.common.world.gen.feature.WorldGenDeepmanSimulacrum;
 import thebetweenlands.common.world.gen.feature.WorldGenFluidPool;
 import thebetweenlands.common.world.gen.feature.WorldGenLakeCavernSimulacrum;
+import thebetweenlands.common.world.gen.feature.WorldGenLyestone;
 import thebetweenlands.common.world.gen.feature.WorldGenMossCluster;
+import thebetweenlands.common.world.gen.feature.WorldGenPebbleCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenPlantCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenRootmanSimulacrum;
 import thebetweenlands.common.world.gen.feature.WorldGenRootsCluster;
@@ -50,6 +53,7 @@ import thebetweenlands.common.world.gen.feature.structure.WorldGenSpawner;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenSpawnerStructure;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenTarPoolDungeon;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenUndergroundRuins;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenUnderwaterRuins;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenGiantTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenGiantTreeDead;
@@ -129,6 +133,12 @@ public class DecorationHelper {
 	public static final WorldGenerator GEN_LAKE_CAVERN_SIMULACRUM = new WorldGenLakeCavernSimulacrum();
 	public static final WorldGenerator GEN_DEEPMAN_SIMULACRUM = new WorldGenDeepmanSimulacrum();
 	public static final WorldGenerator GEN_ROOTMAN_SIMULACRUM = new WorldGenRootmanSimulacrum();
+	public static final WorldGenerator GEN_BARNACLE_CLUSTER = new WorldGenBarnacleCluster(BlockRegistry.BARNACLE_1_2.getDefaultState());
+	public static final WorldGenerator GEN_PEBBLE_CLUSTER_LAND = new WorldGenPebbleCluster(BlockRegistry.BETWEENSTONE_PEBBLE_PILE.getDefaultState());
+	public static final WorldGenerator GEN_PEBBLE_CLUSTER_WATER = new WorldGenPebbleCluster(BlockRegistry.BETWEENSTONE_PEBBLE_PILE_WATER.getDefaultState()).setUnderwater(true);
+	public static final WorldGenerator GEN_UNDERWATER_RUINS = new WorldGenUnderwaterRuins();
+	
+	public static final WorldGenerator LYESTONE = new WorldGenLyestone();
 	
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
@@ -136,6 +146,7 @@ public class DecorationHelper {
 	private static final CubicBezier CAVE_MOSS_Y_CDF = new CubicBezier(0.5F, 1, 0.8F, 1);
 	private static final CubicBezier CAVE_HANGERS_Y_CDF = new CubicBezier(0.8F, 1, 0.5F, 0);
 	private static final CubicBezier CAVE_GRASS_Y_CDF = new CubicBezier(0.25F, 1, 0.9F, 1);
+	private static final CubicBezier PEBBLE_Y_CDF = new CubicBezier(0, 1, 0, 1);
 
 	private static boolean canShortThingsGenerateHere(DecoratorPositionProvider decorator) {
 		return ((ChunkGeneratorBetweenlands)decorator.getChunkGenerator()).evalTreeNoise(decorator.getX() * 0.01, decorator.getZ() * 0.01) > -0.25;
@@ -157,6 +168,7 @@ public class DecorationHelper {
 	public static boolean populateCaves(BiomeDecoratorBetweenlands decorator) {
 		decorator.generate(2 + getSpeleothemAttemptAdditive(decorator), DecorationHelper::generateSpeleothemCluster);
 		decorator.generate(decorator.getRand().nextInt(3) == 0 ? 2 : 1, DecorationHelper::generateCavePotsCluster);
+		decorator.generate(100, DecorationHelper::generateLyestone);
 		decorator.generate(140, DecorationHelper::generateCaveThornsCluster);
 		decorator.generate(120, DecorationHelper::generateCaveMossCluster);
 		decorator.generate(120, DecorationHelper::generateCaveHangersCluster);
@@ -165,6 +177,8 @@ public class DecorationHelper {
 		decorator.generate(120, DecorationHelper::generateCaveGrassCluster);
 		decorator.generate(5, DecorationHelper::generateDeepmanSimulacrum);
 		decorator.generate(0.6f, DecorationHelper::generateLakeCavernSimulacrum);
+		decorator.generate(8, DecorationHelper::generateUndergroundPebbleClusterLand);
+		decorator.generate(8, DecorationHelper::generateUndergroundPebbleClusterWater);
 		return true;
 	}
 
@@ -197,6 +211,13 @@ public class DecorationHelper {
 		int y = (int) (v * (WorldProviderBetweenlands.CAVE_START - 5.0F - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 		int z = decorator.getRandomPosZ();
 		return GEN_CAVE_POTS.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
+	}
+	
+	public static boolean generateLyestone(DecoratorPositionProvider decorator) {
+		int x = decorator.getRandomPosX();
+		int y = WorldProviderBetweenlands.CAVE_START - decorator.getRand().nextInt(WorldProviderBetweenlands.CAVE_START - WorldProviderBetweenlands.PITSTONE_HEIGHT);
+		int z = decorator.getRandomPosZ();
+		return LYESTONE.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
 	}
 
 	public static boolean generateCaveThornsCluster(DecoratorPositionProvider decorator) {
@@ -795,6 +816,15 @@ public class DecorationHelper {
 		return false;
 	}
 
+	public static boolean generateUnderwaterRuins(DecoratorPositionProvider decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down()) &&
+				SurfaceType.WATER.matches(decorator.getWorld(), pos.up())) {
+			return GEN_UNDERWATER_RUINS.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
 	public static boolean generateFallenLeaves(DecoratorPositionProvider decorator) {
 		World world = decorator.getWorld();
 		MutableBlockPos checkPos = new MutableBlockPos();
@@ -946,5 +976,45 @@ public class DecorationHelper {
 	
 	public static boolean generateSludgePlainsClearingDungeon(DecoratorPositionProvider decorator) {
 		return generateSubBiomeStructure(decorator, GEN_SLUDGE_WORM_DUNGEON, 16, 16, 45, BiomeRegistry.SLUDGE_PLAINS_CLEARING, SurfaceType.MIXED_GROUND);
+	}
+	
+	public static boolean generateBarnacleCluster(DecoratorPositionProvider decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(decorator.getWorld().isAirBlock(pos) && decorator.getWorld().getBlockState(pos.down()).isNormalCube()) {
+			return GEN_BARNACLE_CLUSTER.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generatePebbleClusterLand(DecoratorPositionProvider decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND_AND_UNDERGROUND.matches(decorator.getWorld(), pos.down())) {
+			return GEN_PEBBLE_CLUSTER_LAND.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generatePebbleClusterWater(DecoratorPositionProvider decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down())) {
+			return GEN_PEBBLE_CLUSTER_WATER.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generateUndergroundPebbleClusterLand(DecoratorPositionProvider decorator) {
+		int x = decorator.getRandomPosX();
+		float v = PEBBLE_Y_CDF.eval(decorator.getRand().nextFloat());
+		int y = (int) (v * (WorldProviderBetweenlands.CAVE_START - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
+		int z = decorator.getRandomPosZ();
+		return GEN_PEBBLE_CLUSTER_LAND.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
+	}
+	
+	public static boolean generateUndergroundPebbleClusterWater(DecoratorPositionProvider decorator) {
+		int x = decorator.getRandomPosX();
+		float v = PEBBLE_Y_CDF.eval(decorator.getRand().nextFloat());
+		int y = (int) (v * (WorldProviderBetweenlands.CAVE_START - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
+		int z = decorator.getRandomPosZ();
+		return GEN_PEBBLE_CLUSTER_WATER.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
 	}
 }

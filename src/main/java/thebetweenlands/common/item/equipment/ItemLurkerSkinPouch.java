@@ -51,6 +51,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.capability.equipment.EquipmentHelper;
 import thebetweenlands.common.inventory.InventoryItem;
+import thebetweenlands.common.inventory.InventoryPouch;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -134,7 +135,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
     		ItemStack heldItem = player.getHeldItem(hand);
     		if(!heldItem.isEmpty() && heldItem.getItem() == this) {
     			if(!world.isRemote) {
-	    			InventoryItem inventory = new InventoryItem(heldItem, 9 + (heldItem.getItemDamage() * 9), "Lurker Skin Pouch");
+	    			InventoryItem inventory = new InventoryPouch(heldItem, 9 + (heldItem.getItemDamage() * 9), "Lurker Skin Pouch");
 	    			TileEntity tile = world.getTileEntity(pos);
 	        		if(tile != null) {
 	        			IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side);
@@ -205,17 +206,17 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
         IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
         if(cap != null) {
 			IInventory inv = cap.getInventory(EnumEquipmentInventory.MISC);
-			ItemStack pouch = null;
+			ItemStack pouch = ItemStack.EMPTY;
 
 			for(int i = 0; i < inv.getSizeInventory(); i++) {
 				ItemStack stack = inv.getStackInSlot(i);
-				if(stack != null && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
+				if(!stack.isEmpty() && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
 					pouch = stack;
 					break;
 				}
 			}
 
-			if(pouch != null) {
+			if(!pouch.isEmpty()) {
 				TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
 				RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 
@@ -223,7 +224,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
 				ITextureObject texture = textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 				texture.setBlurMipmap(false, false);
 
-				IBakedModel model = renderItem.getItemModelMesher().getItemModel(pouch);
+				IBakedModel model = renderItem.getItemModelWithOverrides(pouch, null, null);
 
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(x, y + 1.0D, z);

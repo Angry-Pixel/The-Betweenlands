@@ -11,12 +11,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.common.entity.mobs.EntityAngler;
-import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
+import thebetweenlands.common.entity.mobs.EntityCaveFish;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityChiromawGreeblingRider;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityGasCloud;
+import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntityStalker;
@@ -56,6 +57,7 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		.addFeature(type == 0 ? new Marsh1Feature() : new Marsh2Feature())
 		.addFeature(new PatchFeature(0.03125D * 3.5D, 0.03125D * 3.5D, BlockRegistry.PEAT.getDefaultState()))
 		.addFeature(new PatchFeature(0.03125D * 12.5D, 0.03125D * 12.5D, BlockRegistry.PEAT.getDefaultState()))
+		.addFeature(new PatchFeature(0.03125D * 6.5D, 0.03125D * 6.5D, BlockRegistry.PEAT_SMOULDERING.getDefaultState(), 0.625D, 3.0D))
 		.addFeature(new PatchFeature(0.03125D * 5.5D, 0.03125D * 5.5D, BlockRegistry.MUD.getDefaultState()))
 		.addFeature(new PatchFeature(0.03125D * 8.5D, 0.03125D * 8.5D, BlockRegistry.MUD.getDefaultState()))
 		.setDecorator(new BiomeDecoratorMarsh(this));
@@ -68,7 +70,7 @@ public class BiomeMarsh extends BiomeBetweenlands {
 
 		entries.add(new SurfaceSpawnEntry(0, EntityFirefly.class, EntityFirefly::new, (short) 65).setCanSpawnOnWater(true).setSpawnCheckRadius(32.0D));
 		entries.add(new SporelingSpawnEntry(1, EntitySporeling.class, EntitySporeling::new, (short) 80).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
-		entries.add(new CaveSpawnEntry(2, EntityBlindCaveFish.class, EntityBlindCaveFish::new, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
+		entries.add(new CaveSpawnEntry(2, EntityOlm.class, EntityOlm::new, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
 		entries.add(new GreeblingSpawnEntry(3, (short) 10).setGroupSize(1, 3).setSpawnCheckRadius(64.0D).setGroupSpawnRadius(4).setSpawningInterval(24000));
 		
 		entries.add(new SurfaceSpawnEntry(4, EntityWight.class, EntityWight::new, (short) 5).setHostile(true).setSpawnCheckRadius(64.0D).setSpawningInterval(4000));
@@ -83,6 +85,7 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		entries.add(new SkySpawnEntry(13, EntityChiromawGreeblingRider.class, EntityChiromawGreeblingRider::new, (short) 20).setSpawnCheckRadius(64.0D).setGroupSize(1, 3).setSpawningInterval(600).setHostile(true));
 		entries.add(new PitstoneCaveSpawnEntry(14, EntityStalker.class, EntityStalker::new, (short) 10).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(16).setSpawningInterval(6000));
 		entries.add(new CaveSpawnEntry(15, EntitySwarm.class, EntitySwarm::new, (short) 60).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(32.0D));
+		entries.add(new CaveSpawnEntry(16, EntityCaveFish.class, EntityCaveFish::new, (short) 30).setCanSpawnInWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D));
 	}
 
 	private float fogRangeInterpolateStart = 0.0F;

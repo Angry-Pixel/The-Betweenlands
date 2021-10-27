@@ -22,7 +22,38 @@ public class ParticleEntitySwirl extends ParticleSwirl implements IParticleSprit
 		this.target = target;
 
 		this.setOffset(0, -1.6D, 0);
+		
 		this.updateTarget();
+	}
+	
+	@Override
+	public ParticleEntitySwirl setOffset(double x, double y, double z) {
+		super.setOffset(x, y, z);
+		return this;
+	}
+	
+	@Override
+	public ParticleEntitySwirl setTarget(double x, double y, double z) {
+		super.setTarget(x, y, z);
+		return this;
+	}
+	
+	@Override
+	public ParticleEntitySwirl setTargetMotion(double x, double y, double z) {
+		super.setTargetMotion(x, y, z);
+		return this;
+	}
+	
+	@Override
+	public ParticleEntitySwirl setRotationSpeed(double speed) {
+		super.setRotationSpeed(speed);
+		return this;
+	}
+	
+	@Override
+	public ParticleEntitySwirl setRotate3D(boolean rotate3d) {
+		super.setRotate3D(rotate3d);
+		return this;
 	}
 	
 	public ParticleEntitySwirl setTargetOffset(double x, double y, double z) {

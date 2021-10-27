@@ -29,12 +29,14 @@ import thebetweenlands.client.render.particle.entity.ParticleDruidCasting;
 import thebetweenlands.client.render.particle.entity.ParticleEmissiveBug;
 import thebetweenlands.client.render.particle.entity.ParticleEmissiveSwarm;
 import thebetweenlands.client.render.particle.entity.ParticleEntitySwirl;
+import thebetweenlands.client.render.particle.entity.ParticleFancyBubble;
+import thebetweenlands.client.render.particle.entity.ParticleFancyDrip;
 import thebetweenlands.client.render.particle.entity.ParticleFish;
+import thebetweenlands.client.render.particle.entity.ParticleFishVortex;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.client.render.particle.entity.ParticleLifeEssence;
 import thebetweenlands.client.render.particle.entity.ParticleLightningArc;
 import thebetweenlands.client.render.particle.entity.ParticleMoth;
-import thebetweenlands.client.render.particle.entity.ParticleVisionOrb;
 import thebetweenlands.client.render.particle.entity.ParticlePuzzleBeam;
 import thebetweenlands.client.render.particle.entity.ParticlePuzzleBeam2;
 import thebetweenlands.client.render.particle.entity.ParticleRingOfRecruitmentState;
@@ -46,6 +48,8 @@ import thebetweenlands.client.render.particle.entity.ParticleSpiritButterfly;
 import thebetweenlands.client.render.particle.entity.ParticleSwarm;
 import thebetweenlands.client.render.particle.entity.ParticleTarBeastDrip;
 import thebetweenlands.client.render.particle.entity.ParticleThem;
+import thebetweenlands.client.render.particle.entity.ParticleUrchinSpike;
+import thebetweenlands.client.render.particle.entity.ParticleVisionOrb;
 import thebetweenlands.client.render.particle.entity.ParticleWaterRipple;
 import thebetweenlands.client.render.particle.entity.ParticleWeedwoodLeaf;
 import thebetweenlands.client.render.particle.entity.ParticleWisp;
@@ -100,15 +104,16 @@ public enum BLParticles {
 			.getBaseArgsBuilder()
 			.withColor(0.306F, 0.576F, 0.192F, 1.0F)
 			.buildBaseArgs()),
-	BUBBLE_PURIFIER(new ParticleBubbleBL.Factory()
+	BUBBLE_WATER(new ParticleBubbleBL.WaterFactory()),
+	BUBBLE_PURIFIER(new ParticleBubbleBL.InfuserFactory()
 			.getBaseArgsBuilder()
 			.withColor(0.306F, 0.576F, 0.192F, 1.0F)
 			.buildBaseArgs()),
-	BUBBLE_INFUSION(new ParticleBubbleBL.Factory()
+	BUBBLE_INFUSION(new ParticleBubbleBL.InfuserFactory()
 			.getBaseArgsBuilder()
 			.withColor(0.5F, 0F, 0.125F, 1.0F)
 			.buildBaseArgs()),
-	BUBBLE_TAR(new ParticleBubbleBL.Factory()
+	BUBBLE_TAR(new ParticleBubbleBL.InfuserFactory()
 			.getBaseArgsBuilder()
 			.withColor(0, 0, 0, 1.0F)
 			.buildBaseArgs()),
@@ -159,7 +164,12 @@ public enum BLParticles {
 	SWARM(new ParticleSwarm.Factory()),
 	SWARM_EMISSIVE(new ParticleEmissiveSwarm.Factory()),
 	FLYING_SWARM_EMISSIVE(new ParticleEmissiveBug.Swarm()),
-	WIND_CHIME_VISION(new ParticleVisionOrb.Factory(new ResourceLocation("thebetweenlands:particle/wind_chime_vision_mask")));
+	WIND_CHIME_VISION(new ParticleVisionOrb.Factory(new ResourceLocation("thebetweenlands:particle/wind_chime_vision_mask"))),
+	URCHIN_SPIKE(new ParticleUrchinSpike.Factory()),
+	FANCY_DRIP(new ParticleFancyDrip.Factory()),
+	FANCY_BUBBLE(new ParticleFancyBubble.Factory()),
+	FISH_VORTEX(new ParticleFishVortex.Factory()),
+	SHADOW_GHOSTS(new ParticleAnimated.ShadowGhostFactory());
 	
 	private ParticleFactory<?, ?> factory;
 

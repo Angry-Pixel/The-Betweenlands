@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -17,6 +18,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
+import thebetweenlands.api.item.IAmphibiousArmorUpgrade;
 import thebetweenlands.api.item.IDecayFood;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.api.item.IFoodSicknessItem;
@@ -28,12 +30,15 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.handler.FoodSicknessHandler;
 import thebetweenlands.common.handler.OverworldItemHandler;
 import thebetweenlands.common.herblore.aspect.AspectManager;
+import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorUpgrades;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 import thebetweenlands.common.recipe.censer.AbstractCenserRecipe;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
 import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipe;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemTooltipHandler {
 	public static final DecimalFormat COMPOST_AMOUNT_FORMAT = new DecimalFormat("#.##");
@@ -48,6 +53,12 @@ public class ItemTooltipHandler {
 		List<String> toolTip = event.getToolTip();
 		EntityPlayer player = event.getEntityPlayer();
 
+		int armorUpgradeDamage = ItemAmphibiousArmor.getUpgradeItemStoredDamage(stack);
+		if(armorUpgradeDamage > 0) {
+			int maxArmorUpgradeDamage = ItemAmphibiousArmor.getUpgradeItemMaxStoredDamage(stack);
+			toolTip.add(I18n.format("tooltip.bl.damaged_armor_upgrade", Math.max(0, maxArmorUpgradeDamage - armorUpgradeDamage), maxArmorUpgradeDamage));
+		}
+		
 		CircleGemType circleGem = CircleGemHelper.getGem(stack);
 		if(circleGem != CircleGemType.NONE) {
 			toolTip.add(I18n.format("tooltip.bl.circlegem." + circleGem.name));
@@ -109,6 +120,28 @@ public class ItemTooltipHandler {
 				usedInMachines.add(I18n.format("tooltip.bl.recipes.purifier"));
 			}
 
+			List<String> amphibiousUpgrades = new ArrayList<>();
+
+			if(AmphibiousArmorUpgrades.getUpgrade(EntityEquipmentSlot.HEAD, stack) != null) {
+				amphibiousUpgrades.add(I18n.format("tooltip.bl.amphibious_upgrade.helmet"));
+			}
+
+			if(AmphibiousArmorUpgrades.getUpgrade(EntityEquipmentSlot.CHEST, stack) != null) {
+				amphibiousUpgrades.add(I18n.format("tooltip.bl.amphibious_upgrade.chestplate"));
+			}
+
+			if(AmphibiousArmorUpgrades.getUpgrade(EntityEquipmentSlot.LEGS, stack) != null) {
+				amphibiousUpgrades.add(I18n.format("tooltip.bl.amphibious_upgrade.leggings"));
+			}
+
+			if(AmphibiousArmorUpgrades.getUpgrade(EntityEquipmentSlot.FEET, stack) != null) {
+				amphibiousUpgrades.add(I18n.format("tooltip.bl.amphibious_upgrade.boots"));
+			}
+
+			if(amphibiousUpgrades.size() > 0) {
+				usedInMachines.add(I18n.format("tooltip.bl.amphibious_upgrade.format", amphibiousUpgrades.stream().collect(Collectors.joining("/"))));
+			}
+
 			ICompostBinRecipe compostRecipe = CompostRecipe.getCompostRecipe(stack);
 			if(compostRecipe != null) {
 				String debug = "";
@@ -118,6 +151,10 @@ public class ItemTooltipHandler {
 				usedInMachines.add(I18n.format("tooltip.bl.recipes.compost_bin") + debug);
 			}
 
+			if(stack.getItem() == ItemRegistry.SPIRIT_FRUIT || stack.getItem() == ItemRegistry.BONE_WAYFINDER) {
+				usedInMachines.add(I18n.format("tooltip.bl.recipes.offering_table"));
+			}
+			
 			if(!usedInMachines.isEmpty()) {
 				toolTip.add(I18n.format("tooltip.bl.recipes.used_in", usedInMachines.stream().collect(Collectors.joining(", "))));
 			}

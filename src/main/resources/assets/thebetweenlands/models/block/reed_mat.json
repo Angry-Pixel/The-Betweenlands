@@ -1,0 +1,21 @@
+{
+    "parent": "block/thin_block",
+    "textures": {
+        "texture": "thebetweenlands:blocks/reed_mat",
+        "particle": "thebetweenlands:blocks/reed_mat"
+    },
+    "elements": [
+        {
+            "from": [0, 0, 0],
+            "to": [16, 2, 16],
+            "faces": {
+                "north": {"uv": [0, 0, 16, 2], "rotation": 180, "texture": "#texture", "cullface": "north" },
+                "east": {"uv": [14, 0, 16, 16], "rotation": 90, "texture": "#texture", "cullface": "east" },
+                "south": {"uv": [0, 13, 16, 15], "texture": "#texture", "cullface": "south" },
+                "west": {"uv": [2, 0, 4, 16], "rotation": 270, "texture": "#texture", "cullface": "west" },
+                "up": {"uv": [0, 0, 16, 16], "texture": "#texture", "cullface": "up" },
+                "down": {"uv": [0, 0, 16, 16], "texture": "#texture", "cullface": "down" }
+            }
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:rock_snot_pearl"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:pearl_block"
+  }
+}

@@ -28,6 +28,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockLantern extends Block {
 	private static final AxisAlignedBB AABB_LARGE = new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 1.0D, 0.75D);
@@ -76,7 +77,9 @@ public class BlockLantern extends Block {
 
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		return state.withProperty(HANGING, worldIn.isSideSolid(pos.up(), EnumFacing.DOWN, false) || worldIn.getBlockState(pos.up()).getBlockFaceShape(worldIn, pos.up(), EnumFacing.DOWN) != BlockFaceShape.UNDEFINED);
+		return state.withProperty(HANGING, worldIn.isSideSolid(pos.up(), EnumFacing.DOWN, false) ||
+				worldIn.getBlockState(pos.up()).getBlockFaceShape(worldIn, pos.up(), EnumFacing.DOWN) != BlockFaceShape.UNDEFINED ||
+				worldIn.getBlockState(pos.up()).getBlock() instanceof BlockRope);
 	}
 
 	@Override
@@ -87,6 +90,11 @@ public class BlockLantern extends Block {
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		int rotation = MathHelper.floor(((placer.rotationYaw + 180.0F) * 8.0F / 360.0F) + 0.5D) & 7;
+
+		if(worldIn.getBlockState(pos.up()).getBlock() instanceof BlockRope) {
+			rotation -= rotation % 2;
+		}
+
 		worldIn.setBlockState(pos, state.withProperty(ROTATION, rotation), 11);
 	}
 
@@ -99,12 +107,14 @@ public class BlockLantern extends Block {
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		return super.canPlaceBlockAt(worldIn, pos) &&
 				(worldIn.isSideSolid(pos.up(), EnumFacing.DOWN) || worldIn.getBlockState(pos.up()).getBlockFaceShape(worldIn, pos.up(), EnumFacing.DOWN) != BlockFaceShape.UNDEFINED ||
-				worldIn.isSideSolid(pos.down(), EnumFacing.UP) || worldIn.getBlockState(pos.down()).getBlockFaceShape(worldIn, pos.down(), EnumFacing.UP) != BlockFaceShape.UNDEFINED);
+				worldIn.isSideSolid(pos.down(), EnumFacing.UP) || worldIn.getBlockState(pos.down()).getBlockFaceShape(worldIn, pos.down(), EnumFacing.UP) != BlockFaceShape.UNDEFINED ||
+				worldIn.getBlockState(pos.up()).getBlock() instanceof BlockRope);
 	}
 
 	protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
 		if(!worldIn.isSideSolid(pos.up(), EnumFacing.DOWN) && worldIn.getBlockState(pos.up()).getBlockFaceShape(worldIn, pos.up(), EnumFacing.DOWN) == BlockFaceShape.UNDEFINED &&
-				!worldIn.isSideSolid(pos.down(), EnumFacing.UP) && worldIn.getBlockState(pos.down()).getBlockFaceShape(worldIn, pos.down(), EnumFacing.UP) == BlockFaceShape.UNDEFINED) {
+				!worldIn.isSideSolid(pos.down(), EnumFacing.UP) && worldIn.getBlockState(pos.down()).getBlockFaceShape(worldIn, pos.down(), EnumFacing.UP) == BlockFaceShape.UNDEFINED &&
+				!(worldIn.getBlockState(pos.up()).getBlock() instanceof BlockRope)) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
 			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 		}

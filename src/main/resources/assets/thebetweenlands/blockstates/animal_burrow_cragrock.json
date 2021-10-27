@@ -1,0 +1,25 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "main": "thebetweenlands:blocks/cragrock"
+    }
+  },
+  "variants": {
+    "facing=east": {
+      "model": "thebetweenlands:base_animal_burrow",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "thebetweenlands:base_animal_burrow",
+      "y": 270
+    },
+    "facing=south": {
+      "model": "thebetweenlands:base_animal_burrow",
+      "y": 180
+    },
+    "facing=north": {
+      "model": "thebetweenlands:base_animal_burrow"
+    }
+  }
+}

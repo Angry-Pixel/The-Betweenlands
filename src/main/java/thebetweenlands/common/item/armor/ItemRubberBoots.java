@@ -10,6 +10,8 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.BLMaterialRegistry;
+import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorUpgrades;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -32,7 +34,8 @@ public class ItemRubberBoots extends ItemBLArmor {
 	public static boolean canEntityWalkOnMud(Entity entity) {
 		if(entity instanceof EntityLivingBase && ElixirEffectRegistry.EFFECT_HEAVYWEIGHT.isActive((EntityLivingBase)entity)) return false;
 		boolean canWalk = isEntityWearingRubberBoots(entity);
-		boolean hasLurkerArmor = entity instanceof EntityPlayer && entity.isInWater() && !((EntityPlayer) entity).inventory.armorInventory.get(0).isEmpty()&& ((EntityPlayer) entity).inventory.armorInventory.get(0).getItem() == ItemRegistry.LURKER_SKIN_BOOTS;
-		return entity.isInWater() || entity instanceof IEntityBL || entity instanceof EntityItem || canWalk || hasLurkerArmor || (entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode && ((EntityPlayer)entity).capabilities.isFlying);
+		boolean hasLurkerArmor = entity instanceof EntityPlayer && entity.isInWater() && !((EntityPlayer) entity).inventory.armorInventory.get(0).isEmpty() && ((EntityPlayer) entity).inventory.armorInventory.get(0).getItem() == ItemRegistry.LURKER_SKIN_BOOTS;
+		boolean hasUpgradedAmphibiousArmor = entity instanceof EntityLivingBase && !entity.isInWater() && ItemAmphibiousArmor.getUpgradeCount((EntityLivingBase)entity, AmphibiousArmorUpgrades.MOVEMENT_SPEED) >= 4;
+		return entity.isInWater() || entity instanceof IEntityBL || entity instanceof EntityItem || canWalk || hasUpgradedAmphibiousArmor || hasLurkerArmor || (entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode && ((EntityPlayer)entity).capabilities.isFlying);
 	}
 }

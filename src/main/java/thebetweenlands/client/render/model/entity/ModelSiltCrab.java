@@ -1,9 +1,8 @@
 package thebetweenlands.client.render.model.entity;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -170,21 +169,48 @@ public class ModelSiltCrab extends ModelBase {
 	}
 
 	@Override
-	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
-		super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel);
-		setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
-		GL11.glPushMatrix();
-		GL11.glRotatef(90.0F, 0.0F, -1.0F, 0.0F);
-		legleft_b1.render(unitPixel);
-		legright_m1.render(unitPixel);
-		legright_b1.render(unitPixel);
-		armleft1.render(unitPixel);
-		legleft_f1.render(unitPixel);
-		armright1.render(unitPixel);
-		legleft_m1.render(unitPixel);
-		legright_f1.render(unitPixel);
-		body_base.render(unitPixel);
-		GL11.glPopMatrix();
+	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale) {
+		super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, scale);
+		setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, scale, entity);
+		GlStateManager.pushMatrix();
+		GlStateManager.rotate(90.0F, 0.0F, -1.0F, 0.0F);
+		legleft_b1.render(scale);
+		legright_m1.render(scale);
+		legright_b1.render(scale);
+		armleft1.render(scale);
+		legleft_f1.render(scale);
+		armright1.render(scale);
+		legleft_m1.render(scale);
+		legright_f1.render(scale);
+		body_base.render(scale);
+		GlStateManager.popMatrix();
+	}
+
+	public void renderEating(float animationTick, float scale) {
+		setRotationAnglesEating(animationTick);
+		GlStateManager.pushMatrix();
+		GlStateManager.rotate(90.0F, 0.0F, -1.0F, 0.0F);
+		legleft_b1.render(scale);
+		legright_m1.render(scale);
+		legright_b1.render(scale);
+		armleft1.render(scale);
+		legleft_f1.render(scale);
+		armright1.render(scale);
+		legleft_m1.render(scale);
+		legright_f1.render(scale);
+		body_base.render(scale);
+		GlStateManager.popMatrix();
+	}
+
+	private void setRotationAnglesEating(float animationTick) {
+		float flap = MathHelper.sin((animationTick) * 0.15F) * 0.6F;
+		float flap2 = MathHelper.cos((animationTick) * 0.15F) * 0.6F;
+		armright1.rotateAngleZ = flap * 0.5F + 0.4553564018453205F;
+		armleft1.rotateAngleZ = flap2 * 0.5F -0.4553564018453205F;
+		clawtop1.rotateAngleZ = -0.045553093477052F * 5F + flap * 0.5F;
+		clawtop2.rotateAngleZ = 0.045553093477052F * 5F + flap2 * 0.5F;
+		clawbase1.rotateAngleZ = 0.40980330836826856F * 4F + flap * 1.5F;
+		clawbase2.rotateAngleZ = -0.40980330836826856F* 4F + flap2 * 1.5F;
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {
@@ -194,9 +220,8 @@ public class ModelSiltCrab extends ModelBase {
 	}
 
 	@Override
-	public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
-		super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
-
+	public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale, Entity entity) {
+		super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, scale, entity);
 		float movement = MathHelper.cos(limbSwing * 1.5F + (float) Math.PI) * 1.5F * limbSwingAngle *0.5F;
 		armright1.rotateAngleX = -movement * 0.2F -1.5025539530419183F;
 		armleft1.rotateAngleX = movement * 0.2F -1.5025539530419183F;
@@ -206,7 +231,9 @@ public class ModelSiltCrab extends ModelBase {
 		legleft_f1.rotateAngleZ = movement;
 		legleft_m1.rotateAngleZ = -movement;
 		legleft_b1.rotateAngleZ = movement;
-
-
+		clawtop1.rotateAngleZ = -0.045553093477052F;
+		clawtop2.rotateAngleZ = 0.045553093477052F;
+		clawbase1.rotateAngleZ = 0.40980330836826856F;
+		clawbase2.rotateAngleZ = -0.40980330836826856F;
 	}
 }

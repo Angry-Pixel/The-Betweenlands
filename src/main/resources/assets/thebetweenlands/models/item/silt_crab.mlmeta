@@ -1,0 +1,9 @@
+{
+  "source": "thebetweenlands:silt_crab",
+  "inherit_overrides": false,
+  "custom": {
+    "map": {
+      "thebetweenlands:silt_crab": "thebetweenlands:item/silt_crab_item"
+    }
+  }
+}

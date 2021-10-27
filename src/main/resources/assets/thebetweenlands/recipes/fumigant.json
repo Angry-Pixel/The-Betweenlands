@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:items_misc",
+	  "data": 27
+    },
+    {
+      "item": "thebetweenlands:items_crushed",
+	  "data": 43
+    },
+    {
+      "item": "thebetweenlands:sap_ball"
+    }
+  ],
+  "result": {
+    "item": "thebetweenlands:fumigant"
+  }
+}

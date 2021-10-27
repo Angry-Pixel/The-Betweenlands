@@ -3,6 +3,10 @@ package thebetweenlands.common.item.misc;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -16,14 +20,13 @@ public class ItemChiromawTame extends ItemMob {
 		super(1, EntityChiromawTame.class, entity -> entity.setElectricBoogaloo(electric));
 		this.electric = electric;
 	}
-
+	
 	@Override
-	protected void spawnCapturedEntity(EntityPlayer player, World world, Entity entity) {
-		if (entity instanceof EntityChiromawTame) {
+	protected EnumActionResult spawnCapturedEntity(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ, Entity entity, boolean isNewEntity) {
+		if (!world.isRemote && entity instanceof EntityChiromawTame) {
 			((EntityChiromawTame) entity).setOwnerId(player.getUniqueID());
 		}
-
-		super.spawnCapturedEntity(player, world, entity);
+		return super.spawnCapturedEntity(player, world, pos, hand, facing, hitX, hitY, hitZ, entity, isNewEntity);
 	}
 
 	@Override

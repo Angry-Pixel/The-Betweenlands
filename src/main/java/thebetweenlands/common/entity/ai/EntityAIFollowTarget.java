@@ -3,6 +3,8 @@ package thebetweenlands.common.entity.ai;
 import java.util.List;
 import java.util.function.Supplier;
 
+import com.google.common.base.Predicate;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -11,34 +13,44 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityAIFollowTarget extends EntityAIBase {
-	public static class FollowClosest implements Supplier<EntityLivingBase> {
-		private double range;
-		private Class<? extends EntityLivingBase> type;
-		private final EntityLiving taskOwner;
+	public static class FollowClosest<T extends EntityLivingBase> implements Supplier<T> {
+        private double range;
+        private final Class<T> type;
+        private final com.google.common.base.Predicate<T> predicate;
+        private final EntityLiving taskOwner;
 
-		public FollowClosest(EntityLiving taskOwner, Class<? extends EntityLivingBase> type, double range) {
-			this.taskOwner = taskOwner;
-			this.type = type;
-			this.range = range;
-		}
+        public FollowClosest(EntityLiving taskOwner, Class<T> type, double range) {
+            this.taskOwner = taskOwner;
+            this.type = type;
+            this.range = range;
+            this.predicate = null;
+        }
 
-		@Override
-		public EntityLivingBase get() {
-			List<EntityLivingBase> entities = this.taskOwner.world.getEntitiesWithinAABB(this.type, this.taskOwner.getEntityBoundingBox().grow(this.range));
-			EntityLivingBase closest = null;
-			for(EntityLivingBase entity : entities) {
-				if(closest == null || entity.getDistanceSq(this.taskOwner) < closest.getDistanceSq(this.taskOwner)) {
-					closest = entity;
-				}
-			}
-			return closest;
-		}
-	}
+        public FollowClosest(EntityLiving taskOwner, Class<T> type, Predicate<T> predicate, double range) {
+            this.taskOwner = taskOwner;
+            this.type = type;
+            this.range = range;
+            this.predicate = predicate;
+        }
+
+        @Override
+        public T get() {
+            List<T> entities = this.taskOwner.world.getEntitiesWithinAABB(this.type, this.taskOwner.getEntityBoundingBox().grow(this.range), this.predicate == null ? EntitySelectors.NOT_SPECTATING : this.predicate);
+            T closest = null;
+            for(T entity : entities) {
+                if(closest == null || entity.getDistanceSq(this.taskOwner) < closest.getDistanceSq(this.taskOwner)) {
+                    closest = entity;
+                }
+            }
+            return closest;
+        }
+    }
 
 	protected final EntityLiving taskOwner;
 	protected final Supplier<EntityLivingBase> target;

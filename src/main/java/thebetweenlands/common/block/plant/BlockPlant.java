@@ -12,9 +12,14 @@ import net.minecraft.block.BlockBush;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ColorizerFoliage;
@@ -29,7 +34,10 @@ import thebetweenlands.api.block.ISickleHarvestable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.SoilHelper;
+import thebetweenlands.common.block.farming.BlockGenericDugSoil;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.tile.TileEntityDugSoil;
 
 public class BlockPlant extends BlockBush implements IShearable, ISickleHarvestable, IFarmablePlant, ITintedBlock {
 	protected static final AxisAlignedBB PLANT_AABB = new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.8D, 0.9D);
@@ -106,7 +114,7 @@ public class BlockPlant extends BlockBush implements IShearable, ISickleHarvesta
 
 	@Override
 	public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
-		return item.getItem() == ItemRegistry.SYRMORITE_SHEARS;
+		return item.getItem() == ItemRegistry.SYRMORITE_SHEARS || item.getItem() == ItemRegistry.SILT_CRAB_CLAW;
 	}
 
 	@Override
@@ -157,5 +165,32 @@ public class BlockPlant extends BlockBush implements IShearable, ISickleHarvesta
 	@Override
 	public int getColorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
 		return worldIn != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(worldIn, pos) : -1;
+	}
+	
+	@Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack heldItem = playerIn.getHeldItem(hand);
+        if(!heldItem.isEmpty() && EnumItemMisc.COMPOST.isItemOf(heldItem)) {
+        	pos = pos.down();
+        	for(int i = 0; i < 3; i++) {
+        		state = world.getBlockState(pos);
+        		if(state.getBlock() instanceof BlockGenericDugSoil) {
+        			return state.getBlock().onBlockActivated(world, pos, state, playerIn, hand, EnumFacing.UP, 0.5f, 1.0f, 0.5f);
+        		} else if(!this.isSamePlant(state)) {
+        			break;
+        		}
+        		pos = pos.down();
+        	}
+        }
+        return false;
+    }
+	
+	/**
+	 * Returns true if the specified block should be considered as the same plant
+	 * @param blockState
+	 * @return
+	 */
+	protected boolean isSamePlant(IBlockState blockState) {
+		return blockState.getBlock() == this;
 	}
 }

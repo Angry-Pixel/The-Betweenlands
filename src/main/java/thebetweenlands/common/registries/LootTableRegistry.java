@@ -33,6 +33,9 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.loot.EntityPropertyAnadiaBodyType;
+import thebetweenlands.common.loot.EntityPropertyAnadiaHeadType;
+import thebetweenlands.common.loot.EntityPropertyAnadiaTailType;
 import thebetweenlands.common.loot.EntityPropertyEventActive;
 import thebetweenlands.common.loot.EntityPropertyFrogType;
 import thebetweenlands.common.loot.EntityPropertyHasItem;
@@ -40,12 +43,15 @@ import thebetweenlands.common.loot.EntityPropertyIsBossPeatMummy;
 import thebetweenlands.common.loot.EntityPropertyLootModifier;
 import thebetweenlands.common.loot.EntityPropertyPeatMummyShimmerstone;
 import thebetweenlands.common.loot.EntityPropertyPyradCharging;
+import thebetweenlands.common.loot.EntityPropertyRockSnotType;
 import thebetweenlands.common.loot.EntityPropertySludgeWormSquashed;
 import thebetweenlands.common.loot.LootConditionEventActive;
 import thebetweenlands.common.loot.LootConditionFromSharedPool;
 import thebetweenlands.common.loot.LootConditionKilledLootModifier;
 import thebetweenlands.common.loot.LootConditionOr;
 import thebetweenlands.common.loot.LootConditionSharedPool;
+import thebetweenlands.common.loot.LootFunctionSetAnadiaProperties;
+import thebetweenlands.common.loot.LootFunctionSetCountFromAnadia;
 import thebetweenlands.common.loot.LootFunctionSetMetaFromArray;
 import thebetweenlands.util.FakeClientWorld;
 
@@ -77,6 +83,7 @@ public class LootTableRegistry {
     public static final ResourceLocation IDOL_HEADS_CHEST = register("loot/idol_heads_chest");
     public static final ResourceLocation TAR_POOL_POT = register("loot/tar_pool_pot");
     public static final ResourceLocation UNDERGROUND_RUINS_POT = register("loot/underground_ruins_pot");
+    public static final ResourceLocation UNDERWATER_RUINS_POT = register("loot/underwater_ruins_pot");
     //Sludge worm dungeon
     public static final ResourceLocation SLUDGE_WORM_DUNGEON_CHEST = register("loot/sludge_worm_dungeon_chest");
     public static final ResourceLocation SLUDGE_WORM_DUNGEON_URN = register("loot/sludge_worm_dungeon_urn");
@@ -94,7 +101,7 @@ public class LootTableRegistry {
     
     //MOBS
     public static final ResourceLocation ANGLER = register("entities/angler");
-    public static final ResourceLocation BLIND_CAVE_FISH = register("entities/blind_cave_fish");
+    public static final ResourceLocation OLM = register("entities/olm");
     public static final ResourceLocation BLOOD_SNAIL = register("entities/blood_snail");
     public static final ResourceLocation CHIROMAW = register("entities/chiromaw");
     public static final ResourceLocation DARK_DRUID = register("entities/dark_druid");
@@ -137,10 +144,25 @@ public class LootTableRegistry {
     public static final ResourceLocation EMBERLING_SHAMAN = register("entities/emberling_shaman");
     public static final ResourceLocation GREEBLING_CORPSE = register("entities/greebling_corpse");
     public static final ResourceLocation CHIROMAW_MATRIARCH = register("entities/chiromaw_matriarch");
+    public static final ResourceLocation ANADIA = register("entities/anadia");
+    public static final ResourceLocation ANADIA_HEAD = register("entities/anadia_head");
+    public static final ResourceLocation ANADIA_BODY = register("entities/anadia_body");
+    public static final ResourceLocation ANADIA_TAIL = register("entities/anadia_tail");
+    public static final ResourceLocation ANADIA_TREASURE = register("entities/anadia_treasure");
+    public static final ResourceLocation ROCK_SNOT = register("entities/rock_snot");
+    public static final ResourceLocation FRESHWATER_URCHIN = register("entities/freshwater_urchin");
+    public static final ResourceLocation JELLYFISH = register("entities/jellyfish");
+    public static final ResourceLocation GREEBLING_CORACLE = register("entities/greebling_coracle");
+    public static final ResourceLocation SILT_CRAB_TRIM_1 = register("entities/silt_crab_trim_1");
+    public static final ResourceLocation SILT_CRAB_TRIM_2 = register("entities/silt_crab_trim_2");
+    public static final ResourceLocation SILT_CRAB_TRIM_3 = register("entities/silt_crab_trim_3");
+    public static final ResourceLocation BUBBLER_CRAB_TRIM_1 = register("entities/bubbler_crab_trim_1");
+    public static final ResourceLocation BUBBLER_CRAB_TRIM_2 = register("entities/bubbler_crab_trim_2");
+    public static final ResourceLocation BUBBLER_CRAB_TRIM_3 = register("entities/bubbler_crab_trim_3");
 
     //SPECIAL MOB LOOT FUNCTIONS
     public static final ResourceLocation CHIROMAW_HATCHLING = register("entities/chiromaw_hatchling");
-    
+
     //BOSSES
     public static final ResourceLocation FORTRESS_BOSS = register("entities/fortress_boss");
     public static final ResourceLocation DREADFUL_PEAT_MUMMY = register("entities/dreadful_peat_mummy");
@@ -155,7 +177,11 @@ public class LootTableRegistry {
     public static final ResourceLocation ENTITY_PROPERTY_IS_EVENT_ACTIVE = register(new EntityPropertyEventActive.Serializer());
     public static final ResourceLocation ENTITY_PROPERTY_LOOT_MODIFIER = register(new EntityPropertyLootModifier.Serializer());
     public static final ResourceLocation ENTITY_PROPERTY_SLUDGE_WORM_SQUASHED = register(new EntityPropertySludgeWormSquashed.Serializer());
-    
+    public static final ResourceLocation ENTITY_PROPERTY_ANADIA_HEAD_TYPE = register(new EntityPropertyAnadiaHeadType.Serializer());
+    public static final ResourceLocation ENTITY_PROPERTY_ANADIA_BODY_TYPE = register(new EntityPropertyAnadiaBodyType.Serializer());
+    public static final ResourceLocation ENTITY_PROPERTY_ANADIA_TAIL_TYPE = register(new EntityPropertyAnadiaTailType.Serializer());
+    public static final ResourceLocation ENTITY_ROCK_SNOT_TYPE = register(new EntityPropertyRockSnotType.Serializer());
+
     //LOOT CONDITIONS
     public static final ResourceLocation LOOT_CONDITION_OR = register(new LootConditionOr.Serializer());
     public static final ResourceLocation LOOT_CONDITION_EVENT_ACTIVE = register(new LootConditionEventActive.Serializer());
@@ -165,6 +191,8 @@ public class LootTableRegistry {
     
     //LOOT FUNCTIONS
     public static final ResourceLocation LOOT_FUNCTION_SET_META_FROM_ARRAY = register(new LootFunctionSetMetaFromArray.Serializer());
+    public static final ResourceLocation LOOT_FUNCTION_SET_COUNT_FROM_ANADIA = register(new LootFunctionSetCountFromAnadia.Serializer());
+    public static final ResourceLocation LOOT_FUNCTION_SET_ANADIA_PROPERTIES = register(new LootFunctionSetAnadiaProperties.Serializer());
     
     public static void preInit() {
     	if(BetweenlandsConfig.DEBUG.debug) {

@@ -218,6 +218,11 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 	}
 
 	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
+
+	@Override
 	public void update() {
 		if(this.isActive()) {
 			this.updateEffects(this.effect);
@@ -230,7 +235,7 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 		compound = super.writeToNBT(compound);
 
 		compound.setInteger("effectId", this.effect.id);
-		compound.setInteger("secondaryEffectId", this.effect.id);
+		compound.setInteger("secondaryEffectId", this.secondaryEffect.id);
 		compound.setBoolean("isActive", this.isActive);
 		compound.setString("customName", this.customName);
 
@@ -263,7 +268,18 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 		NBTTagCompound nbt = super.getUpdateTag();
 		nbt.setInteger("effectId", this.effect.id);
 		nbt.setInteger("secondaryEffectId", this.secondaryEffect.id);
+		nbt.setBoolean("isActive", this.isActive);
+		nbt.setString("customName", this.customName);
 		return nbt;
+	}
+
+	@Override
+	public void handleUpdateTag(NBTTagCompound tag) {
+		super.handleUpdateTag(tag);
+		this.effect = Effect.byId(tag.getInteger("effectId"));
+		this.secondaryEffect = Effect.byId(tag.getInteger("secondaryEffectId"));
+		this.isActive = tag.getBoolean("isActive");
+		this.customName = tag.getString("customName");
 	}
 
 	@Override

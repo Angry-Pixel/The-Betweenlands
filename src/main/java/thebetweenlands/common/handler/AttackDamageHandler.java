@@ -1,7 +1,9 @@
 package thebetweenlands.common.handler;
 
+import net.minecraft.enchantment.EnchantmentThorns;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -24,6 +26,8 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
+import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorUpgrades;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 import thebetweenlands.common.network.clientbound.MessageDamageReductionParticle;
 import thebetweenlands.common.network.clientbound.MessagePowerRingParticles;
 import thebetweenlands.common.registries.CapabilityRegistry;
@@ -149,6 +153,21 @@ public class AttackDamageHandler {
 
 				damage *= 1.0F + 0.5F * rings;
 			}
+		}
+
+		int thornsCount = 0;
+
+		for (ItemStack armor : attackedEntity.getArmorInventoryList()) {
+			if (armor.getItem() instanceof ItemAmphibiousArmor) {
+				if (((ItemAmphibiousArmor) armor.getItem()).getUpgradeCount(armor, AmphibiousArmorUpgrades.THORNS) >= 1) {
+					thornsCount++;
+				}
+			}
+		}
+
+		if(entity != null && thornsCount > 0 && EnchantmentThorns.shouldHit(thornsCount, entity.world.rand)) {
+			// Perhaps also damage armor like normal thorns would do? though thats usually really annoying
+			entity.attackEntityFrom(DamageSource.causeThornsDamage(attackedEntity), thornsCount + entity.world.rand.nextInt(4));
 		}
 
 		event.setAmount(damage);

@@ -19,11 +19,19 @@ import net.minecraft.util.EnumHand;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.EntityTinyWormEggSac;
+import thebetweenlands.common.entity.mobs.EntityAnadia;
+import thebetweenlands.common.entity.mobs.EntityCaveFish;
 import thebetweenlands.common.entity.mobs.EntityChiromawHatchling;
 import thebetweenlands.common.entity.mobs.EntityChiromawTame;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
+import thebetweenlands.common.entity.mobs.EntityFreshwaterUrchin;
 import thebetweenlands.common.entity.mobs.EntityGecko;
+import thebetweenlands.common.entity.mobs.EntityJellyfish;
+import thebetweenlands.common.entity.mobs.EntityMireSnail;
+import thebetweenlands.common.entity.mobs.EntityOlm;
+import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
+import thebetweenlands.common.entity.mobs.EntityTinySludgeWormHelper;
 import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -44,6 +52,14 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 		register(EntityChiromawHatchling.class, () -> ItemRegistry.CHIROMAW_EGG_LIGHTNING, (p, e) -> !e.getHasHatched() && e.getElectricBoogaloo());
 		register(EntityChiromawTame.class, () -> ItemRegistry.CHIROMAW_TAME, (p, e) -> e.getOwner() == p && !e.getElectricBoogaloo());
 		register(EntityChiromawTame.class, () -> ItemRegistry.CHIROMAW_TAME_LIGHTNING, (p, e) -> e.getOwner() == p && e.getElectricBoogaloo());
+		register(EntityTinySludgeWorm.class, () -> ItemRegistry.TINY_SLUDGE_WORM, (p, e) -> true);
+		register(EntityTinySludgeWormHelper.class, () -> ItemRegistry.TINY_SLUDGE_WORM_HELPER, (p, e) -> true);
+		register(EntityMireSnail.class, () -> ItemRegistry.CRITTER, (p, e) -> true);
+		register(EntityAnadia.class, () -> ItemRegistry.ANADIA, (p, e) -> e.getNettableTimer() > 0);
+		register(EntityFreshwaterUrchin.class, () -> ItemRegistry.FRESHWATER_URCHIN, (p, e) -> true);
+		register(EntityCaveFish.class, () -> ItemRegistry.CRITTER, (p, e) -> true);
+		register(EntityOlm.class, () -> ItemRegistry.CRITTER, (p, e) -> true);
+		register(EntityJellyfish.class, () -> ItemRegistry.JELLYFISH, (p, e) -> true);
 	}
 
 	public ItemNet() {
@@ -57,11 +73,13 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 		Collection<Pair<Supplier<? extends ItemMob>, BiPredicate<EntityPlayer, Entity>>> entries = CATCHABLE_ENTITIES.get(target.getClass());
 
 		if(entries != null) {
-			if(!player.world.isRemote) {
-				for(Pair<Supplier<? extends ItemMob>, BiPredicate<EntityPlayer, Entity>> entry : entries) {
-					if(entry.getRight().test(player, target)) {
-						ItemMob item = entry.getLeft().get();
+			for(Pair<Supplier<? extends ItemMob>, BiPredicate<EntityPlayer, Entity>> entry : entries) {
+				if(entry.getRight().test(player, target)) {
+					ItemMob item = entry.getLeft().get();
 
+					player.swingArm(hand);
+
+					if(!player.world.isRemote) {
 						ItemStack mobItemStack = item.capture(target);
 
 						if(!mobItemStack.isEmpty()) {
@@ -72,17 +90,17 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 
 							stack.damageItem(1, player);
 
-							item.onCapturedByPlayer(player, hand, mobItemStack);
-							
-							break;
+							item.onCapturedByPlayer(player, hand, mobItemStack, target);
+
+							return true;
 						}
+					} else {
+						return true;
 					}
 				}
 			}
-
-			player.swingArm(hand);
-			return true;
 		}
+		
 		return false;
 	}
 

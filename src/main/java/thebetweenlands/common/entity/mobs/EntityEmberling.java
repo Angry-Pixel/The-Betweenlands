@@ -127,8 +127,8 @@ public class EntityEmberling extends EntityTameableBL implements IEntityMultiPar
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40D);
-		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(90D);
+		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.25D);
 	}
@@ -221,9 +221,9 @@ public class EntityEmberling extends EntityTameableBL implements IEntityMultiPar
 
 		if (!getEntityWorld().isRemote && isSitting()) {
 			if (getHealth() < getMaxHealth())
-				if (ticksExisted % 1200 == 0)
+				if (ticksExisted % 600 == 0)
 					if (getEntityWorld().getBlockState(getPosition().down()).getBlock() instanceof BlockOctine) {
-						heal(1); // passive heal, 1 health a minute whilst sleeping on an octine block.
+						heal(1); // passive heal, 1 health every 30s whilst sleeping on an octine block.
 						playTameEffect(true);
 						world.setEntityState(this, (byte)7);
 					}
@@ -272,7 +272,7 @@ public class EntityEmberling extends EntityTameableBL implements IEntityMultiPar
 				if ((EnumItemMisc.OCTINE_NUGGET.isItemOf(stack) || stack.getItem() == ItemRegistry.OCTINE_INGOT)) {
 					if (getHealth() < getMaxHealth()) {
 						if (!getEntityWorld().isRemote) {
-							heal(EnumItemMisc.OCTINE_NUGGET.isItemOf(stack) ? 5.0F : getMaxHealth() - getHealth());
+							heal(EnumItemMisc.OCTINE_NUGGET.isItemOf(stack) ? 10.0F : getMaxHealth() - getHealth());
 
 							if (!player.capabilities.isCreativeMode) {
 								stack.shrink(1);

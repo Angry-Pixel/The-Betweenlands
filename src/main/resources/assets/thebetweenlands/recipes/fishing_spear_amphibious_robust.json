@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " X ",
+    "Y#Y",
+    " Y "
+  ],
+  "key": {
+    "X": {
+      "item": "thebetweenlands:items_misc",
+      "data": 59
+    },
+    "#": {
+      "item": "thebetweenlands:fishing_spear_amphibious"
+    },
+    "Y": {
+      "item": "thebetweenlands:shambler_tongue"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:fishing_spear_amphibious_robust"
+  }
+}

@@ -136,7 +136,7 @@ public class BlockGeckoCage extends BlockContainer {
 				if(ItemRegistry.CRITTER.isCapturedEntity(heldItemStack, EntityGecko.class)) {
 					if(!tile.hasGecko()) {
 						if(!world.isRemote) {
-							Entity gecko = ItemRegistry.CRITTER.createCapturedEntity(world, pos.getX(), pos.getY(), pos.getZ(), heldItemStack);
+							Entity gecko = ItemRegistry.CRITTER.createCapturedEntity(world, pos.getX(), pos.getY(), pos.getZ(), heldItemStack, true);
 							if(gecko instanceof EntityGecko) {
 								tile.addGecko((int)((EntityGecko) gecko).getHealth(), gecko.hasCustomName() ? gecko.getCustomNameTag() : null);
 								if(!player.capabilities.isCreativeMode)

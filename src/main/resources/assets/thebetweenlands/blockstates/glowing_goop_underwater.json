@@ -1,0 +1,35 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:internal/layer_selection",
+    "custom": {
+      "model": "forge:block/fluid",
+      "layers": [
+      	"translucent"
+      ],
+      "model_data": {
+      	"fluid": "swamp_water"
+      }
+    }
+  },
+  "variants": {
+    "facing=down": [
+      { "submodel": { "one_1": { "model": "thebetweenlands:glowing_goop_down", "x": 180 } } }
+    ],
+    "facing=up": [
+      { "submodel": { "one_1": { "model": "thebetweenlands:glowing_goop" } } }
+    ],
+    "facing=north": [
+      { "submodel": { "one_1": { "model": "thebetweenlands:glowing_goop_side", "x": 270, "y": 180 } } }
+    ],
+    "facing=south": [
+      { "submodel": { "one_1": { "model": "thebetweenlands:glowing_goop_side", "x": 270 } } }
+    ],
+    "facing=west": [
+      { "submodel": { "one_1": { "model": "thebetweenlands:glowing_goop_side", "x": 270, "y": 90 } } }
+    ],
+    "facing=east": [
+      { "submodel": { "one_1": { "model": "thebetweenlands:glowing_goop_side" , "x": 270, "y": 270 } } }
+    ]
+  }
+}

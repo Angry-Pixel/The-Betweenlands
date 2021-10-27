@@ -1,0 +1,63 @@
+{
+    "parent": "block/cube",
+    "textures": {
+        "0": "thebetweenlands:blocks/mud",
+        "1": "thebetweenlands:blocks/silt_strands_1",
+        "particle": "thebetweenlands:blocks/mud"
+    },
+    "elements": [
+        {
+            "name": "block",
+            "from": [0, 0, 0],
+            "to": [16, 16, 16],
+            "faces": {
+                "north": {"uv": [0, 0, 16, 16], "texture": "#0", "cullface": "north" },
+                "east": {"uv": [0, 0, 16, 16], "texture": "#0", "cullface": "east" },
+                "south": {"uv": [0, 0, 16, 16], "texture": "#0", "cullface": "south" },
+                "west": {"uv": [0, 0, 16, 16], "texture": "#0", "cullface": "west" },
+                "up": {"uv": [0, 0, 16, 16], "texture": "#0", "cullface": "up" },
+                "down": {"uv": [0, 0, 16, 16], "texture": "#0", "cullface": "down" }
+            }
+        },
+        {
+            "name": "e_strands",
+            "from": [13, 16, 0],
+            "to": [13, 24, 16],
+            "shade": false,
+            "faces": {
+                "east": {"uv": [0, 8, 16, 16], "texture": "#1"},
+                "west": {"uv": [0, 8, 16, 16], "texture": "#1"}
+            }
+        },
+        {
+            "name": "w_strands",
+            "from": [3, 16, 0],
+            "to": [3, 24, 16],
+            "shade": false,
+            "faces": {
+                "east": {"uv": [0, 8, 16, 16], "texture": "#1"},
+                "west": {"uv": [0, 8, 16, 16], "texture": "#1"}
+            }
+        },
+        {
+            "name": "s_strands",
+            "from": [0, 16, 13],
+            "to": [16, 24, 13],
+            "shade": false,
+            "faces": {
+                "north": {"uv": [0, 8, 16, 16], "texture": "#1"},
+                "south": {"uv": [0, 8, 16, 16], "texture": "#1"}
+            }
+        },
+        {
+            "name": "n_strands",
+            "from": [0, 16, 3],
+            "to": [16, 24, 3],
+            "shade": false,
+            "faces": {
+                "north": {"uv": [0, 8, 16, 16], "texture": "#1"},
+                "south": {"uv": [0, 8, 16, 16], "texture": "#1"}
+            }
+        }
+    ]
+}

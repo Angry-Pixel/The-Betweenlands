@@ -1,0 +1,7 @@
+{ 
+  "variants": { 
+    "normal": {
+      "model": "thebetweenlands:cragrock_tiles_mossy"
+    } 
+  } 
+}

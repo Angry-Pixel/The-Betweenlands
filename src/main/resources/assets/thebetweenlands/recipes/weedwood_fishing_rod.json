@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  W",
+    "SWR",
+    "WSF"
+  ],
+  "key": {
+    "W": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    },
+    "S": {
+      "item": "thebetweenlands:items_misc",
+      "data": 11
+    },
+    "R": {
+      "item": "thebetweenlands:items_misc",
+      "data": 7
+    },
+    "F": {
+      "item": "thebetweenlands:items_misc",
+      "data": 60
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:weedwood_fishing_rod"
+  }
+}

@@ -121,7 +121,7 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 
 	@Override
 	public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
-		return item.getItem() == ItemRegistry.SYRMORITE_SHEARS;
+		return item.getItem() == ItemRegistry.SYRMORITE_SHEARS || item.getItem() == ItemRegistry.SILT_CRAB_CLAW;
 	}
 
 	@Override

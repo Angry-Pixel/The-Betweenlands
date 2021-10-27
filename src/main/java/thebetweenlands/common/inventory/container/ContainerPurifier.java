@@ -22,7 +22,15 @@ public class ContainerPurifier extends Container {
 
 		addSlotToContainer(new SlotRestriction(tileentity, 0, 61, 54, EnumItemMisc.SULFUR.create(1), 64, this));
 		addSlotToContainer(new Slot(tileentity, 1, 61, 14));
-		addSlotToContainer(new SlotOutput(tileentity, 2, 121, 34, this));
+		addSlotToContainer(new SlotOutput(tileentity, 2, 121, 34, this) {
+			@Override
+			public ItemStack onTake(EntityPlayer thePlayer, ItemStack stack) {
+				if(thePlayer instanceof EntityPlayerMP && stack.getItem() instanceof ICorrodible) {
+					AdvancementCriterionRegistry.PURIFY_TOOL.trigger((EntityPlayerMP) thePlayer);
+				}
+				return super.onTake(thePlayer, stack);
+			}
+		});
 
 		for (int i = 0; i < 3; ++i) {
 			for (int j = 0; j < 9; ++j) {

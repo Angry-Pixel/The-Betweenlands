@@ -1,0 +1,45 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"1": "thebetweenlands:blocks/glowing_goop",
+		"2": "thebetweenlands:blocks/glowing_goop_drip",
+		"particle": "thebetweenlands:blocks/glowing_goop_drip"
+	},
+	"elements": [
+		{
+			"name": "outer",
+			"from": [2, 0, 2],
+			"to": [14, 4, 14],
+			"faces": {
+				"north": {"uv": [2, 2, 14, 6], "texture": "#1"},
+				"east": {"uv": [2, 2, 14, 6], "texture": "#1"},
+				"south": {"uv": [2, 2, 14, 6], "texture": "#1"},
+				"west": {"uv": [2, 2, 14, 6], "texture": "#1"},
+				"up": {"uv": [2, 2, 14, 14], "texture": "#1"}
+			}
+		},
+		{
+			"name": "inner",
+			"from": [4, 1, 4],
+			"to": [12, 3, 12],
+			"faces": {
+				"north": {"uv": [4, 2, 12, 4], "texture": "#1"},
+				"east": {"uv": [4, 2, 12, 4], "texture": "#1"},
+				"south": {"uv": [4, 2, 12, 4], "texture": "#1"},
+				"west": {"uv": [4, 2, 12, 4], "texture": "#1"},
+				"up": {"uv": [4, 4, 12, 12], "texture": "#1"}
+			}
+		},
+		{
+			"name": "overlay",
+			"from": [2, 4, 2],
+			"to": [14, 18, 14],
+			"faces": {
+				"north": {"uv": [2, 0, 14, 14], "rotation": 180, "texture": "#2"},
+				"east": {"uv": [2, 0, 14, 14], "rotation": 180, "texture": "#2"},
+				"south": {"uv": [2, 0, 14, 14], "rotation": 180, "texture": "#2"},
+				"west": {"uv": [2, 0, 14, 14], "rotation": 180, "texture": "#2"}
+			}
+		}
+	]
+}

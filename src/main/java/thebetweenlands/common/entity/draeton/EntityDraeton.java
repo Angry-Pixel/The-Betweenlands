@@ -1933,6 +1933,11 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 			if (source instanceof EntityDamageSource && ((source.getTrueSource() != null && this.isPassenger(source.getTrueSource())) || (source.getImmediateSource() != null && this.isPassenger(source.getImmediateSource())))) {
 				return false;
 			} else {
+				Entity sourceEntity = source.getTrueSource();
+				if(sourceEntity instanceof IPullerEntity && ((IPullerEntity) sourceEntity).getCarriage() == this) {
+					return false;
+				}
+				
 				boolean isPlayerHit = source.getImmediateSource() instanceof EntityPlayer;
 
 				if(!this.world.isRemote) {
@@ -2228,7 +2233,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 			//Add new puller part and entity
 			ItemStack stack = this.getPullersInventory().getStackInSlot(index);
 			if(!stack.isEmpty() && stack.getItem() instanceof ItemMob) {
-				Entity capturedEntity = ((ItemMob) stack.getItem()).createCapturedEntity(this.world, this.posX, this.posY, this.posZ, stack);
+				Entity capturedEntity = ((ItemMob) stack.getItem()).createCapturedEntity(this.world, this.posX, this.posY, this.posZ, stack, true);
 
 				Entity spawnedEntity = null;
 

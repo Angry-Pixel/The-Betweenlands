@@ -2,6 +2,7 @@ package thebetweenlands.common.tile;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.item.ItemStack;
@@ -11,6 +12,8 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
 import thebetweenlands.common.inventory.container.ContainerMortar;
 import thebetweenlands.common.item.misc.ItemLifeCrystal;
@@ -34,6 +37,10 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
         super(4, "container.bl.mortar");
     }
 
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
 
     @Override
     public void update() {
@@ -88,7 +95,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
 	                        world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundRegistry.GRIND, SoundCategory.BLOCKS, 1F, 1F);
 	                    
 	                        //Makes sure client knows that new grinding cycle has started
-	                        world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+	                        world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 2);
 	                    }
 	                    
 	                    if (progress == 64 || progress == 84) {
@@ -139,21 +146,22 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
         if (pestleInstalled()) {
         	if(!hasPestle) {
         		hasPestle = true;
-        		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+        		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 2);
         	}
         } else {
         	if(hasPestle) {
         		hasPestle = false;
-        		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+        		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 2);
         	}
         }
+
         if (!validRecipe || getStackInSlot(0).isEmpty() || getStackInSlot(1).isEmpty() || outputFull) {
             if (!inventory.get(1).isEmpty())
                 NBTHelper.getStackNBTSafe(getStackInSlot(1)).setBoolean("active", false);
             
             if(progress > 0) {
             	progress = 0;
-            	world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+            	world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 2);
             	markDirty();
             }
         }
@@ -162,17 +170,17 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
                 NBTHelper.getStackNBTSafe(getStackInSlot(1)).setBoolean("active", false);
             progress = 0;
             markDirty();
-            world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+            world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 2);
         }
         if (isCrystalInstalled()) {
         	if(!hasCrystal) {
         		hasCrystal = true;
-        		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+        		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 2);
         	}
         } else {
         	if(hasCrystal) {
         		hasCrystal = false;
-        		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+        		world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 2);
         	}
         }
     }
@@ -220,6 +228,27 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
         manualGrinding = nbt.getBoolean("manualGrinding");
     }
 
+    @Override
+    public NBTTagCompound getUpdateTag() {
+    	NBTTagCompound nbt = super.getUpdateTag();
+        nbt.setInteger("progress", progress);
+        nbt.setBoolean("hasPestle", hasPestle);
+        nbt.setBoolean("hasCrystal", hasCrystal);
+        nbt.setBoolean("manualGrinding", manualGrinding);
+        this.writeInventoryNBT(nbt);
+    	return nbt;
+    }
+
+    @Override
+    public void handleUpdateTag(NBTTagCompound tag) {
+    	super.handleUpdateTag(tag);
+    	progress = tag.getInteger("progress");
+        hasPestle = tag.getBoolean("hasPestle");
+        hasCrystal = tag.getBoolean("hasCrystal");
+        manualGrinding = tag.getBoolean("manualGrinding");
+        this.readInventoryNBT(tag);
+    }
+    
     @Nullable
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
@@ -240,7 +269,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
         manualGrinding = packet.getNbtCompound().getBoolean("manualGrinding");
         this.readInventoryNBT(packet.getNbtCompound());
     }
-
+    
     @Override
     public int[] getSlotsForFace(EnumFacing side) {
         switch(side) {

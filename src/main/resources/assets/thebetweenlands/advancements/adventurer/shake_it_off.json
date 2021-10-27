@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:critter_cruncher"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.shake_it_off.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.shake_it_off.description"
+    }
+  },
+  "parent": "thebetweenlands:adventurer/bouldery_bois",
+  "criteria": {
+    "event": {
+      "trigger": "thebetweenlands:infested"
+    }
+  }
+}

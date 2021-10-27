@@ -4,15 +4,18 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.EntityAngryPebble;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityFalseXPOrb;
+import thebetweenlands.common.entity.EntityFishBait;
+import thebetweenlands.common.entity.EntityFishVortex;
+import thebetweenlands.common.entity.EntityFishingTackleBoxSeat;
 import thebetweenlands.common.entity.EntityGalleryFrame;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.entity.EntityGreeblingCorpse;
 import thebetweenlands.common.entity.EntityLurkerSkinRaft;
+import thebetweenlands.common.entity.EntityMistBridge;
 import thebetweenlands.common.entity.EntityMovingWall;
 import thebetweenlands.common.entity.EntityResurrection;
 import thebetweenlands.common.entity.EntityRootGrabber;
@@ -27,18 +30,21 @@ import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.entity.EntityTinyWormEggSac;
 import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
 import thebetweenlands.common.entity.EntityTriggeredSludgeWallJet;
+import thebetweenlands.common.entity.EntityUrchinSpikeAOE;
 import thebetweenlands.common.entity.EntityVolarkite;
 import thebetweenlands.common.entity.EntityWormGroundSpawner;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.entity.draeton.EntityPullerChiromaw;
 import thebetweenlands.common.entity.draeton.EntityPullerDragonfly;
 import thebetweenlands.common.entity.draeton.EntityPullerFirefly;
+import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityAshSprite;
 import thebetweenlands.common.entity.mobs.EntityBarrishee;
-import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
+import thebetweenlands.common.entity.mobs.EntityBubblerCrab;
+import thebetweenlands.common.entity.mobs.EntityCaveFish;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityChiromawGreeblingRider;
 import thebetweenlands.common.entity.mobs.EntityChiromawHatchling;
@@ -59,12 +65,16 @@ import thebetweenlands.common.entity.mobs.EntityFortressBossProjectile;
 import thebetweenlands.common.entity.mobs.EntityFortressBossSpawner;
 import thebetweenlands.common.entity.mobs.EntityFortressBossTeleporter;
 import thebetweenlands.common.entity.mobs.EntityFortressBossTurret;
+import thebetweenlands.common.entity.mobs.EntityFreshwaterUrchin;
 import thebetweenlands.common.entity.mobs.EntityFrog;
 import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.entity.mobs.EntityGiantToad;
 import thebetweenlands.common.entity.mobs.EntityGreebling;
+import thebetweenlands.common.entity.mobs.EntityGreeblingCoracle;
 import thebetweenlands.common.entity.mobs.EntityGreeblingVolarpadFloater;
+import thebetweenlands.common.entity.mobs.EntityJellyfish;
+import thebetweenlands.common.entity.mobs.EntityJellyfishCave;
 import thebetweenlands.common.entity.mobs.EntityLargeSludgeWorm;
 import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityLurker;
@@ -73,8 +83,11 @@ import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
 import thebetweenlands.common.entity.mobs.EntityMovingSpawnerHole;
 import thebetweenlands.common.entity.mobs.EntityMultipartDummy;
 import thebetweenlands.common.entity.mobs.EntityMummyArm;
+import thebetweenlands.common.entity.mobs.EntityOlm;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
+import thebetweenlands.common.entity.mobs.EntityRockSnot;
+import thebetweenlands.common.entity.mobs.EntityRockSnotTendril;
 import thebetweenlands.common.entity.mobs.EntityRootSprite;
 import thebetweenlands.common.entity.mobs.EntityShambler;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
@@ -100,11 +113,15 @@ import thebetweenlands.common.entity.mobs.EntityVolatileSoul;
 import thebetweenlands.common.entity.mobs.EntityWallLamprey;
 import thebetweenlands.common.entity.mobs.EntityWallLivingRoot;
 import thebetweenlands.common.entity.mobs.EntityWight;
-import thebetweenlands.common.entity.mobs.EntityGreeblingCoracle;
+import thebetweenlands.common.entity.projectiles.EntityAngryPebble;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
+import thebetweenlands.common.entity.projectiles.EntityBLFishHook;
 import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
+import thebetweenlands.common.entity.projectiles.EntityBubblerCrabBubble;
 import thebetweenlands.common.entity.projectiles.EntityChiromawDroppings;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
+import thebetweenlands.common.entity.projectiles.EntityFishingSpear;
+import thebetweenlands.common.entity.projectiles.EntityGlowingGoop;
 import thebetweenlands.common.entity.projectiles.EntityPredatorArrowGuide;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
@@ -138,7 +155,7 @@ public class EntityRegistry {
 		registerEntity(EntityGecko.class, "gecko", 0xFF8000, 0x22E0B1, 64, 1, true);
 		registerEntity(EntityTermite.class, "termite", 0xD9D7A7, 0xD99830);
 		registerEntity(EntityGiantToad.class, "toad", 0x405C3B, 0x7ABA45);
-		registerEntity(EntityBlindCaveFish.class, "blind_cave_fish", 0xD0D1C2, 0xECEDDF);
+		registerEntity(EntityOlm.class, "olm", 0xE8D8B8, 0xE79B7B);
 		registerEntity(EntityChiromaw.class, "chiromaw", 0x142728, 0x7A4E42);
 		registerEntity(EntityFrog.class, "frog", 0x1E4921, 0x479219, 64, 20, true);
 		registerEntity(EntitySwordEnergy.class, "sword_energy");
@@ -182,7 +199,6 @@ public class EntityRegistry {
 		registerEntity(EntitySpiritTreeFaceMask.class, "spirit_tree_face_mask", 64, 20, false);
 		registerEntity(EntityRootSprite.class, "root_sprite", 0x5D533D, 0x8F952B);
 		registerEntity(EntityPredatorArrowGuide.class, "predator_arrow_guide");
-		
 		registerEntity(EntitySludgeWorm.class, "small_sludge_worm", 0x6D3D39, 0x301411);
 		registerEntity(EntityTinySludgeWorm.class, "tiny_sludge_worm", 0xDAC2A7, 0x5C4639);
 		registerEntity(EntityLargeSludgeWorm.class, "large_sludge_worm", 0x726459, 0xE2DED9);
@@ -208,18 +224,19 @@ public class EntityRegistry {
 		registerEntity(EntityEmberlingShaman.class, "emberling_shaman", 0xA43B2E, 0x391211);
 		registerEntity(EntityFlameJet.class, "flame_jet", 64, 1, true);
 		registerEntity(EntityMovingWall.class, "moving_wall", 64, 1, true);
-		registerEntity(EntityEmberling.class, "emberling", 0xA43B2E, 0x391211);
+		registerEntity(EntityEmberling.class, "emberling");
 		registerEntity(EntityEmberlingWild.class, "wild_emberling", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityGalleryFrame.class, "gallery_frame");
 		registerEntity(EntitySludgeMenace.class, "sludge_menace", 0x726459, 0x726459);
 		registerEntity(EntitySludgeMenace.DummyPart.class, "sludge_menace_multipart_dummy", 64, 20, false);
 		registerEntity(EntityShock.class, "shock", 64, 20, false);
 		registerEntity(EntityBLLightningBolt.class, "lightning", 100, 20, false);
+
 		registerEntity(EntityResurrection.class, "resurrection", 64, 6, true);
 		registerEntity(EntityFalseXPOrb.class, "false_xp", 64, 20, true);
 		
 		registerEntity(EntityMultipartDummy.class, "multipart_dummy", 64, 20, false);
-		
+
 		registerEntity(EntityDraeton.class, "draeton", 80, 3, true);
 		registerEntity(EntityPullerDragonfly.class, "draeton_dragonfly", 80, 3, true);
 		registerEntity(EntityPullerFirefly.class, "draeton_firefly", 80, 3, true);
@@ -228,17 +245,48 @@ public class EntityRegistry {
 		registerEntity(EntityChiromawGreeblingRider.class, "chiromaw_greebling_rider", 0x142728, 0x7CB2AA);
 		registerEntity(EntityGreeblingVolarpadFloater.class, "greebling_volarpad_floater", 64, 20, true);
 		registerEntity(EntityBetweenstonePebble.class, "betweenstone_pebble", 64, 20, true);
-		
+
 		registerEntity(EntityWormGroundSpawner.class, "worm_ground_spawner");
 		registerEntity(EntityChiromawMatriarch.class, "chiromaw_matriarch", 0x142728, 0x4A2120, 128, 3, true);
 		registerEntity(EntityChiromawDroppings.class, "chiromaw_droppings", 64, 20, true);
 		registerEntity(EntityChiromawHatchling.class, "chiromaw_hatchling", 64, 3, true);
 		registerEntity(EntityChiromawTame.class, "chiromaw_tame", 128, 3, true);
 		registerEntity(EntityGreeblingCorpse.class, "greebling_corpse", 80, 20, false);
+		registerEntity(EntityGreeblingCoracle.class, "greebling_coracle", 0x7CB2AA, 0xC3726C);
 
 		registerEntity(EntityStalker.class, "stalker", 0xE4DCC9, 0xD58888);
 		registerEntity(EntitySwarm.class, "swarm", 0x292B3B, 0xE2D698);
-		//registerEntity(EntityGreeblingCoracle.class, "greebling_coracle", 0x142728, 0x7CB2AA);
+
+		registerEntity(EntityFishBait.class, "fish_bait_item");
+		registerEntity(EntityAnadia.class, "anadia", 0x5D633A, 0xB53D2F);
+		registerEntity(EntityBLFishHook.class, "betweenlands_fish_hook");
+		registerEntity(EntityFishingSpear.class, "fishing_spear", 64, 20, true);
+		registerEntity(EntityFishingTackleBoxSeat.class, "fishing_tackle_box_seat");
+		
+		//WIP Stuffs
+		registerEntity(EntityRockSnot.class, "rock_snot", 0xC4B7DB, 0x2D0000, 64, 3, true);
+		registerEntity(EntityRockSnotTendril.class, "rock_snot_tendril", 64, 20, true);
+
+		// TODO Shit that will be added onedayTM
+		//registerEntity(EntityPuffin.class, "puffin", 0x3F5A69, 0xA16A77, 64, 3, true);
+		//registerEntity(EntityAnimalBurrow.class, "animal_burrow");
+		
+		registerEntity(EntityMistBridge.class, "mist_brige");
+
+		registerEntity(EntityJellyfish.class, "jellyfish", 0xFFEBE5, 0xFF506B, 64, 3, true);
+		registerEntity(EntityJellyfishCave.class, "jellyfish_cave", 0xE0FFF6, 0x7CFFFF, 64, 3, true);
+
+		registerEntity(EntityBubblerCrab.class, "bubbler_crab", 0xD8D5CB, 0xC7692C);
+
+		registerEntity(EntityFreshwaterUrchin.class, "freshwater_urchin", 0x612E2E, 0x13363F, 64, 3, true);
+
+		registerEntity(EntityBubblerCrabBubble.class, "bubbler_crab_bubble", 64, 1, true);
+		registerEntity(EntityCaveFish.class, "cave_fish", 0xFF8000, 0xE6E6E6);
+
+		registerEntity(EntityGlowingGoop.class, "glowing_goop");
+
+		registerEntity(EntityFishVortex.class, "fish_vortex");
+		registerEntity(EntityUrchinSpikeAOE.class, "urchin_spike_aoe");
 	}
 
 	private static int id = 0;

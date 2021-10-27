@@ -1,0 +1,57 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:amphibious_leggings"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.craftsman.aquaman.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.craftsman.aquaman.description"
+    },
+    "frame": "challenge"
+  },
+  "parent": "thebetweenlands:craftsman/fish_guts",
+  "criteria": {
+    "amphibious_helmet": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+              "item": "thebetweenlands:amphibious_helmet"
+          }
+        ]
+      }
+    },
+    "amphibious_chestplate": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+              "item": "thebetweenlands:amphibious_chestplate"
+          }
+        ]
+      }
+    },
+    "amphibious_leggings": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+              "item": "thebetweenlands:amphibious_leggings"
+          }
+        ]
+      }
+    },
+    "amphibious_boots": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+              "item": "thebetweenlands:amphibious_boots"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -20,6 +20,45 @@
     }
   },
   "variants": {
-    "normal": [{ }]
+    "normal": [
+      {
+        "model": "thebetweenlands:internal/model_combined",
+        "custom": { 
+          "model_base": "thebetweenlands:block/internal/layer_selection",
+          "model_base_data": {
+            "model": "thebetweenlands:block/water_weeds",
+            "layers": ["cutout", "none"]
+          },
+          
+          "model_additional": "thebetweenlands:block/internal/layer_selection",
+          "model_additional_data": {
+            "model": "forge:block/fluid",
+            "layers": ["translucent"],
+            "model_data": {
+              "fluid": "swamp_water"
+            }
+          }
+        }
+      },
+      {
+        "model": "thebetweenlands:internal/model_combined",
+        "custom": { 
+          "model_base": "thebetweenlands:block/internal/layer_selection",
+          "model_base_data": {
+            "model": "thebetweenlands:block/water_weeds_mirrored",
+            "layers": ["cutout", "none"]
+          },
+          
+          "model_additional": "thebetweenlands:block/internal/layer_selection",
+          "model_additional_data": {
+            "model": "forge:block/fluid",
+            "layers": ["translucent"],
+            "model_data": {
+              "fluid": "swamp_water"
+            }
+          }
+        }
+      }
+    ]
   }
 }

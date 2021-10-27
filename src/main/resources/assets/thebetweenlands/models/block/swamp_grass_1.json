@@ -1,0 +1,135 @@
+{
+	"parent": "block/block",
+	"textures": {
+		"top": "thebetweenlands:blocks/swamp_grass_top_gs",
+		"particle": "thebetweenlands:blocks/swamp_dirt",
+		"bottom": "thebetweenlands:blocks/swamp_dirt",
+		"extra": "thebetweenlands:blocks/swamp_grass_extra_0",
+		"side": "thebetweenlands:blocks/swamp_grass_side",
+		"overlay": "thebetweenlands:blocks/swamp_grass_side_overlay"
+	},
+	"elements": [
+		{
+			"name": "main",
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "north" },
+				"east": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "east" },
+				"south": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "south" },
+				"west": {"uv": [0, 0, 16, 16], "texture": "#side", "cullface": "west" },
+				"up": {"uv": [0, 0, 16, 16], "texture": "#top", "tintindex": 0, "cullface": "up" },
+				"down": {"uv": [0, 0, 16, 16], "texture": "#bottom", "cullface": "down" }
+			}
+		},
+		{
+			"name": "overlay",
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#overlay", "tintindex": 0, "cullface": "north" },
+				"east": {"uv": [0, 0, 16, 16], "texture": "#overlay", "tintindex": 0, "cullface": "east" },
+				"south": {"uv": [0, 0, 16, 16], "texture": "#overlay", "tintindex": 0, "cullface": "south" },
+				"west": {"uv": [0, 0, 16, 16], "texture": "#overlay", "tintindex": 0, "cullface": "west" }
+			}
+		},
+		{
+			"name": "tuft_1",
+			"from": [13, 16, 8],
+			"to": [14, 17, 8],
+			"shade": false,
+			"rotation": {"angle": -22.5, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [1, 15, 2, 16], "texture": "#extra", "tintindex": 0},
+				"south": {"uv": [1, 15, 2, 16], "texture": "#extra", "tintindex": 0}
+			}
+		},
+		{
+			"name": "tuft_2",
+			"from": [2, 16, 8],
+			"to": [3, 18, 8],
+			"shade": false,
+			"rotation": {"angle": 45, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [4, 14, 5, 16], "texture": "#extra", "tintindex": 0},
+				"south": {"uv": [4, 14, 5, 16], "texture": "#extra", "tintindex": 0}
+			}
+		},
+		{
+			"name": "tuft_3",
+			"from": [6, 16, 10],
+			"to": [7, 17, 10],
+			"shade": false,
+			"rotation": {"angle": -45, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [6, 15, 7, 16], "texture": "#extra", "tintindex": 0},
+				"south": {"uv": [6, 15, 7, 16], "texture": "#extra", "tintindex": 0}
+			}
+		},
+		{
+			"name": "tuft_4",
+			"from": [9, 16, 8],
+			"to": [10, 18, 8],
+			"shade": false,
+			"rotation": {"angle": 22.5, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [9, 14, 10, 16], "texture": "#extra", "tintindex": 0},
+				"south": {"uv": [9, 14, 10, 16], "texture": "#extra", "tintindex": 0}
+			}
+		},
+		{
+			"name": "tuft_5",
+			"from": [11, 16, 8],
+			"to": [12, 17, 8],
+			"shade": false,
+			"rotation": {"angle": -22.5, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [11, 15, 12, 16], "texture": "#extra", "tintindex": 0},
+				"south": {"uv": [11, 15, 12, 16], "texture": "#extra", "tintindex": 0}
+			}
+		},
+		{
+			"name": "tuft_6",
+			"from": [13, 16, 8],
+			"to": [14, 17, 8],
+			"shade": false,
+			"rotation": {"angle": 22.5, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [14, 15, 15, 16], "texture": "#extra", "tintindex": 0},
+				"south": {"uv": [14, 15, 15, 16], "texture": "#extra", "tintindex": 0}
+			}
+		},
+		{
+			"name": "tuft_7",
+			"from": [9, 16, 12],
+			"to": [10, 18, 12],
+			"shade": false,
+			"faces": {
+				"north": {"uv": [9, 14, 10, 16], "texture": "#extra", "tintindex": 0},
+				"south": {"uv": [9, 14, 10, 16], "texture": "#extra", "tintindex": 0}
+			}
+		},
+		{
+			"name": "tuft_8",
+			"from": [9, 16, 3],
+			"to": [10, 18, 3],
+			"shade": false,
+			"rotation": {"angle": 22.5, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [9, 14, 10, 16], "texture": "#extra", "tintindex": 0},
+				"south": {"uv": [9, 14, 10, 16], "texture": "#extra", "tintindex": 0}
+			}
+		},
+		{
+			"name": "tuft_9",
+			"from": [1, 16, 8],
+			"to": [2, 17, 8],
+			"shade": false,
+			"rotation": {"angle": -22.5, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [1, 15, 2, 16], "texture": "#extra", "tintindex": 0},
+				"south": {"uv": [1, 15, 2, 16], "texture": "#extra", "tintindex": 0}
+			}
+		}
+	]
+}

@@ -15,6 +15,7 @@ import thebetweenlands.api.capability.ILastKilledCapability;
 import thebetweenlands.api.capability.IPortalCapability;
 import thebetweenlands.api.capability.IPuppetCapability;
 import thebetweenlands.api.capability.IPuppeteerCapability;
+import thebetweenlands.api.capability.IRotSmellCapability;
 import thebetweenlands.api.capability.ISummoningCapability;
 import thebetweenlands.api.capability.ISwarmedCapability;
 import thebetweenlands.common.capability.CustomStepSoundCapability;
@@ -25,6 +26,7 @@ import thebetweenlands.common.capability.circlegem.CircleGemEntityCapability;
 import thebetweenlands.common.capability.collision.RingOfDispersionEntityCapability;
 import thebetweenlands.common.capability.decay.DecayEntityCapability;
 import thebetweenlands.common.capability.equipment.EquipmentEntityCapability;
+import thebetweenlands.common.capability.fishing.RotSmellEntityCapability;
 import thebetweenlands.common.capability.flight.FlightEntityCapability;
 import thebetweenlands.common.capability.foodsickness.FoodSicknessEntityCapability;
 import thebetweenlands.common.capability.item.ILivingWeedwoodShieldCapability;
@@ -88,6 +90,9 @@ public class CapabilityRegistry {
 	
 	@CapabilityInject(ISwarmedCapability.class)
 	public static final Capability<ISwarmedCapability> CAPABILITY_SWARMED = null;
+
+	@CapabilityInject(IRotSmellCapability.class)
+	public static final Capability<IRotSmellCapability> CAPABILITY_ROT_SMELL = null;
 		
 	public static void preInit() {
 		EntityCapabilityHandler.registerEntityCapability(new DecayEntityCapability());
@@ -105,6 +110,7 @@ public class CapabilityRegistry {
 		EntityCapabilityHandler.registerEntityCapability(new LastKilledCapability());
 		EntityCapabilityHandler.registerEntityCapability(new BlessingEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new SwarmedCapability());
+		EntityCapabilityHandler.registerEntityCapability(new RotSmellEntityCapability());
 		
 		ItemCapabilityHandler.registerItemCapability(new LivingWeedwoodShieldItemCapability());
 		

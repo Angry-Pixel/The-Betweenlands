@@ -30,17 +30,24 @@ import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.EntityGalleryFrame;
 import thebetweenlands.common.entity.EntityTinyWormEggSac;
+import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
+import thebetweenlands.common.entity.mobs.EntityBubblerCrab;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
+import thebetweenlands.common.entity.mobs.EntityFreshwaterUrchin;
+import thebetweenlands.common.entity.mobs.EntityJellyfish;
 import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityMireSnail;
+import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.entity.mobs.EntitySludge;
 import thebetweenlands.common.entity.mobs.EntitySmollSludge;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntitySwarm;
 import thebetweenlands.common.entity.mobs.EntityTermite;
+import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
+import thebetweenlands.common.entity.mobs.EntityTinySludgeWormHelper;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.ItemAncientArmor;
@@ -54,6 +61,10 @@ import thebetweenlands.common.item.armor.ItemSpiritTreeFaceMaskLarge;
 import thebetweenlands.common.item.armor.ItemSpiritTreeFaceMaskSmall;
 import thebetweenlands.common.item.armor.ItemSyrmoriteArmor;
 import thebetweenlands.common.item.armor.ItemValoniteArmor;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmorSpecialUpgrade;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmourUpgradeToggle;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmourUpgradeTrigger;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.item.equipment.ItemRingOfDispersion;
@@ -72,6 +83,7 @@ import thebetweenlands.common.item.food.ItemBLFood;
 import thebetweenlands.common.item.food.ItemBlackHatMushroom;
 import thebetweenlands.common.item.food.ItemBulbCappedMushroom;
 import thebetweenlands.common.item.food.ItemChiromawWing;
+import thebetweenlands.common.item.food.ItemCrabClaw;
 import thebetweenlands.common.item.food.ItemFlatHeadMushroom;
 import thebetweenlands.common.item.food.ItemForbiddenFig;
 import thebetweenlands.common.item.food.ItemGertsDonut;
@@ -81,6 +93,7 @@ import thebetweenlands.common.item.food.ItemMireScramble;
 import thebetweenlands.common.item.food.ItemMireSnailEgg;
 import thebetweenlands.common.item.food.ItemNettleSoup;
 import thebetweenlands.common.item.food.ItemNibblestick;
+import thebetweenlands.common.item.food.ItemRockSnotPearl;
 import thebetweenlands.common.item.food.ItemRottenFood;
 import thebetweenlands.common.item.food.ItemSapBall;
 import thebetweenlands.common.item.food.ItemSapJello;
@@ -100,6 +113,7 @@ import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemAmateMap;
 import thebetweenlands.common.item.misc.ItemAmuletSlot;
 import thebetweenlands.common.item.misc.ItemAngryPebble;
+import thebetweenlands.common.item.misc.ItemBLNameTag;
 import thebetweenlands.common.item.misc.ItemBLRecord;
 import thebetweenlands.common.item.misc.ItemBarkAmulet;
 import thebetweenlands.common.item.misc.ItemBoneWayfinder;
@@ -111,6 +125,9 @@ import thebetweenlands.common.item.misc.ItemDentrothystShard;
 import thebetweenlands.common.item.misc.ItemDoorBetweenlands;
 import thebetweenlands.common.item.misc.ItemDraeton;
 import thebetweenlands.common.item.misc.ItemEmptyAmateMap;
+import thebetweenlands.common.item.misc.ItemFishBait;
+import thebetweenlands.common.item.misc.ItemFreshwaterUrchin;
+import thebetweenlands.common.item.misc.ItemFumigant;
 import thebetweenlands.common.item.misc.ItemGalleryFrame;
 import thebetweenlands.common.item.misc.ItemGem;
 import thebetweenlands.common.item.misc.ItemGemSinger;
@@ -122,7 +139,9 @@ import thebetweenlands.common.item.misc.ItemLurkerSkinPatch;
 import thebetweenlands.common.item.misc.ItemMagicItemMagnet;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.item.misc.ItemMistStaff;
 import thebetweenlands.common.item.misc.ItemMob;
+import thebetweenlands.common.item.misc.ItemMobAnadia;
 import thebetweenlands.common.item.misc.ItemMossBed;
 import thebetweenlands.common.item.misc.ItemMummyBait;
 import thebetweenlands.common.item.misc.ItemOctineIngot;
@@ -130,7 +149,9 @@ import thebetweenlands.common.item.misc.ItemPyradFlame;
 import thebetweenlands.common.item.misc.ItemRingOfGathering;
 import thebetweenlands.common.item.misc.ItemRope;
 import thebetweenlands.common.item.misc.ItemRuneDoorKey;
+import thebetweenlands.common.item.misc.ItemShadowStaff;
 import thebetweenlands.common.item.misc.ItemShimmerStone;
+import thebetweenlands.common.item.misc.ItemSnotPod;
 import thebetweenlands.common.item.misc.ItemSpiritTreeFaceMaskSmallAnimated;
 import thebetweenlands.common.item.misc.ItemSwampTalisman;
 import thebetweenlands.common.item.misc.ItemTarminion;
@@ -152,12 +173,14 @@ import thebetweenlands.common.item.tools.ItemAncientBattleAxe;
 import thebetweenlands.common.item.tools.ItemAncientGreatsword;
 import thebetweenlands.common.item.tools.ItemBLAxe;
 import thebetweenlands.common.item.tools.ItemBLBucket;
+import thebetweenlands.common.item.tools.ItemBLFishingRod;
 import thebetweenlands.common.item.tools.ItemBLPickaxe;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.item.tools.ItemBLShovel;
 import thebetweenlands.common.item.tools.ItemBLSword;
 import thebetweenlands.common.item.tools.ItemBucketInfusion;
 import thebetweenlands.common.item.tools.ItemChirobarbErupter;
+import thebetweenlands.common.item.tools.ItemFishingSpear;
 import thebetweenlands.common.item.tools.ItemGreataxe;
 import thebetweenlands.common.item.tools.ItemHagHacker;
 import thebetweenlands.common.item.tools.ItemLootSword;
@@ -191,6 +214,9 @@ public class ItemRegistry {
     public static final Item WEEDWOOD_ROWBOAT = new ItemWeedwoodRowboat();
     public static final Item DENTROTHYST_SHARD_ORANGE = new ItemDentrothystShard(EnumDentrothyst.ORANGE);
     public static final Item DENTROTHYST_SHARD_GREEN = new ItemDentrothystShard(EnumDentrothyst.GREEN);
+    public static final Item FISH_BAIT = new ItemFishBait();
+    public static final Item FUMIGANT= new ItemFumigant();
+
     //food
     public static final Item SAP_BALL = new ItemSapBall();
     public static final ItemRottenFood ROTTEN_FOOD = (ItemRottenFood) new ItemRottenFood().setAlwaysEdible();
@@ -198,32 +224,30 @@ public class ItemRegistry {
     public static final Item SPORES = new ItemSpores();
     public static final Item ASPECTRUS_SEEDS = new ItemAspectrusSeeds();
     public static final Item MIRE_SNAIL_EGG = new ItemMireSnailEgg();
-    public static final Item MIRE_SNAIL_EGG_COOKED = new ItemBLFood(8, 1, false);
-    public static final Item ANGLER_MEAT_RAW = new ItemBLFood(4, 0.4F, false);
-    public static final Item ANGLER_MEAT_COOKED = new ItemBLFood(8, 0.8F, false);
-    public static final Item FROG_LEGS_RAW = new ItemBLFood(3, 0.4F, false);
-    public static final Item FROG_LEGS_COOKED = new ItemBLFood(6, 0.8F, false);
-    public static final Item SNAIL_FLESH_RAW = new ItemBLFood(3, 0.4F, false);
-    public static final Item SNAIL_FLESH_COOKED = new ItemBLFood(6, 0.9F, false);
+    public static final Item MIRE_SNAIL_EGG_COOKED = new ItemBLFood(8, 1F, false);
+    public static final Item FROG_LEGS_RAW = new ItemBLFood(2, 0.4F, false);
+    public static final Item FROG_LEGS_COOKED = new ItemBLFood(4, 0.6F, false);
+    public static final Item SNAIL_FLESH_RAW = new ItemBLFood(2, 0.4F, false);
+    public static final Item SNAIL_FLESH_COOKED = new ItemBLFood(4, 0.7F, false);
     public static final Item REED_DONUT = new ItemBLFood(6, 0.6F, false);
     public static final Item JAM_DONUT = new ItemBLFood(10, 0.6F, false);
     public static final Item GERTS_DONUT = new ItemGertsDonut();
     public static final Item ASPECTRUS_FRUIT = new ItemAspectrusFruit();
-    public static final Item PUFFSHROOM_TENDRIL = new ItemBLFood(8, 0.9F, false);
+    public static final Item PUFFSHROOM_TENDRIL = new ItemBLFood(6, 0.6F, false);
     public static final Item KRAKEN_TENTACLE = new ItemBLFood(8, 0.9F, false);
-    public static final Item KRAKEN_CALAMARI = new ItemBLFood(14, 1.2F, false);
+    public static final Item KRAKEN_CALAMARI = new ItemBLFood(14, 1F, false);
     public static final Item MIDDLE_FRUIT = new ItemBLFood(6, 0.6F, false);
     public static final Item MINCE_PIE = new ItemBLFood(8, 1F, false);
     public static final Item CHRISTMAS_PUDDING = new ItemBLFood(6, 0.95F, false);
     public static final Item CANDY_CANE = new ItemBLFood(4, 0.85F, false);
     public static final Item WEEPING_BLUE_PETAL = new ItemWeepingBluePetal();
     public static final Item WIGHT_HEART = new ItemWightHeart();
-    public static final Item YELLOW_DOTTED_FUNGUS = new ItemBLFood(8, 0.6F, false);
-    public static final Item SILT_CRAB_CLAW = new ItemBLFood(2, 0.6F, false);
-    public static final Item CRAB_STICK = new ItemBLFood(6, 0.9F, false);
+    public static final Item YELLOW_DOTTED_FUNGUS = new ItemBLFood(6, 0.6F, false);
+    public static final Item SILT_CRAB_CLAW = new ItemCrabClaw();
+    public static final Item CRAB_STICK = new ItemBLFood(5, 0.9F, false);
     public static final Item NETTLE_SOUP = new ItemNettleSoup();
     public static final Item SLUDGE_JELLO = new ItemBLFood(4, 0.9F, false);
-    public static final Item MIDDLE_FRUIT_JELLO = new ItemBLFood(10, 1.0F, false);
+    public static final Item MIDDLE_FRUIT_JELLO = new ItemBLFood(8, 1.0F, false);
     public static final Item SAP_JELLO = new ItemSapJello();
     public static final Item MARSHMALLOW = new ItemMarshmallow();
     public static final Item MARSHMALLOW_PINK = new ItemMarshmallowPink();
@@ -232,7 +256,7 @@ public class ItemRegistry {
     public static final Item BULB_CAPPED_MUSHROOM_ITEM = new ItemBulbCappedMushroom();
     public static final Item SWAMP_REED_ITEM = new ItemSwampReed();
     public static final Item SWAMP_KELP_ITEM = new ItemSwampKelp();
-    public static final Item FRIED_SWAMP_KELP = new ItemBLFood(5, 0.6F, false);
+    public static final Item FRIED_SWAMP_KELP = new ItemBLFood(4, 0.6F, false);
     public static final Item FORBIDDEN_FIG = new ItemForbiddenFig();
     public static final Item CANDY_BLUE = new ItemBLFood(4, 1.0F, false);
     public static final Item CANDY_RED = new ItemBLFood(4, 1.0F, false);
@@ -244,7 +268,27 @@ public class ItemRegistry {
     public static final Item NIBBLESTICK = new ItemNibblestick();
     public static final Item SPIRIT_FRUIT = new ItemSpiritFruit();
     public static final Item SUSHI = new ItemBLFood(5, 1.0F, false);
+    public static final Item ROCK_SNOT_PEARL = new ItemRockSnotPearl(0, 0F, false, false);
+    public static final Item PEARLED_PEAR = new ItemRockSnotPearl(6, 0.6F, false, true);
+
+    public static final Item ANADIA_MEAT_RAW = new ItemBLFood(2, 0.2F, false); // temp
+    public static final Item ANADIA_MEAT_COOKED = new ItemBLFood(4, 0.4F, false);
+    public static final Item ANADIA_MEAT_SMOKED = new ItemBLFood(8, 0.8F, false);
+
+    public static final Item BARNACLE = new ItemBLFood(1, 0.2F, false);
+    public static final Item BARNACLE_COOKED = new ItemBLFood(2, 0.3F, false);
+    public static final Item BARNACLE_SMOKED = new ItemBLFood(4, 0.4F, false);
     
+    public static final Item CRAB_STICK_SMOKED = new ItemBLFood(10, 1F, false);
+    public static final Item FROG_LEGS_SMOKED = new ItemBLFood(6, 0.8F, false);
+    public static final Item PUFFSHROOM_TENDRIL_SMOKED = new ItemBLFood(8, 0.8F, false);
+    public static final Item SILT_CRAB_CLAW_SMOKED = new ItemBLFood(4, 0.8F, false);
+    public static final Item SNAIL_FLESH_SMOKED = new ItemBLFood(6, 0.9F, false);
+    
+    public static final Item OLM_EGG_RAW = new ItemBLFood(1, 0.2F, false);
+    public static final Item OLM_EGG_COOKED = new ItemBLFood(2, 0.2F, false);
+    public static final Item OLMLETTE = new ItemBLFood(8, 0.6F, false);
+
     //armor
     public static final Item BONE_HELMET = new ItemBoneArmor(EntityEquipmentSlot.HEAD);
     public static final Item BONE_CHESTPLATE = new ItemBoneArmor(EntityEquipmentSlot.CHEST);
@@ -266,6 +310,10 @@ public class ItemRegistry {
     public static final Item ANCIENT_CHESTPLATE = new ItemAncientArmor(EntityEquipmentSlot.CHEST);
     public static final Item ANCIENT_LEGGINGS = new ItemAncientArmor(EntityEquipmentSlot.LEGS);
     public static final Item ANCIENT_BOOTS = new ItemAncientArmor(EntityEquipmentSlot.FEET);
+    public static final Item AMPHIBIOUS_HELMET = new ItemAmphibiousArmor(EntityEquipmentSlot.HEAD);
+    public static final Item AMPHIBIOUS_CHESTPLATE = new ItemAmphibiousArmor(EntityEquipmentSlot.CHEST);
+    public static final Item AMPHIBIOUS_LEGGINGS = new ItemAmphibiousArmor(EntityEquipmentSlot.LEGS);
+    public static final Item AMPHIBIOUS_BOOTS = new ItemAmphibiousArmor(EntityEquipmentSlot.FEET);
     public static final Item RUBBER_BOOTS = new ItemRubberBoots();
     public static final Item MARSH_RUNNER_BOOTS = new ItemMarshRunnerBoots();
     public static final Item SKULL_MASK = new ItemSkullMask();
@@ -335,6 +383,12 @@ public class ItemRegistry {
     public static final Item SIMPLE_SLINGSHOT = new ItemSimpleSlingshot();
     public static final Item CHIROBARB_ERUPTER = new ItemChirobarbErupter(false);
     public static final Item CHIROBARB_SHOCK_ERUPTER = new ItemChirobarbErupter(true);
+    public static final Item WEEDWOOD_FISHING_ROD = new ItemBLFishingRod();
+    public static final Item FISHING_SPEAR = new ItemFishingSpear((byte) 0);
+    public static final Item FISHING_SPEAR_AMPHIBIOUS = new ItemFishingSpear((byte) 1);
+    public static final Item FISHING_SPEAR_AMPHIBIOUS_ROBUST = new ItemFishingSpear((byte) 2);
+    public static final Item MIST_STAFF = new ItemMistStaff();
+    public static final Item SHADOW_STAFF = new ItemShadowStaff();
     //BUCKETS
     public static final ItemBLBucket BL_BUCKET = new ItemBLBucket();
     public static final Item BL_BUCKET_RUBBER = new ItemSpecificBucket(FluidRegistry.RUBBER);
@@ -342,20 +396,21 @@ public class ItemRegistry {
     public static final Item BL_BUCKET_PLANT_TONIC = new ItemPlantTonic();
     public static final Item SYRMORITE_BUCKET_SOLID_RUBBER = new ItemSyrmoriteBucketSolidRubber();
     //RECORDS
-    public static final Item ASTATOS = new ItemBLRecord(SoundRegistry.ASTATOS);
-    public static final Item BETWEEN_YOU_AND_ME = new ItemBLRecord(SoundRegistry.BETWEEN_YOU_AND_ME);
-    public static final Item CHRISTMAS_ON_THE_MARSH = new ItemBLRecord(SoundRegistry.CHRISTMAS_ON_THE_MARSH);
-    public static final Item THE_EXPLORER = new ItemBLRecord(SoundRegistry.THE_EXPLORER);
-    public static final Item HAG_DANCE = new ItemBLRecord(SoundRegistry.HAG_DANCE);
-    public static final Item LONELY_FIRE = new ItemBLRecord(SoundRegistry.LONELY_FIRE);
-    public static final Item MYSTERIOUS_RECORD = new ItemBLRecord(SoundRegistry._16612);
-    public static final Item ANCIENT = new ItemBLRecord(SoundRegistry.ACIENT);
-    public static final Item BENEATH_A_GREEN_SKY = new ItemBLRecord(SoundRegistry.BENEATH_A_GREEN_SKY);
-    public static final Item DJ_WIGHTS_MIXTAPE = new ItemBLRecord(SoundRegistry.DJ_WIGHTS_MIXTAPE);
-    public static final Item ONWARDS = new ItemBLRecord(SoundRegistry.ONWARD);
-    public static final Item STUCK_IN_THE_MUD = new ItemBLRecord(SoundRegistry.STUCK_IN_THE_MUD);
-    public static final Item WANDERING_WISPS = new ItemBLRecord(SoundRegistry.WANDERING_WISPS);
-    public static final Item WATERLOGGED = new ItemBLRecord(SoundRegistry.WATERLOGGED);
+    public static final Item ASTATOS = new ItemBLRecord(SoundRegistry.ASTATOS, true);
+    public static final Item BETWEEN_YOU_AND_ME = new ItemBLRecord(SoundRegistry.BETWEEN_YOU_AND_ME, true);
+    public static final Item CHRISTMAS_ON_THE_MARSH = new ItemBLRecord(SoundRegistry.CHRISTMAS_ON_THE_MARSH, true);
+    public static final Item THE_EXPLORER = new ItemBLRecord(SoundRegistry.THE_EXPLORER, true);
+    public static final Item HAG_DANCE = new ItemBLRecord(SoundRegistry.HAG_DANCE, true);
+    public static final Item LONELY_FIRE = new ItemBLRecord(SoundRegistry.LONELY_FIRE, true);
+    public static final Item MYSTERIOUS_RECORD = new ItemBLRecord(SoundRegistry._16612, true);
+    public static final Item ANCIENT = new ItemBLRecord(SoundRegistry.ANCIENT, true);
+    public static final Item BENEATH_A_GREEN_SKY = new ItemBLRecord(SoundRegistry.BENEATH_A_GREEN_SKY, true);
+    public static final Item DJ_WIGHTS_MIXTAPE = new ItemBLRecord(SoundRegistry.DJ_WIGHTS_MIXTAPE, true);
+    public static final Item ONWARDS = new ItemBLRecord(SoundRegistry.ONWARD, true);
+    public static final Item STUCK_IN_THE_MUD = new ItemBLRecord(SoundRegistry.STUCK_IN_THE_MUD, true);
+    public static final Item WANDERING_WISPS = new ItemBLRecord(SoundRegistry.WANDERING_WISPS, true);
+    public static final Item WATERLOGGED = new ItemBLRecord(SoundRegistry.WATERLOGGED, true);
+    public static final Item DEEP_WATER_THEME = new ItemBLRecord(SoundRegistry.DEEP_WATER_THEME, false);
     //MISC
     public static final Item WEEDWOOD_DOOR_ITEM = new ItemDoorBetweenlands() {
         @Override
@@ -412,6 +467,13 @@ public class ItemRegistry {
     public static final Item PYRAD_FLAME = new ItemPyradFlame();
     public static final ItemMob CRITTER = new ItemCritters();
     public static final ItemMob SLUDGE_WORM_EGG_SAC = new ItemMob(16, EntityTinyWormEggSac.class, null);
+    public static final ItemMob TINY_SLUDGE_WORM = new ItemMob(1, EntityTinySludgeWorm.class, null);
+    public static final ItemMob TINY_SLUDGE_WORM_HELPER = new ItemMob(1, EntityTinySludgeWormHelper.class, null);
+    public static final ItemMobAnadia ANADIA = new ItemMobAnadia(1, EntityAnadia.class, null);
+    public static final ItemMob JELLYFISH = new ItemMob(1, EntityJellyfish.class, null);
+    public static final ItemMob SILT_CRAB = new ItemMob(1, EntitySiltCrab.class, null);
+    public static final ItemMob BUBBLER_CRAB = new ItemMob(1, EntityBubblerCrab.class, null);
+    public static final ItemMob FRESHWATER_URCHIN = new ItemFreshwaterUrchin(1, EntityFreshwaterUrchin.class, null);
     public static final ItemMob CHIROMAW_EGG = new ItemChiromawEgg(false);
     public static final ItemMob CHIROMAW_EGG_LIGHTNING = new ItemChiromawEgg(true);
     public static final ItemMob CHIROMAW_TAME = new ItemChiromawTame(false);
@@ -456,7 +518,16 @@ public class ItemRegistry {
     public static final Item DRAETON_UPGRADE_ANCHOR = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1);
     public static final Item DRAETON_UPGRADE_CRAFTING = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1);
     public static final Item WEEDWOOD_ROWBOAT_UPGRADE_LANTERN = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1);
-    
+    public static final Item SNOT_POD = new ItemSnotPod();
+    public static final Item BL_NAME_TAG = new ItemBLNameTag();
+    public static final Item AA_UPGRADE_ELECTRIC = new ItemAmphibiousArmorSpecialUpgrade().setCreativeTab(BLCreativeTabs.GEARS);
+    public static final Item AA_UPGRADE_GLIDE = new ItemAmphibiousArmorSpecialUpgrade().setCreativeTab(BLCreativeTabs.GEARS);
+    public static final Item AA_UPGRADE_LEAP = new ItemAmphibiousArmorSpecialUpgrade().setCreativeTab(BLCreativeTabs.GEARS);
+    public static final Item AA_UPGRADE_URCHIN = new ItemAmphibiousArmorSpecialUpgrade().setCreativeTab(BLCreativeTabs.GEARS);
+    public static final Item AA_UPGRADE_VORTEX = new ItemAmphibiousArmorSpecialUpgrade().setCreativeTab(BLCreativeTabs.GEARS);
+    public static final Item AA_UPGRADE_TRIGGER = new ItemAmphibiousArmourUpgradeTrigger().setCreativeTab(BLCreativeTabs.GEARS);
+    public static final Item AA_UPGRADE_TOGGLE = new ItemAmphibiousArmourUpgradeToggle().setCreativeTab(BLCreativeTabs.GEARS);
+
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
     private static final List<ItemStack> NUGGETS = new ArrayList<ItemStack>();
@@ -652,6 +723,7 @@ public class ItemRegistry {
 		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.STUCK_IN_THE_MUD));
 		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.WANDERING_WISPS));
 		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.WATERLOGGED));
+		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.DEEP_WATER_THEME));
 	}
 
     private static boolean containsItem(List<ItemStack> lst, ItemStack stack) {

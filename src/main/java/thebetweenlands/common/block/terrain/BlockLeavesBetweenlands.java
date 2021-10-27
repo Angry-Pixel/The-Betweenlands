@@ -1,8 +1,13 @@
 package thebetweenlands.common.block.terrain;
 
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockPlanks.EnumType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -16,6 +21,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -23,10 +29,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.util.AdvancedStateMap;
-
-import java.util.Random;
 
 public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMappedBlock {
 	private int[] decayBlockCache;
@@ -241,5 +247,63 @@ public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMapped
 	protected void removeLeaves(World world, BlockPos pos) {
 		this.dropBlockAsItem(world, pos, world.getBlockState(pos), 0);
 		world.setBlockToAir(pos);
+		
+		BlockPos ground = this.findGround(world, pos, 12 + world.rand.nextInt(13));
+		if(ground != null) {
+			this.growFallenPile(world, ground, 0);
+		}
+	}
+	
+	protected boolean growFallenPile(World world, BlockPos pos, int i) {
+		IBlockState state = world.getBlockState(pos);
+		
+		if(state.getBlock() instanceof BlockFallenLeaves) {
+			int layers = state.getValue(BlockFallenLeaves.LAYERS);
+			if(layers == 4) {
+				if(i <= 3) {
+					for(int j = 0; j < 2; j++) {
+						if(this.growFallenPile(world, pos.offset(EnumFacing.HORIZONTALS[world.rand.nextInt(4)]), i + 1)) {
+							return true;
+						}
+					}
+					return false;
+				}
+			} else {
+				world.setBlockState(pos, state.withProperty(BlockFallenLeaves.LAYERS, Math.min(4, + 1 + world.rand.nextInt(4))));
+			}
+		} else if((state.getBlock().isAir(state, world, pos) || state.getBlock() instanceof BlockFallenLeaves || state.getBlock().isReplaceable(world, pos)) && BlockRegistry.FALLEN_LEAVES.canPlaceBlockAt(world, pos)) {
+			world.setBlockState(pos, BlockRegistry.FALLEN_LEAVES.getDefaultState().withProperty(BlockFallenLeaves.LAYERS, 1 + world.rand.nextInt(4)));
+		}
+		return true;
+	}
+	
+	@Nullable
+	protected BlockPos findGround(World world, BlockPos pos, int range) {
+		MutableBlockPos checkPos = new MutableBlockPos(pos);
+		
+		boolean prevEmpty = false;
+		
+		for(int i = 0; i < range; i++) {
+			IBlockState state = world.getBlockState(checkPos);
+			
+			if(state.getBlock().isAir(state, world, checkPos) || state.getBlock() instanceof BlockFallenLeaves || state.getBlock().isReplaceable(world, checkPos)) {
+				prevEmpty = true;
+			} else {
+				if(state.getMaterial() != Material.LEAVES) {
+					if(prevEmpty && world.isSideSolid(checkPos, EnumFacing.UP)) {
+						checkPos.setY(checkPos.getY() + 1);
+						return checkPos.toImmutable();
+					} else {
+						return null;
+					}
+				}
+				
+				prevEmpty = false;
+			}
+			
+			checkPos.setY(checkPos.getY() - 1);
+		}
+	
+		return null;
 	}
 }

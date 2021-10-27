@@ -8,6 +8,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -34,10 +35,12 @@ import net.minecraftforge.registries.IForgeRegistry;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.recipes.IDruidAltarRecipe;
 import thebetweenlands.api.recipes.IPurifierRecipe;
+import thebetweenlands.api.recipes.ISmokingRackRecipe;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityRootSprite;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
@@ -46,6 +49,7 @@ import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.item.misc.ItemSwampTalisman.EnumTalisman;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe;
@@ -56,6 +60,7 @@ import thebetweenlands.common.recipe.censer.CenserRecipeAspect;
 import thebetweenlands.common.recipe.censer.CenserRecipeCremains;
 import thebetweenlands.common.recipe.censer.CenserRecipeDungeonFog;
 import thebetweenlands.common.recipe.censer.CenserRecipeElixir;
+import thebetweenlands.common.recipe.censer.CenserRecipeFumigant;
 import thebetweenlands.common.recipe.censer.CenserRecipePlantTonic;
 import thebetweenlands.common.recipe.censer.CenserRecipeSapBall;
 import thebetweenlands.common.recipe.censer.CenserRecipeStagnantWater;
@@ -64,19 +69,25 @@ import thebetweenlands.common.recipe.censer.CenserRecipeWeepingBluePetal;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.recipe.misc.BookMergeRecipe;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
+import thebetweenlands.common.recipe.misc.CrabPotFilterRecipeBubbler;
+import thebetweenlands.common.recipe.misc.CrabPotFilterRecipeSilt;
 import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
 import thebetweenlands.common.recipe.misc.HearthgroveTarringRecipe;
 import thebetweenlands.common.recipe.misc.RecipeClearBoneWayfinder;
+import thebetweenlands.common.recipe.misc.RecipeFishingRodWormAdd;
 import thebetweenlands.common.recipe.misc.RecipeGrapplingHookUpgrades;
 import thebetweenlands.common.recipe.misc.RecipeLurkerSkinPouchUpgrades;
 import thebetweenlands.common.recipe.misc.RecipeMarshRunnerBoots;
 import thebetweenlands.common.recipe.misc.RecipeMummyBait;
+import thebetweenlands.common.recipe.misc.RecipeOlmletteMixture;
 import thebetweenlands.common.recipe.misc.RecipeSapSpitCleanTool;
 import thebetweenlands.common.recipe.misc.RecipesAspectVials;
 import thebetweenlands.common.recipe.misc.RecipesCircleGems;
 import thebetweenlands.common.recipe.misc.RecipesCoating;
+import thebetweenlands.common.recipe.misc.RecipesFishBait;
 import thebetweenlands.common.recipe.misc.RecipesLifeCrystal;
 import thebetweenlands.common.recipe.misc.RecipesPlantTonic;
+import thebetweenlands.common.recipe.misc.SmokingRackRecipe;
 import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipe;
 import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipeAspectrus;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
@@ -99,7 +110,10 @@ public class RecipeRegistry {
 	public static final ResourceLocation CLEAR_BONE_WAYFINDER = new ResourceLocation(ModInfo.ID, "clear_bone_wayfinder");
 	public static final ResourceLocation SAP_SPIT_CLEAN_TOOL = new ResourceLocation(ModInfo.ID, "sap_spit_clean_tool");
 	public static final ResourceLocation GRAPPLING_HOOK_UPGRADE = new ResourceLocation(ModInfo.ID, "grappling_hook_upgrade");
-	
+	public static final ResourceLocation FISH_BAIT = new ResourceLocation(ModInfo.ID, "recipe_fish_bait");
+	public static final ResourceLocation FISHING_ROD_WORM_ADD = new ResourceLocation(ModInfo.ID, "fishing_rod_worm_add");
+	public static final ResourceLocation OLMLETTE_MIXTURE = new ResourceLocation(ModInfo.ID, "olmlette_mixture");
+
 	private RecipeRegistry() { }
 
 	@SubscribeEvent
@@ -114,6 +128,9 @@ public class RecipeRegistry {
 		registerDruidAltarRecipes();
 		registerAnimatorRecipes();
 		registerCenserRecipes();
+		registerSmokingRackRecipes();
+		registerCrabPotFilterRecipesSilt();
+		registerCrabPotFilterRecipesBubbler();
 
 		ElixirRecipes.init();
 
@@ -226,6 +243,9 @@ public class RecipeRegistry {
 		registry.register(new RecipeClearBoneWayfinder().setRegistryName(CLEAR_BONE_WAYFINDER));
 		registry.register(new RecipeSapSpitCleanTool().setRegistryName(SAP_SPIT_CLEAN_TOOL));
 		registry.register(new RecipeGrapplingHookUpgrades().setRegistryName(GRAPPLING_HOOK_UPGRADE));
+		registry.register(new RecipesFishBait().setRegistryName(FISH_BAIT));
+		registry.register(new RecipeFishingRodWormAdd().setRegistryName(FISHING_ROD_WORM_ADD));
+		registry.register(new RecipeOlmletteMixture().setRegistryName(OLMLETTE_MIXTURE));
 	}
 
 	private static void registerSmelting() {
@@ -233,10 +253,9 @@ public class RecipeRegistry {
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.OCTINE_ORE), new ItemStack(ItemRegistry.OCTINE_INGOT), 0.7F);
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.DAMP_TORCH), new ItemStack(Blocks.TORCH), 0F);
 		GameRegistry.addSmelting(new ItemStack(ItemRegistry.SWAMP_REED_ITEM), EnumItemMisc.DRIED_SWAMP_REED.create(1), 0.1F);
-		GameRegistry.addSmelting(new ItemStack(BlockRegistry.MUD), EnumItemMisc.MUD_BRICK.create(1), 0.2F);
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.MUD), EnumItemMisc.MUD_BRICK.create(4), 0.2F);
 		GameRegistry.addSmelting(new ItemStack(ItemRegistry.KRAKEN_TENTACLE), new ItemStack(ItemRegistry.KRAKEN_CALAMARI, 5), 0.3F);
 		GameRegistry.addSmelting(new ItemStack(ItemRegistry.SWAMP_KELP_ITEM), new ItemStack(ItemRegistry.FRIED_SWAMP_KELP), 0.1F);
-		GameRegistry.addSmelting(new ItemStack(ItemRegistry.ANGLER_MEAT_RAW), new ItemStack(ItemRegistry.ANGLER_MEAT_COOKED), 0.3F);
 		GameRegistry.addSmelting(new ItemStack(ItemRegistry.FROG_LEGS_RAW), new ItemStack(ItemRegistry.FROG_LEGS_COOKED), 0.3F);
 		GameRegistry.addSmelting(new ItemStack(ItemRegistry.SNAIL_FLESH_RAW), new ItemStack(ItemRegistry.SNAIL_FLESH_COOKED), 0.3F);
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.BETWEENSTONE), new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE), 0.1F);
@@ -257,6 +276,16 @@ public class RecipeRegistry {
 		GameRegistry.addSmelting(BlockRegistry.LICHEN, new ItemStack(BlockRegistry.DEAD_LICHEN), 0.1F);
 		GameRegistry.addSmelting(BlockRegistry.WEEDWOOD_BUSH, new ItemStack(BlockRegistry.DEAD_WEEDWOOD_BUSH), 0.1F);
 		GameRegistry.addSmelting(BlockRegistry.SULFUR_TORCH_EXTINGUISHED, new ItemStack(BlockRegistry.SULFUR_TORCH), 0.1F);
+		GameRegistry.addSmelting(new ItemStack(ItemRegistry.ANADIA_MEAT_RAW), new ItemStack(ItemRegistry.ANADIA_MEAT_COOKED), 0.3F);
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.CRAGROCK_CHISELED), new ItemStack(BlockRegistry.CRAGROCK_CHISELED_CRACKED), 0.1F);
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.CRAGROCK_TILES), new ItemStack(BlockRegistry.CRAGROCK_TILES_CRACKED), 0.1F);
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.CRAGROCK_BRICKS), new ItemStack(BlockRegistry.CRAGROCK_BRICKS_CRACKED), 0.1F);
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.MUD_TILES, 1, 0), new ItemStack(BlockRegistry.MUD_TILES, 1, 2), 0.1F);
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.FILTERED_SILT), new ItemStack(BlockRegistry.FILTERED_SILT_GLASS), 0.3F);
+		GameRegistry.addSmelting(new ItemStack(ItemRegistry.BARNACLE), new ItemStack(ItemRegistry.BARNACLE_COOKED), 0.1F);
+		GameRegistry.addSmelting(new ItemStack(ItemRegistry.OLM_EGG_RAW), new ItemStack(ItemRegistry.OLM_EGG_COOKED), 0.1F);
+		GameRegistry.addSmelting(EnumItemMisc.OLMLETTE_MIXTURE.create(1), new ItemStack(ItemRegistry.OLMLETTE), 0.1F);
+
 		//smelt to nuggets
 		GameRegistry.addSmelting(ItemRegistry.VALONITE_AXE, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
 		GameRegistry.addSmelting(ItemRegistry.VALONITE_PICKAXE, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
@@ -505,6 +534,7 @@ public class RecipeRegistry {
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_PALE_GRASS.create(1)), (ItemPlantDrop.EnumItemPlantDrop.PALE_GRASS_BLADES.create(1)));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_STRING_ROOTS.create(1)), (ItemPlantDrop.EnumItemPlantDrop.STRING_ROOT_FIBERS.create(1)));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_CRYPTWEED.create(1)), (ItemPlantDrop.EnumItemPlantDrop.CRYPTWEED_BLADES.create(1)));
+		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_BETWEENSTONE_PEBBLE.create(1)), (EnumItemMisc.BETWEENSTONE_PEBBLE.create(1)));
 		
 		//Loot scraps
 		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.SKULL_MASK));
@@ -522,6 +552,13 @@ public class RecipeRegistry {
 		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.RING_OF_SUMMONING));
 		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.RING_OF_GATHERING));
 		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.GEM_SINGER));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.MIST_STAFF));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.SHADOW_STAFF));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), EnumItemMisc.AMULET_SOCKET.create(1));
+		
+		//Fishing
+		PestleAndMortarRecipe.addRecipe(new ItemStack(ItemRegistry.FISH_BAIT, 1), new ItemStack(ItemRegistry.TINY_SLUDGE_WORM));
+		PestleAndMortarRecipe.addRecipe(new ItemStack(ItemRegistry.FISH_BAIT, 1), new ItemStack(ItemRegistry.TINY_SLUDGE_WORM_HELPER));
 		
 		//Misc
 		PestleAndMortarRecipe.addRecipe(new PestleAndMortarRecipeAspectrus());
@@ -579,7 +616,17 @@ public class RecipeRegistry {
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.INANIMATE_ANGRY_PEBBLE.create(1), 1, 1, new ItemStack(ItemRegistry.ANGRY_PEBBLE)));
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.SLUDGE_WORM_EGG_SAC), 6, 3, new ItemStack(ItemRegistry.SLUDGE_WORM_ARROW)));
 		AnimatorRecipe.addRecipe(new RingOfGatheringRespawnAnimatorRecipe());
-		
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.SNOT.create(1), 10, 6, new ItemStack(ItemRegistry.SNOT_POD)));
+
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.FISHING_SPEAR_AMPHIBIOUS_ROBUST), 2, 1) {
+					@Override
+					public ItemStack onAnimated(World world, BlockPos pos, ItemStack stack) {
+						if (stack.getMaxDamage() - stack.getItemDamage() == stack.getMaxDamage() && stack.hasTagCompound() && stack.getTagCompound().hasKey("animated") && !stack.getTagCompound().getBoolean("animated"))
+							stack.getTagCompound().setBoolean("animated", true);
+						return stack;
+					}
+				});
+
 		for(Item item : ItemRegistry.ITEMS) {
 			if(item instanceof IAnimatorRepairable) {
 				AnimatorRecipe.addRecipe(new ToolRepairAnimatorRecipe((IAnimatorRepairable)item));
@@ -628,5 +675,112 @@ public class RecipeRegistry {
 		AbstractCenserRecipe.addRecipe(new CenserRecipeAspect());
 		AbstractCenserRecipe.addRecipe(new CenserRecipeCremains());
 		AbstractCenserRecipe.addRecipe(new CenserRecipeSwampWater());
+		AbstractCenserRecipe.addRecipe(new CenserRecipeFumigant());
+	}
+	
+	private static void registerSmokingRackRecipes() {
+		SmokingRackRecipe.addRecipe(new ISmokingRackRecipe() {
+
+			@Override
+			public boolean matchesInput(ItemStack stack) {
+				return !stack.isEmpty() && stack.getItem() == ItemRegistry.ANADIA && ((ItemMob) stack.getItem()).hasEntityData(stack);
+			}
+
+			@Override
+			public ItemStack getOutput(ItemStack stack) {
+				ItemStack output = stack.copy();
+				
+				NBTTagCompound entityNbt = ((ItemMob) output.getItem()).getEntityData(output);
+				
+				// never called in legit caught anadia, but helps display correct item in JEI smoking recipe ;)
+				if(entityNbt == null) {
+					entityNbt = new NBTTagCompound();
+					ResourceLocation id = EntityList.getKey(EntityAnadia.class);
+					if(id != null) {
+						entityNbt.setString("id", id.toString());
+					}
+				}
+
+				if (entityNbt.getByte("fishColour") != 0) {
+					entityNbt.setByte("fishColour", (byte) 0);
+					
+					NBTTagCompound headItem = entityNbt.getCompoundTag("headItem");
+					NBTTagCompound bodyItem = entityNbt.getCompoundTag("bodyItem");
+					NBTTagCompound tailItem = entityNbt.getCompoundTag("tailItem");
+
+					if (headItem != null) {
+						checkAndConvertNBTStack(headItem).writeToNBT(headItem);
+						entityNbt.setTag("headItem", headItem);
+					}
+
+					if (bodyItem != null) {
+						checkAndConvertNBTStack(bodyItem).writeToNBT(bodyItem);
+						entityNbt.setTag("bodyItem", bodyItem);
+					}
+
+					if (tailItem != null) {
+						checkAndConvertNBTStack(tailItem).writeToNBT(tailItem);
+						entityNbt.setTag("tailItem", tailItem);
+					}
+				}
+				
+				((ItemMob) output.getItem()).setEntityData(output, entityNbt);
+				
+				return output;
+			}
+
+			@Override
+			public int getSmokingTime(ItemStack stack) {
+				return 3;
+			}
+
+			@Override
+			public ItemStack getInput() {
+				return new ItemStack(ItemRegistry.ANADIA);
+			}
+
+			public boolean isRawMeatStack(ItemStack stack) {
+				return stack.getItem() == ItemRegistry.ANADIA_MEAT_RAW;
+			}
+
+			public ItemStack checkAndConvertNBTStack(NBTTagCompound nbt) {
+				ItemStack stackOld = new ItemStack(nbt);
+				int count = stackOld.getCount();
+				if (isRawMeatStack(stackOld))
+					return new ItemStack(ItemRegistry.ANADIA_MEAT_SMOKED, count);
+				return stackOld;
+			}
+		});
+
+		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.ANADIA_MEAT_SMOKED), 1, new ItemStack(ItemRegistry.ANADIA_MEAT_RAW));
+		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.BARNACLE_SMOKED), 1, new ItemStack(ItemRegistry.BARNACLE));
+		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.CRAB_STICK_SMOKED), 1, new ItemStack(ItemRegistry.CRAB_STICK));
+		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.FROG_LEGS_SMOKED), 1, new ItemStack(ItemRegistry.FROG_LEGS_RAW));
+		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.PUFFSHROOM_TENDRIL_SMOKED), 1, new ItemStack(ItemRegistry.PUFFSHROOM_TENDRIL));
+		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.SILT_CRAB_CLAW_SMOKED), 1, new ItemStack(ItemRegistry.SILT_CRAB_CLAW));
+		SmokingRackRecipe.addRecipe(new ItemStack(ItemRegistry.SNAIL_FLESH_SMOKED), 1, new ItemStack(ItemRegistry.SNAIL_FLESH_RAW));
+		SmokingRackRecipe.addRecipe(EnumItemMisc.DRIED_SWAMP_REED.create(1), 1, new ItemStack(ItemRegistry.SWAMP_REED_ITEM));
+		SmokingRackRecipe.addRecipe(EnumItemMisc.DRY_BARK.create(1), 2, new ItemStack(BlockRegistry.LOG_WEEDWOOD));
+	}
+
+	private static void registerCrabPotFilterRecipesSilt() {
+		CrabPotFilterRecipeSilt.addRecipe(new ItemStack(BlockRegistry.SILT), new ItemStack(BlockRegistry.MUD));
+		CrabPotFilterRecipeSilt.addRecipe(new ItemStack(BlockRegistry.MUD), new ItemStack(BlockRegistry.SWAMP_DIRT));
+		CrabPotFilterRecipeSilt.addRecipe(new ItemStack(BlockRegistry.PEAT), new ItemStack(BlockRegistry.MOSS));
+		CrabPotFilterRecipeSilt.addRecipe(new ItemStack(BlockRegistry.SILT), new ItemStack(BlockRegistry.FILTERED_SILT));
+		CrabPotFilterRecipeSilt.addRecipe(new ItemStack(BlockRegistry.LOG_ROTTEN_BARK), new ItemStack(BlockRegistry.LOG_WEEDWOOD, 1, 12));
+		CrabPotFilterRecipeSilt.addRecipe(new ItemStack(ItemRegistry.SLUDGE_BALL), new ItemStack(ItemRegistry.SAP_BALL));
+		CrabPotFilterRecipeSilt.addRecipe(EnumItemMisc.SULFUR.create(1), EnumItemMisc.CREMAINS.create(1));
+	}
+
+	private static void registerCrabPotFilterRecipesBubbler() {
+		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(BlockRegistry.FILTERED_SILT), new ItemStack(BlockRegistry.SILT));
+		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(BlockRegistry.SWAMP_DIRT), new ItemStack(BlockRegistry.MUD));
+		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(BlockRegistry.PURIFIED_SWAMP_DIRT), new ItemStack(BlockRegistry.SWAMP_DIRT));
+		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(ItemRegistry.CRIMSON_MIDDLE_GEM), new ItemStack(BlockRegistry.CRIMSON_MIDDLE_GEM_ORE));
+		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(ItemRegistry.AQUA_MIDDLE_GEM), new ItemStack(BlockRegistry.AQUA_MIDDLE_GEM_ORE));
+		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM), new ItemStack(BlockRegistry.GREEN_MIDDLE_GEM_ORE));
+		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(ItemRegistry.SAP_BALL), new ItemStack(ItemRegistry.SLUDGE_BALL));
+		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(BlockRegistry.ROOT, 4), new ItemStack(BlockRegistry.ROOT_POD));
 	}
 }

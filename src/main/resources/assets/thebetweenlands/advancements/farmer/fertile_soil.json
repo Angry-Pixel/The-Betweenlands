@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:tiny_sludge_worm"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.farmer.fertile_soil.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.farmer.fertile_soil.description"
+    }
+  },
+  "parent": "thebetweenlands:farmer/root",
+  "criteria": {
+    "event": {
+      "trigger": "thebetweenlands:worm_from_dirt"
+    }
+  }
+}

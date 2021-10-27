@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -41,6 +42,21 @@ public class ItemLifeCrystal extends Item {
 	public boolean isRechargeable(ItemStack stack) {
 		return this.isRechargeable;
 	}
+
+	@Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        return false;
+    }
+
+	@Override
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book)  {
+        return false;
+    }
+
+	@Override
+    public int getItemEnchantability() {
+        return 0;
+    }
 
 	@SideOnly(Side.CLIENT)
 	@Override

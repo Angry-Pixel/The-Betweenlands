@@ -1,0 +1,19 @@
+{
+	"forge_marker": 1,
+	"variants": {
+		"normal": [
+			{
+				"model": "thebetweenlands:filtered_silt"
+			},
+			{
+				"model": "thebetweenlands:filtered_silt", "y": 90
+			},
+			{
+				"model": "thebetweenlands:filtered_silt", "y": 180
+			},
+			{
+				"model": "thebetweenlands:filtered_silt", "y": 270
+			}
+		]
+	}
+}

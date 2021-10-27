@@ -33,8 +33,10 @@ import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.entity.EntityFishBait;
 import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.item.BLMaterialRegistry;
+import thebetweenlands.common.item.misc.ItemFishBait;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -84,7 +86,7 @@ public class ItemSimpleSlingshot extends Item implements ICorrodible, IAnimatorR
 	}
 
 	protected boolean isSlingShotAmmo(ItemStack stack) {
-		return !stack.isEmpty() && EnumItemMisc.BETWEENSTONE_PEBBLE.isItemOf(stack);
+		return !stack.isEmpty() && (EnumItemMisc.BETWEENSTONE_PEBBLE.isItemOf(stack) || stack.getItem() == ItemRegistry.FISH_BAIT);
 	}
 
 	@Override
@@ -110,33 +112,44 @@ public class ItemSimpleSlingshot extends Item implements ICorrodible, IAnimatorR
 
 			if (strength >= 0.1F) {
 				if (!world.isRemote) {
-					ItemMisc itemAmmo = (ItemMisc) ammo.getItem();
-					EntityBetweenstonePebble pebble = createAmmo(world, ammo, player);
-					pebble.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, strength * 3.0F, 1.0F);
+					if (ammo.getItem() == EnumItemMisc.BETWEENSTONE_PEBBLE.getItem()) {
+						ItemMisc itemAmmo = (ItemMisc) ammo.getItem();
+						EntityBetweenstonePebble pebble = createPebbleAmmo(world, ammo, player);
+						pebble.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, strength * 3.0F, 1.0F);
 
-					if (strength == 1.0F)
-						pebble.setIsCritical(true);
+						if (strength == 1.0F)
+							pebble.setIsCritical(true);
 
-					int j = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
+						int j = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
 
-					if (j > 0)
-						pebble.setDamage(pebble.getDamage() + (double) j * 0.5D + 0.5D);
+						if (j > 0)
+							pebble.setDamage(pebble.getDamage() + (double) j * 0.5D + 0.5D);
 
-					int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
+						int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
 
-					if (k > 0)
-						pebble.setKnockbackStrength(k);
+						if (k > 0)
+							pebble.setKnockbackStrength(k);
 
-					if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0)
-						pebble.setFire(100);
+						if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0)
+							pebble.setFire(100);
 
-					stack.damageItem(1, player);
-					fireAmmo(player, stack, pebble, strength);
+						stack.damageItem(1, player);
+						fireAmmo(player, stack, pebble, strength);
+					}
+
+					if (ammo.getItem() == ItemRegistry.FISH_BAIT) {
+						ItemFishBait itemAmmo = (ItemFishBait) ammo.getItem();
+						EntityFishBait bait = (EntityFishBait) itemAmmo.createEntity(world, player, ammo.copy());
+						bait.setInfinitePickupDelay();
+						ammo.damageItem(1, player);
+						bait.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, strength * 3.0F, 1.0F);
+						fireBaitAmmo(player, stack, bait, strength);
+					}
 				}
 
 				world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.SLINGSHOT_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + strength * 0.5F);
 
-				if (!infinite)
+				if (!infinite && ammo.getItem() == EnumItemMisc.BETWEENSTONE_PEBBLE.getItem())
 					ammo.shrink(1);
 
 				if (ammo.getCount() == 0)
@@ -147,12 +160,16 @@ public class ItemSimpleSlingshot extends Item implements ICorrodible, IAnimatorR
 		}
 	}
 
-	public EntityBetweenstonePebble createAmmo(World world, ItemStack stack, EntityLivingBase shooter) {
+	public EntityBetweenstonePebble createPebbleAmmo(World world, ItemStack stack, EntityLivingBase shooter) {
 		EntityBetweenstonePebble pebble = new EntityBetweenstonePebble(world, shooter);
 		return pebble;
 	}
 
 	protected void fireAmmo(EntityPlayer player, ItemStack stack, EntityBetweenstonePebble ammo, float strength) {
+		player.world.spawnEntity(ammo);
+	}
+
+	protected void fireBaitAmmo(EntityPlayer player, ItemStack stack, EntityFishBait ammo, float strength) {
 		player.world.spawnEntity(ammo);
 	}
 

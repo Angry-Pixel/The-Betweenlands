@@ -1,16 +1,14 @@
 package thebetweenlands.client.render.model.entity;
 
-import thebetweenlands.client.render.model.AdvancedModelRenderer;
-import thebetweenlands.client.render.model.MowzieModelBase;
-import thebetweenlands.client.render.model.MowzieModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.model.MowzieModelBase;
 import thebetweenlands.client.render.model.MowzieModelRenderer;
+import thebetweenlands.common.entity.mobs.EntityGreeblingCoracle;
 
-/**
- * BLGreeblingCoracle - TripleHeadedSheep
- * Created using Tabula 7.0.1
- */
+@SideOnly(Side.CLIENT)
 public class ModelGreeblingCoracle extends MowzieModelBase {
     public MowzieModelRenderer body_base;
     public MowzieModelRenderer coracle_base;
@@ -387,13 +385,10 @@ public class ModelGreeblingCoracle extends MowzieModelBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
-        this.coracle_base.render(f5);
+    public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+      this.coracle_base.render(scale); 
     }
 
-    /**
-     * This is a helper function from Tabula to set the rotation of model parts
-     */
     public void setRotateAngle(MowzieModelRenderer MowzieModelRenderer, float x, float y, float z) {
         MowzieModelRenderer.rotateAngleX = x;
         MowzieModelRenderer.rotateAngleY = y;
@@ -401,17 +396,23 @@ public class ModelGreeblingCoracle extends MowzieModelBase {
     }
 
     @Override
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-        faceTarget(head_connect, 1, f3, f4);
+    public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
+        faceTarget(head_connect, 1, rotationYaw, rotationPitch);
     }
 
     @Override
     public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
         super.setLivingAnimations(entity, swing, speed, partialRenderTicks);
         setToInitPose();
-        float frame = entity.ticksExisted + partialRenderTicks;
+        EntityGreeblingCoracle coracle = (EntityGreeblingCoracle) entity;
+        float frame = coracle.ticksExisted + partialRenderTicks;
 
-        if (entity.isInWater()) {
+        if(coracle.getSinkingTicks() > 10)
+			body_base.showModel = false;
+        else
+			body_base.showModel = true;
+
+        if (coracle.isGreeblingAboveWater()) {
             // Boat idle
             bob(coracle_base, 0.1f, 0.2f, false, frame, 1f);
             walk(coracle_base, 0.06f, 0.05f, false, 0, 0, frame, 1f);
@@ -446,8 +447,8 @@ public class ModelGreeblingCoracle extends MowzieModelBase {
             walk(cloth1b, 0.1f, 0.05f, false, 1f, 0.025f, frame, 1f);
 
             // Paddling
-//            swing = frame;
-//            speed = 1f;
+           // swing = frame;
+           // speed = 1f;
 
             float globalDegree = 0.6f;
             float globalSpeed = 1.4f;
@@ -496,5 +497,6 @@ public class ModelGreeblingCoracle extends MowzieModelBase {
 
             body_base.rotationPointZ -= 1 * speed;
         }
+
     }
 }

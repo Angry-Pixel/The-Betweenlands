@@ -2,35 +2,39 @@ package thebetweenlands.common.item.tools;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Multimap;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.item.ICorrodible;
+import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
 import thebetweenlands.common.item.BLMaterialRegistry;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
-
-import javax.annotation.Nullable;
 
 public class ItemBLShovel extends ItemSpade implements ICorrodible, IAnimatorRepairable {
 	public ItemBLShovel(ToolMaterial material) {
@@ -72,23 +76,32 @@ public class ItemBLShovel extends ItemSpade implements ICorrodible, IAnimatorRep
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		IBlockState blockState = world.getBlockState(pos);
+		
+		if(blockState.getMaterial() == Material.PLANTS) {
+			pos = pos.down();
+			blockState = world.getBlockState(pos);
+			facing = EnumFacing.UP;
+		}
+		
 		if(facing == EnumFacing.UP) {
 			boolean dug = false;
-			IBlockState blockState = world.getBlockState(pos);
 
 			if(blockState.getBlock() == BlockRegistry.COARSE_SWAMP_DIRT) {
 				world.setBlockState(pos, BlockRegistry.DUG_SWAMP_DIRT.getDefaultState());
 				dug = true;
 			}
 
-			if(blockState.getBlock() == BlockRegistry.SWAMP_DIRT) {
+			if (blockState.getBlock() == BlockRegistry.SWAMP_DIRT) {
 				world.setBlockState(pos, BlockRegistry.DUG_SWAMP_DIRT.getDefaultState());
 				dug = true;
+				checkForWormSpawn(world, pos, player);
 			}
 
 			if(blockState.getBlock() == BlockRegistry.SWAMP_GRASS) {
 				world.setBlockState(pos, BlockRegistry.DUG_SWAMP_GRASS.getDefaultState());
 				dug = true;
+				checkForWormSpawn(world, pos, player);
 			}
 
 			if(blockState.getBlock() == BlockRegistry.PURIFIED_SWAMP_DIRT) {
@@ -116,6 +129,18 @@ public class ItemBLShovel extends ItemSpade implements ICorrodible, IAnimatorRep
 		return EnumActionResult.PASS;
 	}
 	
+	public void checkForWormSpawn(World world, BlockPos pos, EntityPlayer player) {
+		if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
+			if (world.rand.nextInt(12) == 0) {
+				EntityTinySludgeWorm entity = new EntityTinySludgeWorm(world);
+				entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, 0.0F, 0.0F);
+				world.spawnEntity(entity);
+				if (player instanceof EntityPlayerMP)
+		        	AdvancementCriterionRegistry.WORM_FROM_DIRT.trigger((EntityPlayerMP) player);
+			}
+		}
+	}
+
 	@Override
 	public int getMinRepairFuelCost(ItemStack stack) {
 		return BLMaterialRegistry.getMinRepairFuelCost(this.toolMaterial);

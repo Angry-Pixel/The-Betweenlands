@@ -130,6 +130,10 @@ public class AmbienceManager {
 
 					//Stop or set any ambient tracks to lower priority if they don't have priority or shouldn't play
 					for(AmbienceSound sound : this.playingAmbiences) {
+						if(sound.type.getAmbienceLayer() != layer) {
+							continue;
+						}
+						
 						//Whether the sound has a lower priority and has to use a lower volume
 						boolean lowerPriority = false;
 

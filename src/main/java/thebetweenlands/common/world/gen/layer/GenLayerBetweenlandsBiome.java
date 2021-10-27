@@ -1,6 +1,7 @@
 package thebetweenlands.common.world.gen.layer;
 
 import net.minecraft.world.biome.Biome;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.util.WeightedList;
@@ -12,7 +13,7 @@ public class GenLayerBetweenlandsBiome extends GenLayerBetweenlands {
 	public GenLayerBetweenlandsBiome(InstancedIntCache cache, long seed) {
 		super(cache, seed);
 		for(BiomeBetweenlands biome : BiomeRegistry.REGISTERED_BIOMES) {
-			if(biome.getWeight() > 0) {
+			if(biome.getWeight() > 0 && (!BetweenlandsConfig.DEBUG.debug || BetweenlandsConfig.DEBUG.biomeList.isEmpty() || BetweenlandsConfig.DEBUG.biomeList.contains(biome.getRegistryName().toString()))) {
 				this.biomesToGenerate.add(biome);
 			}
 		}

@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:smoking_rack"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.craftsman.authentic_flavor.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.craftsman.authentic_flavor.description"
+    }
+  },
+  "parent": "thebetweenlands:craftsman/fish_guts",
+  "criteria": {
+    "event": {
+      "trigger": "thebetweenlands:take_item_from_output_smoking_rack"
+    }
+  }
+}

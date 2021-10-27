@@ -12,6 +12,8 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.common.item.armor.ItemLurkerSkinArmor;
 import thebetweenlands.common.item.armor.ItemSyrmoriteArmor;
+import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorUpgrades;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 
 public class ArmorHandler {
 	private ArmorHandler() { }
@@ -50,11 +52,22 @@ public class ArmorHandler {
 			if(fullyInWater) {
 				NonNullList<ItemStack> armor = player.inventory.armorInventory;
 				int pieces = 0;
+				boolean fullSetAmphibious = true;
+
 				for (int i = 0; i < armor.size(); i++) {
 					if (!armor.get(i).isEmpty() && armor.get(i).getItem() instanceof ItemLurkerSkinArmor) {
+						fullSetAmphibious = false;
 						pieces++;
+					} else if (!(armor.get(i).getItem() instanceof ItemAmphibiousArmor)) {
+						fullSetAmphibious = false;
 					}
 				}
+
+				// only give full mining speed if we have full amphibious set + the mining upgrade
+				if(pieces == 0 && fullSetAmphibious && ItemAmphibiousArmor.getUpgradeCount(player, AmphibiousArmorUpgrades.MINING_SPEED) > 0) {
+					pieces = 4;
+				}
+
 				if(pieces != 0) {
 					event.setNewSpeed(event.getNewSpeed() * (5.0F * (player.onGround ? 1.0F : 5.0F) / 4.0F * pieces));
 				}

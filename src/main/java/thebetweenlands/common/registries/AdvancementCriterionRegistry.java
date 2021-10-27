@@ -48,6 +48,16 @@ public class AdvancementCriterionRegistry {
 	public static final NoCriteriaTrigger REVIVED_BLESSED = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "revive_blessed")));
 	public static final NoCriteriaTrigger WIND_CHIME_PREDICTION = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "wind_chime_prediction")));
 	public static final NoCriteriaTrigger STRUCK_BY_LIGHTNING_WHILE_FLYING = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "struck_by_lightning_while_flying")));
-
+	public static final NoCriteriaTrigger SMOKE_ITEM = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "take_item_from_output_smoking_rack")));
+	public static final NoCriteriaTrigger TRIM_FISH = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "take_item_from_output_trimming_table")));
+	public static final NoCriteriaTrigger CRAB_FILTER = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "take_item_from_output_crab_pot_filter")));
+	public static final NoCriteriaTrigger CRAB_POT = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "crab_in_pot")));
+	public static final NoCriteriaTrigger USED_ROD_ON_JAR = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "use_worm_jar")));
+	public static final NoCriteriaTrigger WORM_FROM_DIRT = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "worm_from_dirt")));
+	public static final NoCriteriaTrigger INFESTED = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "infested")));
+	public static final NoCriteriaTrigger SIT_ON_TACKLE_BOX = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "sit_on_tackle_box")));
+	public static final NoCriteriaTrigger USED_FUMIGANT = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "used_fumigant")));
+	public static final NoCriteriaTrigger BREAK_ALCOVE_URN = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "break_alcove_urn")));
+			
 	public static void preInit() { }
 }
