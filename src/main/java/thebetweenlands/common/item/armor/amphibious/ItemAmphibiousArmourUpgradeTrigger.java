@@ -125,6 +125,7 @@ public class ItemAmphibiousArmourUpgradeTrigger extends Item {
 								if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
 									armorEffectsHelper.spawnUrchinSpikes(world, player, urchinCount);
 									nbt.setLong(armorEffectsHelper.NBT_URCHIN_AOE_COOLDOWN, world.getTotalWorldTime() + 50);
+									((ItemAmphibiousArmor)chest.getItem()).damageUpgrade(chest, AmphibiousArmorUpgrades.URCHIN, 1, IAmphibiousArmorUpgrade.DamageEvent.ON_USE, false);
 								}
 							}
 						}
@@ -133,8 +134,10 @@ public class ItemAmphibiousArmourUpgradeTrigger extends Item {
 					if (upgradeListChest.get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.FISH_VORTEX) {
 						int vortexCount = ((ItemAmphibiousArmor) chest.getItem()).getUpgradeCount(chest, AmphibiousArmorUpgrades.FISH_VORTEX);
 						if (vortexCount >= 1)
-							if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL)
+							if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
 								armorEffectsHelper.activateFishVortex(world, player, vortexCount);
+								((ItemAmphibiousArmor)chest.getItem()).damageUpgrade(chest, AmphibiousArmorUpgrades.FISH_VORTEX, 1, IAmphibiousArmorUpgrade.DamageEvent.ON_USE, false);
+							}
 					}
 
 					if (upgradeListChest.get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.ELECTRIC) {
@@ -142,9 +145,11 @@ public class ItemAmphibiousArmourUpgradeTrigger extends Item {
 						long electricCooldown = nbt.getLong(armorEffectsHelper.NBT_ELECTRIC_COOLDOWN);
 						if (electricCount >= 1) {
 							if (world.getTotalWorldTime() >= electricCooldown) {
-								if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL)
+								if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
 									armorEffectsHelper.spawnElectricEntity(world, player, player, electricCount);
 									nbt.setLong(armorEffectsHelper.NBT_ELECTRIC_COOLDOWN, world.getTotalWorldTime() + 50);
+									((ItemAmphibiousArmor)chest.getItem()).damageUpgrade(chest, AmphibiousArmorUpgrades.ELECTRIC, 1, IAmphibiousArmorUpgrade.DamageEvent.ON_USE, false);
+								}
 							}
 						}
 					}

@@ -182,6 +182,7 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 					if (world.getTotalWorldTime() % 200 == 0) { //TODO dunno about timings yet
 						if (!world.isRemote) {// && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
 							armorEffectsHelper.activateFishVortex(world, player, vortexCount);
+							damageUpgrade(itemStack, AmphibiousArmorUpgrades.FISH_VORTEX, 1, DamageEvent.ON_USE, false);
 						}
 					}
 				}
@@ -190,6 +191,7 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 					if (world.getTotalWorldTime() %10 == 0 && world.getTotalWorldTime() >= urchinAOECooldown) {
 						if (!world.isRemote) {// && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
 							armorEffectsHelper.activateUrchinSpikes(world, player, urchinCount, nbt);
+							damageUpgrade(itemStack, AmphibiousArmorUpgrades.URCHIN, 1, DamageEvent.ON_USE, false);
 						}
 					}
 				}
@@ -198,17 +200,22 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 					if (player.hurtResistantTime == player.maxHurtResistantTime && world.getTotalWorldTime() >= electricCooldown) {
 						if (!world.isRemote) {// && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
 							armorEffectsHelper.activateElectricEntity(world, player, electricCount, nbt);
+							damageUpgrade(itemStack, AmphibiousArmorUpgrades.ELECTRIC, 1, DamageEvent.ON_USE, false);
 						}
 					}
 				}
 
 				if (glideCount >= 1 && itemStack.getTagCompound().getBoolean("glideAuto")) {
 					if (player.isSprinting() && !player.onGround && !player.isJumping) {
-							player.fallDistance = 0.0F;
-							player.motionX *= 1.05D;
-							player.motionZ *= 1.05D;
-							player.motionY *= 0.6D - glideCount * 0.1F;
+						player.fallDistance = 0.0F;
+						player.motionX *= 1.05D;
+						player.motionZ *= 1.05D;
+						player.motionY *= 0.6D - glideCount * 0.1F;
+
+						if(player.ticksExisted % 20 == 0) {
+							damageUpgrade(itemStack, AmphibiousArmorUpgrades.GLIDE, 1, DamageEvent.ON_USE, false);
 						}
+					}
 				}
 			}
 
