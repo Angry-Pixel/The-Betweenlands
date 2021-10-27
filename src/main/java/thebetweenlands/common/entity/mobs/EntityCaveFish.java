@@ -41,7 +41,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.api.item.IAmphibiousArmorUpgrade;
 import thebetweenlands.common.entity.ai.EntityAIFollowTarget;
+import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorUpgrades;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
@@ -54,6 +56,7 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
 	private EntityAIAvoidEntity<EntityLivingBase> aiAvoidFollowers;
 	private EntityAINearestAttackableTarget targetRivalLeader;
 	private AICaveFishMeleeAttack attackLeader;
+	private boolean spawnedChildren = false;
 
     public EntityCaveFish(World world) {
         super(world);
@@ -98,19 +101,20 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
         return new PathNavigateSwimmer(this, world);
     }
 
-	@Nullable
-	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-		if (!getEntityWorld().isRemote) {
+	private void checkSpawnChildren() {
+		if (!getEntityWorld().isRemote && !spawnedChildren) {
 			setIsLeader(true);
+
 			for (int x = 0; x < 3 + world.rand.nextInt(4); x++) {
 				EntityCaveFish fish = new EntityCaveFish(world);
 				fish.setLocationAndAngles(posX, posY, posZ, world.rand.nextFloat() * 360, 0);
 				fish.setIsLeader(false);
+				fish.spawnedChildren = true;
 				world.spawnEntity(fish);
 			}
+
+			spawnedChildren = true;
 		}
-		return livingdata;
 	}
 
 	public void setIsLeader(boolean isLeader) {
@@ -237,6 +241,17 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
 		if (!world.isRemote) {
 			if(world.getTotalWorldTime()%200 == 0)
 				checkIfCanBeLeader(); // just in case there is no leader
+		}
+
+		if(!spawnedChildren) {
+			if(isLeader()) {
+				AxisAlignedBB aabb = new AxisAlignedBB(getPosition()).grow(16);
+
+				for (EntityPlayer player : world.getEntitiesWithinAABB(EntityPlayer.class, aabb, a -> a.getDistanceSq(getPosition().getX() + 0.5f, getPosition().getY() + 0.5f, getPosition().getZ() + 0.5f) <= 16 * 16)) {
+					checkSpawnChildren();
+					break;
+				}
+			}
 		}
 
 		if (inWater) {

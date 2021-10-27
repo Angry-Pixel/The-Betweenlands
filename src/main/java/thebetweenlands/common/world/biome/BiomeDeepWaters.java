@@ -82,10 +82,10 @@ public class BiomeDeepWaters extends BiomeBetweenlands {
 		entries.add(new PitstoneCaveSpawnEntry(11, EntityStalker.class, EntityStalker::new, (short) 12).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(16).setSpawningInterval(6000));
 		entries.add(new CaveSpawnEntry(12, EntitySwarm.class, EntitySwarm::new, (short) 60).setConstantWeight(true).setHostile(true).setSpawnCheckRadius(32.0D));
 		entries.add(new SurfaceSpawnEntry(13, EntityAnadia.class, EntityAnadia::new, (short) 60).setCanSpawnInWater(true).setHostile(false).setGroupSize(1, 5));
-		entries.add(new SurfaceSpawnEntry(14, EntityFreshwaterUrchin.class, EntityFreshwaterUrchin::new, (short) 60).setSurfacePredicate(SurfaceType.DIRT).setCanSpawnInWater(true).setHostile(false).setGroupSize(1, 3));
-		entries.add(new SurfaceSpawnEntry(15, EntityJellyfish.class, EntityJellyfish::new, (short) 60).setCanSpawnInWater(true).setHostile(false).setGroupSize(1, 3));
+		entries.add(new SurfaceSpawnEntry(14, EntityFreshwaterUrchin.class, EntityFreshwaterUrchin::new, (short) 30).setSurfacePredicate(SurfaceType.DIRT).setCanSpawnInWater(true).setHostile(false).setGroupSize(1, 3));
+		entries.add(new SurfaceSpawnEntry(15, EntityJellyfish.class, EntityJellyfish::new, (short) 30).setCanSpawnInWater(true).setHostile(false).setGroupSize(1, 3));
 		entries.add(new CaveSpawnEntry(16, EntityJellyfishCave.class, EntityJellyfishCave::new, (short) 25).setCanSpawnInWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D));
-		entries.add(new SurfaceSpawnEntry(17, EntityRockSnot.class, EntityRockSnot::new, (short) 30).setSurfacePredicate(SurfaceType.MIXED_GROUND).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 1));
+		entries.add(new SurfaceSpawnEntry(17, EntityRockSnot.class, EntityRockSnot::new, (short) 20).setSurfacePredicate(SurfaceType.MIXED_GROUND).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 1));
 		entries.add(new CaveSpawnEntry(18, EntityCaveFish.class, EntityCaveFish::new, (short) 30).setCanSpawnInWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D));
 		entries.add(new SurfaceSpawnEntry(19, EntityGreeblingCoracle.class, EntityGreeblingCoracle::new, (short) 5).setCanSpawnOnWater(true).setHostile(false).setGroupSize(1, 1).setSpawningInterval(2000));
 	}
