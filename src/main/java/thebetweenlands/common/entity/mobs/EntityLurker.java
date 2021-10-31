@@ -1,5 +1,7 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -11,6 +13,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
@@ -27,6 +30,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.pathfinding.PathNodeType;
@@ -40,6 +44,7 @@ import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.entity.EntityFishBait;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.ai.EntityAINearestAttackableSmellyTarget;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -85,6 +90,8 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
     private PathNavigateGround pathNavigatorGround;
     private PathNavigateSwimmer pathNavigatorWater;
     
+    public EntityLurker.AIFindBait aiFindBait;
+    
     public EntityLurker(World world) {
         super(world);
         
@@ -118,7 +125,8 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
         tasks.addTask(3, new EntityAIWander(this, 0.7D, 80));
         tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         tasks.addTask(5, new EntityAILookIdle(this));
-
+        aiFindBait = new EntityLurker.AIFindBait(this, 8D);
+        tasks.addTask(6, aiFindBait);
         targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
         targetTasks.addTask(1, new EntityAINearestAttackableSmellyTarget<>(this, EntityPlayer.class, false));
         targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityDragonFly.class, true));
@@ -633,4 +641,87 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
     public float getBlockPathWeight(BlockPos pos) {
         return 0.5F;
     }
+    
+	public class AIFindBait extends EntityAIBase {
+
+		private final EntityLurker lurker;
+		private double searchRange;
+		public EntityFishBait bait = null;
+
+		public AIFindBait(EntityLurker lurkerIn, double searchRangeIn) {
+			lurker = lurkerIn;
+			searchRange = searchRangeIn;
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			return lurker.huntingTimer <= 0 && bait == null;
+		}
+
+		@Override
+		public void startExecuting() {
+			if(bait == null)
+				bait = getClosestBait(searchRange);
+		}
+
+		@Override
+		public boolean shouldContinueExecuting() {
+			return lurker.huntingTimer <= 0 && bait != null && !bait.isDead;
+		}
+
+		@Override
+		public void updateTask() {
+			if (!lurker.world.isRemote && shouldContinueExecuting()) {
+
+				if (bait != null) {
+					float distance = bait.getDistance(lurker);
+					double x = bait.posX;
+					double y = bait.posY;
+					double z = bait.posZ;
+
+					if (bait.cannotPickup()) {
+						if (distance >= 1F) {
+							lurker.getLookHelper().setLookPosition(x, y, z, 20.0F, 8.0F);
+							moveToItem(bait);
+						}
+
+						if (distance <= 3F) {
+							lurker.getMoveHelper().setMoveTo(x, y, z, lurker.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED) .getAttributeValue() * 2D);
+							bait.getItem().shrink(1);
+							if (bait.getItem().getCount() <= 0)
+								bait.setDead();
+							lurker.setHuntingTimer(2400);
+							resetTask();
+						}
+					}
+				}
+			}
+		}
+
+		@Override
+		public void resetTask() {
+			bait = null;
+		}
+
+		public EntityFishBait getClosestBait(double distance) {
+			List<EntityFishBait> list = lurker.getEntityWorld().getEntitiesWithinAABB(EntityFishBait.class, lurker.getEntityBoundingBox().grow(distance, distance, distance));
+			for (Iterator<EntityFishBait> iterator = list.iterator(); iterator.hasNext();) {
+				EntityFishBait bait = iterator.next();
+				if (bait.ticksExisted >= bait.lifespan || !bait.isInWater()|| !bait.isGlowing())
+					iterator.remove();
+			}
+			if (list.isEmpty())
+				return null;
+			if (!list.isEmpty())
+				Collections.shuffle(list);
+			return list.get(0);
+		}
+
+		public void moveToItem(EntityFishBait bait) {
+			Path pathentity = lurker.getNavigator().getPath();
+			if (pathentity != null) {
+				lurker.getNavigator().tryMoveToXYZ(bait.posX, bait.posY, bait.posZ, lurker.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 2D);
+			}
+		}
+	}
 }
