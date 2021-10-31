@@ -108,9 +108,9 @@
 				"model_active": "thebetweenlands:block/log_weedwood_spook"
 			},
 			"model_active": "thebetweenlands:block/log_weedwood_frosty",
-			"x": 90,
 			"weight": 100
-				}
+				},
+				"x": 90
 			},
 			{
 				"model": "thebetweenlands:internal/winter_event",
@@ -121,9 +121,9 @@
 				"model_active": "thebetweenlands:block/log_weedwood_spook"
 			},
 			"model_active": "thebetweenlands:block/log_weedwood_frosty",
-			"x": 90,
 			"weight": 100
-				}
+				},
+				"x": 90
 			},
 			{
 				"model": "thebetweenlands:internal/winter_event",
@@ -134,9 +134,9 @@
 				"model_active": "thebetweenlands:block/log_weedwood_spook"
 			},
 			"model_active": "thebetweenlands:block/log_weedwood_frosty",
-			"x": 90,
 			"weight": 100
-				}
+				},
+				"x": 90
 			},
 			{
 				"model": "thebetweenlands:internal/winter_event",
@@ -147,9 +147,9 @@
 				"model_active": "thebetweenlands:block/log_weedwood_spook"
 			},
 			"model_active": "thebetweenlands:block/log_weedwood_frosty",
-			"x": 90,
 			"weight": 10
-				}
+				},
+				"x": 90
 			},
 			{
 				"model": "thebetweenlands:internal/winter_event",
@@ -160,9 +160,9 @@
 				"model_active": "thebetweenlands:block/log_weedwood_spook"
 			},
 			"model_active": "thebetweenlands:block/log_weedwood_frosty",
-			"x": 90,
 			"weight": 10
-				}
+				},
+				"x": 90
 			},
 			{
 				"model": "thebetweenlands:internal/winter_event",
@@ -173,9 +173,9 @@
 				"model_active": "thebetweenlands:block/log_weedwood_spook"
 			},
 			"model_active": "thebetweenlands:block/log_weedwood_frosty",
-			"x": 90,
 			"weight": 5
-				}
+				},
+				"x": 90
 			},
 			{
 				"model": "thebetweenlands:internal/winter_event",
@@ -186,9 +186,9 @@
 				"model_active": "thebetweenlands:block/log_weedwood_spook"
 			},
 			"model_active": "thebetweenlands:block/log_weedwood_frosty",
-			"x": 90,
 			"weight": 5
-				}
+				},
+				"x": 90
 			}
 		],
 		"axis=x": [
@@ -201,10 +201,10 @@
 				"model_active": "thebetweenlands:block/log_weedwood_spook"
 			},
 			"model_active": "thebetweenlands:block/log_weedwood_frosty",
-			"x": 90,
-			"y": 90,
 			"weight": 100
-				}
+				},
+				"x": 90,
+				"y": 90
 			},
 			{
 				"model": "thebetweenlands:internal/winter_event",
@@ -215,10 +215,10 @@
 				"model_active": "thebetweenlands:block/log_weedwood_spook"
 			},
 			"model_active": "thebetweenlands:block/log_weedwood_frosty",
-			"x": 90,
-			"y": 90,
 			"weight": 100
-				}
+				},
+				"x": 90,
+				"y": 90
 			},
 			{
 				"model": "thebetweenlands:internal/winter_event",
@@ -229,10 +229,10 @@
 				"model_active": "thebetweenlands:block/log_weedwood_spook"
 			},
 			"model_active": "thebetweenlands:block/log_weedwood_frosty",
-			"x": 90,
-			"y": 90,
 			"weight": 100
-				}
+				},
+				"x": 90,
+				"y": 90
 			},
 			{
 				"model": "thebetweenlands:internal/winter_event",
@@ -243,10 +243,10 @@
 				"model_active": "thebetweenlands:block/log_weedwood_spook"
 			},
 			"model_active": "thebetweenlands:block/log_weedwood_frosty",
-			"x": 90,
-			"y": 90,
 			"weight": 10
-				}
+				},
+				"x": 90,
+				"y": 90
 			},
 			{
 				"model": "thebetweenlands:internal/winter_event",
@@ -257,10 +257,10 @@
 				"model_active": "thebetweenlands:block/log_weedwood_spook"
 			},
 			"model_active": "thebetweenlands:block/log_weedwood_frosty",
-			"x": 90,
-			"y": 90,
 			"weight": 10
-				}
+				},
+				"x": 90,
+				"y": 90
 			},
 			{
 				"model": "thebetweenlands:internal/winter_event",
@@ -271,10 +271,10 @@
 				"model_active": "thebetweenlands:block/log_weedwood_spook"
 			},
 			"model_active": "thebetweenlands:block/log_weedwood_frosty",
-			"x": 90,
-			"y": 90,
 			"weight": 5
-				}
+				},
+				"x": 90,
+				"y": 90
 			},
 			{
 				"model": "thebetweenlands:internal/winter_event",
@@ -285,10 +285,10 @@
 				"model_active": "thebetweenlands:block/log_weedwood_spook"
 			},
 			"model_active": "thebetweenlands:block/log_weedwood_frosty",
-			"x": 90,
-			"y": 90,
 			"weight": 5
-				}
+				},
+				"x": 90,
+				"y": 90
 			}
 		],
 			"axis=none": [
