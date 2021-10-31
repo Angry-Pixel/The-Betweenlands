@@ -203,10 +203,10 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 		if (!world.isRemote) {
 			EntityLivingBase entity = null;
 			if (world.rand.nextInt(3) == 0) {
-				if (world.getBlockState(pos.up()).getMaterial() == Material.AIR) {
+				if (world.getBlockState(pos.up()).getMaterial() != Material.WATER) {
 					entity = new EntityTermite(world);
 					entity.getEntityAttribute(EntityTermite.SMALL).setBaseValue(1);
-				} else if (world.getBlockState(pos.up()).getMaterial() == Material.WATER) {
+				} else {
 					if (world.rand.nextBoolean())
 						entity = new EntityBubblerCrab(world);
 					else
