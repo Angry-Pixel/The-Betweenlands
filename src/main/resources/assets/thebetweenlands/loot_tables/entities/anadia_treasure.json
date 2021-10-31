@@ -76,7 +76,7 @@
                             "size_start": 0.125,
                             "size_end": 0.95,
                             "min_count": 1,
-                            "max_count": 3
+                            "max_count": 2
                         }
                     ]
                 },
@@ -127,8 +127,8 @@
                             "function": "thebetweenlands:set_count_from_anadia",
                             "size_start": 0.125,
                             "size_end": 0.95,
-                            "min_count": 4,
-                            "max_count": 8
+                            "min_count": 2,
+                            "max_count": 4
                         },
                         {
                             "function":"set_data",
@@ -257,8 +257,8 @@
                             "function": "thebetweenlands:set_count_from_anadia",
                             "size_start": 0.125,
                             "size_end": 0.95,
-                            "min_count": 3,
-                            "max_count": 6
+                            "min_count": 2,
+                            "max_count": 3
                         }
                     ]
                 },
@@ -281,8 +281,8 @@
                             "function": "thebetweenlands:set_count_from_anadia",
                             "size_start": 0.125,
                             "size_end": 0.95,
-                            "min_count": 2,
-                            "max_count": 3
+                            "min_count": 1,
+                            "max_count": 2
                         },
                         {
                             "function":"set_data",
@@ -292,7 +292,7 @@
                 },
                 {
                     "type": "item",
-                    "entryName": "syrmorite_nuggets_1",
+                    "entryName": "syrmorite_ingot_1",
                     "name": "thebetweenlands:items_misc",
                     "weight": 3,
                     "conditions": [
@@ -309,8 +309,8 @@
                             "function": "thebetweenlands:set_count_from_anadia",
                             "size_start": 0.125,
                             "size_end": 0.95,
-                            "min_count": 8,
-                            "max_count": 16
+                            "min_count": 1,
+                            "max_count": 2
                         },
                         {
                             "function":"set_data",
@@ -367,8 +367,8 @@
                             "function": "thebetweenlands:set_count_from_anadia",
                             "size_start": 0.125,
                             "size_end": 0.95,
-                            "min_count": 4,
-                            "max_count": 9
+                            "min_count": 2,
+                            "max_count": 4
                         },
                         {
                             "function":"set_data",
@@ -467,8 +467,8 @@
                             "function": "thebetweenlands:set_count_from_anadia",
                             "size_start": 0.125,
                             "size_end": 0.95,
-                            "min_count": 5,
-                            "max_count": 8
+                            "min_count": 2,
+                            "max_count": 4
                         }
                     ]
                 },
@@ -491,8 +491,8 @@
                             "function": "thebetweenlands:set_count_from_anadia",
                             "size_start": 0.125,
                             "size_end": 0.95,
-                            "min_count": 2,
-                            "max_count": 4
+                            "min_count": 1,
+                            "max_count": 3
                         },
                         {
                             "function":"set_data",
@@ -502,7 +502,7 @@
                 },
                 {
                     "type": "item",
-                    "entryName": "syrmorite_nuggets_2",
+                    "entryName": "syrmorite_ingot_2",
                     "name": "thebetweenlands:items_misc",
                     "weight": 2,
                     "conditions": [
@@ -519,8 +519,8 @@
                             "function": "thebetweenlands:set_count_from_anadia",
                             "size_start": 0.125,
                             "size_end": 0.95,
-                            "min_count": 12,
-                            "max_count": 24
+                            "min_count": 2,
+                            "max_count": 3
                         },
                         {
                             "function":"set_data",
