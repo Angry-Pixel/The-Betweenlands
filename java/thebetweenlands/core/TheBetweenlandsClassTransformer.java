@@ -28,22 +28,14 @@ import static org.objectweb.asm.tree.AbstractInsnNode.LDC_INSN;
 import static org.objectweb.asm.tree.AbstractInsnNode.METHOD_INSN;
 
 import java.util.Iterator;
+import java.util.List;
+import java.util.logging.LogManager;
 
+import cpw.mods.fml.common.FMLLog;
+import org.apache.logging.log4j.Level;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.FieldInsnNode;
-import org.objectweb.asm.tree.FieldNode;
-import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.InsnNode;
-import org.objectweb.asm.tree.JumpInsnNode;
-import org.objectweb.asm.tree.LabelNode;
-import org.objectweb.asm.tree.LdcInsnNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.TypeInsnNode;
-import org.objectweb.asm.tree.VarInsnNode;
+import org.objectweb.asm.tree.*;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 
@@ -70,29 +62,29 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 	public byte[] transform(String name, String transformedName, byte[] classBytes) {
 		boolean obf;
 		if ("net.minecraft.server.MinecraftServer".equals(name)) {
-			return writeClass(transformMinecraftServer(readClass(classBytes)));
+			return writeClass(transformMinecraftServer(readClass(classBytes)), false);
 		} else if ((obf = "yz".equals(name)) || "net.minecraft.entity.player.EntityPlayer".equals(name)) {
-			return writeClass(transformEntityPlayer(readClass(classBytes), obf));
+			return writeClass(transformEntityPlayer(readClass(classBytes), obf), false);
 		} else if ((obf = "sv".equals(name)) || "net.minecraft.entity.EntityLivingBase".equals(name)) {
-			return writeClass(transformEntityLivingBase(readClass(classBytes), obf));
+			return writeClass(transformEntityLivingBase(readClass(classBytes), obf), false);
 		} else if ((obf = "bao".equals(name)) || "net.minecraft.client.Minecraft".equals(name)) {
-			return writeClass(transformMinecraft(readClass(classBytes), obf));
+			return writeClass(transformMinecraft(readClass(classBytes), obf), false);
 		} else if ((obf = "bdw".equals(name)) || "net.minecraft.client.gui.GuiScreen".equals(name)) {
-			return writeClass(transformGuiScreen(readClass(classBytes), obf));
+			return writeClass(transformGuiScreen(readClass(classBytes), obf), false);
 		} else if ((obf = "oi".equals(name)) || "net.minecraft.server.management.ServerConfigurationManager".equals(name)) {
-			return writeClass(transformServerConfigurationManager(readClass(classBytes), obf));
+			return writeClass(transformServerConfigurationManager(readClass(classBytes), obf), false);
 		} else if ((obf = "baj".equals(name)) || "net.minecraft.client.renderer.ActiveRenderInfo".equals(name)) {
-			return writeClass(transformActiveRenderInfo(readClass(classBytes), obf));
+			return writeClass(transformActiveRenderInfo(readClass(classBytes), obf), false);
 		} else if ((obf = "blt".equals(name)) || "net.minecraft.client.renderer.EntityRenderer".equals(name)) {
-			return writeClass(transformEntityRenderer(readClass(classBytes), obf));
+			return writeClass(transformEntityRenderer(readClass(classBytes), obf), true);
 		} else if ((obf = "bnn".equals(name)) || "net.minecraft.client.renderer.entity.RenderManager".equals(name)) {
-			return writeClass(transformRenderManager(readClass(classBytes), obf));
+			return writeClass(transformRenderManager(readClass(classBytes), obf), false);
 		} else if ((obf = "sa".equals(name)) || "net.minecraft.entity.Entity".equals(name)) {
-			return writeClass(transformEntity(readClass(classBytes), obf));
+			return writeClass(transformEntity(readClass(classBytes), obf), false);
 		} else if ("net.minecraft.command.CommandWeather".equals(name) && /*!*/true/*!*/) {
 			classBytes['J'+'u'+'s'*'t'+' '+'f'+'o'+'r'+' '-'t'*'h'+'e'+' '+'l'+'o'+'l'+'z'+'.'] = 0x1D; // 0x19 0x05 0x03
 		} else if ((obf = "mn".equals(name)) || "net.minecraft.entity.EntityTracker".equals(name)) {
-			return writeClass(transformEntityTracker(readClass(classBytes), obf));
+			return writeClass(transformEntityTracker(readClass(classBytes), obf), false);
 		}
 		return classBytes;
 	}
@@ -104,8 +96,11 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 		return classNode;
 	}
 
-	private byte[] writeClass(ClassNode classNode) {
-		ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+	private byte[] writeClass(ClassNode classNode, boolean shouldComputeFrames) {
+		ClassWriter classWriter;
+		if (shouldComputeFrames) classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
+		else classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+
 		classNode.accept(classWriter);
 		return classWriter.toByteArray();
 	}
@@ -359,6 +354,19 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 		return classNode;
 	}
 
+	private int getLocalVarIndex(List<LocalVariableNode> list, String name, String name2) {
+		// Returns the index of a specific local variable name from the method. This is required for compatibility with any Optifine version.
+		// It uses a list which you can create in the specific method using method.localVariables, and two names since for some dumb reasons,
+		// The game can access varX fine with the latest Optifine but not the internal name, and the opposite otherwise.
+
+		for (int i = 0; i < list.size(); i += 1) {
+			LocalVariableNode object = list.get(i);
+			if (object.name.equals(name) || object.name.equals(name2)) return object.index;
+		}
+		return -1;
+
+	}
+
 	private ClassNode transformEntityRenderer(ClassNode classNode, boolean obf) {
 		String orientCamera = obf ? "h" : "orientCamera";
 		String activeRenderInfo = obf ? "baj" : "net/minecraft/client/renderer/ActiveRenderInfo";
@@ -379,7 +387,15 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 		boolean needsRenderWorld = true;
 		boolean needsGetMouseOver = true;
 		boolean needsPostRenderHandEvent = true;
+
+
 		for (MethodNode method : classNode.methods) {
+			List localVarList = method.localVariables;
+			int var7index = getLocalVarIndex(localVarList,"var7", "d0");
+			int var14index = getLocalVarIndex(localVarList, "var14", "frustrum");
+
+
+
 			if (needsOrientCamera && orientCamera.equals(method.name) && "(F)V".equals(method.desc)) {
 				method.localVariables.clear();
 				InsnList insns = method.instructions;
@@ -407,11 +423,13 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 					}
 				}
 				boolean replacedASTORE8 = false;
+
 				for (int i = 0; i < method.instructions.size(); i++) {
 					AbstractInsnNode insnNode = method.instructions.get(i);
 					if (needsPerspectiveStuff && insnNode.getOpcode() == INVOKESTATIC && activeRenderInfo.equals(((MethodInsnNode) insnNode).owner)) {
 						InsnList addCameraPosToViewerPos = new InsnList();
-						for (int n = 0, s = 7; n < objectXYZ.length; n++, s += 2) {
+
+						for (int n = 0, s = var7index; n < objectXYZ.length; n++, s += 2) { // Replace 9 with the index of var7
 							addCameraPosToViewerPos.add(new VarInsnNode(DLOAD, s));
 							addCameraPosToViewerPos.add(new FieldInsnNode(GETSTATIC, activeRenderInfo, objectXYZ[n], "F"));
 							addCameraPosToViewerPos.add(new InsnNode(F2D));
@@ -428,17 +446,18 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 					if (needsFrustumStuff) {
 						if (replacedASTORE8) {
 							// replace all things trying to get the frustum from the
-							// stack frame to getting the frustum from the class
-							// field
-							if (insnNode.getOpcode() == ALOAD && ((VarInsnNode) insnNode).var == 14) {
+							// stack frame to getting the frustum from the class field.
+							if (insnNode.getOpcode() == ALOAD && ((VarInsnNode) insnNode).var == var14index) { // Replace 19 with the index of var14.
 								((VarInsnNode) insnNode).var = 0;
 								method.instructions.insert(insnNode, new FieldInsnNode(GETFIELD, entityRendererOwner, fieldNameAddition, frustumDesc));
 							}
+
 						} else {
 							// instead of storing the newly created frustum into
-							// slot 14 of the method stack frame, put in the added
+							// slot 17 of the method stack frame, put in the added
 							// class field for external access
-							if (insnNode.getOpcode() == ASTORE && ((VarInsnNode) insnNode).var == 14) {
+
+							if (insnNode.getOpcode() == ASTORE && ((VarInsnNode) insnNode).var == var14index) { // Replace 19 with the index of var14.
 								InsnList newInsn = new InsnList();
 								method.instructions.insertBefore(method.instructions.get(i - 3), new VarInsnNode(ALOAD, 0));
 								method.instructions.set(insnNode, new FieldInsnNode(PUTFIELD, entityRendererOwner, fieldNameAddition, frustumDesc));
@@ -447,6 +466,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 						}
 					}
 				}
+
 				if (needsFrustumStuff) {
 					classNode.fields.add(new FieldNode(ACC_PUBLIC, fieldNameAddition, frustumDesc, null, null));
 				}
