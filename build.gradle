@@ -24,10 +24,13 @@ def modid = getModIdFromJava()
 version = getVersionFromJava() + project.buildnumber
 group = 'net.angrypixel'
 archivesBaseName = 'TheBetweenlands'
-sourceCompatibility = targetCompatibility = '1.7'
+sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
 
 minecraft {
-    version = '1.7.10-10.13.4.1558-1.7.10'
+    version = '1.7.10-10.13.4.1614-1.7.10'
     runDir = 'minecraft'
     replace '${version}', project.version
     replace '/*!*/true/*!*/', 'false'
@@ -66,6 +69,12 @@ repositories {
     maven {
         name = 'ilexiconn'
         url = 'http://maven.ilexiconn.net/'
+    }
+}
+
+idea {
+    module {
+        inheritOutputDirs = true
     }
 }
 
