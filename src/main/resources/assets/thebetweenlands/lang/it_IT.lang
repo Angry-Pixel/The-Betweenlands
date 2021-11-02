@@ -78,10 +78,16 @@ tile.thebetweenlands.cragrock.default.name=Roccia sporgente
 tile.thebetweenlands.cragrock.mossy_1.name=Muschio superiore di roccia sporgente
 tile.thebetweenlands.cragrock.mossy_2.name=Muschio inferiore di roccia sporgente
 tile.thebetweenlands.cragrock_bricks.name=Mattoni di roccia sporgente
+tile.thebetweenlands.cragrock_bricks_cracked.name=Mattoni di roccia sporgente incrinati
+tile.thebetweenlands.cragrock_bricks_mossy.name=Mattoni di roccia sporgente muschiosi
 tile.thebetweenlands.cragrock_brick_stairs.name=Scalini di mattoni di roccia sporgente
 tile.thebetweenlands.cragrock_chiseled.name=Roccia sporgente cesellata
+tile.thebetweenlands.cragrock_chiseled_mossy.name=Roccia sporgente cesellata muschiata
+tile.thebetweenlands.cragrock_chiseled_cracked.name=Roccia sporgente cesellata incrinata
 tile.thebetweenlands.cragrock_pillar.name=Pilastro di roccia sporgente
 tile.thebetweenlands.cragrock_tiles.name=Piastrelle di roccia sporgente
+tile.thebetweenlands.cragrock_tiles_cracked.name=Piastrelle di roccia sporgente incrinati
+tile.thebetweenlands.cragrock_tiles_mossy.name=Piastrelle di roccia muschiosi
 tile.thebetweenlands.cragrock_wall.name=Muro di roccia sporgente
 tile.thebetweenlands.cragrock_slab.name=Lastra di roccia sporgente
 tile.thebetweenlands.cragrock_stairs.name=Scalini di roccia sporgente
@@ -107,9 +113,9 @@ tile.thebetweenlands.leaves_sap_tree.name=Foglie di albero della linfa
 tile.thebetweenlands.leaves_weedwood_tree.name=Foglie di gramigna
 tile.thebetweenlands.leaves_hearthgrove_tree.name=Foglie di boschetto del cuore
 tile.thebetweenlands.leaves_nibbletwig_tree.name=Foglie di mordicchio
-tile.thebetweenlands.leaves_spirit_tree_top.name=Foglie di albero spirituale
-tile.thebetweenlands.leaves_spirit_tree_middle.name=Foglie di albero spirituale
-tile.thebetweenlands.leaves_spirit_tree_bottom.name=Foglie di albero spirituale
+tile.thebetweenlands.leaves_spirit_tree_top.name=Foglie superiori di Albero dello spirito
+tile.thebetweenlands.leaves_spirit_tree_middle.name=Foglie intermedie di Albero dello spirito
+tile.thebetweenlands.leaves_spirit_tree_bottom.name=Foglie inferiori di Albero dello spirito
 tile.thebetweenlands.life_crystal_stalactite.default.name=Stalattite di cristallo della vita
 tile.thebetweenlands.life_crystal_stalactite.ore.name=Cristallo della vita grezzo
 tile.thebetweenlands.limestone.name=Calcare
@@ -158,6 +164,7 @@ tile.thebetweenlands.mud_brick_shingle_wall.name=Muretto di tegole di mattoni di
 tile.thebetweenlands.octine_block.name=Blocco di ottino
 tile.thebetweenlands.octine_ore.name=Ottino grezzo
 tile.thebetweenlands.peat.name=Torba
+tile.thebetweenlands.peat_smouldering.name=Torba fumante
 tile.thebetweenlands.pitcher_plant.name=Pianta cobra
 tile.thebetweenlands.pitstone.name=Pietra della cava
 tile.thebetweenlands.pitstone_stairs.name=Scalini di pietra della cava
@@ -192,6 +199,7 @@ tile.thebetweenlands.sapling_spirit_tree.name=Arboscello di albero spirituale
 tile.thebetweenlands.scabyst_ore.name=Crostite grezza
 tile.thebetweenlands.shelf_fungus.name=Fungo da scaffale
 tile.thebetweenlands.silt.name=Limo
+tile.thebetweenlands.filtered_silt.name=Limo filtrato
 tile.thebetweenlands.slimy_bone_ore.name=Osso viscido grezzo
 tile.thebetweenlands.slimy_dirt.name=Terra viscida
 tile.thebetweenlands.slimy_grass.name=Erba viscida
@@ -308,6 +316,7 @@ tile.thebetweenlands.aqua_middle_gem_block.name=Blocco di gemma d'acqua centrale
 tile.thebetweenlands.sulfur_block.name=Blocco di zolfo
 tile.thebetweenlands.inactive_glowing_smooth_cragrock.name=Roccia sporgente liscia luccicante inattiva
 tile.thebetweenlands.silt_glass_pane.name=Pannello di vetro di limo
+tile.thebetweenlands.filtered_silt_glass_pane.name=Pannello di vetro di limo filtrato
 tile.thebetweenlands.polished_limestone_wall.name=Muretto di calcare levigato
 tile.thebetweenlands.smooth_pitstone_wall.name=Muretto di pietra della cava liscia
 tile.thebetweenlands.polished_dentrothyst_pane.green.name=Pannello verde di dentrotista lucidato
@@ -320,6 +329,7 @@ tile.thebetweenlands.smooth_pitstone_slab.name=Lastra di pietra della cava lisci
 tile.thebetweenlands.temple_brick_wall.name=Muretto di mattoni del tempio
 tile.thebetweenlands.deep_water_coral_block.name=Blocco di corallo d'acqua profonda
 tile.thebetweenlands.silt_glass.name=Vetro di limo
+tile.thebetweenlands.filtered_silt_glass.name=Vetro di limo filtrato
 tile.thebetweenlands.mire_coral_block.name=Blocco di corallo di palude
 tile.thebetweenlands.crimson_middle_gem_block.name=Blocco di gemma cremisi centrale
 tile.thebetweenlands.tar_solid_wall.name=Muretto di catrame solido
@@ -488,6 +498,40 @@ tile.thebetweenlands.lantern_paper_2.name=Lanterna di carta Amate a scacchi
 tile.thebetweenlands.lantern_paper_3.name=Lanterna di carta amate con cornice
 tile.thebetweenlands.lantern_silt_glass.name=Laterna di vetro di limo
 tile.thebetweenlands.bauble.name=Bauble
+tile.thebetweenlands.fishing_tackle_box.name=Scatola degli attrezzi da pesca
+tile.thebetweenlands.smoking_rack.name=Rastrelliera per il fumo
+tile.thebetweenlands.fish_trimming_table.name=Tavolo di rifilatura del pesce
+tile.thebetweenlands.crab_pot.name=Pentola di granchio
+tile.thebetweenlands.silt_glass_jar.name=Vaso di vetro di limo
+tile.thebetweenlands.crab_pot_filter.name=Filtro del vaso di granchio
+tile.thebetweenlands.pearl_block.name=Blocco di perle
+tile.thebetweenlands.betweenstone_pebble_pile.one.name=Pila di ciottoli di pietra intermedia
+tile.thebetweenlands.betweenstone_pebble_pile.two.name=Pila di ciottoli di pietra intermedia
+tile.thebetweenlands.betweenstone_pebble_pile.three.name=Pila di ciottoli di pietra intermedia
+tile.thebetweenlands.betweenstone_pebble_pile.four.name=Pila di ciottoli di pietra intermedia
+tile.thebetweenlands.betweenstone_pebble_pile.one_plant.name=Pila di ciottoli di pietra intermedia
+tile.thebetweenlands.betweenstone_pebble_pile.two_plant.name=Pila di ciottoli di pietra intermedia
+tile.thebetweenlands.betweenstone_pebble_pile.three_plant.name=Pila di ciottoli di pietra intermedia
+tile.thebetweenlands.betweenstone_pebble_pile.four_plant.name=Pila di ciottoli di pietra intermedia
+tile.thebetweenlands.betweenstone_pebble_pile_water.one.name=Pila d'acqua di ciottoli di pietra intermedia
+tile.thebetweenlands.betweenstone_pebble_pile_water.two.name=Pila d'acqua di ciottoli di pietra intermedia
+tile.thebetweenlands.betweenstone_pebble_pile_water.three.name=Pila d'acqua di ciottoli di pietra intermedia
+tile.thebetweenlands.betweenstone_pebble_pile_water.four.name=Pila d'acqua di ciottoli di pietra intermedia
+tile.thebetweenlands.betweenstone_pebble_pile_water.one_plant.name=Pila d'acqua di ciottoli di pietra intermedia
+tile.thebetweenlands.betweenstone_pebble_pile_water.two_plant.name=Pila d'acqua di ciottoli di pietra intermedia
+tile.thebetweenlands.betweenstone_pebble_pile_water.three_plant.name=Pila d'acqua di ciottoli di pietra intermedia
+tile.thebetweenlands.betweenstone_pebble_pile_water.four_plant.name=Pila d'acqua di ciottoli di pietra intermedia
+tile.thebetweenlands.barnacle_1_2.name=Cluster di cirripede
+tile.thebetweenlands.barnacle_3_4.name=Cluster di cirripede
+tile.thebetweenlands.glowing_goop.name=Goop luminoso
+tile.thebetweenlands.reed_mat.name=Stuoia di canna
+tile.thebetweenlands.mud_loot_pot.1.name=Vaso di fango della fortuna
+tile.thebetweenlands.mud_loot_pot.2.name=Vaso di fango della fortuna
+tile.thebetweenlands.mud_loot_pot.3.name=Vaso di fango della fortuna
+tile.thebetweenlands.lyestone.name=Pietra soda
+tile.thebetweenlands.mist_bridge.name=Ponte della nebbia
+tile.thebetweenlands.shadow_walker.name=Camminatore dell'ombra
+tile.thebetweenlands.weak_smooth_cragrock.name=Roccia sporgente liscia debole
 
 # Items
 
@@ -540,6 +584,7 @@ item.thebetweenlands.compost.name=Concime
 item.thebetweenlands.copper_iris_petals.name=Petali di iris di rame
 item.thebetweenlands.crab_stick.name=Bastoncino di granchio
 item.thebetweenlands.deep_water_coral_item.name=Corallo d'acqua profonda
+item.thebetweenlands.deep_water_theme.name=Acqua profonda
 item.thebetweenlands.dj_wights_mixtape.name=La nuova casetta mix sexy di DJ Wight
 item.thebetweenlands.dragonfly_wing.name=Ala di libellula
 item.thebetweenlands.dried_swamp_reed.name=Canna di palude essiccata
@@ -619,6 +664,7 @@ item.thebetweenlands.ground_rotbulb.name=Bulbo rotante macinato
 item.thebetweenlands.ground_pale_grass.name=Erba pallida macinata
 item.thebetweenlands.ground_string_roots.name=Radici di stringa macinate
 item.thebetweenlands.ground_cryptweed.name=Erba della cripta macinata
+item.thebetweenlands.ground_betweenstone_pebble.name=Ciottolo di terra tra le pietre
 item.thebetweenlands.hag_dance.name=Disco musicale
 item.thebetweenlands.hanger_item.name=Gruccia
 item.thebetweenlands.inanimate_tarminion.name=Servo di catrame inanimato
@@ -681,7 +727,7 @@ item.thebetweenlands.shockwave_sword_2.name=Pezzo di spada ad onde d'urto
 item.thebetweenlands.shockwave_sword_3.name=Pezzo di spada ad onde d'urto
 item.thebetweenlands.shockwave_sword_4.name=Pezzo di spada ad onde d'urto
 item.thebetweenlands.shoot_leaves.name=Spari
-item.thebetweenlands.silt_crab_claw.name=Artiglio di granchio di limo
+item.thebetweenlands.silt_crab_claw.name=Artiglio di granchio
 item.thebetweenlands.slimy_bone.name=Osso viscido
 item.thebetweenlands.sludge_ball.name=Sfera di fango
 item.thebetweenlands.sludgecreep_leaves.name=Foglie di verme melmoso
@@ -891,6 +937,55 @@ item.thebetweenlands.ancient_boots.name=Stivali antichi
 item.thebetweenlands.ancient_chestplate.name=Corazza antica
 item.thebetweenlands.ancient_helmet.name=Elmo antico
 item.thebetweenlands.ancient_leggings.name=Leggings antichi
+item.thebetweenlands.amphibious_boots.name=Stivali anfibi
+item.thebetweenlands.amphibious_chestplate.name=Corazza anfibia
+item.thebetweenlands.amphibious_helmet.name=Casco anfibio
+item.thebetweenlands.amphibious_leggings.name=Leggings anfibi
+item.thebetweenlands.fish_bait.name=Esca per pesci
+item.thebetweenlands.fishing_spear.name=Lancia da pesca
+item.thebetweenlands.fishing_spear_amphibious.name=Lancia da pesca anfibia
+item.thebetweenlands.fishing_spear_amphibious_robust.name=Lancia da pesca anfibia robusta
+item.thebetweenlands.weedwood_fishing_rod.name=Canna da pesca di gramigna
+item.thebetweenlands.fishing_float.name= Galleggiante e gancio da pesca
+item.thebetweenlands.snot_pod.name=Baccello muco di roccia
+item.thebetweenlands.snot.name=Muco
+item.thebetweenlands.rock_snot_pearl.name=Perla muco di roccia
+item.thebetweenlands.pearled_pear.name=Pera perlata
+item.thebetweenlands.anadia_swim_bladder.name=Vescica da bagno Anadia
+item.thebetweenlands.anadia_eye.name=Occhio di Anadia
+item.thebetweenlands.anadia_gills.name=Branchie di Anadia
+item.thebetweenlands.anadia_scales.name=Squame di Anadia
+item.thebetweenlands.anadia_bones.name=Ossa di Anadia
+item.thebetweenlands.anadia_remains.name=Resti di Anadia
+item.thebetweenlands.anadia_fins.name=Pinne di Anadia
+item.thebetweenlands.anadia_meat_raw.name=Carne cruda di Anadia
+item.thebetweenlands.anadia_meat_cooked.name=Carne cotta di Anadia
+item.thebetweenlands.anadia_meat_smoked.name=Carne affumicata di Anadia
+item.thebetweenlands.urchin_spike.name=Picco del riccio
+item.thebetweenlands.fumigant.name=Fumigante
+item.thebetweenlands.bl_name_tag.name=Targhetta di Amate
+item.thebetweenlands.barnacle_larvae.name=Larve di cirripede
+item.thebetweenlands.barnacle.name=Carne di cirripede
+item.thebetweenlands.barnacle_cooked.name=Polpa di cirripede cotta
+item.thebetweenlands.barnacle_smoked.name=Carne di cirripede affumicata
+item.thebetweenlands.crab_stick_smoked.name=Granchio affumicato
+item.thebetweenlands.frog_legs_smoked.name=Coscia di rana affumicata
+item.thebetweenlands.puffshroom_tendril_smoked.name=Viticcio di puffshroom affumicato
+item.thebetweenlands.silt_crab_claw_smoked.name=Artiglio di granchio affumicato
+item.thebetweenlands.snail_flesh_smoked.name=Carne di lumaca affumicata
+item.thebetweenlands.aa_upgrade_electric.name=Potenziamento elettrico
+item.thebetweenlands.aa_upgrade_glide.name=Potenziamento della planata
+item.thebetweenlands.aa_upgrade_leap.name=Potenziamento dell'ascesa
+item.thebetweenlands.aa_upgrade_urchin.name=Potenziamento del picco del riccio
+item.thebetweenlands.aa_upgrade_vortex.name=Potenziamento del vortice di pesce
+item.thebetweenlands.aa_upgrade_trigger.name=Pietra del grilletto biopatico
+item.thebetweenlands.aa_upgrade_toggle.name=Pietra del collegamento biopatico
+item.thebetweenlands.mist_staff.name=Bastone del camminatore della nebbia
+item.thebetweenlands.shadow_staff.name=Bastone del camminatore dell'ombra
+item.thebetweenlands.olm_egg_raw.name=Cluster di uova di Olm
+item.thebetweenlands.olm_egg_cooked.name=Cluster di uova di Olm al forno
+item.thebetweenlands.olmlette_mixture.name=Miscela di Olmlette
+item.thebetweenlands.olmlette.name=Olmlette
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Fiala di dentrotista verde
@@ -945,6 +1040,8 @@ container.bl.draeton_inventory=Draeton
 container.bl.draeton_storage=Stoccaggio di Draeton
 container.bl.draeton_furnace=Forno di Draeton
 container.bl.draeton_burner=Bruciatore
+container.bl.amphibious_armour=Armatura anfibia
+container.bl.crab_pot_filter=Filtro del vaso di granchio
 
 # Locations
 location.wilderness.name=80:<scale:1.75>Lande selvagge</scale>
@@ -968,6 +1065,7 @@ location.sludge_worm_dungeon_maze.name=80:Caveau labirintiche
 location.sludge_worm_dungeon.name=80:Torre dei fanghi
 location.sludge_worm_dungeon_pit.name=80:Fossa della decadenza
 location.chiromaw_matriarch_nest.name=80:Nido di matriarca di Cirofauci
+location.underwater_ruins.name=80:Rovine subacquee
 
 
 
@@ -1005,6 +1103,7 @@ tooltip.bl.press.shift=Tieni premuto «shift» per vedere di più
 tooltip.bl.life_crystal.remaining=%d rimanenti
 tooltip.bl.shockwave_sword.usage=Clicca con il tasto destro del mouse sul terreno\nper creare un'onda d'urto
 tooltip.bl.tool.broken=\n%s è rotto\ne deve essere riparato in\nun Animatore.
+tooltip.bl.tool.broken_rod=\n%s è rotto\ne ha bisogno di una nuova linea e un galleggiante.\n
 tooltip.bl.food_sickness.state.fine=Ha un buon sapore
 tooltip.bl.food_sickness.state.half=Ha un sapore semplice
 tooltip.bl.food_sickness.state.sick=Non posso più mangiarlo
@@ -1055,6 +1154,30 @@ tooltip.bl.simple_slingshot=Spara ciottoli di pietra
 tooltip.bl.lurker_skin_patch=Corregge le perdite di Draeton
 tooltip.bl.chirobarb_erupter.usage=Clicca con il tasto destro del mouse per sparare una raffica di ardiglioni a 360 gradi.\nHa un cooldown di 3 secondi.
 tooltip.bl.ancient_armor.usage=Riduce il danno magico.\nFino a metà della riduzione del danno magico\ncon un set completo equipaggiato.
+tooltip.bl.rock_snot_pearl=Dà 10 punti esperienza quando viene consumato
+tooltip.bl.pearled_pear=Dà 80 punti esperienza quando viene consumato
+tooltip.bl.damaged_armor_upgrade=Potenziamento armatura anfibia danneggiata (%d/%d).
+tooltip.bl.crab_pot_item=Aggiungi resti di Anadia per tentare i granchi.\nPuò essere messo sopra un\nFiltro del vaso di granchio per più usi.
+tooltip.bl.crab_pot_filter_item=Utilizzato con un vaso per granchi.\nVaso di granchio posizionato sopra,\ncontenente limo o granchi gorgogliatori,\nforniscono funzioni extra.
+tooltip.bl.silt_glass_jar_item=Stoccaggio per minuscoli vermi di fango.\nUtilizzando una canna da pesca di gramigna sul barattolo\naggiunge un verme all'asta.
+tooltip.bl.silt_glass_jar_content=- §a%2$s x %3$d
+tooltip.bl.fish_bait_jei=Gli oggetti secondari modificano gli attributi. Usa le descrizioni degli strumenti quando fabbrichi per vedere quali attributi sono interessati.
+
+# Anadia item mob stats
+tooltip.bl.item_mob_anadia.health=Salute: %s / %s
+tooltip.bl.item_mob_anadia.size=Dimensione: %s
+tooltip.bl.item_mob_anadia.speed=Velocità: %s
+tooltip.bl.item_mob_anadia.strength=Forza: %s
+tooltip.bl.item_mob_anadia.stamina=Resistenza: %s
+
+tooltip.bl.item_mob_anadia.status=Stato: 
+tooltip.bl.item_mob_anadia.rotting_1=Appena pescato
+tooltip.bl.item_mob_anadia.rotting_2=Pescato di recente
+tooltip.bl.item_mob_anadia.rotting_3=Iniziare a maturare
+tooltip.bl.item_mob_anadia.rotting_4=Sta diventando puzzolente
+tooltip.bl.item_mob_anadia.rotting_5=Sta diventando davvero puzzolente
+tooltip.bl.item_mob_anadia.rotten=Marcio
+tooltip.bl.item_mob_anadia.smoked=Affumicato
 
 tooltip.bl.elixir.potency=§9Potenza: %s
 tooltip.bl.elixir.duration=§9Durata: %s (%s)
@@ -1099,6 +1222,7 @@ tooltip.bl.censer.effect.dungeon_fog=Aumenta la crescita delle colture e\npermet
 tooltip.bl.censer.effect.aspect=Infonde alle colture Aspectrus\nl'aspetto e permette alle colture\ndi crescere in una piccola area.
 tooltip.bl.censer.effect.cremains=Incenerisce qualsiasi creatura vivente\nin una piccola area e li trasforma\nin ceneri.
 tooltip.bl.censer.effect.swamp_water=Diffonde vapore in una vasta area\nche porta l'effetto dell'oggetto di cui\nè impregnato.\nPuò essere impregnato di un Amuleto di corteccia.
+tooltip.bl.censer.effect.fumigant=Rimuove la puzza di marcio in una vasta area.
 
 tooltip.bl.simulacrum.effect=Effetto: %s
 tooltip.bl.simulacrum.effect.none=Nessuno
@@ -1123,6 +1247,36 @@ tooltip.bl.recipes.censer_primary=Incensiere
 tooltip.bl.recipes.censer_secondary=Incensiere (secondario)
 tooltip.bl.recipes.purifier=Purificatore
 tooltip.bl.recipes.mortar=Mortaio
+tooltip.bl.recipes.offering_table=Tabella delle offerte
+
+tooltip.bl.fish_bait.saturation=Saturazione: %s
+tooltip.bl.fish_bait.sink_speed=Velocità di affondamento: %s
+tooltip.bl.fish_bait.dissolve_time=Tempo di dissolvenza: %s
+tooltip.bl.fish_bait.range=Raggio: %s
+tooltip.bl.fish_bait.glowing=Incandescente: %s
+
+tooltip.bl.fishing_rod.baited=Ha un verme: %s
+
+tooltip.bl.fumigant=Rimuove la puzza di marcio su un giocatore
+tooltip.bl.fishing_spear_animated=Animato:
+
+tooltip.bl.item_misc.snot=Sembra avere a malapena la resistenza in acqua.
+tooltip.bl.item_misc.anadia_eye=Realizzato per la vista acquatica.
+tooltip.bl.item_misc.anadia_gills=I pesci non trattengono il fiato.
+tooltip.bl.item_misc.anadia_scales=Forma uno strato protettivo.
+tooltip.bl.item_misc.anadia_bones=Sottile, ma resistente.
+tooltip.bl.item_misc.anadia_fins=Scivolano nell'acqua come ali nell'aria.
+tooltip.bl.item_misc.anadia_swim_bladder=Impedisce al pesce di affondare... e di galleggiare.
+tooltip.bl.item_misc.urchin_spike=L'offesa come difesa.
+tooltip.bl.item_misc.lurker_skin=Duro e con i piedi per terra.
+
+tooltip.bl.amphibious_upgrade.format=%s anfibio
+tooltip.bl.amphibious_upgrade.helmet=Elmo
+tooltip.bl.amphibious_upgrade.chestplate=Corazza
+tooltip.bl.amphibious_upgrade.leggings=Gambiere
+tooltip.bl.amphibious_upgrade.boots=Stivali
+tooltip.bl.amphibious_ability.toggle=Attiva/disattiva il potenziamento dell'abilità Armatura Anfibia\nScorri con il tasto destro del mouse per scorrere\nClick destro per attivare/disattivare
+tooltip.bl.amphibious_ability.trigger=Attiva il potenziamento dell'abilità Armatura anfibia\nClicca di nascosto con il tasto destro per scorrere\nClicca di destro per attivare
 
 
 # Chat
@@ -1232,6 +1386,7 @@ chat.equipment.equipped=%s equipaggiato
 chat.equipment.unequipped=%s non equipaggiato
 
 chat.waystone.obstructed=Il menhir è ostruito
+chat.bone_wayfinder.sky_obstructed=Il cielo è ostruito
 chat.simulacrum.obstructed=Il simulacro è ostruito
 chat.simulacrum.blessed=Ti senti benedetto
 
@@ -1259,6 +1414,21 @@ chat.simulacrum.changed_effect=Cambiato effetto in '%s'
 
 chat.wind_chime.changed_attunement=In sintonia con '%s'
 chat.wind_chime.removed_attunement=In sintonia con qualsiasi evento
+
+chat.aa_trigger.selected_effect=In sintonia con: %s
+
+chat.aa_item.ascent=Ascensione
+chat.aa_item.electric=Elettrico
+chat.aa_item.vortex=Vortice
+chat.aa_item.glide=Plana
+chat.aa_item.urchin_spikes=Punte di riccio
+
+chat.aa_toggle.selected_effect=Effetto selezionato: %s
+chat.aa_toggle.urchin_active=Riccio attivo: %s
+chat.aa_toggle.vortex_active=Vortice attivo: %s
+chat.aa_toggle.electric_active=Elettrico attivo: %s
+chat.aa_toggle.glide_active=Planata attiva: %s
+chat.aa_toggle.ascent_active=Ascesa attiva: %s
 
 # Damage Source
 death.attack.suffocation=%s è stato soffocato da Respiro basso
@@ -1324,6 +1494,7 @@ bl.potion.rootBound=Legato alla radice
 bl.potion.enlightened=Illuminato
 
 bl.effect.blessed=Benedetto
+bl.effect.shocked=Scioccato
 
 # Entities
 entity.thebetweenlands.dark_druid.name=Druido oscuro
@@ -1350,7 +1521,7 @@ entity.thebetweenlands.termite.name=Termite
 entity.thebetweenlands.toad.name=Rospo arlecchino
 entity.thebetweenlands.melee_guardian.name=Guardian del tempio
 entity.thebetweenlands.berserker_guardian.name=Guardian del tempio
-entity.thebetweenlands.blind_cave_fish.name=Pesce di grotta cieco
+entity.thebetweenlands.olm.name=Olm
 entity.thebetweenlands.tarminion.name=Servo di catrame
 entity.thebetweenlands.thrown_tarminion.name=Servo di catrame lanciato
 entity.thebetweenlands.mummy_arm.name=Braccio di mummia
@@ -1432,6 +1603,34 @@ entity.thebetweenlands.draeton_upgrade_furnace.name=Forno di Draeton
 entity.thebetweenlands.draeton_upgrade_crafting.name=Fabbricazione di Draeton
 entity.thebetweenlands.stalker.name=Divoratore
 entity.thebetweenlands.swarm.name=Infestazione
+entity.thebetweenlands.anadia.name=Anadia
+entity.thebetweenlands.fish_bait_item.name=Esca per pesci
+entity.thebetweenlands.betweenlands_fish_hook.name=Amo da pesca
+entity.thebetweenlands.fishing_spear.name=Lancia da pesca
+entity.thebetweenlands.fishing_tackle_box_seat.name=Sedile da pesca
+entity.thebetweenlands.rock_snot.name=Moccio di roccia
+entity.thebetweenlands.rock_snot_tendril.name=Viticcio del moccio di roccia
+entity.thebetweenlands.jellyfish.name=Medusa
+entity.thebetweenlands.jellyfish_cave.name=Medusa delle caverne
+entity.thebetweenlands.bubbler_crab.name=Granchio gorgogliatore
+entity.thebetweenlands.bubbler_crab_bubble.name=Bolla di granchio gorgogliatore
+entity.thebetweenlands.freshwater_urchin.name=Riccio d'acqua dolce
+entity.thebetweenlands.greebling_coracle.name=Coracolo greebling
+entity.thebetweenlands.cave_fish.name=Pesce delle caverne
+entity.thebetweenlands.glowing_goop.name=Goop luminoso
+
+#Fish Parts
+entity.thebetweenlands.anadia_body_0=Skittish
+entity.thebetweenlands.anadia_body_1=Stubby
+entity.thebetweenlands.anadia_body_2=Snello
+
+entity.thebetweenlands.anadia_tail_0=Coda biforcata
+entity.thebetweenlands.anadia_tail_1=Coda a ventaglio
+entity.thebetweenlands.anadia_tail_2=Coda lunga
+
+entity.thebetweenlands.anadia_head_0=Piluccatore
+entity.thebetweenlands.anadia_head_1=Testa di tonfo
+entity.thebetweenlands.anadia_head_2=Predatore
 
 # Equipment
 equipment.menu.equip=Equipaggia %s
@@ -1454,6 +1653,7 @@ item.thebetweenlands.record.stuck_in_the_mud.desc=Voog2 - Bloccato nel fango
 item.thebetweenlands.record.waterlogged.desc=Voog2 - Inzuppato d'acqua
 item.thebetweenlands.record.wandering_wisps.desc=Voog2 - Cieli erranti
 item.thebetweenlands.record.ancient.desc=Voog2 - Antico
+item.thebetweenlands.record.deep_water_theme.desc=Rotch Gwylt - Acqua profonda
 
 
 # Signs
@@ -1482,6 +1682,9 @@ jei.thebetweenlands.recipe.pestle_and_mortar=Pestello e mortaio
 jei.thebetweenlands.recipe.druid_altar=Altare druido
 jei.thebetweenlands.recipe.purifier=Purificatore
 jei.thebetweenlands.recipe.compost=Concime
+jei.thebetweenlands.recipe.smoking_rack=Rastrelliera per il fumo
+jei.thebetweenlands.recipe.crab_pot_filter_bubbler=Filtro per vasi di granchio (Granchio gorgogliatore)
+jei.thebetweenlands.recipe.crab_pot_filter_silt=Filtro per vasi di granchio (Granchio di limo)
 jei.thebetweenlands.compost.amount=Quantità di concime: %d
 jei.thebetweenlands.time=Tempo del processo: %d minuti e %d secondi
 jei.thebetweenlands.time.minutes=Tempo del processo: %d minuti
@@ -1697,9 +1900,17 @@ gui.bl.draeton.main.puller=Slot di trazione:\n§7 - Libellula\n§7 - Lucciola\n�
 gui.bl.draeton.main.upgrade_utility=Slot di potenziamento dell'utilità:\n§7 - Marsupio di pelle di Lurker\n§7 - Potenziamento della fabbricazione di Draeton\n§7 - Potenziamento della fornace di Draeton
 gui.bl.draeton.main.upgrade_anchor=Slot di potenziamento dell'ancora:\n§7 - Potenziamento dell'ancora di Draeton
 
+gui.bl.fish_trimming_table.butcher=Chop\!
+
+# HWYLA Alt Block names
+tooltip.thebetweenlands.barnacle_stage_1.name=Cluster di cirripede (di nuova costituzione)
+tooltip.thebetweenlands.barnacle_stage_2.name=Cluster di cirripede (sviluppo iniziale)
+tooltip.thebetweenlands.barnacle_stage_3.name=Cluster di cirripede (inizia a maturare)
+tooltip.thebetweenlands.barnacle_stage_4.name=Cluster di cirripede (pronto per la raccolta)
+
 # Advancements
 
-# Adventures
+# Adventurer
 advancements.thebetweenlands.adventurer.root.title=Avventuriero
 advancements.thebetweenlands.adventurer.root.description=L'inizio dell'avventura nelle Terre intermedie
 advancements.thebetweenlands.adventurer.give_me_that.title=Dammelo
@@ -1754,6 +1965,12 @@ advancements.thebetweenlands.adventurer.gambling_addict.title=Dipendente dal gio
 advancements.thebetweenlands.adventurer.gambling_addict.description=Anima troppe pergamene dell'oggetto
 advancements.thebetweenlands.adventurer.thunderstruck.title=Colpito da un tuono\!
 advancements.thebetweenlands.adventurer.thunderstruck.description=Vola in un fulmine mentre usi un Volarkite o cavalchi un Draeton
+advancements.thebetweenlands.adventurer.shake_it_off.title=Scrollalo di dosso
+advancements.thebetweenlands.adventurer.shake_it_off.description=Vieni invaso da un'infestazione
+advancements.thebetweenlands.adventurer.vinyl_enthusiast.title=Il conto alla rovescia del vinile
+advancements.thebetweenlands.adventurer.vinyl_enthusiast.description=Raccogli tutti i dischi musicali delle Terre intermedie
+advancements.thebetweenlands.adventurer.i_think_you_urned_this.title=Penso che tu l'abbia sentito
+advancements.thebetweenlands.adventurer.i_think_you_urned_this.description=Raccogli 20 Urne da alcova
 
 # Fighter
 advancements.thebetweenlands.fighter.root.title=Combattente
@@ -1798,6 +2015,8 @@ advancements.thebetweenlands.fighter.not_a_boss.title=Non è un boss...?
 advancements.thebetweenlands.fighter.not_a_boss.description=Sigilla il pozzo della decadenza e sconfiggi la Minaccia di fango
 advancements.thebetweenlands.fighter.a_spiky_matter.title=Una questione spinosa
 advancements.thebetweenlands.fighter.a_spiky_matter.description=Sconfiggi una matriarca di Cirofauci
+advancements.thebetweenlands.fighter.banshees_in_the_barriers.title=Banshees nelle barriere
+advancements.thebetweenlands.fighter.banshees_in_the_barriers.description=Sconfiggi un Barrishee
 
 # Farmer
 advancements.thebetweenlands.farmer.root.title=Agricoltore
@@ -1822,6 +2041,12 @@ advancements.thebetweenlands.farmer.flower_power.title=Potere dei fiori
 advancements.thebetweenlands.farmer.flower_power.description=Coltiva alcuni fiori nella tua fattoria
 advancements.thebetweenlands.farmer.pure_and_dirty.title=Puro e sporco
 advancements.thebetweenlands.farmer.pure_and_dirty.description=Usa la terra di palude purificata per la tua fattoria
+advancements.thebetweenlands.farmer.fertile_soil.title=Terreno fertile
+advancements.thebetweenlands.farmer.fertile_soil.description=Scava un verme mentre fai buche per le colture
+advancements.thebetweenlands.farmer.bountiful_barnacles.title=Cirripedi generosi
+advancements.thebetweenlands.farmer.bountiful_barnacles.description=Raccogli e sostituisci un gruppo di cirripedi
+advancements.thebetweenlands.survivalist.premium_produce.title=Prodotti di qualità
+advancements.thebetweenlands.survivalist.premium_produce.description=Fabbrica e consuma una pera perlata
 
 # Herbalist
 advancements.thebetweenlands.herbalist.root.title=Erborista
@@ -1862,6 +2087,10 @@ advancements.thebetweenlands.survivalist.onions_have_layers.title=Le cipolle han
 advancements.thebetweenlands.survivalist.onions_have_layers.description=Rivesti i tuoi strumenti contro la corrosione
 advancements.thebetweenlands.survivalist.hashtag_blessed.title=\#Benedetto
 advancements.thebetweenlands.survivalist.hashtag_blessed.description=Fatti salvare dall'effetto Benedetto di un Simulacro
+advancements.thebetweenlands.survivalist.uh_oh_stinky.title=Oh oh, puzzolente
+advancements.thebetweenlands.survivalist.uh_oh_stinky.description=Usare un fumigante per rimuovere il fetore
+advancements.thebetweenlands.survivalist.sacrifices_were_made.title=Sono stati fatti dei sacrifici
+advancements.thebetweenlands.survivalist.sacrifices_were_made.description=Non si può fare una Olmlette senza rompere delle uova
 
 # Craftsman
 advancements.thebetweenlands.craftsman.root.title=Artigiano
@@ -1876,6 +2105,24 @@ advancements.thebetweenlands.craftsman.freebies.title=Omaggi
 advancements.thebetweenlands.craftsman.freebies.description=Ottieni lingotti extra usando il flusso di calcare
 advancements.thebetweenlands.craftsman.feel_it_coming.title=Nell'aria stanotte
 advancements.thebetweenlands.craftsman.feel_it_coming.description=Prevedi un evento meteorologico con i campanelli a vento
+advancements.thebetweenlands.craftsman.teach_a_man_to_fish.title=Insegna a un uomo a pescare
+advancements.thebetweenlands.craftsman.teach_a_man_to_fish.description=Fabbrica una canna da pesca di gramigna
+advancements.thebetweenlands.craftsman.fishy_business.title=Affari di pesce
+advancements.thebetweenlands.craftsman.fishy_business.description=Cattura un'Anadia con una canna da pesca di gramigna
+advancements.thebetweenlands.craftsman.jar_o_worms.title=Barattolo di vermi
+advancements.thebetweenlands.craftsman.jar_o_worms.description=Metti l'esca alla tua canna da un barattolo di vetro pieno di vermi
+advancements.thebetweenlands.craftsman.net_fish_and_chill.title=Pesce a rete e freddo
+advancements.thebetweenlands.craftsman.net_fish_and_chill.description=Siediti e rilassati su una scatola per attrezzatura da pesca
+advancements.thebetweenlands.craftsman.fish_guts.title=Budella di pesce
+advancements.thebetweenlands.craftsman.fish_guts.description=Fabbrica e usa un tavolo da taglio per pesci
+advancements.thebetweenlands.craftsman.authentic_flavor.title=Sapore autentico
+advancements.thebetweenlands.craftsman.authentic_flavor.description=Usa una rastrelliera per fumare del cibo
+advancements.thebetweenlands.craftsman.its_a_trap.title=È una trappola\!
+advancements.thebetweenlands.craftsman.its_a_trap.description=Ottieni una pentola per granchi e attiraci un granchio
+advancements.thebetweenlands.craftsman.natures_purifier.title=Purificatore della natura
+advancements.thebetweenlands.craftsman.natures_purifier.description=Usa un filtro per vaso di granchio per convertire un oggetto
+advancements.thebetweenlands.craftsman.aquaman.title=Aquaman
+advancements.thebetweenlands.craftsman.aquaman.description=Ottieni un'armatura anfibia completa
 
 # Miner
 advancements.thebetweenlands.miner.root.title=Minatore
@@ -1997,6 +2244,7 @@ config.thebetweenlands.debug_mode=Modalità debug
 config.thebetweenlands.debug_model_loader=Debug del caricatore di modelli
 config.thebetweenlands.debug_recipe_overrides=La ricetta sovrascrive il debug
 config.thebetweenlands.dump_packed_textures=Scarica le texture compatte
+config.thebetweenlands.biome_list=Elenco dei biomi
 
 # Damage sources
 death.attack.bl.shockwave=%1$s è stato ucciso da un'onda d'urto
@@ -2121,7 +2369,7 @@ blsubtitles.entity.spirit_tree.spikes=Spuntoni fuoriescono
 blsubtitles.entity.spirit_tree.spike_trap_emerge=Trappola di spuntoni emerge
 blsubtitles.entity.root_sprite.death=Spiritello della radice muore
 blsubtitles.entity.root_sprite.hurt=Spiritello della radice si fa male
-blsubtitles.entity.root_living.death=Spiritello della radice si lamenta
+blsubtitles.entity.root_sprite.living=Spiritello della radice si lamenta
 blsubtitles.entity.shambler.living=Shambler ringhia
 blsubtitles.entity.shambler.hurt=Shambler grugnisce
 blsubtitles.entity.shambler.death=Shambler muore
@@ -2156,10 +2404,12 @@ blsubtitles.entity.greebling.giggle=Greebling ridacchia
 blsubtitles.entity.greebling.whistle=Greebling fischia
 blsubtitles.entity.greebling.fall=Greebling cade
 blsubtitles.entity.greebling.vanish=Greebling scompare
+blsubtitles.entity.greebling.hum=Greebling ronza
+blsubtitles.entity.greebling.coracle_sink=Coracolo affonda
 blsubtitles.entity.chiromaw_matriarch.barbs=Matriarca di Cirofauci spara ardiglioni
 blsubtitles.entity.chiromaw_matriarch.living=Matriarca di Cirofauci chiacchiera
-blsubtitles.entity.chiromaw_matriarch.hurt=Matriarca di Cirofauci spara ferisce
-blsubtitles.entity.chiromaw_matriarch.death=Matriarca di Cirofauci spara muore
+blsubtitles.entity.chiromaw_matriarch.hurt=Matriarca di Cirofauci si fa male
+blsubtitles.entity.chiromaw_matriarch.death=Matriarca di Cirofauci muore
 blsubtitles.entity.chiromaw_matriarch.poop=Matriarca di Cirofauci fa la cacca
 blsubtitles.entity.chiromaw_matriarch.grab=Matriarca di Cirofauci afferra
 blsubtitles.entity.chiromaw_matriarch.release=Matriarca di Cirofauci rilascia
@@ -2237,3 +2487,4 @@ blsubtitles.misc.chirobarb_erupter=Eruttatore di Ciroardiglioni spara ardiglioni
 blsubtitles.misc.simulacrum_break=Rumore misterioso e distante
 blsubtitles.misc.wind=Vento soffia le campane
 blsubtitles.misc.druid_chant=Canto misterioso
+blsubtitles.misc.lyestone_fizzes=Pietra soda spumeggia
