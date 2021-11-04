@@ -77,6 +77,11 @@ project.ext.buildnumber = project.isDeploymentEnv ? ENV['DEPLOY_BUILD_NUMBER'] :
 project.ext.modid = project.getModIdFromJava()
 
 allprojects {
+    tasks.withType(JavaCompile).configureEach {
+        options.fork = true
+        options.incremental = true
+    }
+
 	version = project.getVersionFromJava()
 	if(!isDeploymentRelease) version = version + (!project.isDeploymentRelease ? ((project.isDeploymentEnv ? ('-' + project.buildnumber) : '') + '-SNAPSHOT') : '')
 
