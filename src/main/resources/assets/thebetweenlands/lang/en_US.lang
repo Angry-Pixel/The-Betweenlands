@@ -1430,6 +1430,8 @@ chat.aa_toggle.electric_active=Electric Active: %s
 chat.aa_toggle.glide_active=Glide Active: %s
 chat.aa_toggle.ascent_active=Ascent Active: %s
 
+chat.aa_upgrade_broke=Armor Upgrade %s broke.
+
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath
 

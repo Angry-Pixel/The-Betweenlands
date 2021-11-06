@@ -19,6 +19,8 @@ public class AdditiveAttributeUpgrade implements IAmphibiousArmorAttributeUpgrad
 	public static final AdditiveAttributeUpgrade TOUGHNESS = new AdditiveAttributeUpgrade(SharedMonsterAttributes.ARMOR_TOUGHNESS, UUID.fromString("37b0ef4b-7e67-4734-a281-cb02d5a154a1"), "Armor toughness", 0.5D, -1);
 	public static final AdditiveAttributeUpgrade KNOCKBACK_RESISTANCE = new AdditiveAttributeUpgrade(SharedMonsterAttributes.KNOCKBACK_RESISTANCE, UUID.fromString("88d07789-7125-432c-922d-5ad82aac79a5"), "Knockback resistance", 0.25D, -1);
 	public static final AdditiveAttributeUpgrade MOVEMENT_SPEED = new AdditiveAttributeUpgrade(SharedMonsterAttributes.MOVEMENT_SPEED, UUID.fromString("88457b7c-f751-40ba-8526-6d40b6df63c8"), "Movement Speed", 0.01D, 4);
+	public static final AdditiveAttributeUpgrade ARMOR = new AdditiveAttributeUpgrade(SharedMonsterAttributes.ARMOR, UUID.fromString("f17c6e19-1f85-4ab9-8c90-6912b64ed518"), "generic.armor", 0.5D, -1);
+
 
 	private final IAttribute attribute;
 

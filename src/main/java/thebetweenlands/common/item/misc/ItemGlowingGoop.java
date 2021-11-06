@@ -23,6 +23,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.projectiles.EntityGlowingGoop;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class ItemGlowingGoop extends ItemBlock {
@@ -43,13 +44,18 @@ public class ItemGlowingGoop extends ItemBlock {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		if(!canUse(playerIn.getHeldItem(handIn))) {
+			return new ActionResult<>(EnumActionResult.FAIL, playerIn.getHeldItem(handIn));
+		}
+
 		playerIn.setActiveHand(handIn);
+
 		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 
 	@Override
 	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
-		if (player instanceof EntityPlayer) {
+		if (player instanceof EntityPlayer && canUse(stack)) {
 			Vec3d forward = player.getLookVec();
 			float yaw = player.rotationYaw;
 			float pitch = player.rotationPitch - 90;
@@ -68,6 +74,9 @@ public class ItemGlowingGoop extends ItemBlock {
 
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entityLiving, int timeLeft) {
+		if(!canUse(stack))
+			return;
+
 		if (!world.isRemote && entityLiving instanceof EntityPlayer) {
 			int useTime = this.getMaxItemUseDuration(stack) - timeLeft;
 
@@ -85,6 +94,10 @@ public class ItemGlowingGoop extends ItemBlock {
 
 	@Override
 	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
+		if(!canUse(stack)) {
+			return false;
+		}
+
 		Block block = this.block;
 		
 		if(world.getBlockState(pos).getMaterial() == Material.WATER) {
@@ -107,5 +120,10 @@ public class ItemGlowingGoop extends ItemBlock {
 		}
 
 		return true;
+	}
+
+
+	private boolean canUse(ItemStack stack) {
+		return ItemAmphibiousArmor.getUpgradeItemStoredDamage(stack) == 0;
 	}
 }

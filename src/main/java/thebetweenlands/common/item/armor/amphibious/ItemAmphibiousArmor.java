@@ -3,7 +3,12 @@ package thebetweenlands.common.item.armor.amphibious;
 import java.util.*;
 import java.util.Map.Entry;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.TextComponentTranslation;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.Multimap;
@@ -19,13 +24,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -41,10 +39,12 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.inventory.InventoryAmphibiousArmor;
+import thebetweenlands.common.inventory.container.ContainerAmphibiousArmor;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.Item3DArmor;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.sound.BLSoundEvent;
 import thebetweenlands.util.NBTHelper;
 
 public class ItemAmphibiousArmor extends Item3DArmor {
@@ -67,8 +67,7 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 	private static final String NBT_URCHIN_AOE_COOLDOWN = "thebetweenlands.urchin_aoe_cooldown";
 	private static final String NBT_ELECTRIC_COOLDOWN = "thebetweenlands.electric_cooldown";
 
-	final UUID ARMOR_TOUGHNESS_MODIFIER = MathHelper.getRandomUUID();
-
+	private EntityPlayerMP player;
 
 	AmphibiousArmorEffectsHelper armorEffectsHelper = new AmphibiousArmorEffectsHelper();
 
@@ -102,6 +101,8 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		if(!world.isRemote) {
+			this.player = (EntityPlayerMP) player;
+
 			Map<IAmphibiousArmorUpgrade, Map<EntityEquipmentSlot, Integer>> wornUpgrades = getWornUpgradeCounts(player);
 			
 			NBTTagCompound nbt = itemStack.getTagCompound();
@@ -427,11 +428,27 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 
 	@Override
 	public void setDamage(ItemStack stack, int damage) {
-		super.setDamage(stack, damage);
-
 		for(IAmphibiousArmorUpgrade upgrade : AmphibiousArmorUpgrades.values()) {
 			this.damageUpgrade(stack, upgrade, 1, DamageEvent.ON_DAMAGE, true);
 		}
+
+		if(getDamage(stack) >= stack.getMaxDamage()) {
+			IInventory inv = new InventoryAmphibiousArmor(stack, "");
+
+			for(int i = 0; i < inv.getSizeInventory(); i++) {
+				ItemStack upgradeItem = inv.getStackInSlot(i).copy();
+
+				if(!upgradeItem.isEmpty()) {
+					int itemDamage = this.getUpgradeDamage(stack, i);
+					setUpgradeItemStoredDamage(upgradeItem, itemDamage, upgradeItem.getMaxDamage());
+
+					if (!player.inventory.addItemStackToInventory(upgradeItem))
+						player.dropItem(upgradeItem, false);
+				}
+			}
+		}
+
+		super.setDamage(stack, damage);
 	}
 
 	public void setUpgradeFilter(ItemStack stack, int slot, ItemStack filter) {
@@ -586,6 +603,12 @@ public class ItemAmphibiousArmor extends Item3DArmor {
 
 					if(damage + amount > maxDamage) {
 						if(itemUpgrade.canBreak()) {
+							if(player != null && !player.world.isRemote) {
+								System.out.println(player.getPosition());
+								player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.AMBIENT, 1F, 1F);
+								player.sendStatusMessage(new TextComponentTranslation("chat.aa_upgrade_broke", upgradeItem.getDisplayName()), false);
+							}
+
 							upgradeItem.shrink(1);
 							inv.setInventorySlotContents(i, upgradeItem);
 							this.setUpgradeDamage(stack, i, 0, itemUpgrade.getMaxDamage());
