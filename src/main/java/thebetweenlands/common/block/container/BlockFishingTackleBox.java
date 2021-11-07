@@ -145,7 +145,7 @@ public class BlockFishingTackleBox extends BlockContainer implements ICustomItem
 			if (world.getTileEntity(pos) instanceof TileEntityFishingTackleBox) {
 				TileEntityFishingTackleBox tile = (TileEntityFishingTackleBox) world.getTileEntity(pos);
 				if (!tile.isOpen() && !isBoxSatOn(world, pos)) {
-					if (world.isAirBlock(pos.up()) && world.isAirBlock(pos.up(2)))
+					if (world.isAirBlock(pos.up()) && world.isAirBlock(pos.up(2)) && side == EnumFacing.UP)
 						tile.seatPlayer(player, pos);
 				}
 				if (tile.isOpen())
