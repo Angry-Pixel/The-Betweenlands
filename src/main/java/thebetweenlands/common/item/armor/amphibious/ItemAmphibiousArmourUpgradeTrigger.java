@@ -18,6 +18,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -54,13 +55,17 @@ public class ItemAmphibiousArmourUpgradeTrigger extends Item {
 								upgradeListChest.add(upgrade);
 
 				if (!upgradeListChest.isEmpty() && stack.hasTagCompound() && stack.getTagCompound().hasKey("scrollPos") && stack.getTagCompound().getInteger("scrollPos") != -1) {
-					if (upgradeListChest.get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.URCHIN)
+					int scrollPos = stack.getTagCompound().getInteger("scrollPos");
+
+					scrollPos = MathHelper.clamp(scrollPos, 0, upgradeListChest.size() - 1);
+
+					if (upgradeListChest.get(scrollPos) == AmphibiousArmorUpgrades.URCHIN)
 						return 1;
 
-					if (upgradeListChest.get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.FISH_VORTEX)
+					if (upgradeListChest.get(scrollPos) == AmphibiousArmorUpgrades.FISH_VORTEX)
 						return 2;
 
-					if (upgradeListChest.get(stack.getTagCompound().getInteger("scrollPos")) == AmphibiousArmorUpgrades.ELECTRIC)
+					if (upgradeListChest.get(scrollPos) == AmphibiousArmorUpgrades.ELECTRIC)
 						return 3;
 				}
 				return 0;
