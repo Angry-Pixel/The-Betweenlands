@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -77,6 +78,11 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL,
 		return SoundRegistry.DRAGONFLY;
 	}
 
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		return SoundRegistry.CRUNCH;
+	}
+	
 	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundRegistry.SQUISH;

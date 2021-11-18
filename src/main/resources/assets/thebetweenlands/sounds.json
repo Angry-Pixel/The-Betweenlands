@@ -158,6 +158,20 @@
     ],
     "subtitle": "blsubtitles.entity.fish.death"
   },
+  "olm_hurt": {
+    "sounds": [
+      "thebetweenlands:olm_hurt_1",
+      "thebetweenlands:olm_hurt_2",
+      "thebetweenlands:olm_hurt_3"
+    ],
+    "subtitle": "blsubtitles.entity.olm.hurt"
+  },
+  "olm_death": {
+    "sounds": [
+      "thebetweenlands:olm_death"
+    ],
+    "subtitle": "blsubtitles.entity.olm.death"
+  },
   "angler_attack": {
     "sounds": [
       "thebetweenlands:angler_attack_1",
@@ -764,6 +778,14 @@
     ],
     "subtitle": "blsubtitles.entity.termite.living"
   },
+  "crunch": {
+    "sounds": [
+      "thebetweenlands:crunch_1",
+      "thebetweenlands:crunch_2",
+      "thebetweenlands:crunch_3"
+    ],
+    "subtitle": "blsubtitles.entity.termite.living"
+  },
   "pyrad_living": {
     "sounds": [
       "thebetweenlands:pyrad_living_1",
@@ -785,6 +807,12 @@
       "thebetweenlands:pyrad_death"
     ],
     "subtitle": "blsubtitles.entity.pyrad.death"
+  },
+  "pyrad_shoot": {
+    "sounds": [
+      "entity.blaze.shoot"
+    ],
+    "subtitle": "blsubtitles.entity.pyrad.shoot"
   },
   "gas_cloud_living": {
     "sounds": [
@@ -1434,6 +1462,12 @@
       "thebetweenlands:sorry"
     ],
     "subtitle": "blsubtitles.misc.angry_pebble"
+  },
+  "pebble_hiss": {
+    "sounds": [
+      "thebetweenlands:sorry"
+    ],
+    "subtitle": "blsubtitles.misc.angry_pebble.hiss"
   },
   "ambient_swamp": {
     "sounds": [

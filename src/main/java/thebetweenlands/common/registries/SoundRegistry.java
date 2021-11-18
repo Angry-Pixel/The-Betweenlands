@@ -60,9 +60,11 @@ public class SoundRegistry {
     public static final BLSoundEvent SPIKE = reg("spike");
     public static final BLSoundEvent POSSESSED_SCREAM = reg("possessed_scream");
     public static final BLSoundEvent SORRY = reg("sorry");
+    public static final BLSoundEvent PEBBLE_HISS = reg("pebble_hiss");
     public static final BLSoundEvent REJECTED = reg("rejected");
     public static final BLSoundEvent SHOCKWAVE_SWORD = reg("shockwave_sword");
     public static final BLSoundEvent SQUISH = reg("squish");
+    public static final BLSoundEvent CRUNCH = reg("crunch");
     public static final BLSoundEvent IGNITE = reg("ignite");
     public static final BLSoundEvent DAMAGE_REDUCTION = reg("damage_reduction");
     public static final BLSoundEvent RIFT_OPEN = reg("rift_open");
@@ -107,6 +109,8 @@ public class SoundRegistry {
     // Hostiles
     public static final BLSoundEvent FISH_HURT = reg("fish_hurt");
     public static final BLSoundEvent FISH_DEATH = reg("fish_death");
+    public static final BLSoundEvent OLM_HURT = reg("olm_hurt");
+    public static final BLSoundEvent OLM_DEATH = reg("olm_death");
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");
     public static final BLSoundEvent ASHSPRITE_HURT = reg("ashsprite_hurt");
     public static final BLSoundEvent ASHSPRITE_DEATH = reg("ashsprite_death");
@@ -152,6 +156,7 @@ public class SoundRegistry {
     public static final BLSoundEvent PYRAD_DEATH = reg("pyrad_death");
     public static final BLSoundEvent PYRAD_HURT = reg("pyrad_hurt");
     public static final BLSoundEvent PYRAD_LIVING = reg("pyrad_living");
+    public static final BLSoundEvent PYRAD_SHOOT = reg("pyrad_shoot");
     public static final BLSoundEvent LURKER_HURT = reg("lurker_hurt");
     public static final BLSoundEvent LURKER_LIVING = reg("lurker_living");
     public static final BLSoundEvent LURKER_DEATH = reg("lurker_death");
