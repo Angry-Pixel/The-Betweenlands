@@ -296,6 +296,8 @@ public class SoundRegistry {
     public static final BLSoundEvent GIANT_TOAD_DEATH = reg("giant_toad_death");
     public static final BLSoundEvent GIANT_TOAD_HURT = reg("giant_toad_hurt");
     public static final BLSoundEvent GIANT_TOAD_LIVING = reg("giant_toad_living");
+    public static final BLSoundEvent TARMINION_DEATH = reg("tarminion_death");
+    public static final BLSoundEvent TARMINION_HURT = reg("tarminion_hurt");
     public static final BLSoundEvent SNAIL_DEATH = reg("snail_death");
     public static final BLSoundEvent SNAIL_HURT = reg("snail_hurt");
     public static final BLSoundEvent SNAIL_LIVING = reg("snail_living");
@@ -319,6 +321,7 @@ public class SoundRegistry {
     public static final BLSoundEvent ROOT_SPRITE_HURT = reg("root_sprite_hurt");
     public static final BLSoundEvent GREEBLING_VANISH = reg("greebling_vanish");
     public static final BLSoundEvent JELLYFISH_HURT = reg("jellyfish_hurt");
+    public static final BLSoundEvent JELLYFISH_DEATH = reg("jellyfish_death");
     public static final BLSoundEvent JELLYFISH_SWIM = reg("jellyfish_swim");
     public static final BLSoundEvent JELLYFISH_ZAP = reg("jellyfish_zap");
     public static final BLSoundEvent URCHIN_SHOOT = reg("urchin_shoot");

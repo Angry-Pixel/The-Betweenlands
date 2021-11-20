@@ -358,6 +358,18 @@
     ],
     "subtitle": "blsubtitles.entity.sporeling.living"
   },
+  "tarminion_death": {
+    "sounds": [
+      "thebetweenlands:snail_death"
+    ],
+    "subtitle": "blsubtitles.entity.tarminion.death"
+  },
+  "tarminion_hurt": {
+    "sounds": [
+      "thebetweenlands:snail_hurt"
+    ],
+    "subtitle": "blsubtitles.entity.tarminion.hurt"
+  },
   "snail_death": {
     "sounds": [
       "thebetweenlands:snail_death"
@@ -2284,6 +2296,15 @@
       "thebetweenlands:jellyfish_hurt_4"
     ],
     "subtitle":  "blsubtitles.entity.jellyfish.hurt"
+  },
+  "jellyfish_death": {
+    "sounds": [
+      "thebetweenlands:jellyfish_hurt_1",
+      "thebetweenlands:jellyfish_hurt_2",
+      "thebetweenlands:jellyfish_hurt_3",
+      "thebetweenlands:jellyfish_hurt_4"
+    ],
+    "subtitle":  "blsubtitles.entity.jellyfish.death"
   },
   "jellyfish_swim": {
     "sounds": [

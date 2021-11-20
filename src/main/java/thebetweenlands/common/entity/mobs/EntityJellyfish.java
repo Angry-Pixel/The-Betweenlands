@@ -160,7 +160,7 @@ public class EntityJellyfish extends EntityCreature implements IEntityBL, IEntit
 	
     @Override
     protected SoundEvent getDeathSound() {
-       return SoundRegistry.JELLYFISH_HURT;
+       return SoundRegistry.JELLYFISH_DEATH;
     }
 	 
 	@Override

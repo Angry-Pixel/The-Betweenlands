@@ -121,8 +121,13 @@ public class EntityTarminion extends EntityTameableBL implements IEntityBL, IRin
 	}
 
 	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSource) {
+		return SoundRegistry.TARMINION_HURT;
+	}
+
+	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundRegistry.SQUISH;
+		return SoundRegistry.TARMINION_DEATH;
 	}
 
 	@Override

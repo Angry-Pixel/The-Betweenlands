@@ -9,7 +9,9 @@ import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.projectiles.EntityBubblerCrabBubble;
@@ -26,6 +28,16 @@ public class EntityBubblerCrab extends EntitySiltCrab {
 		this.setSize(0.7F, 0.5F);
 		this.stepHeight = 2;
 	}
+	
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return SoundRegistry.CRUNCH;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SoundRegistry.CRUNCH;
+    }
 
 	@Override
 	protected void initEntityAI() {

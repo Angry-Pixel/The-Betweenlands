@@ -11,6 +11,7 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -76,6 +77,11 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 	@Override
 	protected SoundEvent getAmbientSound() {
 		return SoundRegistry.TERMITE_LIVING;
+	}
+	
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSource) {
+		return SoundRegistry.CRUNCH;
 	}
 
 	@Override
