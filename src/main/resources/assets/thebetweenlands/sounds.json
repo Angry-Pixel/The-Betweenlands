@@ -2428,5 +2428,17 @@
       "entity.slime.jump"
     ],
     "subtitle": "blsubtitles.entity.sludge.jump"
+  },
+  "living_root_hurt": {
+    "sounds": [
+      "block.wood.hit"
+    ],
+    "subtitle": "blsubtitles.entity.living_root.hurt"
+  },
+  "living_root_death": {
+    "sounds": [
+      "block.wood.break"
+    ],
+    "subtitle": "blsubtitles.entity.living_root.death"
   }
 }

@@ -2452,6 +2452,8 @@ blsubtitles.entity.bubbler.land=Bubble lands
 blsubtitles.entity.bubbler.pop=Pop!
 blsubtitles.entity.sludge.attack=Sludge attacks
 blsubtitles.entity.sludge.jump=Sludge jumps
+blsubtitles.entity.living_root.hurt=Living Root hurts
+blsubtitles.entity.living_root.death=Living Root dies
 
 blsubtitles.misc.roof_collapse=Roof collapses
 blsubtitles.misc.beam_switch=Beam switches

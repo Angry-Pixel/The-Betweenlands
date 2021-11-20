@@ -276,6 +276,8 @@ public class SoundRegistry {
     public static final BLSoundEvent BUBBLER_POP = reg("bubbler_pop");
     public static final BLSoundEvent SLUDGE_ATTACK = reg("sludge_attack");
     public static final BLSoundEvent SLUDGE_JUMP = reg("sludge_jump");
+    public static final BLSoundEvent LIVING_ROOT_HURT = reg("living_root_hurt");
+    public static final BLSoundEvent LIVING_ROOT_DEATH = reg("living_root_death");
 
     // Generic Mob sounds
     public static final BLSoundEvent FISH_HURT = reg("fish_hurt");

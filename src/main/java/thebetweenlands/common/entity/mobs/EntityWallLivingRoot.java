@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -418,9 +417,8 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 		super.handleStatusUpdate(id);
 
 		if(id == EVENT_HURT_SOUND || id == EVENT_DEATH) {
-			SoundType soundType = SoundType.WOOD;
-			this.world.playSound(this.posX, this.posY, this.posZ, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 1.3F, soundType.getPitch() * 0.8F, false);
-			this.world.playSound(this.posX, this.posY, this.posZ, soundType.getHitSound(), SoundCategory.NEUTRAL, (soundType.getVolume() + 1.0F) / 4.0F, soundType.getPitch() * 0.5F, false);
+			this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.LIVING_ROOT_DEATH, getSoundCategory(), 0.75F, 0.8F, false);
+			this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.LIVING_ROOT_HURT, getSoundCategory(), 0.25F, 0.5F, false);
 		}
 	}
 
