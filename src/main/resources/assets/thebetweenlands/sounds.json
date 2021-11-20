@@ -802,7 +802,7 @@
       "thebetweenlands:crunch_2",
       "thebetweenlands:crunch_3"
     ],
-    "subtitle": "blsubtitles.entity.termite.living"
+    "subtitle": "blsubtitles.entity.crunch"
   },
   "pyrad_living": {
     "sounds": [
