@@ -274,6 +274,9 @@ public class SoundRegistry {
     public static final BLSoundEvent BUBBLER_SPIT = reg("bubbler_spit");
     public static final BLSoundEvent BUBBLER_LAND = reg("bubbler_land");
     public static final BLSoundEvent BUBBLER_POP = reg("bubbler_pop");
+    
+    public static final BLSoundEvent SLUDGE_ATTACK = reg("sludge_attack");
+    public static final BLSoundEvent SLUDGE_JUMP = reg("sludge_jump");
 
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");

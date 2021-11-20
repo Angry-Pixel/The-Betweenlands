@@ -38,6 +38,7 @@ import thebetweenlands.client.render.model.ControlledAnimation;
 import thebetweenlands.common.entity.attributes.BooleanAttribute;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	public static final DataParameter<Boolean> IS_ACTIVE = EntityDataManager.createKey(EntitySludge.class, DataSerializers.BOOLEAN);
@@ -228,7 +229,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 
 	protected void dealDamage(EntityLivingBase entityIn) {
 		if (this.isActive() && this.canEntityBeSeen(entityIn) && this.getDistanceSq(entityIn) < 2.5D && entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue())) {
-			this.playSound(SoundEvents.ENTITY_SLIME_ATTACK, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+			this.playSound(SoundRegistry.SLUDGE_ATTACK, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
 		}
 	}
 
@@ -256,7 +257,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	}
 	
 	protected SoundEvent getJumpSound() {
-		return SoundEvents.ENTITY_SLIME_JUMP;
+		return SoundRegistry.SLUDGE_JUMP;
 	}
 
 	public void setActive(boolean active) {

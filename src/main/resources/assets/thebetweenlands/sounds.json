@@ -2410,5 +2410,17 @@
       "thebetweenlands:lyestone_fizz"
     ],
     "subtitle":  "blsubtitles.misc.lyestone_fizzes"
+  },
+  "sludge_attack": {
+    "sounds": [
+      "entity.slime.attack"
+    ],
+    "subtitle": "blsubtitles.entity.sludge.attack"
+  },
+  "sludge_jump": {
+    "sounds": [
+      "entity.slime.jump"
+    ],
+    "subtitle": "blsubtitles.entity.sludge.jump"
   }
 }

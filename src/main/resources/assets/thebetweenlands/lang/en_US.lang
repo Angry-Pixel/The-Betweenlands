@@ -2449,6 +2449,8 @@ blsubtitles.entity.urchin.attack=Urchin attacks
 blsubtitles.entity.bubbler.spit=Bubbler Crab blows a bubble
 blsubtitles.entity.bubbler.land=Bubble lands
 blsubtitles.entity.bubbler.pop=Pop!
+blsubtitles.entity.sludge.attack=Sludge attacks
+blsubtitles.entity.sludge.jump=Sludge jumps
 
 blsubtitles.misc.roof_collapse=Roof collapses
 blsubtitles.misc.beam_switch=Beam switches
