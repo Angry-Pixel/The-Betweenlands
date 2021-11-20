@@ -1471,7 +1471,7 @@
   },
   "pebble_hiss": {
     "sounds": [
-      "thebetweenlands:sorry"
+      "entity.creeper.primed"
     ],
     "subtitle": "blsubtitles.misc.angry_pebble.hiss"
   },
