@@ -158,6 +158,12 @@
     ],
     "subtitle": "blsubtitles.entity.fish.death"
   },
+  "fish_flop": {
+    "sounds": [
+      "entity.guardian.flop"
+    ],
+    "subtitle": "blsubtitles.entity.fish.flop"
+  },
   "olm_hurt": {
     "sounds": [
       "thebetweenlands:olm_hurt_1",

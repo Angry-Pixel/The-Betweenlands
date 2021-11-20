@@ -531,14 +531,14 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return super.getHurtSound(source);
+		return SoundRegistry.FISH_HURT;
 	}
-	/*
+
     @Override
     protected SoundEvent getDeathSound() {
-       return SoundRegistry.ANADIA_DEATH;
+    	return SoundRegistry.FISH_DEATH;
     }
-	 */
+
 	@Override
 	protected SoundEvent getSwimSound() {
 		return SoundEvents.ENTITY_HOSTILE_SWIM;
@@ -611,7 +611,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 			onGround = false;
 			isAirBorne = true;
 			if(getEntityWorld().getTotalWorldTime()%5==0)
-				getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
+				getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundRegistry.FISH_FLOP, SoundCategory.HOSTILE, 1F, 1F);
 			damageEntity(DamageSource.DROWN, 0.5F);
 		}
 

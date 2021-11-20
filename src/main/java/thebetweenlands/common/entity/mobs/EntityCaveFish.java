@@ -10,7 +10,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -38,12 +37,9 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
-import thebetweenlands.api.item.IAmphibiousArmorUpgrade;
 import thebetweenlands.common.entity.ai.EntityAIFollowTarget;
-import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorUpgrades;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
@@ -175,7 +171,7 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
 
 	@Nullable
     @Override
-    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+    protected SoundEvent getHurtSound(DamageSource source) {
         return SoundRegistry.FISH_HURT;
     }
 
@@ -259,7 +255,7 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
 			onGround = false;
 			isAirBorne = true;
 			if (world.getTotalWorldTime() % 5 == 0)
-				world.playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP,SoundCategory.HOSTILE, 1F, 1F);
+				world.playSound((EntityPlayer) null, posX, posY, posZ, SoundRegistry.FISH_FLOP, SoundCategory.HOSTILE, 1F, 1F);
 			this.damageEntity(DamageSource.DROWN, 0.5F);
 		}
     }

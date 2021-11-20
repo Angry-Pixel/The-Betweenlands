@@ -2279,6 +2279,7 @@ blsubtitles.entity.druid.living=Druid murmurs
 blsubtitles.entity.druid.teleport=Druid teleports
 blsubtitles.entity.fish.hurt=Fish hurts
 blsubtitles.entity.fish.death=Fish dies
+blsubtitles.entity.fish.flop=Fish flops
 blsubtitles.entity.olm.hurt=Olm hurts
 blsubtitles.entity.olm.death=Olm dies
 blsubtitles.entity.angler.attack=Angler bites

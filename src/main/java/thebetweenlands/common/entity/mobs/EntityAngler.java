@@ -163,7 +163,7 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 			onGround = false;
 			isAirBorne = true;
 			if(getEntityWorld().getTotalWorldTime()%5==0)
-				getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
+				getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundRegistry.FISH_FLOP, SoundCategory.HOSTILE, 1F, 1F);
 				damageEntity(DamageSource.DROWN, 0.5F);
 		}
 
