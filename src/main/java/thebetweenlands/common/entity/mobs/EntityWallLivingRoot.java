@@ -31,6 +31,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -405,6 +406,11 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 	@Override
 	public SoundCategory getSoundCategory() {
 		return SoundCategory.HOSTILE;
+	}
+
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundRegistry.LIVING_ROOT_DEATH;
 	}
 
 	@Override
