@@ -422,10 +422,12 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 	public void handleStatusUpdate(byte id) {
 		super.handleStatusUpdate(id);
 
-		if(id == EVENT_HURT_SOUND || id == EVENT_DEATH) {
+		if(id == EVENT_DEATH)
 			this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.LIVING_ROOT_DEATH, getSoundCategory(), 0.75F, 0.8F, false);
-			this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.LIVING_ROOT_HURT, getSoundCategory(), 0.25F, 0.5F, false);
-		}
+	
+		if(id == EVENT_HURT_SOUND)
+			this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.LIVING_ROOT_HURT, getSoundCategory(), 0.75F, 0.5F, false);
+
 	}
 
 	@Override
