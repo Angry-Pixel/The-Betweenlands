@@ -31,6 +31,7 @@ import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -235,7 +236,18 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-
+		if (isLeader()) {
+			if (getEntityWorld().isRemote && getEntityWorld().getTotalWorldTime() % 5 + getEntityWorld().rand.nextInt(5) == 0) {
+				if (isInWater()) {
+					for (int i = 0; i < 2; ++i) {
+						double a = Math.toRadians(rotationYaw);
+						double offSetX = -Math.sin(a) * width * 0.5D;
+						double offSetZ = Math.cos(a) * width * 0.5D;
+						getEntityWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX + offSetX, posY + height * 0.5D + rand.nextDouble() * 0.5D, posZ + offSetZ, 0.0D, 0.4D, 0.0D, new int[0]);
+					}
+				}
+			}
+		}
 		if (!world.isRemote) {
 			if(world.getTotalWorldTime()%200 == 0)
 				checkIfCanBeLeader(); // just in case there is no leader
