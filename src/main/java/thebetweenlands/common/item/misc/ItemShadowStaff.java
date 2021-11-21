@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,13 +16,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import thebetweenlands.api.item.IBigSwingAnimation;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.misc.BlockMistBridge;
 import thebetweenlands.common.block.misc.BlockShadowWalker;
 import thebetweenlands.common.entity.EntityMistBridge;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class ItemShadowStaff extends Item {
+public class ItemShadowStaff extends Item implements IBigSwingAnimation {
 
 	public ItemShadowStaff() {
 		setMaxStackSize(1);
@@ -31,21 +33,22 @@ public class ItemShadowStaff extends Item {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {	
-	ItemStack stack = player.getHeldItem(hand);
-	BlockPos pos = player.getPosition();
-	IBlockState blockStart = world.getBlockState(pos);
+		ItemStack stack = player.getHeldItem(hand);
+		BlockPos pos = player.getPosition();
 
 		if(player.getCooldownTracker().hasCooldown(this))
 			return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 
-		if (!world.isRemote) {
-			if (world.isAirBlock(pos)) {
+		if (world.isAirBlock(pos)) {
+			if (!world.isRemote) {
 				stack.damageItem(2, player);
+
 				double direction = Math.toRadians(player.rotationYaw);
 				Vec3d diag = new Vec3d(Math.sin(direction + Math.PI / 2.0D), 0, Math.cos(direction + Math.PI / 2.0D)).normalize();
 				List<BlockPos> spawnedPos = new ArrayList<BlockPos>();
 				List<BlockPos> convertPos = new ArrayList<BlockPos>();
 				List<Integer> blockDistance = new ArrayList<Integer>();
+
 				for (int distance = -1; distance <= 16; distance++) {
 					for (int distance2 = -distance; distance2 <= distance; distance2++) {
 						for (int yo = 0; yo <= 1; yo++) {
@@ -60,7 +63,7 @@ public class ItemShadowStaff extends Item {
 							spawnedPos.add(origin);
 
 							IBlockState block = world.getBlockState(new BlockPos(originX, originY, originZ));
-							
+
 							if (isShadowableBlock(world, player, origin, block)) {
 								convertPos.add(origin);
 								blockDistance.add(distance);
@@ -69,11 +72,17 @@ public class ItemShadowStaff extends Item {
 						}
 					}
 				}
+
 				spawnEntity(world, pos, blockDistance, convertPos);
 				world.playSound((EntityPlayer) null, pos, SoundRegistry.MIST_STAFF_CAST, SoundCategory.BLOCKS, 1F, 1.0F);
 				player.getCooldownTracker().setCooldown(this, 200);
 			}
+			
+			player.swingArm(hand);
+		} else {
+			return new ActionResult<>(EnumActionResult.FAIL, stack);
 		}
+
 		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 	}
 
@@ -91,6 +100,16 @@ public class ItemShadowStaff extends Item {
 				world.spawnEntity(mist_bridge);
 			}
 		}
+	}
+
+	@Override
+	public boolean shouldUseBigSwingAnimation(ItemStack stack) {
+		return true;
+	}
+
+	@Override
+	public float getSwingSpeedMultiplier(EntityLivingBase entity, ItemStack stack) {
+		return 0.35f;
 	}
 
 }
