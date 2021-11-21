@@ -160,7 +160,10 @@
   },
   "fish_flop": {
     "sounds": [
-      "entity.guardian.flop"
+      "mob/guardian/flop1",
+      "mob/guardian/flop2",
+      "mob/guardian/flop3",
+      "mob/guardian/flop4"
     ],
     "subtitle": "blsubtitles.entity.fish.flop"
   },
@@ -828,7 +831,7 @@
   },
   "pyrad_shoot": {
     "sounds": [
-      "entity.blaze.shoot"
+      "mob/ghast/fireball4"
     ],
     "subtitle": "blsubtitles.entity.pyrad.shoot"
   },
@@ -1483,7 +1486,7 @@
   },
   "pebble_hiss": {
     "sounds": [
-      "entity.creeper.primed"
+      "random/fuse"
     ],
     "subtitle": "blsubtitles.misc.angry_pebble.hiss"
   },
@@ -2440,25 +2443,37 @@
   },
   "sludge_attack": {
     "sounds": [
-      "entity.slime.attack"
+      "mob/slime/attack1",
+      "mob/slime/attack2"
     ],
     "subtitle": "blsubtitles.entity.sludge.attack"
   },
   "sludge_jump": {
     "sounds": [
-      "entity.slime.jump"
+      "mob/slime/big1",
+      "mob/slime/big2",
+      "mob/slime/big3",
+      "mob/slime/big4"
     ],
     "subtitle": "blsubtitles.entity.sludge.jump"
   },
   "living_root_hurt": {
     "sounds": [
-      "block.wood.hit"
+      "step/wood1",
+      "step/wood2",
+      "step/wood3",
+      "step/wood4",
+      "step/wood5",
+      "step/wood6"
     ],
     "subtitle": "blsubtitles.entity.living_root.hurt"
   },
   "living_root_death": {
     "sounds": [
-      "block.wood.break"
+      "dig/wood1",
+      "dig/wood2",
+      "dig/wood3",
+      "dig/wood4"
     ],
     "subtitle": "blsubtitles.entity.living_root.death"
   }
