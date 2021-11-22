@@ -1269,6 +1269,7 @@ tooltip.bl.item_misc.anadia_fins=They glide through the water like wings through
 tooltip.bl.item_misc.anadia_swim_bladder=Keeps the fish from sinking... and floating.
 tooltip.bl.item_misc.urchin_spike=Offense as defense.
 tooltip.bl.item_misc.lurker_skin=Tough and grounded.
+tooltip.bl.item.glowing_goop=Fish can't hide forever.
 tooltip.bl.item.sap_spit=Keeps decay at bay.
 
 tooltip.bl.amphibious_upgrade.format=Amphibious %s
