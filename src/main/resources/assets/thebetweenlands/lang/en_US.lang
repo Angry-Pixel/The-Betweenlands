@@ -1279,6 +1279,7 @@ tooltip.bl.amphibious_upgrade.leggings=Leggings
 tooltip.bl.amphibious_upgrade.boots=Boots
 tooltip.bl.amphibious_ability.toggle=Toggles Amphibious Armour Ability Upgrade\nSneak + Right Click to Scroll\nRight Click to Toggle
 tooltip.bl.amphibious_ability.trigger=Activates Amphibious Armour Ability Upgrade\nSneak + Right Click to Scroll\nRight Click to Activate
+tooltip.bl.fish_trimming_table=Uses a bone axe to chop caught fish and crabs.
 
 
 # Chat

@@ -35,13 +35,15 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.event.ArmSwingSpeedEvent;
+import thebetweenlands.api.item.IBigSwingAnimation;
 import thebetweenlands.api.item.IExtendedReach;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.BLMaterialRegistry;
+import thebetweenlands.common.item.misc.ItemShadowStaff;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.NBTHelper;
 
-public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
+public class ItemGreatsword extends ItemBLSword implements IExtendedReach, IBigSwingAnimation {
 	protected static final String NBT_SWING_START_COOLDOWN = "swingStartCooldownState";
 	protected static final String NBT_HIT_COOLDOWN = "hitCooldownState";
 	protected static final String NBT_SWING_START_TICKS = "swingStartTicks";
@@ -254,10 +256,16 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 		return 5.5;
 	}
 
-	protected float getSwingSpeedMultiplier(EntityLivingBase entity, ItemStack stack) {
+	@Override
+	public float getSwingSpeedMultiplier(EntityLivingBase entity, ItemStack stack) {
 		return 0.35F;
 	}
 
+	@Override
+	public boolean shouldUseBigSwingAnimation(ItemStack stack) {
+		return true;
+	}
+	
 	protected boolean doesBlockShieldUse(EntityLivingBase entity, ItemStack stack) {
 		return true;
 	}
@@ -322,8 +330,8 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 		if(entity.isSwingInProgress && entity.swingingHand != null) {
 			ItemStack stack = entity.getHeldItem(entity.swingingHand);
 
-			if(!stack.isEmpty() && stack.getItem() instanceof ItemGreatsword) {
-				event.setSpeed(event.getSpeed() * ((ItemGreatsword) stack.getItem()).getSwingSpeedMultiplier(entity, stack));
+			if(!stack.isEmpty() && stack.getItem() instanceof IBigSwingAnimation && ((IBigSwingAnimation) stack.getItem()).shouldUseBigSwingAnimation(stack)) {
+				event.setSpeed(event.getSpeed() * ((IBigSwingAnimation) stack.getItem()).getSwingSpeedMultiplier(entity, stack));
 			}
 		}
 	}
@@ -334,7 +342,7 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 		if(!renderingHand) {
 			ItemStack stack = event.getItemStack();
 
-			if(!stack.isEmpty() && stack.getItem() instanceof ItemGreatsword) {
+			if(!stack.isEmpty() && stack.getItem() instanceof IBigSwingAnimation && ((IBigSwingAnimation) stack.getItem()).shouldUseBigSwingAnimation(stack)) {
 				event.setCanceled(true);
 
 				renderingHand = true;
