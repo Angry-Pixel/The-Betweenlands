@@ -541,7 +541,7 @@ public class DecorationHelper {
 
 	public static boolean generateTallCattail(DecoratorPositionProvider decorator) {
 		BlockPos pos = decorator.getRandomPos();
-		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.PLANT_DECORATION_SOIL.matches(decorator.getWorld(), pos.down())) {
+		if(decorator.getWorld().isAirBlock(pos) && decorator.getWorld().isAirBlock(pos.up()) && SurfaceType.PLANT_DECORATION_SOIL.matches(decorator.getWorld(), pos.down())) {
 			BlockRegistry.TALL_CATTAIL.placeAt(decorator.getWorld(), pos, 2);
 			return true;
 		}
@@ -550,7 +550,7 @@ public class DecorationHelper {
 
 	public static boolean generateSwampDoubleTallgrass(DecoratorPositionProvider decorator) {
 		BlockPos pos = decorator.getRandomPos();
-		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.PLANT_DECORATION_SOIL.matches(decorator.getWorld(), pos.down())) {
+		if(decorator.getWorld().isAirBlock(pos) && decorator.getWorld().isAirBlock(pos.up()) && SurfaceType.PLANT_DECORATION_SOIL.matches(decorator.getWorld(), pos.down())) {
 			BlockRegistry.SWAMP_DOUBLE_TALLGRASS.placeAt(decorator.getWorld(), pos, 2);
 			return true;
 		}

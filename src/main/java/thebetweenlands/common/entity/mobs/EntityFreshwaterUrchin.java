@@ -22,6 +22,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -52,6 +53,16 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 		stepHeight = 1F;
 	}
 
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return SoundRegistry.CRUNCH;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SoundRegistry.CRUNCH;
+    }
+	
 	@Override
 	protected void initEntityAI() {
 		tasks.addTask(0, new EntityAIAvoidEntity<EntityPlayer>(this, EntityPlayer.class, 10.0F, 1D, 1D));

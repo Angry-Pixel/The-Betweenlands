@@ -137,7 +137,7 @@ public class ItemGreataxe extends ItemGreatsword {
 	}
 
 	@Override
-	protected float getSwingSpeedMultiplier(EntityLivingBase entity, ItemStack stack) {
+	public float getSwingSpeedMultiplier(EntityLivingBase entity, ItemStack stack) {
 		return 0.14F;
 	}
 

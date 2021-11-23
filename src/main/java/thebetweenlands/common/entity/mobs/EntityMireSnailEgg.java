@@ -9,8 +9,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import thebetweenlands.api.entity.IEntityBL;
@@ -19,6 +21,7 @@ import thebetweenlands.common.entity.EntityAnimalBL;
 import thebetweenlands.common.item.food.ItemMireSnailEgg;
 import thebetweenlands.common.network.clientbound.MessageMireSnailEggHatching;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.AnimationMathHelper;
 
 public class EntityMireSnailEgg extends EntityAnimalBL {
@@ -75,6 +78,16 @@ public class EntityMireSnailEgg extends EntityAnimalBL {
 	@Override
 	public EntityAgeable createChild(EntityAgeable entityAgeable) {
 		return null;
+	}
+	
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		return SoundRegistry.CRUNCH;
+	}
+
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundRegistry.SQUISH;
 	}
 
 	@Override

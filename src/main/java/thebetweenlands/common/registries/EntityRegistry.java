@@ -225,7 +225,7 @@ public class EntityRegistry {
 		registerEntity(EntityFlameJet.class, "flame_jet", 64, 1, true);
 		registerEntity(EntityMovingWall.class, "moving_wall", 64, 1, true);
 		registerEntity(EntityEmberling.class, "emberling");
-		registerEntity(EntityEmberlingWild.class, "wild_emberling", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntityEmberlingWild.class, "wild_emberling", 0xA43B2E, 0x391211);
 		registerEntity(EntityGalleryFrame.class, "gallery_frame");
 		registerEntity(EntitySludgeMenace.class, "sludge_menace", 0x726459, 0x726459);
 		registerEntity(EntitySludgeMenace.DummyPart.class, "sludge_menace_multipart_dummy", 64, 20, false);

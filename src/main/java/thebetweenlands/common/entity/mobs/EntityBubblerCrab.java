@@ -9,7 +9,9 @@ import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.projectiles.EntityBubblerCrabBubble;
@@ -26,6 +28,16 @@ public class EntityBubblerCrab extends EntitySiltCrab {
 		this.setSize(0.7F, 0.5F);
 		this.stepHeight = 2;
 	}
+	
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return SoundRegistry.CRUNCH;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SoundRegistry.CRUNCH;
+    }
 
 	@Override
 	protected void initEntityAI() {
@@ -82,26 +94,30 @@ public class EntityBubblerCrab extends EntitySiltCrab {
 		public void updateTask() {
 			--attackTime;
 			EntityLivingBase entitylivingbase = crab.getAttackTarget();
-			double d0 = crab.getDistanceSq(entitylivingbase);
-			if (d0 < 25D) {
-				double d1 = entitylivingbase.posX - crab.posX;
-				double d2 = entitylivingbase.posY - crab.posY;
-				double d3 = entitylivingbase.posZ - crab.posZ;
-				if (attackTime <= 0) {
-					++attackStep;
-					if (attackStep == 1)
-						attackTime = 40;
-					else {
-						attackTime = 40;
-						attackStep = 0;
-					}
-					if (attackStep == 1) {
-						EntityBubblerCrabBubble entityBubble = new EntityBubblerCrabBubble(crab.getEntityWorld(), crab);
-						entityBubble.setPosition(crab.posX, crab.posY + crab.height + 0.5D , crab.posZ);
-						entityBubble.shoot(d1, d2, d3, 0.5F, 0F);
-						crab.getEntityWorld().spawnEntity(entityBubble);
-						crab.getEntityWorld().playSound((EntityPlayer) null, crab.getPosition(), SoundRegistry.BUBBLER_SPIT, SoundCategory.HOSTILE, 1F, 1.0F);
-						crab.aggroCooldown = 0;
+			if (entitylivingbase != null && entitylivingbase.isEntityAlive()) {
+				double d0 = crab.getDistanceSq(entitylivingbase);
+				if (d0 < 25D) {
+					double d1 = entitylivingbase.posX - crab.posX;
+					double d2 = entitylivingbase.posY - crab.posY;
+					double d3 = entitylivingbase.posZ - crab.posZ;
+					if (attackTime <= 0) {
+						++attackStep;
+						if (attackStep == 1)
+							attackTime = 40;
+						else {
+							attackTime = 40;
+							attackStep = 0;
+						}
+						if (attackStep == 1) {
+							EntityBubblerCrabBubble entityBubble = new EntityBubblerCrabBubble(crab.getEntityWorld(),
+									crab);
+							entityBubble.setPosition(crab.posX, crab.posY + crab.height + 0.5D, crab.posZ);
+							entityBubble.shoot(d1, d2, d3, 0.5F, 0F);
+							crab.getEntityWorld().spawnEntity(entityBubble);
+							crab.getEntityWorld().playSound((EntityPlayer) null, crab.getPosition(),
+									SoundRegistry.BUBBLER_SPIT, SoundCategory.HOSTILE, 1F, 1.0F);
+							crab.aggroCooldown = 0;
+						}
 					}
 				}
 			}

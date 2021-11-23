@@ -25,6 +25,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -78,6 +79,16 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 		this.dataManager.register(LOOK_X, 0.0F);
 		this.dataManager.register(LOOK_Y, 0.0F);
 		this.dataManager.register(LOOK_Z, 0.0F);
+	}
+	
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		return SoundRegistry.CRUNCH;
+	}
+
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundRegistry.SQUISH;
 	}
 
 	@Override

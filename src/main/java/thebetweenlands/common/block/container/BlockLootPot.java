@@ -1,6 +1,5 @@
 package thebetweenlands.common.block.container;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -8,7 +7,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.Block.EnumOffsetType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
@@ -22,11 +20,15 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
@@ -35,13 +37,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.entity.mobs.EntityBubblerCrab;
+import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.item.ItemBlockEnum.IGenericMetaSelector;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.BlockRegistry.ISubtypeItemBlockModelDefinition;
-import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityLootInventory;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.util.AdvancedStateMap.Builder;
@@ -61,7 +64,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 		setHarvestLevel("pickaxe", 0);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(VARIANT, EnumLootPot.POT_1));
 	}
-	
+
 	@Nullable
 	public static TileEntityLootPot getTileEntity(IBlockAccess world, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
@@ -75,7 +78,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
 	}
-	
+
 	@Override
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
@@ -196,16 +199,26 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 	}
 
 	@Override
-	public void onPlayerDestroy(World worldIn, BlockPos pos, IBlockState state) {
-		if (!worldIn.isRemote) {
-			if (worldIn.rand.nextInt(3) == 0) {
-				EntityTermite entity = new EntityTermite(worldIn);
-				entity.getEntityAttribute(EntityTermite.SMALL).setBaseValue(1);
-				entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0.0F, 0.0F);
-				worldIn.spawnEntity(entity);
+	public void onPlayerDestroy(World world, BlockPos pos, IBlockState state) {
+		if (!world.isRemote) {
+			EntityLivingBase entity = null;
+			if (world.rand.nextInt(3) == 0) {
+				if (world.getBlockState(pos.up()).getMaterial() != Material.WATER) {
+					entity = new EntityTermite(world);
+					entity.getEntityAttribute(EntityTermite.SMALL).setBaseValue(1);
+				} else {
+					if (world.rand.nextBoolean())
+						entity = new EntityBubblerCrab(world);
+					else
+						entity = new EntitySiltCrab(world);
+				}
+				if (entity != null) {
+					entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0.0F, 0.0F);
+					world.spawnEntity(entity);
+				}
 			}
 		}
-		super.onPlayerDestroy(worldIn, pos, state);
+		super.onPlayerDestroy(world, pos, state);
 	}
 
 	@Override
@@ -272,12 +285,12 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 	public void setStateMapper(Builder builder) {
 		builder.ignore(VARIANT).withPropertySuffix(VARIANT, e -> e.getName());
 	}
-	
+
 	@Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
-	
+
 	@Override
 	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return false;

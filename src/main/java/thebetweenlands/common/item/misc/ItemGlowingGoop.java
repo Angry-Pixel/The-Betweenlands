@@ -4,6 +4,8 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -21,14 +23,26 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.projectiles.EntityGlowingGoop;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 import thebetweenlands.common.registries.BlockRegistry;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemGlowingGoop extends ItemBlock {
 	public ItemGlowingGoop() {
 		super(BlockRegistry.GLOWING_GOOP);
 		this.setCreativeTab(BLCreativeTabs.ITEMS);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		tooltip.add(I18n.format("tooltip.bl.item.glowing_goop"));
 	}
 
 	@Override
@@ -43,13 +57,18 @@ public class ItemGlowingGoop extends ItemBlock {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		if(!canUse(playerIn.getHeldItem(handIn))) {
+			return new ActionResult<>(EnumActionResult.FAIL, playerIn.getHeldItem(handIn));
+		}
+
 		playerIn.setActiveHand(handIn);
+
 		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 
 	@Override
 	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
-		if (player instanceof EntityPlayer) {
+		if (player instanceof EntityPlayer && canUse(stack)) {
 			Vec3d forward = player.getLookVec();
 			float yaw = player.rotationYaw;
 			float pitch = player.rotationPitch - 90;
@@ -68,6 +87,9 @@ public class ItemGlowingGoop extends ItemBlock {
 
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entityLiving, int timeLeft) {
+		if(!canUse(stack))
+			return;
+
 		if (!world.isRemote && entityLiving instanceof EntityPlayer) {
 			int useTime = this.getMaxItemUseDuration(stack) - timeLeft;
 
@@ -85,6 +107,10 @@ public class ItemGlowingGoop extends ItemBlock {
 
 	@Override
 	public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
+		if(!canUse(stack)) {
+			return false;
+		}
+
 		Block block = this.block;
 		
 		if(world.getBlockState(pos).getMaterial() == Material.WATER) {
@@ -107,5 +133,10 @@ public class ItemGlowingGoop extends ItemBlock {
 		}
 
 		return true;
+	}
+
+
+	private boolean canUse(ItemStack stack) {
+		return ItemAmphibiousArmor.getUpgradeItemStoredDamage(stack) == 0;
 	}
 }

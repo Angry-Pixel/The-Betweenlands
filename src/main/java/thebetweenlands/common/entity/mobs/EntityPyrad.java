@@ -25,6 +25,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -466,8 +467,7 @@ public class EntityPyrad extends EntityFlyingMob implements IEntityBL {
 	
 						if (this.attackStep > 1) {
 							float f = MathHelper.sqrt(MathHelper.sqrt(distSq)) * 0.8F;
-							this.pyrad.world.playEvent((EntityPlayer)null, 1018, new BlockPos((int)this.pyrad.posX, (int)this.pyrad.posY, (int)this.pyrad.posZ), 0);
-	
+							pyrad.world.playSound(null, pyrad.posX, pyrad.posY, pyrad.posZ, SoundRegistry.PYRAD_SHOOT, SoundCategory.HOSTILE, 1F, 0.8F + pyrad.world.rand.nextFloat() * 0.4F);
 							int numberFlames = (int)this.pyrad.getEntityAttribute(FLAMES_PER_ATTACK).getAttributeValue();
 	
 							for (int i = 0; i < (numberFlames > 1 ? this.pyrad.rand.nextInt(numberFlames) : 0) + 1; ++i) {

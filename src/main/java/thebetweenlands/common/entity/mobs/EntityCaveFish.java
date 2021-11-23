@@ -10,7 +10,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -32,18 +31,16 @@ import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
-import thebetweenlands.api.item.IAmphibiousArmorUpgrade;
 import thebetweenlands.common.entity.ai.EntityAIFollowTarget;
-import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorUpgrades;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
@@ -175,7 +172,7 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
 
 	@Nullable
     @Override
-    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
+    protected SoundEvent getHurtSound(DamageSource source) {
         return SoundRegistry.FISH_HURT;
     }
 
@@ -239,7 +236,18 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-
+		if (isLeader()) {
+			if (getEntityWorld().isRemote && getEntityWorld().getTotalWorldTime() % 5 + getEntityWorld().rand.nextInt(5) == 0) {
+				if (isInWater()) {
+					for (int i = 0; i < 2; ++i) {
+						double a = Math.toRadians(rotationYaw);
+						double offSetX = -Math.sin(a) * width * 0.5D;
+						double offSetZ = Math.cos(a) * width * 0.5D;
+						getEntityWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX + offSetX, posY + height * 0.5D + rand.nextDouble() * 0.5D, posZ + offSetZ, 0.0D, 0.4D, 0.0D, new int[0]);
+					}
+				}
+			}
+		}
 		if (!world.isRemote) {
 			if(world.getTotalWorldTime()%200 == 0)
 				checkIfCanBeLeader(); // just in case there is no leader
@@ -259,7 +267,7 @@ public class EntityCaveFish extends EntityCreature implements IEntityBL {
 			onGround = false;
 			isAirBorne = true;
 			if (world.getTotalWorldTime() % 5 == 0)
-				world.playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP,SoundCategory.HOSTILE, 1F, 1F);
+				world.playSound((EntityPlayer) null, posX, posY, posZ, SoundRegistry.FISH_FLOP, SoundCategory.HOSTILE, 1F, 1F);
 			this.damageEntity(DamageSource.DROWN, 0.5F);
 		}
     }

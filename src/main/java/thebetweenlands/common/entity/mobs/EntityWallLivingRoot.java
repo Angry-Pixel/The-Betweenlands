@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -32,6 +31,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -409,6 +409,11 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 	}
 
 	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundRegistry.LIVING_ROOT_DEATH;
+	}
+
+	@Override
 	protected void playHurtSound(DamageSource source) {
 		this.world.setEntityState(this, EVENT_HURT_SOUND);
 	}
@@ -417,11 +422,12 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 	public void handleStatusUpdate(byte id) {
 		super.handleStatusUpdate(id);
 
-		if(id == EVENT_HURT_SOUND || id == EVENT_DEATH) {
-			SoundType soundType = SoundType.WOOD;
-			this.world.playSound(this.posX, this.posY, this.posZ, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 1.3F, soundType.getPitch() * 0.8F, false);
-			this.world.playSound(this.posX, this.posY, this.posZ, soundType.getHitSound(), SoundCategory.NEUTRAL, (soundType.getVolume() + 1.0F) / 4.0F, soundType.getPitch() * 0.5F, false);
-		}
+		if(id == EVENT_DEATH)
+			this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.LIVING_ROOT_DEATH, getSoundCategory(), 0.75F, 0.8F, false);
+	
+		if(id == EVENT_HURT_SOUND)
+			this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.LIVING_ROOT_HURT, getSoundCategory(), 0.75F, 0.5F, false);
+
 	}
 
 	@Override

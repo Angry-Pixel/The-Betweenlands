@@ -38,6 +38,7 @@ import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -531,14 +532,14 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource source) {
-		return super.getHurtSound(source);
+		return SoundRegistry.FISH_HURT;
 	}
-	/*
+
     @Override
     protected SoundEvent getDeathSound() {
-       return SoundRegistry.ANADIA_DEATH;
+    	return SoundRegistry.FISH_DEATH;
     }
-	 */
+
 	@Override
 	protected SoundEvent getSwimSound() {
 		return SoundEvents.ENTITY_HOSTILE_SWIM;
@@ -587,12 +588,15 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 
 	@Override
 	public void onLivingUpdate() {
-		if (getEntityWorld().isRemote) {
-			/*	if (isInWater()) {
-				Vec3d vec3d = getLook(0.0F);
-				for (int i = 0; i < 2; ++i)
-					getEntityWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX + (rand.nextDouble() - 0.5D) * (double) width - vec3d.x , posY + rand.nextDouble() * (double) height - vec3d.y , posZ + (rand.nextDouble() - 0.5D) * (double) width - vec3d.z, 0.0D, 0.0D, 0.0D, new int[0]);
-			}*/
+		if (getEntityWorld().isRemote && getEntityWorld().getTotalWorldTime()%5 + getEntityWorld().rand.nextInt(5) == 0) {
+			if (isInWater()) {
+				for (int i = 0; i < 2; ++i) {
+					double a = Math.toRadians(rotationYaw);
+					double offSetX = -Math.sin(a) * width * 0.5D;
+					double offSetZ = Math.cos(a) * width * 0.5D;
+					getEntityWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX + offSetX, posY + height * 0.5D + rand.nextDouble() * 0.5D, posZ + offSetZ, 0.0D, 0.4D, 0.0D, new int[0]);
+				}
+			}
 		}
 
 		if(glowTimer > 0) {
@@ -611,7 +615,7 @@ public class EntityAnadia extends EntityCreature implements IEntityBL {
 			onGround = false;
 			isAirBorne = true;
 			if(getEntityWorld().getTotalWorldTime()%5==0)
-				getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
+				getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundRegistry.FISH_FLOP, SoundCategory.HOSTILE, 1F, 1F);
 			damageEntity(DamageSource.DROWN, 0.5F);
 		}
 

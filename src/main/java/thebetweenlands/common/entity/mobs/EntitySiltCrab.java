@@ -25,6 +25,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -57,6 +58,16 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 		this.stepHeight = 2;
 	}
 
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return SoundRegistry.CRUNCH;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SoundRegistry.CRUNCH;
+    }
+	
 	@Override
 	protected void entityInit() {
 		super.entityInit();

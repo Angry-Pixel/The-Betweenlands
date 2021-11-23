@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:blocks/water_weeds"
+    "layer0": "thebetweenlands:items/water_weeds"
   }
 }

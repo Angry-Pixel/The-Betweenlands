@@ -203,12 +203,12 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return null;
+		return SoundRegistry.CRUNCH;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return null;
+		return SoundRegistry.SQUISH;
 	}
 
 	@Override

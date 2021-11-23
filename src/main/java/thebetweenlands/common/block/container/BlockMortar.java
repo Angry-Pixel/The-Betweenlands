@@ -75,6 +75,7 @@ public class BlockMortar extends BlockContainer {
 				if (playerIn.getHeldItem(hand).getItem() == ItemRegistry.PESTLE && tile.getStackInSlot(1).isEmpty()) {
 					tile.setInventorySlotContents(1, playerIn.getHeldItem(hand));
 					tile.hasPestle = true;
+					worldIn.notifyBlockUpdate(tile.getPos(), worldIn.getBlockState(pos), worldIn.getBlockState(pos), 2);
 					playerIn.setHeldItem(hand, ItemStack.EMPTY);
 				} else if (playerIn.getHeldItem(hand).getItem() instanceof ItemLifeCrystal && tile.getStackInSlot(3).isEmpty()) {
 					tile.setInventorySlotContents(3, playerIn.getHeldItem(hand));

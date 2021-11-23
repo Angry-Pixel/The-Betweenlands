@@ -32,7 +32,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
@@ -143,11 +142,14 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 
 	@Override
 	public void onLivingUpdate() {
-		if (getEntityWorld().isRemote) {
+		if (getEntityWorld().isRemote && getEntityWorld().getTotalWorldTime()%5 + getEntityWorld().rand.nextInt(5) == 0) {
 			if (isInWater()) {
-				Vec3d vec3d = getLook(0.0F);
-				for (int i = 0; i < 2; ++i)
-					getEntityWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX + (rand.nextDouble() - 0.5D) * (double) width - vec3d.x * 1.5D, posY + rand.nextDouble() * (double) height - vec3d.y * 1.5D, posZ + (rand.nextDouble() - 0.5D) * (double) width - vec3d.z * 1.5D, 0.0D, 0.0D, 0.0D, new int[0]);
+				for (int i = 0; i < 2; ++i) {
+					double a = Math.toRadians(rotationYaw);
+					double offSetX = -Math.sin(a) * width * 0.5D;
+					double offSetZ = Math.cos(a) * width * 0.5D;
+					getEntityWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX + offSetX, posY + height * 0.5D + rand.nextDouble() * 0.5D, posZ + offSetZ, 0.0D, 0.4D, 0.0D, new int[0]);
+				}
 			}
 		}
 
@@ -163,7 +165,7 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 			onGround = false;
 			isAirBorne = true;
 			if(getEntityWorld().getTotalWorldTime()%5==0)
-				getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
+				getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundRegistry.FISH_FLOP, SoundCategory.HOSTILE, 1F, 1F);
 				damageEntity(DamageSource.DROWN, 0.5F);
 		}
 

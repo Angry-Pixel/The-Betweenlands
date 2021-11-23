@@ -9,8 +9,10 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
@@ -22,6 +24,7 @@ import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.entity.draeton.EntityPullerFirefly;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class EntityFirefly extends EntityFlyingCreature implements IEntityBL, IPullerEntityProvider<EntityPullerFirefly> {
@@ -80,6 +83,16 @@ public class EntityFirefly extends EntityFlyingCreature implements IEntityBL, IP
 	@Override
 	public int getMaxSpawnedInChunk() {
 		return 1;
+	}
+	
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		return SoundRegistry.CRUNCH;
+	}
+
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundRegistry.SQUISH;
 	}
 
 	@Override

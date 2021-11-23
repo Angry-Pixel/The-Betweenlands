@@ -5,13 +5,14 @@ import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -24,7 +25,7 @@ import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class TileEntityFishTrimmingTable extends TileEntity implements IInventory {
+public class TileEntityFishTrimmingTable extends TileEntity implements ISidedInventory {
 	public NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(6, ItemStack.EMPTY);
 
 	public TileEntityFishTrimmingTable() {
@@ -176,8 +177,23 @@ public class TileEntityFishTrimmingTable extends TileEntity implements IInventor
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack is) {
+	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing direction) {
 		return false;
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int index, ItemStack stack) {
+		return false;
+	}
+
+	@Override
+	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+		return false;
+	}
+
+	@Override
+	public int[] getSlotsForFace(EnumFacing side) {
+		return new int[]{0};
 	}
 
 	@Override

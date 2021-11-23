@@ -25,6 +25,7 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -63,6 +64,16 @@ public class EntityRockSnot extends EntityProximitySpawner implements IEntityBL 
 	public World getWorld() {
 		return getEntityWorld();
 	}
+	
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return SoundRegistry.CRUNCH;
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return SoundRegistry.CRUNCH;
+    }
 
 	@Override
 	protected void initEntityAI() {
