@@ -42,7 +42,7 @@ import thebetweenlands.common.world.WorldProviderBetweenlands;
 public class EventWinter extends SeasonalEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "winter");
 
-	private static final long WINTER_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), 11, 1, 0, 0).getTime().getTime();
+	private static final long WINTER_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), 11, 24, 0, 0).getTime().getTime();
 
 	public EventWinter(BLEnvironmentEventRegistry registry) {
 		super(registry);
@@ -55,7 +55,7 @@ public class EventWinter extends SeasonalEnvironmentEvent {
 
 	@Override
 	public int getDurationInDays() {
-		return 31;
+		return 7;
 	}
 
 	public static boolean isFroooosty(World world) {
