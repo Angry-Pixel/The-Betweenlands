@@ -386,8 +386,19 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 					}
 
 					if (anadia.getStaminaTicks() % 40 == 0) {
-						// consumes half a shank of hunger every 2 seconds or so whilst the fish has stamina
-						angler.getFoodStats().setFoodLevel(angler.getFoodStats().getFoodLevel() - 1);
+						NBTTagCompound nbt = angler.getEntityData();
+						float saturation = 0F;
+						// tries first to consume saturation every 2 seconds or so whilst the fish has stamina
+						if (nbt.hasKey("foodLevel", 99))
+							saturation = nbt.getFloat("foodSaturationLevel");
+
+						if (angler.getFoodStats().getSaturationLevel() > 0.0F) {
+							saturation = Math.max(angler.getFoodStats().getSaturationLevel() - 1.0F, 0.0F);
+							nbt.setFloat("foodSaturationLevel", saturation);
+						} else {
+							// consumes half a shank of hunger every 2 seconds or so whilst the fish has stamina
+							angler.getFoodStats().setFoodLevel(angler.getFoodStats().getFoodLevel() - 1);
+						}
 					}
 				}
 
