@@ -386,7 +386,7 @@ public class EntityBLFishHook extends EntityFishHook implements IEntityAdditiona
 					}
 
 					if (anadia.getStaminaTicks() % 40 == 0) {
-						// consumes a full shank of hunger every 2 seconds or so whilst the fish has stamina
+						// consumes a full shank of hunger every 2 seconds or so whilst the fish has stamina 
 						angler.getFoodStats().addExhaustion(8);
 					}
 				}
