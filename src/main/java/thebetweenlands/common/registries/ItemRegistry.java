@@ -110,8 +110,59 @@ import thebetweenlands.common.item.herblore.ItemDentrothystVial;
 import thebetweenlands.common.item.herblore.ItemElixir;
 import thebetweenlands.common.item.herblore.ItemManualHL;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
-import thebetweenlands.common.item.misc.*;
+import thebetweenlands.common.item.misc.ItemAmateMap;
+import thebetweenlands.common.item.misc.ItemAmuletSlot;
+import thebetweenlands.common.item.misc.ItemAngryPebble;
+import thebetweenlands.common.item.misc.ItemBLNameTag;
+import thebetweenlands.common.item.misc.ItemBLRecord;
+import thebetweenlands.common.item.misc.ItemBarkAmulet;
+import thebetweenlands.common.item.misc.ItemBoneWayfinder;
+import thebetweenlands.common.item.misc.ItemCavingRope;
+import thebetweenlands.common.item.misc.ItemChiromawEgg;
+import thebetweenlands.common.item.misc.ItemChiromawTame;
+import thebetweenlands.common.item.misc.ItemCritters;
+import thebetweenlands.common.item.misc.ItemDentrothystShard;
+import thebetweenlands.common.item.misc.ItemDoorBetweenlands;
+import thebetweenlands.common.item.misc.ItemDraeton;
+import thebetweenlands.common.item.misc.ItemEmptyAmateMap;
+import thebetweenlands.common.item.misc.ItemFishBait;
+import thebetweenlands.common.item.misc.ItemFreshwaterUrchin;
+import thebetweenlands.common.item.misc.ItemFumigant;
+import thebetweenlands.common.item.misc.ItemGalleryFrame;
+import thebetweenlands.common.item.misc.ItemGem;
+import thebetweenlands.common.item.misc.ItemGemSinger;
+import thebetweenlands.common.item.misc.ItemGlue;
+import thebetweenlands.common.item.misc.ItemGrapplingHook;
+import thebetweenlands.common.item.misc.ItemLifeCrystal;
+import thebetweenlands.common.item.misc.ItemLoreScrap;
+import thebetweenlands.common.item.misc.ItemLurkerSkinPatch;
+import thebetweenlands.common.item.misc.ItemMagicItemMagnet;
+import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.item.misc.ItemMistStaff;
+import thebetweenlands.common.item.misc.ItemMob;
+import thebetweenlands.common.item.misc.ItemMobAnadia;
+import thebetweenlands.common.item.misc.ItemMossBed;
+import thebetweenlands.common.item.misc.ItemMummyBait;
+import thebetweenlands.common.item.misc.ItemOctineIngot;
+import thebetweenlands.common.item.misc.ItemPyradFlame;
+import thebetweenlands.common.item.misc.ItemRingOfGathering;
+import thebetweenlands.common.item.misc.ItemRope;
+import thebetweenlands.common.item.misc.ItemRuneDoorKey;
+import thebetweenlands.common.item.misc.ItemSapSpit;
+import thebetweenlands.common.item.misc.ItemShadowStaff;
+import thebetweenlands.common.item.misc.ItemShimmerStone;
+import thebetweenlands.common.item.misc.ItemSnotPod;
+import thebetweenlands.common.item.misc.ItemSpiritTreeFaceMaskSmallAnimated;
+import thebetweenlands.common.item.misc.ItemSwampTalisman;
+import thebetweenlands.common.item.misc.ItemTarminion;
+import thebetweenlands.common.item.misc.ItemVolarkite;
+import thebetweenlands.common.item.misc.ItemWeedwoodRowboat;
+import thebetweenlands.common.item.misc.ItemWeedwoodSign;
+import thebetweenlands.common.item.misc.LocationDebugItem;
+import thebetweenlands.common.item.misc.TestItem;
+import thebetweenlands.common.item.misc.TestItemChimp;
+import thebetweenlands.common.item.misc.TestItemChimpRuler;
 import thebetweenlands.common.item.shields.ItemDentrothystShield;
 import thebetweenlands.common.item.shields.ItemLivingWeedwoodShield;
 import thebetweenlands.common.item.shields.ItemLurkerSkinShield;
@@ -238,6 +289,8 @@ public class ItemRegistry {
     public static final Item OLM_EGG_RAW = new ItemBLFood(1, 0.2F, false);
     public static final Item OLM_EGG_COOKED = new ItemBLFood(2, 0.2F, false);
     public static final Item OLMLETTE = new ItemBLFood(8, 0.6F, false);
+    
+    public static final Item SILK_GRUB = new ItemBLFood(1, 0.2F, false);
 
     //armor
     public static final Item BONE_HELMET = new ItemBoneArmor(EntityEquipmentSlot.HEAD);
@@ -477,6 +530,8 @@ public class ItemRegistry {
     public static final Item AA_UPGRADE_VORTEX = new ItemAmphibiousArmorSpecialUpgrade().setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item AA_UPGRADE_TRIGGER = new ItemAmphibiousArmourUpgradeTrigger().setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item AA_UPGRADE_TOGGLE = new ItemAmphibiousArmourUpgradeToggle().setCreativeTab(BLCreativeTabs.GEARS);
+
+    public static final Item PHEROMONE_THORAX = new Item().setCreativeTab(BLCreativeTabs.ITEMS); //placeholder will make it a stand alone item later
 
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();

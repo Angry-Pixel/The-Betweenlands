@@ -151,6 +151,7 @@ import thebetweenlands.common.block.plant.BlockThorns;
 import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
 import thebetweenlands.common.block.plant.BlockWaterWeeds;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
+import thebetweenlands.common.block.plant.BlockWeedwoodBushInfested;
 import thebetweenlands.common.block.plant.BlockWeepingBlue;
 import thebetweenlands.common.block.structure.BlockBeamLensSupport;
 import thebetweenlands.common.block.structure.BlockBeamOrigin;
@@ -771,6 +772,12 @@ public class BlockRegistry {
     public static final Block MIDDLE_FRUIT_BUSH = new BlockMiddleFruitBush();
     public static final Block FUNGUS_CROP = new BlockFungusCrop();
     public static final BlockAspectrusCrop ASPECTRUS_CROP = new BlockAspectrusCrop();
+    public static final Block WEEDWOOD_BUSH_INFESTED_0 = new BlockWeedwoodBushInfested(ItemStack.EMPTY, 0);
+    public static final Block WEEDWOOD_BUSH_INFESTED_1 = new BlockWeedwoodBushInfested(ItemStack.EMPTY, 1);
+    public static final Block WEEDWOOD_BUSH_INFESTED_2 = new BlockWeedwoodBushInfested(ItemStack.EMPTY, 2);// drop silk worm
+    public static final Block WEEDWOOD_BUSH_INFESTED_3 = new BlockWeedwoodBushInfested(ItemStack.EMPTY, 3);// drop silk but render cocoons
+    public static final Block WEEDWOOD_BUSH_INFESTED_4 = new BlockWeedwoodBushInfested(ItemStack.EMPTY, 4);// decay 
+    
     public static final Block PURIFIED_SWAMP_DIRT = new BlockSwampDirt(Material.GROUND);
     public static final Block DUG_SWAMP_DIRT = new BlockDugDirt(false).setItemDropped(() -> Item.getItemFromBlock(SWAMP_DIRT));
     public static final Block DUG_PURIFIED_SWAMP_DIRT = new BlockDugDirt(true).setItemDropped(() -> Item.getItemFromBlock(SWAMP_DIRT));

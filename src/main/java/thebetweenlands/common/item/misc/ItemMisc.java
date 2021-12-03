@@ -148,7 +148,9 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 		SNOT(58),
 		URCHIN_SPIKE(59),
 		FISHING_FLOAT(60),
-		OLMLETTE_MIXTURE(61);
+		OLMLETTE_MIXTURE(61),
+		SILK_GRUB_COCOON(62),
+		SILK_THREAD(63);
 
 		private final int id;
 		private final String unlocalizedName;
