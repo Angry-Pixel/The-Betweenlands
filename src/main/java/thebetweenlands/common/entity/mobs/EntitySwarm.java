@@ -28,6 +28,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -49,6 +50,7 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySwarm extends EntityClimberBase implements IMob {
@@ -209,6 +211,11 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundRegistry.SQUISH;
+	}
+
+	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.INFESTATION;
 	}
 
 	@Override

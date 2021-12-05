@@ -159,6 +159,7 @@ public class LootTableRegistry {
     public static final ResourceLocation BUBBLER_CRAB_TRIM_1 = register("entities/bubbler_crab_trim_1");
     public static final ResourceLocation BUBBLER_CRAB_TRIM_2 = register("entities/bubbler_crab_trim_2");
     public static final ResourceLocation BUBBLER_CRAB_TRIM_3 = register("entities/bubbler_crab_trim_3");
+    public static final ResourceLocation INFESTATION = register("entities/infestation");
 
     //SPECIAL MOB LOOT FUNCTIONS
     public static final ResourceLocation CHIROMAW_HATCHLING = register("entities/chiromaw_hatchling");
