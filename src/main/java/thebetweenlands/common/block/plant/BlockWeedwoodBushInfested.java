@@ -12,6 +12,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.common.entity.mobs.EntitySwarm;
+import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockWeedwoodBushInfested extends BlockWeedwoodBush {
 	private ItemStack drop;
@@ -20,6 +25,7 @@ public class BlockWeedwoodBushInfested extends BlockWeedwoodBush {
 	public BlockWeedwoodBushInfested(ItemStack drop, int stage) {
 		this.drop = drop;
 		this.stage = stage;
+		setTickRandomly(true);
 	}
 
 	@Override
@@ -38,6 +44,63 @@ public class BlockWeedwoodBushInfested extends BlockWeedwoodBush {
 		IBlockState iblockstate = worldIn.getBlockState(pos);
 		Block block = iblockstate.getBlock();
 		return block instanceof BlockWeedwoodBush && !(block instanceof BlockNesting);
+	}
+
+	@Override
+	public int tickRate(World world) {
+		return 5;
+	}
+
+	@Override
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+		if (world.isRemote)
+			return;
+		switch (stage) {
+		case 0:
+			world.setBlockState(pos, BlockRegistry.WEEDWOOD_BUSH_INFESTED_1.getDefaultState(), 2);
+			break;
+		case 1:
+				world.setBlockState(pos, BlockRegistry.WEEDWOOD_BUSH_INFESTED_2.getDefaultState(), 2);
+			break;
+		case 2:
+				world.setBlockState(pos, BlockRegistry.WEEDWOOD_BUSH_INFESTED_3.getDefaultState(), 2);
+			break;
+		case 3:
+				world.setBlockState(pos, BlockRegistry.WEEDWOOD_BUSH_INFESTED_4.getDefaultState(), 2);
+			break;
+		case 4:
+				world.setBlockState(pos, BlockRegistry.WEEDWOOD_BUSH.getDefaultState(), 2);
+				EntitySwarm swarm = new EntitySwarm(world);
+				swarm.setPosition(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+				world.spawnEntity(swarm);
+			break;
+			
+		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+		double px = (double) pos.getX() + 0.5D;
+		double py = (double) pos.getY() + 1.2D;
+		double pz = (double) pos.getZ() + 0.5D;
+		if (world.rand.nextInt(5) == 0) {
+			switch (stage) {
+			case 0:
+				BLParticles.SULFUR_TORCH.spawn(world, px, py, pz);
+				break;
+			case 1:
+				BLParticles.MOTH.spawn(world, px, py, pz);
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				BLParticles.DIRT_DECAY.spawn(world, px, py, pz);
+				break;
+			}
+		}
 	}
 
 	@Override
