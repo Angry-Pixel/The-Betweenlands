@@ -41,6 +41,11 @@ tile.thebetweenlands.string_roots.name=String Roots
 tile.thebetweenlands.rotbulb.name=Rotbulb
 tile.thebetweenlands.pale_grass.name=Pale Grass
 tile.thebetweenlands.weedwood_bush.name=Weedwood Bush
+tile.thebetweenlands.weedwood_bush_infested_0.name=Pheromone Infused Weedwood Bush
+tile.thebetweenlands.weedwood_bush_infested_1.name=Moth Infested Weedwood Bush
+tile.thebetweenlands.weedwood_bush_infested_2.name=Silk Grub Infested Weedwood Bush
+tile.thebetweenlands.weedwood_bush_infested_3.name=Silk Cocooned Weedwood Bush
+tile.thebetweenlands.weedwood_bush_infested_4.name=Decay Infested Weedwood Bush
 tile.thebetweenlands.dead_weedwood_bush.name=Dead Weedwood Bush
 tile.thebetweenlands.nesting_block_sticks.name=Nesting Block
 tile.thebetweenlands.nesting_block_bones.name=Nesting Block
@@ -986,6 +991,10 @@ item.thebetweenlands.olm_egg_raw.name=Olm Egg Cluster
 item.thebetweenlands.olm_egg_cooked.name=Baked Olm Egg Cluster
 item.thebetweenlands.olmlette_mixture.name=Olmlette Mixture
 item.thebetweenlands.olmlette.name=Olmlette
+item.thebetweenlands.pheromone_thorax.name=Pheromone Thorax
+item.thebetweenlands.silk_grub.name=Silk Grub
+item.thebetweenlands.silk_cocoon.name=Silk Cocoon
+item.thebetweenlands.silk_thread.name=Silk Thread
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
