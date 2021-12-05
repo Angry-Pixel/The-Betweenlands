@@ -4,7 +4,7 @@
 		"model": "thebetweenlands:internal/weedwood_bush",
 		"custom": {
 			"texture_leaves": "thebetweenlands:blocks/leaves_weedwood_bush_infested_1",
-			"texture_sticks": ""
+			"texture_sticks": "thebetweenlands:items/weedwood_stick"
 		}
 	},
 	"variants": {
