@@ -1,14 +1,21 @@
 package thebetweenlands.common.block.plant;
 
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -17,6 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.entity.mobs.EntitySwarm;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockWeedwoodBushInfested extends BlockWeedwoodBush {
 	private ItemStack drop;
@@ -69,13 +77,42 @@ public class BlockWeedwoodBushInfested extends BlockWeedwoodBush {
 				world.setBlockState(pos, BlockRegistry.WEEDWOOD_BUSH_INFESTED_4.getDefaultState(), 2);
 			break;
 		case 4:
-				world.setBlockState(pos, BlockRegistry.WEEDWOOD_BUSH.getDefaultState(), 2);
+				world.setBlockState(pos, BlockRegistry.DEAD_WEEDWOOD_BUSH.getDefaultState(), 2);
 				EntitySwarm swarm = new EntitySwarm(world);
 				swarm.setPosition(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 				world.spawnEntity(swarm);
 			break;
 			
 		}
+	}
+
+	@Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack held = player.getHeldItem(hand);
+		if (!world.isRemote && !held.isEmpty() && (held.getItem() instanceof ItemShears || held.getItem() == ItemRegistry.SILT_CRAB_CLAW)) {
+			IBlockState iblockstate = world.getBlockState(pos);
+			Block block = iblockstate.getBlock();
+			if (block == BlockRegistry.WEEDWOOD_BUSH_INFESTED_2 || block == BlockRegistry.WEEDWOOD_BUSH_INFESTED_3) {
+				ItemStack harvest = new ItemStack(drop.getItem(), 2, drop.getItemDamage());
+				EntityItem item = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, harvest);
+				item.motionX = item.motionY = item.motionZ = 0D;
+				world.spawnEntity(item);
+				world.setBlockState(pos, BlockRegistry.WEEDWOOD_BUSH.getDefaultState(), 2);
+				held.damageItem(1, player);
+				return true;
+			}
+		}
+		return true;
+    }
+
+	@Override
+	public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
+		return item.getItem() instanceof ItemShears || item.getItem() == ItemRegistry.SILT_CRAB_CLAW;
+	}
+
+	@Override
+	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
+		return ImmutableList.of(new ItemStack(Item.getItemFromBlock(BlockRegistry.WEEDWOOD_BUSH.getDefaultState().getBlock())), new ItemStack(drop.getItem(), 1, drop.getItemDamage()));
 	}
 
 	@Override

@@ -145,6 +145,7 @@ import thebetweenlands.common.item.misc.ItemMobAnadia;
 import thebetweenlands.common.item.misc.ItemMossBed;
 import thebetweenlands.common.item.misc.ItemMummyBait;
 import thebetweenlands.common.item.misc.ItemOctineIngot;
+import thebetweenlands.common.item.misc.ItemPheromoneThorax;
 import thebetweenlands.common.item.misc.ItemPyradFlame;
 import thebetweenlands.common.item.misc.ItemRingOfGathering;
 import thebetweenlands.common.item.misc.ItemRope;
@@ -531,7 +532,7 @@ public class ItemRegistry {
     public static final Item AA_UPGRADE_TRIGGER = new ItemAmphibiousArmourUpgradeTrigger().setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item AA_UPGRADE_TOGGLE = new ItemAmphibiousArmourUpgradeToggle().setCreativeTab(BLCreativeTabs.GEARS);
 
-    public static final Item PHEROMONE_THORAX = new Item().setCreativeTab(BLCreativeTabs.ITEMS); //placeholder will make it a stand alone item later
+    public static final Item PHEROMONE_THORAX = new ItemPheromoneThorax().setCreativeTab(BLCreativeTabs.ITEMS);
 
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
