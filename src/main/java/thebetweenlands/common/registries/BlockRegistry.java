@@ -775,7 +775,7 @@ public class BlockRegistry {
     public static final Block WEEDWOOD_BUSH_INFESTED_0 = new BlockWeedwoodBushInfested(ItemStack.EMPTY, 0);
     public static final Block WEEDWOOD_BUSH_INFESTED_1 = new BlockWeedwoodBushInfested(ItemStack.EMPTY, 1);
     public static final Block WEEDWOOD_BUSH_INFESTED_2 = new BlockWeedwoodBushInfested(new ItemStack(ItemRegistry.SILK_GRUB), 2);// drop silk worm
-    public static final Block WEEDWOOD_BUSH_INFESTED_3 = new BlockWeedwoodBushInfested(EnumItemMisc.SILK_THREAD.create(1), 3);// drop silk but render cocoons
+    public static final Block WEEDWOOD_BUSH_INFESTED_3 = new BlockWeedwoodBushInfested(EnumItemMisc.SILK_GRUB_COCOON.create(1), 3);// drop silk but render cocoons
     public static final Block WEEDWOOD_BUSH_INFESTED_4 = new BlockWeedwoodBushInfested(ItemStack.EMPTY, 4);// decay 
     
     public static final Block PURIFIED_SWAMP_DIRT = new BlockSwampDirt(Material.GROUND);
