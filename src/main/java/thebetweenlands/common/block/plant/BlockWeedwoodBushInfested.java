@@ -55,11 +55,6 @@ public class BlockWeedwoodBushInfested extends BlockWeedwoodBush {
 	}
 
 	@Override
-	public int tickRate(World world) {
-		return 5;
-	}
-
-	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		if (world.isRemote)
 			return;
