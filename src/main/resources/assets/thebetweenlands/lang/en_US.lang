@@ -996,6 +996,24 @@ item.thebetweenlands.silk_grub.name=Silk Grub
 item.thebetweenlands.silk_cocoon.name=Silk Cocoon
 item.thebetweenlands.silk_thread.name=Silk Thread
 
+# Dyes
+item.thebetweenlands.dye.brown_rust.name=Brown Rust Dye
+item.thebetweenlands.dye.cadmium_green.name=Cadmium Green Dye
+item.thebetweenlands.dye.camelot_magenta.name=Camelot Magenta Dye
+item.thebetweenlands.dye.caribbean_green.name=Caribbean Green Dye
+item.thebetweenlands.dye.champagne.name=Champagne Dye
+item.thebetweenlands.dye.dull_lavender.name=Dull Lavender Dye
+item.thebetweenlands.dye.elm_cyan.name=Elm Cyan Dye
+item.thebetweenlands.dye.lavender_blue.name=Lavender Blue Dye
+item.thebetweenlands.dye.maroon.name=Maroon Dye
+item.thebetweenlands.dye.midnight_purple.name=Midnight Purple Dye
+item.thebetweenlands.dye.pewter_grey.name=Pewter Grey Dye
+item.thebetweenlands.dye.raisin_black.name=Raisin Black Dye
+item.thebetweenlands.dye.saffron.name=Saffron Dye
+item.thebetweenlands.dye.shadow_green.name=Shadow Green Dye
+item.thebetweenlands.dye.sushi_green.name=Sushi Green Dye
+item.thebetweenlands.dye.vivid_tangerine.name=Vivid Tangerine Dye
+
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
 item.thebetweenlands.elixir.dentrothyst_vial.orange.name=Orange Dentrothyst Vial
