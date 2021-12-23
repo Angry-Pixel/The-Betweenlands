@@ -1,5 +1,8 @@
 package thebetweenlands.common.inventory.container;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,17 +11,35 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.inventory.InventoryItem;
-import thebetweenlands.common.inventory.slot.SlotInvRestriction;
+import thebetweenlands.common.inventory.slot.SlotRestrictionListWithMeta;
+import thebetweenlands.common.item.herblore.ItemCrushed.EnumItemCrushed;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.util.InventoryUtils;
 
 public class ContainerSilkBundle extends Container {
 	@Nullable
 	private final InventoryItem inventory;
-
+	public List<ItemStack> acceptedItems = new ArrayList<>();
 	private int numRows = 3;
 
 	public ContainerSilkBundle(EntityPlayer player, InventoryPlayer playerInventory, @Nullable InventoryItem itemInventory) {
 		this.inventory = itemInventory;
+		
+		acceptedItems.add(EnumItemCrushed.GROUND_BLUE_EYED_GRASS.create(1));
+		acceptedItems.add(EnumItemCrushed.GROUND_BLOOD_SNAIL_SHELL.create(1));
+		acceptedItems.add(EnumItemCrushed.GROUND_PALE_GRASS.create(1));
+		acceptedItems.add(EnumItemCrushed.GROUND_MILKWEED.create(1));
+		acceptedItems.add(EnumItemCrushed.GROUND_GOLDEN_CLUB.create(1));
+		acceptedItems.add(EnumItemCrushed.GROUND_MARSH_MARIGOLD.create(1));
+		acceptedItems.add(EnumItemCrushed.GROUND_DEEP_WATER_CORAL.create(1));
+		acceptedItems.add(EnumItemCrushed.GROUND_MARSH_HIBISCUS.create(1));
+		acceptedItems.add(EnumItemCrushed.GROUND_BUTTON_BUSH.create(1));
+		acceptedItems.add(EnumItemCrushed.GROUND_SWAMP_KELP.create(1));
+		acceptedItems.add(EnumItemCrushed.GROUND_POISON_IVY.create(1));
+		acceptedItems.add(EnumItemCrushed.GROUND_PICKEREL_WEED.create(1));
+		acceptedItems.add(EnumItemCrushed.GROUND_COPPER_IRIS.create(1));
+		acceptedItems.add(EnumItemCrushed.GROUND_ANGLER_TOOTH.create(1));
+		acceptedItems.add(EnumItemMisc.CREMAINS.create(1));
 
 		if(this.inventory == null || this.inventory.isEmpty()) {
 			return;
@@ -27,12 +48,11 @@ public class ContainerSilkBundle extends Container {
 		this.numRows = this.inventory.getSizeInventory() / 9;
 		int yOffset = (this.numRows - 4) * 18;
 
-	
-		//new slot restriction list with meta needed here
-		this.addSlotToContainer(new SlotInvRestriction(itemInventory, 0, 98, 4));
-		this.addSlotToContainer(new SlotInvRestriction(itemInventory, 1, 116, 4));
-		this.addSlotToContainer(new SlotInvRestriction(itemInventory, 2, 134, 4));
-		this.addSlotToContainer(new SlotInvRestriction(itemInventory, 3, 152, 4));
+		//new slot restriction list with meta
+		this.addSlotToContainer(new SlotRestrictionListWithMeta(itemInventory, 0, 98, 4, getItemList(), 1, this));
+		this.addSlotToContainer(new SlotRestrictionListWithMeta(itemInventory, 1, 116, 4, getItemList(), 1, this));
+		this.addSlotToContainer(new SlotRestrictionListWithMeta(itemInventory, 2, 134, 4, getItemList(), 1, this));
+		this.addSlotToContainer(new SlotRestrictionListWithMeta(itemInventory, 3, 152, 4, getItemList(), 1, this));
 				
 
 		for (int row = 0; row < 3; ++row) {
@@ -44,6 +64,10 @@ public class ContainerSilkBundle extends Container {
 		for (int column = 0; column < 9; ++column) {
 			this.addSlotToContainer(new Slot(playerInventory, column, 8 + column * 18, 161 + yOffset));
 		}
+	}
+
+	public List<ItemStack> getItemList() {
+		return acceptedItems;
 	}
 
 	public InventoryItem getItemInventory() {
@@ -64,25 +88,22 @@ public class ContainerSilkBundle extends Container {
 			ItemStack slotStack = slot.getStack();
 			stack = slotStack.copy();
 
-			if (InventoryUtils.isDisallowedInInventories(slotStack)) {
+			if (InventoryUtils.isDisallowedInInventories(slotStack))
 				return ItemStack.EMPTY;
-			}
 
-			if (slotIndex < this.numRows * 9) {
-				if (!mergeItemStack(slotStack, this.numRows * 9, this.inventorySlots.size(), true)) {
+			if (slotIndex > 3) {
+				if (!mergeItemStack(slotStack, 0, 4, false)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!mergeItemStack(slotStack, 0, this.numRows * 9, false)) {
+			} else if (!mergeItemStack(slotStack, 4, inventorySlots.size(), false))
 				return ItemStack.EMPTY;
-			}
 
-			if (slotStack.getCount() == 0) {
+
+			if (slotStack.isEmpty())
 				slot.putStack(ItemStack.EMPTY);
-			} else {
+			else
 				slot.onSlotChanged();
-			}
 		}
-
 		return stack;
 	}
 }
