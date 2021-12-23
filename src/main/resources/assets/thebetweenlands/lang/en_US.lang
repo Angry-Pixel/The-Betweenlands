@@ -995,6 +995,7 @@ item.thebetweenlands.pheromone_thorax.name=Pheromone Thorax
 item.thebetweenlands.silk_grub.name=Silk Grub
 item.thebetweenlands.silk_cocoon.name=Silk Cocoon
 item.thebetweenlands.silk_thread.name=Silk Thread
+item.thebetweenlands.silk_bundle.name=Silk Bundle
 
 # Dyes
 item.thebetweenlands.dye.brown_rust.name=Brown Rust Dye
@@ -1069,6 +1070,7 @@ container.bl.draeton_furnace=Draeton Furnace
 container.bl.draeton_burner=Burner
 container.bl.amphibious_armour=Amphibious Armour
 container.bl.crab_pot_filter=Crab Pot Filter
+container.bl.silk_bundle=Silk Bundle
 
 # Locations
 location.wilderness.name=80:<scale:1.75>Wilderness</scale>

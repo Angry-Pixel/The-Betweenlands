@@ -482,6 +482,7 @@ public class ItemRegistry {
     public static final Item DYE = new ItemBLDye();
 
     public static final Item PHEROMONE_THORAX = new ItemPheromoneThorax().setCreativeTab(BLCreativeTabs.ITEMS);
+    public static final Item SILK_BUNDLE = new ItemSilkBundle();
 
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();

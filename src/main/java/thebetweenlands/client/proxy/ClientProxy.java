@@ -63,6 +63,7 @@ import thebetweenlands.client.gui.inventory.GuiFishingTackleBox;
 import thebetweenlands.client.gui.inventory.GuiMortar;
 import thebetweenlands.client.gui.inventory.GuiPouch;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
+import thebetweenlands.client.gui.inventory.GuiSilkBundle;
 import thebetweenlands.client.gui.inventory.GuiSmokingRack;
 import thebetweenlands.client.gui.inventory.GuiTarBarrel;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
@@ -276,14 +277,17 @@ import thebetweenlands.common.herblore.book.GuiManualHerblore;
 import thebetweenlands.common.herblore.book.HLEntryRegistry;
 import thebetweenlands.common.inventory.InventoryAmphibiousArmor;
 import thebetweenlands.common.inventory.InventoryPouch;
+import thebetweenlands.common.inventory.InventorySilkBundle;
 import thebetweenlands.common.inventory.container.ContainerAmphibiousArmor;
 import thebetweenlands.common.inventory.container.ContainerDraetonPouch;
 import thebetweenlands.common.inventory.container.ContainerPouch;
+import thebetweenlands.common.inventory.container.ContainerSilkBundle;
 import thebetweenlands.common.item.ITintedItem;
 import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.item.misc.ItemBarkAmulet;
+import thebetweenlands.common.item.misc.ItemSilkBundle;
 import thebetweenlands.common.item.shields.ItemSwatShield;
 import thebetweenlands.common.item.tools.ItemBLFishingRod;
 import thebetweenlands.common.item.tools.bow.ItemBLBow;
@@ -528,6 +532,18 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.amphibious_armour";
 			if (!item.isEmpty() && item.getItem() instanceof ItemAmphibiousArmor)
 				return new GuiAmphibiousArmor(new ContainerAmphibiousArmor(player, new InventoryAmphibiousArmor(item, name)));
+			break;
+		}
+
+		case GUI_SILK_BUNDLE: {
+			ItemStack item = player.getHeldItemMainhand();
+			if(item.isEmpty() || !(item.getItem() instanceof ItemSilkBundle)) {
+				item = player.getHeldItemOffhand();
+			}
+			if(!item.isEmpty() && item.getItem() instanceof ItemSilkBundle) {
+				String name = item.hasDisplayName() ? item.getDisplayName(): I18n.format("container.bl.silk_bundle");
+				return new GuiSilkBundle(new ContainerSilkBundle(player, player.inventory, new InventorySilkBundle(item, 4, name)));
+			}
 			break;
 		}
 		}
