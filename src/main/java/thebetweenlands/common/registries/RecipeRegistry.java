@@ -791,6 +791,21 @@ public class RecipeRegistry {
 
 	private static void registerBoilingPotRecipes() {
 		// BoilingPotRecipes.addRecipe(outStack, inputFluid, inStack1, inStack2, inStack3, inStack4);
+		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 0), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_BLUE_EYED_GRASS.create(1), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
+		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 1), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_BLOOD_SNAIL_SHELL.create(1), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
+		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 2), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_PALE_GRASS.create(1), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
+		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 3), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_MILKWEED.create(1), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
+		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 4), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_GOLDEN_CLUB.create(1), EnumItemCrushed.GROUND_MARSH_MARIGOLD.create(1), ItemStack.EMPTY, ItemStack.EMPTY);
+		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 5), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_DEEP_WATER_CORAL.create(1), EnumItemCrushed.GROUND_PALE_GRASS.create(1), ItemStack.EMPTY, ItemStack.EMPTY);
+		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 6), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_MARSH_HIBISCUS.create(1), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
+		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 7), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_BUTTON_BUSH.create(1), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
+		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 8), FluidRegistry.getFluid("swamp_water"), EnumItemMisc.CREMAINS.create(1), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
+		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 9), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_SWAMP_KELP.create(1), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
+		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 10), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_DEEP_WATER_CORAL.create(1), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
+		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 11), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_POISON_IVY.create(1), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
 		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 12), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_BLUE_EYED_GRASS.create(1), EnumItemCrushed.GROUND_PICKEREL_WEED.create(1), ItemStack.EMPTY, ItemStack.EMPTY);
+		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 13), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_COPPER_IRIS.create(1), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
+		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 14), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_PICKEREL_WEED.create(1), EnumItemMisc.CREMAINS.create(1), ItemStack.EMPTY, ItemStack.EMPTY);
+		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 15), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_ANGLER_TOOTH.create(1), EnumItemMisc.CREMAINS.create(1), ItemStack.EMPTY, ItemStack.EMPTY);
 	}
 }
