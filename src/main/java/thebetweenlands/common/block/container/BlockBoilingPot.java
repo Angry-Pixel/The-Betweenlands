@@ -30,6 +30,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityBoilingPot;
 
 public class BlockBoilingPot extends Block implements ITileEntityProvider {
@@ -96,7 +97,7 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 		if (!world.isRemote && world.getTileEntity(pos) instanceof TileEntityBoilingPot) {
 			TileEntityBoilingPot tile = (TileEntityBoilingPot) world.getTileEntity(pos);
 			if (!player.isSneaking()) {
-				if (!heldItem.isEmpty()) {
+				if (!heldItem.isEmpty() && heldItem.getItem() == ItemRegistry.SILK_BUNDLE) {
 					if (tile.getStackInSlot(0).isEmpty()) {
 						ItemStack ingredient = heldItem.copy();
 						ingredient.setCount(1);

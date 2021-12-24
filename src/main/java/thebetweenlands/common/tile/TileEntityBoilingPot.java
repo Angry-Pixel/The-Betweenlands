@@ -21,6 +21,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.recipe.misc.BoilingPotRecipes;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -70,7 +71,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 				if (recipe != null) {
 					output = recipe.getOutput();
 					if (!inventory.get(0).isEmpty())
-						setInventorySlotContents(0, ItemStack.EMPTY);
+						setInventorySlotContents(0, EnumItemMisc.SILK_BUNDLE_DIRTY.create(1));
 					tank.drain(Fluid.BUCKET_VOLUME, true);
 					setHeatProgress(0);
 					spawnItemStack(getWorld(), pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D, output);

@@ -996,6 +996,7 @@ item.thebetweenlands.silk_grub.name=Silk Grub
 item.thebetweenlands.silk_cocoon.name=Silk Cocoon
 item.thebetweenlands.silk_thread.name=Silk Thread
 item.thebetweenlands.silk_bundle.name=Silk Bundle
+item.thebetweenlands.silk_bundle_dirty.name=Dirty Silk Bundle
 
 # Dyes
 item.thebetweenlands.dye.brown_rust.name=Brown Rust Dye

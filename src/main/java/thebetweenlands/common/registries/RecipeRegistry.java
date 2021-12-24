@@ -668,6 +668,8 @@ public class RecipeRegistry {
 				return output;
 			}
 		});
+		
+		PurifierRecipe.addRecipe(new ItemStack(ItemRegistry.SILK_BUNDLE), EnumItemMisc.SILK_BUNDLE_DIRTY.create(1));
 	}
 	
 	private static void registerCenserRecipes() {
