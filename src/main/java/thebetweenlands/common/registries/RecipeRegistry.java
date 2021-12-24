@@ -27,6 +27,7 @@ import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.crafting.IShapedRecipe;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -46,6 +47,7 @@ import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.herblore.elixir.ElixirRecipes;
 import thebetweenlands.common.item.herblore.ItemCrushed;
+import thebetweenlands.common.item.herblore.ItemCrushed.EnumItemCrushed;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -67,6 +69,7 @@ import thebetweenlands.common.recipe.censer.CenserRecipeStagnantWater;
 import thebetweenlands.common.recipe.censer.CenserRecipeSwampWater;
 import thebetweenlands.common.recipe.censer.CenserRecipeWeepingBluePetal;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
+import thebetweenlands.common.recipe.misc.BoilingPotRecipes;
 import thebetweenlands.common.recipe.misc.BookMergeRecipe;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
 import thebetweenlands.common.recipe.misc.CrabPotFilterRecipeBubbler;
@@ -131,6 +134,8 @@ public class RecipeRegistry {
 		registerSmokingRackRecipes();
 		registerCrabPotFilterRecipesSilt();
 		registerCrabPotFilterRecipesBubbler();
+		
+		registerBoilingPotRecipes();
 
 		ElixirRecipes.init();
 
@@ -782,5 +787,10 @@ public class RecipeRegistry {
 		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM), new ItemStack(BlockRegistry.GREEN_MIDDLE_GEM_ORE));
 		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(ItemRegistry.SAP_BALL), new ItemStack(ItemRegistry.SLUDGE_BALL));
 		CrabPotFilterRecipeBubbler.addRecipe(new ItemStack(BlockRegistry.ROOT, 4), new ItemStack(BlockRegistry.ROOT_POD));
+	}
+
+	private static void registerBoilingPotRecipes() {
+		// BoilingPotRecipes.addRecipe(outStack, inputFluid, inStack1, inStack2, inStack3, inStack4);
+		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 12), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_BLUE_EYED_GRASS.create(1), EnumItemCrushed.GROUND_PICKEREL_WEED.create(1), ItemStack.EMPTY, ItemStack.EMPTY);
 	}
 }

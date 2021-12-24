@@ -13,6 +13,7 @@ import thebetweenlands.common.tile.TileEntityBLFurnace;
 import thebetweenlands.common.tile.TileEntityBarrel;
 import thebetweenlands.common.tile.TileEntityBeamOrigin;
 import thebetweenlands.common.tile.TileEntityBeamRelay;
+import thebetweenlands.common.tile.TileEntityBoilingPot;
 import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
@@ -131,6 +132,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityMudLootPot1.class, "mud_loot_pot_1");
 		registerTileEntity(TileEntityMudLootPot2.class, "mud_loot_pot_2");
 		registerTileEntity(TileEntityMudLootPot3.class, "mud_loot_pot_3");
+		registerTileEntity(TileEntityBoilingPot.class, "boiling_pot");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
