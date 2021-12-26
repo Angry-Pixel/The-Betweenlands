@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -35,7 +36,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 	
 	public TileEntityBoilingPot() {
 		super(1, "container.bl.boiling_pot");
-        this.tank = new FluidTank(null, Fluid.BUCKET_VOLUME * 3);
+        this.tank = new FluidTank(null, Fluid.BUCKET_VOLUME * 1);
         this.tank.setTileEntity(this);
 	}
 
@@ -60,6 +61,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 
 			if (getTankFluidAmount() >= Fluid.BUCKET_VOLUME && getHeatProgress() >= 100) {
 				ItemStack output = ItemStack.EMPTY;
+				FluidStack outputFluid = null;
 				BoilingPotRecipes recipe = BoilingPotRecipes.getRecipe(tank, getBundleItems().get(0), getBundleItems().get(1), getBundleItems().get(2), getBundleItems().get(3));
 
 				if (recipe == null) {
@@ -69,14 +71,23 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 				}
 
 				if (recipe != null) {
-					output = recipe.getOutput();
+					output = recipe.getOutputItem();
+					outputFluid = recipe.getOutputFluid();
+
 					if (!inventory.get(0).isEmpty())
 						setInventorySlotContents(0, EnumItemMisc.SILK_BUNDLE_DIRTY.create(1));
+
 					tank.drain(Fluid.BUCKET_VOLUME, true);
 					setHeatProgress(0);
-					spawnItemStack(getWorld(), pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D, output);
+					
+					if (outputFluid != null)
+						tank.fill(outputFluid, true);
+					else
+						spawnItemStack(getWorld(), pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D, output);
+
 					EntityXPOrb orb = new EntityXPOrb(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 1);
 					world.spawnEntity(orb);
+					System.out.println("Recipe Done");
 				}
 			}
 		}

@@ -40,6 +40,7 @@ public class ContainerSilkBundle extends Container {
 		acceptedItems.add(EnumItemCrushed.GROUND_COPPER_IRIS.create(1));
 		acceptedItems.add(EnumItemCrushed.GROUND_ANGLER_TOOTH.create(1));
 		acceptedItems.add(EnumItemMisc.CREMAINS.create(1));
+		acceptedItems.add(EnumItemMisc.TAR_DRIP.create(1)); //temp
 
 		if(this.inventory == null || this.inventory.isEmpty()) {
 			return;

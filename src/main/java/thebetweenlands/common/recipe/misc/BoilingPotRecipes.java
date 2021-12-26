@@ -17,14 +17,27 @@ public class BoilingPotRecipes {
 	public static void addRecipe(ItemStack output, Fluid fluid, Object... input) {
 		addRecipe(output, new FluidStack(fluid, Fluid.BUCKET_VOLUME), input);
 	}
+	
+	public static void addRecipe(Fluid output, Fluid fluid, Object... input) {
+		addRecipe(new FluidStack(output, Fluid.BUCKET_VOLUME), new FluidStack(fluid, Fluid.BUCKET_VOLUME), input);
+	}
 
 	public static void addRecipe(ItemStack output, FluidStack fluid,  Object... input) {
 		recipes.add(new BoilingPotRecipes(output, fluid, input));
 	}
+	
+	public static void addRecipe(FluidStack output, FluidStack fluid,  Object... input) {
+		recipes.add(new BoilingPotRecipes(output, fluid, input));
+	}
 
-	public static ItemStack getOutput(IFluidTank tank, ItemStack input1, ItemStack input2, ItemStack input3, ItemStack input4) {
+	public static ItemStack getOutputItem(IFluidTank tank, ItemStack input1, ItemStack input2, ItemStack input3, ItemStack input4) {
 		BoilingPotRecipes recipe = getRecipe(tank, input1, input2, input3, input4);
-		return recipe != null ? recipe.getOutput() : ItemStack.EMPTY;
+		return recipe != null ? recipe.getOutputItem() : ItemStack.EMPTY;
+	}
+	
+	public static FluidStack getOutputFluid(IFluidTank tank, ItemStack input1, ItemStack input2, ItemStack input3, ItemStack input4) {
+		BoilingPotRecipes recipe = getRecipe(tank, input1, input2, input3, input4);
+		return recipe != null ? recipe.getOutputFluid() : null;
 	}
 
 	public static BoilingPotRecipes getRecipe(IFluidTank tank, ItemStack input1, ItemStack input2, ItemStack input3, ItemStack input4) {
@@ -34,9 +47,14 @@ public class BoilingPotRecipes {
 		return null;
 	}
 
-	public static ItemStack getOutput(IFluidTank tank, ItemStack... input) {
+	public static ItemStack getItemOutput(IFluidTank tank, ItemStack... input) {
 		BoilingPotRecipes recipe = getRecipe(tank, input);
-		return recipe != null ? recipe.getOutput() : ItemStack.EMPTY;
+		return recipe != null ? recipe.getOutputItem() : ItemStack.EMPTY;
+	}
+	
+	public static FluidStack getFluidOutput(IFluidTank tank, ItemStack... input) {
+		BoilingPotRecipes recipe = getRecipe(tank, input);
+		return recipe != null ? recipe.getOutputFluid() : null;
 	}
 
 	public static BoilingPotRecipes getRecipe(IFluidTank tank, ItemStack... input) {
@@ -51,12 +69,36 @@ public class BoilingPotRecipes {
 	}
 
 	private final ItemStack output;
-	private final FluidStack fluidStack;
+	private final FluidStack fluidStackIn;
+	private final FluidStack fluidStackOut;
 	private final Object[] input;
 
 	private BoilingPotRecipes(ItemStack output, FluidStack fluidIn, Object... input) {
 		this.output = output.copy();
-		this.fluidStack = fluidIn;
+		this.fluidStackOut = null;
+		this.fluidStackIn = fluidIn;
+		this.input = new Object[4];
+
+		if (input.length > 4)
+			throw new IllegalArgumentException("Input must be 1 to 4.");
+
+		for (int c = 0; c < input.length; c++)
+			if (input[c] instanceof ItemStack)
+				this.input[c] = ((ItemStack) input[c]).copy();
+			else if (input[c] instanceof String)
+				this.input[c] = OreDictionary.getOres((String) input[c]);
+			else
+				throw new IllegalArgumentException("Input must be an ItemStack or an OreDictionary name");
+
+		for (int i = input.length; i < 4; i++) {
+			this.input[i] = ItemStack.EMPTY.copy();
+		}
+	}
+
+	private BoilingPotRecipes(FluidStack fluidOut, FluidStack fluidIn, Object... input) {
+		this.output = ItemStack.EMPTY;
+		this.fluidStackOut = fluidOut.copy();
+		this.fluidStackIn = fluidIn;
 		this.input = new Object[4];
 
 		if (input.length > 4)
@@ -79,8 +121,12 @@ public class BoilingPotRecipes {
 		return input;
 	}
 
-	public ItemStack getOutput() {
+	public ItemStack getOutputItem() {
 		return output.copy();
+	}
+	
+	public FluidStack getOutputFluid() {
+		return fluidStackOut == null ? null : fluidStackOut.copy();
 	}
 
 	//Urgh... fugly as all hell... it works though
@@ -133,6 +179,6 @@ public class BoilingPotRecipes {
 	}
 
 	public FluidStack getFluidStack() {
-		return fluidStack;
+		return fluidStackIn;
 	}
 }

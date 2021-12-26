@@ -792,6 +792,9 @@ public class RecipeRegistry {
 	}
 
 	private static void registerBoilingPotRecipes() {
+		// BoilingPotRecipes.addRecipe(outFluid, inputFluid, inStack1, inStack2, inStack3, inStack4);
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("tar"), FluidRegistry.getFluid("swamp_water"), EnumItemMisc.TAR_DRIP.create(1), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
+
 		// BoilingPotRecipes.addRecipe(outStack, inputFluid, inStack1, inStack2, inStack3, inStack4);
 		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 0), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_BLUE_EYED_GRASS.create(1), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
 		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 1), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_BLOOD_SNAIL_SHELL.create(1), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
@@ -810,4 +813,5 @@ public class RecipeRegistry {
 		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 14), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_PICKEREL_WEED.create(1), EnumItemMisc.CREMAINS.create(1), ItemStack.EMPTY, ItemStack.EMPTY);
 		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 15), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_ANGLER_TOOTH.create(1), EnumItemMisc.CREMAINS.create(1), ItemStack.EMPTY, ItemStack.EMPTY);
 	}
+
 }
