@@ -18,16 +18,16 @@ public class BoilingPotRecipes {
 		addRecipe(output, new FluidStack(fluid, Fluid.BUCKET_VOLUME), input);
 	}
 	
-	public static void addRecipe(Fluid output, Fluid fluid, Object... input) {
-		addRecipe(new FluidStack(output, Fluid.BUCKET_VOLUME), new FluidStack(fluid, Fluid.BUCKET_VOLUME), input);
+	public static void addRecipe(Fluid output, int outputFluidMeta, Fluid fluid, Object... input) {
+		addRecipe(new FluidStack(output, Fluid.BUCKET_VOLUME), outputFluidMeta, new FluidStack(fluid, Fluid.BUCKET_VOLUME), input);
 	}
 
 	public static void addRecipe(ItemStack output, FluidStack fluid,  Object... input) {
 		recipes.add(new BoilingPotRecipes(output, fluid, input));
 	}
 	
-	public static void addRecipe(FluidStack output, FluidStack fluid,  Object... input) {
-		recipes.add(new BoilingPotRecipes(output, fluid, input));
+	public static void addRecipe(FluidStack output, int outputFluidMeta, FluidStack fluid,  Object... input) {
+		recipes.add(new BoilingPotRecipes(output, outputFluidMeta, fluid, input));
 	}
 
 	public static ItemStack getOutputItem(IFluidTank tank, ItemStack input1, ItemStack input2, ItemStack input3, ItemStack input4) {
@@ -71,11 +71,13 @@ public class BoilingPotRecipes {
 	private final ItemStack output;
 	private final FluidStack fluidStackIn;
 	private final FluidStack fluidStackOut;
+	private final int fluidMeta;
 	private final Object[] input;
 
 	private BoilingPotRecipes(ItemStack output, FluidStack fluidIn, Object... input) {
 		this.output = output.copy();
 		this.fluidStackOut = null;
+		this.fluidMeta = 0;
 		this.fluidStackIn = fluidIn;
 		this.input = new Object[4];
 
@@ -95,9 +97,10 @@ public class BoilingPotRecipes {
 		}
 	}
 
-	private BoilingPotRecipes(FluidStack fluidOut, FluidStack fluidIn, Object... input) {
+	private BoilingPotRecipes(FluidStack fluidOut, int outputFluidMeta, FluidStack fluidIn, Object... input) {
 		this.output = ItemStack.EMPTY;
 		this.fluidStackOut = fluidOut.copy();
+		this.fluidMeta = outputFluidMeta;
 		this.fluidStackIn = fluidIn;
 		this.input = new Object[4];
 
@@ -124,9 +127,13 @@ public class BoilingPotRecipes {
 	public ItemStack getOutputItem() {
 		return output.copy();
 	}
-	
+
 	public FluidStack getOutputFluid() {
 		return fluidStackOut == null ? null : fluidStackOut.copy();
+	}
+
+	public int getOutputFluidMeta() {
+		return fluidMeta;
 	}
 
 	//Urgh... fugly as all hell... it works though

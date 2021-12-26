@@ -22,9 +22,11 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
+import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.recipe.misc.BoilingPotRecipes;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class TileEntityBoilingPot extends TileEntityBasicInventory implements ITickable {
@@ -62,6 +64,8 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 			if (getTankFluidAmount() >= Fluid.BUCKET_VOLUME && getHeatProgress() >= 100) {
 				ItemStack output = ItemStack.EMPTY;
 				FluidStack outputFluid = null;
+				FluidStack fluidWithTag = null;
+				int outputFluidMeta = 0;
 				BoilingPotRecipes recipe = BoilingPotRecipes.getRecipe(tank, getBundleItems().get(0), getBundleItems().get(1), getBundleItems().get(2), getBundleItems().get(3));
 
 				if (recipe == null) {
@@ -73,15 +77,24 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 				if (recipe != null) {
 					output = recipe.getOutputItem();
 					outputFluid = recipe.getOutputFluid();
-
+					outputFluidMeta = recipe.getOutputFluidMeta();
+					
 					if (!inventory.get(0).isEmpty())
 						setInventorySlotContents(0, EnumItemMisc.SILK_BUNDLE_DIRTY.create(1));
 
 					tank.drain(Fluid.BUCKET_VOLUME, true);
 					setHeatProgress(0);
-					
-					if (outputFluid != null)
-						tank.fill(outputFluid, true);
+
+					if (outputFluid != null) {
+						if(outputFluid.getFluid() == FluidRegistry.DYED_WATER) {
+							NBTTagCompound nbt = new NBTTagCompound();
+							nbt.setInteger("color", EnumBLDyeColor.byMetadata(outputFluidMeta).getColorValue());
+							fluidWithTag = new FluidStack(outputFluid.getFluid(), Fluid.BUCKET_VOLUME, nbt);
+							tank.fill(fluidWithTag , true);
+						}
+						else
+							tank.fill(outputFluid, true);
+					}
 					else
 						spawnItemStack(getWorld(), pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D, output);
 

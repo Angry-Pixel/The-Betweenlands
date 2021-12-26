@@ -31,10 +31,12 @@ public class RenderBoilingPot extends TileEntitySpecialRenderer<TileEntityBoilin
 		if (fluidLevel > 0) {
 			Tessellator tessellator = Tessellator.getInstance();
 			BufferBuilder buffer = tessellator.getBuffer();
-			FluidStack fluidStack = new FluidStack(tile.tank.getFluid(), 100);
+			FluidStack fluidStack = tile.tank.getFluid();
 			height = (0.375F / tile.tank.getCapacity()) * tile.tank.getFluidAmount();
 			TextureAtlasSprite fluidStillSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluidStack.getFluid().getStill().toString());
 			int fluidColor = fluidStack.getFluid().getColor(fluidStack);
+			if(fluidStack.tag != null && fluidStack.tag.hasKey("color"))
+				fluidColor = fluidStack.tag.getInteger("color");
 			GlStateManager.disableLighting();
 			GlStateManager.pushMatrix();
 			GlStateManager.enableBlend();
