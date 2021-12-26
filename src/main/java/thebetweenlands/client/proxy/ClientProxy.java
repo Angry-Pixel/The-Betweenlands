@@ -103,6 +103,7 @@ import thebetweenlands.client.render.tile.RenderAspectVial;
 import thebetweenlands.client.render.tile.RenderAspectrusCrop;
 import thebetweenlands.client.render.tile.RenderBarrel;
 import thebetweenlands.client.render.tile.RenderBeamOrigin;
+import thebetweenlands.client.render.tile.RenderBoilingPot;
 import thebetweenlands.client.render.tile.RenderCenser;
 import thebetweenlands.client.render.tile.RenderChestBetweenlands;
 import thebetweenlands.client.render.tile.RenderCompostBin;
@@ -304,6 +305,7 @@ import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
 import thebetweenlands.common.tile.TileEntityBarrel;
 import thebetweenlands.common.tile.TileEntityBeamOrigin;
+import thebetweenlands.common.tile.TileEntityBoilingPot;
 import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
@@ -799,6 +801,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudLootPot1.class, new RenderMudLootPot1());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudLootPot2.class, new RenderMudLootPot2());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudLootPot3.class, new RenderMudLootPot3());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBoilingPot.class, new RenderBoilingPot());
 		
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);

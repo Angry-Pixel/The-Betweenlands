@@ -48,10 +48,10 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 		return EnumBlockRenderType.MODEL;
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
-		return layer == BlockRenderLayer.TRANSLUCENT || layer == BlockRenderLayer.CUTOUT;
+	@SideOnly(Side.CLIENT)
+	public BlockRenderLayer getRenderLayer() {
+		return BlockRenderLayer.CUTOUT;
 	}
 
 	@Override
@@ -62,6 +62,11 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean isNormalCube(IBlockState state) {
 		return false;
 	}
 

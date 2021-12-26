@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "cauldron_empty" }
+        "normal": { "model": "thebetweenlands:boiling_pot" }
     }
 }
