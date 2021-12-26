@@ -43,7 +43,7 @@ public class FluidRegistry {
 	public static final Fluid RUBBER = new Fluid("rubber", new ResourceLocation("thebetweenlands:fluids/rubber_still"), new ResourceLocation("thebetweenlands:fluids/rubber_flowing")).setDensity(1200).setViscosity(1500);
 	public static final Fluid FOG = new Fluid("fog", new ResourceLocation("thebetweenlands:fluids/fog"), new ResourceLocation("thebetweenlands:fluids/fog")).setDensity(2).setViscosity(10).setGaseous(true);
 	public static final Fluid SHALLOWBREATH = new Fluid("shallowbreath", new ResourceLocation("thebetweenlands:fluids/shallowbreath"), new ResourceLocation("thebetweenlands:fluids/shallowbreath")).setDensity(2).setViscosity(10).setGaseous(true);
-	public static final Fluid BL_DYE = new Fluid("dyed_water", new ResourceLocation("thebetweenlands:fluids/dyed_water_still"), new ResourceLocation("thebetweenlands:fluids/dyed_water_flowing")).setDensity(1000).setViscosity(1000);
+	public static final Fluid DYED_WATER = new Fluid("dyed_water", new ResourceLocation("thebetweenlands:fluids/dyed_water_still"), new ResourceLocation("thebetweenlands:fluids/dyed_water_flowing")).setDensity(1000).setViscosity(1000);
 
 	public static final List<Fluid> REGISTERED_FLUIDS = new ArrayList<Fluid>();
 
