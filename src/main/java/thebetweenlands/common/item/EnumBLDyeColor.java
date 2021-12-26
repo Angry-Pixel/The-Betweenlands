@@ -6,22 +6,22 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public enum EnumBLDyeColor implements IStringSerializable
 {
-    DULL_LAVENDAR(0, "dull_lavender", 8882149),
-    MAROON(1, "maroon", 8519684),
-    SHADOW_GREEN(2, "shadow_green", 10208437),
-    CAMELOT_MAGENTA(3, "camelot_magenta", 9316177),
-    SAFFRON(4, "saffron", 15384110),
-    CARIBBEAN_GREEN(5, "caribbean_green", 52901),
-    VIVID_TANGERINE(6, "vivid_tangerine", 16747660),
-    CHAMPAGNE(7, "champagne", 16378828),
-    RAISIN_BLACK(8, "raisin_black", 2170142),
-    SUSHI_GREEN(9, "sushi_green", 9416509),
-    ELM_CYAN(10, "elm_cyan", 1804678),
-    CADMIUM_GREEN(11, "cadmium_green", 2189375),
-    LAVENDAR_BLUE(12, "lavender_blue", 12761312),
-    BROWN_RUST(13, "brown_rust", 11295547),
-    MIDNIGHT_PURPLE(14, "midnight_purple", 6951282),
-    PEWTER_GREY(15, "pewter_grey", 9936283);
+    DULL_LAVENDAR(0, "dull_lavender", 8882149 | 0xFF000000),
+    MAROON(1, "maroon", 8519684 | 0xFF000000),
+    SHADOW_GREEN(2, "shadow_green", 10208437 | 0xFF000000),
+    CAMELOT_MAGENTA(3, "camelot_magenta", 9316177 | 0xFF000000),
+    SAFFRON(4, "saffron", 15384110 | 0xFF000000),
+    CARIBBEAN_GREEN(5, "caribbean_green", 52901 | 0xFF000000),
+    VIVID_TANGERINE(6, "vivid_tangerine", 16747660 | 0xFF000000),
+    CHAMPAGNE(7, "champagne", 16378828 | 0xFF000000),
+    RAISIN_BLACK(8, "raisin_black", 2170142 | 0xFF000000),
+    SUSHI_GREEN(9, "sushi_green", 9416509 | 0xFF000000),
+    ELM_CYAN(10, "elm_cyan", 1804678 | 0xFF000000),
+    CADMIUM_GREEN(11, "cadmium_green", 2189375 | 0xFF000000),
+    LAVENDAR_BLUE(12, "lavender_blue", 12761312 | 0xFF000000),
+    BROWN_RUST(13, "brown_rust", 11295547 | 0xFF000000),
+    MIDNIGHT_PURPLE(14, "midnight_purple", 6951282 | 0xFF000000),
+    PEWTER_GREY(15, "pewter_grey", 9936283 | 0xFF000000);
 
 	private static final EnumBLDyeColor[] META_LOOKUP = new EnumBLDyeColor[values().length];
 

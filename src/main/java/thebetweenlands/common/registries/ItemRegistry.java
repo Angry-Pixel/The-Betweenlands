@@ -14,6 +14,8 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.FluidContainerColorer;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -729,6 +731,12 @@ public class ItemRegistry {
         for (Item item : ITEMS) {
             TheBetweenlands.proxy.registerDefaultItemRenderer(item);
         }
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public static void registerItemColorHandlers(ColorHandlerEvent.Item event) {
+    	event.getItemColors().registerItemColorHandler(new FluidContainerColorer(), ItemRegistry.BL_BUCKET, ItemRegistry.DENTROTHYST_FLUID_VIAL);
     }
 
     public interface IMultipleItemModelDefinition {

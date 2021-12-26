@@ -35,8 +35,6 @@ public class RenderBoilingPot extends TileEntitySpecialRenderer<TileEntityBoilin
 			height = (0.375F / tile.tank.getCapacity()) * tile.tank.getFluidAmount();
 			TextureAtlasSprite fluidStillSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluidStack.getFluid().getStill().toString());
 			int fluidColor = fluidStack.getFluid().getColor(fluidStack);
-			if(fluidStack.tag != null && fluidStack.tag.hasKey("color"))
-				fluidColor = fluidStack.tag.getInteger("color");
 			GlStateManager.disableLighting();
 			GlStateManager.pushMatrix();
 			GlStateManager.enableBlend();
