@@ -60,7 +60,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 				}
 			}
 
-			if (getTankFluidAmount() >= Fluid.BUCKET_VOLUME && getHeatProgress() >= 100) {
+			if (getTankFluidAmount() >= Fluid.BUCKET_VOLUME && getHeatProgress() >= 100 && hasBundle()) {
 				ItemStack output = ItemStack.EMPTY;
 				FluidStack outputFluid = null;
 				FluidStack fluidWithTag = null;
@@ -103,6 +103,11 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 				}
 			}
 		}
+	}
+
+	private boolean hasBundle() {
+		ItemStack bundle = getStackInSlot(0);
+		return !bundle.isEmpty() && bundle.getItem() == ItemRegistry.SILK_BUNDLE && bundle.hasTagCompound() && bundle.getTagCompound().hasKey("Items");
 	}
 
 	private NonNullList<ItemStack> getBundleItems() {
