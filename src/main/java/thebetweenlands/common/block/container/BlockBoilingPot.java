@@ -24,15 +24,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
-import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityBoilingPot;
 
@@ -104,6 +101,7 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 
 		if (!world.isRemote && world.getTileEntity(pos) instanceof TileEntityBoilingPot) {
 			TileEntityBoilingPot tile = (TileEntityBoilingPot) world.getTileEntity(pos);
+
 			if (!player.isSneaking()) {
 				if (!heldItem.isEmpty() && heldItem.getItem() == ItemRegistry.SILK_BUNDLE) {
 					if (tile.getStackInSlot(0).isEmpty()) {
@@ -113,28 +111,13 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 						if (!player.capabilities.isCreativeMode)
 							heldItem.shrink(1);
 						tile.setHeatProgress(0);
-						world.playSound((EntityPlayer) null, pos, SoundEvents.ENTITY_PLAYER_SPLASH, SoundCategory.BLOCKS, 0.75F, 2F);
+						if(tile.tank.getFluid() != null)
+							world.playSound((EntityPlayer) null, pos, SoundEvents.ENTITY_PLAYER_SPLASH, SoundCategory.BLOCKS, 0.75F, 2F);
 						world.notifyBlockUpdate(pos, state, state, 3);
 						return true;
 					}
 				}
 				
-				if (!heldItem.isEmpty() && EnumItemMisc.WEEDWOOD_BOWL.isItemOf(heldItem)) {
-					if (tile.tank.getFluid() != null && tile.tank.getFluid().getFluid() == FluidRegistry.DYE_FLUID && tile.getTankFluidAmount() >= 250) {
-						FluidStack tankContents = tile.tank.getFluid();
-						ItemStack dyeBowl = EnumItemMisc.WEEDWOOD_BOWL.create(1);
-						if(tankContents.tag != null && tankContents.tag.hasKey("color"))
-							dyeBowl = new ItemStack(ItemRegistry.DYE, 1, tankContents.tag.getInteger("color"));
-						if (!player.inventory.addItemStackToInventory(dyeBowl))
-							ForgeHooks.onPlayerTossEvent(player, dyeBowl, false);
-						if (!player.capabilities.isCreativeMode)
-							heldItem.shrink(1);
-						tile.tank.drain(250, true);
-						world.playSound((EntityPlayer) null, pos, SoundEvents.ENTITY_PLAYER_SPLASH, SoundCategory.BLOCKS, 0.75F, 2F);
-						world.notifyBlockUpdate(pos, state, state, 3);
-						return true;
-					}
-				}
 			}
 
 			if (player.isSneaking()) {
@@ -149,7 +132,7 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 				}
 			}
 		}
-		return true;
+		return false;
 	}
 
 	@Nullable
