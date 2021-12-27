@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraftforge.common.util.RecipeMatcher;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -125,14 +129,16 @@ public class BoilingPotRecipes {
 			return false;
 		if (tankIn.getFluidAmount() < getFluidStack().amount)
 			return false;
-		//TODO
-		// This needs changing to make stuff shapeless and not ordered recipes
-		if (areStacksTheSame(getInputs()[0], stacks[0]))
-			if (areStacksTheSame(getInputs()[1], stacks[1]))
-				if (areStacksTheSame(getInputs()[2], stacks[2]))
-					return areStacksTheSame(getInputs()[3], stacks[3]);
 
-		return false;
+		List<ItemStack> inputList = Lists.newArrayList();
+		for (Object inputIt : input)
+			inputList.add((ItemStack) inputIt);
+
+		List<Ingredient> stackList = Lists.newArrayList();
+		for (ItemStack stackIt : stacks)
+			stackList.add(Ingredient.fromStacks(stackIt));
+
+		return RecipeMatcher.findMatches(inputList, stackList) != null;
 	}
 
 	@SuppressWarnings("unchecked")
