@@ -4,11 +4,11 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.base.CaseFormat;
-
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import thebetweenlands.common.item.EnumBLDyeColor;
 
 public class FluidRegistry {
 	private FluidRegistry() { }
@@ -47,10 +47,21 @@ public class FluidRegistry {
 		@Override
 		public int getColor(net.minecraftforge.fluids.FluidStack stack) {
 			if(stack.tag != null && stack.tag.hasKey("color")) {
-				return stack.tag.getInteger("color") | 0xFF000000;
+				return EnumBLDyeColor.byMetadata(stack.tag.getInteger("color")).getColorValue() | 0xFF000000;
 			}
 			return 0xFFFFFFFF;
 		}
+
+		@Override
+		public String getUnlocalizedName(FluidStack stack) {
+			if (stack.tag != null && stack.tag.hasKey("color")) {
+				String colour = "dye_fluid." + EnumBLDyeColor.byMetadata(stack.tag.getInteger("color")).getDyeColorName();
+				setUnlocalizedName(colour);
+				return this.getUnlocalizedName() + colour;
+			}
+			return this.getUnlocalizedName();
+		}
+
 	}.setDensity(1000).setViscosity(1000);
 
 	public static final List<Fluid> REGISTERED_FLUIDS = new ArrayList<Fluid>();

@@ -537,6 +537,7 @@ tile.thebetweenlands.lyestone.name=Lyestone
 tile.thebetweenlands.mist_bridge.name=Mist Bridge
 tile.thebetweenlands.shadow_walker.name=Shadow Walker
 tile.thebetweenlands.weak_smooth_cragrock.name=Weak Smooth Cragrock
+tile.thebetweenlands.boiling_pot.name=Boiling Pot Thingy
 
 # Items
 
@@ -1038,6 +1039,22 @@ fluid.stagnant_water=Stagnant Water
 fluid.rubber=Rubber
 fluid.fog=Fog
 fluid.shallowbreath=Shallowbreath
+fluid.dye_fluid.brown_rust=Brown Rust Dye
+fluid.dye_fluid.cadmium_green=Cadmium Green Dye
+fluid.dye_fluid.camelot_magenta=Camelot Magenta Dye
+fluid.dye_fluid.caribbean_green=Caribbean Green Dye
+fluid.dye_fluid.champagnee=Champagne Dye
+fluid.dye_fluid.dull_lavender=Dull Lavender Dye
+fluid.dye_fluid.elm_cyan=Elm Cyan Dye
+fluid.dye_fluid.lavender_blue=Lavender Blue Dye
+fluid.dye_fluid.maroon=Maroon Dye
+fluid.dye_fluid.midnight_purple=Midnight Purple Dye
+fluid.dye_fluid.pewter_grey=Pewter Grey Dye
+fluid.dye_fluid.raisin_black=Raisin Black Dye
+fluid.dye_fluid.saffron=Saffron Dye
+fluid.dye_fluid.shadow_green=Shadow Green Dye
+fluid.dye_fluid.sushi_green=Sushi Green Dye
+fluid.dye_fluid.vivid_tangerine=Vivid Tangerine Dye
 
 # Creative Tabs
 itemGroup.thebetweenlands.block=The Betweenlands Blocks

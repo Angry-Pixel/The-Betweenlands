@@ -22,7 +22,6 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
-import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.recipe.misc.BoilingPotRecipes;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -88,7 +87,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 					if (outputFluid != null) {
 						if(outputFluid.getFluid() == FluidRegistry.DYE_FLUID) {
 							NBTTagCompound nbt = new NBTTagCompound();
-							nbt.setInteger("color", EnumBLDyeColor.byMetadata(outputFluidMeta).getColorValue());
+							nbt.setInteger("color", outputFluidMeta);
 							fluidWithTag = new FluidStack(outputFluid.getFluid(), Fluid.BUCKET_VOLUME, nbt);
 							tank.fill(fluidWithTag , true);
 						}
