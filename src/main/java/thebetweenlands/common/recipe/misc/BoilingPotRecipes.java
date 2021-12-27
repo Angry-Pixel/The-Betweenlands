@@ -30,29 +30,12 @@ public class BoilingPotRecipes {
 		recipes.add(new BoilingPotRecipes(output, outputFluidMeta, fluid, input));
 	}
 
-	public static ItemStack getOutputItem(IFluidTank tank, ItemStack input1, ItemStack input2, ItemStack input3, ItemStack input4) {
-		BoilingPotRecipes recipe = getRecipe(tank, input1, input2, input3, input4);
-		return recipe != null ? recipe.getOutputItem() : ItemStack.EMPTY;
-	}
-	
-	public static FluidStack getOutputFluid(IFluidTank tank, ItemStack input1, ItemStack input2, ItemStack input3, ItemStack input4) {
-		BoilingPotRecipes recipe = getRecipe(tank, input1, input2, input3, input4);
-		return recipe != null ? recipe.getOutputFluid() : null;
-	}
-
-	public static BoilingPotRecipes getRecipe(IFluidTank tank, ItemStack input1, ItemStack input2, ItemStack input3, ItemStack input4) {
-		for (BoilingPotRecipes recipe : recipes)
-			if (recipe.matches(tank, input1, input2, input3, input4))
-				return recipe;
-		return null;
-	}
-
-	public static ItemStack getItemOutput(IFluidTank tank, ItemStack... input) {
+	public static ItemStack getOutputItem(IFluidTank tank, ItemStack... input) {
 		BoilingPotRecipes recipe = getRecipe(tank, input);
 		return recipe != null ? recipe.getOutputItem() : ItemStack.EMPTY;
 	}
-	
-	public static FluidStack getFluidOutput(IFluidTank tank, ItemStack... input) {
+
+	public static FluidStack getOutputFluid(IFluidTank tank, ItemStack... input) {
 		BoilingPotRecipes recipe = getRecipe(tank, input);
 		return recipe != null ? recipe.getOutputFluid() : null;
 	}
