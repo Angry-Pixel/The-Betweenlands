@@ -86,7 +86,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 					setHeatProgress(0);
 
 					if (outputFluid != null) {
-						if(outputFluid.getFluid() == FluidRegistry.DYED_WATER) {
+						if(outputFluid.getFluid() == FluidRegistry.DYE_FLUID) {
 							NBTTagCompound nbt = new NBTTagCompound();
 							nbt.setInteger("color", EnumBLDyeColor.byMetadata(outputFluidMeta).getColorValue());
 							fluidWithTag = new FluidStack(outputFluid.getFluid(), Fluid.BUCKET_VOLUME, nbt);

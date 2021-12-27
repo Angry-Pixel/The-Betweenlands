@@ -43,7 +43,7 @@ public class FluidRegistry {
 	public static final Fluid RUBBER = new Fluid("rubber", new ResourceLocation("thebetweenlands:fluids/rubber_still"), new ResourceLocation("thebetweenlands:fluids/rubber_flowing")).setDensity(1200).setViscosity(1500);
 	public static final Fluid FOG = new Fluid("fog", new ResourceLocation("thebetweenlands:fluids/fog"), new ResourceLocation("thebetweenlands:fluids/fog")).setDensity(2).setViscosity(10).setGaseous(true);
 	public static final Fluid SHALLOWBREATH = new Fluid("shallowbreath", new ResourceLocation("thebetweenlands:fluids/shallowbreath"), new ResourceLocation("thebetweenlands:fluids/shallowbreath")).setDensity(2).setViscosity(10).setGaseous(true);
-	public static final Fluid DYED_WATER = new Fluid("dyed_water", new ResourceLocation("thebetweenlands:fluids/dyed_water_still"), new ResourceLocation("thebetweenlands:fluids/dyed_water_flowing")) {
+	public static final Fluid DYE_FLUID = new Fluid("dye_fluid", new ResourceLocation("thebetweenlands:fluids/dye_fluid_still"), new ResourceLocation("thebetweenlands:fluids/dye_fluid_flowing")) {
 		@Override
 		public int getColor(net.minecraftforge.fluids.FluidStack stack) {
 			if(stack.tag != null && stack.tag.hasKey("color")) {
