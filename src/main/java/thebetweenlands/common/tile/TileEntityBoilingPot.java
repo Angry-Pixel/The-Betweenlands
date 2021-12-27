@@ -75,7 +75,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 
 				if (recipe != null) {
 					output = recipe.getOutputItem();
-					outputFluid = recipe.getOutputFluid();
+					outputFluid = recipe.getOutputFluidStack();
 					outputFluidMeta = recipe.getOutputFluidMeta();
 					
 					if (!inventory.get(0).isEmpty())
