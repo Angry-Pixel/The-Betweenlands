@@ -4,11 +4,11 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.base.CaseFormat;
-
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import thebetweenlands.common.item.EnumBLDyeColor;
 
 public class FluidRegistry {
 	private FluidRegistry() { }
@@ -43,14 +43,25 @@ public class FluidRegistry {
 	public static final Fluid RUBBER = new Fluid("rubber", new ResourceLocation("thebetweenlands:fluids/rubber_still"), new ResourceLocation("thebetweenlands:fluids/rubber_flowing")).setDensity(1200).setViscosity(1500);
 	public static final Fluid FOG = new Fluid("fog", new ResourceLocation("thebetweenlands:fluids/fog"), new ResourceLocation("thebetweenlands:fluids/fog")).setDensity(2).setViscosity(10).setGaseous(true);
 	public static final Fluid SHALLOWBREATH = new Fluid("shallowbreath", new ResourceLocation("thebetweenlands:fluids/shallowbreath"), new ResourceLocation("thebetweenlands:fluids/shallowbreath")).setDensity(2).setViscosity(10).setGaseous(true);
-	public static final Fluid DYED_WATER = new Fluid("dyed_water", new ResourceLocation("thebetweenlands:fluids/dyed_water_still"), new ResourceLocation("thebetweenlands:fluids/dyed_water_flowing")) {
+	public static final Fluid DYE_FLUID = new Fluid("dye_fluid", new ResourceLocation("thebetweenlands:fluids/dye_fluid_still"), new ResourceLocation("thebetweenlands:fluids/dye_fluid_flowing")) {
 		@Override
 		public int getColor(net.minecraftforge.fluids.FluidStack stack) {
 			if(stack.tag != null && stack.tag.hasKey("color")) {
-				return stack.tag.getInteger("color") | 0xFF000000;
+				return EnumBLDyeColor.byMetadata(stack.tag.getInteger("color")).getColorValue() | 0xFF000000;
 			}
 			return 0xFFFFFFFF;
 		}
+
+		@Override
+		public String getUnlocalizedName(FluidStack stack) {
+			if (stack.tag != null && stack.tag.hasKey("color")) {
+				String colour = "dye_fluid." + EnumBLDyeColor.byMetadata(stack.tag.getInteger("color")).getDyeColorName();
+				setUnlocalizedName(colour);
+				return this.getUnlocalizedName() + colour;
+			}
+			return this.getUnlocalizedName();
+		}
+
 	}.setDensity(1000).setViscosity(1000);
 
 	public static final List<Fluid> REGISTERED_FLUIDS = new ArrayList<Fluid>();

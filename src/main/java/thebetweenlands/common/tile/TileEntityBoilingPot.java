@@ -22,7 +22,6 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
-import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.recipe.misc.BoilingPotRecipes;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -61,7 +60,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 				}
 			}
 
-			if (getTankFluidAmount() >= Fluid.BUCKET_VOLUME && getHeatProgress() >= 100) {
+			if (getTankFluidAmount() >= Fluid.BUCKET_VOLUME && getHeatProgress() >= 100 && hasBundle()) {
 				ItemStack output = ItemStack.EMPTY;
 				FluidStack outputFluid = null;
 				FluidStack fluidWithTag = null;
@@ -76,7 +75,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 
 				if (recipe != null) {
 					output = recipe.getOutputItem();
-					outputFluid = recipe.getOutputFluid();
+					outputFluid = recipe.getOutputFluidStack();
 					outputFluidMeta = recipe.getOutputFluidMeta();
 					
 					if (!inventory.get(0).isEmpty())
@@ -86,9 +85,9 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 					setHeatProgress(0);
 
 					if (outputFluid != null) {
-						if(outputFluid.getFluid() == FluidRegistry.DYED_WATER) {
+						if(outputFluid.getFluid() == FluidRegistry.DYE_FLUID) {
 							NBTTagCompound nbt = new NBTTagCompound();
-							nbt.setInteger("color", EnumBLDyeColor.byMetadata(outputFluidMeta).getColorValue());
+							nbt.setInteger("color", outputFluidMeta);
 							fluidWithTag = new FluidStack(outputFluid.getFluid(), Fluid.BUCKET_VOLUME, nbt);
 							tank.fill(fluidWithTag , true);
 						}
@@ -104,6 +103,11 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 				}
 			}
 		}
+	}
+
+	private boolean hasBundle() {
+		ItemStack bundle = getStackInSlot(0);
+		return !bundle.isEmpty() && bundle.getItem() == ItemRegistry.SILK_BUNDLE && bundle.hasTagCompound() && bundle.getTagCompound().hasKey("Items");
 	}
 
 	private NonNullList<ItemStack> getBundleItems() {

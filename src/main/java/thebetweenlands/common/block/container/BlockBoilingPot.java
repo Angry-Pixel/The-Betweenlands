@@ -101,6 +101,7 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 
 		if (!world.isRemote && world.getTileEntity(pos) instanceof TileEntityBoilingPot) {
 			TileEntityBoilingPot tile = (TileEntityBoilingPot) world.getTileEntity(pos);
+
 			if (!player.isSneaking()) {
 				if (!heldItem.isEmpty() && heldItem.getItem() == ItemRegistry.SILK_BUNDLE) {
 					if (tile.getStackInSlot(0).isEmpty()) {
@@ -110,11 +111,13 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 						if (!player.capabilities.isCreativeMode)
 							heldItem.shrink(1);
 						tile.setHeatProgress(0);
-						world.playSound((EntityPlayer) null, pos, SoundEvents.ENTITY_PLAYER_SPLASH, SoundCategory.BLOCKS, 0.75F, 2F);
+						if(tile.tank.getFluid() != null)
+							world.playSound((EntityPlayer) null, pos, SoundEvents.ENTITY_PLAYER_SPLASH, SoundCategory.BLOCKS, 0.75F, 2F);
 						world.notifyBlockUpdate(pos, state, state, 3);
 						return true;
 					}
 				}
+				
 			}
 
 			if (player.isSneaking()) {
@@ -129,7 +132,7 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 				}
 			}
 		}
-		return true;
+		return false;
 	}
 
 	@Nullable

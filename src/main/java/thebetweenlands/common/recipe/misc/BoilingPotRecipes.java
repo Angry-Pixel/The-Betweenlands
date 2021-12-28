@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraftforge.common.util.RecipeMatcher;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -17,7 +21,7 @@ public class BoilingPotRecipes {
 	public static void addRecipe(ItemStack output, Fluid fluid, Object... input) {
 		addRecipe(output, new FluidStack(fluid, Fluid.BUCKET_VOLUME), input);
 	}
-	
+
 	public static void addRecipe(Fluid output, int outputFluidMeta, Fluid fluid, Object... input) {
 		addRecipe(new FluidStack(output, Fluid.BUCKET_VOLUME), outputFluidMeta, new FluidStack(fluid, Fluid.BUCKET_VOLUME), input);
 	}
@@ -25,36 +29,19 @@ public class BoilingPotRecipes {
 	public static void addRecipe(ItemStack output, FluidStack fluid,  Object... input) {
 		recipes.add(new BoilingPotRecipes(output, fluid, input));
 	}
-	
+
 	public static void addRecipe(FluidStack output, int outputFluidMeta, FluidStack fluid,  Object... input) {
 		recipes.add(new BoilingPotRecipes(output, outputFluidMeta, fluid, input));
 	}
 
-	public static ItemStack getOutputItem(IFluidTank tank, ItemStack input1, ItemStack input2, ItemStack input3, ItemStack input4) {
-		BoilingPotRecipes recipe = getRecipe(tank, input1, input2, input3, input4);
-		return recipe != null ? recipe.getOutputItem() : ItemStack.EMPTY;
-	}
-	
-	public static FluidStack getOutputFluid(IFluidTank tank, ItemStack input1, ItemStack input2, ItemStack input3, ItemStack input4) {
-		BoilingPotRecipes recipe = getRecipe(tank, input1, input2, input3, input4);
-		return recipe != null ? recipe.getOutputFluid() : null;
-	}
-
-	public static BoilingPotRecipes getRecipe(IFluidTank tank, ItemStack input1, ItemStack input2, ItemStack input3, ItemStack input4) {
-		for (BoilingPotRecipes recipe : recipes)
-			if (recipe.matches(tank, input1, input2, input3, input4))
-				return recipe;
-		return null;
-	}
-
-	public static ItemStack getItemOutput(IFluidTank tank, ItemStack... input) {
+	public static ItemStack getOutputItem(IFluidTank tank, ItemStack... input) {
 		BoilingPotRecipes recipe = getRecipe(tank, input);
 		return recipe != null ? recipe.getOutputItem() : ItemStack.EMPTY;
 	}
-	
-	public static FluidStack getFluidOutput(IFluidTank tank, ItemStack... input) {
+
+	public static FluidStack getOutputFluid(IFluidTank tank, ItemStack... input) {
 		BoilingPotRecipes recipe = getRecipe(tank, input);
-		return recipe != null ? recipe.getOutputFluid() : null;
+		return recipe != null ? recipe.getOutputFluidStack() : null;
 	}
 
 	public static BoilingPotRecipes getRecipe(IFluidTank tank, ItemStack... input) {
@@ -124,11 +111,15 @@ public class BoilingPotRecipes {
 		return input;
 	}
 
+	public FluidStack getInputFluidStack() {
+		return fluidStackIn;
+	}
+
 	public ItemStack getOutputItem() {
 		return output.copy();
 	}
 
-	public FluidStack getOutputFluid() {
+	public FluidStack getOutputFluidStack() {
 		return fluidStackOut == null ? null : fluidStackOut.copy();
 	}
 
@@ -136,56 +127,20 @@ public class BoilingPotRecipes {
 		return fluidMeta;
 	}
 
-	//Urgh... fugly as all hell... it works though
 	public boolean matches(IFluidTank tankIn, ItemStack... stacks) {
-		if (tankIn.getFluid() == null || !tankIn.getFluid().isFluidEqual(getFluidStack()))
+		if (tankIn.getFluid() == null || !tankIn.getFluid().isFluidEqual(getInputFluidStack()))
 			return false;
-		if (tankIn.getFluidAmount() < getFluidStack().amount)
-			return false;
-		//TODO
-		// This needs changing to make stuff shapeless and not ordered recipes
-		if (areStacksTheSame(getInputs()[0], stacks[0]))
-			if (areStacksTheSame(getInputs()[1], stacks[1]))
-				if (areStacksTheSame(getInputs()[2], stacks[2]))
-					return areStacksTheSame(getInputs()[3], stacks[3]);
-
-		return false;
-	}
-
-	@SuppressWarnings("unchecked")
-	public boolean areStacksTheSame(Object obj, ItemStack target) {
-		if (obj instanceof ItemStack)
-			return areStacksTheSame((ItemStack) obj, target, false);
-
-		else if (obj instanceof List) {
-			List<ItemStack> list = (List<ItemStack>) obj;
-
-			for (ItemStack stack : list)
-				if (areStacksTheSame(stack, target, false))
-					return true;
-		}
-		return false;
-	}
-
-	public static boolean areStacksTheSame(ItemStack stack1, ItemStack stack2, boolean matchSize) {
-		if (stack1.isEmpty() && !stack2.isEmpty() || !stack1.isEmpty() && stack2.isEmpty())
+		if (tankIn.getFluidAmount() < getInputFluidStack().amount)
 			return false;
 
-		if (stack1.getItem() == stack2.getItem())
-			if (stack1.getItemDamage() == stack2.getItemDamage() || isWildcard(stack1.getItemDamage()) || isWildcard(stack2.getItemDamage()))
-				if (!matchSize || stack1.getCount() == stack2.getCount()) {
-					if (stack1.hasTagCompound() && stack2.hasTagCompound())
-						return stack1.getTagCompound().equals(stack2.getTagCompound());
-					return stack1.hasTagCompound() == stack2.hasTagCompound();
-				}
-		return false;
-	}
+		List<ItemStack> inputList = Lists.newArrayList();
+		for (Object inputIt : input)
+			inputList.add((ItemStack) inputIt);
 
-	private static boolean isWildcard(int meta) {
-		return meta == OreDictionary.WILDCARD_VALUE;
-	}
+		List<Ingredient> stackList = Lists.newArrayList();
+		for (ItemStack stackIt : stacks)
+			stackList.add(Ingredient.fromStacks(stackIt));
 
-	public FluidStack getFluidStack() {
-		return fluidStackIn;
+		return RecipeMatcher.findMatches(inputList, stackList) != null;
 	}
 }
