@@ -46,24 +46,24 @@ public class ContainerSilkBundle extends Container {
 			return;
 		}
 
-		this.numRows = this.inventory.getSizeInventory() / 9;
+		this.numRows = 2;
 		int yOffset = (this.numRows - 4) * 18;
 
 		//new slot restriction list with meta
-		this.addSlotToContainer(new SlotRestrictionListWithMeta(itemInventory, 0, 98, 4, getItemList(), 1, this));
-		this.addSlotToContainer(new SlotRestrictionListWithMeta(itemInventory, 1, 116, 4, getItemList(), 1, this));
-		this.addSlotToContainer(new SlotRestrictionListWithMeta(itemInventory, 2, 134, 4, getItemList(), 1, this));
-		this.addSlotToContainer(new SlotRestrictionListWithMeta(itemInventory, 3, 152, 4, getItemList(), 1, this));
+		this.addSlotToContainer(new SlotRestrictionListWithMeta(itemInventory, 0, 78, 15, getItemList(), 1, this));
+		this.addSlotToContainer(new SlotRestrictionListWithMeta(itemInventory, 1, 42, 33, getItemList(), 1, this));
+		this.addSlotToContainer(new SlotRestrictionListWithMeta(itemInventory, 2, 114, 33, getItemList(), 1, this));
+		this.addSlotToContainer(new SlotRestrictionListWithMeta(itemInventory, 3, 78, 51, getItemList(), 1, this));
 				
 
-		for (int row = 0; row < 3; ++row) {
-			for (int column = 0; column < 9; ++column) {
-				this.addSlotToContainer(new Slot(playerInventory, column + row * 9 + 9, 8 + column * 18, 103 + row * 18 + yOffset));
+		for (int row = 0; row < 3; row++) {
+			for (int column = 0; column < 9; column++) {
+				this.addSlotToContainer(new Slot(playerInventory, column + row * 9 + 9, 7 + column * 18, 119 + row * 18 + yOffset));
 			}
 		}
 
 		for (int column = 0; column < 9; ++column) {
-			this.addSlotToContainer(new Slot(playerInventory, column, 8 + column * 18, 161 + yOffset));
+			this.addSlotToContainer(new Slot(playerInventory, column, 7 + column * 18, 177 + yOffset));
 		}
 	}
 
