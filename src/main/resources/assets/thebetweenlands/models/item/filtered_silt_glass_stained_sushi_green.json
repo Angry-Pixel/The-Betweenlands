@@ -1,0 +1,6 @@
+{ 
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "thebetweenlands:blocks/filtered_silt_glass_stained_sushi_green_0"
+  } 
+}

@@ -6,7 +6,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public enum EnumBLDyeColor implements IStringSerializable
 {
-    DULL_LAVENDAR(0, "dull_lavender", 8882149 | 0xFF000000),
+    DULL_LAVENDER(0, "dull_lavender", 8882149 | 0xFF000000),
     MAROON(1, "maroon", 8519684 | 0xFF000000),
     SHADOW_GREEN(2, "shadow_green", 10208437 | 0xFF000000),
     CAMELOT_MAGENTA(3, "camelot_magenta", 9316177 | 0xFF000000),
@@ -18,7 +18,7 @@ public enum EnumBLDyeColor implements IStringSerializable
     SUSHI_GREEN(9, "sushi_green", 9416509 | 0xFF000000),
     ELM_CYAN(10, "elm_cyan", 1804678 | 0xFF000000),
     CADMIUM_GREEN(11, "cadmium_green", 2189375 | 0xFF000000),
-    LAVENDAR_BLUE(12, "lavender_blue", 12761312 | 0xFF000000),
+    LAVENDER_BLUE(12, "lavender_blue", 12761312 | 0xFF000000),
     BROWN_RUST(13, "brown_rust", 11295547 | 0xFF000000),
     MIDNIGHT_PURPLE(14, "midnight_purple", 6951282 | 0xFF000000),
     PEWTER_GREY(15, "pewter_grey", 9936283 | 0xFF000000);

@@ -68,29 +68,7 @@ import thebetweenlands.common.recipe.censer.CenserRecipeSapBall;
 import thebetweenlands.common.recipe.censer.CenserRecipeStagnantWater;
 import thebetweenlands.common.recipe.censer.CenserRecipeSwampWater;
 import thebetweenlands.common.recipe.censer.CenserRecipeWeepingBluePetal;
-import thebetweenlands.common.recipe.misc.AnimatorRecipe;
-import thebetweenlands.common.recipe.misc.BoilingPotRecipes;
-import thebetweenlands.common.recipe.misc.BookMergeRecipe;
-import thebetweenlands.common.recipe.misc.CompostRecipe;
-import thebetweenlands.common.recipe.misc.CrabPotFilterRecipeBubbler;
-import thebetweenlands.common.recipe.misc.CrabPotFilterRecipeSilt;
-import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
-import thebetweenlands.common.recipe.misc.HearthgroveTarringRecipe;
-import thebetweenlands.common.recipe.misc.RecipeClearBoneWayfinder;
-import thebetweenlands.common.recipe.misc.RecipeFishingRodWormAdd;
-import thebetweenlands.common.recipe.misc.RecipeGrapplingHookUpgrades;
-import thebetweenlands.common.recipe.misc.RecipeLurkerSkinPouchUpgrades;
-import thebetweenlands.common.recipe.misc.RecipeMarshRunnerBoots;
-import thebetweenlands.common.recipe.misc.RecipeMummyBait;
-import thebetweenlands.common.recipe.misc.RecipeOlmletteMixture;
-import thebetweenlands.common.recipe.misc.RecipeSapSpitCleanTool;
-import thebetweenlands.common.recipe.misc.RecipesAspectVials;
-import thebetweenlands.common.recipe.misc.RecipesCircleGems;
-import thebetweenlands.common.recipe.misc.RecipesCoating;
-import thebetweenlands.common.recipe.misc.RecipesFishBait;
-import thebetweenlands.common.recipe.misc.RecipesLifeCrystal;
-import thebetweenlands.common.recipe.misc.RecipesPlantTonic;
-import thebetweenlands.common.recipe.misc.SmokingRackRecipe;
+import thebetweenlands.common.recipe.misc.*;
 import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipe;
 import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipeAspectrus;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
@@ -116,6 +94,7 @@ public class RecipeRegistry {
 	public static final ResourceLocation FISH_BAIT = new ResourceLocation(ModInfo.ID, "recipe_fish_bait");
 	public static final ResourceLocation FISHING_ROD_WORM_ADD = new ResourceLocation(ModInfo.ID, "fishing_rod_worm_add");
 	public static final ResourceLocation OLMLETTE_MIXTURE = new ResourceLocation(ModInfo.ID, "olmlette_mixture");
+	public static final ResourceLocation STAINED_GLASS = new ResourceLocation(ModInfo.ID, "recipe_stained_glass");
 
 	private RecipeRegistry() { }
 
@@ -251,6 +230,7 @@ public class RecipeRegistry {
 		registry.register(new RecipesFishBait().setRegistryName(FISH_BAIT));
 		registry.register(new RecipeFishingRodWormAdd().setRegistryName(FISHING_ROD_WORM_ADD));
 		registry.register(new RecipeOlmletteMixture().setRegistryName(OLMLETTE_MIXTURE));
+		registry.register(new RecipeStainedGlass().setRegistryName(STAINED_GLASS));
 	}
 
 	private static void registerSmelting() {

@@ -19,6 +19,7 @@ import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
@@ -41,6 +42,7 @@ import thebetweenlands.client.gui.inventory.GuiSmokingRack;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
+import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.item.misc.ItemBoneWayfinder;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -190,6 +192,10 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
         //Fish Bait
         registry.handleRecipes(RecipesFishBait.class, recipe -> new FishBaitRecipeJEI(jeiHelper.getGuiHelper()), VanillaRecipeCategoryUid.CRAFTING);
 
+        for(EnumBLDyeColor color : EnumBLDyeColor.values()) {
+            recipes.add(new ShapedOreRecipe(null, new ItemStack(BlockRegistry.FILTERED_SILT_GLASS_STAINED, 1, color.getMetadata()),
+                    "GGG", "GDG", "GGG", 'G', new ItemStack(BlockRegistry.FILTERED_SILT_GLASS,  1, 0), 'D', new ItemStack(ItemRegistry.DYE,  1, color.getMetadata())).setRegistryName(ModInfo.ID, RecipeRegistry.STAINED_GLASS.getPath() + "_" + color.getDyeColorName()));
+        }
 
         //Vials
         recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 0), new ItemStack(ItemRegistry.ASPECT_VIAL,  1, 0)).setRegistryName(ModInfo.ID, RecipeRegistry.ASPECT_VIAL.getPath() + "_green"));

@@ -537,6 +537,22 @@ tile.thebetweenlands.lyestone.name=Lyestone
 tile.thebetweenlands.mist_bridge.name=Mist Bridge
 tile.thebetweenlands.shadow_walker.name=Shadow Walker
 tile.thebetweenlands.weak_smooth_cragrock.name=Weak Smooth Cragrock
+tile.thebetweenlands.filtered_silt_glass_stained.brown_rust.name=Brown Rust Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.cadmium_green.name=Cadmium Green Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.camelot_magenta.name=Camelot Magenta Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.caribbean_green.name=Caribbean Green Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.champagne.name=Champagne Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.dull_lavender.name=Dull Lavender Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.elm_cyan.name=Elm Cyan Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.lavender_blue.name=Lavender Blue Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.maroon.name=Maroon Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.midnight_purple.name=Midnight Purple Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.pewter_grey.name=Pewter Grey Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.raisin_black.name=Raisin Black Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.saffron.name=Saffron Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.shadow_green.name=Shadow Green Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.sushi_green.name=Sushi Green Filtered Silt Glass
+tile.thebetweenlands.filtered_silt_glass_stained.vivid_tangerine.name=Vivid Tangerine Filtered Silt Glass
 tile.thebetweenlands.boiling_pot.name=Boiling Pot Thingy
 
 # Items
