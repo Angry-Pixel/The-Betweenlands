@@ -35,6 +35,12 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 	private boolean heated = false;
 	private NonNullList<ItemStack> inventoryBundle;
 	
+	public int itemRotate = 0;
+    public int prevItemRotate  = 0;
+    public int prevItemBob = 0;
+    public int itemBob = 0;
+    private boolean countUp = true;
+	
 	public TileEntityBoilingPot() {
 		super(1, "container.bl.boiling_pot");
         this.tank = new FluidTank(null, Fluid.BUCKET_VOLUME * 1);
@@ -44,9 +50,34 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 	@Override
 	public void update() {
 
+		prevItemRotate = itemRotate;
+		prevItemBob = itemBob;
+		
+		if (getWorld().isRemote) {
+				if (countUp && itemBob <= 20) {
+					itemBob++;
+					if (itemBob == 20)
+						countUp = false;
+				}
+				if (!countUp && itemBob >= -20) {
+					itemBob--;
+					if (itemBob == -20)
+						countUp = true;
+				}
+
+			if (getHeatProgress() > 80) {
+				if (itemRotate < 180)
+					itemRotate += 1;
+				if (itemRotate >= 180) {
+					itemRotate = 0;
+					prevItemRotate = 0;
+				}
+			}
+		}
+		
 		if (!getWorld().isRemote) {
 			
-			if (this.isHeatSource(world.getBlockState(pos.down())) && getHeatProgress()< 100 && getTankFluidAmount() > 0) {
+			if (this.isHeatSource(world.getBlockState(pos.down())) && getHeatProgress() < 100 && getTankFluidAmount() > 0) {
 				if (world.getTotalWorldTime() % 10 == 0) {
 					setHeatProgress(getHeatProgress() + 1);
 					this.markForUpdate();
@@ -100,6 +131,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 					EntityXPOrb orb = new EntityXPOrb(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 1);
 					world.spawnEntity(orb);
 					System.out.println("Recipe Done");
+					this.markForUpdate();
 				}
 			}
 		}
@@ -179,6 +211,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 
     protected NBTTagCompound writePacketNbt(NBTTagCompound nbt) {
         nbt.setTag("tank", tank.writeToNBT(new NBTTagCompound()));
+        nbt.setInteger("heatProgress", getHeatProgress());
         this.writeInventoryNBT(nbt);
         return nbt;
     }
@@ -186,6 +219,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
     protected void readPacketNbt(NBTTagCompound nbt) {
         NBTTagCompound compound = nbt;
         tank.readFromNBT(compound.getCompoundTag("tank"));
+        setHeatProgress(nbt.getInteger("heatProgress"));
         this.readInventoryNBT(nbt);
     }
 
