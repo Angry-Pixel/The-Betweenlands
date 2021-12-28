@@ -1,0 +1,52 @@
+{ 
+  "variants": {
+    "color=dull_lavender": {
+      "model": "thebetweenlands:mud_brick_shingle_stained_dull_lavender"
+    },
+    "color=maroon": {
+      "model": "thebetweenlands:mud_brick_shingle_stained_maroon"
+    },
+    "color=shadow_green": {
+      "model": "thebetweenlands:mud_brick_shingle_stained_shadow_green"
+    },
+    "color=camelot_magenta": {
+      "model": "thebetweenlands:mud_brick_shingle_stained_camelot_magenta"
+    },
+    "color=saffron": {
+      "model": "thebetweenlands:mud_brick_shingle_stained_saffron"
+    },
+    "color=caribbean_green": {
+      "model": "thebetweenlands:mud_brick_shingle_stained_caribbean_green"
+    },
+    "color=vivid_tangerine": {
+      "model": "thebetweenlands:mud_brick_shingle_stained_vivid_tangerine"
+    },
+    "color=champagne": {
+      "model": "thebetweenlands:mud_brick_shingle_stained_champagne"
+    },
+    "color=raisin_black": {
+      "model": "thebetweenlands:mud_brick_shingle_stained_raisin_black"
+    },
+    "color=sushi_green": {
+      "model": "thebetweenlands:mud_brick_shingle_stained_sushi_green"
+    },
+    "color=elm_cyan": {
+      "model": "thebetweenlands:mud_brick_shingle_stained_elm_cyan"
+    },
+    "color=cadmium_green": {
+      "model": "thebetweenlands:mud_brick_shingle_stained_cadmium_green"
+    },
+    "color=lavender_blue": {
+      "model": "thebetweenlands:mud_brick_shingle_stained_lavender_blue"
+    },
+    "color=brown_rust": {
+      "model": "thebetweenlands:mud_brick_shingle_stained_brown_rust"
+    },
+    "color=midnight_purple": {
+      "model": "thebetweenlands:mud_brick_shingle_stained_midnight_purple"
+    },
+    "color=pewter_grey": {
+      "model": "thebetweenlands:mud_brick_shingle_stained_pewter_grey"
+    }
+  } 
+}
