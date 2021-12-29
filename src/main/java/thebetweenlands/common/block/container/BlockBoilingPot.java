@@ -114,6 +114,7 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 						if (!player.capabilities.isCreativeMode)
 							heldItem.shrink(1);
 						tile.setHeatProgress(0);
+						tile.hasCraftResult = false;
 						if(tile.tank.getFluid() != null)
 							world.playSound((EntityPlayer) null, pos, SoundEvents.ENTITY_PLAYER_SPLASH, SoundCategory.BLOCKS, 0.75F, 2F);
 						world.notifyBlockUpdate(pos, state, state, 3);
@@ -129,6 +130,7 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 						ForgeHooks.onPlayerTossEvent(player, tile.getStackInSlot(0), false);
 					tile.setInventorySlotContents(0, ItemStack.EMPTY);
 					tile.setHeatProgress(0);
+					tile.hasCraftResult = false;
 					world.playSound((EntityPlayer) null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5F, 2F);
 					world.notifyBlockUpdate(pos, state, state, 3);
 					return true;

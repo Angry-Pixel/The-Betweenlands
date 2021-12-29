@@ -37,12 +37,13 @@ public class RenderBoilingPot extends TileEntitySpecialRenderer<TileEntityBoilin
 			height = (0.375F / tile.tank.getCapacity()) * tile.tank.getFluidAmount();
 			TextureAtlasSprite fluidStillSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluidStack.getFluid().getStill().toString());
 			int fluidColor = fluidStack.getFluid().getColor(fluidStack);
+			int fluidColorTemp = tile.tempFluidColour;
+			float fade = tile.hasBundle() ? 0.01F * tile.getHeatProgress() : 0F;
 			GlStateManager.disableLighting();
 			GlStateManager.pushMatrix();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			setGLColorFromInt(fluidColor);
 			GlStateManager.translate(x, y + 0.25F, z);
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 			float xMax, zMax, xMin, zMin, yMin = 0;
@@ -60,8 +61,22 @@ public class RenderBoilingPot extends TileEntitySpecialRenderer<TileEntityBoilin
 				zMin = 0.25F;
 				yMin = 0F;
 			}
-
+			setGLColorFromInt(fluidColor, 1F - fade);
 			renderCuboid(buffer, xMax, xMin, yMin, height, zMin, zMax, fluidStillSprite);
+			tessellator.draw();
+			GlStateManager.disableBlend();
+			GlStateManager.popMatrix();
+			GlStateManager.enableLighting();
+			
+			GlStateManager.disableLighting();
+			GlStateManager.pushMatrix();
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+			bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+			GlStateManager.translate(x, y + 0.25F, z);
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+			setGLColorFromInt(fluidColorTemp, 0F + fade);
+			renderCuboid(buffer, xMax, xMin, yMin, height + 0.01F, zMin, zMax, fluidStillSprite);
 			tessellator.draw();
 			GlStateManager.disableBlend();
 			GlStateManager.popMatrix();
@@ -109,12 +124,12 @@ public class RenderBoilingPot extends TileEntitySpecialRenderer<TileEntityBoilin
 		}
 	}
 
-	private void setGLColorFromInt(int color) {
+	private void setGLColorFromInt(int color, float alpha) {
 		float red = (color >> 16 & 0xFF) / 255.0F;
 		float green = (color >> 8 & 0xFF) / 255.0F;
 		float blue = (color & 0xFF) / 255.0F;
 
-		GlStateManager.color(red, green, blue, 1.0F);
+		GlStateManager.color(red, green, blue, alpha);
 	}
 
 	private void renderCuboid(BufferBuilder buffer, float xMax, float xMin, float yMin, float height, float zMin, float zMax, TextureAtlasSprite textureAtlasSprite) {
