@@ -104,7 +104,8 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 
 		if (!world.isRemote && world.getTileEntity(pos) instanceof TileEntityBoilingPot) {
 			TileEntityBoilingPot tile = (TileEntityBoilingPot) world.getTileEntity(pos);
-
+			if (tile.getHeatProgress() > 50 && tile.getHeatProgress() < 100 && tile.hasBundle())
+				return false;
 			if (!player.isSneaking()) {
 				if (!heldItem.isEmpty() && heldItem.getItem() == ItemRegistry.SILK_BUNDLE) {
 					if (tile.getStackInSlot(0).isEmpty()) {

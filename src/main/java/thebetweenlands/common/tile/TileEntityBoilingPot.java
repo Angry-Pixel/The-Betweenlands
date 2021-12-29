@@ -89,11 +89,8 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 						outputFluid = recipe.getOutputFluidStack();
 						outputFluidMeta = recipe.getOutputFluidMeta();
 						if (outputFluid != null) {
-							if (outputFluid.getFluid() == FluidRegistry.DYE_FLUID) {
+							if (outputFluid.getFluid() == FluidRegistry.DYE_FLUID)
 								setTempFluidColour(EnumBLDyeColor.byMetadata(outputFluidMeta).getColorValue() | 0xFF000000);
-								System.out.println( "Is Dye colour of: " + EnumBLDyeColor.byMetadata(outputFluidMeta).getName());
-							}
-
 							hasCraftResult = true;
 						}
 					}
@@ -228,7 +225,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 
     public void markForUpdate() {
         IBlockState state = this.getWorld().getBlockState(this.getPos());
-        this.getWorld().notifyBlockUpdate(this.getPos(), state, state, 2);
+        this.getWorld().notifyBlockUpdate(this.getPos(), state, state, 3);
     }
 
     @Override
