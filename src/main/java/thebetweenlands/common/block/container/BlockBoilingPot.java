@@ -29,7 +29,10 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityBoilingPot;
 
@@ -101,7 +104,8 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 
 		if (!world.isRemote && world.getTileEntity(pos) instanceof TileEntityBoilingPot) {
 			TileEntityBoilingPot tile = (TileEntityBoilingPot) world.getTileEntity(pos);
-
+			if (tile.getHeatProgress() > 50 && tile.getHeatProgress() < 100 && tile.hasBundle())
+				return false;
 			if (!player.isSneaking()) {
 				if (!heldItem.isEmpty() && heldItem.getItem() == ItemRegistry.SILK_BUNDLE) {
 					if (tile.getStackInSlot(0).isEmpty()) {
@@ -111,6 +115,7 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 						if (!player.capabilities.isCreativeMode)
 							heldItem.shrink(1);
 						tile.setHeatProgress(0);
+						tile.hasCraftResult = false;
 						if(tile.tank.getFluid() != null)
 							world.playSound((EntityPlayer) null, pos, SoundEvents.ENTITY_PLAYER_SPLASH, SoundCategory.BLOCKS, 0.75F, 2F);
 						world.notifyBlockUpdate(pos, state, state, 3);
@@ -126,6 +131,7 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 						ForgeHooks.onPlayerTossEvent(player, tile.getStackInSlot(0), false);
 					tile.setInventorySlotContents(0, ItemStack.EMPTY);
 					tile.setHeatProgress(0);
+					tile.hasCraftResult = false;
 					world.playSound((EntityPlayer) null, pos, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5F, 2F);
 					world.notifyBlockUpdate(pos, state, state, 3);
 					return true;
@@ -139,5 +145,38 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 	private IFluidHandler getFluidHandler(IBlockAccess world, BlockPos pos) {
 		TileEntityBoilingPot tileentity = (TileEntityBoilingPot) world.getTileEntity(pos);
 		return tileentity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+		if (world.getTileEntity(pos) instanceof TileEntityBoilingPot) {
+			int x = pos.getX();
+			int y = pos.getY();
+			int z = pos.getZ();
+			TileEntityBoilingPot pot = (TileEntityBoilingPot) world.getTileEntity(pos);
+			if (pot.getTankFluidAmount() > 0  && pot.getHeatProgress() > 80) {
+				int amount = pot.tank.getFluidAmount();
+				int capacity = pot.tank.getCapacity();
+				float size = 1F / capacity * amount;
+				float xx = (float) x + 0.5F;
+				float yy = (float) (y + 0.35F + size * 0.25F);
+				float zz = (float) z + 0.5F;
+				float fixedOffset = 0.25F;
+				float randomOffset = rand.nextFloat() * 0.6F - 0.3F;
+				int colour = pot.tank.getFluid().getFluid().getColor();
+				if(pot.tank.getFluid().tag != null && pot.tank.getFluid().tag.hasKey("color"))
+					colour =  EnumBLDyeColor.byMetadata(pot.tank.getFluid().tag.getInteger("color")).getColorValue() | 0xFF000000;
+
+				BLParticles.BUBBLE_INFUSION.spawn(world, xx + 0.3F - rand.nextFloat() * 0.6F, yy, zz + 0.3F - rand.nextFloat() * 0.6F, ParticleArgs.get().withScale(0.3F).withColor(colour));
+	
+				if (pot.getHeatProgress() >= 100) {
+					BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx - fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), ParticleArgs.get().withScale(0.3F).withColor(colour));
+					BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), ParticleArgs.get().withScale(0.3F).withColor(colour));
+					BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz - fixedOffset), ParticleArgs.get().withScale(0.3F).withColor(colour));
+					BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz + fixedOffset), ParticleArgs.get().withScale(0.3F).withColor(colour));
+				}
+			}
+		}
 	}
 }

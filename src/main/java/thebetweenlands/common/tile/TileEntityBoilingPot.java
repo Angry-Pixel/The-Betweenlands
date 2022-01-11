@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
+import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.recipe.misc.BoilingPotRecipes;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -30,10 +31,18 @@ import thebetweenlands.common.registries.ItemRegistry;
 
 public class TileEntityBoilingPot extends TileEntityBasicInventory implements ITickable {
     public FluidTank tank;
+    public int tempFluidColour;
 	private IItemHandler itemHandler;
+	public boolean hasCraftResult = false;
     private int heatProgress = 0;
 	private boolean heated = false;
 	private NonNullList<ItemStack> inventoryBundle;
+	
+	public int itemRotate = 0;
+    public int prevItemRotate  = 0;
+    public int prevItemBob = 0;
+    public int itemBob = 0;
+    private boolean countUp = true;
 	
 	public TileEntityBoilingPot() {
 		super(1, "container.bl.boiling_pot");
@@ -44,19 +53,76 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 	@Override
 	public void update() {
 
+		prevItemRotate = itemRotate;
+		prevItemBob = itemBob;
+		
+		if (getWorld().isRemote) {
+				if (countUp && itemBob <= 20) {
+					itemBob++;
+					if (itemBob == 20)
+						countUp = false;
+				}
+				if (!countUp && itemBob >= -20) {
+					itemBob--;
+					if (itemBob == -20)
+						countUp = true;
+				}
+
+			if (getHeatProgress() > 80 && hasBundle()) {
+				if (itemRotate < 180)
+					itemRotate += 1;
+				if (itemRotate >= 180) {
+					itemRotate = 0;
+					prevItemRotate = 0;
+				}
+			}
+		}
+
 		if (!getWorld().isRemote) {
-			
-			if (this.isHeatSource(world.getBlockState(pos.down())) && getHeatProgress()< 100 && getTankFluidAmount() > 0) {
-				if (world.getTotalWorldTime() % 10 == 0) {
-					setHeatProgress(getHeatProgress() + 1);
-					this.markForUpdate();
+			if (getTankFluidAmount() >= Fluid.BUCKET_VOLUME && !hasCraftResult) {
+				if (hasBundle()) {
+					BoilingPotRecipes recipe = getCraftResult(tank, getBundleItems().get(0), getBundleItems().get(1), getBundleItems().get(2), getBundleItems().get(3));
+					FluidStack outputFluid = null;
+					FluidStack fluidWithTag = null;
+					int outputFluidMeta = 0;
+					if (recipe != null) {
+						outputFluid = recipe.getOutputFluidStack();
+						outputFluidMeta = recipe.getOutputFluidMeta();
+						if (outputFluid != null) {
+							if (outputFluid.getFluid() == FluidRegistry.DYE_FLUID)
+								setTempFluidColour(EnumBLDyeColor.byMetadata(outputFluidMeta).getColorValue() | 0xFF000000);
+							hasCraftResult = true;
+						}
+					}
+				} else {
+					setTempFluidColour(tank.getFluid().getFluid().getColor());
+					hasCraftResult = true;
+				}
+				this.markForUpdate();
+			}
+
+			if (this.isHeatSource(world.getBlockState(pos.down()))) {
+				if (getHeatProgress() < 100 && getTankFluidAmount() > 0) {
+					if (world.getTotalWorldTime() % 10 == 0) {
+						setHeatProgress(getHeatProgress() + 1);
+						this.markForUpdate();
+					}
+				}
+				else if(tank.getFluid() == null && getHeatProgress() != 0) {
+						setHeatProgress(0);
+						this.markForUpdate();
 				}
 			}
 
-			if (!this.isHeatSource(world.getBlockState(pos.down())) && getHeatProgress() > 0) {
-				if (world.getTotalWorldTime() % 5 == 0) {
-					setHeatProgress(getHeatProgress() - 1);
-					this.markForUpdate();
+			if (!this.isHeatSource(world.getBlockState(pos.down()))) {
+				if (getHeatProgress() > 0) {
+					if (world.getTotalWorldTime() % 5 == 0) {
+						setHeatProgress(getHeatProgress() - 1);
+						this.markForUpdate();
+					} else if (tank.getFluid() == null && getHeatProgress() != 0) {
+						setHeatProgress(0);
+						this.markForUpdate();
+					}
 				}
 			}
 
@@ -65,7 +131,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 				FluidStack outputFluid = null;
 				FluidStack fluidWithTag = null;
 				int outputFluidMeta = 0;
-				BoilingPotRecipes recipe = BoilingPotRecipes.getRecipe(tank, getBundleItems().get(0), getBundleItems().get(1), getBundleItems().get(2), getBundleItems().get(3));
+				BoilingPotRecipes recipe = getCraftResult(tank, getBundleItems().get(0), getBundleItems().get(1), getBundleItems().get(2), getBundleItems().get(3));
 
 				if (recipe == null) {
 					setHeatProgress(0);
@@ -82,7 +148,6 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 						setInventorySlotContents(0, EnumItemMisc.SILK_BUNDLE_DIRTY.create(1));
 
 					tank.drain(Fluid.BUCKET_VOLUME, true);
-					setHeatProgress(0);
 
 					if (outputFluid != null) {
 						if(outputFluid.getFluid() == FluidRegistry.DYE_FLUID) {
@@ -100,12 +165,22 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 					EntityXPOrb orb = new EntityXPOrb(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 1);
 					world.spawnEntity(orb);
 					System.out.println("Recipe Done");
+					hasCraftResult = false;
+					this.markForUpdate();
 				}
 			}
 		}
 	}
 
-	private boolean hasBundle() {
+	private void setTempFluidColour(int colour) {
+		this.tempFluidColour = colour;
+	}
+
+	public BoilingPotRecipes getCraftResult(FluidTank tank, ItemStack stack1, ItemStack stack2, ItemStack stack3, ItemStack stack4) {
+		return BoilingPotRecipes.getRecipe(tank, stack1, stack2, stack3, stack4);
+	}
+
+	public boolean hasBundle() {
 		ItemStack bundle = getStackInSlot(0);
 		return !bundle.isEmpty() && bundle.getItem() == ItemRegistry.SILK_BUNDLE && bundle.hasTagCompound() && bundle.getTagCompound().hasKey("Items");
 	}
@@ -150,7 +225,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 
     public void markForUpdate() {
         IBlockState state = this.getWorld().getBlockState(this.getPos());
-        this.getWorld().notifyBlockUpdate(this.getPos(), state, state, 2);
+        this.getWorld().notifyBlockUpdate(this.getPos(), state, state, 3);
     }
 
     @Override
@@ -179,6 +254,8 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 
     protected NBTTagCompound writePacketNbt(NBTTagCompound nbt) {
         nbt.setTag("tank", tank.writeToNBT(new NBTTagCompound()));
+        nbt.setInteger("heatProgress", getHeatProgress());
+        nbt.setInteger("tempFluidColour", tempFluidColour);
         this.writeInventoryNBT(nbt);
         return nbt;
     }
@@ -186,6 +263,8 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
     protected void readPacketNbt(NBTTagCompound nbt) {
         NBTTagCompound compound = nbt;
         tank.readFromNBT(compound.getCompoundTag("tank"));
+        setHeatProgress(nbt.getInteger("heatProgress"));
+        setTempFluidColour(nbt.getInteger("tempFluidColour"));
         this.readInventoryNBT(nbt);
     }
 

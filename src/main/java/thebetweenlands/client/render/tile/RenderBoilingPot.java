@@ -1,5 +1,7 @@
 package thebetweenlands.client.render.tile;
 
+import java.util.Random;
+
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -35,12 +37,13 @@ public class RenderBoilingPot extends TileEntitySpecialRenderer<TileEntityBoilin
 			height = (0.375F / tile.tank.getCapacity()) * tile.tank.getFluidAmount();
 			TextureAtlasSprite fluidStillSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluidStack.getFluid().getStill().toString());
 			int fluidColor = fluidStack.getFluid().getColor(fluidStack);
+			int fluidColorTemp = tile.tempFluidColour;
+			float fade = tile.getHeatProgress() > 50 && tile.hasBundle() ? (-50 + tile.getHeatProgress()) * 0.02F: 0F;
 			GlStateManager.disableLighting();
 			GlStateManager.pushMatrix();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			setGLColorFromInt(fluidColor);
 			GlStateManager.translate(x, y + 0.25F, z);
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 			float xMax, zMax, xMin, zMin, yMin = 0;
@@ -58,42 +61,75 @@ public class RenderBoilingPot extends TileEntitySpecialRenderer<TileEntityBoilin
 				zMin = 0.25F;
 				yMin = 0F;
 			}
-
+			setGLColorFromInt(fluidColor, 1F - fade);
 			renderCuboid(buffer, xMax, xMin, yMin, height, zMin, zMax, fluidStillSprite);
 			tessellator.draw();
 			GlStateManager.disableBlend();
 			GlStateManager.popMatrix();
 			GlStateManager.enableLighting();
+			
+			GlStateManager.disableLighting();
+			GlStateManager.pushMatrix();
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+			bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+			GlStateManager.translate(x, y + 0.25F, z);
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+			setGLColorFromInt(fluidColorTemp, 0F + fade);
+			renderCuboid(buffer, xMax, xMin, yMin, height + 0.01F, zMin, zMax, fluidStillSprite);
+			tessellator.draw();
+			GlStateManager.disableBlend();
+			GlStateManager.popMatrix();
+			GlStateManager.enableLighting();
 		}
-		
-		if(!tile.getStackInSlot(0).isEmpty()) {
+
+		if (!tile.getStackInSlot(0).isEmpty()) {
+			int itemBob = tile.itemBob;
+			int prevItemBob = tile.prevItemBob;
+			int stirProgress = tile.itemRotate;
+			int prevStirProgress = tile.prevItemRotate;
+			float stirTicks = stirProgress + (stirProgress - prevStirProgress) * partialTick;
+			float bobTicks = itemBob + (itemBob - prevItemBob) * partialTick;
+
 			double itemY = y + 0.25D + height;
+			Random rand = new Random();
+			rand.setSeed((long) (tile.getPos().getX() + tile.getPos().getY() + tile.getPos().getZ()));
+			float randRot = rand.nextFloat() * 360.0F;
+			double xo = -0.2D + rand.nextFloat() * 0.4D;
+			double zo = -0.2D + rand.nextFloat() * 0.4D;
+			double rot = (stirTicks < 180 && fluidLevel > 0 ? stirTicks * 2D + 90D + randRot : 90D + randRot);
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x + 0.5D, 0, z + 0.5D);
-			renderItemInSlot(tile, 0, 0, itemY, 0);
+			GlStateManager.rotate((float) -rot, 0, 1, 0);
+			GlStateManager.translate(xo, 0, zo);
+			renderItemInSlot(tile, 0, 0, itemY, 0, fluidLevel > 0 ? bobTicks : 0D, -rot);
 			GlStateManager.popMatrix();
 		}
 
 	}
 
-	private void renderItemInSlot(TileEntityBoilingPot tile, int slotIndex, double x, double y, double z) {
+	private void renderItemInSlot(TileEntityBoilingPot tile, int slotIndex, double x, double y, double z, double itemBob, double rotation) {
 		if (!tile.getStackInSlot(slotIndex).isEmpty()) {
 			GlStateManager.pushMatrix();
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			GlStateManager.translate(x, y, z);
 			GlStateManager.scale(0.5D, 0.5D, 0.5D);
-			GlStateManager.translate(0D, 0D, 0D);
+			GlStateManager.translate(0D, itemBob * 0.0025F, 0D);
+			GlStateManager.rotate((float) rotation, 0, 1, 0);
+			GlStateManager.rotate(tile.getHeatProgress() < 20 ? 0F : (float) itemBob * 0.2F, 0, 0, 1);
+			GlStateManager.rotate(tile.getHeatProgress() < 40 ? 0F : (float) itemBob * 0.2F, 1, 0, 0);
+			GlStateManager.rotate(tile.getHeatProgress() < 60 ? 0F : (float) itemBob * 0.4F, 0, -1, 0);
 			Minecraft.getMinecraft().getRenderItem().renderItem(tile.getStackInSlot(slotIndex), TransformType.FIXED);
 			GlStateManager.popMatrix();
 		}
 	}
 
-	private void setGLColorFromInt(int color) {
+	private void setGLColorFromInt(int color, float alpha) {
 		float red = (color >> 16 & 0xFF) / 255.0F;
 		float green = (color >> 8 & 0xFF) / 255.0F;
 		float blue = (color & 0xFF) / 255.0F;
 
-		GlStateManager.color(red, green, blue, 1.0F);
+		GlStateManager.color(red, green, blue, alpha);
 	}
 
 	private void renderCuboid(BufferBuilder buffer, float xMax, float xMin, float yMin, float height, float zMin, float zMax, TextureAtlasSprite textureAtlasSprite) {
