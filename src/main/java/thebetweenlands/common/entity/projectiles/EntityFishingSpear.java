@@ -381,15 +381,18 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 		Entity entity = raytraceResultIn.entityHit;
 
 		if (entity != null) {
-
-			if (entity instanceof EntityAnadia)
-				setDamage(((EntityAnadia) entity).getMaxHealth());
-			else if (entity instanceof EntityAngler)
-				setDamage(((EntityAngler) entity).getMaxHealth());
-			else if (returningTicks > 0 && entity != shootingEntity )
-				setDamage(4);
-
 			float f = MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
+
+			if (entity instanceof EntityAnadia) {
+				setDamage(((EntityAnadia) entity).getMaxHealth());
+				f = 1;
+			} else if (entity instanceof EntityAngler) {
+				setDamage(((EntityAngler) entity).getMaxHealth());
+				f = 1;
+			} else if (returningTicks > 0 && entity != shootingEntity ) {
+				setDamage(4);
+			}
+
 			int i = MathHelper.ceil((double) f * damage);
 
 			if (getIsCritical())
@@ -405,9 +408,6 @@ public class EntityFishingSpear extends Entity implements IProjectile, IThrowabl
 			if (entity.attackEntityFrom(damagesource, (float) i)) {
 				if (entity instanceof EntityLivingBase) {
 					EntityLivingBase entitylivingbase = (EntityLivingBase) entity;
-
-					if (!world.isRemote)
-						entitylivingbase.setArrowCountInEntity(entitylivingbase.getArrowCountInEntity() + 1);
 
 					if (shootingEntity instanceof EntityLivingBase) {
 						EnchantmentHelper.applyThornEnchantments(entitylivingbase, shootingEntity);
