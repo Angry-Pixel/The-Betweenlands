@@ -521,8 +521,10 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 
 	@Override
 	public double getYOffset() {
-		if(getRidingEntity() !=null && getRidingEntity() instanceof EntityPlayer)
-			return height * 0.5D;
+		if(getRidingEntity() != null && getRidingEntity() instanceof EntityPlayer) {
+			return height * (getRidingEntity().isSneaking() ? 0.3D : 0.5D);
+		}
+
 		return 0.0D;
 	}
 
