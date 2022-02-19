@@ -1,7 +1,7 @@
 # Blocks
 tile.thebetweenlands.angry_betweenstone.name=Pierre en Colère
 tile.thebetweenlands.aqua_middle_gem_ore.name=Minerais de Gemme Aquatique
-tile.thebetweenlands.arrow_arum.name=Pelatandra
+tile.thebetweenlands.arrow_arum.name=Peltandra
 tile.thebetweenlands.algae.name=Algue de Surface
 tile.thebetweenlands.blue_eyed_grass.name=Iridacée Bleue
 tile.thebetweenlands.blue_iris.name=Iris Bleu
@@ -564,7 +564,7 @@ item.thebetweenlands.ancient.name=Disque du Temple
 item.thebetweenlands.angler_meat_cooked.name=Filet de Poisson-pêcheur Cuit
 item.thebetweenlands.angler_meat_raw.name=Filet de Poisson-pêcheur Cru
 item.thebetweenlands.angler_tooth.name=Dent de Poisson-pêcheur
-item.thebetweenlands.arrow_arum_leaf.name=Feuille de Pelatandra
+item.thebetweenlands.arrow_arum_leaf.name=Feuille de Peltandra
 item.thebetweenlands.aspectrus_fruit.name=Fruit d’Essence
 item.thebetweenlands.aspectrus_fruit.filled.name=Fruit d’Essence - %s (%s)
 item.thebetweenlands.aspectrus_fruit.filled.default.name=Fruit d’Essence - %s
@@ -628,7 +628,7 @@ item.thebetweenlands.cryptweed_blades.name=Brin d’Herbe des Cryptes
 item.thebetweenlands.ground_algae.name=Algue de Surface en Poudre
 item.thebetweenlands.ground_angler_tooth.name=Dent de Poisson-pêcheur (Pilée)
 item.thebetweenlands.ground_aqua_middle_gem.name=Gemme Aquatique (Pilée)
-item.thebetweenlands.ground_arrow_arum.name=Pelatandra (Pilée)
+item.thebetweenlands.ground_arrow_arum.name=Peltandra (Pilée)
 item.thebetweenlands.ground_blackhat_mushroom.name=Champignon Chapeau Noir (Pilé)
 item.thebetweenlands.ground_blood_snail_shell.name=Coquille Carmin d’Escargot (Pilée)
 item.thebetweenlands.ground_blue_eyed_grass.name=Iridacée Bleue (Pilée)
@@ -1860,7 +1860,7 @@ manual.uduriis.description=L’essence qui correspond à la nature chaotique de 
 
 #ground items
 manual.item.thebetweenlands.ground_algae.description=De grandes étendues d’Algues de Surface peuvent être trouvées couramment, dans n’importe quel biome, à la surface de l’eau.
-manual.item.thebetweenlands.ground_arrow_arum.description=La Pelatandra est une plante feuillue qui pousse dans les Marécages des Betweenlands.
+manual.item.thebetweenlands.ground_arrow_arum.description=La Peltandra est une plante feuillue qui pousse dans les Marécages des Betweenlands.
 manual.item.thebetweenlands.ground_blackhat_mushroom.description=Les Champignons à Chapeau Noir peuvent être trouvés dispersés un peu partout sur les Terres Embourbées.
 manual.item.thebetweenlands.ground_bog_bean.description=Trouvés au sein des Iles Eparses, les Trèfles d’eau poussent dans la boue et les eaux peu profondes.
 manual.item.thebetweenlands.ground_boneset.description=L’Eupatoire Perfoliée est une fleur qui pousse sur les Iles Eparses.
