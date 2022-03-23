@@ -26,12 +26,56 @@ import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockHollowLog extends BlockHorizontal {
+	public static final float thickness = 0.125f;
+	public static final AxisAlignedBB TOP_BOUNDING_BOX = new AxisAlignedBB(0, 1, 0, 1, 1 - thickness, 1);
+	public static final AxisAlignedBB BOTTOM_BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, thickness, 1);
+
+	public static final AxisAlignedBB SOUTH_BOUNDING_BOX = new AxisAlignedBB(0, 0, 1, 1, 1, 1 - thickness);
+	public static final AxisAlignedBB NORTH_BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 1, thickness);
+
+	public static final AxisAlignedBB EAST_BOUNDING_BOX = new AxisAlignedBB(1, 0, 0, 1 - thickness, 1, 1);
+	public static final AxisAlignedBB WEST_BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, thickness, 1, 1);
+	
 	public BlockHollowLog() {
 		super(Material.WOOD);
 		setHardness(0.8F);
 		setSoundType(SoundType.WOOD);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
 		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+	}
+	
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return Block.FULL_BLOCK_AABB;
+	}
+
+	@Override
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState) {
+		
+		EnumFacing facing = state.getValue(FACING);
+
+		addCollisionBoxToList(pos, entityBox, collidingBoxes, TOP_BOUNDING_BOX);
+		addCollisionBoxToList(pos, entityBox, collidingBoxes, BOTTOM_BOUNDING_BOX);
+		
+		//only add collision to sides that should be solid
+		switch(facing) {
+			case NORTH:
+			case SOUTH:
+				addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_BOUNDING_BOX);
+				addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_BOUNDING_BOX);
+				break;
+			case EAST:
+			case WEST:
+				addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_BOUNDING_BOX);
+				addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_BOUNDING_BOX);
+				break;
+			default:
+				addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_BOUNDING_BOX);
+				addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_BOUNDING_BOX);
+				addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_BOUNDING_BOX);
+				addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_BOUNDING_BOX);
+				break;
+		}
 	}
 
 	@Override
@@ -53,7 +97,6 @@ public class BlockHollowLog extends BlockHorizontal {
 	public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return false;
 	}
-
 
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
