@@ -741,7 +741,7 @@ location.spirit_tree.name=80:Призрачное дерево
 
 
 # Tooltips
-tooltip.bl.arrow.octine=Используйте с осторожностью!
+tooltip.bl.arrow.octine=Осторожно! Огнеопасно!
 tooltip.bl.arrow.basilisk=Вызывает паралич
 tooltip.bl.chiromaw_wing.eat=После этого, как мне кажется, любая еда станет вкуснее...
 tooltip.bl.chiromaw_wing.dont_eat=Мне кажется, что это больше не стоит есть...
@@ -762,17 +762,17 @@ tooltip.bl.ring.recruitment.bonus=Дарует способность вербо
 tooltip.bl.ring.flight.bonus=Дарует способность полёта
 tooltip.bl.ring.summoning.bonus=Дарует способность вызывать союзников из недр
 tooltip.bl.item.equippable=Можно экипировать
-tooltip.bl.ring.summoning=Equip using the radial \nmenu [press '%s'], \nscream using '%s'
-tooltip.bl.ring.flight=Equip using the radial \nmenu [press '%s'], \ndouble tap '%s' to activate
-tooltip.bl.ring.power=Equip using the radial \nmenu [press '%s']
-tooltip.bl.ring.recruitment=Equip using the radial \nmenu [press '%s'], \nhold '%s' \non mobs to take control\nover them
+tooltip.bl.ring.summoning=Экипируйте используя \nменю [нажмите '%s'], \nипользуйте нажимая '%s'
+tooltip.bl.ring.flight=Экипируйте используя \nменю [нажмите '%s'], \nактивация - двойное нажатие на '%s'
+tooltip.bl.ring.power=Экипируйте используя \nменю [нажмите '%s'],
+tooltip.bl.ring.recruitment=Экипируйте используя \nменю [нажмите '%s'], \nудерживайте '%s' \nна мобах чтобы взять их под контроль
 tooltip.bl.press.shift=Удерживайте "Shift", чтобы увидеть больше
-tooltip.bl.life_crystal.remaining=%d remaining
+tooltip.bl.life_crystal.remaining=%d осталось
 tooltip.bl.shockwave_sword.usage=Щелкните ПКМ по земле,\nчтобы создать ударную волну
 tooltip.bl.shockwave_sword.broken=Меч ударной волны\n сломан и нуждается\n в починке с помощью Оживителя
 tooltip.bl.compost.compostable=Можно компостировать
 tooltip.bl.food_sickness.state.fine=Хороший вкус
-tooltip.bl.food_sickness.state.half=Tastes plain
+tooltip.bl.food_sickness.state.half=Безвкусно
 tooltip.bl.food_sickness.state.sick=Больше не могу это есть
 tooltip.bl.circlegem.green=§aЗелёный самоцвет§r
 tooltip.bl.circlegem.crimson=§cБагровый самоцвет§r
@@ -793,7 +793,7 @@ tooltip.bl.amulet.none=\nНет эффекта.\nМожет комбиниров
 tooltip.bl.amulet.aqua=\nКогда надето:\n §9- Есть шанс ослабить противника при атаке\n §9- Есть шанс увеличить защиту при атаке
 tooltip.bl.amulet.crimson=\nКогда надето:\n §9- Есть шанс получить силу при атаке\n §9- Есть шанс нанести дополнительный урон врагу при атаке
 tooltip.bl.amulet.green=\nКогда надето:\n §9- Есть шанс восстановить здоровье при атаке\n §9- Есть шанс поглотить урон при атаке
-tooltip.bl.amulet.usage=Equip using the radial \nmenu [press '%s'] \nor by pressing '%s'
+tooltip.bl.amulet.usage=Экипируйте используя \nменю [нажмите '%s'], \nили нажимая на '%s'
 tooltip.bl.weedwood_bucket=Щёлкните ПКМ по\nкаучуковуму дереву, чтобы\nсобрать каучук
 tooltip.bl.syrmorite_bucket=Щёлкните ПКМ по\nкаучуковуму дереву, чтобы\nсобрать каучук
 tooltip.bl.bl_bucket=Щёлкните ПКМ по\nкаучуковуму дереву, чтобы\nсобрать каучук
@@ -801,9 +801,9 @@ tooltip.bl.octine_shield=Поджигает врагов
 tooltip.bl.syrmorite_shield=Удерживайте '%1$s' + '%2$s' для накопления силы\nа затем отпустите '%1$s', чтобы отбросить врагов.
 tooltip.bl.valonite_shield=Удерживайте '%1$s' + '%2$s' для накопления силы\nа затем отпустите '%1$s', чтобы отбросить врагов. Отражает снаряды
 tooltip.bl.dentrothyst_shield=Блокирует от эффектов зелий
-tooltip.bl.caving_rope=Press '%s' to connect or disconnect\nto/from a nearby caving rope.\n§6The caving rope will despawn after\n§6%s minutes if not connected to\n§6a player.
-tooltip.bl.hearthgrove_log=This dense log is excellent as fuel.\nCan be tarred
-tooltip.bl.decay_food=Heals decay
+tooltip.bl.caving_rope=Нажмите '%s' чтобы присоеденить или отсоеденить\nсебя от скалолазной веревки.\n§6Верёвка пропадёт через\n§6%s минут\n§6если не надета на игрока.
+tooltip.bl.hearthgrove_log=Это твёрдое дерево - отличное топливо.\nМожно просмолить
+tooltip.bl.decay_food=Лечит разложение
 tooltip.bl.swamp_talisman_linked=Связан с порталом\nX: %s\nY: %s\nZ: %s
 tooltip.bl.infusion.time=§aВремя наполнения:§r %s
 tooltip.bl.infusion.ingredients=§aИнгридиенты:
@@ -916,9 +916,9 @@ chat.aspect.discovery.byariis=Геккон яростно жует свой хв
 chat.compost.full=Компостный ящик заполнен
 chat.compost.not.compostable=Этот предмет нельзя компостировать
 
-chat.rope.already_connected=Already connected to another caving rope
-chat.rope.disconnected=You were disconnected from the caving  rope
-chat.rope.too_far=You're too far away from the last anchor point
+chat.rope.already_connected=Уже присоеденён к скалолазной верёвке
+chat.rope.disconnected=Вы отсоеденились от скалолазной веревки
+chat.rope.too_far=Вы слишком далеко от точки прошлого якоря
 
 chat.bed_spawn_set=Ваша Точка Возрождения была установлена на эту кровать с мхом
 
@@ -1068,17 +1068,17 @@ equipment.menu.page=Стр. %d
 item.thebetweenlands.record.astatos.desc=Voog2 - Астатос
 item.thebetweenlands.record.between_you_and_me.desc=Voog2 - Между тобой и мной
 item.thebetweenlands.record.christmas_on_the_marsh.desc=Voog2 - Рождество на болоте
-item.thebetweenlands.record.the_explorer.desc=Voog2 - исследователь
+item.thebetweenlands.record.the_explorer.desc=Voog2 - Исследователь
 item.thebetweenlands.record.hag_dance.desc=Voog2 - Танец кикиморы
 item.thebetweenlands.record.lonely_fire.desc=Voog2 - Одинокое пламя
 item.thebetweenlands.record.16612.desc=...
 item.thebetweenlands.record.beneath_a_green_sky.desc=Voog2 - Под зеленым небом
 item.thebetweenlands.record.onwards.desc=Voog2 - Вперед
 item.thebetweenlands.record.dj_wights_mixtape.desc=Voog2 - Вечеринка в пещере
-item.thebetweenlands.record.stuck_in_the_mud.desc=Voog2 - Застрял в грязи
+item.thebetweenlands.record.stuck_in_the_mud.desc=Voog2 - Застрявший в грязи
 item.thebetweenlands.record.waterlogged.desc=Voog2 - Заболоченное
 item.thebetweenlands.record.wandering_wisps.desc=Voog2 - Блуждающие огоньки
-item.thebetweenlands.record.ancient.desc=Voog2 - Древний
+item.thebetweenlands.record.ancient.desc=Voog2 - Древнее
 
 
 # Signs
