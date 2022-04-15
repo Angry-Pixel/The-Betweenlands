@@ -72,6 +72,11 @@ public class BlockBetweenstonePebblePileWater extends BlockSwampWater implements
     }
 
 	@Override
+	public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
+		return true;
+	}
+
+	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		state = state.getActualState(source, pos);
 		switch ((EnumPileType) state.getValue(PILE_TYPE)) {
