@@ -860,7 +860,7 @@ public class DecorationHelper {
 	}
 
 	public static boolean generateWightFortress(DecoratorPositionProvider decorator) {
-		BlockPos pos = decorator.getRandomPos(1);
+		BlockPos pos = decorator.getRandomPosSeaGround(1);
 		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down())) {
 			Biome biome = decorator.getWorld().getBiome(pos);
 			WorldGenWightFortress fortress = new WorldGenWightFortress();
