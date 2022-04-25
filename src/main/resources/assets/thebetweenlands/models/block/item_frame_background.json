@@ -1,0 +1,23 @@
+{
+    "credit": "Made with Blockbench",
+    "textures": {
+        "0": "thebetweenlands:blocks/item_frame_bg",
+        "particle": "thebetweenlands:blocks/item_frame_bg"
+    },
+    "elements": [
+        {
+            "name": "bg",
+            "from": [3, 1.5, 15.9],
+            "to": [13, 14.5, 15.9],
+            "rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 16]},
+            "faces": {
+                "north": {"uv": [4, 1, 14, 14], "texture": "#0"},
+                "east": {"uv": [0, 0, 0, 13], "texture": "#missing"},
+                "south": {"uv": [4, 1, 14, 14], "texture": "#0"},
+                "west": {"uv": [0, 0, 0, 13], "texture": "#missing"},
+                "up": {"uv": [0, 0, 10, 0], "texture": "#missing"},
+                "down": {"uv": [0, 0, 10, 0], "texture": "#missing"}
+            }
+        }
+    ]
+}

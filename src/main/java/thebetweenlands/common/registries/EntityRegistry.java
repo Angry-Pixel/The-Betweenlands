@@ -4,35 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.EntityBLLightningBolt;
-import thebetweenlands.common.entity.EntityCCGroundSpawner;
-import thebetweenlands.common.entity.EntityDecayPitTarget;
-import thebetweenlands.common.entity.EntityFalseXPOrb;
-import thebetweenlands.common.entity.EntityFishBait;
-import thebetweenlands.common.entity.EntityFishVortex;
-import thebetweenlands.common.entity.EntityFishingTackleBoxSeat;
-import thebetweenlands.common.entity.EntityGalleryFrame;
-import thebetweenlands.common.entity.EntityGrapplingHookNode;
-import thebetweenlands.common.entity.EntityGreeblingCorpse;
-import thebetweenlands.common.entity.EntityLurkerSkinRaft;
-import thebetweenlands.common.entity.EntityMistBridge;
-import thebetweenlands.common.entity.EntityMovingWall;
-import thebetweenlands.common.entity.EntityResurrection;
-import thebetweenlands.common.entity.EntityRootGrabber;
-import thebetweenlands.common.entity.EntityRopeNode;
-import thebetweenlands.common.entity.EntityShock;
-import thebetweenlands.common.entity.EntityShockwaveBlock;
-import thebetweenlands.common.entity.EntityShockwaveSwordItem;
-import thebetweenlands.common.entity.EntitySpikeWave;
-import thebetweenlands.common.entity.EntitySpiritTreeFaceMask;
-import thebetweenlands.common.entity.EntitySplodeshroom;
-import thebetweenlands.common.entity.EntitySwordEnergy;
-import thebetweenlands.common.entity.EntityTinyWormEggSac;
-import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
-import thebetweenlands.common.entity.EntityTriggeredSludgeWallJet;
-import thebetweenlands.common.entity.EntityUrchinSpikeAOE;
-import thebetweenlands.common.entity.EntityVolarkite;
-import thebetweenlands.common.entity.EntityWormGroundSpawner;
+import thebetweenlands.common.entity.*;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.entity.draeton.EntityPullerChiromaw;
 import thebetweenlands.common.entity.draeton.EntityPullerDragonfly;
@@ -287,6 +259,8 @@ public class EntityRegistry {
 
 		registerEntity(EntityFishVortex.class, "fish_vortex");
 		registerEntity(EntityUrchinSpikeAOE.class, "urchin_spike_aoe");
+
+		registerEntity(EntityBLItemFrame.class, "item_frame", 256, 64, false);
 	}
 
 	private static int id = 0;

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "normal": {
+      "model": "thebetweenlands:item_frame"
+    },
+    "background": {
+      "model": "thebetweenlands:item_frame_background"
+    }
+  }
+}
