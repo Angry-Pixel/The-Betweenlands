@@ -10,8 +10,10 @@ import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemHangingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.FluidContainerColorer;
@@ -30,6 +32,7 @@ import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.entity.EntityBLItemFrame;
 import thebetweenlands.common.entity.EntityGalleryFrame;
 import thebetweenlands.common.entity.EntityTinyWormEggSac;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
@@ -482,6 +485,8 @@ public class ItemRegistry {
     public static final Item AA_UPGRADE_TRIGGER = new ItemAmphibiousArmourUpgradeTrigger().setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item AA_UPGRADE_TOGGLE = new ItemAmphibiousArmourUpgradeToggle().setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item DYE = new ItemBLDye();
+    public static final Item ITEM_FRAME = new ItemBLItemFrame();
+
 
     public static final Item PHEROMONE_THORAX = new ItemPheromoneThorax().setCreativeTab(BLCreativeTabs.ITEMS);
     public static final Item SILK_BUNDLE = new ItemSilkBundle();
