@@ -21,6 +21,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.tuple.Pair;
 
+import thebetweenlands.client.render.entity.RenderBLItemFrame;
 import thebetweenlands.client.render.entity.RenderDraeton;
 import thebetweenlands.client.render.model.loader.extension.*;
 import thebetweenlands.common.TheBetweenlands;
@@ -249,15 +250,17 @@ public final class CustomModelLoader implements ICustomModelLoader {
 		for(TileEntitySpecialRenderer<?> renderer : TileEntityRendererDispatcher.instance.renderers.values()) {
 			if(renderer instanceof IFastTESRBakedModels) {
 				Collection<ModelResourceLocation> locations = ((IFastTESRBakedModels) renderer).getModelLocations();
-				
+
 				for(ModelResourceLocation location : locations) {
 					this.stitchLocation(event, location);
 				}
 			}
 		}
-		
+
 		this.stitchLocation(event, RenderDraeton.FRAME_MAP_MODEL);
 		this.stitchLocation(event, RenderDraeton.FRAME_MODEL);
+		this.stitchLocation(event, RenderBLItemFrame.FRAME_MODEL);
+		this.stitchLocation(event, RenderBLItemFrame.FRAME_BG_MODEL);
 	}
 	
 	private IBakedModel bakeLocation(IRegistry<ModelResourceLocation, IBakedModel> modelRegistry, ModelResourceLocation location) {
@@ -285,6 +288,8 @@ public final class CustomModelLoader implements ICustomModelLoader {
 		
 		this.bakeLocation(modelRegistry, RenderDraeton.FRAME_MAP_MODEL);
 		this.bakeLocation(modelRegistry, RenderDraeton.FRAME_MODEL);
+		this.bakeLocation(modelRegistry, RenderBLItemFrame.FRAME_MODEL);
+		this.bakeLocation(modelRegistry, RenderBLItemFrame.FRAME_BG_MODEL);
 		
 		//Replace loader extensions models
 		Set<ModelResourceLocation> keys = modelRegistry.getKeys();

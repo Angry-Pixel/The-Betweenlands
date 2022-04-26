@@ -1,7 +1,7 @@
 {
     "textures": {
         "particle": "thebetweenlands:blocks/weedwood_planks",
-        "back": "thebetweenlands:items/item_frame_bg"
+        "back": "thebetweenlands:blocks/item_frame_bg"
     },
     "elements": [
         {   "from": [ 3, 3, 15.5 ],

@@ -9,22 +9,19 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ModelManager;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderItemFrame;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemDye;
-import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.storage.MapData;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.entity.EntityBLItemFrame;
+import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.lib.ModInfo;
 
 import javax.annotation.Nullable;
@@ -34,8 +31,8 @@ public class RenderBLItemFrame extends RenderItemFrame
 {
     private static final ResourceLocation MAP_BACKGROUND_TEXTURES = new ResourceLocation("textures/map/map_background.png");
     private final Minecraft mc = Minecraft.getMinecraft();
-    private final ModelResourceLocation itemFrameModel = new ModelResourceLocation(new ResourceLocation(ModInfo.ID, "item_frame"), "normal");
-    private final ModelResourceLocation itemBackgroundModel = new ModelResourceLocation(new ResourceLocation(ModInfo.ID, "item_frame"), "background");
+    public static final ModelResourceLocation FRAME_MODEL = new ModelResourceLocation(new ResourceLocation(ModInfo.ID, "item_frame"), "normal");
+    public static final ModelResourceLocation FRAME_BG_MODEL = new ModelResourceLocation(new ResourceLocation(ModInfo.ID, "item_frame"), "background");
 
     protected final RenderItem itemRenderer;
 
@@ -132,20 +129,26 @@ public class RenderBLItemFrame extends RenderItemFrame
     }
 
     protected void renderModel(EntityItemFrame entity, Minecraft mc) {
-        BlockRendererDispatcher blockrendererdispatcher = mc.getBlockRendererDispatcher();
+        BlockRendererDispatcher blockrendererdispatcher = this.mc.getBlockRendererDispatcher();
         ModelManager modelmanager = blockrendererdispatcher.getBlockModelShapes().getModelManager();
-        IBakedModel woodModel, coloredModel;
 
-        woodModel = modelmanager.getModel(itemFrameModel);
-        coloredModel = modelmanager.getModel(itemBackgroundModel);
+        if (entity.getDisplayedItem().getItem() instanceof net.minecraft.item.ItemMap) {
+            IBakedModel model = modelmanager.getModel(RenderDraeton.FRAME_MAP_MODEL);
+            blockrendererdispatcher.getBlockModelRenderer().renderModelBrightnessColor(model, 1.0F, 1.0F, 1.0F, 1.0F);
+        } else {
+            IBakedModel woodModel, coloredModel;
 
-        blockrendererdispatcher.getBlockModelRenderer().renderModelBrightnessColor(woodModel, 1.0F, 1.0F, 1.0F, 1.0F);
+            woodModel = modelmanager.getModel(FRAME_MODEL);
+            coloredModel = modelmanager.getModel(FRAME_BG_MODEL);
 
-        int color = ItemDye.DYE_COLORS[15]; //  - entity.getColor()
-        float r = (color >> 16 & 0xFF) / 255F;
-        float g = (color >> 8 & 0xFF) / 255F;
-        float b = (color & 0xFF) / 255F;
+            blockrendererdispatcher.getBlockModelRenderer().renderModelBrightnessColor(woodModel, 1.0F, 1.0F, 1.0F, 1.0F);
 
-        blockrendererdispatcher.getBlockModelRenderer().renderModelBrightnessColor(coloredModel, 1.0F, r, g, b);
+            int color = EnumBLDyeColor.byMetadata(15 - ((EntityBLItemFrame) entity).getColor()).getColorValue();
+            float r = (color >> 16 & 0xFF) / 255F;
+            float g = (color >> 8 & 0xFF) / 255F;
+            float b = (color & 0xFF) / 255F;
+
+            blockrendererdispatcher.getBlockModelRenderer().renderModelBrightnessColor(coloredModel, 1.0F, r, g, b);
+        }
     }
 }

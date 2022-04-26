@@ -15,33 +15,47 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.MapData;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.registries.ItemRegistry;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
 public class EntityBLItemFrame extends EntityItemFrame implements IEntityAdditionalSpawnData {
-    protected static final Predicate<Entity> IS_HANGING_ENTITY = entity -> entity instanceof EntityHanging;
+    private static final DataParameter<Integer> COLOR = EntityDataManager.createKey(EntityBLItemFrame.class, DataSerializers.VARINT);
+    private static final String TAG_COLOR = "DyeColor";
 
-    private EnumBLDyeColor color = EnumBLDyeColor.DULL_LAVENDER;
     private float itemDropChance = 1.0F;
-
-    private static final DataParameter<ItemStack> ITEM = EntityDataManager.<ItemStack>createKey(EntityBLItemFrame.class, DataSerializers.ITEM_STACK);
 
 
     public EntityBLItemFrame(World worldIn) {
         super(worldIn);
     }
 
-    public EntityBLItemFrame(World worldIn, BlockPos pos, EnumFacing facing) {
+    public EntityBLItemFrame(World worldIn, BlockPos pos, EnumFacing facing, int color) {
         super(worldIn, pos, facing);
+        dataManager.set(COLOR, color);
+    }
 
-        System.out.println(facing);
-        this.updateFacingWithBoundingBox(facing);
+    @Override
+    protected void entityInit() {
+        super.entityInit();
+        dataManager.register(COLOR, 0);
+    }
+
+    @Nonnull
+    @Override
+    public ItemStack getPickedResult(RayTraceResult target) {
+        ItemStack held = getDisplayedItem();
+        if (held.isEmpty())
+            return new ItemStack(ItemRegistry.ITEM_FRAME, 1, getColor());
+        else
+            return held.copy();
     }
 
     @Override
@@ -64,7 +78,7 @@ public class EntityBLItemFrame extends EntityItemFrame implements IEntityAdditio
 
             if (p_146065_2_)
             {
-                this.entityDropItem(new ItemStack(ItemRegistry.ITEM_FRAME, 1, color.getMetadata()), 0.0F);
+                this.entityDropItem(new ItemStack(ItemRegistry.ITEM_FRAME, 1, getColor()), 0.0F);
             }
 
             if (!itemstack.isEmpty() && this.rand.nextFloat() < this.itemDropChance)
@@ -95,33 +109,15 @@ public class EntityBLItemFrame extends EntityItemFrame implements IEntityAdditio
     @Override
     public void writeEntityToNBT(NBTTagCompound compound)
     {
-        if (!this.getDisplayedItem().isEmpty())
-        {
-            compound.setInteger("Color", color.getMetadata());
-        }
-
+        compound.setInteger(TAG_COLOR, getColor());
         super.writeEntityToNBT(compound);
     }
 
-    /**
-     * (abstract) Protected helper method to read subclass entity data from NBT.
-     */
     @Override
     public void readEntityFromNBT(NBTTagCompound compound)
     {
-        NBTTagCompound nbttagcompound = compound.getCompoundTag("Item");
-
-        if (!nbttagcompound.isEmpty())
-        {
-            this.color = EnumBLDyeColor.byMetadata(compound.getInteger("Color"));
-        }
-
+        dataManager.set(COLOR, compound.getInteger(TAG_COLOR));
         super.readEntityFromNBT(compound);
-    }
-
-    @Override
-    protected void updateBoundingBox() {
-        super.updateBoundingBox();
     }
 
     @Override
@@ -140,5 +136,9 @@ public class EntityBLItemFrame extends EntityItemFrame implements IEntityAdditio
             this.facingDirection = EnumFacing.byIndex(buf.readInt());
             this.updateFacingWithBoundingBox(this.facingDirection);
         }
+    }
+
+    public int getColor() {
+        return dataManager.get(COLOR);
     }
 }
