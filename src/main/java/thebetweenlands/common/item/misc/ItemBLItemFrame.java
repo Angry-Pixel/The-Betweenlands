@@ -90,7 +90,7 @@ public class ItemBLItemFrame extends Item implements ItemRegistry.IMultipleItemM
     @Override
     public int getColorMultiplier(ItemStack stack, int tintIndex) {
         if(tintIndex == 0) {
-            return EnumBLDyeColor.byMetadata(15 - stack.getItemDamage()).getColorValue();
+            return EnumBLDyeColor.byMetadata(stack.getItemDamage()).getColorValue();
         }
 
         return -1;

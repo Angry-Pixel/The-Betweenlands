@@ -143,7 +143,7 @@ public class RenderBLItemFrame extends RenderItemFrame
 
             blockrendererdispatcher.getBlockModelRenderer().renderModelBrightnessColor(woodModel, 1.0F, 1.0F, 1.0F, 1.0F);
 
-            int color = EnumBLDyeColor.byMetadata(15 - ((EntityBLItemFrame) entity).getColor()).getColorValue();
+            int color = EnumBLDyeColor.byMetadata(((EntityBLItemFrame) entity).getColor()).getColorValue();
             float r = (color >> 16 & 0xFF) / 255F;
             float g = (color >> 8 & 0xFF) / 255F;
             float b = (color & 0xFF) / 255F;
