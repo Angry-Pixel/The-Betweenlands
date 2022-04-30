@@ -95,6 +95,7 @@ public class RecipeRegistry {
 	public static final ResourceLocation FISHING_ROD_WORM_ADD = new ResourceLocation(ModInfo.ID, "fishing_rod_worm_add");
 	public static final ResourceLocation OLMLETTE_MIXTURE = new ResourceLocation(ModInfo.ID, "olmlette_mixture");
 	public static final ResourceLocation STAINED_GLASS = new ResourceLocation(ModInfo.ID, "recipe_stained_glass");
+	public static final ResourceLocation RENAME_ITEMS = new ResourceLocation(ModInfo.ID, "recipe_rename_items");
 
 	private RecipeRegistry() { }
 
@@ -231,6 +232,7 @@ public class RecipeRegistry {
 		registry.register(new RecipeFishingRodWormAdd().setRegistryName(FISHING_ROD_WORM_ADD));
 		registry.register(new RecipeOlmletteMixture().setRegistryName(OLMLETTE_MIXTURE));
 		registry.register(new RecipeStainedGlass().setRegistryName(STAINED_GLASS));
+		registry.register(new RecipeRenameItem().setRegistryName(RENAME_ITEMS));
 	}
 
 	private static void registerSmelting() {
