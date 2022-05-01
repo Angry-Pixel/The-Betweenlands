@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.entity.RenderItemFrame;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -129,6 +128,12 @@ public class RenderBLItemFrame extends RenderItemFrame
     }
 
     protected void renderModel(EntityItemFrame entity, Minecraft mc) {
+        EntityBLItemFrame itemFrame = (EntityBLItemFrame)entity;
+
+        if(itemFrame.IsFrameInvisible() && !itemFrame.getDisplayedItem().isEmpty()) {
+            return;
+        }
+
         BlockRendererDispatcher blockrendererdispatcher = this.mc.getBlockRendererDispatcher();
         ModelManager modelmanager = blockrendererdispatcher.getBlockModelShapes().getModelManager();
 
