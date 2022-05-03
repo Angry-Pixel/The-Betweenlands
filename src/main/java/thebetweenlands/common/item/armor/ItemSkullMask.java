@@ -15,7 +15,7 @@ public class ItemSkullMask extends ItemBLArmor {
 	private static final ResourceLocation SKULL_SIDE_RIGHT_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/skull_mask_side_right.png");
 
 	public ItemSkullMask() {
-		super(BLMaterialRegistry.ARMOR_BONE, 2, EntityEquipmentSlot.HEAD, "skull_mask");
+		super(BLMaterialRegistry.ARMOR_DECORATIVE, 2, EntityEquipmentSlot.HEAD, "skull_mask");
 		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 	}
 
