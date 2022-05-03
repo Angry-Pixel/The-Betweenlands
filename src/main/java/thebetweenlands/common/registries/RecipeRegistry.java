@@ -820,10 +820,10 @@ public class RecipeRegistry {
 		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("fish_oil"), 0, FluidRegistry.getFluid("clean_water"), EnumItemMisc.ANADIA_REMAINS.create(1), EnumItemMisc.ANADIA_REMAINS.create(1), EnumItemMisc.ANADIA_REMAINS.create(1), EnumItemMisc.ANADIA_REMAINS.create(1));
 		
 		//Drinks
-		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 0, FluidRegistry.getFluid("clean_water"), ItemRegistry.BLACK_HAT_MUSHROOM_ITEM, ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM, new ItemStack(BlockRegistry.NETTLE));
-		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 0, FluidRegistry.getFluid("clean_water"), ItemRegistry.BLACK_HAT_MUSHROOM_ITEM, ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM, new ItemStack(BlockRegistry.NETTLE_FLOWERED));
-		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 1, FluidRegistry.getFluid("clean_water"), EnumItemPlantDrop.NETTLE_LEAF, EnumItemPlantDrop.NETTLE_LEAF, EnumItemPlantDrop.NETTLE_LEAF);
-		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 2, FluidRegistry.getFluid("clean_water"), ItemRegistry.PHEROMONE_THORAX, ItemRegistry.PHEROMONE_THORAX, ItemRegistry.PHEROMONE_THORAX, ItemRegistry.PHEROMONE_THORAX);
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 0, FluidRegistry.getFluid("clean_water"), new ItemStack(ItemRegistry.BLACK_HAT_MUSHROOM_ITEM), new ItemStack(ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM), new ItemStack(BlockRegistry.NETTLE));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 0, FluidRegistry.getFluid("clean_water"), new ItemStack(ItemRegistry.BLACK_HAT_MUSHROOM_ITEM), new ItemStack(ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM), new ItemStack(BlockRegistry.NETTLE_FLOWERED));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 1, FluidRegistry.getFluid("clean_water"), EnumItemPlantDrop.NETTLE_LEAF.create(1), EnumItemPlantDrop.NETTLE_LEAF.create(1), EnumItemPlantDrop.NETTLE_LEAF.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 2, FluidRegistry.getFluid("clean_water"), new ItemStack(ItemRegistry.PHEROMONE_THORAX), new ItemStack(ItemRegistry.PHEROMONE_THORAX), new ItemStack(ItemRegistry.PHEROMONE_THORAX), new ItemStack(ItemRegistry.PHEROMONE_THORAX));
 	/*	BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 3, FluidRegistry.getFluid("clean_water"), EnumItemCrushed.GROUND_MILKWEED.create(1));
 		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 4, FluidRegistry.getFluid("clean_water"), EnumItemCrushed.GROUND_GOLDEN_CLUB.create(1), EnumItemCrushed.GROUND_MARSH_MARIGOLD.create(1));
 		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 5, FluidRegistry.getFluid("clean_water"), EnumItemCrushed.GROUND_DEEP_WATER_CORAL.create(1), EnumItemCrushed.GROUND_PALE_GRASS.create(1));
