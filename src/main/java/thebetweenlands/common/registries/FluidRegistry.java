@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import thebetweenlands.common.item.EnumBLDrinkableBrew;
 import thebetweenlands.common.item.EnumBLDyeColor;
 
 public class FluidRegistry {
@@ -63,6 +64,31 @@ public class FluidRegistry {
 		}
 
 	}.setDensity(1000).setViscosity(1000);
+	
+	public static final Fluid DRINKABLE_BREW = new Fluid("drinkable_brew", new ResourceLocation("thebetweenlands:fluids/drinkable_brew_still"), new ResourceLocation("thebetweenlands:fluids/drinkable_brew_flowing")) {
+		@Override
+		public int getColor(net.minecraftforge.fluids.FluidStack stack) {
+			if(stack.tag != null && stack.tag.hasKey("color")) {
+				return EnumBLDrinkableBrew.byMetadata(stack.tag.getInteger("color")).getColorValue() | 0xFF000000;
+			}
+			return 0xFFFFFFFF;
+		}
+
+		@Override
+		public String getUnlocalizedName(FluidStack stack) {
+			if (stack.tag != null && stack.tag.hasKey("color")) {
+				String colour = "drinkable_brew." + EnumBLDrinkableBrew.byMetadata(stack.tag.getInteger("color")).getBrewColourName();
+				setUnlocalizedName(colour);
+				return this.getUnlocalizedName() + colour;
+			}
+			return this.getUnlocalizedName();
+		}
+
+	}.setDensity(1000).setViscosity(1000);
+
+	public static final Fluid CLEAN_WATER = new Fluid("clean_water", new ResourceLocation("thebetweenlands:fluids/clean_water_still"), new ResourceLocation("thebetweenlands:fluids/clean_water_flowing")).setDensity(1000).setViscosity(1000);
+	public static final Fluid FISH_OIL = new Fluid("fish_oil", new ResourceLocation("thebetweenlands:fluids/fish_oil_still"), new ResourceLocation("thebetweenlands:fluids/fish_oil_flowing")).setDensity(1000).setViscosity(1000);
+	
 
 	public static final List<Fluid> REGISTERED_FLUIDS = new ArrayList<Fluid>();
 

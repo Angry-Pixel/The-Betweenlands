@@ -49,6 +49,7 @@ import thebetweenlands.common.herblore.elixir.ElixirRecipes;
 import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.herblore.ItemCrushed.EnumItemCrushed;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
+import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemMob;
@@ -68,7 +69,31 @@ import thebetweenlands.common.recipe.censer.CenserRecipeSapBall;
 import thebetweenlands.common.recipe.censer.CenserRecipeStagnantWater;
 import thebetweenlands.common.recipe.censer.CenserRecipeSwampWater;
 import thebetweenlands.common.recipe.censer.CenserRecipeWeepingBluePetal;
-import thebetweenlands.common.recipe.misc.*;
+import thebetweenlands.common.recipe.misc.AnimatorRecipe;
+import thebetweenlands.common.recipe.misc.BoilingPotRecipes;
+import thebetweenlands.common.recipe.misc.BookMergeRecipe;
+import thebetweenlands.common.recipe.misc.CompostRecipe;
+import thebetweenlands.common.recipe.misc.CrabPotFilterRecipeBubbler;
+import thebetweenlands.common.recipe.misc.CrabPotFilterRecipeSilt;
+import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
+import thebetweenlands.common.recipe.misc.HearthgroveTarringRecipe;
+import thebetweenlands.common.recipe.misc.RecipeClearBoneWayfinder;
+import thebetweenlands.common.recipe.misc.RecipeFishingRodWormAdd;
+import thebetweenlands.common.recipe.misc.RecipeGrapplingHookUpgrades;
+import thebetweenlands.common.recipe.misc.RecipeLurkerSkinPouchUpgrades;
+import thebetweenlands.common.recipe.misc.RecipeMarshRunnerBoots;
+import thebetweenlands.common.recipe.misc.RecipeMummyBait;
+import thebetweenlands.common.recipe.misc.RecipeOlmletteMixture;
+import thebetweenlands.common.recipe.misc.RecipeRenameItem;
+import thebetweenlands.common.recipe.misc.RecipeSapSpitCleanTool;
+import thebetweenlands.common.recipe.misc.RecipeStainedGlass;
+import thebetweenlands.common.recipe.misc.RecipesAspectVials;
+import thebetweenlands.common.recipe.misc.RecipesCircleGems;
+import thebetweenlands.common.recipe.misc.RecipesCoating;
+import thebetweenlands.common.recipe.misc.RecipesFishBait;
+import thebetweenlands.common.recipe.misc.RecipesLifeCrystal;
+import thebetweenlands.common.recipe.misc.RecipesPlantTonic;
+import thebetweenlands.common.recipe.misc.SmokingRackRecipe;
 import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipe;
 import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipeAspectrus;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
@@ -775,24 +800,45 @@ public class RecipeRegistry {
 
 	private static void registerBoilingPotRecipes() {
 		// BoilingPotRecipes.addRecipe(outFluid, outFluidMeta, inputFluid, inStack1, inStack2, inStack3, inStack4);
-		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 0, FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_BLUE_EYED_GRASS.create(1));
-		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 1, FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_BLOOD_SNAIL_SHELL.create(1));
-		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 2, FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_PALE_GRASS.create(1));
-		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 3, FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_MILKWEED.create(1));
-		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 4, FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_GOLDEN_CLUB.create(1), EnumItemCrushed.GROUND_MARSH_MARIGOLD.create(1));
-		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 5, FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_DEEP_WATER_CORAL.create(1), EnumItemCrushed.GROUND_PALE_GRASS.create(1));
-		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 6, FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_MARSH_HIBISCUS.create(1));
-		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 7, FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_BUTTON_BUSH.create(1));
-		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 8, FluidRegistry.getFluid("swamp_water"), EnumItemMisc.CREMAINS.create(1));
-		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 9, FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_SWAMP_KELP.create(1));
-		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 10, FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_DEEP_WATER_CORAL.create(1));
-		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 11, FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_POISON_IVY.create(1));
-		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 12, FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_BLUE_EYED_GRASS.create(1), EnumItemCrushed.GROUND_PICKEREL_WEED.create(1));
-		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 13, FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_COPPER_IRIS.create(1));
-		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 14, FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_PICKEREL_WEED.create(1), EnumItemMisc.CREMAINS.create(1));
-		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 15, FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_ANGLER_TOOTH.create(1), EnumItemMisc.CREMAINS.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 0, FluidRegistry.getFluid("fish_oil"), EnumItemCrushed.GROUND_BLUE_EYED_GRASS.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 1, FluidRegistry.getFluid("fish_oil"), EnumItemCrushed.GROUND_BLOOD_SNAIL_SHELL.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 2, FluidRegistry.getFluid("fish_oil"), EnumItemCrushed.GROUND_PALE_GRASS.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 3, FluidRegistry.getFluid("fish_oil"), EnumItemCrushed.GROUND_MILKWEED.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 4, FluidRegistry.getFluid("fish_oil"), EnumItemCrushed.GROUND_GOLDEN_CLUB.create(1), EnumItemCrushed.GROUND_MARSH_MARIGOLD.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 5, FluidRegistry.getFluid("fish_oil"), EnumItemCrushed.GROUND_DEEP_WATER_CORAL.create(1), EnumItemCrushed.GROUND_PALE_GRASS.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 6, FluidRegistry.getFluid("fish_oil"), EnumItemCrushed.GROUND_MARSH_HIBISCUS.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 7, FluidRegistry.getFluid("fish_oil"), EnumItemCrushed.GROUND_BUTTON_BUSH.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 8, FluidRegistry.getFluid("fish_oil"), EnumItemMisc.CREMAINS.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 9, FluidRegistry.getFluid("fish_oil"), EnumItemCrushed.GROUND_SWAMP_KELP.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 10, FluidRegistry.getFluid("fish_oil"), EnumItemCrushed.GROUND_DEEP_WATER_CORAL.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 11, FluidRegistry.getFluid("fish_oil"), EnumItemCrushed.GROUND_POISON_IVY.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 12, FluidRegistry.getFluid("fish_oil"), EnumItemCrushed.GROUND_BLUE_EYED_GRASS.create(1), EnumItemCrushed.GROUND_PICKEREL_WEED.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 13, FluidRegistry.getFluid("fish_oil"), EnumItemCrushed.GROUND_COPPER_IRIS.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 14, FluidRegistry.getFluid("fish_oil"), EnumItemCrushed.GROUND_PICKEREL_WEED.create(1), EnumItemMisc.CREMAINS.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("dye_fluid"), 15, FluidRegistry.getFluid("fish_oil"), EnumItemCrushed.GROUND_ANGLER_TOOTH.create(1), EnumItemMisc.CREMAINS.create(1));
+	
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("fish_oil"), 0, FluidRegistry.getFluid("clean_water"), EnumItemMisc.ANADIA_REMAINS.create(1), EnumItemMisc.ANADIA_REMAINS.create(1), EnumItemMisc.ANADIA_REMAINS.create(1), EnumItemMisc.ANADIA_REMAINS.create(1));
 		
-		
+		//Drinks
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 0, FluidRegistry.getFluid("clean_water"), ItemRegistry.BLACK_HAT_MUSHROOM_ITEM, ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM, new ItemStack(BlockRegistry.NETTLE));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 0, FluidRegistry.getFluid("clean_water"), ItemRegistry.BLACK_HAT_MUSHROOM_ITEM, ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM, new ItemStack(BlockRegistry.NETTLE_FLOWERED));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 1, FluidRegistry.getFluid("clean_water"), EnumItemPlantDrop.NETTLE_LEAF, EnumItemPlantDrop.NETTLE_LEAF, EnumItemPlantDrop.NETTLE_LEAF);
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 2, FluidRegistry.getFluid("clean_water"), ItemRegistry.PHEROMONE_THORAX, ItemRegistry.PHEROMONE_THORAX, ItemRegistry.PHEROMONE_THORAX, ItemRegistry.PHEROMONE_THORAX);
+	/*	BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 3, FluidRegistry.getFluid("clean_water"), EnumItemCrushed.GROUND_MILKWEED.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 4, FluidRegistry.getFluid("clean_water"), EnumItemCrushed.GROUND_GOLDEN_CLUB.create(1), EnumItemCrushed.GROUND_MARSH_MARIGOLD.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 5, FluidRegistry.getFluid("clean_water"), EnumItemCrushed.GROUND_DEEP_WATER_CORAL.create(1), EnumItemCrushed.GROUND_PALE_GRASS.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 6, FluidRegistry.getFluid("clean_water"), EnumItemCrushed.GROUND_MARSH_HIBISCUS.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 7, FluidRegistry.getFluid("clean_water"), EnumItemCrushed.GROUND_BUTTON_BUSH.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 8, FluidRegistry.getFluid("clean_water"), EnumItemMisc.CREMAINS.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 9, FluidRegistry.getFluid("clean_water"), EnumItemCrushed.GROUND_SWAMP_KELP.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 10, FluidRegistry.getFluid("clean_water"), EnumItemCrushed.GROUND_DEEP_WATER_CORAL.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 11, FluidRegistry.getFluid("clean_water"), EnumItemCrushed.GROUND_POISON_IVY.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 12, FluidRegistry.getFluid("clean_water"), EnumItemCrushed.GROUND_BLUE_EYED_GRASS.create(1), EnumItemCrushed.GROUND_PICKEREL_WEED.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 13, FluidRegistry.getFluid("clean_water"), EnumItemCrushed.GROUND_COPPER_IRIS.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 14, FluidRegistry.getFluid("clean_water"), EnumItemCrushed.GROUND_PICKEREL_WEED.create(1), EnumItemMisc.CREMAINS.create(1));
+		BoilingPotRecipes.addRecipe(FluidRegistry.getFluid("drinkable_brew"), 15, FluidRegistry.getFluid("clean_water"), EnumItemCrushed.GROUND_ANGLER_TOOTH.create(1), EnumItemMisc.CREMAINS.create(1));
+		*/	
+
 		/*
 		// BoilingPotRecipes.addRecipe(outStack, inputFluid, inStack1, inStack2, inStack3, inStack4);
 		BoilingPotRecipes.addRecipe(new ItemStack(ItemRegistry.DYE, 1, 0), FluidRegistry.getFluid("swamp_water"), EnumItemCrushed.GROUND_BLUE_EYED_GRASS.create(1), ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
