@@ -1,12 +1,16 @@
 package thebetweenlands.common.tile;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidTank;
@@ -14,24 +18,83 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
+import thebetweenlands.common.block.plant.BlockWeedwoodBush;
+import thebetweenlands.common.block.plant.BlockWeedwoodBushInfested;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 
-public class TileEntityBushInfestinator extends TileEntityBasicInventory implements ITickable {
+public class TileEntityGrubHub extends TileEntityBasicInventory implements ITickable {
 	
 	public FluidTank tank;
 	private IItemHandler itemHandler;
 
-	public TileEntityBushInfestinator() {
-		super(1, "container.bl.bush_infestinator");
+	public TileEntityGrubHub() {
+		super(1, "container.bl.grub_hub");
         this.tank = new FluidTank(null, Fluid.BUCKET_VOLUME * 8); // eventually should only accept the specific fluid
         this.tank.setTileEntity(this);
 	}
 
 	@Override
 	public void update() {
-		// TODO All the things.
-		
+		if (!getWorld().isRemote && getWorld().getTotalWorldTime()%20 == 0)
+			checkCanInfestOrHarvest();
 	}
-	
+
+	private void checkCanInfestOrHarvest() {
+		AxisAlignedBB axisalignedbb = areaOfEffect();
+		int minX = MathHelper.floor(axisalignedbb.minX);
+		int maxX = MathHelper.floor(axisalignedbb.maxX);
+		int minY = MathHelper.floor(axisalignedbb.minY);
+		int maxY = MathHelper.floor(axisalignedbb.maxY);
+		int minZ = MathHelper.floor(axisalignedbb.minZ);
+		int maxZ = MathHelper.floor(axisalignedbb.maxZ);
+		MutableBlockPos mutablePos = new MutableBlockPos();
+
+		for (int x = minX; x < maxX; x++)
+			for (int y = minY; y < maxY; y++)
+				for (int z = minZ; z < maxZ; z++) {
+					IBlockState state = getWorld().getBlockState(mutablePos.setPos(x, y, z));
+					if (state.getBlock() instanceof BlockWeedwoodBush && !(state.getBlock() instanceof BlockWeedwoodBushInfested))
+						infestBush(mutablePos);
+					else if (state.getBlock() instanceof BlockWeedwoodBushInfested && state.getBlock() == BlockRegistry.WEEDWOOD_BUSH_INFESTED_2) {
+						harvestGrub(mutablePos);
+					}
+				}
+	}
+
+	private void harvestGrub(MutableBlockPos mutablePos) {
+		//play suck sound
+		getWorld().setBlockState(mutablePos, BlockRegistry.WEEDWOOD_BUSH.getDefaultState(), 3);
+		ItemStack contents = getStackInSlot(0);
+		ItemStack silk_grub = new ItemStack(ItemRegistry.SILK_GRUB, 1);
+		
+		if (contents.isEmpty())
+			setInventorySlotContents(0, silk_grub);
+
+		if (!contents.isEmpty() && contents.getItem() == ItemRegistry.SILK_GRUB) {
+			if(contents.getCount() < getInventoryStackLimit())
+				contents.grow(1);
+			else {
+				EntityItem item = new EntityItem(world, mutablePos.getX() + 0.5D, mutablePos.getY() + 1.0D, mutablePos.getZ() + 0.5D, silk_grub);
+				//item.motionX = item.motionY = item.motionZ = 0D;
+				item.motionY = 0.003D;
+				world.spawnEntity(item);
+			}
+		}
+		markForUpdate();
+	}
+
+	private void infestBush(MutableBlockPos mutablePos) {
+		//lower tank contents
+		//spawn smoke particles
+		//play exhale noise
+		getWorld().setBlockState(mutablePos, BlockRegistry.WEEDWOOD_BUSH_INFESTED_0.getDefaultState(), 3);
+	}
+
+	public AxisAlignedBB areaOfEffect() {
+		return new AxisAlignedBB(pos.down()).grow(1D, 0D, 1D);	
+	}
+
 	public int getTankFluidAmount() {
 		return tank.getFluidAmount();
 	}

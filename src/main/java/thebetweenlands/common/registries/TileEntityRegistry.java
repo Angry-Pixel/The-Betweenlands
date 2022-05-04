@@ -14,7 +14,7 @@ import thebetweenlands.common.tile.TileEntityBarrel;
 import thebetweenlands.common.tile.TileEntityBeamOrigin;
 import thebetweenlands.common.tile.TileEntityBeamRelay;
 import thebetweenlands.common.tile.TileEntityBoilingPot;
-import thebetweenlands.common.tile.TileEntityBushInfestinator;
+import thebetweenlands.common.tile.TileEntityGrubHub;
 import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
@@ -136,7 +136,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityMudLootPot2.class, "mud_loot_pot_2");
 		registerTileEntity(TileEntityMudLootPot3.class, "mud_loot_pot_3");
 		registerTileEntity(TileEntityBoilingPot.class, "boiling_pot");
-		registerTileEntity(TileEntityBushInfestinator.class, "bush_infeatinator");
+		registerTileEntity(TileEntityGrubHub.class, "grub_hub");
 		registerTileEntity(TileEntityWaterFilter.class, "water_filter");
 		registerTileEntity(TileEntityFilteredSiltGlassJar.class, "filtered_silt_glass_jar");
 	}
