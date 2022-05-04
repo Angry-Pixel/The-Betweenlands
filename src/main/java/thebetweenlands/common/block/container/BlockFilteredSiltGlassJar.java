@@ -113,7 +113,7 @@ public class BlockFilteredSiltGlassJar extends BlockContainer implements ICustom
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		final IFluidHandler fluidHandler = getFluidHandler(world, pos);
 		if (fluidHandler != null) {
-			FluidUtil.interactWithFluidHandler(player, hand, world, pos, side);//(heldItem, fluidHandler, player);
+			FluidUtil.interactWithFluidHandler(player, hand, world, pos, side);
 			return FluidUtil.getFluidHandler(player.getHeldItem(hand)) != null;
 		}
 		return false;

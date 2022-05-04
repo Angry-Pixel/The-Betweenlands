@@ -18,6 +18,10 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.block.plant.BlockWeedwoodBushInfested;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -27,7 +31,8 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 	
 	public FluidTank tank;
 	private IItemHandler itemHandler;
-
+	private boolean doMistParticles;
+	public int particleCounter;
 	public TileEntityGrubHub() {
 		super(1, "container.bl.grub_hub");
         this.tank = new FluidTank(null, Fluid.BUCKET_VOLUME * 8); // eventually should only accept the specific fluid
@@ -36,8 +41,27 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 
 	@Override
 	public void update() {
-		if (!getWorld().isRemote && getWorld().getTotalWorldTime()%20 == 0)
-			checkCanInfestOrHarvest();
+		if (!getWorld().isRemote) {
+			if (getWorld().getTotalWorldTime()%20 == 0)
+				checkCanInfestOrHarvest();
+			if (doMistParticles)
+				particleCounter--;
+			if (particleCounter <= 0) {
+				doMistParticles(false);
+				markForUpdate();
+				}
+		}
+
+		if (getWorld().isRemote && doMistParticles) {
+			for(int i = 0; i < 6 + getWorld().rand.nextInt(5); i++) {
+				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(getWorld(), pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, 
+						ParticleArgs.get()
+						.withMotion((getWorld().rand.nextFloat() - 0.5f) * 0.2f, getWorld().rand.nextFloat() * 0.01F + 0.01F, (getWorld().rand.nextFloat() - 0.5f) * 0.2f)
+						.withScale(1f + getWorld().rand.nextFloat() * 8.0F)
+						.withColor(1F, 1.0F, 1.0F, 0.05f)
+						.withData(80, true, 0.01F, true)));
+			}
+		}
 	}
 
 	private void checkCanInfestOrHarvest() {
@@ -54,7 +78,7 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 			for (int y = minY; y < maxY; y++)
 				for (int z = minZ; z < maxZ; z++) {
 					IBlockState state = getWorld().getBlockState(mutablePos.setPos(x, y, z));
-					if (state.getBlock() instanceof BlockWeedwoodBush && !(state.getBlock() instanceof BlockWeedwoodBushInfested))
+					if (state.getBlock() instanceof BlockWeedwoodBush && !(state.getBlock() instanceof BlockWeedwoodBushInfested) && tank.getFluidAmount() > 0)
 						infestBush(mutablePos);
 					else if (state.getBlock() instanceof BlockWeedwoodBushInfested && state.getBlock() == BlockRegistry.WEEDWOOD_BUSH_INFESTED_2) {
 						harvestGrub(mutablePos);
@@ -85,10 +109,20 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 	}
 
 	private void infestBush(MutableBlockPos mutablePos) {
+		//TODO - change all this so it looks better - probably add a vector thing for the particles and a delay so it looks smoother
+		//will probably change the way it works and send the target pos over the packet as well etc.
 		//lower tank contents
 		//spawn smoke particles
 		//play exhale noise
+		particleCounter = 10;
+		doMistParticles(true);
 		getWorld().setBlockState(mutablePos, BlockRegistry.WEEDWOOD_BUSH_INFESTED_0.getDefaultState(), 3);
+		tank.drain(100, true);
+		markForUpdate();
+	}
+
+	private void doMistParticles(boolean particles) {
+		doMistParticles = particles;
 	}
 
 	public AxisAlignedBB areaOfEffect() {
@@ -130,6 +164,7 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 
     protected NBTTagCompound writePacketNbt(NBTTagCompound nbt) {
         nbt.setTag("tank", tank.writeToNBT(new NBTTagCompound()));
+        nbt.setBoolean("doMistParticles", doMistParticles);
         this.writeInventoryNBT(nbt);
         return nbt;
     }
@@ -137,6 +172,7 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
     protected void readPacketNbt(NBTTagCompound nbt) {
         NBTTagCompound compound = nbt;
         tank.readFromNBT(compound.getCompoundTag("tank"));
+        doMistParticles(compound.getBoolean("doMistParticles"));
         this.readInventoryNBT(nbt);
     }
 
@@ -144,12 +180,14 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		tank.readFromNBT(tagCompound);
+		doMistParticles(tagCompound.getBoolean("doMistParticles"));
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		tank.writeToNBT(tagCompound);
+		tagCompound.setBoolean("doMistParticles", doMistParticles);
 		return tagCompound;
 	}
 
