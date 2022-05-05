@@ -116,7 +116,7 @@ public class BlockWeedwoodBushInfested extends BlockWeedwoodBush {
 		double px = (double) pos.getX() + 0.5D;
 		double py = (double) pos.getY() + 1.2D;
 		double pz = (double) pos.getZ() + 0.5D;
-		if (world.rand.nextInt(5) == 0) {
+		if (world.rand.nextInt(10) == 0) {
 			switch (stage) {
 			case 0:
 				BLParticles.SULFUR_TORCH.spawn(world, px, py, pz);
