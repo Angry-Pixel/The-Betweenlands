@@ -51,7 +51,7 @@ public class BlockWeedwoodBushInfested extends BlockWeedwoodBush {
 	public boolean canConnectTo(IBlockAccess worldIn, BlockPos pos, EnumFacing dir) {
 		IBlockState iblockstate = worldIn.getBlockState(pos);
 		Block block = iblockstate.getBlock();
-		return block instanceof BlockWeedwoodBushInfested;
+		return block instanceof BlockWeedwoodBush && !(block instanceof BlockNesting);
 	}
 
 	@Override
