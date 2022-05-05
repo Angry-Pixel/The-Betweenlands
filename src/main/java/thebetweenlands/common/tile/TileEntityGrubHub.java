@@ -66,7 +66,7 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 			for (int y = minY; y < maxY; y++)
 				for (int z = minZ; z < maxZ; z++) {
 					IBlockState state = getWorld().getBlockState(mutablePos.setPos(x, y, z));
-						if (state.getBlock() instanceof BlockWeedwoodBush && !(state.getBlock() instanceof BlockWeedwoodBushInfested) && tank.getFluidAmount() > 0) {
+						if (state.getBlock() instanceof BlockWeedwoodBush && !(state.getBlock() instanceof BlockWeedwoodBushInfested) && tank.getFluidAmount() >= 50) {
 							if(!world.isRemote) {
 								infestBush(mutablePos);
 							}
@@ -113,7 +113,7 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 	private void infestBush(MutableBlockPos mutablePos) {
 		//play exhale noise
 		getWorld().setBlockState(mutablePos, BlockRegistry.WEEDWOOD_BUSH_INFESTED_0.getDefaultState(), 3);
-		tank.drain(100, true);
+		tank.drain(50, true);
 		markForUpdate();
 	}
 
