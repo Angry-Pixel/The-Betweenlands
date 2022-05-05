@@ -8,6 +8,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -30,6 +31,7 @@ import thebetweenlands.common.block.plant.BlockWeedwoodBushInfested;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class TileEntityGrubHub extends TileEntityBasicInventory implements ITickable {
 	
@@ -48,7 +50,7 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 
 	@Override
 	public void update() {
-		if (getWorld().getTotalWorldTime()%20 == 0)
+		if (getWorld().getTotalWorldTime()%10 == 0)
 			checkCanInfestOrHarvest(getWorld());
 	}
 
@@ -111,7 +113,7 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 	}
 
 	private void infestBush(MutableBlockPos mutablePos) {
-		//play exhale noise
+		getWorld().playSound(null, this.pos, SoundRegistry.GRUB_HUB_MIST, SoundCategory.BLOCKS, 0.5F, 2F);
 		getWorld().setBlockState(mutablePos, BlockRegistry.WEEDWOOD_BUSH_INFESTED_0.getDefaultState(), 3);
 		tank.drain(50, true);
 		markForUpdate();
