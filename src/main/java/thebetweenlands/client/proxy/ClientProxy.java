@@ -143,6 +143,7 @@ import thebetweenlands.client.render.tile.RenderSpikeTrap;
 import thebetweenlands.client.render.tile.RenderTarLootPot1;
 import thebetweenlands.client.render.tile.RenderTarLootPot2;
 import thebetweenlands.client.render.tile.RenderTarLootPot3;
+import thebetweenlands.client.render.tile.RenderWaterFilter;
 import thebetweenlands.client.render.tile.RenderWaystone;
 import thebetweenlands.client.render.tile.RenderWeedwoodSign;
 import thebetweenlands.client.render.tile.RenderWeedwoodWorkbench;
@@ -346,6 +347,7 @@ import thebetweenlands.common.tile.TileEntitySpikeTrap;
 import thebetweenlands.common.tile.TileEntityTarLootPot1;
 import thebetweenlands.common.tile.TileEntityTarLootPot2;
 import thebetweenlands.common.tile.TileEntityTarLootPot3;
+import thebetweenlands.common.tile.TileEntityWaterFilter;
 import thebetweenlands.common.tile.TileEntityWaystone;
 import thebetweenlands.common.tile.TileEntityWeedwoodSign;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
@@ -807,6 +809,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudLootPot3.class, new RenderMudLootPot3());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBoilingPot.class, new RenderBoilingPot());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrubHub.class, new RenderGrubHub());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWaterFilter.class, new RenderWaterFilter());
 		
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
