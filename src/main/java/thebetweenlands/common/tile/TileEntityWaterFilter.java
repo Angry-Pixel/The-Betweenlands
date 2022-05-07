@@ -21,19 +21,25 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class TileEntityWaterFilter extends TileEntityBasicInventory implements ITickable {
-	
+
 	public FluidTank tank;
 	private IItemHandler itemHandler;
 	public boolean showFluidAnimation;
 
 	public TileEntityWaterFilter() {
 		super(2, "container.bl.water_filter");
-        this.tank = new FluidTank(FluidRegistry.SWAMP_WATER, 0,  Fluid.BUCKET_VOLUME * 4); // eventually should only accept the specific fluids
+        this.tank = new FluidTank(Fluid.BUCKET_VOLUME * 4) {
+        	@Override
+			public boolean canFillFluidType(FluidStack fluid) {
+				return canFill() && (fluid.getFluid() == FluidRegistry.SWAMP_WATER || fluid.getFluid() == FluidRegistry.STAGNANT_WATER);
+			}
+        };
         this.tank.setTileEntity(this);
 	}
 
@@ -51,12 +57,14 @@ public class TileEntityWaterFilter extends TileEntityBasicInventory implements I
 							FluidStack contents = properties.getContents();
 							if (tank.getFluid() != null) {
 								if (contents == null || contents.amount <= properties.getCapacity() - 20 && contents.containsFluid(new FluidStack(getResultFluid(), 0))) {
-									tank.drain(new FluidStack(tank.getFluid(), 20), true);
 									recepticle.fill(new FluidStack(getResultFluid(), 20), true);
+									addByProductRandom(getWorld().rand, tank.getFluid().getFluid());
+									damageFilter(1);
+									tank.drain(new FluidStack(tank.getFluid(), 20), true);
+
 									if(!getFluidAnimation())
 										setFluidAnimation(true);
-									addByProductRandom(getWorld().rand);
-									damageFilter(1);
+
 									markForUpdate();
 								}
 							}
@@ -77,11 +85,13 @@ public class TileEntityWaterFilter extends TileEntityBasicInventory implements I
 	}
 
 	public FluidStack getResultFluid() {
+		if(tank.getFluid().getFluid() == FluidRegistry.STAGNANT_WATER)
+			return new FluidStack(FluidRegistry.SWAMP_WATER, 0);
 		if(tank.getFluid().getFluid() == FluidRegistry.SWAMP_WATER)
-			return new FluidStack(FluidRegistry.CLEAN_WATER, 0);
+				return new FluidStack(FluidRegistry.CLEAN_WATER, 0);
 		return tank.getFluid();
 	}
-	
+
 	public void setFluidAnimation(boolean showFluid) {
 		showFluidAnimation = showFluid;
 	}
@@ -91,15 +101,19 @@ public class TileEntityWaterFilter extends TileEntityBasicInventory implements I
 	}
 
 	// hardcoding this for testing
-	private void addByProductRandom(Random rand) {
-		if (rand.nextInt(25) == 0) {
+	private void addByProductRandom(Random rand, Fluid fluid) {
+		if (rand.nextInt(50) == 0) {
 			ItemStack product = getStackInSlot(1);
 
 			if (!product.isEmpty() && product.getCount() < getInventoryStackLimit())
 				product.grow(1);
 
-			if (product.isEmpty())
-				setInventorySlotContents(1, new ItemStack(ItemRegistry.SLUDGE_BALL, 1));
+			if (product.isEmpty()) {
+				if (fluid == FluidRegistry.STAGNANT_WATER)
+					setInventorySlotContents(1, EnumItemMisc.SULFUR.create(1));
+				if (fluid == FluidRegistry.SWAMP_WATER)
+					setInventorySlotContents(1, new ItemStack(ItemRegistry.SLUDGE_BALL, 1));
+			}
 		}
 	}
 

@@ -16,6 +16,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidUtil;
@@ -79,6 +80,12 @@ public class BlockWaterFilter extends BlockContainer {
 		if (world.getTileEntity(pos) instanceof TileEntityWaterFilter) {
 			TileEntityWaterFilter tile = (TileEntityWaterFilter) world.getTileEntity(pos);
 			if (FluidUtil.getFluidHandler(heldItem) == null && hand == EnumHand.MAIN_HAND) {
+
+				// remove this once testing is done - just need to see what is in the tanks
+				if (world.isRemote && tile.tank.getFluid() !=null)
+					player.sendStatusMessage(new TextComponentTranslation(tile.tank.getFluid().getFluid().getName() + ": "+ tile.tank.getFluidAmount()+"/"+ tile.tank.getCapacity()), true);
+				// 
+
 				if (heldItem.getItem() == ItemRegistry.SILK_FILTER || heldItem.getItem() == ItemRegistry.MOSS_FILTER) {
 					if (tile.getStackInSlot(0).isEmpty()) {
 						if (!world.isRemote) {
