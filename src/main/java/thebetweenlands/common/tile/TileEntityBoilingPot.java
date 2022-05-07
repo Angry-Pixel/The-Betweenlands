@@ -150,7 +150,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 					tank.drain(Fluid.BUCKET_VOLUME, true);
 
 					if (outputFluid != null) {
-						if(outputFluid.getFluid() == FluidRegistry.DYE_FLUID) {
+						if(outputFluid.getFluid() == FluidRegistry.DYE_FLUID || outputFluid.getFluid() == FluidRegistry.DRINKABLE_BREW) {
 							NBTTagCompound nbt = new NBTTagCompound();
 							nbt.setInteger("color", outputFluidMeta);
 							fluidWithTag = new FluidStack(outputFluid.getFluid(), Fluid.BUCKET_VOLUME, nbt);

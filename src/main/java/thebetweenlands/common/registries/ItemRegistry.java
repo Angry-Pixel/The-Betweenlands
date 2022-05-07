@@ -487,9 +487,10 @@ public class ItemRegistry {
     public static final Item DYE = new ItemBLDye();
     public static final Item ITEM_FRAME = new ItemBLItemFrame();
 
-
     public static final Item PHEROMONE_THORAX = new ItemPheromoneThorax().setCreativeTab(BLCreativeTabs.ITEMS);
     public static final Item SILK_BUNDLE = new ItemSilkBundle();
+    public static final Item SILK_FILTER = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1).setMaxDamage(2000);
+    public static final Item MOSS_FILTER = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1).setMaxDamage(400);
 
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();

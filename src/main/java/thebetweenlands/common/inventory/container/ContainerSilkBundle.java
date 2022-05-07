@@ -13,7 +13,10 @@ import net.minecraft.item.ItemStack;
 import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.inventory.slot.SlotRestrictionListWithMeta;
 import thebetweenlands.common.item.herblore.ItemCrushed.EnumItemCrushed;
+import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.InventoryUtils;
 
 public class ContainerSilkBundle extends Container {
@@ -41,6 +44,16 @@ public class ContainerSilkBundle extends Container {
 		acceptedItems.add(EnumItemCrushed.GROUND_ANGLER_TOOTH.create(1));
 		acceptedItems.add(EnumItemMisc.CREMAINS.create(1));
 		acceptedItems.add(EnumItemMisc.TAR_DRIP.create(1)); //temp
+		
+		acceptedItems.add(EnumItemMisc.ANADIA_REMAINS.create(1)); // fish oil
+		
+		acceptedItems.add(new ItemStack(ItemRegistry.BLACK_HAT_MUSHROOM_ITEM));
+		acceptedItems.add(new ItemStack(ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM));
+		acceptedItems.add(new ItemStack(BlockRegistry.NETTLE));
+		acceptedItems.add(new ItemStack(BlockRegistry.NETTLE_FLOWERED));
+		acceptedItems.add(EnumItemPlantDrop.NETTLE_LEAF.create(1));
+		acceptedItems.add(new ItemStack(ItemRegistry.PHEROMONE_THORAX));
+
 
 		if(this.inventory == null || this.inventory.isEmpty()) {
 			return;

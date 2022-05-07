@@ -14,6 +14,7 @@ import thebetweenlands.common.tile.TileEntityBarrel;
 import thebetweenlands.common.tile.TileEntityBeamOrigin;
 import thebetweenlands.common.tile.TileEntityBeamRelay;
 import thebetweenlands.common.tile.TileEntityBoilingPot;
+import thebetweenlands.common.tile.TileEntityGrubHub;
 import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
@@ -26,6 +27,7 @@ import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
+import thebetweenlands.common.tile.TileEntityFilteredSiltGlassJar;
 import thebetweenlands.common.tile.TileEntityFishTrimmingTable;
 import thebetweenlands.common.tile.TileEntityFishingTackleBox;
 import thebetweenlands.common.tile.TileEntityGeckoCage;
@@ -59,6 +61,7 @@ import thebetweenlands.common.tile.TileEntitySpikeTrap;
 import thebetweenlands.common.tile.TileEntityTarLootPot1;
 import thebetweenlands.common.tile.TileEntityTarLootPot2;
 import thebetweenlands.common.tile.TileEntityTarLootPot3;
+import thebetweenlands.common.tile.TileEntityWaterFilter;
 import thebetweenlands.common.tile.TileEntityWaystone;
 import thebetweenlands.common.tile.TileEntityWeedwoodSign;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
@@ -133,6 +136,9 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityMudLootPot2.class, "mud_loot_pot_2");
 		registerTileEntity(TileEntityMudLootPot3.class, "mud_loot_pot_3");
 		registerTileEntity(TileEntityBoilingPot.class, "boiling_pot");
+		registerTileEntity(TileEntityGrubHub.class, "grub_hub");
+		registerTileEntity(TileEntityWaterFilter.class, "water_filter");
+		registerTileEntity(TileEntityFilteredSiltGlassJar.class, "filtered_silt_glass_jar");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
