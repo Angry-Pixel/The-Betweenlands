@@ -1,0 +1,18 @@
+{
+   "pools":[
+      {
+         "name":"sludge_ball",
+         "rolls":1,
+         "conditions":[
+            
+         ],
+         "entries":[
+            {
+               "type":"item",
+               "name":"thebetweenlands:sludge_ball",
+               "weight":1
+            }
+         ]
+      }
+   ]
+}

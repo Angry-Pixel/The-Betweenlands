@@ -1,0 +1,72 @@
+{
+   "pools":[
+      {
+         "name":"sulfur",
+         "rolls":1,
+         "conditions":[
+            
+         ],
+         "entries":[
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_misc",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data":18
+                  }
+               ],
+               "weight":1
+            }
+         ]
+      },
+       {
+         "name":"glue",
+         "rolls":1,
+         "conditions":[
+            
+         ],
+         "entries":[
+            {
+               "type":"item",
+               "name":"thebetweenlands:glue",
+               "weight":1
+            }
+         ]
+      },
+       {
+         "name":"syrmorite_nugget",
+         "rolls":1,
+         "conditions":[
+            
+         ],
+         "entries":[
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_misc",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data":41
+                  }
+               ],
+               "weight":1
+            }
+         ]
+      },
+       {
+         "name":"wight_heart",
+         "rolls":1,
+         "conditions":[
+            
+         ],
+         "entries":[
+            {
+               "type":"item",
+               "name":"thebetweenlands:wight_heart",
+               "weight":1
+            }
+         ]
+      }
+   ]
+}

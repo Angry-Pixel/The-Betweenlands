@@ -83,6 +83,7 @@ public class BlockWaterFilter extends BlockContainer {
 		ItemStack heldItem = player.getHeldItem(hand);
 		if (world.getTileEntity(pos) instanceof TileEntityWaterFilter) {
 			TileEntityWaterFilter tile = (TileEntityWaterFilter) world.getTileEntity(pos);
+
 			if (FluidUtil.getFluidHandler(heldItem) == null && hand == EnumHand.MAIN_HAND) {
 
 				// remove this once testing is done - just need to see what is in the tanks
@@ -102,31 +103,41 @@ public class BlockWaterFilter extends BlockContainer {
 					return true;
 				}
 
-				if (!tile.getStackInSlot(0).isEmpty()) {
-					if (!world.isRemote) {
+				if (!tile.getStackInSlot(0).isEmpty())
+					if (!world.isRemote) 
 						if (player.isSneaking()) {
-							ItemStack extracted = tile.getStackInSlot(0);
-							EntityItem item = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, extracted);
-							item.motionX = item.motionY = item.motionZ = 0D;
-							world.spawnEntity(item);
-							tile.setInventorySlotContents(0, ItemStack.EMPTY);
-							tile.markForUpdate();
+							spitOutItems(world, pos, tile, 0);
+							return true;
 						}
-					}
-				}
 
-				if (!tile.getStackInSlot(1).isEmpty()) {
-					if (!world.isRemote) {
+				if (!tile.getStackInSlot(1).isEmpty())
+					if (!world.isRemote)
 						if (!player.isSneaking()) {
-							ItemStack extracted = tile.getStackInSlot(1);
-							EntityItem item = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, extracted);
-							item.motionX = item.motionY = item.motionZ = 0D;
-							world.spawnEntity(item);
-							tile.setInventorySlotContents(1, ItemStack.EMPTY);
-							tile.markForUpdate();
+							spitOutItems(world, pos, tile, 1);
+							return true;
 						}
-					}
-				}
+				
+				if (!tile.getStackInSlot(2).isEmpty())
+					if (!world.isRemote)
+						if (!player.isSneaking()) {
+							spitOutItems(world, pos, tile, 2);
+							return true;
+						}
+
+				if (!tile.getStackInSlot(3).isEmpty())
+					if (!world.isRemote)
+						if (!player.isSneaking()) {
+							spitOutItems(world, pos, tile, 3);
+							return true;
+						}
+				
+				if (!tile.getStackInSlot(4).isEmpty())
+					if (!world.isRemote)
+						if (!player.isSneaking()) {
+							spitOutItems(world, pos, tile, 4);
+							return true;
+						}
+
 				player.swingArm(hand);
 				return true;
 			}
@@ -138,6 +149,15 @@ public class BlockWaterFilter extends BlockContainer {
 			return FluidUtil.getFluidHandler(player.getHeldItem(hand)) != null;
 		}
 		return false;
+	}
+	
+	public void spitOutItems(World world, BlockPos pos, TileEntityWaterFilter tile, int slot) {
+		ItemStack extracted = tile.getStackInSlot(slot);
+		EntityItem item = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, extracted);
+		item.motionX = item.motionY = item.motionZ = 0D;
+		world.spawnEntity(item);
+		tile.setInventorySlotContents(slot, ItemStack.EMPTY);
+		tile.markForUpdate();
 	}
 
 	@Override

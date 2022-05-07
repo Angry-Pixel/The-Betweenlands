@@ -15,7 +15,6 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -90,26 +89,86 @@ public class RenderWaterFilter extends TileEntitySpecialRenderer<TileEntityWater
 
 		if (!tile.getStackInSlot(1).isEmpty()) {
 			ItemStack stack = tile.getStackInSlot(1);
-			double yUp = 0.26D;
+			double yUp = 0.3125;
 			int items = tile.getStackInSlot(1).getCount() / 4 + 1;
-			for (int r = 0; r < 4; r++) {
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(x + 0.5D, y + yUp, z + 0.5D);
+			GlStateManager.rotate(180, 1, 0, 0);
+			for (int i = 0; i < items; i++) {
 				GlStateManager.pushMatrix();
-				GlStateManager.translate(x + 0.5D, y + yUp, z + 0.5D);
-				GlStateManager.rotate(r * 90, 0, 1, 0);
-				GlStateManager.rotate(25, 1, 0, 0);
-				for (int i = 0; i < items; i++) {
-					GlStateManager.pushMatrix();
-					GlStateManager.translate(rand.nextDouble() * 0.4D - 0.2D, 0.0D, 0.4D + rand.nextDouble() * 0.2D - 0.1D);
-					GlStateManager.rotate((float) rand.nextDouble() * 30.0f - 15.0f, 1, 0, 0);
-					GlStateManager.rotate((float) rand.nextDouble() * 30.0f - 15.0f, 0, 0, 1);
-					GlStateManager.scale(0.125D, 0.125D, 0.125D);
-					GlStateManager.rotate(270, 1, 0, 0);
-					GlStateManager.rotate((float) rand.nextDouble() * 360.0F, 0, 0, 1);
-					renderItem.renderItem(stack, TransformType.FIXED);
-					GlStateManager.popMatrix();
-				}
+				GlStateManager.translate(rand.nextDouble() * 0.25D - 0.125D, 0.0D, rand.nextDouble() * 0.25D - 0.125D);
+				GlStateManager.rotate((float) rand.nextDouble() * 30.0f - 15.0f, 1, 0, 0);
+				GlStateManager.rotate((float) rand.nextDouble() * 30.0f - 15.0f, 0, 0, 1);
+				GlStateManager.scale(0.125D, 0.125D, 0.125D);
+				GlStateManager.rotate(90, 1, 0, 0);
+				GlStateManager.rotate((float) rand.nextDouble() * 360.0F, 0, 0, 1);
+				renderItem.renderItem(stack, TransformType.FIXED);
 				GlStateManager.popMatrix();
 			}
+			GlStateManager.popMatrix();
+		}
+		
+		if (!tile.getStackInSlot(2).isEmpty()) {
+			ItemStack stack = tile.getStackInSlot(2);
+			double yUp = 0.3125;
+			int items = tile.getStackInSlot(2).getCount() / 4 + 1;
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(x + 0.5D, y + yUp, z + 0.5D);
+			GlStateManager.rotate(180, 1, 0, 0);
+			for (int i = 0; i < items; i++) {
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(rand.nextDouble() * 0.25D - 0.125D, 0.0D, rand.nextDouble() * 0.25D - 0.125D);
+				GlStateManager.rotate((float) rand.nextDouble() * 30.0f - 15.0f, 1, 0, 0);
+				GlStateManager.rotate((float) rand.nextDouble() * 30.0f - 15.0f, 0, 0, 1);
+				GlStateManager.scale(0.125D, 0.125D, 0.125D);
+				GlStateManager.rotate(90, 1, 0, 0);
+				GlStateManager.rotate((float) rand.nextDouble() * 360.0F, 0, 0, 1);
+				renderItem.renderItem(stack, TransformType.FIXED);
+				GlStateManager.popMatrix();
+			}
+			GlStateManager.popMatrix();
+		}
+		
+		if (!tile.getStackInSlot(3).isEmpty()) {
+			ItemStack stack = tile.getStackInSlot(3);
+			double yUp = 0.3125;
+			int items = tile.getStackInSlot(3).getCount() / 4 + 1;
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(x + 0.5D, y + yUp, z + 0.5D);
+			GlStateManager.rotate(180, 1, 0, 0);
+			for (int i = 0; i < items; i++) {
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(rand.nextDouble() * 0.25D - 0.125D, 0.0D, rand.nextDouble() * 0.25D - 0.125D);
+				GlStateManager.rotate((float) rand.nextDouble() * 30.0f - 15.0f, 1, 0, 0);
+				GlStateManager.rotate((float) rand.nextDouble() * 30.0f - 15.0f, 0, 0, 1);
+				GlStateManager.scale(0.125D, 0.125D, 0.125D);
+				GlStateManager.rotate(90, 1, 0, 0);
+				GlStateManager.rotate((float) rand.nextDouble() * 360.0F, 0, 0, 1);
+				renderItem.renderItem(stack, TransformType.FIXED);
+				GlStateManager.popMatrix();
+			}
+			GlStateManager.popMatrix();
+		}
+		
+		if (!tile.getStackInSlot(4).isEmpty()) {
+			ItemStack stack = tile.getStackInSlot(4);
+			double yUp = 0.3125;
+			int items = tile.getStackInSlot(4).getCount() / 4 + 1;
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(x + 0.5D, y + yUp, z + 0.5D);
+			GlStateManager.rotate(180, 1, 0, 0);
+			for (int i = 0; i < items; i++) {
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(rand.nextDouble() * 0.25D - 0.125D, 0.0D, rand.nextDouble() * 0.25D - 0.125D);
+				GlStateManager.rotate((float) rand.nextDouble() * 30.0f - 15.0f, 1, 0, 0);
+				GlStateManager.rotate((float) rand.nextDouble() * 30.0f - 15.0f, 0, 0, 1);
+				GlStateManager.scale(0.125D, 0.125D, 0.125D);
+				GlStateManager.rotate(90, 1, 0, 0);
+				GlStateManager.rotate((float) rand.nextDouble() * 360.0F, 0, 0, 1);
+				renderItem.renderItem(stack, TransformType.FIXED);
+				GlStateManager.popMatrix();
+			}
+			GlStateManager.popMatrix();
 		}
 	}
 

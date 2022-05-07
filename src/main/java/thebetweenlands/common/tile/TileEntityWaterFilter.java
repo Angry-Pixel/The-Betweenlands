@@ -1,5 +1,7 @@
 package thebetweenlands.common.tile;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -11,6 +13,10 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -21,10 +27,10 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
-import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 
 public class TileEntityWaterFilter extends TileEntityBasicInventory implements ITickable {
 
@@ -33,7 +39,7 @@ public class TileEntityWaterFilter extends TileEntityBasicInventory implements I
 	public boolean showFluidAnimation;
 
 	public TileEntityWaterFilter() {
-		super(2, "container.bl.water_filter");
+		super(5, "container.bl.water_filter");
         this.tank = new FluidTank(Fluid.BUCKET_VOLUME * 4) {
         	@Override
 			public boolean canFillFluidType(FluidStack fluid) {
@@ -85,10 +91,10 @@ public class TileEntityWaterFilter extends TileEntityBasicInventory implements I
 	}
 
 	public FluidStack getResultFluid() {
-		if(tank.getFluid().getFluid() == FluidRegistry.STAGNANT_WATER)
+		if (tank.getFluid().getFluid() == FluidRegistry.STAGNANT_WATER)
 			return new FluidStack(FluidRegistry.SWAMP_WATER, 0);
-		if(tank.getFluid().getFluid() == FluidRegistry.SWAMP_WATER)
-				return new FluidStack(FluidRegistry.CLEAN_WATER, 0);
+		if (tank.getFluid().getFluid() == FluidRegistry.SWAMP_WATER)
+			return new FluidStack(FluidRegistry.CLEAN_WATER, 0);
 		return tank.getFluid();
 	}
 
@@ -100,21 +106,42 @@ public class TileEntityWaterFilter extends TileEntityBasicInventory implements I
 		return showFluidAnimation;
 	}
 
-	// hardcoding this for testing
 	private void addByProductRandom(Random rand, Fluid fluid) {
 		if (rand.nextInt(50) == 0) {
-			ItemStack product = getStackInSlot(1);
+			ItemStack stack = ItemStack.EMPTY;
+			if (fluid == FluidRegistry.STAGNANT_WATER)
+				stack = chooseRandomItemFromLootTable(getStagnantWaterLootTable());
 
-			if (!product.isEmpty() && product.getCount() < getInventoryStackLimit())
-				product.grow(1);
+			if (fluid == FluidRegistry.SWAMP_WATER)
+				stack = chooseRandomItemFromLootTable(getSwampWaterLootTable());
 
-			if (product.isEmpty()) {
-				if (fluid == FluidRegistry.STAGNANT_WATER)
-					setInventorySlotContents(1, EnumItemMisc.SULFUR.create(1));
-				if (fluid == FluidRegistry.SWAMP_WATER)
-					setInventorySlotContents(1, new ItemStack(ItemRegistry.SLUDGE_BALL, 1));
+			for (int slot = 1; slot < 5; slot++) {
+				if (inventoryHandler.insertItem(slot, stack, false).isEmpty()) {
+					break;
+				}
 			}
 		}
+	}
+
+	protected ResourceLocation getStagnantWaterLootTable() {
+		return LootTableRegistry.FILTERED_STAGNANT_WATER;
+	}
+
+	protected ResourceLocation getSwampWaterLootTable() {
+		return LootTableRegistry.FILTERED_SWAMP_WATER;
+	}
+
+	public ItemStack chooseRandomItemFromLootTable(ResourceLocation resourceLocation) {
+		LootTable lootTable = getWorld().getLootTableManager().getLootTableFromLocation(resourceLocation);
+		if (lootTable != null) {
+			LootContext.Builder lootBuilder = new LootContext.Builder((WorldServer) world);
+			List<ItemStack> loot = lootTable.generateLootForPools(world.rand, lootBuilder.build());
+			if (!loot.isEmpty()) {
+				Collections.shuffle(loot);
+				return loot.get(0);
+			}
+		}
+		return new ItemStack(ItemRegistry.GLUE); // to stop null;
 	}
 
 	private void damageFilter(int damage) {
