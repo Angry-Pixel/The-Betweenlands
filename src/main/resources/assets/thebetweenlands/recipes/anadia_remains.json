@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:anadia_meat_raw"
+    },
+    {
+      "item": "thebetweenlands:anadia_meat_raw"
+    }
+  ],
+  "result": {
+     "item": "thebetweenlands:items_misc",
+      "data": 56
+  }
+}
