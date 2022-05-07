@@ -21,6 +21,7 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.common.item.herblore.ItemAspectVial;
+import thebetweenlands.common.item.misc.ItemGlowingGoop;
 import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -30,7 +31,8 @@ import java.util.List;
 
 public class EntityBLItemFrame extends EntityItemFrame implements IEntityAdditionalSpawnData {
     private static final DataParameter<Integer> COLOR = EntityDataManager.createKey(EntityBLItemFrame.class, DataSerializers.VARINT);
-    private static final DataParameter<Boolean> INVISIBLE = EntityDataManager.createKey(EntityBLItemFrame.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> INVISIBLE = EntityDataManager.createKey(EntityBLItemFrame.class, DataSerializers.BOOLEAN);;
+    private static final DataParameter<Boolean> IS_GLOWING = EntityDataManager.createKey(EntityBLItemFrame.class, DataSerializers.BOOLEAN);
     private static final String TAG_COLOR = "DyeColor";
 
     private float itemDropChance = 1.0F;
@@ -44,6 +46,7 @@ public class EntityBLItemFrame extends EntityItemFrame implements IEntityAdditio
         super(worldIn, pos, facing);
         dataManager.set(COLOR, color);
         dataManager.set(INVISIBLE, false);
+        dataManager.set(IS_GLOWING, false);
     }
 
     @Override
@@ -51,6 +54,7 @@ public class EntityBLItemFrame extends EntityItemFrame implements IEntityAdditio
         super.entityInit();
         dataManager.register(COLOR, 0);
         dataManager.register(INVISIBLE, false);
+        dataManager.register(IS_GLOWING, false);
     }
 
     @Nonnull
@@ -116,6 +120,7 @@ public class EntityBLItemFrame extends EntityItemFrame implements IEntityAdditio
     {
         compound.setInteger(TAG_COLOR, getColor());
         compound.setBoolean("IS_INVISIBLE", dataManager.get(INVISIBLE));
+        compound.setBoolean("IS_GLOWING", dataManager.get(IS_GLOWING));
         super.writeEntityToNBT(compound);
     }
 
@@ -124,6 +129,7 @@ public class EntityBLItemFrame extends EntityItemFrame implements IEntityAdditio
     {
         dataManager.set(COLOR, compound.getInteger(TAG_COLOR));
         dataManager.set(INVISIBLE, compound.getBoolean("IS_INVISIBLE"));
+        dataManager.set(IS_GLOWING, compound.getBoolean("IS_GLOWING"));
         super.readEntityFromNBT(compound);
     }
 
@@ -159,6 +165,14 @@ public class EntityBLItemFrame extends EntityItemFrame implements IEntityAdditio
         return dataManager.get(INVISIBLE);
     }
 
+    public boolean IsFrameGlowing() {
+        return dataManager.get(IS_GLOWING);
+    }
+
+    public void SetGlowing(boolean isGlowing) {
+        dataManager.set(IS_GLOWING, isGlowing);
+    }
+
 
     @Override
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand)
@@ -167,16 +181,22 @@ public class EntityBLItemFrame extends EntityItemFrame implements IEntityAdditio
 
         if (!this.world.isRemote)
         {
-            if(player.isSneaking() && itemstack.getItem() instanceof ItemAspectVial && !this.IsFrameInvisible()) {
-                ItemAspectContainer aspectVial = ItemAspectContainer.fromItem(itemstack);
-                List<Aspect> aspectList = aspectVial.getAspects(player);
+            if(player.isSneaking()) {
+                if (itemstack.getItem() instanceof ItemAspectVial && !this.IsFrameInvisible()) {
+                    ItemAspectContainer aspectVial = ItemAspectContainer.fromItem(itemstack);
+                    List<Aspect> aspectList = aspectVial.getAspects(player);
 
-                for(Aspect aspect : aspectList) {
-                    if(aspect.type == AspectRegistry.FREIWYNN && aspect.amount >= 100) {
-                        aspectVial.drain(AspectRegistry.FREIWYNN, 100);
-                        this.SetVisibility(true);
-                        return true;
+                    for (Aspect aspect : aspectList) {
+                        if (aspect.type == AspectRegistry.FREIWYNN && aspect.amount >= 100) {
+                            aspectVial.drain(AspectRegistry.FREIWYNN, 100);
+                            this.SetVisibility(true);
+                            return true;
+                        }
                     }
+                } else if(itemstack.getItem() instanceof ItemGlowingGoop && !isGlowing()) {
+                    itemstack.shrink(1);
+                    SetGlowing(true);
+                    return true;
                 }
             }
 

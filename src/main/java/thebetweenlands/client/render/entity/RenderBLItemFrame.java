@@ -1,10 +1,7 @@
 package thebetweenlands.client.render.entity;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ModelManager;
@@ -50,6 +47,8 @@ public class RenderBLItemFrame extends RenderItemFrame
     public void doRender(EntityItemFrame entity, double x, double y, double z, float entityYaw, float partialTicks)
     {
         GlStateManager.pushMatrix();
+        EntityBLItemFrame blItemFrame = (EntityBLItemFrame)entity;
+
         BlockPos blockpos = entity.getHangingPosition();
         double d0 = (double)blockpos.getX() - entity.posX + x;
         double d1 = (double)blockpos.getY() - entity.posY + y;
@@ -75,6 +74,10 @@ public class RenderBLItemFrame extends RenderItemFrame
             GlStateManager.disableColorMaterial();
         }
 
+        if(blItemFrame.IsFrameGlowing()) {
+            GlStateManager.enableLighting();
+        }
+
         GlStateManager.popMatrix();
         GlStateManager.translate(0.0F, 0.0F, 0.4375F);
         this.renderItem(entity);
@@ -83,12 +86,15 @@ public class RenderBLItemFrame extends RenderItemFrame
 
     private void renderItem(EntityItemFrame itemFrame)
     {
+        EntityBLItemFrame blItemFrame = (EntityBLItemFrame)itemFrame;
+
         ItemStack itemstack = itemFrame.getDisplayedItem();
 
         if (!itemstack.isEmpty())
         {
             GlStateManager.pushMatrix();
             GlStateManager.disableLighting();
+
             boolean flag = itemstack.getItem() instanceof net.minecraft.item.ItemMap;
             int i = flag ? itemFrame.getRotation() % 4 * 2 : itemFrame.getRotation();
             GlStateManager.rotate((float)i * 360.0F / 8.0F, 0.0F, 0.0F, 1.0F);
@@ -138,6 +144,11 @@ public class RenderBLItemFrame extends RenderItemFrame
         ModelManager modelmanager = blockrendererdispatcher.getBlockModelShapes().getModelManager();
 
         if (entity.getDisplayedItem().getItem() instanceof net.minecraft.item.ItemMap) {
+            if(itemFrame.IsFrameGlowing()) {
+                GlStateManager.disableLighting();
+                OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
+            }
+
             IBakedModel model = modelmanager.getModel(RenderDraeton.FRAME_MAP_MODEL);
             blockrendererdispatcher.getBlockModelRenderer().renderModelBrightnessColor(model, 1.0F, 1.0F, 1.0F, 1.0F);
         } else {
@@ -152,6 +163,11 @@ public class RenderBLItemFrame extends RenderItemFrame
             float r = (color >> 16 & 0xFF) / 255F;
             float g = (color >> 8 & 0xFF) / 255F;
             float b = (color & 0xFF) / 255F;
+
+            if(itemFrame.IsFrameGlowing()) {
+                GlStateManager.disableLighting();
+                OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
+            }
 
             blockrendererdispatcher.getBlockModelRenderer().renderModelBrightnessColor(coloredModel, 1.0F, r, g, b);
         }
