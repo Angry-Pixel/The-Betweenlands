@@ -9,8 +9,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleBreaking;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -30,6 +33,7 @@ import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySplodeshroom extends EntityProximitySpawner {
@@ -136,15 +140,27 @@ public class EntitySplodeshroom extends EntityProximitySpawner {
 				if (entity != null)
 					if (entity instanceof EntityPlayer) {
 						EntityPlayer player = (EntityPlayer) entity;
-						if(!player.isSpectator() && !player.isCreative()) {
-							player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60));
-							player.addPotionEffect(ElixirEffectRegistry.EFFECT_DECAY.createEffect(40, 1));
+						if(!isWearingSilkMask(player)) {
+							if(!player.isSpectator() && !player.isCreative()) {
+								player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60));
+								player.addPotionEffect(ElixirEffectRegistry.EFFECT_DECAY.createEffect(40, 1));
+							}
 						}
 					}
 				}
 			}
 		return entity;
 	}
+
+    public boolean isWearingSilkMask(EntityLivingBase entity) {
+    	if(entity instanceof EntityPlayer) {
+        	ItemStack helmet = ((EntityPlayer)entity).getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+        	if(!helmet.isEmpty() && helmet.getItem() == ItemRegistry.SILK_MASK) {
+        		return true;
+        	}
+        }
+    	return false;
+    }
 
 	private void explode() {
 		this.world.setEntityState(this, EVENT_EXPLODE_PARTICLES);
