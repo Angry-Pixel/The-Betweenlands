@@ -90,7 +90,7 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 	}
 
 	private void harvestGrub(MutableBlockPos mutablePos) {
-		//play suck sound
+		getWorld().playSound(null, this.pos, SoundRegistry.GRUB_HUB_SUCK, SoundCategory.BLOCKS, 0.5F, 1F);
 		getWorld().setBlockState(mutablePos, BlockRegistry.WEEDWOOD_BUSH.getDefaultState(), 3);
 		ItemStack contents = getStackInSlot(0);
 		ItemStack silk_grub = new ItemStack(ItemRegistry.SILK_GRUB, 1);
@@ -109,7 +109,7 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 	}
 
 	private void infestBush(MutableBlockPos mutablePos) {
-		getWorld().playSound(null, this.pos, SoundRegistry.GRUB_HUB_MIST, SoundCategory.BLOCKS, 0.5F, 2F);
+		getWorld().playSound(null, this.pos, SoundRegistry.GRUB_HUB_MIST, SoundCategory.BLOCKS, 0.5F, 1F);
 		getWorld().setBlockState(mutablePos, BlockRegistry.WEEDWOOD_BUSH_INFESTED_0.getDefaultState(), 3);
 		tank.drain(50, true);
 		markForUpdate();
