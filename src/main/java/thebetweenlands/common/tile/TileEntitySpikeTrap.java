@@ -45,7 +45,7 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 				getWorld().setBlockToAir(getPos().offset(facing, 1));
 			}
 			IBlockState stateFacing2 = getWorld().getBlockState(getPos().offset(facing, 2));
-			if (stateFacing2.getBlock() != Blocks.AIR && stateFacing2.getBlockHardness(getWorld(), getPos().offset(facing, 2)) >= 0.0F && !(stateFacing.getBlock() instanceof BlockSludge)) {
+			if (stateFacing2.getBlock() != Blocks.AIR && stateFacing2.getBlockHardness(getWorld(), getPos().offset(facing, 2)) >= 0.0F && !(stateFacing2.getBlock() instanceof BlockSludge)) {
 				setType((byte) 1);
 				setActive(true);
 				Block block = stateFacing2.getBlock();

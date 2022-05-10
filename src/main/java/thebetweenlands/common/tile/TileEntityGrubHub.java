@@ -1,7 +1,6 @@
 package thebetweenlands.common.tile;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -84,7 +83,7 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 								}
 							}
 						}
-						else if (!world.isRemote && state.getBlock() instanceof BlockWeedwoodBushInfested && state.getBlock() == BlockRegistry.WEEDWOOD_BUSH_INFESTED_2) {
+						else if (!world.isRemote && state.getBlock() instanceof BlockWeedwoodBushInfested && state.getBlock() == BlockRegistry.WEEDWOOD_BUSH_INFESTED_2 && canAddGrub(0)) {
 							harvestGrub(mutablePos);
 						}
 					}
@@ -95,21 +94,18 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 		getWorld().setBlockState(mutablePos, BlockRegistry.WEEDWOOD_BUSH.getDefaultState(), 3);
 		ItemStack contents = getStackInSlot(0);
 		ItemStack silk_grub = new ItemStack(ItemRegistry.SILK_GRUB, 1);
-		
-		if (contents.isEmpty())
-			setInventorySlotContents(0, silk_grub);
-
-		if (!contents.isEmpty() && contents.getItem() == ItemRegistry.SILK_GRUB) {
-			if(contents.getCount() < getInventoryStackLimit())
+			if (contents.isEmpty())
+				setInventorySlotContents(0, silk_grub);
+			else
 				contents.grow(1);
-			else {
-				EntityItem item = new EntityItem(world, mutablePos.getX() + 0.5D, mutablePos.getY() + 1.0D, mutablePos.getZ() + 0.5D, silk_grub);
-				//item.motionX = item.motionY = item.motionZ = 0D;
-				item.motionY = 0.003D;
-				world.spawnEntity(item);
-			}
-		}
 		markForUpdate();
+	}
+
+	private boolean canAddGrub(int slot) {
+		// this check could be used to stop the infestation of the bush beforehand, but atm I'm letting the bush spawn nasties if inventory is full
+		ItemStack contents = getStackInSlot(slot);
+		return contents.isEmpty() ? true : (!contents.isEmpty() && contents.getItem() == ItemRegistry.SILK_GRUB && contents.getCount() < getInventoryStackLimit()) ? true : false;
+		
 	}
 
 	private void infestBush(MutableBlockPos mutablePos) {
