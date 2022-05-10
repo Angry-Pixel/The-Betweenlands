@@ -2481,6 +2481,12 @@
     "sounds": [
       "thebetweenlands:grub_hub_mist"
     ],
-    "subtitle": "blsubtitles.entity.grub_hub_mists"
+    "subtitle": "blsubtitles.entity.grub_hub_mist"
+  },
+  "grub_hub_suck": {
+    "sounds": [
+      "thebetweenlands:grub_hub_suck"
+    ],
+    "subtitle": "blsubtitles.entity.grub_hub_suck"
   }
 }

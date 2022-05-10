@@ -1251,7 +1251,7 @@ tooltip.bl.item_mob_anadia.speed=Speed: %s
 tooltip.bl.item_mob_anadia.strength=Strength: %s
 tooltip.bl.item_mob_anadia.stamina=Stamina: %s
 
-tooltip.bl.item_mob_anadia.status=Status: 
+tooltip.bl.item_mob_anadia.status=Status:
 tooltip.bl.item_mob_anadia.rotting_1=Freshly Caught
 tooltip.bl.item_mob_anadia.rotting_2=Recently Caught
 tooltip.bl.item_mob_anadia.rotting_3=Starting to Ripen
@@ -1972,9 +1972,9 @@ manual.item.thebetweenlands.bl.elixir.strength.description=<scale:0.8>The Elixir
 
 # GUIs
 gui.gallery.not_found=Online picture gallery\nis currently disabled.\nThis feature can be\nenabled in the config\nunder 'General' and\n'Online picture gallery'.\nThen restart the game\nto download the\npictures.
-gui.gallery.author=§n§oAuthor:§r        
-gui.gallery.description=§n§oDescription:§r   
-gui.gallery.source_url=§n§oSource:§r        
+gui.gallery.author=§n§oAuthor:§r
+gui.gallery.description=§n§oDescription:§r
+gui.gallery.source_url=§n§oSource:§r
 gui.gallery.source_url_click=§9§o§nOpen URL§r
 gui.gallery.info_not_found=Could not find any information about this picture
 gui.gallery.search=Search:
@@ -2599,7 +2599,7 @@ blsubtitles.misc.chirobarb_erupter=Chirobarb Erupter shoots barbs
 blsubtitles.misc.simulacrum_break=Mysterious distant noise
 blsubtitles.misc.wind=Wind blows the chimes
 blsubtitles.misc.druid_chant=Mysterious chanting
-blsubtitles.misc.lyestone_fizzes=Lyestone Fizzes
+blsubtitles.misc.lyestone_fizzes=Lyestone fizzes
 blsubtitles.misc.fishing_tackle_box=Fishing Tackle Box creaks
 blsubtitles.misc.fish_chop=Chop chop!
 blsubtitles.misc.bl_fishing_cast=Fishing line cast
@@ -2610,3 +2610,5 @@ blsubtitles.misc.spear.throw=Fishing Spear thrown
 blsubtitles.misc.spear.return=Fishing Spear returns
 blsubtitles.misc.mist_staff_cast=A magical staff is used
 blsubtitles.misc.mist_staff_vanish=Something disappears
+blsubtitles.entity.grub_hub_mist=Mist sprays
+blsubtitles.entity.grub_hub_suck=Sucking
