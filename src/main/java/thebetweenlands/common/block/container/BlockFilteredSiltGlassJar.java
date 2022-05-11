@@ -23,6 +23,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -134,7 +135,7 @@ public class BlockFilteredSiltGlassJar extends BlockContainer implements ICustom
 				if(stack.hasTagCompound() && !stack.getTagCompound().hasKey("Empty")) {
 					FluidStack fluid = FluidStack.loadFluidStackFromNBT(stack.getTagCompound());
 					if(fluid != null) {
-						list.add(TextFormatting.GREEN + "Contains: "+ fluid.getFluid().getLocalizedName(fluid));
+						list.add(TextFormatting.GREEN + "Contains: "+ new TextComponentTranslation(fluid.getFluid().getUnlocalizedName()).getFormattedText());
 						list.add(TextFormatting.BLUE + "" + fluid.amount + "Mb/4000Mb");
 					}
 				}
