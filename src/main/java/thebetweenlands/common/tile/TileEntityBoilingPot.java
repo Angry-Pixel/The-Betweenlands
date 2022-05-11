@@ -235,7 +235,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound nbt = new NBTTagCompound();
+        NBTTagCompound nbt = super.getUpdateTag();
         this.writePacketNbt(nbt);
         return new SPacketUpdateTileEntity(pos, 0, nbt);
     }
