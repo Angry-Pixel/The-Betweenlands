@@ -1,5 +1,5 @@
 {
-    "parent": "thebetweenlands:block/water_filter",
+    "parent": "builtin/entity",
     "display": {
         "gui": {
             "rotation": [ 30, 45, 0 ],

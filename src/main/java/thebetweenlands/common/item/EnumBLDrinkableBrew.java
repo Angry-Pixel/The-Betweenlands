@@ -6,7 +6,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public enum EnumBLDrinkableBrew implements IStringSerializable
 {
-    NETTLE_SOUP(0, "nettle soup", 8882149 | 0xFF000000),
+    NETTLE_SOUP(0, "nettle_soup", 8882149 | 0xFF000000),
     NETTLE_TEA(1, "nettle_tea", 8519684 | 0xFF000000),
     PHEROMONE_EXTRACT(2, "pheromone_extract", 10208437 | 0xFF000000),
     //TODO

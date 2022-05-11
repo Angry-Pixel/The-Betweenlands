@@ -553,7 +553,29 @@ tile.thebetweenlands.filtered_silt_glass_stained.saffron.name=Saffron Filtered S
 tile.thebetweenlands.filtered_silt_glass_stained.shadow_green.name=Shadow Green Filtered Silt Glass
 tile.thebetweenlands.filtered_silt_glass_stained.sushi_green.name=Sushi Green Filtered Silt Glass
 tile.thebetweenlands.filtered_silt_glass_stained.vivid_tangerine.name=Vivid Tangerine Filtered Silt Glass
-tile.thebetweenlands.boiling_pot.name=Boiling Pot Thingy
+
+tile.thebetweenlands.mud_brick_shingle_stained.brown_rust.name=Brown Rust Mud Brick Shingle
+tile.thebetweenlands.mud_brick_shingle_stained.cadmium_green.name=Cadmium Green Mud Brick Shingle
+tile.thebetweenlands.mud_brick_shingle_stained.camelot_magenta.name=Camelot Magenta Mud Brick Shingle
+tile.thebetweenlands.mud_brick_shingle_stained.caribbean_green.name=Caribbean Green Mud Brick Shingle
+tile.thebetweenlands.mud_brick_shingle_stained.champagne.name=Champagne Mud Brick Shingle
+tile.thebetweenlands.mud_brick_shingle_stained.dull_lavender.name=Dull Lavender Mud Brick Shingle
+tile.thebetweenlands.mud_brick_shingle_stained.elm_cyan.name=Elm Cyan Mud Brick Shingle
+tile.thebetweenlands.mud_brick_shingle_stained.lavender_blue.name=Lavender Blue Mud Brick Shingle
+tile.thebetweenlands.mud_brick_shingle_stained.maroon.name=Maroon Mud Brick Shingle
+tile.thebetweenlands.mud_brick_shingle_stained.midnight_purple.name=Midnight Purple Mud Brick Shingle
+tile.thebetweenlands.mud_brick_shingle_stained.pewter_grey.name=Pewter Grey Mud Brick Shingle
+tile.thebetweenlands.mud_brick_shingle_stained.raisin_black.name=Raisin Black Mud Brick Shingle
+tile.thebetweenlands.mud_brick_shingle_stained.saffron.name=Saffron Mud Brick Shingle
+tile.thebetweenlands.mud_brick_shingle_stained.shadow_green.name=Shadow Green Mud Brick Shingle
+tile.thebetweenlands.mud_brick_shingle_stained.sushi_green.name=Sushi Green Mud Brick Shingle
+tile.thebetweenlands.mud_brick_shingle_stained.vivid_tangerine.name=Vivid Tangerine Mud Brick Shingle
+
+tile.thebetweenlands.boiling_pot.name=Steeping Pot
+tile.thebetweenlands.grub_hub.name=Grub Hub
+tile.thebetweenlands.water_filter.name=Water Filter
+tile.thebetweenlands.moth_house.name=Moth House
+tile.thebetweenlands.filtered_silt_glass_jar.name=Filtered Silt Glass Jar
 
 # Items
 
@@ -1010,10 +1032,13 @@ item.thebetweenlands.olmlette_mixture.name=Olmlette Mixture
 item.thebetweenlands.olmlette.name=Olmlette
 item.thebetweenlands.pheromone_thorax.name=Pheromone Thorax
 item.thebetweenlands.silk_grub.name=Silk Grub
-item.thebetweenlands.silk_cocoon.name=Silk Cocoon
+item.thebetweenlands.silk_grub_cocoon.name=Silk Grub Cocoon
 item.thebetweenlands.silk_thread.name=Silk Thread
 item.thebetweenlands.silk_bundle.name=Silk Bundle
 item.thebetweenlands.silk_bundle_dirty.name=Dirty Silk Bundle
+item.thebetweenlands.silk_mask.name=Silk Mask
+item.thebetweenlands.silk_filter.name=Silk Filter
+item.thebetweenlands.moss_filter.name=Moss Filter
 
 # Dyes
 item.thebetweenlands.dye.brown_rust.name=Brown Rust Dye
@@ -1073,6 +1098,10 @@ fluid.stagnant_water=Stagnant Water
 fluid.rubber=Rubber
 fluid.fog=Fog
 fluid.shallowbreath=Shallowbreath
+fluid.clean_water=Clean Water
+fluid.fish_oil=Fish Oil
+
+# Fluid dyes
 fluid.dye_fluid.brown_rust=Brown Rust Dye
 fluid.dye_fluid.cadmium_green=Cadmium Green Dye
 fluid.dye_fluid.camelot_magenta=Camelot Magenta Dye
@@ -1090,6 +1119,24 @@ fluid.dye_fluid.shadow_green=Shadow Green Dye
 fluid.dye_fluid.sushi_green=Sushi Green Dye
 fluid.dye_fluid.vivid_tangerine=Vivid Tangerine Dye
 
+# Fluid brews
+fluid.drinkable_brew.nettle_soup=Nettle Soup
+fluid.drinkable_brew.nettle_tea=Nettle Tea
+fluid.drinkable_brew.pheromone_extract=Pheromone Extract
+fluid.drinkable_brew.drinkable_brew_3=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_4=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_5=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_6=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_7=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_8=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_9=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_10=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_11=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_12=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_13=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_14=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_15=NYI needs lang
+
 # Creative Tabs
 itemGroup.thebetweenlands.block=The Betweenlands Blocks
 itemGroup.thebetweenlands.item=The Betweenlands Items
@@ -1097,7 +1144,6 @@ itemGroup.thebetweenlands.gear=The Betweenlands Gear
 itemGroup.thebetweenlands.special=The Betweenlands Specials
 itemGroup.thebetweenlands.plants=The Betweenlands Plants
 itemGroup.thebetweenlands.herblore=The Betweenlands Herblore
-
 
 # Container
 container.bl.syrmorite_hopper=Syrmorite Hopper

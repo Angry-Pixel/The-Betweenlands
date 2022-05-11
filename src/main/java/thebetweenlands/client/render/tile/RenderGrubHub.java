@@ -16,7 +16,6 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -30,15 +29,11 @@ public class RenderGrubHub extends TileEntitySpecialRenderer<TileEntityGrubHub> 
 	private static final ResourceLocation TEXTURE_SMALL = new ResourceLocation(ModInfo.ID, "textures/entity/spirit_tree_face_small.png");
 	@Override
 	public void render(TileEntityGrubHub tile, double x, double y, double z, float partialTick, int destroyStage, float alpha) {
-
-		if(tile == null || !tile.hasWorld())
-			return;
-
 		float fluidLevel = tile.tank.getFluidAmount();
 		float height = 0.0625F;
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 		SplittableRandom rand = new SplittableRandom((long) (tile.getPos().getX() + tile.getPos().getY() + tile.getPos().getZ()));
-		
+
 		GlStateManager.pushMatrix();
 		bindTexture(TEXTURE_SMALL);
 		GlStateManager.translate(x + 0.5F, y + 1.5F, z - 0.4375F);
@@ -47,7 +42,7 @@ public class RenderGrubHub extends TileEntitySpecialRenderer<TileEntityGrubHub> 
 		maskModel.head_base.rotationPointZ = 8;
 		maskModel.head_base.render(0.0625F);
 		GlStateManager.popMatrix();
-		
+
 		GlStateManager.pushMatrix();
 		bindTexture(TEXTURE_SMALL);
 		GlStateManager.translate(x - 0.4375F, y + 1.5F, z + 0.5F );
@@ -57,7 +52,7 @@ public class RenderGrubHub extends TileEntitySpecialRenderer<TileEntityGrubHub> 
 		maskModel.head_base.rotationPointZ = 8;
 		maskModel.head_base.render(0.0625F);
 		GlStateManager.popMatrix();
-		
+
 		GlStateManager.pushMatrix();
 		bindTexture(TEXTURE_SMALL);
 		GlStateManager.translate(x + 0.5F, y + 1.5F, z + 1.4375F);
@@ -67,7 +62,7 @@ public class RenderGrubHub extends TileEntitySpecialRenderer<TileEntityGrubHub> 
 		maskModel.head_base.rotationPointZ = 8;
 		maskModel.head_base.render(0.0625F);
 		GlStateManager.popMatrix();
-		
+
 		GlStateManager.pushMatrix();
 		bindTexture(TEXTURE_SMALL);
 		GlStateManager.translate(x + 1.4375F, y + 1.5F, z + 0.5F );
@@ -77,61 +72,54 @@ public class RenderGrubHub extends TileEntitySpecialRenderer<TileEntityGrubHub> 
 		maskModel.head_base.rotationPointZ = 8;
 		maskModel.head_base.render(0.0625F);
 		GlStateManager.popMatrix();
-		
-		if (fluidLevel > 0) {
-			Tessellator tessellator = Tessellator.getInstance();
-			BufferBuilder buffer = tessellator.getBuffer();
-			FluidStack fluidStack = tile.tank.getFluid();
-			height = (0.68749F / tile.tank.getCapacity()) * tile.tank.getFluidAmount();
-			TextureAtlasSprite fluidStillSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluidStack.getFluid().getStill().toString());
-			int fluidColor = fluidStack.getFluid().getColor(fluidStack);
-			GlStateManager.disableLighting();
-			GlStateManager.pushMatrix();
-			GlStateManager.enableBlend();
-			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-			bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			GlStateManager.translate(x, y + 0.0625F, z);
-			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-			float xMax, zMax, xMin, zMin, yMin = 0;
 
-			xMax = 1.625F;
-			zMax = 1.625F;
-			xMin = 0.375F;
-			zMin = 0.375F;
-			yMin = 0F;
-
-			if (fluidLevel >= Fluid.BUCKET_VOLUME) {
+		if (tile != null) {
+			if (fluidLevel > 0) {
+				Tessellator tessellator = Tessellator.getInstance();
+				BufferBuilder buffer = tessellator.getBuffer();
+				FluidStack fluidStack = tile.tank.getFluid();
+				height = (0.68749F / tile.tank.getCapacity()) * tile.tank.getFluidAmount();
+				TextureAtlasSprite fluidStillSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluidStack.getFluid().getStill().toString());
+				int fluidColor = fluidStack.getFluid().getColor(fluidStack);
+				GlStateManager.disableLighting();
+				GlStateManager.pushMatrix();
+				GlStateManager.enableBlend();
+				GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+				bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+				GlStateManager.translate(x, y + 0.0625F, z);
+				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+				float xMax, zMax, xMin, zMin, yMin = 0;
 				xMax = 1.75F;
 				zMax = 1.75F;
 				xMin = 0.25F;
 				zMin = 0.25F;
 				yMin = 0F;
+				setGLColorFromInt(fluidColor, 1F);
+				renderCuboid(buffer, xMax, xMin, yMin, height, zMin, zMax, fluidStillSprite);
+				tessellator.draw();
+				GlStateManager.disableBlend();
+				GlStateManager.popMatrix();
+				GlStateManager.enableLighting();
 			}
-			setGLColorFromInt(fluidColor, 1F);
-			renderCuboid(buffer, xMax, xMin, yMin, height, zMin, zMax, fluidStillSprite);
-			tessellator.draw();
-			GlStateManager.disableBlend();
-			GlStateManager.popMatrix();
-			GlStateManager.enableLighting();
-		}
-
-		if (!tile.getStackInSlot(0).isEmpty()) {
-			GlStateManager.pushMatrix();
-			double yUp = 0.8125D;
-			GlStateManager.translate(x + 0.5D, y + yUp, z + 0.5D);
-			GlStateManager.rotate(180, 1, 0, 0);
-			int items = tile.getStackInSlot(0).getCount();
-			for (int i = 0; i < items; i++) {
+	
+			if (!tile.getStackInSlot(0).isEmpty()) {
 				GlStateManager.pushMatrix();
-				GlStateManager.translate(rand.nextDouble() / 2.0D - 1.0D / 4.0D, 0.0D, rand.nextDouble() / 2.0D - 1.0D / 4.0D);
-				GlStateManager.rotate((float) rand.nextDouble() * 360.0f - 180.0f, 0, 1, 0);
-				GlStateManager.scale(0.25D, 0.25D, 0.25D);
+				double yUp = 0.8125D;
+				GlStateManager.translate(x + 0.5D, y + yUp, z + 0.5D);
 				GlStateManager.rotate(180, 1, 0, 0);
-				ItemStack stack = tile.getStackInSlot(0);
-				renderItem.renderItem(stack, TransformType.FIXED);
+				int items = tile.getStackInSlot(0).getCount();
+				for (int i = 0; i < items; i++) {
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(rand.nextDouble() / 2.0D - 1.0D / 4.0D, 0.0D, rand.nextDouble() / 2.0D - 1.0D / 4.0D);
+					GlStateManager.rotate((float) rand.nextDouble() * 360.0f - 180.0f, 0, 1, 0);
+					GlStateManager.scale(0.25D, 0.25D, 0.25D);
+					GlStateManager.rotate(180, 1, 0, 0);
+					ItemStack stack = tile.getStackInSlot(0);
+					renderItem.renderItem(stack, TransformType.FIXED);
+					GlStateManager.popMatrix();
+				}
 				GlStateManager.popMatrix();
 			}
-			GlStateManager.popMatrix();
 		}
 	}
 
@@ -181,6 +169,11 @@ public class RenderGrubHub extends TileEntitySpecialRenderer<TileEntityGrubHub> 
 		addVertexWithUV(buffer, xMin, height, zMin, uMax, vMin + (vHeight * height));
 		addVertexWithUV(buffer, xMin, yMin, zMin, uMax, vMin);
 
+		// down
+		addVertexWithUV(buffer, xMax, yMin, zMin, uMax, vMin);
+		addVertexWithUV(buffer, xMax, yMin, zMax, uMin, vMin);
+		addVertexWithUV(buffer, xMin, yMin, zMax, uMin, vMax);
+		addVertexWithUV(buffer, xMin, yMin, zMin, uMax, vMax);
 	}
 
 	private void addVertexWithUV(BufferBuilder buffer, float x, float y, float z, double u, double v) {

@@ -5,41 +5,43 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.GlStateManager.CullFace;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.tile.ModelSiltGlassJar;
-import thebetweenlands.common.herblore.elixir.ElixirRecipe;
-import thebetweenlands.common.tile.TileEntitySiltGlassJar;
+import thebetweenlands.common.tile.TileEntityFilteredSiltGlassJar;
 
 @SideOnly(Side.CLIENT)
-public class RenderFilteredSiltGlassJar extends TileEntitySpecialRenderer<TileEntitySiltGlassJar> {
-	public static final ResourceLocation WORM_WIGGLE = new ResourceLocation("thebetweenlands:blocks/worm_wiggle");
+public class RenderFilteredSiltGlassJar extends TileEntitySpecialRenderer<TileEntityFilteredSiltGlassJar> {
 
 	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/blocks/silt_glass_jar.png");
 	private final ModelSiltGlassJar model = new ModelSiltGlassJar();
 	
 	@Override
-	public void render(TileEntitySiltGlassJar tile, double x, double y, double z, float partialTick, int destroyStage, float alpha) {
-		if(tile != null) {
-			int wormLevel = tile.getItemCount();
-			if (wormLevel >= 1) {
-				float height = (0.6875F / 8) * wormLevel;
-				
-				TextureAtlasSprite wormSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("thebetweenlands:blocks/worm_wiggle");
+	public void render(TileEntityFilteredSiltGlassJar tile, double x, double y, double z, float partialTick, int destroyStage, float alpha) {
+		if (tile != null) {
+			float fluidLevel = tile.tank.getFluidAmount();
+			if (fluidLevel > 0) {
+				FluidStack fluidStack = new FluidStack(tile.tank.getFluid(), 100);
+				float height = (0.6875F / tile.tank.getCapacity()) * tile.tank.getFluidAmount();
+
+				TextureAtlasSprite fluidStillSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluidStack.getFluid().getStill().toString());
 				Tessellator tessellator = Tessellator.getInstance();
 				BufferBuilder buffer = tessellator.getBuffer();
-		
+				int fluidColor = fluidStack.getFluid().getColor(fluidStack);
+
 				GlStateManager.disableLighting();
-		        GlStateManager.pushMatrix();
+				GlStateManager.pushMatrix();
 				GlStateManager.translate(x, y, z);
 				Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+				setGLColorFromInt(fluidColor);
 				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 				float xMax, zMax, xMin, zMin, yMin = 0;
 				xMax = 1.5F;
@@ -47,14 +49,14 @@ public class RenderFilteredSiltGlassJar extends TileEntitySpecialRenderer<TileEn
 				xMin = 0.5F;
 				zMin = 0.5F;
 				yMin = 0.0625F;
-		
-				renderCuboid(buffer, xMax, xMin, yMin, height, zMin, zMax, wormSprite);
+
+				renderCuboid(buffer, xMax, xMin, yMin, height, zMin, zMax, fluidStillSprite);
 				tessellator.draw();
 				GlStateManager.popMatrix();
 				GlStateManager.enableLighting();
 			}
 		}
-		
+
 		bindTexture(TEXTURE);
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
@@ -68,6 +70,13 @@ public class RenderFilteredSiltGlassJar extends TileEntitySpecialRenderer<TileEn
 		GlStateManager.cullFace(CullFace.BACK);
 		model.render();
 		GlStateManager.popMatrix();
+	}
+	
+	private void setGLColorFromInt(int color) {
+		float red = (color >> 16 & 0xFF) / 255.0F;
+		float green = (color >> 8 & 0xFF) / 255.0F;
+		float blue = (color & 0xFF) / 255.0F;
+		GlStateManager.color(red, green, blue, 1.0F);
 	}
 
 	private void renderCuboid(BufferBuilder buffer, float xMax, float xMin, float yMin, float height, float zMin, float zMax, TextureAtlasSprite textureAtlasSprite) {
@@ -108,6 +117,12 @@ public class RenderFilteredSiltGlassJar extends TileEntitySpecialRenderer<TileEn
 		addVertexWithUV(buffer, xMin, height, zMax, uMin, vMin + (vHeight * height));
 		addVertexWithUV(buffer, xMin, height, zMin, uMax, vMin + (vHeight * height));
 		addVertexWithUV(buffer, xMin, yMin, zMin, uMax, vMin);
+
+		// down
+		addVertexWithUV(buffer, xMax, yMin, zMin, uMax, vMin);
+		addVertexWithUV(buffer, xMax, yMin, zMax, uMin, vMin);
+		addVertexWithUV(buffer, xMin, yMin, zMax, uMin, vMax);
+		addVertexWithUV(buffer, xMin, yMin, zMin, uMax, vMax);
 
 	}
 

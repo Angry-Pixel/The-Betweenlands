@@ -53,7 +53,7 @@ public class BlockFilteredSiltGlassJar extends BlockContainer implements ICustom
 
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.MODEL;
+		return EnumBlockRenderType.INVISIBLE;
 	}
 
 	@Override
@@ -133,9 +133,9 @@ public class BlockFilteredSiltGlassJar extends BlockContainer implements ICustom
 			public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flag) {
 				if(stack.hasTagCompound() && !stack.getTagCompound().hasKey("Empty")) {
 					FluidStack fluid = FluidStack.loadFluidStackFromNBT(stack.getTagCompound());
-					if(fluid !=null) {
+					if(fluid != null) {
 						list.add(TextFormatting.GREEN + "Contains: "+ fluid.getFluid().getLocalizedName(fluid));
-						list.add(TextFormatting.BLUE + ""+ fluid.amount +"Mb/32000Mb");
+						list.add(TextFormatting.BLUE + "" + fluid.amount + "Mb/4000Mb");
 					}
 				}
 				else
