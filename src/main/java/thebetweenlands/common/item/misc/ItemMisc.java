@@ -42,6 +42,7 @@ import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePile;
 import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePileWater;
 import thebetweenlands.common.entity.mobs.EntityEmberling;
 import thebetweenlands.common.entity.mobs.EntityEmberlingWild;
+import thebetweenlands.common.item.EnumBLDrinkableBrew;
 import thebetweenlands.common.item.IGenericItem;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -258,18 +259,24 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 			IFluidHandler handler = FluidUtil.getFluidHandler(world, pos, facing);
 			if (handler != null) {
 				FluidStack tankContents = handler.drain(250, false);
-				if (tankContents != null && tankContents.getFluid() == FluidRegistry.DYE_FLUID) {
-					tankContents = handler.drain(tankContents, true);
-					IBlockState state = world.getBlockState(pos);
-					ItemStack dyeBowl = EnumItemMisc.WEEDWOOD_BOWL.create(1);
-					if(tankContents.tag != null && tankContents.tag.hasKey("color"))
-						dyeBowl = new ItemStack(ItemRegistry.DYE, 1, tankContents.tag.getInteger("color"));
-					if (!player.inventory.addItemStackToInventory(dyeBowl))
-						ForgeHooks.onPlayerTossEvent(player, dyeBowl, false);
-					if (!player.capabilities.isCreativeMode)
-						heldItem.shrink(1);
-					world.playSound((EntityPlayer) null, pos, SoundEvents.ENTITY_PLAYER_SPLASH, SoundCategory.BLOCKS, 0.75F, 2F);
-					world.notifyBlockUpdate(pos, state, state, 3);
+				if (tankContents != null) { 
+					if(tankContents.getFluid() == FluidRegistry.DYE_FLUID || tankContents.getFluid() == FluidRegistry.DRINKABLE_BREW) {
+						IBlockState state = world.getBlockState(pos);
+						ItemStack filledBowl = EnumItemMisc.WEEDWOOD_BOWL.create(1);
+						if(tankContents.tag != null && tankContents.tag.hasKey("color")) {
+							if(tankContents.getFluid() == FluidRegistry.DYE_FLUID)
+								filledBowl = new ItemStack(ItemRegistry.DYE, 1, tankContents.tag.getInteger("color"));
+							if(tankContents.getFluid() == FluidRegistry.DRINKABLE_BREW)
+								filledBowl = EnumBLDrinkableBrew.byMetadata(tankContents.tag.getInteger("color")).getBrewItemStack();
+						}
+						if (!player.inventory.addItemStackToInventory(filledBowl))
+							ForgeHooks.onPlayerTossEvent(player, filledBowl, false);
+						if (!player.capabilities.isCreativeMode)
+							heldItem.shrink(1);
+						world.playSound((EntityPlayer) null, pos, SoundEvents.ENTITY_PLAYER_SPLASH, SoundCategory.BLOCKS, 0.75F, 2F);
+						handler.drain(250, true);
+						world.notifyBlockUpdate(pos, state, state, 3);
+					}
 				}
 			}
 			return EnumActionResult.SUCCESS;
@@ -278,7 +285,7 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 			return EnumActionResult.FAIL;
 		}
 	}
-	
+
     public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
         if ((world.getBlockState(pos.down()).getBlock() instanceof BlockBetweenstonePebblePileWater || world.getBlockState(pos.down()).getBlock() instanceof BlockBetweenstonePebblePile) && side == EnumFacing.UP)
         	return false;
