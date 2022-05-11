@@ -134,7 +134,7 @@ public class BlockFilteredSiltGlassJar extends BlockContainer implements ICustom
 				if(stack.hasTagCompound() && !stack.getTagCompound().hasKey("Empty")) {
 					FluidStack fluid = FluidStack.loadFluidStackFromNBT(stack.getTagCompound());
 					if(fluid != null) {
-						list.add(TextFormatting.GREEN + "Contains: "+ fluid.getFluid().getLocalizedName(fluid));
+						list.add(TextFormatting.GREEN + "Contains: "+ fluid.getFluid());
 						list.add(TextFormatting.BLUE + "" + fluid.amount + "Mb/4000Mb");
 					}
 				}
