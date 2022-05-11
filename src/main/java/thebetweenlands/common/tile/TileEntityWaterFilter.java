@@ -179,15 +179,16 @@ public class TileEntityWaterFilter extends TileEntityBasicInventory implements I
 
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound nbt = super.getUpdateTag();
+        NBTTagCompound nbt = new NBTTagCompound();
         this.writePacketNbt(nbt);
         return new SPacketUpdateTileEntity(pos, 0, nbt);
     }
 
 	@Override
     public NBTTagCompound getUpdateTag() {
-		NBTTagCompound tag = new NBTTagCompound();
-        return writeToNBT(tag);
+		NBTTagCompound tag = super.getUpdateTag();
+        this.writePacketNbt(tag);
+        return tag;
     }
 
     @Override

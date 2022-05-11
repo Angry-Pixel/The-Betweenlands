@@ -54,7 +54,8 @@ public class TileEntityFilteredSiltGlassJar extends TileEntity {
 	@Override
     public NBTTagCompound getUpdateTag() {
 		NBTTagCompound tag = super.getUpdateTag();
-        return writeToNBT(tag);
+        this.writePacketNbt(tag);
+        return tag;
     }
 
     @Override
