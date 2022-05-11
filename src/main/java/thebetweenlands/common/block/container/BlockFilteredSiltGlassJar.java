@@ -37,7 +37,7 @@ import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.tile.TileEntityFilteredSiltGlassJar;
 
 public class BlockFilteredSiltGlassJar extends BlockContainer implements ICustomItemBlock {
-	
+
 	public BlockFilteredSiltGlassJar() {
 		super(Material.GLASS);
 		setSoundType(SoundType.GLASS);
