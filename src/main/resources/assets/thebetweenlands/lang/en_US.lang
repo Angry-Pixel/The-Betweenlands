@@ -1562,9 +1562,6 @@ chat.aa_toggle.ascent_active=Ascent Active: %s
 
 chat.aa_upgrade_broke=Armor Upgrade %s broke.
 
-# Damage Source
-death.attack.suffocation=%s was suffocated by a Shallowbreath
-
 # Elixirs
 bl.elixir.petrify=Petrify
 bl.elixir.strength=Elixir of Strength
@@ -2380,9 +2377,11 @@ config.thebetweenlands.dump_packed_textures=Dump packed textures
 config.thebetweenlands.biome_list=Biome list
 
 # Damage sources
+death.attack.bl.suffocation=%s was suffocated by a Shallowbreath
 death.attack.bl.shockwave=%1$s was killed by a shockwave
 death.attack.bl.spikewave=%1$s was impaled by roots
 death.attack.bl.swarm=%1$s was decomposed by infestation
+death.attack.bl.urchin_spikes=%1$s was impaled by urchin spikes
 
 #Dev thing
 item.thebetweenlands.test_item_chimp_ruler.name=Test Ruler
