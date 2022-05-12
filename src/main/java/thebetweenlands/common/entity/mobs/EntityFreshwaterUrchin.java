@@ -45,14 +45,13 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 	private boolean shootSpikes;
 	public int MAX_SPIKE_TIMER = 10;
 	public static final byte EVENT_ATTACK = 66;
-	public DamageSource urchinSpikesDamageSource;
+	public DamageSource urchinSpikesDamageSource = new EntityDamageSource("bl.urchin_spikes", this);
 
 	public EntityFreshwaterUrchin(World world) {
 		super(world);
 		setSize(0.6875F, 0.4375F);
 		setPathPriority(PathNodeType.WATER, 4.0F);
 		stepHeight = 1F;
-		urchinSpikesDamageSource = new EntityDamageSource("bl.urchin_spikes", this);
 	}
 
     @Override
