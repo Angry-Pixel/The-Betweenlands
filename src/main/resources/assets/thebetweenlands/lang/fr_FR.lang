@@ -1750,7 +1750,7 @@ entity.thebetweenlands.glowing_goop.name=Gelée Luminescente
 entity.thebetweenlands.item_frame.name=Cadre
 
 #Fish Parts
-entity.thebetweenlands.anadia_body_0=Espiègle
+entity.thebetweenlands.anadia_body_0=Banale
 entity.thebetweenlands.anadia_body_1=Trapue
 entity.thebetweenlands.anadia_body_2=Mince
 
@@ -1758,9 +1758,9 @@ entity.thebetweenlands.anadia_tail_0=Queue Courte
 entity.thebetweenlands.anadia_tail_1=Queue en Eventail
 entity.thebetweenlands.anadia_tail_2=Queue Longue
 
-entity.thebetweenlands.anadia_head_0=Brouteur
-entity.thebetweenlands.anadia_head_1=Cogneur
-entity.thebetweenlands.anadia_head_2=Rôdeur
+entity.thebetweenlands.anadia_head_0=Brouteuse
+entity.thebetweenlands.anadia_head_1=Cogneuse
+entity.thebetweenlands.anadia_head_2=Rôdeuse
 
 # Equipment
 equipment.menu.equip=Equiper %s
