@@ -545,7 +545,7 @@ tile.thebetweenlands.filtered_silt_glass_stained.champagne.name=Verre en Limon F
 tile.thebetweenlands.filtered_silt_glass_stained.dull_lavender.name=Verre en Limon Filtré Lavande
 tile.thebetweenlands.filtered_silt_glass_stained.elm_cyan.name=Verre en Limon Filtré Cyan Foncé
 tile.thebetweenlands.filtered_silt_glass_stained.lavender_blue.name=Verre en Limon Filtré Bleu Lavande
-tile.thebetweenlands.filtered_silt_glass_stained.maroon.name=Verre en Limon Filtré Cramoisi
+tile.thebetweenlands.filtered_silt_glass_stained.maroon.name=Verre en Limon Filtré Rouge Cramoisi
 tile.thebetweenlands.filtered_silt_glass_stained.midnight_purple.name=Verre en Limon Filtré Pourpre
 tile.thebetweenlands.filtered_silt_glass_stained.pewter_grey.name=Verre en Limon Filtré Gris Perle
 tile.thebetweenlands.filtered_silt_glass_stained.raisin_black.name=Verre en Limon Filtré Noir Aile de Corbeau
@@ -553,7 +553,29 @@ tile.thebetweenlands.filtered_silt_glass_stained.saffron.name=Verre en Limon Fil
 tile.thebetweenlands.filtered_silt_glass_stained.shadow_green.name=Verre en Limon Filtré Vert Menthe
 tile.thebetweenlands.filtered_silt_glass_stained.sushi_green.name=Verre en Limon Filtré Vert Pistache
 tile.thebetweenlands.filtered_silt_glass_stained.vivid_tangerine.name=Verre en Limon Filtré Rose Pêche
-tile.thebetweenlands.boiling_pot.name=Distillateur à Colorant
+
+tile.thebetweenlands.mud_brick_shingle_stained.brown_rust.name=Bardeaux en Briques de Boue Marron Rouille
+tile.thebetweenlands.mud_brick_shingle_stained.cadmium_green.name=Bardeaux en Briques de Boue Vert de Cadmium
+tile.thebetweenlands.mud_brick_shingle_stained.camelot_magenta.name=Bardeaux en Briques de Boue Rose Bonbon
+tile.thebetweenlands.mud_brick_shingle_stained.caribbean_green.name=Bardeaux en Briques de Boue Vert Caraïbes
+tile.thebetweenlands.mud_brick_shingle_stained.champagne.name=Bardeaux en Briques de Boue Jaune Champagne
+tile.thebetweenlands.mud_brick_shingle_stained.dull_lavender.name=Bardeaux en Briques de Boue Lavande
+tile.thebetweenlands.mud_brick_shingle_stained.elm_cyan.name=Bardeaux en Briques de Boue Cyan Foncé
+tile.thebetweenlands.mud_brick_shingle_stained.lavender_blue.name=Bardeaux en Briques de Boue Bleu Lavande
+tile.thebetweenlands.mud_brick_shingle_stained.maroon.name=Bardeaux en Briques de Boue Rouge Cramoisi
+tile.thebetweenlands.mud_brick_shingle_stained.midnight_purple.name=Bardeaux en Briques de Boue Pourpre
+tile.thebetweenlands.mud_brick_shingle_stained.pewter_grey.name=Bardeaux en Briques de Boue Gris Perle
+tile.thebetweenlands.mud_brick_shingle_stained.raisin_black.name=Bardeaux en Briques de Boue Noir Aile de Corbeau
+tile.thebetweenlands.mud_brick_shingle_stained.saffron.name=Bardeaux en Briques de Boue jaune Safran
+tile.thebetweenlands.mud_brick_shingle_stained.shadow_green.name=Bardeaux en Briques de Boue Vert Menthe
+tile.thebetweenlands.mud_brick_shingle_stained.sushi_green.name=Bardeaux en Briques de Boue Vert Pistache
+tile.thebetweenlands.mud_brick_shingle_stained.vivid_tangerine.name=Bardeaux en Briques de Boue Rose Pêche
+
+tile.thebetweenlands.boiling_pot.name=Pot à Macération
+tile.thebetweenlands.grub_hub.name=Colonie de Vers
+tile.thebetweenlands.water_filter.name=Filtre à Eau
+tile.thebetweenlands.moth_house.name=Cabane à Papillons
+tile.thebetweenlands.filtered_silt_glass_jar.name=Jarre en Verre de Limon Filtré
 
 # Items
 
@@ -1010,10 +1032,13 @@ item.thebetweenlands.olmlette_mixture.name=Mixture d'Olmelette
 item.thebetweenlands.olmlette.name=Olmelette
 item.thebetweenlands.pheromone_thorax.name=Thorax à Phéromones
 item.thebetweenlands.silk_grub.name=Ver à Soie
-item.thebetweenlands.silk_cocoon.name=Cocon de Soie
+item.thebetweenlands.silk_grub_cocoon.name=Cocon de Vers de Soie
 item.thebetweenlands.silk_thread.name=Fil de Soie
 item.thebetweenlands.silk_bundle.name=Sac de Soie
 item.thebetweenlands.silk_bundle_dirty.name=Sac de Soie Sale
+item.thebetweenlands.silk_mask.name=Masque en Soie
+item.thebetweenlands.silk_filter.name=Filtre en Soie
+item.thebetweenlands.moss_filter.name=Filtre en Mousse
 
 # Dyes
 item.thebetweenlands.dye.brown_rust.name=Colorant Marron Rouille
@@ -1024,7 +1049,7 @@ item.thebetweenlands.dye.champagne.name=Colorant Jaune Champagne
 item.thebetweenlands.dye.dull_lavender.name=Colorant Lavande
 item.thebetweenlands.dye.elm_cyan.name=Colorant Cyan Foncé
 item.thebetweenlands.dye.lavender_blue.name=Colorant Bleu Lavande
-item.thebetweenlands.dye.maroon.name=Colorant Cramoisi
+item.thebetweenlands.dye.maroon.name=Colorant Rouge Cramoisi
 item.thebetweenlands.dye.midnight_purple.name=Colorant Pourpre
 item.thebetweenlands.dye.pewter_grey.name=Colorant Gris Perle
 item.thebetweenlands.dye.raisin_black.name=Colorant Noir Aile de Corbeau
@@ -1032,6 +1057,24 @@ item.thebetweenlands.dye.saffron.name=Colorant Jaune Safran
 item.thebetweenlands.dye.shadow_green.name=Colorant Vert Menthe
 item.thebetweenlands.dye.sushi_green.name=Colorant Vert Pistache
 item.thebetweenlands.dye.vivid_tangerine.name=Colorant Rose Pêche
+
+# Item Frames
+item.thebetweenlands.item_frame.brown_rust.name=Cadre Marron Rouille
+item.thebetweenlands.item_frame.cadmium_green.name=Cadre Vert de Cadmium
+item.thebetweenlands.item_frame.camelot_magenta.name=Cadre Rose Bonbon
+item.thebetweenlands.item_frame.caribbean_green.name=Cadre Vert Caraïbes
+item.thebetweenlands.item_frame.champagne.name=Cadre Jaune Champagne
+item.thebetweenlands.item_frame.dull_lavender.name=Cadre Lavande
+item.thebetweenlands.item_frame.elm_cyan.name=Cadre Cyan Foncé
+item.thebetweenlands.item_frame.lavender_blue.name=Cadre Bleu Lavande
+item.thebetweenlands.item_frame.maroon.name=Cadre Rouge Cramoisi
+item.thebetweenlands.item_frame.midnight_purple.name=Cadre Pourpre
+item.thebetweenlands.item_frame.pewter_grey.name=Cadre Gris Perle
+item.thebetweenlands.item_frame.raisin_black.name=Cadre Noir Aile de Corbeau
+item.thebetweenlands.item_frame.saffron.name=Cadre Jaune Safran
+item.thebetweenlands.item_frame.shadow_green.name=Cadre Vert Menthe
+item.thebetweenlands.item_frame.sushi_green.name=Cadre Vert Pistache
+item.thebetweenlands.item_frame.vivid_tangerine.name=Cadre Rose Pêche
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Fiole en Dendrotisthe Verte
@@ -1055,6 +1098,10 @@ fluid.stagnant_water=Eau Stagnante
 fluid.rubber=Caoutchouc
 fluid.fog=Brouillard
 fluid.shallowbreath=Coursouffle
+fluid.clean_water=Eau Propre
+fluid.fish_oil=Huile de Poisson
+
+# Fluid dyes
 fluid.dye_fluid.brown_rust=Colorant Marron Rouille
 fluid.dye_fluid.cadmium_green=Colorant Vert de Cadmium
 fluid.dye_fluid.camelot_magenta=Colorant Rose Bonbon
@@ -1063,7 +1110,7 @@ fluid.dye_fluid.champagnee=Colorant Jaune Champagne
 fluid.dye_fluid.dull_lavender=Colorant Lavande
 fluid.dye_fluid.elm_cyan=Colorant Blue Lavande
 fluid.dye_fluid.lavender_blue=Colorant Bleu Lavande
-fluid.dye_fluid.maroon=Colorant Cramoisi
+fluid.dye_fluid.maroon=Colorant Rouge Cramoisi
 fluid.dye_fluid.midnight_purple=Colorant Pourpre
 fluid.dye_fluid.pewter_grey=Colorant Gris Perle
 fluid.dye_fluid.raisin_black=Colorant Noir Aile de Corbeau
@@ -1072,6 +1119,24 @@ fluid.dye_fluid.shadow_green=Colorant Vert Menthe
 fluid.dye_fluid.sushi_green=Colorant Vert Pistache
 fluid.dye_fluid.vivid_tangerine=Colorant Rose Pêche
 
+# Fluid brews
+fluid.drinkable_brew.nettle_soup=Soupe d'Ortie
+fluid.drinkable_brew.nettle_tea=Tisane d'Ortie
+fluid.drinkable_brew.pheromone_extract=Extrait de Phéromones
+fluid.drinkable_brew.drinkable_brew_3=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_4=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_5=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_6=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_7=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_8=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_9=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_10=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_11=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_12=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_13=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_14=NYI needs lang
+fluid.drinkable_brew.drinkable_brew_15=NYI needs lang
+
 # Creative Tabs
 itemGroup.thebetweenlands.block=Blocs des Betweenlands
 itemGroup.thebetweenlands.item=Objets des Betweenlands
@@ -1079,7 +1144,6 @@ itemGroup.thebetweenlands.gear=Outils des Betweenlands
 itemGroup.thebetweenlands.special=Objets Spéciaux des Betweenlands
 itemGroup.thebetweenlands.plants=Flore des Betweenlands
 itemGroup.thebetweenlands.herblore=Herboristerie des Betweenlands
-
 
 # Container
 container.bl.syrmorite_hopper=Entonnoir en Syrmorithe
@@ -1233,7 +1297,7 @@ tooltip.bl.item_mob_anadia.speed=Vitesse: %s
 tooltip.bl.item_mob_anadia.strength=Force: %s
 tooltip.bl.item_mob_anadia.stamina=Endurance: %s
 
-tooltip.bl.item_mob_anadia.status=Statut: 
+tooltip.bl.item_mob_anadia.status=Statut:
 tooltip.bl.item_mob_anadia.rotting_1=Fraichement Attrapée
 tooltip.bl.item_mob_anadia.rotting_2=Attrapée Récemment
 tooltip.bl.item_mob_anadia.rotting_3=Commence à Pourrir
@@ -1498,9 +1562,6 @@ chat.aa_toggle.ascent_active=Ascension Active: %s
 
 chat.aa_upgrade_broke=Amélioration d'Armure Amphibie %s est cassée
 
-# Damage Source
-death.attack.suffocation=%s a été étouffée.e par un Coursouffle
-
 # Elixirs
 bl.elixir.petrify=Elixir de Pétrification
 bl.elixir.strength=Elixir de Force
@@ -1686,6 +1747,7 @@ entity.thebetweenlands.freshwater_urchin.name=Oursin d'Eau Douce
 entity.thebetweenlands.greebling_coracle.name=Greblin sur un Coracle
 entity.thebetweenlands.cave_fish.name=Poisson des Cavernes
 entity.thebetweenlands.glowing_goop.name=Gelée Luminescente
+entity.thebetweenlands.item_frame.name=Cadre
 
 #Fish Parts
 entity.thebetweenlands.anadia_body_0=Espiègle
@@ -2315,10 +2377,12 @@ config.thebetweenlands.dump_packed_textures=Dump packed textures
 config.thebetweenlands.biome_list=Biome list
 
 # Damage sources
-death.attack.bl.shockwave=%1$s a été tué.e par une onde sismique
-death.attack.bl.spikewave=%1$s s’est fait.e empalé.e par des racines
-death.attack.bl.swarm=%1$s s'est fait.e grignoté.e par une infestation
-death.attack.flamejet=%1$s a été réduit.e en cendres
+death.attack.suffocation=%s a été étouffée·e par un Coursouffle
+death.attack.bl.shockwave=%1$s a été tué·e par une onde sismique
+death.attack.bl.spikewave=%1$s s’est fait·e empalé·e par des racines
+death.attack.bl.swarm=%1$s s'est fait·e grignoté·e par une infestation
+death.attack.flamejet=%1$s a été réduit·e en cendres
+death.attack.bl.urchin_spikes=%1$s a été empalé·é par des piquants d'oursin
 
 #Dev thing
 item.thebetweenlands.test_item_chimp_ruler.name=Test Ruler
@@ -2592,3 +2656,5 @@ blsubtitles.misc.spear.throw=Lance de pêche lancée
 blsubtitles.misc.spear.return=Lance de pêche qui revient
 blsubtitles.misc.mist_staff_cast=Un sceptre magique est utilisé
 blsubtitles.misc.mist_staff_vanish=Quelque chose disparrait
+blsubtitles.entity.grub_hub_mist=Brume vaporisée
+blsubtitles.entity.grub_hub_suck=Succion
