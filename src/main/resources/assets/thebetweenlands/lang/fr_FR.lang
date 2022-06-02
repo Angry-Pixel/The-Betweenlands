@@ -2033,10 +2033,10 @@ gui.bl.draeton.main.upgrade_anchor=Place d’Amélioration d’Ancre:\n§7 – A
 gui.bl.fish_trimming_table.butcher=Chop!
 
 # HWYLA Alt Block names
-tooltip.thebetweenlands.barnacle_stage_1.name=Groupement de Bernacles (Récemment Apparu)
-tooltip.thebetweenlands.barnacle_stage_2.name=Groupement de Bernacles (En début de Croissance)
-tooltip.thebetweenlands.barnacle_stage_3.name=Groupement de Bernacles (Arrive bientôt à Maturation)
-tooltip.thebetweenlands.barnacle_stage_4.name=Groupement de Bernacles (Prêt pour la Récolte)
+tooltip.thebetweenlands.barnacle_stage_1.name=Cluster de Bernacles (Récemment Apparu)
+tooltip.thebetweenlands.barnacle_stage_2.name=Cluster de Bernacles (En début de Croissance)
+tooltip.thebetweenlands.barnacle_stage_3.name=Cluster de Bernacles (Arrive bientôt à Maturation)
+tooltip.thebetweenlands.barnacle_stage_4.name=Cluster de Bernacles (Prêt pour la Récolte)
 
 # Advancements
 
@@ -2146,7 +2146,7 @@ advancements.thebetweenlands.fighter.not_a_boss.description=Sceller la Fosse du 
 advancements.thebetweenlands.fighter.a_spiky_matter.title=Une Affaire Epineuse
 advancements.thebetweenlands.fighter.a_spiky_matter.description=Triompher d’une Chiroptère Matriarche
 advancements.thebetweenlands.fighter.banshees_in_the_barriers.title=Banshee des Barrières
-advancements.thebetweenlands.fighter.banshees_in_the_barriers.description=Triompher d’une Barrishie
+advancements.thebetweenlands.fighter.banshees_in_the_barriers.description=Triompher d’une Barrishe
 
 # Fermier
 advancements.thebetweenlands.farmer.root.title=Fermier
@@ -2172,11 +2172,11 @@ advancements.thebetweenlands.farmer.flower_power.description=Faire pousser des f
 advancements.thebetweenlands.farmer.pure_and_dirty.title=Comme un Sou Neuf
 advancements.thebetweenlands.farmer.pure_and_dirty.description=Utiliser de la Terre Marécageuse Purifiée dans sa ferme
 advancements.thebetweenlands.farmer.fertile_soil.title=Sol Fertile
-advancements.thebetweenlands.farmer.fertile_soil.description=Dénicher un Vermisseaux en creusant un trou pour vos pousses
-advancements.thebetweenlands.farmer.bountiful_barnacles.title=Bienfaisant Bernacles
-advancements.thebetweenlands.farmer.bountiful_barnacles.description=Récolter et Replacer un Groupement de Bernacles
-advancements.thebetweenlands.survivalist.premium_produce.title=Produit Premium
-advancements.thebetweenlands.survivalist.premium_produce.description=Fabriquer et Consommer une Poire Perlée
+advancements.thebetweenlands.farmer.fertile_soil.description=Dénicher un Vermisseaux de Vase en creusant un trou pour planter des pousses
+advancements.thebetweenlands.farmer.bountiful_barnacles.title=Bernacles d'Abondance
+advancements.thebetweenlands.farmer.bountiful_barnacles.description=Récolter et replacer un Cluster de Bernacles
+advancements.thebetweenlands.farmer.premium_produce.title=Produit de Première Qualité
+advancements.thebetweenlands.farmer.premium_produce.description=Fabriquer et consommer une Poire Perlée
 
 # Herboriste
 advancements.thebetweenlands.herbalist.root.title=Herboriste
