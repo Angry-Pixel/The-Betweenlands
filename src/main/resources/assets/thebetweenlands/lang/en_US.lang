@@ -2050,8 +2050,8 @@ advancements.thebetweenlands.farmer.fertile_soil.title=Fertile Soil
 advancements.thebetweenlands.farmer.fertile_soil.description=Dig up a worm while making holes for crops
 advancements.thebetweenlands.farmer.bountiful_barnacles.title=Bountiful Barnacles
 advancements.thebetweenlands.farmer.bountiful_barnacles.description=Harvest and replace a cluster of Barnacles
-advancements.thebetweenlands.survivalist.premium_produce.title=Premium Produce
-advancements.thebetweenlands.survivalist.premium_produce.description=Craft and consume a Pearled Pear
+advancements.thebetweenlands.farmer.premium_produce.title=Premium Produce
+advancements.thebetweenlands.farmer.premium_produce.description=Craft and consume a Pearled Pear
 
 # Herbalist
 advancements.thebetweenlands.herbalist.root.title=Herbalist
