@@ -16,11 +16,12 @@ public class ItemDrinkableBrew extends ItemBLFood {
 	public int buffDuration;
 
 	public ItemDrinkableBrew(int healAmount, float saturationModifier) {
-		super(healAmount, saturationModifier, false);
+		super(healAmount, saturationModifier, false); //no need for wolf food :P
+		setAlwaysEdible();
 	}
 
 	public ItemDrinkableBrew(int healAmount, float saturationModifier, boolean hasBuffIn, int buffTypeIn, int buffDurationIn) {
-		super(healAmount, saturationModifier, false);
+		this(healAmount, saturationModifier);
 		this.hasBuff = hasBuffIn;
 		this.buffType = buffTypeIn;
 		this.buffDuration = buffDurationIn;
