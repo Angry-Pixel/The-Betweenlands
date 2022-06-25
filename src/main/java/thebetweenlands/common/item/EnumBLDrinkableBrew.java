@@ -10,8 +10,8 @@ import thebetweenlands.common.registries.ItemRegistry;
 public enum EnumBLDrinkableBrew implements IStringSerializable
 {
     NETTLE_SOUP(0, "nettle_soup", 8882149 | 0xFF000000, ItemRegistry.NETTLE_SOUP),
-    NETTLE_TEA(1, "nettle_tea", 8519684 | 0xFF000000, null),
-    PHEROMONE_EXTRACT(2, "pheromone_extract", 10208437 | 0xFF000000, null),
+    NETTLE_TEA(1, "nettle_tea", 8519684 | 0xFF000000, ItemRegistry.NETTLE_TEA),
+    PHEROMONE_EXTRACT(2, "pheromone_extract", 10208437 | 0xFF000000, ItemRegistry.PHEROMONE_EXTRACT),
     //TODO
     DRINKABLE_BREW_3(3, "drinkable_brew_3", 9316177 | 0xFF000000, null),
     DRINKABLE_BREW_4(4, "drinkable_brew_4", 15384110 | 0xFF000000, null),
