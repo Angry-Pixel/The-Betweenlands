@@ -1076,6 +1076,24 @@ item.thebetweenlands.item_frame.shadow_green.name=Shadow Green Item Frame
 item.thebetweenlands.item_frame.sushi_green.name=Sushi Green Item Frame
 item.thebetweenlands.item_frame.vivid_tangerine.name=Vivid Tangerine Item Frame
 
+# Item brews
+item.thebetweenlands.drinkable_brew.nettle_soup.name=Nettle Soup
+item.thebetweenlands.drinkable_brew.nettle_tea.name=Nettle Tea
+item.thebetweenlands.drinkable_brew.pheromone_extract.name=Pheromone Extract
+item.thebetweenlands.drinkable_brew.drinkable_brew_3.name=NYI needs lang
+item.thebetweenlands.drinkable_brew.drinkable_brew_4.name=NYI needs lang
+item.thebetweenlands.drinkable_brew.drinkable_brew_5.name=NYI needs lang
+item.thebetweenlands.drinkable_brew.drinkable_brew_6.name=NYI needs lang
+item.thebetweenlands.drinkable_brew.drinkable_brew_7.name=NYI needs lang
+item.thebetweenlands.drinkable_brew.drinkable_brew_8.name=NYI needs lang
+item.thebetweenlands.drinkable_brew.drinkable_brew_9.name=NYI needs lang
+item.thebetweenlands.drinkable_brew.drinkable_brew_10.name=NYI needs lang
+item.thebetweenlands.drinkable_brew.drinkable_brew_11.name=NYI needs lang
+item.thebetweenlands.drinkable_brew.drinkable_brew_12.name=NYI needs lang
+item.thebetweenlands.drinkable_brew.drinkable_brew_13.name=NYI needs lang
+item.thebetweenlands.drinkable_brew.drinkable_brew_14.name=NYI needs lang
+item.thebetweenlands.drinkable_brew.drinkable_brew_15.name=NYI needs lang
+
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
 item.thebetweenlands.elixir.dentrothyst_vial.orange.name=Orange Dentrothyst Vial

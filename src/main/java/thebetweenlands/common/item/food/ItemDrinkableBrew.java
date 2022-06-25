@@ -8,10 +8,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -77,7 +75,7 @@ public class ItemDrinkableBrew extends ItemBLFood implements ItemRegistry.IMulti
 		case 0:
 			break;
 		case 1:
-			player.addPotionEffect(new PotionEffect(MobEffects.SPEED, duration, 1)); //test
+			//player.addPotionEffect(new PotionEffect(MobEffects.SPEED, duration, 1)); //test
 			break;
 		case 2:
 			if (!world.isRemote) {
