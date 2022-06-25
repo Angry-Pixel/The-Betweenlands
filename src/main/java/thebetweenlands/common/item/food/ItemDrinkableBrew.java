@@ -122,7 +122,7 @@ public class ItemDrinkableBrew extends ItemBLFood implements ItemRegistry.IMulti
     public Map<Integer, ResourceLocation> getModels() {
         Map<Integer, ResourceLocation> models = new HashMap<>();
         for(EnumBLDrinkableBrew type : EnumBLDrinkableBrew.values()) {
-            models.put(type.getMetadata(), new ResourceLocation(ModInfo.ID, "drinkable_brew_" + type.getBrewName()));
+            models.put(type.getMetadata(), new ResourceLocation(ModInfo.ID, type.getBrewName()));
         }
         return models;
     }
