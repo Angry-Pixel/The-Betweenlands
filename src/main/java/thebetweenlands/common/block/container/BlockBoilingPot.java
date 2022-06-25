@@ -164,17 +164,17 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 				float zz = (float) z + 0.5F;
 				float fixedOffset = 0.25F;
 				float randomOffset = rand.nextFloat() * 0.6F - 0.3F;
-				int colour = pot.tank.getFluid().getFluid().getColor();
-				if(pot.tank.getFluid().tag != null && pot.tank.getFluid().tag.hasKey("color"))
-					colour =  EnumBLDyeColor.byMetadata(pot.tank.getFluid().tag.getInteger("color")).getColorValue() | 0xFF000000;
+				int type = pot.tank.getFluid().getFluid().getColor();
+				if(pot.tank.getFluid().tag != null && pot.tank.getFluid().tag.hasKey("type"))
+					type =  EnumBLDyeColor.byMetadata(pot.tank.getFluid().tag.getInteger("type")).getColorValue() | 0xFF000000;
 
-				BLParticles.BUBBLE_INFUSION.spawn(world, xx + 0.3F - rand.nextFloat() * 0.6F, yy, zz + 0.3F - rand.nextFloat() * 0.6F, ParticleArgs.get().withScale(0.3F).withColor(colour));
+				BLParticles.BUBBLE_INFUSION.spawn(world, xx + 0.3F - rand.nextFloat() * 0.6F, yy, zz + 0.3F - rand.nextFloat() * 0.6F, ParticleArgs.get().withScale(0.3F).withColor(type));
 	
 				if (pot.getHeatProgress() >= 100) {
-					BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx - fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), ParticleArgs.get().withScale(0.3F).withColor(colour));
-					BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), ParticleArgs.get().withScale(0.3F).withColor(colour));
-					BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz - fixedOffset), ParticleArgs.get().withScale(0.3F).withColor(colour));
-					BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz + fixedOffset), ParticleArgs.get().withScale(0.3F).withColor(colour));
+					BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx - fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), ParticleArgs.get().withScale(0.3F).withColor(type));
+					BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), ParticleArgs.get().withScale(0.3F).withColor(type));
+					BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz - fixedOffset), ParticleArgs.get().withScale(0.3F).withColor(type));
+					BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz + fixedOffset), ParticleArgs.get().withScale(0.3F).withColor(type));
 				}
 			}
 		}

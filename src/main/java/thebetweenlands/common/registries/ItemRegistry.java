@@ -299,9 +299,7 @@ public class ItemRegistry {
     public static final Item SILK_GRUB = new ItemBLFood(1, 0.2F, false);
 
     //Drinkable Brews
-    public static final Item NETTLE_SOUP = new ItemDrinkableBrew(6, 1F);
-    public static final Item NETTLE_TEA = new ItemDrinkableBrew(0, 0.2F);
-    public static final Item PHEROMONE_EXTRACT = new ItemDrinkableBrew(0, 0F, true, 2, 400);
+    public static final Item DRINKABLE_BREW = new ItemDrinkableBrew();
 
     //armor
     public static final Item BONE_HELMET = new ItemBoneArmor(EntityEquipmentSlot.HEAD);

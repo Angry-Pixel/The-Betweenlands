@@ -152,7 +152,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 					if (outputFluid != null) {
 						if(outputFluid.getFluid() == FluidRegistry.DYE_FLUID || outputFluid.getFluid() == FluidRegistry.DRINKABLE_BREW) {
 							NBTTagCompound nbt = new NBTTagCompound();
-							nbt.setInteger("color", outputFluidMeta);
+							nbt.setInteger("type", outputFluidMeta);
 							fluidWithTag = new FluidStack(outputFluid.getFluid(), Fluid.BUCKET_VOLUME, nbt);
 							tank.fill(fluidWithTag , true);
 						}
@@ -172,8 +172,8 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 		}
 	}
 
-	private void setTempFluidColour(int colour) {
-		this.tempFluidColour = colour;
+	private void setTempFluidColour(int type) {
+		this.tempFluidColour = type;
 	}
 
 	public BoilingPotRecipes getCraftResult(FluidTank tank, ItemStack stack1, ItemStack stack2, ItemStack stack3, ItemStack stack4) {

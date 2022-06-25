@@ -263,11 +263,11 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 					if(tankContents.getFluid() == FluidRegistry.DYE_FLUID || tankContents.getFluid() == FluidRegistry.DRINKABLE_BREW) {
 						IBlockState state = world.getBlockState(pos);
 						ItemStack filledBowl = EnumItemMisc.WEEDWOOD_BOWL.create(1);
-						if(tankContents.tag != null && tankContents.tag.hasKey("color")) {
+						if(tankContents.tag != null && tankContents.tag.hasKey("type")) {
 							if(tankContents.getFluid() == FluidRegistry.DYE_FLUID)
-								filledBowl = new ItemStack(ItemRegistry.DYE, 1, tankContents.tag.getInteger("color"));
+								filledBowl = new ItemStack(ItemRegistry.DYE, 1, tankContents.tag.getInteger("type"));
 							if(tankContents.getFluid() == FluidRegistry.DRINKABLE_BREW)
-								filledBowl = EnumBLDrinkableBrew.byMetadata(tankContents.tag.getInteger("color")).getBrewItemStack();
+								filledBowl = EnumBLDrinkableBrew.byMetadata(tankContents.tag.getInteger("type")).getBrewItemStack();
 						}
 						if (!player.inventory.addItemStackToInventory(filledBowl))
 							ForgeHooks.onPlayerTossEvent(player, filledBowl, false);

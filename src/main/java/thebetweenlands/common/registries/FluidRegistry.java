@@ -47,18 +47,18 @@ public class FluidRegistry {
 	public static final Fluid DYE_FLUID = new Fluid("dye_fluid", new ResourceLocation("thebetweenlands:fluids/dye_fluid_still"), new ResourceLocation("thebetweenlands:fluids/dye_fluid_flowing")) {
 		@Override
 		public int getColor(net.minecraftforge.fluids.FluidStack stack) {
-			if(stack.tag != null && stack.tag.hasKey("color")) {
-				return EnumBLDyeColor.byMetadata(stack.tag.getInteger("color")).getColorValue() | 0xFF000000;
+			if(stack.tag != null && stack.tag.hasKey("type")) {
+				return EnumBLDyeColor.byMetadata(stack.tag.getInteger("type")).getColorValue() | 0xFF000000;
 			}
 			return 0xFFFFFFFF;
 		}
 
 		@Override
 		public String getUnlocalizedName(FluidStack stack) {
-			if (stack.tag != null && stack.tag.hasKey("color")) {
-				String colour = "dye_fluid." + EnumBLDyeColor.byMetadata(stack.tag.getInteger("color")).getDyeColorName();
-				setUnlocalizedName(colour);
-				return this.getUnlocalizedName() + colour;
+			if (stack.tag != null && stack.tag.hasKey("type")) {
+				String type = "dye_fluid." + EnumBLDyeColor.byMetadata(stack.tag.getInteger("type")).getDyeColorName();
+				setUnlocalizedName(type);
+				return this.getUnlocalizedName() + type;
 			}
 			return this.getUnlocalizedName();
 		}
@@ -68,18 +68,18 @@ public class FluidRegistry {
 	public static final Fluid DRINKABLE_BREW = new Fluid("drinkable_brew", new ResourceLocation("thebetweenlands:fluids/drinkable_brew_still"), new ResourceLocation("thebetweenlands:fluids/drinkable_brew_flowing")) {
 		@Override
 		public int getColor(net.minecraftforge.fluids.FluidStack stack) {
-			if(stack.tag != null && stack.tag.hasKey("color")) {
-				return EnumBLDrinkableBrew.byMetadata(stack.tag.getInteger("color")).getColorValue() | 0xFF000000;
+			if(stack.tag != null && stack.tag.hasKey("type")) {
+				return EnumBLDrinkableBrew.byMetadata(stack.tag.getInteger("type")).getColorValue() | 0xFF000000;
 			}
 			return 0xFFFFFFFF;
 		}
 
 		@Override
 		public String getUnlocalizedName(FluidStack stack) {
-			if (stack.tag != null && stack.tag.hasKey("color")) {
-				String colour = "drinkable_brew." + EnumBLDrinkableBrew.byMetadata(stack.tag.getInteger("color")).getBrewColourName();
-				setUnlocalizedName(colour);
-				return this.getUnlocalizedName() + colour;
+			if (stack.tag != null && stack.tag.hasKey("type")) {
+				String type = "drinkable_brew." + EnumBLDrinkableBrew.byMetadata(stack.tag.getInteger("type")).getBrewName();
+				setUnlocalizedName(type);
+				return this.getUnlocalizedName() + type;
 			}
 			return this.getUnlocalizedName();
 		}
