@@ -60,7 +60,7 @@ public enum EnumBLDrinkableBrew implements IStringSerializable
 	}
 	
 	public ItemStack getBrewItemStack() {
-		return this.brewItem != null ? new ItemStack(this.brewItem, this.meta) : ItemStack.EMPTY;
+		return this.brewItem != null ? new ItemStack(this.brewItem, 1, this.meta) : ItemStack.EMPTY;
 	}
 
 	public int getHealAmount() {
