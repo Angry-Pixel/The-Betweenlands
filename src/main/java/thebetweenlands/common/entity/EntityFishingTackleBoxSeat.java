@@ -63,11 +63,13 @@ public class EntityFishingTackleBoxSeat extends Entity {
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
 		setSeatOffset(nbt.getFloat("offset"));
+		tempSeat = nbt.getBoolean("tempSeat"); 
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
 		nbt.setFloat("offset", getSeatOffset());
+		nbt.setBoolean("tempSeat", tempSeat);
 	}
 
 }
