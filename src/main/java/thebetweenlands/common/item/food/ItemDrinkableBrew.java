@@ -77,6 +77,7 @@ public class ItemDrinkableBrew extends ItemBLFood implements ItemRegistry.IMulti
 	private void applyBuffToPlayer(ItemStack stack, World world, EntityPlayer player) {
 		int meta = stack.getMetadata();
 		int duration = EnumBLDrinkableBrew.byMetadata(meta).getBuffDuration();
+		ElixirEffect effect = ElixirEffectRegistry.EFFECT_DRUNKARD;
 		switch (meta) {
 		case 0:
 			break;
@@ -93,7 +94,7 @@ public class ItemDrinkableBrew extends ItemBLFood implements ItemRegistry.IMulti
 			break;
 		case 3:
 			//decay reduction?
-			ElixirEffect effect = ElixirEffectRegistry.EFFECT_RIPENING;
+			effect = ElixirEffectRegistry.EFFECT_RIPENING;
 			player.addPotionEffect(effect.createEffect(duration, 1));
 			break;
 		case 4:
@@ -103,20 +104,20 @@ public class ItemDrinkableBrew extends ItemBLFood implements ItemRegistry.IMulti
 			break;
 		case 6:
 			 // NV and Hunter's sense
-			ElixirEffect effect1 = ElixirEffectRegistry.EFFECT_HUNTERSSENSE;
-			ElixirEffect effect2 = ElixirEffectRegistry.EFFECT_GILLSGROWTH;
-			player.addPotionEffect(effect1.createEffect(duration, 1));
-			player.addPotionEffect(effect2.createEffect(duration, 1));
+			effect = ElixirEffectRegistry.EFFECT_HUNTERSSENSE;
+			player.addPotionEffect(effect.createEffect(duration, 1));
+			effect = ElixirEffectRegistry.EFFECT_CATSEYES;
+			player.addPotionEffect(effect.createEffect(duration, 1));
 			break;
 		case 7:
 			// water breathing?
-			ElixirEffect effect3 = ElixirEffectRegistry.EFFECT_GILLSGROWTH;
-			player.addPotionEffect(effect3.createEffect(duration, 1));
+			effect = ElixirEffectRegistry.EFFECT_GILLSGROWTH;
+			player.addPotionEffect(effect.createEffect(duration, 1));
 			break;
 		case 8:
 			// light footed across sludge and mud etc?
-			ElixirEffect effect4 = ElixirEffectRegistry.EFFECT_LIGHTWEIGHT;
-			player.addPotionEffect(effect4.createEffect(duration, 1));
+			effect = ElixirEffectRegistry.EFFECT_LIGHTWEIGHT;
+			player.addPotionEffect(effect.createEffect(duration, 1));
 			break;
 		case 9:
 			 // jumping for 20 secs.
