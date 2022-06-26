@@ -19,7 +19,6 @@ import thebetweenlands.api.capability.IFoodSicknessCapability;
 import thebetweenlands.api.capability.IInfestationIgnoreCapability;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
-import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.item.EnumBLDrinkableBrew;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
@@ -77,7 +76,6 @@ public class ItemDrinkableBrew extends ItemBLFood implements ItemRegistry.IMulti
 	private void applyBuffToPlayer(ItemStack stack, World world, EntityPlayer player) {
 		int meta = stack.getMetadata();
 		int duration = EnumBLDrinkableBrew.byMetadata(meta).getBuffDuration();
-		ElixirEffect effect = ElixirEffectRegistry.EFFECT_DRUNKARD;
 		switch (meta) {
 		case 0:
 			break;
@@ -94,8 +92,7 @@ public class ItemDrinkableBrew extends ItemBLFood implements ItemRegistry.IMulti
 			break;
 		case 3:
 			//decay reduction?
-			effect = ElixirEffectRegistry.EFFECT_RIPENING;
-			player.addPotionEffect(effect.createEffect(duration, 1));
+			player.addPotionEffect(ElixirEffectRegistry.EFFECT_RIPENING.createEffect(duration, 1));
 			break;
 		case 4:
 			break;
@@ -104,20 +101,16 @@ public class ItemDrinkableBrew extends ItemBLFood implements ItemRegistry.IMulti
 			break;
 		case 6:
 			 // NV and Hunter's sense
-			effect = ElixirEffectRegistry.EFFECT_HUNTERSSENSE;
-			player.addPotionEffect(effect.createEffect(duration, 1));
-			effect = ElixirEffectRegistry.EFFECT_CATSEYES;
-			player.addPotionEffect(effect.createEffect(duration, 1));
+			player.addPotionEffect(ElixirEffectRegistry.EFFECT_HUNTERSSENSE.createEffect(duration, 1));
+			player.addPotionEffect(ElixirEffectRegistry.EFFECT_CATSEYES.createEffect(duration, 1));
 			break;
 		case 7:
 			// water breathing?
-			effect = ElixirEffectRegistry.EFFECT_GILLSGROWTH;
-			player.addPotionEffect(effect.createEffect(duration, 1));
+			player.addPotionEffect(ElixirEffectRegistry.EFFECT_GILLSGROWTH.createEffect(duration, 1));
 			break;
 		case 8:
 			// light footed across sludge and mud etc?
-			effect = ElixirEffectRegistry.EFFECT_LIGHTWEIGHT;
-			player.addPotionEffect(effect.createEffect(duration, 1));
+			player.addPotionEffect(ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.createEffect(duration, 1));
 			break;
 		case 9:
 			 // jumping for 20 secs.
