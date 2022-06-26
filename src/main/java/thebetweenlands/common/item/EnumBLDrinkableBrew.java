@@ -13,14 +13,14 @@ public enum EnumBLDrinkableBrew implements IStringSerializable
     NETTLE_TEA(1, "nettle_tea", 8519684 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, false, 0),
     PHEROMONE_EXTRACT(2, "pheromone_extract", 10208437 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0F, true, 2400),
     //TODO
-    DRINKABLE_BREW_3(3, "drinkable_brew_3", 9316177 | 0xFF000000, null, 0, 0F, false, 0),
-    DRINKABLE_BREW_4(4, "drinkable_brew_4", 15384110 | 0xFF000000, null, 0, 0F, false, 0),
-    DRINKABLE_BREW_5(5, "drinkable_brew_5", 52901 | 0xFF000000, null, 0, 0F, false, 0),
-    DRINKABLE_BREW_6(6, "drinkable_brew_6", 16747660 | 0xFF000000, null, 0, 0F, false, 0),
-    DRINKABLE_BREW_7(7, "drinkable_brew_7", 16378828 | 0xFF000000, null, 0, 0F, false, 0),
-    DRINKABLE_BREW_8(8, "drinkable_brew_8", 2170142 | 0xFF000000, null, 0, 0F, false, 0),
-    DRINKABLE_BREW_9(9, "drinkable_brew_9", 9416509 | 0xFF000000, null, 0, 0F, false, 0),
-    DRINKABLE_BREW_10(10, "drinkable_brew_10", 1804678 | 0xFF000000, null, 0, 0F, false, 0),
+    DRINKABLE_BREW_3(3, "swamp_broth", 9316177 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, true, 400), //decay reduction?
+    DRINKABLE_BREW_4(4, "sturdy_stock", 15384110 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 2F, false, 0), // lots of saturation.
+    DRINKABLE_BREW_5(5, "pear_cordial", 52901 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0F, false, 0), //reduce fall damage? O.o
+    DRINKABLE_BREW_6(6, "shamans_brew", 16747660 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, true, 400), // NV and Hunter's sense
+    DRINKABLE_BREW_7(7, "lake_broth", 16378828 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, true, 400), // water breathing?
+    DRINKABLE_BREW_8(8, "shell_stock", 2170142 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, true, 400), // light footed across sludge and mud etc?
+    DRINKABLE_BREW_9(9, "frog_leg_extract", 9416509 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, true, 400), // jumping for 20 secs.
+    DRINKABLE_BREW_10(10, "witch_tea", 1804678 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, true, 0), // restores food sickness and something about worms?
     DRINKABLE_BREW_11(11, "drinkable_brew_11", 2189375 | 0xFF000000, null, 0, 0F, false, 0),
     DRINKABLE_BREW_12(12, "drinkable_brew_12", 12761312 | 0xFF000000, null, 0, 0F, false, 0),
     DRINKABLE_BREW_13(13, "drinkable_brew_13", 11295547 | 0xFF000000, null, 0, 0F, false, 0),

@@ -8,12 +8,18 @@ import javax.annotation.Nullable;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import thebetweenlands.api.capability.IFoodSicknessCapability;
 import thebetweenlands.api.capability.IInfestationIgnoreCapability;
+import thebetweenlands.common.capability.foodsickness.FoodSickness;
+import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
+import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.item.EnumBLDrinkableBrew;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
@@ -86,13 +92,43 @@ public class ItemDrinkableBrew extends ItemBLFood implements ItemRegistry.IMulti
 			}
 			break;
 		case 3:
+			//decay reduction?
+			ElixirEffect effect = ElixirEffectRegistry.EFFECT_RIPENING;
+			player.addPotionEffect(effect.createEffect(duration, 1));
+			break;
 		case 4:
+			break;
 		case 5:
+			//reduce fall damage? O.o
+			break;
 		case 6:
+			 // NV and Hunter's sense
+			ElixirEffect effect1 = ElixirEffectRegistry.EFFECT_HUNTERSSENSE;
+			ElixirEffect effect2 = ElixirEffectRegistry.EFFECT_GILLSGROWTH;
+			player.addPotionEffect(effect1.createEffect(duration, 1));
+			player.addPotionEffect(effect2.createEffect(duration, 1));
+			break;
 		case 7:
+			// water breathing?
+			ElixirEffect effect3 = ElixirEffectRegistry.EFFECT_GILLSGROWTH;
+			player.addPotionEffect(effect3.createEffect(duration, 1));
+			break;
 		case 8:
+			// light footed across sludge and mud etc?
+			ElixirEffect effect4 = ElixirEffectRegistry.EFFECT_LIGHTWEIGHT;
+			player.addPotionEffect(effect4.createEffect(duration, 1));
+			break;
 		case 9:
+			 // jumping for 20 secs.
+			player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, duration, 1));
+			break;
 		case 10:
+			// restores food sickness and something about worms?
+			IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
+			if (!world.isRemote && cap != null)
+				if (FoodSickness.getSicknessForHatred(cap.getFoodHatred(this)) != FoodSickness.SICK)
+					cap.increaseFoodHatred(this, 0, FoodSickness.SICK.maxHatred);
+			break;
 		case 11:
 		case 12:
 		case 13:
