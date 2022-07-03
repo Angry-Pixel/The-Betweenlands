@@ -52,12 +52,14 @@ import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.capability.equipment.EquipmentHelper;
 import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.inventory.InventoryPouch;
+import thebetweenlands.common.item.EnumBLDyeColor;
+import thebetweenlands.common.item.ITintedItem;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
 
-public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamableItem {
+public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamableItem, ITintedItem {
     public ItemLurkerSkinPouch() {
         this.setMaxStackSize(1);
         this.setCreativeTab(BLCreativeTabs.GEARS);
@@ -162,6 +164,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
         if (!world.isRemote) {
             if (!player.isSneaking()) {
                 player.openGui(TheBetweenlands.instance, CommonProxy.GUI_LURKER_POUCH, world, 0, 0, 0);
+                stack.getTagCompound().setInteger("type", itemRand.nextInt(15)); // remove after testing
             } else {
                 player.openGui(TheBetweenlands.instance, CommonProxy.GUI_ITEM_RENAMING, world, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
             }
@@ -302,4 +305,18 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
     @Override
     public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory) {
     }
+    
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int getColorMultiplier(ItemStack stack, int tintIndex) {
+		if (tintIndex == 1) {
+			if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("type")) {
+				int type = stack.getTagCompound().getInteger("type");
+				return EnumBLDyeColor.byMetadata(type).getColorValue();
+			}
+			else
+				return EnumBLDyeColor.byMetadata(2).getColorValue(); // default to Shadow Green
+		}
+		return  -1;
+	}
 }

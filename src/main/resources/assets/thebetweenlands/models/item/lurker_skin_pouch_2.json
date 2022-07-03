@@ -1,6 +1,7 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "thebetweenlands:items/lurker_skin_pouch_2"
+		"layer0": "thebetweenlands:items/lurker_skin_pouch_2",
+        "layer1": "thebetweenlands:items/lurker_skin_pouch_2_cord"
 	}
 }
