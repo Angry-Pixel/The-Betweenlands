@@ -314,7 +314,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
 				return EnumBLDyeColor.byMetadata(type).getColorValue();
 			}
 			else
-				return EnumBLDyeColor.byMetadata(2).getColorValue(); // default to Shadow Green
+				return EnumBLDyeColor.byMetadata(11).getColorValue(); // default to Shadow Green
 		}
 		return  -1;
 	}
