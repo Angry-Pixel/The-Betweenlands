@@ -164,7 +164,6 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
         if (!world.isRemote) {
             if (!player.isSneaking()) {
                 player.openGui(TheBetweenlands.instance, CommonProxy.GUI_LURKER_POUCH, world, 0, 0, 0);
-                stack.getTagCompound().setInteger("type", itemRand.nextInt(15)); // remove after testing
             } else {
                 player.openGui(TheBetweenlands.instance, CommonProxy.GUI_ITEM_RENAMING, world, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
             }
@@ -305,7 +304,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
     @Override
     public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory) {
     }
-    
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getColorMultiplier(ItemStack stack, int tintIndex) {
