@@ -3,6 +3,7 @@ package thebetweenlands.common.recipe.misc;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -68,6 +69,11 @@ public class RecipeLurkerSkinColoring extends IForgeRegistryEntry.Impl<IRecipe> 
         }
 
         ItemStack newPouch = itemStackPouch.copy();
+
+        if(!newPouch.hasTagCompound()) {
+            newPouch.setTagCompound(new NBTTagCompound());
+        }
+
         newPouch.getTagCompound().setInteger("type", itemStackDye.getMetadata());
 
         return newPouch;
