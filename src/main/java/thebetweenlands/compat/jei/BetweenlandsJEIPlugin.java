@@ -30,6 +30,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import thebetweenlands.client.gui.inventory.GuiAnimator;
@@ -195,8 +196,13 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
 
         // stained glass
         for(EnumBLDyeColor color : EnumBLDyeColor.values()) {
-            recipes.add(new ShapedOreRecipe(null, new ItemStack(BlockRegistry.FILTERED_SILT_GLASS_STAINED, 1, color.getMetadata()),
+            recipes.add(new ShapedOreRecipe(null, new ItemStack(BlockRegistry.FILTERED_SILT_GLASS_STAINED, 8, color.getMetadata()),
                     "GGG", "GDG", "GGG", 'G', new ItemStack(BlockRegistry.FILTERED_SILT_GLASS,  1, 0), 'D', new ItemStack(ItemRegistry.DYE,  1, color.getMetadata())).setRegistryName(ModInfo.ID, RecipeRegistry.STAINED_GLASS.getPath() + "_" + color.getDyeColorName()));
+        }
+
+        // colored item frames
+        for(EnumBLDyeColor color : EnumBLDyeColor.values()) {
+            recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.ITEM_FRAME, 1, color.getMetadata()), new ItemStack(ItemRegistry.ITEM_FRAME,1, OreDictionary.WILDCARD_VALUE), new ItemStack(ItemRegistry.DYE, 1, color.getMetadata())).setRegistryName(ModInfo.ID, RecipeRegistry.COLORED_ITEM_FRAME.getPath() + "_" + color.getDyeColorName()));
         }
 
         //Vials
@@ -230,11 +236,15 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
             ItemStack output = new ItemStack(ItemRegistry.LURKER_SKIN_POUCH);
             ItemStack input = new ItemStack(ItemRegistry.LURKER_SKIN_POUCH);
             ItemStack dye = new ItemStack(ItemRegistry.DYE);
-            for (int i = 0; i < EnumBLDyeColor.values().length; i++) {
-                dye.setItemDamage(i);
-                output.setTagCompound(new NBTTagCompound());
-                output.getTagCompound().setInteger("type", i);
-                recipes.add(new ShapelessOreRecipe(null, output, input, dye).setRegistryName(ModInfo.ID, RecipeRegistry.COLORED_LURKER_SKIN_POUCH.getPath() + "_" + i));
+            for(int j = 0; j < 3; j++) {
+                for (int i = 0; i < EnumBLDyeColor.values().length; i++) {
+                    dye.setItemDamage(i);
+                    input.setItemDamage(j);
+                    output.setItemDamage(j);
+                    output.setTagCompound(new NBTTagCompound());
+                    output.getTagCompound().setInteger("type", i);
+                    recipes.add(new ShapelessOreRecipe(null, output, input, dye).setRegistryName(ModInfo.ID, RecipeRegistry.COLORED_LURKER_SKIN_POUCH.getPath() + "_" + i));
+                }
             }
         }
 

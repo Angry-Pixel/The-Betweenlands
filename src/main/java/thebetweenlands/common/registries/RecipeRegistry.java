@@ -98,6 +98,7 @@ public class RecipeRegistry {
 	public static final ResourceLocation STAINED_GLASS = new ResourceLocation(ModInfo.ID, "recipe_stained_glass");
 	public static final ResourceLocation RENAME_ITEMS = new ResourceLocation(ModInfo.ID, "recipe_rename_items");
 	public static final ResourceLocation COLORED_LURKER_SKIN_POUCH = new ResourceLocation(ModInfo.ID, "recipe_colored_lurker_skin_pouch");
+	public static final ResourceLocation COLORED_ITEM_FRAME = new ResourceLocation(ModInfo.ID, "recipe_colored_item_frame");
 
 	private RecipeRegistry() { }
 
@@ -236,6 +237,7 @@ public class RecipeRegistry {
 		registry.register(new RecipeStainedGlass().setRegistryName(STAINED_GLASS));
 		registry.register(new RecipeRenameItem().setRegistryName(RENAME_ITEMS));
 		registry.register(new RecipeLurkerSkinColoring().setRegistryName(COLORED_LURKER_SKIN_POUCH));
+		registry.register(new RecipeColoredItemFrame().setRegistryName(COLORED_ITEM_FRAME));
 	}
 
 	private static void registerSmelting() {

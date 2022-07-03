@@ -42,7 +42,7 @@ public class ItemAmuletSlot extends Item {
 	public boolean isBookEnchantable(ItemStack stack, ItemStack book)  {
 		if(EnchantmentHelper.getEnchantments(book).containsKey(Enchantments.MENDING))
 			return false;
-		
+
 		return true;
 	}
 	
