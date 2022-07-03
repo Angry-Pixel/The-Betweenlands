@@ -10,7 +10,10 @@ import net.minecraft.client.renderer.entity.RenderItemFrame;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemCompass;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.storage.MapData;
@@ -44,17 +47,23 @@ public class RenderBLItemFrame extends RenderItemFrame
     }
 
     @Override
-    public void doRender(EntityItemFrame entity, double x, double y, double z, float entityYaw, float partialTicks)
-    {
-        GlStateManager.pushMatrix();
+    public void doRender(EntityItemFrame entity, double x, double y, double z, float entityYaw, float partialTicks) {
         EntityBLItemFrame blItemFrame = (EntityBLItemFrame)entity;
 
+        GlStateManager.pushMatrix();
         BlockPos blockpos = entity.getHangingPosition();
         double d0 = (double)blockpos.getX() - entity.posX + x;
         double d1 = (double)blockpos.getY() - entity.posY + y;
         double d2 = (double)blockpos.getZ() - entity.posZ + z;
         GlStateManager.translate(d0 + 0.5D, d1 + 0.5D, d2 + 0.5D);
-        GlStateManager.rotate(180.0F - entity.rotationYaw, 0.0F, 1.0F, 0.0F);
+
+        if(blItemFrame.realFacingDirection.getAxis() == EnumFacing.Axis.Y) {
+            GlStateManager.rotate(blItemFrame.realFacingDirection == EnumFacing.DOWN ? -90.0F : 90.0F, 1.0F, 0.0F, 0.0F);
+            GlStateManager.rotate(blItemFrame.realFacingDirection == EnumFacing.UP ? 180.0F : 0.0F, 0.0F, 0.0F, 1.0F);
+        } else {
+            GlStateManager.rotate(180.0F - entity.rotationYaw, 0.0F, 1.0F, 0.0F);
+        }
+
         this.renderManager.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
         GlStateManager.pushMatrix();
@@ -80,9 +89,14 @@ public class RenderBLItemFrame extends RenderItemFrame
 
         GlStateManager.popMatrix();
         GlStateManager.translate(0.0F, 0.0F, 0.4375F);
+
+        boolean flipItem = blItemFrame.realFacingDirection == EnumFacing.DOWN && !blItemFrame.getDisplayedItem().isEmpty() && blItemFrame.getDisplayedItem().getItem() instanceof ItemCompass;
+        GlStateManager.rotate(flipItem ? -180.0F : 0.0F, 0.0F, 1.0F, 0.0F);
+
         this.renderItem(entity);
         GlStateManager.popMatrix();
     }
+
 
     private void renderItem(EntityItemFrame itemFrame)
     {
@@ -119,7 +133,11 @@ public class RenderBLItemFrame extends RenderItemFrame
                 }
                 else
                 {
+                    if(itemstack.getItem() instanceof ItemBlock && blItemFrame.realFacingDirection.getAxis().equals(EnumFacing.Axis.Y))
+                        GlStateManager.rotate(-90F, 1F, 0F, 0F);
+
                     GlStateManager.scale(0.5F, 0.5F, 0.5F);
+
                     GlStateManager.pushAttrib();
                     RenderHelper.enableStandardItemLighting();
                     this.itemRenderer.renderItem(itemstack, ItemCameraTransforms.TransformType.FIXED);

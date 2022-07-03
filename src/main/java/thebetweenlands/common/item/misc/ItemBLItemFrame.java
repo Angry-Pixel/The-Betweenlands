@@ -40,7 +40,7 @@ public class ItemBLItemFrame extends Item implements ItemRegistry.IMultipleItemM
         ItemStack stack = playerIn.getHeldItem(hand);
         BlockPos blockpos = pos.offset(facing);
 
-        if (facing != EnumFacing.DOWN && facing != EnumFacing.UP && playerIn.canPlayerEdit(blockpos, facing, stack)) {
+        if (playerIn.canPlayerEdit(blockpos, facing, stack)) {
             EntityHanging entityhanging = this.createEntity(worldIn, blockpos, facing, stack.getItemDamage());
 
             if (entityhanging.onValidSurface())
