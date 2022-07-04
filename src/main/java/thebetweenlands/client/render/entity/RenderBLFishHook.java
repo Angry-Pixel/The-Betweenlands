@@ -108,14 +108,14 @@ public class RenderBLFishHook extends Render<EntityBLFishHook> {
 			bufferbuilder.begin(5, DefaultVertexFormats.POSITION_COLOR);
 
 			for (int count = 0; count <= 48; ++count) {
-				float fx = 0.125F;
-				float f1x = 0.314F;
-				float f2x = 0.125F;
+				float fx = 0.737F;
+				float f1x = 0.737F;
+				float f2x = 0.737F;
 
 				if (count % 2 == 0) {
-					fx = 0.082F;
-					f1x = 0.204F;
-					f2x = 0.082F;
+					fx = 0.811F;
+					f1x = 0.811F;
+					f2x = 0.811F;
 				}
 
 				float f3x = (float) count / 48.0F;
@@ -128,14 +128,14 @@ public class RenderBLFishHook extends Render<EntityBLFishHook> {
 			bufferbuilder.begin(5, DefaultVertexFormats.POSITION_COLOR);
 
 			for (int count2 = 0; count2 <= 48; ++count2) {
-				float f4x = 0.125F;
-				float f5x = 0.314F;
-				float f6x = 0.125F;
+				float f4x = 0.737F;
+				float f5x = 0.737F;
+				float f6x = 0.737F;
 
 				if (count2 % 2 == 0) {
-					f4x = 0.082F;
-					f5x = 0.204F;
-					f6x = 0.082F;
+					f4x = 0.811F;
+					f5x = 0.811F;
+					f6x = 0.811F;
 				}
 
 				float f7x = (float) count2 / 48.0F;

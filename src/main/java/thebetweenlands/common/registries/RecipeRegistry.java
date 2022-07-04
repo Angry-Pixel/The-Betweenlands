@@ -46,6 +46,7 @@ import thebetweenlands.common.entity.mobs.EntityRootSprite;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.herblore.elixir.ElixirRecipes;
+import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.herblore.ItemCrushed.EnumItemCrushed;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
@@ -99,6 +100,7 @@ public class RecipeRegistry {
 	public static final ResourceLocation RENAME_ITEMS = new ResourceLocation(ModInfo.ID, "recipe_rename_items");
 	public static final ResourceLocation COLORED_LURKER_SKIN_POUCH = new ResourceLocation(ModInfo.ID, "recipe_colored_lurker_skin_pouch");
 	public static final ResourceLocation COLORED_ITEM_FRAME = new ResourceLocation(ModInfo.ID, "recipe_colored_item_frame");
+	public static final ResourceLocation STAINED_SHINGLES = new ResourceLocation(ModInfo.ID, "recipe_stained_shingles");
 
 	private RecipeRegistry() { }
 
@@ -238,6 +240,7 @@ public class RecipeRegistry {
 		registry.register(new RecipeRenameItem().setRegistryName(RENAME_ITEMS));
 		registry.register(new RecipeLurkerSkinColoring().setRegistryName(COLORED_LURKER_SKIN_POUCH));
 		registry.register(new RecipeColoredItemFrame().setRegistryName(COLORED_ITEM_FRAME));
+		registry.register(new RecipeStainedShingles().setRegistryName(STAINED_SHINGLES));
 	}
 
 	private static void registerSmelting() {
@@ -634,6 +637,12 @@ public class RecipeRegistry {
 		PurifierRecipe.addRecipe(new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM, 1), new ItemStack(BlockRegistry.GREEN_MIDDLE_GEM_ORE));
 		PurifierRecipe.addRecipe(new ItemStack(BlockRegistry.PURIFIED_SWAMP_DIRT), new ItemStack(BlockRegistry.SWAMP_DIRT));
 		PurifierRecipe.addRecipe(ItemRegistry.DENTROTHYST_VIAL.createStack(0), ItemRegistry.DENTROTHYST_VIAL.createStack(1));
+		PurifierRecipe.addRecipe(new ItemStack(ItemRegistry.SILK_BUNDLE), EnumItemMisc.SILK_BUNDLE_DIRTY.create(1));
+
+		PurifierRecipe.addRecipe(new ItemStack(ItemRegistry.ITEM_FRAME, 1, EnumBLDyeColor.PEWTER_GREY.getMetadata()), new ItemStack(ItemRegistry.ITEM_FRAME, 1, OreDictionary.WILDCARD_VALUE));
+		PurifierRecipe.addRecipe(new ItemStack(BlockRegistry.FILTERED_SILT_GLASS), new ItemStack(BlockRegistry.FILTERED_SILT_GLASS_STAINED, 1, OreDictionary.WILDCARD_VALUE));
+		PurifierRecipe.addRecipe(new ItemStack(BlockRegistry.MUD_BRICK_SHINGLES), new ItemStack(BlockRegistry.MUD_BRICK_SHINGLE_STAINED, 1, OreDictionary.WILDCARD_VALUE));
+
 		PurifierRecipe.addRecipe(new IPurifierRecipe() {
 			@Override
 			public boolean matchesInput(ItemStack stack) {
@@ -655,8 +664,22 @@ public class RecipeRegistry {
 				return output;
 			}
 		});
-		
-		PurifierRecipe.addRecipe(new ItemStack(ItemRegistry.SILK_BUNDLE), EnumItemMisc.SILK_BUNDLE_DIRTY.create(1));
+
+		// lurker pouch cleaning
+		PurifierRecipe.addRecipe(new IPurifierRecipe() {
+			@Override
+			public boolean matchesInput(ItemStack stack) {
+				return !stack.isEmpty() && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH && stack.hasTagCompound();
+			}
+
+			@Override
+			public ItemStack getOutput(ItemStack input) {
+				ItemStack output = input.copy();
+				NBTTagCompound compound = output.getTagCompound();
+				compound.setInteger("type", EnumBLDyeColor.PEWTER_GREY.getMetadata());
+				return output;
+			}
+		});
 	}
 	
 	private static void registerCenserRecipes() {

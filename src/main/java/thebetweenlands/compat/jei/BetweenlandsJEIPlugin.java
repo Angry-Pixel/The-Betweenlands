@@ -202,7 +202,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
 
         // colored item frames
         for(EnumBLDyeColor color : EnumBLDyeColor.values()) {
-            recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.ITEM_FRAME, 1, color.getMetadata()), new ItemStack(ItemRegistry.ITEM_FRAME,1, OreDictionary.WILDCARD_VALUE), new ItemStack(ItemRegistry.DYE, 1, color.getMetadata())).setRegistryName(ModInfo.ID, RecipeRegistry.COLORED_ITEM_FRAME.getPath() + "_" + color.getDyeColorName()));
+            recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.ITEM_FRAME, 1, color.getMetadata()), new ItemStack(ItemRegistry.ITEM_FRAME,1, EnumBLDyeColor.PEWTER_GREY.getMetadata()), new ItemStack(ItemRegistry.DYE, 1, color.getMetadata())).setRegistryName(ModInfo.ID, RecipeRegistry.COLORED_ITEM_FRAME.getPath() + "_" + color.getDyeColorName()));
         }
 
         //Vials

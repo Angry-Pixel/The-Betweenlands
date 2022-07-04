@@ -7,6 +7,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.item.misc.ItemBLDye;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -37,7 +38,7 @@ public class RecipeColoredItemFrame extends IForgeRegistryEntry.Impl<IRecipe> im
                 return false;
             }
 
-            if(is.getItem() == ItemRegistry.ITEM_FRAME) {
+            if(is.getItem() == ItemRegistry.ITEM_FRAME && is.getMetadata() == EnumBLDyeColor.PEWTER_GREY.getMetadata()) {
                 hasFrame = true;
             } else if(is.getItem() == ItemRegistry.DYE) {
                 hasDye = true;
@@ -58,7 +59,7 @@ public class RecipeColoredItemFrame extends IForgeRegistryEntry.Impl<IRecipe> im
             if(tempStack.isEmpty())
                 continue;
 
-            if(tempStack.getItem() == ItemRegistry.ITEM_FRAME) {
+            if(tempStack.getItem() == ItemRegistry.ITEM_FRAME && tempStack.getMetadata() == EnumBLDyeColor.PEWTER_GREY.getMetadata()) {
                 itemStackFrame = tempStack;
             } else if(tempStack.getItem() == ItemRegistry.DYE) {
                 itemStackDye = tempStack;

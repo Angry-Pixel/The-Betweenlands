@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -36,7 +37,7 @@ public class RecipeLurkerSkinColoring extends IForgeRegistryEntry.Impl<IRecipe> 
                 return false;
             }
 
-            if(is.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
+            if(is.getItem() == ItemRegistry.LURKER_SKIN_POUCH && (is.getTagCompound() == null || is.getTagCompound().getInteger("type") == EnumBLDyeColor.PEWTER_GREY.getMetadata())) {
                 hasPouch = true;
             } else if(is.getItem() == ItemRegistry.DYE) {
                 hasDye = true;
@@ -57,7 +58,7 @@ public class RecipeLurkerSkinColoring extends IForgeRegistryEntry.Impl<IRecipe> 
             if(tempStack.isEmpty())
                 continue;
 
-            if(tempStack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
+            if(tempStack.getItem() == ItemRegistry.LURKER_SKIN_POUCH && (tempStack.getTagCompound() == null || tempStack.getTagCompound().getInteger("type") == EnumBLDyeColor.PEWTER_GREY.getMetadata())) {
                 itemStackPouch = tempStack;
             } else if(tempStack.getItem() == ItemRegistry.DYE) {
                 itemStackDye = tempStack;
