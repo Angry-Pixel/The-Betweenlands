@@ -8,12 +8,16 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.EnumBLDyeColor;
+import thebetweenlands.common.item.ItemBlockEnum;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
+import thebetweenlands.common.registries.BlockRegistry.ISubtypeItemBlockModelDefinition;
 
-public class BlockBLColored extends Block {
+public class BlockBLColored extends Block implements ICustomItemBlock, ISubtypeItemBlockModelDefinition {
 	public static final PropertyEnum<EnumBLDyeColor> COLOR = PropertyEnum.<EnumBLDyeColor>create("color", EnumBLDyeColor.class);
 
 	public BlockBLColored(Material materialIn, SoundType soundType) {
@@ -54,5 +58,20 @@ public class BlockBLColored extends Block {
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] { COLOR });
+	}
+
+	@Override
+	public ItemBlock getItemBlock() {
+		return ItemBlockEnum.create(this, EnumBLDyeColor.class);
+    }
+
+	@Override
+	public int getSubtypeNumber() {
+		return EnumBLDyeColor.values().length;
+	}
+
+	@Override
+	public String getSubtypeName(int meta) {
+		return "samite_" + EnumBLDyeColor.byMetadata(meta).getName();
 	}
 }
