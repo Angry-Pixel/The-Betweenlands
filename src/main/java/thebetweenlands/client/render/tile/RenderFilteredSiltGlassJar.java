@@ -21,7 +21,7 @@ import thebetweenlands.common.tile.TileEntityFilteredSiltGlassJar;
 @SideOnly(Side.CLIENT)
 public class RenderFilteredSiltGlassJar extends TileEntitySpecialRenderer<TileEntityFilteredSiltGlassJar> {
 
-	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/blocks/silt_glass_jar.png");
+	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/blocks/filtered_silt_glass_jar.png");
 	private final ModelSiltGlassJar model = new ModelSiltGlassJar();
 	
 	@Override
