@@ -112,6 +112,8 @@ import thebetweenlands.common.block.misc.BlockPressurePlateBetweenlands;
 import thebetweenlands.common.block.misc.BlockReedMat;
 import thebetweenlands.common.block.misc.BlockRope;
 import thebetweenlands.common.block.misc.BlockRubberTap;
+import thebetweenlands.common.block.misc.BlockSamiteCanvasPanel;
+import thebetweenlands.common.block.misc.BlockSamiteCanvasPanelRotated;
 import thebetweenlands.common.block.misc.BlockShadowWalker;
 import thebetweenlands.common.block.misc.BlockSludge;
 import thebetweenlands.common.block.misc.BlockSulfurTorch;
@@ -945,6 +947,8 @@ public class BlockRegistry {
     public static final Block MOTH_HOUSE = new BlockMothHouse();
     
     public static final Block SAMITE = new BlockBLColored(Material.CLOTH, SoundType.CLOTH).setHardness(0.8F);
+    public static final Block SAMITE_CANVAS_PANEL = new BlockSamiteCanvasPanel(Material.CLOTH, SoundType.CLOTH).setHardness(0.8F);
+    public static final Block SAMITE_CANVAS_PANEL_ROTATED = new BlockSamiteCanvasPanelRotated(Material.CLOTH, SoundType.CLOTH).setHardness(0.8F);
 
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();
