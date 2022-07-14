@@ -118,7 +118,7 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 
 	@Override
 	public String getName() {
-		if (getElectricBoogaloo()) {
+		if (getElectricBoogaloo() && !hasCustomName()) {
 			return I18n.translateToLocal("entity.thebetweenlands.chiromaw_tame_lightning.name");
 		}
 		return super.getName();
