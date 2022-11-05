@@ -42,7 +42,7 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 		this.tank = new FluidTank(Fluid.BUCKET_VOLUME * 8) {
 			@Override
 			public boolean canFillFluidType(FluidStack fluid) {
-				return canFill() && fluid.getFluid() == FluidRegistry.DRINKABLE_BREW && fluid.tag != null && fluid.tag.hasKey("color") && fluid.tag.getInteger("color") == 2;
+				return canFill() && fluid.getFluid() == FluidRegistry.DRINKABLE_BREW && fluid.tag != null && fluid.tag.hasKey("type") && fluid.tag.getInteger("type") == 2;
 			}
 		}; //ewww
         this.tank.setTileEntity(this);
