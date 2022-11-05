@@ -1,0 +1,83 @@
+{
+  "parent": "block/cube_all",
+	"textures": {
+		"0": "thebetweenlands:blocks/samite_maroon",
+		"1": "thebetweenlands:blocks/weedwood",
+		"particle": "thebetweenlands:blocks/samite_maroon"
+	},
+	"elements": [
+		{
+			"name": "samite_pane",
+			"from": [7, 0, 0],
+			"to": [9, 16, 16],
+			"faces": {
+				"north": {"uv": [7, 0, 9, 16], "texture": "#0"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"south": {"uv": [7, 0, 9, 16], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"up": {"uv": [7, 0, 9, 16], "texture": "#0"},
+				"down": {"uv": [7, 0, 9, 16], "texture": "#0"}
+			}
+		},
+		{
+			"name": "n_vertical",
+			"from": [6, 0.01, 1],
+			"to": [10, 15.99, 2],
+			"faces": {
+				"north": {"uv": [6, 0, 10, 15.98], "texture": "#1"},
+				"east": {"uv": [14, 0, 15, 15.98], "texture": "#1"},
+				"south": {"uv": [6, 0, 10, 15.98], "texture": "#1"},
+				"west": {"uv": [1, 0, 2, 15.98], "texture": "#1"},
+				"up": {"uv": [6, 14, 10, 15], "texture": "#1"},
+				"down": {"uv": [6, 1, 10, 2], "texture": "#1"}
+			}
+		},
+		{
+			"name": "s_vertical",
+			"from": [6, 0.01, 14],
+			"to": [10, 15.99, 15],
+			"faces": {
+				"north": {"uv": [6, 0, 10, 15.98], "texture": "#1"},
+				"east": {"uv": [1, 0, 2, 15.98], "texture": "#1"},
+				"south": {"uv": [6, 0.02, 10, 16], "texture": "#1"},
+				"west": {"uv": [14, 0, 15, 15.98], "texture": "#1"},
+				"up": {"uv": [6, 1, 10, 2], "texture": "#1"},
+				"down": {"uv": [6, 14, 10, 15], "texture": "#1"}
+			}
+		},
+		{
+			"name": "b_cross",
+			"from": [6.01, 0.98, 0.01],
+			"to": [9.99, 1.98, 15.99],
+			"faces": {
+				"north": {"uv": [6, 14, 9.98, 15], "texture": "#1"},
+				"east": {"uv": [0, 0, 15.98, 1], "texture": "#1"},
+				"south": {"uv": [6, 14, 9.98, 15], "texture": "#1"},
+				"west": {"uv": [0.02, 14, 16, 15], "texture": "#1"},
+				"up": {"uv": [6, 0, 9.98, 15.98], "texture": "#1"},
+				"down": {"uv": [6, 0, 9.98, 15.98], "texture": "#1"}
+			}
+		},
+		{
+			"name": "t_cross",
+			"from": [5.99, 14, 0.01],
+			"to": [9.97, 15, 15.99],
+			"faces": {
+				"north": {"uv": [6, 2, 9.98, 3], "texture": "#1"},
+				"east": {"uv": [0, 1, 15.98, 2], "texture": "#1"},
+				"south": {"uv": [6, 1, 9.98, 2], "texture": "#1"},
+				"west": {"uv": [0, 1, 15.98, 2], "texture": "#1"},
+				"up": {"uv": [6, 0.02, 9.98, 16], "texture": "#1"},
+				"down": {"uv": [6, 0, 9.98, 15.98], "texture": "#1"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "group",
+			"origin": [0, 0, 0],
+			"color": 0,
+			"children": [0, 1, 2, 3, 4]
+		}
+	]
+}

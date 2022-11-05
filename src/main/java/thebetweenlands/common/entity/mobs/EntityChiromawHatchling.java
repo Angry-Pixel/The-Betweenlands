@@ -482,7 +482,7 @@ public class EntityChiromawHatchling extends EntityProximitySpawner implements I
 
 	@Override
 	public String getName() {
-		if (getElectricBoogaloo()) {
+		if (getElectricBoogaloo() && !hasCustomName()) {
 			return I18n.translateToLocal("entity.thebetweenlands.chiromaw_hatchling_lightning.name");
 		}
 		return super.getName();

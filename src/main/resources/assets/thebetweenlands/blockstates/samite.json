@@ -1,0 +1,20 @@
+{
+    "variants": {
+        "color=dull_lavender": { "model": "thebetweenlands:samite_dull_lavender" },
+        "color=maroon": { "model": "thebetweenlands:samite_maroon" },
+        "color=shadow_green": { "model": "thebetweenlands:samite_shadow_green" },
+        "color=camelot_magenta": { "model": "thebetweenlands:samite_camelot_magenta" },
+        "color=saffron": { "model": "thebetweenlands:samite_saffron" },
+        "color=caribbean_green": { "model": "thebetweenlands:samite_caribbean_green" },
+        "color=vivid_tangerine": { "model": "thebetweenlands:samite_vivid_tangerine" },
+        "color=champagne": { "model": "thebetweenlands:samite_champagne" },
+        "color=raisin_black": { "model": "thebetweenlands:samite_raisin_black" },
+        "color=sushi_green": { "model": "thebetweenlands:samite_sushi_green" },
+        "color=elm_cyan": { "model": "thebetweenlands:samite_elm_cyan" },
+        "color=cadmium_green": { "model": "thebetweenlands:samite_cadmium_green" },
+        "color=lavender_blue": { "model": "thebetweenlands:samite_lavender_blue" },
+        "color=brown_rust": { "model": "thebetweenlands:samite_brown_rust" },
+        "color=midnight_purple": { "model": "thebetweenlands:samite_midnight_purple" },
+        "color=pewter_grey": { "model": "thebetweenlands:samite_pewter_grey" }
+    }
+}
