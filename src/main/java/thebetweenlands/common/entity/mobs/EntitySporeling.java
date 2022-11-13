@@ -36,7 +36,7 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
-public class EntitySporeling extends EntityCreature implements IEntityBL {
+public class EntitySporeling extends EntityCreature implements IEntityBL, net.minecraft.entity.passive.IAnimals {
 	private float jumpHeightOverride = -1;
 	
 	protected static final DataParameter<Boolean> IS_FALLING = EntityDataManager.<Boolean>createKey(EntitySporeling.class, DataSerializers.BOOLEAN);
