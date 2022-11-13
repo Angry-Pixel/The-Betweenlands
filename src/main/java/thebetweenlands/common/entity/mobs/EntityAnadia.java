@@ -59,7 +59,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.util.TranslationHelper;
 
-public class EntityAnadia extends EntityCreature implements IEntityBL {
+public class EntityAnadia extends EntityCreature implements IEntityBL, net.minecraft.entity.passive.IAnimals {
 
 	private static final DataParameter<Float> FISH_SIZE = EntityDataManager.<Float>createKey(EntityAnadia.class, DataSerializers.FLOAT);
 	private static final DataParameter<Byte> HEAD_TYPE = EntityDataManager.<Byte>createKey(EntityAnadia.class, DataSerializers.BYTE);
