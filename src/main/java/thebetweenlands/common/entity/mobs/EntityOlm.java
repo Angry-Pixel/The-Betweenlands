@@ -34,7 +34,7 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
-public class EntityOlm extends EntityCreature implements IEntityBL {
+public class EntityOlm extends EntityCreature implements IEntityBL, net.minecraft.entity.passive.IAnimals {
 	public long egg_cooldown;
 
     public EntityOlm(World world) {
