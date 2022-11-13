@@ -52,7 +52,7 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.MathUtils;
 
-public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
+public class EntityLurker extends EntityCreature implements IEntityBL, IMob, net.minecraft.entity.passive.IAnimals {
     private static final DataParameter<Boolean> IS_LEAPING = EntityDataManager.createKey(EntityLurker.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> SHOULD_MOUTH_BE_OPEN = EntityDataManager.createKey(EntityLurker.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Float> MOUTH_MOVE_SPEED = EntityDataManager.createKey(EntityLurker.class, DataSerializers.FLOAT);
