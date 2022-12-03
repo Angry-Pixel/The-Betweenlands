@@ -84,6 +84,7 @@ public class ItemDrinkableBrew extends ItemBLFood implements ItemRegistry.IMulti
 			//player.addPotionEffect(new PotionEffect(MobEffects.SPEED, duration, 1)); //test
 			break;
 		case 2:
+			// masks from infestations
 			if (!world.isRemote) {
 				IInfestationIgnoreCapability ignore = player.getCapability(CapabilityRegistry.CAPABILITY_INFESTATION_IGNORE, null);
 				if (ignore != null)

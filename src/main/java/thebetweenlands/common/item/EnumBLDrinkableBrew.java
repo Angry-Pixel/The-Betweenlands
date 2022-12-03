@@ -11,7 +11,7 @@ public enum EnumBLDrinkableBrew implements IStringSerializable
 {
     NETTLE_SOUP(0, "nettle_soup", 8882149 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 6, 1F, false, 0),
     NETTLE_TEA(1, "nettle_tea", 8519684 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, false, 0),
-    PHEROMONE_EXTRACT(2, "pheromone_extract", 10208437 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0F, true, 2400),
+    PHEROMONE_EXTRACT(2, "pheromone_extract", 10208437 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0F, true, 2400), // masks from infestations
     //TODO
     DRINKABLE_BREW_3(3, "swamp_broth", 9316177 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, true, 400), //decay reduction?
     DRINKABLE_BREW_4(4, "sturdy_stock", 15384110 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 2F, false, 0), // lots of saturation.
