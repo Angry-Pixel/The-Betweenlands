@@ -15,7 +15,7 @@ public enum EnumBLDrinkableBrew implements IStringSerializable
     //TODO
     DRINKABLE_BREW_3(3, "swamp_broth", 9316177 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, true, 400), //decay reduction?
     DRINKABLE_BREW_4(4, "sturdy_stock", 15384110 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 2F, false, 0), // lots of saturation.
-    DRINKABLE_BREW_5(5, "pear_cordial", 52901 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, true, 0), //reduce fall damage? O.o
+    DRINKABLE_BREW_5(5, "pear_cordial", 52901 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, true, 400), //reduce fall damage? O.o
     DRINKABLE_BREW_6(6, "shamans_brew", 16747660 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, true, 400), // NV and Hunter's sense
     DRINKABLE_BREW_7(7, "lake_broth", 16378828 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, true, 400), // water breathing?
     DRINKABLE_BREW_8(8, "shell_stock", 2170142 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, true, 400), // light footed across sludge and mud etc?
