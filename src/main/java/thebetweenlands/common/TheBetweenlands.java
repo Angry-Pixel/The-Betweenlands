@@ -27,6 +27,7 @@ import thebetweenlands.common.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.capability.base.ItemCapabilityHandler;
 import thebetweenlands.common.capability.blessing.BlessingEntityCapability;
 import thebetweenlands.common.capability.collision.RingOfDispersionEntityCapability;
+import thebetweenlands.common.capability.falldamagereduce.FallDamageReductionCapability;
 import thebetweenlands.common.capability.fishing.RotSmellEntityCapability;
 import thebetweenlands.common.capability.lastkilled.LastKilledCapability;
 import thebetweenlands.common.capability.playermounts.PlayerMountsEntityCapability;
@@ -286,5 +287,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(RotSmellEntityCapability.class);
 		MinecraftForge.EVENT_BUS.register(EntitySwarm.class);
 		MinecraftForge.EVENT_BUS.register(CorrosiveBootsHandler.class);
+		MinecraftForge.EVENT_BUS.register(FallDamageReductionCapability.class);
 	}
 }

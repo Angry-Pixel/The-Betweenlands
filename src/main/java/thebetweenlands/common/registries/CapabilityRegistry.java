@@ -9,6 +9,7 @@ import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.capability.IEntityCircleGemCapability;
 import thebetweenlands.api.capability.IEntityCustomCollisionsCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
+import thebetweenlands.api.capability.IFallDamageReductionCapability;
 import thebetweenlands.api.capability.IFlightCapability;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
 import thebetweenlands.api.capability.IInfestationIgnoreCapability;
@@ -27,6 +28,7 @@ import thebetweenlands.common.capability.circlegem.CircleGemEntityCapability;
 import thebetweenlands.common.capability.collision.RingOfDispersionEntityCapability;
 import thebetweenlands.common.capability.decay.DecayEntityCapability;
 import thebetweenlands.common.capability.equipment.EquipmentEntityCapability;
+import thebetweenlands.common.capability.falldamagereduce.FallDamageReductionCapability;
 import thebetweenlands.common.capability.fishing.RotSmellEntityCapability;
 import thebetweenlands.common.capability.flight.FlightEntityCapability;
 import thebetweenlands.common.capability.foodsickness.FoodSicknessEntityCapability;
@@ -97,7 +99,11 @@ public class CapabilityRegistry {
 	public static final Capability<IRotSmellCapability> CAPABILITY_ROT_SMELL = null;
 	
 	@CapabilityInject(IInfestationIgnoreCapability.class)
-	public static final Capability<IInfestationIgnoreCapability> CAPABILITY_INFESTATION_IGNORE = null;	
+	public static final Capability<IInfestationIgnoreCapability> CAPABILITY_INFESTATION_IGNORE = null;
+	
+	@CapabilityInject(IFallDamageReductionCapability.class)
+	public static final Capability<IFallDamageReductionCapability> CAPABILITY_FALL_DAMAGE_REDUCTION = null;	
+
 
 	public static void preInit() {
 		EntityCapabilityHandler.registerEntityCapability(new DecayEntityCapability());
@@ -117,7 +123,8 @@ public class CapabilityRegistry {
 		EntityCapabilityHandler.registerEntityCapability(new SwarmedCapability());
 		EntityCapabilityHandler.registerEntityCapability(new RotSmellEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new InfestationIgnoreEntityCapability());
-		
+		EntityCapabilityHandler.registerEntityCapability(new FallDamageReductionCapability());
+
 		ItemCapabilityHandler.registerItemCapability(new LivingWeedwoodShieldItemCapability());
 		
 		EntityCapabilityHandler.registerCapabilities();

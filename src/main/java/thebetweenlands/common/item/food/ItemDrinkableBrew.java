@@ -15,6 +15,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import thebetweenlands.api.capability.IFallDamageReductionCapability;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
 import thebetweenlands.api.capability.IInfestationIgnoreCapability;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
@@ -95,9 +96,16 @@ public class ItemDrinkableBrew extends ItemBLFood implements ItemRegistry.IMulti
 			player.addPotionEffect(ElixirEffectRegistry.EFFECT_RIPENING.createEffect(duration, 1));
 			break;
 		case 4:
+			//gives lots of saturation
 			break;
 		case 5:
 			//reduce fall damage? O.o
+			if (!world.isRemote) {
+				IFallDamageReductionCapability reduce = player.getCapability(CapabilityRegistry.CAPABILITY_FALL_DAMAGE_REDUCTION, null);
+				if (reduce != null)
+					if (!reduce.isActive())
+						reduce.setActive(Math.max(reduce.getRemainingActiveTicks(), duration));
+			}
 			break;
 		case 6:
 			 // NV and Hunter's sense
