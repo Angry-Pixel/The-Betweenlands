@@ -1,5 +1,6 @@
 package thebetweenlands.common.item.tools;
 
+import mezz.jei.api.ISubtypeRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -31,6 +32,8 @@ import thebetweenlands.common.block.container.BlockInfuser;
 import thebetweenlands.common.block.misc.BlockRubberTap;
 import thebetweenlands.common.block.terrain.BlockRubberLog;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.item.EnumBLDrinkableBrew;
+import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -40,7 +43,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMultipleItemModelDefinition {
+public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMultipleItemModelDefinition, ISubtypeRegistry {
 
     private final ItemStack emptyWeedwood;
     private final ItemStack emptySyrmorite;
@@ -79,6 +82,32 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
         models.put(0, new ResourceLocation(getRegistryName().toString() + "_weedwood"));
         models.put(1, new ResourceLocation(getRegistryName().toString() + "_syrmorite"));
         return models;
+    }
+
+    @Override
+    public void useNbtForSubtypes(Item... items) {
+
+    }
+
+    @Override
+    public void registerNbtInterpreter(Item item, ISubtypeInterpreter interpreter) {
+
+    }
+
+    @Override
+    public void registerSubtypeInterpreter(Item item, ISubtypeInterpreter interpreter) {
+
+    }
+
+    @Nullable
+    @Override
+    public String getSubtypeInfo(ItemStack itemStack) {
+        return null;
+    }
+
+    @Override
+    public boolean hasSubtypeInterpreter(ItemStack itemStack) {
+        return false;
     }
 
     private static final class FluidBLBucketHandler extends FluidHandlerItemStackSimple {
@@ -250,12 +279,38 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
                     if (i == 0 && fluid.getTemperature() > 430)
                         continue;
                     // Add all fluids that the bucket can be filled with
-                    final FluidStack fs = new FluidStack(fluid, getCapacity());
-                    final ItemStack stack = new ItemStack(this, 1, i);
-                    final IFluidHandlerItem fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-                    if (fluidHandler != null && fluidHandler.fill(fs, true) == fs.amount) {
-                        final ItemStack filled = fluidHandler.getContainer();
-                        subItems.add(filled);
+                    if(fluid == thebetweenlands.common.registries.FluidRegistry.DYE_FLUID) {
+                        for(EnumBLDyeColor dye : EnumBLDyeColor.values()) {
+                            NBTTagCompound tag = new NBTTagCompound();
+                            tag.setInteger("type", dye.getMetadata());
+                            final FluidStack fs = new FluidStack(fluid, getCapacity(), tag);
+                            final ItemStack stack = new ItemStack(this, 1, i);
+                            final IFluidHandlerItem fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                            if (fluidHandler != null && fluidHandler.fill(fs, true) == fs.amount) {
+                                final ItemStack filled = fluidHandler.getContainer();
+                                subItems.add(filled);
+                            }
+                        }
+                    } else if(fluid == thebetweenlands.common.registries.FluidRegistry.DRINKABLE_BREW) {
+                        for(EnumBLDrinkableBrew brew : EnumBLDrinkableBrew.values()) {
+                            NBTTagCompound tag = new NBTTagCompound();
+                            tag.setInteger("type", brew.getMetadata());
+                            final FluidStack fs = new FluidStack(fluid, getCapacity(), tag);
+                            final ItemStack stack = new ItemStack(this, 1, i);
+                            final IFluidHandlerItem fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                            if (fluidHandler != null && fluidHandler.fill(fs, true) == fs.amount) {
+                                final ItemStack filled = fluidHandler.getContainer();
+                                subItems.add(filled);
+                            }
+                        }
+                    } else {
+                        final FluidStack fs = new FluidStack(fluid, getCapacity());
+                        final ItemStack stack = new ItemStack(this, 1, i);
+                        final IFluidHandlerItem fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                        if (fluidHandler != null && fluidHandler.fill(fs, true) == fs.amount) {
+                            final ItemStack filled = fluidHandler.getContainer();
+                            subItems.add(filled);
+                        }
                     }
                 }
             }
