@@ -306,7 +306,17 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
             }
             return itemStack.getItemDamage() + nbtTagCompound.toString();
         });*/
+
         subtypeRegistry.useNbtForSubtypes(ItemRegistry.AMULET);
+        //subtypeRegistry.useNbtForSubtypes(ItemRegistry.BL_BUCKET);
+
+        subtypeRegistry.registerSubtypeInterpreter(ItemRegistry.BL_BUCKET, itemStack -> {
+            NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
+            if (nbtTagCompound == null || nbtTagCompound.isEmpty()) {
+                return itemStack.getItemDamage() + ISubtypeRegistry.ISubtypeInterpreter.NONE;
+            }
+            return itemStack.getItemDamage() + nbtTagCompound.toString();
+        });
     }
 
     @Override

@@ -1157,6 +1157,15 @@ fluid.drinkable_brew.drinkable_brew_13=NYI needs lang
 fluid.drinkable_brew.drinkable_brew_14=NYI needs lang
 fluid.drinkable_brew.drinkable_brew_15=NYI needs lang
 
+fluid.drinkable_brew.swamp_broth=Swamp Broth
+fluid.drinkable_brew.sturdy_stock=Sturdy Stock
+fluid.drinkable_brew.pear_cordial=Pear Cordial
+fluid.drinkable_brew.shamans_brew=Shaman's Brew
+fluid.drinkable_brew.lake_broth=Lake Broth
+fluid.drinkable_brew.shell_stock=Shell Stock
+fluid.drinkable_brew.frog_leg_extract=Frog Leg Extract
+fluid.drinkable_brew.witch_tea=Witch Tea
+
 # Creative Tabs
 itemGroup.thebetweenlands.block=The Betweenlands Blocks
 itemGroup.thebetweenlands.item=The Betweenlands Items
