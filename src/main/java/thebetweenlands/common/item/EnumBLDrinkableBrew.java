@@ -20,13 +20,16 @@ public enum EnumBLDrinkableBrew implements IStringSerializable
     DRINKABLE_BREW_7(7, "lake_broth", 16378828 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, true, 400), // water breathing?
     DRINKABLE_BREW_8(8, "shell_stock", 2170142 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, true, 400), // light footed across sludge and mud etc?
     DRINKABLE_BREW_9(9, "frog_leg_extract", 9416509 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, true, 400), // jumping for 20 secs.
-    DRINKABLE_BREW_10(10, "witch_tea", 1804678 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, true, 0), // restores food sickness and something about worms?
-    DRINKABLE_BREW_11(11, "drinkable_brew_11", 2189375 | 0xFF000000, null, 0, 0F, false, 0),
+    DRINKABLE_BREW_10(10, "witch_tea", 1804678 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, true, 0); // restores food sickness and something about worms?
+    
+/*
+	// spare metas
+	DRINKABLE_BREW_11(11, "drinkable_brew_11", 2189375 | 0xFF000000, null, 0, 0F, false, 0),
     DRINKABLE_BREW_12(12, "drinkable_brew_12", 12761312 | 0xFF000000, null, 0, 0F, false, 0),
     DRINKABLE_BREW_13(13, "drinkable_brew_13", 11295547 | 0xFF000000, null, 0, 0F, false, 0),
     DRINKABLE_BREW_14(14, "drinkable_brew_14", 6951282 | 0xFF000000, null, 0, 0F, false, 0),
     DRINKABLE_BREW_15(15, "drinkable_brew_15", 9936283 | 0xFF000000, null, 0, 0F, false, 0);
-
+*/
 	private static final EnumBLDrinkableBrew[] META_LOOKUP = new EnumBLDrinkableBrew[values().length];
 
 	private final int meta;

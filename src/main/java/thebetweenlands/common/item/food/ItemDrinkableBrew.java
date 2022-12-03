@@ -132,12 +132,15 @@ public class ItemDrinkableBrew extends ItemBLFood implements ItemRegistry.IMulti
 				if (FoodSickness.getSicknessForHatred(cap.getFoodHatred(this)) != FoodSickness.SICK)
 					cap.increaseFoodHatred(this, 0, FoodSickness.SICK.maxHatred);
 			break;
-		case 11:
+/*		
+		//some spares for later
+ 		case 11:
 		case 12:
 		case 13:
 		case 14:
 		case 15:
 			break;
+*/
 		}
 	}
 
