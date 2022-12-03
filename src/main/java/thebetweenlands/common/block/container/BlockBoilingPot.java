@@ -32,7 +32,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.item.EnumBLDrinkableBrew;
 import thebetweenlands.common.item.EnumBLDyeColor;
+import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityBoilingPot;
 
@@ -166,7 +168,10 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 				float randomOffset = rand.nextFloat() * 0.6F - 0.3F;
 				int type = pot.tank.getFluid().getFluid().getColor();
 				if(pot.tank.getFluid().tag != null && pot.tank.getFluid().tag.hasKey("type"))
+					if(pot.tank.getFluid().getFluid() == FluidRegistry.DYE_FLUID)
 					type =  EnumBLDyeColor.byMetadata(pot.tank.getFluid().tag.getInteger("type")).getColorValue() | 0xFF000000;
+				if(pot.tank.getFluid().getFluid() == FluidRegistry.DRINKABLE_BREW)
+					type =  EnumBLDrinkableBrew.byMetadata(pot.tank.getFluid().tag.getInteger("type")).getColorValue() | 0xFF000000;
 
 				BLParticles.BUBBLE_INFUSION.spawn(world, xx + 0.3F - rand.nextFloat() * 0.6F, yy, zz + 0.3F - rand.nextFloat() * 0.6F, ParticleArgs.get().withScale(0.3F).withColor(type));
 	

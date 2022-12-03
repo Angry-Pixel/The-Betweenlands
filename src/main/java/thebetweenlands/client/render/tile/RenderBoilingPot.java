@@ -17,6 +17,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.tile.TileEntityBoilingPot;
 
 @SideOnly(Side.CLIENT)
@@ -36,6 +37,8 @@ public class RenderBoilingPot extends TileEntitySpecialRenderer<TileEntityBoilin
 			FluidStack fluidStack = tile.tank.getFluid();
 			height = (0.375F / tile.tank.getCapacity()) * tile.tank.getFluidAmount();
 			TextureAtlasSprite fluidStillSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluidStack.getFluid().getStill().toString());
+			if(tile.getHeatProgress() > 0  && tile.tank.getFluid().getFluid() == FluidRegistry.DYE_FLUID || tile.tank.getFluid().getFluid() == FluidRegistry.DRINKABLE_BREW)
+				fluidStillSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluidStack.getFluid().getFlowing().toString());	
 			int fluidColor = fluidStack.getFluid().getColor(fluidStack);
 			int fluidColorTemp = tile.tempFluidColour;
 			float fade = tile.getHeatProgress() > 50 && tile.hasBundle() ? (-50 + tile.getHeatProgress()) * 0.02F: 0F;
