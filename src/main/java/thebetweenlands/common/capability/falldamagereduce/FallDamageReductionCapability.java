@@ -106,7 +106,7 @@ public class FallDamageReductionCapability extends EntityCapability<FallDamageRe
 			if (event.getSource() == DamageSource.FALL) {
 				IFallDamageReductionCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FALL_DAMAGE_REDUCTION, null);
 				if (cap != null && cap.isActive()) {
-					event.setAmount(amount * 0.25F); // dunno if quarter is enough
+					event.setAmount(0F + (amount * 0.125F)); // 1/8th
 				}
 			}
 		}
