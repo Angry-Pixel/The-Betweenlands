@@ -19,6 +19,7 @@ import thebetweenlands.api.capability.IFallDamageReductionCapability;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
 import thebetweenlands.api.capability.IInfestationIgnoreCapability;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
+import thebetweenlands.common.entity.mobs.EntityTinySludgeWormHelper;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.EnumBLDrinkableBrew;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -128,9 +129,16 @@ public class ItemDrinkableBrew extends ItemBLFood implements ItemRegistry.IMulti
 		case 10:
 			// restores food sickness and something about worms?
 			IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
-			if (!world.isRemote && cap != null)
+			if (!world.isRemote && cap != null) {
 				if (FoodSickness.getSicknessForHatred(cap.getFoodHatred(this)) != FoodSickness.SICK)
 					cap.increaseFoodHatred(this, 0, FoodSickness.SICK.maxHatred);
+				for (int count = 0; count < 4; count++) {
+					EntityTinySludgeWormHelper worm = new EntityTinySludgeWormHelper(world);
+					worm.setLocationAndAngles(player.posX, player.posY + 1D, player.posZ, player.rotationYaw, player.rotationPitch);
+					worm.setOwnerId(player.getUniqueID());
+					world.spawnEntity(worm);
+				}
+			}
 			break;
 /*		
 		//some spares for later

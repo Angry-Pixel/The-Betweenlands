@@ -9,7 +9,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 
 public enum EnumBLDrinkableBrew implements IStringSerializable
 {
-    NETTLE_SOUP(0, "nettle_soup", 736523 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 6, 1F, false, 0), //just soup
+    NETTLE_SOUP(0, "nettle_soup", 736523 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 2, 0.3F, false, 0), //just soup
     NETTLE_TEA(1, "nettle_tea", 2516511 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, false, 0), //just tea
     PHEROMONE_EXTRACT(2, "pheromone_extract", 7165556 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0F, true, 2400), // masks from infestations
     SWAMP_BROTH(3, "swamp_broth", 4741952 | 0xFF000000, ItemRegistry.DRINKABLE_BREW, 0, 0.2F, true, 400), //decay reduction
