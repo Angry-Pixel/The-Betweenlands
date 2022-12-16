@@ -13,7 +13,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -51,19 +50,12 @@ public class RenderSteepingPot extends TileEntitySpecialRenderer<TileEntitySteep
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 			float xMax, zMax, xMin, zMin, yMin = 0;
 
-			xMax = 1.625F;
-			zMax = 1.625F;
-			xMin = 0.375F;
-			zMin = 0.375F;
-			yMin = 0F;
-
-			if (fluidLevel >= Fluid.BUCKET_VOLUME) {
-				xMax = 1.75F;
-				zMax = 1.75F;
-				xMin = 0.25F;
-				zMin = 0.25F;
+				xMax = 1.5F;
+				zMax = 1.5F;
+				xMin = 0.5F;
+				zMin = 0.5F;
 				yMin = 0F;
-			}
+
 			setGLColorFromInt(fluidColor, 1F - fade);
 			renderCuboid(buffer, xMax, xMin, yMin, height, zMin, zMax, fluidStillSprite);
 			tessellator.draw();
@@ -98,8 +90,8 @@ public class RenderSteepingPot extends TileEntitySpecialRenderer<TileEntitySteep
 			Random rand = new Random();
 			rand.setSeed((long) (tile.getPos().getX() + tile.getPos().getY() + tile.getPos().getZ()));
 			float randRot = rand.nextFloat() * 360.0F;
-			double xo = -0.2D + rand.nextFloat() * 0.4D;
-			double zo = -0.2D + rand.nextFloat() * 0.4D;
+			double xo = -0.1D + rand.nextFloat() * 0.2D;
+			double zo = -0.1D + rand.nextFloat() * 0.2D;
 			double rot = (stirTicks < 180 && fluidLevel > 0 ? stirTicks * 2D + 90D + randRot : 90D + randRot);
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x + 0.5D, 0, z + 0.5D);
@@ -116,7 +108,7 @@ public class RenderSteepingPot extends TileEntitySpecialRenderer<TileEntitySteep
 			GlStateManager.pushMatrix();
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			GlStateManager.translate(x, y, z);
-			GlStateManager.scale(0.5D, 0.5D, 0.5D);
+			GlStateManager.scale(0.4D, 0.4D, 0.4D);
 			GlStateManager.translate(0D, itemBob * 0.0025F, 0D);
 			GlStateManager.rotate((float) rotation, 0, 1, 0);
 			GlStateManager.rotate(tile.getHeatProgress() < 20 ? 0F : (float) itemBob * 0.2F, 0, 0, 1);
