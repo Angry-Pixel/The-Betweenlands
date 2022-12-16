@@ -14,9 +14,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class BoilingPotRecipes {
+public class SteepingPotRecipes {
 
-	private static final List<BoilingPotRecipes> recipes = new ArrayList<BoilingPotRecipes>();
+	private static final List<SteepingPotRecipes> recipes = new ArrayList<SteepingPotRecipes>();
 
 	public static void addRecipe(ItemStack output, Fluid fluid, Object... input) {
 		addRecipe(output, new FluidStack(fluid, Fluid.BUCKET_VOLUME), input);
@@ -27,31 +27,31 @@ public class BoilingPotRecipes {
 	}
 
 	public static void addRecipe(ItemStack output, FluidStack fluid,  Object... input) {
-		recipes.add(new BoilingPotRecipes(output, fluid, input));
+		recipes.add(new SteepingPotRecipes(output, fluid, input));
 	}
 
 	public static void addRecipe(FluidStack output, int outputFluidMeta, FluidStack fluid,  Object... input) {
-		recipes.add(new BoilingPotRecipes(output, outputFluidMeta, fluid, input));
+		recipes.add(new SteepingPotRecipes(output, outputFluidMeta, fluid, input));
 	}
 
 	public static ItemStack getOutputItem(IFluidTank tank, ItemStack... input) {
-		BoilingPotRecipes recipe = getRecipe(tank, input);
+		SteepingPotRecipes recipe = getRecipe(tank, input);
 		return recipe != null ? recipe.getOutputItem() : ItemStack.EMPTY;
 	}
 
 	public static FluidStack getOutputFluid(IFluidTank tank, ItemStack... input) {
-		BoilingPotRecipes recipe = getRecipe(tank, input);
+		SteepingPotRecipes recipe = getRecipe(tank, input);
 		return recipe != null ? recipe.getOutputFluidStack() : null;
 	}
 
-	public static BoilingPotRecipes getRecipe(IFluidTank tank, ItemStack... input) {
-		for (BoilingPotRecipes recipe : recipes)
+	public static SteepingPotRecipes getRecipe(IFluidTank tank, ItemStack... input) {
+		for (SteepingPotRecipes recipe : recipes)
 			if (recipe.matches(tank, input))
 				return recipe;
 		return null;
 	}
 
-	public static List<BoilingPotRecipes> getRecipeList() {
+	public static List<SteepingPotRecipes> getRecipeList() {
 		return Collections.unmodifiableList(recipes);
 	}
 
@@ -61,7 +61,7 @@ public class BoilingPotRecipes {
 	private final int fluidMeta;
 	private final Object[] input;
 
-	private BoilingPotRecipes(ItemStack output, FluidStack fluidIn, Object... input) {
+	private SteepingPotRecipes(ItemStack output, FluidStack fluidIn, Object... input) {
 		this.output = output.copy();
 		this.fluidStackOut = null;
 		this.fluidMeta = 0;
@@ -84,7 +84,7 @@ public class BoilingPotRecipes {
 		}
 	}
 
-	private BoilingPotRecipes(FluidStack fluidOut, int outputFluidMeta, FluidStack fluidIn, Object... input) {
+	private SteepingPotRecipes(FluidStack fluidOut, int outputFluidMeta, FluidStack fluidIn, Object... input) {
 		this.output = ItemStack.EMPTY;
 		this.fluidStackOut = fluidOut.copy();
 		this.fluidMeta = outputFluidMeta;

@@ -36,11 +36,11 @@ import thebetweenlands.common.item.EnumBLDrinkableBrew;
 import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.tile.TileEntityBoilingPot;
+import thebetweenlands.common.tile.TileEntitySteepingPot;
 
-public class BlockBoilingPot extends Block implements ITileEntityProvider {
+public class BlockSteepingPot extends Block implements ITileEntityProvider {
 
-	public BlockBoilingPot() {
+	public BlockSteepingPot() {
 		super(Material.WOOD);
 		setHardness(1.5F);
 		setResistance(10.0F);
@@ -77,7 +77,7 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileEntityBoilingPot();
+		return new TileEntitySteepingPot();
 	}
 
 	@Nullable
@@ -87,7 +87,7 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		TileEntityBoilingPot tile = (TileEntityBoilingPot) world.getTileEntity(pos);
+		TileEntitySteepingPot tile = (TileEntitySteepingPot) world.getTileEntity(pos);
 		if (tile != null) {
 			InventoryHelper.dropInventoryItems(world, pos, tile);
 		}
@@ -104,8 +104,8 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 			return FluidUtil.getFluidHandler(heldItem) != null;
 		}
 
-		if (!world.isRemote && world.getTileEntity(pos) instanceof TileEntityBoilingPot) {
-			TileEntityBoilingPot tile = (TileEntityBoilingPot) world.getTileEntity(pos);
+		if (!world.isRemote && world.getTileEntity(pos) instanceof TileEntitySteepingPot) {
+			TileEntitySteepingPot tile = (TileEntitySteepingPot) world.getTileEntity(pos);
 			if (tile.getHeatProgress() > 50 && tile.getHeatProgress() < 100 && tile.hasBundle())
 				return false;
 			if (!player.isSneaking()) {
@@ -145,18 +145,18 @@ public class BlockBoilingPot extends Block implements ITileEntityProvider {
 
 	@Nullable
 	private IFluidHandler getFluidHandler(IBlockAccess world, BlockPos pos) {
-		TileEntityBoilingPot tileentity = (TileEntityBoilingPot) world.getTileEntity(pos);
+		TileEntitySteepingPot tileentity = (TileEntitySteepingPot) world.getTileEntity(pos);
 		return tileentity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
-		if (world.getTileEntity(pos) instanceof TileEntityBoilingPot) {
+		if (world.getTileEntity(pos) instanceof TileEntitySteepingPot) {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
-			TileEntityBoilingPot pot = (TileEntityBoilingPot) world.getTileEntity(pos);
+			TileEntitySteepingPot pot = (TileEntitySteepingPot) world.getTileEntity(pos);
 			if (pot.getTankFluidAmount() > 0  && pot.getHeatProgress() > 80) {
 				int amount = pot.tank.getFluidAmount();
 				int capacity = pot.tank.getCapacity();

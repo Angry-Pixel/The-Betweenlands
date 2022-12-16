@@ -18,13 +18,13 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.registries.FluidRegistry;
-import thebetweenlands.common.tile.TileEntityBoilingPot;
+import thebetweenlands.common.tile.TileEntitySteepingPot;
 
 @SideOnly(Side.CLIENT)
-public class RenderBoilingPot extends TileEntitySpecialRenderer<TileEntityBoilingPot> {
+public class RenderSteepingPot extends TileEntitySpecialRenderer<TileEntitySteepingPot> {
 
 	@Override
-	public void render(TileEntityBoilingPot tile, double x, double y, double z, float partialTick, int destroyStage, float alpha) {
+	public void render(TileEntitySteepingPot tile, double x, double y, double z, float partialTick, int destroyStage, float alpha) {
 		if(tile == null || !tile.hasWorld())
 			return;
 		
@@ -111,7 +111,7 @@ public class RenderBoilingPot extends TileEntitySpecialRenderer<TileEntityBoilin
 
 	}
 
-	private void renderItemInSlot(TileEntityBoilingPot tile, int slotIndex, double x, double y, double z, double itemBob, double rotation) {
+	private void renderItemInSlot(TileEntitySteepingPot tile, int slotIndex, double x, double y, double z, double itemBob, double rotation) {
 		if (!tile.getStackInSlot(slotIndex).isEmpty()) {
 			GlStateManager.pushMatrix();
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

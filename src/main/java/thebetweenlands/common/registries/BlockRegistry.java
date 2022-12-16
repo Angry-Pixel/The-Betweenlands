@@ -44,7 +44,7 @@ import thebetweenlands.common.block.container.BlockAspectVial;
 import thebetweenlands.common.block.container.BlockBLDualFurnace;
 import thebetweenlands.common.block.container.BlockBLFurnace;
 import thebetweenlands.common.block.container.BlockBarrel;
-import thebetweenlands.common.block.container.BlockBoilingPot;
+import thebetweenlands.common.block.container.BlockSteepingPot;
 import thebetweenlands.common.block.container.BlockCenser;
 import thebetweenlands.common.block.container.BlockChestBetweenlands;
 import thebetweenlands.common.block.container.BlockCompostBin;
@@ -939,7 +939,7 @@ public class BlockRegistry {
     public static final Block MIST_BRIDGE = new BlockMistBridge(Material.ROCK);
     public static final Block SHADOW_WALKER = new BlockShadowWalker(Material.AIR);
     
-    public static final Block BOILING_POT = new BlockBoilingPot();
+    public static final Block STEEPING_POT = new BlockSteepingPot();
     public static final Block GRUB_HUB = new BlockGrubHub();
     public static final Block WATER_FILTER = new BlockWaterFilter();
     public static final Block FILTERED_SILT_GLASS_JAR = new BlockFilteredSiltGlassJar();

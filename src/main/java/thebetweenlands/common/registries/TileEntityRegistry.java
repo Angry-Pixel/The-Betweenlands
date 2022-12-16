@@ -73,7 +73,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityMudLootPot1.class, "mud_loot_pot_1");
 		registerTileEntity(TileEntityMudLootPot2.class, "mud_loot_pot_2");
 		registerTileEntity(TileEntityMudLootPot3.class, "mud_loot_pot_3");
-		registerTileEntity(TileEntityBoilingPot.class, "boiling_pot");
+		registerTileEntity(TileEntitySteepingPot.class, "steeping_pot");
 		registerTileEntity(TileEntityGrubHub.class, "grub_hub");
 		registerTileEntity(TileEntityWaterFilter.class, "water_filter");
 		registerTileEntity(TileEntityFilteredSiltGlassJar.class, "filtered_silt_glass_jar");

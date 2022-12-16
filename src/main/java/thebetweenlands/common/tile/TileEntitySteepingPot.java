@@ -24,12 +24,12 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
-import thebetweenlands.common.recipe.misc.BoilingPotRecipes;
+import thebetweenlands.common.recipe.misc.SteepingPotRecipes;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class TileEntityBoilingPot extends TileEntityBasicInventory implements ITickable {
+public class TileEntitySteepingPot extends TileEntityBasicInventory implements ITickable {
     public FluidTank tank;
     public int tempFluidColour;
 	private IItemHandler itemHandler;
@@ -44,7 +44,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
     public int itemBob = 0;
     private boolean countUp = true;
 	
-	public TileEntityBoilingPot() {
+	public TileEntitySteepingPot() {
 		super(1, "container.bl.boiling_pot");
         this.tank = new FluidTank(null, Fluid.BUCKET_VOLUME * 1);
         this.tank.setTileEntity(this);
@@ -81,7 +81,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 		if (!getWorld().isRemote) {
 			if (getTankFluidAmount() >= Fluid.BUCKET_VOLUME && !hasCraftResult) {
 				if (hasBundle()) {
-					BoilingPotRecipes recipe = getCraftResult(tank, getBundleItems().get(0), getBundleItems().get(1), getBundleItems().get(2), getBundleItems().get(3));
+					SteepingPotRecipes recipe = getCraftResult(tank, getBundleItems().get(0), getBundleItems().get(1), getBundleItems().get(2), getBundleItems().get(3));
 					FluidStack outputFluid = null;
 					FluidStack fluidWithTag = null;
 					int outputFluidMeta = 0;
@@ -131,7 +131,7 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 				FluidStack outputFluid = null;
 				FluidStack fluidWithTag = null;
 				int outputFluidMeta = 0;
-				BoilingPotRecipes recipe = getCraftResult(tank, getBundleItems().get(0), getBundleItems().get(1), getBundleItems().get(2), getBundleItems().get(3));
+				SteepingPotRecipes recipe = getCraftResult(tank, getBundleItems().get(0), getBundleItems().get(1), getBundleItems().get(2), getBundleItems().get(3));
 
 				if (recipe == null) {
 					setHeatProgress(0);
@@ -176,8 +176,8 @@ public class TileEntityBoilingPot extends TileEntityBasicInventory implements IT
 		this.tempFluidColour = type;
 	}
 
-	public BoilingPotRecipes getCraftResult(FluidTank tank, ItemStack stack1, ItemStack stack2, ItemStack stack3, ItemStack stack4) {
-		return BoilingPotRecipes.getRecipe(tank, stack1, stack2, stack3, stack4);
+	public SteepingPotRecipes getCraftResult(FluidTank tank, ItemStack stack1, ItemStack stack2, ItemStack stack3, ItemStack stack4) {
+		return SteepingPotRecipes.getRecipe(tank, stack1, stack2, stack3, stack4);
 	}
 
 	public boolean hasBundle() {

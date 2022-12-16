@@ -571,7 +571,7 @@ tile.thebetweenlands.mud_brick_shingle_stained.shadow_green.name=Shadow Green Mu
 tile.thebetweenlands.mud_brick_shingle_stained.sushi_green.name=Sushi Green Mud Brick Shingle
 tile.thebetweenlands.mud_brick_shingle_stained.vivid_tangerine.name=Vivid Tangerine Mud Brick Shingle
 
-tile.thebetweenlands.boiling_pot.name=Steeping Pot
+tile.thebetweenlands.steeping_pot.name=Steeping Pot
 tile.thebetweenlands.grub_hub.name=Grub Hub
 tile.thebetweenlands.water_filter.name=Water Filter
 tile.thebetweenlands.moth_house.name=Moth House
