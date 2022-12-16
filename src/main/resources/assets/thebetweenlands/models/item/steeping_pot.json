@@ -1,5 +1,5 @@
 {
-    "parent": "thebetweenlands:block/boiling_pot",
+    "parent": "thebetweenlands:block/steeping_pot",
     "display": {
         "gui": {
             "rotation": [ 30, 45, 0 ],
