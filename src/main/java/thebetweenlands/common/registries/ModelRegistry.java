@@ -80,6 +80,7 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelSundew;
 import thebetweenlands.client.render.model.baked.modelbase.ModelSwampPlant;
 import thebetweenlands.client.render.model.baked.modelbase.ModelVenusFlyTrap;
 import thebetweenlands.client.render.model.baked.modelbase.ModelVolarpad;
+import thebetweenlands.client.render.model.baked.modelbase.ModelWaterFilter;
 import thebetweenlands.client.render.model.baked.modelbase.ModelWeedwoodRowboatItem;
 import thebetweenlands.client.render.model.baked.modelbase.ModelWeepingBlue;
 import thebetweenlands.client.render.model.baked.modelbase.ModelWhitePearCrop1;
@@ -409,7 +410,9 @@ public class ModelRegistry {
 
 	public static final IModel STEEPING_POT = new ModelFromModelBase.Builder(new ModelSteepingPot(), new ResourceLocation("thebetweenlands:blocks/steeping_pot"), 128, 128)
 			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/steeping_pot_particle")).packer(MODEL_TEXTURE_PACKER).build();
-	
+
+	public static final IModel WATER_FILTER = new ModelFromModelBase.Builder(new ModelWaterFilter(), new ResourceLocation("thebetweenlands:blocks/water_filter"), 128, 128)
+			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/water_filter_particle")).packer(MODEL_TEXTURE_PACKER).build();
 	
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 

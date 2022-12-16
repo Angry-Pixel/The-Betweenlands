@@ -86,10 +86,8 @@ public class BlockWaterFilter extends BlockContainer {
 
 			if (FluidUtil.getFluidHandler(heldItem) == null && hand == EnumHand.MAIN_HAND) {
 
-				// remove this once testing is done - just need to see what is in the tanks
 				if (world.isRemote && tile.tank.getFluid() !=null)
-					player.sendStatusMessage(new TextComponentTranslation(tile.tank.getFluid().getFluid().getName() + ": "+ tile.tank.getFluidAmount()+"/"+ tile.tank.getCapacity()), true);
-				// 
+					player.sendStatusMessage(new TextComponentTranslation(tile.tank.getFluid().getLocalizedName() + ": "+ tile.tank.getFluidAmount()+"/"+ tile.tank.getCapacity()), true);
 
 				if (heldItem.getItem() == ItemRegistry.SILK_FILTER || heldItem.getItem() == ItemRegistry.MOSS_FILTER) {
 					if (tile.getStackInSlot(0).isEmpty()) {
