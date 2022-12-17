@@ -22,6 +22,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
+import thebetweenlands.common.item.EnumBLDrinkableBrew;
 import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.recipe.misc.SteepingPotRecipes;
@@ -91,6 +92,8 @@ public class TileEntitySteepingPot extends TileEntityBasicInventory implements I
 						if (outputFluid != null) {
 							if (outputFluid.getFluid() == FluidRegistry.DYE_FLUID)
 								setTempFluidColour(EnumBLDyeColor.byMetadata(outputFluidMeta).getColorValue() | 0xFF000000);
+							if (outputFluid.getFluid() == FluidRegistry.DRINKABLE_BREW)
+								setTempFluidColour(EnumBLDrinkableBrew.byMetadata(outputFluidMeta).getColorValue() | 0xFF000000);
 							hasCraftResult = true;
 						}
 					}
