@@ -40,7 +40,7 @@ public class RenderSteepingPot extends TileEntitySpecialRenderer<TileEntitySteep
 				fluidStillSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluidStack.getFluid().getFlowing().toString());	
 			int fluidColor = fluidStack.getFluid().getColor(fluidStack);
 			int fluidColorTemp = tile.tempFluidColour;
-			float fade = tile.getHeatProgress() > 50 && tile.hasBundle() ? (-50 + tile.getHeatProgress()) * 0.02F: 0F;
+			float fade = tile.getHeatProgress() > 50 && tile.hasBundle() ? (-50 + tile.getHeatProgress()) * 0.025F: 0F;
 			GlStateManager.disableLighting();
 			GlStateManager.pushMatrix();
 			GlStateManager.enableBlend();

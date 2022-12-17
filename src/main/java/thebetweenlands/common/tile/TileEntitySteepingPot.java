@@ -4,6 +4,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,6 +13,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -138,7 +140,10 @@ public class TileEntitySteepingPot extends TileEntityBasicInventory implements I
 
 				if (recipe == null) {
 					setHeatProgress(0);
-					System.out.println("Invalid Recipe");
+					if (!inventory.get(0).isEmpty())
+						setInventorySlotContents(0, EnumItemMisc.SILK_BUNDLE_DIRTY.create(1));
+					world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.3f, 0.9f + world.rand.nextFloat() * 0.3f);
+					tank.drain(Fluid.BUCKET_VOLUME, true);
 					return;
 				}
 
@@ -167,7 +172,6 @@ public class TileEntitySteepingPot extends TileEntityBasicInventory implements I
 
 					EntityXPOrb orb = new EntityXPOrb(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 1);
 					world.spawnEntity(orb);
-					System.out.println("Recipe Done");
 					hasCraftResult = false;
 					this.markForUpdate();
 				}
