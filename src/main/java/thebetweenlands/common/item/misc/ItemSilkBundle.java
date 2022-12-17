@@ -48,7 +48,7 @@ public class ItemSilkBundle extends Item {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
-        if (!world.isRemote)
+        if (!world.isRemote && player.isSneaking())
             player.openGui(TheBetweenlands.instance, CommonProxy.GUI_SILK_BUNDLE, world, 0, 0, 0);
 
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
