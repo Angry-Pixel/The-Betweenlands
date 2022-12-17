@@ -27,6 +27,7 @@ import thebetweenlands.common.tile.TileEntityGrubHub;
 public class RenderGrubHub extends TileEntitySpecialRenderer<TileEntityGrubHub> {
 	private static final ModelSpiritTreeFaceMaskSmall maskModel = new ModelSpiritTreeFaceMaskSmall(false);
 	private static final ResourceLocation TEXTURE_SMALL = new ResourceLocation(ModInfo.ID, "textures/entity/spirit_tree_face_small.png");
+	private static final ResourceLocation TEXTURE_EYES = new ResourceLocation(ModInfo.ID, "textures/entity/spirit_tree_face_small_glow.png");
 	@Override
 	public void render(TileEntityGrubHub tile, double x, double y, double z, float partialTick, int destroyStage, float alpha) {
 		float fluidLevel = tile.tank.getFluidAmount();
@@ -72,6 +73,47 @@ public class RenderGrubHub extends TileEntitySpecialRenderer<TileEntityGrubHub> 
 		maskModel.head_base.rotationPointZ = 8;
 		maskModel.head_base.render(0.0625F);
 		GlStateManager.popMatrix();
+		
+		if(tile.switchTextureCount > 0) {
+			GlStateManager.pushMatrix();
+			bindTexture(TEXTURE_EYES);
+			GlStateManager.translate(x + 0.5F, y + 1.5F, z - 0.4375F);
+			GlStateManager.scale(-1, -1, 1);
+			maskModel.head_base.rotationPointY = 16.5F;
+			maskModel.head_base.rotationPointZ = 8;
+			maskModel.head_base.render(0.0625F);
+			GlStateManager.popMatrix();
+
+			GlStateManager.pushMatrix();
+			bindTexture(TEXTURE_EYES);
+			GlStateManager.translate(x - 0.4375F, y + 1.5F, z + 0.5F );
+			GlStateManager.rotate(90F, 0, 1, 0);
+			GlStateManager.scale(-1, -1, 1);
+			maskModel.head_base.rotationPointY = 16.5F;
+			maskModel.head_base.rotationPointZ = 8;
+			maskModel.head_base.render(0.0625F);
+			GlStateManager.popMatrix();
+
+			GlStateManager.pushMatrix();
+			bindTexture(TEXTURE_EYES);
+			GlStateManager.translate(x + 0.5F, y + 1.5F, z + 1.4375F);
+			GlStateManager.rotate(180F, 0, 1, 0);
+			GlStateManager.scale(-1, -1, 1);
+			maskModel.head_base.rotationPointY = 16.5F;
+			maskModel.head_base.rotationPointZ = 8;
+			maskModel.head_base.render(0.0625F);
+			GlStateManager.popMatrix();
+
+			GlStateManager.pushMatrix();
+			bindTexture(TEXTURE_EYES);
+			GlStateManager.translate(x + 1.4375F, y + 1.5F, z + 0.5F );
+			GlStateManager.rotate(270F, 0, 1, 0);
+			GlStateManager.scale(-1, -1, 1);
+			maskModel.head_base.rotationPointY = 16.5F;
+			maskModel.head_base.rotationPointZ = 8;
+			maskModel.head_base.render(0.0625F);
+			GlStateManager.popMatrix();
+		}
 
 		if (tile != null) {
 			if (fluidLevel > 0) {

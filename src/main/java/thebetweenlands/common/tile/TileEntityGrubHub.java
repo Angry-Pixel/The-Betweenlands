@@ -37,6 +37,7 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 	
 	public FluidTank tank;
 	private IItemHandler itemHandler;
+	public int switchTextureCount = 0;
 	public TileEntityGrubHub() {
 		super(1, "container.bl.grub_hub");
 		this.tank = new FluidTank(Fluid.BUCKET_VOLUME * 8) {
@@ -57,6 +58,8 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 	public void update() {
 		if (getWorld().getTotalWorldTime()%10 == 0)
 			checkCanInfestOrHarvest(getWorld());
+		if(world.isRemote && switchTextureCount > 0)
+			switchTextureCount--;
 	}
 
 	private void checkCanInfestOrHarvest(World world) {
@@ -78,6 +81,7 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 								infestBush(mutablePos);
 							}
 							if (world.isRemote) {
+								switchTextureCount = 10;
 								Vec3d vector = new Vec3d((mutablePos.getX() + 0.5D) - (pos.getX() + 0.5D), (mutablePos.getY() + 1D) - (pos.getY() + 0.325D), (mutablePos.getZ() + 0.5D) - (pos.getZ() + 0.5D));
 								for(int i = 0; i < 20 + world.rand.nextInt(5); i++) {
 									BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(world, pos.getX() + 0.5F, pos.getY() + 0.325F, pos.getZ() + 0.5F, 
