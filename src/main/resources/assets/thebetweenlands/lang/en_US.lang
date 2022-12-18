@@ -555,6 +555,23 @@ tile.thebetweenlands.samite.shadow_green.name=Shadow Green Samite
 tile.thebetweenlands.samite.sushi_green.name=Sushi Green Samite
 tile.thebetweenlands.samite.vivid_tangerine.name=Vivid Tangerine Samite
 
+tile.thebetweenlands.samite_canvas_panel.brown_rust.name=Brown Rust Samite Canvas Panel
+tile.thebetweenlands.samite_canvas_panel.cadmium_green.name=Cadmium Green Samite Canvas Panel
+tile.thebetweenlands.samite_canvas_panel.camelot_magenta.name=Camelot Magenta Samite Canvas Panel
+tile.thebetweenlands.samite_canvas_panel.caribbean_green.name=Caribbean Green Samite Canvas Panel
+tile.thebetweenlands.samite_canvas_panel.champagne.name=Champagne Samite Canvas Panel
+tile.thebetweenlands.samite_canvas_panel.dull_lavender.name=Dull Lavender Samite Canvas Panel
+tile.thebetweenlands.samite_canvas_panel.elm_cyan.name=Elm Cyan Samite Canvas Panel
+tile.thebetweenlands.samite_canvas_panel.lavender_blue.name=Lavender Blue Samite Canvas Panel
+tile.thebetweenlands.samite_canvas_panel.maroon.name=Maroon Samite Canvas Panel
+tile.thebetweenlands.samite_canvas_panel.midnight_purple.name=Midnight Purple Samite Canvas Panel
+tile.thebetweenlands.samite_canvas_panel.pewter_grey.name=Pewter Grey Samite Canvas Panel
+tile.thebetweenlands.samite_canvas_panel.raisin_black.name=Raisin Black Samite Canvas Panel
+tile.thebetweenlands.samite_canvas_panel.saffron.name=Saffron Samite Canvas Panel
+tile.thebetweenlands.samite_canvas_panel.shadow_green.name=Shadow Green Samite Canvas Panel
+tile.thebetweenlands.samite_canvas_panel.sushi_green.name=Sushi Green Samite Canvas Panel
+tile.thebetweenlands.samite_canvas_panel.vivid_tangerine.name=Vivid Tangerine Samite Canvas Panel
+
 tile.thebetweenlands.filtered_silt_glass_stained.brown_rust.name=Brown Rust Filtered Silt Glass
 tile.thebetweenlands.filtered_silt_glass_stained.cadmium_green.name=Cadmium Green Filtered Silt Glass
 tile.thebetweenlands.filtered_silt_glass_stained.camelot_magenta.name=Camelot Magenta Filtered Silt Glass
