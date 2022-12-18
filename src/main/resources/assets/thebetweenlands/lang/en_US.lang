@@ -537,6 +537,24 @@ tile.thebetweenlands.lyestone.name=Lyestone
 tile.thebetweenlands.mist_bridge.name=Mist Bridge
 tile.thebetweenlands.shadow_walker.name=Shadow Walker
 tile.thebetweenlands.weak_smooth_cragrock.name=Weak Smooth Cragrock
+
+tile.thebetweenlands.samite.brown_rust.name=Brown Rust Samite
+tile.thebetweenlands.samite.cadmium_green.name=Cadmium Green Samite
+tile.thebetweenlands.samite.camelot_magenta.name=Camelot Magenta Samite
+tile.thebetweenlands.samite.caribbean_green.name=Caribbean Green Samite
+tile.thebetweenlands.samite.champagne.name=Champagne Samite
+tile.thebetweenlands.samite.dull_lavender.name=Dull Lavender Samite
+tile.thebetweenlands.samite.elm_cyan.name=Elm Cyan Samite
+tile.thebetweenlands.samite.lavender_blue.name=Lavender Blue Samite
+tile.thebetweenlands.samite.maroon.name=Maroon Samite
+tile.thebetweenlands.samite.midnight_purple.name=Midnight Purple Samite
+tile.thebetweenlands.samite.pewter_grey.name=Pewter Grey Samite
+tile.thebetweenlands.samite.raisin_black.name=Raisin Black Samite
+tile.thebetweenlands.samite.saffron.name=Saffron Samite
+tile.thebetweenlands.samite.shadow_green.name=Shadow Green Samite
+tile.thebetweenlands.samite.sushi_green.name=Sushi Green Samite
+tile.thebetweenlands.samite.vivid_tangerine.name=Vivid Tangerine Samite
+
 tile.thebetweenlands.filtered_silt_glass_stained.brown_rust.name=Brown Rust Filtered Silt Glass
 tile.thebetweenlands.filtered_silt_glass_stained.cadmium_green.name=Cadmium Green Filtered Silt Glass
 tile.thebetweenlands.filtered_silt_glass_stained.camelot_magenta.name=Camelot Magenta Filtered Silt Glass
