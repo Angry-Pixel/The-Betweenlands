@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "# #",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:filtered_silt_glass"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:filtered_silt_glass_jar"
+  }
+}

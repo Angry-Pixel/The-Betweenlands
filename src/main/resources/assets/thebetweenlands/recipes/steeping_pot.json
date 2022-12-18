@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BRB",
+    "SBS",
+    "CCC"
+  ],
+  "key": {
+    "B": {
+            "item": "thebetweenlands:items_misc",
+            "data": 10
+    },
+    "S": {
+            "item": "thebetweenlands:items_misc",
+            "data": 14
+    },
+    "R": {
+            "item": "thebetweenlands:items_misc",
+            "data": 7
+    },
+    "C": {
+            "item": "thebetweenlands:smooth_cragrock_slab"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:steeping_pot"
+  }
+}

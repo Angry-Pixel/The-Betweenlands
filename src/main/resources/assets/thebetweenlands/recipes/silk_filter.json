@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " W ",
+    "WSW",
+    " W "
+  ],
+  "key": {
+    "W": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    },
+    "S": {
+      "item": "thebetweenlands:items_misc",
+      "data": 63
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:silk_filter"
+  }
+}

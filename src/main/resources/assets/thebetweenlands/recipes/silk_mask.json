@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " R ",
+    "R R",
+    "SSS"
+  ],
+  "key": {
+    "R": {
+      "item": "thebetweenlands:items_misc",
+      "data": 7
+    },
+    "S": {
+      "item": "thebetweenlands:items_misc",
+      "data": 63
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:lurker_skin_pouch"
+  }
+}
