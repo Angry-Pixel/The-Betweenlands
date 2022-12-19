@@ -19,16 +19,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityWaterFilter;
 
@@ -172,17 +168,6 @@ public class BlockWaterFilter extends BlockContainer {
 	private IFluidHandler getFluidHandler(IBlockAccess world, BlockPos pos) {
 		TileEntityWaterFilter tileentity = (TileEntityWaterFilter) world.getTileEntity(pos);
 		return tileentity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-	}
-
-	@Override
-	public void fillWithRain(World world, BlockPos pos) {
-		if (world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && world.getTileEntity(pos) instanceof TileEntityWaterFilter) {
-			TileEntityWaterFilter tile = (TileEntityWaterFilter) world.getTileEntity(pos);
-			
-			if(tile != null) {
-				tile.tank.fill(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME / 2), true);
-			}
-		}
 	}
 
 }
