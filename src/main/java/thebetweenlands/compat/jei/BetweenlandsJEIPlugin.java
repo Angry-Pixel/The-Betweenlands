@@ -197,7 +197,19 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
         // stained glass
         for(EnumBLDyeColor color : EnumBLDyeColor.values()) {
             recipes.add(new ShapedOreRecipe(null, new ItemStack(BlockRegistry.FILTERED_SILT_GLASS_STAINED, 8, color.getMetadata()),
-                    "GGG", "GDG", "GGG", 'G', new ItemStack(BlockRegistry.FILTERED_SILT_GLASS,  1, 0), 'D', new ItemStack(ItemRegistry.DYE,  1, color.getMetadata())).setRegistryName(ModInfo.ID, RecipeRegistry.STAINED_GLASS.getPath() + "_" + color.getDyeColorName()));
+                    "GGG", "GDG", "GGG", 'G', new ItemStack(BlockRegistry.FILTERED_SILT_GLASS, 1, 0), 'D', new ItemStack(ItemRegistry.DYE,  1, color.getMetadata())).setRegistryName(ModInfo.ID, RecipeRegistry.STAINED_GLASS.getPath() + "_" + color.getDyeColorName()));
+        }
+
+        // stained shingles
+        for(EnumBLDyeColor color : EnumBLDyeColor.values()) {
+            recipes.add(new ShapedOreRecipe(null, new ItemStack(BlockRegistry.MUD_BRICK_SHINGLE_STAINED, 8, color.getMetadata()),
+                    "GGG", "GDG", "GGG", 'G', new ItemStack(BlockRegistry.MUD_BRICK_SHINGLES, 1, 0), 'D', new ItemStack(ItemRegistry.DYE,  1, color.getMetadata())).setRegistryName(ModInfo.ID, RecipeRegistry.STAINED_SHINGLES.getPath() + "_" + color.getDyeColorName()));
+        }
+
+        // stained samite
+        for(EnumBLDyeColor color : EnumBLDyeColor.values()) {
+            recipes.add(new ShapedOreRecipe(null, new ItemStack(BlockRegistry.SAMITE, 8, color.getMetadata()),
+                    "GGG", "GDG", "GGG", 'G', new ItemStack(BlockRegistry.SAMITE, 1, OreDictionary.WILDCARD_VALUE), 'D', new ItemStack(ItemRegistry.DYE,  1, color.getMetadata())).setRegistryName(ModInfo.ID, RecipeRegistry.STAINED_SAMITE.getPath() + "_" + color.getDyeColorName()));
         }
 
         // colored item frames
