@@ -185,7 +185,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			}
 			if (this.world.isRemote && this.infusionColorGradientTicks > 0 && this.currentInfusionState == 2) {
 				float colors[] = currentInfusionColor;
-				for(int i = 0; i < 2 + world.rand.nextInt(3); i++) {
+				for(int i = 0; i < 3 + world.rand.nextInt(5); i++) {
 					BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(world, pos.getX() + 0.5F, pos.getY() + 0.75F, pos.getZ() + 0.5F, 
 							ParticleArgs.get()
 							.withMotion((world.rand.nextFloat() * 0.25F - 0.125f) * 0.09f, world.rand.nextFloat() * 0.02F + 0.01F, (world.rand.nextFloat() * 0.25F - 0.125f) * 0.09f)
@@ -232,7 +232,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 				
 				if (this.world.isRemote && this.infusionColorGradientTicks > 0) {
 					float colors[] = currentInfusionColor;
-					for(int i = 0; i < 2 + world.rand.nextInt(3); i++) {
+					for(int i = 0; i < 3 + world.rand.nextInt(5); i++) {
 						BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(world, pos.getX() + 0.5F, pos.getY() + 0.75F, pos.getZ() + 0.5F, 
 								ParticleArgs.get()
 								.withMotion((world.rand.nextFloat() * 0.25F - 0.125f) * 0.09f, world.rand.nextFloat() * 0.02F + 0.01F, (world.rand.nextFloat() * 0.25F - 0.125f) * 0.09f)
