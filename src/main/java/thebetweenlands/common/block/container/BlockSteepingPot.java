@@ -35,6 +35,8 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.EnumBLDrinkableBrew;
@@ -219,10 +221,14 @@ public class BlockSteepingPot extends Block implements ITileEntityProvider {
 				BLParticles.BUBBLE_INFUSION.spawn(world, xx + 0.3F - rand.nextFloat() * 0.6F, yy, zz + 0.3F - rand.nextFloat() * 0.6F, ParticleArgs.get().withScale(0.3F).withColor(type));
 	
 				if (pot.getHeatProgress() >= 100) {
-					BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx - fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), ParticleArgs.get().withScale(0.3F).withColor(type));
-					BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset), ParticleArgs.get().withScale(0.3F).withColor(type));
-					BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz - fixedOffset), ParticleArgs.get().withScale(0.3F).withColor(type));
-					BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) y + 0.75D, (double) (zz + fixedOffset), ParticleArgs.get().withScale(0.3F).withColor(type));
+					for(int i = 0; i < 2 + rand.nextInt(3); i++) {
+						BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(world, pos.getX() + 0.5F, pos.getY() + 0.75F, pos.getZ() + 0.5F, 
+								ParticleArgs.get()
+								.withMotion((rand.nextFloat() * 0.25F - 0.125f) * 0.09f, rand.nextFloat() * 0.02F + 0.01F, (rand.nextFloat() * 0.25F - 0.125f) * 0.09f)
+								.withScale(1f + rand.nextFloat() * 2.0F)
+								.withColor(type)
+								.withData(80, true, 0.01F, true)));
+					}
 				}
 			}
 		}
