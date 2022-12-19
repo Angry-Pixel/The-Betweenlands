@@ -1,5 +1,13 @@
 package thebetweenlands.common.entity;
 
+import java.util.List;
+import java.util.function.Predicate;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.Validate;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.BlockRedstoneDiode;
 import net.minecraft.block.state.IBlockState;
@@ -23,18 +31,12 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.MapData;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import org.apache.commons.lang3.Validate;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.common.item.herblore.ItemAspectVial;
 import thebetweenlands.common.item.misc.ItemGlowingGoop;
 import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.function.Predicate;
 
 public class EntityBLItemFrame extends EntityItemFrame implements IEntityAdditionalSpawnData {
     private static final DataParameter<Integer> COLOR = EntityDataManager.createKey(EntityBLItemFrame.class, DataSerializers.VARINT);

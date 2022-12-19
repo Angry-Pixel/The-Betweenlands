@@ -31,7 +31,6 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
-import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMappedBlock {

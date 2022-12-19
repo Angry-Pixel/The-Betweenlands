@@ -15,7 +15,6 @@ import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.inventory.slot.SlotInvRestriction;
-import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.util.InventoryUtils;
 

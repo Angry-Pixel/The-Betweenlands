@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.container;
 
+import java.util.Random;
+
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -26,9 +28,6 @@ import thebetweenlands.common.item.misc.ItemLifeCrystal;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityMortar;
-
-import javax.annotation.Nullable;
-import java.util.Random;
 
 public class BlockMortar extends BlockContainer {
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;

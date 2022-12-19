@@ -1,10 +1,11 @@
 package thebetweenlands.common.entity.ai;
 
+import java.util.List;
+
 import com.google.common.base.Predicates;
-import net.minecraft.command.EntitySelector;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.passive.EntityTameable;
@@ -12,11 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-
-import java.util.List;
-import java.util.function.Predicate;
 
 public class EntityAIBLAvoidEntity extends EntityAIBase {
 

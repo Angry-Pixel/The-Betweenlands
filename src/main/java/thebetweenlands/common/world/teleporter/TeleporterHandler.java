@@ -4,11 +4,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
-import thebetweenlands.common.config.BetweenlandsConfig;
 
 public final class TeleporterHandler {
 	private static final TeleporterHandler INSTANCE = new TeleporterHandler();

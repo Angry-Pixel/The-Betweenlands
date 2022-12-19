@@ -13,8 +13,9 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.oredict.OreDictionary;
+import thebetweenlands.api.recipes.ISteepingPotRecipe;
 
-public class SteepingPotRecipes {
+public class SteepingPotRecipes implements ISteepingPotRecipe {
 
 	private static final List<SteepingPotRecipes> recipes = new ArrayList<SteepingPotRecipes>();
 
@@ -110,6 +111,16 @@ public class SteepingPotRecipes {
 	public Object[] getInputs() {
 		return input;
 	}
+	
+	public List<ItemStack> getInputAsStacks() {
+		List<ItemStack> stacks = new ArrayList<>();
+		for (int c = 0; c < getInputs().length; c++)
+			if (getInputs()[c] instanceof ItemStack)
+				stacks.add((ItemStack) getInputs()[c]);
+			else
+				stacks.add(ItemStack.EMPTY);
+		return stacks;
+	}
 
 	public FluidStack getInputFluidStack() {
 		return fluidStackIn;
@@ -143,4 +154,5 @@ public class SteepingPotRecipes {
 
 		return RecipeMatcher.findMatches(inputList, stackList) != null;
 	}
+
 }

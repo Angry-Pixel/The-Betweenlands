@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,11 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.item.IAmphibiousArmorUpgrade;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.item.IGenericItem;
-import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import javax.annotation.Nullable;
 
 public class ItemAmphibiousArmourUpgradeToggle extends Item {
 

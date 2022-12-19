@@ -13,8 +13,6 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
-import net.minecraft.util.SoundEvent;
-import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySludgeJet extends Entity {
 

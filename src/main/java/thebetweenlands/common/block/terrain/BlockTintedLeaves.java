@@ -1,15 +1,11 @@
 package thebetweenlands.common.block.terrain;
 
-import java.util.Random;
-
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.biome.BiomeColorHelper;
 import thebetweenlands.common.block.ITintedBlock;
-import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockTintedLeaves extends BlockLeavesBetweenlands implements ITintedBlock {
 	@Override

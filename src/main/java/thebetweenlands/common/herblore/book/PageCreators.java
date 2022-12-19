@@ -12,7 +12,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.oredict.OreDictionary;
 import thebetweenlands.api.aspect.AspectItem;
 import thebetweenlands.api.aspect.IAspectType;
-import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.book.widgets.AspectItemSlideShowWidget;
 import thebetweenlands.common.herblore.book.widgets.AspectSlideShowWidget;
 import thebetweenlands.common.herblore.book.widgets.AspectWidget;

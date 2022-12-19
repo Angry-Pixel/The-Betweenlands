@@ -1,15 +1,15 @@
 package thebetweenlands.common.config.properties;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
+
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.ConfigProperty;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Supplier;
 
 public class BlockListProperty extends ConfigProperty {
 	private final Supplier<String[]> unparsed;

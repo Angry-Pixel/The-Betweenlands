@@ -1,6 +1,10 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.List;
+import java.util.Random;
+
 import com.google.common.collect.ImmutableList;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,9 +26,6 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.util.NBTHelper;
-
-import java.util.List;
-import java.util.Random;
 
 public class ItemShimmerStone extends Item {
 	private static final int MAX_SHIMMER_TICKS = 8;

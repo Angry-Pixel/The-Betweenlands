@@ -1,5 +1,11 @@
 package thebetweenlands.compat.jei.recipes.misc;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.ICraftingGridHelper;
 import mezz.jei.api.gui.IGuiItemStackGroup;
@@ -17,11 +23,6 @@ import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.registries.RecipeRegistry;
 import thebetweenlands.compat.jei.BetweenlandsJEIPlugin;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 
 public class CoatingRecipeJEI implements ICraftingRecipeWrapper, ICustomCraftingRecipeWrapper {

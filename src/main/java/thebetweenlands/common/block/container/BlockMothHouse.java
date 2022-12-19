@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.container;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -21,8 +23,6 @@ import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityMothHouse;
-
-import javax.annotation.Nullable;
 
 public class BlockMothHouse  extends BlockContainer {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;

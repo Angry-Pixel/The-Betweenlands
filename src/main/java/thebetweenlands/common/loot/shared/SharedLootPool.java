@@ -15,7 +15,6 @@ import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.loot.ISharedLootPool;
 import thebetweenlands.api.loot.LootTableView;
 import thebetweenlands.common.world.storage.SharedLootPoolStorage;
-import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class SharedLootPool implements ISharedLootPool {
 	protected ResourceLocation lootTableLocation;

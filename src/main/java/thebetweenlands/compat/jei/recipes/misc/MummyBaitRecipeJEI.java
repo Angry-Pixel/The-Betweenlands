@@ -1,5 +1,10 @@
 package thebetweenlands.compat.jei.recipes.misc;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
@@ -11,10 +16,6 @@ import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MummyBaitRecipeJEI implements ICraftingRecipeWrapper {
 

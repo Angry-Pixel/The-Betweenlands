@@ -1,6 +1,5 @@
 package thebetweenlands.common.block.terrain;
 
-import java.util.List;
 import java.util.Locale;
 
 import net.minecraft.block.Block;

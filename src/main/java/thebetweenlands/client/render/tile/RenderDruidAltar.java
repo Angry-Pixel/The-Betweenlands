@@ -1,5 +1,9 @@
 package thebetweenlands.client.render.tile;
 
+import java.util.Random;
+
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -16,15 +20,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.render.model.tile.ModelDruidAltar;
 import thebetweenlands.client.render.model.tile.ModelStone;
 import thebetweenlands.common.block.container.BlockDruidAltar;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.util.LightingUtil;
 import thebetweenlands.util.StatePropertyHelper;
-
-import java.util.Random;
 
 @SideOnly(Side.CLIENT)
 public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidAltar> {

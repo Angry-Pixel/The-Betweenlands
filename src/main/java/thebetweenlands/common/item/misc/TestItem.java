@@ -11,11 +11,6 @@ import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.world.gen.feature.WorldGenLakeCavernSimulacrum;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenSludgeWormDungeon;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenSpawner;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenSpawnerStructure;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
 
 
 //MINE!!

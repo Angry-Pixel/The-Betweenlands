@@ -14,7 +14,6 @@ import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.client.render.shader.postprocessing.WorldShader;
 
 public class ParticleLightningArc extends Particle {
 	private class Arc {

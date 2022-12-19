@@ -3,7 +3,6 @@ package thebetweenlands.client.render.model.entity.rowboat;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
-import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.entity.rowboat.Lantern;
 
 public class ModelLantern extends ModelBase {

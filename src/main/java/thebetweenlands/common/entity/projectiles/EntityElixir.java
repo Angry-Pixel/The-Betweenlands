@@ -1,9 +1,13 @@
 package thebetweenlands.common.entity.projectiles;
 
 
+import java.util.Iterator;
+import java.util.List;
+
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.projectile.EntityPotion;
+import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -13,13 +17,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-
-import java.util.Iterator;
-import java.util.List;
-
-import net.minecraft.entity.projectile.EntityThrowable;
-
-import net.minecraft.nbt.NBTTagCompound;
 import thebetweenlands.api.event.SplashPotionEvent;
 import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;

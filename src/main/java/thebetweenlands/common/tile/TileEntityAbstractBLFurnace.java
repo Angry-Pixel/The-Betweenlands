@@ -1,5 +1,13 @@
 package thebetweenlands.common.tile;
 
+import java.util.ArrayList;
+import java.util.function.IntPredicate;
+import java.util.stream.IntStream;
+
+import org.apache.commons.lang3.ArrayUtils;
+
+import com.google.common.base.Preconditions;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
@@ -13,19 +21,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.ItemStackHandler;
-
-import org.apache.commons.lang3.ArrayUtils;
-
-import com.google.common.base.Preconditions;
-
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import java.util.ArrayList;
-import java.util.function.BiFunction;
-import java.util.function.IntPredicate;
-import java.util.stream.IntStream;
 
 public abstract class TileEntityAbstractBLFurnace extends TileEntityBasicInventory implements ISidedInventory, ITickable {
     private static final String NBT_BURN_TIME = "BurnTime";

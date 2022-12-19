@@ -1,6 +1,5 @@
 package thebetweenlands.client.tab;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.registries.ItemRegistry;
 

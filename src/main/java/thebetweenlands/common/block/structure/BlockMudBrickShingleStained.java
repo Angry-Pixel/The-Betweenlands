@@ -1,6 +1,7 @@
 package thebetweenlands.common.block.structure;
 
-import net.minecraft.block.properties.IProperty;
+import java.util.Locale;
+
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -10,13 +11,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.property.ExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
 import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry;
-
-import java.util.Locale;
 
 public class BlockMudBrickShingleStained extends BlockMudBricks implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeItemBlockModelDefinition {
     public static final PropertyEnum<EnumBLDyeColor> COLOR = PropertyEnum.create("color", EnumBLDyeColor.class);

@@ -20,7 +20,6 @@ import thebetweenlands.client.render.shader.ResizableFramebuffer;
 import thebetweenlands.common.world.event.EventRift;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.FramebufferStack;
-import thebetweenlands.util.RenderUtils;
 
 public class RiftRenderer implements IRiftRenderer {
 	protected final int skyDomeDispList;

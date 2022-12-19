@@ -1,5 +1,9 @@
 package thebetweenlands.common.block.structure;
 
+import java.util.Random;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyEnum;
@@ -22,9 +26,6 @@ import net.minecraft.world.World;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.item.ItemBlockSlab;
 import thebetweenlands.common.registries.BlockRegistry;
-
-import javax.annotation.Nonnull;
-import java.util.Random;
 
 public class BlockSlabBetweenlands extends BasicBlock implements BlockRegistry.ICustomItemBlock {
 	public static final PropertyEnum<EnumBlockHalfBL> HALF = PropertyEnum.<EnumBlockHalfBL>create("half", EnumBlockHalfBL.class);

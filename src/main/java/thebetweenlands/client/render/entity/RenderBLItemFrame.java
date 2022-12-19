@@ -1,7 +1,13 @@
 package thebetweenlands.client.render.entity;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ModelManager;
@@ -22,8 +28,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.EntityBLItemFrame;
 import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.lib.ModInfo;
-
-import javax.annotation.Nullable;
 
 @SideOnly(Side.CLIENT)
 public class RenderBLItemFrame extends RenderItemFrame

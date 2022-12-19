@@ -1,5 +1,8 @@
 package thebetweenlands.client.render.model.entity.rowboat;
 
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -7,8 +10,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
 import thebetweenlands.util.phys.DiffEqSolver;
 import thebetweenlands.util.phys.PendulumSimulation;
 import thebetweenlands.util.phys.RungeKuttaSolver;

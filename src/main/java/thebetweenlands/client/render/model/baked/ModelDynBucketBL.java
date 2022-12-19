@@ -2,7 +2,6 @@ package thebetweenlands.client.render.model.baked;
 
 import java.util.Collection;
 
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonParser;

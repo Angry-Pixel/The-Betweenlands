@@ -1,5 +1,9 @@
 package thebetweenlands.common.item.equipment;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
@@ -31,9 +35,6 @@ import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
 import thebetweenlands.util.NBTHelper;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemRingOfFlight extends ItemRing {
 	public ItemRingOfFlight() {

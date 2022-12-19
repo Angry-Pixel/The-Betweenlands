@@ -1,12 +1,12 @@
 package thebetweenlands.common.world.gen.feature.tree;
 
+import java.util.Random;
+
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.plant.BlockVineBL;
-
-import java.util.Random;
 
 public class WorldGenGiantTreeDead extends WorldGenGiantTreeTrunk {
 	private static final float TILT_SCALE = 0.2F;

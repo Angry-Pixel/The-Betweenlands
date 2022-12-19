@@ -1,10 +1,11 @@
 package thebetweenlands.client.render.sprite;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import thebetweenlands.client.handler.TextureStitchHandler.Frame;
+import java.util.Random;
 
 import javax.annotation.Nullable;
-import java.util.Random;
+
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import thebetweenlands.client.handler.TextureStitchHandler.Frame;
 
 public class TextureAnimation {
     private Frame[] frames;

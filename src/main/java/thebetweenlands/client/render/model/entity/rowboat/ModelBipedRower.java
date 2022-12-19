@@ -1,13 +1,11 @@
 package thebetweenlands.client.render.model.entity.rowboat;
 
 import java.util.EnumMap;
-import java.util.Iterator;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-
 import thebetweenlands.client.render.model.AdvancedModelRenderer;
 import thebetweenlands.client.render.model.entity.ModelBoxCustomizable;
 import thebetweenlands.common.entity.rowboat.ShipSide;

@@ -1,13 +1,13 @@
 package thebetweenlands.client.render.model.entity;
 
 import net.minecraft.client.model.ModelBox;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import thebetweenlands.client.render.model.AdvancedModelRenderer;
 import thebetweenlands.client.render.model.MowzieModelBase;
 import thebetweenlands.client.render.model.MowzieModelRenderer;
-import net.minecraft.entity.Entity;
 import thebetweenlands.common.entity.mobs.EntityStalker;
 
 public class ModelStalker extends MowzieModelBase {

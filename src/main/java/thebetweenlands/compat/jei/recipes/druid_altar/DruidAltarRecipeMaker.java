@@ -1,12 +1,13 @@
 package thebetweenlands.compat.jei.recipes.druid_altar;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import mezz.jei.api.recipe.IRecipeWrapper;
 import thebetweenlands.api.recipes.IDruidAltarRecipe;
 import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DruidAltarRecipeMaker {
     @Nonnull

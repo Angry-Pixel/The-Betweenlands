@@ -8,9 +8,6 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -21,14 +18,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
-import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.item.misc.ItemGem;
 import thebetweenlands.common.item.misc.ItemMisc;
-import thebetweenlands.common.item.misc.ItemShimmerStone;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
-
-import java.util.List;
 
 public class AdvancementHandler {
 

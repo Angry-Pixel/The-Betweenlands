@@ -1,5 +1,14 @@
 package thebetweenlands.common.entity.ai.gecko;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.ConcurrentModificationException;
+import java.util.List;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
@@ -13,9 +22,6 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.Vec3d;
 import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.registries.BlockRegistry;
-
-import javax.annotation.Nullable;
-import java.util.*;
 
 public abstract class EntityAIGeckoHide extends EntityAIBase {
 	private final Comparator<BlockPos> closest = (a, b) -> {

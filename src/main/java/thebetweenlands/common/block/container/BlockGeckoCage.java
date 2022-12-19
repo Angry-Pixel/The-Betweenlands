@@ -2,8 +2,6 @@ package thebetweenlands.common.block.container;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -40,7 +38,6 @@ import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityGeckoCage;
-import thebetweenlands.util.TranslationHelper;
 
 public class BlockGeckoCage extends BlockContainer {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);

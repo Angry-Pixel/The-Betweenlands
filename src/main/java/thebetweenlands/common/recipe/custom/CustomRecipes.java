@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

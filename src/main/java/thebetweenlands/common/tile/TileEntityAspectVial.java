@@ -1,5 +1,7 @@
 package thebetweenlands.common.tile;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -9,8 +11,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.common.herblore.Amounts;
-
-import javax.annotation.Nullable;
 
 public class TileEntityAspectVial extends TileEntity {
     public static final float MAX_AMOUNT = Amounts.VIAL;

@@ -93,6 +93,8 @@ import thebetweenlands.compat.jei.recipes.purifier.PurifierRecipeCategory;
 import thebetweenlands.compat.jei.recipes.purifier.PurifierRecipeMaker;
 import thebetweenlands.compat.jei.recipes.smoking_rack.SmokingRackRecipeCategory;
 import thebetweenlands.compat.jei.recipes.smoking_rack.SmokingRackRecipeMaker;
+import thebetweenlands.compat.jei.recipes.steeping_pot.SteepingPotRecipeCategory;
+import thebetweenlands.compat.jei.recipes.steeping_pot.SteepingPotRecipeMaker;
 
 @JEIPlugin
 public class BetweenlandsJEIPlugin implements IModPlugin {
@@ -105,6 +107,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
     public static final String SMOKING_RACK_CATEGORY_UID = ModInfo.ID + ":smoking_rack";
     public static final String CRAB_POT_FILTER_BUBBLER_CATEGORY_UID = ModInfo.ID + ":crab_pot_filter_bubbler";
     public static final String CRAB_POT_FILTER_SILT_CATEGORY_UID = ModInfo.ID + ":crab_pot_filter_silt";
+    public static final String STEEPING_POT_CATEGORY_UID = ModInfo.ID + ":steeping_pot";
 
     public static IJeiHelpers jeiHelper;
     public static IJeiRuntime jeiRuntime;
@@ -126,6 +129,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.SMOKING_RACK), SMOKING_RACK_CATEGORY_UID);
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.CRAB_POT_FILTER), CRAB_POT_FILTER_BUBBLER_CATEGORY_UID);
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.CRAB_POT_FILTER), CRAB_POT_FILTER_SILT_CATEGORY_UID);
+        registry.addRecipeCatalyst(new ItemStack(BlockRegistry.STEEPING_POT), STEEPING_POT_CATEGORY_UID);
 
         registry.addRecipes(CompostRecipeMaker.getRecipes(), COMPOST_CATEGORY_UID);
         registry.addRecipes(AnimatorRecipeMaker.getRecipes(), ANIMATOR_CATEGORY_UID);
@@ -135,6 +139,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
         registry.addRecipes(SmokingRackRecipeMaker.getRecipes(), SMOKING_RACK_CATEGORY_UID);
         registry.addRecipes(CrabPotFilterBubblerRecipeMaker.getRecipes(), CRAB_POT_FILTER_BUBBLER_CATEGORY_UID);
         registry.addRecipes(CrabPotFilterSiltRecipeMaker.getRecipes(), CRAB_POT_FILTER_SILT_CATEGORY_UID);
+        registry.addRecipes(SteepingPotRecipeMaker.getRecipes(), STEEPING_POT_CATEGORY_UID);
 
         registry.handleRecipes(ShapelessOverrideDummyRecipe.class, recipe -> new ShapelessOverrideRecipeJEI(jeiHelper, recipe), VanillaRecipeCategoryUid.CRAFTING);
         registry.handleRecipes(ShapedOverrideDummyRecipe.class, recipe -> new ShapedOverrideRecipeJEI(jeiHelper, recipe), VanillaRecipeCategoryUid.CRAFTING);
@@ -338,7 +343,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
     @Override
 	public void registerCategories(IRecipeCategoryRegistration registry) {
         jeiHelper = registry.getJeiHelpers();
-        registry.addRecipeCategories(new CompostRecipeCategory(), new AnimatorRecipeCategory(), new DruidAltarRecipeCategory(), new PestleAndMortarCategory(), new PurifierRecipeCategory(), new SmokingRackRecipeCategory(), new CrabPotFilterBubblerRecipeCategory(), new CrabPotFilterSiltRecipeCategory());
+        registry.addRecipeCategories(new CompostRecipeCategory(), new AnimatorRecipeCategory(), new DruidAltarRecipeCategory(), new PestleAndMortarCategory(), new PurifierRecipeCategory(), new SmokingRackRecipeCategory(), new CrabPotFilterBubblerRecipeCategory(), new CrabPotFilterSiltRecipeCategory(), new SteepingPotRecipeCategory());
     }
 
     public static void addRecipeName(ResourceLocation registryName, IGuiItemStackGroup guiItemStacks, int ouputIndex) {

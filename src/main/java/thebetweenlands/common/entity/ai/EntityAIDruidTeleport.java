@@ -1,14 +1,14 @@
 package thebetweenlands.common.entity.ai;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Predicate;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.player.EntityPlayer;
 import thebetweenlands.common.entity.mobs.EntityDarkDruid;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Predicate;
 
 public class EntityAIDruidTeleport extends EntityAIBase {
 	private EntityAINearestAttackableTarget.Sorter nearestEntitySorter;

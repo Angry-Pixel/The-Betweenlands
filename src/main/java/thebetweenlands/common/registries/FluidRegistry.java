@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import thebetweenlands.common.item.EnumBLDrinkableBrew;
@@ -62,6 +63,16 @@ public class FluidRegistry {
 			}
 			return this.getUnlocalizedName();
 		}
+		
+		@Override
+		public String getLocalizedName(FluidStack stack) {
+			if (stack.tag != null && stack.tag.hasKey("type")) {
+				String type = "dye_fluid." + EnumBLDyeColor.byMetadata(stack.tag.getInteger("type")).getDyeColorName();
+				setUnlocalizedName(type);
+				return I18n.translateToLocal(this.getUnlocalizedName());
+			}
+			return this.getUnlocalizedName();
+		}
 
 	}.setDensity(1000).setViscosity(1000);
 	
@@ -80,6 +91,16 @@ public class FluidRegistry {
 				String type = "drinkable_brew." + EnumBLDrinkableBrew.byMetadata(stack.tag.getInteger("type")).getBrewName();
 				setUnlocalizedName(type);
 				return this.getUnlocalizedName() + type;
+			}
+			return this.getUnlocalizedName();
+		}
+		
+		@Override
+		public String getLocalizedName(FluidStack stack) {
+			if (stack.tag != null && stack.tag.hasKey("type")) {
+				String type = "drinkable_brew." + EnumBLDrinkableBrew.byMetadata(stack.tag.getInteger("type")).getBrewName();
+				setUnlocalizedName(type);
+				return I18n.translateToLocal(this.getUnlocalizedName());
 			}
 			return this.getUnlocalizedName();
 		}

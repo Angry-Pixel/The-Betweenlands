@@ -2,10 +2,7 @@ package thebetweenlands.client.render.model.entity;
 
 import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.GlStateManager.DestFactor;
-import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.entity.Entity;
-import thebetweenlands.util.LightingUtil;
 
 public class ModelPlayerColored extends ModelPlayer {
 	private float r, g, b, a;

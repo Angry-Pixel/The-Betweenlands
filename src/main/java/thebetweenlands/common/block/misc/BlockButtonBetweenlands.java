@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.misc;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.BlockButton;
 import net.minecraft.block.SoundType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,8 +10,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
-
-import javax.annotation.Nullable;
 
 public class BlockButtonBetweenlands extends BlockButton {
     private boolean wooden;

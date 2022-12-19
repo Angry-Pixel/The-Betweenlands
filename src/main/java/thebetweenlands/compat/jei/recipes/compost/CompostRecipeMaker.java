@@ -1,12 +1,13 @@
 package thebetweenlands.compat.jei.recipes.compost;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import mezz.jei.api.recipe.IRecipeWrapper;
 import thebetweenlands.api.recipes.ICompostBinRecipe;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CompostRecipeMaker {
     @Nonnull

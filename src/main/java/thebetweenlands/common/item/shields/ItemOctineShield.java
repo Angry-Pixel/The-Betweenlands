@@ -2,7 +2,6 @@ package thebetweenlands.common.item.shields;
 
 import java.util.List;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,7 +13,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.tools.ItemBLShield;
-import thebetweenlands.common.registries.KeyBindRegistry;
 
 public class ItemOctineShield extends ItemBLShield {
 	public ItemOctineShield() {

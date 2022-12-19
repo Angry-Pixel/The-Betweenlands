@@ -1,5 +1,7 @@
 package thebetweenlands.client.render.tile;
 
+import java.util.Random;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
@@ -20,8 +22,6 @@ import net.minecraft.util.math.MathHelper;
 import thebetweenlands.client.render.model.tile.ModelCompostBin;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityCompostBin;
-
-import java.util.Random;
 
 public class RenderCompostBin extends TileEntitySpecialRenderer<TileEntityCompostBin> {
 	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/compost_bin.png");

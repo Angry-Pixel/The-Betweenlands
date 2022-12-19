@@ -6,10 +6,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.lang.reflect.Field;
-import java.util.LinkedList;
-import java.util.List;
-
 @SideOnly(Side.CLIENT)
 public class MowzieModelBase extends ModelBase {
     /**

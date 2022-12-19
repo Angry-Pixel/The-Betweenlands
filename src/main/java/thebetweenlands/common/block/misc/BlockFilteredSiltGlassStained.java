@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.misc;
 
+import java.util.Locale;
+
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -18,7 +20,6 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry;
-import java.util.Locale;
 
 public class BlockFilteredSiltGlassStained extends BlockFilteredSiltGlass implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeItemBlockModelDefinition {
     public static final PropertyEnum<EnumBLDyeColor> COLOR = PropertyEnum.create("color", EnumBLDyeColor.class);

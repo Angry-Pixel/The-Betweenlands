@@ -1,16 +1,13 @@
 package thebetweenlands.common.recipe.misc;
 
 import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import thebetweenlands.common.item.EnumBLDyeColor;
-import thebetweenlands.common.item.misc.ItemBLDye;
 import thebetweenlands.common.item.misc.ItemMisc;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class RecipeColoredItemFrame extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {

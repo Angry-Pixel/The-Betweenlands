@@ -1,6 +1,12 @@
 package thebetweenlands.client.render.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.lwjgl.opengl.GL11;
+
 import com.google.common.collect.Lists;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
@@ -9,12 +15,8 @@ import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 import thebetweenlands.util.MathUtils;
 import thebetweenlands.util.RotationOrder;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AdvancedModelRenderer extends MowzieModelRenderer {
     public boolean compiled;

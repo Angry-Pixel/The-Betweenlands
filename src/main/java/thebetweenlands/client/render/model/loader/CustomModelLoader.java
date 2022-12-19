@@ -1,5 +1,19 @@
 package thebetweenlands.client.render.model.loader;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import javax.annotation.Nonnull;
+
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.google.common.base.Function;
 
 import net.minecraft.client.Minecraft;
@@ -18,18 +32,15 @@ import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.tuple.Pair;
-
 import thebetweenlands.client.render.entity.RenderBLItemFrame;
 import thebetweenlands.client.render.entity.RenderDraeton;
-import thebetweenlands.client.render.model.loader.extension.*;
+import thebetweenlands.client.render.model.loader.extension.AdvancedItemLoaderExtension;
+import thebetweenlands.client.render.model.loader.extension.LoaderExtension;
+import thebetweenlands.client.render.model.loader.extension.LoaderExtensionException;
+import thebetweenlands.client.render.model.loader.extension.ModelProcessorLoaderExtension;
+import thebetweenlands.client.render.model.loader.extension.SimpleItemLoaderExtension;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
-
-import javax.annotation.Nonnull;
-import java.util.*;
-import java.util.Map.Entry;
 
 public final class CustomModelLoader implements ICustomModelLoader {
 	private static enum LoaderType {

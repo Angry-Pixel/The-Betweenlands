@@ -12,21 +12,18 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.item.Item;
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.api.item.IAmphibiousArmorAttributeUpgrade;
 import thebetweenlands.api.item.IAmphibiousArmorUpgrade;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
-import thebetweenlands.common.item.misc.ItemGlowingGoop;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;

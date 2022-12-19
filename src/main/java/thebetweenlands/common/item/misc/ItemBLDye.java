@@ -1,7 +1,10 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
+
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -10,10 +13,6 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Stream;
 
 public class ItemBLDye extends Item implements ItemRegistry.IMultipleItemModelDefinition {
     public ItemBLDye() {

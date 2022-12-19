@@ -9,8 +9,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.armor.ModelSpiritTreeFaceMaskLarge;
 import thebetweenlands.client.render.model.armor.ModelSpiritTreeFaceMaskSmall;
-import thebetweenlands.client.render.model.entity.ModelSpiritTreeFaceLarge;
-import thebetweenlands.client.render.model.entity.ModelSpiritTreeFaceSmall2;
 import thebetweenlands.common.entity.EntitySpiritTreeFaceMask;
 import thebetweenlands.common.lib.ModInfo;
 
