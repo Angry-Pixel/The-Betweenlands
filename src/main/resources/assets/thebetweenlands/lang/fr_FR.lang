@@ -537,6 +537,41 @@ tile.thebetweenlands.lyestone.name=Pierre d'Alkalie
 tile.thebetweenlands.mist_bridge.name=Pont de Brume
 tile.thebetweenlands.shadow_walker.name=Marcheur d'Ombre
 tile.thebetweenlands.weak_smooth_cragrock.name=Crageroche Polie Fragile
+
+tile.thebetweenlands.samite.brown_rust.name=Samit Marron Rouille
+tile.thebetweenlands.samite.cadmium_green.name=Samit Vert de Cadmium
+tile.thebetweenlands.samite.camelot_magenta.name=Samit Rose Bonbon
+tile.thebetweenlands.samite.caribbean_green.name=Samit Vert des Caraïbes
+tile.thebetweenlands.samite.champagne.name=Samit Jaune Champagne
+tile.thebetweenlands.samite.dull_lavender.name=Samit Lavande
+tile.thebetweenlands.samite.elm_cyan.name=Samit Cyan Foncé
+tile.thebetweenlands.samite.lavender_blue.name=Samit Bleu Lavande
+tile.thebetweenlands.samite.maroon.name=Samit Rouge Cramoisi
+tile.thebetweenlands.samite.midnight_purple.name=Samit Pourpre
+tile.thebetweenlands.samite.pewter_grey.name=Samit Gris Perle
+tile.thebetweenlands.samite.raisin_black.name=Samit Noir Aile de Corbeau
+tile.thebetweenlands.samite.saffron.name=Samit Jaune Safran
+tile.thebetweenlands.samite.shadow_green.name=Samit Vert Menthe
+tile.thebetweenlands.samite.sushi_green.name=Samit Vert Pistache
+tile.thebetweenlands.samite.vivid_tangerine.name=Samit Rose Pêche
+
+tile.thebetweenlands.samite_canvas_panel.brown_rust.name=Panneau de Toile en Samit Marron Rouille
+tile.thebetweenlands.samite_canvas_panel.cadmium_green.name=Panneau de Toile en Samit Vert de Cadmium
+tile.thebetweenlands.samite_canvas_panel.camelot_magenta.name=Panneau de Toile en Samit Rose Bonbon
+tile.thebetweenlands.samite_canvas_panel.caribbean_green.name=Panneau de Toile en Samit Vert des Caraïbes
+tile.thebetweenlands.samite_canvas_panel.champagne.name=Panneau de Toile en Samit Jaune Champagne
+tile.thebetweenlands.samite_canvas_panel.dull_lavender.name=Panneau de Toile en Samit Lavande
+tile.thebetweenlands.samite_canvas_panel.elm_cyan.name=Panneau de Toile en Samit Cyan Foncé
+tile.thebetweenlands.samite_canvas_panel.lavender_blue.name=Panneau de Toile en Samit Bleu Lavande
+tile.thebetweenlands.samite_canvas_panel.maroon.name=Panneau de Toile en Samit Rouge Cramoisi
+tile.thebetweenlands.samite_canvas_panel.midnight_purple.name=Panneau de Toile en Samit Pourpre
+tile.thebetweenlands.samite_canvas_panel.pewter_grey.name=Panneau de Toile en Samit Gris Perle
+tile.thebetweenlands.samite_canvas_panel.raisin_black.name=Panneau de Toile en Samit Noir Aile de Corbeau
+tile.thebetweenlands.samite_canvas_panel.saffron.name=Panneau de Toile en Samit Jaune Safran
+tile.thebetweenlands.samite_canvas_panel.shadow_green.name=Panneau de Toile en Samit Vert Menthe
+tile.thebetweenlands.samite_canvas_panel.sushi_green.name=Panneau de Toile en Samit Vert Pistache
+tile.thebetweenlands.samite_canvas_panel.vivid_tangerine.name=Panneau de Toile en Samit Rose Pêche
+
 tile.thebetweenlands.filtered_silt_glass_stained.brown_rust.name=Verre en Limon Filtré Marron Rouille
 tile.thebetweenlands.filtered_silt_glass_stained.cadmium_green.name=Verre en Limon Filtré Vert de Cadmium
 tile.thebetweenlands.filtered_silt_glass_stained.camelot_magenta.name=Verre en Limon Filtré Rose Bonbon
@@ -571,7 +606,7 @@ tile.thebetweenlands.mud_brick_shingle_stained.shadow_green.name=Bardeaux en Bri
 tile.thebetweenlands.mud_brick_shingle_stained.sushi_green.name=Bardeaux en Briques de Boue Vert Pistache
 tile.thebetweenlands.mud_brick_shingle_stained.vivid_tangerine.name=Bardeaux en Briques de Boue Rose Pêche
 
-tile.thebetweenlands.boiling_pot.name=Pot à Macération
+tile.thebetweenlands.steeping_pot.name=Pot à Macération
 tile.thebetweenlands.grub_hub.name=Colonie de Vers
 tile.thebetweenlands.water_filter.name=Filtre à Eau
 tile.thebetweenlands.moth_house.name=Cabane à Papillons
@@ -1076,6 +1111,26 @@ item.thebetweenlands.item_frame.shadow_green.name=Cadre Vert Menthe
 item.thebetweenlands.item_frame.sushi_green.name=Cadre Vert Pistache
 item.thebetweenlands.item_frame.vivid_tangerine.name=Cadre Rose Pêche
 
+# Item brews
+item.thebetweenlands.drinkable_brew.nettle_soup.name=Soupe d'Ortie
+item.thebetweenlands.drinkable_brew.nettle_tea.name=Thé d'Ortie
+item.thebetweenlands.drinkable_brew.pheromone_extract.name=Extrait de Phéromone
+item.thebetweenlands.drinkable_brew.swamp_broth.name=Bouillon du Marais
+item.thebetweenlands.drinkable_brew.sturdy_stock.name=Tonic du Robuste
+item.thebetweenlands.drinkable_brew.pear_cordial.name=Poire Vineuse
+item.thebetweenlands.drinkable_brew.shamans_brew.name=Brevage du Shaman
+item.thebetweenlands.drinkable_brew.lake_broth.name=Bouillon du Lac
+item.thebetweenlands.drinkable_brew.shell_stock.name=Tonic d'Encoquilleur
+item.thebetweenlands.drinkable_brew.frog_leg_extract.name=Extrait de Cuisse de Grenouille
+item.thebetweenlands.drinkable_brew.witch_tea.name=Thé de la Sorcière
+
+# unused atm
+# item.thebetweenlands.drinkable_brew.drinkable_brew_11.name=NYI needs lang
+# item.thebetweenlands.drinkable_brew.drinkable_brew_12.name=NYI needs lang
+# item.thebetweenlands.drinkable_brew.drinkable_brew_13.name=NYI needs lang
+# item.thebetweenlands.drinkable_brew.drinkable_brew_14.name=NYI needs lang
+# item.thebetweenlands.drinkable_brew.drinkable_brew_15.name=NYI needs lang
+
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Fiole en Dendrotisthe Verte
 item.thebetweenlands.elixir.dentrothyst_vial.orange.name=Fiole en Dendrotisthe Orange
@@ -1106,7 +1161,7 @@ fluid.dye_fluid.brown_rust=Colorant Marron Rouille
 fluid.dye_fluid.cadmium_green=Colorant Vert de Cadmium
 fluid.dye_fluid.camelot_magenta=Colorant Rose Bonbon
 fluid.dye_fluid.caribbean_green=Colorant Vert Caraïbes
-fluid.dye_fluid.champagnee=Colorant Jaune Champagne
+fluid.dye_fluid.champagne=Colorant Jaune Champagne
 fluid.dye_fluid.dull_lavender=Colorant Lavande
 fluid.dye_fluid.elm_cyan=Colorant Blue Lavande
 fluid.dye_fluid.lavender_blue=Colorant Bleu Lavande
@@ -1120,9 +1175,9 @@ fluid.dye_fluid.sushi_green=Colorant Vert Pistache
 fluid.dye_fluid.vivid_tangerine=Colorant Rose Pêche
 
 # Fluid brews
-fluid.drinkable_brew.nettle_soup=Soupe d'Ortie
-fluid.drinkable_brew.nettle_tea=Tisane d'Ortie
-fluid.drinkable_brew.pheromone_extract=Extrait de Phéromones
+fluid.drinkable_brew.nettle_soup=Nettle Soup
+fluid.drinkable_brew.nettle_tea=Nettle Tea
+fluid.drinkable_brew.pheromone_extract=Pheromone Extract
 fluid.drinkable_brew.drinkable_brew_3=NYI needs lang
 fluid.drinkable_brew.drinkable_brew_4=NYI needs lang
 fluid.drinkable_brew.drinkable_brew_5=NYI needs lang
@@ -1136,6 +1191,15 @@ fluid.drinkable_brew.drinkable_brew_12=NYI needs lang
 fluid.drinkable_brew.drinkable_brew_13=NYI needs lang
 fluid.drinkable_brew.drinkable_brew_14=NYI needs lang
 fluid.drinkable_brew.drinkable_brew_15=NYI needs lang
+
+fluid.drinkable_brew.swamp_broth=Soupe d'Ortie
+fluid.drinkable_brew.sturdy_stock=Tonic du Robuste
+fluid.drinkable_brew.pear_cordial=Poire Vineuse
+fluid.drinkable_brew.shamans_brew=Brevage du Shaman
+fluid.drinkable_brew.lake_broth=Bouillon du Lac
+fluid.drinkable_brew.shell_stock=Tonic d'Encoquilleur
+fluid.drinkable_brew.frog_leg_extract=Extrait de Cuisse de Grenouille
+fluid.drinkable_brew.witch_tea=Thé de la Sorcière
 
 # Creative Tabs
 itemGroup.thebetweenlands.block=Blocs des Betweenlands
@@ -1823,6 +1887,7 @@ jei.thebetweenlands.animator.life=Quantité de vie: %d
 jei.thebetweenlands.animator.fuel=Quantité de carburant: %d
 jei.thebetweenlands.tarred_weedwood_boat=Cliquer sur une barque avec une Goutte de Goudron la rendra goudronnée. Une barque goudronnée ne part pas à la dérive et est plus facile à manœuvrer.
 jei.thebetweenlands.druid_circle_reactivate=Réactive le Générateur de Druides
+jei.thebetweenlands.recipe.steeping_pot=Pot à Macération
 
 # Commands
 command.generic.noplayer=You must be a player
