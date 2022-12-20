@@ -220,6 +220,12 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
         for(EnumBLDyeColor color : EnumBLDyeColor.values()) {
             recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.ITEM_FRAME, 1, color.getMetadata()), new ItemStack(ItemRegistry.ITEM_FRAME,1, EnumBLDyeColor.PEWTER_GREY.getMetadata()), new ItemStack(ItemRegistry.DYE, 1, color.getMetadata())).setRegistryName(ModInfo.ID, RecipeRegistry.COLORED_ITEM_FRAME.getPath() + "_" + color.getDyeColorName()));
         }
+        
+        // colored reed mats
+        for(EnumBLDyeColor color : EnumBLDyeColor.values()) {
+            recipes.add(new ShapedOreRecipe(null, new ItemStack(BlockRegistry.REED_MAT_COLORED, 8, color.getMetadata()),
+                    "GGG", "GDG", "GGG", 'G', new ItemStack(BlockRegistry.REED_MAT), 'D', new ItemStack(ItemRegistry.DYE,  1, color.getMetadata())).setRegistryName(ModInfo.ID, RecipeRegistry.REED_MAT_COLORED.getPath() + "_" + color.getDyeColorName()));
+        }
 
         //Vials
         recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 0), new ItemStack(ItemRegistry.ASPECT_VIAL,  1, 0)).setRegistryName(ModInfo.ID, RecipeRegistry.ASPECT_VIAL.getPath() + "_green"));

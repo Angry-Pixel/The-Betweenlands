@@ -110,6 +110,7 @@ import thebetweenlands.common.block.misc.BlockPaneBetweenlands;
 import thebetweenlands.common.block.misc.BlockPolishedDentrothyst;
 import thebetweenlands.common.block.misc.BlockPressurePlateBetweenlands;
 import thebetweenlands.common.block.misc.BlockReedMat;
+import thebetweenlands.common.block.misc.BlockReedMatColored;
 import thebetweenlands.common.block.misc.BlockRope;
 import thebetweenlands.common.block.misc.BlockRubberTap;
 import thebetweenlands.common.block.misc.BlockSamiteCanvasPanel;
@@ -949,7 +950,8 @@ public class BlockRegistry {
     public static final Block SAMITE = new BlockBLColored(Material.CLOTH, SoundType.CLOTH).setHardness(0.8F);
     public static final Block SAMITE_CANVAS_PANEL = new BlockSamiteCanvasPanel(Material.CLOTH, SoundType.CLOTH).setHardness(0.8F);
     public static final Block SAMITE_CANVAS_PANEL_ROTATED = new BlockSamiteCanvasPanelRotated(Material.CLOTH, SoundType.CLOTH).setHardness(0.8F);
-
+    public static final Block REED_MAT_COLORED = new BlockReedMatColored(Material.PLANTS, SoundType.PLANT);
+    
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();
 

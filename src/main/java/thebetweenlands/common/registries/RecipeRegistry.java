@@ -86,6 +86,7 @@ import thebetweenlands.common.recipe.misc.RecipeLurkerSkinPouchUpgrades;
 import thebetweenlands.common.recipe.misc.RecipeMarshRunnerBoots;
 import thebetweenlands.common.recipe.misc.RecipeMummyBait;
 import thebetweenlands.common.recipe.misc.RecipeOlmletteMixture;
+import thebetweenlands.common.recipe.misc.RecipeReedMatColored;
 import thebetweenlands.common.recipe.misc.RecipeRenameItem;
 import thebetweenlands.common.recipe.misc.RecipeSapSpitCleanTool;
 import thebetweenlands.common.recipe.misc.RecipeStainedGlass;
@@ -130,6 +131,7 @@ public class RecipeRegistry {
 	public static final ResourceLocation COLORED_ITEM_FRAME = new ResourceLocation(ModInfo.ID, "recipe_colored_item_frame");
 	public static final ResourceLocation STAINED_SHINGLES = new ResourceLocation(ModInfo.ID, "recipe_stained_shingles");
 	public static final ResourceLocation STAINED_SAMITE = new ResourceLocation(ModInfo.ID, "recipe_stained_samite");
+	public static final ResourceLocation REED_MAT_COLORED = new ResourceLocation(ModInfo.ID, "recipe_reed_mat_colored");
 
 	private RecipeRegistry() { }
 
@@ -271,6 +273,7 @@ public class RecipeRegistry {
 		registry.register(new RecipeColoredItemFrame().setRegistryName(COLORED_ITEM_FRAME));
 		registry.register(new RecipeStainedShingles().setRegistryName(STAINED_SHINGLES));
 		registry.register(new RecipeStainedSamite().setRegistryName(STAINED_SAMITE));
+		registry.register(new RecipeReedMatColored().setRegistryName(REED_MAT_COLORED));
 	}
 
 	private static void registerSmelting() {

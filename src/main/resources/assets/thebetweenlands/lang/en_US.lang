@@ -606,6 +606,23 @@ tile.thebetweenlands.mud_brick_shingle_stained.shadow_green.name=Shadow Green Mu
 tile.thebetweenlands.mud_brick_shingle_stained.sushi_green.name=Sushi Green Mud Brick Shingle
 tile.thebetweenlands.mud_brick_shingle_stained.vivid_tangerine.name=Vivid Tangerine Mud Brick Shingle
 
+tile.thebetweenlands.reed_mat_colored.brown_rust.name=Brown Rust Reed Mat
+tile.thebetweenlands.reed_mat_colored.cadmium_green.name=Cadmium Green Reed Mat
+tile.thebetweenlands.reed_mat_colored.camelot_magenta.name=Camelot Magenta Reed Mat
+tile.thebetweenlands.reed_mat_colored.caribbean_green.name=Caribbean Green Reed Mat
+tile.thebetweenlands.reed_mat_colored.champagne.name=Champagne Reed Mat
+tile.thebetweenlands.reed_mat_colored.dull_lavender.name=Dull Lavender Reed Mat
+tile.thebetweenlands.reed_mat_colored.elm_cyan.name=Elm Cyan Reed Mat
+tile.thebetweenlands.reed_mat_colored.lavender_blue.name=Lavender Blue Reed Mat
+tile.thebetweenlands.reed_mat_colored.maroon.name=Maroon Reed Mat
+tile.thebetweenlands.reed_mat_colored.midnight_purple.name=Midnight Purple Reed Mat
+tile.thebetweenlands.reed_mat_colored.pewter_grey.name=Pewter Grey Reed Mat
+tile.thebetweenlands.reed_mat_colored.raisin_black.name=Raisin Black Reed Mat
+tile.thebetweenlands.reed_mat_colored.saffron.name=Saffron Reed Mat
+tile.thebetweenlands.reed_mat_colored.shadow_green.name=Shadow Green Reed Mat
+tile.thebetweenlands.reed_mat_colored.sushi_green.name=Sushi Green Reed Mat
+tile.thebetweenlands.reed_mat_colored.vivid_tangerine.name=Vivid Tangerine Reed Mat
+
 tile.thebetweenlands.steeping_pot.name=Steeping Pot
 tile.thebetweenlands.grub_hub.name=Grub Hub
 tile.thebetweenlands.water_filter.name=Water Filter

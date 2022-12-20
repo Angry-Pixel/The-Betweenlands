@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "thebetweenlands:blocks/reed_mat_colored_raisin_black"
+  }
+}
