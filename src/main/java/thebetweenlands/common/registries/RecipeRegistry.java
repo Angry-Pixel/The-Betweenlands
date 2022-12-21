@@ -672,7 +672,7 @@ public class RecipeRegistry {
 		PurifierRecipe.addRecipe(ItemRegistry.DENTROTHYST_VIAL.createStack(0), ItemRegistry.DENTROTHYST_VIAL.createStack(1));
 		PurifierRecipe.addRecipe(new ItemStack(ItemRegistry.SILK_BUNDLE), EnumItemMisc.SILK_BUNDLE_DIRTY.create(1));
 
-		PurifierRecipe.addRecipe(new ItemStack(ItemRegistry.ITEM_FRAME, 1, EnumBLDyeColor.PEWTER_GREY.getMetadata()), new ItemStack(ItemRegistry.ITEM_FRAME, 1, OreDictionary.WILDCARD_VALUE));
+		PurifierRecipe.addRecipe(new ItemStack(ItemRegistry.ITEM_FRAME, 1, EnumBLDyeColor.CHAMPAGNE.getMetadata()), new ItemStack(ItemRegistry.ITEM_FRAME, 1, OreDictionary.WILDCARD_VALUE));
 		PurifierRecipe.addRecipe(new ItemStack(BlockRegistry.FILTERED_SILT_GLASS), new ItemStack(BlockRegistry.FILTERED_SILT_GLASS_STAINED, 1, OreDictionary.WILDCARD_VALUE));
 		PurifierRecipe.addRecipe(new ItemStack(BlockRegistry.MUD_BRICK_SHINGLES), new ItemStack(BlockRegistry.MUD_BRICK_SHINGLE_STAINED, 1, OreDictionary.WILDCARD_VALUE));
 
@@ -709,7 +709,7 @@ public class RecipeRegistry {
 			public ItemStack getOutput(ItemStack input) {
 				ItemStack output = input.copy();
 				NBTTagCompound compound = output.getTagCompound();
-				compound.setInteger("type", EnumBLDyeColor.PEWTER_GREY.getMetadata());
+				compound.setInteger("type", EnumBLDyeColor.CHAMPAGNE.getMetadata());
 				return output;
 			}
 		});

@@ -36,7 +36,7 @@ public class RecipeLurkerSkinColoring extends IForgeRegistryEntry.Impl<IRecipe> 
                 return false;
             }
 
-            if(is.getItem() == ItemRegistry.LURKER_SKIN_POUCH && (is.getTagCompound() == null || is.getTagCompound().getInteger("type") == EnumBLDyeColor.PEWTER_GREY.getMetadata())) {
+            if(is.getItem() == ItemRegistry.LURKER_SKIN_POUCH && (is.getTagCompound() == null || is.getTagCompound().getInteger("type") == EnumBLDyeColor.CHAMPAGNE.getMetadata())) {
                 hasPouch = true;
             } else if(is.getItem() == ItemRegistry.DYE) {
                 hasDye = true;
@@ -57,7 +57,7 @@ public class RecipeLurkerSkinColoring extends IForgeRegistryEntry.Impl<IRecipe> 
             if(tempStack.isEmpty())
                 continue;
 
-            if(tempStack.getItem() == ItemRegistry.LURKER_SKIN_POUCH && (tempStack.getTagCompound() == null || tempStack.getTagCompound().getInteger("type") == EnumBLDyeColor.PEWTER_GREY.getMetadata())) {
+            if(tempStack.getItem() == ItemRegistry.LURKER_SKIN_POUCH && (tempStack.getTagCompound() == null || tempStack.getTagCompound().getInteger("type") == EnumBLDyeColor.CHAMPAGNE.getMetadata())) {
                 itemStackPouch = tempStack;
             } else if(tempStack.getItem() == ItemRegistry.DYE) {
                 itemStackDye = tempStack;
