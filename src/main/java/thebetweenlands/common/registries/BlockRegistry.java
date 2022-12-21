@@ -914,7 +914,7 @@ public class BlockRegistry {
         public ItemStack getDoorItem() {
             return new ItemStack(ItemRegistry.ROTTEN_PLANK_DOOR_ITEM);
         }
-    }.setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
+    }.setSoundType(SoundType.WOOD).setHardness(1.0F).setResistance(5.0F);
     public static final Block STANDING_WEEDWOOD_SIGN = new BlockStandingWeedwoodSign();
     public static final Block WALL_WEEDWOOD_SIGN = new BlockWallWeedwoodSign();
     public static final Block SULFUR_TORCH = new BlockSulfurTorch();
