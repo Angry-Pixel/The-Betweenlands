@@ -312,6 +312,7 @@ tile.thebetweenlands.hearthgrove_plank_trapdoor.name=Hearthgrove Plank Trapdoor
 tile.thebetweenlands.nibbletwig_plank_trapdoor.name=Nibbletwig Plank Trapdoor
 tile.thebetweenlands.scabyst_trapdoor.name=Scabyst Trapdoor
 tile.thebetweenlands.syrmorite_hopper.name=Syrmorite Hopper
+tile.thebetweenlands.rotten_plank_trapdoor.name=Rotten Plank Trapdoor
 tile.thebetweenlands.mud_flower_pot.name=Mud Brick Flower Pot
 tile.thebetweenlands.mud_flower_pot_candle.name=Mud Brick Flower Pot With Candle
 tile.thebetweenlands.gecko_cage.name=Gecko Cage
@@ -537,6 +538,42 @@ tile.thebetweenlands.lyestone.name=Lyestone
 tile.thebetweenlands.mist_bridge.name=Mist Bridge
 tile.thebetweenlands.shadow_walker.name=Shadow Walker
 tile.thebetweenlands.weak_smooth_cragrock.name=Weak Smooth Cragrock
+
+tile.thebetweenlands.weedwood_planks_treated.name=Treated Weedwood Planks
+tile.thebetweenlands.weedwood_plank_stairs_treated.name=Treated Weedwood Plank Stairs
+tile.thebetweenlands.weedwood_plank_slab_treated.name=Treated Weedwood Plank Slab
+tile.thebetweenlands.weedwood_plank_fence_treated.name=Treated Weedwood Plank Fence
+tile.thebetweenlands.weedwood_plank_fence_gate_treated.name=Treated Weedwood Plank Fence Gate
+
+tile.thebetweenlands.rubber_tree_planks_treated.name=Treated Rubber Tree Planks
+tile.thebetweenlands.rubber_tree_plank_stairs_treated.name=Treated Giant Root Plank Stairs
+tile.thebetweenlands.rubber_tree_plank_slab_treated.name=Treated Giant Root Plank Slab
+tile.thebetweenlands.rubber_tree_plank_fence_treated.name=Treated Giant Root Plank Fence
+tile.thebetweenlands.rubber_tree_plank_fence_gate_treated.name=Treated Giant Root Plank Fence Gate
+
+tile.thebetweenlands.giant_root_planks_treated.name=Treated Giant Root Planks
+tile.thebetweenlands.giant_root_plank_stairs_treated.name=Treated Giant Root Plank Stairs
+tile.thebetweenlands.giant_root_plank_slab_treated.name=Treated Giant Root Plank Slab
+tile.thebetweenlands.giant_root_plank_fence_treated.name=Treated Giant Root Plank Fence
+tile.thebetweenlands.giant_root_plank_fence_gate_treated.name=Treated Giant Root Plank Fence Gate
+
+tile.thebetweenlands.hearthgrove_planks_treated.name=Treated Hearthgrove Planks
+tile.thebetweenlands.hearthgrove_plank_stairs_treated.name=Treated Hearthgrove Plank Stairs
+tile.thebetweenlands.hearthgrove_plank_slab_treated.name=Treated Hearthgrove Plank Slab
+tile.thebetweenlands.hearthgrove_plank_fence_treated.name=Treated Hearthgrove Plank Fence
+tile.thebetweenlands.hearthgrove_plank_fence_gate_treated.name=Treated Hearthgrove Plank Fence Gate
+
+tile.thebetweenlands.nibbletwig_planks_treated.name=Treated Nibbletwig Planks
+tile.thebetweenlands.nibbletwig_plank_stairs_treated.name=Treated Nibbletwig Plank Stairs
+tile.thebetweenlands.nibbletwig_plank_slab_treated.name=Treated Nibbletwig Plank Slab
+tile.thebetweenlands.nibbletwig_plank_fence_treated.name=Treated Nibbletwig Plank Fence
+tile.thebetweenlands.nibbletwig_plank_fence_gate_treated.name=Treated Nibbletwig Plank Fence Gate
+
+tile.thebetweenlands.rotten_planks_treated.name=Treated Rotten Planks
+tile.thebetweenlands.rotten_plank_stairs_treated.name=Treated Rotten Plank Stairs
+tile.thebetweenlands.rotten_plank_slab_treated.name=Treated Rotten Plank Slab
+tile.thebetweenlands.rotten_plank_fence_treated.name=Treated Rotten Plank Fence
+tile.thebetweenlands.rotten_plank_fence_gate_treated.name=Treated Rotten Plank Fence Gate
 
 tile.thebetweenlands.samite.brown_rust.name=Brown Rust Samite
 tile.thebetweenlands.samite.cadmium_green.name=Cadmium Green Samite
@@ -934,6 +971,7 @@ item.thebetweenlands.giant_root_plank_door_item.name=Giant Root Plank Door
 item.thebetweenlands.hearthgrove_plank_door_item.name=Hearthgrove Plank Door
 item.thebetweenlands.nibbletwig_plank_door_item.name=Nibbletwig Plank Door
 item.thebetweenlands.scabyst_door_item.name=Scabyst Door
+item.thebetweenlands.rotten_plank_door_item.name=Rotten Plank Door
 item.thebetweenlands.moss_bed_item.name=Moss Bed
 item.thebetweenlands.lore_scrap.them.name=Lurking Shadows
 item.thebetweenlands.lore_scrap.mutants.name=Mutants of Terror
