@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#B#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:rotten_planks"
+    },
+    "B": {
+      "item": "thebetweenlands:bl_bucket_fish_oil",
+      "data": 32767
+      }
+  },
+  "result": {
+    "item": "thebetweenlands:rotten_planks_treated",
+    "count": 8
+  }
+}

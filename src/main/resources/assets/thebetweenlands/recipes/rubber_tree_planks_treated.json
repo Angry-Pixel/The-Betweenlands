@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#B#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:rubber_tree_planks"
+    },
+    "B": {
+      "type": "minecraft:item_nbt",
+      "item": "thebetweenlands:bl_bucket_fish_oil",
+      "data": 32767,
+      "nbt": "{FluidName:\"fish_oil\",Amount:1000}"
+      }
+  },
+  "result": {
+    "item": "thebetweenlands:rubber_tree_planks_treated",
+    "count": 8
+  }
+}

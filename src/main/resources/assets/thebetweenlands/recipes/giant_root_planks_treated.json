@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#B#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:giant_root_planks"
+    },
+    "B": {
+      "item": "thebetweenlands:bl_bucket_fish_oil",
+      "data": 32767
+      }
+  },
+  "result": {
+    "item": "thebetweenlands:giant_root_planks_treated",
+    "count": 8
+  }
+}
