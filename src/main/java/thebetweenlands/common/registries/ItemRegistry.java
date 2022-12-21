@@ -467,6 +467,12 @@ public class ItemRegistry {
             return BlockRegistry.SCABYST_DOOR;
         }
     };
+    public static final Item ROTTEN_PLANK_DOOR_ITEM = new ItemDoorBetweenlands() {
+        @Override
+        public Block getDoorBlock() {
+            return BlockRegistry.ROTTEN_PLANK_DOOR;
+        }
+    };
     public static final Item WEEDWOOD_SIGN_ITEM = new ItemWeedwoodSign();
     public static final Item CRIMSON_MIDDLE_GEM = new ItemGem(CircleGemType.CRIMSON);
     public static final Item AQUA_MIDDLE_GEM = new ItemGem(CircleGemType.AQUA);

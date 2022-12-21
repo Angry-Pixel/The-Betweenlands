@@ -909,6 +909,12 @@ public class BlockRegistry {
             return new ItemStack(ItemRegistry.SCABYST_DOOR_ITEM);
         }
     }.setSoundType(SoundType.METAL).setHardness(1.5F).setResistance(10.0F);
+    public static final Block ROTTEN_PLANK_DOOR = new BlockDoorBetweenlands(Material.WOOD) {
+        @Override
+        public ItemStack getDoorItem() {
+            return new ItemStack(ItemRegistry.ROTTEN_PLANK_DOOR_ITEM);
+        }
+    }.setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
     public static final Block STANDING_WEEDWOOD_SIGN = new BlockStandingWeedwoodSign();
     public static final Block WALL_WEEDWOOD_SIGN = new BlockWallWeedwoodSign();
     public static final Block SULFUR_TORCH = new BlockSulfurTorch();
@@ -919,6 +925,7 @@ public class BlockRegistry {
     public static final Block GIANT_ROOT_PLANK_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
     public static final Block HEARTHGROVE_PLANK_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
     public static final Block NIBBLETWIG_PLANK_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
+    public static final Block ROTTEN_PLANK_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(1.0F).setResistance(5.0F);
     public static final Block SCABYST_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.IRON).setSoundType(SoundType.STONE).setHardness(1.75F).setResistance(5.0F);
     public static final Block SYRMORITE_HOPPER = new BlockHopperBetweenlands();
     public static final Block MUD_FLOWER_POT = new BlockMudFlowerPot();
