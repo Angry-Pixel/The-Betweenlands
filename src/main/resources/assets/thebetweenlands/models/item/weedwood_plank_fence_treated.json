@@ -1,0 +1,6 @@
+{
+    "parent": "block/fence_inventory",
+    "textures": {
+        "texture": "thebetweenlands:blocks/weedwood_planks_treated"
+    }
+}
