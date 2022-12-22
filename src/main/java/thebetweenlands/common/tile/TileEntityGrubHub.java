@@ -225,7 +225,9 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 	}
 
 	@Override
-	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+	public boolean canInsertItem(int index, ItemStack stack, EnumFacing direction) {
+		if(stack.getItem() != ItemRegistry.SILK_GRUB)
+			return false;
 		return true;
 	}
 
@@ -241,6 +243,8 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
+		if(stack.getItem() != ItemRegistry.SILK_GRUB)
+			return false;
 		return true;
 	}
 }
