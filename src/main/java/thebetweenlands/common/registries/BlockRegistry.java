@@ -163,8 +163,65 @@ import thebetweenlands.common.block.plant.BlockWaterWeeds;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.block.plant.BlockWeedwoodBushInfested;
 import thebetweenlands.common.block.plant.BlockWeepingBlue;
-import thebetweenlands.common.block.structure.*;
+import thebetweenlands.common.block.structure.BlockBeamLensSupport;
+import thebetweenlands.common.block.structure.BlockBeamOrigin;
+import thebetweenlands.common.block.structure.BlockBeamRelay;
+import thebetweenlands.common.block.structure.BlockBeamTube;
+import thebetweenlands.common.block.structure.BlockBrazier;
+import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudBrickType;
+import thebetweenlands.common.block.structure.BlockChipPath;
+import thebetweenlands.common.block.structure.BlockCompactedMud;
+import thebetweenlands.common.block.structure.BlockCompactedMudSlope;
+import thebetweenlands.common.block.structure.BlockDecayPitControl;
+import thebetweenlands.common.block.structure.BlockDecayPitGroundChain;
+import thebetweenlands.common.block.structure.BlockDecayPitHangingChain;
+import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlock;
+import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockDiagonal;
+import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockL1;
+import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockL2;
+import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockR1;
+import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockR2;
+import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
+import thebetweenlands.common.block.structure.BlockDoorBetweenlands;
+import thebetweenlands.common.block.structure.BlockDruidStone;
+import thebetweenlands.common.block.structure.BlockDungeonDoorCombination;
+import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
+import thebetweenlands.common.block.structure.BlockDungeonWallCandle;
+import thebetweenlands.common.block.structure.BlockEnergyBarrier;
+import thebetweenlands.common.block.structure.BlockEnergyBarrierMud;
+import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
+import thebetweenlands.common.block.structure.BlockFenceGateBetweenlands;
+import thebetweenlands.common.block.structure.BlockItemCage;
+import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
+import thebetweenlands.common.block.structure.BlockMudBrickRoof;
+import thebetweenlands.common.block.structure.BlockMudBrickShingleSlab;
+import thebetweenlands.common.block.structure.BlockMudBrickShingleStained;
+import thebetweenlands.common.block.structure.BlockMudBrickSpikeTrap;
+import thebetweenlands.common.block.structure.BlockMudBricks;
+import thebetweenlands.common.block.structure.BlockMudBricksClimbable;
+import thebetweenlands.common.block.structure.BlockMudTiles;
+import thebetweenlands.common.block.structure.BlockMudTilesSpikeTrap;
+import thebetweenlands.common.block.structure.BlockMudTilesWater;
+import thebetweenlands.common.block.structure.BlockPortalFrame;
+import thebetweenlands.common.block.structure.BlockPossessedBlock;
+import thebetweenlands.common.block.structure.BlockPuffshroom;
+import thebetweenlands.common.block.structure.BlockRottenBarkCarved;
+import thebetweenlands.common.block.structure.BlockSimulacrum;
+import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
+import thebetweenlands.common.block.structure.BlockSpikeTrap;
+import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
+import thebetweenlands.common.block.structure.BlockStandingWeedwoodSign;
+import thebetweenlands.common.block.structure.BlockTarBeastSpawner;
+import thebetweenlands.common.block.structure.BlockTemplePillar;
+import thebetweenlands.common.block.structure.BlockThatchRoof;
+import thebetweenlands.common.block.structure.BlockTreePortal;
+import thebetweenlands.common.block.structure.BlockWalkway;
+import thebetweenlands.common.block.structure.BlockWallBetweenlands;
+import thebetweenlands.common.block.structure.BlockWallWeedwoodSign;
+import thebetweenlands.common.block.structure.BlockWaystone;
+import thebetweenlands.common.block.structure.BlockWoodenSupportBeam;
+import thebetweenlands.common.block.structure.BlockWormDungeonPillar;
 import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePile;
 import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePileWater;
@@ -211,7 +268,6 @@ import thebetweenlands.common.block.terrain.BlockTintedLeaves;
 import thebetweenlands.common.block.terrain.BlockWisp;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
@@ -853,6 +909,12 @@ public class BlockRegistry {
             return new ItemStack(ItemRegistry.SCABYST_DOOR_ITEM);
         }
     }.setSoundType(SoundType.METAL).setHardness(1.5F).setResistance(10.0F);
+    public static final Block ROTTEN_PLANK_DOOR = new BlockDoorBetweenlands(Material.WOOD) {
+        @Override
+        public ItemStack getDoorItem() {
+            return new ItemStack(ItemRegistry.ROTTEN_PLANK_DOOR_ITEM);
+        }
+    }.setSoundType(SoundType.WOOD).setHardness(1.0F).setResistance(5.0F);
     public static final Block STANDING_WEEDWOOD_SIGN = new BlockStandingWeedwoodSign();
     public static final Block WALL_WEEDWOOD_SIGN = new BlockWallWeedwoodSign();
     public static final Block SULFUR_TORCH = new BlockSulfurTorch();
@@ -863,6 +925,7 @@ public class BlockRegistry {
     public static final Block GIANT_ROOT_PLANK_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
     public static final Block HEARTHGROVE_PLANK_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
     public static final Block NIBBLETWIG_PLANK_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
+    public static final Block ROTTEN_PLANK_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(1.0F).setResistance(5.0F);
     public static final Block SCABYST_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.IRON).setSoundType(SoundType.STONE).setHardness(1.75F).setResistance(5.0F);
     public static final Block SYRMORITE_HOPPER = new BlockHopperBetweenlands();
     public static final Block MUD_FLOWER_POT = new BlockMudFlowerPot();
@@ -929,7 +992,43 @@ public class BlockRegistry {
     public static final Block SAMITE_CANVAS_PANEL = new BlockSamiteCanvasPanel(Material.CLOTH, SoundType.CLOTH).setHardness(0.8F);
     public static final Block SAMITE_CANVAS_PANEL_ROTATED = new BlockSamiteCanvasPanelRotated(Material.CLOTH, SoundType.CLOTH).setHardness(0.8F);
     public static final Block REED_MAT_COLORED = new BlockReedMatColored(Material.PLANTS, SoundType.PLANT);
-    
+
+    public static final Block WEEDWOOD_PLANKS_TREATED = new BasicBlock(Material.WOOD).setSoundType2(SoundType.WOOD).setHardness(2.0F).setResistance(5.0F);
+	public static final Block WEEDWOOD_PLANK_SLAB_TREATED = new BlockSlabBetweenlands(WEEDWOOD_PLANKS_TREATED);
+	public static final Block WEEDWOOD_PLANK_STAIRS_TREATED = new BlockStairsBetweenlands(WEEDWOOD_PLANKS_TREATED.getDefaultState());
+    public static final Block WEEDWOOD_PLANK_FENCE_TREATED = new BlockFenceBetweenlands(WEEDWOOD_PLANKS_TREATED.getDefaultState());
+    public static final Block WEEDWOOD_PLANK_FENCE_GATE_TREATED = new BlockFenceGateBetweenlands(WEEDWOOD_PLANKS_TREATED.getDefaultState());
+
+    public static final Block RUBBER_TREE_PLANKS_TREATED = new BasicBlock(Material.WOOD).setSoundType2(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
+	public static final Block RUBBER_TREE_PLANK_SLAB_TREATED = new BlockSlabBetweenlands(RUBBER_TREE_PLANKS_TREATED);
+	public static final Block RUBBER_TREE_PLANK_STAIRS_TREATED = new BlockStairsBetweenlands(RUBBER_TREE_PLANKS_TREATED.getDefaultState());
+    public static final Block RUBBER_TREE_PLANK_FENCE_TREATED = new BlockFenceBetweenlands(RUBBER_TREE_PLANKS_TREATED.getDefaultState());
+    public static final Block RUBBER_TREE_PLANK_FENCE_GATE_TREATED = new BlockFenceGateBetweenlands(RUBBER_TREE_PLANKS_TREATED.getDefaultState());
+
+    public static final Block GIANT_ROOT_PLANKS_TREATED = new BasicBlock(Material.WOOD).setSoundType2(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
+	public static final Block GIANT_ROOT_PLANK_SLAB_TREATED = new BlockSlabBetweenlands(GIANT_ROOT_PLANKS_TREATED);
+	public static final Block GIANT_ROOT_PLANK_STAIRS_TREATED = new BlockStairsBetweenlands(GIANT_ROOT_PLANKS_TREATED.getDefaultState());
+    public static final Block GIANT_ROOT_PLANK_FENCE_TREATED = new BlockFenceBetweenlands(GIANT_ROOT_PLANKS_TREATED.getDefaultState());
+    public static final Block GIANT_ROOT_PLANK_FENCE_GATE_TREATED = new BlockFenceGateBetweenlands(GIANT_ROOT_PLANKS_TREATED.getDefaultState());
+
+    public static final Block HEARTHGROVE_PLANKS_TREATED = new BasicBlock(Material.WOOD).setSoundType2(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
+	public static final Block HEARTHGROVE_PLANK_SLAB_TREATED = new BlockSlabBetweenlands(HEARTHGROVE_PLANKS_TREATED);
+	public static final Block HEARTHGROVE_PLANK_STAIRS_TREATED = new BlockStairsBetweenlands(HEARTHGROVE_PLANKS_TREATED.getDefaultState());
+    public static final Block HEARTHGROVE_PLANK_FENCE_TREATED = new BlockFenceBetweenlands(HEARTHGROVE_PLANKS_TREATED.getDefaultState());
+    public static final Block HEARTHGROVE_PLANK_FENCE_GATE_TREATED = new BlockFenceGateBetweenlands(HEARTHGROVE_PLANKS_TREATED.getDefaultState());
+
+    public static final Block NIBBLETWIG_PLANKS_TREATED = new BasicBlock(Material.WOOD).setSoundType2(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
+	public static final Block NIBBLETWIG_PLANK_SLAB_TREATED = new BlockSlabBetweenlands(NIBBLETWIG_PLANKS_TREATED);
+	public static final Block NIBBLETWIG_PLANK_STAIRS_TREATED = new BlockStairsBetweenlands(NIBBLETWIG_PLANKS_TREATED.getDefaultState());
+    public static final Block NIBBLETWIG_PLANK_FENCE_TREATED = new BlockFenceBetweenlands(NIBBLETWIG_PLANKS_TREATED.getDefaultState());
+    public static final Block NIBBLETWIG_PLANK_FENCE_GATE_TREATED = new BlockFenceGateBetweenlands(NIBBLETWIG_PLANKS_TREATED.getDefaultState());
+
+    public static final Block ROTTEN_PLANKS_TREATED = new BasicBlock(Material.WOOD).setSoundType2(SoundType.WOOD).setHardness(1.5F).setResistance(4.0F);
+	public static final Block ROTTEN_PLANK_SLAB_TREATED = new BlockSlabBetweenlands(ROTTEN_PLANKS_TREATED);
+	public static final Block ROTTEN_PLANK_STAIRS_TREATED = new BlockStairsBetweenlands(ROTTEN_PLANKS_TREATED.getDefaultState());
+    public static final Block ROTTEN_PLANK_FENCE_TREATED = new BlockFenceBetweenlands(ROTTEN_PLANKS_TREATED.getDefaultState());
+    public static final Block ROTTEN_PLANK_FENCE_GATE_TREATED = new BlockFenceGateBetweenlands(ROTTEN_PLANKS_TREATED.getDefaultState());
+
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();
 

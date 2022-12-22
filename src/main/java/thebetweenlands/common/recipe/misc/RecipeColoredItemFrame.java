@@ -35,7 +35,7 @@ public class RecipeColoredItemFrame extends IForgeRegistryEntry.Impl<IRecipe> im
                 return false;
             }
 
-            if(is.getItem() == ItemRegistry.ITEM_FRAME && is.getMetadata() == EnumBLDyeColor.PEWTER_GREY.getMetadata()) {
+            if(is.getItem() == ItemRegistry.ITEM_FRAME && is.getMetadata() == EnumBLDyeColor.CHAMPAGNE.getMetadata()) {
                 hasFrame = true;
             } else if(is.getItem() == ItemRegistry.DYE) {
                 hasDye = true;
@@ -56,7 +56,7 @@ public class RecipeColoredItemFrame extends IForgeRegistryEntry.Impl<IRecipe> im
             if(tempStack.isEmpty())
                 continue;
 
-            if(tempStack.getItem() == ItemRegistry.ITEM_FRAME && tempStack.getMetadata() == EnumBLDyeColor.PEWTER_GREY.getMetadata()) {
+            if(tempStack.getItem() == ItemRegistry.ITEM_FRAME && tempStack.getMetadata() == EnumBLDyeColor.CHAMPAGNE.getMetadata()) {
                 itemStackFrame = tempStack;
             } else if(tempStack.getItem() == ItemRegistry.DYE) {
                 itemStackDye = tempStack;

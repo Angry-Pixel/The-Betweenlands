@@ -9,10 +9,13 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.BlockBLColored;
@@ -25,6 +28,7 @@ public class BlockSamiteCanvasPanelRotated extends BlockBLColored {
 
 	public BlockSamiteCanvasPanelRotated(Material materialIn, SoundType soundType) {
 		super(materialIn, soundType);
+		setCreativeTab(null);
 	}
 
 	@Override
@@ -38,6 +42,11 @@ public class BlockSamiteCanvasPanelRotated extends BlockBLColored {
 			return true;
 		return false;
 	}
+
+	@Override
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+		return new ItemStack(BlockRegistry.SAMITE_CANVAS_PANEL, 1, this.damageDropped(state));
+    }
 
 	@Override
 	@Nullable
@@ -74,5 +83,10 @@ public class BlockSamiteCanvasPanelRotated extends BlockBLColored {
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
+
+	@Override
+	public String getSubtypeName(int meta) {
+		return "samite_canvas_panel_rotated_" + EnumBLDyeColor.byMetadata(meta).getName();
+	}
 
 }

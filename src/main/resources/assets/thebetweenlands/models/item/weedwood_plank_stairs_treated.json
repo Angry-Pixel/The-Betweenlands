@@ -1,0 +1,7 @@
+{
+  "forge_marker": 1,
+  "parent":"thebetweenlands:block/base_stairs",
+  "textures": {
+    "all": "thebetweenlands:blocks/weedwood_planks_treated"
+  }
+}

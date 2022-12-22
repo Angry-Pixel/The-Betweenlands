@@ -408,6 +408,7 @@ public class ItemRegistry {
     public static final Item BL_BUCKET_INFUSION = new ItemBucketInfusion();
     public static final Item BL_BUCKET_PLANT_TONIC = new ItemPlantTonic();
     public static final Item SYRMORITE_BUCKET_SOLID_RUBBER = new ItemSyrmoriteBucketSolidRubber();
+    public static final Item BL_BUCKET_FISH_OIL = new ItemSpecificBucket(FluidRegistry.FISH_OIL);
     //RECORDS
     public static final Item ASTATOS = new ItemBLRecord(SoundRegistry.ASTATOS, true);
     public static final Item BETWEEN_YOU_AND_ME = new ItemBLRecord(SoundRegistry.BETWEEN_YOU_AND_ME, true);
@@ -465,6 +466,12 @@ public class ItemRegistry {
         @Override
         public Block getDoorBlock() {
             return BlockRegistry.SCABYST_DOOR;
+        }
+    };
+    public static final Item ROTTEN_PLANK_DOOR_ITEM = new ItemDoorBetweenlands() {
+        @Override
+        public Block getDoorBlock() {
+            return BlockRegistry.ROTTEN_PLANK_DOOR;
         }
     };
     public static final Item WEEDWOOD_SIGN_ITEM = new ItemWeedwoodSign();

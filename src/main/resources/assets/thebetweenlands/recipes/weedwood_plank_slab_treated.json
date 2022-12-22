@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:weedwood_planks_treated"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:weedwood_plank_slab_treated",
+    "count": 6
+  }
+}

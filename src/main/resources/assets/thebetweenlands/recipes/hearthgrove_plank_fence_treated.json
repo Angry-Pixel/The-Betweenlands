@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SxS",
+    "SxS"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    },
+    "S": {
+      "item": "thebetweenlands:hearthgrove_planks_treated"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:hearthgrove_plank_fence_treated",
+    "count": 3
+  }
+}

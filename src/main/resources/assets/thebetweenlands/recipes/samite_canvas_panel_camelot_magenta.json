@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " W ",
+    "WSW",
+    " W "
+  ],
+  "key": {
+    "W": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    },
+    "S": {
+      "item": "thebetweenlands:samite",
+      "data": 3
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:samite_canvas_panel",
+     "data": 3,
+     "count": 4
+  }
+}

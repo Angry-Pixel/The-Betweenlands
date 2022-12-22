@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x"
+  ],
+  "key": {
+    "x": {
+    "item": "thebetweenlands:samite",
+    "data": 7      
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:items_misc",
+    "data": 63,
+    "count": 9
+  }
+}
