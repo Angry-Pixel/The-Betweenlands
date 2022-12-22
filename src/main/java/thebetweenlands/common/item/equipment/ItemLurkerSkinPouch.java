@@ -23,6 +23,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -163,6 +164,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
         ItemStack stack = player.getHeldItem(hand);
         if (!world.isRemote) {
             if (!player.isSneaking()) {
+            	checkForLegacyPouch(stack);
                 player.openGui(TheBetweenlands.instance, CommonProxy.GUI_LURKER_POUCH, world, 0, 0, 0);
             } else {
                 player.openGui(TheBetweenlands.instance, CommonProxy.GUI_ITEM_RENAMING, world, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
@@ -172,7 +174,14 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
 
-    @Override
+    private void checkForLegacyPouch(ItemStack stack) {
+		if(!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+		if(!stack.getTagCompound().hasKey("type"))
+			stack.getTagCompound().setInteger("type", 7);
+	}
+
+	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		if(this.isInCreativeTab(tab)) {
 			ItemStack basePouch = new ItemStack(this);
