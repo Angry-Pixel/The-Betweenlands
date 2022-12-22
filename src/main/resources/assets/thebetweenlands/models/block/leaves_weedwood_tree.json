@@ -1,6 +1,5 @@
 {
-	"credit": "Made with Blockbench",
-	"parent": "block/cross",
+	"parent": "block/cube_all",
 	"ambientocclusion": false,
 	"textures": {
 		"all": "thebetweenlands:blocks/leaves_weedwood_tree"
