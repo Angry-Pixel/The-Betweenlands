@@ -14,6 +14,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.oredict.OreDictionary;
 import thebetweenlands.api.recipes.ISteepingPotRecipe;
+import thebetweenlands.common.inventory.container.ContainerSilkBundle;
 
 public class SteepingPotRecipes implements ISteepingPotRecipe {
 
@@ -28,11 +29,23 @@ public class SteepingPotRecipes implements ISteepingPotRecipe {
 	}
 
 	public static void addRecipe(ItemStack output, FluidStack fluid,  Object... input) {
+		whitelistIngredient(input);
 		recipes.add(new SteepingPotRecipes(output, fluid, input));
 	}
 
 	public static void addRecipe(FluidStack output, int outputFluidMeta, FluidStack fluid,  Object... input) {
+		whitelistIngredient(input);
 		recipes.add(new SteepingPotRecipes(output, outputFluidMeta, fluid, input));
+	}
+
+	private static void whitelistIngredient(Object... input) {
+		for (int i = 0; i < input.length; i++) {
+			if (input[i] instanceof ItemStack) {
+				ContainerSilkBundle.acceptedItems.add(((ItemStack) input[i]).copy());
+			} else if (input[i] instanceof String) {
+				ContainerSilkBundle.acceptedItems.add(OreDictionary.getOres((String) input[i]).get(0));
+			}
+		}
 	}
 
 	public static ItemStack getOutputItem(IFluidTank tank, ItemStack... input) {
