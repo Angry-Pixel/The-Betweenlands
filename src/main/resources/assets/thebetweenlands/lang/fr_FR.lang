@@ -1264,8 +1264,8 @@ fluid.dye_fluid.sushi_green=Colorant Vert Pistache
 fluid.dye_fluid.vivid_tangerine=Colorant Rose Pêche
 
 # Fluid brews
-fluid.drinkable_brew.nettle_soup=Nettle Soup
-fluid.drinkable_brew.nettle_tea=Nettle Tea
+fluid.drinkable_brew.nettle_soup=Soupe d'Ortie
+fluid.drinkable_brew.nettle_tea=Thé d'Ortie
 fluid.drinkable_brew.pheromone_extract=Pheromone Extract
 fluid.drinkable_brew.drinkable_brew_3=NYI needs lang
 fluid.drinkable_brew.drinkable_brew_4=NYI needs lang
@@ -1281,7 +1281,7 @@ fluid.drinkable_brew.drinkable_brew_13=NYI needs lang
 fluid.drinkable_brew.drinkable_brew_14=NYI needs lang
 fluid.drinkable_brew.drinkable_brew_15=NYI needs lang
 
-fluid.drinkable_brew.swamp_broth=Soupe d'Ortie
+fluid.drinkable_brew.swamp_broth=Bouillon du Marais
 fluid.drinkable_brew.sturdy_stock=Tonic du Robuste
 fluid.drinkable_brew.pear_cordial=Poire Vineuse
 fluid.drinkable_brew.shamans_brew=Brevage du Shaman
