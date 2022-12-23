@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x"
+  ],
+  "key": {
+        "x": {
+        "item": "thebetweenlands:ancient_remnant_block"
+    }
+  },
+  "result": {
+        "item": "thebetweenlands:items_misc",
+        "data": 47,
+        "count": 9
+  }
+}

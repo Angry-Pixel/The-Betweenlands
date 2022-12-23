@@ -377,6 +377,11 @@ public class BlockRegistry {
             .setSoundType2(SoundType.STONE)
             .setHardness(1.2F)
             .setResistance(8.0F);
+    public static final Block ANCIENT_REMNANT_BLOCK = new BasicBlock(Material.ROCK)
+            .setDefaultCreativeTab()
+            .setSoundType2(SoundType.STONE)
+            .setHardness(1.2F)
+            .setResistance(8.0F);
     //TREES
     public static final Block LOG_WEEDWOOD = new BlockLogBetweenlands();
     public static final Block LOG_ROTTEN_BARK = new BlockRottenLog();
