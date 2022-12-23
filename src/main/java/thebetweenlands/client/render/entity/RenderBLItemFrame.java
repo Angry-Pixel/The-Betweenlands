@@ -159,6 +159,11 @@ public class RenderBLItemFrame extends RenderItemFrame
         EntityBLItemFrame itemFrame = (EntityBLItemFrame)entity;
 
         if(itemFrame.IsFrameInvisible() && !itemFrame.getDisplayedItem().isEmpty()) {
+            if(itemFrame.IsFrameGlowing()) {
+                GlStateManager.disableLighting();
+                OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
+            }
+
             return;
         }
 
