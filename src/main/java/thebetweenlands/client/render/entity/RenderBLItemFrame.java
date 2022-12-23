@@ -137,9 +137,6 @@ public class RenderBLItemFrame extends RenderItemFrame
                 }
                 else
                 {
-                    if(itemstack.getItem() instanceof ItemBlock && blItemFrame.realFacingDirection.getAxis().equals(EnumFacing.Axis.Y))
-                        GlStateManager.rotate(-90F, 1F, 0F, 0F);
-
                     GlStateManager.scale(0.5F, 0.5F, 0.5F);
 
                     GlStateManager.pushAttrib();
