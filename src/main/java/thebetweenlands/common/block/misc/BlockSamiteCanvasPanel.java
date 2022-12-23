@@ -51,7 +51,7 @@ public class BlockSamiteCanvasPanel extends BlockBLColored {
 
 	@Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
-    	return BlockFaceShape.UNDEFINED;
+    	return BlockFaceShape.MIDDLE_POLE_THIN;
     }
 
 	@Override
