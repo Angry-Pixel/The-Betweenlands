@@ -130,6 +130,9 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.CRAB_POT_FILTER), CRAB_POT_FILTER_BUBBLER_CATEGORY_UID);
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.CRAB_POT_FILTER), CRAB_POT_FILTER_SILT_CATEGORY_UID);
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.STEEPING_POT), STEEPING_POT_CATEGORY_UID);
+      //  registry.addRecipeCatalyst(new ItemStack(ItemRegistry.DYE, 1, OreDictionary.WILDCARD_VALUE), STEEPING_POT_CATEGORY_UID);
+      //  registry.addRecipeCatalyst(new ItemStack(ItemRegistry.DRINKABLE_BREW, 1, OreDictionary.WILDCARD_VALUE), STEEPING_POT_CATEGORY_UID);
+        registry.addRecipeCatalyst(new ItemStack(ItemRegistry.SILK_BUNDLE), STEEPING_POT_CATEGORY_UID);
 
         registry.addRecipes(CompostRecipeMaker.getRecipes(), COMPOST_CATEGORY_UID);
         registry.addRecipes(AnimatorRecipeMaker.getRecipes(), ANIMATOR_CATEGORY_UID);
