@@ -1161,8 +1161,8 @@ item.thebetweenlands.silk_thread.name=Silk Thread
 item.thebetweenlands.silk_bundle.name=Silk Bundle
 item.thebetweenlands.silk_bundle_dirty.name=Dirty Silk Bundle
 item.thebetweenlands.silk_mask.name=Silk Mask
-item.thebetweenlands.silk_filter.name=Silk Filter
-item.thebetweenlands.moss_filter.name=Moss Filter
+item.thebetweenlands.silk_filter.name=Silk Mesh Strainer
+item.thebetweenlands.moss_filter.name=Moss Mesh Strainer
 
 # Dyes
 item.thebetweenlands.dye.brown_rust.name=Brown Rust Dye
