@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import mezz.jei.api.ISubtypeRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -55,7 +54,7 @@ import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMultipleItemModelDefinition, ISubtypeRegistry {
+public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMultipleItemModelDefinition {
 
     private final ItemStack emptyWeedwood;
     private final ItemStack emptySyrmorite;
@@ -94,32 +93,6 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
         models.put(0, new ResourceLocation(getRegistryName().toString() + "_weedwood"));
         models.put(1, new ResourceLocation(getRegistryName().toString() + "_syrmorite"));
         return models;
-    }
-
-    @Override
-    public void useNbtForSubtypes(Item... items) {
-
-    }
-
-    @Override
-    public void registerNbtInterpreter(Item item, ISubtypeInterpreter interpreter) {
-
-    }
-
-    @Override
-    public void registerSubtypeInterpreter(Item item, ISubtypeInterpreter interpreter) {
-
-    }
-
-    @Nullable
-    @Override
-    public String getSubtypeInfo(ItemStack itemStack) {
-        return null;
-    }
-
-    @Override
-    public boolean hasSubtypeInterpreter(ItemStack itemStack) {
-        return false;
     }
 
     private static final class FluidBLBucketHandler extends FluidHandlerItemStackSimple {

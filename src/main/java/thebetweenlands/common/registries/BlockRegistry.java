@@ -377,6 +377,11 @@ public class BlockRegistry {
             .setSoundType2(SoundType.STONE)
             .setHardness(1.2F)
             .setResistance(8.0F);
+    public static final Block ANCIENT_REMNANT_BLOCK = new BasicBlock(Material.ROCK)
+            .setDefaultCreativeTab()
+            .setSoundType2(SoundType.STONE)
+            .setHardness(1.2F)
+            .setResistance(8.0F);
     //TREES
     public static final Block LOG_WEEDWOOD = new BlockLogBetweenlands();
     public static final Block LOG_ROTTEN_BARK = new BlockRottenLog();
@@ -522,6 +527,8 @@ public class BlockRegistry {
     public static final Block POLISHED_DENTROTHYST = new BlockPolishedDentrothyst().setHardness(0.3F);
     public static final Block SILT_GLASS = new BlockGlassBetweenlands(Material.GLASS).setHardness(0.3F);
     public static final Block SILT_GLASS_PANE = new BlockPaneBetweenlands(Material.GLASS).setHardness(0.3F);
+    public static final Block LATTICE = new BlockPaneBetweenlands(Material.WOOD, SoundType.WOOD).setHardness(1.0F);
+    public static final Block LATTICE_FINE = new BlockPaneBetweenlands(Material.WOOD, SoundType.WOOD).setHardness(1.5F);
     public static final Block FILTERED_SILT_GLASS = new BlockFilteredSiltGlass().setHardness(0.3F);
     public static final Block FILTERED_SILT_GLASS_PANE = new BlockFilteredSiltGlassPane();
     public static final Block POLISHED_DENTROTHYST_PANE = new BlockDentrothystPane().setHardness(0.3F);
@@ -915,6 +922,42 @@ public class BlockRegistry {
             return new ItemStack(ItemRegistry.ROTTEN_PLANK_DOOR_ITEM);
         }
     }.setSoundType(SoundType.WOOD).setHardness(1.0F).setResistance(5.0F);
+    public static final Block WEEDWOOD_DOOR_TREATED = new BlockDoorBetweenlands(Material.WOOD) {
+        @Override
+        public ItemStack getDoorItem() {
+            return new ItemStack(ItemRegistry.WEEDWOOD_DOOR_TREATED_ITEM);
+        }
+    }.setSoundType(SoundType.WOOD).setHardness(2.0F).setResistance(5.0F);
+    public static final Block RUBBER_TREE_PLANK_DOOR_TREATED = new BlockDoorBetweenlands(Material.WOOD) {
+        @Override
+        public ItemStack getDoorItem() {
+            return new ItemStack(ItemRegistry.RUBBER_TREE_PLANK_DOOR_TREATED_ITEM);
+        }
+    }.setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
+    public static final Block GIANT_ROOT_PLANK_DOOR_TREATED = new BlockDoorBetweenlands(Material.WOOD) {
+        @Override
+        public ItemStack getDoorItem() {
+            return new ItemStack(ItemRegistry.GIANT_ROOT_PLANK_DOOR_TREATED_ITEM);
+        }
+    }.setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
+    public static final Block HEARTHGROVE_PLANK_DOOR_TREATED = new BlockDoorBetweenlands(Material.WOOD) {
+        @Override
+        public ItemStack getDoorItem() {
+            return new ItemStack(ItemRegistry.HEARTHGROVE_PLANK_DOOR_TREATED_ITEM);
+        }
+    }.setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
+    public static final Block NIBBLETWIG_PLANK_DOOR_TREATED = new BlockDoorBetweenlands(Material.WOOD) {
+        @Override
+        public ItemStack getDoorItem() {
+            return new ItemStack(ItemRegistry.NIBBLETWIG_PLANK_DOOR_TREATED_ITEM);
+        }
+    }.setSoundType(SoundType.WOOD).setHardness(1.0F).setResistance(5.0F);
+    public static final Block ROTTEN_PLANK_DOOR_TREATED = new BlockDoorBetweenlands(Material.WOOD) {
+        @Override
+        public ItemStack getDoorItem() {
+            return new ItemStack(ItemRegistry.ROTTEN_PLANK_DOOR_TREATED_ITEM);
+        }
+    }.setSoundType(SoundType.WOOD).setHardness(1.0F).setResistance(5.0F);
     public static final Block STANDING_WEEDWOOD_SIGN = new BlockStandingWeedwoodSign();
     public static final Block WALL_WEEDWOOD_SIGN = new BlockWallWeedwoodSign();
     public static final Block SULFUR_TORCH = new BlockSulfurTorch();
@@ -926,6 +969,12 @@ public class BlockRegistry {
     public static final Block HEARTHGROVE_PLANK_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
     public static final Block NIBBLETWIG_PLANK_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
     public static final Block ROTTEN_PLANK_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(1.0F).setResistance(5.0F);
+    public static final Block WEEDWOOD_TRAPDOOR_TREATED = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(2.0F).setResistance(5.0F);
+    public static final Block RUBBER_TREE_PLANK_TRAPDOOR_TREATED  = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
+    public static final Block GIANT_ROOT_PLANK_TRAPDOOR_TREATED  = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
+    public static final Block HEARTHGROVE_PLANK_TRAPDOOR_TREATED  = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
+    public static final Block NIBBLETWIG_PLANK_TRAPDOOR_TREATED  = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
+    public static final Block ROTTEN_PLANK_TRAPDOOR_TREATED  = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(1.0F).setResistance(5.0F);
     public static final Block SCABYST_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.IRON).setSoundType(SoundType.STONE).setHardness(1.75F).setResistance(5.0F);
     public static final Block SYRMORITE_HOPPER = new BlockHopperBetweenlands();
     public static final Block MUD_FLOWER_POT = new BlockMudFlowerPot();
