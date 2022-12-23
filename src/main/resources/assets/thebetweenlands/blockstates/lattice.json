@@ -1,0 +1,48 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "glass_pane_post",
+    "textures": {
+      "edge": "thebetweenlands:blocks/lattice",
+      "pane": "thebetweenlands:blocks/lattice"
+    }
+  },
+  "variants": {
+    "north": {
+      "true": {
+        "submodel": "glass_pane_side"
+      },
+      "false": {
+        "submodel": "glass_pane_noside"
+      }
+    },
+    "east": {
+      "true": {
+        "submodel": "glass_pane_side",
+        "y": 90
+      },
+      "false": {
+        "submodel": "glass_pane_noside_alt"
+      }
+    },
+    "south": {
+      "true": {
+        "submodel": "glass_pane_side_alt"
+      },
+      "false": {
+        "submodel": "glass_pane_noside_alt", 
+        "y": 90
+      }
+    },
+    "west": {
+      "true": {
+        "submodel": "glass_pane_side_alt",
+        "y": 90
+      },
+      "false": {
+        "submodel": "glass_pane_noside", 
+        "y": 270
+      }
+    }
+  }
+}
