@@ -474,6 +474,42 @@ public class ItemRegistry {
             return BlockRegistry.ROTTEN_PLANK_DOOR;
         }
     };
+    public static final Item WEEDWOOD_DOOR_TREATED_ITEM = new ItemDoorBetweenlands() {
+        @Override
+        public Block getDoorBlock() {
+            return BlockRegistry.WEEDWOOD_DOOR_TREATED;
+        }
+    };
+    public static final Item RUBBER_TREE_PLANK_DOOR_TREATED_ITEM = new ItemDoorBetweenlands() {
+        @Override
+        public Block getDoorBlock() {
+            return BlockRegistry.RUBBER_TREE_PLANK_DOOR_TREATED;
+        }
+    };
+    public static final Item GIANT_ROOT_PLANK_DOOR_TREATED_ITEM = new ItemDoorBetweenlands() {
+        @Override
+        public Block getDoorBlock() {
+            return BlockRegistry.GIANT_ROOT_PLANK_DOOR_TREATED;
+        }
+    };
+    public static final Item HEARTHGROVE_PLANK_DOOR_TREATED_ITEM = new ItemDoorBetweenlands() {
+        @Override
+        public Block getDoorBlock() {
+            return BlockRegistry.HEARTHGROVE_PLANK_DOOR_TREATED;
+        }
+    };
+    public static final Item NIBBLETWIG_PLANK_DOOR_TREATED_ITEM = new ItemDoorBetweenlands() {
+        @Override
+        public Block getDoorBlock() {
+            return BlockRegistry.NIBBLETWIG_PLANK_DOOR_TREATED;
+        }
+    };
+    public static final Item ROTTEN_PLANK_DOOR_TREATED_ITEM = new ItemDoorBetweenlands() {
+        @Override
+        public Block getDoorBlock() {
+            return BlockRegistry.ROTTEN_PLANK_DOOR_TREATED;
+        }
+    };
     public static final Item WEEDWOOD_SIGN_ITEM = new ItemWeedwoodSign();
     public static final Item CRIMSON_MIDDLE_GEM = new ItemGem(CircleGemType.CRIMSON);
     public static final Item AQUA_MIDDLE_GEM = new ItemGem(CircleGemType.AQUA);
