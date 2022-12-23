@@ -12,48 +12,7 @@ import net.minecraft.client.particle.ParticleSplash;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.client.render.particle.entity.ParticleAltarCrafting;
-import thebetweenlands.client.render.particle.entity.ParticleAnimated;
-import thebetweenlands.client.render.particle.entity.ParticleAnimator;
-import thebetweenlands.client.render.particle.entity.ParticleBLRain;
-import thebetweenlands.client.render.particle.entity.ParticleBlockProtection;
-import thebetweenlands.client.render.particle.entity.ParticleBreakingBL;
-import thebetweenlands.client.render.particle.entity.ParticleBubbleBL;
-import thebetweenlands.client.render.particle.entity.ParticleBug;
-import thebetweenlands.client.render.particle.entity.ParticleCaveWaterDrip;
-import thebetweenlands.client.render.particle.entity.ParticleChiromawDroppings;
-import thebetweenlands.client.render.particle.entity.ParticleChiromawFeathers;
-import thebetweenlands.client.render.particle.entity.ParticleDamageReduction;
-import thebetweenlands.client.render.particle.entity.ParticleDraetonBurnerFlame;
-import thebetweenlands.client.render.particle.entity.ParticleDruidCasting;
-import thebetweenlands.client.render.particle.entity.ParticleEmissiveBug;
-import thebetweenlands.client.render.particle.entity.ParticleEmissiveSwarm;
-import thebetweenlands.client.render.particle.entity.ParticleEntitySwirl;
-import thebetweenlands.client.render.particle.entity.ParticleFancyBubble;
-import thebetweenlands.client.render.particle.entity.ParticleFancyDrip;
-import thebetweenlands.client.render.particle.entity.ParticleFish;
-import thebetweenlands.client.render.particle.entity.ParticleFishVortex;
-import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
-import thebetweenlands.client.render.particle.entity.ParticleLifeEssence;
-import thebetweenlands.client.render.particle.entity.ParticleLightningArc;
-import thebetweenlands.client.render.particle.entity.ParticleMoth;
-import thebetweenlands.client.render.particle.entity.ParticlePuzzleBeam;
-import thebetweenlands.client.render.particle.entity.ParticlePuzzleBeam2;
-import thebetweenlands.client.render.particle.entity.ParticleRingOfRecruitmentState;
-import thebetweenlands.client.render.particle.entity.ParticleRootSpike;
-import thebetweenlands.client.render.particle.entity.ParticleSimple;
-import thebetweenlands.client.render.particle.entity.ParticleSonicScream;
-import thebetweenlands.client.render.particle.entity.ParticleSoundRipple;
-import thebetweenlands.client.render.particle.entity.ParticleSpiritButterfly;
-import thebetweenlands.client.render.particle.entity.ParticleSwarm;
-import thebetweenlands.client.render.particle.entity.ParticleTarBeastDrip;
-import thebetweenlands.client.render.particle.entity.ParticleThem;
-import thebetweenlands.client.render.particle.entity.ParticleUrchinSpike;
-import thebetweenlands.client.render.particle.entity.ParticleVisionOrb;
-import thebetweenlands.client.render.particle.entity.ParticleWaterRipple;
-import thebetweenlands.client.render.particle.entity.ParticleWeedwoodLeaf;
-import thebetweenlands.client.render.particle.entity.ParticleWisp;
-import thebetweenlands.client.render.particle.entity.ParticleXPPieces;
+import thebetweenlands.client.render.particle.entity.*;
 
 
 public enum BLParticles {
@@ -90,6 +49,7 @@ public enum BLParticles {
 			.buildBaseArgs()),
 	FLY(new ParticleBug.FlyFactory()),
 	MOTH(new ParticleMoth.Factory()),
+	SILK_MOTH(new ParticleSilkMoth.Factory()),
 	MOSQUITO(new ParticleBug.MosquitoFactory()),
 	SPIRIT_BUTTERFLY(new ParticleSpiritButterfly.Factory()),
 	WATER_BUG(new ParticleBug.WaterBugFactory()),

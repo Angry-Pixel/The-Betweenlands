@@ -34,7 +34,7 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
                 double py = (double) pos.getY() + 0.3D;
                 double pz = (double) pos.getZ() + 0.5D;
 
-                BLParticles.MOTH.spawn(world, px, py, pz);
+                BLParticles.SILK_MOTH.spawn(world, px, py, pz);
 
                 checkEfficiency();
             }
@@ -117,7 +117,7 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
                             double py = (double) mutablePos.getY() + 0.3D;
                             double pz = (double) mutablePos.getZ() + 0.5D;
 
-                            BLParticles.MOTH.spawn(world, px, py, pz);
+                            BLParticles.SILK_MOTH.spawn(world, px, py, pz);
                         }
                     }
 
