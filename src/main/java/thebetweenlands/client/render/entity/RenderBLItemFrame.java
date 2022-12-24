@@ -1,6 +1,7 @@
 package thebetweenlands.client.render.entity;
 
 import javax.annotation.Nullable;
+import javax.annotation.Resource;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
@@ -15,10 +16,14 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.RenderItemFrame;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemCompass;
+import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -26,7 +31,13 @@ import net.minecraft.world.storage.MapData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.EntityBLItemFrame;
+import thebetweenlands.common.entity.mobs.EntityAnadia;
+import thebetweenlands.common.entity.mobs.EntityFirefly;
+import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
+import thebetweenlands.common.entity.mobs.EntityTinySludgeWormHelper;
 import thebetweenlands.common.item.EnumBLDyeColor;
+import thebetweenlands.common.item.misc.ItemMob;
+import thebetweenlands.common.item.misc.ItemMobAnadia;
 import thebetweenlands.common.lib.ModInfo;
 
 @SideOnly(Side.CLIENT)
@@ -141,7 +152,45 @@ public class RenderBLItemFrame extends RenderItemFrame
 
                     GlStateManager.pushAttrib();
                     RenderHelper.enableStandardItemLighting();
-                    this.itemRenderer.renderItem(itemstack, ItemCameraTransforms.TransformType.FIXED);
+
+                    if(itemstack.getItem() instanceof ItemMob) {
+                        ItemMob itemMob = (ItemMob)itemstack.getItem();
+                        Entity entity = EntityList.createEntityByIDFromName(itemMob.getCapturedEntityId(itemstack), itemFrame.world);
+
+                        if (entity != null && !(entity instanceof EntityTinySludgeWorm) && !(entity instanceof EntityFirefly)) {
+                            NBTTagCompound nbt = itemMob.getEntityData(itemstack);
+
+                            if(nbt != null) {
+                                entity.deserializeNBT(nbt);
+                            }
+
+                            float horizontalOffset = 0;
+
+                            if(entity instanceof EntityAnadia) {
+                                horizontalOffset = entity.width / 4;
+                            }
+
+                            entity.setPositionAndRotation(0, 0, 0, 0, 0);
+                            entity.setWorld(itemFrame.world);
+
+                            if(blItemFrame.realFacingDirection.getAxis().equals(EnumFacing.Axis.Y)) {
+                                GlStateManager.rotate(-90F, 1F, 0F, 0F);
+                            } else {
+                                GlStateManager.translate(horizontalOffset, -entity.height / 2D, -0.05D);
+                            }
+
+                            GlStateManager.rotate(90, 0, 1, 0);
+                            entity.setRotationYawHead(0F);
+                            entity.rotationPitch = 0F;
+                            entity.ticksExisted = 0;
+                            Minecraft.getMinecraft().getRenderManager().renderEntity(entity, 0D, 0D, 0D, 0F, 0F, true);
+                        } else {
+                            this.itemRenderer.renderItem(itemstack, ItemCameraTransforms.TransformType.FIXED);
+                        }
+                    } else {
+                        this.itemRenderer.renderItem(itemstack, ItemCameraTransforms.TransformType.FIXED);
+                    }
+
                     RenderHelper.disableStandardItemLighting();
                     GlStateManager.popAttrib();
                 }
