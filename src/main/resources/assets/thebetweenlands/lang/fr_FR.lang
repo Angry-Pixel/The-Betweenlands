@@ -706,6 +706,8 @@ tile.thebetweenlands.water_filter.name=Filtre à Eau
 tile.thebetweenlands.moth_house.name=Cabane à Papillons
 tile.thebetweenlands.filtered_silt_glass_jar.name=Jarre en Verre de Limon Filtré
 tile.thebetweenlands.ancient_remnant_block.name=Bloc de Débris Anciens
+tile.thebetweenlands.lattice.name=Treillage
+tile.thebetweenlands.lattice_fine.name=Treillage Affiné
 
 # Items
 
