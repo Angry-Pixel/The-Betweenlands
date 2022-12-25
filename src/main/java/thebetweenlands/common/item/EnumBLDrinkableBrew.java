@@ -80,7 +80,6 @@ public enum EnumBLDrinkableBrew implements IStringSerializable
 		return this.buffDuration;
 	}
 
-	@SideOnly(Side.CLIENT)
 	public String getBrewName() {
 		return this.name;
 	}
@@ -111,10 +110,12 @@ public enum EnumBLDrinkableBrew implements IStringSerializable
 		return META_LOOKUP[meta];
 	}
 
+	@Override
 	public String toString() {
 		return this.name;
 	}
 
+	@Override
 	public String getName() {
 		return this.name;
 	}
