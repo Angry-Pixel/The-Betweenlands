@@ -2344,8 +2344,12 @@ advancements.thebetweenlands.farmer.fertile_soil.title=Fertile Soil
 advancements.thebetweenlands.farmer.fertile_soil.description=Dig up a worm while making holes for crops
 advancements.thebetweenlands.farmer.bountiful_barnacles.title=Bountiful Barnacles
 advancements.thebetweenlands.farmer.bountiful_barnacles.description=Harvest and replace a cluster of Barnacles
-advancements.thebetweenlands.survivalist.premium_produce.title=Premium Produce
-advancements.thebetweenlands.survivalist.premium_produce.description=Craft and consume a Pearled Pear
+advancements.thebetweenlands.farmer.premium_produce.title=Premium Produce
+advancements.thebetweenlands.farmer.premium_produce.description=Craft and consume a Pearled Pear
+advancements.thebetweenlands.farmer.your_bush_smells.title=Your Bush Smells
+advancements.thebetweenlands.farmer.your_bush_smells.description=Infuse a Weedwood Bush using a Pheromone Thorax
+advancements.thebetweenlands.farmer.moving_day.title=Moving Day
+advancements.thebetweenlands.farmer.moving_day.description=Put Silk Grubs in a Moth House to produce Silk
 
 # Herbalist
 advancements.thebetweenlands.herbalist.root.title=Herbalist
@@ -2360,6 +2364,12 @@ advancements.thebetweenlands.herbalist.bookworms.title=Bookworms
 advancements.thebetweenlands.herbalist.bookworms.description=Obtain an Herblore Book
 advancements.thebetweenlands.herbalist.fully_booked.title=Fully Booked
 advancements.thebetweenlands.herbalist.fully_booked.description=Completely fill in the Herblore Book
+advancements.thebetweenlands.herbalist.steep_learning_curve.title=Steep Learning Curve
+advancements.thebetweenlands.herbalist.steep_learning_curve.description=Place a Steeping Pot
+advancements.thebetweenlands.herbalist.tea_bagging.title=Tea Bagging
+advancements.thebetweenlands.herbalist.tea_bagging.description=Craft a Silk Bundle and steep some tea
+advancements.thebetweenlands.herbalist.home_remedy_extraordinaire.title=Home Remedy Extraordinaire
+advancements.thebetweenlands.herbalist.home_remedy_extraordinaire.description=Steep all brews
 
 # Survivalist
 advancements.thebetweenlands.survivalist.root.title=Survivalist
@@ -2422,6 +2432,16 @@ advancements.thebetweenlands.craftsman.natures_purifier.title=Nature's Purifier
 advancements.thebetweenlands.craftsman.natures_purifier.description=Use a Crab Pot Filter to convert an item
 advancements.thebetweenlands.craftsman.aquaman.title=Aquaman
 advancements.thebetweenlands.craftsman.aquaman.description=Obtain a full suit of Amphibious armor
+advancements.thebetweenlands.craftsman.percolation_station.title=Percolation Station
+advancements.thebetweenlands.craftsman.percolation_station.description=Place a Water Filter and collect clean water
+advancements.thebetweenlands.craftsman.omega_3.title=Omega 3
+advancements.thebetweenlands.craftsman.omega_3.description=Use a Steeping Pot to obtain Fish Oil
+advancements.thebetweenlands.craftsman.ill_treat_you_right.title=I'll Treat You Right
+advancements.thebetweenlands.craftsman.ill_treat_you_right.description=Use Fish Oil to craft Treated Planks
+advancements.thebetweenlands.craftsman.paint_job.title=Paint Job
+advancements.thebetweenlands.craftsman.paint_job.description=Use Dye to color a block
+advancements.thebetweenlands.craftsman.dye_hard.title=Dye Hard
+advancements.thebetweenlands.craftsman.dye_hard.description=Create every dye color using a Steeping Pot
 
 # Miner
 advancements.thebetweenlands.miner.root.title=Miner

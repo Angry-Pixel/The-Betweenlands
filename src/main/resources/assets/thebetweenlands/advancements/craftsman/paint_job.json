@@ -1,0 +1,414 @@
+{
+    "display": {
+      "icon": {
+        "item": "thebetweenlands:samite"
+      },
+      "title": {
+        "translate": "advancements.thebetweenlands.craftsman.paint_job.title"
+      },
+      "description": {
+        "translate": "advancements.thebetweenlands.craftsman.paint_job.description"
+      }
+    },
+    "parent": "thebetweenlands:craftsman/fish_oil",
+    "criteria": {
+      "glass": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:filtered_silt_glass_stained"
+            }
+          ]
+        }
+      },
+      "shingles": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:mud_brick_shingle_stained"
+            }
+          ]
+        }
+      },
+      "reed_mat": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:reed_mat_colored"
+            }
+          ]
+        }
+      },
+      "samite_0": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:samite",
+              "data": 0
+            }
+          ]
+        }
+      },
+      "samite_1": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:samite",
+              "data": 1
+            }
+          ]
+        }
+      },
+      "samite_2": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:samite",
+              "data": 2
+            }
+          ]
+        }
+      },
+      "samite_3": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:samite",
+              "data": 3
+            }
+          ]
+        }
+      },
+      "samite_4": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:samite",
+              "data": 4
+            }
+          ]
+        }
+      },
+      "samite_5": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:samite",
+              "data": 5
+            }
+          ]
+        }
+      },
+      "samite_6": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:samite",
+              "data": 6
+            }
+          ]
+        }
+      },
+      "samite_8": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:samite",
+              "data": 8
+            }
+          ]
+        }
+      },
+      "samite_9": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:samite",
+              "data": 9
+            }
+          ]
+        }
+      },
+      "samite_10": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:samite",
+              "data": 10
+            }
+          ]
+        }
+      },
+      "samite_11": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:samite",
+              "data": 11
+            }
+          ]
+        }
+      },
+      "samite_12": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:samite",
+              "data": 12
+            }
+          ]
+        }
+      },
+      "samite_13": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:samite",
+              "data": 13
+            }
+          ]
+        }
+      },
+      "samite_14": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:samite",
+              "data": 14
+            }
+          ]
+        }
+      },
+      "samite_15": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:samite",
+              "data": 15
+            }
+          ]
+        }
+      },
+      "item_frame_0": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:item_frame",
+              "data": 0
+            }
+          ]
+        }
+      },
+      "item_frame_1": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:item_frame",
+              "data": 1
+            }
+          ]
+        }
+      },
+      "item_frame_2": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:item_frame",
+              "data": 2
+            }
+          ]
+        }
+      },
+      "item_frame_3": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:item_frame",
+              "data": 3
+            }
+          ]
+        }
+      },
+      "item_frame_4": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:item_frame",
+              "data": 4
+            }
+          ]
+        }
+      },
+      "item_frame_5": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:item_frame",
+              "data": 5
+            }
+          ]
+        }
+      },
+      "item_frame_6": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:item_frame",
+              "data": 6
+            }
+          ]
+        }
+      },
+      "item_frame_8": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:item_frame",
+              "data": 8
+            }
+          ]
+        }
+      },
+      "item_frame_9": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:item_frame",
+              "data": 9
+            }
+          ]
+        }
+      },
+      "item_frame_10": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:item_frame",
+              "data": 10
+            }
+          ]
+        }
+      },
+      "item_frame_11": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:item_frame",
+              "data": 11
+            }
+          ]
+        }
+      },
+      "item_frame_12": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:item_frame",
+              "data": 12
+            }
+          ]
+        }
+      },
+      "item_frame_13": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:item_frame",
+              "data": 13
+            }
+          ]
+        }
+      },
+      "item_frame_14": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:item_frame",
+              "data": 14
+            }
+          ]
+        }
+      },
+      "item_frame_15": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:item_frame",
+              "data": 15
+            }
+          ]
+        }
+      }
+    },
+    "requirements": [
+      [
+         "glass",
+         "shingles",
+         "reed_mat",
+         "samite_0",
+         "samite_1",
+         "samite_2",
+         "samite_3",
+         "samite_4",
+         "samite_5",
+         "samite_6",
+         "samite_8",
+         "samite_9",
+         "samite_10",
+         "samite_11",
+         "samite_12",
+         "samite_13",
+         "samite_14",
+         "samite_15",
+         "item_frame_0",
+         "item_frame_1",
+         "item_frame_2",
+         "item_frame_3",
+         "item_frame_4",
+         "item_frame_5",
+         "item_frame_6",
+         "item_frame_8",
+         "item_frame_9",
+         "item_frame_10",
+         "item_frame_11",
+         "item_frame_12",
+         "item_frame_13",
+         "item_frame_14",
+         "item_frame_15"
+      ]
+    ]
+  }
+  
