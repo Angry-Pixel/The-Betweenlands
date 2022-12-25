@@ -125,6 +125,7 @@ public class BlockSteepingPot extends Block implements ITileEntityProvider {
 		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing()), 2);
 	}
 
+	@Override
 	@Nullable
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		return Item.getItemFromBlock(this);
@@ -209,8 +210,6 @@ public class BlockSteepingPot extends Block implements ITileEntityProvider {
 				float xx = (float) x + 0.5F;
 				float yy = (float) (y + 0.35F + size * 0.25F);
 				float zz = (float) z + 0.5F;
-				float fixedOffset = 0.25F;
-				float randomOffset = rand.nextFloat() * 0.6F - 0.3F;
 				int type = pot.tank.getFluid().getFluid().getColor();
 				if(pot.tank.getFluid().tag != null && pot.tank.getFluid().tag.hasKey("type"))
 					if(pot.tank.getFluid().getFluid() == FluidRegistry.DYE_FLUID)

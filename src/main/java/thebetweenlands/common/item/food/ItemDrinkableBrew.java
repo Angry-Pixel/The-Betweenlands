@@ -95,7 +95,14 @@ public class ItemDrinkableBrew extends ItemBLFood implements ItemRegistry.IMulti
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
 		stack = super.onItemUseFinish(stack, worldIn, entityLiving);
-		return hasContainerItem(stack) ? getContainerItem(stack) : stack;
+		if(hasContainerItem(stack)) {
+			if(stack.getCount() == 0) {
+				return getContainerItem(stack);
+			} else if(entityLiving instanceof EntityPlayer) {
+				((EntityPlayer) entityLiving).inventory.addItemStackToInventory(getContainerItem(stack));
+			}
+		}
+		return stack;
 	}
 
 	private void applyBuffToPlayer(ItemStack stack, World world, EntityPlayer player) {
