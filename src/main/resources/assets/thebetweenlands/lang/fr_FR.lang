@@ -703,7 +703,7 @@ tile.thebetweenlands.reed_mat_colored.vivid_tangerine.name=Tapis en Roseau Rose 
 tile.thebetweenlands.steeping_pot.name=Pot à Macération
 tile.thebetweenlands.grub_hub.name=Colonie de Vers
 tile.thebetweenlands.water_filter.name=Filtre à Eau
-tile.thebetweenlands.moth_house.name=Cabane à Papillons
+tile.thebetweenlands.moth_house.name=Cabane à Mites
 tile.thebetweenlands.filtered_silt_glass_jar.name=Jarre en Verre de Limon Filtré
 tile.thebetweenlands.ancient_remnant_block.name=Bloc de Débris Anciens
 tile.thebetweenlands.lattice.name=Treillage
@@ -2346,6 +2346,10 @@ advancements.thebetweenlands.farmer.bountiful_barnacles.title=Bernacles d'Abonda
 advancements.thebetweenlands.farmer.bountiful_barnacles.description=Récolter et replacer un Cluster de Bernacles
 advancements.thebetweenlands.farmer.premium_produce.title=Produit de Première Qualité
 advancements.thebetweenlands.farmer.premium_produce.description=Fabriquer et consommer une Poire Perlée
+advancements.thebetweenlands.farmer.your_bush_smells.title=Ton Buisson Schlingue
+advancements.thebetweenlands.farmer.your_bush_smells.description=Infuser un Buisson d'Harbre avec un Thorax à Phéromones
+advancements.thebetweenlands.farmer.moving_day.title=Pendaison de Crémaillère
+advancements.thebetweenlands.farmer.moving_day.description=Mettre des Vers à Soie dans une Cabane à Mites pour produire de la Soie
 
 # Herboriste
 advancements.thebetweenlands.herbalist.root.title=Herboriste
@@ -2360,6 +2364,12 @@ advancements.thebetweenlands.herbalist.bookworms.title=Rat de Bibliothèque
 advancements.thebetweenlands.herbalist.bookworms.description=Obtenir un Manuel d’Herboristerie
 advancements.thebetweenlands.herbalist.fully_booked.title=Tourner la Page
 advancements.thebetweenlands.herbalist.fully_booked.description=Compléter entièrement le Manuel d’Herboristerie
+advancements.thebetweenlands.herbalist.steep_learning_curve.title=Trempez-la dans l'Huile, Trempez-la dans l'Eau
+advancements.thebetweenlands.herbalist.steep_learning_curve.description=Placer un Pot à Macération
+advancements.thebetweenlands.herbalist.tea_bagging.title=La Sagesse de l'Univers
+advancements.thebetweenlands.herbalist.tea_bagging.description=Fabriquer un Sac de Soie et confectionner du thé
+advancements.thebetweenlands.herbalist.home_remedy_extraordinaire.title=Remède de Grand-mère Extraordinaire
+advancements.thebetweenlands.herbalist.home_remedy_extraordinaire.description=Concocter toutes les boissons
 
 # Survivaliste
 advancements.thebetweenlands.survivalist.root.title=Survivaliste
@@ -2422,6 +2432,16 @@ advancements.thebetweenlands.craftsman.natures_purifier.title=Purificateur Natur
 advancements.thebetweenlands.craftsman.natures_purifier.description=Utiliser un Filtre pour Pot à Crabe afin de filtrer un objet
 advancements.thebetweenlands.craftsman.aquaman.title=Aquaman
 advancements.thebetweenlands.craftsman.aquaman.description=Obtenir la tenue complète d'Armure Amphibie
+advancements.thebetweenlands.craftsman.percolation_station.title=Station de Percolation
+advancements.thebetweenlands.craftsman.percolation_station.description=Placer un Filtre à Eau et recolter de l'eau propre
+advancements.thebetweenlands.craftsman.omega_3.title=Oméga 3
+advancements.thebetweenlands.craftsman.omega_3.description=Utiliser un Pot à Macération pour obtenir de l'Huile de Poisson
+advancements.thebetweenlands.craftsman.ill_treat_you_right.title=Un Peu d'Huile de Coude
+advancements.thebetweenlands.craftsman.ill_treat_you_right.description=Utiliser de l'Huile de Poisson pour frabriquer des Planches Huilées
+advancements.thebetweenlands.craftsman.paint_job.title=Coup de Pinceau
+advancements.thebetweenlands.craftsman.paint_job.description=Utiliser un Colorant pour teindre un bloc
+advancements.thebetweenlands.craftsman.dye_hard.title=Ça Annonce la Couleur
+advancements.thebetweenlands.craftsman.dye_hard.description=Créer toute les teintures avec un Pot à Macération
 
 # Mineur
 advancements.thebetweenlands.miner.root.title=Mineur
