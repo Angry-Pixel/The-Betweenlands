@@ -12,7 +12,7 @@
       },
       "frame": "challenge"
     },
-    "parent": "thebetweenlands:herbalist/tea",
+    "parent": "thebetweenlands:herbalist/tea_bagging",
     "criteria": {
       "nettle_tea": {
         "trigger": "minecraft:inventory_changed",

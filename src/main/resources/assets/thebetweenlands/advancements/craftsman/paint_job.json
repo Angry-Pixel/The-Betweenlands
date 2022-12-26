@@ -10,7 +10,7 @@
         "translate": "advancements.thebetweenlands.craftsman.paint_job.description"
       }
     },
-    "parent": "thebetweenlands:craftsman/fish_oil",
+    "parent": "thebetweenlands:craftsman/omega_3s",
     "criteria": {
       "glass": {
         "trigger": "minecraft:inventory_changed",

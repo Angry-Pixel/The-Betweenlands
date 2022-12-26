@@ -1,0 +1,21 @@
+{
+    "display": {
+      "icon": {
+        "item": "thebetweenlands:aspect_vial",
+        "nbt": "{blHerbloreAspects:{container:[{aspect:{type:\"Freiwynn\"}}]}}"
+      },
+      "title": {
+        "translate": "advancements.thebetweenlands.herbalist.you_cant_see_me.title"
+      },
+      "description": {
+        "translate": "advancements.thebetweenlands.herbalist.you_cant_see_me.description"
+      }
+    },
+    "parent": "thebetweenlands:herbalist/bookworms",
+    "criteria": {
+        "invisible": {
+          "trigger": "thebetweenlands:item_frame_invisible"
+      }
+   }
+}
+  

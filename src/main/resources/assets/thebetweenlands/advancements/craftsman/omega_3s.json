@@ -4,13 +4,13 @@
         "item": "thebetweenlands:bl_bucket_fish_oil"
       },
       "title": {
-        "translate": "advancements.thebetweenlands.craftsman.omega_3.title"
+        "translate": "advancements.thebetweenlands.craftsman.omega_3s.title"
       },
       "description": {
-        "translate": "advancements.thebetweenlands.craftsman.omega_3.description"
+        "translate": "advancements.thebetweenlands.craftsman.omega_3s.description"
       }
     },
-    "parent": "thebetweenlands:craftsman/water_filter",
+    "parent": "thebetweenlands:craftsman/percolation_station",
     "criteria": {
         "fish_oil": {
           "trigger": "minecraft:inventory_changed",

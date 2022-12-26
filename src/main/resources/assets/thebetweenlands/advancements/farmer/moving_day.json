@@ -10,7 +10,7 @@
         "translate": "advancements.thebetweenlands.farmer.moving_day.description"
       }
     },
-    "parent": "thebetweenlands:farmer/infuse_bush",
+    "parent": "thebetweenlands:farmer/your_bush_smells",
     "criteria": {
       "grub": {
         "trigger": "thebetweenlands:right_click_block",

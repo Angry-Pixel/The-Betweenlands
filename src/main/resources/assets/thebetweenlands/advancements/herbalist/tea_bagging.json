@@ -10,7 +10,7 @@
         "translate": "advancements.thebetweenlands.herbalist.tea_bagging.description"
       }
     },
-    "parent": "thebetweenlands:herbalist/steeping_pot",
+    "parent": "thebetweenlands:herbalist/steep_learning_curve",
     "criteria": {
       "nettle_tea": {
         "trigger": "minecraft:inventory_changed",

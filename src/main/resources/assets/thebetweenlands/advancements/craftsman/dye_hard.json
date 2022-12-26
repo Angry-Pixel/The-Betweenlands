@@ -12,7 +12,7 @@
       },
       "frame": "challenge"
     },
-    "parent": "thebetweenlands:craftsman/dye_item",
+    "parent": "thebetweenlands:craftsman/paint_job",
     "criteria": {
       "lavender": {
         "trigger": "minecraft:inventory_changed",

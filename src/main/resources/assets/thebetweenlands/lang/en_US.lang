@@ -2350,6 +2350,10 @@ advancements.thebetweenlands.farmer.your_bush_smells.title=Your Bush Smells
 advancements.thebetweenlands.farmer.your_bush_smells.description=Infuse a Weedwood Bush using a Pheromone Thorax
 advancements.thebetweenlands.farmer.moving_day.title=Moving Day
 advancements.thebetweenlands.farmer.moving_day.description=Put Silk Grubs in a Moth House to produce Silk
+advancements.thebetweenlands.farmer.multicore_threading.title=Multicore Threading
+advancements.thebetweenlands.farmer.multicore_threading.description=Use lanterns to boost a Moth House's production speed
+advancements.thebetweenlands.farmer.grubhub_inc.title=Grubhub Inc.
+advancements.thebetweenlands.farmer.grubhub_inc.description=Awaken a Grub Hub using Pheromone Extract
 
 # Herbalist
 advancements.thebetweenlands.herbalist.root.title=Herbalist
@@ -2370,6 +2374,8 @@ advancements.thebetweenlands.herbalist.tea_bagging.title=Tea Bagging
 advancements.thebetweenlands.herbalist.tea_bagging.description=Craft a Silk Bundle and steep some tea
 advancements.thebetweenlands.herbalist.home_remedy_extraordinaire.title=Home Remedy Extraordinaire
 advancements.thebetweenlands.herbalist.home_remedy_extraordinaire.description=Steep all brews
+advancements.thebetweenlands.herbalist.you_cant_see_me.title=You Can't See Me
+advancements.thebetweenlands.herbalist.you_cant_see_me.description=Use the vision aspect to make an Item Frame invisible 
 
 # Survivalist
 advancements.thebetweenlands.survivalist.root.title=Survivalist
@@ -2434,8 +2440,8 @@ advancements.thebetweenlands.craftsman.aquaman.title=Aquaman
 advancements.thebetweenlands.craftsman.aquaman.description=Obtain a full suit of Amphibious armor
 advancements.thebetweenlands.craftsman.percolation_station.title=Percolation Station
 advancements.thebetweenlands.craftsman.percolation_station.description=Place a Water Filter and collect clean water
-advancements.thebetweenlands.craftsman.omega_3.title=Omega 3
-advancements.thebetweenlands.craftsman.omega_3.description=Use a Steeping Pot to obtain Fish Oil
+advancements.thebetweenlands.craftsman.omega_3s.title=Omega 3
+advancements.thebetweenlands.craftsman.omega_3s.description=Use a Steeping Pot to obtain Fish Oil
 advancements.thebetweenlands.craftsman.ill_treat_you_right.title=I'll Treat You Right
 advancements.thebetweenlands.craftsman.ill_treat_you_right.description=Use Fish Oil to craft Treated Planks
 advancements.thebetweenlands.craftsman.paint_job.title=Paint Job
