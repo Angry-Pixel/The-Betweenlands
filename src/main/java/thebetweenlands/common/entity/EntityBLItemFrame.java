@@ -246,7 +246,9 @@ public class EntityBLItemFrame extends EntityItemFrame implements IEntityAdditio
         return dataManager.get(IS_GLOWING);
     }
 
-    public void SetGlowing(boolean isGlowing) {
+    public void SetGlowing(boolean isGlowing, EntityPlayer player) {
+    	if(isGlowing)
+    		AdvancementCriterionRegistry.ITEM_FRAME_GLOWING.trigger((EntityPlayerMP) player);
         dataManager.set(IS_GLOWING, isGlowing);
     }
 
@@ -272,7 +274,7 @@ public class EntityBLItemFrame extends EntityItemFrame implements IEntityAdditio
                     }
                 } else if(itemstack.getItem() instanceof ItemGlowingGoop && !isGlowing()) {
                     itemstack.shrink(1);
-                    SetGlowing(true);
+                    SetGlowing(true, player);
                     return true;
                 }
             }

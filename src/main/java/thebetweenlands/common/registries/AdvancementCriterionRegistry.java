@@ -60,6 +60,7 @@ public class AdvancementCriterionRegistry {
 	public static final NoCriteriaTrigger BREAK_ALCOVE_URN = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "break_alcove_urn")));
 	public static final NoCriteriaTrigger MOTH_HOUSE_MAXED = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "moth_house_maxed")));
 	public static final NoCriteriaTrigger ITEM_FRAME_INVISIBLE = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "item_frame_invisible")));
-	
+	public static final NoCriteriaTrigger ITEM_FRAME_GLOWING = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "item_frame_glowing")));
+
 	public static void preInit() { }
 }
