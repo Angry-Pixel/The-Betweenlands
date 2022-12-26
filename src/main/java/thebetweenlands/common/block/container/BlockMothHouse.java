@@ -42,6 +42,14 @@ public class BlockMothHouse  extends BlockContainer {
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		if (!world.isRemote) {
+			if (world.getTileEntity(pos) instanceof TileEntityMothHouse) {
+				TileEntityMothHouse tile = (TileEntityMothHouse) world.getTileEntity(pos);
+				if(placer instanceof EntityPlayer)
+					tile.setPlacer((EntityPlayer) placer);
+				tile.markForUpdate();
+			}
+		}
         world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing()), 2);
     }
 

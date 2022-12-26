@@ -1,6 +1,10 @@
 package thebetweenlands.common.tile;
 
+import java.util.UUID;
+
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -14,6 +18,7 @@ import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.misc.BlockLantern;
 import thebetweenlands.common.item.misc.ItemMisc;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class TileEntityMothHouse  extends TileEntityBasicInventory implements ITickable {
@@ -24,10 +29,31 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
     private int productionTime = 0;
     private int productionEfficiency = 0;
     private boolean isWorking = false;
+	private EntityPlayer placer;
+	private UUID placerUUID;
+	
+	@Override
+	public void setWorld(World worldIn) {
+		super.setWorld(worldIn);
+		this.updatePlacerFromUUID();
+	}
+
+	private boolean updatePlacerFromUUID() {
+		if(placerUUID != null) {
+			EntityPlayer player = this.world.getPlayerEntityByUUID(placerUUID);
+			if(player != null && player != getPlacer()) {
+				setPlacer(player);
+				return true;
+			}
+		}
+		return false;
+	}
 
 
     @Override
     public void update() {
+    	
+    	
         if(world.getTotalWorldTime() % 20 == 0) {
             if(isWorking) {
                 double px = (double) pos.getX() + 0.5D;
@@ -41,6 +67,13 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
         }
 
         if (!this.world.isRemote) {
+			// because the player is always null unless the world is loaded but block NBT is loaded before grrrrr
+			if(placerUUID != null && getPlacer() == null && world.getTotalWorldTime() % 20 == 0) {
+				if(updatePlacerFromUUID()) {
+					markForUpdate();
+				}
+			}
+
             ItemStack grubs = super.getStackInSlot(0);
 
             // don't work if no grubs are available or silk stack is full
@@ -110,6 +143,8 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
                     if (lanternsNearby < maxLanterns && state.getBlock() instanceof BlockLantern) {
                         if (!world.isRemote) {
                             lanternsNearby++;
+                            if(lanternsNearby == maxLanterns)
+                            	AdvancementCriterionRegistry.MOTH_HOUSE_MAXED.trigger((EntityPlayerMP) placer);
                         }
 
                         if (world.isRemote) {
@@ -162,6 +197,10 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
 
+		if (nbt.hasKey("OwnerUUID", 8)) {
+			placerUUID = nbt.getUniqueId("OwnerUUID");
+		}
+
         productionTime = nbt.getInteger("productionTime");
         productionEfficiency = nbt.getInteger("productionEfficiency");
     }
@@ -169,6 +208,11 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
+
+		EntityPlayer placer = getPlacer();
+		if (placer != null) {
+			nbt.setUniqueId("OwnerUUID", placer.getUniqueID());
+		}
 
         nbt.setInteger("productionTime", productionTime);
         nbt.setInteger("productionEfficiency", productionEfficiency);
@@ -209,4 +253,12 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
     public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
         return slot == 1;
     }
+
+	public void setPlacer(EntityPlayer player) {
+		this.placer = player;
+	}
+
+	private EntityPlayer getPlacer() {
+		return this.placer;
+	}
 }
