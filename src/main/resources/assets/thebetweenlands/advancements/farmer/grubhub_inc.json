@@ -1,0 +1,36 @@
+{
+    "display": {
+      "icon": {
+        "item": "thebetweenlands:grub_hub"
+      },
+      "title": {
+        "translate": "advancements.thebetweenlands.farmer.grubhub_inc.title"
+      },
+      "description": {
+        "translate": "advancements.thebetweenlands.farmer.grubhub_inc.description"
+      },
+      "frame": "goal"
+    },
+    "parent": "thebetweenlands:farmer/multicore_threading",
+    "criteria": {
+    "activate": {
+      "trigger": "thebetweenlands:right_click_block",
+      "conditions": {
+      "blocks": [
+        {
+          "block": "thebetweenlands:grub_hub"
+        }
+      ],
+      "items": [
+        {
+          "item": "thebetweenlands:bl_bucket",
+          "nbt": "{Fluid:{FluidName:\"drinkable_brew\",Tag:{type:2}}}"
+          }
+        ]
+      }
+    }
+  }
+}
+  
+
+  
