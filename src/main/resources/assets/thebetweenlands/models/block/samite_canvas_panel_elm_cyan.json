@@ -1,9 +1,9 @@
 {
   "parent": "block/cube_all",
 	"textures": {
-		"0": "thebetweenlands:blocks/samite_lavender_blue",
+		"0": "thebetweenlands:blocks/samite_elm_cyan",
 		"1": "thebetweenlands:blocks/weedwood",
-		"particle": "thebetweenlands:blocks/samite_lavender_blue"
+		"particle": "thebetweenlands:blocks/samite_elm_cyan"
 	},
 	"elements": [
 		{
