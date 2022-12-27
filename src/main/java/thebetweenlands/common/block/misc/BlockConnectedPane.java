@@ -6,11 +6,14 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.IConnectedTextureBlock;
 import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
 
@@ -37,9 +40,6 @@ public class BlockConnectedPane extends BlockPaneBetweenlands implements IConnec
 	@Override
 	public IBlockState getExtendedState(IBlockState oldState, IBlockAccess world, BlockPos pos) {
 		IExtendedBlockState state = (IExtendedBlockState) oldState;
-		
-		
-		
 		IConnectionRules connectionState = new IConnectionRules() {
 			@Override
 			public boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing face, BlockPos to) {
@@ -56,6 +56,32 @@ public class BlockConnectedPane extends BlockPaneBetweenlands implements IConnec
 			}
 		};
 		return this.getExtendedConnectedTextureState(state, world, pos, connectionState);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override	
+	@SideOnly(Side.CLIENT)
+	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+		IBlockState offsetBlockState = blockAccess.getBlockState(pos.offset(side));
+		
+		if(offsetBlockState.getBlock() == this) {
+			if(side.getAxis() != Axis.Y) {
+				return false;
+			}
+			
+			blockState = this.getExtendedState(blockState, blockAccess, pos);
+			offsetBlockState = offsetBlockState.getBlock().getExtendedState(offsetBlockState, blockAccess, pos);
+			
+			AxisAlignedBB thisAabb = blockState.getBoundingBox(blockAccess, pos);
+			AxisAlignedBB otherAabb = offsetBlockState.getBoundingBox(blockAccess, pos.offset(side));
+			
+			if(thisAabb.maxX - thisAabb.minX > otherAabb.maxX - otherAabb.minX || thisAabb.maxZ - thisAabb.minZ > otherAabb.maxZ - otherAabb.minZ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		return super.shouldSideBeRendered(blockState, blockAccess, pos, side);
 	}
 
 	@Override
