@@ -2350,6 +2350,10 @@ advancements.thebetweenlands.farmer.your_bush_smells.title=Ton Buisson Schlingue
 advancements.thebetweenlands.farmer.your_bush_smells.description=Infuser un Buisson d'Harbre avec un Thorax à Phéromones
 advancements.thebetweenlands.farmer.moving_day.title=Pendaison de Crémaillère
 advancements.thebetweenlands.farmer.moving_day.description=Mettre des Vers à Soie dans une Cabane à Mites pour produire de la Soie
+advancements.thebetweenlands.farmer.multicore_threading.title=Multithreading
+advancements.thebetweenlands.farmer.multicore_threading.description=Utiliser des lanternes pour augmenter la vitesse de production d'une Cabane à Mites
+advancements.thebetweenlands.farmer.grubhub_inc.title=Bombyx Mori & Co.
+advancements.thebetweenlands.farmer.grubhub_inc.description=Réveiller une Colonie de Vers en utilisant de l'Extrait de Phéromone
 
 # Herboriste
 advancements.thebetweenlands.herbalist.root.title=Herboriste
@@ -2370,6 +2374,8 @@ advancements.thebetweenlands.herbalist.tea_bagging.title=La Sagesse de l'Univers
 advancements.thebetweenlands.herbalist.tea_bagging.description=Fabriquer un Sac de Soie et confectionner du thé
 advancements.thebetweenlands.herbalist.home_remedy_extraordinaire.title=Remède de Grand-mère Extraordinaire
 advancements.thebetweenlands.herbalist.home_remedy_extraordinaire.description=Concocter toutes les boissons
+advancements.thebetweenlands.herbalist.you_cant_see_me.title=Tu Me Vois, Tu Me Vois Plus!
+advancements.thebetweenlands.herbalist.you_cant_see_me.description=Utiliser de l'Essence de Vision pour créer un Cadre invisible
 
 # Survivaliste
 advancements.thebetweenlands.survivalist.root.title=Survivaliste
@@ -2434,8 +2440,8 @@ advancements.thebetweenlands.craftsman.aquaman.title=Aquaman
 advancements.thebetweenlands.craftsman.aquaman.description=Obtenir la tenue complète d'Armure Amphibie
 advancements.thebetweenlands.craftsman.percolation_station.title=Station de Percolation
 advancements.thebetweenlands.craftsman.percolation_station.description=Placer un Filtre à Eau et recolter de l'eau propre
-advancements.thebetweenlands.craftsman.omega_3.title=Oméga 3
-advancements.thebetweenlands.craftsman.omega_3.description=Utiliser un Pot à Macération pour obtenir de l'Huile de Poisson
+advancements.thebetweenlands.craftsman.omega_3s.title=Oméga 3
+advancements.thebetweenlands.craftsman.omega_3s.description=Utiliser un Pot à Macération pour obtenir de l'Huile de Poisson
 advancements.thebetweenlands.craftsman.ill_treat_you_right.title=Un Peu d'Huile de Coude
 advancements.thebetweenlands.craftsman.ill_treat_you_right.description=Utiliser de l'Huile de Poisson pour frabriquer des Planches Huilées
 advancements.thebetweenlands.craftsman.paint_job.title=Coup de Pinceau
