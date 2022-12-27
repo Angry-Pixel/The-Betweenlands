@@ -1,6 +1,6 @@
 {
-  "parent": "item/generated",
+  "parent": "thebetweenlands:block/reed_mat",
   "textures": {
-    "layer0": "thebetweenlands:blocks/reed_mat_colored_midnight_purple"
+    "texture": "thebetweenlands:blocks/reed_mat_colored_midnight_purple"
   }
 }
