@@ -3,7 +3,65 @@
   "defaults": {
     "model": "thebetweenlands:internal/layer_selection",
     "custom": {
-      "model": "thebetweenlands:block/thick_pane_post_filtered_silt_glass",
+      "model": "thebetweenlands:block/internal/model_combined",
+      "model_data": {
+        "model_base": "thebetweenlands:block/internal/connected_texture",
+        "model_base_data": {
+          "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+          "connected_texture_faces": [
+            {
+              "cullface": "cull_top",
+              "connected_textures": [
+                "thebetweenlands:blocks/filtered_silt_glass_0",
+                "thebetweenlands:blocks/filtered_silt_glass_1",
+                "thebetweenlands:blocks/filtered_silt_glass_2",
+                "thebetweenlands:blocks/filtered_silt_glass_3",
+                "thebetweenlands:blocks/filtered_silt_glass_4"
+              ],
+              "indices": [
+                "top_north_west_index",
+                "top_south_west_index",
+                "top_south_east_index",
+                "top_north_east_index"
+              ],
+              "vertices": [
+                { "x": 0.375, "y": 1.0, "z": 0.375, "u": 0.375, "v": 0.375 },
+                { "x": 0.375, "y": 1.0, "z": 0.625, "u": 0.375, "v": 0.625 },
+                { "x": 0.625, "y": 1.0, "z": 0.625, "u": 0.625, "v": 0.625 },
+                { "x": 0.625, "y": 1.0, "z": 0.375, "u": 0.625, "v": 0.375 }
+              ]
+            }
+          ]
+        },
+        "model_additional": "thebetweenlands:block/internal/connected_texture",
+        "model_additional_data": {
+          "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+          "connected_texture_faces": [
+            {
+              "cullface": "cull_bottom",
+              "connected_textures": [
+                "thebetweenlands:blocks/filtered_silt_glass_0",
+                "thebetweenlands:blocks/filtered_silt_glass_1",
+                "thebetweenlands:blocks/filtered_silt_glass_2",
+                "thebetweenlands:blocks/filtered_silt_glass_3",
+                "thebetweenlands:blocks/filtered_silt_glass_4"
+              ],
+              "indices": [
+                "bottom_north_west_index",
+                "bottom_north_east_index",
+                "bottom_south_east_index",
+                "bottom_south_west_index"
+              ],
+              "vertices": [
+                { "x": 0.375, "y": 0.0, "z": 0.375, "u": 0.375, "v": 0.375 },
+                { "x": 0.625, "y": 0.0, "z": 0.375, "u": 0.375, "v": 0.625 },
+                { "x": 0.625, "y": 0.0, "z": 0.625, "u": 0.625, "v": 0.625 },
+                { "x": 0.375, "y": 0.0, "z": 0.625, "u": 0.625, "v": 0.375 }
+              ]
+            }
+          ]
+        }
+      },
       "layers": [
         "translucent",
         "none"
@@ -17,7 +75,65 @@
           "post_north": {
             "model": "thebetweenlands:internal/layer_selection",
             "custom": {
-              "model": "thebetweenlands:block/thick_pane_post_north_filtered_silt_glass",
+              "model": "thebetweenlands:block/internal/model_combined",
+              "model_data": {
+                "model_base": "thebetweenlands:block/internal/connected_texture",
+                "model_base_data": {
+                  "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+                  "connected_texture_faces": [
+                    {
+                      "cullface": "cull_top_north",
+                      "connected_textures": [
+                        "thebetweenlands:blocks/filtered_silt_glass_0",
+                        "thebetweenlands:blocks/filtered_silt_glass_1",
+                        "thebetweenlands:blocks/filtered_silt_glass_2",
+                        "thebetweenlands:blocks/filtered_silt_glass_3",
+                        "thebetweenlands:blocks/filtered_silt_glass_4"
+                      ],
+                      "indices": [
+                        "top_north_west_index",
+                        "top_south_west_index",
+                        "top_south_east_index",
+                        "top_north_east_index"
+                      ],
+                      "vertices": [
+                        { "x": 0.375, "y": 1.0, "z": 0.0, "u": 0.375, "v": 0 },
+                        { "x": 0.375, "y": 1.0, "z": 0.375, "u": 0.375, "v": 0.375 },
+                        { "x": 0.625, "y": 1.0, "z": 0.375, "u": 0.625, "v": 0.375 },
+                        { "x": 0.625, "y": 1.0, "z": 0.0, "u": 0.625, "v": 0 }
+                      ]
+                    }
+                  ]
+                },
+                "model_additional": "thebetweenlands:block/internal/connected_texture",
+                "model_additional_data": {
+                  "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+                  "connected_texture_faces": [
+                    {
+                      "cullface": "cull_bottom_north",
+                      "connected_textures": [
+                        "thebetweenlands:blocks/filtered_silt_glass_0",
+                        "thebetweenlands:blocks/filtered_silt_glass_1",
+                        "thebetweenlands:blocks/filtered_silt_glass_2",
+                        "thebetweenlands:blocks/filtered_silt_glass_3",
+                        "thebetweenlands:blocks/filtered_silt_glass_4"
+                      ],
+                      "indices": [
+                        "bottom_north_west_index",
+                        "bottom_north_east_index",
+                        "bottom_south_east_index",
+                        "bottom_south_west_index"
+                      ],
+                      "vertices": [
+                        { "x": 0.375, "y": 0.0, "z": 0.0, "u": 0, "v": 0.375 },
+                        { "x": 0.625, "y": 0.0, "z": 0.0, "u": 0, "v": 0.625 },
+                        { "x": 0.625, "y": 0.0, "z": 0.375, "u": 0.375, "v": 0.625 },
+                        { "x": 0.375, "y": 0.0, "z": 0.375, "u": 0.375, "v": 0.375 }
+                      ]
+                    }
+                  ]
+                }
+              },
               "layers": [
                 "translucent",
                 "none"
@@ -61,7 +177,7 @@
               ]
             }
           },
-          "side_north_south": {
+          "side_north_west": {
             "model": "thebetweenlands:internal/layer_selection",
             "custom": {
               "model": "thebetweenlands:block/internal/connected_texture",
@@ -148,7 +264,65 @@
           "post_east": {
             "model": "thebetweenlands:internal/layer_selection",
             "custom": {
-              "model": "thebetweenlands:block/thick_pane_post_east_filtered_silt_glass",
+              "model": "thebetweenlands:block/internal/model_combined",
+              "model_data": {
+                "model_base": "thebetweenlands:block/internal/connected_texture",
+                "model_base_data": {
+                  "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+                  "connected_texture_faces": [
+                    {
+                      "cullface": "cull_top_east",
+                      "connected_textures": [
+                        "thebetweenlands:blocks/filtered_silt_glass_0",
+                        "thebetweenlands:blocks/filtered_silt_glass_1",
+                        "thebetweenlands:blocks/filtered_silt_glass_2",
+                        "thebetweenlands:blocks/filtered_silt_glass_3",
+                        "thebetweenlands:blocks/filtered_silt_glass_4"
+                      ],
+                      "indices": [
+                        "top_north_west_index",
+                        "top_south_west_index",
+                        "top_south_east_index",
+                        "top_north_east_index"
+                      ],
+                      "vertices": [
+                        { "x": 0.625, "y": 1.0, "z": 0.375, "u": 0.625, "v": 0.375 },
+                        { "x": 0.625, "y": 1.0, "z": 0.625, "u": 0.625, "v": 0.625 },
+                        { "x": 1.0, "y": 1.0, "z": 0.625, "u": 1, "v": 0.625 },
+                        { "x": 1.0, "y": 1.0, "z": 0.375, "u": 1, "v": 0.375 }
+                      ]
+                    }
+                  ]
+                },
+                "model_additional": "thebetweenlands:block/internal/connected_texture",
+                "model_additional_data": {
+                  "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+                  "connected_texture_faces": [
+                    {
+                      "cullface": "cull_bottom_east",
+                      "connected_textures": [
+                        "thebetweenlands:blocks/filtered_silt_glass_0",
+                        "thebetweenlands:blocks/filtered_silt_glass_1",
+                        "thebetweenlands:blocks/filtered_silt_glass_2",
+                        "thebetweenlands:blocks/filtered_silt_glass_3",
+                        "thebetweenlands:blocks/filtered_silt_glass_4"
+                      ],
+                      "indices": [
+                        "bottom_north_west_index",
+                        "bottom_north_east_index",
+                        "bottom_south_east_index",
+                        "bottom_south_west_index"
+                      ],
+                      "vertices": [
+                        { "x": 0.625, "y": 0.0, "z": 0.375, "u": 0.375, "v": 0.625 },
+                        { "x": 1.0, "y": 0.0, "z": 0.375, "u": 0.375, "v": 1 },
+                        { "x": 1.0, "y": 0.0, "z": 0.625, "u": 0.625, "v": 1 },
+                        { "x": 0.625, "y": 0.0, "z": 0.625, "u": 0.625, "v": 0.625 }
+                      ]
+                    }
+                  ]
+                }
+              },
               "layers": [
                 "translucent",
                 "none"
@@ -279,7 +453,65 @@
           "post_south": {
             "model": "thebetweenlands:internal/layer_selection",
             "custom": {
-              "model": "thebetweenlands:block/thick_pane_post_south_filtered_silt_glass",
+              "model": "thebetweenlands:block/internal/model_combined",
+              "model_data": {
+                "model_base": "thebetweenlands:block/internal/connected_texture",
+                "model_base_data": {
+                  "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+                  "connected_texture_faces": [
+                    {
+                      "cullface": "cull_top_south",
+                      "connected_textures": [
+                        "thebetweenlands:blocks/filtered_silt_glass_0",
+                        "thebetweenlands:blocks/filtered_silt_glass_1",
+                        "thebetweenlands:blocks/filtered_silt_glass_2",
+                        "thebetweenlands:blocks/filtered_silt_glass_3",
+                        "thebetweenlands:blocks/filtered_silt_glass_4"
+                      ],
+                      "indices": [
+                        "top_north_west_index",
+                        "top_south_west_index",
+                        "top_south_east_index",
+                        "top_north_east_index"
+                      ],
+                      "vertices": [
+                        { "x": 0.375, "y": 1.0, "z": 0.625, "u": 0.375, "v": 0.625 },
+                        { "x": 0.375, "y": 1.0, "z": 1.0, "u": 0.375, "v": 1 },
+                        { "x": 0.625, "y": 1.0, "z": 1.0, "u": 0.625, "v": 1 },
+                        { "x": 0.625, "y": 1.0, "z": 0.625, "u": 0.625, "v": 0.625 }
+                      ]
+                    }
+                  ]
+                },
+                "model_additional": "thebetweenlands:block/internal/connected_texture",
+                "model_additional_data": {
+                  "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+                  "connected_texture_faces": [
+                    {
+                      "cullface": "cull_bottom_south",
+                      "connected_textures": [
+                        "thebetweenlands:blocks/filtered_silt_glass_0",
+                        "thebetweenlands:blocks/filtered_silt_glass_1",
+                        "thebetweenlands:blocks/filtered_silt_glass_2",
+                        "thebetweenlands:blocks/filtered_silt_glass_3",
+                        "thebetweenlands:blocks/filtered_silt_glass_4"
+                      ],
+                      "indices": [
+                        "bottom_north_west_index",
+                        "bottom_north_east_index",
+                        "bottom_south_east_index",
+                        "bottom_south_west_index"
+                      ],
+                      "vertices": [
+                        { "x": 0.375, "y": 0.0, "z": 0.625, "u": 0.625, "v": 0.375 },
+                        { "x": 0.625, "y": 0.0, "z": 0.625, "u": 0.625, "v": 0.625 },
+                        { "x": 0.625, "y": 0.0, "z": 1.0, "u": 1, "v": 0.625 },
+                        { "x": 0.375, "y": 0.0, "z": 1.0, "u": 1, "v": 0.375 }
+                      ]
+                    }
+                  ]
+                }
+              },
               "layers": [
                 "translucent",
                 "none"
@@ -410,7 +642,65 @@
           "post_west": {
             "model": "thebetweenlands:internal/layer_selection",
             "custom": {
-              "model": "thebetweenlands:block/thick_pane_post_west_filtered_silt_glass",
+              "model": "thebetweenlands:block/internal/model_combined",
+              "model_data": {
+                "model_base": "thebetweenlands:block/internal/connected_texture",
+                "model_base_data": {
+                  "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+                  "connected_texture_faces": [
+                    {
+                      "cullface": "cull_top_west",
+                      "connected_textures": [
+                        "thebetweenlands:blocks/filtered_silt_glass_0",
+                        "thebetweenlands:blocks/filtered_silt_glass_1",
+                        "thebetweenlands:blocks/filtered_silt_glass_2",
+                        "thebetweenlands:blocks/filtered_silt_glass_3",
+                        "thebetweenlands:blocks/filtered_silt_glass_4"
+                      ],
+                      "indices": [
+                        "top_north_west_index",
+                        "top_south_west_index",
+                        "top_south_east_index",
+                        "top_north_east_index"
+                      ],
+                      "vertices": [
+                        { "x": 0.0, "y": 1.0, "z": 0.375, "u": 0, "v": 0.375 },
+                        { "x": 0.0, "y": 1.0, "z": 0.625, "u": 0, "v": 0.625 },
+                        { "x": 0.375, "y": 1.0, "z": 0.625, "u": 0.375, "v": 0.625 },
+                        { "x": 0.375, "y": 1.0, "z": 0.375, "u": 0.375, "v": 0.375 }
+                      ]
+                    }
+                  ]
+                },
+                "model_additional": "thebetweenlands:block/internal/connected_texture",
+                "model_additional_data": {
+                  "particle_texture": "thebetweenlands:blocks/filtered_silt_glass_0",
+                  "connected_texture_faces": [
+                    {
+                      "cullface": "cull_bottom_west",
+                      "connected_textures": [
+                        "thebetweenlands:blocks/filtered_silt_glass_0",
+                        "thebetweenlands:blocks/filtered_silt_glass_1",
+                        "thebetweenlands:blocks/filtered_silt_glass_2",
+                        "thebetweenlands:blocks/filtered_silt_glass_3",
+                        "thebetweenlands:blocks/filtered_silt_glass_4"
+                      ],
+                      "indices": [
+                        "bottom_north_west_index",
+                        "bottom_north_east_index",
+                        "bottom_south_east_index",
+                        "bottom_south_west_index"
+                      ],
+                      "vertices": [
+                        { "x": 0.0, "y": 0.0, "z": 0.375, "u": 0.375, "v": 0 },
+                        { "x": 0.375, "y": 0.0, "z": 0.375, "u": 0.375, "v": 0.375 },
+                        { "x": 0.375, "y": 0.0, "z": 0.625, "u": 0.625, "v": 0.375 },
+                        { "x": 0.0, "y": 0.0, "z": 0.625, "u": 0.625, "v": 0 }
+                      ]
+                    }
+                  ]
+                }
+              },
               "layers": [
                 "translucent",
                 "none"
