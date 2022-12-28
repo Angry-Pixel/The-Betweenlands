@@ -1413,6 +1413,7 @@ tooltip.bl.fig=C’est tentant…
 tooltip.bl.pestle=Placez le Pilon dans le Mortier
 tooltip.bl.pestle.remaining=%d%% Restants: %d usages.
 tooltip.bl.aspectvial.byariis.fuel=Peut être utilisé comme carburant pour le Répulseur
+tooltip.bl.aspectvial.freiwynn=Peut être utilisée pour rendre les cadres invisibles
 tooltip.bl.rubber_bucket=Clic-droit pour extraire le caoutchouc du seau
 tooltip.bl.gem.aqua=\nSur un outil:\n §9- A une chance d’affaiblir l’ennemi attaqué\nSur une armure:\n §9- A une chance de faire gagner de la résistance lorsqu’attaqué
 tooltip.bl.gem.crimson=\nSur un outil:\n §9- A une chance de vous rendre plus puissant en attaquant\nSur une armure:\n §9- A une chance de blesser l’ennemi qui vous attaque
