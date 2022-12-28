@@ -11,12 +11,14 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.ItemStackHandler;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.misc.BlockLantern;
 import thebetweenlands.common.item.misc.ItemMisc;
@@ -24,13 +26,77 @@ import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class TileEntityMothHouse  extends TileEntityBasicInventory implements ITickable {
-    public TileEntityMothHouse() {
-        super(2, "container.bl.moth_house");
+	public static final int SLOT_GRUBS = 0;
+	public static final int SLOT_SILK = 1;
+	
+	protected static final int MAX_GRUBS = 5;
+	protected static final int MAX_SILK_PER_GRUB = 3;
+	protected static final int BASE_TICKS_PER_SILK = 160;
+	
+	public TileEntityMothHouse() {
+        super("container.bl.moth_house", NonNullList.withSize(2, ItemStack.EMPTY), (te, inv) -> new ItemStackHandler(inv) {
+    		@Override
+    		public void setSize(int size) {
+    			if(size != inv.size()) {
+    				throw new UnsupportedOperationException("Can't resize this inventory");
+    			}
+    		}
+
+    		@Override
+    		protected void onContentsChanged(int slot) {
+    			// Don't mark dirty while loading chunk!
+    			if(te.hasWorld()) {
+    				te.markDirty();
+    			}
+    		}
+    		
+    		@Override
+    		public void setStackInSlot(int slot, ItemStack stack) {
+    			if(slot == SLOT_SILK) {
+    				ItemStack prevStack = this.getStackInSlot(slot).copy();
+    				
+    				super.setStackInSlot(slot, stack);
+    				
+    				ItemStack newStack = this.getStackInSlot(slot);
+    				
+    				if(newStack.getCount() < prevStack.getCount()) {
+    					((TileEntityMothHouse) te).onSilkRemoved(prevStack.getCount() - newStack.getCount());
+    				}
+    			} else {
+    				super.setStackInSlot(slot, stack);
+    			}
+    		}
+    		
+    		@Override
+    		public ItemStack extractItem(int slot, int amount, boolean simulate) {
+    			if(slot == SLOT_SILK && !simulate) {
+    				ItemStack extracted = super.extractItem(slot, amount, false);
+    				
+    				if(extracted.getCount() > 0) {
+    					((TileEntityMothHouse) te).onSilkRemoved(extracted.getCount());
+    				}
+    				
+    				return extracted;
+    			} else {
+    				return super.extractItem(slot, amount, simulate);
+    			}
+    		}
+    		
+    		@Override
+    		public int getSlotLimit(int slot) {
+    			if(slot == SLOT_GRUBS) {
+    				return MAX_GRUBS;
+    			}
+    			return super.getSlotLimit(slot);
+    		}
+    	});
     }
 
     private int productionTime = 0;
-    private int productionEfficiency = 0;
+    private float productionEfficiency = 0;
+    
     private boolean isWorking = false;
+    
 	private EntityPlayer placer;
 	private UUID placerUUID;
 	
@@ -51,11 +117,8 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
 		return false;
 	}
 
-
     @Override
     public void update() {
-    	
-    	
         if(world.getTotalWorldTime() % 20 == 0) {
             if(isWorking) {
             	if(this.world.isRemote && this.world.rand.nextInt(3) == 0) {
@@ -71,6 +134,8 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
         }
 
         if (!this.world.isRemote) {
+        	System.out.println("Stage: " + this.getSilkProductionStage() + "/" + this.getSilkRenderStage() + " Grubs: " + this.getStackInSlot(SLOT_GRUBS).getCount() + " Silk: " + this.getStackInSlot(SLOT_SILK).getCount() + " Time: " + this.productionTime);
+        	
 			// because the player is always null unless the world is loaded but block NBT is loaded before grrrrr
 			if(placerUUID != null && getPlacer() == null && world.getTotalWorldTime() % 20 == 0) {
 				if(updatePlacerFromUUID()) {
@@ -78,39 +143,37 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
 				}
 			}
 
-            ItemStack grubs = super.getStackInSlot(0);
+            ItemStack grubs = this.getStackInSlot(SLOT_GRUBS);
 
             boolean wasWorking = this.isWorking;
             
             // don't work if no grubs are available or silk stack is full
-            if(grubs == ItemStack.EMPTY || grubs.getCount() == 0 || super.getStackInSlot(1).getCount() == super.getStackInSlot(1).getMaxStackSize()) {
+            if(grubs == ItemStack.EMPTY || grubs.getCount() == 0 || this.getStackInSlot(SLOT_SILK).getCount() == this.getStackInSlot(SLOT_SILK).getMaxStackSize() || this.getStackInSlot(SLOT_SILK).getCount() >= this.getStackInSlot(SLOT_GRUBS).getCount() * MAX_SILK_PER_GRUB) {
                 isWorking = false;
             } else {
+            	if(!isWorking) {
+            		this.updateEfficiency();
+            		
+            		this.resetProductionTime();
+            	}
+            	
             	productionTime--;
-
+            	
                 isWorking = true;
 
                 if(productionTime <= 0) {
-                    grubs.shrink(1);
+                	ItemStack silkStack = this.getStackInSlot(SLOT_SILK);
 
-                    if(productionEfficiency != 0) {
-                        int randomChance = world.rand.nextInt(4 - productionEfficiency);
-
-                        if(randomChance == 0) {
-                            ItemStack silkStack = super.getStackInSlot(1);
-
-                            if(silkStack == ItemStack.EMPTY) {
-                                silkStack = ItemMisc.EnumItemMisc.SILK_THREAD.create(1);
-                                super.setInventorySlotContents(1, silkStack);
-                            } else {
-                                silkStack.grow(1);
-                            }
-
-                            markForUpdate();
-                        }
+                    if(silkStack == ItemStack.EMPTY) {
+                        silkStack = ItemMisc.EnumItemMisc.SILK_THREAD.create(1);
+                        super.setInventorySlotContents(1, silkStack);
+                    } else if(ItemMisc.EnumItemMisc.SILK_THREAD.isItemOf(silkStack)) {
+                    	silkStack.grow(1);
                     }
 
-                    productionTime = 20;
+                    markForUpdate();
+
+                    this.resetProductionTime();
                 }
             }
             
@@ -120,17 +183,24 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
         }
     }
 
-
-    public int getSilkCount() {
-        ItemStack silkStack = super.getStackInSlot(1);
-
-        if(silkStack == ItemStack.EMPTY)
-            return 0;
-
-        float percent = (float)silkStack.getCount() / (float)silkStack.getMaxStackSize();
-        return Math.round(percent * 3);
+    protected void resetProductionTime() {
+    	float efficiencyMultiplier = 1.0f / (0.1f + this.productionEfficiency * 0.9f);
+        
+    	// Triple production time with each stage
+    	this.productionTime = (int)(BASE_TICKS_PER_SILK * Math.pow(3, this.getSilkProductionStage()) * efficiencyMultiplier);
     }
-
+    
+    public int getSilkProductionStage() {
+    	// Silk stage starts at 0 and increments by 1 whenever all grubs have produced one more silk
+    	ItemStack grubStack = this.getStackInSlot(SLOT_GRUBS);
+    	ItemStack silkStack = this.getStackInSlot(SLOT_SILK);
+    	return grubStack.getCount() > 0 ? silkStack.getCount() / grubStack.getCount() : 0;
+    }
+    
+    public int getSilkRenderStage() {
+    	ItemStack silkStack = this.getStackInSlot(SLOT_SILK);
+    	return MathHelper.ceil(Math.min(1.0f, silkStack.getCount() / (float)Math.min(this.inventoryHandler.getSlotLimit(SLOT_SILK), MAX_GRUBS * MAX_SILK_PER_GRUB)) * 3);
+    }
 
     private void updateEfficiency() {
         AxisAlignedBB axisalignedbb = extendRangeBox();
@@ -170,7 +240,7 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
             }
         }
 
-        productionEfficiency = lanternsNearby;
+        productionEfficiency = lanternsNearby / 3.0f;
     }
 
     @SideOnly(Side.CLIENT)
@@ -179,21 +249,24 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
     }
 
     public int addGrubs(ItemStack stack) {
-        int grubsAdded = Math.min(this.inventory.get(0).getMaxStackSize() - this.inventory.get(0).getCount(), stack.getCount());
-
-        if(grubsAdded <= 0) {
-            return 0;
-        }
-
-        ItemStack copy = stack.copy();
-        copy.setCount(this.inventory.get(0).getCount() + grubsAdded);
-        super.setInventorySlotContents(0, copy);
+    	int count = stack.getCount();
+    	
+        int grubsAdded = count - this.inventoryHandler.insertItem(SLOT_GRUBS, stack, false).getCount();
 
         markForUpdate();
 
         return grubsAdded;
     }
 
+    protected void onSilkRemoved(int count) {
+    	int grubsToRemove = MathHelper.ceil(count / (float)MAX_SILK_PER_GRUB);
+    	
+    	ItemStack grubsStack = this.getStackInSlot(SLOT_GRUBS);
+    	
+    	grubsStack.shrink(grubsToRemove);
+    	
+    	this.markDirty();
+    }
 
     @Override
     public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
@@ -215,7 +288,7 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
 		}
 
         productionTime = nbt.getInteger("productionTime");
-        productionEfficiency = nbt.getInteger("productionEfficiency");
+        productionEfficiency = nbt.getFloat("productionEfficiency");
         isWorking = nbt.getBoolean("isWorking");
     }
 
@@ -229,7 +302,7 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
 		}
 
         nbt.setInteger("productionTime", productionTime);
-        nbt.setInteger("productionEfficiency", productionEfficiency);
+        nbt.setFloat("productionEfficiency", productionEfficiency);
         nbt.setBoolean("isWorking", this.isWorking);
 
         return nbt;
@@ -261,12 +334,12 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
 
     @Override
     public boolean canInsertItem(int slot, ItemStack stack, EnumFacing side) {
-        return slot == 0 && stack.getItem() == ItemRegistry.SILK_GRUB;
+        return super.canInsertItem(slot, stack, side) && slot == SLOT_GRUBS && stack.getItem() == ItemRegistry.SILK_GRUB;
     }
 
     @Override
     public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
-        return slot == 1;
+        return slot == SLOT_SILK;
     }
 
 	public void setPlacer(EntityPlayer player) {

@@ -221,19 +221,13 @@ public class BlockMothHouse  extends BlockContainer {
                     return false;
 
                 if(heldItem.isEmpty()) {
-                    int slotToTakeFrom = 1;
+                	// Extract silk first so that grubs are destroyed
+                    extractItems(world, pos, state, player, hand, tile, false);
 
                     if(player.isSneaking()) {
-                        slotToTakeFrom = 0;
+                        extractItems(world, pos, state, player, hand, tile, true);
                     }
-
-                    ItemStack itemStack = tile.getStackInSlot(slotToTakeFrom);
-
-                    if(itemStack != ItemStack.EMPTY) {
-                        player.addItemStackToInventory(itemStack.copy());
-                        tile.setInventorySlotContents(slotToTakeFrom, ItemStack.EMPTY);
-                    }
-
+                    
                     return true;
                 } else if(heldItem.getItem() == ItemRegistry.SILK_GRUB) {
                     int grubCount = tile.addGrubs(heldItem);
@@ -248,6 +242,15 @@ public class BlockMothHouse  extends BlockContainer {
         }
 
         return true;
+    }
+    
+    protected void extractItems(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, TileEntityMothHouse tile, boolean grubs) {
+    	ItemStack itemStack = tile.getStackInSlot(grubs ? TileEntityMothHouse.SLOT_GRUBS : TileEntityMothHouse.SLOT_SILK);
+
+        if(itemStack != ItemStack.EMPTY) {
+            player.addItemStackToInventory(itemStack.copy());
+            tile.setInventorySlotContents(grubs ? TileEntityMothHouse.SLOT_GRUBS : TileEntityMothHouse.SLOT_SILK, ItemStack.EMPTY);
+        }
     }
 
 

@@ -1,7 +1,11 @@
 package thebetweenlands.client.render.tile;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.render.model.tile.ModelMothHouse;
@@ -21,15 +25,15 @@ public class RenderMothHouse extends TileEntitySpecialRenderer<TileEntityMothHou
     public void render(TileEntityMothHouse te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         EnumFacing rotation = StatePropertyHelper.getStatePropertySafely(te, BlockMothHouse.class, BlockMothHouse.FACING, EnumFacing.NORTH);
 
-        int silkCount = 0;
+        int silkRenderStage = 0;
 
         if(te != null) {
-            silkCount = te.getSilkCount();
+            silkRenderStage = te.getSilkRenderStage();
         }
 
-        silkCount = Math.max(0, Math.min(silkCount, 3));
+        silkRenderStage = Math.max(0, Math.min(silkRenderStage, 3));
 
-        switch(silkCount) {
+        switch(silkRenderStage) {
             case 0:
                 bindTexture(TEXTURE_STAGE_0);
                 break;
@@ -76,7 +80,68 @@ public class RenderMothHouse extends TileEntitySpecialRenderer<TileEntityMothHou
         }
         
         MODEL.render();
+        
+        ItemStack grubs = ItemStack.EMPTY;
+        if(te != null) {
+        	grubs = te.getStackInSlot(TileEntityMothHouse.SLOT_GRUBS);
+        }
+        if(!grubs.isEmpty()) {
+        	renderGrubs(grubs);
+        }
 
         GlStateManager.popMatrix();
+    }
+    
+    private void renderGrubs(ItemStack stack) {
+    	if(stack.getCount() > 0) {
+    		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+
+    		switch(stack.getCount()) {
+    		default:
+    		case 5:
+    			GlStateManager.pushMatrix();
+    			GlStateManager.scale(0.15D, 0.15D, 0.15D);
+    			GlStateManager.translate(-0.5D, 6.2D, 0.4D);
+    			GlStateManager.rotate(-80, 0, 0, 1);
+    			GlStateManager.rotate(180, 1, 0, 0);
+    			renderItem.renderItem(stack, TransformType.FIXED);
+    			GlStateManager.popMatrix();
+    		case 4:
+    			GlStateManager.pushMatrix();
+    			GlStateManager.scale(0.15D, 0.15D, 0.15D);
+    			GlStateManager.translate(1.1D, 6.8D, 0.4D);
+    			GlStateManager.rotate(-8, 0, 0, 1);
+    			GlStateManager.rotate(180, 0, 1, 0);
+    			GlStateManager.rotate(180, 1, 0, 0);
+    			renderItem.renderItem(stack, TransformType.FIXED);
+    			GlStateManager.popMatrix();
+    		case 3:
+    			GlStateManager.pushMatrix();
+    			GlStateManager.scale(0.15D, 0.15D, 0.15D);
+    			GlStateManager.translate(0.3D, 8.6D, 0.4D);
+    			GlStateManager.rotate(-75, 0, 0, 1);
+    			GlStateManager.rotate(180, 0, 1, 0);
+    			GlStateManager.rotate(180, 1, 0, 0);
+    			renderItem.renderItem(stack, TransformType.FIXED);
+    			GlStateManager.popMatrix();
+    		case 2:
+    			GlStateManager.pushMatrix();
+    			GlStateManager.scale(0.15D, 0.15D, 0.15D);
+    			GlStateManager.translate(-1.0D, 8.0D, 0.4D);
+    			GlStateManager.rotate(5, 0, 0, 1);
+    			GlStateManager.rotate(180, 0, 1, 0);
+    			GlStateManager.rotate(180, 1, 0, 0);
+    			renderItem.renderItem(stack, TransformType.FIXED);
+    			GlStateManager.popMatrix();
+    		case 1:
+    			GlStateManager.pushMatrix();
+    			GlStateManager.scale(0.15D, 0.15D, 0.15D);
+    			GlStateManager.translate(0.5D, 7.5D, 0.4D);
+    			GlStateManager.rotate(-20, 0, 0, 1);
+    			GlStateManager.rotate(180, 1, 0, 0);
+    			renderItem.renderItem(stack, TransformType.FIXED);
+    			GlStateManager.popMatrix();
+    		}
+    	}
     }
 }
