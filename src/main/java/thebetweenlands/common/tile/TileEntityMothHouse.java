@@ -196,8 +196,9 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
     }
     
     public boolean isSilkProductionFinished() {
+    	ItemStack grubStack = this.getStackInSlot(SLOT_GRUBS);
     	ItemStack silkStack = this.getStackInSlot(SLOT_SILK);
-    	return silkStack.getCount() >= MAX_GRUBS * MAX_SILK_PER_GRUB;
+    	return silkStack.getCount() >= Math.min(MAX_GRUBS, grubStack.getCount()) * MAX_SILK_PER_GRUB;
     }
     
     public int getSilkRenderStage() {
