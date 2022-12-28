@@ -15,6 +15,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.misc.BlockLantern;
 import thebetweenlands.common.item.misc.ItemMisc;
@@ -56,13 +58,15 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
     	
         if(world.getTotalWorldTime() % 20 == 0) {
             if(isWorking) {
-                double px = (double) pos.getX() + 0.5D;
-                double py = (double) pos.getY() + 0.3D;
-                double pz = (double) pos.getZ() + 0.5D;
+            	if(this.world.isRemote) {
+            		double px = (double) pos.getX() + 0.5D;
+                    double py = (double) pos.getY() + 0.3D;
+                    double pz = (double) pos.getZ() + 0.5D;
 
-                BLParticles.SILK_MOTH.spawn(world, px, py, pz);
+                    spawnSilkMothParticle(px, py, pz);
+            	}
 
-                checkEfficiency();
+                updateEfficiency();
             }
         }
 
@@ -123,7 +127,7 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
     }
 
 
-    private void checkEfficiency() {
+    private void updateEfficiency() {
         AxisAlignedBB axisalignedbb = extendRangeBox();
         int minX = MathHelper.floor(axisalignedbb.minX);
         int maxX = MathHelper.floor(axisalignedbb.maxX);
@@ -143,16 +147,16 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
                     if (lanternsNearby < maxLanterns && state.getBlock() instanceof BlockLantern) {
                         if (!world.isRemote) {
                             lanternsNearby++;
-                            if(lanternsNearby == maxLanterns)
+                            
+                            if(this.placer instanceof EntityPlayerMP && lanternsNearby == maxLanterns) {
                             	AdvancementCriterionRegistry.MOTH_HOUSE_MAXED.trigger((EntityPlayerMP) placer);
-                        }
-
-                        if (world.isRemote) {
+                            }
+                        } else {
                             double px = (double) mutablePos.getX() + 0.5D;
                             double py = (double) mutablePos.getY() + 0.3D;
                             double pz = (double) mutablePos.getZ() + 0.5D;
 
-                            BLParticles.SILK_MOTH.spawn(world, px, py, pz);
+                            spawnSilkMothParticle(px, py, pz);
                         }
                     }
 
@@ -164,6 +168,10 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
         productionEfficiency = lanternsNearby;
     }
 
+    @SideOnly(Side.CLIENT)
+    protected void spawnSilkMothParticle(double x, double y, double z) {
+    	BLParticles.SILK_MOTH.spawn(this.world, x, y, z);
+    }
 
     public int addGrubs(ItemStack stack) {
         int grubsAdded = Math.min(this.inventory.get(0).getMaxStackSize() - this.inventory.get(0).getCount(), stack.getCount());
