@@ -172,11 +172,15 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
                     markForUpdate();
 
                     this.resetProductionTime();
+                    
+                    this.markDirty();
                 }
             }
             
             if(wasWorking != this.isWorking) {
             	this.markForUpdate();
+            	
+            	this.markDirty();
             }
         }
     }
