@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.mobs.EntitySwarm;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -119,10 +120,10 @@ public class BlockWeedwoodBushInfested extends BlockWeedwoodBush {
 		if (world.rand.nextInt(10) == 0) {
 			switch (stage) {
 			case 0:
-				BLParticles.SULFUR_TORCH.spawn(world, px, py, pz);
+				BLParticles.SULFUR_TORCH.spawn(world, px, py, pz, ParticleArgs.get().withColor(0.6f, 0.35f, 0.8f, 0.45f));
 				break;
 			case 1:
-				BLParticles.MOTH.spawn(world, px, py, pz);
+				BLParticles.SILK_MOTH.spawn(world, px, py, pz);
 				break;
 			case 2:
 				break;

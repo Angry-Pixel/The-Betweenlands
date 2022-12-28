@@ -65,7 +65,7 @@ public class MessageInfestWeedwoodBush extends MessageBase {
 							ParticleArgs.get()
 							.withMotion(dir.x * 0.08f, dir.y * 0.08F, dir.z * 0.08F)
 							.withScale(0.6f + world.rand.nextFloat() * 5.0F)
-							.withColor(1F, 1.0F, 1.0F, 0.05f)
+							.withColor(0.45f, 0.1f, 0.6f, 0.08f)
 							.withData(80, true, 0.01F, true)));
 				}
 			}
