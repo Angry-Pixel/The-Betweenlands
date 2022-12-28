@@ -206,7 +206,7 @@ public class BlockMothHouse  extends BlockContainer {
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
-        return BlockFaceShape.UNDEFINED;
+        return !state.getValue(ON_WALL) && face.getAxis() == EnumFacing.Axis.Y ? BlockFaceShape.MIDDLE_POLE_THICK : BlockFaceShape.UNDEFINED;
     }
 
     @Override
