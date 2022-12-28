@@ -134,8 +134,6 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
         }
 
         if (!this.world.isRemote) {
-        	System.out.println("Stage: " + this.getSilkProductionStage() + "/" + this.getSilkRenderStage() + " Grubs: " + this.getStackInSlot(SLOT_GRUBS).getCount() + " Silk: " + this.getStackInSlot(SLOT_SILK).getCount() + " Time: " + this.productionTime);
-        	
 			// because the player is always null unless the world is loaded but block NBT is loaded before grrrrr
 			if(placerUUID != null && getPlacer() == null && world.getTotalWorldTime() % 20 == 0) {
 				if(updatePlacerFromUUID()) {
