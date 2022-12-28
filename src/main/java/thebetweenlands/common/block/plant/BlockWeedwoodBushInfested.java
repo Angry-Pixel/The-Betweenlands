@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -21,10 +22,13 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.capability.ICustomStepSoundCapability;
+import thebetweenlands.api.capability.ISwarmedCapability;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.mobs.EntitySwarm;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockWeedwoodBushInfested extends BlockWeedwoodBush {
@@ -168,5 +172,18 @@ public class BlockWeedwoodBushInfested extends BlockWeedwoodBush {
 	@Override
 	public int getCompostCost(World world, BlockPos pos, IBlockState state, Random rand) {
 		return 0;
+	}
+	
+	@Override
+	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
+		super.onEntityCollision(world, pos, state, entity);
+		
+		if(!entity.world.isRemote) {
+			ISwarmedCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_SWARMED, null);
+			
+			if(cap != null) {
+				cap.setSwarmedStrength(cap.getSwarmedStrength() + 0.005f);
+			}
+		}
 	}
 }
