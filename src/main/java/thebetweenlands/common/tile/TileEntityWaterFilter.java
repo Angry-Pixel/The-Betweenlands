@@ -20,7 +20,6 @@ import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
@@ -34,24 +33,19 @@ import thebetweenlands.common.registries.LootTableRegistry;
 
 public class TileEntityWaterFilter extends TileEntityBasicInventory implements ITickable {
 
-	public FluidTank tank;
+	public FluidTankTile tank;
 	private IItemHandler itemHandler;
 	public boolean showFluidAnimation;
 
 	public TileEntityWaterFilter() {
 		super(5, "container.bl.water_filter");
-        this.tank = new FluidTank(Fluid.BUCKET_VOLUME * 4) {
-        	@Override
-			public boolean canFillFluidType(FluidStack fluid) {
-				return canFill() && (fluid.getFluid() == FluidRegistry.SWAMP_WATER || fluid.getFluid() == FluidRegistry.STAGNANT_WATER);
-			}
-        };
+        this.tank = new FluidTankTile(Fluid.BUCKET_VOLUME * 4);
         this.tank.setTileEntity(this);
 	}
 
 	@Override
 	public void update() {
-		if (!getWorld().isRemote && getWorld().getTotalWorldTime()%10 == 0 && (hasMossFilter() || hasSilkFilter())) {
+		if (!getWorld().isRemote && getWorld().getTotalWorldTime()%10 == 0) {
 			EnumFacing facing = EnumFacing.DOWN;
 			TileEntity tileToFill = getWorld().getTileEntity(pos.offset(facing));
 			if (tileToFill != null && tileToFill.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing.getOpposite())) {
@@ -64,8 +58,10 @@ public class TileEntityWaterFilter extends TileEntityBasicInventory implements I
 							if (tank.getFluid() != null) {
 								if (contents == null || contents.amount <= properties.getCapacity() - 20 && contents.containsFluid(new FluidStack(getResultFluid(), 0))) {
 									recepticle.fill(new FluidStack(getResultFluid(), 20), true);
-									addByProductRandom(getWorld().rand, tank.getFluid().getFluid());
-									damageFilter(1);
+									 if(hasMossFilter() || hasSilkFilter()) {
+										 addByProductRandom(getWorld().rand, tank.getFluid().getFluid());
+										 damageFilter(1);
+									 }
 									tank.drain(new FluidStack(tank.getFluid(), 20), true);
 
 									if(!getFluidAnimation())
@@ -84,7 +80,7 @@ public class TileEntityWaterFilter extends TileEntityBasicInventory implements I
 			}
 		}
 
-		if (!getWorld().isRemote && (!hasMossFilter() && !hasSilkFilter()) && getFluidAnimation()) {
+		if (!getWorld().isRemote && tank.getFluid() == null && getFluidAnimation()) { //instead of filter check - check for can empty stuff and change rendering
 			setFluidAnimation(false);
 			markForUpdate();
 		}
@@ -155,11 +151,11 @@ public class TileEntityWaterFilter extends TileEntityBasicInventory implements I
 		}
 	}
 
-	private boolean hasMossFilter() {
+	public boolean hasMossFilter() {
 		return !getStackInSlot(0).isEmpty() && (getStackInSlot(0).getItem() == ItemRegistry.MOSS_FILTER);
 	}
 
-	private boolean hasSilkFilter() {
+	public boolean hasSilkFilter() {
 		return !getStackInSlot(0).isEmpty() && (getStackInSlot(0).getItem() == ItemRegistry.SILK_FILTER);
 	}
 
