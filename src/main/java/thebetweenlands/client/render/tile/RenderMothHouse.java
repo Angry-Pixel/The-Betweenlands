@@ -98,6 +98,14 @@ public class RenderMothHouse extends TileEntitySpecialRenderer<TileEntityMothHou
 
     		switch(stack.getCount()) {
     		default:
+    		case 6:
+    			GlStateManager.pushMatrix();
+    			GlStateManager.scale(0.15D, 0.15D, 0.15D);
+    			GlStateManager.translate(0.5D, 5.8D, 0.4D);
+    			GlStateManager.rotate(10, 0, 0, 1);
+    			GlStateManager.rotate(180, 1, 0, 0);
+    			renderItem.renderItem(stack, TransformType.FIXED);
+    			GlStateManager.popMatrix();
     		case 5:
     			GlStateManager.pushMatrix();
     			GlStateManager.scale(0.15D, 0.15D, 0.15D);

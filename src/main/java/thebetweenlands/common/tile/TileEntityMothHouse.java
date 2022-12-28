@@ -29,7 +29,7 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
 	public static final int SLOT_GRUBS = 0;
 	public static final int SLOT_SILK = 1;
 	
-	protected static final int MAX_GRUBS = 5;
+	protected static final int MAX_GRUBS = 6;
 	protected static final int MAX_SILK_PER_GRUB = 3;
 	protected static final int BASE_TICKS_PER_SILK = 160;
 	
