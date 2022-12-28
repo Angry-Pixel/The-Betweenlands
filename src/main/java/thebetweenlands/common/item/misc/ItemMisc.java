@@ -249,41 +249,48 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 				}
 				return EnumActionResult.SUCCESS;
 			}
-
-			else {
-				return EnumActionResult.FAIL;
-			}
-		}
-		
-		else if (!heldItem.isEmpty() && EnumItemMisc.WEEDWOOD_BOWL.isItemOf(heldItem)) {
+				
+			return EnumActionResult.FAIL;
+		} else if (!heldItem.isEmpty() && EnumItemMisc.WEEDWOOD_BOWL.isItemOf(heldItem)) {
 			IFluidHandler handler = FluidUtil.getFluidHandler(world, pos, facing);
 			if (handler != null) {
 				FluidStack tankContents = handler.drain(250, false);
 				if (tankContents != null) { 
 					if(tankContents.getFluid() == FluidRegistry.DYE_FLUID || tankContents.getFluid() == FluidRegistry.DRINKABLE_BREW) {
-						IBlockState state = world.getBlockState(pos);
-						ItemStack filledBowl = EnumItemMisc.WEEDWOOD_BOWL.create(1);
-						if(tankContents.tag != null && tankContents.tag.hasKey("type")) {
-							if(tankContents.getFluid() == FluidRegistry.DYE_FLUID)
-								filledBowl = new ItemStack(ItemRegistry.DYE, 1, tankContents.tag.getInteger("type"));
-							if(tankContents.getFluid() == FluidRegistry.DRINKABLE_BREW)
-								filledBowl = EnumBLDrinkableBrew.byMetadata(tankContents.tag.getInteger("type")).getBrewItemStack();
+						if(!world.isRemote) {
+							IBlockState state = world.getBlockState(pos);
+							
+							ItemStack filledBowl = EnumItemMisc.WEEDWOOD_BOWL.create(1);
+							
+							if(tankContents.tag != null && tankContents.tag.hasKey("type")) {
+								if(tankContents.getFluid() == FluidRegistry.DYE_FLUID)
+									filledBowl = new ItemStack(ItemRegistry.DYE, 1, tankContents.tag.getInteger("type"));
+								if(tankContents.getFluid() == FluidRegistry.DRINKABLE_BREW)
+									filledBowl = EnumBLDrinkableBrew.byMetadata(tankContents.tag.getInteger("type")).getBrewItemStack();
+							}
+							
+							if (!player.capabilities.isCreativeMode) {
+								heldItem.shrink(1);
+							}
+							
+							if (!player.inventory.addItemStackToInventory(filledBowl))
+								ForgeHooks.onPlayerTossEvent(player, filledBowl, false);
+							
+							handler.drain(250, true);
+							world.notifyBlockUpdate(pos, state, state, 3);
 						}
-						if (!player.inventory.addItemStackToInventory(filledBowl))
-							ForgeHooks.onPlayerTossEvent(player, filledBowl, false);
-						if (!player.capabilities.isCreativeMode)
-							heldItem.shrink(1);
+						
 						world.playSound((EntityPlayer) null, pos, SoundEvents.ENTITY_PLAYER_SPLASH, SoundCategory.BLOCKS, 0.75F, 2F);
-						handler.drain(250, true);
-						world.notifyBlockUpdate(pos, state, state, 3);
+						
+						return EnumActionResult.SUCCESS;
 					}
 				}
 			}
-			return EnumActionResult.SUCCESS;
-		}
-		else {
+			
 			return EnumActionResult.FAIL;
 		}
+			
+		return EnumActionResult.PASS;
 	}
 
     public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {

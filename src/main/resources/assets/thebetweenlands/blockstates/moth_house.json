@@ -3,7 +3,7 @@
   "defaults": {
     "model": "thebetweenlands:internal/blank",
     "custom": {
-      "particle_texture": "thebetweenlands:particle/block/alembic_particle"
+      "particle_texture": "thebetweenlands:particle/block/mothhouse_particle"
     }
   },
   "variants": {
@@ -12,6 +12,10 @@
       "east": { },
       "south": { },
       "west": { }
+    },
+    "on_wall": {
+      "true": { },
+      "false": { }
     }
   }
 }

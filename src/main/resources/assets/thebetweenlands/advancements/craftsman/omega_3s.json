@@ -1,0 +1,27 @@
+{
+    "display": {
+      "icon": {
+        "item": "thebetweenlands:bl_bucket_fish_oil"
+      },
+      "title": {
+        "translate": "advancements.thebetweenlands.craftsman.omega_3s.title"
+      },
+      "description": {
+        "translate": "advancements.thebetweenlands.craftsman.omega_3s.description"
+      }
+    },
+    "parent": "thebetweenlands:craftsman/percolation_station",
+    "criteria": {
+        "fish_oil": {
+          "trigger": "minecraft:inventory_changed",
+          "conditions": {
+            "items": [
+              {
+                "item": "thebetweenlands:bl_bucket_fish_oil"
+              }
+            ]
+        }
+      }
+    }
+  }
+  

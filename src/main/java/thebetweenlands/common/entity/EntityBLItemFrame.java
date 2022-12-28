@@ -16,6 +16,7 @@ import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
@@ -35,6 +36,7 @@ import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.common.item.herblore.ItemAspectVial;
 import thebetweenlands.common.item.misc.ItemGlowingGoop;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -229,7 +231,9 @@ public class EntityBLItemFrame extends EntityItemFrame implements IEntityAdditio
     }
 
 
-    public void SetVisibility(boolean isInvisible) {
+    public void SetVisibility(boolean isInvisible, EntityPlayer player) {
+    	if(isInvisible)
+    		AdvancementCriterionRegistry.ITEM_FRAME_INVISIBLE.trigger((EntityPlayerMP) player);
         dataManager.set(INVISIBLE, isInvisible);
     }
 
@@ -242,7 +246,9 @@ public class EntityBLItemFrame extends EntityItemFrame implements IEntityAdditio
         return dataManager.get(IS_GLOWING);
     }
 
-    public void SetGlowing(boolean isGlowing) {
+    public void SetGlowing(boolean isGlowing, EntityPlayer player) {
+    	if(isGlowing)
+    		AdvancementCriterionRegistry.ITEM_FRAME_GLOWING.trigger((EntityPlayerMP) player);
         dataManager.set(IS_GLOWING, isGlowing);
     }
 
@@ -262,13 +268,13 @@ public class EntityBLItemFrame extends EntityItemFrame implements IEntityAdditio
                     for (Aspect aspect : aspectList) {
                         if (aspect.type == AspectRegistry.FREIWYNN && aspect.amount >= 100) {
                             aspectVial.drain(AspectRegistry.FREIWYNN, 100);
-                            this.SetVisibility(true);
+                            this.SetVisibility(true, player);
                             return true;
                         }
                     }
                 } else if(itemstack.getItem() instanceof ItemGlowingGoop && !isGlowing()) {
                     itemstack.shrink(1);
-                    SetGlowing(true);
+                    SetGlowing(true, player);
                     return true;
                 }
             }

@@ -1,0 +1,23 @@
+{
+    "display": {
+      "icon": {
+        "item": "thebetweenlands:steeping_pot"
+      },
+      "title": {
+        "translate": "advancements.thebetweenlands.herbalist.steep_learning_curve.title"
+      },
+      "description": {
+        "translate": "advancements.thebetweenlands.herbalist.steep_learning_curve.description"
+      }
+    },
+    "parent": "thebetweenlands:herbalist/root",
+    "criteria": {
+        "steeping_pot": {
+            "trigger": "minecraft:placed_block",
+            "conditions": {
+                "block": "thebetweenlands:steeping_pot"
+            }
+        }
+    }
+  }
+  

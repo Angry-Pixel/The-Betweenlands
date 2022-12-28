@@ -1,0 +1,20 @@
+{
+    "display": {
+      "icon": {
+        "item": "thebetweenlands:glowing_goop"
+      },
+      "title": {
+        "translate": "advancements.thebetweenlands.craftsman.let_it_shine.title"
+      },
+      "description": {
+        "translate": "advancements.thebetweenlands.craftsman.let_it_shine.description"
+      }
+    },
+    "parent": "thebetweenlands:craftsman/paint_job",
+    "criteria": {
+        "glowing": {
+          "trigger": "thebetweenlands:item_frame_glowing"
+      }
+   }
+}
+  

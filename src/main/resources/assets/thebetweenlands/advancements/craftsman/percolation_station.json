@@ -1,0 +1,35 @@
+{
+    "display": {
+      "icon": {
+        "item": "thebetweenlands:water_filter"
+      },
+      "title": {
+        "translate": "advancements.thebetweenlands.craftsman.percolation_station.title"
+      },
+      "description": {
+        "translate": "advancements.thebetweenlands.craftsman.percolation_station.description"
+      }
+    },
+    "parent": "thebetweenlands:craftsman/all_over_again",
+    "criteria": {
+        "water_filter": {
+            "trigger": "minecraft:placed_block",
+            "conditions": {
+                "block": "thebetweenlands:water_filter"
+            }
+        },
+        "clean_water": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+              "items": [
+                {
+                  "item": "thebetweenlands:bl_bucket",
+                  "nbt": "{Fluid:{FluidName:\"clean_water\"}}"
+                }
+              ]
+            }
+        }
+    }
+  }
+
+  

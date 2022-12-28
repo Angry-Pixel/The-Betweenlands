@@ -7,11 +7,13 @@ import java.util.stream.Stream;
 import javax.annotation.Nullable;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.FoodStats;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -30,7 +32,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 public class ItemDrinkableBrew extends ItemBLFood implements ItemRegistry.IMultipleItemModelDefinition {
 	
     public ItemDrinkableBrew() {
-    	super(3, 0.5F, false);//default for safety
+    	super(0, 0, false);//default for safety
         setMaxDamage(0);
         setHasSubtypes(true);
 		setAlwaysEdible();
@@ -46,6 +48,11 @@ public class ItemDrinkableBrew extends ItemBLFood implements ItemRegistry.IMulti
 		return EnumBLDrinkableBrew.byMetadata(stack.getMetadata()).getSaturationModifier();
 	}
 
+	@Override
+	public boolean hasContainerItem(ItemStack stack) {
+		return true;
+	}	
+	
 	@Override
 	public ItemStack getContainerItem(ItemStack stack) {
 		return EnumItemMisc.WEEDWOOD_BOWL.create(1);
@@ -69,10 +76,33 @@ public class ItemDrinkableBrew extends ItemBLFood implements ItemRegistry.IMulti
 	@Override
 	protected void onFoodEaten(ItemStack stack, World world, EntityPlayer player) {
 		super.onFoodEaten(stack, world, player);
-		if (stack.getCount() != 0)
-			player.inventory.addItemStackToInventory(getContainerItem(stack));
+		
 		if (EnumBLDrinkableBrew.byMetadata(stack.getMetadata()).hasBuff())
 			applyBuffToPlayer(stack, world, player);
+		
+		int healAmount = this.getHealAmount(stack);
+		float saturation = this.getSaturationModifier(stack);
+		
+		if(healAmount == 0 && saturation > 0) {
+			FoodStats stats = player.getFoodStats();
+			int prevFoodLevel = stats.getFoodLevel();
+			
+			stats.addStats(1, saturation);
+			stats.setFoodLevel(prevFoodLevel);
+		}
+	}
+	
+	@Override
+	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
+		stack = super.onItemUseFinish(stack, worldIn, entityLiving);
+		if(hasContainerItem(stack)) {
+			if(stack.getCount() == 0) {
+				return getContainerItem(stack);
+			} else if(entityLiving instanceof EntityPlayer) {
+				((EntityPlayer) entityLiving).inventory.addItemStackToInventory(getContainerItem(stack));
+			}
+		}
+		return stack;
 	}
 
 	private void applyBuffToPlayer(ItemStack stack, World world, EntityPlayer player) {

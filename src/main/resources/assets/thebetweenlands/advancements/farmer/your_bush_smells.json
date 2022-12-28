@@ -1,0 +1,32 @@
+{
+    "display": {
+      "icon": {
+        "item": "thebetweenlands:pheromone_thorax"
+      },
+      "title": {
+        "translate": "advancements.thebetweenlands.farmer.your_bush_smells.title"
+      },
+      "description": {
+        "translate": "advancements.thebetweenlands.farmer.your_bush_smells.description"
+      }
+    },
+    "parent": "thebetweenlands:farmer/root",
+    "criteria": {
+      "infuse_bush": {
+        "trigger": "thebetweenlands:right_click_block",
+        "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:weedwood_bush"
+          }
+        ],
+        "items": [
+          {
+            "item": "thebetweenlands:pheromone_thorax"
+          }
+        ]
+      }
+    }
+  }
+}
+  

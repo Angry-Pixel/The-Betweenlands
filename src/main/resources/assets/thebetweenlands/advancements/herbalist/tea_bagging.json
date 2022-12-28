@@ -1,0 +1,45 @@
+{
+    "display": {
+      "icon": {
+        "item": "thebetweenlands:silk_bundle"
+      },
+      "title": {
+        "translate": "advancements.thebetweenlands.herbalist.tea_bagging.title"
+      },
+      "description": {
+        "translate": "advancements.thebetweenlands.herbalist.tea_bagging.description"
+      }
+    },
+    "parent": "thebetweenlands:herbalist/steep_learning_curve",
+    "criteria": {
+      "nettle_tea": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:drinkable_brew",
+              "data": 1
+            }
+          ]
+        }
+      },
+      "witch_tea": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:drinkable_brew",
+              "data": 10
+            }
+          ]
+        }
+      }
+    },
+    "requirements": [
+      [
+         "nettle_tea",
+         "witch_tea"
+      ]
+    ]
+  }
+  

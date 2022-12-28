@@ -63,8 +63,9 @@ public class RenderWaterFilter extends TileEntitySpecialRenderer<TileEntityWater
 			if(tile.getFluidAnimation()) {
 				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 				GlStateManager.translate(0F, -0.1875F, 0F);
-				renderCuboid(buffer, 1.0625F, 0.9375F, 0F, 0.125F, 0.9375F, 1.0625F, fluidStillSprite);
-				renderCuboid(buffer, 1.375F, 0.625F, 0F, 0.00625F, 0.625F, 1.375F, fluidStillSprite);
+				renderCuboid(buffer, 1.0625F, 0.9375F, -0.125F, 0.25F, 0.9375F, 1.0625F, fluidStillSprite);
+				if (tile.hasMossFilter() || tile.hasSilkFilter())
+					renderCuboid(buffer, 1.375F, 0.625F, 0F, 0.00625F, 0.625F, 1.375F, fluidStillSprite);
 				tessellator.draw();
 			}
 

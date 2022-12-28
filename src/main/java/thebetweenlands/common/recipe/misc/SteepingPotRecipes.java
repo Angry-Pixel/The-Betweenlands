@@ -146,10 +146,12 @@ public class SteepingPotRecipes implements ISteepingPotRecipe {
 		}
 	}
 
+	@Override
 	public Object[] getInputs() {
 		return input;
 	}
-	
+
+	@Override
 	public List<ItemStack> getInputAsStacks() {
 		List<ItemStack> stacks = new ArrayList<>();
 		for (int c = 0; c < getInputs().length; c++)
@@ -160,22 +162,27 @@ public class SteepingPotRecipes implements ISteepingPotRecipe {
 		return stacks;
 	}
 
+	@Override
 	public FluidStack getInputFluidStack() {
 		return fluidStackIn;
 	}
 
+	@Override
 	public ItemStack getOutputItem() {
 		return output.copy();
 	}
 
+	@Override
 	public FluidStack getOutputFluidStack() {
 		return fluidStackOut == null ? null : fluidStackOut.copy();
 	}
 
+	@Override
 	public int getOutputFluidMeta() {
 		return fluidMeta;
 	}
 
+	@Override
 	public boolean matches(IFluidTank tankIn, ItemStack... stacks) {
 		if (tankIn.getFluid() == null || !tankIn.getFluid().isFluidEqual(getInputFluidStack()))
 			return false;

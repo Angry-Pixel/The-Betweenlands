@@ -12,41 +12,42 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
-import thebetweenlands.client.render.particle.BLParticles;
-import thebetweenlands.client.render.particle.BatchedParticleRenderer;
-import thebetweenlands.client.render.particle.DefaultParticleBatches;
-import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.block.plant.BlockWeedwoodBushInfested;
+import thebetweenlands.common.network.clientbound.MessageInfestWeedwoodBush;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class TileEntityGrubHub extends TileEntityBasicInventory implements ITickable {
-	
-	public FluidTank tank;
+
+	public FluidTankTile tank;
 	private IItemHandler itemHandler;
+
 	public int switchTextureCount = 0;
+
 	public TileEntityGrubHub() {
 		super(1, "container.bl.grub_hub");
-		this.tank = new FluidTank(Fluid.BUCKET_VOLUME * 8) {
+		this.tank = new FluidTankTile(Fluid.BUCKET_VOLUME * 8) {
 			@Override
 			public boolean canFillFluidType(FluidStack fluid) {
 				return canFill() && fluid.getFluid() == FluidRegistry.DRINKABLE_BREW && fluid.tag != null && fluid.tag.hasKey("type") && fluid.tag.getInteger("type") == 2;
 			}
 		}; //ewww
-        this.tank.setTileEntity(this);
+		
+		
+		this.tank.setTileEntity(this);
 	}
 
 	@Override
@@ -56,8 +57,9 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 
 	@Override
 	public void update() {
-		if (getWorld().getTotalWorldTime()%10 == 0)
+		if (!world.isRemote && getWorld().getTotalWorldTime() % 10 == 0)
 			checkCanInfestOrHarvest(getWorld());
+
 		if(world.isRemote && switchTextureCount > 0)
 			switchTextureCount--;
 	}
@@ -72,31 +74,19 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 		int maxZ = MathHelper.floor(axisalignedbb.maxZ);
 		MutableBlockPos mutablePos = new MutableBlockPos();
 
-		for (int x = minX; x < maxX; x++)
-			for (int y = minY; y < maxY; y++)
+		for (int x = minX; x < maxX; x++) {
+			for (int y = minY; y < maxY; y++) {
 				for (int z = minZ; z < maxZ; z++) {
 					IBlockState state = getWorld().getBlockState(mutablePos.setPos(x, y, z));
-						if (state.getBlock() instanceof BlockWeedwoodBush && !(state.getBlock() instanceof BlockWeedwoodBushInfested) && tank.getFluidAmount() >= 50) {
-							if(!world.isRemote) {
-								infestBush(mutablePos);
-							}
-							if (world.isRemote) {
-								switchTextureCount = 10;
-								Vec3d vector = new Vec3d((mutablePos.getX() + 0.5D) - (pos.getX() + 0.5D), (mutablePos.getY() + 1D) - (pos.getY() + 0.325D), (mutablePos.getZ() + 0.5D) - (pos.getZ() + 0.5D));
-								for(int i = 0; i < 20 + world.rand.nextInt(5); i++) {
-									BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(world, pos.getX() + 0.5F, pos.getY() + 0.325F, pos.getZ() + 0.5F, 
-											ParticleArgs.get()
-											.withMotion(vector.x * 0.08f, vector.y * 0.08F, vector.z * 0.08F)
-											.withScale(0.6f + world.rand.nextFloat() * 5.0F)
-											.withColor(1F, 1.0F, 1.0F, 0.05f)
-											.withData(80, true, 0.01F, true)));
-								}
-							}
-						}
-						else if (!world.isRemote && state.getBlock() instanceof BlockWeedwoodBushInfested && state.getBlock() == BlockRegistry.WEEDWOOD_BUSH_INFESTED_2 && canAddGrub(0)) {
-							harvestGrub(mutablePos);
-						}
+					if (state.getBlock() instanceof BlockWeedwoodBush && !(state.getBlock() instanceof BlockWeedwoodBushInfested) && tank.getFluidAmount() >= 50) {
+						infestBush(mutablePos);
 					}
+					else if (state.getBlock() instanceof BlockWeedwoodBushInfested && state.getBlock() == BlockRegistry.WEEDWOOD_BUSH_INFESTED_2 && canAddGrub(0)) {
+						harvestGrub(mutablePos);
+					}
+				}
+			}
+		}
 	}
 
 	private void harvestGrub(MutableBlockPos mutablePos) {
@@ -104,10 +94,10 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 		getWorld().setBlockState(mutablePos, BlockRegistry.WEEDWOOD_BUSH.getDefaultState(), 3);
 		ItemStack contents = getStackInSlot(0);
 		ItemStack silk_grub = new ItemStack(ItemRegistry.SILK_GRUB, 1);
-			if (contents.isEmpty())
-				setInventorySlotContents(0, silk_grub);
-			else
-				contents.grow(1);
+		if (contents.isEmpty())
+			setInventorySlotContents(0, silk_grub);
+		else
+			contents.grow(1);
 		markForUpdate();
 	}
 
@@ -115,14 +105,17 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 		// this check could be used to stop the infestation of the bush beforehand, but atm I'm letting the bush spawn nasties if inventory is full
 		ItemStack contents = getStackInSlot(slot);
 		return contents.isEmpty() ? true : (!contents.isEmpty() && contents.getItem() == ItemRegistry.SILK_GRUB && contents.getCount() < getInventoryStackLimit()) ? true : false;
-		
 	}
 
 	private void infestBush(MutableBlockPos mutablePos) {
 		getWorld().playSound(null, this.pos, SoundRegistry.GRUB_HUB_MIST, SoundCategory.BLOCKS, 0.5F, 1F);
 		getWorld().setBlockState(mutablePos, BlockRegistry.WEEDWOOD_BUSH_INFESTED_0.getDefaultState(), 3);
+
 		tank.drain(50, true);
+
 		markForUpdate();
+
+		TheBetweenlands.networkWrapper.sendToAllAround(new MessageInfestWeedwoodBush(this, mutablePos.toImmutable()), new NetworkRegistry.TargetPoint(this.world.provider.getDimension(), this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D, 32D));
 	}
 
 	public AxisAlignedBB areaOfEffect() {
@@ -133,47 +126,47 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 		return tank.getFluidAmount();
 	}
 
-    public void markForUpdate() {
-        IBlockState state = this.getWorld().getBlockState(this.getPos());
-        this.getWorld().notifyBlockUpdate(this.getPos(), state, state, 3);
-    }
-
-    @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-        this.readPacketNbt(packet.getNbtCompound());
-    }
-
-    @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound nbt = new NBTTagCompound();
-        this.writePacketNbt(nbt);
-        return new SPacketUpdateTileEntity(pos, 0, nbt);
-    }
+	public void markForUpdate() {
+		IBlockState state = this.getWorld().getBlockState(this.getPos());
+		this.getWorld().notifyBlockUpdate(this.getPos(), state, state, 3);
+	}
 
 	@Override
-    public NBTTagCompound getUpdateTag() {
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
+		this.readPacketNbt(packet.getNbtCompound());
+	}
+
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		this.writePacketNbt(nbt);
+		return new SPacketUpdateTileEntity(pos, 0, nbt);
+	}
+
+	@Override
+	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound tag = super.getUpdateTag();
-        this.writePacketNbt(tag);
-        return tag;
-    }
+		this.writePacketNbt(tag);
+		return tag;
+	}
 
-    @Override
-    public void handleUpdateTag(NBTTagCompound nbt) {
-        super.handleUpdateTag(nbt);
-        this.readPacketNbt(nbt);
-    }
+	@Override
+	public void handleUpdateTag(NBTTagCompound nbt) {
+		super.handleUpdateTag(nbt);
+		this.readPacketNbt(nbt);
+	}
 
-    protected NBTTagCompound writePacketNbt(NBTTagCompound nbt) {
-        nbt.setTag("tank", tank.writeToNBT(new NBTTagCompound()));
-        this.writeInventoryNBT(nbt);
-        return nbt;
-    }
+	protected NBTTagCompound writePacketNbt(NBTTagCompound nbt) {
+		nbt.setTag("tank", tank.writeToNBT(new NBTTagCompound()));
+		this.writeInventoryNBT(nbt);
+		return nbt;
+	}
 
-    protected void readPacketNbt(NBTTagCompound nbt) {
-        NBTTagCompound compound = nbt;
-        tank.readFromNBT(compound.getCompoundTag("tank"));
-        this.readInventoryNBT(nbt);
-    }
+	protected void readPacketNbt(NBTTagCompound nbt) {
+		NBTTagCompound compound = nbt;
+		tank.readFromNBT(compound.getCompoundTag("tank"));
+		this.readInventoryNBT(nbt);
+	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tagCompound) {

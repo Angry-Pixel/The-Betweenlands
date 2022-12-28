@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:moth_house"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.farmer.multicore_threading.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.farmer.multicore_threading.description"
+    }
+  },
+  "parent": "thebetweenlands:farmer/moving_day",
+  "criteria": {
+    "boost_moth_house": {
+      "trigger": "thebetweenlands:moth_house_maxed"
+    }
+  }
+}

@@ -1,10 +1,14 @@
 {
   "forge_marker": 1,
   "variants": {
-    "facing=north": { "model": "thebetweenlands:internal/steeping_pot" },
-    "facing=south": { "model": "thebetweenlands:internal/steeping_pot", "y": 180 },
-    "facing=west":  { "model": "thebetweenlands:internal/steeping_pot", "y": 270 },
-    "facing=east":  { "model": "thebetweenlands:internal/steeping_pot", "y": 90 },
+    "facing=north,hanging=false": { "model": "thebetweenlands:internal/steeping_pot" },
+    "facing=south,hanging=false": { "model": "thebetweenlands:internal/steeping_pot", "y": 180 },
+    "facing=west,hanging=false":  { "model": "thebetweenlands:internal/steeping_pot", "y": 270 },
+    "facing=east,hanging=false":  { "model": "thebetweenlands:internal/steeping_pot", "y": 90 },
+    "facing=north,hanging=true": { "model": "thebetweenlands:internal/steeping_pot_hanging" },
+    "facing=south,hanging=true": { "model": "thebetweenlands:internal/steeping_pot_hanging", "y": 180 },
+    "facing=west,hanging=true":  { "model": "thebetweenlands:internal/steeping_pot_hanging", "y": 270 },
+    "facing=east,hanging=true":  { "model": "thebetweenlands:internal/steeping_pot_hanging", "y": 90 },
     "inventory": { 
       "model": "thebetweenlands:internal/steeping_pot",
       "transform": {
