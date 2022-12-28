@@ -16,7 +16,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -33,19 +32,21 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 public class TileEntityGrubHub extends TileEntityBasicInventory implements ITickable {
 
-	public FluidTank tank;
+	public FluidTankTile tank;
 	private IItemHandler itemHandler;
 
 	public int switchTextureCount = 0;
 
 	public TileEntityGrubHub() {
 		super(1, "container.bl.grub_hub");
-		this.tank = new FluidTank(Fluid.BUCKET_VOLUME * 8) {
+		this.tank = new FluidTankTile(Fluid.BUCKET_VOLUME * 8) {
 			@Override
 			public boolean canFillFluidType(FluidStack fluid) {
 				return canFill() && fluid.getFluid() == FluidRegistry.DRINKABLE_BREW && fluid.tag != null && fluid.tag.hasKey("type") && fluid.tag.getInteger("type") == 2;
 			}
 		}; //ewww
+		
+		
 		this.tank.setTileEntity(this);
 	}
 

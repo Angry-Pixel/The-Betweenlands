@@ -10,14 +10,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class TileEntityFilteredSiltGlassJar extends TileEntity {
-    public FluidTank tank;
+    public FluidTankTile tank;
 
 	public TileEntityFilteredSiltGlassJar() {
-        this.tank = new FluidTank(null, Fluid.BUCKET_VOLUME * 4);
+        this.tank = new FluidTankTile(null, Fluid.BUCKET_VOLUME * 4);
         this.tank.setTileEntity(this);
 	}
 
