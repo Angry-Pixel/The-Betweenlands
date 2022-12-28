@@ -1413,6 +1413,7 @@ tooltip.bl.fig=Looks tempting...
 tooltip.bl.pestle=Place Pestle in Mortar
 tooltip.bl.pestle.remaining=%d%% Remaining: %d more uses.
 tooltip.bl.aspectvial.byariis.fuel=Can be used as fuel for the Repeller
+tooltip.bl.aspectvial.freiwynn=Can be used to turn item frames invisible
 tooltip.bl.rubber_bucket=Right click to extract the rubber from the bucket
 tooltip.bl.gem.aqua=\nWhen on tool:\n §9- Chance to weaken the enemy when attacking\nWhen on armor:\n §9- Chance to gain defense when attacked
 tooltip.bl.gem.crimson=\nWhen on tool:\n §9- Chance to gain strength when attacking\nWhen on armor:\n §9- Chance to hurt the enemy when attacked
