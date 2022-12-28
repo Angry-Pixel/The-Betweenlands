@@ -79,7 +79,8 @@ public class BlockSwampReed extends BlockStackablePlant implements ICustomItemBl
 			for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL) {
 				if (worldIn.isBlockLoaded(blockpos.offset(enumfacing))) {
 					IBlockState iblockstate = worldIn.getBlockState(blockpos.offset(enumfacing));
-					if (iblockstate.getMaterial() == Material.WATER) {
+					Material material = iblockstate.getMaterial();
+					if (material == Material.WATER || material == Material.ICE || material == Material.PACKED_ICE) {
 						return true;
 					}
 				}
@@ -97,7 +98,8 @@ public class BlockSwampReed extends BlockStackablePlant implements ICustomItemBl
 			BlockPos blockpos = pos.down();
 			for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL) {
 				IBlockState iblockstate = worldIn.getBlockState(blockpos.offset(enumfacing));
-				if (iblockstate.getMaterial() == Material.WATER) {
+				Material material = iblockstate.getMaterial();
+				if (material == Material.WATER || material == Material.ICE || material == Material.PACKED_ICE) {
 					return true;
 				}
 			}
