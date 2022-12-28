@@ -120,7 +120,7 @@ public class BlockWeedwoodBushInfested extends BlockWeedwoodBush {
 		if (world.rand.nextInt(10) == 0) {
 			switch (stage) {
 			case 0:
-				BLParticles.SULFUR_TORCH.spawn(world, px, py, pz, ParticleArgs.get().withColor(0.6f, 0.35f, 0.8f, 0.45f));
+				BLParticles.SULFUR_TORCH.spawn(world, px, py, pz, ParticleArgs.get().withColor(0.6f, 0.35f, 0.8f, 0.28f));
 				break;
 			case 1:
 				BLParticles.SILK_MOTH.spawn(world, px, py, pz);

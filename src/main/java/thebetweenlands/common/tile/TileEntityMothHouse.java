@@ -58,7 +58,7 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
     	
         if(world.getTotalWorldTime() % 20 == 0) {
             if(isWorking) {
-            	if(this.world.isRemote) {
+            	if(this.world.isRemote && this.world.rand.nextInt(3) == 0) {
             		double px = (double) pos.getX() + 0.5D;
                     double py = (double) pos.getY() + 0.3D;
                     double pz = (double) pos.getZ() + 0.5D;
@@ -80,37 +80,42 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
 
             ItemStack grubs = super.getStackInSlot(0);
 
+            boolean wasWorking = this.isWorking;
+            
             // don't work if no grubs are available or silk stack is full
             if(grubs == ItemStack.EMPTY || grubs.getCount() == 0 || super.getStackInSlot(1).getCount() == super.getStackInSlot(1).getMaxStackSize()) {
                 isWorking = false;
-                return;
-            }
+            } else {
+            	productionTime--;
 
-            productionTime--;
+                isWorking = true;
 
-            isWorking = true;
+                if(productionTime <= 0) {
+                    grubs.shrink(1);
 
-            if(productionTime <= 0) {
-                grubs.shrink(1);
+                    if(productionEfficiency != 0) {
+                        int randomChance = world.rand.nextInt(4 - productionEfficiency);
 
-                if(productionEfficiency != 0) {
-                    int randomChance = world.rand.nextInt(4 - productionEfficiency);
+                        if(randomChance == 0) {
+                            ItemStack silkStack = super.getStackInSlot(1);
 
-                    if(randomChance == 0) {
-                        ItemStack silkStack = super.getStackInSlot(1);
+                            if(silkStack == ItemStack.EMPTY) {
+                                silkStack = ItemMisc.EnumItemMisc.SILK_THREAD.create(1);
+                                super.setInventorySlotContents(1, silkStack);
+                            } else {
+                                silkStack.grow(1);
+                            }
 
-                        if(silkStack == ItemStack.EMPTY) {
-                            silkStack = ItemMisc.EnumItemMisc.SILK_THREAD.create(1);
-                            super.setInventorySlotContents(1, silkStack);
-                        } else {
-                            silkStack.grow(1);
+                            markForUpdate();
                         }
-
-                        markForUpdate();
                     }
-                }
 
-                productionTime = 20;
+                    productionTime = 20;
+                }
+            }
+            
+            if(wasWorking != this.isWorking) {
+            	this.markForUpdate();
             }
         }
     }
@@ -151,9 +156,9 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
                             if(this.placer instanceof EntityPlayerMP && lanternsNearby == maxLanterns) {
                             	AdvancementCriterionRegistry.MOTH_HOUSE_MAXED.trigger((EntityPlayerMP) placer);
                             }
-                        } else {
+                        } else if(this.world.rand.nextInt(16) == 0) {
                             double px = (double) mutablePos.getX() + 0.5D;
-                            double py = (double) mutablePos.getY() + 0.3D;
+                            double py = (double) mutablePos.getY() + 0.7D;
                             double pz = (double) mutablePos.getZ() + 0.5D;
 
                             spawnSilkMothParticle(px, py, pz);
@@ -211,6 +216,7 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
 
         productionTime = nbt.getInteger("productionTime");
         productionEfficiency = nbt.getInteger("productionEfficiency");
+        isWorking = nbt.getBoolean("isWorking");
     }
 
     @Override
@@ -224,6 +230,7 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
 
         nbt.setInteger("productionTime", productionTime);
         nbt.setInteger("productionEfficiency", productionEfficiency);
+        nbt.setBoolean("isWorking", this.isWorking);
 
         return nbt;
     }
