@@ -195,6 +195,11 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
     	return grubStack.getCount() > 0 ? silkStack.getCount() / grubStack.getCount() : 0;
     }
     
+    public boolean isSilkProductionFinished() {
+    	ItemStack silkStack = this.getStackInSlot(SLOT_SILK);
+    	return silkStack.getCount() >= MAX_GRUBS * MAX_SILK_PER_GRUB;
+    }
+    
     public int getSilkRenderStage() {
     	ItemStack silkStack = this.getStackInSlot(SLOT_SILK);
     	return MathHelper.ceil(Math.min(1.0f, silkStack.getCount() / (float)Math.min(this.inventoryHandler.getSlotLimit(SLOT_SILK), MAX_GRUBS * MAX_SILK_PER_GRUB)) * 3);
@@ -249,10 +254,10 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
     public int addGrubs(ItemStack stack) {
     	int count = stack.getCount();
     	
-        int grubsAdded = count - this.inventoryHandler.insertItem(SLOT_GRUBS, stack, false).getCount();
+        int grubsAdded = count - this.inventoryHandler.insertItem(SLOT_GRUBS, stack.copy(), false).getCount();
 
-        markForUpdate();
-
+    	this.markDirty();
+    	
         return grubsAdded;
     }
 

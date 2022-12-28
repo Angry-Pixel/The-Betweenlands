@@ -99,6 +99,7 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 		else
 			contents.grow(1);
 		markForUpdate();
+		this.markDirty();
 	}
 
 	private boolean canAddGrub(int slot) {
@@ -114,6 +115,7 @@ public class TileEntityGrubHub extends TileEntityBasicInventory implements ITick
 		tank.drain(50, true);
 
 		markForUpdate();
+		this.markDirty();
 
 		TheBetweenlands.networkWrapper.sendToAllAround(new MessageInfestWeedwoodBush(this, mutablePos.toImmutable()), new NetworkRegistry.TargetPoint(this.world.provider.getDimension(), this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D, 32D));
 	}

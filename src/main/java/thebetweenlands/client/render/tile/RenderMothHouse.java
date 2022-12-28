@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -81,12 +82,12 @@ public class RenderMothHouse extends TileEntitySpecialRenderer<TileEntityMothHou
         
         MODEL.render();
         
-        ItemStack grubs = ItemStack.EMPTY;
-        if(te != null) {
-        	grubs = te.getStackInSlot(TileEntityMothHouse.SLOT_GRUBS);
-        }
-        if(!grubs.isEmpty()) {
-        	renderGrubs(grubs);
+        if(te != null && !te.isSilkProductionFinished() && x * x + y * y + z * z < 256) {
+        	ItemStack grubs = te.getStackInSlot(TileEntityMothHouse.SLOT_GRUBS);
+        	
+        	if(!grubs.isEmpty()) {
+            	renderGrubs(grubs);
+            }
         }
 
         GlStateManager.popMatrix();
