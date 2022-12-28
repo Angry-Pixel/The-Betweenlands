@@ -68,6 +68,13 @@ public class RenderMothHouse extends TileEntitySpecialRenderer<TileEntityMothHou
                 break;
         }
 
+
+        boolean onWall = StatePropertyHelper.getStatePropertySafely(te, BlockMothHouse.class, BlockMothHouse.ON_WALL, false);
+        
+        if(onWall) {
+        	GlStateManager.translate(0, 0, 0.38f);
+        }
+        
         MODEL.render();
 
         GlStateManager.popMatrix();
