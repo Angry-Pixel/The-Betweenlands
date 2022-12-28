@@ -21,7 +21,7 @@
          ]
       },
        {
-         "name":"glue",
+         "name":"anadia remains",
          "rolls":1,
          "conditions":[
             
@@ -29,7 +29,13 @@
          "entries":[
             {
                "type":"item",
-               "name":"thebetweenlands:glue",
+               "name":"thebetweenlands:items_misc",
+                "functions":[
+                  {
+                     "function":"set_data",
+                     "data":56
+                  }
+               ],
                "weight":1
             }
          ]
@@ -55,15 +61,41 @@
          ]
       },
        {
-         "name":"wight_heart",
+         "name":"slimy_bone",
          "rolls":1,
          "conditions":[
             
-         ],
+           ],
          "entries":[
             {
                "type":"item",
-               "name":"thebetweenlands:wight_heart",
+               "name":"thebetweenlands:items_misc",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data":14
+                  }
+               ],
+               "weight":1
+            }
+         ]
+      },
+       {
+         "name":"limestone_flux",
+         "rolls":1,
+         "conditions":[
+            
+           ],
+         "entries":[
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_misc",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data":27
+                  }
+               ],
                "weight":1
             }
          ]
