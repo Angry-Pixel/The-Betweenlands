@@ -16,8 +16,10 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.block.container.BlockSteepingPot;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.tile.TileEntitySteepingPot;
+import thebetweenlands.util.StatePropertyHelper;
 
 @SideOnly(Side.CLIENT)
 public class RenderSteepingPot extends TileEntitySpecialRenderer<TileEntitySteepingPot> {
@@ -26,6 +28,12 @@ public class RenderSteepingPot extends TileEntitySpecialRenderer<TileEntitySteep
 	public void render(TileEntitySteepingPot tile, double x, double y, double z, float partialTick, int destroyStage, float alpha) {
 		if(tile == null || !tile.hasWorld())
 			return;
+		
+		GlStateManager.pushMatrix();
+		
+		if(StatePropertyHelper.getStatePropertySafely(tile, BlockSteepingPot.class, BlockSteepingPot.HANGING, false, true, false)) {
+			GlStateManager.translate(0, -0.247, 0);
+		}
 		
 		float fluidLevel = tile.tank.getFluidAmount();
 		float height = 0.0625F;
@@ -41,6 +49,7 @@ public class RenderSteepingPot extends TileEntitySpecialRenderer<TileEntitySteep
 			int fluidColor = fluidStack.getFluid().getColor(fluidStack);
 			int fluidColorTemp = tile.tempFluidColour;
 			float fade = tile.getHeatProgress() > 50 && tile.hasBundle() ? (-50 + tile.getHeatProgress()) * 0.025F: 0F;
+			
 			GlStateManager.disableLighting();
 			GlStateManager.pushMatrix();
 			GlStateManager.enableBlend();
@@ -101,6 +110,7 @@ public class RenderSteepingPot extends TileEntitySpecialRenderer<TileEntitySteep
 			GlStateManager.popMatrix();
 		}
 
+		GlStateManager.popMatrix();
 	}
 
 	private void renderItemInSlot(TileEntitySteepingPot tile, int slotIndex, double x, double y, double z, double itemBob, double rotation) {
@@ -133,8 +143,6 @@ public class RenderSteepingPot extends TileEntitySpecialRenderer<TileEntitySteep
 		double uMax = (double) textureAtlasSprite.getMaxU();
 		double vMin = (double) textureAtlasSprite.getMinV();
 		double vMax = (double) textureAtlasSprite.getMaxV();
-
-		final double vHeight = vMax - vMin;
 
 		// top only needed ;)
 		addVertexWithUV(buffer, xMax, height, zMax, uMax, vMin);

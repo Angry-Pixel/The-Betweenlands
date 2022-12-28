@@ -9,6 +9,7 @@ import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
@@ -49,18 +50,20 @@ public class BlockSteepingPot extends Block implements ITileEntityProvider {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
+	public static final PropertyBool HANGING = PropertyBool.create("hanging");
+	
 	public BlockSteepingPot() {
 		super(Material.WOOD);
 		setHardness(1.5F);
 		setResistance(10.0F);
 		setSoundType(SoundType.WOOD);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
-		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(HANGING, false));
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, FACING);
+		return new BlockStateContainer(this, FACING, HANGING);
 	}
 
 	@Override
@@ -118,6 +121,12 @@ public class BlockSteepingPot extends Block implements ITileEntityProvider {
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
 		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing());
+	}
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		BlockFaceShape shape = worldIn.getBlockState(pos.up()).getBlockFaceShape(worldIn, pos.up(), EnumFacing.DOWN);
+		return state.withProperty(HANGING, (shape != BlockFaceShape.BOWL && shape != BlockFaceShape.UNDEFINED) || worldIn.isSideSolid(pos.up(), EnumFacing.DOWN, false));
 	}
 
 	@Override

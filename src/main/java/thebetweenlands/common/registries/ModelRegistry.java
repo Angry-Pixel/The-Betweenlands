@@ -76,6 +76,7 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelSimulacrumRootma
 import thebetweenlands.client.render.model.baked.modelbase.ModelSimulacrumRootman2;
 import thebetweenlands.client.render.model.baked.modelbase.ModelSimulacrumRootman3;
 import thebetweenlands.client.render.model.baked.modelbase.ModelSteepingPot;
+import thebetweenlands.client.render.model.baked.modelbase.ModelSteepingPotHanging;
 import thebetweenlands.client.render.model.baked.modelbase.ModelSundew;
 import thebetweenlands.client.render.model.baked.modelbase.ModelSwampPlant;
 import thebetweenlands.client.render.model.baked.modelbase.ModelVenusFlyTrap;
@@ -409,6 +410,9 @@ public class ModelRegistry {
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/barnacle_4")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 
 	public static final IModel STEEPING_POT = new ModelFromModelBase.Builder(new ModelSteepingPot(), new ResourceLocation("thebetweenlands:blocks/steeping_pot"), 128, 128)
+			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/steeping_pot_particle")).packer(MODEL_TEXTURE_PACKER).build();
+
+	public static final IModel STEEPING_POT_HANGING = new ModelFromModelBase.Builder(new ModelSteepingPotHanging(), new ResourceLocation("thebetweenlands:blocks/steeping_pot_hanging"), 128, 128)
 			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/steeping_pot_particle")).packer(MODEL_TEXTURE_PACKER).build();
 
 	public static final IModel WATER_FILTER = new ModelFromModelBase.Builder(new ModelWaterFilter(), new ResourceLocation("thebetweenlands:blocks/water_filter"), 128, 128)
