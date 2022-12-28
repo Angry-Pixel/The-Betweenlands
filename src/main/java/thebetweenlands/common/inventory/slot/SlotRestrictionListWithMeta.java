@@ -6,6 +6,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class SlotRestrictionListWithMeta extends Slot {
 	public List<ItemStack> acceptedItems;
@@ -22,7 +23,7 @@ public class SlotRestrictionListWithMeta extends Slot {
 	@Override
 	public boolean isItemValid(ItemStack stack) {
 		for(ItemStack stuff : acceptedItems)
-			if (stuff.getItem() == stack.getItem() && stuff.getItemDamage() == stack.getItemDamage())
+			if (stuff.getItem() == stack.getItem() && (stuff.getItemDamage() == stack.getItemDamage() || stuff.getItemDamage() == OreDictionary.WILDCARD_VALUE))
 				return true;
 		return false;
 	}

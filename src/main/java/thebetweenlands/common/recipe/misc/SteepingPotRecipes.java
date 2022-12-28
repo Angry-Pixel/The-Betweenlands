@@ -20,6 +20,31 @@ public class SteepingPotRecipes implements ISteepingPotRecipe {
 
 	private static final List<SteepingPotRecipes> recipes = new ArrayList<SteepingPotRecipes>();
 
+	public static void addRecipe(ISteepingPotRecipe recipe) {
+		if(recipe.getOutputFluidStack() != null) {
+			addRecipe(
+					recipe.getOutputFluidStack(),
+					recipe.getOutputFluidMeta(),
+					recipe.getInputFluidStack(),
+					recipe.getInputs()
+			);
+		} else {
+			addRecipe(
+					recipe.getOutputItem(),
+					recipe.getInputFluidStack(),
+					recipe.getInputs()
+			);
+		}
+	}
+
+	public static void removeRecipe(ISteepingPotRecipe recipe) {
+		if(recipe.getOutputFluidStack() != null) {
+			recipes.removeIf(r -> r.getOutputFluidStack() == recipe.getOutputFluidStack() && r.getInputFluidStack() == recipe.getInputFluidStack());
+		} else {
+			recipes.removeIf(r -> r.getOutputItem() == recipe.getOutputItem() && r.getInputFluidStack() == recipe.getInputFluidStack());
+		}
+	}
+
 	public static void addRecipe(ItemStack output, Fluid fluid, Object... input) {
 		addRecipe(output, new FluidStack(fluid, Fluid.BUCKET_VOLUME), input);
 	}
@@ -75,7 +100,7 @@ public class SteepingPotRecipes implements ISteepingPotRecipe {
 	private final int fluidMeta;
 	private final Object[] input;
 
-	private SteepingPotRecipes(ItemStack output, FluidStack fluidIn, Object... input) {
+	public SteepingPotRecipes(ItemStack output, FluidStack fluidIn, Object... input) {
 		this.output = output.copy();
 		this.fluidStackOut = null;
 		this.fluidMeta = 0;
@@ -98,7 +123,7 @@ public class SteepingPotRecipes implements ISteepingPotRecipe {
 		}
 	}
 
-	private SteepingPotRecipes(FluidStack fluidOut, int outputFluidMeta, FluidStack fluidIn, Object... input) {
+	public SteepingPotRecipes(FluidStack fluidOut, int outputFluidMeta, FluidStack fluidIn, Object... input) {
 		this.output = ItemStack.EMPTY;
 		this.fluidStackOut = fluidOut.copy();
 		this.fluidMeta = outputFluidMeta;

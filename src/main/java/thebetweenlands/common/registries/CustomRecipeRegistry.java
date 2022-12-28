@@ -11,27 +11,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 
-import thebetweenlands.api.recipes.IAnimatorRecipe;
-import thebetweenlands.api.recipes.ICompostBinRecipe;
-import thebetweenlands.api.recipes.ICrabPotFilterRecipeBubbler;
-import thebetweenlands.api.recipes.ICrabPotFilterRecipeSilt;
-import thebetweenlands.api.recipes.IDruidAltarRecipe;
-import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
-import thebetweenlands.api.recipes.IPurifierRecipe;
-import thebetweenlands.api.recipes.ISmokingRackRecipe;
+import thebetweenlands.api.recipes.*;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.recipe.custom.CustomAnimatorRecipes;
-import thebetweenlands.common.recipe.custom.CustomAnimatorRepairableRecipes;
-import thebetweenlands.common.recipe.custom.CustomCompostBinRecipes;
-import thebetweenlands.common.recipe.custom.CustomCrabPotFilterRecipesBubbler;
-import thebetweenlands.common.recipe.custom.CustomCrabPotFilterRecipesSilt;
-import thebetweenlands.common.recipe.custom.CustomDruidAltarRecipes;
-import thebetweenlands.common.recipe.custom.CustomPestleAndMortarRecipes;
-import thebetweenlands.common.recipe.custom.CustomPurifierRecipes;
-import thebetweenlands.common.recipe.custom.CustomRecipes;
+import thebetweenlands.common.recipe.custom.*;
 import thebetweenlands.common.recipe.custom.CustomRecipes.InvalidRecipeException;
-import thebetweenlands.common.recipe.custom.CustomSmokingRackRecipes;
 
 public class CustomRecipeRegistry {
 	private CustomRecipeRegistry() { }
@@ -47,6 +31,7 @@ public class CustomRecipeRegistry {
 	public static CustomRecipes<ISmokingRackRecipe> smokingRackRecipes;
 	public static CustomRecipes<ICrabPotFilterRecipeSilt> crabPotFilterRecipesSilt;
 	public static CustomRecipes<ICrabPotFilterRecipeBubbler> crabPotFilterRecipesBubbler;
+	public static CustomRecipes<ISteepingPotRecipe> steepingPot;
 
 	public static void preInit() {
 		RECIPE_TYPES.add(animatorRecipes = new CustomAnimatorRecipes());
@@ -58,6 +43,7 @@ public class CustomRecipeRegistry {
 		RECIPE_TYPES.add(smokingRackRecipes = new CustomSmokingRackRecipes());
 		RECIPE_TYPES.add(crabPotFilterRecipesSilt = new CustomCrabPotFilterRecipesSilt());
 		RECIPE_TYPES.add(crabPotFilterRecipesBubbler = new CustomCrabPotFilterRecipesBubbler());
+		RECIPE_TYPES.add(steepingPot = new CustomSteepingPotRecipes());
 	}
 
 	public static boolean loadCustomRecipes() {

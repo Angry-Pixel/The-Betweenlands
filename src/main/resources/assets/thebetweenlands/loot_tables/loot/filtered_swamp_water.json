@@ -13,6 +13,86 @@
                "weight":1
             }
          ]
+      },
+       {
+         "name":"angler_tooth",
+         "rolls":1,
+         "conditions":[
+            
+         ],
+         "entries":[
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_misc",
+                "functions":[
+                  {
+                     "function":"set_data",
+                     "data":21
+                  }
+               ],
+               "weight":1
+            }
+         ]
+      },
+       {
+         "name":"lurker_skin",
+         "rolls":1,
+         "conditions":[
+            
+         ],
+         "entries":[
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_misc",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data":4
+                  }
+               ],
+               "weight":1
+            }
+         ]
+      },
+       {
+         "name":"dragonfly_wing",
+         "rolls":1,
+         "conditions":[
+            
+           ],
+         "entries":[
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_misc",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data":3
+                  }
+               ],
+               "weight":1
+            }
+         ]
+      },
+       {
+         "name":"betweenstone_pebble",
+         "rolls":1,
+         "conditions":[
+            
+           ],
+         "entries":[
+            {
+               "type":"item",
+               "name":"thebetweenlands:items_misc",
+               "functions":[
+                  {
+                     "function":"set_data",
+                     "data":50
+                  }
+               ],
+               "weight":1
+            }
+         ]
       }
    ]
 }
