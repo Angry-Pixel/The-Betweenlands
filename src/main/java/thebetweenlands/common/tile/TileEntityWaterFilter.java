@@ -48,29 +48,35 @@ public class TileEntityWaterFilter extends TileEntityBasicInventory implements I
 		if (!getWorld().isRemote && getWorld().getTotalWorldTime()%10 == 0) {
 			EnumFacing facing = EnumFacing.DOWN;
 			TileEntity tileToFill = getWorld().getTileEntity(pos.offset(facing));
+			
 			if (tileToFill != null && tileToFill.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing.getOpposite())) {
 				IFluidHandler recepticle = tileToFill.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing.getOpposite());
 				IFluidTankProperties[] tankProperties = recepticle.getTankProperties();
+				
 				if (tankProperties != null) {
 					for (IFluidTankProperties properties : tankProperties) {
-						if (properties != null && properties.canFill() && properties.getCapacity() > 0) {
-							FluidStack contents = properties.getContents();
-							if (tank.getFluid() != null) {
-								if (contents == null || contents.amount <= properties.getCapacity() - 20 && contents.containsFluid(new FluidStack(getResultFluid(), 0))) {
-									recepticle.fill(new FluidStack(getResultFluid(), 20), true);
-									 if(hasMossFilter() || hasSilkFilter()) {
-										 addByProductRandom(getWorld().rand, tank.getFluid().getFluid());
-										 damageFilter(1);
-									 }
-									tank.drain(new FluidStack(tank.getFluid(), 20), true);
+						
+						if (properties != null && (properties.canFill() || properties.getCapacity() > 0)) {
+							FluidStack tankFluid = this.tank.drain(20, false);
+							
+							if (tankFluid != null) {
+								int filled = recepticle.fill(this.getResultFluid(tankFluid), true);
+								
+								FluidStack drained = this.tank.drain(filled, true);
 
-									if(!getFluidAnimation())
-										setFluidAnimation(true);
-
-									markForUpdate();
+								if(drained != null && this.hasFilter()) {
+									if(drained.amount >= 20) {
+										addByProductRandom(getWorld().rand, drained.getFluid());
+									}
+									
+									damageFilter(1);
 								}
-							}
-							else if(tank.getFluid() == null && getFluidAnimation()) {
+								
+								if(!getFluidAnimation())
+									setFluidAnimation(true);
+
+								markForUpdate();
+							} else if((tankFluid == null || tankFluid.amount == 0) && getFluidAnimation()) {
 								setFluidAnimation(false);
 								markForUpdate();
 							}	
@@ -86,12 +92,16 @@ public class TileEntityWaterFilter extends TileEntityBasicInventory implements I
 		}
 	}
 
-	public FluidStack getResultFluid() {
-		if (tank.getFluid().getFluid() == FluidRegistry.STAGNANT_WATER)
-			return new FluidStack(FluidRegistry.SWAMP_WATER, 0);
-		if (tank.getFluid().getFluid() == FluidRegistry.SWAMP_WATER)
-			return new FluidStack(FluidRegistry.CLEAN_WATER, 0);
-		return tank.getFluid();
+	public FluidStack getResultFluid(FluidStack fluid) {
+		if(this.hasFilter()) {
+			if (fluid.getFluid() == FluidRegistry.STAGNANT_WATER) {
+				return new FluidStack(FluidRegistry.SWAMP_WATER, fluid.amount);
+			}
+			if (fluid.getFluid() == FluidRegistry.SWAMP_WATER) {
+				return new FluidStack(FluidRegistry.CLEAN_WATER, fluid.amount);
+			}
+		}
+		return fluid.copy();
 	}
 
 	public void setFluidAnimation(boolean showFluid) {
@@ -149,6 +159,10 @@ public class TileEntityWaterFilter extends TileEntityBasicInventory implements I
 				getWorld().playEvent(2001, getPos(), Block.getIdFromBlock(BlockRegistry.WEEDWOOD_PLANKS));
 			}
 		}
+	}
+	
+	public boolean hasFilter() {
+		return this.hasMossFilter() || this.hasSilkFilter();
 	}
 
 	public boolean hasMossFilter() {
