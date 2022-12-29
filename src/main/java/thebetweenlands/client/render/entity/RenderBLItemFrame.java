@@ -31,11 +31,9 @@ import net.minecraft.world.storage.MapData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.EntityBLItemFrame;
-import thebetweenlands.common.entity.mobs.EntityAnadia;
-import thebetweenlands.common.entity.mobs.EntityFirefly;
-import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
-import thebetweenlands.common.entity.mobs.EntityTinySludgeWormHelper;
+import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.item.EnumBLDyeColor;
+import thebetweenlands.common.item.misc.ItemChiromawTame;
 import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.item.misc.ItemMobAnadia;
 import thebetweenlands.common.lib.ModInfo;
@@ -160,8 +158,14 @@ public class RenderBLItemFrame extends RenderItemFrame
                         if (entity != null && !(entity instanceof EntityTinySludgeWorm) && !(entity instanceof EntityFirefly)) {
                             NBTTagCompound nbt = itemMob.getEntityData(itemstack);
 
-                            if(nbt != null) {
-                                entity.deserializeNBT(nbt);
+                            if(entity instanceof EntityChiromawTame) {
+                                if(nbt != null && nbt.hasKey("Electric")) {
+                                    ((EntityChiromawTame) entity).setElectricBoogaloo(nbt.getBoolean("Electric"));
+                                }
+                            } else if(entity instanceof EntityAnadia) {
+                                if(nbt != null) {
+                                    entity.deserializeNBT(nbt);
+                                }
                             }
 
                             float horizontalOffset = 0;
