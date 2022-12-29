@@ -45,7 +45,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
-public class EntityCaveFish extends EntityCreature implements IEntityBL {
+public class EntityCaveFish extends EntityCreature implements IEntityBL, net.minecraft.entity.passive.IAnimals {
 
 	protected static final DataParameter<Boolean> IS_LEADER = EntityDataManager.<Boolean>createKey(EntityCaveFish.class, DataSerializers.BOOLEAN);
 	private EntityAIWander wanderAbout;

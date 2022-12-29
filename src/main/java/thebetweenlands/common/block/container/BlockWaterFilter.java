@@ -3,6 +3,7 @@ package thebetweenlands.common.block.container;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
@@ -35,6 +36,7 @@ public class BlockWaterFilter extends BlockContainer {
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
+		setSoundType(SoundType.WOOD);
 	}
 
 	@Override

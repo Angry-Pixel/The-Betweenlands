@@ -533,6 +533,167 @@ tile.thebetweenlands.lyestone.name=Щелочной камень
 tile.thebetweenlands.mist_bridge.name=Туманный мост
 tile.thebetweenlands.shadow_walker.name=Тень
 
+tile.thebetweenlands.weedwood_planks_treated.name=Обработанные сорные доски
+tile.thebetweenlands.weedwood_plank_stairs_treated.name=Ступеньки из обработанных сорных досок
+tile.thebetweenlands.weedwood_plank_slab_treated.name=Плита из обработанных сорных досок
+tile.thebetweenlands.weedwood_plank_fence_treated.name=Забор из обработанных сорных досок
+tile.thebetweenlands.weedwood_plank_fence_gate_treated.name=Калитка из обработанных сорных досок
+
+tile.thebetweenlands.rubber_tree_planks_treated.name=Обработанные доски каучукового дерева
+tile.thebetweenlands.rubber_tree_plank_stairs_treated.name=Ступеньки из обработанных досок каучукового дерева
+tile.thebetweenlands.rubber_tree_plank_slab_treated.name=Плита из обработанных досок каучукового дерева
+tile.thebetweenlands.rubber_tree_plank_fence_treated.name=Забор из обработанных досок каучукового дерева
+tile.thebetweenlands.rubber_tree_plank_fence_gate_treated.name=Калитка из обработанных досок каучукового дерева
+
+tile.thebetweenlands.giant_root_planks_treated.name= Обработанные доски гигантского корня
+tile.thebetweenlands.giant_root_plank_stairs_treated.name=Ступеньки из обработанных досок гигантского корня
+tile.thebetweenlands.giant_root_plank_slab_treated.name=Плита из обработанных досок гигантского корня
+tile.thebetweenlands.giant_root_plank_fence_treated.name=Забор из обработанных досок гигантского корня
+tile.thebetweenlands.giant_root_plank_fence_gate_treated.name=Калитка из обработанных досок гигантского корня
+
+tile.thebetweenlands.hearthgrove_planks_treated.name=Обработанные доски огненного дерева
+tile.thebetweenlands.hearthgrove_plank_stairs_treated.name=Ступеньки из обработанных досок огненного дерева
+tile.thebetweenlands.hearthgrove_plank_slab_treated.name=Плита из обработанных досок огненного дерева
+tile.thebetweenlands.hearthgrove_plank_fence_treated.name=Забор из обработанных досок огненного дерева
+tile.thebetweenlands.hearthgrove_plank_fence_gate_treated.name=Калитка из обработанных досок огненного дерева
+
+tile.thebetweenlands.nibbletwig_planks_treated.name=Обработанные доски облезлого дерева
+tile.thebetweenlands.nibbletwig_plank_stairs_treated.name=Ступеньки из обработанных досок
+tile.thebetweenlands.nibbletwig_plank_slab_treated.name=Плита из обработанных досок облезлого дерева
+tile.thebetweenlands.nibbletwig_plank_fence_treated.name=Забор из обработанных досок облезлого дерева
+tile.thebetweenlands.nibbletwig_plank_fence_gate_treated.name=Калитка из обработанных досок облезлого дерева
+
+tile.thebetweenlands.rotten_planks_treated.name=Обработанные гнилые доски
+tile.thebetweenlands.rotten_plank_stairs_treated.name=Ступеньки
+tile.thebetweenlands.rotten_plank_slab_treated.name=Плита
+tile.thebetweenlands.rotten_plank_fence_treated.name=Забор
+tile.thebetweenlands.rotten_plank_fence_gate_treated.name=Калитка
+
+tile.thebetweenlands.samite.brown_rust.name=Ржаво-коричневая парча
+tile.thebetweenlands.samite.cadmium_green.name=Кадмиево-зеленая парча
+tile.thebetweenlands.samite.camelot_magenta.name=Темно-фуксиевая парча
+tile.thebetweenlands.samite.caribbean_green.name=Персидско-зеленая парча
+tile.thebetweenlands.samite.champagne.name=Шампановая парча
+tile.thebetweenlands.samite.dull_lavender.name=Васильковая парча
+tile.thebetweenlands.samite.elm_cyan.name=Бирюзовая парча
+tile.thebetweenlands.samite.lavender_blue.name=Бледно-васильковая парча
+tile.thebetweenlands.samite.maroon.name=Багровая парча
+tile.thebetweenlands.samite.midnight_purple.name=Полночно-пурпурная парча
+tile.thebetweenlands.samite.pewter_grey.name=Оловянно-серая парча
+tile.thebetweenlands.samite.raisin_black.name=Изюмно-черная парча
+tile.thebetweenlands.samite.saffron.name=Шафранная парча
+tile.thebetweenlands.samite.shadow_green.name=Тускло-зеленая парча
+tile.thebetweenlands.samite.sushi_green.name=Болотно-зеленая парча
+tile.thebetweenlands.samite.vivid_tangerine.name=Оранжево-розовая парча
+
+tile.thebetweenlands.samite_canvas_panel.brown_rust.name=Ржаво-коричневая панель из парчи
+tile.thebetweenlands.samite_canvas_panel.cadmium_green.name=Кадмиево-зеленая панель из парчи
+tile.thebetweenlands.samite_canvas_panel.camelot_magenta.name=Темно-фуксиевая панель из парчи
+tile.thebetweenlands.samite_canvas_panel.caribbean_green.name=Персидско-зеленая панель из парчи
+tile.thebetweenlands.samite_canvas_panel.champagne.name=Шампановая панель из парчи
+tile.thebetweenlands.samite_canvas_panel.dull_lavender.name=Васильковая панель из парчи
+tile.thebetweenlands.samite_canvas_panel.elm_cyan.name=Бирюзовая панель из парчи
+tile.thebetweenlands.samite_canvas_panel.lavender_blue.name=Бледно-васильковая панель из парчи
+tile.thebetweenlands.samite_canvas_panel.maroon.name=Багровая панель из парчи
+tile.thebetweenlands.samite_canvas_panel.midnight_purple.name=Полночно-пурпурная панель из парчи
+tile.thebetweenlands.samite_canvas_panel.pewter_grey.name=Оловянно-серая панель из парчи
+tile.thebetweenlands.samite_canvas_panel.raisin_black.name=Изюмно-черная панель из парчи
+tile.thebetweenlands.samite_canvas_panel.saffron.name=Шафранная панель из парчи
+tile.thebetweenlands.samite_canvas_panel.shadow_green.name=Тускло-зеленая панель из парчи
+tile.thebetweenlands.samite_canvas_panel.sushi_green.name=Болотно-зеленая панель из парчи
+tile.thebetweenlands.samite_canvas_panel.vivid_tangerine.name=Оранжево-розовая панель из парчи
+
+tile.thebetweenlands.mud_brick_shingle_stained.brown_rust.name=Ржаво-коричневая грязевая черепица
+tile.thebetweenlands.mud_brick_shingle_stained.cadmium_green.name=Кадмиево-зеленая грязевая черепица
+tile.thebetweenlands.mud_brick_shingle_stained.camelot_magenta.name=Темно-фуксиевая грязевая черепица
+tile.thebetweenlands.mud_brick_shingle_stained.caribbean_green.name=Персидско-зеленая грязевая черепица
+tile.thebetweenlands.mud_brick_shingle_stained.champagne.name=Шампановая грязевая черепица
+tile.thebetweenlands.mud_brick_shingle_stained.dull_lavender.name=Васильковая грязевая черепица
+tile.thebetweenlands.mud_brick_shingle_stained.elm_cyan.name=Бирюзовая грязевая черепица
+tile.thebetweenlands.mud_brick_shingle_stained.lavender_blue.name=Бледно-васильковая грязевая черепица
+tile.thebetweenlands.mud_brick_shingle_stained.maroon.name=Багровая грязевая черепица
+tile.thebetweenlands.mud_brick_shingle_stained.midnight_purple.name=Полночно-пурпурная грязевая черепица
+tile.thebetweenlands.mud_brick_shingle_stained.pewter_grey.name=Оловянно-серая грязевая черепица
+tile.thebetweenlands.mud_brick_shingle_stained.raisin_black.name=Изюмно-черная грязевая черепица
+tile.thebetweenlands.mud_brick_shingle_stained.saffron.name=Шафранная грязевая черепица
+tile.thebetweenlands.mud_brick_shingle_stained.shadow_green.name=Тускло-зеленая грязевая черепица
+tile.thebetweenlands.mud_brick_shingle_stained.sushi_green.name=Болотно-зеленая грязевая черепица
+tile.thebetweenlands.mud_brick_shingle_stained.vivid_tangerine.name=Оранжево-розовая грязевая черепица
+
+tile.thebetweenlands.mud_brick_shingle_slab_stained_brown_rust.name=Ржаво-коричневая плита из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_slab_stained_cadmium_green.name=Кадмиево-зеленая плита из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_slab_stained_camelot_magenta.name=Темно-фуксиевая плита из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_slab_stained_caribbean_green.name=Персидско-зеленая плита из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_slab_stained_champagne.name=Шампановая плита из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_slab_stained_dull_lavender.name=Васильковая плита из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_slab_stained_elm_cyan.name=Бирюзовая плита из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_slab_stained_lavender_blue.name=Бледно-васильковая плита из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_slab_stained_maroon.name=Багровая плита из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_slab_stained_midnight_purple.name=Полночно-пурпурная плита из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_slab_stained_pewter_grey.name=Оловянно-серая плита из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_slab_stained_raisin_black.name=Изюмно-черная Mud плита из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_slab_stained_saffron.name=Шафранная плита из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_slab_stained_shadow_green.name=Тускло-зеленая плита из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_slab_stained_sushi_green.name=Болотно-зеленая плита из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_slab_stained_vivid_tangerine.name=Оранжево-розовая плита из грязевой черепицы
+
+tile.thebetweenlands.mud_brick_shingle_stairs_stained_brown_rust.name=Ржаво-коричневые ступеньки из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_stairs_stained_cadmium_green.name=Кадмиево-зеленые ступеньки из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_stairs_stained_camelot_magenta.name=Темно-фуксиевые ступеньки из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_stairs_stained_caribbean_green.name=Персидско-зеленые ступеньки из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_stairs_stained_champagne.name=Шампановые ступеньки из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_stairs_stained_dull_lavender.name=Васильковые ступеньки из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_stairs_stained_elm_cyan.name=Бирюзовые ступеньки из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_stairs_stained_lavender_blue.name=Бледно-лавандовые ступеньки из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_stairs_stained_maroon.name=Багровые ступеньки из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_stairs_stained_midnight_purple.name=Полночно-пурпурные ступеньки из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_stairs_stained_pewter_grey.name=Оловянно-серые ступеньки из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_stairs_stained_raisin_black.name=Изюмно-черные ступеньки из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_stairs_stained_saffron.name=Шафранные ступеньки из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_stairs_stained_shadow_green.name=Тускло-зеленые ступеньки из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_stairs_stained_sushi_green.name=Болотно-зеленые ступеньки из грязевой черепицы
+tile.thebetweenlands.mud_brick_shingle_stairs_stained_vivid_tangerine.name=Оранжево-розовые ступеньки из грязевой черепицы
+
+tile.thebetweenlands.filtered_silt_glass_stained.brown_rust.name=Ржаво-коричневое стекло из очищенного ила
+tile.thebetweenlands.filtered_silt_glass_stained.cadmium_green.name=Кадмиево-зеленое стекло из очищенного ила
+tile.thebetweenlands.filtered_silt_glass_stained.camelot_magenta.name=Темно-фуксиевое стекло из очищенного ила
+tile.thebetweenlands.filtered_silt_glass_stained.caribbean_green.name=Персидско-зеленое стекло из очищенного ила
+tile.thebetweenlands.filtered_silt_glass_stained.champagne.name=Шампановое стекло из очищенного ила
+tile.thebetweenlands.filtered_silt_glass_stained.dull_lavender.name=Васильковое стекло из очищенного ила
+tile.thebetweenlands.filtered_silt_glass_stained.elm_cyan.name=Бирюзовое стекло из очищенного ила
+tile.thebetweenlands.filtered_silt_glass_stained.lavender_blue.name=Бледно-васильковое стекло из очищенного ила
+tile.thebetweenlands.filtered_silt_glass_stained.maroon.name=Багровое стекло из очищенного ила
+tile.thebetweenlands.filtered_silt_glass_stained.midnight_purple.name=Полночно-пурпурное стекло из очищенного ила
+tile.thebetweenlands.filtered_silt_glass_stained.pewter_grey.name=Оловянно-серое стекло из очищенного ила
+tile.thebetweenlands.filtered_silt_glass_stained.raisin_black.name=Изюмно-черное стекло из очищенного ила
+tile.thebetweenlands.filtered_silt_glass_stained.saffron.name=Шафранное стекло из очищенного ила
+tile.thebetweenlands.filtered_silt_glass_stained.shadow_green.name=Блекло-зеленое стекло из очищенного ила
+tile.thebetweenlands.filtered_silt_glass_stained.sushi_green.name=Болотно-зеленое стекло из очищенного ила
+tile.thebetweenlands.filtered_silt_glass_stained.vivid_tangerine.name=Оранжево-розовое стекло из очищенного ила
+
+tile.thebetweenlands.reed_mat_colored.brown_rust.name=Ржаво-коричневый тростниковый коврик
+tile.thebetweenlands.reed_mat_colored.cadmium_green.name=Кадмиево-зеленый тростниковый коврик
+tile.thebetweenlands.reed_mat_colored.camelot_magenta.name=Темно-фуксиевый тростниковый коврик
+tile.thebetweenlands.reed_mat_colored.caribbean_green.name=Персидско-зеленый тростниковый коврик
+tile.thebetweenlands.reed_mat_colored.champagne.name=Шампановый тростниковый коврик
+tile.thebetweenlands.reed_mat_colored.dull_lavender.name=Васильковый тростниковый коврик
+tile.thebetweenlands.reed_mat_colored.elm_cyan.name=Бирюзовый тростниковый коврик
+tile.thebetweenlands.reed_mat_colored.lavender_blue.name=Бледно-васильковый тростниковый коврик
+tile.thebetweenlands.reed_mat_colored.maroon.name=Багровый тростниковый коврик
+tile.thebetweenlands.reed_mat_colored.midnight_purple.name=Полночно-пурпурный тростниковый коврик
+tile.thebetweenlands.reed_mat_colored.pewter_grey.name=Оловянно-серый тростниковый коврик
+tile.thebetweenlands.reed_mat_colored.raisin_black.name=Изюмно-черный тростниковый коврик
+tile.thebetweenlands.reed_mat_colored.saffron.name=Шафранный тростниковый коврик
+tile.thebetweenlands.reed_mat_colored.shadow_green.name=Тускло-зеленый тростниковый коврик
+tile.thebetweenlands.reed_mat_colored.sushi_green.name=Болотно-зеленый тростниковый коврик
+tile.thebetweenlands.reed_mat_colored.vivid_tangerine.name=Оранжево-розовый тростниковый коврик
+
+tile.thebetweenlands.steeping_pot.name=Горшок для готовки
+tile.thebetweenlands.grub_hub.name=Распылитель экстракта
+tile.thebetweenlands.water_filter.name=Водяной фильтр
+tile.thebetweenlands.moth_house.name=Червоводня
+tile.thebetweenlands.filtered_silt_glass_jar.name=Банка из очищенного илового стекла
+
 # Items
 
 item.thebetweenlands.enum.unknown.name=Что то пошло не так :(
@@ -984,6 +1145,64 @@ item.thebetweenlands.olm_egg_raw.name=Яйца олмов
 item.thebetweenlands.olm_egg_cooked.name=Печеные яйца олмов
 item.thebetweenlands.olmlette_mixture.name=Смесь для Олмлета
 item.thebetweenlands.olmlette.name=Олмлет
+item.thebetweenlands.pheromone_thorax.name=Пахучий торакс
+item.thebetweenlands.silk_grub.name=Шелкопряд
+item.thebetweenlands.silk_grub_cocoon.name=Кокон шелкопряда
+item.thebetweenlands.silk_thread.name=Шелковая нить
+item.thebetweenlands.silk_bundle.name=Шелковый пакетик
+item.thebetweenlands.silk_bundle_dirty.name=Грязный шелковый пакетик
+item.thebetweenlands.silk_mask.name=Шелковая маска
+item.thebetweenlands.silk_filter.name=Фильтр из шелка
+item.thebetweenlands.moss_filter.name=Фильтр из мха
+
+# Dyes
+item.thebetweenlands.dye.brown_rust.name=Ржаво-коричневый краситель
+item.thebetweenlands.dye.cadmium_green.name=Кадмиево-зеленый краситель
+item.thebetweenlands.dye.camelot_magenta.name=Темно-фуксиевый краситель
+item.thebetweenlands.dye.caribbean_green.name=Персидско-зеленый краситель
+item.thebetweenlands.dye.champagne.name=Шампановый краситель
+item.thebetweenlands.dye.dull_lavender.name=Васильковый краситель
+item.thebetweenlands.dye.elm_cyan.name=Бирюзовый краситель
+item.thebetweenlands.dye.lavender_blue.name=Бледно-васильковый краситель
+item.thebetweenlands.dye.maroon.name=Багровый краситель
+item.thebetweenlands.dye.midnight_purple.name=Полночно-пурпурный краситель
+item.thebetweenlands.dye.pewter_grey.name=Оловянно-серый краситель
+item.thebetweenlands.dye.raisin_black.name=Изюмно-черный краситель
+item.thebetweenlands.dye.saffron.name=Шафранный краситель
+item.thebetweenlands.dye.shadow_green.name=Тускло-зеленый краситель
+item.thebetweenlands.dye.sushi_green.name=Болотно-зеленый краситель
+item.thebetweenlands.dye.vivid_tangerine.name=Оранжево-розовый краситель
+
+# Item Frames
+item.thebetweenlands.item_frame.brown_rust.name=Ржаво-коричневая рамка
+item.thebetweenlands.item_frame.cadmium_green.name=Кадмиево-зеленая рамка
+item.thebetweenlands.item_frame.camelot_magenta.name=Темно-фуксиевая рамка
+item.thebetweenlands.item_frame.caribbean_green.name=Персидско-зеленая рамка
+item.thebetweenlands.item_frame.champagne.name=Шампановая рамка
+item.thebetweenlands.item_frame.dull_lavender.name=Васильковая рамка
+item.thebetweenlands.item_frame.elm_cyan.name=Бирюзовая рамка
+item.thebetweenlands.item_frame.lavender_blue.name=Бледно-васильковая рамка
+item.thebetweenlands.item_frame.maroon.name=Maroon Item Frame
+item.thebetweenlands.item_frame.midnight_purple.name=Полночно-пурпурная рамка
+item.thebetweenlands.item_frame.pewter_grey.name=Оловянно-серая рамка
+item.thebetweenlands.item_frame.raisin_black.name=Изюмно-черная рамка
+item.thebetweenlands.item_frame.saffron.name=Шафранная рамка
+item.thebetweenlands.item_frame.shadow_green.name=Тускло-зеленая рамка
+item.thebetweenlands.item_frame.sushi_green.name=Болотно-зеленая рамка
+item.thebetweenlands.item_frame.vivid_tangerine.name=Оранжево-розовая рамка
+
+# Item brews
+item.thebetweenlands.drinkable_brew.nettle_soup.name=Крапивный суп
+item.thebetweenlands.drinkable_brew.nettle_tea.name=Крапивный чай
+item.thebetweenlands.drinkable_brew.pheromone_extract.name=Экстракт феромона
+item.thebetweenlands.drinkable_brew.swamp_broth.name=Болотный бульон
+item.thebetweenlands.drinkable_brew.sturdy_stock.name=Сытная похлебка
+item.thebetweenlands.drinkable_brew.pear_cordial.name=Наливка из груши
+item.thebetweenlands.drinkable_brew.shamans_brew.name=Шаманье варево
+item.thebetweenlands.drinkable_brew.lake_broth.name=Озерный бульон
+item.thebetweenlands.drinkable_brew.shell_stock.name=Улиточная похлебка
+item.thebetweenlands.drinkable_brew.frog_leg_extract.name=Экстракт лягушачьей ноги
+item.thebetweenlands.drinkable_brew.witch_tea.name=Ведьмин чай
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Зеленый флакон
@@ -1007,6 +1226,51 @@ fluid.stagnant_water=Затхлая вода
 fluid.rubber=Каучук
 fluid.fog=Туман
 fluid.shallowbreath=Дыхание мелководья
+fluid.clean_water=Чистая вода
+fluid.fish_oil=Рыбий жир
+
+# Fluid dyes
+fluid.dye_fluid.brown_rust=Ржаво-коричневый краситель
+fluid.dye_fluid.cadmium_green=Кадмиево-зеленый краситель
+fluid.dye_fluid.camelot_magenta=Темно-фуксиевый краситель
+fluid.dye_fluid.caribbean_green=Персидско-зеленый краситель
+fluid.dye_fluid.champagne=Шампановый краситель
+fluid.dye_fluid.dull_lavender=Васильковый краситель
+fluid.dye_fluid.elm_cyan=Бирюзовый краситель
+fluid.dye_fluid.lavender_blue=Бледно-васильковый краситель
+fluid.dye_fluid.maroon=Багровый краситель
+fluid.dye_fluid.midnight_purple=Полночно-пурпурный краситель
+fluid.dye_fluid.pewter_grey=Оловянно-серый краситель
+fluid.dye_fluid.raisin_black=Изюмно-черный краситель
+fluid.dye_fluid.saffron=Шафранный краситель
+fluid.dye_fluid.shadow_green=Тускло-зеленый краситель
+fluid.dye_fluid.sushi_green=Болотно-зеленый краситель
+fluid.dye_fluid.vivid_tangerine=Оранжево-розовый краситель
+
+item.thebetweenlands.drinkable_brew.nettle_soup.name=Крапивный суп
+item.thebetweenlands.drinkable_brew.nettle_tea.name=Крапивный суп
+item.thebetweenlands.drinkable_brew.pheromone_extract.name=Экстракт феромона
+item.thebetweenlands.drinkable_brew.swamp_broth.name=Болотный бульон
+item.thebetweenlands.drinkable_brew.sturdy_stock.name=Сытная похлебка
+item.thebetweenlands.drinkable_brew.pear_cordial.name=Наливка из груши
+item.thebetweenlands.drinkable_brew.shamans_brew.name=Шаманье варево
+item.thebetweenlands.drinkable_brew.lake_broth.name=Озерный бульон
+item.thebetweenlands.drinkable_brew.shell_stock.name=Улиточная похлебка
+item.thebetweenlands.drinkable_brew.frog_leg_extract.name=Экстракт лягушачьей ноги
+item.thebetweenlands.drinkable_brew.witch_tea.name=Ведьмин чай
+
+# Fluid brews
+fluid.drinkable_brew.nettle_soup=Крапивный суп
+fluid.drinkable_brew.nettle_tea=Крапивный суп
+fluid.drinkable_brew.pheromone_extract=Экстракт феромона
+fluid.drinkable_brew.swamp_broth=Болотный бульон
+fluid.drinkable_brew.sturdy_stock=Сытная похлебка
+fluid.drinkable_brew.pear_cordial=Наливка из груши
+fluid.drinkable_brew.shamans_brew=Шаманье варево
+fluid.drinkable_brew.lake_broth=Озерный бульон
+fluid.drinkable_brew.shell_stock=Улиточная похлебка
+fluid.drinkable_brew.frog_leg_extract=Экстракт лягушачьей ноги
+fluid.drinkable_brew.witch_tea=Ведьмин чай
 
 # Creative Tabs
 itemGroup.thebetweenlands.block=The Betweenlands: Блоки
@@ -2137,4 +2401,3 @@ tooltip.bl.chimp_ruler.homez=Нуль Z: %s
 chat.chimp_ruler_x=Цель X: %s
 chat.chimp_ruler_y=Цель Y: %s
 chat.chimp_ruler_z=Цель Z: %s
-

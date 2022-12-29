@@ -29,7 +29,7 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
 	public static final int SLOT_GRUBS = 0;
 	public static final int SLOT_SILK = 1;
 	
-	protected static final int MAX_GRUBS = 5;
+	protected static final int MAX_GRUBS = 6;
 	protected static final int MAX_SILK_PER_GRUB = 3;
 	protected static final int BASE_TICKS_PER_SILK = 160;
 	
@@ -134,8 +134,6 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
         }
 
         if (!this.world.isRemote) {
-        	System.out.println("Stage: " + this.getSilkProductionStage() + "/" + this.getSilkRenderStage() + " Grubs: " + this.getStackInSlot(SLOT_GRUBS).getCount() + " Silk: " + this.getStackInSlot(SLOT_SILK).getCount() + " Time: " + this.productionTime);
-        	
 			// because the player is always null unless the world is loaded but block NBT is loaded before grrrrr
 			if(placerUUID != null && getPlacer() == null && world.getTotalWorldTime() % 20 == 0) {
 				if(updatePlacerFromUUID()) {
@@ -174,11 +172,15 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
                     markForUpdate();
 
                     this.resetProductionTime();
+                    
+                    this.markDirty();
                 }
             }
             
             if(wasWorking != this.isWorking) {
             	this.markForUpdate();
+            	
+            	this.markDirty();
             }
         }
     }
@@ -195,6 +197,12 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
     	ItemStack grubStack = this.getStackInSlot(SLOT_GRUBS);
     	ItemStack silkStack = this.getStackInSlot(SLOT_SILK);
     	return grubStack.getCount() > 0 ? silkStack.getCount() / grubStack.getCount() : 0;
+    }
+    
+    public boolean isSilkProductionFinished() {
+    	ItemStack grubStack = this.getStackInSlot(SLOT_GRUBS);
+    	ItemStack silkStack = this.getStackInSlot(SLOT_SILK);
+    	return silkStack.getCount() >= Math.min(MAX_GRUBS, grubStack.getCount()) * MAX_SILK_PER_GRUB;
     }
     
     public int getSilkRenderStage() {
@@ -251,10 +259,10 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
     public int addGrubs(ItemStack stack) {
     	int count = stack.getCount();
     	
-        int grubsAdded = count - this.inventoryHandler.insertItem(SLOT_GRUBS, stack, false).getCount();
+        int grubsAdded = count - this.inventoryHandler.insertItem(SLOT_GRUBS, stack.copy(), false).getCount();
 
-        markForUpdate();
-
+    	this.markDirty();
+    	
         return grubsAdded;
     }
 

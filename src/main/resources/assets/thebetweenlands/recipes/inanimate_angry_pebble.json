@@ -10,10 +10,8 @@
       "data": 18
     },
     {
-      "item": "thebetweenlands:betweenstone_button"
-    },
-    {
-      "item": "thebetweenlands:betweenstone"
+      "item": "thebetweenlands:items_misc",
+      "data": 50
     }
   ],
   "result": {

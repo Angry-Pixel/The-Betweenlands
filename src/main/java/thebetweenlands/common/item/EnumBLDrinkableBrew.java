@@ -91,7 +91,6 @@ public enum EnumBLDrinkableBrew implements IStringSerializable
 	/**
 	 * Gets the RGB color corresponding to this brew color.
 	 */
-	@SideOnly(Side.CLIENT)
 	public int getColorValue() {
 		return this.colorValue;
 	}

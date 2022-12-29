@@ -30,7 +30,7 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityFrog extends EntityCreature implements IEntityBL {
+public class EntityFrog extends EntityCreature implements IEntityBL, net.minecraft.entity.passive.IAnimals {
 	public static final IAttribute FROG_SKIN_ATTRIB = (new RangedAttribute(null, "bl.frogSkin", 0, 0, 5)).setDescription("Frog skin").setShouldWatch(true);
 
 	private static final DataParameter<Byte> DW_SWIM_STROKE = EntityDataManager.createKey(EntityFrog.class, DataSerializers.BYTE);

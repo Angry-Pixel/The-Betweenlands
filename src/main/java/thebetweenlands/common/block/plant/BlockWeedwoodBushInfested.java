@@ -186,4 +186,9 @@ public class BlockWeedwoodBushInfested extends BlockWeedwoodBush {
 			}
 		}
 	}
+	
+	@Override
+	public boolean canBeDestroyedByPuddles(World world, BlockPos pos, IBlockState state) {
+		return true;
+	}
 }

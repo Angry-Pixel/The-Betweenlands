@@ -37,7 +37,7 @@ import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.entity.movement.PathNavigateFlyingBL;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityPuffin extends EntityCreature implements IEntityBL {
+public class EntityPuffin extends EntityCreature implements IEntityBL, net.minecraft.entity.passive.IAnimals {
 
 	private static final DataParameter<Boolean> IS_HOVERING = EntityDataManager.createKey(EntityPuffin.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_DIVING = EntityDataManager.createKey(EntityPuffin.class, DataSerializers.BOOLEAN);

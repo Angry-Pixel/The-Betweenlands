@@ -45,7 +45,7 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityEmberlingWild extends EntityMob implements IEntityMultiPart, IEntityBL{
+public class EntityEmberlingWild extends EntityMob implements IEntityMultiPart, IEntityBL, net.minecraft.entity.passive.IAnimals {
 
 	public MultiPartEntityPart[] tailPart;
 	private static final DataParameter<Boolean> IS_FLAME_ATTACKING = EntityDataManager.<Boolean>createKey(EntityEmberlingWild.class, DataSerializers.BOOLEAN);
