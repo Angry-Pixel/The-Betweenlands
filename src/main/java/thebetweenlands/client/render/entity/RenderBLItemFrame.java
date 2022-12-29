@@ -1,7 +1,6 @@
 package thebetweenlands.client.render.entity;
 
 import javax.annotation.Nullable;
-import javax.annotation.Resource;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
@@ -17,13 +16,10 @@ import net.minecraft.client.renderer.entity.RenderItemFrame;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
+import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.item.EntityItemFrame;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemCompass;
-import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -31,11 +27,9 @@ import net.minecraft.world.storage.MapData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.EntityBLItemFrame;
-import thebetweenlands.common.entity.mobs.*;
+import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.item.EnumBLDyeColor;
-import thebetweenlands.common.item.misc.ItemChiromawTame;
 import thebetweenlands.common.item.misc.ItemMob;
-import thebetweenlands.common.item.misc.ItemMobAnadia;
 import thebetweenlands.common.lib.ModInfo;
 
 @SideOnly(Side.CLIENT)
@@ -155,7 +149,7 @@ public class RenderBLItemFrame extends RenderItemFrame
                         ItemMob itemMob = (ItemMob)itemstack.getItem();
                         Entity entity = itemMob.createCapturedEntity(itemFrame.world, 0, 0, 0, itemstack, false);
 
-                        if (entity != null && !(entity instanceof EntityTinySludgeWorm) && !(entity instanceof EntityFirefly)) {
+                        if (entity != null && !(entity instanceof IEntityMultiPart)) {
                             float horizontalOffset = 0;
 
                             if(entity instanceof EntityAnadia) {
