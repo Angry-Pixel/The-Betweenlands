@@ -26,12 +26,92 @@ import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockHollowLog extends BlockHorizontal {
+	public static final float thickness = 0.125f;
+	public static final AxisAlignedBB TOP_BOUNDING_BOX = new AxisAlignedBB(0, 1, 0, 1, 1 - thickness, 1);
+	public static final AxisAlignedBB BOTTOM_BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, thickness, 1);
+
+	public static final AxisAlignedBB SOUTH_BOUNDING_BOX = new AxisAlignedBB(0, 0, 1, 1, 1, 1 - thickness);
+	public static final AxisAlignedBB NORTH_BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 1, thickness);
+
+	public static final AxisAlignedBB EAST_BOUNDING_BOX = new AxisAlignedBB(1, 0, 0, 1 - thickness, 1, 1);
+	public static final AxisAlignedBB WEST_BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, thickness, 1, 1);
+	
 	public BlockHollowLog() {
 		super(Material.WOOD);
 		setHardness(0.8F);
 		setSoundType(SoundType.WOOD);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
 		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+	}
+	
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return Block.FULL_BLOCK_AABB;
+	}
+
+	protected void addBox(EnumFacing facing, IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState) {
+		AxisAlignedBB box;
+		switch(facing) {
+			case UP:
+				box = TOP_BOUNDING_BOX;
+				break;
+			case DOWN:
+				box = BOTTOM_BOUNDING_BOX;
+				break;
+			case NORTH:
+				box = NORTH_BOUNDING_BOX;
+				break;
+			case SOUTH:
+				box = SOUTH_BOUNDING_BOX;
+				break;
+			case EAST:
+				box = EAST_BOUNDING_BOX;
+				break;
+			case WEST:
+				box = WEST_BOUNDING_BOX;
+				break;
+			default:
+				return;
+		}
+		// dont add collision to faces where they are connected to other logs
+		if(facing.getAxis() != EnumFacing.Axis.Y && worldIn.isBlockLoaded(pos.offset(facing))) {
+			IBlockState lstate = worldIn.getBlockState(pos.offset(facing));
+			if(lstate.getBlock() == BlockRegistry.HOLLOW_LOG && lstate.getValue(FACING).getAxis() != facing.getAxis()) {
+				return;
+			} 
+		}
+		addCollisionBoxToList(pos, entityBox, collidingBoxes, box);
+	}
+		
+	@Override
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState) {
+		
+		EnumFacing facing = state.getValue(FACING);
+
+		//don't do any special checks for top and bottom faces
+		addCollisionBoxToList(pos, entityBox, collidingBoxes, TOP_BOUNDING_BOX);
+		addCollisionBoxToList(pos, entityBox, collidingBoxes, BOTTOM_BOUNDING_BOX);
+		
+		//only add collision to sides that should be solid
+		switch(facing) {
+			case NORTH:
+			case SOUTH:
+				addBox(EnumFacing.EAST, state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
+				addBox(EnumFacing.WEST, state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
+				break;
+			case EAST:
+			case WEST:
+				addBox(EnumFacing.NORTH, state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
+				addBox(EnumFacing.SOUTH, state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
+				break;
+			default:
+				//don't do any special collision checks for an invalid log
+				addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_BOUNDING_BOX);
+				addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_BOUNDING_BOX);
+				addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_BOUNDING_BOX);
+				addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_BOUNDING_BOX);
+				break;
+		}
 	}
 
 	@Override
@@ -53,7 +133,6 @@ public class BlockHollowLog extends BlockHorizontal {
 	public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return false;
 	}
-
 
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
