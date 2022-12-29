@@ -25,7 +25,7 @@ import thebetweenlands.common.entity.ai.EntityAIJumpRandomly;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityRootSprite extends EntityCreature implements IEntityBL {
+public class EntityRootSprite extends EntityCreature implements IEntityBL, net.minecraft.entity.passive.IAnimals {
 	private static final byte EVENT_STEP = 40;
 
 	private float jumpHeightOverride = -1;

@@ -24,7 +24,7 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.EntityShock;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityJellyfishCave extends EntityJellyfish implements IMob {
+public class EntityJellyfishCave extends EntityJellyfish implements IMob, net.minecraft.entity.passive.IAnimals {
 	protected static final byte EVENT_SPARK = 80;
 
 	public EntityJellyfishCave(World world) {
