@@ -153,21 +153,9 @@ public class RenderBLItemFrame extends RenderItemFrame
 
                     if(itemstack.getItem() instanceof ItemMob) {
                         ItemMob itemMob = (ItemMob)itemstack.getItem();
-                        Entity entity = EntityList.createEntityByIDFromName(itemMob.getCapturedEntityId(itemstack), itemFrame.world);
+                        Entity entity = itemMob.createCapturedEntity(itemFrame.world, 0, 0, 0, itemstack, false);
 
                         if (entity != null && !(entity instanceof EntityTinySludgeWorm) && !(entity instanceof EntityFirefly)) {
-                            NBTTagCompound nbt = itemMob.getEntityData(itemstack);
-
-                            if(entity instanceof EntityChiromawTame) {
-                                if(nbt != null && nbt.hasKey("Electric")) {
-                                    ((EntityChiromawTame) entity).setElectricBoogaloo(nbt.getBoolean("Electric"));
-                                }
-                            } else if(entity instanceof EntityAnadia) {
-                                if(nbt != null) {
-                                    entity.deserializeNBT(nbt);
-                                }
-                            }
-
                             float horizontalOffset = 0;
 
                             if(entity instanceof EntityAnadia) {
@@ -175,7 +163,6 @@ public class RenderBLItemFrame extends RenderItemFrame
                             }
 
                             entity.setPositionAndRotation(0, 0, 0, 0, 0);
-                            entity.setWorld(itemFrame.world);
 
                             if(blItemFrame.realFacingDirection.getAxis().equals(EnumFacing.Axis.Y)) {
                                 GlStateManager.rotate(-90F, 1F, 0F, 0F);
@@ -184,7 +171,6 @@ public class RenderBLItemFrame extends RenderItemFrame
                             }
 
                             GlStateManager.rotate(90, 0, 1, 0);
-                            entity.setRotationYawHead(0F);
                             entity.rotationPitch = 0F;
                             entity.ticksExisted = 0;
                             Minecraft.getMinecraft().getRenderManager().renderEntity(entity, 0D, 0D, 0D, 0F, 0F, true);
