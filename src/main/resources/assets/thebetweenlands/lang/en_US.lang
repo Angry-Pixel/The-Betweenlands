@@ -288,10 +288,10 @@ tile.thebetweenlands.weedwood_plank_fence_gate.name=Weedwood Plank Fence Gate
 tile.thebetweenlands.weedwood_log_fence_gate.name=Weedwood Log Fence Gate
 tile.thebetweenlands.rubber_tree_plank_fence_gate.name=Rubber Tree Plank Fence Gate
 tile.thebetweenlands.weedwood_plank_pressure_plate.name=Weedwood Plank Pressure Plate
-tile.thebetweenlands.betweenstone_pressure_plate.name=Betweenstone Pressure Plate
+tile.thebetweenlands.betweenstone_pressure_plate.name=Smooth Betweenstone Pressure Plate
 tile.thebetweenlands.syrmorite_pressure_plate.name=Syrmorite Pressure Plate
 tile.thebetweenlands.weedwood_plank_button.name=Weedwood Plank Button
-tile.thebetweenlands.betweenstone_button.name=Betweenstone Button
+tile.thebetweenlands.betweenstone_button.name=Smooth Betweenstone Button
 tile.thebetweenlands.weedwood_ladder.name=Weedwood Ladder
 tile.thebetweenlands.weedwood_lever.name=Weedwood Lever
 tile.thebetweenlands.hollow_log.name=Hollow Log
@@ -2580,6 +2580,7 @@ death.attack.bl.shockwave=%1$s was killed by a shockwave
 death.attack.bl.spikewave=%1$s was impaled by roots
 death.attack.bl.swarm=%1$s was decomposed by infestation
 death.attack.bl.urchin_spikes=%1$s was impaled by urchin spikes
+death.attack.flamejet=%1$s was turned to ashes
 
 #Dev thing
 item.thebetweenlands.test_item_chimp_ruler.name=Test Ruler
