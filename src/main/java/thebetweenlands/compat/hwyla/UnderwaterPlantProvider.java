@@ -1,6 +1,11 @@
 package thebetweenlands.compat.hwyla;
 
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import com.google.common.base.Strings;
+
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
@@ -15,9 +20,6 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fluids.FluidRegistry;
 import thebetweenlands.common.block.plant.BlockStackablePlantUnderwater;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import javax.annotation.Nonnull;
-import java.util.List;
 
 public class UnderwaterPlantProvider implements IWailaDataProvider {
 

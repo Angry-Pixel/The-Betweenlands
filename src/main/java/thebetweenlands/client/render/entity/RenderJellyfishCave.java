@@ -1,6 +1,5 @@
 package thebetweenlands.client.render.entity;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.render.model.entity.ModelJellyfishCave;

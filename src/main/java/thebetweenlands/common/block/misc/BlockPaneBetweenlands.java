@@ -21,6 +21,12 @@ public class BlockPaneBetweenlands extends BlockPane {
 		this.setSoundType(SoundType.GLASS);
 	}
 
+	public BlockPaneBetweenlands(Material materialIn, SoundType soundtypeIn) {
+		super(materialIn, true);
+		this.setCreativeTab(BLCreativeTabs.BLOCKS);
+		this.setSoundType(soundtypeIn);
+	}
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public BlockRenderLayer getRenderLayer() {

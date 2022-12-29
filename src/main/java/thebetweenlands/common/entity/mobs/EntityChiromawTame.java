@@ -40,7 +40,6 @@ import net.minecraft.network.play.server.SPacketSetPassengers;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
@@ -118,7 +117,7 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 
 	@Override
 	public String getName() {
-		if (getElectricBoogaloo()) {
+		if (getElectricBoogaloo() && !hasCustomName()) {
 			return I18n.translateToLocal("entity.thebetweenlands.chiromaw_tame_lightning.name");
 		}
 		return super.getName();
@@ -521,8 +520,10 @@ public class EntityChiromawTame extends EntityTameableBL implements IRingOfGathe
 
 	@Override
 	public double getYOffset() {
-		if(getRidingEntity() !=null && getRidingEntity() instanceof EntityPlayer)
-			return height * 0.5D;
+		if(getRidingEntity() != null && getRidingEntity() instanceof EntityPlayer) {
+			return height * (getRidingEntity().isSneaking() ? 0.3D : 0.5D);
+		}
+
 		return 0.0D;
 	}
 

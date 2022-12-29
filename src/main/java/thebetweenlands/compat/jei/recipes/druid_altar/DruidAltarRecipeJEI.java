@@ -1,12 +1,12 @@
 package thebetweenlands.compat.jei.recipes.druid_altar;
 
+import java.util.ArrayList;
+
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
-
-import java.util.ArrayList;
 
 public class DruidAltarRecipeJEI implements IRecipeWrapper {
     private ArrayList<ItemStack> inputs;

@@ -41,7 +41,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityJellyfish extends EntityCreature implements IEntityBL, IEntityAdditionalSpawnData, IMob {
+public class EntityJellyfish extends EntityCreature implements IEntityBL, IEntityAdditionalSpawnData, IMob, net.minecraft.entity.passive.IAnimals {
 	protected Vec3d prevOrientationPos = Vec3d.ZERO;
 	protected Vec3d orientationPos = Vec3d.ZERO;
 

@@ -4,11 +4,13 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.base.CaseFormat;
-
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import thebetweenlands.common.item.EnumBLDrinkableBrew;
+import thebetweenlands.common.item.EnumBLDyeColor;
 
 public class FluidRegistry {
 	private FluidRegistry() { }
@@ -43,7 +45,71 @@ public class FluidRegistry {
 	public static final Fluid RUBBER = new Fluid("rubber", new ResourceLocation("thebetweenlands:fluids/rubber_still"), new ResourceLocation("thebetweenlands:fluids/rubber_flowing")).setDensity(1200).setViscosity(1500);
 	public static final Fluid FOG = new Fluid("fog", new ResourceLocation("thebetweenlands:fluids/fog"), new ResourceLocation("thebetweenlands:fluids/fog")).setDensity(2).setViscosity(10).setGaseous(true);
 	public static final Fluid SHALLOWBREATH = new Fluid("shallowbreath", new ResourceLocation("thebetweenlands:fluids/shallowbreath"), new ResourceLocation("thebetweenlands:fluids/shallowbreath")).setDensity(2).setViscosity(10).setGaseous(true);
+	public static final Fluid DYE_FLUID = new Fluid("dye_fluid", new ResourceLocation("thebetweenlands:fluids/dye_fluid_still"), new ResourceLocation("thebetweenlands:fluids/dye_fluid_flowing")) {
+		@Override
+		public int getColor(net.minecraftforge.fluids.FluidStack stack) {
+			if(stack.tag != null && stack.tag.hasKey("type")) {
+				return EnumBLDyeColor.byMetadata(stack.tag.getInteger("type")).getColorValue() | 0xFF000000;
+			}
+			return 0xFFFFFFFF;
+		}
 
+		@Override
+		public String getUnlocalizedName(FluidStack stack) {
+			if (stack.tag != null && stack.tag.hasKey("type")) {
+				String type = "dye_fluid." + EnumBLDyeColor.byMetadata(stack.tag.getInteger("type")).getDyeColorName();
+				setUnlocalizedName(type);
+				return this.getUnlocalizedName() + type;
+			}
+			return this.getUnlocalizedName();
+		}
+		
+		@Override
+		public String getLocalizedName(FluidStack stack) {
+			if (stack.tag != null && stack.tag.hasKey("type")) {
+				String type = "dye_fluid." + EnumBLDyeColor.byMetadata(stack.tag.getInteger("type")).getDyeColorName();
+				setUnlocalizedName(type);
+				return I18n.translateToLocal(this.getUnlocalizedName());
+			}
+			return this.getUnlocalizedName();
+		}
+
+	}.setDensity(1000).setViscosity(1000);
+	
+	public static final Fluid DRINKABLE_BREW = new Fluid("drinkable_brew", new ResourceLocation("thebetweenlands:fluids/drinkable_brew_still"), new ResourceLocation("thebetweenlands:fluids/drinkable_brew_flowing")) {
+		@Override
+		public int getColor(net.minecraftforge.fluids.FluidStack stack) {
+			if(stack.tag != null && stack.tag.hasKey("type")) {
+				return EnumBLDrinkableBrew.byMetadata(stack.tag.getInteger("type")).getColorValue() | 0xFF000000;
+			}
+			return 0xFFFFFFFF;
+		}
+
+		@Override
+		public String getUnlocalizedName(FluidStack stack) {
+			if (stack.tag != null && stack.tag.hasKey("type")) {
+				String type = "drinkable_brew." + EnumBLDrinkableBrew.byMetadata(stack.tag.getInteger("type")).getBrewName();
+				setUnlocalizedName(type);
+				return this.getUnlocalizedName() + type;
+			}
+			return this.getUnlocalizedName();
+		}
+		
+		@Override
+		public String getLocalizedName(FluidStack stack) {
+			if (stack.tag != null && stack.tag.hasKey("type")) {
+				String type = "drinkable_brew." + EnumBLDrinkableBrew.byMetadata(stack.tag.getInteger("type")).getBrewName();
+				setUnlocalizedName(type);
+				return I18n.translateToLocal(this.getUnlocalizedName());
+			}
+			return this.getUnlocalizedName();
+		}
+
+	}.setDensity(1000).setViscosity(1000);
+
+	public static final Fluid CLEAN_WATER = new Fluid("clean_water", new ResourceLocation("thebetweenlands:fluids/clean_water_still"), new ResourceLocation("thebetweenlands:fluids/clean_water_flowing")).setDensity(1000).setViscosity(1000);
+	public static final Fluid FISH_OIL = new Fluid("fish_oil", new ResourceLocation("thebetweenlands:fluids/fish_oil_still"), new ResourceLocation("thebetweenlands:fluids/fish_oil_flowing")).setDensity(1000).setViscosity(1000);
+	
 
 	public static final List<Fluid> REGISTERED_FLUIDS = new ArrayList<Fluid>();
 

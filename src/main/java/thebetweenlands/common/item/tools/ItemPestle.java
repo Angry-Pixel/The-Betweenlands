@@ -1,5 +1,9 @@
 package thebetweenlands.common.item.tools;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,9 +17,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.util.TranslationHelper;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemPestle extends Item implements IAnimatorRepairable {
 

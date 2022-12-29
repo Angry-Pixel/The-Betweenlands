@@ -1,9 +1,16 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.UUID;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIBreakDoor;
+import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,8 +35,6 @@ import thebetweenlands.common.network.clientbound.MessageDruidTeleportParticles;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.MathUtils;
-
-import java.util.UUID;
 
 public class EntityDarkDruid extends EntityMob {
     private static final DataParameter<Boolean> CASTING = EntityDataManager.createKey(EntityDarkDruid.class, DataSerializers.BOOLEAN);

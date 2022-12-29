@@ -3,14 +3,12 @@ package thebetweenlands.common.entity.mobs;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.item.ItemAxe;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
@@ -18,11 +16,10 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import thebetweenlands.common.capability.collision.RingOfDispersionEntityCapability;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTreeStructure;
 
 public abstract class EntitySpiritTreeFace extends EntityMovingWallFace {
@@ -278,10 +275,20 @@ public abstract class EntitySpiritTreeFace extends EntityMovingWallFace {
 			this.spitDamage = spitDamage;
 			this.setMutexBits(0);
 		}
+		
+	    public boolean isWearingTreeMask(EntityLivingBase entityIn) {
+	    	if(entityIn instanceof EntityPlayer && this.entity instanceof EntitySpiritTreeFaceSmall) {
+	        	ItemStack helmet = ((EntityPlayer)entityIn).getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+	        	if(!helmet.isEmpty() && (helmet.getItem() == ItemRegistry.SPIRIT_TREE_FACE_SMALL_MASK || helmet.getItem() == ItemRegistry.SPIRIT_TREE_FACE_LARGE_MASK)) {
+	        		return true;
+	        	}
+	        }
+	    	return false;
+	    }
 
 		@Override
 		public boolean shouldExecute() {
-			return this.entity.isActive() && !this.entity.isAttacking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive() && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
+			return this.entity.isActive() && !this.entity.isAttacking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive() && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget()) && !isWearingTreeMask(this.entity.getAttackTarget());
 		}
 
 		@Override

@@ -2,16 +2,13 @@ package thebetweenlands.client.render.particle;
 
 import java.util.function.Predicate;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer.ParticleBatch;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer.ParticleBatchType;
 import thebetweenlands.client.render.shader.ShaderHelper;

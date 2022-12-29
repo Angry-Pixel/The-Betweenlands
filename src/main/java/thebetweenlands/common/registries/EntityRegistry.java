@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.EntityBLItemFrame;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
@@ -287,6 +288,8 @@ public class EntityRegistry {
 
 		registerEntity(EntityFishVortex.class, "fish_vortex");
 		registerEntity(EntityUrchinSpikeAOE.class, "urchin_spike_aoe");
+
+		registerEntity(EntityBLItemFrame.class, "item_frame", 256, 64, false);
 	}
 
 	private static int id = 0;

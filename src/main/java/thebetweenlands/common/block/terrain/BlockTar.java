@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.terrain;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -26,8 +28,6 @@ import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.util.AdvancedStateMap;
-
-import javax.annotation.Nonnull;
 
 public class BlockTar extends BlockFluidClassic implements IStateMappedBlock, ICustomItemBlock {
 	public BlockTar() {

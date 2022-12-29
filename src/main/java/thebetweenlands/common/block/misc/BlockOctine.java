@@ -14,7 +14,6 @@ import net.minecraft.world.World;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.plant.BlockMoss;
 import thebetweenlands.common.block.plant.BlockThorns;
-import thebetweenlands.common.item.misc.ItemOctineIngot;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockOctine extends BasicBlock {

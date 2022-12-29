@@ -2,6 +2,9 @@ package thebetweenlands.common.entity.rowboat;
 
 import java.util.EnumMap;
 
+import javax.annotation.Nullable;
+
+import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -35,7 +38,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.network.serverbound.MessageRow;
@@ -47,10 +49,6 @@ import thebetweenlands.util.MathUtils;
 import thebetweenlands.util.Matrix;
 import thebetweenlands.util.OpenSimplexNoise;
 import thebetweenlands.util.Quat;
-
-import io.netty.buffer.ByteBuf;
-
-import javax.annotation.Nullable;
 
 /*
  * Useful links:

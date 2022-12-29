@@ -63,6 +63,7 @@ import thebetweenlands.client.gui.inventory.GuiFishingTackleBox;
 import thebetweenlands.client.gui.inventory.GuiMortar;
 import thebetweenlands.client.gui.inventory.GuiPouch;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
+import thebetweenlands.client.gui.inventory.GuiSilkBundle;
 import thebetweenlands.client.gui.inventory.GuiSmokingRack;
 import thebetweenlands.client.gui.inventory.GuiTarBarrel;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
@@ -113,15 +114,18 @@ import thebetweenlands.client.render.tile.RenderDecayPitHangingChain;
 import thebetweenlands.client.render.tile.RenderDruidAltar;
 import thebetweenlands.client.render.tile.RenderDungeonDoorCombination;
 import thebetweenlands.client.render.tile.RenderDungeonDoorRunes;
+import thebetweenlands.client.render.tile.RenderFilteredSiltGlassJar;
 import thebetweenlands.client.render.tile.RenderFishTrimmingTable;
 import thebetweenlands.client.render.tile.RenderFishingTackleBox;
 import thebetweenlands.client.render.tile.RenderGeckoCage;
 import thebetweenlands.client.render.tile.RenderGroundItem;
+import thebetweenlands.client.render.tile.RenderGrubHub;
 import thebetweenlands.client.render.tile.RenderInfuser;
 import thebetweenlands.client.render.tile.RenderItemCage;
 import thebetweenlands.client.render.tile.RenderItemShelf;
 import thebetweenlands.client.render.tile.RenderItemStackAsTileEntity;
 import thebetweenlands.client.render.tile.RenderLivingWeedwoodShield;
+import thebetweenlands.client.render.tile.RenderMothHouse;
 import thebetweenlands.client.render.tile.RenderMudBrickSpikeTrap;
 import thebetweenlands.client.render.tile.RenderMudFlowerPot;
 import thebetweenlands.client.render.tile.RenderMudLootPot1;
@@ -137,9 +141,11 @@ import thebetweenlands.client.render.tile.RenderSimulacrum;
 import thebetweenlands.client.render.tile.RenderSmokingRack;
 import thebetweenlands.client.render.tile.RenderSpawnerBetweenlands;
 import thebetweenlands.client.render.tile.RenderSpikeTrap;
+import thebetweenlands.client.render.tile.RenderSteepingPot;
 import thebetweenlands.client.render.tile.RenderTarLootPot1;
 import thebetweenlands.client.render.tile.RenderTarLootPot2;
 import thebetweenlands.client.render.tile.RenderTarLootPot3;
+import thebetweenlands.client.render.tile.RenderWaterFilter;
 import thebetweenlands.client.render.tile.RenderWaystone;
 import thebetweenlands.client.render.tile.RenderWeedwoodSign;
 import thebetweenlands.client.render.tile.RenderWeedwoodWorkbench;
@@ -150,6 +156,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
+import thebetweenlands.common.entity.EntityBLItemFrame;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
@@ -276,14 +283,17 @@ import thebetweenlands.common.herblore.book.GuiManualHerblore;
 import thebetweenlands.common.herblore.book.HLEntryRegistry;
 import thebetweenlands.common.inventory.InventoryAmphibiousArmor;
 import thebetweenlands.common.inventory.InventoryPouch;
+import thebetweenlands.common.inventory.InventorySilkBundle;
 import thebetweenlands.common.inventory.container.ContainerAmphibiousArmor;
 import thebetweenlands.common.inventory.container.ContainerDraetonPouch;
 import thebetweenlands.common.inventory.container.ContainerPouch;
+import thebetweenlands.common.inventory.container.ContainerSilkBundle;
 import thebetweenlands.common.item.ITintedItem;
 import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.item.misc.ItemBarkAmulet;
+import thebetweenlands.common.item.misc.ItemSilkBundle;
 import thebetweenlands.common.item.shields.ItemSwatShield;
 import thebetweenlands.common.item.tools.ItemBLFishingRod;
 import thebetweenlands.common.item.tools.bow.ItemBLBow;
@@ -311,14 +321,17 @@ import thebetweenlands.common.tile.TileEntityDecayPitHangingChain;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
+import thebetweenlands.common.tile.TileEntityFilteredSiltGlassJar;
 import thebetweenlands.common.tile.TileEntityFishTrimmingTable;
 import thebetweenlands.common.tile.TileEntityFishingTackleBox;
 import thebetweenlands.common.tile.TileEntityGeckoCage;
 import thebetweenlands.common.tile.TileEntityGroundItem;
+import thebetweenlands.common.tile.TileEntityGrubHub;
 import thebetweenlands.common.tile.TileEntityInfuser;
 import thebetweenlands.common.tile.TileEntityItemCage;
 import thebetweenlands.common.tile.TileEntityItemShelf;
 import thebetweenlands.common.tile.TileEntityMortar;
+import thebetweenlands.common.tile.TileEntityMothHouse;
 import thebetweenlands.common.tile.TileEntityMudBricksSpikeTrap;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
 import thebetweenlands.common.tile.TileEntityMudLootPot1;
@@ -334,9 +347,11 @@ import thebetweenlands.common.tile.TileEntitySiltGlassJar;
 import thebetweenlands.common.tile.TileEntitySimulacrum;
 import thebetweenlands.common.tile.TileEntitySmokingRack;
 import thebetweenlands.common.tile.TileEntitySpikeTrap;
+import thebetweenlands.common.tile.TileEntitySteepingPot;
 import thebetweenlands.common.tile.TileEntityTarLootPot1;
 import thebetweenlands.common.tile.TileEntityTarLootPot2;
 import thebetweenlands.common.tile.TileEntityTarLootPot3;
+import thebetweenlands.common.tile.TileEntityWaterFilter;
 import thebetweenlands.common.tile.TileEntityWaystone;
 import thebetweenlands.common.tile.TileEntityWeedwoodSign;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
@@ -530,6 +545,18 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 				return new GuiAmphibiousArmor(new ContainerAmphibiousArmor(player, new InventoryAmphibiousArmor(item, name)));
 			break;
 		}
+
+		case GUI_SILK_BUNDLE: {
+			ItemStack item = player.getHeldItemMainhand();
+			if(item.isEmpty() || !(item.getItem() instanceof ItemSilkBundle)) {
+				item = player.getHeldItemOffhand();
+			}
+			if(!item.isEmpty() && item.getItem() instanceof ItemSilkBundle) {
+				String name = item.hasDisplayName() ? item.getDisplayName(): I18n.format("container.bl.silk_bundle");
+				return new GuiSilkBundle(new ContainerSilkBundle(player, player.inventory, new InventorySilkBundle(item, 4, name)));
+			}
+			break;
+		}
 		}
 		return null;
 	}
@@ -718,6 +745,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntitySwarm.class, RenderSwarm::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGreeblingCoracle.class, RenderGreeblingCoracle::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFishVortex.class, RenderNothing::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityBLItemFrame.class, RenderBLItemFrame::new);
 
 		//WIP
 		RenderingRegistry.registerEntityRenderingHandler(EntityRockSnot.class, RenderRockSnot::new);
@@ -779,10 +807,15 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFishTrimmingTable.class, new RenderFishTrimmingTable());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrabPot.class, new RenderCrabPot());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySiltGlassJar.class, new RenderSiltGlassJar());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFilteredSiltGlassJar.class, new RenderFilteredSiltGlassJar());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrabPotFilter.class, new RenderCrabPotFilter());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudLootPot1.class, new RenderMudLootPot1());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudLootPot2.class, new RenderMudLootPot2());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudLootPot3.class, new RenderMudLootPot3());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySteepingPot.class, new RenderSteepingPot());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGrubHub.class, new RenderGrubHub());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWaterFilter.class, new RenderWaterFilter());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMothHouse.class, new RenderMothHouse());
 		
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
@@ -856,6 +889,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		Item.getItemFromBlock(BlockRegistry.CRAB_POT).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityCrabPot.class));
 		Item.getItemFromBlock(BlockRegistry.CRAB_POT_FILTER).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityCrabPotFilter.class));
 		Item.getItemFromBlock(BlockRegistry.SILT_GLASS_JAR).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntitySiltGlassJar.class));
+		Item.getItemFromBlock(BlockRegistry.FILTERED_SILT_GLASS_JAR).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityFilteredSiltGlassJar.class));
+		Item.getItemFromBlock(BlockRegistry.MOTH_HOUSE).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityMothHouse.class));
 		Item.getItemFromBlock(BlockRegistry.MUD_LOOT_POT).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(renderer -> {
 			for(EnumFacing facing : EnumFacing.HORIZONTALS) {
 				renderer.add(EnumLootPot.POT_1.getMetadata(facing), TileEntityMudLootPot1.class);

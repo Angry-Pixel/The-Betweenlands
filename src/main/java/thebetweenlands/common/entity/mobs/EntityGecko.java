@@ -41,7 +41,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBushUncollidableEntity {
+public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBushUncollidableEntity, net.minecraft.entity.passive.IAnimals {
 	private static final DataParameter<Boolean> HIDING = EntityDataManager.createKey(EntityGecko.class, DataSerializers.BOOLEAN);
 
 	private static final int MIN_HIDE_TIME = 20 * 60 * 2;

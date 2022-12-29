@@ -1,13 +1,13 @@
 package thebetweenlands.compat.jei.recipes.pam;
 
+import java.util.ArrayList;
+
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import java.util.ArrayList;
 
 public class PestleAndMortarRecipeJEI implements IRecipeWrapper {
     private final ItemStack output;

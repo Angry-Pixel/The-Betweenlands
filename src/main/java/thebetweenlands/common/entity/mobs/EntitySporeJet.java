@@ -2,7 +2,9 @@ package thebetweenlands.common.entity.mobs;
 
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -13,6 +15,7 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntitySporeJet extends Entity {
 
@@ -68,16 +71,28 @@ public class EntitySporeJet extends Entity {
 	@Override
 	public void onCollideWithPlayer(EntityPlayer player) {
 		if (!getEntityWorld().isRemote) {
-			if (player.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && player.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY)
-				if (player.getEntityBoundingBox().maxX >= getEntityBoundingBox().minX && player.getEntityBoundingBox().minX <= getEntityBoundingBox().maxX)
-					if (player.getEntityBoundingBox().maxZ >= getEntityBoundingBox().minZ && player.getEntityBoundingBox().minZ <= getEntityBoundingBox().maxZ) {
-						//((EntityLivingBase) player).addPotionEffect(new PotionEffect(MobEffects.POISON, 5 * 20, 0));
-						ItemStack stack = player.getHeldItemMainhand();
-						if (!stack.isEmpty())
-							player.dropItem(true);
-					}
+			if(!isWearingSilkMask(player)) {
+				if (player.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && player.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY)
+					if (player.getEntityBoundingBox().maxX >= getEntityBoundingBox().minX && player.getEntityBoundingBox().minX <= getEntityBoundingBox().maxX)
+						if (player.getEntityBoundingBox().maxZ >= getEntityBoundingBox().minZ && player.getEntityBoundingBox().minZ <= getEntityBoundingBox().maxZ) {
+							//((EntityLivingBase) player).addPotionEffect(new PotionEffect(MobEffects.POISON, 5 * 20, 0));
+							ItemStack stack = player.getHeldItemMainhand();
+							if (!stack.isEmpty())
+								player.dropItem(true);
+						}
+			}
 		}
 	}
+
+    public boolean isWearingSilkMask(EntityLivingBase entity) {
+    	if(entity instanceof EntityPlayer) {
+        	ItemStack helmet = ((EntityPlayer)entity).getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+        	if(!helmet.isEmpty() && helmet.getItem() == ItemRegistry.SILK_MASK) {
+        		return true;
+        	}
+        }
+    	return false;
+    }
 
 	@Override
 	protected void entityInit() {

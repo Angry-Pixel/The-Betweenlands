@@ -2,6 +2,8 @@ package thebetweenlands.common.item.tools;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Multimap;
 
 import net.minecraft.block.material.Material;
@@ -12,7 +14,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -20,8 +21,6 @@ import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.common.item.BLMaterialRegistry;
-
-import javax.annotation.Nullable;
 
 
 public class ItemBLAxe extends ItemAxe implements ICorrodible, IAnimatorRepairable {

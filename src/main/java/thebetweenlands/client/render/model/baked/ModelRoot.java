@@ -19,7 +19,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
-import net.minecraftforge.common.property.IExtendedBlockState;
 import thebetweenlands.common.block.terrain.BlockRoot;
 import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.StalactiteHelper;

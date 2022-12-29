@@ -1,5 +1,12 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.material.MapColor;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -40,9 +47,6 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
 import thebetweenlands.common.world.storage.location.LocationStorage;
-
-import javax.annotation.Nullable;
-import java.util.*;
 
 public class ItemAmateMap extends ItemMap implements ICustomMeshCallback, IRenamableItem {
 

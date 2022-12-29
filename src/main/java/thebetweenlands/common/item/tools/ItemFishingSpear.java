@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -71,6 +72,16 @@ public class ItemFishingSpear extends Item implements IAnimatorRepairable{
 			tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.fishing_spear_animated") + stack.getTagCompound().getBoolean("animated"));
 		}
 	}
+
+	@Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+		return false;
+    }
+
+	@Override
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book)  {
+		return false;
+    }
 
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean isHeldItem) {

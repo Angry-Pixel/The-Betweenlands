@@ -24,6 +24,20 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 public class TileEntityBasicInventory extends TileEntity implements ISidedInventory {
+	private static class ISHSidedInvWrapper extends SidedInvWrapper {
+		private final ItemStackHandler handler;
+		
+		public ISHSidedInvWrapper(ISidedInventory inv, EnumFacing side, ItemStackHandler handler) {
+			super(inv, side);
+			this.handler = handler;
+		}
+		
+		@Override
+		public int getSlotLimit(int slot) {
+			return Math.min(super.getSlotLimit(slot), this.handler.getSlotLimit(slot));
+		}
+	}
+	
 	protected static final BiFunction<TileEntityBasicInventory, NonNullList<ItemStack>, ItemStackHandler> DEFAULT_HANDLER = (te, inv) -> new ItemStackHandler(inv) {
 		@Override
 		public void setSize(int size) {
@@ -45,6 +59,14 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	protected NonNullList<ItemStack> inventory;
 	protected final ItemStackHandler inventoryHandler;
 
+	private final IItemHandler handlerUp;
+	private final IItemHandler handlerDown;
+	private final IItemHandler handlerNorth;
+	private final IItemHandler handlerSouth;
+	private final IItemHandler handlerEast;
+	private final IItemHandler handlerWest;
+	private final IItemHandler handlerNull;
+	
 	public TileEntityBasicInventory(int invSize, String name) {
 		this(name, NonNullList.withSize(invSize, ItemStack.EMPTY), DEFAULT_HANDLER);
 	}
@@ -53,6 +75,19 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 		this.inventoryHandler = handler.apply(this, inventory);
 		this.inventory = inventory;
 		this.name = name;
+		
+		this.handlerUp = new ISHSidedInvWrapper(this, EnumFacing.UP, this.inventoryHandler);
+		this.handlerDown = new ISHSidedInvWrapper(this, EnumFacing.DOWN, this.inventoryHandler);
+		this.handlerNorth = new ISHSidedInvWrapper(this, EnumFacing.NORTH, this.inventoryHandler);
+		this.handlerSouth = new ISHSidedInvWrapper(this, EnumFacing.SOUTH, this.inventoryHandler);
+		this.handlerEast = new ISHSidedInvWrapper(this, EnumFacing.EAST, this.inventoryHandler);
+		this.handlerWest = new ISHSidedInvWrapper(this, EnumFacing.WEST, this.inventoryHandler);
+		this.handlerNull = new InvWrapper(this) {
+			@Override
+			public int getSlotLimit(int slot) {
+				return Math.min(super.getSlotLimit(slot), TileEntityBasicInventory.this.inventoryHandler.getSlotLimit(slot));
+			}
+		};
 	}
 	
 	@Override
@@ -165,7 +200,7 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	@Override
 	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing side) {
 		this.accessSlot(slot);
-		return isItemValidForSlot(slot, stack);
+		return isItemValidForSlot(slot, stack) && this.getStackInSlot(slot).getCount() + stack.getCount() <= this.inventoryHandler.getSlotLimit(slot);
 	}
 
 	@Override
@@ -212,14 +247,6 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	protected void accessSlot(int slot) {
 
 	}
-
-	private IItemHandler handlerUp = new SidedInvWrapper(this, EnumFacing.UP);
-	private IItemHandler handlerDown = new SidedInvWrapper(this, EnumFacing.DOWN);
-	private IItemHandler handlerNorth = new SidedInvWrapper(this, EnumFacing.NORTH);
-	private IItemHandler handlerSouth = new SidedInvWrapper(this, EnumFacing.SOUTH);
-	private IItemHandler handlerEast = new SidedInvWrapper(this, EnumFacing.EAST);
-	private IItemHandler handlerWest = new SidedInvWrapper(this, EnumFacing.WEST);
-	private IItemHandler handlerNull = new InvWrapper(this);
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {

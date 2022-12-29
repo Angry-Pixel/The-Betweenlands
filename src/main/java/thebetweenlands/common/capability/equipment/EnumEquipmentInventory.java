@@ -1,9 +1,10 @@
 package thebetweenlands.common.capability.equipment;
 
-import com.google.common.collect.ImmutableList;
-import net.minecraft.inventory.IInventory;
-
 import javax.annotation.Nullable;
+
+import com.google.common.collect.ImmutableList;
+
+import net.minecraft.inventory.IInventory;
 
 public enum EnumEquipmentInventory {
 	MISC(3, 32), AMULET(1, 3), RING(2, 2);

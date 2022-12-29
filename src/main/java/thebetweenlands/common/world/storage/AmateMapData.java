@@ -1,6 +1,9 @@
 package thebetweenlands.common.world.storage;
 
+import java.util.Objects;
+
 import com.google.common.collect.ImmutableList;
+
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
@@ -22,8 +25,6 @@ import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationPortal;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.MathUtils;
-
-import java.util.Objects;
 
 public class AmateMapData extends MapData {
 	public final Int2ObjectMap<BLMapDecoration> decorations = new Int2ObjectOpenHashMap<>();

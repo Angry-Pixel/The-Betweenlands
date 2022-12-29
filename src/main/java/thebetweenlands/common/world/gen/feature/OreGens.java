@@ -1,5 +1,7 @@
 package thebetweenlands.common.world.gen.feature;
 
+import java.util.Random;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.util.math.BlockPos;
@@ -9,8 +11,6 @@ import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite.EnumLifeCrystalType;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.BlockRegistry;
-
-import java.util.Random;
 
 public class OreGens {
 	public static final WorldGenerator SULFUR = 

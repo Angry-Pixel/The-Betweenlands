@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:rotten_planks_treated"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:rotten_plank_trapdoor_treated",
+    "count": 2
+  }
+}

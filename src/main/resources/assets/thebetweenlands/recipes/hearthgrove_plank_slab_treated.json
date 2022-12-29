@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:hearthgrove_planks_treated"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:hearthgrove_plank_slab_treated",
+    "count": 6
+  }
+}

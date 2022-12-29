@@ -44,8 +44,6 @@ import thebetweenlands.common.block.structure.BlockWormDungeonPillar;
 import thebetweenlands.common.block.structure.BlockWormDungeonPillar.EnumWormPillarType;
 import thebetweenlands.common.block.terrain.BlockHanger;
 import thebetweenlands.common.block.terrain.BlockLogBetweenlands;
-import thebetweenlands.common.capability.circlegem.CircleGemHelper;
-import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityGroundItem;

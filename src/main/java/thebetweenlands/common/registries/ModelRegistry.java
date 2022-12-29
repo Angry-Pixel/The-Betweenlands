@@ -75,10 +75,13 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelSimulacrumLakeCa
 import thebetweenlands.client.render.model.baked.modelbase.ModelSimulacrumRootman1;
 import thebetweenlands.client.render.model.baked.modelbase.ModelSimulacrumRootman2;
 import thebetweenlands.client.render.model.baked.modelbase.ModelSimulacrumRootman3;
+import thebetweenlands.client.render.model.baked.modelbase.ModelSteepingPot;
+import thebetweenlands.client.render.model.baked.modelbase.ModelSteepingPotHanging;
 import thebetweenlands.client.render.model.baked.modelbase.ModelSundew;
 import thebetweenlands.client.render.model.baked.modelbase.ModelSwampPlant;
 import thebetweenlands.client.render.model.baked.modelbase.ModelVenusFlyTrap;
 import thebetweenlands.client.render.model.baked.modelbase.ModelVolarpad;
+import thebetweenlands.client.render.model.baked.modelbase.ModelWaterFilter;
 import thebetweenlands.client.render.model.baked.modelbase.ModelWeedwoodRowboatItem;
 import thebetweenlands.client.render.model.baked.modelbase.ModelWeepingBlue;
 import thebetweenlands.client.render.model.baked.modelbase.ModelWhitePearCrop1;
@@ -406,6 +409,15 @@ public class ModelRegistry {
 	public static final IModel BARNACLE_4 = new ModelFromModelBase.Builder(new ModelBarnacle4(), new ResourceLocation("thebetweenlands:blocks/barnacle_4"), 64, 64)
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/barnacle_4")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 
+	public static final IModel STEEPING_POT = new ModelFromModelBase.Builder(new ModelSteepingPot(), new ResourceLocation("thebetweenlands:blocks/steeping_pot"), 128, 128)
+			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/steeping_pot_particle")).packer(MODEL_TEXTURE_PACKER).build();
+
+	public static final IModel STEEPING_POT_HANGING = new ModelFromModelBase.Builder(new ModelSteepingPotHanging(), new ResourceLocation("thebetweenlands:blocks/steeping_pot_hanging"), 128, 128)
+			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/steeping_pot_particle")).packer(MODEL_TEXTURE_PACKER).build();
+
+	public static final IModel WATER_FILTER = new ModelFromModelBase.Builder(new ModelWaterFilter(), new ResourceLocation("thebetweenlands:blocks/water_filter"), 128, 128)
+			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/water_filter_particle")).packer(MODEL_TEXTURE_PACKER).build();
+	
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 
 	private static final ICustomRegistrar DEFAULT_REGISTRAR = new DefaultRegistrar(CustomModelManager.INSTANCE);

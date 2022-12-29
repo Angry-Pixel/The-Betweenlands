@@ -143,7 +143,7 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 	public boolean canConnectTo(IBlockAccess worldIn, BlockPos pos, EnumFacing dir) {
 		IBlockState iblockstate = worldIn.getBlockState(pos);
 		Block block = iblockstate.getBlock();
-		return block == this;
+		return block instanceof BlockWeedwoodBush && !(block instanceof BlockNesting);
 	}
 
 	@Override

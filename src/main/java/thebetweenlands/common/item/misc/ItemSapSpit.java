@@ -1,5 +1,9 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -8,9 +12,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemSapSpit extends Item {
     public ItemSapSpit() {

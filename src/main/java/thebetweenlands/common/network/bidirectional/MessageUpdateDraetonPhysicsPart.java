@@ -6,8 +6,8 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
-import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.entity.draeton.DraetonPhysicsPart;
+import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.network.MessageEntity;
 
 public class MessageUpdateDraetonPhysicsPart extends MessageEntity {

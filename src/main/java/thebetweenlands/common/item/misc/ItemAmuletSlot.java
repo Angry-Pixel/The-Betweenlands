@@ -1,7 +1,10 @@
 package thebetweenlands.common.item.misc;
 
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,6 +28,22 @@ public class ItemAmuletSlot extends Item {
 	@Override
 	public EnumRarity getRarity(ItemStack stack) {
 		return EnumRarity.EPIC;
+	}
+
+	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+		if(enchantment == Enchantments.MENDING)
+			return false;
+
+		return true;
+	}
+
+	@Override
+	public boolean isBookEnchantable(ItemStack stack, ItemStack book)  {
+		if(EnchantmentHelper.getEnchantments(book).containsKey(Enchantments.MENDING))
+			return false;
+
+		return true;
 	}
 	
 	@Override

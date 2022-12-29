@@ -39,7 +39,6 @@ import thebetweenlands.api.item.IBigSwingAnimation;
 import thebetweenlands.api.item.IExtendedReach;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.BLMaterialRegistry;
-import thebetweenlands.common.item.misc.ItemShadowStaff;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.NBTHelper;
 

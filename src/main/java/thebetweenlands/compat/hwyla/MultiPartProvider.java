@@ -1,6 +1,13 @@
 package thebetweenlands.compat.hwyla;
 
+import static mcp.mobius.waila.api.SpecialChars.getRenderString;
+
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import com.google.common.base.Strings;
+
 import mcp.mobius.waila.addons.core.HUDHandlerEntities;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaEntityAccessor;
@@ -14,11 +21,6 @@ import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.util.text.translation.I18n;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.lib.ModInfo;
-
-import javax.annotation.Nonnull;
-import java.util.List;
-
-import static mcp.mobius.waila.api.SpecialChars.getRenderString;
 
 public class MultiPartProvider implements IWailaEntityProvider {
 

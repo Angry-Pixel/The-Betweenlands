@@ -3,7 +3,6 @@ package thebetweenlands.common.block.structure;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.SoundType;

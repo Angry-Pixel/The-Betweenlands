@@ -32,11 +32,10 @@ import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
-import net.minecraftforge.common.property.IExtendedBlockState;
 import thebetweenlands.common.block.structure.BlockSlanted;
 import thebetweenlands.util.QuadBuilder;
-import thebetweenlands.util.StatePropertyHelper;
 import thebetweenlands.util.QuadBuilder.Quads;
+import thebetweenlands.util.StatePropertyHelper;
 
 public class ModelSlant implements IModel {
 	public final ResourceLocation textureSlant;

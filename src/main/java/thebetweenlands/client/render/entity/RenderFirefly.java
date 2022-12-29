@@ -2,9 +2,9 @@ package thebetweenlands.client.render.entity;
 
 import java.util.Random;
 
-import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;

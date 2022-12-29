@@ -68,4 +68,15 @@ public interface IFarmablePlant {
 	 * @param rand
 	 */
 	public void spreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand);
+	
+	/**
+	 * Returns whether this plant can be destroyed by rain
+	 * @param world
+	 * @param pos
+	 * @param state
+	 * @return
+	 */
+	public default boolean canBeDestroyedByPuddles(World world, BlockPos pos, IBlockState state) {
+		return false;
+	}
 }

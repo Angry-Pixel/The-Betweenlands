@@ -1,8 +1,14 @@
 package thebetweenlands.common.item.tools;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -32,10 +38,6 @@ import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.NBTHelper;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class ItemShockwaveSword extends ItemBLSword {

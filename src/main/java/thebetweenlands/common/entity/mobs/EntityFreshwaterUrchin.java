@@ -45,6 +45,7 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 	private boolean shootSpikes;
 	public int MAX_SPIKE_TIMER = 10;
 	public static final byte EVENT_ATTACK = 66;
+	public DamageSource urchinSpikesDamageSource = new EntityDamageSource("bl.urchin_spikes", this);
 
 	public EntityFreshwaterUrchin(World world) {
 		super(world);
@@ -170,7 +171,7 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 			if (!list.isEmpty()) {
 				EntityLivingBase entity = list.get(0);
 				if(entity.hurtResistantTime <= 0) {
-					entity.attackEntityFrom(new EntityDamageSource("cactus", this), 2F);
+					entity.attackEntityFrom(urchinSpikesDamageSource, 2F);
 					shootSpikes = false;
 					setSpikeBoxTimer(0);
 				}
@@ -231,15 +232,18 @@ public class EntityFreshwaterUrchin extends EntityProximitySpawner {
 	}
 
 	@Override
+    public boolean canAttackClass(Class <? extends EntityLivingBase > entityClass) {
+        return entityClass != EntityFreshwaterUrchin.class;
+    }
+
+	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if(source == DamageSource.DROWN) {
+		if(source == DamageSource.DROWN)
 			return false;
-		}
-		
+
 		Entity attacker = source.getImmediateSource();
-		if(attacker instanceof EntityLivingBase && attacker.hurtResistantTime <= 0 && ((EntityLivingBase) attacker).getHeldItemMainhand().isEmpty()) {
-			attacker.attackEntityFrom(new EntityDamageSource("cactus", this), 2F);
-		}
+		if(attacker instanceof EntityLivingBase && attacker.hurtResistantTime <= 0 && ((EntityLivingBase) attacker).getHeldItemMainhand().isEmpty() && !(attacker instanceof EntityFreshwaterUrchin))
+			attacker.attackEntityFrom(urchinSpikesDamageSource, 2F);
 		
 		return super.attackEntityFrom(source, damage);
 	}

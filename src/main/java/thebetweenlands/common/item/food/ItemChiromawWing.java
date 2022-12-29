@@ -1,5 +1,9 @@
 package thebetweenlands.common.item.food;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -17,9 +21,6 @@ import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.network.clientbound.MessageShowFoodSicknessLine;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.util.TranslationHelper;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 
 public class ItemChiromawWing extends ItemBLFood {

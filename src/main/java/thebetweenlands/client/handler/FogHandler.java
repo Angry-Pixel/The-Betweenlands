@@ -1,6 +1,5 @@
 package thebetweenlands.client.handler;
 
-import net.minecraft.world.WorldProvider;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.Block;
@@ -16,6 +15,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;

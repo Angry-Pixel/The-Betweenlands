@@ -1,0 +1,6 @@
+{
+  "parent": "thebetweenlands:block/reed_mat",
+  "textures": {
+    "texture": "thebetweenlands:blocks/reed_mat_colored_maroon"
+  }
+}

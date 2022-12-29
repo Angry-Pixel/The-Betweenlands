@@ -2,11 +2,9 @@ package thebetweenlands.common.config.properties;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import gnu.trove.map.TIntIntMap;
 import gnu.trove.map.hash.TIntIntHashMap;
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;

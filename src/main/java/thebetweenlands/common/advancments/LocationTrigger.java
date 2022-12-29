@@ -1,7 +1,11 @@
 package thebetweenlands.common.advancments;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
+
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.critereon.AbstractCriterionInstance;
@@ -9,9 +13,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.lib.ModInfo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class LocationTrigger extends BLTrigger<LocationTrigger.Instance, LocationTrigger.Listener> {
 

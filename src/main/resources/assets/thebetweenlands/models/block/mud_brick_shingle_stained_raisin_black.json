@@ -1,0 +1,6 @@
+{ 
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "thebetweenlands:blocks/mud_brick_shingles_stained_raisin_black"
+  } 
+}

@@ -61,7 +61,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityEmberling extends EntityTameableBL implements IEntityMultiPart, IRingOfGatheringMinion {
+public class EntityEmberling extends EntityTameableBL implements IEntityMultiPart, IRingOfGatheringMinion, net.minecraft.entity.passive.IAnimals {
 
 	public MultiPartEntityPart[] tailPart;
 	private static final DataParameter<Boolean> IS_FLAME_ATTACKING = EntityDataManager.<Boolean>createKey(EntityEmberling.class, DataSerializers.BOOLEAN);

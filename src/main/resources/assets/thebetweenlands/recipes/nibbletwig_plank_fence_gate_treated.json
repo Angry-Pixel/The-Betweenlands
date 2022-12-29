@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xSx",
+    "xSx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    },
+    "S": {
+      "item": "thebetweenlands:nibbletwig_planks_treated"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:nibbletwig_plank_fence_gate_treated"
+  }
+}

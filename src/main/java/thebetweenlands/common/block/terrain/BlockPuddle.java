@@ -27,9 +27,9 @@ import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import thebetweenlands.api.block.IFarmablePlant;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.ITintedBlock;
-import thebetweenlands.common.block.farming.BlockGenericCrop;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
@@ -134,7 +134,8 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
 					for(int zo = -1; zo <= 1; zo++) {
 						BlockPos newPos = pos.add(xo, 0, zo);
 						if((xo == 0 && zo == 0) || xo*xo == zo*zo) continue;
-						if((world.isAirBlock(newPos) || world.getBlockState(newPos).getBlock() instanceof BlockGenericCrop) && this.canPlaceBlockAt(world, newPos)) {
+						IBlockState offsetState = world.getBlockState(newPos);
+						if((world.isAirBlock(newPos) || (offsetState.getBlock() instanceof IFarmablePlant && ((IFarmablePlant) offsetState.getBlock()).canBeDestroyedByPuddles(world, newPos, offsetState))) && this.canPlaceBlockAt(world, newPos)) {
 							world.setBlockState(newPos, getDefaultState());
 						} else if(world.getBlockState(newPos).getBlock() == BlockRegistry.PUDDLE) {
 							world.setBlockState(newPos, state.withProperty(AMOUNT, Math.min(amount + rand.nextInt(6), 15)), 2);
@@ -188,7 +189,7 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
 	public boolean canPlaceBlockAt(World world, BlockPos pos) {
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
-		return (block.isReplaceable(world, pos) || block instanceof BlockGenericCrop) && world.isSideSolid(pos.down(), EnumFacing.UP) && world.getBlockState(pos.down()).getBlockFaceShape(world, pos.down(), EnumFacing.UP) == BlockFaceShape.SOLID;
+		return (block.isReplaceable(world, pos) || (block instanceof IFarmablePlant && ((IFarmablePlant) block).canBeDestroyedByPuddles(world, pos, state))) && world.isSideSolid(pos.down(), EnumFacing.UP) && world.getBlockState(pos.down()).getBlockFaceShape(world, pos.down(), EnumFacing.UP) == BlockFaceShape.SOLID;
 	}
 
 	@Override

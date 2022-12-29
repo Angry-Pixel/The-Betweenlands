@@ -1,13 +1,14 @@
 package thebetweenlands.common.advancments;
 
+import java.util.Map;
+import java.util.Set;
+
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+
 import net.minecraft.advancements.ICriterionInstance;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
-
-import java.util.Map;
-import java.util.Set;
 
 public abstract class BLTrigger<E extends ICriterionInstance, T extends BLTrigger.Listener<E>> implements ICriterionTrigger<E> {
 

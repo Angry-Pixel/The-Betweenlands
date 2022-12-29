@@ -1,20 +1,19 @@
 package thebetweenlands.common.advancments;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-import net.minecraft.advancements.*;
+
+import net.minecraft.advancements.ICriterionTrigger;
+import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.critereon.AbstractCriterionInstance;
-import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.lib.ModInfo;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class EquipTrigger extends BLTrigger<EquipTrigger.Instance, EquipTrigger.Listener> {
 

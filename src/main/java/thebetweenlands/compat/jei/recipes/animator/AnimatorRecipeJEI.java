@@ -1,5 +1,18 @@
 package thebetweenlands.compat.jei.recipes.animator;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+
+import com.google.common.collect.ImmutableList;
+
 import mezz.jei.api.gui.IGuiIngredient;
 import mezz.jei.api.gui.ITickTimer;
 import mezz.jei.api.ingredients.IIngredients;
@@ -16,11 +29,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-
-import com.google.common.collect.ImmutableList;
-
 import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.recipe.animator.ToolRepairAnimatorRecipe;
@@ -29,13 +37,6 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.compat.jei.BetweenlandsJEIPlugin;
 import thebetweenlands.util.TranslationHelper;
-
-import javax.annotation.Nullable;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class AnimatorRecipeJEI implements IRecipeWrapper {
     private IAnimatorRecipe animatorRecipe;

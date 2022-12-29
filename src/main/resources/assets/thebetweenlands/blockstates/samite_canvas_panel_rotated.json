@@ -1,0 +1,20 @@
+{
+    "variants": {
+        "color=dull_lavender": { "model": "thebetweenlands:samite_canvas_panel_dull_lavender", "y": 90 },
+        "color=maroon": { "model": "thebetweenlands:samite_canvas_panel_maroon", "y": 90 },
+        "color=shadow_green": { "model": "thebetweenlands:samite_canvas_panel_shadow_green", "y": 90 },
+        "color=camelot_magenta": { "model": "thebetweenlands:samite_canvas_panel_camelot_magenta", "y": 90 },
+        "color=saffron": { "model": "thebetweenlands:samite_canvas_panel_saffron", "y": 90 },
+        "color=caribbean_green": { "model": "thebetweenlands:samite_canvas_panel_caribbean_green", "y": 90 },
+        "color=vivid_tangerine": { "model": "thebetweenlands:samite_canvas_panel_vivid_tangerine", "y": 90 },
+        "color=champagne": { "model": "thebetweenlands:samite_canvas_panel_champagne", "y": 90 },
+        "color=raisin_black": { "model": "thebetweenlands:samite_canvas_panel_raisin_black", "y": 90 },
+        "color=sushi_green": { "model": "thebetweenlands:samite_canvas_panel_sushi_green", "y": 90 },
+        "color=elm_cyan": { "model": "thebetweenlands:samite_canvas_panel_elm_cyan", "y": 90 },
+        "color=cadmium_green": { "model": "thebetweenlands:samite_canvas_panel_cadmium_green", "y": 90 },
+        "color=lavender_blue": { "model": "thebetweenlands:samite_canvas_panel_lavender_blue", "y": 90 },
+        "color=brown_rust": { "model": "thebetweenlands:samite_canvas_panel_brown_rust", "y": 90 },
+        "color=midnight_purple": { "model": "thebetweenlands:samite_canvas_panel_midnight_purple", "y": 90 },
+        "color=pewter_grey": { "model": "thebetweenlands:samite_canvas_panel_pewter_grey", "y": 90 }
+    }
+}

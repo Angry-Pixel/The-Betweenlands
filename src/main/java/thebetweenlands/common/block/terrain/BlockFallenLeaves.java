@@ -1,12 +1,16 @@
 package thebetweenlands.common.block.terrain;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -23,12 +27,6 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemFallenLeaves;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
-
-import javax.annotation.Nullable;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
 
 public class BlockFallenLeaves extends BlockBush implements IShearable, ISickleHarvestable, ICustomItemBlock {
 	public static final PropertyInteger LAYERS = PropertyInteger.create("layers", 1, 4);

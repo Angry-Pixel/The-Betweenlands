@@ -1,5 +1,10 @@
 package thebetweenlands.common.block.structure;
 
+import java.util.List;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -32,10 +37,6 @@ import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationPortal;
 import thebetweenlands.common.world.teleporter.TeleporterHandler;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
 
 public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 	public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.<EnumFacing.Axis>create("axis", EnumFacing.Axis.class, new EnumFacing.Axis[]{EnumFacing.Axis.X, EnumFacing.Axis.Z});

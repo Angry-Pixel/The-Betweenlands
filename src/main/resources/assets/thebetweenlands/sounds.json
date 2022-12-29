@@ -2476,5 +2476,17 @@
       "dig/wood4"
     ],
     "subtitle": "blsubtitles.entity.living_root.death"
+  },
+  "grub_hub_mist": {
+    "sounds": [
+      "thebetweenlands:grub_hub_mist"
+    ],
+    "subtitle": "blsubtitles.entity.grub_hub_mist"
+  },
+  "grub_hub_suck": {
+    "sounds": [
+      "thebetweenlands:grub_hub_suck"
+    ],
+    "subtitle": "blsubtitles.entity.grub_hub_suck"
   }
 }

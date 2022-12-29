@@ -1,0 +1,87 @@
+{
+    "display": {
+      "icon": {
+        "item": "thebetweenlands:weedwood_planks_treated"
+      },
+      "title": {
+        "translate": "advancements.thebetweenlands.craftsman.ill_treat_you_right.title"
+      },
+      "description": {
+        "translate": "advancements.thebetweenlands.craftsman.ill_treat_you_right.description"
+      }
+    },
+    "parent": "thebetweenlands:craftsman/omega_3s",
+    "criteria": {
+      "weedwood": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:weedwood_planks_treated"
+            }
+          ]
+        }
+      },
+      "rubber_tree": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:rubber_tree_planks_treated"
+            }
+          ]
+        }
+      },
+      "rotten": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:rotten_planks_treated"
+            }
+          ]
+        }
+      },
+      "hearthgrove": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:hearthgrove_planks_treated"
+            }
+          ]
+        }
+      },
+      "nibbletwig": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:nibbletwig_planks_treated"
+            }
+          ]
+        }
+      },
+      "giant_root": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:giant_root_planks_treated"
+            }
+          ]
+        }
+      }
+    },
+    "requirements": [
+      [
+          "giant_root",
+          "hearthgrove",
+          "nibbletwig",
+          "rotten",
+          "rubber_tree",
+          "weedwood"
+      ]
+    ]
+}
+  

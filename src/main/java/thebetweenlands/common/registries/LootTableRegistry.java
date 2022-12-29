@@ -98,6 +98,9 @@ public class LootTableRegistry {
     public static final ResourceLocation WIGHT_FORTRESS_POT = register("loot/wight_fortress_pot");
     //Chiromaw Nest
     public static final ResourceLocation CHIROMAW_NEST_SCATTERED_LOOT = register("loot/chiromaw_nest_scattered_loot");
+    //Water Filter
+    public static final ResourceLocation FILTERED_STAGNANT_WATER = register("loot/filtered_stagnant_water");
+    public static final ResourceLocation FILTERED_SWAMP_WATER = register("loot/filtered_swamp_water");
     
     //MOBS
     public static final ResourceLocation ANGLER = register("entities/angler");
@@ -159,6 +162,7 @@ public class LootTableRegistry {
     public static final ResourceLocation BUBBLER_CRAB_TRIM_1 = register("entities/bubbler_crab_trim_1");
     public static final ResourceLocation BUBBLER_CRAB_TRIM_2 = register("entities/bubbler_crab_trim_2");
     public static final ResourceLocation BUBBLER_CRAB_TRIM_3 = register("entities/bubbler_crab_trim_3");
+    public static final ResourceLocation INFESTATION = register("entities/infestation");
 
     //SPECIAL MOB LOOT FUNCTIONS
     public static final ResourceLocation CHIROMAW_HATCHLING = register("entities/chiromaw_hatchling");

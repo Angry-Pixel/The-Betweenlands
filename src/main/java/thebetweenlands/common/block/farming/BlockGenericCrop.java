@@ -357,6 +357,11 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	}
 	
 	@Override
+	public boolean canBeDestroyedByPuddles(World world, BlockPos pos, IBlockState state) {
+		return true;
+	}
+	
+	@Override
 	public boolean isHarvestable(ItemStack item, IBlockAccess world, BlockPos pos) {
 		return false;
 	}

@@ -1,7 +1,6 @@
 package thebetweenlands.common.handler;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
@@ -20,7 +19,6 @@ import thebetweenlands.api.capability.IEntityCustomCollisionsCapability.BlockCol
 import thebetweenlands.api.capability.IEntityCustomCollisionsCapability.CollisionBoxHelper;
 import thebetweenlands.api.capability.IEntityCustomCollisionsCapability.EntityCollisionPredicate;
 import thebetweenlands.api.entity.IEntityCustomBlockCollisions;
-import thebetweenlands.api.entity.ProcessedEntityCollisionBox;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 public final class CustomEntityCollisionsHandler {

@@ -25,10 +25,12 @@ import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
+import thebetweenlands.common.tile.TileEntityFilteredSiltGlassJar;
 import thebetweenlands.common.tile.TileEntityFishTrimmingTable;
 import thebetweenlands.common.tile.TileEntityFishingTackleBox;
 import thebetweenlands.common.tile.TileEntityGeckoCage;
 import thebetweenlands.common.tile.TileEntityGroundItem;
+import thebetweenlands.common.tile.TileEntityGrubHub;
 import thebetweenlands.common.tile.TileEntityHopperBetweenlands;
 import thebetweenlands.common.tile.TileEntityInfuser;
 import thebetweenlands.common.tile.TileEntityItemCage;
@@ -37,6 +39,7 @@ import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.TileEntityLootUrn;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityMossBed;
+import thebetweenlands.common.tile.TileEntityMothHouse;
 import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
 import thebetweenlands.common.tile.TileEntityMudBricksSpikeTrap;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
@@ -55,9 +58,11 @@ import thebetweenlands.common.tile.TileEntitySiltGlassJar;
 import thebetweenlands.common.tile.TileEntitySimulacrum;
 import thebetweenlands.common.tile.TileEntitySmokingRack;
 import thebetweenlands.common.tile.TileEntitySpikeTrap;
+import thebetweenlands.common.tile.TileEntitySteepingPot;
 import thebetweenlands.common.tile.TileEntityTarLootPot1;
 import thebetweenlands.common.tile.TileEntityTarLootPot2;
 import thebetweenlands.common.tile.TileEntityTarLootPot3;
+import thebetweenlands.common.tile.TileEntityWaterFilter;
 import thebetweenlands.common.tile.TileEntityWaystone;
 import thebetweenlands.common.tile.TileEntityWeedwoodSign;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
@@ -131,6 +136,11 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityMudLootPot1.class, "mud_loot_pot_1");
 		registerTileEntity(TileEntityMudLootPot2.class, "mud_loot_pot_2");
 		registerTileEntity(TileEntityMudLootPot3.class, "mud_loot_pot_3");
+		registerTileEntity(TileEntitySteepingPot.class, "steeping_pot");
+		registerTileEntity(TileEntityGrubHub.class, "grub_hub");
+		registerTileEntity(TileEntityWaterFilter.class, "water_filter");
+		registerTileEntity(TileEntityFilteredSiltGlassJar.class, "filtered_silt_glass_jar");
+		registerTileEntity(TileEntityMothHouse.class, "moth_house");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

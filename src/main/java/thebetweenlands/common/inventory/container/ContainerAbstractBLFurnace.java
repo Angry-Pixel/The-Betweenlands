@@ -1,15 +1,14 @@
 package thebetweenlands.common.inventory.container;
 
+import java.util.stream.IntStream;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.tile.TileEntityAbstractBLFurnace;
-
-import java.util.stream.IntStream;
-
-import static thebetweenlands.common.tile.TileEntityAbstractBLFurnace.FurnaceData;
+import thebetweenlands.common.tile.TileEntityAbstractBLFurnace.FurnaceData;
 
 public abstract class ContainerAbstractBLFurnace extends Container {
     private TileEntityAbstractBLFurnace tileFurnace;

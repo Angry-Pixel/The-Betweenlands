@@ -1,7 +1,11 @@
 package thebetweenlands.common.advancments;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
+
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
@@ -10,9 +14,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.lib.ModInfo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class HasAdvancementTrigger extends BLTrigger<HasAdvancementTrigger.Instance, HasAdvancementTrigger.Listener> {
 

@@ -5,8 +5,6 @@ import java.util.List;
 
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
@@ -42,10 +40,9 @@ import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.item.misc.ItemBarrel;
 import thebetweenlands.common.proxy.CommonProxy;
-import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
+import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.tile.TileEntityBarrel;
-import thebetweenlands.common.tile.TileEntityPurifier;
 
 public class BlockBarrel extends BasicBlock implements ITileEntityProvider, ICustomItemBlock {
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##",
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:rubber_tree_planks_treated"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:rubber_tree_plank_door_treated_item",
+    "count": 3
+  }
+}

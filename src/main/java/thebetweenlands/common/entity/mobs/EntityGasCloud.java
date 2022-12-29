@@ -13,7 +13,6 @@ import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.PotionEffect;
@@ -57,7 +56,7 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 	protected double aboveLayer = 6.0D;
 	protected int targetBlockedTicks = 0;
 
-	public static final DamageSource damageSourceSuffocation = (new DamageSource("suffocation")).setDamageBypassesArmor();
+	public static final DamageSource damageSourceSuffocation = (new DamageSource("bl.suffocation")).setDamageBypassesArmor();
 
 	@SideOnly(Side.CLIENT)
 	private ParticleBatch particleBatch;

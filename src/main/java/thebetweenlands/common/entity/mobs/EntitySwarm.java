@@ -15,7 +15,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,6 +27,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -47,8 +47,10 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
+import thebetweenlands.common.entity.ai.EntityAINearestAttackableTargetNonImmune;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySwarm extends EntityClimberBase implements IMob {
@@ -83,7 +85,7 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 				return attackTarget.width + 0.15f;
 			}
 		});
-		this.targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 1, false, false, null));
+		this.targetTasks.addTask(0, new EntityAINearestAttackableTargetNonImmune<>(this, EntityPlayer.class, 1, false, false, null));
 	}
 
 	@Override
@@ -209,6 +211,11 @@ public class EntitySwarm extends EntityClimberBase implements IMob {
 	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundRegistry.SQUISH;
+	}
+
+	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.INFESTATION;
 	}
 
 	@Override

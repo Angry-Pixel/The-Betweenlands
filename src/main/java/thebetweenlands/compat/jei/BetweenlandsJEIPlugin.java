@@ -21,6 +21,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
@@ -28,6 +29,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import thebetweenlands.client.gui.inventory.GuiAnimator;
@@ -41,6 +43,7 @@ import thebetweenlands.client.gui.inventory.GuiSmokingRack;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
+import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.item.misc.ItemBoneWayfinder;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -90,6 +93,8 @@ import thebetweenlands.compat.jei.recipes.purifier.PurifierRecipeCategory;
 import thebetweenlands.compat.jei.recipes.purifier.PurifierRecipeMaker;
 import thebetweenlands.compat.jei.recipes.smoking_rack.SmokingRackRecipeCategory;
 import thebetweenlands.compat.jei.recipes.smoking_rack.SmokingRackRecipeMaker;
+import thebetweenlands.compat.jei.recipes.steeping_pot.SteepingPotRecipeCategory;
+import thebetweenlands.compat.jei.recipes.steeping_pot.SteepingPotRecipeMaker;
 
 @JEIPlugin
 public class BetweenlandsJEIPlugin implements IModPlugin {
@@ -102,6 +107,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
     public static final String SMOKING_RACK_CATEGORY_UID = ModInfo.ID + ":smoking_rack";
     public static final String CRAB_POT_FILTER_BUBBLER_CATEGORY_UID = ModInfo.ID + ":crab_pot_filter_bubbler";
     public static final String CRAB_POT_FILTER_SILT_CATEGORY_UID = ModInfo.ID + ":crab_pot_filter_silt";
+    public static final String STEEPING_POT_CATEGORY_UID = ModInfo.ID + ":steeping_pot";
 
     public static IJeiHelpers jeiHelper;
     public static IJeiRuntime jeiRuntime;
@@ -123,6 +129,10 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.SMOKING_RACK), SMOKING_RACK_CATEGORY_UID);
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.CRAB_POT_FILTER), CRAB_POT_FILTER_BUBBLER_CATEGORY_UID);
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.CRAB_POT_FILTER), CRAB_POT_FILTER_SILT_CATEGORY_UID);
+        registry.addRecipeCatalyst(new ItemStack(BlockRegistry.STEEPING_POT), STEEPING_POT_CATEGORY_UID);
+      //  registry.addRecipeCatalyst(new ItemStack(ItemRegistry.DYE, 1, OreDictionary.WILDCARD_VALUE), STEEPING_POT_CATEGORY_UID);
+      //  registry.addRecipeCatalyst(new ItemStack(ItemRegistry.DRINKABLE_BREW, 1, OreDictionary.WILDCARD_VALUE), STEEPING_POT_CATEGORY_UID);
+        registry.addRecipeCatalyst(new ItemStack(ItemRegistry.SILK_BUNDLE), STEEPING_POT_CATEGORY_UID);
 
         registry.addRecipes(CompostRecipeMaker.getRecipes(), COMPOST_CATEGORY_UID);
         registry.addRecipes(AnimatorRecipeMaker.getRecipes(), ANIMATOR_CATEGORY_UID);
@@ -132,6 +142,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
         registry.addRecipes(SmokingRackRecipeMaker.getRecipes(), SMOKING_RACK_CATEGORY_UID);
         registry.addRecipes(CrabPotFilterBubblerRecipeMaker.getRecipes(), CRAB_POT_FILTER_BUBBLER_CATEGORY_UID);
         registry.addRecipes(CrabPotFilterSiltRecipeMaker.getRecipes(), CRAB_POT_FILTER_SILT_CATEGORY_UID);
+        registry.addRecipes(SteepingPotRecipeMaker.getRecipes(), STEEPING_POT_CATEGORY_UID);
 
         registry.handleRecipes(ShapelessOverrideDummyRecipe.class, recipe -> new ShapelessOverrideRecipeJEI(jeiHelper, recipe), VanillaRecipeCategoryUid.CRAFTING);
         registry.handleRecipes(ShapedOverrideDummyRecipe.class, recipe -> new ShapedOverrideRecipeJEI(jeiHelper, recipe), VanillaRecipeCategoryUid.CRAFTING);
@@ -161,6 +172,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
         blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.GLUE));
         blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.TAINTED_POTION));
         blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.ROTTEN_FOOD));
+        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.SAMITE_CANVAS_PANEL_ROTATED, 1, OreDictionary.WILDCARD_VALUE));
 
         if (!BetweenlandsConfig.DEBUG.debug) {
             blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.TEST_ITEM));
@@ -190,6 +202,34 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
         //Fish Bait
         registry.handleRecipes(RecipesFishBait.class, recipe -> new FishBaitRecipeJEI(jeiHelper.getGuiHelper()), VanillaRecipeCategoryUid.CRAFTING);
 
+        // stained glass
+        for(EnumBLDyeColor color : EnumBLDyeColor.values()) {
+            recipes.add(new ShapedOreRecipe(null, new ItemStack(BlockRegistry.FILTERED_SILT_GLASS_STAINED, 8, color.getMetadata()),
+                    "GGG", "GDG", "GGG", 'G', new ItemStack(BlockRegistry.FILTERED_SILT_GLASS, 1, 0), 'D', new ItemStack(ItemRegistry.DYE,  1, color.getMetadata())).setRegistryName(ModInfo.ID, RecipeRegistry.STAINED_GLASS.getPath() + "_" + color.getDyeColorName()));
+        }
+
+        // stained shingles
+        for(EnumBLDyeColor color : EnumBLDyeColor.values()) {
+            recipes.add(new ShapedOreRecipe(null, new ItemStack(BlockRegistry.MUD_BRICK_SHINGLE_STAINED, 8, color.getMetadata()),
+                    "GGG", "GDG", "GGG", 'G', new ItemStack(BlockRegistry.MUD_BRICK_SHINGLES, 1, 0), 'D', new ItemStack(ItemRegistry.DYE,  1, color.getMetadata())).setRegistryName(ModInfo.ID, RecipeRegistry.STAINED_SHINGLES.getPath() + "_" + color.getDyeColorName()));
+        }
+
+        // stained samite
+        for(EnumBLDyeColor color : EnumBLDyeColor.values()) {
+            recipes.add(new ShapedOreRecipe(null, new ItemStack(BlockRegistry.SAMITE, 8, color.getMetadata()),
+                    "GGG", "GDG", "GGG", 'G', new ItemStack(BlockRegistry.SAMITE, 1, OreDictionary.WILDCARD_VALUE), 'D', new ItemStack(ItemRegistry.DYE,  1, color.getMetadata())).setRegistryName(ModInfo.ID, RecipeRegistry.STAINED_SAMITE.getPath() + "_" + color.getDyeColorName()));
+        }
+
+        // colored item frames
+        for(EnumBLDyeColor color : EnumBLDyeColor.values()) {
+            recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.ITEM_FRAME, 1, color.getMetadata()), new ItemStack(ItemRegistry.ITEM_FRAME,1, EnumBLDyeColor.CHAMPAGNE.getMetadata()), new ItemStack(ItemRegistry.DYE, 1, color.getMetadata())).setRegistryName(ModInfo.ID, RecipeRegistry.COLORED_ITEM_FRAME.getPath() + "_" + color.getDyeColorName()));
+        }
+        
+        // colored reed mats
+        for(EnumBLDyeColor color : EnumBLDyeColor.values()) {
+            recipes.add(new ShapedOreRecipe(null, new ItemStack(BlockRegistry.REED_MAT_COLORED, 8, color.getMetadata()),
+                    "GGG", "GDG", "GGG", 'G', new ItemStack(BlockRegistry.REED_MAT), 'D', new ItemStack(ItemRegistry.DYE,  1, color.getMetadata())).setRegistryName(ModInfo.ID, RecipeRegistry.REED_MAT_COLORED.getPath() + "_" + color.getDyeColorName()));
+        }
 
         //Vials
         recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 0), new ItemStack(ItemRegistry.ASPECT_VIAL,  1, 0)).setRegistryName(ModInfo.ID, RecipeRegistry.ASPECT_VIAL.getPath() + "_green"));
@@ -215,6 +255,23 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
 	            output.setItemDamage(i+1);
 	            recipes.add(new ShapedOreRecipe(null, output.copy(), "LLL", "LPL", "LLL", 'L', skin, 'P', input.copy()).setRegistryName(ModInfo.ID, RecipeRegistry.LURKER_POUCH.getPath() + "_" + i));
 	        }
+        }
+
+        //Lurker skin coloring
+        {
+            ItemStack output = new ItemStack(ItemRegistry.LURKER_SKIN_POUCH);
+            ItemStack input = new ItemStack(ItemRegistry.LURKER_SKIN_POUCH);
+            ItemStack dye = new ItemStack(ItemRegistry.DYE);
+            for(int j = 0; j < 3; j++) {
+                for (int i = 0; i < EnumBLDyeColor.values().length; i++) {
+                    dye.setItemDamage(i);
+                    input.setItemDamage(j);
+                    output.setItemDamage(j);
+                    output.setTagCompound(new NBTTagCompound());
+                    output.getTagCompound().setInteger("type", i);
+                    recipes.add(new ShapelessOreRecipe(null, output, input, dye).setRegistryName(ModInfo.ID, RecipeRegistry.COLORED_LURKER_SKIN_POUCH.getPath() + "_" + i));
+                }
+            }
         }
 
         //Grappling hook upgrade
@@ -275,7 +332,17 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
             }
             return itemStack.getItemDamage() + nbtTagCompound.toString();
         });*/
+
         subtypeRegistry.useNbtForSubtypes(ItemRegistry.AMULET);
+        //subtypeRegistry.useNbtForSubtypes(ItemRegistry.BL_BUCKET);
+
+        subtypeRegistry.registerSubtypeInterpreter(ItemRegistry.BL_BUCKET, itemStack -> {
+            NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
+            if (nbtTagCompound == null || nbtTagCompound.isEmpty()) {
+                return itemStack.getItemDamage() + ISubtypeRegistry.ISubtypeInterpreter.NONE;
+            }
+            return itemStack.getItemDamage() + nbtTagCompound.toString();
+        });
     }
 
     @Override
@@ -286,7 +353,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
     @Override
 	public void registerCategories(IRecipeCategoryRegistration registry) {
         jeiHelper = registry.getJeiHelpers();
-        registry.addRecipeCategories(new CompostRecipeCategory(), new AnimatorRecipeCategory(), new DruidAltarRecipeCategory(), new PestleAndMortarCategory(), new PurifierRecipeCategory(), new SmokingRackRecipeCategory(), new CrabPotFilterBubblerRecipeCategory(), new CrabPotFilterSiltRecipeCategory());
+        registry.addRecipeCategories(new CompostRecipeCategory(), new AnimatorRecipeCategory(), new DruidAltarRecipeCategory(), new PestleAndMortarCategory(), new PurifierRecipeCategory(), new SmokingRackRecipeCategory(), new CrabPotFilterBubblerRecipeCategory(), new CrabPotFilterSiltRecipeCategory(), new SteepingPotRecipeCategory());
     }
 
     public static void addRecipeName(ResourceLocation registryName, IGuiItemStackGroup guiItemStacks, int ouputIndex) {

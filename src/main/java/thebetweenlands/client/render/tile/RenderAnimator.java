@@ -16,7 +16,6 @@ import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.client.render.model.tile.ModelAnimator;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
-import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityAnimator;
 
 public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator> {

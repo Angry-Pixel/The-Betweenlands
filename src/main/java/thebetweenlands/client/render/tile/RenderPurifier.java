@@ -1,5 +1,9 @@
 package thebetweenlands.client.render.tile;
 
+import java.util.Random;
+
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -16,13 +20,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.render.model.tile.ModelPurifier;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.util.StatePropertyHelper;
-
-import java.util.Random;
 
 @SideOnly(Side.CLIENT)
 public class RenderPurifier extends TileEntitySpecialRenderer<TileEntityPurifier> {

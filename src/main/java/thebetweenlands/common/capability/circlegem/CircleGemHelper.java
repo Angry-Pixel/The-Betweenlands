@@ -1,13 +1,26 @@
 package thebetweenlands.common.capability.circlegem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemBow;
+import net.minecraft.item.ItemShield;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
@@ -20,9 +33,6 @@ import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.network.clientbound.MessageGemProc;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.util.NBTHelper;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CircleGemHelper {
 	public static final String ITEM_GEM_NBT_TAG = "Gem";

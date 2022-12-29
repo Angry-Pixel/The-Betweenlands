@@ -1,5 +1,13 @@
 package thebetweenlands.client.render.entity.layer;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelBox;
@@ -9,7 +17,6 @@ import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -21,8 +28,6 @@ import thebetweenlands.client.render.entity.RenderPlayerRower;
 import thebetweenlands.client.render.model.entity.rowboat.ModelBipedRower;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.util.Matrix;
-
-import java.util.*;
 
 public class LayerRowerArmor extends LayerBipedArmor {
 	private final RenderPlayerRower rower;

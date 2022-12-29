@@ -1,5 +1,7 @@
 package thebetweenlands.api.item;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -9,8 +11,6 @@ import net.minecraft.util.ResourceLocation;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.registries.CapabilityRegistry;
-
-import javax.annotation.Nullable;
 
 public interface IEquippable {
 	/**

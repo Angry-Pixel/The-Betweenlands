@@ -27,6 +27,9 @@ import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
@@ -181,11 +184,21 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 				updateBlock = true;
 			}
 			if (this.world.isRemote && this.infusionColorGradientTicks > 0 && this.currentInfusionState == 2) {
-				for (int i = 0; i < 10; i++) {
-					double x = pos.getX() + 0.25F + this.world.rand.nextFloat() * 0.5F;
-					double z = pos.getZ() + 0.25F + this.world.rand.nextFloat() * 0.5F;
-					BLParticles.STEAM_PURIFIER.spawn(this.world, x, pos.getY() + 1.0D - this.world.rand.nextFloat() * 0.2F, z);
+				float colors[] = currentInfusionColor;
+				for(int i = 0; i < 3 + world.rand.nextInt(5); i++) {
+					BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(world, pos.getX() + 0.5F, pos.getY() + 0.75F, pos.getZ() + 0.5F, 
+							ParticleArgs.get()
+							.withMotion((world.rand.nextFloat() * 0.25F - 0.125f) * 0.09f, world.rand.nextFloat() * 0.02F + 0.01F, (world.rand.nextFloat() * 0.25F - 0.125f) * 0.09f)
+							.withScale(1f + world.rand.nextFloat() * 2.0F)
+							.withColor(colors[0], colors[1], colors[2], 1)
+							.withData(80, true, 0.01F, true)));
 				}
+
+				//for (int i = 0; i < 10; i++) {
+				//	double x = pos.getX() + 0.25F + this.world.rand.nextFloat() * 0.5F;
+				//	double z = pos.getZ() + 0.25F + this.world.rand.nextFloat() * 0.5F;
+				//	BLParticles.STEAM_PURIFIER.spawn(this.world, x, pos.getY() + 1.0D - this.world.rand.nextFloat() * 0.2F, z);
+				//}
 			}
 		} else {
 			if (this.currentInfusionState != 0)
@@ -218,11 +231,20 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 				}
 				
 				if (this.world.isRemote && this.infusionColorGradientTicks > 0) {
-					for (int i = 0; i < 10; i++) {
-						double x = pos.getX() + 0.25F + this.world.rand.nextFloat() * 0.5F;
-						double z = pos.getZ() + 0.25F + this.world.rand.nextFloat() * 0.5F;
-						BLParticles.STEAM_PURIFIER.spawn(this.world, x, pos.getY() + 1.0D - this.world.rand.nextFloat() * 0.2F, z);
+					float colors[] = currentInfusionColor;
+					for(int i = 0; i < 3 + world.rand.nextInt(5); i++) {
+						BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(world, pos.getX() + 0.5F, pos.getY() + 0.75F, pos.getZ() + 0.5F, 
+								ParticleArgs.get()
+								.withMotion((world.rand.nextFloat() * 0.25F - 0.125f) * 0.09f, world.rand.nextFloat() * 0.02F + 0.01F, (world.rand.nextFloat() * 0.25F - 0.125f) * 0.09f)
+								.withScale(1f + world.rand.nextFloat() * 2.0F)
+								.withColor(colors[0], colors[1], colors[2], 1)
+								.withData(80, true, 0.01F, true)));
 					}
+					//for (int i = 0; i < 10; i++) {
+					//	double x = pos.getX() + 0.25F + this.world.rand.nextFloat() * 0.5F;
+					//	double z = pos.getZ() + 0.25F + this.world.rand.nextFloat() * 0.5F;
+					//	BLParticles.STEAM_PURIFIER.spawn(this.world, x, pos.getY() + 1.0D - this.world.rand.nextFloat() * 0.2F, z);
+					//}
 				}
 			} else {
 				this.currentInfusionState = 0;

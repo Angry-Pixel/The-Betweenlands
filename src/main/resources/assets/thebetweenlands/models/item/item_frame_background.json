@@ -1,0 +1,15 @@
+{
+    "textures": {
+        "particle": "thebetweenlands:blocks/weedwood_planks",
+        "back": "thebetweenlands:blocks/item_frame_bg"
+    },
+    "elements": [
+        {   "from": [ 3, 3, 15.5 ],
+            "to": [ 13, 13, 16 ],
+            "faces": {
+                "north": { "uv": [ 3, 3, 13, 13 ], "texture": "#back", "tintindex": 0 },
+                "south": { "uv": [ 3, 3, 13, 13 ], "texture": "#back", "tintindex": 0 }
+            }
+        }
+    ]
+}

@@ -1,7 +1,6 @@
 package thebetweenlands.client.audio;
 
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.Vec3d;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.registries.SoundRegistry;
 

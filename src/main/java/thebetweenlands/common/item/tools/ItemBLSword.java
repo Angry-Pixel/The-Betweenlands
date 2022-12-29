@@ -2,6 +2,8 @@ package thebetweenlands.common.item.tools;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Multimap;
 
 import net.minecraft.block.state.IBlockState;
@@ -11,7 +13,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -20,8 +21,6 @@ import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.item.BLMaterialRegistry;
-
-import javax.annotation.Nullable;
 
 public class ItemBLSword extends ItemSword implements ICorrodible, IAnimatorRepairable {
 	protected final ToolMaterial toolMaterial;

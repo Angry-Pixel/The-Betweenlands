@@ -1,5 +1,7 @@
 package thebetweenlands.common.item.food;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -16,8 +18,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
-
-import javax.annotation.Nullable;
 
 public class ItemTaintedPotion extends Item {
 	public ItemTaintedPotion() {

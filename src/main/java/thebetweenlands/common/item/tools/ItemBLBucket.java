@@ -1,5 +1,12 @@
 package thebetweenlands.common.item.tools;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -9,7 +16,13 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextFormatting;
@@ -18,7 +31,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
@@ -31,14 +49,10 @@ import thebetweenlands.common.block.container.BlockInfuser;
 import thebetweenlands.common.block.misc.BlockRubberTap;
 import thebetweenlands.common.block.terrain.BlockRubberLog;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.item.EnumBLDrinkableBrew;
+import thebetweenlands.common.item.EnumBLDyeColor;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMultipleItemModelDefinition {
 
@@ -250,12 +264,38 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
                     if (i == 0 && fluid.getTemperature() > 430)
                         continue;
                     // Add all fluids that the bucket can be filled with
-                    final FluidStack fs = new FluidStack(fluid, getCapacity());
-                    final ItemStack stack = new ItemStack(this, 1, i);
-                    final IFluidHandlerItem fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-                    if (fluidHandler != null && fluidHandler.fill(fs, true) == fs.amount) {
-                        final ItemStack filled = fluidHandler.getContainer();
-                        subItems.add(filled);
+                    if(fluid == thebetweenlands.common.registries.FluidRegistry.DYE_FLUID) {
+                        for(EnumBLDyeColor dye : EnumBLDyeColor.values()) {
+                            NBTTagCompound tag = new NBTTagCompound();
+                            tag.setInteger("type", dye.getMetadata());
+                            final FluidStack fs = new FluidStack(fluid, getCapacity(), tag);
+                            final ItemStack stack = new ItemStack(this, 1, i);
+                            final IFluidHandlerItem fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                            if (fluidHandler != null && fluidHandler.fill(fs, true) == fs.amount) {
+                                final ItemStack filled = fluidHandler.getContainer();
+                                subItems.add(filled);
+                            }
+                        }
+                    } else if(fluid == thebetweenlands.common.registries.FluidRegistry.DRINKABLE_BREW) {
+                        for(EnumBLDrinkableBrew brew : EnumBLDrinkableBrew.values()) {
+                            NBTTagCompound tag = new NBTTagCompound();
+                            tag.setInteger("type", brew.getMetadata());
+                            final FluidStack fs = new FluidStack(fluid, getCapacity(), tag);
+                            final ItemStack stack = new ItemStack(this, 1, i);
+                            final IFluidHandlerItem fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                            if (fluidHandler != null && fluidHandler.fill(fs, true) == fs.amount) {
+                                final ItemStack filled = fluidHandler.getContainer();
+                                subItems.add(filled);
+                            }
+                        }
+                    } else {
+                        final FluidStack fs = new FluidStack(fluid, getCapacity());
+                        final ItemStack stack = new ItemStack(this, 1, i);
+                        final IFluidHandlerItem fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+                        if (fluidHandler != null && fluidHandler.fill(fs, true) == fs.amount) {
+                            final ItemStack filled = fluidHandler.getContainer();
+                            subItems.add(filled);
+                        }
                     }
                 }
             }

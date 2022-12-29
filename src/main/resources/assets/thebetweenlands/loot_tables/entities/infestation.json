@@ -1,0 +1,32 @@
+{
+  "pools": [
+    {
+      "name": "infestation",
+      "rolls": 1,
+      "conditions": [],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:pheromone_thorax",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 0,
+                "max": 1
+              }
+            },
+            {
+              "function": "looting_enchant",
+              "count": {
+                "min": 0,
+                "max": 1
+              }
+            }
+          ],
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

@@ -2,7 +2,7 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "texture": "thebetweenlands:blocks/betweenstone"
+      "texture": "thebetweenlands:blocks/smooth_betweenstone"
     }
   },
   "variants": {

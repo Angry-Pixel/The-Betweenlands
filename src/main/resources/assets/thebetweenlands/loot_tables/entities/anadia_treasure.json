@@ -310,11 +310,11 @@
                             "size_start": 0.125,
                             "size_end": 0.95,
                             "min_count": 1,
-                            "max_count": 2
+                            "max_count": 1
                         },
                         {
                             "function":"set_data",
-                            "data": 41
+                            "data": 11
                         }
                     ]
                 },
@@ -519,12 +519,12 @@
                             "function": "thebetweenlands:set_count_from_anadia",
                             "size_start": 0.125,
                             "size_end": 0.95,
-                            "min_count": 2,
-                            "max_count": 3
+                            "min_count": 1,
+                            "max_count": 2
                         },
                         {
                             "function":"set_data",
-                            "data": 41
+                            "data": 11
                         }
                     ]
                 },

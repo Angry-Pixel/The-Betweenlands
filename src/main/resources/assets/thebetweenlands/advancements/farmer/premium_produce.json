@@ -4,10 +4,10 @@
         "item": "thebetweenlands:pearled_pear"
       },
       "title": {
-        "translate": "advancements.thebetweenlands.survivalist.premium_produce.title"
+        "translate": "advancements.thebetweenlands.farmer.premium_produce.title"
       },
       "description": {
-        "translate": "advancements.thebetweenlands.survivalist.premium_produce.description"
+        "translate": "advancements.thebetweenlands.farmer.premium_produce.description"
       },
       "frame": "goal"
     },

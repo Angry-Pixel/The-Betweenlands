@@ -95,6 +95,11 @@ public class BlockBetweenstonePebblePile extends BasicBlock implements ICustomIt
 	}
 
 	@Override
+	public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
+		return false;
+	}
+
+	@Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }

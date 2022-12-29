@@ -46,7 +46,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityGiantToad extends EntityTameableBL implements IEntityBL, IRingOfGatheringMinion {
+public class EntityGiantToad extends EntityTameableBL implements IEntityBL, IRingOfGatheringMinion, net.minecraft.entity.passive.IAnimals {
 	private static final DataParameter<Byte> DW_SWIM_STROKE = EntityDataManager.createKey(EntityGiantToad.class, DataSerializers.BYTE);
 	private static final DataParameter<Boolean> DW_TAMED = EntityDataManager.createKey(EntityGiantToad.class, DataSerializers.BOOLEAN);
 

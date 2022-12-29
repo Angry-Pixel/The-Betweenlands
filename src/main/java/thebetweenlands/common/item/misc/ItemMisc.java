@@ -20,6 +20,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -31,15 +32,21 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePile;
 import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePileWater;
 import thebetweenlands.common.entity.mobs.EntityEmberling;
 import thebetweenlands.common.entity.mobs.EntityEmberlingWild;
+import thebetweenlands.common.item.EnumBLDrinkableBrew;
 import thebetweenlands.common.item.IGenericItem;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDefinition {
@@ -148,7 +155,10 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 		SNOT(58),
 		URCHIN_SPIKE(59),
 		FISHING_FLOAT(60),
-		OLMLETTE_MIXTURE(61);
+		OLMLETTE_MIXTURE(61),
+		SILK_GRUB_COCOON(62),
+		SILK_THREAD(63),
+		SILK_BUNDLE_DIRTY(64);
 
 		private final int id;
 		private final String unlocalizedName;
@@ -210,7 +220,9 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (!player.getHeldItem(hand).isEmpty() && player.getHeldItem(hand).getItem() == EnumItemMisc.BETWEENSTONE_PEBBLE.getItem() && player.getHeldItem(hand).getItemDamage() == EnumItemMisc.BETWEENSTONE_PEBBLE.getID()) {
+		ItemStack heldItem = player.getHeldItem(hand);
+		
+		if (!heldItem.isEmpty() && heldItem.getItem() == EnumItemMisc.BETWEENSTONE_PEBBLE.getItem() && heldItem.getItemDamage() == EnumItemMisc.BETWEENSTONE_PEBBLE.getID()) {
 			IBlockState iblockstate = world.getBlockState(pos);
 			Block block = iblockstate.getBlock();
 			Block blockType;
@@ -237,16 +249,50 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 				}
 				return EnumActionResult.SUCCESS;
 			}
-
-			else {
-				return EnumActionResult.FAIL;
+				
+			return EnumActionResult.FAIL;
+		} else if (!heldItem.isEmpty() && EnumItemMisc.WEEDWOOD_BOWL.isItemOf(heldItem)) {
+			IFluidHandler handler = FluidUtil.getFluidHandler(world, pos, facing);
+			if (handler != null) {
+				FluidStack tankContents = handler.drain(250, false);
+				if (tankContents != null) { 
+					if(tankContents.getFluid() == FluidRegistry.DYE_FLUID || tankContents.getFluid() == FluidRegistry.DRINKABLE_BREW) {
+						if(!world.isRemote) {
+							IBlockState state = world.getBlockState(pos);
+							
+							ItemStack filledBowl = EnumItemMisc.WEEDWOOD_BOWL.create(1);
+							
+							if(tankContents.tag != null && tankContents.tag.hasKey("type")) {
+								if(tankContents.getFluid() == FluidRegistry.DYE_FLUID)
+									filledBowl = new ItemStack(ItemRegistry.DYE, 1, tankContents.tag.getInteger("type"));
+								if(tankContents.getFluid() == FluidRegistry.DRINKABLE_BREW)
+									filledBowl = EnumBLDrinkableBrew.byMetadata(tankContents.tag.getInteger("type")).getBrewItemStack();
+							}
+							
+							if (!player.capabilities.isCreativeMode) {
+								heldItem.shrink(1);
+							}
+							
+							if (!player.inventory.addItemStackToInventory(filledBowl))
+								ForgeHooks.onPlayerTossEvent(player, filledBowl, false);
+							
+							handler.drain(250, true);
+							world.notifyBlockUpdate(pos, state, state, 3);
+						}
+						
+						world.playSound((EntityPlayer) null, pos, SoundEvents.ENTITY_PLAYER_SPLASH, SoundCategory.BLOCKS, 0.75F, 2F);
+						
+						return EnumActionResult.SUCCESS;
+					}
+				}
 			}
-		}
-		else {
+			
 			return EnumActionResult.FAIL;
 		}
+			
+		return EnumActionResult.PASS;
 	}
-	
+
     public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
         if ((world.getBlockState(pos.down()).getBlock() instanceof BlockBetweenstonePebblePileWater || world.getBlockState(pos.down()).getBlock() instanceof BlockBetweenstonePebblePile) && side == EnumFacing.UP)
         	return false;

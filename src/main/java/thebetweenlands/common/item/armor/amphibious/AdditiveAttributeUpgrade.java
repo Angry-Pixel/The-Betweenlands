@@ -3,8 +3,6 @@ package thebetweenlands.common.item.armor.amphibious;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.google.common.collect.Multimap;
 
 import net.minecraft.entity.SharedMonsterAttributes;

@@ -1,5 +1,7 @@
 package thebetweenlands.client.gui.inventory;
 
+import java.io.IOException;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiButtonImage;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -14,11 +16,8 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
-
-import java.io.IOException;
 
 @SideOnly(Side.CLIENT)
 public class GuiWeedwoodWorkbench extends GuiContainer implements IRecipeShownListener {

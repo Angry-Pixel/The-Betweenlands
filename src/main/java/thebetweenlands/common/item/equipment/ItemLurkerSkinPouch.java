@@ -23,6 +23,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -52,12 +53,14 @@ import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.capability.equipment.EquipmentHelper;
 import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.inventory.InventoryPouch;
+import thebetweenlands.common.item.EnumBLDyeColor;
+import thebetweenlands.common.item.ITintedItem;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
 
-public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamableItem {
+public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamableItem, ITintedItem {
     public ItemLurkerSkinPouch() {
         this.setMaxStackSize(1);
         this.setCreativeTab(BLCreativeTabs.GEARS);
@@ -161,6 +164,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
         ItemStack stack = player.getHeldItem(hand);
         if (!world.isRemote) {
             if (!player.isSneaking()) {
+            	checkForLegacyPouch(stack);
                 player.openGui(TheBetweenlands.instance, CommonProxy.GUI_LURKER_POUCH, world, 0, 0, 0);
             } else {
                 player.openGui(TheBetweenlands.instance, CommonProxy.GUI_ITEM_RENAMING, world, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
@@ -170,7 +174,14 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
 
-    @Override
+    private void checkForLegacyPouch(ItemStack stack) {
+		if(!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+		if(!stack.getTagCompound().hasKey("type"))
+			stack.getTagCompound().setInteger("type", 7);
+	}
+
+	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		if(this.isInCreativeTab(tab)) {
 			ItemStack basePouch = new ItemStack(this);
@@ -302,4 +313,18 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
     @Override
     public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory) {
     }
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int getColorMultiplier(ItemStack stack, int tintIndex) {
+		if (tintIndex == 1) {
+			if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("type")) {
+				int type = stack.getTagCompound().getInteger("type");
+				return EnumBLDyeColor.byMetadata(type).getColorValue();
+			}
+			else
+				return EnumBLDyeColor.byMetadata(EnumBLDyeColor.CHAMPAGNE.getMetadata()).getColorValue(); // default to Pewter Grey
+		}
+		return  -1;
+	}
 }

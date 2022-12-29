@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -25,6 +24,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class CustomRecipes<C> {
@@ -91,10 +93,24 @@ public abstract class CustomRecipes<C> {
 			}
 		};
 
+		public static final RecipeArg<FluidStack> FLUID_INPUT = new RecipeArg<FluidStack>() {
+			@Override
+			public IRecipeEntry<FluidStack> parse(JsonElement element) {
+				return RecipeArg.parseFluidStack(element, true);
+			}
+		};
+
 		public static final RecipeArg<ItemStack> ITEM_OUTPUT = new RecipeArg<ItemStack>() {
 			@Override
 			public IRecipeEntry<ItemStack> parse(JsonElement element) {
 				return parseItemStack(element, false);
+			}
+		};
+
+		public static final RecipeArg<FluidStack> FLUID_OUTPUT = new RecipeArg<FluidStack>() {
+			@Override
+			public IRecipeEntry<FluidStack> parse(JsonElement element) {
+				return RecipeArg.parseFluidStack(element, false);
 			}
 		};
 
@@ -109,6 +125,21 @@ public abstract class CustomRecipes<C> {
 			int size = obj.has("size") ? obj.get("size").getAsInt() : 1;
 			ItemStack stack = new ItemStack(Item.getByNameOrId(id), size, meta);
 			stack.setTagCompound(nbt);
+			return (world, pos, crafter) -> stack.copy();
+		}
+
+		private static IRecipeEntry<FluidStack> parseFluidStack(JsonElement element, boolean input) {
+			JsonObject obj = element.getAsJsonObject();
+			String id = obj.get("id").getAsString();
+			int meta = obj.has("meta") ? obj.get("meta").getAsInt() : (input ? OreDictionary.WILDCARD_VALUE : 0);
+			NBTTagCompound nbt = null;
+			if(obj.has("nbt")) {
+				nbt = NBT.parse(obj.get("nbt")).create();
+			}
+			int size = obj.has("size") ? obj.get("size").getAsInt() : 1;
+			Fluid fluid = FluidRegistry.getFluid(id);
+			FluidStack stack = new FluidStack(fluid, Fluid.BUCKET_VOLUME);
+			stack.tag = nbt;
 			return (world, pos, crafter) -> stack.copy();
 		}
 

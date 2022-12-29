@@ -20,9 +20,12 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
@@ -81,6 +84,22 @@ public class ItemAmulet extends Item implements IEquippable {
 	public static boolean canPlayerAddAmulet(EntityPlayer player, Entity target) {
 		IPuppetCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
 		return SUPPORTED_ENTITIES.contains(target.getClass()) || (cap != null && cap.hasPuppeteer() && cap.getPuppeteer() == player);
+	}
+
+	@Override
+	public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+		if(enchantment == Enchantments.MENDING)
+			return false;
+
+		return true;
+	}
+
+	@Override
+	public boolean isBookEnchantable(ItemStack stack, ItemStack book)  {
+		if(EnchantmentHelper.getEnchantments(book).containsKey(Enchantments.MENDING))
+			return false;
+
+		return true;
 	}
 
 	/**

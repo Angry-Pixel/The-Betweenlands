@@ -1,8 +1,18 @@
 package thebetweenlands.common.advancments;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-import net.minecraft.advancements.*;
+
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementProgress;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.CriterionProgress;
+import net.minecraft.advancements.ICriterionTrigger;
+import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.critereon.AbstractCriterionInstance;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.entity.EntityLivingBase;
@@ -10,10 +20,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 import thebetweenlands.common.lib.ModInfo;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class SwatShieldTrigger extends BLTrigger<SwatShieldTrigger.Instance, SwatShieldTrigger.Listener> {
 

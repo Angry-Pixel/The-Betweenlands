@@ -1,5 +1,8 @@
 package thebetweenlands.common.capability.equipment;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,9 +21,6 @@ import thebetweenlands.common.inventory.InventoryEquipment;
 import thebetweenlands.common.inventory.InventoryEquipmentAmulets;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
-
-import java.util.EnumMap;
-import java.util.Map;
 
 public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityCapability, IEquipmentCapability, EntityPlayer> implements IEquipmentCapability, ISerializableCapability {
 	private Map<EnumEquipmentInventory, NonNullList<ItemStack>> allInventoryStacks = new EnumMap<>(EnumEquipmentInventory.class);

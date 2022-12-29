@@ -1,0 +1,6 @@
+{ 
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "thebetweenlands:blocks/ancient_remnant_block"
+  } 
+}

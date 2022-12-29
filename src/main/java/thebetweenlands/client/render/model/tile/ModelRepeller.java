@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import thebetweenlands.common.registries.AspectRegistry;
-import thebetweenlands.common.tile.TileEntityAspectVial;
 import thebetweenlands.util.ColorUtils;
 import thebetweenlands.util.LightingUtil;
 

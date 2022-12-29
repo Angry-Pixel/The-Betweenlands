@@ -1,9 +1,9 @@
 package thebetweenlands.common.world.gen.feature.loot;
 
+import java.util.Random;
+
 import net.minecraft.item.ItemStack;
 import thebetweenlands.util.WeightedList;
-
-import java.util.Random;
 
 public class WeightedLootList extends WeightedList<LootItemStack> {
 

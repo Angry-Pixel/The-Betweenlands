@@ -2,7 +2,6 @@ package thebetweenlands.common.config.remapper;
 
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
-import net.minecraftforge.fml.common.versioning.InvalidVersionSpecificationException;
 
 /**
  * Remaps any config file with no version to 1.0.0

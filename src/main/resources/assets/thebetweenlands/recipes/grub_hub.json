@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "PMP",
+    "MJM",
+    " M "
+  ],
+  "key": {
+    "P": {
+            "item": "thebetweenlands:weedwood_planks"
+    },
+    "M": {
+            "item": "thebetweenlands:spirit_tree_face_small_mask_animated"
+    },
+    "J": {
+            "item": "thebetweenlands:filtered_silt_glass_jar"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:grub_hub"
+  }
+}

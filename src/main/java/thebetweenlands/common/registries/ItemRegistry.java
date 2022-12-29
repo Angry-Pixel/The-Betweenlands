@@ -14,6 +14,8 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.FluidContainerColorer;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -56,6 +58,7 @@ import thebetweenlands.common.item.armor.ItemExplorersHat;
 import thebetweenlands.common.item.armor.ItemLurkerSkinArmor;
 import thebetweenlands.common.item.armor.ItemMarshRunnerBoots;
 import thebetweenlands.common.item.armor.ItemRubberBoots;
+import thebetweenlands.common.item.armor.ItemSilkMask;
 import thebetweenlands.common.item.armor.ItemSkullMask;
 import thebetweenlands.common.item.armor.ItemSpiritTreeFaceMaskLarge;
 import thebetweenlands.common.item.armor.ItemSpiritTreeFaceMaskSmall;
@@ -84,6 +87,7 @@ import thebetweenlands.common.item.food.ItemBlackHatMushroom;
 import thebetweenlands.common.item.food.ItemBulbCappedMushroom;
 import thebetweenlands.common.item.food.ItemChiromawWing;
 import thebetweenlands.common.item.food.ItemCrabClaw;
+import thebetweenlands.common.item.food.ItemDrinkableBrew;
 import thebetweenlands.common.item.food.ItemFlatHeadMushroom;
 import thebetweenlands.common.item.food.ItemForbiddenFig;
 import thebetweenlands.common.item.food.ItemGertsDonut;
@@ -91,7 +95,6 @@ import thebetweenlands.common.item.food.ItemMarshmallow;
 import thebetweenlands.common.item.food.ItemMarshmallowPink;
 import thebetweenlands.common.item.food.ItemMireScramble;
 import thebetweenlands.common.item.food.ItemMireSnailEgg;
-import thebetweenlands.common.item.food.ItemNettleSoup;
 import thebetweenlands.common.item.food.ItemNibblestick;
 import thebetweenlands.common.item.food.ItemRockSnotPearl;
 import thebetweenlands.common.item.food.ItemRottenFood;
@@ -110,8 +113,63 @@ import thebetweenlands.common.item.herblore.ItemDentrothystVial;
 import thebetweenlands.common.item.herblore.ItemElixir;
 import thebetweenlands.common.item.herblore.ItemManualHL;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
-import thebetweenlands.common.item.misc.*;
+import thebetweenlands.common.item.misc.ItemAmateMap;
+import thebetweenlands.common.item.misc.ItemAmuletSlot;
+import thebetweenlands.common.item.misc.ItemAngryPebble;
+import thebetweenlands.common.item.misc.ItemBLDye;
+import thebetweenlands.common.item.misc.ItemBLItemFrame;
+import thebetweenlands.common.item.misc.ItemBLNameTag;
+import thebetweenlands.common.item.misc.ItemBLRecord;
+import thebetweenlands.common.item.misc.ItemBarkAmulet;
+import thebetweenlands.common.item.misc.ItemBoneWayfinder;
+import thebetweenlands.common.item.misc.ItemCavingRope;
+import thebetweenlands.common.item.misc.ItemChiromawEgg;
+import thebetweenlands.common.item.misc.ItemChiromawTame;
+import thebetweenlands.common.item.misc.ItemCritters;
+import thebetweenlands.common.item.misc.ItemDentrothystShard;
+import thebetweenlands.common.item.misc.ItemDoorBetweenlands;
+import thebetweenlands.common.item.misc.ItemDraeton;
+import thebetweenlands.common.item.misc.ItemEmptyAmateMap;
+import thebetweenlands.common.item.misc.ItemFishBait;
+import thebetweenlands.common.item.misc.ItemFreshwaterUrchin;
+import thebetweenlands.common.item.misc.ItemFumigant;
+import thebetweenlands.common.item.misc.ItemGalleryFrame;
+import thebetweenlands.common.item.misc.ItemGem;
+import thebetweenlands.common.item.misc.ItemGemSinger;
+import thebetweenlands.common.item.misc.ItemGlue;
+import thebetweenlands.common.item.misc.ItemGrapplingHook;
+import thebetweenlands.common.item.misc.ItemLifeCrystal;
+import thebetweenlands.common.item.misc.ItemLoreScrap;
+import thebetweenlands.common.item.misc.ItemLurkerSkinPatch;
+import thebetweenlands.common.item.misc.ItemMagicItemMagnet;
+import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.item.misc.ItemMistStaff;
+import thebetweenlands.common.item.misc.ItemMob;
+import thebetweenlands.common.item.misc.ItemMobAnadia;
+import thebetweenlands.common.item.misc.ItemMossBed;
+import thebetweenlands.common.item.misc.ItemMummyBait;
+import thebetweenlands.common.item.misc.ItemOctineIngot;
+import thebetweenlands.common.item.misc.ItemPheromoneThorax;
+import thebetweenlands.common.item.misc.ItemPyradFlame;
+import thebetweenlands.common.item.misc.ItemRingOfGathering;
+import thebetweenlands.common.item.misc.ItemRope;
+import thebetweenlands.common.item.misc.ItemRuneDoorKey;
+import thebetweenlands.common.item.misc.ItemSapSpit;
+import thebetweenlands.common.item.misc.ItemShadowStaff;
+import thebetweenlands.common.item.misc.ItemShimmerStone;
+import thebetweenlands.common.item.misc.ItemSilkBundle;
+import thebetweenlands.common.item.misc.ItemSnotPod;
+import thebetweenlands.common.item.misc.ItemSpiritTreeFaceMaskSmallAnimated;
+import thebetweenlands.common.item.misc.ItemSwampTalisman;
+import thebetweenlands.common.item.misc.ItemTarminion;
+import thebetweenlands.common.item.misc.ItemVolarkite;
+import thebetweenlands.common.item.misc.ItemWeedwoodRowboat;
+import thebetweenlands.common.item.misc.ItemWeedwoodSign;
+import thebetweenlands.common.item.misc.LocationDebugItem;
+import thebetweenlands.common.item.misc.TestItem;
+import thebetweenlands.common.item.misc.TestItemChimp;
+import thebetweenlands.common.item.misc.TestItemChimpRuler;
 import thebetweenlands.common.item.shields.ItemDentrothystShield;
 import thebetweenlands.common.item.shields.ItemLivingWeedwoodShield;
 import thebetweenlands.common.item.shields.ItemLurkerSkinShield;
@@ -195,7 +253,6 @@ public class ItemRegistry {
     public static final Item YELLOW_DOTTED_FUNGUS = new ItemBLFood(6, 0.6F, false);
     public static final Item SILT_CRAB_CLAW = new ItemCrabClaw();
     public static final Item CRAB_STICK = new ItemBLFood(5, 0.9F, false);
-    public static final Item NETTLE_SOUP = new ItemNettleSoup();
     public static final Item SLUDGE_JELLO = new ItemBLFood(4, 0.9F, false);
     public static final Item MIDDLE_FRUIT_JELLO = new ItemBLFood(8, 1.0F, false);
     public static final Item SAP_JELLO = new ItemSapJello();
@@ -238,6 +295,11 @@ public class ItemRegistry {
     public static final Item OLM_EGG_RAW = new ItemBLFood(1, 0.2F, false);
     public static final Item OLM_EGG_COOKED = new ItemBLFood(2, 0.2F, false);
     public static final Item OLMLETTE = new ItemBLFood(8, 0.6F, false);
+    
+    public static final Item SILK_GRUB = new ItemBLFood(1, 0.2F, false);
+
+    //Drinkable Brews
+    public static final Item DRINKABLE_BREW = new ItemDrinkableBrew();
 
     //armor
     public static final Item BONE_HELMET = new ItemBoneArmor(EntityEquipmentSlot.HEAD);
@@ -274,6 +336,7 @@ public class ItemRegistry {
     public static final Item GALLERY_FRAME_SMALL = new ItemGalleryFrame(EntityGalleryFrame.Type.SMALL);
     public static final Item GALLERY_FRAME_LARGE = new ItemGalleryFrame(EntityGalleryFrame.Type.LARGE);
     public static final Item GALLERY_FRAME_VERY_LARGE = new ItemGalleryFrame(EntityGalleryFrame.Type.VERY_LARGE);
+    public static final Item SILK_MASK = new ItemSilkMask();
     //TOOLS
     public static final Item WEEDWOOD_SWORD = new ItemBLSword(BLMaterialRegistry.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item WEEDWOOD_SHOVEL = new ItemBLShovel(BLMaterialRegistry.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
@@ -345,6 +408,7 @@ public class ItemRegistry {
     public static final Item BL_BUCKET_INFUSION = new ItemBucketInfusion();
     public static final Item BL_BUCKET_PLANT_TONIC = new ItemPlantTonic();
     public static final Item SYRMORITE_BUCKET_SOLID_RUBBER = new ItemSyrmoriteBucketSolidRubber();
+    public static final Item BL_BUCKET_FISH_OIL = new ItemSpecificBucket(FluidRegistry.FISH_OIL);
     //RECORDS
     public static final Item ASTATOS = new ItemBLRecord(SoundRegistry.ASTATOS, true);
     public static final Item BETWEEN_YOU_AND_ME = new ItemBLRecord(SoundRegistry.BETWEEN_YOU_AND_ME, true);
@@ -402,6 +466,48 @@ public class ItemRegistry {
         @Override
         public Block getDoorBlock() {
             return BlockRegistry.SCABYST_DOOR;
+        }
+    };
+    public static final Item ROTTEN_PLANK_DOOR_ITEM = new ItemDoorBetweenlands() {
+        @Override
+        public Block getDoorBlock() {
+            return BlockRegistry.ROTTEN_PLANK_DOOR;
+        }
+    };
+    public static final Item WEEDWOOD_DOOR_TREATED_ITEM = new ItemDoorBetweenlands() {
+        @Override
+        public Block getDoorBlock() {
+            return BlockRegistry.WEEDWOOD_DOOR_TREATED;
+        }
+    };
+    public static final Item RUBBER_TREE_PLANK_DOOR_TREATED_ITEM = new ItemDoorBetweenlands() {
+        @Override
+        public Block getDoorBlock() {
+            return BlockRegistry.RUBBER_TREE_PLANK_DOOR_TREATED;
+        }
+    };
+    public static final Item GIANT_ROOT_PLANK_DOOR_TREATED_ITEM = new ItemDoorBetweenlands() {
+        @Override
+        public Block getDoorBlock() {
+            return BlockRegistry.GIANT_ROOT_PLANK_DOOR_TREATED;
+        }
+    };
+    public static final Item HEARTHGROVE_PLANK_DOOR_TREATED_ITEM = new ItemDoorBetweenlands() {
+        @Override
+        public Block getDoorBlock() {
+            return BlockRegistry.HEARTHGROVE_PLANK_DOOR_TREATED;
+        }
+    };
+    public static final Item NIBBLETWIG_PLANK_DOOR_TREATED_ITEM = new ItemDoorBetweenlands() {
+        @Override
+        public Block getDoorBlock() {
+            return BlockRegistry.NIBBLETWIG_PLANK_DOOR_TREATED;
+        }
+    };
+    public static final Item ROTTEN_PLANK_DOOR_TREATED_ITEM = new ItemDoorBetweenlands() {
+        @Override
+        public Block getDoorBlock() {
+            return BlockRegistry.ROTTEN_PLANK_DOOR_TREATED;
         }
     };
     public static final Item WEEDWOOD_SIGN_ITEM = new ItemWeedwoodSign();
@@ -477,6 +583,13 @@ public class ItemRegistry {
     public static final Item AA_UPGRADE_VORTEX = new ItemAmphibiousArmorSpecialUpgrade().setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item AA_UPGRADE_TRIGGER = new ItemAmphibiousArmourUpgradeTrigger().setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item AA_UPGRADE_TOGGLE = new ItemAmphibiousArmourUpgradeToggle().setCreativeTab(BLCreativeTabs.GEARS);
+    public static final Item DYE = new ItemBLDye();
+    public static final Item ITEM_FRAME = new ItemBLItemFrame();
+
+    public static final Item PHEROMONE_THORAX = new ItemPheromoneThorax().setCreativeTab(BLCreativeTabs.ITEMS);
+    public static final Item SILK_BUNDLE = new ItemSilkBundle();
+    public static final Item SILK_FILTER = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1).setMaxDamage(2000);
+    public static final Item MOSS_FILTER = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1).setMaxDamage(400);
 
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
@@ -723,6 +836,12 @@ public class ItemRegistry {
         for (Item item : ITEMS) {
             TheBetweenlands.proxy.registerDefaultItemRenderer(item);
         }
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public static void registerItemColorHandlers(ColorHandlerEvent.Item event) {
+    	event.getItemColors().registerItemColorHandler(new FluidContainerColorer(), ItemRegistry.BL_BUCKET, ItemRegistry.DENTROTHYST_FLUID_VIAL);
     }
 
     public interface IMultipleItemModelDefinition {

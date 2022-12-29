@@ -20,6 +20,7 @@ public class BLMaterialRegistry {
 	public static final ToolMaterial TOOL_LEGEND = EnumHelper.addToolMaterial("legend", 6, 10000, 16.0F, 6.0F, 0);
 
 	//TODO add armor equip sounds maybe
+	public static final ArmorMaterial ARMOR_DECORATIVE = EnumHelper.addArmorMaterial("decorative", "decorative", 6, new int[]{0, 0, 0, 0}, 0, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0.0f);
 	public static final ArmorMaterial ARMOR_BL_CLOTH = EnumHelper.addArmorMaterial("bl_cloth", "bl_cloth", 12, new int[]{1, 2, 3, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0f);
 	public static final ArmorMaterial ARMOR_LURKER_SKIN = EnumHelper.addArmorMaterial("lurker_skin", "lurker_skin", 12, new int[]{1, 2, 3, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0f);
 	public static final ArmorMaterial ARMOR_BONE = EnumHelper.addArmorMaterial("slimy_bone", "slimy_bone", 6, new int[]{1, 3, 5, 2}, 0, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0.0f);

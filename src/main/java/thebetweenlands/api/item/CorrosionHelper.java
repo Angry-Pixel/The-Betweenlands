@@ -1,7 +1,11 @@
 package thebetweenlands.api.item;
 
+import java.util.List;
+import java.util.UUID;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -19,9 +23,6 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.GameruleRegistry;
 import thebetweenlands.util.NBTHelper;
-
-import java.util.List;
-import java.util.UUID;
 
 public class CorrosionHelper {
 	/**

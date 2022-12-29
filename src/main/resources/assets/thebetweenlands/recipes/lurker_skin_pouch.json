@@ -12,10 +12,12 @@
     },
     "R": {
       "item": "thebetweenlands:items_misc",
-      "data": 7
+      "data": 63
     }
   },
   "result": {
-    "item": "thebetweenlands:lurker_skin_pouch"
+      "type": "minecraft:item_nbt",
+      "item": "thebetweenlands:lurker_skin_pouch",
+      "nbt": "{type: 7}"
   }
 }

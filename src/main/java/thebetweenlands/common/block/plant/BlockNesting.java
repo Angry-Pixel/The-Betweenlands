@@ -1,11 +1,9 @@
 package thebetweenlands.common.block.plant;
 
 import java.util.Random;
-import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.terrain;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -10,8 +12,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry;
-
-import java.util.Random;
 
 public class BlockSlimyGrass extends Block
 {

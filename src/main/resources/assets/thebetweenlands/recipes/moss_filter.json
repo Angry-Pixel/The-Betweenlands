@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " W ",
+    "WmW",
+    " W "
+  ],
+  "key": {
+    "W": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    },
+    "m": {
+      "item": "thebetweenlands:moss"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:moss_filter"
+  }
+}

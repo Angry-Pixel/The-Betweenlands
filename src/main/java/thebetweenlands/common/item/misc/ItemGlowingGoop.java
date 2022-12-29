@@ -1,5 +1,9 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -29,9 +33,6 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.projectiles.EntityGlowingGoop;
 import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 import thebetweenlands.common.registries.BlockRegistry;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemGlowingGoop extends ItemBlock {
 	public ItemGlowingGoop() {

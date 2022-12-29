@@ -8,7 +8,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.AdvancedModelRenderer;
 import thebetweenlands.client.render.model.MowzieModelBase;
-import thebetweenlands.client.render.model.MowzieModelRenderer;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.util.MathUtils;
 

@@ -1,0 +1,6 @@
+{
+    "parent": "block/fence_gate_closed",
+    "textures": {
+        "texture": "thebetweenlands:blocks/giant_root_planks_treated"
+    }
+}

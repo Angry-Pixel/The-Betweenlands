@@ -3,9 +3,6 @@ package thebetweenlands.client.audio.ambience.list;
 import net.minecraft.util.SoundEvent;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.event.EventDenseFog;
-import thebetweenlands.common.world.event.EventWinter;
 
 public class DeepWatersAmbienceType extends SurfaceAmbienceType {
 	@Override

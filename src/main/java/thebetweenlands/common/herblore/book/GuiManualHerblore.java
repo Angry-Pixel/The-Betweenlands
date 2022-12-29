@@ -1,5 +1,10 @@
 package thebetweenlands.common.herblore.book;
 
+import java.io.IOException;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -14,12 +19,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import java.io.IOException;
-import java.nio.Buffer;
 
 public class GuiManualHerblore extends GuiScreen {
     private static ResourceLocation book = new ResourceLocation("thebetweenlands:textures/gui/manual/manual_hl.png");

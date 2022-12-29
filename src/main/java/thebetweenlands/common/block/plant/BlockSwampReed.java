@@ -21,8 +21,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 
 public class BlockSwampReed extends BlockStackablePlant implements ICustomItemBlock {
@@ -79,7 +79,8 @@ public class BlockSwampReed extends BlockStackablePlant implements ICustomItemBl
 			for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL) {
 				if (worldIn.isBlockLoaded(blockpos.offset(enumfacing))) {
 					IBlockState iblockstate = worldIn.getBlockState(blockpos.offset(enumfacing));
-					if (iblockstate.getMaterial() == Material.WATER) {
+					Material material = iblockstate.getMaterial();
+					if (material == Material.WATER || material == Material.ICE || material == Material.PACKED_ICE) {
 						return true;
 					}
 				}
@@ -97,7 +98,8 @@ public class BlockSwampReed extends BlockStackablePlant implements ICustomItemBl
 			BlockPos blockpos = pos.down();
 			for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL) {
 				IBlockState iblockstate = worldIn.getBlockState(blockpos.offset(enumfacing));
-				if (iblockstate.getMaterial() == Material.WATER) {
+				Material material = iblockstate.getMaterial();
+				if (material == Material.WATER || material == Material.ICE || material == Material.PACKED_ICE) {
 					return true;
 				}
 			}

@@ -1,9 +1,6 @@
 package thebetweenlands.common.handler;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -24,7 +21,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.storage.IChunkStorage;
-import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.storage.WorldStorageImpl;

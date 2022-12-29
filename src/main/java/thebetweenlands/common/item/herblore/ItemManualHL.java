@@ -1,8 +1,5 @@
 package thebetweenlands.common.item.herblore;
 
-import java.util.List;
-
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -10,15 +7,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import thebetweenlands.api.aspect.DiscoveryContainer;
 import thebetweenlands.api.item.IDiscoveryProvider;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.proxy.CommonProxy;
-
-import javax.annotation.Nullable;
 
 public class ItemManualHL extends Item implements IDiscoveryProvider<ItemStack>{
     public ItemManualHL() {

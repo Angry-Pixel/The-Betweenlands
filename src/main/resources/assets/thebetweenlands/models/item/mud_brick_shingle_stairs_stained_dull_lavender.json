@@ -1,0 +1,7 @@
+{ 
+  "forge_marker": 1,
+  "parent":"thebetweenlands:block/base_stairs",
+  "textures": {
+    "all": "thebetweenlands:blocks/mud_brick_shingles_stained_dull_lavender"
+  } 
+}

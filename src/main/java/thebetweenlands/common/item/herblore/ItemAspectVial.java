@@ -6,8 +6,6 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import org.lwjgl.input.Keyboard;
-
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
@@ -147,8 +145,12 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IM
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flagIn) {
         if (world != null) {
             List<Aspect> itemAspects = ItemAspectContainer.fromItem(stack).getAspects();
-            if (!itemAspects.isEmpty() && itemAspects.get(0).type == AspectRegistry.BYARIIS) {
-                tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.aspectvial.byariis.fuel"));
+            if (!itemAspects.isEmpty()) {
+                if(itemAspects.get(0).type == AspectRegistry.BYARIIS) {
+                    tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.aspectvial.byariis.fuel"));
+                } else if(itemAspects.get(0).type == AspectRegistry.FREIWYNN) {
+                    tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.aspectvial.freiwynn"));
+                }
             }
         }
     }

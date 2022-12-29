@@ -1,0 +1,10 @@
+{
+  "source": "thebetweenlands:bl_bucket_fish_oil_syrmorite",
+  "inherit_overrides": false,
+  "custom": {
+    "default_fluid": "fish_oil",
+    "base_texture": "thebetweenlands:items/syrmorite_bucket_base",
+    "liquid_template": "thebetweenlands:items/syrmorite_bucket_base",
+    "cover_texture": "thebetweenlands:items/syrmorite_bucket_cover"
+  }
+}

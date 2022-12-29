@@ -14,8 +14,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.block.terrain.BlockDentrothyst;
-import thebetweenlands.common.block.terrain.BlockLeavesBetweenlands;
 import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
+import thebetweenlands.common.block.terrain.BlockLeavesBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public abstract class WorldGenGiantTreeTrunk extends WorldGenerator {

@@ -1,0 +1,53 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "facing=north,hanging=false": { "model": "thebetweenlands:internal/steeping_pot" },
+    "facing=south,hanging=false": { "model": "thebetweenlands:internal/steeping_pot", "y": 180 },
+    "facing=west,hanging=false":  { "model": "thebetweenlands:internal/steeping_pot", "y": 270 },
+    "facing=east,hanging=false":  { "model": "thebetweenlands:internal/steeping_pot", "y": 90 },
+    "facing=north,hanging=true": { "model": "thebetweenlands:internal/steeping_pot_hanging" },
+    "facing=south,hanging=true": { "model": "thebetweenlands:internal/steeping_pot_hanging", "y": 180 },
+    "facing=west,hanging=true":  { "model": "thebetweenlands:internal/steeping_pot_hanging", "y": 270 },
+    "facing=east,hanging=true":  { "model": "thebetweenlands:internal/steeping_pot_hanging", "y": 90 },
+    "inventory": { 
+      "model": "thebetweenlands:internal/steeping_pot",
+      "transform": {
+                "gui": {
+                    "rotation": [{"x": 30}, {"y": 225}, {"z": 0}],
+                    "translation": [0, 0, 0],
+                    "scale":[0.6, 0.6, 0.6]
+                },
+                "ground": {
+                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
+                    "translation": [0, -0.15, 0],
+                    "scale":[0.25, 0.25, 0.25]
+                },
+                "fixed": {
+                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
+                    "translation": [0, 0, 0],
+                    "scale":[0.5, 0.5, 0.5]
+                },
+                "thirdperson_righthand": {
+                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
+                    "translation": [0, 0.15, 0.15],
+                    "scale": [0.5, 0.5, 0.5]
+                },
+                "thirdperson_lefthand": {
+                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
+                    "translation": [0, 0.15, 0.15],
+                    "scale": [0.5, 0.5, 0.5]
+                },
+                "firstperson_righthand": {
+                    "rotation": [{"x": 0}, {"y": 45}, {"z": 0}],
+                    "translation": [0, 0, 0],
+                    "scale": [0.5, 0.5, 0.5]
+                },
+                "firstperson_lefthand": {
+                    "rotation": [{"x": 0}, {"y": -315}, {"z": 0}],
+                    "translation": [0, 0, 0],
+                    "scale": [0.5, 0.5, 0.5]
+                }
+            }
+    }
+  }
+}

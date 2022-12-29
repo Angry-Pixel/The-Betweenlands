@@ -1,7 +1,6 @@
 package thebetweenlands.common.inventory;
 
 import net.minecraft.item.ItemStack;
-import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.util.InventoryUtils;
 
 public class InventoryPouch extends InventoryItem {

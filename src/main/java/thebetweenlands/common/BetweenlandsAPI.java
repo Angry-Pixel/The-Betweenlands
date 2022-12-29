@@ -7,7 +7,6 @@ import java.util.function.Predicate;
 import com.google.common.base.Preconditions;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;

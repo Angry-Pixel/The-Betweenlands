@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x  ",
+    "xx ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:nibbletwig_planks_treated"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:nibbletwig_plank_stairs_treated",
+    "count": 4
+  }
+}

@@ -35,7 +35,6 @@ import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
-import net.minecraftforge.common.property.IExtendedBlockState;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.QuadBuilder;

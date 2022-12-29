@@ -1,11 +1,11 @@
 package thebetweenlands.common.world.gen.feature.loot;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.api.entity.spawning.IWeightProvider;
-
-import java.util.Random;
 
 public class LootItemStack implements IWeightProvider {
 

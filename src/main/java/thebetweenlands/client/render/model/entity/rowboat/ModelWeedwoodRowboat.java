@@ -5,10 +5,7 @@ import java.util.Optional;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.oredict.OreDictionary;
 import thebetweenlands.client.render.model.AdvancedModelRenderer;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.entity.rowboat.ShipSide;

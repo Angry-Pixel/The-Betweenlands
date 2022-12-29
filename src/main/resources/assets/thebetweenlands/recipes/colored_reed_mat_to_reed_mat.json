@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:reed_mat_colored",
+      "data": 32767
+    }
+  ],
+  "result": {
+    "item": "thebetweenlands:reed_mat"
+  }
+}

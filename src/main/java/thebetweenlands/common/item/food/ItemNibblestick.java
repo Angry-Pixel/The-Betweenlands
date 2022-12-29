@@ -1,5 +1,7 @@
 package thebetweenlands.common.item.food;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -11,8 +13,6 @@ import thebetweenlands.api.capability.IFoodSicknessCapability;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.registries.CapabilityRegistry;
-
-import javax.annotation.Nullable;
 
 public class ItemNibblestick extends ItemBLFood {
 	public ItemNibblestick() {

@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "L L",
+    "WLW",
+    "RPR"
+  ],
+  "key": {
+    "L": {
+            "item": "thebetweenlands:items_misc",
+            "data": 4
+    },
+    "W": {
+            "item": "thebetweenlands:items_misc",
+            "data": 20
+    },
+    "R": {
+            "item": "thebetweenlands:items_misc",
+            "data": 7
+    },
+    "P": {
+            "item": "thebetweenlands:weedwood_planks"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:water_filter"
+  }
+}

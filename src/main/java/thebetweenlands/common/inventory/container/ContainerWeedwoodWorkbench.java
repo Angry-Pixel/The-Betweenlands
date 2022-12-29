@@ -8,7 +8,6 @@ import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.util.math.BlockPos;
 import thebetweenlands.common.inventory.InventoryWeedwoodWorkbench;
 import thebetweenlands.common.inventory.InventoryWeedwoodWorkbenchResult;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 
 public class ContainerWeedwoodWorkbench extends ContainerWorkbench {

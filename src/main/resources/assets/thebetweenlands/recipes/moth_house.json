@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "DDD",
+    "SRS",
+    "WCW"
+  ],
+  "key": {
+    "W": {
+      "item": "thebetweenlands:weedwood_plank_slab"
+    },
+    "D": {
+      "item": "thebetweenlands:thatch"
+    },
+    "R": {
+      "item": "thebetweenlands:items_misc",
+      "data": 7
+    },
+    "C": {
+      "item": "thebetweenlands:weedwood_chest"
+    },
+    "S": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:moth_house"
+  }
+}

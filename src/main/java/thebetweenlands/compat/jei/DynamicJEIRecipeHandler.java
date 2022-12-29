@@ -1,14 +1,14 @@
 package thebetweenlands.compat.jei;
 
-import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraft.world.World;
-import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import mezz.jei.api.recipe.IRecipeWrapper;
+import net.minecraft.world.World;
+import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class DynamicJEIRecipeHandler {
 	private DynamicJEIRecipeHandler() { }

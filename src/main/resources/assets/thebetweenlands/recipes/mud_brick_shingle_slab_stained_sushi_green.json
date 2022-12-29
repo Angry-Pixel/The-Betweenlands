@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:mud_brick_shingle_stained",
+      "data": 9
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:mud_brick_shingle_slab_stained_sushi_green",
+    "count": 6
+  }
+}

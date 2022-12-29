@@ -30,10 +30,8 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BlockStateContainerHelper;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
-import thebetweenlands.common.item.misc.ItemGlowingGoop;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockGlowingGoopUnderwater extends BlockSwampWater {
 

@@ -1,0 +1,129 @@
+{
+    "display": {
+      "icon": {
+        "item": "thebetweenlands:drinkable_brew",
+        "data": 3
+      },
+      "title": {
+        "translate": "advancements.thebetweenlands.herbalist.home_remedy_extraordinaire.title"
+      },
+      "description": {
+        "translate": "advancements.thebetweenlands.herbalist.home_remedy_extraordinaire.description"
+      },
+      "frame": "challenge"
+    },
+    "parent": "thebetweenlands:herbalist/tea_bagging",
+    "criteria": {
+      "nettle_tea": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:drinkable_brew",
+              "data": 1
+            }
+          ]
+        }
+      },
+      "pheromone_extract": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:drinkable_brew",
+              "data": 2
+            }
+          ]
+        }
+      },
+      "swamp_broth": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:drinkable_brew",
+              "data": 3
+            }
+          ]
+        }
+      },
+      "sturdy_stock": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:drinkable_brew",
+              "data": 4
+            }
+          ]
+        }
+      },
+      "pear_cordial": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:drinkable_brew",
+              "data": 5
+            }
+          ]
+        }
+      },
+      "shamans_brew": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:drinkable_brew",
+              "data": 6
+            }
+          ]
+        }
+      },
+      "lake_broth": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:drinkable_brew",
+              "data": 7
+            }
+          ]
+        }
+      },
+      "shell_stock": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:drinkable_brew",
+              "data": 8
+            }
+          ]
+        }
+      },
+      "frog_leg_extract": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:drinkable_brew",
+              "data": 9
+            }
+          ]
+        }
+      },
+      "witch_tea": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:drinkable_brew",
+              "data": 10
+            }
+          ]
+        }
+      }
+    }
+  }
+  

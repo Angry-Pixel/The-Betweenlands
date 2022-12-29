@@ -3,6 +3,8 @@ package thebetweenlands.common.item.tools;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -25,8 +27,6 @@ import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
-
-import javax.annotation.Nullable;
 
 public class ItemSickle extends Item implements ICorrodible, IAnimatorRepairable {
 	public ItemSickle() {

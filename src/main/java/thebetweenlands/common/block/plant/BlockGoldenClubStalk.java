@@ -5,7 +5,6 @@ import java.util.Random;
 
 import com.google.common.collect.ImmutableList;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,10 +17,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockGoldenClubStalk extends BlockStackablePlantUnderwater {

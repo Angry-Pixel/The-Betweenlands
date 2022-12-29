@@ -1,20 +1,22 @@
 package thebetweenlands.common.advancments;
 
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nullable;
-import java.util.Map;
 
 public class BlockPredicate {
 

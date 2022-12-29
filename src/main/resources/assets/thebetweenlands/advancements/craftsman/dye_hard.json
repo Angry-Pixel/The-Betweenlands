@@ -1,0 +1,195 @@
+{
+    "display": {
+      "icon": {
+        "item": "thebetweenlands:dye",
+        "data": 3
+      },
+      "title": {
+        "translate": "advancements.thebetweenlands.craftsman.dye_hard.title"
+      },
+      "description": {
+        "translate": "advancements.thebetweenlands.craftsman.dye_hard.description"
+      },
+      "frame": "challenge"
+    },
+    "parent": "thebetweenlands:craftsman/paint_job",
+    "criteria": {
+      "lavender": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:dye",
+              "data": 0
+            }
+          ]
+        }
+      },
+      "maroon": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:dye",
+              "data": 1
+            }
+          ]
+        }
+      },
+      "shadow": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:dye",
+              "data": 2
+            }
+          ]
+        }
+      },
+      "magenta": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:dye",
+              "data": 3
+            }
+          ]
+        }
+      },
+      "saffron": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:dye",
+              "data": 4
+            }
+          ]
+        }
+      },
+      "carribean": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:dye",
+              "data": 5
+            }
+          ]
+        }
+      },
+      "tangerine": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:dye",
+              "data": 6
+            }
+          ]
+        }
+      },
+      "champagne": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:dye",
+              "data": 7
+            }
+          ]
+        }
+      },
+      "black": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:dye",
+              "data": 8
+            }
+          ]
+        }
+      },
+      "sushi": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:dye",
+              "data": 9
+            }
+          ]
+        }
+      },
+      "cyan": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:dye",
+              "data": 10
+            }
+          ]
+        }
+      },
+      "cadmium": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:dye",
+              "data": 11
+            }
+          ]
+        }
+      },
+      "blue": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:dye",
+              "data": 12
+            }
+          ]
+        }
+      },
+      "brown": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:dye",
+              "data": 13
+            }
+          ]
+        }
+      },
+      "purple": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:dye",
+              "data": 14
+            }
+          ]
+        }
+      },
+      "gray": {
+        "trigger": "minecraft:inventory_changed",
+        "conditions": {
+          "items": [
+            {
+              "item": "thebetweenlands:dye",
+              "data": 15
+            }
+          ]
+        }
+      }
+    }
+  }
+  

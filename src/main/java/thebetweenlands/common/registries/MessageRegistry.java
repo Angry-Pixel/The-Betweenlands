@@ -21,6 +21,7 @@ import thebetweenlands.common.network.clientbound.MessageDamageReductionParticle
 import thebetweenlands.common.network.clientbound.MessageDruidAltarProgress;
 import thebetweenlands.common.network.clientbound.MessageDruidTeleportParticles;
 import thebetweenlands.common.network.clientbound.MessageGemProc;
+import thebetweenlands.common.network.clientbound.MessageInfestWeedwoodBush;
 import thebetweenlands.common.network.clientbound.MessageLivingWeedwoodShieldSpit;
 import thebetweenlands.common.network.clientbound.MessageMireSnailEggHatching;
 import thebetweenlands.common.network.clientbound.MessagePlayEntityIdle;
@@ -95,6 +96,7 @@ public class MessageRegistry {
 		registerMessage(MessageSyncDraetonLeakages.class, Side.CLIENT);
 		registerMessage(MessageShockArrowHit.class, Side.CLIENT);
 		registerMessage(MessageShockParticle.class, Side.CLIENT);
+		registerMessage(MessageInfestWeedwoodBush.class, Side.CLIENT);
 
 		registerMessage(MessageEquipItem.class, Side.SERVER);
 		registerMessage(MessageOpenPouch.class, Side.SERVER);

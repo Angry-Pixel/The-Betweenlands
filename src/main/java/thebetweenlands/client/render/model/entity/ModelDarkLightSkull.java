@@ -8,8 +8,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.ControlledAnimation;
 import thebetweenlands.client.render.model.MowzieModelBase;
 import thebetweenlands.client.render.model.MowzieModelRenderer;
-import thebetweenlands.common.entity.mobs.EntityDarkLight;
-import thebetweenlands.common.entity.mobs.EntitySludge;
 
 @SideOnly(Side.CLIENT)
 public class ModelDarkLightSkull extends MowzieModelBase {
