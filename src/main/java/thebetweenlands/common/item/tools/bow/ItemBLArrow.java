@@ -19,8 +19,27 @@ import javax.annotation.Nullable;
 public class ItemBLArrow extends ItemArrow {
 	private EnumArrowType type;
 
+	public static final BehaviorProjectileDispense BLArrowBehaviour = new BehaviorProjectileDispense()
+	{
+	    protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn)
+	    {
+		EntityBLArrow entity = new EntityBLArrow(worldIn);
+		Item item = stackIn.getItem();
+		if(item instanceof ItemBLArrow) {
+		    entity.setType(((ItemBLArrow)item).getType());
+		} else {
+		    entity.setType(EnumArrowType.DEFAULT);
+		}
+		entity.setPosition(position.getX(), position.getY(), position.getZ());
+		entity.pickupStatus = EntityArrow.PickupStatus.ALLOWED;
+		return entity;
+	    }
+	};
+
+
 	public ItemBLArrow(EnumArrowType type) {
-		this.type = type;
+	    this.type = type;
+	    BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(this, ItemBLArrow.BLArrowBehaviour);
 	}
 
 	@Override
