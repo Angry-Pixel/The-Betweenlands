@@ -99,6 +99,7 @@ import thebetweenlands.common.block.misc.BlockGroundItem;
 import thebetweenlands.common.block.misc.BlockLadderBetweenlands;
 import thebetweenlands.common.block.misc.BlockLantern;
 import thebetweenlands.common.block.misc.BlockLanternSiltGlass;
+import thebetweenlands.common.block.misc.BlockLattice;
 import thebetweenlands.common.block.misc.BlockLeverBetweenlands;
 import thebetweenlands.common.block.misc.BlockMistBridge;
 import thebetweenlands.common.block.misc.BlockMossBed;
@@ -527,8 +528,8 @@ public class BlockRegistry {
     public static final Block POLISHED_DENTROTHYST = new BlockPolishedDentrothyst().setHardness(0.3F);
     public static final Block SILT_GLASS = new BlockGlassBetweenlands(Material.GLASS).setHardness(0.3F);
     public static final Block SILT_GLASS_PANE = new BlockPaneBetweenlands(Material.GLASS).setHardness(0.3F);
-    public static final Block LATTICE = new BlockPaneBetweenlands(Material.WOOD, SoundType.WOOD).setHardness(1.0F);
-    public static final Block LATTICE_FINE = new BlockPaneBetweenlands(Material.WOOD, SoundType.WOOD).setHardness(1.5F);
+    public static final Block LATTICE = new BlockLattice();
+    public static final Block LATTICE_FINE = new BlockLattice().setHardness(1.5F);
     public static final Block FILTERED_SILT_GLASS = new BlockFilteredSiltGlass().setHardness(0.3F);
     public static final Block FILTERED_SILT_GLASS_PANE = new BlockFilteredSiltGlassPane();
     public static final Block POLISHED_DENTROTHYST_PANE = new BlockDentrothystPane().setHardness(0.3F);
