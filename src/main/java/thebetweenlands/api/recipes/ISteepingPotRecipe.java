@@ -21,4 +21,6 @@ public interface ISteepingPotRecipe {
 	public Object[] getInputs();
 	
 	public List<ItemStack> getInputAsStacks();
+	
+	public boolean containsInput(ItemStack stack);
 }

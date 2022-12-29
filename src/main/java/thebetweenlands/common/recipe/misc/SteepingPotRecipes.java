@@ -89,6 +89,13 @@ public class SteepingPotRecipes implements ISteepingPotRecipe {
 				return recipe;
 		return null;
 	}
+	
+	public static SteepingPotRecipes getRecipeForInputStack(ItemStack stack) {
+		for (SteepingPotRecipes recipe : recipes)
+			if (recipe.containsInput(stack))
+				return recipe;
+		return null;
+	}
 
 	public static List<SteepingPotRecipes> getRecipeList() {
 		return Collections.unmodifiableList(recipes);
@@ -198,6 +205,16 @@ public class SteepingPotRecipes implements ISteepingPotRecipe {
 			stackList.add(Ingredient.fromStacks(stackIt));
 
 		return RecipeMatcher.findMatches(inputList, stackList) != null;
+	}
+
+	@Override
+	public boolean containsInput(ItemStack stack) {
+		for (Object inputIt : input) {
+			if(inputIt instanceof ItemStack && Ingredient.fromStacks((ItemStack) inputIt).apply(stack)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

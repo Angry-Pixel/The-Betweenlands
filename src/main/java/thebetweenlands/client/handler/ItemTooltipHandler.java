@@ -34,6 +34,7 @@ import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 import thebetweenlands.common.recipe.censer.AbstractCenserRecipe;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
+import thebetweenlands.common.recipe.misc.SteepingPotRecipes;
 import thebetweenlands.common.recipe.mortar.PestleAndMortarRecipe;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.registries.CapabilityRegistry;
@@ -152,6 +153,19 @@ public class ItemTooltipHandler {
 
 			if(stack.getItem() == ItemRegistry.SPIRIT_FRUIT || stack.getItem() == ItemRegistry.BONE_WAYFINDER) {
 				usedInMachines.add(I18n.format("tooltip.bl.recipes.offering_table"));
+			}
+			
+			if(stack.getItem() == ItemRegistry.MOSS_FILTER || stack.getItem() == ItemRegistry.SILK_FILTER) {
+				usedInMachines.add(I18n.format("tooltip.bl.recipes.water_filter"));
+			}
+
+			if(stack.getItem() == ItemRegistry.SILK_BUNDLE) {
+				usedInMachines.add(I18n.format("tooltip.bl.recipes.steeping_pot"));
+			}
+			
+			if(SteepingPotRecipes.getRecipeForInputStack(stack) != null) {
+				usedInMachines.add(I18n.format("tooltip.bl.recipes.silk_bundle"));
+				usedInMachines.add(I18n.format("tooltip.bl.recipes.steeping_pot"));
 			}
 			
 			if(!usedInMachines.isEmpty()) {

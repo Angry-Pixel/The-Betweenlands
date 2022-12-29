@@ -1544,6 +1544,9 @@ tooltip.bl.recipes.censer_secondary=Censer (secondary)
 tooltip.bl.recipes.purifier=Purifier
 tooltip.bl.recipes.mortar=Mortar
 tooltip.bl.recipes.offering_table=Offering Table
+tooltip.bl.recipes.water_filter=Water Filter
+tooltip.bl.recipes.steeping_pot=Steeping Pot
+tooltip.bl.recipes.silk_bundle=Silk Bundle
 
 tooltip.bl.fish_bait.saturation=Saturation: %s
 tooltip.bl.fish_bait.sink_speed=Sinking Speed: %s
