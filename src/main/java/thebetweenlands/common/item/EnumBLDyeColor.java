@@ -57,7 +57,6 @@ public enum EnumBLDyeColor implements IStringSerializable
 	/**
 	 * Gets the RGB color corresponding to this dye color.
 	 */
-	@SideOnly(Side.CLIENT)
 	public int getColorValue() {
 		return this.colorValue;
 	}
