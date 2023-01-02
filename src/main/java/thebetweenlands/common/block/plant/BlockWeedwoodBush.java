@@ -26,6 +26,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -50,6 +51,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
 import thebetweenlands.common.entity.WeedWoodBushUncollidableEntity;
+import thebetweenlands.common.entity.mobs.EntitySwarm;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
@@ -128,6 +130,20 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
 		return ImmutableList.of(new ItemStack(Item.getItemFromBlock(this)));
 	}
+
+	@Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack held = player.getHeldItem(hand);
+		if (!world.isRemote && !held.isEmpty() && EnumItemMisc.PHEROMONE_THORAX_CLUTCH.isItemOf(held)) {
+			world.setBlockState(pos, BlockRegistry.DEAD_WEEDWOOD_BUSH.getDefaultState());
+			EntitySwarm swarm = new EntitySwarm(world);
+			swarm.setPosition(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+			world.spawnEntity(swarm);
+			held.damageItem(1, player);
+			return true;
+		}
+		return true;
+    }
 
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
