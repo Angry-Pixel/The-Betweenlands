@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x"
+  ],
+  "key": {
+    "x": {
+    "item": "thebetweenlands:items_misc",
+    "data": 65
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:pheromone_thorax",
+    "count": 4 
+  }
+}

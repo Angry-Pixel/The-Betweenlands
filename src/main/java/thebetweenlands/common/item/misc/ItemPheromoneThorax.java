@@ -15,8 +15,6 @@ import thebetweenlands.common.registries.BlockRegistry;
 public class ItemPheromoneThorax extends Item {
 
 	public ItemPheromoneThorax() {
-		setMaxDamage(2);
-		setMaxStackSize(1);
 	}
 
 	@Override
@@ -32,12 +30,12 @@ public class ItemPheromoneThorax extends Item {
 			Block block = iblockstate.getBlock();
 			if (block == BlockRegistry.WEEDWOOD_BUSH) {
 				world.setBlockState(pos, BlockRegistry.WEEDWOOD_BUSH_INFESTED_0.getDefaultState(), 2);
-				held.damageItem(1, player);
+				held.shrink(1);
 				return EnumActionResult.SUCCESS;
 			} else
 				return EnumActionResult.FAIL;
 		}
-		player.swingArm(hand);;
+		player.swingArm(hand);
 		return EnumActionResult.PASS;
 	}
 }
