@@ -164,7 +164,7 @@ public class TileEntityMothHouse  extends TileEntityBasicInventory implements IT
 
                     if(silkStack == ItemStack.EMPTY) {
                         silkStack = ItemMisc.EnumItemMisc.SILK_THREAD.create(1);
-                        super.setInventorySlotContents(1, silkStack);
+                        super.setInventorySlotContents(SLOT_SILK, silkStack);
                     } else if(ItemMisc.EnumItemMisc.SILK_THREAD.isItemOf(silkStack)) {
                     	silkStack.grow(1);
                     }

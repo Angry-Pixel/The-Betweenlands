@@ -31,7 +31,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityMothHouse;
 
-public class BlockMothHouse  extends BlockContainer {
+public class BlockMothHouse extends BlockContainer {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     public static final PropertyBool ON_WALL = PropertyBool.create("on_wall");
 
@@ -259,7 +259,14 @@ public class BlockMothHouse  extends BlockContainer {
         TileEntityMothHouse tile = (TileEntityMothHouse) world.getTileEntity(pos);
 
         if (tile != null) {
-            InventoryHelper.dropInventoryItems(world, pos, tile);
+        	// Drop and remove silk first to destroy grubs
+            InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), tile.getStackInSlot(TileEntityMothHouse.SLOT_SILK).copy());
+            tile.setInventorySlotContents(TileEntityMothHouse.SLOT_SILK, ItemStack.EMPTY);
+            
+            // Drop remaining grubs
+            InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), tile.getStackInSlot(TileEntityMothHouse.SLOT_GRUBS).copy());
+            tile.setInventorySlotContents(TileEntityMothHouse.SLOT_GRUBS, ItemStack.EMPTY);
+            
             world.removeTileEntity(pos);
         }
 
