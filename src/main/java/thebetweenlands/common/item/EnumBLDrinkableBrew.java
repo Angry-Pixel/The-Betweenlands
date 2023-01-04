@@ -3,8 +3,6 @@ package thebetweenlands.common.item;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public enum EnumBLDrinkableBrew implements IStringSerializable

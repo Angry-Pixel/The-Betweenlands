@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import thebetweenlands.api.capability.IFallDamageReductionCapability;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
 import thebetweenlands.api.capability.IInfestationIgnoreCapability;
+import thebetweenlands.api.capability.IMudWalkerCapability;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWormHelper;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
@@ -146,11 +147,16 @@ public class ItemDrinkableBrew extends ItemBLFood implements ItemRegistry.IMulti
 			break;
 		case 7:
 			// water breathing?
-			player.addPotionEffect(ElixirEffectRegistry.EFFECT_GILLSGROWTH.createEffect(duration, 1));
+			player.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, duration, 1));
 			break;
 		case 8:
 			// light footed across sludge and mud etc?
-			player.addPotionEffect(ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.createEffect(duration, 1));
+			if (!world.isRemote) {
+				IMudWalkerCapability mudWalk = player.getCapability(CapabilityRegistry.CAPABILITY_MUD_WALKER, null);
+				if (mudWalk != null)
+					if (!mudWalk.isActive())
+						mudWalk.setActive(Math.max(mudWalk.getRemainingActiveTicks(), duration));
+			}
 			break;
 		case 9:
 			 // jumping for 20 secs.

@@ -7,6 +7,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
@@ -18,9 +19,11 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.capability.IMudWalkerCapability;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.BLMaterialRegistry;
+import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockSludge extends Block {
@@ -52,7 +55,9 @@ public class BlockSludge extends Block {
 
 	@Override
 	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
-		if (!(entity instanceof IEntityBL) && entity.onGround) {
+		IMudWalkerCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_MUD_WALKER, null);
+		boolean mudWalker = entity instanceof EntityPlayer && cap != null && cap.isActive();
+		if (!(entity instanceof IEntityBL) && entity.onGround && !mudWalker) {
 			entity.setInWeb();
 		}
 	}

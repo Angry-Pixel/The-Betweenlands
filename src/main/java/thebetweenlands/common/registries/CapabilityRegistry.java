@@ -14,6 +14,7 @@ import thebetweenlands.api.capability.IFlightCapability;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
 import thebetweenlands.api.capability.IInfestationIgnoreCapability;
 import thebetweenlands.api.capability.ILastKilledCapability;
+import thebetweenlands.api.capability.IMudWalkerCapability;
 import thebetweenlands.api.capability.IPortalCapability;
 import thebetweenlands.api.capability.IPuppetCapability;
 import thebetweenlands.api.capability.IPuppeteerCapability;
@@ -35,6 +36,7 @@ import thebetweenlands.common.capability.foodsickness.FoodSicknessEntityCapabili
 import thebetweenlands.common.capability.item.ILivingWeedwoodShieldCapability;
 import thebetweenlands.common.capability.item.LivingWeedwoodShieldItemCapability;
 import thebetweenlands.common.capability.lastkilled.LastKilledCapability;
+import thebetweenlands.common.capability.mud_walker.MudWalkerCapability;
 import thebetweenlands.common.capability.pheromonebrew.InfestationIgnoreEntityCapability;
 import thebetweenlands.common.capability.playermounts.IPlayerMountsEntityCapability;
 import thebetweenlands.common.capability.playermounts.PlayerMountsEntityCapability;
@@ -100,9 +102,12 @@ public class CapabilityRegistry {
 	
 	@CapabilityInject(IInfestationIgnoreCapability.class)
 	public static final Capability<IInfestationIgnoreCapability> CAPABILITY_INFESTATION_IGNORE = null;
-	
+
 	@CapabilityInject(IFallDamageReductionCapability.class)
-	public static final Capability<IFallDamageReductionCapability> CAPABILITY_FALL_DAMAGE_REDUCTION = null;	
+	public static final Capability<IFallDamageReductionCapability> CAPABILITY_FALL_DAMAGE_REDUCTION = null;
+
+	@CapabilityInject(IMudWalkerCapability.class)
+	public static final Capability<IMudWalkerCapability> CAPABILITY_MUD_WALKER = null;	
 
 
 	public static void preInit() {
@@ -124,6 +129,7 @@ public class CapabilityRegistry {
 		EntityCapabilityHandler.registerEntityCapability(new RotSmellEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new InfestationIgnoreEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new FallDamageReductionCapability());
+		EntityCapabilityHandler.registerEntityCapability(new MudWalkerCapability());
 
 		ItemCapabilityHandler.registerItemCapability(new LivingWeedwoodShieldItemCapability());
 		
