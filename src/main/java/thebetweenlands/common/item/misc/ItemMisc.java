@@ -58,10 +58,14 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		String key = "tooltip.bl.item_misc." + IGenericItem.getFromStack(EnumItemMisc.class, stack).getTranslationKey();
+		IGenericItem item = IGenericItem.getFromStack(EnumItemMisc.class, stack);
+		
+		if(item != null) {
+			String key = "tooltip.bl.item_misc." + item.getTranslationKey();
 
-		if(I18n.hasKey(key)) {
-			tooltip.add(I18n.format(key));
+			if(I18n.hasKey(key)) {
+				tooltip.add(I18n.format(key));
+			}
 		}
 	}
 
@@ -74,11 +78,11 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 
 	@Override
 	public String getTranslationKey(ItemStack stack) {
-		try {
-			return "item.thebetweenlands." + IGenericItem.getFromStack(EnumItemMisc.class, stack).getTranslationKey();
-		} catch (Exception e) {
-			return "item.thebetweenlands.unknown_generic";
+		IGenericItem item = IGenericItem.getFromStack(EnumItemMisc.class, stack);
+		if(item != null) {
+			return "item.thebetweenlands." + item.getTranslationKey();
 		}
+		return "item.thebetweenlands.unknown_generic";
 	}
 
 	@Override

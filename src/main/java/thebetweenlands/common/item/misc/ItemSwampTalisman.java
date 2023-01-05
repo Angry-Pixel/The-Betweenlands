@@ -73,11 +73,11 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 
 	@Override
 	public String getTranslationKey(ItemStack stack) {
-		try {
-			return "item.thebetweenlands." + IGenericItem.getFromStack(EnumTalisman.class, stack).getTranslationKey();
-		} catch (Exception e) {
-			return "item.thebetweenlands.unknown_talisman";
+		IGenericItem item = IGenericItem.getFromStack(EnumTalisman.class, stack);
+		if(item != null) {
+			return "item.thebetweenlands." + item.getTranslationKey();
 		}
+		return "item.thebetweenlands.unknown_talisman";
 	}
 
 	@SideOnly(Side.CLIENT)
