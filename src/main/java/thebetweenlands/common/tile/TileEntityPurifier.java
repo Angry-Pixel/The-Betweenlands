@@ -199,7 +199,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
     }
 
     private boolean outputIsFull() {
-        return !getStackInSlot(2).isEmpty() && getStackInSlot(2).getCount() >= getInventoryStackLimit();
+        return !getStackInSlot(2).isEmpty() && getStackInSlot(2).getCount() >= getInventoryStackLimit() && getStackInSlot(2).getCount() <= getStackInSlot(2).getMaxStackSize();
     }
 
     public void setIlluminated(boolean state) {
