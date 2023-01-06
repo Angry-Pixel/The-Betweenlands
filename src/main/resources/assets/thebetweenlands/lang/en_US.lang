@@ -1179,6 +1179,7 @@ item.thebetweenlands.silk_bundle_dirty.name=Dirty Silk Bundle
 item.thebetweenlands.silk_mask.name=Silk Mask
 item.thebetweenlands.silk_filter.name=Silk Mesh Strainer
 item.thebetweenlands.moss_filter.name=Moss Mesh Strainer
+item.thebetweenlands.silky_pebble.name=Silky Pebble
 
 # Dyes
 item.thebetweenlands.dye.brown_rust.name=Brown Rust Dye
@@ -1921,6 +1922,7 @@ entity.thebetweenlands.greebling_coracle.name=Greebling Coracle
 entity.thebetweenlands.cave_fish.name=Cave Fish
 entity.thebetweenlands.glowing_goop.name=Glowing Goop
 entity.thebetweenlands.item_frame.name=Item Frame
+entity.thebetweenlands.silky_pebble.name=Silky Pebble
 
 #Fish Parts
 entity.thebetweenlands.anadia_body_0=Skittish

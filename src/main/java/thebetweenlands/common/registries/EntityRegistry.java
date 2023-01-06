@@ -126,6 +126,7 @@ import thebetweenlands.common.entity.projectiles.EntityGlowingGoop;
 import thebetweenlands.common.entity.projectiles.EntityPredatorArrowGuide;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
+import thebetweenlands.common.entity.projectiles.EntitySilkyPebble;
 import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
 import thebetweenlands.common.entity.projectiles.EntitySludgeWallJet;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
@@ -290,6 +291,7 @@ public class EntityRegistry {
 		registerEntity(EntityUrchinSpikeAOE.class, "urchin_spike_aoe");
 
 		registerEntity(EntityBLItemFrame.class, "item_frame", 256, 64, false);
+		registerEntity(EntitySilkyPebble.class, "silky_pebble");
 	}
 
 	private static int id = 0;

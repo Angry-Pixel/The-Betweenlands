@@ -273,6 +273,7 @@ import thebetweenlands.common.entity.projectiles.EntityGlowingGoop;
 import thebetweenlands.common.entity.projectiles.EntityPredatorArrowGuide;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
+import thebetweenlands.common.entity.projectiles.EntitySilkyPebble;
 import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
 import thebetweenlands.common.entity.projectiles.EntitySludgeWallJet;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
@@ -746,6 +747,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityGreeblingCoracle.class, RenderGreeblingCoracle::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFishVortex.class, RenderNothing::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBLItemFrame.class, RenderBLItemFrame::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySilkyPebble.class, manager -> new RenderSilkyPebble(manager, Minecraft.getMinecraft().getRenderItem()));
 
 		//WIP
 		RenderingRegistry.registerEntityRenderingHandler(EntityRockSnot.class, RenderRockSnot::new);

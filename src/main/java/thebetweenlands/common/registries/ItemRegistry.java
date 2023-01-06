@@ -159,6 +159,7 @@ import thebetweenlands.common.item.misc.ItemSapSpit;
 import thebetweenlands.common.item.misc.ItemShadowStaff;
 import thebetweenlands.common.item.misc.ItemShimmerStone;
 import thebetweenlands.common.item.misc.ItemSilkBundle;
+import thebetweenlands.common.item.misc.ItemSilkyPebble;
 import thebetweenlands.common.item.misc.ItemSnotPod;
 import thebetweenlands.common.item.misc.ItemSpiritTreeFaceMaskSmallAnimated;
 import thebetweenlands.common.item.misc.ItemSwampTalisman;
@@ -590,6 +591,7 @@ public class ItemRegistry {
     public static final Item SILK_BUNDLE = new ItemSilkBundle();
     public static final Item SILK_FILTER = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1).setMaxDamage(2000);
     public static final Item MOSS_FILTER = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(1).setMaxDamage(400);
+    public static final Item SILKY_PEBBLE = new ItemSilkyPebble();
 
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
