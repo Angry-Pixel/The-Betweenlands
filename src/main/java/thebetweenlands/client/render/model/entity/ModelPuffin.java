@@ -1,8 +1,8 @@
 package thebetweenlands.client.render.model.entity;
 
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.AnimationBlender;
@@ -184,24 +184,26 @@ public class ModelPuffin extends MowzieModelBase {
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale) {
-    	
-    	//Temp until proper diving model is done
-    	
-    	EntityPuffin puffin = (EntityPuffin) entity;
-        if(puffin.getIsDiving()) {
-        	GlStateManager.pushMatrix();
-        	GlStateManager.rotate(45F, 1, 0, 0);
-        body1.render(scale);
-        GlStateManager.popMatrix();
-        }
-        else
-        	 body1.render(scale);
+    	body1.render(scale);
     }
 
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale, Entity entity) {
 		super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, scale, entity);
+		EntityPuffin puffin = (EntityPuffin) entity;
+		if (!puffin.getIsFlying()) {
+			body1.rotateAngleX = 0.4553564018453205F + MathHelper.cos(limbSwing + (float) Math.PI) * 0.5F * limbSwingAngle;
+			neck.rotateAngleX = -0.8651597102135892F - MathHelper.cos(limbSwing + (float) Math.PI) * 0.5F * limbSwingAngle;
+			leg_left1.rotateAngleX = -0.7740535232594852F + MathHelper.sin(limbSwing + (float) Math.PI) * 1F * limbSwingAngle;
+			leg_right1.rotateAngleX = -0.7740535232594852F + MathHelper.sin(limbSwing + (float) Math.PI) * 1F * limbSwingAngle;
+			leg_left2.rotateAngleX = 0 + MathHelper.sin(limbSwing + (float) Math.PI) * 1F * limbSwingAngle;
+			leg_right2.rotateAngleX = 0 + MathHelper.sin(limbSwing + (float) Math.PI) * 1F * limbSwingAngle;
+			tail1.rotateAngleX = 0 + MathHelper.cos(limbSwing + (float) Math.PI) * 0.5F * limbSwingAngle;
+			tailfeather_left1.rotateAngleX = 0 + MathHelper.cos(limbSwing + (float) Math.PI) * 0.5F * limbSwingAngle;
+			tailfeather_right1.rotateAngleX = 0 + MathHelper.cos(limbSwing + (float) Math.PI) * 0.5F * limbSwingAngle;
+		}
 	}
+	
 	
 	@Override
 	public void setLivingAnimations(EntityLivingBase entity, float limbSwing, float limbSwingAngle, float partialRenderTicks) {
@@ -271,7 +273,7 @@ public class ModelPuffin extends MowzieModelBase {
 				setRotateAngle(tailfeather_left2, 0.136659280431156F, 0.0F, 0.0F);
 				setRotateAngle(beak1a, 0.22759093446006054F, 0.0F, 0.0F);
 				setRotateAngle(beak2, 0.045553093477052F, 0.0F, 0.0F);
-				setRotateAngle(body1, 1.2292353921796064F, 0.0F, 0.0F);
+				setRotateAngle(body1, 2.276432943376204F, 0.0F, 0.0F);
 				setRotateAngle(tailfeather_left1, 0.045553093477052F, 0.0F, -0.091106186954104F);
 				setRotateAngle(leg_right2, 1.0471975511965976F, 0.0F, 0.0F);
 				setRotateAngle(leg_left2, 1.0471975511965976F, 0.0F, 0.0F);
