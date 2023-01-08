@@ -2,15 +2,19 @@ package thebetweenlands.common.entity.mobs;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Predicate;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMoveToBlock;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityJumpHelper;
@@ -23,8 +27,10 @@ import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -69,7 +75,7 @@ public class EntityPuffin extends EntityCreature implements IEntityBL, net.minec
 	public final ControlledAnimation landingTimer = new ControlledAnimation(10); // base pose
 	public final ControlledAnimation divingTimer = new ControlledAnimation(10); // diving pose
 	public int MAX_RESTING_TIME = 120; //ticks
-	public int MAX_FLIGHT_TIME = 120;
+	public int MAX_FLIGHT_TIME = 360;
 	
 	public EntityPuffin(World world) {
 		super(world);
@@ -81,7 +87,7 @@ public class EntityPuffin extends EntityCreature implements IEntityBL, net.minec
 		pathNavigatorGround = new PathNavigateGround(this, world);
 		pathNavigatorGround.setCanSwim(true);
 		pathNavigatorAir = new PathNavigateFlyingBL(this, world, 0);
-		setPathPriority(PathNodeType.WATER, -8F);
+		setPathPriority(PathNodeType.WATER, 8F);
 		setPathPriority(PathNodeType.BLOCKED, -8.0F);
 		setPathPriority(PathNodeType.OPEN, 8.0F);
 		setPathPriority(PathNodeType.FENCE, -8.0F);
@@ -93,10 +99,11 @@ public class EntityPuffin extends EntityCreature implements IEntityBL, net.minec
 	protected void initEntityAI() {
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityPuffin.EntityAIPuffinLandRandomly(this, 0.5D));
-		tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, true));
-		tasks.addTask(3, new EntityPuffin.EntityAIFlyingWanderPuffin(this, 0.5D, 10));
+		tasks.addTask(0, new EntityPuffin.EntityAIPickUpFish(this, 2D, true));
+		tasks.addTask(3, new EntityPuffin.EntityAIFlyingWanderPuffin(this, 0.5D, 100));
 		tasks.addTask(3, new EntityAIWander(this, 1D, 10));
 		tasks.addTask(4, new EntityAILookIdle(this));
+		targetTasks.addTask(1, new EntityPuffin.EntityAIGoFishing(this, EntityAnadia.class, true, 32D).setUnseenMemoryTicks(160));
 	}
 
 	@Override
@@ -110,7 +117,7 @@ public class EntityPuffin extends EntityCreature implements IEntityBL, net.minec
 		dataManager.register(SHOULD_TAKE_OFF, true);
 		dataManager.register(RESTING_TIMER, 0);
 		dataManager.register(FLYING_TIMER, 0);
-		dataManager.register(IS_FISHING, false);
+		dataManager.register(IS_FISHING, true);
 	}
 
 	@Override
@@ -131,6 +138,9 @@ public class EntityPuffin extends EntityCreature implements IEntityBL, net.minec
 		if (!getEntityWorld().isRemote) {
 			
 			if(getIsFlying()) {
+				if(world.getTotalWorldTime()%40 ==0)
+					if (!getIsFishing())
+						setIsFishing(true);
 				isAirBorne = true;
 				onGround = false;
 				if(getFlyingTimer() < MAX_FLIGHT_TIME)
@@ -145,6 +155,8 @@ public class EntityPuffin extends EntityCreature implements IEntityBL, net.minec
 			}
 			
 			if(!getIsFlying()) {
+				if (getIsFishing())
+					setIsFishing(false);
 				isAirBorne = false;
 				onGround = true;
 				if(getRestingTimer() < MAX_RESTING_TIME)
@@ -155,8 +167,8 @@ public class EntityPuffin extends EntityCreature implements IEntityBL, net.minec
 						setFlyingTimer(0);
 						//System.out.println("SHOULD FUCKING LAND!");
 					}
-				}
-			}	
+				
+			}	}
 		}
 		
 		if (getIsLanding() && getEntityWorld().isAirBlock(getPosition())) {
@@ -166,8 +178,18 @@ public class EntityPuffin extends EntityCreature implements IEntityBL, net.minec
 		if (isJumping && isInWater()) {
 			getMoveHelper().setMoveTo(posX, posY + 1, posZ, 1.0D);
 		}
+		
+		if (getIsFishing() && getAttackTarget() != null) {
+			if (motionY < 0)
+				if (!getIsDiving())
+					setIsDiving(true);
+		}
 
-//		if (getIsHovering()) {
+		if (motionY >= 0 && !isInWater())
+			if (getIsDiving())
+				setIsDiving(false);
+
+	//	if (getIsHovering()) {
 	//		motionX = motionY = motionZ = 0.0D;
 	//	}
 
@@ -176,14 +198,15 @@ public class EntityPuffin extends EntityCreature implements IEntityBL, net.minec
 			divingTimer.updateTimer();
 
 			if (getIsDiving()) {
-				divingTimer.increaseTimer();
+				divingTimer.increaseTimer(2);
 				landingTimer.decreaseTimer();
-			} else if (!getIsFlying()) {
+			} 
+			else if (!getIsFlying()) {
 				landingTimer.increaseTimer();
 				divingTimer.decreaseTimer();
-			} else {
+			} else if (!getIsDiving() && getIsFlying()) {
 				landingTimer.decreaseTimer();
-				divingTimer.decreaseTimer();
+				divingTimer.decreaseTimer(2);
 			}
 		}
 	}
@@ -281,9 +304,9 @@ public class EntityPuffin extends EntityCreature implements IEntityBL, net.minec
 		if (this.isInWater()) {
 			this.moveRelative(strafe, vertical, forward, 0.02F);
 			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-			this.motionX *= 0.800000011920929D;
-			this.motionY *= 0.800000011920929D;
-			this.motionZ *= 0.800000011920929D;
+			this.motionX *= 0.9D;
+			this.motionY *= 0.9D;
+			this.motionZ *= 0.9D;
 		} else if (this.isInLava()) {
 			this.moveRelative(strafe, vertical, forward, 0.02F);
 			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
@@ -332,6 +355,11 @@ public class EntityPuffin extends EntityCreature implements IEntityBL, net.minec
 
 	private void calculateRotationYaw(double x, double z) {
 		rotationYaw = (float) (MathHelper.atan2(z - posZ, x - posX) * (180D / Math.PI)) - 90.0F;
+	}
+	
+	@Override
+	public void notifyDataManagerChange(DataParameter<?> key) {
+		super.notifyDataManagerChange(key);
 	}
 
 	public boolean getShouldTakeOff() {
@@ -481,7 +509,6 @@ public class EntityPuffin extends EntityCreature implements IEntityBL, net.minec
 			if (puffin.getIsLanding())
 				puffin.setIsLanding(false);
 		}
-
 	}
 
 	class EntityAIPuffinLandRandomly extends EntityAIMoveToBlock {
@@ -539,6 +566,161 @@ public class EntityPuffin extends EntityCreature implements IEntityBL, net.minec
 			}
 		}
 	}
+	
+	public class EntityAIGoFishing<T extends EntityLivingBase> extends EntityAINearestAttackableTarget<T> {
+
+		protected double baseRange;
+		protected double revengeRange;
+		private final EntityPuffin puffin;
+
+		public EntityAIGoFishing(EntityPuffin puffinIn, Class<T> classTarget, boolean checkSight, double rangeIn) {
+			super(puffinIn, classTarget, checkSight);
+			baseRange = revengeRange = rangeIn;
+			puffin = puffinIn;
+			setMutexBits(3);
+		}
+
+		public EntityAIGoFishing(EntityPuffin puffinIn, Class<T> classTarget, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate <? super T > targetSelector) {
+			super(puffinIn, classTarget, chance, checkSight, onlyNearby, targetSelector);
+			puffin = puffinIn;
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			if (super.shouldExecute())
+				return puffin.getIsFishing() && puffin.getIsFlying();
+			return false;
+		}
+
+		@Override
+		protected AxisAlignedBB getTargetableArea(double targetDistance) {
+			return puffin.getEntityBoundingBox().grow(targetDistance, targetDistance, targetDistance);
+		}
+
+		@Override
+		protected double getTargetDistance() {
+			if(getRevengeTarget() != null) {
+				setAttackTarget(getRevengeTarget());
+				revengeRange = getDistance(getRevengeTarget());
+			}
+			return Math.max(baseRange, revengeRange);
+		}
+	}
+	
+	class EntityAIPickUpFish extends EntityAIBase {
+		World world;
+		protected int attackTick;
+		double speedTowardsTarget;
+		boolean longMemory;
+		Path path;
+		private int delayCounter;
+		private double targetX;
+		private double targetY;
+		private double targetZ;
+		protected final int attackInterval = 20;
+		private int failedPathFindingPenalty = 0;
+		private boolean canPenalize = false;
+		private final EntityPuffin puffin;
+
+		public EntityAIPickUpFish(EntityPuffin puffinIn, double speedIn, boolean useLongMemory) {
+			puffin = puffinIn;
+			world = puffin.world;
+			speedTowardsTarget = speedIn;
+			longMemory = useLongMemory;
+			setMutexBits(3);
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			EntityLivingBase entitylivingbase = puffin.getAttackTarget();
+			if (entitylivingbase == null)
+				return false;
+			else if (!entitylivingbase.isEntityAlive())
+				return false;
+			else if (!puffin.getIsFlying())
+				return false;
+			else {
+				path = puffin.getNavigator().getPathToEntityLiving(entitylivingbase);
+				if (path != null)
+					return true;
+				else
+					return getAttackReachSqr(entitylivingbase) >= puffin.getDistanceSq(entitylivingbase.posX, entitylivingbase.getEntityBoundingBox().minY, entitylivingbase.posZ);
+			}
+		}
+
+		@Override
+		public boolean shouldContinueExecuting() {
+			EntityLivingBase entitylivingbase = puffin.getAttackTarget();
+			if (entitylivingbase == null)
+				return false;
+			if (!puffin.getIsFishing())
+				return false;
+			if (!entitylivingbase.isEntityAlive())
+				return false;
+			if (!longMemory)
+				return !puffin.getNavigator().noPath();
+			return !(entitylivingbase instanceof EntityAnadia);
+		}
+
+		@Override
+		public void startExecuting() {
+			puffin.getNavigator().setPath(path, speedTowardsTarget);
+			delayCounter = 0;
+		}
+
+		@Override
+		public void resetTask() {
+			puffin.setAttackTarget((EntityLivingBase)null);
+			puffin.getNavigator().clearPath();
+		}
+
+		@Override
+		public void updateTask() {
+			EntityLivingBase entitylivingbase = puffin.getAttackTarget();
+			if(entitylivingbase == null) {
+				return;
+			}
+			puffin.getLookHelper().setLookPositionWithEntity(entitylivingbase, 30.0F, 30.0F);
+			double distToEnemySqr = puffin.getDistanceSq(entitylivingbase.posX, entitylivingbase.getEntityBoundingBox().minY, entitylivingbase.posZ);
+			--delayCounter;
+				if ((longMemory || puffin.getEntitySenses().canSee(entitylivingbase)) && delayCounter <= 0 && (targetX == 0.0D && targetY == 0.0D && targetZ == 0.0D || entitylivingbase.getDistanceSq(targetX, targetY, targetZ) >= 1.0D || puffin.getRNG().nextFloat() < 0.05F)) {
+					targetX = entitylivingbase.posX;
+					targetY = entitylivingbase.getEntityBoundingBox().minY;
+					targetZ = entitylivingbase.posZ;
+					delayCounter = 4 + puffin.getRNG().nextInt(7);
+					if (distToEnemySqr > 1024.0D)
+						delayCounter += 10;
+					else if (distToEnemySqr > 256.0D)
+						delayCounter += 5;
+					if (!puffin.getNavigator().tryMoveToEntityLiving(entitylivingbase, speedTowardsTarget))
+						delayCounter += 15;
+				}
+				checkAndPerformDropAttack(entitylivingbase, distToEnemySqr);
+			attackTick = Math.max(attackTick - 1, 0);
+		}
+
+
+		protected void checkAndPerformDropAttack(EntityLivingBase enemy, double distToEnemySqr) {
+			double attackReachSq = getAttackReachSqr(enemy);
+			if (distToEnemySqr <= attackReachSq + 1F && attackTick <= 0)  {
+				attackTick = 20;
+				puffin.jump();
+				puffin.swingArm(EnumHand.MAIN_HAND);
+				if(enemy instanceof EntityAnadia) {
+					puffin.setIsDiving(false);
+					enemy.setDead();
+					puffin.setIsFishing(false);
+					System.out.println("Caught a fish");
+				}
+				resetTask();
+			}
+		}
+
+		protected double getAttackReachSqr(EntityLivingBase attackTarget)  {
+			return (double)(puffin.width * 2.0F * puffin.width * 2.0F + attackTarget.width);
+		}
+	}
+	
 	
 	public class PuffinJumpHelper extends EntityJumpHelper {
 		private final EntityPuffin puffin;

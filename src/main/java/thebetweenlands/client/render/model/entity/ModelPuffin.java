@@ -1,5 +1,6 @@
 package thebetweenlands.client.render.model.entity;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.fml.relauncher.Side;
@@ -183,7 +184,18 @@ public class ModelPuffin extends MowzieModelBase {
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale) {
+    	
+    	//Temp until proper diving model is done
+    	
+    	EntityPuffin puffin = (EntityPuffin) entity;
+        if(puffin.getIsDiving()) {
+        	GlStateManager.pushMatrix();
+        	GlStateManager.rotate(45F, 1, 0, 0);
         body1.render(scale);
+        GlStateManager.popMatrix();
+        }
+        else
+        	 body1.render(scale);
     }
 
 	@Override
@@ -287,7 +299,7 @@ public class ModelPuffin extends MowzieModelBase {
         //Diving animation state
         blender.addState(model -> {
         	model.setToInitPose();
-        	flyingPose.apply(model, 1.5f, 0.25f, 0);
+        	divingPose.apply(model, 1.5f, 0.25f, 0);
         }, () -> divingPercent);
 
         blender.setAngles(false);
