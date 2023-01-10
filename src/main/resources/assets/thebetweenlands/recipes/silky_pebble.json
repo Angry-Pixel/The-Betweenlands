@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " S ",
+    "SPS",
+    " S "
+  ],
+  "key": {
+    "S": {
+      "item": "thebetweenlands:items_misc",
+      "data": 63
+    },
+    "P": {
+      "item": "thebetweenlands:angry_pebble"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:silky_pebble"
+  }
+}
