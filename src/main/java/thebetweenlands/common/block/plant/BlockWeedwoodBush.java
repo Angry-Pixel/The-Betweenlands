@@ -135,6 +135,7 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		ItemStack held = player.getHeldItem(hand);
 		if (!world.isRemote && !held.isEmpty() && EnumItemMisc.PHEROMONE_THORAX_CLUTCH.isItemOf(held)) {
+			world.playEvent(null, 2001, pos, Block.getIdFromBlock(this));
 			world.setBlockState(pos, BlockRegistry.DEAD_WEEDWOOD_BUSH.getDefaultState());
 			EntitySwarm swarm = new EntitySwarm(world);
 			swarm.setPosition(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
