@@ -25,7 +25,7 @@ public class ItemSilkyPebble extends ItemAngryPebble {
 			int useTime = this.getMaxItemUseDuration(stack) - timeLeft;
 
 			if(useTime > 20) {
-				worldIn.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, SoundRegistry.SORRY, SoundCategory.PLAYERS, 0.7F, 0.8F);
+				worldIn.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, SoundRegistry.SILKY_PEBBLE_THROW, SoundCategory.PLAYERS, 0.7F, 0.8F);
 				EntitySilkyPebble pebble = new EntitySilkyPebble(worldIn, entityLiving);
 				pebble.shoot(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, -10, 1.2F, 3.5F);
 				worldIn.spawnEntity(pebble);

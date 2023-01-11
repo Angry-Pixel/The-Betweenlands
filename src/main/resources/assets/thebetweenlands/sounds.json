@@ -1489,6 +1489,12 @@
       "random/fuse"
     ],
     "subtitle": "blsubtitles.misc.angry_pebble.hiss"
+  }, 
+  "silky_pebble_throw": {
+    "sounds": [
+      "thebetweenlands:silky_pebble_throw"
+    ],
+    "subtitle": "blsubtitles.misc.silky_pebble"
   },
   "ambient_swamp": {
     "sounds": [

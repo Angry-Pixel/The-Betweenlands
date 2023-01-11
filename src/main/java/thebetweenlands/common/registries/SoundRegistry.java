@@ -350,6 +350,7 @@ public class SoundRegistry {
     public static final BLSoundEvent BL_FISHING_ROD_CREAK = reg("bl_fishing_rod_creak");
     public static final BLSoundEvent MIST_STAFF_CAST = reg("mist_staff_cast");
     public static final BLSoundEvent MIST_STAFF_VANISH = reg("mist_staff_vanish");
+    public static final BLSoundEvent SILKY_PEBBLE_THROW = reg("silky_pebble_throw");
 
     // Blocks
     public static final BLSoundEvent GRIND = reg("grind");
