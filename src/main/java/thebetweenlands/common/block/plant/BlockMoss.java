@@ -36,7 +36,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.block.ISickleHarvestable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.ITintedBlock;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.util.OpenSimplexNoise;
 
 public class BlockMoss extends BlockDirectional implements IShearable, ISickleHarvestable, ITintedBlock {
     protected static final AxisAlignedBB MOSS_UP_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.2D, 1.0D);
@@ -50,6 +52,9 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
     protected boolean isReplaceable = false;
 
     public final boolean spreading;
+    
+    private final OpenSimplexNoise spreadingClusterNoise1 = new OpenSimplexNoise(1337);
+    private final OpenSimplexNoise spreadingClusterNoise2 = new OpenSimplexNoise(42);
     
     public BlockMoss(boolean spreading) {
         super(Material.PLANTS);
@@ -252,6 +257,13 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
     @Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
     	if(this.spreading) {
+			double noiseScale = 0.06;
+    		double ridgedNoise = Math.min(
+    				Math.abs(this.spreadingClusterNoise1.eval((pos.getX() + 0.5) * noiseScale, (pos.getY() + 0.5) * noiseScale, (pos.getZ() + 0.5) * noiseScale)),
+    				Math.abs(this.spreadingClusterNoise2.eval((pos.getX() + 0.5) * noiseScale, (pos.getY() + 0.5) * noiseScale, (pos.getZ() + 0.5) * noiseScale)));
+    		
+    		boolean spread = ridgedNoise >= 0.065;
+    		
 	    	MutableBlockPos checkPos = new MutableBlockPos();
 			byte radius = 2;
 	    	int attempt = 0;
@@ -265,47 +277,49 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
 				}
 			}
 			if (rand.nextInt(3) == 0) {
-				int maxNearbyMossBlocks = 6;
-				for (int xx = pos.getX() - radius; xx <= pos.getX() + radius; ++xx) {
-					for (int zz = pos.getZ() - radius; zz <= pos.getZ() + radius; ++zz) {
-						for (int yy = pos.getY() - radius; yy <= pos.getY() + radius; ++yy) {
-							if (world.getBlockState(checkPos.setPos(xx, yy, zz)).getBlock() == this) {
-								--maxNearbyMossBlocks;
-								if (maxNearbyMossBlocks <= 0) {
-									return;
+				if(spread) {
+					int maxNearbyMossBlocks = 6;
+					for (int xx = pos.getX() - radius; xx <= pos.getX() + radius; ++xx) {
+						for (int zz = pos.getZ() - radius; zz <= pos.getZ() + radius; ++zz) {
+							for (int yy = pos.getY() - radius; yy <= pos.getY() + radius; ++yy) {
+								if (world.getBlockState(checkPos.setPos(xx, yy, zz)).getBlock() == this) {
+									--maxNearbyMossBlocks;
+									if (maxNearbyMossBlocks <= 0) {
+										return;
+									}
 								}
 							}
 						}
 					}
-				}
-				for (attempt = 0; attempt < 30; attempt++) {
-					int xx = pos.getX() + rand.nextInt(3) - 1;
-					int yy = pos.getY() + rand.nextInt(3) - 1;
-					int zz = pos.getZ() + rand.nextInt(3) - 1;
-					int offsetDir = 0;
-					if (xx != pos.getX()) offsetDir++;
-					if (yy != pos.getY()) offsetDir++;
-					if (zz != pos.getZ()) offsetDir++;
-					if (offsetDir > 1)
-						continue;
-					BlockPos offsetPos = new BlockPos(xx, yy, zz);
-					if (world.isAirBlock(offsetPos)) {
-						EnumFacing facing = EnumFacing.byIndex(rand.nextInt(EnumFacing.VALUES.length));
-						EnumFacing.Axis axis = facing.getAxis();
-						EnumFacing oppositeFacing = facing.getOpposite();
-						boolean isInvalid = false;
-						if (axis.isHorizontal() && !world.isSideSolid(offsetPos.offset(oppositeFacing), facing, true)) {
-							isInvalid = true;
-						} else if (axis.isVertical() && !this.canPlaceOn(world, offsetPos.offset(oppositeFacing))) {
-							isInvalid = true;
-						}
-						if (!isInvalid) {
-							world.setBlockState(offsetPos, this.getDefaultState().withProperty(BlockMoss.FACING, facing));
-							break;
+					for (attempt = 0; attempt < 30; attempt++) {
+						int xx = pos.getX() + rand.nextInt(3) - 1;
+						int yy = pos.getY() + rand.nextInt(3) - 1;
+						int zz = pos.getZ() + rand.nextInt(3) - 1;
+						int offsetDir = 0;
+						if (xx != pos.getX()) offsetDir++;
+						if (yy != pos.getY()) offsetDir++;
+						if (zz != pos.getZ()) offsetDir++;
+						if (offsetDir > 1)
+							continue;
+						BlockPos offsetPos = new BlockPos(xx, yy, zz);
+						if (world.isAirBlock(offsetPos)) {
+							EnumFacing facing = EnumFacing.byIndex(rand.nextInt(EnumFacing.VALUES.length));
+							EnumFacing.Axis axis = facing.getAxis();
+							EnumFacing oppositeFacing = facing.getOpposite();
+							boolean isInvalid = false;
+							if (axis.isHorizontal() && !world.isSideSolid(offsetPos.offset(oppositeFacing), facing, true)) {
+								isInvalid = true;
+							} else if (axis.isVertical() && !this.canPlaceOn(world, offsetPos.offset(oppositeFacing))) {
+								isInvalid = true;
+							}
+							if (!isInvalid) {
+								world.setBlockState(offsetPos, this.getDefaultState().withProperty(BlockMoss.FACING, facing));
+								break;
+							}
 						}
 					}
 				}
-			} else if(rand.nextInt(20) == 0) {
+			} else if(rand.nextInt(27) == 0) {
 				world.setBlockToAir(pos);
 			}
     	}
