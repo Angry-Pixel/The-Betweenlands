@@ -42,6 +42,7 @@ import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePile;
 import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePileWater;
 import thebetweenlands.common.entity.mobs.EntityEmberling;
 import thebetweenlands.common.entity.mobs.EntityEmberlingWild;
+import thebetweenlands.common.entity.mobs.EntitySwarm;
 import thebetweenlands.common.item.EnumBLDrinkableBrew;
 import thebetweenlands.common.item.IGenericItem;
 import thebetweenlands.common.lib.ModInfo;
@@ -290,7 +291,18 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 			
 			return EnumActionResult.FAIL;
 		}
-			
+		else if (!heldItem.isEmpty() && EnumItemMisc.PHEROMONE_THORAX_CLUTCH.isItemOf(heldItem)) {
+			if (!world.isRemote) {
+				world.playEvent(null, 2001, pos, Block.getIdFromBlock(BlockRegistry.WEEDWOOD_BUSH));
+				world.setBlockState(pos, BlockRegistry.DEAD_WEEDWOOD_BUSH.getDefaultState());
+				EntitySwarm swarm = new EntitySwarm(world);
+				swarm.setPosition(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+				world.spawnEntity(swarm);
+				heldItem.shrink(1);
+				return EnumActionResult.SUCCESS;
+			}
+			return EnumActionResult.FAIL;
+		}
 		return EnumActionResult.PASS;
 	}
 
