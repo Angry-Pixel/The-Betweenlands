@@ -103,4 +103,9 @@ public class BlockStalactite extends BasicBlock {
 	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return false;
 	}
+	
+	@Override
+	protected boolean canSilkHarvest() {
+		return true;
+	}
 }

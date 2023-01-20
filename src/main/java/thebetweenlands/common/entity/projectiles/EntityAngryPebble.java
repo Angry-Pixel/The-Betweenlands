@@ -46,6 +46,6 @@ public class EntityAngryPebble extends EntityThrowable {
 	 */
 	protected void explode() {
 		boolean blockDamage = this.world.getGameRules().getBoolean("mobGriefing");
-		this.world.createExplosion(this, this.posX, this.posY, this.posZ, 4.5F, blockDamage);
+		this.world.createExplosion(this.thrower != null ? this.thrower : this, this.posX, this.posY, this.posZ, 4.5F, blockDamage);
 	}
 }

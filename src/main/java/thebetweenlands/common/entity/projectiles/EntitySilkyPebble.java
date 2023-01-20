@@ -1,5 +1,6 @@
 package thebetweenlands.common.entity.projectiles;
 
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -7,13 +8,16 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntitySilkyPebble extends EntityAngryPebble {
 	public EntitySilkyPebble(World world) {
@@ -29,36 +33,47 @@ public class EntitySilkyPebble extends EntityAngryPebble {
 		if (event.getWorld().isRemote)
 			return;
 
-		if (event.getExplosion().getExplosivePlacedBy() instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) event.getExplosion().getExplosivePlacedBy();
+		World world = event.getWorld();
+		Explosion explosion = event.getExplosion();
+		EntityLivingBase placedBy = explosion.getExplosivePlacedBy();
+		
+		if (placedBy instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) placedBy;
+			
 			List<Entity> entityList = event.getAffectedEntities();
 			List<BlockPos> blockPosList = event.getAffectedBlocks();
-			for (Entity entity : entityList)
-				if (entity instanceof EntitySilkyPebble)
-					for (BlockPos pos : blockPosList) {
-						IBlockState state = event.getWorld().getBlockState(pos);
-						Block block = state.getBlock();
-						if (block.canSilkHarvest(event.getWorld(), pos, state, player)) {
-							java.util.List<ItemStack> items = new java.util.ArrayList<ItemStack>();
-							ItemStack itemstack = getSilkTouchDrop(block, state);
-							if (!itemstack.isEmpty())
-								items.add(itemstack);
-							// not really needed but I guess it is nice if someone else needs it
-							net.minecraftforge.event.ForgeEventFactory.fireBlockHarvesting(items, event.getWorld(), pos, state, 0, 1.0f, true, player);
-							for (ItemStack item : items) {
-								block.spawnAsEntity(event.getWorld(), pos, item);
-							}
-						} else
-							block.dropBlockAsItem(event.getWorld(), pos, state, 0);
+			
+			if(entityList.stream().anyMatch(entity -> entity instanceof EntitySilkyPebble)) {
+				Iterator<BlockPos> it = blockPosList.iterator();
+				
+				while(it.hasNext()) {
+					BlockPos pos = it.next();
+				
+					IBlockState state = world.getBlockState(pos);
+					Block block = state.getBlock();
+					TileEntity te = world.getTileEntity(pos);
+					
+					if (block.canSilkHarvest(event.getWorld(), pos, state, player)) {
+						// Remove from affected blocks and
+						// destroy block
+						it.remove();
+						block.onBlockExploded(event.getWorld(), pos, explosion);
+						
+						// Create virtual silk touch pebble
+						ItemStack pebble = new ItemStack(ItemRegistry.SILKY_PEBBLE, 1);
+						pebble.addEnchantment(Enchantments.SILK_TOUCH, 1);
+						
+						// Harvest block silk touch drops
+						block.harvestBlock(event.getWorld(), player, pos, state, te, pebble);
 					}
+				}
+			}
 		}
 	}
-
-	private static ItemStack getSilkTouchDrop(Block block, IBlockState state) {
-        Item item = Item.getItemFromBlock(block);
-        int i = 0;
-        if (item.getHasSubtypes())
-            i = block.getMetaFromState(state);
-        return new ItemStack(item, 1, i);
-    }
+	
+	@Override
+	protected void explode() {
+		boolean blockDamage = this.world.getGameRules().getBoolean("mobGriefing");
+		this.world.createExplosion(this.thrower != null ? this.thrower : this, this.posX, this.posY, this.posZ, 3.0F, blockDamage);
+	}
 }

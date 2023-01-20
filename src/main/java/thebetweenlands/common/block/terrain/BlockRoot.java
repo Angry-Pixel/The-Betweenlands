@@ -115,4 +115,9 @@ public class BlockRoot extends BasicBlock implements ICustomItemBlock {
 	public ItemBlock getItemBlock() {
 		return new ItemBlockRoot();
 	}
+	
+	@Override
+	protected boolean canSilkHarvest() {
+		return true;
+	}
 }
