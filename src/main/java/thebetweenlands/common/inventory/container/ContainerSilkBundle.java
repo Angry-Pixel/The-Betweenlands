@@ -58,7 +58,12 @@ public class ContainerSilkBundle extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
-		return true;
+		for(int i = 0; i < player.inventory.getSizeInventory(); i++) {
+			if(player.inventory.getStackInSlot(i) == this.inventory.getInventoryItemStack()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

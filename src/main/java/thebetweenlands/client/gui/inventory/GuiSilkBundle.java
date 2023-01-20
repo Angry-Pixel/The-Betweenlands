@@ -54,8 +54,8 @@ public class GuiSilkBundle extends GuiContainer {
 
 	@Override
 	protected void keyTyped(char key, int event){  
-	   if (event == 1 || event == this.mc.gameSettings.keyBindInventory.getKeyCode())
-		   this.mc.player.closeScreen();
-	       this.checkHotbarKeys(key);
-	   }
+		if (event == 1 || event == this.mc.gameSettings.keyBindInventory.getKeyCode())
+			this.mc.player.closeScreen();
+		this.checkHotbarKeys(key);
+	}
 }
