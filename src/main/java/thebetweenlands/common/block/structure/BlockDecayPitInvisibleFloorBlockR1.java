@@ -35,7 +35,6 @@ public class BlockDecayPitInvisibleFloorBlockR1 extends BlockHorizontal implemen
 			setHardness(10.0F);
 			setResistance(2000.0F);
 			setSoundType(SoundType.STONE);
-			setCreativeTab(BLCreativeTabs.BLOCKS);
 			setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 		}
 

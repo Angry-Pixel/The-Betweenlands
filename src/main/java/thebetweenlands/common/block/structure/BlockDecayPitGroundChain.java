@@ -28,7 +28,6 @@ public class BlockDecayPitGroundChain extends BlockHorizontal implements ITileEn
 		this.setBlockUnbreakable();
 		setResistance(2000.0F);
 		setSoundType(SoundType.STONE);
-		setCreativeTab(BLCreativeTabs.BLOCKS);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	}
 

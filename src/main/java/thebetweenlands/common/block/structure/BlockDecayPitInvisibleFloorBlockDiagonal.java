@@ -34,7 +34,6 @@ public class BlockDecayPitInvisibleFloorBlockDiagonal extends BlockHorizontal im
 			setHardness(10.0F);
 			setResistance(2000.0F);
 			setSoundType(SoundType.STONE);
-			setCreativeTab(BLCreativeTabs.BLOCKS);
 			setDefaultState(blockState.getBaseState().withProperty(FLIPPED, false));
 		}
 

@@ -173,6 +173,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
         blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.TAINTED_POTION));
         blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.ROTTEN_FOOD));
         blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.SAMITE_CANVAS_PANEL_ROTATED, 1, OreDictionary.WILDCARD_VALUE));
+        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.MUD_TOWER_BEAM_ORIGIN));
 
         if (!BetweenlandsConfig.DEBUG.debug) {
             blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.TEST_ITEM));
