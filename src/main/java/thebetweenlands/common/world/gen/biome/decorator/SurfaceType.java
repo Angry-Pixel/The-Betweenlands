@@ -20,10 +20,13 @@ public enum SurfaceType implements Predicate<IBlockState> {
 			BlockMatcher.forBlock(Blocks.GRASS),
 			BlockMatcher.forBlock(Blocks.MYCELIUM),
 			BlockMatcher.forBlock(BlockRegistry.SWAMP_GRASS),
+			BlockMatcher.forBlock(BlockRegistry.DUG_PURIFIED_SWAMP_GRASS),
 			BlockMatcher.forBlock(BlockRegistry.DEAD_GRASS)
 			)),
 	DIRT(ImmutableList.of(
 			BlockMatcher.forBlock(BlockRegistry.SWAMP_DIRT),
+			BlockMatcher.forBlock(BlockRegistry.PURIFIED_SWAMP_DIRT),
+			BlockMatcher.forBlock(BlockRegistry.DUG_SWAMP_DIRT),
 			BlockMatcher.forBlock(Blocks.DIRT),
 			BlockMatcher.forBlock(BlockRegistry.MUD),
 			BlockMatcher.forBlock(BlockRegistry.COMPACTED_MUD),

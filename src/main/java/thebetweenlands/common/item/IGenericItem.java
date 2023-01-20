@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -70,7 +72,7 @@ public interface IGenericItem {
 	 * @param type
 	 * @return
 	 */
-	public static List<IGenericItem> getGenericItems(Class<? extends Enum<?>> type) {
+	public static <X extends Enum<?> & IGenericItem> List<IGenericItem> getGenericItems(Class<? extends X> type) {
 		List<IGenericItem> genericItems = TYPE_CONTAINER.typeToItems.get(type);
 		if(genericItems == null) {
 			if(!IGenericItem.class.isAssignableFrom(type))
@@ -88,7 +90,8 @@ public interface IGenericItem {
 	 * @param id
 	 * @return
 	 */
-	public static IGenericItem getFromID(Class<? extends Enum<?>> type, int id) {
+	@Nullable
+	public static <X extends Enum<?> & IGenericItem> IGenericItem getFromID(Class<? extends X> type, int id) {
 		for(IGenericItem item : getGenericItems(type)) {
 			if(item.getID() == id)
 				return item;
@@ -102,7 +105,8 @@ public interface IGenericItem {
 	 * @param stack
 	 * @return
 	 */
-	public static IGenericItem getFromStack(Class<? extends Enum<?>> type, ItemStack stack) {
+	@Nullable
+	public static <X extends Enum<?> & IGenericItem> IGenericItem getFromStack(Class<? extends X> type, ItemStack stack) {
 		return stack.isEmpty() ? null : getFromID(type, stack.getItemDamage());
 	}
 }

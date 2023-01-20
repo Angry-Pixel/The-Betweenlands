@@ -58,11 +58,11 @@ public class ItemCrushed extends Item implements ItemRegistry.IMultipleItemModel
 
 	@Override
 	public String getTranslationKey(ItemStack stack) {
-		try {
-			return "item.thebetweenlands." + IGenericItem.getFromStack(EnumItemCrushed.class, stack).getTranslationKey();
-		} catch (Exception e) {
-			return "item.thebetweenlands.unknown_crushed";
+		IGenericItem item = IGenericItem.getFromStack(EnumItemCrushed.class, stack);
+		if(item != null) {
+			return "item.thebetweenlands." + item.getTranslationKey();
 		}
+		return "item.thebetweenlands.unknown_crushed";
 	}
 
 	@Override

@@ -29,11 +29,11 @@ public class ItemPlantDrop extends Item implements ItemRegistry.IMultipleItemMod
 
 	@Override
 	public String getTranslationKey(ItemStack stack) {
-		try {
-			return "item.thebetweenlands." + IGenericItem.getFromStack(EnumItemPlantDrop.class, stack).getTranslationKey();
-		} catch (Exception e) {
-			return "item.thebetweenlands.unknown_plant_drop";
+		IGenericItem item = IGenericItem.getFromStack(EnumItemPlantDrop.class, stack);
+		if(item != null) {
+			return "item.thebetweenlands." + item.getTranslationKey();
 		}
+		return "item.thebetweenlands.unknown_plant_drop";
 	}
 
 	@Override
