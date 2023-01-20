@@ -41,4 +41,21 @@ public class GuiSilkBundle extends GuiContainer {
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
 	}
+
+	@Override
+	protected void mouseReleased(int mouseX, int mouseY, int state) {
+		if (mouseX < this.guiLeft || mouseX > this.guiLeft + this.ySize)
+			return;
+		 else if (mouseY < this.guiTop || mouseY > this.guiTop + this.xSize)
+			return;
+		else
+			super.mouseReleased(mouseX, mouseY, state);
+	}
+
+	@Override
+	protected void keyTyped(char key, int event){  
+	   if (event == 1 || event == this.mc.gameSettings.keyBindInventory.getKeyCode())
+		   this.mc.player.closeScreen();
+	       this.checkHotbarKeys(key);
+	   }
 }
