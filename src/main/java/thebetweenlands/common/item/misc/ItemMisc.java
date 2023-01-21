@@ -38,6 +38,7 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePile;
 import thebetweenlands.common.block.terrain.BlockBetweenstonePebblePileWater;
 import thebetweenlands.common.entity.mobs.EntityEmberling;
@@ -296,7 +297,9 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 			return EnumActionResult.FAIL;
 		}
 		else if (!heldItem.isEmpty() && EnumItemMisc.PHEROMONE_THORAX_CLUTCH.isItemOf(heldItem)) {
-			if (!world.isRemote) {
+			IBlockState iblockstate = world.getBlockState(pos);
+			Block block = iblockstate.getBlock();
+			if (!world.isRemote && block.isReplaceable(world, pos) && (block instanceof BlockWeedwoodBush)) {
 				world.playEvent(null, 2001, pos, Block.getIdFromBlock(BlockRegistry.WEEDWOOD_BUSH));
 				world.setBlockState(pos, BlockRegistry.DEAD_WEEDWOOD_BUSH.getDefaultState());
 				EntitySwarm swarm = new EntitySwarm(world);
