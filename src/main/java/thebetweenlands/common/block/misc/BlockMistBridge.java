@@ -9,6 +9,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
@@ -70,6 +71,11 @@ public class BlockMistBridge extends Block implements IStateMappedBlock {
 	@Override
     public boolean isReplaceable(IBlockAccess world, BlockPos pos) {
         return false;
+    }
+
+	@Override
+    public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+    	return false;
     }
 
 	@Override
