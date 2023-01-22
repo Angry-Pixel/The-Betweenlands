@@ -3,10 +3,15 @@ package thebetweenlands.api;
 import java.util.List;
 import java.util.function.Predicate;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.aspect.IAspectType;
+import thebetweenlands.api.entity.IEntityMusic;
+import thebetweenlands.api.entity.IEntityMusicProvider;
 import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.api.recipes.ICompostBinRecipe;
 import thebetweenlands.api.recipes.IDruidAltarRecipe;
@@ -149,4 +154,23 @@ public interface IBetweenlandsAPI {
 	 * @param aspectCount
 	 */
 	public void addStaticAspectsToItem(ItemStack item, IItemStackMatcher matcher, int tier, int group, float amountMultiplier, float amountVariation, int aspectCount);
+	
+	/**
+	 * Registers an entity music provider which allows playing music around an entity or to change
+	 * the music of a mob implementing {@link IEntityMusic}
+	 * @param entityCls
+	 * @param musicProvider
+	 * @return ture if successful. May be false if a music provider has already been registered for the specified entity class
+	 */
+	@SideOnly(Side.CLIENT)
+	public boolean registerEntityMusicProvider(Class<? extends Entity> entityCls, IEntityMusicProvider musicProvider);
+	
+	/**
+	 * Unregisters an entity music provider
+	 * @param entityCls
+	 * @param musicProvider
+	 * @return
+	 */
+	@SideOnly(Side.CLIENT)
+	public boolean unregisterEntityMusicProvider(Class<? extends Entity> entityCls, IEntityMusicProvider musicProvider);
 }

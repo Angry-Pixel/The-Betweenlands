@@ -1,12 +1,16 @@
 package thebetweenlands.client.handler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
 import javax.annotation.Nullable;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -40,6 +44,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import thebetweenlands.api.audio.IEntitySound;
 import thebetweenlands.api.entity.IEntityMusic;
+import thebetweenlands.api.entity.IEntityMusicProvider;
 import thebetweenlands.client.audio.SoundSystemOpenALAccess;
 import thebetweenlands.client.audio.ambience.AmbienceManager;
 import thebetweenlands.client.gui.menu.GuiBLMainMenu;
@@ -57,7 +62,9 @@ public class MusicHandler {
 	private static final int MAX_WAIT_MENU = 600;
 
 	private final SoundSystemOpenALAccess openAlAccess = new SoundSystemOpenALAccess();
-	
+
+	private final Map<Class<? extends Entity>, IEntityMusicProvider> entityMusicProviders = new HashMap<>();
+
 	private List<Sound> musicDimTrackAccessors;
 	private List<Sound> musicMenuTrackAccessors;
 	private Minecraft mc = Minecraft.getMinecraft();
@@ -67,24 +74,40 @@ public class MusicHandler {
 	private Sound previousSound;
 	private IntSet playingEntityMusicLayers = new IntOpenHashSet();
 	private Int2ObjectMap<IEntitySound> entityMusicMap = new Int2ObjectOpenHashMap<>();
-	
+
 	private boolean hasBlMainMenu = false;
 	private boolean isInBlMainMenu = false;
+
+	public boolean registerEntityMusicProvider(Class<? extends Entity> entityCls, IEntityMusicProvider musicProvider) {
+		if(!this.entityMusicProviders.containsKey(entityCls)) {
+			this.entityMusicProviders.put(entityCls, musicProvider);
+			return true;
+		}
+		return false;
+	}
 	
+	public boolean unregisterEntityMusicProvider(Class<? extends Entity> entityCls, IEntityMusicProvider musicProvider) {
+		if(this.entityMusicProviders.get(entityCls) == musicProvider) {
+			this.entityMusicProviders.remove(entityCls);
+			return true;
+		}
+		return false;
+	}
+
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onSoundSystemLoad(SoundLoadEvent event) {
 		if(event.getManager() == this.mc.getSoundHandler().sndManager) {
 			this.openAlAccess.cleanup();
 		}
 	}
-	
+
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onGuiOpen(GuiOpenEvent event) {
 		if(event.getGui() != null && event.getGui().getClass() == GuiMainMenu.class) {
 			hasBlMainMenu = false;
 		}
 	}
-	
+
 	@SubscribeEvent
 	public void onTick(ClientTickEvent event) {
 		if(event.phase == TickEvent.Phase.START) {
@@ -92,7 +115,7 @@ public class MusicHandler {
 				//Needs to be done here because during SoundLoadEvent and SoundSetupEvent the system isn't fully set up yet
 				this.openAlAccess.init(this.mc.getSoundHandler().sndManager);
 			}
-			
+
 			EntityPlayer player = getPlayer();
 
 			boolean isInMainMenu = (!(mc.currentScreen instanceof GuiWinGame) && mc.player == null) && BetweenlandsConfig.GENERAL.blMainMenu;
@@ -100,24 +123,34 @@ public class MusicHandler {
 			if(mc.currentScreen instanceof GuiBLMainMenu) {
 				hasBlMainMenu = true;
 			}
-			
+
 			isInBlMainMenu = isInMainMenu && hasBlMainMenu;
-			
+
 			if ((isInBlMainMenu || (player != null && player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId))) {
 
-				Int2ObjectMap<IEntityMusic> closestMusicEntityMap = new Int2ObjectOpenHashMap<>();
-				
+				Int2ObjectMap<Pair<IEntityMusic, Entity>> closestMusicEntityMap = new Int2ObjectOpenHashMap<>();
+
 				if(mc.world != null) {
 					for(Entity entity : this.mc.world.loadedEntityList) {
-						if(entity instanceof IEntityMusic) {
-							int layer = ((IEntityMusic) entity).getMusicLayer(player);
-							
-							Entity closest = (Entity) closestMusicEntityMap.get(layer);
-							
+						IEntityMusic entityMusic = null;
+
+						IEntityMusicProvider entityMusicProvider = this.entityMusicProviders.get(entity.getClass());
+						if(entityMusicProvider != null) {
+							entityMusic = entityMusicProvider.getEntityMusic(entity);
+						} else if(entity instanceof IEntityMusic) {
+							entityMusic = (IEntityMusic) entity;
+						}
+
+						if(entityMusic != null) {
+							int layer = entityMusic.getMusicLayer(player);
+
+							Pair<IEntityMusic, Entity> closestPair = closestMusicEntityMap.get(layer);
+							Entity closest = closestPair != null ? closestPair.getRight() : null;
+
 							if((closest == null || entity.getDistance(player) < closest.getDistance(player))
-									&& entity.getDistance(player) <= ((IEntityMusic)entity).getMusicRange(player)
-									&& ((IEntityMusic)entity).isMusicActive(player)) {
-								closestMusicEntityMap.put(layer, (IEntityMusic) entity);
+									&& entity.getDistance(player) <= entityMusic.getMusicRange(player)
+									&& entityMusic.isMusicActive(player)) {
+								closestMusicEntityMap.put(layer, Pair.of(entityMusic, entity));
 							}
 						}
 					}
@@ -136,19 +169,22 @@ public class MusicHandler {
 				}
 
 				if(!closestMusicEntityMap.isEmpty()) {
-					for(Int2ObjectMap.Entry<IEntityMusic> entry : closestMusicEntityMap.int2ObjectEntrySet()) {
+					for(Int2ObjectMap.Entry<Pair<IEntityMusic, Entity>> entry : closestMusicEntityMap.int2ObjectEntrySet()) {
 						IEntitySound currentlyPlaying = this.entityMusicMap.get(entry.getIntKey());
-						
+
+						IEntityMusic closestEntityMusic = entry.getValue().getLeft();
+						Entity closestEntity = entry.getValue().getRight();
+
 						if(currentlyPlaying == null) {
-							IEntitySound newSound = entry.getValue().getMusicSound(player);
-							
+							IEntitySound newSound = closestEntityMusic.getMusicSound(player);
+
 							if(newSound != null) {
 								this.entityMusicMap.put(entry.getIntKey(), newSound);
 								this.playingEntityMusicLayers.add(entry.getIntKey());
-								
+
 								this.mc.getSoundHandler().playSound(newSound);
 							}
-						} else if(currentlyPlaying.getMusicEntity() != entry.getValue() && entry.getValue().canInterruptOtherEntityMusic(player)) {
+						} else if(currentlyPlaying.getMusicEntity() != closestEntity && closestEntityMusic.canInterruptOtherEntityMusic(player)) {
 							currentlyPlaying.stopEntityMusic();
 						}
 					}
@@ -200,7 +236,7 @@ public class MusicHandler {
 		return this.isSoundContainedIn(SoundEvents.MUSIC_CREATIVE, sound) || this.isSoundContainedIn(SoundEvents.MUSIC_CREDITS, sound) || this.isSoundContainedIn(SoundEvents.MUSIC_DRAGON, sound) || this.isSoundContainedIn(SoundEvents.MUSIC_END, sound) ||
 				this.isSoundContainedIn(SoundEvents.MUSIC_GAME, sound) || this.isSoundContainedIn(SoundEvents.MUSIC_MENU, sound) || this.isSoundContainedIn(SoundEvents.MUSIC_NETHER, sound);
 	}
-	
+
 	private boolean isSoundContainedIn(SoundEvent track, ISound sound) {
 		if(Objects.equals(sound.getSoundLocation(), track.getSoundName())) {
 			return true;
@@ -303,11 +339,11 @@ public class MusicHandler {
 	public EntityPlayer getPlayer() {
 		return this.mc.player;
 	}
-	
+
 	public SoundSystemOpenALAccess getOpenALAccess() {
 		return this.openAlAccess;
 	}
-	
+
 	@Nullable
 	public IEntitySound getEntityMusic(int layer) {
 		return this.entityMusicMap.get(layer);

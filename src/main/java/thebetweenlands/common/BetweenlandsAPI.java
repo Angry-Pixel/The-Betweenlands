@@ -6,18 +6,23 @@ import java.util.function.Predicate;
 
 import com.google.common.base.Preconditions;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.LoaderState;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.IBetweenlandsAPI;
 import thebetweenlands.api.aspect.IAspectType;
+import thebetweenlands.api.entity.IEntityMusicProvider;
 import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.api.recipes.ICompostBinRecipe;
 import thebetweenlands.api.recipes.IDruidAltarRecipe;
 import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
 import thebetweenlands.api.recipes.IPurifierRecipe;
+import thebetweenlands.client.handler.MusicHandler;
 import thebetweenlands.common.handler.OverworldItemHandler;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.aspect.IItemStackMatcher;
@@ -149,5 +154,17 @@ public class BetweenlandsAPI implements IBetweenlandsAPI {
 			float amountMultiplier, float amountVariation, int aspectCount) {
 		Preconditions.checkState(Loader.instance().isInState(LoaderState.INITIALIZATION), "Must be called during INITIALIZATION");
 		AspectManager.addStaticAspectsToItem(item, matcher, tier, group, amountMultiplier, amountVariation, aspectCount);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean registerEntityMusicProvider(Class<? extends Entity> entityCls, IEntityMusicProvider musicProvider) {
+		return MusicHandler.INSTANCE.registerEntityMusicProvider(entityCls, musicProvider);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean unregisterEntityMusicProvider(Class<? extends Entity> entityCls, IEntityMusicProvider musicProvider) {
+		return MusicHandler.INSTANCE.unregisterEntityMusicProvider(entityCls, musicProvider);
 	}
 }
