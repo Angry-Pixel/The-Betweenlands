@@ -73,7 +73,7 @@ public class MusicHandler {
 	private ISound currentSound;
 	private Sound previousSound;
 	private IntSet playingEntityMusicLayers = new IntOpenHashSet();
-	private Int2ObjectMap<IEntitySound> entityMusicMap = new Int2ObjectOpenHashMap<>();
+	private Int2ObjectMap<Pair<IEntitySound, IEntityMusic>> entityMusicMap = new Int2ObjectOpenHashMap<>();
 
 	private boolean hasBlMainMenu = false;
 	private boolean isInBlMainMenu = false;
@@ -159,18 +159,21 @@ public class MusicHandler {
 				IntIterator it = this.playingEntityMusicLayers.iterator();
 				while(it.hasNext()) {
 					int layer = it.nextInt();
-					IEntitySound sound = this.entityMusicMap.get(layer);
+					Pair<IEntitySound, IEntityMusic> pair = this.entityMusicMap.get(layer);
+					IEntitySound sound = pair.getLeft();
+					IEntityMusic music = pair.getRight();
 					if(!this.mc.getSoundHandler().isSoundPlaying(sound)) {
 						it.remove();
 						this.entityMusicMap.remove(layer);
-					} else if(!((IEntityMusic) sound.getMusicEntity()).isMusicActive(player)) {
+					} else if(!music.isMusicActive(player)) {
 						sound.stopEntityMusic();
 					}
 				}
 
 				if(!closestMusicEntityMap.isEmpty()) {
 					for(Int2ObjectMap.Entry<Pair<IEntityMusic, Entity>> entry : closestMusicEntityMap.int2ObjectEntrySet()) {
-						IEntitySound currentlyPlaying = this.entityMusicMap.get(entry.getIntKey());
+						Pair<IEntitySound, IEntityMusic> currentlyPlayingPair = this.entityMusicMap.get(entry.getIntKey());
+						IEntitySound currentlyPlaying = currentlyPlayingPair != null ? currentlyPlayingPair.getKey() : null;
 
 						IEntityMusic closestEntityMusic = entry.getValue().getLeft();
 						Entity closestEntity = entry.getValue().getRight();
@@ -179,7 +182,7 @@ public class MusicHandler {
 							IEntitySound newSound = closestEntityMusic.getMusicSound(player);
 
 							if(newSound != null) {
-								this.entityMusicMap.put(entry.getIntKey(), newSound);
+								this.entityMusicMap.put(entry.getIntKey(), Pair.of(newSound, closestEntityMusic));
 								this.playingEntityMusicLayers.add(entry.getIntKey());
 
 								this.mc.getSoundHandler().playSound(newSound);
@@ -346,7 +349,8 @@ public class MusicHandler {
 
 	@Nullable
 	public IEntitySound getEntityMusic(int layer) {
-		return this.entityMusicMap.get(layer);
+		Pair<IEntitySound, IEntityMusic> pair = this.entityMusicMap.get(layer);
+		return pair != null ? pair.getKey() : null;
 	}
 
 	public static class SoundWrapper implements ISound {

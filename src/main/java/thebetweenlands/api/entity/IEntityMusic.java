@@ -25,7 +25,7 @@ public interface IEntityMusic {
 	@Nullable
 	public default IEntitySound getMusicSound(EntityPlayer listener) {
 		BLSoundEvent sound = this.getMusicFile(listener);
-		return new EntityMusicSound<Entity>(sound, SoundCategory.MUSIC, (Entity) this, 1, AttenuationType.NONE);
+		return new EntityMusicSound<Entity>(sound, SoundCategory.MUSIC, (Entity) this, this, 1, AttenuationType.NONE);
 	}
 
 	public default int getMusicLayer(EntityPlayer listener) {

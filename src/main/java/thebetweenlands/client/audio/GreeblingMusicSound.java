@@ -23,7 +23,7 @@ public class GreeblingMusicSound extends EntityMusicSound<EntityGreebling> {
 	private volatile boolean isSoundReady = false;
 
 	public GreeblingMusicSound(int type, EntityGreebling entity, float volume) {
-		super(type == 0 ? SoundRegistry.GREEBLING_MUSIC_1 : SoundRegistry.GREEBLING_MUSIC_2, SoundCategory.NEUTRAL, entity, volume, AttenuationType.NONE);
+		super(type == 0 ? SoundRegistry.GREEBLING_MUSIC_1 : SoundRegistry.GREEBLING_MUSIC_2, SoundCategory.NEUTRAL, entity, entity, volume, AttenuationType.NONE);
 		this.type = type;
 	}
 

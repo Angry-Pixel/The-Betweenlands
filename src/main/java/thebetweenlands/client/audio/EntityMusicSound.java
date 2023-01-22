@@ -15,12 +15,12 @@ public class EntityMusicSound<T extends Entity> extends EntitySound<T> {
 
 	protected boolean mustFadeOut = false;
 	
-	public EntityMusicSound(SoundEvent sound, SoundCategory category, T entity, float volume, AttenuationType attenuationType) {
+	public EntityMusicSound(SoundEvent sound, SoundCategory category, T entity, IEntityMusic music, float volume, AttenuationType attenuationType) {
 		super(sound, category, entity, e -> true);
 		this.repeat = true;
 		this.attenuationType = attenuationType;
 
-		this.music = (IEntityMusic) entity;
+		this.music = music;
 		this.xPosF = (float) this.entity.posX;
 		this.yPosF = (float) this.entity.posY;
 		this.zPosF = (float) this.entity.posZ;

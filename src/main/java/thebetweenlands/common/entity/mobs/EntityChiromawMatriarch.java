@@ -62,6 +62,8 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 	private static final DataParameter<Boolean> RETURN_TO_NEST = EntityDataManager.createKey(EntityChiromawMatriarch.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_LANDING = EntityDataManager.createKey(EntityChiromawMatriarch.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_SPINNING = EntityDataManager.createKey(EntityChiromawMatriarch.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> TARGET_ENTITY_ID = EntityDataManager.createKey(EntityChiromawMatriarch.class, DataSerializers.VARINT);
+	
 	public int broodCount;
 	public double pickupHeight;
 	public int droppingTimer; // makes sure player is always dropped
@@ -97,6 +99,7 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		dataManager.register(RETURN_TO_NEST, false);
 		dataManager.register(IS_LANDING, false);
 		dataManager.register(IS_SPINNING, false);
+		dataManager.register(TARGET_ENTITY_ID, -1);
 	}
 
 	@Override
@@ -134,6 +137,11 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 				setReturnToNest(false);
 			if(getBroodCount() < 240)
 				setBroodCount(240);
+		}
+		
+		if(!this.world.isRemote) {
+			Entity target = this.getAttackTarget();
+			this.dataManager.set(TARGET_ENTITY_ID, target != null ? target.getEntityId() : -1);
 		}
 
 		if (isJumping && isInWater()) {
@@ -231,6 +239,20 @@ public class EntityChiromawMatriarch extends EntityFlyingMob implements IEntityB
 		}
 	}
 
+	@Override
+	public EntityLivingBase getAttackTarget() {
+		if(this.world.isRemote) {
+			int targetId = this.dataManager.get(TARGET_ENTITY_ID);
+			if(targetId >= 0) {
+				Entity target = this.world.getEntityByID(targetId);
+				if(target instanceof EntityLivingBase) {
+					return (EntityLivingBase) target;
+				}
+			}
+		}
+		return super.getAttackTarget();
+	}
+	
 	@Override
 	public void addVelocity(double x, double y, double z) {
 		if (getIsNesting()) {
