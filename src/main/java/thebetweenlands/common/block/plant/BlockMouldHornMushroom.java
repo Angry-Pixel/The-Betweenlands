@@ -154,10 +154,10 @@ public class BlockMouldHornMushroom extends Block implements ICustomItemBlock, I
 		return getDefaultState().withProperty(MOULD_HORN_TYPE, EnumMouldHorn.byMetadata(meta));
 	}
 
-	private boolean checkForAdjacentBlockingMushroom(World world, BlockPos pos, IBlockState state) {
-		for(int offsetX = -1; offsetX < 1; offsetX++)
-			for(int offsetY = -1; offsetY < 1; offsetY++)
-				if (isBlockingMushroomAdjacent(world, pos.add(offsetX, 0, offsetY), state))
+	private boolean checkForAdjacentBlockingMushroom(World world, BlockPos pos, int offSetXIn, int offSetZIn, IBlockState state) {
+		for(int offsetX = -offSetXIn; offsetX < offSetXIn; offsetX++)
+			for(int offsetZ = -offSetZIn; offsetZ < offSetZIn; offsetZ++)
+				if (isBlockingMushroomAdjacent(world, pos.add(offsetX, 0, offsetZ), state))
 					return true;
 
 		return false;
@@ -192,7 +192,7 @@ public class BlockMouldHornMushroom extends Block implements ICustomItemBlock, I
 	//BASIC GROWTH TICK TESTING - can make more varied later
 			switch (stage) {
 			case MOULD_HORN_MYCELIUM:
-				if(!checkForAdjacentBlockingMushroom(world, pos, fullStalk) && !checkForAdjacentBlockingMushroom(world, pos, fullCap) && !checkForAdjacentBlockingMushroom(world, pos, smallStalk) && !checkForAdjacentBlockingMushroom(world, pos, smallCap))
+				if(!checkForAdjacentBlockingMushroom(world, pos, 2, 2,  fullStalk) && !checkForAdjacentBlockingMushroom(world, pos, 2, 2, fullCap) && !checkForAdjacentBlockingMushroom(world, pos, 2, 2, smallStalk) && !checkForAdjacentBlockingMushroom(world, pos, 2, 2, smallCap))
 					world.setBlockState(pos, getDefaultState().withProperty(MOULD_HORN_TYPE, EnumMouldHorn.MOULD_HORN_CAP_THIN), 2);
 				break;
 			case MOULD_HORN_CAP_THIN:
@@ -200,12 +200,12 @@ public class BlockMouldHornMushroom extends Block implements ICustomItemBlock, I
 					world.setBlockState(pos, getDefaultState().withProperty(MOULD_HORN_TYPE, EnumMouldHorn.MOULD_HORN_STALK_THIN), 2);
 					world.setBlockState(pos.up(), getDefaultState().withProperty(MOULD_HORN_TYPE, EnumMouldHorn.MOULD_HORN_CAP_THIN), 2);
 				}
-				if(!checkForAdjacentBlockingMushroom(world, pos, fullStalk) && !checkForAdjacentBlockingMushroom(world, pos, fullCap))
+				if(!checkForAdjacentBlockingMushroom(world, pos, 1, 1, fullStalk) && !checkForAdjacentBlockingMushroom(world, pos, 1, 1, fullCap))
 					if(world.getBlockState(pos.down()) == this.getDefaultState().withProperty(MOULD_HORN_TYPE, EnumMouldHorn.MOULD_HORN_STALK_THIN))
 						world.setBlockState(pos, getDefaultState().withProperty(MOULD_HORN_TYPE, EnumMouldHorn.MOULD_HORN_CAP_FULL), 2);
 				break;
 			case MOULD_HORN_STALK_THIN:
-				if(!checkForAdjacentBlockingMushroom(world, pos, fullStalk) && !checkForAdjacentBlockingMushroom(world, pos, fullCap))
+				if(!checkForAdjacentBlockingMushroom(world, pos, 1, 1, fullStalk) && !checkForAdjacentBlockingMushroom(world, pos, 1, 1, fullCap))
 					if(world.getBlockState(pos.up()) == this.getDefaultState().withProperty(MOULD_HORN_TYPE, EnumMouldHorn.MOULD_HORN_CAP_FULL))
 						world.setBlockState(pos, getDefaultState().withProperty(MOULD_HORN_TYPE, EnumMouldHorn.MOULD_HORN_STALK_FULL), 2);
 				break;
