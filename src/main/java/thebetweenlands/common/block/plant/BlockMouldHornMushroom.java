@@ -58,6 +58,7 @@ public class BlockMouldHornMushroom extends Block implements ICustomItemBlock, I
 		list.add(new ItemStack(this, 1, EnumMouldHorn.MOULD_HORN_CAP_THIN.ordinal()));
 		list.add(new ItemStack(this, 1, EnumMouldHorn.MOULD_HORN_STALK_FULL.ordinal()));
 		list.add(new ItemStack(this, 1, EnumMouldHorn.MOULD_HORN_CAP_FULL.ordinal()));
+		list.add(new ItemStack(this, 1, EnumMouldHorn.MOULD_HORN_CAP_FULL_WARTS.ordinal()));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -172,7 +173,7 @@ public class BlockMouldHornMushroom extends Block implements ICustomItemBlock, I
 	private boolean checkForAdjacentThinMushroomBlock(World world, BlockPos pos, IBlockState state) {
 		for(EnumFacing facing : EnumFacing.values()) {
 			if(facing != EnumFacing.UP || facing != EnumFacing.DOWN)
-				if (isMyceliumBlockAdjacent(world, pos, facing))
+				if (isThinMushroomBlockAdjacent(world, pos, facing))
 					return true;
 		}
 		return false;
