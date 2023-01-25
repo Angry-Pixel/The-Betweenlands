@@ -1,4 +1,5 @@
 {
+"parent": "block/cube_all",
 	"textures": {
 		"1": "thebetweenlands:blocks/mould_horn_bottom",
 		"2": "thebetweenlands:blocks/mould_horn_stem",

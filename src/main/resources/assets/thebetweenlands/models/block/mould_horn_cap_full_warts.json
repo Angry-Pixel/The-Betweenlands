@@ -1,10 +1,10 @@
 {
 "parent": "block/cube_all",
 	"textures": {
-		"0": "thebetweenlands:blocks/mould_horn_cap_top",
+		"0": "thebetweenlands:blocks/mould_horn_cap_top_warts",
 		"1": "thebetweenlands:blocks/mould_horn_bottom",
-		"2": "thebetweenlands:blocks/mould_horn_cap_side",
-		"particle": "thebetweenlands:blocks/mould_horn_cap_top"
+		"2": "thebetweenlands:blocks/mould_horn_cap_side_warts",
+		"particle": "thebetweenlands:blocks/mould_horn_cap_top_warts"
 	},
 	"elements": [
 		{
