@@ -1,0 +1,9 @@
+{
+  "variants": {
+    "type=mould_horn_mycelium": {"model": "thebetweenlands:mould_horn_mycelium"},
+    "type=mould_horn_stalk_thin": {"model": "thebetweenlands:mould_horn_stalk_thin"},
+    "type=mould_horn_cap_thin": {"model": "thebetweenlands:mould_horn_cap_thin"},
+    "type=mould_horn_stalk_full": {"model": "thebetweenlands:mould_horn_stalk_full"},
+    "type=mould_horn_cap_full": {"model": "thebetweenlands:mould_horn_cap_full"}
+    }
+}

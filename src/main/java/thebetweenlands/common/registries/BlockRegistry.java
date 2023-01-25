@@ -142,6 +142,7 @@ import thebetweenlands.common.block.plant.BlockLichen;
 import thebetweenlands.common.block.plant.BlockMarshMarigoldFlower;
 import thebetweenlands.common.block.plant.BlockMarshMarigoldStalk;
 import thebetweenlands.common.block.plant.BlockMoss;
+import thebetweenlands.common.block.plant.BlockMouldHornMushroom;
 import thebetweenlands.common.block.plant.BlockNesting;
 import thebetweenlands.common.block.plant.BlockNettle;
 import thebetweenlands.common.block.plant.BlockNettleFlowered;
@@ -832,6 +833,14 @@ public class BlockRegistry {
     public static final Block WEEDWOOD_BUSH_INFESTED_2 = new BlockWeedwoodBushInfested(new ItemStack(ItemRegistry.SILK_GRUB), 2);// drop silk worm
     public static final Block WEEDWOOD_BUSH_INFESTED_3 = new BlockWeedwoodBushInfested(EnumItemMisc.SILK_GRUB_COCOON.create(1), 3);// drop silk but render cocoons
     public static final Block WEEDWOOD_BUSH_INFESTED_4 = new BlockWeedwoodBushInfested(ItemStack.EMPTY, 4);// decay 
+    
+    //Testshroom
+    public static final Block MOULD_HORN = new BlockMouldHornMushroom();
+    public static final Block MOULDY_SOIL = new BasicBlock(Material.GROUND)
+            .setDefaultCreativeTab()
+            .setHarvestLevel2("shovel", 0)
+            .setSoundType2(SoundType.GROUND)
+            .setHardness(0.5F);
     
     public static final Block PURIFIED_SWAMP_DIRT = new BlockSwampDirt(Material.GROUND);
     public static final Block DUG_SWAMP_DIRT = new BlockDugDirt(false).setItemDropped(() -> Item.getItemFromBlock(SWAMP_DIRT));

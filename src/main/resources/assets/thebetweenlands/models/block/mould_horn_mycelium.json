@@ -1,0 +1,6 @@
+{
+	"parent": "block/cross",
+	"textures": {
+		"cross": "thebetweenlands:blocks/mould_horn_mycelium"
+	}
+}
