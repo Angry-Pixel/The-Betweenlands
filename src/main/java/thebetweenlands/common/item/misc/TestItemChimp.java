@@ -1,9 +1,6 @@
 package thebetweenlands.common.item.misc;
 
-import java.util.List;
-
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumActionResult;
@@ -15,7 +12,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.entity.EntityFishVortex;
+import thebetweenlands.common.entity.projectiles.EntitySkySpores;
 
 
 //MINE!!
@@ -218,19 +215,15 @@ public class TestItemChimp extends Item {
 
 	//Test code for things
 	private void makeSomethingHere(World world, EntityPlayer player) {
-			if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
-				List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, proximityBox(player));
-				for (int entityCount = 0; entityCount < list.size(); entityCount++) {
-					EntityLivingBase entity = list.get(entityCount);
-					if (entity != null) {
-						if (!(entity instanceof EntityPlayer)) {
-							EntityFishVortex vortex = new EntityFishVortex(world);
-							vortex.setPosition(entity.posX, entity.posY + 0.25D, entity.posZ);
-							world.spawnEntity(vortex);
-							entity.startRiding(vortex, true);
-						}
+			if (!world.isRemote) {// && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
+					if (world.canBlockSeeSky(player.getPosition())) {
+						double angle = Math.toRadians((double)world.rand.nextInt(360));
+						double offSetX = -Math.sin(angle) * 88D;
+						double offSetZ = Math.cos(angle) * 88D;
+						EntitySkySpores skySpores = new EntitySkySpores(world, player.posX + offSetX, 96, player.posZ + offSetZ, player);
+						world.spawnEntity(skySpores);
 					}
-				}
+					System.out.println("Summoning Panspermia");
 			}
 	}
 
