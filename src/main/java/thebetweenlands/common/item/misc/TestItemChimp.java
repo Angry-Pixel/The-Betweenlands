@@ -8,10 +8,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.entity.EntityBigPuffshroom;
 import thebetweenlands.common.entity.projectiles.EntitySkySpores;
 
 
@@ -206,7 +206,11 @@ public class TestItemChimp extends Item {
 			}
 			*/
 
-				makeSomethingHere(worldIn, player);
+				//makeSomethingHere(worldIn, player);
+				
+			EntityBigPuffshroom bigPuffShroom = new EntityBigPuffshroom(worldIn);
+			bigPuffShroom.setPosition(pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F);
+			worldIn.spawnEntity(bigPuffShroom);
 	
 		}
 

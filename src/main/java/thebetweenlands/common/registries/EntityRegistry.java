@@ -6,6 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.EntityBLItemFrame;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
+import thebetweenlands.common.entity.EntityBigPuffshroom;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityFalseXPOrb;
@@ -127,7 +128,6 @@ import thebetweenlands.common.entity.projectiles.EntityPredatorArrowGuide;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
 import thebetweenlands.common.entity.projectiles.EntitySilkyPebble;
-import thebetweenlands.common.entity.projectiles.EntitySkySpores;
 import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
 import thebetweenlands.common.entity.projectiles.EntitySludgeWallJet;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
@@ -294,7 +294,9 @@ public class EntityRegistry {
 		registerEntity(EntityBLItemFrame.class, "item_frame", 256, 64, false);
 		registerEntity(EntitySilkyPebble.class, "silky_pebble");
 		
-		registerEntity(EntitySkySpores.class, "sky_spores", 65536, 3, true);
+		//registerEntity(EntitySkySpores.class, "sky_spores", 65536, 3, true);
+		registerEntity(EntityBigPuffshroom.class, "big_puffshroom", 64, 3, true);
+		//registerEntity(EntitySporeBomb.class, "spore_bomb", 64, 3, true);
 	}
 
 	private static int id = 0;

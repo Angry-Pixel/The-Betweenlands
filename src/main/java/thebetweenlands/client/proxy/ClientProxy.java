@@ -158,6 +158,7 @@ import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.entity.EntityBLItemFrame;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
+import thebetweenlands.common.entity.EntityBigPuffshroom;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityFalseXPOrb;
@@ -762,6 +763,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityCaveFish.class, RenderCaveFish::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGlowingGoop.class, manager -> new RenderGlowingGoop(manager, Minecraft.getMinecraft().getRenderItem()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityMistBridge.class, RenderNothing::new);
+
+		RenderingRegistry.registerEntityRenderingHandler(EntityBigPuffshroom.class, RenderBigPuffshroom::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());
