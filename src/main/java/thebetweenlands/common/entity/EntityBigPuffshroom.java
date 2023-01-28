@@ -30,6 +30,7 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
+import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -96,8 +97,10 @@ public class EntityBigPuffshroom extends EntityLiving {
 				if (animation_4 <= 1)
 					getEntityWorld().playSound((EntityPlayer) null, getPosition().getX() + 0.5D, getPosition().getY() + 1D, getPosition().getZ() + 0.5D, SoundRegistry.PUFF_SHROOM, SoundCategory.BLOCKS, 0.5F, 0.95F + getEntityWorld().rand.nextFloat() * 0.2F);
 				if (animation_4 == 10) {
-					createDebris(getPosition());
+					//createDebris(getPosition());
 					//System.out.println("Shooting Spore Bombs");
+					spawnSporelings(world, getPosition());
+					
 				}
 			}
 		}
@@ -178,6 +181,34 @@ public class EntityBigPuffshroom extends EntityLiving {
 			cooldown = 0;
 
 		renderTicks++;
+	}
+
+	private void spawnSporelings(World world, BlockPos pos) {
+		for (int x = 0; x < 12; x++) {
+			double angle = Math.toRadians(x * 30D);
+			double offSetX = Math.floor(-Math.sin(angle) * 1D);
+			double offSetZ = Math.floor(Math.cos(angle) * 1D);
+
+			if(getEntityWorld().isAirBlock(pos.add(offSetX, 1, offSetZ))) {
+				EntitySporeling sporeling = new EntitySporeling(world);
+				sporeling.setLocationAndAngles(posX + offSetX, posY + 1D, posZ + offSetZ, world.rand.nextFloat() * 360, 0);
+				EntitySplodeshroom shroom = new EntitySplodeshroom(world);
+				shroom.setLocationAndAngles(posX + offSetX, posY + 2D, posZ + offSetZ, world.rand.nextFloat() * 360, 0);
+				Vec3d vector3d = new Vec3d(this.posX, this.posY, this.posZ);
+				double velX = pos.getX() + offSetX * 4D - sporeling.posX;
+				double velY = pos.getY() + 6D - sporeling.posY;
+				double velZ = pos.getZ() + offSetZ * 4D - sporeling.posZ;
+				double distanceSqRt = (double) MathHelper.sqrt(velX * velX + velY * velY + velZ * velZ);
+				double accelerationX = velX / distanceSqRt * 0.3D + rand.nextDouble() * 0.2D;
+				double accelerationY = velY / distanceSqRt * 0.5D + rand.nextDouble() * 0.5D;
+				double accelerationZ = velZ / distanceSqRt * 0.3D + rand.nextDouble() * 0.2D;
+				vector3d.add(accelerationX, accelerationY, accelerationZ).scale((double) 0.9F);
+				sporeling.addVelocity(accelerationX, accelerationY, accelerationZ);
+				world.spawnEntity(sporeling);
+				world.spawnEntity(shroom);
+				shroom.startRiding(sporeling);
+			}
+		}
 	}
 
 	protected Entity findEnemyToAttack() {
