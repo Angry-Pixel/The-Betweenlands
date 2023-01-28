@@ -254,6 +254,7 @@ public class ModelBigPuffshroom extends ModelBase {
 		float smoothedTicks = bigPuffsroom.prev_renderTicks + (bigPuffsroom.renderTicks - bigPuffsroom.prev_renderTicks) * partialTickTime;
 		float flap = MathHelper.sin((smoothedTicks) * 0.325F) * 0.125F;
 		float flap2 = MathHelper.cos((smoothedTicks) * 0.325F) * 0.125F;
+		float rise = 0F;
 
 		if (bigPuffsroom.animation_1 < 8) {
 			GlStateManager.pushMatrix();
@@ -268,7 +269,12 @@ public class ModelBigPuffshroom extends ModelBase {
 		}
 		else {
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(0F, 0F - interAnimationTicks_1 * 0.0625F, 0F);
+			if (bigPuffsroom.getSlam()) {
+				if (bigPuffsroom.active_4 && bigPuffsroom.pause) {
+					rise = interAnimationTicks_4 * 0.025F;
+				}
+			}
+			GlStateManager.translate(0F, 0F - interAnimationTicks_1 * 0.0625F - rise, 0F);
 			GlStateManager.rotate(0F + interAnimationTicks_1 * 22.55F, 0F, 1F, 0F);
 			main_base.render(0.0625F);
 
@@ -307,6 +313,13 @@ public class ModelBigPuffshroom extends ModelBase {
 			flap = 0;
 			flap2 = 0;
 		}
+		
+		if (bigPuffsroom.getSlam()) {
+			if ((bigPuffsroom.active_4 || bigPuffsroom.active_3) && bigPuffsroom.pause) {
+				flap = interAnimationTicks_4 * 0.05F;
+				flap2 = -interAnimationTicks_4 * 0.05F;
+			}
+		}
 
 			back_c_tent_1.rotateAngleX = -0.7853981633974483F + interAnimationTicks_2 / (180F / (float) Math.PI) * 11.25F;
 			front_c_tent_1.rotateAngleX = -0.7853981633974483F + interAnimationTicks_2 / (180F / (float) Math.PI) * 11.25F;
@@ -329,15 +342,15 @@ public class ModelBigPuffshroom extends ModelBase {
 			back_l_tent_1.rotateAngleX = -0.7853981633974483F + interAnimationTicks_3 / (180F / (float) Math.PI) * 11.25F - flap2;
 			front_l_tent_1.rotateAngleX = -0.7853981633974483F + interAnimationTicks_3 / (180F / (float) Math.PI) * 11.25F + flap;
 			
-			back_r_tent_2.rotateAngleX = 0F - interAnimationTicks_3 / (180F / (float) Math.PI) * 1.40625F - flap * 2F;
-			front_r_tent_2.rotateAngleX = 0F - interAnimationTicks_3 / (180F / (float) Math.PI) * 1.40625F + flap2 * 2F;
-			back_l_tent_2.rotateAngleX = 0F - interAnimationTicks_3 / (180F / (float) Math.PI) * 1.40625F + flap2 * 2F;
-			front_l_tent_2.rotateAngleX = 0F - interAnimationTicks_3 / (180F / (float) Math.PI) * 1.40625F - flap * 2F;
+			back_r_tent_2.rotateAngleX = 0F - interAnimationTicks_3 / (180F / (float) Math.PI) * 1.40625F + (!bigPuffsroom.getSlam() ? -flap * 2F :  flap);
+			front_r_tent_2.rotateAngleX = 0F - interAnimationTicks_3 / (180F / (float) Math.PI) * 1.40625F + (!bigPuffsroom.getSlam() ? flap2 * 2F : - flap2);
+			back_l_tent_2.rotateAngleX = 0F - interAnimationTicks_3 / (180F / (float) Math.PI) * 1.40625F + (!bigPuffsroom.getSlam() ? flap2 * 2F :  -flap2);
+			front_l_tent_2.rotateAngleX = 0F - interAnimationTicks_3 / (180F / (float) Math.PI) * 1.40625F + (!bigPuffsroom.getSlam() ? -flap * 2F :  flap);
 			
-			back_r_tent_3.rotateAngleX = -0.7853981633974483F + (interAnimationTicks_3 - interAnimationTicks_4 * 0.5F) / (180F / (float) Math.PI) * 11.25F + flap * 4F;
-			front_r_tent_3.rotateAngleX = -0.7853981633974483F + (interAnimationTicks_3 - interAnimationTicks_4 * 0.5F) / (180F / (float) Math.PI) * 11.25F - flap2 * 4F;
-			back_l_tent_3.rotateAngleX = -0.7853981633974483F + (interAnimationTicks_3 - interAnimationTicks_4 * 0.5F) / (180F / (float) Math.PI) * 11.25F - flap2 * 4F;
-			front_l_tent_3.rotateAngleX = -0.7853981633974483F + (interAnimationTicks_3 - interAnimationTicks_4 * 0.5F) / (180F / (float) Math.PI) * 11.25F + flap * 4F;
+			back_r_tent_3.rotateAngleX = -0.7853981633974483F + (interAnimationTicks_3 - interAnimationTicks_4 * 0.5F) / (180F / (float) Math.PI) * 11.25F + flap * (!bigPuffsroom.getSlam() ? 4F : 2F);
+			front_r_tent_3.rotateAngleX = -0.7853981633974483F + (interAnimationTicks_3 - interAnimationTicks_4 * 0.5F) / (180F / (float) Math.PI) * 11.25F - flap2 * (!bigPuffsroom.getSlam() ? 4F :2F);
+			back_l_tent_3.rotateAngleX = -0.7853981633974483F + (interAnimationTicks_3 - interAnimationTicks_4 * 0.5F) / (180F / (float) Math.PI) * 11.25F - flap2 * (!bigPuffsroom.getSlam() ? 4F : 2F);
+			front_l_tent_3.rotateAngleX = -0.7853981633974483F + (interAnimationTicks_3 - interAnimationTicks_4 * 0.5F) / (180F / (float) Math.PI) * 11.25F + flap * (!bigPuffsroom.getSlam() ? 4F : 2F);
 		}
 
 	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {

@@ -14,6 +14,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -43,6 +46,8 @@ public class EntityBigPuffshroom extends EntityLiving {
 	public int animation_4 = 0, prev_animation_4 = 0;
 	public boolean active_1 = false, active_2 = false, active_3 = false, active_4 = false, active_5 = false, pause = true;
 	public int renderTicks = 0, prev_renderTicks = 0, pause_count = 30;
+	
+	private static final DataParameter<Boolean> SLAM_ATTACK = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
 
 	public EntityBigPuffshroom(World world) {
 		super(world);
@@ -52,6 +57,15 @@ public class EntityBigPuffshroom extends EntityLiving {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
+		dataManager.register(SLAM_ATTACK, false);
+	}
+	
+	public void setSlam(boolean state) {
+		dataManager.set(SLAM_ATTACK, state);
+	}
+
+	public boolean getSlam() {
+		return dataManager.get(SLAM_ATTACK);
 	}
 
 	@Override
@@ -93,18 +107,34 @@ public class EntityBigPuffshroom extends EntityLiving {
 		}
 
 		if (!getEntityWorld().isRemote) {
+			//TODO Set a boolean state so the attack uses the right animations
+			
 			if (active_4) {
-				if (animation_4 <= 1)
-					getEntityWorld().playSound((EntityPlayer) null, getPosition().getX() + 0.5D, getPosition().getY() + 1D, getPosition().getZ() + 0.5D, SoundRegistry.PUFF_SHROOM, SoundCategory.BLOCKS, 0.5F, 0.95F + getEntityWorld().rand.nextFloat() * 0.2F);
-				if (animation_4 == 10) {
-					//createDebris(getPosition());
-					//System.out.println("Shooting Spore Bombs");
-					spawnSporelings(world, getPosition());
-					
-				}
-			}
-		}
+				if (getRangeToPlayer() > 5) {
+					setSlam(false);
+					//if (animation_4 <= 1)
+					//	getEntityWorld().playSound(null, getPosition().getX() + 0.5D, getPosition().getY() + 1D, getPosition().getZ() + 0.5D, SoundRegistry.PUFF_SHROOM, SoundCategory.BLOCKS, 0.5F, 0.95F + getEntityWorld().rand.nextFloat() * 0.2F);
+					if (animation_4 == 10) {
+						// createDebris(getPosition());
+						// System.out.println("Shooting Spore Bombs");
+						spawnSporelings(world, getPosition());
+						getEntityWorld().playSound(null, getPosition().getX() + 0.5D, getPosition().getY() + 1D, getPosition().getZ() + 0.5D, SoundRegistry.PUFF_SHROOM, SoundCategory.BLOCKS, 0.5F, 0.95F + getEntityWorld().rand.nextFloat() * 0.2F);
 
+					}
+				}
+
+				if (getRangeToPlayer() <= 5) {
+					setSlam(true);
+					//if (animation_4 <= 1)
+					//	getEntityWorld().playSound(null, getPosition().getX() + 0.5D, getPosition().getY() + 1D, getPosition().getZ() + 0.5D, SoundRegistry.PUFF_SHROOM, SoundCategory.BLOCKS, 0.5F, 0.95F + getEntityWorld().rand.nextFloat() * 0.2F);
+					if (animation_4 == 10) {
+						getEntityWorld().playSound(null, getPosition(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 1F, 1F);
+						slamAttack(world, getPosition());
+					}
+
+				}
+		}
+		}
 		if (active_1) {
 			if (animation_1 <= 8)
 				animation_1++;
@@ -183,6 +213,40 @@ public class EntityBigPuffshroom extends EntityLiving {
 		renderTicks++;
 	}
 
+	private void slamAttack(World world, BlockPos pos) {
+		for (int x = 0; x < 12; x++) {
+			for (int d = 0; d < 6; d++) {
+			double angle = Math.toRadians(x * 30D);
+			double offSetX = Math.floor(-Math.sin(angle) * (2D + d));
+			double offSetZ = Math.floor(Math.cos(angle) * (2D + d));
+
+			BlockPos origin = new BlockPos(pos.add(offSetX, -1, offSetZ));
+			IBlockState block = world.getBlockState(origin);
+
+			if (block.isNormalCube()
+					&& !block.getBlock().hasTileEntity(block)
+					&& block.getBlockHardness(world, origin) <= 5.0F && block.getBlockHardness(world, origin) >= 0.0F
+					&& world.getBlockState(origin).isOpaqueCube()) {
+
+				EntityShockwaveBlock shockwaveBlock = new EntityShockwaveBlock(world);
+				shockwaveBlock.setOrigin(origin, 5 + d * 2, origin.getX() + 0.5D, origin.getZ() + 0.5D, this);
+				shockwaveBlock.setLocationAndAngles(origin.getX() + 0.5D, origin.getY(), origin.getZ() + 0.5D, 0.0F, 0.0F);
+				shockwaveBlock.setBlock(Block.getBlockById(Block.getIdFromBlock(world.getBlockState(origin).getBlock())), world.getBlockState(origin).getBlock().getMetaFromState(world.getBlockState(origin)));
+				world.spawnEntity(shockwaveBlock);
+			}
+		}
+		}
+		//setSlam(false);
+	}
+
+	private float getRangeToPlayer() {
+		List<EntityPlayer> list = getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(getPosition()).grow(8D, 2D, 8D));
+		for (EntityPlayer player : list)
+			if (/* !player.isCreative() && */ !player.isSpectator())
+				return getDistance(player);
+		return 5F;
+	}
+	
 	private void spawnSporelings(World world, BlockPos pos) {
 		for (int x = 0; x < 12; x++) {
 			double angle = Math.toRadians(x * 30D);
@@ -213,7 +277,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 
 	protected Entity findEnemyToAttack() {
 		if(!active_1 && animation_1 == 0) {
-			List<EntityPlayer> list = getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(getPosition()).grow(5D, 2D, 5D));
+			List<EntityPlayer> list = getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(getPosition()).grow(8D, 2D, 8D));
 			for(EntityPlayer player : list) {
 				if (/*!player.isCreative() &&*/ !player.isSpectator()) {
 					active_1 = true;
