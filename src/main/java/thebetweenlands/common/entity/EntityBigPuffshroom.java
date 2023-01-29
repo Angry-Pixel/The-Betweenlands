@@ -1,6 +1,8 @@
 package thebetweenlands.common.entity;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -48,6 +50,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 	public int renderTicks = 0, prev_renderTicks = 0, pause_count = 30;
 	
 	private static final DataParameter<Boolean> SLAM_ATTACK = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> MOVE = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
 
 	public EntityBigPuffshroom(World world) {
 		super(world);
@@ -58,6 +61,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 	protected void entityInit() {
 		super.entityInit();
 		dataManager.register(SLAM_ATTACK, false);
+		dataManager.register(MOVE, false);
 	}
 	
 	public void setSlam(boolean state) {
@@ -67,12 +71,21 @@ public class EntityBigPuffshroom extends EntityLiving {
 	public boolean getSlam() {
 		return dataManager.get(SLAM_ATTACK);
 	}
+	
+	public void setMove(boolean state) {
+		dataManager.set(MOVE, state);
+	}
+
+	public boolean getMove() {
+		return dataManager.get(MOVE);
+	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50.0D);
+		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 	}
 
 	@Override
@@ -84,8 +97,10 @@ public class EntityBigPuffshroom extends EntityLiving {
 		prev_animation_4 = animation_4;
 		prev_renderTicks = renderTicks;
 
-		if (/*!getEntityWorld().isRemote && */cooldown <= 0 && getEntityWorld().getTotalWorldTime()%5 == 0)
+		if (/*!getEntityWorld().isRemote && */cooldown <= 0 && getEntityWorld().getTotalWorldTime()%5 == 0) {
 			findEnemyToAttack();
+		}
+			
 
 		if (active_1 || active_5) {
 			if (getEntityWorld().isRemote) {
@@ -116,10 +131,8 @@ public class EntityBigPuffshroom extends EntityLiving {
 					//	getEntityWorld().playSound(null, getPosition().getX() + 0.5D, getPosition().getY() + 1D, getPosition().getZ() + 0.5D, SoundRegistry.PUFF_SHROOM, SoundCategory.BLOCKS, 0.5F, 0.95F + getEntityWorld().rand.nextFloat() * 0.2F);
 					if (animation_4 == 10) {
 						// createDebris(getPosition());
-						// System.out.println("Shooting Spore Bombs");
-						spawnSporelings(world, getPosition());
+						//spawnSporelings(world, getPosition());
 						getEntityWorld().playSound(null, getPosition().getX() + 0.5D, getPosition().getY() + 1D, getPosition().getZ() + 0.5D, SoundRegistry.PUFF_SHROOM, SoundCategory.BLOCKS, 0.5F, 0.95F + getEntityWorld().rand.nextFloat() * 0.2F);
-
 					}
 				}
 
@@ -130,11 +143,19 @@ public class EntityBigPuffshroom extends EntityLiving {
 					if (animation_4 == 10) {
 						getEntityWorld().playSound(null, getPosition(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 1F, 1F);
 						slamAttack(world, getPosition());
+						
 					}
+				}
+			}
 
+			if (!active_5)
+				if (getMove()) {
+					BlockPos moveTo = new BlockPos(findNewSurfaceLocation(world, getPosition().down()));
+					setPositionAndUpdate(moveTo.getX() + 0.5D, moveTo.getY() + 1, moveTo.getZ() + 0.5D);
+					setMove(false);
 				}
 		}
-		}
+
 		if (active_1) {
 			if (animation_1 <= 8)
 				animation_1++;
@@ -202,6 +223,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 			if (animation_1 <= 0) {
 				prev_animation_1 = animation_1 = 0;
 				active_5 = false;
+				setMove(true);
 			}
 		}
 
@@ -211,6 +233,42 @@ public class EntityBigPuffshroom extends EntityLiving {
 			cooldown = 0;
 
 		renderTicks++;
+		super.onUpdate();
+	}
+
+	private BlockPos findNewSurfaceLocation(World world, BlockPos pos) {
+		List<BlockPos> allViableBlocks = new ArrayList<BlockPos>();
+		List<BlockPos> posRandom = new ArrayList<BlockPos>();
+		IBlockState mouldySoil = BlockRegistry.MOULDY_SOIL.getDefaultState();
+		for (int x = -16; x <= 16; x++)
+			for (int z = -16; z <= 16; z++)
+				if (world.getBlockState(pos.add(x, 0, z)).getBlock() == mouldySoil.getBlock())
+					allViableBlocks.add(pos.add(x, 0, z));
+
+		if (!allViableBlocks.isEmpty())
+			for (BlockPos goodBlocks : allViableBlocks)
+				if (checkForAdjacentMouldyDirt(world, goodBlocks, 1, 1, mouldySoil))
+					posRandom.add(goodBlocks);
+
+		if (!posRandom.isEmpty()) {
+			Collections.shuffle(posRandom);
+			return posRandom.get(0);
+		}
+		return pos;
+	}
+
+	private boolean checkForAdjacentMouldyDirt(World world, BlockPos pos, int offSetXIn, int offSetZIn, IBlockState state) {
+		int count = 0;
+		for(int offsetX = -offSetXIn; offsetX <= offSetXIn; offsetX++)
+			for(int offsetZ = -offSetZIn; offsetZ <= offSetZIn; offsetZ++)
+				if (isMouldyDirtAdjacent(world.getBlockState(pos.add(offsetX, 0, offsetZ)), state)) {
+					count ++;
+				}
+		return count >= 8;
+	}
+
+	private boolean isMouldyDirtAdjacent(IBlockState posState, IBlockState stateChecked) {
+        return posState.getBlock() == stateChecked.getBlock();
 	}
 
 	private void slamAttack(World world, BlockPos pos) {
@@ -236,7 +294,6 @@ public class EntityBigPuffshroom extends EntityLiving {
 			}
 		}
 		}
-		//setSlam(false);
 	}
 
 	private float getRangeToPlayer() {
@@ -327,7 +384,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 
 	@Override
 	protected boolean isMovementBlocked() {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -349,7 +406,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 
 	@Override
 	public boolean getIsInvulnerable() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -366,10 +423,9 @@ public class EntityBigPuffshroom extends EntityLiving {
 			Entity sourceEntity = ((EntityDamageSource) source).getTrueSource();
 			if (sourceEntity instanceof EntityPlayer) {
 				if (!getEntityWorld().isRemote) {
-					return true;
+					return super.attackEntityFrom(source, damage);
 				}
 			}
-			return true;
 		}
 		return false;
 	}
