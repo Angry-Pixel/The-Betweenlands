@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.entity.EntityBigPuffshroom;
+import thebetweenlands.common.entity.mobs.EntityBigPuffshroom;
 import thebetweenlands.common.entity.projectiles.EntitySkySpores;
 
 

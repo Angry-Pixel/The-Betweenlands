@@ -8,7 +8,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.entity.EntityBigPuffshroom;
+import thebetweenlands.common.entity.mobs.EntityBigPuffshroom;
 
 @SideOnly(Side.CLIENT)
 

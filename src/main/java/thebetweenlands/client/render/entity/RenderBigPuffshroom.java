@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelBigPuffshroom;
-import thebetweenlands.common.entity.EntityBigPuffshroom;
+import thebetweenlands.common.entity.mobs.EntityBigPuffshroom;
 
 @SideOnly(Side.CLIENT)
 public class RenderBigPuffshroom extends RenderLiving<EntityBigPuffshroom> {

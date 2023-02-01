@@ -158,7 +158,6 @@ import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.entity.EntityBLItemFrame;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
-import thebetweenlands.common.entity.EntityBigPuffshroom;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityFalseXPOrb;
@@ -189,6 +188,7 @@ import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityAshSprite;
 import thebetweenlands.common.entity.mobs.EntityBarrishee;
+import thebetweenlands.common.entity.mobs.EntityBigPuffshroom;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
 import thebetweenlands.common.entity.mobs.EntityBubblerCrab;
@@ -249,6 +249,7 @@ import thebetweenlands.common.entity.mobs.EntitySmollSludge;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceLarge;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceSmallBase;
 import thebetweenlands.common.entity.mobs.EntitySporeJet;
+import thebetweenlands.common.entity.mobs.EntitySporeMinion;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntityStalker;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
@@ -765,6 +766,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityMistBridge.class, RenderNothing::new);
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityBigPuffshroom.class, RenderBigPuffshroom::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySporeMinion.class, RenderSporeMinion::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());

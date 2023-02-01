@@ -6,7 +6,6 @@ import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.EntityBLItemFrame;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
-import thebetweenlands.common.entity.EntityBigPuffshroom;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityFalseXPOrb;
@@ -43,6 +42,7 @@ import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityAshSprite;
 import thebetweenlands.common.entity.mobs.EntityBarrishee;
+import thebetweenlands.common.entity.mobs.EntityBigPuffshroom;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
 import thebetweenlands.common.entity.mobs.EntityBubblerCrab;
@@ -101,6 +101,7 @@ import thebetweenlands.common.entity.mobs.EntitySmollSludge;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceLarge;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceSmall;
 import thebetweenlands.common.entity.mobs.EntitySporeJet;
+import thebetweenlands.common.entity.mobs.EntitySporeMinion;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntityStalker;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
@@ -296,7 +297,7 @@ public class EntityRegistry {
 		
 		//registerEntity(EntitySkySpores.class, "sky_spores", 65536, 3, true);
 		registerEntity(EntityBigPuffshroom.class, "big_puffshroom", 64, 3, true);
-		//registerEntity(EntitySporeBomb.class, "spore_bomb", 64, 3, true);
+		registerEntity(EntitySporeMinion.class, "spore_minion", 64, 3, true);
 	}
 
 	private static int id = 0;
