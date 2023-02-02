@@ -2,6 +2,8 @@ package thebetweenlands.common.entity.mobs;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -12,6 +14,9 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -19,11 +24,13 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySporeMinion extends EntityMob implements IEntityBL {
@@ -134,6 +141,47 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 		}
 		super.onUpdate();
 	}
+	
+	@Override
+	public boolean attackEntityAsMob(Entity entity) {
+		if (canEntityBeSeen(entity)) {
+			if (super.attackEntityAsMob(entity)) {
+				if (entity instanceof EntityLivingBase) {
+					switch (getType()) {
+					case 0:
+						((EntityLivingBase)entity).knockBack(this, 0.75F, MathHelper.sin(this.rotationYaw * 3.141593F / 180.0F), -MathHelper.cos(this.rotationYaw * 3.141593F / 180.0F));
+						break;
+					case 1:
+						this.heal(2F);
+						world.playSound(null, getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.HOSTILE, 0.5F, 2F);
+						break;
+					case 2:
+						if (entity instanceof EntityPlayer) {
+							EntityPlayer player = (EntityPlayer) entity;
+							if (!isWearingSilkMask(player)) {
+								ItemStack stack = player.getHeldItemMainhand();
+								if (!stack.isEmpty())
+									player.dropItem(true);
+							}
+						}
+						break;
+					}
+				}
+			}
+			return true;
+		} else
+			return false;
+	}
+
+    public boolean isWearingSilkMask(EntityLivingBase entity) {
+    	if(entity instanceof EntityPlayer) {
+        	ItemStack helmet = ((EntityPlayer)entity).getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+        	if(!helmet.isEmpty() && helmet.getItem() == ItemRegistry.SILK_MASK) {
+        		return true;
+        	}
+        }
+    	return false;
+    }
 
     public float smoothedAngle(float partialTicks) {
         return this.prevFloatingRotationTicks + (this.floatingRotationTicks - this.prevFloatingRotationTicks) * partialTicks;
