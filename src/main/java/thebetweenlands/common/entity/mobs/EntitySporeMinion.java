@@ -12,6 +12,7 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -30,6 +31,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	public int animation_1 = 0, prev_animation_1 = 0;
 	public int animation_2 = 0, prev_animation_2 = 0;
 	protected static final DataParameter<Boolean> IS_FALLING = EntityDataManager.<Boolean>createKey(EntitySporeMinion.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Integer> TYPE = EntityDataManager.<Integer>createKey(EntitySporeMinion.class, DataSerializers.VARINT);
 
 	protected float prevFloatingRotationTicks = 0;
 	protected float floatingRotationTicks = 0;
@@ -47,6 +49,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	protected void entityInit() {
 		super.entityInit();
 		dataManager.register(IS_FALLING, false);
+		dataManager.register(TYPE, rand.nextInt(3));
 	}
 
 	@Override
@@ -63,10 +66,26 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5D);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.49D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
-		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
+		double attackBuff = 0D;
+		double moveSpeedBuff = 0D;
+		double healthBuff = 0D;
+		switch (getType()) {
+		case 0:
+			attackBuff = 1.5D;
+			moveSpeedBuff = 0.2D;
+			break;
+		case 1:
+			healthBuff = 15D;
+			break;
+		case 2:
+			moveSpeedBuff = -0.2D;
+			healthBuff = 25D;
+			break;
+		}
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5D + attackBuff);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.49D + moveSpeedBuff);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D + healthBuff);
+		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
 	}
 
 	@Override
@@ -198,5 +217,25 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 		if (!getEntityWorld().isRemote) {
 		}
 		return livingdata;
+	}
+
+	public void setType(int skinType) {
+		dataManager.set(TYPE, skinType);
+	}
+
+	public int getType() {
+		return dataManager.get(TYPE);
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
+		nbt.setInteger("type", getType());
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
+		setType(nbt.getInteger("type"));
 	}
 }
