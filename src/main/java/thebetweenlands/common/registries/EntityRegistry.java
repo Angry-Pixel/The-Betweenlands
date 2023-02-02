@@ -297,7 +297,7 @@ public class EntityRegistry {
 		
 		//registerEntity(EntitySkySpores.class, "sky_spores", 65536, 3, true);
 		registerEntity(EntityBigPuffshroom.class, "big_puffshroom", 64, 3, true);
-		registerEntity(EntitySporeMinion.class, "spore_minion", 64, 3, true);
+		registerEntity(EntitySporeMinion.class, "spore_minion", 0xFF8000, 0xE6E6E6, 64, 3, true); //remove egg after testing
 	}
 
 	private static int id = 0;

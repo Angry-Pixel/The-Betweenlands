@@ -27,7 +27,8 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	private float jumpHeightOverride = -1;
-	
+	public int animation_1 = 0, prev_animation_1 = 0;
+	public int animation_2 = 0, prev_animation_2 = 0;
 	protected static final DataParameter<Boolean> IS_FALLING = EntityDataManager.<Boolean>createKey(EntitySporeMinion.class, DataSerializers.BOOLEAN);
 
 	protected float prevFloatingRotationTicks = 0;
@@ -52,7 +53,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	protected void initEntityAI() {
 		super.initEntityAI();
 		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, false));;
+		tasks.addTask(1, new EntityAIAttackMelee(this, 0.6D, false));;
 		tasks.addTask(2, new EntityAIWander(this, 0.6D));
 		tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		tasks.addTask(4, new EntityAILookIdle(this));
@@ -70,6 +71,8 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 
 	@Override
 	public void onUpdate() {
+		prev_animation_1 = animation_1;
+		prev_animation_2 = animation_2;
 		if (!getEntityWorld().isRemote) {
 			if (!this.isInWater()) {
 				boolean canSpin = (this.getRidingEntity() != null ? !this.getRidingEntity().onGround : !onGround) && !this.isInWeb && !this.isInWater() && !this.isInLava() && world.isAirBlock(getPosition().down());
@@ -97,6 +100,18 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 			this.prevFloatingRotationTicks += wrap;
 		} else {
 			this.floatingRotationTicks = 0;
+		}
+
+		if(ticksExisted >= 20) {
+			if (animation_1 <= 10)
+				animation_1++;
+			if (animation_1 > 10) {
+				prev_animation_1 = animation_1 = 10;
+				if (animation_2 <= 10)
+					animation_2++;
+				if (animation_2 > 10)
+					prev_animation_2 = animation_2 = 10;
+			}
 		}
 		super.onUpdate();
 	}

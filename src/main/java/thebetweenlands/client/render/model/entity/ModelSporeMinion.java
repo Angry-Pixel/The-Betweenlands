@@ -4,8 +4,10 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.entity.mobs.EntitySporeMinion;
 @SideOnly(Side.CLIENT)
 public class ModelSporeMinion extends ModelBase {
     public ModelRenderer main_base;
@@ -241,34 +243,48 @@ public class ModelSporeMinion extends ModelBase {
     public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale) {
         this.main_base.render(scale);
     }
-    
+
     @Override
     public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
-    /*	EntitySporeMinion spore = (EntitySporeMinion) entity;
-		float smoothed = spore.ticksExisted + (spore.ticksExisted - spore.ticksExisted - 1) * partialRenderTicks;
-		float flap = 0F;// MathHelper.sin((smoothed) * 0.325F) * 0.125F;
-		float flap2 = 0F;// MathHelper.cos((smoothed) * 0.325F) * 0.125F;
-		
-		if (spore.ticksExisted <= 22 && spore.getIsFalling()) {
-				flap = smoothed * 0.05F;
-				flap2 = -smoothed * 0.05F;
-		
-			back_r_tent_1.rotateAngleX = 0F + smoothed / (180F / (float) Math.PI) * 11.25F;
-			front_r_tent_1.rotateAngleX = 0F + smoothed / (180F / (float) Math.PI) * 11.25F;
-			back_l_tent_1.rotateAngleX = 0F + smoothed / (180F / (float) Math.PI) * 11.25F;
-			front_l_tent_1.rotateAngleX = 0F + smoothed / (180F / (float) Math.PI) * 11.25F;
-			
-			back_r_tent_2.rotateAngleX = 0.7853981633974483F - smoothed / (180F / (float) Math.PI) * 1.40625F;
-			front_r_tent_2.rotateAngleX = 0.7853981633974483F - smoothed / (180F / (float) Math.PI) * 1.40625F;
-			back_l_tent_2.rotateAngleX = 0.7853981633974483F - smoothed / (180F / (float) Math.PI) * 1.40625F;
-			front_l_tent_2.rotateAngleX = 0.7853981633974483F - smoothed / (180F / (float) Math.PI) * 1.40625F;
-			
-			back_r_tent_3.rotateAngleX = -0.7853981633974483F + (smoothed - smoothed * 0.5F) / (180F / (float) Math.PI) * 11.25F;
-			front_r_tent_3.rotateAngleX = -0.7853981633974483F + (smoothed - smoothed * 0.5F) / (180F / (float) Math.PI) * 11.25F;
-			back_l_tent_3.rotateAngleX = -0.7853981633974483F + (smoothed - smoothed * 0.5F) / (180F / (float) Math.PI) * 11.25F;
-			front_l_tent_3.rotateAngleX = -0.7853981633974483F + (smoothed - smoothed * 0.5F) / (180F / (float) Math.PI) * 11.25F; 
-			
-		}*/
+    	EntitySporeMinion spore = (EntitySporeMinion) entity;
+		float smoothed_1 = spore.animation_1 + (spore.animation_1 - spore.prev_animation_1) * partialRenderTicks;
+		float smoothed_2 = spore.animation_2 + (spore.animation_2 - spore.prev_animation_2) * partialRenderTicks;
+		//floating
+		// origin from 180 to 80 = -1.74533 / 10
+		// tent 2 from 45 to 0 = -0.785398/10
+		// tent 3 from -45 to -30 = +0.261799 /10
+
+		//walk from float
+		// tent 2 from 0 to 45 = +0.785398/10
+		// tent 3 from -30 to 55 = +1.48353 /10
+
+		front_l_tent_origin.rotateAngleX = 3.14159F - smoothed_1 * 0.174533F;
+		front_r_tent_origin.rotateAngleX = 3.14159F - smoothed_1 * 0.174533F;
+		back_l_tent_origin.rotateAngleX = 3.14159F - smoothed_1 * 0.174533F;
+		back_r_tent_origin.rotateAngleX = 3.14159F - smoothed_1 * 0.174533F;
+
+		back_r_tent_2.rotateAngleX = 0.785398F - smoothed_1 * 0.0785398F + smoothed_2 * 0.0785398F;
+		front_r_tent_2.rotateAngleX = 0.785398F - smoothed_1 *0.0785398F + smoothed_2 * 0.0785398F;
+		back_l_tent_2.rotateAngleX = 0.785398F - smoothed_1 * 0.0785398F + smoothed_2 * 0.0785398F;
+		front_l_tent_2.rotateAngleX = 0.785398F - smoothed_1 * 0.0785398F + smoothed_2 * 0.0785398F;
+
+		back_r_tent_3.rotateAngleX = -0.785398F + smoothed_1 * 0.0261799F + smoothed_2 * 0.148353F;
+		front_r_tent_3.rotateAngleX = -0.785398F + smoothed_1 * 0.0261799F + smoothed_2 * 0.148353F;
+		back_l_tent_3.rotateAngleX = -0.785398F + smoothed_1 * 0.0261799F + smoothed_2 * 0.148353F;
+		front_l_tent_3.rotateAngleX = -0.785398F + smoothed_1 * 0.0261799F + smoothed_2 * 0.148353F;
+
+		float movementCos = MathHelper.cos(swing * 1.5F + (float) Math.PI) * 1.5F * speed *0.5F;
+		float movementSin = MathHelper.sin(swing * 1.5F + (float) Math.PI) * 1.5F * speed *0.5F;
+
+		front_l_tent_origin.rotateAngleZ = movementCos;
+		front_r_tent_origin.rotateAngleZ = movementSin;
+		back_l_tent_origin.rotateAngleZ = -movementCos;
+		back_r_tent_origin.rotateAngleZ = movementSin;
+
+		front_l_tent_origin.rotateAngleY = 0.7853981633974483F - movementSin;
+		front_r_tent_origin.rotateAngleY = -0.7853981633974483F + movementCos;
+		back_l_tent_origin.rotateAngleY = 2.356194490192345F - movementSin;
+		back_r_tent_origin.rotateAngleY = -2.356194490192345F + movementCos;
 }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
