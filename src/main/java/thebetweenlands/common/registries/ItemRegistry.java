@@ -96,6 +96,7 @@ import thebetweenlands.common.item.food.ItemMarshmallowPink;
 import thebetweenlands.common.item.food.ItemMireScramble;
 import thebetweenlands.common.item.food.ItemMireSnailEgg;
 import thebetweenlands.common.item.food.ItemNibblestick;
+import thebetweenlands.common.item.food.ItemPuffshroomTendril;
 import thebetweenlands.common.item.food.ItemRockSnotPearl;
 import thebetweenlands.common.item.food.ItemRottenFood;
 import thebetweenlands.common.item.food.ItemSapBall;
@@ -242,7 +243,7 @@ public class ItemRegistry {
     public static final Item JAM_DONUT = new ItemBLFood(10, 0.6F, false);
     public static final Item GERTS_DONUT = new ItemGertsDonut();
     public static final Item ASPECTRUS_FRUIT = new ItemAspectrusFruit();
-    public static final Item PUFFSHROOM_TENDRIL = new ItemBLFood(6, 0.6F, false);
+    public static final Item PUFFSHROOM_TENDRIL = new ItemPuffshroomTendril();
     public static final Item KRAKEN_TENTACLE = new ItemBLFood(8, 0.9F, false);
     public static final Item KRAKEN_CALAMARI = new ItemBLFood(14, 1F, false);
     public static final Item MIDDLE_FRUIT = new ItemBLFood(6, 0.6F, false);
