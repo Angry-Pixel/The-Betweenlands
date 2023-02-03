@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -30,6 +31,7 @@ import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.block.plant.BlockMouldHornMushroom;
 import thebetweenlands.common.block.plant.BlockMouldHornMushroom.EnumMouldHorn;
+import thebetweenlands.common.registries.BlockRegistry;
 
 public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL {
 	private static final DataParameter<Boolean> IS_MIDDLE = EntityDataManager.createKey(EntityPuffshroomBuilder.class, DataSerializers.BOOLEAN);
@@ -68,9 +70,10 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 				checkForMiddle();
 				if (getIsMiddle())
 					if (checkForMouldhorns(world, getPosition())) {
-						System.out.println("Mould horns all there");
-						//set the soil patches, break the mould horns kill all the tendril entities and spawn the new entity.
-						//easy right?
+						createSoilPatches(world, getPosition().down());
+						breakMouldhorns(world, getPosition());
+						killTendrills(world, getPosition());
+						//DO the thing for the thing
 					}
 			}
 			if (world.isRemote) {
@@ -80,6 +83,49 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 					}
 			}
 		}
+	}
+
+	private void killTendrills(World world, BlockPos pos) {
+		List<Entity> list = getEntityWorld().getEntitiesWithinAABB(EntityPuffshroomBuilder.class, getEntityBoundingBox().grow(0.6D, 0D, 0.6D));
+		for(Entity found : list)
+			found.setDead();
+	}
+
+	private void breakMouldhorns(World world, BlockPos pos) {
+		breakShroomBlocks(world, pos.add(6, 0, 0));
+		breakShroomBlocks(world, pos.add(0, 0, 6));
+		breakShroomBlocks(world, pos.add(-6, 0, 0));
+		breakShroomBlocks(world, pos.add(0, 0, -6));
+		breakShroomBlocks(world, pos.add(5, 0, 5));
+		breakShroomBlocks(world, pos.add(5, 0, -5));
+		breakShroomBlocks(world, pos.add(-5, 0, 5));
+		breakShroomBlocks(world, pos.add(-5, 0, -5));
+	}
+	
+	private void breakShroomBlocks(World world, BlockPos pos) {
+		for(int y = 0; y <= 6; y++)
+			if (world.getBlockState(pos.add(0, y, 0)).getBlock() instanceof BlockMouldHornMushroom) {
+				world.playEvent(null, 2001, pos.add(0, y, 0), Block.getIdFromBlock(BlockRegistry.MOULD_HORN));
+				world.setBlockToAir(pos.add(0, y, 0));
+			}
+	}
+
+	private void createSoilPatches(World world, BlockPos pos) {
+		setSoilPatches(world, pos);
+		setSoilPatches(world, pos.add(6, 0, 0));
+		setSoilPatches(world, pos.add(0, 0, 6));
+		setSoilPatches(world, pos.add(-6, 0, 0));
+		setSoilPatches(world, pos.add(0, 0, -6));
+		setSoilPatches(world, pos.add(5, 0, 5));
+		setSoilPatches(world, pos.add(5, 0, -5));
+		setSoilPatches(world, pos.add(-5, 0, 5));
+		setSoilPatches(world, pos.add(-5, 0, -5));
+	}
+
+	private void setSoilPatches(World world, BlockPos pos) {
+		for (int x = -1; x <= 1; x++)
+			for (int z = -1; z <= 1; z++)
+				world.setBlockState(pos.add(x, 0, z), BlockRegistry.MOULDY_SOIL.getDefaultState());
 	}
 
 	private boolean checkForMouldhorns(World world, BlockPos pos) {
@@ -100,8 +146,7 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 			count++;
 		if(checkForCap(world, pos.add(-5, 0, -5)))
 			count++;
-		System.out.println("Mould horns found:" + count);
-		return count >=8;
+		return count >= 8;
 	}
 
 	private boolean checkForCap(World world, BlockPos pos) {
@@ -109,8 +154,7 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 			if (world.getBlockState(pos.add(0, y, 0)).getBlock() instanceof BlockMouldHornMushroom && world.getBlockState(pos.add(0, y, 0)).getValue(BlockMouldHornMushroom.MOULD_HORN_TYPE) == EnumMouldHorn.MOULD_HORN_CAP_FULL_WARTS) {
 				if (world.isRemote) {
 					spawnBrazierParticles(new Vec3d(pos.getX() - getPosition().getX(), y + 0.75D, pos.getZ() - getPosition().getZ()));
-				}
-				
+					}
 				return true;
 				}
 		return false;
