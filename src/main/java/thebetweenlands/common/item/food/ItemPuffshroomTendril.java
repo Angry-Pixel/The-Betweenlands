@@ -10,7 +10,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.block.farming.BlockDugDirt;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.registries.BlockRegistry;
 
