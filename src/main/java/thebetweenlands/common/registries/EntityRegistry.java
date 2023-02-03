@@ -18,6 +18,7 @@ import thebetweenlands.common.entity.EntityGreeblingCorpse;
 import thebetweenlands.common.entity.EntityLurkerSkinRaft;
 import thebetweenlands.common.entity.EntityMistBridge;
 import thebetweenlands.common.entity.EntityMovingWall;
+import thebetweenlands.common.entity.EntityPuffshroomBuilder;
 import thebetweenlands.common.entity.EntityResurrection;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityRopeNode;
@@ -296,6 +297,7 @@ public class EntityRegistry {
 		registerEntity(EntitySilkyPebble.class, "silky_pebble");
 		
 		//registerEntity(EntitySkySpores.class, "sky_spores", 65536, 3, true);
+		registerEntity(EntityPuffshroomBuilder.class, "puffshroom_builder");
 		registerEntity(EntityBigPuffshroom.class, "big_puffshroom", 64, 3, true);
 		registerEntity(EntitySporeMinion.class, "spore_minion", 0xFF8000, 0xE6E6E6, 64, 3, true); //remove egg after testing
 	}

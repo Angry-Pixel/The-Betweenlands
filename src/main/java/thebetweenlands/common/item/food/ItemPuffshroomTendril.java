@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
-import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.entity.EntityPuffshroomBuilder;
 
 public class ItemPuffshroomTendril extends ItemBLFood {
 
@@ -27,7 +27,10 @@ public class ItemPuffshroomTendril extends ItemBLFood {
 			IBlockState state = world.getBlockState(pos);
 			Block block = state.getBlock();
 			if (block instanceof BlockGenericDugSoil && state.getValue(BlockGenericDugSoil.COMPOSTED)) {
-				world.setBlockState(pos.up(), BlockRegistry.WEEDWOOD_BUSH.getDefaultState(), 2); //TEST until new thing exists
+				EntityPuffshroomBuilder puffShroomBuilder = new EntityPuffshroomBuilder(world);
+				puffShroomBuilder.setPosition(pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F);
+				puffShroomBuilder.onInitialSpawn(world.getDifficultyForLocation(puffShroomBuilder.getPosition()), null);
+				world.spawnEntity(puffShroomBuilder);
 				held.shrink(1);
 				return EnumActionResult.SUCCESS;
 			} else
