@@ -28,7 +28,7 @@ public class ItemPuffshroomTendril extends ItemBLFood {
 			Block block = state.getBlock();
 			if (block instanceof BlockGenericDugSoil && state.getValue(BlockGenericDugSoil.COMPOSTED)) {
 				EntityPuffshroomBuilder puffShroomBuilder = new EntityPuffshroomBuilder(world);
-				puffShroomBuilder.setPosition(pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F);
+				puffShroomBuilder.setPositionAndRotation(pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F, (float)world.rand.nextInt(360), 0F);
 				puffShroomBuilder.onInitialSpawn(world.getDifficultyForLocation(puffShroomBuilder.getPosition()), null);
 				world.spawnEntity(puffShroomBuilder);
 				held.shrink(1);
