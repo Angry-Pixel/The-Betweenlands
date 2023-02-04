@@ -198,8 +198,9 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 	
 	@SideOnly(Side.CLIENT)
 	private void spawnSporeDustParticles(World world, BlockPos pos, int offX, int offY, int offZ) {
-		BLParticles.REDSTONE_DUST.spawn(world, pos.getX() + offX + 0.5D + (rand.nextDouble() - 0.5D) * width, pos.getY() + offY  + 0.5D + rand.nextDouble() * height, pos.getZ() + offZ + 0.5D + (rand.nextDouble() - 0.5D) * width, 
-		ParticleArgs.get().withColor(0.5F + this.rand.nextFloat() * 0.5F, 0.5F + this.rand.nextFloat() * 0.5F, 0.5F + this.rand.nextFloat() * 0.5F, 1.0F));
+		if(!(world.getBlockState(pos.add(offX, offY, offZ)).getBlock() instanceof BlockMouldHornMushroom))
+			BLParticles.REDSTONE_DUST.spawn(world, pos.getX() + offX + 0.5D + (rand.nextDouble() - 0.5D) * width, pos.getY() + offY  + 0.5D + rand.nextDouble() * height, pos.getZ() + offZ + 0.5D + (rand.nextDouble() - 0.5D) * width, 
+					ParticleArgs.get().withColor(0.5F + this.rand.nextFloat() * 0.5F, 0.5F + this.rand.nextFloat() * 0.5F, 0.5F + this.rand.nextFloat() * 0.5F, 1.0F));
 	}
 
 	@Override
