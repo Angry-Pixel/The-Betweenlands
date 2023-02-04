@@ -23,6 +23,7 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -33,12 +34,12 @@ public class EntityDropHeldCloud extends Entity {
 
 	public EntityDropHeldCloud(World world) {
 		super(world);
-		setSize(4F, 0.5F);
+		setSize(2F, 0.5F);
 	}
 
 	@Override
 	protected void entityInit() {
-		dataManager.register(AOE_SIZE_XZ, 4F);
+		dataManager.register(AOE_SIZE_XZ, 2F);
 		dataManager.register(AOE_SIZE_Y, 0.5F);
 	}
 
@@ -50,7 +51,7 @@ public class EntityDropHeldCloud extends Entity {
 			if (getEntityWorld().getTotalWorldTime() % 5 == 0)
 				checkAreaOfEffect();
 			if (getAOESizeXZ() > 0.5F)
-				setAOESizeXZ(getAOESizeXZ() - 0.01F);
+				setAOESizeXZ(getAOESizeXZ() - 0.005F);
 			if (getAOESizeXZ() <= 0.5F)
 				setDead();
 		}
@@ -155,9 +156,9 @@ public class EntityDropHeldCloud extends Entity {
 		double x = this.posX + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
 		double y = this.posY + 0.1D;
 		double z = this.posZ + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
-		double mx = (this.world.rand.nextFloat() - 0.5F) / 12.0F;
+		double mx = (this.world.rand.nextFloat() - 0.5F) / 16.0F;
 		double my = (this.world.rand.nextFloat() - 0.5F) / 16.0F * 0.1F;
-		double mz = (this.world.rand.nextFloat() - 0.5F) / 12.0F;
+		double mz = (this.world.rand.nextFloat() - 0.5F) / 16.0F;
 		int[] color = {100, 100, 0, 255};
 
 		ParticleGasCloud hazeParticle = (ParticleGasCloud) BLParticles.GAS_CLOUD
@@ -177,6 +178,23 @@ public class EntityDropHeldCloud extends Entity {
 						.withScale(4f));
 
 		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS_TEXTURED, particle);
+		
+			double d0 = x - 0.0625F;
+			double d1 = y;
+			double d2 = z - 0.0625F;
+			double d3 = x + 0.0625F;
+			double d4 = z + 0.0625F;
+			double d5 = x;
+			double d6 = y + 0.25F;
+			double d7 = z;
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d0, d1, d2, ParticleArgs.get().withColor(105F, 70F, 40F, 1F).withScale(1.5F).withMotion(mx, my, mz).withData(100)));
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d0, d1, d4, ParticleArgs.get().withColor(105F, 70F, 40F, 1F).withScale(1.5F).withMotion(mx, my, mz).withData(100)));
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d3, d1, d2, ParticleArgs.get().withColor(105F, 70F, 40F, 1F).withScale(1.5F).withMotion(mx, my, mz).withData(100)));
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d3, d1, d4, ParticleArgs.get().withColor(105F, 70F, 40F, 1F).withScale(1.5F).withMotion(mx, my, mz).withData(100)));
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d0, d1, d2, ParticleArgs.get().withColor(105F, 70F, 40F, 1F).withScale(1.5F).withMotion(mx, my, mz).withData(100)));
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d5, d6, d7, ParticleArgs.get().withColor(105F, 70F, 40F, 1F).withScale(1.5F).withMotion(mx, my, mz).withData(100)));
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d0, d1, d2, ParticleArgs.get().withColor(105F, 70F, 40F, 1F).withScale(1.5F).withMotion(mx, my, mz).withData(100)));
+
 	}
 
 	@Override
