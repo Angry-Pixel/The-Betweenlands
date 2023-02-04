@@ -30,6 +30,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.entity.ai.EntityAIFollowTarget;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -39,9 +40,15 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	public int animation_2 = 0, prev_animation_2 = 0;
 	protected static final DataParameter<Boolean> IS_FALLING = EntityDataManager.<Boolean>createKey(EntitySporeMinion.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Integer> TYPE = EntityDataManager.<Integer>createKey(EntitySporeMinion.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> INFLATE_SIZE = EntityDataManager.<Integer>createKey(EntitySporeMinion.class, DataSerializers.VARINT);
 
 	protected float prevFloatingRotationTicks = 0;
 	protected float floatingRotationTicks = 0;
+	
+	private EntityAIFollowTarget moveToTarget;
+	private boolean canFollow = false;
+	private EntityAIAttackMelee meleeAttack;
+	private EntityAIWander wander;
 
 	public EntitySporeMinion(World world) {
 		super(world);
@@ -57,14 +64,18 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 		super.entityInit();
 		dataManager.register(IS_FALLING, false);
 		dataManager.register(TYPE, rand.nextInt(3));
+		dataManager.register(INFLATE_SIZE, 0);
 	}
 
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
+		moveToTarget = new EntityAIFollowTarget(this, new EntityAIFollowTarget.FollowClosest(this, EntityPlayer.class, 32D), 0.6D, 1F, 32.0F, false);
+		meleeAttack = new EntityAIAttackMelee(this, 0.6D, false);
+		wander = new EntityAIWander(this, 0.5D);
 		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIAttackMelee(this, 0.6D, false));;
-		tasks.addTask(2, new EntityAIWander(this, 0.6D));
+		tasks.addTask(1, meleeAttack);
+		tasks.addTask(2, wander);
 		tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		tasks.addTask(4, new EntityAILookIdle(this));
 		targetTasks.addTask(0, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, true));
@@ -87,6 +98,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 		case 2:
 			moveSpeedBuff = -0.2D;
 			healthBuff = 25D;
+			attackBuff = -0.5D;
 			break;
 		}
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5D + attackBuff);
@@ -116,6 +128,29 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 					}
 				}
 			}
+
+			if (getType() == 2 && !canFollow) {
+				tasks.removeTask(wander);
+				tasks.addTask(1, moveToTarget);
+				tasks.removeTask(meleeAttack);
+				canFollow = true;
+			}
+			
+			if (getType() == 2) {
+				if (getInflateSize() <= 0)
+					setInflateSize(0);
+				if (getInflateSize() >= 100)
+					explode();
+				if (getAttackTarget() == null)
+					setInflateSize(getInflateSize() - 2);
+				if (getAttackTarget() != null) {
+					float distance = (float) getDistance(getAttackTarget().posX, getAttackTarget().getEntityBoundingBox().minY, getAttackTarget().posZ);
+					if (getInflateSize() < 100 && distance <= 2)
+						setInflateSize(getInflateSize() + 2);
+					if (getInflateSize() < 100 && distance > 2)
+						setInflateSize(getInflateSize() - 2);
+				}
+			}
 		}
 
 		this.prevFloatingRotationTicks = this.floatingRotationTicks;
@@ -141,6 +176,16 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 		}
 		super.onUpdate();
 	}
+
+	private void explode() {
+	//Stuff
+		setDead();
+	}
+
+	@Override
+	protected boolean isMovementBlocked() {
+		return getType() == 2 && getInflateSize() > 0;
+	}
 	
 	@Override
 	public boolean attackEntityAsMob(Entity entity) {
@@ -149,21 +194,21 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 				if (entity instanceof EntityLivingBase) {
 					switch (getType()) {
 					case 0:
-						((EntityLivingBase)entity).knockBack(this, 0.75F, MathHelper.sin(this.rotationYaw * 3.141593F / 180.0F), -MathHelper.cos(this.rotationYaw * 3.141593F / 180.0F));
+						((EntityLivingBase)entity).knockBack(this, 0.5F, MathHelper.sin(this.rotationYaw * 3.141593F / 180.0F), -MathHelper.cos(this.rotationYaw * 3.141593F / 180.0F));
 						break;
 					case 1:
 						this.heal(2F);
 						world.playSound(null, getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.HOSTILE, 0.5F, 2F);
 						break;
 					case 2:
-						if (entity instanceof EntityPlayer) {
+					/*	if (entity instanceof EntityPlayer) {
 							EntityPlayer player = (EntityPlayer) entity;
 							if (!isWearingSilkMask(player)) {
 								ItemStack stack = player.getHeldItemMainhand();
 								if (!stack.isEmpty())
 									player.dropItem(true);
 							}
-						}
+						}*/
 						break;
 					}
 				}
@@ -273,6 +318,14 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 
 	public int getType() {
 		return dataManager.get(TYPE);
+	}
+	
+	public void setInflateSize(int size) {
+		dataManager.set(INFLATE_SIZE, size);
+	}
+
+	public int getInflateSize() {
+		return dataManager.get(INFLATE_SIZE);
 	}
 
 	@Override

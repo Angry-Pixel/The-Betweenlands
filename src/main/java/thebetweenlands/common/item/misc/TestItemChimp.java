@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.mobs.EntityBigPuffshroom;
+import thebetweenlands.common.entity.mobs.EntitySporeMinion;
 import thebetweenlands.common.entity.projectiles.EntitySkySpores;
 
 
@@ -208,10 +209,14 @@ public class TestItemChimp extends Item {
 
 				//makeSomethingHere(worldIn, player);
 				
-			EntityBigPuffshroom bigPuffShroom = new EntityBigPuffshroom(worldIn);
+		/*	EntityBigPuffshroom bigPuffShroom = new EntityBigPuffshroom(worldIn);
 			bigPuffShroom.setPosition(pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F);
 			worldIn.spawnEntity(bigPuffShroom);
-	
+		*/	
+			EntitySporeMinion spore = new EntitySporeMinion(worldIn);
+			spore.setPosition(pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F);
+			spore.setType(2);
+			worldIn.spawnEntity(spore);
 		}
 
 		return EnumActionResult.SUCCESS;
