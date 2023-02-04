@@ -26,8 +26,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
-import thebetweenlands.client.render.particle.BatchedParticleRenderer;
-import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.block.plant.BlockMouldHornMushroom;
 import thebetweenlands.common.block.plant.BlockMouldHornMushroom.EnumMouldHorn;
@@ -153,7 +151,7 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 		for(int y = 0; y <= 6; y++)
 			if (world.getBlockState(pos.add(0, y, 0)).getBlock() instanceof BlockMouldHornMushroom && world.getBlockState(pos.add(0, y, 0)).getValue(BlockMouldHornMushroom.MOULD_HORN_TYPE) == EnumMouldHorn.MOULD_HORN_CAP_FULL_WARTS) {
 				if (world.isRemote) {
-					spawnBrazierParticles(new Vec3d(pos.getX() - getPosition().getX(), y + 0.75D, pos.getZ() - getPosition().getZ()));
+					spawnSporeBeamParticles(new Vec3d(pos.getX() - getPosition().getX(), y + 0.75D, pos.getZ() - getPosition().getZ()));
 					}
 				return true;
 				}
@@ -161,17 +159,16 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 	}
 	
 	@SideOnly(Side.CLIENT)
-	private void spawnBrazierParticles(Vec3d target) {
-		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, BLParticles.PUZZLE_BEAM_2.create(world, this.posX + target.x, this.posY + target.y, this.posZ + target.z, ParticleArgs.get().withMotion(0, 0, 0).withColor(255F, 102F, 0F, 1F).withScale(1.5F).withData(30, target.scale(-1))));
-		for(int i = 0; i < 2; i++) {
+	private void spawnSporeBeamParticles(Vec3d target) {
+		for(int i = 0; i < 20; i++) {
 			float offsetLen = this.world.rand.nextFloat();
 			Vec3d offset = new Vec3d(target.x * offsetLen + world.rand.nextFloat() * 0.2f - 0.1f, target.y * offsetLen + world.rand.nextFloat() * 0.2f - 0.1f, target.z * offsetLen + world.rand.nextFloat() * 0.2f - 0.1f);
-			float vx = (world.rand.nextFloat() * 2f - 1) * 0.0025f;
-			float vy = (world.rand.nextFloat() * 2f - 1) * 0.0025f + 0.008f;
-			float vz = (world.rand.nextFloat() * 2f - 1) * 0.0025f;
-			float scale = 0.5f + world.rand.nextFloat();
-			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, this.posX + offset.x, this.posY + offset.y, this.posZ + offset.z, ParticleArgs.get().withMotion(vx, vy, vz).withColor(255F, 102F, 0F, 1F).withScale(scale).withData(100)));
-
+			float vx = (world.rand.nextFloat() * 0.5f - 0.25f) * 0.00125f;
+			float vy = (world.rand.nextFloat() * 0.5f - 0.25f) * 0.00125f;
+			float vz = (world.rand.nextFloat() * 0.5f - 0.25f) * 0.00125f;
+			float scale = 1f + world.rand.nextFloat();
+			BLParticles.SMOKE.spawn(world, this.posX + offset.x, this.posY + offset.y, this.posZ + offset.z, 
+			ParticleArgs.get().withMotion(vx, vy, vz).withColor(0.5F + this.rand.nextFloat() * 0.5F, 0.5F + this.rand.nextFloat() * 0.5F, 0.5F + this.rand.nextFloat() * 0.5F, 1.0F).withScale(scale).withData(100));
 		}
 	}
 
@@ -186,10 +183,23 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 	@Override
 	public void onLivingUpdate() {
 		if(getIsMiddle() && world.isRemote) {
-			BLParticles.REDSTONE_DUST.spawn(world, posX + (rand.nextDouble() - 0.5D) * width, posY + rand.nextDouble() * height, posZ + (rand.nextDouble() - 0.5D) * width, 
-				ParticleArgs.get().withColor(0.5F + this.rand.nextFloat() * 0.5F, 0.5F + this.rand.nextFloat() * 0.5F, 0.5F + this.rand.nextFloat() * 0.5F, 1.0F));
-		}
+			spawnSporeDustParticles(world, getPosition(), 0, 0, 0);
+			spawnSporeDustParticles(world, getPosition(), 6, 0, 0);
+			spawnSporeDustParticles(world, getPosition(), 0, 0, 6);
+			spawnSporeDustParticles(world, getPosition(), -6, 0, 0);
+			spawnSporeDustParticles(world, getPosition(),0, 0, -6);
+			spawnSporeDustParticles(world, getPosition(),5, 0, 5);
+			spawnSporeDustParticles(world, getPosition(),5, 0, -5);
+			spawnSporeDustParticles(world, getPosition(),-5, 0, 5);
+			spawnSporeDustParticles(world, getPosition(),-5, 0, -5);
+			}
 		super.onLivingUpdate();
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private void spawnSporeDustParticles(World world, BlockPos pos, int offX, int offY, int offZ) {
+		BLParticles.REDSTONE_DUST.spawn(world, pos.getX() + offX + 0.5D + (rand.nextDouble() - 0.5D) * width, pos.getY() + offY  + 0.5D + rand.nextDouble() * height, pos.getZ() + offZ + 0.5D + (rand.nextDouble() - 0.5D) * width, 
+		ParticleArgs.get().withColor(0.5F + this.rand.nextFloat() * 0.5F, 0.5F + this.rand.nextFloat() * 0.5F, 0.5F + this.rand.nextFloat() * 0.5F, 1.0F));
 	}
 
 	@Override
