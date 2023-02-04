@@ -4,9 +4,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.client.render.model.entity.ModelPuffshroomBuilder;
 import thebetweenlands.client.render.model.entity.ModelSporeMinion;
-import thebetweenlands.common.entity.EntityPuffshroomBuilder;
 import thebetweenlands.common.entity.mobs.EntitySporeMinion;
 
 public class RenderSporeMinion extends RenderLiving<EntitySporeMinion> {

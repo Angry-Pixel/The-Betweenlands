@@ -30,6 +30,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.entity.EntityDropHeldCloud;
 import thebetweenlands.common.entity.ai.EntityAIFollowTarget;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -178,8 +179,10 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	}
 
 	private void explode() {
-	//Stuff
 		setDead();
+		EntityDropHeldCloud cloud = new EntityDropHeldCloud(world);
+		cloud.setPosition(posX, posY, posZ);
+		world.spawnEntity(cloud);
 	}
 
 	@Override

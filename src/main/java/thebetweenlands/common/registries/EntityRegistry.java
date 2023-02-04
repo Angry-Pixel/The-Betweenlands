@@ -8,6 +8,7 @@ import thebetweenlands.common.entity.EntityBLItemFrame;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
+import thebetweenlands.common.entity.EntityDropHeldCloud;
 import thebetweenlands.common.entity.EntityFalseXPOrb;
 import thebetweenlands.common.entity.EntityFishBait;
 import thebetweenlands.common.entity.EntityFishVortex;
@@ -300,6 +301,7 @@ public class EntityRegistry {
 		registerEntity(EntityPuffshroomBuilder.class, "puffshroom_builder");
 		registerEntity(EntityBigPuffshroom.class, "big_puffshroom", 64, 3, true);
 		registerEntity(EntitySporeMinion.class, "spore_minion", 0xFF8000, 0xE6E6E6, 64, 3, true); //remove egg after testing
+		registerEntity(EntityDropHeldCloud.class, "drop_held_cloud");
 	}
 
 	private static int id = 0;
