@@ -71,7 +71,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		moveToTarget = new EntityAIFollowTarget(this, new EntityAIFollowTarget.FollowClosest(this, EntityPlayer.class, 32D), 0.6D, 1F, 32.0F, false);
+		moveToTarget = new EntityAIFollowTarget(this, new EntityAIFollowTarget.FollowClosest(this, EntityPlayer.class, 32D), 1D, 1F, 32.0F, false);
 		meleeAttack = new EntityAIAttackMelee(this, 0.6D, false);
 		wander = new EntityAIWander(this, 0.5D);
 		tasks.addTask(0, new EntityAISwimming(this));
@@ -91,19 +91,19 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 		switch (getType()) {
 		case 0:
 			attackBuff = 1.5D;
-			moveSpeedBuff = 0.2D;
+			moveSpeedBuff = 0.1D;
 			break;
 		case 1:
 			healthBuff = 15D;
 			break;
 		case 2:
-			moveSpeedBuff = -0.2D;
+			moveSpeedBuff = -0.1D;
 			healthBuff = 25D;
 			attackBuff = -0.5D;
 			break;
 		}
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5D + attackBuff);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.49D + moveSpeedBuff);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D + moveSpeedBuff);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D + healthBuff);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
 	}
@@ -143,13 +143,13 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 				if (getInflateSize() >= 100)
 					explode();
 				if (getAttackTarget() == null)
-					setInflateSize(getInflateSize() - 2);
+					setInflateSize(getInflateSize() - 4);
 				if (getAttackTarget() != null) {
 					float distance = (float) getDistance(getAttackTarget().posX, getAttackTarget().getEntityBoundingBox().minY, getAttackTarget().posZ);
 					if (getInflateSize() < 100 && distance <= 2)
-						setInflateSize(getInflateSize() + 2);
+						setInflateSize(getInflateSize() + 4);
 					if (getInflateSize() < 100 && distance > 2)
-						setInflateSize(getInflateSize() - 2);
+						setInflateSize(getInflateSize() - 4);
 				}
 			}
 		}
