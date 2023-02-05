@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -49,7 +50,11 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	private EntityAIFollowTarget moveToTarget;
 	private boolean canFollow = false;
 	private EntityAIAttackMelee meleeAttack;
+	private int aggroCooldown = 100;
+	private boolean canAttack = false;
 	private EntityAIWander wander;
+	private EntityAIAvoidEntity<EntityPlayer> runAway;
+	private EntityAINearestAttackableTarget<EntityPlayer> target;
 
 	public EntitySporeMinion(World world) {
 		super(world);
@@ -74,12 +79,15 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 		moveToTarget = new EntityAIFollowTarget(this, new EntityAIFollowTarget.FollowClosest(this, EntityPlayer.class, 32D), 1D, 1F, 32.0F, false);
 		meleeAttack = new EntityAIAttackMelee(this, 0.6D, false);
 		wander = new EntityAIWander(this, 0.5D);
+		runAway = new EntityAIAvoidEntity<EntityPlayer>(this, EntityPlayer.class, 5.0F, 0.51D, 0.51D);
+		target =  new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, true);
+		
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, meleeAttack);
 		tasks.addTask(2, wander);
 		tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		tasks.addTask(4, new EntityAILookIdle(this));
-		targetTasks.addTask(0, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, true));
+		targetTasks.addTask(0, target);
 	}
 
 	@Override
@@ -130,13 +138,32 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 				}
 			}
 
+			if (getType() == 0) {
+				if (aggroCooldown == 100 && !canAttack) {
+					tasks.removeTask(runAway);
+					tasks.addTask(1, meleeAttack);
+					targetTasks.addTask(0, target);
+					canAttack = true;
+				}
+
+				if (aggroCooldown == 0 && canAttack) {
+					tasks.removeTask(meleeAttack);
+					targetTasks.removeTask(target);
+					tasks.addTask(1, runAway);
+					canAttack = false;
+				}
+
+				if (aggroCooldown <= 100)
+					aggroCooldown++;
+			}
+
 			if (getType() == 2 && !canFollow) {
 				tasks.removeTask(wander);
 				tasks.addTask(1, moveToTarget);
 				tasks.removeTask(meleeAttack);
 				canFollow = true;
 			}
-			
+
 			if (getType() == 2) {
 				if (getInflateSize() <= 0)
 					setInflateSize(0);
@@ -198,6 +225,8 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 					switch (getType()) {
 					case 0:
 						((EntityLivingBase)entity).knockBack(this, 0.5F, MathHelper.sin(this.rotationYaw * 3.141593F / 180.0F), -MathHelper.cos(this.rotationYaw * 3.141593F / 180.0F));
+						if (!getEntityWorld().isRemote)
+							aggroCooldown = 0;
 						break;
 					case 1:
 						this.heal(2F);
