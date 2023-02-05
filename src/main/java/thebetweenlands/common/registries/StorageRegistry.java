@@ -24,6 +24,7 @@ import thebetweenlands.common.world.storage.location.LocationMobArenaProtection;
 import thebetweenlands.common.world.storage.location.LocationPortal;
 import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
 import thebetweenlands.common.world.storage.location.LocationSpiritTree;
+import thebetweenlands.common.world.storage.location.LocationSporeHive;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.common.world.storage.location.LocationTokenBucket;
 import thebetweenlands.common.world.storage.operation.DeferredLinkOperation;
@@ -50,6 +51,7 @@ public class StorageRegistry {
 		register(new ResourceLocation(ModInfo.ID, "chiromaw_matriarch_nest"), LocationChiromawMatriarchNest.class, LocationChiromawMatriarchNest::new);
 		register(new ResourceLocation(ModInfo.ID, "token_bucket"), LocationTokenBucket.class, LocationTokenBucket::new);
 		register(new ResourceLocation(ModInfo.ID, "mob_arena_protection"), LocationMobArenaProtection.class, LocationMobArenaProtection::new);
+		register(new ResourceLocation(ModInfo.ID, "spore_hive"), LocationSporeHive.class, LocationSporeHive::new);
 		
 		register(new ResourceLocation(ModInfo.ID, "deferred_link"), DeferredLinkOperation.class, DeferredLinkOperation::new);
 	}

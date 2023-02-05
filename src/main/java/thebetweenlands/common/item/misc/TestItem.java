@@ -1,16 +1,23 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.UUID;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import thebetweenlands.api.storage.LocalRegion;
+import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.world.gen.feature.WorldGenLakeCavernSimulacrum;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.LocationSporeHive;
 
 
 //MINE!!
@@ -48,10 +55,10 @@ public class TestItem extends Item {
 			WorldGenWightFortress fortress = new WorldGenWightFortress();
 			fortress.generate(worldIn, itemRand, pos.up());
 		*/
-				
+		/*		
 			WorldGenLakeCavernSimulacrum gen = new WorldGenLakeCavernSimulacrum();
 			gen.generate(worldIn, itemRand, pos.up());
-			
+		*/
 		/*
 			WorldGenSmallRuins ruins = new WorldGenSmallRuins();
 			ruins.generate(worldIn, itemRand, pos.up());
@@ -160,6 +167,13 @@ public class TestItem extends Item {
 				//playerIn.setHeldItem(hand, null);
 			}
 		*/
+				
+			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(worldIn);
+			LocationSporeHive hive = new LocationSporeHive(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), pos);
+			hive.addBounds(new AxisAlignedBB(pos).grow(8 + Math.abs(MathHelper.getCoordinateRandom(pos.getX(), pos.getY(), pos.getZ()) % 12), 4, 8 + Math.abs(MathHelper.getCoordinateRandom(pos.getX() + 10, pos.getY(), pos.getZ()) % 12)));
+			//hive.addBounds(new AxisAlignedBB(pos).grow(64, 4, 64));
+			hive.setSeed(MathHelper.getCoordinateRandom(pos.getX(), pos.getY(), pos.getZ()));
+			worldStorage.getLocalStorageHandler().addLocalStorage(hive);
 		}
 
 		return EnumActionResult.SUCCESS;

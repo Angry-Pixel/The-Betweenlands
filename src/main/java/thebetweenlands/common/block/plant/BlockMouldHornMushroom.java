@@ -33,6 +33,7 @@ import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.ISubtypeItemBlockModelDefinition;
+import thebetweenlands.common.world.storage.location.LocationSporeHive;
 
 public class BlockMouldHornMushroom extends Block implements ICustomItemBlock, ISubtypeItemBlockModelDefinition {
 	public static final PropertyEnum<EnumMouldHorn> MOULD_HORN_TYPE = PropertyEnum.<EnumMouldHorn>create("type", EnumMouldHorn.class);
@@ -181,6 +182,13 @@ public class BlockMouldHornMushroom extends Block implements ICustomItemBlock, I
     public void randomTick(World world, BlockPos pos, IBlockState state, Random random) {
 		if (world.isRemote)
 			return;
+		
+		LocationSporeHive hive = LocationSporeHive.getAtBlock(world, pos);
+		if(hive != null && !hive.isGrowing()) {
+			// Don't grow if hive stopped growing
+			return;
+		}
+		
 		//if(world.rand.nextInt(4) == 0) {
 			EnumMouldHorn stage = state.getValue(MOULD_HORN_TYPE);
 			IBlockState basicBitch = BlockRegistry.MOULD_HORN.getDefaultState();
@@ -199,37 +207,37 @@ public class BlockMouldHornMushroom extends Block implements ICustomItemBlock, I
 				else if(checkForAdjacentBlockingMushroom(world, pos, 1, 1, smallStalk) || checkForAdjacentBlockingMushroom(world, pos, 1, 1, smallCap))
 					break;
 				else
-					world.setBlockState(pos, smallCap, 2);
+					LocationSporeHive.overgrowBlock(world, pos, smallCap, 2);
 				break;
 			case MOULD_HORN_CAP_THIN:
 				if(world.getBlockState(pos.down()) != smallStalk && world.isAirBlock(pos.up())) {
-					world.setBlockState(pos, smallStalk, 3);
-					world.setBlockState(pos.up(), smallCap, 2);
+					LocationSporeHive.overgrowBlock(world, pos, smallStalk, 3);
+					LocationSporeHive.overgrowBlock(world, pos.up(), smallCap, 2);
 					break;
 				}
 				if(checkForAdjacentBlockingMushroom(world, pos, 2, 2, fullStalk) || checkForAdjacentBlockingMushroom(world, pos, 2, 2, fullCap))
 					break;
 				else
 					if(world.getBlockState(pos.down()) == smallStalk)
-						world.setBlockState(pos, fullCap, 2);
+						LocationSporeHive.overgrowBlock(world, pos, fullCap, 2);
 				break;
 			case MOULD_HORN_STALK_THIN:
 				if(checkForAdjacentBlockingMushroom(world, pos, 1, 1, fullStalk) || checkForAdjacentBlockingMushroom(world, pos, 1, 1, fullCap))
 					break;
 				else
 					if(world.getBlockState(pos.up()) == fullCap)
-						world.setBlockState(pos, fullStalk, 2);
+						LocationSporeHive.overgrowBlock(world, pos, fullStalk, 2);
 				break;
 			case MOULD_HORN_CAP_FULL: 
 				if(world.getBlockState(pos.down()) == smallStalk) {
-					world.setBlockState(pos.down(), fullStalk, 2);
+					LocationSporeHive.overgrowBlock(world, pos.down(), fullStalk, 2);
 				} // test size atm
 				else if(world.getBlockState(pos.down(3)) != fullStalk && world.isAirBlock(pos.up())) {
-					world.setBlockState(pos, fullStalk, 2);
+					LocationSporeHive.overgrowBlock(world, pos, fullStalk, 2);
 					if(random.nextBoolean())
-						world.setBlockState(pos.up(), fullCap, 2);
+						LocationSporeHive.overgrowBlock(world, pos.up(), fullCap, 2);
 					else
-						world.setBlockState(pos.up(), warts, 2);
+						LocationSporeHive.overgrowBlock(world, pos.up(), warts, 2);
 				}
 				break;
 			default:
