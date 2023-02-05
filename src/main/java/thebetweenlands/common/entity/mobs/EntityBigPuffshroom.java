@@ -348,8 +348,8 @@ public class EntityBigPuffshroom extends EntityLiving {
 	private void spawnFragSpores(BlockPos pos) {
 		for (int x = 0; x < 6; x++) {
 			double angle = Math.toRadians(x * 60D);
-			double offSetX = Math.floor(-Math.sin(angle) * 1D);
-			double offSetZ = Math.floor(Math.cos(angle) * 1D);
+			double offSetX = Math.floor(-Math.sin(angle) * 2D);
+			double offSetZ = Math.floor(Math.cos(angle) * 2D);
 			EntityFragSpore fragSpore = new EntityFragSpore(getEntityWorld());
 			fragSpore.setPosition(Math.floor(pos.getX() + 0.5D + offSetX), pos.getY() + 2D, Math.floor(pos.getZ() + 0.5D + offSetZ));
 			Vec3d vector3d = new Vec3d(this.posX, this.posY, this.posZ);
