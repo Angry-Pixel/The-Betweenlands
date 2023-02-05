@@ -11,7 +11,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -35,6 +34,7 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
+import thebetweenlands.common.entity.EntityFragSpore;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -130,8 +130,10 @@ public class EntityBigPuffshroom extends EntityLiving {
 					//if (animation_4 <= 1)
 					//	getEntityWorld().playSound(null, getPosition().getX() + 0.5D, getPosition().getY() + 1D, getPosition().getZ() + 0.5D, SoundRegistry.PUFF_SHROOM, SoundCategory.BLOCKS, 0.5F, 0.95F + getEntityWorld().rand.nextFloat() * 0.2F);
 					if (animation_4 == 10) {
-						// createDebris(getPosition());
-						spawnSporeMinions(world, getPosition());
+						if (rand.nextBoolean())
+							spawnFragSpores(getPosition());
+						else
+							spawnSporeMinions(world, getPosition());
 						getEntityWorld().playSound(null, getPosition().getX() + 0.5D, getPosition().getY() + 1D, getPosition().getZ() + 0.5D, SoundRegistry.PUFF_SHROOM, SoundCategory.BLOCKS, 0.5F, 0.95F + getEntityWorld().rand.nextFloat() * 0.2F);
 					}
 				}
@@ -343,28 +345,24 @@ public class EntityBigPuffshroom extends EntityLiving {
 		return null;
 	}
 	
-	private void createDebris(BlockPos pos) {
-		for (int x = 0; x < 12; x++) {
-			double angle = Math.toRadians(x * 30D);
+	private void spawnFragSpores(BlockPos pos) {
+		for (int x = 0; x < 6; x++) {
+			double angle = Math.toRadians(x * 60D);
 			double offSetX = Math.floor(-Math.sin(angle) * 2D);
 			double offSetZ = Math.floor(Math.cos(angle) * 2D);
-
-			if(getEntityWorld().isAirBlock(pos.add(offSetX, 1, offSetZ))) {
-				IBlockState placedBlock = BlockRegistry.MOULDY_SOIL.getDefaultState();
-				getEntityWorld().setBlockState(pos.add(offSetX, 2, offSetZ), placedBlock);
-				EntityFallingBlock debris = new EntityFallingBlock(getEntityWorld(), Math.floor(pos.getX() + 0.5D + offSetX), pos.getY() + 2D, Math.floor(pos.getZ() + 0.5D + offSetZ), placedBlock);
-				Vec3d vector3d = new Vec3d(this.posX, this.posY, this.posZ);
-				double velX = pos.getX() + offSetX * 3D - debris.posX;
-				double velY = pos.getY() + 6D - debris.posY;
-				double velZ = pos.getZ() + offSetZ * 3D - debris.posZ;
-				double distanceSqRt = (double) MathHelper.sqrt(velX * velX + velY * velY + velZ * velZ);
-				double accelerationX = velX / distanceSqRt * 0.3D + rand.nextDouble() * 0.2D;
-				double accelerationY = velY / distanceSqRt * 0.5D + rand.nextDouble() * 0.5D;
-				double accelerationZ = velZ / distanceSqRt * 0.3D + rand.nextDouble() * 0.2D;
-				vector3d.add(accelerationX, accelerationY, accelerationZ).scale((double) 0.9F);
-				debris.addVelocity(accelerationX, accelerationY, accelerationZ);
-				getEntityWorld().spawnEntity(debris);
-			}
+			EntityFragSpore fragSpore = new EntityFragSpore(getEntityWorld());
+			fragSpore.setPosition(Math.floor(pos.getX() + 0.5D + offSetX), pos.getY() + 2D, Math.floor(pos.getZ() + 0.5D + offSetZ));
+			Vec3d vector3d = new Vec3d(this.posX, this.posY, this.posZ);
+			double velX = pos.getX() + offSetX * 3D - fragSpore.posX;
+			double velY = pos.getY() + 6D - fragSpore.posY;
+			double velZ = pos.getZ() + offSetZ * 3D - fragSpore.posZ;
+			double distanceSqRt = (double) MathHelper.sqrt(velX * velX + velY * velY + velZ * velZ);
+			double accelerationX = velX / distanceSqRt * 0.3D + rand.nextDouble() * 0.2D;
+			double accelerationY = velY / distanceSqRt * 0.5D + rand.nextDouble() * 0.5D;
+			double accelerationZ = velZ / distanceSqRt * 0.3D + rand.nextDouble() * 0.2D;
+			vector3d.add(accelerationX, accelerationY, accelerationZ).scale((double) 0.9F);
+			fragSpore.addVelocity(accelerationX, accelerationY, accelerationZ);
+			getEntityWorld().spawnEntity(fragSpore);
 		}
 	}
 
