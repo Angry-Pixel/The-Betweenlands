@@ -326,6 +326,8 @@ public class EntityBigPuffshroom extends EntityLiving {
 				vector3d.add(accelerationX, accelerationY, accelerationZ).scale((double) 0.9F);
 				spore.addVelocity(accelerationX, accelerationY, accelerationZ);
 				world.spawnEntity(spore);
+				//spore.setType(1); //test
+				spore.setOwnerId(this.getUniqueID());
 			}
 		}
 	}
@@ -410,8 +412,8 @@ public class EntityBigPuffshroom extends EntityLiving {
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if(source == DamageSource.OUT_OF_WORLD) {
-			return true;
+		if(source == DamageSource.OUT_OF_WORLD || source == DamageSource.GENERIC) { // test using generic atm
+			return super.attackEntityFrom(source, damage);
 		}
 		if (source instanceof EntityDamageSource) {
 			Entity sourceEntity = ((EntityDamageSource) source).getTrueSource();

@@ -1,6 +1,10 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.UUID;
+
 import javax.annotation.Nullable;
+
+import com.google.common.base.Optional;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,7 +19,6 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,13 +26,14 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.EntityDropHeldCloud;
 import thebetweenlands.common.entity.ai.EntityAIFollowTarget;
@@ -43,7 +47,8 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	protected static final DataParameter<Boolean> IS_FALLING = EntityDataManager.<Boolean>createKey(EntitySporeMinion.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Integer> TYPE = EntityDataManager.<Integer>createKey(EntitySporeMinion.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> INFLATE_SIZE = EntityDataManager.<Integer>createKey(EntitySporeMinion.class, DataSerializers.VARINT);
-
+	protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntitySporeMinion.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+	
 	protected float prevFloatingRotationTicks = 0;
 	protected float floatingRotationTicks = 0;
 	
@@ -55,13 +60,13 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	private EntityAIWander wander;
 	private EntityAIAvoidEntity<EntityPlayer> runAway;
 	private EntityAINearestAttackableTarget<EntityPlayer> target;
+	private boolean poppedNaturally = false;
 
 	public EntitySporeMinion(World world) {
 		super(world);
 		setSize(0.75F, 0.75F);
 		stepHeight = 1.0F;
 		this.experienceValue = 1;
-		
 		this.setPathPriority(PathNodeType.WATER, -1.0F);
 	}
 
@@ -69,8 +74,9 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	protected void entityInit() {
 		super.entityInit();
 		dataManager.register(IS_FALLING, false);
-		dataManager.register(TYPE, rand.nextInt(3));
+		dataManager.register(TYPE, rand.nextInt(4));
 		dataManager.register(INFLATE_SIZE, 0);
+		dataManager.register(OWNER_UNIQUE_ID, Optional.absent());
 	}
 
 	@Override
@@ -108,6 +114,9 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 			moveSpeedBuff = -0.1D;
 			healthBuff = 25D;
 			attackBuff = -0.5D;
+			break;
+		case 3:
+			healthBuff = 15D;
 			break;
 		}
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5D + attackBuff);
@@ -179,6 +188,24 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 						setInflateSize(getInflateSize() - 4);
 				}
 			}
+			
+			if (ticksExisted > 200 && (getType() == 1 ||  getType() == 3)) {
+				if (getInflateSize() < 100)
+					setInflateSize(getInflateSize() + 4);
+				if (getInflateSize() >= 100) {
+					poppedNaturally = true;
+					explode();
+				}
+			}
+			
+			if (getType() == 3) {
+				if (!canAttack) {
+					tasks.removeTask(meleeAttack);
+					targetTasks.removeTask(target);
+					tasks.addTask(1, runAway);
+					canAttack = true; // not really but just need a toggle atm
+				}
+			}
 		}
 
 		this.prevFloatingRotationTicks = this.floatingRotationTicks;
@@ -207,14 +234,30 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 
 	private void explode() {
 		setDead();
-		EntityDropHeldCloud cloud = new EntityDropHeldCloud(world);
-		cloud.setPosition(posX, posY, posZ);
-		world.spawnEntity(cloud);
+		if (getType() == 2) {
+			EntityDropHeldCloud cloud = new EntityDropHeldCloud(world);
+			cloud.setPosition(posX, posY, posZ);
+			world.spawnEntity(cloud);
+		}
+	}
+
+	@Override
+	public void setDead() {
+		// parent healing/damage
+		if (getOwner() instanceof EntityBigPuffshroom) {
+			if (!poppedNaturally) {
+				if (getType() == 1)
+					((EntityLivingBase) getOwner()).heal(2F);
+				if (getType() == 3)
+					((EntityLivingBase) getOwner()).attackEntityFrom(DamageSource.GENERIC, 2F);
+			}
+		}
+		super.setDead();
 	}
 
 	@Override
 	protected boolean isMovementBlocked() {
-		return getType() == 2 && getInflateSize() > 0;
+		return getInflateSize() > 0;//getType() == 2 && ;
 	}
 	
 	@Override
@@ -229,8 +272,8 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 							aggroCooldown = 0;
 						break;
 					case 1:
-						this.heal(2F);
-						world.playSound(null, getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.HOSTILE, 0.5F, 2F);
+						//this.heal(2F);
+						//world.playSound(null, getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.HOSTILE, 0.5F, 2F);
 						break;
 					case 2:
 					/*	if (entity instanceof EntityPlayer) {
@@ -241,6 +284,8 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 									player.dropItem(true);
 							}
 						}*/
+						break;
+					case 3:
 						break;
 					}
 				}
@@ -359,16 +404,68 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	public int getInflateSize() {
 		return dataManager.get(INFLATE_SIZE);
 	}
+	
+    public void setOwnerId(@Nullable UUID uuidIn) {
+        this.dataManager.set(OWNER_UNIQUE_ID, Optional.fromNullable(uuidIn));
+    }
+	
+    @Nullable
+    public UUID getOwnerId() {
+        return (UUID)((Optional)this.dataManager.get(OWNER_UNIQUE_ID)).orNull();
+    }
+    
+	@Nullable
+	public Entity getOwner() {
+		if (!world.isRemote) {
+			WorldServer serverWorld = (WorldServer) world;
+			try {
+				UUID uuid = getOwnerId();
+				return uuid == null ? null : serverWorld.getEntityFromUuid(uuid);
+			} catch (IllegalArgumentException nope) {
+				return null;
+			}
+		}
+		return null;
+    }
+
+    public boolean isOwner(Entity entityIn) {
+        return entityIn == getOwner();
+    }
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
-		super.writeEntityToNBT(nbt);
+	       super.writeEntityToNBT(nbt);
+
+	        if (getOwnerId() == null)
+	        	nbt.setString("OwnerUUID", "");
+	        else
+	        	nbt.setString("OwnerUUID", getOwnerId().toString());
+
 		nbt.setInteger("type", getType());
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
+		 String ownerIdString;
+
+	        if (nbt.hasKey("OwnerUUID", 8))
+	        	ownerIdString = nbt.getString("OwnerUUID");
+	        else
+	        {
+	            String ownerName = nbt.getString("Owner");
+	            ownerIdString = PreYggdrasilConverter.convertMobOwnerIfNeeded(getServer(), ownerName);
+	        }
+
+	        if (!ownerIdString.isEmpty()) {
+	            try {
+	                setOwnerId(UUID.fromString(ownerIdString));
+	            }
+	            catch (Throwable throwable) {
+	               // explode if owner is missing or dead?
+	            }
+	        }
+
 		setType(nbt.getInteger("type"));
 	}
 }
