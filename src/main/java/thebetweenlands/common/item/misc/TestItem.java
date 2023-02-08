@@ -12,8 +12,11 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
+import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
@@ -174,9 +177,18 @@ public class TestItem extends Item {
 			//hive.addBounds(new AxisAlignedBB(pos).grow(64, 4, 64));
 			hive.setSeed(MathHelper.getCoordinateRandom(pos.getX(), pos.getY(), pos.getZ()));
 			worldStorage.getLocalStorageHandler().addLocalStorage(hive);
+				
+			
+		} else {
+			this.doClientStuff(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
 		}
 
 		return EnumActionResult.SUCCESS;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private void doClientStuff(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		BLParticles.MOULD_THROBBING.spawn(worldIn, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 	}
 	
 	@Override

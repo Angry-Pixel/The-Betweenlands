@@ -129,7 +129,10 @@ public enum BLParticles {
 	FANCY_DRIP(new ParticleFancyDrip.Factory()),
 	FANCY_BUBBLE(new ParticleFancyBubble.Factory()),
 	FISH_VORTEX(new ParticleFishVortex.Factory()),
-	SHADOW_GHOSTS(new ParticleAnimated.ShadowGhostFactory());
+	SHADOW_GHOSTS(new ParticleAnimated.ShadowGhostFactory()),
+	MOULD_THROBBING(new ParticleMouldThrobbing.Factory()),
+	MOULD_THROBBING_SPREAD(new ParticleMouldThrobbing.SpreadingFactory()),
+	MOULD_THROBBING_REEMIT(new ParticleMouldThrobbing.ReemitFactory());
 	
 	private ParticleFactory<?, ?> factory;
 

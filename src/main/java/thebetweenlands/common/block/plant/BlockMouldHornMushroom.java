@@ -13,7 +13,9 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -28,6 +30,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -246,6 +249,18 @@ public class BlockMouldHornMushroom extends Block implements ICustomItemBlock, I
 		//}
 	}
 
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+		if(stateIn.getValue(MOULD_HORN_TYPE) == EnumMouldHorn.MOULD_HORN_STALK_FULL) {
+			Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
+			
+			if(renderView != null && renderView.getDistanceSqToCenter(pos) < 100 && worldIn.rand.nextInt(200) == 0 && worldIn.getBlockState(pos.down()).getBlock() == BlockRegistry.MOULDY_SOIL) {
+				BLParticles.MOULD_THROBBING.spawn(worldIn, pos.getX() + 0.5D, pos.getY() - 0.5D, pos.getZ() + 0.5D);
+			}
+		}
+	}
+	
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return ((EnumMouldHorn)state.getValue(MOULD_HORN_TYPE)).getMetadata();
