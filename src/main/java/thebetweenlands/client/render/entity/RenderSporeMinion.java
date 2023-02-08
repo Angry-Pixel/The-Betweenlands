@@ -32,15 +32,15 @@ public class RenderSporeMinion extends RenderLiving<EntitySporeMinion> {
 			GlStateManager.scale(-1, -1, 1);
 			GlStateManager.rotate(entityYaw, 0, 1, 0);
 			GlStateManager.pushMatrix();
-			if (entity.getType() == 2) {
+		//	if (entity.getType() == 2) {
 				int size = entity.getInflateSize();
 				GlStateManager.translate(0F, 0.2F - (float)(size * 0.012F), 0F);
 				GlStateManager.scale(0.9F + (float)(size * 0.009F), 0.9F + (float)(size * 0.009F), 0.9F + (float)(size * 0.009F));
 				GlStateManager.rotate(entityYaw + (float)(size) * 7.2F + partialTicks, 0, 1, 0);
-			} else {
-				GlStateManager.translate(0F, 0.2F, 0F);
-				GlStateManager.scale(0.9F, 0.9F, 0.9F);	
-				}
+		//	} else {
+			//	GlStateManager.translate(0F, 0.2F, 0F);
+			//	GlStateManager.scale(0.9F, 0.9F, 0.9F);	
+			//	}
 			
 			MODEL.renderSpore(0.0625F);
 			GlStateManager.popMatrix();
@@ -57,6 +57,8 @@ public class RenderSporeMinion extends RenderLiving<EntitySporeMinion> {
 			return TEXTURE_GREEN;
 		case 2:
 			return TEXTURE_BLUE;
+		case 3:
+			return TEXTURE;
 		}
 		return TEXTURE;
 	}

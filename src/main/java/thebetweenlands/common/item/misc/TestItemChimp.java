@@ -215,7 +215,7 @@ public class TestItemChimp extends Item {
 			
 		//	EntitySporeMinion spore = new EntitySporeMinion(worldIn);
 		//	spore.setPosition(pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F);
-		//	spore.setType(2);
+		//	spore.setType(0);
 		//	worldIn.spawnEntity(spore);
 		}
 
