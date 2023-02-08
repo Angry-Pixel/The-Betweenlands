@@ -19,6 +19,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.BlockStatePaletteRegistry;
@@ -29,6 +30,7 @@ import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
@@ -78,12 +80,12 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 	private final Set<BlockPos> growthFrontier = new LinkedHashSet<>();
 
 	private double size = 1.0D;
-	private double growthSpeed = 0.05D;
+	private double growthSpeed = 10.05D;
 
 	// TODO Temp for testing, or needs to be saved
 	private int age = 0;
 	private boolean isGrowing;
-	
+
 	private NoiseGeneratorPerlin noiseGenerator;
 
 	public LocationSporeHive(IWorldStorage worldStorage, StorageID id, LocalRegion region) {
@@ -131,7 +133,7 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 			nbt.setInteger("latestFrontierY", this.latestFrontier.getY());
 			nbt.setInteger("latestFrontierZ", this.latestFrontier.getZ());
 		}
-		
+
 		NBTTagList growthFrontierNbt = new NBTTagList();
 		for(BlockPos pos : this.growthFrontier) {
 			NBTTagCompound posNbt = new NBTTagCompound();
@@ -141,11 +143,11 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 			growthFrontierNbt.appendTag(posNbt);
 		}
 		nbt.setTag("growthFrontier", growthFrontierNbt);
-		
+
 		nbt.setDouble("growthSpeed", this.growthSpeed);
-		
+
 		nbt.setDouble("hiveSize", this.size);
-		
+
 		return nbt;
 	}
 
@@ -171,22 +173,22 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 
 			this.changes.add(changeGroup.toArray(new BlockChange[0]));
 		}
-		
+
 		if(nbt.hasKey("latestFrontierX", Constants.NBT.TAG_INT) && nbt.hasKey("latestFrontierY", Constants.NBT.TAG_INT) && nbt.hasKey("latestFrontierZ", Constants.NBT.TAG_INT)) {
 			this.latestFrontier = new BlockPos(nbt.getInteger("latestFrontierX"), nbt.getInteger("latestFrontierY"), nbt.getInteger("latestFrontierZ"));
 		} else {
 			this.latestFrontier = null;
 		}
-		
+
 		this.growthFrontier.clear();
 		NBTTagList growthFrontierNbt = nbt.getTagList("growthFrontier", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < growthFrontierNbt.tagCount(); ++i) {
 			NBTTagCompound posNbt = growthFrontierNbt.getCompoundTagAt(i);
 			this.growthFrontier.add(new BlockPos(posNbt.getInteger("x"), posNbt.getInteger("y"), posNbt.getInteger("z")));
 		}
-		
+
 		this.growthSpeed = nbt.getDouble("growthSpeed");
-		
+
 		this.size = nbt.getDouble("hiveSize");
 	}
 
@@ -246,18 +248,43 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 	}
 
 	protected boolean canOvergrowBlock(World world, BlockPos pos, IBlockState state) {
+		// Tile entities should never be overgrown
+		// because only block and metadata is saved
 		return world.getTileEntity(pos) == null;
 	}
 
 	protected boolean canOvergrowBlockNaturally(World world, BlockPos pos, IBlockState state, boolean plants) {
+		if(this.isOvergrownBlock(world, pos, state)) {
+			return true;
+		}
+
+		if(!this.canOvergrowBlock(world, pos, state)) {
+			return false;
+		}
+
 		if(plants) {
 			Block plantBlock = state.getBlock();
 			if(plantBlock instanceof IPlantable && this.isOvergrownBlock(world, pos.down(), world.getBlockState(pos.down()))) {
-				for(int i = 0; i < 8; ++i) {
-					pos = pos.up();
-					state = world.getBlockState(pos);
+				MutableBlockPos checkPos = new MutableBlockPos();
 
-					if(state.getBlock() == plantBlock) {
+				// Make sure plant isn't underwater
+				if(state.getMaterial().isLiquid()) {
+					return false;
+				}
+				for(EnumFacing dir : EnumFacing.HORIZONTALS) {
+					checkPos.setPos(pos.getX() + dir.getXOffset(), pos.getY(), pos.getZ() + dir.getZOffset());
+
+					if(!world.isBlockLoaded(checkPos) || world.getBlockState(checkPos).getMaterial().isLiquid()) {
+						return false;
+					}
+				}
+
+				// Only allow overgrowing plants if
+				// they're max. 8 blocks tall
+				for(int i = 0; i < 8; ++i) {
+					checkPos.setPos(pos.getX(), pos.getY() + i + 1, pos.getZ());
+
+					if(world.getBlockState(checkPos).getBlock() == plantBlock) {
 						continue;
 					} else {
 						return true;
@@ -269,19 +296,28 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 
 			return false;
 		} else {
-			return this.isOvergrownBlock(world, pos, state) || (this.canOvergrowBlock(world, pos, state) && SurfaceType.MIXED_GROUND.matches(state));
+			return SurfaceType.MIXED_GROUND.matches(state);
 		}
 	}
 
 	protected boolean isOvergrownBlock(World world, BlockPos pos, IBlockState state) {
-		return state.getBlock() == BlockRegistry.MOULDY_SOIL;
+		return this.isOvergrownBlock(world, pos, state, false) || this.isOvergrownBlock(world, pos, state, true);
 	}
 
-	protected IBlockState getOvergrownBlock(World world, BlockPos pos, IBlockState state, boolean plants) {
-		if(plants || (world.isAirBlock(pos) && world.getBlockState(pos.down()).getBlock() == BlockRegistry.MOULDY_SOIL)) {
-			return BlockRegistry.MOULD_HORN.getDefaultState();
+	protected boolean isOvergrownBlock(World world, BlockPos pos, IBlockState state, boolean plants) {
+		if(plants) {
+			return state.getBlock() == BlockRegistry.MOULD_HORN;
+		} else {
+			return state.getBlock() == BlockRegistry.MOULDY_SOIL;
 		}
-		return BlockRegistry.MOULDY_SOIL.getDefaultState();
+	}
+
+	protected IBlockState getNaturallyOvergrownBlock(World world, BlockPos pos, IBlockState state, boolean plants) {
+		if(plants) {
+			return BlockRegistry.MOULD_HORN.getDefaultState();
+		} else {
+			return BlockRegistry.MOULDY_SOIL.getDefaultState();
+		}
 	}
 
 	@Nullable
@@ -316,17 +352,25 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 
 	protected boolean overgrowBlockNaturally(World world, BlockPos pos, boolean plants) {
 		IBlockState oldState = world.getBlockState(pos);
-		IBlockState newState = this.getOvergrownBlock(world, pos, oldState, plants);
+		IBlockState newState = this.getNaturallyOvergrownBlock(world, pos, oldState, plants);
 
 		List<BlockChange> changes = new ArrayList<>();
 
 		// Try to apply without block updates
 		if(world.setBlockState(pos, newState, 0)) {
+			// Just to be safe, otherwise change list could grow infinitely
+			if(!this.isOvergrownBlock(world, pos, newState = world.getBlockState(pos))) {
+				world.setBlockState(pos, oldState, 0);
+				TheBetweenlands.logger.warn("Tried to overgrow {} at {} with {}, but {} is not a overgrown block. This shouldn't happen!", oldState, pos, newState, newState);
+				return false;
+			}
+
 			changes.add(new BlockChange(pos, oldState, newState));
 
 			if(plants) {
+				// If block is plant, also remove any plants above
+				// (e.g. reeds, tall grass, etc.)
 				Block plantBlock = oldState.getBlock();
-
 				if(plantBlock instanceof IPlantable && this.isOvergrownBlock(world, pos.down(), world.getBlockState(pos.down()))) {
 					for(int i = 0; i < 8; ++i) {
 						BlockPos offsetPos = pos.up(i + 1);
@@ -464,10 +508,14 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 					}
 
 					state = world.getBlockState(pos);
-					isCurrentOvergrown = this.isOvergrownBlock(world, pos, state);
+					isCurrentOvergrown = this.isOvergrownBlock(world, pos, state, false);
 
-					if(isCurrentOvergrown && !blockGrown && ((world.isAirBlock(pos.up()) && MathHelper.getCoordinateRandom(pos.getX(), pos.getY(), pos.getZ()) % 10 == 0) || this.canOvergrowBlockNaturally(world, pos.up(), world.getBlockState(pos.up()), true))) {
-						blockGrown = this.overgrowBlockNaturally(world, pos.up(), true);
+					BlockPos posUp = pos.up();
+					IBlockState stateUp = world.getBlockState(posUp);
+
+					if(isCurrentOvergrown && !blockGrown && !this.isOvergrownBlock(world, posUp, stateUp) &&
+							((world.isAirBlock(posUp) && MathHelper.getCoordinateRandom(pos.getX(), pos.getY(), pos.getZ()) % 10 == 0) || this.canOvergrowBlockNaturally(world, posUp, stateUp, true))) {
+						blockGrown |= this.overgrowBlockNaturally(world, posUp, true);
 					}
 
 					if(blockGrown) {
