@@ -186,6 +186,13 @@ public class BlockMouldHornMushroom extends Block implements ICustomItemBlock, I
 		if (world.isRemote)
 			return;
 		
+		// Don't load chunks
+		for(EnumFacing dir : EnumFacing.HORIZONTALS) {
+			if(!world.isBlockLoaded(pos.offset(dir, 3))) {
+				return;
+			}
+		}
+		
 		LocationSporeHive hive = LocationSporeHive.getAtBlock(world, pos);
 		if(hive != null && !hive.isGrowing()) {
 			// Don't grow if hive stopped growing
