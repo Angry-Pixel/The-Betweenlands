@@ -12,7 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
@@ -24,14 +24,12 @@ import thebetweenlands.common.registries.BlockRegistry;
 public class ParticleMouldThrobbing extends ParticleAnimated implements IParticleSpriteReceiver {
 
 	private static class Wave {
-		private final World world;
 		private final Set<BlockPos> positions = new HashSet<>();
 		private final int range;
 
 		private int remainingReemits;
 
-		public Wave(World world, int range, int reemits) {
-			this.world = world;
+		public Wave(int range, int reemits) {
 			this.range = range;
 			this.remainingReemits = reemits;
 		}
@@ -47,8 +45,6 @@ public class ParticleMouldThrobbing extends ParticleAnimated implements IParticl
 	private BlockPos source;
 
 	private List<EnumFacing> spreadingDirs = new ArrayList<>();
-
-	private long waveAgeOffset;
 
 	protected ParticleMouldThrobbing(World world, BlockPos pos, int maxAge, int remainingRange, Wave wave) { 
 		super(world, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, 0, 0, 0, maxAge, 1.0f, false);
@@ -73,24 +69,26 @@ public class ParticleMouldThrobbing extends ParticleAnimated implements IParticl
 	}
 
 	protected ParticleMouldThrobbing(World world, BlockPos pos, int maxAge, int remainingRange, int remainingReemits) {
-		this(world, pos, maxAge, remainingRange, new Wave(world, remainingRange, remainingReemits));
+		this(world, pos, maxAge, remainingRange, new Wave(remainingRange, remainingReemits));
 	}
 
 	protected ParticleMouldThrobbing(World world, BlockPos pos, ParticleMouldThrobbing source) {
 		this(world, pos, source.particleMaxAge, source.remainingRange - 1, source.wave);
-		this.originStartTime = source.originStartTime;
+		this.originStartTime = source.originStartTime + world.rand.nextInt(4) - 1;
 		this.origin = source.origin;
 		this.source = source.pos;
 	}
 
 	protected ParticleMouldThrobbing(World world, BlockPos pos, ParticleMouldThrobbing source, int remainingRange) {
 		this(world, pos, source.particleMaxAge, remainingRange, source.wave);
+		this.source = source.pos;
 	}
 
 	@Override
-	public int getBrightnessForRender(float partialTick) {
+	public int getBrightnessForRender(float partialTicks) {
 		BlockPos blockpos = this.pos.up();
-		return this.world.isBlockLoaded(blockpos) ? this.world.getCombinedLight(blockpos, 0) : 0;
+		int brightness = 1 + MathHelper.floor(MathHelper.clamp(this.remainingRange / 8.0f, 0, 1) * 3);
+		return this.world.isBlockLoaded(blockpos) ? this.world.getCombinedLight(blockpos, brightness) : 0;
 	}
 
 	@Override
@@ -103,7 +101,6 @@ public class ParticleMouldThrobbing extends ParticleAnimated implements IParticl
 		float maxU = minU + 0.0624375F;
 		float minV = (float)this.particleTextureIndexY / 16.0F;
 		float maxV = minV + 0.0624375F;
-		float scale = 0.5f;
 
 		if (this.particleTexture != null) {
 			minU = this.particleTexture.getMinU();
@@ -119,18 +116,22 @@ public class ParticleMouldThrobbing extends ParticleAnimated implements IParticl
 		int lightmapX = brightness >> 16 & 65535;
 		int lightmapY = brightness & 65535;
 
-		int timeToFullAlpha = this.particleMaxAge / 2;
+		float timeToFullAlpha = this.particleMaxAge * 0.25f;
+		float timeToNoAlpha = this.particleMaxAge * 0.5f;
 		float alpha = this.particleAge + partialTicks;
 		if(alpha < timeToFullAlpha) {
 			alpha = alpha / timeToFullAlpha;
-		} else if(alpha > timeToFullAlpha && alpha < this.particleMaxAge - timeToFullAlpha) {
+		} else if(alpha > timeToFullAlpha && alpha < this.particleMaxAge - timeToNoAlpha) {
 			alpha = 1.0f;
 		} else {
-			alpha = Math.max(0, (this.particleMaxAge - alpha) / timeToFullAlpha);
+			alpha = MathHelper.clamp((this.particleMaxAge - alpha) / timeToNoAlpha, 0, 1);
 		}
-		
-		double yOffset = Math.min(0.1D, Math.sqrt(rpx * rpx + rpz * rpz) * 0.0001D);
-		
+
+		double dst = this.pos.getDistance(this.origin.getX(), this.origin.getY(), this.origin.getZ());
+		alpha *= MathHelper.clamp(1 - dst * 2 / this.wave.range, 0, 1);
+
+		double yOffset = Math.min(0.1D, Math.sqrt(rpx * rpx + rpz * rpz) * 0.0001D) + 0.005D;
+
 		double p1x = 0.5D;
 		double p1z = 0.5D;
 		double p2x = 0.5D;
@@ -139,7 +140,7 @@ public class ParticleMouldThrobbing extends ParticleAnimated implements IParticl
 		double p3z = -0.5D;
 		double p4x = -0.5D;
 		double p4z = 0.5D;
-		
+
 		buff.pos((double)rpx + p1x, (double)rpy + 0.5D + yOffset, (double)rpz + p1z).tex((double)maxU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha * alpha).lightmap(lightmapX, lightmapY).endVertex();
 		buff.pos((double)rpx + p2x, (double)rpy + 0.5D + yOffset, (double)rpz + p2z).tex((double)maxU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha * alpha).lightmap(lightmapX, lightmapY).endVertex();
 		buff.pos((double)rpx + p3x, (double)rpy + 0.5D + yOffset, (double)rpz + p3z).tex((double)minU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha * alpha).lightmap(lightmapX, lightmapY).endVertex();
@@ -159,7 +160,7 @@ public class ParticleMouldThrobbing extends ParticleAnimated implements IParticl
 			this.setExpired();
 		}
 
-		int ticksPerBlock = this.particleMaxAge / 2;
+		float ticksPerBlock = this.particleMaxAge / 4.0f;
 
 		if(this.remainingRange > 0 && this.wave.positions.size() < 128) {
 			Iterator<EnumFacing> dirIT = this.spreadingDirs.iterator();
@@ -211,7 +212,7 @@ public class ParticleMouldThrobbing extends ParticleAnimated implements IParticl
 
 		@Override
 		protected void setBaseArguments(ParticleArgs<?> args) {
-			args.withData(10, 16, 3);
+			args.withData(-1, 16, 3);
 		}
 	}
 

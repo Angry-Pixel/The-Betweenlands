@@ -1,14 +1,18 @@
 package thebetweenlands.common.world.storage.location;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
@@ -20,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.BlockStatePaletteRegistry;
 import net.minecraft.world.chunk.IBlockStatePalette;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
@@ -67,22 +72,19 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 
 	private BlockPos source;
 
-	private final LinkedList<BlockChange> changes = new LinkedList<>();
+	private final LinkedList<BlockChange[]> changes = new LinkedList<>();
 
-	// TODO Save
 	private BlockPos latestFrontier = null;
 	private final Set<BlockPos> growthFrontier = new LinkedHashSet<>();
 
-	private NoiseGeneratorPerlin noiseGenerator;
-
-	private boolean isGrowing;
-
 	private double size = 1.0D;
-
 	private double growthSpeed = 0.05D;
 
 	// TODO Temp for testing, or needs to be saved
 	private int age = 0;
+	private boolean isGrowing;
+	
+	private NoiseGeneratorPerlin noiseGenerator;
 
 	public LocationSporeHive(IWorldStorage worldStorage, StorageID id, LocalRegion region) {
 		super(worldStorage, id, region, "", EnumLocationType.SPORE_HIVE);
@@ -115,11 +117,35 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 		nbt.setInteger("z", this.source.getZ());
 
 		NBTTagList changesNbt = new NBTTagList();
-		for(BlockChange change : this.changes) {
-			changesNbt.appendTag(change.writeToNBT());
+		for(BlockChange[] changeGroup : this.changes) {
+			NBTTagList changesNbt2 = new NBTTagList();
+			for(BlockChange change : changeGroup) {
+				changesNbt2.appendTag(change.writeToNBT());
+			}
+			changesNbt.appendTag(changesNbt2);
 		}
 		nbt.setTag("changes", changesNbt);
 
+		if(this.latestFrontier != null) {
+			nbt.setInteger("latestFrontierX", this.latestFrontier.getX());
+			nbt.setInteger("latestFrontierY", this.latestFrontier.getY());
+			nbt.setInteger("latestFrontierZ", this.latestFrontier.getZ());
+		}
+		
+		NBTTagList growthFrontierNbt = new NBTTagList();
+		for(BlockPos pos : this.growthFrontier) {
+			NBTTagCompound posNbt = new NBTTagCompound();
+			posNbt.setInteger("x", pos.getX());
+			posNbt.setInteger("y", pos.getY());
+			posNbt.setInteger("z", pos.getZ());
+			growthFrontierNbt.appendTag(posNbt);
+		}
+		nbt.setTag("growthFrontier", growthFrontierNbt);
+		
+		nbt.setDouble("growthSpeed", this.growthSpeed);
+		
+		nbt.setDouble("hiveSize", this.size);
+		
 		return nbt;
 	}
 
@@ -132,13 +158,36 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 		this.source = new BlockPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
 
 		this.changes.clear();
-		NBTTagList changesNbt = nbt.getTagList("changes", Constants.NBT.TAG_COMPOUND);
+		NBTTagList changesNbt = nbt.getTagList("changes", Constants.NBT.TAG_LIST);
 		for(int i = 0; i < changesNbt.tagCount(); ++i) {
-			BlockChange change = BlockChange.readFromNBT(changesNbt.getCompoundTagAt(i));
-			if(change != null) {
-				this.changes.add(change);
+			NBTTagList changesNbt2 = (NBTTagList) changesNbt.get(i);
+			List<BlockChange> changeGroup = new ArrayList<>();
+			for(int j = 0; j < changesNbt2.tagCount(); j++) {
+				BlockChange change = BlockChange.readFromNBT(changesNbt2.getCompoundTagAt(j));
+				if(change != null) {
+					changeGroup.add(change);
+				}
 			}
+
+			this.changes.add(changeGroup.toArray(new BlockChange[0]));
 		}
+		
+		if(nbt.hasKey("latestFrontierX", Constants.NBT.TAG_INT) && nbt.hasKey("latestFrontierY", Constants.NBT.TAG_INT) && nbt.hasKey("latestFrontierZ", Constants.NBT.TAG_INT)) {
+			this.latestFrontier = new BlockPos(nbt.getInteger("latestFrontierX"), nbt.getInteger("latestFrontierY"), nbt.getInteger("latestFrontierZ"));
+		} else {
+			this.latestFrontier = null;
+		}
+		
+		this.growthFrontier.clear();
+		NBTTagList growthFrontierNbt = nbt.getTagList("growthFrontier", Constants.NBT.TAG_COMPOUND);
+		for(int i = 0; i < growthFrontierNbt.tagCount(); ++i) {
+			NBTTagCompound posNbt = growthFrontierNbt.getCompoundTagAt(i);
+			this.growthFrontier.add(new BlockPos(posNbt.getInteger("x"), posNbt.getInteger("y"), posNbt.getInteger("z")));
+		}
+		
+		this.growthSpeed = nbt.getDouble("growthSpeed");
+		
+		this.size = nbt.getDouble("hiveSize");
 	}
 
 	@Override
@@ -168,8 +217,9 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 		this.isGrowing = this.isHiveSource(this.source);
 
 		this.age++;
-		if(this.age > 10000) {
-			this.isGrowing = false;
+		if(this.age > 10000000) {
+			//TODO
+			//this.isGrowing = false;
 		}
 
 		if(this.isGrowing) {
@@ -199,16 +249,36 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 		return world.getTileEntity(pos) == null;
 	}
 
-	protected boolean canOvergrowBlockNaturally(World world, BlockPos pos, IBlockState state) {
-		return this.isOvergrownBlock(world, pos, state) || (this.canOvergrowBlock(world, pos, state) && SurfaceType.MIXED_GROUND.matches(state));
+	protected boolean canOvergrowBlockNaturally(World world, BlockPos pos, IBlockState state, boolean plants) {
+		if(plants) {
+			Block plantBlock = state.getBlock();
+			if(plantBlock instanceof IPlantable && this.isOvergrownBlock(world, pos.down(), world.getBlockState(pos.down()))) {
+				for(int i = 0; i < 8; ++i) {
+					pos = pos.up();
+					state = world.getBlockState(pos);
+
+					if(state.getBlock() == plantBlock) {
+						continue;
+					} else {
+						return true;
+					}
+				}
+
+				return false;
+			}
+
+			return false;
+		} else {
+			return this.isOvergrownBlock(world, pos, state) || (this.canOvergrowBlock(world, pos, state) && SurfaceType.MIXED_GROUND.matches(state));
+		}
 	}
 
 	protected boolean isOvergrownBlock(World world, BlockPos pos, IBlockState state) {
 		return state.getBlock() == BlockRegistry.MOULDY_SOIL;
 	}
 
-	protected IBlockState getOvergrownBlock(World world, BlockPos pos, IBlockState state) {
-		if(world.isAirBlock(pos) && world.getBlockState(pos.down()).getBlock() == BlockRegistry.MOULDY_SOIL) {
+	protected IBlockState getOvergrownBlock(World world, BlockPos pos, IBlockState state, boolean plants) {
+		if(plants || (world.isAirBlock(pos) && world.getBlockState(pos.down()).getBlock() == BlockRegistry.MOULDY_SOIL)) {
 			return BlockRegistry.MOULD_HORN.getDefaultState();
 		}
 		return BlockRegistry.MOULDY_SOIL.getDefaultState();
@@ -233,189 +303,231 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 
 	public boolean overgrowBlock(BlockPos pos, IBlockState newState, int flags) {
 		World world = this.getWorldStorage().getWorld();
-		IBlockState state = world.getBlockState(pos);
-
-		if((world.isAirBlock(pos) || this.canOvergrowBlock(world, pos, state)) && world.setBlockState(pos, newState, flags)) {
-			this.changes.add(new BlockChange(pos, state, newState));
-			return true;
-		}
-
-		return false;
-	}
-
-	protected boolean overgrowBlock(World world, BlockPos pos) {
 		IBlockState oldState = world.getBlockState(pos);
-		IBlockState newState = this.getOvergrownBlock(world, pos, oldState);
 
-		if(world.setBlockState(pos, newState)) {
-			this.changes.add(new BlockChange(pos, oldState, newState));
+		if((world.isAirBlock(pos) || this.canOvergrowBlock(world, pos, oldState)) && world.setBlockState(pos, newState, flags)) {
+			this.changes.add(new BlockChange[] { new BlockChange(pos, oldState, newState) });
+			this.markDirty();
 			return true;
 		}
 
 		return false;
 	}
 
-	protected void grow(World world) {
-			BlockPos pos = this.source.down();
-			IBlockState state = world.getBlockState(pos);
+	protected boolean overgrowBlockNaturally(World world, BlockPos pos, boolean plants) {
+		IBlockState oldState = world.getBlockState(pos);
+		IBlockState newState = this.getOvergrownBlock(world, pos, oldState, plants);
 
-			if(!this.isOvergrownBlock(world, pos, state)) {
-				if(this.canOvergrowBlockNaturally(world, pos, state)) {
-					this.overgrowBlock(world, pos);
-				}
-			} else {
-				BlockPos frontier = null;
+		List<BlockChange> changes = new ArrayList<>();
 
-				this.growthFrontier.add(pos);
+		// Try to apply without block updates
+		if(world.setBlockState(pos, newState, 0)) {
+			changes.add(new BlockChange(pos, oldState, newState));
 
-				if(world.rand.nextInt(this.latestFrontier == null ? 4 : 16) == 0) {
-					for(int i = 0; i < this.growthFrontier.size(); ++i) {
-						frontier = this.growthFrontier.stream().findFirst().get();
+			if(plants) {
+				Block plantBlock = oldState.getBlock();
 
-						if(this.isOvergrownBlock(world, frontier, world.getBlockState(frontier))) {
-							pos = frontier;
-							break;
+				if(plantBlock instanceof IPlantable && this.isOvergrownBlock(world, pos.down(), world.getBlockState(pos.down()))) {
+					for(int i = 0; i < 8; ++i) {
+						BlockPos offsetPos = pos.up(i + 1);
+						IBlockState offsetState = world.getBlockState(offsetPos);
+
+						if(offsetState.getBlock() == plantBlock) {
+							if(world.setBlockState(offsetPos, Blocks.AIR.getDefaultState(), 2)) {
+								changes.add(new BlockChange(offsetPos, offsetState, Blocks.AIR.getDefaultState()));
+							}
 						} else {
-							frontier = null;
-
-							this.growthFrontier.remove(frontier);
-						}
-					}
-				} else if(this.latestFrontier != null) {
-					pos = frontier = this.latestFrontier;
-				}
-
-				BlockPos prevPos = pos;
-
-				int s = world.rand.nextInt(4);
-
-				boolean blockGrown = false;
-
-				for(int i = 0; i < 64; ++i) {
-					if(i < 4) {
-						pos = prevPos;
-					}
-
-					prevPos = pos;
-					pos = pos.offset(EnumFacing.HORIZONTALS[i < 4 ? ((i + s) % 4) : world.rand.nextInt(4)]);
-
-					if(!world.isBlockLoaded(pos) || !this.isInside(pos)) {
-						pos = prevPos;
-					} else {
-						state = world.getBlockState(pos);
-
-						Predicate<BlockPos> canOvergrowAtPos = checkPos -> {
-							AxisAlignedBB aabb = this.getBoundingBox();
-
-							double sx = aabb.maxX - aabb.minX;
-							double sz = aabb.maxZ - aabb.minZ;
-
-							double scale = (sx + sz) * 4.5D;
-
-							double dx = (checkPos.getX() - this.source.getX()) / sx * 2.0D;
-							double dz = (checkPos.getZ() - this.source.getZ()) / sz * 2.0D;
-
-							double size = MathHelper.clamp(this.size, 0, 1);
-
-							double value = Math.max(-30, this.noiseGenerator.getValue(dx / sx * scale, dz / sz * scale) * 8.0D) * Math.sqrt(size);
-							value -= (dx * dx + dz * dz - 0.5D + (1.0D - size * size) * 0.65D) * 200.0D; 
-							value += (1.0D - (dx * dx + dz * dz)) * (0.5D + (1.0D - size) * 8.5D);
-							value += (1.0D - ((dx * dx + dz * dz) - (0.5D + 0.5D * size))) * 16.5D;
-
-							if(value > 0) {
-								IBlockState checkState = world.getBlockState(checkPos);
-								return this.canOvergrowBlockNaturally(world, checkPos, checkState)
-										&& (this.isOvergrownBlock(world, checkPos.down(), world.getBlockState(checkPos.down())) || this.canOvergrowBlockNaturally(world, checkPos.down(), world.getBlockState(checkPos.down())))
-										&& (world.isAirBlock(checkPos.up()) || !world.isBlockNormalCube(checkPos.up(), false));
-							}
-
-							return false;
-						};
-
-						boolean isCurrentOvergrown = this.isOvergrownBlock(world, pos, state);
-
-						if(!isCurrentOvergrown && canOvergrowAtPos.test(pos)) {
-							blockGrown = !this.isOvergrownBlock(world, pos, state) && this.overgrowBlock(world, pos);
-						} else if(canOvergrowAtPos.test(pos.up())) {
-							if(this.canOvergrowBlockNaturally(world, pos, state)) {
-								blockGrown |= !this.isOvergrownBlock(world, pos, state) && this.overgrowBlock(world, pos);
-								pos = pos.up();
-							} else if(this.canOvergrowBlockNaturally(world, prevPos.up(), world.getBlockState(prevPos.up()))) {
-								blockGrown |= !this.isOvergrownBlock(world, prevPos.up(), world.getBlockState(prevPos.up())) && this.overgrowBlock(world, prevPos.up());
-								pos = pos.up();
-							}
-
-							if(blockGrown) {
-								this.overgrowBlock(world, pos);
-							}
-
-						} else if(!isCurrentOvergrown && canOvergrowAtPos.test(pos.down())) {
-							if(this.canOvergrowBlockNaturally(world, prevPos.down(), world.getBlockState(prevPos.down()))) {
-								blockGrown |= !this.isOvergrownBlock(world, prevPos.down(), world.getBlockState(prevPos.down())) && this.overgrowBlock(world, prevPos.down());
-								pos = pos.down();
-							} else if(this.canOvergrowBlockNaturally(world, pos, state)) {
-								blockGrown |= !this.isOvergrownBlock(world, pos, state) && this.overgrowBlock(world, pos);
-								pos = pos.down();
-							}
-
-							if(blockGrown) {
-								this.overgrowBlock(world, pos);
-							}
-						}
-
-						state = world.getBlockState(pos);
-						isCurrentOvergrown = this.isOvergrownBlock(world, pos, state);
-
-						if(isCurrentOvergrown && !blockGrown && MathHelper.getCoordinateRandom(pos.getX(), pos.getY(), pos.getZ()) % 5 == 0 && world.isAirBlock(pos.up())) {
-							blockGrown = this.overgrowBlock(world, pos.up());
-						}
-
-						if(blockGrown) {
-							if(this.growthFrontier.size() < 128) {
-								this.growthFrontier.add(pos);
-								this.latestFrontier = frontier;
-							}
-
-							boolean remove = true;
-
-							for(EnumFacing offset : EnumFacing.HORIZONTALS) {
-								if(!this.isOvergrownBlock(world, prevPos.offset(offset), world.getBlockState(prevPos.offset(offset)))) {
-									remove = false;
-									break;
-								}
-							}
-
-							if(remove) {
-								this.growthFrontier.remove(prevPos);
-							}
-
 							break;
-						} else if(!isCurrentOvergrown) {
-							pos = prevPos;
-						} else if(this.growthFrontier.size() < 32 && world.rand.nextInt(16) == 0) {
-							this.growthFrontier.add(pos);
-							this.growthFrontier.add(prevPos);
-						}
-					}
-
-					if(frontier != null) {
-						if(!blockGrown) {
-							this.growthFrontier.remove(frontier);
 						}
 					}
 				}
 			}
+		}
 
-			this.markDirty();
+		// Apply block updates
+		for(BlockChange change : changes) {
+			world.notifyBlockUpdate(change.pos, change.oldState, change.newState, 3);
+		}
+
+		this.changes.add(changes.toArray(new BlockChange[0]));
+		this.markDirty();
+
+		return !changes.isEmpty();
+	}
+
+	protected void grow(World world) {
+		BlockPos pos = this.source.down();
+		IBlockState state = world.getBlockState(pos);
+
+		if(!this.isOvergrownBlock(world, pos, state)) {
+			if(this.canOvergrowBlockNaturally(world, pos, state, false)) {
+				this.overgrowBlockNaturally(world, pos, false);
+			}
+		} else {
+			BlockPos frontier = null;
+
+			this.growthFrontier.add(pos);
+
+			if(world.rand.nextInt(this.latestFrontier == null ? 4 : 16) == 0) {
+				for(int i = 0; i < this.growthFrontier.size(); ++i) {
+					frontier = this.growthFrontier.stream().findFirst().get();
+
+					if(this.isOvergrownBlock(world, frontier, world.getBlockState(frontier))) {
+						pos = frontier;
+						break;
+					} else {
+						frontier = null;
+
+						this.growthFrontier.remove(frontier);
+					}
+				}
+			} else if(this.latestFrontier != null) {
+				pos = frontier = this.latestFrontier;
+			}
+
+			BlockPos prevPos = pos;
+
+			int s = world.rand.nextInt(4);
+
+			boolean blockGrown = false;
+
+			for(int i = 0; i < 64; ++i) {
+				if(i < 4) {
+					pos = prevPos;
+				}
+
+				prevPos = pos;
+				pos = pos.offset(EnumFacing.HORIZONTALS[i < 4 ? ((i + s) % 4) : world.rand.nextInt(4)]);
+
+				if(!world.isBlockLoaded(pos) || !this.isInside(pos)) {
+					pos = prevPos;
+				} else {
+					state = world.getBlockState(pos);
+
+					Predicate<BlockPos> canOvergrowAtPos = checkPos -> {
+						AxisAlignedBB aabb = this.getBoundingBox();
+
+						double sx = aabb.maxX - aabb.minX;
+						double sz = aabb.maxZ - aabb.minZ;
+
+						double scale = (sx + sz) * 4.5D;
+
+						double dx = (checkPos.getX() - this.source.getX()) / sx * 2.0D;
+						double dz = (checkPos.getZ() - this.source.getZ()) / sz * 2.0D;
+
+						double size = MathHelper.clamp(this.size, 0, 1);
+
+						double value = Math.max(-30, this.noiseGenerator.getValue(dx / sx * scale, dz / sz * scale) * 8.0D) * Math.sqrt(size);
+						value -= (dx * dx + dz * dz - 0.5D + (1.0D - size * size) * 0.65D) * 200.0D; 
+						value += (1.0D - (dx * dx + dz * dz)) * (0.5D + (1.0D - size) * 8.5D);
+						value += (1.0D - ((dx * dx + dz * dz) - (0.5D + 0.5D * size))) * 16.5D;
+
+						if(value > 0) {
+							IBlockState checkState = world.getBlockState(checkPos);
+							return this.canOvergrowBlockNaturally(world, checkPos, checkState, false)
+									&& (this.isOvergrownBlock(world, checkPos.down(), world.getBlockState(checkPos.down())) || this.canOvergrowBlockNaturally(world, checkPos.down(), world.getBlockState(checkPos.down()), false))
+									&& (world.isAirBlock(checkPos.up()) || !world.isBlockNormalCube(checkPos.up(), false));
+						}
+
+						return false;
+					};
+
+					boolean isCurrentOvergrown = this.isOvergrownBlock(world, pos, state);
+
+					if(!isCurrentOvergrown && canOvergrowAtPos.test(pos)) {
+						blockGrown = !this.isOvergrownBlock(world, pos, state) && this.overgrowBlockNaturally(world, pos, false);
+					} else if(canOvergrowAtPos.test(pos.up())) {
+						if(this.canOvergrowBlockNaturally(world, pos, state, false)) {
+							blockGrown |= !this.isOvergrownBlock(world, pos, state) && this.overgrowBlockNaturally(world, pos, false);
+							pos = pos.up();
+						} else if(this.canOvergrowBlockNaturally(world, prevPos.up(), world.getBlockState(prevPos.up()), false)) {
+							blockGrown |= !this.isOvergrownBlock(world, prevPos.up(), world.getBlockState(prevPos.up())) && this.overgrowBlockNaturally(world, prevPos.up(), false);
+							pos = pos.up();
+						}
+
+						if(blockGrown) {
+							this.overgrowBlockNaturally(world, pos, false);
+						}
+
+					} else if(!isCurrentOvergrown && canOvergrowAtPos.test(pos.down())) {
+						if(this.canOvergrowBlockNaturally(world, prevPos.down(), world.getBlockState(prevPos.down()), false)) {
+							blockGrown |= !this.isOvergrownBlock(world, prevPos.down(), world.getBlockState(prevPos.down())) && this.overgrowBlockNaturally(world, prevPos.down(), false);
+							pos = pos.down();
+						} else if(this.canOvergrowBlockNaturally(world, pos, state, false)) {
+							blockGrown |= !this.isOvergrownBlock(world, pos, state) && this.overgrowBlockNaturally(world, pos, false);
+							pos = pos.down();
+						}
+
+						if(blockGrown) {
+							this.overgrowBlockNaturally(world, pos, false);
+						}
+					}
+
+					state = world.getBlockState(pos);
+					isCurrentOvergrown = this.isOvergrownBlock(world, pos, state);
+
+					if(isCurrentOvergrown && !blockGrown && ((world.isAirBlock(pos.up()) && MathHelper.getCoordinateRandom(pos.getX(), pos.getY(), pos.getZ()) % 10 == 0) || this.canOvergrowBlockNaturally(world, pos.up(), world.getBlockState(pos.up()), true))) {
+						blockGrown = this.overgrowBlockNaturally(world, pos.up(), true);
+					}
+
+					if(blockGrown) {
+						if(this.growthFrontier.size() < 128) {
+							this.growthFrontier.add(pos);
+							this.latestFrontier = frontier;
+						}
+
+						boolean remove = true;
+
+						for(EnumFacing offset : EnumFacing.HORIZONTALS) {
+							if(!this.isOvergrownBlock(world, prevPos.offset(offset), world.getBlockState(prevPos.offset(offset)))) {
+								remove = false;
+								break;
+							}
+						}
+
+						if(remove) {
+							this.growthFrontier.remove(prevPos);
+						}
+
+						break;
+					} else if(!isCurrentOvergrown) {
+						pos = prevPos;
+					} else if(this.growthFrontier.size() < 32 && world.rand.nextInt(16) == 0) {
+						this.growthFrontier.add(pos);
+						this.growthFrontier.add(prevPos);
+					}
+				}
+
+				if(frontier != null) {
+					if(!blockGrown) {
+						this.growthFrontier.remove(frontier);
+					}
+				}
+			}
+		}
+
+		this.markDirty();
 	}
 
 	protected void ungrow(World world) {
 		if(!this.changes.isEmpty()) {
 			if(this.age % 1 == 0) {
-				BlockChange change = this.changes.removeLast();
+				BlockChange[] changeGroup = this.changes.removeLast();
 
-				if(world.getBlockState(change.pos).equals(change.newState)) {
-					world.setBlockState(change.pos, change.oldState);
+				List<BlockChange> appliedChanges = new ArrayList<>();
+
+				// Apply without block updates
+				for(int i = changeGroup.length - 1; i >= 0; --i) {
+					BlockChange change = changeGroup[i];
+					if(world.getBlockState(change.pos).equals(change.newState)) {
+						world.setBlockState(change.pos, change.oldState, 0);
+						appliedChanges.add(change);
+					}
+				}
+
+				// Apply block updates
+				for(BlockChange change : appliedChanges) {
+					world.notifyBlockUpdate(change.pos, change.newState, change.oldState, 3);
 				}
 
 				this.markDirty();
