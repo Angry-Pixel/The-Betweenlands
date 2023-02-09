@@ -2,6 +2,7 @@ package thebetweenlands.client.render.particle.entity;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.handler.TextureStitchHandler.Frame;
 import thebetweenlands.client.render.particle.ParticleFactory;
@@ -12,11 +13,21 @@ import thebetweenlands.client.render.sprite.TextureAnimation;
 public class ParticleAnimated extends Particle implements IParticleSpriteReceiver {
 	protected TextureAnimation animation;
 
+	protected final int lightLevel;
+	
 	public ParticleAnimated(World world, double x, double y, double z, double mx, double my, double mz, int maxAge, float scale) {
-		this(world, x, y, z, mx, my, mz, maxAge, scale, true);
+		this(world, x, y, z, mx, my, mz, maxAge, scale, true, 0);
 	}
 
 	public ParticleAnimated(World world, double x, double y, double z, double mx, double my, double mz, int maxAge, float scale, boolean randomStart) {
+		this(world, x, y, z, mx, my, mz, maxAge, scale, randomStart, 0);
+	}
+	
+	public ParticleAnimated(World world, double x, double y, double z, double mx, double my, double mz, int maxAge, float scale, int lightLevel) {
+		this(world, x, y, z, mx, my, mz, maxAge, scale, true, lightLevel);
+	}
+
+	public ParticleAnimated(World world, double x, double y, double z, double mx, double my, double mz, int maxAge, float scale, boolean randomStart, int lightLevel) {
 		super(world, x, y, z);
 		this.posX = this.prevPosX = x;
 		this.posY = this.prevPosY = y;
@@ -30,6 +41,7 @@ public class ParticleAnimated extends Particle implements IParticleSpriteReceive
 			this.animation.setRandomStart(this.rand);
 		}
 		this.particleMaxAge = maxAge;
+		this.lightLevel = lightLevel;
 	}
 
 	@Override
@@ -49,6 +61,12 @@ public class ParticleAnimated extends Particle implements IParticleSpriteReceive
 			}
 		}
 	}
+	
+	@Override
+	public int getBrightnessForRender(float partialTick) {
+		BlockPos blockpos = new BlockPos(this.posX, this.posY, this.posZ);
+        return this.world.isBlockLoaded(blockpos) ? this.world.getCombinedLight(blockpos, this.lightLevel) : 0;
+	}
 
 	@Override
 	public void onUpdate() {
@@ -65,12 +83,12 @@ public class ParticleAnimated extends Particle implements IParticleSpriteReceive
 
 		@Override
 		public ParticleAnimated createParticle(ImmutableParticleArgs args) {
-			return new ParticleAnimated(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.scale, args.data.getBool(1));
+			return new ParticleAnimated(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.scale, args.data.getBool(1), args.data.getInt(2));
 		}
 
 		@Override
 		protected void setBaseArguments(ParticleArgs<?> args) {
-			args.withData(40, false);
+			args.withData(-1, false, 0);
 		}
 	}
 
@@ -81,7 +99,7 @@ public class ParticleAnimated extends Particle implements IParticleSpriteReceive
 
 		@Override
 		public ParticleAnimated createParticle(ImmutableParticleArgs args) {
-			return new ParticleAnimated(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.scale);
+			return new ParticleAnimated(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.scale, 0);
 		}
 
 		@Override

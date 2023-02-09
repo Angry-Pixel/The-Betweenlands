@@ -12,9 +12,13 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -27,15 +31,21 @@ import net.minecraft.world.chunk.IBlockStatePalette;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.network.IGenericDataManagerAccess.IDataManagedObject;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
-public class LocationSporeHive extends LocationStorage implements ITickable {
+public class LocationSporeHive extends LocationStorage implements ITickable, IDataManagedObject {
 
 	private static class BlockChange {
 		private static final IBlockStatePalette REGISTRY_BASED_PALETTE = new BlockStatePaletteRegistry();
@@ -72,6 +82,9 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 		}
 	}
 
+
+	protected static final DataParameter<Integer> GROWTH_AREA_SEED = GenericDataManager.createKey(LocationSporeHive.class, DataSerializers.VARINT);
+
 	private BlockPos source;
 
 	private final LinkedList<BlockChange[]> changes = new LinkedList<>();
@@ -89,24 +102,43 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 	private NoiseGeneratorPerlin noiseGenerator;
 
 	public LocationSporeHive(IWorldStorage worldStorage, StorageID id, LocalRegion region) {
-		super(worldStorage, id, region, "", EnumLocationType.SPORE_HIVE);
-		this.createNoiseGenerator();
+		this(worldStorage, id, region, null);
 	}
 
 	public LocationSporeHive(IWorldStorage worldStorage, StorageID id, LocalRegion region, BlockPos source) {
 		super(worldStorage, id, region, "", EnumLocationType.SPORE_HIVE);
 		this.source = source;
-		this.createNoiseGenerator();
+
+		this.dataManager.register(GROWTH_AREA_SEED, 0);
+		this.createNoiseGenerator(0);
 	}
 
-	private void createNoiseGenerator() {
-		this.noiseGenerator = new NoiseGeneratorPerlin(new Random(this.getSeed()), 4);
+	private void createNoiseGenerator(int seed) {
+		this.noiseGenerator = new NoiseGeneratorPerlin(new Random(seed), 4);
+	}
+
+	@Override
+	public boolean onParameterChange(DataParameter<?> key, Object value, boolean fromPacket) {
+		if(key == GROWTH_AREA_SEED && value instanceof Integer) {
+			this.createNoiseGenerator((int)value);
+		}
+		return false;
 	}
 
 	@Override
 	public LocationStorage setSeed(long seed) {
 		super.setSeed(seed);
-		this.createNoiseGenerator();
+
+		if(!this.getWorldStorage().getWorld().isRemote) {
+			Random rand = new Random(this.getSeed());
+
+			int noiseSeed = rand.nextInt();
+
+			this.dataManager.set(GROWTH_AREA_SEED, noiseSeed);
+
+			this.createNoiseGenerator(noiseSeed);
+		}
+
 		return this;
 	}
 
@@ -155,7 +187,8 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 
-		this.createNoiseGenerator();
+		// Recreate noise generator
+		this.setSeed(this.getSeed());
 
 		this.source = new BlockPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
 
@@ -203,6 +236,8 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 			} else {
 				this.updateGrowth(world);
 			}
+		} else {
+			this.updateParticles(world);
 		}
 	}
 
@@ -399,6 +434,35 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 		return !changes.isEmpty();
 	}
 
+	protected double getGrowthAreaNoiseAt(BlockPos pos, double _default) {
+		AxisAlignedBB aabb = this.getBoundingBox();
+
+		if(aabb == null) {
+			return _default;
+		}
+
+		double sx = aabb.maxX - aabb.minX;
+		double sz = aabb.maxZ - aabb.minZ;
+
+		double scale = (sx + sz) * 4.5D;
+
+		double dx = (pos.getX() + 0.5D - (aabb.minX + sx * 0.5D)) / sx * 2.0D;
+		double dz = (pos.getZ() + 0.5D - (aabb.minZ + sz * 0.5D)) / sz * 2.0D;
+
+		double size = MathHelper.clamp(this.size, 0, 1);
+
+		double value = Math.max(-30, this.noiseGenerator.getValue(dx / sx * scale, dz / sz * scale) * 8.0D) * Math.sqrt(size);
+		value -= (dx * dx + dz * dz - 0.5D + (1.0D - size * size) * 0.65D) * 200.0D; 
+		value += (1.0D - (dx * dx + dz * dz)) * (0.5D + (1.0D - size) * 8.5D);
+		value += (1.0D - ((dx * dx + dz * dz) - (0.5D + 0.5D * size))) * 16.5D;
+
+		return value;
+	}
+
+	protected boolean isInGrowthArea(BlockPos pos) {
+		return this.getGrowthAreaNoiseAt(pos, -1) > 0;
+	}
+
 	protected void grow(World world) {
 		BlockPos pos = this.source.down();
 		IBlockState state = world.getBlockState(pos);
@@ -449,30 +513,12 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 					state = world.getBlockState(pos);
 
 					Predicate<BlockPos> canOvergrowAtPos = checkPos -> {
-						AxisAlignedBB aabb = this.getBoundingBox();
-
-						double sx = aabb.maxX - aabb.minX;
-						double sz = aabb.maxZ - aabb.minZ;
-
-						double scale = (sx + sz) * 4.5D;
-
-						double dx = (checkPos.getX() - this.source.getX()) / sx * 2.0D;
-						double dz = (checkPos.getZ() - this.source.getZ()) / sz * 2.0D;
-
-						double size = MathHelper.clamp(this.size, 0, 1);
-
-						double value = Math.max(-30, this.noiseGenerator.getValue(dx / sx * scale, dz / sz * scale) * 8.0D) * Math.sqrt(size);
-						value -= (dx * dx + dz * dz - 0.5D + (1.0D - size * size) * 0.65D) * 200.0D; 
-						value += (1.0D - (dx * dx + dz * dz)) * (0.5D + (1.0D - size) * 8.5D);
-						value += (1.0D - ((dx * dx + dz * dz) - (0.5D + 0.5D * size))) * 16.5D;
-
-						if(value > 0) {
+						if(this.isInGrowthArea(checkPos)) {
 							IBlockState checkState = world.getBlockState(checkPos);
 							return this.canOvergrowBlockNaturally(world, checkPos, checkState, false)
 									&& (this.isOvergrownBlock(world, checkPos.down(), world.getBlockState(checkPos.down())) || this.canOvergrowBlockNaturally(world, checkPos.down(), world.getBlockState(checkPos.down()), false))
 									&& (world.isAirBlock(checkPos.up()) || !world.isBlockNormalCube(checkPos.up(), false));
 						}
-
 						return false;
 					};
 
@@ -583,6 +629,61 @@ public class LocationSporeHive extends LocationStorage implements ITickable {
 		} else {
 			// TODO Become inactive
 			this.getWorldStorage().getLocalStorageHandler().removeLocalStorage(this);
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	protected void updateParticles(World world) {
+		Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
+		AxisAlignedBB aabb = this.getBoundingBox();
+
+		if(renderView != null && aabb != null) {
+			for(int i = 0; i < 8 + 64 * MathHelper.clamp(this.size, 0, 1); ++i) {
+				double px = aabb.minX + world.rand.nextFloat() * (aabb.maxX - aabb.minX);
+				double py = aabb.minY + world.rand.nextFloat() * (aabb.maxY - aabb.minY);
+				double pz = aabb.minZ + world.rand.nextFloat() * (aabb.maxZ - aabb.minZ);
+
+				BlockPos pos = new BlockPos(px, py, pz);
+
+				if(world.isAirBlock(pos) && renderView.getDistanceSqToCenter(pos) < 64) {
+					BlockPos ground = world.getPrecipitationHeight(pos).down();
+
+					IBlockState state = world.getBlockState(ground);
+
+					boolean spawn = false;
+					if(pos.getY() - ground.getY() - 1 < (state.getBlock() == BlockRegistry.MOULDY_SOIL ? 4 : 1) && this.isOvergrownBlock(world, ground, state)) {
+						spawn = true;
+					} else {
+						for(EnumFacing dir : EnumFacing.HORIZONTALS) {
+							BlockPos offsetPos = pos.offset(dir);
+							if(this.isOvergrownBlock(world, offsetPos, world.getBlockState(offsetPos))) {
+								spawn = true;
+								break;
+							}
+						}
+					}
+
+					if(spawn && this.isInGrowthArea(pos)) {
+						BLParticles particle;
+						switch(world.rand.nextInt(4)) {
+						default:
+						case 0:
+							particle = BLParticles.MOULD_HORN_1;
+							break;
+						case 1:
+							particle = BLParticles.MOULD_HORN_2;
+							break;
+						case 2:
+							particle = BLParticles.MOULD_HORN_3;
+							break;
+						case 3:
+							particle = BLParticles.MOULD_HORN_4;
+							break;
+						}
+						particle.spawn(world, px, py, pz, ParticleArgs.get().withMotion(0, Math.pow(Math.abs(world.rand.nextGaussian()), 2) * 0.003f, 0).withData(-1, false, 5));
+					}
+				}
+			}
 		}
 	}
 
