@@ -1,12 +1,12 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "thebetweenlands:mouldy_soil"
+    "model": "thebetweenlands:mouldy_soil_layer"
   },
   "variants": {
     "north": {
       "true": {
-        "submodel": "thebetweenlands:mouldy_soil_north"
+        "submodel": "thebetweenlands:mouldy_soil_layer_north"
       },
       "false": {
       
@@ -14,7 +14,7 @@
     },
     "east": {
       "true": {
-        "submodel": "thebetweenlands:mouldy_soil_east"
+        "submodel": "thebetweenlands:mouldy_soil_layer_east"
       },
       "false": {
       
@@ -22,7 +22,7 @@
     },
     "south": {
       "true": {
-        "submodel": "thebetweenlands:mouldy_soil_south"
+        "submodel": "thebetweenlands:mouldy_soil_layer_south"
       },
       "false": {
       
@@ -30,7 +30,7 @@
     },
     "west": {
       "true": {
-        "submodel": "thebetweenlands:mouldy_soil_west"
+        "submodel": "thebetweenlands:mouldy_soil_layer_west"
       },
       "false": {
       

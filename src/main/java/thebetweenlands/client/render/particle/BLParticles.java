@@ -132,7 +132,11 @@ public enum BLParticles {
 	SHADOW_GHOSTS(new ParticleAnimated.ShadowGhostFactory()),
 	MOULD_THROBBING(new ParticleMouldThrobbing.Factory()),
 	MOULD_THROBBING_SPREAD(new ParticleMouldThrobbing.SpreadingFactory()),
-	MOULD_THROBBING_REEMIT(new ParticleMouldThrobbing.ReemitFactory());
+	MOULD_THROBBING_REEMIT(new ParticleMouldThrobbing.ReemitFactory()),
+	MOULD_HORN_1(new ParticleAnimated.GenericFactory(new ResourceLocation("thebetweenlands:particle/mould_horn_1"))),
+	MOULD_HORN_2(new ParticleAnimated.GenericFactory(new ResourceLocation("thebetweenlands:particle/mould_horn_2"))),
+	MOULD_HORN_3(new ParticleAnimated.GenericFactory(new ResourceLocation("thebetweenlands:particle/mould_horn_3"))),
+	MOULD_HORN_4(new ParticleAnimated.GenericFactory(new ResourceLocation("thebetweenlands:particle/mould_horn_4")));
 	
 	private ParticleFactory<?, ?> factory;
 

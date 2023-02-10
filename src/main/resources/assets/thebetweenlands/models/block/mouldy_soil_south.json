@@ -1,0 +1,29 @@
+{
+  "parent": "block/thin_block",
+  "textures": {
+    "particle": "thebetweenlands:blocks/mouldy_soil_layer",
+    "soil": "thebetweenlands:blocks/mouldy_soil_layer",
+    "soil_edge": "thebetweenlands:blocks/mouldy_soil_layer_horizontal"
+  },
+  "elements": [
+    {
+      "from": [ 0, 16.3, 16 ],
+      "to": [ 16, 16.3, 19 ],
+      "faces": {
+        "up":    { "uv": [ 0,  0, 16, 3 ], "texture": "#soil_edge", "tintindex": 0 }
+      }
+    },
+    {
+      "from": [ 0, 16.3, 15 ],
+      "to": [ 16, 16.3, 16 ],
+      "rotation": {
+        "origin": [ 0, 16.3, 16 ],
+        "axis": "x",
+        "angle": -22.5
+      },
+      "faces": {
+        "up":    { "uv": [ 0, 15, 16, 16 ], "texture": "#soil", "tintindex": 0 }
+      }
+    }
+  ]
+}

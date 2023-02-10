@@ -150,6 +150,7 @@ public class BlockSmokingRack extends BlockContainer implements IStateMappedBloc
 		super.breakBlock(world, pos, state);
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
 		if (!state.getValue(INVISIBLE)) {

@@ -1,0 +1,16 @@
+{
+  "parent": "block/thin_block",
+  "textures": {
+    "particle": "thebetweenlands:blocks/mouldy_soil_layer",
+    "soil": "thebetweenlands:blocks/mouldy_soil_layer_horizontal"
+  },
+  "elements": [
+    {
+      "from": [ 0, 0.3, 16 ],
+      "to": [ 16, 0.3, 19 ],
+      "faces": {
+        "up":    { "uv": [ 0,  0, 16, 3 ], "texture": "#soil", "tintindex": 0 }
+      }
+    }
+  ]
+}
