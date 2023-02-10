@@ -11,6 +11,7 @@ import java.util.function.Predicate;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -38,6 +39,8 @@ import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
@@ -85,15 +88,17 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 
 	protected static final DataParameter<Integer> GROWTH_AREA_SEED = GenericDataManager.createKey(LocationSporeHive.class, DataSerializers.VARINT);
 
-	private BlockPos source;
+	protected BlockPos source;
 
 	private final LinkedList<BlockChange[]> changes = new LinkedList<>();
 
 	private BlockPos latestFrontier = null;
 	private final Set<BlockPos> growthFrontier = new LinkedHashSet<>();
 
-	private double size = 1.0D;
-	private double growthSpeed = 10.05D;
+	protected double size = 1.0D;
+	protected double growthSpeed = 10.05D;
+
+	protected int maxChanges = 4096;
 
 	// TODO Temp for testing, or needs to be saved
 	private int age = 0;
@@ -150,6 +155,8 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 		nbt.setInteger("y", this.source.getY());
 		nbt.setInteger("z", this.source.getZ());
 
+		nbt.setInteger("maxChanges", this.maxChanges);
+
 		NBTTagList changesNbt = new NBTTagList();
 		for(BlockChange[] changeGroup : this.changes) {
 			NBTTagList changesNbt2 = new NBTTagList();
@@ -191,6 +198,8 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 		this.setSeed(this.getSeed());
 
 		this.source = new BlockPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
+
+		this.maxChanges = nbt.getInteger("maxChanges");
 
 		this.changes.clear();
 		NBTTagList changesNbt = nbt.getTagList("changes", Constants.NBT.TAG_LIST);
@@ -252,7 +261,7 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 
 	protected void updateGrowth(World world) {
 		this.isGrowing = this.isHiveSource(this.source);
-
+		
 		this.age++;
 		if(this.age > 10000000) {
 			//TODO
@@ -260,14 +269,16 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 		}
 
 		if(this.isGrowing) {
-			int steps = MathHelper.floor(this.growthSpeed);
+			if(this.changes.size() <= this.maxChanges) {
+				int steps = MathHelper.floor(this.growthSpeed);
 
-			for(int i = 0; i < Math.min(steps, 10); ++i) {
-				this.grow(world);
-			}
+				for(int i = 0; i < Math.min(steps, 10); ++i) {
+					this.grow(world);
+				}
 
-			if(world.rand.nextFloat() < this.growthSpeed - steps) {
-				this.grow(world);
+				if(world.rand.nextFloat() < this.growthSpeed - steps) {
+					this.grow(world);
+				}
 			}
 		} else {
 			int steps = MathHelper.floor(this.growthSpeed * 4);
@@ -298,6 +309,10 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 		}
 
 		if(plants) {
+			if(!this.isOvergrownBlock(world, pos.down(), world.getBlockState(pos.down()))) {
+				return false;
+			}
+			
 			Block plantBlock = state.getBlock();
 			if(plantBlock instanceof IPlantable && this.isOvergrownBlock(world, pos.down(), world.getBlockState(pos.down()))) {
 				MutableBlockPos checkPos = new MutableBlockPos();
@@ -331,7 +346,7 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 
 			return false;
 		} else {
-			return SurfaceType.MIXED_GROUND.matches(state);
+			return SurfaceType.MIXED_GROUND.matches(state) || (world.isAirBlock(pos.up()) && world.isSideSolid(pos, EnumFacing.UP) && state.getBlockFaceShape(world, pos, EnumFacing.UP) == BlockFaceShape.SOLID);
 		}
 	}
 
@@ -343,14 +358,19 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 		if(plants) {
 			return state.getBlock() == BlockRegistry.MOULD_HORN;
 		} else {
-			return state.getBlock() == BlockRegistry.MOULDY_SOIL;
+			return state.getBlock() == BlockRegistry.MOULDY_SOIL || world.getBlockState(pos.up()).getBlock() == BlockRegistry.MOULDY_SOIL_LAYER;
 		}
 	}
 
-	protected IBlockState getNaturallyOvergrownBlock(World world, BlockPos pos, IBlockState state, boolean plants) {
+	protected IBlockState getNaturallyOvergrownBlock(World world, MutableBlockPos pos, IBlockState state, boolean plants) {
 		if(plants) {
 			return BlockRegistry.MOULD_HORN.getDefaultState();
 		} else {
+			pos.setPos(pos.getX(), pos.getY() + 1, pos.getZ());
+			if((!SurfaceType.MIXED_GROUND.matches(state) || MathHelper.getCoordinateRandom(pos.getX() * 1, pos.getY() * 2, pos.getZ() * 3) % 32 == 0) && world.isAirBlock(pos)) {
+				return BlockRegistry.MOULDY_SOIL_LAYER.getDefaultState();
+			}
+			pos.setPos(pos.getX(), pos.getY() - 1, pos.getZ());
 			return BlockRegistry.MOULDY_SOIL.getDefaultState();
 		}
 	}
@@ -373,6 +393,10 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 	}
 
 	public boolean overgrowBlock(BlockPos pos, IBlockState newState, int flags) {
+		if(this.changes.size() >= this.maxChanges) {
+			return false;
+		}
+
 		World world = this.getWorldStorage().getWorld();
 		IBlockState oldState = world.getBlockState(pos);
 
@@ -386,15 +410,20 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 	}
 
 	protected boolean overgrowBlockNaturally(World world, BlockPos pos, boolean plants) {
+		BlockPos originalPos = pos;
+
+		MutableBlockPos newPos = new MutableBlockPos(pos);
+		IBlockState newState = this.getNaturallyOvergrownBlock(world, newPos, world.getBlockState(pos), plants);
+		pos = newPos.toImmutable();
+
 		IBlockState oldState = world.getBlockState(pos);
-		IBlockState newState = this.getNaturallyOvergrownBlock(world, pos, oldState, plants);
 
 		List<BlockChange> changes = new ArrayList<>();
 
 		// Try to apply without block updates
 		if(world.setBlockState(pos, newState, 0)) {
 			// Just to be safe, otherwise change list could grow infinitely
-			if(!this.isOvergrownBlock(world, pos, newState = world.getBlockState(pos))) {
+			if(!this.isOvergrownBlock(world, originalPos, world.getBlockState(originalPos))) {
 				world.setBlockState(pos, oldState, 0);
 				TheBetweenlands.logger.warn("Tried to overgrow {} at {} with {}, but {} is not a overgrown block. This shouldn't happen!", oldState, pos, newState, newState);
 				return false;
@@ -516,7 +545,6 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 						if(this.isInGrowthArea(checkPos)) {
 							IBlockState checkState = world.getBlockState(checkPos);
 							return this.canOvergrowBlockNaturally(world, checkPos, checkState, false)
-									&& (this.isOvergrownBlock(world, checkPos.down(), world.getBlockState(checkPos.down())) || this.canOvergrowBlockNaturally(world, checkPos.down(), world.getBlockState(checkPos.down()), false))
 									&& (world.isAirBlock(checkPos.up()) || !world.isBlockNormalCube(checkPos.up(), false));
 						}
 						return false;
@@ -638,7 +666,9 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 		AxisAlignedBB aabb = this.getBoundingBox();
 
 		if(renderView != null && aabb != null) {
-			for(int i = 0; i < 8 + 64 * MathHelper.clamp(this.size, 0, 1); ++i) {
+			double areaSize = (aabb.maxX - aabb.minX) * (aabb.maxY - aabb.minY) * (aabb.maxZ - aabb.minZ) / 10000.0D;
+
+			for(int i = 0; i < 8 + 64 * MathHelper.clamp(this.size * areaSize, 0, 1); ++i) {
 				double px = aabb.minX + world.rand.nextFloat() * (aabb.maxX - aabb.minX);
 				double py = aabb.minY + world.rand.nextFloat() * (aabb.maxY - aabb.minY);
 				double pz = aabb.minZ + world.rand.nextFloat() * (aabb.maxZ - aabb.minZ);
@@ -648,39 +678,58 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 				if(world.isAirBlock(pos) && renderView.getDistanceSqToCenter(pos) < 64) {
 					BlockPos ground = world.getPrecipitationHeight(pos).down();
 
+					if(!this.isOvergrownBlock(world, ground, world.getBlockState(ground), false)) {
+						ground = ground.down();
+					}
+
 					IBlockState state = world.getBlockState(ground);
 
-					boolean spawn = false;
-					if(pos.getY() - ground.getY() - 1 < (state.getBlock() == BlockRegistry.MOULDY_SOIL ? 4 : 1) && this.isOvergrownBlock(world, ground, state)) {
-						spawn = true;
+					boolean isGroundOvergrownSoil = this.isOvergrownBlock(world, ground, state, false);
+
+					boolean spawnSpores = false;
+					if(pos.getY() - ground.getY() - 1 < (isGroundOvergrownSoil ? 4 : 1) && (isGroundOvergrownSoil || this.isOvergrownBlock(world, ground, state))) {
+						spawnSpores = true;
 					} else {
 						for(EnumFacing dir : EnumFacing.HORIZONTALS) {
 							BlockPos offsetPos = pos.offset(dir);
 							if(this.isOvergrownBlock(world, offsetPos, world.getBlockState(offsetPos))) {
-								spawn = true;
+								spawnSpores = true;
 								break;
 							}
 						}
 					}
 
-					if(spawn && this.isInGrowthArea(pos)) {
-						BLParticles particle;
-						switch(world.rand.nextInt(4)) {
-						default:
-						case 0:
-							particle = BLParticles.MOULD_HORN_1;
-							break;
-						case 1:
-							particle = BLParticles.MOULD_HORN_2;
-							break;
-						case 2:
-							particle = BLParticles.MOULD_HORN_3;
-							break;
-						case 3:
-							particle = BLParticles.MOULD_HORN_4;
-							break;
+					if((spawnSpores || isGroundOvergrownSoil) && this.isInGrowthArea(pos)) {
+						if(spawnSpores) {
+							BLParticles particle;
+							switch(world.rand.nextInt(4)) {
+							default:
+							case 0:
+								particle = BLParticles.MOULD_HORN_1;
+								break;
+							case 1:
+								particle = BLParticles.MOULD_HORN_2;
+								break;
+							case 2:
+								particle = BLParticles.MOULD_HORN_3;
+								break;
+							case 3:
+								particle = BLParticles.MOULD_HORN_4;
+								break;
+							}
+							particle.spawn(world, px, py, pz, ParticleArgs.get().withMotion(0, Math.pow(Math.abs(world.rand.nextGaussian()), 2) * 0.003f, 0).withData(-1, false, 5));
 						}
-						particle.spawn(world, px, py, pz, ParticleArgs.get().withMotion(0, Math.pow(Math.abs(world.rand.nextGaussian()), 2) * 0.003f, 0).withData(-1, false, 5));
+
+						if(isGroundOvergrownSoil) {
+							Random rand = world.rand;
+							float size = rand.nextFloat();
+							BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(world, ground.getX() + 0.5F, ground.getY() + 1F, ground.getZ() + 0.5F, 
+									ParticleArgs.get()
+									.withMotion((rand.nextFloat() - 0.5f) * 0.04f, rand.nextFloat() * 0.04f, (rand.nextFloat() - 0.5f) * 0.04f)
+									.withScale(2f + size * 10.0F)
+									.withColor(0.8F, 0.6F, 0.3F, (1 - size) * 0.25f + 0.25f)
+									.withData(80, true, 0.01F, true)));
+						}
 					}
 				}
 			}

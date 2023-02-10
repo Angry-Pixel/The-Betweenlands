@@ -246,6 +246,7 @@ import thebetweenlands.common.block.terrain.BlockLogBetweenlands;
 import thebetweenlands.common.block.terrain.BlockLogSap;
 import thebetweenlands.common.block.terrain.BlockLyestone;
 import thebetweenlands.common.block.terrain.BlockMouldySoil;
+import thebetweenlands.common.block.terrain.BlockMouldySoilLayer;
 import thebetweenlands.common.block.terrain.BlockMud;
 import thebetweenlands.common.block.terrain.BlockPeat;
 import thebetweenlands.common.block.terrain.BlockPeatSmouldering;
@@ -838,6 +839,7 @@ public class BlockRegistry {
     //Testshroom
     public static final Block MOULD_HORN = new BlockMouldHornMushroom();
     public static final Block MOULDY_SOIL = new BlockMouldySoil();
+    public static final Block MOULDY_SOIL_LAYER = new BlockMouldySoilLayer();
     
     public static final Block PURIFIED_SWAMP_DIRT = new BlockSwampDirt(Material.GROUND);
     public static final Block DUG_SWAMP_DIRT = new BlockDugDirt(false).setItemDropped(() -> Item.getItemFromBlock(SWAMP_DIRT));
