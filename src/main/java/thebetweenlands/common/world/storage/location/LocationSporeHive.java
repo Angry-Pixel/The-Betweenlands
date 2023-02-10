@@ -105,7 +105,7 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 	private boolean isGrowing;
 
 	private NoiseGeneratorPerlin noiseGenerator;
-	
+
 	private List<BlockPos> balls = new ArrayList<>();
 
 	public LocationSporeHive(IWorldStorage worldStorage, StorageID id, LocalRegion region) {
@@ -198,7 +198,7 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 			ballsNbt.appendTag(posNbt);
 		}
 		nbt.setTag("balls", ballsNbt);
-		
+
 		return nbt;
 	}
 
@@ -244,7 +244,7 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 		this.growthSpeed = nbt.getDouble("growthSpeed");
 
 		this.size = nbt.getDouble("hiveSize");
-		
+
 		this.balls.clear();
 		NBTTagList ballsNbt = nbt.getTagList("balls", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < ballsNbt.tagCount(); ++i) {
@@ -366,16 +366,10 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 			return false;
 		} else {
 			if(this.isOvergrownBlock(world, pos.down(), world.getBlockState(pos.down()), false)) {
-				BlockPos closestBall = null;
-				
 				for(BlockPos ball : this.balls) {
-					if(closestBall == null || pos.distanceSq(ball) < pos.distanceSq(closestBall)) {
-						closestBall = ball;
+					if(ball.distanceSq(pos) < 8) {
+						return true;
 					}
-				}
-				
-				if(closestBall != null && closestBall.distanceSq(pos) < 8) {
-					return true;
 				}
 			}
 			return SurfaceType.MIXED_GROUND.matches(state) || (world.isAirBlock(pos.up()) && world.isSideSolid(pos, EnumFacing.UP) && state.getBlockFaceShape(world, pos, EnumFacing.UP) == BlockFaceShape.SOLID);
@@ -479,7 +473,7 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 						IBlockState offsetState = world.getBlockState(offsetPos);
 
 						if(offsetState.getBlock() == plantBlock) {
-							if(world.setBlockState(offsetPos, Blocks.AIR.getDefaultState(), 2)) {
+							if(world.setBlockState(offsetPos, Blocks.AIR.getDefaultState(), 0)) {
 								changes.add(new BlockChange(offsetPos, offsetState, Blocks.AIR.getDefaultState()));
 							}
 						} else {
@@ -492,7 +486,7 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 
 		// Apply block updates
 		for(BlockChange change : changes) {
-			world.notifyBlockUpdate(change.pos, change.oldState, change.newState, 3);
+			world.markAndNotifyBlock(change.pos, null, change.oldState, change.newState, 3);
 		}
 
 		this.changes.add(changes.toArray(new BlockChange[0]));
@@ -533,28 +527,28 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 	protected void grow(World world) {
 		if(this.balls.isEmpty()) {
 			AxisAlignedBB aabb = this.getBoundingBox();
-			
+
 			if(aabb != null) {
 				double areaSize = (aabb.maxX - aabb.minX) * (aabb.maxY - aabb.minY) * (aabb.maxZ - aabb.minZ) / 10000.0D;
-				
+
 				int num = world.rand.nextInt((int)MathHelper.clamp(areaSize * 8 + 1, 1, 8)) + 3;
-				
+
 				for(int i = 0; i < 128 && this.balls.size() < num; ++i) {
 					double px = aabb.minX + world.rand.nextFloat() * (aabb.maxX - aabb.minX);
 					double py = aabb.minY + world.rand.nextFloat() * (aabb.maxY - aabb.minY);
 					double pz = aabb.minZ + world.rand.nextFloat() * (aabb.maxZ - aabb.minZ);
 
 					BlockPos pos = new BlockPos(px, py, pz);
-					
+
 					BlockPos ground = world.getPrecipitationHeight(pos).down();
-					
+
 					if(this.canOvergrowBlockNaturally(world, ground, world.getBlockState(ground), false)) {
 						this.balls.add(ground.add(0, world.rand.nextInt(2) - 1, 0));
 					}
 				}
 			}
 		}
-		
+
 		BlockPos pos = this.source.down();
 		IBlockState state = world.getBlockState(pos);
 
@@ -703,20 +697,21 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 			if(this.age % 1 == 0) {
 				BlockChange[] changeGroup = this.changes.removeLast();
 
-				List<BlockChange> appliedChanges = new ArrayList<>();
+				IBlockState[] prevStates = new IBlockState[changeGroup.length];
 
 				// Apply without block updates
 				for(int i = changeGroup.length - 1; i >= 0; --i) {
 					BlockChange change = changeGroup[i];
-					if(world.getBlockState(change.pos).equals(change.newState)) {
+					IBlockState state = prevStates[i] = world.getBlockState(change.pos);
+					if(state.equals(change.newState)) {
 						world.setBlockState(change.pos, change.oldState, 0);
-						appliedChanges.add(change);
 					}
 				}
 
 				// Apply block updates
-				for(BlockChange change : appliedChanges) {
-					world.notifyBlockUpdate(change.pos, change.newState, change.oldState, 3);
+				for(int i = 0; i < changeGroup.length; ++i) {
+					BlockPos pos = changeGroup[i].pos;
+					world.markAndNotifyBlock(pos, null, world.getBlockState(pos), prevStates[i], 3);
 				}
 
 				this.markDirty();
