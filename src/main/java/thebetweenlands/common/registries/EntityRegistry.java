@@ -30,6 +30,7 @@ import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySpikeWave;
 import thebetweenlands.common.entity.EntitySpiritTreeFaceMask;
 import thebetweenlands.common.entity.EntitySplodeshroom;
+import thebetweenlands.common.entity.EntitySpyEye;
 import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.entity.EntityTinyWormEggSac;
 import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
@@ -304,6 +305,7 @@ public class EntityRegistry {
 		registerEntity(EntitySporeMinion.class, "spore_minion", 0xFF8000, 0xE6E6E6, 64, 3, true); //remove egg after testing
 		registerEntity(EntityDropHeldCloud.class, "drop_held_cloud");
 		registerEntity(EntityFragSpore.class, "frag_spore");
+		registerEntity(EntitySpyEye.class, "spy_eye");
 	}
 
 	private static int id = 0;
