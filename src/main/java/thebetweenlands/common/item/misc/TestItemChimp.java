@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.entity.EntitySpyEye;
+import thebetweenlands.common.entity.mobs.EntityBigPuffshroom;
 import thebetweenlands.common.entity.projectiles.EntitySkySpores;
 
 
@@ -208,18 +208,18 @@ public class TestItemChimp extends Item {
 
 				//makeSomethingHere(worldIn, player);
 				
-		//	EntityBigPuffshroom bigPuffShroom = new EntityBigPuffshroom(worldIn);
-		//	bigPuffShroom.setPosition(pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F);
-		//	worldIn.spawnEntity(bigPuffShroom);
+			EntityBigPuffshroom bigPuffShroom = new EntityBigPuffshroom(worldIn);
+			bigPuffShroom.setPosition(pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F);
+			worldIn.spawnEntity(bigPuffShroom);
 			
 		//	EntitySporeMinion spore = new EntitySporeMinion(worldIn);
 		//	spore.setPosition(pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F);
 		//	spore.setType(0);
 		//	worldIn.spawnEntity(spore);
 				
-			EntitySpyEye spy_eye = new EntitySpyEye(worldIn);
-			spy_eye.setPosition(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
-			worldIn.spawnEntity(spy_eye);
+			//EntitySpyEye spy_eye = new EntitySpyEye(worldIn);
+			//spy_eye.setPosition(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
+			//worldIn.spawnEntity(spy_eye);
 		}
 
 		return EnumActionResult.SUCCESS;

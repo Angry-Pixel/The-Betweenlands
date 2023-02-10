@@ -11,7 +11,7 @@ import thebetweenlands.common.entity.mobs.EntityBigPuffshroom;
 
 @SideOnly(Side.CLIENT)
 public class RenderBigPuffshroom extends RenderLiving<EntityBigPuffshroom> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/puffshroom.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/big_puffshroom.png");
 	private static final  ModelBigPuffshroom MODEL = new ModelBigPuffshroom();
 
 	public RenderBigPuffshroom(RenderManager manager) {
@@ -24,8 +24,8 @@ public class RenderBigPuffshroom extends RenderLiving<EntityBigPuffshroom> {
 		if (entity.animation_1 != 0) {
 			bindTexture(TEXTURE);
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(x, y + 3F, z);
-			GlStateManager.scale(-3, -3, 3);
+			GlStateManager.translate(x, y + 1F, z);
+			GlStateManager.scale(-1, -1, 1);
 			MODEL.render(entity, partialTicks);
 			GlStateManager.popMatrix();
 		}
