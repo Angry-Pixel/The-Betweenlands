@@ -47,7 +47,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 	public int animation_3 = 0, prev_animation_3 = 0;
 	public int animation_4 = 0, prev_animation_4 = 0;
 	public boolean active_1 = false, active_2 = false, active_3 = false, active_4 = false, active_5 = false, pause = true;
-	public int renderTicks = 0, prev_renderTicks = 0, pause_count = 30000000;
+	public int renderTicks = 0, prev_renderTicks = 0, pause_count = 30;
 	
 	private static final DataParameter<Boolean> SLAM_ATTACK = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> MOVE = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
@@ -204,7 +204,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 					pause_count--;
 				if (pause_count <= 0) {
 					pause = false;
-					pause_count = 30000000;
+					pause_count = 30;
 					active_5 = true;
 				}
 			}

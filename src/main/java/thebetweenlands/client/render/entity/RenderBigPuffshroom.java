@@ -24,7 +24,7 @@ public class RenderBigPuffshroom extends RenderLiving<EntityBigPuffshroom> {
 		if (entity.animation_1 != 0) {
 			bindTexture(TEXTURE);
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(x, y + 1F, z);
+			GlStateManager.translate(x, y - 0.25F, z);
 			GlStateManager.scale(-1, -1, 1);
 			MODEL.render(entity, partialTicks);
 			GlStateManager.popMatrix();
