@@ -47,6 +47,8 @@ public class EntityFragSpore extends EntityLiving implements IEntityBL {
 			if(ticksExisted > 60)
 				explode();
 		}
+		if (motionY < 0)
+			motionY *= 0.8F;
 	}
 
 	private void explode() {

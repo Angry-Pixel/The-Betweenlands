@@ -25,7 +25,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -46,7 +45,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 	public int animation_3 = 0, prev_animation_3 = 0;
 	public int animation_4 = 0, prev_animation_4 = 0;
 	public boolean active_1 = false, active_2 = false, active_3 = false, active_4 = false, active_5 = false, pause = true;
-	public int renderTicks = 0, prev_renderTicks = 0, pause_count = 30;
+	public int renderTicks = 0, prev_renderTicks = 0, pause_count = 40;
 	
 	private static final DataParameter<Boolean> SLAM_ATTACK = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> MOVE = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
@@ -136,7 +135,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 					//	getEntityWorld().playSound(null, getPosition().getX() + 0.5D, getPosition().getY() + 1D, getPosition().getZ() + 0.5D, SoundRegistry.PUFF_SHROOM, SoundCategory.BLOCKS, 0.5F, 0.95F + getEntityWorld().rand.nextFloat() * 0.2F);
 					if (animation_4 == 10) {
 						//if (rand.nextBoolean())
-							spawnFragSpores(getPosition());
+							spawnFragSpores();
 						//else
 							//spawnSporeMinions(world, getPosition());
 						getEntityWorld().playSound(null, getPosition().getX() + 0.5D, getPosition().getY() + 1D, getPosition().getZ() + 0.5D, SoundRegistry.PUFF_SHROOM, SoundCategory.BLOCKS, 0.5F, 0.95F + getEntityWorld().rand.nextFloat() * 0.2F);
@@ -209,7 +208,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 					pause_count--;
 				if (pause_count <= 0) {
 					pause = false;
-					pause_count = 30;
+					pause_count = 40;
 					active_5 = true;
 				}
 			}
@@ -320,7 +319,6 @@ public class EntityBigPuffshroom extends EntityLiving {
 			if(getEntityWorld().isAirBlock(pos.add(offSetX, 1, offSetZ))) {
 				EntitySporeMinion spore = new EntitySporeMinion(world);
 				spore.setLocationAndAngles(posX + offSetX, posY + 1.8D, posZ + offSetZ, world.rand.nextFloat() * 360, 0);
-				Vec3d vector3d = new Vec3d(this.posX, this.posY, this.posZ);
 				double velX = pos.getX() + offSetX * 4D - spore.posX;
 				double velY = pos.getY() + 6D - spore.posY;
 				double velZ = pos.getZ() + offSetZ * 4D - spore.posZ;
@@ -328,7 +326,6 @@ public class EntityBigPuffshroom extends EntityLiving {
 				double accelerationX = velX / distanceSqRt * 0.3D + rand.nextDouble() * 0.2D;
 				double accelerationY = velY / distanceSqRt * 0.5D + rand.nextDouble() * 0.5D;
 				double accelerationZ = velZ / distanceSqRt * 0.3D + rand.nextDouble() * 0.2D;
-				vector3d.add(accelerationX, accelerationY, accelerationZ).scale((double) 0.9F);
 				spore.addVelocity(accelerationX, accelerationY, accelerationZ);
 				world.spawnEntity(spore);
 				//spore.setType(1); //test
@@ -351,23 +348,21 @@ public class EntityBigPuffshroom extends EntityLiving {
 		}
 		return null;
 	}
-	
-	private void spawnFragSpores(BlockPos pos) {
+
+	private void spawnFragSpores() {
 		for (int x = 0; x < 6; x++) {
 			double angle = Math.toRadians(x * 60D);
-			double offSetX = Math.floor(-Math.sin(angle) * 1D);
-			double offSetZ = Math.floor(Math.cos(angle) * 1D);
+			double offSetX = Math.floor(-Math.sin(angle) * 1.5D);
+			double offSetZ = Math.floor(Math.cos(angle) * 1.5D);
 			EntityFragSpore fragSpore = new EntityFragSpore(getEntityWorld());
-			fragSpore.setPosition( posX + offSetX, posY + 2.5D, posZ + offSetZ);
-			Vec3d vector3d = new Vec3d(this.posX, this.posY, this.posZ);
-			double velX = posX + offSetX * 2D - fragSpore.posX;
-			double velY = posY + 6D - fragSpore.posY;
-			double velZ = posZ + offSetZ * 2D - fragSpore.posZ;
+			fragSpore.setPosition(posX, posY + 2.5D, posZ);
+			double velX = posX + offSetX - fragSpore.posX;
+			double velY = posY + 6 - fragSpore.posY;
+			double velZ = posZ + offSetZ - fragSpore.posZ;
 			double distanceSqRt = (double) MathHelper.sqrt(velX * velX + velY * velY + velZ * velZ);
-			double accelerationX = velX / distanceSqRt;// * 0.3D + rand.nextDouble() * 0.2D;
-			double accelerationY = velY / distanceSqRt;// * 0.5D + rand.nextDouble() * 0.5D;
-			double accelerationZ = velZ / distanceSqRt;// * 0.3D + rand.nextDouble() * 0.2D;
-			vector3d.add(accelerationX, accelerationY, accelerationZ).scale((double) 0.9F);
+			double accelerationX = velX / distanceSqRt + rand.nextDouble() * 0.1D - rand.nextDouble() * 0.05D;
+			double accelerationY = velY / distanceSqRt + rand.nextDouble() * 0.1D - rand.nextDouble() * 0.05D;
+			double accelerationZ = velZ / distanceSqRt + rand.nextDouble() * 0.1D - rand.nextDouble() * 0.05D;
 			fragSpore.addVelocity(accelerationX, accelerationY, accelerationZ);
 			getEntityWorld().spawnEntity(fragSpore);
 		}
