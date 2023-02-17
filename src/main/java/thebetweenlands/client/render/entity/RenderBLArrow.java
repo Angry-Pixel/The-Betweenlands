@@ -22,6 +22,7 @@ public class RenderBLArrow extends RenderArrow<EntityBLArrow> {
 	public static final ResourceLocation TEXTURE_WORM = new ResourceLocation("thebetweenlands:textures/entity/tiny_sludge_worm.png");
 	private static final ResourceLocation TEXTURE_CHIROMAW_BARB = new ResourceLocation("thebetweenlands:textures/entity/chiromaw_barb.png");
 	private static final ResourceLocation TEXTURE_SHOCK = new ResourceLocation("thebetweenlands:textures/entity/shock_arrow.png");
+	private static final ResourceLocation TEXTURE_FRAG_SPORE_BARB = new ResourceLocation("thebetweenlands:textures/entity/frag_spore_barb.png");
 	
 	public static final ModelWormArrow WORM_MODEL = new ModelWormArrow();
 
@@ -98,6 +99,8 @@ public class RenderBLArrow extends RenderArrow<EntityBLArrow> {
 		case CHIROMAW_SHOCK_BARB:
 		case CHIROMAW_BARB:
 			return TEXTURE_CHIROMAW_BARB;
+		case FRAG_SPORE_BARB:
+			return TEXTURE_FRAG_SPORE_BARB;
 		default:
 			return TEXTURE_ANGLER_TOOTH;
 		}

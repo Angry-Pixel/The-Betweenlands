@@ -32,8 +32,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
-import thebetweenlands.client.render.particle.ParticleFactory;
-import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.EntityFragSpore;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -115,11 +114,17 @@ public class EntityBigPuffshroom extends EntityLiving {
 						double motionY = getEntityWorld().rand.nextDouble() * 0.3F + 0.075F;
 						double motionZ = getEntityWorld().rand.nextDouble() * 0.4F - 0.2F;
 						world.spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getStateId(BlockRegistry.MOULDY_SOIL.getDefaultState()));
-
 					}
 				}
 			}
 		}
+		
+		if (getEntityWorld().isRemote) {
+			if (active_4)
+				if (animation_4 == 10)
+					spawnSporeJetParticles();
+		}
+		
 
 		if (!getEntityWorld().isRemote) {
 			//TODO Set a boolean state so the attack uses the right animations
@@ -130,10 +135,10 @@ public class EntityBigPuffshroom extends EntityLiving {
 					//if (animation_4 <= 1)
 					//	getEntityWorld().playSound(null, getPosition().getX() + 0.5D, getPosition().getY() + 1D, getPosition().getZ() + 0.5D, SoundRegistry.PUFF_SHROOM, SoundCategory.BLOCKS, 0.5F, 0.95F + getEntityWorld().rand.nextFloat() * 0.2F);
 					if (animation_4 == 10) {
-						if (rand.nextBoolean())
+						//if (rand.nextBoolean())
 							spawnFragSpores(getPosition());
-						else
-							spawnSporeMinions(world, getPosition());
+						//else
+							//spawnSporeMinions(world, getPosition());
 						getEntityWorld().playSound(null, getPosition().getX() + 0.5D, getPosition().getY() + 1D, getPosition().getZ() + 0.5D, SoundRegistry.PUFF_SHROOM, SoundCategory.BLOCKS, 0.5F, 0.95F + getEntityWorld().rand.nextFloat() * 0.2F);
 					}
 				}
@@ -350,18 +355,18 @@ public class EntityBigPuffshroom extends EntityLiving {
 	private void spawnFragSpores(BlockPos pos) {
 		for (int x = 0; x < 6; x++) {
 			double angle = Math.toRadians(x * 60D);
-			double offSetX = Math.floor(-Math.sin(angle) * 2D);
-			double offSetZ = Math.floor(Math.cos(angle) * 2D);
+			double offSetX = Math.floor(-Math.sin(angle) * 1D);
+			double offSetZ = Math.floor(Math.cos(angle) * 1D);
 			EntityFragSpore fragSpore = new EntityFragSpore(getEntityWorld());
-			fragSpore.setPosition(Math.floor(pos.getX() + 0.5D + offSetX), pos.getY() + 2D, Math.floor(pos.getZ() + 0.5D + offSetZ));
+			fragSpore.setPosition( posX + offSetX, posY + 2.5D, posZ + offSetZ);
 			Vec3d vector3d = new Vec3d(this.posX, this.posY, this.posZ);
-			double velX = pos.getX() + offSetX * 3D - fragSpore.posX;
-			double velY = pos.getY() + 6D - fragSpore.posY;
-			double velZ = pos.getZ() + offSetZ * 3D - fragSpore.posZ;
+			double velX = posX + offSetX * 2D - fragSpore.posX;
+			double velY = posY + 6D - fragSpore.posY;
+			double velZ = posZ + offSetZ * 2D - fragSpore.posZ;
 			double distanceSqRt = (double) MathHelper.sqrt(velX * velX + velY * velY + velZ * velZ);
-			double accelerationX = velX / distanceSqRt * 0.3D + rand.nextDouble() * 0.2D;
-			double accelerationY = velY / distanceSqRt * 0.5D + rand.nextDouble() * 0.5D;
-			double accelerationZ = velZ / distanceSqRt * 0.3D + rand.nextDouble() * 0.2D;
+			double accelerationX = velX / distanceSqRt;// * 0.3D + rand.nextDouble() * 0.2D;
+			double accelerationY = velY / distanceSqRt;// * 0.5D + rand.nextDouble() * 0.5D;
+			double accelerationZ = velZ / distanceSqRt;// * 0.3D + rand.nextDouble() * 0.2D;
 			vector3d.add(accelerationX, accelerationY, accelerationZ).scale((double) 0.9F);
 			fragSpore.addVelocity(accelerationX, accelerationY, accelerationZ);
 			getEntityWorld().spawnEntity(fragSpore);
@@ -450,32 +455,24 @@ public class EntityBigPuffshroom extends EntityLiving {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private void spawnCloudParticle() {
-		double x = this.posX + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
-		double y = this.posY + 0.1D;
-		double z = this.posZ + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
-		double mx = (this.world.rand.nextFloat() - 0.5F) / 12.0F;
-		double my = (this.world.rand.nextFloat() - 0.5F) / 16.0F * 0.1F;
-		double mz = (this.world.rand.nextFloat() - 0.5F) / 12.0F;
-		int[] color = {100, 100, 0, 255};
-
-		ParticleGasCloud hazeParticle = (ParticleGasCloud) BLParticles.GAS_CLOUD
-				.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
-						.withData(null)
-						.withMotion(mx, my, mz)
-						.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F)
-						.withScale(8f));
-		
-		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS_HEAT_HAZE, hazeParticle);
-		
-		ParticleGasCloud particle = (ParticleGasCloud) BLParticles.GAS_CLOUD
-				.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
-						.withData(null)
-						.withMotion(mx, my, mz)
-						.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F)
-						.withScale(4f));
-
-		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS_TEXTURED, particle);
+	private void spawnSporeJetParticles() {
+		for (double yy = this.posY + 2.25F; yy < this.posY + 4.25D; yy += 0.5D) {
+			double d0 = this.posX - 0.075F;
+			double d1 = yy;
+			double d2 = this.posZ - 0.075F;
+			double d3 = this.posX + 0.075F;
+			double d4 = this.posZ + 0.075F;
+			double d5 = this.posX;
+			double d6 = yy + 0.25F;
+			double d7 = this.posZ;
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d0, d1, d2, ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f)).withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d0, d1, d4, ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f)).withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d3, d1, d2, ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f)).withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d3, d1, d4, ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f)).withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d0, d1, d2, ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f)).withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d5, d6, d7, ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f)).withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d0, d1, d2, ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f)).withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
+		}
 	}
 
 	@Override

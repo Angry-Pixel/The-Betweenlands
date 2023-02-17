@@ -151,6 +151,10 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 			this.setDead();
 		}
 		
+		if(!this.world.isRemote && this.getArrowType() == EnumArrowType.FRAG_SPORE_BARB && this.pickupStatus != PickupStatus.ALLOWED && this.ticksSpentInGround > 40) {
+			this.setDead();
+		}
+		
 		if(this.world.isRemote && (this.getArrowType() == EnumArrowType.SHOCK || this.getArrowType() == EnumArrowType.CHIROMAW_SHOCK_BARB)) {
 			this.spawnLightningArcs();
 		}
@@ -229,6 +233,11 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 			if(living.isNonBoss()) {
 				living.addPotionEffect(ElixirEffectRegistry.EFFECT_PETRIFY.createEffect(40, 1));
 			} 
+			break;
+		case FRAG_SPORE_BARB:
+			if(living instanceof EntityPlayer) {
+				living.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 80, 2));
+			}
 			break;
 		default:
 		}

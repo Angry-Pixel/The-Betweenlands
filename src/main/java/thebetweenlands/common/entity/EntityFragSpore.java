@@ -65,7 +65,7 @@ public class EntityFragSpore extends EntityLiving implements IEntityBL {
 				double accelerationZ = velZ / distanceSqRt * 0.3D + rand.nextDouble() * 0.2D;
 				vector3d.add(accelerationX, accelerationY, accelerationZ).scale(0.9D);
 				arrow.addVelocity(accelerationX, accelerationY, accelerationZ);
-				arrow.setType(EnumArrowType.CHIROMAW_BARB);
+				arrow.setType(EnumArrowType.FRAG_SPORE_BARB);
 				getEntityWorld().spawnEntity(arrow);
 			}
 		setDead();
