@@ -1,5 +1,6 @@
 package thebetweenlands.client.render.entity;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -21,6 +22,25 @@ public class RenderBigPuffshroom extends RenderLiving<EntityBigPuffshroom> {
 	@Override
 	public void doRender(EntityBigPuffshroom entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+		boolean isVisible = this.isVisible(entity);
+		boolean isTranslucentToPlayer = !isVisible && !entity.isInvisibleToPlayer(Minecraft.getMinecraft().player);
+
+		if(!isVisible && !isTranslucentToPlayer)
+			return;
+
+		boolean useBrightness = this.setDoRenderBrightness(entity, partialTicks);
+
+		if(isTranslucentToPlayer)
+			GlStateManager.enableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
+		
+		boolean useTeamColors = false;
+
+		if(this.renderOutlines) {
+			useTeamColors = this.setScoreTeamColor(entity);
+			GlStateManager.enableColorMaterial();
+			GlStateManager.enableOutlineMode(this.getTeamColor(entity));
+		}
+
 		if (entity.animation_1 != 0) {
 			bindTexture(TEXTURE);
 			GlStateManager.pushMatrix();
@@ -29,6 +49,20 @@ public class RenderBigPuffshroom extends RenderLiving<EntityBigPuffshroom> {
 			MODEL.render(entity, partialTicks);
 			GlStateManager.popMatrix();
 		}
+
+		if(this.renderOutlines) {
+			GlStateManager.disableOutlineMode();
+			GlStateManager.disableColorMaterial();
+		}
+
+		if(useTeamColors)
+			this.unsetScoreTeamColor();
+
+		if(isTranslucentToPlayer)
+			GlStateManager.disableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
+
+		if(useBrightness)
+			this.unsetBrightness();
 	}
 
 	@Override

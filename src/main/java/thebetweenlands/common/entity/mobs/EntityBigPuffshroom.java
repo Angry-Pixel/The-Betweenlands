@@ -134,10 +134,10 @@ public class EntityBigPuffshroom extends EntityLiving {
 					//if (animation_4 <= 1)
 					//	getEntityWorld().playSound(null, getPosition().getX() + 0.5D, getPosition().getY() + 1D, getPosition().getZ() + 0.5D, SoundRegistry.PUFF_SHROOM, SoundCategory.BLOCKS, 0.5F, 0.95F + getEntityWorld().rand.nextFloat() * 0.2F);
 					if (animation_4 == 10) {
-						//if (rand.nextBoolean())
+						if (rand.nextBoolean())
 							spawnFragSpores();
-						//else
-							//spawnSporeMinions(world, getPosition());
+						else
+							spawnSporeMinions(world, getPosition());
 						getEntityWorld().playSound(null, getPosition().getX() + 0.5D, getPosition().getY() + 1D, getPosition().getZ() + 0.5D, SoundRegistry.PUFF_SHROOM, SoundCategory.BLOCKS, 0.5F, 0.95F + getEntityWorld().rand.nextFloat() * 0.2F);
 					}
 				}
@@ -230,6 +230,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 				prev_animation_1 = animation_1 = 0;
 				active_5 = false;
 				setMove(true);
+				cooldown = 40;
 			}
 		}
 
@@ -303,11 +304,11 @@ public class EntityBigPuffshroom extends EntityLiving {
 	}
 
 	private float getRangeToPlayer() {
-		List<EntityPlayer> list = getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(getPosition()).grow(8D, 2D, 8D));
+		List<EntityPlayer> list = getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(getPosition()).grow(12D, 2D, 12D));
 		for (EntityPlayer player : list)
 			if (/* !player.isCreative() && */ !player.isSpectator())
 				return getDistance(player);
-		return 5F;
+		return 6F;
 	}
 	
 	private void spawnSporeMinions(World world, BlockPos pos) {
@@ -336,11 +337,10 @@ public class EntityBigPuffshroom extends EntityLiving {
 
 	protected Entity findEnemyToAttack() {
 		if(!active_1 && animation_1 == 0) {
-			List<EntityPlayer> list = getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(getPosition()).grow(8D, 2D, 8D));
+			List<EntityPlayer> list = getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(getPosition()).grow(12D, 2D, 12D));
 			for(EntityPlayer player : list) {
 				if (/*!player.isCreative() &&*/ !player.isSpectator()) {
 					active_1 = true;
-					cooldown = 120;
 					pause = true;
 					return player;
 				}
@@ -418,12 +418,26 @@ public class EntityBigPuffshroom extends EntityLiving {
 		if (source instanceof EntityDamageSource) {
 			Entity sourceEntity = ((EntityDamageSource) source).getTrueSource();
 			if (sourceEntity instanceof EntityPlayer) {
-				if (!getEntityWorld().isRemote) {
-					return super.attackEntityFrom(source, damage);
+				if (cooldown <= 0 && canBeHit()) {
+					active_1 = false;
+					active_2 = false;
+					active_3 = false;
+					active_4 = false;
+					pause = false;
+					pause_count = 40;
+					active_5 = true;
+					cooldown = 40;
+					if (!getEntityWorld().isRemote) {
+						return super.attackEntityFrom(source, damage);
+					}
 				}
 			}
 		}
 		return false;
+	}
+
+	private boolean canBeHit() {
+		return pause || active_1 || active_2 || active_3 || active_4 || active_5;
 	}
 
 	@Override
