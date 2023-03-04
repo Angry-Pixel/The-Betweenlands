@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.HashSet;
 
 import javax.annotation.Nullable;
 
@@ -577,6 +578,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 	public static class AIBreakLightSources extends EntityAIBase {
 		private static final Set<Block> IGNORED_LIGHT_SOURCES = ImmutableSet.of(BlockRegistry.OCTINE_ORE, BlockRegistry.LIFE_CRYSTAL_STALACTITE, BlockRegistry.MOB_SPAWNER);
+		public static final Set<Block> CUSTOM_IGNORED_LIGHT_SOURCES = new HashSet<Block>();
 
 		private final EntityStalker entity;
 
@@ -783,7 +785,7 @@ public class EntityStalker extends EntityClimberBase implements IMob {
 
 			IBlockState state = this.entity.world.getBlockState(pos);
 
-			if(!IGNORED_LIGHT_SOURCES.contains(state.getBlock())) {
+			if(!IGNORED_LIGHT_SOURCES.contains(state.getBlock()) && !CUSTOM_IGNORED_LIGHT_SOURCES.contains(state.getBlock())) {
 				float hardness = state.getBlockHardness(this.entity.world, pos);
 				return this.entity.world.getBlockState(pos).getLightValue(this.entity.world, pos) > 0 && hardness >= 0 && hardness <= 2.5F && state.getBlock().canEntityDestroy(state, this.entity.world, pos, this.entity);
 			}
