@@ -343,67 +343,78 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 	protected void placeBridge() {
 		Path path = this.getNavigator().getPath();
 
-		if(path != null && path.getCurrentPathIndex() < path.getCurrentPathLength()) {
-			PathPoint nextPoint = path.getPathPointFromIndex(path.getCurrentPathIndex());
+		if(path == null || path.getCurrentPathIndex() >= path.getCurrentPathLength()) {
+			return;
+		}
+		
+		PathPoint nextPoint = path.getPathPointFromIndex(path.getCurrentPathIndex());
+		if(nextPoint.y != MathHelper.floor(this.posY + 0.5f)) {
+			return;
+		}
+		
+		
+		BlockPos pos = new BlockPos(this);
+		pos = pos.add(0, nextPoint.y - pos.getY() - 1, 0);
 
-			if(nextPoint.y == MathHelper.floor(this.posY + 0.5f)) {
-				BlockPos pos = new BlockPos(this);
-				pos = pos.add(0, nextPoint.y - pos.getY() - 1, 0);
+		if(this.getDistanceSq(pos) > 2 || !this.isBridgableSpot(pos)) {
+			return;
+		}
+		
+		if(!ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
+			return;
+		}
+		
+		int nx = -2;
+		int nz = -2;
 
-				if(this.getDistanceSq(pos) <= 2 && this.isBridgableSpot(pos)) {
-					if(ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
+		if(path.getCurrentPathIndex() < path.getCurrentPathLength() - 1) {
+			PathPoint secondNextPoint = path.getPathPointFromIndex(path.getCurrentPathIndex() + 1);
+			nx = MathHelper.clamp(secondNextPoint.x - nextPoint.x, -1, 1);
+			nz = MathHelper.clamp(secondNextPoint.z - nextPoint.z, -1, 1);
+			if(nx == 0) nx = -2;
+			if(nz == 0) nz = -2;
+		}
 
-						int nx = -2;
-						int nz = -2;
+		for(int xo = -1; xo <= 1; xo++) {
+			for(int zo = -1; zo <= 1; zo++) {
+				if(xo == nx || zo == nz) {
+					continue;
+				}
+				
+				
+				BlockPos offsetPos = pos.add(xo, 0, zo);
 
-						if(path.getCurrentPathIndex() < path.getCurrentPathLength() - 1) {
-							PathPoint secondNextPoint = path.getPathPointFromIndex(path.getCurrentPathIndex() + 1);
-							nx = MathHelper.clamp(secondNextPoint.x - nextPoint.x, -1, 1);
-							nz = MathHelper.clamp(secondNextPoint.z - nextPoint.z, -1, 1);
-							if(nx == 0) nx = -2;
-							if(nz == 0) nz = -2;
+				if(!(this.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(offsetPos), e -> e != this).isEmpty()) || !this.isBridgableSpot(offsetPos)) {
+					continue;
+				}
+				
+				boolean canReplace = false;
+
+				if(this.world.getBlockState(offsetPos).getBlock().isReplaceable(this.world, offsetPos)) {
+					canReplace = true;
+				} else {
+					IBlockState hitState = this.world.getBlockState(offsetPos);
+					float hardness = hitState.getBlockHardness(this.world, offsetPos);
+
+					if(hardness >= 0
+							&& hitState.getBlock().canEntityDestroy(hitState, this.world, offsetPos, this)
+							&& ForgeEventFactory.onEntityDestroyBlock(this, offsetPos, hitState)) {
+
+						canReplace = true;
+						if(!hitState.getMaterial().isLiquid() && hitState.getCollisionBoundingBox(this.world, pos) != null) {
+							this.world.playEvent(2001, offsetPos, Block.getStateId(hitState));
 						}
-
-						for(int xo = -1; xo <= 1; xo++) {
-							for(int zo = -1; zo <= 1; zo++) {
-								if(xo != nx && zo != nz) {
-									BlockPos offsetPos = pos.add(xo, 0, zo);
-
-									if(this.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(offsetPos), e -> e != this).isEmpty() && this.isBridgableSpot(offsetPos)) {
-
-										boolean canReplace = false;
-
-										if(this.world.getBlockState(offsetPos).getBlock().isReplaceable(this.world, offsetPos)) {
-											canReplace = true;
-										} else {
-											IBlockState hitState = this.world.getBlockState(offsetPos);
-											float hardness = hitState.getBlockHardness(this.world, offsetPos);
-
-											if(hardness >= 0
-													&& hitState.getBlock().canEntityDestroy(hitState, this.world, offsetPos, this)
-													&& ForgeEventFactory.onEntityDestroyBlock(this, offsetPos, hitState)) {
-
-												canReplace = true;
-												if(!hitState.getMaterial().isLiquid() && hitState.getCollisionBoundingBox(this.world, pos) != null) {
-													this.world.playEvent(2001, offsetPos, Block.getStateId(hitState));
-												}
-												this.world.setBlockToAir(offsetPos);
-											}
-										}
-
-										if(canReplace) {
-											this.world.setBlockState(offsetPos, BlockRegistry.PEAT.getDefaultState());
-										}
-
-									}
-								}
-							}
-						}
-
+						this.world.setBlockToAir(offsetPos);
 					}
+				}
+
+				if(canReplace) {
+					this.world.setBlockState(offsetPos, BlockRegistry.PEAT.getDefaultState());
 				}
 			}
 		}
+
+
 	}
 
 	@Override
