@@ -124,7 +124,7 @@ public class FoodSicknessHandler {
 		if(currentSickness == FoodSickness.SICK) {
 			if(item instanceof ItemFood) {
 				int foodLevel = ((ItemFood)itemStack.getItem()).getHealAmount(itemStack);
-				double foodLoss = 1.0D / 3.0D * 2.0;
+				double foodLoss = 2.0D / 3.0D;
 
 				if(player.world.isRemote) {
 					//Remove all gained food on client side and wait for sync
@@ -141,7 +141,7 @@ public class FoodSicknessHandler {
 				if(decayCap != null) {
 					int decayLevel = decayFoodStats.decay;
 					DecayStats decayStats = decayCap.getDecayStats();
-					double decayLoss = 1.0D / 3.0D * 2.0;
+					double decayLoss = 2.0D / 3.0D;
 
 					if (player.world.isRemote) {
 						//Remove all gained decay on client side and wait for sync
