@@ -164,6 +164,7 @@ import thebetweenlands.common.entity.EntityDropHeldCloud;
 import thebetweenlands.common.entity.EntityFalseXPOrb;
 import thebetweenlands.common.entity.EntityFishVortex;
 import thebetweenlands.common.entity.EntityFishingTackleBoxSeat;
+import thebetweenlands.common.entity.EntityFragSpore;
 import thebetweenlands.common.entity.EntityGalleryFrame;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.entity.EntityGreeblingCorpse;
@@ -773,6 +774,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityPuffshroomBuilder.class, RenderPuffshroomBuilder::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityDropHeldCloud.class, RenderNothing::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpyEye.class, RenderSpyEye::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFragSpore.class, RenderFragSpore::new);
 		
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());
