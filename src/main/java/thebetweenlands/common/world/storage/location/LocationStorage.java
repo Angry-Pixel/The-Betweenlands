@@ -28,6 +28,7 @@ import thebetweenlands.api.network.IGenericDataManagerAccess;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.LocalStorageImpl;
@@ -46,6 +47,9 @@ public class LocationStorage extends LocalStorageImpl {
 
 	private TObjectIntMap<Entity> titleDisplayCooldowns = new TObjectIntHashMap<Entity>();
 
+	// Increment when stuff needs to be fixed and implement fix in fixData
+	private static final int VERSION = 1;
+	
 	protected static final DataParameter<String> NAME = GenericDataManager.createKey(LocationStorage.class, DataSerializers.STRING);
 	protected static final DataParameter<Boolean> VISIBLE = GenericDataManager.createKey(LocationStorage.class, DataSerializers.BOOLEAN);
 
@@ -275,6 +279,12 @@ public class LocationStorage extends LocalStorageImpl {
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
+		int savedVersion = nbt.getInteger("version");
+		if(savedVersion != VERSION) {
+			this.fixData(nbt, savedVersion, VERSION);
+			this.markDirty(); // save new version
+		}
+		
 		super.readFromNBT(nbt);
 
 		this.readSharedNbt(nbt);
@@ -303,6 +313,39 @@ public class LocationStorage extends LocalStorageImpl {
 		this.locationSeed = nbt.getLong("seed");
 	}
 
+	protected void fixData(NBTTagCompound nbt, int oldVersion, int newVersion) {
+		if(oldVersion == 0) {
+			// Visibility default was changed to false in update
+			// v3.4.0 causing locations generated afterwards to no
+			// longer be visible
+			
+			String name = nbt.getString("name");
+			
+			if(this.doesVisibilityNeedFixing(name)) {
+				TheBetweenlands.logger.debug("Fixing visibility of location {}", name);
+				nbt.setBoolean("visible", true);
+			}
+		}
+	}
+	
+	private boolean doesVisibilityNeedFixing(String name) {
+		switch(name) {
+		case "ruins":
+		case "small_dungeon":
+		case "tar_pool_dungeon":
+		case "cragrock_tower":
+		case "wight_tower":
+		case "wight_tower_puzzle":
+		case "wight_tower_teleporter":
+		case "wight_tower_boss":
+		case "abandoned_shack":
+		case "underground_ruins":
+			return true;
+		default:
+			return false;
+		}
+	}
+	
 	protected NBTTagCompound writeAabb(AxisAlignedBB aabb) {
 		NBTTagCompound boxNbt = new NBTTagCompound();
 		boxNbt.setDouble("minX", aabb.minX);
@@ -340,6 +383,8 @@ public class LocationStorage extends LocalStorageImpl {
 
 		this.writeSharedNbt(nbt);
 
+		nbt.setInteger("version", VERSION);
+		
 		return nbt;
 	}
 

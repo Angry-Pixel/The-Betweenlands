@@ -63,6 +63,7 @@ public class WorldGenMudStructures extends WorldGenHelper {
 		if(generated) {
 			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(worldIn);
 			LocationStorage locationStorage = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(position), "abandoned_shack", EnumLocationType.RUINS);
+			locationStorage.setVisible(true);
 			locationStorage.setSeed(rand.nextLong());
 			for(AxisAlignedBB aabb : this.bounds) {
 				locationStorage.addBounds(aabb.grow(2, 1, 2));
