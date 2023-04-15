@@ -50,6 +50,7 @@ import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.capability.IEntityCustomCollisionsCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.capability.IPortalCapability;
+import thebetweenlands.client.gui.InfectionOverlayRenderer;
 import thebetweenlands.client.gui.SwarmOverlayRenderer;
 import thebetweenlands.client.render.block.RingOfDispersionWorldRenderer;
 import thebetweenlands.client.render.shader.ResizableFramebuffer;
@@ -77,7 +78,7 @@ import thebetweenlands.util.ColorUtils;
 public class ScreenRenderHandler extends Gui {
 	private ScreenRenderHandler() { }
 
-	public static ScreenRenderHandler INSTANCE = new ScreenRenderHandler();
+	public static final ScreenRenderHandler INSTANCE = new ScreenRenderHandler();
 
 	private static final ResourceLocation DECAY_BAR_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/decay_bar.png");
 	private static final ResourceLocation RING_OF_DISPERSION_OVERLAY_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/overlay/ring_of_dispersion_overlay.png");
@@ -115,6 +116,7 @@ public class ScreenRenderHandler extends Gui {
 	public static final ResourceLocation CAVING_ROPE_DISCONNECTED = new ResourceLocation("thebetweenlands:textures/gui/caving_rope_disconnected.png");
 
 	private final SwarmOverlayRenderer crawlerOverlayRenderer = new SwarmOverlayRenderer();
+	public final InfectionOverlayRenderer infectionOverlayRenderer = new InfectionOverlayRenderer();
 	
 	public static List<LocationStorage> getVisibleLocations(Entity entity) {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(entity.world);
@@ -125,6 +127,7 @@ public class ScreenRenderHandler extends Gui {
 	public void onClientTick(ClientTickEvent event) {
 		if(event.phase == Phase.START && !Minecraft.getMinecraft().isGamePaused()) {
 			this.crawlerOverlayRenderer.update();
+			this.infectionOverlayRenderer.update();
 			
 			this.updateCounter++;
 
@@ -313,6 +316,7 @@ public class ScreenRenderHandler extends Gui {
 
 			GlStateManager.popMatrix();*/
 			
+			this.infectionOverlayRenderer.render(event.getPartialTicks());
 			this.crawlerOverlayRenderer.render(event.getPartialTicks());
 
 			if(BetweenlandsConfig.GENERAL.cavingRopeIndicator && player != null) {

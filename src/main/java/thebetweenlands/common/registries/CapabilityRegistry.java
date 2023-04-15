@@ -12,6 +12,7 @@ import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.capability.IFallDamageReductionCapability;
 import thebetweenlands.api.capability.IFlightCapability;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
+import thebetweenlands.api.capability.IInfectionCapability;
 import thebetweenlands.api.capability.IInfestationIgnoreCapability;
 import thebetweenlands.api.capability.ILastKilledCapability;
 import thebetweenlands.api.capability.IMudWalkerCapability;
@@ -33,6 +34,7 @@ import thebetweenlands.common.capability.falldamagereduce.FallDamageReductionCap
 import thebetweenlands.common.capability.fishing.RotSmellEntityCapability;
 import thebetweenlands.common.capability.flight.FlightEntityCapability;
 import thebetweenlands.common.capability.foodsickness.FoodSicknessEntityCapability;
+import thebetweenlands.common.capability.infection.InfectionEntityCapability;
 import thebetweenlands.common.capability.item.ILivingWeedwoodShieldCapability;
 import thebetweenlands.common.capability.item.LivingWeedwoodShieldItemCapability;
 import thebetweenlands.common.capability.lastkilled.LastKilledCapability;
@@ -108,6 +110,9 @@ public class CapabilityRegistry {
 
 	@CapabilityInject(IMudWalkerCapability.class)
 	public static final Capability<IMudWalkerCapability> CAPABILITY_MUD_WALKER = null;	
+	
+	@CapabilityInject(IInfectionCapability.class)
+	public static final Capability<IInfectionCapability> CAPABILITY_INFECTION = null;
 
 
 	public static void preInit() {
@@ -130,6 +135,7 @@ public class CapabilityRegistry {
 		EntityCapabilityHandler.registerEntityCapability(new InfestationIgnoreEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new FallDamageReductionCapability());
 		EntityCapabilityHandler.registerEntityCapability(new MudWalkerCapability());
+		EntityCapabilityHandler.registerEntityCapability(new InfectionEntityCapability());
 
 		ItemCapabilityHandler.registerItemCapability(new LivingWeedwoodShieldItemCapability());
 		

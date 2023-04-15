@@ -109,6 +109,8 @@ public class SoundRegistry {
     public static final BLSoundEvent SPEAR_LAND = reg("spear_land");
     public static final BLSoundEvent SPEAR_RETURN_1 = reg("spear_return_1");
     public static final BLSoundEvent SPEAR_RETURN_2 = reg("spear_return_2");
+    public static final BLSoundEvent INFECTION_HEARTBEAT = reg("infection_heartbeat");
+    public static final BLSoundEvent INFECTION_SPREAD = reg("infection_spread");
 
     // Hostiles
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");

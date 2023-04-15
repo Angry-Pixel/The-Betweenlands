@@ -2494,5 +2494,24 @@
       "thebetweenlands:grub_hub_suck"
     ],
     "subtitle": "blsubtitles.entity.grub_hub_suck"
+  },
+  "infection_spread": {
+    "sounds": [
+      "thebetweenlands:infection_spread_1",
+      "thebetweenlands:infection_spread_2",
+      "thebetweenlands:infection_spread_3",
+      "thebetweenlands:infection_spread_4",
+      "thebetweenlands:infection_spread_5"
+    ],
+    "subtitle": "blsubtitles.misc.infection_spread"
+  },
+  "infection_heartbeat": {
+    "sounds": [
+      "thebetweenlands:infection_heartbeat_1",
+      "thebetweenlands:infection_heartbeat_2",
+      "thebetweenlands:infection_heartbeat_3",
+      "thebetweenlands:infection_heartbeat_4"
+    ],
+    "subtitle": "blsubtitles.misc.infection_heartbeat"
   }
 }

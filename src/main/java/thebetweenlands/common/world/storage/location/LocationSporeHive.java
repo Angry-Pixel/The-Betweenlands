@@ -15,6 +15,7 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -34,6 +35,7 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.capability.IInfectionCapability;
 import thebetweenlands.api.network.IGenericDataManagerAccess.IDataManagedObject;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
@@ -45,6 +47,7 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
@@ -264,6 +267,8 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 			} else {
 				this.updateGrowth(world);
 			}
+			
+			this.infectEntities(world);
 		} else {
 			this.updateParticles(world);
 		}
@@ -792,6 +797,28 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 									.withColor(0.8F, 0.6F, 0.3F, (1 - size) * 0.25f + 0.25f)
 									.withData(80, true, 0.01F, true)));
 						}
+					}
+				}
+			}
+		}
+	}
+	
+	protected void infectEntities(World world) {
+		float strength = (float) this.size;
+		
+		if(strength > 0.1f) {
+			List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getBoundingBox(), e -> e.hasCapability(CapabilityRegistry.CAPABILITY_INFECTION, null));
+			
+			for(EntityLivingBase entity : entities) {
+				double noise = this.getGrowthAreaNoiseAt(entity.getPosition(), -1);
+				
+				if(noise > 0) {
+					strength *= MathHelper.clamp((float)noise / 200.0f, 0.0f, 1.0f);
+					
+					IInfectionCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_INFECTION, null);
+					
+					if(cap != null && cap.isInfectable()) {
+						cap.setInfectionPercent(Math.min(1.0f, cap.getInfectionPercent() + strength * 0.0015f));
 					}
 				}
 			}
