@@ -17,8 +17,10 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import thebetweenlands.api.capability.IInfectionCapability;
 import thebetweenlands.api.capability.ISerializableCapability;
+import thebetweenlands.api.entity.IInfectionBehavior;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.base.EntityCapability;
+import thebetweenlands.common.entity.infection.PlantingInfectionBehavior;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.network.clientbound.MessageInfectionIncrease;
 import thebetweenlands.common.registries.CapabilityRegistry;
@@ -60,6 +62,8 @@ public class InfectionEntityCapability extends EntityCapability<InfectionEntityC
 	private float increaseThreshold = 0.025f;
 	private int infectionIncreaseTimer;
 
+	private IInfectionBehavior currentInfectionBehavior;
+
 	public InfectionEntityCapability() {
 		this.seed = RNG.nextInt();
 	}
@@ -75,7 +79,7 @@ public class InfectionEntityCapability extends EntityCapability<InfectionEntityC
 
 		if(this.percentage != percent) {
 			float diff = percent - this.percentage;
-			
+
 			this.percentage += diff;
 
 			this.infectionIncrease = MathHelper.clamp(this.infectionIncrease + diff, 0.0f, 1.0f);
@@ -132,6 +136,42 @@ public class InfectionEntityCapability extends EntityCapability<InfectionEntityC
 	}
 
 	@Override
+	public boolean triggerInfectionBehavior(IInfectionBehavior behavior) {
+		if(this.currentInfectionBehavior != null) {
+			return false;
+		}
+
+		this.currentInfectionBehavior = behavior;
+		this.currentInfectionBehavior.start();
+
+		return true;
+	}
+
+	@Override
+	public boolean stopInfectionBehavior() {
+		if(this.currentInfectionBehavior != null) {
+			if(this.currentInfectionBehavior.stop()) {
+				this.removeInfectionBehavior();
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public void removeInfectionBehavior() {
+		if(this.currentInfectionBehavior != null) {
+			this.currentInfectionBehavior.onRemove();
+		}
+		this.currentInfectionBehavior = null;		
+	}
+
+	@Override
+	public IInfectionBehavior getCurrentInfectionBehavior() {
+		return this.currentInfectionBehavior;
+	}
+
+	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		this.writeTrackingDataToNBT(nbt);
 	}
@@ -161,30 +201,50 @@ public class InfectionEntityCapability extends EntityCapability<InfectionEntityC
 
 	@SubscribeEvent
 	public static void onPlayerTick(PlayerTickEvent event) {
-		if(event.phase == TickEvent.Phase.END && !event.player.world.isRemote) {
+		if(event.phase == TickEvent.Phase.END) {
 			IInfectionCapability cap = event.player.getCapability(CapabilityRegistry.CAPABILITY_INFECTION, null);
 
 			if(cap != null) {
-				float healingRate = cap.getInfectionHealingRate();
-				float infection = cap.getInfectionPercent();
+				IInfectionBehavior behavior = cap.getCurrentInfectionBehavior();
 
-				if(healingRate > 0 && infection > 0) {
-					cap.setInfectionPercent(Math.max(0, infection - healingRate));
-				}
+				if(!event.player.world.isRemote) {
+					if(behavior != null) {
+						behavior.update();
 
-				// TODO Debug
-				if(event.player.ticksExisted % 20 == 0)
-					System.out.println("P: " + cap.getInfectionPercent());
-				
-				cap.incrementInfectionIncreaseTimer();
+						if(behavior.isDone()) {
+							cap.stopInfectionBehavior();
+						}
+					}
 
-				float increase = cap.getInfectionIncrease();
+					float healingRate = cap.getInfectionHealingRate();
+					float infection = cap.getInfectionPercent();
 
-				if(event.player instanceof EntityPlayerMP && increase > 0.015f && cap.getInfectionIncreaseTimer() > 30 + 70 * MathHelper.clamp(0.2f - increase, 0.0f, 1.0f)) {
-					TheBetweenlands.networkWrapper.sendTo(new MessageInfectionIncrease(increase), (EntityPlayerMP) event.player);
+					if(healingRate > 0 && infection > 0) {
+						cap.setInfectionPercent(Math.max(0, infection - healingRate));
+					}
 
-					cap.resetInfectionIncrease();
-					cap.resetInfectionIncreaseTimer();
+					// TODO Debug
+					if(event.player.ticksExisted % 20 == 0)
+						System.out.println("P: " + cap.getInfectionPercent());
+
+					cap.incrementInfectionIncreaseTimer();
+
+					float increase = cap.getInfectionIncrease();
+
+					if(event.player instanceof EntityPlayerMP && increase > 0.015f && cap.getInfectionIncreaseTimer() > 30 + 70 * MathHelper.clamp(0.2f - increase, 0.0f, 1.0f)) {
+						TheBetweenlands.networkWrapper.sendTo(new MessageInfectionIncrease(increase), (EntityPlayerMP) event.player);
+
+						cap.resetInfectionIncrease();
+						cap.resetInfectionIncreaseTimer();
+					}
+
+
+					// TODO Testing
+					if(event.player.ticksExisted % 20 == 0 && cap.getCurrentInfectionBehavior() == null && !event.player.isCreative()) {
+						cap.triggerInfectionBehavior(new PlantingInfectionBehavior(event.player));
+					}
+				} else if(behavior != null) {
+					behavior.update();
 				}
 			}
 		}

@@ -188,6 +188,7 @@ import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
 import thebetweenlands.common.entity.EntityTriggeredSludgeWallJet;
 import thebetweenlands.common.entity.EntityVolarkite;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
+import thebetweenlands.common.entity.infection.PlantingInfectionBehavior;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityAshSprite;
@@ -1009,6 +1010,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         MinecraftForge.EVENT_BUS.register(EventHeavyRain.class);
         MinecraftForge.EVENT_BUS.register(new GuiFishStaminaBar());
         MinecraftForge.EVENT_BUS.register(ItemBLFishingRod.class);
+        MinecraftForge.EVENT_BUS.register(PlantingInfectionBehavior.class);
 	}
 
 	private static FontRenderer pixelLove;

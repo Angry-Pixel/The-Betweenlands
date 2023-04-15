@@ -32,17 +32,13 @@ public class MessageGemProc extends MessageEntity {
 	}
 
 	@Override
-	public void deserialize(PacketBuffer buf) {
+	public void deserialize(PacketBuffer buf) throws IOException {
 		super.deserialize(buf);
-		try {
-			this.gem = CircleGem.readFromNBT(buf.readCompoundTag());
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		this.gem = CircleGem.readFromNBT(buf.readCompoundTag());
 	}
 
 	@Override
-	public void serialize(PacketBuffer buf) {
+	public void serialize(PacketBuffer buf) throws IOException {
 		super.serialize(buf);
 		buf.writeCompoundTag(this.gem.writeToNBT(new NBTTagCompound()));
 	}

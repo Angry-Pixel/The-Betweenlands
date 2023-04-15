@@ -33,12 +33,15 @@ import thebetweenlands.common.network.clientbound.MessageShockArrowHit;
 import thebetweenlands.common.network.clientbound.MessageShockParticle;
 import thebetweenlands.common.network.clientbound.MessageShowFoodSicknessLine;
 import thebetweenlands.common.network.clientbound.MessageSoundRipple;
+import thebetweenlands.common.network.clientbound.MessageStartInfectionBehavior;
+import thebetweenlands.common.network.clientbound.MessageStopInfectionBehavior;
 import thebetweenlands.common.network.clientbound.MessageSummonPeatMummyParticles;
 import thebetweenlands.common.network.clientbound.MessageSyncChunkStorage;
 import thebetweenlands.common.network.clientbound.MessageSyncDraetonLeakages;
 import thebetweenlands.common.network.clientbound.MessageSyncEntityCapabilities;
 import thebetweenlands.common.network.clientbound.MessageSyncEnvironmentEventData;
 import thebetweenlands.common.network.clientbound.MessageSyncGameRules;
+import thebetweenlands.common.network.clientbound.MessageSyncInfectionBehavior;
 import thebetweenlands.common.network.clientbound.MessageSyncLocalStorageData;
 import thebetweenlands.common.network.clientbound.MessageSyncLocalStorageReferences;
 import thebetweenlands.common.network.clientbound.MessageSyncStaticAspects;
@@ -50,6 +53,7 @@ import thebetweenlands.common.network.serverbound.MessageConnectCavingRope;
 import thebetweenlands.common.network.serverbound.MessageEquipItem;
 import thebetweenlands.common.network.serverbound.MessageExtendedReach;
 import thebetweenlands.common.network.serverbound.MessageFlightState;
+import thebetweenlands.common.network.serverbound.MessageInfectionPlantBlock;
 import thebetweenlands.common.network.serverbound.MessageItemNaming;
 import thebetweenlands.common.network.serverbound.MessageOpenPouch;
 import thebetweenlands.common.network.serverbound.MessagePurgeDraetonBurner;
@@ -99,6 +103,9 @@ public class MessageRegistry {
 		registerMessage(MessageShockParticle.class, Side.CLIENT);
 		registerMessage(MessageInfestWeedwoodBush.class, Side.CLIENT);
 		registerMessage(MessageInfectionIncrease.class, Side.CLIENT);
+		registerMessage(MessageStartInfectionBehavior.class, Side.CLIENT);
+		registerMessage(MessageStopInfectionBehavior.class, Side.CLIENT);
+		registerMessage(MessageSyncInfectionBehavior.class, Side.CLIENT);
 
 		registerMessage(MessageEquipItem.class, Side.SERVER);
 		registerMessage(MessageOpenPouch.class, Side.SERVER);
@@ -115,6 +122,7 @@ public class MessageRegistry {
 		registerMessage(MessagePurgeDraetonBurner.class, Side.SERVER);
 		registerMessage(MessageChiromawDoubleJump.class, Side.SERVER);
 		registerMessage(MessageButcherFish.class, Side.SERVER);
+		registerMessage(MessageInfectionPlantBlock.class, Side.SERVER);
 	}
 
 	private static void registerMessage(Class<? extends MessageBase> messageType, Side toSide) {

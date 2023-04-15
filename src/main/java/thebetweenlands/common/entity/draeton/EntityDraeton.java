@@ -1,5 +1,6 @@
 package thebetweenlands.common.entity.draeton;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -2294,7 +2295,11 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		buffer.writeInt(this.physicsParts.size());
 		for(DraetonPhysicsPart part : this.physicsParts) {
 			MessageUpdateDraetonPhysicsPart msg = new MessageUpdateDraetonPhysicsPart(this, part, MessageUpdateDraetonPhysicsPart.Action.UPDATE);
-			msg.serialize(packetBuffer);
+			try {
+				msg.serialize(packetBuffer);
+			} catch(IOException e) {
+				TheBetweenlands.logger.error("Failed serializing draeton physics part", e);
+			}
 		}
 	}
 
@@ -2309,7 +2314,12 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		int numParts = buffer.readInt();
 		for(int i = 0; i < numParts; i++) {
 			MessageUpdateDraetonPhysicsPart msg = new MessageUpdateDraetonPhysicsPart();
-			msg.deserialize(packetBuffer);
+			try {
+				msg.deserialize(packetBuffer);
+			} catch(IOException e) {
+				TheBetweenlands.logger.error("Failed deserializing draeton physics part", e);
+				continue;
+			}
 			msg.processClient(this);
 		}
 	}

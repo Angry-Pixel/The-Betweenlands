@@ -17,6 +17,7 @@ public class Registries {
 		CustomRecipeRegistry.preInit();
 		AdvancementCriterionRegistry.preInit();
 		LootTableRegistry.preInit();
+		InfectionBehaviorRegistry.preInit();
 
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 			ModelRegistry.preInit();
