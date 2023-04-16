@@ -42,6 +42,10 @@ import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.AdvancedStateMap;
 
+import thebetweenlands.common.block.farming.BlockGenericDugSoil;
+import net.minecraft.util.EnumHand;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+
 public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, IShearable, ISickleHarvestable, IFarmablePlant, ITintedBlock {
 	protected static final AxisAlignedBB PLANT_AABB = new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 1.0D, 0.9D);
 
@@ -270,5 +274,21 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 	@Override
 	public int getColorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
 		return worldIn != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(worldIn, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
+	}
+	
+	@Override
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack heldItem = playerIn.getHeldItem(hand);
+		if(!heldItem.isEmpty() && EnumItemMisc.COMPOST.isItemOf(heldItem)) {
+			pos = pos.down();
+			if(state.getValue(HALF) == BlockDoublePlantBL.EnumBlockHalf.UPPER) {
+				pos = pos.down();
+			}
+			state = world.getBlockState(pos);
+			if(state.getBlock() instanceof BlockGenericDugSoil) {
+				return state.getBlock().onBlockActivated(world, pos, state, playerIn, hand, EnumFacing.UP, 0.5f, 1.0f, 0.5f);
+			}
+		}
+		return false;
 	}
 }
