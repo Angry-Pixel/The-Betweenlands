@@ -92,7 +92,7 @@ public class MessageSyncInfectionBehavior extends MessageEntity {
 	@SideOnly(Side.CLIENT)
 	protected void syncData(AbstractInfectionBehavior behavior) {
 		IGenericDataManagerAccess dataManager = behavior.getDataManager();
-		if(dataManager != null) {
+		if(dataManager != null && this.dataManagerEntries != null) {
 			dataManager.setValuesFromPacket(this.dataManagerEntries);
 		}
 	}

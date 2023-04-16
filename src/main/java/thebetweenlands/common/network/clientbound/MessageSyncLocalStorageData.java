@@ -66,7 +66,7 @@ public class MessageSyncLocalStorageData extends MessageBase {
 	@SideOnly(Side.CLIENT)
 	private void handle() {
 		World world = Minecraft.getMinecraft().world;
-		if(world != null) {
+		if(world != null && this.dataManagerEntries != null) {
 			StorageID id = StorageID.readFromNBT(this.idNbt);
 
 			IWorldStorage worldStorage = WorldStorageImpl.getCapability(world);

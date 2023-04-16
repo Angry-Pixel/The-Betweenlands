@@ -1,9 +1,14 @@
 package thebetweenlands.common.entity.infection;
 
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
+import thebetweenlands.api.capability.IInfectionCapability;
 import thebetweenlands.api.entity.IInfectionBehavior;
 import thebetweenlands.api.network.IGenericDataManagerAccess.IDataManagedObject;
 import thebetweenlands.common.TheBetweenlands;
@@ -12,6 +17,7 @@ import thebetweenlands.common.network.clientbound.MessageStartInfectionBehavior;
 import thebetweenlands.common.network.clientbound.MessageStopInfectionBehavior;
 import thebetweenlands.common.network.clientbound.MessageSyncInfectionBehavior;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
+import thebetweenlands.common.registries.CapabilityRegistry;
 
 public abstract class AbstractInfectionBehavior implements IInfectionBehavior, IDataManagedObject {
 
@@ -71,5 +77,21 @@ public abstract class AbstractInfectionBehavior implements IInfectionBehavior, I
 		if(entity instanceof EntityPlayerMP) {
 			TheBetweenlands.networkWrapper.sendTo(message, (EntityPlayerMP) entity);
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T extends IInfectionBehavior> Optional<T> getInfectionBehavior(@Nullable Entity entity, Class<T> cls) {
+		if(entity != null) {
+			IInfectionCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_INFECTION, null);
+
+			if(cap != null) {
+				IInfectionBehavior behavior = cap.getCurrentInfectionBehavior();
+
+				if(cls.isInstance(behavior)) {
+					return Optional.of((T) behavior);
+				}
+			}
+		}
+		return Optional.empty();
 	}
 }

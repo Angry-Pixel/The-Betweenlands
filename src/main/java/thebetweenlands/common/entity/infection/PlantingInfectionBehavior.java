@@ -9,7 +9,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -23,25 +22,27 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.api.capability.IInfectionCapability;
-import thebetweenlands.api.entity.IInfectionBehavior;
+import thebetweenlands.api.entity.IInfectionBehaviorOverlay;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.plant.BlockMouldHornMushroom;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.network.serverbound.MessageInfectionPlantBlock;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 
-public class PlantingInfectionBehavior extends AbstractInfectionBehavior {
+public class PlantingInfectionBehavior extends AbstractInfectionBehavior implements IInfectionBehaviorOverlay {
 
 	private static final DataParameter<BlockPos> TARGET_POS = GenericDataManager.createKey(PlantingInfectionBehavior.class, DataSerializers.BLOCK_POS);
 
 	protected int lookingTicks;
-	
+
 	private Vec3d targetLookDir;
 	private Vec3d prevLookDir;
 	private Vec3d originalLookDir;
@@ -55,7 +56,13 @@ public class PlantingInfectionBehavior extends AbstractInfectionBehavior {
 	private boolean firstApply = true;
 
 	private boolean hasPlanted = false;
-	
+
+	private int plantingTimeout;
+
+	private int obstructedTicks;
+
+	private int maxLookingTicks = 200;
+
 	public PlantingInfectionBehavior(EntityLivingBase entity) {
 		super(entity);
 		this.dataManager.register(TARGET_POS, BlockPos.ORIGIN);
@@ -78,6 +85,11 @@ public class PlantingInfectionBehavior extends AbstractInfectionBehavior {
 	}
 
 	@Override
+	public float getOverlayPercentage() {
+		return 1.0f;
+	}
+	
+	@Override
 	public void start() {
 		if(!this.world.isRemote) {
 			BlockPos newTarget = this.findTargetPos();
@@ -91,9 +103,9 @@ public class PlantingInfectionBehavior extends AbstractInfectionBehavior {
 	public void update() {
 		if(!this.world.isRemote) {
 			this.checkTargetValid();
-			
+
 			if(this.isLooking()) {
-				this.entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1, 2, true, false));
+				this.entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1, 3, true, false));
 			}
 		}
 
@@ -105,69 +117,111 @@ public class PlantingInfectionBehavior extends AbstractInfectionBehavior {
 
 		if(!this.world.isRemote || !this.firstApply) {
 			this.lookingTicks++;
-		}
-		
-		System.out.println((this.world.isRemote ? "C: " : "S: ") + " " + this.getTargetPos());
 
-		if(this.world.isRemote && this.lookingTicks > 40 && this.isLooking()) {
+			if(this.lookingTicks >= this.maxLookingTicks - 10 && this.tryPlaceBlock(this.entity.getPosition())) {
+				this.hasPlanted = true;
+			}
+		}
+
+		if(this.plantingTimeout > 0) {
+			--this.plantingTimeout;
+		}
+
+		if(this.world.isRemote && this.lookingTicks > 40 && this.isLooking() && this.plantingTimeout == 0) {
 			Vec3d startVec = this.entity.getPositionEyes(1.0f);
 			Vec3d endVec = startVec.add(this.entity.getLookVec().scale(5.0D));
-			
+
 			RayTraceResult result = this.world.rayTraceBlocks(startVec, endVec, true);
-			
+
 			if(result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
 				BlockPos hitPos = result.getBlockPos();
-				
-				if(hitPos != null && this.getTargetPos().equals(hitPos.up()) && result.sideHit == EnumFacing.UP && result.hitVec != null && Math.abs(result.hitVec.x - hitPos.getX() - 0.5D) < 0.25D && Math.abs(result.hitVec.z - hitPos.getZ() - 0.5D) < 0.25D) {
+
+				if(hitPos != null && this.getTargetPos().equals(hitPos.up()) && result.sideHit == EnumFacing.UP && result.hitVec != null && Math.abs(result.hitVec.x - hitPos.getX() - 0.5D) < 0.25D && Math.abs(result.hitVec.z - hitPos.getZ() - 0.5D) < 0.35D) {
 					if(this.tryPlaceBlock(hitPos)) {
+						this.spawnPlantingParticles(hitPos.up());
 						TheBetweenlands.networkWrapper.sendToServer(new MessageInfectionPlantBlock(hitPos.up()));
-						this.hasPlanted = true;
+						this.plantingTimeout = 20;
 					}
 				}
 			}
 		}
-		
-		// TODO Plant anyway if timer expires
-		
+
 		super.update();
 	}
 
-	public void handleClientPlanting(BlockPos pos) {
-		if(this.getTargetPos().equals(pos)) {
-			if(this.tryPlaceBlock(pos)) {
-				this.hasPlanted = true;
+	@SideOnly(Side.CLIENT)
+	protected void spawnPlantingParticles(BlockPos pos) {
+		for(int i = 0; i < 16; ++i) {
+			BLParticles particle;
+			switch(this.world.rand.nextInt(4)) {
+			default:
+			case 0:
+				particle = BLParticles.MOULD_HORN_1;
+				break;
+			case 1:
+				particle = BLParticles.MOULD_HORN_2;
+				break;
+			case 2:
+				particle = BLParticles.MOULD_HORN_3;
+				break;
+			case 3:
+				particle = BLParticles.MOULD_HORN_4;
+				break;
 			}
+			float dx = this.world.rand.nextFloat() * 0.4f - 0.2f;
+			float dz = this.world.rand.nextFloat() * 0.4f - 0.2f;
+			particle.spawn(this.world,
+					pos.getX() + 0.5D + dx, pos.getY() - 0.1f + this.world.rand.nextFloat() * 0.5f, pos.getZ() + 0.5D + dz,
+					ParticleArgs.get().withMotion(dx * 0.25D, 0.025D, dz * 0.25D).withData(-1, false, 5));
+		}
+
+		for(int i = 0; i < 10; ++i) {
+			Random rand = this.world.rand;
+			float size = rand.nextFloat();
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(this.world,
+					pos.getX() + rand.nextFloat(), pos.getY(), pos.getZ() + rand.nextFloat(), 
+					ParticleArgs.get()
+					.withMotion((rand.nextFloat() - 0.5f) * 0.04f, rand.nextFloat() * 0.02f, (rand.nextFloat() - 0.5f) * 0.04f)
+					.withScale(2f + size * 10.0F)
+					.withColor(0.8F, 0.6F, 0.3F, (1 - size) * 0.25f + 0.25f)
+					.withData(80, true, 0.01F, true)));
 		}
 	}
-	
+
+	public void handleClientPlanting(BlockPos pos) {
+		if(this.getTargetPos().equals(pos) && this.tryPlaceBlock(pos)) {
+			this.hasPlanted = true;
+		}
+	}
+
 	public boolean tryPlaceBlock(BlockPos pos) {
-		if(this.entity instanceof EntityPlayer) {
-			
+		if(!this.hasPlanted && this.entity instanceof EntityPlayer) {
+
 			// TODO Don't
-			
+
 			ItemStack prevStack = this.entity.getHeldItem(EnumHand.MAIN_HAND);
-			
+
 
 			ItemStack stack = new ItemStack(Item.getItemFromBlock(BlockRegistry.MOULD_HORN));
-			
+
 			this.entity.setHeldItem(EnumHand.MAIN_HAND, stack);
 			boolean success = stack.getItem().onItemUse((EntityPlayer) this.entity, this.world, pos, EnumHand.MAIN_HAND, EnumFacing.UP, 0.5f, 1.0f, 0.5f) == EnumActionResult.SUCCESS;
-			
+
 			this.entity.setHeldItem(EnumHand.MAIN_HAND, prevStack);
-			
+
 			if(success) {
 				this.entity.swingArm(EnumHand.MAIN_HAND);
 			}
-			
+
 			return success;
 		}
 		// TODO ?
 		return false;
 	}
-	
+
 	@Override
 	public boolean isDone() {
-		return !this.isLooking() || this.lookingTicks > 200 || this.hasPlanted;
+		return !this.isLooking() || this.lookingTicks > this.maxLookingTicks || this.hasPlanted;
 	}
 
 	protected boolean isLooking() {
@@ -181,7 +235,23 @@ public class PlantingInfectionBehavior extends AbstractInfectionBehavior {
 			if(!this.isValidPlantingSpot(target)) {
 				this.setTargetPos(BlockPos.ORIGIN);
 			} else {
+				boolean isValid = true;
+
 				if(target.distanceSq(this.entity.getPosition()) > 36) {
+					isValid = false;
+				}
+
+				if(this.world.rayTraceBlocks(new Vec3d(this.entity.posX, this.entity.posY + (double)this.entity.getEyeHeight(), this.entity.posZ), new Vec3d(target.getX() + 0.5D, target.getY() + 0.01D, target.getZ() + 0.5D), true) != null) {
+					++this.obstructedTicks;
+
+					if(this.obstructedTicks > 20) {
+						isValid = false;
+					}
+				} else {
+					this.obstructedTicks = 0;
+				}
+
+				if(!isValid) {
 					BlockPos newTarget = this.findTargetPos();
 					this.setTargetPos(newTarget != null ? newTarget : BlockPos.ORIGIN);
 				}
@@ -233,40 +303,37 @@ public class PlantingInfectionBehavior extends AbstractInfectionBehavior {
 
 			float p = MathHelper.clamp(this.lookingTicks / 40.0f, 0.0f, 1.0f);
 
-			float s = MathHelper.clamp(this.lookingTicks / 200.0f, 0.0f, 1.0f);
+			float s = MathHelper.clamp(this.lookingTicks / 100.0f, 0.0f, 1.0f);
 
 			newLookDir = this.originalLookDir.add(newLookDir.subtract(this.originalLookDir).scale(p)).normalize();
 
 			if(this.prevLookDir != null) {
-				newLookDir = this.prevLookDir.add(newLookDir.subtract(this.prevLookDir).scale((0.5f + s * 5.5f) * 0.2f)).normalize();
+				newLookDir = this.prevLookDir.add(newLookDir.subtract(this.prevLookDir).scale((0.5f + s * 4.5f) * 0.2f)).normalize();
 			}
 
 			double d = (double)MathHelper.sqrt(newLookDir.x * newLookDir.x + newLookDir.z * newLookDir.z);
 			float yaw = (float)(MathHelper.atan2(newLookDir.z, newLookDir.x) * (180D / Math.PI)) - 90.0F;
 			float pitch = (float)(-(MathHelper.atan2(newLookDir.y, d) * (180D / Math.PI)));
 
-			this.rotationYaw = this.entity.rotationYawHead = this.updateRotation(this.rotationYaw, yaw, Math.abs(MathHelper.wrapDegrees(yaw - this.rotationYaw) / 180.0f) * (1.0f + s * 3.0f) * 20.0f);
-			this.rotationPitch = this.entity.rotationPitch = this.updateRotation(this.rotationPitch, pitch, Math.abs(MathHelper.wrapDegrees(pitch - this.rotationPitch) / 180.0f) * (1.0f + s * 4.0f) * 20.0f);
+			this.rotationYaw = this.entity.rotationYawHead = this.updateRotation(this.rotationYaw, yaw, Math.abs(MathHelper.wrapDegrees(yaw - this.rotationYaw) / 180.0f) * (1.0f + s * 4.0f) * 20.0f);
+			this.rotationPitch = this.entity.rotationPitch = this.updateRotation(this.rotationPitch, pitch, Math.abs(MathHelper.wrapDegrees(pitch - this.rotationPitch) / 180.0f) * (1.0f + s * 5.0f) * 20.0f);
 
 			this.prevLookDir = newLookDir;
 		}
 	}
 
-	private float updateRotation(float p_75652_1_, float p_75652_2_, float p_75652_3_)
-	{
-		float f = MathHelper.wrapDegrees(p_75652_2_ - p_75652_1_);
+	private float updateRotation(float current, float target, float rate) {
+		float offset = MathHelper.wrapDegrees(target - current);
 
-		if (f > p_75652_3_)
-		{
-			f = p_75652_3_;
+		if (offset > rate) {
+			offset = rate;
 		}
 
-		if (f < -p_75652_3_)
-		{
-			f = -p_75652_3_;
+		if (offset < -rate) {
+			offset = -rate;
 		}
 
-		return p_75652_1_ + f;
+		return current + offset;
 	}
 
 	protected void applyLookDirectionFirstPerson(BlockPos target, float partialTicks) {
@@ -293,25 +360,23 @@ public class PlantingInfectionBehavior extends AbstractInfectionBehavior {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public static void onFogColors(FogColors event) {
-		EntityPlayer player = Minecraft.getMinecraft().player;
+		getInfectionBehavior(Minecraft.getMinecraft().player, PlantingInfectionBehavior.class).ifPresent(behavior -> {
+			BlockPos target = behavior.getTargetPos();
 
-		if(player != null) {
-			IInfectionCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_INFECTION, null);
-
-			if(cap != null) {
-				IInfectionBehavior currentBehavior = cap.getCurrentInfectionBehavior();
-
-				if(currentBehavior instanceof PlantingInfectionBehavior) {
-					PlantingInfectionBehavior behavior = (PlantingInfectionBehavior) currentBehavior;
-
-					BlockPos target = behavior.getTargetPos();
-
-					if(behavior.isLooking()) {
-						behavior.applyLookDirectionFirstPerson(target, (float)event.getRenderPartialTicks());
-					}
-				}
+			if(behavior.isLooking()) {
+				behavior.applyLookDirectionFirstPerson(target, (float)event.getRenderPartialTicks());
 			}
-		}
+		});
+	}
+
+	@SubscribeEvent
+	public static void onLivingJump(LivingEvent.LivingJumpEvent event) {
+		EntityLivingBase entity = event.getEntityLiving();
+		getInfectionBehavior(entity, PlantingInfectionBehavior.class).ifPresent(behavior -> {
+			if(behavior.isLooking() && entity.motionY > 0) {
+				entity.motionY *= 0.5f;
+			}
+		});
 	}
 
 }
