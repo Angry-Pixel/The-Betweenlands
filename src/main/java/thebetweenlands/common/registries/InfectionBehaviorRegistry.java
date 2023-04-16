@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.entity.infection.AbstractInfectionBehavior;
 import thebetweenlands.common.entity.infection.PlantingInfectionBehavior;
+import thebetweenlands.common.entity.infection.RandomLookingBehavior;
 import thebetweenlands.common.entity.infection.SporeInfectionBehavior;
 import thebetweenlands.common.lib.ModInfo;
 
@@ -24,6 +25,7 @@ public class InfectionBehaviorRegistry {
 	public static void preInit() {
 		register(new ResourceLocation(ModInfo.ID, "planting_behavior"), PlantingInfectionBehavior.class, PlantingInfectionBehavior::new);
 		register(new ResourceLocation(ModInfo.ID, "spore_behavior"), SporeInfectionBehavior.class, SporeInfectionBehavior::new);
+		register(new ResourceLocation(ModInfo.ID, "random_looking_behavior"), RandomLookingBehavior.class, RandomLookingBehavior::new);
 	}
 
 	public static <T extends AbstractInfectionBehavior> void register(ResourceLocation id, Class<T> cls, Factory<T> factory) {
