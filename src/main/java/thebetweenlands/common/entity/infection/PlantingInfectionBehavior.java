@@ -4,6 +4,8 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.SoundType;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,15 +15,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -88,7 +92,7 @@ public class PlantingInfectionBehavior extends AbstractInfectionBehavior impleme
 	public float getOverlayPercentage() {
 		return 1.0f;
 	}
-	
+
 	@Override
 	public void start() {
 		if(!this.world.isRemote) {
@@ -137,7 +141,7 @@ public class PlantingInfectionBehavior extends AbstractInfectionBehavior impleme
 				BlockPos hitPos = result.getBlockPos();
 
 				if(hitPos != null && this.getTargetPos().equals(hitPos.up()) && result.sideHit == EnumFacing.UP && result.hitVec != null && Math.abs(result.hitVec.x - hitPos.getX() - 0.5D) < 0.25D && Math.abs(result.hitVec.z - hitPos.getZ() - 0.5D) < 0.35D) {
-					if(this.tryPlaceBlock(hitPos)) {
+					if(this.tryPlaceBlock(hitPos.up())) {
 						this.spawnPlantingParticles(hitPos.up());
 						TheBetweenlands.networkWrapper.sendToServer(new MessageInfectionPlantBlock(hitPos.up()));
 						this.plantingTimeout = 20;
@@ -195,28 +199,48 @@ public class PlantingInfectionBehavior extends AbstractInfectionBehavior impleme
 	}
 
 	public boolean tryPlaceBlock(BlockPos pos) {
-		if(!this.hasPlanted && this.entity instanceof EntityPlayer) {
+		if(!this.hasPlanted) {
+			IBlockState state = BlockRegistry.MOULD_HORN.getDefaultState();
 
-			// TODO Don't
+			if(this.entity instanceof EntityPlayer) {
+				EntityPlayer player = (EntityPlayer) this.entity;
 
-			ItemStack prevStack = this.entity.getHeldItem(EnumHand.MAIN_HAND);
-
-
-			ItemStack stack = new ItemStack(Item.getItemFromBlock(BlockRegistry.MOULD_HORN));
-
-			this.entity.setHeldItem(EnumHand.MAIN_HAND, stack);
-			boolean success = stack.getItem().onItemUse((EntityPlayer) this.entity, this.world, pos, EnumHand.MAIN_HAND, EnumFacing.UP, 0.5f, 1.0f, 0.5f) == EnumActionResult.SUCCESS;
-
-			this.entity.setHeldItem(EnumHand.MAIN_HAND, prevStack);
-
-			if(success) {
-				this.entity.swingArm(EnumHand.MAIN_HAND);
+				if(!player.canPlayerEdit(pos, EnumFacing.UP, new ItemStack(Item.getItemFromBlock(state.getBlock())))
+						|| !this.world.mayPlace(state.getBlock(), pos, false, EnumFacing.UP, player)) {
+					this.hasPlanted = true;
+					return false;
+				}
+			} else if(!ForgeEventFactory.getMobGriefingEvent(this.world, this.entity)) {
+				this.hasPlanted = true;
+				return false;
 			}
 
-			return success;
+			if(this.placeBlockAt(this.entity, this.world, pos, EnumFacing.UP, state)) {
+				state = this.world.getBlockState(pos);
+
+				SoundType soundtype = state.getBlock().getSoundType(state, this.world, pos, this.entity);
+				this.world.playSound(this.entity instanceof EntityPlayer ? (EntityPlayer) this.entity : null, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+
+				this.entity.swingArm(EnumHand.MAIN_HAND);
+
+				return true;
+			}
 		}
-		// TODO ?
+
 		return false;
+	}
+
+	public boolean placeBlockAt(EntityLivingBase placer, World world, BlockPos pos, EnumFacing side, IBlockState newState) {
+		if(!world.setBlockState(pos, newState, 11)) {
+			return false;
+		}
+
+		IBlockState state = world.getBlockState(pos);
+		if(state.getBlock() == newState.getBlock()) {
+			newState.getBlock().onBlockPlacedBy(world, pos, state, placer, ItemStack.EMPTY);
+		}
+
+		return true;
 	}
 
 	@Override
