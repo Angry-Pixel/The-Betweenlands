@@ -56,6 +56,15 @@ public class BlockHollowLog extends BlockHorizontal {
 	}
 
 	protected void addBox(EnumFacing facing, IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState) {
+		
+		// dont add collision to faces where they are connected to other logs
+		if(facing.getAxis() != EnumFacing.Axis.Y && worldIn.isBlockLoaded(pos.offset(facing))) {
+			IBlockState lstate = worldIn.getBlockState(pos.offset(facing));
+			if(lstate.getBlock() == BlockRegistry.HOLLOW_LOG && lstate.getValue(FACING).getAxis() == facing.getAxis()) {
+				return;
+			} 
+		}
+		
 		AxisAlignedBB box;
 		switch(facing) {
 			case UP:
@@ -79,13 +88,7 @@ public class BlockHollowLog extends BlockHorizontal {
 			default:
 				return;
 		}
-		// dont add collision to faces where they are connected to other logs
-		if(facing.getAxis() != EnumFacing.Axis.Y && worldIn.isBlockLoaded(pos.offset(facing))) {
-			IBlockState lstate = worldIn.getBlockState(pos.offset(facing));
-			if(lstate.getBlock() == BlockRegistry.HOLLOW_LOG && lstate.getValue(FACING).getAxis() != facing.getAxis()) {
-				return;
-			} 
-		}
+		
 		addCollisionBoxToList(pos, entityBox, collidingBoxes, box);
 	}
 		
