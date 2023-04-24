@@ -172,7 +172,9 @@ public class EntityBLItemFrame extends EntityItemFrame implements IEntityAdditio
         dataManager.set(IS_GLOWING, compound.getBoolean("IS_GLOWING"));
         super.readEntityFromNBT(compound);
 
-        this.updateFacingWithBoundingBox(EnumFacing.byIndex(compound.getByte("REAL_FACING_DIRECTION")));
+        if(compound.hasKey("REAL_FACING_DIRECTION") || !compound.hasKey("Facing")) {
+            this.updateFacingWithBoundingBox(EnumFacing.byIndex(compound.getByte("REAL_FACING_DIRECTION")));
+        }
     }
 
     @Override
