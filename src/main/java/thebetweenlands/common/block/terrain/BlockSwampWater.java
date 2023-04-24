@@ -328,11 +328,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 		if (!(state.getBlock() instanceof BlockSwampWater && ((BlockSwampWater) state.getBlock()).isUnderwaterBlock)) {
 			// check adjacent block levels if non-source
 			if (quantaRemaining < quantaPerBlock) {
-				if (world.getBlockState(pos.add(0, -densityDir, 0)).getBlock() == this ||
-						world.getBlockState(pos.add(-1, -densityDir, 0)).getBlock() == this ||
-						world.getBlockState(pos.add(1, -densityDir, 0)).getBlock() == this ||
-						world.getBlockState(pos.add(0, -densityDir, -1)).getBlock() == this ||
-						world.getBlockState(pos.add(0, -densityDir, 1)).getBlock() == this) {
+				if (world.getBlockState(pos.add(0, -densityDir, 0)).getBlock() == this) {
 					expQuanta = quantaPerBlock - 1;
 				} else {
 					int maxQuanta = -100;
