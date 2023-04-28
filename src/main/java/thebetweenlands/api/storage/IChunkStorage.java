@@ -114,16 +114,20 @@ public interface IChunkStorage extends ICapabilityProvider {
 
 	/**
 	 * Unlinks this chunk from the specified local storage
+	 * @deprecated since API 1.15.0. Use {@link ILocalStorageHandler#unlinkChunk(ILocalStorage, IChunkStorage)} instead to support metadata.
 	 * @param storage
 	 * @return True if it was successfully unlinked
 	 */
+	@Deprecated
 	public boolean unlinkLocalStorage(ILocalStorage storage);
 
 	/**
 	 * Links this chunk with the specified local storage
+	 * @deprecated since API 1.15.0. Use {@link ILocalStorageHandler#linkChunk(ILocalStorage, IChunkStorage)} instead to support metadata.
 	 * @param storage
 	 * @return
 	 */
+	@Deprecated
 	public boolean linkLocalStorage(ILocalStorage storage);
 
 	/**

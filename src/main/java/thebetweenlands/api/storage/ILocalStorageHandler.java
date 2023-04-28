@@ -13,6 +13,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.chunk.Chunk;
 
 public interface ILocalStorageHandler {
 	/**
@@ -152,7 +153,48 @@ public interface ILocalStorageHandler {
 	 * @param storage
 	 */
 	public void loadDeferredOperations(IChunkStorage storage);
+	
+	/**
+	 * Returns the deferred storage operations of the specified chunk.
+	 * @param cls
+	 * @param chunk
+	 * @param exactRegistryId whether the deferred operation registry id must be an exact match
+	 * @return
+	 */
+	public <T extends IDeferredStorageOperation> Iterable<T> getDeferredOperations(Class<T> cls, ChunkPos chunk, boolean exactRegistryId);
 
+	/**
+	 * Returns all (including cached) metadata of the specified chunk for location storages of the specified type.
+	 * @param cls
+	 * @param chunk
+	 * @param exactRegistryId whether the local storage registry id must be an exact match
+	 * @return
+	 */
+	public <T extends ILocalStorage> Iterable<LocalStorageMetadata> getMetadata(Class<T> cls, ChunkPos chunk, boolean exactRegistryId);
+	
+	/**
+	 * Unlinks the specified chunk from the specified local storage
+	 * @param storage
+	 * @param chunk
+	 * @return True if it was successfully unlinked
+	 */
+	public boolean unlinkChunk(ILocalStorage storage, Chunk chunk);
+
+	/**
+	 * Links the specified chunk with the specified local storage
+	 * @param storage
+	 * @param chunk
+	 * @return
+	 */
+	public boolean linkChunk(ILocalStorage storage, Chunk chunk);
+	
+	/**
+	 * Caches the metadata of the specified chunk or refreshes already cached data
+	 * @param storage
+	 * @param chunk
+	 */
+	public void cacheMetadata(Chunk chunk);
+	
 	/**
 	 * Saves a local storage instance to NBT
 	 * @param nbt

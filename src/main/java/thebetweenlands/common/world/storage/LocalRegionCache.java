@@ -37,25 +37,21 @@ public class LocalRegionCache {
 	}
 
 	/**
-	 * Returns a cached region if available, otherwise tries to read the region from a file and if it doesn't exist a new region is created
+	 * Tries to read the region from cache or a file and if it doesn't exist and {@code create} is true a new region is created.
+	 * If {@code createNonPersistentIfEmpty} is true, then a new region is also created, but it is non-persistent and
+	 * can thus only be read from and not be modified. If {@code metaOnly} is true, then only metadata is loaded and
+	 * the rest of the data is lazily loaded.
 	 * @param region
-	 * @return
-	 */
-	public LocalRegionData getOrCreateRegion(LocalRegion region) {
-		return this.getOrCreateRegion(region, true);
-	}
-
-	/**
-	 * Returns a cached region if available, otherwise tries to read the region from a file. If such a file doesn't exist, and {@code create} is true, a new region is created, otherwise it returns null
-	 * @param region
-	 * @param create
+	 * @param create Whether to create a persistent region if none exists already.
+	 * @param createNonPersistentIfEmpty Whether to create a non-persistent region if none exists already.
+	 * @param metaOnly Whether only metadata should be loaded.
 	 * @return
 	 */
 	@Nullable
-	public LocalRegionData getOrCreateRegion(LocalRegion region, boolean create) {
+	public LocalRegionData getOrCreateRegion(LocalRegion region, boolean create, boolean createNonPersistentIfEmpty, boolean metaOnly) {
 		LocalRegionData data = this.regionData.get(region);
-		if(data == null) {
-			data = LocalRegionData.getOrCreateRegion(this, this.dir, region, create);
+		if(data == null || (!createNonPersistentIfEmpty && !data.isPersistent())) {
+			data = LocalRegionData.getOrCreateRegion(this, this.dir, region, create, createNonPersistentIfEmpty, metaOnly);
 			if(data != null) {
 				this.regionData.put(region, data);
 			}
@@ -88,8 +84,8 @@ public class LocalRegionCache {
 		List<LocalRegionData> unloadRegions = new ArrayList<>();
 
 		for(LocalRegionData data : this.regionData.values()) {
-			if(data.isDirty()) {
-				data.saveRegion(this.dir);
+			if(data.isPersistent() && data.isDirty()) {
+				data.saveRegion();
 			}
 
 			//Unload dangling regions that for some reason haven't been unloaded properly (should be none)

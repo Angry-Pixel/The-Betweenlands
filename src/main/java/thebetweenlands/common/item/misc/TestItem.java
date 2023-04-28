@@ -19,7 +19,9 @@ import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.SporeHiveManager;
 import thebetweenlands.common.world.storage.location.LocationSporeHive;
 
 
@@ -32,6 +34,10 @@ public class TestItem extends Item {
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 			if (!worldIn.isRemote) {
+				
+				long time = System.nanoTime();
+				System.out.println(new SporeHiveManager(worldIn, 6*16).checkAt(new BlockPos(-1282, 122, -1269)));
+				System.out.println("ms: " + ((System.nanoTime() - time) / 1000000.0f));
 		/*	IBlockState state = worldIn.getBlockState(pos);
 			if (state.getBlock() instanceof BlockGenericDugSoil) {
 				TileEntityDugSoil te = (TileEntityDugSoil) worldIn.getTileEntity(pos);
@@ -170,13 +176,15 @@ public class TestItem extends Item {
 				//playerIn.setHeldItem(hand, null);
 			}
 		*/
-				
-			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(worldIn);
-			LocationSporeHive hive = new LocationSporeHive(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), pos);
-			hive.addBounds(new AxisAlignedBB(pos).grow(8 + Math.abs(MathHelper.getCoordinateRandom(pos.getX(), pos.getY(), pos.getZ()) % 12), 4, 8 + Math.abs(MathHelper.getCoordinateRandom(pos.getX() + 10, pos.getY(), pos.getZ()) % 12)));
-			//hive.addBounds(new AxisAlignedBB(pos).grow(64, 4, 64));
-			hive.setSeed(MathHelper.getCoordinateRandom(pos.getX(), pos.getY(), pos.getZ()));
-			worldStorage.getLocalStorageHandler().addLocalStorage(hive);
+
+			if(worldIn.getBlockState(pos).getBlock() == BlockRegistry.MOULD_HORN) {
+				BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(worldIn);
+				LocationSporeHive hive = new LocationSporeHive(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), pos);
+				hive.addBounds(new AxisAlignedBB(pos).grow(8 + Math.abs(MathHelper.getCoordinateRandom(pos.getX(), pos.getY(), pos.getZ()) % 12), 4, 8 + Math.abs(MathHelper.getCoordinateRandom(pos.getX() + 10, pos.getY(), pos.getZ()) % 12)));
+				//hive.addBounds(new AxisAlignedBB(pos).grow(64, 4, 64));
+				hive.setSeed(MathHelper.getCoordinateRandom(pos.getX(), pos.getY(), pos.getZ()));
+				worldStorage.getLocalStorageHandler().addLocalStorage(hive);
+			}
 				
 			
 		} else {

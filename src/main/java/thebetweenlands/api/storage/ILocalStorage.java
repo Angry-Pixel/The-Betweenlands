@@ -232,6 +232,24 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 * @return True if the chunk was unlinked successfully
 	 */
 	public boolean unlinkChunk(Chunk chunk);
+	
+	/**
+	 * Returns whether references to this local storage should
+	 * be cached.
+	 * @return
+	 */
+	public default boolean shouldCacheMetadata() {
+		return false;
+	}
+	
+	/**
+	 * Returns the metadata to be cached, if {@link #shouldCacheMetadata()} is true.
+	 * @return
+	 */
+	@Nullable
+	public default NBTTagCompound getCacheMetadata() {
+		return null;
+	}
 
 	/**
 	 * Returns the data manager used to sync data. <p><b>Only storages that implement {@link ITickable}

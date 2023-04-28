@@ -92,6 +92,7 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 	protected static final DataParameter<Integer> GROWTH_AREA_SEED = GenericDataManager.createKey(LocationSporeHive.class, DataSerializers.VARINT);
 
 	protected BlockPos source;
+	private NBTTagCompound cacheMetadata;
 
 	private final LinkedList<BlockChange[]> changes = new LinkedList<>();
 
@@ -117,12 +118,17 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 
 	public LocationSporeHive(IWorldStorage worldStorage, StorageID id, LocalRegion region, BlockPos source) {
 		super(worldStorage, id, region, "", EnumLocationType.SPORE_HIVE);
-		this.source = source;
+		this.setSource(source);
 
 		this.dataManager.register(GROWTH_AREA_SEED, 0);
 		this.createNoiseGenerator(0);
 	}
 
+	protected void setSource(BlockPos pos) {
+		this.source = pos;
+		this.cacheMetadata = null;
+	}
+	
 	private void createNoiseGenerator(int seed) {
 		this.noiseGenerator = new NoiseGeneratorPerlin(new Random(seed), 4);
 	}
@@ -151,7 +157,23 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 
 		return this;
 	}
+	
+	@Override
+	public boolean shouldCacheMetadata() {
+		return true;
+	}
 
+	@Override
+	public NBTTagCompound getCacheMetadata() {
+		if(this.cacheMetadata == null) {
+			this.cacheMetadata = new NBTTagCompound();
+			this.cacheMetadata.setInteger("SourceX", this.source.getX());
+			this.cacheMetadata.setInteger("SourceY", this.source.getY());
+			this.cacheMetadata.setInteger("SourceZ", this.source.getZ());
+		}
+		return this.cacheMetadata;
+	}
+	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt = super.writeToNBT(nbt);
@@ -208,11 +230,11 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-
+		
 		// Recreate noise generator
 		this.setSeed(this.getSeed());
 
-		this.source = new BlockPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
+		this.setSource(new BlockPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z")));
 
 		this.maxChanges = nbt.getInteger("maxChanges");
 

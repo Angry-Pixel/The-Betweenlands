@@ -8,7 +8,7 @@ import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.api.storage.LocalStorageReference;
 
 public class DeferredLinkOperation implements IDeferredStorageOperation {
-	private LocalStorageReference ref;
+	protected LocalStorageReference ref;
 
 	public DeferredLinkOperation() {
 
@@ -24,7 +24,7 @@ public class DeferredLinkOperation implements IDeferredStorageOperation {
 
 		try(ILocalStorageHandle handle = handler.getOrLoadLocalStorage(this.ref)) {
 			if(handle != null) {
-				chunkStorage.linkLocalStorage(handle.get());
+				handler.linkChunk(handle.get(), chunkStorage.getChunk());
 			}
 		}
 	}

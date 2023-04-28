@@ -22,6 +22,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.storage.IChunkStorage;
 import thebetweenlands.api.storage.IWorldStorage;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.storage.WorldStorageImpl;
 
@@ -32,57 +33,84 @@ public final class WorldEventHandler {
 
 	@SubscribeEvent
 	public static void onChunkLoad(ChunkEvent.Load event) {
-		IWorldStorage cap = WorldStorageImpl.getCapability(event.getWorld());
-		if(cap != null) {
-			cap.loadChunk(event.getChunk());
-			
-			if(!event.getWorld().isRemote) {
-				IChunkStorage chunkStorage = cap.getChunkStorage(event.getChunk());
-				if(chunkStorage != null) {
-					cap.getLocalStorageHandler().loadDeferredOperations(chunkStorage);
+		try {
+			IWorldStorage cap = WorldStorageImpl.getCapability(event.getWorld());
+			if(cap != null) {
+				cap.loadChunk(event.getChunk());
+
+				if(!event.getWorld().isRemote) {
+					IChunkStorage chunkStorage = cap.getChunkStorage(event.getChunk());
+					if(chunkStorage != null) {
+						cap.getLocalStorageHandler().loadDeferredOperations(chunkStorage);
+					}
 				}
 			}
+		} catch(Exception ex) {
+			TheBetweenlands.logger.error(String.format("Failed loading chunk at %s", "[x=" + event.getChunk().x + ", z=" + event.getChunk().z + "]"), ex);
 		}
 	}
 
 	@SubscribeEvent
 	public static void onChunkRead(ChunkDataEvent.Load event) {
-		if(event.getData().hasKey(CHUNK_NBT_TAG, Constants.NBT.TAG_COMPOUND)) {
-			IWorldStorage cap = WorldStorageImpl.getCapability(event.getWorld());
-			if(cap != null) {
-				cap.readAndLoadChunk(event.getChunk(), event.getData().getCompoundTag(CHUNK_NBT_TAG));
+		try {
+			if(event.getData().hasKey(CHUNK_NBT_TAG, Constants.NBT.TAG_COMPOUND)) {
+				IWorldStorage cap = WorldStorageImpl.getCapability(event.getWorld());
+				if(cap != null) {
+					cap.readAndLoadChunk(event.getChunk(), event.getData().getCompoundTag(CHUNK_NBT_TAG));
+
+					// Cache chunk links
+					cap.getLocalStorageHandler().cacheMetadata(event.getChunk());
+				}
 			}
+		} catch(Exception ex) {
+			TheBetweenlands.logger.error(String.format("Failed reading chunk at %s", "[x=" + event.getChunk().x + ", z=" + event.getChunk().z + "]"), ex);
 		}
 	}
 
 	@SubscribeEvent
 	public static void onChunkUnload(ChunkEvent.Unload event) {
-		IWorldStorage cap = WorldStorageImpl.getCapability(event.getWorld());
-		if(cap != null) {
-			if(event.getWorld().isRemote) {
-				//Unload immediately on client side
-				cap.unloadChunk(event.getChunk());
-			} else {
-				//Queue chunk to be unloaded later because there's no way to know
-				//whether chunk will be saved to disk or not
-				UNLOAD_QUEUE.put(event.getChunk(), cap);
+		try {
+			IWorldStorage cap = WorldStorageImpl.getCapability(event.getWorld());
+			if(cap != null) {
+				if(event.getWorld().isRemote) {
+					//Unload immediately on client side
+					cap.unloadChunk(event.getChunk());
+				} else {
+					// Cache chunk links
+					cap.getLocalStorageHandler().cacheMetadata(event.getChunk());
+
+					//Queue chunk to be unloaded later because there's no way to know
+					//whether chunk will be saved to disk or not
+					UNLOAD_QUEUE.put(event.getChunk(), cap);
+				}	
 			}
+		} catch(Exception ex) {
+			TheBetweenlands.logger.error(String.format("Failed unloading chunk at %s", "[x=" + event.getChunk().x + ", z=" + event.getChunk().z + "]"), ex);
 		}
 	}
 
 	@SubscribeEvent
 	public static void onChunkSave(ChunkDataEvent.Save event) {
-		IWorldStorage cap = WorldStorageImpl.getCapability(event.getWorld());
-		if(cap != null) {
-			NBTTagCompound nbt = cap.saveChunk(event.getChunk());
-			if(nbt != null) {
-				event.getData().setTag(CHUNK_NBT_TAG, nbt);
+		try {
+			IWorldStorage cap = WorldStorageImpl.getCapability(event.getWorld());
+			if(cap != null) {
+				// Cache chunk links
+				cap.getLocalStorageHandler().cacheMetadata(event.getChunk());
+				
+				NBTTagCompound nbt = cap.saveChunk(event.getChunk());
+				if(nbt != null) {
+					event.getData().setTag(CHUNK_NBT_TAG, nbt);
+				}
+				
+				if(!event.getChunk().isLoaded()) {
+					//Unload immediately after saving
+					cap.unloadChunk(event.getChunk());
+
+					UNLOAD_QUEUE.remove(event.getChunk());
+				}
 			}
-			if(!event.getChunk().isLoaded()) {
-				//Unload immediately after saving
-				cap.unloadChunk(event.getChunk());
-				UNLOAD_QUEUE.remove(event.getChunk());
-			}
+		} catch(Exception ex) {
+			TheBetweenlands.logger.error(String.format("Failed saving chunk at %s", "[x=" + event.getChunk().x + ", z=" + event.getChunk().z + "]"), ex);
 		}
 	}
 
@@ -104,9 +132,13 @@ public final class WorldEventHandler {
 
 	@SubscribeEvent
 	public static void onWorldSave(WorldEvent.Save event) {
-		IWorldStorage worldStorage = WorldStorageImpl.getCapability(event.getWorld());
-		
-		worldStorage.getLocalStorageHandler().saveAll();
+		try {
+			IWorldStorage worldStorage = WorldStorageImpl.getCapability(event.getWorld());
+
+			worldStorage.getLocalStorageHandler().saveAll();
+		} catch(Exception ex) {
+			TheBetweenlands.logger.error(String.format("Failed saving world %s", event.getWorld()), ex);
+		}
 	}
 
 	@SubscribeEvent

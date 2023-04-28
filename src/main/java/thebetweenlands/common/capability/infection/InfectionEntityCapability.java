@@ -226,8 +226,8 @@ public class InfectionEntityCapability extends EntityCapability<InfectionEntityC
 					}
 
 					// TODO Debug
-					if(event.player.ticksExisted % 20 == 0)
-						System.out.println("P: " + cap.getInfectionPercent());
+					//if(event.player.ticksExisted % 20 == 0)
+					//	System.out.println("P: " + cap.getInfectionPercent());
 
 					cap.incrementInfectionIncreaseTimer();
 

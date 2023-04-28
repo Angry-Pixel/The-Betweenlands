@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
@@ -26,12 +27,15 @@ import thebetweenlands.api.storage.IChunkStorage;
 import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
+import thebetweenlands.api.storage.LocalStorageMetadata;
 import thebetweenlands.api.storage.LocalStorageReference;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.clientbound.MessageAddLocalStorage;
 import thebetweenlands.common.network.clientbound.MessageRemoveLocalStorage;
+import thebetweenlands.common.registries.StorageRegistry;
 import thebetweenlands.common.world.storage.operation.DeferredLinkOperation;
+import thebetweenlands.common.world.storage.operation.DeferredLinkOperationWithMetadata;
 
 public abstract class LocalStorageImpl implements ILocalStorage {
 	private final IWorldStorage worldStorage;
@@ -270,10 +274,9 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 		while(it.hasNext()) {
 			pos = it.next();
 			Chunk chunk = this.worldStorage.getWorld().getChunk(pos.x, pos.z);
-			IChunkStorage chunkData = this.worldStorage.getChunkStorage(chunk);
-			if(chunkData == null || !chunkData.unlinkLocalStorage(this)) {
+			if(!this.worldStorage.getLocalStorageHandler().unlinkChunk(this, chunk)) {
 				allUnlinked = false;
-			} else if(chunkData != null) {
+			} else {
 				changed = true;
 			}
 		}
@@ -288,8 +291,7 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 	public boolean linkChunk(Chunk chunk) {
 		ChunkPos chunkPos = new ChunkPos(chunk.x, chunk.z);
 		if(!this.linkedChunks.contains(chunkPos)) {
-			IChunkStorage chunkData = this.worldStorage.getChunkStorage(chunk);
-			if(chunkData != null && chunkData.linkLocalStorage(this)) {
+			if(this.worldStorage.getLocalStorageHandler().linkChunk(this, chunk)) {
 				if(this.linkedChunks.add(chunkPos)) {
 					//TODO Send packet
 					this.setDirty(true);
@@ -304,7 +306,16 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 	public void linkChunkDeferred(ChunkPos chunk) {
 		if(!this.linkedChunks.contains(chunk) && this.linkedChunks.add(chunk)) {
 			this.setDirty(true);
-			this.worldStorage.getLocalStorageHandler().queueDeferredOperation(chunk, new DeferredLinkOperation(new LocalStorageReference(chunk, this.getID(), this.getRegion())));
+			this.worldStorage.getLocalStorageHandler().queueDeferredOperation(chunk, this.createDeferredLinkOperation(new LocalStorageReference(chunk, this.getID(), this.getRegion())));
+		}
+	}
+	
+	protected DeferredLinkOperation createDeferredLinkOperation(LocalStorageReference ref) {
+		ResourceLocation regId = StorageRegistry.getStorageId(this.getClass());
+		if(this.shouldCacheMetadata() && regId != null) {
+			return new DeferredLinkOperationWithMetadata(ref, new LocalStorageMetadata(ref, regId, this.getCacheMetadata()));
+		} else {
+			return new DeferredLinkOperation(ref);
 		}
 	}
 
@@ -312,14 +323,11 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 	public boolean unlinkChunk(Chunk chunk) {
 		ChunkPos chunkPos = new ChunkPos(chunk.x, chunk.z);
 		if(this.linkedChunks.contains(chunkPos)) {
-			IChunkStorage chunkData = this.worldStorage.getChunkStorage(chunk);
-			if(chunkData != null) {
-				chunkData.unlinkLocalStorage(this);
-				if(this.linkedChunks.remove(chunkPos)) {
-					//TODO Send packet
-					this.setDirty(true);
-					return true;
-				}
+			this.worldStorage.getLocalStorageHandler().unlinkChunk(this, chunk);
+			if(this.linkedChunks.remove(chunkPos)) {
+				//TODO Send packet
+				this.setDirty(true);
+				return true;
 			}
 		}
 		return false;
