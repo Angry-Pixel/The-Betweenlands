@@ -28,12 +28,15 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.spawning.IBiomeSpawnEntriesData;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.api.environment.IEnvironmentEvent;
+import thebetweenlands.api.event.LocalStorageEvent;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.herblore.aspect.AspectManager;
@@ -54,6 +57,8 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 
 	protected List<SpiritTreeKillToken> spiritTreeKillTokens = new ArrayList<>();
 
+	protected SporeHiveManager sporeHiveManager;
+	
 	public BLEnvironmentEventRegistry getEnvironmentEventRegistry() {
 		return this.environmentEventRegistry;
 	}
@@ -62,6 +67,10 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		return this.aspectManager;
 	}
 
+	public SporeHiveManager getSporeHiveManager() {
+		return this.sporeHiveManager;
+	}
+	
 	@Override
 	public BiomeSpawnEntriesData getBiomeSpawnEntriesData(Biome biome) {
 		if(biome instanceof ICustomSpawnEntriesProvider) {
@@ -89,6 +98,8 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		}
 
 		this.ambienceTicks = this.getWorld().rand.nextInt(7000);
+		
+		this.sporeHiveManager = new SporeHiveManager(this.getWorld(), 6 * 16);
 	}
 
 	@Override
@@ -297,5 +308,15 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 				}
 			}
 		}
+	}
+	
+	@SubscribeEvent
+	public static void onLocalStorageRemoved(LocalStorageEvent.Unloaded event) {
+		BetweenlandsWorldStorage.forWorld(event.getStorage().getWorld()).getSporeHiveManager().clearLocation(event.getStorage());
+	}
+
+	@SubscribeEvent
+	public static void onChunkUnload(ChunkEvent.Unload event) {
+		BetweenlandsWorldStorage.forWorld(event.getWorld()).getSporeHiveManager().clearOccupiedChunk(event.getChunk().getPos());
 	}
 }

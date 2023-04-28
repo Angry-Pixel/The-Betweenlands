@@ -24,6 +24,7 @@ public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 	public final EventSnowfall snowfall;
 	public final EventThunderstorm thunderstorm;
 	public final EventRift rift;
+	public final EventSporepocalypse sporepocalypse;
 	
 	private World world;
 
@@ -39,6 +40,7 @@ public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 		snowfall = new EventSnowfall(this);
 		thunderstorm = new EventThunderstorm(this);
 		rift = new EventRift(this);
+		sporepocalypse = new EventSporepocalypse(this);
 	}
 
 	@Override
@@ -58,6 +60,7 @@ public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 			register(snowfall);
 			register(thunderstorm);
 			register(rift);
+			register(sporepocalypse);
 		}
 
 		MinecraftForge.EVENT_BUS.post(new InitializeEnvironmentEventsEvent(this));

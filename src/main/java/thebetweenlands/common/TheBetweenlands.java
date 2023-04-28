@@ -98,6 +98,7 @@ import thebetweenlands.common.world.biome.spawning.WorldMobSpawner;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenDruidCircle;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenWaystone;
 import thebetweenlands.common.world.storage.BetweenlandsChunkStorage;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.OfflinePlayerHandlerImpl;
 import thebetweenlands.common.world.storage.WorldStorageImpl;
 import thebetweenlands.compat.tmg.TMGEquipmentInventory;
@@ -236,6 +237,7 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(ItemBLShield.EventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(WorldEventHandler.class);
 		MinecraftForge.EVENT_BUS.register(BetweenlandsChunkStorage.class);
+		MinecraftForge.EVENT_BUS.register(BetweenlandsWorldStorage.class);
 		MinecraftForge.EVENT_BUS.register(new AnvilEventHandler());
 		MinecraftForge.EVENT_BUS.register(EnvironmentEventHandler.class);
 		MinecraftForge.EVENT_BUS.register(EntityCapabilityHandler.class);

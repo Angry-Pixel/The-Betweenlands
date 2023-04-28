@@ -129,6 +129,11 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 		this.cacheMetadata = null;
 	}
 	
+	@Nullable
+	public BlockPos getSource() {
+		return this.source;
+	}
+	
 	private void createNoiseGenerator(int seed) {
 		this.noiseGenerator = new NoiseGeneratorPerlin(new Random(seed), 4);
 	}
@@ -172,6 +177,10 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 			this.cacheMetadata.setInteger("SourceZ", this.source.getZ());
 		}
 		return this.cacheMetadata;
+	}
+	
+	public static BlockPos getSourcePosFromMetadata(NBTTagCompound nbt) {
+		return new BlockPos(nbt.getInteger("SourceX"), nbt.getInteger("SourceY"), nbt.getInteger("SourceZ"));
 	}
 	
 	@Override

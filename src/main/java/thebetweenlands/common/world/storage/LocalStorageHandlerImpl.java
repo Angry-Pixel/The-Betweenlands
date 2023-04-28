@@ -28,7 +28,9 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
+import thebetweenlands.api.event.LocalStorageEvent;
 import thebetweenlands.api.network.IGenericDataManagerAccess;
 import thebetweenlands.api.storage.IChunkStorage;
 import thebetweenlands.api.storage.IDeferredStorageOperation;
@@ -118,7 +120,13 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 				//If it is still unreferenced it will be unloaded.
 				this.pendingUnreferencedStorages.add(storage);
 			}
+			
+			if(isInitialAdd) {
+				MinecraftForge.EVENT_BUS.post(new LocalStorageEvent.Added(storage));
+			}
 
+			MinecraftForge.EVENT_BUS.post(new LocalStorageEvent.Loaded(storage));
+			
 			return true;
 		}
 		return false;
@@ -171,6 +179,10 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 					this.decrRegionRef(this.regionCache.getCachedRegion(region), null, true);
 				}
 			}
+
+			MinecraftForge.EVENT_BUS.post(new LocalStorageEvent.Unloaded(storage));
+			
+			MinecraftForge.EVENT_BUS.post(new LocalStorageEvent.Removed(storage));
 
 			return true;
 		}
@@ -439,6 +451,8 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 				}
 			}
 
+			MinecraftForge.EVENT_BUS.post(new LocalStorageEvent.Unloaded(storage));
+			
 			return true;
 		}
 		return false;

@@ -35,9 +35,6 @@ public class TestItem extends Item {
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 			if (!worldIn.isRemote) {
 				
-				long time = System.nanoTime();
-				System.out.println(new SporeHiveManager(worldIn, 6*16).checkAt(new BlockPos(-1282, 122, -1269)));
-				System.out.println("ms: " + ((System.nanoTime() - time) / 1000000.0f));
 		/*	IBlockState state = worldIn.getBlockState(pos);
 			if (state.getBlock() instanceof BlockGenericDugSoil) {
 				TileEntityDugSoil te = (TileEntityDugSoil) worldIn.getTileEntity(pos);

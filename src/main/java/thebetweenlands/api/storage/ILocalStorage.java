@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
@@ -23,6 +24,14 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 */
 	public IWorldStorage getWorldStorage();
 
+	/**
+	 * Returns the world
+	 * @return
+	 */
+	public default World getWorld() {
+		return this.getWorldStorage().getWorld();
+	}
+	
 	/**
 	 * Returns the bounds of the local storage. May be null
 	 * @return
