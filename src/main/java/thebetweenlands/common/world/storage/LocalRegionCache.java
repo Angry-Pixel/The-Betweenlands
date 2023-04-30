@@ -49,14 +49,19 @@ public class LocalRegionCache {
 	 */
 	@Nullable
 	public LocalRegionData getOrCreateRegion(LocalRegion region, boolean create, boolean createNonPersistentIfEmpty, boolean metaOnly) {
-		LocalRegionData data = this.regionData.get(region);
-		if(data == null || (!createNonPersistentIfEmpty && !data.isPersistent())) {
-			data = LocalRegionData.getOrCreateRegion(this, this.dir, region, create, createNonPersistentIfEmpty, metaOnly);
-			if(data != null) {
-				this.regionData.put(region, data);
+		LocalRegionData cachedRegion = this.regionData.get(region);
+
+		if(cachedRegion == null || (!createNonPersistentIfEmpty && !cachedRegion.isPersistent())) {
+			LocalRegionData newRegion = LocalRegionData.getOrCreateRegion(this, this.dir, region, create, createNonPersistentIfEmpty, metaOnly, cachedRegion);
+
+			if(newRegion != null) {
+				this.regionData.put(region, newRegion);
 			}
+
+			cachedRegion = newRegion;
 		}
-		return data;
+
+		return cachedRegion;
 	}
 
 	/**

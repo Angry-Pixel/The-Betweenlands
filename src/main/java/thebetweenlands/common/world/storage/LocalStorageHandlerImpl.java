@@ -13,6 +13,8 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.tuple.Triple;
+
 import com.google.common.base.Predicate;
 
 import gnu.trove.iterator.TObjectLongIterator;
@@ -56,7 +58,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	private final List<ILocalStorage> tickableLocalStorage = new ArrayList<>();
 	private final List<ILocalStorage> pendingUnreferencedStorages = new ArrayList<>();
 
-	private final TObjectLongMap<LocalRegionData> pendingUnreferencedRegions = new TObjectLongHashMap<>();
+	private final TObjectLongMap<LocalRegion> pendingUnreferencedRegions = new TObjectLongHashMap<>();
 
 	private final LocalRegionCache regionCache;
 
@@ -275,37 +277,35 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 		this.saveLocalStorageFile(storage, false);
 	}
 
-	private void saveLocalStorageFile(ILocalStorage storage, boolean skipRegionUnloading) {
+	private void saveLocalStorageFile(ILocalStorage storage, boolean isUnloadingStorage) {
 		NBTTagCompound nbt = this.saveLocalStorageToNBT(new NBTTagCompound(), storage);
-		if(storage.getRegion() == null) {
+		
+		LocalRegion region = storage.getRegion();
+		
+		if(region == null) {
 			File file = new File(this.getLocalStorageDirectory(), storage.getID().getStringID() + ".dat");
 			this.saveHandler.queueLocalStorage(file, nbt);
 		} else {
-			LocalRegion region = storage.getRegion();
 			LocalRegionData data = this.regionCache.getOrCreateRegion(region, true, false, false);
 
-			boolean isLoaded = !storage.getLoadedReferences().isEmpty() && this.getLocalStorage(storage.getID()) != null;
-			boolean isFromRegion = data.getLocalStorageNBT(storage.getID()) != null;
-			boolean isNewStorage = isLoaded && !isFromRegion;
+			boolean isLoadedFromRegion = data.getLocalStorageNBT(storage.getID()) != null;
+			
+			boolean isCurrentlyLoaded = !storage.getLoadedReferences().isEmpty() && this.getLocalStorage(storage.getID()) != null;
 
+			// If storage is new (i.e. not yet saved to the region), then the reference
+			// counter isn't decremented because it will be decremented later when the storage is
+			// unloaded again. If the storage is not being unloaded but is not currently loaded,
+			// then the reference counter must be decremented to ensure that the region doesn't
+			// remain loaded forever.
+			boolean decrRegionRef = isLoadedFromRegion || (!isUnloadingStorage && !isCurrentlyLoaded);
+			
 			this.incrRegionRef(data);
 
 			try {
 				data.setLocalStorageNBT(storage.getID(), nbt);
 			} finally {
-				if(skipRegionUnloading) {
-					this.decrRegionRef(data, null, false);
-				} else {
-					//If the region is new, i.e. was properly added but not loaded from a region, then
-					//the region need not be unloaded or the region reference counter need not be decreased,
-					//because we can be sure that this will happen later on.
-					//In all other cases this should normally not cause the region to be unloaded unless the local storage
-					//is a dangling instance or the region was not loaded properly, because when loaded properly the region
-					//should also be loaded and be referenced accordingly. The only safe way to proceed if the region was
-					//not loaded or not referenced properly is to immediately unload the region again to prevent a dangling region.
-					if(!isNewStorage && this.decrRegionRef(data, null, true)) {
-						TheBetweenlands.logger.warn(String.format("Saving local storage with ID %s, but its region %s was not loaded. This should not happen...", storage.getID().getStringID(), data.getID()));
-					}
+				if(decrRegionRef && this.decrRegionRef(data, null, true)) {
+					TheBetweenlands.logger.warn(String.format("Saving local storage with ID %s, but its region %s was not loaded. This should not happen...", storage.getID().getStringID(), data.getID()));
 				}
 			}
 		}
@@ -315,16 +315,34 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	private ILocalStorage loadLocalStorageUnsafe(LocalStorageReference reference) {
 		if(!this.world.isRemote) {
 			try {
-				ILocalStorage storage = this.createLocalStorageFromFile(reference);
+				Triple<ILocalStorage, LocalRegion, LocalRegionData> result = this.createLocalStorageFromFile(reference);
+				
+				ILocalStorage storage = result.getLeft();
+				LocalRegion region = result.getMiddle();
+				LocalRegionData regionData = result.getRight();
+				
+				boolean added = false;
+				
 				if(storage != null) {
-					this.addLocalStorageInternal(storage, false);
-
-					LocalRegion region = storage.getRegion();
+					added = this.addLocalStorageInternal(storage, false);
+				}
+				
+				if(!added) {
 					if(region != null) {
-						LocalRegionData data = this.regionCache.getOrCreateRegion(region, true, false, false);
-						this.incrRegionRef(data);
+						// Try to get region again from cache because it may
+						// have been replaced
+						LocalRegionData cachedRegionData = this.regionCache.getOrCreateRegion(region, false, false, false);
+						
+						if(cachedRegionData != null) {
+							this.decrRegionRef(cachedRegionData, null, true);
+						} else if(regionData != null) {
+							this.decrRegionRef(regionData, null, true);
+						}
+					} else if(regionData != null) {
+						this.decrRegionRef(regionData, null, true);
 					}
 				}
+				
 				return storage;
 			} catch(Exception ex) {
 				TheBetweenlands.logger.error(String.format("Failed loading local storage with ID %s at %s", reference.getID().getStringID(), "[x=" + reference.getChunk().x + ", z=" + reference.getChunk().z + "]"), ex);
@@ -360,26 +378,28 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	 * @param reference
 	 * @return
 	 */
-	@Nullable
-	private ILocalStorage createLocalStorageFromFile(LocalStorageReference reference) {
+	private Triple<ILocalStorage, LocalRegion, LocalRegionData> createLocalStorageFromFile(LocalStorageReference reference) {
 		if(!reference.hasRegion()) {
 			File file = new File(this.getLocalStorageDirectory(), reference.getID().getStringID() + ".dat");
 			try {
-				NBTTagCompound nbt = this.saveHandler.loadFileNbt(file);;
+				NBTTagCompound nbt = this.saveHandler.loadFileNbt(file);
 				if(nbt != null) {
-					return this.createLocalStorageFromNBT(nbt, null);
+					return Triple.of(this.createLocalStorageFromNBT(nbt, null), null, null);
 				}
 			} catch(Exception ex) {
 				TheBetweenlands.logger.error(String.format("Failed reading local storage %s from file: %s", reference.getID().getStringID(), file.getAbsolutePath()), ex);
 			}
 		} else {
-			LocalRegionData region = this.regionCache.getOrCreateRegion(reference.getRegion(), true, false, false);
-			NBTTagCompound nbt = region.getLocalStorageNBT(reference.getID());
-			if(nbt != null) {
-				return this.createLocalStorageFromNBT(nbt, reference.getRegion());
+			LocalRegionData region = this.regionCache.getOrCreateRegion(reference.getRegion(), false, false, false);
+			if(region != null) {
+				this.incrRegionRef(region);
+				NBTTagCompound nbt = region.getLocalStorageNBT(reference.getID());
+				if(nbt != null) {
+					return Triple.of(this.createLocalStorageFromNBT(nbt, reference.getRegion()), reference.getRegion(), region);
+				}
 			}
 		}
-		return null;
+		return Triple.of(null, null, null);
 	}
 
 	private void incrRegionRef(@Nullable LocalRegionData data) {
@@ -387,7 +407,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 			data.incrRefCounter();
 
 			if(data.hasReferences()) {
-				this.pendingUnreferencedRegions.remove(data);
+				this.pendingUnreferencedRegions.remove(data.getRegion());
 			}
 		}
 	}
@@ -398,7 +418,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 
 			if(!data.hasReferences()) {
 				if(saveAndUnload) {
-					this.pendingUnreferencedRegions.put(data, this.world.getTotalWorldTime());
+					this.pendingUnreferencedRegions.putIfAbsent(data.getRegion(), this.world.getTotalWorldTime());
 				}
 
 				return true;
@@ -421,33 +441,35 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 
 			this.localStorage.remove(storage.getID());
 
-			Iterator<ILocalStorage> tickableIt = this.tickableLocalStorage.iterator();
-			while(tickableIt.hasNext()) {
-				ILocalStorage tickableStorage = tickableIt.next();
-				if(storage.getID().equals(tickableStorage.getID())) {
-					tickableIt.remove();
+			try {
+				Iterator<ILocalStorage> tickableIt = this.tickableLocalStorage.iterator();
+				while(tickableIt.hasNext()) {
+					ILocalStorage tickableStorage = tickableIt.next();
+					if(storage.getID().equals(tickableStorage.getID())) {
+						tickableIt.remove();
+					}
 				}
-			}
 
-			Iterator<ILocalStorage> pendingIt = this.pendingUnreferencedStorages.iterator();
-			while(pendingIt.hasNext()) {
-				ILocalStorage pendingStorage = pendingIt.next();
-				if(storage.getID().equals(pendingStorage.getID())) {
-					pendingIt.remove();
+				Iterator<ILocalStorage> pendingIt = this.pendingUnreferencedStorages.iterator();
+				while(pendingIt.hasNext()) {
+					ILocalStorage pendingStorage = pendingIt.next();
+					if(storage.getID().equals(pendingStorage.getID())) {
+						pendingIt.remove();
+					}
 				}
-			}
 
-			storage.onUnloaded();
+				storage.onUnloaded();
+			} finally {
+				if(!this.world.isRemote) {
+					LocalRegion region = storage.getRegion();
 
-			if(!this.world.isRemote) {
-				LocalRegion region = storage.getRegion();
-
-				if(region != null) {
-					//A region only has a reference from a storage if that storage was new and saved to that
-					//region or if it was loaded from that region. Only in those cases the region reference
-					//counter needs to be decremented and the region unloaded if no longer referenced, hence
-					//decrRegionRef needs to check if the region data contains that storage.
-					this.decrRegionRef(this.regionCache.getCachedRegion(region), storage.getID(), true);
+					if(region != null) {
+						//A region only has a reference from a storage if that storage was new and saved to that
+						//region or if it was loaded from that region. Only in those cases the region reference
+						//counter needs to be decremented and the region unloaded if no longer referenced, hence
+						//decrRegionRef needs to check if the region data contains that storage.
+						this.decrRegionRef(this.regionCache.getCachedRegion(region), storage.getID(), true);
+					}
 				}
 			}
 
@@ -497,20 +519,27 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 				}
 			}
 
-			TObjectLongIterator<LocalRegionData> pendingUnreferencedRegionsIT = this.pendingUnreferencedRegions.iterator();
+			TObjectLongIterator<LocalRegion> pendingUnreferencedRegionsIT = this.pendingUnreferencedRegions.iterator();
 			while(pendingUnreferencedRegionsIT.hasNext()) {
 				pendingUnreferencedRegionsIT.advance();
 
-				if(this.world.getTotalWorldTime() - pendingUnreferencedRegionsIT.value() > pendingUnreferencedRegionsIT.key().getMinCacheTicks()) {
-					LocalRegionData data = pendingUnreferencedRegionsIT.key();
+				LocalRegion region = pendingUnreferencedRegionsIT.key();
+				long lastAccessTime = pendingUnreferencedRegionsIT.value();
+				
+				LocalRegionData data = this.regionCache.getCachedRegion(region);
+				
+				if(data != null) {
+					if(this.world.getTotalWorldTime() - lastAccessTime > data.getMinCacheTicks()) {
+						pendingUnreferencedRegionsIT.remove();
 
-					pendingUnreferencedRegionsIT.remove();
-
-					if(data.isPersistent() && data.isDirty()) {
-						data.saveRegion();
+						if(data.isPersistent() && data.isDirty()) {
+							data.saveRegion();
+						}
+						
+						this.regionCache.removeRegion(region);
 					}
-
-					this.regionCache.removeRegion(data.getRegion());
+				} else {
+					pendingUnreferencedRegionsIT.remove();
 				}
 			}
 		}
@@ -975,7 +1004,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 						LocalRegion region = LocalRegion.getFromBlockPos(chunk.x * 16, chunk.z * 16);
 
 						LocalRegionData data = this.regionCache.getOrCreateRegion(region, true, false, true);
-
+						
 						this.incrRegionRef(data);
 
 						try {
@@ -1037,12 +1066,16 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 		}
 
 		//Save and unload all unreferenced regions
-		for(LocalRegionData data : this.pendingUnreferencedRegions.keySet()) {
-			if(data.isPersistent() && data.isDirty()) {
-				data.saveRegion();
+		for(LocalRegion region : this.pendingUnreferencedRegions.keySet()) {
+			LocalRegionData data = this.regionCache.getCachedRegion(region);
+			
+			if(data != null) {
+				if(data.isPersistent() && data.isDirty()) {
+					data.saveRegion();
+				}
+				
+				this.regionCache.removeRegion(region);
 			}
-
-			this.regionCache.removeRegion(data.getRegion());
 		}
 		this.pendingUnreferencedRegions.clear();
 

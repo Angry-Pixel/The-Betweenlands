@@ -76,6 +76,15 @@ public class LocalStorageReference {
 	}
 
 	/**
+	 * Whether this reference is persistent. References from a handle, i.e.
+	 * where {@link #getHandle()} is <code>null</code>, are not persistent.
+	 * @return
+	 */
+	public boolean isPersistent() {
+		return this.handle == null;
+	}
+	
+	/**
 	 * Returns the reference ID string
 	 * @return
 	 */

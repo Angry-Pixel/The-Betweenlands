@@ -151,7 +151,7 @@ public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
 		if(!this.localStorageReferences.isEmpty()) {
 			NBTTagList localReferenceList = new NBTTagList();
 			for(LocalStorageReference ref : this.localStorageReferences) {
-				if(ref.getHandle() == null) {
+				if(ref.isPersistent()) {
 					localReferenceList.appendTag(ref.writeToNBT(new NBTTagCompound()));
 				}
 			}

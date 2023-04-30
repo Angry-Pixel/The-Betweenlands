@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.annotation.Nullable;
 
@@ -127,7 +128,7 @@ public class LocalRegionData {
 	@Nullable
 	private NBTTagCompound deferredOperationsNbt;
 
-	private int refCounter;
+	private final AtomicInteger refCounter;
 	private boolean dirty;
 
 	private boolean persistent;
@@ -144,12 +145,12 @@ public class LocalRegionData {
 
 	private int minCacheTicks = 20;
 
-	private LocalRegionData(LocalRegionCache cache, LocalRegion region, File dir, boolean persistent) {
+	private LocalRegionData(LocalRegionCache cache, LocalRegion region, File dir, boolean persistent, AtomicInteger refCounter) {
 		this.region = region;
 		this.dir = dir;
 		this.persistent = persistent;
 
-		this.refCounter = 0;
+		this.refCounter = refCounter;
 		this.dirty = false;
 
 		this.cache = cache;
@@ -232,11 +233,16 @@ public class LocalRegionData {
 	 * @param create Whether to create a persistent region if none exists already.
 	 * @param createNonPersistentIfEmpty Whether to create a non-persistent region if none exists already.
 	 * @param metaOnly Whether only metadata should be loaded.
+	 * @param cachedRegion
 	 * @return
 	 */
 	@Nullable
-	public static LocalRegionData getOrCreateRegion(LocalRegionCache cache, File dir, LocalRegion region, boolean create, boolean createNonPersistentIfEmpty, boolean metaOnly) {
-		LocalRegionData data = new LocalRegionData(cache, region, dir, true);
+	public static LocalRegionData getOrCreateRegion(LocalRegionCache cache, File dir, LocalRegion region, boolean create, boolean createNonPersistentIfEmpty, boolean metaOnly, @Nullable LocalRegionData cachedRegion) {
+		if(cachedRegion != null && !region.equals(cachedRegion.getRegion())) {
+			throw new IllegalArgumentException("Previously cached region data is not of the same region");
+		}
+		
+		LocalRegionData data = new LocalRegionData(cache, region, dir, true, cachedRegion != null ? cachedRegion.refCounter : new AtomicInteger(0));
 
 		if(!metaOnly) {
 			data.isDataFromDisk |= data.tryLoadStorageData();
@@ -274,14 +280,14 @@ public class LocalRegionData {
 	 * Increases the reference counter
 	 */
 	public void incrRefCounter() {
-		this.refCounter++;
+		this.refCounter.incrementAndGet();
 	}
 
 	/**
 	 * Decreases the reference counter
 	 */
 	public void decrRefCounter() {
-		this.refCounter--;
+		this.refCounter.decrementAndGet();
 	}
 
 	/**
@@ -289,7 +295,15 @@ public class LocalRegionData {
 	 * @return
 	 */
 	public boolean hasReferences() {
-		return this.refCounter > 0;
+		return this.refCounter.get() > 0;
+	}
+	
+	/**
+	 * Returns the reference count
+	 * @return
+	 */
+	public int getReferenceCount() {
+		return this.refCounter.get();
 	}
 
 	/**
@@ -649,7 +663,7 @@ public class LocalRegionData {
 
 		if(this.metadataLoaded) {
 			if(this.hasMetadata()) {
-				this.cache.getLocalStorageHandler().getSaveHandler().queueRegion(new File(this.dir, this.getID() + ".meta.dat"), this.writeMetadataToNBT(new NBTTagCompound()));
+				this.cache.getLocalStorageHandler().getSaveHandler().queueRegion(new File(this.dir, this.getID() + ".meta.dat"), this.writeMetadataToNBT(new NBTTagCompound()).copy());
 			} else {
 				this.deleteMetadataFile();
 			}

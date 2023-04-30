@@ -36,6 +36,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationStorage;
@@ -49,6 +50,74 @@ public class DebugHandlerClient {
 			World world = Minecraft.getMinecraft().world;
 			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 
+			GlStateManager.pushMatrix();
+			GlStateManager.disableTexture2D();
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0f);
+			GlStateManager.color(1, 1, 1, 1);
+			GlStateManager.glLineWidth(1F);
+			GlStateManager.depthMask(false);
+			GL11.glEnable(GL11.GL_LINE_SMOOTH);
+			
+			int prx = Minecraft.getMinecraft().player.getPosition().getX() >> 9;
+			int prz = Minecraft.getMinecraft().player.getPosition().getZ() >> 9;
+			for(int rx = -1; rx <= 1; ++rx) {
+				for(int rz = -1; rz <= 1; ++rz) {
+					int crx = rx + prx;
+					int crz = rz + prz;
+					
+					int bx = crx * 512;
+					int bz = crz * 512;
+					
+					GlStateManager.color(1.0f, 1.0f, 0.0f, 1.0f);
+					if (GuiScreen.isCtrlKeyDown()) {
+						GlStateManager.disableDepth();
+						drawBoundingBoxOutline(new AxisAlignedBB(bx, 256, bz, bx + 512, 256, bz + 512).offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX,
+								-Minecraft.getMinecraft().getRenderManager().viewerPosY,
+								-Minecraft.getMinecraft().getRenderManager().viewerPosZ));
+					}
+					drawBoundingBoxOutline(new AxisAlignedBB(bx, WorldProviderBetweenlands.LAYER_HEIGHT + 10, bz, bx + 512, WorldProviderBetweenlands.LAYER_HEIGHT + 10, bz + 512).offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX,
+							-Minecraft.getMinecraft().getRenderManager().viewerPosY,
+							-Minecraft.getMinecraft().getRenderManager().viewerPosZ));
+					drawBoundingBoxOutline(new AxisAlignedBB(bx, 0, bz, bx, GuiScreen.isCtrlKeyDown() ? 256 : WorldProviderBetweenlands.LAYER_HEIGHT + 10, bz).offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX,
+							-Minecraft.getMinecraft().getRenderManager().viewerPosY,
+							-Minecraft.getMinecraft().getRenderManager().viewerPosZ));
+					drawBoundingBoxOutline(new AxisAlignedBB(bx + 512, 0, bz, bx + 512, GuiScreen.isCtrlKeyDown() ? 256 : WorldProviderBetweenlands.LAYER_HEIGHT + 10, bz).offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX,
+							-Minecraft.getMinecraft().getRenderManager().viewerPosY,
+							-Minecraft.getMinecraft().getRenderManager().viewerPosZ));
+					drawBoundingBoxOutline(new AxisAlignedBB(bx + 512, 0, bz + 512, bx + 512, GuiScreen.isCtrlKeyDown() ? 256 : WorldProviderBetweenlands.LAYER_HEIGHT + 10, bz + 512).offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX,
+							-Minecraft.getMinecraft().getRenderManager().viewerPosY,
+							-Minecraft.getMinecraft().getRenderManager().viewerPosZ));
+					drawBoundingBoxOutline(new AxisAlignedBB(bx, 0, bz + 512, bx, GuiScreen.isCtrlKeyDown() ? 256 : WorldProviderBetweenlands.LAYER_HEIGHT + 10, bz + 512).offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX,
+							-Minecraft.getMinecraft().getRenderManager().viewerPosY,
+							-Minecraft.getMinecraft().getRenderManager().viewerPosZ));
+					GlStateManager.color(1.0f, 1.0f, 0.0f, 0.02f);
+					drawBoundingBox(new AxisAlignedBB(bx, 0, bz, bx, WorldProviderBetweenlands.LAYER_HEIGHT + 10, bz + 512).offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX,
+							-Minecraft.getMinecraft().getRenderManager().viewerPosY,
+							-Minecraft.getMinecraft().getRenderManager().viewerPosZ));
+					drawBoundingBox(new AxisAlignedBB(bx, 0, bz + 512, bx + 512, WorldProviderBetweenlands.LAYER_HEIGHT + 10, bz + 512).offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX,
+							-Minecraft.getMinecraft().getRenderManager().viewerPosY,
+							-Minecraft.getMinecraft().getRenderManager().viewerPosZ));
+					drawBoundingBox(new AxisAlignedBB(bx + 512, 0, bz + 512, bx + 512, WorldProviderBetweenlands.LAYER_HEIGHT + 10, bz).offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX,
+							-Minecraft.getMinecraft().getRenderManager().viewerPosY,
+							-Minecraft.getMinecraft().getRenderManager().viewerPosZ));
+					drawBoundingBox(new AxisAlignedBB(bx, 0, bz, bx + 512, WorldProviderBetweenlands.LAYER_HEIGHT + 10, bz).offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX,
+							-Minecraft.getMinecraft().getRenderManager().viewerPosY,
+							-Minecraft.getMinecraft().getRenderManager().viewerPosZ));
+					GlStateManager.enableDepth();
+				}	
+			}
+			
+			GL11.glDisable(GL11.GL_LINE_SMOOTH);
+			GlStateManager.color(1, 1, 1, 1);
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1f);
+			GlStateManager.depthMask(true);
+			GlStateManager.enableTexture2D();
+			GlStateManager.enableDepth();
+			GlStateManager.disableBlend();
+			GlStateManager.popMatrix();
+			
 			for (ILocalStorage sharedStorage : worldStorage.getLocalStorageHandler().getLoadedStorages()) {
 				if (sharedStorage instanceof LocationStorage) {
 					LocationStorage location = (LocationStorage) sharedStorage;
@@ -65,7 +134,7 @@ public class DebugHandlerClient {
 					GlStateManager.glLineWidth(1F);
 					GlStateManager.depthMask(false);
 					GL11.glEnable(GL11.GL_LINE_SMOOTH);
-
+					
 					Random rnd = new Random(location.getSeed());
 
 					float red = (0.25F + rnd.nextFloat() / 2.0F * 0.75F) * (location.getLayer() + 2) / 2.0F;

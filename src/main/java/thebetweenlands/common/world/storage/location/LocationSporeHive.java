@@ -315,6 +315,10 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 	}
 
 	protected void updateGrowth(World world) {
+		if(!world.isBlockLoaded(this.source)) {
+			return;
+		}
+		
 		this.isGrowing = this.isHiveSource(this.source);
 
 		this.age++;
@@ -601,13 +605,15 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 				for(int i = 0; i < this.growthFrontier.size(); ++i) {
 					frontier = this.growthFrontier.stream().findFirst().get();
 
-					if(this.isOvergrownBlock(world, frontier, world.getBlockState(frontier))) {
-						pos = frontier;
-						break;
-					} else {
-						frontier = null;
+					if(world.isBlockLoaded(frontier)) {
+						if(this.isOvergrownBlock(world, frontier, world.getBlockState(frontier))) {
+							pos = frontier;
+							break;
+						} else {
+							frontier = null;
 
-						this.growthFrontier.remove(frontier);
+							this.growthFrontier.remove(frontier);
+						}
 					}
 				}
 			} else if(this.latestFrontier != null) {
@@ -633,7 +639,8 @@ public class LocationSporeHive extends LocationStorage implements ITickable, IDa
 					pos = pos.offset(EnumFacing.HORIZONTALS[i < 4 ? ((i + s) % 4) : world.rand.nextInt(4)]);
 				}
 
-				if(!world.isBlockLoaded(pos) || !this.isInside(pos)) {
+				if(!world.isBlockLoaded(pos) || !world.isBlockLoaded(pos.north()) || !world.isBlockLoaded(pos.east())
+						|| !world.isBlockLoaded(pos.south()) || !world.isBlockLoaded(pos.west()) || !this.isInside(pos)) {
 					pos = prevPos;
 				} else {
 					state = world.getBlockState(pos);
