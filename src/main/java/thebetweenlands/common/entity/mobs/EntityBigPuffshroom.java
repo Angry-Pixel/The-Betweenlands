@@ -1,6 +1,5 @@
 package thebetweenlands.common.entity.mobs;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,16 +38,35 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityBigPuffshroom extends EntityLiving {
-	
-	public int animation_1 = 0, prev_animation_1 = 0, cooldown = 0;
-	public int animation_2 = 0, prev_animation_2 = 0;
-	public int animation_3 = 0, prev_animation_3 = 0;
-	public int animation_4 = 0, prev_animation_4 = 0;
-	public boolean active_1 = false, active_2 = false, active_3 = false, active_4 = false, active_5 = false, pause = true;
-	public int renderTicks = 0, prev_renderTicks = 0, pause_count = 40;
-	
+
+	public int cooldown = 0;
+	public int prev_animation_1 = 0;
+	public int prev_animation_2 = 0;
+	public int prev_animation_3 = 0;
+	public int prev_animation_4 = 0;
+	public int renderTicks = 0;
+	public int prev_renderTicks = 0;
+	private static final byte SYNC_PREV_ANIMATION_DATA_MAX_1 = 101;
+	private static final byte SYNC_PREV_ANIMATION_DATA_MAX_2 = 102;
+	private static final byte SYNC_PREV_ANIMATION_DATA_MAX_3 = 103;
+	private static final byte SYNC_PREV_ANIMATION_DATA_MAX_4 = 104;
+	private static final byte SYNC_PREV_ANIMATION_DATA_MIN_1 = 105;
+	private static final byte SYNC_PREV_ANIMATION_DATA_MIN_2 = 106;
+	private static final byte SYNC_PREV_ANIMATION_DATA_MIN_3 = 107;
+	private static final byte SYNC_PREV_ANIMATION_DATA_MIN_4 = 108;
 	private static final DataParameter<Boolean> SLAM_ATTACK = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> MOVE = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> ACTIVE_1 = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> ACTIVE_2 = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> ACTIVE_3 = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> ACTIVE_4 = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> ACTIVE_5 = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> PAUSE = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> PAUSE_COUNT = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> ANIMATION_1 = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> ANIMATION_2 = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> ANIMATION_3 = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> ANIMATION_4 = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.VARINT);
 
 	public EntityBigPuffshroom(World world) {
 		super(world);
@@ -60,8 +78,19 @@ public class EntityBigPuffshroom extends EntityLiving {
 		super.entityInit();
 		dataManager.register(SLAM_ATTACK, false);
 		dataManager.register(MOVE, false);
+		dataManager.register(ACTIVE_1, false);
+		dataManager.register(ACTIVE_2, false);
+		dataManager.register(ACTIVE_3, false);
+		dataManager.register(ACTIVE_4, false);
+		dataManager.register(ACTIVE_5, false);
+		dataManager.register(PAUSE, true);
+		dataManager.register(PAUSE_COUNT, 40);
+		dataManager.register(ANIMATION_1, 0);
+		dataManager.register(ANIMATION_2, 0);
+		dataManager.register(ANIMATION_3, 0);
+		dataManager.register(ANIMATION_4, 0);
 	}
-	
+
 	public void setSlam(boolean state) {
 		dataManager.set(SLAM_ATTACK, state);
 	}
@@ -69,13 +98,101 @@ public class EntityBigPuffshroom extends EntityLiving {
 	public boolean getSlam() {
 		return dataManager.get(SLAM_ATTACK);
 	}
-	
+
 	public void setMove(boolean state) {
 		dataManager.set(MOVE, state);
 	}
 
 	public boolean getMove() {
 		return dataManager.get(MOVE);
+	}
+
+	public void setActive1(boolean state) {
+		dataManager.set(ACTIVE_1, state);
+	}
+
+	public boolean getActive1() {
+		return dataManager.get(ACTIVE_1);
+	}
+
+	public void setActive2(boolean state) {
+		dataManager.set(ACTIVE_2, state);
+	}
+
+	public boolean getActive2() {
+		return dataManager.get(ACTIVE_2);
+	}
+
+	public void setActive3(boolean state) {
+		dataManager.set(ACTIVE_3, state);
+	}
+
+	public boolean getActive3() {
+		return dataManager.get(ACTIVE_3);
+	}
+
+	public void setActive4(boolean state) {
+		dataManager.set(ACTIVE_4, state);
+	}
+
+	public boolean getActive4() {
+		return dataManager.get(ACTIVE_4);
+	}
+
+	public void setActive5(boolean state) {
+		dataManager.set(ACTIVE_5, state);
+	}
+
+	public boolean getActive5() {
+		return dataManager.get(ACTIVE_5);
+	}
+
+	public void setPause(boolean state) {
+		dataManager.set(PAUSE, state);
+	}
+
+	public boolean getPause() {
+		return dataManager.get(PAUSE);
+	}
+
+	public void setPauseCount(int count) {
+		dataManager.set(PAUSE_COUNT, count);
+	}
+
+	public int getPauseCount() {
+		return dataManager.get(PAUSE_COUNT);
+	}
+
+	public void setAnimation1(int count) {
+		dataManager.set(ANIMATION_1, count);
+	}
+
+	public int getAnimation1() {
+		return dataManager.get(ANIMATION_1);
+	}
+
+	public void setAnimation2(int count) {
+		dataManager.set(ANIMATION_2, count);
+	}
+
+	public int getAnimation2() {
+		return dataManager.get(ANIMATION_2);
+	}
+
+	public void setAnimation3(int count) {
+		dataManager.set(ANIMATION_3, count);
+	}
+
+	public int getAnimation3() {
+		return dataManager.get(ANIMATION_3);
+	}
+
+	public void setAnimation4(int count) {
+		dataManager.set(ANIMATION_4, count);
+	}
+
+	public int getAnimation4() {
+		return dataManager.get(ANIMATION_4);
 	}
 
 	@Override
@@ -88,21 +205,141 @@ public class EntityBigPuffshroom extends EntityLiving {
 
 	@Override
 	public void onUpdate() {
-		
-		prev_animation_1 = animation_1;
-		prev_animation_2 = animation_2;
-		prev_animation_3 = animation_3;
-		prev_animation_4 = animation_4;
-		prev_renderTicks = renderTicks;
-
-		if (/*!getEntityWorld().isRemote && */cooldown <= 0 && getEntityWorld().getTotalWorldTime()%5 == 0) {
-			findEnemyToAttack();
+		if (getEntityWorld().isRemote) {
+			prev_animation_1 = getAnimation1();
+			prev_animation_2 = getAnimation2();
+			prev_animation_3 = getAnimation3();
+			prev_animation_4 = getAnimation4();
+			prev_renderTicks = renderTicks;
 		}
-			
 
-		if (active_1 || active_5) {
-			if (getEntityWorld().isRemote) {
-				if (animation_1 < 3) {
+		if (!getEntityWorld().isRemote) {
+			if (cooldown <= 0 && getEntityWorld().getTotalWorldTime() % 5 == 0)
+				findEnemyToAttack();
+
+			// TODO Set a boolean state so the attack uses the right animations
+
+			if (getActive1()) {
+				if (getAnimation1() <= 8)
+					setAnimation1(getAnimation1() + 1);
+				if (getAnimation1() > 8) {
+					setAnimation1(8);
+					getEntityWorld().setEntityState(this, SYNC_PREV_ANIMATION_DATA_MAX_1);
+					setActive2(true);
+					setActive1(false);
+				}
+			}
+
+			if (getActive2()) {
+				if (getAnimation2() <= 8)
+					setAnimation2(getAnimation2() + 1);
+				if (getAnimation2() == 8)
+					setActive3(true);
+				if (getAnimation2() > 8) {
+					setAnimation2(8);
+					getEntityWorld().setEntityState(this, SYNC_PREV_ANIMATION_DATA_MAX_2);
+					setActive2(false);
+				}
+			}
+
+			if (getActive3()) {
+				if (getAnimation3() <= 8)
+					setAnimation3(getAnimation3() + 1);
+				if (getAnimation3() > 8) {
+					setAnimation3(8);
+					getEntityWorld().setEntityState(this, SYNC_PREV_ANIMATION_DATA_MAX_3);
+					setActive3(false);
+					setActive4(true);
+				}
+			}
+
+			if (getActive4()) {
+				if (getRangeToPlayer() > 5) {
+					setSlam(false);
+					if (getAnimation4() == 10) {
+						if (rand.nextBoolean())
+							spawnFragSpores();
+						else
+							spawnSporeMinions(world, getPosition());
+						getEntityWorld().playSound(null, getPosition().getX() + 0.5D, getPosition().getY() + 1D, getPosition().getZ() + 0.5D, SoundRegistry.PUFF_SHROOM, SoundCategory.BLOCKS, 0.5F, 0.95F + getEntityWorld().rand.nextFloat() * 0.2F);
+					}
+				}
+
+				if (getRangeToPlayer() <= 5) {
+					setSlam(true);
+					if (getAnimation4() == 10) {
+						getEntityWorld().playSound(null, getPosition(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 1F, 1F);
+						slamAttack(world, getPosition());
+					}
+				}
+				
+				if (getAnimation4() <= 12)
+					setAnimation4(getAnimation4() + 1);
+				if (getAnimation4() > 12) {
+					setAnimation4(12);
+					getEntityWorld().setEntityState(this, SYNC_PREV_ANIMATION_DATA_MAX_4);
+					setActive4(false);
+				}
+			}
+
+			if (getPause()) {
+				if (getAnimation4() >= 12) {
+					if (getPauseCount() > 0)
+						setPauseCount(getPauseCount() -1);
+					if (getPauseCount() <= 0) {
+						setPause(false);
+						setPauseCount(40);
+						setActive5(true);
+					}
+				}
+			}
+
+			if (getActive5()) {
+				setAnimation4(0);
+				getEntityWorld().setEntityState(this, SYNC_PREV_ANIMATION_DATA_MIN_4);
+				if (getAnimation1() >= 0)
+					setAnimation3(getAnimation3() - 1);
+				if (getAnimation3() <= 0)
+					setAnimation2(getAnimation2() - 1);
+				if (getAnimation2() <= 0)
+					setAnimation1(getAnimation1() - 1);
+
+				if (getAnimation3() <= 0) {
+					setAnimation3(0);
+					getEntityWorld().setEntityState(this, SYNC_PREV_ANIMATION_DATA_MIN_3);
+				}
+				if (getAnimation2() <= 0) {
+					setAnimation2(0);
+					getEntityWorld().setEntityState(this, SYNC_PREV_ANIMATION_DATA_MIN_2);
+				}
+				if (getAnimation1() <= 0) {
+					setAnimation1(0);
+					getEntityWorld().setEntityState(this, SYNC_PREV_ANIMATION_DATA_MIN_1);
+					setActive5(false);
+					setMove(true);
+					cooldown = 40;
+				}
+			}
+
+			if (cooldown >= 0)
+				cooldown--;
+			if (cooldown < 0)
+				cooldown = 0;
+
+			if (getMove()) {
+				BlockPos moveTo = new BlockPos(findNewSurfaceLocation(world, getPosition().down()));
+				setPositionAndUpdate(moveTo.getX() + 0.5D, moveTo.getY() + 1, moveTo.getZ() + 0.5D);
+				setMove(false);
+			}
+		}
+
+		if (getEntityWorld().isRemote) {
+			if (getActive4())
+				if (getAnimation4() == 10)
+					spawnSporeJetParticles();
+
+			if (getActive1() || getActive5()) {
+				if (getAnimation1() < 3) {
 					double px = getPosition().getX() + 0.5D;
 					double py = getPosition().getY() + 0.0625D;
 					double pz = getPosition().getZ() + 0.5D;
@@ -117,130 +354,32 @@ public class EntityBigPuffshroom extends EntityLiving {
 				}
 			}
 		}
-		
-		if (getEntityWorld().isRemote) {
-			if (active_4)
-				if (animation_4 == 10)
-					spawnSporeJetParticles();
-		}
-		
 
-		if (!getEntityWorld().isRemote) {
-			//TODO Set a boolean state so the attack uses the right animations
-			
-			if (active_4) {
-				if (getRangeToPlayer() > 5) {
-					setSlam(false);
-					//if (animation_4 <= 1)
-					//	getEntityWorld().playSound(null, getPosition().getX() + 0.5D, getPosition().getY() + 1D, getPosition().getZ() + 0.5D, SoundRegistry.PUFF_SHROOM, SoundCategory.BLOCKS, 0.5F, 0.95F + getEntityWorld().rand.nextFloat() * 0.2F);
-					if (animation_4 == 10) {
-						if (rand.nextBoolean())
-							spawnFragSpores();
-						else
-							spawnSporeMinions(world, getPosition());
-						getEntityWorld().playSound(null, getPosition().getX() + 0.5D, getPosition().getY() + 1D, getPosition().getZ() + 0.5D, SoundRegistry.PUFF_SHROOM, SoundCategory.BLOCKS, 0.5F, 0.95F + getEntityWorld().rand.nextFloat() * 0.2F);
-					}
-				}
-
-				if (getRangeToPlayer() <= 5) {
-					setSlam(true);
-					//if (animation_4 <= 1)
-					//	getEntityWorld().playSound(null, getPosition().getX() + 0.5D, getPosition().getY() + 1D, getPosition().getZ() + 0.5D, SoundRegistry.PUFF_SHROOM, SoundCategory.BLOCKS, 0.5F, 0.95F + getEntityWorld().rand.nextFloat() * 0.2F);
-					if (animation_4 == 10) {
-						getEntityWorld().playSound(null, getPosition(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 1F, 1F);
-						slamAttack(world, getPosition());
-						
-					}
-				}
-			}
-
-			if (!active_5)
-				if (getMove()) {
-					BlockPos moveTo = new BlockPos(findNewSurfaceLocation(world, getPosition().down()));
-					setPositionAndUpdate(moveTo.getX() + 0.5D, moveTo.getY() + 1, moveTo.getZ() + 0.5D);
-					setMove(false);
-				}
-		}
-
-		if (active_1) {
-			if (animation_1 <= 8)
-				animation_1++;
-			if (animation_1 > 8) {
-				prev_animation_1 = animation_1 = 8;
-				active_2 = true;
-				active_1 = false;
-			}
-		}
-
-		if (active_2) {
-			if (animation_2 <= 8)
-				animation_2++;
-			if (animation_2 == 8)
-				active_3 = true;
-			if (animation_2 > 8) {
-				prev_animation_2 = animation_2 = 8;
-				active_2 = false;
-			}
-		}
-
-		if (active_3) {
-			if (animation_3 <= 8)
-				animation_3++;
-			if (animation_3 > 8) {
-				prev_animation_3 = animation_3 = 8;
-				active_3 = false;
-				active_4 = true;
-			}
-		}
-
-		if (active_4) {
-			if (animation_4 <= 12)
-				animation_4++;
-			if (animation_4 > 12) {
-				prev_animation_4 = animation_4 = 12;
-				active_4 = false;
-			}
-		}
-
-		if (pause) {
-			if (animation_4 >= 12) {
-				if (pause_count > 0)
-					pause_count--;
-				if (pause_count <= 0) {
-					pause = false;
-					pause_count = 40;
-					active_5 = true;
-				}
-			}
-		}
-
-		if (active_5) {
-			prev_animation_4 = animation_4 = 0;
-			if (animation_1 >= 0)
-				animation_3--;
-			if (animation_3 <= 0)
-				animation_2--;
-			if (animation_2 <= 0)
-				animation_1--;
-			if (animation_3 <= 0)
-				prev_animation_3 = animation_3 = 0;
-			if (animation_2 <= 0)
-				prev_animation_2 = animation_2 = 0;
-			if (animation_1 <= 0) {
-				prev_animation_1 = animation_1 = 0;
-				active_5 = false;
-				setMove(true);
-				cooldown = 40;
-			}
-		}
-
-		if (cooldown >= 0)
-			cooldown--;
-		if (cooldown < 0)
-			cooldown = 0;
-
-		renderTicks++;
+		if (getEntityWorld().isRemote)
+			renderTicks++;
 		super.onUpdate();
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void handleStatusUpdate(byte id) {
+		super.handleStatusUpdate(id);
+		if (id == SYNC_PREV_ANIMATION_DATA_MAX_1)
+			prev_animation_1 = 8;
+		if (id == SYNC_PREV_ANIMATION_DATA_MAX_2)
+			prev_animation_2 = 8;
+		if (id == SYNC_PREV_ANIMATION_DATA_MAX_3)
+			prev_animation_3 = 8;
+		if (id == SYNC_PREV_ANIMATION_DATA_MAX_4)
+			prev_animation_4 = 12;
+		if (id == SYNC_PREV_ANIMATION_DATA_MIN_1)
+			prev_animation_1 = 0;
+		if (id == SYNC_PREV_ANIMATION_DATA_MIN_2)
+			prev_animation_2 = 0;
+		if (id == SYNC_PREV_ANIMATION_DATA_MIN_3)
+			prev_animation_3 = 0;
+		if (id == SYNC_PREV_ANIMATION_DATA_MIN_4)
+			prev_animation_4 = 0;
 	}
 
 	private BlockPos findNewSurfaceLocation(World world, BlockPos pos) {
@@ -264,42 +403,39 @@ public class EntityBigPuffshroom extends EntityLiving {
 		return pos;
 	}
 
-	private boolean checkForAdjacentMouldyDirt(World world, BlockPos pos, int offSetXIn, int offSetZIn, IBlockState state) {
+	private boolean checkForAdjacentMouldyDirt(World world, BlockPos pos, int offSetXIn, int offSetZIn,
+			IBlockState state) {
 		int count = 0;
-		for(int offsetX = -offSetXIn; offsetX <= offSetXIn; offsetX++)
-			for(int offsetZ = -offSetZIn; offsetZ <= offSetZIn; offsetZ++)
+		for (int offsetX = -offSetXIn; offsetX <= offSetXIn; offsetX++)
+			for (int offsetZ = -offSetZIn; offsetZ <= offSetZIn; offsetZ++)
 				if (isMouldyDirtAdjacent(world.getBlockState(pos.add(offsetX, 0, offsetZ)), state)) {
-					count ++;
+					count++;
 				}
 		return count >= 8;
 	}
 
 	private boolean isMouldyDirtAdjacent(IBlockState posState, IBlockState stateChecked) {
-        return posState.getBlock() == stateChecked.getBlock();
+		return posState.getBlock() == stateChecked.getBlock();
 	}
 
 	private void slamAttack(World world, BlockPos pos) {
 		for (int x = 0; x < 12; x++) {
 			for (int d = 0; d < 6; d++) {
-			double angle = Math.toRadians(x * 30D);
-			double offSetX = Math.floor(-Math.sin(angle) * (2D + d));
-			double offSetZ = Math.floor(Math.cos(angle) * (2D + d));
+				double angle = Math.toRadians(x * 30D);
+				double offSetX = Math.floor(-Math.sin(angle) * (2D + d));
+				double offSetZ = Math.floor(Math.cos(angle) * (2D + d));
 
-			BlockPos origin = new BlockPos(pos.add(offSetX, -1, offSetZ));
-			IBlockState block = world.getBlockState(origin);
+				BlockPos origin = new BlockPos(pos.add(offSetX, -1, offSetZ));
+				IBlockState block = world.getBlockState(origin);
 
-			if (block.isNormalCube()
-					&& !block.getBlock().hasTileEntity(block)
-					&& block.getBlockHardness(world, origin) <= 5.0F && block.getBlockHardness(world, origin) >= 0.0F
-					&& world.getBlockState(origin).isOpaqueCube()) {
-
-				EntityShockwaveBlock shockwaveBlock = new EntityShockwaveBlock(world);
-				shockwaveBlock.setOrigin(origin, 5 + d * 2, origin.getX() + 0.5D, origin.getZ() + 0.5D, this);
-				shockwaveBlock.setLocationAndAngles(origin.getX() + 0.5D, origin.getY(), origin.getZ() + 0.5D, 0.0F, 0.0F);
-				shockwaveBlock.setBlock(Block.getBlockById(Block.getIdFromBlock(world.getBlockState(origin).getBlock())), world.getBlockState(origin).getBlock().getMetaFromState(world.getBlockState(origin)));
-				world.spawnEntity(shockwaveBlock);
+				if (block.isNormalCube() && !block.getBlock().hasTileEntity(block) && block.getBlockHardness(world, origin) <= 5.0F && block.getBlockHardness(world, origin) >= 0.0F && world.getBlockState(origin).isOpaqueCube()) {
+					EntityShockwaveBlock shockwaveBlock = new EntityShockwaveBlock(world);
+					shockwaveBlock.setOrigin(origin, 5 + d * 2, origin.getX() + 0.5D, origin.getZ() + 0.5D, this);
+					shockwaveBlock.setLocationAndAngles(origin.getX() + 0.5D, origin.getY(), origin.getZ() + 0.5D, 0.0F, 0.0F);
+					shockwaveBlock.setBlock(Block.getBlockById(Block.getIdFromBlock(world.getBlockState(origin).getBlock())), world.getBlockState(origin).getBlock().getMetaFromState(world.getBlockState(origin)));
+					world.spawnEntity(shockwaveBlock);
+				}
 			}
-		}
 		}
 	}
 
@@ -310,14 +446,14 @@ public class EntityBigPuffshroom extends EntityLiving {
 				return getDistance(player);
 		return 6F;
 	}
-	
+
 	private void spawnSporeMinions(World world, BlockPos pos) {
 		for (int x = 0; x < 4; x++) {
 			double angle = Math.toRadians(x * 90D);
 			double offSetX = Math.floor(-Math.sin(angle) * 1D);
 			double offSetZ = Math.floor(Math.cos(angle) * 1D);
 
-			if(getEntityWorld().isAirBlock(pos.add(offSetX, 1, offSetZ))) {
+			if (getEntityWorld().isAirBlock(pos.add(offSetX, 1, offSetZ))) {
 				EntitySporeMinion spore = new EntitySporeMinion(world);
 				spore.setLocationAndAngles(posX + offSetX, posY + 1.8D, posZ + offSetZ, world.rand.nextFloat() * 360, 0);
 				double velX = pos.getX() + offSetX * 4D - spore.posX;
@@ -329,24 +465,22 @@ public class EntityBigPuffshroom extends EntityLiving {
 				double accelerationZ = velZ / distanceSqRt * 0.3D + rand.nextDouble() * 0.2D;
 				spore.addVelocity(accelerationX, accelerationY, accelerationZ);
 				world.spawnEntity(spore);
-				//spore.setType(1); //test
+				// spore.setType(1); //test
 				spore.setOwnerId(this.getUniqueID());
 			}
 		}
 	}
 
-	protected Entity findEnemyToAttack() {
-		if(!active_1 && animation_1 == 0) {
+	protected void findEnemyToAttack() {
+		if (!getActive1() && getAnimation1() == 0) {
 			List<EntityPlayer> list = getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(getPosition()).grow(12D, 2D, 12D));
-			for(EntityPlayer player : list) {
-				if (/*!player.isCreative() &&*/ !player.isSpectator()) {
-					active_1 = true;
-					pause = true;
-					return player;
+			for (EntityPlayer player : list) {
+				if (/* !player.isCreative() && */ !player.isSpectator()) {
+					setActive1(true);
+					setPause(true);
 				}
 			}
 		}
-		return null;
 	}
 
 	private void spawnFragSpores() {
@@ -368,15 +502,14 @@ public class EntityBigPuffshroom extends EntityLiving {
 		}
 	}
 
-    public boolean isWearingSilkMask(EntityLivingBase entity) {
-    	if(entity instanceof EntityPlayer) {
-        	ItemStack helmet = ((EntityPlayer)entity).getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-        	if(!helmet.isEmpty() && helmet.getItem() == ItemRegistry.SILK_MASK) {
-        		return true;
-        	}
-        }
-    	return false;
-    }
+	public boolean isWearingSilkMask(EntityLivingBase entity) {
+		if (entity instanceof EntityPlayer) {
+			ItemStack helmet = ((EntityPlayer) entity).getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+			if (!helmet.isEmpty() && helmet.getItem() == ItemRegistry.SILK_MASK)
+				return true;
+		}
+		return false;
+	}
 
 	@Override
 	protected boolean isMovementBlocked() {
@@ -384,14 +517,14 @@ public class EntityBigPuffshroom extends EntityLiving {
 	}
 
 	@Override
-    public boolean canBePushed() {
-        return false;
-    }
+	public boolean canBePushed() {
+		return false;
+	}
 
 	@Override
-    public boolean canBeCollidedWith() {
-        return true;
-    }
+	public boolean canBeCollidedWith() {
+		return true;
+	}
 
 	@Override
 	public void addVelocity(double x, double y, double z) {
@@ -409,23 +542,23 @@ public class EntityBigPuffshroom extends EntityLiving {
 	public void onKillCommand() {
 		this.setDead();
 	}
-	
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if(source == DamageSource.OUT_OF_WORLD || source == DamageSource.GENERIC) { // test using generic atm
+		if (source == DamageSource.OUT_OF_WORLD || source == DamageSource.GENERIC) // test using generic atm
 			return super.attackEntityFrom(source, damage);
-		}
+
 		if (source instanceof EntityDamageSource) {
 			Entity sourceEntity = ((EntityDamageSource) source).getTrueSource();
 			if (sourceEntity instanceof EntityPlayer) {
 				if (cooldown <= 0 && canBeHit()) {
-					active_1 = false;
-					active_2 = false;
-					active_3 = false;
-					active_4 = false;
-					pause = false;
-					pause_count = 40;
-					active_5 = true;
+					setActive1(false);
+					setActive2(false);
+					setActive3(false);
+					setActive4(false);
+					setPause(false);
+					setPauseCount(40);
+					setActive5(true);
 					cooldown = 40;
 					if (!getEntityWorld().isRemote) {
 						return super.attackEntityFrom(source, damage);
@@ -437,30 +570,42 @@ public class EntityBigPuffshroom extends EntityLiving {
 	}
 
 	private boolean canBeHit() {
-		return pause || active_1 || active_2 || active_3 || active_4 || active_5;
+		return getPause() || getActive1() || getActive2() || getActive3() || getActive4() || getActive5();
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		nbt.setBoolean("active_1", active_1);
-		nbt.setBoolean("active_2", active_2);
-		nbt.setBoolean("active_3", active_3);
-		nbt.setBoolean("active_4", active_4);
-		nbt.setBoolean("active_5", active_5);
-		nbt.setBoolean("pause", pause);
+		nbt.setBoolean("active_1", getActive1());
+		nbt.setBoolean("active_2", getActive2());
+		nbt.setBoolean("active_3", getActive3());
+		nbt.setBoolean("active_4", getActive4());
+		nbt.setBoolean("active_5", getActive5());
+		nbt.setBoolean("pause", getPause());
+		nbt.setInteger("pause_count", getPauseCount());
+		nbt.setInteger("cooldown", cooldown);
+		nbt.setInteger("animation_1", getAnimation1());
+		nbt.setInteger("animation_2", getAnimation2());
+		nbt.setInteger("animation_3", getAnimation3());
+		nbt.setInteger("animation_4", getAnimation4());
 		return nbt;
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		active_1 = nbt.getBoolean("active_1");
-		active_2 = nbt.getBoolean("active_2");
-		active_3 = nbt.getBoolean("active_3");
-		active_4 = nbt.getBoolean("active_4");
-		active_5 = nbt.getBoolean("active_5");
-		pause = nbt.getBoolean("pause");
+		setActive1(nbt.getBoolean("active_1"));
+		setActive2(nbt.getBoolean("active_2"));
+		setActive3(nbt.getBoolean("active_3"));
+		setActive4(nbt.getBoolean("active_4"));
+		setActive5(nbt.getBoolean("active_5"));
+		setPause(nbt.getBoolean("pause"));
+		setPauseCount(nbt.getInteger("pause_count"));
+		cooldown = nbt.getInteger("cooldown");
+		setAnimation1(nbt.getInteger("animation_1"));
+		setAnimation2(nbt.getInteger("animation_2"));
+		setAnimation3(nbt.getInteger("animation_3"));
+		setAnimation4(nbt.getInteger("animation_4"));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -474,13 +619,48 @@ public class EntityBigPuffshroom extends EntityLiving {
 			double d5 = this.posX;
 			double d6 = yy + 0.25F;
 			double d7 = this.posZ;
-			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d0, d1, d2, ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f)).withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
-			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d0, d1, d4, ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f)).withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
-			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d3, d1, d2, ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f)).withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
-			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d3, d1, d4, ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f)).withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
-			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d0, d1, d2, ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f)).withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
-			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d5, d6, d7, ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f)).withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
-			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d0, d1, d2, ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f)).withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
+			BatchedParticleRenderer.INSTANCE
+					.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR,
+							BLParticles.PUZZLE_BEAM.create(world, d0, d1, d2,
+									ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f),
+											0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f))
+											.withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
+			BatchedParticleRenderer.INSTANCE
+					.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR,
+							BLParticles.PUZZLE_BEAM.create(world, d0, d1, d4,
+									ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f),
+											0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f))
+											.withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
+			BatchedParticleRenderer.INSTANCE
+					.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR,
+							BLParticles.PUZZLE_BEAM.create(world, d3, d1, d2,
+									ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f),
+											0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f))
+											.withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
+			BatchedParticleRenderer.INSTANCE
+					.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR,
+							BLParticles.PUZZLE_BEAM.create(world, d3, d1, d4,
+									ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f),
+											0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f))
+											.withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
+			BatchedParticleRenderer.INSTANCE
+					.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR,
+							BLParticles.PUZZLE_BEAM.create(world, d0, d1, d2,
+									ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f),
+											0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f))
+											.withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
+			BatchedParticleRenderer.INSTANCE
+					.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR,
+							BLParticles.PUZZLE_BEAM.create(world, d5, d6, d7,
+									ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f),
+											0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f))
+											.withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
+			BatchedParticleRenderer.INSTANCE
+					.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR,
+							BLParticles.PUZZLE_BEAM.create(world, d0, d1, d2,
+									ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f),
+											0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f))
+											.withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
 		}
 	}
 

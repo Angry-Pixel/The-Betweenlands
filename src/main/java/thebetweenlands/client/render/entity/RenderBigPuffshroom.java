@@ -41,7 +41,7 @@ public class RenderBigPuffshroom extends RenderLiving<EntityBigPuffshroom> {
 			GlStateManager.enableOutlineMode(this.getTeamColor(entity));
 		}
 
-		if (entity.animation_1 != 0) {
+		if (entity.getAnimation1() != 0) {
 			bindTexture(TEXTURE);
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x, y - 0.25F, z);

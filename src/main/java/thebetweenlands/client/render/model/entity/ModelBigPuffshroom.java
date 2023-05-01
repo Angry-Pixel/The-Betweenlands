@@ -38,6 +38,7 @@ public class ModelBigPuffshroom extends ModelBase {
 	private final ModelRenderer core_myco4a;
 	private final ModelRenderer core_myco4b;
 	private final ModelRenderer base;
+	private final ModelRenderer base_core;
 	private final ModelRenderer roots;
 	private final ModelRenderer base_tentacle1;
 	private final ModelRenderer tentacle1a;
@@ -362,7 +363,11 @@ public class ModelBigPuffshroom extends ModelBase {
 
 		base = new ModelRenderer(this);
 		base.setRotationPoint(0.0F, 24.0F, 0.0F);
-		base.cubeList.add(new ModelBox(base, 0, 0, -5.0F, -26.0F, -5.0F, 10, 28, 10, 0.0F, false));
+		base.cubeList.add(new ModelBox(base, 0, 0, -5F, -28F, -5F, 0, 0, 0, 0.0F, false));
+		
+		base_core = new ModelRenderer(this);
+		base_core.setRotationPoint(0.0F, 24.0F, 0.0F);
+		base_core.cubeList.add(new ModelBox(base_core, 0, 0, -5.0F, -26.5F, -5.0F, 10, 28, 10, 0.0F, false));
 
 		roots = new ModelRenderer(this);
 		roots.setRotationPoint(0.0F, 0.0F, 0.0F);
@@ -1393,20 +1398,24 @@ public class ModelBigPuffshroom extends ModelBase {
 	
     public void render(EntityBigPuffshroom entity, float partialTickTime) {
     	EntityBigPuffshroom bigPuffsroom = (EntityBigPuffshroom) entity;
-		float interAnimationTicks_1 = bigPuffsroom.prev_animation_1 + (bigPuffsroom.animation_1 - bigPuffsroom.prev_animation_1) * partialTickTime;
-		float interAnimationTicks_2 = bigPuffsroom.prev_animation_2 + (bigPuffsroom.animation_2 - bigPuffsroom.prev_animation_2) * partialTickTime;
-		float interAnimationTicks_3 = bigPuffsroom.prev_animation_3 + (bigPuffsroom.animation_3 - bigPuffsroom.prev_animation_3) * partialTickTime;
-		float interAnimationTicks_4 = bigPuffsroom.prev_animation_4 + (bigPuffsroom.animation_4 - bigPuffsroom.prev_animation_4) * partialTickTime;
+		float interAnimationTicks_1 = bigPuffsroom.prev_animation_1 + (bigPuffsroom.getAnimation1() - bigPuffsroom.prev_animation_1) * partialTickTime;
+		float interAnimationTicks_2 = bigPuffsroom.prev_animation_2 + (bigPuffsroom.getAnimation2() - bigPuffsroom.prev_animation_2) * partialTickTime;
+		float interAnimationTicks_3 = bigPuffsroom.prev_animation_3 + (bigPuffsroom.getAnimation3() - bigPuffsroom.prev_animation_3) * partialTickTime;
+		float interAnimationTicks_4 = bigPuffsroom.prev_animation_4 + (bigPuffsroom.getAnimation4() - bigPuffsroom.prev_animation_4) * partialTickTime;
 		float smoothedTicks = bigPuffsroom.prev_renderTicks + (bigPuffsroom.renderTicks - bigPuffsroom.prev_renderTicks) * partialTickTime;
-		float flap = MathHelper.sin((smoothedTicks) * 0.325F) * 0.125F;
-		float flap2 = MathHelper.cos((smoothedTicks) * 0.325F) * 0.125F;
+		float flap = MathHelper.sin((smoothedTicks) * 0.125F) * 0.125F;
+		float flap2 = MathHelper.cos((smoothedTicks) * 0.125F) * 0.125F;
+		float flap3 = MathHelper.sin((smoothedTicks) * 0.2F) * 0.125F;
+		float flap4 = MathHelper.cos((smoothedTicks) * 0.2F) * 0.125F;
 		float rise = 0F;
 
-		if (bigPuffsroom.animation_1 < 8) {
+		if (bigPuffsroom.getAnimation1() < 8) {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(0F, 0F - interAnimationTicks_1 * 0.25F, 0F);
 			GlStateManager.rotate(0F + interAnimationTicks_1 * 22.5F, 0F, 1F, 0F);
+			GlStateManager.disableCull();
 			base.render(0.0625F);
+			base_core.render(0.0625F);
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			spitty_part.render(0.0625F);
@@ -1415,12 +1424,14 @@ public class ModelBigPuffshroom extends ModelBase {
 			core3a.render(0.0625F);
 			core4a.render(0.0625F);
 			GlStateManager.disableBlend();
+			GlStateManager.enableCull();
 			GlStateManager.popMatrix();
 		}
 		else {
 			GlStateManager.pushMatrix();
+			
 			if (bigPuffsroom.getSlam()) {
-				if (bigPuffsroom.active_4 && bigPuffsroom.pause) {
+				if (bigPuffsroom.getActive4() && bigPuffsroom.getPause()) {
 					rise = interAnimationTicks_4 * 0.025F;
 				}
 			}
@@ -1429,11 +1440,19 @@ public class ModelBigPuffshroom extends ModelBase {
 			base.render(0.0625F);
 
 			GlStateManager.pushMatrix();
-			if (bigPuffsroom.animation_4 <= 8)
-				GlStateManager.scale(1F + interAnimationTicks_4 * 0.125F, 1F, 1F + interAnimationTicks_4 * 0.125F);
-			if (bigPuffsroom.animation_4 >= 10)
+			GlStateManager.disableCull();
+			GlStateManager.translate(0F, 0.125F, 0F);
+				if ((bigPuffsroom.getAnimation4() >= 12 && bigPuffsroom.getPause() || bigPuffsroom.getAnimation1() > 0)) {
+					GlStateManager.translate(0F, 0.125F + flap4 * 0.25F, 0F);
+					GlStateManager.scale(1F + flap3 * 0.5F, 1F - flap4 * 0.25F, 1F + flap3 * 0.5F);
+			}
+			
+			if (bigPuffsroom.getAnimation4() <= 8)
+				GlStateManager.scale(1F + interAnimationTicks_4 * 0.0625F, 1F, 1F + interAnimationTicks_4 * 0.125F);
+			if (bigPuffsroom.getAnimation4() >= 10)
 				GlStateManager.scale(1.75F - interAnimationTicks_4 * 0.0625F, 1F, 1.75F - interAnimationTicks_4 * 0.0625F);
-
+			
+			base_core.render(0.0625F);
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			spitty_part.render(0.0625F);
@@ -1442,8 +1461,9 @@ public class ModelBigPuffshroom extends ModelBase {
 			core3a.render(0.0625F);
 			core4a.render(0.0625F);
 			GlStateManager.disableBlend();
+			GlStateManager.enableCull();
 			GlStateManager.popMatrix();
-			
+
 			GlStateManager.popMatrix();
 		}
     }
@@ -1451,17 +1471,17 @@ public class ModelBigPuffshroom extends ModelBase {
     @Override
     public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
     	EntityBigPuffshroom bigPuffsroom = (EntityBigPuffshroom) entity;
-		float interAnimationTicks_1 = bigPuffsroom.prev_animation_1 + (bigPuffsroom.animation_1 - bigPuffsroom.prev_animation_1) * partialRenderTicks;
-		float interAnimationTicks_2 = bigPuffsroom.prev_animation_2 + (bigPuffsroom.animation_2 - bigPuffsroom.prev_animation_2) * partialRenderTicks;
-		float interAnimationTicks_3 = bigPuffsroom.prev_animation_3 + (bigPuffsroom.animation_3 - bigPuffsroom.prev_animation_3) * partialRenderTicks;
-		float interAnimationTicks_4 = bigPuffsroom.prev_animation_4 + (bigPuffsroom.animation_4 - bigPuffsroom.prev_animation_4) * partialRenderTicks;
+		float interAnimationTicks_1 = bigPuffsroom.prev_animation_1 + (bigPuffsroom.getAnimation1() - bigPuffsroom.prev_animation_1) * partialRenderTicks;
+		float interAnimationTicks_2 = bigPuffsroom.prev_animation_2 + (bigPuffsroom.getAnimation2() - bigPuffsroom.prev_animation_2) * partialRenderTicks;
+		float interAnimationTicks_3 = bigPuffsroom.prev_animation_3 + (bigPuffsroom.getAnimation3() - bigPuffsroom.prev_animation_3) * partialRenderTicks;
+		float interAnimationTicks_4 = bigPuffsroom.prev_animation_4 + (bigPuffsroom.getAnimation4() - bigPuffsroom.prev_animation_4) * partialRenderTicks;
 		float smoothedTicks = bigPuffsroom.prev_renderTicks + (bigPuffsroom.renderTicks - bigPuffsroom.prev_renderTicks)* partialRenderTicks;
-		float flap = MathHelper.sin((smoothedTicks) * 0.325F) * 0.0625F;
-		float flap2 = MathHelper.cos((smoothedTicks) * 0.325F) * 0.0625F;
-		float flap3 = MathHelper.sin((smoothedTicks) * 0.325F) * 0.0625F;
-		float flap4 = MathHelper.cos((smoothedTicks) * 0.325F) * 0.0625F;
+		float flap = MathHelper.sin((smoothedTicks) * 0.25F) * 0.0625F;
+		float flap2 = MathHelper.cos((smoothedTicks) * 0.25F) * 0.0625F;
+		float flap3 = MathHelper.sin((smoothedTicks) * 0.25F) * 0.0625F;
+		float flap4 = MathHelper.cos((smoothedTicks) * 0.25F) * 0.0625F;
 
-		if (bigPuffsroom.active_1) {
+		if (bigPuffsroom.getActive1()) {
 			flap = 0;
 			flap2 = 0;
 			flap3 = 0;
@@ -1469,7 +1489,7 @@ public class ModelBigPuffshroom extends ModelBase {
 		}
 
 		if (bigPuffsroom.getSlam()) {
-			if ((bigPuffsroom.active_4 || bigPuffsroom.active_3) && bigPuffsroom.pause) {
+			if ((bigPuffsroom.getActive4() || bigPuffsroom.getActive3()) && bigPuffsroom.getPause()) {
 				flap = -interAnimationTicks_4 * 0.025F;
 				flap2 = -interAnimationTicks_4 * 0.025F;
 				flap3 = interAnimationTicks_4 * 0.025F;
