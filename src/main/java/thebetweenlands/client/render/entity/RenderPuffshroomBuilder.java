@@ -4,6 +4,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelPuffshroomBuilder;
@@ -21,11 +22,13 @@ public class RenderPuffshroomBuilder extends RenderLiving<EntityPuffshroomBuilde
 	@Override
 	public void doRender(EntityPuffshroomBuilder entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+		float smoothedTicks = entity.prev_renderTicks + (entity.renderTicks - entity.prev_renderTicks)* partialTicks;
+		float flap = MathHelper.sin((smoothedTicks) * 0.25F) * 0.125F;
 		bindTexture(TEXTURE);
 		if (entity.getIsMiddle()) {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x, y + 1.5F, z);
-			GlStateManager.scale(-1, -1, 1);
+			GlStateManager.scale(-1 + flap, -1, 1- flap);
 			GlStateManager.rotate(entityYaw, 0, 1, 0);
 			MODEL.renderSpore(0.0625F);
 			GlStateManager.popMatrix();

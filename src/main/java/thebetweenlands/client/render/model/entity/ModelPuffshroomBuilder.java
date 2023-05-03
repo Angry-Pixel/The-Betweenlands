@@ -3,8 +3,11 @@ package thebetweenlands.client.render.model.entity;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.entity.EntityPuffshroomBuilder;
 
 @SideOnly(Side.CLIENT)
 public class ModelPuffshroomBuilder extends ModelBase {
@@ -83,7 +86,20 @@ public class ModelPuffshroomBuilder extends ModelBase {
     public void renderTendril(float scale) {
     	this.back_r_tent_origin.render(scale);
     }
-
+    @Override
+    public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
+    	EntityPuffshroomBuilder puffShoom_builder = (EntityPuffshroomBuilder) entity;
+		float smoothedTicks = puffShoom_builder.prev_renderTicks + (puffShoom_builder.renderTicks - puffShoom_builder.prev_renderTicks)* partialRenderTicks;
+		float flap = MathHelper.sin((smoothedTicks) * 0.25F) * 0.125F;
+		float flap2 = MathHelper.cos((smoothedTicks) * 0.25F) * 0.125F;
+		if(!puffShoom_builder.getIsMiddle()) {
+		    back_r_tent_origin.rotateAngleY = -2.356194490192345F - flap;
+		    back_r_tent_origin.rotateAngleX = 0F - flap;
+		    back_r_tent_1.rotateAngleX = 0F + flap2 ;
+		    back_r_tent_2.rotateAngleX = 0.7853981633974483F + flap *2F;
+		    back_r_tent_3.rotateAngleX = -0.7853981633974483F + flap2*3F;
+		}
+    }
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;

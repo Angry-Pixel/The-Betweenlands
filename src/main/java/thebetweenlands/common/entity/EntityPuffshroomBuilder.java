@@ -42,7 +42,8 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 	private static final DataParameter<BlockPos> PATCH_6 = EntityDataManager.createKey(EntityPuffshroomBuilder.class, DataSerializers.BLOCK_POS);
 	private static final DataParameter<BlockPos> PATCH_7 = EntityDataManager.createKey(EntityPuffshroomBuilder.class, DataSerializers.BLOCK_POS);
 	private static final DataParameter<BlockPos> PATCH_8 = EntityDataManager.createKey(EntityPuffshroomBuilder.class, DataSerializers.BLOCK_POS);
-	public BlockPos holder = new BlockPos(0,0,0);
+	public int renderTicks = 0;
+	public int prev_renderTicks = 0;
 
 	public EntityPuffshroomBuilder (World world) {
 		super(world);
@@ -145,6 +146,9 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		if (getEntityWorld().isRemote)
+			prev_renderTicks = renderTicks;
+
 		if (world.getTotalWorldTime() % 20 == 0) {
 			if (!world.isRemote) {
 				checkForMiddle();
@@ -163,6 +167,8 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 					}
 			}
 		}
+		if (getEntityWorld().isRemote)
+			renderTicks++;
 	}
 
 	private void killTendrills() {
@@ -192,14 +198,14 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 
 	private void createSoilPatches() {
 		setSoilPatches(getPosition().down());
-		setSoilPatches(getPatch1());
-		setSoilPatches(getPatch2());
-		setSoilPatches(getPatch3());
-		setSoilPatches(getPatch4());
-		setSoilPatches(getPatch5());
-		setSoilPatches(getPatch6());
-		setSoilPatches(getPatch7());
-		setSoilPatches(getPatch8());
+		setSoilPatches(getPatch1().down());
+		setSoilPatches(getPatch2().down());
+		setSoilPatches(getPatch3().down());
+		setSoilPatches(getPatch4().down());
+		setSoilPatches(getPatch5().down());
+		setSoilPatches(getPatch6().down());
+		setSoilPatches(getPatch7().down());
+		setSoilPatches(getPatch8().down());
 	}
 
 	private void setSoilPatches(BlockPos pos) {
@@ -328,14 +334,14 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 		if (!getEntityWorld().isRemote) {
 			checkForMiddle();
 			if (getIsMiddle()) {
-				setPatch1(getPosition().add(6 + rand.nextInt(4), 0, 0));
-				setPatch2(getPosition().add(0, 0, 6 + rand.nextInt(4)));
-				setPatch3(getPosition().add(-6 - rand.nextInt(4), 0, 0));
-				setPatch4(getPosition().add(0, 0, -6 - rand.nextInt(4)));
-				setPatch5(getPosition().add(5 + rand.nextInt(4), 0, 5 + rand.nextInt(4)));
-				setPatch6(getPosition().add(5 + rand.nextInt(4), 0, -5 - rand.nextInt(4)));
-				setPatch7(getPosition().add(-5 - rand.nextInt(4), 0, 5 + rand.nextInt(4)));
-				setPatch8(getPosition().add(-5 - rand.nextInt(4), 0, -5 - rand.nextInt(4)));
+				setPatch1(getPosition().add(5 + rand.nextInt(5), 0, 0));
+				setPatch2(getPosition().add(0, 0, 5 + rand.nextInt(5)));
+				setPatch3(getPosition().add(-5 - rand.nextInt(5), 0, 0));
+				setPatch4(getPosition().add(0, 0, -5 - rand.nextInt(5)));
+				setPatch5(getPosition().add(4 + rand.nextInt(5), 0, 4 + rand.nextInt(5)));
+				setPatch6(getPosition().add(4 + rand.nextInt(5), 0, -4 - rand.nextInt(5)));
+				setPatch7(getPosition().add(-4 - rand.nextInt(5), 0, 4 + rand.nextInt(5)));
+				setPatch8(getPosition().add(-4 - rand.nextInt(5), 0, -4 - rand.nextInt(5)));
 			}
 		}
 		return livingdata;
