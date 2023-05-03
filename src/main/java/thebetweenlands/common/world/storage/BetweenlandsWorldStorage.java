@@ -99,7 +99,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 
 		this.ambienceTicks = this.getWorld().rand.nextInt(7000);
 		
-		this.sporeHiveManager = new SporeHiveManager(this.getWorld(), 6 * 16);
+		this.sporeHiveManager = new SporeHiveManager(this.getWorld(), 5 * 16);
 	}
 
 	@Override
@@ -163,6 +163,10 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 
 		if(this.getWorld().isRemote && this.getWorld().provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			this.updateAmbientCaveSounds();
+		}
+		
+		if(this.getWorld().getTotalWorldTime() % 600 == 0) {
+			this.sporeHiveManager.clearCache();
 		}
 	}
 

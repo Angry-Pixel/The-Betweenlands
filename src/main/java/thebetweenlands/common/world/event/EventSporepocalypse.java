@@ -17,7 +17,9 @@ import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.SporeHiveManager;
 import thebetweenlands.common.world.storage.location.LocationSporeHive;
 
 public class EventSporepocalypse extends TimedEnvironmentEvent {
@@ -47,26 +49,36 @@ public class EventSporepocalypse extends TimedEnvironmentEvent {
 
 		if(this.isActive() && world.provider instanceof WorldProviderBetweenlands && !world.isRemote && world instanceof WorldServer) {
 			WorldServer worldServer = (WorldServer) world;
-			for (Iterator<Chunk> iterator = worldServer.getPersistentChunkIterable(worldServer.getPlayerChunkMap().getChunkIterator()); iterator.hasNext(); ) {
-				Chunk chunk = iterator.next();
 
-				BlockPos pos = new BlockPos(chunk.x * 16 + 7, chunk.getHeightValue(7, 7), chunk.z * 16 + 7);
+			SporeHiveManager sporeHiveManager = BetweenlandsWorldStorage.forWorld(world).getSporeHiveManager();
 
-				if(BetweenlandsWorldStorage.forWorld(world).getSporeHiveManager().occupyIfFree(pos)) {
-					world.setBlockState(pos, BlockRegistry.MOULD_HORN.getDefaultState());
+			Iterator<Chunk> chunks = worldServer.getPersistentChunkIterable(worldServer.getPlayerChunkMap().getChunkIterator());
+			while(chunks.hasNext()) {
+				Chunk chunk = chunks.next();
 
-					BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+				int rx = world.rand.nextInt(16);
+				int rz = world.rand.nextInt(16);
 
-					LocationSporeHive hive = new LocationSporeHive(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), pos);
-					hive.addBounds(new AxisAlignedBB(pos).grow(8 + Math.abs(MathHelper.getCoordinateRandom(pos.getX(), pos.getY(), pos.getZ()) % 12), 4, 8 + Math.abs(MathHelper.getCoordinateRandom(pos.getX() + 10, pos.getY(), pos.getZ()) % 12)));
-					hive.setSeed(MathHelper.getCoordinateRandom(pos.getX(), pos.getY(), pos.getZ()));
+				BlockPos pos = new BlockPos(chunk.x * 16 + rx, chunk.getHeightValue(rx, rz), chunk.z * 16 + rz);
 
-					worldStorage.getLocalStorageHandler().addLocalStorage(hive);
+				if(world.isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(world, pos.down()) && sporeHiveManager.occupyIfFree(pos)) {
+					this.spawnSporeHive(world, pos);
 				}
 			}
 		}
 	}
 
+	private void spawnSporeHive(World world, BlockPos pos) {
+		world.setBlockState(pos, BlockRegistry.MOULD_HORN.getDefaultState());
+
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+
+		LocationSporeHive hive = new LocationSporeHive(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), pos);
+		hive.addBounds(new AxisAlignedBB(pos).grow(8 + world.rand.nextInt(17), 4, 8 + world.rand.nextInt(17)));
+		hive.setSeed(MathHelper.getCoordinateRandom(pos.getX(), pos.getY(), pos.getZ()));
+
+		worldStorage.getLocalStorageHandler().addLocalStorage(hive);
+	}
 
 	@Override
 	public ResourceLocation[] getVisionTextures() {

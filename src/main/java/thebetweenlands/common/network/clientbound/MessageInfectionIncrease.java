@@ -44,7 +44,6 @@ public class MessageInfectionIncrease extends MessageBase {
 	private void handle() {
 		EntityPlayer player = Minecraft.getMinecraft().player;
 		if(player != null) {
-			player.world.playSound(player, player.posX, player.posY, player.posZ, SoundRegistry.INFECTION_SPREAD, SoundCategory.PLAYERS, 0.75f + 1.0f * MathHelper.clamp(this.amount * 10.0f, 0.0f, 1.0f), 1);
 			ScreenRenderHandler.INSTANCE.infectionOverlayRenderer.onInfectionIncrease(this.amount);
 		}
 	}

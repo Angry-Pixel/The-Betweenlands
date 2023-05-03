@@ -12,7 +12,9 @@ import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import thebetweenlands.api.capability.IInfectionCapability;
@@ -24,8 +26,10 @@ import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.CatmullRomSpline;
 
 public class InfectionOverlayRenderer {
-	// TODO Change texture
-	protected static final ResourceLocation INFECTION_OVERLAY_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/overlay/swarm_indicator_overlay.png");
+	protected static final ResourceLocation INFECTION_OVERLAY_INNER_GRADIENT_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/overlay/infection_overlay_inner_gradient.png");
+	protected static final ResourceLocation INFECTION_OVERLAY_OUTER_GRADIENT_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/overlay/infection_overlay_outer_gradient.png");
+	protected static final ResourceLocation INFECTION_OVERLAY_MYCELIUM_BACK_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/overlay/infection_overlay_mycelium_back.png");
+	protected static final ResourceLocation INFECTION_OVERLAY_MYCELIUM_MAIN_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/overlay/infection_overlay_mycelium_main.png");
 
 	protected static final ResourceLocation VIGNETTE_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/overlay/strong_vignette.png");
 
@@ -51,8 +55,13 @@ public class InfectionOverlayRenderer {
 			new Vec3d(18, 0, 0)
 	});
 
+	private int ticks;
+
 	private float prevInfectionStrength;
 	private float infectionStrength;
+
+	private float prevWobbleStrength;
+	private float wobbleStrength;
 
 	private int prevPulseTicks;
 	private int pulseTicks;
@@ -68,6 +77,8 @@ public class InfectionOverlayRenderer {
 
 		this.prevInfectionStrength = this.infectionStrength;
 		this.infectionStrength = 0;
+
+		this.prevWobbleStrength = this.wobbleStrength;
 
 		this.prevOverlayPercentage = this.overlayPercentage;
 
@@ -99,6 +110,8 @@ public class InfectionOverlayRenderer {
 		}
 
 		if(this.pulseFadeTicks > 0) {
+			this.wobbleStrength = Math.max(0.2f, this.wobbleStrength - 0.1f);
+
 			this.pulseTicks++;
 
 			if((this.pulseTicks + 12) % 20 == 0) {
@@ -106,7 +119,10 @@ public class InfectionOverlayRenderer {
 			}
 		} else {
 			this.pulseTicks = 0;
+			this.wobbleStrength = Math.min(1.0f, this.wobbleStrength + 0.1f);
 		}
+
+		this.ticks++;
 	}
 
 	public void render(float partialTicks) {
@@ -117,36 +133,38 @@ public class InfectionOverlayRenderer {
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.enableTexture2D();
+		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0f);
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0, 0, -90);
 
 		ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
 
-		float alpha = (this.prevInfectionStrength + (this.infectionStrength - this.prevInfectionStrength) * partialTicks) * 0.4f;
+		float strength = (this.prevInfectionStrength + (this.infectionStrength - this.prevInfectionStrength) * partialTicks);
+
+		float alpha = strength * 0.8f;
+
+		float wobble = (this.prevWobbleStrength + (this.wobbleStrength - this.prevWobbleStrength) * partialTicks);
 
 		float fade = 0.0f;
 
+		float throb = 0;
+
 		if(this.pulseTicks > 0) {
 			fade = (this.prevPulseFadeTicks + (this.pulseFadeTicks - this.prevPulseFadeTicks) * partialTicks) * 0.05f;
-
 			fade *= this.prevOverlayPercentage + (this.overlayPercentage - this.prevOverlayPercentage) * partialTicks;
 
-			float throb = this.prevPulseTicks + (this.pulseTicks - this.prevPulseTicks) * partialTicks;
-
+			throb = this.prevPulseTicks + (this.pulseTicks - this.prevPulseTicks) * partialTicks;
 			throb = ((float)SPLINE.interpolate((throb * 0.05f) % 1.0f).y) / 100.0f * fade;
-			
-			alpha = MathHelper.clamp(alpha + (1.0f - alpha) * throb, 0.0f, 1.0f);
-		}
 
-		GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
+			alpha = MathHelper.clamp(alpha + 0.15f * throb, 0.0f, 1.0f);
+		}
 
 		float shade = fade * 0.75f;
 
 		GlStateManager.color(1, 1, 1, shade);
-
 		Minecraft.getMinecraft().getTextureManager().bindTexture(VIGNETTE_TEXTURE);
-
 		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		vertexbuffer.pos(0.0D, (double)res.getScaledHeight_double(), 0).tex(0.0D, 1.0D).endVertex();
 		vertexbuffer.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), 0).tex(1.0D, 1.0D).endVertex();
@@ -154,28 +172,123 @@ public class InfectionOverlayRenderer {
 		vertexbuffer.pos(0.0D, 0.0D, 0).tex(0.0D, 0.0D).endVertex();
 		tessellator.draw();
 
-		GlStateManager.color(1, 1, 1, alpha);
-
-		Minecraft.getMinecraft().getTextureManager().bindTexture(INFECTION_OVERLAY_TEXTURE);
-
+		GlStateManager.color(1, 1, 1, MathHelper.clamp(alpha + (1.0f - alpha) * throb, 0.0f, 1.0f));
+		Minecraft.getMinecraft().getTextureManager().bindTexture(INFECTION_OVERLAY_INNER_GRADIENT_TEXTURE);
 		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		vertexbuffer.pos(0.0D, (double)res.getScaledHeight_double(), 0).tex(0.0D, 1.0D).endVertex();
 		vertexbuffer.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), 0).tex(1.0D, 1.0D).endVertex();
 		vertexbuffer.pos((double)res.getScaledWidth_double(), 0.0D, 0).tex(1.0D, 0.0D).endVertex();
 		vertexbuffer.pos(0.0D, 0.0D, 0).tex(0.0D, 0.0D).endVertex();
 		tessellator.draw();
-
-		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1f);
 
 		GlStateManager.color(1, 1, 1, 1);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(INFECTION_OVERLAY_MYCELIUM_BACK_TEXTURE);
+		this.drawMesh(res, 13, 5, alpha * 0.8f, (Math.cos(((this.ticks + partialTicks) * 0.138) % (Math.PI)) + 1) * 0.5D * wobble + throb * (1 - wobble), (0.03 - wobble * 0.023) * strength);
+
+		GlStateManager.color(1, 1, 1, 1);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(INFECTION_OVERLAY_MYCELIUM_MAIN_TEXTURE);
+		this.drawMesh(res, 13, 5, alpha * 0.8f, (Math.cos(((this.ticks + partialTicks) * 0.1) % (Math.PI)) + 1) * 0.5D * wobble + throb * (1 - wobble), (0.03 - wobble * 0.023) * strength);
+
+		GlStateManager.color(1, 1, 1, alpha);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(INFECTION_OVERLAY_OUTER_GRADIENT_TEXTURE);
+		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
+		vertexbuffer.pos(0.0D, (double)res.getScaledHeight_double(), 0).tex(0.0D, 1.0D).endVertex();
+		vertexbuffer.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), 0).tex(1.0D, 1.0D).endVertex();
+		vertexbuffer.pos((double)res.getScaledWidth_double(), 0.0D, 0).tex(1.0D, 0.0D).endVertex();
+		vertexbuffer.pos(0.0D, 0.0D, 0).tex(0.0D, 0.0D).endVertex();
+		tessellator.draw();
 
 		GlStateManager.popMatrix();
 
+		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1f);
+		GlStateManager.shadeModel(GL11.GL_FLAT);
 		GlStateManager.depthMask(true);
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 	}
 
+	private void drawMesh(ScaledResolution res, int radialSegments, int lateralSegments, double coverage, double wobble, double wobbleAmount) {
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder vertexbuffer = tessellator.getBuffer();
+
+		double w = res.getScaledWidth_double();
+		double h = res.getScaledHeight_double();
+
+		double cx = w * 0.5D;
+		double cy = h * 0.5D;
+
+		double min = Math.min(w, h);
+		double max = Math.max(w, h);
+
+		double sx = w / max;
+		double sy = h / max;
+
+		double r = max * 0.5D * Math.sqrt(2) + 50;
+
+		vertexbuffer.begin(GL11.GL_QUAD_STRIP, DefaultVertexFormats.POSITION_TEX_COLOR);
+
+		for(int j = 0; j < lateralSegments; ++j) {
+			double ir = j / (double)(lateralSegments) * r;
+			double or = ir + r / (double)(lateralSegments);
+
+			for(int i = 0; i < radialSegments; ++i) {
+				double angle = i / (double)(radialSegments-1) * Math.PI * 2;
+
+				double cos = Math.cos(-angle);
+				double sin = Math.sin(-angle);
+
+				double ipx = cos * ir * sx;
+				double ipy = sin * ir * sy;
+
+				double opx = cos * or * sx;
+				double opy = sin * or * sy;
+
+				float ia = MathHelper.clamp((float)(ir * sx * sy / min * 2), 0.0f, 1.0f);
+				float oa = MathHelper.clamp((float)(or * sx * sy / min * 2), 0.0f, 1.0f);
+
+				ipx += cx;
+				ipy += cy;
+
+				opx += cx;
+				opy += cy;
+
+				double iu = ipx / w;
+				double iv = ipy / h;
+
+				double ou = opx / w;
+				double ov = opy / h;
+
+				double iou = iu - 0.5D;
+				double iov = iv - 0.5D;
+
+				double oou = ou - 0.5D;
+				double oov = ov - 0.5D;
+
+				double ic = MathHelper.clamp(Math.abs(Math.sqrt(iou * iou + iov * iov) - wobble) * 2.0, 0.0, 0.5) * -wobbleAmount;
+				double oc = MathHelper.clamp(Math.abs(Math.sqrt(oou * oou + oov * oov) - wobble) * 2.0, 0.0, 0.5) * -wobbleAmount;
+
+				iu += ic * iou;
+				iv += ic * iov;
+				ou += oc * oou;
+				ov += oc * oov;
+
+				double frs = (1 - coverage) * r ;
+				double fre = frs + r / (float)(lateralSegments + 1);
+
+				ia *= MathHelper.clamp((ir - frs) / (fre - frs), 0, 1);
+				oa *= MathHelper.clamp((or - frs) / (fre - frs), 0, 1);
+
+				vertexbuffer.pos(ipx, ipy, 0).tex(iu, iv).color(1, 1, 1, ia).endVertex();
+				vertexbuffer.pos(opx, opy, 0).tex(ou, ov).color(1, 1, 1, oa).endVertex();
+			}
+		}
+
+		tessellator.draw();
+	}
+
 	public void onInfectionIncrease(float amount) {
-		System.out.println("GUI Infection: " + amount);
+		EntityPlayer player = Minecraft.getMinecraft().player;
+		if(player != null) {
+			player.world.playSound(player, player.posX, player.posY, player.posZ, SoundRegistry.INFECTION_SPREAD, SoundCategory.PLAYERS, 0.75f + 1.0f * MathHelper.clamp(amount * 10.0f, 0.0f, 1.0f), 1);
+		}
 	}
 }
