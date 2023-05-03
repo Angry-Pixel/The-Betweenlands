@@ -11,7 +11,7 @@ import thebetweenlands.common.entity.EntityPuffshroomBuilder;
 
 @SideOnly(Side.CLIENT)
 public class RenderPuffshroomBuilder extends RenderLiving<EntityPuffshroomBuilder> {
-	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/spore_minion.png");
+	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/puffshroom_builder.png");
 	private static final  ModelPuffshroomBuilder MODEL = new ModelPuffshroomBuilder();
 
 	public RenderPuffshroomBuilder(RenderManager manager) {

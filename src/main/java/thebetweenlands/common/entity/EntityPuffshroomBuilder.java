@@ -13,6 +13,7 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -33,6 +34,15 @@ import thebetweenlands.common.registries.BlockRegistry;
 
 public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL {
 	private static final DataParameter<Boolean> IS_MIDDLE = EntityDataManager.createKey(EntityPuffshroomBuilder.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<BlockPos> PATCH_1 = EntityDataManager.createKey(EntityPuffshroomBuilder.class, DataSerializers.BLOCK_POS);
+	private static final DataParameter<BlockPos> PATCH_2 = EntityDataManager.createKey(EntityPuffshroomBuilder.class, DataSerializers.BLOCK_POS);
+	private static final DataParameter<BlockPos> PATCH_3 = EntityDataManager.createKey(EntityPuffshroomBuilder.class, DataSerializers.BLOCK_POS);
+	private static final DataParameter<BlockPos> PATCH_4 = EntityDataManager.createKey(EntityPuffshroomBuilder.class, DataSerializers.BLOCK_POS);
+	private static final DataParameter<BlockPos> PATCH_5 = EntityDataManager.createKey(EntityPuffshroomBuilder.class, DataSerializers.BLOCK_POS);
+	private static final DataParameter<BlockPos> PATCH_6 = EntityDataManager.createKey(EntityPuffshroomBuilder.class, DataSerializers.BLOCK_POS);
+	private static final DataParameter<BlockPos> PATCH_7 = EntityDataManager.createKey(EntityPuffshroomBuilder.class, DataSerializers.BLOCK_POS);
+	private static final DataParameter<BlockPos> PATCH_8 = EntityDataManager.createKey(EntityPuffshroomBuilder.class, DataSerializers.BLOCK_POS);
+	public BlockPos holder = new BlockPos(0,0,0);
 
 	public EntityPuffshroomBuilder (World world) {
 		super(world);
@@ -43,6 +53,14 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 	protected void entityInit() {
 		super.entityInit();
 		dataManager.register(IS_MIDDLE, false);
+		dataManager.register(PATCH_1, new BlockPos(0,0,0));
+		dataManager.register(PATCH_2, new BlockPos(0,0,0));
+		dataManager.register(PATCH_3, new BlockPos(0,0,0));
+		dataManager.register(PATCH_4, new BlockPos(0,0,0));
+		dataManager.register(PATCH_5, new BlockPos(0,0,0));
+		dataManager.register(PATCH_6, new BlockPos(0,0,0));
+		dataManager.register(PATCH_7, new BlockPos(0,0,0));
+		dataManager.register(PATCH_8, new BlockPos(0,0,0));
 	}
 
 	public void setIsMiddle(boolean state) {
@@ -51,6 +69,70 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 
 	public boolean getIsMiddle() {
 		return dataManager.get(IS_MIDDLE);
+	}
+
+	public void setPatch1(BlockPos pos) {
+		dataManager.set(PATCH_1, pos);
+	}
+
+	public BlockPos getPatch1() {
+		return dataManager.get(PATCH_1);
+	}
+
+	public void setPatch2(BlockPos pos) {
+		dataManager.set(PATCH_2, pos);
+	}
+
+	public BlockPos getPatch2() {
+		return dataManager.get(PATCH_2);
+	}
+
+	public void setPatch3(BlockPos pos) {
+		dataManager.set(PATCH_3, pos);
+	}
+
+	public BlockPos getPatch3() {
+		return dataManager.get(PATCH_3);
+	}
+
+	public void setPatch4(BlockPos pos) {
+		dataManager.set(PATCH_4, pos);
+	}
+
+	public BlockPos getPatch4() {
+		return dataManager.get(PATCH_4);
+	}
+
+	public void setPatch5(BlockPos pos) {
+		dataManager.set(PATCH_5, pos);
+	}
+
+	public BlockPos getPatch5() {
+		return dataManager.get(PATCH_5);
+	}
+
+	public void setPatch6(BlockPos pos) {
+		dataManager.set(PATCH_6, pos);
+	}
+
+	public BlockPos getPatch6() {
+		return dataManager.get(PATCH_6);
+	}
+
+	public void setPatch7(BlockPos pos) {
+		dataManager.set(PATCH_7, pos);
+	}
+
+	public BlockPos getPatch7() {
+		return dataManager.get(PATCH_7);
+	}
+
+	public void setPatch8(BlockPos pos) {
+		dataManager.set(PATCH_8, pos);
+	}
+
+	public BlockPos getPatch8() {
+		return dataManager.get(PATCH_8);
 	}
 
 	@Override
@@ -67,90 +149,90 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 			if (!world.isRemote) {
 				checkForMiddle();
 				if (getIsMiddle())
-					if (checkForMouldhorns(world, getPosition())) {
-						createSoilPatches(world, getPosition().down());
-						breakMouldhorns(world, getPosition());
-						killTendrills(world, getPosition());
+					if (checkForMouldhorns()) {
+						createSoilPatches();
+						breakMouldhorns();
+						killTendrills();
 						//DO the thing for the thing
 					}
 			}
 			if (world.isRemote) {
 				if (getIsMiddle())
-					if (checkForMouldhorns(world, getPosition())) {
+					if (checkForMouldhorns()) {
 
 					}
 			}
 		}
 	}
 
-	private void killTendrills(World world, BlockPos pos) {
+	private void killTendrills() {
 		List<Entity> list = getEntityWorld().getEntitiesWithinAABB(EntityPuffshroomBuilder.class, getEntityBoundingBox().grow(0.6D, 0D, 0.6D));
 		for(Entity found : list)
 			found.setDead();
 	}
 
-	private void breakMouldhorns(World world, BlockPos pos) {
-		breakShroomBlocks(world, pos.add(6, 0, 0));
-		breakShroomBlocks(world, pos.add(0, 0, 6));
-		breakShroomBlocks(world, pos.add(-6, 0, 0));
-		breakShroomBlocks(world, pos.add(0, 0, -6));
-		breakShroomBlocks(world, pos.add(5, 0, 5));
-		breakShroomBlocks(world, pos.add(5, 0, -5));
-		breakShroomBlocks(world, pos.add(-5, 0, 5));
-		breakShroomBlocks(world, pos.add(-5, 0, -5));
+	private void breakMouldhorns() {
+		breakShroomBlocks(getPatch1());
+		breakShroomBlocks(getPatch2());
+		breakShroomBlocks(getPatch3());
+		breakShroomBlocks(getPatch4());
+		breakShroomBlocks(getPatch5());
+		breakShroomBlocks(getPatch6());
+		breakShroomBlocks(getPatch7());
+		breakShroomBlocks(getPatch8());
 	}
 	
-	private void breakShroomBlocks(World world, BlockPos pos) {
+	private void breakShroomBlocks(BlockPos pos) {
 		for(int y = 0; y <= 6; y++)
-			if (world.getBlockState(pos.add(0, y, 0)).getBlock() instanceof BlockMouldHornMushroom) {
-				world.playEvent(null, 2001, pos.add(0, y, 0), Block.getIdFromBlock(BlockRegistry.MOULD_HORN));
-				world.setBlockToAir(pos.add(0, y, 0));
+			if (getEntityWorld().getBlockState(pos.add(0, y, 0)).getBlock() instanceof BlockMouldHornMushroom) {
+				getEntityWorld().playEvent(null, 2001, pos.add(0, y, 0), Block.getIdFromBlock(BlockRegistry.MOULD_HORN));
+				getEntityWorld().setBlockToAir(pos.add(0, y, 0));
 			}
 	}
 
-	private void createSoilPatches(World world, BlockPos pos) {
-		setSoilPatches(world, pos);
-		setSoilPatches(world, pos.add(6, 0, 0));
-		setSoilPatches(world, pos.add(0, 0, 6));
-		setSoilPatches(world, pos.add(-6, 0, 0));
-		setSoilPatches(world, pos.add(0, 0, -6));
-		setSoilPatches(world, pos.add(5, 0, 5));
-		setSoilPatches(world, pos.add(5, 0, -5));
-		setSoilPatches(world, pos.add(-5, 0, 5));
-		setSoilPatches(world, pos.add(-5, 0, -5));
+	private void createSoilPatches() {
+		setSoilPatches(getPosition().down());
+		setSoilPatches(getPatch1());
+		setSoilPatches(getPatch2());
+		setSoilPatches(getPatch3());
+		setSoilPatches(getPatch4());
+		setSoilPatches(getPatch5());
+		setSoilPatches(getPatch6());
+		setSoilPatches(getPatch7());
+		setSoilPatches(getPatch8());
 	}
 
-	private void setSoilPatches(World world, BlockPos pos) {
+	private void setSoilPatches(BlockPos pos) {
 		for (int x = -1; x <= 1; x++)
 			for (int z = -1; z <= 1; z++)
-				world.setBlockState(pos.add(x, 0, z), BlockRegistry.MOULDY_SOIL.getDefaultState());
+				getEntityWorld().setBlockState(pos.add(x, 0, z), BlockRegistry.MOULDY_SOIL.getDefaultState());
 	}
 
-	private boolean checkForMouldhorns(World world, BlockPos pos) {
+	private boolean checkForMouldhorns() {
 		int count = 0;
-		if(checkForCap(world, pos.add(6, 0, 0)))
+		if(checkForCap(getPatch1()))
 			count++;
-		if(checkForCap(world, pos.add(0, 0, 6)))
+		if(checkForCap(getPatch2()))
 			count++;
-		if(checkForCap(world, pos.add(-6, 0, 0)))
+		if(checkForCap(getPatch3()))
 			count++;
-		if(checkForCap(world, pos.add(0, 0, -6)))
+		if(checkForCap(getPatch4()))
 			count++;
-		if(checkForCap(world, pos.add(5, 0, 5)))
+		if(checkForCap(getPatch5()))
 			count++;
-		if(checkForCap(world, pos.add(5, 0, -5)))
+		if(checkForCap(getPatch6()))
 			count++;
-		if(checkForCap(world, pos.add(-5, 0, 5)))
+		if(checkForCap(getPatch7()))
 			count++;
-		if(checkForCap(world, pos.add(-5, 0, -5)))
+		if(checkForCap(getPatch8()))
 			count++;
 		return count >= 8;
 	}
 
-	private boolean checkForCap(World world, BlockPos pos) {
+	private boolean checkForCap(BlockPos pos) {
 		for(int y = 0; y <= 6; y++)
-			if (world.getBlockState(pos.add(0, y, 0)).getBlock() instanceof BlockMouldHornMushroom && world.getBlockState(pos.add(0, y, 0)).getValue(BlockMouldHornMushroom.MOULD_HORN_TYPE) == EnumMouldHorn.MOULD_HORN_CAP_FULL_WARTS) {
-				if (world.isRemote) {
+			if (getEntityWorld().getBlockState(pos.add(0, y, 0)).getBlock() instanceof BlockMouldHornMushroom && getEntityWorld().getBlockState(pos.add(0, y, 0)).getValue(BlockMouldHornMushroom.MOULD_HORN_TYPE) == EnumMouldHorn.MOULD_HORN_CAP_FULL_WARTS) {
+				if (getEntityWorld().isRemote) {
 					spawnSporeBeamParticles(new Vec3d(pos.getX() - getPosition().getX(), y + 0.75D, pos.getZ() - getPosition().getZ()));
 					}
 				return true;
@@ -183,23 +265,23 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 	@Override
 	public void onLivingUpdate() {
 		if(getIsMiddle() && world.isRemote) {
-			spawnSporeDustParticles(world, getPosition(), 0, 0, 0);
-			spawnSporeDustParticles(world, getPosition(), 6, 0, 0);
-			spawnSporeDustParticles(world, getPosition(), 0, 0, 6);
-			spawnSporeDustParticles(world, getPosition(), -6, 0, 0);
-			spawnSporeDustParticles(world, getPosition(),0, 0, -6);
-			spawnSporeDustParticles(world, getPosition(),5, 0, 5);
-			spawnSporeDustParticles(world, getPosition(),5, 0, -5);
-			spawnSporeDustParticles(world, getPosition(),-5, 0, 5);
-			spawnSporeDustParticles(world, getPosition(),-5, 0, -5);
+			spawnSporeDustParticles(world, getPosition());
+			spawnSporeDustParticles(world, getPatch1());
+			spawnSporeDustParticles(world, getPatch2());
+			spawnSporeDustParticles(world, getPatch3());
+			spawnSporeDustParticles(world, getPatch4());
+			spawnSporeDustParticles(world, getPatch5());
+			spawnSporeDustParticles(world, getPatch6());
+			spawnSporeDustParticles(world, getPatch7());
+			spawnSporeDustParticles(world, getPatch8());
 			}
 		super.onLivingUpdate();
 	}
 	
 	@SideOnly(Side.CLIENT)
-	private void spawnSporeDustParticles(World world, BlockPos pos, int offX, int offY, int offZ) {
-		if(!(world.getBlockState(pos.add(offX, offY, offZ)).getBlock() instanceof BlockMouldHornMushroom))
-			BLParticles.REDSTONE_DUST.spawn(world, pos.getX() + offX + 0.5D + (rand.nextDouble() - 0.5D) * width, pos.getY() + offY  + 0.5D + rand.nextDouble() * height, pos.getZ() + offZ + 0.5D + (rand.nextDouble() - 0.5D) * width, 
+	private void spawnSporeDustParticles(World world, BlockPos posPatch) {
+		if(!(world.getBlockState(posPatch).getBlock() instanceof BlockMouldHornMushroom))
+			BLParticles.REDSTONE_DUST.spawn(world, posPatch.getX()+ 0.5D + (rand.nextDouble() - 0.5D) * width, posPatch.getY()  + 0.5D + rand.nextDouble() * height, posPatch.getZ() + 0.5D + (rand.nextDouble() - 0.5D) * width, 
 					ParticleArgs.get().withColor(0.5F + this.rand.nextFloat() * 0.5F, 0.5F + this.rand.nextFloat() * 0.5F, 0.5F + this.rand.nextFloat() * 0.5F, 1.0F));
 	}
 
@@ -243,8 +325,19 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 	@Nullable
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-		if (!getEntityWorld().isRemote)
+		if (!getEntityWorld().isRemote) {
 			checkForMiddle();
+			if (getIsMiddle()) {
+				setPatch1(getPosition().add(6 + rand.nextInt(4), 0, 0));
+				setPatch2(getPosition().add(0, 0, 6 + rand.nextInt(4)));
+				setPatch3(getPosition().add(-6 - rand.nextInt(4), 0, 0));
+				setPatch4(getPosition().add(0, 0, -6 - rand.nextInt(4)));
+				setPatch5(getPosition().add(5 + rand.nextInt(4), 0, 5 + rand.nextInt(4)));
+				setPatch6(getPosition().add(5 + rand.nextInt(4), 0, -5 - rand.nextInt(4)));
+				setPatch7(getPosition().add(-5 - rand.nextInt(4), 0, 5 + rand.nextInt(4)));
+				setPatch8(getPosition().add(-5 - rand.nextInt(4), 0, -5 - rand.nextInt(4)));
+			}
+		}
 		return livingdata;
 	}
 
@@ -252,12 +345,32 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
 		setIsMiddle(nbt.getBoolean("isMiddle"));
+		if(nbt.hasKey("patch_1")) {
+			setPatch1(NBTUtil.getPosFromTag(nbt.getCompoundTag("patch_1")));
+			setPatch2(NBTUtil.getPosFromTag(nbt.getCompoundTag("patch_2")));
+			setPatch3(NBTUtil.getPosFromTag(nbt.getCompoundTag("patch_3")));
+			setPatch4(NBTUtil.getPosFromTag(nbt.getCompoundTag("patch_4")));
+			setPatch5(NBTUtil.getPosFromTag(nbt.getCompoundTag("patch_5")));
+			setPatch6(NBTUtil.getPosFromTag(nbt.getCompoundTag("patch_6")));
+			setPatch7(NBTUtil.getPosFromTag(nbt.getCompoundTag("patch_7")));
+			setPatch8(NBTUtil.getPosFromTag(nbt.getCompoundTag("patch_8")));
+		}
 	}
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
 		nbt.setBoolean("isMiddle", getIsMiddle());
+		if (getIsMiddle()) {
+			nbt.setTag("patch_1", NBTUtil.createPosTag(getPatch1()));
+			nbt.setTag("patch_2", NBTUtil.createPosTag(getPatch2()));
+			nbt.setTag("patch_3", NBTUtil.createPosTag(getPatch3()));
+			nbt.setTag("patch_4", NBTUtil.createPosTag(getPatch4()));
+			nbt.setTag("patch_5", NBTUtil.createPosTag(getPatch5()));
+			nbt.setTag("patch_6", NBTUtil.createPosTag(getPatch6()));
+			nbt.setTag("patch_7", NBTUtil.createPosTag(getPatch7()));
+			nbt.setTag("patch_8", NBTUtil.createPosTag(getPatch8()));
+		}
 	}
 
 	@Override
