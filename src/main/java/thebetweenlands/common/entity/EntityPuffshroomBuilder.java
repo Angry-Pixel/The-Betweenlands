@@ -262,8 +262,17 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 
 	private void checkForMiddle() {
 		List<Entity> list = getEntityWorld().getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(0.6D, 0D, 0.6D));
-		if(list.stream().filter(e -> e instanceof EntityPuffshroomBuilder).count() == 8)
+		if(list.stream().filter(e -> e instanceof EntityPuffshroomBuilder).count() == 8) {
 			setIsMiddle(true);
+			setPatch1(getPosition().add(5 + rand.nextInt(5), 0, 0));
+			setPatch2(getPosition().add(0, 0, 5 + rand.nextInt(5)));
+			setPatch3(getPosition().add(-5 - rand.nextInt(5), 0, 0));
+			setPatch4(getPosition().add(0, 0, -5 - rand.nextInt(5)));
+			setPatch5(getPosition().add(4 + rand.nextInt(5), 0, 4 + rand.nextInt(5)));
+			setPatch6(getPosition().add(4 + rand.nextInt(5), 0, -4 - rand.nextInt(5)));
+			setPatch7(getPosition().add(-4 - rand.nextInt(5), 0, 4 + rand.nextInt(5)));
+			setPatch8(getPosition().add(-4 - rand.nextInt(5), 0, -4 - rand.nextInt(5)));
+		}
 		else
 			setIsMiddle(false);
 	}
@@ -331,19 +340,8 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 	@Nullable
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-		if (!getEntityWorld().isRemote) {
+		if (!getEntityWorld().isRemote)
 			checkForMiddle();
-			if (getIsMiddle()) {
-				setPatch1(getPosition().add(5 + rand.nextInt(5), 0, 0));
-				setPatch2(getPosition().add(0, 0, 5 + rand.nextInt(5)));
-				setPatch3(getPosition().add(-5 - rand.nextInt(5), 0, 0));
-				setPatch4(getPosition().add(0, 0, -5 - rand.nextInt(5)));
-				setPatch5(getPosition().add(4 + rand.nextInt(5), 0, 4 + rand.nextInt(5)));
-				setPatch6(getPosition().add(4 + rand.nextInt(5), 0, -4 - rand.nextInt(5)));
-				setPatch7(getPosition().add(-4 - rand.nextInt(5), 0, 4 + rand.nextInt(5)));
-				setPatch8(getPosition().add(-4 - rand.nextInt(5), 0, -4 - rand.nextInt(5)));
-			}
-		}
 		return livingdata;
 	}
 
