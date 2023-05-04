@@ -20,6 +20,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -157,7 +158,15 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 						createSoilPatches();
 						breakMouldhorns();
 						killTendrills();
-						//DO the thing for the thing
+						//DO the thing for the thing test
+						plotMouldyPath(getPosition().down(), getPatch1().down());
+						plotMouldyPath(getPosition().down(), getPatch2().down());
+						plotMouldyPath(getPosition().down(), getPatch3().down());
+						plotMouldyPath(getPosition().down(), getPatch4().down());
+						plotMouldyPath(getPosition().down(), getPatch5().down());
+						plotMouldyPath(getPosition().down(), getPatch6().down());
+						plotMouldyPath(getPosition().down(), getPatch7().down());
+						plotMouldyPath(getPosition().down(), getPatch8().down());
 					}
 			}
 			if (world.isRemote) {
@@ -169,6 +178,18 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 		}
 		if (getEntityWorld().isRemote)
 			renderTicks++;
+	}
+
+	private void plotMouldyPath(BlockPos posStart, BlockPos posEnd) {
+		Vec3d startPos = new Vec3d(posStart.getX(), posStart.getY(), posStart.getZ());
+		Vec3d endPos = new Vec3d(posEnd.getX(), posEnd.getY(), posEnd.getZ());
+		Vec3d targetVector = new Vec3d(posEnd.getX() - posStart.getX(), posEnd.getY() - posStart.getY(), posEnd.getZ() - posStart.getZ()).normalize();
+		int range = MathHelper.floor(startPos.distanceTo(endPos));
+		int distance = 0;
+		while (distance < range) {
+			distance++;
+			getEntityWorld().setBlockState(posStart.add(targetVector.x * distance, targetVector.y * distance, targetVector.z * distance), BlockRegistry.MOULDY_SOIL.getDefaultState());
+		}
 	}
 
 	private void killTendrills() {
