@@ -45,7 +45,7 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 	private static final DataParameter<BlockPos> PATCH_8 = EntityDataManager.createKey(EntityPuffshroomBuilder.class, DataSerializers.BLOCK_POS);
 	public int renderTicks = 0;
 	public int prev_renderTicks = 0;
-
+	public int index = 2;
 	public EntityPuffshroomBuilder (World world) {
 		super(world);
 		setSize(0.5F, 0.5F);
@@ -153,21 +153,25 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 		if (world.getTotalWorldTime() % 20 == 0) {
 			if (!world.isRemote) {
 				checkForMiddle();
-				if (getIsMiddle())
+				if (getIsMiddle()) {
+					plotMouldyPath(getPosition().down(), getPatch1().down(), index);
+					plotMouldyPath(getPosition().down(), getPatch2().down(), index);
+					plotMouldyPath(getPosition().down(), getPatch3().down(), index);
+					plotMouldyPath(getPosition().down(), getPatch4().down(), index);
+					plotMouldyPath(getPosition().down(), getPatch5().down(), index);
+					plotMouldyPath(getPosition().down(), getPatch6().down(), index);
+					plotMouldyPath(getPosition().down(), getPatch7().down(), index);
+					plotMouldyPath(getPosition().down(), getPatch8().down(), index);
+					if(index <= 16) // just to stop unneeded increments
+						index++;
 					if (checkForMouldhorns()) {
 						createSoilPatches();
 						breakMouldhorns();
 						killTendrills();
 						//DO the thing for the thing test
-						plotMouldyPath(getPosition().down(), getPatch1().down());
-						plotMouldyPath(getPosition().down(), getPatch2().down());
-						plotMouldyPath(getPosition().down(), getPatch3().down());
-						plotMouldyPath(getPosition().down(), getPatch4().down());
-						plotMouldyPath(getPosition().down(), getPatch5().down());
-						plotMouldyPath(getPosition().down(), getPatch6().down());
-						plotMouldyPath(getPosition().down(), getPatch7().down());
-						plotMouldyPath(getPosition().down(), getPatch8().down());
+
 					}
+				}
 			}
 			if (world.isRemote) {
 				if (getIsMiddle())
@@ -180,15 +184,13 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 			renderTicks++;
 	}
 
-	private void plotMouldyPath(BlockPos posStart, BlockPos posEnd) {
-		Vec3d startPos = new Vec3d(posStart.getX(), posStart.getY(), posStart.getZ());
-		Vec3d endPos = new Vec3d(posEnd.getX(), posEnd.getY(), posEnd.getZ());
-		Vec3d targetVector = new Vec3d(posEnd.getX() - posStart.getX(), posEnd.getY() - posStart.getY(), posEnd.getZ() - posStart.getZ()).normalize();
+	private void plotMouldyPath(BlockPos posStart, BlockPos posEnd, int index) {
+		Vec3d startPos = new Vec3d(posStart.getX() + 0.5D, posStart.getY(), posStart.getZ() + 0.5D);
+		Vec3d endPos = new Vec3d(posEnd.getX() + 0.5D, posEnd.getY(), posEnd.getZ() + 0.5D);
+		Vec3d targetVector = new Vec3d(posEnd.getX() + 0.5D - posStart.getX() - 0.5D, posEnd.getY() - posStart.getY(), posEnd.getZ() + 0.5D - posStart.getZ() - 0.5D).normalize();
 		int range = MathHelper.floor(startPos.distanceTo(endPos));
-		int distance = 0;
-		while (distance < range) {
-			distance++;
-			getEntityWorld().setBlockState(posStart.add(targetVector.x * distance, targetVector.y * distance, targetVector.z * distance), BlockRegistry.MOULDY_SOIL.getDefaultState());
+		if (index <= range) {
+			getEntityWorld().setBlockState(posStart.add(targetVector.x * index + 0.5D, targetVector.y * index, targetVector.z * index + 0.5D), BlockRegistry.MOULDY_SOIL.getDefaultState());
 		}
 	}
 
@@ -294,6 +296,7 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 				setPatch6(getPosition().add(4 + rand.nextInt(5), 0, -4 - rand.nextInt(5)));
 				setPatch7(getPosition().add(-4 - rand.nextInt(5), 0, 4 + rand.nextInt(5)));
 				setPatch8(getPosition().add(-4 - rand.nextInt(5), 0, -4 - rand.nextInt(5)));
+				index = 2;
 			}
 		}
 		else
