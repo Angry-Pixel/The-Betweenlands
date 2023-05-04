@@ -188,9 +188,12 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 		Vec3d startPos = new Vec3d(posStart.getX() + 0.5D, posStart.getY(), posStart.getZ() + 0.5D);
 		Vec3d endPos = new Vec3d(posEnd.getX() + 0.5D, posEnd.getY(), posEnd.getZ() + 0.5D);
 		Vec3d targetVector = new Vec3d(posEnd.getX() + 0.5D - posStart.getX() - 0.5D, posEnd.getY() - posStart.getY(), posEnd.getZ() + 0.5D - posStart.getZ() - 0.5D).normalize();
-		int range = MathHelper.floor(startPos.distanceTo(endPos));
+		int range = MathHelper.floor(startPos.distanceTo(endPos) + 0.5D);
 		if (index <= range) {
 			getEntityWorld().setBlockState(posStart.add(targetVector.x * index + 0.5D, targetVector.y * index, targetVector.z * index + 0.5D), BlockRegistry.MOULDY_SOIL.getDefaultState());
+		}
+		if (range == index) {
+			getEntityWorld().setBlockState(posStart.add(targetVector.x * index + 0.5D, targetVector.y * index + 1.0D, targetVector.z * index + 0.5D), BlockRegistry.MOULD_HORN.getDefaultState().withProperty(BlockMouldHornMushroom.MOULD_HORN_TYPE, EnumMouldHorn.MOULD_HORN_MYCELIUM));
 		}
 	}
 
