@@ -394,6 +394,11 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 	}
 
 	@Override
+	public boolean canDespawn() {
+		return false;
+	}
+
+	@Override
     public boolean canBePushed() {
         return false;
     }
