@@ -45,7 +45,17 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 	private static final DataParameter<BlockPos> PATCH_8 = EntityDataManager.createKey(EntityPuffshroomBuilder.class, DataSerializers.BLOCK_POS);
 	public int renderTicks = 0;
 	public int prev_renderTicks = 0;
-	public int index = 2;
+	public int index = 0;
+	public boolean hasPlacedPatchMiddle;
+	public boolean hasPlacedPatch1;
+	public boolean hasPlacedPatch2;
+	public boolean hasPlacedPatch3;
+	public boolean hasPlacedPatch4;
+	public boolean hasPlacedPatch5;
+	public boolean hasPlacedPatch6;
+	public boolean hasPlacedPatch7;
+	public boolean hasPlacedPatch8;
+
 	public EntityPuffshroomBuilder (World world) {
 		super(world);
 		setSize(0.5F, 0.5F);
@@ -154,21 +164,34 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 			if (!world.isRemote) {
 				checkForMiddle();
 				if (getIsMiddle()) {
-					plotMouldyPath(getPosition().down(), getPatch1().down(), index);
-					plotMouldyPath(getPosition().down(), getPatch2().down(), index);
-					plotMouldyPath(getPosition().down(), getPatch3().down(), index);
-					plotMouldyPath(getPosition().down(), getPatch4().down(), index);
-					plotMouldyPath(getPosition().down(), getPatch5().down(), index);
-					plotMouldyPath(getPosition().down(), getPatch6().down(), index);
-					plotMouldyPath(getPosition().down(), getPatch7().down(), index);
-					plotMouldyPath(getPosition().down(), getPatch8().down(), index);
-					if(index <= 16) // just to stop unneeded increments
-						index++;
+						if (index == 2)
+							if(!hasPlacedPatchMiddle) {
+								setSoilPatches(getPosition().down());
+								hasPlacedPatchMiddle = true;
+							}
+						if(!hasPlacedPatch1)
+							plotMouldyPath(getPosition().down(), getPatch1().down(), index, 1);
+						if(!hasPlacedPatch2)
+							plotMouldyPath(getPosition().down(), getPatch2().down(), index, 2);
+						if(!hasPlacedPatch3)
+							plotMouldyPath(getPosition().down(), getPatch3().down(), index, 3);
+						if(!hasPlacedPatch4)
+							plotMouldyPath(getPosition().down(), getPatch4().down(), index, 4);
+						if(!hasPlacedPatch5)
+							plotMouldyPath(getPosition().down(), getPatch5().down(), index, 5);
+						if(!hasPlacedPatch6)
+							plotMouldyPath(getPosition().down(), getPatch6().down(), index, 6);
+						if(!hasPlacedPatch7)
+							plotMouldyPath(getPosition().down(), getPatch7().down(), index, 7);
+						if(!hasPlacedPatch8)
+							plotMouldyPath(getPosition().down(), getPatch8().down(), index, 8);
+						if (index <= 16) // just to stop unneeded increments
+							index++;
+
 					if (checkForMouldhorns()) {
-						createSoilPatches();
-						breakMouldhorns();
+						//breakMouldhorns();
 						killTendrills();
-						//DO the thing for the thing test
+						//DO the thing for the thing
 
 					}
 				}
@@ -184,16 +207,17 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 			renderTicks++;
 	}
 
-	private void plotMouldyPath(BlockPos posStart, BlockPos posEnd, int index) {
+	private void plotMouldyPath(BlockPos posStart, BlockPos posEnd, int index, int patchNumber) {
 		Vec3d startPos = new Vec3d(posStart.getX() + 0.5D, posStart.getY(), posStart.getZ() + 0.5D);
 		Vec3d endPos = new Vec3d(posEnd.getX() + 0.5D, posEnd.getY(), posEnd.getZ() + 0.5D);
 		Vec3d targetVector = new Vec3d(posEnd.getX() + 0.5D - posStart.getX() - 0.5D, posEnd.getY() - posStart.getY(), posEnd.getZ() + 0.5D - posStart.getZ() - 0.5D).normalize();
 		int range = MathHelper.floor(startPos.distanceTo(endPos) + 0.5D);
 		if (index <= range) {
 			getEntityWorld().setBlockState(posStart.add(targetVector.x * index + 0.5D, targetVector.y * index, targetVector.z * index + 0.5D), BlockRegistry.MOULDY_SOIL.getDefaultState());
-		}
-		if (range == index) {
-			getEntityWorld().setBlockState(posStart.add(targetVector.x * index + 0.5D, targetVector.y * index + 1.0D, targetVector.z * index + 0.5D), BlockRegistry.MOULD_HORN.getDefaultState().withProperty(BlockMouldHornMushroom.MOULD_HORN_TYPE, EnumMouldHorn.MOULD_HORN_MYCELIUM));
+			if (index == range) {
+				getEntityWorld().setBlockState(posStart.add(targetVector.x * index + 0.5D, targetVector.y * index + 1.0D, targetVector.z * index + 0.5D), BlockRegistry.MOULD_HORN.getDefaultState().withProperty(BlockMouldHornMushroom.MOULD_HORN_TYPE, EnumMouldHorn.MOULD_HORN_MYCELIUM));
+				createSoilPatches(patchNumber);
+			}
 		}
 	}
 
@@ -222,16 +246,41 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 			}
 	}
 
-	private void createSoilPatches() {
-		setSoilPatches(getPosition().down());
-		setSoilPatches(getPatch1().down());
-		setSoilPatches(getPatch2().down());
-		setSoilPatches(getPatch3().down());
-		setSoilPatches(getPatch4().down());
-		setSoilPatches(getPatch5().down());
-		setSoilPatches(getPatch6().down());
-		setSoilPatches(getPatch7().down());
-		setSoilPatches(getPatch8().down());
+	private void createSoilPatches(int patchNumber) {
+		switch (patchNumber) {
+		case 1:
+			setSoilPatches(getPatch1().down());
+			hasPlacedPatch1 = true;
+			break;
+		case 2:
+			setSoilPatches(getPatch2().down());
+			hasPlacedPatch2 = true;
+			break;
+		case 3:
+			setSoilPatches(getPatch3().down());
+			hasPlacedPatch3 = true;
+			break;
+		case 4:
+			setSoilPatches(getPatch4().down());
+			hasPlacedPatch4 = true;
+			break;
+		case 5:
+			setSoilPatches(getPatch5().down());
+			hasPlacedPatch5 = true;
+			break;
+		case 6:
+			setSoilPatches(getPatch6().down());
+			hasPlacedPatch6 = true;
+			break;
+		case 7:
+			setSoilPatches(getPatch7().down());
+			hasPlacedPatch7 = true;
+			break;
+		case 8:
+			setSoilPatches(getPatch8().down());
+			hasPlacedPatch8 = true;
+			break;
+		}
 	}
 
 	private void setSoilPatches(BlockPos pos) {
@@ -299,7 +348,7 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 				setPatch6(getPosition().add(4 + rand.nextInt(5), 0, -4 - rand.nextInt(5)));
 				setPatch7(getPosition().add(-4 - rand.nextInt(5), 0, 4 + rand.nextInt(5)));
 				setPatch8(getPosition().add(-4 - rand.nextInt(5), 0, -4 - rand.nextInt(5)));
-				index = 2;
+				index = 0;
 			}
 		}
 		else
@@ -378,6 +427,7 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
 		setIsMiddle(nbt.getBoolean("isMiddle"));
+
 		if(nbt.hasKey("patch_1")) {
 			setPatch1(NBTUtil.getPosFromTag(nbt.getCompoundTag("patch_1")));
 			setPatch2(NBTUtil.getPosFromTag(nbt.getCompoundTag("patch_2")));
@@ -387,13 +437,22 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 			setPatch6(NBTUtil.getPosFromTag(nbt.getCompoundTag("patch_6")));
 			setPatch7(NBTUtil.getPosFromTag(nbt.getCompoundTag("patch_7")));
 			setPatch8(NBTUtil.getPosFromTag(nbt.getCompoundTag("patch_8")));
+			hasPlacedPatchMiddle = nbt.getBoolean("hasPlacedPatchMiddle");
+			hasPlacedPatch1 = nbt.getBoolean("hasPlacedPatch1");
+			hasPlacedPatch2 = nbt.getBoolean("hasPlacedPatch2");
+			hasPlacedPatch3 = nbt.getBoolean("hasPlacedPatch3");
+			hasPlacedPatch4 = nbt.getBoolean("hasPlacedPatch4");
+			hasPlacedPatch5 = nbt.getBoolean("hasPlacedPatch5");
+			hasPlacedPatch6 = nbt.getBoolean("hasPlacedPatch6");
+			hasPlacedPatch7 = nbt.getBoolean("hasPlacedPatch7");
+			hasPlacedPatch8 = nbt.getBoolean("hasPlacedPatch8");
 		}
 	}
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
-		nbt.setBoolean("isMiddle", getIsMiddle());
+
 		if (getIsMiddle()) {
 			nbt.setTag("patch_1", NBTUtil.createPosTag(getPatch1()));
 			nbt.setTag("patch_2", NBTUtil.createPosTag(getPatch2()));
@@ -403,6 +462,16 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 			nbt.setTag("patch_6", NBTUtil.createPosTag(getPatch6()));
 			nbt.setTag("patch_7", NBTUtil.createPosTag(getPatch7()));
 			nbt.setTag("patch_8", NBTUtil.createPosTag(getPatch8()));
+			nbt.setBoolean("isMiddle", getIsMiddle());
+			nbt.setBoolean("hasPlacedPatchMiddle", hasPlacedPatchMiddle);
+			nbt.setBoolean("hasPlacedPatch1", hasPlacedPatch1);
+			nbt.setBoolean("hasPlacedPatch2", hasPlacedPatch2);
+			nbt.setBoolean("hasPlacedPatch3", hasPlacedPatch3);
+			nbt.setBoolean("hasPlacedPatch4", hasPlacedPatch4);
+			nbt.setBoolean("hasPlacedPatch5", hasPlacedPatch5);
+			nbt.setBoolean("hasPlacedPatch6", hasPlacedPatch6);
+			nbt.setBoolean("hasPlacedPatch7", hasPlacedPatch7);
+			nbt.setBoolean("hasPlacedPatch8", hasPlacedPatch8);
 		}
 	}
 
