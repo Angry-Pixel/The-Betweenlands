@@ -51,11 +51,6 @@ public class BlockMouldHornMushroom extends Block implements ICustomItemBlock, I
 	}
 
 	@Override
-    public Block.EnumOffsetType getOffsetType() {
-        return Block.EnumOffsetType.XZ;
-    }
-
-	@Override
     public boolean isReplaceable(IBlockAccess world, BlockPos pos) {
         return world.getBlockState(pos) == this.getDefaultState().withProperty(MOULD_HORN_TYPE, EnumMouldHorn.MOULD_HORN_MYCELIUM);
     }

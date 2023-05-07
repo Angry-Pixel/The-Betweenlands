@@ -10,6 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -24,6 +25,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -31,6 +33,7 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.block.plant.BlockMouldHornMushroom;
 import thebetweenlands.common.entity.EntityFragSpore;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -220,6 +223,9 @@ public class EntityBigPuffshroom extends EntityLiving {
 			// TODO Set a boolean state so the attack uses the right animations
 
 			if (getActive1()) {
+				if (getAnimation1() == 1) {
+					breakShrooms(getPosition());
+				}
 				if (getAnimation1() <= 8)
 					setAnimation1(getAnimation1() + 1);
 				if (getAnimation1() > 8) {
@@ -358,6 +364,34 @@ public class EntityBigPuffshroom extends EntityLiving {
 		if (getEntityWorld().isRemote)
 			renderTicks++;
 		super.onUpdate();
+	}
+
+	private void breakShrooms(BlockPos pos) {
+		for (int y = 6; y >= 0; y--) {
+			for (int x = -1; x <= 1; x++) {
+				for (int z = -1; z <= 1; z++) {
+					if (getEntityWorld().getBlockState(pos.add(x, y, z)).getBlock() instanceof BlockMouldHornMushroom) {
+						EntityFallingBlock falling_block = new EntityFallingBlock(world, pos.getX() + x + 0.5D, pos.getY() + y + 0.5D, pos.getZ() + z + 0.5D, getEntityWorld().getBlockState(pos.add(x, y, z)));
+						falling_block.setPosition(pos.getX() + x + 0.5D, pos.getY() + y + 0.5D, pos.getZ() + z + 0.5D);
+						double angle = Math.toRadians(y * 60D);
+						double offSetX = Math.floor(-Math.sin(angle) * 3D);
+						double offSetZ = Math.floor(Math.cos(angle) * 3D);
+						Vec3d vector3d = new Vec3d(this.posX, this.posY, this.posZ);
+						double velX = pos.getX() + offSetX * 3D - falling_block.posX;
+						double velY = pos.getY() + 4D - falling_block.posY;
+						double velZ = pos.getZ() + offSetZ * 3D - falling_block.posZ;
+						double distanceSqRt = (double) MathHelper.sqrt(velX * velX + velY * velY + velZ * velZ);
+						double accelerationX = velX / distanceSqRt * 0.3D + rand.nextDouble() * 0.2D;
+						double accelerationY = velY / distanceSqRt * 0.5D + rand.nextDouble() * 0.5D;
+						double accelerationZ = velZ / distanceSqRt * 0.3D + rand.nextDouble() * 0.2D;
+						vector3d.add(accelerationX, accelerationY, accelerationZ).scale(0.95D);
+						falling_block.addVelocity(accelerationX, accelerationY, accelerationZ);
+						getEntityWorld().spawnEntity(falling_block);
+						getEntityWorld().playEvent(null, 2001, pos.add(x, y, z), Block.getIdFromBlock(BlockRegistry.MOULD_HORN));
+					}
+				}
+			}
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
