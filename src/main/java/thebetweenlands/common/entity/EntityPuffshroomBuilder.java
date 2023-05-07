@@ -160,42 +160,43 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 		if (getEntityWorld().isRemote)
 			prev_renderTicks = renderTicks;
 
-		if (world.getTotalWorldTime() % 20 == 0) {
+		if (world.getTotalWorldTime() % 2 == 0) {
 			if (!world.isRemote) {
 				checkForMiddle();
 				if (getIsMiddle()) {
-						if (index == 2)
-							if(!hasPlacedPatchMiddle) {
-								setSoilPatches(getPosition().down());
-								hasPlacedPatchMiddle = true;
-							}
-						if(!hasPlacedPatch1)
-							plotMouldyPath(getPosition().down(), getPatch1().down(), index, 1);
-						if(!hasPlacedPatch2)
-							plotMouldyPath(getPosition().down(), getPatch2().down(), index, 2);
-						if(!hasPlacedPatch3)
-							plotMouldyPath(getPosition().down(), getPatch3().down(), index, 3);
-						if(!hasPlacedPatch4)
-							plotMouldyPath(getPosition().down(), getPatch4().down(), index, 4);
-						if(!hasPlacedPatch5)
-							plotMouldyPath(getPosition().down(), getPatch5().down(), index, 5);
-						if(!hasPlacedPatch6)
-							plotMouldyPath(getPosition().down(), getPatch6().down(), index, 6);
-						if(!hasPlacedPatch7)
-							plotMouldyPath(getPosition().down(), getPatch7().down(), index, 7);
-						if(!hasPlacedPatch8)
-							plotMouldyPath(getPosition().down(), getPatch8().down(), index, 8);
-						if (index <= 16) // just to stop unneeded increments
-							index++;
+					if (index == 2)
+						if (!hasPlacedPatchMiddle) {
+							setSoilPatches(getPosition().down());
+							hasPlacedPatchMiddle = true;
+						}
+					if (!hasPlacedPatch1)
+						plotMouldyPath(getPosition().down(), getPatch1().down(), index, 1);
+					if (!hasPlacedPatch2)
+						plotMouldyPath(getPosition().down(), getPatch2().down(), index, 2);
+					if (!hasPlacedPatch3)
+						plotMouldyPath(getPosition().down(), getPatch3().down(), index, 3);
+					if (!hasPlacedPatch4)
+						plotMouldyPath(getPosition().down(), getPatch4().down(), index, 4);
+					if (!hasPlacedPatch5)
+						plotMouldyPath(getPosition().down(), getPatch5().down(), index, 5);
+					if (!hasPlacedPatch6)
+						plotMouldyPath(getPosition().down(), getPatch6().down(), index, 6);
+					if (!hasPlacedPatch7)
+						plotMouldyPath(getPosition().down(), getPatch7().down(), index, 7);
+					if (!hasPlacedPatch8)
+						plotMouldyPath(getPosition().down(), getPatch8().down(), index, 8);
+					if (index <= 16) // just to stop unneeded increments
+						index++;
 
 					if (checkForMouldhorns()) {
 						//breakMouldhorns();
 						killTendrills();
-						//DO the thing for the thing
+						// DO the thing for the thing
 
 					}
 				}
 			}
+
 			if (world.isRemote) {
 				if (getIsMiddle())
 					if (checkForMouldhorns()) {
@@ -216,8 +217,11 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 			getEntityWorld().setBlockState(posStart.add(targetVector.x * index + 0.5D, targetVector.y * index, targetVector.z * index + 0.5D), BlockRegistry.MOULDY_SOIL.getDefaultState());
 			if (index == range) {
 				getEntityWorld().setBlockState(posStart.add(targetVector.x * index + 0.5D, targetVector.y * index + 1.0D, targetVector.z * index + 0.5D), BlockRegistry.MOULD_HORN.getDefaultState().withProperty(BlockMouldHornMushroom.MOULD_HORN_TYPE, EnumMouldHorn.MOULD_HORN_MYCELIUM));
-				createSoilPatches(patchNumber);
+				//createSoilPatches(patchNumber);
 			}
+		}
+		if (index == range + 1) {
+			createSoilPatches(patchNumber);
 		}
 	}
 
@@ -311,13 +315,21 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 	}
 
 	private boolean checkForCap(BlockPos pos) {
-		for(int y = 0; y <= 6; y++)
-			if (getEntityWorld().getBlockState(pos.add(0, y, 0)).getBlock() instanceof BlockMouldHornMushroom && getEntityWorld().getBlockState(pos.add(0, y, 0)).getValue(BlockMouldHornMushroom.MOULD_HORN_TYPE) == EnumMouldHorn.MOULD_HORN_CAP_FULL_WARTS) {
-				if (getEntityWorld().isRemote) {
-					spawnSporeBeamParticles(new Vec3d(pos.getX() - getPosition().getX(), y + 0.75D, pos.getZ() - getPosition().getZ()));
-					}
-				return true;
+		for(int y = 0; y <= 6; y++) {
+			if (!getEntityWorld().isRemote) {
+				if (getEntityWorld().getBlockState(pos.add(0, y, 0)).getBlock() instanceof BlockMouldHornMushroom && (getEntityWorld().getBlockState(pos.add(0, y, 0)).getValue(BlockMouldHornMushroom.MOULD_HORN_TYPE) == EnumMouldHorn.MOULD_HORN_CAP_FULL || getEntityWorld().getBlockState(pos.add(0, y, 0)).getValue(BlockMouldHornMushroom.MOULD_HORN_TYPE) == EnumMouldHorn.MOULD_HORN_CAP_THIN || getEntityWorld().getBlockState(pos.add(0, y, 0)).getValue(BlockMouldHornMushroom.MOULD_HORN_TYPE) == EnumMouldHorn.MOULD_HORN_MYCELIUM)) {
+						getEntityWorld().getBlockState(pos.add(0, y, 0)).getBlock().randomTick(world, pos.add(0, y, 0), world.getBlockState(pos.add(0, y, 0)), world.rand);
+					break;
 				}
+			}
+
+			if (getEntityWorld().getBlockState(pos.add(0, y, 0)).getBlock() instanceof BlockMouldHornMushroom && getEntityWorld().getBlockState(pos.add(0, y, 0)).getValue(BlockMouldHornMushroom.MOULD_HORN_TYPE) == EnumMouldHorn.MOULD_HORN_CAP_FULL_WARTS) {
+				if (getEntityWorld().isRemote)
+					spawnSporeBeamParticles(new Vec3d(pos.getX() - getPosition().getX(), y + 0.75D, pos.getZ() - getPosition().getZ()));
+				return true;
+			}
+
+		}
 		return false;
 	}
 	

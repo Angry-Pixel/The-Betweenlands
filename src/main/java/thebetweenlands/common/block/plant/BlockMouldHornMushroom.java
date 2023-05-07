@@ -51,6 +51,11 @@ public class BlockMouldHornMushroom extends Block implements ICustomItemBlock, I
 	}
 
 	@Override
+    public Block.EnumOffsetType getOffsetType() {
+        return Block.EnumOffsetType.XZ;
+    }
+
+	@Override
     public boolean isReplaceable(IBlockAccess world, BlockPos pos) {
         return world.getBlockState(pos) == this.getDefaultState().withProperty(MOULD_HORN_TYPE, EnumMouldHorn.MOULD_HORN_MYCELIUM);
     }
@@ -183,6 +188,9 @@ public class BlockMouldHornMushroom extends Block implements ICustomItemBlock, I
 
 	@Override
     public void randomTick(World world, BlockPos pos, IBlockState state, Random random) {
+		Random randomheight = new Random();
+		randomheight.setSeed((long)pos.getX() + pos.getY() + pos.getZ());
+		int growthHeight = 3 + randomheight.nextInt(5);
 		if (world.isRemote)
 			return;
 		
@@ -228,7 +236,7 @@ public class BlockMouldHornMushroom extends Block implements ICustomItemBlock, I
 				if(checkForAdjacentBlockingMushroom(world, pos, 2, 2, fullStalk) || checkForAdjacentBlockingMushroom(world, pos, 2, 2, fullCap))
 					break;
 				else
-					if(world.getBlockState(pos.down()) == smallStalk)
+					if(world.getBlockState(pos.down()) == smallStalk) 
 						LocationSporeHive.overgrowBlock(world, pos, fullCap, 2);
 				break;
 			case MOULD_HORN_STALK_THIN:
@@ -241,14 +249,18 @@ public class BlockMouldHornMushroom extends Block implements ICustomItemBlock, I
 			case MOULD_HORN_CAP_FULL: 
 				if(world.getBlockState(pos.down()) == smallStalk) {
 					LocationSporeHive.overgrowBlock(world, pos.down(), fullStalk, 2);
-				} // test size atm
-				else if(world.getBlockState(pos.down(3)) != fullStalk && world.isAirBlock(pos.up())) {
-					LocationSporeHive.overgrowBlock(world, pos, fullStalk, 2);
-					if(random.nextBoolean())
-						LocationSporeHive.overgrowBlock(world, pos.up(), fullCap, 2);
-					else
-						LocationSporeHive.overgrowBlock(world, pos.up(), warts, 2);
+					break;
 				}
+				else if(world.getBlockState(pos.down(growthHeight -1)) != fullStalk && world.isAirBlock(pos.up())) {
+					LocationSporeHive.overgrowBlock(world, pos, fullStalk, 2);
+					LocationSporeHive.overgrowBlock(world, pos.up(), fullCap, 2);
+					break;
+				}
+				else if(world.getBlockState(pos.down(growthHeight-1)) == fullStalk) {
+					LocationSporeHive.overgrowBlock(world, pos, warts, 2);
+					break;
+					}
+				
 				break;
 			default:
 				break;
