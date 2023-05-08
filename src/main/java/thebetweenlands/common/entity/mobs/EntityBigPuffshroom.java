@@ -627,20 +627,17 @@ public class EntityBigPuffshroom extends EntityLiving {
 			}
 			if (sourceEntity instanceof EntityPlayer) {
 				if (!isDead && cooldown <= 0 && canBeHit()) {
-					if (!getEntityWorld().isRemote) {
+						if (!((getHealth() - damage) <= 0)) {
+							setActive1(false);
+							setActive2(false);
+							setActive3(false);
+							setActive4(false);
+							setPause(false);
+							setPauseCount(40);
+							setActive5(true);
+							cooldown = 40;
+						}
 						return super.attackEntityFrom(source, 1F);
-					}
-
-					if (!((getHealth() - damage) <= 0)) {
-						setActive1(false);
-						setActive2(false);
-						setActive3(false);
-						setActive4(false);
-						setPause(false);
-						setPauseCount(40);
-						setActive5(true);
-						cooldown = 40;
-					}
 				}
 			}
 		}
