@@ -380,7 +380,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 			setAnimation3(8);
 			setAnimation4(12);
 			if (deathTicks > 150 && deathTicks % 5 == 0) {
-				i = 5;
+				i = 5; //500
 				while (i > 0) {
 					j = EntityXPOrb.getXPSplit(i);
 					i -= j;
@@ -393,7 +393,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 			move(MoverType.SELF, rand.nextGaussian() * 0.02D - rand.nextGaussian() * 0.04D, rand.nextGaussian() * 0.32D, rand.nextGaussian() * 0.02D - rand.nextGaussian() * 0.04D);
 
 			if (deathTicks == 200 && !getEntityWorld().isRemote) {
-				i = 10;
+				i = 10; //1000
 				while (i > 0) {
 					j = EntityXPOrb.getXPSplit(i);
 					i -= j;
@@ -537,7 +537,6 @@ public class EntityBigPuffshroom extends EntityLiving {
 				double accelerationZ = velZ / distanceSqRt * 0.3D + rand.nextDouble() * 0.2D;
 				spore.addVelocity(accelerationX, accelerationY, accelerationZ);
 				world.spawnEntity(spore);
-				// spore.setType(1); //test
 				spore.setOwnerId(this.getUniqueID());
 			}
 		}
@@ -547,7 +546,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 		if (!getActive1() && getAnimation1() == 0) {
 			List<EntityPlayer> list = getEntityWorld().getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(getPosition()).grow(12D, 2D, 12D));
 			for (EntityPlayer player : list) {
-				if (/* !player.isCreative() && */ !player.isSpectator()) {
+				if (/* !player.isCreative() && */ !player.isSpectator()) { // TODO put back to normal
 					setActive1(true);
 					setPause(true);
 				}
@@ -617,7 +616,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if (source == DamageSource.OUT_OF_WORLD) // test using generic atm
+		if (source == DamageSource.OUT_OF_WORLD)
 			return super.attackEntityFrom(source, damage);
 
 		if (source instanceof EntityDamageSource) {
@@ -631,7 +630,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 					if (!getEntityWorld().isRemote) {
 						return super.attackEntityFrom(source, 1F);
 					}
-					
+
 					if (!((getHealth() - damage) <= 0)) {
 						setActive1(false);
 						setActive2(false);
