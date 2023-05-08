@@ -9,8 +9,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityFallingBlock;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -49,6 +51,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 	public int prev_animation_4 = 0;
 	public int renderTicks = 0;
 	public int prev_renderTicks = 0;
+	public int deathTicks;
 	private static final byte SYNC_PREV_ANIMATION_DATA_MAX_1 = 101;
 	private static final byte SYNC_PREV_ANIMATION_DATA_MAX_2 = 102;
 	private static final byte SYNC_PREV_ANIMATION_DATA_MAX_3 = 103;
@@ -221,8 +224,6 @@ public class EntityBigPuffshroom extends EntityLiving {
 			if (cooldown <= 0 && getEntityWorld().getTotalWorldTime() % 5 == 0)
 				findEnemyToAttack();
 
-			// TODO Set a boolean state so the attack uses the right animations
-
 			if (getActive1()) {
 				if (getAnimation1() == 1) {
 					breakShrooms(getPosition());
@@ -301,7 +302,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 				}
 			}
 
-			if (getActive5()) {
+			if (getActive5() && getHealth() > 0) { // stop this if health <= 0
 				setAnimation4(0);
 				getEntityWorld().setEntityState(this, SYNC_PREV_ANIMATION_DATA_MIN_4);
 				if (getAnimation1() >= 0)
@@ -323,7 +324,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 					setAnimation1(0);
 					getEntityWorld().setEntityState(this, SYNC_PREV_ANIMATION_DATA_MIN_1);
 					setActive5(false);
-					setMove(true);
+					setMove(true); 
 					cooldown = 40;
 				}
 			}
@@ -365,6 +366,42 @@ public class EntityBigPuffshroom extends EntityLiving {
 		if (getEntityWorld().isRemote)
 			renderTicks++;
 		super.onUpdate();
+	}
+
+	@Override
+	protected void onDeathUpdate() {
+		// TODO add proper death animation
+		++deathTicks;
+		int i;
+		int j;
+		if (!getEntityWorld().isRemote) {
+			setAnimation1(8);
+			setAnimation2(8);
+			setAnimation3(8);
+			setAnimation4(12);
+			if (deathTicks > 150 && deathTicks % 5 == 0) {
+				i = 5;
+				while (i > 0) {
+					j = EntityXPOrb.getXPSplit(i);
+					i -= j;
+					getEntityWorld().spawnEntity(new EntityXPOrb(getEntityWorld(), posX, posY, posZ, j));
+				}
+			}
+
+			// TODO REMOVE TEMP THING
+			// just some random movement to show something is happening
+			move(MoverType.SELF, rand.nextGaussian() * 0.02D - rand.nextGaussian() * 0.04D, rand.nextGaussian() * 0.32D, rand.nextGaussian() * 0.02D - rand.nextGaussian() * 0.04D);
+
+			if (deathTicks == 200 && !getEntityWorld().isRemote) {
+				i = 10;
+				while (i > 0) {
+					j = EntityXPOrb.getXPSplit(i);
+					i -= j;
+					getEntityWorld().spawnEntity(new EntityXPOrb(getEntityWorld(), posX, posY, posZ, j));
+				}
+				setDead();
+			}
+		}
 	}
 
 	private void breakShrooms(BlockPos pos) {
@@ -590,17 +627,20 @@ public class EntityBigPuffshroom extends EntityLiving {
 				return super.attackEntityFrom(minion.sporeminionDamage, damage);
 			}
 			if (sourceEntity instanceof EntityPlayer) {
-				if (cooldown <= 0 && canBeHit()) {
-					setActive1(false);
-					setActive2(false);
-					setActive3(false);
-					setActive4(false);
-					setPause(false);
-					setPauseCount(40);
-					setActive5(true);
-					cooldown = 40;
+				if (!isDead && cooldown <= 0 && canBeHit()) {
 					if (!getEntityWorld().isRemote) {
-						return super.attackEntityFrom(source, 1F);
+						return super.attackEntityFrom(source, 20F);
+					}
+					
+					if (!((getHealth() - damage) <= 0)) {
+						setActive1(false);
+						setActive2(false);
+						setActive3(false);
+						setActive4(false);
+						setPause(false);
+						setPauseCount(40);
+						setActive5(true);
+						cooldown = 40;
 					}
 				}
 			}
