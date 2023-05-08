@@ -89,7 +89,7 @@ public class BlockMouldHornMushroom extends Block implements ICustomItemBlock, I
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return NULL_AABB;
+		return state.getValue(BlockMouldHornMushroom.MOULD_HORN_TYPE) == EnumMouldHorn.MOULD_HORN_MYCELIUM ? NULL_AABB : super.getCollisionBoundingBox(state, world, pos);
 	}
 	
 	@Override

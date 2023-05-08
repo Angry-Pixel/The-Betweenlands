@@ -328,7 +328,6 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 					spawnSporeBeamParticles(new Vec3d(pos.getX() - getPosition().getX(), y + 0.75D, pos.getZ() - getPosition().getZ()));
 				return true;
 			}
-
 		}
 		return false;
 	}

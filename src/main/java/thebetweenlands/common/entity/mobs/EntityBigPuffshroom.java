@@ -71,6 +71,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 	private static final DataParameter<Integer> ANIMATION_3 = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> ANIMATION_4 = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.VARINT);
 
+
 	public EntityBigPuffshroom(World world) {
 		super(world);
 		setSize(3F, 1.8F);
@@ -579,11 +580,15 @@ public class EntityBigPuffshroom extends EntityLiving {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if (source == DamageSource.OUT_OF_WORLD || source == DamageSource.GENERIC) // test using generic atm
+		if (source == DamageSource.OUT_OF_WORLD) // test using generic atm
 			return super.attackEntityFrom(source, damage);
 
 		if (source instanceof EntityDamageSource) {
 			Entity sourceEntity = ((EntityDamageSource) source).getTrueSource();
+			if(sourceEntity instanceof EntitySporeMinion) {
+				EntitySporeMinion minion = (EntitySporeMinion) sourceEntity;
+				return super.attackEntityFrom(minion.sporeminionDamage, damage);
+			}
 			if (sourceEntity instanceof EntityPlayer) {
 				if (cooldown <= 0 && canBeHit()) {
 					setActive1(false);
@@ -595,7 +600,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 					setActive5(true);
 					cooldown = 40;
 					if (!getEntityWorld().isRemote) {
-						return super.attackEntityFrom(source, damage);
+						return super.attackEntityFrom(source, 1F);
 					}
 				}
 			}

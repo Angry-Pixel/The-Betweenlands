@@ -28,6 +28,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
@@ -61,6 +62,8 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	private EntityAIAvoidEntity<EntityPlayer> runAway;
 	private EntityAINearestAttackableTarget<EntityPlayer> target;
 	private boolean poppedNaturally = false;
+	
+	public static DamageSource sporeminionDamage;
 
 	public EntitySporeMinion(World world) {
 		super(world);
@@ -68,6 +71,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 		stepHeight = 1.0F;
 		this.experienceValue = 1;
 		this.setPathPriority(PathNodeType.WATER, -1.0F);
+		sporeminionDamage = new EntityDamageSource("bl.sporeminion_damage", this);
 	}
 
 	@Override
@@ -173,7 +177,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 				canFollow = true;
 			}
 
-			if (getType() == 2) {
+			if (getType() == 2 && ticksExisted <= 200) {
 				if (getInflateSize() <= 0)
 					setInflateSize(0);
 				if (getInflateSize() >= 100)
@@ -189,7 +193,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 				}
 			}
 			
-			if (ticksExisted > 200 && (getType() == 1 ||  getType() == 3)) {
+			if (ticksExisted > 200 && (getType() == 1 ||  getType() == 2 ||  getType() == 3)) {
 				if (getInflateSize() < 100)
 					setInflateSize(getInflateSize() + 4);
 				if (getInflateSize() >= 100) {
@@ -247,9 +251,9 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 		if (getOwner() instanceof EntityBigPuffshroom) {
 			if (!poppedNaturally) {
 				if (getType() == 1)
-					((EntityLivingBase) getOwner()).heal(2F);
+					((EntityLivingBase) getOwner()).heal(5F);
 				if (getType() == 3)
-					((EntityLivingBase) getOwner()).attackEntityFrom(DamageSource.GENERIC, 2F);
+					((EntityLivingBase) getOwner()).attackEntityFrom(sporeminionDamage, 5F);
 			}
 		}
 		super.setDead();
@@ -257,7 +261,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 
 	@Override
 	protected boolean isMovementBlocked() {
-		return getInflateSize() > 0;//getType() == 2 && ;
+		return getInflateSize() > 0;
 	}
 	
 	@Override
