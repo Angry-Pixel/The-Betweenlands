@@ -19,6 +19,7 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,12 +31,17 @@ import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.EntityDropHeldCloud;
 import thebetweenlands.common.entity.ai.EntityAIFollowTarget;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -49,7 +55,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	protected static final DataParameter<Integer> TYPE = EntityDataManager.<Integer>createKey(EntitySporeMinion.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> INFLATE_SIZE = EntityDataManager.<Integer>createKey(EntitySporeMinion.class, DataSerializers.VARINT);
 	protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntitySporeMinion.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-	
+	private static final byte POPPING_PARTICLES = 110;
 	protected float prevFloatingRotationTicks = 0;
 	protected float floatingRotationTicks = 0;
 	
@@ -62,7 +68,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	private EntityAIAvoidEntity<EntityPlayer> runAway;
 	private EntityAINearestAttackableTarget<EntityPlayer> target;
 	private boolean poppedNaturally = false;
-	
+
 	public static DamageSource sporeminionDamage;
 
 	public EntitySporeMinion(World world) {
@@ -192,7 +198,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 						setInflateSize(getInflateSize() - 4);
 				}
 			}
-			
+
 			if (ticksExisted > 200 && (getType() == 1 ||  getType() == 2 ||  getType() == 3)) {
 				if (getInflateSize() < 100)
 					setInflateSize(getInflateSize() + 4);
@@ -201,7 +207,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 					explode();
 				}
 			}
-			
+
 			if (getType() == 3) {
 				if (!canAttack) {
 					tasks.removeTask(meleeAttack);
@@ -237,11 +243,29 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	}
 
 	private void explode() {
+		getEntityWorld().setEntityState(this, POPPING_PARTICLES);
 		setDead();
 		if (getType() == 2) {
 			EntityDropHeldCloud cloud = new EntityDropHeldCloud(world);
 			cloud.setPosition(posX, posY, posZ);
 			world.spawnEntity(cloud);
+		}
+		world.playSound(null, getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.HOSTILE, 1F, 0.5F);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void handleStatusUpdate(byte id) {
+		super.handleStatusUpdate(id);
+		if (id == POPPING_PARTICLES) {
+			for (int i = 0, amount = 20 + getEntityWorld().rand.nextInt(4); i < amount; i++) {
+				double offSetX = getEntityWorld().rand.nextDouble() * 2F - 1F;
+				double offSetZ = getEntityWorld().rand.nextDouble() * 2F - 1F;
+				double motionX = getEntityWorld().rand.nextDouble() * 0.4F - 0.2F;
+				double motionY = getEntityWorld().rand.nextDouble() * 0.3F + 0.075F;
+				double motionZ = getEntityWorld().rand.nextDouble() * 0.4F - 0.2F;
+				BLParticles.ITEM_BREAKING.spawn(world, this.posX + (float) offSetX + (world.rand.nextDouble() * 0.25D - 0.125D) , this.posY + 0.5F, this.posZ + (float) offSetZ + (world.rand.nextDouble() * 0.25D - 0.125D), ParticleArgs.get().withData(new ItemStack(ItemRegistry.PUFFSHROOM_TENDRIL)));
+			}
 		}
 	}
 
@@ -263,7 +287,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	protected boolean isMovementBlocked() {
 		return getInflateSize() > 0;
 	}
-	
+
 	@Override
 	public boolean attackEntityAsMob(Entity entity) {
 		if (canEntityBeSeen(entity)) {
@@ -365,16 +389,16 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	protected boolean canDespawn() {
 		return true;
 	}
-	
+
 	@Override
 	protected ResourceLocation getLootTable() {
 		return null;//LootTableRegistry.SPORELING;
 	}
-	
+
 	public void setJumpHeightOverride(float jumpHeightOverride) {
 		this.jumpHeightOverride = jumpHeightOverride;
 	}
-	
+
 	@Override
 	protected float getJumpUpwardsMotion() {
 		if(this.jumpHeightOverride > 0) {
@@ -400,7 +424,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	public int getType() {
 		return dataManager.get(TYPE);
 	}
-	
+
 	public void setInflateSize(int size) {
 		dataManager.set(INFLATE_SIZE, size);
 	}
@@ -408,16 +432,16 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	public int getInflateSize() {
 		return dataManager.get(INFLATE_SIZE);
 	}
-	
+
     public void setOwnerId(@Nullable UUID uuidIn) {
         this.dataManager.set(OWNER_UNIQUE_ID, Optional.fromNullable(uuidIn));
     }
-	
+
     @Nullable
     public UUID getOwnerId() {
         return (UUID)((Optional)this.dataManager.get(OWNER_UNIQUE_ID)).orNull();
     }
-    
+
 	@Nullable
 	public Entity getOwner() {
 		if (!world.isRemote) {
