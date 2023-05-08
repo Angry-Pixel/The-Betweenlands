@@ -629,7 +629,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 			if (sourceEntity instanceof EntityPlayer) {
 				if (!isDead && cooldown <= 0 && canBeHit()) {
 					if (!getEntityWorld().isRemote) {
-						return super.attackEntityFrom(source, 20F);
+						return super.attackEntityFrom(source, 1F);
 					}
 					
 					if (!((getHealth() - damage) <= 0)) {
