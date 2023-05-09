@@ -3,6 +3,9 @@ package thebetweenlands.common.entity.mobs;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
+
+import com.google.common.base.Optional;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -14,6 +17,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,9 +32,14 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.BossInfo;
+import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.entity.BossType;
+import thebetweenlands.api.entity.IBLBoss;
+import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
@@ -42,7 +51,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityBigPuffshroom extends EntityLiving {
+public class EntityBigPuffshroom extends EntityLiving implements IBLBoss, IEntityScreenShake {
 
 	public int cooldown = 0;
 	public int prev_animation_1 = 0;
@@ -52,6 +61,10 @@ public class EntityBigPuffshroom extends EntityLiving {
 	public int renderTicks = 0;
 	public int prev_renderTicks = 0;
 	public int deathTicks;
+	private int prevShakeTimer;
+	private int shakeTimer;
+	private boolean shaking = false;
+	private int shakingTimerMax = 60;
 	private static final byte SYNC_PREV_ANIMATION_DATA_MAX_1 = 101;
 	private static final byte SYNC_PREV_ANIMATION_DATA_MAX_2 = 102;
 	private static final byte SYNC_PREV_ANIMATION_DATA_MAX_3 = 103;
@@ -60,6 +73,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 	private static final byte SYNC_PREV_ANIMATION_DATA_MIN_2 = 106;
 	private static final byte SYNC_PREV_ANIMATION_DATA_MIN_3 = 107;
 	private static final byte SYNC_PREV_ANIMATION_DATA_MIN_4 = 108;
+	private static final DataParameter<Optional<UUID>> BOSSINFO_ID = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 	private static final DataParameter<Boolean> SLAM_ATTACK = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> MOVE = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> ACTIVE_1 = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
@@ -73,7 +87,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 	private static final DataParameter<Integer> ANIMATION_2 = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> ANIMATION_3 = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> ANIMATION_4 = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.VARINT);
-
+	private final BossInfoServer bossInfo = (BossInfoServer)(new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
 
 	public EntityBigPuffshroom(World world) {
 		super(world);
@@ -83,6 +97,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
+		dataManager.register(BOSSINFO_ID, Optional.absent());
 		dataManager.register(SLAM_ATTACK, false);
 		dataManager.register(MOVE, false);
 		dataManager.register(ACTIVE_1, false);
@@ -342,6 +357,17 @@ public class EntityBigPuffshroom extends EntityLiving {
 		}
 
 		if (getEntityWorld().isRemote) {
+			if (getActive1() || getActive5()) {
+				shake(10);
+				shaking = true;
+				shakeTimer = 0;
+			}
+
+			if (getActive2()) {
+				shaking = false;
+				shakeTimer = 0;
+			}
+
 			if (getActive4())
 				if (getAnimation4() == 10)
 					spawnSporeJetParticles();
@@ -361,16 +387,25 @@ public class EntityBigPuffshroom extends EntityLiving {
 					}
 				}
 			}
+		renderTicks++;	
 		}
-
-		if (getEntityWorld().isRemote)
-			renderTicks++;
+			
 		super.onUpdate();
+	}
+
+	@Override
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
+		if (!this.world.isRemote) {
+			dataManager.set(BOSSINFO_ID, Optional.of(bossInfo.getUniqueId()));
+			bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
+		}
 	}
 
 	@Override
 	protected void onDeathUpdate() {
 		// TODO add proper death animation
+		bossInfo.setPercent(0);
 		++deathTicks;
 		int i;
 		int j;
@@ -390,7 +425,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 
 			// TODO REMOVE TEMP THING
 			// just some random movement to show something is happening
-			move(MoverType.SELF, rand.nextGaussian() * 0.02D - rand.nextGaussian() * 0.04D, rand.nextGaussian() * 0.32D, rand.nextGaussian() * 0.02D - rand.nextGaussian() * 0.04D);
+			move(MoverType.SELF, rand.nextGaussian() * 0.02D - rand.nextGaussian() * 0.04D, rand.nextGaussian() * 0.2D, rand.nextGaussian() * 0.02D - rand.nextGaussian() * 0.04D);
 
 			if (deathTicks == 200 && !getEntityWorld().isRemote) {
 				i = 10; //1000
@@ -637,7 +672,7 @@ public class EntityBigPuffshroom extends EntityLiving {
 							setActive5(true);
 							cooldown = 40;
 						}
-						return super.attackEntityFrom(source, 1F);
+						return super.attackEntityFrom(source, 0F);
 				}
 			}
 		}
@@ -646,6 +681,51 @@ public class EntityBigPuffshroom extends EntityLiving {
 
 	private boolean canBeHit() {
 		return getPause() || getActive1() || getActive2() || getActive3() || getActive4() || getActive5();
+	}
+	
+	public void shake(int shakeTimerMax) {
+		shakingTimerMax = shakeTimerMax;
+		prevShakeTimer = shakeTimer;
+		if(shakeTimer == 0) {
+			shaking = true;
+			shakeTimer = 1;
+		}
+		if(shakeTimer > 0)
+			shakeTimer++;
+
+		if(shakeTimer >= shakingTimerMax)
+			shaking = false;
+		else
+			shaking = true;
+	}
+
+	@Override
+	public float getShakeIntensity(Entity viewer, float partialTicks) {
+		if(isShaking()) {
+			double dist = getShakeDistance(viewer);
+			float shakeMult = (float) (1.0F - dist / 10.0F);
+			if(dist >= 10.0F) {
+				return 0.0F;
+			}
+			return (float) ((Math.sin(getShakingProgress(partialTicks) * Math.PI) + 0.1F) * 2F * shakeMult);
+		} else {
+			return 0.0F;
+		}
+	}
+
+    public float getShakeDistance(Entity entity) {
+        float distX = (float)(getPosition().getX() - entity.getPosition().getX());
+        float distY = (float)(getPosition().getY() - entity.getPosition().getY());
+        float distZ = (float)(getPosition().getZ() - entity.getPosition().getZ());
+        return MathHelper.sqrt(distX  * distX  + distY * distY + distZ * distZ);
+    }
+
+	public boolean isShaking() {
+		return shaking;
+	}
+
+	public float getShakingProgress(float delta) {
+		return 1.0F / shakingTimerMax * (prevShakeTimer + (shakeTimer - prevShakeTimer) * delta);
 	}
 
 	@Override
@@ -740,7 +820,40 @@ public class EntityBigPuffshroom extends EntityLiving {
 	}
 
 	@Override
-	public boolean shouldRenderInPass(int pass) {
-		return pass == 0;
+	public void setCustomNameTag(String name) {
+		super.setCustomNameTag(name);
+		this.bossInfo.setName(this.getDisplayName());
+	}
+
+	@Override
+	public void addTrackingPlayer(EntityPlayerMP player) {
+		super.addTrackingPlayer(player);
+		this.bossInfo.addPlayer(player);
+	}
+
+	@Override
+	public void removeTrackingPlayer(EntityPlayerMP player) {
+		super.removeTrackingPlayer(player);
+		this.bossInfo.removePlayer(player);
+	}
+
+	@Override
+	public UUID getBossInfoUuid() {
+		return this.dataManager.get(BOSSINFO_ID).or(new UUID(0, 0));
+	}
+
+	@Override
+	public BossType getBossType() {
+		return BossType.MINI_BOSS;
+	}
+
+	@Override
+	public Vec3d getMiniBossTagOffset(float partialTicks) {
+		return new Vec3d(0, height + 1D, 0);
+	}
+
+	@Override
+	public float getMiniBossTagSize(float partialTicks) {
+		return canBeHit() ? 0.5F : 0F;
 	}
 }
