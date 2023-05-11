@@ -17,6 +17,7 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -33,6 +34,7 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -55,7 +57,10 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	protected static final DataParameter<Integer> TYPE = EntityDataManager.<Integer>createKey(EntitySporeMinion.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> INFLATE_SIZE = EntityDataManager.<Integer>createKey(EntitySporeMinion.class, DataSerializers.VARINT);
 	protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntitySporeMinion.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-	private static final byte POPPING_PARTICLES = 110;
+	private static final DataParameter<BlockPos> OWNER_POS = EntityDataManager.createKey(EntitySporeMinion.class, DataSerializers.BLOCK_POS);
+	private static final byte HEAL_PARTICLES = 110;
+	private static final byte HURT_PARTICLES = 111;
+	private static final byte POPPING_PARTICLES = 112;
 	protected float prevFloatingRotationTicks = 0;
 	protected float floatingRotationTicks = 0;
 	
@@ -87,6 +92,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 		dataManager.register(TYPE, rand.nextInt(4));
 		dataManager.register(INFLATE_SIZE, 0);
 		dataManager.register(OWNER_UNIQUE_ID, Optional.absent());
+		dataManager.register(OWNER_POS, new BlockPos(0,0,0));
 	}
 
 	@Override
@@ -242,6 +248,38 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 		super.onUpdate();
 	}
 
+	@Override
+	protected void onDeathUpdate() {
+		++this.deathTime;
+
+		if (this.deathTime == 20) {
+			if (!this.world.isRemote && (this.isPlayer() || this.recentlyHit > 0 && this.canDropLoot()
+					&& this.world.getGameRules().getBoolean("doMobLoot"))) {
+				int i = this.getExperiencePoints(this.attackingPlayer);
+				i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
+				while (i > 0) {
+					int j = EntityXPOrb.getXPSplit(i);
+					i -= j;
+					this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+				}
+			}
+
+			this.setDead();
+
+			/*
+			 * for (int k = 0; k < 20; ++k) { double d2 =
+			 * this.rand.nextGaussian() * 0.02D; double d0 =
+			 * this.rand.nextGaussian() * 0.02D; double d1 =
+			 * this.rand.nextGaussian() * 0.02D;
+			 * this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL,
+			 * this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) -
+			 * (double)this.width, this.posY + (double)(this.rand.nextFloat() *
+			 * this.height), this.posZ + (double)(this.rand.nextFloat() *
+			 * this.width * 2.0F) - (double)this.width, d2, d0, d1); }
+			 */
+		}
+	}
+
 	private void explode() {
 		getEntityWorld().setEntityState(this, POPPING_PARTICLES);
 		setDead();
@@ -261,10 +299,24 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 			for (int i = 0, amount = 20 + getEntityWorld().rand.nextInt(4); i < amount; i++) {
 				double offSetX = getEntityWorld().rand.nextDouble() * 2F - 1F;
 				double offSetZ = getEntityWorld().rand.nextDouble() * 2F - 1F;
-				double motionX = getEntityWorld().rand.nextDouble() * 0.4F - 0.2F;
-				double motionY = getEntityWorld().rand.nextDouble() * 0.3F + 0.075F;
-				double motionZ = getEntityWorld().rand.nextDouble() * 0.4F - 0.2F;
 				BLParticles.ITEM_BREAKING.spawn(world, this.posX + (float) offSetX + (world.rand.nextDouble() * 0.25D - 0.125D) , this.posY + 0.5F, this.posZ + (float) offSetZ + (world.rand.nextDouble() * 0.25D - 0.125D), ParticleArgs.get().withData(new ItemStack(ItemRegistry.PUFFSHROOM_TENDRIL)));
+			}
+		}
+		//TODO - Ideally these should move along a vector to the  from the entity position to the getOwnerPos() 
+		if (id == HEAL_PARTICLES) {
+			for (int i = 0, amount = 10; i < amount; i++) {
+				double offSetX = getEntityWorld().rand.nextDouble() * 0.5F - 0.25F;
+				double offSetY = getEntityWorld().rand.nextDouble() * 0.5F - 0.25F;
+				double offSetZ = getEntityWorld().rand.nextDouble() * 0.5F - 0.25F;
+				BLParticles.SPOREMINION_HEALTH.spawn(world, this.posX +  offSetX + world.rand.nextDouble() * 0.25D - 0.125D, this.posY + offSetY + 0.5F + world.rand.nextDouble() * 0.25D - 0.125D, this.posZ + offSetZ + world.rand.nextDouble() * 0.25D - 0.125D, ParticleArgs.get().withColor(255, 255, 255, 1F));
+			}
+		}
+		if (id == HURT_PARTICLES) {
+			for (int i = 0, amount = 10; i < amount; i++) {
+				double offSetX = getEntityWorld().rand.nextDouble() * 0.5F - 0.25F;
+				double offSetY = getEntityWorld().rand.nextDouble() * 0.5F - 0.25F;
+				double offSetZ = getEntityWorld().rand.nextDouble() * 0.5F - 0.25F;
+				BLParticles.SPOREMINION_HEALTH.spawn(world, this.posX +  offSetX + world.rand.nextDouble() * 0.25D - 0.125D, this.posY + offSetY + 0.5F + world.rand.nextDouble() * 0.25D - 0.125D, this.posZ + offSetZ + world.rand.nextDouble() * 0.25D - 0.125D, ParticleArgs.get().withColor(0, 255, 0, 0.5F));
 			}
 		}
 	}
@@ -273,11 +325,18 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	public void setDead() {
 		// parent healing/damage
 		if (getOwner() instanceof EntityBigPuffshroom) {
+			EntityBigPuffshroom big_puffshroom = (EntityBigPuffshroom) getOwner();
 			if (!poppedNaturally) {
-				if (getType() == 1)
-					((EntityLivingBase) getOwner()).heal(5F);
-				if (getType() == 3)
-					((EntityLivingBase) getOwner()).attackEntityFrom(sporeminionDamage, 5F);
+				if (getType() == 1) {
+					setOwnerPos(big_puffshroom.getPosition());
+					getEntityWorld().setEntityState(this, HEAL_PARTICLES);
+					big_puffshroom.heal(5F);
+				}
+				if (getType() == 3) {
+					setOwnerPos(big_puffshroom.getPosition());
+					getEntityWorld().setEntityState(this, HURT_PARTICLES);
+					big_puffshroom.attackEntityFrom(sporeminionDamage, 5F);
+				}
 			}
 		}
 		super.setDead();
@@ -436,6 +495,14 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
     public void setOwnerId(@Nullable UUID uuidIn) {
         this.dataManager.set(OWNER_UNIQUE_ID, Optional.fromNullable(uuidIn));
     }
+
+	public void setOwnerPos(BlockPos pos) {
+		dataManager.set(OWNER_POS, pos);
+	}
+
+	public BlockPos getOwnerPos() {
+		return dataManager.get(OWNER_POS);
+	}
 
     @Nullable
     public UUID getOwnerId() {

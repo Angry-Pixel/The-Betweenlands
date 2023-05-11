@@ -12,7 +12,51 @@ import net.minecraft.client.particle.ParticleSplash;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.client.render.particle.entity.*;
+import thebetweenlands.client.render.particle.entity.ParticleAltarCrafting;
+import thebetweenlands.client.render.particle.entity.ParticleAnimated;
+import thebetweenlands.client.render.particle.entity.ParticleAnimator;
+import thebetweenlands.client.render.particle.entity.ParticleBLRain;
+import thebetweenlands.client.render.particle.entity.ParticleBlockProtection;
+import thebetweenlands.client.render.particle.entity.ParticleBreakingBL;
+import thebetweenlands.client.render.particle.entity.ParticleBubbleBL;
+import thebetweenlands.client.render.particle.entity.ParticleBug;
+import thebetweenlands.client.render.particle.entity.ParticleCaveWaterDrip;
+import thebetweenlands.client.render.particle.entity.ParticleChiromawDroppings;
+import thebetweenlands.client.render.particle.entity.ParticleChiromawFeathers;
+import thebetweenlands.client.render.particle.entity.ParticleDamageReduction;
+import thebetweenlands.client.render.particle.entity.ParticleDraetonBurnerFlame;
+import thebetweenlands.client.render.particle.entity.ParticleDruidCasting;
+import thebetweenlands.client.render.particle.entity.ParticleEmissiveBug;
+import thebetweenlands.client.render.particle.entity.ParticleEmissiveSwarm;
+import thebetweenlands.client.render.particle.entity.ParticleEntitySwirl;
+import thebetweenlands.client.render.particle.entity.ParticleFancyBubble;
+import thebetweenlands.client.render.particle.entity.ParticleFancyDrip;
+import thebetweenlands.client.render.particle.entity.ParticleFish;
+import thebetweenlands.client.render.particle.entity.ParticleFishVortex;
+import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
+import thebetweenlands.client.render.particle.entity.ParticleLifeEssence;
+import thebetweenlands.client.render.particle.entity.ParticleLightningArc;
+import thebetweenlands.client.render.particle.entity.ParticleMoth;
+import thebetweenlands.client.render.particle.entity.ParticleMouldThrobbing;
+import thebetweenlands.client.render.particle.entity.ParticlePuzzleBeam;
+import thebetweenlands.client.render.particle.entity.ParticlePuzzleBeam2;
+import thebetweenlands.client.render.particle.entity.ParticleRingOfRecruitmentState;
+import thebetweenlands.client.render.particle.entity.ParticleRootSpike;
+import thebetweenlands.client.render.particle.entity.ParticleSilkMoth;
+import thebetweenlands.client.render.particle.entity.ParticleSimple;
+import thebetweenlands.client.render.particle.entity.ParticleSonicScream;
+import thebetweenlands.client.render.particle.entity.ParticleSoundRipple;
+import thebetweenlands.client.render.particle.entity.ParticleSpiritButterfly;
+import thebetweenlands.client.render.particle.entity.ParticleSporeMinionHealth;
+import thebetweenlands.client.render.particle.entity.ParticleSwarm;
+import thebetweenlands.client.render.particle.entity.ParticleTarBeastDrip;
+import thebetweenlands.client.render.particle.entity.ParticleThem;
+import thebetweenlands.client.render.particle.entity.ParticleUrchinSpike;
+import thebetweenlands.client.render.particle.entity.ParticleVisionOrb;
+import thebetweenlands.client.render.particle.entity.ParticleWaterRipple;
+import thebetweenlands.client.render.particle.entity.ParticleWeedwoodLeaf;
+import thebetweenlands.client.render.particle.entity.ParticleWisp;
+import thebetweenlands.client.render.particle.entity.ParticleXPPieces;
 
 
 public enum BLParticles {
@@ -136,8 +180,9 @@ public enum BLParticles {
 	MOULD_HORN_1(new ParticleAnimated.GenericFactory(new ResourceLocation("thebetweenlands:particle/mould_horn_1"))),
 	MOULD_HORN_2(new ParticleAnimated.GenericFactory(new ResourceLocation("thebetweenlands:particle/mould_horn_2"))),
 	MOULD_HORN_3(new ParticleAnimated.GenericFactory(new ResourceLocation("thebetweenlands:particle/mould_horn_3"))),
-	MOULD_HORN_4(new ParticleAnimated.GenericFactory(new ResourceLocation("thebetweenlands:particle/mould_horn_4")));
-	
+	MOULD_HORN_4(new ParticleAnimated.GenericFactory(new ResourceLocation("thebetweenlands:particle/mould_horn_4"))),
+	SPOREMINION_HEALTH(new ParticleSporeMinionHealth.Factory());
+
 	private ParticleFactory<?, ?> factory;
 
 	private BLParticles(ParticleFactory<?, ?> factory) {

@@ -216,7 +216,7 @@ public class EntityBigPuffshroom extends EntityLiving implements IBLBoss, IEntit
 	public int getAnimation4() {
 		return dataManager.get(ANIMATION_4);
 	}
-
+	
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
