@@ -308,7 +308,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 				double offSetX = getEntityWorld().rand.nextDouble() * 0.5F - 0.25F;
 				double offSetY = getEntityWorld().rand.nextDouble() * 0.5F - 0.25F;
 				double offSetZ = getEntityWorld().rand.nextDouble() * 0.5F - 0.25F;
-				BLParticles.SPOREMINION_HEALTH.spawn(world, this.posX +  offSetX + world.rand.nextDouble() * 0.25D - 0.125D, this.posY + offSetY + 0.5F + world.rand.nextDouble() * 0.25D - 0.125D, this.posZ + offSetZ + world.rand.nextDouble() * 0.25D - 0.125D, ParticleArgs.get().withColor(255, 0, 0, 0F));
+				BLParticles.SPOREMINION_HEALTH.spawn(world, this.posX +  offSetX + world.rand.nextDouble() * 0.25D - 0.125D, this.posY + offSetY + 0.5F + world.rand.nextDouble() * 0.25D - 0.125D, this.posZ + offSetZ + world.rand.nextDouble() * 0.25D - 0.125D, ParticleArgs.get().withColor(0, 1, 0, 0.5F));
 			}
 		}
 		if (id == HURT_PARTICLES) {
@@ -316,7 +316,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 				double offSetX = getEntityWorld().rand.nextDouble() * 0.5F - 0.25F;
 				double offSetY = getEntityWorld().rand.nextDouble() * 0.5F - 0.25F;
 				double offSetZ = getEntityWorld().rand.nextDouble() * 0.5F - 0.25F;
-				BLParticles.SPOREMINION_HEALTH.spawn(world, this.posX +  offSetX + world.rand.nextDouble() * 0.25D - 0.125D, this.posY + offSetY + 0.5F + world.rand.nextDouble() * 0.25D - 0.125D, this.posZ + offSetZ + world.rand.nextDouble() * 0.25D - 0.125D, ParticleArgs.get().withColor(255, 255, 255, 0F));
+				BLParticles.SPOREMINION_HEALTH.spawn(world, this.posX +  offSetX + world.rand.nextDouble() * 0.25D - 0.125D, this.posY + offSetY + 0.5F + world.rand.nextDouble() * 0.25D - 0.125D, this.posZ + offSetZ + world.rand.nextDouble() * 0.25D - 0.125D, ParticleArgs.get().withColor(0, 0, 0, 0.5F));
 			}
 		}
 	}
