@@ -253,8 +253,8 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 					if (!tagList.isEmpty()) {
 						big_puffshroomNBT.setTag("tempBlockTypes", tagList);
 						big_puffshroomNBT.setTag("originPos", nbttagcompoundPos);
+						bigPuffShroom.writeEntityToNBT(big_puffshroomNBT);
 					}
-					//TODO spawn boss and transfer entitydata to boss
 				}
 		}
         super.setDead();

@@ -21,6 +21,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -35,6 +37,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.BossType;
@@ -447,25 +450,24 @@ public class EntityBigPuffshroom extends EntityLiving implements IBLBoss, IEntit
         super.setDead();
     }
     
-        public void loadOriginBlocks(World world, NBTTagCompound tag) {
-        NBTTagCompound entityNbt = getEntityData();
-        NBTTagCompound nbttagcompoundPos = entityNbt.getCompoundTag("originPos");
-        BlockPos origin = NBTUtil.getPosFromTag(nbttagcompoundPos);
-        List<IBlockState> list = new ArrayList<IBlockState>();
-        NBTTagList tagList = entityNbt.getTagList("tempBlockTypes", Constants.NBT.TAG_COMPOUND);
-        for (int indexCount = 0; indexCount < tagList.tagCount(); ++indexCount) {
-            NBTTagCompound nbttagcompound = tagList.getCompoundTagAt(indexCount);
-            IBlockState state = NBTUtil.readBlockState(nbttagcompound);
-            list.add(indexCount, state);
-        }
-        int a = 0;
-        for (int x = -12; x <= 12; x++)
-            for (int z = -12; z <= 12; z++)
-                for(int y = -1; y <= 6; y++) {
-                world.setBlockState(origin.add(x, y, z), list.get(a++), 3);
-    }
-    }
-
+	public void loadOriginBlocks(World world, NBTTagCompound tag) {
+		NBTTagCompound entityNbt = getEntityData();
+		NBTTagCompound nbttagcompoundPos = entityNbt.getCompoundTag("originPos");
+		BlockPos origin = NBTUtil.getPosFromTag(nbttagcompoundPos);
+		List<IBlockState> list = new ArrayList<IBlockState>();
+		NBTTagList tagList = entityNbt.getTagList("tempBlockTypes", Constants.NBT.TAG_COMPOUND);
+		for (int indexCount = 0; indexCount < tagList.tagCount(); ++indexCount) {
+			NBTTagCompound nbttagcompound = tagList.getCompoundTagAt(indexCount);
+			IBlockState state = NBTUtil.readBlockState(nbttagcompound);
+			list.add(indexCount, state);
+		}
+		int a = 0;
+		for (int x = -12; x <= 12; x++)
+			for (int z = -12; z <= 12; z++)
+				for (int y = -1; y <= 6; y++) {
+					world.setBlockState(origin.add(x, y, z), list.get(a++), 3);
+				}
+	}
 
     private void breakShrooms(BlockPos pos) {
         for (int y = 6; y >= 0; y--) {
@@ -700,7 +702,7 @@ public class EntityBigPuffshroom extends EntityLiving implements IBLBoss, IEntit
                             setActive5(true);
                             cooldown = 40;
                         }
-                        return super.attackEntityFrom(source, 0F);
+                        return super.attackEntityFrom(source, 20F);
                 }
             }
         }
