@@ -465,6 +465,8 @@ public class EntityBigPuffshroom extends EntityLiving implements IBLBoss, IEntit
 		for (int x = -12; x <= 12; x++)
 			for (int z = -12; z <= 12; z++)
 				for (int y = -1; y <= 6; y++) {
+					if (!world.isAirBlock(origin.add(x, y, z)) && y >= 0)
+						getEntityWorld().playEvent(null, 2001, origin.add(x, y, z), Block.getIdFromBlock(world.getBlockState(origin.add(x, y, z)).getBlock()));
 					world.setBlockState(origin.add(x, y, z), list.get(a++), 3);
 				}
 	}
@@ -702,7 +704,7 @@ public class EntityBigPuffshroom extends EntityLiving implements IBLBoss, IEntit
                             setActive5(true);
                             cooldown = 40;
                         }
-                        return super.attackEntityFrom(source, 20F);
+                        return super.attackEntityFrom(source, 0F);
                 }
             }
         }

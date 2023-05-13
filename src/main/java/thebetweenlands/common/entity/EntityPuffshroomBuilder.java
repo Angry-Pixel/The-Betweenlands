@@ -1,7 +1,6 @@
 package thebetweenlands.common.entity;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -249,7 +248,6 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 					NBTTagCompound big_puffshroomNBT = bigPuffShroom.getEntityData();
 					NBTTagCompound nbttagcompoundPos = entityNbt.getCompoundTag("originPos");
 					NBTTagList tagList = entityNbt.getTagList("tempBlockTypes", Constants.NBT.TAG_COMPOUND);
-				//	loadOriginBlocks(getEntityWorld(), getEntityData());
 					if (!tagList.isEmpty()) {
 						big_puffshroomNBT.setTag("tempBlockTypes", tagList);
 						big_puffshroomNBT.setTag("originPos", nbttagcompoundPos);
@@ -278,25 +276,6 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 			entityNbt.setTag("originPos", nbttagcompoundPos);
 		}
 		writeEntityToNBT(entityNbt);
-	}
-
-	public void loadOriginBlocks(World world, NBTTagCompound tag) {
-		NBTTagCompound entityNbt = getEntityData();
-		NBTTagCompound nbttagcompoundPos = entityNbt.getCompoundTag("originPos");
-		BlockPos origin = NBTUtil.getPosFromTag(nbttagcompoundPos);
-		List<IBlockState> list = new ArrayList<IBlockState>();
-		NBTTagList tagList = entityNbt.getTagList("tempBlockTypes", Constants.NBT.TAG_COMPOUND);
-		for (int indexCount = 0; indexCount < tagList.tagCount(); ++indexCount) {
-			NBTTagCompound nbttagcompound = tagList.getCompoundTagAt(indexCount);
-			IBlockState state = NBTUtil.readBlockState(nbttagcompound);
-			list.add(indexCount, state);
-		}
-		int a = 0;
-		for (int x = -12; x <= 12; x++)
-			for (int z = -12; z <= 12; z++)
-				for(int y = -1; y <= 6; y++) {
-				world.setBlockState(origin.add(x, y, z), list.get(a++), 3);
-			}
 	}
 
 	private void breakMouldhorns() {
