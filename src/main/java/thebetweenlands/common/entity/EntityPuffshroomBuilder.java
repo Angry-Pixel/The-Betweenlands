@@ -1,18 +1,21 @@
 package thebetweenlands.common.entity;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -24,6 +27,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
@@ -31,6 +35,7 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.block.plant.BlockMouldHornMushroom;
 import thebetweenlands.common.block.plant.BlockMouldHornMushroom.EnumMouldHorn;
+import thebetweenlands.common.entity.mobs.EntityBigPuffshroom;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL {
@@ -46,6 +51,7 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 	public int renderTicks = 0;
 	public int prev_renderTicks = 0;
 	public int index = 0;
+	public boolean hasStoredBlocks;
 	public boolean hasPlacedPatchMiddle;
 	public boolean hasPlacedPatch1;
 	public boolean hasPlacedPatch2;
@@ -230,6 +236,68 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 		for(Entity found : list)
 			found.setDead();
 	}
+	
+	@Override
+    public void setDead() {
+		if(!getEntityWorld().isRemote) {
+			if(getIsMiddle())
+				if(getEntityData().hasKey("tempBlockTypes")) {
+					EntityBigPuffshroom bigPuffShroom = new EntityBigPuffshroom(world);
+					bigPuffShroom.setPosition(posX, posY, posZ);
+					world.spawnEntity(bigPuffShroom);
+					NBTTagCompound entityNbt = getEntityData();
+					NBTTagCompound big_puffshroomNBT = bigPuffShroom.getEntityData();
+					NBTTagCompound nbttagcompoundPos = entityNbt.getCompoundTag("originPos");
+					NBTTagList tagList = entityNbt.getTagList("tempBlockTypes", Constants.NBT.TAG_COMPOUND);
+				//	loadOriginBlocks(getEntityWorld(), getEntityData());
+					if (!tagList.isEmpty()) {
+						big_puffshroomNBT.setTag("tempBlockTypes", tagList);
+						big_puffshroomNBT.setTag("originPos", nbttagcompoundPos);
+					}
+					//TODO spawn boss and transfer entitydata to boss
+				}
+		}
+        super.setDead();
+    }
+
+	private void getOriginBlocks(World world, BlockPos pos) {
+		NBTTagList tagList = new NBTTagList();
+		NBTTagCompound entityNbt = getEntityData();
+		for (int x = -12; x <= 12; x ++)
+			for (int z = -12; z <= 12; z++) 
+				for(int y = -1; y <= 6; y++) {
+				IBlockState state = world.getBlockState(pos.add(x, y, z));
+				NBTTagCompound tag = new NBTTagCompound();
+				NBTUtil.writeBlockState(tag, state);
+				tagList.appendTag(tag);
+			}
+
+		if (!tagList.isEmpty()) {
+			entityNbt.setTag("tempBlockTypes", tagList);
+			NBTTagCompound nbttagcompoundPos = NBTUtil.createPosTag(pos);
+			entityNbt.setTag("originPos", nbttagcompoundPos);
+		}
+		writeEntityToNBT(entityNbt);
+	}
+
+	public void loadOriginBlocks(World world, NBTTagCompound tag) {
+		NBTTagCompound entityNbt = getEntityData();
+		NBTTagCompound nbttagcompoundPos = entityNbt.getCompoundTag("originPos");
+		BlockPos origin = NBTUtil.getPosFromTag(nbttagcompoundPos);
+		List<IBlockState> list = new ArrayList<IBlockState>();
+		NBTTagList tagList = entityNbt.getTagList("tempBlockTypes", Constants.NBT.TAG_COMPOUND);
+		for (int indexCount = 0; indexCount < tagList.tagCount(); ++indexCount) {
+			NBTTagCompound nbttagcompound = tagList.getCompoundTagAt(indexCount);
+			IBlockState state = NBTUtil.readBlockState(nbttagcompound);
+			list.add(indexCount, state);
+		}
+		int a = 0;
+		for (int x = -12; x <= 12; x++)
+			for (int z = -12; z <= 12; z++)
+				for(int y = -1; y <= 6; y++) {
+				world.setBlockState(origin.add(x, y, z), list.get(a++), 3);
+			}
+	}
 
 	private void breakMouldhorns() {
 		breakShroomBlocks(getPatch1());
@@ -350,6 +418,11 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 		List<Entity> list = getEntityWorld().getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(0.6D, 0D, 0.6D));
 		if(list.stream().filter(e -> e instanceof EntityPuffshroomBuilder).count() == 8) {
 			if (!getIsMiddle()) {
+				if(!hasStoredBlocks) {
+					getOriginBlocks(world, getPosition());
+					hasStoredBlocks = true;
+					clearSpace(getPosition());
+				}
 				setIsMiddle(true);
 				setPatch1(getPosition().add(5 + rand.nextInt(5), 0, 0));
 				setPatch2(getPosition().add(0, 0, 5 + rand.nextInt(5)));
@@ -364,6 +437,16 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 		}
 		else
 			setIsMiddle(false);
+	}
+
+	private void clearSpace(BlockPos pos) {
+		for (int x = -12; x <= 12; x ++)
+			for (int z = -12; z <= 12; z++) 
+				for(int y = 0; y <= 6; y++) {
+				if(!world.isAirBlock(pos.add(x, y, z)))
+					getEntityWorld().playEvent(null, 2001, pos.add(x, y, z), Block.getIdFromBlock(world.getBlockState(pos.add(x, y, z)).getBlock()));
+					world.setBlockToAir(pos.add(x, y, z));
+			}
 	}
 
 	@Override
@@ -453,6 +536,7 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 			setPatch6(NBTUtil.getPosFromTag(nbt.getCompoundTag("patch_6")));
 			setPatch7(NBTUtil.getPosFromTag(nbt.getCompoundTag("patch_7")));
 			setPatch8(NBTUtil.getPosFromTag(nbt.getCompoundTag("patch_8")));
+			hasStoredBlocks = nbt.getBoolean("hasStoredBlocks");
 			hasPlacedPatchMiddle = nbt.getBoolean("hasPlacedPatchMiddle");
 			hasPlacedPatch1 = nbt.getBoolean("hasPlacedPatch1");
 			hasPlacedPatch2 = nbt.getBoolean("hasPlacedPatch2");
@@ -479,6 +563,7 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 			nbt.setTag("patch_7", NBTUtil.createPosTag(getPatch7()));
 			nbt.setTag("patch_8", NBTUtil.createPosTag(getPatch8()));
 			nbt.setBoolean("isMiddle", getIsMiddle());
+			nbt.setBoolean("hasStoredBlocks", hasStoredBlocks);
 			nbt.setBoolean("hasPlacedPatchMiddle", hasPlacedPatchMiddle);
 			nbt.setBoolean("hasPlacedPatch1", hasPlacedPatch1);
 			nbt.setBoolean("hasPlacedPatch2", hasPlacedPatch2);
