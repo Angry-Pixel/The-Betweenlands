@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.SplittableRandom;
+import java.util.function.Supplier;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -41,11 +42,17 @@ public class BiomeGenerator {
 	protected boolean noiseGeneratorsInitialized = false;
 	protected boolean noiseGenerated = false;
 
-	protected BiomeDecoratorBetweenlands decorator;
+	protected BiomeDecoratorBetweenlands mainDecorator;
+	protected Supplier<BiomeDecoratorBetweenlands> decoratorFactory;
 
 	public BiomeGenerator(Biome biome) {
 		this.biome = biome;
-		this.decorator = new BiomeDecoratorBetweenlands(biome);
+		this.mainDecorator = new BiomeDecoratorBetweenlands(biome);
+		this.decoratorFactory = new Supplier<BiomeDecoratorBetweenlands>() {
+			public BiomeDecoratorBetweenlands get() {
+				return new BiomeDecoratorBetweenlands(biome);
+			}
+		};
 	}
 
 	/**
@@ -57,23 +64,31 @@ public class BiomeGenerator {
 	}
 
 	/**
-	 * Sets the biome decorator
-	 * @param decorator
+	 * Sets the biome decorator factory
+	 * @param decoratorFactory
 	 * @return
 	 */
-	public BiomeGenerator setDecorator(BiomeDecoratorBetweenlands decorator) {
+	public BiomeGenerator setDecoratorFactory(Supplier<BiomeDecoratorBetweenlands> decoratorFactory) {
+		BiomeDecoratorBetweenlands decorator = decoratorFactory.get();
 		if(decorator.getBiome() != this.getBiome())
 			throw new RuntimeException("Decorator was assigned to a different biome!");
-		this.decorator = decorator;
+		this.mainDecorator = decorator;
+		this.decoratorFactory = decoratorFactory;
 		return this;
 	}
 
 	/**
-	 * Returns the biome decorator
+	 * Returns a biome decorator
 	 * @return
 	 */
 	public BiomeDecoratorBetweenlands getDecorator() {
-		return this.decorator;
+		if(this.mainDecorator.isDecorating()) {
+			BiomeDecoratorBetweenlands decorator = decoratorFactory.get();
+			if(decorator.getBiome() != this.getBiome())
+				throw new RuntimeException("Decorator was assigned to a different biome!");
+			return decorator;
+		}
+		return this.mainDecorator;
 	}
 
 	/**

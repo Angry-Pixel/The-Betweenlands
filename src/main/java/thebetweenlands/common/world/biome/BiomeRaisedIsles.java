@@ -50,7 +50,7 @@ public class BiomeRaisedIsles extends BiomeBetweenlands {
 				.setTemperature(0.8F)
 				.setRainfall(0.9F));
 		this.setWeight(16);
-		this.getBiomeGenerator().setDecorator(new BiomeDecoratorRaisedIsles(this))
+		this.getBiomeGenerator().setDecoratorFactory(generateDecoratorFactory(BiomeDecoratorRaisedIsles.class))
 		.addFeature(new CoarseIslandsFeature())
 		.addFeature(new AlgaeFeature());
 		this.setFoliageColors(-1, 0xA8A800);

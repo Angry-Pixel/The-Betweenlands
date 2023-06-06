@@ -20,7 +20,7 @@ public class BiomeSwamplandsClearing extends BiomeBetweenlands {
 
 		this.setWeight(0);
 		this.getBiomeGenerator().setFillerBlockState(BlockRegistry.SWAMP_DIRT.getDefaultState())
-		.setTopBlockState(BlockRegistry.SWAMP_GRASS.getDefaultState()).setDecorator(new BiomeDecoratorSwamplandsClearing(this));
+		.setTopBlockState(BlockRegistry.SWAMP_GRASS.getDefaultState()).setDecoratorFactory(generateDecoratorFactory(BiomeDecoratorSwamplandsClearing.class));
 		this.setFoliageColors(-1, 0x52AF5A);
 	}
 

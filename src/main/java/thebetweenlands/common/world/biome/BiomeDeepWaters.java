@@ -51,7 +51,7 @@ public class BiomeDeepWaters extends BiomeBetweenlands {
 				.setRainfall(0.9F));
 		
 		this.setWeight(12);
-		this.getBiomeGenerator().setDecorator(new BiomeDecoratorDeepWaters(this))
+		this.getBiomeGenerator().setDecoratorFactory(generateDecoratorFactory(BiomeDecoratorDeepWaters.class))
 		.addFeature(new DeepWatersFeature())
 		.addFeature(new AlgaeFeature())
 		.addFeature(new CragSpiresFeature());

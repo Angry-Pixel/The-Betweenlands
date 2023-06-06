@@ -222,7 +222,7 @@ public class DecoratorPositionProvider {
 	 * @param world World
 	 * @param biome Biome
 	 * @param generator Chunk Generator
-	 * @param rand Rng
+	 * @param rand unused, kept for compatibility reasons
 	 * @param x X coordinate
 	 * @param y Y coordinate, use -1 for surface
 	 * @param z Z coordinate
