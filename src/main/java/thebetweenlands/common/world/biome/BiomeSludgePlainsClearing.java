@@ -3,6 +3,7 @@ package thebetweenlands.common.world.biome;
 import java.util.List;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome.BiomeProperties;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
@@ -45,7 +46,8 @@ public class BiomeSludgePlainsClearing extends BiomeBetweenlands {
 				.setRainfall(0.9F));
 
 		this.setWeight(0);
-		this.getBiomeGenerator().setTopBlockState(BlockRegistry.COMPACTED_MUD.getDefaultState()).setFillerBlockHeight(1).setDecorator(new BiomeDecoratorSludgePlainsClearing(this))
+		this.getBiomeGenerator().setTopBlockState(BlockRegistry.COMPACTED_MUD.getDefaultState()).setFillerBlockHeight(1)
+		.setDecoratorFactory(BiomeDecoratorSludgePlainsClearing::new)
 		.addFeature(new PatchFeature(0.03125D * 5.75D, 0.03125D * 5.75D, BlockRegistry.SLUDGY_DIRT.getDefaultState()))
 		.addFeature(new PatchFeature(0.74D, 0.74D, BlockRegistry.SWAMP_DIRT.getDefaultState()))
 		.addFeature(new PatchFeature(0.65D, 0.65D, BlockRegistry.MUD.getDefaultState(), 1.0D / 1.35D, 1.72D));

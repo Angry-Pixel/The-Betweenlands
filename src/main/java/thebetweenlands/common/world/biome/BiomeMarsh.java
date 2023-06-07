@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome.BiomeProperties;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.relauncher.Side;
@@ -60,7 +61,7 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		.addFeature(new PatchFeature(0.03125D * 6.5D, 0.03125D * 6.5D, BlockRegistry.PEAT_SMOULDERING.getDefaultState(), 0.625D, 3.0D))
 		.addFeature(new PatchFeature(0.03125D * 5.5D, 0.03125D * 5.5D, BlockRegistry.MUD.getDefaultState()))
 		.addFeature(new PatchFeature(0.03125D * 8.5D, 0.03125D * 8.5D, BlockRegistry.MUD.getDefaultState()))
-		.setDecorator(new BiomeDecoratorMarsh(this));
+		.setDecoratorFactory(BiomeDecoratorMarsh::new);
 		this.setFoliageColors(0x627017, 0x63B581);
 	}
 

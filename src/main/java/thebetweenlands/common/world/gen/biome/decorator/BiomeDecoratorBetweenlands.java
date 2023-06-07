@@ -18,8 +18,8 @@ import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.feature.OreGens;
 
 public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
-    private static final List<String> profiledGenerators = new ArrayList<String>();
-    private static boolean decorating;
+    private final List<String> profiledGenerators = new ArrayList<String>();
+    private boolean decorating;
     private final Biome biome;
 
     public BiomeDecoratorBetweenlands(Biome biome) {
@@ -31,6 +31,10 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
         return this.biome;
     }
 
+    public final boolean isDecorating() {
+    	return decorating;
+    }
+    
     /**
      * Decorates the specified chunk
      *
@@ -40,25 +44,30 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
      * @param z
      */
     public final void decorate(World world, ChunkGeneratorBetweenlands generator, Random rand, int x, int z) {
+    	if(this.decorating) {
+    		throw new RuntimeException("Already Decorating!");
+    	}
+    	
         this.init(world, this.biome, generator, rand, x, z);
 
-        boolean wasDecorating = decorating;
+        //TODO re-evaluate the profiling, make sure it's still working and that decorators aren't piling up or anything
+//        boolean wasDecorating = decorating;
         decorating = true;
 
-        if (!wasDecorating) {
-            profiledGenerators.clear();
+//        if (!wasDecorating) {
+            this.profiledGenerators.clear();
             this.getProfiler().startSection(this.getBiome().getRegistryName().getPath());
-        }
+//        }
 
         this.decorate();
 
-        if (!wasDecorating) {
+//        if (!wasDecorating) {
             this.getProfiler().endSection();
-        }
+//        }
 
-        if (!wasDecorating) {
+//        if (!wasDecorating) {
             decorating = false;
-        }
+//        }
     }
 
     /**
