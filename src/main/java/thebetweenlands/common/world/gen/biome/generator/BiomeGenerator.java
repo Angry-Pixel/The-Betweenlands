@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.SplittableRandom;
-import java.util.function.Supplier;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -18,8 +17,21 @@ import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.feature.BiomeFeature;
+import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 
 public class BiomeGenerator {
+	//because writing Function<BiomeDecoratorBetweenlands, Biome> every time is really long
+	@FunctionalInterface
+	public static interface DecoratorProvider {
+		/**
+		 * Called when the main decorator is already in use (or when creating the main decorator).<br/>
+		 * Must create a new instance of the decorator.
+		 * @param biome The biome to create the decorator for.
+		 * @return A new {@code BiomeDecoratorBetweenlands} instance.
+		 */
+		public BiomeDecoratorBetweenlands createDecorator(Biome biome);
+	}
+	
 	protected final Biome biome;
 
 	protected IBlockState bottomBlockState = BlockRegistry.BETWEENLANDS_BEDROCK.getDefaultState();
@@ -43,16 +55,12 @@ public class BiomeGenerator {
 	protected boolean noiseGenerated = false;
 
 	protected BiomeDecoratorBetweenlands mainDecorator;
-	protected Supplier<BiomeDecoratorBetweenlands> decoratorFactory;
+	protected DecoratorProvider decoratorFactory;
 
 	public BiomeGenerator(Biome biome) {
 		this.biome = biome;
 		this.mainDecorator = new BiomeDecoratorBetweenlands(biome);
-		this.decoratorFactory = new Supplier<BiomeDecoratorBetweenlands>() {
-			public BiomeDecoratorBetweenlands get() {
-				return new BiomeDecoratorBetweenlands(biome);
-			}
-		};
+		this.decoratorFactory = BiomeDecoratorBetweenlands::new;
 	}
 
 	/**
@@ -64,12 +72,12 @@ public class BiomeGenerator {
 	}
 
 	/**
-	 * Sets the biome decorator factory
+	 * Sets the biome decorator factory.
 	 * @param decoratorFactory
 	 * @return
 	 */
-	public BiomeGenerator setDecoratorFactory(Supplier<BiomeDecoratorBetweenlands> decoratorFactory) {
-		BiomeDecoratorBetweenlands decorator = decoratorFactory.get();
+	public BiomeGenerator setDecoratorFactory(DecoratorProvider decoratorFactory) {
+		BiomeDecoratorBetweenlands decorator = decoratorFactory.createDecorator(this.getBiome());
 		if(decorator.getBiome() != this.getBiome())
 			throw new RuntimeException("Decorator was assigned to a different biome!");
 		this.mainDecorator = decorator;
@@ -78,17 +86,19 @@ public class BiomeGenerator {
 	}
 
 	/**
-	 * Returns a biome decorator
+	 * Returns a biome decorator.
+	 * Will create a new instance if the current one is in use.
 	 * @return
 	 */
 	public BiomeDecoratorBetweenlands getDecorator() {
-		if(this.mainDecorator.isDecorating()) {
-			BiomeDecoratorBetweenlands decorator = decoratorFactory.get();
-			if(decorator.getBiome() != this.getBiome())
-				throw new RuntimeException("Decorator was assigned to a different biome!");
-			return decorator;
+		if(!this.mainDecorator.isDecorating()) {
+			return this.mainDecorator;
 		}
-		return this.mainDecorator;
+		
+		BiomeDecoratorBetweenlands decorator = decoratorFactory.createDecorator(this.getBiome());
+		if(decorator.getBiome() != this.getBiome())
+			throw new RuntimeException("Decorator was assigned to a different biome!");
+		return decorator;
 	}
 
 	/**

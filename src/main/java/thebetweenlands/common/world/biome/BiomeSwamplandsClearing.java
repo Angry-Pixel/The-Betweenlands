@@ -1,6 +1,7 @@
 package thebetweenlands.common.world.biome;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome.BiomeProperties;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import thebetweenlands.common.lib.ModInfo;
@@ -20,7 +21,7 @@ public class BiomeSwamplandsClearing extends BiomeBetweenlands {
 
 		this.setWeight(0);
 		this.getBiomeGenerator().setFillerBlockState(BlockRegistry.SWAMP_DIRT.getDefaultState())
-		.setTopBlockState(BlockRegistry.SWAMP_GRASS.getDefaultState()).setDecoratorFactory(generateDecoratorFactory(BiomeDecoratorSwamplandsClearing.class));
+		.setTopBlockState(BlockRegistry.SWAMP_GRASS.getDefaultState()).setDecoratorFactory(BiomeDecoratorSwamplandsClearing::new);
 		this.setFoliageColors(-1, 0x52AF5A);
 	}
 

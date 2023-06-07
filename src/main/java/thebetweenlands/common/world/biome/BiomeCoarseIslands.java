@@ -3,6 +3,7 @@ package thebetweenlands.common.world.biome;
 import java.util.List;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome.BiomeProperties;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
@@ -50,7 +51,7 @@ public class BiomeCoarseIslands extends BiomeBetweenlands {
 				.setTemperature(0.8F)
 				.setRainfall(0.9F));
 		this.setWeight(16);
-		this.getBiomeGenerator().setDecoratorFactory(generateDecoratorFactory(BiomeDecoratorCoarseIslands.class))
+		this.getBiomeGenerator().setDecoratorFactory(BiomeDecoratorCoarseIslands::new)
 		.addFeature(new CoarseIslandsFeature())
 		.addFeature(new AlgaeFeature());
 		this.setFoliageColors(-1, 0xA8A800);

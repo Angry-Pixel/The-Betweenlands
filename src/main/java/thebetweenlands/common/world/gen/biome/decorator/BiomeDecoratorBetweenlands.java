@@ -50,7 +50,7 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
     	
         this.init(world, this.biome, generator, rand, x, z);
 
-        //TODO re-evaluate the profiling, make sure it's still working
+        //TODO re-evaluate the profiling, make sure it's still working and that decorators aren't piling up or anything
 //        boolean wasDecorating = decorating;
         decorating = true;
 

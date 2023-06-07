@@ -3,6 +3,7 @@ package thebetweenlands.common.world.biome;
 import java.util.List;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome.BiomeProperties;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
@@ -51,7 +52,7 @@ public class BiomeDeepWaters extends BiomeBetweenlands {
 				.setRainfall(0.9F));
 		
 		this.setWeight(12);
-		this.getBiomeGenerator().setDecoratorFactory(generateDecoratorFactory(BiomeDecoratorDeepWaters.class))
+		this.getBiomeGenerator().setDecoratorFactory(BiomeDecoratorDeepWaters::new)
 		.addFeature(new DeepWatersFeature())
 		.addFeature(new AlgaeFeature())
 		.addFeature(new CragSpiresFeature());

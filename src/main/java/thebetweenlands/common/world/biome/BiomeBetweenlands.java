@@ -1,12 +1,9 @@
 package thebetweenlands.common.world.biome;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiPredicate;
-import java.util.function.Supplier;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -35,7 +32,6 @@ import thebetweenlands.common.world.biome.spawning.spawners.ConditionalSpawnEntr
 import thebetweenlands.common.world.biome.spawning.spawners.LocationSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.WallSpawnEntry;
-import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
@@ -276,27 +272,5 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider, ICustom
 
 	public void addTypes(){
 
-	}
-	
-	
-	protected Supplier<BiomeDecoratorBetweenlands> generateDecoratorFactory(Class<? extends BiomeDecoratorBetweenlands> clazz) {
-		try {
-			Biome self = this;
-			Constructor<? extends BiomeDecoratorBetweenlands> constructor = clazz.getConstructor(Biome.class);
-			constructor.setAccessible(true);
-			return new Supplier<BiomeDecoratorBetweenlands>() {
-				@Override
-				public BiomeDecoratorBetweenlands get() {
-					try {
-						return constructor.newInstance(self);
-					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-							| InvocationTargetException e) {
-						throw new RuntimeException(e);
-					}
-				}
-			};
-		} catch (NoSuchMethodException | SecurityException e) {
-			throw new RuntimeException(e);
-		}
 	}
 }

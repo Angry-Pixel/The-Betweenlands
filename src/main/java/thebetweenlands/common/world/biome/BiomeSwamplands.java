@@ -3,6 +3,7 @@ package thebetweenlands.common.world.biome;
 import java.util.List;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome.BiomeProperties;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
@@ -66,7 +67,7 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 		.addFeature(new PatchFeature(0.65D, 0.65D, BlockRegistry.MUD.getDefaultState(), 1.0D / 1.35D, 1.72D))
 		.addFeature(new AlgaeFeature())
 		.addFeature(new SiltBeachFeature(0.98F))
-		.setDecoratorFactory(generateDecoratorFactory(BiomeDecoratorSwamplands.class));
+		.setDecoratorFactory(BiomeDecoratorSwamplands::new);
 		this.setFoliageColors(0x2AFF00, 0x52AF5A);
 		this.setSecondaryFoliageColors(0x50a040, 0x85af51);
 	}
