@@ -26,9 +26,10 @@ public class RenderPuffshroomBuilder extends RenderLiving<EntityPuffshroomBuilde
 		float flap = MathHelper.sin((smoothedTicks) * 0.25F) * 0.125F;
 		bindTexture(TEXTURE);
 		if (entity.getIsMiddle()) {
+			float scale = 2F / 1024F;
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(x, y + 1.5F, z);
-			GlStateManager.scale(-1 + flap, -1, 1- flap);
+			GlStateManager.translate(x, y + 1.5F + scale * entity.getGrowthCount() * 1.5F, z);
+			GlStateManager.scale(-1 - scale * entity.getGrowthCount() + flap, -1- scale * entity.getGrowthCount(), 1 + scale * entity.getGrowthCount() - flap);
 			GlStateManager.rotate(entityYaw, 0, 1, 0);
 			MODEL.renderSpore(0.0625F);
 			GlStateManager.popMatrix();

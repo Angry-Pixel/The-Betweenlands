@@ -47,6 +47,7 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 	private static final DataParameter<BlockPos> PATCH_6 = EntityDataManager.createKey(EntityPuffshroomBuilder.class, DataSerializers.BLOCK_POS);
 	private static final DataParameter<BlockPos> PATCH_7 = EntityDataManager.createKey(EntityPuffshroomBuilder.class, DataSerializers.BLOCK_POS);
 	private static final DataParameter<BlockPos> PATCH_8 = EntityDataManager.createKey(EntityPuffshroomBuilder.class, DataSerializers.BLOCK_POS);
+	private static final DataParameter<Integer> GROWTH_COUNT = EntityDataManager.createKey(EntityPuffshroomBuilder.class, DataSerializers.VARINT);
 	public int renderTicks = 0;
 	public int prev_renderTicks = 0;
 	public int index = 0;
@@ -78,6 +79,7 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 		dataManager.register(PATCH_6, new BlockPos(0,0,0));
 		dataManager.register(PATCH_7, new BlockPos(0,0,0));
 		dataManager.register(PATCH_8, new BlockPos(0,0,0));
+		dataManager.register(GROWTH_COUNT, 0);
 	}
 
 	public void setIsMiddle(boolean state) {
@@ -152,6 +154,15 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 		return dataManager.get(PATCH_8);
 	}
 
+	public void setGrowthCount(int count) {
+		dataManager.set(GROWTH_COUNT, count);
+		
+	}
+
+	public int getGrowthCount() {
+		return dataManager.get(GROWTH_COUNT);
+	}
+
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
@@ -165,7 +176,7 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 		if (getEntityWorld().isRemote)
 			prev_renderTicks = renderTicks;
 
-		if (world.getTotalWorldTime() % 2 == 0) { //fast for test
+		if (world.getTotalWorldTime() % 20 == 0) { //fast for test
 			if (!world.isRemote) {
 				checkForMiddle();
 				if (getIsMiddle()) {
@@ -193,10 +204,12 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 					if (index <= 16) // just to stop unneeded increments
 						index++;
 
-					if (checkForMouldhorns()) {
+					if (checkForMouldhorns() > 0 ) {
 						//TODO implement growth stages and count here
+						setGrowthCount(getGrowthCount() + checkForMouldhorns());
 						//breakMouldhorns();
-						killTendrills();
+						if (checkForMouldhorns() >= 8 && getGrowthCount() >= 1024)
+							killTendrills();
 						// DO the thing for the thing
 
 					}
@@ -205,7 +218,7 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 
 			if (world.isRemote) {
 				if (getIsMiddle())
-					if (checkForMouldhorns()) {
+					if (checkForMouldhorns() > 0) {
 
 					}
 			}
@@ -341,7 +354,7 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 				getEntityWorld().setBlockState(pos.add(x, 0, z), BlockRegistry.MOULDY_SOIL.getDefaultState());
 	}
 
-	private boolean checkForMouldhorns() {
+	private int checkForMouldhorns() {
 		int count = 0;
 		if(checkForCap(getPatch1()))
 			count++;
@@ -359,15 +372,17 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 			count++;
 		if(checkForCap(getPatch8()))
 			count++;
-		return count >= 8;
+		return count;
 	}
 
 	private boolean checkForCap(BlockPos pos) {
 		for(int y = 0; y <= 6; y++) {
 			if (!getEntityWorld().isRemote) {
 				if (getEntityWorld().getBlockState(pos.add(0, y, 0)).getBlock() instanceof BlockMouldHornMushroom && (getEntityWorld().getBlockState(pos.add(0, y, 0)).getValue(BlockMouldHornMushroom.MOULD_HORN_TYPE) == EnumMouldHorn.MOULD_HORN_CAP_FULL || getEntityWorld().getBlockState(pos.add(0, y, 0)).getValue(BlockMouldHornMushroom.MOULD_HORN_TYPE) == EnumMouldHorn.MOULD_HORN_CAP_THIN || getEntityWorld().getBlockState(pos.add(0, y, 0)).getValue(BlockMouldHornMushroom.MOULD_HORN_TYPE) == EnumMouldHorn.MOULD_HORN_MYCELIUM)) {
-						getEntityWorld().getBlockState(pos.add(0, y, 0)).getBlock().randomTick(world, pos.add(0, y, 0), world.getBlockState(pos.add(0, y, 0)), world.rand);
-					break;
+						if(rand.nextInt(10) == 0) {
+							getEntityWorld().getBlockState(pos.add(0, y, 0)).getBlock().randomTick(world, pos.add(0, y, 0), world.getBlockState(pos.add(0, y, 0)), world.rand);
+							break;
+						}
 				}
 			}
 
@@ -526,6 +541,7 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 			hasPlacedPatch6 = nbt.getBoolean("hasPlacedPatch6");
 			hasPlacedPatch7 = nbt.getBoolean("hasPlacedPatch7");
 			hasPlacedPatch8 = nbt.getBoolean("hasPlacedPatch8");
+			setGrowthCount(nbt.getInteger("growthCount"));
 		}
 	}
 
@@ -553,6 +569,7 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 			nbt.setBoolean("hasPlacedPatch6", hasPlacedPatch6);
 			nbt.setBoolean("hasPlacedPatch7", hasPlacedPatch7);
 			nbt.setBoolean("hasPlacedPatch8", hasPlacedPatch8);
+			nbt.setInteger("growthCount", getGrowthCount());
 		}
 	}
 
