@@ -165,7 +165,7 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 		if (getEntityWorld().isRemote)
 			prev_renderTicks = renderTicks;
 
-		if (world.getTotalWorldTime() % 2 == 0) {
+		if (world.getTotalWorldTime() % 2 == 0) { //fast for test
 			if (!world.isRemote) {
 				checkForMiddle();
 				if (getIsMiddle()) {
@@ -194,6 +194,7 @@ public class EntityPuffshroomBuilder extends EntityCreature implements IEntityBL
 						index++;
 
 					if (checkForMouldhorns()) {
+						//TODO implement growth stages and count here
 						//breakMouldhorns();
 						killTendrills();
 						// DO the thing for the thing
