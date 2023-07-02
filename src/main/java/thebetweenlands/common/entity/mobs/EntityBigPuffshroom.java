@@ -76,7 +76,7 @@ public class EntityBigPuffshroom extends EntityLiving implements IBLBoss, IEntit
     private static final byte SYNC_PREV_ANIMATION_DATA_MIN_2 = 106;
     private static final byte SYNC_PREV_ANIMATION_DATA_MIN_3 = 107;
     private static final byte SYNC_PREV_ANIMATION_DATA_MIN_4 = 108;
-    private static final DataParameter<Optional<UUID>> BOSSINFO_ID = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+    private static final DataParameter<Optional<UUID>> BOSSINFO_ID = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.OPTIONAL_UNIQUE_ID);
     private static final DataParameter<Boolean> SLAM_ATTACK = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> MOVE = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> ACTIVE_1 = EntityDataManager.createKey(EntityBigPuffshroom.class, DataSerializers.BOOLEAN);
