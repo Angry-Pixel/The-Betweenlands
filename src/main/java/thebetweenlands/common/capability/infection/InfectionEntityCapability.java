@@ -20,6 +20,7 @@ import thebetweenlands.api.capability.ISerializableCapability;
 import thebetweenlands.api.entity.IInfectionBehavior;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.base.EntityCapability;
+import thebetweenlands.common.entity.infection.DeathInfectionBehavior;
 import thebetweenlands.common.entity.infection.PlantingInfectionBehavior;
 import thebetweenlands.common.entity.infection.RandomLookingBehavior;
 import thebetweenlands.common.entity.infection.SporeInfectionBehavior;
@@ -242,8 +243,8 @@ public class InfectionEntityCapability extends EntityCapability<InfectionEntityC
 
 
 					// TODO Testing
-					if(event.player.ticksExisted % 20 == 0 && cap.getCurrentInfectionBehavior() == null && !event.player.isCreative()) {
-						switch(event.player.world.rand.nextInt(3)) {
+					if(event.player.ticksExisted % 20 == 0 && cap.getCurrentInfectionBehavior() == null && cap.getInfectionPercent() > 0.5f && !event.player.isCreative()) {
+						switch(event.player.world.rand.nextInt(4)) {
 						case 0:
 							cap.triggerInfectionBehavior(new PlantingInfectionBehavior(event.player));
 							break;
@@ -252,6 +253,9 @@ public class InfectionEntityCapability extends EntityCapability<InfectionEntityC
 							break;
 						case 2:
 							cap.triggerInfectionBehavior(new RandomLookingBehavior(event.player));
+							break;
+						case 3:
+							cap.triggerInfectionBehavior(new DeathInfectionBehavior(event.player));
 							break;
 						}
 					}

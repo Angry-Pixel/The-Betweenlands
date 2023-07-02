@@ -2513,5 +2513,10 @@
       "thebetweenlands:infection_heartbeat_4"
     ],
     "subtitle": "blsubtitles.misc.infection_heartbeat"
+  },
+  "infection_death": {
+    "sounds": [
+      "thebetweenlands:infection_death"
+    ]
   }
 }

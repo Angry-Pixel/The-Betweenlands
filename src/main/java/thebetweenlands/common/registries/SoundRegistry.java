@@ -111,6 +111,7 @@ public class SoundRegistry {
     public static final BLSoundEvent SPEAR_RETURN_2 = reg("spear_return_2");
     public static final BLSoundEvent INFECTION_HEARTBEAT = reg("infection_heartbeat");
     public static final BLSoundEvent INFECTION_SPREAD = reg("infection_spread");
+    public static final BLSoundEvent INFECTION_DEATH = reg("infection_death");
 
     // Hostiles
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");

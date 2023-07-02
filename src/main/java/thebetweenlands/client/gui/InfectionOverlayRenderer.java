@@ -20,6 +20,7 @@ import net.minecraft.util.math.Vec3d;
 import thebetweenlands.api.capability.IInfectionCapability;
 import thebetweenlands.api.entity.IInfectionBehavior;
 import thebetweenlands.api.entity.IInfectionBehaviorOverlay;
+import thebetweenlands.common.entity.infection.DeathInfectionBehavior;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -30,6 +31,8 @@ public class InfectionOverlayRenderer {
 	protected static final ResourceLocation INFECTION_OVERLAY_OUTER_GRADIENT_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/overlay/infection_overlay_outer_gradient.png");
 	protected static final ResourceLocation INFECTION_OVERLAY_MYCELIUM_BACK_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/overlay/infection_overlay_mycelium_back.png");
 	protected static final ResourceLocation INFECTION_OVERLAY_MYCELIUM_MAIN_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/overlay/infection_overlay_mycelium_main.png");
+	protected static final ResourceLocation INFECTION_OVERLAY_FULL_BACK_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/overlay/infection_overlay_full_back.png");
+	protected static final ResourceLocation INFECTION_OVERLAY_FULL_MAIN_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/overlay/infection_overlay_full_main.png");
 
 	protected static final ResourceLocation VIGNETTE_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/overlay/strong_vignette.png");
 
@@ -71,7 +74,12 @@ public class InfectionOverlayRenderer {
 
 	private float prevOverlayPercentage;
 	private float overlayPercentage;
+	
+	private int tempGrowthTicks;
 
+	private float deathProgress;
+	private float prevDeathProgress;
+	
 	public void update() {
 		Entity view = Minecraft.getMinecraft().getRenderViewEntity();
 
@@ -82,6 +90,8 @@ public class InfectionOverlayRenderer {
 
 		this.prevOverlayPercentage = this.overlayPercentage;
 
+		this.prevDeathProgress = this.deathProgress;
+		
 		boolean isInfected = false;
 
 		if(view != null) {
@@ -96,6 +106,10 @@ public class InfectionOverlayRenderer {
 					isInfected = true;
 
 					this.overlayPercentage = ((IInfectionBehaviorOverlay) behavior).getOverlayPercentage();
+				}
+				
+				if(behavior instanceof DeathInfectionBehavior) {
+					this.deathProgress = ((DeathInfectionBehavior) behavior).getDeathProgress();
 				}
 			}
 		}
@@ -123,6 +137,10 @@ public class InfectionOverlayRenderer {
 		}
 
 		this.ticks++;
+		
+		if(this.tempGrowthTicks > 0) {
+			--this.tempGrowthTicks;
+		}
 	}
 
 	public void render(float partialTicks) {
@@ -151,7 +169,12 @@ public class InfectionOverlayRenderer {
 
 		float throb = 0;
 
-		if(this.pulseTicks > 0) {
+
+		float tempGrowthTicks = this.tempGrowthTicks > 0 ? (1.0f - (this.tempGrowthTicks - partialTicks) / 40.0f) : 0;
+		
+		alpha = MathHelper.clamp(alpha + (float)Math.sin(Math.pow(tempGrowthTicks, 0.5D) * Math.PI) * 0.2f, 0.0f, 1.0f);
+		
+		if(this.pulseTicks > 0 || tempGrowthTicks > 0) {
 			fade = (this.prevPulseFadeTicks + (this.pulseFadeTicks - this.prevPulseFadeTicks) * partialTicks) * 0.05f;
 			fade *= this.prevOverlayPercentage + (this.overlayPercentage - this.prevOverlayPercentage) * partialTicks;
 
@@ -160,7 +183,7 @@ public class InfectionOverlayRenderer {
 
 			alpha = MathHelper.clamp(alpha + 0.15f * throb, 0.0f, 1.0f);
 		}
-
+		
 		float shade = fade * 0.75f;
 
 		GlStateManager.color(1, 1, 1, shade);
@@ -171,6 +194,16 @@ public class InfectionOverlayRenderer {
 		vertexbuffer.pos((double)res.getScaledWidth_double(), 0.0D, 0).tex(1.0D, 0.0D).endVertex();
 		vertexbuffer.pos(0.0D, 0.0D, 0).tex(0.0D, 0.0D).endVertex();
 		tessellator.draw();
+		
+		GlStateManager.color(1, 1, 1, 1);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(INFECTION_OVERLAY_MYCELIUM_BACK_TEXTURE);
+		this.drawMesh(res, 13, 5, alpha * 0.8f, (Math.cos(((this.ticks + partialTicks) * 0.138) % (Math.PI)) + 1) * 0.5D * wobble + throb * (1 - wobble), (0.03 - wobble * 0.023) * strength, 1, 1, 1, 1);
+		
+		double deathCurtain = this.prevDeathProgress + (this.deathProgress - this.prevDeathProgress) * partialTicks;
+		
+		GlStateManager.color(1, 1, 1, 1);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(INFECTION_OVERLAY_FULL_BACK_TEXTURE);
+		this.drawMesh(res, 13, 20, deathCurtain * 1.2, 0.0f, 0.0f, 1, 1, 1, 1);
 
 		GlStateManager.color(1, 1, 1, MathHelper.clamp(alpha + (1.0f - alpha) * throb, 0.0f, 1.0f));
 		Minecraft.getMinecraft().getTextureManager().bindTexture(INFECTION_OVERLAY_INNER_GRADIENT_TEXTURE);
@@ -180,15 +213,15 @@ public class InfectionOverlayRenderer {
 		vertexbuffer.pos((double)res.getScaledWidth_double(), 0.0D, 0).tex(1.0D, 0.0D).endVertex();
 		vertexbuffer.pos(0.0D, 0.0D, 0).tex(0.0D, 0.0D).endVertex();
 		tessellator.draw();
-
+		
 		GlStateManager.color(1, 1, 1, 1);
-		Minecraft.getMinecraft().getTextureManager().bindTexture(INFECTION_OVERLAY_MYCELIUM_BACK_TEXTURE);
-		this.drawMesh(res, 13, 5, alpha * 0.8f, (Math.cos(((this.ticks + partialTicks) * 0.138) % (Math.PI)) + 1) * 0.5D * wobble + throb * (1 - wobble), (0.03 - wobble * 0.023) * strength);
-
+		Minecraft.getMinecraft().getTextureManager().bindTexture(INFECTION_OVERLAY_FULL_MAIN_TEXTURE);
+		this.drawMesh(res, 13, 20, deathCurtain * 1.2, (Math.cos(((this.ticks + partialTicks) * 0.1) % (Math.PI)) + 1) * 0.5D * wobble + throb * (1 - wobble), (0.03 - wobble * 0.023) * strength, 1, 1, 1, 1);
+		
 		GlStateManager.color(1, 1, 1, 1);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(INFECTION_OVERLAY_MYCELIUM_MAIN_TEXTURE);
-		this.drawMesh(res, 13, 5, alpha * 0.8f, (Math.cos(((this.ticks + partialTicks) * 0.1) % (Math.PI)) + 1) * 0.5D * wobble + throb * (1 - wobble), (0.03 - wobble * 0.023) * strength);
-
+		this.drawMesh(res, 13, 5, alpha * 0.8f, (Math.cos(((this.ticks + partialTicks) * 0.1) % (Math.PI)) + 1) * 0.5D * wobble + throb * (1 - wobble), (0.03 - wobble * 0.023) * strength, 1, 1, 1, 1);
+		
 		GlStateManager.color(1, 1, 1, alpha);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(INFECTION_OVERLAY_OUTER_GRADIENT_TEXTURE);
 		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -197,6 +230,10 @@ public class InfectionOverlayRenderer {
 		vertexbuffer.pos((double)res.getScaledWidth_double(), 0.0D, 0).tex(1.0D, 0.0D).endVertex();
 		vertexbuffer.pos(0.0D, 0.0D, 0).tex(0.0D, 0.0D).endVertex();
 		tessellator.draw();
+		
+		GlStateManager.disableTexture2D();
+		this.drawMesh(res, 13, 20, deathCurtain * 1.2, 0.0f, 0.0f, 0, 0, 0, (float)deathCurtain * 0.9f);
+		GlStateManager.enableTexture2D();
 
 		GlStateManager.popMatrix();
 
@@ -206,7 +243,7 @@ public class InfectionOverlayRenderer {
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 	}
 
-	private void drawMesh(ScaledResolution res, int radialSegments, int lateralSegments, double coverage, double wobble, double wobbleAmount) {
+	private void drawMesh(ScaledResolution res, int radialSegments, int lateralSegments, double coverage, double wobble, double wobbleAmount, float r, float g, float b, float alpha) {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder vertexbuffer = tessellator.getBuffer();
 
@@ -216,19 +253,18 @@ public class InfectionOverlayRenderer {
 		double cx = w * 0.5D;
 		double cy = h * 0.5D;
 
-		double min = Math.min(w, h);
 		double max = Math.max(w, h);
 
 		double sx = w / max;
 		double sy = h / max;
 
-		double r = max * 0.5D * Math.sqrt(2) + 50;
+		double radius = max * 0.5D * Math.sqrt(2) + 50;
 
 		vertexbuffer.begin(GL11.GL_QUAD_STRIP, DefaultVertexFormats.POSITION_TEX_COLOR);
 
 		for(int j = 0; j < lateralSegments; ++j) {
-			double ir = j / (double)(lateralSegments) * r;
-			double or = ir + r / (double)(lateralSegments);
+			double ir = j / (double)(lateralSegments) * radius;
+			double or = ir + radius / (double)(lateralSegments);
 
 			for(int i = 0; i < radialSegments; ++i) {
 				double angle = i / (double)(radialSegments-1) * Math.PI * 2;
@@ -241,9 +277,6 @@ public class InfectionOverlayRenderer {
 
 				double opx = cos * or * sx;
 				double opy = sin * or * sy;
-
-				float ia = MathHelper.clamp((float)(ir * sx * sy / min * 2), 0.0f, 1.0f);
-				float oa = MathHelper.clamp((float)(or * sx * sy / min * 2), 0.0f, 1.0f);
 
 				ipx += cx;
 				ipy += cy;
@@ -271,14 +304,14 @@ public class InfectionOverlayRenderer {
 				ou += oc * oou;
 				ov += oc * oov;
 
-				double frs = (1 - coverage) * r ;
-				double fre = frs + r / (float)(lateralSegments + 1);
+				double frs = (1 - coverage) * radius;
+				double fre = frs + radius / 6.0f;
 
-				ia *= MathHelper.clamp((ir - frs) / (fre - frs), 0, 1);
-				oa *= MathHelper.clamp((or - frs) / (fre - frs), 0, 1);
+				float ia = alpha * (float) MathHelper.clamp((ir - frs) / (fre - frs), 0, 1);
+				float oa = alpha * (float) MathHelper.clamp((or - frs) / (fre - frs), 0, 1);
 
-				vertexbuffer.pos(ipx, ipy, 0).tex(iu, iv).color(1, 1, 1, ia).endVertex();
-				vertexbuffer.pos(opx, opy, 0).tex(ou, ov).color(1, 1, 1, oa).endVertex();
+				vertexbuffer.pos(ipx, ipy, 0).tex(iu, iv).color(r, g, b, ia).endVertex();
+				vertexbuffer.pos(opx, opy, 0).tex(ou, ov).color(r, g, b, oa).endVertex();
 			}
 		}
 
@@ -286,6 +319,10 @@ public class InfectionOverlayRenderer {
 	}
 
 	public void onInfectionIncrease(float amount) {
+		if(this.tempGrowthTicks <= 0) {
+			this.tempGrowthTicks = 40;
+		}
+		
 		EntityPlayer player = Minecraft.getMinecraft().player;
 		if(player != null) {
 			player.world.playSound(player, player.posX, player.posY, player.posZ, SoundRegistry.INFECTION_SPREAD, SoundCategory.PLAYERS, 0.75f + 1.0f * MathHelper.clamp(amount * 10.0f, 0.0f, 1.0f), 1);
