@@ -17,8 +17,10 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,13 +30,20 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.EntityDropHeldCloud;
 import thebetweenlands.common.entity.ai.EntityAIFollowTarget;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -48,7 +57,10 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	protected static final DataParameter<Integer> TYPE = EntityDataManager.<Integer>createKey(EntitySporeMinion.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> INFLATE_SIZE = EntityDataManager.<Integer>createKey(EntitySporeMinion.class, DataSerializers.VARINT);
 	protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntitySporeMinion.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-	
+	private static final DataParameter<BlockPos> OWNER_POS = EntityDataManager.createKey(EntitySporeMinion.class, DataSerializers.BLOCK_POS);
+	private static final byte HEAL_PARTICLES = 110;
+	private static final byte HURT_PARTICLES = 111;
+	private static final byte POPPING_PARTICLES = 112;
 	protected float prevFloatingRotationTicks = 0;
 	protected float floatingRotationTicks = 0;
 	
@@ -62,12 +74,15 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	private EntityAINearestAttackableTarget<EntityPlayer> target;
 	private boolean poppedNaturally = false;
 
+	public static DamageSource sporeminionDamage;
+
 	public EntitySporeMinion(World world) {
 		super(world);
 		setSize(0.75F, 0.75F);
 		stepHeight = 1.0F;
 		this.experienceValue = 1;
 		this.setPathPriority(PathNodeType.WATER, -1.0F);
+		sporeminionDamage = new EntityDamageSource("bl.sporeminion_damage", this);
 	}
 
 	@Override
@@ -77,6 +92,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 		dataManager.register(TYPE, rand.nextInt(4));
 		dataManager.register(INFLATE_SIZE, 0);
 		dataManager.register(OWNER_UNIQUE_ID, Optional.absent());
+		dataManager.register(OWNER_POS, new BlockPos(0,0,0));
 	}
 
 	@Override
@@ -173,7 +189,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 				canFollow = true;
 			}
 
-			if (getType() == 2) {
+			if (getType() == 2 && ticksExisted <= 200) {
 				if (getInflateSize() <= 0)
 					setInflateSize(0);
 				if (getInflateSize() >= 100)
@@ -188,8 +204,8 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 						setInflateSize(getInflateSize() - 4);
 				}
 			}
-			
-			if (ticksExisted > 200 && (getType() == 1 ||  getType() == 3)) {
+
+			if (ticksExisted > 200 && (getType() == 1 ||  getType() == 2 ||  getType() == 3)) {
 				if (getInflateSize() < 100)
 					setInflateSize(getInflateSize() + 4);
 				if (getInflateSize() >= 100) {
@@ -197,7 +213,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 					explode();
 				}
 			}
-			
+
 			if (getType() == 3) {
 				if (!canAttack) {
 					tasks.removeTask(meleeAttack);
@@ -232,12 +248,76 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 		super.onUpdate();
 	}
 
+	@Override
+	protected void onDeathUpdate() {
+		++this.deathTime;
+
+		if (this.deathTime == 20) {
+			if (!this.world.isRemote && (this.isPlayer() || this.recentlyHit > 0 && this.canDropLoot()
+					&& this.world.getGameRules().getBoolean("doMobLoot"))) {
+				int i = this.getExperiencePoints(this.attackingPlayer);
+				i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
+				while (i > 0) {
+					int j = EntityXPOrb.getXPSplit(i);
+					i -= j;
+					this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
+				}
+			}
+
+			this.setDead();
+
+			/*
+			 * for (int k = 0; k < 20; ++k) { double d2 =
+			 * this.rand.nextGaussian() * 0.02D; double d0 =
+			 * this.rand.nextGaussian() * 0.02D; double d1 =
+			 * this.rand.nextGaussian() * 0.02D;
+			 * this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL,
+			 * this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) -
+			 * (double)this.width, this.posY + (double)(this.rand.nextFloat() *
+			 * this.height), this.posZ + (double)(this.rand.nextFloat() *
+			 * this.width * 2.0F) - (double)this.width, d2, d0, d1); }
+			 */
+		}
+	}
+
 	private void explode() {
+		getEntityWorld().setEntityState(this, POPPING_PARTICLES);
 		setDead();
 		if (getType() == 2) {
 			EntityDropHeldCloud cloud = new EntityDropHeldCloud(world);
 			cloud.setPosition(posX, posY, posZ);
 			world.spawnEntity(cloud);
+		}
+		world.playSound(null, getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.HOSTILE, 1F, 0.5F);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void handleStatusUpdate(byte id) {
+		super.handleStatusUpdate(id);
+		if (id == POPPING_PARTICLES) {
+			for (int i = 0, amount = 20 + getEntityWorld().rand.nextInt(4); i < amount; i++) {
+				double offSetX = getEntityWorld().rand.nextDouble() * 2F - 1F;
+				double offSetZ = getEntityWorld().rand.nextDouble() * 2F - 1F;
+				BLParticles.ITEM_BREAKING.spawn(world, this.posX + (float) offSetX + (world.rand.nextDouble() * 0.25D - 0.125D) , this.posY + 0.5F, this.posZ + (float) offSetZ + (world.rand.nextDouble() * 0.25D - 0.125D), ParticleArgs.get().withData(new ItemStack(ItemRegistry.PUFFSHROOM_TENDRIL)));
+			}
+		}
+		//TODO - Ideally these should move along a vector from the entity position to the getOwnerPos() 
+		if (id == HEAL_PARTICLES) {
+			for (int i = 0, amount = 10; i < amount; i++) {
+				double offSetX = getEntityWorld().rand.nextDouble() * 0.5F - 0.25F;
+				double offSetY = getEntityWorld().rand.nextDouble() * 0.5F - 0.25F;
+				double offSetZ = getEntityWorld().rand.nextDouble() * 0.5F - 0.25F;
+				BLParticles.SPOREMINION_HEALTH.spawn(world, this.posX +  offSetX + world.rand.nextDouble() * 0.25D - 0.125D, this.posY + offSetY + 0.5F + world.rand.nextDouble() * 0.25D - 0.125D, this.posZ + offSetZ + world.rand.nextDouble() * 0.25D - 0.125D, ParticleArgs.get().withColor(0, 1, 0, 0.5F));
+			}
+		}
+		if (id == HURT_PARTICLES) {
+			for (int i = 0, amount = 10; i < amount; i++) {
+				double offSetX = getEntityWorld().rand.nextDouble() * 0.5F - 0.25F;
+				double offSetY = getEntityWorld().rand.nextDouble() * 0.5F - 0.25F;
+				double offSetZ = getEntityWorld().rand.nextDouble() * 0.5F - 0.25F;
+				BLParticles.SPOREMINION_HEALTH.spawn(world, this.posX +  offSetX + world.rand.nextDouble() * 0.25D - 0.125D, this.posY + offSetY + 0.5F + world.rand.nextDouble() * 0.25D - 0.125D, this.posZ + offSetZ + world.rand.nextDouble() * 0.25D - 0.125D, ParticleArgs.get().withColor(0, 0, 0, 0.5F));
+			}
 		}
 	}
 
@@ -245,11 +325,18 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	public void setDead() {
 		// parent healing/damage
 		if (getOwner() instanceof EntityBigPuffshroom) {
+			EntityBigPuffshroom big_puffshroom = (EntityBigPuffshroom) getOwner();
 			if (!poppedNaturally) {
-				if (getType() == 1)
-					((EntityLivingBase) getOwner()).heal(2F);
-				if (getType() == 3)
-					((EntityLivingBase) getOwner()).attackEntityFrom(DamageSource.GENERIC, 2F);
+				if (getType() == 1) {
+					setOwnerPos(big_puffshroom.getPosition());
+					getEntityWorld().setEntityState(this, HEAL_PARTICLES);
+					big_puffshroom.heal(5F);
+				}
+				if (getType() == 3) {
+					setOwnerPos(big_puffshroom.getPosition());
+					getEntityWorld().setEntityState(this, HURT_PARTICLES);
+					big_puffshroom.attackEntityFrom(sporeminionDamage, 5F);
+				}
 			}
 		}
 		super.setDead();
@@ -257,9 +344,9 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 
 	@Override
 	protected boolean isMovementBlocked() {
-		return getInflateSize() > 0;//getType() == 2 && ;
+		return getInflateSize() > 0;
 	}
-	
+
 	@Override
 	public boolean attackEntityAsMob(Entity entity) {
 		if (canEntityBeSeen(entity)) {
@@ -361,16 +448,16 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	protected boolean canDespawn() {
 		return true;
 	}
-	
+
 	@Override
 	protected ResourceLocation getLootTable() {
 		return null;//LootTableRegistry.SPORELING;
 	}
-	
+
 	public void setJumpHeightOverride(float jumpHeightOverride) {
 		this.jumpHeightOverride = jumpHeightOverride;
 	}
-	
+
 	@Override
 	protected float getJumpUpwardsMotion() {
 		if(this.jumpHeightOverride > 0) {
@@ -396,7 +483,7 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	public int getType() {
 		return dataManager.get(TYPE);
 	}
-	
+
 	public void setInflateSize(int size) {
 		dataManager.set(INFLATE_SIZE, size);
 	}
@@ -404,16 +491,24 @@ public class EntitySporeMinion extends EntityMob implements IEntityBL {
 	public int getInflateSize() {
 		return dataManager.get(INFLATE_SIZE);
 	}
-	
+
     public void setOwnerId(@Nullable UUID uuidIn) {
         this.dataManager.set(OWNER_UNIQUE_ID, Optional.fromNullable(uuidIn));
     }
-	
+
+	public void setOwnerPos(BlockPos pos) {
+		dataManager.set(OWNER_POS, pos);
+	}
+
+	public BlockPos getOwnerPos() {
+		return dataManager.get(OWNER_POS);
+	}
+
     @Nullable
     public UUID getOwnerId() {
         return (UUID)((Optional)this.dataManager.get(OWNER_UNIQUE_ID)).orNull();
     }
-    
+
 	@Nullable
 	public Entity getOwner() {
 		if (!world.isRemote) {
