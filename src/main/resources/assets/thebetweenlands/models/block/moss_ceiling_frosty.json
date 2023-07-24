@@ -1,8 +1,8 @@
 {
 	"texture_size": [64, 64],
 	"textures": {
-		"0": "moss_ceiling",
-		"particle": "moss_ceiling"
+		"0": "thebetweenlands:blocks/moss_ceiling",
+		"particle": "thebetweenlands:blocks/moss_ceiling"
 	},
 	"elements": [
 		{

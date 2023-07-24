@@ -1,8 +1,8 @@
 {
 	"texture_size": [64, 64],
 	"textures": {
-		"1": "moss_floor",
-		"particle": "moss_floor"
+		"1": "thebetweenlands:blocks/moss_floor",
+		"particle": "thebetweenlands:blocks/moss_floor"
 	},
 	"elements": [
 		{
