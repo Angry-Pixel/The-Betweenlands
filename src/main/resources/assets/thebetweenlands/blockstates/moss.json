@@ -5,20 +5,36 @@
 		"custom": {
 			"model_base": "thebetweenlands:block/internal/spook_event",
 			"model_base_data": {
-				"model_base": "thebetweenlands:block/moss_north",
-				"model_active": "thebetweenlands:block/moss_north_spook"
+				"model_base": "thebetweenlands:block/moss_wall",
+				"model_active": "thebetweenlands:block/moss_wall_spook"
 			},
-			"model_active": "thebetweenlands:block/moss_north_frosty"
+			"model_active": "thebetweenlands:block/moss_wall_frosty"
 		}
 	},
 	"variants": {
 		"facing": {
-			"up": {
-				"x": 90
+			"up": { 
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/moss_floor",
+				"model_active": "thebetweenlands:block/moss_floor_spook"
 			},
+			"model_active": "thebetweenlands:block/moss_floor_frosty"
+		}
+	},
 			"down": {
-				"x": -90
+				"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/moss_ceiling",
+				"model_active": "thebetweenlands:block/moss_ceiling_spook"
 			},
+			"model_active": "thebetweenlands:block/moss_ceiling_frosty"
+		}
+	},
 			"south": {
 				
 			},
