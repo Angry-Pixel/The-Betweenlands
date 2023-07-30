@@ -705,7 +705,7 @@ tile.thebetweenlands.grub_hub.name=Colonie de vers
 tile.thebetweenlands.water_filter.name=Filtre à eau
 tile.thebetweenlands.moth_house.name=Cabane à mites
 tile.thebetweenlands.filtered_silt_glass_jar.name=Jarre en verre de limon filtré
-tile.thebetweenlands.ancient_remnant_block.name=Bloc de débris anciens
+tile.thebetweenlands.ancient_remnant_block.name=Bloc de débris ancien
 tile.thebetweenlands.lattice.name=Treillage
 tile.thebetweenlands.lattice_fine.name=Treillage affiné
 
@@ -1000,7 +1000,7 @@ item.thebetweenlands.lore_scrap.tower.name=Écrits de l’aventurier : La tour
 item.thebetweenlands.lore_scrap.fort.name=Écrits de l’aventurier : La forteresse
 item.thebetweenlands.angry_pebble.name=Caillou colérique
 item.thebetweenlands.inanimate_angry_pebble.name=Caillou colérique inanimé
-item.thebetweenlands.ancient_remnant.name=Débris anciens
+item.thebetweenlands.ancient_remnant.name=Débris ancien
 item.thebetweenlands.loot_scraps.name=Restes de butin
 item.thebetweenlands.fabricated_scroll.name=Parchemin fabriqué
 item.thebetweenlands.swift_pick.name="Swift Pick"
