@@ -28,39 +28,45 @@ public class GuiFishStaminaBar extends Gui {
 	@SubscribeEvent
 	public void onRenderHUD(RenderGameOverlayEvent.Post event) {
 		Minecraft mc = Minecraft.getMinecraft();
-		if (event.getType().equals(RenderGameOverlayEvent.ElementType.HOTBAR)) {
-			EntityPlayerSP player = mc.player;
-			if (player != null && player.fishEntity != null && player.fishEntity instanceof EntityBLFishHook) {
-				if (player.fishEntity.isRiding() && player.fishEntity.getRidingEntity() instanceof EntityAnadia) {
+		if (!event.getType().equals(RenderGameOverlayEvent.ElementType.HOTBAR)) {
+			return;
+		}
+		
+		EntityPlayerSP player = mc.player;
+		if (player == null || player.fishEntity == null || player.fishEntity instanceof EntityBLFishHook == false) {
+			return;
+		}
+	
+		if (player.fishEntity.isRiding() && player.fishEntity.getRidingEntity() instanceof EntityAnadia) {
+
+			final EntityAnadia fish = ((EntityAnadia) player.fishEntity.getRidingEntity());
 			
-					int fishpos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getStaminaTicks() * 256 / 180;
-					int escapepos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getEscapeTicks() * 256 / 1024;
-					int helpMe = (int) ((EntityAnadia) player.fishEntity.getRidingEntity()).getStaminaMods() * 30;
-					int escapeDelay = ((EntityAnadia) player.fishEntity.getRidingEntity()).getEscapeDelay();
-					int obstructpos1 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction1Ticks();
-					int obstructpos2 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction2Ticks();
-					int obstructpos3 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction3Ticks();
-					int obstructpos4 = ((EntityAnadia) player.fishEntity.getRidingEntity()).getObstruction4Ticks() * 256 / 512;
-					int treasurePos = ((EntityAnadia) player.fishEntity.getRidingEntity()).getTreasureTicks() * 256 / 1024;
-					boolean showTreasure = ((EntityAnadia) player.fishEntity.getRidingEntity()).isTreasureFish();
-					boolean treasureUnlocked = ((EntityAnadia) player.fishEntity.getRidingEntity()).getTreasureUnlocked();
-					int aniFrame = ((EntityAnadia) player.fishEntity.getRidingEntity()).animationFrame;
-					int aniFrameCrab = ((EntityAnadia) player.fishEntity.getRidingEntity()).animationFrameCrab;
-					
-					mc.renderEngine.bindTexture(GUI_TEXTURE);
-					
-					GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-					GlStateManager.enableAlpha();
-					GlStateManager.enableBlend();
-					GlStateManager.color(1F, 1F, 1F, 1F);
-					
-					ScaledResolution res = new ScaledResolution(mc);
-					if(((EntityAnadia) player.fishEntity.getRidingEntity()).getStaminaTicks() <= 0)
-						renderNetBar((float)res.getScaledWidth() * 0.5F - 128F, (float)res.getScaledHeight() * 0.5F - 120F, 240, 4, aniFrame);
-					else
-						renderStaminaBar(-256 + fishpos, -256 + Math.min(256, escapepos),  escapeDelay < 10 ? escapeDelay: 10, 0 - obstructpos1, 0 - obstructpos2, 0 - obstructpos3, 0 - obstructpos4, 0 - treasurePos, showTreasure, treasureUnlocked, (float)res.getScaledWidth() * 0.5F - 128F, (float)res.getScaledHeight() * 0.5F - 120F, aniFrame, aniFrameCrab);
-				}
-			}
+			int fishpos = fish.getStaminaTicks() * 256 / 180;
+			int escapepos = fish.getEscapeTicks() * 256 / 1024;
+			int helpMe = (int) fish.getStaminaMods() * 30;
+			int escapeDelay = fish.getEscapeDelay();
+			int obstructpos1 = fish.getObstruction1Ticks();
+			int obstructpos2 = fish.getObstruction2Ticks();
+			int obstructpos3 = fish.getObstruction3Ticks();
+			int obstructpos4 = fish.getObstruction4Ticks() * 256 / 512;
+			int treasurePos = fish.getTreasureTicks() * 256 / 1024;
+			boolean showTreasure = fish.isTreasureFish();
+			boolean treasureUnlocked = fish.getTreasureUnlocked();
+			int aniFrame = fish.animationFrame;
+			int aniFrameCrab = fish.animationFrameCrab;
+			
+			mc.renderEngine.bindTexture(GUI_TEXTURE);
+			
+			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+			GlStateManager.enableAlpha();
+			GlStateManager.enableBlend();
+			GlStateManager.color(1F, 1F, 1F, 1F);
+			
+			ScaledResolution res = new ScaledResolution(mc);
+			if(fish.getStaminaTicks() <= 0)
+				renderNetBar((float)res.getScaledWidth() * 0.5F - 128F, (float)res.getScaledHeight() * 0.5F - 120F, 240, 4, aniFrame);
+			else
+				renderStaminaBar(-256 + fishpos, -256 + Math.min(256, escapepos),  escapeDelay < 10 ? escapeDelay: 10, 0 - obstructpos1, 0 - obstructpos2, 0 - obstructpos3, 0 - obstructpos4, 0 - treasurePos, showTreasure, treasureUnlocked, (float)res.getScaledWidth() * 0.5F - 128F, (float)res.getScaledHeight() * 0.5F - 120F, aniFrame, aniFrameCrab);
 		}
 	}
 

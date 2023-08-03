@@ -43,29 +43,39 @@ public class EntityJellyfishCave extends EntityJellyfish implements IMob, net.mi
 		this.tasks.addTask(2, new EntityAIWander(this, 0.5D, 20));
 		this.targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
 	}
+	
+	private void tryDamagingTarget() {
+		if(this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+			return;
+		}
+		
+		EntityLivingBase target = this.getAttackTarget();
+
+		if(target == null) {
+			return;
+		}
+		
+		double dst = this.getDistance(target);
+
+		if(dst < 6.0f && this.world.rand.nextInt(20) == 0) {
+			this.world.setEntityState(this, EVENT_SPARK);
+		}
+
+		if(dst < 3.0f && this.ticksExisted % 20 == 0) {
+			if(canEntityBeSeen(target) && target.isInWater()) {
+				this.world.spawnEntity(new EntityShock(this.world, this, this, (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 0.75f, true));
+				getEntityWorld().playSound(null, getPosition(), SoundRegistry.JELLYFISH_ZAP, SoundCategory.HOSTILE, 1F, 0.8F + rand.nextFloat());
+			}
+		}
+	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-
-		if(this.world.getDifficulty() != EnumDifficulty.PEACEFUL) {
-			EntityLivingBase target = this.getAttackTarget();
-
-			if(target != null) {
-				double dst = this.getDistance(target);
-
-				if(dst < 6.0f && this.world.rand.nextInt(20) == 0) {
-					this.world.setEntityState(this, EVENT_SPARK);
-				}
-
-				if(dst < 3.0f && this.ticksExisted % 20 == 0) {
-					if(canEntityBeSeen(target) && target.isInWater()) {
-						this.world.spawnEntity(new EntityShock(this.world, this, this, (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 0.75f, true));
-						getEntityWorld().playSound(null, getPosition(), SoundRegistry.JELLYFISH_ZAP, SoundCategory.HOSTILE, 1F, 0.8F + rand.nextFloat());
-					}
-				}
-			}
-		}
+		
+		tryDamagingTarget();
+		
+		//other AI goes here
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -81,18 +91,21 @@ public class EntityJellyfishCave extends EntityJellyfish implements IMob, net.mi
 	@SideOnly(Side.CLIENT)
 	private void spawnLightningArcs() {
 		Entity view = Minecraft.getMinecraft().getRenderViewEntity();
-		if(view != null && view.getDistance(this) < 16) {
-			float ox = this.world.rand.nextFloat() - 0.5f + (float)this.motionX;
-			float oy = this.world.rand.nextFloat() - 0.5f + (float)this.motionY;
-			float oz = this.world.rand.nextFloat() - 0.5f + (float)this.motionZ;
-
-			Particle particle = BLParticles.LIGHTNING_ARC.create(this.world, this.posX, this.posY + this.height * 0.5f, this.posZ, 
-					ParticleArgs.get()
-					.withMotion(this.motionX, this.motionY, this.motionZ)
-					.withColor(0.3f, 0.5f, 1.0f, 0.9f)
-					.withData(new Vec3d(this.posX + ox, this.posY + this.height * 0.5f + oy, this.posZ + oz)));
-
-			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, particle);
+		if(view == null || view.getDistance(this) > 16) {
+			return;
 		}
+		
+		
+		float ox = this.world.rand.nextFloat() - 0.5f + (float)this.motionX;
+		float oy = this.world.rand.nextFloat() - 0.5f + (float)this.motionY;
+		float oz = this.world.rand.nextFloat() - 0.5f + (float)this.motionZ;
+
+		Particle particle = BLParticles.LIGHTNING_ARC.create(this.world, this.posX, this.posY + this.height * 0.5f, this.posZ, 
+				ParticleArgs.get()
+				.withMotion(this.motionX, this.motionY, this.motionZ)
+				.withColor(0.3f, 0.5f, 1.0f, 0.9f)
+				.withData(new Vec3d(this.posX + ox, this.posY + this.height * 0.5f + oy, this.posZ + oz)));
+
+		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, particle);
 	}
 }
