@@ -155,64 +155,92 @@ public class ItemRingOfFlight extends ItemRing {
 
 	@SubscribeEvent
 	public static void onPlayerTick(PlayerTickEvent event) {
-		if(event.player != null) {
-			EntityPlayer player = event.player;
-			if(!player.capabilities.isCreativeMode) {
-				IFlightCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FLIGHT, null);
-				if(cap != null) {
-					if(cap.isFlying()) {
-						cap.setFlightTime(cap.getFlightTime() + 1);
-					}
-					ItemStack flightRing = ItemStack.EMPTY;
+		if(event.player == null) {
+			return;
+		}
+		
+		EntityPlayer player = event.player;
+		if(player.capabilities.isCreativeMode) {
+			return;
+		}
+		
+		IFlightCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FLIGHT, null);
+		if(cap == null) {
+			return;
+		}
+		
+		if(cap.isFlying()) {
+			cap.setFlightTime(cap.getFlightTime() + 1);
+		}
+		ItemStack flightRing = ItemStack.EMPTY;
 
-					IEquipmentCapability equipmentCap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-					if(equipmentCap != null) {
-						IInventory inv = equipmentCap.getInventory(EnumEquipmentInventory.RING);
-						for(int i = 0; i < inv.getSizeInventory(); i++) {
-							ItemStack stack = inv.getStackInSlot(i);
-							if(!stack.isEmpty() && stack.getItem() == ItemRegistry.RING_OF_FLIGHT) {
-								flightRing = stack;
-								break;
-							}
-						}
-					}
+		IEquipmentCapability equipmentCap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		if(equipmentCap != null) {
+			IInventory inv = equipmentCap.getInventory(EnumEquipmentInventory.RING);
+			for(int i = 0; i < inv.getSizeInventory(); i++) {
+				ItemStack stack = inv.getStackInSlot(i);
+				if(!stack.isEmpty() && stack.getItem() == ItemRegistry.RING_OF_FLIGHT) {
+					flightRing = stack;
+					break;
+				}
+			}
+		}
 
-					if(!flightRing.isEmpty() && player.world.isRemote) {
-						if(!cap.canFlyWithoutRing(player) && cap.canFlyWithRing(player, flightRing)) {
-							if(event.phase == Phase.START) {
-								player.capabilities.isFlying = false;
-							} else {
-								if(player.capabilities.isFlying) {
-									cap.setFlying(!cap.isFlying());
-									if(player == TheBetweenlands.proxy.getClientPlayer()) {
-										TheBetweenlands.networkWrapper.sendToServer(new MessageFlightState(cap.isFlying()));
-									}
-								}
-							}
-						} else if(cap.isFlying()) {
-							cap.setFlying(false);
-							if(player == TheBetweenlands.proxy.getClientPlayer()) {
-								TheBetweenlands.networkWrapper.sendToServer(new MessageFlightState(cap.isFlying()));
+		if(!flightRing.isEmpty() && player.world.isRemote) {
+			if(!cap.canFlyWithoutRing(player) && cap.canFlyWithRing(player, flightRing)) {
+				if(event.phase == Phase.START) {
+					player.capabilities.isFlying = false;
+				} else {
+					if(player.capabilities.isFlying) {
+						cap.setFlying(!cap.isFlying());
+						if(player == TheBetweenlands.proxy.getClientPlayer()) {
+							TheBetweenlands.networkWrapper.sendToServer(new MessageFlightState(cap.isFlying()));
+						}
+					}
+				}
+				
+				if(player != TheBetweenlands.proxy.getClientPlayer()) {
+					if(cap.isFlying() && !player.onGround) {
+						if(cap.getFlightTime() > 40) {
+							BLParticles.LEAF_SWIRL.spawn(player.world, player.posX, player.posY, player.posZ, ParticleArgs.get().withData(400, 0.0F, player));
+						} else {
+							for(int i = 0; i < 5; i++) {
+								BLParticles.LEAF_SWIRL.spawn(player.world, player.posX, player.posY, player.posZ, ParticleArgs.get().withData(400, 1.0F - (cap.getFlightTime() + i / 5.0F) / 40.0F, player));
 							}
 						}
 					}
-					if(player == TheBetweenlands.proxy.getClientPlayer() && player.ticksExisted % 20 == 0) {
-						TheBetweenlands.networkWrapper.sendToServer(new MessageFlightState(cap.isFlying()));
-					}
-					if(event.phase == Phase.END) {
-						if(flightRing.isEmpty() || !cap.isFlying()) {
-							if(cap.getFlightRing()) {
-								if(!cap.canFlyWithoutRing(player)) {
-									player.capabilities.isFlying = false;
-									player.capabilities.allowFlying = false;
-									if(player.world.isRemote) {
-										player.capabilities.setFlySpeed(0.05F);
-									}
-								}
-								cap.setFlightRing(false);
+				}
+			} else if(cap.isFlying()) {
+				cap.setFlying(false);
+				if(player == TheBetweenlands.proxy.getClientPlayer()) {
+					TheBetweenlands.networkWrapper.sendToServer(new MessageFlightState(cap.isFlying()));
+				} else {
+					if(!player.onGround) {
+						if(cap.getFlightTime() > 40) {
+							BLParticles.LEAF_SWIRL.spawn(player.world, player.posX, player.posY, player.posZ, ParticleArgs.get().withData(400, 0.0F, player));
+						} else {
+							for(int i = 0; i < 5; i++) {
+								BLParticles.LEAF_SWIRL.spawn(player.world, player.posX, player.posY, player.posZ, ParticleArgs.get().withData(400, 1.0F - (cap.getFlightTime() + i / 5.0F) / 40.0F, player));
 							}
 						}
 					}
+				}
+			}
+		}
+		if(player == TheBetweenlands.proxy.getClientPlayer() && player.ticksExisted % 20 == 0) {
+			TheBetweenlands.networkWrapper.sendToServer(new MessageFlightState(cap.isFlying()));
+		}
+		if(event.phase == Phase.END) {
+			if(flightRing.isEmpty() || !cap.isFlying()) {
+				if(cap.getFlightRing()) {
+					if(!cap.canFlyWithoutRing(player)) {
+						player.capabilities.isFlying = false;
+						player.capabilities.allowFlying = false;
+						if(player.world.isRemote) {
+							player.capabilities.setFlySpeed(0.05F);
+						}
+					}
+					cap.setFlightRing(false);
 				}
 			}
 		}
