@@ -116,7 +116,7 @@ public class CommandBLEvent extends CommandBase {
 
 	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
-		if (BetweenlandsWorldStorage.forWorld(sender.getEntityWorld()) == null) {
+		if (BetweenlandsWorldStorage.forWorldNullable(sender.getEntityWorld()) == null) {
 			return Collections.<String>emptyList();
 		}
 		List<String> completions = null;

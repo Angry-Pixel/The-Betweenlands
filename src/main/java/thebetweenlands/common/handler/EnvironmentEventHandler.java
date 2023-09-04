@@ -26,7 +26,7 @@ public class EnvironmentEventHandler {
 	@SubscribeEvent
 	public static void onWorldTick(WorldTickEvent event) {
 		if(event.phase == Phase.END && !event.world.isRemote) {
-			BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(event.world);
+			BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorldNullable(event.world);
 
 			if(storage != null) {
 				BLEnvironmentEventRegistry reg = storage.getEnvironmentEventRegistry();
