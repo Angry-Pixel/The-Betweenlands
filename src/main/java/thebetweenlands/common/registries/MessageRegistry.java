@@ -34,6 +34,7 @@ import thebetweenlands.common.network.clientbound.MessageShowFoodSicknessLine;
 import thebetweenlands.common.network.clientbound.MessageSoundRipple;
 import thebetweenlands.common.network.clientbound.MessageSummonPeatMummyParticles;
 import thebetweenlands.common.network.clientbound.MessageSyncChunkStorage;
+import thebetweenlands.common.network.clientbound.MessageSyncDeathSpread;
 import thebetweenlands.common.network.clientbound.MessageSyncDraetonLeakages;
 import thebetweenlands.common.network.clientbound.MessageSyncEntityCapabilities;
 import thebetweenlands.common.network.clientbound.MessageSyncEnvironmentEventData;
@@ -97,6 +98,7 @@ public class MessageRegistry {
 		registerMessage(MessageShockArrowHit.class, Side.CLIENT);
 		registerMessage(MessageShockParticle.class, Side.CLIENT);
 		registerMessage(MessageInfestWeedwoodBush.class, Side.CLIENT);
+		registerMessage(MessageSyncDeathSpread.class, Side.CLIENT);
 
 		registerMessage(MessageEquipItem.class, Side.SERVER);
 		registerMessage(MessageOpenPouch.class, Side.SERVER);
