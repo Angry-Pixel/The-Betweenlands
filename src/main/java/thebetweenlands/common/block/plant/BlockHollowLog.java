@@ -55,18 +55,19 @@ public class BlockHollowLog extends BlockHorizontal {
 		return Block.FULL_BLOCK_AABB;
 	}
 
-	protected void addBox(EnumFacing facing, IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState) {
+	protected void tryAddCollisionBox(EnumFacing blockFace, IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState) {
 		
 		// dont add collision to faces where they are connected to other logs
-		if(facing.getAxis() != EnumFacing.Axis.Y && worldIn.isBlockLoaded(pos.offset(facing))) {
-			IBlockState lstate = worldIn.getBlockState(pos.offset(facing));
-			if(lstate.getBlock() == BlockRegistry.HOLLOW_LOG && lstate.getValue(FACING).getAxis() == facing.getAxis()) {
+		if(blockFace.getAxis() != EnumFacing.Axis.Y && worldIn.isBlockLoaded(pos.offset(facing))) {
+			IBlockState otherstate = worldIn.getBlockState(pos.offset(blockFace));
+			if(otherstate.getBlock() == BlockRegistry.HOLLOW_LOG && otherstate.getValue(FACING).getAxis() == blockFace.getAxis()) {
 				return;
 			} 
 		}
 		
+		// not my cleanest code, could do something with an array here?
 		AxisAlignedBB box;
-		switch(facing) {
+		switch(blockFace) {
 			case UP:
 				box = TOP_BOUNDING_BOX;
 				break;
@@ -95,26 +96,26 @@ public class BlockHollowLog extends BlockHorizontal {
 	@Override
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState) {
 		
+		//probably should do something with getActualState() for performance, like stairs do
+
 		EnumFacing facing = state.getValue(FACING);
 
-		//don't do any special checks for top and bottom faces
+		// don't do any special checks for top and bottom faces, they're always there
 		addCollisionBoxToList(pos, entityBox, collidingBoxes, TOP_BOUNDING_BOX);
 		addCollisionBoxToList(pos, entityBox, collidingBoxes, BOTTOM_BOUNDING_BOX);
 		
-		//only add collision to sides that should be solid
-		switch(facing) {
-			case NORTH:
-			case SOUTH:
-				addBox(EnumFacing.EAST, state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
-				addBox(EnumFacing.WEST, state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
+		// only add collision to sides that should be solid
+		switch(facing.getAxis()) {
+			case EnumFacing.Axis.Z: // NORTH and SOUTH
+				tryAddCollisionBox(EnumFacing.EAST, state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
+				tryAddCollisionBox(EnumFacing.WEST, state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
 				break;
-			case EAST:
-			case WEST:
-				addBox(EnumFacing.NORTH, state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
-				addBox(EnumFacing.SOUTH, state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
+			case EnumFacing.Axis.X: // EAST and WEST
+				tryAddCollisionBox(EnumFacing.NORTH, state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
+				tryAddCollisionBox(EnumFacing.SOUTH, state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
 				break;
 			default:
-				//don't do any special collision checks for an invalid log
+				// don't do any special collision checks for an invalid log
 				addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_BOUNDING_BOX);
 				addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_BOUNDING_BOX);
 				addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_BOUNDING_BOX);
