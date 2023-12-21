@@ -6,30 +6,35 @@ import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.EnumHelper;
 
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+
 public class BLMaterialRegistry {
-	public static final ToolMaterial TOOL_WEEDWOOD = EnumHelper.addToolMaterial("weedwood", 0, 80, 2.0F, 0.0F, 0);
-	public static final ToolMaterial TOOL_BONE = EnumHelper.addToolMaterial("bone", 1, 320, 4.0F, 1.0F, 0);
-	public static final ToolMaterial TOOL_LURKER_SKIN = EnumHelper.addToolMaterial("bone", 1, 600, 5.0F, 1.0F, 0);
-	public static final ToolMaterial TOOL_DENTROTHYST = EnumHelper.addToolMaterial("dentrothyst", 1, 600, 7.0F, 1.0F, 0);
-	public static final ToolMaterial TOOL_OCTINE = EnumHelper.addToolMaterial("octine", 2, 900, 6.0F, 2.0F, 0);
-	public static final ToolMaterial TOOL_SYRMORITE = EnumHelper.addToolMaterial("syrmorite", 2, 900, 6.0F, 2.0F, 0);
-	public static final ToolMaterial TOOL_VALONITE = EnumHelper.addToolMaterial("valonite", 3, 2500, 8.0F, 3.0F, 0);
+	public static final ToolMaterial TOOL_WEEDWOOD = EnumHelper.addToolMaterial("weedwood", 0, 80, 2.0F, 0.0F, 0)		.setRepairItem(new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
+	public static final ToolMaterial TOOL_BONE = EnumHelper.addToolMaterial("bone", 1, 320, 4.0F, 1.0F, 0)			.setRepairItem(EnumItemMisc.SLIMY_BONE.create(1));
+	public static final ToolMaterial TOOL_LURKER_SKIN = EnumHelper.addToolMaterial("lurker_skin", 1, 600, 5.0F, 1.0F, 0)	.setRepairItem(EnumItemMisc.LURKER_SKIN.create(1));
+	public static final ToolMaterial TOOL_DENTROTHYST = EnumHelper.addToolMaterial("dentrothyst", 1, 600, 7.0F, 1.0F, 0);	// not sure what to do about this one
+	public static final ToolMaterial TOOL_OCTINE = EnumHelper.addToolMaterial("octine", 2, 900, 6.0F, 2.0F, 0)		.setRepairItem(new ItemStack(ItemRegistry.OCTINE_INGOT));
+	public static final ToolMaterial TOOL_SYRMORITE = EnumHelper.addToolMaterial("syrmorite", 2, 900, 6.0F, 2.0F, 0)	.setRepairItem(EnumItemMisc.SYRMORITE_INGOT.create(1));
+	public static final ToolMaterial TOOL_VALONITE = EnumHelper.addToolMaterial("valonite", 3, 2500, 8.0F, 3.0F, 0)		.setRepairItem(EnumItemMisc.VALONITE_SHARD.create(1));
 	public static final ToolMaterial TOOL_LOOT = EnumHelper.addToolMaterial("loot", 3, 7500, 2.0F, 0.5F, 0);
 	public static final ToolMaterial TOOL_LEGEND = EnumHelper.addToolMaterial("legend", 6, 10000, 16.0F, 6.0F, 0);
 
 	//TODO add armor equip sounds maybe
-	public static final ArmorMaterial ARMOR_DECORATIVE = EnumHelper.addArmorMaterial("decorative", "decorative", 6, new int[]{0, 0, 0, 0}, 0, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0.0f);
-	public static final ArmorMaterial ARMOR_BL_CLOTH = EnumHelper.addArmorMaterial("bl_cloth", "bl_cloth", 12, new int[]{1, 2, 3, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0f);
-	public static final ArmorMaterial ARMOR_LURKER_SKIN = EnumHelper.addArmorMaterial("lurker_skin", "lurker_skin", 12, new int[]{1, 2, 3, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0f);
-	public static final ArmorMaterial ARMOR_BONE = EnumHelper.addArmorMaterial("slimy_bone", "slimy_bone", 6, new int[]{1, 3, 5, 2}, 0, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0.0f);
-	public static final ArmorMaterial ARMOR_SYRMORITE = EnumHelper.addArmorMaterial("syrmorite", "syrmorite", 16, new int[]{2, 5, 6, 2}, 0, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0f);
-	public static final ArmorMaterial ARMOR_VALONITE = EnumHelper.addArmorMaterial("valonite", "valonite", 35, new int[]{3, 6, 8, 3}, 0, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.0f);
-	public static final ArmorMaterial ARMOR_RUBBER = EnumHelper.addArmorMaterial("rubber", "rubber", 10, new int[]{1, 0, 0, 0}, 0, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0f);
-	public static final ArmorMaterial ARMOR_LEGEND = EnumHelper.addArmorMaterial("legend", "legend", 66, new int[]{6, 12, 16, 6}, 0, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.0f);
-	public static final ArmorMaterial ARMOR_ANCIENT = EnumHelper.addArmorMaterial("ancient", "ancient", 35, new int[]{3, 6, 8, 3}, 0, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 3.0f);
-	public static final ArmorMaterial ARMOR_AMPHIBIOUS = EnumHelper.addArmorMaterial("amphibious", "amphibious", 12, new int[]{1, 2, 3, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0f);
+	public static final ArmorMaterial ARMOR_DECORATIVE = 	EnumHelper.addArmorMaterial("decorative", "decorative", 6, new int[]{0, 0, 0, 0}, 0, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0.0f);
+	public static final ArmorMaterial ARMOR_BL_CLOTH = 	EnumHelper.addArmorMaterial("bl_cloth", "bl_cloth", 12, new int[]{1, 2, 3, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0f);
+	public static final ArmorMaterial ARMOR_LURKER_SKIN = 	EnumHelper.addArmorMaterial("lurker_skin", "lurker_skin", 12, new int[]{1, 2, 3, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0f)	.setRepairItem(EnumItemMisc.LURKER_SKIN.create(1));
+	public static final ArmorMaterial ARMOR_BONE = 		EnumHelper.addArmorMaterial("slimy_bone", "slimy_bone", 6, new int[]{1, 3, 5, 2}, 0, SoundEvents.ITEM_ARMOR_EQUIP_CHAIN, 0.0f)		.setRepairItem(EnumItemMisc.SLIMY_BONE.create(1));
+	public static final ArmorMaterial ARMOR_SYRMORITE = 	EnumHelper.addArmorMaterial("syrmorite", "syrmorite", 16, new int[]{2, 5, 6, 2}, 0, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0.0f)		.setRepairItem(EnumItemMisc.SYRMORITE_INGOT.create(1));
+	public static final ArmorMaterial ARMOR_VALONITE = 	EnumHelper.addArmorMaterial("valonite", "valonite", 35, new int[]{3, 6, 8, 3}, 0, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.0f)		.setRepairItem(EnumItemMisc.VALONITE_SHARD.create(1));
+	public static final ArmorMaterial ARMOR_RUBBER = 	EnumHelper.addArmorMaterial("rubber", "rubber", 10, new int[]{1, 0, 0, 0}, 0, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0.0f)		.setRepairItem(EnumItemMisc.RUBBER_BALL.create(1));
+	public static final ArmorMaterial ARMOR_LEGEND = 	EnumHelper.addArmorMaterial("legend", "legend", 66, new int[]{6, 12, 16, 6}, 0, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 2.0f);
+	public static final ArmorMaterial ARMOR_ANCIENT = 	EnumHelper.addArmorMaterial("ancient", "ancient", 35, new int[]{3, 6, 8, 3}, 0, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 3.0f);
+	public static final ArmorMaterial ARMOR_AMPHIBIOUS = 	EnumHelper.addArmorMaterial("amphibious", "amphibious", 12, new int[]{1, 2, 3, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0.0f)	.setRepairItem(EnumItemMisc.LURKER_SKIN.create(1));
 
 	public static final Material MUD = new Material(MapColor.DIRT) {
 		@Override
