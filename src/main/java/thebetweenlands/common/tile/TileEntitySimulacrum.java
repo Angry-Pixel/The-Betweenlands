@@ -697,7 +697,7 @@ public class TileEntitySimulacrum extends TileEntityRepeller implements ITickabl
 						player.world.spawnEntity(xpOrb);
 					}
 
-					if(entity.world.rand.nextBoolean()) {
+					if(entity.world.rand.nextBoolean() || entity.posY <= -64) {
 						BlockPos spawnPoint = PlayerRespawnHandler.getSpawnPointNearPos(entity.world, location, 8, false, 4, 0);
 
 						if(spawnPoint != null) {
