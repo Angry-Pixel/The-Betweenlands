@@ -102,7 +102,9 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
 	                    }
 	                }
                 }
-                inventory.get(1).setItemDamage(inventory.get(1).getItemDamage() + this.requiredLifeCount);
+                ItemStack crystalStack = inventory.get(1);
+                if(crystalStack.isItemStackDamageable())
+                    crystalStack.setItemDamage(crystalStack.getItemDamage() + this.requiredLifeCount);
                 markDirty();
                 this.itemAnimated = true;
             }
