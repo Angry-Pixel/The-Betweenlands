@@ -86,7 +86,7 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		super.getDrops(drops, world, pos, state, fortune);
-		if(state.getValue(VISIBLE)) {
+		if(state.getValue(VISIBLE) && harvesters.get() != null) {
 			drops.add(new ItemStack(Item.getItemFromBlock(this), 1));
 		}
 	}
