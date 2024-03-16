@@ -34,6 +34,8 @@ import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 import thebetweenlands.common.world.storage.location.LocationSpiritTree;
 import thebetweenlands.util.AdvancedStateMap.Builder;
 
+import net.minecraft.util.NonNullList;
+
 public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 	protected static final AxisAlignedBB WISP_AABB = new AxisAlignedBB(0.2F, 0.2F, 0.2F, 0.8F, 0.8F, 0.8F);
 
@@ -73,11 +75,19 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 		return null;
 	}
 
+	// @Override
+	// public void onPlayerDestroy(World world, BlockPos pos, IBlockState state) {
+	// 	if(!world.isRemote && state.getValue(VISIBLE)) {
+	// 		EntityItem wispItem = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(Item.getItemFromBlock(this), 1));
+	// 		world.spawnEntity(wispItem);
+	// 	}
+	// }
+
 	@Override
-	public void onPlayerDestroy(World world, BlockPos pos, IBlockState state) {
-		if(!world.isRemote && state.getValue(VISIBLE)) {
-			EntityItem wispItem = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(Item.getItemFromBlock(this), 1));
-			world.spawnEntity(wispItem);
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		super.getDrops(drops, world, pos, state, fortune);
+		if(state.getValue(VISIBLE) && harvesters.get() != null) {
+			drops.add(new ItemStack(Item.getItemFromBlock(this), 1));
 		}
 	}
 
