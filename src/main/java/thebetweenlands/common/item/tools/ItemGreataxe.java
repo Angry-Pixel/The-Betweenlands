@@ -13,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
@@ -146,9 +147,14 @@ public class ItemGreataxe extends ItemGreatsword {
 		return 0;
 	}
 
+//	@Override
+//	public double getReach() {
+//		return 2.5D;
+//	}
+	
 	@Override
-	public double getReach() {
-		return 2.5D;
+	public double getReachModifier(EntityPlayer player, ItemStack stack) {
+		return -2.0F;
 	}
 
 	@Override

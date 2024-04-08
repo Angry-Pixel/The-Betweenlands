@@ -12,6 +12,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
@@ -51,11 +52,16 @@ public class ItemAncientBattleAxe extends ItemGreataxe {
 		return 2.2D;
 	}
 
-	@Override
-	public double getReach() {
-		return 3.5D;
-	}
+//	@Override
+//	public double getReach() {
+//		return 3.5D;
+//	}
 
+	@Override
+	public double getReachModifier(EntityPlayer player, ItemStack stack) {
+		return -1.0F;
+	}
+	
 	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot equipmentSlot, ItemStack stack) {
 		if(equipmentSlot == EntityEquipmentSlot.MAINHAND && stack.getItemDamage() == stack.getMaxDamage()) {

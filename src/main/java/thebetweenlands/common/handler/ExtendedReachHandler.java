@@ -130,7 +130,7 @@ public class ExtendedReachHandler {
             ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
             if (!stack.isEmpty()) {
                 if (stack.getItem() instanceof IExtendedReach) {
-                    double reach = ((IExtendedReach) stack.getItem()).getReach();
+                    double reach = ((IExtendedReach) stack.getItem()).getReach(player, stack);
                     RayTraceResult trace = getExtendedRayTrace(reach);
                     if (trace != null && trace.entityHit != null && trace.entityHit.hurtResistantTime == 0 && trace.entityHit != player) {
                         consumer.accept(trace);
