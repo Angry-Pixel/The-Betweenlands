@@ -1469,11 +1469,11 @@ tooltip.bl.item_mob_anadia.strength=Force: %s
 tooltip.bl.item_mob_anadia.stamina=Endurance: %s
 
 tooltip.bl.item_mob_anadia.status=Statut:
-tooltip.bl.item_mob_anadia.rotting_1=Fraichement attrapée
-tooltip.bl.item_mob_anadia.rotting_2=Attrapée récemment
-tooltip.bl.item_mob_anadia.rotting_3=Commence à pourrir
-tooltip.bl.item_mob_anadia.rotting_4=Commence à sentir fort
-tooltip.bl.item_mob_anadia.rotting_5=Empeste
+tooltip.bl.item_mob_anadia.rotting_1=Fraiche
+tooltip.bl.item_mob_anadia.rotting_2=Récente
+tooltip.bl.item_mob_anadia.rotting_3=Maturante
+tooltip.bl.item_mob_anadia.rotting_4=Faisandée
+tooltip.bl.item_mob_anadia.rotting_5=Putride
 tooltip.bl.item_mob_anadia.rotten=Pourrie
 tooltip.bl.item_mob_anadia.smoked=Fumée
 
