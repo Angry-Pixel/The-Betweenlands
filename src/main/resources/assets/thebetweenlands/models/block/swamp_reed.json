@@ -1,0 +1,7 @@
+{
+	"parent": "thebetweenlands:block/square_plant",
+	"textures": {
+		"texture": "thebetweenlands:blocks/swamp_reed",
+		"particle": "thebetweenlands:blocks/swamp_reed"
+	}
+}

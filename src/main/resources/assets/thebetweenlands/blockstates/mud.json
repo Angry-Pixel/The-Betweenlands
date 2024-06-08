@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"": [
+			{"model": "thebetweenlands:block/mud"},
+			{"model": "thebetweenlands:block/mud", "y": 90},
+			{"model": "thebetweenlands:block/mud", "y": 180},
+			{"model": "thebetweenlands:block/mud", "y": 270}
+		]
+	}
+}

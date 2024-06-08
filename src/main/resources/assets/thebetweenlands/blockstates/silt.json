@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"": [
+			{"model": "thebetweenlands:block/silt"},
+			{"model": "thebetweenlands:block/silt", "y": 90},
+			{"model": "thebetweenlands:block/silt", "y": 180},
+			{"model": "thebetweenlands:block/silt", "y": 270}
+		]
+	}
+}

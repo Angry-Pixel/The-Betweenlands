@@ -1,0 +1,56 @@
+{
+	"forge_marker": 1,
+	"variants": {
+		"": [
+			{
+				"model": "thebetweenlands:block/swamp_grass",
+				"weight": 2
+			},
+			{
+				"model": "thebetweenlands:block/swamp_grass",
+				"y": 90,
+				"weight": 2
+			},
+			{
+				"model": "thebetweenlands:block/swamp_grass",
+				"y": 180,
+				"weight": 2
+			},
+			{
+				"model": "thebetweenlands:block/swamp_grass",
+				"y": 270,
+				"weight": 2
+			},
+			{
+				"model": "thebetweenlands:block/swamp_grass_0"
+			},
+			{
+				"model": "thebetweenlands:block/swamp_grass_0",
+				"y": 90
+			},
+			{
+				"model": "thebetweenlands:block/swamp_grass_0",
+				"y": 180
+			},
+			{
+				"model": "thebetweenlands:block/swamp_grass_0",
+				"y": 270
+			},
+			{
+				"model": "thebetweenlands:block/swamp_grass_1"
+			},
+			{
+				"model": "thebetweenlands:block/swamp_grass_1",
+				"y": 90
+			},
+			{
+				"model": "thebetweenlands:block/swamp_grass_1",
+				"y": 180
+			},
+			{
+				"model": "thebetweenlands:block/swamp_grass_1",
+				"y": 270
+			}
+		]
+	}
+}

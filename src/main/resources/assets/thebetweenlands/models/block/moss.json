@@ -1,0 +1,17 @@
+{
+	"ambientocclusion": true,
+	"textures": {
+		"particle": "thebetweenlands:blocks/moss",
+		"texture": "thebetweenlands:blocks/moss"
+	},
+	"elements": [
+		{
+			"from": [ 0, 0, 0.1 ],
+			"to": [ 16, 16, 0.1 ],
+			"faces": {
+				"north": { "uv": [ 16, 0, 0, 16 ], "tintindex": 0, "texture": "#texture" },
+				"south": { "uv": [ 0, 0, 16, 16 ], "tintindex": 0, "texture": "#texture" }
+			}
+		}
+	]
+}

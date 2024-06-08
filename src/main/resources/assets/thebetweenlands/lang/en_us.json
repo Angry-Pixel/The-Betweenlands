@@ -1,0 +1,13 @@
+{
+	"block.thebetweenlands.pitstone": "Pitstone",
+	"block.thebetweenlands.octine_ore": "Octine Ore",
+	"block.thebetweenlands.sulfur_ore": "Sulfur Ore",
+	"block.thebetweenlands.limestone": "Limestone",
+	"block.thebetweenlands.swamp_dirt": "Swamp Dirt",
+	"block.thebetweenlands.swamp_grass": "Swamp Grass",
+	"block.thebetweenlands.betweenstone": "Betweenstone",
+	"block.thebetweenlands.dead_swamp_grass": "Dead Swamp Grass",
+	
+	"itemGroup.betweelands_blocks_tab": "Betweelands Blocks",
+	"itemGroup.betweelands_plants_tab": "Betweelands Plants"
+}

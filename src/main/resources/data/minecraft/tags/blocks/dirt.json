@@ -1,0 +1,9 @@
+{
+	"replace": false,
+	"values": [
+		"thebetweenlands:swamp_dirt",
+		"thebetweenlands:swamp_grass",
+		"thebetweenlands:mud",
+		"thebetweenlands:peat"
+	]
+}

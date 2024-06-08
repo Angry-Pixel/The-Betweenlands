@@ -1,0 +1,76 @@
+{
+	"textures": {
+		"bark": "thebetweenlands:blocks/log_rubber_stump",
+		"particle": "thebetweenlands:blocks/log_rubber_stump"
+	},
+	"elements": [
+		{
+			"from": [
+				4,
+				4,
+				4
+			],
+			"to": [
+				12,
+				12,
+				12
+			],
+			"faces": {
+				"down": {
+					"texture": "#bark",
+					"uv": [
+						4,
+						4,
+						12,
+						12
+					]
+				},
+				"up": {
+					"texture": "#bark",
+					"uv": [
+						4,
+						4,
+						12,
+						12
+					]
+				},
+				"east": {
+					"texture": "#bark",
+					"uv": [
+						4,
+						4,
+						12,
+						12
+					]
+				},
+				"south": {
+					"texture": "#bark",
+					"uv": [
+						4,
+						4,
+						12,
+						12
+					]
+				},
+				"west": {
+					"texture": "#bark",
+					"uv": [
+						4,
+						4,
+						12,
+						12
+					]
+				},
+				"north": {
+					"texture": "#bark",
+					"uv": [
+						4,
+						4,
+						12,
+						12
+					]
+				}
+			}
+		}
+	]
+}

@@ -1,0 +1,53 @@
+{
+	"type": "thebetweenlands:betweenlands_ravines",
+	"config": {
+		"probability": 0.05,
+		"y": {
+			"type": "minecraft:uniform",
+			"min_inclusive": {
+				"absolute": -60
+			},
+			"max_inclusive": {
+				"absolute": 32
+			}
+		},
+		"yScale": 3,
+		"lava_level": {
+			"absolute": -53
+		},
+		"vertical_rotation": {
+			"type": "minecraft:uniform",
+			"value": {
+				"min_inclusive": -0.125,
+				"max_exclusive": 0.125
+			}
+		},
+		"shape": {
+			"distance_factor": {
+				"type": "minecraft:uniform",
+				"value": {
+					"min_inclusive": 0.75,
+					"max_exclusive": 1
+				}
+			},
+			"thickness": {
+				"type": "minecraft:trapezoid",
+				"value": {
+					"min": 0,
+					"max": 6,
+					"plateau": 2
+				}
+			},
+			"width_smoothness": 3,
+			"horizontal_radius_factor": {
+				"type": "minecraft:uniform",
+				"value": {
+					"min_inclusive": 0.75,
+					"max_exclusive": 1
+				}
+			},
+			"vertical_radius_default_factor": 1,
+			"vertical_radius_center_factor": 0
+		}
+	}
+}

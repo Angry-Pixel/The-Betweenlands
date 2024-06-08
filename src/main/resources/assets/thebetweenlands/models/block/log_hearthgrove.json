@@ -1,0 +1,12 @@
+{
+	"parent": "block/cube",
+	"textures": {
+		"particle": "thebetweenlands:blocks/log_hearthgrove",
+		"up": "thebetweenlands:blocks/log_hearthgrove",
+		"down": "thebetweenlands:blocks/log_hearthgrove",
+		"west": "thebetweenlands:blocks/log_hearthgrove",
+		"east": "thebetweenlands:blocks/log_hearthgrove",
+		"north": "thebetweenlands:blocks/log_hearthgrove",
+		"south": "thebetweenlands:blocks/log_hearthgrove"
+	}
+}

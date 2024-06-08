@@ -1,0 +1,12 @@
+{
+	"parent": "block/cube",
+	"textures": {
+		"particle": "thebetweenlands:blocks/swamp_dirt",
+		"down": "thebetweenlands:blocks/swamp_dirt",
+		"up": "thebetweenlands:blocks/dead_grass_top",
+		"north": "thebetweenlands:blocks/dead_grass_side",
+		"east": "thebetweenlands:blocks/dead_grass_side",
+		"west": "thebetweenlands:blocks/dead_grass_side",
+		"south": "thebetweenlands:blocks/dead_grass_side"
+	}
+}

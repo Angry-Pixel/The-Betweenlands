@@ -1,0 +1,17 @@
+{
+	"variants": {
+		"axis=y": {
+			"model": "thebetweenlands:block/sap_log"
+		},
+		"axis=x": {
+			"model": "thebetweenlands:block/sap_log",
+			"x": 90,
+			"y": 90
+		},
+		"axis=z": {
+			"model": "thebetweenlands:block/sap_log",
+			"x": 90
+			
+		}
+	}
+}

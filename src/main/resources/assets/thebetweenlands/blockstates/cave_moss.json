@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"bottom=true": [
+			{"model": "thebetweenlands:block/cave_moss_bottom"}
+		],
+		"bottom=false": [
+			{"model": "thebetweenlands:block/cave_moss"}
+		]
+	}
+}

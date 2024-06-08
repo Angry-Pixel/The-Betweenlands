@@ -1,0 +1,64 @@
+{
+	"multipart": [
+		{
+			"when": {
+				"up": "true"
+			},
+			"apply": {
+				"model": "thebetweenlands:block/moss",
+				"x": 270,
+				"uvlock": true
+			}
+		},
+		{
+			"when": {
+				"down": "true"
+			},
+			"apply": {
+				"model": "thebetweenlands:block/moss",
+				"x": 90,
+				"uvlock": true
+			}
+		},
+		{
+			"when": {
+				"north": "true"
+			},
+			"apply": {
+				"model": "thebetweenlands:block/moss",
+				"x": 0,
+				"uvlock": true
+			}
+		},
+		{
+			"when": {
+				"south": "true"
+			},
+			"apply": {
+				"model": "thebetweenlands:block/moss",
+				"x": 180,
+				"uvlock": true
+			}
+		},
+		{
+			"when": {
+				"west": "true"
+			},
+			"apply": {
+				"model": "thebetweenlands:block/moss",
+				"y": 270,
+				"uvlock": true
+			}
+		},
+		{
+			"when": {
+				"east": "true"
+			},
+			"apply": {
+				"model": "thebetweenlands:block/moss",
+				"y": 90,
+				"uvlock": true
+			}
+		}
+	]
+}

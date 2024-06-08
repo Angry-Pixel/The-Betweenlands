@@ -1,0 +1,7 @@
+{
+	"parent": "thebetweenlands:block/square_plant",
+	"textures": {
+		"texture": "thebetweenlands:blocks/cave_moss_bottom",
+		"particle": "thebetweenlands:blocks/cave_moss_bottom"
+	}
+}

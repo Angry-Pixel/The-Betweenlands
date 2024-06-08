@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"": [
+			{"model": "thebetweenlands:block/betweenlands_bedrock"},
+			{"model": "thebetweenlands:block/betweenlands_bedrock", "y": 90},
+			{"model": "thebetweenlands:block/betweenlands_bedrock", "y": 180},
+			{"model": "thebetweenlands:block/betweenlands_bedrock", "y": 270}
+		]
+	}
+}

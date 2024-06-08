@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"axis=x": {
+			"model": "thebetweenlands:block/portal_ns"
+		},
+    	"axis=z": {
+    		"model": "thebetweenlands:block/portal_ew"
+    	}
+	}
+}
