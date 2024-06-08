@@ -1,0 +1,7 @@
+Java Launcher: C:\Users\Jayru\.gradle\jdks\jdk-17.0.1+12\bin\java.exe
+Arguments: '--inJar, C:\Users\Jayru\Desktop\GitHub\The-Betweenlands\build\fg_cache\net\minecraftforge\forge\1.18.2-40.2.10\forge-1.18.2-40.2.10-injected.jar, --outJar, C:\Users\Jayru\Desktop\GitHub\The-Betweenlands\build\fg_cache\net\minecraftforge\forge\1.18.2-40.2.10_mapped_official_1.18.2\forge-1.18.2-40.2.10_mapped_official_1.18.2.jar, --logFile, accesstransform.log, --atFile, C:\Users\Jayru\Desktop\GitHub\The-Betweenlands\src\main\resources\META-INF\accesstransformer.cfg, --atFile, C:\Users\Jayru\Desktop\GitHub\The-Betweenlands\build\_atJar_4\parent_at.cfg'
+Classpath:
+ - C:\Users\Jayru\.gradle\caches\forge_gradle\maven_downloader\net\minecraftforge\accesstransformers\8.0.7\accesstransformers-8.0.7-fatjar.jar
+Working directory: C:\Users\Jayru\Desktop\GitHub\The-Betweenlands\build\_atJar_4
+Main class: net.minecraftforge.accesstransformer.TransformerProcessor
+====================================

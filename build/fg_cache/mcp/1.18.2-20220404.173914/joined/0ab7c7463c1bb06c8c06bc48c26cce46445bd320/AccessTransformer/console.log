@@ -1,0 +1,6 @@
+JVM:         C:\Users\Jayru\.gradle\jdks\jdk-17.0.1+12\bin\java.exe
+JVM Args:    
+Run Args:    "--inJar", "C:\Users\Jayru\Desktop\GitHub\The-Betweenlands\build\fg_cache\mcp\1.18.2-20220404.173914\joined\0ab7c7463c1bb06c8c06bc48c26cce46445bd320\rename\output.jar", "--outJar", "C:\Users\Jayru\Desktop\GitHub\The-Betweenlands\build\fg_cache\mcp\1.18.2-20220404.173914\joined\0ab7c7463c1bb06c8c06bc48c26cce46445bd320\AccessTransformer\output.jar", "--atFile", "C:\Users\Jayru\Desktop\GitHub\The-Betweenlands\src\main\resources\META-INF\accesstransformer.cfg", "--atFile", "C:\Users\Jayru\AppData\Local\Temp\FG_ats_8795994706751307991.cfg"
+Classpath:   C:\Users\Jayru\.gradle\caches\forge_gradle\maven_downloader\net\minecraftforge\accesstransformers\8.0.7\accesstransformers-8.0.7-fatjar.jar
+Working Dir: C:\Users\Jayru\Desktop\GitHub\The-Betweenlands\build\fg_cache\mcp\1.18.2-20220404.173914\joined\0ab7c7463c1bb06c8c06bc48c26cce46445bd320\AccessTransformer
+Main Class:  net.minecraftforge.accesstransformer.TransformerProcessor

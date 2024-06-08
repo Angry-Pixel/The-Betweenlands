@@ -1,0 +1,13 @@
+JVM:         C:\Users\Jayru\.gradle\jdks\jdk-17.0.1+12\bin\java.exe
+JVM Args:    
+Run Args:    "--task", "bundler_extract", "--input", "C:\Users\Jayru\Desktop\GitHub\The-Betweenlands\build\fg_cache\mcp\1.18.2-20220404.173914\joined\0ab7c7463c1bb06c8c06bc48c26cce46445bd320\downloadServer\server.jar", "--output", "C:\Users\Jayru\Desktop\GitHub\The-Betweenlands\build\fg_cache\mcp\1.18.2-20220404.173914\joined\0ab7c7463c1bb06c8c06bc48c26cce46445bd320\extractServer\output.jar", "--jar-only"
+Classpath:   C:\Users\Jayru\.gradle\caches\forge_gradle\maven_downloader\net\minecraftforge\installertools\1.2.10\installertools-1.2.10-fatjar.jar
+Working Dir: C:\Users\Jayru\Desktop\GitHub\The-Betweenlands\build\fg_cache\mcp\1.18.2-20220404.173914\joined\0ab7c7463c1bb06c8c06bc48c26cce46445bd320\extractServer
+Main Class:  net.minecraftforge.installertools.ConsoleTool
+Task: BUNDLER_EXTRACT
+Input:   C:\Users\Jayru\Desktop\GitHub\The-Betweenlands\build\fg_cache\mcp\1.18.2-20220404.173914\joined\0ab7c7463c1bb06c8c06bc48c26cce46445bd320\downloadServer\server.jar
+Output:  C:\Users\Jayru\Desktop\GitHub\The-Betweenlands\build\fg_cache\mcp\1.18.2-20220404.173914\joined\0ab7c7463c1bb06c8c06bc48c26cce46445bd320\extractServer\output.jar
+All:     false
+JarOnly: true
+Libs:    false
+Extracted: versions/1.18.2/server-1.18.2.jar

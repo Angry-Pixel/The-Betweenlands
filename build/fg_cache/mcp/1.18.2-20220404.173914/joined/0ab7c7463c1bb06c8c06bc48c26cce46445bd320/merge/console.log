@@ -1,0 +1,6 @@
+JVM:         C:\Users\Jayru\.gradle\jdks\jdk-17.0.1+12\bin\java.exe
+JVM Args:    
+Run Args:    "--client", "C:\Users\Jayru\Desktop\GitHub\The-Betweenlands\build\fg_cache\mcp\1.18.2-20220404.173914\joined\0ab7c7463c1bb06c8c06bc48c26cce46445bd320\stripClient\output.jar", "--server", "C:\Users\Jayru\Desktop\GitHub\The-Betweenlands\build\fg_cache\mcp\1.18.2-20220404.173914\joined\0ab7c7463c1bb06c8c06bc48c26cce46445bd320\stripServer\output.jar", "--ann", "1.18.2", "--output", "C:\Users\Jayru\Desktop\GitHub\The-Betweenlands\build\fg_cache\mcp\1.18.2-20220404.173914\joined\0ab7c7463c1bb06c8c06bc48c26cce46445bd320\merge\output.jar", "--inject", "false"
+Classpath:   C:\Users\Jayru\.gradle\caches\forge_gradle\maven_downloader\net\minecraftforge\mergetool\1.1.3\mergetool-1.1.3-fatjar.jar
+Working Dir: C:\Users\Jayru\Desktop\GitHub\The-Betweenlands\build\fg_cache\mcp\1.18.2-20220404.173914\joined\0ab7c7463c1bb06c8c06bc48c26cce46445bd320\merge
+Main Class:  net.minecraftforge.mergetool.ConsoleMerger
