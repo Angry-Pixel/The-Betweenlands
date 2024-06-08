@@ -1,0 +1,22 @@
+{
+  "required": true,
+  "package": "thebetweenlands.client.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+    "MixinBlockElementFaceDeserializer",
+    "MixinClientPacketListener",
+    "MixinFaceBakery",
+    "MixinItemInHandRenderer",
+    "MixinModelBlockRenderer",
+    "MixinServerEntity"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "modid.mixin-refmap.json",
+  "plugin": "thebetweenlands.common.plugin.mixin.BLMixin",
+  "minVersion": "0.8",
+  "mixins": [
+    "MixinMinecraftServer"
+  ]
+}
