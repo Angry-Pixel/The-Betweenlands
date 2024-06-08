@@ -1,4 +1,4 @@
-package thebetweenlands;
+package thebetweenlands.common;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
