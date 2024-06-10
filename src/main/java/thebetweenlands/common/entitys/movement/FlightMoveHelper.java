@@ -10,7 +10,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 
 public class FlightMoveHelper extends MoveControl {
 	protected int courseChangeCooldown;

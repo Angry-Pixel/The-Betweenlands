@@ -5,7 +5,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.biome.*;
 
 import javax.annotation.CheckForNull;

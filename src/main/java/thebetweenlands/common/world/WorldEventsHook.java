@@ -6,7 +6,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.Event;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BiomeRegistry;
 
 import java.util.ArrayList;

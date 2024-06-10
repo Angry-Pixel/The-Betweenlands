@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.EyesLayer;
 import net.minecraft.resources.ResourceLocation;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.client.rendering.model.entity.ModelSwampHag;
 import thebetweenlands.common.entitys.BetweenlandsEntity;
 

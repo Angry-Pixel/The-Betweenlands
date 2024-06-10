@@ -11,7 +11,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.util.thread.EffectiveSide;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.common.savedata.AmateMapIndex;
 import thebetweenlands.common.savedata.AmateMapItemSavedData;

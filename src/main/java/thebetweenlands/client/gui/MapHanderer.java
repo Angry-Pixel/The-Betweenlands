@@ -1,7 +1,7 @@
 package thebetweenlands.client.gui;
 
 import net.minecraft.client.gui.MapRenderer;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -39,7 +39,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entitys.ai.goals.EntityAIFlyRandomly;
 import thebetweenlands.common.entitys.ai.goals.EntityAIMoveToDirect;
 import thebetweenlands.common.registries.SoundRegistry;

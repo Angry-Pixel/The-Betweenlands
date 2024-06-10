@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.dimension.BetweenlandsDimensionType;
 import thebetweenlands.common.dimension.BetweenlandsSurfaceRuleData;
 import thebetweenlands.common.registries.BiomeRegistry;

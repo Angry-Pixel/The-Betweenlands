@@ -19,7 +19,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.colors.AmateMapColor;
 import thebetweenlands.common.savedata.AmateMapItemSavedData;
 

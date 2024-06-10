@@ -10,7 +10,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.level.levelgen.RandomSource;
 import net.minecraft.world.level.levelgen.synth.SimplexNoise;
 import net.minecraft.world.phys.Vec3;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 
 
 // TODO: make noise effect distance uniformly

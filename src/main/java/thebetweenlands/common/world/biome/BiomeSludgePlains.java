@@ -7,7 +7,7 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.biome.Biome.BiomeCategory;
 import net.minecraft.world.level.biome.Biome.Precipitation;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.CarverRegistry;
 import thebetweenlands.common.registries.MusicHandler;
 import thebetweenlands.common.world.gen.biome.decorator.BiomeDecorator;

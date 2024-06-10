@@ -9,7 +9,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.phys.AABB;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.features.BetweenlandsDecoratorConfiguration;
 import thebetweenlands.common.world.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;

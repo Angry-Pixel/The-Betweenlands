@@ -8,7 +8,7 @@ import net.minecraft.world.level.levelgen.carver.CarverConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.BlockColumnConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.carvers.BetweenlandsCaveCarverConfiguration;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.FeatureRegistries;

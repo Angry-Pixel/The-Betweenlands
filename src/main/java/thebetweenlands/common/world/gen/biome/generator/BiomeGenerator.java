@@ -4,7 +4,7 @@ import net.minecraft.server.level.WorldGenRegion;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.world.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.BiomeWeights;

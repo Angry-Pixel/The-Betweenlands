@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.decorator.DecoratorFeature;

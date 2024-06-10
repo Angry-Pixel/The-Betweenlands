@@ -23,7 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.ISkyRenderHandler;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.client.rendering.shader.BetweenlandsShaders;
 import thebetweenlands.client.rendering.vertex.BetweenlandsVertexFormats;
 

@@ -2,7 +2,7 @@ package thebetweenlands.common.dimension;
 
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.world.ForgeWorldPreset;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 
 public class BetweenlandsForgeWorldPreset extends ForgeWorldPreset {
 

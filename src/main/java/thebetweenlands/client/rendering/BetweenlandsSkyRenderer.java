@@ -6,7 +6,7 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL40;
 
 import net.minecraft.client.Minecraft;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 
 // This is to make super sure optifine and other mods do not atempt to overwrite this render sequance
 // unless they actualy intend to

@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.blocks.BetweenlandsSwampWater;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.ChunkGeneratorBetweenlands;

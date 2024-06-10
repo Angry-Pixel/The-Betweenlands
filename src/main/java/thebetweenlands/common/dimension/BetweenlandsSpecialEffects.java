@@ -14,7 +14,7 @@ import net.minecraftforge.client.ICloudRenderHandler;
 import net.minecraftforge.client.ISkyRenderHandler;
 import net.minecraftforge.client.IWeatherParticleRenderHandler;
 import net.minecraftforge.client.IWeatherRenderHandler;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.client.rendering.BetweenlandsCloudHandler;
 import thebetweenlands.client.rendering.BetweenlandsSkyHandler;
 import thebetweenlands.client.rendering.BetweenlandsSkyHandlerTest;

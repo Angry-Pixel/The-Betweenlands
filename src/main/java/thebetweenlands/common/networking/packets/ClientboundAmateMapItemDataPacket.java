@@ -15,7 +15,7 @@ import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.client.gui.AmateMapRenderer;
 import thebetweenlands.client.gui.MapHanderer;
 import thebetweenlands.client.networking.BetweenlandsClientPacketListener;

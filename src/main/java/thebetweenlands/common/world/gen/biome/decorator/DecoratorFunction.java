@@ -3,7 +3,7 @@ package thebetweenlands.common.world.gen.biome.decorator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.chunk.ChunkGenerator;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.ChunkGeneratorBetweenlands;
 
 import javax.annotation.Nullable;

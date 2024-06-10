@@ -9,7 +9,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.phys.AABB;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.gen.IBlockStateAccessOnly;
 import thebetweenlands.common.world.gen.feature.legacy.WorldGenGiantRoot;
 

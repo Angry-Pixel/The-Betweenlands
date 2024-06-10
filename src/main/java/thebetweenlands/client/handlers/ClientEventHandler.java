@@ -8,7 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import thebetweenlands.TheBetweenlands;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.handlers.BLRenderItemInFrameEvent;
 import thebetweenlands.common.handlers.SaveDataHandler;
 import thebetweenlands.common.items.ItemAmateMap;
