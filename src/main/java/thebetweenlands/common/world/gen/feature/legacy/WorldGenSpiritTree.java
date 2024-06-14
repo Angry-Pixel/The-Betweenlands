@@ -442,4 +442,3 @@ public class WorldGenSpiritTree extends WorldGenHelper {
         }
     }
 }
-}
