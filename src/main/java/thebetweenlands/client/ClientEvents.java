@@ -75,18 +75,18 @@ public class ClientEvents {
 
     public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
         // Changes particle and block colors
-        event.getBlockColors().register(BlockColorRegistry.SWAMP_FOLIGE, BlockRegistry.LEAVES_WEEDWOOD_TREE.get());
-        event.getBlockColors().register(BlockColorRegistry.SWAMP_FOLIGE, BlockRegistry.LEAVES_NIBBLETWIG_TREE.get());
-        event.getBlockColors().register(BlockColorRegistry.SWAMP_FOLIGE, BlockRegistry.LEAVES_RUBBER_TREE.get());
-        event.getBlockColors().register(BlockColorRegistry.SWAMP_GRASS, BlockRegistry.SWAMP_GRASS.get());
-        event.getBlockColors().register(BlockColorRegistry.SWAMP_FOLIGE, BlockRegistry.POISON_IVY.get());
-        event.getBlockColors().register(BlockColorRegistry.SWAMP_GRASS, BlockRegistry.SWAMP_REED.get());
-        event.getBlockColors().register(BlockColorRegistry.SWAMP_FOLIGE, BlockRegistry.MOSS.get());
-        event.getBlockColors().register(BlockColorRegistry.SWAMP_FOLIGE, BlockRegistry.HANGER.get());
-        event.getBlockColors().register(BlockColorRegistry.SWAMP_GRASS, BlockRegistry.SWAMP_TALLGRASS.get());
+        event.register(BlockColorRegistry.SWAMP_FOLIGE, BlockRegistry.LEAVES_WEEDWOOD_TREE.get());
+        event.register(BlockColorRegistry.SWAMP_FOLIGE, BlockRegistry.LEAVES_NIBBLETWIG_TREE.get());
+        event.register(BlockColorRegistry.SWAMP_FOLIGE, BlockRegistry.LEAVES_RUBBER_TREE.get());
+        event.register(BlockColorRegistry.SWAMP_GRASS, BlockRegistry.SWAMP_GRASS.get());
+        event.register(BlockColorRegistry.SWAMP_FOLIGE, BlockRegistry.POISON_IVY.get());
+        event.register(BlockColorRegistry.SWAMP_GRASS, BlockRegistry.SWAMP_REED.get());
+        event.register(BlockColorRegistry.SWAMP_FOLIGE, BlockRegistry.MOSS.get());
+        event.register(BlockColorRegistry.SWAMP_FOLIGE, BlockRegistry.HANGER.get());
+        event.register(BlockColorRegistry.SWAMP_GRASS, BlockRegistry.SWAMP_TALLGRASS.get());
 
         // Only effects particle colors
-        event.getBlockColors().register(BlockColorRegistry.SWAMP_WATER, BlockRegistry.SWAMP_WATER_BLOCK.get());
+        event.register(BlockColorRegistry.SWAMP_WATER, BlockRegistry.SWAMP_WATER_BLOCK.get());
     }
 
     // Ticks every render tick

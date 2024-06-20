@@ -80,7 +80,7 @@ public class TheBetweenlands
     	// Register mod contents
 		SoundRegistry.register(eventbus);
     	ParticleRegistry.register(eventbus);
-    	BlockRegistry.register(eventbus);
+    	BlockRegistry.BLOCKS.register(eventbus);
     	ItemRegistry.register(eventbus);
     	FluidRegistry.register(eventbus);
     	
