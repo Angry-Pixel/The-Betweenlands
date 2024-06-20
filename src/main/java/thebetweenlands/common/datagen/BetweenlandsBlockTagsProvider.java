@@ -1,22 +1,23 @@
 package thebetweenlands.common.datagen;
 
-import net.minecraft.core.Holder;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.BlockTagsProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 
+import java.util.concurrent.CompletableFuture;
+
 public class BetweenlandsBlockTagsProvider extends BlockTagsProvider {
 
-    public BetweenlandsBlockTagsProvider(DataGenerator datagen, @Nullable ExistingFileHelper existingFileHelper) {
-        super(datagen, TheBetweenlands.ID, existingFileHelper);
+    public BetweenlandsBlockTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
+        super(output, provider, TheBetweenlands.ID, existingFileHelper);
     }
 
-    protected void addTags() {
+    protected void addTags(HolderLookup.Provider provider) {
         this.tag(BlockTags.DIRT).add(BlockRegistry.SWAMP_DIRT.get(), BlockRegistry.SWAMP_GRASS.get(), BlockRegistry.DEAD_SWAMP_GRASS.get(), BlockRegistry.MUD.get());
     }
 }

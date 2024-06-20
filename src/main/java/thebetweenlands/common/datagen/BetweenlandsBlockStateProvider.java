@@ -1,16 +1,15 @@
 package thebetweenlands.common.datagen;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.model.generators.*;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraft.data.PackOutput;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.registries.BlockRegistry;
 
 public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 
-    public BetweenlandsBlockStateProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
-        super(gen, TheBetweenlands.ID, exFileHelper);
+    public BetweenlandsBlockStateProvider(PackOutput output, ExistingFileHelper exFileHelper) {
+        super(output, TheBetweenlands.ID, exFileHelper);
     }
 
     @Override

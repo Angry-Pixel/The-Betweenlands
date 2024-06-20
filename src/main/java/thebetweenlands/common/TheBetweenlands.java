@@ -13,6 +13,7 @@ import thebetweenlands.client.ClientEvents;
 import thebetweenlands.client.gui.AmateMapRenderer;
 import thebetweenlands.client.rendering.BetweenlandsSkyRenderer;
 import thebetweenlands.common.ambientsounds.BetweenlandsSoundManager;
+import thebetweenlands.common.datagen.DataGenerators;
 import thebetweenlands.common.networking.BetweenlandsPacketHandler;
 import thebetweenlands.common.registries.*;
 import thebetweenlands.common.world.BetweenlandsBiomeProvider;
@@ -102,6 +103,8 @@ public class TheBetweenlands
 		eventbus.addListener(this::genLayersEvent);
     	// Betweenlands cave & underwater ambience register
     	//eventbus.addListener(this::betweenlandsAmbienceHandler);
+		// Data generation
+		eventbus.addListener(DataGenerators::gatherData);
 
 		DimensionRegistries.register(eventbus);
 

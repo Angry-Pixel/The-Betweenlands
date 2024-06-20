@@ -1,28 +1,30 @@
 package thebetweenlands.common.datagen;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
-import thebetweenlands.common.TheBetweenlands;
+import net.minecraft.data.PackOutput;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 
-@Mod.EventBusSubscriber(modid = "thebetweenlands", bus = Mod.EventBusSubscriber.Bus.MOD)
+import java.util.concurrent.CompletableFuture;
+
 public class DataGenerators {
 
-    @SubscribeEvent
-    public void gatherData(GatherDataEvent event) {
+    public static void gatherData(GatherDataEvent event) {
         DataGenerator gen = event.getGenerator();
+        PackOutput output = gen.getPackOutput();
+        CompletableFuture<HolderLookup.Provider> provider = event.getLookupProvider();
+        ExistingFileHelper helper = event.getExistingFileHelper();
 
-        // Common
-        gen.addProvider(new BetweenlandsBlockTagsProvider(gen, event.getExistingFileHelper()));
+        //Belongs in /assets/
+        boolean assets = event.includeClient();
+        //Belongs in /data/
+        boolean data = event.includeServer();
 
-        // Client
-        if (event.includeClient()) {
-            gen.addProvider(new BetweenlandsBlockStateProvider(gen, event.getExistingFileHelper()));
-        }
+        // Data
+        gen.addProvider(data, new BetweenlandsBlockTagsProvider(output, provider, helper));
 
-        // Server
-        if (event.includeServer()) {
-        }
+        // Assets
+        gen.addProvider(assets, new BetweenlandsBlockStateProvider(output, helper));
     }
 }
