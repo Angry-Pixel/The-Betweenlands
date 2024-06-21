@@ -13,7 +13,7 @@ public class CreativeGroupRegistry {
 	public static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, TheBetweenlands.ID);
 	
 	// Blocks tab
-	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> BETWEELANDS_BLOCKS = CREATIVE_TABS.register("thebetweenlands_block", () -> CreativeModeTab.builder()
+	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> BETWEENLANDS_BLOCKS = CREATIVE_TABS.register("thebetweenlands_block", () -> CreativeModeTab.builder()
 			.title(Component.translatable("itemGroup.thebetweenlands.betweenlands_block"))
 			.icon(() -> new ItemStack(BlockRegistry.SWAMP_GRASS.get()))
 			.displayItems((parameters, output) -> {
@@ -58,10 +58,10 @@ public class CreativeGroupRegistry {
 			}).build());
 
 	// Plants tab
-	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> BETWEELANDS_PLANTS = CREATIVE_TABS.register("betweelands_plants", () -> CreativeModeTab.builder()
-			.title(Component.translatable("itemGroup.thebetweenlands.betweelands_plants"))
+	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> BETWEENLANDS_PLANTS = CREATIVE_TABS.register("betweenlands_plants", () -> CreativeModeTab.builder()
+			.title(Component.translatable("itemGroup.thebetweenlands.betweenlands_plants"))
 			.icon(() -> new ItemStack(BlockRegistry.WEEDWOOD_SAPLING.get()))
-			.withTabsBefore(BETWEELANDS_BLOCKS.getId()) //TODO: Mire Coral
+			.withTabsBefore(BETWEENLANDS_BLOCKS.getId()) //TODO: Mire Coral
 			.displayItems((parameters, output) -> {
 				output.accept(BlockRegistry.WEEDWOOD_SAPLING.get());
 				output.accept(BlockRegistry.SAP_SAPLING.get());
@@ -78,7 +78,7 @@ public class CreativeGroupRegistry {
 				output.accept(BlockRegistry.SWAMP_TALLGRASS.get());
 			}).build());
 
-	public static final CreativeModeTab BETWEELANDS_SPECIAL = new CreativeModeTab("betweelands_special_tab") {
+	public static final CreativeModeTab BETWEENLANDS_SPECIAL = new CreativeModeTab("betweenlands_special_tab") {
 
 		@Override
 		public ItemStack makeIcon() {
