@@ -3,7 +3,8 @@ package thebetweenlands.common.registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.client.renderer.ItemInHandRenderer;
+import net.neoforged.neoforge.common.DeferredSpawnEggItem;
+import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.items.ItemAmateMap;
@@ -18,45 +19,19 @@ public class ItemRegistry {
 	
 	
 	// Bucket inits
-	public static final RegistryObject<Item> SWAMP_WATER_BUCKET = ITEMS.register("swamp_water_bucket", () -> new BucketItem(() -> FluidRegistry.SWAMP_WATER_STILL.get(), new Item.Properties().stacksTo(1).tab(CreativeGroupRegistry.BETWEELANDS_BLOCKS)));
+	public static final DeferredItem<Item> SWAMP_WATER_BUCKET = ITEMS.register("swamp_water_bucket", () -> new BucketItem(() -> FluidRegistry.SWAMP_WATER_STILL.get(), new Item.Properties().stacksTo(1)));
 	
 	// Blocks
 	// - Temp
-	public static final RegistryObject<Item> PORTAL = ITEMS.register("portal", () -> new BlockItem(BlockRegistry.PORTAL.get(), new Item.Properties().tab(CreativeGroupRegistry.BETWEELANDS_BLOCKS)));
-	public static final RegistryObject<Item> SWAMP_HAG_SPAWN_EGG = ITEMS.register("swamp_hag_spawn_egg", () -> new ForgeSpawnEggItem( () -> EntityRegistry.SWAMP_HAG.get(), 0x5E4E2E, 0x18461A, new Item.Properties().tab(CreativeGroupRegistry.BETWEELANDS_BLOCKS)));
-	public static final RegistryObject<Item> GECKO_SPAWN_EGG = ITEMS.register("gecko_spawn_egg", () -> new ForgeSpawnEggItem( () -> EntityRegistry.GECKO.get(), 0xdc7202, 0x05e290, new Item.Properties().tab(CreativeGroupRegistry.BETWEELANDS_BLOCKS)));
-	public static final RegistryObject<Item> WIGHT_SPAWN_EGG = ITEMS.register("wight_spawn_egg", () -> new ForgeSpawnEggItem( () -> EntityRegistry.WIGHT.get(), 0x7d8378, 0x07190a, new Item.Properties().tab(CreativeGroupRegistry.BETWEELANDS_BLOCKS)));
+	public static final DeferredItem<Item> PORTAL = ITEMS.register("portal", () -> new BlockItem(BlockRegistry.PORTAL.get(), new Item.Properties()));
+
+	//Spawn Eggs
+	public static final DeferredItem<Item> SWAMP_HAG_SPAWN_EGG = ITEMS.register("swamp_hag_spawn_egg", () -> new DeferredSpawnEggItem( () -> EntityRegistry.SWAMP_HAG.get(), 0x5E4E2E, 0x18461A, new Item.Properties()));
+	public static final DeferredItem<Item> GECKO_SPAWN_EGG = ITEMS.register("gecko_spawn_egg", () -> new DeferredSpawnEggItem( () -> EntityRegistry.GECKO.get(), 0xdc7202, 0x05e290, new Item.Properties()));
+	public static final DeferredItem<Item> WIGHT_SPAWN_EGG = ITEMS.register("wight_spawn_egg", () -> new DeferredSpawnEggItem( () -> EntityRegistry.WIGHT.get(), 0x7d8378, 0x07190a, new Item.Properties()));
 
 	// Betweenlands Special
-	public static final RegistryObject<Item> EMPTY_AMATE_MAP = ITEMS.register("empty_amate_map", () -> new ItemEmptyAmateMap(new Item.Properties().tab(CreativeGroupRegistry.BETWEELANDS_SPECIAL)));
-	public static final RegistryObject<Item> USED_AMATE_MAP = ITEMS.register("used_amate_map", () -> new ItemAmateMap(new Item.Properties().tab(CreativeGroupRegistry.BETWEELANDS_SPECIAL)));
-	public static final RegistryObject<Item> RECORD_ASTATOS = ITEMS.register("astatos", () -> new RecordItem(0, () -> SoundRegistry.RECORD_ASTATOS.get(), new Item.Properties().tab(CreativeGroupRegistry.BETWEELANDS_SPECIAL)));
-
-	// Register item list
-	public static void register(IEventBus eventBus) {
-		
-		// Register to betweenlands (if anyone would realy need it its here)
-		// Block Items
-		
-		
-		
-		
-		
-		// debug
-		//ITEMS.register("debug", () -> new BlockItem(ModBlocks.DEBUG.get(), new Item.Properties().tab(ModCreativeGroup.BETWEELANDS_BLOCKS)));
-		
-		// Item list register
-		ITEMS.register(eventBus);
-	}
-
-	public interface IHandRenderCallback {
-
-		/**
-		 * A callback to get a custom mesh definition
-		 * @return
-		 */
-		@OnlyIn(Dist.CLIENT)
-		ItemInHandRenderer getHandRenderer();
-
-	}
+	public static final DeferredItem<Item> EMPTY_AMATE_MAP = ITEMS.register("empty_amate_map", () -> new ItemEmptyAmateMap(new Item.Properties()));
+	public static final DeferredItem<Item> USED_AMATE_MAP = ITEMS.register("used_amate_map", () -> new ItemAmateMap(new Item.Properties()));
+	public static final DeferredItem<Item> RECORD_ASTATOS = ITEMS.register("astatos", () -> new RecordItem(0, () -> SoundRegistry.RECORD_ASTATOS.get(), new Item.Properties()));
 }

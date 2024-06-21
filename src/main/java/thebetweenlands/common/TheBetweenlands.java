@@ -81,7 +81,7 @@ public class TheBetweenlands
 		SoundRegistry.register(eventbus);
     	ParticleRegistry.register(eventbus);
     	BlockRegistry.BLOCKS.register(eventbus);
-    	ItemRegistry.register(eventbus);
+    	ItemRegistry.ITEMS.register(eventbus);
     	FluidRegistry.register(eventbus);
     	
     	EntityRegistry.register(eventbus);
@@ -105,6 +105,8 @@ public class TheBetweenlands
     	//eventbus.addListener(this::betweenlandsAmbienceHandler);
 		// Data generation
 		eventbus.addListener(DataGenerators::gatherData);
+		//Populate Spawn Eggs tab with our spawn eggs
+		eventbus.addListener(CreativeGroupRegistry::populateTabs);
 
 		DimensionRegistries.register(eventbus);
 

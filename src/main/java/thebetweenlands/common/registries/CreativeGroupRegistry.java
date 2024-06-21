@@ -3,7 +3,9 @@ package thebetweenlands.common.registries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
@@ -57,11 +59,23 @@ public class CreativeGroupRegistry {
 				output.accept(BlockRegistry.VALONITE_ORE.get());
 			}).build());
 
+	//Special tab
+	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> BETWEENLANDS_SPECIAL = CREATIVE_TABS.register("betweenlands_special", () -> CreativeModeTab.builder()
+			.title(Component.translatable("itemGroup.thebetweenlands.betweenlands_special"))
+			.icon(() -> new ItemStack(ItemRegistry.RECORD_ASTATOS.get()))
+			.withTabsBefore(BETWEENLANDS_BLOCKS.getId())
+			.displayItems((parameters, output) -> {
+				output.accept(ItemRegistry.PORTAL.get()); //TODO: temp
+				output.accept(ItemRegistry.EMPTY_AMATE_MAP.get());
+				output.accept(ItemRegistry.USED_AMATE_MAP.get()); //TODO: Remove?
+				output.accept(ItemRegistry.RECORD_ASTATOS.get());
+			}).build());
+
 	// Plants tab
 	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> BETWEENLANDS_PLANTS = CREATIVE_TABS.register("betweenlands_plants", () -> CreativeModeTab.builder()
 			.title(Component.translatable("itemGroup.thebetweenlands.betweenlands_plants"))
-			.icon(() -> new ItemStack(BlockRegistry.WEEDWOOD_SAPLING.get()))
-			.withTabsBefore(BETWEENLANDS_BLOCKS.getId()) //TODO: Mire Coral
+			.icon(() -> new ItemStack(BlockRegistry.WEEDWOOD_SAPLING.get())) //TODO: Mire Coral
+			.withTabsBefore(BETWEENLANDS_SPECIAL.getId())
 			.displayItems((parameters, output) -> {
 				output.accept(BlockRegistry.WEEDWOOD_SAPLING.get());
 				output.accept(BlockRegistry.SAP_SAPLING.get());
@@ -78,11 +92,11 @@ public class CreativeGroupRegistry {
 				output.accept(BlockRegistry.SWAMP_TALLGRASS.get());
 			}).build());
 
-	public static final CreativeModeTab BETWEENLANDS_SPECIAL = new CreativeModeTab("betweenlands_special_tab") {
-
-		@Override
-		public ItemStack makeIcon() {
-			return new ItemStack(ItemRegistry.RECORD_ASTATOS.get());
+	public static void populateTabs(BuildCreativeModeTabContentsEvent event) {
+		if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
+			event.accept(ItemRegistry.SWAMP_HAG_SPAWN_EGG.get());
+			event.accept(ItemRegistry.GECKO_SPAWN_EGG.get());
+			event.accept(ItemRegistry.WIGHT_SPAWN_EGG.get());
 		}
-	};
+	}
 }
