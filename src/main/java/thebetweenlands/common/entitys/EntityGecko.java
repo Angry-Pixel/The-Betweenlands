@@ -50,7 +50,7 @@ public class EntityGecko extends BetweenlandsEntity {
 	
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundRegistry.GEKO_DEATH.get();
+		return SoundRegistry.GECKO_DEATH.get();
 	}
 	
 	protected void registerGoals() {
@@ -71,12 +71,12 @@ public class EntityGecko extends BetweenlandsEntity {
 	
 	@Override
 	protected SoundEvent getHurtSound(DamageSource p_33034_) {
-		return SoundRegistry.GEKO_HURT.get();
+		return SoundRegistry.GECKO_HURT.get();
 	}
 	
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundRegistry.GEKO_LIVING.get();
+		return SoundRegistry.GECKO_LIVING.get();
 	}
 	
 	static class GeckoAvoidGoal<T extends LivingEntity> extends AvoidEntityGoal<T> {

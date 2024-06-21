@@ -78,7 +78,7 @@ public class TheBetweenlands
 		}
 
     	// Register mod contents
-		SoundRegistry.register(eventbus);
+		SoundRegistry.SOUNDS.register(eventbus);
     	ParticleRegistry.register(eventbus);
     	BlockRegistry.BLOCKS.register(eventbus);
     	ItemRegistry.ITEMS.register(eventbus);
