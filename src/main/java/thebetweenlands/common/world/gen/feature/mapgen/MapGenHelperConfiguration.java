@@ -6,7 +6,7 @@ import java.util.List;
 
 public class MapGenHelperConfiguration extends FeatureHelperConfiguration {
 
-    public MapGenHelperConfiguration(List<TargetBlockState> replaceable) {
-        super(replaceable);
-    }
+	public MapGenHelperConfiguration(List<TargetBlockState> replaceable) {
+		super(replaceable);
+	}
 }

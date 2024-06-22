@@ -3,7 +3,7 @@ package thebetweenlands.common.world.noisegenerators.genlayers;
 
 public class GenLayerSubBiomes extends GenLayerBetweenlands {
 
-	private static final byte[] offsetX = new byte[] { 0, 1, -1, 0, 0 }, offsetZ = new byte[] { 0, 0, 0, 1, -1 };
+	private static final byte[] offsetX = new byte[]{0, 1, -1, 0, 0}, offsetZ = new byte[]{0, 0, 0, 1, -1};
 
 	public GenLayerSubBiomes(InstancedIntCache cache, long seed, GenLayer parentGenLayer) {
 		super(cache, seed);

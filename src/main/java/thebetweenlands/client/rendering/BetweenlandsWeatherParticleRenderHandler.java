@@ -9,10 +9,10 @@ public class BetweenlandsWeatherParticleRenderHandler implements IWeatherParticl
 
 	public BetweenlandsWeatherParticleRenderHandler() {
 	}
-	
+
 	@Override
 	public void render(int ticks, ClientLevel level, Minecraft minecraft, Camera camera) {
-		
+
 	}
 
 }

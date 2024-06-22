@@ -9,8 +9,8 @@ public class BetweenlandsVertexFormats {
 
 	// POSITION_COLOR_TEX_MASK
 	public static final VertexFormat BETWEENLANDS_SKY = new VertexFormat(ImmutableMap.<String, VertexFormatElement>builder().
-			put("Position", DefaultVertexFormat.ELEMENT_POSITION).
-			put("Color", DefaultVertexFormat.ELEMENT_COLOR).
-			put("UV0", DefaultVertexFormat.ELEMENT_UV0).build());
+		put("Position", DefaultVertexFormat.ELEMENT_POSITION).
+		put("Color", DefaultVertexFormat.ELEMENT_COLOR).
+		put("UV0", DefaultVertexFormat.ELEMENT_UV0).build());
 
 }

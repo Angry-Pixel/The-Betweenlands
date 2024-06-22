@@ -10,7 +10,7 @@ import net.minecraft.network.protocol.game.ClientboundMapItemDataPacket;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.items.ItemAmateMap;
+import thebetweenlands.common.items.AmateMapItem;
 import thebetweenlands.common.savedata.AmateMapData;
 
 public class AmateMapPacket implements CustomPacketPayload {
@@ -51,7 +51,7 @@ public class AmateMapPacket implements CustomPacketPayload {
 					Level level = ctx.player().level();
 					// [VanillaCopy] ClientPlayNetHandler#handleMaps with our own mapdatas
 					MapRenderer mapitemrenderer = Minecraft.getInstance().gameRenderer.getMapRenderer();
-					String s = ItemAmateMap.getMapName(message.inner.mapId().id());
+					String s = AmateMapItem.getMapName(message.inner.mapId().id());
 					AmateMapData mapdata = AmateMapData.getMapData(level, s);
 					if (mapdata == null) {
 						mapdata = new AmateMapData(0, 0, false, false, message.inner.locked());

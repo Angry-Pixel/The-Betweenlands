@@ -1,7 +1,5 @@
 package thebetweenlands.common.world.gen.biome.feature;
 
-import java.util.Random;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -13,6 +11,8 @@ import thebetweenlands.common.world.gen.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.decorator.DecoratorFeature;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 import thebetweenlands.common.world.noisegenerators.NoiseGeneratorPerlin;
+
+import java.util.Random;
 
 /**
  * Generates block patches at the surface of the terrain
@@ -54,14 +54,14 @@ public class PatchFeature extends DecoratorFeature {
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise,
 								   ChunkAccess chunkPrimer, ChunkGeneratorBetweenlands chunkGenerator, int[] biomesForGeneration,
 								   int biome, BiomeWeights biomeWeights, EnumGeneratorPass pass) {
-		if(pass == EnumGeneratorPass.POST_GEN_CAVES) {
+		if (pass == EnumGeneratorPass.POST_GEN_CAVES) {
 			float biomeWeight = biomeWeights.get(x, z);
-			if(this.mudNoise[x * 16 + z] * this.mult * biomeWeight + this.offset <= 0) {
+			if (this.mudNoise[x * 16 + z] * this.mult * biomeWeight + this.offset <= 0) {
 				int y = TheBetweenlands.LAYER_HEIGHT + 20;
-				for(int yo = 0; yo < TheBetweenlands.LAYER_HEIGHT + 20; yo++) {
+				for (int yo = 0; yo < TheBetweenlands.LAYER_HEIGHT + 20; yo++) {
 					Block currentBlock = chunkPrimer.getBlockState(new BlockPos(x, y - yo, z)).getBlock();
 					Block blockAbove = chunkPrimer.getBlockState(new BlockPos(x, y - yo + 1, z)).getBlock();
-					if(currentBlock == chunkGenerator.betweenlandsBiomeProvider.BiomeFromID(biome).topBlock() && blockAbove == Blocks.AIR) {
+					if (currentBlock == chunkGenerator.betweenlandsBiomeProvider.BiomeFromID(biome).topBlock() && blockAbove == Blocks.AIR) {
 						chunkPrimer.setBlockState(new BlockPos(x, y - yo, z), this.block, false);
 						break;
 					}

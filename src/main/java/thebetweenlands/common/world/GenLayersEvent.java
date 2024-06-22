@@ -11,30 +11,30 @@ import java.util.function.Supplier;
 
 public class GenLayersEvent extends Event implements IModBusEvent {
 
-    // Register
-    public static GenLayerRegistry REGISTRY = new GenLayerRegistry();
+	// Register
+	public static GenLayerRegistry REGISTRY = new GenLayerRegistry();
 
-    public static class RegisterGenLayersEvent extends GenLayersEvent {
+	public static class RegisterGenLayersEvent extends GenLayersEvent {
 
-        public RegisterGenLayersEvent() {
-            super();
-        }
+		public RegisterGenLayersEvent() {
+			super();
+		}
 
-        // Variable input
-        @SafeVarargs
-        public final void Register(Pair < ResourceLocation, Supplier<GenLayer>>...registerGenLayer){
-            for (Pair<ResourceLocation, Supplier<GenLayer>> gen : registerGenLayer) {
-                this.Register(gen.getFirst(), gen.getSecond());
-            }
-        }
+		// Variable input
+		@SafeVarargs
+		public final void Register(Pair<ResourceLocation, Supplier<GenLayer>>... registerGenLayer) {
+			for (Pair<ResourceLocation, Supplier<GenLayer>> gen : registerGenLayer) {
+				this.Register(gen.getFirst(), gen.getSecond());
+			}
+		}
 
-        // Single input
-        public void Register(ResourceLocation name, Supplier<GenLayer> registerGenLayer){
-            REGISTRY.Register(name, registerGenLayer);
-        }
+		// Single input
+		public void Register(ResourceLocation name, Supplier<GenLayer> registerGenLayer) {
+			REGISTRY.Register(name, registerGenLayer);
+		}
 
-        public void RegisterProvider(ResourceLocation name, Supplier<ProviderGenLayer> provider) {
-            REGISTRY.RegisterProvider(name,provider);
-        }
-    }
+		public void RegisterProvider(ResourceLocation name, Supplier<ProviderGenLayer> provider) {
+			REGISTRY.RegisterProvider(name, provider);
+		}
+	}
 }

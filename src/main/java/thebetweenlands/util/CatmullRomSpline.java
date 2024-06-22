@@ -22,7 +22,7 @@ public class CatmullRomSpline implements ISpline {
 	@Override
 	public Vec3 interpolate(float s) {
 		int numSections = pts.length - 3;
-		int currPt = (int)Math.min(Math.floor(s * (float) numSections), numSections - 1);
+		int currPt = (int) Math.min(Math.floor(s * (float) numSections), numSections - 1);
 
 		Vec3 P0 = this.pts[currPt];
 		Vec3 P1 = this.pts[currPt + 1];
@@ -86,7 +86,7 @@ public class CatmullRomSpline implements ISpline {
 	@Override
 	public Vec3 derivative(float s) {
 		int numSections = pts.length - 3;
-		int currPt = (int)Math.min(Math.floor(s * (float) numSections), numSections - 1);
+		int currPt = (int) Math.min(Math.floor(s * (float) numSections), numSections - 1);
 
 		Vec3 P0 = this.pts[currPt];
 		Vec3 P1 = this.pts[currPt + 1];
@@ -191,7 +191,7 @@ public class CatmullRomSpline implements ISpline {
 		//alpha = 1.0F: chordal
 		float alpha = 0.5F;
 
-		return (float)Math.pow(p1.subtract(p0).length(), alpha) + t;
+		return (float) Math.pow(p1.subtract(p0).length(), alpha) + t;
 	}
 
 	@Override

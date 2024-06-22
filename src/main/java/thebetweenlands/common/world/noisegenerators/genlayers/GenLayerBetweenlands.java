@@ -2,7 +2,6 @@ package thebetweenlands.common.world.noisegenerators.genlayers;
 
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
-import thebetweenlands.common.world.gen.layer.IntCache;
 import thebetweenlands.util.WeightedList;
 
 public class GenLayerBetweenlands extends GenLayer {
@@ -14,8 +13,8 @@ public class GenLayerBetweenlands extends GenLayer {
 
 	public GenLayerBetweenlands(InstancedIntCache cache, long seed) {
 		super(seed);
-		for(BiomeBetweenlands biome : BiomeRegistry.BETWEENLANDS_DIM_BIOME_REGISTRY) {
-			if(biome.biomeWeight > 0) {
+		for (BiomeBetweenlands biome : BiomeRegistry.BETWEENLANDS_DIM_BIOME_REGISTRY) {
+			if (biome.biomeWeight > 0) {
 				this.biomesToGenerate.add(biome.biomeWeight);
 			}
 		}

@@ -1,4 +1,4 @@
-package thebetweenlands.common.entitys.movement;
+package thebetweenlands.common.entities.movement;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
@@ -8,18 +8,16 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
-import thebetweenlands.common.TheBetweenlands;
 
 public class FlightMoveHelper extends MoveControl {
 	protected int courseChangeCooldown;
 	protected boolean blocked = false;
-	
+
 	public FlightMoveHelper(Mob p_24983_) {
 		super(p_24983_);
 	}
-	
+
 	@Override
 	public void tick() {
 		AttributeInstance entityMoveSpeedAttribute = this.mob.getAttributes().getInstance(Attributes.MOVEMENT_SPEED);
@@ -36,12 +34,12 @@ public class FlightMoveHelper extends MoveControl {
 				this.courseChangeCooldown += this.getCourseChangeCooldown();
 
 				dist = (double)Math.sqrt(dist);
-				
+
 				if(this.isNotColliding(this.wantedX, this.wantedY, this.wantedZ, dist)) {
 					if(dist < this.mob.getBbWidth() + speed) {
 						speed *= dist / (this.mob.getBbWidth() + speed);
 					}
-					
+
 					if(dist < 0.01D) {
 						this.mob.setZza(0);
 						this.operation = Operation.WAIT;
@@ -60,7 +58,7 @@ public class FlightMoveHelper extends MoveControl {
 				} else {
 					this.blocked = true;
 				}
-				
+
 				if(this.blocked) {
 					this.operation = Operation.WAIT;
 				}
@@ -81,7 +79,7 @@ public class FlightMoveHelper extends MoveControl {
 			this.mob.setSpeed((float)speed);
 			this.mob.setZza((float)speed*this.strafeForwards);
 			this.mob.setXxa((float)speed*this.strafeRight);
-			
+
 			this.operation = Operation.WAIT;
 		}
 	}
@@ -90,7 +88,7 @@ public class FlightMoveHelper extends MoveControl {
 	 * Returns whether the path is currently blocked
 	 * @return
 	 */
-	
+
 	public boolean isBlocked() {
 		return this.blocked;
 	}

@@ -1,109 +1,104 @@
 package thebetweenlands.common.world.gen.biome.generator;
 
-import net.minecraft.server.level.WorldGenRegion;
-import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
-import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.world.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.decorator.BiomeDecorator;
 import thebetweenlands.common.world.gen.biome.decorator.DecoratorFeature;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 import java.util.SplittableRandom;
 
 public class BiomeGenerator {
 
-    public int biomeID;
-    public boolean noiseGenerated = false;
-    public boolean noiseGeneratorsInitialized = false;
-    public final BiomeDecorator decorator;
+	public int biomeID;
+	public boolean noiseGenerated = false;
+	public boolean noiseGeneratorsInitialized = false;
+	public final BiomeDecorator decorator;
 
-    // empty generator
-    public BiomeGenerator(BiomeDecorator decorator) {
-        this.decorator = decorator;
-    }
+	// empty generator
+	public BiomeGenerator(BiomeDecorator decorator) {
+		this.decorator = decorator;
+	}
 
-    public BiomeGenerator addFeature(DecoratorFeature feature) {
-        this.decorator.features.add(feature);
-        return this;
-    }
+	public BiomeGenerator addFeature(DecoratorFeature feature) {
+		this.decorator.features.add(feature);
+		return this;
+	}
 
-    public BiomeGenerator addFeatures(DecoratorFeature... feature) {
-        this.decorator.features.addAll(feature.length, Arrays.stream(feature).toList());
-        return this;
-    }
+	public BiomeGenerator addFeatures(DecoratorFeature... feature) {
+		this.decorator.features.addAll(feature.length, Arrays.stream(feature).toList());
+		return this;
+	}
 
-    public void initializeGenerators(long seed) {
-        if (!this.noiseGeneratorsInitialized) {
-            this.decorator.features.forEach((feature) -> {
-                feature.initializeGenerators(seed, this.biomeID);
-            });
-            this.noiseGeneratorsInitialized = true;
-        }
-    }
+	public void initializeGenerators(long seed) {
+		if (!this.noiseGeneratorsInitialized) {
+			this.decorator.features.forEach((feature) -> {
+				feature.initializeGenerators(seed, this.biomeID);
+			});
+			this.noiseGeneratorsInitialized = true;
+		}
+	}
 
-    /**
-     * Resets the noise generators at the next {@link BiomeGenerator#initializeGenerators(long)} call
-     */
-    public void resetNoiseGenerators() {
-        this.noiseGeneratorsInitialized = false;
-    }
+	/**
+	 * Resets the noise generators at the next {@link BiomeGenerator#initializeGenerators(long)} call
+	 */
+	public void resetNoiseGenerators() {
+		this.noiseGeneratorsInitialized = false;
+	}
 
-    public void generateNoise(int chunkZ, int chunkX) {
-        if (!this.noiseGenerated) {
-            decorator.features.forEach((feature) -> {
-                feature.generateNoise(chunkZ, chunkX, this.biomeID);
-            });
-            this.noiseGenerated = true;
-        }
-    }
+	public void generateNoise(int chunkZ, int chunkX) {
+		if (!this.noiseGenerated) {
+			decorator.features.forEach((feature) -> {
+				feature.generateNoise(chunkZ, chunkX, this.biomeID);
+			});
+			this.noiseGenerated = true;
+		}
+	}
 
-    /**
-     * Modifies the terrain with {@link DecoratorFeature} specific features.
-     * @param blockX
-     * @param blockZ
-     * @param inChunkX
-     * @param inChunkZ
-     * @param baseBlockNoise
-     * @param chunkPrimer
-     * @param chunkGenerator
-     * @param biomesForGeneration
-     * @param biomeWeights
-     * @param pass
-     */
-    public final void runBiomeFeatures(int blockX, int blockZ, int inChunkX, int inChunkZ,
-                                       double baseBlockNoise, ChunkAccess chunkPrimer,
-                                       ChunkGeneratorBetweenlands chunkGenerator, int[] biomesForGeneration,
-                                       BiomeWeights biomeWeights, EnumGeneratorPass pass) {
+	/**
+	 * Modifies the terrain with {@link DecoratorFeature} specific features.
+	 *
+	 * @param blockX
+	 * @param blockZ
+	 * @param inChunkX
+	 * @param inChunkZ
+	 * @param baseBlockNoise
+	 * @param chunkPrimer
+	 * @param chunkGenerator
+	 * @param biomesForGeneration
+	 * @param biomeWeights
+	 * @param pass
+	 */
+	public final void runBiomeFeatures(int blockX, int blockZ, int inChunkX, int inChunkZ,
+									   double baseBlockNoise, ChunkAccess chunkPrimer,
+									   ChunkGeneratorBetweenlands chunkGenerator, int[] biomesForGeneration,
+									   BiomeWeights biomeWeights, EnumGeneratorPass pass) {
 
-        decorator.features.forEach((feature) -> {
-            feature.replaceStackBlocks(inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, this.biomeID, biomeWeights, pass);
-        });
-    }
+		decorator.features.forEach((feature) -> {
+			feature.replaceStackBlocks(inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, this.biomeID, biomeWeights, pass);
+		});
+	}
 
-    public void replaceBiomeBlocks(int blockX, int blockZ, int inChunkX, int inChunkZ,
-                                   double baseBlockNoise, Random rng, long seed, ChunkAccess chunkPrimer,
-                                   ChunkGeneratorBetweenlands chunkGenerator, int[] biomesForGeneration,
-                                   BiomeWeights biomeWeights) {
+	public void replaceBiomeBlocks(int blockX, int blockZ, int inChunkX, int inChunkZ,
+								   double baseBlockNoise, Random rng, long seed, ChunkAccess chunkPrimer,
+								   ChunkGeneratorBetweenlands chunkGenerator, int[] biomesForGeneration,
+								   BiomeWeights biomeWeights) {
 
-        if(!this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, biomeWeights, EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS)) {
-            return;
-        }
+		if (!this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, biomeWeights, EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS)) {
+			return;
+		}
 
-        SplittableRandom fastRng = new SplittableRandom(blockX * 341873128712L + blockZ * 132897987541L);
+		SplittableRandom fastRng = new SplittableRandom(blockX * 341873128712L + blockZ * 132897987541L);
 
-        //Random number for base block patch generation based on the base block noise
-        int baseBlockNoiseRN = (int) (baseBlockNoise / 3.0D + 3.0D + fastRng.nextDouble() * 0.25D);
+		//Random number for base block patch generation based on the base block noise
+		int baseBlockNoiseRN = (int) (baseBlockNoise / 3.0D + 3.0D + fastRng.nextDouble() * 0.25D);
 
-        //Amount of blocks below the surface
-        int blocksBelow = -1;
-        //Amount of blocks below the first block under the layer
-        int blocksBelowLayer = -1;
+		//Amount of blocks below the surface
+		int blocksBelow = -1;
+		//Amount of blocks below the first block under the layer
+		int blocksBelowLayer = -1;
 
         /*
         for(int y = 255; y >= 0; --y) {
@@ -166,27 +161,26 @@ public class BiomeGenerator {
             }
         }
          */
-        this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, biomeWeights, EnumGeneratorPass.POST_REPLACE_BIOME_BLOCKS);
-    }
+		this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, biomeWeights, EnumGeneratorPass.POST_REPLACE_BIOME_BLOCKS);
+	}
 
-    public boolean replaceStackBlocks(int blockX, int blockZ, int inChunkX, int inChunkZ,
-                                   double baseBlockNoise, ChunkAccess chunkPrimer,
-                                   ChunkGeneratorBetweenlands chunkGenerator, int[] biomesForGeneration,
-                                   BiomeWeights biomeWeights, EnumGeneratorPass enumGeneratorPass) {
+	public boolean replaceStackBlocks(int blockX, int blockZ, int inChunkX, int inChunkZ,
+									  double baseBlockNoise, ChunkAccess chunkPrimer,
+									  ChunkGeneratorBetweenlands chunkGenerator, int[] biomesForGeneration,
+									  BiomeWeights biomeWeights, EnumGeneratorPass enumGeneratorPass) {
 
 
+		// default always return true
+		return true;
+	}
 
-        // default always return true
-        return true;
-    }
+	public void resetNoise() {
+		this.noiseGenerated = false;
+	}
 
-    public void resetNoise() {
-        this.noiseGenerated = false;
-    }
-
-    public static enum EnumGeneratorPass {
-        PRE_REPLACE_BIOME_BLOCKS,
-        POST_REPLACE_BIOME_BLOCKS,
-        POST_GEN_CAVES
-    }
+	public static enum EnumGeneratorPass {
+		PRE_REPLACE_BIOME_BLOCKS,
+		POST_REPLACE_BIOME_BLOCKS,
+		POST_GEN_CAVES
+	}
 }

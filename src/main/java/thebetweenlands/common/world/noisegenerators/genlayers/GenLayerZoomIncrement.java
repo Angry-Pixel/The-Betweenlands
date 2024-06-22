@@ -12,7 +12,7 @@ public class GenLayerZoomIncrement extends GenLayerBetweenlands {
 	@Override
 	public int[] getInts(int areaX, int areaZ, int sizeX, int sizeZ) {
 		int parentAreaX = areaX >> 1;
-		int parentAreaZ = areaZ >> 1;	
+		int parentAreaZ = areaZ >> 1;
 		int parentSizeX = (sizeX >> 1) + 2;
 		int parentSizeZ = (sizeZ >> 1) + 2;
 		int[] parentInts = this.parent.getInts(parentAreaX, parentAreaZ, parentSizeX, parentSizeZ);
@@ -27,17 +27,17 @@ public class GenLayerZoomIncrement extends GenLayerBetweenlands {
 			int xnzp = parentInts[0 + 0 + (zo + 1) * parentSizeX];
 
 			for (int xo = 0; xo < parentSizeX - 1; ++xo) {
-				this.initChunkSeed((long)(xo + parentAreaX << 1), (long)(zo + parentAreaZ << 1));
+				this.initChunkSeed((long) (xo + parentAreaX << 1), (long) (zo + parentAreaZ << 1));
 
 				int xpzn = parentInts[xo + 1 + (zo + 0) * parentSizeX];
 				int xpzp = parentInts[xo + 1 + (zo + 1) * parentSizeX];
 
 				newInts[index] = xnzn;
 
-				int rnd1 = this.selectRandom(new int[] {xnzn, xnzp});
+				int rnd1 = this.selectRandom(new int[]{xnzn, xnzp});
 				newInts[index++ + newSizeX] = rnd1 + (this.increment && rnd1 != -1 ? 1 : 0);
 
-				int rnd2 = this.selectRandom(new int[] {xnzn, xpzn});
+				int rnd2 = this.selectRandom(new int[]{xnzn, xpzn});
 				newInts[index] = rnd2 + (this.increment && rnd2 != -1 ? 1 : 0);
 
 				int rnd3 = this.selectModeOrRandom(xnzn, xpzn, xnzp, xpzp);
@@ -59,6 +59,7 @@ public class GenLayerZoomIncrement extends GenLayerBetweenlands {
 
 	/**
 	 * Magnifies the mask and increments every set int that is spread out by 1
+	 *
 	 * @param layer
 	 * @param num
 	 * @return

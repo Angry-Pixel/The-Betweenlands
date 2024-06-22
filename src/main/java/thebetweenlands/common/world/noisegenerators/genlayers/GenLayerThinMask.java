@@ -25,11 +25,12 @@ public class GenLayerThinMask extends GenLayerBetweenlands {
 				int id = currentInts[xx + this.range + (zz + this.range) * (sizeX + this.range * 2)];
 				ints[xx + zz * sizeX] = id;
 
-				if(id == this.id) {
-					check: for(int xo = -this.range; xo <= this.range; xo++) {
-						for(int zo = -this.range; zo <= this.range; zo++) {
-							if((xo != 0 || zo != 0) && xo * xo + zo * zo <= this.range * this.range + 1) {
-								if(currentInts[xx + this.range + xo + (zz + this.range + zo) * (sizeX + this.range * 2)] == this.id && this.nextInt(10000) <= this.removeChance * 10000) {
+				if (id == this.id) {
+					check:
+					for (int xo = -this.range; xo <= this.range; xo++) {
+						for (int zo = -this.range; zo <= this.range; zo++) {
+							if ((xo != 0 || zo != 0) && xo * xo + zo * zo <= this.range * this.range + 1) {
+								if (currentInts[xx + this.range + xo + (zz + this.range + zo) * (sizeX + this.range * 2)] == this.id && this.nextInt(10000) <= this.removeChance * 10000) {
 									ints[xx + zz * sizeX] = -1;
 									break check;
 								}

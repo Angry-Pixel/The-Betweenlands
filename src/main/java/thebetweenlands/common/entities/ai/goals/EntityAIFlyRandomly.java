@@ -1,18 +1,17 @@
-package thebetweenlands.common.entitys.ai.goals;
+package thebetweenlands.common.entities.ai.goals;
 
 import java.util.Random;
 
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
-import thebetweenlands.common.entitys.movement.FlightMoveHelper;
+import thebetweenlands.common.entities.movement.FlightMoveHelper;
 
 public class EntityAIFlyRandomly<T extends Mob> extends Goal {
 
 	protected final T entity;
 	protected double distanceMultiplier = 1.0D;
-	
+
 		public EntityAIFlyRandomly(T entity) {
 			this.entity = entity;
 		}

@@ -21,16 +21,16 @@ public class NibbletwigSapling extends BetweenlandsSapling {
 
 	public InteractionResult use(BlockState p_51088_, Level p_51089_, BlockPos p_51090_, Player p_51091_, InteractionHand p_51092_, BlockHitResult p_51093_) {
 		ItemStack item = p_51091_.getItemInHand(p_51092_);
-		
+
 		if (item.is(Items.BONE_MEAL)) {
-			
+
 			if (!p_51089_.isClientSide()) {
-				generator.generate(p_51089_,p_51089_.getRandom(), p_51090_);
+				generator.generate(p_51089_, p_51089_.getRandom(), p_51090_);
 			}
-			
+
 			return InteractionResult.SUCCESS;
 		}
-		
+
 		return InteractionResult.FAIL;
 	}
 }

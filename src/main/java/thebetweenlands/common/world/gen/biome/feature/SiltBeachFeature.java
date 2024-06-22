@@ -1,7 +1,5 @@
 package thebetweenlands.common.world.gen.biome.feature;
 
-import java.util.Random;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -13,6 +11,8 @@ import thebetweenlands.common.world.gen.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.decorator.DecoratorFeature;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 import thebetweenlands.common.world.noisegenerators.NoiseGeneratorPerlin;
+
+import java.util.Random;
 
 /**
  * Adds silt beaches to low areas close to water
@@ -46,14 +46,14 @@ public class SiltBeachFeature extends DecoratorFeature {
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise, ChunkAccess chunkPrimer,
 								   ChunkGeneratorBetweenlands chunkGenerator, int[] biomesForGeneration, int biome, BiomeWeights biomeWeights,
 								   EnumGeneratorPass pass) {
-		if(pass == EnumGeneratorPass.POST_GEN_CAVES) {
+		if (pass == EnumGeneratorPass.POST_GEN_CAVES) {
 			float biomeWeight = biomeWeights.get(x, z);
-			if(this.siltNoise[x * 16 + z] / 1.6f + 1.5f <= 0 && biomeWeight <= this.terrainWeightThreshold) {
+			if (this.siltNoise[x * 16 + z] / 1.6f + 1.5f <= 0 && biomeWeight <= this.terrainWeightThreshold) {
 				int y = TheBetweenlands.LAYER_HEIGHT;
 				Block currentBlock = chunkPrimer.getBlockState(new BlockPos(x, y, z)).getBlock();
 				Block blockAbove = chunkPrimer.getBlockState(new BlockPos(x, y + 1, z)).getBlock();
-				if(currentBlock == chunkGenerator.betweenlandsBiomeProvider.BiomeFromID(biome).topBlock() && blockAbove == Blocks.AIR) {
-					chunkPrimer.setBlockState(new BlockPos(x, y, z), BlockRegistry.SILT.get().defaultBlockState(),false);
+				if (currentBlock == chunkGenerator.betweenlandsBiomeProvider.BiomeFromID(biome).topBlock() && blockAbove == Blocks.AIR) {
+					chunkPrimer.setBlockState(new BlockPos(x, y, z), BlockRegistry.SILT.get().defaultBlockState(), false);
 				}
 			}
 		}

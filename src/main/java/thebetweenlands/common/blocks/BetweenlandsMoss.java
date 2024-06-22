@@ -11,7 +11,7 @@ public class BetweenlandsMoss extends BetweenlandsMultifaceBlock {
 	public static final BooleanProperty WEST = BlockStateProperties.WEST;
 	public static final BooleanProperty UP = BlockStateProperties.UP;
 	public static final BooleanProperty DOWN = BlockStateProperties.DOWN;
-	
+
 	public BetweenlandsMoss(Properties p_153282_) {
 		super(p_153282_);
 	}

@@ -1,23 +1,20 @@
 package thebetweenlands.common.world;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BiomeRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.core.Holder;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraftforge.event.world.BiomeLoadingEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 // where we add structures and features to biomes
 @Mod.EventBusSubscriber(modid = TheBetweenlands.ID)
@@ -103,7 +100,7 @@ public class WorldEventsHook {
 		public ResourceLocation name;
 
 		// Use if using a hardcoded feature
-		public appendFeatureRegister (ResourceLocation name, GenerationStep.Decoration generationStep, Holder<PlacedFeature> placedFeatureHolder) {
+		public appendFeatureRegister(ResourceLocation name, GenerationStep.Decoration generationStep, Holder<PlacedFeature> placedFeatureHolder) {
 			this.name = name;
 			this.generationStep = generationStep;
 			this.placedFeatureHolder = placedFeatureHolder;
@@ -116,7 +113,7 @@ public class WorldEventsHook {
 		public ResourceLocation name;
 
 		// Use if using a hardcoded feature
-		public appendSpawnRegister (ResourceLocation name, MobCategory category, MobSpawnSettings.SpawnerData spawnerData) {
+		public appendSpawnRegister(ResourceLocation name, MobCategory category, MobSpawnSettings.SpawnerData spawnerData) {
 			this.name = name;
 			this.category = category;
 			this.spawnerData = spawnerData;

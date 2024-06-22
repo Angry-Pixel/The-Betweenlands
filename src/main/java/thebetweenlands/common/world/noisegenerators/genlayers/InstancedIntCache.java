@@ -1,8 +1,8 @@
 package thebetweenlands.common.world.noisegenerators.genlayers;
 
-import java.util.List;
-
 import com.google.common.collect.Lists;
+
+import java.util.List;
 
 public class InstancedIntCache {
 	private int intCacheSize = 256;

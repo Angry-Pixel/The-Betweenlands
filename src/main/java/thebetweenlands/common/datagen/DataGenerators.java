@@ -26,6 +26,7 @@ public class DataGenerators {
         gen.addProvider(data, new BetweenlandsBlockTagsProvider(output, provider, helper));
 
         // Assets
+		gen.addProvider(assets, new BetweenlandsLangProvider(output));
         gen.addProvider(assets, new BetweenlandsBlockStateProvider(output, helper));
     }
 }

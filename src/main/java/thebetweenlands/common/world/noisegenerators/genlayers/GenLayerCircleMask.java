@@ -21,12 +21,13 @@ public class GenLayerCircleMask extends GenLayerBetweenlands {
 			for (int xx = 0; xx < sizeX; ++xx) {
 				maskInts[xx + zz * sizeX] = -1;
 
-				check: for(int xo = -this.radius; xo <= this.radius; xo++) {
-					for(int zo = -this.radius; zo <= this.radius; zo++) {
-						if(xo * xo + zo * zo <= this.radius * this.radius) {
+				check:
+				for (int xo = -this.radius; xo <= this.radius; xo++) {
+					for (int zo = -this.radius; zo <= this.radius; zo++) {
+						if (xo * xo + zo * zo <= this.radius * this.radius) {
 							int index = xx + this.radius + xo + (zz + this.radius + zo) * (sizeX + this.radius * 2);
 							int id = currentInts[index];
-							if(id == this.id) {
+							if (id == this.id) {
 								maskInts[xx + zz * sizeX] = id;
 								break check;
 							}

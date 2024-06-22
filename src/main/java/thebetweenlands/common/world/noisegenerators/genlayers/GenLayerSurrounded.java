@@ -30,11 +30,12 @@ public class GenLayerSurrounded extends GenLayerBetweenlands {
 
 				boolean surrounded = true;
 
-				check: for(int xo = -this.checkRange; xo <= this.checkRange; xo++) {
-					for(int zo = -this.checkRange; zo <= this.checkRange; zo++) {
-						if(xo * xo + zo * zo <= this.checkRange * this.checkRange + 1) {
+				check:
+				for (int xo = -this.checkRange; xo <= this.checkRange; xo++) {
+					for (int zo = -this.checkRange; zo <= this.checkRange; zo++) {
+						if (xo * xo + zo * zo <= this.checkRange * this.checkRange + 1) {
 							int biomeID = currentBiomeInts[xx + this.checkRange + xo + (zz + this.checkRange + zo) * (sizeX + this.checkRange * 2)];
-							if(biomeID != this.surrounding) {
+							if (biomeID != this.surrounding) {
 								surrounded = false;
 								break check;
 							}
@@ -42,7 +43,7 @@ public class GenLayerSurrounded extends GenLayerBetweenlands {
 					}
 				}
 
-				if(surrounded && this.nextInt(10000) <= this.spawnChance * 10000) {
+				if (surrounded && this.nextInt(10000) <= this.spawnChance * 10000) {
 					biomeInts[xx + zz * sizeX] = this.biome;
 				}
 			}

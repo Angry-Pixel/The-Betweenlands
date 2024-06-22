@@ -7,13 +7,15 @@ import thebetweenlands.common.world.GenLayersEvent;
 
 public abstract class ProviderGenLayer {
 
-    // Genlayer provider settings here
-    public static MapCodec<ProviderGenLayer> CODEC = RecordCodecBuilder.mapCodec((codec) -> {
-        return codec.group(ResourceLocation.CODEC.fieldOf("type").forGetter((obj) -> obj.name)).
-                apply(codec, (obj) -> {return GenLayersEvent.REGISTRY.Providers.get(obj).get();});
-    });
+	// Genlayer provider settings here
+	public static MapCodec<ProviderGenLayer> CODEC = RecordCodecBuilder.mapCodec((codec) -> {
+		return codec.group(ResourceLocation.CODEC.fieldOf("type").forGetter((obj) -> obj.name)).
+			apply(codec, (obj) -> {
+				return GenLayersEvent.REGISTRY.Providers.get(obj).get();
+			});
+	});
 
-    public ResourceLocation name;
+	public ResourceLocation name;
 
-    public abstract GenLayer[] initialize(long seed);
+	public abstract GenLayer[] initialize(long seed);
 }

@@ -10,25 +10,25 @@ import thebetweenlands.common.TheBetweenlands;
 public class SoundRegistry {
 	// Sound list
 	public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT, TheBetweenlands.ID);
-	
+
 	// Ambent loops
 	public static final DeferredHolder<SoundEvent, SoundEvent> BETWEENLANDS_AMBIENT_SWAMP_LOOP = register("ambient_swamp");
 	public static final DeferredHolder<SoundEvent, SoundEvent> BETWEENLANDS_AMBIENT_WATER_LOOP = register("water_ambience");
 	public static final DeferredHolder<SoundEvent, SoundEvent> BETWEENLANDS_AMBIENT_CAVES_LOOP = register("ambient_cave");
-	
+
 	// Ambent effects
-	
-	
+
+
 	// Blocks
 	public static final DeferredHolder<SoundEvent, SoundEvent> BETWEENLANDS_PORTAL = register("portal");
-	
+
 	// Music
 	public static final DeferredHolder<SoundEvent, SoundEvent> BETWEENLANDS_MUSIC = register("bl_dimension");
 
 	// Records
 	public static final DeferredHolder<SoundEvent, SoundEvent> RECORD_ASTATOS = register("astatos");
 
-	// Entitys
+	// Entities
 	public static final DeferredHolder<SoundEvent, SoundEvent> SWAMP_HAG_DEATH = register("swamp_hag_death");
 	public static final DeferredHolder<SoundEvent, SoundEvent> SWAMP_HAG_HURT = register("swamp_hag_hurt");
 	public static final DeferredHolder<SoundEvent, SoundEvent> SWAMP_HAG_LIVING = register("swamp_hag_living"); // FIXME Compialation of all sounds (may be unused)
@@ -45,8 +45,7 @@ public class SoundRegistry {
 	public static final DeferredHolder<SoundEvent, SoundEvent> WIGHT_HURT = register("wight_hurt");
 	public static final DeferredHolder<SoundEvent, SoundEvent> WIGHT_LIVING = register("wight_living");
 
-	//TODO: Not every sound will be variable
 	public static DeferredHolder<SoundEvent, SoundEvent> register(String name) {
-		return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(TheBetweenlands.ID, name)));
+		return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(TheBetweenlands.prefix(name)));
 	}
 }

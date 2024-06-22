@@ -13,7 +13,7 @@ public class BetweenlandsThorns extends BetweenlandsVineBlock {
 		super(properties);
 	}
 
-	
+
 	@Override
 	public void entityInside(BlockState p_60495_, Level p_60496_, BlockPos p_60497_, Entity p_60498_) {
 		// Only hurt players and mobs ignoring items and others

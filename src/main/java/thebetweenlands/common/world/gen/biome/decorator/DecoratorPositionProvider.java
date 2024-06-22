@@ -1,19 +1,14 @@
 package thebetweenlands.common.world.gen.biome.decorator;
 
-import java.lang.ref.Reference;
-import java.lang.ref.WeakReference;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockPos.MutableBlockPos;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.ChunkGeneratorBetweenlands;
+
+import javax.annotation.Nullable;
+import java.util.Random;
 
 
 // TODO: figure out were exactly the position values get buggered up here
@@ -25,12 +20,13 @@ public class DecoratorPositionProvider {
 	public int biome;
 	public WorldGenLevel world;
 	public int x, y, z, seaGroundY;
-	public Random rand;		// I really wish native pointers existed in java
+	public Random rand;        // I really wish native pointers existed in java
 	public ChunkGeneratorBetweenlands generator;
 	public int minOffsetXZ = 8, maxOffsetXZ = 24, minOffsetY = -8, maxOffsetY = 8;
 
 	/**
 	 * Returns the chunk generator
+	 *
 	 * @return
 	 */
 	@Nullable
@@ -40,6 +36,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Returns the biome
+	 *
 	 * @return
 	 */
 	public int getBiome() {
@@ -48,6 +45,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Returns a random X/Z offset
+	 *
 	 * @return
 	 */
 	public int offsetXZ() {
@@ -56,6 +54,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Returns a random X/Z offset for generating a feature with a custom padding
+	 *
 	 * @param padding Block padding from chunk borders, from 0 to 15
 	 * @return
 	 */
@@ -67,6 +66,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Returns a random Y offset
+	 *
 	 * @return
 	 */
 	public int offsetY() {
@@ -75,6 +75,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Returns a random position
+	 *
 	 * @return
 	 */
 	public BlockPos getRandomPos() {
@@ -83,6 +84,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Returns a random position with a custom padding
+	 *
 	 * @param padding Block padding from chunk borders, from 0 to 15
 	 * @return
 	 */
@@ -92,6 +94,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Returns a random position near the sea ground with a padding of 8 blocks
+	 *
 	 * @return
 	 */
 	public BlockPos getRandomPosSeaGround() {
@@ -100,6 +103,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Returns a random position near the sea ground with a custom padding
+	 *
 	 * @param padding Block padding from chunk borders, from 0 to 15
 	 * @return
 	 */
@@ -109,6 +113,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Returns a random X position with a padding of 8 blocks
+	 *
 	 * @return
 	 */
 	public int getRandomPosX() {
@@ -117,6 +122,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Returns a random X position with a custom padding
+	 *
 	 * @param padding Block padding from chunk borders, from 0 to 15
 	 * @return
 	 */
@@ -126,6 +132,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Returns a random Z position with a padding of 8 blocks
+	 *
 	 * @return
 	 */
 	public int getRandomPosZ() {
@@ -134,6 +141,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Returns a random Z position with a custom padding
+	 *
 	 * @param padding Block padding from chunk borders, from 0 to 15
 	 * @return
 	 */
@@ -143,6 +151,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Returns a random Y position
+	 *
 	 * @return
 	 */
 	public int getRandomPosY() {
@@ -151,6 +160,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Returns a random Y position near the sea ground
+	 *
 	 * @return
 	 */
 	public int getRandomPosYSeaGround() {
@@ -159,6 +169,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Returns the world
+	 *
 	 * @return
 	 */
 	public WorldGenLevel getWorld() {
@@ -167,6 +178,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Returns the X coordinate
+	 *
 	 * @return
 	 */
 	public int getX() {
@@ -175,6 +187,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Returns the Y coordinate
+	 *
 	 * @return
 	 */
 	public int getY() {
@@ -183,6 +196,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Returns the Y coordinate below liquids
+	 *
 	 * @return
 	 */
 	public int getSeaGroundY() {
@@ -191,6 +205,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Returns the Z coordinate
+	 *
 	 * @return
 	 */
 	public int getZ() {
@@ -199,6 +214,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Returns the RNG
+	 *
 	 * @return
 	 */
 	public Random getRand() {
@@ -207,6 +223,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Sets the minimum and maximum offsets in X/Z direction
+	 *
 	 * @param min
 	 * @param max
 	 */
@@ -218,6 +235,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Sets the mimimum and maximum offsets in Y direction
+	 *
 	 * @param min
 	 * @param max
 	 */
@@ -229,13 +247,14 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Updates the positions
-	 * @param world World
-	 * @param biome Biome
+	 *
+	 * @param world     World
+	 * @param biome     Biome
 	 * @param generator Chunk Generator
-	 * @param rand Rng
-	 * @param x X coordinate
-	 * @param y Y coordinate, use -1 for surface
-	 * @param z Z coordinate
+	 * @param rand      Rng
+	 * @param x         X coordinate
+	 * @param y         Y coordinate, use -1 for surface
+	 * @param z         Z coordinate
 	 */
 	public void init(WorldGenLevel world, int biome, @Nullable ChunkGeneratorBetweenlands generator, Random rand, int x, int y, int z) {
 		this.generator = generator;
@@ -244,13 +263,13 @@ public class DecoratorPositionProvider {
 		this.z = z;
 		this.rand = rand;
 		this.world = world;
-		if(y == -1) {
+		if (y == -1) {
 			this.y = world.getHeight(Heightmap.Types.WORLD_SURFACE_WG, x, z);
 		} else {
 			this.y = y;
 		}
 		this.seaGroundY = this.y;
-		if(this.y <= TheBetweenlands.LAYER_HEIGHT && world.getBlockState(new BlockPos(this.x, this.y, this.z)).getMaterial().isLiquid()) {
+		if (this.y <= TheBetweenlands.LAYER_HEIGHT && world.getBlockState(new BlockPos(this.x, this.y, this.z)).getMaterial().isLiquid()) {
 			MutableBlockPos offsetPos = new MutableBlockPos();
 			for (int oy = this.y; oy > 0; oy--) {
 				offsetPos.set(this.x, oy, this.z);
@@ -264,6 +283,7 @@ public class DecoratorPositionProvider {
 
 	/**
 	 * Updates the positions
+	 *
 	 * @param world
 	 * @param biome
 	 * @param generator

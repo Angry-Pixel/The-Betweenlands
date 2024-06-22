@@ -127,10 +127,10 @@ public class AmateMapRenderer implements AutoCloseable {
 					float f4 = textureatlassprite.getU1();
 					float f5 = textureatlassprite.getV1();
 					VertexConsumer vertexconsumer1 = buffer.getBuffer(RenderType.text(textureatlassprite.atlasLocation()));
-					vertexconsumer1.addVertex(matrix4f1, -1.0F, 1.0F, (float)k * -0.001F).setColor(-1).setUv(f2, f3).setLight(light);
-					vertexconsumer1.addVertex(matrix4f1, 1.0F, 1.0F, (float)k * -0.001F).setColor(-1).setUv(f4, f3).setLight(light);
-					vertexconsumer1.addVertex(matrix4f1, 1.0F, -1.0F, (float)k * -0.001F).setColor(-1).setUv(f4, f5).setLight(light);
-					vertexconsumer1.addVertex(matrix4f1, -1.0F, -1.0F, (float)k * -0.001F).setColor(-1).setUv(f2, f5).setLight(light);
+					vertexconsumer1.addVertex(matrix4f1, -1.0F, 1.0F, (float) k * -0.001F).setColor(-1).setUv(f2, f3).setLight(light);
+					vertexconsumer1.addVertex(matrix4f1, 1.0F, 1.0F, (float) k * -0.001F).setColor(-1).setUv(f4, f3).setLight(light);
+					vertexconsumer1.addVertex(matrix4f1, 1.0F, -1.0F, (float) k * -0.001F).setColor(-1).setUv(f4, f5).setLight(light);
+					vertexconsumer1.addVertex(matrix4f1, -1.0F, -1.0F, (float) k * -0.001F).setColor(-1).setUv(f2, f5).setLight(light);
 					stack.popPose();
 					if (mapdecoration.name().isPresent()) {
 						Font font = Minecraft.getInstance().font;
@@ -138,7 +138,7 @@ public class AmateMapRenderer implements AutoCloseable {
 						float f6 = (float) font.width(component);
 						float f7 = Mth.clamp(25.0F / f6, 0.0F, 6.0F / 9.0F);
 						stack.pushPose();
-						stack.translate(0.0F + (float)mapdecoration.x() / 2.0F + 64.0F - f6 * f7 / 2.0F, 0.0F + (float)mapdecoration.y() / 2.0F + 64.0F + 4.0F, -0.025F);
+						stack.translate(0.0F + (float) mapdecoration.x() / 2.0F + 64.0F - f6 * f7 / 2.0F, 0.0F + (float) mapdecoration.y() / 2.0F + 64.0F + 4.0F, -0.025F);
 						stack.scale(f7, f7, 1.0F);
 						stack.translate(0.0D, 0.0D, -0.1F);
 						font.drawInBatch(component, 0.0F, 0.0F, -1, false, stack.last().pose(), buffer, Font.DisplayMode.NORMAL, Integer.MIN_VALUE, light);

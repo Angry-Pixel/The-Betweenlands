@@ -1,4 +1,4 @@
-package thebetweenlands.common.entitys.ai.goals;
+package thebetweenlands.common.entities.ai.goals;
 
 import javax.annotation.Nullable;
 

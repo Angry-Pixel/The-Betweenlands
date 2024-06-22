@@ -1,4 +1,4 @@
-package thebetweenlands.common.entitys;
+package thebetweenlands.common.entities;
 
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -33,13 +33,13 @@ public class EntitySwampHag extends BetweenlandsEntity {
 	private static final EntityDataAccessor<Boolean> IS_THROWING = SynchedEntityData.defineId(EntitySwampHag.class, EntityDataSerializers.BOOLEAN);
 	private static final EntityDataAccessor<Integer> THROW_TIMER = SynchedEntityData.defineId(EntitySwampHag.class, EntityDataSerializers.INT);
 	AnimationMathHelper animationTalk = new AnimationMathHelper();
-	
-	
+
+
 	public EntitySwampHag(EntityType<? extends Monster> p_33002_, Level p_33003_) {
 		super(p_33002_, p_33003_);
 		this.ambientSoundTime = 120;
 	}
-	
+
 	@Override
 	public AttributeMap getAttributes() {
 		return new AttributeMap(BetweenlandsEntity.createMonsterAttributes()
@@ -48,12 +48,12 @@ public class EntitySwampHag extends BetweenlandsEntity {
 				.add(Attributes.ATTACK_DAMAGE, 4.0D)
 				.add(Attributes.FOLLOW_RANGE, 35.0D).build());
 	}
-	
+
 	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundRegistry.SWAMP_HAG_DEATH.get();
 	}
-	
+
 	protected void registerGoals() {
 	      this.goalSelector.addGoal(1, new FloatGoal(this));
 	      this.goalSelector.addGoal(4, new SwampHagAttackGoal(this));
@@ -64,25 +64,25 @@ public class EntitySwampHag extends BetweenlandsEntity {
 	      this.targetSelector.addGoal(2, new SwampHagTargetGoal<>(this, Player.class));
 	      this.targetSelector.addGoal(3, new SwampHagTargetGoal<>(this, IronGolem.class));
 	}
-	
-	
+
+
 	static class SwampHagAttackGoal extends MeleeAttackGoal {
 	      public SwampHagAttackGoal(EntitySwampHag p_33822_) {
 	         super(p_33822_, 1.0D, false);
 	      }
 	}
-	
+
 	static class SwampHagTargetGoal<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
 	      public SwampHagTargetGoal(EntitySwampHag p_33832_, Class<T> p_33833_) {
 	         super(p_33832_, p_33833_, true);
 	      }
 	}
-	
+
 	@Override
 	public void onSyncedDataUpdated(EntityDataAccessor<?> p_21104_) {
 		super.onSyncedDataUpdated(p_21104_);
 	}
-	
+
 	protected void defineSynchedData() {
 	      super.defineSynchedData();
 	      this.entityData.define(TALK_SOUND, (byte)0);
@@ -91,14 +91,14 @@ public class EntitySwampHag extends BetweenlandsEntity {
 	      this.entityData.define(IS_THROWING, false);
 	      this.entityData.define(THROW_TIMER, 0);
 	   }
-	
+
 	@Override
 	public void tick() {
 		super.tick();
-		
+
 		// NO BREATHING ALLOWED! ~random mojank dev who decided not to alow indiviual modelpart scaling
 		//breatheFloat = animationBreathe.swing(0.2F, 0.5F, false);
-		
+
 		/*
 		// Fixed in this build
 		if(this.getAttackTarget() != null && !this.getRecursivePassengersByType(EntityWight.class).isEmpty()) {
@@ -112,12 +112,12 @@ public class EntitySwampHag extends BetweenlandsEntity {
 			}
 		}
 		*/
-		
-		
+
+
 		if (!this.level.isClientSide) {
 			updateLivingSoundTime();
 		}
-		
+
 		if (animationTick > 0) {
 			animationTick--;
 		}
@@ -137,7 +137,7 @@ public class EntitySwampHag extends BetweenlandsEntity {
 		else if (shouldJawMove() && getTalkSound() == 3 || shouldJawMove() && getTalkSound() == 4)
 			jawFloat = animationTalk.swing(0.4F, 1.2F, false);
 	}
-	
+
 	private void updateLivingSoundTime() {
 		this.entityData.set(LIVING_SOUND_TIMER, this.ambientSoundTime);
 	}
@@ -145,32 +145,32 @@ public class EntitySwampHag extends BetweenlandsEntity {
 	private int getLivingSoundTime() {
 		return this.entityData.get(LIVING_SOUND_TIMER);
 	}
-	
+
 	private byte getTalkSound() {
 		return this.entityData.get(TALK_SOUND);
 	}
-	
+
 	private void setTalkSound(byte value) {
 		this.entityData.set(TALK_SOUND, value);
 	}
-	
+
 	public void setShouldJawMove(boolean jawState) {
 		entityData.set(SHOULD_JAW_MOVE, jawState);
 		if (jawState)
 			animationTick = 20;
 	}
-	
+
 	public boolean shouldJawMove() {
 		return entityData.get(SHOULD_JAW_MOVE);
 	}
-	
+
 	@Override
 	protected SoundEvent getHurtSound(DamageSource p_33034_) {
 		setTalkSound((byte) 4);
 		setShouldJawMove(true);
 		return SoundRegistry.SWAMP_HAG_HURT.get();
 	}
-	
+
 	@Override
 	protected SoundEvent getAmbientSound() {
 		int randomSound = random.nextInt(4) + 1;
@@ -186,14 +186,14 @@ public class EntitySwampHag extends BetweenlandsEntity {
 			return SoundRegistry.SWAMP_HAG_LIVING_4.get();
 		}
 	}
-	
+
 	// This uses the combination event
 	/*
 	protected SoundEvent getAmbientSound() {
 		return ModSounds.SWAMP_HAG_LIVING.get();
 	}
 	*/
-	
+
 	public boolean isRidingMummy() {
 		return false;
 	}

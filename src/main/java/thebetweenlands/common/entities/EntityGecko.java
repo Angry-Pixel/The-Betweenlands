@@ -1,4 +1,4 @@
-package thebetweenlands.common.entitys;
+package thebetweenlands.common.entities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -25,7 +25,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 public class EntityGecko extends BetweenlandsEntity {
 
 	public static final EntityDataAccessor<Boolean> HIDING = SynchedEntityData.defineId(EntityGecko.class, EntityDataSerializers.BOOLEAN);
-	
+
 	private static final int MIN_HIDE_TIME = 20 * 60 * 2;
 
 	private static final float UNHIDE_CHANCE = 0.1F;
@@ -35,24 +35,24 @@ public class EntityGecko extends BetweenlandsEntity {
 	private BlockPos hidingBush;
 
 	private int timeHiding;
-	
+
 	public EntityGecko(EntityType<? extends Monster> p_33002_, Level p_33003_) {
 		super(p_33002_, p_33003_);
 		this.ambientSoundTime = 80;
 	}
-	
+
 	@Override
 	public AttributeMap getAttributes() {
 		return new AttributeMap(EntityGecko.createMonsterAttributes()
 				.add(Attributes.MAX_HEALTH, 12.0D)
 				.add(Attributes.MOVEMENT_SPEED, 0.5D).build());
 	}
-	
+
 	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundRegistry.GECKO_DEATH.get();
 	}
-	
+
 	protected void registerGoals() {
 	      this.goalSelector.addGoal(0, new FloatGoal(this));
 	      this.goalSelector.addGoal(1, new PanicGoal(this, 1.0D));
@@ -63,22 +63,22 @@ public class EntityGecko extends BetweenlandsEntity {
 	      this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
 	      this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
 	}
-	
+
 	protected void defineSynchedData() {
 	      super.defineSynchedData();
 	      this.entityData.define(HIDING, false);
 	   }
-	
+
 	@Override
 	protected SoundEvent getHurtSound(DamageSource p_33034_) {
 		return SoundRegistry.GECKO_HURT.get();
 	}
-	
+
 	@Override
 	protected SoundEvent getAmbientSound() {
 		return SoundRegistry.GECKO_LIVING.get();
 	}
-	
+
 	static class GeckoAvoidGoal<T extends LivingEntity> extends AvoidEntityGoal<T> {
 	      public GeckoAvoidGoal(EntityGecko gecko, Class<T> p_29276_, float p_29277_, double p_29278_, double p_29279_) {
 	         super(gecko, p_29276_, p_29277_, p_29278_, p_29279_, EntitySelector.NO_SPECTATORS::test);

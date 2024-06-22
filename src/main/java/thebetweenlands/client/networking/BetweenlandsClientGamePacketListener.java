@@ -4,5 +4,5 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 
 public interface BetweenlandsClientGamePacketListener extends ClientGamePacketListener {
 
-    void handleAmateMapItemData(ClientGamePacketListener listener);
+	void handleAmateMapItemData(ClientGamePacketListener listener);
 }

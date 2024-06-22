@@ -24,7 +24,7 @@ public class GenLayerMixMask extends GenLayerBetweenlands {
 
 		for (int i = 0; i < sizeX * sizeZ; ++i) {
 			int mask = maskInts[i];
-			if(mask != -1) {
+			if (mask != -1) {
 				mixedInts[i] = mask;
 			} else {
 				mixedInts[i] = parentInts[i];

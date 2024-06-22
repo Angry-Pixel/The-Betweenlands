@@ -9,11 +9,11 @@ public class BetweenlandsWeatherHandler implements IWeatherRenderHandler {
 
 	public BetweenlandsWeatherHandler() {
 	}
-	
+
 	@Override
 	public void render(int ticks, float partialTick, ClientLevel level, Minecraft minecraft, LightTexture lightTexture,
-			double camX, double camY, double camZ) {
-		
+					   double camX, double camY, double camZ) {
+
 	}
 
 }

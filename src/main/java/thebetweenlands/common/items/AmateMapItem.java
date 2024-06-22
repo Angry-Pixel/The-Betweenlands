@@ -26,14 +26,17 @@ import thebetweenlands.common.savedata.BLMapDecoration;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
-public class ItemAmateMap extends MapItem {
+public class AmateMapItem extends MapItem {
 
 	public static final String STR_ID = "amatemap";
 	public static final Map<ResourceLocation, BiomeColor> BIOME_COLORS = new HashMap<>();
 
-	public ItemAmateMap(Properties properties) {
+	public AmateMapItem(Properties properties) {
 		super(properties);
 	}
 
@@ -61,7 +64,7 @@ public class ItemAmateMap extends MapItem {
 		AmateMapData mapdata = getData(stack, level);
 		if (mapdata == null && !level.isClientSide()) {
 			BlockPos sharedSpawnPos = level.getSharedSpawnPos();
-			mapdata = ItemAmateMap.createMapData(stack, level, sharedSpawnPos.getX(), sharedSpawnPos.getZ(), false, false);
+			mapdata = AmateMapItem.createMapData(stack, level, sharedSpawnPos.getX(), sharedSpawnPos.getZ(), false, false);
 		}
 
 		return mapdata;

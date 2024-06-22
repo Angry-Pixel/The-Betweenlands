@@ -8,9 +8,9 @@ import java.util.Random;
 
 public class WorldGenDebug extends WorldGenHelper {
 
-    @Override
-    public boolean generate(WorldGenLevel world, Random rand, BlockPos pos) {
-        world.setBlock(pos, BlockRegistry.LIMESTONE.get().defaultBlockState(), 0);
-        return true;
-    }
+	@Override
+	public boolean generate(WorldGenLevel world, Random rand, BlockPos pos) {
+		world.setBlock(pos, BlockRegistry.LIMESTONE.get().defaultBlockState(), 0);
+		return true;
+	}
 }

@@ -1,4 +1,4 @@
-package thebetweenlands.common.entitys;
+package thebetweenlands.common.entities;
 
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Monster;

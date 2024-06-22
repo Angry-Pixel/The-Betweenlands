@@ -1,4 +1,4 @@
-package thebetweenlands.common.entitys;
+package thebetweenlands.common.entities;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -14,14 +14,14 @@ public class EntityVolatileSoul extends BetweenlandsEntity {
 	private Entity target = null;
 	private int strikes = 0;
 	private int ticksInAir;
-	
+
 	//protected static final DataParameter<Optional<UUID>> OWNER_UUID_DW = EntityDataManager.createKey(EntityVolatileSoul.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
 	protected Deque<Vector3d> trail = new LinkedList<>();
-	
+
 	protected EntityVolatileSoul(EntityType<? extends Monster> p_33002_, Level p_33003_) {
 		super(p_33002_, p_33003_);
 	}
-	
+
 
 }

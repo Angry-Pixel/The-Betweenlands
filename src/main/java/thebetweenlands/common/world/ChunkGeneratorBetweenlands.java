@@ -1,14 +1,9 @@
 package thebetweenlands.common.world;
 
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
@@ -28,6 +23,9 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
+import net.minecraft.world.level.levelgen.material.WorldGenMaterialRule;
+import net.minecraft.world.level.levelgen.structure.StructureSet;
+import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import net.minecraft.world.level.levelgen.synth.PerlinNoise;
 import net.minecraft.world.level.levelgen.synth.SimplexNoise;
 import thebetweenlands.common.TheBetweenlands;
@@ -38,26 +36,18 @@ import thebetweenlands.common.world.gen.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 import thebetweenlands.common.world.gen.feature.legacy.MapGenCavesBetweenlands;
-import thebetweenlands.common.world.noisegenerators.NoiseGeneratorPerlin;
 import thebetweenlands.common.world.noisegenerators.NoiseGeneratorOctaves;
+import thebetweenlands.common.world.noisegenerators.NoiseGeneratorPerlin;
 import thebetweenlands.common.world.noisegenerators.NoiseGeneratorSimplex;
-import thebetweenlands.common.world.util.postprossesors.CorseIslandsPostProssesor;
-import thebetweenlands.common.world.util.postprossesors.HardCutPostProssesor;
-import thebetweenlands.common.world.util.postprossesors.StandardPostProssesor;
-import thebetweenlands.common.world.util.postprossesors.SurfacePostProssesor;
-import thebetweenlands.common.world.util.postprossesors.SwamplandsPostProssesor;
-import thebetweenlands.common.world.surfacegenerators.CorseIslandsSurfaceGenerator;
-import thebetweenlands.common.world.surfacegenerators.DeepWatersSurfaceGenerator;
-import thebetweenlands.common.world.surfacegenerators.ErodedMarshSurfaceGenerator;
-import thebetweenlands.common.world.surfacegenerators.MarshSurfaceGenerator;
-import thebetweenlands.common.world.surfacegenerators.PatchyIslandsSurfaceGenerator;
-import thebetweenlands.common.world.surfacegenerators.SlugePlainsSurfaceGenerator;
-import thebetweenlands.common.world.surfacegenerators.SurfaceGenerator;
-import thebetweenlands.common.world.surfacegenerators.SwamplandsSurfaceGenerator;
+import thebetweenlands.common.world.surfacegenerators.*;
 import thebetweenlands.common.world.util.OpenBeardifier;
-import net.minecraft.world.level.levelgen.material.WorldGenMaterialRule;
-import net.minecraft.world.level.levelgen.structure.StructureSet;
-import net.minecraft.world.level.levelgen.synth.NormalNoise;
+import thebetweenlands.common.world.util.postprossesors.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 
 /* TODO: big rewrite!
@@ -66,14 +56,14 @@ import net.minecraft.world.level.levelgen.synth.NormalNoise;
 
 
 public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
-	
+
 	// Generator data pack inputs
 	public final static Codec<BetweenlandsGeneratorSettings> SETTINGS_CODEC = RecordCodecBuilder.create((p_64475_) -> {
 		return p_64475_.group(
-		Codec.FLOAT.fieldOf("pitstone_base").forGetter(BetweenlandsGeneratorSettings::getPitstoneBase),
-		Codec.BOOL.fieldOf("betweenlands_caves_enabled").forGetter(BetweenlandsGeneratorSettings::getBetweenlandsCaveStyle),
-		Codec.BOOL.fieldOf("betweenlands_gen_enabled").forGetter(BetweenlandsGeneratorSettings::getBetweenlandsGen))
-		.apply(p_64475_, BetweenlandsGeneratorSettings::new);
+				Codec.FLOAT.fieldOf("pitstone_base").forGetter(BetweenlandsGeneratorSettings::getPitstoneBase),
+				Codec.BOOL.fieldOf("betweenlands_caves_enabled").forGetter(BetweenlandsGeneratorSettings::getBetweenlandsCaveStyle),
+				Codec.BOOL.fieldOf("betweenlands_gen_enabled").forGetter(BetweenlandsGeneratorSettings::getBetweenlandsGen))
+			.apply(p_64475_, BetweenlandsGeneratorSettings::new);
 	});
 
 	public static final Codec<ChunkGeneratorBetweenlands> CODEC = RecordCodecBuilder.create((p_188643_) -> {
@@ -114,28 +104,28 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 
 	// TODO: move to biome wrapper
 	public List<Float> biomeBaseHeights = List.of(
-			(float)120-1.25F,
-			(float)120-2,
-			(float)120-12,
-			(float)120-5,
-			(float)120-5,
-			(float)120-5,
-			(float)120-1,
-			(float)120-1,
-			(float)120+2,
-			(float)120+4);
+		(float) 120 - 1.25F,
+		(float) 120 - 2,
+		(float) 120 - 12,
+		(float) 120 - 5,
+		(float) 120 - 5,
+		(float) 120 - 5,
+		(float) 120 - 1,
+		(float) 120 - 1,
+		(float) 120 + 2,
+		(float) 120 + 4);
 
 	public List<Float> biomeHeightVariation = List.of(
-			(float)4.75F,
-			(float)1,
-			(float)5,
-			(float)4,
-			(float)4,
-			(float)3,
-			(float)1.1,
-			(float)1.1,
-			(float)1,
-			(float)0.5
+		(float) 4.75F,
+		(float) 1,
+		(float) 5,
+		(float) 4,
+		(float) 4,
+		(float) 3,
+		(float) 1.1,
+		(float) 1.1,
+		(float) 1,
+		(float) 0.5
 	);
 
 	private static final BlockState AIR = Blocks.AIR.defaultBlockState();
@@ -149,29 +139,29 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 	public final NoiseRouter sampler;
 	private final SurfaceSystem surfaceSystem;
 	private final Aquifer.FluidPicker globalFluidPicker;
-	
+
 	// SurfaceGenerators
 	public final List<SurfaceGenerator> surfaceGenerator = new ArrayList<SurfaceGenerator>();
 	public final List<SurfacePostProssesor> surfacePostProssesor = new ArrayList<SurfacePostProssesor>();
-	
+
 	// Biome souce
 	public final BiomeSource biomesource;
 	public BetweenlandsBiomeProvider betweenlandsBiomeProvider;
-	
+
 	// Noises
 	public XoroshiroRandomSource source;
-	public List<Integer> list = List.of(0,1);
-	public List<Integer> riverrange = List.of(-1,1);
+	public List<Integer> list = List.of(0, 1);
+	public List<Integer> riverrange = List.of(-1, 1);
 	public PerlinNoise perlinnoise;
 	public SimplexNoise simplexnoise;
 	public PerlinNoise vainrivernoise;
-	
+
 	// Noise modifyers
-	public List<Float> linepoint = List.of(0.0f,1.0f);
-	public List<Float> linevalue = List.of(0.0f,1.0f);
-	
-	public List<Float> spikespoint = List.of(0.0f,0.1f,0.8f,0.9f,1.0f);
-	public List<Float> spikesvalue = List.of(1.0f,0.0f,1.0f,0.0f,1.0f);
+	public List<Float> linepoint = List.of(0.0f, 1.0f);
+	public List<Float> linevalue = List.of(0.0f, 1.0f);
+
+	public List<Float> spikespoint = List.of(0.0f, 0.1f, 0.8f, 0.9f, 1.0f);
+	public List<Float> spikesvalue = List.of(1.0f, 0.0f, 1.0f, 0.0f, 1.0f);
 
 	private MapGenCavesBetweenlands caveGenerator;
 
@@ -182,15 +172,15 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 	private NoiseGeneratorSimplex speleothemDensityNoise;
 
 	public ChunkGeneratorBetweenlands(Registry<StructureSet> p_209106_, Registry<NormalNoise.NoiseParameters> p_209107_, BiomeSource p_209108_, long p_209109_, Holder<NoiseGeneratorSettings> p_209110_, BetweenlandsGeneratorSettings betweenlandssettings) {
-		this(p_209106_,p_209107_, p_209108_, p_209108_, p_209109_, p_209110_, betweenlandssettings);
+		this(p_209106_, p_209107_, p_209108_, p_209108_, p_209109_, p_209110_, betweenlandssettings);
 	}
 
 	public ChunkGeneratorBetweenlands(Registry<StructureSet> p_209106_, Registry<NormalNoise.NoiseParameters> p_188614_, BiomeSource biomeSource, BiomeSource p_188616_, long seed, Holder<NoiseGeneratorSettings> p_188618_, BetweenlandsGeneratorSettings betweenlandssettings) {
-		super(p_209106_,p_188614_, biomeSource, seed, p_188618_);
+		super(p_209106_, p_188614_, biomeSource, seed, p_188618_);
 
 		// I know this looks stupid, that's cos it is
 		//if (seed == 0) {
-			// Set to overworld seed if set to 0 in datapack
+		// Set to overworld seed if set to 0 in datapack
 		//	seed = Minecraft.getInstance().level.getServer().overworld().getSeed();
 		//}
 
@@ -199,7 +189,7 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 		this.biomeWeights = new float[25];
 		for (int i = -2; i <= 2; ++i) {
 			for (int j = -2; j <= 2; ++j) {
-				float f = 10.0F / Mth.sqrt((float)(i * i + j * j) + 0.2F);
+				float f = 10.0F / Mth.sqrt((float) (i * i + j * j) + 0.2F);
 				this.biomeWeights[i + 2 + (j + 2) * 5] = f;
 			}
 		}
@@ -227,7 +217,7 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 			return p_198229_ < Math.min(-54, i) ? aquifer$fluidstatus : aquifer$fluidstatus1;
 		};
 		this.surfaceSystem = new SurfaceSystem(p_188614_, this.baseBlockState, i, seed, betweenlandsgeneratorsettings.getRandomSource());
-		
+
 		//Noises
 		this.source = new XoroshiroRandomSource(seed);
 		this.perlinnoise = PerlinNoise.create(source, list);
@@ -237,7 +227,7 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 		this.fillfluid = this.settings.value().defaultFluid();
 
 		Random rand = new Random(this.seed);
-		
+
 		// Generators for eatch biome
 		this.surfaceGenerator.add(new SwamplandsSurfaceGenerator(source));
 		this.surfaceGenerator.add(new DeepWatersSurfaceGenerator(source));
@@ -247,7 +237,7 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 		this.surfaceGenerator.add(new PatchyIslandsSurfaceGenerator(source));
 		this.surfaceGenerator.add(new CorseIslandsSurfaceGenerator(source));
 		this.surfaceGenerator.add(new CorseIslandsSurfaceGenerator(source));
-		
+
 		// Postprossesors for biome blending
 		this.surfacePostProssesor.add(new SwamplandsPostProssesor());
 		this.surfacePostProssesor.add(new StandardPostProssesor());
@@ -255,8 +245,8 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 		this.surfacePostProssesor.add(new HardCutPostProssesor(5));
 		this.surfacePostProssesor.add(new HardCutPostProssesor(5));
 		this.surfacePostProssesor.add(new StandardPostProssesor());
-		this.surfacePostProssesor.add(new CorseIslandsPostProssesor(8,5));
-		this.surfacePostProssesor.add(new CorseIslandsPostProssesor(8,5));
+		this.surfacePostProssesor.add(new CorseIslandsPostProssesor(8, 5));
+		this.surfacePostProssesor.add(new CorseIslandsPostProssesor(8, 5));
 
 		// Init noise
 		//SimplexNoise test = new SimplexNoise();
@@ -270,26 +260,25 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 		this.speleothemDensityNoise = new NoiseGeneratorSimplex(rand);
 
 		this.caveGenerator = new MapGenCavesBetweenlands(seed);
-		
+
 	}
 
 	public void buildSurface(WorldGenRegion p_188636_, StructureFeatureManager p_188637_, ChunkAccess p_188638_) {
 
 		// Betweenlands terrain generation (reads biome data for terrain features instead of noise)
 		// TODO: this setting causes chunk treads to crash or hang, fix asap
-		if (betweenlandsSettings.getBetweenlandsGen())
-		{
+		if (betweenlandsSettings.getBetweenlandsGen()) {
 			// Collect cords for generating
 			ChunkPos chunkpos = p_188638_.getPos();
 			BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-			
+
 			// Get frequent block states to avoid recalling slow getters
 			BlockState betweenBedrock = BlockRegistry.BETWEENLANDS_BEDROCK.get().defaultBlockState();
 			BlockState betweenStone = BlockRegistry.BETWEENSTONE.get().defaultBlockState();
 			BlockState pitStone = BlockRegistry.PITSTONE.get().defaultBlockState();
 			BlockState swampDirt = BlockRegistry.SWAMP_DIRT.get().defaultBlockState();
 			BlockState mud = BlockRegistry.MUD.get().defaultBlockState();
-			
+
 			// Bedrock layer fill
 			/*for (int x = 0; x < 16; x++)
 			{
@@ -298,8 +287,8 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 					p_188638_.setBlockState(pos.set(x, -64, z), betweenBedrock, false);
 				}
 			}*/
-			
-			// Pitstone layer fill 
+
+			// Pitstone layer fill
 			/*for (int x = 0; x < 16; x++)
 			{
 				for (int y = -64; y < -42; y++)
@@ -311,7 +300,7 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 				}
 			}*/
 		}
-		
+
 		// Stock terrain generation (surface generation is handled via datapack)
 		WorldGenerationContext worldgenerationcontext = new WorldGenerationContext(this, p_188636_);
 		NoiseGeneratorSettings noisegeneratorsettings = this.settings.value();
@@ -324,10 +313,10 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 	/*
 	@Override
 	public CompletableFuture<ChunkAccess> fillFromNoise(Executor p_188702_, Blender p_188703_, StructureFeatureManager p_188704_, ChunkAccess p_188705_) {
-		
+
 		// now unused
 		//Throwable chunkerror = new Throwable("Betweenlands chunk generator: Cannot get server instance (likely called during server shutdown)");
-		
+
 		// ISSUE:		-Server calls chunk generation even after server level is no longer present
 		// SOLUTION:	-Cancel chunk generation and tell server to not save the chunk
 		// NOTES:		-This problem only ocures due to needing biome noise reading needed for some generation features
@@ -338,7 +327,7 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 
 		// SOLUTION:	-removed need for server level entierly by sampleing biome noise directly from BetweenlandsBiomeSource
 		//				however if BiomeSource is not of type BetweenlandsBiomeSource errors are expected but undocumented
-		
+
 		// Init vars
 		NoiseGeneratorSettings noisegeneratorsettings = this.settings.value();
 		BlockState fillblock = this.settings.value().defaultBlock();
@@ -354,7 +343,7 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 			for(int z = 0; z < 16; z++) {
 				int xin = (p_188705_.getPos().x * 16) + x;
 				int zin = (p_188705_.getPos().z * 16) + z;
-				
+
 				//int scantranslatex = 4;
 				//int scantranslatez = 4;
 
@@ -362,33 +351,33 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 
 				// Get some biome scale in blocks for border detection
 				//double biomeScale = betweenlandsbiomesource.biomenoise.cellscale * 4;
-				
+
 				// Get this biome
 				//int biomecount = betweenlandsbiomesource.parameters.values().size();
 				int biomeID = betweenlandsbiomesource.getBiomeFromCellData(BiomeSample.result);
 				//Biome blockbiome = betweenlandsbiomesource.getBiomeFromID(betweenlandsbiomesource.getIdFromHolder(p_188705_.getNoiseBiome(x-2, 64, z-2)));//betweenlandsbiomesource.getBiomeFromID(biomeID);
-				
+
 				//int ScanRange = 10;
 				//int ExtendedScanRange = 15;
-				
+
 				//int TrenchBaseHight = 58;
 				//int DeepwatersBaseHight = 54;
 				//int SwampBaseHight = 64;
 				//int SlugeBaseHight = 64;
 				//int PatchyIslandsBaseHight = 62;
-				
+
 				//int MarshBaseHight = 63;
 				//int MarshUnderwaterBaseHight = 62;
 
-				
+
 				int ysurface = 64;
 				//double mod = 0;
-				
+
 				//double val = UtilWorldFunctions.biomeNoiseSample((BetweenlandsBiomeProvider) biomesource, xin-2, 0, zin-2);
 				double surfaceheight = 0;
 				double underwaterheight = 0;
 				double hightfactor = 0;
-				
+
 				// Biome specific generation
 				SurfaceMapValues output = surfaceGenerator.get(biomeID).sample(xin, zin);
 
@@ -400,7 +389,7 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 
 				// Biome border thingamabobs
 				ScanReturn border = UtilWorldFunctions.BorderScan(true, betweenlandsbiomesource, xin,zin,24,8,biomeID,0);		// gets borderse
-				
+
 				// TEMP: quick test, mix values
 				//double BlocksFromBorder = 10000;
 				//int count = border.distances.size();
@@ -411,23 +400,23 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 				//		BlocksFromBorder = border.distances.get(index)*0.1d;
 				//	}
 				//}
-				
+
 				//if (BlocksFromBorder <= 4) {
 				//	underwaterheight = 50;
 				//	surfaceheight = 50;
 				//	hightfactor = 0.5f;
 				//}
-				
-				
+
+
 				SurfaceMapValues outpost = surfacePostProssesor.get(biomeID).docheck(border, BiomeSample, surfaceGenerator, biomeID, xin, zin);		// uses borderScan output to edit surface values
-					
+
 				underwaterheight = outpost.underwaterHeight;
 				surfaceheight = outpost.surfaceHeight;
 				hightfactor = outpost.surfaceFactor;
-				
+
 				// Calculate ysurface to generate blocks up to
 				ysurface = (int) ((underwaterheight * hightfactor) + (surfaceheight * (1 - hightfactor)));
-				
+
 				// Fill Blocks
 				for(int y = floor; y <= ysurface; y++) {
 					p_188705_.setBlockState(new BlockPos(x, y, z), fillblock, false);
@@ -438,7 +427,7 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 				}
 			}
 		}
-		
+
 		return CompletableFuture.completedFuture(p_188705_);
 	}*/
 
@@ -452,17 +441,17 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 
 		// Setup for features
 		// Interpolate biome weights
-		for(int z = 0; z < 16; z++) {
-			for(int x = 0; x < 16; x++) {
+		for (int z = 0; z < 16; z++) {
+			for (int x = 0; x < 16; x++) {
 				float fractionZ = (z % 4) / 4.0F;
 				float fractionX = (x % 4) / 4.0F;
 				int biomeWeightZ = z / 4;
 				int biomeWeightX = x / 4;
 
 				float weightXCZC = this.terrainBiomeWeights[biomeWeightX + biomeWeightZ * 5];
-				float weightXNZC = this.terrainBiomeWeights[biomeWeightX+1 + biomeWeightZ * 5];
-				float weightXCZN = this.terrainBiomeWeights[biomeWeightX + (biomeWeightZ+1) * 5];
-				float weightXNZN = this.terrainBiomeWeights[biomeWeightX+1 + (biomeWeightZ+1) * 5];
+				float weightXNZC = this.terrainBiomeWeights[biomeWeightX + 1 + biomeWeightZ * 5];
+				float weightXCZN = this.terrainBiomeWeights[biomeWeightX + (biomeWeightZ + 1) * 5];
+				float weightXNZN = this.terrainBiomeWeights[biomeWeightX + 1 + (biomeWeightZ + 1) * 5];
 
 				float interpZAxisXC = weightXCZC + (weightXCZN - weightXCZC) * fractionZ;
 				float interpZAxisXN = weightXNZC + (weightXNZN - weightXNZC) * fractionZ;
@@ -476,15 +465,15 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 
 		this.biomesForGeneration = this.betweenlandsBiomeProvider.legacyGetBiomes(this.biomesForGeneration, chunkprimer.getPos().x * 16, chunkprimer.getPos().z * 16, 16, 16, false);
 
-		this.surfaceNoiseBuffer = this.surfaceNoise.getRegion(this.surfaceNoiseBuffer, (double)(chunkX * 16), (double)(chunkZ * 16), 16, 16, 0.0625D, 0.0625D, 1.0D);
+		this.surfaceNoiseBuffer = this.surfaceNoise.getRegion(this.surfaceNoiseBuffer, (double) (chunkX * 16), (double) (chunkZ * 16), 16, 16, 0.0625D, 0.0625D, 1.0D);
 
 		// World generator modifiers
 		List<BiomeGenerator> foundGenerators = new ArrayList<BiomeGenerator>();
-		for(int z = 0; z < 16; z++) {
-			for(int x = 0; x < 16; x++) {
+		for (int z = 0; z < 16; z++) {
+			for (int x = 0; x < 16; x++) {
 				double baseBlockNoise = this.surfaceNoiseBuffer[z + x * 16];
 				BiomeBetweenlands biome = this.betweenlandsBiomeProvider.BiomeFromID(this.biomesForGeneration[z + x * 16]);
-				if(biome != null) {
+				if (biome != null) {
 					BiomeGenerator generator = biome.biomeGenerator;
 					if (generator != null) {
 						generator.initializeGenerators(this.seed);
@@ -498,7 +487,7 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 			}
 		}
 
-		for(BiomeGenerator gen : foundGenerators) {
+		for (BiomeGenerator gen : foundGenerators) {
 			gen.resetNoise();
 		}
 
@@ -508,13 +497,13 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 
 		// TODO: move to features call
 		// Add biome features (post cave)
-		for(int z = 0; z < 16; z++) {
-			for(int x = 0; x < 16; x++) {
+		for (int z = 0; z < 16; z++) {
+			for (int x = 0; x < 16; x++) {
 				double baseBlockNoise = this.surfaceNoiseBuffer[z + x * 16];
 				BiomeBetweenlands biome = this.betweenlandsBiomeProvider.BiomeFromID(this.biomesForGeneration[z + x * 16]);
-				if(biome != null) {
+				if (biome != null) {
 					BiomeGenerator generator = biome.biomeGenerator;
-					if(generator != null) {
+					if (generator != null) {
 						generator.runBiomeFeatures(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, chunkprimer, this, this.biomesForGeneration, featureBiomeWeights, EnumGeneratorPass.POST_GEN_CAVES);
 					}
 				}
@@ -533,15 +522,16 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 
 	/**
 	 * Generates the base terrain
+	 *
 	 * @param chunkX
 	 * @param chunkZ
 	 * @param chunkaccess
 	 */
 	public void setBlocksInChunk(int chunkX, int chunkZ, ChunkAccess chunkaccess) {
 
-		this.biomesForGeneration = this.betweenlandsBiomeProvider.legacyGetBiomesWithin(this.biomesForGeneration,(chunkX * 4) - 6, (chunkZ * 4) - 6, 15, 15);
+		this.biomesForGeneration = this.betweenlandsBiomeProvider.legacyGetBiomesWithin(this.biomesForGeneration, (chunkX * 4) - 6, (chunkZ * 4) - 6, 15, 15);
 
-		generateHeightmap(chunkX*4,0,chunkZ * 4);
+		generateHeightmap(chunkX * 4, 0, chunkZ * 4);
 
 		//X
 		for (int heightMapX = 0; heightMapX < 4; ++heightMapX) {
@@ -642,6 +632,7 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 
 	/**
 	 * Generates a 33x5x5 (Y*X*Z) heightmap
+	 *
 	 * @param x
 	 * @param y
 	 * @param z
@@ -650,9 +641,9 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 		this.depthRegion = this.depthNoise.generateNoiseOctaves(this.depthRegion, x, z, 5, 5, 200.0D, 200.0D, 0.5D);
 		float scaleXZ = 684.412F * 8;
 		float scaleY = 684.412F * 8;
-		this.mainNoiseRegion = this.mainPerlinNoise.generateNoiseOctaves(this.mainNoiseRegion, x, y, z, 5, 33, 5, (double)(scaleXZ / 80.0F), (double)(scaleY / 160.0F), (double)(scaleXZ / 80.0F));
-		this.minLimitRegion = this.minLimitPerlinNoise.generateNoiseOctaves(this.minLimitRegion, x, y, z, 5, 33, 5, (double)scaleXZ, (double)scaleY, (double)scaleXZ);
-		this.maxLimitRegion = this.maxLimitPerlinNoise.generateNoiseOctaves(this.maxLimitRegion, x, y, z, 5, 33, 5, (double)scaleXZ, (double)scaleY, (double)scaleXZ);
+		this.mainNoiseRegion = this.mainPerlinNoise.generateNoiseOctaves(this.mainNoiseRegion, x, y, z, 5, 33, 5, (double) (scaleXZ / 80.0F), (double) (scaleY / 160.0F), (double) (scaleXZ / 80.0F));
+		this.minLimitRegion = this.minLimitPerlinNoise.generateNoiseOctaves(this.minLimitRegion, x, y, z, 5, 33, 5, (double) scaleXZ, (double) scaleY, (double) scaleXZ);
+		this.maxLimitRegion = this.maxLimitPerlinNoise.generateNoiseOctaves(this.maxLimitRegion, x, y, z, 5, 33, 5, (double) scaleXZ, (double) scaleY, (double) scaleXZ);
 
 		int noiseIndex = 0;
 		int heightMapIndex = 0;
@@ -665,7 +656,7 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 
 				int centerBiome = this.biomesForGeneration[heightMapX + 5 + (heightMapZ + 5) * 15];
 
-				if (centerBiome>9||centerBiome<0){
+				if (centerBiome > 9 || centerBiome < 0) {
 					centerBiome = 0;
 				}
 
@@ -676,7 +667,7 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 					for (int offsetZ = -5; offsetZ <= 5; ++offsetZ) {
 						int nearbyBiome = this.biomesForGeneration[heightMapX + 5 + offsetX + (heightMapZ + 5 + offsetZ) * 15];
 
-						if (nearbyBiome>9||nearbyBiome<0){
+						if (nearbyBiome > 9 || nearbyBiome < 0) {
 							nearbyBiome = 0;
 						}
 						float nearbyBiomeDepth = biomeBaseHeights.get(nearbyBiome);
@@ -689,7 +680,7 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 							f6 = 1.0F + f6 * 4.0F;
 						}*/
 
-						if(offsetX >= -2 && offsetX <= 2 && offsetZ >= -2 && offsetZ <=2) {
+						if (offsetX >= -2 && offsetX <= 2 && offsetZ >= -2 && offsetZ <= 2) {
 							float weight = this.biomeWeights[offsetX + 2 + (offsetZ + 2) * 5];
 
 							if (biomeBaseHeights.get(nearbyBiome) > biomeBaseHeights.get(centerBiome)) {
@@ -701,8 +692,8 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 							totalBiomeWeight += weight;
 						}
 
-						float distWeighted = (offsetX*offsetX + offsetZ*offsetZ);
-						if(nearbyBiome != centerBiome && distWeighted < nearestOtherBiomeSq) {
+						float distWeighted = (offsetX * offsetX + offsetZ * offsetZ);
+						if (nearbyBiome != centerBiome && distWeighted < nearestOtherBiomeSq) {
 							nearestOtherBiomeSq = distWeighted;
 						}
 					}
@@ -728,8 +719,7 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 				if (depthPerturbation < 0.0D) {
 					depthPerturbation = depthPerturbation / 2.0D;
 
-					if (depthPerturbation < -1.0D)
-					{
+					if (depthPerturbation < -1.0D) {
 						depthPerturbation = -1.0D;
 					}
 
@@ -748,7 +738,7 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 				//double depth = (biomeDepth * this.layerHeight) / 256.0D;
 
 				for (int heightMapY = 0; heightMapY < 33; ++heightMapY) {
-					double densityOffset = ((double)heightMapY * 8.0D - biomeDepth - (depthPerturbation * biomeVariation / 256.0D)) / 256.0D;
+					double densityOffset = ((double) heightMapY * 8.0D - biomeDepth - (depthPerturbation * biomeVariation / 256.0D)) / 256.0D;
 
 					double maxGenDensity16 = 32767.0D;
 					/*double maxGenDensity16 = 0.0D;
@@ -788,17 +778,17 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 		Iterable<Holder<ConfiguredWorldCarver<?>>> iterable = biomegenerationsettings.getCarvers(p_187696_);
 		int l = 0;
 
-		for(int z = 0; z < 16; z++) {
-			for(int x = 0; x < 16; x++) {
+		for (int z = 0; z < 16; z++) {
+			for (int x = 0; x < 16; x++) {
 				float fractionZ = (z % 4) / 4.0F;
 				float fractionX = (x % 4) / 4.0F;
 				int biomeWeightZ = z / 4;
 				int biomeWeightX = x / 4;
 
 				float weightXCZC = this.terrainBiomeWeights[biomeWeightX + biomeWeightZ * 5];
-				float weightXNZC = this.terrainBiomeWeights[biomeWeightX+1 + biomeWeightZ * 5];
-				float weightXCZN = this.terrainBiomeWeights[biomeWeightX + (biomeWeightZ+1) * 5];
-				float weightXNZN = this.terrainBiomeWeights[biomeWeightX+1 + (biomeWeightZ+1) * 5];
+				float weightXNZC = this.terrainBiomeWeights[biomeWeightX + 1 + biomeWeightZ * 5];
+				float weightXCZN = this.terrainBiomeWeights[biomeWeightX + (biomeWeightZ + 1) * 5];
+				float weightXNZN = this.terrainBiomeWeights[biomeWeightX + 1 + (biomeWeightZ + 1) * 5];
 
 				float interpZAxisXC = weightXCZC + (weightXCZN - weightXCZC) * fractionZ;
 				float interpZAxisXN = weightXNZC + (weightXNZN - weightXNZC) * fractionZ;
@@ -810,19 +800,19 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 
 		BiomeWeights biomes = new BiomeWeights(this.interpolatedTerrainBiomeWeights);
 
-		for(Holder<ConfiguredWorldCarver<?>> holder : iterable) {
+		for (Holder<ConfiguredWorldCarver<?>> holder : iterable) {
 			ConfiguredWorldCarver<?> configuredworldcarver = holder.value();
 			if (configuredworldcarver.worldCarver() instanceof CavesBetweenlands) {
-				((CavesBetweenlands)configuredworldcarver.worldCarver()).setBiomeTerrainWeights(biomes);
+				((CavesBetweenlands) configuredworldcarver.worldCarver()).setBiomeTerrainWeights(biomes);
 			}
 		}
 
-		super.applyCarvers(p_187691_,p_187692_,p_187693_,p_187694_,p_187695_,p_187696_);
+		super.applyCarvers(p_187691_, p_187692_, p_187693_, p_187694_, p_187695_, p_187696_);
 	}
 
 	// Adds biome decorators to feature stage
 	public void applyBiomeDecoration(WorldGenLevel p_187712_, ChunkAccess p_187713_, StructureFeatureManager p_187714_) {
-		super.applyBiomeDecoration(p_187712_,p_187713_,p_187714_);
+		super.applyBiomeDecoration(p_187712_, p_187713_, p_187714_);
 
 		this.biomesForGeneration = this.betweenlandsBiomeProvider.legacyGetBiomes(this.biomesForGeneration, p_187713_.getPos().x * 16, p_187713_.getPos().z * 16, 16, 16, false);
 
@@ -830,7 +820,7 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 
 		// TODO: get all biomes in chunk and call the decorator for each biome at chunk origin block pos 0,0
 
-		for(int z = 0; z < 16; z++) {
+		for (int z = 0; z < 16; z++) {
 			for (int x = 0; x < 16; x++) {
 				int biome = this.biomesForGeneration[(x + z * 16)];
 				if (!biomeList.contains(biome)) {
@@ -841,7 +831,7 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 
 		for (int id : biomeList) {
 			BiomeGenerator generator = this.betweenlandsBiomeProvider.BiomeFromID(id).biomeGenerator;
-			if (generator!= null) {
+			if (generator != null) {
 				generator.decorator.init(p_187712_, id, this, rand, p_187713_.getPos().x * 16, p_187713_.getPos().z * 16);
 				generator.decorator.decorate();
 			}
@@ -859,31 +849,31 @@ public class ChunkGeneratorBetweenlands extends LegacyChunkGenerator {
 	public double evalSpeleothemDensityNoise(double x, double z) {
 		return this.speleothemDensityNoise.getValue(x, z);
 	}
-	
+
 	public static class BetweenlandsGeneratorSettings {
-		
+
 		public final float pitstoneBase;
 		public final boolean betweenlandsCaveStyle;
 		public final boolean betweenlandsGen;
-		
+
 		public BetweenlandsGeneratorSettings(float pitstoneBase, boolean caveStyle, boolean betweenlandsGen) {
 			this.pitstoneBase = pitstoneBase;
 			this.betweenlandsCaveStyle = caveStyle;
 			this.betweenlandsGen = betweenlandsGen;
 		}
-		
+
 		public float getPitstoneBase() {
 			return pitstoneBase;
 		}
-		
+
 		public boolean getBetweenlandsOreEnabled() {
 			return betweenlandsCaveStyle;
 		}
-		
+
 		public boolean getBetweenlandsCaveStyle() {
 			return betweenlandsCaveStyle;
 		}
-		
+
 		public boolean getBetweenlandsGen() {
 			return betweenlandsGen;
 		}

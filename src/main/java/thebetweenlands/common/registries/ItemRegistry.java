@@ -7,8 +7,8 @@ import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.items.ItemAmateMap;
-import thebetweenlands.common.items.ItemEmptyAmateMap;
+import thebetweenlands.common.items.AmateMapItem;
+import thebetweenlands.common.items.EmptyAmateMapItem;
 
 public class ItemRegistry {
 
@@ -31,7 +31,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> WIGHT_SPAWN_EGG = ITEMS.register("wight_spawn_egg", () -> new DeferredSpawnEggItem( () -> EntityRegistry.WIGHT.get(), 0x7d8378, 0x07190a, new Item.Properties()));
 
 	// Betweenlands Special
-	public static final DeferredItem<Item> AMATE_MAP = ITEMS.register("amate_map", () -> new ItemEmptyAmateMap(new Item.Properties()));
-	public static final DeferredItem<Item> FILLED_AMATE_MAP = ITEMS.register("filled_amate_map", () -> new ItemAmateMap(new Item.Properties()));
+	public static final DeferredItem<Item> AMATE_MAP = ITEMS.register("amate_map", () -> new EmptyAmateMapItem(new Item.Properties()));
+	public static final DeferredItem<Item> FILLED_AMATE_MAP = ITEMS.register("filled_amate_map", () -> new AmateMapItem(new Item.Properties()));
 	public static final DeferredItem<Item> RECORD_ASTATOS = ITEMS.register("astatos", () -> new RecordItem(0, () -> SoundRegistry.RECORD_ASTATOS.get(), new Item.Properties()));
 }

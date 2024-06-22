@@ -13,32 +13,32 @@ public class TrentchBuilderPostProssesor extends SurfacePostProssesor {
 	public TrentchBuilderPostProssesor() {
 		super();
 	}
-	
+
 	public SurfaceMapValues docheck(ScanReturn scanin, VoronoiCellNoise.ReturnNoise BiomeSample, List<SurfaceGenerator> genin, int blockbiomeID, int x, int z) {
-		
+
 		SurfaceMapValues thisSurfaceMap = genin.get(blockbiomeID).sample(x, z);
-		
+
 		if (!scanin.active) {
 			return thisSurfaceMap;
 		}
-		
+
 		double underwaterheightout = 0;
 		double additivedifference = 0;
 		int indexcount = scanin.borderbiomes.size();
 		double highestFactor = thisSurfaceMap.surfaceFactor;
-		
+
 		// Go thrue all biomes and do id based conditions
 		for (int index = 0; index < indexcount; index++) {
-			
+
 			// get this biome distance and set factor
 			if (scanin.distances.get(index) < 12 && index != BiomeSample.resultIndex && scanin.borderbiomes.get(BiomeSample.resultIndex) != scanin.borderbiomes.get(index)) {
-				
-				double outfactor = 1d - (double)scanin.distances.get(index) / 12d;
-				
+
+				double outfactor = 1d - (double) scanin.distances.get(index) / 12d;
+
 				if (highestFactor < outfactor) {
 					highestFactor = outfactor;
 				}
-			
+
 				// get biome and difference
 				int biome = scanin.borderbiomes.get(index);
 				double diff = (thisSurfaceMap.underwaterHeight - genin.get(biome).sample(x, z).underwaterHeight) * 0.5;
@@ -46,10 +46,10 @@ public class TrentchBuilderPostProssesor extends SurfacePostProssesor {
 				additivedifference -= (diff * (1d - scanin.distances.get(index) / 12d));
 			}
 		}
-		
+
 		// Normalise difference
-		additivedifference = additivedifference / (double)indexcount;
-		
+		additivedifference = additivedifference / (double) indexcount;
+
 		return new SurfaceMapValues(thisSurfaceMap.surfaceHeight, thisSurfaceMap.underwaterHeight + additivedifference, highestFactor);
 	}
 }

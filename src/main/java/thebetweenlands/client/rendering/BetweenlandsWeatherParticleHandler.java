@@ -9,7 +9,7 @@ public class BetweenlandsWeatherParticleHandler implements IWeatherParticleRende
 
 	@Override
 	public void render(int ticks, ClientLevel level, Minecraft minecraft, Camera camera) {
-		
+
 	}
 
 }

@@ -1,27 +1,16 @@
 package thebetweenlands.common.world;
 
-import java.util.List;
-import java.util.function.Supplier;
-
-import com.mojang.datafixers.kinds.App;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.mojang.serialization.codecs.RecordCodecBuilder.Mu;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.level.ColorResolver;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
@@ -35,14 +24,15 @@ import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.level.storage.WritableLevelData;
 import net.minecraft.world.scores.Scoreboard;
 import net.minecraft.world.ticks.LevelTickAccess;
-import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.world.ChunkGeneratorBetweenlands.BetweenlandsGeneratorSettings;
+
+import java.util.List;
+import java.util.function.Supplier;
 
 public class BetweenlandsLevel extends Level {
-	
+
 	public BetweenlandsLevel(WritableLevelData p_204149_, ResourceKey<Level> p_204150_,
-			Holder<DimensionType> p_204151_, Supplier<ProfilerFiller> p_204152_, boolean p_204153_, boolean p_204154_,
-			long p_204155_) {
+							 Holder<DimensionType> p_204151_, Supplier<ProfilerFiller> p_204152_, boolean p_204153_, boolean p_204154_,
+							 long p_204155_) {
 		super(p_204149_, p_204150_, p_204151_, p_204152_, p_204153_, p_204154_, p_204155_);
 	}
 
@@ -67,13 +57,13 @@ public class BetweenlandsLevel extends Level {
 	@Override
 	public void levelEvent(Player p_46771_, int p_46772_, BlockPos p_46773_, int p_46774_) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void gameEvent(Entity p_151549_, GameEvent p_151550_, BlockPos p_151551_) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -103,21 +93,21 @@ public class BetweenlandsLevel extends Level {
 	@Override
 	public void sendBlockUpdated(BlockPos p_46612_, BlockState p_46613_, BlockState p_46614_, int p_46615_) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void playSound(Player p_46543_, double p_46544_, double p_46545_, double p_46546_, SoundEvent p_46547_,
-			SoundSource p_46548_, float p_46549_, float p_46550_) {
+						  SoundSource p_46548_, float p_46549_, float p_46550_) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void playSound(Player p_46551_, Entity p_46552_, SoundEvent p_46553_, SoundSource p_46554_, float p_46555_,
-			float p_46556_) {
+						  float p_46556_) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -141,7 +131,7 @@ public class BetweenlandsLevel extends Level {
 	@Override
 	public void setMapData(String p_151533_, MapItemSavedData p_151534_) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -153,7 +143,7 @@ public class BetweenlandsLevel extends Level {
 	@Override
 	public void destroyBlockProgress(int p_46506_, BlockPos p_46507_, int p_46508_) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

@@ -8,7 +8,10 @@ import net.minecraft.world.level.biome.BiomeSpecialEffects;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import thebetweenlands.common.colors.BetweenlandsColorModifiers;
-import thebetweenlands.common.registries.*;
+import thebetweenlands.common.registries.BiomeRegistry;
+import thebetweenlands.common.registries.CarverRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
+import thebetweenlands.common.registries.FeatureRegistries;
 import thebetweenlands.common.world.WorldEventsHook;
 
 public class BiomeSwamplandsClearing extends BiomeBetweenlands {
@@ -23,7 +26,7 @@ public class BiomeSwamplandsClearing extends BiomeBetweenlands {
 	public Biome biomeBuilder() {
 		// Biome carvers and features
 		this.biomeGenSettings.addCarver(GenerationStep.Carving.AIR, CarverRegistry.ConfigueredCarvers.CAVES_BETWEENLANDS.getHolder().get())
-				.addCarver(GenerationStep.Carving.AIR, CarverRegistry.ConfigueredCarvers.BETWEENLANDS_RAVINES.getHolder().get());
+			.addCarver(GenerationStep.Carving.AIR, CarverRegistry.ConfigueredCarvers.BETWEENLANDS_RAVINES.getHolder().get());
 		//.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, new RandomPatchFeature(0.18D, 0.18D, BlockRegistry.SWAMP_GRASS.get().defaultBlockState()))
 		//.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, new RandomPatchFeature(0.05D, 0.05D, BlockRegistry.SWAMP_GRASS.get().defaultBlockState()))
 		//.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, new RandomPatchFeature(0.74D, 0.74D, BlockRegistry.SWAMP_DIRT.get().defaultBlockState()))
@@ -50,26 +53,26 @@ public class BiomeSwamplandsClearing extends BiomeBetweenlands {
 
 		// Biome colors and other effects
 		this.biomeSpecialFX.foliageColorOverride(5418842)
-				.fogColor(0x0a1e16)
-				.waterColor(0x184220)
-				.waterFogColor(0x184220)
-				.skyColor(0xff78A7FF)
-				.backgroundMusic(MusicHandler.BETWEENLANDS_MUSIC)
-				.grassColorModifier(BiomeSpecialEffects.GrassColorModifier.create("betweenlands_swamplands", "betweenlands_swamplands", (x, z, color) -> ((BetweenlandsColorModifiers.Betweenlands2ColorMod((int)x, (int)z, 2817792, 5283904, 0.07d)))));
+			.fogColor(0x0a1e16)
+			.waterColor(0x184220)
+			.waterFogColor(0x184220)
+			.skyColor(0xff78A7FF)
+			.backgroundMusic(MusicHandler.BETWEENLANDS_MUSIC)
+			.grassColorModifier(BiomeSpecialEffects.GrassColorModifier.create("betweenlands_swamplands", "betweenlands_swamplands", (x, z, color) -> ((BetweenlandsColorModifiers.Betweenlands2ColorMod((int) x, (int) z, 2817792, 5283904, 0.07d)))));
 		//this.setFoliageColors(0x2AFF00, 0x52AF5A);
 		//this.setSecondaryFoliageColors(0x50a040, 0x85af51);
 
 		// Build Biome
 		this.biomeBuilder.generationSettings(this.biomeGenSettings.build())
-				.mobSpawnSettings(this.mobSpawnSettings.build())
-				.specialEffects(this.biomeSpecialFX.build())
-				.downfall(0.9f)
-				.temperature(0.8f)
-				.biomeCategory(BiomeCategory.SWAMP)
-				.precipitation(Precipitation.RAIN)
-				.build();
-        return this.biomeBuilder.build();
-    }
+			.mobSpawnSettings(this.mobSpawnSettings.build())
+			.specialEffects(this.biomeSpecialFX.build())
+			.downfall(0.9f)
+			.temperature(0.8f)
+			.biomeCategory(BiomeCategory.SWAMP)
+			.precipitation(Precipitation.RAIN)
+			.build();
+		return this.biomeBuilder.build();
+	}
 
 	public void setFeatures() {
 		super.setFeatures();
@@ -87,8 +90,9 @@ public class BiomeSwamplandsClearing extends BiomeBetweenlands {
 	}
 
 	public float getBaseHeight() {
-		return 120+2;
+		return 120 + 2;
 	}
+
 	public float getHeightVariation() {
 		return 1;
 	}

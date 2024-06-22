@@ -10,7 +10,7 @@ public class ScanReturn {
 	public final List<Point> borderpoints;
 	public final List<Double> distances;
 	public final boolean active;
-	
+
 	// a simple class to hold return information from border quickscan
 	public ScanReturn(boolean active, List<Point> borderpoints, List<Double> distances, List<Integer> borderbiomes) {
 		this.borderbiomes = borderbiomes;

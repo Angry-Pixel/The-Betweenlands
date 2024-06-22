@@ -19,12 +19,12 @@ import thebetweenlands.client.rendering.mixintypes.subclasses.BlockElementFaceEX
 @Mixin(FaceBakery.class)
 public class MixinFaceBakery {
 
-    @Inject(method = "bakeQuad", at = @At("RETURN"), cancellable = true)
-    protected void bakeQuadPatch(Vector3f p_111601_, Vector3f p_111602_, BlockElementFace p_111603_, TextureAtlasSprite p_111604_, Direction p_111605_, ModelState p_111606_, BlockElementRotation p_111607_, boolean p_111608_, ResourceLocation p_111609_, CallbackInfoReturnable<BakedQuad> cir) {
-        if (p_111603_ instanceof BlockElementFaceEX) {
-            BlockElementFaceEX element = (BlockElementFaceEX) p_111603_;
-            BakedQuad quad = cir.getReturnValue();
-            cir.setReturnValue(new BakedQuadEX(quad, element.flatshade, element.overrideLightingSide));
-        }
-    }
+	@Inject(method = "bakeQuad", at = @At("RETURN"), cancellable = true)
+	protected void bakeQuadPatch(Vector3f p_111601_, Vector3f p_111602_, BlockElementFace p_111603_, TextureAtlasSprite p_111604_, Direction p_111605_, ModelState p_111606_, BlockElementRotation p_111607_, boolean p_111608_, ResourceLocation p_111609_, CallbackInfoReturnable<BakedQuad> cir) {
+		if (p_111603_ instanceof BlockElementFaceEX) {
+			BlockElementFaceEX element = (BlockElementFaceEX) p_111603_;
+			BakedQuad quad = cir.getReturnValue();
+			cir.setReturnValue(new BakedQuadEX(quad, element.flatshade, element.overrideLightingSide));
+		}
+	}
 }
