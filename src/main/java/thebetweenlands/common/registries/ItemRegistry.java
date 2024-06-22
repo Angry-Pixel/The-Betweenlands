@@ -14,13 +14,13 @@ public class ItemRegistry {
 
 	// Item list
 	public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(TheBetweenlands.ID);
-	
+
 	// Item inits
-	
-	
+
+
 	// Bucket inits
 	public static final DeferredItem<Item> SWAMP_WATER_BUCKET = ITEMS.register("swamp_water_bucket", () -> new BucketItem(() -> FluidRegistry.SWAMP_WATER_STILL.get(), new Item.Properties().stacksTo(1)));
-	
+
 	// Blocks
 	// - Temp
 	public static final DeferredItem<Item> PORTAL = ITEMS.register("portal", () -> new BlockItem(BlockRegistry.PORTAL.get(), new Item.Properties()));
@@ -31,7 +31,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> WIGHT_SPAWN_EGG = ITEMS.register("wight_spawn_egg", () -> new DeferredSpawnEggItem( () -> EntityRegistry.WIGHT.get(), 0x7d8378, 0x07190a, new Item.Properties()));
 
 	// Betweenlands Special
-	public static final DeferredItem<Item> EMPTY_AMATE_MAP = ITEMS.register("empty_amate_map", () -> new ItemEmptyAmateMap(new Item.Properties()));
-	public static final DeferredItem<Item> USED_AMATE_MAP = ITEMS.register("used_amate_map", () -> new ItemAmateMap(new Item.Properties()));
+	public static final DeferredItem<Item> AMATE_MAP = ITEMS.register("amate_map", () -> new ItemEmptyAmateMap(new Item.Properties()));
+	public static final DeferredItem<Item> FILLED_AMATE_MAP = ITEMS.register("filled_amate_map", () -> new ItemAmateMap(new Item.Properties()));
 	public static final DeferredItem<Item> RECORD_ASTATOS = ITEMS.register("astatos", () -> new RecordItem(0, () -> SoundRegistry.RECORD_ASTATOS.get(), new Item.Properties()));
 }

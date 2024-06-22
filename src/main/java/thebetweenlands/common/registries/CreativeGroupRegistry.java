@@ -13,7 +13,7 @@ import thebetweenlands.common.TheBetweenlands;
 public class CreativeGroupRegistry {
 
 	public static final DeferredRegister<CreativeModeTab> CREATIVE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, TheBetweenlands.ID);
-	
+
 	// Blocks tab
 	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> BETWEENLANDS_BLOCKS = CREATIVE_TABS.register("thebetweenlands_block", () -> CreativeModeTab.builder()
 			.title(Component.translatable("itemGroup.thebetweenlands.betweenlands_block"))
@@ -66,8 +66,8 @@ public class CreativeGroupRegistry {
 			.withTabsBefore(BETWEENLANDS_BLOCKS.getId())
 			.displayItems((parameters, output) -> {
 				output.accept(ItemRegistry.PORTAL.get()); //TODO: temp
-				output.accept(ItemRegistry.EMPTY_AMATE_MAP.get());
-				output.accept(ItemRegistry.USED_AMATE_MAP.get()); //TODO: Remove?
+				output.accept(ItemRegistry.AMATE_MAP.get());
+				output.accept(ItemRegistry.FILLED_AMATE_MAP.get()); //TODO: Remove?
 				output.accept(ItemRegistry.RECORD_ASTATOS.get());
 			}).build());
 

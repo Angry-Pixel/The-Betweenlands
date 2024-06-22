@@ -40,9 +40,6 @@ public class ClientEvents {
     private static void doClientStuff(final FMLClientSetupEvent event) {
         // Client only setup
 
-        // Amate Map renderer
-        TheBetweenlands.amateMapRenderer = new AmateMapRenderer(Minecraft.getInstance().textureManager);
-
         // Entity renderers
         EntityRenderers.register(EntityRegistry.SWAMP_HAG.get(), RenderSwampHag::new);
         EntityRenderers.register(EntityRegistry.GECKO.get(), RenderGecko::new);

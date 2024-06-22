@@ -1,4 +1,4 @@
-package thebetweenlands.common.networking.packets;
+package thebetweenlands.common.networking;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.Packet;

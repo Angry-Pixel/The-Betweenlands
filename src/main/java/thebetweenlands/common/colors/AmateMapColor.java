@@ -1,7 +1,5 @@
 package thebetweenlands.common.colors;
 
-import net.minecraft.world.level.material.MaterialColor;
-
 public class AmateMapColor {
 
     // HEX to signed decimal (FF - Blue - Green - Red)

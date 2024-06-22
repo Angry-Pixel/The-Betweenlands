@@ -6,9 +6,7 @@
     "MixinBlockElementFaceDeserializer",
     "MixinClientPacketListener",
     "MixinFaceBakery",
-    "MixinItemInHandRenderer",
-    "MixinModelBlockRenderer",
-    "MixinServerEntity"
+    "MixinModelBlockRenderer"
   ],
   "injectors": {
     "defaultRequire": 1

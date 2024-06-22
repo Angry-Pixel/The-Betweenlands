@@ -9,11 +9,14 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import thebetweenlands.client.ClientEvents;
 import thebetweenlands.client.gui.AmateMapRenderer;
 import thebetweenlands.client.rendering.BetweenlandsSkyRenderer;
 import thebetweenlands.common.ambientsounds.BetweenlandsSoundManager;
 import thebetweenlands.common.datagen.DataGenerators;
+import thebetweenlands.common.networking.AmateMapPacket;
 import thebetweenlands.common.networking.BetweenlandsPacketHandler;
 import thebetweenlands.common.registries.*;
 import thebetweenlands.common.world.BetweenlandsBiomeProvider;
@@ -26,34 +29,30 @@ import thebetweenlands.common.world.GenLayersEvent.RegisterGenLayersEvent;
 import thebetweenlands.common.world.LegacyBiomeSource;
 import thebetweenlands.common.world.noisegenerators.genlayers.ProviderGenLayerBetweenlands;
 
+import java.util.Locale;
 import java.util.stream.Collectors;
 
-@Mod("thebetweenlands")
-public class TheBetweenlands
-{
+@Mod(TheBetweenlands.ID)
+public class TheBetweenlands {
 	// Mod Vars
-	public static final  String NAME = "Betweenlands 1.18 Remake";
-	public static final  String ID = "thebetweenlands";
-	public static final  String VERSION = "1.0";
+	public static final String NAME = "Betweenlands 1.18 Remake";
+	public static final String ID = "thebetweenlands";
+	public static final String VERSION = "1.0";
 
-	// Random global objects
-	public static AmateMapRenderer amateMapRenderer;
-	
 	// Betweenlands time (for shaders)
-	public static int Time;				// Time in seconds
-	public static float FractinalTime;	// Fractinal second
-	
+	public static int Time;                // Time in seconds
+	public static float FractinalTime;    // Fractinal second
+
 	// debug values
-	public static float apeture = 0.53f;		// start point of fog
-	public static float range = 0.4f;			// how far the fog reatches up to cover the sky
-	public static float rotation = 0.0f;			// a rotation value sent to the shader to save proc time
-	public static int amateMapRendererKey;		// Was thinking about making a lib for custom maps, this is a placeholder for that
+	public static float apeture = 0.53f;        // start point of fog
+	public static float range = 0.4f;            // how far the fog reatches up to cover the sky
+	public static float rotation = 0.0f;            // a rotation value sent to the shader to save proc time
 
 	// Old debug values for shader handler, still used by debug command
-	public static float distmul[] = {0.1f,0.1f,0.1f,0.1f};
+	public static float distmul[] = {0.1f, 0.1f, 0.1f, 0.1f};
 
 	// Config vars
-	public static boolean useVanillaBiomes = true;		// if false all normal biomes no longer get registered, for if someone wants to replace all biomes in datapack
+	public static boolean useVanillaBiomes = true;        // if false all normal biomes no longer get registered, for if someone wants to replace all biomes in datapack
 	// (also making away for biomes to individually be modified by data pack)
 
 	// Betweenlands sound manager
@@ -61,67 +60,63 @@ public class TheBetweenlands
 
 	public BetweenlandsSkyRenderer skyrenderer = new BetweenlandsSkyRenderer();
 	public int loopstate = 0;
-	
+
 	// Betweenlands Level loader
 	public boolean isBetweenlandsLoeaded = false;
-	
-    // Directly reference a log4j logger.
-    public static final Logger LOGGER = LogManager.getLogger();
+
+	// Directly reference a log4j logger.
+	public static final Logger LOGGER = LogManager.getLogger();
 
 	// World provider settings untill i make a class for them
 	public static int LAYER_HEIGHT = 120;
 	public static int CAVE_WATER_HEIGHT = 15;
-    
-    public TheBetweenlands(IEventBus eventbus) {
+
+	public TheBetweenlands(IEventBus eventbus) {
 		if (FMLEnvironment.dist == Dist.CLIENT) {
 			ClientEvents.initClient(eventbus);
 		}
 
-    	// Register mod contents
+		// Register mod contents
 		SoundRegistry.SOUNDS.register(eventbus);
-    	ParticleRegistry.register(eventbus);
-    	BlockRegistry.BLOCKS.register(eventbus);
-    	ItemRegistry.ITEMS.register(eventbus);
-    	FluidRegistry.register(eventbus);
-    	
-    	EntityRegistry.register(eventbus);
-    	
-        // rebuilding features and carvers
+		ParticleRegistry.register(eventbus);
+		BlockRegistry.BLOCKS.register(eventbus);
+		ItemRegistry.ITEMS.register(eventbus);
+		FluidRegistry.register(eventbus);
+
+		EntityRegistry.register(eventbus);
+
+		// rebuilding features and carvers
 		PlacementRegistry.register(eventbus);
-        FeatureRegistries.register(eventbus);
-    	CarverRegistry.register(eventbus);
-    	
-    	BiomeRegistry.register(eventbus);
-    	
-    	//Blocks.AZALEA_LEAVES = bob;
-    	
-        // Register the setup method for modloading
-    	eventbus.addListener(this::setup);
-        // Register the processIMC method for modloading
-    	eventbus.addListener(this::processIMC);
+		FeatureRegistries.register(eventbus);
+		CarverRegistry.register(eventbus);
+
+		BiomeRegistry.register(eventbus);
+
+		// Register the setup method for modloading
+		eventbus.addListener(this::setup);
+		// Register the processIMC method for modloading
+		eventbus.addListener(this::processIMC);
 		// Gen layers event
 		eventbus.addListener(this::genLayersEvent);
-    	// Betweenlands cave & underwater ambience register
-    	//eventbus.addListener(this::betweenlandsAmbienceHandler);
+		// Betweenlands cave & underwater ambience register
+		//eventbus.addListener(this::betweenlandsAmbienceHandler);
 		// Data generation
 		eventbus.addListener(DataGenerators::gatherData);
 		//Populate Spawn Eggs tab with our spawn eggs
 		eventbus.addListener(CreativeGroupRegistry::populateTabs);
 
-		DimensionRegistries.register(eventbus);
+		eventbus.addListener(this::registerPackets);
 
-        // Register mod to event bus
-        MinecraftForge.EVENT_BUS.register(this);
-    }
+		DimensionRegistries.register(eventbus);
+	}
 
 	// For whenever I make the gen layers lib a public thing (not sure about the legalitys)
 	private void genLayersEvent(final RegisterGenLayersEvent event) {
-		event.RegisterProvider(new ResourceLocation(TheBetweenlands.ID,"gen_layers_betweenlands"), ProviderGenLayerBetweenlands::new);
+		event.RegisterProvider(new ResourceLocation(TheBetweenlands.ID, "gen_layers_betweenlands"), ProviderGenLayerBetweenlands::new);
 	}
 
 	// Add configured feature registering
-	private void setup(final FMLCommonSetupEvent event)
-    {
+	private void setup(final FMLCommonSetupEvent event) {
 		// Post RegisterGenLayersEvent
 		//MinecraftForge.EVENT_BUS.register(new RegisterGenLayersEvent());
 
@@ -133,53 +128,55 @@ public class TheBetweenlands
 		ModLoader.get().postEvent(new RegisterBiomeDecoratorEvent());
 		TheBetweenlands.LOGGER.info("RegisterBiomeDecoratorEvent concluded");
 
-    	// Server and client setup
+		// Server and client setup
 		BetweenlandsPacketHandler.init();
 
 
-        // Block color setup
+		// Block color setup
 		//ModBlockGrassColors.register();
 		//ModBlockFluidColors.register();
-        ItemColorRegistry.register();
+		ItemColorRegistry.register();
 
-        // Register biome source and chunk generator
+		// Register biome source and chunk generator
 		Registry.register(Registry.BIOME_SOURCE, new ResourceLocation(TheBetweenlands.ID, "legacy_biomeprovider"), LegacyBiomeSource.CODEC);
-     	Registry.register(Registry.BIOME_SOURCE, new ResourceLocation(TheBetweenlands.ID, "betweenlands_biomeprovider"), BetweenlandsBiomeProvider.CODEC);
-        Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(TheBetweenlands.ID, "the_betweenlands_chunkgen"), ChunkGeneratorBetweenlands.CODEC);
-        
-        // Block render types setup
-        // todo: move this to block types (me too lazy)
+		Registry.register(Registry.BIOME_SOURCE, new ResourceLocation(TheBetweenlands.ID, "betweenlands_biomeprovider"), BetweenlandsBiomeProvider.CODEC);
+		Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(TheBetweenlands.ID, "the_betweenlands_chunkgen"), ChunkGeneratorBetweenlands.CODEC);
 
-        ItemBlockRenderTypes.setRenderLayer(BlockRegistry.PORTAL.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(BlockRegistry.SWAMP_GRASS.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(BlockRegistry.DEAD_SWAMP_GRASS.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(BlockRegistry.MOSS.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(BlockRegistry.POISON_IVY.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(BlockRegistry.LEAVES_WEEDWOOD_TREE.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(BlockRegistry.WEEDWOOD_SAPLING.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(BlockRegistry.RUBBER_SAPLING.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(BlockRegistry.NIBBLETWIG_SAPLING.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(BlockRegistry.LEAVES_NIBBLETWIG_TREE.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(BlockRegistry.LEAVES_SAP_TREE.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(BlockRegistry.LEAVES_RUBBER_TREE.get(), RenderType.cutoutMipped());
+		// Block render types setup
+		// todo: move this to block types (me too lazy)
+
+		ItemBlockRenderTypes.setRenderLayer(BlockRegistry.PORTAL.get(), RenderType.translucent());
+		ItemBlockRenderTypes.setRenderLayer(BlockRegistry.SWAMP_GRASS.get(), RenderType.cutoutMipped());
+		ItemBlockRenderTypes.setRenderLayer(BlockRegistry.DEAD_SWAMP_GRASS.get(), RenderType.cutoutMipped());
+		ItemBlockRenderTypes.setRenderLayer(BlockRegistry.MOSS.get(), RenderType.cutoutMipped());
+		ItemBlockRenderTypes.setRenderLayer(BlockRegistry.POISON_IVY.get(), RenderType.cutoutMipped());
+		ItemBlockRenderTypes.setRenderLayer(BlockRegistry.LEAVES_WEEDWOOD_TREE.get(), RenderType.cutoutMipped());
+		ItemBlockRenderTypes.setRenderLayer(BlockRegistry.WEEDWOOD_SAPLING.get(), RenderType.cutoutMipped());
+		ItemBlockRenderTypes.setRenderLayer(BlockRegistry.RUBBER_SAPLING.get(), RenderType.cutoutMipped());
+		ItemBlockRenderTypes.setRenderLayer(BlockRegistry.NIBBLETWIG_SAPLING.get(), RenderType.cutoutMipped());
+		ItemBlockRenderTypes.setRenderLayer(BlockRegistry.LEAVES_NIBBLETWIG_TREE.get(), RenderType.cutoutMipped());
+		ItemBlockRenderTypes.setRenderLayer(BlockRegistry.LEAVES_SAP_TREE.get(), RenderType.cutoutMipped());
+		ItemBlockRenderTypes.setRenderLayer(BlockRegistry.LEAVES_RUBBER_TREE.get(), RenderType.cutoutMipped());
 		ItemBlockRenderTypes.setRenderLayer(BlockRegistry.LEAVES_HEARTHGROVE_TREE.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(BlockRegistry.SAP_SAPLING.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(BlockRegistry.THORNS.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(BlockRegistry.CAVE_MOSS.get(), RenderType.cutoutMipped());
-        ItemBlockRenderTypes.setRenderLayer(BlockRegistry.SWAMP_REED.get(), RenderType.cutoutMipped());
+		ItemBlockRenderTypes.setRenderLayer(BlockRegistry.SAP_SAPLING.get(), RenderType.cutoutMipped());
+		ItemBlockRenderTypes.setRenderLayer(BlockRegistry.THORNS.get(), RenderType.cutoutMipped());
+		ItemBlockRenderTypes.setRenderLayer(BlockRegistry.CAVE_MOSS.get(), RenderType.cutoutMipped());
+		ItemBlockRenderTypes.setRenderLayer(BlockRegistry.SWAMP_REED.get(), RenderType.cutoutMipped());
 		ItemBlockRenderTypes.setRenderLayer(BlockRegistry.HANGER.get(), RenderType.cutoutMipped());
 		ItemBlockRenderTypes.setRenderLayer(BlockRegistry.SWAMP_TALLGRASS.get(), RenderType.cutoutMipped());
 		ItemBlockRenderTypes.setRenderLayer(BlockRegistry.BULB_CAPPED_MUSHROOM_CAP.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(FluidRegistry.SWAMP_WATER_FLOW.get(), RenderType.translucent());
-        ItemBlockRenderTypes.setRenderLayer(FluidRegistry.SWAMP_WATER_STILL.get(), RenderType.translucent());
-    }
+		ItemBlockRenderTypes.setRenderLayer(FluidRegistry.SWAMP_WATER_FLOW.get(), RenderType.translucent());
+		ItemBlockRenderTypes.setRenderLayer(FluidRegistry.SWAMP_WATER_STILL.get(), RenderType.translucent());
+	}
 
-	//TODO: probably unnecessary
-    private void processIMC(final InterModProcessEvent event)
-    {
-        // Recive from other mods
-        LOGGER.info("Got IMC {}", event.getIMCStream().map(m->m.messageSupplier().get()).collect(Collectors.toList()));
-    }
+	public void registerPackets(RegisterPayloadHandlersEvent event) {
+		PayloadRegistrar registrar = event.registrar(ID).versioned("1.0.0");
+		registrar.playToClient(AmateMapPacket.TYPE, AmateMapPacket.STREAM_CODEC, AmateMapPacket::handle);
+	}
+
+	public static ResourceLocation prefix(String name) {
+		return ResourceLocation.fromNamespaceAndPath(ID, name.toLowerCase(Locale.ROOT));
+	}
 }
 
 

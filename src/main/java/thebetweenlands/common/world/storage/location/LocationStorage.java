@@ -1,10 +1,14 @@
 package thebetweenlands.common.world.storage.location;
 
+import net.minecraft.world.phys.AABB;
 import thebetweenlands.common.world.storage.LocalStorageImpl;
 
+import java.util.Collections;
+import java.util.List;
+
 public class LocationStorage extends LocalStorageImpl {
-    private List<AxisAlignedBB> boundingBoxes = new ArrayList<>();
-    private AxisAlignedBB enclosingBoundingBox;
+    private List<AABB> boundingBoxes = new ArrayList<>();
+    private AABB enclosingBoundingBox;
     private EnumLocationType type;
     private int layer;
     private LocationAmbience ambience = null;
@@ -52,8 +56,8 @@ public class LocationStorage extends LocalStorageImpl {
      * @param boundingBoxes
      * @return
      */
-    public LocationStorage addBounds(AxisAlignedBB... boundingBoxes) {
-        for(AxisAlignedBB boundingBox : boundingBoxes) {
+    public LocationStorage addBounds(AABB... boundingBoxes) {
+        for(AABB boundingBox : boundingBoxes) {
             this.boundingBoxes.add(boundingBox);
             this.markDirty();
         }
@@ -65,7 +69,7 @@ public class LocationStorage extends LocalStorageImpl {
      * Returns the bounding boxes of this location
      * @return
      */
-    public List<AxisAlignedBB> getBounds() {
+    public List<AABB> getBounds() {
         return Collections.unmodifiableList(this.boundingBoxes);
     }
 
@@ -73,8 +77,8 @@ public class LocationStorage extends LocalStorageImpl {
      * Removes the specified bounding boxes
      * @param boundingBoxes
      */
-    public void removeBounds(AxisAlignedBB... boundingBoxes) {
-        for(AxisAlignedBB boundingBox : boundingBoxes) {
+    public void removeBounds(AABB... boundingBoxes) {
+        for(AABB boundingBox : boundingBoxes) {
             this.boundingBoxes.remove(boundingBox);
             this.markDirty();
         }
@@ -90,8 +94,8 @@ public class LocationStorage extends LocalStorageImpl {
         } else if(this.boundingBoxes.size() == 1) {
             this.enclosingBoundingBox = this.boundingBoxes.get(0);
         } else {
-            AxisAlignedBB union = this.boundingBoxes.get(0);
-            for(AxisAlignedBB box : this.boundingBoxes) {
+            AABB union = this.boundingBoxes.get(0);
+            for(AABB box : this.boundingBoxes) {
                 union = union.union(box);
             }
             this.enclosingBoundingBox = union;
@@ -102,7 +106,7 @@ public class LocationStorage extends LocalStorageImpl {
      * Returns a bounding box that encloses all bounds
      * @return
      */
-    public AxisAlignedBB getEnclosingBounds() {
+    public AABB getEnclosingBounds() {
         return this.enclosingBoundingBox;
     }
 
@@ -120,7 +124,7 @@ public class LocationStorage extends LocalStorageImpl {
      * @return
      */
     public LocationStorage linkChunks() {
-        for(AxisAlignedBB boundingBox : this.boundingBoxes) {
+        for(AABB boundingBox : this.boundingBoxes) {
             int sx = MathHelper.floor(boundingBox.minX) >> 4;
             int sz = MathHelper.floor(boundingBox.minZ) >> 4;
             int ex = MathHelper.floor(boundingBox.maxX) >> 4;
@@ -272,7 +276,7 @@ public class LocationStorage extends LocalStorageImpl {
         this.locationSeed = nbt.getLong("seed");
     }
 
-    protected NBTTagCompound writeAabb(AxisAlignedBB aabb) {
+    protected NBTTagCompound writeAabb(AABB aabb) {
         NBTTagCompound boxNbt = new NBTTagCompound();
         boxNbt.setDouble("minX", aabb.minX);
         boxNbt.setDouble("minY", aabb.minY);
@@ -283,14 +287,14 @@ public class LocationStorage extends LocalStorageImpl {
         return boxNbt;
     }
 
-    protected AxisAlignedBB readAabb(NBTTagCompound nbt) {
+    protected AABB readAabb(NBTTagCompound nbt) {
         double minX = nbt.getDouble("minX");
         double minY = nbt.getDouble("minY");
         double minZ = nbt.getDouble("minZ");
         double maxX = nbt.getDouble("maxX");
         double maxY = nbt.getDouble("maxY");
         double maxZ = nbt.getDouble("maxZ");
-        return new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
+        return new AABB(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
     /**
@@ -315,7 +319,7 @@ public class LocationStorage extends LocalStorageImpl {
     protected void writeSharedNbt(NBTTagCompound nbt) {
         nbt.setString("name", this.dataManager.get(NAME));
         NBTTagList boundingBoxes = new NBTTagList();
-        for(AxisAlignedBB boundingBox : this.boundingBoxes) {
+        for(AABB boundingBox : this.boundingBoxes) {
             boundingBoxes.appendTag(this.writeAabb(boundingBox));
         }
         nbt.setTag("bounds", boundingBoxes);
@@ -370,7 +374,7 @@ public class LocationStorage extends LocalStorageImpl {
      * @return
      */
     public boolean isInside(Vec3i pos) {
-        for(AxisAlignedBB boundingBox : this.boundingBoxes) {
+        for(AABB boundingBox : this.boundingBoxes) {
             if(this.isVecInsideOrEdge(boundingBox, new Vec3d(pos.getX(), pos.getY(), pos.getZ()))) {
                 return true;
             }
@@ -384,7 +388,7 @@ public class LocationStorage extends LocalStorageImpl {
      * @return
      */
     public boolean isInside(Vec3d pos) {
-        for(AxisAlignedBB boundingBox : this.boundingBoxes) {
+        for(AABB boundingBox : this.boundingBoxes) {
             if(this.isVecInsideOrEdge(boundingBox, pos)) {
                 return true;
             }
@@ -397,8 +401,8 @@ public class LocationStorage extends LocalStorageImpl {
      * @param aabb
      * @return
      */
-    public boolean intersects(AxisAlignedBB aabb) {
-        for(AxisAlignedBB boundingBox : this.boundingBoxes) {
+    public boolean intersects(AABB aabb) {
+        for(AABB boundingBox : this.boundingBoxes) {
             if(boundingBox.intersects(aabb)) {
                 return true;
             }
@@ -412,7 +416,7 @@ public class LocationStorage extends LocalStorageImpl {
      * @param vec
      * @return
      */
-    protected final boolean isVecInsideOrEdge(AxisAlignedBB aabb, Vec3d vec) {
+    protected final boolean isVecInsideOrEdge(AABB aabb, Vec3d vec) {
         return vec.x >= aabb.minX && vec.x <= aabb.maxX ? (vec.y >= aabb.minY && vec.y <= aabb.maxY ? vec.z >= aabb.minZ && vec.z <= aabb.maxZ : false) : false;
     }
 
@@ -485,7 +489,7 @@ public class LocationStorage extends LocalStorageImpl {
      * @param aabb
      * @return
      */
-    public static List<LocationStorage> getLocations(World world, AxisAlignedBB aabb) {
+    public static List<LocationStorage> getLocations(World world, AABB aabb) {
         BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
         return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, aabb, (location) -> {
             return location.intersects(aabb);
@@ -580,7 +584,7 @@ public class LocationStorage extends LocalStorageImpl {
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox() {
+    public AABB getBoundingBox() {
         return this.enclosingBoundingBox;
     }
 
