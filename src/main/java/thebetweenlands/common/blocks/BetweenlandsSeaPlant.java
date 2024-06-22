@@ -3,6 +3,7 @@ package thebetweenlands.common.blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -67,11 +68,10 @@ public class BetweenlandsSeaPlant extends BetweenlandsBlock implements SimpleWat
 
 	// Only allow placment only on ground
 	@Override
-	public boolean canSurvive(BlockState p_52783_, LevelReader p_52784_, BlockPos p_52785_) {
-
+	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
 		// if block below is not of the same block name
-		if (!p_52784_.getBlockState(p_52785_.below()).is(this)) {
-			return p_52784_.getBlockState(p_52785_.below()).isFaceSturdy(p_52784_, p_52785_.below(), Direction.UP);
+		if (!level.getBlockState(pos.below()).is(this)) {
+			return level.getBlockState(pos.below()).isFaceSturdy(level, pos.below(), Direction.UP);
 		}
 
 		return true;
@@ -79,11 +79,10 @@ public class BetweenlandsSeaPlant extends BetweenlandsBlock implements SimpleWat
 
 	// On tick update, check for block connected to solid block
 	@Override
-	public void tick(BlockState p_60462_, ServerLevel p_60463_, BlockPos p_60464_, Random p_60465_) {
-
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
 		// do can suvive check
-		if (!this.canSurvive(p_60462_, p_60463_, p_60464_)) {
-			p_60463_.destroyBlock(p_60464_, false);
+		if (!this.canSurvive(state, level, pos)) {
+			level.destroyBlock(pos, false);
 		}
 	}
 

@@ -21,6 +21,7 @@ import thebetweenlands.client.rendering.shader.BetweenlandsSkyShaderInstance;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.particles.BetweenlandsParticle;
 import thebetweenlands.common.particles.BetweenlandsPortalParticle;
+import thebetweenlands.common.particles.CaveWaterDripParticle;
 import thebetweenlands.common.registries.*;
 
 //Class for events relying on the client side
@@ -67,6 +68,7 @@ public class ClientEvents {
 	private static void particleStuff(final RegisterParticleProvidersEvent event) {
 		event.registerSpriteSet(ParticleRegistry.SULFUR_GENERIC.get(), BetweenlandsParticle.Helper::new);
 		event.registerSpriteSet(ParticleRegistry.PORTAL_EFFECT.get(), BetweenlandsPortalParticle.Helper::new);
+		event.registerSpriteSet(ParticleRegistry.CAVE_WATER_DRIP.get(), CaveWaterDripParticle.Factory::new);
 	}
 
 	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
