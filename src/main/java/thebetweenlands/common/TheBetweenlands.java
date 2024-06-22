@@ -32,35 +32,15 @@ import java.util.Locale;
 
 @Mod(TheBetweenlands.ID)
 public class TheBetweenlands {
-	// Mod Vars
-	public static final String NAME = "Betweenlands 1.18 Remake";
 	public static final String ID = "thebetweenlands";
-	public static final String VERSION = "1.0";
-
-	// Betweenlands time (for shaders)
-	public static int Time;                // Time in seconds
-	public static float FractinalTime;    // Fractinal second
 
 	// debug values
 	public static float apeture = 0.53f;        // start point of fog
 	public static float range = 0.4f;            // how far the fog reatches up to cover the sky
 	public static float rotation = 0.0f;            // a rotation value sent to the shader to save proc time
 
-	// Old debug values for shader handler, still used by debug command
-	public static float distmul[] = {0.1f, 0.1f, 0.1f, 0.1f};
-
-	// Config vars
-	public static boolean useVanillaBiomes = true;        // if false all normal biomes no longer get registered, for if someone wants to replace all biomes in datapack
-	// (also making away for biomes to individually be modified by data pack)
-
-	// Betweenlands sound manager
-	public static BetweenlandsSoundManager soundManager = new BetweenlandsSoundManager();
-
 	public BetweenlandsSkyRenderer skyrenderer = new BetweenlandsSkyRenderer();
 	public int loopstate = 0;
-
-	// Betweenlands Level loader
-	public boolean isBetweenlandsLoeaded = false;
 
 	// Directly reference a log4j logger.
 	public static final Logger LOGGER = LogManager.getLogger();
@@ -69,30 +49,27 @@ public class TheBetweenlands {
 	public static int LAYER_HEIGHT = 120;
 	public static int CAVE_WATER_HEIGHT = 15;
 
-	public TheBetweenlands(IEventBus eventbus) {
-		if (FMLEnvironment.dist == Dist.CLIENT) {
+	public TheBetweenlands(IEventBus eventbus, Dist dist) {
+		if (dist == Dist.CLIENT) {
 			ClientEvents.initClient(eventbus);
 		}
 
 		// Register mod contents
 		SoundRegistry.SOUNDS.register(eventbus);
 		ParticleRegistry.PARTICLES.register(eventbus);
+		CarverRegistry.CARVER_TYPES.register(eventbus);
 		BlockRegistry.BLOCKS.register(eventbus);
 		ItemRegistry.ITEMS.register(eventbus);
+		FeatureRegistry.FEATURES.register(eventbus);
 		FluidRegistry.FLUIDS.register(eventbus);
 		FluidTypeRegistry.FLUID_TYPES.register(eventbus);
 
 		EntityRegistry.register(eventbus);
 
-		// rebuilding features and carvers
 		PlacementRegistry.register(eventbus);
-		FeatureRegistries.register(eventbus);
-		CarverRegistry.register(eventbus);
 
 		// Register the setup method for modloading
 		eventbus.addListener(this::setup);
-		// Register the processIMC method for modloading
-		eventbus.addListener(this::processIMC);
 		// Gen layers event
 		eventbus.addListener(this::genLayersEvent);
 		// Betweenlands cave & underwater ambience register
@@ -103,8 +80,6 @@ public class TheBetweenlands {
 		eventbus.addListener(CreativeGroupRegistry::populateTabs);
 
 		eventbus.addListener(this::registerPackets);
-
-		DimensionRegistries.register(eventbus);
 	}
 
 	// For whenever I make the gen layers lib a public thing (not sure about the legalitys)
