@@ -90,8 +90,6 @@ public class TheBetweenlands {
 		FeatureRegistries.register(eventbus);
 		CarverRegistry.register(eventbus);
 
-		BiomeRegistry.register(eventbus);
-
 		// Register the setup method for modloading
 		eventbus.addListener(this::setup);
 		// Register the processIMC method for modloading

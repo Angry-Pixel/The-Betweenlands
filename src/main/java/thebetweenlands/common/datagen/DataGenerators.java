@@ -22,6 +22,7 @@ public class DataGenerators {
         boolean data = event.includeServer();
 
         // Data
+		gen.addProvider(data, new BetweenlandsRegistryProvider(output, provider));
         gen.addProvider(data, new BetweenlandsBlockTagsProvider(output, provider, helper));
 
         // Assets
