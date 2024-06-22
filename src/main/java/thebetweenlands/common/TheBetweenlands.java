@@ -12,7 +12,6 @@ import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import thebetweenlands.client.ClientEvents;
-import thebetweenlands.client.gui.AmateMapRenderer;
 import thebetweenlands.client.rendering.BetweenlandsSkyRenderer;
 import thebetweenlands.common.ambientsounds.BetweenlandsSoundManager;
 import thebetweenlands.common.datagen.DataGenerators;
@@ -30,7 +29,6 @@ import thebetweenlands.common.world.LegacyBiomeSource;
 import thebetweenlands.common.world.noisegenerators.genlayers.ProviderGenLayerBetweenlands;
 
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 @Mod(TheBetweenlands.ID)
 public class TheBetweenlands {
@@ -81,7 +79,8 @@ public class TheBetweenlands {
 		ParticleRegistry.register(eventbus);
 		BlockRegistry.BLOCKS.register(eventbus);
 		ItemRegistry.ITEMS.register(eventbus);
-		FluidRegistry.register(eventbus);
+		FluidRegistry.FLUIDS.register(eventbus);
+		FluidTypeRegistry.FLUID_TYPES.register(eventbus);
 
 		EntityRegistry.register(eventbus);
 
