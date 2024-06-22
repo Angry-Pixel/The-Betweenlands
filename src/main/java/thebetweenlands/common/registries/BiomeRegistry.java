@@ -13,13 +13,13 @@ import thebetweenlands.common.TheBetweenlands;
 public class BiomeRegistry {
 
 	public static final ResourceKey<Biome> PATCHY_ISLANDS = makeKey("patchy_islands");
-    public static final ResourceKey<Biome> SWAMPLANDS = makeKey("swamplands");
-    public static final ResourceKey<Biome> DEEP_WATERS = makeKey("deep_waters");
-    public static final ResourceKey<Biome> COARSE_ISLANDS = makeKey("coarse_islands");
-    public static final ResourceKey<Biome> RAISED_ISLES = makeKey("raised_isles");
-    public static final ResourceKey<Biome> SLUDGE_PLAINS = makeKey("sludge_plains");
-    public static final ResourceKey<Biome> ERODED_MARSH = makeKey("eroded_marsh");
-    public static final ResourceKey<Biome> MARSH = makeKey("marsh");
+	public static final ResourceKey<Biome> SWAMPLANDS = makeKey("swamplands");
+	public static final ResourceKey<Biome> DEEP_WATERS = makeKey("deep_waters");
+	public static final ResourceKey<Biome> COARSE_ISLANDS = makeKey("coarse_islands");
+	public static final ResourceKey<Biome> RAISED_ISLES = makeKey("raised_isles");
+	public static final ResourceKey<Biome> SLUDGE_PLAINS = makeKey("sludge_plains");
+	public static final ResourceKey<Biome> ERODED_MARSH = makeKey("eroded_marsh");
+	public static final ResourceKey<Biome> MARSH = makeKey("marsh");
 	public static final ResourceKey<Biome> SWAMPLANDS_CLEARING = makeKey("swamplands_clearing");
 	public static final ResourceKey<Biome> SLUDGE_PLAINS_CLEARING = makeKey("sludge_plains_clearing");
 

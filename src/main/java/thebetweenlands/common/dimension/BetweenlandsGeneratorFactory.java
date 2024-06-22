@@ -26,11 +26,11 @@ public class BetweenlandsGeneratorFactory implements IBasicChunkGeneratorFactory
 	public ChunkGenerator createChunkGenerator(RegistryAccess registryAccess, long seed) {
 
 		return new ChunkGeneratorBetweenlands(null, null, new BetweenlandsBiomeProvider(registryAccess, seed), seed,
-				new Holder.Direct<>(new NoiseGeneratorSettings(new NoiseSettings(-64, 256, new NoiseSamplingSettings(0, 0, 0, 0),
+			new Holder.Direct<>(new NoiseGeneratorSettings(new NoiseSettings(-64, 256, new NoiseSamplingSettings(0, 0, 0, 0),
 				new NoiseSlider(0, 0, 0), new NoiseSlider(0, 0, 0), 1, 1, new TerrainShaper(CubicSpline.constant(0), CubicSpline.constant(0), CubicSpline.constant(0))),
-						BlockRegistry.PITSTONE.get().defaultBlockState(), BlockRegistry.SWAMP_WATER_BLOCK.get().defaultBlockState(),
-						new NoiseRouterWithOnlyNoises(DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0)),
-						SurfaceRuleData.nether(), 63, false, false, false, false)), new BetweenlandsGeneratorSettings(-28, false, true));
+				BlockRegistry.PITSTONE.get().defaultBlockState(), BlockRegistry.SWAMP_WATER_BLOCK.get().defaultBlockState(),
+				new NoiseRouterWithOnlyNoises(DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0), DensityFunctions.constant(0)),
+				SurfaceRuleData.nether(), 63, false, false, false, false)), new BetweenlandsGeneratorSettings(-28, false, true));
 	}
 
 }

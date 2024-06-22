@@ -7,7 +7,6 @@ import net.minecraft.world.level.storage.WritableLevelData;
 public class BetweenlandsLevelData implements WritableLevelData {
 
 
-
 	@Override
 	public int getXSpawn() {
 		// TODO Auto-generated method stub
@@ -59,7 +58,7 @@ public class BetweenlandsLevelData implements WritableLevelData {
 	@Override
 	public void setRaining(boolean p_78171_) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -89,25 +88,25 @@ public class BetweenlandsLevelData implements WritableLevelData {
 	@Override
 	public void setXSpawn(int p_78651_) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void setYSpawn(int p_78652_) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void setZSpawn(int p_78653_) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void setSpawnAngle(float p_78648_) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

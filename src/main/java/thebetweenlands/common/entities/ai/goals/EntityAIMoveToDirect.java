@@ -33,13 +33,14 @@ public abstract class EntityAIMoveToDirect<T extends Mob> extends Goal {
 	@Override
 	public void tick() {
 		Vector3d target = this.getTarget();
-		if(target != null) {
+		if (target != null) {
 			this.entity.getMoveControl().setWantedPosition(target.x, target.y, target.z, this.speed);
 		}
 	}
 
 	/**
 	 * Returns the target. Returns null if there is no target
+	 *
 	 * @return
 	 */
 	@Nullable

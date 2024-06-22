@@ -30,52 +30,52 @@ public class AmateMapData extends MapItemSavedData {
 	private final IntSet occupiedSpots = new IntOpenHashSet();
 	private static final Map<String, AmateMapData> CLIENT_DATA = new HashMap<>();
 
-    public AmateMapData(int x, int y, boolean tracking, boolean trackingUnlimited, boolean locked) {
-        super(x, y, (byte)4, tracking, trackingUnlimited, locked, DimensionRegistries.BETWEENLANDS_DIMENSION_KEY);
-    }
+	public AmateMapData(int x, int y, boolean tracking, boolean trackingUnlimited, boolean locked) {
+		super(x, y, (byte) 4, tracking, trackingUnlimited, locked, DimensionRegistries.BETWEENLANDS_DIMENSION_KEY);
+	}
 
-    public static AmateMapData createFresh(double x, double y, boolean tracking, boolean trackingUnlimited, boolean locked) {
-        int scale = 128 * 5;
-        int j = Mth.floor((x + 64.0D) / (double)scale);
-        int k = Mth.floor((y + 64.0D) / (double)scale);
-        int l = j * scale + scale / 2 - 64;
-        int i1 = k * scale + scale / 2 - 64;
-        return new AmateMapData(l, i1, tracking, trackingUnlimited, locked);
-    }
+	public static AmateMapData createFresh(double x, double y, boolean tracking, boolean trackingUnlimited, boolean locked) {
+		int scale = 128 * 5;
+		int j = Mth.floor((x + 64.0D) / (double) scale);
+		int k = Mth.floor((y + 64.0D) / (double) scale);
+		int l = j * scale + scale / 2 - 64;
+		int i1 = k * scale + scale / 2 - 64;
+		return new AmateMapData(l, i1, tracking, trackingUnlimited, locked);
+	}
 
 
-    public static AmateMapData load(CompoundTag tag) {
-        int i = tag.getInt("x");
-        int j = tag.getInt("z");
-        boolean position = !tag.contains("trackingPosition", 1) || tag.getBoolean("trackingPosition");
-        boolean unlimitedTracking = tag.getBoolean("unlimitedTracking");
-        boolean locked = tag.getBoolean("locked");
-        AmateMapData data = new AmateMapData(i, j, position, unlimitedTracking, locked);
+	public static AmateMapData load(CompoundTag tag) {
+		int i = tag.getInt("x");
+		int j = tag.getInt("z");
+		boolean position = !tag.contains("trackingPosition", 1) || tag.getBoolean("trackingPosition");
+		boolean unlimitedTracking = tag.getBoolean("unlimitedTracking");
+		boolean locked = tag.getBoolean("locked");
+		AmateMapData data = new AmateMapData(i, j, position, unlimitedTracking, locked);
 		byte[] colors = tag.getByteArray("colors");
 		if (colors.length == 16384) {
 			data.colors = colors;
 		}
-        return data;
-    }
+		return data;
+	}
 
-    // Optimised save data
+	// Optimised save data
 	@Override
 	public CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
-        tag.putInt("x", this.centerX);
+		tag.putInt("x", this.centerX);
 		tag.putInt("y", this.centerZ);
 		tag.putBoolean("trackingPosition", this.trackingPosition);
 		tag.putBoolean("unlimitedTracking", this.unlimitedTracking);
 		tag.putBoolean("locked", this.locked);
 		tag.putByteArray("colors", this.colors);
-        return tag;
-    }
+		return tag;
+	}
 
 	public void addDecoration(BLMapDecoration deco) {
 		int x = deco.x();
 		int y = deco.y();
 		int index = ((x + y * 128) << 8) | deco.location().getId();
 
-		if(!this.decorations.containsKey(index)) {
+		if (!this.decorations.containsKey(index)) {
 			int gridSize = 3; //Check for occupied spots at a larger scale
 			int area = 24 >> gridSize;
 
@@ -83,9 +83,9 @@ public class AmateMapData extends MapItemSavedData {
 
 			for (int i = -area; i <= area; i++) {
 				for (int j = -area; j <= area; j++) {
-					if(i*i + j*j <= area*area) {
+					if (i * i + j * j <= area * area) {
 						int offsetIndex = ((((x >> gridSize) + i) + ((y >> gridSize) + j) * (128 >> gridSize)) << 8) | deco.location().getId();
-						if(this.occupiedSpots.contains(offsetIndex)) {
+						if (this.occupiedSpots.contains(offsetIndex)) {
 							occupied = true;
 							break;
 						}
@@ -93,7 +93,7 @@ public class AmateMapData extends MapItemSavedData {
 				}
 			}
 
-			if(!occupied) {
+			if (!occupied) {
 				this.occupiedSpots.add((((x >> gridSize) + (y >> gridSize) * (128 >> gridSize)) << 8) | deco.location().getId());
 				this.decorations.put(index, deco);
 			} else {

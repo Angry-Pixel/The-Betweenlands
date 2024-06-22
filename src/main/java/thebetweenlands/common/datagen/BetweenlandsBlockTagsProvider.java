@@ -13,11 +13,11 @@ import java.util.concurrent.CompletableFuture;
 
 public class BetweenlandsBlockTagsProvider extends BlockTagsProvider {
 
-    public BetweenlandsBlockTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
-        super(output, provider, TheBetweenlands.ID, existingFileHelper);
-    }
+	public BetweenlandsBlockTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
+		super(output, provider, TheBetweenlands.ID, existingFileHelper);
+	}
 
-    protected void addTags(HolderLookup.Provider provider) {
-        this.tag(BlockTags.DIRT).add(BlockRegistry.SWAMP_DIRT.get(), BlockRegistry.SWAMP_GRASS.get(), BlockRegistry.DEAD_SWAMP_GRASS.get(), BlockRegistry.MUD.get());
-    }
+	protected void addTags(HolderLookup.Provider provider) {
+		this.tag(BlockTags.DIRT).add(BlockRegistry.SWAMP_DIRT.get(), BlockRegistry.SWAMP_GRASS.get(), BlockRegistry.DEAD_SWAMP_GRASS.get(), BlockRegistry.MUD.get());
+	}
 }

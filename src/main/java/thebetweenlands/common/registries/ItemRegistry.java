@@ -26,9 +26,9 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> PORTAL = ITEMS.register("portal", () -> new BlockItem(BlockRegistry.PORTAL.get(), new Item.Properties()));
 
 	//Spawn Eggs
-	public static final DeferredItem<Item> SWAMP_HAG_SPAWN_EGG = ITEMS.register("swamp_hag_spawn_egg", () -> new DeferredSpawnEggItem( () -> EntityRegistry.SWAMP_HAG.get(), 0x5E4E2E, 0x18461A, new Item.Properties()));
-	public static final DeferredItem<Item> GECKO_SPAWN_EGG = ITEMS.register("gecko_spawn_egg", () -> new DeferredSpawnEggItem( () -> EntityRegistry.GECKO.get(), 0xdc7202, 0x05e290, new Item.Properties()));
-	public static final DeferredItem<Item> WIGHT_SPAWN_EGG = ITEMS.register("wight_spawn_egg", () -> new DeferredSpawnEggItem( () -> EntityRegistry.WIGHT.get(), 0x7d8378, 0x07190a, new Item.Properties()));
+	public static final DeferredItem<Item> SWAMP_HAG_SPAWN_EGG = ITEMS.register("swamp_hag_spawn_egg", () -> new DeferredSpawnEggItem(() -> EntityRegistry.SWAMP_HAG.get(), 0x5E4E2E, 0x18461A, new Item.Properties()));
+	public static final DeferredItem<Item> GECKO_SPAWN_EGG = ITEMS.register("gecko_spawn_egg", () -> new DeferredSpawnEggItem(() -> EntityRegistry.GECKO.get(), 0xdc7202, 0x05e290, new Item.Properties()));
+	public static final DeferredItem<Item> WIGHT_SPAWN_EGG = ITEMS.register("wight_spawn_egg", () -> new DeferredSpawnEggItem(() -> EntityRegistry.WIGHT.get(), 0x7d8378, 0x07190a, new Item.Properties()));
 
 	// Betweenlands Special
 	public static final DeferredItem<Item> AMATE_MAP = ITEMS.register("amate_map", () -> new EmptyAmateMapItem(new Item.Properties()));

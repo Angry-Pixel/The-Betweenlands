@@ -82,7 +82,7 @@ public class FeatureRegistries {
 
 	public static class BlockFilters {
 		static List<FeatureHelperConfiguration.TargetBlockState> LEAVES_SURFACE = Stream.of(
-				FeatureHelperConfiguration.SURFACE, FeatureHelperConfiguration.LEAVES
+			FeatureHelperConfiguration.SURFACE, FeatureHelperConfiguration.LEAVES
 		).flatMap(List::stream).collect(Collectors.toList());
 	}
 
@@ -91,49 +91,49 @@ public class FeatureRegistries {
 	public static class ConfigueredFeatures {
 		// Trees
 		public static final Holder<ConfiguredFeature<FeatureHelperConfiguration, ?>> WEEDWOOD_TREE = FeatureUtils.register("weedwood_tree", WEEDWOOD_TREE_FEATURE.get(), new FeatureHelperConfiguration(
-				BlockFilters.LEAVES_SURFACE
+			BlockFilters.LEAVES_SURFACE
 		));
 		public static final Holder<ConfiguredFeature<FeatureHelperConfiguration, ?>> SAP_TREE = FeatureUtils.register("sap_tree", SAP_TREE_FEATURE.get(), new FeatureHelperConfiguration(
-				BlockFilters.LEAVES_SURFACE
+			BlockFilters.LEAVES_SURFACE
 		));
 		public static final Holder<ConfiguredFeature<FeatureHelperConfiguration, ?>> NIBBLETWIG_TREE = FeatureUtils.register("nibbletwig_tree", NIBBLETWIG_TREE_FEATURE.get(), new FeatureHelperConfiguration(
-				BlockFilters.LEAVES_SURFACE
+			BlockFilters.LEAVES_SURFACE
 		));
 		public static final Holder<ConfiguredFeature<FeatureHelperConfiguration, ?>> RUBBER_TREE = FeatureUtils.register("rubber_tree", RUBBER_TREE_FEATURE.get(), new FeatureHelperConfiguration(
-				BlockFilters.LEAVES_SURFACE
+			BlockFilters.LEAVES_SURFACE
 		));
 		public static final Holder<ConfiguredFeature<FeatureHelperConfiguration, ?>> HEARTHGROVE_TREE = FeatureUtils.register("hearthgrove_tree", HEARTHGROVE_TREE_FEATURE.get(), new FeatureHelperConfiguration(
-				BlockFilters.LEAVES_SURFACE
+			BlockFilters.LEAVES_SURFACE
 		));
 
 		// Ores
 		public static final Holder<ConfiguredFeature<OreConfiguration, ?>> SULFUR = FeatureUtils.register("sulfur", Feature.ORE, new BetweenlandsOreConfiguration(List.of(
-				BetweenlandsOreConfiguration.target(new TagMatchTest(TagRegistry.Blocks.BETWEENSTONE_ORE_REPLACEABLE), BlockRegistry.SULFUR_ORE.get().defaultBlockState())), 14, 0f));
+			BetweenlandsOreConfiguration.target(new TagMatchTest(TagRegistry.Blocks.BETWEENSTONE_ORE_REPLACEABLE), BlockRegistry.SULFUR_ORE.get().defaultBlockState())), 14, 0f));
 		public static final Holder<ConfiguredFeature<OreConfiguration, ?>> SYRMORITE = FeatureUtils.register("syrmorite", Feature.ORE, new BetweenlandsOreConfiguration(List.of(
-				BetweenlandsOreConfiguration.target(new TagMatchTest(TagRegistry.Blocks.BETWEENSTONE_ORE_REPLACEABLE), BlockRegistry.SYRMORITE_ORE.get().defaultBlockState())), 7, 0f));
+			BetweenlandsOreConfiguration.target(new TagMatchTest(TagRegistry.Blocks.BETWEENSTONE_ORE_REPLACEABLE), BlockRegistry.SYRMORITE_ORE.get().defaultBlockState())), 7, 0f));
 		public static final Holder<ConfiguredFeature<OreConfiguration, ?>> BONE_ORE = FeatureUtils.register("bone_ore", Feature.ORE, new BetweenlandsOreConfiguration(List.of(
-				BetweenlandsOreConfiguration.target(new TagMatchTest(TagRegistry.Blocks.BETWEENSTONE_ORE_REPLACEABLE), BlockRegistry.SLIMY_BONE_ORE.get().defaultBlockState())), 11, 0f));
+			BetweenlandsOreConfiguration.target(new TagMatchTest(TagRegistry.Blocks.BETWEENSTONE_ORE_REPLACEABLE), BlockRegistry.SLIMY_BONE_ORE.get().defaultBlockState())), 11, 0f));
 		public static final Holder<ConfiguredFeature<OreConfiguration, ?>> OCTINE = FeatureUtils.register("octine", BETWEENLANDS_ORE.get(), new BetweenlandsOreConfiguration(List.of(
-				BetweenlandsOreConfiguration.target(new TagMatchTest(TagRegistry.Blocks.BETWEENSTONE_ORE_REPLACEABLE), ((OctineOreBlock) BlockRegistry.OCTINE_ORE.get()).FeaturePlacementBlockState())), 14, 0f, true));
+			BetweenlandsOreConfiguration.target(new TagMatchTest(TagRegistry.Blocks.BETWEENSTONE_ORE_REPLACEABLE), ((OctineOreBlock) BlockRegistry.OCTINE_ORE.get()).FeaturePlacementBlockState())), 14, 0f, true));
 		public static final Holder<ConfiguredFeature<OreConfiguration, ?>> SWAMP_DIRT = FeatureUtils.register("swamp_dirt", Feature.ORE, new BetweenlandsOreConfiguration(List.of(
-				BetweenlandsOreConfiguration.target(new TagMatchTest(TagRegistry.Blocks.BETWEENSTONE_ORE_REPLACEABLE), BlockRegistry.SWAMP_DIRT.get().defaultBlockState())), 25, 0f));
+			BetweenlandsOreConfiguration.target(new TagMatchTest(TagRegistry.Blocks.BETWEENSTONE_ORE_REPLACEABLE), BlockRegistry.SWAMP_DIRT.get().defaultBlockState())), 25, 0f));
 		public static final Holder<ConfiguredFeature<OreConfiguration, ?>> LIMESTONE = FeatureUtils.register("limestone", Feature.ORE, new BetweenlandsOreConfiguration(List.of(
-				BetweenlandsOreConfiguration.target(new TagMatchTest(TagRegistry.Blocks.BETWEENSTONE_ORE_REPLACEABLE), BlockRegistry.LIMESTONE.get().defaultBlockState())), 64, 0f));
+			BetweenlandsOreConfiguration.target(new TagMatchTest(TagRegistry.Blocks.BETWEENSTONE_ORE_REPLACEABLE), BlockRegistry.LIMESTONE.get().defaultBlockState())), 64, 0f));
 		public static final Holder<ConfiguredFeature<OreConfiguration, ?>> VALONITE = FeatureUtils.register("valonite", Feature.ORE, new BetweenlandsOreConfiguration(List.of(
-				BetweenlandsOreConfiguration.target(new TagMatchTest(TagRegistry.Blocks.PITSTONE_ORE_REPLACEABLE), BlockRegistry.VALONITE_ORE.get().defaultBlockState())), 5, 0f));
+			BetweenlandsOreConfiguration.target(new TagMatchTest(TagRegistry.Blocks.PITSTONE_ORE_REPLACEABLE), BlockRegistry.VALONITE_ORE.get().defaultBlockState())), 5, 0f));
 		public static final Holder<ConfiguredFeature<OreConfiguration, ?>> SCABYST = FeatureUtils.register("scabyst", Feature.ORE, new BetweenlandsOreConfiguration(List.of(
-				BetweenlandsOreConfiguration.target(new TagMatchTest(TagRegistry.Blocks.PITSTONE_ORE_REPLACEABLE), BlockRegistry.SCABYST_ORE.get().defaultBlockState())), 6, 0f));
+			BetweenlandsOreConfiguration.target(new TagMatchTest(TagRegistry.Blocks.PITSTONE_ORE_REPLACEABLE), BlockRegistry.SCABYST_ORE.get().defaultBlockState())), 6, 0f));
 
 		// Plants
 		public static final Holder<ConfiguredFeature<RandomPatchConfiguration, ?>> SWAMP_TALLGRASS_PATCH = FeatureUtils.register("swamp_tallgrass_patch", Feature.RANDOM_PATCH,
-				FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(BlockRegistry.SWAMP_TALLGRASS.get()))));
+			FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(BlockRegistry.SWAMP_TALLGRASS.get()))));
 
 		// Terrain
 		public static final Holder<ConfiguredFeature<TerrainFeatureHelperConfiguration, ?>> DEEP_WATERS_CRAG_SPIRES = FeatureUtils.register("deep_waters_crag_spires", CRAG_SPIRES.get(), new TerrainFeatureHelperConfiguration(
-				new ResourceLocation(TheBetweenlands.ID,"betweenlands_deep_waters")
+			new ResourceLocation(TheBetweenlands.ID, "betweenlands_deep_waters")
 		));
 		public static final Holder<ConfiguredFeature<GiantRootsConfiguration, ?>> GIANT_ROOTS = FeatureUtils.register("giant_roots", FeatureRegistries.GIANT_ROOTS.get(), new GiantRootsConfiguration(
-				FeatureHelperConfiguration.SURFACE
+			FeatureHelperConfiguration.SURFACE
 		));
 
 		// Structures
@@ -161,25 +161,25 @@ public class FeatureRegistries {
 
 		// Trees
 		public static final Holder<PlacedFeature> WEEDWOOD_TREE = PlacementUtils.register("weedwood_tree", ConfigueredFeatures.WEEDWOOD_TREE, List.of(
-				InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome(), Util.TREE, Util.GEN_SHORT_MASK
+			InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome(), Util.TREE, Util.GEN_SHORT_MASK
 		));
 		public static final Holder<PlacedFeature> SPARSE_WEEDWOOD_TREE = PlacementUtils.register("sparse_weedwood_tree", ConfigueredFeatures.WEEDWOOD_TREE, List.of(
-				RarityFilter.onAverageOnceEvery(2),InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome(), Util.TREE, Util.GEN_SHORT_MASK
+			RarityFilter.onAverageOnceEvery(2), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome(), Util.TREE, Util.GEN_SHORT_MASK
 		));
 		public static final Holder<PlacedFeature> RARE_WEEDWOOD_TREE = PlacementUtils.register("rare_weedwood_tree", ConfigueredFeatures.WEEDWOOD_TREE, List.of(
-				RarityFilter.onAverageOnceEvery(30),InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome(), Util.TREE, Util.GEN_SHORT_MASK
+			RarityFilter.onAverageOnceEvery(30), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome(), Util.TREE, Util.GEN_SHORT_MASK
 		));
 		public static final Holder<PlacedFeature> NIBBLETWIG_TREE = PlacementUtils.register("nibbletwig_tree", ConfigueredFeatures.NIBBLETWIG_TREE, List.of(
-				InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome(), Util.TREE, Util.GEN_SHORT_MASK
+			InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome(), Util.TREE, Util.GEN_SHORT_MASK
 		));
 		public static final Holder<PlacedFeature> SAP_TREE = PlacementUtils.register("sap_tree", ConfigueredFeatures.SAP_TREE, List.of(
-				RarityFilter.onAverageOnceEvery(3), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome(), Util.TREE
+			RarityFilter.onAverageOnceEvery(3), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome(), Util.TREE
 		));
 		public static final Holder<PlacedFeature> RUBBER_TREE = PlacementUtils.register("rubber_tree", ConfigueredFeatures.RUBBER_TREE, List.of(
-				RarityFilter.onAverageOnceEvery(4), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome(), Util.TREE
+			RarityFilter.onAverageOnceEvery(4), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_WORLD_SURFACE, BiomeFilter.biome(), Util.TREE
 		));
 		public static final Holder<PlacedFeature> HEATHGROVE_TREE = PlacementUtils.register("hearthgrove_tree", ConfigueredFeatures.HEARTHGROVE_TREE, List.of(
-				RarityFilter.onAverageOnceEvery(5), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome(), Util.TREE, Util.GEN_SHORT_MASK
+			RarityFilter.onAverageOnceEvery(5), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome(), Util.TREE, Util.GEN_SHORT_MASK
 		));
 
 		// Ores
@@ -197,10 +197,10 @@ public class FeatureRegistries {
 
 		// Terrain
 		public static final Holder<PlacedFeature> DEEP_WATERS_CRAG_SPIRES = PlacementUtils.register("deep_waters_crag_spires", ConfigueredFeatures.DEEP_WATERS_CRAG_SPIRES, List.of(
-				CountPlacement.of(1)
+			CountPlacement.of(1)
 		));
 		public static final Holder<PlacedFeature> GIANT_ROOTS = PlacementUtils.register("giant_roots", ConfigueredFeatures.GIANT_ROOTS, List.of(
-				CountPlacement.of(1)
+			CountPlacement.of(1)
 		));
 
 

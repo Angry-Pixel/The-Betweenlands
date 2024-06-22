@@ -10,23 +10,23 @@ import java.util.concurrent.CompletableFuture;
 
 public class DataGenerators {
 
-    public static void gatherData(GatherDataEvent event) {
-        DataGenerator gen = event.getGenerator();
-        PackOutput output = gen.getPackOutput();
-        CompletableFuture<HolderLookup.Provider> provider = event.getLookupProvider();
-        ExistingFileHelper helper = event.getExistingFileHelper();
+	public static void gatherData(GatherDataEvent event) {
+		DataGenerator gen = event.getGenerator();
+		PackOutput output = gen.getPackOutput();
+		CompletableFuture<HolderLookup.Provider> provider = event.getLookupProvider();
+		ExistingFileHelper helper = event.getExistingFileHelper();
 
-        //Belongs in /assets/
-        boolean assets = event.includeClient();
-        //Belongs in /data/
-        boolean data = event.includeServer();
+		//Belongs in /assets/
+		boolean assets = event.includeClient();
+		//Belongs in /data/
+		boolean data = event.includeServer();
 
-        // Data
+		// Data
 		gen.addProvider(data, new BetweenlandsRegistryProvider(output, provider));
-        gen.addProvider(data, new BetweenlandsBlockTagsProvider(output, provider, helper));
+		gen.addProvider(data, new BetweenlandsBlockTagsProvider(output, provider, helper));
 
-        // Assets
+		// Assets
 		gen.addProvider(assets, new BetweenlandsLangProvider(output));
-        gen.addProvider(assets, new BetweenlandsBlockStateProvider(output, helper));
-    }
+		gen.addProvider(assets, new BetweenlandsBlockStateProvider(output, helper));
+	}
 }

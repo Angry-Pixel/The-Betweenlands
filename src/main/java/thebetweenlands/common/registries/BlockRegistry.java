@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 //TODO: look into new sounds added by vanilla. I mean imo some of them are just overreaching but players are particular...for some reason
 //TODO: noLootTable means blocks will never drop. Go through any that use this method for actual drops
 public class BlockRegistry {
-	
+
 	// Block list
 	public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(TheBetweenlands.ID);
 
@@ -58,13 +58,15 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> RUBBER_SAPLING = register("rubber_sapling", () -> new RubberSapling(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> NIBBLETWIG_SAPLING = register("nibbletwig_sapling", () -> new NibbletwigSapling(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> BULB_CAPED_MUSHROOM = register("bulb_caped_mushroom_sapling", () -> new SapSapling(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS)));
-	public static final DeferredBlock<Block> BULB_CAPPED_MUSHROOM_CAP = register("bulb_capped_mushroom_cap", () -> new HalfTransparentBlock(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).lightLevel((lightlevel) -> 13).noLootTable().noOcclusion().isViewBlocking((e, f, g) -> {return false;}).sound(SoundType.WOOL)));
+	public static final DeferredBlock<Block> BULB_CAPPED_MUSHROOM_CAP = register("bulb_capped_mushroom_cap", () -> new HalfTransparentBlock(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).lightLevel((lightlevel) -> 13).noLootTable().noOcclusion().isViewBlocking((e, f, g) -> {
+		return false;
+	}).sound(SoundType.WOOL)));
 	public static final DeferredBlock<Block> BULB_CAPPED_MUSHROOM_STALK = register("bulb_capped_mushroom_stalk", () -> new BetweenlandsBlock(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).lightLevel((lightlevel) -> 13).noLootTable().sound(SoundType.WOOL)));
 	public static final DeferredBlock<Block> SHELF_FUNGUS = register("shelf_fungus", () -> new Block(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).noLootTable().noOcclusion().sound(SoundType.WOOL)));
 	public static final DeferredBlock<Block> MOSS = register("moss", () -> new BetweenlandsMoss(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> THORNS = register("thorns", () -> new BetweenlandsThorns(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).randomTicks().noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> POISON_IVY = register("poison_ivy", () -> new BlockPoisonIvy(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).randomTicks().noLootTable().noCollission().noOcclusion().sound(SoundType.VINE)));
-	public static final DeferredBlock<Block> CAVE_MOSS = register("cave_moss", () -> new BetweenlandsCaveMoss(BetweenlandsBlockBehaviour.Properties.of().strength(0.5F, 2.5F).randomTicks().noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS),20));
+	public static final DeferredBlock<Block> CAVE_MOSS = register("cave_moss", () -> new BetweenlandsCaveMoss(BetweenlandsBlockBehaviour.Properties.of().strength(0.5F, 2.5F).randomTicks().noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS), 20));
 	public static final DeferredBlock<Block> SWAMP_REED = register("swamp_reed", () -> new BetweenlandsSeaPlant(BetweenlandsBlockBehaviour.Properties.of().strength(0.5F, 2.5F).randomTicks().noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> HANGER = register("hanger", () -> new Hanger(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> SWAMP_TALLGRASS = register("swamp_tallgrass", () -> new TallGrassBlock(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS)));

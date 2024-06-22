@@ -43,10 +43,10 @@ public class EntitySwampHag extends BetweenlandsEntity {
 	@Override
 	public AttributeMap getAttributes() {
 		return new AttributeMap(BetweenlandsEntity.createMonsterAttributes()
-				.add(Attributes.MAX_HEALTH, 40.0D)
-				.add(Attributes.MOVEMENT_SPEED, 0.2D)
-				.add(Attributes.ATTACK_DAMAGE, 4.0D)
-				.add(Attributes.FOLLOW_RANGE, 35.0D).build());
+			.add(Attributes.MAX_HEALTH, 40.0D)
+			.add(Attributes.MOVEMENT_SPEED, 0.2D)
+			.add(Attributes.ATTACK_DAMAGE, 4.0D)
+			.add(Attributes.FOLLOW_RANGE, 35.0D).build());
 	}
 
 	@Override
@@ -55,27 +55,27 @@ public class EntitySwampHag extends BetweenlandsEntity {
 	}
 
 	protected void registerGoals() {
-	      this.goalSelector.addGoal(1, new FloatGoal(this));
-	      this.goalSelector.addGoal(4, new SwampHagAttackGoal(this));
-	      this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8D));
-	      this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
-	      this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
-	      this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-	      this.targetSelector.addGoal(2, new SwampHagTargetGoal<>(this, Player.class));
-	      this.targetSelector.addGoal(3, new SwampHagTargetGoal<>(this, IronGolem.class));
+		this.goalSelector.addGoal(1, new FloatGoal(this));
+		this.goalSelector.addGoal(4, new SwampHagAttackGoal(this));
+		this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8D));
+		this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
+		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
+		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+		this.targetSelector.addGoal(2, new SwampHagTargetGoal<>(this, Player.class));
+		this.targetSelector.addGoal(3, new SwampHagTargetGoal<>(this, IronGolem.class));
 	}
 
 
 	static class SwampHagAttackGoal extends MeleeAttackGoal {
-	      public SwampHagAttackGoal(EntitySwampHag p_33822_) {
-	         super(p_33822_, 1.0D, false);
-	      }
+		public SwampHagAttackGoal(EntitySwampHag p_33822_) {
+			super(p_33822_, 1.0D, false);
+		}
 	}
 
 	static class SwampHagTargetGoal<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
-	      public SwampHagTargetGoal(EntitySwampHag p_33832_, Class<T> p_33833_) {
-	         super(p_33832_, p_33833_, true);
-	      }
+		public SwampHagTargetGoal(EntitySwampHag p_33832_, Class<T> p_33833_) {
+			super(p_33832_, p_33833_, true);
+		}
 	}
 
 	@Override
@@ -84,13 +84,13 @@ public class EntitySwampHag extends BetweenlandsEntity {
 	}
 
 	protected void defineSynchedData() {
-	      super.defineSynchedData();
-	      this.entityData.define(TALK_SOUND, (byte)0);
-	      this.entityData.define(SHOULD_JAW_MOVE, false);
-	      this.entityData.define(LIVING_SOUND_TIMER, 0);
-	      this.entityData.define(IS_THROWING, false);
-	      this.entityData.define(THROW_TIMER, 0);
-	   }
+		super.defineSynchedData();
+		this.entityData.define(TALK_SOUND, (byte) 0);
+		this.entityData.define(SHOULD_JAW_MOVE, false);
+		this.entityData.define(LIVING_SOUND_TIMER, 0);
+		this.entityData.define(IS_THROWING, false);
+		this.entityData.define(THROW_TIMER, 0);
+	}
 
 	@Override
 	public void tick() {
@@ -176,14 +176,14 @@ public class EntitySwampHag extends BetweenlandsEntity {
 		int randomSound = random.nextInt(4) + 1;
 		setTalkSound((byte) randomSound);
 		switch (getTalkSound()) {
-		case 1:
-			return SoundRegistry.SWAMP_HAG_LIVING_1.get();
-		case 2:
-			return SoundRegistry.SWAMP_HAG_LIVING_2.get();
-		case 3:
-			return SoundRegistry.SWAMP_HAG_LIVING_3.get();
-		default:
-			return SoundRegistry.SWAMP_HAG_LIVING_4.get();
+			case 1:
+				return SoundRegistry.SWAMP_HAG_LIVING_1.get();
+			case 2:
+				return SoundRegistry.SWAMP_HAG_LIVING_2.get();
+			case 3:
+				return SoundRegistry.SWAMP_HAG_LIVING_3.get();
+			default:
+				return SoundRegistry.SWAMP_HAG_LIVING_4.get();
 		}
 	}
 

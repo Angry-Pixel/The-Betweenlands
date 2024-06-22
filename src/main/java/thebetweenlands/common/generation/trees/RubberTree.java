@@ -11,18 +11,18 @@ import thebetweenlands.common.registries.BlockRegistry;
 
 public class RubberTree {
 
-	// TODO: fix world gen level varient set correct block state 
-	
+	// TODO: fix world gen level varient set correct block state
+
 	public BlockState log = BlockRegistry.RUBBER_LOG.get().defaultBlockState();
 	public BlockState leaves = BlockRegistry.LEAVES_RUBBER_TREE.get().defaultBlockState();
-	
+
 	private MutableBlockPos checkPos = new MutableBlockPos();
-	
+
 	// Pass this function a level and it'll generate a sap tree
 	// Using WorldGenLevel
 	public boolean generate(WorldGenLevel level, BlockPos position, Random rand) {
-		
-		
+
+
 		int x = position.getX();
 		int y = position.getY();
 		int z = position.getZ();
@@ -33,7 +33,6 @@ public class RubberTree {
 		// add block propertys
 		this.log = BlockRegistry.RUBBER_LOG.get().defaultBlockState();//.withProperty(BlockRubberLog.NATURAL, true);
 		this.leaves = BlockRegistry.LEAVES_RUBBER_TREE.get().defaultBlockState();//.withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
-
 
 
 		for (int xx = x - maxRadius; xx <= x + maxRadius; xx++)
@@ -50,17 +49,17 @@ public class RubberTree {
 
 			if (yy == y + height - 2) {
 				createBranch(level, rand, x + 1, yy, z, 1, 1);
-				createBranch(level, rand, x- 1, yy, z, 2, 1);
+				createBranch(level, rand, x - 1, yy, z, 2, 1);
 				createBranch(level, rand, x, yy, z + 1, 3, 1);
 				createBranch(level, rand, x, yy, z - 1, 4, 1);
 			}
 		}
 		return true;
 	}
-	
+
 	// Using LevelAccessor
 	public boolean generate(Level level, BlockPos position, Random rand) {
-		
+
 		int x = position.getX();
 		int y = position.getY();
 		int z = position.getZ();
@@ -88,14 +87,14 @@ public class RubberTree {
 
 			if (yy == y + height - 2) {
 				createBranch(level, rand, x + 1, yy, z, 1, 1);
-				createBranch(level, rand, x- 1, yy, z, 2, 1);
+				createBranch(level, rand, x - 1, yy, z, 2, 1);
 				createBranch(level, rand, x, yy, z + 1, 3, 1);
 				createBranch(level, rand, x, yy, z - 1, 4, 1);
 			}
 		}
 		return true;
 	}
-	
+
 	private void createBranch(Level world, Random rand, int x, int y, int z, int dir, int branchLength) {
 		for (int i = 0; i <= branchLength; ++i) {
 
@@ -136,7 +135,7 @@ public class RubberTree {
 							world.setBlock(new BlockPos(x1, y1, z1), leaves, 2);
 				}
 	}
-	
+
 	private void createBranch(WorldGenLevel world, Random rand, int x, int y, int z, int dir, int branchLength) {
 		for (int i = 0; i <= branchLength; ++i) {
 

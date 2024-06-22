@@ -66,7 +66,7 @@ public class DimensionRegistries {
 
 	//}
 
-	
+
 	@SuppressWarnings("unchecked")
 	public static void register(IEventBus event) {
 
@@ -79,7 +79,7 @@ public class DimensionRegistries {
 			// reflect dim special effects list and append betweenlands special effects to it
 			reflection = DimensionSpecialEffects.class.getDeclaredFields()[0];
 			reflection.setAccessible(true);
-			
+
 			try {
 				((Object2ObjectMap<ResourceLocation, DimensionSpecialEffects>) reflection.get(reflection)).put(new ResourceLocation(TheBetweenlands.ID, "the_betweenlands"), BetweenlandsSpecialEffects.BetweenlandsEffects());
 			} catch (IllegalArgumentException | IllegalAccessException e) {

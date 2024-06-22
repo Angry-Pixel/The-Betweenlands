@@ -9,7 +9,7 @@ public class BetweenlandsForgeWorldPreset extends ForgeWorldPreset {
 	public BetweenlandsForgeWorldPreset(IBasicChunkGeneratorFactory factory) {
 		super(factory);
 	}
-	
+
 	@Override
 	public Component getDisplayName() {
 		return super.getDisplayName();

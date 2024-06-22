@@ -23,11 +23,11 @@ public class BetweenlandsOreFeature extends OreFeature {
 	public BetweenlandsOreFeature(Codec<OreConfiguration> p_66531_) {
 		super(p_66531_);
 	}
-	
+
 	@Override
 	protected boolean doPlace(WorldGenLevel Level, Random p_66534_, OreConfiguration p_66535_, double p_66536_,
-			double p_66537_, double p_66538_, double p_66539_, double p_66540_, double p_66541_, int p_66542_,
-			int p_66543_, int p_66544_, int p_66545_, int p_66546_) {
+							  double p_66537_, double p_66538_, double p_66539_, double p_66540_, double p_66541_, int p_66542_,
+							  int p_66543_, int p_66544_, int p_66545_, int p_66546_) {
 
 		boolean update = true;
 
@@ -41,7 +41,7 @@ public class BetweenlandsOreFeature extends OreFeature {
 
 		BlockState blockstate = Level.getBlockState(new BlockPos(x, y, z));
 
-		for(OreConfiguration.TargetBlockState oreconfiguration$targetblockstate : p_66535_.targetStates) {
+		for (OreConfiguration.TargetBlockState oreconfiguration$targetblockstate : p_66535_.targetStates) {
 			if (canPlaceOre(blockstate, Level::getBlockState, p_66534_, p_66535_, oreconfiguration$targetblockstate, new BlockPos.MutableBlockPos(x, y, z))) {
 				Level.setBlock(new BlockPos(x, y, z), oreconfiguration$targetblockstate.state, 2);
 			}
@@ -159,14 +159,14 @@ public class BetweenlandsOreFeature extends OreFeature {
 
 	         throw throwable1;
 	      }
-	      
+
 	      bulksectionaccess.close();
 
 
 		 */
 
 
-	      return i > 0;
+		return i > 0;
 	}
 
 }

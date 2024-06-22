@@ -24,23 +24,23 @@ public class FlightMoveHelper extends MoveControl {
 		double entityMoveSpeed = entityMoveSpeedAttribute != null ? entityMoveSpeedAttribute.getValue() : 1.0D;
 		double speed = this.getFlightSpeed() * entityMoveSpeed;
 
-		if(this.operation == Operation.MOVE_TO) {
+		if (this.operation == Operation.MOVE_TO) {
 			double dx = this.wantedX - this.mob.getX();
 			double dy = this.wantedY - this.mob.getY();
 			double dz = this.wantedZ - this.mob.getZ();
 			double dist = dx * dx + dy * dy + dz * dz;
 
-			if(this.courseChangeCooldown-- <= 0) {
+			if (this.courseChangeCooldown-- <= 0) {
 				this.courseChangeCooldown += this.getCourseChangeCooldown();
 
-				dist = (double)Math.sqrt(dist);
+				dist = (double) Math.sqrt(dist);
 
-				if(this.isNotColliding(this.wantedX, this.wantedY, this.wantedZ, dist)) {
-					if(dist < this.mob.getBbWidth() + speed) {
+				if (this.isNotColliding(this.wantedX, this.wantedY, this.wantedZ, dist)) {
+					if (dist < this.mob.getBbWidth() + speed) {
 						speed *= dist / (this.mob.getBbWidth() + speed);
 					}
 
-					if(dist < 0.01D) {
+					if (dist < 0.01D) {
 						this.mob.setZza(0);
 						this.operation = Operation.WAIT;
 					} else {
@@ -48,10 +48,10 @@ public class FlightMoveHelper extends MoveControl {
 						this.mob.yya += dx / dist * speed;
 						this.mob.zza += dz / dist * speed;
 
-						float yaw = (float)(Math.atan2(dz, dx) * (180D / Math.PI)) - 90.0F;
+						float yaw = (float) (Math.atan2(dz, dx) * (180D / Math.PI)) - 90.0F;
 						this.mob.setXRot(this.rotlerp(this.mob.getXRot(), yaw, 90.0F));
 
-						this.mob.setSpeed((float)speed);
+						this.mob.setSpeed((float) speed);
 					}
 
 					this.blocked = false;
@@ -59,11 +59,11 @@ public class FlightMoveHelper extends MoveControl {
 					this.blocked = true;
 				}
 
-				if(this.blocked) {
+				if (this.blocked) {
 					this.operation = Operation.WAIT;
 				}
 			}
-		} else if(this.operation == Operation.STRAFE) {
+		} else if (this.operation == Operation.STRAFE) {
 			float forward = this.strafeForwards;
 			float strafe = this.strafeRight;
 			float dist = (float) Math.sqrt(forward * forward + strafe * strafe);
@@ -76,9 +76,9 @@ public class FlightMoveHelper extends MoveControl {
 			this.mob.xxa += strafeX / dist * speed * 0.15D;
 			this.mob.zza += strafeZ / dist * speed * 0.15D;
 
-			this.mob.setSpeed((float)speed);
-			this.mob.setZza((float)speed*this.strafeForwards);
-			this.mob.setXxa((float)speed*this.strafeRight);
+			this.mob.setSpeed((float) speed);
+			this.mob.setZza((float) speed * this.strafeForwards);
+			this.mob.setXxa((float) speed * this.strafeRight);
 
 			this.operation = Operation.WAIT;
 		}
@@ -86,6 +86,7 @@ public class FlightMoveHelper extends MoveControl {
 
 	/**
 	 * Returns whether the path is currently blocked
+	 *
 	 * @return
 	 */
 
@@ -95,6 +96,7 @@ public class FlightMoveHelper extends MoveControl {
 
 	/**
 	 * Returns the amount of ticks before the course can be changed again
+	 *
 	 * @return
 	 */
 	protected int getCourseChangeCooldown() {
@@ -103,6 +105,7 @@ public class FlightMoveHelper extends MoveControl {
 
 	/**
 	 * Returns whether the entity will collide on the current path
+	 *
 	 * @param x
 	 * @param y
 	 * @param z
@@ -110,7 +113,7 @@ public class FlightMoveHelper extends MoveControl {
 	 * @return
 	 */
 	protected boolean isNotColliding(double x, double y, double z, double step) {
-		if(!this.mob.noPhysics)
+		if (!this.mob.noPhysics)
 			return true;
 
 		double stepX = (x - this.mob.getX()) / step;
@@ -118,10 +121,10 @@ public class FlightMoveHelper extends MoveControl {
 		double stepZ = (z - this.mob.getZ()) / step;
 		AABB aabb = this.mob.getBoundingBox();
 
-		for(int i = 1; (double)i < step; ++i) {
+		for (int i = 1; (double) i < step; ++i) {
 			aabb = aabb.move(stepX, stepY, stepZ);
 
-			if(this.isBlocked(aabb)) {
+			if (this.isBlocked(aabb)) {
 				return false;
 			}
 		}
@@ -131,6 +134,7 @@ public class FlightMoveHelper extends MoveControl {
 
 	/**
 	 * Returns whether the entities path is blocked at the specified AABB
+	 *
 	 * @param aabb
 	 * @return
 	 */
@@ -140,6 +144,7 @@ public class FlightMoveHelper extends MoveControl {
 
 	/**
 	 * Returns the flight speed
+	 *
 	 * @return
 	 */
 	protected double getFlightSpeed() {
@@ -148,6 +153,7 @@ public class FlightMoveHelper extends MoveControl {
 
 	/**
 	 * Returns the ground height at the specified block position
+	 *
 	 * @param world
 	 * @param pos
 	 * @param maxIter
@@ -155,17 +161,17 @@ public class FlightMoveHelper extends MoveControl {
 	 * @return
 	 */
 	public static BlockPos getGroundHeight(Level world, BlockPos pos, int maxIter, BlockPos fallback) {
-		if(world.canSeeSky(pos)) {
+		if (world.canSeeSky(pos)) {
 			return world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, pos);
 		}
 		MutableBlockPos mutablePos = new MutableBlockPos();
 		int i = 0;
-		for(; i < maxIter; i++) {
+		for (; i < maxIter; i++) {
 			mutablePos.set(pos.getX(), pos.getY() - i, pos.getZ());
-			if(!world.isEmptyBlock(mutablePos))
+			if (!world.isEmptyBlock(mutablePos))
 				break;
 		}
-		if(i < maxIter) {
+		if (i < maxIter) {
 			return new BlockPos(pos.getX(), pos.getY() - i, pos.getZ());
 		}
 		return fallback;

@@ -44,8 +44,8 @@ public class EntityGecko extends BetweenlandsEntity {
 	@Override
 	public AttributeMap getAttributes() {
 		return new AttributeMap(EntityGecko.createMonsterAttributes()
-				.add(Attributes.MAX_HEALTH, 12.0D)
-				.add(Attributes.MOVEMENT_SPEED, 0.5D).build());
+			.add(Attributes.MAX_HEALTH, 12.0D)
+			.add(Attributes.MOVEMENT_SPEED, 0.5D).build());
 	}
 
 	@Override
@@ -54,20 +54,20 @@ public class EntityGecko extends BetweenlandsEntity {
 	}
 
 	protected void registerGoals() {
-	      this.goalSelector.addGoal(0, new FloatGoal(this));
-	      this.goalSelector.addGoal(1, new PanicGoal(this, 1.0D));
-	      //this.goalSelector.addGoal(2, new TemptGoal(this, 0.5D, ItemRegistry.SAP_SPIT, true));
-	      this.goalSelector.addGoal(3, new GeckoAvoidGoal<>(this, Player.class, PLAYER_MIN_DISTANCE, 0.65, 1));
-	      // rain this.goalSelector.addGoal(4, new Goal);
-	      this.goalSelector.addGoal(6, new RandomStrollGoal(this, 0.6));
-	      this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
-	      this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
+		this.goalSelector.addGoal(0, new FloatGoal(this));
+		this.goalSelector.addGoal(1, new PanicGoal(this, 1.0D));
+		//this.goalSelector.addGoal(2, new TemptGoal(this, 0.5D, ItemRegistry.SAP_SPIT, true));
+		this.goalSelector.addGoal(3, new GeckoAvoidGoal<>(this, Player.class, PLAYER_MIN_DISTANCE, 0.65, 1));
+		// rain this.goalSelector.addGoal(4, new Goal);
+		this.goalSelector.addGoal(6, new RandomStrollGoal(this, 0.6));
+		this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
+		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
 	}
 
 	protected void defineSynchedData() {
-	      super.defineSynchedData();
-	      this.entityData.define(HIDING, false);
-	   }
+		super.defineSynchedData();
+		this.entityData.define(HIDING, false);
+	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource p_33034_) {
@@ -80,8 +80,8 @@ public class EntityGecko extends BetweenlandsEntity {
 	}
 
 	static class GeckoAvoidGoal<T extends LivingEntity> extends AvoidEntityGoal<T> {
-	      public GeckoAvoidGoal(EntityGecko gecko, Class<T> p_29276_, float p_29277_, double p_29278_, double p_29279_) {
-	         super(gecko, p_29276_, p_29277_, p_29278_, p_29279_, EntitySelector.NO_SPECTATORS::test);
-	      }
-	   }
+		public GeckoAvoidGoal(EntityGecko gecko, Class<T> p_29276_, float p_29277_, double p_29278_, double p_29279_) {
+			super(gecko, p_29276_, p_29277_, p_29278_, p_29279_, EntitySelector.NO_SPECTATORS::test);
+		}
+	}
 }

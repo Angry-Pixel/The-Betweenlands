@@ -24,19 +24,19 @@ public class BetweenlandsCaveCarverConfiguration extends CaveCarverConfiguration
 		})).apply(p_159184_, BetweenlandsCaveCarverConfiguration::new);
 	});
 	final FloatProvider floorLevel;
-	
+
 	// curently unsused
 	public BetweenlandsCaveCarverConfiguration(float p_190653_, HeightProvider p_190654_, FloatProvider p_190655_, VerticalAnchor p_190656_, CarverDebugSettings p_190657_, FloatProvider p_190658_, FloatProvider p_190659_, FloatProvider p_190660_) {
 		super(p_190653_, p_190654_, p_190655_, p_190656_, p_190657_, p_190660_, p_190660_, p_190660_);
 		this.floorLevel = p_190660_;
-		
+
 	}
 
 	public BetweenlandsCaveCarverConfiguration(float p_159160_, HeightProvider p_159161_, FloatProvider p_159162_, VerticalAnchor p_159163_, boolean p_159164_, FloatProvider p_159165_, FloatProvider p_159166_, FloatProvider p_159167_) {
 		this(p_159160_, p_159161_, p_159162_, p_159163_, CarverDebugSettings.DEFAULT, p_159165_, p_159166_, p_159167_);
 	}
 
-	public  BetweenlandsCaveCarverConfiguration(CarverConfiguration p_159179_, FloatProvider p_159180_, FloatProvider p_159181_, FloatProvider p_159182_) {
+	public BetweenlandsCaveCarverConfiguration(CarverConfiguration p_159179_, FloatProvider p_159180_, FloatProvider p_159181_, FloatProvider p_159182_) {
 		this(p_159179_.probability, p_159179_.y, p_159179_.yScale, p_159179_.lavaLevel, p_159179_.debugSettings, p_159180_, p_159181_, p_159182_);
 	}
 }

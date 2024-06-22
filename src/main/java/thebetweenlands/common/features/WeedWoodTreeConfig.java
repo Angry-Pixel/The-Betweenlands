@@ -10,19 +10,19 @@ import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfigur
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 
 public class WeedWoodTreeConfig implements FeatureConfiguration {
-	
+
 	public final List<TargetBlockState> targetStates;
-	
+
 	public static final Codec<WeedWoodTreeConfig> CODEC = RecordCodecBuilder.create((p_67849_) -> {
 		return p_67849_.group(Codec.list(TargetBlockState.CODEC).fieldOf("targets").forGetter((p_161027_) -> {
 			return p_161027_.targetStates;
 		})).apply(p_67849_, WeedWoodTreeConfig::new);
 	});
-	
+
 	public WeedWoodTreeConfig(List<TargetBlockState> targetstates) {
 		this.targetStates = targetstates;
 	}
-	
+
 	// Blocks set to place vegitation onto (reusing names to make it fimilier to use)
 	public static class TargetBlockState {
 		public static final Codec<TargetBlockState> CODEC = RecordCodecBuilder.create((p_161039_) -> {

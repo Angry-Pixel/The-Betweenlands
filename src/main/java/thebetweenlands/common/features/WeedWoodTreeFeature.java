@@ -23,22 +23,22 @@ public class WeedWoodTreeFeature extends Feature<WeedWoodTreeConfig> {
 	public WeedWoodTreeFeature(Codec<WeedWoodTreeConfig> p_65786_) {
 		super(p_65786_);
 	}
-	
+
 	@Override
 	public boolean place(FeaturePlaceContext<WeedWoodTreeConfig> p_159749_) {
 		WorldGenLevel level = p_159749_.level();
 		Random rand = p_159749_.random();
-		BlockPos pos = p_159749_.origin().north(rand.nextInt(8)-4).east(rand.nextInt(8)-4);
+		BlockPos pos = p_159749_.origin().north(rand.nextInt(8) - 4).east(rand.nextInt(8) - 4);
 		ChunkGeneratorBetweenlands chunk = null;
 
 		if (p_159749_.chunkGenerator() instanceof ChunkGeneratorBetweenlands) {
-			chunk = (ChunkGeneratorBetweenlands)p_159749_.chunkGenerator();
+			chunk = (ChunkGeneratorBetweenlands) p_159749_.chunkGenerator();
 
-			if (generateNibbletwigTree(new DecoratorPositionProvider()));
+			if (generateNibbletwigTree(new DecoratorPositionProvider())) ;
 		}
 
 		int depth = 0;
-		
+
 		/*List<ChunkAccess> cal = new ArrayList<ChunkAccess>();
 		cal.add(level.getChunk(pos));
 		// add all relevent chunks to region list
@@ -49,15 +49,15 @@ public class WeedWoodTreeFeature extends Feature<WeedWoodTreeConfig> {
 				}
 			}
 		}
-		
+
 		WorldGenRegion region = new WorldGenRegion(level.getLevel(), cal, level.getChunk(pos).getStatus(), 0);
 		*/
-		
+
 		// Random chance to not gen
 		if (rand.nextInt(8) > 1) {
 			return false;
 		}
-		
+
 		// Do find surface
 		boolean surface = false;
 		for (int y = 0; y <= 40; y++) {
@@ -66,24 +66,24 @@ public class WeedWoodTreeFeature extends Feature<WeedWoodTreeConfig> {
 			if (!scanstate.is(Blocks.AIR) && !(scanstate.getFluidState().is(FluidTags.WATER) && scanstate.getDestroySpeed(level, translatedpos) == 100)) {
 				surface = true;
 				depth = y - 1;
-				
+
 				// Check surface
 				if (!scanstate.is(BlockRegistry.SWAMP_GRASS.get()) &&
-						!scanstate.is(BlockRegistry.DEAD_SWAMP_GRASS.get()) &&
-						!scanstate.is(BlockRegistry.SWAMP_DIRT.get()) &&
-						!scanstate.is(BlockRegistry.MUD.get())) {
+					!scanstate.is(BlockRegistry.DEAD_SWAMP_GRASS.get()) &&
+					!scanstate.is(BlockRegistry.SWAMP_DIRT.get()) &&
+					!scanstate.is(BlockRegistry.MUD.get())) {
 					return false;
 				}
-				
+
 				break;
 			}
 		}
-		
+
 		// if no surface
 		if (!surface) {
 			return false;
 		}
-		
+
 		// Place
 		return WeedwoodTree.generate(level, pos.below(depth), rand, true);
 	}
