@@ -1,17 +1,22 @@
 package thebetweenlands.api.storage;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.List;
 
-public interface ILocalStorage extends ICapabilityProvider {
+public interface ILocalStorage {
 	/**
 	 * Returns the world storage
 	 *
 	 * @return
 	 */
-	public IWorldStorage getWorldStorage();
+	IWorldStorage getWorldStorage();
 
 	/**
 	 * Returns the bounds of the local storage. May be null
@@ -19,21 +24,21 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 * @return
 	 */
 	@Nullable
-	public AABB getBoundingBox();
+	AABB getBoundingBox();
 
 	/**
 	 * Returns whether the local storage is loaded
 	 *
 	 * @return
 	 */
-	public boolean isLoaded();
+	boolean isLoaded();
 
 	/**
 	 * Returns the storage ID
 	 *
 	 * @return
 	 */
-	public StorageID getID();
+	StorageID getID();
 
 	/**
 	 * Returns the storage region
@@ -41,7 +46,7 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 * @return
 	 */
 	@Nullable
-	public LocalRegion getRegion();
+	LocalRegion getRegion();
 
 	/**
 	 * Reads the local storage data from NBT.
@@ -49,7 +54,7 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 *
 	 * @param nbt
 	 */
-	public void readFromNBT(NBTTagCompound nbt);
+	void readFromNBT(CompoundTag nbt);
 
 	/**
 	 * Writes the local storage data to NBT.
@@ -58,14 +63,14 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 * @param nbt
 	 * @return
 	 */
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt);
+	CompoundTag writeToNBT(CompoundTag nbt);
 
 	/**
 	 * Reads the initial data that is sent the first time
 	 *
 	 * @param nbt
 	 */
-	public void readInitialPacket(NBTTagCompound nbt);
+	void readInitialPacket(CompoundTag nbt);
 
 	/**
 	 * Writes the initial data that is sent the first time
@@ -73,68 +78,67 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 * @param nbt
 	 * @return
 	 */
-	public NBTTagCompound writeInitialPacket(NBTTagCompound nbt);
+	CompoundTag writeInitialPacket(CompoundTag nbt);
 
 	/**
 	 * Marks the local storage as dirty
 	 */
-	public void markDirty();
+	void markDirty();
 
 	/**
 	 * Sets whether the local storage is dirty
 	 *
 	 * @param dirty
 	 */
-	public void setDirty(boolean dirty);
+	void setDirty(boolean dirty);
 
 	/**
 	 * Returns whether the local storage data is dirty
 	 *
 	 * @return
 	 */
-	public boolean isDirty();
+	boolean isDirty();
 
 	/**
 	 * Returns an unmodifiable list of all linked chunks
 	 *
 	 * @return
 	 */
-	public List<ChunkPos> getLinkedChunks();
+	List<ChunkPos> getLinkedChunks();
 
 	/**
 	 * Sets the linked chunks. Only for use on client side for syncing
 	 *
 	 * @param linkedChunks New linked chunks
 	 */
-	@SideOnly(Side.CLIENT)
-	public void setLinkedChunks(List<ChunkPos> linkedChunks);
+	void setLinkedChunks(List<ChunkPos> linkedChunks);
 
 	/**
 	 * Called once when the local storage is initially added to the world
 	 */
-	public default void onAdded() {
+	default void onAdded() {
 
 	}
 
 	/**
 	 * Called when the local storage is loaded
 	 */
-	public void onLoaded();
+	void onLoaded();
 
 	/**
 	 * Called when the local storage is unloaded
 	 */
-	public void onUnloaded();
+	void onUnloaded();
 
 	/**
 	 * Called when the local storage has been removed
 	 */
-	public void onRemoved();
+	void onRemoved();
 
 	/**
 	 * Called before the local storage is being removed
 	 */
-	public default void onRemoving() {
+	default void onRemoving() {
 
 	}
 
@@ -143,7 +147,7 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 *
 	 * @return
 	 */
-	public Collection<LocalStorageReference> getLoadedReferences();
+	Collection<LocalStorageReference> getLoadedReferences();
 
 	/**
 	 * Loads a reference
@@ -151,7 +155,7 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 * @param reference
 	 * @return True if the reference wasn't loaded yet
 	 */
-	public boolean loadReference(LocalStorageReference reference);
+	boolean loadReference(LocalStorageReference reference);
 
 	/**
 	 * Unloads a reference
@@ -159,7 +163,7 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 * @param reference
 	 * @return True if the reference was loaded
 	 */
-	public boolean unloadReference(LocalStorageReference reference);
+	boolean unloadReference(LocalStorageReference reference);
 
 	/**
 	 * Adds a watcher of the specified chunk storage.
@@ -170,7 +174,7 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 * @param player
 	 * @return True if the player wasn't watching yet
 	 */
-	public boolean addWatcher(IChunkStorage chunkStorage, EntityPlayerMP player);
+	boolean addWatcher(IChunkStorage chunkStorage, ServerPlayer player);
 
 	/**
 	 * Removes a watcher of the specified chunk storage.
@@ -181,14 +185,14 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 * @param player
 	 * @return True if the player was watching
 	 */
-	public boolean removeWatcher(IChunkStorage chunkStorage, EntityPlayerMP player);
+	boolean removeWatcher(IChunkStorage chunkStorage, ServerPlayer player);
 
 	/**
 	 * Returns an unmodifiable list of all current watching players
 	 *
 	 * @return
 	 */
-	public Collection<EntityPlayerMP> getWatchers();
+	Collection<ServerPlayer> getWatchers();
 
 	/**
 	 * Unlinks all chunks from this local storage.
@@ -198,7 +202,7 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 *
 	 * @return True if all chunks were successfully unlinked
 	 */
-	public boolean unlinkAllChunks();
+	boolean unlinkAllChunks();
 
 	/**
 	 * Links the specified chunk to this local storage
@@ -206,7 +210,7 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 * @param chunk
 	 * @return True if the chunk was linked successfully
 	 */
-	public boolean linkChunk(Chunk chunk);
+	boolean linkChunk(ChunkAccess chunk);
 
 	/**
 	 * Links the specified chunk to this local storage using a deferred
@@ -214,7 +218,7 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 *
 	 * @param chunk
 	 */
-	public default void linkChunkDeferred(ChunkPos chunk) {
+	default void linkChunkDeferred(ChunkPos chunk) {
 
 	}
 
@@ -226,8 +230,8 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 *
 	 * @param chunk
 	 */
-	public default void linkChunkSafely(ChunkPos chunk) {
-		Chunk instance = this.getWorldStorage().getWorld().getChunkProvider().getLoadedChunk(chunk.x, chunk.z);
+	default void linkChunkSafely(ChunkPos chunk) {
+		ChunkAccess instance = this.getWorldStorage().getWorld().getChunkProvider().getLoadedChunk(chunk.x, chunk.z);
 		if (instance != null) {
 			this.linkChunk(instance);
 		} else {
@@ -244,7 +248,7 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 * @param chunk
 	 * @return True if the chunk was unlinked successfully
 	 */
-	public boolean unlinkChunk(Chunk chunk);
+	boolean unlinkChunk(ChunkAccess chunk);
 
 	/**
 	 * Returns the data manager used to sync data. <p><b>Only storages that implement {@link ITickable}
@@ -253,5 +257,5 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 * @return
 	 */
 	@Nullable
-	public IGenericDataManagerAccess getDataManager();
+	IGenericDataManagerAccess getDataManager();
 }

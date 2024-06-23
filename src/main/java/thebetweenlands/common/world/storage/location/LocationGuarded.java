@@ -42,20 +42,20 @@ public class LocationGuarded extends LocationStorage implements ITickable {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
+	public void readFromNBT(CompoundTag nbt) {
 		super.readFromNBT(nbt);
 		this.readGuardNBT(nbt);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public CompoundTag writeToNBT(CompoundTag nbt) {
 		super.writeToNBT(nbt);
 		this.writeGuardNBT(nbt);
 		return nbt;
 	}
 
 	@Override
-	public void onWatched(EntityPlayerMP player) {
+	public void onWatched(ServerPlayer player) {
 		super.onWatched(player);
 		MessageBlockGuardData message = new MessageBlockGuardData(this);
 		this.sendDataToPlayer(message, player);
@@ -65,7 +65,7 @@ public class LocationGuarded extends LocationStorage implements ITickable {
 	public void update() {
 		if (this.queuedClear) {
 			MessageClearBlockGuard message = new MessageClearBlockGuard(this);
-			for (EntityPlayerMP watcher : this.getWatchers()) {
+			for (ServerPlayer watcher : this.getWatchers()) {
 				this.sendDataToPlayer(message, watcher);
 			}
 			this.queuedClear = false;
@@ -79,7 +79,7 @@ public class LocationGuarded extends LocationStorage implements ITickable {
 					BlockPos worldPos = new BlockPos(pos.getX() * 16, pos.getY() * 16, pos.getZ() * 16);
 					GuardChunkSection section = this.guard.getSection(worldPos);
 					MessageBlockGuardSectionChange message = new MessageBlockGuardSectionChange(this, worldPos, section);
-					for (EntityPlayerMP watcher : this.getWatchers()) {
+					for (ServerPlayer watcher : this.getWatchers()) {
 						this.sendDataToPlayer(message, watcher);
 					}
 					it.remove();

@@ -1,6 +1,17 @@
 package thebetweenlands.common.world.storage;
 
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.neoforged.neoforge.common.NeoForge;
+import org.jetbrains.annotations.Nullable;
+import thebetweenlands.api.storage.ILocalStorage;
+
+import java.util.*;
 
 public class LocalStorageImpl implements ILocalStorage {
 	private final IWorldStorage worldStorage;
@@ -15,8 +26,8 @@ public class LocalStorageImpl implements ILocalStorage {
 
 	//protected boolean requiresSync = false;
 
-	private final List<EntityPlayerMP> watchers = new ArrayList<>();
-	private final List<EntityPlayerMP> duplicateWatchers = new ArrayList<>();
+	private final List<ServerPlayer> watchers = new ArrayList<>();
+	private final List<ServerPlayer> duplicateWatchers = new ArrayList<>();
 
 	private boolean loaded = false;
 
@@ -27,18 +38,8 @@ public class LocalStorageImpl implements ILocalStorage {
 
 		//Gather capabilities
 		AttachLocalStorageCapabilitiesEvent event = new AttachLocalStorageCapabilitiesEvent(this);
-		MinecraftForge.EVENT_BUS.post(event);
+		NeoForge.EVENT_BUS.post(event);
 		this.capabilities = event.getCapabilities().size() > 0 ? new CapabilityDispatcher(event.getCapabilities(), null) : null;
-	}
-
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return this.capabilities == null ? false : this.capabilities.hasCapability(capability, facing);
-	}
-
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return this.capabilities == null ? null : this.capabilities.getCapability(capability, facing);
 	}
 
 	@Override
@@ -58,8 +59,8 @@ public class LocalStorageImpl implements ILocalStorage {
 
 	@Override
 	public void readFromNBT(CompoundTag nbt) {
-		if (this.capabilities != null && nbt.hasKey("ForgeCaps")) {
-			this.capabilities.deserializeNBT(nbt.getCompoundTag("ForgeCaps"));
+		if (this.capabilities != null && nbt.contains("ForgeCaps")) {
+			this.capabilities.deserializeNBT(nbt.get("ForgeCaps"));
 		}
 
 		this.readReferenceChunks(nbt);
@@ -69,8 +70,8 @@ public class LocalStorageImpl implements ILocalStorage {
 	public CompoundTag writeToNBT(CompoundTag nbt) {
 		if (this.capabilities != null) {
 			CompoundTag caps = this.capabilities.serializeNBT();
-			if (caps.getSize() > 0) {
-				nbt.setTag("ForgeCaps", caps);
+			if (!caps.isEmpty()) {
+				nbt.put("ForgeCaps", caps);
 			}
 		}
 
@@ -91,22 +92,22 @@ public class LocalStorageImpl implements ILocalStorage {
 	}
 
 	protected final void writeReferenceChunks(CompoundTag nbt) {
-		NBTTagList referenceChunkList = new NBTTagList();
+		ListTag referenceChunkList = new ListTag();
 		for (ChunkPos referenceChunk : this.linkedChunks) {
 			CompoundTag referenceChunkNbt = new CompoundTag();
-			referenceChunkNbt.setInteger("x", referenceChunk.x);
-			referenceChunkNbt.setInteger("z", referenceChunk.z);
-			referenceChunkList.appendTag(referenceChunkNbt);
+			referenceChunkNbt.putInt("x", referenceChunk.x);
+			referenceChunkNbt.putInt("z", referenceChunk.z);
+			referenceChunkList.add(referenceChunkNbt);
 		}
-		nbt.setTag("ReferenceChunks", referenceChunkList);
+		nbt.put("ReferenceChunks", referenceChunkList);
 	}
 
 	protected final void readReferenceChunks(CompoundTag nbt) {
 		this.linkedChunks.clear();
-		NBTTagList referenceChunkList = nbt.getTagList("ReferenceChunks", Constants.NBT.TAG_COMPOUND);
-		for (int i = 0; i < referenceChunkList.tagCount(); i++) {
-			CompoundTag referenceChunkNbt = referenceChunkList.getCompoundTagAt(i);
-			this.linkedChunks.add(new ChunkPos(referenceChunkNbt.getInteger("x"), referenceChunkNbt.getInteger("z")));
+		ListTag referenceChunkList = nbt.getList("ReferenceChunks", Tag.TAG_COMPOUND);
+		for (int i = 0; i < referenceChunkList.size(); i++) {
+			CompoundTag referenceChunkNbt = referenceChunkList.getCompound(i);
+			this.linkedChunks.add(new ChunkPos(referenceChunkNbt.getInt("x"), referenceChunkNbt.getInt("z")));
 		}
 	}
 
@@ -137,7 +138,6 @@ public class LocalStorageImpl implements ILocalStorage {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
 	public void setLinkedChunks(List<ChunkPos> linkedChunks) {
 		this.linkedChunks.clear();
 		this.linkedChunks.addAll(linkedChunks);
@@ -188,7 +188,7 @@ public class LocalStorageImpl implements ILocalStorage {
 	}
 
 	@Override
-	public boolean addWatcher(IChunkStorage chunkStorage, EntityPlayerMP player) {
+	public boolean addWatcher(IChunkStorage chunkStorage, ServerPlayer player) {
 		boolean contained = this.duplicateWatchers.contains(player);
 		this.duplicateWatchers.add(player);
 		if (!contained) {
@@ -203,12 +203,12 @@ public class LocalStorageImpl implements ILocalStorage {
 	 *
 	 * @param player
 	 */
-	protected void onWatched(EntityPlayerMP player) {
+	protected void onWatched(ServerPlayer player) {
 		this.sendDataToPlayer(new MessageAddLocalStorage(this), player);
 	}
 
 	@Override
-	public boolean removeWatcher(IChunkStorage chunkStorage, EntityPlayerMP player) {
+	public boolean removeWatcher(IChunkStorage chunkStorage, ServerPlayer player) {
 		boolean contained = this.duplicateWatchers.remove(player);
 		if (contained && !this.duplicateWatchers.contains(player)) {
 			this.watchers.remove(player);
@@ -222,12 +222,12 @@ public class LocalStorageImpl implements ILocalStorage {
 	 *
 	 * @param player
 	 */
-	protected void onUnwatched(EntityPlayerMP player) {
+	protected void onUnwatched(ServerPlayer player) {
 
 	}
 
 	@Override
-	public Collection<EntityPlayerMP> getWatchers() {
+	public Collection<ServerPlayer> getWatchers() {
 		return Collections.unmodifiableCollection(this.watchers);
 	}
 
@@ -241,7 +241,7 @@ public class LocalStorageImpl implements ILocalStorage {
 		ChunkPos pos = null;
 		while (it.hasNext()) {
 			pos = it.next();
-			Chunk chunk = this.worldStorage.getWorld().getChunk(pos.x, pos.z);
+			ChunkAccess chunk = this.worldStorage.getWorld().getChunk(pos.x, pos.z);
 			IChunkStorage chunkData = this.worldStorage.getChunkStorage(chunk);
 			if (chunkData == null || !chunkData.unlinkLocalStorage(this)) {
 				allUnlinked = false;
@@ -257,8 +257,8 @@ public class LocalStorageImpl implements ILocalStorage {
 	}
 
 	@Override
-	public boolean linkChunk(Chunk chunk) {
-		ChunkPos chunkPos = new ChunkPos(chunk.x, chunk.z);
+	public boolean linkChunk(ChunkAccess chunk) {
+		ChunkPos chunkPos = chunk.getPos();
 		if (!this.linkedChunks.contains(chunkPos)) {
 			IChunkStorage chunkData = this.worldStorage.getChunkStorage(chunk);
 			if (chunkData != null && chunkData.linkLocalStorage(this)) {
@@ -281,8 +281,8 @@ public class LocalStorageImpl implements ILocalStorage {
 	}
 
 	@Override
-	public boolean unlinkChunk(Chunk chunk) {
-		ChunkPos chunkPos = new ChunkPos(chunk.x, chunk.z);
+	public boolean unlinkChunk(ChunkAccess chunk) {
+		ChunkPos chunkPos = chunk.getPos();
 		if (this.linkedChunks.contains(chunkPos)) {
 			IChunkStorage chunkData = this.worldStorage.getChunkStorage(chunk);
 			if (chunkData != null) {
@@ -301,7 +301,7 @@ public class LocalStorageImpl implements ILocalStorage {
 	 * Sends the message to all watching players
 	 */
 	protected void sendMessageToAllWatchers(IMessage message) {
-		for (EntityPlayerMP watcher : this.getWatchers()) {
+		for (ServerPlayer watcher : this.getWatchers()) {
 			this.sendDataToPlayer(message, watcher);
 		}
 	}
@@ -311,7 +311,7 @@ public class LocalStorageImpl implements ILocalStorage {
 	 *
 	 * @param player
 	 */
-	protected void sendDataToPlayer(IMessage message, EntityPlayerMP player) {
+	protected void sendDataToPlayer(IMessage message, ServerPlayer player) {
 		TheBetweenlands.networkWrapper.sendTo(message, player);
 	}
 

@@ -5,7 +5,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.IPlantable;
+import net.neoforged.neoforge.common.IPlantable;
+import net.neoforged.neoforge.common.PlantType;
 
 public class BetweenlandsPlantable extends Block {
 	public BetweenlandsPlantable(Properties p_49795_) {
@@ -14,7 +15,7 @@ public class BetweenlandsPlantable extends Block {
 
 	@Override
 	public boolean canSustainPlant(BlockState state, BlockGetter world, BlockPos pos, Direction facing, IPlantable plantable) {
-		net.minecraftforge.common.PlantType type = plantable.getPlantType(world, pos.relative(facing));
-		return net.minecraftforge.common.PlantType.PLAINS.equals(type);
+		PlantType type = plantable.getPlantType(world, pos.relative(facing));
+		return PlantType.PLAINS.equals(type);
 	}
 }

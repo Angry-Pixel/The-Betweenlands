@@ -2,9 +2,7 @@ package thebetweenlands.client.rendering;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -12,21 +10,19 @@ import net.minecraft.client.renderer.FogRenderer;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.ISkyRenderHandler;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.lwjgl.opengl.GL40;
 import org.lwjgl.opengl.GL43;
 import thebetweenlands.client.rendering.shader.BetweenlandsShaders;
 import thebetweenlands.client.rendering.vertex.BetweenlandsVertexFormats;
 import thebetweenlands.common.TheBetweenlands;
 
-@OnlyIn(Dist.CLIENT)
-public class BetweenlandsSkyHandler implements ISkyRenderHandler {
+public class BetweenlandsSkyHandler {
 
 	// Renders horison texture, sky texture, blobs in sky and clouds
 	public ResourceLocation SkyTexture = TheBetweenlands.prefix("textures/sky/sky_texture.png");
-	public ResourceLocation FogTexture = TheBetweenlands.prefix("textures/sky/fog_texture.png");
+	public static ResourceLocation FogTexture = TheBetweenlands.prefix("textures/sky/fog_texture.png");
 	float ang = 0;
 	float xtest = 0.5f;
 	boolean invert = false;
@@ -34,7 +30,7 @@ public class BetweenlandsSkyHandler implements ISkyRenderHandler {
 	VertexBuffer vertexbuffer;
 
 	public ISkyRenderHandler compositeSky;
-	public boolean compositeRender = false;            // flag is called to switch from overwold sky to betweenlands sky
+	public static boolean compositeRender = false;            // flag is called to switch from overwold sky to betweenlands sky
 
 	boolean test = true;
 
@@ -60,8 +56,7 @@ public class BetweenlandsSkyHandler implements ISkyRenderHandler {
 	// When optifine shader is loaded skip this render step
 	// then check for a betweenlands sky shader
 	// and if possible, add the defalt sky shader over the top of it's overworld sky fragment shader
-	@Override
-	public void render(int ticks, float partialTick, PoseStack poseStack, ClientLevel level, Minecraft minecraft) {
+	public static void render(int ticks, float partialTick, PoseStack poseStack, ClientLevel level, Minecraft minecraft) {
 
 		// Overlay Betweenlands sky
 		//GL40.draw
@@ -81,7 +76,6 @@ public class BetweenlandsSkyHandler implements ISkyRenderHandler {
 		//Vector3f lookDir = new Vector3f(camera.rotation());
 		Matrix4f oldmatrix = RenderSystem.getProjectionMatrix();
 		Tesselator tesselator = Tesselator.getInstance();
-		BufferBuilder bufferbuilder = tesselator.getBuilder();
 
 		// Our buffer to draw the sky
 
@@ -89,14 +83,14 @@ public class BetweenlandsSkyHandler implements ISkyRenderHandler {
 
 		// Check if texture is present and register
 
-		Quaternion Rotation = new Quaternion(0, 0, 0, 1);
-		Rotation.mul(Vector3f.XP.rotationDegrees(camera.getXRot()));
-		Rotation.mul(Vector3f.YP.rotationDegrees(camera.getYRot()));
+		Quaternionf rotation = new Quaternionf(0, 0, 0, 1);
+		rotation.mul(Axis.XP.rotationDegrees(camera.getXRot()));
+		rotation.mul(Axis.YP.rotationDegrees(camera.getYRot()));
 		Matrix4f matrix = new Matrix4f(oldmatrix);
 
 		// Set projection to rotate with camera
-		matrix.multiply(Rotation);
-		RenderSystem.setProjectionMatrix(oldmatrix);
+		matrix.mul(rotation);
+		RenderSystem.setProjectionMatrix(oldmatrix, VertexSorting.DISTANCE_TO_ORIGIN);
 
 
 		float color0[] = RenderSystem.getShaderFogColor();

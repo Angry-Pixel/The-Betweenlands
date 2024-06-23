@@ -1,12 +1,6 @@
 package thebetweenlands.common.dimension;
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.DimensionSpecialEffects;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -14,12 +8,7 @@ import net.minecraftforge.client.ICloudRenderHandler;
 import net.minecraftforge.client.ISkyRenderHandler;
 import net.minecraftforge.client.IWeatherParticleRenderHandler;
 import net.minecraftforge.client.IWeatherRenderHandler;
-import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.client.rendering.BetweenlandsCloudHandler;
 import thebetweenlands.client.rendering.BetweenlandsSkyHandler;
-import thebetweenlands.client.rendering.BetweenlandsSkyHandlerTest;
-import thebetweenlands.client.rendering.BetweenlandsWeatherHandler;
-import thebetweenlands.client.rendering.BetweenlandsWeatherParticleHandler;
 
 @OnlyIn(Dist.CLIENT)
 public class BetweenlandsSpecialEffects extends DimensionSpecialEffects {

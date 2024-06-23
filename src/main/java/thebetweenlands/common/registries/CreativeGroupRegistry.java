@@ -87,7 +87,7 @@ public class CreativeGroupRegistry {
 			output.accept(BlockRegistry.SAP_SAPLING.get());
 			output.accept(BlockRegistry.RUBBER_SAPLING.get());
 			output.accept(BlockRegistry.NIBBLETWIG_SAPLING.get());
-			output.accept(BlockRegistry.BULB_CAPED_MUSHROOM.get());
+			output.accept(BlockRegistry.BULB_CAPPED_MUSHROOM.get());
 			output.accept(BlockRegistry.SHELF_FUNGUS.get());
 			output.accept(BlockRegistry.MOSS.get());
 			output.accept(BlockRegistry.THORNS.get());

@@ -8,6 +8,7 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.blocks.*;
+import thebetweenlands.common.world.BLTreeGrowers;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -53,14 +54,12 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> LOG_HEARTHGROVE = register("log_hearthgrove", () -> new BetweenlandsWoodBlock(BetweenlandsBlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> GIANT_ROOT = register("giant_root", () -> new BetweenlandsWoodBlock(BetweenlandsBlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.WOOD)));
 	// - Plants
-	public static final DeferredBlock<Block> WEEDWOOD_SAPLING = register("weedwood_sapling", () -> new WeedwoodSapling(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS)));
-	public static final DeferredBlock<Block> SAP_SAPLING = register("sap_sapling", () -> new SapSapling(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS)));
-	public static final DeferredBlock<Block> RUBBER_SAPLING = register("rubber_sapling", () -> new RubberSapling(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS)));
-	public static final DeferredBlock<Block> NIBBLETWIG_SAPLING = register("nibbletwig_sapling", () -> new NibbletwigSapling(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS)));
-	public static final DeferredBlock<Block> BULB_CAPED_MUSHROOM = register("bulb_caped_mushroom_sapling", () -> new SapSapling(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS)));
-	public static final DeferredBlock<Block> BULB_CAPPED_MUSHROOM_CAP = register("bulb_capped_mushroom_cap", () -> new HalfTransparentBlock(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).lightLevel((lightlevel) -> 13).noLootTable().noOcclusion().isViewBlocking((e, f, g) -> {
-		return false;
-	}).sound(SoundType.WOOL)));
+	public static final DeferredBlock<Block> WEEDWOOD_SAPLING = register("weedwood_sapling", () -> new SaplingBlock(BLTreeGrowers.WEEDWOOD, BlockBehaviour.Properties.of().strength(0.5F, 2.5F).noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS)));
+	public static final DeferredBlock<Block> SAP_SAPLING = register("sap_sapling", () -> new SaplingBlock(BLTreeGrowers.SAP, BlockBehaviour.Properties.of().strength(0.5F, 2.5F).noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS)));
+	public static final DeferredBlock<Block> RUBBER_SAPLING = register("rubber_sapling", () -> new SaplingBlock(BLTreeGrowers.RUBBER, BlockBehaviour.Properties.of().strength(0.5F, 2.5F).noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS)));
+	public static final DeferredBlock<Block> NIBBLETWIG_SAPLING = register("nibbletwig_sapling", () -> new SaplingBlock(BLTreeGrowers.NIBBLETWIG, BlockBehaviour.Properties.of().strength(0.5F, 2.5F).noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS)));
+	public static final DeferredBlock<Block> BULB_CAPPED_MUSHROOM = register("bulb_capped_mushroom", () -> new MushroomBlock(ConfiguredFeatureRegistry.BIG_BULB_CAPPED_MUSHROOM, BlockBehaviour.Properties.of().strength(0.5F, 2.5F).noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS)));
+	public static final DeferredBlock<Block> BULB_CAPPED_MUSHROOM_CAP = register("bulb_capped_mushroom_cap", () -> new HalfTransparentBlock(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).lightLevel((lightlevel) -> 13).noLootTable().noOcclusion().isViewBlocking((e, f, g) -> false).sound(SoundType.WOOL)));
 	public static final DeferredBlock<Block> BULB_CAPPED_MUSHROOM_STALK = register("bulb_capped_mushroom_stalk", () -> new BetweenlandsBlock(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).lightLevel((lightlevel) -> 13).noLootTable().sound(SoundType.WOOL)));
 	public static final DeferredBlock<Block> SHELF_FUNGUS = register("shelf_fungus", () -> new Block(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).noLootTable().noOcclusion().sound(SoundType.WOOL)));
 	public static final DeferredBlock<Block> MOSS = register("moss", () -> new BetweenlandsMoss(BlockBehaviour.Properties.of().strength(0.5F, 2.5F).noLootTable().noCollission().noOcclusion().sound(SoundType.GRASS)));

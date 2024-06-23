@@ -68,7 +68,7 @@ public class LocationSpiritTree extends LocationGuarded {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public CompoundTag writeToNBT(CompoundTag nbt) {
 		nbt = super.writeToNBT(nbt);
 		this.saveBlockList(nbt, "generatedWispPositions", this.generatedWispPositions);
 		this.saveBlockList(nbt, "notGeneratedWispPositions", this.notGeneratedWispPositions);
@@ -78,7 +78,7 @@ public class LocationSpiritTree extends LocationGuarded {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
+	public void readFromNBT(CompoundTag nbt) {
 		super.readFromNBT(nbt);
 		this.readBlockList(nbt, "generatedWispPositions", this.generatedWispPositions);
 		this.readBlockList(nbt, "notGeneratedWispPositions", this.notGeneratedWispPositions);
@@ -86,17 +86,17 @@ public class LocationSpiritTree extends LocationGuarded {
 		this.readBlockList(nbt, "smallFacePositions", this.smallFacePositions);
 	}
 
-	protected void saveBlockList(NBTTagCompound nbt, String name, List<BlockPos> blocks) {
-		NBTTagList blockList = new NBTTagList();
+	protected void saveBlockList(CompoundTag nbt, String name, List<BlockPos> blocks) {
+		ListTag blockList = new ListTag();
 		for (BlockPos pos : blocks) {
 			blockList.appendTag(new NBTTagLong(pos.toLong()));
 		}
 		nbt.setTag(name, blockList);
 	}
 
-	protected void readBlockList(NBTTagCompound nbt, String name, List<BlockPos> blocks) {
+	protected void readBlockList(CompoundTag nbt, String name, List<BlockPos> blocks) {
 		blocks.clear();
-		NBTTagList blockList = nbt.getTagList(name, Constants.NBT.TAG_LONG);
+		ListTag blockList = nbt.getTagList(name, Constants.NBT.TAG_LONG);
 		for (int i = 0; i < blockList.tagCount(); i++) {
 			NBTTagLong posNbt = (NBTTagLong) blockList.get(i);
 			blocks.add(BlockPos.fromLong(posNbt.getLong()));

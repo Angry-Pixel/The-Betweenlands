@@ -1,6 +1,6 @@
 package thebetweenlands.util;
 
-// Just a MathHelper replacement
+// Just a Mth replacement
 public class MathUtil {
 
 	public static long getCoordinateRandom(int x, int y, int z) {

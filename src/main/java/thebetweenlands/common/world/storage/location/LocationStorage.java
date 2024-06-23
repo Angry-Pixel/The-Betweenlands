@@ -1,9 +1,26 @@
 package thebetweenlands.common.world.storage.location;
 
+import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.event.level.BlockEvent;
+import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.world.storage.LocalStorageImpl;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class LocationStorage extends LocalStorageImpl {
@@ -17,7 +34,7 @@ public class LocationStorage extends LocalStorageImpl {
 
 	protected GenericDataManager dataManager;
 
-	private TObjectIntMap<Entity> titleDisplayCooldowns = new TObjectIntHashMap<Entity>();
+	private Object2IntMap<Entity> titleDisplayCooldowns = new Object2IntArrayMap<>();
 
 	protected static final DataParameter<String> NAME = GenericDataManager.createKey(LocationStorage.class, DataSerializers.STRING);
 	protected static final DataParameter<Boolean> VISIBLE = GenericDataManager.createKey(LocationStorage.class, DataSerializers.BOOLEAN);
@@ -131,10 +148,10 @@ public class LocationStorage extends LocalStorageImpl {
 	 */
 	public LocationStorage linkChunks() {
 		for (AABB boundingBox : this.boundingBoxes) {
-			int sx = MathHelper.floor(boundingBox.minX) >> 4;
-			int sz = MathHelper.floor(boundingBox.minZ) >> 4;
-			int ex = MathHelper.floor(boundingBox.maxX) >> 4;
-			int ez = MathHelper.floor(boundingBox.maxZ) >> 4;
+			int sx = Mth.floor(boundingBox.minX) >> 4;
+			int sz = Mth.floor(boundingBox.minZ) >> 4;
+			int ex = Mth.floor(boundingBox.maxX) >> 4;
+			int ez = Mth.floor(boundingBox.maxZ) >> 4;
 			for (int cx = sx; cx <= ex; cx++) {
 				for (int cz = sz; cz <= ez; cz++) {
 					this.linkChunkSafely(new ChunkPos(cx, cz));
@@ -146,7 +163,7 @@ public class LocationStorage extends LocalStorageImpl {
 
 	/**
 	 * Returns the location guard. Must be created before
-	 * {@link #readFromNBT(NBTTagCompound)} is called
+	 * {@link #readFromNBT(CompoundTag)} is called
 	 *
 	 * @return
 	 */
@@ -255,55 +272,55 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @return
 	 */
 	public String getLocalizedName() {
-		return I18n.translateToLocal("location." + this.dataManager.get(NAME) + ".name");
+		return I18n.get("location." + this.dataManager.get(NAME) + ".name");
 	}
 
 	public boolean hasLocalizedName() {
-		return I18n.canTranslate("location." + this.dataManager.get(NAME) + ".name");
+		return I18n.exists("location." + this.dataManager.get(NAME) + ".name");
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
+	public void readFromNBT(CompoundTag nbt) {
 		super.readFromNBT(nbt);
 
 		this.readSharedNbt(nbt);
 	}
 
-	protected void readSharedNbt(NBTTagCompound nbt) {
+	protected void readSharedNbt(CompoundTag nbt) {
 		this.dataManager.set(NAME, nbt.getString("name"));
 		if (this.dataManager.get(NAME).startsWith("translate:")) {
 			this.dataManager.set(NAME, this.dataManager.get(NAME).replaceFirst("translate:", ""));
 			this.setDirty(true);
 		}
 		this.boundingBoxes.clear();
-		NBTTagList boundingBoxes = nbt.getTagList("bounds", Constants.NBT.TAG_COMPOUND);
-		for (int i = 0; i < boundingBoxes.tagCount(); i++) {
-			NBTTagCompound boxNbt = boundingBoxes.getCompoundTagAt(i);
+		ListTag boundingBoxes = nbt.getList("bounds", Tag.TAG_COMPOUND);
+		for (int i = 0; i < boundingBoxes.size(); i++) {
+			CompoundTag boxNbt = boundingBoxes.getCompound(i);
 			this.boundingBoxes.add(this.readAabb(boxNbt));
 		}
 		this.updateEnclosingBounds();
 		this.type = EnumLocationType.fromName(nbt.getString("type"));
-		this.layer = nbt.getInteger("layer");
-		if (nbt.hasKey("ambience")) {
-			NBTTagCompound ambienceTag = nbt.getCompoundTag("ambience");
+		this.layer = nbt.getInt("layer");
+		if (nbt.contains("ambience")) {
+			CompoundTag ambienceTag = nbt.getCompound("ambience");
 			this.ambience = LocationAmbience.readFromNBT(this, ambienceTag);
 		}
 		this.dataManager.set(VISIBLE, nbt.getBoolean("visible"));
 		this.locationSeed = nbt.getLong("seed");
 	}
 
-	protected NBTTagCompound writeAabb(AABB aabb) {
-		NBTTagCompound boxNbt = new NBTTagCompound();
-		boxNbt.setDouble("minX", aabb.minX);
-		boxNbt.setDouble("minY", aabb.minY);
-		boxNbt.setDouble("minZ", aabb.minZ);
-		boxNbt.setDouble("maxX", aabb.maxX);
-		boxNbt.setDouble("maxY", aabb.maxY);
-		boxNbt.setDouble("maxZ", aabb.maxZ);
+	protected CompoundTag writeAabb(AABB aabb) {
+		CompoundTag boxNbt = new CompoundTag();
+		boxNbt.putDouble("minX", aabb.minX);
+		boxNbt.putDouble("minY", aabb.minY);
+		boxNbt.putDouble("minZ", aabb.minZ);
+		boxNbt.putDouble("maxX", aabb.maxX);
+		boxNbt.putDouble("maxY", aabb.maxY);
+		boxNbt.putDouble("maxZ", aabb.maxZ);
 		return boxNbt;
 	}
 
-	protected AABB readAabb(NBTTagCompound nbt) {
+	protected AABB readAabb(CompoundTag nbt) {
 		double minX = nbt.getDouble("minX");
 		double minY = nbt.getDouble("minY");
 		double minZ = nbt.getDouble("minZ");
@@ -318,14 +335,14 @@ public class LocationStorage extends LocalStorageImpl {
 	 *
 	 * @param nbt
 	 */
-	public void readGuardNBT(NBTTagCompound nbt) {
+	public void readGuardNBT(CompoundTag nbt) {
 		if (this.getGuard() != null) {
-			this.getGuard().readFromNBT(nbt.getCompoundTag("guard"));
+			this.getGuard().readFromNBT(nbt.getCompound("guard"));
 		}
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public CompoundTag writeToNBT(CompoundTag nbt) {
 		super.writeToNBT(nbt);
 
 		this.writeSharedNbt(nbt);
@@ -333,22 +350,22 @@ public class LocationStorage extends LocalStorageImpl {
 		return nbt;
 	}
 
-	protected void writeSharedNbt(NBTTagCompound nbt) {
-		nbt.setString("name", this.dataManager.get(NAME));
-		NBTTagList boundingBoxes = new NBTTagList();
+	protected void writeSharedNbt(CompoundTag nbt) {
+		nbt.putString("name", this.dataManager.get(NAME));
+		ListTag boundingBoxes = new ListTag();
 		for (AABB boundingBox : this.boundingBoxes) {
 			boundingBoxes.appendTag(this.writeAabb(boundingBox));
 		}
-		nbt.setTag("bounds", boundingBoxes);
-		nbt.setString("type", this.type.name);
-		nbt.setInteger("layer", this.layer);
+		nbt.put("bounds", boundingBoxes);
+		nbt.putString("type", this.type.name);
+		nbt.putInt("layer", this.layer);
 		if (this.hasAmbience()) {
-			NBTTagCompound ambienceTag = new NBTTagCompound();
+			CompoundTag ambienceTag = new CompoundTag();
 			this.ambience.writeToNBT(ambienceTag);
-			nbt.setTag("ambience", ambienceTag);
+			nbt.put("ambience", ambienceTag);
 		}
-		nbt.setBoolean("visible", this.dataManager.get(VISIBLE));
-		nbt.setLong("seed", this.locationSeed);
+		nbt.putBoolean("visible", this.dataManager.get(VISIBLE));
+		nbt.putLong("seed", this.locationSeed);
 	}
 
 	/**
@@ -357,21 +374,21 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @param nbt
 	 * @return
 	 */
-	public NBTTagCompound writeGuardNBT(NBTTagCompound nbt) {
+	public CompoundTag writeGuardNBT(CompoundTag nbt) {
 		if (this.getGuard() != null) {
-			nbt.setTag("guard", this.getGuard().writeToNBT(new NBTTagCompound()));
+			nbt.put("guard", this.getGuard().writeToNBT(new CompoundTag()));
 		}
 		return nbt;
 	}
 
 	@Override
-	public void readInitialPacket(NBTTagCompound nbt) {
+	public void readInitialPacket(CompoundTag nbt) {
 		super.readInitialPacket(nbt);
 		this.readSharedNbt(nbt);
 	}
 
 	@Override
-	public NBTTagCompound writeInitialPacket(NBTTagCompound nbt) {
+	public CompoundTag writeInitialPacket(CompoundTag nbt) {
 		super.writeInitialPacket(nbt);
 		this.writeSharedNbt(nbt);
 		return nbt;
@@ -384,7 +401,7 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @return
 	 */
 	public boolean isInside(Entity entity) {
-		return this.intersects(entity.getEntityBoundingBox());
+		return this.intersects(entity.getBoundingBox());
 	}
 
 	/**
@@ -395,7 +412,7 @@ public class LocationStorage extends LocalStorageImpl {
 	 */
 	public boolean isInside(Vec3i pos) {
 		for (AABB boundingBox : this.boundingBoxes) {
-			if (this.isVecInsideOrEdge(boundingBox, new Vec3d(pos.getX(), pos.getY(), pos.getZ()))) {
+			if (this.isVecInsideOrEdge(boundingBox, new Vec3(pos.getX(), pos.getY(), pos.getZ()))) {
 				return true;
 			}
 		}
@@ -408,7 +425,7 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @param pos
 	 * @return
 	 */
-	public boolean isInside(Vec3d pos) {
+	public boolean isInside(Vec3 pos) {
 		for (AABB boundingBox : this.boundingBoxes) {
 			if (this.isVecInsideOrEdge(boundingBox, pos)) {
 				return true;
@@ -439,8 +456,8 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @param vec
 	 * @return
 	 */
-	protected final boolean isVecInsideOrEdge(AABB aabb, Vec3d vec) {
-		return vec.x >= aabb.minX && vec.x <= aabb.maxX ? (vec.y >= aabb.minY && vec.y <= aabb.maxY ? vec.z >= aabb.minZ && vec.z <= aabb.maxZ : false) : false;
+	protected final boolean isVecInsideOrEdge(AABB aabb, Vec3 vec) {
+		return vec.x >= aabb.minX && vec.x <= aabb.maxX && (vec.y >= aabb.minY && vec.y <= aabb.maxY && vec.z >= aabb.minZ && vec.z <= aabb.maxZ);
 	}
 
 	/**
@@ -481,12 +498,7 @@ public class LocationStorage extends LocalStorageImpl {
 		return this.dataManager.get(VISIBLE);
 	}
 
-	private static final Comparator<LocationStorage> LAYER_SORTER = new Comparator<LocationStorage>() {
-		@Override
-		public int compare(LocationStorage s1, LocationStorage s2) {
-			return Integer.compare(s1.getLayer(), s2.getLayer());
-		}
-	};
+	private static final Comparator<LocationStorage> LAYER_SORTER = Comparator.comparingInt(LocationStorage::getLayer);
 
 	/**
 	 * Returns a list of all locations at the specified entity
@@ -495,7 +507,7 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @return
 	 */
 	public static List<LocationStorage> getLocations(Entity entity) {
-		return getLocations(entity.world, entity.getEntityBoundingBox());
+		return getLocations(entity.level(), entity.getBoundingBox());
 	}
 
 	/**
@@ -504,12 +516,9 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @param world
 	 * @return
 	 */
-	public static List<LocationStorage> getLocations(World world, Vec3d position) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
-		return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, position.x, position.z,
-			(location) -> {
-				return location.isInside(position);
-			});
+	public static List<LocationStorage> getLocations(Level level, Vec3 position) {
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(level);
+		return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, position.x, position.z, (location) -> location.isInside(position));
 	}
 
 	/**
@@ -519,11 +528,9 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @param aabb
 	 * @return
 	 */
-	public static List<LocationStorage> getLocations(World world, AABB aabb) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
-		return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, aabb, (location) -> {
-			return location.intersects(aabb);
-		});
+	public static List<LocationStorage> getLocations(Level level, AABB aabb) {
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(level);
+		return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, aabb, (location) -> location.intersects(aabb));
 	}
 
 	/**
@@ -532,8 +539,8 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @param world
 	 * @return
 	 */
-	public static LocationAmbience getAmbience(World world, Vec3d position) {
-		List<LocationStorage> locations = LocationStorage.getLocations(world, position);
+	public static LocationAmbience getAmbience(Level level, Vec3 position) {
+		List<LocationStorage> locations = LocationStorage.getLocations(level, position);
 		if (locations.isEmpty())
 			return null;
 		Collections.sort(locations, LAYER_SORTER);
@@ -608,10 +615,10 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @param entity
 	 * @return
 	 */
-	public static boolean isLocationGuarded(World world, @Nullable Entity entity, BlockPos pos) {
-		List<LocationStorage> locations = getLocations(world, new Vec3d(pos));
+	public static boolean isLocationGuarded(Level level, @Nullable Entity entity, BlockPos pos) {
+		List<LocationStorage> locations = getLocations(level, pos.getCenter());
 		for (LocationStorage location : locations) {
-			if (location.getGuard() != null && location.getGuard().isGuarded(world, entity, pos))
+			if (location.getGuard() != null && location.getGuard().isGuarded(level, entity, pos))
 				return true;
 		}
 		return false;
@@ -628,7 +635,7 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @param event
 	 * @return
 	 */
-	public void onBreakBlock(BreakEvent event) {
+	public void onBreakBlock(BlockEvent.BreakEvent event) {
 
 	}
 }
