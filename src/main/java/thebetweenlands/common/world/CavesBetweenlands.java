@@ -1,11 +1,9 @@
-package thebetweenlands.common.carvers;
+package thebetweenlands.common.world;
 
-import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
@@ -16,94 +14,49 @@ import net.minecraft.world.level.levelgen.Aquifer;
 import net.minecraft.world.level.levelgen.carver.CarverConfiguration;
 import net.minecraft.world.level.levelgen.carver.CarvingContext;
 import net.minecraft.world.level.levelgen.carver.WorldCarver;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.synth.SimplexNoise;
-import net.minecraft.world.level.material.Material;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.DimensionRegistries;
-import thebetweenlands.common.world.biome.BiomeBetweenlands;
-import thebetweenlands.common.world.gen.BiomeWeights;
 import thebetweenlands.common.world.util.FractalOpenSimplexNoise;
 import thebetweenlands.common.world.util.MathUtils;
 import thebetweenlands.common.world.util.OpenSimplexNoise;
 
-import java.util.Random;
-import java.util.Set;
 import java.util.function.Function;
 
 public class CavesBetweenlands extends WorldCarver<CarverConfiguration> {
+
 	private static final int CHUNK_SIZE = 16;
-
 	private static final double XZ_CAVE_SCALE = 0.08;
-
 	private static final double Y_CAVE_SCALE = 0.15;
-
 	private static final double XZ_FORM_SCALE = 0.5;
-
 	private static final double Y_FORM_SCALE = 0.3;
-
 	private static final double FORM_SCALE = 0.4;
-
 	private static final double XZ_BREAK_SCALE = 0.05;
-
 	private static final double BREAK_SCALE = 0.85;
-
 	private static final double BASE_LIMIT = -0.3;
-
 	private static final int LOWER_BOUND = 10;
-
 	private static final int UPPER_BOUND = 20;
 
-	private static final double SHOULDNT_BREAK = 3.5;
-
-	private static final double RIDGE_EXTENTS = 0.5;
-
 	private final OpenSimplexNoise cave;
-
 	private final OpenSimplexNoise seaLevelBreak;
-
 	private final FractalOpenSimplexNoise form;
-
-	private BiomeWeights biomeWeights;
-
-	// TODO: change to holder biomes
-	//    + make datapack compatible
-	private static final Set<Holder<Biome>> noBreakBiomes
-		= ImmutableSet.of(
-		BiomeRegistry.DEEP_WATERS.biome.getHolder().get(),
-		BiomeRegistry.COARSE_ISLANDS.biome.getHolder().get(),
-		BiomeRegistry.RAISED_ISLES.biome.getHolder().get(),
-		BiomeRegistry.MARSH.biome.getHolder().get(),
-		BiomeRegistry.ERODED_MARSH.biome.getHolder().get(),
-		BiomeRegistry.PATCHY_ISLANDS.biome.getHolder().get(),
-		BiomeRegistry.SLUDGE_PLAINS.biome.getHolder().get(),
-		BiomeRegistry.SWAMPLANDS_CLEARING.biome.getHolder().get(),
-		BiomeRegistry.SLUDGE_PLAINS_CLEARING.biome.getHolder().get());
 
 	private final double[] noiseField = new double[9 * 9 * 129];
 	private final double[] seaBreakNoiseField = new double[16 * 16];
 
-	public CavesBetweenlands(Codec p_159366_) {
-		super(p_159366_);
+	public CavesBetweenlands(Codec<CarverConfiguration> codec) {
+		super(codec);
 		cave = new OpenSimplexNoise(0);
-		seaLevelBreak = new OpenSimplexNoise(0 + 1);
-		form = new FractalOpenSimplexNoise(0 + 2, 4, 0.1);
-	}
-
-	public void setBiomeTerrainWeights(BiomeWeights biomeWeights) {
-		this.biomeWeights = biomeWeights;
+		seaLevelBreak = new OpenSimplexNoise(1);
+		form = new FractalOpenSimplexNoise(2, 4, 0.1);
 	}
 
 	@Override
-	public boolean carve(CarvingContext p_190766_, CarverConfiguration p_190767_, ChunkAccess primer, Function p_190769_, Random p_190770_, Aquifer p_190771_, ChunkPos p_190772_, CarvingMask p_190773_) {
+	public boolean carve(CarvingContext context, CarverConfiguration config, ChunkAccess access, Function<BlockPos, Holder<Biome>> biomeAccessor, RandomSource random, Aquifer aquifer, ChunkPos chunkPos, CarvingMask mask) {
 
 		// only generate in this chunk check
-		if (p_190772_.equals(primer.getPos())) {
-			int cx = primer.getPos().x * CHUNK_SIZE;
-			int cz = primer.getPos().z * CHUNK_SIZE;
-			BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+		if (chunkPos.equals(access.getPos())) {
+			int cx = access.getPos().x * CHUNK_SIZE;
+			int cz = access.getPos().z * CHUNK_SIZE;
 
 			//Generate cave noise field (9x9x129)
 			for (int x = 0; x < 9; x++) {
@@ -177,39 +130,15 @@ public class CavesBetweenlands extends WorldCarver<CarverConfiguration> {
 
 								int bz = z * 2 + zo;
 
-								Holder<Biome> biome = primer.getNoiseBiome(cx + bx, 120, cz + bz);
-
-								// Only break in correct biomes and don't generate in biome transitions
-								double shouldntBreak = noBreakBiomes.stream().anyMatch((ent) -> {
-									return ent.is(biome.unwrapKey().get());
-								}) ? SHOULDNT_BREAK : (1 - this.biomeWeights.get(bx, bz)) * SHOULDNT_BREAK;
-
 								int level = 0;
-
-								// TODO: check if has wrapper:
-								//  - get wrapper, then wrapper set height
-								// else:
-								//  - get noise generator height (or const value cos im lazy)
-
-								BiomeBetweenlands betweenlandsbiome = BiomeRegistry.getBiomeBetweenlands(biome);
-								if (betweenlandsbiome != null) {
-									level = (int) (betweenlandsbiome.getBaseHeight() - betweenlandsbiome.getHeightVariation());
-									while (level <= (int) (betweenlandsbiome.getBaseHeight() + betweenlandsbiome.getHeightVariation())) {
-										BlockState state = primer.getBlockState(new BlockPos(bx, level, bz));
-										if (state.getMaterial() == Material.AIR || state.getMaterial().isLiquid()) {
-											break;
-										}
-										level++;
+								while (level <= TheBetweenlands.LAYER_HEIGHT + 20) {
+									BlockState state = access.getBlockState(new BlockPos(bx, level, bz));
+									if (state.isAir() || state.liquid()) {
+										break;
 									}
-								} else {
-									while (level <= TheBetweenlands.LAYER_HEIGHT + 20) {
-										BlockState state = primer.getBlockState(new BlockPos(bx, level, bz));
-										if (state.getMaterial() == Material.AIR || state.getMaterial().isLiquid()) {
-											break;
-										}
-										level++;
-									}
+									level++;
 								}
+
 
 								//Step Y axis
 								for (int yo = 0; yo < 1; yo++) {
@@ -223,17 +152,15 @@ public class CavesBetweenlands extends WorldCarver<CarverConfiguration> {
 									}
 									int surfaceDist = level - by;
 									if (surfaceDist <= UPPER_BOUND) {
-										noise += (shouldntBreak + MathUtils.linearTransformd(this.seaBreakNoiseField[bx * 16 + bz], -1, 1, 0, 1)) * BREAK_SCALE * (1 - surfaceDist / (float) UPPER_BOUND);
+										noise += (MathUtils.linearTransformd(this.seaBreakNoiseField[bx * 16 + bz], -1, 1, 0, 1)) * BREAK_SCALE * (1 - surfaceDist / (float) UPPER_BOUND);
 									}
-									//if (y == level) {
-									//    primer.setBlockState(bx, 150, bz, Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockStainedGlass.COLOR, EnumDyeColor.byMetadata((int) MathUtils.linearTransformd(noise, -0.5F, 1, 0, 15))));
-									//}
+
 									BlockPos blockPos = new BlockPos(bx, by, bz);
-									BlockState state = primer.getBlockState(blockPos);
+									BlockState state = access.getBlockState(blockPos);
 									if (state.getBlock() == BlockRegistry.SWAMP_WATER_BLOCK.get() && noise < limit + 0.25 && noise > limit) {
-										primer.setBlockState(blockPos, BlockRegistry.SWAMP_DIRT.get().defaultBlockState(), false);//COARSE_SWAMP_DIRT.getDefaultState());
+										access.setBlockState(blockPos, BlockRegistry.SWAMP_DIRT.get().defaultBlockState(), false);//COARSE_SWAMP_DIRT.getDefaultState());
 									} else if (noise < limit && state.getBlock() != BlockRegistry.BETWEENLANDS_BEDROCK.get()) {
-										primer.setBlockState(blockPos, by > TheBetweenlands.CAVE_WATER_HEIGHT ? Blocks.AIR.defaultBlockState() : BlockRegistry.SWAMP_WATER_BLOCK.get().defaultBlockState(), false);
+										access.setBlockState(blockPos, by > TheBetweenlands.CAVE_WATER_HEIGHT ? Blocks.AIR.defaultBlockState() : BlockRegistry.SWAMP_WATER_BLOCK.get().defaultBlockState(), false);
 									}
 								}
 
@@ -261,7 +188,7 @@ public class CavesBetweenlands extends WorldCarver<CarverConfiguration> {
 	// Generate once every 10 chunks?
 	// Every chunk seems to generate a 5 by 5 radius around it including the same carver
 	@Override
-	public boolean isStartChunk(CarverConfiguration p_159384_, Random p_159385_) {
+	public boolean isStartChunk(CarverConfiguration config, RandomSource random) {
 		return true;
 	}
 }

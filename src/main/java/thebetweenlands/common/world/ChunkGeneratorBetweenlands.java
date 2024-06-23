@@ -29,7 +29,6 @@ import net.minecraft.world.level.levelgen.synth.NormalNoise;
 import net.minecraft.world.level.levelgen.synth.PerlinNoise;
 import net.minecraft.world.level.levelgen.synth.SimplexNoise;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.carvers.CavesBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.gen.BiomeWeights;

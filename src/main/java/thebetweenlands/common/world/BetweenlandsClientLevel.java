@@ -13,7 +13,6 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import thebetweenlands.common.dimension.BetweenlandsClientChunkCache;
 
 import java.util.function.Supplier;
 
