@@ -6,35 +6,77 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.GrassBlock;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.lighting.LayerLightEngine;
-import net.minecraftforge.common.IPlantable;
+import net.minecraft.world.level.lighting.LightEngine;
+import net.neoforged.neoforge.common.IPlantable;
+import net.neoforged.neoforge.common.PlantType;
 import thebetweenlands.common.registries.BlockRegistry;
 
-import java.util.Random;
+public class BetweenlandsGrassBlock extends BetweenlandsBlock implements BlockColor, BonemealableBlock {
 
-public class BetweenlandsGrassBlock extends GrassBlock implements BlockColor {
-
-	public BetweenlandsGrassBlock(Properties p_49795_) {
-		super(p_49795_);
+	public BetweenlandsGrassBlock(Properties props) {
+		super(props);
 	}
 
-	private static boolean canBeGrass(BlockState p_56824_, LevelReader p_56825_, BlockPos p_56826_) {
-		BlockPos blockpos = p_56826_.above();
-		BlockState blockstate = p_56825_.getBlockState(blockpos);
+	//TODO: Verify logic
+	@Override
+	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+		if (!canBeGrass(state, level, pos)) {
+			if (!level.isAreaLoaded(pos, 3)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light and spreading
+			revertToDirt(level, pos);
+		} else {
+			if (level.getMaxLocalRawBrightness(pos.above()) >= 9) {
+				for (int i = 0; i < 4; ++i) {
+					BlockPos blockpos = pos.offset(random.nextInt(3) - 1, random.nextInt(5) - 3, random.nextInt(3) - 1);
+					spreadGrassTo(level, blockpos);
+				}
+			}
+
+		}
+	}
+
+	private static boolean canBeGrass(BlockState state, LevelReader level, BlockPos pos) {
+		BlockPos blockpos = pos.above();
+		BlockState blockstate = level.getBlockState(blockpos);
 		if (blockstate.is(Blocks.SNOW) && blockstate.getValue(SnowLayerBlock.LAYERS) == 1) {
 			return true;
 		} else if (blockstate.getFluidState().getAmount() == 8) {
 			return false;
 		} else {
-			int i = LayerLightEngine.getLightBlockInto(p_56825_, p_56824_, p_56826_, blockstate, blockpos, Direction.UP, blockstate.getLightBlock(p_56825_, blockpos));
-			return i < p_56825_.getMaxLightLevel();
+			int i = LightEngine.getLightBlockInto(level, state, pos, blockstate, blockpos, Direction.UP, blockstate.getLightBlock(level, blockpos));
+			return i < level.getMaxLightLevel();
+		}
+	}
+
+	//TODO: I reckon this could be a bit more efficient, rather than rely on hardcoded blocks - maybe a parameter?
+	public static void revertToDirt(Level level, BlockPos pos) {
+		BlockState state = level.getBlockState(pos);
+
+		if (state.is(BlockRegistry.SWAMP_GRASS)) {
+			level.setBlockAndUpdate(pos, BlockRegistry.SWAMP_DIRT.get().defaultBlockState());
+		}
+
+		/*Dug Swamp Grass to Dug Swamp Dirt*/
+		/*Dug Purified Swamp Grass to Dug Purified Swamp Dirt*/
+		/*Set compost and decay*/
+	}
+
+	public static void spreadGrassTo(Level level, BlockPos pos) {
+		BlockState state = level.getBlockState(pos);
+
+		if (canPropagate(state, level, pos)) {
+			if(state.is(BlockRegistry.SWAMP_DIRT)) {
+				level.setBlockAndUpdate(pos, BlockRegistry.SWAMP_GRASS.get().defaultBlockState());
+			}
+
+			/*Dug Swamp Dirt to Dug Swamp Grass*/
+			/*Dug Purified Swamp Dirt to Dug Purified Swamp Grass*/
+			/*Set compost and decay, update*/
 		}
 	}
 
@@ -43,36 +85,46 @@ public class BetweenlandsGrassBlock extends GrassBlock implements BlockColor {
 		return canBeGrass(p_56828_, p_56829_, p_56830_) && !p_56829_.getFluidState(blockpos).is(FluidTags.WATER);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public void randomTick(BlockState p_56819_, ServerLevel p_56820_, BlockPos p_56821_, Random p_56822_) {
-		if (!canBeGrass(p_56819_, p_56820_, p_56821_)) {
-			if (!p_56820_.isAreaLoaded(p_56821_, 3)) return; // Forge: prevent loading unloaded chunks when checking neighbor's light and spreading
-			p_56820_.setBlockAndUpdate(p_56821_, BlockRegistry.SWAMP_DIRT.get().defaultBlockState());
-		} else {
-			if (p_56820_.getMaxLocalRawBrightness(p_56821_.above()) >= 9) {
-				BlockState blockstate = this.defaultBlockState();
-
-				for (int i = 0; i < 4; ++i) {
-					BlockPos blockpos = p_56821_.offset(p_56822_.nextInt(3) - 1, p_56822_.nextInt(5) - 3, p_56822_.nextInt(3) - 1);
-					if (p_56820_.getBlockState(blockpos).is(BlockRegistry.SWAMP_DIRT.get()) && canPropagate(blockstate, p_56820_, blockpos)) {
-						p_56820_.setBlockAndUpdate(blockpos, blockstate.setValue(SNOWY, p_56820_.getBlockState(blockpos.above()).is(Blocks.SNOW)));
-					}
-				}
-			}
-
-		}
+	public boolean canSustainPlant(BlockState state, BlockGetter world, BlockPos pos, Direction facing, IPlantable plantable) {
+		PlantType type = plantable.getPlantType(world, pos.relative(facing));
+		return PlantType.PLAINS.equals(type);
 	}
 
 	@Override
-	public boolean canSustainPlant(BlockState state, BlockGetter world, BlockPos pos, Direction facing, IPlantable plantable) {
-		net.minecraftforge.common.PlantType type = plantable.getPlantType(world, pos.relative(facing));
-		return net.minecraftforge.common.PlantType.PLAINS.equals(type);
+	public boolean isValidBonemealTarget(LevelReader pLevel, BlockPos pPos, BlockState pState) {
+		return true;
+	}
+
+	@Override
+	public boolean isBonemealSuccess(Level pLevel, RandomSource pRandom, BlockPos pPos, BlockState pState) {
+		return true;
+	}
+
+	//TODO: Reintroduce logic
+	@Override
+	public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
+//		DecoratorPositionProvider provider = new DecoratorPositionProvider();
+//		provider.init(worldIn, worldIn.getBiome(pos), null, rand, pos.getX(), pos.getY() + 1, pos.getZ());
+//		provider.setOffsetXZ(-4, 4);
+//		provider.setOffsetY(-2, 2);
+//
+//		for(int i = 0; i < 4; i++) {
+//			DecorationHelper.generateSwampDoubleTallgrass(provider);
+//			DecorationHelper.generateTallCattail(provider);
+//			DecorationHelper.generateSwampTallgrassCluster(provider);
+//			if(rand.nextInt(5) == 0) {
+//				DecorationHelper.generateCattailCluster(provider);
+//			}
+//			if(rand.nextInt(3) == 0) {
+//				DecorationHelper.generateShootsCluster(provider);
+//			}
+//		}
 	}
 
 	// TODO: Change block tint colors but not particles
 	@Override
-	public int getColor(BlockState p_92567_, BlockAndTintGetter p_92568_, BlockPos p_92569_, int p_92570_) {
-		return BiomeColors.getAverageGrassColor(p_92568_, p_92569_) | 0xFF000000;
+	public int getColor(BlockState state, BlockAndTintGetter level, BlockPos pos, int index) {
+		return level != null && pos != null ? BiomeColors.getAverageGrassColor(level, pos) : GrassColor.get(0.5D, 1.0D);
 	}
 }
