@@ -45,8 +45,8 @@ public class BetweenlandsPortal extends Block {
 			MinecraftServer server = levelin.getServer();
 
 			if (server != null) {
-				if (levelin.dimension() != DimensionRegistries.BETWEENLANDS_DIMENSION_KEY) {
-					ServerLevel betweenlandsDim = server.getLevel(DimensionRegistries.BETWEENLANDS_DIMENSION_KEY);
+				if (levelin.dimension() != DimensionRegistries.DIMENSION_KEY) {
+					ServerLevel betweenlandsDim = server.getLevel(DimensionRegistries.DIMENSION_KEY);
 					if (betweenlandsDim != null) {
 						entity.changeDimension(betweenlandsDim, new BetweenlandsTeleporter(blockPos, true));
 					}

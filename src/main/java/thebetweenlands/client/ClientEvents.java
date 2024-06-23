@@ -10,9 +10,9 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.*;
 import thebetweenlands.client.rendering.BetweenlandsSkyShaderHandler;
-import thebetweenlands.client.rendering.entitys.RenderGecko;
-import thebetweenlands.client.rendering.entitys.RenderSwampHag;
-import thebetweenlands.client.rendering.entitys.RenderWight;
+import thebetweenlands.client.rendering.entities.RenderGecko;
+import thebetweenlands.client.rendering.entities.RenderSwampHag;
+import thebetweenlands.client.rendering.entities.RenderWight;
 import thebetweenlands.client.rendering.model.entity.ModelGecko;
 import thebetweenlands.client.rendering.model.entity.ModelSwampHag;
 import thebetweenlands.client.rendering.model.entity.ModelWight;
@@ -106,7 +106,7 @@ public class ClientEvents {
 
 			// TODO: replace with a more professional solution
 
-			if (level.dimension() == DimensionRegistries.BETWEENLANDS_DIMENSION_KEY) {
+			if (level.dimension() == DimensionRegistries.DIMENSION_KEY) {
 
 				rotation += 0.001f;
 

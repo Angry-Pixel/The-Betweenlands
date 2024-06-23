@@ -1,4 +1,4 @@
-package thebetweenlands.client.rendering.entitys.layers;
+package thebetweenlands.client.rendering.entities.layers;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;

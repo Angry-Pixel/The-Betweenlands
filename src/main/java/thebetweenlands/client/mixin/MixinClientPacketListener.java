@@ -73,7 +73,7 @@ public class MixinClientPacketListener {
 	@Inject(method = "handleLogin", at = @At("HEAD"), cancellable = true)
 	public void handleLogin(ClientboundLoginPacket packet, CallbackInfo ci) {
 		// TODO: move custom dim registry into standalone lib mod
-		if (packet.dimension().compareTo(DimensionRegistries.BETWEENLANDS_DIMENSION_KEY) != 0) {
+		if (packet.dimension().compareTo(DimensionRegistries.DIMENSION_KEY) != 0) {
 			return;
 		}
 
@@ -140,7 +140,7 @@ public class MixinClientPacketListener {
 	// Handel custom dim clientlevel creation on respawn
 	@Inject(method = "handleRespawn", at = @At("HEAD"), cancellable = true)
 	public void handleRespawn(ClientboundRespawnPacket packet, CallbackInfo ci) {
-		if (packet.getDimension().compareTo(DimensionRegistries.BETWEENLANDS_DIMENSION_KEY) != 0) {
+		if (packet.getDimension().compareTo(DimensionRegistries.DIMENSION_KEY) != 0) {
 			return;
 		}
 

@@ -102,7 +102,7 @@ public class AmateMapItem extends MapItem {
 	@Override
 	public void update(Level level, Entity viewer, MapItemSavedData data) {
 		// don't update if not in the betweenlands
-		if (level.dimension() != DimensionRegistries.BETWEENLANDS_DIMENSION_KEY) {
+		if (level.dimension() != DimensionRegistries.DIMENSION_KEY) {
 			return;
 		}
 

@@ -24,7 +24,7 @@ public class EmptyAmateMapItem extends ComplexItem {
 		if (level.isClientSide()) {
 			return InteractionResultHolder.pass(emptyMapStack);
 		} else {
-			if (level.dimensionTypeRegistration().is(DimensionRegistries.BETWEENLANDS_DIMENSION_TYPE_KEY)) {
+			if (level.dimensionTypeRegistration().is(DimensionRegistries.DIMENSION_TYPE_KEY)) {
 				emptyMapStack.consume(1, player);
 				player.awardStat(Stats.ITEM_USED.get(this));
 				player.level().playSound(null, player, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, player.getSoundSource(), 1.0F, 1.0F);

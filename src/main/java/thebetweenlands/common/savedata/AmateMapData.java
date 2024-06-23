@@ -31,7 +31,7 @@ public class AmateMapData extends MapItemSavedData {
 	private static final Map<String, AmateMapData> CLIENT_DATA = new HashMap<>();
 
 	public AmateMapData(int x, int y, boolean tracking, boolean trackingUnlimited, boolean locked) {
-		super(x, y, (byte) 4, tracking, trackingUnlimited, locked, DimensionRegistries.BETWEENLANDS_DIMENSION_KEY);
+		super(x, y, (byte) 4, tracking, trackingUnlimited, locked, DimensionRegistries.DIMENSION_KEY);
 	}
 
 	public static AmateMapData createFresh(double x, double y, boolean tracking, boolean trackingUnlimited, boolean locked) {

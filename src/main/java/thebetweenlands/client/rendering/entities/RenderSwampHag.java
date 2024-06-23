@@ -1,4 +1,4 @@
-package thebetweenlands.client.rendering.entitys;
+package thebetweenlands.client.rendering.entities;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
-import thebetweenlands.client.rendering.entitys.layers.SwampHagEyesLayer;
+import thebetweenlands.client.rendering.entities.layers.SwampHagEyesLayer;
 import thebetweenlands.client.rendering.model.entity.ModelSwampHag;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entities.EntitySwampHag;

@@ -1,4 +1,4 @@
-package thebetweenlands.client.rendering.entitys;
+package thebetweenlands.client.rendering.entities;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.geom.ModelLayerLocation;
