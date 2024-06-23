@@ -13,7 +13,7 @@ import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.*;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.datagen.BetweenlandsBlockTagsProvider;
-import thebetweenlands.common.world.BetweenlandsSurfaceRules;
+import thebetweenlands.common.world.BetweenlandsSurfaceRuleData;
 
 import java.util.List;
 import java.util.OptionalLong;
@@ -46,9 +46,6 @@ public class DimensionRegistries {
 	}
 
 	public static void bootstrapNoise(BootstrapContext<NoiseGeneratorSettings> context) {
-		HolderGetter<DensityFunction> densityFunctions = context.lookup(Registries.DENSITY_FUNCTION);
-		DensityFunction finalDensity = new DensityFunctions.HolderHolder(densityFunctions.getOrThrow(skylight ? TFDensityFunctions.SKYLIGHT_TERRAIN : TFDensityFunctions.FORESTED_TERRAIN));
-
 		context.register(NOISE_SETTINGS_KEY, new NoiseGeneratorSettings(
 			NoiseSettings.create(0, 256, 2, 2),
 			BlockRegistry.BETWEENSTONE.get().defaultBlockState(),
@@ -70,7 +67,7 @@ public class DimensionRegistries {
 				DensityFunctions.zero(),
 				DensityFunctions.zero()
 			),
-			BetweenlandsSurfaceRules.buildRules(),
+			BetweenlandsSurfaceRuleData.betweenlands(),
 			List.of(),
 			120,
 			false,
