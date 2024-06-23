@@ -2,149 +2,155 @@ package thebetweenlands.common.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Portal;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.border.WorldBorder;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.portal.DimensionTransition;
 import net.minecraft.world.level.portal.PortalShape;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import thebetweenlands.common.dimension.BetweenlandsTeleporter;
+import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.common.registries.ParticleRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-import java.util.Random;
-
-public class BetweenlandsPortal extends Block {
-	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
-	protected static final int AABB_OFFSET = 2;
+public class BetweenlandsPortal extends Block implements Portal {
+	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
 	protected static final VoxelShape X_AXIS_AABB = Block.box(0.0D, 0.0D, 6.0D, 16.0D, 16.0D, 10.0D);
+	protected static final VoxelShape Y_AXIS_AABB = Block.box(6.0D, 0.0D, 6.0D, 10.0D, 16.0D, 10.0D);
 	protected static final VoxelShape Z_AXIS_AABB = Block.box(6.0D, 0.0D, 0.0D, 10.0D, 16.0D, 16.0D);
 
-	// defalt nether portal code for positions and axis
-	public BetweenlandsPortal(Properties p_49795_) {
-		super(p_49795_);
+	public BetweenlandsPortal(Properties properties) {
+		super(properties);
 		this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Direction.Axis.X));
 	}
 
-	public void entityInside(BlockState blockState, Level levelin, BlockPos blockPos, Entity entity) {
+	@Override
+	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+		//TODO search for existing portals in the world storage once implemented
+		if (entity.canUsePortal(false)) {
+			entity.setAsInsidePortal(this, entity.blockPosition());
+		}
+	}
 
-		if (!entity.isPassenger() && !entity.isVehicle() && entity.canChangeDimensions()) {
+	@Override
+	public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
+		return switch (state.getValue(AXIS)) {
+			case Z -> Z_AXIS_AABB;
+			case X -> X_AXIS_AABB;
+			default -> Y_AXIS_AABB;
+		};
+	}
 
-			MinecraftServer server = levelin.getServer();
+	@Override
+	public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor accessor, BlockPos pos, BlockPos neighborPos) {
+		Direction.Axis axis = direction.getAxis();
+		Direction.Axis portalAxis = state.getValue(AXIS);
+		boolean flag = portalAxis != axis && axis.isHorizontal();
+		return !flag && !neighborState.is(this) && !(new PortalShape(accessor, pos, portalAxis)).isComplete() ? Blocks.AIR.defaultBlockState() : super.updateShape(state, direction, neighborState, accessor, pos, neighborPos);
+	}
 
-			if (server != null) {
-				if (levelin.dimension() != DimensionRegistries.DIMENSION_KEY) {
-					ServerLevel betweenlandsDim = server.getLevel(DimensionRegistries.DIMENSION_KEY);
-					if (betweenlandsDim != null) {
-						entity.changeDimension(betweenlandsDim, new BetweenlandsTeleporter(blockPos, true));
-					}
-				}
+	@Override
+	public void destroy(LevelAccessor accessor, BlockPos pos, BlockState state) {
+		//TODO remove from world storage once implemented
+	}
+
+	@Override
+	public BlockState rotate(BlockState state, LevelAccessor level, BlockPos pos, Rotation rotation) {
+		return switch (rotation) {
+			case COUNTERCLOCKWISE_90, CLOCKWISE_90 -> switch (state.getValue(AXIS)) {
+				case Z -> state.setValue(AXIS, Direction.Axis.X);
+				case X -> state.setValue(AXIS, Direction.Axis.Z);
+				default -> state;
+			};
+			default -> state;
+		};
+	}
+
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		builder.add(AXIS);
+	}
+
+	@Override
+	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+		for (int i = 0; i < 4; i++) {
+			double particleX = pos.getX() + random.nextFloat();
+			double particleY = pos.getY() + random.nextFloat();
+			double particleZ = pos.getZ() + random.nextFloat();
+			double motionX;
+			double motionY;
+			double motionZ;
+			float multi = (random.nextFloat() * 2.0F - 1.0F) / 4.0F;
+
+			motionX = (random.nextFloat() - 0.5D) * 0.25D;
+			motionY = (random.nextFloat() - 0.5D) * 0.25D;
+			motionZ = (random.nextFloat() - 0.5D) * 0.25D;
+
+			if (!level.getBlockState(pos.offset(-1, 0, 0)).is(this) && !level.getBlockState(pos.offset(1, 0, 0)).is(this)) {
+				particleX = pos.getX() + 0.5D + 0.25D * multi;
+				motionX = random.nextFloat() * 2.0F * multi;
+			} else {
+				particleZ = pos.getZ() + 0.5D + 0.25D * multi;
+				motionZ = random.nextFloat() * 2.0F * multi;
 			}
-		}
 
-	}
-
-	public VoxelShape getShape(BlockState p_54942_, BlockGetter p_54943_, BlockPos p_54944_, CollisionContext p_54945_) {
-		switch ((Direction.Axis) p_54942_.getValue(AXIS)) {
-			case Z:
-				return Z_AXIS_AABB;
-			case X:
-			default:
-				return X_AXIS_AABB;
-		}
-	}
-
-	@SuppressWarnings("deprecation")
-	public BlockState updateShape(BlockState p_54928_, Direction p_54929_, BlockState p_54930_, LevelAccessor p_54931_, BlockPos p_54932_, BlockPos p_54933_) {
-		Direction.Axis direction$axis = p_54929_.getAxis();
-		Direction.Axis direction$axis1 = p_54928_.getValue(AXIS);
-		boolean flag = direction$axis1 != direction$axis && direction$axis.isHorizontal();
-		return !flag && !p_54930_.is(this) && !(new PortalShape(p_54931_, p_54932_, direction$axis1)).isComplete() ? Blocks.AIR.defaultBlockState() : super.updateShape(p_54928_, p_54929_, p_54930_, p_54931_, p_54932_, p_54933_);
-	}
-
-	public BlockState rotate(BlockState p_54925_, Rotation p_54926_) {
-		switch (p_54926_) {
-			case COUNTERCLOCKWISE_90:
-			case CLOCKWISE_90:
-				switch ((Direction.Axis) p_54925_.getValue(AXIS)) {
-					case Z:
-						return p_54925_.setValue(AXIS, Direction.Axis.X);
-					case X:
-						return p_54925_.setValue(AXIS, Direction.Axis.Z);
-					default:
-						return p_54925_;
-				}
-			default:
-				return p_54925_;
-		}
-	}
-
-	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> p_54935_) {
-		p_54935_.add(AXIS);
-	}
-
-	// Portal effects
-	public void animateTick(BlockState p_55479_, Level p_55480_, BlockPos p_55481_, Random p_55482_) {
-
-		// Spawn particles
-		if (p_55482_.nextInt(3) == 0) {
-			spawnParticles(p_55480_, p_55481_);
+			level.addParticle(ParticleRegistry.PORTAL_EFFECT.get(), particleX, particleY, particleZ, motionX, motionY, motionZ);
 		}
 
 		// Play portal sound
-		if (p_55482_.nextInt(25) == 0) {
-			p_55480_.playLocalSound(p_55481_.getX(), p_55481_.getY(), p_55481_.getZ(), SoundRegistry.BETWEENLANDS_PORTAL.get(), SoundSource.BLOCKS, 1, p_55482_.nextFloat(0.3f) + 0.85f, true);
+		if (random.nextInt(20) == 0) {
+			level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), SoundRegistry.BETWEENLANDS_PORTAL.get(), SoundSource.BLOCKS, 0.3F, random.nextFloat() * 0.4F + 0.8F, true);
 		}
 	}
 
-	private static void spawnParticles(Level level, BlockPos blockpos) {
-		Random random = level.random;
+	@Override
+	public int getPortalTransitionTime(ServerLevel level, Entity entity) {
+		return entity instanceof Player player ? player.getAbilities().invulnerable ? 1 : 80 : 0;
+	}
 
-		Direction.Axis axis = level.getBlockState(blockpos).getValue(AXIS);
-
-		// Get portal axis and spawn particles in block's rotation plane
-		double x = 0;
-		double y = 0;
-		double z = 0;
-		double deltax = 0;
-		double deltay = 0;
-		double deltaz = 0;
-
-		switch (axis) {
-			case X: {
-				x = random.nextFloat(1.0f);
-				y = random.nextFloat(1.0f);
-				z = 0.5d;
-				deltax = 0.125D - random.nextFloat(0.25f);
-				deltay = 0.125D - random.nextFloat(0.25f);
-				deltaz = 0.25D - random.nextFloat(0.5f);
-				break;
-			}
-			case Z: {
-				x = 0.5d;
-				y = random.nextFloat(1.0f);
-				z = random.nextFloat(1.0f);
-				deltax = 0.25D - random.nextFloat(0.5f);
-				deltay = 0.125D - random.nextFloat(0.25f);
-				deltaz = 0.125D - random.nextFloat(0.25f);
-				break;
-			}
-			default:
-				break;
+	@Nullable
+	@Override
+	public DimensionTransition getPortalDestination(ServerLevel level, Entity entity, BlockPos pos) {
+		ResourceKey<Level> newDimension = level.dimension() != DimensionRegistries.DIMENSION_KEY ? DimensionRegistries.DIMENSION_KEY : Level.OVERWORLD;
+		ServerLevel serverlevel = level.getServer().getLevel(newDimension);
+		if (serverlevel == null) {
+			return null;
+		} else {
+			WorldBorder worldborder = serverlevel.getWorldBorder();
+			double d0 = DimensionType.getTeleportationScale(level.dimensionType(), serverlevel.dimensionType());
+			BlockPos newPos = worldborder.clampToBounds(pos.getX() * d0, pos.getY(), pos.getZ() * d0);
+			return this.createTransition(serverlevel, entity, newPos);
 		}
+	}
 
-		level.addParticle(ParticleRegistry.PORTAL_EFFECT.get(), (double) blockpos.getX() + x, (double) blockpos.getY() + y, (double) blockpos.getZ() + z, deltax, deltay, deltaz);
+	//TODO move to nearest existing portal
+	//otherwise, place down a new tree, mark it in storage, and safely place us in the middle of it
+	public DimensionTransition createTransition(ServerLevel level, Entity entity, BlockPos pos) {
+		return new DimensionTransition(
+			level,
+			Vec3.atCenterOf(pos),
+			Vec3.ZERO,
+			entity.getYRot(),
+			entity.getXRot(),
+			DimensionTransition.PLACE_PORTAL_TICKET
+		);
 	}
 }

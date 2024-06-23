@@ -1,4 +1,4 @@
-package thebetweenlands.common.dimension;
+package thebetweenlands.client;
 
 import net.minecraft.client.renderer.DimensionSpecialEffects;
 import net.minecraft.world.phys.Vec3;
