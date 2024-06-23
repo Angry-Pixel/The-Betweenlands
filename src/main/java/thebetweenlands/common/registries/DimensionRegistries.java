@@ -4,6 +4,7 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -19,6 +20,8 @@ import java.util.List;
 import java.util.OptionalLong;
 
 public class DimensionRegistries {
+
+	public static final ResourceLocation DIMENSION_RENDERER = TheBetweenlands.prefix("renderer");
 
 	public static final ResourceKey<Level> DIMENSION_KEY = ResourceKey.create(Registries.DIMENSION, TheBetweenlands.prefix("the_betweenlands"));
 	public static final ResourceKey<DimensionType> DIMENSION_TYPE_KEY = ResourceKey.create(Registries.DIMENSION_TYPE, TheBetweenlands.prefix("the_betweenlands"));
@@ -39,7 +42,7 @@ public class DimensionRegistries {
 			256,
 			256,
 			BetweenlandsBlockTagsProvider.BETWEENSTONE_ORE_REPLACEABLE,
-			TheBetweenlands.prefix("the_betweenlands"),
+			DIMENSION_RENDERER,
 			0.0F,
 			new DimensionType.MonsterSettings(false, false, UniformInt.of(0, 7), 7)
 		));

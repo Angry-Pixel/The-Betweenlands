@@ -56,7 +56,8 @@ public class BetweenlandsSkyHandler {
 	// When optifine shader is loaded skip this render step
 	// then check for a betweenlands sky shader
 	// and if possible, add the defalt sky shader over the top of it's overworld sky fragment shader
-	public static void render(int ticks, float partialTick, PoseStack poseStack, ClientLevel level, Minecraft minecraft) {
+	//TODO redo this entire thing. Sky rendering has changed like a million times since 1.12
+	public static void render(int ticks, float partialTick, Matrix4f projectionMatrix, ClientLevel level, Minecraft minecraft) {
 
 		// Overlay Betweenlands sky
 		//GL40.draw
@@ -98,7 +99,7 @@ public class BetweenlandsSkyHandler {
 		// Render overworld sky
 		compositeRender = true;
 		RenderSystem.setShaderFogColor(0.753f, 0.847f, 1.0f);        // overworld fog
-		levelrenderer.renderSky(poseStack, oldmatrix, partialTick, camera, false, () -> {
+		levelrenderer.renderSky(projectionMatrix, oldmatrix, partialTick, camera, false, () -> {
 			FogRenderer.setupFog(camera, FogRenderer.FogMode.FOG_TERRAIN, Math.max(minecraft.gameRenderer.getRenderDistance(), 32.0F), false, partialTick);
 		});
 		levelrenderer.renderClouds(poseStack, oldmatrix, partialTick, 0, 64, 0);

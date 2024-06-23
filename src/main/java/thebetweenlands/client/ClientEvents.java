@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.*;
 import thebetweenlands.client.rendering.BetweenlandsSkyShaderHandler;
@@ -19,6 +20,7 @@ import thebetweenlands.client.rendering.model.entity.ModelWight;
 import thebetweenlands.client.rendering.shader.BetweenlandsShaders;
 import thebetweenlands.client.rendering.shader.BetweenlandsSkyShaderInstance;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.dimension.BetweenlandsSpecialEffects;
 import thebetweenlands.common.particles.BetweenlandsParticle;
 import thebetweenlands.common.particles.BetweenlandsPortalParticle;
 import thebetweenlands.common.particles.CaveWaterDripParticle;
@@ -30,6 +32,7 @@ public class ClientEvents {
 
 	public static void initClient(IEventBus eventbus) {
 		eventbus.addListener(ClientEvents::doClientStuff);
+		eventbus.addListener(ClientEvents::registerDimEffects);
 		eventbus.addListener(ClientEvents::registerShaders);
 		eventbus.addListener(ClientEvents::registerLayerDefinition);
 		eventbus.addListener(ClientEvents::particleStuff);
@@ -49,6 +52,10 @@ public class ClientEvents {
 		// Compile all rift textures into an atlas
 		TheBetweenlands.LOGGER.info("Building rift texture atlas");
 		skyTextureHandler = new BetweenlandsSkyShaderHandler(true);
+	}
+
+	public static void registerDimEffects(RegisterDimensionSpecialEffectsEvent event) {
+		event.register(DimensionRegistries.DIMENSION_RENDERER, new BetweenlandsSpecialEffects());
 	}
 
 	private static void registerShaders(final RegisterShadersEvent event) {
