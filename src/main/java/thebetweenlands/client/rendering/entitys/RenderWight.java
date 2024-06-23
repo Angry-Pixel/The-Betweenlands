@@ -2,8 +2,7 @@ package thebetweenlands.client.rendering.entitys;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -16,8 +15,8 @@ import thebetweenlands.common.entities.EntityWight;
 
 public class RenderWight<T extends EntityWight> extends MobRenderer<T, ModelWight<T>> {
 
-	private static final ResourceLocation WIGHT_TEXTURE = new ResourceLocation(TheBetweenlands.ID, "textures/entity/wight.png");
-	public static final ModelLayerLocation WIGHT_MODEL_LAYER = new ModelLayerLocation(new ResourceLocation(TheBetweenlands.ID, "main"), "wight");
+	private static final ResourceLocation WIGHT_TEXTURE = ResourceLocation.fromNamespaceAndPath(TheBetweenlands.ID, "textures/entity/wight.png");
+	public static final ModelLayerLocation WIGHT_MODEL_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TheBetweenlands.ID, "main"), "wight");
 	public static final RenderType WIGHT_RENDER_TYPE = RenderType.entityTranslucent(WIGHT_TEXTURE, true);
 
 	float ang;
@@ -45,9 +44,7 @@ public class RenderWight<T extends EntityWight> extends MobRenderer<T, ModelWigh
 
 			if (entity.getRidingEntity() != null) {
 				// SPIiiEEENnnNNnn
-				Quaternion Rotation = new Quaternion(0, 0, 0, 1);
-				Rotation.mul(Vector3f.YP.rotationDegrees((entity.tickCount + partialTicks) / 30.0F * 360.0F));
-				pose.mulPose(Rotation);
+				pose.mulPose(Axis.YP.rotationDegrees((entity.tickCount + partialTicks) / 30.0F * 360.0F));
 				pose.translate(0, -entity.getRidingEntity().getEyeHeight() + 1.65D, 0.8D);
 			}
 			VertexConsumer vertexconsumer = p_115459_.getBuffer(WIGHT_RENDER_TYPE);

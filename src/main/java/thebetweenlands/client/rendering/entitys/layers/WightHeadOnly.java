@@ -4,12 +4,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.rendering.model.entity.ModelWight;
 import thebetweenlands.common.entities.EntityWight;
 
-@OnlyIn(Dist.CLIENT)
 public class WightHeadOnly extends RenderLayer<EntityWight, ModelWight<EntityWight>> {
 
 	public WightHeadOnly(RenderLayerParent<EntityWight, ModelWight<EntityWight>> p_117346_) {
