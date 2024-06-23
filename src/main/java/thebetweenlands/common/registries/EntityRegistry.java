@@ -21,6 +21,6 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<EntityWight>> WIGHT = ENTITY_TYPES.register("wight", () -> EntityType.Builder.of(EntityWight::new, MobCategory.MONSTER).sized(0.7F, 2.2F).build(prefix("wight")));
 
 	private static String prefix(String name) {
-		return ResourceLocation.fromNamespaceAndPath(TheBetweenlands.ID, name).toString();
+		return TheBetweenlands.prefix(name).toString();
 	}
 }

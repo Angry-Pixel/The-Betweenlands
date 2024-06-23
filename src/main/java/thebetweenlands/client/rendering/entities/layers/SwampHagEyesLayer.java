@@ -10,7 +10,7 @@ import thebetweenlands.common.entities.BetweenlandsEntity;
 
 public class SwampHagEyesLayer<T extends BetweenlandsEntity, M extends ModelSwampHag<T>> extends EyesLayer<T, M> {
 
-	private static final ResourceLocation SWAMP_HAG_EYES_TEXTURE = ResourceLocation.fromNamespaceAndPath(TheBetweenlands.ID, "textures/entity/swamp_hag_eyes.png");
+	private static final ResourceLocation SWAMP_HAG_EYES_TEXTURE = TheBetweenlands.prefix("textures/entity/swamp_hag_eyes.png");
 	private static final RenderType SWAMP_HAG_EYES = RenderType.eyes(SWAMP_HAG_EYES_TEXTURE);
 
 	public SwampHagEyesLayer(RenderLayerParent<T, M> p_116981_) {

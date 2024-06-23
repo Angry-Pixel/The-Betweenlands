@@ -25,8 +25,8 @@ import thebetweenlands.common.TheBetweenlands;
 public class BetweenlandsSkyHandler implements ISkyRenderHandler {
 
 	// Renders horison texture, sky texture, blobs in sky and clouds
-	public ResourceLocation SkyTexture = new ResourceLocation(TheBetweenlands.ID, "textures/sky/sky_texture.png");
-	public ResourceLocation FogTexture = new ResourceLocation(TheBetweenlands.ID, "textures/sky/fog_texture.png");
+	public ResourceLocation SkyTexture = TheBetweenlands.prefix("textures/sky/sky_texture.png");
+	public ResourceLocation FogTexture = TheBetweenlands.prefix("textures/sky/fog_texture.png");
 	float ang = 0;
 	float xtest = 0.5f;
 	boolean invert = false;

@@ -17,20 +17,20 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		// Block models
 		//BlockModelBuilder SwampGrassModel = models().getBuilder(BlockRegistry.SWAMP_GRASS.get().getRegistryName().getPath())
 		//        .parent(models().getExistingFile(mcLoc("cube")))
-		//        .customLoader((blockModelBuilder, helper) -> new CustomLoaderBuilder<BlockModelBuilder>(new ResourceLocation("thebetweenlands", "swamp_grass"), blockModelBuilder, helper) { })
+		//        .customLoader((blockModelBuilder, helper) -> new CustomLoaderBuilder<BlockModelBuilder>(TheBetweenlands.prefix("swamp_grass"), blockModelBuilder, helper) { })
 		//        .end();
-		//BlockModelBuilder SwampGrassModelTuft0 = models().getBuilder(new ResourceLocation("thebetweenlands", "swamp_grass_tuft0").getPath())
+		//BlockModelBuilder SwampGrassModelTuft0 = models().getBuilder(TheBetweenlands.prefix("swamp_grass_tuft0").getPath())
 		//        .parent(SwampGrassModel)
-		//        .customLoader((blockModelBuilder, helper) -> new CustomLoaderBuilder<BlockModelBuilder>(new ResourceLocation("thebetweenlands", "swamp_grass_tuft0"), blockModelBuilder, helper) { })
+		//        .customLoader((blockModelBuilder, helper) -> new CustomLoaderBuilder<BlockModelBuilder>(TheBetweenlands.prefix("swamp_grass_tuft0"), blockModelBuilder, helper) { })
 		//        .end();
-		//BlockModelBuilder SwampGrassModelTuft1 = models().getBuilder(new ResourceLocation("thebetweenlands", "swamp_grass_tuft1").getPath())
+		//BlockModelBuilder SwampGrassModelTuft1 = models().getBuilder(TheBetweenlands.prefix("swamp_grass_tuft1").getPath())
 		//        .parent(SwampGrassModel)
-		//        .customLoader((blockModelBuilder, helper) -> new CustomLoaderBuilder<BlockModelBuilder>(new ResourceLocation("thebetweenlands", "swamp_grass_tuft1"), blockModelBuilder, helper) { })
+		//        .customLoader((blockModelBuilder, helper) -> new CustomLoaderBuilder<BlockModelBuilder>(TheBetweenlands.prefix("swamp_grass_tuft1"), blockModelBuilder, helper) { })
 		//        .end();
 
 		// Item models (just casts block model generator to item model generator)
 		//ItemModelBuilder SwampGrassItemModel = itemModels().getBuilder(BlockRegistry.SWAMP_GRASS.get().getRegistryName().getPath())
-		//		.parent(SwampGrassModel).customLoader((ItemModelBuilder, helper) -> new CustomLoaderBuilder<ItemModelBuilder>(new ResourceLocation("thebetweenlands", "swamp_grass"), ItemModelBuilder, helper) { })
+		//		.parent(SwampGrassModel).customLoader((ItemModelBuilder, helper) -> new CustomLoaderBuilder<ItemModelBuilder>(TheBetweenlands.prefix("swamp_grass"), ItemModelBuilder, helper) { })
 		//		.end();
 
 		// Block states

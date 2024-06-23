@@ -15,8 +15,8 @@ import thebetweenlands.common.entities.EntityWight;
 
 public class RenderWight<T extends EntityWight> extends MobRenderer<T, ModelWight<T>> {
 
-	private static final ResourceLocation WIGHT_TEXTURE = ResourceLocation.fromNamespaceAndPath(TheBetweenlands.ID, "textures/entity/wight.png");
-	public static final ModelLayerLocation WIGHT_MODEL_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TheBetweenlands.ID, "main"), "wight");
+	private static final ResourceLocation WIGHT_TEXTURE = TheBetweenlands.prefix("textures/entity/wight.png");
+	public static final ModelLayerLocation WIGHT_MODEL_LAYER = new ModelLayerLocation(TheBetweenlands.prefix("main"), "wight");
 	public static final RenderType WIGHT_RENDER_TYPE = RenderType.entityTranslucent(WIGHT_TEXTURE, true);
 
 	float ang;

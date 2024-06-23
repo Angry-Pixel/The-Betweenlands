@@ -105,7 +105,7 @@ public class BetweenlandsSkyShaderHandler {
 	public List<RiftObject> RiftObjects;
 
 	// A single texture holding all rift textures
-	public TextureAtlas skyAtlas = new TextureAtlas(new ResourceLocation(TheBetweenlands.ID, "textures/sky/sky_atlas"));    // Makes atlas
+	public TextureAtlas skyAtlas = new TextureAtlas(TheBetweenlands.prefix("textures/sky/sky_atlas"));    // Makes atlas
 	// TODO: generate and cache a .png file containing
 
 	// Load defalt atlas from json
@@ -117,12 +117,12 @@ public class BetweenlandsSkyShaderHandler {
 		// If true (do small brain atlas) (will make smarter later)
 		if (useStockTextures) {
 			// Format AtlasObject lists
-			NoiseUV = new AtlasObject(new ResourceLocation(TheBetweenlands.ID, "shader/noise"));
-			SkyUV = List.of(new AtlasObject(new ResourceLocation(TheBetweenlands.ID, "sky/fog_texture")), new AtlasObject(new ResourceLocation(TheBetweenlands.ID, "sky/sky_texture")));
-			EffectUV = List.of(new AtlasObject(new ResourceLocation(TheBetweenlands.ID, "sky/spoopy")));
-			RiftUV = List.of(new RiftAtlasObject(new ResourceLocation(TheBetweenlands.ID, "sky/rifts/sky_rift_overlay_1"), new ResourceLocation(TheBetweenlands.ID, "sky/rifts/sky_rift_alt_overlay_1"), new ResourceLocation(TheBetweenlands.ID, "sky/rifts/sky_rift_mask_1")),
-				new RiftAtlasObject(new ResourceLocation(TheBetweenlands.ID, "sky/rifts/sky_rift_overlay_2"), new ResourceLocation(TheBetweenlands.ID, "sky/rifts/sky_rift_alt_overlay_2"), new ResourceLocation(TheBetweenlands.ID, "sky/rifts/sky_rift_mask_2")),
-				new RiftAtlasObject(new ResourceLocation(TheBetweenlands.ID, "sky/rifts/sky_rift_overlay_3"), new ResourceLocation(TheBetweenlands.ID, "sky/rifts/sky_rift_alt_overlay_3"), new ResourceLocation(TheBetweenlands.ID, "sky/rifts/sky_rift_mask_3")));
+			NoiseUV = new AtlasObject(TheBetweenlands.prefix("shader/noise"));
+			SkyUV = List.of(new AtlasObject(TheBetweenlands.prefix("sky/fog_texture")), new AtlasObject(TheBetweenlands.prefix("sky/sky_texture")));
+			EffectUV = List.of(new AtlasObject(TheBetweenlands.prefix("sky/spoopy")));
+			RiftUV = List.of(new RiftAtlasObject(TheBetweenlands.prefix("sky/rifts/sky_rift_overlay_1"), TheBetweenlands.prefix("sky/rifts/sky_rift_alt_overlay_1"), TheBetweenlands.prefix("sky/rifts/sky_rift_mask_1")),
+				new RiftAtlasObject(TheBetweenlands.prefix("sky/rifts/sky_rift_overlay_2"), TheBetweenlands.prefix("sky/rifts/sky_rift_alt_overlay_2"), TheBetweenlands.prefix("sky/rifts/sky_rift_mask_2")),
+				new RiftAtlasObject(TheBetweenlands.prefix("sky/rifts/sky_rift_overlay_3"), TheBetweenlands.prefix("sky/rifts/sky_rift_alt_overlay_3"), TheBetweenlands.prefix("sky/rifts/sky_rift_mask_3")));
 
 			//TODO: make auto list builder
 			// Utility noise texture
@@ -170,10 +170,10 @@ public class BetweenlandsSkyShaderHandler {
 			}
 		};
 
-		//Stream<ResourceLocation> textureStream = Stream.of(new ResourceLocation(Betweenlands.ID, "sky/rifts/sky_rift_mask_1"),
-		//		new ResourceLocation(Betweenlands.ID, "sky/sky_texture"),
-		//		new ResourceLocation(Betweenlands.ID, "sky/fog_texture"),
-		//		new ResourceLocation(Betweenlands.ID, "sky/rifts/sky_rift_mask_2"));
+		//Stream<ResourceLocation> textureStream = Stream.of(TheBetweenlands.prefix("sky/rifts/sky_rift_mask_1"),
+		//		TheBetweenlands.prefix("sky/sky_texture"),
+		//		TheBetweenlands.prefix("sky/fog_texture"),
+		//		TheBetweenlands.prefix("sky/rifts/sky_rift_mask_2"));
 
 		// Makes a list for texture atlas to use when stitching
 		Stream<ResourceLocation> textureStream = Stream.of(inputUtilTextures.stream(), inputSkyTextures.stream(), inputEffectsTextures.stream(), inputRiftsTextures.stream())

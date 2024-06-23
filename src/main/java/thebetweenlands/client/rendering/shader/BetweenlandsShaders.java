@@ -45,7 +45,7 @@ public class BetweenlandsShaders {
 
 		// Load shaders
 		try {
-			BetweenlandsSky = new BetweenlandsSkyShaderInstance(resourcemanager, new ResourceLocation(TheBetweenlands.ID, "betweenlandssky"), BetweenlandsVertexFormats.BETWEENLANDS_SKY);
+			BetweenlandsSky = new BetweenlandsSkyShaderInstance(resourcemanager, TheBetweenlands.prefix("betweenlandssky"), BetweenlandsVertexFormats.BETWEENLANDS_SKY);
 		}
 		// Thow exeption
 		catch (IOException ioexception) {

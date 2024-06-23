@@ -84,7 +84,7 @@ public class TheBetweenlands {
 
 	// For whenever I make the gen layers lib a public thing (not sure about the legalitys)
 	private void genLayersEvent(final RegisterGenLayersEvent event) {
-		event.RegisterProvider(new ResourceLocation(TheBetweenlands.ID, "gen_layers_betweenlands"), ProviderGenLayerBetweenlands::new);
+		event.RegisterProvider(TheBetweenlands.prefix("gen_layers_betweenlands"), ProviderGenLayerBetweenlands::new);
 	}
 
 	// Add configured feature registering
@@ -110,9 +110,9 @@ public class TheBetweenlands {
 		ItemColorRegistry.register();
 
 		// Register biome source and chunk generator
-		Registry.register(Registry.BIOME_SOURCE, new ResourceLocation(TheBetweenlands.ID, "legacy_biomeprovider"), LegacyBiomeSource.CODEC);
-		Registry.register(Registry.BIOME_SOURCE, new ResourceLocation(TheBetweenlands.ID, "betweenlands_biomeprovider"), BetweenlandsBiomeProvider.CODEC);
-		Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(TheBetweenlands.ID, "the_betweenlands_chunkgen"), ChunkGeneratorBetweenlands.CODEC);
+		Registry.register(Registry.BIOME_SOURCE, TheBetweenlands.prefix("legacy_biomeprovider"), LegacyBiomeSource.CODEC);
+		Registry.register(Registry.BIOME_SOURCE, TheBetweenlands.prefix("betweenlands_biomeprovider"), BetweenlandsBiomeProvider.CODEC);
+		Registry.register(Registry.CHUNK_GENERATOR, TheBetweenlands.prefix("the_betweenlands_chunkgen"), ChunkGeneratorBetweenlands.CODEC);
 
 		// Block render types setup
 		// todo: move this to block types (me too lazy)

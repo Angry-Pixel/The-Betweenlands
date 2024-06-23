@@ -13,8 +13,8 @@ import thebetweenlands.common.entities.EntitySwampHag;
 
 public class RenderSwampHag<T extends EntitySwampHag> extends MobRenderer<T, ModelSwampHag<T>> {
 
-	private static final ResourceLocation SWAMP_HAG_TEXTURE = ResourceLocation.fromNamespaceAndPath(TheBetweenlands.ID, "textures/entity/swamp_hag.png");
-	public static final ModelLayerLocation SWAMP_HAG_MODEL_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TheBetweenlands.ID, "main"), "swamp_hag");
+	private static final ResourceLocation SWAMP_HAG_TEXTURE = TheBetweenlands.prefix("textures/entity/swamp_hag.png");
+	public static final ModelLayerLocation SWAMP_HAG_MODEL_LAYER = new ModelLayerLocation(TheBetweenlands.prefix("main"), "swamp_hag");
 
 	public RenderSwampHag(EntityRendererProvider.Context p_174401_) {
 		this(p_174401_, SWAMP_HAG_MODEL_LAYER);

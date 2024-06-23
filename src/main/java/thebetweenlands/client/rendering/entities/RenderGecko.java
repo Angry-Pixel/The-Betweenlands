@@ -12,8 +12,8 @@ import thebetweenlands.common.entities.EntityGecko;
 
 public class RenderGecko<T extends EntityGecko> extends MobRenderer<T, ModelGecko<T>> {
 
-	private static final ResourceLocation GECKO_TEXTURE = ResourceLocation.fromNamespaceAndPath(TheBetweenlands.ID, "textures/entity/gecko.png");
-	public static final ModelLayerLocation GECKO_MODEL_LAYER = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(TheBetweenlands.ID, "main"), "gecko");
+	private static final ResourceLocation GECKO_TEXTURE = TheBetweenlands.prefix("textures/entity/gecko.png");
+	public static final ModelLayerLocation GECKO_MODEL_LAYER = new ModelLayerLocation(TheBetweenlands.prefix("main"), "gecko");
 
 	public RenderGecko(EntityRendererProvider.Context p_174401_) {
 		this(p_174401_, GECKO_MODEL_LAYER);

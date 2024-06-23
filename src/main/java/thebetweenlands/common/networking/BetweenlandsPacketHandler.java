@@ -23,7 +23,7 @@ public class BetweenlandsPacketHandler {
 	// Server and client will always use the highest mutually known protocol
 	// The Betweenlands client & server communication channel (formatted alike to minecraft packet handler)
 	// TODO: make version checker
-	public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(new ResourceLocation(TheBetweenlands.ID, "main"), () -> ProtocolVersion, ProtocolVersion::equals, ProtocolVersion::equals);
+	public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(TheBetweenlands.prefix("main"), () -> ProtocolVersion, ProtocolVersion::equals, ProtocolVersion::equals);
 
 	public static void init() {
 		int index = 0;

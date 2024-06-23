@@ -13,7 +13,7 @@ import net.minecraft.world.level.levelgen.synth.SimplexNoise;
 public class BetweenlandsSurfaceRules extends SurfaceRules {
 
 	public static ConditionSource simplexGradient(String p_189404_, VerticalAnchor p_189405_, VerticalAnchor p_189406_, double noiseScale) {
-		return new SimplexGradientConditionSource(new ResourceLocation(p_189404_), p_189405_, p_189406_, noiseScale);
+		return new SimplexGradientConditionSource(ResourceLocation.parse(p_189404_), p_189405_, p_189406_, noiseScale);
 	}
 
 	public static record SimplexGradientConditionSource(ResourceLocation randomName, VerticalAnchor trueAtAndBelow, VerticalAnchor falseAtAndAbove, double noiseScale) implements ConditionSource {

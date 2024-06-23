@@ -195,7 +195,7 @@ public class BetweenlandsBiomeProvider extends LegacyBiomeSource {
 	public static class Preset {
 		static final Map<ResourceLocation, Preset> BY_NAME = Maps.newHashMap();
 		// uses
-		public static final Preset BETWEENLANDS = new Preset(new ResourceLocation(TheBetweenlands.ID, "betweenlands_reg"), (registry) -> {
+		public static final Preset BETWEENLANDS = new Preset(TheBetweenlands.prefix("betweenlands_reg"), (registry) -> {
 
 			return new Climate.ParameterList<>(BiomeRegistry.BETWEENLANDS_DIM_BIOME_REGISTRY.stream().map((obj) -> {
 				TheBetweenlands.LOGGER.info(obj.biome.getKey());
