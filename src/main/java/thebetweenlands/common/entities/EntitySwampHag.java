@@ -83,13 +83,13 @@ public class EntitySwampHag extends BetweenlandsEntity {
 		super.onSyncedDataUpdated(p_21104_);
 	}
 
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(TALK_SOUND, (byte) 0);
-		this.entityData.define(SHOULD_JAW_MOVE, false);
-		this.entityData.define(LIVING_SOUND_TIMER, 0);
-		this.entityData.define(IS_THROWING, false);
-		this.entityData.define(THROW_TIMER, 0);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(TALK_SOUND, (byte) 0);
+		builder.define(SHOULD_JAW_MOVE, false);
+		builder.define(LIVING_SOUND_TIMER, 0);
+		builder.define(IS_THROWING, false);
+		builder.define(THROW_TIMER, 0);
 	}
 
 	@Override
@@ -114,7 +114,7 @@ public class EntitySwampHag extends BetweenlandsEntity {
 		*/
 
 
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			updateLivingSoundTime();
 		}
 

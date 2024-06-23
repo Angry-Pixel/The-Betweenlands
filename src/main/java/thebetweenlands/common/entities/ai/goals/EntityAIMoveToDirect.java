@@ -6,6 +6,7 @@ import com.mojang.math.Vector3d;
 
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
+import org.joml.Vector3d;
 
 public abstract class EntityAIMoveToDirect<T extends Mob> extends Goal {
 	protected final T entity;

@@ -1,7 +1,5 @@
 package thebetweenlands.common.entities;
 
-import com.mojang.math.Vector3d;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -18,10 +16,8 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -37,11 +33,11 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import org.joml.Vector3d;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entities.ai.goals.EntityAIFlyRandomly;
 import thebetweenlands.common.entities.ai.goals.EntityAIMoveToDirect;
+import thebetweenlands.common.registries.AttributeRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 // TODO: whight keeps losing its target when it goes volitile & seems to not move towards target while volitile ether
@@ -49,19 +45,13 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityWight extends BetweenlandsEntity {
 
-	public static final Attribute VOLATILE_HEALTH_START_ATTRIB = (new RangedAttribute("bl.volatileHealthStart", 1.0D, 0.0D, 1.0D)).setSyncable(true);    // Volatile Health Percentage Start
-	public static final Attribute VOLATILE_COOLDOWN_ATTRIB = (new RangedAttribute("bl.volatileCooldown", 400.0D, 10.0D, Integer.MAX_VALUE)).setSyncable(true);    // Volatile Cooldown
-	public static final Attribute VOLATILE_FLIGHT_SPEED_ATTRIB = (new RangedAttribute("bl.volatileFlightSpeed", 0.32D, 0.0D, 5.0D)).setSyncable(true);    // Volatile Flight Speed
-	public static final Attribute VOLATILE_LENGTH_ATTRIB = (new RangedAttribute("bl.volatileLength", 600.0D, 0.0D, Integer.MAX_VALUE)).setSyncable(true);    // Volatile Length
-	public static final Attribute VOLATILE_MAX_DAMAGE_ATTRIB = (new RangedAttribute("bl.volatileMaxDamage", 20.0D, 0.0D, Double.MAX_VALUE)).setSyncable(true);    // Volatile Max Damage
-
 	protected static final EntityDataAccessor<Boolean> HIDING_STATE_DW = SynchedEntityData.defineId(EntityWight.class, EntityDataSerializers.BOOLEAN);
 	protected static final EntityDataAccessor<Boolean> VOLATILE_STATE_DW = SynchedEntityData.defineId(EntityWight.class, EntityDataSerializers.BOOLEAN);
 	protected final MoveControl flightMoveHelper;
 	protected final MoveControl groundMoveHelper;
 	private int hidingAnimationTicks = 0;
 	private int lastHidingAnimationTicks = 0;
-	private int volatileCooldownTicks = (int) VOLATILE_COOLDOWN_ATTRIB.getDefaultValue() / 2 + 20;
+	private int volatileCooldownTicks = (int) AttributeRegistry.VOLATILE_COOLDOWN_ATTRIB.value().getDefaultValue() / 2 + 20;
 	private int volatileTicks = 0;
 	private float volatileReceivedDamage = 0.0F;
 	private boolean canTurnVolatile = true;
@@ -82,15 +72,15 @@ public class EntityWight extends BetweenlandsEntity {
             }
         };*/
 		this.moveControl = this.flightMoveHelper = this.groundMoveHelper = new MoveControl(this);
-		this.dimensions = new EntityDimensions(0.7F, 2.2F, false);    // defalt size
+		this.dimensions = EntityDimensions.scalable(0.7F, 2.2F);    // defalt size
 	}
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(HIDING_STATE_DW, false);
-		this.entityData.define(VOLATILE_STATE_DW, false);
-		this.entityData.define(GROW_TIMER, 40);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(HIDING_STATE_DW, false);
+		builder.define(VOLATILE_STATE_DW, false);
+		builder.define(GROW_TIMER, 40);
 
 	}
 
@@ -101,18 +91,18 @@ public class EntityWight extends BetweenlandsEntity {
 			.add(Attributes.MOVEMENT_SPEED, 0.33D)
 			.add(Attributes.ATTACK_DAMAGE, 6.0D)
 			.add(Attributes.FOLLOW_RANGE, 80.0D)
-			.add(VOLATILE_HEALTH_START_ATTRIB)
-			.add(VOLATILE_COOLDOWN_ATTRIB)
-			.add(VOLATILE_FLIGHT_SPEED_ATTRIB)
-			.add(VOLATILE_LENGTH_ATTRIB)
-			.add(VOLATILE_MAX_DAMAGE_ATTRIB).build());
+			.add(AttributeRegistry.VOLATILE_HEALTH_START_ATTRIB)
+			.add(AttributeRegistry.VOLATILE_COOLDOWN_ATTRIB)
+			.add(AttributeRegistry.VOLATILE_FLIGHT_SPEED_ATTRIB)
+			.add(AttributeRegistry.VOLATILE_LENGTH_ATTRIB)
+			.add(AttributeRegistry.VOLATILE_MAX_DAMAGE_ATTRIB).build());
 	}
 
 	@Override
 	public void aiStep() {
 		super.aiStep();
 
-		if (this.level.isClientSide) {
+		if (this.level().isClientSide) {
 			prevGrowCount = growCount;
 			growCount = getGrowTimer();
 			if (getGrowTimer() > 0 && getGrowTimer() < 40)
@@ -120,7 +110,7 @@ public class EntityWight extends BetweenlandsEntity {
 					this.spawnVolatileParticles(true);
 		}
 
-		if (!this.level.isClientSide) {
+		if (!this.level().isClientSide) {
 			if (isInTar()) {
 				if (getGrowTimer() > 0)
 					setGrowTimer(Math.max(0, getGrowTimer() - 1));
@@ -148,15 +138,15 @@ public class EntityWight extends BetweenlandsEntity {
 						this.volatileCooldownTicks--;
 					}
 
-					if (this.getHealth() <= this.getMaxHealth() * this.getAttribute(VOLATILE_HEALTH_START_ATTRIB).getValue() && this.volatileCooldownTicks <= 0) {
+					if (this.getHealth() <= this.getMaxHealth() * this.getAttribute(AttributeRegistry.VOLATILE_HEALTH_START_ATTRIB).getValue() && this.volatileCooldownTicks <= 0) {
 						this.setVolatile(true);
 						this.didTurnVolatileOnPlayer = true;
 						this.volatileReceivedDamage = 0.0F;
-						this.volatileCooldownTicks = this.getMaxVolatileCooldown() + this.level.random.nextInt(this.getMaxVolatileCooldown()) + 20;
+						this.volatileCooldownTicks = this.getMaxVolatileCooldown() + this.level().random.nextInt(this.getMaxVolatileCooldown()) + 20;
 						this.volatileTicks = 0;
 
 						//TheBetweenlands.networkWrapper.sendToAllAround(new MessageWightVolatileParticles(this), new TargetPoint(this.dimension, this.posX, this.posY, this.posZ, 32));
-						this.level.playSound(null, this.getX(), this.getY(), this.getZ(), SoundRegistry.WIGHT_ATTACK.get(), SoundSource.HOSTILE, 1.6F, 1.0F);
+						this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundRegistry.WIGHT_ATTACK.get(), SoundSource.HOSTILE, 1.6F, 1.0F);
 					}
 				} else if (this.didTurnVolatileOnPlayer && this.isVolatile() && !this.canPossess(this.getTarget())) {
 					this.setVolatile(false);
@@ -166,8 +156,8 @@ public class EntityWight extends BetweenlandsEntity {
 		}
 
 		if (this.isVolatile()) {
-			if (!this.level.isClientSide) {
-				if (this.volatileTicks < this.getAttribute(VOLATILE_LENGTH_ATTRIB).getValue()) {
+			if (!this.level().isClientSide) {
+				if (this.volatileTicks < this.getAttribute(AttributeRegistry.VOLATILE_LENGTH_ATTRIB).getValue()) {
 					this.volatileTicks++;
 
 					if (this.volatileTicks >= 20) {
@@ -175,12 +165,12 @@ public class EntityWight extends BetweenlandsEntity {
 						this.setNoGravity(true);
 					}
 				} else {
-					if (!this.level.isClientSide) {
+					if (!this.level().isClientSide) {
 						this.yya -= 0.075D;
 
 						this.fallDistance = 0;
 
-						if (this.didTurnVolatileOnPlayer && this.onGround) {
+						if (this.didTurnVolatileOnPlayer && this.onGround()) {
 							this.setVolatile(false);
 							this.didTurnVolatileOnPlayer = false;
 						}
@@ -244,13 +234,13 @@ public class EntityWight extends BetweenlandsEntity {
 				this.moveControl = this.flightMoveHelper;
 			}
 
-			if (this.level.isClientSide && (this.getRidingEntity() == null || this.tickCount % 4 == 0)) {
+			if (this.level().isClientSide && (this.getRidingEntity() == null || this.tickCount % 4 == 0)) {
 				this.spawnVolatileParticles(false);
 			}
 
 			this.setSize(0.7F, 0.7F);
 		} else {
-			if (!this.level.isClientSide) {
+			if (!this.level().isClientSide) {
 				this.noPhysics = false;
 				this.setNoGravity(false);
 				this.moveControl = this.groundMoveHelper;
@@ -319,16 +309,16 @@ public class EntityWight extends BetweenlandsEntity {
 			} else {
 				float f = 0.91F;
 
-				if (this.onGround) {
-					f = (1f - this.level.getBlockState(new BlockPos(Math.floor(this.getX()), Math.floor(this.getBoundingBox().minY) - 1, Math.floor(this.getZ()))).getBlock().getFriction()) * 0.91F;
+				if (this.onGround()) {
+					f = (1f - this.level().getBlockState(BlockPos.containing(Math.floor(this.getX()), Math.floor(this.getBoundingBox().minY) - 1, Math.floor(this.getZ()))).getBlock().getFriction()) * 0.91F;
 				}
 
 				float f1 = 0.16277136F / (f * f * f);
-				this.moveRelative(this.onGround ? 0.1F * f1 : 0.02F, in);
+				this.moveRelative(this.onGround() ? 0.1F * f1 : 0.02F, in);
 				f = 0.91F;
 
-				if (this.onGround) {
-					f = (1f - this.level.getBlockState(new BlockPos(Math.floor(this.getX()), Math.floor(this.getBoundingBox().minY) - 1, Math.floor(this.getZ()))).getBlock().getFriction()) * 0.91F;
+				if (this.onGround()) {
+					f = (1f - this.level().getBlockState(BlockPos.containing(Math.floor(this.getX()), Math.floor(this.getBoundingBox().minY) - 1, Math.floor(this.getZ()))).getBlock().getFriction()) * 0.91F;
 				}
 
 				this.move(MoverType.SELF, new Vec3(this.xxa, this.yya, this.zza));
@@ -337,7 +327,6 @@ public class EntityWight extends BetweenlandsEntity {
 				this.zza *= (double) f;
 			}
 
-			this.animationSpeedOld = this.animationSpeed;
 			double d1 = this.xo - this.xOld;
 			double d0 = this.zo - this.zOld;
 			float f2 = (float) Math.sqrt(d1 * d1 + d0 * d0) * 4.0F;
@@ -345,9 +334,7 @@ public class EntityWight extends BetweenlandsEntity {
 			if (f2 > 1.0F) {
 				f2 = 1.0F;
 			}
-
-			this.animationSpeed += (f2 - this.animationSpeed) * 0.4F;
-			this.animationPosition += this.animationSpeed;
+			this.walkAnimation.update(f2, 0.4F);
 		} else {
 			//Use normal movement
 
@@ -370,7 +357,6 @@ public class EntityWight extends BetweenlandsEntity {
 		return false;
 	}
 
-	@OnlyIn(Dist.CLIENT)
 	private void spawnVolatileParticles(boolean tarred) {
 		final double radius = 0.3F;
 
@@ -379,9 +365,9 @@ public class EntityWight extends BetweenlandsEntity {
 		//final double cz = this.posZ;
 
 		for (int i = 0; i < 8; i++) {
-			double px = this.level.random.nextFloat() * 0.7F;
-			double py = this.level.random.nextFloat() * 0.7F;
-			double pz = this.level.random.nextFloat() * 0.7F;
+			double px = this.level().random.nextFloat() * 0.7F;
+			double py = this.level().random.nextFloat() * 0.7F;
+			double pz = this.level().random.nextFloat() * 0.7F;
 			//Vector3d vec = new Vector3d(px, py, pz).subtract(new Vector3d(0.35F, 0.35F, 0.35F)).normalize();
 			//px = cx + vec.x * radius;
 			//py = cy + vec.y * radius;
@@ -431,7 +417,7 @@ public class EntityWight extends BetweenlandsEntity {
 			Entity ridingEntity = this.getRidingEntity();
 			if (ridingEntity != null) {
 				this.dismountRidingEntity();
-				if (!this.level.isClientSide) {
+				if (!this.level().isClientSide) {
 					//this.getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(ridingEntity));
 				}
 			}
@@ -439,7 +425,7 @@ public class EntityWight extends BetweenlandsEntity {
 	}
 
 	public int getMaxVolatileCooldown() {
-		return (int) this.getAttribute(VOLATILE_COOLDOWN_ATTRIB).getValue();
+		return (int) this.getAttribute(AttributeRegistry.VOLATILE_COOLDOWN_ATTRIB).getValue();
 	}
 
 	public boolean canPossess(LivingEntity entity) {
@@ -454,8 +440,8 @@ public class EntityWight extends BetweenlandsEntity {
 	}
 
 	public boolean isWearingSkullMask(LivingEntity entity) {
-		if (entity instanceof Player) {
-			ItemStack helmet = ((Player) entity).getItemBySlot(EquipmentSlot.HEAD);
+		if (entity instanceof Player player) {
+			ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
 			if (!helmet.isEmpty() && helmet.getItem() == Items.CARVED_PUMPKIN) {
 				return true;
 			}
@@ -468,7 +454,7 @@ public class EntityWight extends BetweenlandsEntity {
 	}
 
 	@Override
-	public EntityDimensions getDimensions(Pose p_21047_) {
+	public EntityDimensions getDefaultDimensions(Pose pose) {
 		return dimensions;
 	}
 
@@ -493,7 +479,7 @@ public class EntityWight extends BetweenlandsEntity {
 		this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
 		this.targetSelector.addGoal(2, new SwampHagTargetGoal<>(this, Player.class));
 		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
-		this.goalSelector.addGoal(3, new EntityAIMoveToDirect<EntityWight>(this, this.getAttributes().getInstance(VOLATILE_FLIGHT_SPEED_ATTRIB).getValue()) {
+		this.goalSelector.addGoal(3, new EntityAIMoveToDirect<EntityWight>(this, this.getAttributes().getInstance(AttributeRegistry.VOLATILE_FLIGHT_SPEED_ATTRIB).getValue()) {
 			@Override
 			protected Vector3d getTarget() {
 				if (this.entity.volatileTicks >= 20) {

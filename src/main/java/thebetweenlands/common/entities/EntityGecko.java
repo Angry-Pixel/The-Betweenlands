@@ -64,9 +64,9 @@ public class EntityGecko extends BetweenlandsEntity {
 		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
 	}
 
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(HIDING, false);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(HIDING, false);
 	}
 
 	@Override
