@@ -20,7 +20,8 @@ public class BetweenlandsRegistryProvider extends DatapackBuiltinEntriesProvider
 		.add(Registries.CONFIGURED_CARVER, CarverRegistry::bootstrap)
 		.add(Registries.LEVEL_STEM, DimensionRegistries::bootstrapStem)
 		.add(Registries.DIMENSION_TYPE, DimensionRegistries::bootstrapType)
-		.add(Registries.NOISE_SETTINGS, DimensionRegistries::bootstrapNoise);
+		.add(Registries.NOISE_SETTINGS, DimensionRegistries::bootstrapNoise)
+		.add(Registries.JUKEBOX_SONG, MusicRegistry::bootstrap);
 
 	public BetweenlandsRegistryProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
 		super(output, provider, BUILDER, Set.of("minecraft", TheBetweenlands.ID));

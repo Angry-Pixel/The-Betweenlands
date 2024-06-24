@@ -40,5 +40,5 @@ public class ItemRegistry {
 	// Betweenlands Special
 	public static final DeferredItem<Item> AMATE_MAP = ITEMS.register("amate_map", () -> new EmptyAmateMapItem(new Item.Properties()));
 	public static final DeferredItem<Item> FILLED_AMATE_MAP = ITEMS.register("filled_amate_map", () -> new AmateMapItem(new Item.Properties()));
-	public static final DeferredItem<Item> RECORD_ASTATOS = ITEMS.register("astatos", () -> new RecordItem(0, () -> SoundRegistry.RECORD_ASTATOS.get(), new Item.Properties()));
+	public static final DeferredItem<Item> RECORD_ASTATOS = ITEMS.register("astatos", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.ASTATOS)));
 }
