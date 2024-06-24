@@ -60,7 +60,7 @@ public class ClientEvents {
 		//BetweenlandsShaderInstance betweenlandssky = new BetweenlandsShaderInstance(event.getResourceManager(), TheBetweenlands.prefix("starfield"), BetweenlandsVertexFormats.BETWEENLANDS_SKY);
 
 		// todo: sky shader "starfield" name is being changed to "betweenlandsSky"
-		BetweenlandsShaders.preloadShaders(event.getResourceManager());
+		BetweenlandsShaders.preloadShaders(event.getResourceProvider());
 		event.registerShader(BetweenlandsShaders.BetweenlandsSky, BetweenlandsSkyShaderInstance.onLoad);
 	}
 

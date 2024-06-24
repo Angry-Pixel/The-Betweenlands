@@ -1,22 +1,18 @@
 package thebetweenlands.client.rendering.shader;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.server.packs.resources.ResourceProvider;
 import thebetweenlands.client.rendering.vertex.BetweenlandsVertexFormats;
 import thebetweenlands.common.TheBetweenlands;
 
 import java.io.IOException;
 
-@OnlyIn(Dist.CLIENT)
 public class BetweenlandsShaders {
 
 	public static BetweenlandsSkyShaderInstance BetweenlandsSky;
 
 	// Load shaders
 	@SuppressWarnings("unchecked")
-	public static void preloadShaders(ResourceManager resourcemanager) {
+	public static void preloadShaders(ResourceProvider resourcemanager) {
 
 
 		// Try to set uniformMap to public
