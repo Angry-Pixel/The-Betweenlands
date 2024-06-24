@@ -15,8 +15,8 @@ public abstract class MowzieModelBase<T extends BetweenlandsEntity> extends Hier
 	 *
 	 * @param f  is the number of boxes being used. (i.e. if you are
 	 *           using this on a head and neck, set it to 2. Just a head, 1);
-	 * @param f3 is the rotationYaw of the EntityLivingBase;
-	 * @param f4 is the rotationPitch of the EntityLivingBase.
+	 * @param f3 is the rotationYaw of the LivingEntity;
+	 * @param f4 is the rotationPitch of the LivingEntity.
 	 */
 	public void faceTarget(ModelPart box, float f, float f3, float f4) {
 		box.yRot = (f3 / (180f / (float) Math.PI)) / f;

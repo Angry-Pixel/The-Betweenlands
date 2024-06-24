@@ -2,8 +2,10 @@ package thebetweenlands.common.world.storage.location.guard;
 
 import net.minecraft.commands.arguments.NbtTagArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
 
 import javax.annotation.Nullable;
@@ -12,45 +14,45 @@ public interface ILocationGuard {
 	/**
 	 * Sets whether the specified position is guarded
 	 *
-	 * @param world   World
+	 * @param level   World
 	 * @param pos     Position
 	 * @param guarded Whether the block is guarded
-	 * @return true if the the guard state was successfully changed
+	 * @return true if the guard state was successfully changed
 	 */
-	public boolean setGuarded(WorldGenLevel world, BlockPos pos, boolean guarded);
+	boolean setGuarded(Level level, BlockPos pos, boolean guarded);
 
 	/**
 	 * Returns whether the location is guarded at the specified position.
 	 *
-	 * @param world  World
+	 * @param level  World
 	 * @param entity Entity that's checking for the guard
 	 * @param pos    Position
 	 * @return
 	 */
-	public boolean isGuarded(WorldGenLevel world, @Nullable Entity entity, BlockPos pos);
+	boolean isGuarded(Level level, @Nullable Entity entity, BlockPos pos);
 
 	/**
 	 * Clears all guards
 	 *
-	 * @param world
+	 * @param level
 	 */
-	public void clear(WorldGenLevel world);
+	void clear(Level level);
 
 	/**
 	 * Returns if the location is cleared
 	 *
-	 * @param world World
+	 * @param level World
 	 * @return
 	 */
-	public boolean isClear(WorldGenLevel world);
+	boolean isClear(Level level);
 
 	/**
 	 * Handles explosions that affect the location
 	 *
-	 * @param world
+	 * @param level
 	 * @param explosion
 	 */
-	public void handleExplosion(WorldGenLevel world, Explosion explosion);
+	void handleExplosion(Level level, Explosion explosion);
 
 	/**
 	 * Writes the guard to NBT
@@ -58,12 +60,12 @@ public interface ILocationGuard {
 	 * @param nbt
 	 * @return
 	 */
-	public NbtTagArgument writeToNBT(NbtTagArgument nbt);
+	CompoundTag writeToNBT(CompoundTag nbt);
 
 	/**
 	 * Reads the guard from NBT
 	 *
 	 * @param nbt
 	 */
-	public void readFromNBT(NbtTagArgument nbt);
+	void readFromNBT(CompoundTag nbt);
 }

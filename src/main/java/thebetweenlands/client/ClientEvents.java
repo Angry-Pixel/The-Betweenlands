@@ -6,9 +6,11 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.*;
+import org.jetbrains.annotations.Nullable;
 import thebetweenlands.client.rendering.BetweenlandsSkyShaderHandler;
 import thebetweenlands.client.rendering.entities.RenderGecko;
 import thebetweenlands.client.rendering.entities.RenderSwampHag;
@@ -148,5 +150,15 @@ public class ClientEvents {
 				}
 			}
 		}
+	}
+
+	@Nullable
+	public static Level getClientLevel() {
+		return Minecraft.getInstance().level;
+	}
+
+	@Nullable
+	public static Player getClientPlayer() {
+		return Minecraft.getInstance().player;
 	}
 }

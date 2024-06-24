@@ -2,8 +2,8 @@ package thebetweenlands.common.world;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.fml.event.IModBusEvent;
+import net.neoforged.bus.api.Event;
+import net.neoforged.fml.event.IModBusEvent;
 import thebetweenlands.common.world.noisegenerators.genlayers.GenLayer;
 import thebetweenlands.common.world.noisegenerators.genlayers.ProviderGenLayer;
 

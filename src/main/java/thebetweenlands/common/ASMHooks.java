@@ -4,7 +4,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import thebetweenlands.common.registries.ItemRegistry;

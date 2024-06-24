@@ -1,8 +1,17 @@
 package thebetweenlands.common.world.storage.location;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.LongTag;
+import net.minecraft.nbt.Tag;
+import thebetweenlands.api.storage.IWorldStorage;
+import thebetweenlands.api.storage.LocalRegion;
+import thebetweenlands.api.storage.StorageID;
+import thebetweenlands.common.registries.BlockRegistry;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class LocationSpiritTree extends LocationGuarded {
@@ -55,12 +64,12 @@ public class LocationSpiritTree extends LocationGuarded {
 	public int getActiveWisps() {
 		int i = 0;
 		for (BlockPos pos : this.notGeneratedWispPositions) {
-			if (this.getWorldStorage().getWorld().getBlockState(pos).getBlock() == BlockRegistry.WISP) {
+			if (this.getWorldStorage().getLevel().getBlockState(pos).is(BlockRegistry.WISP.get())) {
 				i++;
 			}
 		}
 		for (BlockPos pos : this.generatedWispPositions) {
-			if (this.getWorldStorage().getWorld().getBlockState(pos).getBlock() == BlockRegistry.WISP) {
+			if (this.getWorldStorage().getLevel().getBlockState(pos).is(BlockRegistry.WISP.get())) {
 				i++;
 			}
 		}
@@ -89,17 +98,17 @@ public class LocationSpiritTree extends LocationGuarded {
 	protected void saveBlockList(CompoundTag nbt, String name, List<BlockPos> blocks) {
 		ListTag blockList = new ListTag();
 		for (BlockPos pos : blocks) {
-			blockList.appendTag(new NBTTagLong(pos.toLong()));
+			blockList.add(LongTag.valueOf(pos.asLong()));
 		}
-		nbt.setTag(name, blockList);
+		nbt.put(name, blockList);
 	}
 
 	protected void readBlockList(CompoundTag nbt, String name, List<BlockPos> blocks) {
 		blocks.clear();
-		ListTag blockList = nbt.getTagList(name, Constants.NBT.TAG_LONG);
-		for (int i = 0; i < blockList.tagCount(); i++) {
-			NBTTagLong posNbt = (NBTTagLong) blockList.get(i);
-			blocks.add(BlockPos.fromLong(posNbt.getLong()));
+		ListTag blockList = nbt.getList(name, Tag.TAG_LONG);
+		for (Tag tag : blockList) {
+			LongTag posNbt = (LongTag) tag;
+			blocks.add(BlockPos.of(posNbt.getAsLong()));
 		}
 	}
 }

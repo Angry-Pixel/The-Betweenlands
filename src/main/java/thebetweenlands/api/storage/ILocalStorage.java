@@ -5,6 +5,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.phys.AABB;
+import thebetweenlands.api.ITickable;
+import thebetweenlands.api.network.IGenericDataAccessorAccess;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -52,33 +54,33 @@ public interface ILocalStorage {
 	 * Reads the local storage data from NBT.
 	 * {@link #getID()} and {@link #getRegion()} are already read automatically
 	 *
-	 * @param nbt
+	 * @param tag
 	 */
-	void readFromNBT(CompoundTag nbt);
+	void readFromNBT(CompoundTag tag);
 
 	/**
 	 * Writes the local storage data to NBT.
 	 * {@link #getID()} and {@link #getRegion()} are already written automatically
 	 *
-	 * @param nbt
+	 * @param tag
 	 * @return
 	 */
-	CompoundTag writeToNBT(CompoundTag nbt);
+	CompoundTag writeToNBT(CompoundTag tag);
 
 	/**
 	 * Reads the initial data that is sent the first time
 	 *
-	 * @param nbt
+	 * @param tag
 	 */
-	void readInitialPacket(CompoundTag nbt);
+	void readInitialPacket(CompoundTag tag);
 
 	/**
 	 * Writes the initial data that is sent the first time
 	 *
-	 * @param nbt
+	 * @param tag
 	 * @return
 	 */
-	CompoundTag writeInitialPacket(CompoundTag nbt);
+	CompoundTag writeInitialPacket(CompoundTag tag);
 
 	/**
 	 * Marks the local storage as dirty
@@ -224,14 +226,14 @@ public interface ILocalStorage {
 
 	/**
 	 * Links the specified chunk to this local storage in a safe manner,
-	 * i.e. calls {@link #linkChunk(Chunk)} if the chunk already exists and is loaded,
+	 * i.e. calls {@link #linkChunk(ChunkAccess)} if the chunk already exists and is loaded,
 	 * and {@link #linkChunkDeferred(ChunkPos)} if the chunk does not yet exist
 	 * or is not loaded.
 	 *
 	 * @param chunk
 	 */
 	default void linkChunkSafely(ChunkPos chunk) {
-		ChunkAccess instance = this.getWorldStorage().getWorld().getChunkProvider().getLoadedChunk(chunk.x, chunk.z);
+		ChunkAccess instance = this.getWorldStorage().getLevel().getChunkSource().getChunkNow(chunk.x, chunk.z);
 		if (instance != null) {
 			this.linkChunk(instance);
 		} else {
@@ -257,5 +259,5 @@ public interface ILocalStorage {
 	 * @return
 	 */
 	@Nullable
-	IGenericDataManagerAccess getDataManager();
+	IGenericDataAccessorAccess getDataManager();
 }

@@ -1,30 +1,30 @@
 package thebetweenlands.common.world.storage;
 
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.ChunkAccess;
-import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.api.storage.ILocalStorage;
+import thebetweenlands.api.storage.*;
+import thebetweenlands.common.networking.AddLocalStoragePacket;
+import thebetweenlands.common.networking.RemoveLocalStoragePacket;
+import thebetweenlands.common.world.storage.operation.DeferredLinkOperation;
 
 import java.util.*;
 
-public class LocalStorageImpl implements ILocalStorage {
+public abstract class LocalStorageImpl implements ILocalStorage {
 	private final IWorldStorage worldStorage;
 	private final LocalRegion region;
 	private final StorageID id;
 
-	private CapabilityDispatcher capabilities;
 	private boolean dirty;
 
 	private final List<ChunkPos> linkedChunks = new ArrayList<>();
 	private final List<LocalStorageReference> loadedReferences = new ArrayList<>();
-
-	//protected boolean requiresSync = false;
 
 	private final List<ServerPlayer> watchers = new ArrayList<>();
 	private final List<ServerPlayer> duplicateWatchers = new ArrayList<>();
@@ -35,11 +35,6 @@ public class LocalStorageImpl implements ILocalStorage {
 		this.worldStorage = worldStorage;
 		this.id = id;
 		this.region = region;
-
-		//Gather capabilities
-		AttachLocalStorageCapabilitiesEvent event = new AttachLocalStorageCapabilitiesEvent(this);
-		NeoForge.EVENT_BUS.post(event);
-		this.capabilities = event.getCapabilities().size() > 0 ? new CapabilityDispatcher(event.getCapabilities(), null) : null;
 	}
 
 	@Override
@@ -59,24 +54,12 @@ public class LocalStorageImpl implements ILocalStorage {
 
 	@Override
 	public void readFromNBT(CompoundTag nbt) {
-		if (this.capabilities != null && nbt.contains("ForgeCaps")) {
-			this.capabilities.deserializeNBT(nbt.get("ForgeCaps"));
-		}
-
 		this.readReferenceChunks(nbt);
 	}
 
 	@Override
 	public CompoundTag writeToNBT(CompoundTag nbt) {
-		if (this.capabilities != null) {
-			CompoundTag caps = this.capabilities.serializeNBT();
-			if (!caps.isEmpty()) {
-				nbt.put("ForgeCaps", caps);
-			}
-		}
-
 		this.writeReferenceChunks(nbt);
-
 		return nbt;
 	}
 
@@ -162,9 +145,9 @@ public class LocalStorageImpl implements ILocalStorage {
 	public void onRemoving() {
 		//Notify clients when shared storage is removed.
 		//This is done before onRemoved so that the list of watchers is not yet empty.
-		if (!this.getWorldStorage().getWorld().isRemote) {
+		if (!this.getWorldStorage().getLevel().isClientSide()) {
 			if (!this.getWatchers().isEmpty()) {
-				this.sendMessageToAllWatchers(new MessageRemoveLocalStorage(this.getID()));
+				this.sendMessageToAllWatchers(new RemoveLocalStoragePacket(this.getID()));
 			}
 		}
 	}
@@ -204,7 +187,7 @@ public class LocalStorageImpl implements ILocalStorage {
 	 * @param player
 	 */
 	protected void onWatched(ServerPlayer player) {
-		this.sendDataToPlayer(new MessageAddLocalStorage(this), player);
+		this.sendDataToPlayer(new AddLocalStoragePacket(this), player);
 	}
 
 	@Override
@@ -241,7 +224,7 @@ public class LocalStorageImpl implements ILocalStorage {
 		ChunkPos pos = null;
 		while (it.hasNext()) {
 			pos = it.next();
-			ChunkAccess chunk = this.worldStorage.getWorld().getChunk(pos.x, pos.z);
+			ChunkAccess chunk = this.worldStorage.getLevel().getChunk(pos.x, pos.z);
 			IChunkStorage chunkData = this.worldStorage.getChunkStorage(chunk);
 			if (chunkData == null || !chunkData.unlinkLocalStorage(this)) {
 				allUnlinked = false;
@@ -300,9 +283,9 @@ public class LocalStorageImpl implements ILocalStorage {
 	/**
 	 * Sends the message to all watching players
 	 */
-	protected void sendMessageToAllWatchers(IMessage message) {
+	protected void sendMessageToAllWatchers(CustomPacketPayload packet) {
 		for (ServerPlayer watcher : this.getWatchers()) {
-			this.sendDataToPlayer(message, watcher);
+			this.sendDataToPlayer(packet, watcher);
 		}
 	}
 
@@ -311,8 +294,8 @@ public class LocalStorageImpl implements ILocalStorage {
 	 *
 	 * @param player
 	 */
-	protected void sendDataToPlayer(IMessage message, ServerPlayer player) {
-		TheBetweenlands.networkWrapper.sendTo(message, player);
+	protected void sendDataToPlayer(CustomPacketPayload packet, ServerPlayer player) {
+		PacketDistributor.sendToPlayer(player, packet);
 	}
 
 	@Override

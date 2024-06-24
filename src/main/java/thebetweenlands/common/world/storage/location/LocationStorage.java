@@ -8,6 +8,8 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
@@ -16,7 +18,14 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.level.BlockEvent;
 import org.jetbrains.annotations.Nullable;
+import thebetweenlands.api.network.IGenericDataAccessorAccess;
+import thebetweenlands.api.storage.IWorldStorage;
+import thebetweenlands.api.storage.LocalRegion;
+import thebetweenlands.api.storage.StorageID;
+import thebetweenlands.common.networking.datamanager.GenericDataAccessor;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.LocalStorageImpl;
+import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,7 +33,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class LocationStorage extends LocalStorageImpl {
-	private List<AABB> boundingBoxes = new ArrayList<>();
+	private final List<AABB> boundingBoxes = new ArrayList<>();
 	private AABB enclosingBoundingBox;
 	private EnumLocationType type;
 	private int layer;
@@ -32,12 +41,12 @@ public class LocationStorage extends LocalStorageImpl {
 	private boolean inheritAmbience = true;
 	private long locationSeed = 0L;
 
-	protected GenericDataManager dataManager;
+	protected GenericDataAccessor dataManager;
 
 	private Object2IntMap<Entity> titleDisplayCooldowns = new Object2IntArrayMap<>();
 
-	protected static final DataParameter<String> NAME = GenericDataManager.createKey(LocationStorage.class, DataSerializers.STRING);
-	protected static final DataParameter<Boolean> VISIBLE = GenericDataManager.createKey(LocationStorage.class, DataSerializers.BOOLEAN);
+	protected static final EntityDataAccessor<String> NAME = GenericDataAccessor.defineId(LocationStorage.class, EntityDataSerializers.STRING);
+	protected static final EntityDataAccessor<Boolean> VISIBLE = GenericDataAccessor.defineId(LocationStorage.class, EntityDataSerializers.BOOLEAN);
 
 	public LocationStorage(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
 		this(worldStorage, id, region, "", EnumLocationType.NONE);
@@ -52,7 +61,7 @@ public class LocationStorage extends LocalStorageImpl {
 	public LocationStorage(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region, String name, EnumLocationType type) {
 		super(worldStorage, id, region);
 
-		this.dataManager = new GenericDataManager(this);
+		this.dataManager = new GenericDataAccessor(this);
 
 		this.dataManager.register(NAME, name);
 		this.dataManager.register(VISIBLE, false);
@@ -65,7 +74,7 @@ public class LocationStorage extends LocalStorageImpl {
 	}
 
 	@Override
-	public IGenericDataManagerAccess getDataManager() {
+	public IGenericDataAccessorAccess getDataManager() {
 		return this.dataManager;
 	}
 
@@ -117,7 +126,7 @@ public class LocationStorage extends LocalStorageImpl {
 		} else {
 			AABB union = this.boundingBoxes.get(0);
 			for (AABB box : this.boundingBoxes) {
-				union = union.union(box);
+				union = union.minmax(box);
 			}
 			this.enclosingBoundingBox = union;
 		}
@@ -134,7 +143,7 @@ public class LocationStorage extends LocalStorageImpl {
 
 	@Override
 	public void onAdded() {
-		if (!this.getWorldStorage().getWorld().isRemote) {
+		if (!this.getWorldStorage().getLevel().isClientSide()) {
 			this.linkChunks();
 		}
 	}
@@ -354,7 +363,7 @@ public class LocationStorage extends LocalStorageImpl {
 		nbt.putString("name", this.dataManager.get(NAME));
 		ListTag boundingBoxes = new ListTag();
 		for (AABB boundingBox : this.boundingBoxes) {
-			boundingBoxes.appendTag(this.writeAabb(boundingBox));
+			boundingBoxes.add(this.writeAabb(boundingBox));
 		}
 		nbt.put("bounds", boundingBoxes);
 		nbt.putString("type", this.type.name);
@@ -513,7 +522,7 @@ public class LocationStorage extends LocalStorageImpl {
 	/**
 	 * Returns a list of all locations at the specified position
 	 *
-	 * @param world
+	 * @param level
 	 * @return
 	 */
 	public static List<LocationStorage> getLocations(Level level, Vec3 position) {
@@ -524,7 +533,7 @@ public class LocationStorage extends LocalStorageImpl {
 	/**
 	 * Returns a list of all locations that intersect the specified AABB
 	 *
-	 * @param world
+	 * @param level
 	 * @param aabb
 	 * @return
 	 */
@@ -536,7 +545,7 @@ public class LocationStorage extends LocalStorageImpl {
 	/**
 	 * Returns the highest priority ambience at the specified position
 	 *
-	 * @param world
+	 * @param level
 	 * @return
 	 */
 	public static LocationAmbience getAmbience(Level level, Vec3 position) {

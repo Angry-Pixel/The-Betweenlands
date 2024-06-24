@@ -510,7 +510,7 @@ public class EntityWight extends BetweenlandsEntity {
             @Override
             protected Vec3d getTarget() {
                 if (this.entity.volatileTicks >= 20) {
-                    EntityLivingBase target = this.entity.getAttackTarget();
+                    LivingEntity target = this.entity.getAttackTarget();
                     if (target != null) {
                         return new Vec3d(target.posX, target.posY + target.getEyeHeight() / 2.0D, target.posZ);
                     }

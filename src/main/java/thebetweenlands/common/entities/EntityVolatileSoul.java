@@ -15,7 +15,7 @@ public class EntityVolatileSoul extends BetweenlandsEntity {
 	private int strikes = 0;
 	private int ticksInAir;
 
-	//protected static final DataParameter<Optional<UUID>> OWNER_UUID_DW = EntityDataManager.createKey(EntityVolatileSoul.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+	//protected static final EntityDataAccessor<Optional<UUID>> OWNER_UUID_DW = EntityDataManager.createKey(EntityVolatileSoul.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
 	protected Deque<Vector3d> trail = new LinkedList<>();
 

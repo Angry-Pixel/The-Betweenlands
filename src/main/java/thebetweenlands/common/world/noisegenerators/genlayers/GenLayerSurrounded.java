@@ -1,6 +1,7 @@
 package thebetweenlands.common.world.noisegenerators.genlayers;
 
 
+import net.minecraft.world.level.biome.Biome;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 
 public class GenLayerSurrounded extends GenLayerBetweenlands {
@@ -8,7 +9,7 @@ public class GenLayerSurrounded extends GenLayerBetweenlands {
 	private final float spawnChance;
 	private final int surrounding, biome;
 
-	public GenLayerSurrounded(InstancedIntCache cache, long seed, GenLayer parentGenLayer, BiomeBetweenlands surrounding, BiomeBetweenlands biome, int checkRange, float spawnChance) {
+	public GenLayerSurrounded(InstancedIntCache cache, long seed, GenLayer parentGenLayer, Biome surrounding, Biome biome, int checkRange, float spawnChance) {
 		super(cache, seed);
 		this.parent = parentGenLayer;
 		this.checkRange = checkRange;

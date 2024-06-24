@@ -1,10 +1,27 @@
 package thebetweenlands.common.world.storage.location;
 
-public class LocationGuarded extends LocationStorage implements ITickable {
-	private BlockLocationGuard guard = new BlockLocationGuard() {
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
+import thebetweenlands.api.storage.IWorldStorage;
+import thebetweenlands.api.storage.LocalRegion;
+import thebetweenlands.api.storage.StorageID;
+import thebetweenlands.common.networking.BlockGuardDataPacket;
+import thebetweenlands.common.networking.ChangeBlockGuardSectionPacket;
+import thebetweenlands.common.networking.ClearBlockGuardPacket;
+import thebetweenlands.common.world.storage.location.guard.BlockLocationGuard;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+public class LocationGuarded extends LocationStorage {
+	private final BlockLocationGuard guard = new BlockLocationGuard() {
 		@Override
-		public boolean setGuarded(World world, BlockPos pos, boolean guarded) {
-			if (super.setGuarded(world, pos, guarded)) {
+		public boolean setGuarded(Level level, BlockPos pos, boolean guarded) {
+			if (super.setGuarded(level, pos, guarded)) {
 				LocationGuarded.this.setDirty(true);
 				if (!LocationGuarded.this.getWatchers().isEmpty()) {
 					LocationGuarded.this.queuedChanges.add(new BlockPos(pos.getX() / 16, pos.getY() / 16, pos.getZ() / 16));
@@ -15,8 +32,8 @@ public class LocationGuarded extends LocationStorage implements ITickable {
 		}
 
 		@Override
-		public void clear(World world) {
-			super.clear(world);
+		public void clear(Level level) {
+			super.clear(level);
 			LocationGuarded.this.setDirty(true);
 			if (!LocationGuarded.this.getWatchers().isEmpty()) {
 				LocationGuarded.this.queuedChanges.clear();
@@ -25,7 +42,7 @@ public class LocationGuarded extends LocationStorage implements ITickable {
 		}
 	};
 
-	private Set<BlockPos> queuedChanges = new HashSet<>();
+	private final Set<BlockPos> queuedChanges = new HashSet<>();
 	private boolean queuedClear;
 
 	public LocationGuarded(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
@@ -57,14 +74,14 @@ public class LocationGuarded extends LocationStorage implements ITickable {
 	@Override
 	public void onWatched(ServerPlayer player) {
 		super.onWatched(player);
-		MessageBlockGuardData message = new MessageBlockGuardData(this);
+		BlockGuardDataPacket message = new BlockGuardDataPacket(this);
 		this.sendDataToPlayer(message, player);
 	}
 
 	@Override
-	public void update() {
+	public void tick() {
 		if (this.queuedClear) {
-			MessageClearBlockGuard message = new MessageClearBlockGuard(this);
+			ClearBlockGuardPacket message = new ClearBlockGuardPacket(this);
 			for (ServerPlayer watcher : this.getWatchers()) {
 				this.sendDataToPlayer(message, watcher);
 			}
@@ -77,8 +94,8 @@ public class LocationGuarded extends LocationStorage implements ITickable {
 				while (it.hasNext()) {
 					BlockPos pos = it.next();
 					BlockPos worldPos = new BlockPos(pos.getX() * 16, pos.getY() * 16, pos.getZ() * 16);
-					GuardChunkSection section = this.guard.getSection(worldPos);
-					MessageBlockGuardSectionChange message = new MessageBlockGuardSectionChange(this, worldPos, section);
+					BlockLocationGuard.GuardChunkSection section = this.guard.getSection(worldPos);
+					ChangeBlockGuardSectionPacket message = new ChangeBlockGuardSectionPacket(this, worldPos, section);
 					for (ServerPlayer watcher : this.getWatchers()) {
 						this.sendDataToPlayer(message, watcher);
 					}
