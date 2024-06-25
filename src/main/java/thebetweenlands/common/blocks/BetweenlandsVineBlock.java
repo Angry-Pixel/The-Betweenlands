@@ -96,7 +96,7 @@ public class BetweenlandsVineBlock extends BetweenlandsMultifaceBlock {
 	}
 
 	@Override
-	public void tick(BlockState p_60462_, ServerLevel p_60463_, BlockPos p_60464_, Random p_60465_) {
+	public void tick(BlockState p_60462_, ServerLevel p_60463_, BlockPos p_60464_, RandomSource p_60465_) {
 
 		// Destroy if out of faces
 		if (this.countFaces(p_60462_) == 0) {

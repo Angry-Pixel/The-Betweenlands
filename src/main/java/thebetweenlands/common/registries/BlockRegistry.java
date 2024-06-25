@@ -22,7 +22,7 @@ public class BlockRegistry {
 	public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(TheBetweenlands.ID);
 
 	// Fluid Block inits (fluid blocks must be registered befor blocks)
-	public static final DeferredBlock<LiquidBlock> SWAMP_WATER_BLOCK = BLOCKS.register("swamp_water", () -> new BetweenlandsSwampWater(() -> FluidRegistry.SWAMP_WATER_FLOW.get(), BlockBehaviour.Properties.of().noLootTable().strength(100f)));
+	public static final DeferredBlock<LiquidBlock> SWAMP_WATER_BLOCK = BLOCKS.register("swamp_water", () -> new BetweenlandsSwampWater(FluidRegistry.SWAMP_WATER_STILL.get(), BlockBehaviour.Properties.of().noLootTable().strength(100f)));
 
 	// Block inits
 	// - Landscape (i should fix up grass blocks i think...)

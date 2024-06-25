@@ -31,7 +31,7 @@ public class BetweenlandsParticleEmiterBlock extends BetweenlandsBlock {
 				double d1 = direction$axis == Direction.Axis.X ? 0.5D + 0.5625D * (double) direction.getStepX() : (double) random.nextFloat();
 				double d2 = direction$axis == Direction.Axis.Y ? 0.5D + 0.5625D * (double) direction.getStepY() : (double) random.nextFloat();
 				double d3 = direction$axis == Direction.Axis.Z ? 0.5D + 0.5625D * (double) direction.getStepZ() : (double) random.nextFloat();
-				p_55455_.addParticle(ParticleRegistry.SULFUR_GENERIC.get(), (double) p_55456_.getX() + d1, (double) p_55456_.getY() + d2, (double) p_55456_.getZ() + d3, 0.125D - random.nextFloat(0.25f), 0.125D - random.nextFloat(0.25f), 0.125D - random.nextFloat(0.25f));
+				p_55455_.addParticle(ParticleRegistry.SULFUR_GENERIC.get(), (double) p_55456_.getX() + d1, (double) p_55456_.getY() + d2, (double) p_55456_.getZ() + d3, 0.125D - random.nextFloat() * 0.25f, 0.125D - random.nextFloat() * 0.25f, 0.125D - random.nextFloat() * 0.25f);
 			}
 		}
 	}

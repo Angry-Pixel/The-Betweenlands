@@ -19,7 +19,7 @@ public class BetweenlandsCaveMoss extends BetweenlandsHangingBlock {
 	}
 
 	@Override
-	protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand) {
+	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand) {
 		if (rand.nextInt(40) == 0) {
 			float dripRange = 0.5F;
 			float px = rand.nextFloat() - 0.5F;

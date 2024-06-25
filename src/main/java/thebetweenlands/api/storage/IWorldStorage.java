@@ -1,6 +1,5 @@
 package thebetweenlands.api.storage;
 
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;

@@ -19,6 +19,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.network.SoundRipplePacket;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsChunkStorage;
 
 import java.util.ArrayList;
