@@ -22,8 +22,8 @@ import thebetweenlands.api.storage.ILocalStorageHandle;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalStorageReference;
 import thebetweenlands.api.storage.StorageID;
-import thebetweenlands.common.networking.SyncChunkStoragePacket;
-import thebetweenlands.common.networking.SyncLocalStorageReferencesPacket;
+import thebetweenlands.common.network.SyncChunkStoragePacket;
+import thebetweenlands.common.network.SyncLocalStorageReferencesPacket;
 
 public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
 	protected final IWorldStorage worldStorage;

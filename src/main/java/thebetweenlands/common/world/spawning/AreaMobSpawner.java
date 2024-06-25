@@ -28,6 +28,7 @@ import thebetweenlands.api.entity.spawning.IBiomeSpawnEntriesData;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.util.WeightedList;
 
 public abstract class AreaMobSpawner {
@@ -93,7 +94,7 @@ public abstract class AreaMobSpawner {
 	 * Total world entity limit
 	 */
 	public int getHardEntityLimit() {
-		return BetweenlandsConfig.MOB_SPAWNING.hardEntityLimit;
+		return BetweenlandsConfig.hardEntityLimit;
 	}
 
 	/**

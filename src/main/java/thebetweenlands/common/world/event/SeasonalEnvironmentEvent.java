@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import thebetweenlands.client.ClientEvents;
+import thebetweenlands.common.config.BetweenlandsConfig;
 
 public abstract class SeasonalEnvironmentEvent extends BLEnvironmentEvent {
 	private Level world;
@@ -56,7 +57,7 @@ public abstract class SeasonalEnvironmentEvent extends BLEnvironmentEvent {
 		this.world = level;
 
 		if (!level.isClientSide()) {
-			if (BetweenlandsConfig.WORLD_AND_DIMENSION.enableSeasonalEvents) {
+			if (BetweenlandsConfig.seasonalEvents) {
 				long dayDiff = this.getDayDiffFromStartDate();
 				if (dayDiff >= 0 && dayDiff <= this.getDurationInDays()) {
 					if (!this.isActive() && !this.wasSet) {
@@ -77,7 +78,7 @@ public abstract class SeasonalEnvironmentEvent extends BLEnvironmentEvent {
 	@Override
 	public void resetActiveState() {
 		long dayDiff = this.getDayDiffFromStartDate();
-		if (dayDiff >= 0 && dayDiff <= this.getDurationInDays() && BetweenlandsConfig.WORLD_AND_DIMENSION.enableSeasonalEvents) {
+		if (dayDiff >= 0 && dayDiff <= this.getDurationInDays() && BetweenlandsConfig.seasonalEvents) {
 			if (!this.isActive()) {
 				this.setActive(true);
 			}

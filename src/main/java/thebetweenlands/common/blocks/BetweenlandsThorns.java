@@ -15,10 +15,10 @@ public class BetweenlandsThorns extends BetweenlandsVineBlock {
 
 
 	@Override
-	public void entityInside(BlockState p_60495_, Level p_60496_, BlockPos p_60497_, Entity p_60498_) {
+	public void entityInside(BlockState p_60495_, Level level, BlockPos p_60497_, Entity p_60498_) {
 		// Only hurt players and mobs ignoring items and others
 		if (p_60498_ instanceof LivingEntity) {
-			p_60498_.hurt(DamageSource.SWEET_BERRY_BUSH, 1);
+			p_60498_.hurt(level.damageSources().sweetBerryBush(), 1);
 		}
 	}
 }

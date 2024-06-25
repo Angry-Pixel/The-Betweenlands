@@ -8,14 +8,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntitySelector;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MoverType;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
@@ -166,7 +159,7 @@ public class EntityWight extends BetweenlandsEntity {
 					}
 				} else {
 					if (!this.level().isClientSide) {
-						this.yya -= 0.075D;
+						this.yya -= 0.075F;
 
 						this.fallDistance = 0;
 
@@ -196,13 +189,12 @@ public class EntityWight extends BetweenlandsEntity {
 						double dx = attackTarget.getX() - this.getX();
 						double dz = attackTarget.getZ() - this.getZ();
 						double dy;
-						if (attackTarget instanceof LivingEntity) {
-							LivingEntity entitylivingbase = attackTarget;
-							dy = entitylivingbase.getY() + (double) entitylivingbase.getEyeHeight() - (this.getY() + (double) this.getEyeHeight());
+						if (attackTarget instanceof Mob) {
+							dy = attackTarget.getY() + (double) attackTarget.getEyeHeight() - (this.getY() + (double) this.getEyeHeight());
 						} else {
 							dy = (attackTarget.getBoundingBox().minY + attackTarget.getBoundingBox().maxY) / 2.0D - (this.getY() + (double) this.getEyeHeight());
 						}
-						double dist = (double) Math.sqrt(dx * dx + dz * dz);
+						double dist = Math.sqrt(dx * dx + dz * dz);
 						float yaw = (float) (Math.atan2(dz, dx) * 180.0D / Math.PI) - 90.0F;
 						float pitch = (float) (-(Math.atan2(dy, dist) * 180.0D / Math.PI));
 						this.setRot(yaw, pitch);
@@ -297,15 +289,15 @@ public class EntityWight extends BetweenlandsEntity {
 			if (this.isInWater()) {
 				this.moveRelative(0.02F, in);
 				this.move(MoverType.SELF, new Vec3(this.xxa, this.yya, this.zza));
-				this.xxa *= 0.800000011920929D;
-				this.yya *= 0.800000011920929D;
-				this.zza *= 0.800000011920929D;
+				this.xxa *= 0.800000011920929F;
+				this.yya *= 0.800000011920929F;
+				this.zza *= 0.800000011920929F;
 			} else if (this.isInLava()) {
 				this.moveRelative(0.02F, in);
 				this.move(MoverType.SELF, new Vec3(this.xxa, this.yya, this.zza));
-				this.xxa *= 0.5D;
-				this.yya *= 0.5D;
-				this.zza *= 0.5D;
+				this.xxa *= 0.5F;
+				this.yya *= 0.5F;
+				this.zza *= 0.5F;
 			} else {
 				float f = 0.91F;
 

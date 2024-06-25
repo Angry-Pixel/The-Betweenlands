@@ -7,8 +7,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.savedata.AmateMapData;
-import thebetweenlands.common.savedata.BLMapDecoration;
+import thebetweenlands.common.world.storage.AmateMapData;
+import thebetweenlands.common.world.storage.BLMapDecoration;
 
 @SuppressWarnings({"JavadocReference", "unused", "RedundantSuppression", "deprecation"})
 public class ASMHooks {

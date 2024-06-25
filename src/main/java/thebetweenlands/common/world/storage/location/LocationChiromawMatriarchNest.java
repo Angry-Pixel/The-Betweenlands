@@ -70,7 +70,7 @@ public class LocationChiromawMatriarchNest extends LocationGuarded {
 				for(ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox())) {
 					player.displayClientMessage(Component.translatable("chat.chiromaw_matriarch_nest.tainted"), false);
 
-					AdvancementCriterionRegistry.CHIROMAW_MATRIARCH_NEST_CLAIMED.trigger(player);
+					//AdvancementCriterionRegistry.CHIROMAW_MATRIARCH_NEST_CLAIMED.trigger(player);
 				}
 			}
 

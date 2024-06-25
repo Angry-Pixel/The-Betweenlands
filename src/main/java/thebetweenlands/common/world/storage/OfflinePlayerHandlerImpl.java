@@ -13,8 +13,11 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtAccounter;
+import net.minecraft.nbt.NbtIo;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.storage.LevelResource;
 import net.neoforged.neoforge.event.level.LevelEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import thebetweenlands.api.storage.IOfflinePlayerDataHandler;
@@ -100,7 +103,7 @@ public class OfflinePlayerHandlerImpl implements IOfflinePlayerDataHandler {
 	}
 
 	private File getOfflinePlayerDataFolder(ServerLevel level) {
-		File file = new File(new File(level.getSaveHandler().getWorldDirectory(), "playerdata"), "offline_player_data");
+		File file = new File(level.getServer().getWorldPath(LevelResource.PLAYER_DATA_DIR).toFile(), "offline_player_data");
 		file.mkdirs();
 		return file;
 	}
@@ -122,7 +125,7 @@ public class OfflinePlayerHandlerImpl implements IOfflinePlayerDataHandler {
 		File file = new File(this.getOfflinePlayerDataFolder(this.level), fileName + ".dat");
 
 		if (file.exists()) {
-			return CompressedStreamTools.readCompressed(new FileInputStream(file));
+			return NbtIo.readCompressed(new FileInputStream(file), NbtAccounter.unlimitedHeap());
 		}
 
 		return null;
@@ -158,7 +161,7 @@ public class OfflinePlayerHandlerImpl implements IOfflinePlayerDataHandler {
 		File tempFile = new File(folder, fileName + ".dat.tmp");
 		File currentFile = new File(folder, fileName + ".dat");
 
-		CompressedStreamTools.writeCompressed(nbt, new FileOutputStream(tempFile));
+		NbtIo.writeCompressed(nbt, new FileOutputStream(tempFile));
 
 		if (currentFile.exists()) {
 			currentFile.delete();

@@ -76,6 +76,9 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> OCTINE_ORE = register("octine_ore", () -> new OctineOreBlock(BlockBehaviour.Properties.of().strength(1.5F, 30.0F).sound(SoundType.STONE).lightLevel((lightlevel) -> 13)));
 	public static final DeferredBlock<Block> SCABYST_ORE = register("scabyst_ore", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 30.0F).sound(SoundType.DEEPSLATE)));
 	public static final DeferredBlock<Block> VALONITE_ORE = register("valonite_ore", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 30.0F).sound(SoundType.DEEPSLATE)));
+	public static final DeferredBlock<Block> AQUA_MIDDLE_GEM_ORE = register("aqua_middle_gem_ore", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 30.0F).sound(SoundType.DEEPSLATE)));
+	public static final DeferredBlock<Block> CRIMSON_MIDDLE_GEM_ORE = register("crimson_middle_gem_ore", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 30.0F).sound(SoundType.DEEPSLATE)));
+	public static final DeferredBlock<Block> GREEN_MIDDLE_GEM_ORE = register("green_middle_gem_ore", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 30.0F).sound(SoundType.DEEPSLATE)));
 	// - Portal
 	public static final DeferredBlock<Block> PORTAL = BLOCKS.register("portal", () -> new BetweenlandsPortal(BlockBehaviour.Properties.of().noCollission().randomTicks().strength(-1.0F).sound(SoundType.GLASS).lightLevel((lightlevel) -> 11)));
 

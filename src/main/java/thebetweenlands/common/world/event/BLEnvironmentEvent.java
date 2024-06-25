@@ -10,7 +10,7 @@ import net.minecraft.world.level.Level;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.api.environment.IRemotelyControllableEnvironmentEvent;
 import thebetweenlands.api.network.IGenericDataAccessorAccess;
-import thebetweenlands.common.networking.datamanager.GenericDataAccessor;
+import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 
 public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotelyControllableEnvironmentEvent, IGenericDataAccessorAccess.IDataManagedObject {
 	private final BLEnvironmentEventRegistry registry;

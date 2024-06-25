@@ -18,11 +18,15 @@ import net.minecraft.world.level.saveddata.maps.MapId;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.savedata.AmateMapData;
-import thebetweenlands.common.savedata.BLMapDecoration;
+import thebetweenlands.common.world.storage.AmateMapData;
+import thebetweenlands.common.world.storage.BLMapDecoration;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.LocationCragrockTower;
+import thebetweenlands.common.world.storage.location.LocationGuarded;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 
 import javax.annotation.Nullable;
@@ -159,7 +163,7 @@ public class AmateMapItem extends MapItem {
 			}
 		}
 
-		this.locateBLLocations(level, checkedChunks, centerX, centerZ, blocksPerPixel, map);
+		this.locateBLLocations(level, checkedChunks, centerX, centerZ, blocksPerPixel, (AmateMapData) data);
 	}
 
 	private void locateBLLocations(Level world, Map<Integer, List<Integer>> posList, int centerX, int centerZ, int blocksPerPixel, AmateMapData data) {

@@ -11,7 +11,7 @@ import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import thebetweenlands.client.ClientEvents;
 import thebetweenlands.common.datagen.DataGenerators;
-import thebetweenlands.common.networking.*;
+import thebetweenlands.common.network.*;
 import thebetweenlands.common.registries.*;
 
 import org.apache.logging.log4j.LogManager;
@@ -98,6 +98,7 @@ public class TheBetweenlands {
 		registrar.playToClient(SyncLocalStorageDataPacket.TYPE, SyncLocalStorageDataPacket.STREAM_CODEC, SyncLocalStorageDataPacket::handle);
 		registrar.playToClient(SyncChunkStoragePacket.TYPE, SyncChunkStoragePacket.STREAM_CODEC, SyncChunkStoragePacket::handle);
 		registrar.playToClient(SyncLocalStorageReferencesPacket.TYPE, SyncLocalStorageReferencesPacket.STREAM_CODEC, SyncLocalStorageReferencesPacket::handle);
+		registrar.playToClient(SoundRipplePacket.TYPE, SoundRipplePacket.STREAM_CODEC, SoundRipplePacket::handle);
 	}
 
 	public static ResourceLocation prefix(String name) {

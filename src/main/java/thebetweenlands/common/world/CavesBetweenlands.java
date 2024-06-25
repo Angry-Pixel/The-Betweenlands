@@ -11,18 +11,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.CarvingMask;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.Aquifer;
-import net.minecraft.world.level.levelgen.carver.CarverConfiguration;
 import net.minecraft.world.level.levelgen.carver.CarvingContext;
+import net.minecraft.world.level.levelgen.carver.CaveCarverConfiguration;
 import net.minecraft.world.level.levelgen.carver.WorldCarver;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.util.FractalOpenSimplexNoise;
-import thebetweenlands.common.world.util.MathUtils;
-import thebetweenlands.common.world.util.OpenSimplexNoise;
+import thebetweenlands.util.FractalOpenSimplexNoise;
+import thebetweenlands.util.MathUtils;
+import thebetweenlands.util.OpenSimplexNoise;
 
 import java.util.function.Function;
 
-public class CavesBetweenlands extends WorldCarver<CarverConfiguration> {
+public class CavesBetweenlands extends WorldCarver<CaveCarverConfiguration> {
 
 	private static final int CHUNK_SIZE = 16;
 	private static final double XZ_CAVE_SCALE = 0.08;
@@ -43,7 +43,7 @@ public class CavesBetweenlands extends WorldCarver<CarverConfiguration> {
 	private final double[] noiseField = new double[9 * 9 * 129];
 	private final double[] seaBreakNoiseField = new double[16 * 16];
 
-	public CavesBetweenlands(Codec<CarverConfiguration> codec) {
+	public CavesBetweenlands(Codec<CaveCarverConfiguration> codec) {
 		super(codec);
 		cave = new OpenSimplexNoise(0);
 		seaLevelBreak = new OpenSimplexNoise(1);
@@ -51,7 +51,7 @@ public class CavesBetweenlands extends WorldCarver<CarverConfiguration> {
 	}
 
 	@Override
-	public boolean carve(CarvingContext context, CarverConfiguration config, ChunkAccess access, Function<BlockPos, Holder<Biome>> biomeAccessor, RandomSource random, Aquifer aquifer, ChunkPos chunkPos, CarvingMask mask) {
+	public boolean carve(CarvingContext context, CaveCarverConfiguration config, ChunkAccess access, Function<BlockPos, Holder<Biome>> biomeAccessor, RandomSource random, Aquifer aquifer, ChunkPos chunkPos, CarvingMask mask) {
 
 		// only generate in this chunk check
 		if (chunkPos.equals(access.getPos())) {
@@ -188,7 +188,7 @@ public class CavesBetweenlands extends WorldCarver<CarverConfiguration> {
 	// Generate once every 10 chunks?
 	// Every chunk seems to generate a 5 by 5 radius around it including the same carver
 	@Override
-	public boolean isStartChunk(CarverConfiguration config, RandomSource random) {
+	public boolean isStartChunk(CaveCarverConfiguration config, RandomSource random) {
 		return true;
 	}
 }

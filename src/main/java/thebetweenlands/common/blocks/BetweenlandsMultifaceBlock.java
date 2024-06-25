@@ -3,6 +3,7 @@ package thebetweenlands.common.blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -172,7 +173,7 @@ public class BetweenlandsMultifaceBlock extends BetweenlandsBlock {
 
 	// On block update check all faces have a solid face
 	@Override
-	public void tick(BlockState p_60462_, ServerLevel p_60463_, BlockPos p_60464_, Random p_60465_) {
+	public void tick(BlockState p_60462_, ServerLevel p_60463_, BlockPos p_60464_, RandomSource p_60465_) {
 
 		// Destroy if out of faces
 		if (this.countFaces(p_60462_) == 0) {

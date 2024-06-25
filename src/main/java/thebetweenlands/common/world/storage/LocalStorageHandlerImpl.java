@@ -1,6 +1,7 @@
 package thebetweenlands.common.world.storage;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,6 +26,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.dimension.DimensionType;
+import net.minecraft.world.level.storage.LevelResource;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.api.ITickable;
@@ -39,7 +42,7 @@ import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.LocalStorageReference;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.networking.SyncLocalStorageDataPacket;
+import thebetweenlands.common.network.SyncLocalStorageDataPacket;
 import thebetweenlands.common.registries.StorageRegistry;
 
 public class LocalStorageHandlerImpl implements ILocalStorageHandler {
@@ -60,8 +63,8 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	public LocalStorageHandlerImpl(IWorldStorage worldStorage) {
 		this.worldStorage = worldStorage;
 		this.level = worldStorage.getLevel();
-		String dimFolder = this.level.provider.getSaveFolder();
-		this.localStorageDir = new File(this.level.getSaveHandler().getWorldDirectory(), (dimFolder != null && dimFolder.length() > 0 ? dimFolder + File.separator : "") + "data" + File.separator + "local_storage" + File.separator);
+		Path dimFolder = DimensionType.getStorageFolder(this.level.dimension(), this.level.getServer().getWorldPath(LevelResource.ROOT));
+		this.localStorageDir = new File(this.level.getSaveHandler().getWorldDirectory(), (!dimFolder.toString().isEmpty() ? dimFolder + File.separator : "") + "data" + File.separator + "local_storage" + File.separator);
 		this.regionCache = new LocalRegionCache(this, new File(this.localStorageDir, "region"));
 	}
 

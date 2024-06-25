@@ -2,6 +2,7 @@ package thebetweenlands.common.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.common.registries.ParticleRegistry;
@@ -14,14 +15,14 @@ public class BetweenlandsParticleEmiterBlock extends BetweenlandsBlock {
 		super(p_48756_);
 	}
 
-	public void animateTick(BlockState p_55479_, Level p_55480_, BlockPos p_55481_, Random p_55482_) {
+	public void animateTick(BlockState p_55479_, Level p_55480_, BlockPos p_55481_, RandomSource p_55482_) {
 		if (p_55482_.nextInt(15) == 0) {
 			spawnParticles(p_55480_, p_55481_);
 		}
 	}
 
 	private static void spawnParticles(Level p_55455_, BlockPos p_55456_) {
-		Random random = p_55455_.random;
+		RandomSource random = p_55455_.random;
 
 		for (Direction direction : Direction.values()) {
 			BlockPos blockpos = p_55456_.relative(direction);

@@ -13,6 +13,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -251,9 +252,9 @@ public class AspectManager {
 	 * @param nbt
 	 * @param aspectSeed
 	 */
-	public void loadAndPopulateStaticAspects(CompoundTag nbt, long aspectSeed) {
+	public void loadAndPopulateStaticAspects(CompoundTag nbt, HolderLookup.Provider provider, long aspectSeed) {
 		if(nbt != null && nbt.contains("entries")) {
-			this.loadStaticAspects(nbt);
+			this.loadStaticAspects(nbt, provider);
 			//System.out.println("Loaded aspects: ");
 			//int loaded = this.matchedAspects.size();
 			//for(Entry<AspectItem, List<Aspect>> entry : this.matchedAspects.entrySet()) {
@@ -279,14 +280,14 @@ public class AspectManager {
 	 * Loads all static aspects from an NBT
 	 * @param nbt
 	 */
-	public void loadStaticAspects(CompoundTag nbt) {
+	public void loadStaticAspects(CompoundTag nbt, HolderLookup.Provider provider) {
 		this.matchedAspects.clear();
 		ListTag entryList = (ListTag) nbt.get("entries");
 		entryIT:
 			for(int i = 0; i < entryList.size(); i++) {
 				CompoundTag entryCompound = entryList.getCompound(i);
 				//System.out.println("Getting aspect item: " + entryCompound);
-				AspectItem itemEntry = readAspectItemFromNBT(entryCompound);
+				AspectItem itemEntry = readAspectItemFromNBT(entryCompound, provider);
 				if(itemEntry == null) {
 					//System.out.println("Failed getting aspect item");
 					continue;
@@ -311,13 +312,13 @@ public class AspectManager {
 	 * Saves all static aspects to an NBT
 	 * @param nbt
 	 */
-	public void saveStaticAspects(CompoundTag nbt) {
+	public void saveStaticAspects(CompoundTag nbt, HolderLookup.Provider provider) {
 		ListTag entryList = new ListTag();
 		for(Entry<AspectItem, List<Aspect>> entry : this.matchedAspects.entrySet()) {
 			AspectItem itemEntry = entry.getKey();
 			List<Aspect> itemAspects = entry.getValue();
 			CompoundTag entryCompound = new CompoundTag();
-			writeAspectItemToNbt(itemEntry, entryCompound);
+			writeAspectItemToNbt(itemEntry, entryCompound, provider);
 			ListTag aspectList = new ListTag();
 			for(Aspect aspect : itemAspects) {
 				aspectList.add(aspect.writeToNBT(new CompoundTag()));
@@ -331,22 +332,22 @@ public class AspectManager {
 
 	/**
 	 * Writes an aspect item to the specified NBT
-	 * @param nbt
+	 * @param tag
 	 * @return
 	 */
-	public static CompoundTag writeAspectItemToNbt(AspectItem aspectItem, CompoundTag nbt) {
-		nbt.put("item", aspectItem.getOriginal().save());
-		return nbt;
+	public static CompoundTag writeAspectItemToNbt(AspectItem aspectItem, CompoundTag tag, HolderLookup.Provider provider) {
+		tag.put("item", aspectItem.getOriginal().save(provider));
+		return tag;
 	}
 
 	/**
 	 * Reads an aspect item from the specified NBT
-	 * @param nbt
+	 * @param tag
 	 * @return
 	 */
 	@Nullable
-	public static AspectItem readAspectItemFromNBT(CompoundTag nbt) {
-		ItemStack item = nbt.contains("item") ? ItemStack.parse(nbt.getCompound("item")) : null;
+	public static AspectItem readAspectItemFromNBT(CompoundTag tag, HolderLookup.Provider provider) {
+		ItemStack item = tag.contains("item") ? ItemStack.parseOptional(provider, tag.getCompound("item")) : null;
 		if(item == null)
 			return null;
 		return AspectManager.getAspectItem(item);
@@ -541,15 +542,15 @@ public class AspectManager {
 	 * @param item
 	 * @return
 	 */
-	public List<Aspect> getDiscoveredStaticAspects(AspectItem item, @Nullable DiscoveryContainer<?> discoveryContainer) {
-		List<Aspect> aspects = new ArrayList<Aspect>();
-		if(discoveryContainer == null) {
-			aspects.addAll(this.getStaticAspects(item));
-		} else {
-			aspects.addAll(discoveryContainer.getDiscoveredStaticAspects(this, item));
-		}
-		return aspects;
-	}
+//	public List<Aspect> getDiscoveredStaticAspects(AspectItem item, @Nullable DiscoveryContainer<?> discoveryContainer) {
+//		List<Aspect> aspects = new ArrayList<Aspect>();
+//		if(discoveryContainer == null) {
+//			aspects.addAll(this.getStaticAspects(item));
+//		} else {
+//			aspects.addAll(discoveryContainer.getDiscoveredStaticAspects(this, item));
+//		}
+//		return aspects;
+//	}
 
 	/**
 	 * Returns a list of all discovered aspect types on an item. If you specify a discovery container
@@ -558,11 +559,11 @@ public class AspectManager {
 	 * @param item
 	 * @return
 	 */
-	public List<IAspectType> getDiscoveredAspectTypes(AspectItem item, DiscoveryContainer<?> discoveryContainer) {
-		List<IAspectType> aspects = new ArrayList<IAspectType>();
-		for(Aspect aspect : this.getDiscoveredStaticAspects(item, discoveryContainer)) {
-			aspects.add(aspect.type);
-		}
-		return aspects;
-	}
+//	public List<IAspectType> getDiscoveredAspectTypes(AspectItem item, DiscoveryContainer<?> discoveryContainer) {
+//		List<IAspectType> aspects = new ArrayList<IAspectType>();
+//		for(Aspect aspect : this.getDiscoveredStaticAspects(item, discoveryContainer)) {
+//			aspects.add(aspect.type);
+//		}
+//		return aspects;
+//	}
 }

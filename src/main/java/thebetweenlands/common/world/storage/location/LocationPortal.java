@@ -13,7 +13,9 @@ import net.minecraft.world.phys.AABB;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.DimensionRegistries;
 
 public class LocationPortal extends LocationStorage {
 	private BlockPos portalPos;
@@ -44,10 +46,10 @@ public class LocationPortal extends LocationStorage {
 		} else {
 			//Legacy code for old portals that didn't support other dimensions
 			ResourceKey<Level> currDim = this.getWorldStorage().getLevel().dimension();
-			if (currDim == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
-				this.otherPortalDimension = Level.OVERWORLD;
+			if (currDim == DimensionRegistries.DIMENSION_KEY) {
+				this.otherPortalDimension = BetweenlandsConfig.returnDimension;
 			} else {
-				this.otherPortalDimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId));
+				this.otherPortalDimension = DimensionRegistries.DIMENSION_KEY;
 			}
 		}
 		this.targetDimensionSet = tag.getBoolean("TargetDimSet");

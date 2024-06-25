@@ -3,6 +3,7 @@ package thebetweenlands.common.blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -57,7 +58,7 @@ public class BetweenlandsHangingBlock extends BetweenlandsBlock {
 
 	// On tick update, check for block connected to solid block
 	@Override
-	public void tick(BlockState p_60462_, ServerLevel p_60463_, BlockPos p_60464_, Random p_60465_) {
+	public void tick(BlockState p_60462_, ServerLevel p_60463_, BlockPos p_60464_, RandomSource p_60465_) {
 
 		// do can suvive check
 		if (!this.canSurvive(p_60462_, p_60463_, p_60464_)) {
@@ -66,7 +67,7 @@ public class BetweenlandsHangingBlock extends BetweenlandsBlock {
 	}
 
 	@Override
-	public void randomTick(BlockState p_60462_, ServerLevel p_60463_, BlockPos p_60464_, Random p_60465_) {
+	public void randomTick(BlockState p_60462_, ServerLevel p_60463_, BlockPos p_60464_, RandomSource p_60465_) {
 
 		// Do grow check
 		if (canGrow(p_60464_, p_60463_) && p_60465_.nextInt(this.growthChance) <= 0) {

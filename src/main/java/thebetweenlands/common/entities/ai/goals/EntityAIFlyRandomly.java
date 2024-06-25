@@ -1,7 +1,6 @@
 package thebetweenlands.common.entities.ai.goals;
 
-import java.util.Random;
-
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -40,7 +39,7 @@ public class EntityAIFlyRandomly<T extends Mob> extends Goal {
 
 	@Override
 	public void start() {
-		Random random = this.entity.getRandom();
+		RandomSource random = this.entity.getRandom();
 		this.entity.getMoveControl().setWantedPosition(this.getTargetX(random, this.distanceMultiplier), this.getTargetY(random, this.distanceMultiplier), this.getTargetZ(random, this.distanceMultiplier), this.getFlightSpeed());
 	}
 
@@ -74,7 +73,7 @@ public class EntityAIFlyRandomly<T extends Mob> extends Goal {
 	 * @param distanceMultiplier Decreases if path is blocked or can't find a valid path. Ranges from 0.1 to 1.0
 	 * @return
 	 */
-	protected double getTargetX(Random rand, double distanceMultiplier) {
+	protected double getTargetX(RandomSource rand, double distanceMultiplier) {
 		return this.entity.xo + (double) ((rand.nextFloat() * 2.0F - 1.0F) * 16.0F * distanceMultiplier);
 	}
 
@@ -85,7 +84,7 @@ public class EntityAIFlyRandomly<T extends Mob> extends Goal {
 	 * @param distanceMultiplier Decreases if path is blocked or can't find a valid path. Ranges from 0.1 to 1.0
 	 * @return
 	 */
-	protected double getTargetY(Random rand, double distanceMultiplier) {
+	protected double getTargetY(RandomSource rand, double distanceMultiplier) {
 		return this.entity.yo + (double) ((rand.nextFloat() * 2.0F - 1.0F) * 16.0F * distanceMultiplier);
 	}
 
@@ -96,7 +95,7 @@ public class EntityAIFlyRandomly<T extends Mob> extends Goal {
 	 * @param distanceMultiplier Decreases if path is blocked or can't find a valid path. Ranges from 0.1 to 1.0
 	 * @return
 	 */
-	protected double getTargetZ(Random rand, double distanceMultiplier) {
+	protected double getTargetZ(RandomSource rand, double distanceMultiplier) {
 		return this.entity.zo + (double) ((rand.nextFloat() * 2.0F - 1.0F) * 16.0F * distanceMultiplier);
 	}
 }

@@ -2,6 +2,7 @@ package thebetweenlands.common.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
@@ -25,7 +26,7 @@ public class OctineOreBlock extends Block {
 	}
 
 	@Override
-	public void randomTick(BlockState p_60551_, ServerLevel p_60552_, BlockPos p_60553_, Random p_60554_) {
+	public void randomTick(BlockState p_60551_, ServerLevel p_60552_, BlockPos p_60553_, RandomSource p_60554_) {
 		p_60552_.markAndNotifyBlock(p_60553_, p_60552_.getChunkAt(p_60553_), p_60551_, p_60551_, UPDATE_ALL_IMMEDIATE, UPDATE_ALL);
 		p_60552_.setBlockAndUpdate(p_60553_, p_60551_.setValue(SETUP, true));
 	}

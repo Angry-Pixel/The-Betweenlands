@@ -2,7 +2,6 @@ package thebetweenlands.common.items;
 
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -16,7 +15,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
+import thebetweenlands.common.network.SoundRipplePacket;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsChunkStorage;
 
@@ -30,8 +31,8 @@ public class GemSingerItem extends Item {
 	public enum GemSingerTarget implements Predicate<BlockState> {
 		AQUA_MIDDLE_GEM(0, state -> state.is(BlockRegistry.AQUA_MIDDLE_GEM_ORE)),
 		CRIMSON_MIDDLE_GEM(1, state -> state.is(BlockRegistry.CRIMSON_MIDDLE_GEM_ORE)),
-		GREEN_MIDDLE_GEM(2, state -> state.is(BlockRegistry.GREEN_MIDDLE_GEM_ORE)),
-		LIFE_CRYSTAL(3, state -> state.is(BlockRegistry.LIFE_CRYSTAL_STALACTITE) && state.getValue(BlockLifeCrystalStalactite.VARIANT) == EnumLifeCrystalType.ORE);
+		GREEN_MIDDLE_GEM(2, state -> state.is(BlockRegistry.GREEN_MIDDLE_GEM_ORE));
+		//LIFE_CRYSTAL(3, state -> state.is(BlockRegistry.LIFE_CRYSTAL_STALACTITE) && state.getValue(BlockLifeCrystalStalactite.VARIANT) == EnumLifeCrystalType.ORE);
 
 		private final int id;
 		private final Predicate<BlockState> predicate;
@@ -59,6 +60,10 @@ public class GemSingerItem extends Item {
 		public boolean test(BlockState state) {
 			return this.predicate.test(state);
 		}
+	}
+
+	public GemSingerItem(Properties properties) {
+		super(properties);
 	}
 
 	@Override
@@ -124,7 +129,7 @@ public class GemSingerItem extends Item {
 									this.setTarget(stack, gem, picked.getKey());
 									this.spawnEffect(player, gem, chunkRange * 16, maxDelay);
 
-									stack.hurtAndBreak(1, player, hand);
+									stack.hurtAndBreak(1, player, Player.getSlotForHand(hand));
 									break;
 								}
 							}
@@ -132,7 +137,7 @@ public class GemSingerItem extends Item {
 					}
 				} else {
 					this.spawnEffect(player, gem, chunkRange * 16, maxDelay);
-					stack.hurtAndBreak(1, player, hand);
+					stack.hurtAndBreak(1, player, Player.getSlotForHand(hand));
 				}
 
 				player.getCooldowns().addCooldown(stack.getItem(), 60);
@@ -149,9 +154,9 @@ public class GemSingerItem extends Item {
 	}
 
 	protected void spawnEffect(Player player, BlockPos target, int maxRangeBlocks, int maxDelay) {
-		if(player instanceof ServerPlayer) {
+		if(player instanceof ServerPlayer sp) {
 			int delay = Math.min((int)(Math.sqrt(player.distanceToSqr(Vec3.atCenterOf(target))) / (float)maxRangeBlocks * maxDelay), maxDelay);
-			TheBetweenlands.networkWrapper.sendTo(new MessageSoundRipple(target, delay), (EntityPlayerMP) player);
+			PacketDistributor.sendToPlayer(sp, new SoundRipplePacket(target, delay));
 		}
 	}
 

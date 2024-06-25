@@ -35,7 +35,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
-import thebetweenlands.common.networking.datamanager.GenericDataAccessor;
+import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -487,8 +487,9 @@ public class LocationCragrockTower extends LocationGuarded {
 						this.setDirty(true);
 					}
 
+					//TODO
 					if(this.isTopConquered() && player instanceof ServerPlayer && this.getLevel(Mth.floor(player.getY())) == 5) {
-						AdvancementCriterionRegistry.CRAGROCK_TOP.trigger((ServerPlayer) player);
+						//AdvancementCriterionRegistry.CRAGROCK_TOP.trigger((ServerPlayer) player);
 					} else if (!this.isTopReached && !this.getInnerBoundingBox().inflate(0.5D, 0.5D, 0.5D).contains(player.position()) && player.getY() - structurePos.getY() > 12) {
 						//Player trying to bypass tower, teleport to entrance
 

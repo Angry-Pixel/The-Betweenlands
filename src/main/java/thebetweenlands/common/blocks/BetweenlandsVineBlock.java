@@ -3,6 +3,7 @@ package thebetweenlands.common.blocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -53,7 +54,7 @@ public class BetweenlandsVineBlock extends BetweenlandsMultifaceBlock {
 	}
 
 	@Override
-	public void randomTick(BlockState p_60551_, ServerLevel p_60552_, BlockPos p_60553_, Random p_60554_) {
+	public void randomTick(BlockState p_60551_, ServerLevel p_60552_, BlockPos p_60553_, RandomSource p_60554_) {
 		// Stop ticking if cant grow anymore
 		if (p_60551_.getValue(PERSISTENT)) {
 			return;

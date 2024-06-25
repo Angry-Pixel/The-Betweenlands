@@ -5,19 +5,20 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import thebetweenlands.api.ITickable;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
-import thebetweenlands.common.networking.BlockGuardDataPacket;
-import thebetweenlands.common.networking.ChangeBlockGuardSectionPacket;
-import thebetweenlands.common.networking.ClearBlockGuardPacket;
+import thebetweenlands.common.network.BlockGuardDataPacket;
+import thebetweenlands.common.network.ChangeBlockGuardSectionPacket;
+import thebetweenlands.common.network.ClearBlockGuardPacket;
 import thebetweenlands.common.world.storage.location.guard.BlockLocationGuard;
 
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class LocationGuarded extends LocationStorage {
+public class LocationGuarded extends LocationStorage implements ITickable {
 	private final BlockLocationGuard guard = new BlockLocationGuard() {
 		@Override
 		public boolean setGuarded(Level level, BlockPos pos, boolean guarded) {

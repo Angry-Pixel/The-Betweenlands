@@ -22,7 +22,7 @@ import thebetweenlands.api.network.IGenericDataAccessorAccess;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
-import thebetweenlands.common.networking.datamanager.GenericDataAccessor;
+import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.LocalStorageImpl;
 import thebetweenlands.common.world.storage.location.guard.ILocationGuard;

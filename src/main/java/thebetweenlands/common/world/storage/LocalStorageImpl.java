@@ -10,8 +10,8 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.storage.*;
-import thebetweenlands.common.networking.AddLocalStoragePacket;
-import thebetweenlands.common.networking.RemoveLocalStoragePacket;
+import thebetweenlands.common.network.AddLocalStoragePacket;
+import thebetweenlands.common.network.RemoveLocalStoragePacket;
 import thebetweenlands.common.world.storage.operation.DeferredLinkOperation;
 
 import java.util.*;

@@ -1,9 +1,9 @@
 package thebetweenlands.common.registries;
 
 import net.minecraft.client.color.block.BlockColor;
-import thebetweenlands.common.colors.BetweenlandsFoligeBlockColors;
-import thebetweenlands.common.colors.BetweenlandsGrassBlockColors;
-import thebetweenlands.common.colors.BetweenlandsSwampWaterColors;
+import thebetweenlands.client.color.BetweenlandsFoligeBlockColors;
+import thebetweenlands.client.color.BetweenlandsGrassBlockColors;
+import thebetweenlands.client.color.BetweenlandsSwampWaterColors;
 
 public class BlockColorRegistry {
 

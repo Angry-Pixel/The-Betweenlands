@@ -72,7 +72,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 				event.setDefaults();
 				event.setLoaded();
 			}
-			this.aspectManager.loadAndPopulateStaticAspects(null, AspectManager.getAspectsSeed(this.getLevel().getServer().getLevel(Level.OVERWORLD).getSeed()));
+			this.aspectManager.loadAndPopulateStaticAspects(null, this.getLevel().registryAccess(), AspectManager.getAspectsSeed(this.getLevel().getServer().getLevel(Level.OVERWORLD).getSeed()));
 		}
 
 		this.ambienceTicks = this.getLevel().getRandom().nextInt(7000);
@@ -85,7 +85,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 				event.readFromNBT(tag);
 			}
 			this.environmentEventRegistry.setDisabled(tag.getBoolean("eventsDisabled"));
-			this.aspectManager.loadAndPopulateStaticAspects(tag.getCompound("itemAspects"), AspectManager.getAspectsSeed(this.getLevel().getServer().getLevel(Level.OVERWORLD).getSeed()));
+			this.aspectManager.loadAndPopulateStaticAspects(tag.getCompound("itemAspects"), this.getLevel().registryAccess(), AspectManager.getAspectsSeed(this.getLevel().getServer().getLevel(Level.OVERWORLD).getSeed()));
 
 			this.biomeSpawnEntriesData.clear();
 //			if (tag.contains("biomeData", Tag.TAG_COMPOUND)) {
@@ -114,7 +114,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 			}
 			tag.putBoolean("eventsDisabled", this.environmentEventRegistry.isDisabled());
 			CompoundTag aspectData = new CompoundTag();
-			this.aspectManager.saveStaticAspects(aspectData);
+			this.aspectManager.saveStaticAspects(aspectData, this.getLevel().registryAccess());
 			tag.put("itemAspects", aspectData);
 
 //			CompoundTag biomesNbt = new CompoundTag();

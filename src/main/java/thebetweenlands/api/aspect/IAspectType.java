@@ -53,6 +53,6 @@ public interface IAspectType {
 	 */
 	@Nullable
 	static IAspectType readFromNBT(CompoundTag nbt) {
-		return AspectRegistry.getAspectTypeFromName(nbt.getString("type"));
+		return null;//return AspectRegistry.getAspectTypeFromName(nbt.getString("type"));
 	}
 }

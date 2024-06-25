@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.Nullable;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtIo;
 import thebetweenlands.common.TheBetweenlands;
 
 public class LocalStorageSaveHandler implements IThreadedFileIO {
@@ -73,7 +74,7 @@ public class LocalStorageSaveHandler implements IThreadedFileIO {
 			try {
 				this.lockFile(file);
 				try {
-					return CompressedStreamTools.read(file);
+					return NbtIo.read(file.toPath());
 				} finally {
 					this.unlockFile(file);
 				}
@@ -102,7 +103,7 @@ public class LocalStorageSaveHandler implements IThreadedFileIO {
 						} else {
 							try {
 								file.getParentFile().mkdirs();
-								CompressedStreamTools.safeWrite(nbt, file);
+								NbtIo.write(nbt, file.toPath());
 							} catch(Exception ex) {
 								TheBetweenlands.LOGGER.error("Failed to save region or local storage: " + file.getAbsolutePath(), ex);
 							}

@@ -4,10 +4,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.carver.*;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
@@ -18,7 +14,7 @@ public class CarverRegistry {
 
 	public static final DeferredHolder<WorldCarver<?>, WorldCarver<CaveCarverConfiguration>> BETWEENLANDS_CAVES = CARVER_TYPES.register("betweenlands_caves", () -> new CaveWorldCarver(CaveCarverConfiguration.CODEC));
 	public static final DeferredHolder<WorldCarver<?>, WorldCarver<CanyonCarverConfiguration>> BETWEENLANDS_RAVINES = CARVER_TYPES.register("betweenlands_ravines", () -> new CanyonWorldCarver(CanyonCarverConfiguration.CODEC));
-	public static final DeferredHolder<WorldCarver<?>, WorldCarver<CarverConfiguration>> CAVES_BETWEENLANDS = CARVER_TYPES.register("caves_betweenlands", () -> new CavesBetweenlands(CaveCarverConfiguration.CODEC));
+	public static final DeferredHolder<WorldCarver<?>, WorldCarver<CaveCarverConfiguration>> CAVES_BETWEENLANDS = CARVER_TYPES.register("caves_betweenlands", () -> new CavesBetweenlands(CaveCarverConfiguration.CODEC));
 
 
 	public static final ResourceKey<ConfiguredWorldCarver<?>> CONFIGURED_BETWEENLANDS_CAVES = makeKey("betweenlands_caves");

@@ -2,8 +2,6 @@ package thebetweenlands.common.entities.ai.goals;
 
 import javax.annotation.Nullable;
 
-import com.mojang.math.Vector3d;
-
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import org.joml.Vector3d;

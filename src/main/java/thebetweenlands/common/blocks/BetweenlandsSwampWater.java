@@ -8,12 +8,7 @@ import net.minecraft.world.level.material.FlowingFluid;
 
 public class BetweenlandsSwampWater extends LiquidBlock {
 
-	@SuppressWarnings("deprecation")
 	public BetweenlandsSwampWater(FlowingFluid p_54694_, Properties p_54695_) {
-		super(p_54694_, p_54695_);
-	}
-
-	public BetweenlandsSwampWater(java.util.function.Supplier<? extends FlowingFluid> p_54694_, Properties p_54695_) {
 		super(p_54694_, p_54695_);
 	}
 

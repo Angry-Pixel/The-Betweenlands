@@ -14,6 +14,7 @@ import thebetweenlands.api.ITickable;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
+import thebetweenlands.common.config.BetweenlandsConfig;
 
 public class LocationTokenBucket extends LocationStorage implements ITickable {
 
@@ -274,7 +275,7 @@ public class LocationTokenBucket extends LocationStorage implements ITickable {
 			}
 		}
 
-		if (false/*BetweenlandsConfig.DEBUG.debug*/ && worldTime % 20 == 0) {
+		if (BetweenlandsConfig.debug && worldTime % 20 == 0) {
 			long reservedTokens = 0;
 			for (Ticket ticket : this.tickets) {
 				reservedTokens += ticket.reservedTokens;

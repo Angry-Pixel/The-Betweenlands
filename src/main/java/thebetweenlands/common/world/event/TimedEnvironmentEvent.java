@@ -10,7 +10,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import thebetweenlands.api.environment.IPredictableEnvironmentEvent;
-import thebetweenlands.common.networking.datamanager.GenericDataAccessor;
+import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 
 public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent implements IPredictableEnvironmentEvent {
 	public static class ActiveStateEstimator {
