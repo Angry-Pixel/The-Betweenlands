@@ -24,7 +24,7 @@ public class AmateMapColor {
 		if (id >= 0 && id <= 63) {
 			this.color = color;
 			this.id = id;
-			this.MAP_COLORS[id] = this;
+			MAP_COLORS[id] = this;
 		} else {
 			throw new IndexOutOfBoundsException(id + " is out of bounds! (0-63)");
 		}

@@ -1,7 +1,6 @@
 package thebetweenlands.common.registries;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -15,6 +14,7 @@ public class SoundRegistry {
 	public static final DeferredHolder<SoundEvent, SoundEvent> BETWEENLANDS_AMBIENT_SWAMP_LOOP = register("ambient_swamp");
 	public static final DeferredHolder<SoundEvent, SoundEvent> BETWEENLANDS_AMBIENT_WATER_LOOP = register("water_ambience");
 	public static final DeferredHolder<SoundEvent, SoundEvent> BETWEENLANDS_AMBIENT_CAVES_LOOP = register("ambient_cave");
+	public static final DeferredHolder<SoundEvent, SoundEvent> BETWEENLANDS_AMBIENT_CAVE_SPOOK_LOOP = register("ambient_cave_spook");
 
 	// Ambent effects
 
