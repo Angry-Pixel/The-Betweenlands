@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
+import net.neoforged.neoforge.event.level.ChunkDataEvent;
 import thebetweenlands.common.TheBetweenlands;
 
 public class LocalStorageSaveHandler implements IThreadedFileIO {
@@ -83,6 +84,9 @@ public class LocalStorageSaveHandler implements IThreadedFileIO {
 			}
 			return null;
 		}
+	}
+
+	public void saveChunks(ChunkDataEvent.Save event) {
 	}
 
 	@Override

@@ -41,12 +41,12 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 	/**
 	 * Sets the capability's world
 	 *
-	 * @param level
+	 * @param //level
 	 */
-	private void setLevel(Level level) {
-		this.level = level;
-		this.localStorageHandler = new LocalStorageHandlerImpl(this);
-	}
+//	private void setLevel(Level level) {
+//		this.level = level;
+//		this.localStorageHandler = new LocalStorageHandlerImpl(this);
+//	}
 
 	@Override
 	public Level getLevel() {

@@ -17,6 +17,7 @@ import com.google.common.base.Predicate;
 
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -64,7 +65,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 		this.worldStorage = worldStorage;
 		this.level = worldStorage.getLevel();
 		Path dimFolder = DimensionType.getStorageFolder(this.level.dimension(), this.level.getServer().getWorldPath(LevelResource.ROOT));
-		this.localStorageDir = new File(this.level.getSaveHandler().getWorldDirectory(), (!dimFolder.toString().isEmpty() ? dimFolder + File.separator : "") + "data" + File.separator + "local_storage" + File.separator);
+		this.localStorageDir = new File(Minecraft.getInstance().getLevelSource().validateAndCreateAccess(this.level.noSave()), (!dimFolder.toString().isEmpty() ? dimFolder + File.separator : "") + "data" + File.separator + "local_storage" + File.separator);
 		this.regionCache = new LocalRegionCache(this, new File(this.localStorageDir, "region"));
 	}
 
