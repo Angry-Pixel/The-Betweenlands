@@ -46,6 +46,7 @@ public class TheBetweenlands {
 		ItemRegistry.ITEMS.register(eventbus);
 		FluidRegistry.FLUIDS.register(eventbus);
 		FluidTypeRegistry.FLUID_TYPES.register(eventbus);
+		CreativeGroupRegistry.CREATIVE_TABS.register(eventbus);
 		AttributeRegistry.ATTRIBUTES.register(eventbus);
 		EntityRegistry.ENTITY_TYPES.register(eventbus);
 

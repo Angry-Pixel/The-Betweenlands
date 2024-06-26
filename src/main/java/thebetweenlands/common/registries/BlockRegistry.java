@@ -82,6 +82,13 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> GREEN_MIDDLE_GEM_ORE = register("green_middle_gem_ore", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 30.0F).sound(SoundType.DEEPSLATE)));
 	// - Others
 	public static final DeferredBlock<Block> WISP = register("wisp", () -> new WispBlock(BlockBehaviour.Properties.of().mapColor(MapColor.NONE).noCollission().isViewBlocking((s, l ,p) -> false).noOcclusion().sound(SoundType.STONE).strength(0.0F).randomTicks().replaceable()));
+	// - Structure
+	public static final DeferredBlock<Block> INACTIVE_GLOWING_SMOOTH_CRAGROCK = register("inactive_glowing_smooth_cragrock", () -> new Block(BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(1.5F, 10.0F)));
+	public static final DeferredBlock<Block> GLOWING_SMOOTH_CRAGROCK = register("glowing_smooth_cragrock", () -> new Block(BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(1.5F, 10.0F).lightLevel((s) -> 13)));
+	public static final DeferredBlock<Block> SMOOTH_CRAGROCK = register("smooth_cragrock", () -> new Block(BlockBehaviour.Properties.of().sound(SoundType.STONE).strength(1.5F, 10.0F)));
+	public static final DeferredBlock<Block> WEAK_SMOOTH_CRAGROCK = register("weak_smooth_cragrock", () -> new CollapsingBlock(BlockBehaviour.Properties.ofFullCopy(SMOOTH_CRAGROCK.get())));
+	public static final DeferredBlock<Block> SMOOTH_CRAGROCK_SLAB = register("smooth_cragrock_slab", () -> new SlabBlock(BlockBehaviour.Properties.ofFullCopy(SMOOTH_CRAGROCK.get())));
+	public static final DeferredBlock<Block> MOB_SPAWNER = register("mob_spawner", () -> new BetweenlandsMobSpawnerBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).strength(10.0F, 0.0F).noOcclusion()));
 	// - Portal
 	public static final DeferredBlock<Block> PORTAL = BLOCKS.register("portal", () -> new BetweenlandsPortal(BlockBehaviour.Properties.of().noCollission().randomTicks().strength(-1.0F).sound(SoundType.GLASS).lightLevel((lightlevel) -> 11)));
 

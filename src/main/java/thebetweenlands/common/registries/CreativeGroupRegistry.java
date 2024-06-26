@@ -59,6 +59,13 @@ public class CreativeGroupRegistry {
 			output.accept(BlockRegistry.OCTINE_ORE.get());
 			output.accept(BlockRegistry.SCABYST_ORE.get());
 			output.accept(BlockRegistry.VALONITE_ORE.get());
+			//Structure
+			output.accept(BlockRegistry.INACTIVE_GLOWING_SMOOTH_CRAGROCK);
+			output.accept(BlockRegistry.GLOWING_SMOOTH_CRAGROCK);
+			output.accept(BlockRegistry.SMOOTH_CRAGROCK);
+			output.accept(BlockRegistry.SMOOTH_CRAGROCK_SLAB);
+			output.accept(BlockRegistry.WEAK_SMOOTH_CRAGROCK);
+			output.accept(BlockRegistry.MOB_SPAWNER);
 		}).build());
 
 	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> BETWEENLANDS_ITEMS = CREATIVE_TABS.register("items", () -> CreativeModeTab.builder()

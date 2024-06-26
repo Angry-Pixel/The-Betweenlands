@@ -18,6 +18,9 @@ public class SoundRegistry {
 
 	// Ambent effects
 
+	// Misc
+	public static final DeferredHolder<SoundEvent, SoundEvent> CRUMBLE = register("crumble");
+	public static final DeferredHolder<SoundEvent, SoundEvent> IGNITE = register("ignite");
 
 	// Blocks
 	public static final DeferredHolder<SoundEvent, SoundEvent> BETWEENLANDS_PORTAL = register("portal");
@@ -44,6 +47,7 @@ public class SoundRegistry {
 	public static final DeferredHolder<SoundEvent, SoundEvent> WIGHT_ATTACK = register("wight_attack");
 	public static final DeferredHolder<SoundEvent, SoundEvent> WIGHT_HURT = register("wight_hurt");
 	public static final DeferredHolder<SoundEvent, SoundEvent> WIGHT_LIVING = register("wight_living");
+	public static final DeferredHolder<SoundEvent, SoundEvent> FORTRESS_BOSS_TELEPORT = register("fortress_boss_teleport");
 
 	public static DeferredHolder<SoundEvent, SoundEvent> register(String name) {
 		return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(TheBetweenlands.prefix(name)));

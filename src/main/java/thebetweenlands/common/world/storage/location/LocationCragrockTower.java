@@ -35,6 +35,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
+import thebetweenlands.common.blocks.WispBlock;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -343,7 +344,7 @@ public class LocationCragrockTower extends LocationGuarded {
 							}
 
 							if(canLightUp) {
-								level.setBlockAndUpdate(closest, BlockRegistry.WISP.get().defaultBlockState().setValue(BlockWisp.COLOR, level.getRandom().nextInt(4)));
+								level.setBlockAndUpdate(closest, BlockRegistry.WISP.get().defaultBlockState().setValue(WispBlock.COLOR, level.getRandom().nextInt(4)));
 								level.playSound(null, closest.getX(), closest.getY(), closest.getZ(), SoundRegistry.IGNITE.get(), SoundSource.AMBIENT, 1.6F + level.getRandom().nextFloat() * 0.45F, 1.0F + level.getRandom().nextFloat() * 0.4F);
 
 								this.inactiveWisps.remove(closest);
@@ -545,7 +546,7 @@ public class LocationCragrockTower extends LocationGuarded {
 					BlockState blockState = level.getBlockState(pos);
 
 					if(!blockState.isAir() && level.isEmptyBlock(pos.below()) && level.isEmptyBlock(pos.below(2))) {
-						FallingBlockEntity fallingBlock = new FallingBlockEntity(level, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, BlockRegistry.WEAK_SMOOTH_CRAGROCK.get().defaultBlockState());
+						FallingBlockEntity fallingBlock = FallingBlockEntity.fall(level, pos, BlockRegistry.WEAK_SMOOTH_CRAGROCK.get().defaultBlockState());
 						fallingBlock.time = -60;
 						fallingBlock.dropItem = false;
 						fallingBlock.setHurtsEntities(2.0F, 40);

@@ -115,7 +115,7 @@ public class BetweenlandsMultifaceBlock extends BetweenlandsBlock {
 				return true;
 			}
 			return null;
-		}).filter(Objects::nonNull).findFirst().orElse((boolean) true);
+		}).filter(Objects::nonNull).findFirst().orElse(true);
 	}
 
 	// WIP: faces to be destroyed once at a time
