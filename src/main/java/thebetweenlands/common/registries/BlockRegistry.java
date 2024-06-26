@@ -4,6 +4,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
@@ -79,6 +80,8 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> AQUA_MIDDLE_GEM_ORE = register("aqua_middle_gem_ore", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 30.0F).sound(SoundType.DEEPSLATE)));
 	public static final DeferredBlock<Block> CRIMSON_MIDDLE_GEM_ORE = register("crimson_middle_gem_ore", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 30.0F).sound(SoundType.DEEPSLATE)));
 	public static final DeferredBlock<Block> GREEN_MIDDLE_GEM_ORE = register("green_middle_gem_ore", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 30.0F).sound(SoundType.DEEPSLATE)));
+	// - Others
+	public static final DeferredBlock<Block> WISP = register("wisp", () -> new WispBlock(BlockBehaviour.Properties.of().mapColor(MapColor.NONE).noCollission().isViewBlocking((s, l ,p) -> false).noOcclusion().sound(SoundType.STONE).strength(0.0F).randomTicks().replaceable()));
 	// - Portal
 	public static final DeferredBlock<Block> PORTAL = BLOCKS.register("portal", () -> new BetweenlandsPortal(BlockBehaviour.Properties.of().noCollission().randomTicks().strength(-1.0F).sound(SoundType.GLASS).lightLevel((lightlevel) -> 11)));
 

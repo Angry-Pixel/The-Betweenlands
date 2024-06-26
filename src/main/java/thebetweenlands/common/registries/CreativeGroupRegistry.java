@@ -50,6 +50,8 @@ public class CreativeGroupRegistry {
 			//Plants
 			output.accept(BlockRegistry.BULB_CAPPED_MUSHROOM_CAP.get());
 			output.accept(BlockRegistry.BULB_CAPPED_MUSHROOM_STALK.get());
+			//Others
+			output.accept(BlockRegistry.WISP.get());
 			//Ores
 			output.accept(BlockRegistry.SULFUR_ORE.get());
 			output.accept(BlockRegistry.SYRMORITE_ORE.get());
