@@ -117,7 +117,7 @@ public class BetweenlandsPortal extends Block implements Portal {
 
 		// Play portal sound
 		if (random.nextInt(20) == 0) {
-			level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), SoundRegistry.BETWEENLANDS_PORTAL.get(), SoundSource.BLOCKS, 0.3F, random.nextFloat() * 0.4F + 0.8F, true);
+			level.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), SoundRegistry.PORTAL.get(), SoundSource.BLOCKS, 0.3F, random.nextFloat() * 0.4F + 0.8F, true);
 		}
 	}
 

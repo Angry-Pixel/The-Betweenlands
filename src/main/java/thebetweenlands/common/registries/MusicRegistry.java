@@ -15,6 +15,6 @@ public class MusicRegistry {
 	public static final ResourceKey<JukeboxSong> ASTATOS = ResourceKey.create(Registries.JUKEBOX_SONG, ResourceLocation.fromNamespaceAndPath(TheBetweenlands.ID, "astatos"));
 
 	public static void bootstrap(BootstrapContext<JukeboxSong> context) {
-		context.register(ASTATOS, new JukeboxSong(SoundRegistry.RECORD_ASTATOS, Component.translatable(Util.makeDescriptionId("jukebox_song", ASTATOS.location())), 366.0F, 1));
+		context.register(ASTATOS, new JukeboxSong(SoundRegistry.ASTATOS, Component.translatable(Util.makeDescriptionId("jukebox_song", ASTATOS.location())), 366.0F, 1));
 	}
 }

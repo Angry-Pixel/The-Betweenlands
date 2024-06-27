@@ -532,7 +532,7 @@ public class EntityWight extends BetweenlandsEntity {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundRegistry.WIGHT_LIVING.get();
+		return SoundRegistry.WIGHT_MOAN.get();
 	}
 
 	static class GeckoAvoidGoal<T extends LivingEntity> extends AvoidEntityGoal<T> {
