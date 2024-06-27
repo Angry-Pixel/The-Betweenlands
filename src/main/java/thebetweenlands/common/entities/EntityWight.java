@@ -314,9 +314,9 @@ public class EntityWight extends BetweenlandsEntity {
 				}
 
 				this.move(MoverType.SELF, new Vec3(this.xxa, this.yya, this.zza));
-				this.xxa *= (double) f;
-				this.yya *= (double) f;
-				this.zza *= (double) f;
+				this.xxa *= f;
+				this.yya *= f;
+				this.zza *= f;
 			}
 
 			double d1 = this.xo - this.xOld;

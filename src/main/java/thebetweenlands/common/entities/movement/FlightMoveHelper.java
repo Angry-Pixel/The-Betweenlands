@@ -33,7 +33,7 @@ public class FlightMoveHelper extends MoveControl {
 			if (this.courseChangeCooldown-- <= 0) {
 				this.courseChangeCooldown += this.getCourseChangeCooldown();
 
-				dist = (double) Math.sqrt(dist);
+				dist = Math.sqrt(dist);
 
 				if (this.isNotColliding(this.wantedX, this.wantedY, this.wantedZ, dist)) {
 					if (dist < this.mob.getBbWidth() + speed) {
@@ -44,9 +44,9 @@ public class FlightMoveHelper extends MoveControl {
 						this.mob.setZza(0);
 						this.operation = Operation.WAIT;
 					} else {
-						this.mob.xxa += dy / dist * speed;
-						this.mob.yya += dx / dist * speed;
-						this.mob.zza += dz / dist * speed;
+						this.mob.xxa += (float) (dy / dist * speed);
+						this.mob.yya += (float) (dx / dist * speed);
+						this.mob.zza += (float) (dz / dist * speed);
 
 						float yaw = (float) (Math.atan2(dz, dx) * (180D / Math.PI)) - 90.0F;
 						this.mob.setXRot(this.rotlerp(this.mob.getXRot(), yaw, 90.0F));
@@ -73,8 +73,8 @@ public class FlightMoveHelper extends MoveControl {
 			float strafeX = strafe * rotZ - forward * rotX;
 			float strafeZ = forward * rotZ + strafe * rotX;
 
-			this.mob.xxa += strafeX / dist * speed * 0.15D;
-			this.mob.zza += strafeZ / dist * speed * 0.15D;
+			this.mob.xxa += (float) (strafeX / dist * speed * 0.15D);
+			this.mob.zza += (float) (strafeZ / dist * speed * 0.15D);
 
 			this.mob.setSpeed((float) speed);
 			this.mob.setZza((float) speed * this.strafeForwards);

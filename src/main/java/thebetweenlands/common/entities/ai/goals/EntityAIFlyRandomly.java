@@ -74,7 +74,7 @@ public class EntityAIFlyRandomly<T extends Mob> extends Goal {
 	 * @return
 	 */
 	protected double getTargetX(RandomSource rand, double distanceMultiplier) {
-		return this.entity.xo + (double) ((rand.nextFloat() * 2.0F - 1.0F) * 16.0F * distanceMultiplier);
+		return this.entity.xo + (rand.nextFloat() * 2.0F - 1.0F) * 16.0F * distanceMultiplier;
 	}
 
 	/**
@@ -85,7 +85,7 @@ public class EntityAIFlyRandomly<T extends Mob> extends Goal {
 	 * @return
 	 */
 	protected double getTargetY(RandomSource rand, double distanceMultiplier) {
-		return this.entity.yo + (double) ((rand.nextFloat() * 2.0F - 1.0F) * 16.0F * distanceMultiplier);
+		return this.entity.yo + (rand.nextFloat() * 2.0F - 1.0F) * 16.0F * distanceMultiplier;
 	}
 
 	/**
@@ -96,6 +96,6 @@ public class EntityAIFlyRandomly<T extends Mob> extends Goal {
 	 * @return
 	 */
 	protected double getTargetZ(RandomSource rand, double distanceMultiplier) {
-		return this.entity.zo + (double) ((rand.nextFloat() * 2.0F - 1.0F) * 16.0F * distanceMultiplier);
+		return this.entity.zo + (rand.nextFloat() * 2.0F - 1.0F) * 16.0F * distanceMultiplier;
 	}
 }
