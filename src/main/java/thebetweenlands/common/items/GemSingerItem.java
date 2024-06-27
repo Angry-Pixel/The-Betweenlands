@@ -146,7 +146,7 @@ public class GemSingerItem extends Item {
 		}
 
 		if(level.isClientSide() && !player.isCrouching()) {
-			level.playSound(player, player.blockPosition(), SoundRegistry.GEM_SINGER, SoundSource.PLAYERS, 2, 1);
+			level.playSound(player, player.blockPosition(), SoundRegistry.GEM_SINGER.get(), SoundSource.PLAYERS, 2, 1);
 		}
 
 		player.swing(hand);

@@ -22,6 +22,9 @@ public class SoundRegistry {
 	public static final DeferredHolder<SoundEvent, SoundEvent> CRUMBLE = register("crumble");
 	public static final DeferredHolder<SoundEvent, SoundEvent> IGNITE = register("ignite");
 
+	// Items
+	public static final DeferredHolder<SoundEvent, SoundEvent> GEM_SINGER = register("gem_singer");
+
 	// Blocks
 	public static final DeferredHolder<SoundEvent, SoundEvent> BETWEENLANDS_PORTAL = register("portal");
 
