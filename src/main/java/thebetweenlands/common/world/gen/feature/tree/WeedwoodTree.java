@@ -7,6 +7,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import thebetweenlands.common.blocks.BetweenlandsVineBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class WeedwoodTree {
@@ -285,7 +286,7 @@ public class WeedwoodTree {
 			int length = random.nextInt(4) + 4;
 			for (int yy = 0; yy < length; ++yy)
 				if (accessor.isEmptyBlock(pos.below(yy)))
-					accessor.setBlock(pos.below(yy), BlockRegistry.POISON_IVY.get().defaultBlockState().setValue(BlockVineBL.getPropertyFor(facing.getOpposite()), true), 2);
+					accessor.setBlock(pos.below(yy), BlockRegistry.POISON_IVY.get().defaultBlockState().setValue(BetweenlandsVineBlock.getPropertyFor(facing.getOpposite()), true), 2);
 				else
 					break;
 		}

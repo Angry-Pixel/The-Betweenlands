@@ -210,4 +210,8 @@ public class BetweenlandsMultifaceBlock extends BetweenlandsBlock {
 		}
 		return false;
 	}
+
+	public static BooleanProperty getPropertyFor(Direction pFace) {
+		return PROPERTY_BY_DIRECTION.get(pFace);
+	}
 }
