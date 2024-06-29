@@ -1,9 +1,5 @@
 package thebetweenlands.common.world.storage;
 
-import java.util.*;
-
-import javax.annotation.Nullable;
-
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import net.minecraft.client.Minecraft;
@@ -28,6 +24,9 @@ import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	private BLEnvironmentEventRegistry environmentEventRegistry;
@@ -209,7 +208,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 			double dst = player.distanceToSqr((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D);
 
 			if (dst > 4.0D && dst < 256.0D) {
-				level.playLocalSound((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, SoundRegistry.BETWEENLANDS_AMBIENT_CAVE_SPOOK_LOOP.get(), SoundSource.AMBIENT, 0.85F, 0.8F + level.getRandom().nextFloat() * 0.2F, false);
+				level.playLocalSound((double) pos.getX() + 0.5D, (double) pos.getY() + 0.5D, (double) pos.getZ() + 0.5D, SoundRegistry.AMBIENT_CAVE_SPOOK.get(), SoundSource.AMBIENT, 0.85F, 0.8F + level.getRandom().nextFloat() * 0.2F, false);
 				this.ambienceTicks = level.getRandom().nextInt(7000) + 3000;
 				return true;
 			}
