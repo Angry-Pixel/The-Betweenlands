@@ -30,8 +30,10 @@ public class TheBetweenlands {
 
 	public static final Logger LOGGER = LogManager.getLogger();
 
-	public static int LAYER_HEIGHT = 120;
-	public static int CAVE_WATER_HEIGHT = 15;
+	public static final int LAYER_HEIGHT = 120;
+	public static final int CAVE_WATER_HEIGHT = 15;
+	public static final int PITSTONE_HEIGHT = CAVE_WATER_HEIGHT + 30;
+	public static final int CAVE_START = LAYER_HEIGHT - 10;
 
 	public TheBetweenlands(IEventBus eventbus, Dist dist) {
 		if (dist.isClient()) {

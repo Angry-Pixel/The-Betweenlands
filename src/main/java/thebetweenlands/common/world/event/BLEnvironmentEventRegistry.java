@@ -13,30 +13,30 @@ import thebetweenlands.api.environment.IEnvironmentEventRegistry;
 
 //TODO convert into proper registry
 public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
-//	public final EventDenseFog denseFog;
-//	public final EventHeavyRain heavyRain;
-//	public final EventAuroras auroras;
-//	public final EventBloodSky bloodSky;
-//	public final EventSpoopy spoopy;
-//	public final EventWinter winter;
-//	public final EventSnowfall snowfall;
-//	public final EventThunderstorm thunderstorm;
-//	public final EventRift rift;
+	public final DenseFogEvent denseFog;
+	public final HeavyRainEvent heavyRain;
+	public final AuroraEvent auroras;
+	public final BloodSkyEvent bloodSky;
+	public final SpoopyEvent spoopy;
+	public final WinterEvent winter;
+	public final SnowfallEvent snowfall;
+	public final ThunderstormEvent thunderstorm;
+	public final RiftEvent rift;
 
 	private Level level;
 
 	public BLEnvironmentEventRegistry(Level level) {
 		this.level = level;
 
-//		denseFog = new EventDenseFog(this);
-//		heavyRain = new EventHeavyRain(this);
-//		auroras = new EventAuroras(this);
-//		bloodSky = new EventBloodSky(this);
-//		spoopy = new EventSpoopy(this);
-//		winter = new EventWinter(this);
-//		snowfall = new EventSnowfall(this);
-//		thunderstorm = new EventThunderstorm(this);
-//		rift = new EventRift(this);
+		denseFog = new DenseFogEvent(this);
+		heavyRain = new HeavyRainEvent(this);
+		auroras = new AuroraEvent(this);
+		bloodSky = new BloodSkyEvent(this);
+		spoopy = new SpoopyEvent(this);
+		winter = new WinterEvent(this);
+		snowfall = new SnowfallEvent(this);
+		thunderstorm = new ThunderstormEvent(this);
+		rift = new RiftEvent(this);
 	}
 
 	@Override
@@ -47,15 +47,15 @@ public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 	public void init() {
 		//Only add events to the dimension
 //		if(this.level.provider instanceof WorldProviderBetweenlands) {
-//			register(denseFog);
-//			register(heavyRain);
-//			register(auroras);
-//			register(bloodSky);
-//			register(spoopy);
-//			register(winter);
-//			register(snowfall);
-//			register(thunderstorm);
-//			register(rift);
+			register(denseFog);
+			register(heavyRain);
+			register(auroras);
+			register(bloodSky);
+			register(spoopy);
+			register(winter);
+			register(snowfall);
+			register(thunderstorm);
+			register(this.rift);
 //		}
 //
 //		MinecraftForge.EVENT_BUS.post(new InitializeEnvironmentEventsEvent(this));

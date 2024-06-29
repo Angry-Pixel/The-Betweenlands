@@ -3,8 +3,6 @@ package thebetweenlands.client;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.core.BlockPos;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.IEventBus;
@@ -19,7 +17,6 @@ import thebetweenlands.client.model.entity.ModelSwampHag;
 import thebetweenlands.client.model.entity.ModelWight;
 import thebetweenlands.client.renderer.shader.BetweenlandsShaders;
 import thebetweenlands.client.renderer.shader.BetweenlandsSkyShaderInstance;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.client.particle.BetweenlandsParticle;
 import thebetweenlands.client.particle.BetweenlandsPortalParticle;
 import thebetweenlands.client.particle.CaveWaterDripParticle;
@@ -28,6 +25,8 @@ import thebetweenlands.common.registries.*;
 //Class for events relying on the client side
 public class ClientEvents {
 
+	private static RiftVariantReloadListener riftVariantListener;
+
 	public static void initClient(IEventBus eventbus) {
 		eventbus.addListener(ClientEvents::doClientStuff);
 		eventbus.addListener(ClientEvents::registerDimEffects);
@@ -35,6 +34,7 @@ public class ClientEvents {
 		eventbus.addListener(ClientEvents::registerLayerDefinition);
 		eventbus.addListener(ClientEvents::particleStuff);
 		eventbus.addListener(ClientEvents::registerBlockColors);
+		eventbus.addListener(ClientEvents::registerReloadListeners);
 	}
 
 	private static void doClientStuff(final FMLClientSetupEvent event) {
@@ -44,6 +44,10 @@ public class ClientEvents {
 		EntityRenderers.register(EntityRegistry.SWAMP_HAG.get(), RenderSwampHag::new);
 		EntityRenderers.register(EntityRegistry.GECKO.get(), RenderGecko::new);
 		EntityRenderers.register(EntityRegistry.WIGHT.get(), RenderWight::new);
+	}
+
+	public static void registerReloadListeners(RegisterClientReloadListenersEvent event) {
+		event.registerReloadListener(riftVariantListener = new RiftVariantReloadListener());
 	}
 
 	public static void registerDimEffects(RegisterDimensionSpecialEffectsEvent event) {
@@ -87,12 +91,16 @@ public class ClientEvents {
 	}
 
 	@Nullable
-	public static Level getClientLevel() {
+	public static ClientLevel getClientLevel() {
 		return Minecraft.getInstance().level;
 	}
 
 	@Nullable
 	public static Player getClientPlayer() {
 		return Minecraft.getInstance().player;
+	}
+
+	public static RiftVariantReloadListener getRiftVariantLoader() {
+		return riftVariantListener;
 	}
 }

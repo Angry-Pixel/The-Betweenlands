@@ -1,13 +1,8 @@
 package thebetweenlands.util;
 
-public final class MathUtils {
-	public static final float TAU = (float) (2 * StrictMath.PI);
-	public static final float PI = (float) StrictMath.PI;
-	public static final float DEG_TO_RAD = (float) (StrictMath.PI / 180);
-	public static final float RAD_TO_DEG = (float) (180 / StrictMath.PI);
+import net.minecraft.util.Mth;
 
-	private MathUtils() {
-	}
+public final class MathUtils {
 
 	public static double linearTransformd(double x, double domainMin, double domainMax, double rangeMin, double rangeMax) {
 		x = x < domainMin ? domainMin : x > domainMax ? domainMax : x;
@@ -69,7 +64,7 @@ public final class MathUtils {
 	}
 
 	public static String radiansToDMS(float angle) {
-		angle *= RAD_TO_DEG;
+		angle *= Mth.DEG_TO_RAD;
 		int degrees = (int) angle;
 		angle -= (int) angle;
 		angle *= 60;
