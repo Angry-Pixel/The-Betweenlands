@@ -3,7 +3,7 @@ package thebetweenlands.common.registries;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import thebetweenlands.api.storage.*;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.storage.location.*;

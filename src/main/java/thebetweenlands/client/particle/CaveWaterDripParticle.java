@@ -7,7 +7,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 //TODO: Figure this out properly. It seems to change sprite, but it might be this needs to be split into multiple
 public class CaveWaterDripParticle extends TextureSheetParticle {

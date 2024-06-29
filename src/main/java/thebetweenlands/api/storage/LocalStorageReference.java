@@ -3,7 +3,7 @@ package thebetweenlands.api.storage;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.ChunkPos;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public record LocalStorageReference(ChunkPos pos, StorageID id, LocalRegion region, @Nullable ILocalStorageHandle handle) {
 

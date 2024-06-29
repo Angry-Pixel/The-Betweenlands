@@ -10,7 +10,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.*;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nullable;
 import thebetweenlands.client.renderer.entity.RenderGecko;
 import thebetweenlands.client.renderer.entity.RenderSwampHag;
 import thebetweenlands.client.renderer.entity.RenderWight;
