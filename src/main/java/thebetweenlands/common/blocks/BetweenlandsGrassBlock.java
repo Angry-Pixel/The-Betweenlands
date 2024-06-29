@@ -7,14 +7,15 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.GrassColor;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.lighting.LightEngine;
-import net.neoforged.neoforge.common.IPlantable;
-import net.neoforged.neoforge.common.PlantType;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class BetweenlandsGrassBlock extends BetweenlandsBlock implements BlockColor, BonemealableBlock {
@@ -84,13 +85,15 @@ public class BetweenlandsGrassBlock extends BetweenlandsBlock implements BlockCo
 		BlockPos blockpos = p_56830_.above();
 		return canBeGrass(p_56828_, p_56829_, p_56830_) && !p_56829_.getFluidState(blockpos).is(FluidTags.WATER);
 	}
-
+	
+//TODO fixy as this doesn't exist now
+		/*
 	@Override
 	public boolean canSustainPlant(BlockState state, BlockGetter world, BlockPos pos, Direction facing, IPlantable plantable) {
 		PlantType type = plantable.getPlantType(world, pos.relative(facing));
 		return PlantType.PLAINS.equals(type);
 	}
-
+*/
 	@Override
 	public boolean isValidBonemealTarget(LevelReader pLevel, BlockPos pPos, BlockState pState) {
 		return true;
