@@ -565,6 +565,163 @@ public class BetweenlandsSoundDefinitionsProvider extends SoundDefinitionsProvid
 		add(SoundRegistry.TAR_BEAST_DEATH, definition().with(
 			sound("thebetweenlands:tar_beast_death")
 		).subtitle("blsubtitles.entity.tar_beast.death"));
+		add(SoundRegistry.TAR_BEAST_HURT, definition().with(
+			sound("thebetweenlands:tar_beast_hurt_1"),
+			sound("thebetweenlands:tar_beast_hurt_2")
+		).subtitle("blsubtitles.entity.tar_beast.hurt"));
+		add(SoundRegistry.TAR_BEAST_LIVING, definition().with(
+			sound("thebetweenlands:tar_beast_living_1"),
+			sound("thebetweenlands:tar_beast_living_2"),
+			sound("thebetweenlands:tar_beast_living_3")
+		).subtitle("blsubtitles.entity.tar_beast_living"));
+		add(SoundRegistry.TAR_BEAST_STEP, definition().with(
+			sound("thebetweenlands:tar_beast_step_1"),
+			sound("thebetweenlands:tar_beast_step_2"),
+			sound("thebetweenlands:tar_beast_step_3")
+		));
+		add(SoundRegistry.TAR_BEAST_SUCK, definition().with(
+			sound("thebetweenlands:tar_beast_suck")
+		).subtitle("blsubtitles.entity.tar_beast_suck"));
+		add(SoundRegistry.TEMPLE_GUARDIAN_BERSERKER_CHARGE, definition().with(
+			sound("thebetweenlands:temple_guardian_berserker_charge")
+		));
+		add(SoundRegistry.TEMPLE_GUARDIAN_BERSERKER_IMPACT, definition().with(
+			sound("thebetweenlands:temple_guardian_berserker_impact")
+		));
+		add(SoundRegistry.TEMPLE_GUARDIAN_BERSERKER_LIVING, definition().with(
+			sound("thebetweenlands:temple_guardian_berserker_living_1"),
+			sound("thebetweenlands:temple_guardian_berserker_living_2"),
+			sound("thebetweenlands:temple_guardian_berserker_living_3"),
+			sound("thebetweenlands:temple_guardian_berserker_living_4")
+		));
+		add(SoundRegistry.TEMPLE_GUARDIAN_DEATH, definition().with(
+			sound("thebetweenlands:temple_guardian_death")
+		));
+		add(SoundRegistry.TEMPLE_GUARDIAN_HURT, definition().with(
+			sound("thebetweenlands:temple_guardian_hurt_1"),
+			sound("thebetweenlands:temple_guardian_hurt_2"),
+			sound("thebetweenlands:temple_guardian_hurt_3")
+		));
+		add(SoundRegistry.TEMPLE_GUARDIAN_MELEE_LIVING, definition().with(
+			sound("thebetweenlands:temple_guardian_melee_living_1"),
+			sound("thebetweenlands:temple_guardian_melee_living_2"),
+			sound("thebetweenlands:temple_guardian_melee_living_3"),
+			sound("thebetweenlands:temple_guardian_melee_living_4")
+		));
+		add(SoundRegistry.TEMPLE_GUARDIAN_STEP, definition().with(
+			sound("thebetweenlands:temple_guardian_step_1"),
+			sound("thebetweenlands:temple_guardian_step_2"),
+			sound("thebetweenlands:temple_guardian_step_3")
+		));
+		add(SoundRegistry.WIGHT_HURT, definition().with(
+			sound("thebetweenlands:wight_hurt_1"),
+			sound("thebetweenlands:wight_hurt_2")
+		).subtitle("blsubtitles.entity.wight.hurt"));
+		add(SoundRegistry.WIGHT_MOAN, definition().with(
+			sound("thebetweenlands:wight_moan_1"),
+			sound("thebetweenlands:wight_moan_2"),
+			sound("thebetweenlands:wight_moan_3"),
+			sound("thebetweenlands:wight_moan_4")
+		).subtitle("blsubtitles.entity.wight.living"));
+		add(SoundRegistry.WIGHT_DEATH, definition().with(
+			sound("thebetweenlands:wight_death")
+		).subtitle("blsubtitles.entity.wight.death"));
+		add(SoundRegistry.WIGHT_ATTACK, definition().with(
+			sound("thebetweenlands:wight_attack_1"),
+			sound("thebetweenlands:wight_attack_2"),
+			sound("thebetweenlands:wight_attack_3"),
+			sound("thebetweenlands:wight_attack_4")
+		).subtitle("blsubtitles.entity.wight.scream"));
+		add(SoundRegistry.CRAB_SNIP, definition().with(
+			sound("thebetweenlands:crab_snip")
+		).subtitle("blsubtitles.entity.crab.snip"));
+		add(SoundRegistry.GAS_CLOUD_LIVING, definition().with(
+			sound("thebetweenlands:gas_cloud_living_1"),
+			sound("thebetweenlands:gas_cloud_living_2")
+		).subtitle("blsubtitles.entity.gas_cloud.living"));
+		add(SoundRegistry.GAS_CLOUD_HURT, definition().with(
+			sound("thebetweenlands:gas_cloud_hurt_1"),
+			sound("thebetweenlands:gas_cloud_hurt_2")
+		).subtitle("blsubtitles.entity.gas_cloud.hurt"));
+		add(SoundRegistry.GAS_CLOUD_DEATH, definition().with(
+			sound("thebetweenlands:gas_cloud_death")
+		).subtitle("blsubtitles.entity.gas_cloud.death"));
+		add(SoundRegistry.BOULDER_SPRITE_LIVING, definition().with(
+			sound("thebetweenlands:boulder_sprite_living_1"),
+			sound("thebetweenlands:boulder_sprite_living_2"),
+			sound("thebetweenlands:boulder_sprite_living_3")
+		).subtitle("blsubtitles.entity.boulder_sprite.living"));
+		add(SoundRegistry.BOULDER_SPRITE_HURT, definition().with(
+			sound("thebetweenlands:boulder_sprite_hurt_1"),
+			sound("thebetweenlands:boulder_sprite_hurt_2")
+		).subtitle("blsubtitles.entity.boulder_sprite.hurt"));
+		add(SoundRegistry.BOULDER_SPRITE_DEATH, definition().with(
+			sound("thebetweenlands:boulder_sprite_death")
+		).subtitle("blsubtitles.entity.boulder_sprite.death"));
+		add(SoundRegistry.BOULDER_SPRITE_ROLL, definition().with(
+			sound("thebetweenlands:boulder_sprite_roll")
+		).subtitle("blsubtitles.entity.boulder_sprite.roll"));
+		add(SoundRegistry.SPIRIT_TREE_FACE_SMALL_SPIT, definition().with(
+			sound("thebetweenlands:spirit_tree_face_spit")
+		).subtitle("blsubtitles.entity.spirit_tree_face_small.spit"));
+		add(SoundRegistry.SPIRIT_TREE_FACE_SMALL_LIVING, definition().with(
+			sound("thebetweenlands:spirit_tree_face_large_living_1"),
+			sound("thebetweenlands:spirit_tree_face_large_living_2"),
+			sound("thebetweenlands:spirit_tree_face_large_living_3"),
+			sound("thebetweenlands:spirit_tree_face_large_living_4")
+		).subtitle("blsubtitles.entity.spirit_tree_face_small.living"));
+		add(SoundRegistry.SPIRIT_TREE_FACE_LARGE_SPIT, definition().with(
+			sound("thebetweenlands:spirit_tree_face_spit")
+		).subtitle("blsubtitles.entity.spirit_tree_face_large.spit"));
+		add(SoundRegistry.SPIRIT_TREE_FACE_LARGE_DEATH, definition().with(
+			sound("thebetweenlands:spirit_tree_face_large_death")
+		).subtitle("blsubtitles.entity.spirit_tree_face_large.death"));
+		add(SoundRegistry.SPIRIT_TREE_FACE_LARGE_LIVING, definition().with(
+			sound("thebetweenlands:spirit_tree_face_large_living_1"),
+			sound("thebetweenlands:spirit_tree_face_large_living_2"),
+			sound("thebetweenlands:spirit_tree_face_large_living_3"),
+			sound("thebetweenlands:spirit_tree_face_large_living_4")
+		).subtitle("blsubtitles.entity.spirit_tree_face_small.living"));
+		add(SoundRegistry.SPIRIT_TREE_FACE_SMALL_EMERGE, definition().with(
+			sound("thebetweenlands:spirit_tree_face_small_emerge")
+		));
+		add(SoundRegistry.SPIRIT_TREE_FACE_LARGE_EMERGE, definition().with(
+			sound("thebetweenlands:spirit_tree_face_large_emerge")
+		));
+		add(SoundRegistry.SPIRIT_TREE_FACE_SUCK, definition().with(
+			sound("thebetweenlands:spirit_tree_face_suck")
+		));
+		add(SoundRegistry.SPIRIT_TREE_FACE_SPIT_ROOT_SPIKES, definition().with(
+			sound("thebetweenlands:spirit_tree_face_spit_root_spikes")
+		).subtitle("blsubtitles.entity.spirit_tree_face_large.spit_root_spikes"));
+		add(SoundRegistry.SPIRIT_TREE_SPIKE_TRAP, definition().with(
+			sound("thebetweenlands:spirit_tree_spikes")
+		).subtitle("blsubtitles.entity.spirit_tree.spikes"));
+		add(SoundRegistry.SPIRIT_TREE_SPIKE_TRAP_EMERGE, definition().with(
+			sound("thebetweenlands:spirit_tree_spike_trap_emerge")
+		).subtitle("blsubtitles.entity.spirit_tree.spike_trap_emerge"));
+		add(SoundRegistry.SPIRIT_TREE_SPIKES, definition().with(
+			sound("thebetweenlands:spirit_tree_spikes")
+		).subtitle("blsubtitles.entity.spirit_tree.spikes"));
+		add(SoundRegistry.ROOT_SPIKE_PARTICLE_HIT, definition().with(
+			sound("thebetweenlands:root_spike_particle_hit")
+		));
+		add(SoundRegistry.SHAMBLER_DEATH, definition().with(
+			sound("thebetweenlands:shambler_death")
+		).subtitle("blsubtitles.entity.shambler.death"));
+		add(SoundRegistry.SHAMBLER_HURT, definition().with(
+			sound("thebetweenlands:shambler_hurt_1"),
+			sound("thebetweenlands:shambler_hurt_2")
+		).subtitle("blsubtitles.entity.shambler.hurt"));
+		add(SoundRegistry.SHAMBLER_LIVING, definition().with(
+			sound("thebetweenlands:shambler_living_1"),
+			sound("thebetweenlands:shambler_living_2"),
+			sound("thebetweenlands:shambler_living_3"),
+			sound("thebetweenlands:shambler_living_4")
+		).subtitle("blsubtitles.entity.shambler.living"));
+		add(SoundRegistry.SHAMBLER_LICK, definition().with(
+			sound("thebetweenlands:shambler_lick")
+		).subtitle("blsubtitles.entity.shambler.lick"));
 		//TODO rest of sound events
 	}
 }

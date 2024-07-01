@@ -171,9 +171,9 @@ public class SoundRegistry {
 	public static final DeferredHolder<SoundEvent, SoundEvent> TAR_BEAST_LIVING = register("tar_beast_living");
 	public static final DeferredHolder<SoundEvent, SoundEvent> TAR_BEAST_STEP = register("tar_beast_step");
 	public static final DeferredHolder<SoundEvent, SoundEvent> TAR_BEAST_SUCK = register("tar_beast_suck");
-	public static final DeferredHolder<SoundEvent, SoundEvent> TEMPLE_GUARDIAN_BESERKER_CHARGE = register("temple_guardian_berserker_charge");
-	public static final DeferredHolder<SoundEvent, SoundEvent> TEMPLE_GUARDIAN_BESERKER_IMPACT = register("temple_guardian_berserker_impact");
-	public static final DeferredHolder<SoundEvent, SoundEvent> TEMPLE_GUARDIAN_BESERKER_LIVING = register("temple_guardian_berserker_living");
+	public static final DeferredHolder<SoundEvent, SoundEvent> TEMPLE_GUARDIAN_BERSERKER_CHARGE = register("temple_guardian_berserker_charge");
+	public static final DeferredHolder<SoundEvent, SoundEvent> TEMPLE_GUARDIAN_BERSERKER_IMPACT = register("temple_guardian_berserker_impact");
+	public static final DeferredHolder<SoundEvent, SoundEvent> TEMPLE_GUARDIAN_BERSERKER_LIVING = register("temple_guardian_berserker_living");
 	public static final DeferredHolder<SoundEvent, SoundEvent> TEMPLE_GUARDIAN_DEATH = register("temple_guardian_death");
 	public static final DeferredHolder<SoundEvent, SoundEvent> TEMPLE_GUARDIAN_HURT = register("temple_guardian_hurt");
 	public static final DeferredHolder<SoundEvent, SoundEvent> TEMPLE_GUARDIAN_MELEE_LIVING = register("temple_guardian_melee_living");
