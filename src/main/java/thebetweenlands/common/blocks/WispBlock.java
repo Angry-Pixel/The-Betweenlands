@@ -91,4 +91,9 @@ public class WispBlock extends Block {
 	protected void updateVisibility(Level level, BlockPos pos, BlockState state) {
 		level.setBlockAndUpdate(pos, state.setValue(VISIBLE, this.checkVisibility(level, pos)));
 	}
+
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		builder.add(COLOR, VISIBLE);
+	}
 }
