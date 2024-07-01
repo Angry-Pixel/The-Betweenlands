@@ -377,7 +377,7 @@ public abstract class AreaMobSpawner {
 			}
 		}
 
-		this.updateEntityCounts(level, this.entityCounts);
+		//this.updateEntityCounts(level, this.entityCounts); TODO see method
 		int totalEligibleEntityCount = 0;
 		for(int count : this.entityCounts.values()) {
 			totalEligibleEntityCount += count;
@@ -529,7 +529,8 @@ public abstract class AreaMobSpawner {
 
 						int spawnSegmentY = entitySpawnPos.getY() / 16;
 						ChunkAccess spawnChunk = level.getChunk(entitySpawnPos);
-						ClassInstanceMultiMap<Entity>[] entityLists = spawnChunk.getEntityLists();
+						//TODO: Reimplement this logic
+						/*ClassInstanceMultiMap<Entity>[] entityLists = spawnChunk.getEntityLists();
 						int chunkEntityCount = 0;
 						for(int l = 0; l < entityLists.length; l++) {
 							int subChunkEntityCount = 0;
@@ -550,7 +551,7 @@ public abstract class AreaMobSpawner {
 						if(spawnEntry.getChunkLimit() >= 0 && chunkEntityCount >= spawnEntry.getChunkLimit()) {
 							//Entity reached chunk limit
 							continue;
-						}
+						}*/
 
 						BlockState surfaceBlockState = spawnChunk.getBlockState(BlockPos.containing(entitySpawnPos.getX() - spawnChunk.getPos().x * 16, entitySpawnPos.getY() - 1, entitySpawnPos.getZ() - spawnChunk.getPos().z * 16));
 
@@ -573,7 +574,8 @@ public abstract class AreaMobSpawner {
 							if(spawningEntity != null) {
 								spawningEntity.moveTo(sx, sy, sz, yaw, 0.0F);
 
-								Result canSpawn = EventHooks.finalizeMobSpawnSpawner(spawningEntity, level, (float)sx, (float)sy, (float)sz, null);
+								//TODO: this would be easy to reimplement, but events no longer have Results and there's no longer no collision checks
+								/*Result canSpawn = EventHooks.finalizeMobSpawnSpawner(spawningEntity, level, (float)sx, (float)sy, (float)sz, null);
 								if (canSpawn == Result.ALLOW || (canSpawn == Result.DEFAULT && spawningEntity.check() && spawningEntity.isNotColliding())) {
 									groupData = EventHooks.finalizeMobSpawn(spawningEntity, level, level.getCurrentDifficultyAt(BlockPos.containing(sx, sy, sz)), MobSpawnType.NATURAL, groupData);
 
@@ -600,7 +602,7 @@ public abstract class AreaMobSpawner {
 									if (groupSpawnedEntities >= spawningEntity.getMaxSpawnClusterSize())  {
 										break;
 									}
-								}
+								}*/
 							}
 						}
 					}
@@ -657,11 +659,12 @@ public abstract class AreaMobSpawner {
 	private final Object2IntMap<Class<? extends Entity>> entityCounts = new Object2IntOpenHashMap<>();
 
 	/**
+	 * TODO: Reimplement
 	 * Updates the entity counts of the spawner chunks
 	 * @param level
-	 * @param entityCounts
+	 * @param //entityCounts
 	 */
-	protected void updateEntityCounts(Level level, Object2IntMap<Class<? extends Entity>> entityCounts) {
+	/*protected void updateEntityCounts(Level level, Object2IntMap<Class<? extends Entity>> entityCounts) {
 		entityCounts.clear();
 
 		for(ChunkPos chunkPos : this.eligibleChunksForSpawning) {
@@ -678,7 +681,7 @@ public abstract class AreaMobSpawner {
 				}
 			}
 		}
-	}
+	}*/
 
 	private boolean isCountedEntity(Level level, Entity entity) {
 		return entity instanceof LivingEntity && this.isInsideSpawningArea(level, entity.blockPosition(), true) && (this.entityCountFilter == null || this.entityCountFilter.test((LivingEntity) entity));
