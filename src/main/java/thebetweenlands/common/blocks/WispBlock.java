@@ -5,7 +5,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -64,6 +63,7 @@ public class WispBlock extends Block {
 	//TODO: tile entity
 
 	@Override
+	@SuppressWarnings("deprecation") // Because -Werror is specified
 	protected RenderShape getRenderShape(BlockState pState) {
 		return RenderShape.INVISIBLE;
 	}

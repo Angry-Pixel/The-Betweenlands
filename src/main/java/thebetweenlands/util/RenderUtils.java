@@ -80,7 +80,11 @@ public class RenderUtils {
 	 * @param fbo
 	 */
 	public static void saveFboToFile(File file, RenderTarget fbo) {
-		try(FramebufferStack.State state = FramebufferStack.push()) {
+		// I dislike the hacky hack fix, but you can't suppress the try-with-resources warning and -Werror won't leave you alone if you don't remove it.
+		FramebufferStack.State state = null;
+		try {
+			state = FramebufferStack.push();
+			
 			fbo.bindWrite(false);
 
 			GL11.glReadBuffer(GL11.GL_FRONT);
@@ -108,6 +112,10 @@ public class RenderUtils {
 				ImageIO.write(image, format, file);
 			} catch (IOException e) {
 				e.printStackTrace();
+			}
+		} finally {
+			if(state != null) {
+				state.close();
 			}
 		}
 	}

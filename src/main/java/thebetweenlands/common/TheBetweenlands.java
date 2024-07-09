@@ -60,6 +60,7 @@ public class TheBetweenlands {
 		eventbus.addListener(this::registerPackets);
 	}
 
+	@SuppressWarnings("deprecation") // TODO: remove once the jsons are done
 	private void setup(final FMLCommonSetupEvent event) {
 //		Registry.register(Registries.BIOME_SOURCE, TheBetweenlands.prefix("legacy_biomeprovider"), LegacyBiomeSource.CODEC);
 //		Registry.register(Registries.BIOME_SOURCE, TheBetweenlands.prefix("betweenlands_biomeprovider"), BetweenlandsBiomeProvider.CODEC);

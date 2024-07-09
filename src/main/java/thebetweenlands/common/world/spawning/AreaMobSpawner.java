@@ -188,6 +188,7 @@ public abstract class AreaMobSpawner {
 		}
 
 		@Override
+		@SuppressWarnings("deprecation") // TODO: Unsure if there's a proper supported method of checking if a block is "solid". Suppressed due to Werror
 		public boolean canSpawn(Level level, ChunkAccess chunk, BlockPos pos, BlockState blockState, BlockState surfaceBlockState) {
 			return !blockState.isSolid() && surfaceBlockState.isSolid();
 		}

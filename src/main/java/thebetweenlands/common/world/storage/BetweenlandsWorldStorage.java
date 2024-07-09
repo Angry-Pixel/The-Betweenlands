@@ -249,7 +249,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 
 		@Override
 		public long getLastSpawn(ICustomSpawnEntry spawnEntry) {
-			return this.lastSpawnMap.containsKey(spawnEntry.getID()) ? this.lastSpawnMap.get(spawnEntry.getID()) : -1;
+			return this.lastSpawnMap.containsKey(spawnEntry.getID()) ? this.lastSpawnMap.getLong(spawnEntry.getID()) : -1;
 		}
 
 		@Override
@@ -259,7 +259,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 
 		@Override
 		public long removeLastSpawn(ICustomSpawnEntry spawnEntry) {
-			return this.lastSpawnMap.remove(spawnEntry.getID());
+			return this.lastSpawnMap.removeLong(spawnEntry.getID());
 		}
 
 		public void readFromNbt(CompoundTag tag) {
@@ -277,7 +277,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 			for (ICustomSpawnEntry spawnEntry : this.biome.getCustomSpawnEntries()) {
 				if (spawnEntry.isSaved()) {
 					if (this.lastSpawnMap.containsKey(spawnEntry.getID())) {
-						tag.putLong(spawnEntry.getID().toString(), this.lastSpawnMap.get(spawnEntry.getID()));
+						tag.putLong(spawnEntry.getID().toString(), this.lastSpawnMap.getLong(spawnEntry.getID()));
 					}
 				}
 			}

@@ -19,11 +19,11 @@ import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 
 public class BoxMobSpawner extends AreaMobSpawner {
 	private static class SimpleSpawnEntriesData implements IBiomeSpawnEntriesData {
-		private final Object2LongMap<ResourceLocation> lastSpawnMap = new Object2LongOpenHashMap<>();
+		private final Object2LongMap<ResourceLocation> lastSpawnMap = new Object2LongOpenHashMap<ResourceLocation>();
 
 		@Override
 		public long getLastSpawn(ICustomSpawnEntry spawnEntry) {
-			return this.lastSpawnMap.containsKey(spawnEntry.getID()) ? this.lastSpawnMap.get(spawnEntry.getID()) : -1;
+			return this.lastSpawnMap.containsKey(spawnEntry.getID()) ? this.lastSpawnMap.getLong(spawnEntry.getID()) : -1;
 		}
 
 		@Override
@@ -33,7 +33,7 @@ public class BoxMobSpawner extends AreaMobSpawner {
 
 		@Override
 		public long removeLastSpawn(ICustomSpawnEntry spawnEntry) {
-			return this.lastSpawnMap.remove(spawnEntry.getID());
+			return this.lastSpawnMap.removeLong(spawnEntry.getID());
 		}
 	}
 

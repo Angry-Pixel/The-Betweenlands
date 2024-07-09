@@ -198,7 +198,7 @@ public class GenericDataAccessor implements IGenericDataAccessorAccess {
 
 		this.lock.writeLock().lock();
 		try {
-			this.entries.put(Integer.valueOf(key.id()), entry);
+			this.entries.put(key.id(), entry);
 			this.empty = false;
 		} finally {
 			this.lock.writeLock().unlock();
@@ -212,7 +212,7 @@ public class GenericDataAccessor implements IGenericDataAccessorAccess {
 			GenericDataAccessor.DataEntry<T> entry;
 
 			try {
-				entry = (GenericDataAccessor.DataEntry<T>) this.entries.get(Integer.valueOf(key.id()));
+				entry = (GenericDataAccessor.DataEntry<T>) this.entries.get(key.id());
 			} catch (Throwable throwable) {
 				CrashReport crashreport = CrashReport.forThrowable(throwable, "Getting synced " + this.owner.getClass().getName() + " data");
 				CrashReportCategory crashreportcategory = crashreport.addCategory("Synced " + this.owner.getClass().getName() + " data");
@@ -433,7 +433,7 @@ public class GenericDataAccessor implements IGenericDataAccessorAccess {
 
 		try {
 			for (IDataEntry<?> newEntry : newEntries) {
-				GenericDataAccessor.DataEntry<?> entry = this.entries.get(Integer.valueOf(newEntry.getKey().id()));
+				GenericDataAccessor.DataEntry<?> entry = this.entries.get(newEntry.getKey().id());
 
 				if (entry != null) {
 					Object newValue;

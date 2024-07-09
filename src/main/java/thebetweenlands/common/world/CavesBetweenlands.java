@@ -133,7 +133,9 @@ public class CavesBetweenlands extends WorldCarver<CaveCarverConfiguration> {
 								int level = 0;
 								while (level <= TheBetweenlands.LAYER_HEIGHT + 20) {
 									BlockState state = access.getBlockState(new BlockPos(bx, level, bz));
-									if (state.isAir() || state.liquid()) {
+									@SuppressWarnings("deprecation")
+									boolean occupied = state.isAir() || state.liquid() || !state.getFluidState().isEmpty();
+									if (occupied) {
 										break;
 									}
 									level++;

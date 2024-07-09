@@ -217,7 +217,9 @@ public class LocationTokenBucket extends LocationStorage implements ITickable {
 			checkPos1.set(ticket.area.minX, ticket.area.minY, ticket.area.minZ);
 			checkPos2.set(ticket.area.maxX, ticket.area.maxY, ticket.area.maxZ);
 
-			ticket.loaded = level.hasChunksAt(checkPos1, checkPos2);
+			@SuppressWarnings("deprecation")
+			boolean areaLoaded = level.hasChunksAt(checkPos1, checkPos2);
+			ticket.loaded = areaLoaded;
 
 			if (ticket.loaded) {
 				ticket.counter++;

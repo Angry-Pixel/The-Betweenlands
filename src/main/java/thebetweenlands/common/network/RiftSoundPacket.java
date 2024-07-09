@@ -59,6 +59,7 @@ public record RiftSoundPacket(RiftSoundType soundType) implements CustomPacketPa
 		private final SoundEvent event;
 		private final Function<Level, Float> pitch;
 
+		@SuppressWarnings("deprecation") // -Werror specified
 		public static final StringRepresentable.EnumCodec<RiftSoundType> CODEC = StringRepresentable.fromEnum(RiftSoundType::values);
 
 		RiftSoundType(SoundEvent event, Function<Level, Float> pitch) {
