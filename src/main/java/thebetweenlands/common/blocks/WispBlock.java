@@ -81,10 +81,13 @@ public class WispBlock extends Block {
 	}
 
 	protected boolean checkVisibility(Level level, BlockPos pos) {
-		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(level);
+		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorldNullable(level);
 
 		//TODO: reimplement when registry is back
-
+		if(storage != null) {
+			// auroras
+		}
+		
 		return false;
 	}
 
