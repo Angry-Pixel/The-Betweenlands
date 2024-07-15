@@ -96,7 +96,7 @@ public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 
 	@Override
 	public List<IEnvironmentEvent> getEventsOfState(boolean isActive) {
-		List<IEnvironmentEvent> list = new ArrayList<IEnvironmentEvent>();
+		List<IEnvironmentEvent> list = new ArrayList<>();
 		for (IEnvironmentEvent event : registeredEvents.values()) {
 			if (event.isActive() == isActive) {
 				list.add(event);
@@ -107,7 +107,7 @@ public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 
 	@Override
 	public List<IEnvironmentEvent> getEventsOfStateAt(double x, double y, double z, boolean active) {
-		List<IEnvironmentEvent> list = new ArrayList<IEnvironmentEvent>();
+		List<IEnvironmentEvent> list = new ArrayList<>();
 		for (IEnvironmentEvent event : this.getEvents().values()) {
 			if (event.isActiveAt(x, y, z) == active) {
 				list.add(event);

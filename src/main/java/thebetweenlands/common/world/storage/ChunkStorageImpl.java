@@ -15,7 +15,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.neoforged.neoforge.network.PacketDistributor;
-import thebetweenlands.api.ITickable;
+import thebetweenlands.api.storage.TickableStorage;
 import thebetweenlands.api.storage.IChunkStorage;
 import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.api.storage.ILocalStorageHandle;
@@ -25,7 +25,7 @@ import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.network.SyncChunkStoragePacket;
 import thebetweenlands.common.network.SyncLocalStorageReferencesPacket;
 
-public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
+public abstract class ChunkStorageImpl implements IChunkStorage, TickableStorage {
 	protected final IWorldStorage worldStorage;
 	protected final Level level;
 	protected final ChunkAccess chunk;

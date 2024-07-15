@@ -3,6 +3,7 @@ package thebetweenlands.common.datagen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
@@ -23,7 +24,10 @@ public class DataGenerators {
 
 		// Data
 		gen.addProvider(data, new BetweenlandsRegistryProvider(output, provider));
-		gen.addProvider(data, new BetweenlandsBlockTagsProvider(output, provider, helper));
+		BlockTagsProvider blockTags = new BetweenlandsBlockTagsProvider(output, provider, helper);
+		gen.addProvider(data, blockTags);
+		gen.addProvider(data, new BetweenlandsEntityTagProvider(output, provider, helper));
+		gen.addProvider(data, new BetweenlandsItemTagProvider(output, provider, blockTags.contentsGetter(), helper));
 
 		// Assets
 		gen.addProvider(assets, new BetweenlandsLangProvider(output));

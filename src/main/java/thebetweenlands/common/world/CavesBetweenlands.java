@@ -159,10 +159,10 @@ public class CavesBetweenlands extends WorldCarver<CaveCarverConfiguration> {
 
 									BlockPos blockPos = new BlockPos(bx, by, bz);
 									BlockState state = access.getBlockState(blockPos);
-									if (state.getBlock() == BlockRegistry.SWAMP_WATER_BLOCK.get() && noise < limit + 0.25 && noise > limit) {
+									if (state.is(BlockRegistry.SWAMP_WATER.get()) && noise < limit + 0.25 && noise > limit) {
 										access.setBlockState(blockPos, BlockRegistry.SWAMP_DIRT.get().defaultBlockState(), false);//COARSE_SWAMP_DIRT.getDefaultState());
 									} else if (noise < limit && state.getBlock() != BlockRegistry.BETWEENLANDS_BEDROCK.get()) {
-										access.setBlockState(blockPos, by > TheBetweenlands.CAVE_WATER_HEIGHT ? Blocks.AIR.defaultBlockState() : BlockRegistry.SWAMP_WATER_BLOCK.get().defaultBlockState(), false);
+										access.setBlockState(blockPos, by > TheBetweenlands.CAVE_WATER_HEIGHT ? Blocks.AIR.defaultBlockState() : BlockRegistry.SWAMP_WATER.get().defaultBlockState(), false);
 									}
 								}
 

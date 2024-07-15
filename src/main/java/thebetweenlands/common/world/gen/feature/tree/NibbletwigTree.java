@@ -6,7 +6,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import thebetweenlands.common.blocks.BlockPoisonIvy;
+import thebetweenlands.common.block.PoisonIvyBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class NibbletwigTree {
@@ -32,8 +32,8 @@ public class NibbletwigTree {
 
 		int canopy1 = random.nextInt(3) + 3;
 
-		BlockState log = BlockRegistry.LOG_NIBBLETWIG.get().defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
-		BlockState leaves = BlockRegistry.LEAVES_NIBBLETWIG_TREE.get().defaultBlockState();
+		BlockState log = BlockRegistry.NIBBLETWIG_LOG.get().defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
+		BlockState leaves = BlockRegistry.NIBBLETWIG_LEAVES.get().defaultBlockState();
 		BlockState ivy = BlockRegistry.POISON_IVY.get().defaultBlockState();
 
 		int xo[] = new int[height + 1];
@@ -73,7 +73,7 @@ public class NibbletwigTree {
 				for (int yo = 0; yo < ivyLength; yo++) {
 					BlockPos ivyPosY = ivyPos.below(yo);
 					if (accessor.isEmptyBlock(ivyPosY)) {
-						accessor.setBlock(ivyPosY, ivy.setValue(BlockPoisonIvy.getPropertyFor(offset.getOpposite()), true), 2);
+						accessor.setBlock(ivyPosY, ivy.setValue(PoisonIvyBlock.getPropertyForFace(offset.getOpposite()), true), 2);
 					} else {
 						break;
 					}
@@ -125,7 +125,7 @@ public class NibbletwigTree {
 				for (int yo = 0; yo < ivyLength; yo++) {
 					BlockPos ivyPosY = ivyPos.below(yo);
 					if (accessor.isEmptyBlock(ivyPosY)) {
-						accessor.setBlock(ivyPosY, ivy.setValue(BlockPoisonIvy.getPropertyFor(ivyOffset.getOpposite()), true), 2);
+						accessor.setBlock(ivyPosY, ivy.setValue(PoisonIvyBlock.getPropertyForFace(ivyOffset.getOpposite()), true), 2);
 					} else {
 						break;
 					}

@@ -92,7 +92,7 @@ public class AmateMapRenderer implements AutoCloseable {
 			for (int i = 0; i < 128; ++i) {
 				for (int j = 0; j < 128; ++j) {
 					int k = j + i * 128;
-					this.texture.getPixels().setPixelRGBA(j, i, AmateMapColor.MAP_COLORS[this.data.colors[k]].color);
+					this.texture.getPixels().setPixelRGBA(j, i, AmateMapColor.MAP_COLORS[this.data.colors[k]].color());
 				}
 			}
 

@@ -1,0 +1,69 @@
+package thebetweenlands.common.items.recipe;
+
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.fluids.FluidStack;
+import thebetweenlands.common.registries.RecipeRegistry;
+
+public record PurifierRecipe(Ingredient input, ItemStack result, FluidStack requiredWater) implements Recipe<SingleRecipeInput> {
+	@Override
+	public boolean matches(SingleRecipeInput input, Level level) {
+		return this.input().test(input.item());
+	}
+
+	@Override
+	public ItemStack assemble(SingleRecipeInput input, HolderLookup.Provider registries) {
+		return this.result().copy();
+	}
+
+	@Override
+	public boolean canCraftInDimensions(int width, int height) {
+		return true;
+	}
+
+	@Override
+	public ItemStack getResultItem(HolderLookup.Provider registries) {
+		return this.result();
+	}
+
+	@Override
+	public RecipeSerializer<?> getSerializer() {
+		return RecipeRegistry.PURIFIER_SERIALIZER.get();
+	}
+
+	@Override
+	public RecipeType<?> getType() {
+		return RecipeRegistry.PURIFIER_RECIPE.get();
+	}
+
+	public static class Serializer implements RecipeSerializer<PurifierRecipe> {
+
+		public static final MapCodec<PurifierRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+			Ingredient.CODEC_NONEMPTY.fieldOf("input").forGetter(PurifierRecipe::input),
+			ItemStack.STRICT_CODEC.fieldOf("result").forGetter(PurifierRecipe::result),
+			FluidStack.CODEC.fieldOf("water_needed").forGetter(PurifierRecipe::requiredWater)
+		).apply(instance, PurifierRecipe::new));
+
+		public static final StreamCodec<RegistryFriendlyByteBuf, PurifierRecipe> STREAM_CODEC = StreamCodec.composite(
+			Ingredient.CONTENTS_STREAM_CODEC, PurifierRecipe::input,
+			ItemStack.STREAM_CODEC, PurifierRecipe::result,
+			FluidStack.STREAM_CODEC, PurifierRecipe::requiredWater,
+			PurifierRecipe::new);
+
+		@Override
+		public MapCodec<PurifierRecipe> codec() {
+			return CODEC;
+		}
+
+		@Override
+		public StreamCodec<RegistryFriendlyByteBuf, PurifierRecipe> streamCodec() {
+			return STREAM_CODEC;
+		}
+	}
+}

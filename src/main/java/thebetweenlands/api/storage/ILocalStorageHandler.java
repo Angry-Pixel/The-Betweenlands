@@ -109,7 +109,7 @@ public interface ILocalStorageHandler {
 	Collection<ILocalStorage> getLoadedStorages();
 
 	/**
-	 * Updates all local storages that implement {@link thebetweenlands.api.ITickable}
+	 * Updates all local storages that implement {@link TickableStorage}
 	 */
 	void tick();
 

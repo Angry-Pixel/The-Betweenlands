@@ -23,7 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.AspectItem;
-import thebetweenlands.api.aspect.IAspectType;
+import thebetweenlands.api.aspect.AspectType;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class AspectManager {
@@ -48,17 +48,17 @@ public class AspectManager {
 	}
 
 	public static final class AspectEntry {
-		public final IAspectType aspect;
+		public final AspectType aspect;
 		public final int tier;
 		public final int group;
 		public final int baseAmount;
 		public final String aspectName;
 
-		private AspectEntry(IAspectType aspect, AspectTier tier, AspectGroup group, int baseAmount) {
+		private AspectEntry(AspectType aspect, AspectTier tier, AspectGroup group, int baseAmount) {
 			this(aspect, tier.id, group.id, baseAmount);
 		}
 
-		private AspectEntry(IAspectType aspect, int tier, int group, int baseAmount) {
+		private AspectEntry(AspectType aspect, int tier, int group, int baseAmount) {
 			this.aspect = aspect;
 			this.tier = tier;
 			this.group = group;
@@ -102,11 +102,11 @@ public class AspectManager {
 		}
 	}
 
-	private static final List<AspectEntry> REGISTERED_ASPECTS = new ArrayList<AspectEntry>();
-	private static final Map<AspectItem, List<AspectItemEntry>> REGISTERED_ITEMS = new LinkedHashMap<AspectItem, List<AspectItemEntry>>();
-	private static final Map<Item, List<AspectItem>> ITEM_TO_ASPECT_ITEMS = new HashMap<Item, List<AspectItem>>();
+	private static final List<AspectEntry> REGISTERED_ASPECTS = new ArrayList<>();
+	private static final Map<AspectItem, List<AspectItemEntry>> REGISTERED_ITEMS = new LinkedHashMap<>();
+	private static final Map<Item, List<AspectItem>> ITEM_TO_ASPECT_ITEMS = new HashMap<>();
 
-	private final Map<AspectItem, List<Aspect>> matchedAspects = new LinkedHashMap<AspectItem, List<Aspect>>();
+	private final Map<AspectItem, List<Aspect>> matchedAspects = new LinkedHashMap<>();
 
 	/**
 	 * Returns a list of all generated and matched aspects
@@ -131,7 +131,7 @@ public class AspectManager {
 	 * @param type
 	 * @param baseAmount
 	 */
-	public static void registerAspect(IAspectType aspect, AspectTier tier, AspectGroup type, int baseAmount) {
+	public static void registerAspect(AspectType aspect, AspectTier tier, AspectGroup type, int baseAmount) {
 		registerAspect(aspect, tier.id, type.id, baseAmount);
 	}
 
@@ -142,7 +142,7 @@ public class AspectManager {
 	 * @param type
 	 * @param baseAmount
 	 */
-	public static void registerAspect(IAspectType aspect, int tier, int type, int baseAmount) {
+	public static void registerAspect(AspectType aspect, int tier, int type, int baseAmount) {
 		REGISTERED_ASPECTS.add(new AspectEntry(aspect, tier, type, baseAmount));
 	}
 
@@ -212,17 +212,14 @@ public class AspectManager {
 		}
 
 		//Register item and possible aspects
-		List<AspectItemEntry> entryList = REGISTERED_ITEMS.get(itemEntry);
-		if(entryList == null) {
-			REGISTERED_ITEMS.put(itemEntry, entryList = new ArrayList<AspectItemEntry>());
-		}
+		List<AspectItemEntry> entryList = REGISTERED_ITEMS.computeIfAbsent(itemEntry, k -> new ArrayList<>());
 		for(int i = 0; i < aspectCount; i++) {
 			entryList.add(entry);
 		}
 
 		//Register aspect item and matcher
 		if(aspectItems == null) {
-			ITEM_TO_ASPECT_ITEMS.put(item.getItem(), aspectItems = new ArrayList<AspectItem>());
+			ITEM_TO_ASPECT_ITEMS.put(item.getItem(), aspectItems = new ArrayList<>());
 		}
 		aspectItems.add(entry.item);
 	}
@@ -294,7 +291,7 @@ public class AspectManager {
 				}
 				//System.out.println("Getting aspect list for item: " + itemEntry);
 				ListTag aspectList = (ListTag) entryCompound.get("aspects");
-				List<Aspect> itemAspects = new ArrayList<Aspect>();
+				List<Aspect> itemAspects = new ArrayList<>();
 				for(int c = 0; c < aspectList.size(); c++) {
 					CompoundTag aspectCompound = aspectList.getCompound(c);
 					Aspect aspect = Aspect.readFromNBT(aspectCompound);
@@ -370,10 +367,10 @@ public class AspectManager {
 		Random rnd = new Random();
 		rnd.setSeed(seed);
 
-		List<AspectEntry> availableAspects = new ArrayList<AspectEntry>(REGISTERED_ASPECTS.size());
+		List<AspectEntry> availableAspects = new ArrayList<>(REGISTERED_ASPECTS.size());
 		availableAspects.addAll(REGISTERED_ASPECTS);
 
-		List<AspectEntry> possibleAspects = new ArrayList<AspectEntry>();
+		List<AspectEntry> possibleAspects = new ArrayList<>();
 
 		for(Entry<AspectItem, List<AspectItemEntry>> item : REGISTERED_ITEMS.entrySet()) {
 			AspectItem itemStack = item.getKey();
@@ -387,17 +384,13 @@ public class AspectManager {
 			Map<Integer, List<AspectItemEntry>> itemEntriesByGroup = new LinkedHashMap<>();
 
 			for(AspectItemEntry itemEntry : item.getValue()) {
-				List<AspectItemEntry> groupItemEntries = itemEntriesByGroup.get(itemEntry.group);
-
-				if(groupItemEntries == null) {
-					itemEntriesByGroup.put(itemEntry.group, groupItemEntries = new ArrayList<>());
-				}
+				List<AspectItemEntry> groupItemEntries = itemEntriesByGroup.computeIfAbsent(itemEntry.group, k -> new ArrayList<>());
 
 				groupItemEntries.add(itemEntry);
 			}
 
 			for(List<AspectItemEntry> itemEntries : itemEntriesByGroup.values()) {
-				List<Aspect> itemAspects = new ArrayList<Aspect>(itemEntries.size());
+				List<Aspect> itemAspects = new ArrayList<>(itemEntries.size());
 				if(!this.fillItemAspects(itemAspects, itemEntries.size(), itemEntries, possibleAspects, availableAspects, rnd)) {
 					this.fillItemAspects(itemAspects, itemEntries.size(), itemEntries, possibleAspects, REGISTERED_ASPECTS, rnd);
 				}
@@ -408,7 +401,7 @@ public class AspectManager {
 
 				List<Aspect> mergedAspects = this.matchedAspects.get(itemStack);
 				if(mergedAspects == null) {
-					mergedAspects = new ArrayList<Aspect>(itemAspects.size());
+					mergedAspects = new ArrayList<>(itemAspects.size());
 				}
 
 				for(Aspect aspect : itemAspects) {
@@ -502,7 +495,7 @@ public class AspectManager {
 		AspectItem item = getAspectItem(stack);
 		if(item != null)
 			return this.getStaticAspects(item);
-		return new ArrayList<Aspect>();
+		return new ArrayList<>();
 	}
 
 	/**
@@ -514,7 +507,7 @@ public class AspectManager {
 	public List<Aspect> getStaticAspects(AspectItem item) {
 		List<Aspect> aspects = this.matchedAspects.get(item);
 		if(aspects == null)
-			aspects = new ArrayList<Aspect>();
+			aspects = new ArrayList<>();
 		return aspects;
 	}
 

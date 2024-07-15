@@ -5,9 +5,9 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.network.syncher.EntityDataAccessor;
-import thebetweenlands.api.ITickable;
+import thebetweenlands.api.storage.TickableStorage;
 
-public interface IGenericDataAccessorAccess extends ITickable {
+public interface IGenericDataAccessorAccess extends TickableStorage {
 	interface IDataEntry<T> {
 		EntityDataAccessor<T> getKey();
 

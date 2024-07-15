@@ -32,7 +32,7 @@ public class FluidRegistry {
 	public static final DeferredHolder<Fluid, BaseFlowingFluid.Source> FISH_OIL_STILL = FLUIDS.register("fish_oil", () -> new BaseFlowingFluid.Source(FluidRegistry.FISH_OIL_PROPERTIES));
 	public static final DeferredHolder<Fluid, BaseFlowingFluid.Flowing> FISH_OIL_FLOW = FLUIDS.register("flowing_fish_oil", () -> new BaseFlowingFluid.Flowing(FluidRegistry.FISH_OIL_PROPERTIES));
 
-	public static final BaseFlowingFluid.Properties SWAMP_WATER_PROPERTIES = new BaseFlowingFluid.Properties(FluidTypeRegistry.SWAMP_WATER, SWAMP_WATER_STILL, SWAMP_WATER_FLOW).block(BlockRegistry.SWAMP_WATER_BLOCK).bucket(ItemRegistry.SWAMP_WATER_BUCKET);
+	public static final BaseFlowingFluid.Properties SWAMP_WATER_PROPERTIES = new BaseFlowingFluid.Properties(FluidTypeRegistry.SWAMP_WATER, SWAMP_WATER_STILL, SWAMP_WATER_FLOW).block(BlockRegistry.SWAMP_WATER).bucket(ItemRegistry.SWAMP_WATER_BUCKET);
 	public static final BaseFlowingFluid.Properties STAGNANT_WATER_PROPERTIES = new BaseFlowingFluid.Properties(FluidTypeRegistry.STAGNANT_WATER, STAGNANT_WATER_STILL, STAGNANT_WATER_FLOW).bucket(ItemRegistry.STAGNANT_WATER_BUCKET);
 	public static final BaseFlowingFluid.Properties TAR_PROPERTIES = new BaseFlowingFluid.Properties(FluidTypeRegistry.TAR, TAR_STILL, TAR_FLOW).bucket(ItemRegistry.TAR_BUCKET);
 	public static final BaseFlowingFluid.Properties RUBBER_PROPERTIES = new BaseFlowingFluid.Properties(FluidTypeRegistry.RUBBER, RUBBER_STILL, RUBBER_FLOW).bucket(ItemRegistry.RUBBER_BUCKET);

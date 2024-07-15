@@ -52,7 +52,7 @@ public class DimensionRegistries {
 		context.register(NOISE_SETTINGS_KEY, new NoiseGeneratorSettings(
 			NoiseSettings.create(0, 256, 2, 2),
 			BlockRegistry.BETWEENSTONE.get().defaultBlockState(),
-			BlockRegistry.SWAMP_WATER_BLOCK.get().defaultBlockState(),
+			BlockRegistry.SWAMP_WATER.get().defaultBlockState(),
 			new NoiseRouter(
 				DensityFunctions.zero(),
 				DensityFunctions.zero(),

@@ -1,6 +1,6 @@
 package thebetweenlands.common.registries;
 
-import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
@@ -9,16 +9,24 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.items.AmateMapItem;
 import thebetweenlands.common.items.EmptyAmateMapItem;
+import thebetweenlands.common.items.OctineIngotItem;
+import thebetweenlands.common.items.SapSpitItem;
 
 public class ItemRegistry {
 
-	// Item list
 	public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(TheBetweenlands.ID);
 
-	// Item inits
+	//TODO proper armor item
+	public static final DeferredItem<Item> LURKER_SKIN_BOOTS = ITEMS.register("lurker_skin_boots", () -> new Item(new Item.Properties().stacksTo(1)));
 
+	public static final DeferredItem<Item> GERTS_DONUT = ITEMS.register("gerts_donut", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> LIMESTONE_FLUX = ITEMS.register("limestone_flux", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> COMPOST = ITEMS.register("compost", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> OCTINE_INGOT = ITEMS.register("octine_ingot", () -> new OctineIngotItem(new Item.Properties()));
+	public static final DeferredItem<Item> RUNE_DOOR_KEY = ITEMS.register("rune_door_key", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> MIDDLE_FRUIT = ITEMS.register("middle_fruit", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.6F).build())));
+	public static final DeferredItem<Item> SAP_SPIT = ITEMS.register("sap_spit", () -> new SapSpitItem(new Item.Properties()));
 
-	// Bucket inits
 	public static final DeferredItem<Item> SWAMP_WATER_BUCKET = ITEMS.register("swamp_water_bucket", () -> new BucketItem(FluidRegistry.SWAMP_WATER_STILL.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> STAGNANT_WATER_BUCKET = ITEMS.register("stagnant_water_bucket", () -> new BucketItem(FluidRegistry.STAGNANT_WATER_STILL.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> TAR_BUCKET = ITEMS.register("tar_bucket", () -> new BucketItem(FluidRegistry.TAR_STILL.get(), new Item.Properties().stacksTo(1)));
@@ -28,17 +36,26 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> CLEAN_WATER_BUCKET = ITEMS.register("clean_water_bucket", () -> new BucketItem(FluidRegistry.CLEAN_WATER_STILL.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> FISH_OIL_BUCKET = ITEMS.register("fish_oil_bucket", () -> new BucketItem(FluidRegistry.FISH_OIL_STILL.get(), new Item.Properties().stacksTo(1)));
 
-	// Blocks
-	// - Temp
-	public static final DeferredItem<Item> PORTAL = ITEMS.register("portal", () -> new BlockItem(BlockRegistry.PORTAL.get(), new Item.Properties()));
-
-	//Spawn Eggs
 	public static final DeferredItem<Item> SWAMP_HAG_SPAWN_EGG = ITEMS.register("swamp_hag_spawn_egg", () -> new DeferredSpawnEggItem(EntityRegistry.SWAMP_HAG, 0x5E4E2E, 0x18461A, new Item.Properties()));
 	public static final DeferredItem<Item> GECKO_SPAWN_EGG = ITEMS.register("gecko_spawn_egg", () -> new DeferredSpawnEggItem(EntityRegistry.GECKO, 0xdc7202, 0x05e290, new Item.Properties()));
 	public static final DeferredItem<Item> WIGHT_SPAWN_EGG = ITEMS.register("wight_spawn_egg", () -> new DeferredSpawnEggItem(EntityRegistry.WIGHT, 0x7d8378, 0x07190a, new Item.Properties()));
 
-	// Betweenlands Special
 	public static final DeferredItem<Item> AMATE_MAP = ITEMS.register("amate_map", () -> new EmptyAmateMapItem(new Item.Properties()));
 	public static final DeferredItem<Item> FILLED_AMATE_MAP = ITEMS.register("filled_amate_map", () -> new AmateMapItem(new Item.Properties()));
 	public static final DeferredItem<Item> RECORD_ASTATOS = ITEMS.register("astatos", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.ASTATOS)));
+	public static final DeferredItem<Item> RECORD_BETWEEN_YOU_AND_ME = ITEMS.register("between_you_and_me", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.BETWEEN_YOU_AND_ME)));
+	public static final DeferredItem<Item> RECORD_CHRISTMAS_ON_THE_MARSH = ITEMS.register("christmas_on_the_marsh", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.CHRISTMAS_ON_THE_MARSH)));
+	public static final DeferredItem<Item> RECORD_THE_EXPLORER = ITEMS.register("the_explorer", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.THE_EXPLORER)));
+	public static final DeferredItem<Item> RECORD_HAG_DANCE = ITEMS.register("hag_dance", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.HAG_DANCE)));
+	public static final DeferredItem<Item> RECORD_LONELY_FIRE = ITEMS.register("lonely_fire", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.LONELY_FIRE)));
+	public static final DeferredItem<Item> MYSTERIOUS_RECORD = ITEMS.register("mysterious_record", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.MYSTERIOUS_RECORD)));
+	public static final DeferredItem<Item> RECORD_ANCIENT = ITEMS.register("ancient", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.ANCIENT)));
+	public static final DeferredItem<Item> RECORD_BENEATH_A_GREEN_SKY = ITEMS.register("beneath_a_green_sky", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.BENEATH_A_GREEN_SKY)));
+	public static final DeferredItem<Item> RECORD_DJ_WIGHTS_MIXTAPE = ITEMS.register("dj_wights_mixtape", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.DJ_WIGHTS_MIXTAPE)));
+	public static final DeferredItem<Item> RECORD_ONWARDS = ITEMS.register("onwards", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.ONWARDS)));
+	public static final DeferredItem<Item> RECORD_STUCK_IN_THE_MUD = ITEMS.register("stuck_in_the_mud", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.STUCK_IN_THE_MUD)));
+	public static final DeferredItem<Item> RECORD_WANDERING_WISPS = ITEMS.register("wandering_wisps", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.WANDERING_WISPS)));
+	public static final DeferredItem<Item> RECORD_WATERLOGGED = ITEMS.register("waterlogged", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.WATERLOGGED)));
+	public static final DeferredItem<Item> RECORD_DEEP_WATER_THEME = ITEMS.register("deep_water_theme", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.DEEP_WATER_THEME)));
+
 }

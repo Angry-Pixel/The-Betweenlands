@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
@@ -16,12 +17,17 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 import thebetweenlands.client.ClientEvents;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.BLSnowLayerBlock;
+import thebetweenlands.common.block.entity.PresentBlockEntity;
+import thebetweenlands.common.datagen.BetweenlandsBlockTagsProvider;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 
 public class WinterEvent extends SeasonalEnvironmentEvent {
 	public static final ResourceLocation ID = TheBetweenlands.prefix("winter");
@@ -85,27 +91,27 @@ public class WinterEvent extends SeasonalEnvironmentEvent {
 						int cbx = level.getRandom().nextInt(16);
 						int cbz = level.getRandom().nextInt(16);
 						BlockPos pos = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, levelchunk.getPos().getWorldPosition().offset(cbx, 0, cbz)).below();
-						if (level.isEmptyBlock(pos.above()) && level.getBlockState(pos).is(BlockRegistry.SWAMP_WATER_BLOCK)) {
+						if (level.isEmptyBlock(pos.above()) && level.getBlockState(pos).is(BlockRegistry.SWAMP_WATER)) {
 							if (level.getRandom().nextInt(3) == 0) {
 								boolean hasSuitableNeighbourBlock = false;
 								BlockPos.MutableBlockPos checkPos = new BlockPos.MutableBlockPos();
-//								for (Direction dir : Direction.Plane.HORIZONTAL) {
-//									checkPos.set(pos.getX() + dir.getStepX(), pos.getY(), pos.getZ() + dir.getStepZ());
-//									if (level.isLoaded(checkPos)) {
-//										if (!hasSuitableNeighbourBlock) {
-//											BlockState neighourState = level.getBlockState(checkPos);
-//											if (neighourState.is(BlockRegistry.BLACK_ICE) || neighourState.isFaceSturdy(level, checkPos, dir.getOpposite())) {
-//												hasSuitableNeighbourBlock = true;
-//											}
-//										}
-//									} else {
-//										hasSuitableNeighbourBlock = false;
-//										break;
-//									}
-//								}
-//								if (hasSuitableNeighbourBlock) {
-//									level.setBlockAndUpdate(pos, BlockRegistry.BLACK_ICE.get().getDefaultState());
-//								}
+								for (Direction dir : Direction.Plane.HORIZONTAL) {
+									checkPos.set(pos.getX() + dir.getStepX(), pos.getY(), pos.getZ() + dir.getStepZ());
+									if (level.isLoaded(checkPos)) {
+										if (!hasSuitableNeighbourBlock) {
+											BlockState neighourState = level.getBlockState(checkPos);
+											if (neighourState.is(BlockRegistry.BLACK_ICE) || neighourState.isFaceSturdy(level, checkPos, dir.getOpposite())) {
+												hasSuitableNeighbourBlock = true;
+											}
+										}
+									} else {
+										hasSuitableNeighbourBlock = false;
+										break;
+									}
+								}
+								if (hasSuitableNeighbourBlock) {
+									level.setBlockAndUpdate(pos, BlockRegistry.BLACK_ICE.get().defaultBlockState());
+								}
 							}
 						} else if (level.getRandom().nextInt(3000) == 0) {
 							BlockState state = level.getBlockState(pos);
@@ -131,14 +137,14 @@ public class WinterEvent extends SeasonalEnvironmentEvent {
 						if (level.getRandom().nextInt(3000) == 0 && level.getNearestPlayer(pos.getX(), pos.getY(), pos.getZ(), 64.0D, false) == null) {
 							BlockState stateAbove = level.getBlockState(pos.above());
 							if (stateAbove.isFaceSturdy(level, pos, Direction.UP)) {
-//								if (stateAbove.isAir() || (stateAbove.getBlock() instanceof BlockSnowBetweenlands && stateAbove.getValue(BlockSnowBetweenlands.LAYERS) <= 5)) {
-//									level.setBlockAndUpdate(pos.above(), BlockRegistry.PRESENT.getDefaultState().setValue(BlockPresent.COLOR, DyeColor.values()[level.getRandom().nextInt(DyeColor.values().length)]));
-//									TileEntityPresent tile = level.getBlockEntity(pos.above());
-//									if (tile != null) {
-//										tile.setLootTable(LootTableRegistry.PRESENT, level.getRandom().nextLong());
-//										tile.setChanged();
-//									}
-//								}
+								if (stateAbove.isAir() || (stateAbove.getBlock() instanceof BLSnowLayerBlock && stateAbove.getValue(BLSnowLayerBlock.LAYERS) <= 5)) {
+									level.setBlockAndUpdate(pos.above(), BuiltInRegistries.BLOCK.getOrCreateTag(BetweenlandsBlockTagsProvider.PRESENTS).getRandomElement(level.getRandom()).get().value().defaultBlockState());
+									BlockEntity tile = level.getBlockEntity(pos.above());
+									if (tile instanceof PresentBlockEntity present) {
+										present.setLootTable(LootTableRegistry.PRESENT, level.getRandom().nextLong());
+										present.setChanged();
+									}
+								}
 							}
 						}
 					}

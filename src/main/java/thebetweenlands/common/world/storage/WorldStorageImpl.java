@@ -11,7 +11,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import javax.annotation.Nullable;
-import thebetweenlands.api.ITickable;
+import thebetweenlands.api.storage.TickableStorage;
 import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.common.TheBetweenlands;
@@ -19,7 +19,7 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 
 public abstract class WorldStorageImpl implements IWorldStorage {
 	private final Map<ChunkPos, ChunkStorageImpl> storageMap = new HashMap<>();
-	private final List<ITickable> tickableStorages = new ArrayList<>();
+	private final List<TickableStorage> tickableStorages = new ArrayList<>();
 
 	private Level level;
 
@@ -72,8 +72,8 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 				storage.setDefaults();
 				this.storageMap.put(chunk.getPos(), storage);
 
-				if (storage instanceof ITickable) {
-					this.tickableStorages.add((ITickable) storage);
+				if (storage instanceof TickableStorage) {
+					this.tickableStorages.add((TickableStorage) storage);
 				}
 
 				//Makes sure that the default values are saved
@@ -95,8 +95,8 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 				storage.readFromNBT(nbt, false);
 				this.storageMap.put(chunk.getPos(), storage);
 
-				if (storage instanceof ITickable) {
-					this.tickableStorages.add((ITickable) storage);
+				if (storage instanceof TickableStorage) {
+					this.tickableStorages.add((TickableStorage) storage);
 				}
 			} catch (Exception ex) {
 				TheBetweenlands.LOGGER.error(String.format("Failed reading chunk storage at %s", "[x=" + chunk.getPos().x + ", z=" + chunk.getPos().z + "]"), ex);
@@ -164,7 +164,7 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 	public void tick() {
 		this.localStorageHandler.tick();
 
-		for (ITickable tickable : this.tickableStorages) {
+		for (TickableStorage tickable : this.tickableStorages) {
 			tickable.tick();
 		}
 	}

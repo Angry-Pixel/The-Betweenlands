@@ -14,7 +14,7 @@ public class BetweenlandsSurfaceRuleData extends SurfaceRuleData {
 
 	public static final SurfaceRules.RuleSource SWAMP_GRASS = blockState(BlockRegistry.SWAMP_GRASS);
 	public static final SurfaceRules.RuleSource SWAMP_DIRT = blockState(BlockRegistry.SWAMP_DIRT);
-	public static final SurfaceRules.RuleSource DEAD_SWAMP_GRASS = blockState(BlockRegistry.DEAD_SWAMP_GRASS);
+	public static final SurfaceRules.RuleSource DEAD_SWAMP_GRASS = blockState(BlockRegistry.DEAD_GRASS);
 	public static final SurfaceRules.RuleSource MUD = blockState(BlockRegistry.MUD);
 	public static final SurfaceRules.RuleSource MUD_UNDERWATER = blockState(BlockRegistry.MUD);
 	public static final SurfaceRules.RuleSource BETWEENLANDS_BEDROCK = blockState(BlockRegistry.BETWEENLANDS_BEDROCK);

@@ -25,13 +25,13 @@ import net.minecraft.nbt.Tag;
  */
 public class AspectContainer {
 	protected static final class Storage {
-		private final IAspectType type;
+		private final AspectType type;
 		private final AspectContainer container;
 		private int dynamicAmount;
 		private int storedStaticAmount;
 		private boolean hasStoredStaticAmount;
 
-		private Storage(IAspectType type, AspectContainer container) {
+		private Storage(AspectType type, AspectContainer container) {
 			this.type = type;
 			this.dynamicAmount = 0;
 			this.storedStaticAmount = 0;
@@ -119,14 +119,14 @@ public class AspectContainer {
 		}
 	}
 
-	private final Map<IAspectType, Storage> storage = new HashMap<IAspectType, Storage>();
+	private final Map<AspectType, Storage> storage = new HashMap<AspectType, Storage>();
 
 	/**
 	 * Returns the storage for the specified aspect
 	 * @param type
 	 * @return
 	 */
-	protected final Storage getStorage(IAspectType type) {
+	protected final Storage getStorage(AspectType type) {
 		Storage storage = this.storage.get(type);
 		if(storage == null) {
 			this.storage.put(type, storage = new Storage(type, this));
@@ -150,7 +150,7 @@ public class AspectContainer {
 	 * Returns the set of all stored aspect types
 	 * @return
 	 */
-	protected final ImmutableSet<IAspectType> getStoredAspectTypes() {
+	protected final ImmutableSet<AspectType> getStoredAspectTypes() {
 		return ImmutableSet.copyOf(this.storage.keySet());
 	}
 
@@ -159,7 +159,7 @@ public class AspectContainer {
 	 * @param type
 	 * @return
 	 */
-	protected final int get(IAspectType type, boolean dynamic) {
+	protected final int get(AspectType type, boolean dynamic) {
 		return this.getStorage(type).getAmount(dynamic);
 	}
 
@@ -168,7 +168,7 @@ public class AspectContainer {
 	 * @param type
 	 * @return
 	 */
-	public final int get(IAspectType type) {
+	public final int get(AspectType type) {
 		Storage storage = this.getStorage(type);
 		return storage.getAmount(true) + storage.getAmount(false);
 	}
@@ -178,7 +178,7 @@ public class AspectContainer {
 	 * @param type
 	 * @return
 	 */
-	public final Aspect getAspect(IAspectType type)  {
+	public final Aspect getAspect(AspectType type)  {
 		return new Aspect(type, this.get(type));
 	}
 
@@ -188,7 +188,7 @@ public class AspectContainer {
 	 * @param amount
 	 * @return
 	 */
-	public final AspectContainer set(IAspectType type, int amount) {
+	public final AspectContainer set(AspectType type, int amount) {
 		if(amount >= 0) {
 			Storage storage = this.getStorage(type);
 			int diff = this.get(type) - amount;
@@ -217,7 +217,7 @@ public class AspectContainer {
 	 * @param amount
 	 * @return
 	 */
-	public final AspectContainer add(IAspectType type, int amount) {
+	public final AspectContainer add(AspectType type, int amount) {
 		Storage storage = this.getStorage(type);
 
 		storage.dynamicAmount += amount;
@@ -235,7 +235,7 @@ public class AspectContainer {
 	 * @param desiredAmount
 	 * @return the drained amount
 	 */
-	public final int drain(IAspectType type, int desiredAmount) {
+	public final int drain(AspectType type, int desiredAmount) {
 		int amount = this.get(type);
 		if(desiredAmount >= amount) {
 			this.set(type, 0);
@@ -264,8 +264,8 @@ public class AspectContainer {
 	 */
 	public CompoundTag save(CompoundTag nbt) {
 		ListTag typesList = new ListTag();
-		for(Entry<IAspectType, Storage> entry : this.storage.entrySet()) {
-			IAspectType type = entry.getKey();
+		for(Entry<AspectType, Storage> entry : this.storage.entrySet()) {
+			AspectType type = entry.getKey();
 			Storage storage = entry.getValue();
 
 			if(storage.dynamicAmount == 0 && !storage.hasStoredStaticAmount) {
@@ -292,7 +292,7 @@ public class AspectContainer {
 		ListTag typesList = nbt.getList("container", Tag.TAG_COMPOUND);
 		for(int i = 0; i < typesList.size(); i++) {
 			CompoundTag storageNbt = typesList.getCompound(i);
-			IAspectType type = IAspectType.readFromNBT(storageNbt.getCompound("aspect"));
+			AspectType type = AspectType.readFromNBT(storageNbt.getCompound("aspect"));
 			if(type == null)
 				continue;
 			Storage storage = this.getStorage(type);
@@ -317,8 +317,8 @@ public class AspectContainer {
 	@Nonnull
 	public List<Aspect> getAspects() {
 		List<Aspect> aspects = new ArrayList<Aspect>();
-		Set<IAspectType> types = this.getStoredAspectTypes();
-		for(IAspectType type : types) {
+		Set<AspectType> types = this.getStoredAspectTypes();
+		for(AspectType type : types) {
 			int amount = this.get(type);
 			if(amount > 0)
 				aspects.add(new Aspect(type, amount));

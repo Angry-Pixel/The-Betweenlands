@@ -5,7 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import javax.annotation.Nullable;
-import thebetweenlands.api.ITickable;
+import thebetweenlands.api.storage.TickableStorage;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class LocationGuarded extends LocationStorage implements ITickable {
+public class LocationGuarded extends LocationStorage implements TickableStorage {
 	private final BlockLocationGuard guard = new BlockLocationGuard() {
 		@Override
 		public boolean setGuarded(Level level, BlockPos pos, boolean guarded) {

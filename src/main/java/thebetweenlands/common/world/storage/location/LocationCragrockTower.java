@@ -35,7 +35,7 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
-import thebetweenlands.common.blocks.WispBlock;
+import thebetweenlands.common.block.WispBlock;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;

@@ -10,13 +10,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import thebetweenlands.api.ITickable;
+import thebetweenlands.api.storage.TickableStorage;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.config.BetweenlandsConfig;
 
-public class LocationTokenBucket extends LocationStorage implements ITickable {
+public class LocationTokenBucket extends LocationStorage implements TickableStorage {
 
 	private static class Ticket {
 		private final ResourceLocation key;

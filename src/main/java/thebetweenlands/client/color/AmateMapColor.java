@@ -1,11 +1,11 @@
 package thebetweenlands.client.color;
 
-public class AmateMapColor {
+public record AmateMapColor(int id, int color) {
 
 	// HEX to signed decimal (FF - Blue - Green - Red)
 	public static final AmateMapColor[] MAP_COLORS = new AmateMapColor[64];
 	public static final AmateMapColor EMPTY = new AmateMapColor(0, 0);
-	public static final AmateMapColor DEFALT = new AmateMapColor(1, -10648444);
+	public static final AmateMapColor DEFAULT = new AmateMapColor(1, -10648444);
 	public static final AmateMapColor BORDER = new AmateMapColor(2, -16115169);
 	public static final AmateMapColor PATCHY_ISLANDS = new AmateMapColor(3, -14992057);
 	public static final AmateMapColor SWAMPLANDS = new AmateMapColor(4, -10648444);
@@ -16,9 +16,6 @@ public class AmateMapColor {
 	public static final AmateMapColor MARSH = new AmateMapColor(9, -12871271);
 	public static final AmateMapColor ERODED_MARSH = new AmateMapColor(10, -13991791);
 	public static final AmateMapColor SWAMPLANDS_CLEARING = new AmateMapColor(11, -9202283);
-
-	public final int color;
-	public final int id;
 
 	public AmateMapColor(int id, int color) {
 		if (id >= 0 && id <= 63) {

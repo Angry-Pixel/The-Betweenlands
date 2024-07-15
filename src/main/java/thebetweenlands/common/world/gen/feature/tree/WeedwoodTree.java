@@ -5,17 +5,17 @@ import net.minecraft.core.Direction;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.VineBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import thebetweenlands.common.blocks.BetweenlandsVineBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class WeedwoodTree {
 
 	private final BlockState log = BlockRegistry.WEEDWOOD_LOG.get().defaultBlockState();
-	private final BlockState bark = BlockRegistry.WEEDWOOD_BARK_LOG.get().defaultBlockState();
+	private final BlockState bark = BlockRegistry.WEEDWOOD_BARK.get().defaultBlockState();
 	private final BlockState wood = BlockRegistry.WEEDWOOD.get().defaultBlockState();
-	private final BlockState leaves = BlockRegistry.LEAVES_WEEDWOOD_TREE.get().defaultBlockState();
+	private final BlockState leaves = BlockRegistry.WEEDWOOD_LEAVES.get().defaultBlockState();
 
 	public boolean generate(LevelAccessor accessor, BlockPos pos, RandomSource random) {
 
@@ -286,7 +286,7 @@ public class WeedwoodTree {
 			int length = random.nextInt(4) + 4;
 			for (int yy = 0; yy < length; ++yy)
 				if (accessor.isEmptyBlock(pos.below(yy)))
-					accessor.setBlock(pos.below(yy), BlockRegistry.POISON_IVY.get().defaultBlockState().setValue(BetweenlandsVineBlock.getPropertyFor(facing.getOpposite()), true), 2);
+					accessor.setBlock(pos.below(yy), BlockRegistry.POISON_IVY.get().defaultBlockState().setValue(VineBlock.getPropertyForFace(facing.getOpposite()), true), 2);
 				else
 					break;
 		}

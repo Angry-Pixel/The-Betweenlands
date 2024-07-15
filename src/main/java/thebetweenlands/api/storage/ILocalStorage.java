@@ -5,7 +5,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.phys.AABB;
-import thebetweenlands.api.ITickable;
 import thebetweenlands.api.network.IGenericDataAccessorAccess;
 
 import javax.annotation.Nullable;
@@ -253,7 +252,7 @@ public interface ILocalStorage {
 	boolean unlinkChunk(ChunkAccess chunk);
 
 	/**
-	 * Returns the data manager used to sync data. <p><b>Only storages that implement {@link ITickable}
+	 * Returns the data manager used to sync data. <p><b>Only storages that implement {@link TickableStorage}
 	 * will automatically update the data manager!</b>
 	 *
 	 * @return

@@ -78,7 +78,7 @@ public class RubberTree {
 					double dSq = Math.pow(x1 - x, 2.0D) + Math.pow(z1 - z, 2.0D) + Math.pow(y1 - y, 2.0D);
 					if (Math.round(Math.sqrt(dSq)) <= maxRadius)
 						if (!accessor.getBlockState(checkPos.set(x1, y1, z1)).is(BlockRegistry.RUBBER_LOG.get()) && random.nextInt(5) != 0)
-							accessor.setBlock(new BlockPos(x1, y1, z1), BlockRegistry.LEAVES_RUBBER_TREE.get().defaultBlockState(), 2);
+							accessor.setBlock(new BlockPos(x1, y1, z1), BlockRegistry.RUBBER_TREE_LEAVES.get().defaultBlockState(), 2);
 				}
 	}
 }

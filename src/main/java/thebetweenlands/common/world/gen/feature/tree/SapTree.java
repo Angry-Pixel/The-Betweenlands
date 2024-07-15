@@ -13,8 +13,8 @@ public class SapTree {
 	private final BlockState logX = BlockRegistry.SAP_LOG.get().defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.X);
 	private final BlockState logY = BlockRegistry.SAP_LOG.get().defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
 	private final BlockState logZ = BlockRegistry.SAP_LOG.get().defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Z);
-	private final BlockState roots = BlockRegistry.SAP_LOG.get().defaultBlockState().setValue(BlockStateProperties.AXIS, Direction.Axis.Y);
-	private final BlockState leaves = BlockRegistry.LEAVES_SAP_TREE.get().defaultBlockState();
+	private final BlockState roots = BlockRegistry.SAP_BARK.get().defaultBlockState();
+	private final BlockState leaves = BlockRegistry.SAP_LEAVES.get().defaultBlockState();
 
 	public boolean generate(LevelAccessor accessor, BlockPos pos, RandomSource random) {
 

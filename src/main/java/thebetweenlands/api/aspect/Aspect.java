@@ -4,6 +4,8 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import thebetweenlands.api.BLRegistries;
 
 public final class Aspect implements Comparable<Aspect> {
 	public static final DecimalFormat ASPECT_AMOUNT_FORMAT = new DecimalFormat("#.##");
@@ -15,14 +17,14 @@ public final class Aspect implements Comparable<Aspect> {
 	/**
 	 * The type of this aspect
 	 */
-	public final IAspectType type;
+	public final AspectType type;
 
 	/**
 	 * The amount of this aspect
 	 */
 	public final int amount;
 
-	public Aspect(IAspectType aspect, int amount) {
+	public Aspect(AspectType aspect, int amount) {
 		if(aspect == null) throw new RuntimeException("Aspect can't be null");
 		this.type = aspect;
 		this.amount = amount;
@@ -42,14 +44,13 @@ public final class Aspect implements Comparable<Aspect> {
 		return nbt;
 	}
 
-	//TODO reintroduce once registry returns
 	public static Aspect readFromNBT(CompoundTag nbt) {
 		String aspectName = nbt.getString("aspect");
 		int amount = nbt.getInt("amount");
-//		IAspectType aspectType = AspectRegistry.getAspectTypeFromName(aspectName);
-//		if(aspectType != null) {
-//			return new Aspect(aspectType, amount);
-//		}
+		AspectType aspectType = BLRegistries.ASPECTS.get(ResourceLocation.tryParse(aspectName));
+		if(aspectType != null) {
+			return new Aspect(aspectType, amount);
+		}
 		return null;
 	}
 
