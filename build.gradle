@@ -36,7 +36,8 @@ group = 'org.angrypixel'
 archivesBaseName = mod_id
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
-minecraft.accessTransformers.file('src/main/resources/META-INF/accesstransformer.cfg')
+minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
+//minecraft.accessTransformers.file('src/main/resources/META-INF/accesstransformer.cfg')
 compileJava.options.compilerArgs << "-Xlint:all,-classfile,-processing,-deprecation,-this-escape" << "-Werror"
 
 runs {
