@@ -24,13 +24,14 @@ public class AspectVialBlockEntity extends BlockEntity {
 
 	/**
 	 * Tries to add an amount and returns the added amount
+	 *
 	 * @param amount
 	 * @return
 	 */
 	public int addAmount(int amount) {
 		int canAdd = (int) (MAX_AMOUNT - this.aspect.amount);
 		int added = 0;
-		if(canAdd > 0) {
+		if (canAdd > 0) {
 			added = Math.min(canAdd, amount);
 			this.aspect = new Aspect(this.aspect.type, this.aspect.amount + added);
 		}
@@ -40,12 +41,13 @@ public class AspectVialBlockEntity extends BlockEntity {
 
 	/**
 	 * Tries to remove an amount and returns the removed amount
+	 *
 	 * @param amount
 	 * @return
 	 */
 	public int removeAmount(int amount) {
 		int removed = Math.min(this.aspect.amount, amount);
-		if(removed < this.aspect.amount) {
+		if (removed < this.aspect.amount) {
 			this.aspect = new Aspect(this.aspect.type, this.aspect.amount - removed);
 		} else {
 			this.aspect = null;
@@ -74,14 +76,14 @@ public class AspectVialBlockEntity extends BlockEntity {
 	@Override
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
-		if(this.aspect != null)
+		if (this.aspect != null)
 			this.aspect.writeToNBT(tag);
 	}
 
 	@Override
 	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
-		if(tag.contains("aspect")) {
+		if (tag.contains("aspect")) {
 			this.aspect = Aspect.readFromNBT(tag);
 		} else {
 			this.aspect = null;

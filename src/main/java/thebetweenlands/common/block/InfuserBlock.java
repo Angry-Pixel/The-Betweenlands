@@ -20,7 +20,6 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
-import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.aspect.AspectContainerItem;
 import thebetweenlands.common.block.entity.InfuserBlockEntity;
 import thebetweenlands.common.herblore.aspect.AspectManager;
@@ -28,6 +27,7 @@ import thebetweenlands.common.items.LifeCrystalItem;
 import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.common.registries.FluidRegistry;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class InfuserBlock extends HorizontalBaseEntityBlock {

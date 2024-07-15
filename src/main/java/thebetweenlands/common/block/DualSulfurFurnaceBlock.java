@@ -3,8 +3,9 @@ package thebetweenlands.common.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.block.entity.SulfurFurnaceBlockEntity;
+
+import javax.annotation.Nullable;
 
 public class DualSulfurFurnaceBlock extends SulfurFurnaceBlock {
 

@@ -19,12 +19,13 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.block.entity.CompostBinBlockEntity;
 import thebetweenlands.common.component.item.CompostData;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+
+import javax.annotation.Nullable;
 
 public class CompostBinBlock extends HorizontalBaseEntityBlock {
 

@@ -13,8 +13,9 @@ import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.block.entity.WeedwoodCraftingTableBlockEntity;
+
+import javax.annotation.Nullable;
 
 public class WeedwoodCraftingTableBlock extends BaseEntityBlock {
 

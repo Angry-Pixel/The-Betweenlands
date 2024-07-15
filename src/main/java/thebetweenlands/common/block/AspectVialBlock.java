@@ -19,13 +19,14 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.AspectContainerItem;
 import thebetweenlands.common.block.entity.AspectVialBlockEntity;
 import thebetweenlands.common.herblore.Amounts;
 import thebetweenlands.common.items.AspectVialItem;
 import thebetweenlands.common.items.DentrothystVialItem;
+
+import javax.annotation.Nullable;
 
 public class AspectVialBlock extends BaseEntityBlock {
 

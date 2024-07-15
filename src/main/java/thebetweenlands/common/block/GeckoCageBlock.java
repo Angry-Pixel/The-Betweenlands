@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.AspectItem;
 import thebetweenlands.api.aspect.DiscoveryContainer;
@@ -25,6 +24,7 @@ import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class GeckoCageBlock extends HorizontalBaseEntityBlock {

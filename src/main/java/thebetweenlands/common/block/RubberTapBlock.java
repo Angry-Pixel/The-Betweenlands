@@ -17,10 +17,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.block.entity.RubberTapBlockEntity;
 import thebetweenlands.common.registries.BlockRegistry;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 public class RubberTapBlock extends HorizontalBaseEntityBlock {
