@@ -446,7 +446,7 @@ public class GenericDataAccessor implements IGenericDataAccessorAccess {
 							} catch(Exception ex) {
 								throw new DecoderException("Failed deserializing data with custom deserializer " + entry.deserializer.getClass().getName(), ex);
 							} finally {
-								buf.release();
+								((FriendlyByteBuf) buf).release();
 							}
 						}
 						newValue = newGenericEntry.deserializedValue;

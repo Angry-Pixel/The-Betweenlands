@@ -30,7 +30,7 @@ public class ClientEvents {
 	public static void initClient(IEventBus eventbus) {
 		eventbus.addListener(ClientEvents::doClientStuff);
 		eventbus.addListener(ClientEvents::registerDimEffects);
-		eventbus.addListener(ClientEvents::registerShaders);
+//		eventbus.addListener(ClientEvents::registerShaders);
 		eventbus.addListener(ClientEvents::registerLayerDefinition);
 		eventbus.addListener(ClientEvents::particleStuff);
 		eventbus.addListener(ClientEvents::registerBlockColors);
