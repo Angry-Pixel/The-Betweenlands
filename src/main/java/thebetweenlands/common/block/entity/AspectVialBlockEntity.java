@@ -1,6 +1,8 @@
 package thebetweenlands.common.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.api.aspect.Aspect;
@@ -32,7 +34,7 @@ public class AspectVialBlockEntity extends BlockEntity {
 			added = Math.min(canAdd, amount);
 			this.aspect = new Aspect(this.aspect.type, this.aspect.amount + added);
 		}
-		markDirty();
+		this.setChanged();
 		return added;
 	}
 
@@ -48,7 +50,7 @@ public class AspectVialBlockEntity extends BlockEntity {
 		} else {
 			this.aspect = null;
 		}
-		markDirty();
+		this.setChanged();
 		return removed;
 	}
 
@@ -70,18 +72,17 @@ public class AspectVialBlockEntity extends BlockEntity {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		super.writeToNBT(compound);
+	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveAdditional(tag, registries);
 		if(this.aspect != null)
-			this.aspect.writeToNBT(compound);
-		return compound;
+			this.aspect.writeToNBT(tag);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
-		if(nbt.hasKey("aspect")) {
-			this.aspect = Aspect.readFromNBT(nbt);
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
+		if(tag.contains("aspect")) {
+			this.aspect = Aspect.readFromNBT(tag);
 		} else {
 			this.aspect = null;
 		}

@@ -2,13 +2,11 @@ package thebetweenlands.common.block;
 
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -26,16 +24,16 @@ import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.AspectContainerItem;
 import thebetweenlands.common.block.entity.AspectVialBlockEntity;
 import thebetweenlands.common.herblore.Amounts;
+import thebetweenlands.common.items.AspectVialItem;
+import thebetweenlands.common.items.DentrothystVialItem;
 
 public class AspectVialBlock extends BaseEntityBlock {
 
 	public static final VoxelShape SHAPE = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 7.0D, 12.0D);
 	public static final BooleanProperty RANDOM_POSITION = BooleanProperty.create("random_position");
-	private Holder<Item> vialItem;
 
-	public AspectVialBlock(Holder<Item> vialItem, Properties properties) {
+	public AspectVialBlock(Properties properties) {
 		super(properties);
-		this.vialItem = vialItem;
 		this.registerDefaultState(this.getStateDefinition().any().setValue(RANDOM_POSITION, false));
 	}
 
@@ -54,7 +52,7 @@ public class AspectVialBlock extends BaseEntityBlock {
 		if (level.getBlockEntity(pos) instanceof AspectVialBlockEntity vial) {
 
 			AspectContainerItem container;
-			if (stack.is(ItemRegistry.ASPECT_VIAL) && (container = AspectContainerItem.fromItem(stack)).getAspects().size() == 1) {
+			if (stack.getItem() instanceof AspectVialItem vialItem && (container = AspectContainerItem.fromItem(stack)).getAspects().size() == 1) {
 				Aspect itemAspect = container.getAspects().getFirst();
 				if (!player.isCrouching()) {
 					if (vial.getAspect() == null || vial.getAspect().type == itemAspect.type) {
@@ -66,7 +64,7 @@ public class AspectVialBlock extends BaseEntityBlock {
 								int leftAmount = itemAspect.amount - added;
 								container.set(itemAspect.type, itemAspect.amount - added);
 								if (leftAmount <= 0) {
-									player.setItemInHand(hand, new ItemStack(this.vialItem));
+									player.setItemInHand(hand, vialItem.getCraftingRemainingItem(stack));
 								}
 							}
 						}
@@ -84,12 +82,12 @@ public class AspectVialBlock extends BaseEntityBlock {
 						return ItemInteractionResult.sidedSuccess(level.isClientSide());
 					}
 				}
-			} else if (stack.is(ItemRegistry.DENTROTHYST_VIAL) && player.isCrouching() && vial.getAspect() != null) {
+			} else if (stack.getItem() instanceof DentrothystVialItem vialItem && player.isCrouching() && vial.getAspect() != null) {
 				if (!level.isClientSide()) {
 					Aspect aspect = vial.getAspect();
 					int removedAmount = vial.removeAmount(100);
 					if (removedAmount > 0) {
-						container = AspectContainerItem.fromItem(new ItemStack(this.vialItem));
+						container = AspectContainerItem.fromItem(new ItemStack(vialItem.getFullBottle()));
 						container.add(aspect.type, removedAmount);
 
 						stack.shrink(1);
@@ -97,7 +95,7 @@ public class AspectVialBlock extends BaseEntityBlock {
 							player.setItemInHand(hand, stack);
 
 						//Drop new aspect item
-						ItemEntity itemEntity = player.drop(new ItemStack(this.vialItem), false);
+						ItemEntity itemEntity = player.drop(new ItemStack(vialItem.getFullBottle()), false);
 						if (itemEntity != null) itemEntity.setNoPickUpDelay();
 					}
 				}

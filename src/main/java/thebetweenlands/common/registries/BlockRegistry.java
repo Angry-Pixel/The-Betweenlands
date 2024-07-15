@@ -627,6 +627,8 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> MUD_FLOWER_POT_CANDLE = register("mud_flower_pot_candle", () -> new MudFlowerPotCandleBlock(BlockBehaviour.Properties.of().strength(0.3F).lightLevel(value -> value.getValue(MudFlowerPotCandleBlock.LIT) ? 13 : 0).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> GECKO_CAGE = register("gecko_cage", () -> new GeckoCageBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> INFUSER = register("infuser", () -> new InfuserBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> ORANGE_ASPECT_VIAL = register("orange_aspect_vial", () -> new AspectVialBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.GLASS)));
+	public static final DeferredBlock<Block> GREEN_ASPECT_VIAL = register("green_aspect_vial", () -> new AspectVialBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.GLASS)));
 
 	public static <T extends Block> DeferredBlock<T> register(String name, Supplier<? extends T> block) {
 		return register(name, block, item -> () -> new BlockItem(item.get(), new Item.Properties()));
