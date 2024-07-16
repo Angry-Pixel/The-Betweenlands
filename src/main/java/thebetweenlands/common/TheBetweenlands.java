@@ -68,6 +68,7 @@ public class TheBetweenlands {
 		DataComponentRegistry.COMPONENTS.register(eventbus);
 		RecipeRegistry.RECIPE_TYPES.register(eventbus);
 		RecipeRegistry.RECIPE_SERIALIZERS.register(eventbus);
+		FeatureRegistry.FEATURES.register(eventbus);
 
 		StorageRegistry.preInit();
 
