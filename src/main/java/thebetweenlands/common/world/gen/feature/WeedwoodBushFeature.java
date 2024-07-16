@@ -10,6 +10,7 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.world.gen.SurfaceType;
 
 public class WeedwoodBushFeature extends Feature<NoneFeatureConfiguration> {
 

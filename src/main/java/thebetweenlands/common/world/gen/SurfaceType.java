@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.gen.feature;
+package thebetweenlands.common.world.gen;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
