@@ -43,5 +43,6 @@ public class BlockEntityRegistry {
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GeckoCageBlockEntity>> GECKO_CAGE = BLOCK_ENTITIES.register("gecko_cage", () -> BlockEntityType.Builder.of(GeckoCageBlockEntity::new, BlockRegistry.GECKO_CAGE.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<InfuserBlockEntity>> INFUSER = BLOCK_ENTITIES.register("infuser", () -> BlockEntityType.Builder.of(InfuserBlockEntity::new, BlockRegistry.INFUSER.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AspectVialBlockEntity>> ASPECT_VIAL = BLOCK_ENTITIES.register("aspect_vial", () -> BlockEntityType.Builder.of(AspectVialBlockEntity::new, BlockRegistry.ORANGE_ASPECT_VIAL.get(), BlockRegistry.GREEN_ASPECT_VIAL.get()).build(null));
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MortarBlockEntity>> MORTAR = BLOCK_ENTITIES.register("mortar", () -> BlockEntityType.Builder.of(MortarBlockEntity::new, BlockRegistry.MORTAR.get()).build(null));
 
 }

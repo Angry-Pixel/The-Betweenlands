@@ -629,6 +629,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> INFUSER = register("infuser", () -> new InfuserBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> ORANGE_ASPECT_VIAL = register("orange_aspect_vial", () -> new AspectVialBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.GLASS)));
 	public static final DeferredBlock<Block> GREEN_ASPECT_VIAL = register("green_aspect_vial", () -> new AspectVialBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.GLASS)));
+	public static final DeferredBlock<Block> MORTAR = register("mortar", () -> new MortarBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.STONE)));
 
 	public static <T extends Block> DeferredBlock<T> register(String name, Supplier<? extends T> block) {
 		return register(name, block, item -> () -> new BlockItem(item.get(), new Item.Properties()));

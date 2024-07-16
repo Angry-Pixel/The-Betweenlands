@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 
 public record PurifierRecipe(Ingredient input, ItemStack result, FluidStack requiredWater) implements Recipe<SingleRecipeInput> {
@@ -40,6 +41,11 @@ public record PurifierRecipe(Ingredient input, ItemStack result, FluidStack requ
 	@Override
 	public RecipeType<?> getType() {
 		return RecipeRegistry.PURIFIER_RECIPE.get();
+	}
+
+	@Override
+	public ItemStack getToastSymbol() {
+		return new ItemStack(BlockRegistry.PURIFIER.get());
 	}
 
 	public static class Serializer implements RecipeSerializer<PurifierRecipe> {

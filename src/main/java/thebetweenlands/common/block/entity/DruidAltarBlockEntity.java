@@ -22,9 +22,9 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.network.PacketDistributor;
+import thebetweenlands.api.recipes.DruidAltarRecipe;
 import thebetweenlands.common.block.DruidAltarBlock;
 import thebetweenlands.common.block.DruidStoneBlock;
-import thebetweenlands.common.items.recipe.DruidAltarRecipe;
 import thebetweenlands.common.items.recipe.MultiStackInput;
 import thebetweenlands.common.network.UpdateDruidAltarProgressPacket;
 import thebetweenlands.common.registries.BlockEntityRegistry;
@@ -37,7 +37,7 @@ public class DruidAltarBlockEntity extends BaseContainerBlockEntity implements W
 
 	public final static double FINAL_HEIGHT = 2.0D;
 	// 14.25 seconds crafting time
-	public static final int CRAFTING_TIME = 20 * 14 + 5;
+	public static final int DEFAULT_CRAFTING_TIME = 20 * 14 + 5;
 	private static final float ROTATION_SPEED = 2.0F;
 	public float rotation;
 	public float prevRotation;
@@ -45,6 +45,8 @@ public class DruidAltarBlockEntity extends BaseContainerBlockEntity implements W
 	public float prevRenderYOffset;
 	public int craftingProgress = 0;
 	private boolean circleShouldRevert = true;
+	@Nullable
+	private DruidAltarRecipe currentRecipe;
 
 	protected NonNullList<ItemStack> items = NonNullList.withSize(5, ItemStack.EMPTY);
 
@@ -68,25 +70,24 @@ public class DruidAltarBlockEntity extends BaseContainerBlockEntity implements W
 				entity.craftingProgress++;
 			}
 			entity.prevRenderYOffset = entity.renderYOffset;
-			entity.renderYOffset = (float) ((double) entity.craftingProgress / (double) DruidAltarBlockEntity.CRAFTING_TIME * (FINAL_HEIGHT - 0.2D) + 1.2D);
+			entity.renderYOffset = (float) ((double) entity.craftingProgress / (double) (entity.currentRecipe != null ? entity.currentRecipe.processTime() : DruidAltarBlockEntity.DEFAULT_CRAFTING_TIME) * (FINAL_HEIGHT - 0.2D) + 1.2D);
 		} else {
-			if (entity.craftingProgress != 0) {
+			if (entity.currentRecipe != null) {
 				MultiStackInput input = new MultiStackInput(entity.getItems().subList(1, 5));
-				Optional<RecipeHolder<DruidAltarRecipe>> holder = level.getRecipeManager().getRecipeFor(RecipeRegistry.DRUID_ALTAR_RECIPE.get(), input, level);
 				// Sync clients every second
 				if (entity.craftingProgress % 20 == 0 || entity.craftingProgress == 1) {
 					entity.sendCraftingProgressPacket(level, pos);
 				}
 				entity.craftingProgress++;
-				if (holder.isEmpty() || !entity.getItems().getFirst().isEmpty()) {
+				if (!entity.currentRecipe.matches(input, level) || !entity.getItems().getFirst().isEmpty()) {
 					entity.stopCraftingProcess(level, pos, state);
-				}
-				if (holder.isPresent()) {
-					DruidAltarRecipe recipe = holder.get().value();
-					if (entity.craftingProgress >= recipe.getProcessTime()) {
-						ItemStack stack = recipe.assemble(input, level.registryAccess());
+				} else {
+					entity.currentRecipe.onCrafting(level, pos, input);
+					if (entity.craftingProgress >= entity.currentRecipe.processTime()) {
+						ItemStack stack = entity.currentRecipe.assemble(input, level.registryAccess());
 						entity.getItems().clear();
 						entity.getItems().set(0, stack);
+						entity.currentRecipe.onCrafted(level, pos, input, stack);
 						entity.stopCraftingProcess(level, pos, state);
 					}
 				}
@@ -107,13 +108,13 @@ public class DruidAltarBlockEntity extends BaseContainerBlockEntity implements W
 		AABB aabb = new AABB(pos).inflate(8, 6, 8);
 //		List<DarkDruid> druids = level.getEntitiesOfClass(DarkDruid.class, aabb);
 //		for(DarkDruid druid : druids) {
-//			druid.hurt(level.damageSources().generic(), druid.getHealth());
+//			druid.kill();
 //		}
 //
 //		MobSpawnerLogicBetweenlands logic = BlockMobSpawnerBetweenlands.getLogic(level, pos.down());
 //		if(logic != null) {
 //			//Don't spawn druids while crafting
-//			logic.setDelay(CRAFTING_TIME + 20);
+//			logic.setDelay(this.currentRecipe != null ? this.currentRecipe.processTime() : DEFAULT_CRAFTING_TIME + 20);
 //		}
 	}
 
@@ -126,6 +127,7 @@ public class DruidAltarBlockEntity extends BaseContainerBlockEntity implements W
 		PacketDistributor.sendToPlayersNear((ServerLevel) level, null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 64.0D, new UpdateDruidAltarProgressPacket(this, 0));
 		// Does the metadata stuff for the circle animated textures
 		this.checkDruidCircleBlocks(level, pos);
+		this.currentRecipe = null;
 	}
 
 	public void sendCraftingProgressPacket(Level level, BlockPos pos) {
@@ -154,6 +156,24 @@ public class DruidAltarBlockEntity extends BaseContainerBlockEntity implements W
 				}
 			}
 		}
+	}
+
+	@Override
+	public void setItem(int slot, ItemStack stack) {
+		this.getItems().set(slot, stack);
+		stack.limitSize(this.getMaxStackSize(stack));
+		MultiStackInput input = new MultiStackInput(this.getItems().subList(1, 5));
+		Optional<RecipeHolder<DruidAltarRecipe>> holder = RecipeRegistry.getRecipeForInterface(DruidAltarRecipe.class, input, this.getLevel());
+		if (!this.getLevel().isClientSide() && holder.isPresent() && !stack.isEmpty() && this.getItem(0).isEmpty() && this.craftingProgress == 0) {
+			this.currentRecipe = holder.get().value();
+			this.currentRecipe.onStartCrafting(this.getLevel(), this.getBlockPos(), input);
+			this.startCraftingProcess(this.getLevel(), this.getBlockPos(), this.getBlockState());
+		}
+	}
+
+	@Override
+	public int getMaxStackSize() {
+		return 1;
 	}
 
 	@Override
