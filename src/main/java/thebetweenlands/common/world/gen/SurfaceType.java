@@ -3,7 +3,9 @@ package thebetweenlands.common.world.gen;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -102,6 +104,11 @@ public enum SurfaceType implements Predicate<BlockState> {
 
 	public boolean matches(Level level, BlockPos pos) {
 		return level.isLoaded(pos) && this.apply(level.getBlockState(pos));
+	}
+
+	//Take a look at isLoaded, and then look at this first half of the logic. Exactly the same thing
+	public boolean matches(WorldGenLevel level, BlockPos pos) {
+		return (!level.isOutsideBuildHeight(pos) && level.getChunkSource().hasChunk(SectionPos.blockToSectionCoord(pos.getX()), SectionPos.blockToSectionCoord(pos.getZ()))) && this.apply(level.getBlockState(pos));
 	}
 
 	public boolean matches(BlockState state) {
