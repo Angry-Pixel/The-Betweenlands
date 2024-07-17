@@ -23,22 +23,21 @@ public class SwampReedClusterFeature extends Feature<NoneFeatureConfiguration> {
 	}
 
 	public boolean generate(WorldGenLevel level, RandomSource rand, BlockPos pos) {
-		BlockPos.MutableBlockPos mutable = pos.mutable();
 		boolean generated = false;
 
-		for (BlockState state = level.getBlockState(mutable); (state.isAir() || state.is(BlockTags.LEAVES)) && mutable.getY() > level.getMinBuildHeight(); state = level.getBlockState(mutable)) {
-			mutable.below();
+		for (BlockState state = level.getBlockState(pos); (state.isAir() || state.is(BlockTags.LEAVES)) && pos.getY() > level.getMinBuildHeight(); state = level.getBlockState(pos)) {
+			pos = pos.below();
 		}
 
 		for (int i = 0; i < 128; ++i) {
-			mutable.offset(rand.nextInt(10) - rand.nextInt(10), rand.nextInt(8) - rand.nextInt(8), rand.nextInt(10) - rand.nextInt(10));
+			BlockPos offset = pos.mutable().offset(rand.nextInt(10) - rand.nextInt(10), rand.nextInt(8) - rand.nextInt(8), rand.nextInt(10) - rand.nextInt(10));
 
-			if (level.isAreaLoaded(mutable, 1)) {
-				if (SurfaceType.WATER.matches(level, mutable.above()) && level.getBlockState(mutable).is(BlockRegistry.MUD) && level.getBlockState(mutable.above(2)).isAir()) {
-					this.generateReedStack(level, rand, mutable.above());
+			if (level.isAreaLoaded(offset, 1)) {
+				if (SurfaceType.WATER.matches(level, offset.above()) && level.getBlockState(offset).is(BlockRegistry.MUD) && level.getBlockState(offset.above(2)).isAir()) {
+					this.generateReedStack(level, rand, offset.above());
 					generated = true;
-				} else if (SurfaceType.MIXED_GROUND.matches(level, mutable) && BlockRegistry.SWAMP_REED.get().defaultBlockState().canSurvive(level, mutable.above())) {
-					this.generateReedStack(level, rand, mutable.above());
+				} else if (SurfaceType.MIXED_GROUND.matches(level, offset) && BlockRegistry.SWAMP_REED.get().defaultBlockState().canSurvive(level, offset.above())) {
+					this.generateReedStack(level, rand, offset.above());
 					generated = true;
 				}
 			}
