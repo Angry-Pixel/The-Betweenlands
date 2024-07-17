@@ -1,6 +1,7 @@
 package thebetweenlands.api.recipes;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
 import thebetweenlands.api.aspect.AspectType;
@@ -131,7 +132,7 @@ public interface CenserRecipe<Context> {
 	 * @param tooltip
 	 * @return
 	 */
-	void getLocalizedEffectText(@Nullable Context context, Censer censer, List<String> tooltip);
+	void getLocalizedEffectText(@Nullable Context context, Censer censer, List<Component> tooltip);
 
 	enum EffectColorType {
 		FOG,
