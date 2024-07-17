@@ -24,7 +24,7 @@ public class WeedwoodBushFeature extends Feature<NoneFeatureConfiguration> {
 	}
 
 	private boolean generate(WorldGenLevel level, RandomSource rand, BlockPos pos) {
-		BlockPos.MutableBlockPos offset = new BlockPos.MutableBlockPos(pos.getX(), pos.getY(), pos.getZ());
+		BlockPos.MutableBlockPos offset = pos.mutable();
 		int y = pos.getY();
 		BlockState state;
 		do {
