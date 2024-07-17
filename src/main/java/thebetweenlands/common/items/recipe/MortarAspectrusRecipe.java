@@ -1,19 +1,11 @@
 package thebetweenlands.common.items.recipe;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.chat.numbers.BlankFormat;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.util.Unit;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import thebetweenlands.api.aspect.Aspect;
@@ -106,11 +98,6 @@ public class MortarAspectrusRecipe implements MortarRecipe {
 	}
 
 	@Override
-	public boolean canCraftInDimensions(int width, int height) {
-		return true;
-	}
-
-	@Override
 	public ItemStack getResultItem(HolderLookup.Provider registries) {
 		return ItemStack.EMPTY;
 	}
@@ -118,11 +105,6 @@ public class MortarAspectrusRecipe implements MortarRecipe {
 	@Override
 	public RecipeSerializer<?> getSerializer() {
 		return RecipeRegistry.MORTAR_ASPECTRUS_SERIALIZER.get();
-	}
-
-	@Override
-	public RecipeType<?> getType() {
-		return RecipeRegistry.MORTAR_ASPECTRUS_RECIPE.get();
 	}
 
 	@Override

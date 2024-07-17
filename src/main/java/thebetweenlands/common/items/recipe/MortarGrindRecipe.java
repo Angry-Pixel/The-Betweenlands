@@ -1,11 +1,8 @@
 package thebetweenlands.common.items.recipe;
 
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
@@ -27,11 +24,6 @@ public record MortarGrindRecipe(Ingredient input, ItemStack result) implements M
 	}
 
 	@Override
-	public boolean canCraftInDimensions(int width, int height) {
-		return true;
-	}
-
-	@Override
 	public ItemStack getResultItem(HolderLookup.Provider registries) {
 		return this.result();
 	}
@@ -39,11 +31,6 @@ public record MortarGrindRecipe(Ingredient input, ItemStack result) implements M
 	@Override
 	public RecipeSerializer<?> getSerializer() {
 		return RecipeRegistry.MORTAR_GRIND_SERIALIZER.get();
-	}
-
-	@Override
-	public RecipeType<?> getType() {
-		return RecipeRegistry.MORTAR_GRIND_RECIPE.get();
 	}
 
 	@Override

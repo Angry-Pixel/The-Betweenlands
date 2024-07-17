@@ -163,7 +163,7 @@ public class DruidAltarBlockEntity extends BaseContainerBlockEntity implements W
 		this.getItems().set(slot, stack);
 		stack.limitSize(this.getMaxStackSize(stack));
 		MultiStackInput input = new MultiStackInput(this.getItems().subList(1, 5));
-		Optional<RecipeHolder<DruidAltarRecipe>> holder = RecipeRegistry.getRecipeForInterface(DruidAltarRecipe.class, input, this.getLevel());
+		Optional<RecipeHolder<DruidAltarRecipe>> holder = this.getLevel().getRecipeManager().getRecipeFor(RecipeRegistry.DRUID_ALTAR_RECIPE.get(), input, this.getLevel());
 		if (!this.getLevel().isClientSide() && holder.isPresent() && !stack.isEmpty() && this.getItem(0).isEmpty() && this.craftingProgress == 0) {
 			this.currentRecipe = holder.get().value();
 			this.currentRecipe.onStartCrafting(this.getLevel(), this.getBlockPos(), input);

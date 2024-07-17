@@ -13,7 +13,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -45,6 +44,16 @@ public record DruidAltarReversionRecipe(NonNullList<Ingredient> items, int proce
 	}
 
 	@Override
+	public boolean isSpecial() {
+		return true;
+	}
+
+	@Override
+	public boolean showNotification() {
+		return false;
+	}
+
+	@Override
 	public ItemStack getResultItem(HolderLookup.Provider registries) {
 		return ItemStack.EMPTY;
 	}
@@ -52,11 +61,6 @@ public record DruidAltarReversionRecipe(NonNullList<Ingredient> items, int proce
 	@Override
 	public RecipeSerializer<?> getSerializer() {
 		return RecipeRegistry.DRUID_ALTAR_REVERSION_SERIALIZER.get();
-	}
-
-	@Override
-	public RecipeType<?> getType() {
-		return RecipeRegistry.DRUID_ALTAR_REVERSION_RECIPE.get();
 	}
 
 	@Override

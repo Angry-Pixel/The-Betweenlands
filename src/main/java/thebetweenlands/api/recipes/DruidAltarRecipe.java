@@ -3,10 +3,12 @@ package thebetweenlands.api.recipes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import thebetweenlands.common.items.recipe.MultiStackInput;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.RecipeRegistry;
 
 public interface DruidAltarRecipe extends Recipe<MultiStackInput> {
 
@@ -44,5 +46,15 @@ public interface DruidAltarRecipe extends Recipe<MultiStackInput> {
 		if (level.getBlockState(pos.below()).is(BlockRegistry.MOB_SPAWNER)) {
 			level.setBlockAndUpdate(pos.below(), Blocks.GRASS_BLOCK.defaultBlockState());
 		}
+	}
+
+	@Override
+	default boolean canCraftInDimensions(int width, int height) {
+		return true;
+	}
+
+	@Override
+	default RecipeType<?> getType() {
+		return RecipeRegistry.DRUID_ALTAR_RECIPE.get();
 	}
 }

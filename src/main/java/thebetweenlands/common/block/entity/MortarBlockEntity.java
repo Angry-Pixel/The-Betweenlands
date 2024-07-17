@@ -73,7 +73,7 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 
 		if (entity.pestleInstalled()) {
 			SingleRecipeInput input = new SingleRecipeInput(entity.getItem(0));
-			Optional<RecipeHolder<MortarRecipe>> holder = RecipeRegistry.getRecipeForInterface(MortarRecipe.class, input, level);
+			Optional<RecipeHolder<MortarRecipe>> holder = level.getRecipeManager().getRecipeFor(RecipeRegistry.MORTAR_RECIPE.get(), input, level);
 
 			if (holder.isPresent()) {
 				MortarRecipe recipe = holder.get().value();

@@ -48,11 +48,6 @@ public record DruidAltarAssemblyRecipe(NonNullList<Ingredient> items, ItemStack 
 	}
 
 	@Override
-	public RecipeType<?> getType() {
-		return RecipeRegistry.DRUID_ALTAR_ASSEMBLY_RECIPE.get();
-	}
-
-	@Override
 	public ItemStack getToastSymbol() {
 		return new ItemStack(BlockRegistry.DRUID_ALTAR.get());
 	}
