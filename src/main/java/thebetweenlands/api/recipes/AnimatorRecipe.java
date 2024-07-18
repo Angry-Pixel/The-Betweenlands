@@ -1,84 +1,85 @@
 package thebetweenlands.api.recipes;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
+import thebetweenlands.common.registries.RecipeRegistry;
 
 import javax.annotation.Nullable;
 
-public interface AnimatorRecipe<T extends RecipeInput> extends Recipe<T> {
-	/**
-	 * Returns whether this recipe matches the item stack
-	 * @param stack
-	 * @return
-	 */
-	boolean matchesInput(ItemStack stack);
+public interface AnimatorRecipe extends Recipe<SingleRecipeInput> {
 
 	/**
 	 * Returns the amount of required fuel
-	 * @param stack
+	 * @param input
 	 * @return
 	 */
-	int getRequiredFuel(ItemStack stack);
+	int getRequiredFuel(SingleRecipeInput input);
 
 	/**
 	 * Returns the amount of required life crystal
-	 * @param stack
+	 * @param input
 	 * @return
 	 */
-	int getRequiredLife(ItemStack stack);
+	int getRequiredLife(SingleRecipeInput input);
 
 	/**
 	 * Returns the entity to be rendered when animating the item
-	 * @param stack
+	 * @param input
 	 * @return
 	 */
 	@Nullable
-	Entity getRenderEntity(ItemStack stack);
-
-	/**
-	 * Returns the resulting item when this recipe is finished
-	 * @param stack
-	 * @return
-	 */
-	ItemStack getResult(ItemStack stack, RegistryAccess access);
+	Entity getRenderEntity(SingleRecipeInput input);
 
 	/**
 	 * Returns the entity that is spawned when this recipe is finished
-	 * @param stack
+	 * @param input
 	 * @return
 	 */
 	@Nullable
-	Class<? extends Entity> getSpawnEntityClass(ItemStack stack);
+	EntityType<?> getSpawnEntity(SingleRecipeInput input);
 
 	/**
-	 * Called when the item is animated. Can return the resulting ItemStack (overrides {@link AnimatorRecipe#getResult()}).
+	 * Called when the item is animated. Can return the resulting ItemStack (overrides {@link AnimatorRecipe#assemble(RecipeInput, HolderLookup.Provider)}).
 	 * Also used to spawn entities from animator once animated
 	 * @param level
 	 * @param pos
-	 * @param stack
+	 * @param input
 	 * @return
 	 */
-	ItemStack onAnimated(Level level, BlockPos pos, ItemStack stack);
+	ItemStack onAnimated(Level level, BlockPos pos, SingleRecipeInput input);
 
 	/**
-	 * Called when the animator has finished animating and is right clicked.
+	 * Called when the animator has finished animating and is right-clicked.
 	 * Return true if GUI should be opened on first click
 	 * @param player
 	 * @param pos
-	 * @param stack
+	 * @param input
 	 */
-	boolean onRetrieved(Player player, BlockPos pos, ItemStack stack);
+	boolean onRetrieved(Player player, BlockPos pos, SingleRecipeInput input);
 
 	/**
 	 * Returns whether the GUI should close when the animator has finished
-	 * @param stack
+	 * @param input
 	 * @return
 	 */
-	boolean getCloseOnFinish(ItemStack stack);
+	boolean getCloseOnFinish(SingleRecipeInput input);
+
+	@Override
+	default boolean canCraftInDimensions(int width, int height) {
+		return true;
+	}
+
+	@Override
+	default RecipeType<?> getType() {
+		return RecipeRegistry.ANIMATOR_RECIPE.get();
+	}
 }

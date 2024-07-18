@@ -45,5 +45,7 @@ public class BlockEntityRegistry {
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AspectVialBlockEntity>> ASPECT_VIAL = BLOCK_ENTITIES.register("aspect_vial", () -> BlockEntityType.Builder.of(AspectVialBlockEntity::new, BlockRegistry.ORANGE_ASPECT_VIAL.get(), BlockRegistry.GREEN_ASPECT_VIAL.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MortarBlockEntity>> MORTAR = BLOCK_ENTITIES.register("mortar", () -> BlockEntityType.Builder.of(MortarBlockEntity::new, BlockRegistry.MORTAR.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CenserBlockEntity>> CENSER = BLOCK_ENTITIES.register("censer", () -> BlockEntityType.Builder.of(CenserBlockEntity::new, BlockRegistry.CENSER.get()).build(null));
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BarrelBlockEntity>> BARREL = BLOCK_ENTITIES.register("barrel", () -> BlockEntityType.Builder.of(BarrelBlockEntity::new, BlockRegistry.WEEDWOOD_BARREL.get(), BlockRegistry.SYRMORITE_BARREL.get()).build(null));
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AnimatorBlockEntity>> ANIMATOR = BLOCK_ENTITIES.register("censer", () -> BlockEntityType.Builder.of(AnimatorBlockEntity::new, BlockRegistry.ANIMATOR.get()).build(null));
 
 }

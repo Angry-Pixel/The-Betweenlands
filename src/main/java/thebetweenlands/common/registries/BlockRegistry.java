@@ -13,6 +13,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.BarrelBlock;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
 import thebetweenlands.common.block.*;
 import thebetweenlands.common.block.MossBlock;
@@ -631,6 +632,9 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> GREEN_ASPECT_VIAL = register("green_aspect_vial", () -> new AspectVialBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.GLASS)));
 	public static final DeferredBlock<Block> MORTAR = register("mortar", () -> new MortarBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> CENSER = register("censer", () -> new CenserBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> WEEDWOOD_BARREL = register("weedwood_barrel", () -> new BarrelBlock(false, BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> SYRMORITE_BARREL = register("syrmorite_barrel", () -> new BarrelBlock(true, BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.METAL)));
+	public static final DeferredBlock<Block> ANIMATOR = register("animator", () -> new AnimatorBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.METAL)));
 
 	public static <T extends Block> DeferredBlock<T> register(String name, Supplier<? extends T> block) {
 		return register(name, block, item -> () -> new BlockItem(item.get(), new Item.Properties()));
