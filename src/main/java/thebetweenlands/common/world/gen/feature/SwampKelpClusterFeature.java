@@ -19,7 +19,7 @@ public class SwampKelpClusterFeature extends Feature<NoneFeatureConfiguration> {
 
 	@Override
 	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
-		return false;
+		return generate(context.level(), context.random(), context.origin());
 	}
 
 	public boolean generate(WorldGenLevel level, RandomSource rand, BlockPos pos) {
