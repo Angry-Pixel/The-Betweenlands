@@ -6,10 +6,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -17,7 +13,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.api.entity.ScreenShaker;
@@ -26,10 +21,9 @@ import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
-public class DungeonDoorRunesBlockEntity extends BlockEntity implements ScreenShaker {
+public class DungeonDoorRunesBlockEntity extends SyncedBlockEntity implements ScreenShaker {
 
 	//private LightTowerBuildParts lightTowerBuild = new LightTowerBuildParts(null);
 	private boolean mimic; // true = trap
@@ -554,24 +548,6 @@ public class DungeonDoorRunesBlockEntity extends BlockEntity implements ScreenSh
 		this.hide_back_wall = tag.getBoolean("hide_back_wall");
 		this.is_in_dungeon = tag.getBoolean("is_in_dungeon");
 		this.is_gate_entrance = tag.getBoolean("is_gate_entrance");
-	}
-
-	@Nullable
-	@Override
-	public Packet<ClientGamePacketListener> getUpdatePacket() {
-		return ClientboundBlockEntityDataPacket.create(this);
-	}
-
-	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
-		this.loadAdditional(packet.getTag(), registries);
-	}
-
-	@Override
-	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-		CompoundTag tag = super.getUpdateTag(registries);
-		this.saveAdditional(tag, registries);
-		return tag;
 	}
 
 	@Override

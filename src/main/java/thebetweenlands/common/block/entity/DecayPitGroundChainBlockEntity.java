@@ -3,25 +3,19 @@ package thebetweenlands.common.block.entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileDeflection;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
-public class DecayPitGroundChainBlockEntity extends BlockEntity {
+public class DecayPitGroundChainBlockEntity extends SyncedBlockEntity {
 
 	public int animationTicksChain = 0;
 	public int animationTicksChainPrev = 0;
@@ -132,8 +126,8 @@ public class DecayPitGroundChainBlockEntity extends BlockEntity {
 	@Override
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
-		tag.putInt("animationTicksChain", this.animationTicksChain);
-		tag.putInt("animationTicksChainPrev", this.animationTicksChainPrev);
+		tag.putInt("animation_ticks_chain", this.animationTicksChain);
+		tag.putInt("animation_ticks_chain_prev", this.animationTicksChainPrev);
 		tag.putInt("length", this.getLength());
 		tag.putBoolean("raising", this.isRaising());
 		tag.putBoolean("moving", this.isMoving());
@@ -143,29 +137,11 @@ public class DecayPitGroundChainBlockEntity extends BlockEntity {
 	@Override
 	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
-		this.animationTicksChain = tag.getInt("animationTicksChain");
-		this.animationTicksChainPrev = tag.getInt("animationTicksChainPrev");
+		this.animationTicksChain = tag.getInt("animation_ticks_chain");
+		this.animationTicksChainPrev = tag.getInt("animation_ticks_chain_prev");
 		this.setLength(tag.getInt("length"));
 		this.setRaising(tag.getBoolean("raising"));
 		this.setMoving(tag.getBoolean("moving"));
 		this.setBroken(tag.getBoolean("broken"));
-	}
-
-	@Nullable
-	@Override
-	public Packet<ClientGamePacketListener> getUpdatePacket() {
-		return ClientboundBlockEntityDataPacket.create(this);
-	}
-
-	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
-		this.loadAdditional(packet.getTag(), registries);
-	}
-
-	@Override
-	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-		CompoundTag tag = super.getUpdateTag(registries);
-		this.saveAdditional(tag, registries);
-		return tag;
 	}
 }

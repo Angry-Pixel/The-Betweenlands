@@ -169,7 +169,7 @@ public class PurifierBlockEntity extends BaseContainerBlockEntity {
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
 		ContainerHelper.saveAllItems(tag, this.items, registries);
-		tag.putInt("time", this.time);
+		tag.putInt("progress", this.time);
 		tag.put("tank", this.waterTank.writeToNBT(registries, new CompoundTag()));
 	}
 
@@ -178,7 +178,7 @@ public class PurifierBlockEntity extends BaseContainerBlockEntity {
 		super.loadAdditional(tag, registries);
 		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(tag, this.items, registries);
-		this.time = tag.getInt("time");
+		this.time = tag.getInt("progress");
 		this.waterTank.readFromNBT(registries, tag.getCompound("tank"));
 	}
 

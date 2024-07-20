@@ -296,25 +296,25 @@ public class CenserBlockEntity extends BaseContainerBlockEntity implements World
 
 	protected void saveTag(CompoundTag tag, HolderLookup.Provider registries, boolean packet) {
 		ContainerHelper.saveAllItems(tag, this.items, registries);
-		tag.put("fluidTank", this.fluidTank.writeToNBT(registries, new CompoundTag()));
-		tag.putInt("remainingItemAmount", this.remainingItemAmount);
-		tag.putInt("consumptionTicks", this.consumptionTicks);
-		tag.putInt("maxConsumptionTicks", this.maxConsumptionTicks);
-		tag.putInt("fuelTicks", this.fuelTicks);
-		tag.putInt("maxFuelTicks", this.maxFuelTicks);
+		tag.put("fluid_tank", this.fluidTank.writeToNBT(registries, new CompoundTag()));
+		tag.putInt("remaining_item_amount", this.remainingItemAmount);
+		tag.putInt("consumption_ticks", this.consumptionTicks);
+		tag.putInt("max_consumption_ticks", this.maxConsumptionTicks);
+		tag.putInt("fuel_ticks", this.fuelTicks);
+		tag.putInt("max_fuel_ticks", this.maxFuelTicks);
 		this.writeRecipeNbt(tag, packet);
 	}
 
 	protected void writeRecipeNbt(CompoundTag tag, boolean packet) {
-		tag.putBoolean("fluidRecipe", this.isFluidRecipe);
+		tag.putBoolean("fluid_recipe", this.isFluidRecipe);
 
-		if(this.currentRecipe != null) {
-			tag.putString("recipeId", BLRegistries.CENSER_RECIPES.getKey(this.currentRecipe).toString());
+		if (this.currentRecipe != null) {
+			tag.putString("recipe_id", BLRegistries.CENSER_RECIPES.getKey(this.currentRecipe).toString());
 
-			if(this.currentRecipeContext != null) {
+			if (this.currentRecipeContext != null) {
 				CompoundTag contextNbt = new CompoundTag();
 				this.currentRecipe.save(this.currentRecipeContext, contextNbt, packet);
-				tag.put("recipeNbt", contextNbt);
+				tag.put("recipe_nbt", contextNbt);
 			}
 		}
 	}
@@ -327,45 +327,45 @@ public class CenserBlockEntity extends BaseContainerBlockEntity implements World
 
 	protected void loadTag(CompoundTag tag, HolderLookup.Provider registries, boolean packet) {
 		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-		this.fluidTank.readFromNBT(registries, tag.getCompound("fluidTank"));
-		this.remainingItemAmount = tag.getInt("remainingItemAmount");
-		this.consumptionTicks = tag.getInt("consumptionTicks");
-		this.maxConsumptionTicks = tag.getInt("maxConsumptionTicks");
-		this.fuelTicks = tag.getInt("fuelTicks");
-		this.maxFuelTicks = tag.getInt("maxFuelTicks");
+		this.fluidTank.readFromNBT(registries, tag.getCompound("fluid_tank"));
+		this.remainingItemAmount = tag.getInt("remaining_item_amount");
+		this.consumptionTicks = tag.getInt("consumption_ticks");
+		this.maxConsumptionTicks = tag.getInt("max_consumption_ticks");
+		this.fuelTicks = tag.getInt("fuel_ticks");
+		this.maxFuelTicks = tag.getInt("max_fuel_ticks");
 		this.readRecipeNbt(tag, packet);
 	}
 
 	protected void readRecipeNbt(CompoundTag tag, boolean packet) {
-		this.isFluidRecipe = tag.getBoolean("fluidRecipe");
+		this.isFluidRecipe = tag.getBoolean("fluid_recipe");
 
 		this.currentRecipe = null;
 		this.currentRecipeContext = null;
 
-		if(tag.contains("recipeId", Tag.TAG_STRING)) {
-			ResourceLocation id = ResourceLocation.parse(tag.getString("recipeId"));
+		if (tag.contains("recipe_id", Tag.TAG_STRING)) {
+			ResourceLocation id = ResourceLocation.parse(tag.getString("recipe_id"));
 
-			CenserRecipe<Object> recipe = null;
+			CenserRecipe<Object> recipe;
 			Object recipeContext = null;
 
-			if(this.isFluidRecipe) {
+			if (this.isFluidRecipe) {
 				recipe = (CenserRecipe<Object>) this.getEffect(this.fluidTank.getFluid());
-				if(recipe != null) {
+				if (recipe != null) {
 					recipeContext = recipe.createContext(this.fluidTank.getFluid());
 				}
 			} else {
 				recipe = (CenserRecipe<Object>) this.getEffect(this.getItem(INTERNAL_SLOT));
-				if(recipe != null) {
+				if (recipe != null) {
 					recipeContext = recipe.createContext(this.getItem(INPUT_SLOT));
 				}
 			}
 
-			if(recipe != null && this.canRecipeRun(this.isFluidRecipe, recipe)) {
+			if (recipe != null && this.canRecipeRun(this.isFluidRecipe, recipe)) {
 				this.currentRecipe = recipe;
 				this.currentRecipeContext = recipeContext;
 
-				if(recipeContext != null && id.equals(BLRegistries.CENSER_RECIPES.getKey(recipe)) && tag.contains("recipeNbt", Tag.TAG_COMPOUND)) {
-					CompoundTag recipeNbt = tag.getCompound("recipeNbt");
+				if (recipeContext != null && id.equals(BLRegistries.CENSER_RECIPES.getKey(recipe)) && tag.contains("recipe_nbt", Tag.TAG_COMPOUND)) {
+					CompoundTag recipeNbt = tag.getCompound("recipe_nbt");
 					recipe.read(recipeContext, recipeNbt, packet);
 				}
 			} else {
@@ -515,31 +515,55 @@ public class CenserBlockEntity extends BaseContainerBlockEntity implements World
 
 	@Override
 	public FluidStack getFluidInTank(int tank) {
-		return this.fluidTank.getFluid();
+		return this.fluidTank.getFluidInTank(tank);
 	}
 
 	@Override
 	public int getTankCapacity(int tank) {
-		return this.fluidTank.getCapacity();
+		return this.fluidTank.getTankCapacity(tank);
 	}
 
 	@Override
 	public boolean isFluidValid(int tank, FluidStack stack) {
-		return this.fluidTank.isFluidValid(stack);
+		return this.fluidTank.isFluidValid(tank, stack);
 	}
 
 	@Override
 	public int fill(FluidStack resource, FluidAction action) {
+		if (this.remainingItemAmount > 0) {
+			return 0;
+		}
+		if (action.execute()) {
+			this.setChanged();
+			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
+
+			this.checkInternalSlotForRecipes = true;
+			this.checkInputSlotForTransfer = true;
+		}
 		return this.fluidTank.fill(resource, action);
 	}
 
 	@Override
 	public FluidStack drain(FluidStack resource, FluidAction action) {
+		if (action.execute()) {
+			this.setChanged();
+			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
+
+			this.checkInternalSlotForRecipes = true;
+			this.checkInputSlotForTransfer = true;
+		}
 		return this.fluidTank.drain(resource, action);
 	}
 
 	@Override
 	public FluidStack drain(int maxDrain, FluidAction action) {
+		if (action.execute()) {
+			this.setChanged();
+			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
+
+			this.checkInternalSlotForRecipes = true;
+			this.checkInputSlotForTransfer = true;
+		}
 		return this.fluidTank.drain(maxDrain, action);
 	}
 

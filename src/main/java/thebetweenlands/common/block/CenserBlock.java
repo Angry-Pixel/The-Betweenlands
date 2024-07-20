@@ -2,7 +2,10 @@ package thebetweenlands.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.*;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -107,11 +110,11 @@ public class CenserBlock extends HorizontalBaseEntityBlock implements DungeonFog
 
 	@Override
 	public AspectType getAspectFogType(LevelAccessor level, BlockPos pos, BlockState state) {
-		if(level.getBlockEntity(pos) instanceof CenserBlockEntity censer) {
-			if(censer.isRecipeRunning()) {
+		if (level.getBlockEntity(pos) instanceof CenserBlockEntity censer) {
+			if (censer.isRecipeRunning()) {
 				CenserRecipe<Object> recipe = censer.getCurrentRecipe();
 
-				if(recipe != null) {
+				if (recipe != null) {
 					return recipe.getAspectFogType(censer.getCurrentRecipeContext(), censer);
 				}
 			}

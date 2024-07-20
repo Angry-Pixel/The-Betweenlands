@@ -1,7 +1,9 @@
 package thebetweenlands.common.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.ItemStack;
@@ -22,10 +24,11 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InfuserBlockEntity extends NoMenuContainerBlockEntity {
+public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IFluidHandler {
 
 	public static final int MAX_INGREDIENTS = 6;
 
@@ -42,6 +45,7 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity {
 	private boolean hasCrystal = false;
 	private float crystalVelocity = 0.0F;
 	private float crystalRotation = 0.0F;
+	@Nullable
 	private ElixirRecipe infusingRecipe = null;
 	private boolean updateRecipe = false;
 
@@ -443,5 +447,85 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity {
 		if (this.getLevel() != null) {
 //			this.infusingRecipe = ElixirRecipes.getFromAspects(this.getInfusingAspects(this.getLevel()));
 		}
+	}
+
+	@Override
+	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveAdditional(tag, registries);
+		tag.put("water_tank", this.waterTank.writeToNBT(registries, new CompoundTag()));
+		tag.putInt("stir_progress", this.stirProgress);
+		tag.putInt("evaporation", this.evaporation);
+		tag.putInt("temperature", this.temp);
+		tag.putInt("infusion_time", this.infusionTime);
+		tag.putBoolean("has_infusion", this.hasInfusion);
+		tag.putBoolean("has_crystal", this.hasCrystal);
+		tag.putInt("infusion_state", this.currentInfusionState);
+		tag.putInt("infusion_color_gradient_ticks", this.infusionColorGradientTicks);
+	}
+
+	@Override
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
+		this.waterTank.readFromNBT(registries, tag.getCompound("water_tank"));
+		this.stirProgress = tag.getInt("stir_progress");
+		this.evaporation = tag.getInt("evaporation");
+		this.temp = tag.getInt("temperature");
+		this.infusionTime = tag.getInt("infusion_time");
+		this.hasInfusion = tag.getBoolean("has_infusion");
+		this.hasCrystal = tag.getBoolean("has_crystal");
+		this.currentInfusionState = tag.getInt("infusion_state");
+		this.infusionColorGradientTicks = tag.getInt("infusion_color_gradient_ticks");
+		this.updateRecipe = true;
+	}
+
+	@Override
+	public int getTanks() {
+		return this.waterTank.getTanks();
+	}
+
+	@Override
+	public FluidStack getFluidInTank(int tank) {
+		return this.waterTank.getFluidInTank(tank);
+	}
+
+	@Override
+	public int getTankCapacity(int tank) {
+		return this.waterTank.getTankCapacity(tank);
+	}
+
+	@Override
+	public boolean isFluidValid(int tank, FluidStack stack) {
+		return this.waterTank.isFluidValid(tank, stack);
+	}
+
+	@Override
+	public int fill(FluidStack resource, FluidAction action) {
+		if (this.hasInfusion) {
+			return 0; //Don't allow refill when infusing has already started
+		}
+		int filled = this.waterTank.fill(resource, FluidAction.SIMULATE);
+		if (filled == resource.getAmount() && action.execute()) {
+			this.waterTank.fill(resource, FluidAction.EXECUTE);
+			if (temp >= 3) {
+				temp = temp - temp / 3;
+				evaporation = 0;
+			}
+
+			if (action.execute()) {
+				this.setChanged();
+				this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 3);
+			}
+		}
+		return filled;
+	}
+
+	@Override
+	public FluidStack drain(FluidStack resource, FluidAction action) {
+		return FluidStack.EMPTY;
+	}
+
+	@Override
+	public FluidStack drain(int maxDrain, FluidAction action) {
+		return FluidStack.EMPTY;
 	}
 }

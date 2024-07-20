@@ -3,9 +3,11 @@ package thebetweenlands.common.block.entity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -18,7 +20,6 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.api.entity.ScreenShaker;
@@ -30,7 +31,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 import java.util.List;
 
-public class DecayPitControlBlockEntity extends BlockEntity implements ScreenShaker {
+public class DecayPitControlBlockEntity extends SyncedBlockEntity implements ScreenShaker {
 
 	public float animationTicks = 0;
 	public float animationTicksPrev = 0;
@@ -553,5 +554,31 @@ public class DecayPitControlBlockEntity extends BlockEntity implements ScreenSha
 
 	public float getShakingProgress() {
 		return 1.0F / shakingTimerMax * (prevShakeTimer + (shakeTimer - prevShakeTimer));
+	}
+
+	@Override
+	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveAdditional(tag, registries);
+		tag.putFloat("animation_ticks", this.animationTicks);
+		tag.putInt("spawn_type", this.getSpawnType());
+		tag.putFloat("plug_drop_ticks", this.plugDropTicks);
+		tag.putBoolean("plugged", this.isPlugged());
+		tag.putBoolean("show_floor", this.getShowFloor());
+		tag.putBoolean("spawn_drops", this.getSpawnXPAndDrops());
+		tag.putInt("death_ticks", this.getDeathTicks());
+		tag.putInt("tentacle_countdown", this.getTentacleSpawnCountDown());
+	}
+
+	@Override
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
+		this.animationTicks = tag.getFloat("animation_ticks");
+		this.setSpawnType(tag.getInt("spawn_type"));
+		this.plugDropTicks = tag.getFloat("plug_drop_ticks");
+		this.setPlugged(tag.getBoolean("plugged"));
+		this.setShowFloor(tag.getBoolean("show_floor"));
+		this.setSpawnXPAndDrops(tag.getBoolean("spawn_drops"));
+		this.setDeathTicks(tag.getInt("death_ticks"));
+		this.setTentacleSpawnCountDown(tag.getInt("tentacle_countdown"));
 	}
 }

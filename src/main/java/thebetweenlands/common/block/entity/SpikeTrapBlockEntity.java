@@ -4,16 +4,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.common.block.SludgeBlock;
@@ -25,7 +20,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class SpikeTrapBlockEntity extends BlockEntity {
+public class SpikeTrapBlockEntity extends SyncedBlockEntity {
 
 	public int prevAnimationTicks;
 	public int animationTicks;
@@ -120,34 +115,16 @@ public class SpikeTrapBlockEntity extends BlockEntity {
 	@Override
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
-		tag.putInt("animationTicks", animationTicks);
-		tag.putBoolean("active", active);
-		tag.putByte("type", type);
+		tag.putInt("animation_ticks", this.animationTicks);
+		tag.putBoolean("active", this.active);
+		tag.putByte("type", this.type);
 	}
 
 	@Override
 	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
-		this.animationTicks = tag.getInt("animationTicks");
+		this.animationTicks = tag.getInt("animation_ticks");
 		this.active = tag.getBoolean("active");
 		this.type = tag.getByte("type");
-	}
-
-	@Nullable
-	@Override
-	public Packet<ClientGamePacketListener> getUpdatePacket() {
-		return ClientboundBlockEntityDataPacket.create(this);
-	}
-
-	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
-		this.loadAdditional(packet.getTag(), registries);
-	}
-
-	@Override
-	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-		CompoundTag tag = super.getUpdateTag(registries);
-		this.saveAdditional(tag, registries);
-		return tag;
 	}
 }

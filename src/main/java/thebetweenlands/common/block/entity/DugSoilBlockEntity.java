@@ -1,14 +1,15 @@
 package thebetweenlands.common.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.common.block.DecayableCropBlock;
 import thebetweenlands.common.block.DugSoilBlock;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
-public class DugSoilBlockEntity extends BlockEntity {
+public class DugSoilBlockEntity extends SyncedBlockEntity {
 
 	private int compost = 0;
 	private int decay = 0;
@@ -118,5 +119,21 @@ public class DugSoilBlockEntity extends BlockEntity {
 
 	public boolean isFullyDecayed() {
 		return this.decay >= 20;
+	}
+
+	@Override
+	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveAdditional(tag, registries);
+		tag.putInt("compost", this.compost);
+		tag.putInt("decay", this.decay);
+		tag.putInt("purified_harvests", this.purifiedHarvests);
+	}
+
+	@Override
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
+		this.decay = tag.getInt("decay");
+		this.compost = tag.getInt("compost");
+		this.purifiedHarvests = tag.getInt("purified_harvests");
 	}
 }

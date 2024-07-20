@@ -1,10 +1,13 @@
 package thebetweenlands.common.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
@@ -218,5 +221,26 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 	@Override
 	public int getContainerSize() {
 		return 4;
+	}
+
+	@Override
+	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveAdditional(tag, registries);
+		ContainerHelper.saveAllItems(tag, this.items, registries);
+		tag.putInt("progress", this.progress);
+		tag.putBoolean("has_pestle", this.hasPestle);
+		tag.putBoolean("has_crystal", this.hasCrystal);
+		tag.putBoolean("manual_grinding", this.manualGrinding);
+	}
+
+	@Override
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
+		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+		ContainerHelper.loadAllItems(tag, this.items, registries);
+		this.progress = tag.getInt("progress");
+		this.hasPestle = tag.getBoolean("has_pestle");
+		this.hasCrystal = tag.getBoolean("has_crystal");
+		this.manualGrinding = tag.getBoolean("manual_grinding");
 	}
 }

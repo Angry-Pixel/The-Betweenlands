@@ -4,13 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.AspectType;
@@ -18,13 +13,15 @@ import thebetweenlands.common.registries.BlockEntityRegistry;
 
 import javax.annotation.Nullable;
 
-public class GeckoCageBlockEntity extends BlockEntity {
+public class GeckoCageBlockEntity extends SyncedBlockEntity {
 
 	private int ticks = 0;
 	private int prevTicks = 0;
 	private int recoverTicks = 0;
+	@Nullable
 	private AspectType aspectType = null;
 	private int geckoUsages = 0;
+	@Nullable
 	private String geckoName;
 
 	public GeckoCageBlockEntity(BlockPos pos, BlockState state) {
@@ -61,6 +58,7 @@ public class GeckoCageBlockEntity extends BlockEntity {
 		return this.prevTicks + (this.ticks - this.prevTicks) * delta;
 	}
 
+	@Nullable
 	public AspectType getAspectType() {
 		return this.aspectType;
 	}
@@ -104,46 +102,26 @@ public class GeckoCageBlockEntity extends BlockEntity {
 	@Override
 	public void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
-		tag.putInt("RecoverTicks", this.recoverTicks);
-		tag.putInt("GeckoUsages", this.geckoUsages);
+		tag.putInt("recover_ticks", this.recoverTicks);
+		tag.putInt("gecko_usages", this.geckoUsages);
 		if (this.geckoName != null) {
-			tag.putString("GeckoName", this.geckoName);
+			tag.putString("gecko_name", this.geckoName);
 		}
-		tag.putString("AspectType", this.aspectType == null ? "" : this.aspectType.getName());
-		tag.putInt("Ticks", this.ticks);
+		tag.putString("aspect_type", this.aspectType == null ? "" : this.aspectType.getName());
+		tag.putInt("ticks", this.ticks);
 	}
 
 	@Override
 	public void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
-		this.recoverTicks = tag.getInt("RecoverTicks");
-		this.geckoUsages = tag.getInt("GeckoUsages");
-		if (tag.contains("GeckoName", Tag.TAG_STRING)) {
-			this.geckoName = tag.getString("GeckoName");
+		this.recoverTicks = tag.getInt("recover_ticks");
+		this.geckoUsages = tag.getInt("gecko_usages");
+		if (tag.contains("gecko_name", Tag.TAG_STRING)) {
+			this.geckoName = tag.getString("gecko_name");
 		} else {
 			this.geckoName = null;
 		}
-		this.aspectType = BLRegistries.ASPECTS.get(ResourceLocation.tryParse(tag.getString("AspectType")));
-		this.ticks = tag.getInt("Ticks");
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getUpdatePacket() {
-		return ClientboundBlockEntityDataPacket.create(this);
-	}
-
-	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
-		CompoundTag tag = packet.getTag();
-		this.geckoUsages = tag.getInt("GeckoUsages");
-		this.aspectType = BLRegistries.ASPECTS.get(ResourceLocation.tryParse(tag.getString("AspectType")));
-	}
-
-	@Override
-	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-		CompoundTag nbt = super.getUpdateTag(registries);
-		nbt.putInt("GeckoUsages", this.geckoUsages);
-		nbt.putString("AspectType", this.aspectType == null ? "" : this.aspectType.getName());
-		return nbt;
+		this.aspectType = BLRegistries.ASPECTS.get(ResourceLocation.tryParse(tag.getString("aspect_type")));
+		this.ticks = tag.getInt("ticks");
 	}
 }

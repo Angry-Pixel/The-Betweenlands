@@ -1,12 +1,13 @@
 package thebetweenlands.common.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.common.registries.BlockEntityRegistry;
@@ -15,7 +16,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 import java.util.List;
 
-public class PuffshroomBlockEntity extends BlockEntity {
+public class PuffshroomBlockEntity extends SyncedBlockEntity {
 
 	public int animation_1 = 0, prev_animation_1 = 0, cooldown = 0;
 	public int animation_2 = 0, prev_animation_2 = 0;
@@ -162,5 +163,27 @@ public class PuffshroomBlockEntity extends BlockEntity {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveAdditional(tag, registries);
+		tag.putBoolean("active_1", this.active_1);
+		tag.putBoolean("active_2", this.active_2);
+		tag.putBoolean("active_3", this.active_3);
+		tag.putBoolean("active_4", this.active_4);
+		tag.putBoolean("active_5", this.active_5);
+		tag.putBoolean("pause", this.pause);
+	}
+
+	@Override
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
+		this.active_1 = tag.getBoolean("active_1");
+		this.active_2 = tag.getBoolean("active_2");
+		this.active_3 = tag.getBoolean("active_3");
+		this.active_4 = tag.getBoolean("active_4");
+		this.active_5 = tag.getBoolean("active_5");
+		this.pause = tag.getBoolean("pause");
 	}
 }

@@ -1,7 +1,9 @@
 package thebetweenlands.common.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -22,9 +24,9 @@ public class CompostBinBlockEntity extends NoMenuContainerBlockEntity {
 	private int compostedAmount;
 	private int totalCompostAmount;
 	private float lidAngle = 0.0F;
-	private final int[] processes = new int[MAX_ITEMS];
-	private final int[] compostAmounts = new int[MAX_ITEMS];
-	private final int[] compostTimes = new int[MAX_ITEMS];
+	private int[] processes = new int[MAX_ITEMS];
+	private int[] compostAmounts = new int[MAX_ITEMS];
+	private int[] compostTimes = new int[MAX_ITEMS];
 
 	private NonNullList<ItemStack> items = NonNullList.withSize(MAX_ITEMS, ItemStack.EMPTY);
 
@@ -127,6 +129,33 @@ public class CompostBinBlockEntity extends NoMenuContainerBlockEntity {
 
 	private boolean canAddItemToBin(int compostAmount, int index) {
 		return this.getItem(index).isEmpty() && (this.getTotalCompostAmount() + compostAmount <= MAX_COMPOST_AMOUNT ? compostAmount : MAX_COMPOST_AMOUNT - this.getTotalCompostAmount()) > 0;
+	}
+
+	@Override
+	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveAdditional(tag, registries);
+		tag.putIntArray("processes", this.processes);
+		tag.putIntArray("compost_amounts", this.compostAmounts);
+		tag.putIntArray("compost_times", this.compostTimes);
+		tag.putInt("total_compost_amount", this.totalCompostAmount);
+		tag.putInt("composted_amount", this.compostedAmount);
+		tag.putFloat("lid_angle", this.lidAngle);
+	}
+
+	@Override
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
+		this.processes = readIntArrayFixedSize("processes", this.items.size(), tag);
+		this.compostAmounts = readIntArrayFixedSize("compost_amounts", this.items.size(), tag);
+		this.compostTimes = readIntArrayFixedSize("compost_times", this.items.size(), tag);
+		this.totalCompostAmount = tag.getInt("total_compost_amount");
+		this.compostedAmount = tag.getInt("composted_amount");
+		this.lidAngle = tag.getFloat("lid_angle");
+	}
+
+	public static int[] readIntArrayFixedSize(String id, int length, CompoundTag tag) {
+		int[] array = tag.getIntArray(id);
+		return array.length != length ? new int[length] : array;
 	}
 
 	@Override

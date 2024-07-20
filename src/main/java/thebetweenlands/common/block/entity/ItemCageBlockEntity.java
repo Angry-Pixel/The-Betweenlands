@@ -3,21 +3,15 @@ package thebetweenlands.common.block.entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemCageBlockEntity extends BlockEntity {
+public class ItemCageBlockEntity extends SyncedBlockEntity {
 
 	public byte type; // type will be used for each sword part rendering
 	public boolean canBreak;
@@ -66,31 +60,13 @@ public class ItemCageBlockEntity extends BlockEntity {
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
 		tag.putByte("type", this.type);
-		tag.putBoolean("canBreak", this.canBreak);
+		tag.putBoolean("can_break", this.canBreak);
 	}
 
 	@Override
 	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
 		this.type = tag.getByte("type");
-		this.canBreak = tag.getBoolean("canBreak");
-	}
-
-	@Nullable
-	@Override
-	public Packet<ClientGamePacketListener> getUpdatePacket() {
-		return ClientboundBlockEntityDataPacket.create(this);
-	}
-
-	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
-		this.loadAdditional(packet.getTag(), registries);
-	}
-
-	@Override
-	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-		CompoundTag tag = super.getUpdateTag(registries);
-		this.saveAdditional(tag, registries);
-		return tag;
+		this.canBreak = tag.getBoolean("can_break");
 	}
 }

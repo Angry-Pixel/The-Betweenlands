@@ -3,7 +3,6 @@ package thebetweenlands.common.block.entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.common.herblore.Amounts;
@@ -11,7 +10,7 @@ import thebetweenlands.common.registries.BlockEntityRegistry;
 
 import javax.annotation.Nullable;
 
-public class AspectVialBlockEntity extends BlockEntity {
+public class AspectVialBlockEntity extends SyncedBlockEntity {
 
 	public static final float MAX_AMOUNT = Amounts.VIAL;
 

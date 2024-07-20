@@ -4,22 +4,15 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.common.block.BeamRelayBlock;
 import thebetweenlands.common.block.DungeonDoorRunesBlock;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
-import javax.annotation.Nullable;
-
-public class BeamRelayBlockEntity extends BlockEntity {
+public class BeamRelayBlockEntity extends SyncedBlockEntity {
 
 	public boolean active;
 	public boolean in_down, in_up, in_north, in_south, in_west, in_east;
@@ -163,23 +156,5 @@ public class BeamRelayBlockEntity extends BlockEntity {
 		this.in_south = tag.getBoolean("in_south");
 		this.in_west = tag.getBoolean("in_west)");
 		this.in_east = tag.getBoolean("in_east");
-	}
-
-	@Nullable
-	@Override
-	public Packet<ClientGamePacketListener> getUpdatePacket() {
-		return ClientboundBlockEntityDataPacket.create(this);
-	}
-
-	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
-		this.loadAdditional(packet.getTag(), registries);
-	}
-
-	@Override
-	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-		CompoundTag tag = super.getUpdateTag(registries);
-		this.saveAdditional(tag, registries);
-		return tag;
 	}
 }

@@ -2,13 +2,22 @@ package thebetweenlands.common.block.entity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
@@ -25,6 +34,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class AnimatorBlockEntity extends BaseContainerBlockEntity {
@@ -39,6 +49,34 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 
 	private boolean soundPlaying = false;
 	private NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY);
+	public final ContainerData data = new ContainerData() {
+		public int get(int index) {
+			return switch (index) {
+				case 0 -> AnimatorBlockEntity.this.fuelBurnProgress;
+				case 1 -> AnimatorBlockEntity.this.lifeCrystalLife;
+				case 2 -> AnimatorBlockEntity.this.itemAnimated ? 1 : 0;
+				case 3 -> AnimatorBlockEntity.this.fuelConsumed;
+				case 4 -> AnimatorBlockEntity.this.requiredFuelCount;
+				case 5 -> AnimatorBlockEntity.this.requiredLifeCount;
+				default -> 0;
+			};
+		}
+
+		public void set(int index, int value) {
+			switch (index) {
+				case 0 -> AnimatorBlockEntity.this.fuelBurnProgress = value;
+				case 1 -> AnimatorBlockEntity.this.lifeCrystalLife = value;
+				case 2 -> AnimatorBlockEntity.this.itemAnimated = value == 1;
+				case 3 -> AnimatorBlockEntity.this.fuelConsumed = value;
+				case 4 -> AnimatorBlockEntity.this.requiredFuelCount = value;
+				case 5 -> AnimatorBlockEntity.this.requiredLifeCount = value;
+			}
+		}
+
+		public int getCount() {
+			return 6;
+		}
+	};
 
 	public AnimatorBlockEntity(BlockPos pos, BlockState state) {
 		super(BlockEntityRegistry.ANIMATOR.get(), pos, state);
@@ -188,5 +226,53 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 	@Override
 	public int getContainerSize() {
 		return 3;
+	}
+
+	@Override
+	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveAdditional(tag, registries);
+		ContainerHelper.saveAllItems(tag, this.items, registries);
+		tag.putInt("life", this.lifeCrystalLife);
+		tag.putInt("progress", this.fuelBurnProgress);
+		tag.putInt("items_consumed", this.fuelConsumed);
+		tag.putBoolean("life_depleted", this.itemAnimated);
+		if (!this.itemToAnimate.isEmpty()) {
+			tag.put("to_animate", this.itemToAnimate.save(registries));
+		}
+		tag.putBoolean("running", this.running);
+	}
+
+	@Override
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
+		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+		ContainerHelper.loadAllItems(tag, this.items, registries);
+		this.lifeCrystalLife = tag.getInt("life");
+		this.fuelBurnProgress = tag.getInt("progress");
+		this.fuelConsumed = tag.getInt("items_consumed");
+		this.itemAnimated = tag.getBoolean("life_depleted");
+		if (tag.contains("to_animate", Tag.TAG_COMPOUND))
+			this.itemToAnimate = ItemStack.parseOptional(registries, tag.getCompound("to_animate"));
+		else
+			this.itemToAnimate = ItemStack.EMPTY;
+		this.running = tag.getBoolean("running");
+	}
+
+	@Nullable
+	@Override
+	public Packet<ClientGamePacketListener> getUpdatePacket() {
+		return ClientboundBlockEntityDataPacket.create(this);
+	}
+
+	@Override
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
+		this.loadAdditional(packet.getTag(), registries);
+	}
+
+	@Override
+	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+		CompoundTag tag = super.getUpdateTag(registries);
+		this.saveAdditional(tag, registries);
+		return tag;
 	}
 }

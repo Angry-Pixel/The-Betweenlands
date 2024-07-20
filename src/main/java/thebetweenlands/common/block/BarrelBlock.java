@@ -38,7 +38,7 @@ public class BarrelBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-		if(level.getBlockEntity(pos) instanceof BarrelBlockEntity barrel) {
+		if (level.getBlockEntity(pos) instanceof BarrelBlockEntity barrel) {
 			if (player.isCrouching()) {
 				return ItemInteractionResult.FAIL;
 			}
@@ -73,7 +73,7 @@ public class BarrelBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-		if(!level.isClientSide() && level.getBlockEntity(pos) instanceof BarrelBlockEntity barrel) {
+		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof BarrelBlockEntity barrel) {
 			player.openMenu(barrel);
 			return InteractionResult.SUCCESS;
 		}

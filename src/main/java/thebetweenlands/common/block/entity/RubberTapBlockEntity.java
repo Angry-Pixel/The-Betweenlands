@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
@@ -14,7 +13,7 @@ import thebetweenlands.common.block.RubberTapBlock;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 
-public class RubberTapBlockEntity extends BlockEntity {
+public class RubberTapBlockEntity extends SyncedBlockEntity implements IFluidHandler {
 
 	private final FluidTank tank = new FluidTank(FluidType.BUCKET_VOLUME, fluidStack -> fluidStack.is(FluidRegistry.RUBBER_STILL.get()));
 	private int fillProgress = 0;
@@ -52,5 +51,53 @@ public class RubberTapBlockEntity extends BlockEntity {
 		super.loadAdditional(tag, registries);
 		this.tank.readFromNBT(registries, tag);
 		this.fillProgress = tag.getInt("fill_progress");
+	}
+
+	@Override
+	public int getTanks() {
+		return this.tank.getTanks();
+	}
+
+	@Override
+	public FluidStack getFluidInTank(int tank) {
+		return this.tank.getFluidInTank(tank);
+	}
+
+	@Override
+	public int getTankCapacity(int tank) {
+		return this.tank.getTankCapacity(tank);
+	}
+
+	@Override
+	public boolean isFluidValid(int tank, FluidStack stack) {
+		return this.tank.isFluidValid(tank, stack);
+	}
+
+	@Override
+	public int fill(FluidStack resource, FluidAction action) {
+		if (action.execute()) {
+			this.setChanged();
+			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
+		}
+		return this.tank.fill(resource, action);
+	}
+
+	@Override
+	public FluidStack drain(FluidStack resource, FluidAction action) {
+		if (action.execute()) {
+			this.setChanged();
+			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
+		}
+		return this.tank.drain(resource, action);
+	}
+
+	@Override
+	public FluidStack drain(int maxDrain, FluidAction action) {
+		if (action.execute()) {
+			this.setChanged();
+			BlockState stat = this.getLevel().getBlockState(this.getBlockPos());
+			this.getLevel().sendBlockUpdated(this.getBlockPos(), stat, stat, 2);
+		}
+		return this.tank.drain(maxDrain, action);
 	}
 }

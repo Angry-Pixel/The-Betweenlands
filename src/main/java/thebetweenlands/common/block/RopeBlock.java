@@ -46,7 +46,7 @@ public class RopeBlock extends Block {
 
 	@Override
 	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-		return state.canSurvive(level, pos) ? this.getRopeState(this.defaultBlockState(), level, pos): Blocks.AIR.defaultBlockState();
+		return state.canSurvive(level, pos) ? this.getRopeState(this.defaultBlockState(), level, pos) : Blocks.AIR.defaultBlockState();
 	}
 
 	@Nullable

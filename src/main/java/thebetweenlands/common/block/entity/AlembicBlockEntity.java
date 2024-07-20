@@ -1,12 +1,14 @@
 package thebetweenlands.common.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.AspectContainerItem;
@@ -23,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class AlembicBlockEntity extends BlockEntity {
+public class AlembicBlockEntity extends SyncedBlockEntity {
 
 	public static final int DISTILLING_TIME = 4800; //4 Minutes
 
@@ -74,6 +76,43 @@ public class AlembicBlockEntity extends BlockEntity {
 					entity.setChanged();
 				}
 				entity.running = false;
+			}
+		}
+	}
+
+	@Override
+	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveAdditional(tag, registries);
+		if (!this.infusionBucket.isEmpty())
+			tag.put("infusion_bucket", this.infusionBucket.save(registries));
+		tag.putInt("progress", this.progress);
+		tag.putInt("produced_amount", this.producedAmount);
+		tag.putBoolean("running", this.running);
+		ListTag aspectList = new ListTag();
+		for (Aspect aspect : this.producableItemAspects) {
+			CompoundTag aspectCompound = new CompoundTag();
+			aspect.writeToNBT(aspectCompound);
+			aspectList.add(aspectCompound);
+		}
+		tag.put("producible_item_aspects", aspectList);
+	}
+
+	@Override
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
+		if (tag.contains("infusion_bucket"))
+			this.infusionBucket = ItemStack.parseOptional(registries, tag.getCompound("infusion_bucket"));
+		this.loadInfusionData = true;
+		this.progress = tag.getInt("progress");
+		this.producedAmount = tag.getInt("produced_amount");
+		this.running = tag.getBoolean("running");
+		if (tag.contains("producible_item_aspects")) {
+			this.producableItemAspects.clear();
+			ListTag aspectList = tag.getList("producible_item_aspects", Tag.TAG_COMPOUND);
+			for (int i = 0; i < aspectList.size(); i++) {
+				CompoundTag aspectCompound = aspectList.getCompound(i);
+				Aspect aspect = Aspect.readFromNBT(aspectCompound);
+				this.producableItemAspects.add(aspect);
 			}
 		}
 	}

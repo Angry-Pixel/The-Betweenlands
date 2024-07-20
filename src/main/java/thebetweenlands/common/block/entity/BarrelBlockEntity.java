@@ -2,6 +2,8 @@ package thebetweenlands.common.block.entity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
@@ -38,12 +40,18 @@ public class BarrelBlockEntity extends BlockEntity implements MenuProvider, Name
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
 		this.fluidTank.writeToNBT(registries, tag);
+		if (this.name != null) {
+			tag.putString("name", Component.Serializer.toJson(this.name, registries));
+		}
 	}
 
 	@Override
 	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
 		this.fluidTank.readFromNBT(registries, tag);
+		if (tag.contains("name", 8)) {
+			this.name = parseCustomNameSafe(tag.getString("name"), registries);
+		}
 	}
 
 	@Nullable
@@ -94,12 +102,12 @@ public class BarrelBlockEntity extends BlockEntity implements MenuProvider, Name
 
 	@Override
 	public FluidStack getFluidInTank(int tank) {
-		return this.fluidTank.getFluid();
+		return this.fluidTank.getFluidInTank(tank);
 	}
 
 	@Override
 	public int getTankCapacity(int tank) {
-		return this.getTankCapacity(tank);
+		return this.fluidTank.getTankCapacity(tank);
 	}
 
 	@Override
@@ -119,8 +127,7 @@ public class BarrelBlockEntity extends BlockEntity implements MenuProvider, Name
 
 				if (filled != 0 && action.execute()) {
 					this.setChanged();
-					BlockState stat = this.getLevel().getBlockState(this.getBlockPos());
-					this.getLevel().sendBlockUpdated(this.getBlockPos(), stat, stat, 2);
+					this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
 				}
 
 				return filled;
@@ -134,8 +141,7 @@ public class BarrelBlockEntity extends BlockEntity implements MenuProvider, Name
 	public FluidStack drain(FluidStack resource, FluidAction action) {
 		if (action.execute()) {
 			this.setChanged();
-			BlockState stat = this.getLevel().getBlockState(this.getBlockPos());
-			this.getLevel().sendBlockUpdated(this.getBlockPos(), stat, stat, 2);
+			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
 		}
 		return this.fluidTank.drain(resource, action);
 	}
@@ -148,5 +154,17 @@ public class BarrelBlockEntity extends BlockEntity implements MenuProvider, Name
 			this.getLevel().sendBlockUpdated(this.getBlockPos(), stat, stat, 2);
 		}
 		return this.fluidTank.drain(maxDrain, action);
+	}
+
+	@Override
+	protected void applyImplicitComponents(BlockEntity.DataComponentInput componentInput) {
+		super.applyImplicitComponents(componentInput);
+		this.name = componentInput.get(DataComponents.CUSTOM_NAME);
+	}
+
+	@Override
+	protected void collectImplicitComponents(DataComponentMap.Builder components) {
+		super.collectImplicitComponents(components);
+		components.set(DataComponents.CUSTOM_NAME, this.name);
 	}
 }
