@@ -22,7 +22,7 @@ import thebetweenlands.common.registries.BlockEntityRegistry;
 
 import java.util.List;
 
-public class RepellerBlockEntity extends BlockEntity {
+public class RepellerBlockEntity extends SyncedBlockEntity {
 
 	private static final float MAX_RADIUS = 18.0F;
 	private static final int DEPLOY_TIME = 80;

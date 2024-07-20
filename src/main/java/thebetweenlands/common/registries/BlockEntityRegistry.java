@@ -6,12 +6,14 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.*;
+import thebetweenlands.common.block.entity.spawner.MobSpawnerBlockEntity;
 
 public class BlockEntityRegistry {
 	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, TheBetweenlands.ID);
 
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WispBlockEntity>> WISP = BLOCK_ENTITIES.register("wisp", () -> BlockEntityType.Builder.of(WispBlockEntity::new, BlockRegistry.WISP.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootPotBlockEntity>> LOOT_POT = BLOCK_ENTITIES.register("loot_pot", () -> BlockEntityType.Builder.of(LootPotBlockEntity::new, BlockRegistry.LOOT_POT_1.get(), BlockRegistry.LOOT_POT_2.get(), BlockRegistry.LOOT_POT_3.get()).build(null));
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MobSpawnerBlockEntity>> MOB_SPAWNER = BLOCK_ENTITIES.register("mob_spawner", () -> BlockEntityType.Builder.of(MobSpawnerBlockEntity::new, BlockRegistry.MOB_SPAWNER.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<LootUrnBlockEntity>> LOOT_URN = BLOCK_ENTITIES.register("loot_urn", () -> BlockEntityType.Builder.of(LootUrnBlockEntity::new, BlockRegistry.LOOT_URN_1.get(), BlockRegistry.LOOT_URN_2.get(), BlockRegistry.LOOT_URN_3.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SpikeTrapBlockEntity>> SPIKE_TRAP = BLOCK_ENTITIES.register("spike_trap", () -> BlockEntityType.Builder.of(SpikeTrapBlockEntity::new, BlockRegistry.SPIKE_TRAP.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<PossessedBlockEntity>> POSSESSED_BLOCK = BLOCK_ENTITIES.register("possessed_block", () -> BlockEntityType.Builder.of(PossessedBlockEntity::new, BlockRegistry.POSSESSED_BLOCK.get()).build(null));
@@ -52,5 +54,9 @@ public class BlockEntityRegistry {
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<RepellerBlockEntity>> REPELLER = BLOCK_ENTITIES.register("repeller", () -> BlockEntityType.Builder.of(RepellerBlockEntity::new, BlockRegistry.REPELLER.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WaystoneBlockEntity>> WAYSTONE = BLOCK_ENTITIES.register("waystone", () -> BlockEntityType.Builder.of(WaystoneBlockEntity::new, BlockRegistry.WAYSTONE.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GroundItemBlockEntity>> GROUND_ITEM = BLOCK_ENTITIES.register("ground_item", () -> BlockEntityType.Builder.of(GroundItemBlockEntity::new, BlockRegistry.GROUND_ITEM.get()).build(null));
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SimulacrumBlockEntity>> SIMULACRUM = BLOCK_ENTITIES.register("simulacrum", () -> BlockEntityType.Builder.of(SimulacrumBlockEntity::new,
+		BlockRegistry.DEEPMAN_SIMULACRUM_1.get(), BlockRegistry.DEEPMAN_SIMULACRUM_2.get(), BlockRegistry.DEEPMAN_SIMULACRUM_3.get(),
+		BlockRegistry.LAKE_CAVERN_SIMULACRUM_1.get(), BlockRegistry.LAKE_CAVERN_SIMULACRUM_2.get(), BlockRegistry.LAKE_CAVERN_SIMULACRUM_3.get(),
+		BlockRegistry.ROOTMAN_SIMULACRUM_1.get(), BlockRegistry.ROOTMAN_SIMULACRUM_2.get(), BlockRegistry.ROOTMAN_SIMULACRUM_3.get()).build(null));
 
 }

@@ -14,6 +14,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -21,9 +23,11 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import thebetweenlands.api.aspect.AspectContainerItem;
+import thebetweenlands.common.block.entity.AlembicBlockEntity;
 import thebetweenlands.common.block.entity.InfuserBlockEntity;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.items.LifeCrystalItem;
+import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.common.registries.FluidRegistry;
 
@@ -189,6 +193,12 @@ public class InfuserBlock extends HorizontalBaseEntityBlock {
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new InfuserBlockEntity(pos, state);
+	}
+
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+		return createTickerHelper(type, BlockEntityRegistry.INFUSER.get(), InfuserBlockEntity::tick);
 	}
 
 	@Override

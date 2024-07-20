@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.block.BarrelBlock;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
-public class BarrelBlockEntity extends BlockEntity implements MenuProvider, Nameable, IFluidHandler {
+public class BarrelBlockEntity extends SyncedBlockEntity implements MenuProvider, Nameable, IFluidHandler {
 
 	@Nullable
 	private Component name;
@@ -52,24 +52,6 @@ public class BarrelBlockEntity extends BlockEntity implements MenuProvider, Name
 		if (tag.contains("name", 8)) {
 			this.name = parseCustomNameSafe(tag.getString("name"), registries);
 		}
-	}
-
-	@Nullable
-	@Override
-	public Packet<ClientGamePacketListener> getUpdatePacket() {
-		return ClientboundBlockEntityDataPacket.create(this);
-	}
-
-	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
-		this.loadAdditional(packet.getTag(), registries);
-	}
-
-	@Override
-	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-		CompoundTag tag = super.getUpdateTag(registries);
-		this.saveAdditional(tag, registries);
-		return tag;
 	}
 
 	@Override

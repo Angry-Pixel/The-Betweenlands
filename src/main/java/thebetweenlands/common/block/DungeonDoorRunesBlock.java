@@ -12,11 +12,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import thebetweenlands.common.block.entity.AlembicBlockEntity;
 import thebetweenlands.common.block.entity.DungeonDoorRunesBlockEntity;
+import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import javax.annotation.Nullable;
@@ -104,6 +108,12 @@ public class DungeonDoorRunesBlock extends HorizontalBaseEntityBlock {
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return !state.getValue(INVISIBLE) ? new DungeonDoorRunesBlockEntity(pos, state, this.mimic, this.barrishee) : null;
+	}
+
+	@org.jetbrains.annotations.Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+		return createTickerHelper(type, BlockEntityRegistry.DUNGEON_DOOR_RUNES.get(), DungeonDoorRunesBlockEntity::tick);
 	}
 
 	@Override

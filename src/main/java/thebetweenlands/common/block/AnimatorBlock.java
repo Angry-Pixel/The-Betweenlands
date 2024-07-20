@@ -11,12 +11,16 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.recipes.AnimatorRecipe;
+import thebetweenlands.common.block.entity.AlembicBlockEntity;
 import thebetweenlands.common.block.entity.AnimatorBlockEntity;
+import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 
 import java.util.ArrayList;
@@ -93,5 +97,11 @@ public class AnimatorBlock extends HorizontalBaseEntityBlock {
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new AnimatorBlockEntity(pos, state);
+	}
+
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+		return createTickerHelper(type, BlockEntityRegistry.ANIMATOR.get(), AnimatorBlockEntity::tick);
 	}
 }

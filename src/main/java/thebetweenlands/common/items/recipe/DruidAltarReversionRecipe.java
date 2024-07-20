@@ -17,7 +17,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import thebetweenlands.api.recipes.DruidAltarRecipe;
+import thebetweenlands.common.block.entity.spawner.BetweenlandsBaseSpawner;
+import thebetweenlands.common.block.entity.spawner.MobSpawnerBlockEntity;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -69,8 +72,8 @@ public record DruidAltarReversionRecipe(NonNullList<Ingredient> items, int proce
 		if (level.getBlockState(spawnerPos).getDestroySpeed(level, spawnerPos) >= 0.0F) {
 			level.setBlockAndUpdate(spawnerPos, BlockRegistry.MOB_SPAWNER.get().defaultBlockState());
 			if (level.getBlockEntity(pos) instanceof MobSpawnerBlockEntity spawner) {
-				MobSpawnerLogic logic = spawner.getSpawnerLogic();
-				logic.setNextEntityName("thebetweenlands:dark_druid").setCheckRange(32.0D).setSpawnRange(6).setSpawnInAir(false).setMaxEntities(1 + level.getRandom().nextInt(3));
+				BetweenlandsBaseSpawner logic = spawner.getSpawner();
+				logic.setNextEntityName(EntityRegistry.DARK_DRUID.get(), level, level.getRandom(), pos).setCheckRange(32.0D).setSpawnRange(6).setSpawnInAir(false).setMaxEntities(1 + level.getRandom().nextInt(3));
 			}
 
 			level.playSound(null, spawnerPos, SoundRegistry.DRUID_TELEPORT.get(), SoundSource.BLOCKS, 1.0F, 1.0F);

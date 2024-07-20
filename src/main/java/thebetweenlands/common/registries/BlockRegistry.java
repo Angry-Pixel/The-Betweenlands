@@ -174,7 +174,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> LOOT_POT_1 = register("loot_pot_1", () -> new LootPotBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
 	public static final DeferredBlock<Block> LOOT_POT_2 = register("loot_pot_2", () -> new LootPotBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
 	public static final DeferredBlock<Block> LOOT_POT_3 = register("loot_pot_3", () -> new LootPotBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
-	//TODO spawner
+	public static final DeferredBlock<Block> MOB_SPAWNER = register("mob_spawner", () -> new MobSpawnerBlock(BlockBehaviour.Properties.of().strength(10.0F).sound(SoundType.GLASS)));
 	public static final DeferredBlock<Block> TEMPLE_PILLAR = register("temple_pillar", () -> new TemplePillarBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> BETWEENSTONE_PILLAR = register("betweenstone_pillar", () -> new TemplePillarBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> PITSTONE_PILLAR = register("pitstone_pillar", () -> new TemplePillarBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
@@ -648,6 +648,15 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> WAYSTONE = register("waystone", () -> new WaystoneBlock(BlockBehaviour.Properties.of().strength(25.0F, 10000.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> CAVING_ROPE_LIGHT = BLOCKS.register("caving_rope_light", () -> new CavingRopeLightBlock(BlockBehaviour.Properties.of().randomTicks().lightLevel(value -> 6).air()));
 	public static final DeferredBlock<Block> GROUND_ITEM = BLOCKS.register("ground_item", () -> new GroundItemBlock(BlockBehaviour.Properties.of().strength(0.1F).sound(SoundType.EMPTY)));
+	public static final DeferredBlock<Block> DEEPMAN_SIMULACRUM_1 = BLOCKS.register("deepman_simulacrum_1", () -> new SimulacrumBlock(BlockBehaviour.Properties.of().strength(10.0F, 10000.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> DEEPMAN_SIMULACRUM_2 = BLOCKS.register("deepman_simulacrum_2", () -> new SimulacrumBlock(BlockBehaviour.Properties.of().strength(10.0F, 10000.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> DEEPMAN_SIMULACRUM_3 = BLOCKS.register("deepman_simulacrum_3", () -> new SimulacrumBlock(BlockBehaviour.Properties.of().strength(10.0F, 10000.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> LAKE_CAVERN_SIMULACRUM_1 = BLOCKS.register("lake_cavern_simulacrum_1", () -> new SimulacrumBlock(BlockBehaviour.Properties.of().strength(10.0F, 10000.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> LAKE_CAVERN_SIMULACRUM_2 = BLOCKS.register("lake_cavern_simulacrum_2", () -> new SimulacrumBlock(BlockBehaviour.Properties.of().strength(10.0F, 10000.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> LAKE_CAVERN_SIMULACRUM_3 = BLOCKS.register("lake_cavern_simulacrum_3", () -> new SimulacrumBlock(BlockBehaviour.Properties.of().strength(10.0F, 10000.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> ROOTMAN_SIMULACRUM_1 = BLOCKS.register("rootman_simulacrum_1", () -> new SimulacrumBlock(BlockBehaviour.Properties.of().strength(10.0F, 10000.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> ROOTMAN_SIMULACRUM_2 = BLOCKS.register("rootman_simulacrum_2", () -> new SimulacrumBlock(BlockBehaviour.Properties.of().strength(10.0F, 10000.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> ROOTMAN_SIMULACRUM_3 = BLOCKS.register("rootman_simulacrum_3", () -> new SimulacrumBlock(BlockBehaviour.Properties.of().strength(10.0F, 10000.0F).sound(SoundType.WOOD)));
 
 	public static <T extends Block> DeferredBlock<T> register(String name, Supplier<? extends T> block) {
 		return register(name, block, item -> () -> new BlockItem(item.get(), new Item.Properties()));

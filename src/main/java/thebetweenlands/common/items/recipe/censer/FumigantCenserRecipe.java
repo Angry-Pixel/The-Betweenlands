@@ -2,6 +2,7 @@ package thebetweenlands.common.items.recipe.censer;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -19,26 +20,26 @@ public class FumigantCenserRecipe extends AbstractCenserRecipe<Void> {
 		return stack.is(ItemRegistry.FUMIGANT);
 	}
 
-	private List<LivingEntity> getAffectedEntities(Level level, BlockPos pos) {
-		return level.getEntitiesOfClass(LivingEntity.class, new AABB(pos).inflate(32, 1, 32).expandTowards(0, 16, 0));
+	private List<Player> getAffectedEntities(Level level, BlockPos pos) {
+		return level.getEntitiesOfClass(Player.class, new AABB(pos).inflate(32, 1, 32).expandTowards(0, 16, 0));
 	}
 
 	@Override
 	public int update(Void context, Censer censer) {
 		Level level = censer.getLevel();
 
-		if(!world.isClientSide() && level.getGameTime() % 100 == 0) {
+		if(!level.isClientSide() && level.getGameTime() % 100 == 0) {
 			boolean applied = false;
 
 			BlockPos pos = censer.getBlockPos();
 
-			List<LivingEntity> affected = this.getAffectedEntities(world, pos);
-			for(LivingEntity living : affected) {
-				RotSmellData cap = living.getData(AttachmentRegistry.ROT_SMELL);
+			List<Player> affected = this.getAffectedEntities(level, pos);
+			for(Player player : affected) {
+				RotSmellData cap = player.getData(AttachmentRegistry.ROT_SMELL);
 
-				if (cap.getRemainingSmellyTicks(living) > 0) {
-					cap.setNotSmellingBad(living);
-					cap.setImmune(Math.max(cap.getRemainingImmunityTicks(living), 600));
+				if (cap.getRemainingSmellyTicks(player) > 0) {
+					cap.setNotSmellingBad(player);
+					cap.setImmune(player, Math.max(cap.getRemainingImmunityTicks(player), 600));
 					applied = true;
 				}
 			}

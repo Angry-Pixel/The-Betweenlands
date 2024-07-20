@@ -137,7 +137,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 						AABB aabb = new AABB(pos).inflate(12);
 						for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, aabb, EntitySelector.NO_SPECTATORS)) {
 							if (player.distanceToSqr(Vec3.atCenterOf(pos)) <= 144) {
-								AdvancementCriterionRegistry.ANIMATE.trigger(input, result.copy(), player);
+//								AdvancementCriterionRegistry.ANIMATE.trigger(input, result.copy(), player);
 							}
 						}
 					}

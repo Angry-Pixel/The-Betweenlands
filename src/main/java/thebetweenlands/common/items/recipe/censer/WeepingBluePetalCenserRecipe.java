@@ -2,6 +2,7 @@ package thebetweenlands.common.items.recipe.censer;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -19,8 +20,8 @@ public class WeepingBluePetalCenserRecipe extends AbstractCenserRecipe<Void> {
 		return stack.is(ItemRegistry.WEEPING_BLUE_PETAL);
 	}
 
-	private List<LivingEntity> getAffectedEntities(Level level, BlockPos pos) {
-		return level.getEntitiesOfClass(LivingEntity.class, new AABB(pos).inflate(32, 1, 32).expandTowards(0, 16, 0));
+	private List<Player> getAffectedEntities(Level level, BlockPos pos) {
+		return level.getEntitiesOfClass(Player.class, new AABB(pos).inflate(32, 1, 32).expandTowards(0, 16, 0));
 	}
 
 	@Override
@@ -32,12 +33,12 @@ public class WeepingBluePetalCenserRecipe extends AbstractCenserRecipe<Void> {
 
 			BlockPos pos = censer.getBlockPos();
 
-			List<LivingEntity> affected = this.getAffectedEntities(level, pos);
-			for(LivingEntity living : affected) {
-				DecayData cap = living.getData(AttachmentRegistry.DECAY);
+			List<Player> affected = this.getAffectedEntities(level, pos);
+			for(Player player : affected) {
+				DecayData cap = player.getData(AttachmentRegistry.DECAY);
 
-				if(cap.getDecayLevel(living) > 0) {
-					cap.addStats(living, -2, 0);
+				if(cap.getDecayLevel(player) > 0) {
+					cap.addStats(player, -2, 0);
 
 					applied = true;
 				}

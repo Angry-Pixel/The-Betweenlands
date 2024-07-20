@@ -71,23 +71,24 @@ public class RepellerBlock extends HorizontalBaseEntityBlock {
 				} else if (stack.getItem() instanceof AspectVialItem) {
 					if (repeller.hasShimmerstone()) {
 						if (repeller.getFuel() < repeller.getMaxFuel()) {
-							AspectContainerItem aspectContainer = AspectContainerItem.fromItem(stack);
-							int amount = aspectContainer.get(AspectRegistry.BYARIIS);
-							int loss = 10; //Loss when adding
-							if (amount >= loss) {
-								if (!level.isClientSide()) {
-									int added = repeller.addFuel(amount - loss);
-									if (!player.isCreative()) {
-										int leftAmount = amount - added - loss;
-										if (leftAmount > 0) {
-											aspectContainer.set(AspectRegistry.BYARIIS, leftAmount);
-										} else {
-											player.setItemInHand(hand, stack.getCraftingRemainingItem());
-										}
-									}
-								}
-								return ItemInteractionResult.sidedSuccess(level.isClientSide());
-							}
+							//TODO
+//							AspectContainerItem aspectContainer = AspectContainerItem.fromItem(stack);
+//							int amount = aspectContainer.get(AspectRegistry.BYARIIS);
+//							int loss = 10; //Loss when adding
+//							if (amount >= loss) {
+//								if (!level.isClientSide()) {
+//									int added = repeller.addFuel(amount - loss);
+//									if (!player.isCreative()) {
+//										int leftAmount = amount - added - loss;
+//										if (leftAmount > 0) {
+//											aspectContainer.set(AspectRegistry.BYARIIS, leftAmount);
+//										} else {
+//											player.setItemInHand(hand, stack.getCraftingRemainingItem());
+//										}
+//									}
+//								}
+//								return ItemInteractionResult.sidedSuccess(level.isClientSide());
+//							}
 						}
 					} else {
 						if (!level.isClientSide()) {
@@ -98,7 +99,7 @@ public class RepellerBlock extends HorizontalBaseEntityBlock {
 					ItemStack newStack = new ItemStack(vial.getFullBottle());
 					if (!level.isClientSide()) {
 						AspectContainerItem aspectContainer = AspectContainerItem.fromItem(newStack);
-						aspectContainer.set(AspectRegistry.BYARIIS, repeller.removeFuel(Amounts.VIAL));
+						//aspectContainer.set(AspectRegistry.BYARIIS, repeller.removeFuel(Amounts.VIAL));
 					}
 					stack.shrink(1);
 					if (!player.getInventory().add(newStack)) {
