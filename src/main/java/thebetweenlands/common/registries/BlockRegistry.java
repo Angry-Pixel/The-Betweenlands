@@ -645,6 +645,9 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> THATCH_ROOF = register("thatch_roof", () -> new StairBlock(THATCH.get().defaultBlockState(), BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.AZALEA)));
 	public static final DeferredBlock<Block> MUD_BRICK_SHINGLE_ROOF = register("mud_brick_shingle_roof", () -> new StairBlock(MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> REPELLER = register("repeller", () -> new RepellerBlock(BlockBehaviour.Properties.of().strength(1.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> WAYSTONE = register("waystone", () -> new WaystoneBlock(BlockBehaviour.Properties.of().strength(25.0F, 10000.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> CAVING_ROPE_LIGHT = BLOCKS.register("caving_rope_light", () -> new CavingRopeLightBlock(BlockBehaviour.Properties.of().randomTicks().lightLevel(value -> 6).air()));
+	public static final DeferredBlock<Block> GROUND_ITEM = BLOCKS.register("ground_item", () -> new GroundItemBlock(BlockBehaviour.Properties.of().strength(0.1F).sound(SoundType.EMPTY)));
 
 	public static <T extends Block> DeferredBlock<T> register(String name, Supplier<? extends T> block) {
 		return register(name, block, item -> () -> new BlockItem(item.get(), new Item.Properties()));

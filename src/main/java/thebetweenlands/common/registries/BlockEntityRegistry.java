@@ -49,6 +49,8 @@ public class BlockEntityRegistry {
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AnimatorBlockEntity>> ANIMATOR = BLOCK_ENTITIES.register("censer", () -> BlockEntityType.Builder.of(AnimatorBlockEntity::new, BlockRegistry.ANIMATOR.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlembicBlockEntity>> ALEMBIC = BLOCK_ENTITIES.register("alembic", () -> BlockEntityType.Builder.of(AlembicBlockEntity::new, BlockRegistry.ALEMBIC.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MossBedBlockEntity>> MOSS_BED = BLOCK_ENTITIES.register("moss_bed", () -> BlockEntityType.Builder.of(MossBedBlockEntity::new, BlockRegistry.MOSS_BED.get()).build(null));
-	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<RepellerBlockEntity>> REPELLER = BLOCK_ENTITIES.register("moss_bed", () -> BlockEntityType.Builder.of(RepellerBlockEntity::new, BlockRegistry.REPELLER.get()).build(null));
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<RepellerBlockEntity>> REPELLER = BLOCK_ENTITIES.register("repeller", () -> BlockEntityType.Builder.of(RepellerBlockEntity::new, BlockRegistry.REPELLER.get()).build(null));
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WaystoneBlockEntity>> WAYSTONE = BLOCK_ENTITIES.register("waystone", () -> BlockEntityType.Builder.of(WaystoneBlockEntity::new, BlockRegistry.WAYSTONE.get()).build(null));
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GroundItemBlockEntity>> GROUND_ITEM = BLOCK_ENTITIES.register("ground_item", () -> BlockEntityType.Builder.of(GroundItemBlockEntity::new, BlockRegistry.GROUND_ITEM.get()).build(null));
 
 }
