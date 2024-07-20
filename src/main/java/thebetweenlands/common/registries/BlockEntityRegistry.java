@@ -47,5 +47,7 @@ public class BlockEntityRegistry {
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CenserBlockEntity>> CENSER = BLOCK_ENTITIES.register("censer", () -> BlockEntityType.Builder.of(CenserBlockEntity::new, BlockRegistry.CENSER.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BarrelBlockEntity>> BARREL = BLOCK_ENTITIES.register("barrel", () -> BlockEntityType.Builder.of(BarrelBlockEntity::new, BlockRegistry.WEEDWOOD_BARREL.get(), BlockRegistry.SYRMORITE_BARREL.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AnimatorBlockEntity>> ANIMATOR = BLOCK_ENTITIES.register("censer", () -> BlockEntityType.Builder.of(AnimatorBlockEntity::new, BlockRegistry.ANIMATOR.get()).build(null));
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AlembicBlockEntity>> ALEMBIC = BLOCK_ENTITIES.register("alembic", () -> BlockEntityType.Builder.of(AlembicBlockEntity::new, BlockRegistry.ALEMBIC.get()).build(null));
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MossBedBlockEntity>> MOSS_BED = BLOCK_ENTITIES.register("moss_bed", () -> BlockEntityType.Builder.of(MossBedBlockEntity::new, BlockRegistry.MOSS_BED.get()).build(null));
 
 }

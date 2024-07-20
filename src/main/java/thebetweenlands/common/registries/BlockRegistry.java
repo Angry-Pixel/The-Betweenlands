@@ -634,7 +634,16 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> CENSER = register("censer", () -> new CenserBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> WEEDWOOD_BARREL = register("weedwood_barrel", () -> new BarrelBlock(false, BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> SYRMORITE_BARREL = register("syrmorite_barrel", () -> new BarrelBlock(true, BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.METAL)));
-	public static final DeferredBlock<Block> ANIMATOR = register("animator", () -> new AnimatorBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.METAL)));
+	public static final DeferredBlock<Block> ANIMATOR = register("animator", () -> new AnimatorBlock(BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> ALEMBIC = register("alembic", () -> new AlembicBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> MOSS_BED = register("moss_bed", () -> new MossBedBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.GREEN_BED)));
+	public static final DeferredBlock<Block> ROPE = register("rope", () -> new RopeBlock(BlockBehaviour.Properties.of().instabreak().pushReaction(PushReaction.DESTROY).sound(SoundType.WOOL)));
+	public static final DeferredBlock<Block> DAMP_TORCH = BLOCKS.register("damp_torch", () -> new DampTorchBlock(BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY)));
+	public static final DeferredBlock<Block> DAMP_WALL_TORCH = BLOCKS.register("damp_wall_torch", () -> new DampWallTorchBlock(BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY)));
+	public static final DeferredBlock<Block> WALKWAY = register("walkway", () -> new WalkwayBlock(BlockBehaviour.Properties.of().strength(1.0F).pushReaction(PushReaction.DESTROY).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> CHIP_PATH = register("chip_path", () -> new WalkwayBlock(BlockBehaviour.Properties.of().strength(0.5F).pushReaction(PushReaction.DESTROY).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> THATCH_ROOF = register("thatch_roof", () -> new StairBlock(THATCH.get().defaultBlockState(), BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.AZALEA)));
+	public static final DeferredBlock<Block> MUD_BRICK_SHINGLE_ROOF = register("mud_brick_shingle_roof", () -> new StairBlock(MUD_BRICK_SHINGLES.get().defaultBlockState(), BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 
 	public static <T extends Block> DeferredBlock<T> register(String name, Supplier<? extends T> block) {
 		return register(name, block, item -> () -> new BlockItem(item.get(), new Item.Properties()));
