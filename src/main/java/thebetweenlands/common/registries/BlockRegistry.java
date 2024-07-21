@@ -658,6 +658,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> ROOTMAN_SIMULACRUM_2 = BLOCKS.register("rootman_simulacrum_2", () -> new SimulacrumBlock(BlockBehaviour.Properties.of().strength(10.0F, 10000.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> ROOTMAN_SIMULACRUM_3 = BLOCKS.register("rootman_simulacrum_3", () -> new SimulacrumBlock(BlockBehaviour.Properties.of().strength(10.0F, 10000.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> OFFERING_TABLE = BLOCKS.register("offering_table", () -> new OfferingTableBlock(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> WIND_CHIME = BLOCKS.register("wind_chime", () -> new WindChimeBlock(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.WOOD)));
 
 	public static <T extends Block> DeferredBlock<T> register(String name, Supplier<? extends T> block) {
 		return register(name, block, item -> () -> new BlockItem(item.get(), new Item.Properties()));
