@@ -17,6 +17,7 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.entity.SimulacrumBlockEntity;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class ThunderstormEvent extends TimedEnvironmentEvent {
@@ -59,14 +60,14 @@ public class ThunderstormEvent extends TimedEnvironmentEvent {
 
 						BlockPos seedPos = new BlockPos(levelchunk.getPos().x * 16 + (l & 15), 0, levelchunk.getPos().z * 16 + (l >> 8 & 15));
 
-//						TileEntitySimulacrum simulacrum = TileEntitySimulacrum.getClosestActiveTile(TileEntitySimulacrum.class, null, server, seedPos.getX() + 0.5D, level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, seedPos).getY(), seedPos.getZ() + 0.5D, 64.0D, TileEntitySimulacrum.Effect.ATTRACTION, null);
+						SimulacrumBlockEntity simulacrum = SimulacrumBlockEntity.getClosestActiveTile(SimulacrumBlockEntity.class, null, server, seedPos.getX() + 0.5D, level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, seedPos).getY(), seedPos.getZ() + 0.5D, 64.0D, SimulacrumBlockEntity.Effect.ATTRACTION, null);
 
 						BlockPos pos;
 						boolean isFlyingPlayerTarget = false;
 
-						/*if(simulacrum != null) {
-							pos = simulacrum.getBlockPos().up();
-						} else*/ {
+						if(simulacrum != null) {
+							pos = simulacrum.getBlockPos().above();
+						} else {
 							pos = this.getNearbyFlyingPlayer(server, seedPos);
 							if(pos == null) {
 								pos = this.adjustPosToNearbyEntity(server, seedPos);

@@ -14,10 +14,13 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
+import thebetweenlands.client.shader.postprocessing.GroundFog;
+import thebetweenlands.client.shader.postprocessing.WorldShader;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 import thebetweenlands.common.world.spawning.BoxMobSpawner;
 import thebetweenlands.common.world.storage.location.LocationAmbience.EnumLocationAmbience;
@@ -215,28 +218,27 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 		}
 	}
 
-	//FIXME
-//	public boolean addGroundFogVolumesToShader(WorldShader shader) {
-//		float globalStrength = this.dataManager.get(GROUND_FOG_STRENGTH);
-//
-//		if(globalStrength > 0) {
-//			for(int floor = 0; floor < MAX_FLOORS; floor++) {
-//				float floorStrength = globalStrength / (float) MAX_FLOORS * (floor + 1);
-//
-//				float fogBrightness = 0.25F;
-//				float inScattering = 0.035F - 0.015F * floorStrength;
-//				float extinction = 6.0F - 4.2F * floorStrength;
-//
-//				float height = 4.0f + 8.0f * floorStrength;
-//
-//				shader.addGroundFogVolume(new GroundFogVolume(new Vec3(this.structurePos.getX(), this.structurePos.getY() - 5.2D - floor * 6, this.structurePos.getZ()), new Vec3(29, height, 29), inScattering, extinction, fogBrightness, fogBrightness, fogBrightness));
-//			}
-//
-//			return true;
-//		}
-//
-//		return false;
-//	}
+	public boolean addGroundFogVolumesToShader(WorldShader shader) {
+		float globalStrength = this.dataManager.get(GROUND_FOG_STRENGTH);
+
+		if(globalStrength > 0) {
+			for(int floor = 0; floor < MAX_FLOORS; floor++) {
+				float floorStrength = globalStrength / (float) MAX_FLOORS * (floor + 1);
+
+				float fogBrightness = 0.25F;
+				float inScattering = 0.035F - 0.015F * floorStrength;
+				float extinction = 6.0F - 4.2F * floorStrength;
+
+				float height = 4.0f + 8.0f * floorStrength;
+
+				shader.addGroundFogVolume(new GroundFog.GroundFogVolume(new Vec3(this.structurePos.getX(), this.structurePos.getY() - 5.2D - floor * 6, this.structurePos.getZ()), new Vec3(29, height, 29), inScattering, extinction, fogBrightness, fogBrightness, fogBrightness));
+			}
+
+			return true;
+		}
+
+		return false;
+	}
 
 	public int getFloor(BlockPos pos) {
 		return (this.structurePos.getY() - 1 - pos.getY()) / (MAX_FLOORS - 1);
