@@ -1,4 +1,4 @@
-package thebetweenlands.common;
+package thebetweenlands.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,7 +22,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.common.block.HorizontalBaseEntityBlock;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.FishingTackleBoxBlockEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;

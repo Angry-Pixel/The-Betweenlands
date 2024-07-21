@@ -12,7 +12,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import thebetweenlands.common.SiltGlassLanternBlock;
+import thebetweenlands.common.block.SiltGlassLanternBlock;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BarrelBlock;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;

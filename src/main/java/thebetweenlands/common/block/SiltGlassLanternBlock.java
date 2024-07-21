@@ -1,10 +1,9 @@
-package thebetweenlands.common;
+package thebetweenlands.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import thebetweenlands.common.block.BLLanternBlock;
 
 public class SiltGlassLanternBlock extends BLLanternBlock {
 	public SiltGlassLanternBlock(Properties properties) {
