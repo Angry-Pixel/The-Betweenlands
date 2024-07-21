@@ -60,5 +60,7 @@ public class BlockEntityRegistry {
 		BlockRegistry.ROOTMAN_SIMULACRUM_1.get(), BlockRegistry.ROOTMAN_SIMULACRUM_2.get(), BlockRegistry.ROOTMAN_SIMULACRUM_3.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<OfferingTableBlockEntity>> OFFERING_TABLE = BLOCK_ENTITIES.register("offering_table", () -> BlockEntityType.Builder.of(OfferingTableBlockEntity::new, BlockRegistry.OFFERING_TABLE.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WindChimeBlockEntity>> WIND_CHIME = BLOCK_ENTITIES.register("offering_table", () -> BlockEntityType.Builder.of(WindChimeBlockEntity::new, BlockRegistry.WIND_CHIME.get()).build(null));
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FishingTackleBoxBlockEntity>> FISHING_TACKLE_BOX = BLOCK_ENTITIES.register("fishing_tackle_box", () -> BlockEntityType.Builder.of(FishingTackleBoxBlockEntity::new, BlockRegistry.FISHING_TACKLE_BOX.get()).build(null));
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SmokingRackBlockEntity>> SMOKING_RACK = BLOCK_ENTITIES.register("smoking_rack", () -> BlockEntityType.Builder.of(SmokingRackBlockEntity::new, BlockRegistry.SMOKING_RACK.get()).build(null));
 
 }
