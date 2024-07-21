@@ -14,20 +14,17 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.util.random.SimpleWeightedRandomList;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.SpawnData;
 import net.minecraft.world.level.Spawner;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
-import net.minecraft.world.phys.AABB;
 import net.neoforged.fml.util.ObfuscationReflectionHelper;
 import thebetweenlands.common.block.entity.spawner.BetweenlandsBaseSpawner;
 import thebetweenlands.common.component.entity.BlessingData;
@@ -44,7 +41,6 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
 import java.util.function.Predicate;
 
 public class SimulacrumBlockEntity extends RepellerBlockEntity implements Spawner {
@@ -353,9 +349,9 @@ public class SimulacrumBlockEntity extends RepellerBlockEntity implements Spawne
 						if (offering != null) {
 							if (!level.isClientSide() && level.getRandom().nextInt(40) == 0) {
 								BlessingData cap = player.getData(AttachmentRegistry.BLESSING);
-								ItemStack stack = offering.getStack();
+								ItemStack stack = offering.getTheItem();
 								stack.shrink(1);
-								offering.setStack(stack);
+								offering.setTheItem(stack);
 								cap.setBlessed(player.level().dimension(), pos);
 								player.displayClientMessage(Component.translatable("chat.simulacrum.blessed"), true);
 							} else if (level.isClientSide()) {
@@ -456,7 +452,7 @@ public class SimulacrumBlockEntity extends RepellerBlockEntity implements Spawne
 
 							if (dstSq <= range * range && (closest == null || dstSq <= closest.getBlockPos().distToCenterSqr(x, y, z)) &&
 								(effect == null || !(tile instanceof SimulacrumBlockEntity simulacrum) || simulacrum.getEffect() == effect && simulacrum.isActive()) &&
-								(offeringPredicate == null || !(tile instanceof OfferingTableBlockEntity table) || offeringPredicate.test(table.getStack()))) {
+								(offeringPredicate == null || !(tile instanceof OfferingTableBlockEntity table) || offeringPredicate.test(table.getTheItem()))) {
 								closest = (T) tile;
 							}
 						}

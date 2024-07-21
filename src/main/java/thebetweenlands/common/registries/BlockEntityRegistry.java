@@ -58,5 +58,6 @@ public class BlockEntityRegistry {
 		BlockRegistry.DEEPMAN_SIMULACRUM_1.get(), BlockRegistry.DEEPMAN_SIMULACRUM_2.get(), BlockRegistry.DEEPMAN_SIMULACRUM_3.get(),
 		BlockRegistry.LAKE_CAVERN_SIMULACRUM_1.get(), BlockRegistry.LAKE_CAVERN_SIMULACRUM_2.get(), BlockRegistry.LAKE_CAVERN_SIMULACRUM_3.get(),
 		BlockRegistry.ROOTMAN_SIMULACRUM_1.get(), BlockRegistry.ROOTMAN_SIMULACRUM_2.get(), BlockRegistry.ROOTMAN_SIMULACRUM_3.get()).build(null));
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<OfferingTableBlockEntity>> OFFERING_TABLE = BLOCK_ENTITIES.register("offering_table", () -> BlockEntityType.Builder.of(OfferingTableBlockEntity::new, BlockRegistry.OFFERING_TABLE.get()).build(null));
 
 }
