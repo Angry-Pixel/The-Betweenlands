@@ -6,6 +6,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.*;
+import thebetweenlands.common.block.entity.simulacrum.SimulacrumBlockEntity;
 import thebetweenlands.common.block.entity.spawner.MobSpawnerBlockEntity;
 
 public class BlockEntityRegistry {
@@ -62,5 +63,6 @@ public class BlockEntityRegistry {
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WindChimeBlockEntity>> WIND_CHIME = BLOCK_ENTITIES.register("offering_table", () -> BlockEntityType.Builder.of(WindChimeBlockEntity::new, BlockRegistry.WIND_CHIME.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FishingTackleBoxBlockEntity>> FISHING_TACKLE_BOX = BLOCK_ENTITIES.register("fishing_tackle_box", () -> BlockEntityType.Builder.of(FishingTackleBoxBlockEntity::new, BlockRegistry.FISHING_TACKLE_BOX.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SmokingRackBlockEntity>> SMOKING_RACK = BLOCK_ENTITIES.register("smoking_rack", () -> BlockEntityType.Builder.of(SmokingRackBlockEntity::new, BlockRegistry.SMOKING_RACK.get()).build(null));
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FishTrimmingTableBlockEntity>> FISH_TRIMMING_TABLE = BLOCK_ENTITIES.register("fish_trimming_table", () -> BlockEntityType.Builder.of(FishTrimmingTableBlockEntity::new, BlockRegistry.FISH_TRIMMING_TABLE.get()).build(null));
 
 }
