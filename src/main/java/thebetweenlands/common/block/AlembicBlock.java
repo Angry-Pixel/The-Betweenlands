@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.block.entity.AlembicBlockEntity;
-import thebetweenlands.common.block.entity.SimulacrumBlockEntity;
 import thebetweenlands.common.items.DentrothystVialItem;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;

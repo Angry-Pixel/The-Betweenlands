@@ -20,8 +20,9 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import thebetweenlands.common.block.entity.SimulacrumBlockEntity;
+import thebetweenlands.common.block.entity.simulacrum.SimulacrumBlockEntity;
 import thebetweenlands.common.block.entity.WispBlockEntity;
+import thebetweenlands.common.registries.SimulacrumEffectRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 import thebetweenlands.common.world.storage.location.LocationSpiritTree;
@@ -113,7 +114,7 @@ public class WispBlock extends Block implements EntityBlock {
 				return true;
 			}
 
-			return SimulacrumBlockEntity.getClosestActiveTile(SimulacrumBlockEntity.class, null, level, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, 16, SimulacrumBlockEntity.Effect.WISP, null) != null;
+			return SimulacrumBlockEntity.getClosestActiveTile(SimulacrumBlockEntity.class, null, level, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, 16, SimulacrumEffectRegistry.WISP.get(), null) != null;
 		}
 
 		return false;

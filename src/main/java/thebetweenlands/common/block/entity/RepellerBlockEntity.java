@@ -224,6 +224,10 @@ public class RepellerBlockEntity extends SyncedBlockEntity {
 		return this.hasShimmerstone;
 	}
 
+	public void setShimmerstone(boolean shimmerstone) {
+		this.hasShimmerstone = shimmerstone;
+	}
+
 	public void removeShimmerstone() {
 		if (this.hasShimmerstone) {
 			this.hasShimmerstone = false;
@@ -264,12 +268,20 @@ public class RepellerBlockEntity extends SyncedBlockEntity {
 		return this.fuel;
 	}
 
+	public void setFuel(int fuel) {
+		this.fuel = fuel;
+	}
+
 	public void emptyFuel() {
 		this.fuel = 0;
 	}
 
 	public boolean isRunning() {
 		return this.running || this.radius > 0.0F;
+	}
+
+	public void setRunning(boolean running) {
+		this.running = running;
 	}
 
 	public float getRadius(float partialTicks) {

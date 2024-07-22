@@ -20,6 +20,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.common.block.SmokingRackBlock;
+import thebetweenlands.common.items.AnadiaMobItem;
+import thebetweenlands.common.items.MobItem;
 import thebetweenlands.common.items.recipe.SmokingRackRecipe;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
@@ -61,7 +63,7 @@ public class SmokingRackBlockEntity extends BaseContainerBlockEntity {
 
 				for (int i = 0; i < 3; i++) {
 					Optional<RecipeHolder<SmokingRackRecipe>> recipe = level.getRecipeManager().getRecipeFor(RecipeRegistry.SMOKING_RECIPE.get(), new SingleRecipeInput(entity.getItem(i + 1)), level);
-					if (entity.canSmokeSlots(recipe, state, 1 + i, 4 + i)) {
+					if (entity.canSmokeSlots(recipe, level, pos, state, 1 + i, 4 + i)) {
 						entity.updateCuringModifier(recipe, level, pos, state, 1 + i);
 
 						entity.setSlotProgress(1 + i, entity.getSlotProgress(1 + i) + 1);
@@ -125,18 +127,18 @@ public class SmokingRackBlockEntity extends BaseContainerBlockEntity {
 		fuelStack.shrink(1);
 	}
 
-	private boolean canSmokeSlots(Optional<RecipeHolder<SmokingRackRecipe>> recipe, BlockState state, int input, int output) {
-		if (!state.getValue(SmokingRackBlock.HEATED) || !this.updateFuelState() || getItems().get(input).isEmpty() || !getItems().get(output).isEmpty())
+	private boolean canSmokeSlots(Optional<RecipeHolder<SmokingRackRecipe>> recipe, Level level, BlockPos pos, BlockState state, int input, int output) {
+		if (!state.getValue(SmokingRackBlock.HEATED) || !this.updateFuelState(level, pos, state) || getItems().get(input).isEmpty() || !getItems().get(output).isEmpty())
 			return false;
 		else {
 			if (recipe.isEmpty())
 				return false;
 			else {
 				ItemStack stack = this.getItems().get(input);
-				if(!stack.isEmpty() && stack.getItem() instanceof MobItem mob && mob.hasEntityData(stack)) {
+				if(!stack.isEmpty() && stack.getItem() instanceof AnadiaMobItem mob && mob.hasEntityData(stack)) {
 					CompoundTag entityNbt = mob.getEntityData(stack);
 
-					return entityNbt == null || !entityNbt.contains("fishColor") || (entityNbt.getByte("fishColor") != 0 && entityNbt.getByte("fishColor") != 1);
+					return entityNbt == null || !entityNbt.contains("fish_color") || (entityNbt.getByte("fish_color") != 0 && entityNbt.getByte("fish_color") != 1);
 				}
 				return true;
 			}
@@ -182,7 +184,7 @@ public class SmokingRackBlockEntity extends BaseContainerBlockEntity {
 	}
 
 	public void smokeItem(Optional<RecipeHolder<SmokingRackRecipe>> recipe, Level level, BlockPos pos, BlockState state, int input, int output) {
-		if (this.canSmokeSlots(recipe, this.getBlockState(), input, output)) {
+		if (this.canSmokeSlots(recipe, level, pos, state, input, output)) {
 			ItemStack itemstack = this.getItem(input);
 			ItemStack result = recipe.map(holder -> holder.value().result()).orElse(ItemStack.EMPTY);
 			if (!result.isEmpty()) {

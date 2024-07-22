@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Unit;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -18,10 +19,7 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.api.recipes.MortarRecipe;
 import thebetweenlands.common.items.LifeCrystalItem;
-import thebetweenlands.common.registries.BlockEntityRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.registries.RecipeRegistry;
-import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.registries.*;
 
 import java.util.Optional;
 
@@ -104,7 +102,7 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 						}
 
 						if (!entity.getItem(1).isEmpty())
-							NBTHelper.getStackNBTSafe(entity.getItem(1)).setBoolean("active", true);
+							entity.getItem(1).set(DataComponentRegistry.PESTLE_ACTIVE, Unit.INSTANCE);
 
 						if (entity.progress > 84) {
 							if (!entity.getItem(0).isEmpty())
@@ -132,7 +130,7 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 							}
 
 							if (!entity.getItem(1).isEmpty())
-								NBTHelper.getStackNBTSafe(entity.getItem(1)).setBoolean("active", false);
+								entity.getItem(1).remove(DataComponentRegistry.PESTLE_ACTIVE);
 
 							entity.setChanged();
 						}
@@ -157,7 +155,7 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 
 		if (!validRecipe || entity.getItem(0).isEmpty() || entity.getItem(1).isEmpty() || outputFull) {
 			if (!entity.getItem(1).isEmpty())
-				NBTHelper.getStackNBTSafe(entity.getItem(1)).setBoolean("active", false);
+				entity.getItem(1).remove(DataComponentRegistry.PESTLE_ACTIVE);
 
 			if (entity.progress > 0) {
 				entity.progress = 0;
@@ -167,7 +165,7 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 		}
 		if (entity.getItem(3).isEmpty() && entity.progress > 0 && !entity.manualGrinding) {
 			if (!entity.getItem(1).isEmpty())
-				NBTHelper.getStackNBTSafe(entity.getItem(1)).setBoolean("active", false);
+				entity.getItem(1).remove(DataComponentRegistry.PESTLE_ACTIVE);
 			entity.progress = 0;
 			entity.setChanged();
 			level.sendBlockUpdated(pos, state, state, 2);

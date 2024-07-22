@@ -11,10 +11,11 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import thebetweenlands.common.block.entity.SimulacrumBlockEntity;
+import thebetweenlands.common.block.entity.simulacrum.SimulacrumBlockEntity;
 import thebetweenlands.common.component.entity.BlessingData;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.AttachmentRegistry;
+import thebetweenlands.common.registries.SimulacrumEffectRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 import java.util.Optional;
@@ -26,7 +27,7 @@ public class BetweenlandsEvents {
 		Player player = event.getEntity();
 
 		if (pos.isPresent()) {
-			SimulacrumBlockEntity simulacrum = SimulacrumBlockEntity.getClosestActiveTile(SimulacrumBlockEntity.class, null, player.level(), pos.get().getX() + 0.5D, pos.get().getY() + 0.5D, pos.get().getZ() + 0.5D, 16.0D, SimulacrumBlockEntity.Effect.WEAKNESS, null);
+			SimulacrumBlockEntity simulacrum = SimulacrumBlockEntity.getClosestActiveTile(SimulacrumBlockEntity.class, null, player.level(), pos.get().getX() + 0.5D, pos.get().getY() + 0.5D, pos.get().getZ() + 0.5D, 16.0D, SimulacrumEffectRegistry.WEAKNESS.get(), null);
 
 			if (simulacrum != null) {
 				double dst = simulacrum.getBlockPos().distToCenterSqr(pos.get().getX() + 0.5D, pos.get().getY() + 0.5D, pos.get().getZ() + 0.5D);
@@ -105,7 +106,7 @@ public class BetweenlandsEvents {
 		LivingEntity entity = event.getEntity();
 
 		if (!entity.level().isClientSide() && !(entity instanceof Player) && entity.level().getRandom().nextInt(4) == 0) {
-			SimulacrumBlockEntity simulacrum = SimulacrumBlockEntity.getClosestActiveTile(SimulacrumBlockEntity.class, null, entity.level(), entity.getX(), entity.getY(), entity.getZ(), 16.0D, SimulacrumBlockEntity.Effect.RESURRECTION, null);
+			SimulacrumBlockEntity simulacrum = SimulacrumBlockEntity.getClosestActiveTile(SimulacrumBlockEntity.class, null, entity.level(), entity.getX(), entity.getY(), entity.getZ(), 16.0D, SimulacrumEffectRegistry.RESURRECTION.get(), null);
 
 			if (simulacrum != null) {
 //				entity.setDropItemsWhenDead(false);

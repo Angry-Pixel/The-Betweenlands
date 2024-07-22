@@ -672,8 +672,8 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> MAGENTA_BAUBLE = register("magenta_bauble", () -> new BaubleBlock(BlockBehaviour.Properties.of().lightLevel(value -> 15).randomTicks().strength(0.3F).sound(SoundType.GLASS)));
 	public static final DeferredBlock<Block> PINK_BAUBLE = register("pink_bauble", () -> new BaubleBlock(BlockBehaviour.Properties.of().lightLevel(value -> 15).randomTicks().strength(0.3F).sound(SoundType.GLASS)));
 	public static final DeferredBlock<Block> CYAN_BAUBLE = register("cyan_bauble", () -> new BaubleBlock(BlockBehaviour.Properties.of().lightLevel(value -> 15).randomTicks().strength(0.3F).sound(SoundType.GLASS)));
-	public static final DeferredBlock<Block> FISHING_TACKLE_BOX = register("fishing_tackle_box", () -> new WindChimeBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<Block> SMOKING_RACK = register("smoking_rack", () -> new WindChimeBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> FISHING_TACKLE_BOX = register("fishing_tackle_box", () -> new FishingTackleBoxBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> SMOKING_RACK = register("smoking_rack", () -> new SmokingRackBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 
 	public static <T extends Block> DeferredBlock<T> register(String name, Supplier<? extends T> block) {
 		return register(name, block, item -> () -> new BlockItem(item.get(), new Item.Properties()));

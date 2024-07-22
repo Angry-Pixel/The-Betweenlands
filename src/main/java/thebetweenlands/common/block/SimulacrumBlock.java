@@ -2,7 +2,6 @@ package thebetweenlands.common.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,8 +22,12 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.common.block.entity.SimulacrumBlockEntity;
+import thebetweenlands.api.BLRegistries;
+import thebetweenlands.api.SimulacrumEffect;
+import thebetweenlands.common.block.entity.simulacrum.SimulacrumBlockEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.DataComponentRegistry;
+import thebetweenlands.common.registries.SimulacrumEffectRegistry;
 
 import java.util.List;
 
@@ -43,10 +46,12 @@ public class SimulacrumBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
-		if(level.getBlockEntity(pos) instanceof SimulacrumBlockEntity simulacrum) {
-			simulacrum.setEffect(SimulacrumBlockEntity.Effect.byId(NBTHelper.getStackNBTSafe(stack).getInteger("simulacrumEffectId")));
+		if (level.getBlockEntity(pos) instanceof SimulacrumBlockEntity simulacrum) {
+			if (stack.has(DataComponentRegistry.SIMULACRUM_EFFECT)) {
+				simulacrum.setEffect(BLRegistries.SIMULACRUM_EFFECTS.get(stack.get(DataComponentRegistry.SIMULACRUM_EFFECT)));
+			}
 			simulacrum.setActive(level, pos, state, true);
-			if(stack.has(DataComponents.CUSTOM_NAME)) {
+			if (stack.has(DataComponents.CUSTOM_NAME)) {
 				simulacrum.setCustomName(stack.getDisplayName());
 			}
 		}
@@ -54,15 +59,14 @@ public class SimulacrumBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-		if(player.isCreative() && player.isCrouching()) {
+		if (player.isCreative() && player.isCrouching()) {
 
-			if(!level.isClientSide()) {
-				if(level.getBlockEntity(pos) instanceof SimulacrumBlockEntity simulacrum) {
-					SimulacrumBlockEntity.Effect nextEffect = SimulacrumBlockEntity.Effect.values()[(simulacrum.getEffect().ordinal() + 1) % SimulacrumBlockEntity.Effect.values().length];
+			if (!level.isClientSide()) {
+				if (level.getBlockEntity(pos) instanceof SimulacrumBlockEntity simulacrum) {
+					SimulacrumEffect nextEffect = BLRegistries.SIMULACRUM_EFFECTS.byId(BLRegistries.SIMULACRUM_EFFECTS.getId(simulacrum.getEffect()) + 1 % BLRegistries.SIMULACRUM_EFFECTS.size());
 
 					simulacrum.setEffect(nextEffect);
-
-					player.displayClientMessage(Component.translatable("chat.simulacrum.changed_effect", Component.translatable("tooltip.bl.simulacrum.effect." + nextEffect.name)), true);
+					player.displayClientMessage(Component.translatable("chat.simulacrum.changed_effect", Component.translatable(nextEffect.getDescriptionId())), true);
 				}
 			}
 
@@ -87,9 +91,8 @@ public class SimulacrumBlock extends HorizontalBaseEntityBlock {
 	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
 		ItemStack stack = new ItemStack(this);
 
-		if(level.getBlockEntity(pos) instanceof SimulacrumBlockEntity simulacrum) {
-			CompoundTag nbt = NBTHelper.getStackNBTSafe(stack);
-			nbt.putInt("simulacrumEffectId", simulacrum.getEffect().id);
+		if (level.getBlockEntity(pos) instanceof SimulacrumBlockEntity simulacrum) {
+			stack.set(DataComponentRegistry.SIMULACRUM_EFFECT, BLRegistries.SIMULACRUM_EFFECTS.getKey(simulacrum.getEffect()));
 		}
 
 		return stack;
@@ -98,7 +101,7 @@ public class SimulacrumBlock extends HorizontalBaseEntityBlock {
 	@Override
 	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		if (flag.isCreative()) {
-			tooltip.add(Component.translatable("tooltip.bl.simulacrum.effect", Component.translatable("tooltip.bl.simulacrum.effect." + SimulacrumBlockEntity.Effect.byId(NBTHelper.getStackNBTSafe(stack).getInteger("simulacrumEffectId")).name)));
+			tooltip.add(Component.translatable("tooltip.bl.simulacrum.effect", Component.translatable(BLRegistries.SIMULACRUM_EFFECTS.get(stack.getOrDefault(DataComponentRegistry.SIMULACRUM_EFFECT, BLRegistries.SIMULACRUM_EFFECTS.getKey(SimulacrumEffectRegistry.NONE.get()))).getDescriptionId())));
 		}
 	}
 }

@@ -18,7 +18,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.common.block.entity.GroundItemBlockEntity;
 import thebetweenlands.common.block.entity.OfferingTableBlockEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
@@ -57,7 +56,7 @@ public class OfferingTableBlock extends HorizontalBaseEntityBlock {
 	@Override
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
 		if (!newState.is(this)) {
-			if (!level.isClientSide() && level.getBlockEntity(pos) instanceof OfferingTableBlockEntity table && !item.getTheItem().isEmpty()) {
+			if (!level.isClientSide() && level.getBlockEntity(pos) instanceof OfferingTableBlockEntity table && !table.getTheItem().isEmpty()) {
 				Block.popResource(level, pos, table.getTheItem());
 			}
 		}
