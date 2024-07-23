@@ -5,9 +5,7 @@ import net.minecraft.core.registries.Registries;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.advancement.AnimateTrigger;
-import thebetweenlands.common.advancement.BreakBlockTrigger;
-import thebetweenlands.common.advancement.NoCriteriaTrigger;
+import thebetweenlands.common.advancement.*;
 
 public class AdvancementCriteriaRegistry {
 
@@ -15,7 +13,10 @@ public class AdvancementCriteriaRegistry {
 
 	public static final DeferredHolder<CriterionTrigger<?>, AnimateTrigger> ANIMATE = TRIGGERS.register("animate_item", AnimateTrigger::new);
 	public static final DeferredHolder<CriterionTrigger<?>, BreakBlockTrigger> BREAK_BLOCK = TRIGGERS.register("break_block", BreakBlockTrigger::new);
-
+	public static final DeferredHolder<CriterionTrigger<?>, EventTrigger> EVENT = TRIGGERS.register("event", EventTrigger::new);
+	public static final DeferredHolder<CriterionTrigger<?>, GeckoTrigger> GECKO = TRIGGERS.register("gecko", GeckoTrigger::new);
+	public static final DeferredHolder<CriterionTrigger<?>, ShockwaveKillTrigger> SHOCKWAVE_KILL = TRIGGERS.register("shockwave_kill", ShockwaveKillTrigger::new);
+	public static final DeferredHolder<CriterionTrigger<?>, SwatShieldTrigger> SWAT_SHIELD = TRIGGERS.register("swat_shield", SwatShieldTrigger::new);
 
 	public static final DeferredHolder<CriterionTrigger<?>, NoCriteriaTrigger> CAVING_ROPE_PLACED = TRIGGERS.register("caving_rope_placed", NoCriteriaTrigger::new);
 	public static final DeferredHolder<CriterionTrigger<?>, NoCriteriaTrigger> CHIROMAW_MATRIARCH_NEST_CLAIMED = TRIGGERS.register("chiromaw_matriarch_nest_claimed", NoCriteriaTrigger::new);
@@ -50,5 +51,4 @@ public class AdvancementCriteriaRegistry {
 	public static final DeferredHolder<CriterionTrigger<?>, NoCriteriaTrigger> MOTH_HOUSE_MAXED = TRIGGERS.register("moth_house_maxed", NoCriteriaTrigger::new);
 	public static final DeferredHolder<CriterionTrigger<?>, NoCriteriaTrigger> ITEM_FRAME_INVISIBLE = TRIGGERS.register("item_frame_invisible", NoCriteriaTrigger::new);
 	public static final DeferredHolder<CriterionTrigger<?>, NoCriteriaTrigger> ITEM_FRAME_GLOWING = TRIGGERS.register("item_frame_glowing", NoCriteriaTrigger::new);
-
 }

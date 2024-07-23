@@ -22,6 +22,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.util.Unit;
+import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.ObjectUtils;
 
 import io.netty.buffer.ByteBuf;
@@ -489,7 +490,7 @@ public class GenericDataAccessor implements IGenericDataAccessorAccess {
 	}
 
 	@Override
-	public void tick() {
+	public void tick(Level level) {
 		if(!this.trackedEntries.isEmpty()) {
 			for (GenericDataAccessor.DataEntry<?> entry : this.trackedEntries) {
 				if(entry.trackingTimer >= 0) {

@@ -47,7 +47,7 @@ public class GeckoCageBlock extends HorizontalBaseEntityBlock {
 					level.addFreshEntity(gecko);
 					gecko.playAmbientSound();
 					if (player instanceof ServerPlayer sp) {
-						AdvancementCriteriaRegistry.GECKO_TRIGGER.get().trigger(sp, false, true);
+						AdvancementCriteriaRegistry.GECKO.get().trigger(sp, false, true);
 					}
 				}
 			}
@@ -98,7 +98,7 @@ public class GeckoCageBlock extends HorizontalBaseEntityBlock {
 											DiscoveryContainer.addDiscoveryToContainers(player, aspectItem, discovery.discovered.type);
 											cage.setAspectType(level, pos, state, discovery.discovered.type, 600);
 											if (player instanceof ServerPlayer sp) {
-												AdvancementCriteriaRegistry.GECKO_TRIGGER.get().trigger(sp, true, false);
+												AdvancementCriteriaRegistry.GECKO.get().trigger(sp, true, false);
 												if (discovery.result == DiscoveryContainer.AspectDiscovery.DiscoveryResult.LAST && DiscoveryContainer.getMergedDiscoveryContainer(player).haveDiscoveredAll(manager)) {
 													AdvancementCriteriaRegistry.HERBLORE_FIND_ALL.get().trigger(sp);
 												}

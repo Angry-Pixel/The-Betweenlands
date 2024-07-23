@@ -22,8 +22,10 @@ import thebetweenlands.api.storage.ILocalStorageHandle;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalStorageReference;
 import thebetweenlands.api.storage.StorageID;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.SyncChunkStoragePacket;
 import thebetweenlands.common.network.SyncLocalStorageReferencesPacket;
+import thebetweenlands.common.registries.DimensionRegistries;
 
 public abstract class ChunkStorageImpl implements IChunkStorage, TickableStorage {
 	protected final IWorldStorage worldStorage;
@@ -95,7 +97,7 @@ public abstract class ChunkStorageImpl implements IChunkStorage, TickableStorage
 				//Load reference if properly linked
 				if(handle != null && handle.get().getLinkedChunks().contains(this.chunk.getPos())) {
 					handle.get().loadReference(ref);
-				} else if(!this.worldStorage.getLevel().isClientSide()) {
+				} else if(!TheBetweenlands.getLevelWorkaround(DimensionRegistries.DIMENSION_KEY).isClientSide()) {
 					//Local storage doesn't exist or chunk shouldn't be linked to local storage, remove link
 					refIT.remove();
 				}

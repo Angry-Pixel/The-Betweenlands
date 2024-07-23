@@ -5,6 +5,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import thebetweenlands.api.environment.IRemotelyControllableEnvironmentEvent;
@@ -47,7 +48,8 @@ public abstract class BLEnvironmentEvent implements IRemotelyControllableEnviron
 
 		if (active)
 			for (Player player : level.players()) {
-				AdvancementCriteriaRegistry.EVENT.get().trigger(player, this);
+				if (player instanceof ServerPlayer sp)
+					AdvancementCriteriaRegistry.EVENT.get().trigger(sp, this);
 			}
 	}
 

@@ -241,7 +241,7 @@ public class AspectManager {
 	 * @return
 	 */
 	public static AspectManager get(Level level) {
-		return BetweenlandsWorldStorage.forWorld(level).getAspectManager();
+		return BetweenlandsWorldStorage.getOrThrow(level).getAspectManager();
 	}
 
 	/**

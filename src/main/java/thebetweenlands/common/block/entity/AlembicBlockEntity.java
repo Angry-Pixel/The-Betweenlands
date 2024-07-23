@@ -232,7 +232,7 @@ public class AlembicBlockEntity extends SyncedBlockEntity {
 			for (Aspect aspect : container.getAspects()) {
 				infusingAspects.add(aspect.type);
 			}
-			//infusingAspects.addAll(AspectManager.get(this.world).getDiscoveredAspectTypes(AspectManager.getAspectItem(ingredient), null));
+//			infusingAspects.addAll(AspectManager.get(level).getDiscoveredAspectTypes(AspectManager.getAspectItem(ingredient), null));
 		}
 		return infusingAspects;
 	}
