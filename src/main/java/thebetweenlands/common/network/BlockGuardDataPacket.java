@@ -33,10 +33,12 @@ public record BlockGuardDataPacket(String id, CompoundTag data) implements Custo
 
 	public static void handle(BlockGuardDataPacket packet, IPayloadContext context) {
 		context.enqueueWork(() -> {
-			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(context.player().level());
-			ILocalStorage storage = worldStorage.getLocalStorageHandler().getLocalStorage(StorageID.fromString(packet.id()));
-			if (storage instanceof LocationGuarded location) {
-				location.readGuardNBT(packet.data());
+			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(context.player().level());
+			if (worldStorage != null) {
+				ILocalStorage storage = worldStorage.getLocalStorageHandler().getLocalStorage(StorageID.fromString(packet.id()));
+				if (storage instanceof LocationGuarded location) {
+					location.readGuardNBT(packet.data());
+				}
 			}
 		});
 	}

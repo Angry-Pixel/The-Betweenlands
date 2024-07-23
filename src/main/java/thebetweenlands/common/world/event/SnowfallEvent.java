@@ -1,6 +1,9 @@
 package thebetweenlands.common.world.event;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.resources.ResourceLocation;
@@ -13,20 +16,22 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.BLSnowLayerBlock;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
+import thebetweenlands.common.registries.AttachmentRegistry;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+
+import javax.annotation.Nullable;
 
 public class SnowfallEvent extends TimedEnvironmentEvent {
-	public static final ResourceLocation ID = TheBetweenlands.prefix("snowfall");
 
 	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[] { TheBetweenlands.prefix("textures/events/snowfall.png") };
 
 	private float snowingStrength = 0.0F;
 	protected static final EntityDataAccessor<Float> TARGET_SNOWING_STRENGTH = GenericDataAccessor.defineId(SnowfallEvent.class, EntityDataSerializers.FLOAT);
-
-	public SnowfallEvent(BLEnvironmentEventRegistry registry) {
-		super(registry);
-	}
 
 	@Override
 	protected void initDataParameters() {
@@ -34,12 +39,12 @@ public class SnowfallEvent extends TimedEnvironmentEvent {
 		this.dataManager.register(TARGET_SNOWING_STRENGTH, 0.0F);
 	}
 
-	public static float getSnowingStrength(Level level) {
+	public static float getSnowingStrength(@Nullable Level level) {
 		if (level != null) {
-//			WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(level);
-//			if (provider != null) {
-//				return provider.getEnvironmentEventRegistry().snowfall.getSnowingStrength();
-//			}
+			BetweenlandsWorldStorage provider = BetweenlandsWorldStorage.get(level);
+			if (provider != null) {
+				return EnvironmentEventRegistry.SNOWFALL.get().getSnowingStrength();
+			}
 		}
 		return 0;
 	}
@@ -53,25 +58,20 @@ public class SnowfallEvent extends TimedEnvironmentEvent {
 	}
 
 	@Override
-	protected boolean canActivate() {
-		return this.getRegistry().winter.isActive();
+	protected boolean canActivate(Level level) {
+		return BetweenlandsWorldStorage.isEventActive(level, EnvironmentEventRegistry.WINTER);
 	}
 
 	@Override
-	public ResourceLocation getEventName() {
-		return ID;
-	}
-
-	@Override
-	public void setActive(boolean active) {
-		if(!this.getLevel().isClientSide()) {
+	public void setActive(Level level, boolean active) {
+		if(!level.isClientSide()) {
 			if (active) {
-				this.dataManager.set(TARGET_SNOWING_STRENGTH, 0.5F + this.getLevel().getRandom().nextFloat() * 7.5F);
+				this.dataManager.set(TARGET_SNOWING_STRENGTH, 0.5F + level.getRandom().nextFloat() * 7.5F);
 			} else {
 				this.dataManager.set(TARGET_SNOWING_STRENGTH, 0.0F);
 			}
 		}
-		super.setActive(active);
+		super.setActive(level, active);
 	}
 
 	@Override
@@ -79,8 +79,8 @@ public class SnowfallEvent extends TimedEnvironmentEvent {
 		super.tick(level);
 
 		if (!level.isClientSide()) {
-			if(this.isActive() && !this.getRegistry().winter.isActive()) {
-				this.setActive(false);
+			if(this.isActive() && !this.canActivate(level)) {
+				this.setActive(level, false);
 			}
 
 			if (this.isActive() && level instanceof ServerLevel server && level.getRandom().nextInt(5) == 0) {
@@ -92,31 +92,31 @@ public class SnowfallEvent extends TimedEnvironmentEvent {
 						BlockPos pos = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, levelchunk.getPos().getWorldPosition().offset(cbx, 0, cbz)).below();
 						if (level.getRandom().nextInt(Math.max(20 - (int) (this.getSnowingStrength() / 8.0F * 18.0F), 2)) == 0) {
 							BlockState stateAbove = level.getBlockState(pos.above());
-//							if (stateAbove.isAir() && BlockRegistry.SNOW.canPlaceBlockAt(level, pos.above())) {
-//								levelchunk.setBlockState(pos.above(), BlockRegistry.SNOW.getDefaultState());
-//							} else if (stateAbove.getBlock() instanceof BlockSnowBetweenlands) {
-//								int layers = stateAbove.getValue(BlockSnowBetweenlands.LAYERS);
-//								if (layers < 5) {
-//									boolean hasEnoughSnowAround = true;
-//									BlockPos.MutableBlockPos checkPos = new BlockPos.MutableBlockPos();
-//									for (Direction dir : Direction.Plane.HORIZONTAL) {
-//										checkPos.set(pos.getX() + dir.getStepX(), pos.getY() + 1, pos.getZ() + dir.getStepZ());
-//										if (level.isLoaded(checkPos)) {
-//											BlockState neighourState = level.getBlockState(checkPos);
-//											if (BlockRegistry.SNOW.canPlaceBlockAt(level, checkPos)
-//												&& (!neighourState.is(BlockRegistry.SNOW) || neighourState.getValue(BlockSnowBetweenlands.LAYERS) < layers)) {
-//												hasEnoughSnowAround = false;
-//											}
-//										} else {
-//											hasEnoughSnowAround = false;
-//											break;
-//										}
-//									}
-//									if (hasEnoughSnowAround) {
-//										level.setBlockAndUpdate(pos.above(), stateAbove.setValue(BlockSnowBetweenlands.LAYERS, layers + 1));
-//									}
-//								}
-//							}
+							if (stateAbove.isAir() && BlockRegistry.SNOW.get().defaultBlockState().canSurvive(level, pos.above())) {
+								levelchunk.setBlockState(pos.above(), BlockRegistry.SNOW.get().defaultBlockState(), false);
+							} else if (stateAbove.getBlock() instanceof BLSnowLayerBlock) {
+								int layers = stateAbove.getValue(BLSnowLayerBlock.LAYERS);
+								if (layers < 5) {
+									boolean hasEnoughSnowAround = true;
+									BlockPos.MutableBlockPos checkPos = new BlockPos.MutableBlockPos();
+									for (Direction dir : Direction.Plane.HORIZONTAL) {
+										checkPos.set(pos.getX() + dir.getStepX(), pos.getY() + 1, pos.getZ() + dir.getStepZ());
+										if (level.isLoaded(checkPos)) {
+											BlockState neighourState = level.getBlockState(checkPos);
+											if (BlockRegistry.SNOW.get().defaultBlockState().canSurvive(level, checkPos)
+												&& (!neighourState.is(BlockRegistry.SNOW) || neighourState.getValue(BLSnowLayerBlock.LAYERS) < layers)) {
+												hasEnoughSnowAround = false;
+											}
+										} else {
+											hasEnoughSnowAround = false;
+											break;
+										}
+									}
+									if (hasEnoughSnowAround) {
+										level.setBlockAndUpdate(pos.above(), stateAbove.setValue(BLSnowLayerBlock.LAYERS, layers + 1));
+									}
+								}
+							}
 						}
 					}
 				}
@@ -149,15 +149,15 @@ public class SnowfallEvent extends TimedEnvironmentEvent {
 	}
 
 	@Override
-	public void saveEventData() {
-		super.saveEventData();
-		this.getData().putFloat("targetSnowingStrength", this.dataManager.get(TARGET_SNOWING_STRENGTH));
+	public void saveEventData(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveEventData(tag, registries);
+		tag.putFloat("targetSnowingStrength", this.dataManager.get(TARGET_SNOWING_STRENGTH));
 	}
 
 	@Override
-	public void loadEventData() {
-		super.loadEventData();
-		this.dataManager.set(TARGET_SNOWING_STRENGTH, this.getData().getFloat("targetSnowingStrength"));
+	public void loadEventData(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadEventData(tag, registries);
+		this.dataManager.set(TARGET_SNOWING_STRENGTH, tag.getFloat("targetSnowingStrength"));
 	}
 
 	@Override

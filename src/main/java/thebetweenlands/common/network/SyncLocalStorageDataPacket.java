@@ -17,6 +17,7 @@ import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 import thebetweenlands.common.registries.StorageRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.WorldStorageImpl;
 
 public class SyncLocalStorageDataPacket implements CustomPacketPayload {
@@ -62,15 +63,17 @@ public class SyncLocalStorageDataPacket implements CustomPacketPayload {
 			Level level = context.player().level();
 			StorageID id = StorageID.readFromNBT(packet.idNbt);
 
-			IWorldStorage worldStorage = WorldStorageImpl.getAttachment(level);
-			ILocalStorageHandler storageHandler = worldStorage.getLocalStorageHandler();
+			IWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
+			if (worldStorage != null) {
+				ILocalStorageHandler storageHandler = worldStorage.getLocalStorageHandler();
 
-			ILocalStorage storage = storageHandler.getLocalStorage(id);
+				ILocalStorage storage = storageHandler.getLocalStorage(id);
 
-			if(storage != null && storage.getClass() == StorageRegistry.getStorageType(packet.type)) {
-				IGenericDataAccessorAccess dataManager = storage.getDataManager();
-				if(dataManager != null) {
-					dataManager.setValuesFromPacket(packet.dataManagerEntries);
+				if (storage != null && storage.getClass() == StorageRegistry.getStorageType(packet.type)) {
+					IGenericDataAccessorAccess dataManager = storage.getDataManager();
+					if (dataManager != null) {
+						dataManager.setValuesFromPacket(packet.dataManagerEntries);
+					}
 				}
 			}
 		});

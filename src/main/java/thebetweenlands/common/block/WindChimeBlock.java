@@ -64,13 +64,13 @@ public class WindChimeBlock extends BaseEntityBlock {
 
 				IEnvironmentEvent attunedEvent;
 				if (newAttunement != null) {
-					attunedEvent = BetweenlandsWorldStorage.forWorld(level).getEnvironmentEventRegistry().getEvent(newAttunement);
+					attunedEvent = BetweenlandsWorldStorage.getOrThrow(level).getEnvironmentEventRegistry().getEvent(newAttunement);
 				} else {
 					attunedEvent = null;
 				}
 
 				if (newAttunement != null) {
-					player.displayClientMessage(Component.translatable("chat.wind_chime.changed_attunement", Component.translatable(attunedEvent.getLocalizationEventName())), true);
+					player.displayClientMessage(Component.translatable("chat.wind_chime.changed_attunement", Component.translatable(attunedEvent.getDescriptionId())), true);
 				} else {
 					player.displayClientMessage(Component.translatable("chat.wind_chime.removed_attunement"), true);
 				}

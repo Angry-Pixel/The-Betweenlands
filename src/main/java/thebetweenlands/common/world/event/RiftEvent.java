@@ -1,7 +1,6 @@
 package thebetweenlands.common.world.event;
 
-import java.util.List;
-
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -18,6 +17,9 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.RiftSoundPacket;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+
+import java.util.List;
 
 public class RiftEvent extends TimedEnvironmentEvent {
 	public static class RiftConfiguration {
@@ -77,8 +79,6 @@ public class RiftEvent extends TimedEnvironmentEvent {
 		}
 	}
 
-	public static final ResourceLocation ID = TheBetweenlands.prefix("rift");
-
 	private static final int MAX_ACTIVATION_TICKS = 350;
 
 	protected static final EntityDataAccessor<RiftConfiguration> RIFT_CONFIGURATION = GenericDataAccessor.defineId(RiftEvent.class, RiftConfiguration::write, RiftConfiguration::new);
@@ -93,10 +93,6 @@ public class RiftEvent extends TimedEnvironmentEvent {
 
 	protected boolean playRiftOpenSound = true;
 
-	public RiftEvent(BLEnvironmentEventRegistry registry) {
-		super(registry);
-	}
-
 	@Override
 	protected void initDataParameters() {
 		super.initDataParameters();
@@ -105,14 +101,14 @@ public class RiftEvent extends TimedEnvironmentEvent {
 	}
 
 	@Override
-	public void setDefaults() {
-		super.setDefaults();
-		if(this.getRegistry().isDisabled()) {
+	public void setDefaults(Level level) {
+		super.setDefaults(level);
+		if(BetweenlandsWorldStorage.get(level) != null && BetweenlandsWorldStorage.getOrThrow(level).getEnvironmentEventRegistry().isDisabled()) {
 			this.dataManager.set(ACTIVATION_TICKS, this.lastActivationTicks = 0).syncImmediately();
 		} else {
 			this.playRiftOpenSound = false;
-			this.setRandomConfiguration();
-			this.setActive(true);
+			this.setRandomConfiguration(level);
+			this.setActive(level, true);
 			this.playRiftOpenSound = true;
 			this.dataManager.set(ACTIVATION_TICKS, this.lastActivationTicks = MAX_ACTIVATION_TICKS).syncImmediately();
 		}
@@ -129,29 +125,24 @@ public class RiftEvent extends TimedEnvironmentEvent {
 	}
 
 	@Override
-	public ResourceLocation getEventName() {
-		return ID;
-	}
-
-	@Override
-	public void setActive(boolean active) {
-		if(!this.getLevel().isClientSide() && active && !this.isActive() && this.getActivationTicks() == 0) {
-			this.setRandomConfiguration();
+	public void setActive(Level level, boolean active) {
+		if(!level.isClientSide() && active && !this.isActive() && this.getActivationTicks() == 0) {
+			this.setRandomConfiguration(level);
 
 			if(this.playRiftOpenSound) {
-				PacketDistributor.sendToPlayersInDimension((ServerLevel) this.getLevel(), new RiftSoundPacket(RiftSoundPacket.RiftSoundType.OPEN));
+				PacketDistributor.sendToPlayersInDimension((ServerLevel) level, new RiftSoundPacket(RiftSoundPacket.RiftSoundType.OPEN));
 			}
 		}
 
-		super.setActive(active);
+		super.setActive(level, active);
 	}
 
-	protected void setRandomConfiguration() {
+	protected void setRandomConfiguration(Level level) {
 		this.dataManager.set(RIFT_CONFIGURATION, new RiftConfiguration(
-				this.getLevel().getRandom().nextInt(Integer.MAX_VALUE),
-				this.getLevel().getRandom().nextFloat(), this.getLevel().getRandom().nextFloat(),
-				this.getLevel().getRandom().nextFloat(), this.getLevel().getRandom().nextFloat(),
-				this.getLevel().getRandom().nextBoolean(), this.getLevel().getRandom().nextBoolean()));
+				level.getRandom().nextInt(Integer.MAX_VALUE),
+				level.getRandom().nextFloat(), level.getRandom().nextFloat(),
+				level.getRandom().nextFloat(), level.getRandom().nextFloat(),
+				level.getRandom().nextBoolean(), level.getRandom().nextBoolean()));
 	}
 
 	@Override
@@ -178,31 +169,29 @@ public class RiftEvent extends TimedEnvironmentEvent {
 			}
 		}
 
-		if(!this.getLevel().isClientSide()) {
+		if(!level.isClientSide()) {
 			int remainingTicks = this.getTicks();
 			if((!this.isActive() && remainingTicks < 1800 && remainingTicks > 80) || (this.isActive() && remainingTicks < 1800 && remainingTicks > 80)) {
 				if(this.soundTicks-- <= 0) {
-					PacketDistributor.sendToPlayersInDimension((ServerLevel) this.getLevel(), new RiftSoundPacket(RiftSoundPacket.RiftSoundType.CREAK));
-					this.soundTicks = this.getLevel().getRandom().nextInt(150) + 100;
+					PacketDistributor.sendToPlayersInDimension((ServerLevel) level, new RiftSoundPacket(RiftSoundPacket.RiftSoundType.CREAK));
+					this.soundTicks = level.getRandom().nextInt(150) + 100;
 				}
 			}
 		}
 	}
 
 	@Override
-	public void saveEventData() {
-		super.saveEventData();
-		CompoundTag nbt = this.getData();
-		nbt.putInt("riftTicks", this.getActivationTicks());
-		this.getRiftConfiguration().writeToNBT(nbt);
+	public void saveEventData(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveEventData(tag, registries);
+		tag.putInt("riftTicks", this.getActivationTicks());
+		this.getRiftConfiguration().writeToNBT(tag);
 	}
 
 	@Override
-	public void loadEventData() {
-		super.loadEventData();
-		CompoundTag nbt = this.getData();
-		this.dataManager.set(ACTIVATION_TICKS, nbt.getInt("riftTicks")).syncImmediately();
-		this.dataManager.set(RIFT_CONFIGURATION, new RiftConfiguration(nbt));
+	public void loadEventData(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadEventData(tag, registries);
+		this.dataManager.set(ACTIVATION_TICKS, tag.getInt("riftTicks")).syncImmediately();
+		this.dataManager.set(RIFT_CONFIGURATION, new RiftConfiguration(tag));
 	}
 
 	/**

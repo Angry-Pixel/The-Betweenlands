@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.api.block.FarmablePlant;
+import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 import javax.annotation.Nullable;
@@ -65,7 +66,7 @@ public class PuddleBlock extends Block {
 	@Override
 	protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
 		int amount = state.getValue(AMOUNT);
-		if (!BetweenlandsWorldStorage.forWorld(level).getEnvironmentEventRegistry().heavyRain.isActive()) {
+		if (!BetweenlandsWorldStorage.isEventActive(level, EnvironmentEventRegistry.HEAVY_RAIN)) {
 			level.removeBlock(pos, false);
 			amount = 0;
 		} else if (level.canSeeSky(pos)) {

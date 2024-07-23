@@ -9,17 +9,17 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.api.environment.IPredictableEnvironmentEvent;
+import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
@@ -70,7 +70,7 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 			entity.chimeTicks = Math.max(entity.chimeTicks - 1, 0);
 		}
 
-		BLEnvironmentEventRegistry registry = BetweenlandsWorldStorage.forWorld(level).getEnvironmentEventRegistry();
+		BLEnvironmentEventRegistry registry = BetweenlandsWorldStorage.getOrThrow(level).getEnvironmentEventRegistry();
 
 		int maxPredictionTime = entity.getMaxPredictionTime();
 
@@ -79,12 +79,12 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 		ResourceLocation[] nextEventVisions = null;
 
 		for (IEnvironmentEvent event : registry.getEvents().values()) {
-			if (event instanceof IPredictableEnvironmentEvent predictable && (entity.attunedEvent == null || entity.attunedEvent.equals(event.getEventName()))) {
+			if (event instanceof IPredictableEnvironmentEvent predictable && (entity.attunedEvent == null || entity.attunedEvent.equals(BLRegistries.ENVIRONMENT_EVENTS.getKey(event)))) {
 
 				ResourceLocation[] visions = predictable.getVisionTextures();
 
 				if (visions != null) {
-					int prediction = predictable.estimateTimeUntil(IPredictableEnvironmentEvent.State.ACTIVE);
+					int prediction = predictable.estimateTimeUntil(level, IPredictableEnvironmentEvent.State.ACTIVE);
 
 					if (prediction > 0 && prediction < nextPrediction && prediction < maxPredictionTime) {
 						nextPrediction = prediction;
@@ -125,7 +125,7 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 		AABB aabb = new AABB(pos).inflate(16);
 		for(ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, aabb, EntitySelector.NO_SPECTATORS)) {
 			if(player.distanceToSqr(Vec3.atCenterOf(pos)) <= 256) {
-//				AdvancementCriterionRegistry.WIND_CHIME_PREDICTION.trigger(player);
+				AdvancementCriteriaRegistry.WIND_CHIME_PREDICTION.get().trigger(player);
 			}
 		}
 	}
@@ -178,7 +178,7 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 			if(this.particleBatch != null) {
 				Entity view = Minecraft.getInstance().getCameraEntity();
 
-				if(view != null && view.distanceToSqr(pos) < 256) {
+				if(view != null && view.distanceToSqr(Vec3.atCenterOf(pos)) < 256) {
 					double cx = pos.getX() + 0.5f;
 					double cy = pos.getY() + 0.2f;
 					double cz = pos.getZ() + 0.5f;
@@ -248,42 +248,45 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 
 	@Nullable
 	public ResourceLocation cycleAttunedEvent(Level level) {
-		BLEnvironmentEventRegistry registry = BetweenlandsWorldStorage.forWorld(level).getEnvironmentEventRegistry();
+		if (BetweenlandsWorldStorage.get(level) != null) {
+			BLEnvironmentEventRegistry registry = BetweenlandsWorldStorage.getOrThrow(level).getEnvironmentEventRegistry();
 
-		List<IPredictableEnvironmentEvent> choices = new ArrayList<>();
+			List<IPredictableEnvironmentEvent> choices = new ArrayList<>();
 
-		int currentAttunedIndex = -1;
+			int currentAttunedIndex = -1;
 
-		int i = 0;
-		for(Map.Entry<ResourceLocation, IEnvironmentEvent> entry : registry.getEvents().entrySet()) {
-			if(entry.getValue() instanceof IPredictableEnvironmentEvent) {
-				choices.add((IPredictableEnvironmentEvent) entry.getValue());
+			int i = 0;
+			for (Map.Entry<ResourceLocation, IEnvironmentEvent> entry : registry.getEvents().entrySet()) {
+				if (entry.getValue() instanceof IPredictableEnvironmentEvent) {
+					choices.add((IPredictableEnvironmentEvent) entry.getValue());
 
-				if(this.attunedEvent != null && this.attunedEvent.equals(entry.getKey())) {
-					currentAttunedIndex = i;
+					if (this.attunedEvent != null && this.attunedEvent.equals(entry.getKey())) {
+						currentAttunedIndex = i;
+					}
+
+					i++;
 				}
-
-				i++;
 			}
-		}
 
-		ResourceLocation newAttunement;
+			ResourceLocation newAttunement;
 
-		if(currentAttunedIndex >= 0) {
-			if(currentAttunedIndex == choices.size() - 1) {
-				newAttunement = null;
+			if (currentAttunedIndex >= 0) {
+				if (currentAttunedIndex == choices.size() - 1) {
+					newAttunement = null;
+				} else {
+					newAttunement = BLRegistries.ENVIRONMENT_EVENTS.getKey(choices.get(currentAttunedIndex + 1));
+				}
+			} else if (!choices.isEmpty()) {
+				newAttunement = BLRegistries.ENVIRONMENT_EVENTS.getKey(choices.getFirst());
 			} else {
-				newAttunement = choices.get(currentAttunedIndex + 1).getEventName();
+				newAttunement = null;
 			}
-		} else if(choices.size() > 0) {
-			newAttunement = choices.get(0).getEventName();
-		} else {
-			newAttunement = null;
+
+			this.setAttunedEvent(newAttunement);
+
+			return newAttunement;
 		}
-
-		this.setAttunedEvent(newAttunement);
-
-		return newAttunement;
+		return null;
 	}
 
 	@Nullable

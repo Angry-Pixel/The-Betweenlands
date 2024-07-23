@@ -22,6 +22,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import thebetweenlands.common.datagen.BetweenlandsBlockTagsProvider;
 import thebetweenlands.common.datagen.BetweenlandsItemTagProvider;
+import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 
 import javax.annotation.Nullable;
@@ -94,10 +95,10 @@ public class OctineIngotItem extends Item {
 					if (!level.isClientSide()) {
 						if (remainingUseDuration <= 1) {
 							if (player instanceof ServerPlayer sp) {
-//								AdvancementCriterionRegistry.OCTINE_INGOT_FIRE.trigger(sp);
+								AdvancementCriteriaRegistry.OCTINE_INGOT_FIRE.get().trigger(sp);
 
 								if (level.getBlockState(isBlockTinder ? pos.below() : offsetPos.below()).is(BlockRegistry.PEAT)) {
-//									AdvancementCriterionRegistry.PEAT_FIRE.trigger(sp);
+									AdvancementCriteriaRegistry.PEAT_FIRE.get().trigger(sp);
 								}
 							}
 

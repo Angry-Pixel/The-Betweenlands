@@ -29,10 +29,7 @@ import net.minecraft.world.phys.Vec3;
 import thebetweenlands.api.recipes.AnimatorRecipe;
 import thebetweenlands.client.audio.AnimatorSoundInstance;
 import thebetweenlands.common.items.LifeCrystalItem;
-import thebetweenlands.common.registries.BlockEntityRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.registries.RecipeRegistry;
-import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.registries.*;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -137,7 +134,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 						AABB aabb = new AABB(pos).inflate(12);
 						for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, aabb, EntitySelector.NO_SPECTATORS)) {
 							if (player.distanceToSqr(Vec3.atCenterOf(pos)) <= 144) {
-//								AdvancementCriterionRegistry.ANIMATE.trigger(input, result.copy(), player);
+								AdvancementCriteriaRegistry.ANIMATE.get().trigger(player, input, result.copy());
 							}
 						}
 					}

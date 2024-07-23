@@ -238,7 +238,7 @@ public class GenericDataAccessor implements IGenericDataAccessorAccess {
 	}
 
 	public <T> EntryAccess<T> set(EntityDataAccessor<T> key, T value) {
-		GenericDataAccessor.DataEntry<T> entry = this.<T>getEntry(key);
+		GenericDataAccessor.DataEntry<T> entry = this.getEntry(key);
 
 		if(entry == null) {
 			throw new IllegalArgumentException("Data parameter " + key + " is not registered!");

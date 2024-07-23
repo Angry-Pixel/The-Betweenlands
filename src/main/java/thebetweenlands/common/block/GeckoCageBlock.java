@@ -20,6 +20,7 @@ import thebetweenlands.api.aspect.DiscoveryContainer;
 import thebetweenlands.common.block.entity.GeckoCageBlockEntity;
 import thebetweenlands.common.entities.EntityGecko;
 import thebetweenlands.common.herblore.aspect.AspectManager;
+import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -46,7 +47,7 @@ public class GeckoCageBlock extends HorizontalBaseEntityBlock {
 					level.addFreshEntity(gecko);
 					gecko.playAmbientSound();
 					if (player instanceof ServerPlayer sp) {
-//						AdvancementCriterionRegistry.GECKO_TRIGGER.trigger(sp, false, true);
+						AdvancementCriteriaRegistry.GECKO_TRIGGER.get().trigger(sp, false, true);
 					}
 				}
 			}
@@ -97,9 +98,9 @@ public class GeckoCageBlock extends HorizontalBaseEntityBlock {
 											DiscoveryContainer.addDiscoveryToContainers(player, aspectItem, discovery.discovered.type);
 											cage.setAspectType(level, pos, state, discovery.discovered.type, 600);
 											if (player instanceof ServerPlayer sp) {
-//												AdvancementCriterionRegistry.GECKO_TRIGGER.trigger(sp, true, false);
+												AdvancementCriteriaRegistry.GECKO_TRIGGER.get().trigger(sp, true, false);
 												if (discovery.result == DiscoveryContainer.AspectDiscovery.DiscoveryResult.LAST && DiscoveryContainer.getMergedDiscoveryContainer(player).haveDiscoveredAll(manager)) {
-//													AdvancementCriterionRegistry.HERBLORE_FIND_ALL.trigger(sp);
+													AdvancementCriteriaRegistry.HERBLORE_FIND_ALL.get().trigger(sp);
 												}
 											}
 											player.displayClientMessage(Component.translatable("chat.aspect.discovery." + discovery.discovered.type.getName().toLowerCase()), false);

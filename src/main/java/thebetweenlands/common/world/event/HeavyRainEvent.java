@@ -24,21 +24,13 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class HeavyRainEvent extends TimedEnvironmentEvent {
-	public static final ResourceLocation ID = TheBetweenlands.prefix("heavy_rain");
 
 	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[]{TheBetweenlands.prefix("textures/events/heavy_rain.png")};
-
-	public HeavyRainEvent(BLEnvironmentEventRegistry registry) {
-		super(registry);
-	}
-
-	@Override
-	public ResourceLocation getEventName() {
-		return ID;
-	}
 
 	@Override
 	public int getOffTime(RandomSource rnd) {
@@ -51,9 +43,9 @@ public class HeavyRainEvent extends TimedEnvironmentEvent {
 	}
 
 	@Override
-	public void setActive(boolean active) {
-		if ((active && !this.getRegistry().winter.isActive()) || !active) {
-			super.setActive(active);
+	public void setActive(Level level, boolean active) {
+		if (!active || !BetweenlandsWorldStorage.isEventActive(level, EnvironmentEventRegistry.WINTER)) {
+			super.setActive(level, active);
 		}
 	}
 
@@ -61,8 +53,8 @@ public class HeavyRainEvent extends TimedEnvironmentEvent {
 	public void tick(Level level) {
 		super.tick(level);
 
-		if (!level.isClientSide() && this.getRegistry().winter.isActive()) {
-			this.setActive(false);
+		if (!level.isClientSide() && BetweenlandsWorldStorage.isEventActive(level, EnvironmentEventRegistry.WINTER)) {
+			this.setActive(level, false);
 		}
 
 		if (this.isActive() && level.getRandom().nextInt(20) == 0) {

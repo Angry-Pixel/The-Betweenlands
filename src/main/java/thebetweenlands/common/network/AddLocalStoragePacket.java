@@ -17,13 +17,19 @@ import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 import thebetweenlands.common.registries.StorageRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.WorldStorageImpl;
+
+import javax.annotation.Nullable;
 
 public class AddLocalStoragePacket implements CustomPacketPayload {
 
 	private final ResourceLocation type;
+	@Nullable
 	private final CompoundTag idTag;
+	@Nullable
 	private final CompoundTag tag;
+	@Nullable
 	private List<IGenericDataAccessorAccess.IDataEntry<?>> dataManagerEntries;
 
 
@@ -74,26 +80,28 @@ public class AddLocalStoragePacket implements CustomPacketPayload {
 			Level level = context.player().level();
 			StorageID id = StorageID.readFromNBT(packet.idTag);
 
-			IWorldStorage worldStorage = WorldStorageImpl.getAttachment(level);
-			ILocalStorageHandler storageHandler = worldStorage.getLocalStorageHandler();
+			IWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
+			if (worldStorage != null) {
+				ILocalStorageHandler storageHandler = worldStorage.getLocalStorageHandler();
 
-			ILocalStorage loadedStorage = storageHandler.getLocalStorage(id);
-			if (loadedStorage != null) {
-				storageHandler.removeLocalStorage(loadedStorage);
-			}
-
-			ILocalStorage newStorage = storageHandler.createLocalStorage(packet.type, id, null);
-
-			newStorage.readInitialPacket(packet.tag);
-
-			if (packet.dataManagerEntries != null) {
-				IGenericDataAccessorAccess dataManager = newStorage.getDataManager();
-				if (dataManager != null) {
-					dataManager.setValuesFromPacket(packet.dataManagerEntries);
+				ILocalStorage loadedStorage = storageHandler.getLocalStorage(id);
+				if (loadedStorage != null) {
+					storageHandler.removeLocalStorage(loadedStorage);
 				}
-			}
 
-			storageHandler.addLocalStorage(newStorage);
+				ILocalStorage newStorage = storageHandler.createLocalStorage(packet.type, id, null);
+
+				newStorage.readInitialPacket(packet.tag);
+
+				if (packet.dataManagerEntries != null) {
+					IGenericDataAccessorAccess dataManager = newStorage.getDataManager();
+					if (dataManager != null) {
+						dataManager.setValuesFromPacket(packet.dataManagerEntries);
+					}
+				}
+
+				storageHandler.addLocalStorage(newStorage);
+			}
 		});
 	}
 }

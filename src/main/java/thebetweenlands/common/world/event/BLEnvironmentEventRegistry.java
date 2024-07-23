@@ -1,103 +1,38 @@
 package thebetweenlands.common.world.event;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Level;
+import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.environment.IEnvironmentEvent;
-import thebetweenlands.api.environment.IEnvironmentEventRegistry;
 
-//TODO convert into proper registry
-public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
-	public final DenseFogEvent denseFog;
-	public final HeavyRainEvent heavyRain;
-	public final AuroraEvent auroras;
-	public final BloodSkyEvent bloodSky;
-	public final SpoopyEvent spoopy;
-	public final WinterEvent winter;
-	public final SnowfallEvent snowfall;
-	public final ThunderstormEvent thunderstorm;
-	public final RiftEvent rift;
+import javax.annotation.Nullable;
+import java.util.*;
 
-	private Level level;
-
-	public BLEnvironmentEventRegistry(Level level) {
-		this.level = level;
-
-		denseFog = new DenseFogEvent(this);
-		heavyRain = new HeavyRainEvent(this);
-		auroras = new AuroraEvent(this);
-		bloodSky = new BloodSkyEvent(this);
-		spoopy = new SpoopyEvent(this);
-		winter = new WinterEvent(this);
-		snowfall = new SnowfallEvent(this);
-		thunderstorm = new ThunderstormEvent(this);
-		rift = new RiftEvent(this);
-	}
-
-	@Override
-	public Level getLevel() {
-		return this.level;
-	}
-
-	public void init() {
-		//Only add events to the dimension
-//		if(this.level.provider instanceof WorldProviderBetweenlands) {
-			register(denseFog);
-			register(heavyRain);
-			register(auroras);
-			register(bloodSky);
-			register(spoopy);
-			register(winter);
-			register(snowfall);
-			register(thunderstorm);
-			register(this.rift);
-//		}
-//
-//		MinecraftForge.EVENT_BUS.post(new InitializeEnvironmentEventsEvent(this));
-	}
+public class BLEnvironmentEventRegistry {
 
 	private final Map<ResourceLocation, IEnvironmentEvent> registeredEvents = new HashMap<>();
-
 	private boolean disabled = false;
 
-	@Override
-	public void register(IEnvironmentEvent event) {
-		if(registeredEvents.containsKey(event.getEventName())) {
-			throw new RuntimeException("Duplicate environment event name: " + event.getEventName());
+	public BLEnvironmentEventRegistry() {
+		for (IEnvironmentEvent event : BLRegistries.ENVIRONMENT_EVENTS) {
+			this.registeredEvents.put(BLRegistries.ENVIRONMENT_EVENTS.getKey(event), event);
 		}
-		if(event.getRegistry() != this) {
-			throw new RuntimeException(String.format("Environment event %s is already registered in another registry: %s", event.getEventName(), this));
-		}
-		registeredEvents.put(event.getEventName(), event);
 	}
 
-	@Override
-	public IEnvironmentEvent unregister(IEnvironmentEvent event) {
-		return registeredEvents.remove(event.getEventName());
-	}
-
-	@Override
 	public Map<ResourceLocation, IEnvironmentEvent> getEvents() {
-		return Collections.unmodifiableMap(registeredEvents);
+		return Collections.unmodifiableMap(this.registeredEvents);
 	}
 
 	public IEnvironmentEvent forName(ResourceLocation eventName) {
-		return registeredEvents.get(eventName);
+		return this.registeredEvents.get(eventName);
 	}
 
 	public List<IEnvironmentEvent> getActiveEvents() {
-		return getEventsOfState(true);
+		return this.getEventsOfState(true);
 	}
 
-	@Override
 	public List<IEnvironmentEvent> getEventsOfState(boolean isActive) {
 		List<IEnvironmentEvent> list = new ArrayList<>();
-		for (IEnvironmentEvent event : registeredEvents.values()) {
+		for (IEnvironmentEvent event : this.registeredEvents.values()) {
 			if (event.isActive() == isActive) {
 				list.add(event);
 			}
@@ -105,7 +40,6 @@ public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 		return list;
 	}
 
-	@Override
 	public List<IEnvironmentEvent> getEventsOfStateAt(double x, double y, double z, boolean active) {
 		List<IEnvironmentEvent> list = new ArrayList<>();
 		for (IEnvironmentEvent event : this.getEvents().values()) {
@@ -118,27 +52,28 @@ public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 
 	public List<ResourceLocation> getEventNames() {
 		List<ResourceLocation> eventNames = new ArrayList<>();
-		for (IEnvironmentEvent event : registeredEvents.values()) {
-			eventNames.add(event.getEventName());
+		for (Map.Entry<ResourceLocation, IEnvironmentEvent> event : this.registeredEvents.entrySet()) {
+			eventNames.add(event.getKey());
 		}
 		return eventNames;
 	}
 
 	public List<ResourceLocation> getEventNamesOfState(boolean isActive) {
 		List<ResourceLocation> eventNames = new ArrayList<>();
-		for (IEnvironmentEvent event : registeredEvents.values()) {
-			if (event.isActive() == isActive) {
-				eventNames.add(event.getEventName());
+		for (Map.Entry<ResourceLocation, IEnvironmentEvent> event : this.registeredEvents.entrySet()) {
+			if (event.getValue().isActive() == isActive) {
+				eventNames.add(event.getKey());
 			}
 		}
 		return eventNames;
 	}
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public String getGrammaticalActiveEventNameList() {
 		StringBuilder list = new StringBuilder();
-		IEnvironmentEvent[] events = registeredEvents.values().toArray(new IEnvironmentEvent[0]);
+		Map.Entry<ResourceLocation, IEnvironmentEvent>[] events = this.registeredEvents.entrySet().toArray(new Map.Entry[0]);
 		for (int i = 0; i < events.length; i++) {
-			ResourceLocation eventName = events[i].getEventName();
+			ResourceLocation eventName = events[i].getKey();
 			if (i > 0) {
 				list.append(", ");
 				if (i == events.length - 1) {
@@ -155,39 +90,35 @@ public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 	}
 
 	public void enable() {
-		disabled = false;
+		this.disabled = false;
 	}
 
 	public void disable() {
-		disabled = true;
+		this.disabled = true;
 	}
 
-	@Override
 	public boolean isEnabled() {
-		return !disabled;
+		return !this.disabled;
 	}
 
 	public boolean isDisabled() {
-		return disabled;
+		return this.disabled;
 	}
 
-	@Override
 	public boolean setEnabled(boolean enabled) {
 		return this.disabled = !enabled;
 	}
 
-	@Override
+	@Nullable
 	public IEnvironmentEvent getEvent(ResourceLocation eventId) {
 		return this.registeredEvents.get(eventId);
 	}
 
-	@Override
 	public boolean isEventActive(ResourceLocation eventId) {
 		IEnvironmentEvent event = this.getEvent(eventId);
 		return event != null && event.isActive();
 	}
 
-	@Override
 	public boolean isEventActiveAt(double x, double y, double z, ResourceLocation eventId) {
 		IEnvironmentEvent event = this.getEvent(eventId);
 		return event != null && event.isActiveAt(x, y, z);

@@ -142,9 +142,9 @@ public class LocationStorage extends LocalStorageImpl {
 	}
 
 	@Override
-	public void onAdded() {
-		if (!this.getWorldStorage().getLevel().isClientSide()) {
-			this.linkChunks();
+	public void onAdded(Level level) {
+		if (!level.isClientSide()) {
+			this.linkChunks(level);
 		}
 	}
 
@@ -155,7 +155,7 @@ public class LocationStorage extends LocalStorageImpl {
 	 *
 	 * @return
 	 */
-	public LocationStorage linkChunks() {
+	public LocationStorage linkChunks(Level level) {
 		for (AABB boundingBox : this.boundingBoxes) {
 			int sx = Mth.floor(boundingBox.minX) >> 4;
 			int sz = Mth.floor(boundingBox.minZ) >> 4;
@@ -163,7 +163,7 @@ public class LocationStorage extends LocalStorageImpl {
 			int ez = Mth.floor(boundingBox.maxZ) >> 4;
 			for (int cx = sx; cx <= ex; cx++) {
 				for (int cz = sz; cz <= ez; cz++) {
-					this.linkChunkSafely(new ChunkPos(cx, cz));
+					this.linkChunkSafely(level, new ChunkPos(cx, cz));
 				}
 			}
 		}
@@ -526,8 +526,11 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @return
 	 */
 	public static List<LocationStorage> getLocations(Level level, Vec3 position) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(level);
-		return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, position.x, position.z, (location) -> location.isInside(position));
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
+		if (worldStorage != null) {
+			return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, position.x, position.z, (location) -> location.isInside(position));
+		}
+		return List.of();
 	}
 
 	/**
@@ -538,8 +541,11 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @return
 	 */
 	public static List<LocationStorage> getLocations(Level level, AABB aabb) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(level);
-		return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, aabb, (location) -> location.intersects(aabb));
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
+		if (worldStorage != null) {
+			return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, aabb, (location) -> location.intersects(aabb));
+		}
+		return List.of();
 	}
 
 	/**

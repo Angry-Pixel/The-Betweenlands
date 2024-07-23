@@ -37,6 +37,7 @@ import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.block.WispBlock;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
+import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -102,10 +103,9 @@ public class LocationCragrockTower extends LocationGuarded {
 	 * Sets whether the top was reached and changes all glowing cragrock blocks accordingly
 	 * @param reached
 	 */
-	public void setTopConquered(boolean reached) {
+	public void setTopConquered(Level level, boolean reached) {
 		this.isTopConquered = reached;
 
-		Level level = this.getWorldStorage().getLevel();
 		for(BlockPos pos : this.glowingCragrockBlocks) {
 			if(reached) {
 				level.setBlockAndUpdate(pos, BlockRegistry.GLOWING_SMOOTH_CRAGROCK.get().defaultBlockState());
@@ -177,10 +177,9 @@ public class LocationCragrockTower extends LocationGuarded {
 	 * Destroys the blockade blocks for the specified level
 	 * @param level
 	 */
-	public void destroyBlockade(int level) {
+	public void destroyBlockade(Level world, int level) {
 		BlockPos[] blocks = this.levelBlockadeBlocks[level];
 		if(blocks != null && blocks.length != 0) {
-			Level world = this.getWorldStorage().getLevel();
 
 			for(BlockPos pos : blocks) {
 				world.playSound(null, pos, SoundRegistry.CRUMBLE.get(), SoundSource.BLOCKS, 0.2F, 1F);
@@ -200,11 +199,9 @@ public class LocationCragrockTower extends LocationGuarded {
 	 * Restores the blockade blocks for the specified level
 	 * @param level
 	 */
-	public void restoreBlockade(int level) {
+	public void restoreBlockade(Level world, int level) {
 		BlockPos[] blocks = this.levelBlockadeBlocks[level];
 		if(blocks != null && blocks.length != 0) {
-			Level world = this.getWorldStorage().getLevel();
-
 			for(BlockPos pos : blocks) {
 				world.setBlockAndUpdate(pos, BlockRegistry.SMOOTH_CRAGROCK_SLAB.get().defaultBlockState().setValue(SlabBlock.TYPE, SlabType.TOP));
 				this.getGuard().setGuarded(world, pos, true);
@@ -313,9 +310,7 @@ public class LocationCragrockTower extends LocationGuarded {
 	 * Updates the wisp blocks
 	 * @param player Closest non-creative player
 	 */
-	public void updateWispBlocks(@Nullable Player player) {
-		Level level = this.getWorldStorage().getLevel();
-
+	public void updateWispBlocks(Level level, @Nullable Player player) {
 		if(this.wasEntered() && !this.inactiveWisps.isEmpty()) {
 			if(player != null) {
 				this.wispUpdateTicks++;
@@ -444,10 +439,8 @@ public class LocationCragrockTower extends LocationGuarded {
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
-
-		Level level = this.getWorldStorage().getLevel();
+	public void tick(Level level) {
+		super.tick(level);
 
 		if(this.isCrumbling()) {
 			this.dataManager.set(CRUMBLING_TICKS, this.getCrumblingTicks() + 1);
@@ -456,7 +449,7 @@ public class LocationCragrockTower extends LocationGuarded {
 				if(this.getCrumblingTicks() > 1200) {
 					this.dataManager.set(CRUMBLING_TICKS, -1).syncImmediately();
 					this.setCrumbling(false);
-					this.destroyBlockade(4);
+					this.destroyBlockade(level, 4);
 					this.getGuard().clear(level);
 				} else {
 					this.setDirty(true);
@@ -472,7 +465,7 @@ public class LocationCragrockTower extends LocationGuarded {
 					List<Player> topPlayers = level.getEntitiesOfClass(Player.class, this.getLevelBounds(5).inflate(5, 3, 5), player -> !player.isCreative() && !player.isSpectator());
 					if (topPlayers.isEmpty()) {
 						this.setCrumbling(true);
-						this.restoreBlockade(4);
+						this.restoreBlockade(level, 4);
 					}
 				}
 
@@ -488,9 +481,8 @@ public class LocationCragrockTower extends LocationGuarded {
 						this.setDirty(true);
 					}
 
-					//TODO
 					if(this.isTopConquered() && player instanceof ServerPlayer && this.getLevel(Mth.floor(player.getY())) == 5) {
-						//AdvancementCriterionRegistry.CRAGROCK_TOP.trigger((ServerPlayer) player);
+						AdvancementCriteriaRegistry.CRAGROCK_TOP.get().trigger((ServerPlayer) player);
 					} else if (!this.isTopReached && !this.getInnerBoundingBox().inflate(0.5D, 0.5D, 0.5D).contains(player.position()) && player.getY() - structurePos.getY() > 12) {
 						//Player trying to bypass tower, teleport to entrance
 
@@ -513,9 +505,9 @@ public class LocationCragrockTower extends LocationGuarded {
 						closest = player;
 					}
 				}
-				this.updateWispBlocks(closest);
+				this.updateWispBlocks(level, closest);
 			} else {
-				this.updateWispBlocks(null);
+				this.updateWispBlocks(level, null);
 			}
 
 			if(!this.isTopConquered()) {
@@ -523,7 +515,7 @@ public class LocationCragrockTower extends LocationGuarded {
 					if(this.getBlockadeState(i) && !this.getSpawnerState(i)) {
 						List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, this.getLevelBounds(i), entity -> entity instanceof Mob || entity instanceof Enemy);
 						if(entities.isEmpty()) {
-							this.destroyBlockade(i);
+							this.destroyBlockade(level, i);
 						}
 					}
 				}
@@ -531,7 +523,7 @@ public class LocationCragrockTower extends LocationGuarded {
 				if(this.topSpawners == 0) {
 					List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, this.getLevelBounds(5).inflate(3, 2, 3), entity -> entity instanceof Mob || entity instanceof Enemy);
 					if(entities.isEmpty()) {
-						this.setTopConquered(true);
+						this.setTopConquered(level, true);
 
 						for(Player player : players) {
 							player.giveExperiencePoints(350);
@@ -542,7 +534,7 @@ public class LocationCragrockTower extends LocationGuarded {
 
 			if(this.isCrumbling()) {
 				for(int i = 0; i < Math.min(Math.pow(this.getCrumblingTicks() / 400.0f, 4) * 30.0f, 30) + 1; i++) {
-					BlockPos pos = this.getRandomPosInTower();
+					BlockPos pos = this.getRandomPosInTower(level);
 					BlockState blockState = level.getBlockState(pos);
 
 					if(!blockState.isAir() && level.isEmptyBlock(pos.below()) && level.isEmptyBlock(pos.below(2))) {
@@ -567,7 +559,7 @@ public class LocationCragrockTower extends LocationGuarded {
 	 * Returns a random block pos inside the tower
 	 * @return
 	 */
-	protected BlockPos getRandomPosInTower() {
+	protected BlockPos getRandomPosInTower(Level level) {
 		AABB innerBB = this.getInnerBoundingBox().inflate(-1, -1, -1);
 
 		int x = Mth.ceil(innerBB.minX);
@@ -576,8 +568,6 @@ public class LocationCragrockTower extends LocationGuarded {
 		int width = Mth.floor(innerBB.maxX) - x;
 		int height = Mth.floor(innerBB.maxY) - y;
 		int depth = Mth.floor(innerBB.maxZ) - z;
-
-		Level level = this.getWorldStorage().getLevel();
 
 		return new BlockPos(x + level.getRandom().nextInt(width + 1), y + level.getRandom().nextInt(height + 1), z + level.getRandom().nextInt(depth + 1));
 	}

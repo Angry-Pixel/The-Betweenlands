@@ -33,6 +33,8 @@ import thebetweenlands.client.renderer.GLTextureObjectWrapper;
 import thebetweenlands.client.sky.BLSkyRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.registries.AttachmentRegistry;
+import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.GLUProjection;
@@ -515,13 +517,12 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		boolean hasBeat = false;
 
 		Level world = Minecraft.getInstance().level;
-		if (world != null) {
-			BLEnvironmentEventRegistry eeRegistry = BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry();
-			skyTransparency += eeRegistry.bloodSky.getSkyTransparency(partialTicks);
+		if (world != null && world.getExistingData(AttachmentRegistry.WORLD_STORAGE).isPresent()) {
+			skyTransparency += EnvironmentEventRegistry.BLOOD_SKY.get().getSkyTransparency(partialTicks);
 			if (skyTransparency > 0.01F) {
 				hasBeat = true;
 			}
-			skyTransparency += eeRegistry.spoopy.getSkyTransparency(partialTicks);
+			skyTransparency += EnvironmentEventRegistry.SPOOPY.get().getSkyTransparency(partialTicks);
 		}
 
 		if (skyTransparency <= 0.01F) {

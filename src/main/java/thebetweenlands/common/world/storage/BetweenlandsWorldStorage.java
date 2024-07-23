@@ -4,12 +4,13 @@ import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -21,32 +22,27 @@ import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.herblore.aspect.AspectManager;
+import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Supplier;
 
 public class BetweenlandsWorldStorage extends WorldStorageImpl {
-	private BLEnvironmentEventRegistry environmentEventRegistry;
-	private AspectManager aspectManager = new AspectManager();
 
-	private Map<ICustomSpawnEntriesProvider, BiomeSpawnEntriesData> biomeSpawnEntriesData = new HashMap<>();
+	private final BLEnvironmentEventRegistry environmentEventRegistry = new BLEnvironmentEventRegistry();
+	private final AspectManager aspectManager = new AspectManager();
+
+	private final Map<ICustomSpawnEntriesProvider, BiomeSpawnEntriesData> biomeSpawnEntriesData = new HashMap<>();
 
 	protected final Set<ChunkPos> previousCheckedAmbientChunks = new HashSet<>();
 	protected int ambienceTicks;
-	protected int updateLCG = (new Random()).nextInt();
+	protected int updateLCG = RandomSource.create().nextInt();
 
-	protected List<SpiritTreeKillToken> spiritTreeKillTokens = new ArrayList<>();
-
-	public BLEnvironmentEventRegistry getEnvironmentEventRegistry() {
-		return this.environmentEventRegistry;
-	}
-
-	public AspectManager getAspectManager() {
-		return this.aspectManager;
-	}
+	private final List<SpiritTreeKillToken> spiritTreeKillTokens = new ArrayList<>();
 
 //	@Override
 //	public BiomeSpawnEntriesData getBiomeSpawnEntriesData(Biome biome) {
@@ -62,86 +58,40 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 //	}
 
 	@Override
-	protected void init() {
-		this.environmentEventRegistry = new BLEnvironmentEventRegistry(this.getLevel());
-		this.environmentEventRegistry.init();
-
-		if (!this.getLevel().isClientSide()) {
+	protected void init(Level level) {
+		if (!level.isClientSide()) {
 			for (IEnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
-				event.setDefaults();
-				event.setLoaded();
+				event.setDefaults(level);
+				event.setLoaded(level);
 			}
-			this.aspectManager.loadAndPopulateStaticAspects(null, this.getLevel().registryAccess(), AspectManager.getAspectsSeed(this.getLevel().getServer().getLevel(Level.OVERWORLD).getSeed()));
+			this.aspectManager.loadAndPopulateStaticAspects(null, level.registryAccess(), AspectManager.getAspectsSeed(level.getServer().getLevel(Level.OVERWORLD).getSeed()));
 		}
 
-		this.ambienceTicks = this.getLevel().getRandom().nextInt(7000);
+		this.ambienceTicks = level.getRandom().nextInt(7000);
+	}
+
+	public BLEnvironmentEventRegistry getEnvironmentEventRegistry() {
+		return this.environmentEventRegistry;
+	}
+
+	public AspectManager getAspectManager() {
+		return this.aspectManager;
+	}
+
+	public Map<ICustomSpawnEntriesProvider, BiomeSpawnEntriesData> getBiomeSpawnEntriesData() {
+		return this.biomeSpawnEntriesData;
 	}
 
 	@Override
-	public void readFromNBT(CompoundTag tag) {
-		if (!this.getLevel().isClientSide()) {
-			for (IEnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
-				event.readFromNBT(tag);
-			}
-			this.environmentEventRegistry.setDisabled(tag.getBoolean("eventsDisabled"));
-			this.aspectManager.loadAndPopulateStaticAspects(tag.getCompound("itemAspects"), this.getLevel().registryAccess(), AspectManager.getAspectsSeed(this.getLevel().getServer().getLevel(Level.OVERWORLD).getSeed()));
+	public void tick(Level level) {
+		super.tick(level);
 
-			this.biomeSpawnEntriesData.clear();
-//			if (tag.contains("biomeData", Tag.TAG_COMPOUND)) {
-//				CompoundTag biomesNbt = tag.getCompound("biomeData");
-//				for (String key : biomesNbt.getAllKeys()) {
-//					Biome biome = Biome.REGISTRY.getObject(ResourceLocation.tryParse(key));
-//					if (biome instanceof ICustomSpawnEntriesProvider) {
-//						this.getBiomeSpawnEntriesData(biome).readFromNbt(biomesNbt.getCompound(key));
-//					}
-//				}
-//			}
-
-			this.spiritTreeKillTokens.clear();
-			ListTag spiritTreeKillTokensNbt = tag.getList("spiritTreeKillTokens", Tag.TAG_COMPOUND);
-			for (int i = 0; i < spiritTreeKillTokensNbt.size(); i++) {
-				this.spiritTreeKillTokens.add(SpiritTreeKillToken.readFromNBT(spiritTreeKillTokensNbt.getCompound(i)));
-			}
+		if (level.isClientSide() && level.dimension() == DimensionRegistries.DIMENSION_KEY) {
+			this.updateAmbientCaveSounds(level);
 		}
 	}
 
-	@Override
-	public void writeToNBT(CompoundTag tag) {
-		if (!this.getLevel().isClientSide()) {
-			for (IEnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
-				event.writeToNBT(tag);
-			}
-			tag.putBoolean("eventsDisabled", this.environmentEventRegistry.isDisabled());
-			CompoundTag aspectData = new CompoundTag();
-			this.aspectManager.saveStaticAspects(aspectData, this.getLevel().registryAccess());
-			tag.put("itemAspects", aspectData);
-
-//			CompoundTag biomesNbt = new CompoundTag();
-//			for (BiomeBetweenlands biome : BiomeRegistry.REGISTERED_BIOMES) {
-//				CompoundTag biomeSpawnEntriesNbt = new CompoundTag();
-//				this.getBiomeSpawnEntriesData(biome).writeToNbt(biomeSpawnEntriesNbt);
-//				biomesNbt.put(biome.getRegistryName().toString(), biomeSpawnEntriesNbt);
-//			}
-//			tag.put("biomeData", biomesNbt);
-
-			ListTag spiritTreeKillTokensNbt = new ListTag();
-			for (SpiritTreeKillToken token : this.spiritTreeKillTokens) {
-				spiritTreeKillTokensNbt.add(token.writeToNBT());
-			}
-			tag.put("spiritTreeKillTokens", spiritTreeKillTokensNbt);
-		}
-	}
-
-	@Override
-	public void tick() {
-		super.tick();
-
-		if (this.getLevel().isClientSide() && this.getLevel().dimension() == DimensionRegistries.DIMENSION_KEY) {
-			this.updateAmbientCaveSounds();
-		}
-	}
-
-	protected void updateAmbientCaveSounds() {
+	protected void updateAmbientCaveSounds(Level level) {
 		Minecraft mc = Minecraft.getInstance();
 		Player player = mc.player;
 
@@ -175,9 +125,9 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 						int bx = chunkpos.x * 16;
 						int bz = chunkpos.z * 16;
 
-						ChunkAccess chunk = this.getLevel().getChunk(chunkpos.x, chunkpos.z);
+						ChunkAccess chunk = level.getChunkSource().getChunkNow(chunkpos.x, chunkpos.z);
 
-						if (this.playAmbientCaveSounds(player, bx, bz, chunk)) {
+						if (chunk != null && this.playAmbientCaveSounds(level, player, bx, bz, chunk)) {
 							break;
 						}
 
@@ -193,9 +143,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		}
 	}
 
-	protected boolean playAmbientCaveSounds(Player player, int x, int z, ChunkAccess chunk) {
-		Level level = this.getLevel();
-
+	protected boolean playAmbientCaveSounds(Level level, Player player, int x, int z, ChunkAccess chunk) {
 		this.updateLCG = this.updateLCG * 3 + 1013904223;
 		int rnd = this.updateLCG >> 2;
 		int xo = rnd & 15;
@@ -216,22 +164,21 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		return false;
 	}
 
-	public static BetweenlandsWorldStorage forWorld(Level level) {
-		BetweenlandsWorldStorage storage = forWorldNullable(level);
+	public static BetweenlandsWorldStorage getOrThrow(Level level) {
+		BetweenlandsWorldStorage storage = get(level);
 		if (storage == null) {
-			throw new RuntimeException(String.format("World %s does not have BetweenlandsWorldStorage capability", level.dimension().location()));
+			throw new RuntimeException(String.format("World %s does not have BetweenlandsWorldStorage saved data attached", level.dimension().location()));
 		}
 		return storage;
 	}
 
-	//TODO make data attachment
 	@Nullable
-	public static BetweenlandsWorldStorage forWorldNullable(Level level) {
-//		IWorldStorage storage = level.getCapability(CAPABILITY_INSTANCE, null);
-//		if (storage instanceof BetweenlandsWorldStorage) {
-//			return (BetweenlandsWorldStorage) storage;
-//		}
-		return null;
+	public static BetweenlandsWorldStorage get(Level level) {
+		return level.getExistingData(AttachmentRegistry.WORLD_STORAGE).orElse(null);
+	}
+
+	public static boolean isEventActive(Level level, Holder<IEnvironmentEvent> event) {
+		return BetweenlandsWorldStorage.get(level) != null && BetweenlandsWorldStorage.getOrThrow(level).getEnvironmentEventRegistry().getActiveEvents().contains(event.value());
 	}
 
 	public List<SpiritTreeKillToken> getSpiritTreeKillTokens() {

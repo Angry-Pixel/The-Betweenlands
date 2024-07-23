@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableList;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.level.Level;
 
 public interface IPredictableEnvironmentEvent extends IEnvironmentEvent {
 	/**
@@ -36,17 +37,17 @@ public interface IPredictableEnvironmentEvent extends IEnvironmentEvent {
 	 * @param state State to estimate time for
 	 * @return
 	 */
-	int estimateTimeUntil(State state);
+	int estimateTimeUntil(Level level, State state);
 
 	/**
 	 * Estimates the time in ticks remaining for the specified state. If the event is not in the specified state returns -1.
 	 * @param state State to estimate time for
 	 * @return
 	 */
-	default int estimateTimeRemaining(State state) {
+	default int estimateTimeRemaining(Level level, State state) {
 		int remaining = -1;
 
-		if(this.estimateTimeUntil(state) == 0) {
+		if(this.estimateTimeUntil(level, state) == 0) {
 			//In most cases the remaining time can be estimated by taking
 			//the minimum time until the next state. This will work unless
 			//the time for the next state cannot be estimated, in which
@@ -54,7 +55,7 @@ public interface IPredictableEnvironmentEvent extends IEnvironmentEvent {
 
 			for(State other : this.getStates()) {
 				if(!Objects.equals(state, other)) {
-					int estimation = this.estimateTimeUntil(other);
+					int estimation = this.estimateTimeUntil(level, other);
 
 					if(estimation > 0) {
 						if(remaining < 0) {

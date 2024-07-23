@@ -14,6 +14,7 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import thebetweenlands.common.block.entity.simulacrum.SimulacrumBlockEntity;
 import thebetweenlands.common.component.entity.BlessingData;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
+import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.SimulacrumEffectRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -88,7 +89,7 @@ public class BetweenlandsEvents {
 //					}
 
 					if (player instanceof ServerPlayer sp) {
-//						AdvancementCriterionRegistry.REVIVED_BLESSED.trigger(sp);
+						AdvancementCriteriaRegistry.REVIVED_BLESSED.get().trigger(sp);
 					}
 
 					data.clearBlessed();

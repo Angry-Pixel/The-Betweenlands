@@ -14,6 +14,7 @@ import org.lwjgl.opengl.GL12;
 import net.minecraft.client.Minecraft;
 import thebetweenlands.api.sky.IRiftMaskRenderer;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.world.event.RiftEvent;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
@@ -33,7 +34,7 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 
 	@Override
 	public void renderMask(ClientLevel level, float partialTicks, PoseStack stack, float skyBrightness) {
-		RiftEvent rift = BetweenlandsWorldStorage.forWorld(level).getEnvironmentEventRegistry().rift;
+		RiftEvent rift = EnvironmentEventRegistry.RIFT.get();
 		float[] riftAngles = rift.getRiftAngles(partialTicks);
 		float scale = rift.getRiftScale(partialTicks);
 		RiftVariant variant = rift.getVariant();
@@ -88,7 +89,7 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 
 	@Override
 	public void renderOverlay(ClientLevel level, float partialTicks, PoseStack stack, float skyBrightness) {
-		RiftEvent rift = BetweenlandsWorldStorage.forWorld(level).getEnvironmentEventRegistry().rift;
+		RiftEvent rift = EnvironmentEventRegistry.RIFT.get();
 		float[] riftAngles = rift.getRiftAngles(partialTicks);
 		float visibility = rift.getVisibility(partialTicks);
 		float scale = rift.getRiftScale(partialTicks);
@@ -158,7 +159,7 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 
 	@Override
 	public void renderRiftProjection(ClientLevel level, float partialTicks, Camera camera, float skyBrightness) {
-		RiftEvent rift = BetweenlandsWorldStorage.forWorld(level).getEnvironmentEventRegistry().rift;
+		RiftEvent rift = EnvironmentEventRegistry.RIFT.get();
 		float visibility = rift.getVisibility(partialTicks);
 		float visibilitySq = visibility * visibility;
 

@@ -11,10 +11,16 @@ import net.minecraft.world.phys.AABB;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
+import thebetweenlands.common.registries.DimensionRegistries;
+
+import javax.annotation.Nullable;
 
 public class LocationChiromawMatriarchNest extends LocationGuarded {
 	private static final int RESPAWN_TIME = 20 * 6; //20 * 6 * 10s = 20min.
 
+	@Nullable
 	private BlockPos nest;
 
 	private int respawnCounter = 0;
@@ -32,6 +38,7 @@ public class LocationChiromawMatriarchNest extends LocationGuarded {
 		this.nest = nest;
 	}
 
+	@Nullable
 	public BlockPos getNestPosition() {
 		return this.nest;
 	}
@@ -39,7 +46,7 @@ public class LocationChiromawMatriarchNest extends LocationGuarded {
 	@Override
 	public CompoundTag writeToNBT(CompoundTag nbt) {
 		nbt = super.writeToNBT(nbt);
-		if(this.nest != null) {
+		if (this.nest != null) {
 			nbt.putInt("NestX", this.nest.getX());
 			nbt.putInt("NestY", this.nest.getY());
 			nbt.putInt("NestZ", this.nest.getZ());
@@ -56,21 +63,20 @@ public class LocationChiromawMatriarchNest extends LocationGuarded {
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
+	public void tick(Level level) {
+		super.tick(level);
 
-		Level level = this.getWorldStorage().getLevel();
-		if(!level.isClientSide() && this.nest != null && !this.getGuard().isClear(level)) {
+		if (!level.isClientSide() && this.nest != null && !this.getGuard().isClear(level)) {
 			//Check for player claiming
-			if(!level.getEntitiesOfClass(Player.class, new AABB(this.nest), player -> !player.isCreative() && !player.isSpectator()).isEmpty()) {
+			if (!level.getEntitiesOfClass(Player.class, new AABB(this.nest), player -> !player.isCreative() && !player.isSpectator()).isEmpty()) {
 				this.getGuard().clear(level);
 
 				this.setVisible(false);
 
-				for(ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox())) {
+				for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox())) {
 					player.displayClientMessage(Component.translatable("chat.chiromaw_matriarch_nest.tainted"), false);
 
-					//AdvancementCriterionRegistry.CHIROMAW_MATRIARCH_NEST_CLAIMED.trigger(player);
+					AdvancementCriteriaRegistry.CHIROMAW_MATRIARCH_NEST_CLAIMED.get().trigger(player);
 				}
 			}
 

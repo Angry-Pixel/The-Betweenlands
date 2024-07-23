@@ -12,6 +12,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import thebetweenlands.api.storage.IChunkStorage;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.WorldStorageImpl;
 import thebetweenlands.util.ExtraCodecs;
 
@@ -35,12 +36,14 @@ public record SyncLocalStorageReferencesPacket(CompoundTag tag, ChunkPos pos) im
 	public static void handle(SyncLocalStorageReferencesPacket packet, IPayloadContext context) {
 		context.enqueueWork(() -> {
 			Level level = context.player().level();
-			ChunkAccess chunk = level.getChunk(packet.pos().x, packet.pos().z);
+			ChunkAccess chunk = level.getChunkSource().getChunkNow(packet.pos().x, packet.pos().z);
 			if (chunk != null) {
-				IWorldStorage worldStorage = WorldStorageImpl.getAttachment(level);
-				IChunkStorage chunkStorage = worldStorage.getChunkStorage(chunk);
-				if (chunkStorage != null) {
-					chunkStorage.readLocalStorageReferences(packet.tag);
+				IWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
+				if (worldStorage != null) {
+					IChunkStorage chunkStorage = worldStorage.getChunkStorage(chunk);
+					if (chunkStorage != null) {
+						chunkStorage.readLocalStorageReferences(packet.tag);
+					}
 				}
 			}
 		});

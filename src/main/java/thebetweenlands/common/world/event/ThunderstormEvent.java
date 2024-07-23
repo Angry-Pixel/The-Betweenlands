@@ -1,9 +1,5 @@
 package thebetweenlands.common.world.event;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
@@ -18,29 +14,27 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.simulacrum.SimulacrumBlockEntity;
+import thebetweenlands.common.registries.AttachmentRegistry;
+import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.registries.SimulacrumEffectRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ThunderstormEvent extends TimedEnvironmentEvent {
 	protected int updateLCG = RandomSource.create().nextInt();
 
-	public static final ResourceLocation ID = TheBetweenlands.prefix("thunderstorm");
+	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[]{TheBetweenlands.prefix("textures/events/thunderstorm.png")};
 
-	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[] { TheBetweenlands.prefix("textures/events/thunderstorm.png") };
-
-	public ThunderstormEvent(BLEnvironmentEventRegistry registry) {
-		super(registry);
-		this.getActiveStateEstimator().dependsOnEvent(() -> registry.heavyRain);
+	public ThunderstormEvent() {
+		this.getActiveStateEstimator().dependsOnEvent(EnvironmentEventRegistry.HEAVY_RAIN::get);
 	}
 
 	@Override
-	protected boolean canActivate() {
-		return this.getRegistry().heavyRain.isActive();
-	}
-
-	@Override
-	public ResourceLocation getEventName() {
-		return ID;
+	protected boolean canActivate(Level level) {
+		return BetweenlandsWorldStorage.isEventActive(level, EnvironmentEventRegistry.HEAVY_RAIN);
 	}
 
 	@Override
@@ -48,11 +42,11 @@ public class ThunderstormEvent extends TimedEnvironmentEvent {
 		super.tick(level);
 
 		if (!level.isClientSide()) {
-			if(this.isActive() && !this.getRegistry().heavyRain.isActive()) {
-				this.setActive(false);
+			if (this.isActive() && !this.canActivate(level)) {
+				this.setActive(level, false);
 			}
 
-			if(this.isActive() && level instanceof ServerLevel server) {
+			if (this.isActive() && level instanceof ServerLevel server) {
 				for (ChunkHolder chunkholder : server.getChunkSource().chunkMap.getChunks()) {
 					LevelChunk levelchunk = chunkholder.getTickingChunk();
 					if (levelchunk != null && level.dimensionType().hasSkyLight() && !level.dimensionType().hasCeiling() && level.getRandom().nextInt(2500) == 0) {
@@ -66,18 +60,18 @@ public class ThunderstormEvent extends TimedEnvironmentEvent {
 						BlockPos pos;
 						boolean isFlyingPlayerTarget = false;
 
-						if(simulacrum != null) {
+						if (simulacrum != null) {
 							pos = simulacrum.getBlockPos().above();
 						} else {
 							pos = this.getNearbyFlyingPlayer(server, seedPos);
-							if(pos == null) {
+							if (pos == null) {
 								pos = this.adjustPosToNearbyEntity(server, seedPos);
 							} else {
 								isFlyingPlayerTarget = true;
 							}
 						}
 
-						if((pos.getY() > 150 || this.getLevel().getRandom().nextInt(8) == 0) && level.isRainingAt(pos)) {
+						if ((pos.getY() > 150 || level.getRandom().nextInt(8) == 0) && level.isRainingAt(pos)) {
 //							level.addFreshEntity(new EntityBLLightningBolt(level, (double)pos.getX() + 0.5D, (double)pos.getY(), (double)pos.getZ() + 0.5D, isFlyingPlayerTarget ? 50 : 400, isFlyingPlayerTarget, false));
 						}
 					}
@@ -90,21 +84,21 @@ public class ThunderstormEvent extends TimedEnvironmentEvent {
 	protected BlockPos getNearbyFlyingPlayer(ServerLevel world, BlockPos blockpos) {
 		Player closestPlayer = null;
 		double closestDistSq = Double.MAX_VALUE;
-		for(Player player : world.players()) {
-			if(player.getY() > 130 && (!player.onGround() || player.isPassenger()) && (player.getY() - world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, player.blockPosition()).getY()) > 8) {
+		for (Player player : world.players()) {
+			if (player.getY() > 130 && (!player.onGround() || player.isPassenger()) && (player.getY() - world.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, player.blockPosition()).getY()) > 8) {
 				double dstSq = (blockpos.getX() - player.getX()) * (blockpos.getX() - player.getX()) + (blockpos.getZ() - player.getZ()) * (blockpos.getZ() - player.getZ());
-				if(dstSq < closestDistSq) {
+				if (dstSq < closestDistSq) {
 					closestPlayer = player;
 					closestDistSq = dstSq;
 				}
 			}
 		}
 
-		if(closestPlayer != null && closestDistSq < 50 * 50) {
+		if (closestPlayer != null && closestDistSq < 50 * 50) {
 			double motionX;
 			double motionY;
 			double motionZ;
-			if(closestPlayer.getVehicle() != null) {
+			if (closestPlayer.getVehicle() != null) {
 				motionX = closestPlayer.getVehicle().getDeltaMovement().x();
 				motionY = closestPlayer.getVehicle().getDeltaMovement().y();
 				motionZ = closestPlayer.getVehicle().getDeltaMovement().z();

@@ -6,6 +6,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.neoforged.neoforge.network.PacketDistributor;
 import javax.annotation.Nullable;
@@ -142,10 +143,10 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 	}
 
 	@Override
-	public void onRemoving() {
+	public void onRemoving(Level level) {
 		//Notify clients when shared storage is removed.
 		//This is done before onRemoved so that the list of watchers is not yet empty.
-		if (!this.getWorldStorage().getLevel().isClientSide()) {
+		if (!level.isClientSide()) {
 			if (!this.getWatchers().isEmpty()) {
 				this.sendMessageToAllWatchers(new RemoveLocalStoragePacket(this.getID()));
 			}
@@ -215,7 +216,7 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 	}
 
 	@Override
-	public boolean unlinkAllChunks() {
+	public boolean unlinkAllChunks(Level level) {
 		boolean changed = false;
 		boolean allUnlinked = true;
 		List<ChunkPos> chunks = new ArrayList<>(this.linkedChunks.size());
@@ -224,7 +225,7 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 		ChunkPos pos = null;
 		while (it.hasNext()) {
 			pos = it.next();
-			ChunkAccess chunk = this.worldStorage.getLevel().getChunk(pos.x, pos.z);
+			ChunkAccess chunk = level.getChunkSource().getChunkNow(pos.x, pos.z);
 			IChunkStorage chunkData = this.worldStorage.getChunkStorage(chunk);
 			if (chunkData == null || !chunkData.unlinkLocalStorage(this)) {
 				allUnlinked = false;

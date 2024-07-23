@@ -99,7 +99,7 @@ public class WaystoneBlock extends BaseEntityBlock {
 	@Override
 	protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
 		super.onRemove(state, level, pos, newState, movedByPiston);
-		var worldStorage = BetweenlandsWorldStorage.forWorldNullable(level);
+		var worldStorage = BetweenlandsWorldStorage.get(level);
 		if (worldStorage != null) {
 			ILocalStorageHandler localStorageHandler = worldStorage.getLocalStorageHandler();
 			List<LocationStorage> waystoneLocations = localStorageHandler.getLocalStorages(LocationStorage.class, new AABB(pos), storage -> storage.getType() == EnumLocationType.WAYSTONE);

@@ -22,10 +22,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entities.BubblerCrab;
 import thebetweenlands.common.entities.SiltCrab;
 import thebetweenlands.common.items.MobItem;
-import thebetweenlands.common.registries.BlockEntityRegistry;
-import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.EntityRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.*;
 import thebetweenlands.common.world.storage.location.TokenBucket;
 
 import javax.annotation.Nullable;
@@ -178,7 +175,7 @@ public class CrabPotBlockEntity extends NoMenuContainerBlockEntity {
 								entity.setChanged();
 
 								if((entity.hasSiltCrab() || entity.hasBubblerCrab()) && placer instanceof ServerPlayer sp) {
-									AdvancementCriterionRegistry.CRAB_POT.trigger(sp);
+									AdvancementCriteriaRegistry.CRAB_POT.get().trigger(sp);
 								}
 							}
 						}

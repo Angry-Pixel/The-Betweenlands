@@ -9,6 +9,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -18,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.common.block.FishingTackleBoxBlock;
+import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
 import javax.annotation.Nullable;
@@ -50,8 +52,8 @@ public class FishingTackleBoxBlockEntity extends BaseContainerBlockEntity {
 //		seat.setSeatOffset(0.1F);
 //		level.addFreshEntity(seat);
 //		player.startRiding(seat, true);
-//		if (player instanceof ServerPlayer sp)
-//			AdvancementCriterionRegistry.SIT_ON_TACKLE_BOX.trigger(sp);
+		if (player instanceof ServerPlayer sp)
+			AdvancementCriteriaRegistry.SIT_ON_TACKLE_BOX.get().trigger(sp);
 	}
 
 	@Override

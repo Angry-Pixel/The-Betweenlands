@@ -5,26 +5,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkAccess;
+import net.neoforged.neoforge.attachment.IAttachmentSerializer;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+
 import javax.annotation.Nullable;
 
 public interface IWorldStorage {
-	/**
-	 * Writes the world data to the tag
-	 * @param tag
-	 */
-	void writeToNBT(CompoundTag tag);
-
-	/**
-	 * Reads the world data from the tag
-	 * @param tag
-	 */
-	void readFromNBT(CompoundTag tag);
-
-	/**
-	 * Returns the world instance
-	 * @return
-	 */
-	Level getLevel();
 
 	/**
 	 * Called when a chunk storage needs to be read from the specified NBT and loaded
@@ -86,5 +72,5 @@ public interface IWorldStorage {
 	/**
 	 * Ticks the world storage
 	 */
-	void tick();
+	void tick(Level level);
 }

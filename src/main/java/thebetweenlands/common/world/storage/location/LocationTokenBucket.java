@@ -54,11 +54,11 @@ public class LocationTokenBucket extends LocationStorage implements TickableStor
 		super(worldStorage, id, region, "token_bucket", EnumLocationType.NONE);
 	}
 
-	public LocationTokenBucket(IWorldStorage worldStorage, StorageID id, LocalRegion region, AABB aabb, ResourceLocation bucketId) {
+	public LocationTokenBucket(IWorldStorage worldStorage, StorageID id, LocalRegion region, AABB aabb, ResourceLocation bucketId, long checkTime) {
 		this(worldStorage, id, region);
 		this.addBounds(aabb);
 		this.bucketId = bucketId;
-		this.lastCheckedTime = worldStorage.getLevel().getGameTime();
+		this.lastCheckedTime = checkTime;
 	}
 
 	public ResourceLocation getBucketId() {
@@ -200,9 +200,7 @@ public class LocationTokenBucket extends LocationStorage implements TickableStor
 	}
 
 	@Override
-	public void tick() {
-		Level level = this.getWorldStorage().getLevel();
-
+	public void tick(Level level) {
 		if (level.isClientSide()) {
 			return;
 		}
@@ -242,7 +240,7 @@ public class LocationTokenBucket extends LocationStorage implements TickableStor
 
 		long decay = Math.max(this.sharedTokens - (long) Math.floor(this.sharedTokens * this.limitMultiplier) - 1, 0);
 
-		long newTokens = Math.max(this.generateTokens(ticks) - decay, 0);
+		long newTokens = Math.max(this.generateTokens(level, ticks) - decay, 0);
 
 		int n = this.tickets.size();
 
@@ -288,12 +286,12 @@ public class LocationTokenBucket extends LocationStorage implements TickableStor
 		this.markDirty();
 	}
 
-	protected long generateTokens(long ticks) {
+	protected long generateTokens(Level level, long ticks) {
 		if (ticks == 1) {
-			return this.getWorldStorage().getLevel().getRandom().nextInt(Math.max(this.maxTokensPerTick - this.minTokensPerTick, 0) + 1) + this.minTokensPerTick;
+			return level.getRandom().nextInt(Math.max(this.maxTokensPerTick - this.minTokensPerTick, 0) + 1) + this.minTokensPerTick;
 		} else {
 			float tokens = ticks * (this.maxTokensPerTick + this.minTokensPerTick) / 2.0f;
-			return this.getWorldStorage().getLevel().getRandom().nextBoolean() ? Mth.floor(tokens) : Mth.ceil(tokens);
+			return level.getRandom().nextBoolean() ? Mth.floor(tokens) : Mth.ceil(tokens);
 		}
 	}
 

@@ -167,37 +167,39 @@ public class AmateMapItem extends MapItem {
 	}
 
 	private void locateBLLocations(Level world, Map<Integer, List<Integer>> posList, int centerX, int centerZ, int blocksPerPixel, AmateMapData data) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
-		ILocalStorageHandler handler = worldStorage.getLocalStorageHandler();
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(world);
+		if (worldStorage != null) {
+			ILocalStorageHandler handler = worldStorage.getLocalStorageHandler();
 
-		for (Map.Entry<Integer, List<Integer>> chunkX : posList.entrySet()) {
-			for (Integer z : chunkX.getValue()) {
-				int x = chunkX.getKey();
-				List<LocationStorage> localStorages = handler.getLocalStorages(LocationStorage.class, x << 4, z << 4, input -> true);
-				if (localStorages.size() > 0) {
-					for (LocationStorage storage : localStorages) {
-						AABB aabb = storage.getEnclosingBounds();
-						Vec3 center = new Vec3(aabb.minX + (aabb.maxX - aabb.minX) * 0.5D, aabb.minY + (aabb.maxY - aabb.minY) * 0.5D, aabb.minZ + (aabb.maxZ - aabb.minZ) * 0.5D);
-						byte mapX = (byte) ((center.x - centerX) / (float) blocksPerPixel * 2F);
-						byte mapZ = (byte) ((center.z - centerZ) / (float) blocksPerPixel * 2F);
-						BLMapDecoration.Location location = BLMapDecoration.Location.getLocation(storage);
-						if (location != BLMapDecoration.Location.NONE) {
-							data.addDecoration(new BLMapDecoration(location, mapX, mapZ, (byte) 8));
+			for (Map.Entry<Integer, List<Integer>> chunkX : posList.entrySet()) {
+				for (Integer z : chunkX.getValue()) {
+					int x = chunkX.getKey();
+					List<LocationStorage> localStorages = handler.getLocalStorages(LocationStorage.class, x << 4, z << 4, input -> true);
+					if (localStorages.size() > 0) {
+						for (LocationStorage storage : localStorages) {
+							AABB aabb = storage.getEnclosingBounds();
+							Vec3 center = new Vec3(aabb.minX + (aabb.maxX - aabb.minX) * 0.5D, aabb.minY + (aabb.maxY - aabb.minY) * 0.5D, aabb.minZ + (aabb.maxZ - aabb.minZ) * 0.5D);
+							byte mapX = (byte) ((center.x - centerX) / (float) blocksPerPixel * 2F);
+							byte mapZ = (byte) ((center.z - centerZ) / (float) blocksPerPixel * 2F);
+							BLMapDecoration.Location location = BLMapDecoration.Location.getLocation(storage);
+							if (location != BLMapDecoration.Location.NONE) {
+								data.addDecoration(new BLMapDecoration(location, mapX, mapZ, (byte) 8));
 
-							boolean done = false;
-							if (location == BLMapDecoration.Location.TOWER) {
-								LocationCragrockTower tower = (LocationCragrockTower) storage;
-								if (tower.isTopConquered()) {
-									done = true;
+								boolean done = false;
+								if (location == BLMapDecoration.Location.TOWER) {
+									LocationCragrockTower tower = (LocationCragrockTower) storage;
+									if (tower.isTopConquered()) {
+										done = true;
+									}
+								} else if (location == BLMapDecoration.Location.FORTRESS || location == BLMapDecoration.Location.SPIRIT_TREE || location == BLMapDecoration.Location.SLUDGE_WORM_DUNGEON) {
+									LocationGuarded guarded = (LocationGuarded) storage;
+									if (guarded.getGuard().isClear(world)) {
+										done = true;
+									}
 								}
-							} else if (location == BLMapDecoration.Location.FORTRESS || location == BLMapDecoration.Location.SPIRIT_TREE || location == BLMapDecoration.Location.SLUDGE_WORM_DUNGEON) {
-								LocationGuarded guarded = (LocationGuarded) storage;
-								if (guarded.getGuard().isClear(world)) {
-									done = true;
+								if (done) {
+									data.addDecoration(new BLMapDecoration(BLMapDecoration.Location.CHECK, mapX, mapZ, (byte) 8));
 								}
-							}
-							if (done) {
-								data.addDecoration(new BLMapDecoration(BLMapDecoration.Location.CHECK, mapX, mapZ, (byte) 8));
 							}
 						}
 					}

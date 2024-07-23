@@ -21,7 +21,9 @@ import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.client.shader.postprocessing.GroundFog;
 import thebetweenlands.client.shader.postprocessing.WorldShader;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
+import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.common.world.spawning.BoxMobSpawner;
 import thebetweenlands.common.world.storage.location.LocationAmbience.EnumLocationAmbience;
 
@@ -182,10 +184,8 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
-
-		Level level = this.getWorldStorage().getLevel();
+	public void tick(Level level) {
+		super.tick(level);
 
 		if(!level.isClientSide()) {
 			float fogStrength = this.dataManager.get(GROUND_FOG_STRENGTH);

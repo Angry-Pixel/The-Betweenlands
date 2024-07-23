@@ -25,6 +25,7 @@ import thebetweenlands.client.shader.GeometryBuffer;
 import thebetweenlands.client.shader.ShaderHelper;
 import thebetweenlands.client.shader.postprocessing.WorldShader;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.FramebufferStack;
@@ -33,6 +34,7 @@ import thebetweenlands.util.Mesh.Triangle;
 import thebetweenlands.util.Mesh.Triangle.Vertex;
 import thebetweenlands.util.Mesh.Triangle.Vertex.Vector3D;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -46,8 +48,10 @@ public class BLSkyRenderer implements IBetweenlandsSky {
 
 	private static int skyDomeDispList = -1;
 
+	@Nullable
 	private static Mesh starMesh;
 
+	@Nullable
 	public static GeometryBuffer clipPlaneBuffer;
 
 	protected int ticks;
@@ -55,6 +59,7 @@ public class BLSkyRenderer implements IBetweenlandsSky {
 
 	private IRiftRenderer riftRenderer;
 
+	@Nullable
 	private static RiftRenderer blRiftRenderer;
 
 	public BLSkyRenderer() {
@@ -507,17 +512,15 @@ public class BLSkyRenderer implements IBetweenlandsSky {
 		}
 	}
 
-	public void update(ClientLevel world, Minecraft mc) {
+	public void update(ClientLevel level, Minecraft mc) {
 		this.ticks++;
 
-		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorldNullable(world);
+		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.get(level);
 		if (storage != null) {
-			BLEnvironmentEventRegistry reg = storage.getEnvironmentEventRegistry();
+			this.spoopy = BetweenlandsWorldStorage.isEventActive(level, EnvironmentEventRegistry.SPOOPY);
 
-			this.spoopy = reg.spoopy.isActive();
-
-			if (reg.auroras.isActive()) {
-				RandomSource rand = world.getRandom();
+			if (BetweenlandsWorldStorage.isEventActive(level, EnvironmentEventRegistry.AURORAS)) {
+				RandomSource rand = level.getRandom();
 				double newAuroraPosX = mc.player.getX() + rand.nextInt(160) - 80;
 				double newAuroraPosZ = mc.player.getZ() + rand.nextInt(160) - 80;
 				double newAuroraPosY = 260;
@@ -535,7 +538,7 @@ public class BLSkyRenderer implements IBetweenlandsSky {
 
 				if (minDist > 150 || this.auroras.isEmpty()) {
 					List<Vector4f> gradients = new ArrayList<>();
-					switch (reg.auroras.getAuroraType()) {
+					switch (EnvironmentEventRegistry.AURORAS.get().getAuroraType()) {
 						default:
 						case 0:
 							gradients.add(new Vector4f(0, 1, 0, 0.01F));

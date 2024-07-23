@@ -1,6 +1,7 @@
 package thebetweenlands.api.environment;
 
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.world.level.Level;
 
 public interface IRemotelyControllableEnvironmentEvent extends IEnvironmentEvent {
 	/**
@@ -15,14 +16,14 @@ public interface IRemotelyControllableEnvironmentEvent extends IEnvironmentEvent
 	 * Called <i>once</i> when the remote no longer affects this event's state and {@link #isCurrentStateFromRemote()} returns true.
 	 * This will only be called when the remote states are updated,
 	 * the event is responsible handling its own remote reset ticks received from
-	 * {@link #updateStateFromRemote(boolean, int, ImmutableMap)} and resetting the state
+	 * {@link #updateStateFromRemote(Level, boolean, int, ImmutableMap)} and resetting the state
 	 * if the data was not downloaded and the remote reset ticks run out
 	 */
-	void resetStateFromRemote();
+	void resetStateFromRemote(Level level);
 
 	/**
 	 * Returns whether the current event state was set by the remote.
-	 * Should be false after {@link #resetStateFromRemote()} was called
+	 * Should be false after {@link #resetStateFromRemote(Level)} was called
 	 * or if the event's state was overridden (e.g. by a player, command, etc)
 	 * @return
 	 */
@@ -44,5 +45,5 @@ public interface IRemotelyControllableEnvironmentEvent extends IEnvironmentEvent
 	 * Default timeout ticks value is 3600 (3 min.).
 	 * @param data Additional json entries
 	 */
-	void updateStateFromRemote(boolean active, int remoteResetTicks, ImmutableMap<String, String> data);
+	void updateStateFromRemote(Level level, boolean active, int remoteResetTicks, ImmutableMap<String, String> data);
 }

@@ -1,17 +1,24 @@
 package thebetweenlands.common;
 
+import net.minecraft.advancements.Advancement;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import thebetweenlands.client.ClientEvents;
 import thebetweenlands.common.datagen.DataGenerators;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
@@ -21,6 +28,7 @@ import thebetweenlands.common.registries.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.annotation.Nullable;
 import java.util.Locale;
 
 @Mod(TheBetweenlands.ID)
@@ -70,6 +78,8 @@ public class TheBetweenlands {
 		RecipeRegistry.RECIPE_SERIALIZERS.register(eventbus);
 		FeatureRegistry.FEATURES.register(eventbus);
 		SimulacrumEffectRegistry.EFFECTS.register(eventbus);
+		EnvironmentEventRegistry.EVENTS.register(eventbus);
+		AdvancementCriteriaRegistry.TRIGGERS.register(eventbus);
 
 		StorageRegistry.preInit();
 
@@ -117,6 +127,26 @@ public class TheBetweenlands {
 
 	public static ResourceLocation prefix(String name) {
 		return ResourceLocation.fromNamespaceAndPath(ID, name.toLowerCase(Locale.ROOT));
+	}
+
+	@Nullable
+	public static Level getLevelWorkaround(ResourceKey<Level> dimension) {
+		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+		if (server != null) {
+			return server.getLevel(dimension);
+		} else if (FMLLoader.getDist().isClient()) {
+			return ClientEvents.getClientLevel();
+		}
+		return null;
+	}
+
+	@Nullable
+	public static ServerLevel tryGetServer(ResourceKey<Level> dimension) {
+		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+		if (server != null) {
+			return server.getLevel(dimension);
+		}
+		return null;
 	}
 }
 

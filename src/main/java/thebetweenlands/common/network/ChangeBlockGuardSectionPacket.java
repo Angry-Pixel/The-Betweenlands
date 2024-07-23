@@ -18,6 +18,7 @@ import thebetweenlands.common.world.storage.location.guard.BlockLocationGuard.Gu
 public class ChangeBlockGuardSectionPacket implements CustomPacketPayload {
 	private final String id;
 	private final BlockPos pos;
+	@Nullable
 	private final byte[] data;
 
 	public static final Type<ChangeBlockGuardSectionPacket> TYPE = new Type<>(TheBetweenlands.prefix("change_block_guard_section"));
@@ -27,7 +28,7 @@ public class ChangeBlockGuardSectionPacket implements CustomPacketPayload {
 		ByteBufCodecs.byteArray(512), o -> o.data,
 		ChangeBlockGuardSectionPacket::new);
 
-	private ChangeBlockGuardSectionPacket(String id, BlockPos pos, byte[] data) {
+	private ChangeBlockGuardSectionPacket(String id, BlockPos pos, @Nullable byte[] data) {
 		this.id = id;
 		this.pos = pos;
 		this.data = data;
@@ -51,20 +52,22 @@ public class ChangeBlockGuardSectionPacket implements CustomPacketPayload {
 
 	public static void handle(ChangeBlockGuardSectionPacket packet, IPayloadContext context) {
 		context.enqueueWork(() -> {
-			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(context.player().level());
-			ILocalStorage storage = worldStorage.getLocalStorageHandler().getLocalStorage(StorageID.fromString(packet.id));
-			if (storage instanceof LocationGuarded location) {
-				if (location.getGuard() != null) {
-					GuardChunkSection section = location.getGuard().getSection(packet.pos);
-					if (packet.data != null) {
-						//Make sure chunk and section are loaded and not null
-						location.getGuard().setGuarded(context.player().level(), packet.pos, true);
-						section = location.getGuard().getSection(packet.pos);
-						if (section != null) {
-							section.loadData(packet.data);
+			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(context.player().level());
+			if (worldStorage != null) {
+				ILocalStorage storage = worldStorage.getLocalStorageHandler().getLocalStorage(StorageID.fromString(packet.id));
+				if (storage instanceof LocationGuarded location) {
+					if (location.getGuard() != null) {
+						GuardChunkSection section = location.getGuard().getSection(packet.pos);
+						if (packet.data != null) {
+							//Make sure chunk and section are loaded and not null
+							location.getGuard().setGuarded(context.player().level(), packet.pos, true);
+							section = location.getGuard().getSection(packet.pos);
+							if (section != null) {
+								section.loadData(packet.data);
+							}
+						} else if (section != null) {
+							section.clear();
 						}
-					} else if (section != null) {
-						section.clear();
 					}
 				}
 			}

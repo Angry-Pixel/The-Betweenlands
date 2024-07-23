@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.LongTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.level.Level;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
@@ -15,11 +16,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class LocationSpiritTree extends LocationGuarded {
-	private List<BlockPos> notGeneratedWispPositions = new ArrayList<>();
-	private List<BlockPos> generatedWispPositions = new ArrayList<>();
+	private final List<BlockPos> notGeneratedWispPositions = new ArrayList<>();
+	private final List<BlockPos> generatedWispPositions = new ArrayList<>();
 
-	private List<BlockPos> largeFacePositions = new ArrayList<>();
-	private List<BlockPos> smallFacePositions = new ArrayList<>();
+	private final List<BlockPos> largeFacePositions = new ArrayList<>();
+	private final List<BlockPos> smallFacePositions = new ArrayList<>();
 
 	public LocationSpiritTree(IWorldStorage worldStorage, StorageID id, LocalRegion region) {
 		super(worldStorage, id, region, "spirit_tree", EnumLocationType.SPIRIT_TREE);
@@ -61,15 +62,15 @@ public class LocationSpiritTree extends LocationGuarded {
 		return Collections.unmodifiableList(this.notGeneratedWispPositions);
 	}
 
-	public int getActiveWisps() {
+	public int getActiveWisps(Level level) {
 		int i = 0;
 		for (BlockPos pos : this.notGeneratedWispPositions) {
-			if (this.getWorldStorage().getLevel().getBlockState(pos).is(BlockRegistry.WISP.get())) {
+			if (level.getBlockState(pos).is(BlockRegistry.WISP.get())) {
 				i++;
 			}
 		}
 		for (BlockPos pos : this.generatedWispPositions) {
-			if (this.getWorldStorage().getLevel().getBlockState(pos).is(BlockRegistry.WISP.get())) {
+			if (level.getBlockState(pos).is(BlockRegistry.WISP.get())) {
 				i++;
 			}
 		}

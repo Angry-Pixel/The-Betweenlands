@@ -15,10 +15,15 @@ import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
-public class TokenBucket {
-	private Level level;
-	private BlockPos pos;
+import javax.annotation.Nullable;
 
+public class TokenBucket {
+
+	@Nullable
+	private Level level;
+	@Nullable
+	private BlockPos pos;
+	@Nullable
 	private ResourceLocation bucketId;
 	private float sizeX, sizeY, sizeZ;
 	private int minTokensPerTick = 1;
@@ -36,7 +41,7 @@ public class TokenBucket {
 		this.readFromNBT(nbt);
 	}
 
-	public TokenBucket(ResourceLocation bucketId, float sizeX, float sizeY, float sizeZ, int minTokensPerTick, int maxTokensPerTick, double limitMultiplier, double tokensConsumedPerTick) {
+	public TokenBucket(@Nullable ResourceLocation bucketId, float sizeX, float sizeY, float sizeZ, int minTokensPerTick, int maxTokensPerTick, double limitMultiplier, double tokensConsumedPerTick) {
 		this.bucketId = bucketId;
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
@@ -95,39 +100,41 @@ public class TokenBucket {
 			return 0;
 		}
 
-		IWorldStorage storage = BetweenlandsWorldStorage.forWorld(this.level);
-		ILocalStorageHandler handler = storage.getLocalStorageHandler();
+		IWorldStorage storage = BetweenlandsWorldStorage.get(this.level);
+		if (storage != null) {
+			ILocalStorageHandler handler = storage.getLocalStorageHandler();
 
-		LocationTokenBucket tokenBucket = null;
+			LocationTokenBucket tokenBucket = null;
 
-		AABB posAabb = new AABB(this.pos);
+			AABB posAabb = new AABB(this.pos);
 
-		List<LocationTokenBucket> locations = handler.getLocalStorages(LocationTokenBucket.class, posAabb, location -> this.bucketId.equals(location.getBucketId()));
-		if (!locations.isEmpty()) {
-			tokenBucket = locations.get(0);
-		}
+			List<LocationTokenBucket> locations = handler.getLocalStorages(LocationTokenBucket.class, posAabb, location -> this.bucketId.equals(location.getBucketId()));
+			if (!locations.isEmpty()) {
+				tokenBucket = locations.getFirst();
+			}
 
-		if (tokenBucket == null && !this.level.isClientSide()) {
-			tokenBucket = new LocationTokenBucket(storage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(this.pos), posAabb.inflate(this.sizeX * 0.5f - 0.49f, this.sizeY * 0.5f - 0.49f, this.sizeZ * 0.5f - 0.49f), this.bucketId);
-			tokenBucket.setTokensPerTick(this.minTokensPerTick, this.maxTokensPerTick);
-			tokenBucket.setLimitMultiplier(this.limitMultiplier);
-			handler.addLocalStorage(tokenBucket);
-		}
+			if (tokenBucket == null && !this.level.isClientSide()) {
+				tokenBucket = new LocationTokenBucket(storage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(this.pos), posAabb.inflate(this.sizeX * 0.5f - 0.49f, this.sizeY * 0.5f - 0.49f, this.sizeZ * 0.5f - 0.49f), this.bucketId, this.level.getGameTime());
+				tokenBucket.setTokensPerTick(this.minTokensPerTick, this.maxTokensPerTick);
+				tokenBucket.setLimitMultiplier(this.limitMultiplier);
+				handler.addLocalStorage(tokenBucket);
+			}
 
-		if (tokenBucket != null) {
-			long worldTime = this.level.getGameTime();
-			long ticks = Math.max(worldTime - this.lastCheckedTime, 0);
+			if (tokenBucket != null) {
+				long worldTime = this.level.getGameTime();
+				long ticks = Math.max(worldTime - this.lastCheckedTime, 0);
 
-			double consumedTokens = ticks * this.tokensConsumedPerTick + this.consumedTokenFraction;
-			long wholeConsumedTokens = Mth.floor(consumedTokens);
+				double consumedTokens = ticks * this.tokensConsumedPerTick + this.consumedTokenFraction;
+				long wholeConsumedTokens = Mth.floor(consumedTokens);
 
-			if (wholeConsumedTokens > 0) {
-				this.lastCheckedTime = worldTime;
-				this.consumedTokenFraction = consumedTokens - wholeConsumedTokens;
+				if (wholeConsumedTokens > 0) {
+					this.lastCheckedTime = worldTime;
+					this.consumedTokenFraction = consumedTokens - wholeConsumedTokens;
 
-				tokenBucket.refreshTicket(ResourceLocation.fromNamespaceAndPath(this.bucketId.getNamespace(), String.format("%d_%d_%d", this.pos.getX(), this.pos.getY(), this.pos.getZ())), posAabb);
+					tokenBucket.refreshTicket(ResourceLocation.fromNamespaceAndPath(this.bucketId.getNamespace(), String.format("%d_%d_%d", this.pos.getX(), this.pos.getY(), this.pos.getZ())), posAabb);
 
-				return tokenBucket.consumeTokens(wholeConsumedTokens);
+					return tokenBucket.consumeTokens(wholeConsumedTokens);
+				}
 			}
 		}
 

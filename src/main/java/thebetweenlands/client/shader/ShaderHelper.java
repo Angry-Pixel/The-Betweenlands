@@ -15,6 +15,8 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.util.FramebufferStack;
 
+import javax.annotation.Nullable;
+
 public class ShaderHelper implements ResourceManagerReloadListener {
 
 	public static final ShaderHelper INSTANCE = new ShaderHelper();
@@ -24,9 +26,13 @@ public class ShaderHelper implements ResourceManagerReloadListener {
 	private boolean gl30Supported = false;
 	private boolean arbFloatBufferSupported = false;
 
+	@Nullable
 	private Exception shaderError = null;
+	@Nullable
 	private WorldShader worldShader = null;
+	@Nullable
 	private Tonemapper toneMappingShader = null;
+	@Nullable
 	private ResizableFramebuffer blitBuffer = null;
 
 	private boolean shadersUpdated = false;
@@ -37,6 +43,7 @@ public class ShaderHelper implements ResourceManagerReloadListener {
 	 */
 	public static final int MIN_REQUIRED_TEX_UNITS = 6;
 
+	@Nullable
 	public WorldShader getWorldShader() {
 		return this.worldShader;
 	}

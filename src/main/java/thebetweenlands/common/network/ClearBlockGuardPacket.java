@@ -28,11 +28,13 @@ public record ClearBlockGuardPacket(String id) implements CustomPacketPayload {
 
 	public static void handle(ClearBlockGuardPacket packet, IPayloadContext context) {
 		context.enqueueWork(() -> {
-			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(context.player().level());
-			ILocalStorage storage = worldStorage.getLocalStorageHandler().getLocalStorage(StorageID.fromString(packet.id()));
-			if (storage instanceof LocationGuarded location) {
-				if (location.getGuard() != null) {
-					location.getGuard().clear(context.player().level());
+			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(context.player().level());
+			if (worldStorage != null) {
+				ILocalStorage storage = worldStorage.getLocalStorageHandler().getLocalStorage(StorageID.fromString(packet.id()));
+				if (storage instanceof LocationGuarded location) {
+					if (location.getGuard() != null) {
+						location.getGuard().clear(context.player().level());
+					}
 				}
 			}
 		});

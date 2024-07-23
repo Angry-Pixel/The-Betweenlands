@@ -8,21 +8,11 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class DenseFogEvent extends TimedEnvironmentEvent {
-	public static final ResourceLocation ID = TheBetweenlands.prefix("dense_fog");
 
 	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[]{TheBetweenlands.prefix("textures/events/dense_fog.png")};
 
 	private float fade = 1.0F;
 	private float lastFade = 1.0F;
-
-	public DenseFogEvent(BLEnvironmentEventRegistry registry) {
-		super(registry);
-	}
-
-	@Override
-	public ResourceLocation getEventName() {
-		return ID;
-	}
 
 	@Override
 	public int getOffTime(RandomSource rnd) {

@@ -17,6 +17,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.common.block.entity.MudBrickAlcoveBlockEntity;
+import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 
 import javax.annotation.Nullable;
@@ -64,7 +65,7 @@ public class MudBrickAlcoveBlock extends HorizontalBaseEntityBlock {
 					level.setBlockAndUpdate(pos, state.setValue(HAS_URN, false));
 					level.sendBlockUpdated(pos, state, state, 2);
 					if (player instanceof ServerPlayer sp) {
-//						AdvancementCriterionRegistry.BREAK_ALCOVE_URN.trigger(sp);
+						AdvancementCriteriaRegistry.BREAK_ALCOVE_URN.get().trigger(sp);
 					}
 				}
 			}

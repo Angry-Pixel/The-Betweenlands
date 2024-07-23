@@ -19,6 +19,7 @@ import thebetweenlands.common.registries.DimensionRegistries;
 
 public class LocationPortal extends LocationStorage {
 	private BlockPos portalPos;
+	@Nullable
 	private BlockPos otherPortalPos;
 	private ResourceKey<Level> otherPortalDimension;
 	private boolean targetDimensionSet;
@@ -43,14 +44,6 @@ public class LocationPortal extends LocationStorage {
 		}
 		if (tag.contains("OtherPortalDimension", Tag.TAG_INT)) {
 			this.otherPortalDimension = ResourceKey.create(Registries.DIMENSION, ResourceLocation.parse(tag.getString("OtherPortalDimension")));
-		} else {
-			//Legacy code for old portals that didn't support other dimensions
-			ResourceKey<Level> currDim = this.getWorldStorage().getLevel().dimension();
-			if (currDim == DimensionRegistries.DIMENSION_KEY) {
-				this.otherPortalDimension = BetweenlandsConfig.returnDimension;
-			} else {
-				this.otherPortalDimension = DimensionRegistries.DIMENSION_KEY;
-			}
 		}
 		this.targetDimensionSet = tag.getBoolean("TargetDimSet");
 	}
@@ -135,8 +128,7 @@ public class LocationPortal extends LocationStorage {
 	 *
 	 * @return True if the portal was invalid and removed
 	 */
-	public boolean validateAndRemove() {
-		Level level = this.getWorldStorage().getLevel();
+	public boolean validateAndRemove(Level level) {
 		AABB bounds = this.getBoundingBox();
 		for (BlockPos checkPos : BlockPos.betweenClosed(BlockPos.containing(bounds.minX, bounds.minY, bounds.minZ), BlockPos.containing(bounds.maxX, bounds.maxY, bounds.maxZ))) {
 			if (level.getBlockState(checkPos).is(BlockRegistry.PORTAL)) {

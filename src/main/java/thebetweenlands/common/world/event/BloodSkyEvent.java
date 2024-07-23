@@ -1,6 +1,5 @@
 package thebetweenlands.common.world.event;
 
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -11,17 +10,12 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class BloodSkyEvent extends TimedEnvironmentEvent {
-	public static final ResourceLocation ID = TheBetweenlands.prefix("blood_sky");
 
 	protected static final ResourceLocation[] VISION_TEXTURES = new ResourceLocation[] { TheBetweenlands.prefix("textures/events/blood_sky.png") };
 
 	private boolean soundPlayed = true;
 	private float skyTransparency = 0.0F;
 	private float lastSkyTransparency = 0.0F;
-
-	public BloodSkyEvent(BLEnvironmentEventRegistry registry) {
-		super(registry);
-	}
 
 	public void setSkyTransparency(float transparency) {
 		this.lastSkyTransparency = this.skyTransparency;
@@ -30,11 +24,6 @@ public class BloodSkyEvent extends TimedEnvironmentEvent {
 
 	public float getSkyTransparency(float partialTicks) {
 		return this.skyTransparency + (this.skyTransparency - this.lastSkyTransparency) * partialTicks;
-	}
-
-	@Override
-	public ResourceLocation getEventName() {
-		return ID;
 	}
 
 	@Override
@@ -71,11 +60,10 @@ public class BloodSkyEvent extends TimedEnvironmentEvent {
 	}
 
 	@Override
-	public void setActive(boolean active) {
-		super.setActive(active);
+	public void setActive(Level level, boolean active) {
+		super.setActive(level, active);
 		if(active) {
-			ClientLevel level = ClientEvents.getClientLevel();
-			if(level != null && level.isClientSide() && !this.soundPlayed) {
+			if(level.isClientSide() && !this.soundPlayed) {
 				level.playSound(null, ClientEvents.getClientPlayer().blockPosition(), SoundRegistry.AMBIENT_BLOOD_SKY_ROAR.get(), SoundSource.AMBIENT, 100.0F, 1.0F);
 			}
 			this.soundPlayed = true;

@@ -1,16 +1,20 @@
 package thebetweenlands.common.world.event;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Supplier;
-
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import thebetweenlands.api.environment.IPredictableEnvironmentEvent;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
+import thebetweenlands.common.registries.AttachmentRegistry;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
 
 public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent implements IPredictableEnvironmentEvent {
 	public static class ActiveStateEstimator {
@@ -52,7 +56,7 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent implement
 			return this;
 		}
 
-		public int estimateTimeUntil(State state) {
+		public int estimateTimeUntil(Level level, State state) {
 			if(state == State.ACTIVE) {
 				if(this.event.isActive()) {
 					return 0;
@@ -62,12 +66,12 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent implement
 
 					for(Supplier<ActiveStateEstimator> dep : this.dependencies) {
 						ActiveStateEstimator estimator = dep.get();
-						int startEstimate = estimator.estimateTimeUntil(State.ACTIVE);
+						int startEstimate = estimator.estimateTimeUntil(level, State.ACTIVE);
 						startDepTime = Math.max(startDepTime, startEstimate);
 
 						int endEstimate;
 						if(estimator.event.isActive()) {
-							endEstimate = estimator.event.estimateTimeRemaining(State.ACTIVE);
+							endEstimate = estimator.event.estimateTimeRemaining(level, State.ACTIVE);
 						} else {
 							endEstimate = startEstimate + estimator.estimateNextStateDuration();
 						}
@@ -83,7 +87,7 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent implement
 					} else {
 						return -1;
 					}
-				} else if(this.event.canActivate()) {
+				} else if(this.event.canActivate(level)) {
 					return this.event.getTicks();
 				}
 			} else if(state == State.INACTIVE) {
@@ -94,7 +98,7 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent implement
 
 					for(Supplier<ActiveStateEstimator> dep : this.dependencies) {
 						ActiveStateEstimator estimator = dep.get();
-						endDepTime = Math.min(endDepTime, estimator.estimateTimeUntil(State.ACTIVE) + estimator.estimateNextStateDuration());
+						endDepTime = Math.min(endDepTime, estimator.estimateTimeUntil(level, State.ACTIVE) + estimator.estimateNextStateDuration());
 					}
 
 					return Math.min(endDepTime, this.event.getTicks());
@@ -116,10 +120,6 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent implement
 
 	protected ActiveStateEstimator activeStateEstimator = new ActiveStateEstimator(this);
 
-	public TimedEnvironmentEvent(BLEnvironmentEventRegistry registry) {
-		super(registry);
-	}
-
 	@Override
 	protected void initDataParameters() {
 		super.initDataParameters();
@@ -131,17 +131,17 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent implement
 	@Override
 	public void tick(Level level) {
 		super.tick(level);
-
-		if(!this.getRegistry().isDisabled() && !this.isCurrentStateFromRemote() /*&& this.getLevel().getGameRules().getBoolean(GameruleRegistry.BL_TIMED_EVENTS)*/) {
-			if(this.isActive() || this.canActivate()) {
+		var storage = level.getExistingData(AttachmentRegistry.WORLD_STORAGE);
+		if(storage.isPresent() && !storage.get().getEnvironmentEventRegistry().isDisabled() && !this.isCurrentStateFromRemote() && level.getGameRules().getBoolean(TheBetweenlands.TIMED_EVENT_GAMERULE)) {
+			if(this.isActive() || this.canActivate(level)) {
 				this.dataManager.set(TICKS, this.getTicks() - 1);
 			}
 
 			if(!level.isClientSide() && this.getTicks() <= 0) {
 				int nextDuration = this.dataManager.get(NEXT_DURATION);
 
-				if(this.isActive() || this.canActivate()) {
-					this.setActive(!this.isActive());
+				if(this.isActive() || this.canActivate(level)) {
+					this.setActive(level, !this.isActive());
 				}
 
 				this.dataManager.set(TICKS, nextDuration).syncImmediately();
@@ -160,7 +160,7 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent implement
 	 * Returns whether the event can activate right now
 	 * @return
 	 */
-	protected boolean canActivate() {
+	protected boolean canActivate(Level level) {
 		return true;
 	}
 
@@ -201,52 +201,51 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent implement
 	}
 
 	@Override
-	public void setActive(boolean active) {
-		if(!active || this.canActivate()) {
-			super.setActive(active);
-			if(!this.getLevel().isClientSide()) {
+	public void setActive(Level level, boolean active) {
+		if(!active || this.canActivate(level)) {
+			super.setActive(level, active);
+			if(!level.isClientSide()) {
 				if(!this.isActive()) {
-					int offTime = this.getOffTime(this.getLevel().getRandom());
+					int offTime = this.getOffTime(level.getRandom());
 					this.dataManager.set(TICKS, offTime).syncImmediately();
 					this.dataManager.set(START_TICKS, offTime);
-					this.dataManager.set(NEXT_DURATION, this.getOnTime(this.getLevel().getRandom()));
+					this.dataManager.set(NEXT_DURATION, this.getOnTime(level.getRandom()));
 				} else {
-					int onTime = this.getOnTime(this.getLevel().getRandom());
+					int onTime = this.getOnTime(level.getRandom());
 					this.dataManager.set(TICKS, onTime).syncImmediately();
 					this.dataManager.set(START_TICKS, onTime);
-					this.dataManager.set(NEXT_DURATION, this.getOffTime(this.getLevel().getRandom()));
+					this.dataManager.set(NEXT_DURATION, this.getOffTime(level.getRandom()));
 				}
 			}
 		}
 	}
 
 	@Override
-	public void saveEventData() {
-		super.saveEventData();
-		this.getData().putInt("ticks", this.getTicks());
-		this.getData().putInt("startTicks", this.getStartTicks());
-		this.getData().putInt("nextDuration", this.dataManager.get(NEXT_DURATION));
+	public void saveEventData(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveEventData(tag, registries);
+		tag.putInt("ticks", this.getTicks());
+		tag.putInt("startTicks", this.getStartTicks());
+		tag.putInt("nextDuration", this.dataManager.get(NEXT_DURATION));
 	}
 
 	@Override
-	public void loadEventData() {
-		super.loadEventData();
-		this.dataManager.set(TICKS, this.getData().getInt("ticks")).syncImmediately();
-		this.dataManager.set(START_TICKS, this.getData().getInt("startTicks"));
+	public void loadEventData(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadEventData(tag, registries);
+		this.dataManager.set(TICKS, tag.getInt("ticks")).syncImmediately();
+		this.dataManager.set(START_TICKS, tag.getInt("startTicks"));
 
 		//Backwards compatibility with <= 3.7.1 before NEXT_DURATION existed
-		if(!this.getData().contains("nextDuration", Tag.TAG_INT)) {
+		if(!tag.contains("nextDuration", Tag.TAG_INT)) {
 			this.dataManager.set(NEXT_DURATION, this.isActive() ? this.getOffTime(RandomSource.create()) : this.getOnTime(RandomSource.create()));
 		} else {
-			this.dataManager.set(NEXT_DURATION, this.getData().getInt("nextDuration"));
+			this.dataManager.set(NEXT_DURATION, tag.getInt("nextDuration"));
 		}
 	}
 
 	@Override
-	public void setDefaults() {
-		RandomSource rnd = RandomSource.create();
-		this.dataManager.set(TICKS, this.getOffTime(rnd));
-		this.dataManager.set(NEXT_DURATION, this.getOnTime(rnd));
+	public void setDefaults(Level level) {
+		this.dataManager.set(TICKS, this.getOffTime(level.getRandom()));
+		this.dataManager.set(NEXT_DURATION, this.getOnTime(level.getRandom()));
 	}
 
 	/**
@@ -264,8 +263,8 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent implement
 	public abstract int getOnTime(RandomSource rnd);
 
 	@Override
-	public int estimateTimeUntil(State state) {
-		return this.activeStateEstimator.estimateTimeUntil(state);
+	public int estimateTimeUntil(Level level, State state) {
+		return this.activeStateEstimator.estimateTimeUntil(level, state);
 	}
 
 	public ActiveStateEstimator getActiveStateEstimator() {

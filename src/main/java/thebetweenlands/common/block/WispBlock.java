@@ -22,6 +22,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.common.block.entity.simulacrum.SimulacrumBlockEntity;
 import thebetweenlands.common.block.entity.WispBlockEntity;
+import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.registries.SimulacrumEffectRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
@@ -99,10 +100,10 @@ public class WispBlock extends Block implements EntityBlock {
 	}
 
 	protected boolean checkVisibility(Level level, BlockPos pos) {
-		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorldNullable(level);
+		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.get(level);
 
 		if (storage != null) {
-			if (storage.getEnvironmentEventRegistry().auroras.isActive()) {
+			if (BetweenlandsWorldStorage.isEventActive(level, EnvironmentEventRegistry.AURORAS)) {
 				return true;
 			}
 

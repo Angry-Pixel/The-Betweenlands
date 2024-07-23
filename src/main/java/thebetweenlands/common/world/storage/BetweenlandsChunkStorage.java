@@ -39,7 +39,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 
 	@Nullable
 	public static BetweenlandsChunkStorage forChunk(Level level, ChunkAccess chunk) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(level);
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
 		if (worldStorage != null) {
 			ChunkStorageImpl chunkStorage = worldStorage.getChunkStorage(chunk);
 			if (chunkStorage instanceof BetweenlandsChunkStorage) {
@@ -88,13 +88,11 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 				this.savedGemTargets.add(target);
 			}
 
-			if (this.level.dimension() == DimensionRegistries.DIMENSION_KEY) {
-				for (GemSingerItem.GemSingerTarget target : GemSingerItem.GemSingerTarget.values()) {
-					if (!this.savedGemTargets.contains(target.getId())) {
-						//A new gem singer target was added -> chunk needs to be rescanned
-						this.rescanGemSingerTargets = true;
-						break;
-					}
+			for (GemSingerItem.GemSingerTarget target : GemSingerItem.GemSingerTarget.values()) {
+				if (!this.savedGemTargets.contains(target.getId())) {
+					//A new gem singer target was added -> chunk needs to be rescanned
+					this.rescanGemSingerTargets = true;
+					break;
 				}
 			}
 
@@ -110,10 +108,10 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
+	public void tick(Level level) {
+		super.tick(level);
 
-		if (!this.level.isClientSide() && this.rescanGemSingerTargets) {
+		if (this.rescanGemSingerTargets) {
 			this.rescanGemSingerTargets = false;
 			this.gemToPositions.clear();
 

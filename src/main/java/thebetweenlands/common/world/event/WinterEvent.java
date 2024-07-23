@@ -1,14 +1,10 @@
 package thebetweenlands.common.world.event;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
@@ -22,21 +18,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
 import thebetweenlands.client.ClientEvents;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BLSnowLayerBlock;
 import thebetweenlands.common.block.entity.PresentBlockEntity;
 import thebetweenlands.common.datagen.BetweenlandsBlockTagsProvider;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 public class WinterEvent extends SeasonalEnvironmentEvent {
-	public static final ResourceLocation ID = TheBetweenlands.prefix("winter");
 
 	private static final long WINTER_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.DECEMBER, 24, 0, 0).getTime().getTime();
-
-	public WinterEvent(BLEnvironmentEventRegistry registry) {
-		super(registry);
-	}
 
 	@Override
 	public long getStartDateInMs() {
@@ -59,14 +52,9 @@ public class WinterEvent extends SeasonalEnvironmentEvent {
 	}
 
 	@Override
-	public ResourceLocation getEventName() {
-		return ID;
-	}
-
-	@Override
-	public void setActive(boolean active) {
+	public void setActive(Level level, boolean active) {
 		//Mark blocks in range for render update to update block textures
-		if (active != this.isActive() && ClientEvents.getClientLevel() != null && ClientEvents.getClientPlayer() != null) {
+		if (active != this.isActive() && level.isClientSide() && ClientEvents.getClientPlayer() != null) {
 			updateModelActiveState(active);
 
 			Player player = ClientEvents.getClientPlayer();
@@ -76,7 +64,7 @@ public class WinterEvent extends SeasonalEnvironmentEvent {
 			Minecraft.getInstance().levelRenderer.setBlocksDirty(px, py, pz, px + 512, py + 512, pz + 512);
 		}
 
-		super.setActive(active);
+		super.setActive(level, active);
 	}
 
 	@Override

@@ -2,17 +2,15 @@ package thebetweenlands.api.environment;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.Util;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
+import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.network.IGenericDataAccessorAccess;
 
 public interface IEnvironmentEvent {
-	/**
-	 * Returns the world
-	 * @return
-	 */
-	Level getLevel();
 
 	/**
 	 * Returns whether this event is currently active
@@ -37,18 +35,18 @@ public interface IEnvironmentEvent {
 	 * Resets the active state. Can be used by seasonal events to
 	 * reset to the correct and expected state
 	 */
-	void resetActiveState();
+	void resetActiveState(Level level);
 
 	/**
 	 * Activates or deactivates the event.
 	 * @param active Whether the event should be activated or deactivated
 	 */
-	void setActive(boolean active);
+	void setActive(Level level, boolean active);
 
 	/**
 	 * Sets the event data to be loaded
 	 */
-	void setLoaded();
+	void setLoaded(Level level);
 
 	/**
 	 * Called every world tick.
@@ -57,37 +55,31 @@ public interface IEnvironmentEvent {
 	void tick(Level level);
 
 	/**
-	 * Returns the NBT data of this event.
-	 * @return
-	 */
-	CompoundTag getData();
-
-	/**
 	 * Saves the event data.
-	 * @param compound
+	 * @param tag
 	 */
-	void writeToNBT(CompoundTag compound);
+	void writeToNBT(CompoundTag tag, HolderLookup.Provider registries);
 
 	/**
 	 * Loads the event data.
-	 * @param compound
+	 * @param tag
 	 */
-	void readFromNBT(CompoundTag compound);
+	void readFromNBT(CompoundTag tag, HolderLookup.Provider registries);
 
 	/**
 	 * Sets the default values when the event is first loaded from the save file.
 	 */
-	void setDefaults();
+	void setDefaults(Level level);
 
 	/**
 	 * Saves additional event data.
 	 */
-	void saveEventData();
+	void saveEventData(CompoundTag tag, HolderLookup.Provider registries);
 
 	/**
 	 * Loads additional event data.
 	 */
-	void loadEventData();
+	void loadEventData(CompoundTag tag, HolderLookup.Provider registries);
 
 	/**
 	 * Returns whether the data of this event has already been loaded.
@@ -95,23 +87,9 @@ public interface IEnvironmentEvent {
 	 */
 	boolean isLoaded();
 
-	/**
-	 * Returns the name of this event.
-	 * @return
-	 */
-	ResourceLocation getEventName();
-
-	/**
-	 * Returns the localization name of this event.
-	 * @return
-	 */
-	String getLocalizationEventName();
-
-	/**
-	 * Returns the event registry of this event.
-	 * @return
-	 */
-	IEnvironmentEventRegistry getRegistry();
+	default String getDescriptionId() {
+		return Util.makeDescriptionId("environment_event", BLRegistries.ENVIRONMENT_EVENTS.getKey(this));
+	}
 
 	/**
 	 * Returns the data manager used to sync data

@@ -27,7 +27,6 @@ import thebetweenlands.common.network.SyncLocalStorageReferencesPacket;
 
 public abstract class ChunkStorageImpl implements IChunkStorage, TickableStorage {
 	protected final IWorldStorage worldStorage;
-	protected final Level level;
 	protected final ChunkAccess chunk;
 
 	private Set<ServerPlayer> watchers = new HashSet<>();
@@ -39,7 +38,6 @@ public abstract class ChunkStorageImpl implements IChunkStorage, TickableStorage
 
 	public ChunkStorageImpl(IWorldStorage worldStorage, ChunkAccess chunk) {
 		this.worldStorage = worldStorage;
-		this.level = worldStorage.getLevel();
 		this.chunk = chunk;
 	}
 
@@ -273,7 +271,7 @@ public abstract class ChunkStorageImpl implements IChunkStorage, TickableStorage
 	}
 
 	@Override
-	public void tick() {
+	public void tick(Level level) {
 		if(this.syncStorageLinks) {
 			this.syncStorageLinks = false;
 

@@ -80,7 +80,7 @@ public class LocationGuarded extends LocationStorage implements TickableStorage 
 	}
 
 	@Override
-	public void tick() {
+	public void tick(Level level) {
 		if (this.queuedClear) {
 			ClearBlockGuardPacket message = new ClearBlockGuardPacket(this);
 			for (ServerPlayer watcher : this.getWatchers()) {

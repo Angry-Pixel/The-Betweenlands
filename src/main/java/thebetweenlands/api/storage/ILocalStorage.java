@@ -3,6 +3,7 @@ package thebetweenlands.api.storage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.api.network.IGenericDataAccessorAccess;
@@ -117,7 +118,7 @@ public interface ILocalStorage {
 	/**
 	 * Called once when the local storage is initially added to the world
 	 */
-	default void onAdded() {
+	default void onAdded(Level level) {
 
 	}
 
@@ -139,7 +140,7 @@ public interface ILocalStorage {
 	/**
 	 * Called before the local storage is being removed
 	 */
-	default void onRemoving() {
+	default void onRemoving(Level level) {
 
 	}
 
@@ -203,7 +204,7 @@ public interface ILocalStorage {
 	 *
 	 * @return True if all chunks were successfully unlinked
 	 */
-	boolean unlinkAllChunks();
+	boolean unlinkAllChunks(Level level);
 
 	/**
 	 * Links the specified chunk to this local storage
@@ -231,8 +232,8 @@ public interface ILocalStorage {
 	 *
 	 * @param chunk
 	 */
-	default void linkChunkSafely(ChunkPos chunk) {
-		ChunkAccess instance = this.getWorldStorage().getLevel().getChunkSource().getChunkNow(chunk.x, chunk.z);
+	default void linkChunkSafely(Level level, ChunkPos chunk) {
+		ChunkAccess instance = level.getChunkSource().getChunkNow(chunk.x, chunk.z);
 		if (instance != null) {
 			this.linkChunk(instance);
 		} else {

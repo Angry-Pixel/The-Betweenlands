@@ -1,28 +1,21 @@
 package thebetweenlands.common.world.event;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import thebetweenlands.client.ClientEvents;
-import thebetweenlands.common.TheBetweenlands;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class SpoopyEvent extends SeasonalEnvironmentEvent {
-	public static final ResourceLocation ID = TheBetweenlands.prefix("spook");
 
 	private static final long SPOOPY_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), Calendar.OCTOBER, 23, 0, 0).getTime().getTime();
 
 	private float skyTransparency = 0.0F;
 	private float lastSkyTransparency = 0.0F;
-
-	public SpoopyEvent(BLEnvironmentEventRegistry registry) {
-		super(registry);
-	}
 
 	@Override
 	public long getStartDateInMs() {
@@ -54,12 +47,7 @@ public class SpoopyEvent extends SeasonalEnvironmentEvent {
 	}
 
 	@Override
-	public ResourceLocation getEventName() {
-		return ID;
-	}
-
-	@Override
-	public void setActive(boolean active) {
+	public void setActive(Level level, boolean active) {
 		//Mark blocks in range for render update to update block textures
 		if (active != this.isActive() && ClientEvents.getClientLevel() != null && ClientEvents.getClientPlayer() != null) {
 			updateModelActiveState(active);
@@ -71,7 +59,7 @@ public class SpoopyEvent extends SeasonalEnvironmentEvent {
 			Minecraft.getInstance().levelRenderer.setBlocksDirty(px, py, pz, px + 512, py + 512, pz + 512);
 		}
 
-		super.setActive(active);
+		super.setActive(level, active);
 	}
 
 	@Override

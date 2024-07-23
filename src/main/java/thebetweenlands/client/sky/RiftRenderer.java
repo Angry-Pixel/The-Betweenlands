@@ -23,6 +23,7 @@ import thebetweenlands.api.sky.IRiftMaskRenderer;
 import thebetweenlands.api.sky.IRiftRenderer;
 import thebetweenlands.api.sky.IRiftSkyRenderer;
 import thebetweenlands.client.shader.ResizableFramebuffer;
+import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.world.event.RiftEvent;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.FramebufferStack;
@@ -72,7 +73,7 @@ public class RiftRenderer implements IRiftRenderer {
 	@Override
 	public void render(ClientLevel level, float partialTicks, Matrix4f projectionMatrix, Camera camera, Matrix4f frustrumMatrix, boolean isFoggy, Runnable skyFogSetup) {
 
-		RiftEvent rift = BetweenlandsWorldStorage.forWorld(level).getEnvironmentEventRegistry().rift;
+		RiftEvent rift = EnvironmentEventRegistry.RIFT.get();
 
 		if (rift.getActivationTicks() > 0 && rift.getVisibility(partialTicks) > 0) {
 			RenderTarget skyFbo;
