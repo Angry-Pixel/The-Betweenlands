@@ -57,9 +57,7 @@ public class MudFlowerPotBlock extends BaseEntityBlock {
 			if (!be.hasFlowerBlock() && stack.is(BlockRegistry.SULFUR_TORCH.asItem())) {
 				level.setBlockAndUpdate(pos, BlockRegistry.MUD_FLOWER_POT_CANDLE.get().defaultBlockState());
 				level.playSound(null, pos, SoundType.WOOD.getPlaceSound(), SoundSource.BLOCKS, (SoundType.WOOD.getVolume() + 1.0F) / 2.0F, SoundType.WOOD.getPitch() * 0.8F);
-				if (!player.isCreative()) {
-					stack.shrink(1);
-				}
+				stack.consume(1, player);
 				return ItemInteractionResult.sidedSuccess(level.isClientSide());
 			} else {
 				boolean isFlower = stack.getItem() instanceof BlockItem item && !getFlowerPotState(item.getBlock()).isAir();
@@ -69,9 +67,7 @@ public class MudFlowerPotBlock extends BaseEntityBlock {
 						if (isFlower && !be.hasFlowerBlock()) {
 							be.setFlowerBlock(((BlockItem) stack.getItem()).getBlock());
 							player.awardStat(Stats.POT_FLOWER);
-							if (!player.getAbilities().instabuild) {
-								stack.shrink(1);
-							}
+							stack.consume(1, player);
 						} else {
 							ItemStack flowerStack = new ItemStack(be.getFlowerBlock());
 							if (stack.isEmpty()) {

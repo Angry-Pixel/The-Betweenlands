@@ -76,8 +76,7 @@ public class GeckoCageBlock extends HorizontalBaseEntityBlock {
 				if (stack.is(ItemRegistry.SAP_SPIT) && cage.hasGecko() && cage.getGeckoUsages() < 12) {
 					if (!level.isClientSide()) {
 						cage.setGeckoUsages(level, pos, state, 12);
-						if (!player.isCreative())
-							stack.shrink(1);
+						stack.consume(1, player);
 					} else {
 						this.spawnHeartParticles(level, pos);
 					}
@@ -111,8 +110,7 @@ public class GeckoCageBlock extends HorizontalBaseEntityBlock {
 												player.displayClientMessage(Component.translatable("chat.aspect.discovery.more"), true);
 												player.displayClientMessage(Component.translatable("chat.aspect.discovery.more"), false);
 											}
-											if (!player.isCreative())
-												stack.shrink(1);
+											stack.consume(1, player);
 											return ItemInteractionResult.sidedSuccess(level.isClientSide());
 										case END:
 											//already all discovered

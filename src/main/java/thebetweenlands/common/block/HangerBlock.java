@@ -58,9 +58,7 @@ public class HangerBlock extends Block {
 		if (stack.is(ItemRegistry.MIDDLE_FRUIT)) {
 			level.setBlockAndUpdate(pos, BlockRegistry.SEEDED_HANGER.get().defaultBlockState().setValue(CAN_GROW, state.getValue(CAN_GROW)));
 			level.playSound(null, pos, SoundEvents.GRASS_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
-			if (!player.isCreative()) {
-				stack.shrink(1);
-			}
+			stack.consume(1, player);
 			return ItemInteractionResult.SUCCESS;
 		}
 		return super.useItemOn(stack, state, level, pos, player, hand, hitResult);

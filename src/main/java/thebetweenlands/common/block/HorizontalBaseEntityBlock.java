@@ -22,7 +22,7 @@ public abstract class HorizontalBaseEntityBlock extends BaseEntityBlock {
 
 	public HorizontalBaseEntityBlock(Properties properties) {
 		super(properties);
-		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.UP));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH));
 	}
 
 	@Override

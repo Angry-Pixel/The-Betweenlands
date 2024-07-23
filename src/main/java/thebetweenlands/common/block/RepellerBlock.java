@@ -63,9 +63,7 @@ public class RepellerBlock extends HorizontalBaseEntityBlock {
 			if (!player.isCrouching() && level.getBlockEntity(pos) instanceof RepellerBlockEntity repeller) {
 				if (stack.is(ItemRegistry.SHIMMER_STONE) && !repeller.hasShimmerstone()) {
 					repeller.addShimmerstone();
-					if (!player.isCreative()) {
-						stack.shrink(1);
-					}
+					stack.consume(1, player);
 					return ItemInteractionResult.sidedSuccess(level.isClientSide());
 				} else if (stack.getItem() instanceof AspectVialItem) {
 					if (repeller.hasShimmerstone()) {

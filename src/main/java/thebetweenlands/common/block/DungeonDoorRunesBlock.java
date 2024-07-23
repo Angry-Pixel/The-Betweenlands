@@ -71,8 +71,7 @@ public class DungeonDoorRunesBlock extends HorizontalBaseEntityBlock {
 					runes.top_state = runes.top_code;
 					runes.mid_state = runes.mid_code;
 					runes.bottom_state = runes.bottom_code;
-					if (!player.isCreative())
-						stack.shrink(1);
+					stack.consume(1, player);
 					level.sendBlockUpdated(pos, state, state, 3);
 					return ItemInteractionResult.SUCCESS;
 				}

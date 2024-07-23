@@ -44,7 +44,7 @@ public class AlembicBlock extends HorizontalBaseEntityBlock {
 					ItemStack result = alembic.getElixir(level, pos, state, stack.getItem());
 					ItemEntity itemEntity = player.drop(result, false);
 					if (itemEntity != null) itemEntity.setNoPickUpDelay();
-					if (!player.isCreative()) stack.shrink(1);
+					stack.consume(1, player);
 				}
 			}
 		}

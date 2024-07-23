@@ -194,9 +194,7 @@ public abstract class DugSoilBlock extends BaseEntityBlock {
 			if (!level.isClientSide()) {
 				level.playSound(null, pos, SoundEvents.GRASS_PLACE, SoundSource.PLAYERS, 1, 0.5f + level.getRandom().nextFloat() * 0.5f);
 				soil.setCompost(level, pos, 30);
-				if (!player.isCreative()) {
-					stack.shrink(1);
-				}
+				stack.consume(1, player);
 			}
 			return ItemInteractionResult.SUCCESS;
 		}

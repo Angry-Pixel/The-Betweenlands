@@ -67,9 +67,7 @@ public class CompostBinBlock extends HorizontalBaseEntityBlock {
 						switch (bin.addItemToBin(level, pos, state, stack, amount, time, true)) {
 							case CompostBinBlockEntity.CompostResult.ADDED:
 								bin.addItemToBin(level, pos, state, stack, amount, time, false);
-								if (!player.isCreative()) {
-									stack.shrink(1);
-								}
+								stack.consume(1, player);
 								break;
 							case CompostBinBlockEntity.CompostResult.FULL:
 							default:
