@@ -7,10 +7,7 @@ import net.minecraft.world.entity.MobCategory;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entities.Anadia;
-import thebetweenlands.common.entities.EntityGecko;
-import thebetweenlands.common.entities.EntitySwampHag;
-import thebetweenlands.common.entities.EntityWight;
+import thebetweenlands.common.entities.*;
 
 public class EntityRegistry {
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, TheBetweenlands.ID);
@@ -21,6 +18,8 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<EntityGecko>> GECKO = ENTITY_TYPES.register("gecko", () -> EntityType.Builder.of(EntityGecko::new, MobCategory.CREATURE).sized(0.75F, 0.35F).build(prefix("gecko")));
 	public static final DeferredHolder<EntityType<?>, EntityType<EntityWight>> WIGHT = ENTITY_TYPES.register("wight", () -> EntityType.Builder.of(EntityWight::new, MobCategory.MONSTER).sized(0.7F, 2.2F).build(prefix("wight")));
 	public static final DeferredHolder<EntityType<?>, EntityType<Anadia>> ANADIA = ENTITY_TYPES.register("anadia", () -> EntityType.Builder.of(Anadia::new, MobCategory.WATER_CREATURE).sized(0.8F, 0.8F).build(prefix("anadia")));
+	public static final DeferredHolder<EntityType<?>, EntityType<BubblerCrab>> BUBBLER_CRAB = ENTITY_TYPES.register("bubbler_crab", () -> EntityType.Builder.of(BubblerCrab::new, MobCategory.WATER_CREATURE).sized(0.7F, 0.6F).build(prefix("bubbler_crab")));
+	public static final DeferredHolder<EntityType<?>, EntityType<SiltCrab>> SILT_CRAB = ENTITY_TYPES.register("silt_crab", () -> EntityType.Builder.of(SiltCrab::new, MobCategory.WATER_CREATURE).sized(0.8F, 0.6F).build(prefix("silt_crab")));
 
 	private static String prefix(String name) {
 		return TheBetweenlands.prefix(name).toString();

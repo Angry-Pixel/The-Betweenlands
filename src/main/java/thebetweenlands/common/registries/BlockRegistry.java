@@ -675,6 +675,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> FISHING_TACKLE_BOX = register("fishing_tackle_box", () -> new FishingTackleBoxBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> SMOKING_RACK = register("smoking_rack", () -> new SmokingRackBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> FISH_TRIMMING_TABLE = register("fish_trimming_table", () -> new FishTrimmingTableBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> CRAB_POT = register("crab_pot", () -> new CrabPotBlock(BlockBehaviour.Properties.of().strength(0.5F, 5.0F).sound(SoundType.WOOD)));
 
 	public static <T extends Block> DeferredBlock<T> register(String name, Supplier<? extends T> block) {
 		return register(name, block, item -> () -> new BlockItem(item.get(), new Item.Properties()));
