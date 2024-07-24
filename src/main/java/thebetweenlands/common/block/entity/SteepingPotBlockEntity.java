@@ -12,7 +12,6 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -77,12 +76,12 @@ public class SteepingPotBlockEntity extends NoMenuContainerBlockEntity implement
 					if (recipe.isPresent()) {
 						FluidStack outputFluid = recipe.get().value().getResultFluid(level.registryAccess());
 						if (!outputFluid.isEmpty()) {
-							entity.setTempFluidColour(outputFluid.getOrDefault(DataComponents.DYED_COLOR, new DyedItemColor(0, false)).rgb());
+							entity.setTempFluidColour(outputFluid.getOrDefault(DataComponentRegistry.FLUID_COLOR, 0xFFFFFF));
 							entity.hasCraftResult = true;
 						}
 					}
 				} else {
-					entity.setTempFluidColour(entity.tank.getFluid().getOrDefault(DataComponents.DYED_COLOR, new DyedItemColor(0, false)).rgb());
+					entity.setTempFluidColour(entity.tank.getFluid().getOrDefault(DataComponentRegistry.FLUID_COLOR, 0xFFFFFF));
 					entity.hasCraftResult = true;
 				}
 				level.sendBlockUpdated(pos, state, state, 2);

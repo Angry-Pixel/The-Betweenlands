@@ -56,10 +56,21 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> TAR_BUCKET = ITEMS.register("tar_bucket", () -> new BucketItem(FluidRegistry.TAR_STILL.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> RUBBER_BUCKET = ITEMS.register("rubber_bucket", () -> new BucketItem(FluidRegistry.RUBBER_STILL.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> DYE_BUCKET = ITEMS.register("dye_bucket", () -> new BucketItem(FluidRegistry.DYE_STILL.get(), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> BREW_BUCKET = ITEMS.register("brew_bucket", () -> new BucketItem(FluidRegistry.BREW_STILL.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> CLEAN_WATER_BUCKET = ITEMS.register("clean_water_bucket", () -> new BucketItem(FluidRegistry.CLEAN_WATER_STILL.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> FISH_OIL_BUCKET = ITEMS.register("fish_oil_bucket", () -> new BucketItem(FluidRegistry.FISH_OIL_STILL.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> PLANT_TONIC_BUCKET = ITEMS.register("plant_tonic_bucket", () -> new Item(new Item.Properties().stacksTo(1)));
+
+	public static final DeferredItem<Item> NETTLE_SOUP_BUCKET = ITEMS.register("nettle_soup_bucket", () -> new BucketItem(FluidRegistry.NETTLE_SOUP_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> NETTLE_TEA_BUCKET = ITEMS.register("nettle_tea_bucket", () -> new BucketItem(FluidRegistry.NETTLE_TEA_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> PHEROMONE_EXTREACT_BUCKET = ITEMS.register("pheromone_extract_bucket", () -> new BucketItem(FluidRegistry.PHEROMONE_EXTRACT_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SWAMP_BROTH_BUCKET = ITEMS.register("swamp_broth_bucket", () -> new BucketItem(FluidRegistry.SWAMP_BROTH_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> STURDY_STOCK_BUCKET = ITEMS.register("sturdy_stock_bucket", () -> new BucketItem(FluidRegistry.STURDY_STOCK_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> PEAR_CORDIAL_BUCKET = ITEMS.register("pear_cordial_bucket", () -> new BucketItem(FluidRegistry.PEAR_CORDIAL_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SHAMANS_BREW_BUCKET = ITEMS.register("shamans_brew_bucket", () -> new BucketItem(FluidRegistry.SHAMANS_BREW_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> LAKE_BROTH_BUCKET = ITEMS.register("lake_broth_bucket", () -> new BucketItem(FluidRegistry.LAKE_BROTH_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SHELL_STOCK_BUCKET = ITEMS.register("shell_stock_bucket", () -> new BucketItem(FluidRegistry.SHELL_STOCK_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> FROG_LEG_EXTRACT_BUCKET = ITEMS.register("frog_leg_extract_bucket", () -> new BucketItem(FluidRegistry.FROG_LEG_EXTRACT_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> WITCH_TEA_BUCKET = ITEMS.register("witch_tea_bucket", () -> new BucketItem(FluidRegistry.WITCH_TEA_STILL.get(), new Item.Properties().stacksTo(1)));
 
 	public static final DeferredItem<Item> SWAMP_HAG_SPAWN_EGG = ITEMS.register("swamp_hag_spawn_egg", () -> new DeferredSpawnEggItem(EntityRegistry.SWAMP_HAG, 0x5E4E2E, 0x18461A, new Item.Properties()));
 	public static final DeferredItem<Item> GECKO_SPAWN_EGG = ITEMS.register("gecko_spawn_egg", () -> new DeferredSpawnEggItem(EntityRegistry.GECKO, 0xdc7202, 0x05e290, new Item.Properties()));
