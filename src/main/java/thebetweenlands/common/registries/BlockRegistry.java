@@ -7,6 +7,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
@@ -678,6 +679,9 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> CRAB_POT = register("crab_pot", () -> new CrabPotBlock(BlockBehaviour.Properties.of().strength(0.5F, 5.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> CRAB_POT_FILTER = register("crab_pot_filter", () -> new CrabPotFilterBlock(BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> SILT_GLASS_JAR = register("silt_glass_jar", () -> new SiltGlassJarBlock(BlockBehaviour.Properties.of().strength(1.0F, 5.0F).sound(SoundType.GLASS)));
+	public static final DeferredBlock<Block> BETWEENSTONE_PEBBLE = register("betweenstone_pebble", () -> new PebblePileBlock(BlockBehaviour.Properties.of().strength(0.5F, 5.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> BARNACLE = register("barnacle", () -> new BarnacleBlock(BlockBehaviour.Properties.of().noCollission().randomTicks().strength(0.2F).sound(SoundType.SLIME_BLOCK)));
+	public static final DeferredBlock<Block> GLOWING_GOOP = register("glowing_goop", () -> new GlowingGoopBlock(BlockBehaviour.Properties.of().lightLevel(state -> state.getValue(BlockStateProperties.WATERLOGGED) ? 15 : 0).noCollission().strength(0.0F, 2.0F).sound(SoundType.SLIME_BLOCK)));
 
 	public static <T extends Block> DeferredBlock<T> register(String name, Supplier<? extends T> block) {
 		return register(name, block, item -> () -> new BlockItem(item.get(), new Item.Properties()));

@@ -28,7 +28,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.common.block.entity.AnimatorBlockEntity;
 import thebetweenlands.common.block.entity.CrabPotBlockEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
