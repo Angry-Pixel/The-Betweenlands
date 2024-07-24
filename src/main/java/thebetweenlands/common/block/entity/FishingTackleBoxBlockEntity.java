@@ -19,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.common.block.FishingTackleBoxBlock;
+import thebetweenlands.common.entities.Seat;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
@@ -47,11 +48,11 @@ public class FishingTackleBoxBlockEntity extends BaseContainerBlockEntity {
 	}
 
 	public void seatPlayer(Player player, Level level, BlockPos pos) {
-//		FishingTackleBoxSeat seat = new FishingTackleBoxSeat(level);
-//		seat.setPosition(pos.getX() + 0.5D, pos.getY(), pos.getZ()  + 0.5D);
-//		seat.setSeatOffset(0.1F);
-//		level.addFreshEntity(seat);
-//		player.startRiding(seat, true);
+		Seat seat = new Seat(level, false);
+		seat.setPos(pos.getX() + 0.5D, pos.getY(), pos.getZ()  + 0.5D);
+		seat.setSeatOffset(0.1F);
+		level.addFreshEntity(seat);
+		player.startRiding(seat, true);
 		if (player instanceof ServerPlayer sp)
 			AdvancementCriteriaRegistry.SIT_ON_TACKLE_BOX.get().trigger(sp);
 	}

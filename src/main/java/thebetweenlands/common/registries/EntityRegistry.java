@@ -1,7 +1,6 @@
 package thebetweenlands.common.registries;
 
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -20,6 +19,7 @@ public class EntityRegistry {
 	public static final DeferredHolder<EntityType<?>, EntityType<Anadia>> ANADIA = ENTITY_TYPES.register("anadia", () -> EntityType.Builder.of(Anadia::new, MobCategory.WATER_CREATURE).sized(0.8F, 0.8F).build(prefix("anadia")));
 	public static final DeferredHolder<EntityType<?>, EntityType<BubblerCrab>> BUBBLER_CRAB = ENTITY_TYPES.register("bubbler_crab", () -> EntityType.Builder.of(BubblerCrab::new, MobCategory.WATER_CREATURE).sized(0.7F, 0.6F).build(prefix("bubbler_crab")));
 	public static final DeferredHolder<EntityType<?>, EntityType<SiltCrab>> SILT_CRAB = ENTITY_TYPES.register("silt_crab", () -> EntityType.Builder.of(SiltCrab::new, MobCategory.WATER_CREATURE).sized(0.8F, 0.6F).build(prefix("silt_crab")));
+	public static final DeferredHolder<EntityType<?>, EntityType<Seat>> SEAT = ENTITY_TYPES.register("seat", () -> EntityType.Builder.<Seat>of(Seat::new, MobCategory.MISC).sized(0.0F, 0.0F).fireImmune().noSummon().build(prefix("seat")));
 
 	private static String prefix(String name) {
 		return TheBetweenlands.prefix(name).toString();

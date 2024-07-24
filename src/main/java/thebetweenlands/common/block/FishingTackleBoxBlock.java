@@ -24,6 +24,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.FishingTackleBoxBlockEntity;
+import thebetweenlands.common.entities.Seat;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -38,15 +39,15 @@ public class FishingTackleBoxBlock extends HorizontalBaseEntityBlock {
 		this.registerDefaultState(this.getStateDefinition().any().setValue(OPEN, false));
 	}
 
-	private boolean isBoxSatOn(Level level, BlockPos pos) {
-		return !level.getEntitiesOfClass(FishingTackleBoxSeat.class, new AABB(pos), EntitySelector.ENTITY_STILL_ALIVE).isEmpty();
+	public static boolean isSatOn(Level level, BlockPos pos) {
+		return !level.getEntitiesOfClass(Seat.class, new AABB(pos), EntitySelector.ENTITY_STILL_ALIVE).isEmpty();
 	}
 
 	@Override
 	protected void attack(BlockState state, Level level, BlockPos pos, Player player) {
 		if (!level.isClientSide()) {
 			if (level.getBlockEntity(pos) instanceof FishingTackleBoxBlockEntity box) {
-				if (!this.isBoxSatOn(level, pos)) {
+				if (!isSatOn(level, pos)) {
 					level.playSound(null, pos, state.getValue(OPEN) ? SoundRegistry.FISHING_TACKLE_BOX_CLOSE.get() : SoundRegistry.FISHING_TACKLE_BOX_OPEN.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
 					level.setBlockAndUpdate(pos, state.cycle(OPEN));
 					level.sendBlockUpdated(pos, state, state, 2);
@@ -60,7 +61,7 @@ public class FishingTackleBoxBlock extends HorizontalBaseEntityBlock {
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
 		if (!level.isClientSide()) {
 			if (level.getBlockEntity(pos) instanceof FishingTackleBoxBlockEntity box) {
-				if (!state.getValue(OPEN) && !this.isBoxSatOn(level, pos)) {
+				if (!state.getValue(OPEN) && !isSatOn(level, pos)) {
 					if (level.isEmptyBlock(pos.above()) && level.isEmptyBlock(pos.above(2)) && hitResult.getDirection() == Direction.UP)
 						box.seatPlayer(player, level, pos);
 				}
