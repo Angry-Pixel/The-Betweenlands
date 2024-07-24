@@ -19,6 +19,8 @@ public class RecipeRegistry {
 	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<BubblerCrabPotFilterRecipe>> BUBBLER_CRAB_POT_FILTER_SERIALIZER = RECIPE_SERIALIZERS.register("bubbler_crab_pot_filter", BubblerCrabPotFilterRecipe.Serializer::new);
 	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<DruidAltarAssemblyRecipe>> DRUID_ALTAR_ASSEMBLY_SERIALIZER = RECIPE_SERIALIZERS.register("druid_altar_assembly", DruidAltarAssemblyRecipe.Serializer::new);
 	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<DruidAltarReversionRecipe>> DRUID_ALTAR_REVERSION_SERIALIZER = RECIPE_SERIALIZERS.register("druid_altar_reversion", DruidAltarReversionRecipe.Serializer::new);
+	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<FluidSteepingPotRecipe>> FLUID_STEEPING_POT_SERIALIZER = RECIPE_SERIALIZERS.register("fluid_steeping", FluidSteepingPotRecipe.Serializer::new);
+	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ItemSteepingPotRecipe>> ITEM_STEEPING_POT_SERIALIZER = RECIPE_SERIALIZERS.register("item_steeping", ItemSteepingPotRecipe.Serializer::new);
 	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<MortarGrindRecipe>> MORTAR_GRIND_SERIALIZER = RECIPE_SERIALIZERS.register("mortar_grind", MortarGrindRecipe.Serializer::new);
 	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<MortarAspectrusRecipe>> MORTAR_ASPECTRUS_SERIALIZER = RECIPE_SERIALIZERS.register("mortar_aspectrus", MortarAspectrusRecipe.Serializer::new);
 	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<PurifierRecipe>> PURIFIER_SERIALIZER = RECIPE_SERIALIZERS.register("purifier", PurifierRecipe.Serializer::new);
@@ -32,5 +34,6 @@ public class RecipeRegistry {
 	public static final DeferredHolder<RecipeType<?>, RecipeType<MortarRecipe>> MORTAR_RECIPE = RECIPE_TYPES.register("mortar", () -> RecipeType.simple(TheBetweenlands.prefix("mortar")));
 	public static final DeferredHolder<RecipeType<?>, RecipeType<PurifierRecipe>> PURIFIER_RECIPE = RECIPE_TYPES.register("purifier", () -> RecipeType.simple(TheBetweenlands.prefix("purifier")));
 	public static final DeferredHolder<RecipeType<?>, RecipeType<SmokingRackRecipe>> SMOKING_RECIPE = RECIPE_TYPES.register("smoking_rack", () -> RecipeType.simple(TheBetweenlands.prefix("smoking_rack")));
+	public static final DeferredHolder<RecipeType<?>, RecipeType<SteepingPotRecipe>> STEEPING_POT_RECIPE = RECIPE_TYPES.register("steeping_pot", () -> RecipeType.simple(TheBetweenlands.prefix("steeping_pot")));
 	public static final DeferredHolder<RecipeType<?>, RecipeType<TrimmingTableRecipe>> TRIMMING_TABLE_RECIPE = RECIPE_TYPES.register("trimming_table", () -> RecipeType.simple(TheBetweenlands.prefix("trimming_table")));
 }
