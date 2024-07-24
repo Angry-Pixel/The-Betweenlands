@@ -559,7 +559,12 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> DEAD_LICHEN = register("dead_lichen", () -> new MossBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().replaceable().strength(0.2F).sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> HANGER = register("hanger", () -> new HangerBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().randomTicks().strength(0.1F).sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> SEEDED_HANGER = register("seeded_hanger", () -> new SeededHangerBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().randomTicks().strength(0.1F).sound(SoundType.GRASS)));
-	//TODO crops and bushes
+	//TODO crops
+	public static final DeferredBlock<Block> PHEROMONE_INFUSED_WEEDWOOD_BUSH = register("pheromone_infused_weedwood_bush", () -> new InfestedWeedwoodBushBlock(0, BlockBehaviour.Properties.of().noOcclusion().randomTicks().strength(0.35F).sound(SoundType.GRASS)));
+	public static final DeferredBlock<Block> MOTH_INFESTED_WEEDWOOD_BUSH = register("moth_infested_weedwood_bush", () -> new InfestedWeedwoodBushBlock(1, BlockBehaviour.Properties.of().noOcclusion().randomTicks().strength(0.35F).sound(SoundType.GRASS)));
+	public static final DeferredBlock<Block> GRUB_INFESTED_WEEDWOOD_BUSH = register("grub_infested_weedwood_bush", () -> new InfestedWeedwoodBushBlock(2, BlockBehaviour.Properties.of().noOcclusion().randomTicks().strength(0.35F).sound(SoundType.GRASS)));
+	public static final DeferredBlock<Block> SILK_COCOONED_WEEDWOOD_BUSH = register("silk_cocooned_weedwood_bush", () -> new InfestedWeedwoodBushBlock(3, BlockBehaviour.Properties.of().noOcclusion().randomTicks().strength(0.35F).sound(SoundType.GRASS)));
+	public static final DeferredBlock<Block> DECAY_INFESTED_WEEDWOOD_BUSH = register("decay_infested_weedwood_bush", () -> new InfestedWeedwoodBushBlock(4, BlockBehaviour.Properties.of().noOcclusion().randomTicks().strength(0.35F).sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> PURIFIED_SWAMP_DIRT = register("purified_swamp_dirt", () -> new Block(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> DUG_SWAMP_DIRT = register("dug_swamp_dirt", () -> new DugDirtBlock(false, BlockBehaviour.Properties.of().randomTicks().strength(0.5F).sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> PURIFIED_DUG_SWAMP_DIRT = register("purified_dug_swamp_dirt", () -> new DugDirtBlock(true, BlockBehaviour.Properties.of().randomTicks().strength(0.5F).sound(SoundType.GRASS)));
@@ -687,6 +692,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> MIST_BRIDGE = register("mist_bridge", () -> new MistBridgeBlock(BlockBehaviour.Properties.of().strength(1.2F, 8.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> SHADOW_WALKER = register("shadow_walker", () -> new ShadowWalkerBlock(BlockBehaviour.Properties.of().strength(1.2F, 8.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> STEEPING_POT = register("steeping_pot", () -> new SteepingPotBlock(BlockBehaviour.Properties.of().noOcclusion().strength(1.5F, 10.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> GRUB_HUB = register("grub_hub", () -> new GrubHubBlock(BlockBehaviour.Properties.of().noOcclusion().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 
 	public static <T extends Block> DeferredBlock<T> register(String name, Supplier<? extends T> block) {
 		return register(name, block, item -> () -> new BlockItem(item.get(), new Item.Properties()));

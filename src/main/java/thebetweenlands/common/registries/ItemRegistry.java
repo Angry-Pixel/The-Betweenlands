@@ -43,6 +43,8 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> WEEDWOOD_FISHING_ROD = ITEMS.register("weedwood_fishing_rod", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> SILK_BUNDLE = ITEMS.register("silk_bundle", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> DIRTY_SILK_BUNDLE = ITEMS.register("dirty_silk_bundle", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> SILK_GRUB = ITEMS.register("silk_grub", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> SILK_COCOON = ITEMS.register("silk_cocoon", () -> new Item(new Item.Properties()));
 
 	public static final DeferredItem<Item> DIRTY_DENTROTHYST_VIAL = ITEMS.register("dirty_dentothyst_vial", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> ORANGE_DENTROTHYST_VIAL = ITEMS.register("orange_dentothyst_vial", () -> new DentrothystVialItem(ItemRegistry.ORANGE_ASPECT_VIAL, new Item.Properties()));

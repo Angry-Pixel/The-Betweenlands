@@ -70,5 +70,6 @@ public class BlockEntityRegistry {
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CrabPotFilterBlockEntity>> CRAB_POT_FILTER = BLOCK_ENTITIES.register("crab_pot_filter", () -> BlockEntityType.Builder.of(CrabPotFilterBlockEntity::new, BlockRegistry.CRAB_POT_FILTER.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SiltGlassJarBlockEntity>> SILT_GLASS_JAR = BLOCK_ENTITIES.register("silt_glass_jar", () -> BlockEntityType.Builder.of(SiltGlassJarBlockEntity::new, BlockRegistry.SILT_GLASS_JAR.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SteepingPotBlockEntity>> STEEPING_POT = BLOCK_ENTITIES.register("steeping_pot", () -> BlockEntityType.Builder.of(SteepingPotBlockEntity::new, BlockRegistry.STEEPING_POT.get()).build(null));
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GrubHubBlockEntity>> GRUB_HUB = BLOCK_ENTITIES.register("grub_hub", () -> BlockEntityType.Builder.of(GrubHubBlockEntity::new, BlockRegistry.GRUB_HUB.get()).build(null));
 
 }
