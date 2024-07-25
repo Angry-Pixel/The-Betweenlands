@@ -225,6 +225,23 @@ public class MothHouseBlockEntity extends NoMenuContainerBlockEntity {
 	}
 
 	@Override
+	public void setItem(int index, ItemStack stack) {
+		if(index == SLOT_SILK) {
+			ItemStack prevStack = this.getItem(index).copy();
+
+			super.setItem(index, stack);
+
+			ItemStack newStack = this.getItem(index);
+
+			if(newStack.getCount() < prevStack.getCount()) {
+				this.onSilkRemoved(prevStack.getCount() - newStack.getCount());
+			}
+		} else {
+			super.setItem(index, stack);
+		}
+	}
+
+	@Override
 	public boolean canPlaceItem(int slot, ItemStack stack) {
 		return slot == SLOT_GRUBS && stack.is(ItemRegistry.SILK_GRUB);
 	}
