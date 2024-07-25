@@ -693,6 +693,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> SHADOW_WALKER = register("shadow_walker", () -> new ShadowWalkerBlock(BlockBehaviour.Properties.of().strength(1.2F, 8.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> STEEPING_POT = register("steeping_pot", () -> new SteepingPotBlock(BlockBehaviour.Properties.of().noOcclusion().strength(1.5F, 10.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> GRUB_HUB = register("grub_hub", () -> new GrubHubBlock(BlockBehaviour.Properties.of().noOcclusion().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> WATER_FILTER = register("water_filter", () -> new WaterFilterBlock(BlockBehaviour.Properties.of().noOcclusion().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 
 	public static <T extends Block> DeferredBlock<T> register(String name, Supplier<? extends T> block) {
 		return register(name, block, item -> () -> new BlockItem(item.get(), new Item.Properties()));
