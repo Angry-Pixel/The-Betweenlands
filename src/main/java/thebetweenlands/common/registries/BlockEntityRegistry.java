@@ -73,5 +73,6 @@ public class BlockEntityRegistry {
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<GrubHubBlockEntity>> GRUB_HUB = BLOCK_ENTITIES.register("grub_hub", () -> BlockEntityType.Builder.of(GrubHubBlockEntity::new, BlockRegistry.GRUB_HUB.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<WaterFilterBlockEntity>> WATER_FILTER = BLOCK_ENTITIES.register("water_filter", () -> BlockEntityType.Builder.of(WaterFilterBlockEntity::new, BlockRegistry.WATER_FILTER.get()).build(null));
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FilteredSiltGlassJarBlockEntity>> FILTERED_SILT_GLASS_JAR = BLOCK_ENTITIES.register("filtered_silt_glass_jar", () -> BlockEntityType.Builder.of(FilteredSiltGlassJarBlockEntity::new, BlockRegistry.FILTERED_SILT_GLASS_JAR.get()).build(null));
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<MothHouseBlockEntity>> MOTH_HOUSE = BLOCK_ENTITIES.register("moth_house", () -> BlockEntityType.Builder.of(MothHouseBlockEntity::new, BlockRegistry.MOTH_HOUSE.get()).build(null));
 
 }
