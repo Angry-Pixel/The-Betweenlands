@@ -1,5 +1,7 @@
 package thebetweenlands.common.items;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,7 +22,8 @@ public class RubberBootsItem extends ArmorItem {
 		return entity instanceof Player player && player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof RubberBootsItem;
 	}
 
-	public static boolean canEntityWalkOnMud(Entity entity) {
+	public static boolean canEntityWalkOnMud(@Nullable Entity entity) {
+		if(entity == null) return false;
 		if(entity instanceof LivingEntity living && ElixirEffectRegistry.EFFECT_HEAVYWEIGHT.get().isActive(living)) return false;
 		boolean canWalk = isEntityWearingRubberBoots(entity);
 		boolean hasLurkerArmor = entity instanceof Player player && entity.isInWater() && player.getItemBySlot(EquipmentSlot.FEET).is(ItemRegistry.LURKER_SKIN_BOOTS);
