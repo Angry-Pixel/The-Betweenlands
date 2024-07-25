@@ -13,7 +13,6 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
-import thebetweenlands.common.block.SiltGlassLanternBlock;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BarrelBlock;
 import thebetweenlands.common.component.entity.circlegem.CircleGemType;
@@ -75,6 +74,8 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> CRIMSON_MIDDLE_GEM_ORE = register("crimson_middle_gem_ore", () -> new CircleGemBlock(CircleGemType.CRIMSON, BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> GREEN_MIDDLE_GEM_ORE = register("green_middle_gem_ore", () -> new CircleGemBlock(CircleGemType.GREEN, BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	//TODO stalactites
+	public static final DeferredBlock<Block> ROOT = register("root", () -> new RootBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.WOOD)));
+	
 	public static final DeferredBlock<Block> SILT = register("silt", () -> new SiltBlock(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.SAND)));
 	public static final DeferredBlock<Block> FILTERED_SILT = register("filtered_silt", () -> new SiltBlock(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.SAND)));
 	public static final DeferredBlock<Block> DEAD_GRASS = register("dead_grass", () -> new DeadGrassBlock(BlockBehaviour.Properties.of().strength(0.5F).randomTicks().sound(SoundType.GRASS)));
