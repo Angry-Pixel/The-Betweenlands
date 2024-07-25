@@ -25,7 +25,7 @@ public class AnimateTrigger extends SimpleCriterionTrigger<AnimateTrigger.Trigge
 		this.trigger(player, (instance) -> instance.matches(input, output));
 	}
 
-	public record TriggerInstance(Optional<ContextAwarePredicate> player, Optional<ItemPredicate> input, Optional<ItemPredicate> output) implements SimpleInstance {
+	public record TriggerInstance(Optional<ContextAwarePredicate> player, Optional<ItemPredicate> input, Optional<ItemPredicate> output) implements SimpleCriterionTrigger.SimpleInstance {
 
 		public static final Codec<AnimateTrigger.TriggerInstance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(AnimateTrigger.TriggerInstance::player),

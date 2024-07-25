@@ -22,7 +22,7 @@ public class GeckoTrigger extends SimpleCriterionTrigger<GeckoTrigger.TriggerIns
 		this.trigger(player, (instance) -> instance.matches(test, release));
 	}
 
-	public record TriggerInstance(Optional<ContextAwarePredicate> player, boolean test, boolean release) implements SimpleInstance {
+	public record TriggerInstance(Optional<ContextAwarePredicate> player, boolean test, boolean release) implements SimpleCriterionTrigger.SimpleInstance {
 
 		public static final Codec<GeckoTrigger.TriggerInstance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(GeckoTrigger.TriggerInstance::player),

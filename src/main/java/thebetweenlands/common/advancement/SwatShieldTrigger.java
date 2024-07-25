@@ -26,7 +26,7 @@ public class SwatShieldTrigger extends SimpleCriterionTrigger<SwatShieldTrigger.
 		this.trigger(player, (instance) -> instance.matches(lootcontext));
 	}
 
-	public record TriggerInstance(Optional<ContextAwarePredicate> player, Optional<ContextAwarePredicate> victim) implements SimpleInstance {
+	public record TriggerInstance(Optional<ContextAwarePredicate> player, Optional<ContextAwarePredicate> victim) implements SimpleCriterionTrigger.SimpleInstance {
 
 		public static final Codec<SwatShieldTrigger.TriggerInstance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(SwatShieldTrigger.TriggerInstance::player),

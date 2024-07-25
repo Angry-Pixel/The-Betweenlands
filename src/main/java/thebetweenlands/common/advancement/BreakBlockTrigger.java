@@ -23,7 +23,7 @@ public class BreakBlockTrigger extends SimpleCriterionTrigger<BreakBlockTrigger.
 		this.trigger(player, (instance) -> instance.matches(player.serverLevel(), pos));
 	}
 
-	public record TriggerInstance(Optional<ContextAwarePredicate> player, Optional<BlockPredicate> block) implements SimpleInstance {
+	public record TriggerInstance(Optional<ContextAwarePredicate> player, Optional<BlockPredicate> block) implements SimpleCriterionTrigger.SimpleInstance {
 
 		public static final Codec<BreakBlockTrigger.TriggerInstance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(BreakBlockTrigger.TriggerInstance::player),

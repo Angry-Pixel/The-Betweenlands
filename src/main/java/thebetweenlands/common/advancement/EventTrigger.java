@@ -25,7 +25,7 @@ public class EventTrigger extends SimpleCriterionTrigger<EventTrigger.TriggerIns
 		this.trigger(player, (instance) -> instance.matches(event));
 	}
 
-	public record TriggerInstance(Optional<ContextAwarePredicate> player, Optional<IEnvironmentEvent> event) implements SimpleInstance {
+	public record TriggerInstance(Optional<ContextAwarePredicate> player, Optional<IEnvironmentEvent> event) implements SimpleCriterionTrigger.SimpleInstance {
 
 		public static final Codec<EventTrigger.TriggerInstance> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 				EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(EventTrigger.TriggerInstance::player),
