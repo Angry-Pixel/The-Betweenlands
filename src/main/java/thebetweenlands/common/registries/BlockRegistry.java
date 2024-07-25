@@ -694,6 +694,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> STEEPING_POT = register("steeping_pot", () -> new SteepingPotBlock(BlockBehaviour.Properties.of().noOcclusion().strength(1.5F, 10.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> GRUB_HUB = register("grub_hub", () -> new GrubHubBlock(BlockBehaviour.Properties.of().noOcclusion().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> WATER_FILTER = register("water_filter", () -> new WaterFilterBlock(BlockBehaviour.Properties.of().noOcclusion().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> FILTERED_SILT_GLASS_JAR = register("filtered_silt_glass_jar", () -> new FilteredSiltGlassJarBlock(BlockBehaviour.Properties.of().noOcclusion().strength(1.0F, 5.0F).sound(SoundType.GLASS)));
 
 	public static <T extends Block> DeferredBlock<T> register(String name, Supplier<? extends T> block) {
 		return register(name, block, item -> () -> new BlockItem(item.get(), new Item.Properties()));
