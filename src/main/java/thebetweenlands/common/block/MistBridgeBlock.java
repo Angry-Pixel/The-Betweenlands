@@ -49,7 +49,9 @@ public class MistBridgeBlock extends Block {
 
 	@Override
 	public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
-		if (!level.isClientSide())
+		if (player.isCreative() && state.getValue(SOLID).booleanValue() == false)
+			super.playerDestroy(level, player, pos, state, blockEntity, tool);
+		else if (!level.isClientSide())
 			level.setBlockAndUpdate(pos, state.setValue(SOLID, false));
 	}
 
