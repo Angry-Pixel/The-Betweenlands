@@ -70,7 +70,7 @@ public class WeedwoodBushBlock extends Block implements FarmablePlant {
 
 	@Override
 	protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		if (context instanceof EntityCollisionContext ctx && ctx.getEntity().getType().is(BetweenlandsEntityTagProvider.IGNORES_WEEDWOOD_BUSHES)) {
+		if (context instanceof EntityCollisionContext ctx && ctx.getEntity() != null && ctx.getEntity().getType().is(BetweenlandsEntityTagProvider.IGNORES_WEEDWOOD_BUSHES)) {
 			return Shapes.empty();
 		}
 		return super.getCollisionShape(state, level, pos, context);
