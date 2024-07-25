@@ -1,4 +1,4 @@
-package thebetweenlands.client.renderer.model.baked;
+package thebetweenlands.client.model.baked;
 
 import java.util.List;
 import java.util.Optional;
@@ -178,7 +178,8 @@ public class RootGeometry implements IUnbakedGeometry<RootGeometry> {
 			} else {
 				quads = ImmutableList.of();
 			}
-			return null;
+			
+			return quads;
 		}
 		
 		@Override
