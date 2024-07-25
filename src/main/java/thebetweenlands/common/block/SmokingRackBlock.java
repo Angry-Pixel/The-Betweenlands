@@ -120,7 +120,7 @@ public class SmokingRackBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		super.createBlockStateDefinition(builder.add(HALF));
+		super.createBlockStateDefinition(builder.add(HALF).add(HEATED));
 	}
 
 	@Nullable
