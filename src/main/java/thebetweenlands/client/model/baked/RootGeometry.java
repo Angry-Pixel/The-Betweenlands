@@ -10,28 +10,35 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.BlockPos.MutableBlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.IDynamicBakedModel;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelProperty;
 import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
-import net.neoforged.neoforge.client.model.pipeline.QuadBakingVertexConsumer;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.RootBlock;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.StalactiteHelper;
 
@@ -49,8 +56,10 @@ public class RootGeometry implements IUnbakedGeometry<RootGeometry> {
 	
 	@Override
 	public BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides) {
-		// TODO redo
-		return new RootDynamicModel(spriteGetter.apply(context.getMaterial(this.textureTop.toString())), spriteGetter.apply(context.getMaterial(this.textureMiddle.toString())), spriteGetter.apply(context.getMaterial(this.textureBottom.toString())));
+		Material materialTop 	= new Material(InventoryMenu.BLOCK_ATLAS, this.textureTop);
+		Material materialMiddle = new Material(InventoryMenu.BLOCK_ATLAS, this.textureMiddle);
+		Material materialBottom = new Material(InventoryMenu.BLOCK_ATLAS, this.textureBottom);
+		return new RootDynamicModel(spriteGetter.apply(materialTop), spriteGetter.apply(materialMiddle), spriteGetter.apply(materialBottom));
 	}
 
 	public static class RootDynamicModel implements IDynamicBakedModel {
@@ -71,15 +80,20 @@ public class RootGeometry implements IUnbakedGeometry<RootGeometry> {
 //			extraData.get(null)
 			// TODO Auto-generated method stub
 			List<BakedQuad> quads;
+
+//			TheBetweenlands.LOGGER.info("Root model get quads for state {}", state.toString());	
+//			for(ModelProperty<?> property : extraData.getProperties()) {
+//				TheBetweenlands.LOGGER.info("Root model property {} has value {}", property.toString(), extraData.get(property));	
+//			}
 			
 			if(side == null) {
-				int distUp = Optional.of(extraData.get(RootBlock.DIST_UP)).orElse(0);
-				int distDown = Optional.of(extraData.get(RootBlock.DIST_DOWN)).orElse(0);
-				boolean noTop = Optional.of(extraData.get(RootBlock.NO_TOP)).orElse(true);
-				boolean noBottom = Optional.of(extraData.get(RootBlock.NO_BOTTOM)).orElse(true);
-				int posX = Optional.of(extraData.get(RootBlock.POS_X)).orElse(0);
-				int posY = Optional.of(extraData.get(RootBlock.POS_Y)).orElse(0);
-				int posZ = Optional.of(extraData.get(RootBlock.POS_Z)).orElse(0);
+				int distUp = Optional.ofNullable(extraData.get(RootBlock.DIST_UP)).orElse(0);
+				int distDown = Optional.ofNullable(extraData.get(RootBlock.DIST_DOWN)).orElse(0);
+				boolean noTop = Optional.ofNullable(extraData.get(RootBlock.NO_TOP)).orElse(true);
+				boolean noBottom = Optional.ofNullable(extraData.get(RootBlock.NO_BOTTOM)).orElse(true);
+				int posX = Optional.ofNullable(extraData.get(RootBlock.POS_X)).orElse(0);
+				int posY = Optional.ofNullable(extraData.get(RootBlock.POS_Y)).orElse(0);
+				int posZ = Optional.ofNullable(extraData.get(RootBlock.POS_Z)).orElse(0);
 				float height = 1.0F;
 
 				int totalHeight = 1 + distDown + distUp;
@@ -130,7 +144,7 @@ public class RootGeometry implements IUnbakedGeometry<RootGeometry> {
 				}
 				
 //				QuadBakingVertexConsumer builder = new QuadBakingVertexConsumer();
-				QuadBuilder builder = new QuadBuilder(24, renderType.format);
+				QuadBuilder builder = new QuadBuilder(24, renderType != null ? renderType.format : DefaultVertexFormat.BLOCK);
 
 				boolean hasTop = distUp == 0 && !noTop;
 				boolean hasBottom = distDown == 0 && !noBottom;
@@ -183,6 +197,48 @@ public class RootGeometry implements IUnbakedGeometry<RootGeometry> {
 		}
 		
 		@Override
+		public ModelData getModelData(BlockAndTintGetter level, BlockPos pos, BlockState state, ModelData modelData) {
+			ModelData coolAndGoodModelData = IDynamicBakedModel.super.getModelData(level, pos, state, modelData);
+
+			final int maxLength = 32;
+			int distUp = 0;
+			int distDown = 0;
+			boolean noTop = false;
+			boolean noBottom = false;
+
+			final int pos_getY = pos.getY();
+			//TODO pool pos probably
+			MutableBlockPos mutablePos = new MutableBlockPos(pos.getX(), pos_getY, pos.getZ());
+			BlockState mutableBlockState = state;
+			//Block block;
+			for(distUp = 0; distUp < maxLength; distUp++) {
+				mutableBlockState = level.getBlockState(mutablePos.setY(pos_getY + (1 + distUp)));
+				//TODO make roots a tag or something?
+				if(mutableBlockState.getBlock() == BlockRegistry.ROOT.get())
+					continue;
+				if(mutableBlockState.isAir() || !mutableBlockState.isSolidRender(level, pos))
+					noTop = true;
+				break;
+			}
+			for(distDown = 0; distDown < maxLength; distDown++)
+			{
+				mutableBlockState = level.getBlockState(mutablePos.setY(pos_getY - (1 + distDown)));
+				//TODO make roots a tag or something?
+				if(mutableBlockState.getBlock() == BlockRegistry.ROOT.get())
+					continue;
+				if(mutableBlockState.isAir() || !mutableBlockState.isSolidRender(level, pos))
+					noBottom = true;
+				break;
+			}
+
+			return coolAndGoodModelData.derive()
+					.with(RootBlock.POS_X, pos.getX()).with(RootBlock.POS_Y, pos_getY).with(RootBlock.POS_Z, pos.getZ())
+					.with(RootBlock.DIST_UP, distUp).with(RootBlock.DIST_DOWN, distDown)
+					.with(RootBlock.NO_TOP, noTop).with(RootBlock.NO_BOTTOM, noBottom)
+					.build();
+		}
+		
+		@Override
 		public boolean useAmbientOcclusion() {
 			return true;
 		}
@@ -222,6 +278,7 @@ public class RootGeometry implements IUnbakedGeometry<RootGeometry> {
 		@Override
 		public RootGeometry read(JsonObject jsonObject, JsonDeserializationContext deserializationContext) throws JsonParseException {
 			JsonObject textures = jsonObject.getAsJsonObject("textures");
+			TheBetweenlands.LOGGER.info("Textures object found: " + (textures != null));
 			ResourceLocation
 				topTexture = MissingTextureAtlasSprite.getLocation(),
 				middleTexture = MissingTextureAtlasSprite.getLocation(),
@@ -230,11 +287,14 @@ public class RootGeometry implements IUnbakedGeometry<RootGeometry> {
 			try {
 				if(textures != null) {
 					String top = textures.get("top").getAsString();
+					TheBetweenlands.LOGGER.info("Texture top " + top);
 					String middle = textures.get("middle").getAsString();
+					TheBetweenlands.LOGGER.info("Texture middle " + middle);
 					String bottom = textures.get("bottom").getAsString();
-					topTexture = ResourceLocation.tryParse(top);
-					middleTexture = ResourceLocation.tryParse(middle);
-					bottomTexture = ResourceLocation.tryParse(bottom);
+					TheBetweenlands.LOGGER.info("Texture bottom " + bottom);
+					topTexture = ResourceLocation.tryParse(top).withPrefix("textures");
+					middleTexture = ResourceLocation.tryParse(middle).withPrefix("textures");
+					bottomTexture = ResourceLocation.tryParse(bottom).withPrefix("textures");
 				}
 			} catch(Exception e) {
 				e.printStackTrace();
