@@ -6,6 +6,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class TemplePillarBlock extends RotatedPillarBlock {
@@ -24,6 +25,7 @@ public class TemplePillarBlock extends RotatedPillarBlock {
 			case X -> X_AABB;
 			case Y -> Y_AABB;
 			case Z -> Z_AABB;
+			default -> Shapes.empty();
 		};
 	}
 }

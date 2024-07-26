@@ -18,6 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.common.registries.BlockRegistry;
 
@@ -54,7 +55,7 @@ public class SulfurWallTorchBlock extends BaseTorchBlock {
 	}
 
 	public static VoxelShape getShape(BlockState state) {
-		return AABBS.get(state.getValue(FACING));
+		return AABBS.getOrDefault(state.getValue(FACING), Shapes.empty());
 	}
 
 	@Override

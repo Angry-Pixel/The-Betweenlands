@@ -30,6 +30,7 @@ public class FilteredSiltGlassJarBlock extends BaseEntityBlock {
 		super(properties);
 	}
 
+	
 	@Override
 	protected MapCodec<? extends BaseEntityBlock> codec() {
 		return null;

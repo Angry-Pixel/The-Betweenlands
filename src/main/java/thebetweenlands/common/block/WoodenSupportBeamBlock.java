@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
@@ -42,7 +43,7 @@ public class WoodenSupportBeamBlock extends HorizontalDirectionalBlock {
 
 	@Override
 	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		return SHAPE_BY_DIRECTION.get(state.getValue(FACING));
+		return SHAPE_BY_DIRECTION.getOrDefault(state.getValue(FACING), Shapes.empty());
 	}
 
 	@Nullable

@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.common.registries.FluidRegistry;
 
@@ -53,7 +54,7 @@ public class BarnacleBlock extends DirectionalBlock implements LiquidBlockContai
 
 	@Override
 	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		return SHAPE_BY_DIRECTION.get(state.getValue(FACING));
+		return SHAPE_BY_DIRECTION.getOrDefault(state.getValue(FACING), Shapes.empty());
 	}
 
 	@Override

@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import thebetweenlands.common.block.entity.ItemShelfBlockEntity;
@@ -44,7 +45,7 @@ public class ItemShelfBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-		return SHAPE_BY_DIRECTION.get(state.getValue(FACING));
+		return SHAPE_BY_DIRECTION.getOrDefault(state.getValue(FACING), Shapes.empty());
 	}
 
 	@Override

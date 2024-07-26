@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.block.entity.GrubHubBlockEntity;
@@ -69,7 +70,7 @@ public class MothHouseBlock extends HorizontalBaseEntityBlock {
 	@Override
 	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
 		if (state.getValue(ON_WALL)) {
-			return WALL_SHAPE_BY_DIRECTION.get(state.getValue(FACING));
+			return WALL_SHAPE_BY_DIRECTION.getOrDefault(state.getValue(FACING), Shapes.empty());
 		} else {
 			return state.getValue(FACING).getAxis() == Direction.Axis.X ? X_SHAPE : Z_SHAPE;
 		}
