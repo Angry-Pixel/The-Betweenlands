@@ -11,7 +11,7 @@ import thebetweenlands.common.registries.AttachmentRegistry;
 
 public record UpdateMudWalkerPacket(long reductionTime) implements CustomPacketPayload {
 
-	public static final Type<UpdateMudWalkerPacket> TYPE = new Type<>(TheBetweenlands.prefix("update_decay_data"));
+	public static final Type<UpdateMudWalkerPacket> TYPE = new Type<>(TheBetweenlands.prefix("update_mud_walker"));
 	public static final StreamCodec<RegistryFriendlyByteBuf, UpdateMudWalkerPacket> STREAM_CODEC = StreamCodec.composite(
 		ByteBufCodecs.VAR_LONG, UpdateMudWalkerPacket::reductionTime,
 		UpdateMudWalkerPacket::new
