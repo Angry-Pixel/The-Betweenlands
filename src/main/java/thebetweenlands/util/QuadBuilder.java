@@ -458,7 +458,6 @@ public class QuadBuilder {
 	//TODO foward-port the old vertex builder maybe? (I think we're almost ignoring VertexFormat with the QuadBakingVertexConsumer)
 	private void putVertex(VertexFormat format, QuadBakingVertexConsumer builder, Vec3 quadNormal, Vertex vert) {
 //		boolean hasTransform = vert.transformation != null && !vert.transformation.equals(TRSRTransformation.identity());
-//		boolean addedVertex = false;
 		builder.addVertex(0, 0, 0); //we probably override it with POSITION later
 		List<VertexFormatElement> elements = format.getElements();
 		for (int e = 0; e < elements.size(); e++) {
@@ -472,7 +471,8 @@ public class QuadBuilder {
 //					vec.get(positionData);
 //				}
 //				builder.put(e, positionData);
-				//maybe override POSITION data
+				
+				//override POSITION data
 				builder.misc(element, Float.floatToIntBits((float) vert.pos.x), Float.floatToIntBits((float) vert.pos.y), Float.floatToIntBits((float) vert.pos.z));//, Float.floatToIntBits(1f));
 				break;
 			case COLOR:
@@ -521,14 +521,14 @@ public class QuadBuilder {
 					break;
 				} else if (vert.blockLight >= 0 && vert.skyLight >= 0 && element.index() == 1){
 //					builder.put(e, ((float)vert.blockLight * 0x20) / 0xFFFF, ((float)vert.skyLight * 0x20) / 0xFFFF);
-					//should maybe be setUv1 or setUV2
-					builder.setUv2((int)((float)vert.blockLight * 0x20) / 0xFFFF, (int)((float)vert.skyLight * 0x20) / 0xFFFF);
-//					builder.misc(element, (int)(((float)vert.blockLight * 0x20) / 0xFFFF), (int)(((float)vert.skyLight * 0x20) / 0xFFFF));
+					// see builder.setLight
+					builder.setUv2((vert.blockLight * 0x20) / 0xFFFF, (vert.skyLight * 0x20) / 0xFFFF);
+//					builder.misc(element, ((vert.blockLight * 0x20) / 0xFFFF), ((vert.skyLight * 0x20) / 0xFFFF));
 					break;
 				}
 			default:
 //				builder.put(e);
-				// TODO re-enable
+				// TODO re-enable?
 //				builder.misc(element, new int[element.byteSize()]);
 				break;
 			}
