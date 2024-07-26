@@ -11,7 +11,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -32,7 +31,6 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.IDynamicBakedModel;
 import net.neoforged.neoforge.client.model.data.ModelData;
-import net.neoforged.neoforge.client.model.data.ModelProperty;
 import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
@@ -59,6 +57,7 @@ public class RootGeometry implements IUnbakedGeometry<RootGeometry> {
 		Material materialTop 	= new Material(InventoryMenu.BLOCK_ATLAS, this.textureTop);
 		Material materialMiddle = new Material(InventoryMenu.BLOCK_ATLAS, this.textureMiddle);
 		Material materialBottom = new Material(InventoryMenu.BLOCK_ATLAS, this.textureBottom);
+		TheBetweenlands.LOGGER.info("sprites: {}, {}, {}", spriteGetter.apply(materialTop).toString(), spriteGetter.apply(materialMiddle).toString(), spriteGetter.apply(materialBottom).toString());
 		return new RootDynamicModel(spriteGetter.apply(materialTop), spriteGetter.apply(materialMiddle), spriteGetter.apply(materialBottom));
 	}
 
@@ -77,14 +76,7 @@ public class RootGeometry implements IUnbakedGeometry<RootGeometry> {
 		
 		@Override
 		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData extraData, @Nullable RenderType renderType) {
-//			extraData.get(null)
-			// TODO Auto-generated method stub
 			List<BakedQuad> quads;
-
-//			TheBetweenlands.LOGGER.info("Root model get quads for state {}", state.toString());	
-//			for(ModelProperty<?> property : extraData.getProperties()) {
-//				TheBetweenlands.LOGGER.info("Root model property {} has value {}", property.toString(), extraData.get(property));	
-//			}
 			
 			if(side == null) {
 				int distUp = Optional.ofNullable(extraData.get(RootBlock.DIST_UP)).orElse(0);
@@ -278,7 +270,6 @@ public class RootGeometry implements IUnbakedGeometry<RootGeometry> {
 		@Override
 		public RootGeometry read(JsonObject jsonObject, JsonDeserializationContext deserializationContext) throws JsonParseException {
 			JsonObject textures = jsonObject.getAsJsonObject("textures");
-			TheBetweenlands.LOGGER.info("Textures object found: " + (textures != null));
 			ResourceLocation
 				topTexture = MissingTextureAtlasSprite.getLocation(),
 				middleTexture = MissingTextureAtlasSprite.getLocation(),
@@ -287,14 +278,11 @@ public class RootGeometry implements IUnbakedGeometry<RootGeometry> {
 			try {
 				if(textures != null) {
 					String top = textures.get("top").getAsString();
-					TheBetweenlands.LOGGER.info("Texture top " + top);
 					String middle = textures.get("middle").getAsString();
-					TheBetweenlands.LOGGER.info("Texture middle " + middle);
 					String bottom = textures.get("bottom").getAsString();
-					TheBetweenlands.LOGGER.info("Texture bottom " + bottom);
-					topTexture = ResourceLocation.tryParse(top).withPrefix("textures");
-					middleTexture = ResourceLocation.tryParse(middle).withPrefix("textures");
-					bottomTexture = ResourceLocation.tryParse(bottom).withPrefix("textures");
+					topTexture = ResourceLocation.tryParse(top);
+					middleTexture = ResourceLocation.tryParse(middle);
+					bottomTexture = ResourceLocation.tryParse(bottom);
 				}
 			} catch(Exception e) {
 				e.printStackTrace();

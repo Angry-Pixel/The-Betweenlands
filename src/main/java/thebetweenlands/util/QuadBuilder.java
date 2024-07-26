@@ -507,8 +507,8 @@ public class QuadBuilder {
 				break;
 			case UV:
 				if (element.index() == 0) {
-					float u = vert.u;
-					float v = vert.v;
+					float u = vert.u / 16f;
+					float v = vert.v / 16f;
 					if(vert.sprite != null) {
 						float pu = u;
 						float pv = v;
@@ -522,7 +522,8 @@ public class QuadBuilder {
 				} else if (vert.blockLight >= 0 && vert.skyLight >= 0 && element.index() == 1){
 //					builder.put(e, ((float)vert.blockLight * 0x20) / 0xFFFF, ((float)vert.skyLight * 0x20) / 0xFFFF);
 					//should maybe be setUv1 or setUV2
-					builder.misc(element, (int)(((float)vert.blockLight * 0x20) / 0xFFFF), (int)(((float)vert.skyLight * 0x20) / 0xFFFF));
+					builder.setUv2((int)((float)vert.blockLight * 0x20) / 0xFFFF, (int)((float)vert.skyLight * 0x20) / 0xFFFF);
+//					builder.misc(element, (int)(((float)vert.blockLight * 0x20) / 0xFFFF), (int)(((float)vert.skyLight * 0x20) / 0xFFFF));
 					break;
 				}
 			default:
