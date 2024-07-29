@@ -73,9 +73,9 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> AQUA_MIDDLE_GEM_ORE = register("aqua_middle_gem_ore", () -> new CircleGemBlock(CircleGemType.AQUA, BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> CRIMSON_MIDDLE_GEM_ORE = register("crimson_middle_gem_ore", () -> new CircleGemBlock(CircleGemType.CRIMSON, BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> GREEN_MIDDLE_GEM_ORE = register("green_middle_gem_ore", () -> new CircleGemBlock(CircleGemType.GREEN, BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
-	//TODO stalactites
-	public static final DeferredBlock<Block> ROOT = register("root", () -> new RootBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.WOOD)));
-	
+	public static final DeferredBlock<Block> STALACTITE = register("stalactite", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> LIFE_CRYSTAL_STALACTITE = register("life_crystal_stalactite", () -> new LifeCrystalStalactiteBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> LIFE_CRYSTAL_ORE_STALACTITE = register("life_crystal_ore_stalactite", () -> new LifeCrystalStalactiteBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> SILT = register("silt", () -> new SiltBlock(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.SAND)));
 	public static final DeferredBlock<Block> FILTERED_SILT = register("filtered_silt", () -> new SiltBlock(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.SAND)));
 	public static final DeferredBlock<Block> DEAD_GRASS = register("dead_grass", () -> new DeadGrassBlock(BlockBehaviour.Properties.of().strength(0.5F).randomTicks().sound(SoundType.GRASS)));
@@ -504,7 +504,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> SHELF_FUNGUS = register("shelf_fungus", () -> new ShelfFungusBlock(BlockBehaviour.Properties.of().strength(0.2F).sound(SoundType.WOOL)));
 	public static final DeferredBlock<Block> ALGAE = register("algae", () -> new AlgaeBlock(BlockBehaviour.Properties.of().instabreak().pushReaction(PushReaction.DESTROY).noCollission().noOcclusion().replaceable().sound(SoundType.WET_GRASS)));
 	public static final DeferredBlock<Block> POISON_IVY = register("poison_ivy", () -> new PoisonIvyBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).replaceable().noCollission().strength(0.2F).sound(SoundType.VINE).ignitedByLava().pushReaction(PushReaction.DESTROY)));
-	//TODO root block, works like stalactites
+	public static final DeferredBlock<Block> ROOT = register("root", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> GIANT_ROOT = register("giant_root", () -> new Block(BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.WOOD).ignitedByLava()));
 	public static final DeferredBlock<Block> ARROW_ARUM = register("arrow_arum", () -> new PlantBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().offsetType(BlockBehaviour.OffsetType.XYZ).instabreak().sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> BLUE_EYED_GRASS = register("blue_eyed_grass", () -> new PlantBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().offsetType(BlockBehaviour.OffsetType.XYZ).instabreak().sound(SoundType.GRASS)));

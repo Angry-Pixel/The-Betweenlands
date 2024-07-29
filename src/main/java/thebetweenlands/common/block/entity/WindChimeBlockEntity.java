@@ -1,6 +1,5 @@
 package thebetweenlands.common.block.entity;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -9,7 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -29,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+//TODO fix particles
 public class WindChimeBlockEntity extends SyncedBlockEntity {
 
 	public int renderTicks;
@@ -37,8 +36,8 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 	public int prevChimeTicks;
 	public int chimeTicks;
 
-	@Nullable
-	private ParticleBatch particleBatch;
+//	@Nullable
+//	private ParticleBatch particleBatch;
 
 	private int fadeOutTimer = 0;
 
@@ -123,98 +122,98 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 
 	private void triggerAdvancement(Level level, BlockPos pos) {
 		AABB aabb = new AABB(pos).inflate(16);
-		for(ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, aabb, EntitySelector.NO_SPECTATORS)) {
-			if(player.distanceToSqr(Vec3.atCenterOf(pos)) <= 256) {
+		for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, aabb, EntitySelector.NO_SPECTATORS)) {
+			if (player.distanceToSqr(Vec3.atCenterOf(pos)) <= 256) {
 				AdvancementCriteriaRegistry.WIND_CHIME_PREDICTION.get().trigger(player);
 			}
 		}
 	}
 
-	private void updateParticles(Level level, BlockPos pos, int maxPredictionTime, int nextPrediction, IPredictableEnvironmentEvent nextEvent, ResourceLocation[] nextEventVisions) {
-		if(this.predictedEvent != null && this.predictedEvent != nextEvent && this.fadeOutTimer < 20) {
+	private void updateParticles(Level level, BlockPos pos, int maxPredictionTime, int nextPrediction, @Nullable IPredictableEnvironmentEvent nextEvent, ResourceLocation@Nullable[] nextEventVisions) {
+		if (this.predictedEvent != null && this.predictedEvent != nextEvent && this.fadeOutTimer < 20) {
 			this.fadeOutTimer++;
 
-			if(this.fadeOutTimer >= 20) {
+			if (this.fadeOutTimer >= 20) {
 				this.fadeOutTimer = 0;
 				this.predictedEvent = nextEvent;
 				this.predictedTimeUntilActivation = -1;
 
 				this.predictedEventVision = nextEventVisions != null && nextEventVisions.length >= 1 ? nextEventVisions[level.getRandom().nextInt(nextEventVisions.length)] : null;
 
-				if(this.predictedEventVision != null) {
-					this.particleBatch = ParticleVisionOrb.createParticleBatch(() -> this.predictedEventVision);
-				} else {
-					this.particleBatch = null;
-				}
+//				if (this.predictedEventVision != null) {
+//					this.particleBatch = ParticleVisionOrb.createParticleBatch(() -> this.predictedEventVision);
+//				} else {
+//					this.particleBatch = null;
+//				}
 			}
-		} else if(this.predictedEvent == null) {
+		} else if (this.predictedEvent == null) {
 			this.predictedEvent = nextEvent;
 
-			if(nextEvent != null) {
+			if (nextEvent != null) {
 				this.predictedEventVision = nextEventVisions != null && nextEventVisions.length >= 1 ? nextEventVisions[level.getRandom().nextInt(nextEventVisions.length)] : null;
 
-				if(this.predictedEventVision != null) {
-					this.particleBatch = ParticleVisionOrb.createParticleBatch(() -> this.predictedEventVision);
-				} else {
-					this.particleBatch = null;
-				}
+//				if (this.predictedEventVision != null) {
+//					this.particleBatch = ParticleVisionOrb.createParticleBatch(() -> this.predictedEventVision);
+//				} else {
+//					this.particleBatch = null;
+//				}
 			} else {
 				this.predictedEventVision = null;
-				this.particleBatch = null;
+//				this.particleBatch = null;
 			}
 		}
 
-		if(this.predictedEvent == nextEvent && nextEvent != null) {
-			if(this.predictedTimeUntilActivation == -1 || this.predictedTimeUntilActivation >= maxPredictionTime && nextPrediction < maxPredictionTime) {
+		if (this.predictedEvent == nextEvent && nextEvent != null) {
+			if (this.predictedTimeUntilActivation == -1 || this.predictedTimeUntilActivation >= maxPredictionTime && nextPrediction < maxPredictionTime) {
 				this.playChimes(level, pos, nextEvent);
-			} else if(this.predictedTimeUntilActivation >= maxPredictionTime * 0.4f && nextPrediction < maxPredictionTime * 0.4f) {
+			} else if (this.predictedTimeUntilActivation >= maxPredictionTime * 0.4f && nextPrediction < maxPredictionTime * 0.4f) {
 				this.playChimes(level, pos, nextEvent);
-			} else if(this.predictedTimeUntilActivation >= maxPredictionTime * 0.2f && nextPrediction < maxPredictionTime * 0.2f) {
+			} else if (this.predictedTimeUntilActivation >= maxPredictionTime * 0.2f && nextPrediction < maxPredictionTime * 0.2f) {
 				this.playChimes(level, pos, nextEvent);
 			}
 
 			this.predictedTimeUntilActivation = nextPrediction;
 
-			if(this.particleBatch != null) {
-				Entity view = Minecraft.getInstance().getCameraEntity();
-
-				if(view != null && view.distanceToSqr(Vec3.atCenterOf(pos)) < 256) {
-					double cx = pos.getX() + 0.5f;
-					double cy = pos.getY() + 0.2f;
-					double cz = pos.getZ() + 0.5f;
-
-					double rx = level.getRandom().nextFloat() - 0.5f;
-					double ry = level.getRandom().nextFloat() - 0.5f;
-					double rz = level.getRandom().nextFloat() - 0.5f;
-					double len = Math.sqrt(rx * rx + ry * ry + rz * rz);
-					rx /= len;
-					ry /= len;
-					rz /= len;
-
-					int size = level.getRandom().nextInt(3);
-					rx *= 0.6f + size * 0.1f;
-					ry *= 0.6f + size * 0.1f;
-					rz *= 0.6f + size * 0.1f;
-
-					ParticleVisionOrb particle = (ParticleVisionOrb) BLParticles.WIND_CHIME_VISION
-						.create(len, cx + rx, cy + ry, cz + rz, ParticleFactory.ParticleArgs.get()
-							.withData(cx, cy, cz, 150)
-							.withMotion(0, 0, 0)
-							.withColor(1.0f, 1.0f, 1.0f, 0.85f)
-							.withScale(0.85f));
-
-					particle.setAlphaFunction(() -> 1.0f - this.fadeOutTimer / 20.0f);
-
-					BatchedParticleRenderer.INSTANCE.addParticle(this.particleBatch, particle);
-				}
-			}
+//			if (this.particleBatch != null) {
+//				Entity view = Minecraft.getInstance().getCameraEntity();
+//
+//				if (view != null && view.distanceToSqr(Vec3.atCenterOf(pos)) < 256) {
+//					double cx = pos.getX() + 0.5f;
+//					double cy = pos.getY() + 0.2f;
+//					double cz = pos.getZ() + 0.5f;
+//
+//					double rx = level.getRandom().nextFloat() - 0.5f;
+//					double ry = level.getRandom().nextFloat() - 0.5f;
+//					double rz = level.getRandom().nextFloat() - 0.5f;
+//					double len = Math.sqrt(rx * rx + ry * ry + rz * rz);
+//					rx /= len;
+//					ry /= len;
+//					rz /= len;
+//
+//					int size = level.getRandom().nextInt(3);
+//					rx *= 0.6f + size * 0.1f;
+//					ry *= 0.6f + size * 0.1f;
+//					rz *= 0.6f + size * 0.1f;
+//
+//					ParticleVisionOrb particle = (ParticleVisionOrb) BLParticles.WIND_CHIME_VISION
+//						.create(len, cx + rx, cy + ry, cz + rz, ParticleFactory.ParticleArgs.get()
+//							.withData(cx, cy, cz, 150)
+//							.withMotion(0, 0, 0)
+//							.withColor(1.0f, 1.0f, 1.0f, 0.85f)
+//							.withScale(0.85f));
+//
+//					particle.setAlphaFunction(() -> 1.0f - this.fadeOutTimer / 20.0f);
+//
+//					BatchedParticleRenderer.INSTANCE.addParticle(this.particleBatch, particle);
+//				}
+//			}
 		} else {
 			this.predictedTimeUntilActivation = -1;
 		}
 
-		if(this.particleBatch != null) {
-			BatchedParticleRenderer.INSTANCE.updateBatch(this.particleBatch);
-		}
+//		if (this.particleBatch != null) {
+//			BatchedParticleRenderer.INSTANCE.updateBatch(this.particleBatch);
+//		}
 	}
 
 	private void playChimes(Level level, BlockPos pos, IPredictableEnvironmentEvent event) {
@@ -222,7 +221,7 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 
 		SoundEvent chimes = event.getChimesSound();
 
-		if(chimes != null) {
+		if (chimes != null) {
 			level.playLocalSound(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, chimes, SoundSource.BLOCKS, 2.0F, 1.0F, false);
 		}
 
@@ -289,11 +288,12 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 		return null;
 	}
 
-	@Nullable
-	public ParticleBatch getParticleBatch() {
-		return this.particleBatch;
-	}
+//	@Nullable
+//	public ParticleBatch getParticleBatch() {
+//		return this.particleBatch;
+//	}
 
+	@Nullable
 	public IPredictableEnvironmentEvent getPredictedEvent() {
 		return this.predictedEvent;
 	}

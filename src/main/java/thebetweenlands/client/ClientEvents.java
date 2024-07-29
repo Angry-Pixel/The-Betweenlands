@@ -6,18 +6,14 @@ import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.EventBusSubscriber.Bus;
 import net.neoforged.neoforge.client.event.*;
 import javax.annotation.Nullable;
 
+import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.renderer.entity.RenderGecko;
 import thebetweenlands.client.renderer.entity.RenderSwampHag;
 import thebetweenlands.client.renderer.entity.RenderWight;
-import thebetweenlands.client.renderer.model.baked.RootGeometry;
 import thebetweenlands.client.model.entity.ModelGecko;
 import thebetweenlands.client.model.entity.ModelSwampHag;
 import thebetweenlands.client.model.entity.ModelWight;
@@ -31,17 +27,6 @@ import thebetweenlands.common.registries.*;
 
 public class ClientEvents {
 
-	// Wouldn't work with normal SubscribeEvents
-	@EventBusSubscriber(modid = TheBetweenlands.ID, value = Dist.CLIENT, bus = Bus.MOD)
-	public static class ModBusClientEvents {
-		
-		@SubscribeEvent
-		public static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
-			event.register(TheBetweenlands.prefix("root"), RootGeometry.RootGeometryLoader.INSTANCE);
-		}
-		
-	}
-	
 	private static final int DEEP_COLOR_R = 19;
 	private static final int DEEP_COLOR_G = 24;
 	private static final int DEEP_COLOR_B = 68;
@@ -56,12 +41,17 @@ public class ClientEvents {
 		eventbus.addListener(ClientEvents::particleStuff);
 		eventbus.addListener(ClientEvents::registerBlockColors);
 		eventbus.addListener(ClientEvents::registerReloadListeners);
+		eventbus.addListener(ClientEvents::registerGeometryLoaders);
 	}
 
 	private static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
 		event.registerEntityRenderer(EntityRegistry.SWAMP_HAG.get(), RenderSwampHag::new);
 		event.registerEntityRenderer(EntityRegistry.GECKO.get(), RenderGecko::new);
 		event.registerEntityRenderer(EntityRegistry.WIGHT.get(), RenderWight::new);
+	}
+
+	private static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
+		event.register(TheBetweenlands.prefix("root"), RootGeometry.RootGeometryLoader.INSTANCE);
 	}
 
 	public static void registerReloadListeners(RegisterClientReloadListenersEvent event) {
