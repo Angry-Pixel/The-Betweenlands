@@ -1,74 +1,54 @@
 package thebetweenlands.client.model.entity;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HeadedModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import thebetweenlands.client.model.MowzieModelBase;
-import thebetweenlands.common.entities.BetweenlandsEntity;
+import thebetweenlands.common.entities.Gecko;
 
-public class ModelGecko<T extends BetweenlandsEntity> extends MowzieModelBase<T> implements HeadedModel {
+public class GeckoModel<T extends Gecko> extends MowzieModelBase<T> implements HeadedModel {
 
 	public static int textureWidth = 64;
 	public static int textureHeight = 32;
 
+	public ModelPart root;
 	public ModelPart body_base;
-
 	public ModelPart head;
-
 	public ModelPart legleft_f1;
-
 	public ModelPart legright_f1;
-
 	public ModelPart legleft_b1;
-
 	public ModelPart legright_b1;
-
 	public ModelPart tail1;
-
 	public ModelPart tail2;
-
 	public ModelPart tail3;
-
 	public ModelPart crane;
-
 	public ModelPart tongue;
-
 	public ModelPart legleft_f2;
-
 	public ModelPart legright_f2;
-
 	public ModelPart legleft_b2;
-
 	public ModelPart legright_b2;
-
-	public ModelPart ModelCore;
-
 	private ModelPart[] tail;
 
-	// constructs the model part herarcy
-	public ModelGecko(ModelPart core) {
+	public GeckoModel(ModelPart root) {
+		this.root = root;
+		this.body_base = root.getChild("body_base");
+		this.tail1 = body_base.getChild("tail1");
+		this.tail2 = tail1.getChild("tail2");
+		this.tail3 = tail2.getChild("tail3");
+		this.head = root.getChild("head");
+		this.tongue = this.head.getChild("tongue");
+		this.crane = this.head.getChild("crane");
+		this.legleft_f1 = root.getChild("legleft_f1");
+		this.legleft_b1 = root.getChild("legleft_b1");
+		this.legright_f1 = root.getChild("legright_f1");
+		this.legright_b1 = root.getChild("legright_b1");
+		this.legleft_f2 = this.legleft_f1.getChild("legleft_f2");
+		this.legleft_b2 = this.legleft_b1.getChild("legleft_b2");
+		this.legright_f2 = this.legright_f1.getChild("legright_f2");
+		this.legright_b2 = this.legright_b1.getChild("legright_b2");
 
-		ModelCore = core;
-		body_base = core.getChild("body_base");
-		tail1 = body_base.getChild("tail1");
-		tail2 = tail1.getChild("tail2");
-		tail3 = tail2.getChild("tail3");
-		head = core.getChild("head");
-		tongue = head.getChild("tongue");
-		crane = head.getChild("crane");
-		legleft_f1 = core.getChild("legleft_f1");
-		legleft_b1 = core.getChild("legleft_b1");
-		legright_f1 = core.getChild("legright_f1");
-		legright_b1 = core.getChild("legright_b1");
-		legleft_f2 = legleft_f1.getChild("legleft_f2");
-		legleft_b2 = legleft_b1.getChild("legleft_b2");
-		legright_f2 = legright_f1.getChild("legright_f2");
-		legright_b2 = legright_b1.getChild("legright_b2");
-
-		tail = new ModelPart[]{tail3, tail2, tail1};
+		this.tail = new ModelPart[]{this.tail3, this.tail2, this.tail1};
 	}
 
 	public static LayerDefinition createModelLayer() {
@@ -102,46 +82,39 @@ public class ModelGecko<T extends BetweenlandsEntity> extends MowzieModelBase<T>
 
 	@Override
 	public ModelPart root() {
-		return ModelCore;
+		return this.root;
 	}
 
 	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAngle, float p_102621_, float p_102622_,
-						  float p_102623_) {
-		faceTarget(head, 1, p_102622_, p_102623_);
+	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+		this.faceTarget(this.head, 1, netHeadYaw, headPitch);
 
-		if (limbSwingAngle > 0.4) {
-			limbSwingAngle = 0.4F;
+		if (limbSwingAmount > 0.4) {
+			limbSwingAmount = 0.4F;
 		}
 
 		float globalSpeed = 1, globalDegree = 1, frontOffset = 0.85F;
 
-		walk(legleft_f1, globalSpeed, globalDegree, false, frontOffset, 0, limbSwing, limbSwingAngle);
-		walk(legleft_f2, globalSpeed, 1.5F * globalDegree, false, 2 + frontOffset, -0.4F * globalDegree, limbSwing, limbSwingAngle);
-		walk(legright_f1, globalSpeed, globalDegree, true, frontOffset, 0, limbSwing, limbSwingAngle);
-		walk(legright_f2, globalSpeed, 1.5F * globalDegree, true, 2 + frontOffset, -0.4F * globalDegree, limbSwing, limbSwingAngle);
+		this.walk(this.legleft_f1, globalSpeed, globalDegree, false, frontOffset, 0, limbSwing, limbSwingAmount);
+		this.walk(this.legleft_f2, globalSpeed, 1.5F * globalDegree, false, 2 + frontOffset, -0.4F * globalDegree, limbSwing, limbSwingAmount);
+		this.walk(this.legright_f1, globalSpeed, globalDegree, true, frontOffset, 0, limbSwing, limbSwingAmount);
+		this.walk(this.legright_f2, globalSpeed, 1.5F * globalDegree, true, 2 + frontOffset, -0.4F * globalDegree, limbSwing, limbSwingAmount);
 
-		walk(legleft_b1, globalSpeed, globalDegree, false, 0, -2.5F * globalDegree, limbSwing, limbSwingAngle);
-		walk(legleft_b2, globalSpeed, globalDegree, false, -1, 2.5F * globalDegree, limbSwing, limbSwingAngle);
-		walk(legright_b1, globalSpeed, globalDegree, true, 0, -2.5F * globalDegree, limbSwing, limbSwingAngle);
-		walk(legright_b2, globalSpeed, globalDegree, true, -1, 2.5F * globalDegree, limbSwing, limbSwingAngle);
+		this.walk(this.legleft_b1, globalSpeed, globalDegree, false, 0, -2.5F * globalDegree, limbSwing, limbSwingAmount);
+		this.walk(this.legleft_b2, globalSpeed, globalDegree, false, -1, 2.5F * globalDegree, limbSwing, limbSwingAmount);
+		this.walk(this.legright_b1, globalSpeed, globalDegree, true, 0, -2.5F * globalDegree, limbSwing, limbSwingAmount);
+		this.walk(this.legright_b2, globalSpeed, globalDegree, true, -1, 2.5F * globalDegree, limbSwing, limbSwingAmount);
 
-		float frame = entity.tickCount + p_102621_;
+		float frame = entity.tickCount + ageInTicks;
 		float tongueControl = (int) ((Math.sin(0.15F * frame - Math.cos(0.15F * frame)) + 1) / 2 + 0.5F);
-		tongue.visible = tongueControl == 1;
-		walk(tongue, 2, 1, false, 0, 0, frame, 1);
-		chainWave(tail, 0.2F, 0.1f, 0, frame, 1);
-		chainSwing(tail, 0.4F, 0.15f, 3, frame, 1);
-	}
-
-	public static MeshDefinition createBodyMesh(CubeDeformation none) {
-		MeshDefinition meshdefinition = new MeshDefinition();
-		PartDefinition partdefinition = meshdefinition.getRoot();
-		return meshdefinition;
+		this.tongue.visible = tongueControl == 1;
+		this.walk(this.tongue, 2, 1, false, 0, 0, frame, 1);
+		this.chainWave(this.tail, 0.2F, 0.1f, 0, frame, 1);
+		this.chainSwing(this.tail, 0.4F, 0.15f, 3, frame, 1);
 	}
 
 	@Override
 	public ModelPart getHead() {
-		return head;
+		return this.head;
 	}
 }

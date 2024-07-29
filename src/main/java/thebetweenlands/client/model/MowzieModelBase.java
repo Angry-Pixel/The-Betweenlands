@@ -3,10 +3,11 @@ package thebetweenlands.client.model;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.world.entity.Entity;
 import thebetweenlands.common.entities.BetweenlandsEntity;
 
 // This ported nicely*!
-public abstract class MowzieModelBase<T extends BetweenlandsEntity> extends HierarchicalModel<T> {
+public abstract class MowzieModelBase<T extends Entity> extends HierarchicalModel<T> {
 
 	/**
 	 * Rotates a box to face where the entity is looking.

@@ -18,7 +18,7 @@ import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.AspectItem;
 import thebetweenlands.api.aspect.DiscoveryContainer;
 import thebetweenlands.common.block.entity.GeckoCageBlockEntity;
-import thebetweenlands.common.entities.EntityGecko;
+import thebetweenlands.common.entities.Gecko;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockEntityRegistry;
@@ -39,7 +39,7 @@ public class GeckoCageBlock extends HorizontalBaseEntityBlock {
 		if (!level.isClientSide()) {
 			if (blockEntity instanceof GeckoCageBlockEntity cage) {
 				if (cage.hasGecko()) {
-					EntityGecko gecko = new EntityGecko(EntityRegistry.GECKO.get(), level);
+					Gecko gecko = new Gecko(EntityRegistry.GECKO.get(), level);
 					gecko.setHealth(cage.getGeckoUsages());
 					gecko.moveTo(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, 0.0F, 0.0F);
 					if (cage.getGeckoName() != null && !cage.getGeckoName().isEmpty())
