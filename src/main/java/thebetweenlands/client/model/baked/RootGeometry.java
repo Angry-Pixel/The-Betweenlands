@@ -4,10 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import com.google.common.base.Predicates;
-import net.neoforged.neoforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.Nullable;
 
+import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
@@ -33,15 +32,15 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.IDynamicBakedModel;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelProperty;
 import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.StalactiteHelper;
 
-public record RootGeometry(ResourceLocation textureTop, ResourceLocation textureMiddle, ResourceLocation textureBottom) implements IUnbakedGeometry<RootGeometry> {
+public record RootGeometry(ResourceLocation textureTop, ResourceLocation textureMiddle, ResourceLocation textureBottom, ResourceLocation textureParticle) implements IUnbakedGeometry<RootGeometry> {
 
 	public static final ModelProperty<Boolean> NO_BOTTOM = new ModelProperty<>(Predicates.notNull());
 	public static final ModelProperty<Boolean> NO_TOP = new ModelProperty<>(Predicates.notNull());
@@ -56,11 +55,12 @@ public record RootGeometry(ResourceLocation textureTop, ResourceLocation texture
 		Material materialTop = new Material(InventoryMenu.BLOCK_ATLAS, this.textureTop);
 		Material materialMiddle = new Material(InventoryMenu.BLOCK_ATLAS, this.textureMiddle);
 		Material materialBottom = new Material(InventoryMenu.BLOCK_ATLAS, this.textureBottom);
+		Material materialParticle = new Material(InventoryMenu.BLOCK_ATLAS, this.textureParticle);
 
-		return new RootDynamicModel(spriteGetter.apply(materialTop), spriteGetter.apply(materialMiddle), spriteGetter.apply(materialBottom));
+		return new RootDynamicModel(spriteGetter.apply(materialTop), spriteGetter.apply(materialMiddle), spriteGetter.apply(materialBottom), spriteGetter.apply(materialParticle));
 	}
 
-	public record RootDynamicModel(TextureAtlasSprite textureTop, TextureAtlasSprite textureMiddle, TextureAtlasSprite textureBottom) implements IDynamicBakedModel {
+	public record RootDynamicModel(TextureAtlasSprite textureTop, TextureAtlasSprite textureMiddle, TextureAtlasSprite textureBottom, TextureAtlasSprite textureParticle) implements IDynamicBakedModel {
 
 		@Override
 		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource random, ModelData extraData, @Nullable RenderType renderType) {
@@ -240,7 +240,7 @@ public record RootGeometry(ResourceLocation textureTop, ResourceLocation texture
 
 		@Override
 		public TextureAtlasSprite getParticleIcon() {
-			return this.textureTop;
+			return this.textureParticle;
 		}
 
 		@Override
@@ -258,22 +258,29 @@ public record RootGeometry(ResourceLocation textureTop, ResourceLocation texture
 			ResourceLocation
 				topTexture = MissingTextureAtlasSprite.getLocation(),
 				middleTexture = MissingTextureAtlasSprite.getLocation(),
-				bottomTexture = MissingTextureAtlasSprite.getLocation();
+				bottomTexture = MissingTextureAtlasSprite.getLocation(),
+				particleTexture = MissingTextureAtlasSprite.getLocation();
 
 			try {
 				if (textures != null) {
 					String top = textures.get("top").getAsString();
 					String middle = textures.get("middle").getAsString();
 					String bottom = textures.get("bottom").getAsString();
+					String particle = textures.get("particle").getAsString();
 					topTexture = ResourceLocation.tryParse(top);
 					middleTexture = ResourceLocation.tryParse(middle);
 					bottomTexture = ResourceLocation.tryParse(bottom);
+					particleTexture = ResourceLocation.tryParse(particle);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			
+			if(particleTexture == null || particleTexture.equals(MissingTextureAtlasSprite.getLocation())) {
+				particleTexture = topTexture;
+			}
 
-			return new RootGeometry(topTexture, middleTexture, bottomTexture);
+			return new RootGeometry(topTexture, middleTexture, bottomTexture, particleTexture);
 		}
 
 	}
