@@ -1,0 +1,15 @@
+{
+	"variants": {
+		"": [
+			{
+                "model": "thebetweenlands:internal/root",
+                "textures": {
+                    "particle": "thebetweenlands:blocks/stalactite_middle",
+                    "top": "thebetweenlands:blocks/stalactite_top",
+                    "middle": "thebetweenlands:blocks/stalactite_middle",
+                    "bottom": "thebetweenlands:blocks/stalactite_bottom"
+                }
+            }
+		]
+	}
+}

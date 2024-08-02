@@ -2,7 +2,12 @@ package thebetweenlands.util;
 
 import java.util.Random;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.state.BlockState;
+
 public class StalactiteHelper {
+	
 	public double tX, tZ;
 	public double bX, bZ;
 
@@ -57,5 +62,12 @@ public class StalactiteHelper {
 
 	private static float randRange(Random rand, float min, float max) {
 		return rand.nextFloat() * (max - min) + min;
+	}
+	
+
+	public static interface IStalactite {
+		public default boolean doesConnect(BlockAndTintGetter level, BlockPos pos, BlockState state) {
+			return state.getBlock() == this;
+		}
 	}
 }

@@ -36,9 +36,11 @@ import net.neoforged.neoforge.client.model.data.ModelProperty;
 import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
+import thebetweenlands.common.block.StalactiteBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.StalactiteHelper;
+import thebetweenlands.util.StalactiteHelper.IStalactite;
 
 public record RootGeometry(ResourceLocation textureTop, ResourceLocation textureMiddle, ResourceLocation textureBottom, ResourceLocation textureParticle) implements IUnbakedGeometry<RootGeometry> {
 
@@ -180,21 +182,29 @@ public record RootGeometry(ResourceLocation textureTop, ResourceLocation texture
 		public ModelData getModelData(BlockAndTintGetter level, BlockPos pos, BlockState state, ModelData modelData) {
 			ModelData coolAndGoodModelData = IDynamicBakedModel.super.getModelData(level, pos, state, modelData);
 
-			final int maxLength = 32;
+			final int maxLength = StalactiteBlock.MAX_LENGTH;
 			int distUp = 0;
 			int distDown = 0;
 			boolean noTop = false;
 			boolean noBottom = false;
 
 			final int pos_getY = pos.getY();
+
+			if(state.getBlock() instanceof IStalactite == false) {
+				return coolAndGoodModelData.derive()
+					.with(POS_X, pos.getX()).with(POS_Y, pos_getY).with(POS_Z, pos.getZ())
+					.with(DIST_UP, 0).with(DIST_DOWN, 0)
+					.with(NO_TOP, noTop).with(NO_BOTTOM, noBottom)
+					.build();
+			}
+			IStalactite stalactite = (IStalactite)state.getBlock();
+			
 			//TODO pool pos probably
 			MutableBlockPos mutablePos = new MutableBlockPos(pos.getX(), pos_getY, pos.getZ());
 			BlockState mutableBlockState = state;
-			//Block block;
 			for (distUp = 0; distUp < maxLength; distUp++) {
 				mutableBlockState = level.getBlockState(mutablePos.setY(pos_getY + (1 + distUp)));
-				//TODO make roots a tag or something?
-				if (mutableBlockState.getBlock() == BlockRegistry.ROOT.get())
+				if (stalactite.doesConnect(level, mutablePos, mutableBlockState))
 					continue;
 				if (mutableBlockState.isAir() || !mutableBlockState.isSolidRender(level, pos))
 					noTop = true;
@@ -202,8 +212,7 @@ public record RootGeometry(ResourceLocation textureTop, ResourceLocation texture
 			}
 			for (distDown = 0; distDown < maxLength; distDown++) {
 				mutableBlockState = level.getBlockState(mutablePos.setY(pos_getY - (1 + distDown)));
-				//TODO make roots a tag or something?
-				if (mutableBlockState.getBlock() == BlockRegistry.ROOT.get())
+				if (stalactite.doesConnect(level, mutablePos, mutableBlockState))
 					continue;
 				if (mutableBlockState.isAir() || !mutableBlockState.isSolidRender(level, pos))
 					noBottom = true;

@@ -79,10 +79,10 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> GREEN_MIDDLE_GEM_ORE = register("green_middle_gem_ore", () -> new CircleGemBlock(CircleGemType.GREEN, BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	
 	//stalactites and roots
-	public static final DeferredBlock<Block> STALACTITE = register("stalactite", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE).noOcclusion().isValidSpawn(BlockRegistry::never).isSuffocating(BlockRegistry::never).isViewBlocking(BlockRegistry::never)));
+	public static final DeferredBlock<Block> STALACTITE = register("stalactite", () -> new StalactiteBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE).noOcclusion().isValidSpawn(BlockRegistry::never).isSuffocating(BlockRegistry::never).isViewBlocking(BlockRegistry::never)));
 	public static final DeferredBlock<Block> LIFE_CRYSTAL_STALACTITE = register("life_crystal_stalactite", () -> new LifeCrystalStalactiteBlock(BlockBehaviour.Properties.of().strength(2.5F, 10.0F).sound(SoundType.STONE).noOcclusion().isValidSpawn(BlockRegistry::never).isSuffocating(BlockRegistry::never).isViewBlocking(BlockRegistry::never)));
 	public static final DeferredBlock<Block> LIFE_CRYSTAL_ORE_STALACTITE = register("life_crystal_ore_stalactite", () -> new LifeCrystalStalactiteBlock(BlockBehaviour.Properties.of().strength(2.5F, 10.0F).sound(SoundType.STONE).noOcclusion().isValidSpawn(BlockRegistry::never).isSuffocating(BlockRegistry::never).isViewBlocking(BlockRegistry::never).lightLevel((state) -> 6)));
-	public static final DeferredBlock<Block> ROOT = register("root", () -> new LifeCrystalStalactiteBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.WOOD).noOcclusion().isValidSpawn(BlockRegistry::never).isSuffocating(BlockRegistry::never).isViewBlocking(BlockRegistry::never)));
+	public static final DeferredBlock<Block> ROOT = register("root", () -> new StalactiteBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.WOOD).noOcclusion().isValidSpawn(BlockRegistry::never).isSuffocating(BlockRegistry::never).isViewBlocking(BlockRegistry::never)));
 	
 	public static final DeferredBlock<Block> SILT = register("silt", () -> new SiltBlock(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.SAND)));
 	public static final DeferredBlock<Block> FILTERED_SILT = register("filtered_silt", () -> new SiltBlock(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.SAND)));
