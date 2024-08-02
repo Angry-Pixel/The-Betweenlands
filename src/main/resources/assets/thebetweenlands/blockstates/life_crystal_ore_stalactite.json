@@ -1,0 +1,9 @@
+{
+	"variants": {
+		"": [
+			{
+                "model": "thebetweenlands:internal/life_crystal_ore_stalactite"
+            }
+		]
+	}
+}

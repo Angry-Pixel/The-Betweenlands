@@ -1,0 +1,10 @@
+{
+    "parent": "minecraft:block/block",
+    "loader": "thebetweenlands:root",
+    "textures": {
+        "particle": "thebetweenlands:blocks/pitstone",
+        "top": "thebetweenlands:blocks/pitstone",
+        "middle": "thebetweenlands:blocks/pitstone",
+        "bottom": "thebetweenlands:blocks/pitstone"
+    }
+}
