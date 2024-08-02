@@ -13,6 +13,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.LevelChunkSection;
@@ -153,5 +154,11 @@ public abstract class SpreadingDeathBlock extends Block {
 
 		if (!chunk.isUnsaved()) chunk.setUnsaved(true);
 		level.getChunkSource().chunkMap.resendBiomesForChunks(List.of(chunk));
+	}
+	
+	@Override
+	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder);
+		builder.add(ACTIVE);
 	}
 }
