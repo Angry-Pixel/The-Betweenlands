@@ -2,9 +2,9 @@
     "parent": "minecraft:block/block",
     "loader": "thebetweenlands:root",
     "textures": {
-        "particle": "thebetweenlands:block/root_top",
-        "top": "thebetweenlands:block/root_top",
-        "middle": "thebetweenlands:block/root_middle",
-        "bottom": "thebetweenlands:block/root_bottom"
+        "particle": "thebetweenlands:blocks/root_top",
+        "top": "thebetweenlands:blocks/root_top",
+        "middle": "thebetweenlands:blocks/root_middle",
+        "bottom": "thebetweenlands:blocks/root_bottom"
     }
 }
