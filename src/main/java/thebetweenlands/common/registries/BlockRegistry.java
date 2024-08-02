@@ -1,12 +1,16 @@
 package thebetweenlands.common.registries;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
@@ -63,7 +67,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> SWAMP_DIRT = register("swamp_dirt", () -> new Block(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.ROOTED_DIRT)));
 	public static final DeferredBlock<Block> COARSE_SWAMP_DIRT = register("coarse_swamp_dirt", () -> new Block(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.ROOTED_DIRT)));
 	public static final DeferredBlock<Block> SWAMP_GRASS = register("swamp_grass", () -> new SwampGrassBlock(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.WET_GRASS)));
-	public static final DeferredBlock<Block> WISP = register("wisp", () -> new WispBlock(BlockBehaviour.Properties.of().instabreak().noCollission().noOcclusion().sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> WISP = register("wisp", () -> new WispBlock(BlockBehaviour.Properties.of().instabreak().noCollission().noOcclusion().sound(SoundType.STONE).replaceable()));
 	public static final DeferredBlock<Block> OCTINE_ORE = register("octine_ore", () -> new OctineOreBlock(ConstantInt.of(0), BlockBehaviour.Properties.of().lightLevel(value -> 13).strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> VALONITE_ORE = register("valonite_ore", () -> new DropExperienceBlock(UniformInt.of(5, 12), BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> SULFUR_ORE = register("sulfur_ore", () -> new SulfurOreBlock(UniformInt.of(0, 2), BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
@@ -73,9 +77,13 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> AQUA_MIDDLE_GEM_ORE = register("aqua_middle_gem_ore", () -> new CircleGemBlock(CircleGemType.AQUA, BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> CRIMSON_MIDDLE_GEM_ORE = register("crimson_middle_gem_ore", () -> new CircleGemBlock(CircleGemType.CRIMSON, BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> GREEN_MIDDLE_GEM_ORE = register("green_middle_gem_ore", () -> new CircleGemBlock(CircleGemType.GREEN, BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
-	public static final DeferredBlock<Block> STALACTITE = register("stalactite", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<Block> LIFE_CRYSTAL_STALACTITE = register("life_crystal_stalactite", () -> new LifeCrystalStalactiteBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<Block> LIFE_CRYSTAL_ORE_STALACTITE = register("life_crystal_ore_stalactite", () -> new LifeCrystalStalactiteBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.WOOD)));
+	
+	//stalactites and roots
+	public static final DeferredBlock<Block> STALACTITE = register("stalactite", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE).noOcclusion().isValidSpawn(BlockRegistry::never).isSuffocating(BlockRegistry::never).isViewBlocking(BlockRegistry::never)));
+	public static final DeferredBlock<Block> LIFE_CRYSTAL_STALACTITE = register("life_crystal_stalactite", () -> new LifeCrystalStalactiteBlock(BlockBehaviour.Properties.of().strength(2.5F, 10.0F).sound(SoundType.STONE).noOcclusion().isValidSpawn(BlockRegistry::never).isSuffocating(BlockRegistry::never).isViewBlocking(BlockRegistry::never)));
+	public static final DeferredBlock<Block> LIFE_CRYSTAL_ORE_STALACTITE = register("life_crystal_ore_stalactite", () -> new LifeCrystalStalactiteBlock(BlockBehaviour.Properties.of().strength(2.5F, 10.0F).sound(SoundType.STONE).noOcclusion().isValidSpawn(BlockRegistry::never).isSuffocating(BlockRegistry::never).isViewBlocking(BlockRegistry::never)));
+	public static final DeferredBlock<Block> ROOT = register("root", () -> new LifeCrystalStalactiteBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.WOOD).noOcclusion().isValidSpawn(BlockRegistry::never).isSuffocating(BlockRegistry::never).isViewBlocking(BlockRegistry::never)));
+	
 	public static final DeferredBlock<Block> SILT = register("silt", () -> new SiltBlock(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.SAND)));
 	public static final DeferredBlock<Block> FILTERED_SILT = register("filtered_silt", () -> new SiltBlock(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.SAND)));
 	public static final DeferredBlock<Block> DEAD_GRASS = register("dead_grass", () -> new DeadGrassBlock(BlockBehaviour.Properties.of().strength(0.5F).randomTicks().sound(SoundType.GRASS)));
@@ -104,17 +112,17 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> WEEDWOOD_SAPLING = register("weedwood_sapling", () -> new SaplingBlock(BLTreeGrowers.WEEDWOOD, BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
 	public static final DeferredBlock<Block> SAP_SAPLING = register("sap_sapling", () -> new SaplingBlock(BLTreeGrowers.SAP, BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
 	public static final DeferredBlock<Block> RUBBER_SAPLING = register("rubber_sapling", () -> new SaplingBlock(BLTreeGrowers.RUBBER, BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
-	public static final DeferredBlock<Block> HEARTHGROVE_SAPLING = register("hearthgrove_sapling", () -> new SaplingBlock(BLTreeGrowers.HEARTHGROVE, BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
+//	public static final DeferredBlock<Block> HEARTHGROVE_SAPLING = register("hearthgrove_sapling", () -> new SaplingBlock(BLTreeGrowers.HEARTHGROVE, BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
 	public static final DeferredBlock<Block> NIBBLETWIG_SAPLING = register("nibbletwig_sapling", () -> new SaplingBlock(BLTreeGrowers.NIBBLETWIG, BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
-	public static final DeferredBlock<Block> SPIRIT_TREE_SAPLING = register("spirit_tree_sapling", () -> new SaplingBlock(BLTreeGrowers.SPIRIT_TREE, BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
-	public static final DeferredBlock<Block> WEEDWOOD_LEAVES = register("weedwood_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn((state, level, pos, value) -> false).isSuffocating((state, level, pos) -> false).isViewBlocking((state, level, pos) -> false).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor((state, level, pos) -> false)));
-	public static final DeferredBlock<Block> SAP_LEAVES = register("sap_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn((state, level, pos, value) -> false).isSuffocating((state, level, pos) -> false).isViewBlocking((state, level, pos) -> false).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor((state, level, pos) -> false)));
-	public static final DeferredBlock<Block> RUBBER_TREE_LEAVES = register("rubber_tree_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn((state, level, pos, value) -> false).isSuffocating((state, level, pos) -> false).isViewBlocking((state, level, pos) -> false).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor((state, level, pos) -> false)));
-	public static final DeferredBlock<Block> HEARTHGROVE_LEAVES = register("hearthgrove_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn((state, level, pos, value) -> false).isSuffocating((state, level, pos) -> false).isViewBlocking((state, level, pos) -> false).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor((state, level, pos) -> false)));
-	public static final DeferredBlock<Block> NIBBLETWIG_LEAVES = register("nibbletwig_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn((state, level, pos, value) -> false).isSuffocating((state, level, pos) -> false).isViewBlocking((state, level, pos) -> false).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor((state, level, pos) -> false)));
-	public static final DeferredBlock<Block> TOP_SPIRIT_TREE_LEAVES = register("top_spirit_tree_leaves", () -> new SpiritTreeLeavesBlock(SpiritTreeLeavesBlock.LeafType.TOP, BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn((state, level, pos, value) -> false).isSuffocating((state, level, pos) -> false).isViewBlocking((state, level, pos) -> false).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor((state, level, pos) -> false)));
-	public static final DeferredBlock<Block> MIDDLE_SPIRIT_TREE_LEAVES = register("middle_spirit_tree_leaves", () -> new SpiritTreeLeavesBlock(SpiritTreeLeavesBlock.LeafType.MIDDLE, BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn((state, level, pos, value) -> false).isSuffocating((state, level, pos) -> false).isViewBlocking((state, level, pos) -> false).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor((state, level, pos) -> false)));
-	public static final DeferredBlock<Block> BOTTOM_SPIRIT_TREE_LEAVES = register("bottom_spirit_tree_leaves", () -> new SpiritTreeLeavesBlock(SpiritTreeLeavesBlock.LeafType.BOTTOM, BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn((state, level, pos, value) -> false).isSuffocating((state, level, pos) -> false).isViewBlocking((state, level, pos) -> false).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor((state, level, pos) -> false)));
+//	public static final DeferredBlock<Block> SPIRIT_TREE_SAPLING = register("spirit_tree_sapling", () -> new SaplingBlock(BLTreeGrowers.SPIRIT_TREE, BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).noCollission().randomTicks().instabreak().sound(SoundType.GRASS).pushReaction(PushReaction.DESTROY)));
+	public static final DeferredBlock<Block> WEEDWOOD_LEAVES = register("weedwood_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(BlockRegistry::never).isSuffocating(BlockRegistry::never).isViewBlocking(BlockRegistry::never).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor(BlockRegistry::never)));
+	public static final DeferredBlock<Block> SAP_LEAVES = register("sap_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(BlockRegistry::never).isSuffocating(BlockRegistry::never).isViewBlocking(BlockRegistry::never).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor(BlockRegistry::never)));
+	public static final DeferredBlock<Block> RUBBER_TREE_LEAVES = register("rubber_tree_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(BlockRegistry::never).isSuffocating(BlockRegistry::never).isViewBlocking(BlockRegistry::never).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor(BlockRegistry::never)));
+	public static final DeferredBlock<Block> HEARTHGROVE_LEAVES = register("hearthgrove_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(BlockRegistry::never).isSuffocating(BlockRegistry::never).isViewBlocking(BlockRegistry::never).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor(BlockRegistry::never)));
+	public static final DeferredBlock<Block> NIBBLETWIG_LEAVES = register("nibbletwig_leaves", () -> new LeavesBlock(BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(BlockRegistry::never).isSuffocating(BlockRegistry::never).isViewBlocking(BlockRegistry::never).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor(BlockRegistry::never)));
+	public static final DeferredBlock<Block> TOP_SPIRIT_TREE_LEAVES = register("top_spirit_tree_leaves", () -> new SpiritTreeLeavesBlock(SpiritTreeLeavesBlock.LeafType.TOP, BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(BlockRegistry::never).isSuffocating(BlockRegistry::never).isViewBlocking(BlockRegistry::never).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor(BlockRegistry::never)));
+	public static final DeferredBlock<Block> MIDDLE_SPIRIT_TREE_LEAVES = register("middle_spirit_tree_leaves", () -> new SpiritTreeLeavesBlock(SpiritTreeLeavesBlock.LeafType.MIDDLE, BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(BlockRegistry::never).isSuffocating(BlockRegistry::never).isViewBlocking(BlockRegistry::never).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor(BlockRegistry::never)));
+	public static final DeferredBlock<Block> BOTTOM_SPIRIT_TREE_LEAVES = register("bottom_spirit_tree_leaves", () -> new SpiritTreeLeavesBlock(SpiritTreeLeavesBlock.LeafType.BOTTOM, BlockBehaviour.Properties.of().ignitedByLava().mapColor(MapColor.PLANT).strength(0.2F).randomTicks().sound(SoundType.GRASS).noOcclusion().isValidSpawn(BlockRegistry::never).isSuffocating(BlockRegistry::never).isViewBlocking(BlockRegistry::never).ignitedByLava().pushReaction(PushReaction.DESTROY).isRedstoneConductor(BlockRegistry::never)));
 
 	public static final DeferredBlock<Block> WEEDWOOD_PLANKS = register("weedwood_planks", () -> new Block(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> RUBBER_TREE_PLANKS = register("rubber_tree_planks", () -> new Block(BlockBehaviour.Properties.of().ignitedByLava().strength(1.75F, 5.0F).sound(SoundType.WOOD)));
@@ -504,7 +512,6 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> SHELF_FUNGUS = register("shelf_fungus", () -> new ShelfFungusBlock(BlockBehaviour.Properties.of().strength(0.2F).sound(SoundType.WOOL)));
 	public static final DeferredBlock<Block> ALGAE = register("algae", () -> new AlgaeBlock(BlockBehaviour.Properties.of().instabreak().pushReaction(PushReaction.DESTROY).noCollission().noOcclusion().replaceable().sound(SoundType.WET_GRASS)));
 	public static final DeferredBlock<Block> POISON_IVY = register("poison_ivy", () -> new PoisonIvyBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT).replaceable().noCollission().strength(0.2F).sound(SoundType.VINE).ignitedByLava().pushReaction(PushReaction.DESTROY)));
-	public static final DeferredBlock<Block> ROOT = register("root", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> GIANT_ROOT = register("giant_root", () -> new Block(BlockBehaviour.Properties.of().strength(2.0F).sound(SoundType.WOOD).ignitedByLava()));
 	public static final DeferredBlock<Block> ARROW_ARUM = register("arrow_arum", () -> new PlantBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().offsetType(BlockBehaviour.OffsetType.XYZ).instabreak().sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> BLUE_EYED_GRASS = register("blue_eyed_grass", () -> new PlantBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().offsetType(BlockBehaviour.OffsetType.XYZ).instabreak().sound(SoundType.GRASS)));
@@ -571,7 +578,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> PURIFIED_DUG_SWAMP_DIRT = register("purified_dug_swamp_dirt", () -> new DugDirtBlock(true, BlockBehaviour.Properties.of().randomTicks().strength(0.5F).sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> DUG_SWAMP_GRASS = register("dug_swamp_grass", () -> new DugGrassBlock(false, BlockBehaviour.Properties.of().randomTicks().strength(0.5F).sound(SoundType.GRASS)));
 	public static final DeferredBlock<Block> PURIFIED_DUG_SWAMP_GRASS = register("purified_dug_swamp_grass", () -> new DugGrassBlock(true, BlockBehaviour.Properties.of().randomTicks().strength(0.5F).sound(SoundType.GRASS)));
-	public static final DeferredBlock<Block> BLACK_ICE = register("black_ice", () -> new BlackIceBlock(BlockBehaviour.Properties.of().noOcclusion().randomTicks().strength(0.5F).randomTicks().friction(0.98F).sound(SoundType.GLASS).isRedstoneConductor((state, level, pos) -> false)));
+	public static final DeferredBlock<Block> BLACK_ICE = register("black_ice", () -> new BlackIceBlock(BlockBehaviour.Properties.of().noOcclusion().randomTicks().strength(0.5F).randomTicks().friction(0.98F).sound(SoundType.GLASS).isRedstoneConductor(BlockRegistry::never)));
 	public static final DeferredBlock<Block> SNOW = register("snow", () -> new BLSnowLayerBlock(BlockBehaviour.Properties.of().replaceable().forceSolidOff().randomTicks().strength(0.1F).sound(SoundType.SNOW)));
 	//MISC
 	public static final DeferredBlock<Block> PORTAL_LOG = register("portal_log", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
@@ -636,8 +643,8 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> MUD_FLOWER_POT_CANDLE = register("mud_flower_pot_candle", () -> new MudFlowerPotCandleBlock(BlockBehaviour.Properties.of().strength(0.3F).lightLevel(value -> value.getValue(MudFlowerPotCandleBlock.LIT) ? 13 : 0).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> GECKO_CAGE = register("gecko_cage", () -> new GeckoCageBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> INFUSER = register("infuser", () -> new InfuserBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<Block> ORANGE_ASPECT_VIAL = register("orange_aspect_vial", () -> new AspectVialBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.GLASS)));
-	public static final DeferredBlock<Block> GREEN_ASPECT_VIAL = register("green_aspect_vial", () -> new AspectVialBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.GLASS)));
+	public static final DeferredBlock<Block> ORANGE_ASPECT_VIAL = BLOCKS.register("orange_aspect_vial", () -> new AspectVialBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.GLASS)));
+	public static final DeferredBlock<Block> GREEN_ASPECT_VIAL = BLOCKS.register("green_aspect_vial", () -> new AspectVialBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.GLASS)));
 	public static final DeferredBlock<Block> MORTAR = register("mortar", () -> new MortarBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> CENSER = register("censer", () -> new CenserBlock(BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> WEEDWOOD_BARREL = register("weedwood_barrel", () -> new BarrelBlock(false, BlockBehaviour.Properties.of().strength(2.0F, 5.0F).sound(SoundType.WOOD)));
@@ -785,4 +792,12 @@ public class BlockRegistry {
 		ItemRegistry.ITEMS.register(name, item.apply(reg));
 		return reg;
 	}
+	
+    private static Boolean never(BlockState state, BlockGetter blockGetter, BlockPos pos, EntityType<?> entity) {
+        return false;
+    }
+
+    private static boolean never(BlockState state, BlockGetter blockGetter, BlockPos pos) {
+        return false;
+    }
 }
