@@ -10,6 +10,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.item.CompostData;
+import thebetweenlands.common.component.item.CorrosionData;
 
 public class DataComponentRegistry {
 
@@ -23,5 +24,7 @@ public class DataComponentRegistry {
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Unit>> PESTLE_ACTIVE = COMPONENTS.register("active", () -> DataComponentType.<Unit>builder().persistent(Codec.unit(Unit.INSTANCE)).networkSynchronized(StreamCodec.unit(Unit.INSTANCE)).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<ResourceLocation>> SIMULACRUM_EFFECT = COMPONENTS.register("simulacrum_effect", () -> DataComponentType.<ResourceLocation>builder().persistent(ResourceLocation.CODEC).networkSynchronized(ResourceLocation.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Long>> ROT_TIME = COMPONENTS.register("rot_time", () -> DataComponentType.<Long>builder().persistent(Codec.LONG).networkSynchronized(ByteBufCodecs.VAR_LONG).build());
+
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<CorrosionData>> CORROSION = COMPONENTS.register("corrosion", () -> DataComponentType.<CorrosionData>builder().persistent(CorrosionData.CODEC).networkSynchronized(CorrosionData.STREAM_CODEC).cacheEncoding().build());
 
 }

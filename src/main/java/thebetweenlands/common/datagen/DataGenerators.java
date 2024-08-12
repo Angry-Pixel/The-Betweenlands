@@ -28,6 +28,7 @@ public class DataGenerators {
 		gen.addProvider(data, blockTags);
 		gen.addProvider(data, new BetweenlandsEntityTagProvider(output, provider, helper));
 		gen.addProvider(data, new BetweenlandsItemTagProvider(output, provider, blockTags.contentsGetter(), helper));
+		gen.addProvider(data, new BetweenlandsDimensionTagProvider(output, provider, helper));
 
 		// Assets
 		gen.addProvider(assets, new BetweenlandsLangProvider(output));
