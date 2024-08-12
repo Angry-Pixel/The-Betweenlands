@@ -62,9 +62,9 @@ public class AnadiaMobItem extends MobItem {
 
 	@Override
 	protected InteractionResult spawnCapturedEntity(Player player, Level level, BlockPos pos, InteractionHand hand, Direction facing, Vec3 hitVec, Entity entity, boolean isNewEntity) {
-		if (entity instanceof Anadia anadia && !anadia.getFishColor().isAlive()) {
-			return InteractionResult.PASS;
-		}
+//		if (entity instanceof Anadia anadia && !anadia.getFishColor().isAlive()) {
+//			return InteractionResult.PASS;
+//		}
 		return super.spawnCapturedEntity(player, level, pos, hand, facing, hitVec, entity, isNewEntity);
 	}
 

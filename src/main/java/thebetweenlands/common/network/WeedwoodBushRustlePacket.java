@@ -35,7 +35,7 @@ public record WeedwoodBushRustlePacket(BlockPos bushPos, float strength) impleme
 				float dy = level.getRandom().nextFloat() * 2 - 0.5F;
 				float dz = level.getRandom().nextFloat() * 2 - 1;
 				float mag = 0.01F + level.getRandom().nextFloat() * 0.07F;
-				BLParticles.WEEDWOOD_LEAF.spawn(level, x, y, z, ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
+//				BLParticles.WEEDWOOD_LEAF.spawn(level, x, y, z, ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
 			}
 		});
 	}

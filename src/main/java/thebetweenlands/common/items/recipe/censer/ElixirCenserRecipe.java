@@ -16,14 +16,16 @@ import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 public class ElixirCenserRecipe extends AbstractCenserRecipe<ElixirCenserRecipe.CenserRecipeElixirContext> {
 
 	@Override
 	public boolean matchesInput(ItemStack stack) {
-		if(stack.is(ItemRegistry.ELIXIR)) {
-			ElixirEffect effect = ItemRegistry.ELIXIR.get().getElixirFromItem(stack);
-			return !effect.getElixirEffect().value().isInstantenous();
-		}
+//		if(stack.is(ItemRegistry.ELIXIR)) {
+//			ElixirEffect effect = ItemRegistry.ELIXIR.get().getElixirFromItem(stack);
+//			return !effect.getElixirEffect().value().isInstantenous();
+//		}
 		return false;
 	}
 
@@ -33,42 +35,44 @@ public class ElixirCenserRecipe extends AbstractCenserRecipe<ElixirCenserRecipe.
 	}
 
 	private List<LivingEntity> getAffectedEntities(Level level, BlockPos pos, CenserRecipeElixirContext context) {
-		int amplifier = ItemRegistry.ELIXIR.get().createPotionEffect(context.elixir, 1).getAmplifier();
+//		int amplifier = ItemRegistry.ELIXIR.get().createPotionEffect(context.elixir, 1).getAmplifier();
+//
+//		int xzRange = 35 + amplifier * 15;
+//		int yRange = 12 + amplifier * 4;
 
-		int xzRange = 35 + amplifier * 15;
-		int yRange = 12 + amplifier * 4;
-
-		return level.getEntitiesOfClass(LivingEntity.class, new AABB(pos).inflate(xzRange, 1, xzRange).expandTowards(0, yRange, 0));
+//		return level.getEntitiesOfClass(LivingEntity.class, new AABB(pos).inflate(xzRange, 1, xzRange).expandTowards(0, yRange, 0));
+		return Lists.newArrayList();
 	}
 
 	@Override
 	public int update(CenserRecipeElixirContext context, Censer censer) {
-		Level level = censer.getLevel();
-
-		if(level.getGameTime() % 100 == 0) {
-			Holder<MobEffect> potion = ItemRegistry.ELIXIR.get().getElixirFromItem(context.elixir).getPotionEffect();
-
-			int maxDuration = ItemRegistry.ELIXIR.get().createPotionEffect(context.elixir, 0.25D).getDuration();
-
-			BlockPos pos = censer.getBlockPos();
-
-			List<LivingEntity> affected = this.getAffectedEntities(level, pos, context);
-
-			if(!level.isClientSide()) {
-				for(LivingEntity living : affected) {
-					living.addEffect(new MobEffectInstance(potion, Math.min(maxDuration, 300), 0, true, false));
-				}
-			}
-
-			context.setConsuming(!affected.isEmpty());
-		}
+//		Level level = censer.getLevel();
+//
+//		if(level.getGameTime() % 100 == 0) {
+//			Holder<MobEffect> potion = ItemRegistry.ELIXIR.get().getElixirFromItem(context.elixir).getPotionEffect();
+//
+//			int maxDuration = ItemRegistry.ELIXIR.get().createPotionEffect(context.elixir, 0.25D).getDuration();
+//
+//			BlockPos pos = censer.getBlockPos();
+//
+//			List<LivingEntity> affected = this.getAffectedEntities(level, pos, context);
+//
+//			if(!level.isClientSide()) {
+//				for(LivingEntity living : affected) {
+//					living.addEffect(new MobEffectInstance(potion, Math.min(maxDuration, 300), 0, true, false));
+//				}
+//			}
+//
+//			context.setConsuming(!affected.isEmpty());
+//		}
 
 		return 0;
 	}
 
 	private int getEffectiveDuration(CenserRecipeElixirContext context) {
-		MobEffectInstance effect = ItemRegistry.ELIXIR.get().createPotionEffect(context.elixir, 1.0D);
-		return 20 + effect.getDuration() * 8;
+//		MobEffectInstance effect = ItemRegistry.ELIXIR.get().createPotionEffect(context.elixir, 1.0D);
+//		return 20 + effect.getDuration() * 8;
+		return 0;
 	}
 
 	@Override
@@ -86,7 +90,7 @@ public class ElixirCenserRecipe extends AbstractCenserRecipe<ElixirCenserRecipe.
 
 	@Override
 	public int getEffectColor(CenserRecipeElixirContext context, Censer censer, CenserRecipe.EffectColorType type) {
-		return ((ElixirItem) context.elixir.getItem()).getColorMultiplier(context.elixir, 0);
+		return 0;//((ElixirItem) context.elixir.getItem()).getColorMultiplier(context.elixir, 0);
 	}
 
 	public static class CenserRecipeElixirContext {

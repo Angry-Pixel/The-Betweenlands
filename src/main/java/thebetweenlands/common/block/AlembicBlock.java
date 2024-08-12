@@ -26,30 +26,30 @@ public class AlembicBlock extends HorizontalBaseEntityBlock {
 		super(properties);
 	}
 
-	@Override
-	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof AlembicBlockEntity alembic) {
-			if (player.isCrouching())
-				return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
-
-			if (!stack.isEmpty()) {
-				if (stack.is(ItemRegistry.BL_BUCKET_INFUSION)) {
-					if (!alembic.isFull()) {
-						alembic.addInfusion(level, stack);
-						if (!player.isCreative()) {
-							player.setItemInHand(hand, ItemBucketInfusion.getEmptyBucket(stack));
-						}
-					}
-				} else if (stack.getItem() instanceof DentrothystVialItem && alembic.hasFinished()) {
-					ItemStack result = alembic.getElixir(level, pos, state, stack.getItem());
-					ItemEntity itemEntity = player.drop(result, false);
-					if (itemEntity != null) itemEntity.setNoPickUpDelay();
-					stack.consume(1, player);
-				}
-			}
-		}
-		return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
-	}
+//	@Override
+//	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+//		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof AlembicBlockEntity alembic) {
+//			if (player.isCrouching())
+//				return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+//
+//			if (!stack.isEmpty()) {
+//				if (stack.is(ItemRegistry.BL_BUCKET_INFUSION)) {
+//					if (!alembic.isFull()) {
+//						alembic.addInfusion(level, stack);
+//						if (!player.isCreative()) {
+//							player.setItemInHand(hand, ItemBucketInfusion.getEmptyBucket(stack));
+//						}
+//					}
+//				} else if (stack.getItem() instanceof DentrothystVialItem && alembic.hasFinished()) {
+//					ItemStack result = alembic.getElixir(level, pos, state, stack.getItem());
+//					ItemEntity itemEntity = player.drop(result, false);
+//					if (itemEntity != null) itemEntity.setNoPickUpDelay();
+//					stack.consume(1, player);
+//				}
+//			}
+//		}
+//		return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
+//	}
 
 	@Override
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {

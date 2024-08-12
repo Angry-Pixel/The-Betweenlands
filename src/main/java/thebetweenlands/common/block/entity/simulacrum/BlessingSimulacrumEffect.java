@@ -26,20 +26,20 @@ public class BlessingSimulacrumEffect implements SimulacrumEffect {
 			});
 
 			if (player != null) {
-				OfferingTableBlockEntity offering = SimulacrumBlockEntity.getClosestActiveTile(OfferingTableBlockEntity.class, null, level, player.getX(), player.getY(), player.getZ(), 2.5f, null, stack -> !stack.isEmpty() && stack.is(ItemRegistry.SPIRIT_FRUIT));
-
-				if (offering != null) {
-					if (!level.isClientSide() && level.getRandom().nextInt(40) == 0) {
-						BlessingData cap = player.getData(AttachmentRegistry.BLESSING);
-						ItemStack stack = offering.getTheItem();
-						stack.shrink(1);
-						offering.setTheItem(stack);
-						cap.setBlessed(player.level().dimension(), pos);
-						player.displayClientMessage(Component.translatable("chat.simulacrum.blessed"), true);
-					} else if (level.isClientSide()) {
-						this.spawnBlessingParticles(level.getGameTime() * 0.025f, offering.getBlockPos().getX() + 0.5f, offering.getBlockPos().getY() + 0.4f, offering.getBlockPos().getZ() + 0.5f);
-					}
-				}
+//				OfferingTableBlockEntity offering = SimulacrumBlockEntity.getClosestActiveTile(OfferingTableBlockEntity.class, null, level, player.getX(), player.getY(), player.getZ(), 2.5f, null, stack -> !stack.isEmpty() && stack.is(ItemRegistry.SPIRIT_FRUIT));
+//
+//				if (offering != null) {
+//					if (!level.isClientSide() && level.getRandom().nextInt(40) == 0) {
+//						BlessingData cap = player.getData(AttachmentRegistry.BLESSING);
+//						ItemStack stack = offering.getTheItem();
+//						stack.shrink(1);
+//						offering.setTheItem(stack);
+//						cap.setBlessed(player.level().dimension(), pos);
+//						player.displayClientMessage(Component.translatable("chat.simulacrum.blessed"), true);
+//					} else if (level.isClientSide()) {
+//						this.spawnBlessingParticles(level.getGameTime() * 0.025f, offering.getBlockPos().getX() + 0.5f, offering.getBlockPos().getY() + 0.4f, offering.getBlockPos().getZ() + 0.5f);
+//					}
+//				}
 			}
 		}
 	}

@@ -40,9 +40,9 @@ public class AspectContainerItem extends AspectContainer {
 	 */
 	public static AspectContainerItem fromItem(ItemStack stack, @Nullable AspectManager manager) {
 		AspectContainerItem container = new AspectContainerItem(manager, stack);
-		CompoundTag aspectNbt = stack.getTagCompound() != null ? stack.getTagCompound().getCompoundTag(ASPECTS_NBT_TAG) : null;
-		if(aspectNbt != null)
-			container.read(aspectNbt);
+//		CompoundTag aspectNbt = stack.getTagCompound() != null ? stack.getTagCompound().getCompoundTag(ASPECTS_NBT_TAG) : null;
+//		if(aspectNbt != null)
+//			container.read(aspectNbt);
 		return container;
 	}
 
@@ -54,18 +54,18 @@ public class AspectContainerItem extends AspectContainer {
 	 */
 	public static AspectContainerItem fromItem(ItemStack stack) {
 		AspectContainerItem container = new AspectContainerItem(null, stack);
-		CompoundTag aspectNbt = stack.getTagCompound() != null ? stack.getTagCompound().getCompoundTag(ASPECTS_NBT_TAG) : null;
-		if(aspectNbt != null)
-			container.read(aspectNbt);
+//		CompoundTag aspectNbt = stack.getTagCompound() != null ? stack.getTagCompound().getCompoundTag(ASPECTS_NBT_TAG) : null;
+//		if(aspectNbt != null)
+//			container.read(aspectNbt);
 		return container;
 	}
 
 	@Override
 	protected void onChanged() {
-		CompoundTag nbt = this.itemStack.getTagCompound();
-		if(nbt == null)
-			this.itemStack.setTagCompound(nbt = new CompoundTag());
-		nbt.setTag(ASPECTS_NBT_TAG, this.save(new CompoundTag()));
+//		CompoundTag nbt = this.itemStack.getTagCompound();
+//		if(nbt == null)
+//			this.itemStack.setTagCompound(nbt = new CompoundTag());
+//		nbt.setTag(ASPECTS_NBT_TAG, this.save(new CompoundTag()));
 	}
 
 	/**

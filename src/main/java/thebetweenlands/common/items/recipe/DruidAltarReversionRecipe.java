@@ -73,7 +73,7 @@ public record DruidAltarReversionRecipe(NonNullList<Ingredient> items, int proce
 			level.setBlockAndUpdate(spawnerPos, BlockRegistry.MOB_SPAWNER.get().defaultBlockState());
 			if (level.getBlockEntity(pos) instanceof MobSpawnerBlockEntity spawner) {
 				BetweenlandsBaseSpawner logic = spawner.getSpawner();
-				logic.setNextEntityName(EntityRegistry.DARK_DRUID.get(), level, level.getRandom(), pos).setCheckRange(32.0D).setSpawnRange(6).setSpawnInAir(false).setMaxEntities(1 + level.getRandom().nextInt(3));
+//				logic.setNextEntityName(EntityRegistry.DARK_DRUID.get(), level, level.getRandom(), pos).setCheckRange(32.0D).setSpawnRange(6).setSpawnInAir(false).setMaxEntities(1 + level.getRandom().nextInt(3));
 			}
 
 			level.playSound(null, spawnerPos, SoundRegistry.DRUID_TELEPORT.get(), SoundSource.BLOCKS, 1.0F, 1.0F);

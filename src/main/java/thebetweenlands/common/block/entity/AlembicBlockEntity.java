@@ -145,84 +145,84 @@ public class AlembicBlockEntity extends SyncedBlockEntity {
 	}
 
 	private void loadFromInfusion(Level level) {
-		this.recipe = null;
-		if (this.infusionBucket.isEmpty() || infusionBucket.getTagCompound() == null) return;
-		int infusionTime = this.infusionBucket.getTagCompound().getInteger("infusionTime");
-		this.bucketInfusionTime = infusionTime;
-		if (this.infusionBucket.getTagCompound() == null || !this.infusionBucket.getTagCompound().hasKey("ingredients")) {
-			this.addInvalidInfusion(level);
-			return;
-		}
-		ListTag nbtList = (ListTag) this.infusionBucket.getTagCompound().getTag("ingredients");
-		List<ItemStack> infusionIngredients = new ArrayList<>();
-		for (int i = 0; i < nbtList.size(); i++) {
-			infusionIngredients.add(ItemStack.parseOptional(level.registryAccess(), nbtList.getCompound(i)));
-		}
-		List<AspectType> infusionAspects = this.getInfusionAspects(level, infusionIngredients);
-		ElixirRecipe recipe = ElixirRecipes.getFromAspects(infusionAspects);
-		this.recipe = recipe;
-		if (recipe == null || infusionTime < recipe.idealInfusionTime - recipe.infusionTimeVariation || infusionTime > recipe.idealInfusionTime + recipe.infusionTimeVariation) {
-			this.addInvalidInfusion(level);
-			return;
-		}
-		List<Aspect> infusionItemAspects = this.getInfusionItemAspects(level, infusionIngredients);
-		int totalAmount = Amounts.VERY_LOW; //Base amount
-		int strengthAspectAmount = 0;
-		int durationAspectAmount = 0;
-		for (Aspect a : infusionItemAspects) {
-			totalAmount += a.amount;
-			if (recipe.strengthAspect != null && a.type == recipe.strengthAspect)
-				strengthAspectAmount += a.amount;
-			if (recipe.durationAspect != null && a.type == recipe.durationAspect)
-				durationAspectAmount += a.amount;
-		}
-		int recipeByariis = 0;
-		for (IAspectType a : recipe.aspects) {
-			if (a == AspectRegistry.BYARIIS) {
-				recipeByariis++;
-			}
-		}
-		this.producableAmount = totalAmount;
-		boolean isPositive = true;
-		for (AspectType a : infusionAspects) {
-			if (a == AspectRegistry.BYARIIS) {
-				if (recipeByariis <= 0) {
-					isPositive = !isPositive;
-				} else {
-					recipeByariis--;
-				}
-			}
-		}
-		this.producableElixir = isPositive ? recipe.positiveElixir : recipe.negativeElixir;
-		float relStrengthAmount = strengthAspectAmount / (float) Amounts.MAX_ASPECT_AMOUNT;
-		float relDurationAmount = durationAspectAmount / (float) Amounts.MAX_ASPECT_AMOUNT;
-		this.producableStrength = Mth.floor(relStrengthAmount * ElixirEffect.VIAL_INFUSION_MAX_POTENCY);
-		if (isPositive) {
-			this.producableDuration = recipe.baseDuration + MathHelper.floor(recipe.durationModifier * relDurationAmount);
-		} else {
-			this.producableDuration = recipe.negativeBaseDuration + MathHelper.floor(recipe.negativeDurationModifier * relDurationAmount);
-		}
+//		this.recipe = null;
+//		if (this.infusionBucket.isEmpty() || infusionBucket.getTagCompound() == null) return;
+//		int infusionTime = this.infusionBucket.getTagCompound().getInteger("infusionTime");
+//		this.bucketInfusionTime = infusionTime;
+//		if (this.infusionBucket.getTagCompound() == null || !this.infusionBucket.getTagCompound().hasKey("ingredients")) {
+//			this.addInvalidInfusion(level);
+//			return;
+//		}
+//		ListTag nbtList = (ListTag) this.infusionBucket.getTagCompound().getTag("ingredients");
+//		List<ItemStack> infusionIngredients = new ArrayList<>();
+//		for (int i = 0; i < nbtList.size(); i++) {
+//			infusionIngredients.add(ItemStack.parseOptional(level.registryAccess(), nbtList.getCompound(i)));
+//		}
+//		List<AspectType> infusionAspects = this.getInfusionAspects(level, infusionIngredients);
+//		ElixirRecipe recipe = ElixirRecipes.getFromAspects(infusionAspects);
+//		this.recipe = recipe;
+//		if (recipe == null || infusionTime < recipe.idealInfusionTime - recipe.infusionTimeVariation || infusionTime > recipe.idealInfusionTime + recipe.infusionTimeVariation) {
+//			this.addInvalidInfusion(level);
+//			return;
+//		}
+//		List<Aspect> infusionItemAspects = this.getInfusionItemAspects(level, infusionIngredients);
+//		int totalAmount = Amounts.VERY_LOW; //Base amount
+//		int strengthAspectAmount = 0;
+//		int durationAspectAmount = 0;
+//		for (Aspect a : infusionItemAspects) {
+//			totalAmount += a.amount;
+//			if (recipe.strengthAspect != null && a.type == recipe.strengthAspect)
+//				strengthAspectAmount += a.amount;
+//			if (recipe.durationAspect != null && a.type == recipe.durationAspect)
+//				durationAspectAmount += a.amount;
+//		}
+//		int recipeByariis = 0;
+//		for (IAspectType a : recipe.aspects) {
+//			if (a == AspectRegistry.BYARIIS) {
+//				recipeByariis++;
+//			}
+//		}
+//		this.producableAmount = totalAmount;
+//		boolean isPositive = true;
+//		for (AspectType a : infusionAspects) {
+//			if (a == AspectRegistry.BYARIIS) {
+//				if (recipeByariis <= 0) {
+//					isPositive = !isPositive;
+//				} else {
+//					recipeByariis--;
+//				}
+//			}
+//		}
+//		this.producableElixir = isPositive ? recipe.positiveElixir : recipe.negativeElixir;
+//		float relStrengthAmount = strengthAspectAmount / (float) Amounts.MAX_ASPECT_AMOUNT;
+//		float relDurationAmount = durationAspectAmount / (float) Amounts.MAX_ASPECT_AMOUNT;
+//		this.producableStrength = Mth.floor(relStrengthAmount * ElixirEffect.VIAL_INFUSION_MAX_POTENCY);
+//		if (isPositive) {
+//			this.producableDuration = recipe.baseDuration + MathHelper.floor(recipe.durationModifier * relDurationAmount);
+//		} else {
+//			this.producableDuration = recipe.negativeBaseDuration + MathHelper.floor(recipe.negativeDurationModifier * relDurationAmount);
+//		}
 	}
 
 	//TODO data component
 	private void addInvalidInfusion(Level level) {
-		//Invalid recipe or infusion too short or too long
-		this.producableElixir = null;
-		this.producableAmount = 0;
-		this.producableDuration = 0;
-		this.producableStrength = 0;
-		this.producableItemAspects.clear();
-		if (!this.infusionBucket.isEmpty() && this.infusionBucket.getTagCompound() != null && this.infusionBucket.getTagCompound().hasKey("ingredients")) {
-			ListTag nbtList = (ListTag) this.infusionBucket.getTagCompound().getTag("ingredients");
-			List<ItemStack> infusionIngredients = new ArrayList<>();
-			for (int i = 0; i < nbtList.size(); i++) {
-				infusionIngredients.add(ItemStack.parseOptional(level.registryAccess(), nbtList.getCompound(i)));
-			}
-			List<Aspect> infusionAspects = this.getInfusionItemAspects(level, infusionIngredients);
-			for (Aspect aspect : infusionAspects) {
-				this.producableItemAspects.add(new Aspect(aspect.type, Mth.floor((aspect.amount * (1.0F - ISOLATION_LOSS_MULTIPLIER)) / 3.0F)));
-			}
-		}
+//		//Invalid recipe or infusion too short or too long
+//		this.producableElixir = null;
+//		this.producableAmount = 0;
+//		this.producableDuration = 0;
+//		this.producableStrength = 0;
+//		this.producableItemAspects.clear();
+//		if (!this.infusionBucket.isEmpty() && this.infusionBucket.getTagCompound() != null && this.infusionBucket.getTagCompound().hasKey("ingredients")) {
+//			ListTag nbtList = (ListTag) this.infusionBucket.getTagCompound().getTag("ingredients");
+//			List<ItemStack> infusionIngredients = new ArrayList<>();
+//			for (int i = 0; i < nbtList.size(); i++) {
+//				infusionIngredients.add(ItemStack.parseOptional(level.registryAccess(), nbtList.getCompound(i)));
+//			}
+//			List<Aspect> infusionAspects = this.getInfusionItemAspects(level, infusionIngredients);
+//			for (Aspect aspect : infusionAspects) {
+//				this.producableItemAspects.add(new Aspect(aspect.type, Mth.floor((aspect.amount * (1.0F - ISOLATION_LOSS_MULTIPLIER)) / 3.0F)));
+//			}
+//		}
 	}
 
 	public List<AspectType> getInfusionAspects(Level level, List<ItemStack> ingredients) {
@@ -325,6 +325,6 @@ public class AlembicBlockEntity extends SyncedBlockEntity {
 	}
 
 	private ItemStack createElixir(ElixirEffect elixir, int strength, int duration, Item vial) {
-		return ItemRegistry.ELIXIR.get().getElixirItem(elixir, duration, strength, vial);
+		return ItemRegistry.ELIXIR.get().getDefaultInstance();//.getElixirItem(elixir, duration, strength, vial);
 	}
 }

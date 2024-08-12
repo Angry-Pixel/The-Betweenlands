@@ -150,7 +150,7 @@ public class MothHouseBlockEntity extends NoMenuContainerBlockEntity {
 
 	public int getSilkRenderStage() {
 		ItemStack silkStack = this.getItem(SLOT_SILK);
-		return Mth.ceil(Math.min(1.0f, silkStack.getCount() / (float) Math.min(this.inventoryHandler.getSlotLimit(SLOT_SILK), MAX_GRUBS * MAX_SILK_PER_GRUB)) * 3);
+		return 0;//Mth.ceil(Math.min(1.0f, silkStack.getCount() / (float) Math.min(this.inventoryHandler.getSlotLimit(SLOT_SILK), MAX_GRUBS * MAX_SILK_PER_GRUB)) * 3);
 	}
 
 	private void updateEfficiency(Level level, BlockPos pos) {
@@ -183,7 +183,7 @@ public class MothHouseBlockEntity extends NoMenuContainerBlockEntity {
 	public int addGrubs(ItemStack stack) {
 		int count = stack.getCount();
 
-		int grubsAdded = count - this.inventoryHandler.insertItem(SLOT_GRUBS, stack.copy(), false).getCount();
+		int grubsAdded = count - 0;//this.inventoryHandler.insertItem(SLOT_GRUBS, stack.copy(), false).getCount();
 
 		this.setChanged();
 

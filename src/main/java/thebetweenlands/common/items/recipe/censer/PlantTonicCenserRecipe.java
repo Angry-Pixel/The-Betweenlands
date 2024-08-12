@@ -20,7 +20,7 @@ public class PlantTonicCenserRecipe extends AbstractCenserRecipe<Void> {
 
 	@Override
 	public ItemStack consumeInput(ItemStack stack) {
-		return new ItemStack(ItemRegistry.BL_BUCKET);
+		return null;//new ItemStack(ItemRegistry.BL_BUCKET);
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class PlantTonicCenserRecipe extends AbstractCenserRecipe<Void> {
 								if(soil.getDecay() > 5) {
 									soil.setDecay(level, tePos, 0);
 
-									PacketDistributor.sendToPlayersNear(level, null, tePos.getX(), tePos.getY(), tePos.getZ(), 32, new MessageCureDecayParticles(tePos.above()));
+//									PacketDistributor.sendToPlayersNear(level, null, tePos.getX(), tePos.getY(), tePos.getZ(), 32, new MessageCureDecayParticles(tePos.above()));
 
 									cost += 10;
 								}

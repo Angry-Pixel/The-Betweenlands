@@ -36,7 +36,7 @@ public class LastKilledData {
 
 	public void setLastKilled(ResourceLocation key) {
 		this.lastKilled = Optional.of(key);
-		this.setChanged();
+//		this.setChanged();
 	}
 
 	public static void onLivingDeath(LivingDeathEvent event) {

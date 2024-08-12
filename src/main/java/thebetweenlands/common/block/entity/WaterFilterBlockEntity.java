@@ -107,9 +107,9 @@ public class WaterFilterBlockEntity extends NoMenuContainerBlockEntity implement
 				stack = this.chooseRandomItemFromLootTable(level, this.getSwampWaterLootTable());
 
 			for (int slot = 1; slot < 5; slot++) {
-				if (this.insertItem(slot, stack, false).isEmpty()) {
-					break;
-				}
+//				if (this.insertItem(slot, stack, false).isEmpty()) {
+//					break;
+//				}
 			}
 		}
 	}

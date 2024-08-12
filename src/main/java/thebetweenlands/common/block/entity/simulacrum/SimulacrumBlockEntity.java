@@ -207,6 +207,6 @@ public class SimulacrumBlockEntity extends RepellerBlockEntity implements Spawne
 
 	@Override
 	public void setEntityId(EntityType<?> entityType, RandomSource random) {
-		this.mireSnailSpawner.setEntityId(EntityRegistry.MIRE_SNAIL.get(), this.getLevel(), random, this.getBlockPos());
+//		this.mireSnailSpawner.setEntityId(EntityRegistry.MIRE_SNAIL.get(), this.getLevel(), random, this.getBlockPos());
 	}
 }

@@ -46,7 +46,7 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity {
 	}
 
 	public boolean hasChopper() {
-		return this.getItem(5).is(ItemRegistry.BONE_AXE);
+		return false; //this.getItem(5).is(ItemRegistry.BONE_AXE);
 	}
 
 	@Override
