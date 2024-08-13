@@ -2,6 +2,8 @@ package thebetweenlands.common.handler;
 
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.neoforged.bus.api.EventPriority;
@@ -10,9 +12,9 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.EventBusSubscriber.Bus;
 import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.datagen.BetweenlandsItemTagProvider;
 
 @EventBusSubscriber(modid = TheBetweenlands.ID, bus = Bus.GAME)
 public class CorrosionHandler {
@@ -52,5 +54,20 @@ public class CorrosionHandler {
 		}
 	}
 	
+	@SubscribeEvent
+	public static void updateCorrosionInPlayerInventory(PlayerTickEvent.Post event) {
+		Player player = event.getEntity();
+		
+		if(player != null && !player.isDeadOrDying() && player.getInventory() != null) {
+			Inventory inv = player.getInventory();
+			
+			int mainhandSlot = Inventory.isHotbarSlot(inv.selected) ? inv.selected : -1;
+	        for (int i = 0; i < inv.getContainerSize(); ++i) {
+	            if (!inv.getItem(i).isEmpty()) {
+	            	CorrosionHelper.updateCorrosion(inv.getItem(i), player.level(), player, i, i == mainhandSlot || i == Inventory.SLOT_OFFHAND);
+	            }
+	        }
+		}
+	}
 	
 }
