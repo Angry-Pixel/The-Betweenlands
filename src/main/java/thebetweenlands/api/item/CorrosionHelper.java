@@ -169,7 +169,7 @@ public class CorrosionHelper {
 	}
 	
 	public static boolean isCorrodible(ItemStack stack) {
-		return stack != null && !stack.isEmpty() && (stack.is(BetweenlandsItemTagProvider.CORRODIBLE) || stack.getItem() == Items.DIAMOND_SWORD);
+		return stack != null && !stack.isEmpty() && stack.is(BetweenlandsItemTagProvider.CORRODIBLE);
 	}
 	
 	/**

@@ -47,7 +47,6 @@ public class CorrosionHandler {
 	@SubscribeEvent
 	public static void onItemTooltip(ItemTooltipEvent event) {
 		ItemStack stack = event.getItemStack();
-//		TheBetweenlands.LOGGER.info("Is {} corrodible? {} {}", stack, stack.is(BetweenlandsItemTagProvider.CORRODIBLE), CorrosionHelper.isCorrodible(stack));
 		if(CorrosionHelper.isCorrodible(stack)) {
 			CorrosionHelper.addCorrosionTooltips(stack, event.getToolTip(), event.getFlags(), event.getContext());
 		}

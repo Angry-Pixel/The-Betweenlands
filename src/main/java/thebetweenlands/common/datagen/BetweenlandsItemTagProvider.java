@@ -39,10 +39,11 @@ public class BetweenlandsItemTagProvider extends ItemTagsProvider {
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
 		this.copy(BetweenlandsBlockTagsProvider.OCTINE_IGNITES, OCTINE_IGNITES);
+
+		// Those two "inherit" from this one
+		this.tag(CORRODIBLE).addTag(DEFAULT_CORRODIBLE).addTag(CUSTOM_CORRODIBLE);
 		this.tag(DEFAULT_CORRODIBLE).add(Items.DIAMOND_SWORD);
 		this.tag(CUSTOM_CORRODIBLE);
-		// Those two "inherit" from this one
-		this.tag(CORRODIBLE).addTag(DEFAULT_CORRODIBLE).addTag(CUSTOM_CORRODIBLE).add(Items.DIAMOND_SWORD);
 	}
 
 	public static TagKey<Item> tag(String tagName) {
@@ -52,4 +53,5 @@ public class BetweenlandsItemTagProvider extends ItemTagsProvider {
 	public static TagKey<Item> commonTag(String tagName) {
 		return ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", tagName));
 	}
+	
 }

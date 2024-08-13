@@ -1,16 +1,25 @@
 package thebetweenlands.common.datagen;
 
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+
+import net.minecraft.DetectedVersion;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.metadata.PackMetadataGenerator;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
+import net.minecraft.util.InclusiveRange;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
-import java.util.concurrent.CompletableFuture;
-
+//@EventBusSubscriber(modid = TheBetweenlands.ID, bus = EventBusSubscriber.Bus.MOD)
 public class DataGenerators {
 
+//	@SubscribeEvent
 	public static void gatherData(GatherDataEvent event) {
 		DataGenerator gen = event.getGenerator();
 		PackOutput output = gen.getPackOutput();
@@ -23,16 +32,24 @@ public class DataGenerators {
 		boolean data = event.includeServer();
 
 		// Data
-		gen.addProvider(data, new BetweenlandsRegistryProvider(output, provider));
-		BlockTagsProvider blockTags = new BetweenlandsBlockTagsProvider(output, provider, helper);
+		BetweenlandsRegistryProvider datapack = new BetweenlandsRegistryProvider(output, provider);
+		CompletableFuture<HolderLookup.Provider> dataProvider = datapack.getRegistryProvider();
+		gen.addProvider(data, datapack);
+		BlockTagsProvider blockTags = new BetweenlandsBlockTagsProvider(output, dataProvider, helper);
 		gen.addProvider(data, blockTags);
-		gen.addProvider(data, new BetweenlandsEntityTagProvider(output, provider, helper));
-		gen.addProvider(data, new BetweenlandsItemTagProvider(output, provider, blockTags.contentsGetter(), helper));
-		gen.addProvider(data, new BetweenlandsDimensionTagProvider(output, provider, helper));
+		gen.addProvider(data, new BetweenlandsEntityTagProvider(output, dataProvider, helper));
+		gen.addProvider(data, new BetweenlandsItemTagProvider(output, dataProvider, blockTags.contentsGetter(), helper));
+//		gen.addProvider(data, new BetweenlandsDimensionTagProvider(output, dataProvider, helper));
 
 		// Assets
 		gen.addProvider(assets, new BetweenlandsLangProvider(output));
 		gen.addProvider(assets, new BetweenlandsBlockStateProvider(output, helper));
 		gen.addProvider(assets, new BetweenlandsSoundDefinitionsProvider(output, helper));
+
+		// Make a pack.mcmeta
+		gen.addProvider(true, new PackMetadataGenerator(output).add(PackMetadataSection.TYPE, new PackMetadataSection(
+			Component.literal("Resources for The Betweenlands"),
+			DetectedVersion.BUILT_IN.getPackVersion(PackType.SERVER_DATA),
+			Optional.of(new InclusiveRange<>(0, Integer.MAX_VALUE)))));
 	}
 }

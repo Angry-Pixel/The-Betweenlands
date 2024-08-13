@@ -27,3 +27,6 @@ run
 runs
 logs
 secrets.properties
+
+run-data/*
+src/generated

@@ -267,9 +267,10 @@ public class BetweenlandsSoundDefinitionsProvider extends SoundDefinitionsProvid
 		add(SoundRegistry.DRAETON_ANCHOR, definition().with(
 			sound("thebetweenlands:draeton_anchor")
 		).subtitle("blsubtitles.misc.draeton_anchor"));
-		add(SoundRegistry.DRAETON_LEAK_START, definition().with(
-			sound("thebeweenlands:draeton_leak_1")
-		).subtitle("blsubtitles.misc.draeton_leak"));
+		// TODO no idea why this breaks runData
+//		add(SoundRegistry.DRAETON_LEAK_START, definition().with(
+//			sound("thebeweenlands:draeton_leak_1")
+//		).subtitle("blsubtitles.misc.draeton_leak"));
 		add(SoundRegistry.DRAETON_LEAK_LOOP, definition().with(
 			sound("thebetweenlands:draeton_leak_2")
 		));
@@ -412,9 +413,6 @@ public class BetweenlandsSoundDefinitionsProvider extends SoundDefinitionsProvid
 			sound("thebetweenlands:dreadful_peat_mummy_living_4"),
 			sound("thebetweenlands:dreadful_peat_mummy_living_5")
 		).subtitle("blsubtitles.entity.dreadful_peat_mummy.living"));
-		add(SoundRegistry.DREADFUL_PEAT_MUMMY_LICK, definition().with(
-			sound("thebetweenlands:dreadful_peat_mummy_lick")
-		).subtitle("blsubtitles.entity.dreadful_peat_mummy.lick"));
 		add(SoundRegistry.DREADFUL_PEAT_MUMMY_LOOP, definition().with(
 			sound("thebetweenlands:boss/dreadful_peat_mummy_loop").stream()
 		));

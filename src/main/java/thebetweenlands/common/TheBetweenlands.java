@@ -85,7 +85,7 @@ public class TheBetweenlands {
 
 		eventbus.addListener(this::setup);
 		eventbus.addListener(this::registerBlockEntityValidBlocks);
-		eventbus.addListener(DataGenerators::gatherData);
+		eventbus.addListener(thebetweenlands.common.datagen.DataGenerators::gatherData);
 		eventbus.addListener(CreativeGroupRegistry::populateTabs);
 		eventbus.addListener(this::registerPackets);
 	}

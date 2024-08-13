@@ -3,6 +3,7 @@ package thebetweenlands.common.registries;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.data.worldgen.SurfaceRuleData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -65,12 +66,12 @@ public class DimensionRegistries {
 				DensityFunctions.zero(),
 				DensityFunctions.zero(),
 				DensityFunctions.zero(),
-				DensityFunctions.zero(),
+				DensityFunctions.zero(), // TODO add a density function
 				DensityFunctions.zero(),
 				DensityFunctions.zero(),
 				DensityFunctions.zero()
 			),
-			BetweenlandsSurfaceRuleData.betweenlands(),
+			SurfaceRuleData.overworld(), // TODO revert to BetweenlandsSurfaceRuleData.betweenlands();
 			List.of(),
 			120,
 			false,
