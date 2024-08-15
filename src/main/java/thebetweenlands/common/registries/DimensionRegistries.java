@@ -71,7 +71,7 @@ public class DimensionRegistries {
 				DensityFunctions.zero(),
 				DensityFunctions.zero()
 			),
-			SurfaceRuleData.overworld(), // TODO revert to BetweenlandsSurfaceRuleData.betweenlands();
+			BetweenlandsSurfaceRuleData.betweenlands(),
 			List.of(),
 			120,
 			false,

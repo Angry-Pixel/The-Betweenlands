@@ -27,6 +27,7 @@ import thebetweenlands.common.registries.*;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import thebetweenlands.common.world.BetweenlandsSurfaceRules;
 
 import javax.annotation.Nullable;
 import java.util.Locale;
@@ -80,6 +81,7 @@ public class TheBetweenlands {
 		SimulacrumEffectRegistry.EFFECTS.register(eventbus);
 		EnvironmentEventRegistry.EVENTS.register(eventbus);
 		AdvancementCriteriaRegistry.TRIGGERS.register(eventbus);
+		BetweenlandsSurfaceRules.SOURCES.register(eventbus);
 
 		StorageRegistry.preInit();
 

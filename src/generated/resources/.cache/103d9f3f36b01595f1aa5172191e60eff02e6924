@@ -1,4 +1,4 @@
-// 1.21	2024-08-14T23:47:14.2056183	Registries
+// 1.21	2024-08-15T11:21:27.3494308	Registries
 e23d7da85b85afde62f91a7e541cb2b768aa6693 data/thebetweenlands/dimension/the_betweenlands.json
 2b786ad82142bd826db2f8d86df9ed42bf08bd5f data/thebetweenlands/dimension_type/the_betweenlands.json
 c2f0f90525ceded7021638ef915fe394c653b537 data/thebetweenlands/jukebox_song/ancient.json
@@ -26,4 +26,4 @@ ca31d40c969c15a37719791077a8191f0a120591 data/thebetweenlands/worldgen/biome/slu
 ca31d40c969c15a37719791077a8191f0a120591 data/thebetweenlands/worldgen/biome/sludge_plains_clearing.json
 771353fe64e901b367fdc83da41b25cb309a1d39 data/thebetweenlands/worldgen/biome/swamplands.json
 faed554519c28430ed35f9c7e3026b4b0d521c87 data/thebetweenlands/worldgen/biome/swamplands_clearing.json
-9e9a0387521aba84d661d325d66e783e269081d5 data/thebetweenlands/worldgen/noise_settings/the_betweenlands.json
+8aa6404569af4413950486f6f3bf76583d90467d data/thebetweenlands/worldgen/noise_settings/the_betweenlands.json

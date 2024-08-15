@@ -1,7 +1,9 @@
 package thebetweenlands.common.world;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.KeyDispatchDataCodec;
 import net.minecraft.util.Mth;
@@ -10,8 +12,15 @@ import net.minecraft.world.level.levelgen.SurfaceRules;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.XoroshiroRandomSource;
 import net.minecraft.world.level.levelgen.synth.SimplexNoise;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import thebetweenlands.common.TheBetweenlands;
 
 public class BetweenlandsSurfaceRules {
+
+	public static final DeferredRegister<MapCodec<? extends SurfaceRules.ConditionSource>> SOURCES = DeferredRegister.create(Registries.MATERIAL_CONDITION, TheBetweenlands.ID);
+
+	public static final DeferredHolder<MapCodec<? extends SurfaceRules.ConditionSource>, MapCodec<SimplexGradientConditionSource>> SIMPLEX_GRADIENT = SOURCES.register("simplex_gradient", SimplexGradientConditionSource.CODEC::codec);
 
 	public static SurfaceRules.ConditionSource simplexGradient(String p_189404_, VerticalAnchor p_189405_, VerticalAnchor p_189406_, double noiseScale) {
 		return new SimplexGradientConditionSource(ResourceLocation.parse(p_189404_), p_189405_, p_189406_, noiseScale);
