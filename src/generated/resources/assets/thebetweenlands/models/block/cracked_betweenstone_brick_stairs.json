@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "thebetweenlands:block/cracked_betweenstone_bricks",
+    "side": "thebetweenlands:block/cracked_betweenstone_bricks",
+    "top": "thebetweenlands:block/cracked_betweenstone_bricks"
+  }
+}

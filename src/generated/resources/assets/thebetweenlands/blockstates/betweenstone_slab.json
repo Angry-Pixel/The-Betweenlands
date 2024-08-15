@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "thebetweenlands:block/betweenstone_slab"
+    },
+    "type=double": {
+      "model": "thebetweenlands:block/betweenstone"
+    },
+    "type=top": {
+      "model": "thebetweenlands:block/betweenstone_slab_top"
+    }
+  }
+}

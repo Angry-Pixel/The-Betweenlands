@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "thebetweenlands:block/dull_lavender_mud_brick_shingles"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "thebetweenlands:block/midnight_purple_mud_brick_shingle_slab"
+    },
+    "type=double": {
+      "model": "thebetweenlands:block/midnight_purple_mud_brick_shingles"
+    },
+    "type=top": {
+      "model": "thebetweenlands:block/midnight_purple_mud_brick_shingle_slab_top"
+    }
+  }
+}

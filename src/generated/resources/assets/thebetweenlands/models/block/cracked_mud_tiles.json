@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "thebetweenlands:block/cracked_mud_tiles"
+  }
+}

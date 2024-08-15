@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "thebetweenlands:block/brown_rust_mud_brick_shingles",
+    "side": "thebetweenlands:block/brown_rust_mud_brick_shingles",
+    "top": "thebetweenlands:block/brown_rust_mud_brick_shingles"
+  }
+}

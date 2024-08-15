@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "thebetweenlands:block/cragrock",
+    "side": "thebetweenlands:block/cragrock",
+    "top": "thebetweenlands:block/cragrock"
+  }
+}

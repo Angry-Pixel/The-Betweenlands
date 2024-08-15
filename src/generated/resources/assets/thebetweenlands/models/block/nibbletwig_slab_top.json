@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "thebetweenlands:block/nibbletwig_planks",
+    "side": "thebetweenlands:block/nibbletwig_planks",
+    "top": "thebetweenlands:block/nibbletwig_planks"
+  }
+}

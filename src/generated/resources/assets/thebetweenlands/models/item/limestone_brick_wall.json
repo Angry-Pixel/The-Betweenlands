@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/wall_inventory",
+  "textures": {
+    "wall": "thebetweenlands:block/limestone_bricks"
+  }
+}

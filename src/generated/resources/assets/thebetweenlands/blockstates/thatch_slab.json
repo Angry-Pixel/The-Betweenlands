@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "thebetweenlands:block/thatch_slab"
+    },
+    "type=double": {
+      "model": "thebetweenlands:block/thatch"
+    },
+    "type=top": {
+      "model": "thebetweenlands:block/thatch_slab_top"
+    }
+  }
+}

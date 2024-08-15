@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "thebetweenlands:block/mossy_betweenstone_bricks",
+    "side": "thebetweenlands:block/mossy_betweenstone_bricks",
+    "top": "thebetweenlands:block/mossy_betweenstone_bricks"
+  }
+}

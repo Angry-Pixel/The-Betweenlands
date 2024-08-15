@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "thebetweenlands:block/mud_bricks",
+    "side": "thebetweenlands:block/mud_bricks",
+    "top": "thebetweenlands:block/mud_bricks"
+  }
+}

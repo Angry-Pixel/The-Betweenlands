@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "thebetweenlands:block/midnight_purple_mud_brick_shingles",
+    "side": "thebetweenlands:block/midnight_purple_mud_brick_shingles",
+    "top": "thebetweenlands:block/midnight_purple_mud_brick_shingles"
+  }
+}

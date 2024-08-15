@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "thebetweenlands:block/weedwood_slab"
+    },
+    "type=double": {
+      "model": "thebetweenlands:block/weedwood_planks"
+    },
+    "type=top": {
+      "model": "thebetweenlands:block/weedwood_slab_top"
+    }
+  }
+}

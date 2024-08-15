@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "thebetweenlands:block/sludgy_mud_bricks_1",
+    "side": "thebetweenlands:block/sludgy_mud_bricks_1",
+    "top": "thebetweenlands:block/sludgy_mud_bricks_1"
+  }
+}

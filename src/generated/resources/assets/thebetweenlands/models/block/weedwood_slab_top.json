@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "thebetweenlands:block/weedwood_planks",
+    "side": "thebetweenlands:block/weedwood_planks",
+    "top": "thebetweenlands:block/weedwood_planks"
+  }
+}

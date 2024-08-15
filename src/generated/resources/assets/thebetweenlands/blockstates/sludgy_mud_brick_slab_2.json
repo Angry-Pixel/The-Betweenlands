@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "thebetweenlands:block/sludgy_mud_brick_slab_2"
+    },
+    "type=double": {
+      "model": "thebetweenlands:block/sludgy_mud_bricks_2"
+    },
+    "type=top": {
+      "model": "thebetweenlands:block/sludgy_mud_brick_slab_2_top"
+    }
+  }
+}

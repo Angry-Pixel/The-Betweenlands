@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "thebetweenlands:block/cragrock_slab"
+    },
+    "type=double": {
+      "model": "thebetweenlands:block/cragrock"
+    },
+    "type=top": {
+      "model": "thebetweenlands:block/cragrock_slab_top"
+    }
+  }
+}

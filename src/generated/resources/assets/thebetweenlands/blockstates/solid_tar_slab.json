@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "thebetweenlands:block/solid_tar_slab"
+    },
+    "type=double": {
+      "model": "thebetweenlands:block/solid_tar"
+    },
+    "type=top": {
+      "model": "thebetweenlands:block/solid_tar_slab_top"
+    }
+  }
+}

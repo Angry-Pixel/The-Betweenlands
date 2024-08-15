@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "thebetweenlands:block/mossy_smooth_betweenstone",
+    "side": "thebetweenlands:block/mossy_smooth_betweenstone",
+    "top": "thebetweenlands:block/mossy_smooth_betweenstone"
+  }
+}

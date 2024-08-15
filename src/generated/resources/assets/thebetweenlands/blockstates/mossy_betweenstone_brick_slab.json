@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "thebetweenlands:block/mossy_betweenstone_brick_slab"
+    },
+    "type=double": {
+      "model": "thebetweenlands:block/mossy_betweenstone_bricks"
+    },
+    "type=top": {
+      "model": "thebetweenlands:block/mossy_betweenstone_brick_slab_top"
+    }
+  }
+}

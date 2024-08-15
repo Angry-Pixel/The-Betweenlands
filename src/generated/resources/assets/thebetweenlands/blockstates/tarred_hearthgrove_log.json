@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "thebetweenlands:block/tarred_hearthgrove_log_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "thebetweenlands:block/tarred_hearthgrove_log"
+    },
+    "axis=z": {
+      "model": "thebetweenlands:block/tarred_hearthgrove_log_horizontal",
+      "x": 90
+    }
+  }
+}

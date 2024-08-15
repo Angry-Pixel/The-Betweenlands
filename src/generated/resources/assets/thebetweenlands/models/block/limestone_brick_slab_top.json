@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "thebetweenlands:block/limestone_bricks",
+    "side": "thebetweenlands:block/limestone_bricks",
+    "top": "thebetweenlands:block/limestone_bricks"
+  }
+}

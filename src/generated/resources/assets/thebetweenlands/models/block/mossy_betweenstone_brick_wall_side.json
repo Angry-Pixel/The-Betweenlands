@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_wall_side",
+  "textures": {
+    "wall": "thebetweenlands:block/mossy_betweenstone_bricks"
+  }
+}

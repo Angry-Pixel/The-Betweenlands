@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "thebetweenlands:block/limestone_slab"
+    },
+    "type=double": {
+      "model": "thebetweenlands:block/limestone"
+    },
+    "type=top": {
+      "model": "thebetweenlands:block/limestone_slab_top"
+    }
+  }
+}

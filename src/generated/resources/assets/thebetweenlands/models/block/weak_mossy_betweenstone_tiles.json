@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "thebetweenlands:block/weak_mossy_betweenstone_tiles"
+  }
+}

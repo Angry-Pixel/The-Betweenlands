@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "thebetweenlands:block/solid_tar",
+    "side": "thebetweenlands:block/solid_tar",
+    "top": "thebetweenlands:block/solid_tar"
+  }
+}

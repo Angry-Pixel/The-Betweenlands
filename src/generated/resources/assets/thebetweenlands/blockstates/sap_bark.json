@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "thebetweenlands:block/sap_bark_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "thebetweenlands:block/sap_bark"
+    },
+    "axis=z": {
+      "model": "thebetweenlands:block/sap_bark_horizontal",
+      "x": 90
+    }
+  }
+}

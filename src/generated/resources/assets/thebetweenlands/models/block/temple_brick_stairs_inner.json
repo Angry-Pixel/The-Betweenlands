@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "thebetweenlands:block/temple_bricks",
+    "side": "thebetweenlands:block/temple_bricks",
+    "top": "thebetweenlands:block/temple_bricks"
+  }
+}

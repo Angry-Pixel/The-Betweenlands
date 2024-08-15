@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "type=bottom": [
+      {
+        "model": "thebetweenlands:block/scabyst_brick_slab"
+      },
+      {
+        "model": "thebetweenlands:block/scabyst_brick_slab"
+      }
+    ],
+    "type=double": [
+      {
+        "model": "thebetweenlands:block/scabyst_bricks"
+      },
+      {
+        "model": "thebetweenlands:block/scabyst_bricks"
+      }
+    ],
+    "type=top": [
+      {
+        "model": "thebetweenlands:block/scabyst_brick_slab_top"
+      },
+      {
+        "model": "thebetweenlands:block/scabyst_brick_slab_top"
+      }
+    ]
+  }
+}

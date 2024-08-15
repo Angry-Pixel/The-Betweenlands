@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "thebetweenlands:block/giant_root_slab"
+    },
+    "type=double": {
+      "model": "thebetweenlands:block/giant_root_planks"
+    },
+    "type=top": {
+      "model": "thebetweenlands:block/giant_root_slab_top"
+    }
+  }
+}

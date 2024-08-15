@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "thebetweenlands:block/sushi_green_mud_brick_shingles",
+    "side": "thebetweenlands:block/sushi_green_mud_brick_shingles",
+    "top": "thebetweenlands:block/sushi_green_mud_brick_shingles"
+  }
+}

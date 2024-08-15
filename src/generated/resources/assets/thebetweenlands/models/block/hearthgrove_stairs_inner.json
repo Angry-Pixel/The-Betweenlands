@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "thebetweenlands:block/hearthgrove_planks",
+    "side": "thebetweenlands:block/hearthgrove_planks",
+    "top": "thebetweenlands:block/hearthgrove_planks"
+  }
+}

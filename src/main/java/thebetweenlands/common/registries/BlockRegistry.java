@@ -154,7 +154,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> CRACKED_CRAGROCK_BRICKS = register("cracked_cragrock_bricks", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> MOSSY_CRAGROCK_BRICKS = register("mossy_cragrock_bricks", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> CRAGROCK_TILES = register("cragrock_tiles", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
-	public static final DeferredBlock<Block> CRACKED_CRAGROCK_TILES = register("cragrock_cragrock_tiles", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> CRACKED_CRAGROCK_TILES = register("cracked_cragrock_tiles", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> MOSSY_CRAGROCK_TILES = register("mossy_cragrock_tiles", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> GLOWING_BETWEENSTONE_TILE = register("glowing_betweenstone_tile", () -> new Block(BlockBehaviour.Properties.of().lightLevel(value -> 13).strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> INACTIVE_GLOWING_SMOOTH_CRAGROCK = register("inactive_glowing_smooth_cragrock", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
@@ -241,7 +241,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> SPIKE_TRAP = register("spike_trap", () -> new SpikeTrapBlock(BlockBehaviour.Properties.of().strength(10.0F, 2000.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> WEEDWOOD_STAIRS = register("weedwood_stairs", () -> new StairBlock(WEEDWOOD_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(WEEDWOOD_PLANKS.get())));
 	public static final DeferredBlock<Block> RUBBER_TREE_STAIRS = register("rubber_tree_stairs", () -> new StairBlock(RUBBER_TREE_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(RUBBER_TREE_PLANKS.get())));
-	public static final DeferredBlock<Block> GIANT_ROOT_STAIRS = register("giant_stairs", () -> new StairBlock(GIANT_ROOT_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(GIANT_ROOT_PLANKS.get())));
+	public static final DeferredBlock<Block> GIANT_ROOT_STAIRS = register("giant_root_stairs", () -> new StairBlock(GIANT_ROOT_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(GIANT_ROOT_PLANKS.get())));
 	public static final DeferredBlock<Block> HEARTHGROVE_STAIRS = register("hearthgrove_stairs", () -> new StairBlock(HEARTHGROVE_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(HEARTHGROVE_PLANKS.get())));
 	public static final DeferredBlock<Block> NIBBLETWIG_STAIRS = register("nibbletwig_stairs", () -> new StairBlock(NIBBLETWIG_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(NIBBLETWIG_PLANKS.get())));
 	public static final DeferredBlock<Block> POSSESSED_BLOCK = register("possessed_block", () -> new PossessedBlock(BlockBehaviour.Properties.of().strength(10.0F, 2000.0F).sound(SoundType.STONE)));

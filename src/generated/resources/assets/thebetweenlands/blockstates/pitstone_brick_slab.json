@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "thebetweenlands:block/pitstone_brick_slab"
+    },
+    "type=double": {
+      "model": "thebetweenlands:block/pitstone_bricks"
+    },
+    "type=top": {
+      "model": "thebetweenlands:block/pitstone_brick_slab_top"
+    }
+  }
+}

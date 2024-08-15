@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "thebetweenlands:block/hearthgrove_slab"
+    },
+    "type=double": {
+      "model": "thebetweenlands:block/hearthgrove_planks"
+    },
+    "type=top": {
+      "model": "thebetweenlands:block/hearthgrove_slab_top"
+    }
+  }
+}
