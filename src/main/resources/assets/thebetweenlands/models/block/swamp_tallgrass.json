@@ -1,6 +1,0 @@
-{
-	"parent": "thebetweenlands:block/tinted_cross_0",
-	"textures": {
-		"cross": "thebetweenlands:blocks/swamp_tallgrass"
-	}
-}

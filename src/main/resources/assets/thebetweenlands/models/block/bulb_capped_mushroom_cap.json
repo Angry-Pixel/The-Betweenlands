@@ -1,6 +1,0 @@
-{
-	"parent": "block/cube_all",
-	"textures": {
-		"all": "thebetweenlands:blocks/bulb_capped_shroom_cap"
-	}
-}

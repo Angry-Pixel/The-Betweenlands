@@ -1,4 +1,4 @@
-// 1.21	2024-08-15T00:05:59.4146438	Block States: thebetweenlands
+// 1.21	2024-08-15T00:11:19.9519376	Block States: thebetweenlands
 31a399798688aeec66042af5523ac58b2bb089c2 assets/thebetweenlands/blockstates/druid_stone_1.json
 7b894840f5fb9191761227b9fc84e19ba13178fb assets/thebetweenlands/blockstates/druid_stone_2.json
 f1c705d2c760afe8d14d2df1fb3e3c1e45a94f89 assets/thebetweenlands/blockstates/druid_stone_3.json
@@ -15,3 +15,9 @@ da6589ed209e2b6936e8948ea315f5905b950056 assets/thebetweenlands/models/block/dru
 15dd60f8f6015a1a185cfc1f90f97c4cc821a8bb assets/thebetweenlands/models/block/druid_stone_4_active.json
 961c6d92dc3dfd06a74f63e84e209f19c5d3af9d assets/thebetweenlands/models/block/druid_stone_5.json
 961c6d92dc3dfd06a74f63e84e209f19c5d3af9d assets/thebetweenlands/models/block/druid_stone_5_active.json
+f4ee56be4aca172918587626d581b0c3afc8ce2d assets/thebetweenlands/models/item/druid_stone_1.json
+a211594672b502b09378f6e83280ba9241f19d71 assets/thebetweenlands/models/item/druid_stone_2.json
+3afabf2aa3cc9d9e64f402cbeda48d894e2d4bd5 assets/thebetweenlands/models/item/druid_stone_3.json
+37f11d2865b9a4c5c0817359a69b5d93b017061e assets/thebetweenlands/models/item/druid_stone_4.json
+23e6d070ec5561c09f0995e4fddf993846120e20 assets/thebetweenlands/models/item/druid_stone_5.json
+fb63fdeef603a7edf02010fc963c89e2d41931b6 assets/thebetweenlands/models/item/druid_stone_6.json
