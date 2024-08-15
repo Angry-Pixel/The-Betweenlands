@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "active=false,facing=east": {
+      "model": "thebetweenlands:block/druid_stone_1",
+      "y": 270
+    },
+    "active=false,facing=north": {
+      "model": "thebetweenlands:block/druid_stone_1",
+      "y": 180
+    },
+    "active=false,facing=south": {
+      "model": "thebetweenlands:block/druid_stone_1"
+    },
+    "active=false,facing=west": {
+      "model": "thebetweenlands:block/druid_stone_1",
+      "y": 90
+    },
+    "active=true,facing=east": {
+      "model": "thebetweenlands:block/druid_stone_1_active",
+      "y": 270
+    },
+    "active=true,facing=north": {
+      "model": "thebetweenlands:block/druid_stone_1_active",
+      "y": 180
+    },
+    "active=true,facing=south": {
+      "model": "thebetweenlands:block/druid_stone_1_active"
+    },
+    "active=true,facing=west": {
+      "model": "thebetweenlands:block/druid_stone_1_active",
+      "y": 90
+    }
+  }
+}

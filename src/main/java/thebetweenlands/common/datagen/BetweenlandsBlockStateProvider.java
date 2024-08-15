@@ -1,40 +1,37 @@
 package thebetweenlands.common.datagen;
 
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.DeferredBlock;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.DruidStoneBlock;
+import thebetweenlands.common.registries.BlockRegistry;
 
 public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 
-	public BetweenlandsBlockStateProvider(PackOutput output, ExistingFileHelper exFileHelper) {
-		super(output, TheBetweenlands.ID, exFileHelper);
+	public BetweenlandsBlockStateProvider(PackOutput output, ExistingFileHelper helper) {
+		super(output, TheBetweenlands.ID, helper);
 	}
 
 	@Override
 	protected void registerStatesAndModels() {
-		// Block models
-		//BlockModelBuilder SwampGrassModel = models().getBuilder(BlockRegistry.SWAMP_GRASS.get().getRegistryName().getPath())
-		//        .parent(models().getExistingFile(mcLoc("cube")))
-		//        .customLoader((blockModelBuilder, helper) -> new CustomLoaderBuilder<BlockModelBuilder>(TheBetweenlands.prefix("swamp_grass"), blockModelBuilder, helper) { })
-		//        .end();
-		//BlockModelBuilder SwampGrassModelTuft0 = models().getBuilder(TheBetweenlands.prefix("swamp_grass_tuft0").getPath())
-		//        .parent(SwampGrassModel)
-		//        .customLoader((blockModelBuilder, helper) -> new CustomLoaderBuilder<BlockModelBuilder>(TheBetweenlands.prefix("swamp_grass_tuft0"), blockModelBuilder, helper) { })
-		//        .end();
-		//BlockModelBuilder SwampGrassModelTuft1 = models().getBuilder(TheBetweenlands.prefix("swamp_grass_tuft1").getPath())
-		//        .parent(SwampGrassModel)
-		//        .customLoader((blockModelBuilder, helper) -> new CustomLoaderBuilder<BlockModelBuilder>(TheBetweenlands.prefix("swamp_grass_tuft1"), blockModelBuilder, helper) { })
-		//        .end();
+		this.druidStone(BlockRegistry.DRUID_STONE_1);
+		this.druidStone(BlockRegistry.DRUID_STONE_2);
+		this.druidStone(BlockRegistry.DRUID_STONE_3);
+		this.druidStone(BlockRegistry.DRUID_STONE_4);
+		this.druidStone(BlockRegistry.DRUID_STONE_5);
+		this.simpleBlock(BlockRegistry.DRUID_STONE_6.get(), this.models().getExistingFile(this.blockTexture(Blocks.STONE)));
+	}
 
-		// Item models (just casts block model generator to item model generator)
-		//ItemModelBuilder SwampGrassItemModel = itemModels().getBuilder(BlockRegistry.SWAMP_GRASS.get().getRegistryName().getPath())
-		//		.parent(SwampGrassModel).customLoader((ItemModelBuilder, helper) -> new CustomLoaderBuilder<ItemModelBuilder>(TheBetweenlands.prefix("swamp_grass"), ItemModelBuilder, helper) { })
-		//		.end();
+	private void druidStone(DeferredBlock<Block> stone) {
+		ModelFile inactive = this.models().orientable(stone.getId().toString(), this.blockTexture(Blocks.STONE), this.blockTexture(stone.get()), this.blockTexture(Blocks.STONE));
+		ModelFile active = this.models().orientable(stone.getId() + "_active", this.blockTexture(Blocks.STONE), this.blockTexture(stone.get()), this.blockTexture(Blocks.STONE));
 
-		// Block states
-		//VariantBlockStateBuilder SwampGrassBlockState = getVariantBuilder(BlockRegistry.SWAMP_GRASS.get())
-		//        .partialState().setModels(new ConfiguredModel(SwampGrassModel, 0, 0, false, 2), new ConfiguredModel(SwampGrassModelTuft0, 0, 0, false, 2));
+		this.getVariantBuilder(stone.get()).forAllStates(state -> ConfiguredModel.builder().rotationY((int) state.getValue(DruidStoneBlock.FACING).toYRot()).modelFile(state.getValue(DruidStoneBlock.ACTIVE) ? active : inactive).build());
 	}
 }
