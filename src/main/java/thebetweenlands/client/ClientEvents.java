@@ -13,9 +13,9 @@ import javax.annotation.Nullable;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.entity.GeckoModel;
 import thebetweenlands.client.renderer.entity.GeckoRenderer;
-import thebetweenlands.client.renderer.entity.RenderSwampHag;
+import thebetweenlands.client.renderer.entity.SwampHagRenderer;
 import thebetweenlands.client.renderer.entity.RenderWight;
-import thebetweenlands.client.model.entity.ModelSwampHag;
+import thebetweenlands.client.model.entity.SwampHagModel;
 import thebetweenlands.client.model.entity.ModelWight;
 import thebetweenlands.client.renderer.shader.BetweenlandsShaders;
 import thebetweenlands.client.renderer.shader.BetweenlandsSkyShaderInstance;
@@ -45,7 +45,7 @@ public class ClientEvents {
 	}
 
 	private static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
-		event.registerEntityRenderer(EntityRegistry.SWAMP_HAG.get(), RenderSwampHag::new);
+		event.registerEntityRenderer(EntityRegistry.SWAMP_HAG.get(), SwampHagRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.GECKO.get(), GeckoRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.WIGHT.get(), RenderWight::new);
 	}
@@ -71,7 +71,7 @@ public class ClientEvents {
 	}
 
 	private static void registerLayerDefinition(final EntityRenderersEvent.RegisterLayerDefinitions event) {
-		event.registerLayerDefinition(RenderSwampHag.SWAMP_HAG_MODEL_LAYER, ModelSwampHag::createModelLayer);
+		event.registerLayerDefinition(SwampHagRenderer.SWAMP_HAG_MODEL_LAYER, SwampHagModel::createModelLayer);
 		event.registerLayerDefinition(GeckoRenderer.GECKO_MODEL_LAYER, GeckoModel::createModelLayer);
 		event.registerLayerDefinition(RenderWight.WIGHT_MODEL_LAYER, ModelWight::createModelLayer);
 	}

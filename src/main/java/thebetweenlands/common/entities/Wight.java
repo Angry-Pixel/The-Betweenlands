@@ -10,9 +10,9 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -22,7 +22,6 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -30,16 +29,15 @@ import org.joml.Vector3d;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entities.ai.goals.EntityAIFlyRandomly;
 import thebetweenlands.common.entities.ai.goals.EntityAIMoveToDirect;
+import thebetweenlands.common.entities.movement.FlightMoveHelper;
 import thebetweenlands.common.registries.AttributeRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-// TODO: whight keeps losing its target when it goes volitile & seems to not move towards target while volitile ether
-// ill have to do more tests to find out why
+public class Wight extends Monster {
 
-public class EntityWight extends BetweenlandsEntity {
-
-	protected static final EntityDataAccessor<Boolean> HIDING_STATE_DW = SynchedEntityData.defineId(EntityWight.class, EntityDataSerializers.BOOLEAN);
-	protected static final EntityDataAccessor<Boolean> VOLATILE_STATE_DW = SynchedEntityData.defineId(EntityWight.class, EntityDataSerializers.BOOLEAN);
+	protected static final EntityDataAccessor<Boolean> HIDING_STATE_DW = SynchedEntityData.defineId(Wight.class, EntityDataSerializers.BOOLEAN);
+	protected static final EntityDataAccessor<Boolean> VOLATILE_STATE_DW = SynchedEntityData.defineId(Wight.class, EntityDataSerializers.BOOLEAN);
 	protected final MoveControl flightMoveHelper;
 	protected final MoveControl groundMoveHelper;
 	private int hidingAnimationTicks = 0;
@@ -50,22 +48,18 @@ public class EntityWight extends BetweenlandsEntity {
 	private boolean canTurnVolatile = true;
 	private boolean canTurnVolatileOnTarget = true;
 	private boolean didTurnVolatileOnPlayer = false;
-	private static final EntityDataAccessor<Integer> GROW_TIMER = SynchedEntityData.defineId(EntityWight.class, EntityDataSerializers.INT);
+	private static final EntityDataAccessor<Integer> GROW_TIMER = SynchedEntityData.defineId(Wight.class, EntityDataSerializers.INT);
 	public int growCount, prevGrowCount;
 
-	public EntityDimensions dimensions;
-
-	public EntityWight(EntityType<? extends Monster> p_33002_, Level p_33003_) {
+	public Wight(EntityType<? extends Monster> p_33002_, Level p_33003_) {
 		super(p_33002_, p_33003_);
-		this.ambientSoundTime = 80;
-		/*this.flightMoveHelper = new FlightMoveHelper(this) {
+		this.flightMoveHelper = new FlightMoveHelper(this) {
             @Override
             protected double getFlightSpeed() {
-                return this.mob.getAttributes().getInstance(VOLATILE_FLIGHT_SPEED_ATTRIB).getValue();
+                return this.mob.getAttributes().getInstance(AttributeRegistry.VOLATILE_FLIGHT_SPEED_ATTRIB).getValue();
             }
-        };*/
-		this.moveControl = this.flightMoveHelper = this.groundMoveHelper = new MoveControl(this);
-		this.dimensions = EntityDimensions.scalable(0.7F, 2.2F);    // defalt size
+        };
+		this.groundMoveHelper = this.moveControl = new MoveControl(this);
 	}
 
 	@Override
@@ -77,18 +71,12 @@ public class EntityWight extends BetweenlandsEntity {
 
 	}
 
-	@Override
-	public AttributeMap getAttributes() {
-		return new AttributeMap(EntityWight.createMonsterAttributes()
+	public static AttributeSupplier.Builder makeAttributes() {
+		return Monster.createMonsterAttributes()
 			.add(Attributes.MAX_HEALTH, 76.0D)
 			.add(Attributes.MOVEMENT_SPEED, 0.33D)
 			.add(Attributes.ATTACK_DAMAGE, 6.0D)
-			.add(Attributes.FOLLOW_RANGE, 80.0D)
-			.add(AttributeRegistry.VOLATILE_HEALTH_START_ATTRIB)
-			.add(AttributeRegistry.VOLATILE_COOLDOWN_ATTRIB)
-			.add(AttributeRegistry.VOLATILE_FLIGHT_SPEED_ATTRIB)
-			.add(AttributeRegistry.VOLATILE_LENGTH_ATTRIB)
-			.add(AttributeRegistry.VOLATILE_MAX_DAMAGE_ATTRIB).build());
+			.add(Attributes.FOLLOW_RANGE, 80.0D);
 	}
 
 	@Override
@@ -126,7 +114,7 @@ public class EntityWight extends BetweenlandsEntity {
 			} else {
 				this.setHiding(false);
 
-				if (this.canTurnVolatile && !this.isVolatile() && !this.isRiding() && this.canPossess(this.getTarget()) && this.canTurnVolatileOnTarget) {
+				if (this.canTurnVolatile && !this.isVolatile() && !this.isPassenger() && this.canPossess(this.getTarget()) && this.canTurnVolatileOnTarget) {
 					if (this.volatileCooldownTicks > 0) {
 						this.volatileCooldownTicks--;
 					}
@@ -180,12 +168,12 @@ public class EntityWight extends BetweenlandsEntity {
 				if (this.getTarget() != null) {
 					LivingEntity attackTarget = this.getTarget();
 
-					if (this.getRidingEntity() == null && this.distanceTo(attackTarget) < 1.75D && this.canPossess(attackTarget)) {
+					if (this.getVehicle() == null && this.distanceTo(attackTarget) < 1.75D && this.canPossess(attackTarget)) {
 						this.startRiding(attackTarget, true);
 						this.getServer().getPlayerList().broadcastAll(new ClientboundSetPassengersPacket(attackTarget));
 					}
 
-					if (this.getRidingEntity() == null) {
+					if (this.getVehicle() == null) {
 						double dx = attackTarget.getX() - this.getX();
 						double dz = attackTarget.getZ() - this.getZ();
 						double dy;
@@ -226,11 +214,11 @@ public class EntityWight extends BetweenlandsEntity {
 				this.moveControl = this.flightMoveHelper;
 			}
 
-			if (this.level().isClientSide && (this.getRidingEntity() == null || this.tickCount % 4 == 0)) {
+			if (this.level().isClientSide() && (this.getVehicle() == null || this.tickCount % 4 == 0)) {
 				this.spawnVolatileParticles(false);
 			}
 
-			this.setSize(0.7F, 0.7F);
+			this.getDimensions(this.getPose()).scale(0.7F, 0.7F);
 		} else {
 			if (!this.level().isClientSide) {
 				this.noPhysics = false;
@@ -238,7 +226,7 @@ public class EntityWight extends BetweenlandsEntity {
 				this.moveControl = this.groundMoveHelper;
 			}
 
-			this.setSize(0.7F, 2.2F);
+			this.getDimensions(this.getPose()).scale(0.7F, 2.2F);
 		}
 
 		this.lastHidingAnimationTicks = this.hidingAnimationTicks;
@@ -406,12 +394,9 @@ public class EntityWight extends BetweenlandsEntity {
 		this.entityData.set(VOLATILE_STATE_DW, isVolatile);
 
 		if (!isVolatile) {
-			Entity ridingEntity = this.getRidingEntity();
+			Entity ridingEntity = this.getVehicle();
 			if (ridingEntity != null) {
-				this.dismountRidingEntity();
-				if (!this.level().isClientSide) {
-					//this.getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(ridingEntity));
-				}
+				this.stopRiding();
 			}
 		}
 	}
@@ -421,12 +406,11 @@ public class EntityWight extends BetweenlandsEntity {
 	}
 
 	public boolean canPossess(LivingEntity entity) {
-		if (entity instanceof EntitySwampHag) {
+		if (entity instanceof SwampHag) {
 			return true;
 		}
 		if (entity instanceof Player) {
-			return true;
-			//return !this.isWearingSkullMask(entity);
+			return !this.isWearingSkullMask(entity);
 		}
 		return false;
 	}
@@ -434,9 +418,7 @@ public class EntityWight extends BetweenlandsEntity {
 	public boolean isWearingSkullMask(LivingEntity entity) {
 		if (entity instanceof Player player) {
 			ItemStack helmet = player.getItemBySlot(EquipmentSlot.HEAD);
-			if (!helmet.isEmpty() && helmet.getItem() == Items.CARVED_PUMPKIN) {
-				return true;
-			}
+			return !helmet.isEmpty() && helmet.is(ItemRegistry.SKULL_MASK);
 		}
 		return false;
 	}
@@ -446,32 +428,22 @@ public class EntityWight extends BetweenlandsEntity {
 	}
 
 	@Override
-	public EntityDimensions getDefaultDimensions(Pose pose) {
-		return dimensions;
-	}
-
-	// bandaid solution
-	public void setSize(float x, float y) {
-		this.dimensions.scale(x, y);
-	}
-
-	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundRegistry.WIGHT_DEATH.get();
 	}
 
 	protected void registerGoals() {
 		this.goalSelector.addGoal(0, new FloatGoal(this));
-		this.goalSelector.addGoal(4, new SwampHagAttackGoal(this));
+		this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0D, false));
 		//this.goalSelector.addGoal(1, new PanicGoal(this, 1.0D));
 		//this.goalSelector.addGoal(2, new TemptGoal(this, 0.5D, ItemRegistry.SAP_SPIT, true));
 		//this.goalSelector.addGoal(3, new EntityWight.GeckoAvoidGoal<>(this, Player.class, PLAYER_MIN_DISTANCE, 0.65, 1));
 		// rain this.goalSelector.addGoal(4, new Goal);
 		this.goalSelector.addGoal(6, new RandomStrollGoal(this, 0.6));
 		this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
-		this.targetSelector.addGoal(2, new SwampHagTargetGoal<>(this, Player.class));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
 		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));
-		this.goalSelector.addGoal(3, new EntityAIMoveToDirect<EntityWight>(this, this.getAttributes().getInstance(AttributeRegistry.VOLATILE_FLIGHT_SPEED_ATTRIB).getValue()) {
+		this.goalSelector.addGoal(3, new EntityAIMoveToDirect<>(this, this.getAttributes().getInstance(AttributeRegistry.VOLATILE_FLIGHT_SPEED_ATTRIB).getValue()) {
 			@Override
 			protected Vector3d getTarget() {
 				if (this.entity.volatileTicks >= 20) {
@@ -486,7 +458,7 @@ public class EntityWight extends BetweenlandsEntity {
 			}
 		});
 
-		this.goalSelector.addGoal(9, new EntityAIFlyRandomly<EntityWight>(this) {
+		this.goalSelector.addGoal(9, new EntityAIFlyRandomly<>(this) {
 			@Override
 			public boolean canUse() {
 				return this.entity.isVolatile() && this.entity.volatileTicks >= 20 && this.entity.getTarget() == null && super.canUse();
@@ -513,18 +485,6 @@ public class EntityWight extends BetweenlandsEntity {
 	       */
 	}
 
-	static class SwampHagAttackGoal extends MeleeAttackGoal {
-		public SwampHagAttackGoal(EntityWight p_33822_) {
-			super(p_33822_, 1.0D, false);
-		}
-	}
-
-	static class SwampHagTargetGoal<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
-		public SwampHagTargetGoal(EntityWight p_33832_, Class<T> p_33833_) {
-			super(p_33832_, p_33833_, true);
-		}
-	}
-
 	@Override
 	protected SoundEvent getHurtSound(DamageSource p_33034_) {
 		return SoundRegistry.WIGHT_HURT.get();
@@ -533,28 +493,5 @@ public class EntityWight extends BetweenlandsEntity {
 	@Override
 	protected SoundEvent getAmbientSound() {
 		return SoundRegistry.WIGHT_MOAN.get();
-	}
-
-	static class GeckoAvoidGoal<T extends LivingEntity> extends AvoidEntityGoal<T> {
-		public GeckoAvoidGoal(EntityWight gecko, Class<T> p_29276_, float p_29277_, double p_29278_, double p_29279_) {
-			super(gecko, p_29276_, p_29277_, p_29278_, p_29279_, EntitySelector.NO_SPECTATORS::test);
-		}
-	}
-
-
-	// TODO: remove the folowing bandaid solutions
-
-	public boolean isRiding() {
-		return this.isPassenger();
-	}
-
-	public Entity getRidingEntity() {
-		return this.getVehicle();
-	}
-
-	public void dismountRidingEntity() {
-		Entity joe = this.getRidingEntity();
-		this.stopRiding();
-		this.getServer().getPlayerList().broadcastAll(new ClientboundSetPassengersPacket(joe));
 	}
 }

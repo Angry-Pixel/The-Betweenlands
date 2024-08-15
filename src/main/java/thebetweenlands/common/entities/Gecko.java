@@ -10,6 +10,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Animal;
@@ -44,11 +45,10 @@ public class Gecko extends Animal implements BLEntity {
 		this.setPathfindingMalus(PathType.WATER, 0.0F);
 	}
 
-	@Override
-	public AttributeMap getAttributes() {
-		return new AttributeMap(Gecko.createMobAttributes()
+	public static AttributeSupplier.Builder makeAttributes() {
+		return Gecko.createMobAttributes()
 			.add(Attributes.MAX_HEALTH, 12.0D)
-			.add(Attributes.MOVEMENT_SPEED, 0.5D).build());
+			.add(Attributes.MOVEMENT_SPEED, 0.5D);
 	}
 
 	@Override

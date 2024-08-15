@@ -12,12 +12,11 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.projectile.Fireball;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.Tags;
-import thebetweenlands.common.entities.EntityWight;
+import thebetweenlands.common.entities.Wight;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
 import java.util.List;
@@ -77,7 +76,7 @@ public class RepellerBlockEntity extends SyncedBlockEntity {
 				AABB affectedBB = new AABB(pos).inflate(entity.radius + 5.0D);
 				List<Entity> affectedEntities = level.getEntitiesOfClass(Entity.class, affectedBB);
 				for (Entity selected : affectedEntities) {
-					if (selected instanceof Enemy && !(selected instanceof EntityWight) && !selected.getType().is(Tags.EntityTypes.BOSSES)) {
+					if (selected instanceof Enemy && !(selected instanceof Wight) && !selected.getType().is(Tags.EntityTypes.BOSSES)) {
 						Vec3 closestPoint = entity.getClosestAABBCorner(selected.getBoundingBox(), centerX, centerY, centerZ);
 						if (closestPoint.distanceToSqr(centerX, centerY, centerZ) < entity.radius * entity.radius) {
 							double diffX = selected.getX() - centerX;

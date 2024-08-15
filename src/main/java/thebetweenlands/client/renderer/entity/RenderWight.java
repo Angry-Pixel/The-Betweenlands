@@ -1,5 +1,7 @@
 package thebetweenlands.client.renderer.entity;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -8,90 +10,103 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.client.model.entity.ModelWight;
+import thebetweenlands.client.shader.LightSource;
+import thebetweenlands.client.shader.ShaderHelper;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entities.EntityWight;
+import thebetweenlands.common.entities.Wight;
+import thebetweenlands.common.world.event.WinterEvent;
 
-public class RenderWight<T extends EntityWight> extends MobRenderer<T, ModelWight<T>> {
+public class RenderWight<T extends Wight> extends MobRenderer<T, ModelWight<T>> {
 
-	private static final ResourceLocation WIGHT_TEXTURE = TheBetweenlands.prefix("textures/entity/wight.png");
+	private static final ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/entity/wight.png");
+	public static final ResourceLocation TEXTURE_FROSTY =TheBetweenlands.prefix("textures/entity/wight_frosty.png");
 	public static final ModelLayerLocation WIGHT_MODEL_LAYER = new ModelLayerLocation(TheBetweenlands.prefix("main"), "wight");
-	public static final RenderType WIGHT_RENDER_TYPE = RenderType.entityTranslucent(WIGHT_TEXTURE, true);
 
-	float ang;
-
-	public RenderWight(EntityRendererProvider.Context p_174401_) {
-		this(p_174401_, WIGHT_MODEL_LAYER);
-		this.shadowRadius = 0.5F;
-	}
-
-	public RenderWight(EntityRendererProvider.Context p_174403_, ModelLayerLocation p_174404_) {
-		super(p_174403_, new ModelWight<>(p_174403_.bakeLayer(p_174404_)), 0.8F);
+	public RenderWight(EntityRendererProvider.Context context) {
+		super(context, new ModelWight<>(context.bakeLayer(WIGHT_MODEL_LAYER)), 0.5F);
 	}
 
 	@Override
-	public void render(T entity, float p_115456_, float partialTicks, PoseStack pose, MultiBufferSource p_115459_,
-					   int p_115460_) {
+	public void render(T entity, float yaw, float partialTicks, PoseStack stack, MultiBufferSource source, int light) {
+		if(!entity.isVolatile()) {
+			stack.pushPose();
+			RenderSystem.disableBlend();
+			RenderSystem.colorMask(false, false, false, false);
+			RenderSystem.setShaderColor(1, 1, 1, 1);
 
-		model.alpha = 1F - entity.getHidingAnimation(partialTicks) * 0.5F;
+			super.render(entity, yaw, partialTicks, stack, source, light);
 
-		if (entity.isVolatile()) {
-			this.model.renderHeadOnly = true;
-			this.shadowRadius = 0;
-			pose.scale(0.5f, 0.5f, 0.5f);
-			pose.translate(0, 1.0D, 0);
+			RenderSystem.colorMask(true, true, true, true);
+			RenderSystem.enableBlend();
+			RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+			RenderSystem.setShaderColor(1F, 1F, 1F, 1F - entity.getHidingAnimation(partialTicks) * 0.5F);
 
-			if (entity.getRidingEntity() != null) {
-				// SPIiiEEENnnNNnn
-				pose.mulPose(Axis.YP.rotationDegrees((entity.tickCount + partialTicks) / 30.0F * 360.0F));
-				pose.translate(0, -entity.getRidingEntity().getEyeHeight() + 1.65D, 0.8D);
-			}
-			VertexConsumer vertexconsumer = p_115459_.getBuffer(WIGHT_RENDER_TYPE);
+			super.render(entity, yaw, partialTicks, stack, source, light);
 
-			model.getHead().render(pose, vertexconsumer, p_115460_, p_115460_);
-			model.getHead2().render(pose, vertexconsumer, p_115460_, p_115460_);
-			model.getHead3().render(pose, vertexconsumer, p_115460_, p_115460_);
-			model.getJaw().render(pose, vertexconsumer, p_115460_, p_115460_);
-
-			super.render(entity, p_115456_, partialTicks, pose, p_115459_, p_115460_);
-
-			return;
+			stack.popPose();
 		} else {
-			this.model.renderHeadOnly = false;
+			this.model.renderHeadOnly = true;
+
+			stack.pushPose();
+			RenderSystem.disableBlend();
+			RenderSystem.colorMask(false, false, false, false);
+			RenderSystem.setShaderColor(1, 1, 1, 1);
+
+			if (entity.getVehicle() != null) {
+				stack.scale(-1.0F, -1.0F, 1.0F);
+				stack.mulPose(Axis.YP.rotationDegrees((entity.tickCount + partialTicks) / 30.0F * 360.0F));
+				stack.mulPose(Axis.YP.rotationDegrees(180));
+				stack.translate(0, -entity.getVehicle().getEyeHeight() + 1.65D, 0.8D);
+				stack.scale(0.5F, 0.5F, 0.5F);
+
+				VertexConsumer consumer = source.getBuffer(RenderType.entityTranslucent(this.getTextureLocation(entity), true));
+				this.model.renderToBuffer(stack, consumer, light, OverlayTexture.NO_OVERLAY);
+
+				RenderSystem.colorMask(true, true, true, true);
+				RenderSystem.enableBlend();
+				RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+				RenderSystem.setShaderColor(1F, 1F, 1F, 0.4F);
+
+				this.model.renderToBuffer(stack, consumer, light, OverlayTexture.NO_OVERLAY);
+			} else {
+				super.render(entity, yaw, partialTicks, stack, source, light);
+
+				RenderSystem.colorMask(true, true, true, true);
+				RenderSystem.enableBlend();
+				RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+				RenderSystem.setShaderColor(1F, 1F, 1F, 0.4F);
+
+				super.render(entity, yaw, partialTicks, stack, source, light);
+			}
+
+			stack.popPose();
 		}
-
-		this.shadowRadius = 0.5f;
-
-		float scale = 0.9F / 40F * (entity.getGrowthFactor(partialTicks));
-		pose.scale(0.9F, scale, 0.9F);
-
-		model.renderHeadOnly = false;
-
-		super.render(entity, p_115456_, partialTicks, pose, p_115459_, p_115460_);
-
-		// just incase
-		model.alpha = 1f;
 	}
 
-	public void scale(T entity, PoseStack pose, float partialTicks) {
+	public void scale(T entity, PoseStack stack, float partialTicks) {
+		if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
+			ShaderHelper.INSTANCE.require();
+			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(entity.getX(), entity.getY(), entity.getZ(), 10.0f, -1, -1, -1));
+		}
+
+		float scale = 0.9F / 40F * (entity.getGrowthFactor(partialTicks));
+		stack.scale(0.9F, scale, 0.9F);
+
 		if (entity.isVolatile()) {
-			pose.scale(0.5f, 0.5f, 0.5f);
-			pose.translate(0, 1.0D, 0);
-			return;
+			stack.scale(0.5f, 0.5f, 0.5f);
+			stack.translate(0, 1.0D, 0);
 		}
-		float scale = 0.9F / 40F * (entity.getGrowthFactor(partialTicks));
-		pose.scale(0.9F, scale, 0.9F);
 	}
 
 	@Override
-	public ResourceLocation getTextureLocation(EntityWight p_114482_) {
-		return WIGHT_TEXTURE;
+	public ResourceLocation getTextureLocation(Wight entity) {
+		if (WinterEvent.isFroooosty(entity.level())) {
+			return TEXTURE_FROSTY;
+		}
+		return TEXTURE;
 	}
 
-	@Override
-	protected RenderType getRenderType(T p_115322_, boolean p_115323_, boolean p_115324_, boolean p_115325_) {
-		// TODO Auto-generated method stub
-		return WIGHT_RENDER_TYPE;
-	}
 }

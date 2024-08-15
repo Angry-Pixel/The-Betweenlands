@@ -9,11 +9,8 @@ import thebetweenlands.common.entities.Gecko;
 
 public class GeckoModel<T extends Gecko> extends MowzieModelBase<T> implements HeadedModel {
 
-	public static int textureWidth = 64;
-	public static int textureHeight = 32;
-
 	public ModelPart root;
-	public ModelPart body_base;
+	public ModelPart body;
 	public ModelPart head;
 	public ModelPart legleft_f1;
 	public ModelPart legright_f1;
@@ -28,12 +25,12 @@ public class GeckoModel<T extends Gecko> extends MowzieModelBase<T> implements H
 	public ModelPart legright_f2;
 	public ModelPart legleft_b2;
 	public ModelPart legright_b2;
-	private ModelPart[] tail;
+	private final ModelPart[] tail;
 
 	public GeckoModel(ModelPart root) {
 		this.root = root;
-		this.body_base = root.getChild("body_base");
-		this.tail1 = body_base.getChild("tail1");
+		this.body = root.getChild("body_base");
+		this.tail1 = body.getChild("tail1");
 		this.tail2 = tail1.getChild("tail2");
 		this.tail3 = tail2.getChild("tail3");
 		this.head = root.getChild("head");
@@ -77,7 +74,7 @@ public class GeckoModel<T extends Gecko> extends MowzieModelBase<T> implements H
 		legleft_f1.addOrReplaceChild("legleft_f2", CubeListBuilder.create().texOffs(39, 0).addBox(-0.5F, -0.2F, -1.5F, 1, 1, 2), PartPose.offsetAndRotation(0.0F, 1.5F, -0.5F, 0.8196066167365371F, 0.0F, 0.0F));
 		legleft_b1.addOrReplaceChild("legleft_b2", CubeListBuilder.create().texOffs(39, 8).addBox(-0.5F, -0.2F, -0.4F, 1, 3, 1), PartPose.offsetAndRotation(0.0F, 1.5F, 0.0F, 0.6373942428283291F, 0.0F, 0.0F));
 
-		return LayerDefinition.create(meshdefinition, textureWidth, textureHeight);
+		return LayerDefinition.create(meshdefinition, 64, 32);
 	}
 
 	@Override

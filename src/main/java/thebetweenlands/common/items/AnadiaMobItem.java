@@ -17,7 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.common.component.entity.RotSmellData;
 import thebetweenlands.common.entities.Anadia;
-import thebetweenlands.common.entities.EntitySwampHag;
+import thebetweenlands.common.entities.SwampHag;
 import thebetweenlands.common.entities.Seat;
 import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
@@ -48,7 +48,7 @@ public class AnadiaMobItem extends MobItem {
 	@Override
 	public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
 		if (!attacker.level().isClientSide()) {
-			if (target instanceof EntitySwampHag && !target.isPassenger() && attacker instanceof Player) {
+			if (target instanceof SwampHag && !target.isPassenger() && attacker instanceof Player) {
 				if (attacker.level().getBlockState(target.blockPosition().below()).blocksMotion()) {
 					Seat entitySeat = new Seat(attacker.level(), true);
 					entitySeat.setPos(target.getX(), target.getY() - 0.55D, target.getZ());

@@ -34,7 +34,7 @@ public class QuadBuilder {
 		public final Direction cullFace, orientation;
 		public final boolean diffuse;
 
-		private Vertex(Vec3 pos, float u, float v, TextureAtlasSprite sprite, boolean switchUV, //TRSRTransformation transformation, 
+		private Vertex(Vec3 pos, float u, float v, TextureAtlasSprite sprite, boolean switchUV, //TRSRTransformation transformation,
 				float[] color, Vec3 normal, int blockLight, int skyLight, int tintIndex, Direction cullFace, Direction orientation, boolean diffuse) {
 			this.pos = pos;
 			this.u = u;
@@ -68,7 +68,7 @@ public class QuadBuilder {
 
 	private int blockLight = -1, skyLight = -1;
 	private boolean hasLightmapElement;
-	
+
 	public QuadBuilder(VertexFormat format) {
 		this(50, format);
 	}
@@ -77,7 +77,7 @@ public class QuadBuilder {
 		this.vertices = new ArrayList<Vertex>(vertices);
 		this.format = format;
 	}
-	
+
 
 	/**
 	 * Sets the quad's cull face
@@ -331,7 +331,7 @@ public class QuadBuilder {
 		this.vertices.add(new Vertex(pos, u, v, this.sprite, this.switchUV, /*this.transformation,*/ this.color, this.normal, this.blockLight, this.skyLight, this.tintIndex, this.cullFace, this.orientation, this.diffuseLighting));
 		return this;
 	}
-	
+
 
 	public static final class Quads {
 		public final Map<Direction, ImmutableList<BakedQuad>> culledQuads;
@@ -388,7 +388,7 @@ public class QuadBuilder {
 	public Quads build() {
 		return this.build(null);
 	}
-	
+
 
 //	private void putVertex(VertexFormat format, UnpackedBakedQuad.Builder builder, Vec3 quadNormal, Vertex vert) {
 //		boolean hasTransform = vert.transformation != null && !vert.transformation.equals(TRSRTransformation.identity());
@@ -456,6 +456,7 @@ public class QuadBuilder {
 
 	//TODO fix up the transformations here
 	//TODO foward-port the old vertex builder maybe? (I think we're almost ignoring VertexFormat with the QuadBakingVertexConsumer)
+	@SuppressWarnings("fallthrough")
 	private void putVertex(VertexFormat format, QuadBakingVertexConsumer builder, Vec3 quadNormal, Vertex vert) {
 //		boolean hasTransform = vert.transformation != null && !vert.transformation.equals(TRSRTransformation.identity());
 		builder.addVertex(0, 0, 0); //we probably override it with POSITION later
@@ -471,7 +472,7 @@ public class QuadBuilder {
 //					vec.get(positionData);
 //				}
 //				builder.put(e, positionData);
-				
+
 				//override POSITION data
 				builder.misc(element, Float.floatToIntBits((float) vert.pos.x), Float.floatToIntBits((float) vert.pos.y), Float.floatToIntBits((float) vert.pos.z));//, Float.floatToIntBits(1f));
 				break;
@@ -585,9 +586,9 @@ public class QuadBuilder {
 		putVertex(format, builder, quadNormal, vert2);
 		putVertex(format, builder, quadNormal, vert3);
 		putVertex(format, builder, quadNormal, vert4);
-		
+
 		return builder.bakeQuad();
 	}
-	
-	
+
+
 }
