@@ -1,8 +1,16 @@
 package thebetweenlands.client;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
@@ -10,6 +18,11 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.*;
 import javax.annotation.Nullable;
 
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.entity.GeckoModel;
 import thebetweenlands.client.renderer.entity.GeckoRenderer;
@@ -23,6 +36,8 @@ import thebetweenlands.client.particle.BetweenlandsParticle;
 import thebetweenlands.client.particle.BetweenlandsPortalParticle;
 import thebetweenlands.client.particle.CaveWaterDripParticle;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
+import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.registries.*;
 
 public class ClientEvents {
@@ -36,6 +51,7 @@ public class ClientEvents {
 	public static void initClient(IEventBus eventbus) {
 		eventbus.addListener(ClientEvents::registerRenderers);
 		eventbus.addListener(ClientEvents::registerDimEffects);
+		eventbus.addListener(ClientEvents::registerExtensions);
 //		eventbus.addListener(ClientEvents::registerShaders);
 		eventbus.addListener(ClientEvents::registerLayerDefinition);
 		eventbus.addListener(ClientEvents::particleStuff);
@@ -60,6 +76,118 @@ public class ClientEvents {
 
 	public static void registerDimEffects(RegisterDimensionSpecialEffectsEvent event) {
 		event.register(DimensionRegistries.DIMENSION_RENDERER, new BetweenlandsSpecialEffects());
+	}
+
+	public static void registerExtensions(RegisterClientExtensionsEvent event) {
+		event.registerMobEffect(new IClientMobEffectExtensions() {
+			@Override
+			public boolean isVisibleInInventory(MobEffectInstance instance) {
+				return false;
+			}
+
+			@Override
+			public boolean isVisibleInGui(MobEffectInstance instance) {
+				return false;
+			}
+		}, ElixirEffectRegistry.ENLIGHTENED.get(), ElixirEffectRegistry.ROOT_BOUND.get());
+
+		for (DeferredHolder<MobEffect, ?> effect : ElixirEffectRegistry.EFFECTS.getEntries().stream().filter(holder -> holder.get() instanceof ElixirEffect.ElixirPotionEffect).toList()) {
+			ElixirEffect.ElixirPotionEffect potEffect = (ElixirEffect.ElixirPotionEffect) effect.get();
+			event.registerMobEffect(new IClientMobEffectExtensions() {
+				@Override
+				public boolean isVisibleInInventory(MobEffectInstance instance) {
+					return potEffect.getIcon() != null;
+				}
+
+				@Override
+				public boolean isVisibleInGui(MobEffectInstance instance) {
+					return potEffect.getIcon() != null;
+				}
+
+				@Override
+				public boolean renderInventoryIcon(MobEffectInstance instance, EffectRenderingInventoryScreen<?> screen, GuiGraphics graphics, int x, int y, int blitOffset) {
+					if (potEffect.getIcon() != null) {
+						RenderSystem.enableBlend();
+						RenderSystem.setShaderTexture(0, potEffect.getIcon());
+						Tesselator tesselator = Tesselator.getInstance();
+
+						BufferBuilder builder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+						builder.addVertex(x + 6, y + 6, 0).setUv(0, 0);
+						builder.addVertex(x + 6, y + 6 + 20, 0).setUv(0, 1);
+						builder.addVertex(x + 6 + 20, y + 6 + 20, 0).setUv(1, 1);
+						builder.addVertex(x + 6 + 20, y + 6, 0).setUv(1, 0);
+						BufferUploader.drawWithShader(builder.buildOrThrow());
+					}
+					if (potEffect.localizedElixirName == null) {
+						potEffect.localizedElixirName = potEffect.getDisplayName().getString();
+					}
+					//TODO reimplement once book is added
+//					if (ElixirPotionEffect.this.nameContainer == null) {
+//						ElixirPotionEffect.this.nameContainer = new TextContainer(88, 100, this.localizedElixirName, Minecraft.getInstance().font);
+//						int width = Minecraft.getInstance().font.width(ElixirPotionEffect.this.localizedElixirName);
+//						float scale = 1.0F;
+//						if (width > 88) {
+//							scale = 88.0F / (float) width;
+//							scale -= scale % 0.25F;
+//						}
+//						if (scale < 0.5F) {
+//							scale = 0.5F;
+//						}
+//						ElixirPotionEffect.this.nameContainer.setCurrentScale(scale);
+//						ElixirPotionEffect.this.nameContainer.setCurrentColor(0xFFFFFFFF);
+//						try {
+//							ElixirPotionEffect.this.nameContainer.parse();
+//						} catch (Exception e) {
+//							e.printStackTrace();
+//						}
+//					}
+//					if (ElixirPotionEffect.this.nameContainer != null && ElixirPotionEffect.this.nameContainer.getPages().size() > 0) {
+//						TextContainer.TextPage page0 = this.nameContainer.getPages().get(0);
+//						page0.render(x + 28, y + 6);
+//						String s = Potion.getPotionDurationString(ElixirPotionEffect.this.effect, 1.0F);
+//						graphics.drawString(Minecraft.getInstance().font, s, (float) (x + 10 + 18), (float) (y + 6 + 10), 8355711, true);
+//					}
+					return true;
+				}
+
+				@Override
+				public boolean renderInventoryText(MobEffectInstance instance, EffectRenderingInventoryScreen<?> screen, GuiGraphics graphics, int x, int y, int blitOffset) {
+					return true;
+				}
+
+				@Override
+				public boolean renderGuiIcon(MobEffectInstance instance, Gui gui, GuiGraphics graphics, int x, int y, float z, float alpha) {
+					if (potEffect.getIcon() != null) {
+						RenderSystem.enableBlend();
+						RenderSystem.setShaderTexture(0, potEffect.getIcon());
+
+						Tesselator tesselator = Tesselator.getInstance();
+
+						BufferBuilder builder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+						builder.addVertex(x + 2, y + 2, 0).setUv(0, 0);
+						builder.addVertex(x + 2, y + 2 + 20, 0).setUv(0, 1);
+						builder.addVertex(x + 2 + 20, y + 2 + 20, 0).setUv(1, 1);
+						builder.addVertex(x + 2 + 20, y + 2, 0).setUv(1, 0);
+						BufferUploader.drawWithShader(builder.buildOrThrow());
+					}
+					return true;
+				}
+			}, potEffect);
+		}
+
+		for (DeferredHolder<FluidType, ? extends FluidType> type : FluidTypeRegistry.FLUID_TYPES.getEntries()) {
+			event.registerFluidType(new IClientFluidTypeExtensions() {
+				@Override
+				public ResourceLocation getStillTexture() {
+					return TheBetweenlands.prefix("fluids/" + type.getId().getPath() + "_still");
+				}
+
+				@Override
+				public ResourceLocation getFlowingTexture() {
+					return TheBetweenlands.prefix("fluids/" + type.getId().getPath() + "_flowing");
+				}
+			}, type.get());
+		}
 	}
 
 	private static void registerShaders(final RegisterShadersEvent event) {

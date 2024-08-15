@@ -1,13 +1,11 @@
 package thebetweenlands.common.world.storage;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import it.unimi.dsi.fastutil.ints.IntSet;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket;
 import net.minecraft.network.protocol.game.ClientboundMapItemDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -17,17 +15,19 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.maps.*;
 import javax.annotation.Nullable;
+
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.AmateMapPacket;
 import thebetweenlands.common.registries.DimensionRegistries;
+import thebetweenlands.util.ExtraCodecs;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-// Refined vanilla map
 public class AmateMapData extends MapItemSavedData {
 
-	public final Int2ObjectMap<BLMapDecoration> decorations = new Int2ObjectOpenHashMap<>();
-	private final IntSet occupiedSpots = new IntOpenHashSet();
 	private static final Map<String, AmateMapData> CLIENT_DATA = new HashMap<>();
 
 	public AmateMapData(int x, int y, boolean tracking, boolean trackingUnlimited, boolean locked) {
@@ -43,117 +43,49 @@ public class AmateMapData extends MapItemSavedData {
 		return new AmateMapData(l, i1, tracking, trackingUnlimited, locked);
 	}
 
+	public static AmateMapData load(CompoundTag tag, HolderLookup.Provider registries) {
+		MapItemSavedData ogData = MapItemSavedData.load(tag, registries);
+		final boolean trackingPosition = !tag.contains("trackingPosition", 1) || tag.getBoolean("trackingPosition");
+		final boolean unlimitedTracking = tag.getBoolean("unlimitedTracking");
+		final boolean locked = tag.getBoolean("locked");
+		AmateMapData data = new AmateMapData(ogData.centerX, ogData.centerZ, trackingPosition, unlimitedTracking, locked);
 
-	public static AmateMapData load(CompoundTag tag) {
-		int i = tag.getInt("x");
-		int j = tag.getInt("z");
-		boolean position = !tag.contains("trackingPosition", 1) || tag.getBoolean("trackingPosition");
-		boolean unlimitedTracking = tag.getBoolean("unlimitedTracking");
-		boolean locked = tag.getBoolean("locked");
-		AmateMapData data = new AmateMapData(i, j, position, unlimitedTracking, locked);
-		byte[] colors = tag.getByteArray("colors");
-		if (colors.length == 16384) {
-			data.colors = colors;
+		data.colors = ogData.colors;
+		data.bannerMarkers.putAll(ogData.bannerMarkers);
+		data.frameMarkers.putAll(ogData.frameMarkers);
+
+		for (DecorationHolder decoration : DecorationHolder.CODEC.listOf()
+			.parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get("decorations"))
+			.resultOrPartial(error -> TheBetweenlands.LOGGER.warn("Failed to parse map decoration: '{}'", error))
+			.orElse(List.of())) {
+			MapDecoration mapdecoration1 = decoration.decoration();
+			MapDecoration mapdecoration = data.decorations.put(decoration.id(), mapdecoration1);
+			if (!mapdecoration1.equals(mapdecoration)) {
+				if (mapdecoration != null && mapdecoration.type().value().trackCount()) {
+					data.trackedDecorationCount--;
+				}
+
+				if (decoration.decoration().type().value().trackCount()) {
+					data.trackedDecorationCount++;
+				}
+				data.setDecorationsDirty();
+			}
 		}
 		return data;
 	}
 
-	// Optimised save data
 	@Override
-	public CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
-		tag.putInt("x", this.centerX);
-		tag.putInt("y", this.centerZ);
-		tag.putBoolean("trackingPosition", this.trackingPosition);
-		tag.putBoolean("unlimitedTracking", this.unlimitedTracking);
-		tag.putBoolean("locked", this.locked);
-		tag.putByteArray("colors", this.colors);
+	public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
+		tag = super.save(tag, registries);
+
+		List<DecorationHolder> holders = new ArrayList<>();
+		this.decorations.forEach((s, decoration) -> {
+			if (decoration.type().value().showOnItemFrame()) {
+				holders.add(new DecorationHolder(s, decoration));
+			}
+		});
+		tag.put("decorations", DecorationHolder.CODEC.listOf().encodeStart(NbtOps.INSTANCE, holders).getOrThrow());
 		return tag;
-	}
-
-	public void addDecoration(BLMapDecoration deco) {
-		int x = deco.x();
-		int y = deco.y();
-		int index = ((x + y * 128) << 8) | deco.location().getId();
-
-		if (!this.decorations.containsKey(index)) {
-			int gridSize = 3; //Check for occupied spots at a larger scale
-			int area = 24 >> gridSize;
-
-			boolean occupied = false;
-
-			for (int i = -area; i <= area; i++) {
-				for (int j = -area; j <= area; j++) {
-					if (i * i + j * j <= area * area) {
-						int offsetIndex = ((((x >> gridSize) + i) + ((y >> gridSize) + j) * (128 >> gridSize)) << 8) | deco.location().getId();
-						if (this.occupiedSpots.contains(offsetIndex)) {
-							occupied = true;
-							break;
-						}
-					}
-				}
-			}
-
-			if (!occupied) {
-				this.occupiedSpots.add((((x >> gridSize) + (y >> gridSize) * (128 >> gridSize)) << 8) | deco.location().getId());
-				this.decorations.put(index, deco);
-			} else {
-				this.decorations.put(index, new BLMapDecoration(BLMapDecoration.Location.SMALL_MARKER, deco.x(), deco.y(), deco.rotation()));
-			}
-		}
-	}
-
-	//TODO check if still needed
-//	public void updateMapTexture(MapId id) {
-//		MapRenderer mapItemRenderer = Minecraft.getInstance().gameRenderer.getMapRenderer();
-//		MapRenderer.MapInstance instance = mapItemRenderer.getOrCreateMapInstance(id, this);
-//		for (int i = 0; i < 16384; ++i) {
-//			int j = this.colors[i] & 255;
-//
-//			if (j / 4 == 0) {
-//				instance.texture.getPixels().setPixelRGBA(i, j, this.changeColor((i + i / 128 & 1) * 8 + 16 << 24));
-//			} else {
-//				instance.texture.getPixels().setPixelRGBA(i, j, this.changeColor(MapColor.byId(j / 4).getMapColor(j & 3)));
-//			}
-//		}
-//		instance.forceUpload();
-//	}
-//
-//	private int changeColor(int rgb) {
-//		int r = (rgb >> 16) & 0xFF;
-//		int g = (rgb >> 8) & 0xFF;
-//		int b = rgb & 0xFF;
-//		int rs = Mth.clamp((int) ((0.293 * r + 0.269 * g + 0.089 * b) * 5), 0, 255);
-//		int rg = Mth.clamp((int) ((0.049 * r + 0.386 * g + 0.128 * b) * 5), 0, 255);
-//		int rb = Mth.clamp((int) ((0.072 * r + 0.034 * g + 0.111 * b) * 5), 0, 255);
-//		return rs << 16 | rg << 8 | rb | ((rgb >> 24) & 0xFF << 24);
-//	}
-
-	public void deserializeLocations(byte[] arr) {
-		this.decorations.clear();
-		this.occupiedSpots.clear();
-
-		for (int i = 0; i < arr.length / 3; ++i) {
-			byte id = arr[i * 3];
-			byte mapX = arr[i * 3 + 1];
-			byte mapZ = arr[i * 3 + 2];
-			byte mapRotation = 8;
-
-			this.addDecoration(new BLMapDecoration(BLMapDecoration.Location.byId(id), mapX, mapZ, mapRotation));
-		}
-	}
-
-	public byte[] serializeLocations() {
-		byte[] storage = new byte[this.decorations.size() * 3];
-
-		int i = 0;
-		for (BLMapDecoration location : this.decorations.values()) {
-			storage[i * 3] = location.location().getId();
-			storage[i * 3 + 1] = location.x();
-			storage[i * 3 + 2] = location.y();
-			i++;
-		}
-
-		return storage;
 	}
 
 	// [VanillaCopy] Adapted from World.getMapData
@@ -185,7 +117,13 @@ public class AmateMapData extends MapItemSavedData {
 	@Override
 	public Packet<?> getUpdatePacket(MapId mapId, Player player) {
 		Packet<?> packet = super.getUpdatePacket(mapId, player);
-		return packet instanceof ClientboundMapItemDataPacket mapItemDataPacket ? new ClientboundCustomPayloadPacket(new AmateMapPacket(this, mapItemDataPacket)) : packet;
+		return packet instanceof ClientboundMapItemDataPacket mapItemDataPacket ? new AmateMapPacket(mapItemDataPacket).toVanillaClientbound() : packet;
 	}
 
+	public record DecorationHolder(String id, MapDecoration decoration) {
+		public static final Codec<DecorationHolder> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+			Codec.STRING.fieldOf("id").forGetter(DecorationHolder::id),
+			ExtraCodecs.DECORATION_CODEC.fieldOf("decoration").forGetter(DecorationHolder::decoration)
+		).apply(instance, DecorationHolder::new));
+	}
 }

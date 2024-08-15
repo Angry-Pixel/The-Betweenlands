@@ -82,6 +82,7 @@ public class TheBetweenlands {
 		EnvironmentEventRegistry.EVENTS.register(eventbus);
 		AdvancementCriteriaRegistry.TRIGGERS.register(eventbus);
 		BetweenlandsSurfaceRules.SOURCES.register(eventbus);
+		MapDecorationRegistry.DECORATIONS.register(eventbus);
 
 		StorageRegistry.preInit();
 

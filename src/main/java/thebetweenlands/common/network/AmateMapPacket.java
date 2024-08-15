@@ -13,28 +13,11 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.items.AmateMapItem;
 import thebetweenlands.common.world.storage.AmateMapData;
 
-public class AmateMapPacket implements CustomPacketPayload {
+public record AmateMapPacket(ClientboundMapItemDataPacket inner) implements CustomPacketPayload {
 
 	public static final Type<AmateMapPacket> TYPE = new Type<>(TheBetweenlands.prefix("amate_map"));
 
-	public static final StreamCodec<RegistryFriendlyByteBuf, AmateMapPacket> STREAM_CODEC = StreamCodec.composite(
-		ByteBufCodecs.byteArray(256),
-		p -> p.featureData,
-		ClientboundMapItemDataPacket.STREAM_CODEC, p -> p.inner,
-		AmateMapPacket::new
-	);
-
-	private final byte[] featureData;
-	private final ClientboundMapItemDataPacket inner;
-
-	public AmateMapPacket(AmateMapData mapData, ClientboundMapItemDataPacket inner) {
-		this(mapData.serializeLocations(), inner);
-	}
-
-	public AmateMapPacket(byte[] mapData, ClientboundMapItemDataPacket inner) {
-		this.featureData = mapData;
-		this.inner = inner;
-	}
+	public static final StreamCodec<RegistryFriendlyByteBuf, AmateMapPacket> STREAM_CODEC = StreamCodec.composite(ClientboundMapItemDataPacket.STREAM_CODEC, p -> p.inner, AmateMapPacket::new);
 
 	@Override
 	public Type<? extends CustomPacketPayload> type() {
@@ -49,7 +32,7 @@ public class AmateMapPacket implements CustomPacketPayload {
 				@Override
 				public void run() {
 					Level level = ctx.player().level();
-					// [VanillaCopy] ClientPlayNetHandler#handleMaps with our own mapdatas
+					// [VanillaCopy] ClientPacketListener#handleMapItemData with our own mapdatas
 					MapRenderer mapitemrenderer = Minecraft.getInstance().gameRenderer.getMapRenderer();
 					String s = AmateMapItem.getMapName(message.inner.mapId().id());
 					AmateMapData mapdata = AmateMapData.getMapData(level, s);
@@ -59,7 +42,6 @@ public class AmateMapPacket implements CustomPacketPayload {
 					}
 
 					message.inner.applyToMap(mapdata);
-					mapdata.deserializeLocations(message.featureData);
 					mapitemrenderer.update(message.inner.mapId(), mapdata);
 				}
 			});

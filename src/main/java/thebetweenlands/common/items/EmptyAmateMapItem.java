@@ -4,6 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -18,32 +19,33 @@ public class EmptyAmateMapItem extends ComplexItem {
 		super(properties);
 	}
 
+	// [VanillaCopy] EmptyMapItem.use, edits noted
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
 		ItemStack emptyMapStack = player.getItemInHand(hand);
-		if (level.isClientSide()) {
+		if (level.isClientSide())
 			return InteractionResultHolder.pass(emptyMapStack);
-		} else {
-			if (level.dimensionTypeRegistration().is(DimensionRegistries.DIMENSION_TYPE_KEY)) {
-				emptyMapStack.consume(1, player);
-				player.awardStat(Stats.ITEM_USED.get(this));
-				player.level().playSound(null, player, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, player.getSoundSource(), 1.0F, 1.0F);
-				ItemStack itemstack1 = AmateMapItem.setupNewMap(level, player.getBlockX(), player.getBlockZ(), true, false);
-				if (emptyMapStack.isEmpty()) {
-					return InteractionResultHolder.consume(itemstack1);
-				} else {
-					if (!player.getInventory().add(itemstack1.copy())) {
-						player.drop(itemstack1, false);
-					}
 
-					return InteractionResultHolder.consume(emptyMapStack);
-				}
-			} else {
-				if (!level.isClientSide()) {
-					player.displayClientMessage(Component.translatable("item.thebetweenlands.amate_map.invalid").withStyle(ChatFormatting.RED), false);
-				}
-				return InteractionResultHolder.fail(emptyMapStack);
+		//BL - only allow magic maps to be created in Betweenlands
+		if (level.dimension() != DimensionRegistries.DIMENSION_KEY) {
+			player.displayClientMessage(Component.translatable("item.thebetweenlands.amate_map.invalid").withStyle(ChatFormatting.RED), false);
+			return InteractionResultHolder.fail(emptyMapStack);
+		}
+
+		emptyMapStack.consume(1, player);
+		player.awardStat(Stats.ITEM_USED.get(this));
+		player.level().playSound(null, player, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, player.getSoundSource(), 1.0F, 1.0F);
+
+		// BL - use custom setup method
+		ItemStack newMapStack = AmateMapItem.setupNewMap(level, Mth.floor(player.getX()), Mth.floor(player.getZ()), true, false);
+
+		if (emptyMapStack.isEmpty()) {
+			return InteractionResultHolder.success(newMapStack);
+		} else {
+			if (!player.getInventory().add(newMapStack.copy())) {
+				player.drop(newMapStack, false);
 			}
+			return InteractionResultHolder.success(emptyMapStack);
 		}
 	}
 }

@@ -28,7 +28,7 @@ public class ElixirEffect {
 
 	private final ResourceLocation icon;
 	private final int color;
-	private final Map<Holder<Attribute>, AttributeTemplate> elixirAttributeModifiers = new Object2ObjectOpenHashMap<>();;
+	private final Map<Holder<Attribute>, AttributeTemplate> elixirAttributeModifiers = new Object2ObjectOpenHashMap<>();
 	private Holder<MobEffect> elixirEffect;
 	private Holder<MobEffect> effect;
 	private boolean isAntiInfusion = false;
@@ -194,7 +194,7 @@ public class ElixirEffect {
 	public static class ElixirPotionEffect extends MobEffect {
 		private final ElixirEffect effect;
 		private final ResourceLocation icon;
-		private String localizedElixirName;
+		public String localizedElixirName;
 		//private TextContainer nameContainer;
 
 		public ElixirPotionEffect(ElixirEffect effect, int color, ResourceLocation icon) {
@@ -203,93 +203,13 @@ public class ElixirEffect {
 			this.icon = icon;
 		}
 
-		@Override
-		public boolean isInstantenous() {
-			return this.effect.isInstant();
+		public ResourceLocation getIcon() {
+			return this.icon;
 		}
 
 		@Override
-		public void initializeClient(Consumer<IClientMobEffectExtensions> consumer) {
-			consumer.accept(new IClientMobEffectExtensions() {
-				@Override
-				public boolean isVisibleInInventory(MobEffectInstance instance) {
-					return ElixirPotionEffect.this.icon != null;
-				}
-
-				@Override
-				public boolean isVisibleInGui(MobEffectInstance instance) {
-					return ElixirPotionEffect.this.icon != null;
-				}
-
-				@Override
-				public boolean renderInventoryIcon(MobEffectInstance instance, EffectRenderingInventoryScreen<?> screen, GuiGraphics graphics, int x, int y, int blitOffset) {
-					if (ElixirPotionEffect.this.icon != null) {
-						RenderSystem.enableBlend();
-						RenderSystem.setShaderTexture(0, ElixirPotionEffect.this.icon);
-						Tesselator tesselator = Tesselator.getInstance();
-
-						BufferBuilder builder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-						builder.addVertex(x + 6, y + 6, 0).setUv(0, 0);
-						builder.addVertex(x + 6, y + 6 + 20, 0).setUv(0, 1);
-						builder.addVertex(x + 6 + 20, y + 6 + 20, 0).setUv(1, 1);
-						builder.addVertex(x + 6 + 20, y + 6, 0).setUv(1, 0);
-						BufferUploader.drawWithShader(builder.buildOrThrow());
-					}
-					if (ElixirPotionEffect.this.localizedElixirName == null) {
-						ElixirPotionEffect.this.localizedElixirName = ElixirPotionEffect.this.getDisplayName().getString();
-					}
-					//TODO reimplement once book is added
-//					if (ElixirPotionEffect.this.nameContainer == null) {
-//						ElixirPotionEffect.this.nameContainer = new TextContainer(88, 100, this.localizedElixirName, Minecraft.getInstance().font);
-//						int width = Minecraft.getInstance().font.width(ElixirPotionEffect.this.localizedElixirName);
-//						float scale = 1.0F;
-//						if (width > 88) {
-//							scale = 88.0F / (float) width;
-//							scale -= scale % 0.25F;
-//						}
-//						if (scale < 0.5F) {
-//							scale = 0.5F;
-//						}
-//						ElixirPotionEffect.this.nameContainer.setCurrentScale(scale);
-//						ElixirPotionEffect.this.nameContainer.setCurrentColor(0xFFFFFFFF);
-//						try {
-//							ElixirPotionEffect.this.nameContainer.parse();
-//						} catch (Exception e) {
-//							e.printStackTrace();
-//						}
-//					}
-//					if (ElixirPotionEffect.this.nameContainer != null && ElixirPotionEffect.this.nameContainer.getPages().size() > 0) {
-//						TextContainer.TextPage page0 = this.nameContainer.getPages().get(0);
-//						page0.render(x + 28, y + 6);
-//						String s = Potion.getPotionDurationString(ElixirPotionEffect.this.effect, 1.0F);
-//						graphics.drawString(Minecraft.getInstance().font, s, (float) (x + 10 + 18), (float) (y + 6 + 10), 8355711, true);
-//					}
-					return true;
-				}
-
-				@Override
-				public boolean renderInventoryText(MobEffectInstance instance, EffectRenderingInventoryScreen<?> screen, GuiGraphics graphics, int x, int y, int blitOffset) {
-					return true;
-				}
-
-				@Override
-				public boolean renderGuiIcon(MobEffectInstance instance, Gui gui, GuiGraphics graphics, int x, int y, float z, float alpha) {
-					if (ElixirPotionEffect.this.icon != null) {
-						RenderSystem.enableBlend();
-						RenderSystem.setShaderTexture(0, ElixirPotionEffect.this.icon);
-
-						Tesselator tesselator = Tesselator.getInstance();
-
-						BufferBuilder builder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-						builder.addVertex(x + 2, y + 2, 0).setUv(0, 0);
-						builder.addVertex(x + 2, y + 2 + 20, 0).setUv(0, 1);
-						builder.addVertex(x + 2 + 20, y + 2 + 20, 0).setUv(1, 1);
-						builder.addVertex(x + 2 + 20, y + 2, 0).setUv(1, 0);
-						BufferUploader.drawWithShader(builder.buildOrThrow());
-					}
-					return true;
-				}
-			});
+		public boolean isInstantenous() {
+			return this.effect.isInstant();
 		}
 
 		@Override

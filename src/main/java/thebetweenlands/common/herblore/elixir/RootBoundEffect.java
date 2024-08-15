@@ -18,19 +18,4 @@ public class RootBoundEffect extends MobEffect {
 	public void fillEffectCures(Set<EffectCure> cures, MobEffectInstance instance) {
 		cures.clear();
 	}
-
-	@Override
-	public void initializeClient(Consumer<IClientMobEffectExtensions> consumer) {
-		consumer.accept(new IClientMobEffectExtensions() {
-			@Override
-			public boolean isVisibleInInventory(MobEffectInstance instance) {
-				return false;
-			}
-
-			@Override
-			public boolean isVisibleInGui(MobEffectInstance instance) {
-				return false;
-			}
-		});
-	}
 }

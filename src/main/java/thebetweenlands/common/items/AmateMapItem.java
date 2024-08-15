@@ -1,6 +1,7 @@
 package thebetweenlands.common.items;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceKey;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.saveddata.maps.MapDecorationType;
 import net.minecraft.world.level.saveddata.maps.MapId;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.phys.AABB;
@@ -22,8 +24,8 @@ import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.MapDecorationRegistry;
 import thebetweenlands.common.world.storage.AmateMapData;
-import thebetweenlands.common.world.storage.BLMapDecoration;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
@@ -34,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 public class AmateMapItem extends MapItem {
 
@@ -77,7 +80,7 @@ public class AmateMapItem extends MapItem {
 	private static AmateMapData createMapData(ItemStack stack, Level level, int x, int z, boolean trackingPosition, boolean unlimitedTracking) {
 		MapId freeMapId = level.getFreeMapId();
 
-		AmateMapData mapdata = AmateMapData.createFresh(x, z, trackingPosition, unlimitedTracking, false);
+		AmateMapData mapdata = new AmateMapData(x, z, trackingPosition, unlimitedTracking, false);
 		AmateMapData.registerMapData(level, mapdata, getMapName(freeMapId.id())); // call our own register method
 		stack.set(DataComponents.MAP_ID, freeMapId);
 		return mapdata;
@@ -175,30 +178,30 @@ public class AmateMapItem extends MapItem {
 				for (Integer z : chunkX.getValue()) {
 					int x = chunkX.getKey();
 					List<LocationStorage> localStorages = handler.getLocalStorages(LocationStorage.class, x << 4, z << 4, input -> true);
-					if (localStorages.size() > 0) {
+					if (!localStorages.isEmpty()) {
 						for (LocationStorage storage : localStorages) {
 							AABB aabb = storage.getEnclosingBounds();
 							Vec3 center = new Vec3(aabb.minX + (aabb.maxX - aabb.minX) * 0.5D, aabb.minY + (aabb.maxY - aabb.minY) * 0.5D, aabb.minZ + (aabb.maxZ - aabb.minZ) * 0.5D);
 							byte mapX = (byte) ((center.x - centerX) / (float) blocksPerPixel * 2F);
 							byte mapZ = (byte) ((center.z - centerZ) / (float) blocksPerPixel * 2F);
-							BLMapDecoration.Location location = BLMapDecoration.Location.getLocation(storage);
-							if (location != BLMapDecoration.Location.NONE) {
-								data.addDecoration(new BLMapDecoration(location, mapX, mapZ, (byte) 8));
+							Holder<MapDecorationType> location = MapDecorationRegistry.getLocation(storage);
+							if (location != null) {
+								data.addDecoration(location, world, makeName(location, mapX, mapZ), mapX, mapZ, 180.0F, null);
 
 								boolean done = false;
-								if (location == BLMapDecoration.Location.TOWER) {
+								if (location == MapDecorationRegistry.TOWER) {
 									LocationCragrockTower tower = (LocationCragrockTower) storage;
 									if (tower.isTopConquered()) {
 										done = true;
 									}
-								} else if (location == BLMapDecoration.Location.FORTRESS || location == BLMapDecoration.Location.SPIRIT_TREE || location == BLMapDecoration.Location.SLUDGE_WORM_DUNGEON) {
+								} else if (location == MapDecorationRegistry.WIGHT_TOWER || location == MapDecorationRegistry.SPIRIT_TREE || location == MapDecorationRegistry.SLUDGE_WORM_DUNGEON) {
 									LocationGuarded guarded = (LocationGuarded) storage;
 									if (guarded.getGuard().isClear(world)) {
 										done = true;
 									}
 								}
 								if (done) {
-									data.addDecoration(new BLMapDecoration(BLMapDecoration.Location.CHECK, mapX, mapZ, (byte) 8));
+									data.addDecoration(MapDecorationRegistry.CHECK, world, makeName(MapDecorationRegistry.CHECK, mapX, mapZ), mapX, mapZ, 180.0F, null);
 								}
 							}
 						}
@@ -206,6 +209,10 @@ public class AmateMapItem extends MapItem {
 				}
 			}
 		}
+	}
+
+	public static String makeName(Holder<MapDecorationType> type, int x, int z) {
+		return type.value().assetId() + "_" + x + "_" + z;
 	}
 
 	private BiomeColor getMapColorPerBiome(ResourceLocation biome) {
