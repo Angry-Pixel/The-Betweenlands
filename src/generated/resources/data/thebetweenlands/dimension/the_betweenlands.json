@@ -1,0 +1,11 @@
+{
+  "type": "thebetweenlands:the_betweenlands",
+  "generator": {
+    "type": "minecraft:noise",
+    "biome_source": {
+      "type": "minecraft:fixed",
+      "biome": "thebetweenlands:swamplands"
+    },
+    "settings": "thebetweenlands:the_betweenlands"
+  }
+}

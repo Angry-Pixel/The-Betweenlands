@@ -1,8 +1,11 @@
 package thebetweenlands.common.registries;
 
+import net.minecraft.core.Direction;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.SignItem;
+import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -50,6 +53,11 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> SILK_FILTER = ITEMS.register("silk_filter", () -> new Item(new Item.Properties().stacksTo(1).durability(2000)));
 	public static final DeferredItem<Item> SILK_THREAD = ITEMS.register("silk_thread", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> SKULL_MASK = ITEMS.register("skull_mask", () -> new Item(new Item.Properties()));
+
+	public static final DeferredItem<Item> DAMP_TORCH = ITEMS.register("damp_torch", () -> new StandingAndWallBlockItem(BlockRegistry.DAMP_TORCH.get(), BlockRegistry.DAMP_WALL_TORCH.get(), new Item.Properties(), Direction.DOWN));
+	public static final DeferredItem<Item> SULFUR_TORCH = ITEMS.register("sulfur_torch", () -> new StandingAndWallBlockItem(BlockRegistry.SULFUR_TORCH.get(), BlockRegistry.SULFUR_WALL_TORCH.get(), new Item.Properties(), Direction.DOWN));
+	public static final DeferredItem<Item> EXTINGUISHED_SULFUR_TORCH = ITEMS.register("extinguished_sulfur_torch", () -> new StandingAndWallBlockItem(BlockRegistry.EXTINGUISHED_SULFUR_TORCH.get(), BlockRegistry.EXTINGUISHED_SULFUR_WALL_TORCH.get(), new Item.Properties(), Direction.DOWN));
+	public static final DeferredItem<Item> WEEDWOOD_SIGN = ITEMS.register("weedwood_sign", () -> new SignItem(new Item.Properties(), BlockRegistry.WEEDWOOD_SIGN.get(), BlockRegistry.WEEDWOOD_WALL_SIGN.get()));
 
 	public static final DeferredItem<Item> DIRTY_DENTROTHYST_VIAL = ITEMS.register("dirty_dentothyst_vial", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> ORANGE_DENTROTHYST_VIAL = ITEMS.register("orange_dentothyst_vial", () -> new DentrothystVialItem(ItemRegistry.ORANGE_ASPECT_VIAL, new Item.Properties()));

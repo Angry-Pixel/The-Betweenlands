@@ -45,11 +45,5 @@ public class DataGenerators {
 		gen.addProvider(assets, new BetweenlandsLangProvider(output));
 		gen.addProvider(assets, new BetweenlandsBlockStateProvider(output, helper));
 		gen.addProvider(assets, new BetweenlandsSoundDefinitionsProvider(output, helper));
-
-		// Make a pack.mcmeta
-		gen.addProvider(true, new PackMetadataGenerator(output).add(PackMetadataSection.TYPE, new PackMetadataSection(
-			Component.literal("Resources for The Betweenlands"),
-			DetectedVersion.BUILT_IN.getPackVersion(PackType.SERVER_DATA),
-			Optional.of(new InclusiveRange<>(0, Integer.MAX_VALUE)))));
 	}
 }
