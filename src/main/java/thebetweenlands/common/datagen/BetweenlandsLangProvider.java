@@ -1,9 +1,14 @@
 package thebetweenlands.common.datagen;
 
+import net.minecraft.Util;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.registries.DeferredItem;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class BetweenlandsLangProvider extends LanguageProvider {
 	public BetweenlandsLangProvider(PackOutput output) {
@@ -457,7 +462,6 @@ public class BetweenlandsLangProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.PURIFIED_SWAMP_DIRT, "Purified Swamp Dirt");
 		this.addBlock(BlockRegistry.PURIFIER, "Purifier");
 		this.addBlock(BlockRegistry.PURPLE_PRESENT, "Purple Present");
-
 		this.addBlock(BlockRegistry.RAISIN_BLACK_FILTERED_SILT_GLASS_BLOCK, "Raisin Black Filtered Silt Glass Block");
 		this.addBlock(BlockRegistry.RAISIN_BLACK_MUD_BRICK_SHINGLE_SLAB, "Raisin Black Mud Brick Shingle Slab");
 		this.addBlock(BlockRegistry.RAISIN_BLACK_MUD_BRICK_SHINGLE_STAIRS, "Raisin Black Mud Brick Shingle Stairs");
@@ -756,6 +760,29 @@ public class BetweenlandsLangProvider extends LanguageProvider {
 		this.add("block.thebetweenlands.clean_water", "Clean Water");
 		this.add("block.thebetweenlands.fish_oil", "Fish Oil");
 
+		this.addItem(ItemRegistry.AMATE_MAP, "Empty Amate Map");
+		this.addItem(ItemRegistry.FILLED_AMATE_MAP, "Amate Map");
+		this.addDisc(ItemRegistry.RECORD_ANCIENT, "Temple Disc", "Voog2 - Ancient");
+		this.addDisc(ItemRegistry.RECORD_ASTATOS, "Legendary Disc", "Voog2 - Astatos");
+		this.addDisc(ItemRegistry.RECORD_BENEATH_A_GREEN_SKY, "Music Disc", "Voog2 - Beneath A Green Sky");
+		this.addDisc(ItemRegistry.RECORD_BETWEEN_YOU_AND_ME, "Tribeman's Disc", "Voog2 - Between You And Me");
+		this.addDisc(ItemRegistry.RECORD_CHRISTMAS_ON_THE_MARSH, "Frosty Disc", "Voog2 - Christmas On The Marsh");
+		this.addDisc(ItemRegistry.RECORD_DEEP_WATER_THEME, "Deep Water", "Rotch Gwylt - Deep Water");
+		this.addDisc(ItemRegistry.RECORD_DJ_WIGHTS_MIXTAPE, "DJ Wight's Hot New Mixtape", "Voog2 - Rave In A Cave");
+		this.addDisc(ItemRegistry.RECORD_HAG_DANCE, "Music Disc", "Voog2 - Hag Dance");
+		this.addDisc(ItemRegistry.RECORD_LONELY_FIRE, "Music Disc", "Voog2 - Lonely Fire");
+		this.addDisc(ItemRegistry.RECORD_ONWARDS, "Music Disc", "Voog2 - Onwards");
+		this.addDisc(ItemRegistry.RECORD_STUCK_IN_THE_MUD, "Music Disc", "Voog2 - Stuck In The Mud");
+		this.addDisc(ItemRegistry.RECORD_THE_EXPLORER, "Explorer's Disc", "Voog2 - The Explorer");
+		this.addDisc(ItemRegistry.RECORD_WANDERING_WISPS, "Music Disc", "Voog2 - Wandering Wisps");
+		this.addDisc(ItemRegistry.RECORD_WATERLOGGED, "Music Disc", "Voog2 - Waterlogged");
+		this.addDisc(ItemRegistry.MYSTERIOUS_RECORD, "Mysterious Disc", "...");
+
 		this.add("item.thebetweenlands.amate_map.invalid", "Can't create an Amate Map outside of The Betweenlands");
+	}
+
+	private void addDisc(DeferredItem<Item> disc, String name, String desc) {
+		this.addItem(disc, name);
+		this.add(Util.makeDescriptionId("jukebox_song", disc.get().components().get(DataComponents.JUKEBOX_PLAYABLE).song().key().location()), desc);
 	}
 }

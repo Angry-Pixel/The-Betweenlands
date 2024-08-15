@@ -44,6 +44,7 @@ public class DataGenerators {
 		// Assets
 		gen.addProvider(assets, new BetweenlandsLangProvider(output));
 		gen.addProvider(assets, new BetweenlandsBlockStateProvider(output, helper));
+		gen.addProvider(assets, new BetweenlandsItemModelProvider(output, helper));
 		gen.addProvider(assets, new BetweenlandsSoundDefinitionsProvider(output, helper));
 	}
 }

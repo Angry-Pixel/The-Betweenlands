@@ -2,10 +2,7 @@ package thebetweenlands.common.registries;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.BucketItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.SignItem;
-import net.minecraft.world.item.StandingAndWallBlockItem;
+import net.minecraft.world.item.*;
 import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -36,7 +33,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> BARK_AMULET = ITEMS.register("bark_amulet", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> WEEPING_BLUE_PETAL = ITEMS.register("weeping_blue_petal", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> ASPECTRUS_FRUIT = ITEMS.register("apsectrus_fruit", () -> new Item(new Item.Properties()));
-	public static final DeferredItem<Item> SHIMMER_STONE = ITEMS.register("shimmer_stone", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SHIMMER_STONE = ITEMS.register("shimmer_stone", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
 	public static final DeferredItem<MobItem> ANADIA = ITEMS.register("anadia", () -> new AnadiaMobItem(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> ANADIA_REMAINS = ITEMS.register("anadia_remains", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<MobItem> BUBBLER_CRAB = ITEMS.register("bubbler_crab", () -> new MobItem(new Item.Properties().stacksTo(1), EntityRegistry.BUBBLER_CRAB.get(), null));
@@ -91,22 +88,22 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> GECKO_SPAWN_EGG = ITEMS.register("gecko_spawn_egg", () -> new DeferredSpawnEggItem(EntityRegistry.GECKO, 0xdc7202, 0x05e290, new Item.Properties()));
 	public static final DeferredItem<Item> WIGHT_SPAWN_EGG = ITEMS.register("wight_spawn_egg", () -> new DeferredSpawnEggItem(EntityRegistry.WIGHT, 0x7d8378, 0x07190a, new Item.Properties()));
 
-	public static final DeferredItem<Item> AMATE_MAP = ITEMS.register("amate_map", () -> new EmptyAmateMapItem(new Item.Properties()));
-	public static final DeferredItem<Item> FILLED_AMATE_MAP = ITEMS.register("filled_amate_map", () -> new AmateMapItem(new Item.Properties()));
-	public static final DeferredItem<Item> RECORD_ASTATOS = ITEMS.register("astatos", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.ASTATOS)));
-	public static final DeferredItem<Item> RECORD_BETWEEN_YOU_AND_ME = ITEMS.register("between_you_and_me", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.BETWEEN_YOU_AND_ME)));
-	public static final DeferredItem<Item> RECORD_CHRISTMAS_ON_THE_MARSH = ITEMS.register("christmas_on_the_marsh", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.CHRISTMAS_ON_THE_MARSH)));
-	public static final DeferredItem<Item> RECORD_THE_EXPLORER = ITEMS.register("the_explorer", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.THE_EXPLORER)));
-	public static final DeferredItem<Item> RECORD_HAG_DANCE = ITEMS.register("hag_dance", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.HAG_DANCE)));
-	public static final DeferredItem<Item> RECORD_LONELY_FIRE = ITEMS.register("lonely_fire", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.LONELY_FIRE)));
-	public static final DeferredItem<Item> MYSTERIOUS_RECORD = ITEMS.register("mysterious_record", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.MYSTERIOUS_RECORD)));
-	public static final DeferredItem<Item> RECORD_ANCIENT = ITEMS.register("ancient", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.ANCIENT)));
-	public static final DeferredItem<Item> RECORD_BENEATH_A_GREEN_SKY = ITEMS.register("beneath_a_green_sky", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.BENEATH_A_GREEN_SKY)));
-	public static final DeferredItem<Item> RECORD_DJ_WIGHTS_MIXTAPE = ITEMS.register("dj_wights_mixtape", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.DJ_WIGHTS_MIXTAPE)));
-	public static final DeferredItem<Item> RECORD_ONWARDS = ITEMS.register("onwards", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.ONWARDS)));
-	public static final DeferredItem<Item> RECORD_STUCK_IN_THE_MUD = ITEMS.register("stuck_in_the_mud", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.STUCK_IN_THE_MUD)));
-	public static final DeferredItem<Item> RECORD_WANDERING_WISPS = ITEMS.register("wandering_wisps", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.WANDERING_WISPS)));
-	public static final DeferredItem<Item> RECORD_WATERLOGGED = ITEMS.register("waterlogged", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.WATERLOGGED)));
-	public static final DeferredItem<Item> RECORD_DEEP_WATER_THEME = ITEMS.register("deep_water_theme", () -> new Item(new Item.Properties().jukeboxPlayable(MusicRegistry.DEEP_WATER_THEME)));
+	public static final DeferredItem<Item> AMATE_MAP = ITEMS.register("amate_map", () -> new EmptyAmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
+	public static final DeferredItem<Item> FILLED_AMATE_MAP = ITEMS.register("filled_amate_map", () -> new AmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
+	public static final DeferredItem<Item> RECORD_ASTATOS = ITEMS.register("music_disc_astatos", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.ASTATOS)));
+	public static final DeferredItem<Item> RECORD_BETWEEN_YOU_AND_ME = ITEMS.register("music_disc_between_you_and_me", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.BETWEEN_YOU_AND_ME)));
+	public static final DeferredItem<Item> RECORD_CHRISTMAS_ON_THE_MARSH = ITEMS.register("music_disc_christmas_on_the_marsh", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.CHRISTMAS_ON_THE_MARSH)));
+	public static final DeferredItem<Item> RECORD_THE_EXPLORER = ITEMS.register("music_disc_the_explorer", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.THE_EXPLORER)));
+	public static final DeferredItem<Item> RECORD_HAG_DANCE = ITEMS.register("music_disc_hag_dance", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.HAG_DANCE)));
+	public static final DeferredItem<Item> RECORD_LONELY_FIRE = ITEMS.register("music_disc_lonely_fire", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.LONELY_FIRE)));
+	public static final DeferredItem<Item> MYSTERIOUS_RECORD = ITEMS.register("mysterious_record", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.MYSTERIOUS_RECORD)));
+	public static final DeferredItem<Item> RECORD_ANCIENT = ITEMS.register("music_disc_ancient", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.ANCIENT)));
+	public static final DeferredItem<Item> RECORD_BENEATH_A_GREEN_SKY = ITEMS.register("music_disc_beneath_a_green_sky", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.BENEATH_A_GREEN_SKY)));
+	public static final DeferredItem<Item> RECORD_DJ_WIGHTS_MIXTAPE = ITEMS.register("dj_wights_mixtape", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.DJ_WIGHTS_MIXTAPE)));
+	public static final DeferredItem<Item> RECORD_ONWARDS = ITEMS.register("music_disc_onwards", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.ONWARDS)));
+	public static final DeferredItem<Item> RECORD_STUCK_IN_THE_MUD = ITEMS.register("music_disc_stuck_in_the_mud", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.STUCK_IN_THE_MUD)));
+	public static final DeferredItem<Item> RECORD_WANDERING_WISPS = ITEMS.register("music_disc_wandering_wisps", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.WANDERING_WISPS)));
+	public static final DeferredItem<Item> RECORD_WATERLOGGED = ITEMS.register("music_disc_waterlogged", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.WATERLOGGED)));
+	public static final DeferredItem<Item> RECORD_DEEP_WATER_THEME = ITEMS.register("deep_water_theme", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.DEEP_WATER_THEME)));
 
 }
