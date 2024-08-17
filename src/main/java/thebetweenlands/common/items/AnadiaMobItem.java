@@ -3,12 +3,16 @@ package thebetweenlands.common.items;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -121,43 +125,42 @@ public class AnadiaMobItem extends MobItem {
 		}
 	}
 
-	//FIXME we cant depend on the world timestamp for the tooltip. If theres a way we can get a timestamp without the world that would be great
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-//		if (this.hasEntityData(stack)) {
-//			CompoundTag entityNbt = this.getEntityData(stack);
-//
-//			if (entityNbt != null) {
-//				tooltip.add(BuiltInRegistries.ENTITY_TYPE.get(this.getCapturedEntityId(stack)).getDescription());
-//
-//				if (entityNbt.getByte("fish_color") != 0) {
-//					if (stack.get(DataComponentRegistry.ROT_TIME) != null) {
-//						long rottingTime = stack.get(DataComponentRegistry.ROT_TIME);
-//						if (rottingTime - worldIn.getTotalWorldTime() > 19200)
-//							tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.rotting_1")));
-//						else if (rottingTime - worldIn.getTotalWorldTime() <= 19200 && rottingTime - worldIn.getTotalWorldTime() > 14400)
-//							tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.rotting_2")));
-//						else if (rottingTime - worldIn.getTotalWorldTime() <= 14400 && rottingTime - worldIn.getTotalWorldTime() > 9600)
-//							tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.rotting_3")));
-//						else if (rottingTime - worldIn.getTotalWorldTime() <= 9600 && rottingTime - worldIn.getTotalWorldTime() > 4800)
-//							tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.rotting_4")));
-//						else if (rottingTime - worldIn.getTotalWorldTime() <= 4800 && rottingTime - worldIn.getTotalWorldTime() > 0)
-//							tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.rotting_5")));
-//						else if (rottingTime - worldIn.getTotalWorldTime() <= 0)
-//							tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.rotten")));
-//					}
-//				} else {
-//					tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.smoked")));
-//				}
-//
-//				tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.health", MathHelper.ceil(living.getHealth()), MathHelper.ceil((living.getMaxHealth()))));
+		if (this.hasEntityData(stack)) {
+			CompoundTag entityNbt = this.getEntityData(stack);
+
+			if (entityNbt != null) {
+				tooltip.add(BuiltInRegistries.ENTITY_TYPE.get(this.getCapturedEntityId(stack)).getDescription());
+
+				if (entityNbt.getByte("fish_color") != 0) {
+					if (stack.get(DataComponentRegistry.ROT_TIME) != null && context.level() != null) {
+						long rottingTime = stack.get(DataComponentRegistry.ROT_TIME);
+						if (rottingTime - context.level().getGameTime() > 19200)
+							tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.rotting_1")));
+						else if (rottingTime -  context.level().getGameTime() <= 19200 && rottingTime -  context.level().getGameTime() > 14400)
+							tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.rotting_2")));
+						else if (rottingTime -  context.level().getGameTime() <= 14400 && rottingTime -  context.level().getGameTime() > 9600)
+							tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.rotting_3")));
+						else if (rottingTime -  context.level().getGameTime() <= 9600 && rottingTime -  context.level().getGameTime() > 4800)
+							tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.rotting_4")));
+						else if (rottingTime -  context.level().getGameTime() <= 4800 && rottingTime -  context.level().getGameTime() > 0)
+							tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.rotting_5")));
+						else if (rottingTime -  context.level().getGameTime() <= 0)
+							tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.rotten")));
+					}
+				} else {
+					tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.smoked")));
+				}
+
+//				tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.health", Mth.ceil(living.getHealth()), Mth.ceil((living.getMaxHealth()))));
 //				tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.size", entityNbt.getFloat("fish_size")));
-//				tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.speed", (living.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue())));
+//				tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.speed", (living.getAttribute(Attributes.MOVEMENT_SPEED).getAttributeValue())));
 //				tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.strength", entityNbt.getFloat("strength")));
 //				tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.stamina", entityNbt.getFloat("stamina")));
-//			}
-//		} else {
-//			tooltip.add(Component.translatable("tooltip.bl.item_mob.health", MathHelper.ceil(living.getHealth() / 2), MathHelper.ceil(living.getMaxHealth() / 2)));
-//		}
+			}
+		} else {
+//			tooltip.add(Component.translatable("tooltip.bl.item_mob.health", Mth.ceil(living.getHealth() / 2), Mth.ceil(living.getMaxHealth() / 2)));
+		}
 	}
 }

@@ -12,6 +12,7 @@ public class BetweenlandsConfig {
 	public static boolean debug = false;
 	public static ResourceKey<Level> returnDimension = Level.OVERWORLD;
 	public static boolean seasonalEvents = true;
+	public static int portalMaxLinkDist = 1500;
 
 	public static boolean activateRiftOnFirstJoin = true;
 	public static int minRiftOnFirstJoinDuration = 1800;
