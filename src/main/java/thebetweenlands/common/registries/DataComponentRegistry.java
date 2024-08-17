@@ -12,6 +12,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.item.CompostData;
 import thebetweenlands.common.component.item.CorrosionData;
+import thebetweenlands.common.component.item.FishBaitStats;
 
 public class DataComponentRegistry {
 
@@ -19,6 +20,7 @@ public class DataComponentRegistry {
 
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<CompostData>> COMPOST = COMPONENTS.register("compost", () -> DataComponentType.<CompostData>builder().persistent(CompostData.CODEC).networkSynchronized(CompostData.STREAM_CODEC).cacheEncoding().build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> CORROSIVE = COMPONENTS.register("corrosive", () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
+	public static final DeferredHolder<DataComponentType<?>, DataComponentType<FishBaitStats>> FISH_BAIT = COMPONENTS.register("fish_bait", () -> DataComponentType.<FishBaitStats>builder().persistent(FishBaitStats.CODEC).networkSynchronized(FishBaitStats.STREAM_CODEC).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> FISHING_ROD_BAIT = COMPONENTS.register("bait", () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> FLUID_COLOR = COMPONENTS.register("fluid_color", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build());
 	public static final DeferredHolder<DataComponentType<?>, DataComponentType<Unit>> GLU = COMPONENTS.register("glu", () -> DataComponentType.<Unit>builder().persistent(Codec.unit(Unit.INSTANCE)).networkSynchronized(StreamCodec.unit(Unit.INSTANCE)).build());

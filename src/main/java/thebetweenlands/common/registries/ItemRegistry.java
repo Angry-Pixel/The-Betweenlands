@@ -75,6 +75,11 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> SWAMP_TALISMAN_PIECE_2 = ITEMS.register("swamp_talisman_piece_2", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> SWAMP_TALISMAN_PIECE_3 = ITEMS.register("swamp_talisman_piece_3", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> SWAMP_TALISMAN_PIECE_4 = ITEMS.register("swamp_talisman_piece_4", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> WEEDWOOD_ROWBOAT = ITEMS.register("weedwood_rowboat", () -> new WeedwoodRowboatItem(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> ORANGE_DENTROTHYST_SHARD = ITEMS.register("orange_dentrothyst_shard", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> GREEN_DENTROTHYST_SHARD = ITEMS.register("green_dentrothyst_shard", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> FISH_BAIT = ITEMS.register("fish_bait", () -> new FishBaitItem(new Item.Properties().stacksTo(1).durability(64)));
+	public static final DeferredItem<Item> FUMIGANT = ITEMS.register("fumigant", () -> new FumigantItem(new Item.Properties()));
 
 
 	//TODO proper armor item
