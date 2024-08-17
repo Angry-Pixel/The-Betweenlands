@@ -726,6 +726,21 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.SUSHI);
 			output.accept(ItemRegistry.ROCK_SNOT_PEARL);
 			output.accept(ItemRegistry.PEARLED_PEAR);
+			output.accept(ItemRegistry.RAW_ANADIA_MEAT);
+			output.accept(ItemRegistry.COOKED_ANADIA_MEAT);
+			output.accept(ItemRegistry.SMOKED_ANADIA_MEAT);
+			output.accept(ItemRegistry.BARNACLE);
+			output.accept(ItemRegistry.COOKED_BARNACLE);
+			output.accept(ItemRegistry.SMOKED_BARNACLE);
+			output.accept(ItemRegistry.SMOKED_CRAB_STICK);
+			output.accept(ItemRegistry.SMOKED_FROG_LEGS);
+			output.accept(ItemRegistry.SMOKED_PUFFSHROOM_TENDRIL);
+			output.accept(ItemRegistry.SMOKED_SILT_CRAB_CLAW);
+			output.accept(ItemRegistry.SMOKED_SNAIL_FLESH);
+			output.accept(ItemRegistry.RAW_OLM_EGG);
+			output.accept(ItemRegistry.COOKED_OLM_EGG);
+			output.accept(ItemRegistry.OLMLETTE);
+			output.accept(ItemRegistry.SILK_GRUB);
 		})
 		.build());
 

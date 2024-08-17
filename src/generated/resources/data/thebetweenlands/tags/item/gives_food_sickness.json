@@ -26,7 +26,7 @@
     "thebetweenlands:green_marshmallow",
     "thebetweenlands:pink_marshmallow",
     "thebetweenlands:bulb_capped_mushroom_item",
-    "thebetweenlands:fried_samp_kelp",
+    "thebetweenlands:fried_swamp_kelp",
     "thebetweenlands:forbidden_fig",
     "thebetweenlands:blue_candy",
     "thebetweenlands:red_candy",
@@ -35,6 +35,21 @@
     "thebetweenlands:weeping_blue_petal_salad",
     "thebetweenlands:nibblestick",
     "thebetweenlands:spirit_fruit",
-    "thebetweenlands:sushi"
+    "thebetweenlands:sushi",
+    "thebetweenlands:raw_anadia_meat",
+    "thebetweenlands:cooked_anadia_meat",
+    "thebetweenlands:smoked_anadia_meat",
+    "thebetweenlands:barnacle",
+    "thebetweenlands:cooked_barnacle",
+    "thebetweenlands:smoked_barnacle",
+    "thebetweenlands:smoked_crab_stick",
+    "thebetweenlands:smoked_frog_legs",
+    "thebetweenlands:smoked_puffshroom_tendril",
+    "thebetweenlands:smoked_silt_crab_claw",
+    "thebetweenlands:smoked_snail_flesh",
+    "thebetweenlands:raw_olm_egg",
+    "thebetweenlands:cooked_olm_egg",
+    "thebetweenlands:olmlette",
+    "thebetweenlands:silk_grub"
   ]
 }

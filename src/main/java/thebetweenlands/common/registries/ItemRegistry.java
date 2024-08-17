@@ -2,6 +2,7 @@ package thebetweenlands.common.registries;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.util.Unit;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
@@ -70,7 +71,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> URCHIN_SPIKE = ITEMS.register("urchin_spike", () -> new HoverTextItem(new Item.Properties()));
 	public static final DeferredItem<Item> FISHING_FLOAT_AND_HOOK = ITEMS.register("fishing_float_and_hook", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> OLMLETTE_MIXTURE = ITEMS.register("olmlette_mixture", () -> new Item(new Item.Properties()));
-	public static final DeferredItem<Item> SILK_COCOON = ITEMS.register("silk_cocoon", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> SILK_COCOON = ITEMS.register("silk_grub_cocoon", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> SILK_THREAD = ITEMS.register("silk_thread", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> DIRTY_SILK_BUNDLE = ITEMS.register("dirty_silk_bundle", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> PHEROMONE_THORAXES = ITEMS.register("pheromone_thoraxes", () -> new PheromoneThoraxItem(new Item.Properties()));
@@ -116,7 +117,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> FLATHEAD_MUSHROOM = ITEMS.register("flathead_mushroom_item", () -> new PlantableFoodItem(BlockRegistry.FLATHEAD_MUSHROOM.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.6F).build())));
 	public static final DeferredItem<Item> BLACK_HAT_MUSHROOM = ITEMS.register("black_hat_mushroom_item", () -> new PlantableFoodItem(BlockRegistry.BLACK_HAT_MUSHROOM.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.6F).build())));
 	public static final DeferredItem<Item> BULB_CAPPED_MUSHROOM = ITEMS.register("bulb_capped_mushroom_item", () -> new PlantableFoodItem(BlockRegistry.BLACK_HAT_MUSHROOM.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.6F).build())));
-	public static final DeferredItem<Item> FRIED_SWAMP_KELP = ITEMS.register("fried_samp_kelp", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.6F).build())));
+	public static final DeferredItem<Item> FRIED_SWAMP_KELP = ITEMS.register("fried_swamp_kelp", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.6F).build())));
 	public static final DeferredItem<Item> FORBIDDEN_FIG = ITEMS.register("forbidden_fig", () -> new HoverTextItem(new Item.Properties().rarity(Rarity.RARE).food(new FoodProperties.Builder().nutrition(20).saturationModifier(0.6F).effect(() -> new MobEffectInstance(MobEffects.BLINDNESS, 1200, 1), 1.0F).effect(() -> new MobEffectInstance(MobEffects.WEAKNESS, 1200, 1), 1.0F).build())));
 	public static final DeferredItem<Item> BLUE_CANDY = ITEMS.register("blue_candy", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(1.0F).build())));
 	public static final DeferredItem<Item> RED_CANDY = ITEMS.register("red_candy", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(1.0F).build())));
@@ -126,10 +127,25 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> MIRE_SCRAMBLE = ITEMS.register("mire_scramble", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(12).saturationModifier(1.0F).usingConvertsTo(WEEDWOOD_BOWL).build())));
 	public static final DeferredItem<Item> WEEPING_BLUE_PETAL_SALAD = ITEMS.register("weeping_blue_petal_salad", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationModifier(1.2F).alwaysEdible().usingConvertsTo(WEEDWOOD_BOWL).effect(() -> ElixirEffectRegistry.EFFECT_RIPENING.get().createEffect(4200, 2), 1.0F).build())));
 	public static final DeferredItem<Item> NIBBLESTICK = ITEMS.register("nibblestick", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(1).saturationModifier(0.1F).build())));
-	public static final DeferredItem<Item> SPIRIT_FRUIT = ITEMS.register("spirit_fruit", () -> new Item(new Item.Properties().rarity(Rarity.RARE).food(new FoodProperties.Builder().nutrition(4).saturationModifier(1.2F).alwaysEdible().effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 100, 1), 1.0F).effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, 2400), 1.0F).build())));
+	public static final DeferredItem<Item> SPIRIT_FRUIT = ITEMS.register("spirit_fruit", () -> new Item(new Item.Properties().rarity(Rarity.RARE).component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true).food(new FoodProperties.Builder().nutrition(4).saturationModifier(1.2F).alwaysEdible().effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 100, 1), 1.0F).effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, 2400), 1.0F).build())));
 	public static final DeferredItem<Item> SUSHI = ITEMS.register("sushi", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(5).saturationModifier(1.0F).build())));
 	public static final DeferredItem<Item> ROCK_SNOT_PEARL = ITEMS.register("rock_snot_pearl", () -> new XPGivingFoodItem(10, new Item.Properties().food(new FoodProperties.Builder().alwaysEdible().build())));
 	public static final DeferredItem<Item> PEARLED_PEAR = ITEMS.register("pearled_pear", () -> new XPGivingFoodItem(80, new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.6F).alwaysEdible().build())));
+	public static final DeferredItem<Item> RAW_ANADIA_MEAT = ITEMS.register("raw_anadia_meat", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.2F).build())));
+	public static final DeferredItem<Item> COOKED_ANADIA_MEAT = ITEMS.register("cooked_anadia_meat", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.4F).build())));
+	public static final DeferredItem<Item> SMOKED_ANADIA_MEAT = ITEMS.register("smoked_anadia_meat", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.8F).build())));
+	public static final DeferredItem<Item> BARNACLE = ITEMS.register("barnacle", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(1).saturationModifier(0.1F).build())));
+	public static final DeferredItem<Item> COOKED_BARNACLE = ITEMS.register("cooked_barnacle", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.3F).build())));
+	public static final DeferredItem<Item> SMOKED_BARNACLE = ITEMS.register("smoked_barnacle", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.4F).build())));
+	public static final DeferredItem<Item> SMOKED_CRAB_STICK = ITEMS.register("smoked_crab_stick", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(10).saturationModifier(1.0F).build())));
+	public static final DeferredItem<Item> SMOKED_FROG_LEGS = ITEMS.register("smoked_frog_legs", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.8F).build())));
+	public static final DeferredItem<Item> SMOKED_PUFFSHROOM_TENDRIL = ITEMS.register("smoked_puffshroom_tendril", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.8F).build())));
+	public static final DeferredItem<Item> SMOKED_SILT_CRAB_CLAW = ITEMS.register("smoked_silt_crab_claw", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.8F).build())));
+	public static final DeferredItem<Item> SMOKED_SNAIL_FLESH = ITEMS.register("smoked_snail_flesh", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.9F).build())));
+	public static final DeferredItem<Item> RAW_OLM_EGG = ITEMS.register("raw_olm_egg", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(1).saturationModifier(0.2F).build())));
+	public static final DeferredItem<Item> COOKED_OLM_EGG = ITEMS.register("cooked_olm_egg", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.2F).build())));
+	public static final DeferredItem<Item> OLMLETTE = ITEMS.register("olmlette", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.6F).build())));
+	public static final DeferredItem<Item> SILK_GRUB = ITEMS.register("silk_grub", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(1).saturationModifier(0.2F).build())));
 
 
 	//TODO proper armor item
@@ -150,7 +166,6 @@ public class ItemRegistry {
 	public static final DeferredItem<MobItem> TINY_SLUDGE_WORM_HELPER = ITEMS.register("tiny_sludge_worm_helper", () -> new MobItem(new Item.Properties().stacksTo(1), null, null));
 	public static final DeferredItem<Item> WEEDWOOD_FISHING_ROD = ITEMS.register("weedwood_fishing_rod", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> SILK_BUNDLE = ITEMS.register("silk_bundle", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> SILK_GRUB = ITEMS.register("silk_grub", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> GLUE = ITEMS.register("glue", () -> new GlueItem(new Item.Properties()));
 	public static final DeferredItem<Item> MOSS_FILTER = ITEMS.register("moss_filter", () -> new Item(new Item.Properties().stacksTo(1).durability(400)));
 	public static final DeferredItem<Item> SILK_FILTER = ITEMS.register("silk_filter", () -> new Item(new Item.Properties().stacksTo(1).durability(2000)));

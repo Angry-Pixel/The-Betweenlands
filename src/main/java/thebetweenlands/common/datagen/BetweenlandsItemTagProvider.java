@@ -64,7 +64,15 @@ public class BetweenlandsItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.BLUE_CANDY.get(), ItemRegistry.RED_CANDY.get(),
 			ItemRegistry.YELLOW_CANDY.get(), ItemRegistry.MIRE_SCRAMBLE.get(),
 			ItemRegistry.WEEPING_BLUE_PETAL_SALAD.get(), ItemRegistry.NIBBLESTICK.get(),
-			ItemRegistry.SPIRIT_FRUIT.get(), ItemRegistry.SUSHI.get());
+			ItemRegistry.SPIRIT_FRUIT.get(), ItemRegistry.SUSHI.get(),
+			ItemRegistry.RAW_ANADIA_MEAT.get(), ItemRegistry.COOKED_ANADIA_MEAT.get(),
+			ItemRegistry.SMOKED_ANADIA_MEAT.get(), ItemRegistry.BARNACLE.get(),
+			ItemRegistry.COOKED_BARNACLE.get(), ItemRegistry.SMOKED_BARNACLE.get(),
+			ItemRegistry.SMOKED_CRAB_STICK.get(), ItemRegistry.SMOKED_FROG_LEGS.get(),
+			ItemRegistry.SMOKED_PUFFSHROOM_TENDRIL.get(), ItemRegistry.SMOKED_SILT_CRAB_CLAW.get(),
+			ItemRegistry.SMOKED_SNAIL_FLESH.get(), ItemRegistry.RAW_OLM_EGG.get(),
+			ItemRegistry.COOKED_OLM_EGG.get(), ItemRegistry.OLMLETTE.get(),
+			ItemRegistry.SILK_GRUB.get());
 	}
 
 	public static TagKey<Item> tag(String tagName) {

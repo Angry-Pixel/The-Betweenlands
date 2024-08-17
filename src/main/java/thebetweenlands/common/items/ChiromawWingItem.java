@@ -1,5 +1,6 @@
 package thebetweenlands.common.items;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -48,9 +49,9 @@ public class ChiromawWingItem extends Item {
 		if (player != null) {
 			FoodSicknessData data = player.getData(AttachmentRegistry.FOOD_SICKNESS);
 			if (FoodSickness.getSicknessForHatred(data.getFoodHatred(this)) != FoodSickness.SICK) {
-				tooltip.add(Component.translatable(this.getDescriptionId() + ".eat"));
+				tooltip.add(Component.translatable(this.getDescriptionId() + ".eat").withStyle(ChatFormatting.GRAY));
 			} else {
-				tooltip.add(Component.translatable(this.getDescriptionId() + ".dont_eat"));
+				tooltip.add(Component.translatable(this.getDescriptionId() + ".dont_eat").withStyle(ChatFormatting.GRAY));
 			}
 		}
 	}
