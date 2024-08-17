@@ -29,8 +29,8 @@ public class BLTitleScreen extends TitleScreen {
 	private int ticks;
 	private float bgFade = 1.0F;
 
-	public BLTitleScreen() {
-		super(true);
+	public BLTitleScreen(boolean fading) {
+		super(fading);
 	}
 
 	@Override

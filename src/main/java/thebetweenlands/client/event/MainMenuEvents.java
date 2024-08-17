@@ -28,12 +28,12 @@ public class MainMenuEvents {
 
 	private static void openMainMenu(ScreenEvent.Opening event) {
 		if (event.getNewScreen().getClass() == TitleScreen.class && BetweenlandsConfig.blMainMenu) {
-			event.setNewScreen(new BLTitleScreen());
+			event.setNewScreen(new BLTitleScreen(((TitleScreen)event.getNewScreen()).fading));
 		}
 	}
 
 	private static void initBackground(ScreenEvent.Init.Pre event) {
-		if (!event.isCanceled() && Minecraft.getInstance().level == null && Minecraft.getInstance().screen != null && BetweenlandsConfig.blMainMenu) {
+		if (!event.isCanceled() && Minecraft.getInstance().screen != null && BetweenlandsConfig.blMainMenu) {
 			MainMenuEvents.background.width = event.getScreen().width;
 			MainMenuEvents.background.height = event.getScreen().height;
 			MainMenuEvents.background.init();
@@ -41,7 +41,7 @@ public class MainMenuEvents {
 	}
 
 	private static void tickBackground(ClientTickEvent.Pre event) {
-		if (Minecraft.getInstance().level == null && Minecraft.getInstance().screen != null && BetweenlandsConfig.blMainMenu) {
+		if (Minecraft.getInstance().screen != null && BetweenlandsConfig.blMainMenu) {
 			MainMenuEvents.background.tick();
 		}
 	}

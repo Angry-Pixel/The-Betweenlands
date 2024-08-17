@@ -19,9 +19,9 @@ public abstract class ScreenMixin {
 		MainMenuEvents.background.onClose();
 	}
 
-	@Inject(method = "renderBackground", at = @At("HEAD"), cancellable = true, remap = false)
-	public void renderBLBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
-		if (Minecraft.getInstance().level == null && BetweenlandsConfig.blMainMenu) {
+	@Inject(method = "renderPanorama", at = @At("HEAD"), cancellable = true, remap = false)
+	public void renderBLBackground(GuiGraphics graphics, float partialTicks, CallbackInfo ci) {
+		if (BetweenlandsConfig.blMainMenu) {
 			MainMenuEvents.background.render(graphics, partialTicks, 1.0F);
 			ci.cancel();
 		}
