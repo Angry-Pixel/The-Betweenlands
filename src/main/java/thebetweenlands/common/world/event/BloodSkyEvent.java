@@ -5,7 +5,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import thebetweenlands.client.ClientEvents;
+import thebetweenlands.client.event.ClientEvents;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.SoundRegistry;
 

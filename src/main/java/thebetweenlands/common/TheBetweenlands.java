@@ -1,6 +1,5 @@
 package thebetweenlands.common;
 
-import net.minecraft.advancements.Advancement;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceKey;
@@ -19,8 +18,7 @@ import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
-import thebetweenlands.client.ClientEvents;
-import thebetweenlands.common.datagen.DataGenerators;
+import thebetweenlands.client.event.ClientEvents;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.network.*;
 import thebetweenlands.common.registries.*;

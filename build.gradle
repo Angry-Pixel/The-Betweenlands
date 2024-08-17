@@ -81,6 +81,7 @@ dependencies {
     implementation "net.neoforged:neoforge:${project.neoforge_version}"
 
 	implementation "mezz.jei:jei-${project.minecraft_version}-neoforge:${project.jei_version}"
+	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 jar {

@@ -1,6 +1,6 @@
 @MethodsReturnNonnullByDefault
 @FieldsAreNonnullByDefault
-package thebetweenlands.client.renderer.shader;
+package thebetweenlands.client.gui.menu;
 
 import net.minecraft.FieldsAreNonnullByDefault;
 import net.minecraft.MethodsReturnNonnullByDefault;

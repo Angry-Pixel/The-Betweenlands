@@ -4,7 +4,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import thebetweenlands.client.ClientEvents;
+import thebetweenlands.client.event.ClientEvents;
 import thebetweenlands.common.config.BetweenlandsConfig;
 
 import javax.annotation.Nullable;

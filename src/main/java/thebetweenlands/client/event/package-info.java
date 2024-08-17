@@ -1,0 +1,6 @@
+@MethodsReturnNonnullByDefault
+@FieldsAreNonnullByDefault
+package thebetweenlands.client.event;
+
+import net.minecraft.FieldsAreNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;

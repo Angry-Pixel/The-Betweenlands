@@ -5,7 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import thebetweenlands.client.ClientEvents;
+import thebetweenlands.client.event.ClientEvents;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;

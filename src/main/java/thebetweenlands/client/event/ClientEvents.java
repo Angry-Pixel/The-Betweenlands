@@ -1,4 +1,4 @@
-package thebetweenlands.client;
+package thebetweenlands.client.event;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
@@ -23,6 +23,8 @@ import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtension
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import thebetweenlands.client.BetweenlandsSpecialEffects;
+import thebetweenlands.client.RiftVariantReloadListener;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.entity.GeckoModel;
 import thebetweenlands.client.renderer.entity.GeckoRenderer;
@@ -30,8 +32,6 @@ import thebetweenlands.client.renderer.entity.SwampHagRenderer;
 import thebetweenlands.client.renderer.entity.RenderWight;
 import thebetweenlands.client.model.entity.SwampHagModel;
 import thebetweenlands.client.model.entity.ModelWight;
-import thebetweenlands.client.renderer.shader.BetweenlandsShaders;
-import thebetweenlands.client.renderer.shader.BetweenlandsSkyShaderInstance;
 import thebetweenlands.client.particle.BetweenlandsParticle;
 import thebetweenlands.client.particle.BetweenlandsPortalParticle;
 import thebetweenlands.client.particle.CaveWaterDripParticle;
@@ -52,12 +52,12 @@ public class ClientEvents {
 		eventbus.addListener(ClientEvents::registerRenderers);
 		eventbus.addListener(ClientEvents::registerDimEffects);
 		eventbus.addListener(ClientEvents::registerExtensions);
-//		eventbus.addListener(ClientEvents::registerShaders);
 		eventbus.addListener(ClientEvents::registerLayerDefinition);
 		eventbus.addListener(ClientEvents::particleStuff);
 		eventbus.addListener(ClientEvents::registerBlockColors);
 		eventbus.addListener(ClientEvents::registerReloadListeners);
 		eventbus.addListener(ClientEvents::registerGeometryLoaders);
+		MainMenuEvents.init();
 	}
 
 	private static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
@@ -188,14 +188,6 @@ public class ClientEvents {
 				}
 			}, type.get());
 		}
-	}
-
-	private static void registerShaders(final RegisterShadersEvent event) {
-		//BetweenlandsShaderInstance betweenlandssky = new BetweenlandsShaderInstance(event.getResourceManager(), TheBetweenlands.prefix("starfield"), BetweenlandsVertexFormats.BETWEENLANDS_SKY);
-
-		// todo: sky shader "starfield" name is being changed to "betweenlandsSky"
-		BetweenlandsShaders.preloadShaders(event.getResourceProvider());
-		event.registerShader(BetweenlandsShaders.BetweenlandsSky, BetweenlandsSkyShaderInstance.onLoad);
 	}
 
 	private static void registerLayerDefinition(final EntityRenderersEvent.RegisterLayerDefinitions event) {

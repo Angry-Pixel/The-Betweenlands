@@ -29,3 +29,6 @@ side = "BOTH"
 
 [[accessTransformers]]
 file="META-INF/accesstransformer.cfg"
+
+[[mixins]]
+config="thebetweenlands.mixins.json"
