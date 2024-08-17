@@ -103,7 +103,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> MINCE_PIE = ITEMS.register("mince_pie", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(8).saturationModifier(1.0F).build())));
 	public static final DeferredItem<Item> CHRISTMAS_PUDDING = ITEMS.register("christmas_pudding", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.95F).build())));
 	public static final DeferredItem<Item> CANDY_CANE = ITEMS.register("candy_cane", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.85F).build())));
-	public static final DeferredItem<Item> WEEPING_BLUE_PEDAL = ITEMS.register("weeping_blue_pedal", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(1).saturationModifier(1.0F).effect(() -> ElixirEffectRegistry.EFFECT_RIPENING.get().createEffect(600, 2), 1.0F).build())));
+	public static final DeferredItem<Item> WEEPING_BLUE_PETAL = ITEMS.register("weeping_blue_petal", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(1).saturationModifier(1.0F).effect(() -> ElixirEffectRegistry.EFFECT_RIPENING.get().createEffect(600, 2), 1.0F).build())));
 	public static final DeferredItem<Item> WIGHT_HEART = ITEMS.register("wight_heart", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().build())));
 	public static final DeferredItem<Item> YELLOW_DOTTED_FUNGUS = ITEMS.register("yellow_dotted_fungus", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.6F).build())));
 	public static final DeferredItem<Item> SILT_CRAB_CLAW = ITEMS.register("crab_claw", () -> new ShearsItem(new Item.Properties().component(DataComponents.TOOL, ShearsItem.createToolProperties()).food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.6F).build())));
@@ -111,7 +111,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> SLUDGE_JELLO = ITEMS.register("sludge_jello", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.9F).build())));
 	public static final DeferredItem<Item> MIDDLE_FRUIT_JELLO = ITEMS.register("middle_fruit_jello", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(8).saturationModifier(1.0F).build())));
 	public static final DeferredItem<Item> SAP_JELLO = ITEMS.register("sap_jello", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.9F).alwaysEdible().build())));
-	public static final DeferredItem<Item> MARSHMALLOW = ITEMS.register("marshmallow", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.3F).effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 400, 1), 1.0F).build())));
+	public static final DeferredItem<Item> GREEN_MARSHMALLOW = ITEMS.register("green_marshmallow", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.3F).effect(() -> new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 400, 1), 1.0F).build())));
 	public static final DeferredItem<Item> PINK_MARSHMALLOW = ITEMS.register("pink_marshmallow", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.3F).effect(() -> new MobEffectInstance(MobEffects.JUMP, 400, 1), 1.0F).build())));
 	public static final DeferredItem<Item> FLATHEAD_MUSHROOM = ITEMS.register("flathead_mushroom_item", () -> new PlantableFoodItem(BlockRegistry.FLATHEAD_MUSHROOM.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.6F).build())));
 	public static final DeferredItem<Item> BLACK_HAT_MUSHROOM = ITEMS.register("black_hat_mushroom_item", () -> new PlantableFoodItem(BlockRegistry.BLACK_HAT_MUSHROOM.get(), new Item.Properties().food(new FoodProperties.Builder().nutrition(3).saturationModifier(0.6F).build())));
@@ -141,7 +141,6 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> PESTLE = ITEMS.register("pestle", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> ELIXIR = ITEMS.register("elixir", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> BARK_AMULET = ITEMS.register("bark_amulet", () -> new Item(new Item.Properties()));
-	public static final DeferredItem<Item> WEEPING_BLUE_PETAL = ITEMS.register("weeping_blue_petal", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> ASPECTRUS_FRUIT = ITEMS.register("apsectrus_fruit", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> SHIMMER_STONE = ITEMS.register("shimmer_stone", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
 	public static final DeferredItem<MobItem> ANADIA = ITEMS.register("anadia", () -> new AnadiaMobItem(new Item.Properties().stacksTo(1)));

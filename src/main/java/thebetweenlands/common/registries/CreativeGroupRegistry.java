@@ -609,16 +609,135 @@ public class CreativeGroupRegistry {
 		})::build);
 
 	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> BETWEENLANDS_ITEMS = CREATIVE_TABS.register("items", () -> CreativeModeTab.builder()
+		.icon(ItemRegistry.SWAMP_TALISMAN::toStack)
+		.withTabsBefore(BETWEENLANDS_BLOCKS.getKey())
 		.title(Component.translatable("itemGroup.thebetweenlands.items"))
+		.displayItems((parameters, output) -> {
+			//barnacle
+			output.accept(ItemRegistry.CRIMSON_SNAIL_SHELL);
+			output.accept(ItemRegistry.OCHRE_SNAIL_SHELL);
+			output.accept(ItemRegistry.COMPOST);
+			output.accept(ItemRegistry.DRAGONFLY_WING);
+			output.accept(ItemRegistry.LURKER_SKIN);
+			output.accept(ItemRegistry.DRIED_SWAMP_REED);
+			output.accept(ItemRegistry.REED_ROPE);
+			output.accept(ItemRegistry.MUD_BRICK);
+			output.accept(ItemRegistry.SYRMORITE_INGOT);
+			output.accept(ItemRegistry.DRY_BARK);
+			output.accept(ItemRegistry.SLIMY_BONE);
+			output.accept(ItemRegistry.SNAPPER_ROOT);
+			output.accept(ItemRegistry.STALKER_EYE);
+			output.accept(ItemRegistry.SULFUR);
+			output.accept(ItemRegistry.VALONITE_SHARD);
+			output.accept(ItemRegistry.WEEDWOOD_STICK);
+			output.accept(ItemRegistry.ANGLER_TOOTH);
+			output.accept(ItemRegistry.WEEDWOOD_BOWL);
+			output.accept(ItemRegistry.RUBBER_BALL);
+			output.accept(ItemRegistry.TAR_BEAST_HEART);
+			output.accept(ItemRegistry.ANIMATED_TAR_BEAST_HEART);
+			output.accept(ItemRegistry.TAR_DRIP);
+			output.accept(ItemRegistry.LIMESTONE_FLUX);
+			output.accept(ItemRegistry.INANIMATE_TARMINION);
+			output.accept(ItemRegistry.POISON_GLAND);
+			output.accept(ItemRegistry.AMATE_PAPER);
+			output.accept(ItemRegistry.SHOCKWAVE_SWORD_PIECE_1);
+			output.accept(ItemRegistry.SHOCKWAVE_SWORD_PIECE_2);
+			output.accept(ItemRegistry.SHOCKWAVE_SWORD_PIECE_3);
+			output.accept(ItemRegistry.SHOCKWAVE_SWORD_PIECE_4);
+			output.accept(ItemRegistry.AMULET_SOCKET);
+			output.accept(ItemRegistry.SCABYST);
+			output.accept(ItemRegistry.ITEM_SCROLL);
+			output.accept(ItemRegistry.SYRMORITE_NUGGET);
+			output.accept(ItemRegistry.OCTINE_NUGGET);
+			output.accept(ItemRegistry.VALONITE_SPLINTER);
+			output.accept(ItemRegistry.CREMAINS);
+			output.accept(ItemRegistry.UNDYING_EMBERS);
+			output.accept(ItemRegistry.INANIMATE_ANGRY_PEBBLE);
+			output.accept(ItemRegistry.ANCIENT_REMNANT);
+			output.accept(ItemRegistry.LOOT_SCRAPS);
+			output.accept(ItemRegistry.FABRICATED_SCROLL);
+			output.accept(BlockRegistry.BETWEENSTONE_PEBBLE);
+			output.accept(ItemRegistry.ANADIA_SWIM_BLADDER);
+			output.accept(ItemRegistry.ANADIA_EYE);
+			output.accept(ItemRegistry.ANADIA_GILLS);
+			output.accept(ItemRegistry.ANADIA_SCALES);
+			output.accept(ItemRegistry.ANADIA_BONES);
+			output.accept(ItemRegistry.ANADIA_REMAINS);
+			output.accept(ItemRegistry.ANADIA_FINS);
+			output.accept(ItemRegistry.SNOT);
+			output.accept(ItemRegistry.URCHIN_SPIKE);
+			output.accept(ItemRegistry.FISHING_FLOAT_AND_HOOK);
+			output.accept(ItemRegistry.OLMLETTE_MIXTURE);
+			output.accept(ItemRegistry.SILK_COCOON);
+			output.accept(ItemRegistry.SILK_THREAD);
+			output.accept(ItemRegistry.DIRTY_SILK_BUNDLE);
+			output.accept(ItemRegistry.PHEROMONE_THORAXES);
+			output.accept(ItemRegistry.SWAMP_TALISMAN);
+			output.accept(ItemRegistry.SWAMP_TALISMAN_PIECE_1);
+			output.accept(ItemRegistry.SWAMP_TALISMAN_PIECE_2);
+			output.accept(ItemRegistry.SWAMP_TALISMAN_PIECE_3);
+			output.accept(ItemRegistry.SWAMP_TALISMAN_PIECE_4);
+			output.accept(ItemRegistry.WEEDWOOD_ROWBOAT);
+			output.accept(ItemRegistry.ORANGE_DENTROTHYST_SHARD);
+			output.accept(ItemRegistry.GREEN_DENTROTHYST_SHARD);
+			output.accept(ItemRegistry.FISH_BAIT);
+			output.accept(ItemRegistry.FUMIGANT);
+			output.accept(ItemRegistry.SAP_BALL);
+			output.accept(ItemRegistry.MIRE_SNAIL_EGG);
+			output.accept(ItemRegistry.COOKED_MIRE_SNAIL_EGG);
+			output.accept(ItemRegistry.RAW_FROG_LEGS);
+			output.accept(ItemRegistry.COOKED_FROG_LEGS);
+			output.accept(ItemRegistry.RAW_SNAIL_FLESH);
+			output.accept(ItemRegistry.COOKED_SNAIL_FLESH);
+			output.accept(ItemRegistry.REED_DONUT);
+			output.accept(ItemRegistry.JAM_DONUT);
+			output.accept(ItemRegistry.GERTS_DONUT);
+			output.accept(ItemRegistry.PUFFSHROOM_TENDRIL);
+			output.accept(ItemRegistry.KRAKEN_TENTACLE);
+			output.accept(ItemRegistry.KRAKEN_CALAMARI);
+			output.accept(ItemRegistry.MIDDLE_FRUIT);
+			output.accept(ItemRegistry.MINCE_PIE);
+			output.accept(ItemRegistry.CHRISTMAS_PUDDING);
+			output.accept(ItemRegistry.CANDY_CANE);
+			output.accept(ItemRegistry.WEEPING_BLUE_PETAL);
+			output.accept(ItemRegistry.WIGHT_HEART);
+			output.accept(ItemRegistry.YELLOW_DOTTED_FUNGUS);
+			output.accept(ItemRegistry.SILT_CRAB_CLAW);
+			output.accept(ItemRegistry.CRAB_STICK);
+			output.accept(ItemRegistry.SLUDGE_JELLO);
+			output.accept(ItemRegistry.MIDDLE_FRUIT_JELLO);
+			output.accept(ItemRegistry.SAP_JELLO);
+			output.accept(ItemRegistry.GREEN_MARSHMALLOW);
+			output.accept(ItemRegistry.PINK_MARSHMALLOW);
+			output.accept(ItemRegistry.FLATHEAD_MUSHROOM);
+			output.accept(ItemRegistry.BLACK_HAT_MUSHROOM);
+			output.accept(ItemRegistry.BULB_CAPPED_MUSHROOM);
+			output.accept(ItemRegistry.FRIED_SWAMP_KELP);
+			output.accept(ItemRegistry.FORBIDDEN_FIG);
+			output.accept(ItemRegistry.BLUE_CANDY);
+			output.accept(ItemRegistry.RED_CANDY);
+			output.accept(ItemRegistry.YELLOW_CANDY);
+			output.accept(ItemRegistry.CHIROMAW_WING);
+			output.accept(ItemRegistry.TANGLED_ROOT);
+			output.accept(ItemRegistry.MIRE_SCRAMBLE);
+			output.accept(ItemRegistry.WEEPING_BLUE_PETAL_SALAD);
+			output.accept(ItemRegistry.NIBBLESTICK);
+			output.accept(ItemRegistry.SPIRIT_FRUIT);
+			output.accept(ItemRegistry.SUSHI);
+			output.accept(ItemRegistry.ROCK_SNOT_PEARL);
+			output.accept(ItemRegistry.PEARLED_PEAR);
+		})
 		.build());
 
 	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> BETWEENLANDS_GEAR = CREATIVE_TABS.register("gear", () -> CreativeModeTab.builder()
+		.withTabsBefore(BETWEENLANDS_ITEMS.getKey())
 		.title(Component.translatable("itemGroup.thebetweenlands.gear"))
 		.build());
 
 	//Special tab
 	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> BETWEENLANDS_SPECIAL = CREATIVE_TABS.register("specials", () -> CreativeModeTab.builder()
 		.title(Component.translatable("itemGroup.thebetweenlands.specials"))
+		.withTabsBefore(BETWEENLANDS_GEAR.getKey())
 		.icon(() -> new ItemStack(ItemRegistry.RECORD_ASTATOS.get()))
 		.displayItems((parameters, output) -> {
 			output.accept(ItemRegistry.SKULL_MASK);
@@ -660,6 +779,7 @@ public class CreativeGroupRegistry {
 	// Plants tab
 	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> BETWEENLANDS_PLANTS = CREATIVE_TABS.register("plants", () -> CreativeModeTab.builder()
 		.title(Component.translatable("itemGroup.thebetweenlands.plants"))
+		.withTabsBefore(BETWEENLANDS_SPECIAL.getKey())
 		.icon(() -> new ItemStack(BlockRegistry.MIRE_CORAL))
 		.displayItems((parameters, output) -> {
 			output.accept(BlockRegistry.WEEDWOOD_SAPLING);
@@ -744,6 +864,7 @@ public class CreativeGroupRegistry {
 
 	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> BETWEENLANDS_HERBLORE = CREATIVE_TABS.register("herblore", () -> CreativeModeTab.builder()
 		.title(Component.translatable("itemGroup.thebetweenlands.herblore"))
+		.withTabsBefore(BETWEENLANDS_PLANTS.getKey())
 		.build());
 
 	public static void populateTabs(BuildCreativeModeTabContentsEvent event) {

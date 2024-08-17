@@ -58,7 +58,7 @@ public class BetweenlandsItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.WEEPING_BLUE_PETAL.get(), ItemRegistry.YELLOW_DOTTED_FUNGUS.get(),
 			ItemRegistry.SILT_CRAB_CLAW.get(), ItemRegistry.CRAB_STICK.get(),
 			ItemRegistry.SLUDGE_JELLO.get(), ItemRegistry.MIDDLE_FRUIT_JELLO.get(),
-			ItemRegistry.SAP_JELLO.get(), ItemRegistry.MARSHMALLOW.get(),
+			ItemRegistry.SAP_JELLO.get(), ItemRegistry.GREEN_MARSHMALLOW.get(),
 			ItemRegistry.PINK_MARSHMALLOW.get(), ItemRegistry.BULB_CAPPED_MUSHROOM.get(),
 			ItemRegistry.FRIED_SWAMP_KELP.get(), ItemRegistry.FORBIDDEN_FIG.get(),
 			ItemRegistry.BLUE_CANDY.get(), ItemRegistry.RED_CANDY.get(),
