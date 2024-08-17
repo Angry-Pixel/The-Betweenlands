@@ -71,10 +71,10 @@ public class FishBait extends ItemEntity {
 		List<Anadia> list = this.level().getEntitiesOfClass(Anadia.class, new AABB(this.blockPosition()).inflate(0.125F).inflate(this.getBaitRange() * 0.5D), anadia -> anadia.isInWater() && anadia.hasLineOfSight(this));
 		if (!list.isEmpty()) {
 			Anadia foundFish = list.getFirst();
-			if (foundFish.aiFindBait != null) {
-				foundFish.aiFindBait.bait = this;
-				foundFish.aiFindBait.updateTask();
-			}
+//			if (foundFish.aiFindBait != null) {
+//				foundFish.aiFindBait.bait = this;
+//				foundFish.aiFindBait.updateTask();
+//			}
 		}
 	}
 
@@ -90,7 +90,7 @@ public class FishBait extends ItemEntity {
 		this.setGlowingTag(stats.glowing());
 	}
 
-	public int getBaitSinkSPeed() {
+	public int getBaitSinkSpeed() {
 		return this.getEntityData().get(SINK_SPEED);
 	}
 

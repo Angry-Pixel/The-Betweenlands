@@ -65,9 +65,8 @@ public class WeedwoodRowboatItem extends Item {
 //					player.awardStat(Stats.ITEM_USED.get(this));
 //					return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
 //				}
-			} else {
-				return InteractionResultHolder.pass(itemstack);
 			}
+			return InteractionResultHolder.pass(itemstack);
 		}
 	}
 }

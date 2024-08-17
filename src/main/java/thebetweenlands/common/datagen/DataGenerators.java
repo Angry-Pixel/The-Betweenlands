@@ -1,25 +1,16 @@
 package thebetweenlands.common.datagen;
 
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-import net.minecraft.DetectedVersion;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.metadata.PackMetadataGenerator;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.metadata.pack.PackMetadataSection;
-import net.minecraft.util.InclusiveRange;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
-//@EventBusSubscriber(modid = TheBetweenlands.ID, bus = EventBusSubscriber.Bus.MOD)
 public class DataGenerators {
 
-//	@SubscribeEvent
 	public static void gatherData(GatherDataEvent event) {
 		DataGenerator gen = event.getGenerator();
 		PackOutput output = gen.getPackOutput();
@@ -32,6 +23,7 @@ public class DataGenerators {
 		boolean data = event.includeServer();
 
 		// Data
+		gen.addProvider(data, new BetweenlandsDataMapProvider(output, provider));
 		BetweenlandsRegistryProvider datapack = new BetweenlandsRegistryProvider(output, provider);
 		CompletableFuture<HolderLookup.Provider> dataProvider = datapack.getRegistryProvider();
 		gen.addProvider(data, datapack);

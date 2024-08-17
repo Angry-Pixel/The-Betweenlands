@@ -18,6 +18,7 @@ import thebetweenlands.common.TheBetweenlands;
 public class BetweenlandsItemTagProvider extends ItemTagsProvider {
 
 	public static final TagKey<Item> OCTINE_IGNITES = tag("octine_ignites");
+	public static final TagKey<Item> GIVES_FOOD_SICKNESS = tag("gives_food_sickness");
 
 	/**
 	 * Whether or not an item should be looked at by the corrosion engine
@@ -53,5 +54,5 @@ public class BetweenlandsItemTagProvider extends ItemTagsProvider {
 	public static TagKey<Item> commonTag(String tagName) {
 		return ItemTags.create(ResourceLocation.fromNamespaceAndPath("c", tagName));
 	}
-	
+
 }

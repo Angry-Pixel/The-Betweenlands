@@ -80,6 +80,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> GREEN_DENTROTHYST_SHARD = ITEMS.register("green_dentrothyst_shard", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> FISH_BAIT = ITEMS.register("fish_bait", () -> new FishBaitItem(new Item.Properties().stacksTo(1).durability(64)));
 	public static final DeferredItem<Item> FUMIGANT = ITEMS.register("fumigant", () -> new FumigantItem(new Item.Properties()));
+	public static final DeferredItem<Item> SAP_BALL = ITEMS.register("sap_ball", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().alwaysEdible().build())));
 
 
 	//TODO proper armor item
@@ -92,8 +93,6 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> SAP_SPIT = ITEMS.register("sap_spit", () -> new SapSpitItem(new Item.Properties()));
 	public static final DeferredItem<Item> PESTLE = ITEMS.register("pestle", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> ELIXIR = ITEMS.register("elixir", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> FUMIGANT = ITEMS.register("fumigant", () -> new Item(new Item.Properties()));
-	public static final DeferredItem<Item> SAP_BALL = ITEMS.register("sap_ball", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> BARK_AMULET = ITEMS.register("bark_amulet", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> WEEPING_BLUE_PETAL = ITEMS.register("weeping_blue_petal", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> ASPECTRUS_FRUIT = ITEMS.register("apsectrus_fruit", () -> new Item(new Item.Properties()));
