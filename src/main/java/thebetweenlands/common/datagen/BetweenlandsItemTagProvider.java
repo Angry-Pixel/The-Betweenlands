@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import thebetweenlands.api.item.ICustomCorrodible;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class BetweenlandsItemTagProvider extends ItemTagsProvider {
 
@@ -45,6 +46,25 @@ public class BetweenlandsItemTagProvider extends ItemTagsProvider {
 		this.tag(CORRODIBLE).addTag(DEFAULT_CORRODIBLE).addTag(CUSTOM_CORRODIBLE);
 		this.tag(DEFAULT_CORRODIBLE).add(Items.DIAMOND_SWORD);
 		this.tag(CUSTOM_CORRODIBLE);
+
+		this.tag(GIVES_FOOD_SICKNESS).add(ItemRegistry.MIRE_SNAIL_EGG.get(), ItemRegistry.COOKED_MIRE_SNAIL_EGG.get(),
+			ItemRegistry.RAW_FROG_LEGS.get(), ItemRegistry.COOKED_FROG_LEGS.get(),
+			ItemRegistry.RAW_SNAIL_FLESH.get(), ItemRegistry.COOKED_SNAIL_FLESH.get(),
+			ItemRegistry.REED_DONUT.get(), ItemRegistry.JAM_DONUT.get(),
+			ItemRegistry.GERTS_DONUT.get(), ItemRegistry.PUFFSHROOM_TENDRIL.get(),
+			ItemRegistry.KRAKEN_TENTACLE.get(), ItemRegistry.KRAKEN_CALAMARI.get(),
+			ItemRegistry.MIDDLE_FRUIT.get(), ItemRegistry.MINCE_PIE.get(),
+			ItemRegistry.CHRISTMAS_PUDDING.get(), ItemRegistry.CANDY_CANE.get(),
+			ItemRegistry.WEEPING_BLUE_PETAL.get(), ItemRegistry.YELLOW_DOTTED_FUNGUS.get(),
+			ItemRegistry.SILT_CRAB_CLAW.get(), ItemRegistry.CRAB_STICK.get(),
+			ItemRegistry.SLUDGE_JELLO.get(), ItemRegistry.MIDDLE_FRUIT_JELLO.get(),
+			ItemRegistry.SAP_JELLO.get(), ItemRegistry.MARSHMALLOW.get(),
+			ItemRegistry.PINK_MARSHMALLOW.get(), ItemRegistry.BULB_CAPPED_MUSHROOM.get(),
+			ItemRegistry.FRIED_SWAMP_KELP.get(), ItemRegistry.FORBIDDEN_FIG.get(),
+			ItemRegistry.BLUE_CANDY.get(), ItemRegistry.RED_CANDY.get(),
+			ItemRegistry.YELLOW_CANDY.get(), ItemRegistry.MIRE_SCRAMBLE.get(),
+			ItemRegistry.WEEPING_BLUE_PETAL_SALAD.get(), ItemRegistry.NIBBLESTICK.get(),
+			ItemRegistry.SPIRIT_FRUIT.get(), ItemRegistry.SUSHI.get());
 	}
 
 	public static TagKey<Item> tag(String tagName) {
