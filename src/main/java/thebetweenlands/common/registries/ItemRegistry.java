@@ -147,9 +147,33 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> OLMLETTE = ITEMS.register("olmlette", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.6F).build())));
 	public static final DeferredItem<Item> SILK_GRUB = ITEMS.register("silk_grub", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(1).saturationModifier(0.2F).build())));
 
-
-	//TODO proper armor item
-	public static final DeferredItem<Item> LURKER_SKIN_BOOTS = ITEMS.register("lurker_skin_boots", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> BONE_HELMET = ITEMS.register("bone_helmet", () -> new ArmorItem(ArmorMaterialRegistry.BONE, ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(6)).stacksTo(1)));
+	public static final DeferredItem<Item> BONE_CHESTPLATE = ITEMS.register("bone_chestplate", () -> new ArmorItem(ArmorMaterialRegistry.BONE, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(6)).stacksTo(1)));
+	public static final DeferredItem<Item> BONE_LEGGINGS = ITEMS.register("bone_leggings", () -> new ArmorItem(ArmorMaterialRegistry.BONE, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(6)).stacksTo(1)));
+	public static final DeferredItem<Item> BONE_BOOTS = ITEMS.register("bone_boots", () -> new ArmorItem(ArmorMaterialRegistry.BONE, ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(6)).stacksTo(1)));
+	public static final DeferredItem<Item> LURKER_SKIN_HELMET = ITEMS.register("lurker_skin_helmet", () -> new LurkerSkinArmorItem(ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(12)).stacksTo(1)));
+	public static final DeferredItem<Item> LURKER_SKIN_CHESTPLATE = ITEMS.register("lurker_skin_chestplate", () -> new LurkerSkinArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(12)).stacksTo(1)));
+	public static final DeferredItem<Item> LURKER_SKIN_LEGGINGS = ITEMS.register("lurker_skin_leggings", () -> new LurkerSkinArmorItem(ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(12)).stacksTo(1)));
+	public static final DeferredItem<Item> LURKER_SKIN_BOOTS = ITEMS.register("lurker_skin_boots", () -> new LurkerSkinArmorItem(ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(12)).stacksTo(1)));
+	public static final DeferredItem<Item> SYRMORITE_HELMET = ITEMS.register("syrmorite_helmet", () -> new ArmorItem(ArmorMaterialRegistry.SYRMORITE, ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(16)).stacksTo(1)));
+	public static final DeferredItem<Item> SYRMORITE_CHESTPLATE = ITEMS.register("syrmorite_chestplate", () -> new ArmorItem(ArmorMaterialRegistry.SYRMORITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(16)).stacksTo(1)));
+	public static final DeferredItem<Item> SYRMORITE_LEGGINGS = ITEMS.register("syrmorite_leggings", () -> new ArmorItem(ArmorMaterialRegistry.SYRMORITE, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(16)).stacksTo(1)));
+	public static final DeferredItem<Item> SYRMORITE_BOOTS = ITEMS.register("syrmorite_boots", () -> new ArmorItem(ArmorMaterialRegistry.SYRMORITE, ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(16)).stacksTo(1)));
+	public static final DeferredItem<Item> VALONITE_HELMET = ITEMS.register("valonite_helmet", () -> new ArmorItem(ArmorMaterialRegistry.VALONITE, ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(35)).stacksTo(1)));
+	public static final DeferredItem<Item> VALONITE_CHESTPLATE = ITEMS.register("valonite_chestplate", () -> new ArmorItem(ArmorMaterialRegistry.VALONITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(35)).stacksTo(1)));
+	public static final DeferredItem<Item> VALONITE_LEGGINGS = ITEMS.register("valonite_leggings", () -> new ArmorItem(ArmorMaterialRegistry.VALONITE, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(35)).stacksTo(1)));
+	public static final DeferredItem<Item> VALONITE_BOOTS = ITEMS.register("valonite_boots", () -> new ArmorItem(ArmorMaterialRegistry.VALONITE, ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(35)).stacksTo(1)));
+	public static final DeferredItem<Item> ANCIENT_HELMET = ITEMS.register("ancient_helmet", () -> new AncientArmorItem(ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(35)).rarity(Rarity.EPIC).stacksTo(1)));
+	public static final DeferredItem<Item> ANCIENT_CHESTPLATE = ITEMS.register("ancient_chestplate", () -> new AncientArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(35)).rarity(Rarity.EPIC).stacksTo(1)));
+	public static final DeferredItem<Item> ANCIENT_LEGGINGS = ITEMS.register("ancient_leggings", () -> new AncientArmorItem(ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(35)).rarity(Rarity.EPIC).stacksTo(1)));
+	public static final DeferredItem<Item> ANCIENT_BOOTS = ITEMS.register("ancient_boots", () -> new AncientArmorItem(ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(35)).rarity(Rarity.EPIC).stacksTo(1)));
+//	public static final DeferredItem<Item> AMPHIBIOUS_HELMET = ITEMS.register("amphibious_helmet", () -> new AmphibiousArmorItem(ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(12)).stacksTo(1)));
+//	public static final DeferredItem<Item> AMPHIBIOUS_CHESTPLATE = ITEMS.register("amphibious_chestplate", () -> new AmphibiousArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(12)).stacksTo(1)));
+//	public static final DeferredItem<Item> AMPHIBIOUS_LEGGINGS = ITEMS.register("amphibious_leggings", () -> new AmphibiousArmorItem(ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(12)).stacksTo(1)));
+//	public static final DeferredItem<Item> AMPHIBIOUS_BOOTS = ITEMS.register("amphibious_boots", () -> new AmphibiousArmorItem(ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(12)).stacksTo(1)));
+	public static final DeferredItem<Item> RUBBER_BOOTS = ITEMS.register("rubber_boots", () -> new RubberBootsItem(new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(10)).stacksTo(1)));
+	public static final DeferredItem<Item> MARSH_RUNNER_BOOTS = ITEMS.register("marsh_runner_boots", () -> new MarshRunnerBootsItem(new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(10)).stacksTo(1)));
+	public static final DeferredItem<Item> SKULL_MASK = ITEMS.register("skull_mask", () -> new Item(new Item.Properties()));
 
 	public static final DeferredItem<Item> OCTINE_INGOT = ITEMS.register("octine_ingot", () -> new OctineIngotItem(new Item.Properties()));
 	public static final DeferredItem<Item> RUNE_DOOR_KEY = ITEMS.register("rune_door_key", () -> new Item(new Item.Properties().stacksTo(1)));
@@ -169,7 +193,6 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> GLUE = ITEMS.register("glue", () -> new GlueItem(new Item.Properties()));
 	public static final DeferredItem<Item> MOSS_FILTER = ITEMS.register("moss_filter", () -> new Item(new Item.Properties().stacksTo(1).durability(400)));
 	public static final DeferredItem<Item> SILK_FILTER = ITEMS.register("silk_filter", () -> new Item(new Item.Properties().stacksTo(1).durability(2000)));
-	public static final DeferredItem<Item> SKULL_MASK = ITEMS.register("skull_mask", () -> new Item(new Item.Properties()));
 
 	public static final DeferredItem<Item> DAMP_TORCH = ITEMS.register("damp_torch", () -> new StandingAndWallBlockItem(BlockRegistry.DAMP_TORCH.get(), BlockRegistry.DAMP_WALL_TORCH.get(), new Item.Properties(), Direction.DOWN));
 	public static final DeferredItem<Item> SULFUR_TORCH = ITEMS.register("sulfur_torch", () -> new StandingAndWallBlockItem(BlockRegistry.SULFUR_TORCH.get(), BlockRegistry.SULFUR_WALL_TORCH.get(), new Item.Properties(), Direction.DOWN));
