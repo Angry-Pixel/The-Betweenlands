@@ -17,7 +17,7 @@ public class AncientArmorItem extends ArmorItem {
 
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-		tooltip.add(Component.translatable("item.thebetweenlands.ancient_armor.usage"));
+		tooltip.add(Component.translatable("item.thebetweenlands.ancient_armor.desc"));
 		if (stack.getDamageValue() == stack.getMaxDamage()) {
 			tooltip.add(Component.translatable("item.thebetweenlands.broken", stack.getDisplayName()));
 		}

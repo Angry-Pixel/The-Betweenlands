@@ -15,7 +15,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 
 public class RubberBootsItem extends ArmorItem {
 	public RubberBootsItem(Properties properties) {
-		super(ArmorMaterialRegistry.RUBBER, Type.LEGGINGS, properties);
+		super(ArmorMaterialRegistry.RUBBER, Type.BOOTS, properties);
 	}
 
 	public static boolean isEntityWearingRubberBoots(Entity entity) {

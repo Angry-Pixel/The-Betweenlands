@@ -746,7 +746,33 @@ public class CreativeGroupRegistry {
 
 	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> BETWEENLANDS_GEAR = CREATIVE_TABS.register("gear", () -> CreativeModeTab.builder()
 		.withTabsBefore(BETWEENLANDS_ITEMS.getKey())
+		.icon(ItemRegistry.ANCIENT_HELMET::toStack) //TODO temp, change to valonite pick when implemented
 		.title(Component.translatable("itemGroup.thebetweenlands.gear"))
+		.displayItems((parameters, output) -> {
+			output.accept(ItemRegistry.BONE_HELMET);
+			output.accept(ItemRegistry.BONE_CHESTPLATE);
+			output.accept(ItemRegistry.BONE_LEGGINGS);
+			output.accept(ItemRegistry.BONE_BOOTS);
+			output.accept(ItemRegistry.LURKER_SKIN_HELMET);
+			output.accept(ItemRegistry.LURKER_SKIN_CHESTPLATE);
+			output.accept(ItemRegistry.LURKER_SKIN_LEGGINGS);
+			output.accept(ItemRegistry.LURKER_SKIN_BOOTS);
+			output.accept(ItemRegistry.SYRMORITE_HELMET);
+			output.accept(ItemRegistry.SYRMORITE_CHESTPLATE);
+			output.accept(ItemRegistry.SYRMORITE_LEGGINGS);
+			output.accept(ItemRegistry.SYRMORITE_BOOTS);
+			output.accept(ItemRegistry.VALONITE_HELMET);
+			output.accept(ItemRegistry.VALONITE_CHESTPLATE);
+			output.accept(ItemRegistry.VALONITE_LEGGINGS);
+			output.accept(ItemRegistry.VALONITE_BOOTS);
+			output.accept(ItemRegistry.ANCIENT_HELMET);
+			output.accept(ItemRegistry.ANCIENT_CHESTPLATE);
+			output.accept(ItemRegistry.ANCIENT_LEGGINGS);
+			output.accept(ItemRegistry.ANCIENT_BOOTS);
+			//amphibious armor
+			output.accept(ItemRegistry.RUBBER_BOOTS);
+			output.accept(ItemRegistry.MARSH_RUNNER_BOOTS);
+		})
 		.build());
 
 	//Special tab

@@ -144,6 +144,29 @@ public class BetweenlandsItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.OLMLETTE);
 		this.basicItem(ItemRegistry.SILK_GRUB);
 
+		this.basicItem(ItemRegistry.BONE_HELMET);
+		this.basicItem(ItemRegistry.BONE_CHESTPLATE);
+		this.basicItem(ItemRegistry.BONE_LEGGINGS);
+		this.basicItem(ItemRegistry.BONE_BOOTS);
+		this.basicItem(ItemRegistry.LURKER_SKIN_HELMET);
+		this.basicItem(ItemRegistry.LURKER_SKIN_CHESTPLATE);
+		this.basicItem(ItemRegistry.LURKER_SKIN_LEGGINGS);
+		this.basicItem(ItemRegistry.LURKER_SKIN_BOOTS);
+		this.basicItem(ItemRegistry.SYRMORITE_HELMET);
+		this.basicItem(ItemRegistry.SYRMORITE_CHESTPLATE);
+		this.basicItem(ItemRegistry.SYRMORITE_LEGGINGS);
+		this.basicItem(ItemRegistry.SYRMORITE_BOOTS);
+		this.basicItem(ItemRegistry.VALONITE_HELMET);
+		this.basicItem(ItemRegistry.VALONITE_CHESTPLATE);
+		this.basicItem(ItemRegistry.VALONITE_LEGGINGS);
+		this.basicItem(ItemRegistry.VALONITE_BOOTS);
+		this.basicItem(ItemRegistry.ANCIENT_HELMET);
+		this.basicItem(ItemRegistry.ANCIENT_CHESTPLATE);
+		this.basicItem(ItemRegistry.ANCIENT_LEGGINGS);
+		this.basicItem(ItemRegistry.ANCIENT_BOOTS);
+		this.basicItem(ItemRegistry.RUBBER_BOOTS);
+		this.otherTextureItem(ItemRegistry.MARSH_RUNNER_BOOTS, this.modLoc("rubber_boots"));
+
 		this.basicItem(ItemRegistry.RECORD_ANCIENT);
 		this.basicItem(ItemRegistry.RECORD_ASTATOS);
 		this.basicItem(ItemRegistry.RECORD_BENEATH_A_GREEN_SKY);
