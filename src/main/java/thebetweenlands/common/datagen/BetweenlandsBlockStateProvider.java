@@ -20,6 +20,11 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 
 	@Override
 	protected void registerStatesAndModels() {
+		this.simpleBlock(BlockRegistry.SWAMP_WATER.get(), this.models().getBuilder("swamp_water").texture("particle", this.modLoc("fluid/swamp_water_still")));
+		this.simpleBlock(BlockRegistry.STAGNANT_WATER.get(), this.models().getBuilder("stagnant_water").texture("particle", this.modLoc("fluid/stagnant_water_still")));
+		this.simpleBlock(BlockRegistry.RUBBER.get(), this.models().getBuilder("rubber").texture("particle", this.modLoc("fluid/rubber_still")));
+		this.simpleBlock(BlockRegistry.TAR.get(), this.models().getBuilder("tar").texture("particle", this.modLoc("fluid/tar_still")));
+
 		this.druidStone(BlockRegistry.DRUID_STONE_1);
 		this.druidStone(BlockRegistry.DRUID_STONE_2);
 		this.druidStone(BlockRegistry.DRUID_STONE_3);
@@ -343,8 +348,6 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_2, "s");
 		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_3, "s");
 		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_4, "s");
-
-		this.simpleBlock(BlockRegistry.SWAMP_WATER.get(), this.models().getBuilder("swamp_water").texture("particle", this.modLoc("fluid/swamp_water_still")));
 	}
 
 	private void druidStone(DeferredBlock<Block> stone) {

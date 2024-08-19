@@ -16,6 +16,7 @@ public class BetweenlandsAtlasProvider extends SpriteSourceProvider {
 
 	@Override
 	protected void gather() {
+		this.atlas(BLOCKS_ATLAS).addSource(new DirectoryLister("fluid", "fluid/"));
 		this.atlas(TheBetweenlands.prefix("aspect_icons")).addSource(new DirectoryLister("aspect", ""));
 	}
 }
