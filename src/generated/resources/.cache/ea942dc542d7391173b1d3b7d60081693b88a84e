@@ -1,0 +1,21 @@
+// 1.21.1	2024-08-19T14:57:04.6691059	Tags for minecraft:fluid mod id thebetweenlands
+48e2d20a0a962e53a250c0694018c7bb378b1b5c data/thebetweenlands/tags/fluid/clean_water.json
+c5eab8eefcf542ab842ac19df0e72eee40a8b3c9 data/thebetweenlands/tags/fluid/dye.json
+e2ed24344c17fe427d4a097a16d47e1dae8e13cc data/thebetweenlands/tags/fluid/fish_oil.json
+0c1b04fb1d896a3fd8b792b9869ee642dd2f1538 data/thebetweenlands/tags/fluid/fog.json
+00dc288bf1f9eef94feac95f877de58b401ae2d0 data/thebetweenlands/tags/fluid/frog_leg_extract.json
+17ebc1797fed6c549650ff3b11e179077c520e3b data/thebetweenlands/tags/fluid/lake_broth.json
+39f2f309472fa6845e172f2d956ff10314cb2450 data/thebetweenlands/tags/fluid/nettle_soup.json
+5a457b2787ad040fa73fd19a4ab7b7fe9a5b72b4 data/thebetweenlands/tags/fluid/nettle_tea.json
+587f7d533a51c5c81a0e89f2c68d955542a1745a data/thebetweenlands/tags/fluid/pear_cordial.json
+76f296a07798b81a120af62b87b8f7e71462ae9c data/thebetweenlands/tags/fluid/pheromone_extract.json
+b74d954c339f685b18b8bba0a2dbd421cc9eeceb data/thebetweenlands/tags/fluid/rubber.json
+196ed5c5f63b8b48de761683674f40c184a665e3 data/thebetweenlands/tags/fluid/shallowbreath.json
+41d7bb0e3a92e33bbb3b2e6609507d8ad162aaea data/thebetweenlands/tags/fluid/shamans_brew.json
+df4e182a4231fd36a9457cae79f29f35b751891d data/thebetweenlands/tags/fluid/shell_stock.json
+0b0ee5f7641a10ff633d089f7e12f04b9801eeeb data/thebetweenlands/tags/fluid/stagnant_water.json
+e7233717a2fca42f56eafc847926cfccb5fa2899 data/thebetweenlands/tags/fluid/sturdy_stock.json
+0234ad0798829be3761d08d2c1b66a24cf9de0ec data/thebetweenlands/tags/fluid/swamp_broth.json
+16e85dace9cf5bd32f27e6e702b12b9b433255c6 data/thebetweenlands/tags/fluid/swamp_water.json
+c75ac040747f9c02795f9ce989ebf285cf4040c7 data/thebetweenlands/tags/fluid/tar.json
+08c3361ef48135040da71a9c9ec1c251218e373f data/thebetweenlands/tags/fluid/witch_tea.json

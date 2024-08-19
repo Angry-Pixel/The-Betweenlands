@@ -16,8 +16,6 @@ import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.*;
-import javax.annotation.Nullable;
-
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
@@ -28,18 +26,20 @@ import thebetweenlands.client.CircleGemTextureManager;
 import thebetweenlands.client.RiftVariantReloadListener;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.entity.GeckoModel;
-import thebetweenlands.client.renderer.entity.GeckoRenderer;
-import thebetweenlands.client.renderer.entity.SwampHagRenderer;
-import thebetweenlands.client.renderer.entity.RenderWight;
-import thebetweenlands.client.model.entity.SwampHagModel;
 import thebetweenlands.client.model.entity.ModelWight;
+import thebetweenlands.client.model.entity.SwampHagModel;
 import thebetweenlands.client.particle.BetweenlandsParticle;
 import thebetweenlands.client.particle.BetweenlandsPortalParticle;
 import thebetweenlands.client.particle.CaveWaterDripParticle;
+import thebetweenlands.client.renderer.entity.GeckoRenderer;
+import thebetweenlands.client.renderer.entity.RenderWight;
+import thebetweenlands.client.renderer.entity.SwampHagRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.registries.*;
+
+import javax.annotation.Nullable;
 
 public class ClientEvents {
 
@@ -181,12 +181,12 @@ public class ClientEvents {
 			event.registerFluidType(new IClientFluidTypeExtensions() {
 				@Override
 				public ResourceLocation getStillTexture() {
-					return TheBetweenlands.prefix("fluids/" + type.getId().getPath() + "_still");
+					return TheBetweenlands.prefix("fluid/" + type.getId().getPath() + "_still");
 				}
 
 				@Override
 				public ResourceLocation getFlowingTexture() {
-					return TheBetweenlands.prefix("fluids/" + type.getId().getPath() + "_flowing");
+					return TheBetweenlands.prefix("fluid/" + type.getId().getPath() + "_flowing");
 				}
 			}, type.get());
 		}

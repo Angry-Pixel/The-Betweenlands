@@ -1,13 +1,13 @@
 package thebetweenlands.common.datagen;
 
-import java.util.concurrent.CompletableFuture;
-
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+
+import java.util.concurrent.CompletableFuture;
 
 public class DataGenerators {
 
@@ -31,6 +31,7 @@ public class DataGenerators {
 		gen.addProvider(data, blockTags);
 		gen.addProvider(data, new BetweenlandsEntityTagProvider(output, dataProvider, helper));
 		gen.addProvider(data, new BetweenlandsItemTagProvider(output, dataProvider, blockTags.contentsGetter(), helper));
+		gen.addProvider(data, new BetweenlandsFluidTagsGenerator(output, provider, helper));
 //		gen.addProvider(data, new BetweenlandsDimensionTagProvider(output, dataProvider, helper));
 
 		// Assets

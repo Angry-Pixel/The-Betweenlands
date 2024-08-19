@@ -343,6 +343,8 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_2, "s");
 		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_3, "s");
 		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_4, "s");
+
+		this.simpleBlock(BlockRegistry.SWAMP_WATER.get(), this.models().getBuilder("swamp_water").texture("particle", this.modLoc("fluid/swamp_water_still")));
 	}
 
 	private void druidStone(DeferredBlock<Block> stone) {
