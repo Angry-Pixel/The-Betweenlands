@@ -11,6 +11,7 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.SurfaceType;
+import thebetweenlands.common.world.gen.WorldGenUtil;
 
 public class SwampReedClusterFeature extends Feature<NoneFeatureConfiguration> {
 	public SwampReedClusterFeature(Codec<NoneFeatureConfiguration> codec) {
@@ -24,13 +25,10 @@ public class SwampReedClusterFeature extends Feature<NoneFeatureConfiguration> {
 
 	public boolean generate(WorldGenLevel level, RandomSource rand, BlockPos pos) {
 		boolean generated = false;
-
-		for (BlockState state = level.getBlockState(pos); (state.isAir() || state.is(BlockTags.LEAVES)) && pos.getY() > level.getMinBuildHeight(); state = level.getBlockState(pos)) {
-			pos = pos.below();
-		}
+		pos = WorldGenUtil.loopUntilSolid(level, pos);
 
 		for (int i = 0; i < 128; ++i) {
-			BlockPos offset = pos.mutable().offset(rand.nextInt(10) - rand.nextInt(10), rand.nextInt(8) - rand.nextInt(8), rand.nextInt(10) - rand.nextInt(10));
+			BlockPos offset = WorldGenUtil.randomOffset(rand, pos, 10, 8, 10);
 
 			if (level.isAreaLoaded(offset, 1)) {
 				if (SurfaceType.WATER.matches(level, offset.above()) && level.getBlockState(offset).is(BlockRegistry.MUD) && level.getBlockState(offset.above(2)).isAir()) {

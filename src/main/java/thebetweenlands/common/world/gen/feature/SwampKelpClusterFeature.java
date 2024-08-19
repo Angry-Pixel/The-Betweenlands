@@ -11,6 +11,7 @@ import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.SurfaceType;
+import thebetweenlands.common.world.gen.WorldGenUtil;
 
 public class SwampKelpClusterFeature extends Feature<NoneFeatureConfiguration> {
 	public SwampKelpClusterFeature(Codec<NoneFeatureConfiguration> codec) {
@@ -24,13 +25,10 @@ public class SwampKelpClusterFeature extends Feature<NoneFeatureConfiguration> {
 
 	public boolean generate(WorldGenLevel level, RandomSource rand, BlockPos pos) {
 		boolean generated = false;
-
-		for (BlockState state = level.getBlockState(pos); (state.isAir() || state.is(BlockTags.LEAVES)) && pos.getY() > level.getMinBuildHeight(); level.getBlockState(pos)) {
-			pos = pos.below();
-		}
+		pos = WorldGenUtil.loopUntilSolid(level, pos);
 
 		for (int i = 0; i < 128; ++i) {
-			BlockPos offset = pos.mutable().offset(rand.nextInt(10) - rand.nextInt(10), rand.nextInt(8) - rand.nextInt(8), rand.nextInt(10) - rand.nextInt(10));
+			BlockPos offset = WorldGenUtil.randomOffset(rand, pos, 10, 8, 10);
 
 			if (SurfaceType.WATER.matches(level, offset.above()) && SurfaceType.DIRT.matches(level, offset)) {
 				if (this.generateSwampKelpStack(level, rand, offset.above())) {
