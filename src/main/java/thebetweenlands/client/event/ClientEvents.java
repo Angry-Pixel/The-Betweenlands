@@ -21,6 +21,7 @@ import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtension
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import thebetweenlands.client.AspectIconTextureManager;
 import thebetweenlands.client.BetweenlandsSpecialEffects;
 import thebetweenlands.client.CircleGemTextureManager;
 import thebetweenlands.client.RiftVariantReloadListener;
@@ -74,6 +75,7 @@ public class ClientEvents {
 	public static void registerReloadListeners(RegisterClientReloadListenersEvent event) {
 		event.registerReloadListener(riftVariantListener = new RiftVariantReloadListener());
 		event.registerReloadListener(new CircleGemTextureManager());
+		event.registerReloadListener(new AspectIconTextureManager(Minecraft.getInstance().getTextureManager()));
 	}
 
 	public static void registerDimEffects(RegisterDimensionSpecialEffectsEvent event) {

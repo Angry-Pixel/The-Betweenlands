@@ -1,8 +1,10 @@
 package thebetweenlands.common.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
@@ -12,14 +14,14 @@ import thebetweenlands.api.aspect.AspectType;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class GeckoCageBlockEntity extends SyncedBlockEntity {
 
 	private int ticks = 0;
 	private int prevTicks = 0;
 	private int recoverTicks = 0;
-	@Nullable
-	private AspectType aspectType = null;
+	private Optional<Holder<AspectType>> aspectType = Optional.empty();
 	private int geckoUsages = 0;
 	@Nullable
 	private String geckoName;
@@ -59,13 +61,13 @@ public class GeckoCageBlockEntity extends SyncedBlockEntity {
 	}
 
 	@Nullable
-	public AspectType getAspectType() {
-		return this.aspectType;
+	public Holder<AspectType> getAspectType() {
+		return this.aspectType.orElse(null);
 	}
 
-	public void setAspectType(Level level, BlockPos pos, BlockState state, AspectType type, int recoverTime) {
+	public void setAspectType(Level level, BlockPos pos, BlockState state, Holder<AspectType> type, int recoverTime) {
 		--this.geckoUsages;
-		this.aspectType = type;
+		this.aspectType = Optional.ofNullable(type);
 		this.recoverTicks = recoverTime;
 		level.sendBlockUpdated(pos, state, state, 2);
 		if (!this.hasGecko())
@@ -107,7 +109,7 @@ public class GeckoCageBlockEntity extends SyncedBlockEntity {
 		if (this.geckoName != null) {
 			tag.putString("gecko_name", this.geckoName);
 		}
-		tag.putString("aspect_type", this.aspectType == null ? "" : this.aspectType.getName());
+		this.aspectType.ifPresent(aspectTypeHolder -> AspectType.CODEC.encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), aspectTypeHolder).ifSuccess(tag1 -> tag.put("aspect", tag1)));
 		tag.putInt("ticks", this.ticks);
 	}
 
@@ -121,7 +123,9 @@ public class GeckoCageBlockEntity extends SyncedBlockEntity {
 		} else {
 			this.geckoName = null;
 		}
-		this.aspectType = BLRegistries.ASPECTS.get(ResourceLocation.tryParse(tag.getString("aspect_type")));
+		if (tag.contains("aspect")) {
+			AspectType.CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get("aspect")).ifSuccess(aspectTypeHolder -> this.aspectType = Optional.of(aspectTypeHolder));
+		}
 		this.ticks = tag.getInt("ticks");
 	}
 }

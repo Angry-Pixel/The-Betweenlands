@@ -56,14 +56,14 @@ public class AspectVialBlock extends BaseEntityBlock {
 			if (stack.getItem() instanceof AspectVialItem vialItem && (container = AspectContainerItem.fromItem(stack)).getAspects().size() == 1) {
 				Aspect itemAspect = container.getAspects().getFirst();
 				if (!player.isCrouching()) {
-					if (vial.getAspect() == null || vial.getAspect().type == itemAspect.type) {
+					if (vial.getAspect() == null || vial.getAspect().type() == itemAspect.type()) {
 						if (!level.isClientSide()) {
 							if (vial.getAspect() == null)
-								vial.setAspect(new Aspect(itemAspect.type, 0));
-							int added = vial.addAmount(Math.min(itemAspect.amount, 100));
+								vial.setAspect(new Aspect(itemAspect.type(), 0));
+							int added = vial.addAmount(Math.min(itemAspect.amount(), 100));
 							if (added > 0) {
-								int leftAmount = itemAspect.amount - added;
-								container.set(itemAspect.type, itemAspect.amount - added);
+								int leftAmount = itemAspect.amount() - added;
+								container.set(itemAspect.type(), itemAspect.amount() - added);
 								if (leftAmount <= 0) {
 									player.setItemInHand(hand, vialItem.getCraftingRemainingItem(stack));
 								}
@@ -72,12 +72,12 @@ public class AspectVialBlock extends BaseEntityBlock {
 						return ItemInteractionResult.sidedSuccess(level.isClientSide());
 					}
 				} else {
-					if (vial.getAspect() != null && vial.getAspect().type == itemAspect.type) {
+					if (vial.getAspect() != null && vial.getAspect().type() == itemAspect.type()) {
 						if (!level.isClientSide()) {
-							int toRemove = Math.min(100, Amounts.VIAL - itemAspect.amount);
+							int toRemove = Math.min(100, Amounts.VIAL - itemAspect.amount());
 							if (toRemove > 0) {
 								int removedAmount = vial.removeAmount(toRemove);
-								container.set(itemAspect.type, itemAspect.amount + removedAmount);
+								container.set(itemAspect.type(), itemAspect.amount() + removedAmount);
 							}
 						}
 						return ItemInteractionResult.sidedSuccess(level.isClientSide());
@@ -89,7 +89,7 @@ public class AspectVialBlock extends BaseEntityBlock {
 					int removedAmount = vial.removeAmount(100);
 					if (removedAmount > 0) {
 						container = AspectContainerItem.fromItem(new ItemStack(vialItem.getFullBottle()));
-						container.add(aspect.type, removedAmount);
+						container.add(aspect.type(), removedAmount);
 
 						stack.shrink(1);
 						if (stack.getCount() <= 0)

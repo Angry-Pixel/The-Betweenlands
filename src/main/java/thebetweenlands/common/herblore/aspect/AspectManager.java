@@ -13,6 +13,7 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -24,51 +25,46 @@ import net.minecraft.world.level.Level;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.AspectItem;
 import thebetweenlands.api.aspect.AspectType;
+import thebetweenlands.api.aspect.DiscoveryContainer;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class AspectManager {
-	public static enum AspectTier {
-		COMMON(0), UNCOMMON(1), RARE(2);
+	public enum AspectTier {
+		COMMON(0),
+		UNCOMMON(1),
+		RARE(2);
 
 		public final int id;
 
-		private AspectTier(int id) {
+		AspectTier(int id) {
 			this.id = id;
 		}
 	}
 
-	public static enum AspectGroup {
-		HERB(0), GEM_BYRGINAZ(1), GEM_FIRNALAZ(2), GEM_FERGALAZ(3), SAP_SPIT(4), SLUDGE_WORM_DUNGEON(5);
+	public enum AspectGroup {
+		HERB(0),
+		GEM_BYRGINAZ(1),
+		GEM_FIRNALAZ(2),
+		GEM_FERGALAZ(3),
+		SAP_SPIT(4),
+		SLUDGE_WORM_DUNGEON(5);
 
 		public final int id;
 
-		private AspectGroup(int id) {
+		AspectGroup(int id) {
 			this.id = id;
 		}
 	}
 
-	public static final class AspectEntry {
-		public final AspectType aspect;
-		public final int tier;
-		public final int group;
-		public final int baseAmount;
-		public final String aspectName;
+	public record AspectEntry(Holder<AspectType> aspect, int tier, int group, int baseAmount) {
 
-		private AspectEntry(AspectType aspect, AspectTier tier, AspectGroup group, int baseAmount) {
+		private AspectEntry(Holder<AspectType> aspect, AspectTier tier, AspectGroup group, int baseAmount) {
 			this(aspect, tier.id, group.id, baseAmount);
-		}
-
-		private AspectEntry(AspectType aspect, int tier, int group, int baseAmount) {
-			this.aspect = aspect;
-			this.tier = tier;
-			this.group = group;
-			this.baseAmount = baseAmount;
-			this.aspectName = this.aspect.getName();
 		}
 
 		@Override
 		public String toString() {
-			return "AspectEntry[Aspect=" + this.aspectName + ", Tier=" + this.tier + ", Group=" + this.group + ", BaseAmount=" + this.baseAmount + "]";
+			return "AspectEntry[Aspect=" + this.aspect().getKey().location() + ", Tier=" + this.tier() + ", Group=" + this.group() + ", BaseAmount=" + this.baseAmount() + "]";
 		}
 	}
 
@@ -131,7 +127,7 @@ public class AspectManager {
 	 * @param type
 	 * @param baseAmount
 	 */
-	public static void registerAspect(AspectType aspect, AspectTier tier, AspectGroup type, int baseAmount) {
+	public static void registerAspect(Holder<AspectType> aspect, AspectTier tier, AspectGroup type, int baseAmount) {
 		registerAspect(aspect, tier.id, type.id, baseAmount);
 	}
 
@@ -142,7 +138,7 @@ public class AspectManager {
 	 * @param type
 	 * @param baseAmount
 	 */
-	public static void registerAspect(AspectType aspect, int tier, int type, int baseAmount) {
+	public static void registerAspect(Holder<AspectType> aspect, int tier, int type, int baseAmount) {
 		REGISTERED_ASPECTS.add(new AspectEntry(aspect, tier, type, baseAmount));
 	}
 
@@ -269,7 +265,7 @@ public class AspectManager {
 	}
 
 	private void updateMatchedAspects(AspectItem item, List<Aspect> aspects) {
-		Collections.sort(aspects);
+//		Collections.sort(aspects);
 		this.matchedAspects.put(item, aspects);
 	}
 
@@ -294,7 +290,7 @@ public class AspectManager {
 				List<Aspect> itemAspects = new ArrayList<>();
 				for(int c = 0; c < aspectList.size(); c++) {
 					CompoundTag aspectCompound = aspectList.getCompound(c);
-					Aspect aspect = Aspect.readFromNBT(aspectCompound);
+					Aspect aspect = Aspect.readFromNBT(aspectCompound, provider);
 					if(aspect == null) {
 						//System.out.println("Failed getting aspect");
 						continue entryIT;
@@ -318,7 +314,7 @@ public class AspectManager {
 			writeAspectItemToNbt(itemEntry, entryCompound, provider);
 			ListTag aspectList = new ListTag();
 			for(Aspect aspect : itemAspects) {
-				aspectList.add(aspect.writeToNBT(new CompoundTag()));
+				aspectList.add(aspect.writeToNBT(new CompoundTag(), provider));
 			}
 			entryCompound.put("aspects", aspectList);
 			entryList.add(entryCompound);
@@ -407,7 +403,7 @@ public class AspectManager {
 				for(Aspect aspect : itemAspects) {
 					Aspect mergedAspect = null;
 					for(Aspect ma : mergedAspects) {
-						if(ma.type == aspect.type) {
+						if(ma.type() == aspect.type()) {
 							mergedAspect = ma;
 							break;
 						}
@@ -416,7 +412,7 @@ public class AspectManager {
 						mergedAspects.add(aspect);
 					} else {
 						mergedAspects.remove(mergedAspect);
-						mergedAspects.add(new Aspect(mergedAspect.type, mergedAspect.amount + aspect.amount));
+						mergedAspects.add(new Aspect(mergedAspect.type(), mergedAspect.amount() + aspect.amount()));
 					}
 				}
 
@@ -429,7 +425,7 @@ public class AspectManager {
 		Iterator<AspectEntry> it = availableAspects.iterator();
 		AspectEntry availableAspect = null;
 		while(it.hasNext() && (availableAspect = it.next()) != null) {
-			if(availableAspect.aspect.equals(itemAspect.type)) {
+			if(availableAspect.aspect.equals(itemAspect.type().value())) {
 				it.remove();
 			}
 		}
@@ -441,7 +437,7 @@ public class AspectManager {
 		int possibleAspectCount = this.fillPossibleAspects(itemEntries, possibleAspects, availableAspects, null);
 		if(possibleAspectCount == 0) return false;
 		for(int i = 0; i < itemAspectsSize; i++) {
-			if(possibleAspects.size() == 0) {
+			if(possibleAspects.isEmpty()) {
 				this.fillPossibleAspects(itemEntries, possibleAspects, availableAspects, itemAspectsSize < possibleAspectCount ? itemAspects : null);
 			}
 			AspectEntry randomAspect = possibleAspects.get(rnd.nextInt(possibleAspects.size()));
@@ -471,7 +467,7 @@ public class AspectManager {
 					} else {
 						boolean isTaken = false;
 						for(Aspect takenAspect : takenAspects) {
-							if(takenAspect.type == availableAspect.aspect) {
+							if(takenAspect.type() == availableAspect.aspect) {
 								isTaken = true;
 								break;
 							}
@@ -535,15 +531,15 @@ public class AspectManager {
 	 * @param item
 	 * @return
 	 */
-//	public List<Aspect> getDiscoveredStaticAspects(AspectItem item, @Nullable DiscoveryContainer<?> discoveryContainer) {
-//		List<Aspect> aspects = new ArrayList<Aspect>();
-//		if(discoveryContainer == null) {
-//			aspects.addAll(this.getStaticAspects(item));
-//		} else {
-//			aspects.addAll(discoveryContainer.getDiscoveredStaticAspects(this, item));
-//		}
-//		return aspects;
-//	}
+	public List<Aspect> getDiscoveredStaticAspects(AspectItem item, @Nullable DiscoveryContainer<?> discoveryContainer) {
+		List<Aspect> aspects = new ArrayList<>();
+		if(discoveryContainer == null) {
+			aspects.addAll(this.getStaticAspects(item));
+		} else {
+			aspects.addAll(discoveryContainer.getDiscoveredStaticAspects(this, item));
+		}
+		return aspects;
+	}
 
 	/**
 	 * Returns a list of all discovered aspect types on an item. If you specify a discovery container
@@ -552,11 +548,11 @@ public class AspectManager {
 	 * @param item
 	 * @return
 	 */
-//	public List<IAspectType> getDiscoveredAspectTypes(AspectItem item, DiscoveryContainer<?> discoveryContainer) {
-//		List<IAspectType> aspects = new ArrayList<IAspectType>();
-//		for(Aspect aspect : this.getDiscoveredStaticAspects(item, discoveryContainer)) {
-//			aspects.add(aspect.type);
-//		}
-//		return aspects;
-//	}
+	public List<Holder<AspectType>> getDiscoveredAspectTypes(AspectItem item, DiscoveryContainer<?> discoveryContainer) {
+		List<Holder<AspectType>> aspects = new ArrayList<>();
+		for(Aspect aspect : this.getDiscoveredStaticAspects(item, discoveryContainer)) {
+			aspects.add(aspect.type());
+		}
+		return aspects;
+	}
 }

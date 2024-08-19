@@ -1,8 +1,10 @@
 package thebetweenlands.api.aspect;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -10,10 +12,11 @@ import net.minecraft.world.item.ItemStack;
 import thebetweenlands.api.item.DiscoveryProvider;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class DiscoveryContainer<T> {
-	private final Map<AspectItem, List<AspectType>> discoveredStaticAspects = new HashMap<>();
+	private final Map<AspectItem, List<Holder<AspectType>>> discoveredStaticAspects = new HashMap<>();
 	private final DiscoveryProvider<T> provider;
 	private final T providerObj;
 
@@ -79,7 +82,7 @@ public class DiscoveryContainer<T> {
 			return new AspectDiscovery(AspectDiscovery.DiscoveryResult.END, null, false);
 		}
 		Aspect undiscovered = this.getUndiscoveredAspect(staticAspects, this.discoveredStaticAspects.get(aspectItem));
-		this.addDiscovery(aspectItem, undiscovered.type);
+		this.addDiscovery(aspectItem, undiscovered.type());
 		if(discoveryCount == staticAspects.size()) {
 			this.saveContainer();
 			return new AspectDiscovery(AspectDiscovery.DiscoveryResult.LAST, undiscovered, true);
@@ -105,7 +108,7 @@ public class DiscoveryContainer<T> {
 	public void discoverAll(AspectManager manager) {
 		for(Map.Entry<AspectItem, List<Aspect>> e : manager.getMatchedAspects().entrySet()) {
 			for(Aspect a : e.getValue())
-				this.addDiscovery(e.getKey(), a.type);
+				this.addDiscovery(e.getKey(), a.type());
 		}
 		this.saveContainer();
 	}
@@ -132,22 +135,23 @@ public class DiscoveryContainer<T> {
 	 * @param item
 	 * @param discovered
 	 */
-	public void addDiscovery(AspectItem item, AspectType discovered) {
-		List<AspectType> discoveredAspects = this.discoveredStaticAspects.get(item);
+	public void addDiscovery(AspectItem item, Holder<AspectType> discovered) {
+		List<Holder<AspectType>> discoveredAspects = this.discoveredStaticAspects.get(item);
 		if(discoveredAspects == null) {
-			this.discoveredStaticAspects.put(item, discoveredAspects = new ArrayList<AspectType>());
+			this.discoveredStaticAspects.put(item, discoveredAspects = new ArrayList<>());
 		}
 		if(!discoveredAspects.contains(discovered))
 			discoveredAspects.add(discovered);
 		this.saveContainer();
 	}
 
-	private Aspect getUndiscoveredAspect(List<Aspect> all, List<AspectType> discovered) {
+	@Nullable
+	private Aspect getUndiscoveredAspect(List<Aspect> all, List<Holder<AspectType>> discovered) {
 		if(discovered == null) {
-			return all.size() == 0 ? null : all.get(0);
+			return all.isEmpty() ? null : all.getFirst();
 		}
 		for(Aspect a : all) {
-			if(!discovered.contains(a.type))
+			if(!discovered.contains(a.type()))
 				return a;
 		}
 		return null;
@@ -159,18 +163,18 @@ public class DiscoveryContainer<T> {
 	 */
 	public CompoundTag writeToNBT(CompoundTag tag, HolderLookup.Provider registries) {
 		ListTag discoveryList = new ListTag();
-		Iterator<Map.Entry<AspectItem, List<AspectType>>> discoveryIT = this.discoveredStaticAspects.entrySet().iterator();
+		var discoveryIT = this.discoveredStaticAspects.entrySet().iterator();
 		while(discoveryIT.hasNext()) {
-			Map.Entry<AspectItem, List<AspectType>> e = discoveryIT.next();
-			if(e.getKey() == null || e.getValue() == null || e.getValue().isEmpty()) {
+			var entry = discoveryIT.next();
+			if(entry.getKey() == null || entry.getValue() == null || entry.getValue().isEmpty()) {
 				discoveryIT.remove();
 				continue;
 			}
 			CompoundTag discoveryEntry = new CompoundTag();
-			AspectManager.writeAspectItemToNbt(e.getKey(), discoveryEntry, registries);
+			AspectManager.writeAspectItemToNbt(entry.getKey(), discoveryEntry, registries);
 			ListTag aspectListCompound = new ListTag();
-			for(AspectType type : e.getValue()) {
-				aspectListCompound.add(type.writeToNBT(new CompoundTag()));
+			for(Holder<AspectType> type : entry.getValue()) {
+				AspectType.CODEC.encodeStart(NbtOps.INSTANCE, type).ifSuccess(aspectListCompound::add);
 			}
 			discoveryEntry.put("aspects", aspectListCompound);
 			discoveryList.add(discoveryEntry);
@@ -190,11 +194,11 @@ public class DiscoveryContainer<T> {
 		for (int i = 0; i < discoveryList.size(); i++) {
 			CompoundTag discoveryEntry = discoveryList.getCompound(i);
 			AspectItem item = AspectManager.readAspectItemFromNBT(discoveryEntry, registries);
-			List<AspectType> aspectTypeList = new ArrayList<>();
+			List<Holder<AspectType>> aspectTypeList = new ArrayList<>();
 			ListTag aspectListCompound = discoveryEntry.getList("aspects", Tag.TAG_COMPOUND);
 			for (int c = 0; c < aspectListCompound.size(); c++) {
 				CompoundTag aspectTypeCompound = aspectListCompound.getCompound(c);
-				aspectTypeList.add(AspectType.readFromNBT(aspectTypeCompound));
+				AspectType.CODEC.parse(NbtOps.INSTANCE, aspectTypeCompound).ifSuccess(aspectTypeList::add);
 			}
 			this.discoveredStaticAspects.put(item, aspectTypeList);
 		}
@@ -210,15 +214,15 @@ public class DiscoveryContainer<T> {
 	 */
 	public DiscoveryContainer<T> mergeDiscoveries(DiscoveryContainer<?> other) {
 		boolean changed = false;
-		for (Map.Entry<AspectItem, List<AspectType>> entry : other.discoveredStaticAspects.entrySet()) {
+		for (var entry : other.discoveredStaticAspects.entrySet()) {
 			AspectItem otherItem = entry.getKey();
-			List<AspectType> otherTypes = entry.getValue();
+			List<Holder<AspectType>> otherTypes = entry.getValue();
 			if (!this.discoveredStaticAspects.containsKey(otherItem)) {
 				this.discoveredStaticAspects.put(otherItem, otherTypes);
 				changed = true;
 			} else {
-				List<AspectType> aspectTypes = this.discoveredStaticAspects.get(otherItem);
-				for (AspectType otherType : otherTypes) {
+				List<Holder<AspectType>> aspectTypes = this.discoveredStaticAspects.get(otherItem);
+				for (Holder<AspectType> otherType : otherTypes) {
 					if (!aspectTypes.contains(otherType)) {
 						aspectTypes.add(otherType);
 						changed = true;
@@ -240,10 +244,10 @@ public class DiscoveryContainer<T> {
 	public List<Aspect> getDiscoveredStaticAspects(AspectManager manager, AspectItem item) {
 		List<Aspect> discoveredStaticAspects = new ArrayList<>();
 		if(this.discoveredStaticAspects.containsKey(item)) {
-			List<AspectType> discoveredAspects = this.discoveredStaticAspects.get(item);
+			List<Holder<AspectType>> discoveredAspects = this.discoveredStaticAspects.get(item);
 			List<Aspect> staticAspects = manager.getStaticAspects(item);
 			for(Aspect a : staticAspects) {
-				if(discoveredAspects.contains(a.type))
+				if(discoveredAspects.contains(a.type()))
 					discoveredStaticAspects.add(a);
 			}
 		}
@@ -324,7 +328,7 @@ public class DiscoveryContainer<T> {
 	 * @param item
 	 * @param type
 	 */
-	public static void addDiscoveryToContainers(Player player, AspectItem item, AspectType type) {
+	public static void addDiscoveryToContainers(Player player, AspectItem item, Holder<AspectType> type) {
 		List<DiscoveryContainer<?>> discoveryContainers = getWritableDiscoveryContainers(player);
 		for(DiscoveryContainer<?> container : discoveryContainers)
 			container.addDiscovery(item, type);

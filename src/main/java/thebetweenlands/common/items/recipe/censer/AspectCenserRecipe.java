@@ -1,5 +1,6 @@
 package thebetweenlands.common.items.recipe.censer;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -19,12 +20,12 @@ public class AspectCenserRecipe extends AbstractCenserRecipe<AspectCenserRecipe.
 
 	@Override
 	public int getInputAmount(ItemStack stack) {
-		return Math.min(AspectContainerItem.fromItem(stack).getAspects().getFirst().amount / 5, 1000);
+		return Math.min(AspectContainerItem.fromItem(stack).getAspects().getFirst().amount() / 5, 1000);
 	}
 
 	@Override
 	public CenserRecipeAspectContext createContext(ItemStack stack) {
-		return new CenserRecipeAspectContext(AspectContainerItem.fromItem(stack).getAspects().get(0).type);
+		return new CenserRecipeAspectContext(AspectContainerItem.fromItem(stack).getAspects().get(0).type());
 	}
 
 	@Override
@@ -58,14 +59,14 @@ public class AspectCenserRecipe extends AbstractCenserRecipe<AspectCenserRecipe.
 
 	@Override
 	public int getEffectColor(CenserRecipeAspectContext context, Censer censer, EffectColorType type) {
-		return context.type.getColor();
+		return context.type.value().color();
 	}
 
 	@Override
-	public AspectType getAspectFogType(CenserRecipeAspectContext context, Censer censer) {
+	public Holder<AspectType> getAspectFogType(CenserRecipeAspectContext context, Censer censer) {
 		return context.type();
 	}
 
-	public record CenserRecipeAspectContext(AspectType type) {
+	public record CenserRecipeAspectContext(Holder<AspectType> type) {
 	}
 }

@@ -3,10 +3,15 @@ package thebetweenlands.common.datagen;
 import net.minecraft.Util;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.registries.DeferredItem;
+import org.apache.commons.lang3.StringUtils;
+import thebetweenlands.api.aspect.Aspect;
+import thebetweenlands.api.aspect.AspectType;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -931,6 +936,23 @@ public class BetweenlandsLangProvider extends LanguageProvider {
 		this.addDisc(ItemRegistry.MYSTERIOUS_RECORD, "Mysterious Disc", "...");
 
 		this.add("item.thebetweenlands.amate_map.invalid", "Can't create an Amate Map outside of The Betweenlands");
+
+		this.addAspect(AspectRegistry.ARMANIIS, "Desire", "Has effect on the desires of a mob or the player. Could be useful for food, but also things like trading or corrupting the desire.");
+		this.addAspect(AspectRegistry.AZUWYNN, "Muscle", "Has effect on the muscles, could either result in more damage, speed or maybe rapid fire and all stuff in that regard.");
+		this.addAspect(AspectRegistry.BYARIIS, "Corruption", "This effect can corrupt other effects, but even corrupt effects. So it could turn negative into positive, and positive into negative. so for example, if this effect gets combined with health it will do something negative to your health, but if this effect gets combined twice with health, it will corrupt itself and thus do something positive.");
+		this.addAspect(AspectRegistry.BYRGINAZ, "Water", "Magical property which relates to water. Any combination with this effect can be related to water.");
+		this.addAspect(AspectRegistry.CELAWYNN, "Stomach", "Has effect on the stomach. So this could have effect on the hunger bar for example.");
+		this.addAspect(AspectRegistry.DAYUNIIS, "Mind", "Has effect on the player's mind and on how senses work. Could be positive, or negative (think nausea/schizophrenia).");
+		this.addAspect(AspectRegistry.FERGALAZ, "Earth", "Magical property which relates to earth. Any combination with this effect can be related to the element earth.");
+		this.addAspect(AspectRegistry.FIRNALAZ, "Fire", "Magical property which relates to fire. Any combination with this effect can be related to fire.");
+		this.addAspect(AspectRegistry.FREIWYNN, "Vision", "Alters the player's vision. (In combination with other properties. So for example when you combine health with vision, you would be able to spot mobs their health.)");
+		this.addAspect(AspectRegistry.GEOLIIRGAZ, "Void", "Magical property which relates to the void or ether. Any combination with this effect can be related to void or darkness.");
+		this.addAspect(AspectRegistry.ORDANIIS, "Enchance", "Needs new description");
+		this.addAspect(AspectRegistry.UDURIIS, "Chaos", "The aspect that correlates to the natural orderless state of the universe.");
+		this.addAspect(AspectRegistry.WODREN, "Soul", "The aspect that affects the spiritual state and life force of a being.");
+		this.addAspect(AspectRegistry.YEOWYNN, "Health", "Has effect on the health bar, could be both negative or positive, depending on the combination.");
+		this.addAspect(AspectRegistry.YIHINREN, "Form", "This effect has influence on the form of things, both physical and psychological. A very rare aspect that is mainly used in the special potions.");
+		this.addAspect(AspectRegistry.YUNUGAZ, "Wind", "Magical property which relates to wind. Any combination with this effect can be related to the element wind.");
 	}
 
 	private void addItemWithDesc(DeferredItem<Item> item, String name, String desc) {
@@ -941,5 +963,12 @@ public class BetweenlandsLangProvider extends LanguageProvider {
 	private void addDisc(DeferredItem<Item> disc, String name, String desc) {
 		this.addItem(disc, name);
 		this.add(Util.makeDescriptionId("jukebox_song", disc.get().components().get(DataComponents.JUKEBOX_PLAYABLE).song().key().location()), desc);
+	}
+
+	private void addAspect(ResourceKey<AspectType> aspect, String manualType, String desc) {
+		String base = Util.makeDescriptionId("aspect", aspect.location());
+		this.add(base, StringUtils.capitalize(aspect.location().getPath()));
+		this.add(base + ".manual", manualType);
+		this.add(base + ".desc", desc);
 	}
 }

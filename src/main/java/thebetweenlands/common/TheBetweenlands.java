@@ -17,8 +17,12 @@ import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import net.neoforged.neoforge.registries.DataPackRegistryEvent;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import thebetweenlands.api.BLRegistries;
+import thebetweenlands.api.aspect.AspectType;
 import thebetweenlands.client.event.ClientEvents;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.network.*;
@@ -86,6 +90,8 @@ public class TheBetweenlands {
 		StorageRegistry.preInit();
 
 		eventbus.addListener(this::setup);
+		eventbus.addListener(this::makeNewRegistries);
+		eventbus.addListener(this::makeDatapackRegistries);
 		eventbus.addListener(this::registerBlockEntityValidBlocks);
 		eventbus.addListener(thebetweenlands.common.datagen.DataGenerators::gatherData);
 		eventbus.addListener(CreativeGroupRegistry::populateTabs);
@@ -105,6 +111,18 @@ public class TheBetweenlands {
 
 	public void registerBlockEntityValidBlocks(BlockEntityTypeAddBlocksEvent event) {
 		event.modify(BlockEntityType.JUKEBOX, BlockRegistry.WEEDWOOD_JUKEBOX.get());
+	}
+
+	public void makeDatapackRegistries(DataPackRegistryEvent.NewRegistry event) {
+		event.dataPackRegistry(BLRegistries.Keys.ASPECTS, AspectType.DIRECT_CODEC, AspectType.DIRECT_CODEC);
+	}
+
+	public void makeNewRegistries(NewRegistryEvent event) {
+		event.register(BLRegistries.CENSER_RECIPES);
+		event.register(BLRegistries.ELIXIR_EFFECTS);
+		event.register(BLRegistries.ENVIRONMENT_EVENTS);
+		event.register(BLRegistries.SIMULACRUM_EFFECTS);
+		event.register(BLRegistries.WORLD_STORAGE);
 	}
 
 	public void registerPackets(RegisterPayloadHandlersEvent event) {

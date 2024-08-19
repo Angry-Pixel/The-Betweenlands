@@ -1,6 +1,7 @@
 package thebetweenlands.common.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -91,7 +92,7 @@ public class AlembicBlockEntity extends SyncedBlockEntity {
 		ListTag aspectList = new ListTag();
 		for (Aspect aspect : this.producableItemAspects) {
 			CompoundTag aspectCompound = new CompoundTag();
-			aspect.writeToNBT(aspectCompound);
+			aspect.writeToNBT(aspectCompound, registries);
 			aspectList.add(aspectCompound);
 		}
 		tag.put("producible_item_aspects", aspectList);
@@ -111,7 +112,7 @@ public class AlembicBlockEntity extends SyncedBlockEntity {
 			ListTag aspectList = tag.getList("producible_item_aspects", Tag.TAG_COMPOUND);
 			for (int i = 0; i < aspectList.size(); i++) {
 				CompoundTag aspectCompound = aspectList.getCompound(i);
-				Aspect aspect = Aspect.readFromNBT(aspectCompound);
+				Aspect aspect = Aspect.readFromNBT(aspectCompound, registries);
 				this.producableItemAspects.add(aspect);
 			}
 		}
@@ -225,14 +226,14 @@ public class AlembicBlockEntity extends SyncedBlockEntity {
 //		}
 	}
 
-	public List<AspectType> getInfusionAspects(Level level, List<ItemStack> ingredients) {
-		List<AspectType> infusingAspects = new ArrayList<>();
+	public List<Holder<AspectType>> getInfusionAspects(Level level, List<ItemStack> ingredients) {
+		List<Holder<AspectType>> infusingAspects = new ArrayList<>();
 		for (ItemStack ingredient : ingredients) {
 			AspectContainerItem container = AspectContainerItem.fromItem(ingredient, AspectManager.get(level));
 			for (Aspect aspect : container.getAspects()) {
-				infusingAspects.add(aspect.type);
+				infusingAspects.add(aspect.type());
 			}
-//			infusingAspects.addAll(AspectManager.get(level).getDiscoveredAspectTypes(AspectManager.getAspectItem(ingredient), null));
+			infusingAspects.addAll(AspectManager.get(level).getDiscoveredAspectTypes(AspectManager.getAspectItem(ingredient), null));
 		}
 		return infusingAspects;
 	}
@@ -242,7 +243,7 @@ public class AlembicBlockEntity extends SyncedBlockEntity {
 		for (ItemStack ingredient : ingredients) {
 			AspectContainerItem container = AspectContainerItem.fromItem(ingredient, AspectManager.get(level));
 			infusingItemAspects.addAll(container.getAspects());
-			//infusingItemAspects.addAll(AspectManager.get(this.world).getDiscoveredAspects(AspectManager.getAspectItem(ingredient), null));
+//			infusingItemAspects.addAll(AspectManager.get(level).getDiscoveredAspects(AspectManager.getAspectItem(ingredient), null));
 		}
 		return infusingItemAspects;
 	}
@@ -286,22 +287,22 @@ public class AlembicBlockEntity extends SyncedBlockEntity {
 				if (!this.producableItemAspects.isEmpty()) {
 					Aspect aspect = this.producableItemAspects.getFirst();
 					this.producableItemAspects.removeFirst();
-					int removedAmount = aspect.amount;
+					int removedAmount = aspect.amount();
 					Iterator<Aspect> itemAspectIT = this.producableItemAspects.iterator();
 					while (itemAspectIT.hasNext()) {
 						Aspect currentAspect = itemAspectIT.next();
-						if (currentAspect.type == aspect.type) {
-							removedAmount += currentAspect.amount;
+						if (currentAspect.type() == aspect.type()) {
+							removedAmount += currentAspect.amount();
 							itemAspectIT.remove();
 						}
 					}
 					if (removedAmount > Amounts.VIAL) {
-						this.producableItemAspects.add(new Aspect(aspect.type, removedAmount - Amounts.VIAL));
+						this.producableItemAspects.add(new Aspect(aspect.type(), removedAmount - Amounts.VIAL));
 						removedAmount = Amounts.VIAL;
 					}
 					aspectVial = new ItemStack(vial);
 					AspectContainerItem aspectContainer = AspectContainerItem.fromItem(aspectVial);
-					aspectContainer.add(aspect.type, removedAmount);
+					aspectContainer.add(aspect.type(), removedAmount);
 				}
 				if (this.producableItemAspects.isEmpty()) {
 					this.reset(level, pos, state);

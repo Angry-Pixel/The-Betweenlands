@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.AspectItem;
 import thebetweenlands.api.aspect.DiscoveryContainer;
@@ -95,15 +96,15 @@ public class GeckoCageBlock extends HorizontalBaseEntityBlock {
 									switch (discovery.result) {
 										case NEW:
 										case LAST:
-											DiscoveryContainer.addDiscoveryToContainers(player, aspectItem, discovery.discovered.type);
-											cage.setAspectType(level, pos, state, discovery.discovered.type, 600);
+											DiscoveryContainer.addDiscoveryToContainers(player, aspectItem, discovery.discovered.type());
+											cage.setAspectType(level, pos, state, discovery.discovered.type(), 600);
 											if (player instanceof ServerPlayer sp) {
 												AdvancementCriteriaRegistry.GECKO.get().trigger(sp, true, false);
 												if (discovery.result == DiscoveryContainer.AspectDiscovery.DiscoveryResult.LAST && DiscoveryContainer.getMergedDiscoveryContainer(player).haveDiscoveredAll(manager)) {
 													AdvancementCriteriaRegistry.HERBLORE_FIND_ALL.get().trigger(sp);
 												}
 											}
-											player.displayClientMessage(Component.translatable("chat.aspect.discovery." + discovery.discovered.type.getName().toLowerCase()), false);
+											player.displayClientMessage(Component.translatable("chat.aspect.discovery." + level.registryAccess().registryOrThrow(BLRegistries.Keys.ASPECTS).getKey(discovery.discovered.type().value()).getPath().toLowerCase()), false);
 											if (discovery.result == DiscoveryContainer.AspectDiscovery.DiscoveryResult.LAST) {
 												player.displayClientMessage(Component.translatable("chat.aspect.discovery.last"), true);
 												player.displayClientMessage(Component.translatable("chat.aspect.discovery.last"), false);

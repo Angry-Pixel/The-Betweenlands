@@ -6,7 +6,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,9 +25,9 @@ public class ImitationSimulacrumEffect implements SimulacrumEffect {
 	private static final MethodHandles.Lookup LOOKUP = MethodHandles.lookup();
 	private static final Method Mob_getAmbientSound = ObfuscationReflectionHelper.findMethod(Mob.class, "getAmbientSound");
 	private static final MethodHandle handle_Mob_getAmbientSound;
-	private static final Method Mob_getHurtSound = ObfuscationReflectionHelper.findMethod(Mob.class, "getHurtSound");
+	private static final Method Mob_getHurtSound = ObfuscationReflectionHelper.findMethod(LivingEntity.class, "getHurtSound", DamageSource.class);
 	private static final MethodHandle handle_Mob_getHurtSound;
-	private static final Method Mob_getDeathSound = ObfuscationReflectionHelper.findMethod(Mob.class, "getDeathSound");
+	private static final Method Mob_getDeathSound = ObfuscationReflectionHelper.findMethod(LivingEntity.class, "getDeathSound");
 	private static final MethodHandle handle_Mob_getDeathSound;
 
 	static {

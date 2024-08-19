@@ -31,7 +31,7 @@ public class MortarAspectrusRecipe implements MortarRecipe {
 			if(inputAspects.size() == 1) {
 				Aspect aspect = inputAspects.getFirst();
 
-				if(aspect.amount <= Amounts.VIAL) {
+				if(aspect.amount() <= Amounts.VIAL) {
 					if(useInputOnly) {
 						return true;
 					} else if(output.getCount() == 1 && output.getItem() instanceof DentrothystVialItem) {
@@ -42,8 +42,8 @@ public class MortarAspectrusRecipe implements MortarRecipe {
 						if(outputContainer.isEmpty()) {
 							return true;
 						} else {
-							int storedAmount = outputContainer.get(aspect.type);
-							return storedAmount > 0 /*to check whether aspect matches*/ && storedAmount + aspect.amount <= Amounts.VIAL;
+							int storedAmount = outputContainer.get(aspect.type());
+							return storedAmount > 0 /*to check whether aspect matches*/ && storedAmount + aspect.amount() <= Amounts.VIAL;
 						}
 					}
 				}
@@ -65,11 +65,11 @@ public class MortarAspectrusRecipe implements MortarRecipe {
 			if(outputStack.getItem() instanceof DentrothystVialItem vial) {
 				ItemStack apsectVial = new ItemStack(vial.getFullBottle());
 				AspectContainerItem vialContainer = AspectContainerItem.fromItem(apsectVial);
-				vialContainer.add(aspect.type, aspect.amount);
+				vialContainer.add(aspect.type(), aspect.amount());
 				return apsectVial;
 			} else if(outputStack.getItem() instanceof AspectVialItem) {
 				AspectContainerItem outputContainer = AspectContainerItem.fromItem(outputStack);
-				outputContainer.add(aspect.type, aspect.amount);
+				outputContainer.add(aspect.type(), aspect.amount());
 				return outputStack;
 			}
 		}

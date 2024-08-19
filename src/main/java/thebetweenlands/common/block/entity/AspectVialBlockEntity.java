@@ -28,11 +28,11 @@ public class AspectVialBlockEntity extends SyncedBlockEntity {
 	 * @return
 	 */
 	public int addAmount(int amount) {
-		int canAdd = (int) (MAX_AMOUNT - this.aspect.amount);
+		int canAdd = (int) (MAX_AMOUNT - this.aspect.amount());
 		int added = 0;
 		if (canAdd > 0) {
 			added = Math.min(canAdd, amount);
-			this.aspect = new Aspect(this.aspect.type, this.aspect.amount + added);
+			this.aspect = new Aspect(this.aspect.type(), this.aspect.amount() + added);
 		}
 		this.setChanged();
 		return added;
@@ -45,9 +45,9 @@ public class AspectVialBlockEntity extends SyncedBlockEntity {
 	 * @return
 	 */
 	public int removeAmount(int amount) {
-		int removed = Math.min(this.aspect.amount, amount);
-		if (removed < this.aspect.amount) {
-			this.aspect = new Aspect(this.aspect.type, this.aspect.amount - removed);
+		int removed = Math.min(this.aspect.amount(), amount);
+		if (removed < this.aspect.amount()) {
+			this.aspect = new Aspect(this.aspect.type(), this.aspect.amount() - removed);
 		} else {
 			this.aspect = null;
 		}
@@ -76,14 +76,14 @@ public class AspectVialBlockEntity extends SyncedBlockEntity {
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
 		if (this.aspect != null)
-			this.aspect.writeToNBT(tag);
+			this.aspect.writeToNBT(tag, registries);
 	}
 
 	@Override
 	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
 		if (tag.contains("aspect")) {
-			this.aspect = Aspect.readFromNBT(tag);
+			this.aspect = Aspect.readFromNBT(tag, registries);
 		} else {
 			this.aspect = null;
 		}

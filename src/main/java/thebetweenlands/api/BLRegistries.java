@@ -14,7 +14,6 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 
 public class BLRegistries {
-	public static final Registry<AspectType> ASPECTS = new RegistryBuilder<>(Keys.ASPECTS).sync(true).create();
 	public static final Registry<CenserRecipe<?>> CENSER_RECIPES = new RegistryBuilder<>(Keys.CENSER_RECIPES).sync(true).create();
 	public static final Registry<ElixirEffect> ELIXIR_EFFECTS = new RegistryBuilder<>(Keys.ELIXIR_EFFECTS).sync(true).create();
 	public static final Registry<IEnvironmentEvent> ENVIRONMENT_EVENTS = new RegistryBuilder<>(Keys.ENVIRONMENT_EVENTS).sync(true).create();
@@ -22,7 +21,10 @@ public class BLRegistries {
 	public static final Registry<BiMap<ResourceLocation, ? extends IDeferredStorageOperation>> WORLD_STORAGE = new RegistryBuilder<>(Keys.WORLD_STORAGE).sync(true).create();
 
 	public static final class Keys {
-		public static final ResourceKey<Registry<AspectType>> ASPECTS = ResourceKey.createRegistryKey(TheBetweenlands.prefix("aspect"));
+
+		private static final String DATAPACK_PREFIX = "betweenlands";
+
+		public static final ResourceKey<Registry<AspectType>> ASPECTS = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(DATAPACK_PREFIX, "aspect"));
 		public static final ResourceKey<Registry<CenserRecipe<?>>> CENSER_RECIPES = ResourceKey.createRegistryKey(TheBetweenlands.prefix("censer_recipe"));
 		public static final ResourceKey<Registry<ElixirEffect>> ELIXIR_EFFECTS = ResourceKey.createRegistryKey(TheBetweenlands.prefix("elixir_effect"));
 		public static final ResourceKey<Registry<IEnvironmentEvent>> ENVIRONMENT_EVENTS = ResourceKey.createRegistryKey(TheBetweenlands.prefix("environment_event"));

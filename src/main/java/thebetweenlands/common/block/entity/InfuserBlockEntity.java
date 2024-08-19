@@ -1,6 +1,7 @@
 package thebetweenlands.common.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -386,13 +387,13 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 		return false;
 	}
 
-	public List<AspectType> getInfusingAspects(Level level) {
-		List<AspectType> infusingAspects = new ArrayList<>();
+	public List<Holder<AspectType>> getInfusingAspects(Level level) {
+		List<Holder<AspectType>> infusingAspects = new ArrayList<>();
 		for (int i = 0; i <= MAX_INGREDIENTS; i++) {
 			if (!this.getItems().get(i).isEmpty()) {
 				AspectContainerItem container = AspectContainerItem.fromItem(this.getItems().get(i), AspectManager.get(level));
 				for (Aspect aspect : container.getAspects()) {
-					infusingAspects.add(aspect.type);
+					infusingAspects.add(aspect.type());
 				}
 			}
 		}

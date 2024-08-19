@@ -1,59 +1,25 @@
 package thebetweenlands.api.aspect;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.RegistryFileCodec;
 import thebetweenlands.api.BLRegistries;
 
-public interface AspectType {
-	/**
-	 * Returns the name of this aspect
-	 * @return
-	 */
-	String getName();
+public record AspectType(int color) {
 
-	/**
-	 * Returns the type of this aspect
-	 * @return
-	 */
-	String getType();
+	public static final Codec<AspectType> DIRECT_CODEC = RecordCodecBuilder.create(p_345420_ -> p_345420_.group(
+			Codec.INT.fieldOf("color").forGetter(AspectType::color))
+		.apply(p_345420_, AspectType::new));
+	public static final StreamCodec<RegistryFriendlyByteBuf, AspectType> DIRECT_STREAM_CODEC = StreamCodec.composite(
+		ByteBufCodecs.INT,
+		AspectType::color,
+		AspectType::new
+	);
 
-	/**
-	 * Returns the description of this aspect
-	 * @return
-	 */
-	String getDescription();
-
-	/**
-	 * Returns the aspect icon
-	 * @return
-	 */
-	ResourceLocation getIcon();
-
-	/**
-	 * Returns the color of the aspect
-	 * @return
-	 */
-	int getColor();
-
-	/**
-	 * Writes this aspect type to the specified NBT
-	 * @param nbt
-	 * @return
-	 */
-	default CompoundTag writeToNBT(CompoundTag nbt) {
-		nbt.putString("type", this.getName());
-		return nbt;
-	}
-
-	/**
-	 * Reads the aspect type from the specified NBT
-	 * @param nbt
-	 * @return
-	 */
-	@Nullable
-	static AspectType readFromNBT(CompoundTag nbt) {
-		return BLRegistries.ASPECTS.get(ResourceLocation.tryParse(nbt.getString("type")));
-	}
+	public static final Codec<Holder<AspectType>> CODEC = RegistryFileCodec.create(BLRegistries.Keys.ASPECTS, DIRECT_CODEC);
+	public static final StreamCodec<RegistryFriendlyByteBuf, Holder<AspectType>> STREAM_CODEC = ByteBufCodecs.holder(BLRegistries.Keys.ASPECTS, DIRECT_STREAM_CODEC);
 }

@@ -1,5 +1,6 @@
 package thebetweenlands.api.recipes;
 
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -176,5 +177,5 @@ public interface CenserRecipe<Context> {
 	 * @return
 	 */
 	@Nullable
-	AspectType getAspectFogType(@Nullable Context context, Censer censer);
+	Holder<AspectType> getAspectFogType(@Nullable Context context, Censer censer);
 }

@@ -35,6 +35,7 @@ public class DataGenerators {
 //		gen.addProvider(data, new BetweenlandsDimensionTagProvider(output, dataProvider, helper));
 
 		// Assets
+		gen.addProvider(assets, new BetweenlandsAtlasProvider(output, dataProvider, helper));
 		gen.addProvider(assets, new BetweenlandsLangProvider(output));
 		gen.addProvider(assets, new BetweenlandsBlockStateProvider(output, helper));
 		gen.addProvider(assets, new BetweenlandsItemModelProvider(output, helper));

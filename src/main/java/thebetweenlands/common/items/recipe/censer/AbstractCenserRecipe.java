@@ -2,6 +2,7 @@ package thebetweenlands.common.items.recipe.censer;
 
 import java.util.List;
 
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -129,7 +130,7 @@ public abstract class AbstractCenserRecipe<T> implements CenserRecipe<T> {
 	}
 
 	@Override
-	public AspectType getAspectFogType(T context, Censer censer) {
+	public Holder<AspectType> getAspectFogType(T context, Censer censer) {
 		return null;
 	}
 }

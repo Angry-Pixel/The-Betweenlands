@@ -5,6 +5,7 @@ import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
+import thebetweenlands.api.BLRegistries;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.*;
 
@@ -21,7 +22,8 @@ public class BetweenlandsRegistryProvider extends DatapackBuiltinEntriesProvider
 		.add(Registries.LEVEL_STEM, DimensionRegistries::bootstrapStem)
 		.add(Registries.DIMENSION_TYPE, DimensionRegistries::bootstrapType)
 		.add(Registries.NOISE_SETTINGS, DimensionRegistries::bootstrapNoise)
-		.add(Registries.JUKEBOX_SONG, MusicRegistry::bootstrap);
+		.add(Registries.JUKEBOX_SONG, MusicRegistry::bootstrap)
+		.add(BLRegistries.Keys.ASPECTS, AspectRegistry::bootstrap);
 
 	public BetweenlandsRegistryProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
 		super(output, provider, BUILDER, Set.of("minecraft", TheBetweenlands.ID));

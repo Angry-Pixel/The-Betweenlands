@@ -2,32 +2,23 @@ package thebetweenlands.api.aspect;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.Optional;
 
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.api.BLRegistries;
 
-public final class Aspect implements Comparable<Aspect> {
+import javax.annotation.Nullable;
+
+public record Aspect(Holder<AspectType> type, int amount) {
 	public static final DecimalFormat ASPECT_AMOUNT_FORMAT = new DecimalFormat("#.##");
 
 	static {
 		ASPECT_AMOUNT_FORMAT.setRoundingMode(RoundingMode.CEILING);
-	}
-
-	/**
-	 * The type of this aspect
-	 */
-	public final AspectType type;
-
-	/**
-	 * The amount of this aspect
-	 */
-	public final int amount;
-
-	public Aspect(AspectType aspect, int amount) {
-		if(aspect == null) throw new RuntimeException("Aspect can't be null");
-		this.type = aspect;
-		this.amount = amount;
 	}
 
 	public float getDisplayAmount() {
@@ -38,52 +29,19 @@ public final class Aspect implements Comparable<Aspect> {
 		return ASPECT_AMOUNT_FORMAT.format(this.getDisplayAmount());
 	}
 
-	public CompoundTag writeToNBT(CompoundTag nbt) {
-		nbt.putString("aspect", this.type.getName());
-		nbt.putInt("amount", this.amount);
-		return nbt;
+	public CompoundTag writeToNBT(CompoundTag tag, HolderLookup.Provider registries) {
+		AspectType.CODEC.encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), this.type()).ifSuccess(tag1 -> tag.put("aspect", tag1));
+		tag.putInt("amount", this.amount);
+		return tag;
 	}
 
-	public static Aspect readFromNBT(CompoundTag nbt) {
-		String aspectName = nbt.getString("aspect");
-		int amount = nbt.getInt("amount");
-		AspectType aspectType = BLRegistries.ASPECTS.get(ResourceLocation.tryParse(aspectName));
-		if(aspectType != null) {
+	@Nullable
+	public static Aspect readFromNBT(CompoundTag tag, HolderLookup.Provider registries) {
+		int amount = tag.getInt("amount");
+		Holder<AspectType> aspectType = AspectType.CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), tag.get("aspect")).result().orElse(null);
+		if (aspectType != null) {
 			return new Aspect(aspectType, amount);
 		}
 		return null;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Float.floatToIntBits(this.amount);
-		result = prime * result + ((this.type == null) ? 0 : this.type.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Aspect other = (Aspect) obj;
-		if (Float.floatToIntBits(this.amount) != Float.floatToIntBits(other.amount))
-			return false;
-		if (this.type == null) {
-			if (other.type != null)
-				return false;
-		} else if (!this.type.equals(other.type))
-			return false;
-		return true;
-	}
-
-	@Override
-	public int compareTo(Aspect other) {
-		return this.type.getName().compareTo(other.type.getName());
 	}
 }

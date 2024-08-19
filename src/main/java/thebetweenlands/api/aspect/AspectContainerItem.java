@@ -1,6 +1,7 @@
 package thebetweenlands.api.aspect;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -79,13 +80,13 @@ public class AspectContainerItem extends AspectContainer {
 		if(discoveries != null && this.manager != null)
 			discoveredAspects = discoveries.getDiscoveredStaticAspects(this.manager, AspectManager.getAspectItem(this.itemStack));
 		List<Aspect> aspects = new ArrayList<>();
-		Set<AspectType> types = this.getStoredAspectTypes();
-		for(AspectType type : types) {
+		Set<Holder<AspectType>> types = this.getStoredAspectTypes();
+		for(Holder<AspectType> type : types) {
 			int amount = this.get(type, true);
 			boolean hasDiscovered = false;
 			if(discoveredAspects != null) {
 				for(Aspect discovered : discoveredAspects) {
-					if(discovered.type == type) {
+					if(discovered.type() == type) {
 						hasDiscovered = true;
 						break;
 					}

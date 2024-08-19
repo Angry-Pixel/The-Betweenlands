@@ -12,8 +12,11 @@ import javax.annotation.Nonnull;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 
 /**
@@ -25,13 +28,13 @@ import net.minecraft.nbt.Tag;
  */
 public class AspectContainer {
 	protected static final class Storage {
-		private final AspectType type;
+		private final Holder<AspectType> type;
 		private final AspectContainer container;
 		private int dynamicAmount;
 		private int storedStaticAmount;
 		private boolean hasStoredStaticAmount;
 
-		private Storage(AspectType type, AspectContainer container) {
+		private Storage(Holder<AspectType> type, AspectContainer container) {
 			this.type = type;
 			this.dynamicAmount = 0;
 			this.storedStaticAmount = 0;
@@ -80,8 +83,8 @@ public class AspectContainer {
 					if(staticAspects != null) {
 						int amount = 0;
 						for(Aspect aspect : staticAspects) {
-							if(aspect.type == this.type) {
-								amount += aspect.amount;
+							if(aspect.type() == this.type) {
+								amount += aspect.amount();
 							}
 						}
 						return amount;
@@ -119,14 +122,14 @@ public class AspectContainer {
 		}
 	}
 
-	private final Map<AspectType, Storage> storage = new HashMap<AspectType, Storage>();
+	private final Map<Holder<AspectType>, Storage> storage = new HashMap<>();
 
 	/**
 	 * Returns the storage for the specified aspect
 	 * @param type
 	 * @return
 	 */
-	protected final Storage getStorage(AspectType type) {
+	protected final Storage getStorage(Holder<AspectType> type) {
 		Storage storage = this.storage.get(type);
 		if(storage == null) {
 			this.storage.put(type, storage = new Storage(type, this));
@@ -150,7 +153,7 @@ public class AspectContainer {
 	 * Returns the set of all stored aspect types
 	 * @return
 	 */
-	protected final ImmutableSet<AspectType> getStoredAspectTypes() {
+	protected final ImmutableSet<Holder<AspectType>> getStoredAspectTypes() {
 		return ImmutableSet.copyOf(this.storage.keySet());
 	}
 
@@ -159,7 +162,7 @@ public class AspectContainer {
 	 * @param type
 	 * @return
 	 */
-	protected final int get(AspectType type, boolean dynamic) {
+	protected final int get(Holder<AspectType> type, boolean dynamic) {
 		return this.getStorage(type).getAmount(dynamic);
 	}
 
@@ -168,7 +171,7 @@ public class AspectContainer {
 	 * @param type
 	 * @return
 	 */
-	public final int get(AspectType type) {
+	public final int get(Holder<AspectType> type) {
 		Storage storage = this.getStorage(type);
 		return storage.getAmount(true) + storage.getAmount(false);
 	}
@@ -178,7 +181,7 @@ public class AspectContainer {
 	 * @param type
 	 * @return
 	 */
-	public final Aspect getAspect(AspectType type)  {
+	public final Aspect getAspect(Holder<AspectType> type)  {
 		return new Aspect(type, this.get(type));
 	}
 
@@ -188,7 +191,7 @@ public class AspectContainer {
 	 * @param amount
 	 * @return
 	 */
-	public final AspectContainer set(AspectType type, int amount) {
+	public final AspectContainer set(Holder<AspectType> type, int amount) {
 		if(amount >= 0) {
 			Storage storage = this.getStorage(type);
 			int diff = this.get(type) - amount;
@@ -217,7 +220,7 @@ public class AspectContainer {
 	 * @param amount
 	 * @return
 	 */
-	public final AspectContainer add(AspectType type, int amount) {
+	public final AspectContainer add(Holder<AspectType> type, int amount) {
 		Storage storage = this.getStorage(type);
 
 		storage.dynamicAmount += amount;
@@ -235,7 +238,7 @@ public class AspectContainer {
 	 * @param desiredAmount
 	 * @return the drained amount
 	 */
-	public final int drain(AspectType type, int desiredAmount) {
+	public final int drain(Holder<AspectType> type, int desiredAmount) {
 		int amount = this.get(type);
 		if(desiredAmount >= amount) {
 			this.set(type, 0);
@@ -262,10 +265,10 @@ public class AspectContainer {
 	 * @param nbt
 	 * @return
 	 */
-	public CompoundTag save(CompoundTag nbt) {
+	public CompoundTag save(CompoundTag nbt, HolderGetter.Provider registries) {
 		ListTag typesList = new ListTag();
-		for(Entry<AspectType, Storage> entry : this.storage.entrySet()) {
-			AspectType type = entry.getKey();
+		for(var entry : this.storage.entrySet()) {
+			Holder<AspectType> type = entry.getKey();
 			Storage storage = entry.getValue();
 
 			if(storage.dynamicAmount == 0 && !storage.hasStoredStaticAmount) {
@@ -274,7 +277,7 @@ public class AspectContainer {
 			}
 
 			CompoundTag storageNbt = new CompoundTag();
-			storageNbt.put("aspect", type.writeToNBT(new CompoundTag()));
+			AspectType.CODEC.encodeStart(NbtOps.INSTANCE, type).ifSuccess(tag -> nbt.put("aspect", tag));
 			storageNbt.put("storage", storage.writeToNBT(new CompoundTag()));
 
 			typesList.add(storageNbt);
@@ -288,11 +291,11 @@ public class AspectContainer {
 	 * @param nbt
 	 * @return
 	 */
-	public AspectContainer read(CompoundTag nbt) {
+	public AspectContainer read(CompoundTag nbt, HolderGetter.Provider registries) {
 		ListTag typesList = nbt.getList("container", Tag.TAG_COMPOUND);
 		for(int i = 0; i < typesList.size(); i++) {
 			CompoundTag storageNbt = typesList.getCompound(i);
-			AspectType type = AspectType.readFromNBT(storageNbt.getCompound("aspect"));
+			Holder<AspectType> type = AspectType.CODEC.parse(NbtOps.INSTANCE, storageNbt.get("aspect")).result().orElse(null);;
 			if(type == null)
 				continue;
 			Storage storage = this.getStorage(type);
@@ -316,9 +319,9 @@ public class AspectContainer {
 	 */
 	@Nonnull
 	public List<Aspect> getAspects() {
-		List<Aspect> aspects = new ArrayList<Aspect>();
-		Set<AspectType> types = this.getStoredAspectTypes();
-		for(AspectType type : types) {
+		List<Aspect> aspects = new ArrayList<>();
+		Set<Holder<AspectType>> types = this.getStoredAspectTypes();
+		for(Holder<AspectType> type : types) {
 			int amount = this.get(type);
 			if(amount > 0)
 				aspects.add(new Aspect(type, amount));
