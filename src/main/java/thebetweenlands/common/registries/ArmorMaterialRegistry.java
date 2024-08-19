@@ -25,7 +25,7 @@ public class ArmorMaterialRegistry {
 		map.put(ArmorItem.Type.BODY, 3);
 	}), 0, SoundEvents.ARMOR_EQUIP_LEATHER, () -> Ingredient.of(ItemRegistry.LURKER_SKIN), List.of(new ArmorMaterial.Layer(TheBetweenlands.prefix("lurker_skin"))), 0.0F, 0.0F));
 
-	public static final DeferredHolder<ArmorMaterial, ArmorMaterial> BONE = MATERIALS.register("slimy_bone", () -> new ArmorMaterial(Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+	public static final DeferredHolder<ArmorMaterial, ArmorMaterial> BONE = MATERIALS.register("bone", () -> new ArmorMaterial(Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
 		map.put(ArmorItem.Type.BOOTS, 1);
 		map.put(ArmorItem.Type.LEGGINGS, 3);
 		map.put(ArmorItem.Type.CHESTPLATE, 5);

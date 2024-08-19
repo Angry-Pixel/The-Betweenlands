@@ -24,6 +24,7 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import thebetweenlands.client.BetweenlandsSpecialEffects;
+import thebetweenlands.client.CircleGemTextureManager;
 import thebetweenlands.client.RiftVariantReloadListener;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.entity.GeckoModel;
@@ -72,6 +73,7 @@ public class ClientEvents {
 
 	public static void registerReloadListeners(RegisterClientReloadListenersEvent event) {
 		event.registerReloadListener(riftVariantListener = new RiftVariantReloadListener());
+		event.registerReloadListener(new CircleGemTextureManager());
 	}
 
 	public static void registerDimEffects(RegisterDimensionSpecialEffectsEvent event) {

@@ -4,6 +4,7 @@
   "package": "thebetweenlands.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "HumanoidArmorLayerMixin",
     "ScreenMixin"
   ],
   "injectors": {

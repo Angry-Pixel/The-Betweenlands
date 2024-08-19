@@ -2,6 +2,10 @@ package thebetweenlands.common.component.entity.circlegem;
 
 import javax.annotation.Nullable;
 
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.ByIdMap;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.damagesource.DamageSource;
@@ -11,6 +15,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import thebetweenlands.common.items.GemSingerItem;
+import thebetweenlands.util.FoodSickness;
+
+import java.util.function.IntFunction;
 
 public enum CircleGemType implements StringRepresentable {
 	AQUA("aqua", 1, GemSingerItem.GemSingerTarget.AQUA_MIDDLE_GEM),
@@ -25,7 +32,8 @@ public enum CircleGemType implements StringRepresentable {
 	public final GemSingerItem.GemSingerTarget gemSingerTarget;
 
 	public static final StringRepresentable.EnumCodec<CircleGemType> CODEC = StringRepresentable.fromEnum(CircleGemType::values);
-	public static final CircleGemType[] TYPES = CircleGemType.values();
+	public static final IntFunction<CircleGemType> BY_ID = ByIdMap.continuous(CircleGemType::getId, values(), ByIdMap.OutOfBoundsStrategy.WRAP);
+	public static final StreamCodec<ByteBuf, CircleGemType> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, CircleGemType::getId);
 
 	CircleGemType(String name, int id, @Nullable GemSingerItem.GemSingerTarget gemSingerTarget) {
 		this.name = name;
@@ -36,6 +44,10 @@ public enum CircleGemType implements StringRepresentable {
 	@Override
 	public String getSerializedName() {
 		return this.name;
+	}
+
+	public int getId() {
+		return this.id;
 	}
 
 	/**
@@ -161,7 +173,7 @@ public enum CircleGemType implements StringRepresentable {
 	 * @return
 	 */
 	public static CircleGemType fromName(String name) {
-		for(CircleGemType gem : TYPES) {
+		for(CircleGemType gem : values()) {
 			if(gem.name.equals(name)) {
 				return gem;
 			}
@@ -175,7 +187,7 @@ public enum CircleGemType implements StringRepresentable {
 	 * @return
 	 */
 	public static CircleGemType fromID(int id) {
-		for(CircleGemType gem : TYPES) {
+		for(CircleGemType gem : values()) {
 			if(gem.id == id) {
 				return gem;
 			}
