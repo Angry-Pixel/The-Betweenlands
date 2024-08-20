@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.152'
+	id 'net.neoforged.moddev' version '1.0.1'
 }
 
 def secrets = new Properties()
@@ -33,38 +33,47 @@ idea {
 
 version = mod_version
 group = 'org.angrypixel'
-archivesBaseName = mod_id
+base {
+	archivesName = modid
+}
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
-minecraft.accessTransformers.file rootProject.file('src/main/resources/META-INF/accesstransformer.cfg')
-//minecraft.accessTransformers.file('src/main/resources/META-INF/accesstransformer.cfg')
 compileJava.options.compilerArgs << "-Xlint:all,-classfile,-processing,-deprecation,-this-escape" << "-Werror"
 
-runs {
-    configureEach {
-        modSource project.sourceSets.main
-        systemProperty 'forge.logging.markers', 'REGISTRIES'
-        systemProperty 'forge.logging.console.level', 'debug'
-    }
+neoForge {
+	version = project.neoforge_version
+	validateAccessTransformers = true
 
-    client {
-        systemProperty 'forge.enabledGameTestNamespaces', mod_id
-		programArguments.addAll '--username', secrets.getProperty("username") ?: 'Dev', secrets.getProperty("uuid") ? '--uuid' : '', secrets.getProperty("uuid") ?: ''
-    }
+	runs {
+		configureEach {
+			gameDirectory = project.file('run')
+			systemProperty 'forge.logging.console.level', 'debug'
+			logLevel = org.slf4j.event.Level.DEBUG
+		}
 
-    server {
-        systemProperty 'forge.enabledGameTestNamespaces', mod_id
-		programArgument '--nogui'
-    }
+		client {
+			client()
+			systemProperty 'forge.enabledGameTestNamespaces', modid
+			programArguments.addAll '--username', secrets.getProperty("username") ?: 'Dev', secrets.getProperty("uuid") ? '--uuid' : '', secrets.getProperty("uuid") ?: ''
+		}
 
-    gameTestServer {
-        systemProperty 'forge.enabledGameTestNamespaces', mod_id
-    }
+		server {
+			server()
+			systemProperty 'forge.enabledGameTestNamespaces', modid
+			programArgument '--nogui'
+		}
 
-    data {
-		workingDirectory project.file('run-data')
-        programArguments.addAll '--mod', mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
-    }
+		data {
+			data()
+			programArguments.addAll '--mod', modid, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+		}
+	}
+
+	mods {
+		thebetweenlands {
+			sourceSet this.sourceSets.main
+		}
+	}
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
@@ -78,16 +87,14 @@ repositories {
 }
 
 dependencies {
-    implementation "net.neoforged:neoforge:${project.neoforge_version}"
-
 	implementation "mezz.jei:jei-${project.minecraft_version}-neoforge:${project.jei_version}"
 	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
-jar {
+tasks.named('jar', Jar).configure {
     manifest {
         attributes([
-                "Specification-Title"     : mod_id,
+                "Specification-Title"     : modid,
                 "Specification-Vendor"    : "angrypixel",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
@@ -97,8 +104,6 @@ jar {
         ])
     }
 }
-
-jar.finalizedBy('reobfJar')
 
 publishing {
     publications {
