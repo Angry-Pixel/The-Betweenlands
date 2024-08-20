@@ -16,7 +16,7 @@ public class ElixirDecay extends ElixirEffect {
 		if(!entity.level().isClientSide() && entity instanceof Player player) {
 			DecayData cap = player.getData(AttachmentRegistry.DECAY);
 			if(cap.isDecayEnabled(player)) {
-				cap.addDecayAcceleration(4.0F);
+				cap.addDecayAcceleration(player, 4.0F);
 			}
 		}
 	}
