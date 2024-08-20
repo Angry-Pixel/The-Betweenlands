@@ -61,7 +61,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> SLIMY_DIRT = register("slimy_dirt", () -> new Block(BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.WET_GRASS)));
 	public static final DeferredBlock<Block> SLIMY_GRASS = register("slimy_grass", () -> new SlimyGrassBlock(BlockBehaviour.Properties.of().strength(0.5F).randomTicks().sound(SoundType.WET_GRASS)));
 	public static final DeferredBlock<Block> CRAGROCK = register("cragrock", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).strength(1.5F, 10.0F)));
-	public static final DeferredBlock<Block> MOSSY_CRAGROCK_BOTTOM = register("mossy_cragrock_bottom", () -> new MossyCragrockBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).randomTicks().sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> MOSSY_CRAGROCK_BOTTOM = register("mossy_cragrock_bottom", () -> new MossyCragrockBottomBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).randomTicks().sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> MOSSY_CRAGROCK_TOP = register("mossy_cragrock_top", () -> new MossyCragrockBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).randomTicks().sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> PITSTONE = register("pitstone", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).strength(1.5F, 10.0F)));
 	public static final DeferredBlock<Block> LIMESTONE = register("limestone", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).strength(1.2F, 8.0F)));

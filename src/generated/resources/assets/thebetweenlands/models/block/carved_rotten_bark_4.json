@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "thebetweenlands:block/rotten_bark_rotated",
+    "side": "thebetweenlands:block/rotten_bark_carved_4"
+  }
+}

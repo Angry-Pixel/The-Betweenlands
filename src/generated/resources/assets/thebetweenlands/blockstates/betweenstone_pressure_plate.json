@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "thebetweenlands:block/betweenstone_pressure_plate"
+    },
+    "powered=true": {
+      "model": "thebetweenlands:block/betweenstone_pressure_plate_down"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/fence_post",
+  "textures": {
+    "texture": "thebetweenlands:block/nibbletwig_planks"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "thebetweenlands:block/slimy_dirt",
+    "side": "thebetweenlands:block/slimy_grass_side",
+    "top": "thebetweenlands:block/slimy_grass_top"
+  }
+}

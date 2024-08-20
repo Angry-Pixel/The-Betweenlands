@@ -23,7 +23,7 @@ public class MossyCragrockBlock extends Block {
 					if ((level.getBlockState(newPos.above()).is(BlockRegistry.CRAGROCK) || level.getBlockState(newPos.above()).is(BlockRegistry.MOSSY_CRAGROCK_TOP))
 						&& level.getBlockState(newPos.above(2)).isAir()
 						&& !blockState.is(BlockRegistry.MOSSY_CRAGROCK_BOTTOM)) {
-						level.setBlockAndUpdate(newPos, BlockRegistry.MOSSY_CRAGROCK_BOTTOM.get().defaultBlockState());
+						level.setBlockAndUpdate(newPos, BlockRegistry.MOSSY_CRAGROCK_BOTTOM.get().defaultBlockState().setValue(MossyCragrockBottomBlock.IS_BOTTOM, !level.getBlockState(pos.below()).is(BlockRegistry.MOSSY_CRAGROCK_BOTTOM)));
 					} else if (level.getBlockState(newPos).is(BlockRegistry.CRAGROCK)
 						&& level.getBlockState(newPos.above()).isAir()) {
 						level.setBlock(newPos, BlockRegistry.MOSSY_CRAGROCK_TOP.get().defaultBlockState(), 2);

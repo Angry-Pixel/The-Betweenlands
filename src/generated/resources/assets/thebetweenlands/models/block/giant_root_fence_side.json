@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/fence_side",
+  "textures": {
+    "texture": "thebetweenlands:block/giant_root_planks"
+  }
+}

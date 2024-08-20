@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "thebetweenlands:block/cragrock",
+    "side": "thebetweenlands:block/mossy_cragrock_side_2",
+    "top": "thebetweenlands:block/mossy_cragrock_side_2_2"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/fence_inventory",
+  "textures": {
+    "texture": "thebetweenlands:block/weedwood_log_side"
+  }
+}

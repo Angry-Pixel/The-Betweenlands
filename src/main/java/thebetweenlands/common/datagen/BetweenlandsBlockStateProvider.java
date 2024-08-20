@@ -10,6 +10,7 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.DruidStoneBlock;
+import thebetweenlands.common.block.MossyCragrockBottomBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class BetweenlandsBlockStateProvider extends BlockStateProvider {
@@ -37,50 +38,63 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.MUD);
 		this.simpleBlockWithItem(BlockRegistry.PEAT);
 		this.simpleBlockWithItem(BlockRegistry.SMOULDERING_PEAT);
-		//sludgy dirt
+		this.bottomSideTopBlockWithItem(BlockRegistry.SLUDGY_DIRT, this.modLoc("block/sludgy_dirt_side"), this.modLoc("block/sludgy_dirt_top"), this.modLoc("block/swamp_dirt"));
 		this.simpleBlockWithItem(BlockRegistry.SLIMY_DIRT);
-		//slimy grass
+		this.bottomSideTopBlockWithItem(BlockRegistry.SLIMY_GRASS, this.modLoc("block/slimy_grass_side"), this.modLoc("block/slimy_grass_top"), this.modLoc("block/slimy_dirt"));
 		this.simpleBlockWithItem(BlockRegistry.CRAGROCK);
-		//mossy cragrock
+		this.bottomSideTopBlockWithItem(BlockRegistry.MOSSY_CRAGROCK_TOP, this.modLoc("block/mossy_cragrock_side_1"), this.modLoc("block/mossy_cragrock_top"), this.modLoc("block/mossy_cragrock_side_2"));
+		this.getVariantBuilder(BlockRegistry.MOSSY_CRAGROCK_BOTTOM.get()).forAllStates(state -> {
+			if (state.getValue(MossyCragrockBottomBlock.IS_BOTTOM)) {
+				return ConfiguredModel.builder().modelFile(this.models().cubeBottomTop("mossy_cragrock_bottom_bottom", this.modLoc("block/mossy_cragrock_side_2"), this.modLoc("block/cragrock"), this.modLoc("block/mossy_cragrock_side_2_2"))).build();
+			} else {
+				return ConfiguredModel.builder().modelFile(this.models().cubeAll("mossy_cragrock_bottom", this.modLoc("block/mossy_cragrock_side_2_2"))).build();
+			}
+		});
+		this.simpleBlockItem(BlockRegistry.MOSSY_CRAGROCK_BOTTOM);
 		this.simpleBlockWithItem(BlockRegistry.PITSTONE);
 		this.simpleBlockWithItem(BlockRegistry.LIMESTONE);
 		this.simpleBlockWithItem(BlockRegistry.SWAMP_DIRT);
 		this.simpleBlockWithItem(BlockRegistry.COARSE_SWAMP_DIRT);
-		//swamp grass
-		//wisp
+		this.bottomSideTopBlockWithItem(BlockRegistry.SWAMP_GRASS, this.modLoc("block/swamp_grass_side"), this.modLoc("block/swamp_grass_top"), this.modLoc("block/swamp_dirt"));
+		this.simpleBlock(BlockRegistry.WISP.get(), this.models().getBuilder("wisp").texture("particle", this.modLoc("block/wisp")));
+		this.basicItemTex(BlockRegistry.WISP, true);
 		this.simpleBlockWithItem(BlockRegistry.OCTINE_ORE);
 		this.simpleBlockWithItem(BlockRegistry.VALONITE_ORE);
 		this.simpleBlockWithItem(BlockRegistry.SULFUR_ORE);
 		this.simpleBlockWithItem(BlockRegistry.SLIMY_BONE_ORE);
 		this.simpleBlockWithItem(BlockRegistry.SCABYST_ORE);
+		this.simpleBlockWithItem(BlockRegistry.SYRMORITE_ORE);
 		this.simpleBlockWithItem(BlockRegistry.AQUA_MIDDLE_GEM_ORE);
 		this.simpleBlockWithItem(BlockRegistry.CRIMSON_MIDDLE_GEM_ORE);
 		this.simpleBlockWithItem(BlockRegistry.GREEN_MIDDLE_GEM_ORE);
+		this.basicItemTex(BlockRegistry.STALACTITE, false);
+		this.basicItemTex(BlockRegistry.LIFE_CRYSTAL_STALACTITE, false);
+		this.basicItemTex(BlockRegistry.LIFE_CRYSTAL_ORE_STALACTITE, false);
 		this.simpleBlockWithItem(BlockRegistry.SILT);
 		this.simpleBlockWithItem(BlockRegistry.FILTERED_SILT);
-		//dead grass (has shaggy models)
+		this.bottomSideTopBlockWithItem(BlockRegistry.DEAD_GRASS, this.modLoc("block/dead_grass_side"), this.modLoc("block/dead_grass_top"), this.modLoc("block/swamp_dirt"));
 		this.simpleBlockWithItem(BlockRegistry.SOLID_TAR);
 		//puddle?
 		this.simpleBlockWithItem(BlockRegistry.PEARL_BLOCK);
 		this.simpleBlockWithItem(BlockRegistry.ANCIENT_REMNANT_BLOCK);
 		this.logBlockWithItem(BlockRegistry.WEEDWOOD_LOG); //TODO weedwood has 8 side variants
-		this.barkBlockWithItem(BlockRegistry.WEEDWOOD_BARK);
-		this.barkBlockWithItem(BlockRegistry.ROTTEN_BARK);
+		this.barkBlockWithItem(BlockRegistry.WEEDWOOD_BARK, this.modLoc("block/weedwood_log_side"));
+		this.barkBlockWithItem(BlockRegistry.ROTTEN_BARK, this.modLoc("block/rotten_log_side"));
 		this.simpleBlockWithItem(BlockRegistry.SPREADING_ROTTEN_BARK.get(), this.models().getExistingFile(this.blockTexture(BlockRegistry.ROTTEN_BARK.get())));
 		//rubber tree log
 		this.logBlockWithItem(BlockRegistry.HEARTHGROVE_LOG);
 		this.axisBlock((RotatedPillarBlock) BlockRegistry.TARRED_HEARTHGROVE_LOG.get(), this.blockTexture(BlockRegistry.TARRED_HEARTHGROVE_LOG.get()).withSuffix("_side"), this.blockTexture(BlockRegistry.HEARTHGROVE_LOG.get()).withSuffix("_end"));
 		this.simpleBlockItem(BlockRegistry.TARRED_HEARTHGROVE_LOG);
-		this.barkBlockWithItem(BlockRegistry.HEARTHGROVE_BARK);
-		this.barkBlockWithItem(BlockRegistry.TARRED_HEARTHGROVE_BARK);
+		this.barkBlockWithItem(BlockRegistry.HEARTHGROVE_BARK, this.modLoc("block/hearthgrove_log_side"));
+		this.barkBlockWithItem(BlockRegistry.TARRED_HEARTHGROVE_BARK, this.modLoc("block/tarred_hearthgrove_log_side"));
 //		this.logBlockWithItem(BlockRegistry.NIBBLETWIG_LOG); TODO nibbletwig has 4 side variants
 //		this.barkBlockWithItem(BlockRegistry.NIBBLETWIG_BARK);
 		this.axisBlock((RotatedPillarBlock) BlockRegistry.SPIRIT_TREE_LOG.get(), this.blockTexture(BlockRegistry.SPIRIT_TREE_LOG.get()).withSuffix("_side"), this.blockTexture(BlockRegistry.SPIRIT_TREE_LOG.get()).withSuffix("_side"));
 		this.simpleBlockItem(BlockRegistry.SPIRIT_TREE_LOG);
-		this.barkBlockWithItem(BlockRegistry.SPIRIT_TREE_BARK);
+		this.barkBlockWithItem(BlockRegistry.SPIRIT_TREE_BARK, this.modLoc("block/spirit_tree_log_side"));
 		this.simpleBlockWithItem(BlockRegistry.WEEDWOOD);
 		this.logBlockWithItem(BlockRegistry.SAP_LOG);
-		this.barkBlockWithItem(BlockRegistry.SAP_BARK);
+		this.barkBlockWithItem(BlockRegistry.SAP_BARK, this.modLoc("block/sap_log_side"));
 		this.simpleBlockWithItem(BlockRegistry.WEEDWOOD_LEAVES);
 		this.simpleBlockWithItem(BlockRegistry.SAP_LEAVES);
 		this.simpleBlockWithItem(BlockRegistry.RUBBER_TREE_LEAVES);
@@ -105,7 +119,8 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.CHISELED_SCABYST_1);
 		this.simpleBlockWithItem(BlockRegistry.CHISELED_SCABYST_2);
 		this.simpleBlockWithItem(BlockRegistry.CHISELED_SCABYST_3);
-		//scabyst pitstone
+		this.sidedBlockWithItem(BlockRegistry.DOTTED_SCABYST_PITSTONE, this.modLoc("block/scabyst_pitstone_dotted"), this.modLoc("block/pitstone_bricks"));
+		this.sidedBlockWithItem(BlockRegistry.HORIZONTAL_SCABYST_PITSTONE, this.modLoc("block/scabyst_pitstone_horizontal"), this.modLoc("block/pitstone_bricks"));
 		this.simpleBlockWithItem(BlockRegistry.SCABYST_BRICKS);
 		this.simpleBlockWithItem(BlockRegistry.CRACKED_BETWEENSTONE_BRICKS);
 		this.simpleBlockWithItem(BlockRegistry.CRACKED_BETWEENSTONE_TILES);
@@ -146,22 +161,22 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		//pots of chance
 		//monster spawner
 		//pillars (need custom model. 16 pixels tall, only 14 wide)
-		this.stairBlockWithItem(BlockRegistry.CRAGROCK_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.PITSTONE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.BETWEENSTONE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.BETWEENSTONE_BRICK_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.MUD_BRICK_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.CRAGROCK_BRICK_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.LIMESTONE_BRICK_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.PITSTONE_BRICK_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.LIMESTONE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.SMOOTH_BETWEENSTONE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.SMOOTH_CRAGROCK_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.POLISHED_LIMESTONE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.MOSSY_BETWEENSTONE_BRICK_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.CRACKED_BETWEENSTONE_BRICK_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.SCABYST_BRICK_STAIRS);
+		this.stairBlockWithItem(BlockRegistry.CRAGROCK_STAIRS, BlockRegistry.CRAGROCK);
+		this.stairBlockWithItem(BlockRegistry.PITSTONE_STAIRS, BlockRegistry.PITSTONE);
+		this.stairBlockWithItem(BlockRegistry.BETWEENSTONE_STAIRS, BlockRegistry.BETWEENSTONE);
+		this.stairBlockWithItem(BlockRegistry.BETWEENSTONE_BRICK_STAIRS, BlockRegistry.BETWEENSTONE_BRICKS);
+		this.stairBlockWithItem(BlockRegistry.MUD_BRICK_STAIRS, BlockRegistry.MUD_BRICKS);
+		this.stairBlockWithItem(BlockRegistry.CRAGROCK_BRICK_STAIRS, BlockRegistry.CRAGROCK_BRICKS);
+		this.stairBlockWithItem(BlockRegistry.LIMESTONE_BRICK_STAIRS, BlockRegistry.LIMESTONE_BRICKS);
+		this.stairBlockWithItem(BlockRegistry.PITSTONE_BRICK_STAIRS, BlockRegistry.PITSTONE_BRICKS);
+		this.stairBlockWithItem(BlockRegistry.LIMESTONE_STAIRS, BlockRegistry.LIMESTONE);
+		this.stairBlockWithItem(BlockRegistry.SMOOTH_BETWEENSTONE_STAIRS, BlockRegistry.SMOOTH_BETWEENSTONE);
+		this.stairBlockWithItem(BlockRegistry.SMOOTH_CRAGROCK_STAIRS, BlockRegistry.SMOOTH_CRAGROCK);
+		this.stairBlockWithItem(BlockRegistry.POLISHED_LIMESTONE_STAIRS, BlockRegistry.POLISHED_LIMESTONE);
+		this.stairBlockWithItem(BlockRegistry.MOSSY_BETWEENSTONE_BRICK_STAIRS, BlockRegistry.MOSSY_BETWEENSTONE_BRICKS);
+		this.stairBlockWithItem(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE_STAIRS, BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE);
+		this.stairBlockWithItem(BlockRegistry.CRACKED_BETWEENSTONE_BRICK_STAIRS, BlockRegistry.CRACKED_BETWEENSTONE_BRICKS);
+		this.stairBlockWithItem(BlockRegistry.SCABYST_BRICK_STAIRS, BlockRegistry.SCABYST_BRICKS);
 		this.simpleBlockWithItem(BlockRegistry.SULFUR_BLOCK);
 		this.simpleBlockWithItem(BlockRegistry.TEMPLE_BRICKS);
 		this.simpleBlockWithItem(BlockRegistry.SMOOTH_PITSTONE);
@@ -176,46 +191,46 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.POLISHED_ORANGE_DENTROTHYST);
 		this.simpleBlockWithItem(BlockRegistry.SILT_GLASS);
 		//all panes
-		this.stairBlockWithItem(BlockRegistry.SMOOTH_PITSTONE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.SOLID_TAR_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.TEMPLE_BRICK_STAIRS);
+		this.stairBlockWithItem(BlockRegistry.SMOOTH_PITSTONE_STAIRS, BlockRegistry.SMOOTH_PITSTONE);
+		this.stairBlockWithItem(BlockRegistry.SOLID_TAR_STAIRS, BlockRegistry.SOLID_TAR);
+		this.stairBlockWithItem(BlockRegistry.TEMPLE_BRICK_STAIRS, BlockRegistry.TEMPLE_BRICKS);
 		//spike trap
-		this.woodStairBlockWithItem(BlockRegistry.WEEDWOOD_STAIRS);
-		this.woodStairBlockWithItem(BlockRegistry.RUBBER_TREE_STAIRS);
-		this.woodStairBlockWithItem(BlockRegistry.GIANT_ROOT_STAIRS);
-		this.woodStairBlockWithItem(BlockRegistry.HEARTHGROVE_STAIRS);
-		this.woodStairBlockWithItem(BlockRegistry.NIBBLETWIG_STAIRS);
+		this.stairBlockWithItem(BlockRegistry.WEEDWOOD_STAIRS, BlockRegistry.WEEDWOOD_PLANKS);
+		this.stairBlockWithItem(BlockRegistry.RUBBER_TREE_STAIRS, BlockRegistry.RUBBER_TREE_PLANKS);
+		this.stairBlockWithItem(BlockRegistry.GIANT_ROOT_STAIRS, BlockRegistry.GIANT_ROOT_PLANKS);
+		this.stairBlockWithItem(BlockRegistry.HEARTHGROVE_STAIRS, BlockRegistry.HEARTHGROVE_PLANKS);
+		this.stairBlockWithItem(BlockRegistry.NIBBLETWIG_STAIRS, BlockRegistry.NIBBLETWIG_PLANKS);
 		this.simpleBlockWithItem(BlockRegistry.POSSESSED_BLOCK.get(), this.models().getExistingFile(this.blockTexture(BlockRegistry.BETWEENSTONE_BRICKS.get())));
 		//item cage
 		//item shelf
 		this.simpleBlockWithItem(BlockRegistry.THATCH);
-		this.slabBlockWithItem(BlockRegistry.CRAGROCK_SLAB);
-		this.slabBlockWithItem(BlockRegistry.PITSTONE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.BETWEENSTONE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.SMOOTH_PITSTONE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.SOLID_TAR_SLAB);
-		this.slabBlockWithItem(BlockRegistry.TEMPLE_BRICK_SLAB);
-		this.slabBlockWithItem(BlockRegistry.BETWEENSTONE_BRICK_SLAB);
-		this.slabBlockWithItem(BlockRegistry.MUD_BRICK_SLAB);
-		this.slabBlockWithItem(BlockRegistry.CRAGROCK_BRICK_SLAB);
-		this.slabBlockWithItem(BlockRegistry.LIMESTONE_BRICK_SLAB);
-		this.slabBlockWithItem(BlockRegistry.PITSTONE_BRICK_SLAB);
-		this.slabBlockWithItem(BlockRegistry.LIMESTONE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.SMOOTH_BETWEENSTONE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.SMOOTH_CRAGROCK_SLAB);
-		this.slabBlockWithItem(BlockRegistry.POLISHED_LIMESTONE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.MOSSY_BETWEENSTONE_BRICK_SLAB);
-		this.slabBlockWithItem(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.CRACKED_BETWEENSTONE_BRICK_SLAB);
-		this.slabBlockWithItem(BlockRegistry.SCABYST_BRICK_SLAB);
-		this.woodSlabBlockWithItem(BlockRegistry.WEEDWOOD_SLAB);
-		this.woodSlabBlockWithItem(BlockRegistry.RUBBER_TREE_SLAB);
-		this.woodSlabBlockWithItem(BlockRegistry.GIANT_ROOT_SLAB);
-		this.woodSlabBlockWithItem(BlockRegistry.HEARTHGROVE_SLAB);
-		this.woodSlabBlockWithItem(BlockRegistry.NIBBLETWIG_SLAB);
-		this.slabBlockWithItem(BlockRegistry.MUD_BRICK_SHINGLE_SLAB);
-		this.stairBlockWithItem(BlockRegistry.MUD_BRICK_SHINGLE_STAIRS);
-		this.wallBlockWithItem(BlockRegistry.MUD_BRICK_SHINGLE_WALL);
+		this.slabBlockWithItem(BlockRegistry.CRAGROCK_SLAB, BlockRegistry.CRAGROCK);
+		this.slabBlockWithItem(BlockRegistry.PITSTONE_SLAB, BlockRegistry.PITSTONE);
+		this.slabBlockWithItem(BlockRegistry.BETWEENSTONE_SLAB, BlockRegistry.BETWEENSTONE);
+		this.slabBlockWithItem(BlockRegistry.SMOOTH_PITSTONE_SLAB, BlockRegistry.SMOOTH_PITSTONE);
+		this.slabBlockWithItem(BlockRegistry.SOLID_TAR_SLAB, BlockRegistry.SOLID_TAR);
+		this.slabBlockWithItem(BlockRegistry.TEMPLE_BRICK_SLAB, BlockRegistry.TEMPLE_BRICKS);
+		this.slabBlockWithItem(BlockRegistry.BETWEENSTONE_BRICK_SLAB, BlockRegistry.BETWEENSTONE_BRICKS);
+		this.slabBlockWithItem(BlockRegistry.MUD_BRICK_SLAB, BlockRegistry.MUD_BRICKS);
+		this.slabBlockWithItem(BlockRegistry.CRAGROCK_BRICK_SLAB, BlockRegistry.CRAGROCK_BRICKS);
+		this.slabBlockWithItem(BlockRegistry.LIMESTONE_BRICK_SLAB, BlockRegistry.LIMESTONE_BRICKS);
+		this.slabBlockWithItem(BlockRegistry.PITSTONE_BRICK_SLAB, BlockRegistry.PITSTONE_BRICKS);
+		this.slabBlockWithItem(BlockRegistry.LIMESTONE_SLAB, BlockRegistry.LIMESTONE);
+		this.slabBlockWithItem(BlockRegistry.SMOOTH_BETWEENSTONE_SLAB, BlockRegistry.SMOOTH_BETWEENSTONE);
+		this.slabBlockWithItem(BlockRegistry.SMOOTH_CRAGROCK_SLAB, BlockRegistry.SMOOTH_CRAGROCK);
+		this.slabBlockWithItem(BlockRegistry.POLISHED_LIMESTONE_SLAB, BlockRegistry.POLISHED_LIMESTONE);
+		this.slabBlockWithItem(BlockRegistry.MOSSY_BETWEENSTONE_BRICK_SLAB, BlockRegistry.MOSSY_BETWEENSTONE_BRICKS);
+		this.slabBlockWithItem(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE_SLAB, BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE);
+		this.slabBlockWithItem(BlockRegistry.CRACKED_BETWEENSTONE_BRICK_SLAB, BlockRegistry.CRACKED_BETWEENSTONE_BRICKS);
+		this.slabBlockWithItem(BlockRegistry.SCABYST_BRICK_SLAB, BlockRegistry.SCABYST_BRICKS);
+		this.slabBlockWithItem(BlockRegistry.WEEDWOOD_SLAB, BlockRegistry.WEEDWOOD_PLANKS);
+		this.slabBlockWithItem(BlockRegistry.RUBBER_TREE_SLAB, BlockRegistry.RUBBER_TREE_PLANKS);
+		this.slabBlockWithItem(BlockRegistry.GIANT_ROOT_SLAB, BlockRegistry.GIANT_ROOT_PLANKS);
+		this.slabBlockWithItem(BlockRegistry.HEARTHGROVE_SLAB, BlockRegistry.HEARTHGROVE_PLANKS);
+		this.slabBlockWithItem(BlockRegistry.NIBBLETWIG_SLAB, BlockRegistry.NIBBLETWIG_PLANKS);
+		this.slabBlockWithItem(BlockRegistry.MUD_BRICK_SHINGLE_SLAB, BlockRegistry.MUD_BRICK_SHINGLES);
+		this.stairBlockWithItem(BlockRegistry.MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.MUD_BRICK_SHINGLES);
+		this.wallBlockWithItem(BlockRegistry.MUD_BRICK_SHINGLE_WALL, BlockRegistry.MUD_BRICK_SHINGLES);
 		//TODO CTM for filtered silt
 //		this.simpleBlockWithItem(BlockRegistry.DULL_LAVENDER_FILTERED_SILT_GLASS_BLOCK);
 //		this.simpleBlockWithItem(BlockRegistry.MAROON_FILTERED_SILT_GLASS_BLOCK);
@@ -249,62 +264,78 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.BROWN_RUST_MUD_BRICK_SHINGLES);
 		this.simpleBlockWithItem(BlockRegistry.MIDNIGHT_PURPLE_MUD_BRICK_SHINGLES);
 		this.simpleBlockWithItem(BlockRegistry.PEWTER_GREY_MUD_BRICK_SHINGLES);
-		this.slabBlockWithItem(BlockRegistry.DULL_LAVENDER_MUD_BRICK_SHINGLE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.MAROON_MUD_BRICK_SHINGLE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.SHADOW_GREEN_MUD_BRICK_SHINGLE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.CAMELOT_MAGENTA_MUD_BRICK_SHINGLE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.SAFFRON_MUD_BRICK_SHINGLE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.CARIBBEAN_GREEN_MUD_BRICK_SHINGLE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.VIVID_TANGERINE_MUD_BRICK_SHINGLE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.CHAMPAGNE_MUD_BRICK_SHINGLE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.RAISIN_BLACK_MUD_BRICK_SHINGLE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.SUSHI_GREEN_MUD_BRICK_SHINGLE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.ELM_CYAN_MUD_BRICK_SHINGLE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.CADMIUM_GREEN_MUD_BRICK_SHINGLE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.LAVENDER_BLUE_MUD_BRICK_SHINGLE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.BROWN_RUST_MUD_BRICK_SHINGLE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.MIDNIGHT_PURPLE_MUD_BRICK_SHINGLE_SLAB);
-		this.slabBlockWithItem(BlockRegistry.PEWTER_GREY_MUD_BRICK_SHINGLE_SLAB);
-		this.stairBlockWithItem(BlockRegistry.DULL_LAVENDER_MUD_BRICK_SHINGLE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.MAROON_MUD_BRICK_SHINGLE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.SHADOW_GREEN_MUD_BRICK_SHINGLE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.CAMELOT_MAGENTA_MUD_BRICK_SHINGLE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.SAFFRON_MUD_BRICK_SHINGLE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.CARIBBEAN_GREEN_MUD_BRICK_SHINGLE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.VIVID_TANGERINE_MUD_BRICK_SHINGLE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.CHAMPAGNE_MUD_BRICK_SHINGLE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.RAISIN_BLACK_MUD_BRICK_SHINGLE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.SUSHI_GREEN_MUD_BRICK_SHINGLE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.ELM_CYAN_MUD_BRICK_SHINGLE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.CADMIUM_GREEN_MUD_BRICK_SHINGLE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.LAVENDER_BLUE_MUD_BRICK_SHINGLE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.BROWN_RUST_MUD_BRICK_SHINGLE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.MIDNIGHT_PURPLE_MUD_BRICK_SHINGLE_STAIRS);
-		this.stairBlockWithItem(BlockRegistry.PEWTER_GREY_MUD_BRICK_SHINGLE_STAIRS);
-		this.slabBlockWithItem(BlockRegistry.THATCH_SLAB);
-		this.slabBlockWithItem(BlockRegistry.SCABYST_BRICK_SLAB);
-		this.wallBlockWithItem(BlockRegistry.CRAGROCK_WALL);
-		this.wallBlockWithItem(BlockRegistry.PITSTONE_WALL);
-		this.wallBlockWithItem(BlockRegistry.BETWEENSTONE_WALL);
-		this.wallBlockWithItem(BlockRegistry.SMOOTH_PITSTONE_WALL);
-		this.wallBlockWithItem(BlockRegistry.SOLID_TAR_WALL);
-		this.wallBlockWithItem(BlockRegistry.TEMPLE_BRICK_WALL);
-		this.wallBlockWithItem(BlockRegistry.BETWEENSTONE_BRICK_WALL);
-		this.wallBlockWithItem(BlockRegistry.MUD_BRICK_WALL);
-		this.wallBlockWithItem(BlockRegistry.CRAGROCK_BRICK_WALL);
-		this.wallBlockWithItem(BlockRegistry.LIMESTONE_BRICK_WALL);
-		this.wallBlockWithItem(BlockRegistry.PITSTONE_BRICK_WALL);
-		this.wallBlockWithItem(BlockRegistry.LIMESTONE_WALL);
-		this.wallBlockWithItem(BlockRegistry.SMOOTH_BETWEENSTONE_WALL);
-		this.wallBlockWithItem(BlockRegistry.SMOOTH_CRAGROCK_WALL);
-		this.wallBlockWithItem(BlockRegistry.POLISHED_LIMESTONE_WALL);
-		this.wallBlockWithItem(BlockRegistry.MOSSY_BETWEENSTONE_BRICK_WALL);
-		this.wallBlockWithItem(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE_WALL);
-		this.wallBlockWithItem(BlockRegistry.CRACKED_BETWEENSTONE_BRICK_WALL);
-		this.wallBlockWithItem(BlockRegistry.SCABYST_BRICK_WALL);
-		//fence (gate)s
-		//pressure plates
-		//buttons
+		this.slabBlockWithItem(BlockRegistry.DULL_LAVENDER_MUD_BRICK_SHINGLE_SLAB, BlockRegistry.DULL_LAVENDER_MUD_BRICK_SHINGLES);
+		this.slabBlockWithItem(BlockRegistry.MAROON_MUD_BRICK_SHINGLE_SLAB, BlockRegistry.MAROON_MUD_BRICK_SHINGLES);
+		this.slabBlockWithItem(BlockRegistry.SHADOW_GREEN_MUD_BRICK_SHINGLE_SLAB, BlockRegistry.SHADOW_GREEN_MUD_BRICK_SHINGLES);
+		this.slabBlockWithItem(BlockRegistry.CAMELOT_MAGENTA_MUD_BRICK_SHINGLE_SLAB, BlockRegistry.CAMELOT_MAGENTA_MUD_BRICK_SHINGLES);
+		this.slabBlockWithItem(BlockRegistry.SAFFRON_MUD_BRICK_SHINGLE_SLAB, BlockRegistry.SAFFRON_MUD_BRICK_SHINGLES);
+		this.slabBlockWithItem(BlockRegistry.CARIBBEAN_GREEN_MUD_BRICK_SHINGLE_SLAB, BlockRegistry.CARIBBEAN_GREEN_MUD_BRICK_SHINGLES);
+		this.slabBlockWithItem(BlockRegistry.VIVID_TANGERINE_MUD_BRICK_SHINGLE_SLAB, BlockRegistry.VIVID_TANGERINE_MUD_BRICK_SHINGLES);
+		this.slabBlockWithItem(BlockRegistry.CHAMPAGNE_MUD_BRICK_SHINGLE_SLAB, BlockRegistry.CHAMPAGNE_MUD_BRICK_SHINGLES);
+		this.slabBlockWithItem(BlockRegistry.RAISIN_BLACK_MUD_BRICK_SHINGLE_SLAB, BlockRegistry.RAISIN_BLACK_MUD_BRICK_SHINGLES);
+		this.slabBlockWithItem(BlockRegistry.SUSHI_GREEN_MUD_BRICK_SHINGLE_SLAB, BlockRegistry.SUSHI_GREEN_MUD_BRICK_SHINGLES);
+		this.slabBlockWithItem(BlockRegistry.ELM_CYAN_MUD_BRICK_SHINGLE_SLAB, BlockRegistry.ELM_CYAN_MUD_BRICK_SHINGLES);
+		this.slabBlockWithItem(BlockRegistry.CADMIUM_GREEN_MUD_BRICK_SHINGLE_SLAB, BlockRegistry.CADMIUM_GREEN_MUD_BRICK_SHINGLES);
+		this.slabBlockWithItem(BlockRegistry.LAVENDER_BLUE_MUD_BRICK_SHINGLE_SLAB, BlockRegistry.LAVENDER_BLUE_MUD_BRICK_SHINGLES);
+		this.slabBlockWithItem(BlockRegistry.BROWN_RUST_MUD_BRICK_SHINGLE_SLAB, BlockRegistry.BROWN_RUST_MUD_BRICK_SHINGLES);
+		this.slabBlockWithItem(BlockRegistry.MIDNIGHT_PURPLE_MUD_BRICK_SHINGLE_SLAB, BlockRegistry.MIDNIGHT_PURPLE_MUD_BRICK_SHINGLES);
+		this.slabBlockWithItem(BlockRegistry.PEWTER_GREY_MUD_BRICK_SHINGLE_SLAB, BlockRegistry.PEWTER_GREY_MUD_BRICK_SHINGLES);
+		this.stairBlockWithItem(BlockRegistry.DULL_LAVENDER_MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.DULL_LAVENDER_MUD_BRICK_SHINGLES);
+		this.stairBlockWithItem(BlockRegistry.MAROON_MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.MAROON_MUD_BRICK_SHINGLES);
+		this.stairBlockWithItem(BlockRegistry.SHADOW_GREEN_MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.SHADOW_GREEN_MUD_BRICK_SHINGLES);
+		this.stairBlockWithItem(BlockRegistry.CAMELOT_MAGENTA_MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.CAMELOT_MAGENTA_MUD_BRICK_SHINGLES);
+		this.stairBlockWithItem(BlockRegistry.SAFFRON_MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.SAFFRON_MUD_BRICK_SHINGLES);
+		this.stairBlockWithItem(BlockRegistry.CARIBBEAN_GREEN_MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.CARIBBEAN_GREEN_MUD_BRICK_SHINGLES);
+		this.stairBlockWithItem(BlockRegistry.VIVID_TANGERINE_MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.VIVID_TANGERINE_MUD_BRICK_SHINGLES);
+		this.stairBlockWithItem(BlockRegistry.CHAMPAGNE_MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.CHAMPAGNE_MUD_BRICK_SHINGLES);
+		this.stairBlockWithItem(BlockRegistry.RAISIN_BLACK_MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.RAISIN_BLACK_MUD_BRICK_SHINGLES);
+		this.stairBlockWithItem(BlockRegistry.SUSHI_GREEN_MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.SUSHI_GREEN_MUD_BRICK_SHINGLES);
+		this.stairBlockWithItem(BlockRegistry.ELM_CYAN_MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.ELM_CYAN_MUD_BRICK_SHINGLES);
+		this.stairBlockWithItem(BlockRegistry.CADMIUM_GREEN_MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.CADMIUM_GREEN_MUD_BRICK_SHINGLES);
+		this.stairBlockWithItem(BlockRegistry.LAVENDER_BLUE_MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.LAVENDER_BLUE_MUD_BRICK_SHINGLES);
+		this.stairBlockWithItem(BlockRegistry.BROWN_RUST_MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.BROWN_RUST_MUD_BRICK_SHINGLES);
+		this.stairBlockWithItem(BlockRegistry.MIDNIGHT_PURPLE_MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.MIDNIGHT_PURPLE_MUD_BRICK_SHINGLES);
+		this.stairBlockWithItem(BlockRegistry.PEWTER_GREY_MUD_BRICK_SHINGLE_STAIRS, BlockRegistry.PEWTER_GREY_MUD_BRICK_SHINGLES);
+		this.slabBlockWithItem(BlockRegistry.THATCH_SLAB, BlockRegistry.THATCH);
+		this.slabBlockWithItem(BlockRegistry.SCABYST_BRICK_SLAB, BlockRegistry.SCABYST_BRICKS);
+		this.wallBlockWithItem(BlockRegistry.CRAGROCK_WALL, BlockRegistry.CRAGROCK);
+		this.wallBlockWithItem(BlockRegistry.PITSTONE_WALL, BlockRegistry.PITSTONE);
+		this.wallBlockWithItem(BlockRegistry.BETWEENSTONE_WALL, BlockRegistry.BETWEENSTONE);
+		this.wallBlockWithItem(BlockRegistry.SMOOTH_PITSTONE_WALL, BlockRegistry.SMOOTH_PITSTONE);
+		this.wallBlockWithItem(BlockRegistry.SOLID_TAR_WALL, BlockRegistry.SOLID_TAR);
+		this.wallBlockWithItem(BlockRegistry.TEMPLE_BRICK_WALL, BlockRegistry.TEMPLE_BRICKS);
+		this.wallBlockWithItem(BlockRegistry.BETWEENSTONE_BRICK_WALL, BlockRegistry.BETWEENSTONE_BRICKS);
+		this.wallBlockWithItem(BlockRegistry.MUD_BRICK_WALL, BlockRegistry.MUD_BRICKS);
+		this.wallBlockWithItem(BlockRegistry.CRAGROCK_BRICK_WALL, BlockRegistry.CRAGROCK_BRICKS);
+		this.wallBlockWithItem(BlockRegistry.LIMESTONE_BRICK_WALL, BlockRegistry.LIMESTONE_BRICKS);
+		this.wallBlockWithItem(BlockRegistry.PITSTONE_BRICK_WALL, BlockRegistry.PITSTONE_BRICKS);
+		this.wallBlockWithItem(BlockRegistry.LIMESTONE_WALL, BlockRegistry.LIMESTONE);
+		this.wallBlockWithItem(BlockRegistry.SMOOTH_BETWEENSTONE_WALL, BlockRegistry.SMOOTH_BETWEENSTONE);
+		this.wallBlockWithItem(BlockRegistry.SMOOTH_CRAGROCK_WALL, BlockRegistry.SMOOTH_CRAGROCK);
+		this.wallBlockWithItem(BlockRegistry.POLISHED_LIMESTONE_WALL, BlockRegistry.POLISHED_LIMESTONE);
+		this.wallBlockWithItem(BlockRegistry.MOSSY_BETWEENSTONE_BRICK_WALL, BlockRegistry.MOSSY_BETWEENSTONE_BRICKS);
+		this.wallBlockWithItem(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE_WALL, BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE);
+		this.wallBlockWithItem(BlockRegistry.CRACKED_BETWEENSTONE_BRICK_WALL, BlockRegistry.CRACKED_BETWEENSTONE_BRICKS);
+		this.wallBlockWithItem(BlockRegistry.SCABYST_BRICK_WALL, BlockRegistry.SCABYST_BRICKS);
+		this.fenceBlockWithItem(BlockRegistry.WEEDWOOD_FENCE, BlockRegistry.WEEDWOOD_PLANKS);
+		this.fenceBlock((FenceBlock) BlockRegistry.WEEDWOOD_LOG_FENCE.get(), this.modLoc("block/weedwood_log_side"));
+		this.itemModels().fenceInventory(BlockRegistry.WEEDWOOD_LOG_FENCE.getId().getPath(), this.modLoc("block/weedwood_log_side"));
+		this.fenceBlockWithItem(BlockRegistry.RUBBER_TREE_FENCE, BlockRegistry.RUBBER_TREE_PLANKS);
+		this.fenceBlockWithItem(BlockRegistry.GIANT_ROOT_FENCE, BlockRegistry.GIANT_ROOT_PLANKS);
+		this.fenceBlockWithItem(BlockRegistry.HEARTHGROVE_FENCE, BlockRegistry.HEARTHGROVE_PLANKS);
+		this.fenceBlockWithItem(BlockRegistry.NIBBLETWIG_FENCE, BlockRegistry.NIBBLETWIG_PLANKS);
+		this.gateBlockWithItem(BlockRegistry.WEEDWOOD_FENCE_GATE, BlockRegistry.WEEDWOOD_PLANKS);
+		this.fenceGateBlock((FenceGateBlock) BlockRegistry.WEEDWOOD_LOG_FENCE_GATE.get(), this.modLoc("block/weedwood_log_side"));
+		this.itemModels().fenceInventory(BlockRegistry.WEEDWOOD_LOG_FENCE_GATE.getId().getPath(), this.modLoc("block/weedwood_log_side"));
+		this.gateBlockWithItem(BlockRegistry.RUBBER_TREE_FENCE_GATE, BlockRegistry.RUBBER_TREE_PLANKS);
+		this.gateBlockWithItem(BlockRegistry.GIANT_ROOT_FENCE_GATE, BlockRegistry.GIANT_ROOT_PLANKS);
+		this.gateBlockWithItem(BlockRegistry.HEARTHGROVE_FENCE_GATE, BlockRegistry.HEARTHGROVE_PLANKS);
+		this.gateBlockWithItem(BlockRegistry.NIBBLETWIG_FENCE_GATE, BlockRegistry.NIBBLETWIG_PLANKS);
+		this.plateBlockWithItem(BlockRegistry.WEEDWOOD_PRESSURE_PLATE, BlockRegistry.WEEDWOOD_PLANKS);
+		this.plateBlockWithItem(BlockRegistry.BETWEENSTONE_PRESSURE_PLATE, BlockRegistry.BETWEENSTONE);
+		this.plateBlockWithItem(BlockRegistry.SYRMORITE_PRESSURE_PLATE, BlockRegistry.SYRMORITE_BLOCK);
+		this.buttonBlockWithItem(BlockRegistry.WEEDWOOD_BUTTON, BlockRegistry.WEEDWOOD_PLANKS);
+		this.buttonBlockWithItem(BlockRegistry.BETWEENSTONE_BUTTON, BlockRegistry.BETWEENSTONE);
 		//ladder
 		//lever
 		//pots
@@ -340,14 +371,32 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICKS_2);
 		this.simpleBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICKS_3);
 		this.simpleBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICKS_4);
-		this.stairBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_STAIRS_1, "s");
-		this.stairBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_STAIRS_2, "s");
-		this.stairBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_STAIRS_3, "s");
-		this.stairBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_STAIRS_4, "s");
-		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_1, "s");
-		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_2, "s");
-		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_3, "s");
-		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_4, "s");
+		this.stairBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_STAIRS_1, BlockRegistry.SLUDGY_MUD_BRICKS_1);
+		this.stairBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_STAIRS_2, BlockRegistry.SLUDGY_MUD_BRICKS_2);
+		this.stairBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_STAIRS_3, BlockRegistry.SLUDGY_MUD_BRICKS_3);
+		this.stairBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_STAIRS_4, BlockRegistry.SLUDGY_MUD_BRICKS_4);
+		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_1, BlockRegistry.SLUDGY_MUD_BRICKS_1);
+		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_2, BlockRegistry.SLUDGY_MUD_BRICKS_2);
+		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_3, BlockRegistry.SLUDGY_MUD_BRICKS_3);
+		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_4, BlockRegistry.SLUDGY_MUD_BRICKS_4);
+		//rotten beams
+		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_1, this.modLoc("block/rotten_bark_carved_1"), this.modLoc("block/rotten_bark_rotated"));
+		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_2, this.modLoc("block/rotten_bark_carved_2"), this.modLoc("block/rotten_bark_rotated"));
+		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_3, this.modLoc("block/rotten_bark_carved_3"), this.modLoc("block/rotten_bark_rotated"));
+		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_4, this.modLoc("block/rotten_bark_carved_4"), this.modLoc("block/rotten_bark_rotated"));
+		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_5, this.modLoc("block/rotten_bark_carved_5"), this.modLoc("block/rotten_bark_rotated"));
+		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_6, this.modLoc("block/rotten_bark_carved_6"), this.modLoc("block/rotten_bark_rotated"));
+		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_7, this.modLoc("block/rotten_bark_carved_7"), this.modLoc("block/rotten_bark_rotated"));
+		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_8, this.modLoc("block/rotten_bark_carved_8"), this.modLoc("block/rotten_bark_rotated"));
+		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_9, this.modLoc("block/rotten_bark_carved_9"), this.modLoc("block/rotten_bark_rotated"));
+		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_10, this.modLoc("block/rotten_bark_carved_10"), this.modLoc("block/rotten_bark_rotated"));
+		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_11, this.modLoc("block/rotten_bark_carved_11"), this.modLoc("block/rotten_bark_rotated"));
+		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_12, this.modLoc("block/rotten_bark_carved_12"), this.modLoc("block/rotten_bark_rotated"));
+		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_13, this.modLoc("block/rotten_bark_carved_13"), this.modLoc("block/rotten_bark_rotated"));
+		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_14, this.modLoc("block/rotten_bark_carved_14"), this.modLoc("block/rotten_bark_rotated"));
+		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_15, this.modLoc("block/rotten_bark_carved_15"), this.modLoc("block/rotten_bark_rotated"));
+		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_16, this.modLoc("block/rotten_bark_carved_16"), this.modLoc("block/rotten_bark_rotated"));
+		this.simpleBlock(BlockRegistry.ENERGY_BARRIER.get(), this.models().cubeAll(BlockRegistry.ENERGY_BARRIER.getId().getPath(), this.blockTexture(BlockRegistry.ENERGY_BARRIER.get())).renderType("translucent"));
 	}
 
 	private void druidStone(DeferredBlock<Block> stone) {
@@ -358,59 +407,69 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockItem(stone);
 	}
 
+	private void sidedBlockWithItem(DeferredBlock<Block> block, ResourceLocation side, ResourceLocation end) {
+		this.simpleBlock(block.get(), this.models().cubeColumn(block.getId().getPath(), side, end));
+		this.simpleBlockItem(block);
+	}
+
+	private void bottomSideTopBlockWithItem(DeferredBlock<Block> block, ResourceLocation side, ResourceLocation top, ResourceLocation bottom) {
+		this.simpleBlock(block.get(), this.models().cubeBottomTop(block.getId().getPath(), side, bottom, top));
+		this.simpleBlockItem(block);
+	}
+
 	public void logBlockWithItem(DeferredBlock<Block> block) {
 		this.axisBlock((RotatedPillarBlock) block.get());
 		this.simpleBlockItem(block);
 	}
 
-	public void barkBlockWithItem(DeferredBlock<Block> block) {
-		ResourceLocation tex = ResourceLocation.parse(this.blockTexture(block.get()).toString().replace("bark", "log_side"));
-		this.axisBlock((RotatedPillarBlock) block.get(), this.models().cubeColumn(block.getId().toString(), tex, tex), this.models().cubeColumnHorizontal(block.getId() + "_horizontal", tex, tex));
+	public void barkBlockWithItem(DeferredBlock<Block> block, ResourceLocation texture) {
+		this.axisBlock((RotatedPillarBlock) block.get(), this.models().cubeColumn(block.getId().toString(), texture, texture), this.models().cubeColumnHorizontal(block.getId() + "_horizontal", texture, texture));
 		this.simpleBlockItem(block);
 	}
 
-	public void slabBlockWithItem(DeferredBlock<Block> block) {
-		ResourceLocation tex = ResourceLocation.parse(this.blockTexture(block.get()).toString().replace("_slab", "") + (block.getId().getPath().contains("brick") ? "s" : ""));
-		this.slabBlock((SlabBlock) block.get(), tex, tex);
+	public void slabBlockWithItem(DeferredBlock<Block> block, DeferredBlock<Block> baseBlock) {
+		this.slabBlock((SlabBlock) block.get(), this.blockTexture(baseBlock.get()), this.blockTexture(baseBlock.get()));
 		this.simpleBlockItem(block);
 	}
 
-	public void slabBlockWithItem(DeferredBlock<Block> block, String replacement) {
-		ResourceLocation tex = ResourceLocation.parse(this.blockTexture(block.get()).toString().replace("_slab", replacement));
-		this.slabBlock((SlabBlock) block.get(), tex, tex);
+	public void stairBlockWithItem(DeferredBlock<Block> block, DeferredBlock<Block> baseBlock) {
+		this.stairsBlock((StairBlock) block.get(), this.blockTexture(baseBlock.get()));
 		this.simpleBlockItem(block);
 	}
 
-	public void woodSlabBlockWithItem(DeferredBlock<Block> block) {
-		ResourceLocation tex = ResourceLocation.parse(this.blockTexture(block.get()).toString().replace("slab", "planks"));
-		this.slabBlock((SlabBlock) block.get(), tex, tex);
-		this.simpleBlockItem(block);
+	public void wallBlockWithItem(DeferredBlock<Block> block, DeferredBlock<Block> baseBlock) {
+		this.wallBlock((WallBlock) block.get(), this.blockTexture(baseBlock.get()));
+		this.itemModels().wallInventory(block.getId().toString(), this.blockTexture(baseBlock.get()));
 	}
 
-	public void stairBlockWithItem(DeferredBlock<Block> block, String replacement) {
-		this.stairsBlock((StairBlock) block.get(), ResourceLocation.parse(this.blockTexture(block.get()).toString().replace("_stairs", replacement)));
-		this.simpleBlockItem(block);
+	public void fenceBlockWithItem(DeferredBlock<Block> fence, DeferredBlock<Block> planks) {
+		this.fenceBlock((FenceBlock) fence.get(), this.blockTexture(planks.get()));
+		this.itemModels().fenceInventory(fence.getId().getPath(), this.blockTexture(planks.get()));
 	}
 
-	public void stairBlockWithItem(DeferredBlock<Block> block) {
-		this.stairsBlock((StairBlock) block.get(), ResourceLocation.parse(this.blockTexture(block.get()).toString().replace("_stairs", "") + (block.getId().getPath().contains("brick") ? "s" : "")));
-		this.simpleBlockItem(block);
+	public void gateBlockWithItem(DeferredBlock<Block> gate, DeferredBlock<Block> planks) {
+		this.fenceGateBlock((FenceGateBlock) gate.get(), this.blockTexture(planks.get()));
+		this.simpleBlockItem(gate);
 	}
 
-	public void woodStairBlockWithItem(DeferredBlock<Block> block) {
-		this.stairsBlock((StairBlock) block.get(), ResourceLocation.parse(this.blockTexture(block.get()).toString().replace("stairs", "planks")));
-		this.simpleBlockItem(block);
+	public void plateBlockWithItem(DeferredBlock<Block> plate, DeferredBlock<Block> planks) {
+		this.pressurePlateBlock((PressurePlateBlock) plate.get(), this.blockTexture(planks.get()));
+		this.simpleBlockItem(plate);
 	}
 
-	public void wallBlockWithItem(DeferredBlock<Block> block) {
-		ResourceLocation tex = ResourceLocation.parse(this.blockTexture(block.get()).toString().replace("_wall", "") + (block.getId().getPath().contains("brick") ? "s" : ""));
-		this.wallBlock((WallBlock) block.get(), tex);
-		this.itemModels().wallInventory(block.getId().toString(), tex);
+	public void buttonBlockWithItem(DeferredBlock<Block> button, DeferredBlock<Block> planks) {
+		this.buttonBlock((ButtonBlock) button.get(), this.blockTexture(planks.get()));
+		this.itemModels().buttonInventory(button.getId().getPath(), this.blockTexture(planks.get()));
 	}
 
 	public void simpleBlockWithItem(DeferredBlock<Block> block) {
 		this.simpleBlock(block.get());
 		this.simpleBlockItem(block);
+	}
+
+	public void basicItemTex(DeferredBlock<Block> block, boolean blockFolder) {
+		this.itemModels().withExistingParent(block.getId().toString(), new ModelFile.UncheckedModelFile("item/generated").getLocation())
+			.texture("layer0", ResourceLocation.fromNamespaceAndPath(block.getId().getNamespace(), (blockFolder ? "block/" : "item/") + block.getId().getPath()));
 	}
 
 	public void simpleBlockItem(DeferredBlock<Block> block) {

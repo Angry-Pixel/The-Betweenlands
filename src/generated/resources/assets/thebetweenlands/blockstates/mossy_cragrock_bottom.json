@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "is_bottom=false": {
+      "model": "thebetweenlands:block/mossy_cragrock_bottom"
+    },
+    "is_bottom=true": {
+      "model": "thebetweenlands:block/mossy_cragrock_bottom_bottom"
+    }
+  }
+}

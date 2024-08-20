@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "thebetweenlands:block/pitstone_bricks",
+    "side": "thebetweenlands:block/scabyst_pitstone_dotted"
+  }
+}
