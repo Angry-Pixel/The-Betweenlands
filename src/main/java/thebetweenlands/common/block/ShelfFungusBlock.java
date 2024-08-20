@@ -23,13 +23,17 @@ public class ShelfFungusBlock extends Block {
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		return this.defaultBlockState().setValue(TOP, context.getLevel().getBlockState(context.getClickedPos()).isRedstoneConductor(context.getLevel(), context.getClickedPos()));
+		return this.defaultBlockState().setValue(TOP, !context.getLevel().getBlockState(context.getClickedPos().above()).isRedstoneConductor(context.getLevel(), context.getClickedPos().above()));
 	}
 
 	@Override
 	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-		return state.setValue(TOP, level.getBlockState(pos.above()).isRedstoneConductor(level, pos.above()));
+		if (direction == Direction.UP) {
+			return state.setValue(TOP, !level.getBlockState(pos.above()).isRedstoneConductor(level, pos.above()));
+		}
+		return state;
 	}
+
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

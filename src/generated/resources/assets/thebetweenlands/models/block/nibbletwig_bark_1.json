@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "thebetweenlands:block/nibbletwig_log_side_1",
+    "side": "thebetweenlands:block/nibbletwig_log_side_1"
+  }
+}

@@ -2,6 +2,6 @@
   "parent": "minecraft:block/cube_column",
   "textures": {
     "end": "thebetweenlands:block/shelf_fungus_bottom",
-    "side": "thebetweenlands:block/shelf_fungus_side"
+    "side": "thebetweenlands:block/shelf_fungus_side_2"
   }
 }

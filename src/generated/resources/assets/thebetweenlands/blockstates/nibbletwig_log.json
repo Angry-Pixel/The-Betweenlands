@@ -1,0 +1,58 @@
+{
+  "variants": {
+    "axis=x": [
+      {
+        "model": "thebetweenlands:block/nibbletwig_log_horizontal_1",
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/nibbletwig_log_horizontal_2",
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/nibbletwig_log_horizontal_3",
+        "x": 90,
+        "y": 90
+      },
+      {
+        "model": "thebetweenlands:block/nibbletwig_log_horizontal_4",
+        "x": 90,
+        "y": 90
+      }
+    ],
+    "axis=y": [
+      {
+        "model": "thebetweenlands:block/nibbletwig_log_1"
+      },
+      {
+        "model": "thebetweenlands:block/nibbletwig_log_2"
+      },
+      {
+        "model": "thebetweenlands:block/nibbletwig_log_3"
+      },
+      {
+        "model": "thebetweenlands:block/nibbletwig_log_4"
+      }
+    ],
+    "axis=z": [
+      {
+        "model": "thebetweenlands:block/nibbletwig_log_horizontal_1",
+        "x": 90
+      },
+      {
+        "model": "thebetweenlands:block/nibbletwig_log_horizontal_2",
+        "x": 90
+      },
+      {
+        "model": "thebetweenlands:block/nibbletwig_log_horizontal_3",
+        "x": 90
+      },
+      {
+        "model": "thebetweenlands:block/nibbletwig_log_horizontal_4",
+        "x": 90
+      }
+    ]
+  }
+}

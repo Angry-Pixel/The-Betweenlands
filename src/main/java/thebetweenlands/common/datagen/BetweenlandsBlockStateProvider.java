@@ -99,8 +99,7 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockItem(BlockRegistry.TARRED_HEARTHGROVE_LOG);
 		this.barkBlockWithItem(BlockRegistry.HEARTHGROVE_BARK, this.modLoc("block/hearthgrove_log_side"));
 		this.barkBlockWithItem(BlockRegistry.TARRED_HEARTHGROVE_BARK, this.modLoc("block/tarred_hearthgrove_log_side"));
-//		this.logBlockWithItem(BlockRegistry.NIBBLETWIG_LOG); TODO nibbletwig has 4 side variants
-//		this.barkBlockWithItem(BlockRegistry.NIBBLETWIG_BARK);
+		this.nibbletwigLogs();
 		this.axisBlock((RotatedPillarBlock) BlockRegistry.SPIRIT_TREE_LOG.get(), this.blockTexture(BlockRegistry.SPIRIT_TREE_LOG.get()).withSuffix("_side"), this.blockTexture(BlockRegistry.SPIRIT_TREE_LOG.get()).withSuffix("_side"));
 		this.simpleBlockItem(BlockRegistry.SPIRIT_TREE_LOG);
 		this.barkBlockWithItem(BlockRegistry.SPIRIT_TREE_BARK, this.modLoc("block/spirit_tree_log_side"));
@@ -427,11 +426,12 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.logBlockWithItem(BlockRegistry.BULB_CAPPED_MUSHROOM_STALK);
 		this.getVariantBuilder(BlockRegistry.SHELF_FUNGUS.get()).forAllStates(state -> {
 			if (state.getValue(ShelfFungusBlock.TOP)) {
-				return ConfiguredModel.builder().modelFile(this.models().cubeBottomTop("shelf_fungus", this.modLoc("block/shelf_fungus_side_2"), this.modLoc("block/shelf_fungus_bottom"), this.modLoc("block/shelf_fungus_top"))).build();
+				return ConfiguredModel.builder().modelFile(this.models().cubeBottomTop("shelf_fungus", this.modLoc("block/shelf_fungus_side"), this.modLoc("block/shelf_fungus_bottom"), this.modLoc("block/shelf_fungus_top"))).build();
 			} else {
-				return ConfiguredModel.builder().modelFile(this.models().cubeColumn("shelf_fungus_no_top", this.modLoc("block/shelf_fungus_side"), this.modLoc("block/shelf_fungus_bottom"))).build();
+				return ConfiguredModel.builder().modelFile(this.models().cubeColumn("shelf_fungus_no_top", this.modLoc("block/shelf_fungus_side_2"), this.modLoc("block/shelf_fungus_bottom"))).build();
 			}
 		});
+		this.simpleBlockItem(BlockRegistry.SHELF_FUNGUS);
 		this.basicItemTex(BlockRegistry.ROOT, false);
 		this.simpleBlock(BlockRegistry.GIANT_ROOT.get(), this.models().cubeAll("giant_root", this.modLoc("block/root_bottom")));
 		this.simpleBlockItem(BlockRegistry.GIANT_ROOT);
@@ -703,5 +703,41 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.simpleBlock(block.get(), models().getBuilder(block.getId().getPath())
 			.parent(new ModelFile.UncheckedModelFile("builtin/entity"))
 			.texture("particle", particle));
+	}
+
+	public void nibbletwigLogs() {
+		this.getVariantBuilder(BlockRegistry.NIBBLETWIG_LOG.get()).partialState().with(RotatedPillarBlock.AXIS, Direction.Axis.Y).modelForState()
+			.modelFile(this.models().cubeColumn(BlockRegistry.NIBBLETWIG_LOG.getId().getPath() + "_1", this.modLoc("block/nibbletwig_log_side_1"), this.modLoc("block/nibbletwig_log_end"))).nextModel()
+			.modelFile(this.models().cubeColumn(BlockRegistry.NIBBLETWIG_LOG.getId().getPath() + "_2", this.modLoc("block/nibbletwig_log_side_2"), this.modLoc("block/nibbletwig_log_end"))).nextModel()
+			.modelFile(this.models().cubeColumn(BlockRegistry.NIBBLETWIG_LOG.getId().getPath() + "_3", this.modLoc("block/nibbletwig_log_side_3"), this.modLoc("block/nibbletwig_log_end"))).nextModel()
+			.modelFile(this.models().cubeColumn(BlockRegistry.NIBBLETWIG_LOG.getId().getPath() + "_4", this.modLoc("block/nibbletwig_log_side_4"), this.modLoc("block/nibbletwig_log_end"))).addModel()
+			.partialState().with(RotatedPillarBlock.AXIS, Direction.Axis.Z).modelForState()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.NIBBLETWIG_LOG.getId().getPath() + "_horizontal_1", this.modLoc("block/nibbletwig_log_side_1"), this.modLoc("block/nibbletwig_log_end"))).rotationX(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.NIBBLETWIG_LOG.getId().getPath() + "_horizontal_2", this.modLoc("block/nibbletwig_log_side_2"), this.modLoc("block/nibbletwig_log_end"))).rotationX(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.NIBBLETWIG_LOG.getId().getPath() + "_horizontal_3", this.modLoc("block/nibbletwig_log_side_3"), this.modLoc("block/nibbletwig_log_end"))).rotationX(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.NIBBLETWIG_LOG.getId().getPath() + "_horizontal_4", this.modLoc("block/nibbletwig_log_side_4"), this.modLoc("block/nibbletwig_log_end"))).rotationX(90).addModel()
+			.partialState().with(RotatedPillarBlock.AXIS, Direction.Axis.X).modelForState()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.NIBBLETWIG_LOG.getId().getPath() + "_horizontal_1", this.modLoc("block/nibbletwig_log_side_1"), this.modLoc("block/nibbletwig_log_end"))).rotationX(90).rotationY(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.NIBBLETWIG_LOG.getId().getPath() + "_horizontal_2", this.modLoc("block/nibbletwig_log_side_2"), this.modLoc("block/nibbletwig_log_end"))).rotationX(90).rotationY(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.NIBBLETWIG_LOG.getId().getPath() + "_horizontal_3", this.modLoc("block/nibbletwig_log_side_3"), this.modLoc("block/nibbletwig_log_end"))).rotationX(90).rotationY(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.NIBBLETWIG_LOG.getId().getPath() + "_horizontal_4", this.modLoc("block/nibbletwig_log_side_4"), this.modLoc("block/nibbletwig_log_end"))).rotationX(90).rotationY(90).addModel();
+		this.simpleBlockItem(BlockRegistry.NIBBLETWIG_LOG.get(), this.models().withExistingParent(BlockRegistry.NIBBLETWIG_LOG.getId().getPath(), this.modLoc("block/" + BlockRegistry.NIBBLETWIG_LOG.getId().getPath() + "_1")));
+
+		this.getVariantBuilder(BlockRegistry.NIBBLETWIG_BARK.get()).partialState().with(RotatedPillarBlock.AXIS, Direction.Axis.Y).modelForState()
+			.modelFile(this.models().cubeColumn(BlockRegistry.NIBBLETWIG_BARK.getId().getPath() + "_1", this.modLoc("block/nibbletwig_log_side_1"), this.modLoc("block/nibbletwig_log_side_1"))).nextModel()
+			.modelFile(this.models().cubeColumn(BlockRegistry.NIBBLETWIG_BARK.getId().getPath() + "_2", this.modLoc("block/nibbletwig_log_side_2"), this.modLoc("block/nibbletwig_log_side_2"))).nextModel()
+			.modelFile(this.models().cubeColumn(BlockRegistry.NIBBLETWIG_BARK.getId().getPath() + "_2", this.modLoc("block/nibbletwig_log_side_3"), this.modLoc("block/nibbletwig_log_side_3"))).nextModel()
+			.modelFile(this.models().cubeColumn(BlockRegistry.NIBBLETWIG_BARK.getId().getPath() + "_4", this.modLoc("block/nibbletwig_log_side_4"), this.modLoc("block/nibbletwig_log_side_4"))).addModel()
+			.partialState().with(RotatedPillarBlock.AXIS, Direction.Axis.Z).modelForState()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.NIBBLETWIG_BARK.getId().getPath() + "_horizontal", this.modLoc("block/nibbletwig_log_side_1"), this.modLoc("block/nibbletwig_log_side_1"))).rotationX(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.NIBBLETWIG_BARK.getId().getPath() + "_horizontal", this.modLoc("block/nibbletwig_log_side_2"), this.modLoc("block/nibbletwig_log_side_2"))).rotationX(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.NIBBLETWIG_BARK.getId().getPath() + "_horizontal", this.modLoc("block/nibbletwig_log_side_3"), this.modLoc("block/nibbletwig_log_side_3"))).rotationX(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.NIBBLETWIG_BARK.getId().getPath() + "_horizontal", this.modLoc("block/nibbletwig_log_side_4"), this.modLoc("block/nibbletwig_log_side_4"))).rotationX(90).addModel()
+			.partialState().with(RotatedPillarBlock.AXIS, Direction.Axis.X).modelForState()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.NIBBLETWIG_BARK.getId().getPath() + "_horizontal", this.modLoc("block/nibbletwig_log_side_1"), this.modLoc("block/nibbletwig_log_side_1"))).rotationX(90).rotationY(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.NIBBLETWIG_BARK.getId().getPath() + "_horizontal", this.modLoc("block/nibbletwig_log_side_2"), this.modLoc("block/nibbletwig_log_side_2"))).rotationX(90).rotationY(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.NIBBLETWIG_BARK.getId().getPath() + "_horizontal", this.modLoc("block/nibbletwig_log_side_3"), this.modLoc("block/nibbletwig_log_side_3"))).rotationX(90).rotationY(90).nextModel()
+			.modelFile(this.models().cubeColumnHorizontal(BlockRegistry.NIBBLETWIG_BARK.getId().getPath() + "_horizontal", this.modLoc("block/nibbletwig_log_side_4"), this.modLoc("block/nibbletwig_log_side_4"))).rotationX(90).rotationY(90).addModel();
+		this.simpleBlockItem(BlockRegistry.NIBBLETWIG_BARK.get(), this.models().withExistingParent(BlockRegistry.NIBBLETWIG_BARK.getId().getPath(), this.modLoc("block/" + BlockRegistry.NIBBLETWIG_BARK.getId().getPath() + "_1")));
 	}
 }
