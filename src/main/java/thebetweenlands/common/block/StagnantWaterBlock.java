@@ -23,7 +23,7 @@ public class StagnantWaterBlock extends LiquidBlock {
 				player.addEffect(ElixirEffectRegistry.EFFECT_DECAY.get().createEffect(60, 3));
 			}
 
-			entity.getData(AttachmentRegistry.DECAY).addDecayAcceleration(0.1F);
+			entity.getData(AttachmentRegistry.DECAY).addDecayAcceleration(player, 0.1F);
 
 			RotSmellData capSmell = entity.getData(AttachmentRegistry.ROT_SMELL);
 			if (!capSmell.isSmellingBad(player))
