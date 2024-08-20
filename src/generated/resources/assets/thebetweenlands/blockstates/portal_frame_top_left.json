@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "thebetweenlands:block/portal_frame_top_left",
+      "y": 90
+    },
+    "axis=z": {
+      "model": "thebetweenlands:block/portal_frame_top_left"
+    }
+  }
+}

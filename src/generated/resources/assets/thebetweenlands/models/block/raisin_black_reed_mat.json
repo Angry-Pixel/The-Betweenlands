@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/carpet",
+  "textures": {
+    "wool": "thebetweenlands:block/raisin_black_reed_mat"
+  }
+}

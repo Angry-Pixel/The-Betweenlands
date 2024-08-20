@@ -487,8 +487,8 @@ public class BetweenlandsLangProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.ROTTEN_BARK, "Rotten bark");
 		this.addBlock(BlockRegistry.ROTTEN_FENCE, "Rotten Fence");
 		this.addBlock(BlockRegistry.ROTTEN_FENCE_GATE, "Rotten Fence Gate");
-		this.addBlock(BlockRegistry.ROTTEN_PLANK_DOOR, "Rotten Door");
-		this.addBlock(BlockRegistry.ROTTEN_PLANK_TRAPDOOR, "Rotten Trapdoor");
+		this.addBlock(BlockRegistry.ROTTEN_DOOR, "Rotten Door");
+		this.addBlock(BlockRegistry.ROTTEN_TRAPDOOR, "Rotten Trapdoor");
 		this.addBlock(BlockRegistry.ROTTEN_PLANKS, "Rotten Planks");
 		this.addBlock(BlockRegistry.ROTTEN_SLAB, "Rotten Slab");
 		this.addBlock(BlockRegistry.ROTTEN_STAIRS, "Rotten Stairs");
@@ -680,8 +680,8 @@ public class BetweenlandsLangProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.TREATED_NIBBLETWIG_TRAPDOOR, "Treated Nibbletwig Trapdoor");
 		this.addBlock(BlockRegistry.TREATED_ROTTEN_FENCE, "Treated Rotten Fence");
 		this.addBlock(BlockRegistry.TREATED_ROTTEN_FENCE_GATE, "Treated Rotten Fence Gate");
-		this.addBlock(BlockRegistry.TREATED_ROTTEN_PLANK_DOOR, "Treated Rotten Door");
-		this.addBlock(BlockRegistry.TREATED_ROTTEN_PLANK_TRAPDOOR, "Treated Rotten Trapdoor");
+		this.addBlock(BlockRegistry.TREATED_ROTTEN_DOOR, "Treated Rotten Door");
+		this.addBlock(BlockRegistry.TREATED_ROTTEN_TRAPDOOR, "Treated Rotten Trapdoor");
 		this.addBlock(BlockRegistry.TREATED_ROTTEN_PLANKS, "Treated Rotten Planks");
 		this.addBlock(BlockRegistry.TREATED_ROTTEN_SLAB, "Treated Rotten Slab");
 		this.addBlock(BlockRegistry.TREATED_ROTTEN_STAIRS, "Treated Rotten Stairs");

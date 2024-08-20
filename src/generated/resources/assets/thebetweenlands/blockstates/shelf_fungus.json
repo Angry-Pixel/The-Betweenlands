@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "is_top=false": {
+      "model": "thebetweenlands:block/shelf_fungus_no_top"
+    },
+    "is_top=true": {
+      "model": "thebetweenlands:block/shelf_fungus"
+    }
+  }
+}

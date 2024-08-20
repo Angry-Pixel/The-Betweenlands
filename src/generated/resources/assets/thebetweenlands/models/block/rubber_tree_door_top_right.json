@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_top_right",
+  "textures": {
+    "bottom": "thebetweenlands:block/rubber_tree_door_bottom",
+    "top": "thebetweenlands:block/rubber_tree_door_top"
+  }
+}

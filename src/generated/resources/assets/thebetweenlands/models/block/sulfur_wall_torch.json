@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_torch_wall",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "torch": "thebetweenlands:block/sulfur_torch"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_top_left",
+  "textures": {
+    "bottom": "thebetweenlands:block/rotten_door_bottom",
+    "top": "thebetweenlands:block/rotten_door_top"
+  }
+}

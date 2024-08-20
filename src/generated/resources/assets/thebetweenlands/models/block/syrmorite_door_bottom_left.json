@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_left",
+  "textures": {
+    "bottom": "thebetweenlands:block/syrmorite_door_bottom",
+    "top": "thebetweenlands:block/syrmorite_door_top"
+  }
+}

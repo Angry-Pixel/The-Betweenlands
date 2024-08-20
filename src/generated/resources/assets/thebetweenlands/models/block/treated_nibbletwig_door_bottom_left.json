@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_left",
+  "textures": {
+    "bottom": "thebetweenlands:block/treated_nibbletwig_door_bottom",
+    "top": "thebetweenlands:block/treated_nibbletwig_door_top"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "thebetweenlands:block/extinguished_sulfur_wall_torch"
+    },
+    "facing=north": {
+      "model": "thebetweenlands:block/extinguished_sulfur_wall_torch",
+      "y": 270
+    },
+    "facing=south": {
+      "model": "thebetweenlands:block/extinguished_sulfur_wall_torch",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "thebetweenlands:block/extinguished_sulfur_wall_torch",
+      "y": 180
+    }
+  }
+}

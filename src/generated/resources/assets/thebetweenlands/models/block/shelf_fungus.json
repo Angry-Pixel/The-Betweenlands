@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "thebetweenlands:block/shelf_fungus_bottom",
+    "side": "thebetweenlands:block/shelf_fungus_side_2",
+    "top": "thebetweenlands:block/shelf_fungus_top"
+  }
+}

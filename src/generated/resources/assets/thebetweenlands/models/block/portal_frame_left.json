@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "thebetweenlands:block/portal_log_side",
+    "east": "thebetweenlands:block/portal_log_side",
+    "north": "thebetweenlands:block/portal_frame_left",
+    "south": "thebetweenlands:block/portal_frame_left",
+    "up": "thebetweenlands:block/portal_log_side",
+    "west": "thebetweenlands:block/portal_log_side"
+  }
+}

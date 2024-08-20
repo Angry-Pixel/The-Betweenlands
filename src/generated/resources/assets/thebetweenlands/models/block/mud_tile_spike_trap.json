@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "thebetweenlands:block/mud_tiles",
+    "side": "thebetweenlands:block/mud_tiles",
+    "top": "thebetweenlands:block/mud_tiles_spike_block_inactive_top"
+  }
+}

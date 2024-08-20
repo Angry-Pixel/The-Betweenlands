@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "thebetweenlands:block/compacted_mud_slab"
+    },
+    "type=double": {
+      "model": "thebetweenlands:block/compacted_mud"
+    },
+    "type=top": {
+      "model": "thebetweenlands:block/compacted_mud_slab_top"
+    }
+  }
+}

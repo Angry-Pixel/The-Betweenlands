@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "thebetweenlands:block/polished_limestone",
+    "side": "thebetweenlands:block/polished_limestone",
+    "top": "thebetweenlands:block/spike_block_inactive_top"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "thebetweenlands:block/treated_rotten_planks",
+    "side": "thebetweenlands:block/treated_rotten_planks",
+    "top": "thebetweenlands:block/treated_rotten_planks"
+  }
+}

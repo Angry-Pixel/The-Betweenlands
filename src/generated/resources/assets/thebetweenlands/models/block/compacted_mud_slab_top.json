@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "thebetweenlands:block/compacted_mud",
+    "side": "thebetweenlands:block/compacted_mud",
+    "top": "thebetweenlands:block/compacted_mud"
+  }
+}

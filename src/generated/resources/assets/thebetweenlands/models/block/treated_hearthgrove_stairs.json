@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "thebetweenlands:block/treated_hearthgrove_planks",
+    "side": "thebetweenlands:block/treated_hearthgrove_planks",
+    "top": "thebetweenlands:block/treated_hearthgrove_planks"
+  }
+}

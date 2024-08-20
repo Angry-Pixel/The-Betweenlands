@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "thebetweenlands:block/rotten_slab"
+    },
+    "type=double": {
+      "model": "thebetweenlands:block/rotten_planks"
+    },
+    "type=top": {
+      "model": "thebetweenlands:block/rotten_slab_top"
+    }
+  }
+}

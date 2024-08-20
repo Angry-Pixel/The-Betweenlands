@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_torch",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "torch": "thebetweenlands:block/damp_torch"
+  }
+}

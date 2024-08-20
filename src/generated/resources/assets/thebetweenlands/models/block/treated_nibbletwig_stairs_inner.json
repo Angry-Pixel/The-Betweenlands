@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "thebetweenlands:block/treated_nibbletwig_planks",
+    "side": "thebetweenlands:block/treated_nibbletwig_planks",
+    "top": "thebetweenlands:block/treated_nibbletwig_planks"
+  }
+}

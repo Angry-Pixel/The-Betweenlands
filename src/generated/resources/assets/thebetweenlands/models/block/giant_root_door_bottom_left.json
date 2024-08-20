@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_left",
+  "textures": {
+    "bottom": "thebetweenlands:block/giant_root_door_bottom",
+    "top": "thebetweenlands:block/giant_root_door_top"
+  }
+}

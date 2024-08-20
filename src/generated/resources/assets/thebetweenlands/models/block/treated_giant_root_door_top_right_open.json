@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_top_right_open",
+  "textures": {
+    "bottom": "thebetweenlands:block/treated_giant_root_door_bottom",
+    "top": "thebetweenlands:block/treated_giant_root_door_top"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_top",
+  "textures": {
+    "side": "thebetweenlands:block/weedwood_jukebox_side",
+    "top": "thebetweenlands:block/weedwood_jukebox_top"
+  }
+}

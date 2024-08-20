@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "thebetweenlands:block/weedwood_planks",
+    "east": "thebetweenlands:block/weedwood_workbench",
+    "north": "thebetweenlands:block/weedwood_workbench_front",
+    "south": "thebetweenlands:block/weedwood_workbench",
+    "up": "thebetweenlands:block/weedwood_workbench_top",
+    "west": "thebetweenlands:block/weedwood_workbench_front"
+  }
+}
