@@ -1,0 +1,21 @@
+{
+	"parent": "block/block",
+	"textures": {
+		"side": "thebetweenlands:block/rubber_log_stump",
+		"top": "thebetweenlands:block/rubber_log_top",
+    "particle": "#side"
+	},
+	"elements": [
+		{
+			"from": [4, 4, 0],
+			"to": [12, 12, 4],
+			"faces": {
+				"north": {"uv": [4, 4, 12, 12], "cullface": "north", "texture": "#top"},
+				"east": {"uv": [4, 0, 12, 4], "rotation": 90, "texture": "#side"},
+				"west": {"uv": [4, 0, 12, 4], "rotation": 270, "texture": "#side"},
+				"up": {"uv": [4, 0, 12, 4], "texture": "#side"},
+				"down": {"uv": [4, 0, 12, 4], "rotation": 180, "texture": "#side"}
+			}
+		}
+	]
+}

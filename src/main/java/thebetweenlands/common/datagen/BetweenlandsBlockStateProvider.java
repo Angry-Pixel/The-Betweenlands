@@ -82,7 +82,18 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.barkBlockWithItem(BlockRegistry.WEEDWOOD_BARK, this.modLoc("block/weedwood_log_side"));
 		this.barkBlockWithItem(BlockRegistry.ROTTEN_BARK, this.modLoc("block/rotten_log_side"));
 		this.simpleBlockWithItem(BlockRegistry.SPREADING_ROTTEN_BARK.get(), this.models().getExistingFile(this.blockTexture(BlockRegistry.ROTTEN_BARK.get())));
-		//rubber tree log
+		getMultipartBuilder(BlockRegistry.RUBBER_LOG.get())
+			.part().modelFile(this.models().getExistingFile(this.modLoc("rubber_log"))).addModel().condition(RotatedPillarBlock.AXIS, Direction.Axis.Y).end()
+			.part().modelFile(this.models().getExistingFile(this.modLoc("rubber_log"))).rotationX(90).addModel().condition(RotatedPillarBlock.AXIS, Direction.Axis.Z).end()
+			.part().modelFile(this.models().getExistingFile(this.modLoc("rubber_log"))).rotationX(90).rotationY(90).addModel().condition(RotatedPillarBlock.AXIS, Direction.Axis.X).end()
+
+			.part().modelFile(this.models().getExistingFile(this.modLoc("rubber_log_top"))).rotationX(90).addModel().condition(PipeBlock.UP, true).end()
+			.part().modelFile(this.models().getExistingFile(this.modLoc("rubber_log_bottom"))).rotationX(90).addModel().condition(PipeBlock.DOWN, true).end()
+			.part().modelFile(this.models().getExistingFile(this.modLoc("rubber_log_top"))).rotationY(270).addModel().condition(PipeBlock.EAST, true).end()
+			.part().modelFile(this.models().getExistingFile(this.modLoc("rubber_log_bottom"))).rotationY(270).addModel().condition(PipeBlock.WEST, true).end()
+			.part().modelFile(this.models().getExistingFile(this.modLoc("rubber_log_top"))).addModel().condition(PipeBlock.SOUTH, true).end()
+			.part().modelFile(this.models().getExistingFile(this.modLoc("rubber_log_bottom"))).addModel().condition(PipeBlock.NORTH, true).end();
+		this.simpleBlockItem(BlockRegistry.RUBBER_LOG);
 		this.logBlockWithItem(BlockRegistry.HEARTHGROVE_LOG);
 		this.axisBlock((RotatedPillarBlock) BlockRegistry.TARRED_HEARTHGROVE_LOG.get(), this.blockTexture(BlockRegistry.TARRED_HEARTHGROVE_LOG.get()).withSuffix("_side"), this.blockTexture(BlockRegistry.HEARTHGROVE_LOG.get()).withSuffix("_end"));
 		this.simpleBlockItem(BlockRegistry.TARRED_HEARTHGROVE_LOG);
@@ -161,7 +172,11 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.ORANGE_DENTROTHYST, "translucent");
 		//pots of chance
 		//monster spawner
-		//pillars (need custom model. 16 pixels tall, only 14 wide)
+		this.pillarWithItem(BlockRegistry.TEMPLE_PILLAR);
+		this.pillarWithItem(BlockRegistry.BETWEENSTONE_PILLAR);
+		this.pillarWithItem(BlockRegistry.PITSTONE_PILLAR);
+		this.pillarWithItem(BlockRegistry.LIMESTONE_PILLAR);
+		this.pillarWithItem(BlockRegistry.CRAGROCK_PILLAR);
 		this.stairBlockWithItem(BlockRegistry.CRAGROCK_STAIRS, BlockRegistry.CRAGROCK);
 		this.stairBlockWithItem(BlockRegistry.PITSTONE_STAIRS, BlockRegistry.PITSTONE);
 		this.stairBlockWithItem(BlockRegistry.BETWEENSTONE_STAIRS, BlockRegistry.BETWEENSTONE);
@@ -551,6 +566,11 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.doorBlockWithItem(BlockRegistry.TREATED_HEARTHGROVE_DOOR);
 		this.doorBlockWithItem(BlockRegistry.TREATED_NIBBLETWIG_DOOR);
 		this.doorBlockWithItem(BlockRegistry.TREATED_ROTTEN_DOOR);
+		this.builtinEntity(BlockRegistry.WEEDWOOD_SIGN, this.modLoc("block/weedwood_planks"));
+		this.builtinEntity(BlockRegistry.WEEDWOOD_WALL_SIGN, this.modLoc("block/weedwood_planks"));
+		this.basicItemTex(BlockRegistry.WEEDWOOD_SIGN, false);
+		this.builtinEntity(BlockRegistry.MOSS_BED, this.modLoc("block/moss"));
+		this.basicItemTex(BlockRegistry.MOSS_BED, false);
 	}
 
 	private void druidStone(DeferredBlock<Block> stone) {
@@ -653,6 +673,13 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockItem(block);
 	}
 
+	public void pillarWithItem(DeferredBlock<Block> block) {
+		this.axisBlock((RotatedPillarBlock) block.get(),
+			this.models().withExistingParent(block.getId().getPath(), this.modLoc("block/template_pillar")).texture("side", this.modLoc("block/" + block.getId().getPath())).texture("end", this.modLoc("block/" + block.getId().getPath() + "_top")),
+			this.models().withExistingParent(block.getId().getPath() + "_side", this.modLoc("block/template_pillar_side")).texture("side", this.modLoc("block/" + block.getId().getPath())).texture("end", this.modLoc("block/" + block.getId().getPath() + "_top")));
+		this.simpleBlockItem(block);
+	}
+
 	public void simpleBlockWithItem(DeferredBlock<Block> block) {
 		this.simpleBlock(block.get());
 		this.simpleBlockItem(block);
@@ -670,5 +697,11 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 
 	public void simpleBlockItem(DeferredBlock<Block> block) {
 		this.itemModels().withExistingParent(block.getId().toString(), this.modLoc("block/" + block.getId().getPath()));
+	}
+
+	public void builtinEntity(DeferredBlock<Block> block, ResourceLocation particle) {
+		this.simpleBlock(block.get(), models().getBuilder(block.getId().getPath())
+			.parent(new ModelFile.UncheckedModelFile("builtin/entity"))
+			.texture("particle", particle));
 	}
 }

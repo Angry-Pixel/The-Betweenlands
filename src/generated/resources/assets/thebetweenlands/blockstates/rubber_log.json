@@ -1,0 +1,83 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "thebetweenlands:block/rubber_log"
+      },
+      "when": {
+        "axis": "y"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/rubber_log",
+        "x": 90
+      },
+      "when": {
+        "axis": "z"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/rubber_log",
+        "x": 90,
+        "y": 90
+      },
+      "when": {
+        "axis": "x"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/rubber_log_top",
+        "x": 90
+      },
+      "when": {
+        "up": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/rubber_log_bottom",
+        "x": 90
+      },
+      "when": {
+        "down": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/rubber_log_top",
+        "y": 270
+      },
+      "when": {
+        "east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/rubber_log_bottom",
+        "y": 270
+      },
+      "when": {
+        "west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/rubber_log_top"
+      },
+      "when": {
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "thebetweenlands:block/rubber_log_bottom"
+      },
+      "when": {
+        "north": "true"
+      }
+    }
+  ]
+}

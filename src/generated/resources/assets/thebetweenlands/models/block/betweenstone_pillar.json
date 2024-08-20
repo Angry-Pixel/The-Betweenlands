@@ -1,0 +1,7 @@
+{
+  "parent": "thebetweenlands:block/template_pillar",
+  "textures": {
+    "end": "thebetweenlands:block/betweenstone_pillar_top",
+    "side": "thebetweenlands:block/betweenstone_pillar"
+  }
+}

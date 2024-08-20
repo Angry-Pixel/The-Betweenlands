@@ -111,6 +111,7 @@ public class TheBetweenlands {
 
 	public void registerBlockEntityValidBlocks(BlockEntityTypeAddBlocksEvent event) {
 		event.modify(BlockEntityType.JUKEBOX, BlockRegistry.WEEDWOOD_JUKEBOX.get());
+		event.modify(BlockEntityType.SIGN, BlockRegistry.WEEDWOOD_SIGN.get(), BlockRegistry.WEEDWOOD_WALL_SIGN.get());
 	}
 
 	public void makeDatapackRegistries(DataPackRegistryEvent.NewRegistry event) {

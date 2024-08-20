@@ -5,23 +5,27 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class RubberLogBlock extends PipeBlock {
 
 	public static final MapCodec<RubberLogBlock> CODEC = simpleCodec(RubberLogBlock::new);
+	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
 	public static final BooleanProperty NATURAL = BooleanProperty.create("natural");
 
 	public RubberLogBlock(Properties properties) {
 		super(0.25F, properties);
 		this.registerDefaultState(
-			this.getStateDefinition().any().setValue(NATURAL, false)
+			this.getStateDefinition().any().setValue(AXIS, Direction.Axis.Y).setValue(NATURAL, false)
 				.setValue(NORTH, false).setValue(EAST, false)
 				.setValue(SOUTH, false).setValue(WEST, false)
 				.setValue(UP, false).setValue(DOWN, false));
@@ -34,7 +38,7 @@ public class RubberLogBlock extends PipeBlock {
 
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		return this.getStateWithConnections(context.getLevel(), context.getClickedPos(), this.defaultBlockState());
+		return this.getStateWithConnections(context.getLevel(), context.getClickedPos(), this.defaultBlockState()).setValue(AXIS, context.getClickedFace().getAxis());
 	}
 
 	public BlockState getStateWithConnections(BlockGetter level, BlockPos pos, BlockState state) {
@@ -52,8 +56,13 @@ public class RubberLogBlock extends PipeBlock {
 	}
 
 	@Override
+	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor accessor, BlockPos pos, BlockPos neighborPos) {
+		return state.setValue(PROPERTY_BY_DIRECTION.get(direction), this.canConnectTo(accessor, neighborPos));
+	}
+
+	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(NORTH, EAST, SOUTH, WEST, UP, DOWN, NATURAL);
+		builder.add(AXIS, NORTH, EAST, SOUTH, WEST, UP, DOWN, NATURAL);
 	}
 
 	@Override
