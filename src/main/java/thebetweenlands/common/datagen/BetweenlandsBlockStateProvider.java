@@ -157,8 +157,8 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.WEAK_POLISHED_LIMESTONE);
 		this.simpleBlockWithItem(BlockRegistry.WEAK_MOSSY_BETWEENSTONE_TILES);
 		this.simpleBlockWithItem(BlockRegistry.WEAK_SMOOTH_CRAGROCK);
-		this.simpleBlockWithItem(BlockRegistry.GREEN_DENTROTHYST);
-		this.simpleBlockWithItem(BlockRegistry.ORANGE_DENTROTHYST);
+		this.simpleBlockRenderTypeAndItem(BlockRegistry.GREEN_DENTROTHYST, "translucent");
+		this.simpleBlockRenderTypeAndItem(BlockRegistry.ORANGE_DENTROTHYST, "translucent");
 		//pots of chance
 		//monster spawner
 		//pillars (need custom model. 16 pixels tall, only 14 wide)
@@ -188,9 +188,9 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.CRIMSON_MIDDLE_GEM_BLOCK);
 		this.simpleBlockWithItem(BlockRegistry.GREEN_MIDDLE_GEM_BLOCK);
 		this.simpleBlockWithItem(BlockRegistry.COMPOST_BLOCK);
-		this.simpleBlockWithItem(BlockRegistry.POLISHED_GREEN_DENTROTHYST);
-		this.simpleBlockWithItem(BlockRegistry.POLISHED_ORANGE_DENTROTHYST);
-		this.simpleBlockWithItem(BlockRegistry.SILT_GLASS);
+		this.simpleBlockRenderTypeAndItem(BlockRegistry.POLISHED_GREEN_DENTROTHYST, "translucent");
+		this.simpleBlockRenderTypeAndItem(BlockRegistry.POLISHED_ORANGE_DENTROTHYST, "translucent");
+		this.simpleBlockRenderTypeAndItem(BlockRegistry.SILT_GLASS, "translucent");
 		//all panes
 		this.stairBlockWithItem(BlockRegistry.SMOOTH_PITSTONE_STAIRS, BlockRegistry.SMOOTH_PITSTONE);
 		this.stairBlockWithItem(BlockRegistry.SOLID_TAR_STAIRS, BlockRegistry.SOLID_TAR);
@@ -475,7 +475,22 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.BROWN_RUST_SAMITE);
 		this.simpleBlockWithItem(BlockRegistry.MIDNIGHT_PURPLE_SAMITE);
 		this.simpleBlockWithItem(BlockRegistry.PEWTER_GREY_SAMITE);
-		//panels
+		this.samitePanel(BlockRegistry.DULL_LAVENDER_SAMITE_CANVAS_PANEL, BlockRegistry.DULL_LAVENDER_SAMITE);
+		this.samitePanel(BlockRegistry.MAROON_SAMITE_CANVAS_PANEL, BlockRegistry.MAROON_SAMITE);
+		this.samitePanel(BlockRegistry.SHADOW_GREEN_SAMITE_CANVAS_PANEL, BlockRegistry.SHADOW_GREEN_SAMITE);
+		this.samitePanel(BlockRegistry.CAMELOT_MAGENTA_SAMITE_CANVAS_PANEL, BlockRegistry.CAMELOT_MAGENTA_SAMITE);
+		this.samitePanel(BlockRegistry.SAFFRON_SAMITE_CANVAS_PANEL, BlockRegistry.SAFFRON_SAMITE);
+		this.samitePanel(BlockRegistry.CARIBBEAN_GREEN_SAMITE_CANVAS_PANEL, BlockRegistry.CARIBBEAN_GREEN_SAMITE);
+		this.samitePanel(BlockRegistry.VIVID_TANGERINE_SAMITE_CANVAS_PANEL, BlockRegistry.VIVID_TANGERINE_SAMITE);
+		this.samitePanel(BlockRegistry.CHAMPAGNE_SAMITE_CANVAS_PANEL, BlockRegistry.CHAMPAGNE_SAMITE);
+		this.samitePanel(BlockRegistry.RAISIN_BLACK_SAMITE_CANVAS_PANEL, BlockRegistry.RAISIN_BLACK_SAMITE);
+		this.samitePanel(BlockRegistry.SUSHI_GREEN_SAMITE_CANVAS_PANEL, BlockRegistry.SUSHI_GREEN_SAMITE);
+		this.samitePanel(BlockRegistry.ELM_CYAN_SAMITE_CANVAS_PANEL, BlockRegistry.ELM_CYAN_SAMITE);
+		this.samitePanel(BlockRegistry.CADMIUM_GREEN_SAMITE_CANVAS_PANEL, BlockRegistry.CADMIUM_GREEN_SAMITE);
+		this.samitePanel(BlockRegistry.LAVENDER_BLUE_SAMITE_CANVAS_PANEL, BlockRegistry.LAVENDER_BLUE_SAMITE);
+		this.samitePanel(BlockRegistry.BROWN_RUST_SAMITE_CANVAS_PANEL, BlockRegistry.BROWN_RUST_SAMITE);
+		this.samitePanel(BlockRegistry.MIDNIGHT_PURPLE_SAMITE_CANVAS_PANEL, BlockRegistry.MIDNIGHT_PURPLE_SAMITE);
+		this.samitePanel(BlockRegistry.PEWTER_GREY_SAMITE_CANVAS_PANEL, BlockRegistry.PEWTER_GREY_SAMITE);
 		this.carpetBlockWithItem(BlockRegistry.DULL_LAVENDER_REED_MAT);
 		this.carpetBlockWithItem(BlockRegistry.MAROON_REED_MAT);
 		this.carpetBlockWithItem(BlockRegistry.SHADOW_GREEN_REED_MAT);
@@ -631,6 +646,11 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 	public void carpetBlockWithItem(DeferredBlock<Block> trapdoor) {
 		this.simpleBlock(trapdoor.get(), this.models().carpet(trapdoor.getId().getPath(), this.blockTexture(trapdoor.get())));
 		this.simpleBlockItem(trapdoor);
+	}
+
+	public void samitePanel(DeferredBlock<Block> block, DeferredBlock<Block> samite) {
+		this.getVariantBuilder(block.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(this.models().withExistingParent(block.getId().getPath(), this.modLoc("block/samite_canvas_panel")).texture("samite", this.blockTexture(samite.get()))).rotationY(state.getValue(SamiteCanvasPanelBlock.AXIS) == Direction.Axis.Z ? 90 : 0).build());
+		this.simpleBlockItem(block);
 	}
 
 	public void simpleBlockWithItem(DeferredBlock<Block> block) {

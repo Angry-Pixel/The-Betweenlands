@@ -1,0 +1,6 @@
+{
+  "parent": "thebetweenlands:block/samite_canvas_panel",
+  "textures": {
+    "samite": "thebetweenlands:block/vivid_tangerine_samite"
+  }
+}

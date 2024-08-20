@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "thebetweenlands:block/dull_lavender_samite_canvas_panel"
+    },
+    "axis=z": {
+      "model": "thebetweenlands:block/dull_lavender_samite_canvas_panel",
+      "y": 90
+    }
+  }
+}

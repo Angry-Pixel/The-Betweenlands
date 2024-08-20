@@ -1,0 +1,74 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "beam": "thebetweenlands:block/weedwood",
+    "particle": "#samite"
+  },
+  "elements": [
+    {
+      "name": "samite_pane",
+      "from": [7, 0, 0],
+      "to": [9, 16, 16],
+      "faces": {
+        "north": {"uv": [7, 0, 9, 16], "texture": "#samite"},
+        "east": {"uv": [0, 0, 16, 16], "texture": "#samite"},
+        "south": {"uv": [7, 0, 9, 16], "texture": "#samite"},
+        "west": {"uv": [0, 0, 16, 16], "texture": "#samite"},
+        "up": {"uv": [7, 0, 9, 16], "texture": "#samite"},
+        "down": {"uv": [7, 0, 9, 16], "texture": "#samite"}
+      }
+    },
+    {
+      "name": "n_vertical",
+      "from": [6, 0.01, 1],
+      "to": [10, 15.99, 2],
+      "faces": {
+        "north": {"uv": [6, 0, 10, 15.98], "texture": "#beam"},
+        "east": {"uv": [14, 0, 15, 15.98], "texture": "#beam"},
+        "south": {"uv": [6, 0, 10, 15.98], "texture": "#beam"},
+        "west": {"uv": [1, 0, 2, 15.98], "texture": "#beam"},
+        "up": {"uv": [6, 14, 10, 15], "texture": "#beam"},
+        "down": {"uv": [6, 1, 10, 2], "texture": "#beam"}
+      }
+    },
+    {
+      "name": "s_vertical",
+      "from": [6, 0.01, 14],
+      "to": [10, 15.99, 15],
+      "faces": {
+        "north": {"uv": [6, 0, 10, 15.98], "texture": "#beam"},
+        "east": {"uv": [1, 0, 2, 15.98], "texture": "#beam"},
+        "south": {"uv": [6, 0.02, 10, 16], "texture": "#beam"},
+        "west": {"uv": [14, 0, 15, 15.98], "texture": "#beam"},
+        "up": {"uv": [6, 1, 10, 2], "texture": "#beam"},
+        "down": {"uv": [6, 14, 10, 15], "texture": "#beam"}
+      }
+    },
+    {
+      "name": "b_cross",
+      "from": [6.01, 0.98, 0.01],
+      "to": [9.99, 1.98, 15.99],
+      "faces": {
+        "north": {"uv": [6, 14, 9.98, 15], "texture": "#beam"},
+        "east": {"uv": [0, 0, 15.98, 1], "texture": "#beam"},
+        "south": {"uv": [6, 14, 9.98, 15], "texture": "#beam"},
+        "west": {"uv": [0.02, 14, 16, 15], "texture": "#beam"},
+        "up": {"uv": [6, 0, 9.98, 15.98], "texture": "#beam"},
+        "down": {"uv": [6, 0, 9.98, 15.98], "texture": "#beam"}
+      }
+    },
+    {
+      "name": "t_cross",
+      "from": [5.99, 14, 0.01],
+      "to": [9.97, 15, 15.99],
+      "faces": {
+        "north": {"uv": [6, 2, 9.98, 3], "texture": "#beam"},
+        "east": {"uv": [0, 1, 15.98, 2], "texture": "#beam"},
+        "south": {"uv": [6, 1, 9.98, 2], "texture": "#beam"},
+        "west": {"uv": [0, 1, 15.98, 2], "texture": "#beam"},
+        "up": {"uv": [6, 0.02, 9.98, 16], "texture": "#beam"},
+        "down": {"uv": [6, 0, 9.98, 15.98], "texture": "#beam"}
+      }
+    }
+  ]
+}
