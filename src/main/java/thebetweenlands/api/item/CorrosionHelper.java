@@ -2,6 +2,8 @@ package thebetweenlands.api.item;
 
 import java.util.List;
 
+import net.minecraft.core.Holder;
+import net.minecraft.data.tags.BiomeTagsProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.Entity;
@@ -11,10 +13,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.item.CorrosionData;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.datagen.BetweenlandsBiomeTagProvider;
+import thebetweenlands.common.datagen.BetweenlandsDimensionTypeTagProvider;
 import thebetweenlands.common.datagen.BetweenlandsItemTagProvider;
 import thebetweenlands.common.registries.DataComponentRegistry;
 
@@ -194,14 +199,34 @@ public class CorrosionHelper {
 
 	
 	/**
-	 * Returns whether corrosion is enabled in the specified level
+	 * Returns whether an entity should have items in its inventory corroded
 	 * @return
 	 */
-	public static boolean canLevelCorrode(Level level) {
-		// TODO look into dimension tags
-//		level.dimension().is(BetweenlandsDimensionTagProvider.CORRODING_AURA)
-//		BetweenlandsDimensionTagProvider.CORRODING_AURA.
-		return BetweenlandsConfig.useCorrosion && level.getGameRules().getBoolean(TheBetweenlands.CORROSION_GAMERULE);
+	public static boolean shouldEntityCorrode(Entity entity) {
+		if(entity == null) return isCorrosionEnabled();
+		
+		// If corrosion is disabled: false
+		Level level = entity.level();
+		if(!(BetweenlandsConfig.useCorrosion && level.getGameRules().getBoolean(TheBetweenlands.CORROSION_GAMERULE)))
+			return false;
+
+		// If player is in creative: false
+		if(entity instanceof Player && ((Player)entity).isCreative())
+			return false;
+		
+		Holder<Biome> biome = level.getBiome(entity.blockPosition());
+		if(biome != null) {
+			// If the biome disables corrosion: false
+			if(biome.is(BetweenlandsBiomeTagProvider.DISABLE_CORROSION))
+				return false;
+			
+			// If the biome enables corrosion (outside of the Betweenlands): true
+			if(biome.is(BetweenlandsBiomeTagProvider.CORRODING_AURA))
+				return true;
+		}
+		
+		// If the dimension enables corrosion: true
+		return level.dimensionTypeRegistration().is(BetweenlandsDimensionTypeTagProvider.CORRODING_AURA);
 	}
 	
 
@@ -217,7 +242,7 @@ public class CorrosionHelper {
 		if (world.isClientSide()) {
 			return;
 		}
-		if(!world.isClientSide() && canLevelCorrode(holder.level()) && !(holder instanceof Player && ((Player)holder).isCreative())) {
+		if(!world.isClientSide() && shouldEntityCorrode(holder)) {
 			if(!isCorrodible(stack)) {
 				return;
 			}
