@@ -21,16 +21,18 @@ import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtension
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import thebetweenlands.client.AspectIconTextureManager;
-import thebetweenlands.client.BetweenlandsSpecialEffects;
-import thebetweenlands.client.CircleGemTextureManager;
-import thebetweenlands.client.RiftVariantReloadListener;
+import thebetweenlands.client.*;
 import thebetweenlands.client.model.baked.RootGeometry;
+import thebetweenlands.client.model.block.DeepmanSimulacrumModel1;
+import thebetweenlands.client.model.block.DeepmanSimulacrumModel2;
+import thebetweenlands.client.model.block.DeepmanSimulacrumModel3;
 import thebetweenlands.client.model.entity.GeckoModel;
 import thebetweenlands.client.model.entity.ModelWight;
 import thebetweenlands.client.model.entity.SwampHagModel;
 import thebetweenlands.client.particle.BetweenlandsParticle;
 import thebetweenlands.client.particle.BetweenlandsPortalParticle;
+import thebetweenlands.client.renderer.block.BLItemRenderer;
+import thebetweenlands.client.renderer.block.SimulacrumRenderer;
 import thebetweenlands.client.renderer.entity.GeckoRenderer;
 import thebetweenlands.client.renderer.entity.RenderWight;
 import thebetweenlands.client.renderer.entity.SwampHagRenderer;
@@ -65,6 +67,8 @@ public class ClientEvents {
 		event.registerEntityRenderer(EntityRegistry.SWAMP_HAG.get(), SwampHagRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.GECKO.get(), GeckoRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.WIGHT.get(), RenderWight::new);
+
+		event.registerBlockEntityRenderer(BlockEntityRegistry.SIMULACRUM.get(), SimulacrumRenderer::new);
 	}
 
 	private static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
@@ -82,6 +86,9 @@ public class ClientEvents {
 	}
 
 	public static void registerExtensions(RegisterClientExtensionsEvent event) {
+		event.registerItem(BLItemRenderer.CLIENT_ITEM_EXTENSION,
+			BlockRegistry.DEEPMAN_SIMULACRUM_1.asItem(), BlockRegistry.DEEPMAN_SIMULACRUM_2.asItem(), BlockRegistry.DEEPMAN_SIMULACRUM_3.asItem());
+
 		event.registerMobEffect(new IClientMobEffectExtensions() {
 			@Override
 			public boolean isVisibleInInventory(MobEffectInstance instance) {
@@ -197,6 +204,9 @@ public class ClientEvents {
 		event.registerLayerDefinition(SwampHagRenderer.SWAMP_HAG_MODEL_LAYER, SwampHagModel::createModelLayer);
 		event.registerLayerDefinition(GeckoRenderer.GECKO_MODEL_LAYER, GeckoModel::createModelLayer);
 		event.registerLayerDefinition(RenderWight.WIGHT_MODEL_LAYER, ModelWight::createModelLayer);
+		event.registerLayerDefinition(BLModelLayers.DEEPMAN_SIMULACRUM_1, DeepmanSimulacrumModel1::makeModel);
+		event.registerLayerDefinition(BLModelLayers.DEEPMAN_SIMULACRUM_2, DeepmanSimulacrumModel2::makeModel);
+		event.registerLayerDefinition(BLModelLayers.DEEPMAN_SIMULACRUM_3, DeepmanSimulacrumModel3::makeModel);
 	}
 
 	private static void particleStuff(final RegisterParticleProvidersEvent event) {

@@ -1,0 +1,6 @@
+{
+  "parent": "thebetweenlands:item/base_builtin_entity",
+  "textures": {
+    "particle": "thebetweenlands:block/pitstone"
+  }
+}

@@ -382,8 +382,6 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 				.build();
 		});
 		this.basicItemTex(BlockRegistry.WEEDWOOD_LEVER, true);
-		this.basicItemTex(BlockRegistry.MUD_FLOWER_POT, false);
-		this.basicItemTex(BlockRegistry.MUD_FLOWER_POT_CANDLE, false);
 		this.simpleBlockWithItem(BlockRegistry.WORM_PILLAR);
 		this.simpleBlockWithItem(BlockRegistry.SLUDGY_WORM_PILLAR_1);
 		this.simpleBlockWithItem(BlockRegistry.SLUDGY_WORM_PILLAR_2);
@@ -499,7 +497,18 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.trapdoorBlockWithItem(BlockRegistry.TREATED_NIBBLETWIG_TRAPDOOR);
 		this.trapdoorBlockWithItem(BlockRegistry.TREATED_ROTTEN_TRAPDOOR);
 		this.trapdoorBlockWithItem(BlockRegistry.SCABYST_TRAPDOOR);
+		this.basicItemTex(BlockRegistry.MUD_FLOWER_POT, false);
+		this.basicItemTex(BlockRegistry.MUD_FLOWER_POT_CANDLE, false);
 		this.torchBlockWithItem(BlockRegistry.DAMP_TORCH, BlockRegistry.DAMP_WALL_TORCH);
+		this.builtinEntityAndItem(BlockRegistry.DEEPMAN_SIMULACRUM_1, this.modLoc("block/smooth_betweenstone"));
+		this.builtinEntityAndItem(BlockRegistry.DEEPMAN_SIMULACRUM_2, this.modLoc("block/smooth_betweenstone"));
+		this.builtinEntityAndItem(BlockRegistry.DEEPMAN_SIMULACRUM_3, this.modLoc("block/smooth_betweenstone"));
+		this.builtinEntityAndItem(BlockRegistry.LAKE_CAVERN_SIMULACRUM_1, this.modLoc("block/pitstone"));
+		this.builtinEntityAndItem(BlockRegistry.LAKE_CAVERN_SIMULACRUM_2, this.modLoc("block/pitstone"));
+		this.builtinEntityAndItem(BlockRegistry.LAKE_CAVERN_SIMULACRUM_3, this.modLoc("block/pitstone"));
+		this.builtinEntityAndItem(BlockRegistry.ROOTMAN_SIMULACRUM_1, this.modLoc("block/root_bottom"));
+		this.builtinEntityAndItem(BlockRegistry.ROOTMAN_SIMULACRUM_2, this.modLoc("block/root_bottom"));
+		this.builtinEntityAndItem(BlockRegistry.ROOTMAN_SIMULACRUM_3, this.modLoc("block/root_bottom"));
 		this.carpetBlockWithItem(BlockRegistry.REED_MAT);
 		this.simpleBlockWithItem(BlockRegistry.LYESTONE.get(), this.models().getExistingFile(this.blockTexture(BlockRegistry.LIMESTONE.get())));
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.MIST_BRIDGE, "translucent");
@@ -759,9 +768,16 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 	}
 
 	public void builtinEntity(DeferredBlock<Block> block, ResourceLocation particle) {
-		this.simpleBlock(block.get(), models().getBuilder(block.getId().getPath())
+		this.simpleBlock(block.get(), this.models().getBuilder(block.getId().getPath())
 			.parent(new ModelFile.UncheckedModelFile("builtin/entity"))
 			.texture("particle", particle));
+	}
+
+	public void builtinEntityAndItem(DeferredBlock<Block> block, ResourceLocation particle) {
+		this.simpleBlock(block.get(), this.models().getBuilder(block.getId().getPath())
+			.parent(new ModelFile.UncheckedModelFile("builtin/entity"))
+			.texture("particle", particle));
+		this.itemModels().withExistingParent(block.getId().getPath(), this.modLoc("item/base_builtin_entity")).texture("particle", particle);
 	}
 
 	public void nibbletwigLogs() {
