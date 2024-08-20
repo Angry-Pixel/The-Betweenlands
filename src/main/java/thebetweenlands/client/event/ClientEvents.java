@@ -23,9 +23,7 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import thebetweenlands.client.*;
 import thebetweenlands.client.model.baked.RootGeometry;
-import thebetweenlands.client.model.block.DeepmanSimulacrumModel1;
-import thebetweenlands.client.model.block.DeepmanSimulacrumModel2;
-import thebetweenlands.client.model.block.DeepmanSimulacrumModel3;
+import thebetweenlands.client.model.block.*;
 import thebetweenlands.client.model.entity.GeckoModel;
 import thebetweenlands.client.model.entity.ModelWight;
 import thebetweenlands.client.model.entity.SwampHagModel;
@@ -87,7 +85,8 @@ public class ClientEvents {
 
 	public static void registerExtensions(RegisterClientExtensionsEvent event) {
 		event.registerItem(BLItemRenderer.CLIENT_ITEM_EXTENSION,
-			BlockRegistry.DEEPMAN_SIMULACRUM_1.asItem(), BlockRegistry.DEEPMAN_SIMULACRUM_2.asItem(), BlockRegistry.DEEPMAN_SIMULACRUM_3.asItem());
+			BlockRegistry.DEEPMAN_SIMULACRUM_1.asItem(), BlockRegistry.DEEPMAN_SIMULACRUM_2.asItem(), BlockRegistry.DEEPMAN_SIMULACRUM_3.asItem(),
+			BlockRegistry.LAKE_CAVERN_SIMULACRUM_1.asItem(), BlockRegistry.LAKE_CAVERN_SIMULACRUM_2.asItem(), BlockRegistry.LAKE_CAVERN_SIMULACRUM_3.asItem());
 
 		event.registerMobEffect(new IClientMobEffectExtensions() {
 			@Override
@@ -207,6 +206,9 @@ public class ClientEvents {
 		event.registerLayerDefinition(BLModelLayers.DEEPMAN_SIMULACRUM_1, DeepmanSimulacrumModel1::makeModel);
 		event.registerLayerDefinition(BLModelLayers.DEEPMAN_SIMULACRUM_2, DeepmanSimulacrumModel2::makeModel);
 		event.registerLayerDefinition(BLModelLayers.DEEPMAN_SIMULACRUM_3, DeepmanSimulacrumModel3::makeModel);
+		event.registerLayerDefinition(BLModelLayers.LAKE_CAVERN_SIMULACRUM_1, LakeCavernSimulacrumModel1::makeModel);
+		event.registerLayerDefinition(BLModelLayers.LAKE_CAVERN_SIMULACRUM_2, LakeCavernSimulacrumModel2::makeModel);
+		event.registerLayerDefinition(BLModelLayers.LAKE_CAVERN_SIMULACRUM_3, LakeCavernSimulacrumModel3::makeModel);
 	}
 
 	private static void particleStuff(final RegisterParticleProvidersEvent event) {
