@@ -17,5 +17,4 @@ public class ParticleRegistry {
 
 	// Custom particles
 	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> PORTAL_EFFECT = PARTICLES.register("portal_effect", () -> new SimpleParticleType(true));
-	public static final DeferredHolder<ParticleType<?>, SimpleParticleType> CAVE_WATER_DRIP = PARTICLES.register("cave_water_drip", () -> new SimpleParticleType(false));
 }

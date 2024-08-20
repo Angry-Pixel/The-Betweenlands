@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/lever_on",
+  "ambientocclusion": false,
+  "textures": {
+    "base": "thebetweenlands:block/weedwood_log_side",
+    "lever": "thebetweenlands:block/weedwood_lever",
+    "particle": "thebetweenlands:block/weedwood_log_side"
+  }
+}

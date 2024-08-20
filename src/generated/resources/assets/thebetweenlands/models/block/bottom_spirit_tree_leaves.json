@@ -1,0 +1,7 @@
+{
+  "parent": "thebetweenlands:block/spirit_tree_leaves",
+  "textures": {
+    "side": "thebetweenlands:block/bottom_spirit_tree_leaves",
+    "top": "thebetweenlands:block/blank"
+  }
+}

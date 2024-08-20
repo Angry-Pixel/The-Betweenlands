@@ -1,0 +1,6 @@
+{
+  "parent": "thebetweenlands:block/thick_pane_side_alt",
+  "textures": {
+    "pane": "thebetweenlands:block/squared_amate_paper_pane"
+  }
+}

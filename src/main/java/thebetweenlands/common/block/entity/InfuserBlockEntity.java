@@ -7,6 +7,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -33,7 +34,7 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 
 	public static final int MAX_INGREDIENTS = 6;
 
-	private NonNullList<ItemStack> items = NonNullList.withSize(MAX_INGREDIENTS, ItemStack.EMPTY);
+	private NonNullList<ItemStack> items = NonNullList.withSize(MAX_INGREDIENTS + 2, ItemStack.EMPTY);
 	public final FluidTank waterTank = new FluidTank(FluidType.BUCKET_VOLUME * 3, stack -> stack.is(FluidRegistry.SWAMP_WATER_STILL.get()));
 
 	private int infusionTime = 0;
@@ -377,7 +378,7 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 
 	@Override
 	public int getContainerSize() {
-		return MAX_INGREDIENTS;
+		return MAX_INGREDIENTS + 2;
 	}
 
 	public boolean hasIngredients() {
@@ -453,6 +454,7 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 	@Override
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
+		ContainerHelper.saveAllItems(tag, this.items, registries);
 		tag.put("water_tank", this.waterTank.writeToNBT(registries, new CompoundTag()));
 		tag.putInt("stir_progress", this.stirProgress);
 		tag.putInt("evaporation", this.evaporation);
@@ -467,6 +469,8 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 	@Override
 	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
+		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+		ContainerHelper.loadAllItems(tag, this.items, registries);
 		this.waterTank.readFromNBT(registries, tag.getCompound("water_tank"));
 		this.stirProgress = tag.getInt("stir_progress");
 		this.evaporation = tag.getInt("evaporation");

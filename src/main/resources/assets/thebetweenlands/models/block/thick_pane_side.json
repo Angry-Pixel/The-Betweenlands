@@ -1,0 +1,16 @@
+{
+    "ambientocclusion": false,
+    "textures": {
+        "particle": "#pane"
+    },
+    "elements": [
+        {   "from": [ 6, 0, 0 ],
+            "to": [ 10, 16, 6 ],
+            "faces": {
+                "north": { "uv": [  6, 0,  10, 16 ], "texture": "#pane", "cullface": "north" },
+                "west":  { "uv": [ 16, 0,  10, 16 ], "texture": "#pane" },
+                "east":  { "uv": [  10, 0, 16, 16 ], "texture": "#pane" }
+            }
+        }
+    ]
+}

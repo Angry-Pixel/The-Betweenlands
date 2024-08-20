@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_glass_pane_post",
+  "textures": {
+    "edge": "thebetweenlands:block/fine_lattice",
+    "pane": "thebetweenlands:block/fine_lattice"
+  }
+}

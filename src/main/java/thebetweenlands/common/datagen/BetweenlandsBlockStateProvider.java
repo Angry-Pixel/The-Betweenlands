@@ -4,10 +4,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.client.model.generators.MultiPartBlockStateBuilder;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import thebetweenlands.common.TheBetweenlands;
@@ -111,7 +113,12 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.RUBBER_TREE_LEAVES);
 		this.simpleBlockWithItem(BlockRegistry.HEARTHGROVE_LEAVES);
 		this.simpleBlockWithItem(BlockRegistry.NIBBLETWIG_LEAVES);
-		//spirit tree leaves
+		this.simpleBlock(BlockRegistry.TOP_SPIRIT_TREE_LEAVES.get(), this.models().withExistingParent(BlockRegistry.TOP_SPIRIT_TREE_LEAVES.getId().getPath(), this.modLoc("block/spirit_tree_leaves")).texture("side", this.blockTexture(BlockRegistry.TOP_SPIRIT_TREE_LEAVES.get())).texture("top", this.modLoc("block/top_spirit_tree_leaves_top")));
+		this.basicItemTex(BlockRegistry.TOP_SPIRIT_TREE_LEAVES, true);
+		this.simpleBlock(BlockRegistry.MIDDLE_SPIRIT_TREE_LEAVES.get(), this.models().withExistingParent(BlockRegistry.MIDDLE_SPIRIT_TREE_LEAVES.getId().getPath(), this.modLoc("block/spirit_tree_leaves")).texture("side", this.blockTexture(BlockRegistry.MIDDLE_SPIRIT_TREE_LEAVES.get())).texture("top", this.modLoc("block/blank")));
+		this.basicItemTex(BlockRegistry.MIDDLE_SPIRIT_TREE_LEAVES, true);
+		this.simpleBlock(BlockRegistry.BOTTOM_SPIRIT_TREE_LEAVES.get(), this.models().withExistingParent(BlockRegistry.BOTTOM_SPIRIT_TREE_LEAVES.getId().getPath(), this.modLoc("block/spirit_tree_leaves")).texture("side", this.blockTexture(BlockRegistry.BOTTOM_SPIRIT_TREE_LEAVES.get())).texture("top", this.modLoc("block/blank")));
+		this.basicItemTex(BlockRegistry.BOTTOM_SPIRIT_TREE_LEAVES, true);
 		this.simpleBlockWithItem(BlockRegistry.WEEDWOOD_PLANKS);
 		this.simpleBlockWithItem(BlockRegistry.RUBBER_TREE_PLANKS);
 		this.simpleBlockWithItem(BlockRegistry.GIANT_ROOT_PLANKS);
@@ -205,7 +212,15 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.POLISHED_GREEN_DENTROTHYST, "translucent");
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.POLISHED_ORANGE_DENTROTHYST, "translucent");
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.SILT_GLASS, "translucent");
-		//all panes
+		this.paneBlockWithItem(BlockRegistry.SILT_GLASS_PANE, true, "translucent");
+		this.paneBlockWithItem(BlockRegistry.LATTICE, false);
+		this.paneBlockWithItem(BlockRegistry.FINE_LATTICE, false);
+		//filtered glass and pane
+		this.paneBlockWithItem(BlockRegistry.POLISHED_ORANGE_DENTROTHYST_PANE, true, "translucent");
+		this.paneBlockWithItem(BlockRegistry.POLISHED_GREEN_DENTROTHYST_PANE, true, "translucent");
+		//connect amate pane
+		this.thickPaneBlockWithItem(BlockRegistry.ROUNDED_AMATE_PAPER_PANE);
+		this.thickPaneBlockWithItem(BlockRegistry.SQUARED_AMATE_PAPER_PANE);
 		this.stairBlockWithItem(BlockRegistry.SMOOTH_PITSTONE_STAIRS, BlockRegistry.SMOOTH_PITSTONE);
 		this.stairBlockWithItem(BlockRegistry.SOLID_TAR_STAIRS, BlockRegistry.SOLID_TAR);
 		this.stairBlockWithItem(BlockRegistry.TEMPLE_BRICK_STAIRS, BlockRegistry.TEMPLE_BRICKS);
@@ -351,9 +366,24 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.plateBlockWithItem(BlockRegistry.SYRMORITE_PRESSURE_PLATE, BlockRegistry.SYRMORITE_BLOCK);
 		this.buttonBlockWithItem(BlockRegistry.WEEDWOOD_BUTTON, BlockRegistry.WEEDWOOD_PLANKS);
 		this.buttonBlockWithItem(BlockRegistry.BETWEENSTONE_BUTTON, BlockRegistry.BETWEENSTONE);
-		//ladder
-		//lever
-		//pots
+		this.horizontalBlock(BlockRegistry.WEEDWOOD_LADDER.get(), this.models().withExistingParent("weedwood_ladder", this.mcLoc("block/ladder")).texture("texture", this.modLoc("block/weedwood_ladder")).renderType("cutout"));
+		this.basicItemTex(BlockRegistry.WEEDWOOD_LADDER, true);
+		this.getVariantBuilder(BlockRegistry.WEEDWOOD_LEVER.get()).forAllStates(state -> {
+			ModelFile lever = this.models().withExistingParent("weedwood_lever", this.mcLoc("block/lever_on")).ao(false).texture("lever", this.modLoc("block/weedwood_lever")).texture("base", "block/weedwood_log_side").texture("particle", "block/weedwood_log_side");
+			ModelFile lever_on = this.models().withExistingParent("weedwood_lever_powered", this.mcLoc("block/lever")).ao(false).texture("lever", this.modLoc("block/weedwood_lever")).texture("base", "block/weedwood_log_side").texture("particle", "block/weedwood_log_side");
+			Direction facing = state.getValue(LeverBlock.FACING);
+			AttachFace face = state.getValue(LeverBlock.FACE);
+			boolean powered = state.getValue(LeverBlock.POWERED);
+
+			return ConfiguredModel.builder()
+				.modelFile(powered ? lever_on : lever)
+				.rotationX(face == AttachFace.FLOOR ? 0 : (face == AttachFace.WALL ? 90 : 180))
+				.rotationY((int) (face == AttachFace.CEILING ? facing : facing.getOpposite()).toYRot())
+				.build();
+		});
+		this.basicItemTex(BlockRegistry.WEEDWOOD_LEVER, true);
+		this.basicItemTex(BlockRegistry.MUD_FLOWER_POT, false);
+		this.basicItemTex(BlockRegistry.MUD_FLOWER_POT_CANDLE, false);
 		this.simpleBlockWithItem(BlockRegistry.WORM_PILLAR);
 		this.simpleBlockWithItem(BlockRegistry.SLUDGY_WORM_PILLAR_1);
 		this.simpleBlockWithItem(BlockRegistry.SLUDGY_WORM_PILLAR_2);
@@ -666,6 +696,35 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 	public void carpetBlockWithItem(DeferredBlock<Block> trapdoor) {
 		this.simpleBlock(trapdoor.get(), this.models().carpet(trapdoor.getId().getPath(), this.blockTexture(trapdoor.get())));
 		this.simpleBlockItem(trapdoor);
+	}
+
+	public void paneBlockWithItem(DeferredBlock<Block> pane, boolean uniqueSideTex, String renderType) {
+		this.paneBlockWithRenderType((IronBarsBlock) pane.get(), this.modLoc("block/" + pane.getId().getPath().replace("_pane", "")), this.blockTexture(pane.get()).withSuffix(uniqueSideTex ? "_top" : ""), renderType);
+		this.itemModels().withExistingParent(pane.getId().toString(), new ModelFile.UncheckedModelFile("item/generated").getLocation()).texture("layer0", this.modLoc("block/" + pane.getId().getPath().replace("_pane", "")));
+	}
+
+	public void paneBlockWithItem(DeferredBlock<Block> pane, boolean uniqueSideTex) {
+		this.paneBlock((IronBarsBlock) pane.get(), this.modLoc("block/" + pane.getId().getPath().replace("_pane", "")), this.blockTexture(pane.get()).withSuffix(uniqueSideTex ? "_top" : ""));
+		this.itemModels().withExistingParent(pane.getId().toString(), new ModelFile.UncheckedModelFile("item/generated").getLocation()).texture("layer0", this.modLoc("block/" + pane.getId().getPath().replace("_pane", "")));
+	}
+
+	public void thickPaneBlockWithItem(DeferredBlock<Block> pane) {
+		ModelFile post = this.models().withExistingParent(pane.getId().getPath() + "_post", this.modLoc("block/thick_pane_post")).texture("pane", this.blockTexture(pane.get()));
+		ModelFile side = this.models().withExistingParent(pane.getId().getPath() + "_side", this.modLoc("block/thick_pane_side")).texture("pane", this.blockTexture(pane.get()));
+		ModelFile sideAlt = this.models().withExistingParent(pane.getId().getPath() + "_side_alt", this.modLoc("block/thick_pane_side_alt")).texture("pane", this.blockTexture(pane.get()));
+		ModelFile noSide = this.models().withExistingParent(pane.getId().getPath() + "_noside", this.modLoc("block/thick_pane_noside")).texture("pane", this.blockTexture(pane.get()));
+		ModelFile noSideAlt = this.models().withExistingParent(pane.getId().getPath() + "_noside_alt", this.modLoc("block/thick_pane_noside_alt")).texture("pane", this.blockTexture(pane.get()));
+		MultiPartBlockStateBuilder builder = this.getMultipartBuilder(pane.get()).part().modelFile(post).addModel().end();
+		PipeBlock.PROPERTY_BY_DIRECTION.forEach((dir, value) -> {
+			if (dir.getAxis().isHorizontal()) {
+				boolean alt = dir == Direction.SOUTH;
+				builder.part().modelFile(alt || dir == Direction.WEST ? sideAlt : side).rotationY(dir.getAxis() == Direction.Axis.X ? 90 : 0).addModel()
+					.condition(value, true).end()
+					.part().modelFile(alt || dir == Direction.EAST ? noSideAlt : noSide).rotationY(dir == Direction.WEST ? 270 : dir == Direction.SOUTH ? 90 : 0).addModel()
+					.condition(value, false);
+			}
+		});
+		this.basicItemTex(pane, true);
 	}
 
 	public void samitePanel(DeferredBlock<Block> block, DeferredBlock<Block> samite) {

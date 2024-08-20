@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "thebetweenlands:block/rounded_amate_paper_pane"
+  }
+}

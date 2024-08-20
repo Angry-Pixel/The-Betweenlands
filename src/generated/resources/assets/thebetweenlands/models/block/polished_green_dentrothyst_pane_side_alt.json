@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/template_glass_pane_side_alt",
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "edge": "thebetweenlands:block/polished_green_dentrothyst_pane_top",
+    "pane": "thebetweenlands:block/polished_green_dentrothyst"
+  }
+}

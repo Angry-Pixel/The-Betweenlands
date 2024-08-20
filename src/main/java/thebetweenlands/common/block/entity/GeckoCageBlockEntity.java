@@ -40,12 +40,12 @@ public class GeckoCageBlockEntity extends SyncedBlockEntity {
 					level.sendBlockUpdated(pos, state, state, 2);
 				}
 			} else {
-				if (entity.aspectType != null && entity.geckoUsages == 0) {
+				if (entity.aspectType.isPresent() && entity.geckoUsages == 0) {
 					entity.geckoName = "";
 					level.sendBlockUpdated(pos, state, state, 2);
 				}
-				if (entity.aspectType != null) {
-					entity.aspectType = null;
+				if (entity.aspectType.isPresent()) {
+					entity.aspectType = Optional.empty();
 					level.sendBlockUpdated(pos, state, state, 2);
 				}
 			}
@@ -65,7 +65,7 @@ public class GeckoCageBlockEntity extends SyncedBlockEntity {
 		return this.aspectType.orElse(null);
 	}
 
-	public void setAspectType(Level level, BlockPos pos, BlockState state, Holder<AspectType> type, int recoverTime) {
+	public void setAspectType(Level level, BlockPos pos, BlockState state, @Nullable Holder<AspectType> type, int recoverTime) {
 		--this.geckoUsages;
 		this.aspectType = Optional.ofNullable(type);
 		this.recoverTicks = recoverTime;

@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -55,7 +56,7 @@ public class HangingPlantBodyBlock extends GrowingPlantBodyBlock {
 			float u = Math.max(Math.abs(px), Math.abs(pz));
 			px = px / u * dripRange + 0.5F;
 			pz = pz / u * dripRange + 0.5F;
-			level.addParticle(ParticleRegistry.CAVE_WATER_DRIP.get(), pos.getX() + px, pos.getY() + py, pos.getZ() + pz, 0.0D, 0.0D, 0.0D);
+			level.addParticle(ParticleTypes.DRIPPING_WATER, pos.getX() + px, pos.getY() + py, pos.getZ() + pz, 0.0D, 0.0D, 0.0D);
 		}
 	}
 }

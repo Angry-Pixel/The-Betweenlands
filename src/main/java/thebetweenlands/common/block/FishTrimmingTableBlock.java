@@ -49,6 +49,6 @@ public class FishTrimmingTableBlock extends HorizontalBaseEntityBlock {
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return new FishingTackleBoxBlockEntity(pos, state);
+		return new FishTrimmingTableBlockEntity(pos, state);
 	}
 }

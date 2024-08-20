@@ -55,6 +55,11 @@ public class SpiritTreeLeavesBlock extends LeavesBlock {
 		}
 	}
 
+	@Override
+	protected boolean skipRendering(BlockState state, BlockState neighborState, Direction direction) {
+		return state.is(BlockRegistry.TOP_SPIRIT_TREE_LEAVES) && neighborState.is(BlockRegistry.TOP_SPIRIT_TREE_LEAVES);
+	}
+
 	public enum LeafType {
 		TOP, MIDDLE, BOTTOM
 	}

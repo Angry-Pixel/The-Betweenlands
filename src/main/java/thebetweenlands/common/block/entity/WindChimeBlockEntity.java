@@ -69,54 +69,57 @@ public class WindChimeBlockEntity extends SyncedBlockEntity {
 			entity.chimeTicks = Math.max(entity.chimeTicks - 1, 0);
 		}
 
-		BLEnvironmentEventRegistry registry = BetweenlandsWorldStorage.getOrThrow(level).getEnvironmentEventRegistry();
+		var storage = BetweenlandsWorldStorage.get(level);
+		if (storage != null) {
+			BLEnvironmentEventRegistry registry = storage.getEnvironmentEventRegistry();
 
-		int maxPredictionTime = entity.getMaxPredictionTime();
+			int maxPredictionTime = entity.getMaxPredictionTime();
 
-		int nextPrediction = Integer.MAX_VALUE;
-		IPredictableEnvironmentEvent nextEvent = null;
-		ResourceLocation[] nextEventVisions = null;
+			int nextPrediction = Integer.MAX_VALUE;
+			IPredictableEnvironmentEvent nextEvent = null;
+			ResourceLocation[] nextEventVisions = null;
 
-		for (IEnvironmentEvent event : registry.getEvents().values()) {
-			if (event instanceof IPredictableEnvironmentEvent predictable && (entity.attunedEvent == null || entity.attunedEvent.equals(BLRegistries.ENVIRONMENT_EVENTS.getKey(event)))) {
+			for (IEnvironmentEvent event : registry.getEvents().values()) {
+				if (event instanceof IPredictableEnvironmentEvent predictable && (entity.attunedEvent == null || entity.attunedEvent.equals(BLRegistries.ENVIRONMENT_EVENTS.getKey(event)))) {
 
-				ResourceLocation[] visions = predictable.getVisionTextures();
+					ResourceLocation[] visions = predictable.getVisionTextures();
 
-				if (visions != null) {
-					int prediction = predictable.estimateTimeUntil(level, IPredictableEnvironmentEvent.State.ACTIVE);
+					if (visions != null) {
+						int prediction = predictable.estimateTimeUntil(level, IPredictableEnvironmentEvent.State.ACTIVE);
 
-					if (prediction > 0 && prediction < nextPrediction && prediction < maxPredictionTime) {
-						nextPrediction = prediction;
-						nextEvent = predictable;
-						nextEventVisions = visions;
+						if (prediction > 0 && prediction < nextPrediction && prediction < maxPredictionTime) {
+							nextPrediction = prediction;
+							nextEvent = predictable;
+							nextEventVisions = visions;
+						}
 					}
 				}
 			}
-		}
 
-		if (!level.isClientSide()) {
-			if (entity.predictedEvent != null && entity.predictedEvent != nextEvent) {
-				entity.predictedEvent = nextEvent;
-				entity.predictedTimeUntilActivation = -1;
-			} else if (entity.predictedEvent == null) {
-				entity.predictedEvent = nextEvent;
-			}
-
-			if (nextEvent != null) {
-				if (entity.predictedTimeUntilActivation == -1 || entity.predictedTimeUntilActivation >= maxPredictionTime) {
-					entity.triggerAdvancement(level, pos);
-				} else if (entity.predictedTimeUntilActivation >= maxPredictionTime * 0.4f && nextPrediction < maxPredictionTime * 0.4f) {
-					entity.triggerAdvancement(level, pos);
-				} else if (entity.predictedTimeUntilActivation >= maxPredictionTime * 0.2f && nextPrediction < maxPredictionTime * 0.2f) {
-					entity.triggerAdvancement(level, pos);
+			if (!level.isClientSide()) {
+				if (entity.predictedEvent != null && entity.predictedEvent != nextEvent) {
+					entity.predictedEvent = nextEvent;
+					entity.predictedTimeUntilActivation = -1;
+				} else if (entity.predictedEvent == null) {
+					entity.predictedEvent = nextEvent;
 				}
 
-				entity.predictedTimeUntilActivation = nextPrediction;
+				if (nextEvent != null) {
+					if (entity.predictedTimeUntilActivation == -1 || entity.predictedTimeUntilActivation >= maxPredictionTime) {
+						entity.triggerAdvancement(level, pos);
+					} else if (entity.predictedTimeUntilActivation >= maxPredictionTime * 0.4f && nextPrediction < maxPredictionTime * 0.4f) {
+						entity.triggerAdvancement(level, pos);
+					} else if (entity.predictedTimeUntilActivation >= maxPredictionTime * 0.2f && nextPrediction < maxPredictionTime * 0.2f) {
+						entity.triggerAdvancement(level, pos);
+					}
+
+					entity.predictedTimeUntilActivation = nextPrediction;
+				} else {
+					entity.predictedTimeUntilActivation = -1;
+				}
 			} else {
-				entity.predictedTimeUntilActivation = -1;
+				entity.updateParticles(level, pos, maxPredictionTime, nextPrediction, nextEvent, nextEventVisions);
 			}
-		} else {
-			entity.updateParticles(level, pos, maxPredictionTime, nextPrediction, nextEvent, nextEventVisions);
 		}
 	}
 

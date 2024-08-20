@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/ladder",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "texture": "thebetweenlands:block/weedwood_ladder"
+  }
+}

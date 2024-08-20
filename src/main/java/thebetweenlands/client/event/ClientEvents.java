@@ -31,7 +31,6 @@ import thebetweenlands.client.model.entity.ModelWight;
 import thebetweenlands.client.model.entity.SwampHagModel;
 import thebetweenlands.client.particle.BetweenlandsParticle;
 import thebetweenlands.client.particle.BetweenlandsPortalParticle;
-import thebetweenlands.client.particle.CaveWaterDripParticle;
 import thebetweenlands.client.renderer.entity.GeckoRenderer;
 import thebetweenlands.client.renderer.entity.RenderWight;
 import thebetweenlands.client.renderer.entity.SwampHagRenderer;
@@ -203,7 +202,6 @@ public class ClientEvents {
 	private static void particleStuff(final RegisterParticleProvidersEvent event) {
 		event.registerSpriteSet(ParticleRegistry.SULFUR_GENERIC.get(), BetweenlandsParticle.Helper::new);
 		event.registerSpriteSet(ParticleRegistry.PORTAL_EFFECT.get(), BetweenlandsPortalParticle.Helper::new);
-		event.registerSpriteSet(ParticleRegistry.CAVE_WATER_DRIP.get(), CaveWaterDripParticle.Factory::new);
 	}
 
 	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
