@@ -31,10 +31,7 @@ import thebetweenlands.client.model.entity.ModelWight;
 import thebetweenlands.client.model.entity.SwampHagModel;
 import thebetweenlands.client.particle.BetweenlandsParticle;
 import thebetweenlands.client.particle.BetweenlandsPortalParticle;
-import thebetweenlands.client.renderer.block.BLItemRenderer;
-import thebetweenlands.client.renderer.block.CenserRenderer;
-import thebetweenlands.client.renderer.block.LootPotRenderer;
-import thebetweenlands.client.renderer.block.SimulacrumRenderer;
+import thebetweenlands.client.renderer.block.*;
 import thebetweenlands.client.renderer.entity.GeckoRenderer;
 import thebetweenlands.client.renderer.entity.RenderWight;
 import thebetweenlands.client.renderer.entity.SwampHagRenderer;
@@ -72,6 +69,7 @@ public class ClientEvents {
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.CENSER.get(), CenserRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.LOOT_POT.get(), LootPotRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.LOOT_URN.get(), LootUrnRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SIMULACRUM.get(), SimulacrumRenderer::new);
 	}
 
@@ -89,6 +87,9 @@ public class ClientEvents {
 		event.registerLayerDefinition(BLModelLayers.LOOT_POT_1, LootPotModel1::makeModel);
 		event.registerLayerDefinition(BLModelLayers.LOOT_POT_2, LootPotModel2::makeModel);
 		event.registerLayerDefinition(BLModelLayers.LOOT_POT_3, LootPotModel3::makeModel);
+		event.registerLayerDefinition(BLModelLayers.LOOT_URN_1, LootUrnModel1::makeModel);
+		event.registerLayerDefinition(BLModelLayers.LOOT_URN_2, LootUrnModel2::makeModel);
+		event.registerLayerDefinition(BLModelLayers.LOOT_URN_3, LootUrnModel3::makeModel);
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_1, RootmanSimulacrumModel1::makeModel);
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_2, RootmanSimulacrumModel2::makeModel);
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_3, RootmanSimulacrumModel3::makeModel);
@@ -114,6 +115,7 @@ public class ClientEvents {
 			BlockRegistry.LOOT_POT_1.asItem(), BlockRegistry.LOOT_POT_2.asItem(), BlockRegistry.LOOT_POT_3.asItem(),
 			BlockRegistry.TAR_LOOT_POT_1.asItem(), BlockRegistry.TAR_LOOT_POT_2.asItem(), BlockRegistry.TAR_LOOT_POT_3.asItem(),
 			BlockRegistry.MUD_LOOT_POT_1.asItem(), BlockRegistry.MUD_LOOT_POT_2.asItem(), BlockRegistry.MUD_LOOT_POT_3.asItem(),
+			BlockRegistry.LOOT_URN_1.asItem(), BlockRegistry.LOOT_URN_2.asItem(), BlockRegistry.LOOT_URN_3.asItem(),
 			BlockRegistry.DEEPMAN_SIMULACRUM_1.asItem(), BlockRegistry.DEEPMAN_SIMULACRUM_2.asItem(), BlockRegistry.DEEPMAN_SIMULACRUM_3.asItem(),
 			BlockRegistry.LAKE_CAVERN_SIMULACRUM_1.asItem(), BlockRegistry.LAKE_CAVERN_SIMULACRUM_2.asItem(), BlockRegistry.LAKE_CAVERN_SIMULACRUM_3.asItem(),
 			BlockRegistry.ROOTMAN_SIMULACRUM_1.asItem(), BlockRegistry.ROOTMAN_SIMULACRUM_2.asItem(), BlockRegistry.ROOTMAN_SIMULACRUM_3.asItem());

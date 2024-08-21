@@ -8,11 +8,16 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import thebetweenlands.common.block.entity.LootUrnBlockEntity;
 
@@ -20,8 +25,32 @@ import javax.annotation.Nullable;
 
 public class LootUrnBlock extends HorizontalBaseEntityBlock {
 
-	public LootUrnBlock(Properties properties) {
+	public static final VoxelShape URN_1 = Shapes.or(
+		Block.box(5.0D, 0.0D, 5.0D, 11.0D, 3.0D, 11.0D),
+		Block.box(4.0D, 3.0D, 4.0D, 12.0D, 10.0D, 12.0D),
+		Block.box(5.0D, 10.0D, 5.0D, 11.0D, 13.0D, 11.0D));
+
+	public static final VoxelShape URN_2 = Shapes.or(
+		Block.box(4.0D, 4.0D, 4.0D, 12.0D, 6.0D, 12.0D),
+		Block.box(5.0D, 6.0D, 5.0D, 11.0D, 8.0D, 11.0D),
+		Block.box(4.0D, 8.0D, 4.0D, 12.0D, 14.0D, 12.0D),
+		Block.box(5.0D, 14.0D, 5.0D, 11.0D, 16.0D, 11.0D));
+
+	public static final VoxelShape URN_3 = Shapes.or(
+		Block.box(5.0D, 0.0D, 5.0D, 11.0D, 2.0D, 11.0D),
+		Block.box(4.0D, 2.0D, 4.0D, 12.0D, 10.0D, 12.0D),
+		Block.box(5.0D, 10.0D, 5.0D, 11.0D, 15.0D, 11.0D));
+
+	private final VoxelShape shape;
+
+	public LootUrnBlock(VoxelShape shape, Properties properties) {
 		super(properties);
+		this.shape = shape;
+	}
+
+	@Override
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		return this.shape;
 	}
 
 	@Override
