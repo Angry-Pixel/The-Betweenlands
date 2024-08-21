@@ -34,6 +34,7 @@ public class DataGenerators {
 		gen.addProvider(data, new BetweenlandsFluidTagsGenerator(output, provider, helper));
 		gen.addProvider(data, new BetweenlandsBiomeTagProvider(output, dataProvider, helper));
 		gen.addProvider(data, new BetweenlandsDimensionTypeTagProvider(output, dataProvider, helper));
+		gen.addProvider(data, new BetweenlandsRecipeProvider(output, dataProvider));
 
 		// Assets
 		gen.addProvider(assets, new BetweenlandsAtlasProvider(output, dataProvider, helper));

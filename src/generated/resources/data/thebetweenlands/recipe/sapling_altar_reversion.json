@@ -1,0 +1,18 @@
+{
+  "type": "thebetweenlands:druid_altar_reversion",
+  "ingredients": [
+    {
+      "tag": "minecraft:saplings"
+    },
+    {
+      "tag": "minecraft:saplings"
+    },
+    {
+      "tag": "minecraft:saplings"
+    },
+    {
+      "tag": "minecraft:saplings"
+    }
+  ],
+  "process_time": 285
+}

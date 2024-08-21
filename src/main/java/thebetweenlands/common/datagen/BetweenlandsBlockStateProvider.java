@@ -3,6 +3,7 @@ package thebetweenlands.common.datagen;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -176,18 +177,18 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.WEAK_SMOOTH_CRAGROCK);
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.GREEN_DENTROTHYST, "translucent");
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.ORANGE_DENTROTHYST, "translucent");
-		this.builtinEntityAndItem(BlockRegistry.LOOT_POT_1, this.modLoc("block/particle/loot_pot_1_particle"));
-		this.builtinEntityAndItem(BlockRegistry.LOOT_POT_2, this.modLoc("block/particle/loot_pot_2_particle"));
-		this.builtinEntityAndItem(BlockRegistry.LOOT_POT_3, this.modLoc("block/particle/loot_pot_3_particle"));
+		this.builtinEntityAndItem(BlockRegistry.LOOT_POT_1, this.modLoc("block/particle/loot_pot_1_particle"), 0.625F, 0.0F);
+		this.builtinEntityAndItem(BlockRegistry.LOOT_POT_2, this.modLoc("block/particle/loot_pot_2_particle"), 0.625F, 0.0F);
+		this.builtinEntityAndItem(BlockRegistry.LOOT_POT_3, this.modLoc("block/particle/loot_pot_3_particle"), 0.625F, 0.0F);
 		//monster spawner
 		this.pillarWithItem(BlockRegistry.TEMPLE_PILLAR);
 		this.pillarWithItem(BlockRegistry.BETWEENSTONE_PILLAR);
 		this.pillarWithItem(BlockRegistry.PITSTONE_PILLAR);
 		this.pillarWithItem(BlockRegistry.LIMESTONE_PILLAR);
 		this.pillarWithItem(BlockRegistry.CRAGROCK_PILLAR);
-		this.builtinEntityAndItem(BlockRegistry.TAR_LOOT_POT_1, this.modLoc("block/solid_tar"));
-		this.builtinEntityAndItem(BlockRegistry.TAR_LOOT_POT_2, this.modLoc("block/solid_tar"));
-		this.builtinEntityAndItem(BlockRegistry.TAR_LOOT_POT_3, this.modLoc("block/solid_tar"));
+		this.builtinEntityAndItem(BlockRegistry.TAR_LOOT_POT_1, this.modLoc("block/solid_tar"), 0.625F, 0.0F);
+		this.builtinEntityAndItem(BlockRegistry.TAR_LOOT_POT_2, this.modLoc("block/solid_tar"), 0.625F, 0.0F);
+		this.builtinEntityAndItem(BlockRegistry.TAR_LOOT_POT_3, this.modLoc("block/solid_tar"), 0.625F, 0.0F);
 		this.stairBlockWithItem(BlockRegistry.CRAGROCK_STAIRS, BlockRegistry.CRAGROCK);
 		this.stairBlockWithItem(BlockRegistry.PITSTONE_STAIRS, BlockRegistry.PITSTONE);
 		this.stairBlockWithItem(BlockRegistry.BETWEENSTONE_STAIRS, BlockRegistry.BETWEENSTONE);
@@ -387,9 +388,9 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 				.build();
 		});
 		this.basicItemTex(BlockRegistry.WEEDWOOD_LEVER, true);
-		this.builtinEntityAndItem(BlockRegistry.MUD_LOOT_POT_1, this.modLoc("block/compacted_mud"));
-		this.builtinEntityAndItem(BlockRegistry.MUD_LOOT_POT_2, this.modLoc("block/compacted_mud"));
-		this.builtinEntityAndItem(BlockRegistry.MUD_LOOT_POT_3, this.modLoc("block/compacted_mud"));
+		this.builtinEntityAndItem(BlockRegistry.MUD_LOOT_POT_1, this.modLoc("block/compacted_mud"), 0.625F, 0.0F);
+		this.builtinEntityAndItem(BlockRegistry.MUD_LOOT_POT_2, this.modLoc("block/compacted_mud"), 0.625F, 0.0F);
+		this.builtinEntityAndItem(BlockRegistry.MUD_LOOT_POT_3, this.modLoc("block/compacted_mud"), 0.625F, 0.0F);
 		this.simpleBlockWithItem(BlockRegistry.WORM_PILLAR);
 		this.simpleBlockWithItem(BlockRegistry.SLUDGY_WORM_PILLAR_1);
 		this.simpleBlockWithItem(BlockRegistry.SLUDGY_WORM_PILLAR_2);
@@ -430,9 +431,9 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_2, BlockRegistry.SLUDGY_MUD_BRICKS_2);
 		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_3, BlockRegistry.SLUDGY_MUD_BRICKS_3);
 		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_4, BlockRegistry.SLUDGY_MUD_BRICKS_4);
-		this.builtinEntityAndItem(BlockRegistry.LOOT_URN_1, this.modLoc("block/particle/loot_urn_particle"));
-		this.builtinEntityAndItem(BlockRegistry.LOOT_URN_2, this.modLoc("block/particle/loot_urn_particle"));
-		this.builtinEntityAndItem(BlockRegistry.LOOT_URN_3, this.modLoc("block/particle/loot_urn_particle"));
+		this.builtinEntityAndItem(BlockRegistry.LOOT_URN_1, this.modLoc("block/particle/loot_urn_particle"), 0.75F, 0.0F);
+		this.builtinEntityAndItem(BlockRegistry.LOOT_URN_2, this.modLoc("block/particle/loot_urn_particle"), 0.75F, 0.0F);
+		this.builtinEntityAndItem(BlockRegistry.LOOT_URN_3, this.modLoc("block/particle/loot_urn_particle"), 0.75F, 0.0F);
 		//rotten beams
 		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_1, this.modLoc("block/rotten_bark_carved_1"), this.modLoc("block/rotten_bark_rotated"));
 		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_2, this.modLoc("block/rotten_bark_carved_2"), this.modLoc("block/rotten_bark_rotated"));
@@ -487,6 +488,7 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.portalFrame(BlockRegistry.PORTAL_FRAME_TOP);
 		this.portalFrame(BlockRegistry.PORTAL_FRAME_TOP_LEFT);
 		this.portalFrame(BlockRegistry.PORTAL_FRAME_TOP_RIGHT);
+		this.builtinEntityAndItem(BlockRegistry.DRUID_ALTAR, this.modLoc("block/particle/druid_altar_particle"), 0.325F, -1.25F);
 		this.simpleBlock(BlockRegistry.WEEDWOOD_CRAFTING_TABLE.get(), this.models().cube("weedwood_crafting_table", this.modLoc("block/weedwood_planks"), this.modLoc("block/weedwood_workbench_top"), this.modLoc("block/weedwood_workbench_front"), this.modLoc("block/weedwood_workbench"), this.modLoc("block/weedwood_workbench"), this.modLoc("block/weedwood_workbench_front")));
 		this.simpleBlockItem(BlockRegistry.WEEDWOOD_CRAFTING_TABLE);
 		this.simpleBlock(BlockRegistry.WEEDWOOD_JUKEBOX.get(), this.models().cubeTop("weedwood_jukebox", this.modLoc("block/weedwood_jukebox_side"), this.modLoc("block/weedwood_jukebox_top")));
@@ -510,17 +512,17 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.trapdoorBlockWithItem(BlockRegistry.SCABYST_TRAPDOOR);
 		this.basicItemTex(BlockRegistry.MUD_FLOWER_POT, false);
 		this.basicItemTex(BlockRegistry.MUD_FLOWER_POT_CANDLE, false);
-		this.builtinEntityAndItem(BlockRegistry.CENSER, this.modLoc("block/particle/censer_particle"));
+		this.builtinEntityAndItem(BlockRegistry.CENSER, this.modLoc("block/particle/censer_particle"), 0.625F, 0.0F);
 		this.torchBlockWithItem(BlockRegistry.DAMP_TORCH, BlockRegistry.DAMP_WALL_TORCH);
-		this.builtinEntityAndItem(BlockRegistry.DEEPMAN_SIMULACRUM_1, this.modLoc("block/smooth_betweenstone"));
-		this.builtinEntityAndItem(BlockRegistry.DEEPMAN_SIMULACRUM_2, this.modLoc("block/smooth_betweenstone"));
-		this.builtinEntityAndItem(BlockRegistry.DEEPMAN_SIMULACRUM_3, this.modLoc("block/smooth_betweenstone"));
-		this.builtinEntityAndItem(BlockRegistry.LAKE_CAVERN_SIMULACRUM_1, this.modLoc("block/pitstone"));
-		this.builtinEntityAndItem(BlockRegistry.LAKE_CAVERN_SIMULACRUM_2, this.modLoc("block/pitstone"));
-		this.builtinEntityAndItem(BlockRegistry.LAKE_CAVERN_SIMULACRUM_3, this.modLoc("block/pitstone"));
-		this.builtinEntityAndItem(BlockRegistry.ROOTMAN_SIMULACRUM_1, this.modLoc("block/root_bottom"));
-		this.builtinEntityAndItem(BlockRegistry.ROOTMAN_SIMULACRUM_2, this.modLoc("block/root_bottom"));
-		this.builtinEntityAndItem(BlockRegistry.ROOTMAN_SIMULACRUM_3, this.modLoc("block/root_bottom"));
+		this.builtinEntityAndItem(BlockRegistry.DEEPMAN_SIMULACRUM_1, this.modLoc("block/smooth_betweenstone"), 0.75F, 0.0F);
+		this.builtinEntityAndItem(BlockRegistry.DEEPMAN_SIMULACRUM_2, this.modLoc("block/smooth_betweenstone"), 0.75F, 0.0F);
+		this.builtinEntityAndItem(BlockRegistry.DEEPMAN_SIMULACRUM_3, this.modLoc("block/smooth_betweenstone"), 0.75F, 0.0F);
+		this.builtinEntityAndItem(BlockRegistry.LAKE_CAVERN_SIMULACRUM_1, this.modLoc("block/pitstone"), 0.75F, 0.0F);
+		this.builtinEntityAndItem(BlockRegistry.LAKE_CAVERN_SIMULACRUM_2, this.modLoc("block/pitstone"), 0.75F, 0.0F);
+		this.builtinEntityAndItem(BlockRegistry.LAKE_CAVERN_SIMULACRUM_3, this.modLoc("block/pitstone"), 0.75F, 0.0F);
+		this.builtinEntityAndItem(BlockRegistry.ROOTMAN_SIMULACRUM_1, this.modLoc("block/root_bottom"), 0.75F, 0.0F);
+		this.builtinEntityAndItem(BlockRegistry.ROOTMAN_SIMULACRUM_2, this.modLoc("block/root_bottom"), 0.75F, 0.0F);
+		this.builtinEntityAndItem(BlockRegistry.ROOTMAN_SIMULACRUM_3, this.modLoc("block/root_bottom"), 0.75F, 0.0F);
 		this.carpetBlockWithItem(BlockRegistry.REED_MAT);
 		this.simpleBlockWithItem(BlockRegistry.LYESTONE.get(), this.models().getExistingFile(this.blockTexture(BlockRegistry.LIMESTONE.get())));
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.MIST_BRIDGE, "translucent");
@@ -785,11 +787,16 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 			.texture("particle", particle));
 	}
 
-	public void builtinEntityAndItem(DeferredBlock<Block> block, ResourceLocation particle) {
+	public void builtinEntityAndItem(DeferredBlock<Block> block, ResourceLocation particle, float itemScale, float yOffs) {
 		this.simpleBlock(block.get(), this.models().getBuilder(block.getId().getPath())
 			.parent(new ModelFile.UncheckedModelFile("builtin/entity"))
 			.texture("particle", particle));
-		this.itemModels().withExistingParent(block.getId().getPath(), this.modLoc("item/base_builtin_entity")).texture("particle", particle);
+		this.itemModels().getBuilder(block.getId().getPath()).parent(new ModelFile.UncheckedModelFile("builtin/entity")).texture("particle", particle).transforms()
+			.transform(ItemDisplayContext.GUI).scale(itemScale).translation(0, yOffs, 0).rotation(30, 225, 0).end()
+			.transform(ItemDisplayContext.GROUND).scale(0.3F).translation(0, 3, 0).end()
+			.transform(ItemDisplayContext.FIXED).scale(itemScale).end()
+			.transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).scale(itemScale / 2.0F).rotation(75, 315, 0).translation(0, 2.5F, 0).end()
+			.transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).scale(itemScale / 1.5F).rotation(0, 315, 0).end();
 	}
 
 	public void nibbletwigLogs() {

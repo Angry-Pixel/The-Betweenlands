@@ -1,0 +1,22 @@
+{
+  "type": "thebetweenlands:druid_altar_assembly",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:swamp_talisman_piece_1"
+    },
+    {
+      "item": "thebetweenlands:swamp_talisman_piece_2"
+    },
+    {
+      "item": "thebetweenlands:swamp_talisman_piece_3"
+    },
+    {
+      "item": "thebetweenlands:swamp_talisman_piece_4"
+    }
+  ],
+  "process_time": 285,
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:swamp_talisman"
+  }
+}

@@ -8,16 +8,16 @@
         0
       ],
       "scale": [
-        0.5,
-        0.5,
-        0.5
+        0.21666665,
+        0.21666665,
+        0.21666665
       ]
     },
     "fixed": {
       "scale": [
-        0.75,
-        0.75,
-        0.75
+        0.325,
+        0.325,
+        0.325
       ]
     },
     "ground": {
@@ -39,9 +39,14 @@
         0
       ],
       "scale": [
-        0.75,
-        0.75,
-        0.75
+        0.325,
+        0.325,
+        0.325
+      ],
+      "translation": [
+        0,
+        -1.25,
+        0
       ]
     },
     "thirdperson_righthand": {
@@ -51,9 +56,9 @@
         0
       ],
       "scale": [
-        0.375,
-        0.375,
-        0.375
+        0.1625,
+        0.1625,
+        0.1625
       ],
       "translation": [
         0,
@@ -63,6 +68,6 @@
     }
   },
   "textures": {
-    "particle": "thebetweenlands:block/root_bottom"
+    "particle": "thebetweenlands:block/particle/druid_altar_particle"
   }
 }
