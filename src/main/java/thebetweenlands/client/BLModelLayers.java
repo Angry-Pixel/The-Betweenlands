@@ -5,6 +5,7 @@ import thebetweenlands.common.TheBetweenlands;
 
 public class BLModelLayers {
 
+	public static final ModelLayerLocation CENSER = register("censer");
 	public static final ModelLayerLocation DEEPMAN_SIMULACRUM_1 = register("deepman_simulacrum_1");
 	public static final ModelLayerLocation DEEPMAN_SIMULACRUM_2 = register("deepman_simulacrum_2");
 	public static final ModelLayerLocation DEEPMAN_SIMULACRUM_3 = register("deepman_simulacrum_3");

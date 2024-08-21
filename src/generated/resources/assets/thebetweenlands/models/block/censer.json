@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:builtin/entity",
+  "textures": {
+    "particle": "thebetweenlands:block/particle/censer_particle"
+  }
+}

@@ -499,6 +499,7 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.trapdoorBlockWithItem(BlockRegistry.SCABYST_TRAPDOOR);
 		this.basicItemTex(BlockRegistry.MUD_FLOWER_POT, false);
 		this.basicItemTex(BlockRegistry.MUD_FLOWER_POT_CANDLE, false);
+		this.builtinEntityAndItem(BlockRegistry.CENSER, this.modLoc("block/particle/censer_particle"));
 		this.torchBlockWithItem(BlockRegistry.DAMP_TORCH, BlockRegistry.DAMP_WALL_TORCH);
 		this.builtinEntityAndItem(BlockRegistry.DEEPMAN_SIMULACRUM_1, this.modLoc("block/smooth_betweenstone"));
 		this.builtinEntityAndItem(BlockRegistry.DEEPMAN_SIMULACRUM_2, this.modLoc("block/smooth_betweenstone"));
