@@ -1,4 +1,4 @@
-package thebetweenlands.client.model.block;
+package thebetweenlands.client.model.block.simulacrum;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -11,11 +11,11 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.RenderType;
 
-public class LakeCavernSimulacrumModel1 extends Model {
+public class LakeCavernSimulacrumModel3 extends Model {
 
 	private ModelPart root;
 
-	public LakeCavernSimulacrumModel1(ModelPart root) {
+	public LakeCavernSimulacrumModel3(ModelPart root) {
 		super(RenderType::entityCutoutNoCull);
 		this.root = root;
 	}
@@ -26,20 +26,25 @@ public class LakeCavernSimulacrumModel1 extends Model {
 
 		var base = partDefinition.addOrReplaceChild("base", CubeListBuilder.create()
 				.texOffs(0, 0)
-				.addBox(-3.0F, -3.0F, -2.0F, 6, 3, 4),
+				.addBox(-5.0F, -3.0F, -5.0F, 10, 3, 10),
 			PartPose.ZERO);
 
 		var main = base.addOrReplaceChild("main", CubeListBuilder.create()
-				.texOffs(0, 8)
-				.addBox(-2.0F, -12.0F, -1.0F, 4, 12, 2),
+				.texOffs(0, 14)
+				.addBox(-4.0F, -6.0F, -4.0F, 8, 6, 8),
 			PartPose.offset(0.0F, -3.0F, 0.0F));
 
-		main.addOrReplaceChild("top", CubeListBuilder.create()
-				.texOffs(0, 23)
-				.addBox(-2.0F, -3.0F, -1.0F, 3, 1, 2),
-			PartPose.offset(0.0F, -10.0F, 0.0F));
+		main.addOrReplaceChild("edge_front", CubeListBuilder.create()
+				.texOffs(0, 29)
+				.addBox(-4.0F, -2.0F, -2.0F, 8, 2, 2),
+			PartPose.offset(0.0F, -5.9F, -2.0F));
 
-		return LayerDefinition.create(definition, 32, 32);
+		main.addOrReplaceChild("edge_back", CubeListBuilder.create()
+				.texOffs(21, 29)
+				.addBox(-4.0F, -2.0F, 0.0F, 8, 2, 2),
+			PartPose.offset(0.0F, -6.0F, 2.0F));
+
+		return LayerDefinition.create(definition, 64, 64);
 	}
 
 	@Override

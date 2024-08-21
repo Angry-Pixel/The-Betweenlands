@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
@@ -183,9 +184,9 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> WEAK_SMOOTH_CRAGROCK = register("weak_smooth_cragrock", () -> new CollapsingBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> GREEN_DENTROTHYST = register("green_dentrothyst", () -> new StainedGlassBlock(DyeColor.GREEN, BlockBehaviour.Properties.of().strength(0.3F).sound(SoundType.GLASS)));
 	public static final DeferredBlock<Block> ORANGE_DENTROTHYST = register("orange_dentrothyst", () -> new StainedGlassBlock(DyeColor.ORANGE, BlockBehaviour.Properties.of().strength(0.3F).sound(SoundType.GLASS)));
-	public static final DeferredBlock<Block> LOOT_POT_1 = register("loot_pot_1", () -> new LootPotBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
-	public static final DeferredBlock<Block> LOOT_POT_2 = register("loot_pot_2", () -> new LootPotBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
-	public static final DeferredBlock<Block> LOOT_POT_3 = register("loot_pot_3", () -> new LootPotBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
+	public static final DeferredBlock<Block> LOOT_POT_1 = register("loot_pot_1", () -> new LootPotBlock(LootPotBlock.POT_1, BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
+	public static final DeferredBlock<Block> LOOT_POT_2 = register("loot_pot_2", () -> new LootPotBlock(LootPotBlock.POT_2, BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
+	public static final DeferredBlock<Block> LOOT_POT_3 = register("loot_pot_3", () -> new LootPotBlock(LootPotBlock.POT_3, BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
 	public static final DeferredBlock<Block> MOB_SPAWNER = register("mob_spawner", () -> new MobSpawnerBlock(BlockBehaviour.Properties.of().strength(10.0F).sound(SoundType.GLASS)));
 	public static final DeferredBlock<Block> TEMPLE_PILLAR = register("temple_pillar", () -> new TemplePillarBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> BETWEENSTONE_PILLAR = register("betweenstone_pillar", () -> new TemplePillarBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
@@ -193,9 +194,9 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> LIMESTONE_PILLAR = register("limestone_pillar", () -> new TemplePillarBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> CRAGROCK_PILLAR = register("cragrock_pillar", () -> new TemplePillarBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	//TODO tar beast spawner
-	public static final DeferredBlock<Block> TAR_LOOT_POT_1 = register("tar_loot_pot_1", () -> new LootPotBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
-	public static final DeferredBlock<Block> TAR_LOOT_POT_2 = register("tar_loot_pot_2", () -> new LootPotBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
-	public static final DeferredBlock<Block> TAR_LOOT_POT_3 = register("tar_loot_pot_3", () -> new LootPotBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
+	public static final DeferredBlock<Block> TAR_LOOT_POT_1 = register("tar_loot_pot_1", () -> new LootPotBlock(LootPotBlock.ALMOST_FULL, BlockBehaviour.Properties.of().forceSolidOff().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
+	public static final DeferredBlock<Block> TAR_LOOT_POT_2 = register("tar_loot_pot_2", () -> new LootPotBlock(LootPotBlock.ALMOST_FULL, BlockBehaviour.Properties.of().forceSolidOff().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
+	public static final DeferredBlock<Block> TAR_LOOT_POT_3 = register("tar_loot_pot_3", () -> new LootPotBlock(LootPotBlock.ALMOST_FULL, BlockBehaviour.Properties.of().forceSolidOff().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
 	public static final DeferredBlock<Block> CRAGROCK_STAIRS = register("cragrock_stairs", () -> new StairBlock(CRAGROCK.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(CRAGROCK.get())));
 	public static final DeferredBlock<Block> PITSTONE_STAIRS = register("pitstone_stairs", () -> new StairBlock(PITSTONE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(PITSTONE.get())));
 	public static final DeferredBlock<Block> BETWEENSTONE_STAIRS = register("betweenstone_stairs", () -> new StairBlock(BETWEENSTONE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(BETWEENSTONE.get())));
@@ -378,9 +379,9 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> BETWEENSTONE_BUTTON = register("betweenstone_button", () -> new ButtonBlock(BLWoodTypes.BETWEENSTONE, 20, BlockBehaviour.Properties.of().strength(0.5F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> WEEDWOOD_LADDER = register("weedwood_ladder", () -> new LadderBlock(BlockBehaviour.Properties.of().forceSolidOff().strength(0.4F).sound(SoundType.LADDER).noOcclusion().pushReaction(PushReaction.DESTROY)));
 	public static final DeferredBlock<Block> WEEDWOOD_LEVER = register("weedwood_lever", () -> new LeverBlock(BlockBehaviour.Properties.of().ignitedByLava().noCollission().strength(0.5F).sound(SoundType.WOOD).pushReaction(PushReaction.DESTROY)));
-	public static final DeferredBlock<Block> MUD_LOOT_POT_1 = register("mud_loot_pot_1", () -> new LootPotBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
-	public static final DeferredBlock<Block> MUD_LOOT_POT_2 = register("mud_loot_pot_2", () -> new LootPotBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
-	public static final DeferredBlock<Block> MUD_LOOT_POT_3 = register("mud_loot_pot_3", () -> new LootPotBlock(BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
+	public static final DeferredBlock<Block> MUD_LOOT_POT_1 = register("mud_loot_pot_1", () -> new LootPotBlock(LootPotBlock.ALMOST_FULL, BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
+	public static final DeferredBlock<Block> MUD_LOOT_POT_2 = register("mud_loot_pot_2", () -> new LootPotBlock(LootPotBlock.ALMOST_FULL, BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
+	public static final DeferredBlock<Block> MUD_LOOT_POT_3 = register("mud_loot_pot_3", () -> new LootPotBlock(LootPotBlock.ALMOST_FULL, BlockBehaviour.Properties.of().strength(0.4F).sound(SoundType.DECORATED_POT_CRACKED)));
 	public static final DeferredBlock<Block> WORM_PILLAR = register("worm_pillar", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> SLUDGY_WORM_PILLAR_1 = register("sludgy_worm_pillar_1", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> SLUDGY_WORM_PILLAR_2 = register("sludgy_worm_pillar_2", () -> new Block(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.STONE)));

@@ -1,21 +1,18 @@
-package thebetweenlands.client.model.block;
+package thebetweenlands.client.model.block.simulacrum;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.RenderType;
 
-public class RootmanSimulacrumModel3 extends Model {
+public class RootmanSimulacrumModel1 extends Model {
 
 	private final ModelPart root;
 
-	public RootmanSimulacrumModel3(ModelPart root) {
+	public RootmanSimulacrumModel1(ModelPart root) {
 		super(RenderType::entityCutoutNoCull);
 		this.root = root;
 	}
@@ -61,28 +58,18 @@ public class RootmanSimulacrumModel3 extends Model {
 
 		var maskMain = head.addOrReplaceChild("mask_main", CubeListBuilder.create()
 				.texOffs(19, 0)
-				.addBox(-2.0F, -4.0F, -2.0F, 4, 7, 2),
-			PartPose.offset(0.0F, -1.0F, -3.0F));
+				.addBox(-2.0F, -6.0F, -2.0F, 4, 12, 2),
+			PartPose.offset(0.0F, -3.0F, -3.0F));
 
-		var left = maskMain.addOrReplaceChild("mask_left", CubeListBuilder.create()
-				.texOffs(19, 12)
-				.addBox(0.0F, -2.0F, 0.0F, 2, 5, 2),
-			PartPose.offsetAndRotation(2.0F, -1.0F, -2.0F, 0.0F, -0.22759093446006054F, 0.0F));
+		maskMain.addOrReplaceChild("mask_left", CubeListBuilder.create()
+				.texOffs(19, 15)
+				.addBox(0.0F, -4.0F, 0.0F, 2, 8, 2),
+			PartPose.offsetAndRotation(2.0F, 0.0F, -2.0F, 0.0F, -0.22759093446006054F, 0.0F));
 
-		var right = maskMain.addOrReplaceChild("mask_right", CubeListBuilder.create()
-				.texOffs(28, 12)
-				.addBox(-2.0F, -2.0F, 0.0F, 2, 5, 2),
-			PartPose.offsetAndRotation(-2.0F, -1.0F, -2.0F, 0.0F, 0.22759093446006054F, 0.0F));
-
-		left.addOrReplaceChild("mask_left_2", CubeListBuilder.create()
-				.texOffs(19, 20)
-				.addBox(0.0F, -3.0F, 0.0F, 2, 3, 2),
-			PartPose.offsetAndRotation(2.0F, 1.0F, 0.01F, 0.0F, 0.0F, -0.22759093446006054F));
-
-		right.addOrReplaceChild("mask_right_2", CubeListBuilder.create()
-				.texOffs(28, 20)
-				.addBox(-2.0F, -3.0F, 0.0F, 2, 3, 2),
-			PartPose.offsetAndRotation(-2.0F, 1.0F, 0.01F, 0.0F, 0.0F, 0.22759093446006054F));
+		maskMain.addOrReplaceChild("mask_right", CubeListBuilder.create()
+				.texOffs(28, 15)
+				.addBox(-2.0F, -4.0F, 0.0F, 2, 8, 2),
+			PartPose.offsetAndRotation(-2.0F, 0.0F, -2.0F, 0.0F, 0.22759093446006054F, 0.0F));
 
 		return LayerDefinition.create(definition, 64, 64);
 	}

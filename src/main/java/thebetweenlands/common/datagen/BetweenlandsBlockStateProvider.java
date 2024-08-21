@@ -176,13 +176,18 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.WEAK_SMOOTH_CRAGROCK);
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.GREEN_DENTROTHYST, "translucent");
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.ORANGE_DENTROTHYST, "translucent");
-		//pots of chance
+		this.builtinEntityAndItem(BlockRegistry.LOOT_POT_1, this.modLoc("block/particle/loot_pot_1_particle"));
+		this.builtinEntityAndItem(BlockRegistry.LOOT_POT_2, this.modLoc("block/particle/loot_pot_2_particle"));
+		this.builtinEntityAndItem(BlockRegistry.LOOT_POT_3, this.modLoc("block/particle/loot_pot_3_particle"));
 		//monster spawner
 		this.pillarWithItem(BlockRegistry.TEMPLE_PILLAR);
 		this.pillarWithItem(BlockRegistry.BETWEENSTONE_PILLAR);
 		this.pillarWithItem(BlockRegistry.PITSTONE_PILLAR);
 		this.pillarWithItem(BlockRegistry.LIMESTONE_PILLAR);
 		this.pillarWithItem(BlockRegistry.CRAGROCK_PILLAR);
+		this.builtinEntityAndItem(BlockRegistry.TAR_LOOT_POT_1, this.modLoc("block/solid_tar"));
+		this.builtinEntityAndItem(BlockRegistry.TAR_LOOT_POT_2, this.modLoc("block/solid_tar"));
+		this.builtinEntityAndItem(BlockRegistry.TAR_LOOT_POT_3, this.modLoc("block/solid_tar"));
 		this.stairBlockWithItem(BlockRegistry.CRAGROCK_STAIRS, BlockRegistry.CRAGROCK);
 		this.stairBlockWithItem(BlockRegistry.PITSTONE_STAIRS, BlockRegistry.PITSTONE);
 		this.stairBlockWithItem(BlockRegistry.BETWEENSTONE_STAIRS, BlockRegistry.BETWEENSTONE);
@@ -382,6 +387,9 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 				.build();
 		});
 		this.basicItemTex(BlockRegistry.WEEDWOOD_LEVER, true);
+		this.builtinEntityAndItem(BlockRegistry.MUD_LOOT_POT_1, this.modLoc("block/compacted_mud"));
+		this.builtinEntityAndItem(BlockRegistry.MUD_LOOT_POT_2, this.modLoc("block/compacted_mud"));
+		this.builtinEntityAndItem(BlockRegistry.MUD_LOOT_POT_3, this.modLoc("block/compacted_mud"));
 		this.simpleBlockWithItem(BlockRegistry.WORM_PILLAR);
 		this.simpleBlockWithItem(BlockRegistry.SLUDGY_WORM_PILLAR_1);
 		this.simpleBlockWithItem(BlockRegistry.SLUDGY_WORM_PILLAR_2);

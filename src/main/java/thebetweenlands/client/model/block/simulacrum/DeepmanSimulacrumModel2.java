@@ -1,4 +1,4 @@
-package thebetweenlands.client.model.block;
+package thebetweenlands.client.model.block.simulacrum;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

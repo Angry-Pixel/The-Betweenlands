@@ -24,6 +24,8 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import thebetweenlands.client.*;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.block.*;
+import thebetweenlands.client.model.block.pot.*;
+import thebetweenlands.client.model.block.simulacrum.*;
 import thebetweenlands.client.model.entity.GeckoModel;
 import thebetweenlands.client.model.entity.ModelWight;
 import thebetweenlands.client.model.entity.SwampHagModel;
@@ -31,6 +33,7 @@ import thebetweenlands.client.particle.BetweenlandsParticle;
 import thebetweenlands.client.particle.BetweenlandsPortalParticle;
 import thebetweenlands.client.renderer.block.BLItemRenderer;
 import thebetweenlands.client.renderer.block.CenserRenderer;
+import thebetweenlands.client.renderer.block.LootPotRenderer;
 import thebetweenlands.client.renderer.block.SimulacrumRenderer;
 import thebetweenlands.client.renderer.entity.GeckoRenderer;
 import thebetweenlands.client.renderer.entity.RenderWight;
@@ -68,6 +71,7 @@ public class ClientEvents {
 		event.registerEntityRenderer(EntityRegistry.WIGHT.get(), RenderWight::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.CENSER.get(), CenserRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.LOOT_POT.get(), LootPotRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SIMULACRUM.get(), SimulacrumRenderer::new);
 	}
 
@@ -82,6 +86,9 @@ public class ClientEvents {
 		event.registerLayerDefinition(BLModelLayers.LAKE_CAVERN_SIMULACRUM_1, LakeCavernSimulacrumModel1::makeModel);
 		event.registerLayerDefinition(BLModelLayers.LAKE_CAVERN_SIMULACRUM_2, LakeCavernSimulacrumModel2::makeModel);
 		event.registerLayerDefinition(BLModelLayers.LAKE_CAVERN_SIMULACRUM_3, LakeCavernSimulacrumModel3::makeModel);
+		event.registerLayerDefinition(BLModelLayers.LOOT_POT_1, LootPotModel1::makeModel);
+		event.registerLayerDefinition(BLModelLayers.LOOT_POT_2, LootPotModel2::makeModel);
+		event.registerLayerDefinition(BLModelLayers.LOOT_POT_3, LootPotModel3::makeModel);
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_1, RootmanSimulacrumModel1::makeModel);
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_2, RootmanSimulacrumModel2::makeModel);
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_3, RootmanSimulacrumModel3::makeModel);
@@ -104,6 +111,9 @@ public class ClientEvents {
 	public static void registerExtensions(RegisterClientExtensionsEvent event) {
 		event.registerItem(BLItemRenderer.CLIENT_ITEM_EXTENSION,
 			BlockRegistry.CENSER.asItem(),
+			BlockRegistry.LOOT_POT_1.asItem(), BlockRegistry.LOOT_POT_2.asItem(), BlockRegistry.LOOT_POT_3.asItem(),
+			BlockRegistry.TAR_LOOT_POT_1.asItem(), BlockRegistry.TAR_LOOT_POT_2.asItem(), BlockRegistry.TAR_LOOT_POT_3.asItem(),
+			BlockRegistry.MUD_LOOT_POT_1.asItem(), BlockRegistry.MUD_LOOT_POT_2.asItem(), BlockRegistry.MUD_LOOT_POT_3.asItem(),
 			BlockRegistry.DEEPMAN_SIMULACRUM_1.asItem(), BlockRegistry.DEEPMAN_SIMULACRUM_2.asItem(), BlockRegistry.DEEPMAN_SIMULACRUM_3.asItem(),
 			BlockRegistry.LAKE_CAVERN_SIMULACRUM_1.asItem(), BlockRegistry.LAKE_CAVERN_SIMULACRUM_2.asItem(), BlockRegistry.LAKE_CAVERN_SIMULACRUM_3.asItem(),
 			BlockRegistry.ROOTMAN_SIMULACRUM_1.asItem(), BlockRegistry.ROOTMAN_SIMULACRUM_2.asItem(), BlockRegistry.ROOTMAN_SIMULACRUM_3.asItem());
