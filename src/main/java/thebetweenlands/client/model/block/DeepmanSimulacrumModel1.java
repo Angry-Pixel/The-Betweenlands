@@ -24,7 +24,7 @@ public class DeepmanSimulacrumModel1 extends Model {
 		var body = partDefinition.addOrReplaceChild("body", CubeListBuilder.create()
 				.texOffs(0, 0)
 				.addBox(-4.5F, -7.0F, -4.5F, 9, 7, 9),
-			PartPose.offset(0.0F, -24.0F, 0.0F));
+			PartPose.ZERO);
 
 		var face = body.addOrReplaceChild("face", CubeListBuilder.create()
 				.texOffs(0, 17)

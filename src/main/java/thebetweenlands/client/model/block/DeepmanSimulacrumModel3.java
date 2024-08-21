@@ -24,7 +24,7 @@ public class DeepmanSimulacrumModel3 extends Model {
 		var body = partDefinition.addOrReplaceChild("body", CubeListBuilder.create()
 				.texOffs(0, 0)
 				.addBox(0.0F, -10.0F, 0.0F, 6, 10, 6),
-			PartPose.offset(-4.5F, -24.0F, -3.0F));
+			PartPose.offset(-4.5F, 0.0F, -3.0F));
 
 		var shoulders = body.addOrReplaceChild("shoulders", CubeListBuilder.create()
 				.texOffs(0, 17)
@@ -44,7 +44,7 @@ public class DeepmanSimulacrumModel3 extends Model {
 		var scroll = partDefinition.addOrReplaceChild("scroll", CubeListBuilder.create()
 				.texOffs(0, 32)
 				.addBox(-1.0F, -2.0F, -3.4F, 2, 2, 7),
-			PartPose.offsetAndRotation(3.5F, -24.0F, 0.0F, 0.0F, -0.18203784098300857F, -0.136659280431156F));
+			PartPose.offsetAndRotation(3.5F, 0.0F, 0.0F, 0.0F, -0.18203784098300857F, -0.136659280431156F));
 
 		scroll.addOrReplaceChild("scroll_stick", CubeListBuilder.create()
 			.texOffs(0, 42)

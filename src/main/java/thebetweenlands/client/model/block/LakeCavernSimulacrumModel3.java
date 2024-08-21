@@ -27,7 +27,7 @@ public class LakeCavernSimulacrumModel3 extends Model {
 		var base = partDefinition.addOrReplaceChild("base", CubeListBuilder.create()
 				.texOffs(0, 0)
 				.addBox(-5.0F, -3.0F, -5.0F, 10, 3, 10),
-			PartPose.offset(0.0F, -24.0F, 0.0F));
+			PartPose.ZERO);
 
 		var main = base.addOrReplaceChild("main", CubeListBuilder.create()
 				.texOffs(0, 14)
