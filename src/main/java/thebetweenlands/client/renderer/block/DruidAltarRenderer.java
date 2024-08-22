@@ -1,19 +1,17 @@
 package thebetweenlands.client.renderer.block;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -23,25 +21,25 @@ import org.joml.Quaternionf;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
 import thebetweenlands.client.BLModelLayers;
-import thebetweenlands.client.model.block.DruidAltarModel;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.CenserBlock;
 import thebetweenlands.common.block.DruidAltarBlock;
 import thebetweenlands.common.block.entity.DruidAltarBlockEntity;
 
 public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEntity> {
 
-	private final DruidAltarModel altar;
-	private final DruidAltarModel stones;
-	private final ResourceLocation ACTIVE = TheBetweenlands.prefix("textures/entity/block/druid_altar_active.png");
-	private final ResourceLocation ACTIVEGLOW = TheBetweenlands.prefix("textures/entity/block/druid_altar_active_glow.png");
-	private final ResourceLocation NORMAL = TheBetweenlands.prefix("textures/entity/block/druid_altar.png");
-	private final ResourceLocation NORMALGLOW = TheBetweenlands.prefix("textures/entity/block/druid_altar_glow.png");
 	private static final float HALF_SQRT_3 = (float)(Math.sqrt(3.0) / 2.0);
 
+	private static final RenderType ACTIVE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/druid_altar_active.png"));
+	private static final RenderType ACTIVE_GLOW = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/druid_altar_active_glow.png"));
+	private static final RenderType NORMAL = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/druid_altar.png"));
+	private static final RenderType NORMAL_GLOW = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/druid_altar_glow.png"));
+
+	private final ModelPart altar;
+	private final ModelPart stones;
+
 	public DruidAltarRenderer(BlockEntityRendererProvider.Context context) {
-		this.altar = new DruidAltarModel(context.bakeLayer(BLModelLayers.DRUID_ALTAR));
-		this.stones = new DruidAltarModel(context.bakeLayer(BLModelLayers.DRUID_STONES));
+		this.altar = context.bakeLayer(BLModelLayers.DRUID_ALTAR);
+		this.stones = context.bakeLayer(BLModelLayers.DRUID_STONES);
 	}
 
 	@Override
@@ -54,8 +52,8 @@ public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEn
 		stack.scale(-1.0F, 1.0F, 1.0F);
 		//altar
 		stack.pushPose();
-		this.altar.renderToBuffer(stack, source.getBuffer(RenderType.entityCutoutNoCull(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVE : NORMAL)), light, overlay);
-		this.altar.renderToBuffer(stack, source.getBuffer(RenderType.entityCutoutNoCull(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVEGLOW : NORMALGLOW)), LightTexture.FULL_BRIGHT, overlay);
+		this.altar.render(stack, source.getBuffer(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVE : NORMAL), light, overlay);
+		this.altar.render(stack, source.getBuffer(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVE_GLOW : NORMAL_GLOW), LightTexture.FULL_BRIGHT, overlay);
 		stack.popPose();
 
 		//stones
@@ -63,8 +61,8 @@ public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEn
 		stack.pushPose();
 		stack.mulPose(Axis.YP.rotationDegrees(renderRotation));
 		stack.translate(0.0F, -1.5F, 0.0F);
-		this.stones.renderToBuffer(stack, source.getBuffer(RenderType.entityCutoutNoCull(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVE : NORMAL)), light, overlay);
-		this.stones.renderToBuffer(stack, source.getBuffer(RenderType.entityCutoutNoCull(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVEGLOW : NORMALGLOW)), LightTexture.FULL_BRIGHT, overlay);
+		this.stones.render(stack, source.getBuffer(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVE : NORMAL), light, overlay);
+		this.stones.render(stack, source.getBuffer(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVE_GLOW : NORMAL_GLOW), LightTexture.FULL_BRIGHT, overlay);
 		stack.popPose();
 
 		//Animate the 4 talisman pieces

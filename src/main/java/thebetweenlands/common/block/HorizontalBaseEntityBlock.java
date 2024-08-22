@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 
 public abstract class HorizontalBaseEntityBlock extends BaseEntityBlock {
 
-	public static final DirectionProperty FACING = BlockStateProperties.FACING;
+	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
 	public HorizontalBaseEntityBlock(Properties properties) {
 		super(properties);
@@ -33,7 +33,7 @@ public abstract class HorizontalBaseEntityBlock extends BaseEntityBlock {
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection().getOpposite());
+		return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
 	}
 
 	@Override

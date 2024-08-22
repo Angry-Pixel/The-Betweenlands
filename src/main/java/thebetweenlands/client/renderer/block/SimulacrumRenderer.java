@@ -2,12 +2,12 @@ package thebetweenlands.client.renderer.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import thebetweenlands.client.BLModelLayers;
-import thebetweenlands.client.model.block.simulacrum.*;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.SimulacrumBlock;
 import thebetweenlands.common.block.entity.simulacrum.SimulacrumBlockEntity;
@@ -15,26 +15,30 @@ import thebetweenlands.common.registries.BlockRegistry;
 
 public class SimulacrumRenderer implements BlockEntityRenderer<SimulacrumBlockEntity> {
 
-	private final DeepmanSimulacrumModel1 deepman1;
-	private final DeepmanSimulacrumModel2 deepman2;
-	private final DeepmanSimulacrumModel3 deepman3;
-	private final LakeCavernSimulacrumModel1 lakeman1;
-	private final LakeCavernSimulacrumModel2 lakeman2;
-	private final LakeCavernSimulacrumModel3 lakeman3;
-	private final RootmanSimulacrumModel1 rootman1;
-	private final RootmanSimulacrumModel2 rootman2;
-	private final RootmanSimulacrumModel3 rootman3;
+	private static final RenderType DEEPMAN_1 = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/deepman_simulacrum_1.png"));
+	private static final RenderType DEEPMAN_2 = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/deepman_simulacrum_2.png"));
+	private static final RenderType DEEPMAN_3 = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/deepman_simulacrum_3.png"));
+	private static final RenderType LAKEMAN_1 = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/lake_cavern_simulacrum_1.png"));
+	private static final RenderType LAKEMAN_2 = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/lake_cavern_simulacrum_2.png"));
+	private static final RenderType LAKEMAN_3 = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/lake_cavern_simulacrum_3.png"));
+	private static final RenderType ROOTMAN_1 = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/rootman_simulacrum_1.png"));
+	private static final RenderType ROOTMAN_2 = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/rootman_simulacrum_2.png"));
+	private static final RenderType ROOTMAN_3 = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/rootman_simulacrum_3.png"));
+
+	private final ModelPart deepman1, deepman2, deepman3;
+	private final ModelPart lakeman1, lakeman2, lakeman3;
+	private final ModelPart rootman1, rootman2, rootman3;
 
 	public SimulacrumRenderer(BlockEntityRendererProvider.Context context) {
-		this.deepman1 = new DeepmanSimulacrumModel1(context.bakeLayer(BLModelLayers.DEEPMAN_SIMULACRUM_1));
-		this.deepman2 = new DeepmanSimulacrumModel2(context.bakeLayer(BLModelLayers.DEEPMAN_SIMULACRUM_2));
-		this.deepman3 = new DeepmanSimulacrumModel3(context.bakeLayer(BLModelLayers.DEEPMAN_SIMULACRUM_3));
-		this.lakeman1 = new LakeCavernSimulacrumModel1(context.bakeLayer(BLModelLayers.LAKE_CAVERN_SIMULACRUM_1));
-		this.lakeman2 = new LakeCavernSimulacrumModel2(context.bakeLayer(BLModelLayers.LAKE_CAVERN_SIMULACRUM_2));
-		this.lakeman3 = new LakeCavernSimulacrumModel3(context.bakeLayer(BLModelLayers.LAKE_CAVERN_SIMULACRUM_3));
-		this.rootman1 = new RootmanSimulacrumModel1(context.bakeLayer(BLModelLayers.ROOTMAN_SIMULACRUM_1));
-		this.rootman2 = new RootmanSimulacrumModel2(context.bakeLayer(BLModelLayers.ROOTMAN_SIMULACRUM_2));
-		this.rootman3 = new RootmanSimulacrumModel3(context.bakeLayer(BLModelLayers.ROOTMAN_SIMULACRUM_3));
+		this.deepman1 = context.bakeLayer(BLModelLayers.DEEPMAN_SIMULACRUM_1);
+		this.deepman2 = context.bakeLayer(BLModelLayers.DEEPMAN_SIMULACRUM_2);
+		this.deepman3 = context.bakeLayer(BLModelLayers.DEEPMAN_SIMULACRUM_3);
+		this.lakeman1 = context.bakeLayer(BLModelLayers.LAKE_CAVERN_SIMULACRUM_1);
+		this.lakeman2 = context.bakeLayer(BLModelLayers.LAKE_CAVERN_SIMULACRUM_2);
+		this.lakeman3 = context.bakeLayer(BLModelLayers.LAKE_CAVERN_SIMULACRUM_3);
+		this.rootman1 = context.bakeLayer(BLModelLayers.ROOTMAN_SIMULACRUM_1);
+		this.rootman2 = context.bakeLayer(BLModelLayers.ROOTMAN_SIMULACRUM_2);
+		this.rootman3 = context.bakeLayer(BLModelLayers.ROOTMAN_SIMULACRUM_3);
 	}
 
 	@Override
@@ -46,23 +50,23 @@ public class SimulacrumRenderer implements BlockEntityRenderer<SimulacrumBlockEn
 		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(SimulacrumBlock.FACING).toYRot()));
 		stack.scale(-1.0F, 1.0F, 1.0F);
 		if (entity.getBlockState().is(BlockRegistry.DEEPMAN_SIMULACRUM_1)) {
-			this.deepman1.renderToBuffer(stack, source.getBuffer(RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/deepman_simulacrum_1.png"))), light, overlay);
+			this.deepman1.render(stack, source.getBuffer(DEEPMAN_1), light, overlay);
 		} else if (entity.getBlockState().is(BlockRegistry.DEEPMAN_SIMULACRUM_2)) {
-			this.deepman2.renderToBuffer(stack, source.getBuffer(RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/deepman_simulacrum_2.png"))), light, overlay);
+			this.deepman2.render(stack, source.getBuffer(DEEPMAN_2), light, overlay);
 		} else if (entity.getBlockState().is(BlockRegistry.DEEPMAN_SIMULACRUM_3)) {
-			this.deepman3.renderToBuffer(stack, source.getBuffer(RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/deepman_simulacrum_3.png"))), light, overlay);
+			this.deepman3.render(stack, source.getBuffer(DEEPMAN_3), light, overlay);
 		} else if (entity.getBlockState().is(BlockRegistry.LAKE_CAVERN_SIMULACRUM_1)) {
-			this.lakeman1.renderToBuffer(stack, source.getBuffer(RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/lake_cavern_simulacrum_1.png"))), light, overlay);
+			this.lakeman1.render(stack, source.getBuffer(LAKEMAN_1), light, overlay);
 		} else if (entity.getBlockState().is(BlockRegistry.LAKE_CAVERN_SIMULACRUM_2)) {
-			this.lakeman2.renderToBuffer(stack, source.getBuffer(RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/lake_cavern_simulacrum_2.png"))), light, overlay);
+			this.lakeman2.render(stack, source.getBuffer(LAKEMAN_2), light, overlay);
 		} else if (entity.getBlockState().is(BlockRegistry.LAKE_CAVERN_SIMULACRUM_3)) {
-			this.lakeman3.renderToBuffer(stack, source.getBuffer(RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/lake_cavern_simulacrum_3.png"))), light, overlay);
+			this.lakeman3.render(stack, source.getBuffer(LAKEMAN_3), light, overlay);
 		} else if (entity.getBlockState().is(BlockRegistry.ROOTMAN_SIMULACRUM_1)) {
-			this.rootman1.renderToBuffer(stack, source.getBuffer(RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/rootman_simulacrum_1.png"))), light, overlay);
+			this.rootman1.render(stack, source.getBuffer(ROOTMAN_1), light, overlay);
 		} else if (entity.getBlockState().is(BlockRegistry.ROOTMAN_SIMULACRUM_2)) {
-			this.rootman2.renderToBuffer(stack, source.getBuffer(RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/rootman_simulacrum_2.png"))), light, overlay);
+			this.rootman2.render(stack, source.getBuffer(ROOTMAN_2), light, overlay);
 		} else if (entity.getBlockState().is(BlockRegistry.ROOTMAN_SIMULACRUM_3)) {
-			this.rootman3.renderToBuffer(stack, source.getBuffer(RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/rootman_simulacrum_3.png"))), light, overlay);
+			this.rootman3.render(stack, source.getBuffer(ROOTMAN_3), light, overlay);
 		}
 		stack.popPose();
 	}

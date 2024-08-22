@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
@@ -25,10 +26,14 @@ import thebetweenlands.common.block.entity.PurifierBlockEntity;
 
 public class PurifierRenderer implements BlockEntityRenderer<PurifierBlockEntity> {
 
-	private final PurifierModel purifier;
+	private static final RenderType TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/purifier.png"));
+	private final ModelPart base;
+	private final ModelPart fire;
 
 	public PurifierRenderer(BlockEntityRendererProvider.Context context) {
-		this.purifier = new PurifierModel(context.bakeLayer(BLModelLayers.PURIFIER));
+		ModelPart root = context.bakeLayer(BLModelLayers.PURIFIER);
+		this.base = root.getChild("base");
+		this.fire = root.getChild("fire_plate");
 	}
 
 	@Override
@@ -40,9 +45,9 @@ public class PurifierRenderer implements BlockEntityRenderer<PurifierBlockEntity
 		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(PurifierBlock.FACING).toYRot()));
 		stack.scale(-1.0F, 1.0F, 1.0F);
 		stack.pushPose();
-		this.purifier.renderToBuffer(stack, source.getBuffer(RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/purifier.png"))), light, overlay);
+		this.base.render(stack, source.getBuffer(TEXTURE), light, overlay);
 		if (entity.getBlockState().getValue(PurifierBlock.LIT)) {
-			this.purifier.renderFire(stack, source.getBuffer(RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/purifier.png"))), light, overlay);
+			this.fire.render(stack, source.getBuffer(TEXTURE), light, overlay);
 		}
 		int amount = entity.waterTank.getFluidAmount();
 		int capacity = entity.waterTank.getCapacity();

@@ -8,6 +8,7 @@ import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -21,6 +22,8 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.FishingTackleBoxBlockEntity;
@@ -32,11 +35,18 @@ import java.util.List;
 
 public class FishingTackleBoxBlock extends HorizontalBaseEntityBlock {
 
+	public static final VoxelShape X_AXIS_SHAPE = Block.box(3.0D, 0.0D, 1.0D, 13.0D, 11.5D, 15.0D);
+	public static final VoxelShape Z_AXIS_SHAPE = Block.box(1.0D, 0.0D, 3.0D, 15.0D, 11.5D, 13.0D);
 	public static final BooleanProperty OPEN = BooleanProperty.create("open");
 
 	public FishingTackleBoxBlock(Properties properties) {
 		super(properties);
 		this.registerDefaultState(this.getStateDefinition().any().setValue(OPEN, false));
+	}
+
+	@Override
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		return state.getValue(FACING).getAxis() == Direction.Axis.X ? X_AXIS_SHAPE : Z_AXIS_SHAPE;
 	}
 
 	public static boolean isSatOn(Level level, BlockPos pos) {

@@ -1,26 +1,12 @@
 package thebetweenlands.client.model.block;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.Model;
-import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.RenderType;
 
-public class PurifierModel extends Model {
-
-	private final ModelPart root;
-	private final ModelPart fire;
-
-	public PurifierModel(ModelPart root) {
-		super(RenderType::entityCutoutNoCull);
-		this.root = root.getChild("base");
-		this.fire = root.getChild("fire_plate");
-	}
+public class PurifierModel {
 
 	public static LayerDefinition makeModel() {
 		MeshDefinition definition = new MeshDefinition();
@@ -167,15 +153,4 @@ public class PurifierModel extends Model {
 
 		return LayerDefinition.create(definition, 128, 64);
 	}
-
-	@Override
-	public void renderToBuffer(PoseStack stack, VertexConsumer consumer, int light, int overlay, int color) {
-		this.root.render(stack, consumer, light, overlay, color);
-	}
-
-	public void renderFire(PoseStack stack, VertexConsumer consumer, int light, int overlay) {
-		this.fire.render(stack, consumer, light, overlay);
-	}
-
-
 }

@@ -549,6 +549,7 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.builtinEntityAndItem(BlockRegistry.ROOTMAN_SIMULACRUM_1, this.modLoc("block/root_bottom"), 0.75F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.ROOTMAN_SIMULACRUM_2, this.modLoc("block/root_bottom"), 0.75F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.ROOTMAN_SIMULACRUM_3, this.modLoc("block/root_bottom"), 0.75F, 0.0F);
+		this.builtinEntityAndItem(BlockRegistry.FISHING_TACKLE_BOX, this.modLoc("block/particle/fishing_tackle_box_particle"), 0.625F, 0.0F);
 		this.carpetBlockWithItem(BlockRegistry.REED_MAT);
 		this.simpleBlockWithItem(BlockRegistry.LYESTONE.get(), this.models().getExistingFile(this.blockTexture(BlockRegistry.LIMESTONE.get())));
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.MIST_BRIDGE, "translucent");
