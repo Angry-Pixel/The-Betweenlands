@@ -9,6 +9,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -19,6 +20,8 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.common.block.entity.CompostBinBlockEntity;
 import thebetweenlands.common.component.item.CompostData;
 import thebetweenlands.common.registries.BlockEntityRegistry;
@@ -30,10 +33,17 @@ import javax.annotation.Nullable;
 public class CompostBinBlock extends HorizontalBaseEntityBlock {
 
 	public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
+	//due to wack lighting calculations this block cant be a full block
+	public static final VoxelShape ALMOST_FULL = Block.box(0.001D, 0.0D, 0.001D, 15.999D, 16.0D, 15.999D);
 
 	public CompostBinBlock(Properties properties) {
 		super(properties);
 		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(OPEN, false));
+	}
+
+	@Override
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		return ALMOST_FULL;
 	}
 
 	@Override
@@ -45,10 +55,9 @@ public class CompostBinBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-		if (!level.isClientSide() && state.getValue(OPEN)) {
+		if (state.getValue(OPEN)) {
 			if (level.getBlockEntity(pos) instanceof CompostBinBlockEntity bin) {
 				boolean interacted = false;
-
 
 				if (bin.getCompostedAmount() > 0) {
 					if (bin.removeCompost(level, pos, state, CompostBinBlockEntity.COMPOST_PER_ITEM)) {
@@ -76,6 +85,7 @@ public class CompostBinBlock extends HorizontalBaseEntityBlock {
 						}
 					} else {
 						player.displayClientMessage(Component.translatable("chat.compost.not.compostable"), true);
+						return ItemInteractionResult.CONSUME;
 					}
 				}
 			}

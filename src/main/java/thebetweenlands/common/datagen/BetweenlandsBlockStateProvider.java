@@ -492,6 +492,7 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.builtinEntityAndItem(BlockRegistry.PURIFIER, this.modLoc("block/particle/purifier_particle"), 0.625F, 0.0F);
 		this.simpleBlock(BlockRegistry.WEEDWOOD_CRAFTING_TABLE.get(), this.models().cube("weedwood_crafting_table", this.modLoc("block/weedwood_planks"), this.modLoc("block/weedwood_workbench_top"), this.modLoc("block/weedwood_workbench_front"), this.modLoc("block/weedwood_workbench"), this.modLoc("block/weedwood_workbench"), this.modLoc("block/weedwood_workbench_front")));
 		this.simpleBlockItem(BlockRegistry.WEEDWOOD_CRAFTING_TABLE);
+		this.builtinEntityAndItem(BlockRegistry.COMPOST_BIN, this.modLoc("block/particle/compost_bin_particle"), 0.625F, 0.0F);
 		this.simpleBlock(BlockRegistry.WEEDWOOD_JUKEBOX.get(), this.models().cubeTop("weedwood_jukebox", this.modLoc("block/weedwood_jukebox_side"), this.modLoc("block/weedwood_jukebox_top")));
 		this.simpleBlockItem(BlockRegistry.WEEDWOOD_JUKEBOX);
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.ENERGY_BARRIER, "translucent");
