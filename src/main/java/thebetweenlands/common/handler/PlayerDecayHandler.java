@@ -19,6 +19,8 @@ import thebetweenlands.api.capability.IDecayData;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.AttachmentRegistry;
+import thebetweenlands.common.registries.EnvironmentEventRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.MathUtils;
 
 @EventBusSubscriber(modid = TheBetweenlands.ID, bus = Bus.GAME)
@@ -98,38 +100,37 @@ public class PlayerDecayHandler {
 					} else if (decay >= 10) {
 						player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 0, true, false));
 					}
+					
+					if(!player.isPassenger()) {
+						Difficulty difficulty = player.level().getDifficulty();
 
-					// TODO worry about tomorrow, i go sleep now :)
-//					if(!player.isPassenger()) {
-//						Difficulty difficulty = player.level().getDifficulty();
-//
-//						float decayBaseSpeed = isTargetSmelly(player) ? getDecayBaseSpeed(difficulty) * 1.5F : getDecayBaseSpeed(difficulty); 
-//
-//						float decaySpeed = 0;
-//
-//						if(player.distanceWalkedModified - player.prevDistanceWalkedModified > 0) {
-//							decaySpeed += (player.distanceWalkedModified - player.prevDistanceWalkedModified) * 4 * decayBaseSpeed;
-//						}
-//
-//						BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(player.world);
-//						if(storage.getEnvironmentEventRegistry().heavyRain.isActive() && player.world.canSeeSky(player.getPosition())) {
-//							decaySpeed += decayBaseSpeed;
-//						}
-//
-//						if(player.isInWater()) {
-//							decaySpeed += decayBaseSpeed * 2.75F;
-//						}
-//
-//						if(decaySpeed > 0.0F) {
-//							int armorDecayReduction = getArmorDecayReduction(player);
-//
-//							if(armorDecayReduction > 0) {
-//								decaySpeed -= decaySpeed * (armorDecayReduction / 4f);
-//							}
-//
-//							stats.addDecayAcceleration(decaySpeed);
-//						}
-//					}
+						float decayBaseSpeed = isTargetSmelly(player) ? getDecayBaseSpeed(difficulty) * 1.5F : getDecayBaseSpeed(difficulty); 
+
+						float decaySpeed = 0;
+
+						if(player.walkDist - player.walkDistO > 0) {
+							decaySpeed += (player.walkDist - player.walkDistO) * 4 * decayBaseSpeed;
+						}
+
+						BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.get(player.level());
+						if(storage.getEnvironmentEventRegistry().isEventActive(EnvironmentEventRegistry.HEAVY_RAIN.getId()) && player.level().canSeeSky(player.blockPosition())) {
+							decaySpeed += decayBaseSpeed;
+						}
+
+						if(player.isInWater()) {
+							decaySpeed += decayBaseSpeed * 2.75F;
+						}
+
+						if(decaySpeed > 0.0F) {
+							int armorDecayReduction = getArmorDecayReduction(player);
+
+							if(armorDecayReduction > 0) {
+								decaySpeed -= decaySpeed * (armorDecayReduction / 4f);
+							}
+
+							cap.addDecayAcceleration(player, decaySpeed);
+						}
+					}
 					
 					cap.tick(player);
 				} else {
@@ -187,4 +188,27 @@ public class PlayerDecayHandler {
 //	}
 
 	// TODO OverworldItemHandler required for item uses
+	
+
+	private static boolean isTargetSmelly(LivingEntity entity) {
+		if(entity.hasData(AttachmentRegistry.ROT_SMELL))
+			if(entity.getData(AttachmentRegistry.ROT_SMELL).isSmellingBad(entity))
+				return true;
+		return false;
+	}
+
+	private static int getArmorDecayReduction(LivingEntity entity) {
+		int armorCount = 0;
+
+		// TODO After Amphibious Armour is done (also, maybe make this something an interface or data component can handle)
+//		for (ItemStack armor : entity.getArmorSlots()) {
+//			if (armor.getItem() instanceof ItemAmphibiousArmor) {
+//				if (((ItemAmphibiousArmor) armor.getItem()).getUpgradeCount(armor, AmphibiousArmorUpgrades.DECAY_DECREASE) >= 1) {
+//					armorCount++;
+//				}
+//			}
+//		}
+
+		return armorCount;
+	}
 }
