@@ -71,6 +71,7 @@ public class ClientEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.DRUID_ALTAR.get(), DruidAltarRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.LOOT_POT.get(), LootPotRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.LOOT_URN.get(), LootUrnRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.PURIFIER.get(), PurifierRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SIMULACRUM.get(), SimulacrumRenderer::new);
 	}
 
@@ -93,6 +94,7 @@ public class ClientEvents {
 		event.registerLayerDefinition(BLModelLayers.LOOT_URN_1, LootUrnModel1::makeModel);
 		event.registerLayerDefinition(BLModelLayers.LOOT_URN_2, LootUrnModel2::makeModel);
 		event.registerLayerDefinition(BLModelLayers.LOOT_URN_3, LootUrnModel3::makeModel);
+		event.registerLayerDefinition(BLModelLayers.PURIFIER, PurifierModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_1, RootmanSimulacrumModel1::makeModel);
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_2, RootmanSimulacrumModel2::makeModel);
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_3, RootmanSimulacrumModel3::makeModel);
@@ -114,7 +116,7 @@ public class ClientEvents {
 
 	public static void registerExtensions(RegisterClientExtensionsEvent event) {
 		event.registerItem(BLItemRenderer.CLIENT_ITEM_EXTENSION,
-			BlockRegistry.CENSER.asItem(), BlockRegistry.DRUID_ALTAR.asItem(),
+			BlockRegistry.CENSER.asItem(), BlockRegistry.DRUID_ALTAR.asItem(), BlockRegistry.PURIFIER.asItem(),
 			BlockRegistry.LOOT_POT_1.asItem(), BlockRegistry.LOOT_POT_2.asItem(), BlockRegistry.LOOT_POT_3.asItem(),
 			BlockRegistry.TAR_LOOT_POT_1.asItem(), BlockRegistry.TAR_LOOT_POT_2.asItem(), BlockRegistry.TAR_LOOT_POT_3.asItem(),
 			BlockRegistry.MUD_LOOT_POT_1.asItem(), BlockRegistry.MUD_LOOT_POT_2.asItem(), BlockRegistry.MUD_LOOT_POT_3.asItem(),
