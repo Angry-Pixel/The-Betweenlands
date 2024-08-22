@@ -5,7 +5,9 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.LanguageProvider;
+import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import org.apache.commons.lang3.StringUtils;
 import thebetweenlands.api.aspect.AspectType;
@@ -224,7 +226,6 @@ public class BetweenlandsLangProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.DUNGEON_DOOR_COMBINATION, "Dungeon Door Code");
 		this.addBlock(BlockRegistry.DUNGEON_DOOR_RUNES, "Dungeon Door");
 		this.addBlock(BlockRegistry.DUNGEON_WALL_CANDLE, "Wall Candle");
-
 		this.addBlock(BlockRegistry.EDGE_LEAF, "Edge Leaf");
 		this.addBlock(BlockRegistry.EDGE_MOSS, "Edge Moss");
 		this.addBlock(BlockRegistry.EDGE_SHROOM, "Edge Shroom");
@@ -243,7 +244,7 @@ public class BetweenlandsLangProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.FILTERED_SILT_GLASS_JAR, "Filtered Silt Glass Jar");
 		this.addBlock(BlockRegistry.FILTERED_SILT_GLASS_PANE, "Filtered Silt Glass Pane");
 		this.addBlock(BlockRegistry.FINE_LATTICE, "Fine Lattice");
-		this.addBlock(BlockRegistry.FISH_TRIMMING_TABLE, "Trimming Table");
+		this.addBlockWithDesc(BlockRegistry.FISH_TRIMMING_TABLE, "Trimming Table", "Uses a bone axe to chop caught fish and crabs.");
 		this.addBlock(BlockRegistry.FISHING_TACKLE_BOX, "Fishing Tackle Box");
 		this.addBlock(BlockRegistry.FLATHEAD_MUSHROOM, "Flathead Mushroom");
 		this.addBlock(BlockRegistry.FLOWERED_NETTLE, "Flowered Nettle");
@@ -1068,6 +1069,11 @@ public class BetweenlandsLangProvider extends LanguageProvider {
 	private void addItemWithDesc(DeferredItem<Item> item, String name, String desc) {
 		this.addItem(item, name);
 		this.add(item.get().getDescriptionId() + ".desc", desc);
+	}
+
+	private void addBlockWithDesc(DeferredBlock<Block> block, String name, String desc) {
+		this.addBlock(block, name);
+		this.add(block.get().getDescriptionId() + ".desc", desc);
 	}
 
 	private void addDisc(DeferredItem<Item> disc, String name, String desc) {

@@ -5,6 +5,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.api.recipes.TrimmingTableRecipe;
+import thebetweenlands.common.items.MobItem;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -81,6 +83,15 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity {
 		if (slot == 0 && this.getLevel() != null) {
 			this.recipe = this.getLevel().getRecipeManager().getRecipeFor(RecipeRegistry.TRIMMING_TABLE_RECIPE.get(), new SingleRecipeInput(stack), this.getLevel()).map(RecipeHolder::value).orElse(null);
 		}
+	}
+
+	@Nullable
+	public Entity getInputEntity(Level level) {
+		ItemStack stack = this.getItems().getFirst();
+		if(!stack.isEmpty() && stack.getItem() instanceof MobItem && ((MobItem) stack.getItem()).hasEntityData(stack)) {
+			return ((MobItem) stack.getItem()).createCapturedEntity(level, 0, 0, 0, stack, false);
+		}
+		return null;
 	}
 
 	public ItemStack getSlotResult(Level level, int slot, int numItems) {

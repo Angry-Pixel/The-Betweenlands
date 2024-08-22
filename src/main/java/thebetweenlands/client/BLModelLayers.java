@@ -12,6 +12,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation DEEPMAN_SIMULACRUM_3 = register("deepman_simulacrum_3");
 	public static final ModelLayerLocation DRUID_ALTAR = register("druid_altar");
 	public static final ModelLayerLocation DRUID_STONES = register("druid_stones");
+	public static final ModelLayerLocation FISH_TRIMMING_TABLE = register("fish_trimming_table");
 	public static final ModelLayerLocation FISHING_TACKLE_BOX = register("fishing_tackle_box");
 	public static final ModelLayerLocation LAKE_CAVERN_SIMULACRUM_1 = register("lake_cavern_simulacrum_1");
 	public static final ModelLayerLocation LAKE_CAVERN_SIMULACRUM_2 = register("lake_cavern_simulacrum_2");

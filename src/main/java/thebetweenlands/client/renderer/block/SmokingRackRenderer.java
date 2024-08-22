@@ -17,8 +17,6 @@ import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.SmokingRackBlock;
 import thebetweenlands.common.block.entity.SmokingRackBlockEntity;
-import thebetweenlands.common.entities.Anadia;
-import thebetweenlands.common.items.AnadiaMobItem;
 import thebetweenlands.common.items.MobItem;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -54,30 +52,30 @@ public class SmokingRackRenderer implements BlockEntityRenderer<SmokingRackBlock
 		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(SmokingRackBlock.FACING).toYRot()));
 		stack.scale(-1.0F, 1.0F, 1.0F);
 		this.rack.render(stack, source.getBuffer(entity.getBlockState().getValue(SmokingRackBlock.HEATED) ? ACTIVE_TEXTURE : TEXTURE), light, overlay);
-		stack.popPose();
 
 		if (entity.getLevel() != null) {
 			if (!entity.getItem(0).isEmpty()) {
-				this.renderItemInSlot(stack, source, entity, entity.getItem(0), new Vec3(0.0F, 0.0F, 0.0F), 1.0F, light, overlay);
+				this.renderItemInSlot(stack, source, entity.getItem(0), new Vec3(0.0F, 0.0F, 0.0F), 1.0F, light, overlay);
 			}
 
 			for (int i = 1; i < entity.getContainerSize(); i++) {
 				if (!entity.getItem(i).isEmpty() && (i <= 3 || entity.getItem(i + 3).isEmpty())) {
 					if (this.shouldRenderAsEntity(entity, i) && entity.getRenderEntity(entity.getLevel(), 1) != null) {
-						this.renderAnadiaInSlot(stack, source, entity, entity.getItem(i), entity.getRenderEntity(entity.getLevel(), i), ANADIA_OFFSETS[(i % 3) - 1], light);
+						this.renderAnadiaInSlot(stack, source, entity.getItem(i), entity.getRenderEntity(entity.getLevel(), i), ANADIA_OFFSETS[(i % 3) - 1], light);
 					} else {
-						this.renderItemInSlot(stack, source, entity, entity.getItem(i), ITEM_OFFSETS[(i % 3) - 1], 0.5F, light, overlay);
+						this.renderItemInSlot(stack, source, entity.getItem(i), ITEM_OFFSETS[(i % 3) - 1], 0.5F, light, overlay);
 					}
 				}
 			}
 		}
+		stack.popPose();
 	}
 
 	private boolean shouldRenderAsEntity(SmokingRackBlockEntity entity, int slot) {
 		return entity.getItem(slot).is(ItemRegistry.ANADIA) && ((MobItem) entity.getItem(slot).getItem()).hasEntityData(entity.getItem(slot));
 	}
 
-	public void renderAnadiaInSlot(PoseStack stack, MultiBufferSource source, SmokingRackBlockEntity entity, ItemStack item, @Nullable Entity renderEntity, Vec3 offset, int light) {
+	public void renderAnadiaInSlot(PoseStack stack, MultiBufferSource source, ItemStack item, @Nullable Entity renderEntity, Vec3 offset, int light) {
 		if (renderEntity != null) {
 //			if (item.getItem() instanceof AnadiaMobItem anadia && anadia.isRotten(entity.getLevel(), item)) {
 //				((Anadia) renderEntity).setColor(EnumAnadiaColor.ROTTEN);
@@ -94,7 +92,7 @@ public class SmokingRackRenderer implements BlockEntityRenderer<SmokingRackBlock
 		}
 	}
 
-	public void renderItemInSlot(PoseStack stack, MultiBufferSource source, SmokingRackBlockEntity entity, ItemStack item, Vec3 offset, float scale, int light, int overlay) {
+	public void renderItemInSlot(PoseStack stack, MultiBufferSource source, ItemStack item, Vec3 offset, float scale, int light, int overlay) {
 		if (!item.isEmpty()) {
 			stack.pushPose();
 			stack.translate(offset.x(), offset.y(), offset.z());
