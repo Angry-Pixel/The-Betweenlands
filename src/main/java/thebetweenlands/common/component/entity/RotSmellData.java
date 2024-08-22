@@ -3,6 +3,7 @@ package thebetweenlands.common.component.entity;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -28,49 +29,49 @@ public class RotSmellData {
 		this.immunityTime = prevLevel;
 	}
 
-	public boolean isSmellingBad(Player player) {
-		return this.getRemainingSmellyTicks(player) > 0 && this.getRemainingImmunityTicks(player) <= 0;
+	public boolean isSmellingBad(LivingEntity entity) {
+		return this.getRemainingSmellyTicks(entity) > 0 && this.getRemainingImmunityTicks(entity) <= 0;
 	}
 
-	public int getRemainingSmellyTicks(Player player) {
-		return this.smellyTime >= 0 ? Math.max(0, (int)(this.smellyTime - player.level().getGameTime())) : 0;
+	public int getRemainingSmellyTicks(LivingEntity entity) {
+		return this.smellyTime >= 0 ? Math.max(0, (int)(this.smellyTime - entity.level().getGameTime())) : 0;
 	}
 
-	public void setSmellingBad(Player player, int duration) {
+	public void setSmellingBad(LivingEntity entity, int duration) {
 		if(duration <= 0) {
-			this.setNotSmellingBad(player);
+			this.setNotSmellingBad(entity);
 		} else {
-			this.smellyTime = player.level().getGameTime() + duration;
-			this.setChanged(player);
+			this.smellyTime = entity.level().getGameTime() + duration;
+			this.setChanged(entity);
 		}
 	}
 
-	public void setNotSmellingBad(Player player) {
+	public void setNotSmellingBad(LivingEntity entity) {
 		if(this.smellyTime != -1) {
 			this.smellyTime = -1;
-			this.setChanged(player);
+			this.setChanged(entity);
 		}
 	}
 
-	public int getRemainingImmunityTicks(Player player) {
-		return this.immunityTime >= 0 ? Math.max(0, (int)(this.immunityTime - player.level().getGameTime())) : 0;
+	public int getRemainingImmunityTicks(LivingEntity entity) {
+		return this.immunityTime >= 0 ? Math.max(0, (int)(this.immunityTime - entity.level().getGameTime())) : 0;
 	}
 
-	public void setImmune(Player player, int duration) {
+	public void setImmune(LivingEntity entity, int duration) {
 		if(duration <= 0) {
 			if(this.immunityTime != -1) {
 				this.immunityTime = -1;
-				this.setChanged(player);
+				this.setChanged(entity);
 			}
 		} else {
-			this.immunityTime = player.level().getGameTime() + duration;
-			this.setChanged(player);
+			this.immunityTime = entity.level().getGameTime() + duration;
+			this.setChanged(entity);
 		}
 	}
 
-	private void setChanged(Player player) {
+	private void setChanged(LivingEntity player) {
 		if (player instanceof ServerPlayer) {
-			PacketDistributor.sendToPlayer((ServerPlayer) player, new UpdateRotSmellPacket(this.smellyTime, this.immunityTime));
+			PacketDistributor.sendToPlayersTrackingEntityAndSelf((ServerPlayer) player, new UpdateRotSmellPacket(player.getId(), this.smellyTime, this.immunityTime));
 		}
 	}
 
