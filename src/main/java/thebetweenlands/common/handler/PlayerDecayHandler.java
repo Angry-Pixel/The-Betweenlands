@@ -1,6 +1,10 @@
 package thebetweenlands.common.handler;
 
+import com.google.common.collect.ImmutableList;
+
+import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -14,6 +18,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.EventBusSubscriber.Bus;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerRespawnEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import thebetweenlands.api.capability.IDecayData;
 import thebetweenlands.common.TheBetweenlands;
@@ -177,17 +182,17 @@ public class PlayerDecayHandler {
 	}
 	
 
-//	@SubscribeEvent
-//	public static void syncMaxHealthOnPlayerRespawn(PlayerRespawnEvent event) {
-//		// TODO: May be unnecessary in 1.21+
-//		//Workaround for client not receiving the new MAX_HEALTH attribute after a respawn
-//		Player player = event.getEntity();
-//		if(!player.level().isClientSide() && player instanceof ServerPlayer && player.getAttribute(Attributes.MAX_HEALTH) != null) {
-//			((ServerPlayer)player).connection.send(new ClientboundSetEntityDataPacket(player.getId(), ImmutableList.of(player.getAttribute(Attributes.MAX_HEALTH))));
-//		}
-//	}
+	@SubscribeEvent
+	public static void syncMaxHealthOnPlayerRespawn(PlayerRespawnEvent event) {
+		// TODO: May be unnecessary in 1.21+
+		//Workaround for client not receiving the new MAX_HEALTH attribute after a respawn
+		Player player = event.getEntity();
+		if(!player.level().isClientSide() && player instanceof ServerPlayer && player.getAttribute(Attributes.MAX_HEALTH) != null) {
+			((ServerPlayer)player).connection.send(new ClientboundUpdateAttributesPacket(player.getId(), ImmutableList.of(player.getAttribute(Attributes.MAX_HEALTH))));
+		}
+	}
 
-	// TODO OverworldItemHandler required for item uses
+	// TODO OverworldItemHandler required for item use methods
 	
 
 	private static boolean isTargetSmelly(LivingEntity entity) {
