@@ -71,8 +71,11 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.simpleBlockWithItem(BlockRegistry.AQUA_MIDDLE_GEM_ORE);
 		this.simpleBlockWithItem(BlockRegistry.CRIMSON_MIDDLE_GEM_ORE);
 		this.simpleBlockWithItem(BlockRegistry.GREEN_MIDDLE_GEM_ORE);
+		this.simpleBlock(BlockRegistry.STALACTITE.get(), this.models().getExistingFile(this.modLoc("block/stalactite")));
 		this.basicItemTex(BlockRegistry.STALACTITE, false);
+		this.simpleBlock(BlockRegistry.LIFE_CRYSTAL_STALACTITE.get(), this.models().getExistingFile(this.modLoc("block/life_crystal_stalactite")));
 		this.basicItemTex(BlockRegistry.LIFE_CRYSTAL_STALACTITE, false);
+		this.simpleBlock(BlockRegistry.LIFE_CRYSTAL_ORE_STALACTITE.get(), this.models().getExistingFile(this.modLoc("block/life_crystal_ore_stalactite")));
 		this.basicItemTex(BlockRegistry.LIFE_CRYSTAL_ORE_STALACTITE, false);
 		this.simpleBlockWithItem(BlockRegistry.SILT);
 		this.simpleBlockWithItem(BlockRegistry.FILTERED_SILT);
@@ -472,6 +475,7 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 			}
 		});
 		this.simpleBlockItem(BlockRegistry.SHELF_FUNGUS);
+		this.simpleBlock(BlockRegistry.ROOT.get(), this.models().getExistingFile(this.modLoc("block/root")));
 		this.basicItemTex(BlockRegistry.ROOT, false);
 		this.simpleBlock(BlockRegistry.GIANT_ROOT.get(), this.models().cubeAll("giant_root", this.modLoc("block/root_bottom")));
 		this.simpleBlockItem(BlockRegistry.GIANT_ROOT);
