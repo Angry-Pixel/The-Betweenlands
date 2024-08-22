@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:builtin/entity",
+  "textures": {
+    "particle": "thebetweenlands:block/particle/crab_pot_filter_particle"
+  }
+}
