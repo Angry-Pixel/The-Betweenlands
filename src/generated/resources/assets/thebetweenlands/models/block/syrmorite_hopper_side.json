@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/hopper_side",
+  "textures": {
+    "inside": "thebetweenlands:block/syrmorite_hopper_inside",
+    "particle": "thebetweenlands:block/syrmorite_hopper_outside",
+    "side": "thebetweenlands:block/syrmorite_hopper_outside",
+    "top": "thebetweenlands:block/syrmorite_hopper_top"
+  }
+}

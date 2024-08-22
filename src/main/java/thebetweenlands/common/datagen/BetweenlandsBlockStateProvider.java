@@ -495,6 +495,10 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.builtinEntityAndItem(BlockRegistry.COMPOST_BIN, this.modLoc("block/particle/compost_bin_particle"), 0.625F, 0.0F);
 		this.simpleBlock(BlockRegistry.WEEDWOOD_JUKEBOX.get(), this.models().cubeTop("weedwood_jukebox", this.modLoc("block/weedwood_jukebox_side"), this.modLoc("block/weedwood_jukebox_top")));
 		this.simpleBlockItem(BlockRegistry.WEEDWOOD_JUKEBOX);
+		this.getVariantBuilder(BlockRegistry.SULFUR_FURNACE.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(this.models().getExistingFile(TheBetweenlands.prefix("block/sulfur_furnace" + (state.getValue(SulfurFurnaceBlock.LIT) ? "_active" : "")))).rotationY(((int) state.getValue(SulfurFurnaceBlock.FACING).toYRot() + 180) % 360).build());
+		this.simpleBlockItem(BlockRegistry.SULFUR_FURNACE);
+		this.getVariantBuilder(BlockRegistry.DUAL_SULFUR_FURNACE.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(this.models().getExistingFile(TheBetweenlands.prefix("block/dual_sulfur_furnace" + (state.getValue(DualSulfurFurnaceBlock.LIT) ? "_active" : "")))).rotationY(((int) state.getValue(DualSulfurFurnaceBlock.FACING).toYRot() + 180) % 360).build());
+		this.simpleBlockItem(BlockRegistry.DUAL_SULFUR_FURNACE);
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.ENERGY_BARRIER, "translucent");
 		this.torchBlockWithItem(BlockRegistry.SULFUR_TORCH, BlockRegistry.SULFUR_WALL_TORCH);
 		this.torchBlockWithItem(BlockRegistry.EXTINGUISHED_SULFUR_TORCH, BlockRegistry.EXTINGUISHED_SULFUR_WALL_TORCH);
@@ -512,6 +516,22 @@ public class BetweenlandsBlockStateProvider extends BlockStateProvider {
 		this.trapdoorBlockWithItem(BlockRegistry.TREATED_NIBBLETWIG_TRAPDOOR);
 		this.trapdoorBlockWithItem(BlockRegistry.TREATED_ROTTEN_TRAPDOOR);
 		this.trapdoorBlockWithItem(BlockRegistry.SCABYST_TRAPDOOR);
+		this.getVariantBuilder(BlockRegistry.SYRMORITE_HOPPER.get()).forAllStatesExcept(state -> {
+			if (state.getValue(SyrmoriteHopperBlock.FACING) == Direction.DOWN) {
+				return ConfiguredModel.builder().modelFile(this.models().withExistingParent("syrmorite_hopper", this.mcLoc("block/hopper"))
+					.texture("particle", this.modLoc("block/syrmorite_hopper_outside"))
+					.texture("top", this.modLoc("block/syrmorite_hopper_top"))
+					.texture("side", this.modLoc("block/syrmorite_hopper_outside"))
+					.texture("inside", this.modLoc("block/syrmorite_hopper_inside"))).build();
+			} else {
+				return ConfiguredModel.builder().modelFile(this.models().withExistingParent("syrmorite_hopper_side", this.mcLoc("block/hopper_side"))
+					.texture("particle", this.modLoc("block/syrmorite_hopper_outside"))
+					.texture("top", this.modLoc("block/syrmorite_hopper_top"))
+					.texture("side", this.modLoc("block/syrmorite_hopper_outside"))
+					.texture("inside", this.modLoc("block/syrmorite_hopper_inside"))).rotationY(((int) state.getValue(SyrmoriteHopperBlock.FACING).toYRot() + 180) % 360).build();
+			}
+		}, SyrmoriteHopperBlock.ENABLED);
+		this.basicItemTex(BlockRegistry.SYRMORITE_HOPPER, false);
 		this.basicItemTex(BlockRegistry.MUD_FLOWER_POT, false);
 		this.basicItemTex(BlockRegistry.MUD_FLOWER_POT_CANDLE, false);
 		this.builtinEntityAndItem(BlockRegistry.CENSER, this.modLoc("block/particle/censer_particle"), 0.625F, 0.0F);
