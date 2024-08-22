@@ -2,7 +2,9 @@ package thebetweenlands.common.handler;
 
 import com.google.common.collect.ImmutableList;
 
+import net.minecraft.network.protocol.game.ClientboundDamageEventPacket;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
+import net.minecraft.network.protocol.status.ClientboundStatusResponsePacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
@@ -38,62 +40,12 @@ public class PlayerDecayHandler {
 		Player player = event.getEntity();
 
 		if(player != null && !player.level().isClientSide()) {
-			IDecayData cap = player.getData(AttachmentRegistry.DECAY);
-			if(cap != null) {
-
-				AttributeInstance attr = player.getAttribute(Attributes.MAX_HEALTH);
-
-				if(attr != null) {
-					if(BetweenlandsConfig.decayPercentual) {
-						float decayMaxBaseHealthPercentage = cap.getPlayerMaxHealthPenaltyPercentage(player, cap.getDecayLevel(player));   
-						float prevDecayMaxBaseHealthPercentage = cap.getPlayerMaxHealthPenaltyPercentage(player, cap.getPrevDecayLevel());
-
-						AttributeModifier currentDecayModifier = attr.getModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID);
-
-						if(!MathUtils.epsilonEquals(decayMaxBaseHealthPercentage, prevDecayMaxBaseHealthPercentage) || (currentDecayModifier == null && decayMaxBaseHealthPercentage < 1)) {
-							attr.removeModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID);
-
-							if(decayMaxBaseHealthPercentage < 1) {
-								attr.addPermanentModifier(new AttributeModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID, -decayMaxBaseHealthPercentage,  Operation.ADD_MULTIPLIED_TOTAL));
-							}
-						}
-					} else {
-						int currentMaxHealth = (int) attr.getValue();
-
-						int decayHealthPenalty = (int)(cap.getPlayerMaxHealthPenalty(player, cap.getDecayLevel(player)) / 2.0F) * 2;   
-						int prevDecayHealthPenalty = (int)(cap.getPlayerMaxHealthPenalty(player, cap.getPrevDecayLevel()) / 2.0F) * 2;
-
-						boolean decayHealthChange = (decayHealthPenalty - prevDecayHealthPenalty) != 0;
-
-						AttributeModifier currentDecayModifier = attr.getModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID);
-
-						// Only change modifier if decay modifier is missing, decay health modifier value has changed or if player has less than 3 hearts (in which case decay modifier should be reduced or removed)
-						if((currentMaxHealth > BetweenlandsConfig.decayMinHealth && decayHealthPenalty != 0 && (currentDecayModifier == null || decayHealthPenalty != (int)currentDecayModifier.amount())) ||
-								decayHealthChange ||
-								(currentMaxHealth < BetweenlandsConfig.decayMinHealth && currentDecayModifier != null)) {
-							attr.removeModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID);
-
-							// Get current max health without the decay modifier
-							currentMaxHealth = (int) attr.getValue();
-
-							// TODO: there's potential for an issue here with an ADD_MULTIPLIED_TOTAL modifier from another mod bringing us below the minimum regardless
-							// Don't go below min health
-							int newHealth = (int) Math.max(currentMaxHealth - decayHealthPenalty, BetweenlandsConfig.decayMinHealth);
-
-							int attributeHealth = -(currentMaxHealth - newHealth);
-
-							if(attributeHealth < 0) {
-								attr.addPermanentModifier(new AttributeModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID, attributeHealth, Operation.ADD_VALUE));
-//								cap.setRemovedHealth(-attributeHealth);
-							} else {
-//								cap.setRemovedHealth(0);
-							}
-						}
-					}
-				}
-
-				if(cap.isDecayEnabled(player)) {
-					int decay = cap.getDecayLevel(player);
+			IDecayData decayData = player.getData(AttachmentRegistry.DECAY);
+			if(decayData != null) {
+				applyDecayAttributeModifiers(player);
+				
+				if(decayData.isDecayEnabled(player)) {
+					int decay = decayData.getDecayLevel(player);
 					
 					 // TODO find modern equiv. of jump factor
 					if (decay >= 16) {
@@ -133,19 +85,75 @@ public class PlayerDecayHandler {
 								decaySpeed -= decaySpeed * (armorDecayReduction / 4f);
 							}
 
-							cap.addDecayAcceleration(player, decaySpeed);
+							decayData.addDecayAcceleration(player, decaySpeed);
 						}
 					}
 					
-					cap.tick(player);
+					decayData.tick(player);
 				} else {
-					cap.setDecayLevel(player, 0);
-					cap.setDecaySaturationLevel(player, 1);
+					decayData.setDecayLevel(player, 0);
+					decayData.setDecaySaturationLevel(player, 1);
 				}
 			}
 		}
 	}
 
+	
+	public static void applyDecayAttributeModifiers(Player player) {
+
+		IDecayData decayData = player.getData(AttachmentRegistry.DECAY);
+		
+		AttributeInstance attr = player.getAttribute(Attributes.MAX_HEALTH);
+
+		if(attr != null) {
+			if(BetweenlandsConfig.decayPercentual) {
+				float decayMaxBaseHealthPercentage = decayData.getPlayerMaxHealthPenaltyPercentage(player, decayData.getDecayLevel(player));   
+				float prevDecayMaxBaseHealthPercentage = decayData.getPlayerMaxHealthPenaltyPercentage(player, decayData.getPrevDecayLevel());
+
+				AttributeModifier currentDecayModifier = attr.getModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID);
+
+				if(!MathUtils.epsilonEquals(decayMaxBaseHealthPercentage, prevDecayMaxBaseHealthPercentage) || (currentDecayModifier == null && decayMaxBaseHealthPercentage < 1)) {
+					attr.removeModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID);
+
+					if(decayMaxBaseHealthPercentage < 1) {
+						attr.addPermanentModifier(new AttributeModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID, -decayMaxBaseHealthPercentage,  Operation.ADD_MULTIPLIED_TOTAL));
+					}
+				}
+			} else {
+				int currentMaxHealth = (int) attr.getValue();
+
+				int decayHealthPenalty = (int)(decayData.getPlayerMaxHealthPenalty(player, decayData.getDecayLevel(player)) / 2.0F) * 2;   
+				int prevDecayHealthPenalty = (int)(decayData.getPlayerMaxHealthPenalty(player, decayData.getPrevDecayLevel()) / 2.0F) * 2;
+
+				boolean decayHealthChange = (decayHealthPenalty - prevDecayHealthPenalty) != 0;
+
+				AttributeModifier currentDecayModifier = attr.getModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID);
+
+				// Only change modifier if decay modifier is missing, decay health modifier value has changed or if player has less than 3 hearts (in which case decay modifier should be reduced or removed)
+				if((currentMaxHealth > BetweenlandsConfig.decayMinHealth && decayHealthPenalty != 0 && (currentDecayModifier == null || decayHealthPenalty != (int)currentDecayModifier.amount())) ||
+						decayHealthChange ||
+						(currentMaxHealth < BetweenlandsConfig.decayMinHealth && currentDecayModifier != null)) {
+					attr.removeModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID);
+
+					// Get current max health without the decay modifier
+					currentMaxHealth = (int) attr.getValue();
+
+					// TODO: there's potential for an issue here with an ADD_MULTIPLIED_TOTAL modifier from another mod bringing us below the minimum regardless
+					// Don't go below min health
+					int newHealth = (int) Math.max(currentMaxHealth - decayHealthPenalty, BetweenlandsConfig.decayMinHealth);
+
+					int attributeHealth = -(currentMaxHealth - newHealth);
+
+					if(attributeHealth < 0) {
+						attr.addPermanentModifier(new AttributeModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID, attributeHealth, Operation.ADD_VALUE));
+//						cap.setRemovedHealth(-attributeHealth);
+					} else {
+//						cap.setRemovedHealth(0);
+					}
+				}
+			}
+		}
+	}
 	
 
 	@SubscribeEvent

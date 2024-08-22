@@ -1,4 +1,4 @@
-package thebetweenlands.common.network;
+package thebetweenlands.common.network.clientbound;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;

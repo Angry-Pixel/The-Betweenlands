@@ -26,7 +26,7 @@ import thebetweenlands.api.recipes.DruidAltarRecipe;
 import thebetweenlands.common.block.DruidAltarBlock;
 import thebetweenlands.common.block.DruidStoneBlock;
 import thebetweenlands.common.items.recipe.MultiStackInput;
-import thebetweenlands.common.network.UpdateDruidAltarProgressPacket;
+import thebetweenlands.common.network.clientbound.UpdateDruidAltarProgressPacket;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 

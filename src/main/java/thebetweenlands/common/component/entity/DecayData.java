@@ -12,7 +12,7 @@ import thebetweenlands.api.capability.IDecayData;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.datagen.BetweenlandsDimensionTypeTagProvider;
-import thebetweenlands.common.network.UpdateDecayDataPacket;
+import thebetweenlands.common.network.clientbound.UpdateDecayDataPacket;
 import thebetweenlands.common.registries.DimensionRegistries;
 
 public class DecayData implements IDecayData {

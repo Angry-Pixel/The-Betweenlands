@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.common.component.entity.circlegem.CircleGem;
-import thebetweenlands.common.network.UpdateGemsPacket;
+import thebetweenlands.common.network.clientbound.UpdateGemsPacket;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.PacketDistributor;
-import thebetweenlands.common.network.UpdateMudWalkerPacket;
+import thebetweenlands.common.network.clientbound.UpdateMudWalkerPacket;
 
 public class MudWalkerData {
 	private long reductionTime;

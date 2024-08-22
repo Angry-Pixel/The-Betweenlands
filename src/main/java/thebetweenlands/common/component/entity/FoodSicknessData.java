@@ -9,7 +9,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.common.handler.FoodSicknessHandler;
-import thebetweenlands.common.network.UpdateFoodSicknessPacket;
+import thebetweenlands.common.network.clientbound.UpdateFoodSicknessPacket;
 import thebetweenlands.util.FoodSickness;
 
 import java.util.HashMap;

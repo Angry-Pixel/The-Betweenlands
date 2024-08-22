@@ -26,6 +26,12 @@ import thebetweenlands.api.aspect.AspectType;
 import thebetweenlands.client.event.ClientEvents;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.network.*;
+import thebetweenlands.common.network.clientbound.UpdateDecayDataPacket;
+import thebetweenlands.common.network.clientbound.UpdateDruidAltarProgressPacket;
+import thebetweenlands.common.network.clientbound.UpdateFoodSicknessPacket;
+import thebetweenlands.common.network.clientbound.UpdateGemsPacket;
+import thebetweenlands.common.network.clientbound.UpdateMudWalkerPacket;
+import thebetweenlands.common.network.clientbound.UpdateRotSmellPacket;
 import thebetweenlands.common.registries.*;
 
 import org.apache.logging.log4j.LogManager;
