@@ -23,6 +23,7 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.datamaps.DataMapType;
 
 public class ElixirEffect {
 	public static final int VIAL_INFUSION_MAX_POTENCY = 5;
@@ -136,9 +137,15 @@ public class ElixirEffect {
 	}
 
 
-	public ElixirEffect setEffect(Holder<MobEffect> effectHolder) {
+	public ElixirEffect setElixirEffect(Holder<MobEffect> effectHolder) {
 		this.effect = effectHolder;
 		this.elixirEffect = effectHolder;
+		return this;
+	}
+
+	public ElixirEffect setGeneralEffect(Holder<MobEffect> effectHolder) {
+		this.effect = effectHolder;
+		this.elixirEffect = null;
 		return this;
 	}
 

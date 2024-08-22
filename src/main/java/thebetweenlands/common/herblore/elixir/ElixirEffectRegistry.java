@@ -74,7 +74,7 @@ public class ElixirEffectRegistry {
 
 	public static DeferredHolder<ElixirEffect, ElixirEffect> registerElixir(String name, ElixirEffect elixir) {
 		DeferredHolder<MobEffect, ElixirPotionEffect> effect = EFFECTS.register(name, () -> new ElixirEffect.ElixirPotionEffect(elixir, elixir.getColor(), elixir.getIcon()));
-		elixir.setEffect(effect);
+		elixir.setElixirEffect(effect);
 		return ELIXIRS.register(name, () -> elixir);
 	}
 }
