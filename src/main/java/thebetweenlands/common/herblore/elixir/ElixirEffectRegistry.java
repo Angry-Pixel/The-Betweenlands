@@ -11,6 +11,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.elixir.effects.ElixirDecay;
 import thebetweenlands.common.herblore.elixir.effects.ElixirDraining;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
+import thebetweenlands.common.herblore.elixir.effects.ElixirEffect.ElixirPotionEffect;
 import thebetweenlands.common.herblore.elixir.effects.ElixirFeasting;
 import thebetweenlands.common.herblore.elixir.effects.ElixirHealing;
 import thebetweenlands.common.herblore.elixir.effects.ElixirMasking;
@@ -72,7 +73,8 @@ public class ElixirEffectRegistry {
 
 
 	public static DeferredHolder<ElixirEffect, ElixirEffect> registerElixir(String name, ElixirEffect elixir) {
-		EFFECTS.register(name, () -> new ElixirEffect.ElixirPotionEffect(elixir, elixir.getColor(), elixir.getIcon()));
+		DeferredHolder<MobEffect, ElixirPotionEffect> effect = EFFECTS.register(name, () -> new ElixirEffect.ElixirPotionEffect(elixir, elixir.getColor(), elixir.getIcon()));
+		elixir.setEffect(effect);
 		return ELIXIRS.register(name, () -> elixir);
 	}
 }
