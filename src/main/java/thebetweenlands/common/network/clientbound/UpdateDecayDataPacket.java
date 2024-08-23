@@ -31,6 +31,7 @@ public record UpdateDecayDataPacket(int level, int prevLevel, float saturation, 
 		return TYPE;
 	}
 
+	@SuppressWarnings("resource") // Lmao if we actually were to call Minecraft.close(); with a try-with-resources
 	public static void handle(UpdateDecayDataPacket message, IPayloadContext context) {
 		context.enqueueWork(() -> {
 			Player player = context.player();
@@ -42,12 +43,9 @@ public record UpdateDecayDataPacket(int level, int prevLevel, float saturation, 
 			if(player.getHealth() > player.getMaxHealth()) {
 				player.setHealth(player.getMaxHealth());
 			}
-			int difference = Math.round(initialMax - finalMax);
-			if(difference > 0) {
-				try(Minecraft mc = Minecraft.getInstance()) {
-					mc.gui.displayHealth -= difference;
-				} catch (Exception e) {}
-			}
+			int difference = Math.round(finalMax - initialMax);
+			// Hack to make the game update the max health when decay changes
+			Minecraft.getInstance().gui.displayHealth += difference;
 		});
 	}
 }
