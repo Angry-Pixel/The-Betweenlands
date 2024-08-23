@@ -5,6 +5,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
@@ -18,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.fluids.FluidType;
 import thebetweenlands.common.entities.ai.goals.AttackOnCollideGoal;
 import thebetweenlands.common.items.MobItem;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -25,7 +27,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 import javax.annotation.Nullable;
 
-public class SiltCrab extends WaterAnimal implements BLEntity {
+public class SiltCrab extends PathfinderMob implements BLEntity {
 
 	protected MeleeAttackGoal attackGoal;
 	protected AvoidEntityGoal<Player> avoidPlayerGoal;
@@ -34,8 +36,8 @@ public class SiltCrab extends WaterAnimal implements BLEntity {
 	public int aggroCooldown = 200;
 	protected boolean canAttack = false;
 
-	public SiltCrab(EntityType<? extends WaterAnimal> entityType, Level level) {
-		super(entityType, level);
+	public SiltCrab(EntityType<? extends PathfinderMob> type, Level level) {
+		super(type, level);
 	}
 
 	public static AttributeSupplier.Builder registerAttributes() {
@@ -124,6 +126,21 @@ public class SiltCrab extends WaterAnimal implements BLEntity {
 	@Override
 	public int getMaxSpawnClusterSize() {
 		return 5;
+	}
+
+	@Override
+	public boolean isPushedByFluid() {
+		return false;
+	}
+
+	@Override
+	public boolean canBeLeashed() {
+		return false;
+	}
+
+	@Override
+	public boolean canDrownInFluidType(FluidType type) {
+		return false;
 	}
 
 	public boolean lureToCrabPot(BlockPos pos) {

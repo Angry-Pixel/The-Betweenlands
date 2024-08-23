@@ -22,18 +22,15 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import thebetweenlands.client.*;
+import thebetweenlands.client.gui.screen.FishTrimmingTableScreen;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.block.*;
 import thebetweenlands.client.model.block.simulacrum.*;
-import thebetweenlands.client.model.entity.GeckoModel;
-import thebetweenlands.client.model.entity.ModelWight;
-import thebetweenlands.client.model.entity.SwampHagModel;
+import thebetweenlands.client.model.entity.*;
 import thebetweenlands.client.particle.BetweenlandsParticle;
 import thebetweenlands.client.particle.BetweenlandsPortalParticle;
 import thebetweenlands.client.renderer.block.*;
-import thebetweenlands.client.renderer.entity.GeckoRenderer;
-import thebetweenlands.client.renderer.entity.RenderWight;
-import thebetweenlands.client.renderer.entity.SwampHagRenderer;
+import thebetweenlands.client.renderer.entity.*;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
@@ -50,6 +47,7 @@ public class ClientEvents {
 	private static RiftVariantReloadListener riftVariantListener;
 
 	public static void initClient(IEventBus eventbus) {
+		eventbus.addListener(ClientEvents::registerScreens);
 		eventbus.addListener(ClientEvents::registerRenderers);
 		eventbus.addListener(ClientEvents::registerDimEffects);
 		eventbus.addListener(ClientEvents::registerExtensions);
@@ -61,10 +59,16 @@ public class ClientEvents {
 		MainMenuEvents.init();
 	}
 
+	private static void registerScreens(final RegisterMenuScreensEvent event) {
+		event.register(MenuRegistry.FISH_TRIMMING_TABLE.get(), FishTrimmingTableScreen::new);
+	}
+
 	private static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
 		event.registerEntityRenderer(EntityRegistry.SWAMP_HAG.get(), SwampHagRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.GECKO.get(), GeckoRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.WIGHT.get(), RenderWight::new);
+		event.registerEntityRenderer(EntityRegistry.BUBBLER_CRAB.get(), BubblerCrabRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SILT_CRAB.get(), SiltCrabRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.CENSER.get(), CenserRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.COMPOST_BIN.get(), CompostBinRenderer::new);
@@ -84,6 +88,8 @@ public class ClientEvents {
 		event.registerLayerDefinition(SwampHagRenderer.SWAMP_HAG_MODEL_LAYER, SwampHagModel::createModelLayer);
 		event.registerLayerDefinition(GeckoRenderer.GECKO_MODEL_LAYER, GeckoModel::createModelLayer);
 		event.registerLayerDefinition(RenderWight.WIGHT_MODEL_LAYER, ModelWight::createModelLayer);
+		event.registerLayerDefinition(BLModelLayers.BUBBLER_CRAB, BubblerCrabModel::create);
+		event.registerLayerDefinition(BLModelLayers.SILT_CRAB, SiltCrabModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.CENSER, CenserModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.COMPOST_BIN, CompostBinModel::makeModel);

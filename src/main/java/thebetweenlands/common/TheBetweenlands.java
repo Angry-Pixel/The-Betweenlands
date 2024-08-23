@@ -67,6 +67,7 @@ public class TheBetweenlands {
 		if (dist.isClient()) {
 			ClientEvents.initClient(eventbus);
 		}
+		BetweenlandsEvents.init(eventbus);
 
 		SoundRegistry.SOUNDS.register(eventbus);
 		ParticleRegistry.PARTICLES.register(eventbus);
@@ -92,6 +93,7 @@ public class TheBetweenlands {
 		AdvancementCriteriaRegistry.TRIGGERS.register(eventbus);
 		BetweenlandsSurfaceRules.SOURCES.register(eventbus);
 		MapDecorationRegistry.DECORATIONS.register(eventbus);
+		MenuRegistry.MENUS.register(eventbus);
 
 		StorageRegistry.preInit();
 
@@ -154,6 +156,8 @@ public class TheBetweenlands {
 		registrar.playToClient(UpdateGemsPacket.TYPE, UpdateGemsPacket.STREAM_CODEC, UpdateGemsPacket::handle);
 		registrar.playToClient(GemProtectionPacket.TYPE, GemProtectionPacket.STREAM_CODEC, GemProtectionPacket::handle);
 		registrar.playToClient(UpdateDruidAltarProgressPacket.TYPE, UpdateDruidAltarProgressPacket.STREAM_CODEC, UpdateDruidAltarProgressPacket::handle);
+
+		registrar.playToServer(ChopFishPacket.TYPE, ChopFishPacket.STREAM_CODEC, (payload, context) -> ChopFishPacket.handle(context));
 	}
 
 	public void registerDataMaps(RegisterDataMapTypesEvent event) {

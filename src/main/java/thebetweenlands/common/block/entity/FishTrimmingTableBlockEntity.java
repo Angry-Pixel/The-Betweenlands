@@ -1,10 +1,17 @@
 package thebetweenlands.common.block.entity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -15,6 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.api.recipes.TrimmingTableRecipe;
+import thebetweenlands.common.inventory.FishTrimmingTableMenu;
 import thebetweenlands.common.items.MobItem;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
@@ -33,22 +41,13 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity {
 		super(BlockEntityRegistry.FISH_TRIMMING_TABLE.get(), pos, state);
 	}
 
-	public boolean hasAnadia() {
-		ItemStack stack = this.getItem(0);
-		return !stack.isEmpty() && stack.is(ItemRegistry.ANADIA) && stack.has(DataComponents.ENTITY_DATA);
-	}
-
-	private boolean isAnadiaRotten(Level level) {
-		ItemStack stack = this.getItem(0);
-		if (stack.has(DataComponents.ENTITY_DATA) && stack.has(DataComponentRegistry.ROT_TIME) && stack.get(DataComponents.ENTITY_DATA).copyTag().getByte("fish_color") != 0) {
-			long rottingTime = stack.get(DataComponentRegistry.ROT_TIME);
-			return rottingTime - level.getGameTime() <= 0;
-		}
-		return false;
+	@Nullable
+	public TrimmingTableRecipe getStoredRecipe() {
+		return this.recipe;
 	}
 
 	public boolean hasChopper() {
-		return false; //this.getItem(5).is(ItemRegistry.BONE_AXE);
+		return this.getItem(5).is(ItemRegistry.BONE_AXE);
 	}
 
 	@Override
@@ -66,10 +65,9 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity {
 		this.items = items;
 	}
 
-	//TODO
 	@Override
 	protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
-		return null;
+		return new FishTrimmingTableMenu(containerId, inventory, this);
 	}
 
 	@Override
@@ -88,8 +86,8 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity {
 	@Nullable
 	public Entity getInputEntity(Level level) {
 		ItemStack stack = this.getItems().getFirst();
-		if(!stack.isEmpty() && stack.getItem() instanceof MobItem && ((MobItem) stack.getItem()).hasEntityData(stack)) {
-			return ((MobItem) stack.getItem()).createCapturedEntity(level, 0, 0, 0, stack, false);
+		if(!stack.isEmpty() && stack.getItem() instanceof MobItem mob) {
+			return mob.createCapturedEntity(level, 0, 0, 0, stack, false);
 		}
 		return null;
 	}
@@ -109,6 +107,37 @@ public class FishTrimmingTableBlockEntity extends BaseContainerBlockEntity {
 	}
 
 	public boolean allResultSlotsEmpty() {
-		return this.getItems().subList(1, 5).isEmpty();
+		return this.getItems().subList(1, 5).stream().allMatch(ItemStack::isEmpty);
+	}
+
+	@Override
+	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.saveAdditional(tag, registries);
+		ContainerHelper.saveAllItems(tag, this.items, registries);
+	}
+
+	@Override
+	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
+		super.loadAdditional(tag, registries);
+		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+		ContainerHelper.loadAllItems(tag, this.items, registries);
+	}
+
+	@Nullable
+	@Override
+	public Packet<ClientGamePacketListener> getUpdatePacket() {
+		return ClientboundBlockEntityDataPacket.create(this);
+	}
+
+	@Override
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
+		this.loadAdditional(packet.getTag(), registries);
+	}
+
+	@Override
+	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+		CompoundTag tag = super.getUpdateTag(registries);
+		this.saveAdditional(tag, registries);
+		return tag;
 	}
 }

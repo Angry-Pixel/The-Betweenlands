@@ -11,19 +11,38 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import thebetweenlands.common.block.entity.simulacrum.SimulacrumBlockEntity;
 import thebetweenlands.common.component.entity.BlessingData;
+import thebetweenlands.common.entities.BubblerCrab;
+import thebetweenlands.common.entities.SiltCrab;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.*;
 
 import java.util.Optional;
 
 public class BetweenlandsEvents {
+
+	public static void init(IEventBus bus) {
+		bus.addListener(BetweenlandsEvents::registerAttributes);
+		NeoForge.EVENT_BUS.addListener(BetweenlandsEvents::modifyBreakSpeedWithSimulacrum);
+		NeoForge.EVENT_BUS.addListener(BetweenlandsEvents::handleBlessingDeath);
+		NeoForge.EVENT_BUS.addListener(BetweenlandsEvents::resurrectDeadEntities);
+		NeoForge.EVENT_BUS.addListener(BetweenlandsEvents::addBlessingEffect);
+		NeoForge.EVENT_BUS.addListener(BetweenlandsEvents::protectFromMagicDamage);
+	}
+
+	private static void registerAttributes(EntityAttributeCreationEvent event) {
+		event.put(EntityRegistry.BUBBLER_CRAB.get(), BubblerCrab.registerAttributes().build());
+		event.put(EntityRegistry.SILT_CRAB.get(), SiltCrab.registerAttributes().build());
+	}
 
 	private static void modifyBreakSpeedWithSimulacrum(PlayerEvent.BreakSpeed event) {
 		Optional<BlockPos> pos = event.getPosition();

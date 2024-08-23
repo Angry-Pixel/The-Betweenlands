@@ -167,6 +167,10 @@ public class BetweenlandsItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.RUBBER_BOOTS);
 		this.otherTextureItem(ItemRegistry.MARSH_RUNNER_BOOTS, this.modLoc("rubber_boots"));
 
+		this.basicItem(ItemRegistry.BUBBLER_CRAB);
+		this.basicItem(ItemRegistry.SILT_CRAB);
+		this.toolItem(ItemRegistry.BONE_AXE);
+
 		this.basicItem(ItemRegistry.RECORD_ANCIENT);
 		this.basicItem(ItemRegistry.RECORD_ASTATOS);
 		this.basicItem(ItemRegistry.RECORD_BENEATH_A_GREEN_SKY);
@@ -297,8 +301,14 @@ public class BetweenlandsItemModelProvider extends ItemModelProvider {
 		this.basicItem(ItemRegistry.CRYPTWEED_BLADES);
 	}
 
-	public ItemModelBuilder basicItem(DeferredItem<Item> item) {
+	public ItemModelBuilder basicItem(DeferredItem<? extends Item> item) {
 		return this.basicItem(item.get());
+	}
+
+	public ItemModelBuilder toolItem(DeferredItem<? extends Item> item) {
+		return this.getBuilder(item.getId().toString())
+			.parent(new ModelFile.UncheckedModelFile("item/handheld"))
+			.texture("layer0", ResourceLocation.fromNamespaceAndPath(item.getId().getNamespace(), "item/" + item.getId().getPath()));
 	}
 
 	public ItemModelBuilder otherTextureItem(DeferredItem<Item> item, ResourceLocation texture) {

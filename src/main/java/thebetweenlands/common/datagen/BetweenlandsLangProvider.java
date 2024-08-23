@@ -30,6 +30,9 @@ public class BetweenlandsLangProvider extends LanguageProvider {
 		this.add("itemGroup.thebetweenlands.plants", "The Betweenlands Plants");
 		this.add("itemGroup.thebetweenlands.herblore", "The Betweenlands Herblore");
 
+		this.add("container.thebetweenlands.fish_trimming_table", "Trimming Table");
+		this.add("container.thebetweenlands.fish_trimming_table.butcher", "Chop!");
+
 		this.addBlock(BlockRegistry.ALEMBIC, "Alembic");
 		this.addBlock(BlockRegistry.ALGAE, "Algae");
 		this.addBlock(BlockRegistry.ANCIENT_REMNANT_BLOCK, "Block of Ancient Remnant");

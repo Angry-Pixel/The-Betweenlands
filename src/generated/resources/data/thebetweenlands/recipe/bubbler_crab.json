@@ -1,0 +1,20 @@
+{
+  "type": "thebetweenlands:trimming",
+  "input": {
+    "item": "thebetweenlands:bubbler_crab"
+  },
+  "outputs": [
+    {
+      "count": 1,
+      "id": "thebetweenlands:crab_claw"
+    },
+    {
+      "count": 2,
+      "id": "thebetweenlands:crab_stick"
+    },
+    {
+      "count": 1,
+      "id": "thebetweenlands:crab_claw"
+    }
+  ]
+}

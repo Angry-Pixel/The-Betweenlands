@@ -45,9 +45,10 @@ public class FishTrimmingTableBlock extends HorizontalBaseEntityBlock {
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
 		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof FishTrimmingTableBlockEntity table) {
-			player.openMenu(table);
+			player.openMenu(table, buf -> buf.writeBlockPos(pos));
+			return InteractionResult.CONSUME;
 		}
-		return super.useWithoutItem(state, level, pos, player, hitResult);
+		return InteractionResult.SUCCESS;
 	}
 
 	@Override

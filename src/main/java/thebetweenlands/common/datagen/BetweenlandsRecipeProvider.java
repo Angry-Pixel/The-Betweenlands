@@ -5,8 +5,11 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.item.ItemStack;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.datagen.builders.DruidAltarRecipeBuilder;
+import thebetweenlands.common.datagen.builders.FishTrimmingRecipeBuilder;
+import thebetweenlands.common.items.recipe.AnadiaTrimmingRecipe;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.concurrent.CompletableFuture;
@@ -29,5 +32,19 @@ public class BetweenlandsRecipeProvider extends RecipeProvider {
 			.requires(ItemTags.SAPLINGS).requires(ItemTags.SAPLINGS)
 			.requires(ItemTags.SAPLINGS).requires(ItemTags.SAPLINGS)
 			.save(output, TheBetweenlands.prefix("sapling_altar_reversion"));
+
+		FishTrimmingRecipeBuilder.trimming(ItemRegistry.BUBBLER_CRAB)
+			.outputs(ItemRegistry.SILT_CRAB_CLAW)
+			.outputs(new ItemStack(ItemRegistry.CRAB_STICK.get(), 2))
+			.outputs(ItemRegistry.SILT_CRAB_CLAW)
+			.save(output);
+
+		FishTrimmingRecipeBuilder.trimming(ItemRegistry.SILT_CRAB)
+			.outputs(ItemRegistry.SILT_CRAB_CLAW)
+			.outputs(new ItemStack(ItemRegistry.CRAB_STICK.get(), 2))
+			.outputs(ItemRegistry.SILT_CRAB_CLAW)
+			.save(output);
+
+		output.accept(TheBetweenlands.prefix("anadia_trimming"), new AnadiaTrimmingRecipe(), null);
 	}
 }

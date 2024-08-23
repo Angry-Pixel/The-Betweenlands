@@ -1,4 +1,4 @@
-// 1.21.1	2024-08-21T22:56:10.351492	Item Models: thebetweenlands
+// 1.21.1	2024-08-22T21:28:19.9145327	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 6fc862383ed371b267e50e28fc279af7595b8763 assets/thebetweenlands/models/item/amate_paper.json
@@ -27,12 +27,14 @@ d29f7205657e48772892cf19459988fd63a62ce4 assets/thebetweenlands/models/item/blac
 20233623d2636947d551132585c8068aa2202d00 assets/thebetweenlands/models/item/blue_iris_petal.json
 f0d25dffae1cb929ea188bb1c8343dae37e71c31 assets/thebetweenlands/models/item/bog_bean_flower_drop.json
 f35675323e79b5ff6b7974a276cfe50cc3894405 assets/thebetweenlands/models/item/boneset_flowers.json
+60222740eae07152551c9a7d403943561049d9c1 assets/thebetweenlands/models/item/bone_axe.json
 aae16e68e15d8c58eace80dafbcc33c0d7ad443e assets/thebetweenlands/models/item/bone_boots.json
 9c67fd6ebd1d46d3339d5cc2c180fbd0b3c4da3f assets/thebetweenlands/models/item/bone_chestplate.json
 f2ed04a2b9b013faa899e19d4f98b26ef1ebe2a0 assets/thebetweenlands/models/item/bone_helmet.json
 c224b4d9b6187e78b4ba53ef1d6cff3f815db24d assets/thebetweenlands/models/item/bone_leggings.json
 0ed0ae292bf33c2b0d73b5533a128d1226831313 assets/thebetweenlands/models/item/bottle_brush_grass_blades.json
 2ae33c247dcd38a4818766362cbb59dc9dcf65b4 assets/thebetweenlands/models/item/broomsedge_leaves.json
+8eda2bbe11c8fc47cf2e3e455927ef1410ca53c6 assets/thebetweenlands/models/item/bubbler_crab.json
 cc44aa72575c83fe4e570914d54c50ff15c2869a assets/thebetweenlands/models/item/bulb_capped_mushroom_item.json
 84bd26fd2d08096734bdc55824ad48f7df3c1a0e assets/thebetweenlands/models/item/button_bush_flowers.json
 5772e4f785a0d4d5d7aabcc4786692ee15fecee1 assets/thebetweenlands/models/item/candy_cane.json
@@ -219,6 +221,7 @@ f393baaaab7d9f4b9125e78c7d246814b93d7028 assets/thebetweenlands/models/item/shoo
 f63a7e9342a8e736856c47325f2bc51f94fff8a8 assets/thebetweenlands/models/item/silk_grub.json
 f7aba0ac778750a3366b31a855f7ec2f5e6786cc assets/thebetweenlands/models/item/silk_grub_cocoon.json
 283fecb9655719554890126e06dfc53ae4c6f3f1 assets/thebetweenlands/models/item/silk_thread.json
+85e7e1863806458710fb2fa4e6f19f5cfa36e2c4 assets/thebetweenlands/models/item/silt_crab.json
 2bc536aff18014777891c259f0dfda7aaa377798 assets/thebetweenlands/models/item/slimy_bone.json
 ae28b806d61d22922bbe85fa940981e289a1525c assets/thebetweenlands/models/item/sludgecreep_leaves.json
 f7a5c0a8a0821d8ede55bb40a57e1ddc7763cd8a assets/thebetweenlands/models/item/sludge_jello.json

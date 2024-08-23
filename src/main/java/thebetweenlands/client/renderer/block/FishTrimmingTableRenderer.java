@@ -16,12 +16,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.CenserBlock;
+import thebetweenlands.common.block.FishTrimmingTableBlock;
 import thebetweenlands.common.block.entity.FishTrimmingTableBlockEntity;
-import thebetweenlands.common.entities.Anadia;
 import thebetweenlands.common.items.AnadiaMobItem;
 import thebetweenlands.common.items.MobItem;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import javax.annotation.Nullable;
@@ -35,11 +33,11 @@ public class FishTrimmingTableRenderer implements BlockEntityRenderer<FishTrimmi
 	private final ModelPart blood;
 
 	private static final Vec3[] ITEM_OFFSETS = new Vec3[]{
-		new Vec3(0.0F, 0.75F, 0.0F),
-		new Vec3(-0.25F, 0.75F, 0.0F),
-		new Vec3(0.0F, 0.75F, -0.125F),
-		new Vec3(0.25F, 0.75F, 0.0F),
-		new Vec3(-0.25F, 0.75F, 0.25F)};
+		new Vec3(0.0F, -0.75F, 0.0F),
+		new Vec3(-0.25F, -0.75F, 0.0F),
+		new Vec3(0.0F, -0.75F, 0.125F),
+		new Vec3(0.25F, -0.75F, 0.0F),
+		new Vec3(-0.25F, -0.75F, 0.25F)};
 
 	public FishTrimmingTableRenderer(BlockEntityRendererProvider.Context context) {
 		ModelPart root = context.bakeLayer(BLModelLayers.FISH_TRIMMING_TABLE);
@@ -54,7 +52,7 @@ public class FishTrimmingTableRenderer implements BlockEntityRenderer<FishTrimmi
 		stack.translate(0.5F, 1.0F, 0.5F);
 		stack.mulPose(Axis.XP.rotationDegrees(180.0F));
 		stack.translate(0.0F, 1.0F, 0.0F);
-		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(CenserBlock.FACING).toYRot()));
+		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(FishTrimmingTableBlock.FACING).toYRot()));
 		this.table.render(stack, source.getBuffer(!entity.getItem(4).isEmpty() ? USED_TEXTURE : TEXTURE), light, overlay);
 		if (!entity.getItem(5).isEmpty()) {
 			this.cleaver.render(stack, source.getBuffer(!entity.getItem(4).isEmpty() ? USED_TEXTURE : TEXTURE), light, overlay);
@@ -65,8 +63,8 @@ public class FishTrimmingTableRenderer implements BlockEntityRenderer<FishTrimmi
 			RandomSource random = RandomSource.create(entity.getBlockPos().asLong());
 
 			if (!entity.getItem(0).isEmpty()) {
-				if (shouldRenderAsEntity(entity, 0) && entity.getInputEntity(entity.getLevel()) != null)
-					this.renderMobInSlot(stack, source, entity.getItem(0), entity.getInputEntity(entity.getLevel()), new Vec3(0.0F, 0.8F, 0.0F), light);
+				if (this.shouldRenderAsEntity(entity, 0) && entity.getInputEntity(entity.getLevel()) != null)
+					this.renderMobInSlot(stack, source, entity.getItem(0), entity.getInputEntity(entity.getLevel()), new Vec3(0.0F, -0.8F, 0.0F), light);
 				else
 					this.renderItemInSlot(stack, source, entity.getItem(0), ITEM_OFFSETS[0], 0.5F, 0.0F, light, overlay);
 			}
@@ -90,8 +88,6 @@ public class FishTrimmingTableRenderer implements BlockEntityRenderer<FishTrimmi
 //			if (item.getItem() instanceof AnadiaMobItem anadia && anadia.isRotten(entity.getLevel(), item)) {
 //				((Anadia) renderEntity).setColor(EnumAnadiaColor.ROTTEN);
 //			}
-			renderEntity.setXRot(90);
-			renderEntity.setYRot(90);
 			float scale2 = 1F / renderEntity.getBbWidth() * 0.5F;
 			if (item.getItem() instanceof AnadiaMobItem) {
 //				scale2 = 1F / ((Anadia) renderEntity).getFishSize() * 0.5F;
@@ -103,8 +99,8 @@ public class FishTrimmingTableRenderer implements BlockEntityRenderer<FishTrimmi
 				stack.mulPose(Axis.XP.rotationDegrees(45.0F));
 				stack.mulPose(Axis.ZP.rotationDegrees(90.0F));
 			} else {
-				stack.translate(0F, 0.1875F, 0F);
-				stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
+				stack.translate(0F, -0.1875F, 0F);
+				stack.mulPose(Axis.YN.rotationDegrees(90.0F));
 			}
 			stack.scale(scale2, scale2, scale2);
 			EntityRenderer<? super Entity> renderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(renderEntity);
@@ -119,7 +115,7 @@ public class FishTrimmingTableRenderer implements BlockEntityRenderer<FishTrimmi
 			stack.translate(offset.x(), offset.y(), offset.z());
 			stack.scale(scale, scale, scale);
 			stack.mulPose(Axis.XN.rotationDegrees(90.0F));
-			stack.mulPose(Axis.ZP.rotationDegrees(rotation));
+			stack.mulPose(Axis.ZP.rotationDegrees(rotation + 180));
 			Minecraft.getInstance().getItemRenderer().renderStatic(item, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 			stack.popPose();
 		}

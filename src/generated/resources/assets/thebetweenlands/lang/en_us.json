@@ -779,6 +779,8 @@
   "block.thebetweenlands.worm_pillar_top": "Worm Pillar Top",
   "block.thebetweenlands.yellow_bauble": "Yellow Bauble",
   "block.thebetweenlands.yellow_present": "Yellow Present",
+  "container.thebetweenlands.fish_trimming_table": "Trimming Table",
+  "container.thebetweenlands.fish_trimming_table.butcher": "Chop!",
   "item.thebetweenlands.algae_clump": "Algae Clump",
   "item.thebetweenlands.amate_map": "Empty Amate Map",
   "item.thebetweenlands.amate_map.invalid": "Can't create an Amate Map outside of The Betweenlands",
