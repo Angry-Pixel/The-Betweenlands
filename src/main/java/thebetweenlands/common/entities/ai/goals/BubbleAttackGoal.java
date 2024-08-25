@@ -3,7 +3,7 @@ package thebetweenlands.common.entities.ai.goals;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
-import thebetweenlands.common.entities.BubblerCrab;
+import thebetweenlands.common.entities.fishing.BubblerCrab;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class BubbleAttackGoal extends Goal {

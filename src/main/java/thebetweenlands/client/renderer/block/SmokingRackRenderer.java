@@ -17,6 +17,9 @@ import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.SmokingRackBlock;
 import thebetweenlands.common.block.entity.SmokingRackBlockEntity;
+import thebetweenlands.common.entities.fishing.anadia.Anadia;
+import thebetweenlands.common.entities.fishing.anadia.AnadiaParts;
+import thebetweenlands.common.items.AnadiaMobItem;
 import thebetweenlands.common.items.MobItem;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -77,12 +80,12 @@ public class SmokingRackRenderer implements BlockEntityRenderer<SmokingRackBlock
 
 	public void renderAnadiaInSlot(PoseStack stack, MultiBufferSource source, ItemStack item, @Nullable Entity renderEntity, Vec3 offset, int light) {
 		if (renderEntity != null) {
-//			if (item.getItem() instanceof AnadiaMobItem anadia && anadia.isRotten(entity.getLevel(), item)) {
-//				((Anadia) renderEntity).setColor(EnumAnadiaColor.ROTTEN);
-//			}
+			if (item.getItem() instanceof AnadiaMobItem anadia && anadia.isRotten(renderEntity.level(), item)) {
+				((Anadia) renderEntity).setFishColor(AnadiaParts.AnadiaColor.ROTTEN);
+			}
 			renderEntity.setXRot(90);
 			renderEntity.setYRot(90);
-			float scale2 = 1.0F; // / ((Anadia) renderEntity).getFishSize() * 0.475F;
+			float scale2 = 1.0F / ((Anadia) renderEntity).getFishSize() * 0.475F;
 			stack.pushPose();
 			stack.translate(offset.x(), offset.y(), offset.z());
 			stack.scale(scale2, scale2, scale2);

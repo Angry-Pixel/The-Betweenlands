@@ -84,14 +84,13 @@ public class MobItem extends Item {
 		return super.getDescriptionId(stack);
 	}
 
-	//TODO PLEASE find a better way to get the level
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-		if (Minecraft.getInstance().level != null) {
-			Level level = Minecraft.getInstance().level;
+		if (context.level() != null) {
+			Level level = context.level();
 			Entity entity = this.createCapturedEntity(level, 0, 0, 0, stack, false);
 			if (entity instanceof LivingEntity living) {
-				tooltip.add(Component.translatable("tooltip.bl.item_mob.health", Mth.ceil(living.getHealth() / 2), Mth.ceil(living.getMaxHealth() / 2)));
+				tooltip.add(Component.translatable("item.thebetweenlands.mob.health", Mth.ceil(living.getHealth() / 2), Mth.ceil(living.getMaxHealth() / 2)));
 			}
 		}
 	}

@@ -69,6 +69,7 @@ public class ClientEvents {
 		event.registerEntityRenderer(EntityRegistry.WIGHT.get(), RenderWight::new);
 		event.registerEntityRenderer(EntityRegistry.BUBBLER_CRAB.get(), BubblerCrabRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SILT_CRAB.get(), SiltCrabRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.ANADIA.get(), AnadiaRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.CENSER.get(), CenserRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.COMPOST_BIN.get(), CompostBinRenderer::new);
@@ -90,6 +91,7 @@ public class ClientEvents {
 		event.registerLayerDefinition(RenderWight.WIGHT_MODEL_LAYER, ModelWight::createModelLayer);
 		event.registerLayerDefinition(BLModelLayers.BUBBLER_CRAB, BubblerCrabModel::create);
 		event.registerLayerDefinition(BLModelLayers.SILT_CRAB, SiltCrabModel::create);
+		event.registerLayerDefinition(BLModelLayers.ANADIA, AnadiaModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.CENSER, CenserModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.COMPOST_BIN, CompostBinModel::makeModel);

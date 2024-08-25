@@ -73,6 +73,7 @@ public class TheBetweenlands {
 		ParticleRegistry.PARTICLES.register(eventbus);
 		CarverRegistry.CARVER_TYPES.register(eventbus);
 		BlockRegistry.BLOCKS.register(eventbus);
+		EntityRegistry.SPAWN_EGGS.register(eventbus);
 		ItemRegistry.ITEMS.register(eventbus);
 		FluidRegistry.FLUIDS.register(eventbus);
 		FluidTypeRegistry.FLUID_TYPES.register(eventbus);

@@ -20,8 +20,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import thebetweenlands.common.datagen.BetweenlandsBlockTagsProvider;
-import thebetweenlands.common.datagen.BetweenlandsItemTagProvider;
+import thebetweenlands.common.datagen.tags.BlockTagProvider;
+import thebetweenlands.common.datagen.tags.ItemTagProvider;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 
@@ -119,13 +119,13 @@ public class OctineIngotItem extends Item {
 
 	public static boolean isTinder(ItemStack stack, @Nullable BlockState state) {
 		if (state != null) {
-			return state.is(BetweenlandsBlockTagsProvider.OCTINE_IGNITES);
+			return state.is(BlockTagProvider.OCTINE_IGNITES);
 		}
 		if (!stack.isEmpty()) {
 			if (stack.getItem() instanceof BlockItem block) {
 				return isTinder(ItemStack.EMPTY, block.getBlock().defaultBlockState());
 			}
-			return stack.is(BetweenlandsItemTagProvider.OCTINE_IGNITES);
+			return stack.is(ItemTagProvider.OCTINE_IGNITES);
 		}
 		return false;
 	}

@@ -18,6 +18,8 @@ import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.FishTrimmingTableBlock;
 import thebetweenlands.common.block.entity.FishTrimmingTableBlockEntity;
+import thebetweenlands.common.entities.fishing.anadia.Anadia;
+import thebetweenlands.common.entities.fishing.anadia.AnadiaParts;
 import thebetweenlands.common.items.AnadiaMobItem;
 import thebetweenlands.common.items.MobItem;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -85,12 +87,12 @@ public class FishTrimmingTableRenderer implements BlockEntityRenderer<FishTrimmi
 
 	public void renderMobInSlot(PoseStack stack, MultiBufferSource source, ItemStack item, @Nullable Entity renderEntity, Vec3 offset, int light) {
 		if (renderEntity != null) {
-//			if (item.getItem() instanceof AnadiaMobItem anadia && anadia.isRotten(entity.getLevel(), item)) {
-//				((Anadia) renderEntity).setColor(EnumAnadiaColor.ROTTEN);
-//			}
+			if (item.getItem() instanceof AnadiaMobItem anadia && anadia.isRotten(renderEntity.level(), item)) {
+				((Anadia) renderEntity).setFishColor(AnadiaParts.AnadiaColor.ROTTEN);
+			}
 			float scale2 = 1F / renderEntity.getBbWidth() * 0.5F;
 			if (item.getItem() instanceof AnadiaMobItem) {
-//				scale2 = 1F / ((Anadia) renderEntity).getFishSize() * 0.5F;
+				scale2 = 1F / ((Anadia) renderEntity).getFishSize() * 0.5F;
 			}
 			stack.pushPose();
 			stack.translate(offset.x(), offset.y(), offset.z());

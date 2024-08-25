@@ -8,7 +8,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.component.item.FishBaitStats;
-import thebetweenlands.common.entities.FishBait;
+import thebetweenlands.common.entities.fishing.FishBait;
 import thebetweenlands.common.registries.DataComponentRegistry;
 
 import java.util.List;

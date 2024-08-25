@@ -2,25 +2,43 @@ package thebetweenlands.common.registries;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.projectile.FishingHook;
+import net.minecraft.world.item.Item;
+import net.neoforged.neoforge.common.DeferredSpawnEggItem;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entities.*;
+import thebetweenlands.common.entities.fishing.anadia.Anadia;
+import thebetweenlands.common.entities.fishing.BubblerCrab;
+import thebetweenlands.common.entities.fishing.FishBait;
+import thebetweenlands.common.entities.fishing.SiltCrab;
 
 public class EntityRegistry {
 	public static final DeferredRegister<EntityType<?>> ENTITY_TYPES = DeferredRegister.create(Registries.ENTITY_TYPE, TheBetweenlands.ID);
+	public static final DeferredRegister.Items SPAWN_EGGS = DeferredRegister.createItems(TheBetweenlands.ID);
 
-	public static final DeferredHolder<EntityType<?>, EntityType<SwampHag>> SWAMP_HAG = ENTITY_TYPES.register("swamp_hag", () -> EntityType.Builder.of(SwampHag::new, MobCategory.MONSTER).sized(0.6f, 1.8f).build(prefix("swamp_hag")));
-	public static final DeferredHolder<EntityType<?>, EntityType<Gecko>> GECKO = ENTITY_TYPES.register("gecko", () -> EntityType.Builder.of(Gecko::new, MobCategory.CREATURE).sized(0.75F, 0.35F).build(prefix("gecko")));
-	public static final DeferredHolder<EntityType<?>, EntityType<Wight>> WIGHT = ENTITY_TYPES.register("wight", () -> EntityType.Builder.of(Wight::new, MobCategory.MONSTER).sized(0.7F, 2.2F).build(prefix("wight")));
-	public static final DeferredHolder<EntityType<?>, EntityType<Anadia>> ANADIA = ENTITY_TYPES.register("anadia", () -> EntityType.Builder.of(Anadia::new, MobCategory.WATER_CREATURE).sized(0.8F, 0.8F).build(prefix("anadia")));
-	public static final DeferredHolder<EntityType<?>, EntityType<BubblerCrab>> BUBBLER_CRAB = ENTITY_TYPES.register("bubbler_crab", () -> EntityType.Builder.of(BubblerCrab::new, MobCategory.WATER_CREATURE).sized(0.7F, 0.6F).build(prefix("bubbler_crab")));
-	public static final DeferredHolder<EntityType<?>, EntityType<SiltCrab>> SILT_CRAB = ENTITY_TYPES.register("silt_crab", () -> EntityType.Builder.of(SiltCrab::new, MobCategory.WATER_CREATURE).sized(0.8F, 0.6F).build(prefix("silt_crab")));
+	public static final DeferredHolder<EntityType<?>, EntityType<SwampHag>> SWAMP_HAG = registerWithEgg("swamp_hag", EntityType.Builder.of(SwampHag::new, MobCategory.MONSTER).sized(0.6F, 1.8F), 0x6E5B36, 0x226124);
+	public static final DeferredHolder<EntityType<?>, EntityType<Gecko>> GECKO = registerWithEgg("gecko", EntityType.Builder.of(Gecko::new, MobCategory.CREATURE).sized(0.75F, 0.35F),  0xFF8000, 0x22E0B1);
+	public static final DeferredHolder<EntityType<?>, EntityType<Wight>> WIGHT = registerWithEgg("wight", EntityType.Builder.of(Wight::new, MobCategory.MONSTER).sized(0.7F, 2.2F), 0xECF8E0, 0x243B0B);
+	public static final DeferredHolder<EntityType<?>, EntityType<Anadia>> ANADIA = registerWithEgg("anadia", EntityType.Builder.of(Anadia::new, MobCategory.WATER_CREATURE).sized(0.8F, 0.8F), 0x5D633A, 0xB53D2F);
+	public static final DeferredHolder<EntityType<?>, EntityType<BubblerCrab>> BUBBLER_CRAB = registerWithEgg("bubbler_crab", EntityType.Builder.of(BubblerCrab::new, MobCategory.WATER_CREATURE).sized(0.7F, 0.6F), 0xD8D5CB, 0xC7692C);
+	public static final DeferredHolder<EntityType<?>, EntityType<SiltCrab>> SILT_CRAB = registerWithEgg("silt_crab", EntityType.Builder.of(SiltCrab::new, MobCategory.WATER_CREATURE).sized(0.8F, 0.6F), 0x468282, 0xBC4114);
 	public static final DeferredHolder<EntityType<?>, EntityType<Seat>> SEAT = ENTITY_TYPES.register("seat", () -> EntityType.Builder.<Seat>of(Seat::new, MobCategory.MISC).sized(0.0F, 0.0F).fireImmune().noSummon().build(prefix("seat")));
 	public static final DeferredHolder<EntityType<?>, EntityType<FishBait>> FISH_BAIT = ENTITY_TYPES.register("fish_bait", () -> EntityType.Builder.<FishBait>of(FishBait::new, MobCategory.MISC).sized(0.25F, 0.25F).eyeHeight(0.2125F).clientTrackingRange(6).updateInterval(20).build(prefix("fish_bait")));
+	public static final DeferredHolder<EntityType<?>, EntityType<FishingHook>> FISH_HOOK = ENTITY_TYPES.register("fish_hook", () -> EntityType.Builder.<FishingHook>of(FishingHook::new, MobCategory.MISC).sized(0.25F, 0.25F).build(prefix("fish_hook")));
 
 	private static String prefix(String name) {
 		return TheBetweenlands.prefix(name).toString();
+	}
+
+	public static <E extends Mob> DeferredHolder<EntityType<?>, EntityType<E>> registerWithEgg(String name, EntityType.Builder<E> builder, int primaryColor, int secondaryColor) {
+		DeferredHolder<EntityType<?>, EntityType<E>> ret = ENTITY_TYPES.register(name, () -> builder.build(TheBetweenlands.prefix(name).toString()));
+		if (primaryColor != 0 && secondaryColor != 0) {
+			SPAWN_EGGS.register(name + "_spawn_egg", () -> new DeferredSpawnEggItem(ret, primaryColor, secondaryColor, new Item.Properties()));
+		}
+		return ret;
 	}
 }

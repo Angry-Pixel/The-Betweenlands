@@ -10,7 +10,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import thebetweenlands.api.recipes.TrimmingTableRecipe;
-import thebetweenlands.common.entities.Anadia;
+import thebetweenlands.common.entities.fishing.anadia.Anadia;
 import thebetweenlands.common.items.AnadiaMobItem;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;

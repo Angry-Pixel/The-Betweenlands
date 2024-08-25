@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.model.entity.BubblerCrabModel;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entities.BubblerCrab;
+import thebetweenlands.common.entities.fishing.BubblerCrab;
 
 public class BubblerCrabRenderer extends MobRenderer<BubblerCrab, BubblerCrabModel> {
 

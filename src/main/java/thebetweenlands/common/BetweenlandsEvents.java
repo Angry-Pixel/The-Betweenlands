@@ -4,7 +4,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,8 +20,9 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import thebetweenlands.common.block.entity.simulacrum.SimulacrumBlockEntity;
 import thebetweenlands.common.component.entity.BlessingData;
-import thebetweenlands.common.entities.BubblerCrab;
-import thebetweenlands.common.entities.SiltCrab;
+import thebetweenlands.common.entities.fishing.BubblerCrab;
+import thebetweenlands.common.entities.fishing.SiltCrab;
+import thebetweenlands.common.entities.fishing.anadia.Anadia;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.*;
 
@@ -42,6 +42,7 @@ public class BetweenlandsEvents {
 	private static void registerAttributes(EntityAttributeCreationEvent event) {
 		event.put(EntityRegistry.BUBBLER_CRAB.get(), BubblerCrab.registerAttributes().build());
 		event.put(EntityRegistry.SILT_CRAB.get(), SiltCrab.registerAttributes().build());
+		event.put(EntityRegistry.ANADIA.get(), Anadia.registerAttributes().build());
 	}
 
 	private static void modifyBreakSpeedWithSimulacrum(PlayerEvent.BreakSpeed event) {

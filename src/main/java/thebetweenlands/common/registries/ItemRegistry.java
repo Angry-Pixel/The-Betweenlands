@@ -195,6 +195,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> GLUE = ITEMS.register("glue", () -> new GlueItem(new Item.Properties()));
 	public static final DeferredItem<Item> MOSS_FILTER = ITEMS.register("moss_filter", () -> new Item(new Item.Properties().stacksTo(1).durability(400)));
 	public static final DeferredItem<Item> SILK_FILTER = ITEMS.register("silk_filter", () -> new Item(new Item.Properties().stacksTo(1).durability(2000)));
+	public static final DeferredItem<Item> NET = ITEMS.register("net", () -> new Item(new Item.Properties().stacksTo(1)));
 
 	public static final DeferredItem<Item> DAMP_TORCH = ITEMS.register("damp_torch", () -> new StandingAndWallBlockItem(BlockRegistry.DAMP_TORCH.get(), BlockRegistry.DAMP_WALL_TORCH.get(), new Item.Properties(), Direction.DOWN));
 	public static final DeferredItem<Item> SULFUR_TORCH = ITEMS.register("sulfur_torch", () -> new StandingAndWallBlockItem(BlockRegistry.SULFUR_TORCH.get(), BlockRegistry.SULFUR_WALL_TORCH.get(), new Item.Properties(), Direction.DOWN));
@@ -228,10 +229,6 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> SHELL_STOCK_BUCKET = ITEMS.register("shell_stock_bucket", () -> new BucketItem(FluidRegistry.SHELL_STOCK_STILL.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> FROG_LEG_EXTRACT_BUCKET = ITEMS.register("frog_leg_extract_bucket", () -> new BucketItem(FluidRegistry.FROG_LEG_EXTRACT_STILL.get(), new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> WITCH_TEA_BUCKET = ITEMS.register("witch_tea_bucket", () -> new BucketItem(FluidRegistry.WITCH_TEA_STILL.get(), new Item.Properties().stacksTo(1)));
-
-	public static final DeferredItem<Item> SWAMP_HAG_SPAWN_EGG = ITEMS.register("swamp_hag_spawn_egg", () -> new DeferredSpawnEggItem(EntityRegistry.SWAMP_HAG, 0x5E4E2E, 0x18461A, new Item.Properties()));
-	public static final DeferredItem<Item> GECKO_SPAWN_EGG = ITEMS.register("gecko_spawn_egg", () -> new DeferredSpawnEggItem(EntityRegistry.GECKO, 0xdc7202, 0x05e290, new Item.Properties()));
-	public static final DeferredItem<Item> WIGHT_SPAWN_EGG = ITEMS.register("wight_spawn_egg", () -> new DeferredSpawnEggItem(EntityRegistry.WIGHT, 0x7d8378, 0x07190a, new Item.Properties()));
 
 	public static final DeferredItem<Item> AMATE_MAP = ITEMS.register("amate_map", () -> new EmptyAmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> FILLED_AMATE_MAP = ITEMS.register("filled_amate_map", () -> new AmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));

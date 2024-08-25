@@ -50,6 +50,11 @@ public class LootTableRegistry {
 	public static final ResourceKey<LootTable> FILTERED_STAGNANT_WATER = register("gameplay/filtered_stagnant_water");
 	public static final ResourceKey<LootTable> FILTERED_SWAMP_WATER = register("gameplay/filtered_swamp_water");
 
+	public static final ResourceKey<LootTable> ANADIA_HEAD = register("gameplay/anadia_head");
+	public static final ResourceKey<LootTable> ANADIA_BODY = register("gameplay/anadia_body");
+	public static final ResourceKey<LootTable> ANADIA_TAIL = register("gameplay/anadia_tail");
+	public static final ResourceKey<LootTable> ANADIA_TREASURE = register("gameplay/anadia_treasure");
+
 	private static ResourceKey<LootTable> register(String id) {
 		return register(ResourceKey.create(Registries.LOOT_TABLE, TheBetweenlands.prefix(id)));
 	}
@@ -60,5 +65,9 @@ public class LootTableRegistry {
 		} else {
 			throw new IllegalArgumentException(id + " is already a registered built-in loot table");
 		}
+	}
+
+	public static Set<ResourceKey<LootTable>> getAllBuiltInTables() {
+		return BUILTIN_TABLES;
 	}
 }

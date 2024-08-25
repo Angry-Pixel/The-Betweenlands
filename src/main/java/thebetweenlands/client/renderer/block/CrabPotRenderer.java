@@ -14,12 +14,10 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.CenserBlock;
 import thebetweenlands.common.block.CrabPotBlock;
-import thebetweenlands.common.block.entity.CenserBlockEntity;
 import thebetweenlands.common.block.entity.CrabPotBlockEntity;
-import thebetweenlands.common.entities.BubblerCrab;
-import thebetweenlands.common.entities.SiltCrab;
+import thebetweenlands.common.entities.fishing.BubblerCrab;
+import thebetweenlands.common.entities.fishing.SiltCrab;
 import thebetweenlands.common.items.MobItem;
 
 public class CrabPotRenderer implements BlockEntityRenderer<CrabPotBlockEntity> {

@@ -1025,9 +1025,7 @@ public class CreativeGroupRegistry {
 
 	public static void populateTabs(BuildCreativeModeTabContentsEvent event) {
 		if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
-			event.accept(ItemRegistry.SWAMP_HAG_SPAWN_EGG);
-			event.accept(ItemRegistry.GECKO_SPAWN_EGG);
-			event.accept(ItemRegistry.WIGHT_SPAWN_EGG);
+			EntityRegistry.SPAWN_EGGS.getEntries().forEach(item -> event.accept(new ItemStack(item)));
 		}
 	}
 }

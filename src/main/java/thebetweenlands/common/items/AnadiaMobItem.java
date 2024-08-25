@@ -11,7 +11,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -20,7 +19,7 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.common.component.entity.RotSmellData;
-import thebetweenlands.common.entities.Anadia;
+import thebetweenlands.common.entities.fishing.anadia.Anadia;
 import thebetweenlands.common.entities.SwampHag;
 import thebetweenlands.common.entities.Seat;
 import thebetweenlands.common.registries.AttachmentRegistry;
@@ -66,9 +65,9 @@ public class AnadiaMobItem extends MobItem {
 
 	@Override
 	protected InteractionResult spawnCapturedEntity(Player player, Level level, BlockPos pos, InteractionHand hand, Direction facing, Vec3 hitVec, Entity entity, boolean isNewEntity) {
-//		if (entity instanceof Anadia anadia && !anadia.getFishColor().isAlive()) {
-//			return InteractionResult.PASS;
-//		}
+		if (entity instanceof Anadia anadia && !anadia.getFishColor().isAlive()) {
+			return InteractionResult.PASS;
+		}
 		return super.spawnCapturedEntity(player, level, pos, hand, facing, hitVec, entity, isNewEntity);
 	}
 
@@ -137,27 +136,27 @@ public class AnadiaMobItem extends MobItem {
 					if (stack.get(DataComponentRegistry.ROT_TIME) != null && context.level() != null) {
 						long rottingTime = stack.get(DataComponentRegistry.ROT_TIME);
 						if (rottingTime - context.level().getGameTime() > 19200)
-							tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.rotting_1")));
-						else if (rottingTime -  context.level().getGameTime() <= 19200 && rottingTime -  context.level().getGameTime() > 14400)
-							tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.rotting_2")));
-						else if (rottingTime -  context.level().getGameTime() <= 14400 && rottingTime -  context.level().getGameTime() > 9600)
-							tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.rotting_3")));
-						else if (rottingTime -  context.level().getGameTime() <= 9600 && rottingTime -  context.level().getGameTime() > 4800)
-							tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.rotting_4")));
-						else if (rottingTime -  context.level().getGameTime() <= 4800 && rottingTime -  context.level().getGameTime() > 0)
-							tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.rotting_5")));
-						else if (rottingTime -  context.level().getGameTime() <= 0)
-							tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.rotten")));
+							tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.rotting_1")));
+						else if (rottingTime - context.level().getGameTime() <= 19200 && rottingTime - context.level().getGameTime() > 14400)
+							tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.rotting_2")));
+						else if (rottingTime - context.level().getGameTime() <= 14400 && rottingTime - context.level().getGameTime() > 9600)
+							tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.rotting_3")));
+						else if (rottingTime - context.level().getGameTime() <= 9600 && rottingTime - context.level().getGameTime() > 4800)
+							tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.rotting_4")));
+						else if (rottingTime - context.level().getGameTime() <= 4800 && rottingTime - context.level().getGameTime() > 0)
+							tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.rotting_5")));
+						else if (rottingTime - context.level().getGameTime() <= 0)
+							tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.rotten")));
 					}
 				} else {
-					tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.status").append(Component.translatable("tooltip.bl.item_mob_anadia.smoked")));
+					tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.smoked")));
 				}
 
-//				tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.health", Mth.ceil(living.getHealth()), Mth.ceil((living.getMaxHealth()))));
-//				tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.size", entityNbt.getFloat("fish_size")));
-//				tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.speed", (living.getAttribute(Attributes.MOVEMENT_SPEED).getAttributeValue())));
-//				tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.strength", entityNbt.getFloat("strength")));
-//				tooltip.add(Component.translatable("tooltip.bl.item_mob_anadia.stamina", entityNbt.getFloat("stamina")));
+				tooltip.add(Component.translatable("item.thebetweenlands.anadia.health", Mth.ceil(entityNbt.getFloat("Health")), Mth.ceil(5.0D + entityNbt.getFloat(Anadia.HEALTH_MOD))));
+				tooltip.add(Component.translatable("item.thebetweenlands.anadia.size", entityNbt.getFloat("fish_size")));
+				tooltip.add(Component.translatable("item.thebetweenlands.anadia.speed", 0.2D + entityNbt.getFloat(Anadia.SPEED_MOD)));
+				tooltip.add(Component.translatable("item.thebetweenlands.anadia.strength", entityNbt.getFloat(Anadia.STRENGTH_MOD)));
+				tooltip.add(Component.translatable("item.thebetweenlands.anadia.stamina", entityNbt.getFloat(Anadia.STAMINA_MOD)));
 			}
 		} else {
 //			tooltip.add(Component.translatable("tooltip.bl.item_mob.health", Mth.ceil(living.getHealth() / 2), Mth.ceil(living.getMaxHealth() / 2)));

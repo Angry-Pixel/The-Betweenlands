@@ -20,6 +20,10 @@ public abstract class MowzieModelBase<T extends Entity> extends HierarchicalMode
 		super(renderType);
 	}
 
+	protected void setInitPose() {
+		this.root().getAllParts().forEach(ModelPart::resetPose);
+	}
+
 	/**
 	 * Rotates a box to face where the entity is looking.
 	 * <p/>
@@ -88,7 +92,7 @@ public abstract class MowzieModelBase<T extends Entity> extends HierarchicalMode
 	public void walk(ModelPart box, float speed, float degree, boolean invert, float offset, float weight, float f, float f1) {
 		int inverted = 1;
 		if (invert) inverted = -1;
-		box.xRot = (float) Math.cos(f * speed + offset) * degree * inverted * f1 + weight * f1;
+		box.xRot += (float) Math.cos(f * speed + offset) * degree * inverted * f1 + weight * f1;
 	}
 
 	/**
@@ -109,7 +113,7 @@ public abstract class MowzieModelBase<T extends Entity> extends HierarchicalMode
 	public void swing(ModelPart box, float speed, float degree, boolean invert, float offset, float weight, float f, float f1) {
 		int inverted = 1;
 		if (invert) inverted = -1;
-		box.yRot = (float) Math.cos(f * speed + offset) * degree * inverted * f1 + weight * f1;
+		box.yRot += (float) Math.cos(f * speed + offset) * degree * inverted * f1 + weight * f1;
 	}
 
 	/**
@@ -130,7 +134,7 @@ public abstract class MowzieModelBase<T extends Entity> extends HierarchicalMode
 	public void flap(ModelPart box, float speed, float degree, boolean invert, float offset, float weight, float f, float f1) {
 		int inverted = 1;
 		if (invert) inverted = -1;
-		box.zRot = (float) Math.cos(f * speed + offset) * degree * inverted * f1 + weight * f1;
+		box.zRot += (float) Math.cos(f * speed + offset) * degree * inverted * f1 + weight * f1;
 	}
 
 	/**
@@ -145,7 +149,7 @@ public abstract class MowzieModelBase<T extends Entity> extends HierarchicalMode
 	 * @param f      is the walked distance;
 	 * @param f1     is the walk speed.
 	 */
-	// UNTESTED!!! may cause floating parts or some other wieardness
+	// UNTESTED!!! may cause floating parts or some other weirdness
 	public void bob(ModelPart box, float speed, float degree, boolean bounce, float f, float f1) {
 		float bob = (float) (Math.sin(f * speed) * f1 * degree - f1 * degree);
 		if (bounce) bob = (float) -Math.abs((Math.sin(f * speed) * f1 * degree));
