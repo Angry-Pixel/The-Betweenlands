@@ -269,7 +269,7 @@ public class BLFishHook extends FishingHook implements IEntityWithComplexSpawn {
 			} else if(this.getHookedIn() != null) {
 				this.getHookedIn().setDeltaMovement(this.getHookedIn().getDeltaMovement().add(d0 * 0.02D, d1 * 0.02D, d2 * 0.02D));
 			} else {
-				this.getHookedIn().setDeltaMovement(this.getHookedIn().getDeltaMovement().add(d0 * 0.06D, d1 * 0.06D, d2 * 0.06D));
+				this.setDeltaMovement(this.getDeltaMovement().add(d0 * 0.06D, d1 * 0.06D, d2 * 0.06D));
 			}
 		}
 	}

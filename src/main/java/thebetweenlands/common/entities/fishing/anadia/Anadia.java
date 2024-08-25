@@ -77,9 +77,6 @@ public class Anadia extends PathfinderMob implements BLEntity {
 
 	public boolean playAnadiaWonSound = true;
 
-	public int animationFrame = 0;
-	public int animationFrameCrab = 0;
-
 	private static final int MAX_NETTABLE_TIME = 20;
 	private int nettableTimer = 0;
 	private int glowTimer = 0;
@@ -277,15 +274,6 @@ public class Anadia extends PathfinderMob implements BLEntity {
 
 		if (this.level().isClientSide()) {
 			this.refreshDimensions();
-
-			if (this.level().getGameTime() % 4 == 0)
-				this.animationFrame += 16;
-			if (this.animationFrame > 48)
-				this.animationFrame = 0;
-
-			this.animationFrameCrab += 16;
-			if (this.animationFrameCrab > 48)
-				this.animationFrameCrab = 0;
 		}
 
 		if (!this.level().isClientSide()) {

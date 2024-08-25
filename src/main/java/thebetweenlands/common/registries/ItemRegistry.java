@@ -190,12 +190,12 @@ public class ItemRegistry {
 	public static final DeferredItem<MobItem> SILT_CRAB = ITEMS.register("silt_crab", () -> new MobItem(new Item.Properties().stacksTo(1), EntityRegistry.SILT_CRAB.get(), null));
 	public static final DeferredItem<MobItem> TINY_SLUDGE_WORM = ITEMS.register("tiny_sludge_worm", () -> new MobItem(new Item.Properties().stacksTo(1), null, null));
 	public static final DeferredItem<MobItem> TINY_SLUDGE_WORM_HELPER = ITEMS.register("tiny_sludge_worm_helper", () -> new MobItem(new Item.Properties().stacksTo(1), null, null));
-	public static final DeferredItem<Item> WEEDWOOD_FISHING_ROD = ITEMS.register("weedwood_fishing_rod", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> WEEDWOOD_FISHING_ROD = ITEMS.register("weedwood_fishing_rod", () -> new BLFishingRodItem(new Item.Properties().stacksTo(1).durability(256)));
 	public static final DeferredItem<Item> SILK_BUNDLE = ITEMS.register("silk_bundle", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> GLUE = ITEMS.register("glue", () -> new GlueItem(new Item.Properties()));
 	public static final DeferredItem<Item> MOSS_FILTER = ITEMS.register("moss_filter", () -> new Item(new Item.Properties().stacksTo(1).durability(400)));
 	public static final DeferredItem<Item> SILK_FILTER = ITEMS.register("silk_filter", () -> new Item(new Item.Properties().stacksTo(1).durability(2000)));
-	public static final DeferredItem<Item> NET = ITEMS.register("net", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> NET = ITEMS.register("net", () -> new NetItem(new Item.Properties().stacksTo(1).durability(32)));
 
 	public static final DeferredItem<Item> DAMP_TORCH = ITEMS.register("damp_torch", () -> new StandingAndWallBlockItem(BlockRegistry.DAMP_TORCH.get(), BlockRegistry.DAMP_WALL_TORCH.get(), new Item.Properties(), Direction.DOWN));
 	public static final DeferredItem<Item> SULFUR_TORCH = ITEMS.register("sulfur_torch", () -> new StandingAndWallBlockItem(BlockRegistry.SULFUR_TORCH.get(), BlockRegistry.SULFUR_WALL_TORCH.get(), new Item.Properties(), Direction.DOWN));

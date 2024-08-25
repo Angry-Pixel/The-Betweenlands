@@ -1,4 +1,4 @@
-// 1.21.1	2024-08-22T21:28:19.9145327	Item Models: thebetweenlands
+// 1.21.1	2024-08-25T16:25:57.7466855	Item Models: thebetweenlands
 fc5960817a5d6afbf964fc37c08f5b702172de98 assets/thebetweenlands/models/item/algae_clump.json
 9c3a34e1643eedcbbe7f15189b201a10f945fbea assets/thebetweenlands/models/item/amate_map.json
 6fc862383ed371b267e50e28fc279af7595b8763 assets/thebetweenlands/models/item/amate_paper.json
@@ -182,6 +182,7 @@ f049e6a325420a1b3df79d30ecdd34f86eb0b215 assets/thebetweenlands/models/item/musi
 3906771278c023742856b181faa6ee3bcb011484 assets/thebetweenlands/models/item/music_disc_wandering_wisps.json
 532ed515a2bbbc15334dcd8968ac110641a2f022 assets/thebetweenlands/models/item/music_disc_waterlogged.json
 d5e9493bd5b397afb756357466040a9f75510ecf assets/thebetweenlands/models/item/mysterious_record.json
+dd6b65cd7a8ff26581ec9463e22943871dbe2754 assets/thebetweenlands/models/item/net.json
 bd7b5c5972c4b8e507b85ca547e46d2099b8bdce assets/thebetweenlands/models/item/nettle_leaf.json
 6073651a7fc2091a4c5d2bd81d727b8da7bde369 assets/thebetweenlands/models/item/nibblestick.json
 48699eee5fd5e39772e3cede8576979526ee819f assets/thebetweenlands/models/item/ochre_snail_shell.json
@@ -257,6 +258,8 @@ c1b472a1de08eb15f4a598a890cbb373de6f3f0e assets/thebetweenlands/models/item/tang
 a78e5e503a099b76a3cc25af3aeb36cc59ef83b6 assets/thebetweenlands/models/item/tar_beast_heart.json
 de9d9ed2d20a5dc4cfe6bc427a3cdf0feeff0c3e assets/thebetweenlands/models/item/tar_drip.json
 011504b75b1e4527b97b6cc62960245df32fd772 assets/thebetweenlands/models/item/thorn_branch.json
+a93261e0ec87f3a9a324571c5754b2dc8dace9e6 assets/thebetweenlands/models/item/tiny_sludge_worm.json
+a93261e0ec87f3a9a324571c5754b2dc8dace9e6 assets/thebetweenlands/models/item/tiny_sludge_worm_helper.json
 7a9acc52ced87624f41ecd3dad14a60e06cf8311 assets/thebetweenlands/models/item/undying_embers.json
 f93e02bcf3e153d1f4279afbc5db66347651581f assets/thebetweenlands/models/item/urchin_spike.json
 9337bd4de65af7ee059a7f89a7ea5f3b63830b97 assets/thebetweenlands/models/item/valonite_boots.json

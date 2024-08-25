@@ -8,6 +8,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -19,9 +20,12 @@ import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import thebetweenlands.client.*;
+import thebetweenlands.client.gui.overlay.DecayBarOverlay;
+import thebetweenlands.client.gui.overlay.FishStaminaBarOverlay;
 import thebetweenlands.client.gui.screen.FishTrimmingTableScreen;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.block.*;
@@ -56,7 +60,13 @@ public class ClientEvents {
 		eventbus.addListener(ClientEvents::registerBlockColors);
 		eventbus.addListener(ClientEvents::registerReloadListeners);
 		eventbus.addListener(ClientEvents::registerGeometryLoaders);
+		eventbus.addListener(ClientEvents::registerOverlays);
 		MainMenuEvents.init();
+	}
+
+	private static void registerOverlays(final RegisterGuiLayersEvent event) {
+		event.registerAbove(VanillaGuiLayers.AIR_LEVEL, TheBetweenlands.prefix("decay_meter"), (graphics, deltaTracker) -> DecayBarOverlay.renderDecayBar(graphics));
+		event.registerAboveAll(TheBetweenlands.prefix("fishing_minigame"), FishStaminaBarOverlay::renderFishingHud);
 	}
 
 	private static void registerScreens(final RegisterMenuScreensEvent event) {
@@ -70,6 +80,8 @@ public class ClientEvents {
 		event.registerEntityRenderer(EntityRegistry.BUBBLER_CRAB.get(), BubblerCrabRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SILT_CRAB.get(), SiltCrabRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.ANADIA.get(), AnadiaRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.FISH_HOOK.get(), BLFishHookRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.SEAT.get(), NoopRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.CENSER.get(), CenserRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.COMPOST_BIN.get(), CompostBinRenderer::new);
@@ -92,6 +104,7 @@ public class ClientEvents {
 		event.registerLayerDefinition(BLModelLayers.BUBBLER_CRAB, BubblerCrabModel::create);
 		event.registerLayerDefinition(BLModelLayers.SILT_CRAB, SiltCrabModel::create);
 		event.registerLayerDefinition(BLModelLayers.ANADIA, AnadiaModel::create);
+		event.registerLayerDefinition(BLModelLayers.FISH_HOOK, BLFishHookModel::create);
 
 		event.registerLayerDefinition(BLModelLayers.CENSER, CenserModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.COMPOST_BIN, CompostBinModel::makeModel);

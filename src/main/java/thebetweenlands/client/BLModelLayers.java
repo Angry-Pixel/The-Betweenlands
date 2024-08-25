@@ -7,6 +7,7 @@ public class BLModelLayers {
 
 	public static final ModelLayerLocation ANADIA = register("anadia");
 	public static final ModelLayerLocation BUBBLER_CRAB = register("bubbler_crab");
+	public static final ModelLayerLocation FISH_HOOK = register("fish_hook");
 	public static final ModelLayerLocation SILT_CRAB = register("silt_crab");
 
 	public static final ModelLayerLocation CENSER = register("censer");

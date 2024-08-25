@@ -166,7 +166,7 @@ public class MobItem extends Item {
 		CompoundTag nbt = new CompoundTag();
 
 		if (this.getDefaultMaxStackSize() == 1) {
-			entity.saveWithoutId(nbt);
+			entity.save(nbt);
 		} else {
 			CompoundTag entityNbt = new CompoundTag();
 			if (entity.save(entityNbt) && entityNbt.contains("id", Tag.TAG_STRING)) {

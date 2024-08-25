@@ -169,6 +169,9 @@ public class ItemModelProvider extends net.neoforged.neoforge.client.model.gener
 		this.basicItem(ItemRegistry.BUBBLER_CRAB);
 		this.basicItem(ItemRegistry.SILT_CRAB);
 		this.toolItem(ItemRegistry.BONE_AXE);
+		this.toolItem(ItemRegistry.NET);
+		this.basicItem(ItemRegistry.TINY_SLUDGE_WORM);
+		this.otherTextureItem(ItemRegistry.TINY_SLUDGE_WORM_HELPER, this.modLoc("tiny_sludge_worm"));
 
 		this.basicItem(ItemRegistry.RECORD_ANCIENT);
 		this.basicItem(ItemRegistry.RECORD_ASTATOS);
@@ -310,7 +313,7 @@ public class ItemModelProvider extends net.neoforged.neoforge.client.model.gener
 			.texture("layer0", ResourceLocation.fromNamespaceAndPath(item.getId().getNamespace(), "item/" + item.getId().getPath()));
 	}
 
-	public ItemModelBuilder otherTextureItem(DeferredItem<Item> item, ResourceLocation texture) {
+	public ItemModelBuilder otherTextureItem(DeferredItem<? extends Item> item, ResourceLocation texture) {
 		return this.getBuilder(item.getId().toString())
 			.parent(new ModelFile.UncheckedModelFile("item/generated"))
 			.texture("layer0", ResourceLocation.fromNamespaceAndPath(texture.getNamespace(), "item/" + texture.getPath()));

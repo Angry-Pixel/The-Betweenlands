@@ -920,6 +920,14 @@ public class LangProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.RUBBER_BOOTS, "Rubber Boots");
 		this.addItem(ItemRegistry.MARSH_RUNNER_BOOTS, "Boots of the Marsh Runner");
 
+		this.addItem(ItemRegistry.BONE_AXE, "Bone Axe");
+		this.addItem(ItemRegistry.WEEDWOOD_FISHING_ROD, "Weedwood Fishing Rod");
+		this.add("item.thebetweenlands.weedwood_fishing_rod.broken", "%s is broken\nand needs a new line and float.");
+		this.add("item.thebetweenlands.weedwood_fishing_rod.baited", "Has Worm: %s");
+		this.addItem(ItemRegistry.NET, "Net");
+		this.addItem(ItemRegistry.TINY_SLUDGE_WORM, "Tiny Sludge Worm");
+		this.addItem(ItemRegistry.TINY_SLUDGE_WORM_HELPER, "Tiny Sludge Worm Helper");
+
 		this.addItem(ItemRegistry.AMATE_MAP, "Empty Amate Map");
 		this.addItem(ItemRegistry.FILLED_AMATE_MAP, "Amate Map");
 		this.addDisc(ItemRegistry.RECORD_ANCIENT, "Temple Disc", "Voog2 - Ancient");
