@@ -1,6 +1,9 @@
 package thebetweenlands.common.block;
 
+import javax.annotation.Nullable;
+
 import com.mojang.serialization.MapCodec;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Containers;
@@ -15,18 +18,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import thebetweenlands.common.block.entity.WeedwoodCraftingTableBlockEntity;
 
-import javax.annotation.Nullable;
-
 public class WeedwoodCraftingTableBlock extends BaseEntityBlock {
 
+    public static final MapCodec<WeedwoodCraftingTableBlock> CODEC = simpleCodec(WeedwoodCraftingTableBlock::new);
+    
 	public WeedwoodCraftingTableBlock(Properties properties) {
 		super(properties);
 	}
 
-	@Override
-	protected MapCodec<? extends BaseEntityBlock> codec() {
-		return null;
-	}
+    @Override
+    public MapCodec<? extends WeedwoodCraftingTableBlock> codec() {
+        return CODEC;
+    }
 
 	@Override
 	public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {

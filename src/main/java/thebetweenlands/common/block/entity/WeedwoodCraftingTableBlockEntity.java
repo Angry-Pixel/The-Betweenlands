@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.entity;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -10,16 +12,18 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import thebetweenlands.common.inventory.WeedwoodCraftingMenu;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
-import javax.annotation.Nullable;
-
-public class WeedwoodCraftingTableBlockEntity extends BaseContainerBlockEntity {
+public class WeedwoodCraftingTableBlockEntity extends BlockEntity implements MenuProvider {
 
 	public NonNullList<ItemStack> items = NonNullList.withSize(9, ItemStack.EMPTY);
 	public byte rotation = 0;
@@ -28,30 +32,22 @@ public class WeedwoodCraftingTableBlockEntity extends BaseContainerBlockEntity {
 		super(BlockEntityRegistry.WEEDWOOD_CRAFTING_TABLE.get(), pos, state);
 	}
 
-	@Override
-	protected Component getDefaultName() {
-		return Component.translatable("container.crafting");
-	}
-
-	@Override
-	protected NonNullList<ItemStack> getItems() {
+	public NonNullList<ItemStack> getItems() {
 		return this.items;
 	}
 
-	@Override
-	protected void setItems(NonNullList<ItemStack> items) {
-		this.items = items;
+	public void slotChangedCraftingGrid() {
+		
 	}
-
-	//TODO
+	
 	@Override
-	protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
-		return null;
+	public Component getDisplayName() {
+		return Component.translatable("container.crafting");
 	}
-
+	
 	@Override
-	public int getContainerSize() {
-		return 9;
+	public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
+		return new WeedwoodCraftingMenu(containerId, playerInventory, this, ContainerLevelAccess.create(this.getLevel(), this.getBlockPos()));
 	}
 
 	@Override
@@ -64,7 +60,7 @@ public class WeedwoodCraftingTableBlockEntity extends BaseContainerBlockEntity {
 	@Override
 	protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.loadAdditional(tag, registries);
-		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+		this.items.clear();
 		ContainerHelper.loadAllItems(tag, this.items, registries);
 		this.rotation = tag.getByte("rotation");
 	}
