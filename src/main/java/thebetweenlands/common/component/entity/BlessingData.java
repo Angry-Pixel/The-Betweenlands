@@ -7,10 +7,6 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.event.tick.PlayerTickEvent;
-import net.neoforged.neoforge.network.PacketDistributor;
-import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
-import thebetweenlands.common.registries.AttachmentRegistry;
 
 import javax.annotation.Nullable;
 import java.util.Optional;

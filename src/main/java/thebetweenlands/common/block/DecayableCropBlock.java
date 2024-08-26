@@ -230,7 +230,6 @@ public abstract class DecayableCropBlock extends CropBlock implements FarmablePl
 	 */
 	protected void growUp(Level level, BlockPos pos) {
 		level.setBlockAndUpdate(pos.above(), this.defaultBlockState().setValue(DECAYED, level.getBlockState(pos).getValue(DECAYED)));
-		;
 	}
 
 	@Override

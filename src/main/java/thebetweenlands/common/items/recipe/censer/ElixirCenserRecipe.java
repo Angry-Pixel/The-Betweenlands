@@ -1,18 +1,12 @@
 package thebetweenlands.common.items.recipe.censer;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Holder;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import thebetweenlands.api.block.Censer;
 import thebetweenlands.api.recipes.CenserRecipe;
-import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
-import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.List;
 

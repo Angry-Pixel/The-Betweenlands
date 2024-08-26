@@ -1,7 +1,6 @@
 package thebetweenlands.common.world.storage.location;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -11,9 +10,7 @@ import net.minecraft.world.phys.AABB;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
-import thebetweenlands.common.registries.DimensionRegistries;
 
 import javax.annotation.Nullable;
 

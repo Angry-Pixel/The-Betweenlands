@@ -1,5 +1,6 @@
 package thebetweenlands.common.world.storage.location;
 
+import java.util.Arrays;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -21,9 +22,7 @@ import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.client.shader.postprocessing.GroundFog;
 import thebetweenlands.client.shader.postprocessing.WorldShader;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
-import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.common.world.spawning.BoxMobSpawner;
 import thebetweenlands.common.world.storage.location.LocationAmbience.EnumLocationAmbience;
 
@@ -49,15 +48,13 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 				.setCaveFog(false));
 
 		this.mazeMobSpawner = new BoxMobSpawner() {
-			private boolean[] playerOccupancy = new boolean[MAX_FLOORS];
+			private final boolean[] playerOccupancy = new boolean[MAX_FLOORS];
 
 			@Override
 			protected void updateSpawnerChunks(ServerLevel level, Set<ChunkPos> spawnerChunks) {
 				super.updateSpawnerChunks(level, spawnerChunks);
 
-				for(int i = 0; i < this.playerOccupancy.length; i++) {
-					this.playerOccupancy[i] = false;
-				}
+				Arrays.fill(this.playerOccupancy, false);
 
 				for(Player player : level.players()) {
 					int floor = LocationSludgeWormDungeon.this.getFloor(player.blockPosition());

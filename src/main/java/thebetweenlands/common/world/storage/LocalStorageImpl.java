@@ -222,7 +222,7 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 		List<ChunkPos> chunks = new ArrayList<>(this.linkedChunks.size());
 		chunks.addAll(this.linkedChunks);
 		Iterator<ChunkPos> it = chunks.iterator();
-		ChunkPos pos = null;
+		ChunkPos pos;
 		while (it.hasNext()) {
 			pos = it.next();
 			ChunkAccess chunk = level.getChunkSource().getChunkNow(pos.x, pos.z);

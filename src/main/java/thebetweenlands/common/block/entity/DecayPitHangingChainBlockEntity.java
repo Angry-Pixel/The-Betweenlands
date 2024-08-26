@@ -1,7 +1,5 @@
 package thebetweenlands.common.block.entity;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -14,8 +12,7 @@ import net.minecraft.world.entity.projectile.ProjectileDeflection;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.audio.DecayPitChainSoundInstance;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -75,23 +72,13 @@ public class DecayPitHangingChainBlockEntity extends SyncedBlockEntity {
 				entity.playChainSound = true;
 
 		if (level.isClientSide() && entity.playChainSound) {
-			if (!entity.isBroken())
-				entity.playChainSound(level, pos);
-			else
-				entity.playChainSoundFinal(level, pos);
+			if (!entity.isBroken()) {
+				BetweenlandsClient.playLocalSound(new DecayPitChainSoundInstance(this));
+			} else {
+				//TODO Add final chain sound/other thing
+			}
 			entity.playChainSound = false;
 		}
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	public void playChainSound(Level level, BlockPos pos) {
-		SoundInstance chainSound = new DecayPitChainSoundInstance(this);
-		Minecraft.getInstance().getSoundManager().play(chainSound);
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	public void playChainSoundFinal(Level level, BlockPos pos) {
-		//TODO Add final chain sound/other thing
 	}
 
 	public void handleChainCollision(Level level, AABB chainBox) {

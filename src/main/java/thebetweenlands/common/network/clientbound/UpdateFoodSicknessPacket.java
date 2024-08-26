@@ -9,7 +9,6 @@ import net.minecraft.world.item.Item;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.entity.FoodSicknessData;
-import thebetweenlands.common.component.entity.RotSmellData;
 import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.util.FoodSickness;
 

@@ -2,11 +2,9 @@ package thebetweenlands.client.shader.postprocessing;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import ca.weblite.objc.Client;
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.pipeline.TextureTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -35,12 +33,12 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
-import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.GLUProjection;
 import thebetweenlands.util.GLUProjection.ClampMode;
 import thebetweenlands.util.GLUProjection.Projection;
 import thebetweenlands.util.RenderUtils;
+
+import javax.annotation.Nullable;
 
 /**
  * TODO: Make lighting and other spacial effects use "correct" deferred rendering
@@ -71,8 +69,8 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	private Matrix4f projectionMatrix;
 
 	public static final int MAX_LIGHT_SOURCES_PER_PASS = 32;
-	private List<LightSource> lightSources = new ArrayList<>();
-	private List<GroundFogVolume> groundFogVolumes = new ArrayList<>();
+	private final List<LightSource> lightSources = new ArrayList<>();
+	private final List<GroundFogVolume> groundFogVolumes = new ArrayList<>();
 
 	//Uniforms
 	private int depthUniformID = -1;
@@ -82,9 +80,9 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	private int gasParticlesDepthUniformID = -1;
 	private int invMVPUniformID = -1;
 	private int fogModeUniformID = -1;
-	private int[] lightSourcePositionUniformIDs = new int[MAX_LIGHT_SOURCES_PER_PASS];
-	private int[] lightSourceColorUniformIDs = new int[MAX_LIGHT_SOURCES_PER_PASS];
-	private int[] lightSourceRadiusUniformIDs = new int[MAX_LIGHT_SOURCES_PER_PASS];
+	private final int[] lightSourcePositionUniformIDs = new int[MAX_LIGHT_SOURCES_PER_PASS];
+	private final int[] lightSourceColorUniformIDs = new int[MAX_LIGHT_SOURCES_PER_PASS];
+	private final int[] lightSourceRadiusUniformIDs = new int[MAX_LIGHT_SOURCES_PER_PASS];
 	private int lightSourceAmountUniformID = -1;
 	private int msTimeUniformID = -1;
 	private int worldTimeUniformID = -1;
@@ -92,16 +90,25 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	private int viewPosUniformID = -1;
 
 	//Shader textures
+	@Nullable
 	private RenderTarget gasTextureBaseFramebuffer = null;
+	@Nullable
 	private RenderTarget gasTextureFramebuffer = null;
+	@Nullable
 	private RenderTarget starfieldTextureFramebuffer = null;
 
 	//Effects
+	@Nullable
 	private Warp gasWarpEffect = null;
+	@Nullable
 	private Starfield starfieldEffect = null;
+	@Nullable
 	private OcclusionExtractor occlusionExtractor = null;
+	@Nullable
 	private GodRay godRayEffect = null;
+	@Nullable
 	private Swirl swirlEffect = null;
+	@Nullable
 	private GroundFog groundFogEffect = null;
 	private float swirlAngle = 0.0F;
 	private float lastSwirlAngle = 0.0F;

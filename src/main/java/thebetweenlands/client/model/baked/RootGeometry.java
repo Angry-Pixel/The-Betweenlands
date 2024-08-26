@@ -37,7 +37,6 @@ import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
 import thebetweenlands.common.block.StalactiteBlock;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.StalactiteHelper;
 import thebetweenlands.util.StalactiteHelper.IStalactite;
@@ -190,7 +189,7 @@ public record RootGeometry(ResourceLocation textureTop, ResourceLocation texture
 
 			final int pos_getY = pos.getY();
 
-			if(state.getBlock() instanceof IStalactite == false) {
+			if(!(state.getBlock() instanceof IStalactite)) {
 				return coolAndGoodModelData.derive()
 					.with(POS_X, pos.getX()).with(POS_Y, pos_getY).with(POS_Z, pos.getZ())
 					.with(DIST_UP, 0).with(DIST_DOWN, 0)
@@ -198,7 +197,7 @@ public record RootGeometry(ResourceLocation textureTop, ResourceLocation texture
 					.build();
 			}
 			IStalactite stalactite = (IStalactite)state.getBlock();
-			
+
 			//TODO pool pos probably
 			MutableBlockPos mutablePos = new MutableBlockPos(pos.getX(), pos_getY, pos.getZ());
 			BlockState mutableBlockState = state;
@@ -284,7 +283,7 @@ public record RootGeometry(ResourceLocation textureTop, ResourceLocation texture
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 			if(particleTexture == null || particleTexture.equals(MissingTextureAtlasSprite.getLocation())) {
 				particleTexture = topTexture;
 			}

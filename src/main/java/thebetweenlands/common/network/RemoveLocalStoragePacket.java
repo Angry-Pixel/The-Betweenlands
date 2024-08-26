@@ -10,7 +10,6 @@ import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
-import thebetweenlands.common.world.storage.WorldStorageImpl;
 
 public record RemoveLocalStoragePacket(StorageID id) implements CustomPacketPayload {
 

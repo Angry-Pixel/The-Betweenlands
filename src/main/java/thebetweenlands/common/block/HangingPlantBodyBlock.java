@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.GrowingPlantHeadBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import thebetweenlands.common.registries.ParticleRegistry;
 
 public class HangingPlantBodyBlock extends GrowingPlantBodyBlock {
 

@@ -48,7 +48,7 @@ public class StorageID {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((this.strID == null) ? 0 : this.strID.hashCode());
+		result = prime * result + this.strID.hashCode();
 		return result;
 	}
 
@@ -59,13 +59,6 @@ public class StorageID {
 		if (obj == null)
 			return false;
 		StorageID other = (StorageID) obj;
-		String id = this.strID;
-		String otherId = other.strID;
-		if (id == null) {
-			if (otherId != null)
-				return false;
-		} else if (!id.equals(otherId))
-			return false;
-		return true;
+		return this.strID.equals(other.strID);
 	}
 }

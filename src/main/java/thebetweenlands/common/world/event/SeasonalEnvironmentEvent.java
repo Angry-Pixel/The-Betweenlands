@@ -4,7 +4,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import thebetweenlands.client.event.ClientEvents;
+import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.common.config.BetweenlandsConfig;
 
 import javax.annotation.Nullable;
@@ -36,9 +36,9 @@ public abstract class SeasonalEnvironmentEvent extends BLEnvironmentEvent {
 
 	@Override
 	public void setActive(Level level, boolean active) {
-		if (active && (!this.isActive() || this.lastWorld != level) && ClientEvents.getClientPlayer() != null && level.isClientSide()) {
+		if (active && (!this.isActive() || this.lastWorld != level) && level.isClientSide() && BetweenlandsClient.getClientPlayer() != null) {
 			this.lastWorld = level;
-			Player player = ClientEvents.getClientPlayer();
+			Player player = BetweenlandsClient.getClientPlayer();
 			this.showStatusMessage(player);
 		}
 

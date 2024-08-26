@@ -423,9 +423,9 @@ public class AspectManager {
 
 	private void removeAvailableAspect(Aspect itemAspect, List<AspectEntry> availableAspects) {
 		Iterator<AspectEntry> it = availableAspects.iterator();
-		AspectEntry availableAspect = null;
+		AspectEntry availableAspect;
 		while(it.hasNext() && (availableAspect = it.next()) != null) {
-			if(availableAspect.aspect.equals(itemAspect.type().value())) {
+			if(availableAspect.aspect.equals(itemAspect.type())) {
 				it.remove();
 			}
 		}

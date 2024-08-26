@@ -1,12 +1,9 @@
 package thebetweenlands.common.block.entity.simulacrum;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.api.SimulacrumEffect;
-import thebetweenlands.common.world.gen.SurfaceType;
 
 public class ThemSimulacrumEffect implements SimulacrumEffect {
 	@Override

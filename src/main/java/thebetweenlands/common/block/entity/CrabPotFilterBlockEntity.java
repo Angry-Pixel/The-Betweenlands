@@ -37,7 +37,7 @@ public class CrabPotFilterBlockEntity extends BaseContainerBlockEntity implement
 
 	private int baitProgress = 0;
 	private int filteringProgress = 0;
-	private int itemsToFilterCount = 3; // logic here means 1 already in the chamber + this
+	private final int itemsToFilterCount = 3; // logic here means 1 already in the chamber + this
 
 	private int prevFilteringAnimationTicks;
 	private int filteringAnimationTicks;

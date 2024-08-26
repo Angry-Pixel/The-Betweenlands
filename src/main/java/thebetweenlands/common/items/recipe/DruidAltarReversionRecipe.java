@@ -20,7 +20,6 @@ import thebetweenlands.api.recipes.DruidAltarRecipe;
 import thebetweenlands.common.block.entity.spawner.BetweenlandsBaseSpawner;
 import thebetweenlands.common.block.entity.spawner.MobSpawnerBlockEntity;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 

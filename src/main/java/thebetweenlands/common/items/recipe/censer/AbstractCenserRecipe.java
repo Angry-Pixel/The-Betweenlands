@@ -13,9 +13,6 @@ import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.AspectType;
 import thebetweenlands.api.block.Censer;
 import thebetweenlands.api.recipes.CenserRecipe;
-import thebetweenlands.common.registries.RecipeRegistry;
-
-import javax.annotation.Nullable;
 
 public abstract class AbstractCenserRecipe<T> implements CenserRecipe<T> {
 

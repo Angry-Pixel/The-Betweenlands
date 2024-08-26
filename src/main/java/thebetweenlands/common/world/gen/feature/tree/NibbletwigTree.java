@@ -36,8 +36,8 @@ public class NibbletwigTree {
 		BlockState leaves = BlockRegistry.NIBBLETWIG_LEAVES.get().defaultBlockState();
 		BlockState ivy = BlockRegistry.POISON_IVY.get().defaultBlockState();
 
-		int xo[] = new int[height + 1];
-		int zo[] = new int[height + 1];
+		int[] xo = new int[height + 1];
+		int[] zo = new int[height + 1];
 		for (int i = 0; i <= height; i++) {
 			int bxo = i == 0 ? 0 : xo[i - 1];
 			int bzo = i == 0 ? 0 : zo[i - 1];
@@ -93,7 +93,7 @@ public class NibbletwigTree {
 		int droops = 4 + random.nextInt(8);
 		for (int i = 0; i < droops; i++) {
 			int droopXO = random.nextInt(7) - 3;
-			int droopZO = 0;
+			int droopZO;
 			if (Math.abs(droopXO) <= 1) {
 				droopZO = random.nextInt(7) - 3;
 			} else {

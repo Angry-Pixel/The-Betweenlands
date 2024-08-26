@@ -1,11 +1,8 @@
 package thebetweenlands.client.shader;
 
-import java.io.IOException;
-
 import javax.annotation.Nullable;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.TextureUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.resources.ResourceLocation;

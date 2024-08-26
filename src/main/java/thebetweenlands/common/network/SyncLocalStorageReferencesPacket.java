@@ -13,7 +13,6 @@ import thebetweenlands.api.storage.IChunkStorage;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
-import thebetweenlands.common.world.storage.WorldStorageImpl;
 import thebetweenlands.util.ExtraCodecs;
 
 public record SyncLocalStorageReferencesPacket(CompoundTag tag, ChunkPos pos) implements CustomPacketPayload {

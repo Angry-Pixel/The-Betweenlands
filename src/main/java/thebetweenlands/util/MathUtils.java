@@ -5,12 +5,12 @@ import net.minecraft.util.Mth;
 public final class MathUtils {
 
 	public static double linearTransformd(double x, double domainMin, double domainMax, double rangeMin, double rangeMax) {
-		x = x < domainMin ? domainMin : x > domainMax ? domainMax : x;
+		x = x < domainMin ? domainMin : Math.min(x, domainMax);
 		return (rangeMax - rangeMin) * (x - domainMin) / (domainMax - domainMin) + rangeMin;
 	}
 
 	public static float linearTransformf(float x, float domainMin, float domainMax, float rangeMin, float rangeMax) {
-		x = x < domainMin ? domainMin : x > domainMax ? domainMax : x;
+		x = x < domainMin ? domainMin : Math.min(x, domainMax);
 		return (rangeMax - rangeMin) * (x - domainMin) / (domainMax - domainMin) + rangeMin;
 	}
 

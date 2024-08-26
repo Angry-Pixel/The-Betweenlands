@@ -8,7 +8,6 @@ import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredItem;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entities.fishing.anadia.AnadiaParts;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemModelProvider extends net.neoforged.neoforge.client.model.generators.ItemModelProvider {

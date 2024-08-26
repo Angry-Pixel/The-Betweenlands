@@ -11,7 +11,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import thebetweenlands.common.entities.fishing.BLFishHook;
 import thebetweenlands.common.entities.fishing.anadia.Anadia;
 import thebetweenlands.common.registries.ItemRegistry;
 

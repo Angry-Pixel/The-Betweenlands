@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
@@ -295,7 +294,7 @@ public class AspectContainer {
 		ListTag typesList = nbt.getList("container", Tag.TAG_COMPOUND);
 		for(int i = 0; i < typesList.size(); i++) {
 			CompoundTag storageNbt = typesList.getCompound(i);
-			Holder<AspectType> type = AspectType.CODEC.parse(NbtOps.INSTANCE, storageNbt.get("aspect")).result().orElse(null);;
+			Holder<AspectType> type = AspectType.CODEC.parse(NbtOps.INSTANCE, storageNbt.get("aspect")).result().orElse(null);
 			if(type == null)
 				continue;
 			Storage storage = this.getStorage(type);

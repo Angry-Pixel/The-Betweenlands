@@ -41,30 +41,23 @@ public class GenericDataAccessor implements IGenericDataAccessorAccess {
 		T deserialize(FriendlyByteBuf buf) throws IOException;
 	}
 
-	private static final class CustomSerializer<T> implements EntityDataSerializer<Object> {
-		private final Serializer<T> serializer;
-		private final Deserializer<T> deserializer;
-
-		private CustomSerializer(Serializer<T> serializer, Deserializer<T> deserializer) {
-			this.serializer = serializer;
-			this.deserializer = deserializer;
-		}
+	private record CustomSerializer<T>(Serializer<T> serializer, Deserializer<T> deserializer) implements EntityDataSerializer<Object> {
 
 		@Override
-		public StreamCodec<? super RegistryFriendlyByteBuf, Object> codec() {
-			return StreamCodec.unit(Unit.INSTANCE);
-		}
+			public StreamCodec<? super RegistryFriendlyByteBuf, Object> codec() {
+				return StreamCodec.unit(Unit.INSTANCE);
+			}
 
-		@Override
-		public EntityDataAccessor<Object> createAccessor(int id) {
-			return new EntityDataAccessor<>(id, this);
-		}
+			@Override
+			public EntityDataAccessor<Object> createAccessor(int id) {
+				return new EntityDataAccessor<>(id, this);
+			}
 
-		@Override
-		public Object copy(Object value) {
-			return new CustomSerializer<T>(this.serializer, this.deserializer);
+			@Override
+			public Object copy(Object value) {
+				return new CustomSerializer<T>(this.serializer, this.deserializer);
+			}
 		}
-	};
 
 	private static final Object2IntMap<Class<?>> NEXT_ID_MAP = new Object2IntOpenHashMap<>();
 	private final List<GenericDataAccessor.DataEntry<?>> trackedEntries = new ArrayList<>();
@@ -229,7 +222,7 @@ public class GenericDataAccessor implements IGenericDataAccessorAccess {
 
 	@Override
 	public <T> T get(EntityDataAccessor<T> key) {
-		GenericDataAccessor.DataEntry<T> entry = this.<T>getEntry(key);
+		GenericDataAccessor.DataEntry<T> entry = this.getEntry(key);
 
 		if(entry == null) {
 			throw new IllegalArgumentException("Data parameter " + key + " is not registered!");
@@ -438,8 +431,7 @@ public class GenericDataAccessor implements IGenericDataAccessorAccess {
 
 				if (entry != null) {
 					Object newValue;
-					if(newEntry instanceof GenericDataAccessor.DataEntry<?> && entry.deserializer != null) {
-						GenericDataAccessor.DataEntry<?> newGenericEntry = (GenericDataAccessor.DataEntry<?>) newEntry;
+					if(newEntry instanceof DataEntry<?> newGenericEntry && entry.deserializer != null) {
 						if(newGenericEntry.deserializedValue == null) {
 							ByteBuf buf = Unpooled.wrappedBuffer(newGenericEntry.serializedData);
 							try {
@@ -447,14 +439,14 @@ public class GenericDataAccessor implements IGenericDataAccessorAccess {
 							} catch(Exception ex) {
 								throw new DecoderException("Failed deserializing data with custom deserializer " + entry.deserializer.getClass().getName(), ex);
 							} finally {
-								((FriendlyByteBuf) buf).release();
+								buf.release();
 							}
 						}
 						newValue = newGenericEntry.deserializedValue;
 					} else {
 						newValue = newEntry.getValue();
 					}
-					if(this.owner instanceof IDataManagedObject == false || !((IDataManagedObject)this.owner).onParameterChange(entry.getKey(), newValue, true)) {
+					if(!(this.owner instanceof IDataManagedObject) || !((IDataManagedObject)this.owner).onParameterChange(entry.getKey(), newValue, true)) {
 						this.setEntryValue(entry, newValue);
 					}
 				}
@@ -507,7 +499,7 @@ public class GenericDataAccessor implements IGenericDataAccessorAccess {
 	}
 
 	public static class EntryAccess<T> {
-		private DataEntry<T> entry;
+		private final DataEntry<T> entry;
 
 		private EntryAccess(DataEntry<T> entry) {
 			this.entry = entry;
@@ -548,11 +540,14 @@ public class GenericDataAccessor implements IGenericDataAccessorAccess {
 		private boolean dirty;
 		private int trackingTime;
 		private int trackingTimer;
-		private EntryAccess<T> access;
+		private final EntryAccess<T> access;
 
-		private byte[] serializedData;
+		private byte @Nullable[] serializedData;
+		@Nullable
 		private Object deserializedValue;
+		@Nullable
 		private Serializer<T> serializer;
+		@Nullable
 		private Deserializer<T> deserializer;
 
 		public DataEntry(GenericDataAccessor dataManager, EntityDataAccessor<T> keyIn, T valueIn) {

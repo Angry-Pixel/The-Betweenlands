@@ -22,14 +22,12 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.items.GemSingerItem;
-import thebetweenlands.common.registries.DimensionRegistries;
 
 
 public class BetweenlandsChunkStorage extends ChunkStorageImpl {
-	private IntSet savedGemTargets = new IntOpenHashSet();
-	private Int2ObjectMap<IntSet> gemToPositions = new Int2ObjectOpenHashMap<>();
+	private final IntSet savedGemTargets = new IntOpenHashSet();
+	private final Int2ObjectMap<IntSet> gemToPositions = new Int2ObjectOpenHashMap<>();
 
 	private boolean rescanGemSingerTargets = false;
 

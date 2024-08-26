@@ -18,6 +18,6 @@ public class ElixirDraining extends ElixirEffect {
 	@Override
 	protected boolean isReady(int ticks, int strength) {
 		int ticksPerDamage = 50 >> strength;
-		return ticksPerDamage > 0 ? ticks % ticksPerDamage == 0 : true;
+		return ticksPerDamage == 0 || ticks % ticksPerDamage == 0;
 	}
 }

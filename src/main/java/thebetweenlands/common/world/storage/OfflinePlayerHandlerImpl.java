@@ -56,9 +56,9 @@ public class OfflinePlayerHandlerImpl implements IOfflinePlayerDataHandler {
 		}
 	}
 
-	private Map<UUID, OfflinePlayerData> offlinePlayerDataCache = new HashMap<>();
+	private final Map<UUID, OfflinePlayerData> offlinePlayerDataCache = new HashMap<>();
 
-	private ServerLevel level;
+	private final ServerLevel level;
 
 	public OfflinePlayerHandlerImpl(ServerLevel level) {
 		this.level = level;
@@ -113,7 +113,7 @@ public class OfflinePlayerHandlerImpl implements IOfflinePlayerDataHandler {
 		try {
 			return this.loadOfflinePlayerData(playerUuid);
 		} catch (IOException ex) {
-			TheBetweenlands.LOGGER.error(String.format("Failed loading offline player data for UUID %s", playerUuid.toString()), ex);
+			TheBetweenlands.LOGGER.error(String.format("Failed loading offline player data for UUID %s", playerUuid), ex);
 		}
 		return null;
 	}
@@ -148,7 +148,7 @@ public class OfflinePlayerHandlerImpl implements IOfflinePlayerDataHandler {
 			this.saveOfflinePlayerData(playerUuid, nbt);
 			return true;
 		} catch (IOException ex) {
-			TheBetweenlands.LOGGER.error(String.format("Failed saving offline player data for UUID %s", playerUuid.toString()), ex);
+			TheBetweenlands.LOGGER.error(String.format("Failed saving offline player data for UUID %s", playerUuid), ex);
 		}
 		return false;
 	}

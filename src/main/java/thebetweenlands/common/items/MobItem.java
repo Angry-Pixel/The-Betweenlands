@@ -1,8 +1,6 @@
 package thebetweenlands.common.items;
 
 import net.jodah.typetools.TypeResolver;
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -291,7 +289,7 @@ public class MobItem extends Item {
 
 	@Nullable
 	protected Entity createCapturedEntityFromNBT(Level level, double x, double y, double z, CompoundTag nbt) {
-		Entity entity = EntityType.loadEntityRecursive(nbt, level, p_331097_ -> p_331097_);;
+		Entity entity = EntityType.loadEntityRecursive(nbt, level, p_331097_ -> p_331097_);
 
 		if (entity != null) {
 			entity.moveTo(x, y, z, level.getRandom().nextFloat() * 360.0f, 0);

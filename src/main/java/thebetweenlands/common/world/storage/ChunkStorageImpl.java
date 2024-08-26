@@ -31,7 +31,7 @@ public abstract class ChunkStorageImpl implements IChunkStorage, TickableStorage
 	protected final IWorldStorage worldStorage;
 	protected final ChunkAccess chunk;
 
-	private Set<ServerPlayer> watchers = new HashSet<>();
+	private final Set<ServerPlayer> watchers = new HashSet<>();
 	private boolean dirty = false;
 
 	private final List<LocalStorageReference> localStorageReferences = new ArrayList<>();

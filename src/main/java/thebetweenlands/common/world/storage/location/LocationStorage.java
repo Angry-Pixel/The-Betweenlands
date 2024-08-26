@@ -34,16 +34,18 @@ import java.util.List;
 
 public class LocationStorage extends LocalStorageImpl {
 	private final List<AABB> boundingBoxes = new ArrayList<>();
+	@Nullable
 	private AABB enclosingBoundingBox;
 	private EnumLocationType type;
 	private int layer;
+	@Nullable
 	private LocationAmbience ambience = null;
 	private boolean inheritAmbience = true;
 	private long locationSeed = 0L;
 
 	protected GenericDataAccessor dataManager;
 
-	private Object2IntMap<Entity> titleDisplayCooldowns = new Object2IntArrayMap<>();
+	private final Object2IntMap<Entity> titleDisplayCooldowns = new Object2IntArrayMap<>();
 
 	protected static final EntityDataAccessor<String> NAME = GenericDataAccessor.defineId(LocationStorage.class, EntityDataSerializers.STRING);
 	protected static final EntityDataAccessor<Boolean> VISIBLE = GenericDataAccessor.defineId(LocationStorage.class, EntityDataSerializers.BOOLEAN);
@@ -137,6 +139,7 @@ public class LocationStorage extends LocalStorageImpl {
 	 *
 	 * @return
 	 */
+	@Nullable
 	public AABB getEnclosingBounds() {
 		return this.enclosingBoundingBox;
 	}
@@ -584,6 +587,7 @@ public class LocationStorage extends LocalStorageImpl {
 	 * @param entity
 	 * @return
 	 */
+	@Nullable
 	public static LocationAmbience getAmbience(Entity entity) {
 		List<LocationStorage> locations = getLocations(entity);
 		if (locations.isEmpty())

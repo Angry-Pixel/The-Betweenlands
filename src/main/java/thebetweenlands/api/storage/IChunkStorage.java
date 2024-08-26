@@ -13,7 +13,7 @@ public interface IChunkStorage {
 	 * Returns the world storage
 	 * @return
 	 */
-	public IWorldStorage getWorldStorage();
+	IWorldStorage getWorldStorage();
 
 	/**
 	 * Returns the chunk of this chunk storage

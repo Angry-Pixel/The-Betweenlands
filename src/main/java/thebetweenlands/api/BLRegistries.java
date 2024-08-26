@@ -5,7 +5,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.registries.RegistryBuilder;
-import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.AspectType;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.api.recipes.CenserRecipe;

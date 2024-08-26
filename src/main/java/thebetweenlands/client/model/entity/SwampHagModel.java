@@ -151,8 +151,9 @@ public class SwampHagModel<T extends SwampHag> extends MowzieModelBase<T> implem
 					this.armright.yRot = this.convertDegtoRad(entity.getThrowTimer());
 				}
 
-				if (entity.getThrowTimer() >= 10 && entity.getThrowTimer() <= 99)
+				if (entity.getThrowTimer() >= 10 && entity.getThrowTimer() <= 99) {
 //					this.dat_detailed_hot_bod.visible = true;
+				}
 
 				if (entity.getThrowTimer() >= 90) {
 					this.armright.xRot -= (Mth.PI / 5F);

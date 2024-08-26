@@ -55,13 +55,13 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 		if(!this.initialized) {
 			this.initShaders();
 			this.stages = this.getStages();
-			if(this.stages != null && this.stages.length > 0) {
+			if(this.stages != null) {
 				for(PostProcessingEffect<?> stage : this.stages) {
 					stage.init();
 				}
 			}
 			if(!this.initEffect() || this.shaderProgramID < 0) {
-				throw new RuntimeException("Couldn't initialize shaders for post processing effect: " + this.toString());
+				throw new RuntimeException("Couldn't initialize shaders for post processing effect: " + this);
 			}
 			this.initialized = true;
 		}
@@ -98,7 +98,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 	public final void delete() {
 		if(this.shaderProgramID > 0)
 			GlStateManager.glDeleteProgram(this.shaderProgramID);
-		if(this.stages != null && this.stages.length > 0) {
+		if(this.stages != null) {
 			for(PostProcessingEffect<?> stage : this.stages) {
 				stage.delete();
 			}
@@ -329,7 +329,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 		GL11.glEnd();
 
 		//Apply additional stages
-		if(blitBuffer != null && this.stages != null && this.stages.length > 0) {
+		if(blitBuffer != null && this.stages != null) {
 			for(PostProcessingEffect<?> stage : this.stages) {
 				//Render to blit buffer
 				stage.render(partialTicks, intermediateDst.getColorTextureId(), blitBuffer, intermediateDst, null, renderWidth, renderHeight, false, false, false, clearDepth, clearColor);

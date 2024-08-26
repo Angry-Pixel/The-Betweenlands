@@ -3,7 +3,6 @@ package thebetweenlands.client.shader;
 import javax.annotation.Nullable;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -14,11 +13,14 @@ import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.TextureManager;
 
 public class GeometryBuffer extends AbstractTexture {
+	@Nullable
 	private RenderTarget geometryBuffer;
+	@Nullable
 	private DepthBuffer geometryDepthBuffer;
-	private boolean depthBuffer = false;
+	private boolean depthBuffer;
 
 	protected final TextureManager textureManager;
+	@Nullable
 	protected final ResourceLocation nameDiffuse, nameDepth;
 
 	/**
@@ -34,7 +36,7 @@ public class GeometryBuffer extends AbstractTexture {
 		this.nameDiffuse = nameDiffuse;
 		this.nameDepth = nameDepth;
 
-		if(this.textureManager != null && this.nameDiffuse != null) {
+		if(this.nameDiffuse != null) {
 			this.textureManager.register(this.nameDiffuse, this);
 		}
 	}

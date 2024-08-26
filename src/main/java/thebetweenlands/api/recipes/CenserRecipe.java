@@ -148,7 +148,7 @@ public interface CenserRecipe<Context> {
 	 * @param type
 	 * @return
 	 */
-	public int getEffectColor(@Nullable Context context, Censer censer, EffectColorType type);
+	int getEffectColor(@Nullable Context context, Censer censer, EffectColorType type);
 
 	/**
 	 * Called when the censer is rendered with this recipe active

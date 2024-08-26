@@ -19,7 +19,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.block.entity.FishTrimmingTableBlockEntity;
-import thebetweenlands.common.block.entity.FishingTackleBoxBlockEntity;
 import thebetweenlands.common.items.AnadiaMobItem;
 
 import java.util.List;

@@ -14,9 +14,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemDisplayContext;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.CenserBlock;
 import thebetweenlands.common.block.CrabPotFilterBlock;
-import thebetweenlands.common.block.entity.CenserBlockEntity;
 import thebetweenlands.common.block.entity.CrabPotFilterBlockEntity;
 
 public class CrabPotFilterRenderer implements BlockEntityRenderer<CrabPotFilterBlockEntity> {

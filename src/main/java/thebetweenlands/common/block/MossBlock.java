@@ -95,7 +95,7 @@ public class MossBlock extends DirectionalBlock {
 
 		BlockPos.MutableBlockPos checkPos = new BlockPos.MutableBlockPos();
 		byte radius = 2;
-		int attempt = 0;
+		int attempt;
 		for (int xx = pos.getX() - radius; xx <= pos.getX() + radius; ++xx) {
 			for (int zz = pos.getZ() - radius; zz <= pos.getZ() + radius; ++zz) {
 				for (int yy = pos.getY() - radius; yy <= pos.getY() + radius; ++yy) {

@@ -5,6 +5,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.pathfinder.Path;
+import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.entities.fishing.BLFishHook;
 
 import java.util.Collections;
@@ -14,6 +15,7 @@ public class AnadiaFindHookGoal extends Goal {
 
 	private final Anadia anadia;
 	private final double searchRange;
+	@Nullable
 	public BLFishHook hook = null;
 
 	public AnadiaFindHookGoal(Anadia anadia, double searchRange) {
@@ -74,6 +76,7 @@ public class AnadiaFindHookGoal extends Goal {
 		this.hook = null;
 	}
 
+	@Nullable
 	public BLFishHook getClosestHook(double distance) {
 		List<BLFishHook> list = this.anadia.level().getEntitiesOfClass(BLFishHook.class, this.anadia.getBoundingBox().inflate(distance), Entity::isInWater);
 

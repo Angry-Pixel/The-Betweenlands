@@ -21,6 +21,6 @@ public class ElixirFeasting extends ElixirEffect {
 	@Override
 	protected boolean isReady(int ticks, int strength) {
 		int ticksPerFood = 100 >> strength;
-		return ticksPerFood > 0 ? ticks % ticksPerFood == 0 : true;
+		return ticksPerFood == 0 || ticks % ticksPerFood == 0;
 	}
 }

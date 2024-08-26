@@ -2,7 +2,6 @@ package thebetweenlands.api.aspect;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.Holder;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import thebetweenlands.common.herblore.aspect.AspectManager;

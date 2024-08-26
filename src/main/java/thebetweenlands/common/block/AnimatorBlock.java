@@ -18,7 +18,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.recipes.AnimatorRecipe;
-import thebetweenlands.common.block.entity.AlembicBlockEntity;
 import thebetweenlands.common.block.entity.AnimatorBlockEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;

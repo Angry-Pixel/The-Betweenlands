@@ -5,7 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.ChunkPos;
 import javax.annotation.Nullable;
 
-public record LocalStorageReference(ChunkPos pos, StorageID id, LocalRegion region, @Nullable ILocalStorageHandle handle) {
+public record LocalStorageReference(ChunkPos pos, StorageID id, @Nullable LocalRegion region, @Nullable ILocalStorageHandle handle) {
 
 	/**
 	 * Creates a new local storage reference.
@@ -94,10 +94,10 @@ public record LocalStorageReference(ChunkPos pos, StorageID id, LocalRegion regi
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((pos == null) ? 0 : pos.hashCode());
-		result = prime * result + ((handle == null) ? 0 : handle.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((region == null) ? 0 : region.hashCode());
+		result = prime * result + this.pos.hashCode();
+		result = prime * result + (this.handle == null ? 0 : this.handle.hashCode());
+		result = prime * result + this.id.hashCode();
+		result = prime * result + (this.region == null ? 0 : this.region.hashCode());
 		return result;
 	}
 
@@ -110,26 +110,17 @@ public record LocalStorageReference(ChunkPos pos, StorageID id, LocalRegion regi
 		if (getClass() != obj.getClass())
 			return false;
 		LocalStorageReference other = (LocalStorageReference) obj;
-		if (pos == null) {
-			if (other.pos != null)
-				return false;
-		} else if (!pos.equals(other.pos))
+		if (!pos.equals(other.pos))
 			return false;
 		if (handle == null) {
 			if (other.handle != null)
 				return false;
 		} else if (!handle.equals(other.handle))
 			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
+		if (!id.equals(other.id))
 			return false;
 		if (region == null) {
-			if (other.region != null)
-				return false;
-		} else if (!region.equals(other.region))
-			return false;
-		return true;
+			return other.region == null;
+		} else return region.equals(other.region);
 	}
 }

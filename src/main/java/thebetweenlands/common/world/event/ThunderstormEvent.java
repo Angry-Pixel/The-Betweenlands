@@ -14,7 +14,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.simulacrum.SimulacrumBlockEntity;
-import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.registries.SimulacrumEffectRegistry;
 import thebetweenlands.common.registries.SoundRegistry;

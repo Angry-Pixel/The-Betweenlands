@@ -6,7 +6,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -43,9 +42,9 @@ public class AlembicBlockEntity extends SyncedBlockEntity {
 	private int producableDuration;
 	@Nullable
 	private ElixirEffect producableElixir = null;
-	private List<Aspect> producableItemAspects = new ArrayList<>();
+	private final List<Aspect> producableItemAspects = new ArrayList<>();
 	@Nullable
-	private ElixirRecipe recipe = null;
+	private final ElixirRecipe recipe = null;
 	private int bucketInfusionTime;
 
 	private boolean loadInfusionData = false;

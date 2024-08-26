@@ -26,10 +26,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.common.block.entity.BeamOriginBlockEntity;
 import thebetweenlands.common.block.entity.SteepingPotBlockEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;
-import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.Optional;

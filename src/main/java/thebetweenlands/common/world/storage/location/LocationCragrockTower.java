@@ -42,12 +42,12 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class LocationCragrockTower extends LocationGuarded {
-	private List<BlockPos> glowingCragrockBlocks = new ArrayList<>();
-	private List<BlockPos> wisps = new ArrayList<>();
-	private List<BlockPos> inactiveWisps = new ArrayList<>();
-	private BlockPos[][] levelBlockadeBlocks = new BlockPos[5][0];
-	private boolean[] spawners = { true, true, true, true, true };
-	private boolean[] blockades = { true, true, true, true, true };
+	private final List<BlockPos> glowingCragrockBlocks = new ArrayList<>();
+	private final List<BlockPos> wisps = new ArrayList<>();
+	private final List<BlockPos> inactiveWisps = new ArrayList<>();
+	private final BlockPos[][] levelBlockadeBlocks = new BlockPos[5][0];
+	private final boolean[] spawners = { true, true, true, true, true };
+	private final boolean[] blockades = { true, true, true, true, true };
 	private BlockPos structurePos;
 	private boolean isTopConquered = false;
 	private boolean isTopReached = false;
@@ -179,7 +179,7 @@ public class LocationCragrockTower extends LocationGuarded {
 	 */
 	public void destroyBlockade(Level world, int level) {
 		BlockPos[] blocks = this.levelBlockadeBlocks[level];
-		if(blocks != null && blocks.length != 0) {
+		if(blocks != null) {
 
 			for(BlockPos pos : blocks) {
 				world.playSound(null, pos, SoundRegistry.CRUMBLE.get(), SoundSource.BLOCKS, 0.2F, 1F);
@@ -201,7 +201,7 @@ public class LocationCragrockTower extends LocationGuarded {
 	 */
 	public void restoreBlockade(Level world, int level) {
 		BlockPos[] blocks = this.levelBlockadeBlocks[level];
-		if(blocks != null && blocks.length != 0) {
+		if(blocks != null) {
 			for(BlockPos pos : blocks) {
 				world.setBlockAndUpdate(pos, BlockRegistry.SMOOTH_CRAGROCK_SLAB.get().defaultBlockState().setValue(SlabBlock.TYPE, SlabType.TOP));
 				this.getGuard().setGuarded(world, pos, true);
@@ -322,7 +322,7 @@ public class LocationCragrockTower extends LocationGuarded {
 
 					for(int i = 0; i < 4; i++) {
 						if(!this.inactiveWisps.isEmpty()) {
-							BlockPos src = player != null ? player.blockPosition() : this.structurePos;
+							BlockPos src = player.blockPosition();
 
 							BlockPos closest = this.inactiveWisps.get(0);
 							for(BlockPos pos : this.inactiveWisps) {
@@ -331,12 +331,8 @@ public class LocationCragrockTower extends LocationGuarded {
 								}
 							}
 
-							boolean canLightUp = false;
-
-							if((closest.getY() - this.structurePos.getY() < 16 && player.getY() - this.structurePos.getY() < 45) ||
-									(closest.getY() - this.structurePos.getY() >= 16 && player.getY() - this.structurePos.getY() >= 45)) {
-								canLightUp = true;
-							}
+							boolean canLightUp = (closest.getY() - this.structurePos.getY() < 16 && player.getY() - this.structurePos.getY() < 45) ||
+								(closest.getY() - this.structurePos.getY() >= 16 && player.getY() - this.structurePos.getY() >= 45);
 
 							if(canLightUp) {
 								level.setBlockAndUpdate(closest, BlockRegistry.WISP.get().defaultBlockState().setValue(WispBlock.COLOR, level.getRandom().nextInt(4)));
@@ -487,8 +483,7 @@ public class LocationCragrockTower extends LocationGuarded {
 						//Player trying to bypass tower, teleport to entrance
 
 						player.stopRiding();
-						if (player instanceof ServerPlayer) {
-							ServerPlayer playerMP = (ServerPlayer) player;
+						if (player instanceof ServerPlayer playerMP) {
 							playerMP.connection.teleport(structurePos.getX() + 0.5D, structurePos.getY(), structurePos.getZ() + 0.5D, player.getYRot(), player.getXRot());
 						} else {
 							player.moveTo(structurePos.getX() + 0.5D, structurePos.getY(), structurePos.getZ() + 0.5D, player.getYRot(), player.getXRot());

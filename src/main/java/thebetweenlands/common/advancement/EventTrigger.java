@@ -7,7 +7,6 @@ import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.item.ItemStack;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;

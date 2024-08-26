@@ -21,7 +21,6 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.common.block.entity.CrabPotBlockEntity;
 import thebetweenlands.common.block.entity.CrabPotFilterBlockEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 

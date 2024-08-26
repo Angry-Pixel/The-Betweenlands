@@ -1,18 +1,13 @@
 package thebetweenlands.common.items;
 
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.common.component.entity.FoodSicknessData;
-import thebetweenlands.common.network.ShowFoodSicknessPacket;
 import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.util.FoodSickness;
 

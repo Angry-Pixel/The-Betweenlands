@@ -1,6 +1,5 @@
 package thebetweenlands.common.block.entity;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -26,9 +25,8 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import thebetweenlands.api.recipes.AnimatorRecipe;
+import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.audio.AnimatorSoundInstance;
 import thebetweenlands.common.items.LifeCrystalItem;
 import thebetweenlands.common.registries.*;
@@ -159,17 +157,12 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 			}
 		} else {
 			if (entity.isRunning() && !entity.soundPlaying) {
-				entity.playAnimatorSound();
+				BetweenlandsClient.playLocalSound(new AnimatorSoundInstance(SoundRegistry.ANIMATOR.get(), SoundSource.BLOCKS, entity));
 				entity.soundPlaying = true;
 			} else if (!entity.isRunning()) {
 				entity.soundPlaying = false;
 			}
 		}
-	}
-
-	@OnlyIn(Dist.CLIENT)
-	protected void playAnimatorSound() {
-		Minecraft.getInstance().getSoundManager().play(new AnimatorSoundInstance(SoundRegistry.ANIMATOR.get(), SoundSource.BLOCKS, this));
 	}
 
 	public boolean isCrystalInSlot() {

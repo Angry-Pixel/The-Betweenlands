@@ -11,7 +11,6 @@ import javax.annotation.Nullable;
 
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
@@ -26,11 +25,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
-import net.neoforged.neoforge.client.ClientHooks.ClientEvents;
 import thebetweenlands.api.entity.spawning.IBiomeSpawnEntriesData;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.api.environment.IEnvironmentEvent;
+import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.DimensionRegistries;
@@ -93,7 +92,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		super.tick(level);
 
 		if (level.isClientSide() && level.dimension() == DimensionRegistries.DIMENSION_KEY) {
-			this.updateAmbientCaveSounds(level, thebetweenlands.client.event.ClientEvents.getClientPlayer());
+			this.updateAmbientCaveSounds(level, BetweenlandsClient.getClientPlayer());
 		}
 	}
 

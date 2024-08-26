@@ -18,7 +18,6 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 import thebetweenlands.common.registries.StorageRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
-import thebetweenlands.common.world.storage.WorldStorageImpl;
 
 public class SyncLocalStorageDataPacket implements CustomPacketPayload {
 

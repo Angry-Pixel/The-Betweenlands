@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
-import thebetweenlands.client.event.ClientEvents;
+import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.common.component.entity.FoodSicknessData;
 import thebetweenlands.common.network.ShowFoodSicknessPacket;
 import thebetweenlands.common.registries.AttachmentRegistry;
@@ -45,7 +45,7 @@ public class ChiromawWingItem extends Item {
 
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-		Player player = ClientEvents.getClientPlayer();
+		Player player = BetweenlandsClient.getClientPlayer();
 		if (player != null) {
 			FoodSicknessData data = player.getData(AttachmentRegistry.FOOD_SICKNESS);
 			if (FoodSickness.getSicknessForHatred(data.getFoodHatred(this)) != FoodSickness.SICK) {

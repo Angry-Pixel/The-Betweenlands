@@ -183,7 +183,7 @@ public class MothHouseBlockEntity extends NoMenuContainerBlockEntity {
 	public int addGrubs(ItemStack stack) {
 		int count = stack.getCount();
 
-		int grubsAdded = count - 0;//this.inventoryHandler.insertItem(SLOT_GRUBS, stack.copy(), false).getCount();
+		int grubsAdded = count;//this.inventoryHandler.insertItem(SLOT_GRUBS, stack.copy(), false).getCount();
 
 		this.setChanged();
 

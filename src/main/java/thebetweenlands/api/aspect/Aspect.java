@@ -2,15 +2,11 @@ package thebetweenlands.api.aspect;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.Optional;
 
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.resources.ResourceLocation;
-import thebetweenlands.api.BLRegistries;
 
 import javax.annotation.Nullable;
 

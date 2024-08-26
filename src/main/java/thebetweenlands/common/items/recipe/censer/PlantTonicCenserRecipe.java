@@ -6,7 +6,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.chunk.ChunkAccess;
-import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.api.block.Censer;
 import thebetweenlands.common.block.entity.DugSoilBlockEntity;
 import thebetweenlands.common.registries.ItemRegistry;

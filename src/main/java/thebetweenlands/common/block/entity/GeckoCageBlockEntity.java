@@ -6,10 +6,8 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.AspectType;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 

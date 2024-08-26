@@ -11,6 +11,8 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 
+import javax.annotation.Nullable;
+
 /**
  * Helper class to project world space coordinates to screen space coordinates with {@link GLU#gluProject(float, float, float, FloatBuffer, FloatBuffer, IntBuffer, FloatBuffer)}
  *
@@ -194,7 +196,7 @@ public final class GLUProjection {
 		}
 	}
 	public static class Projection {
-		public static enum Type {
+		public enum Type {
 			INSIDE, OUTSIDE, INVERTED, FAIL
 		}
 		private final double x;
@@ -218,9 +220,10 @@ public final class GLUProjection {
 			return this.t == type;
 		}
 	}
-	public static enum ClampMode { ORTHOGONAL, DIRECT, NONE }
+	public enum ClampMode { ORTHOGONAL, DIRECT, NONE }
 
 	private GLUProjection() { }
+	@Nullable
 	private static GLUProjection instance;
 	public static GLUProjection getInstance() {
 		if(instance == null) {
@@ -280,7 +283,7 @@ public final class GLUProjection {
 		if(fv.x < 0.0D) {
 			yaw = 360.0D - yaw;
 		}
-		double pitch = 0.0D;
+		double pitch;
 		if((-fv.y > 0.0D && yaw >= 90.0D && yaw < 270.0D) || (fv.y > 0.0D && !(yaw >= 90.0D && yaw < 270.0D))) {
 			pitch = Math.toDegrees(Math.atan2(nuv.cross(uv).length(), nuv.dot(uv)));
 		} else {
@@ -364,7 +367,8 @@ public final class GLUProjection {
 							angle = 360.0D - angle;
 						}
 						//Calculate screen border intersections
-						Vector3D intersect = new Vector3D(0, 0, 0);
+						new Vector3D(0, 0, 0);
+						Vector3D intersect;
 						//Check which screen border to intersect
 						if(angle >= this.bra && angle < this.tra) {
 							//Right

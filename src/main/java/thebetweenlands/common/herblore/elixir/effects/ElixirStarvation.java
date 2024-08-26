@@ -23,6 +23,6 @@ public class ElixirStarvation extends ElixirEffect {
 	@Override
 	protected boolean isReady(int ticks, int strength) {
 		int ticksPerStarve = 80 >> strength;
-		return ticksPerStarve > 0 ? ticks % ticksPerStarve == 0 : true;
+		return ticksPerStarve == 0 || ticks % ticksPerStarve == 0;
 	}
 }

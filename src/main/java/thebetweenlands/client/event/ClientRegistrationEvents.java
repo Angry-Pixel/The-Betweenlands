@@ -3,23 +3,22 @@ package thebetweenlands.client.event;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
-import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.client.extensions.common.IClientMobEffectExtensions;
@@ -46,30 +45,36 @@ import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.items.AnadiaMobItem;
 import thebetweenlands.common.registries.*;
 
-import javax.annotation.Nullable;
-
-public class ClientEvents {
+public class ClientRegistrationEvents {
 
 	private static final int DEEP_COLOR_R = 19;
 	private static final int DEEP_COLOR_G = 24;
 	private static final int DEEP_COLOR_B = 68;
 
-	private static RiftVariantReloadListener riftVariantListener;
+	public static RiftVariantReloadListener riftVariantListener;
 
 	public static void initClient(IEventBus eventbus) {
-		eventbus.addListener(ClientEvents::registerScreens);
-		eventbus.addListener(ClientEvents::registerRenderers);
-		eventbus.addListener(ClientEvents::registerDimEffects);
-		eventbus.addListener(ClientEvents::registerExtensions);
-		eventbus.addListener(ClientEvents::registerLayerDefinition);
-		eventbus.addListener(ClientEvents::particleStuff);
-		eventbus.addListener(ClientEvents::registerBlockColors);
-		eventbus.addListener(ClientEvents::registerReloadListeners);
-		eventbus.addListener(ClientEvents::registerGeometryLoaders);
-		eventbus.addListener(ClientEvents::registerPropertyOverrides);
-		eventbus.addListener(ClientEvents::registerOverlays);
-		eventbus.addListener(ClientEvents::registerItemColors);
+		eventbus.addListener(ClientRegistrationEvents::clientSetup);
+		eventbus.addListener(ClientRegistrationEvents::registerScreens);
+		eventbus.addListener(ClientRegistrationEvents::registerRenderers);
+		eventbus.addListener(ClientRegistrationEvents::registerDimEffects);
+		eventbus.addListener(ClientRegistrationEvents::registerExtensions);
+		eventbus.addListener(ClientRegistrationEvents::registerLayerDefinition);
+		eventbus.addListener(ClientRegistrationEvents::particleStuff);
+		eventbus.addListener(ClientRegistrationEvents::registerBlockColors);
+		eventbus.addListener(ClientRegistrationEvents::registerReloadListeners);
+		eventbus.addListener(ClientRegistrationEvents::registerGeometryLoaders);
+		eventbus.addListener(ClientRegistrationEvents::registerPropertyOverrides);
+		eventbus.addListener(ClientRegistrationEvents::registerOverlays);
+		eventbus.addListener(ClientRegistrationEvents::registerItemColors);
 		MainMenuEvents.init();
+	}
+
+	private static void clientSetup(FMLClientSetupEvent event) {
+		event.enqueueWork(() -> {
+			ItemBlockRenderTypes.setRenderLayer(FluidRegistry.SWAMP_WATER_FLOW.get(), RenderType.translucent());
+			ItemBlockRenderTypes.setRenderLayer(FluidRegistry.SWAMP_WATER_STILL.get(), RenderType.translucent());
+		});
 	}
 
 	private static void registerOverlays(final RegisterGuiLayersEvent event) {
@@ -373,25 +378,5 @@ public class ClientEvents {
 			b = (int) (b * depth + DEEP_COLOR_B * (1 - depth) + 0.5F);
 			return r << 16 | g << 8 | b;
 		}, BlockRegistry.SWAMP_WATER.get());
-	}
-
-	@Nullable
-	public static ClientLevel getClientLevel() {
-		return Minecraft.getInstance().level;
-	}
-
-	// Hack for when we need to get the client level, but this code could be in a class that runs on dedicated servers to make it not crash
-	@Nullable
-	public static Level getClientLevelWhereThisCouldBeDedicated() {
-		return getClientLevel();
-	}
-
-	@Nullable
-	public static Player getClientPlayer() {
-		return Minecraft.getInstance().player;
-	}
-
-	public static RiftVariantReloadListener getRiftVariantLoader() {
-		return riftVariantListener;
 	}
 }

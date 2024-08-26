@@ -71,7 +71,7 @@ public class RotSmellData {
 
 	private void setChanged(LivingEntity player) {
 		if (player instanceof ServerPlayer) {
-			PacketDistributor.sendToPlayersTrackingEntityAndSelf((ServerPlayer) player, new UpdateRotSmellPacket(player.getId(), this.smellyTime, this.immunityTime));
+			PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new UpdateRotSmellPacket(player.getId(), this.smellyTime, this.immunityTime));
 		}
 	}
 

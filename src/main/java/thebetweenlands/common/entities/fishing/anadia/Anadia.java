@@ -1,6 +1,5 @@
 package thebetweenlands.common.entities.fishing.anadia;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;

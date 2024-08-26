@@ -80,15 +80,17 @@ public class MobSpawnerBlock extends SpawnerBlock {
 		return createTickerHelper(type, BlockEntityRegistry.MOB_SPAWNER.get(), level.isClientSide() ? MobSpawnerBlockEntity::clientTick : MobSpawnerBlockEntity::serverTick);
 	}
 
-	public static enum RandomSpawnerMob {
+	public enum RandomSpawnerMob {
 		SWAMP_HAG(EntityRegistry.SWAMP_HAG.get(), 200, 500, 4),
 		WIGHT(EntityRegistry.WIGHT.get(), 400, 800, 2);//,
 //		BLOOD_SNAIL(EntityRegistry.BLOOD_SNAIL.get(), 100, 400, 4),
 //		TERMITE(EntityRegistry.TERMITE.get(), 100, 300, 6),
 //		LEECH(EntityRegistry.LEECH.get(), 150, 500, 3);
 
-		private EntityType<?> type;
-		private int minDelay, maxDelay, maxEntities;
+		private final EntityType<?> type;
+		private final int minDelay;
+		private final int maxDelay;
+		private final int maxEntities;
 
 		RandomSpawnerMob(EntityType<?> type, int minDelay, int maxDelay, int maxEntities) {
 			this.type = type;

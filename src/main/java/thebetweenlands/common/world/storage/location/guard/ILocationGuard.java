@@ -1,12 +1,10 @@
 package thebetweenlands.common.world.storage.location.guard;
 
-import net.minecraft.commands.arguments.NbtTagArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.WorldGenLevel;
 
 import javax.annotation.Nullable;
 

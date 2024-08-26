@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.Heightmap;
-import thebetweenlands.client.event.ClientEvents;
+import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.common.block.BLSnowLayerBlock;
 import thebetweenlands.common.block.entity.PresentBlockEntity;
 import thebetweenlands.common.datagen.tags.BlockTagProvider;
@@ -54,10 +54,10 @@ public class WinterEvent extends SeasonalEnvironmentEvent {
 	@Override
 	public void setActive(Level level, boolean active) {
 		//Mark blocks in range for render update to update block textures
-		if (active != this.isActive() && level.isClientSide() && ClientEvents.getClientPlayer() != null) {
+		if (active != this.isActive() && level.isClientSide() && BetweenlandsClient.getClientPlayer() != null) {
 			updateModelActiveState(active);
 
-			Player player = ClientEvents.getClientPlayer();
+			Player player = BetweenlandsClient.getClientPlayer();
 			int px = Mth.floor(player.getX()) - 256;
 			int py = Mth.floor(player.getY()) - 256;
 			int pz = Mth.floor(player.getZ()) - 256;

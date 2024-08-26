@@ -40,7 +40,7 @@ public class WeedwoodCraftingTableBlockEntity extends BlockEntity implements Men
 		return this.items;
 	}
 
-	private Set<WeedwoodCraftingContainer> openInventories = new HashSet<>();
+	private final Set<WeedwoodCraftingContainer> openInventories = new HashSet<>();
 
 	public void openInventory(WeedwoodCraftingContainer inv) {
 		this.openInventories.add(inv);
@@ -49,18 +49,18 @@ public class WeedwoodCraftingTableBlockEntity extends BlockEntity implements Men
 	public void closeInventory(WeedwoodCraftingContainer inv) {
 		this.openInventories.remove(inv);
 	}
-	
+
 	public void slotChangedCraftingGrid() {
 		for(WeedwoodCraftingContainer container : openInventories) {
 			container.menu.slotChangedCraftingGrid();
 		}
 	}
-	
+
 	@Override
 	public Component getDisplayName() {
 		return Component.translatable("container.crafting");
 	}
-	
+
 	@Override
 	public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
 		return new WeedwoodCraftingMenu(containerId, playerInventory, this, ContainerLevelAccess.create(this.getLevel(), this.getBlockPos()));

@@ -30,10 +30,12 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.AspectContainerItem;
 import thebetweenlands.common.block.entity.RepellerBlockEntity;
 import thebetweenlands.common.items.AspectVialItem;
 import thebetweenlands.common.items.DentrothystVialItem;
+import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -69,24 +71,23 @@ public class RepellerBlock extends HorizontalBaseEntityBlock {
 				} else if (stack.getItem() instanceof AspectVialItem) {
 					if (repeller.hasShimmerstone()) {
 						if (repeller.getFuel() < repeller.getMaxFuel()) {
-							//TODO
-//							AspectContainerItem aspectContainer = AspectContainerItem.fromItem(stack);
-//							int amount = aspectContainer.get(AspectRegistry.BYARIIS);
-//							int loss = 10; //Loss when adding
-//							if (amount >= loss) {
-//								if (!level.isClientSide()) {
-//									int added = repeller.addFuel(amount - loss);
-//									if (!player.isCreative()) {
-//										int leftAmount = amount - added - loss;
-//										if (leftAmount > 0) {
-//											aspectContainer.set(AspectRegistry.BYARIIS, leftAmount);
-//										} else {
-//											player.setItemInHand(hand, stack.getCraftingRemainingItem());
-//										}
-//									}
-//								}
-//								return ItemInteractionResult.sidedSuccess(level.isClientSide());
-//							}
+							AspectContainerItem aspectContainer = AspectContainerItem.fromItem(stack);
+							int amount = aspectContainer.get(level.registryAccess().registryOrThrow(BLRegistries.Keys.ASPECTS).getHolderOrThrow(AspectRegistry.BYARIIS));
+							int loss = 10; //Loss when adding
+							if (amount >= loss) {
+								if (!level.isClientSide()) {
+									int added = repeller.addFuel(amount - loss);
+									if (!player.isCreative()) {
+										int leftAmount = amount - added - loss;
+										if (leftAmount > 0) {
+											aspectContainer.set(level.registryAccess().registryOrThrow(BLRegistries.Keys.ASPECTS).getHolderOrThrow(AspectRegistry.BYARIIS), leftAmount);
+										} else {
+											player.setItemInHand(hand, stack.getCraftingRemainingItem());
+										}
+									}
+								}
+								return ItemInteractionResult.sidedSuccess(level.isClientSide());
+							}
 						}
 					} else {
 						if (!level.isClientSide()) {
@@ -241,7 +242,7 @@ public class RepellerBlock extends HorizontalBaseEntityBlock {
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
 		return createTickerHelper(type, BlockEntityRegistry.REPELLER.get(), RepellerBlockEntity::tick);
 	}
-	
+
 	@Override
 	protected void createBlockStateDefinition(Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder.add(HALF));

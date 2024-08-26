@@ -5,8 +5,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.CrabPotBlock;
-import thebetweenlands.common.block.SteepingPotBlock;
 import thebetweenlands.common.block.entity.*;
 import thebetweenlands.common.block.entity.simulacrum.SimulacrumBlockEntity;
 import thebetweenlands.common.block.entity.spawner.MobSpawnerBlockEntity;

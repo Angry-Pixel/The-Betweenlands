@@ -1,8 +1,8 @@
 package thebetweenlands.util;
 
 public class FractalOpenSimplexNoise {
-	private OpenSimplexNoise[] octaves;
-	private double scale;
+	private final OpenSimplexNoise[] octaves;
+	private final double scale;
 
 	public FractalOpenSimplexNoise(int octaves, double scale) {
 		this(Double.doubleToRawLongBits(Math.random()), octaves, scale);

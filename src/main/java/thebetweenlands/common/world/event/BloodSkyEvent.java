@@ -5,7 +5,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
-import thebetweenlands.client.event.ClientEvents;
+import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -64,7 +64,7 @@ public class BloodSkyEvent extends TimedEnvironmentEvent {
 		super.setActive(level, active);
 		if(active) {
 			if(level.isClientSide() && !this.soundPlayed) {
-				level.playSound(null, ClientEvents.getClientPlayer().blockPosition(), SoundRegistry.AMBIENT_BLOOD_SKY_ROAR.get(), SoundSource.AMBIENT, 100.0F, 1.0F);
+				level.playSound(null, BetweenlandsClient.getClientPlayer().blockPosition(), SoundRegistry.AMBIENT_BLOOD_SKY_ROAR.get(), SoundSource.AMBIENT, 100.0F, 1.0F);
 			}
 			this.soundPlayed = true;
 		} else {

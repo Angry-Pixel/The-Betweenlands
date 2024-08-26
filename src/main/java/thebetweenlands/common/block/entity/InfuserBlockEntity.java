@@ -118,7 +118,7 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 				updateBlock = true;
 			}
 			if (level.isClientSide() && entity.infusionColorGradientTicks > 0 && entity.currentInfusionState == 2) {
-				float colors[] = entity.currentInfusionColor;
+				float[] colors = entity.currentInfusionColor;
 				for (int i = 0; i < 3 + level.getRandom().nextInt(5); i++) {
 //					BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(world, pos.getX() + 0.5F, pos.getY() + 0.75F, pos.getZ() + 0.5F,
 //						ParticleArgs.get()

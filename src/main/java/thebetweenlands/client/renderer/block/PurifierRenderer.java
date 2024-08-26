@@ -8,20 +8,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemDisplayContext;
 import thebetweenlands.client.BLModelLayers;
-import thebetweenlands.client.model.block.CenserModel;
-import thebetweenlands.client.model.block.PurifierModel;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.CenserBlock;
 import thebetweenlands.common.block.PurifierBlock;
-import thebetweenlands.common.block.entity.CenserBlockEntity;
 import thebetweenlands.common.block.entity.PurifierBlockEntity;
 
 public class PurifierRenderer implements BlockEntityRenderer<PurifierBlockEntity> {

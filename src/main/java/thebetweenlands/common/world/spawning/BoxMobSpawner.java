@@ -38,8 +38,8 @@ public class BoxMobSpawner extends AreaMobSpawner {
 	}
 
 	private final IBiomeSpawnEntriesData spawnEntriesData = new SimpleSpawnEntriesData();
-	private List<AABB> areas = new ArrayList<>();
-	private List<ICustomSpawnEntry> spawnEntries = new ArrayList<>();
+	private final List<AABB> areas = new ArrayList<>();
+	private final List<ICustomSpawnEntry> spawnEntries = new ArrayList<>();
 	private int maxEntities;
 
 	public void addArea(AABB area) {

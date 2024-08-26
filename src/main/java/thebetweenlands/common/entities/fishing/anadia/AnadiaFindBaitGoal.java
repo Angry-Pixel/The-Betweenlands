@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.level.pathfinder.Path;
+import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.entities.fishing.FishBait;
 
 import java.util.Collections;
@@ -13,6 +14,7 @@ public class AnadiaFindBaitGoal extends Goal {
 
 	private final Anadia anadia;
 	private final double searchRange;
+	@Nullable
 	public FishBait bait = null;
 
 	public AnadiaFindBaitGoal(Anadia anadia, double searchRange) {
@@ -75,6 +77,7 @@ public class AnadiaFindBaitGoal extends Goal {
 		this.bait = null;
 	}
 
+	@Nullable
 	public FishBait getClosestBait(double distance) {
 		List<FishBait> list = this.anadia.level().getEntitiesOfClass(FishBait.class, this.anadia.getBoundingBox().inflate(distance), bait -> bait.isInWater() && bait.tickCount < bait.lifespan);
 		if (list.isEmpty())

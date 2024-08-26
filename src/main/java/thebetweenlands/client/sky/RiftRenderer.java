@@ -3,7 +3,6 @@ package thebetweenlands.client.sky;
 import java.nio.FloatBuffer;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.GlStateManager.DestFactor;
 import com.mojang.blaze3d.platform.GlStateManager.SourceFactor;
 import com.mojang.blaze3d.platform.Lighting;
@@ -18,19 +17,20 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import org.lwjgl.opengl.GLCapabilities;
 import thebetweenlands.api.sky.IRiftMaskRenderer;
 import thebetweenlands.api.sky.IRiftRenderer;
 import thebetweenlands.api.sky.IRiftSkyRenderer;
 import thebetweenlands.client.shader.ResizableFramebuffer;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.world.event.RiftEvent;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.FramebufferStack;
+
+import javax.annotation.Nullable;
 
 public class RiftRenderer implements IRiftRenderer {
 	protected final int skyDomeDispList;
 
+	@Nullable
 	private static ResizableFramebuffer overworldSkyFbo;
 
 	private final FloatBuffer textureMatrix = BufferUtils.createFloatBuffer(16);
@@ -41,7 +41,9 @@ public class RiftRenderer implements IRiftRenderer {
 	private IRiftMaskRenderer riftMaskRenderer;
 	private IRiftSkyRenderer riftSkyRenderer;
 
+	@Nullable
 	private static RiftMaskRenderer blRiftMaskRenderer;
+	@Nullable
 	private static OverworldRiftSkyRenderer blRiftSkyRenderer;
 
 	public RiftRenderer(int skyDomeDispList) {

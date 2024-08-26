@@ -16,58 +16,52 @@ import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.common.TheBetweenlands;
 
-@EventBusSubscriber(modid = TheBetweenlands.ID, bus = Bus.GAME)
 public class CorrosionHandler {
 
-	// Trigger last
-	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void onItemModifiers(ItemAttributeModifierEvent event) {
+	static void changeItemModifiers(ItemAttributeModifierEvent event) {
 		ItemStack stack = event.getItemStack();
 		ItemAttributeModifiers modifiers = event.build();
-		
-		if(stack == null || stack.isEmpty()) return;
-		
-		if(CorrosionHelper.isCorrodible(stack)) {
+
+		if (stack == null || stack.isEmpty()) return;
+
+		if (CorrosionHelper.isCorrodible(stack)) {
 			float corrosionModifier = CorrosionHelper.getModifier(stack);
 			// parity with old mod behaviour
 			// Replace non-multiplicitive modifiers
 			modifiers.modifiers().forEach((entry) -> {
 				// We only want to change attack damage
-				if(!entry.attribute().is(Attributes.ATTACK_DAMAGE.getKey())) {
+				if (!entry.attribute().is(Attributes.ATTACK_DAMAGE.getKey())) {
 					return;
 				}
-				
+
 				AttributeModifier originalModifier = entry.modifier();
-				if(originalModifier.operation() == AttributeModifier.Operation.ADD_VALUE) {
+				if (originalModifier.operation() == AttributeModifier.Operation.ADD_VALUE) {
 					AttributeModifier newModifier = new AttributeModifier(originalModifier.id(), originalModifier.amount() * corrosionModifier, originalModifier.operation());
 					event.replaceModifier(entry.attribute(), newModifier, entry.slot());
 				}
 			});
 		}
 	}
-	
-	@SubscribeEvent
-	public static void onItemTooltip(ItemTooltipEvent event) {
+
+	static void addCorrosionTooltips(ItemTooltipEvent event) {
 		ItemStack stack = event.getItemStack();
-		if(CorrosionHelper.isCorrodible(stack)) {
+		if (CorrosionHelper.isCorrodible(stack)) {
 			CorrosionHelper.addCorrosionTooltips(stack, event.getToolTip(), event.getFlags(), event.getContext());
 		}
 	}
-	
-	@SubscribeEvent
-	public static void updateCorrosionInPlayerInventory(PlayerTickEvent.Post event) {
+
+	static void updateCorrosionInPlayerInventory(PlayerTickEvent.Post event) {
 		Player player = event.getEntity();
-		
-		if(player != null && !player.isDeadOrDying() && player.getInventory() != null) {
+
+		if (!player.isDeadOrDying()) {
 			Inventory inv = player.getInventory();
-			
+
 			int mainhandSlot = Inventory.isHotbarSlot(inv.selected) ? inv.selected : -1;
-	        for (int i = 0; i < inv.getContainerSize(); ++i) {
-	            if (!inv.getItem(i).isEmpty()) {
-	            	CorrosionHelper.updateCorrosion(inv.getItem(i), player.level(), player, i, i == mainhandSlot || i == Inventory.SLOT_OFFHAND);
-	            }
-	        }
+			for (int i = 0; i < inv.getContainerSize(); ++i) {
+				if (!inv.getItem(i).isEmpty()) {
+					CorrosionHelper.updateCorrosion(inv.getItem(i), player.level(), player, i, i == mainhandSlot || i == Inventory.SLOT_OFFHAND);
+				}
+			}
 		}
 	}
-	
 }

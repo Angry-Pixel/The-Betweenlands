@@ -46,13 +46,12 @@ public class EntityAIFlyRandomly<T extends Mob> extends Goal {
 	@Override
 	public void tick() {
 		MoveControl moveHelper = this.entity.getMoveControl();
-		if (moveHelper instanceof FlightMoveHelper) {
-			FlightMoveHelper flightMoveHelper = (FlightMoveHelper) moveHelper;
+		if (moveHelper instanceof FlightMoveHelper flightMoveHelper) {
 
 			if (flightMoveHelper.isBlocked()) {
-				this.distanceMultiplier = Math.max(this.distanceMultiplier -= 0.04F, 0.1D);
+				this.distanceMultiplier = Math.max(this.distanceMultiplier - 0.04F, 0.1D);
 			} else {
-				this.distanceMultiplier = Math.min(this.distanceMultiplier += 0.15F, 1.0D);
+				this.distanceMultiplier = Math.min(this.distanceMultiplier + 0.15F, 1.0D);
 			}
 		}
 	}

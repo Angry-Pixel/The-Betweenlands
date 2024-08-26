@@ -1,14 +1,11 @@
 package thebetweenlands.common.network.clientbound;
 
-import com.mojang.authlib.minecraft.client.MinecraftClient;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.vehicle.Minecart;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.entity.DecayData;
@@ -31,7 +28,6 @@ public record UpdateDecayDataPacket(int level, int prevLevel, float saturation, 
 		return TYPE;
 	}
 
-	@SuppressWarnings("resource") // Lmao if we actually were to call Minecraft.close(); with a try-with-resources
 	public static void handle(UpdateDecayDataPacket message, IPayloadContext context) {
 		context.enqueueWork(() -> {
 			Player player = context.player();

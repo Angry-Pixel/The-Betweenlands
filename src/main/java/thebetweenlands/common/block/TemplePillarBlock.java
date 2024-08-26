@@ -25,7 +25,6 @@ public class TemplePillarBlock extends RotatedPillarBlock {
 			case X -> X_AABB;
 			case Y -> Y_AABB;
 			case Z -> Z_AABB;
-			default -> Shapes.empty();
 		};
 	}
 }

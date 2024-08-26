@@ -10,7 +10,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.event.entity.living.LivingEntityUseItemEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
-import thebetweenlands.client.event.ClientEvents;
+import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.entity.DecayData;
 import thebetweenlands.common.component.entity.FoodSicknessData;
@@ -24,11 +24,11 @@ import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.util.FoodSickness;
 
 public class FoodSicknessHandler {
-	private static InteractionHand lastHand = InteractionHand.MAIN_HAND;
+	private static final InteractionHand lastHand = InteractionHand.MAIN_HAND;
 	private static ItemStack lastUsedItem = ItemStack.EMPTY;
 	private static FoodSickness lastSickness = null;
 
-	public static boolean isFoodSicknessEnabled(Level level) {
+	static boolean isFoodSicknessEnabled(Level level) {
 		if (level.getGameRules().getBoolean(TheBetweenlands.FOOD_SICKNESS_GAMERULE)) {
 			if (level.dimension() == DimensionRegistries.DIMENSION_KEY && BetweenlandsConfig.useFoodSicknessInBetweenlands) {
 				return true;
@@ -38,8 +38,8 @@ public class FoodSicknessHandler {
 		return false;
 	}
 
-	public static void onClientTick(ClientTickEvent event) {
-		Player player = ClientEvents.getClientPlayer();
+	public static void tickSicknessClient(ClientTickEvent.Pre event) {
+		Player player = BetweenlandsClient.getClientPlayer();
 		if (player != null) {
 			if (!lastUsedItem.isEmpty() && (player.getItemInHand(lastHand).isEmpty() || !ItemStack.isSameItem(player.getItemInHand(lastHand), lastUsedItem))) {
 				lastUsedItem = ItemStack.EMPTY;
@@ -56,7 +56,7 @@ public class FoodSicknessHandler {
 		lastSickness = sickness;
 	}
 
-	public static void onStartItemUse(LivingEntityUseItemEvent.Start event) {
+	static void modifyEatingStart(LivingEntityUseItemEvent.Start event) {
 		Player player = event.getEntity() instanceof Player ? (Player) event.getEntity() : null;
 		ItemStack itemStack = event.getItem();
 
@@ -69,7 +69,7 @@ public class FoodSicknessHandler {
 		}
 	}
 
-	public static void onUseItemTick(LivingEntityUseItemEvent.Tick event) {
+	static void modifyEatingSpeed(LivingEntityUseItemEvent.Tick event) {
 		//Check if item will be consumed this tick
 		if (!event.getEntity().level().isClientSide() && event.getDuration() <= 1) {
 			Player player = event.getEntity() instanceof Player ? (Player) event.getEntity() : null;

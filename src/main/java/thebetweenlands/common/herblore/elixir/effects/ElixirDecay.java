@@ -24,6 +24,6 @@ public class ElixirDecay extends ElixirEffect {
 	@Override
 	protected boolean isReady(int ticks, int strength) {
 		int ticksPerDecay = 100 >> strength;
-		return ticksPerDecay > 0 ? ticks % ticksPerDecay == 0 : true;
+		return ticksPerDecay == 0 || ticks % ticksPerDecay == 0;
 	}
 }

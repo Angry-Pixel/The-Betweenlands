@@ -18,6 +18,6 @@ public class ElixirHealing extends ElixirEffect {
 	@Override
 	protected boolean isReady(int ticks, int strength) {
 		int ticksPerHeal = 50 >> strength;
-		return ticksPerHeal > 0 ? ticks % ticksPerHeal == 0 : true;
+		return ticksPerHeal == 0 || ticks % ticksPerHeal == 0;
 	}
 }

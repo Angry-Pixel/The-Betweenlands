@@ -2,7 +2,6 @@ package thebetweenlands.util;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;

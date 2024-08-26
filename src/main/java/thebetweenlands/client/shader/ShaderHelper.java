@@ -13,7 +13,6 @@ import thebetweenlands.client.shader.postprocessing.Tonemapper;
 import thebetweenlands.client.shader.postprocessing.WorldShader;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.DimensionRegistries;
-import thebetweenlands.util.FramebufferStack;
 
 import javax.annotation.Nullable;
 

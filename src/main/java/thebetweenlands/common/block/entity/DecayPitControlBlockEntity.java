@@ -1,7 +1,6 @@
 package thebetweenlands.common.block.entity;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -22,9 +21,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import thebetweenlands.api.entity.ScreenShaker;
+import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.audio.DecayPitGearsSoundInstance;
 import thebetweenlands.common.entities.BLEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;
@@ -204,7 +202,7 @@ public class DecayPitControlBlockEntity extends SyncedBlockEntity implements Scr
 		if (level.isClientSide()) {
 			if (!entity.isPlugged())
 				if (entity.playGearSound) {
-					entity.playGearsSound();
+					BetweenlandsClient.playLocalSound(new DecayPitGearsSoundInstance(entity));
 					entity.playGearSound = false;
 				}
 		}
@@ -284,12 +282,6 @@ public class DecayPitControlBlockEntity extends SyncedBlockEntity implements Scr
 
 	private int getTentacleSpawnCountDown() {
 		return tentacleCooldown;
-	}
-	
-	@OnlyIn(Dist.CLIENT)
-	public void playGearsSound() {
-		SoundInstance chainSound = new DecayPitGearsSoundInstance(this);
-		Minecraft.getInstance().getSoundManager().play(chainSound);
 	}
 
 	public void chainBreakParticles(Level level, BlockPos pos) {

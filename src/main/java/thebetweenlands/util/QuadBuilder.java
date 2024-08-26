@@ -11,7 +11,6 @@ import javax.annotation.Nullable;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
-import com.mojang.math.Transformation;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -66,7 +65,8 @@ public class QuadBuilder {
 
 	private final List<Vertex> vertices;
 
-	private int blockLight = -1, skyLight = -1;
+	private final int blockLight = -1;
+	private final int skyLight = -1;
 	private boolean hasLightmapElement;
 
 	public QuadBuilder(VertexFormat format) {
@@ -357,7 +357,7 @@ public class QuadBuilder {
 		Map<Direction, ImmutableList<BakedQuad>> quads = new EnumMap<>(Direction.class);
 
 		for(Direction face : Direction.values()) {
-			builders.put(face, ImmutableList.<BakedQuad>builder());
+			builders.put(face, ImmutableList.builder());
 		}
 
 		for(int i = 0; i < this.vertices.size(); i += 4) {

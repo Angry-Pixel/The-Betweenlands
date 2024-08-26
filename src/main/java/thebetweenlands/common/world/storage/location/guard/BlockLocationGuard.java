@@ -13,6 +13,8 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 
+import java.util.Arrays;
+
 public class BlockLocationGuard implements ILocationGuard {
 	protected final Long2ObjectMap<GuardChunk> chunkMap = new Long2ObjectOpenHashMap<>(16);
 
@@ -69,9 +71,7 @@ public class BlockLocationGuard implements ILocationGuard {
 			int z = pos.getZ();
 			long id = ChunkPos.asLong(x / 16, z / 16);
 			GuardChunk chunk = this.chunkMap.get(id);
-			if(chunk != null && chunk.isGuarded(x & 15, y, z & 15)) {
-				return true;
-			}
+			return chunk != null && chunk.isGuarded(x & 15, y, z & 15);
 		}
 		return false;
 	}
@@ -161,7 +161,7 @@ public class BlockLocationGuard implements ILocationGuard {
 			byte mask = (byte)(1 << (x & 7));
 			byte data = this.data[byteIndex];
 
-			if(((data & mask) != 0) != guarded) {
+			if(((data & mask) == 0) == guarded) {
 				this.data[byteIndex] = (byte) (guarded ? (data | mask) : (data & (~mask)));
 
 				if(guarded) {
@@ -187,9 +187,7 @@ public class BlockLocationGuard implements ILocationGuard {
 		}
 
 		public void clear() {
-			for(int i = 0; i < this.data.length; i++) {
-				this.data[i] = 0;
-			}
+			Arrays.fill(this.data, (byte) 0);
 			this.blockRefCount = 0;
 		}
 
@@ -241,17 +239,13 @@ public class BlockLocationGuard implements ILocationGuard {
 			int sectionId = y >> 4;
 			if(sectionId >= 0) {
 				GuardChunkSection section = this.sections[sectionId];
-				if(section != null && section.isGuarded(x, y & 15, z)) {
-					return true;
-				}
+				return section != null && section.isGuarded(x, y & 15, z);
 			}
 			return false;
 		}
 
 		public void clear() {
-			for(int i = 0; i < this.sections.length; i++) {
-				this.sections[i] = null;
-			}
+			Arrays.fill(this.sections, null);
 		}
 
 		public CompoundTag writeToNBT(CompoundTag nbt) {

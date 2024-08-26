@@ -159,8 +159,7 @@ public class CorrosionHelper {
 		}
 
 		int corrosion, maxCorrosion;
-		if(stack.is(ItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible) {
-			ICustomCorrodible corrodible = (ICustomCorrodible) stack.getItem();
+		if(stack.is(ItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible corrodible) {
 			corrosion = corrodible.getCorrosion(stack);
 			maxCorrosion = corrodible.getMaxCorrosion(stack);
 		} else if(stack.has(DataComponentRegistry.CORROSION)) {
@@ -254,8 +253,7 @@ public class CorrosionHelper {
 				}
 			} else if (corrosion < getMaximumCorrosion(stack)) {
 				float probability = holder.isInWater() ? 0.0014F : 0.0007F;
-				if (holder instanceof Player) {
-					Player player = (Player) holder;
+				if (holder instanceof Player player) {
 					probability *= (isHeldItem && !player.getMainHandItem().isEmpty() ? 2.8F : 1.0F);
 					IDecayData cap = player.getData(AttachmentRegistry.DECAY);
 					if(cap != null) {
@@ -301,11 +299,10 @@ public class CorrosionHelper {
 //			lines.add(corrosionInfo.toString());
 			MutableComponent mutableComponent = MutableComponent.create(Component.translatable("tooltip.bl.corrosion." + getCorrosionStage(stack)).getContents());
 			if (advancedItemTooltips) {
-				StringBuilder corrosionInfo = new StringBuilder();
-				corrosionInfo.append(" (");
-				corrosionInfo.append(getCorrosion(stack));
-				corrosionInfo.append("/").append(getMaximumCorrosion(stack)).append(")");
-				mutableComponent.append(corrosionInfo.toString());
+				String corrosionInfo = " (" +
+					getCorrosion(stack) +
+					"/" + getMaximumCorrosion(stack) + ")";
+				mutableComponent.append(corrosionInfo);
 			}
 			lines.add(mutableComponent);
 		}
@@ -324,11 +321,10 @@ public class CorrosionHelper {
 
 			MutableComponent mutableComponent = MutableComponent.create(Component.translatable("tooltip.bl.coated." + getCorrosionStage(stack)).getContents());
 			if (advancedItemTooltips) {
-				StringBuilder corrosionInfo = new StringBuilder();
-				corrosionInfo.append(" (");
-				corrosionInfo.append(coating);
-				corrosionInfo.append("/").append(getMaximumCoating(stack)).append(")");
-				mutableComponent.append(corrosionInfo.toString());
+				String corrosionInfo = " (" +
+					coating +
+					"/" + getMaximumCoating(stack) + ")";
+				mutableComponent.append(corrosionInfo);
 			}
 			lines.add(mutableComponent);
 		}

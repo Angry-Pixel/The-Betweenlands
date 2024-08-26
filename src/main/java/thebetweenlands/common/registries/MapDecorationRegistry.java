@@ -11,7 +11,6 @@ import thebetweenlands.common.world.storage.location.LocationPortal;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 
 import javax.annotation.Nullable;
-import java.util.function.Supplier;
 
 public class MapDecorationRegistry {
 	public static final DeferredRegister<MapDecorationType> DECORATIONS = DeferredRegister.create(Registries.MAP_DECORATION_TYPE, TheBetweenlands.ID);

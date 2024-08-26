@@ -9,9 +9,8 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.audio.BlockEntitySoundInstance;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.DruidAltarBlockEntity;
@@ -43,31 +42,33 @@ public record UpdateDruidAltarProgressPacket(BlockPos pos, int progress) impleme
 	public static void handle(UpdateDruidAltarProgressPacket packet, IPayloadContext context) {
 		context.enqueueWork(() -> handleClient(packet, context));
 	}
-	
-	@OnlyIn(Dist.CLIENT)
-	private static void handleClient(UpdateDruidAltarProgressPacket packet, IPayloadContext context) {
 
-		Level level = context.player().level();
-		if (level.getBlockEntity(packet.pos()) instanceof DruidAltarBlockEntity altar) {
-			if (packet.progress >= 0) {
-				altar.craftingProgress = packet.progress;
-			} else if(packet.progress == -1) {
-				for (int x = -8; x <= 8; x++) {
-					for (int y = -8; y <= 8; y++) {
-						for (int z = -8; z <= 8; z++) {
-							BlockPos pos = altar.getBlockPos().offset(x, y, z);
-							BlockState block = level.getBlockState(pos);
-							if (block.is(BlockRegistry.DRUID_STONE_1) || block.is(BlockRegistry.DRUID_STONE_2) ||
-								block.is(BlockRegistry.DRUID_STONE_3) || block.is(BlockRegistry.DRUID_STONE_4) ||
-								block.is(BlockRegistry.DRUID_STONE_5)) {
-//								BLParticles.ALTAR_CRAFTING.spawn(level, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, ParticleArgs.get().withScale(0.25F + level.getRandom().nextFloat() * 0.2F).withData(altar));
+	private static void handleClient(UpdateDruidAltarProgressPacket packet, IPayloadContext context) {
+		if (context.flow().isClientbound()) {
+			context.enqueueWork(() -> {
+				Level level = context.player().level();
+				if (level.getBlockEntity(packet.pos()) instanceof DruidAltarBlockEntity altar) {
+					if (packet.progress >= 0) {
+						altar.craftingProgress = packet.progress;
+					} else if (packet.progress == -1) {
+						for (int x = -8; x <= 8; x++) {
+							for (int y = -8; y <= 8; y++) {
+								for (int z = -8; z <= 8; z++) {
+									BlockPos pos = altar.getBlockPos().offset(x, y, z);
+									BlockState block = level.getBlockState(pos);
+									if (block.is(BlockRegistry.DRUID_STONE_1) || block.is(BlockRegistry.DRUID_STONE_2) ||
+										block.is(BlockRegistry.DRUID_STONE_3) || block.is(BlockRegistry.DRUID_STONE_4) ||
+										block.is(BlockRegistry.DRUID_STONE_5)) {
+//										BLParticles.ALTAR_CRAFTING.spawn(level, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, ParticleArgs.get().withScale(0.25F + level.getRandom().nextFloat() * 0.2F).withData(altar));
+									}
+								}
 							}
 						}
+
+						BetweenlandsClient.playLocalSound(new BlockEntitySoundInstance<>(SoundRegistry.DRUID_CHANT.get(), SoundSource.BLOCKS, altar, entity -> entity.craftingProgress > 0));
 					}
 				}
-
-				Minecraft.getInstance().getSoundManager().play(new BlockEntitySoundInstance<>(SoundRegistry.DRUID_CHANT.get(), SoundSource.BLOCKS, altar, entity -> entity.craftingProgress > 0));
-			}
+			});
 		}
 	}
 }

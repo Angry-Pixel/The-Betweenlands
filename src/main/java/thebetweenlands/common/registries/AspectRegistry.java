@@ -1,7 +1,6 @@
 package thebetweenlands.common.registries;
 
 import net.minecraft.data.worldgen.BootstrapContext;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.AspectType;

@@ -18,7 +18,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BLSnowLayerBlock;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
-import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.registries.SoundRegistry;

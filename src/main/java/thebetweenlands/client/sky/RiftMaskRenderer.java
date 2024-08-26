@@ -16,7 +16,6 @@ import thebetweenlands.api.sky.IRiftMaskRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.world.event.RiftEvent;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class RiftMaskRenderer implements IRiftMaskRenderer {
 	public static final ResourceLocation SKY_RIFT_MASK_BACK_TEXTURE = TheBetweenlands.prefix("textures/sky/rifts/sky_rift_mask_back.png");

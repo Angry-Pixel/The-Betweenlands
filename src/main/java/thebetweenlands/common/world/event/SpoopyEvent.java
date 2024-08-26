@@ -5,7 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import thebetweenlands.client.event.ClientEvents;
+import thebetweenlands.client.BetweenlandsClient;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -49,10 +49,10 @@ public class SpoopyEvent extends SeasonalEnvironmentEvent {
 	@Override
 	public void setActive(Level level, boolean active) {
 		//Mark blocks in range for render update to update block textures
-		if (active != this.isActive() && ClientEvents.getClientLevel() != null && ClientEvents.getClientPlayer() != null) {
+		if (active != this.isActive() && BetweenlandsClient.getClientLevel() != null && BetweenlandsClient.getClientPlayer() != null) {
 			updateModelActiveState(active);
 
-			Player player = ClientEvents.getClientPlayer();
+			Player player = BetweenlandsClient.getClientPlayer();
 			int px = Mth.floor(player.getX()) - 256;
 			int py = Mth.floor(player.getY()) - 256;
 			int pz = Mth.floor(player.getZ()) - 256;

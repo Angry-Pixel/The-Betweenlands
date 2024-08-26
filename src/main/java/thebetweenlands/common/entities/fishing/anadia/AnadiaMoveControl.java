@@ -34,8 +34,8 @@ public class AnadiaMoveControl extends MoveControl {
 			float travelSpeed = (float) (this.speedModifier * this.anadia.getAttributeValue(Attributes.MOVEMENT_SPEED));
 			this.anadia.setSpeed(this.anadia.getSpeed() + (travelSpeed - this.anadia.getSpeed()) * 0.125F);
 			double wiggleSpeed = Math.sin((double) (this.anadia.tickCount + this.anadia.getId()) * 0.5D) * this.anadia.getFishSize() * 0.05D;
-			double wiggleOffsetX = Math.cos((double) (this.anadia.getYRot() * this.anadia.getFishSize() * 0.01F));
-			double wiggleOffsetZ = Math.sin((double) (this.anadia.getYRot() * this.anadia.getFishSize() * 0.01F));
+			double wiggleOffsetX = Math.cos(this.anadia.getYRot() * this.anadia.getFishSize() * 0.01F);
+			double wiggleOffsetZ = Math.sin(this.anadia.getYRot() * this.anadia.getFishSize() * 0.01F);
 			this.anadia.setDeltaMovement(this.anadia.getDeltaMovement().add(wiggleSpeed * wiggleOffsetX, 0.0D, wiggleSpeed * wiggleOffsetZ));
 			wiggleSpeed = Math.sin((double) (this.anadia.tickCount + this.anadia.getId()) * 0.75D) * 0.05D;
 			this.anadia.setDeltaMovement(this.anadia.getDeltaMovement().add(0.0D, wiggleSpeed * (wiggleOffsetZ + wiggleOffsetX) * 0.25D, 0.0D));
