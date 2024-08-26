@@ -20,6 +20,10 @@ public class ItemTagProvider extends ItemTagsProvider {
 
 	public static final TagKey<Item> OCTINE_IGNITES = tag("octine_ignites");
 	public static final TagKey<Item> GIVES_FOOD_SICKNESS = tag("gives_food_sickness");
+	public static final TagKey<Item> REPAIRS_WEEDWOOD_TOOLS = tag("repairs_weedwood_tools");
+	public static final TagKey<Item> REPAIRS_BONE_TOOLS = tag("repairs_bone_tools");
+	public static final TagKey<Item> REPAIRS_OCTINE_TOOLS = tag("repairs_octine_tools");
+	public static final TagKey<Item> REPAIRS_VALONITE_TOOLS = tag("repairs_valonite_tools");
 
 	/**
 	 * Whether or not an item should be looked at by the corrosion engine

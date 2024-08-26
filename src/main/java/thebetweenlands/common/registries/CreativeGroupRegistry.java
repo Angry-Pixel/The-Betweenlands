@@ -4,11 +4,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
-import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
 
@@ -68,7 +66,7 @@ public class CreativeGroupRegistry {
 			output.accept(BlockRegistry.WEEDWOOD_LOG);
 			output.accept(BlockRegistry.WEEDWOOD_BARK);
 			output.accept(BlockRegistry.ROTTEN_BARK);
-			output.accept(BlockRegistry.SPREADING_ROTTEN_BARK);
+//			output.accept(BlockRegistry.SPREADING_ROTTEN_BARK);
 			output.accept(BlockRegistry.RUBBER_LOG);
 			output.accept(BlockRegistry.HEARTHGROVE_LOG);
 			output.accept(BlockRegistry.TARRED_HEARTHGROVE_LOG);
@@ -744,6 +742,56 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.COOKED_OLM_EGG);
 			output.accept(ItemRegistry.OLMLETTE);
 			output.accept(ItemRegistry.SILK_GRUB);
+			//drinkable brews
+			//herblore book
+			output.accept(ItemRegistry.CRIMSON_MIDDLE_GEM);
+			output.accept(ItemRegistry.AQUA_MIDDLE_GEM);
+			output.accept(ItemRegistry.GREEN_MIDDLE_GEM);
+			//life crystal
+			//life crystal fragment
+			//pyrad flame
+			//dragonfly
+			//firefly
+			//olm
+			//gecko
+			//cave fish
+			//mire snail
+			//sludge worm egg sac
+			output.accept(ItemRegistry.TINY_SLUDGE_WORM);
+			output.accept(ItemRegistry.TINY_SLUDGE_WORM_HELPER);
+			output.accept(ItemRegistry.ANADIA);
+			//jellyfish
+			output.accept(ItemRegistry.SILT_CRAB);
+			output.accept(ItemRegistry.BUBBLER_CRAB);
+			//urchin
+			//chiromaw egg
+			//lightning chiromaw egg
+			//chiromaw
+			//lightning chiromaw
+			output.accept(ItemRegistry.SHIMMER_STONE);
+			//tarminion
+			//sludge ball
+			//rope
+			//angry pebble
+			output.accept(ItemRegistry.OCTINE_INGOT);
+			output.accept(ItemRegistry.SAP_SPIT);
+			//shambler tongue
+			output.accept(ItemRegistry.RUNE_DOOR_KEY);
+			//lurker skin patch
+			//draeton balloon
+			//draeton burner
+			//draeton
+			//draeton furnace
+			//draeton anchor
+			//draeton crafting
+			//weedwood rowboat lantern
+			output.accept(ItemRegistry.AMATE_NAME_TAG);
+			//dyes
+			//frames
+			//thorax
+			output.accept(ItemRegistry.SILK_FILTER);
+			output.accept(ItemRegistry.MOSS_FILTER);
+			//silky pebble
 		})
 		.build());
 
@@ -775,6 +823,56 @@ public class CreativeGroupRegistry {
 			//amphibious armor
 			output.accept(ItemRegistry.RUBBER_BOOTS);
 			output.accept(ItemRegistry.MARSH_RUNNER_BOOTS);
+			output.accept(ItemRegistry.WEEDWOOD_SWORD);
+			output.accept(ItemRegistry.WEEDWOOD_SHOVEL);
+			output.accept(ItemRegistry.WEEDWOOD_AXE);
+			output.accept(ItemRegistry.WEEDWOOD_PICKAXE);
+			output.accept(ItemRegistry.BONE_SWORD);
+			output.accept(ItemRegistry.BONE_SHOVEL);
+			output.accept(ItemRegistry.BONE_AXE);
+			output.accept(ItemRegistry.BONE_PICKAXE);
+			output.accept(ItemRegistry.OCTINE_SWORD);
+			output.accept(ItemRegistry.OCTINE_SHOVEL);
+			output.accept(ItemRegistry.OCTINE_AXE);
+			output.accept(ItemRegistry.OCTINE_PICKAXE);
+			output.accept(ItemRegistry.VALONITE_SWORD);
+			output.accept(ItemRegistry.VALONITE_SHOVEL);
+			output.accept(ItemRegistry.VALONITE_AXE);
+			output.accept(ItemRegistry.VALONITE_GREATAXE);
+			output.accept(ItemRegistry.VALONITE_PICKAXE);
+			//octine shield
+			//valonite shield
+			//weedwood shield
+			//living weedwood shield
+			//syrmorite shield
+			//bone shield
+			//green and orange dentrothyst shields
+			//lurker skin shield
+			//shears
+			//sickle
+			//shockwave sword
+			//arrows x6
+			//chiromaw barb
+			//weedwood bow
+			//predator bow
+			//ancient greatsword
+			//ancient battleaxe
+			output.accept(ItemRegistry.PESTLE);
+			output.accept(ItemRegistry.NET);
+			//lurker skin pouches
+			//volarkite
+			//slingshot
+			output.accept(ItemRegistry.WEEDWOOD_FISHING_ROD);
+			//weedwood buckets
+			//syrmorite buckets
+			output.accept(ItemRegistry.ELECTRIC_UPGRADE);
+			output.accept(ItemRegistry.GLIDE_UPGRADE);
+			output.accept(ItemRegistry.ASCENT_UPGRADE);
+			output.accept(ItemRegistry.URCHIN_SPIKE_UPGRADE);
+			output.accept(ItemRegistry.FISH_VORTEX_UPGRADE);
+			//biopathic triggerstone
+			//biopathic linkstone
+			output.accept(ItemRegistry.SILK_BUNDLE);
 		})
 		.build());
 
@@ -817,7 +915,20 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.RECORD_STUCK_IN_THE_MUD);
 			output.accept(ItemRegistry.RECORD_WANDERING_WISPS);
 			output.accept(ItemRegistry.RECORD_WATERLOGGED);
+			//bark amulet
+			//aqua amulet
+			//crimson amulet
+			//green amulet
+			//amulet slot
+			//rings x6
+			//lore scraps x10
+			//mummy bait
+			output.accept(ItemRegistry.BARK_AMULET);
 			output.accept(ItemRegistry.AMATE_MAP);
+			//bone wayfinder
+			//item magnet
+			//gem singer
+			//rocksnot pod
 		}).build());
 
 	// Plants tab
@@ -1021,6 +1132,9 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.PALE_GRASS_BLADES);
 			output.accept(ItemRegistry.STRING_ROOT_FIBERS);
 			output.accept(ItemRegistry.CRYPTWEED_BLADES);
+			//aspectrus fruits
+			//elixirs
+			//aspect vials
 		}).build());
 
 	public static void populateTabs(BuildCreativeModeTabContentsEvent event) {

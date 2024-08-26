@@ -146,7 +146,37 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> COOKED_OLM_EGG = ITEMS.register("cooked_olm_egg", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.2F).build())));
 	public static final DeferredItem<Item> OLMLETTE = ITEMS.register("olmlette", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(8).saturationModifier(0.6F).build())));
 	public static final DeferredItem<Item> SILK_GRUB = ITEMS.register("silk_grub", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(1).saturationModifier(0.2F).build())));
+	//drinkable brew
+	//herblore book
+	public static final DeferredItem<Item> CRIMSON_MIDDLE_GEM = ITEMS.register("crimson_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
+	public static final DeferredItem<Item> AQUA_MIDDLE_GEM = ITEMS.register("aqua_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
+	public static final DeferredItem<Item> GREEN_MIDDLE_GEM = ITEMS.register("green_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
+	//life crystal
+	//pyrad flame
+	//critters :)
+	public static final DeferredItem<MobItem> TINY_SLUDGE_WORM = ITEMS.register("tiny_sludge_worm", () -> new MobItem(new Item.Properties().stacksTo(1), null, null));
+	public static final DeferredItem<MobItem> TINY_SLUDGE_WORM_HELPER = ITEMS.register("tiny_sludge_worm_helper", () -> new MobItem(new Item.Properties().stacksTo(1), null, null));
+	public static final DeferredItem<MobItem> ANADIA = ITEMS.register("anadia", () -> new AnadiaMobItem(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<MobItem> BUBBLER_CRAB = ITEMS.register("bubbler_crab", () -> new MobItem(new Item.Properties().stacksTo(1), EntityRegistry.BUBBLER_CRAB.get(), null));
+	public static final DeferredItem<MobItem> SILT_CRAB = ITEMS.register("silt_crab", () -> new MobItem(new Item.Properties().stacksTo(1), EntityRegistry.SILT_CRAB.get(), null));
+	public static final DeferredItem<Item> SHIMMER_STONE = ITEMS.register("shimmer_stone", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
+	//tarminion
+	//sludge ball
+	//rope
+	//angry pebble
+	public static final DeferredItem<Item> OCTINE_INGOT = ITEMS.register("octine_ingot", () -> new OctineIngotItem(new Item.Properties()));
+	public static final DeferredItem<Item> SAP_SPIT = ITEMS.register("sap_spit", () -> new SapSpitItem(new Item.Properties()));
+	public static final DeferredItem<Item> RUNE_DOOR_KEY = ITEMS.register("rune_door_key", () -> new Item(new Item.Properties().stacksTo(1)));
+	//draeton things
+	public static final DeferredItem<Item> AMATE_NAME_TAG = ITEMS.register("amate_name_tag", () -> new Item(new Item.Properties()));
+	//dye bowls
+	//frames
+	//thorax
+	public static final DeferredItem<Item> MOSS_FILTER = ITEMS.register("moss_filter", () -> new Item(new Item.Properties().stacksTo(1).durability(400)));
+	public static final DeferredItem<Item> SILK_FILTER = ITEMS.register("silk_filter", () -> new Item(new Item.Properties().stacksTo(1).durability(2000)));
+	//silky pebble
 
+	//TODO durability/attribute checks on tools and and armors
 	public static final DeferredItem<Item> BONE_HELMET = ITEMS.register("bone_helmet", () -> new ArmorItem(ArmorMaterialRegistry.BONE, ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(6)).stacksTo(1)));
 	public static final DeferredItem<Item> BONE_CHESTPLATE = ITEMS.register("bone_chestplate", () -> new ArmorItem(ArmorMaterialRegistry.BONE, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(6)).stacksTo(1)));
 	public static final DeferredItem<Item> BONE_LEGGINGS = ITEMS.register("bone_leggings", () -> new ArmorItem(ArmorMaterialRegistry.BONE, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(6)).stacksTo(1)));
@@ -173,73 +203,58 @@ public class ItemRegistry {
 //	public static final DeferredItem<Item> AMPHIBIOUS_BOOTS = ITEMS.register("amphibious_boots", () -> new AmphibiousArmorItem(ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(12)).stacksTo(1)));
 	public static final DeferredItem<Item> RUBBER_BOOTS = ITEMS.register("rubber_boots", () -> new RubberBootsItem(new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(10)).stacksTo(1)));
 	public static final DeferredItem<Item> MARSH_RUNNER_BOOTS = ITEMS.register("marsh_runner_boots", () -> new MarshRunnerBootsItem(new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(10)).stacksTo(1)));
-	public static final DeferredItem<Item> SKULL_MASK = ITEMS.register("skull_mask", () -> new Item(new Item.Properties()));
-
-	public static final DeferredItem<Item> BONE_AXE = ITEMS.register("bone_axe", () -> new Item(new Item.Properties().stacksTo(1)));
-
-	public static final DeferredItem<Item> CRIMSON_MIDDLE_GEM = ITEMS.register("crimson_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
-	public static final DeferredItem<Item> GREEN_MIDDLE_GEM = ITEMS.register("green_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
-	public static final DeferredItem<Item> AQUA_MIDDLE_GEM = ITEMS.register("aqua_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
-	public static final DeferredItem<Item> OCTINE_INGOT = ITEMS.register("octine_ingot", () -> new OctineIngotItem(new Item.Properties()));
-	public static final DeferredItem<Item> RUNE_DOOR_KEY = ITEMS.register("rune_door_key", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> SAP_SPIT = ITEMS.register("sap_spit", () -> new SapSpitItem(new Item.Properties()));
+	public static final DeferredItem<Item> WEEDWOOD_SWORD = ITEMS.register("weedwood_sword", () -> new SwordItem(ToolMaterialRegistry.WEEDWOOD, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> WEEDWOOD_PICKAXE = ITEMS.register("weedwood_pickaxe", () -> new PickaxeItem(ToolMaterialRegistry.WEEDWOOD, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> WEEDWOOD_AXE = ITEMS.register("weedwood_axe", () -> new AxeItem(ToolMaterialRegistry.WEEDWOOD, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> WEEDWOOD_SHOVEL = ITEMS.register("weedwood_shovel", () -> new ShovelItem(ToolMaterialRegistry.WEEDWOOD, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> BONE_SWORD = ITEMS.register("bone_sword", () -> new SwordItem(ToolMaterialRegistry.BONE, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> BONE_PICKAXE = ITEMS.register("bone_pickaxe", () -> new PickaxeItem(ToolMaterialRegistry.BONE, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> BONE_AXE = ITEMS.register("bone_axe", () -> new AxeItem(ToolMaterialRegistry.BONE, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> BONE_SHOVEL = ITEMS.register("bone_shovel", () -> new ShovelItem(ToolMaterialRegistry.BONE, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> OCTINE_SWORD = ITEMS.register("octine_sword", () -> new SwordItem(ToolMaterialRegistry.OCTINE, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> OCTINE_PICKAXE = ITEMS.register("octine_pickaxe", () -> new PickaxeItem(ToolMaterialRegistry.OCTINE, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> OCTINE_AXE = ITEMS.register("octine_axe", () -> new AxeItem(ToolMaterialRegistry.OCTINE, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> OCTINE_SHOVEL = ITEMS.register("octine_shovel", () -> new ShovelItem(ToolMaterialRegistry.OCTINE, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> VALONITE_SWORD = ITEMS.register("valonite_sword", () -> new SwordItem(ToolMaterialRegistry.VALONITE, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> VALONITE_PICKAXE = ITEMS.register("valonite_pickaxe", () -> new PickaxeItem(ToolMaterialRegistry.VALONITE, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> VALONITE_AXE = ITEMS.register("valonite_axe", () -> new AxeItem(ToolMaterialRegistry.VALONITE, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> VALONITE_GREATAXE = ITEMS.register("valonite_greataxe", () -> new AxeItem(ToolMaterialRegistry.VALONITE, new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> VALONITE_SHOVEL = ITEMS.register("valonite_shovel", () -> new ShovelItem(ToolMaterialRegistry.VALONITE, new Item.Properties().stacksTo(1)));
+	//shields
+	//shears
+	//sickle
+	//shockwave sword
+	//arrows
+	//bows
+	//ancient weapons
 	public static final DeferredItem<Item> PESTLE = ITEMS.register("pestle", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> ELIXIR = ITEMS.register("elixir", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> BARK_AMULET = ITEMS.register("bark_amulet", () -> new Item(new Item.Properties()));
-	public static final DeferredItem<Item> ASPECTRUS_FRUIT = ITEMS.register("apsectrus_fruit", () -> new Item(new Item.Properties()));
-	public static final DeferredItem<Item> SHIMMER_STONE = ITEMS.register("shimmer_stone", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
-	public static final DeferredItem<MobItem> ANADIA = ITEMS.register("anadia", () -> new AnadiaMobItem(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<MobItem> BUBBLER_CRAB = ITEMS.register("bubbler_crab", () -> new MobItem(new Item.Properties().stacksTo(1), EntityRegistry.BUBBLER_CRAB.get(), null));
-	public static final DeferredItem<MobItem> SILT_CRAB = ITEMS.register("silt_crab", () -> new MobItem(new Item.Properties().stacksTo(1), EntityRegistry.SILT_CRAB.get(), null));
-	public static final DeferredItem<MobItem> TINY_SLUDGE_WORM = ITEMS.register("tiny_sludge_worm", () -> new MobItem(new Item.Properties().stacksTo(1), null, null));
-	public static final DeferredItem<MobItem> TINY_SLUDGE_WORM_HELPER = ITEMS.register("tiny_sludge_worm_helper", () -> new MobItem(new Item.Properties().stacksTo(1), null, null));
-	public static final DeferredItem<Item> WEEDWOOD_FISHING_ROD = ITEMS.register("weedwood_fishing_rod", () -> new BLFishingRodItem(new Item.Properties().stacksTo(1).durability(256)));
-	public static final DeferredItem<Item> SILK_BUNDLE = ITEMS.register("silk_bundle", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> GLUE = ITEMS.register("glue", () -> new GlueItem(new Item.Properties()));
-	public static final DeferredItem<Item> MOSS_FILTER = ITEMS.register("moss_filter", () -> new Item(new Item.Properties().stacksTo(1).durability(400)));
-	public static final DeferredItem<Item> SILK_FILTER = ITEMS.register("silk_filter", () -> new Item(new Item.Properties().stacksTo(1).durability(2000)));
 	public static final DeferredItem<Item> NET = ITEMS.register("net", () -> new NetItem(new Item.Properties().stacksTo(1).durability(32)));
+	//pouches
+	//caving rope
+	//grapples
+	//volarkite
+	//slingshot
+	public static final DeferredItem<Item> WEEDWOOD_FISHING_ROD = ITEMS.register("weedwood_fishing_rod", () -> new BLFishingRodItem(new Item.Properties().stacksTo(1).durability(256)));
+	//spears
+	//buckets
 	public static final DeferredItem<Item> ELECTRIC_UPGRADE = ITEMS.register("electric_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> GLIDE_UPGRADE = ITEMS.register("glide_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> ASCENT_UPGRADE = ITEMS.register("ascent_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> URCHIN_SPIKE_UPGRADE = ITEMS.register("urchin_spike_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> FISH_VORTEX_UPGRADE = ITEMS.register("fish_vortex_upgrade", () -> new Item(new Item.Properties().stacksTo(1)));
+	//stones
+	public static final DeferredItem<Item> SILK_BUNDLE = ITEMS.register("silk_bundle", () -> new Item(new Item.Properties().stacksTo(1)));
 
-	public static final DeferredItem<Item> DAMP_TORCH = ITEMS.register("damp_torch", () -> new StandingAndWallBlockItem(BlockRegistry.DAMP_TORCH.get(), BlockRegistry.DAMP_WALL_TORCH.get(), new Item.Properties(), Direction.DOWN));
-	public static final DeferredItem<Item> SULFUR_TORCH = ITEMS.register("sulfur_torch", () -> new StandingAndWallBlockItem(BlockRegistry.SULFUR_TORCH.get(), BlockRegistry.SULFUR_WALL_TORCH.get(), new Item.Properties(), Direction.DOWN));
-	public static final DeferredItem<Item> EXTINGUISHED_SULFUR_TORCH = ITEMS.register("extinguished_sulfur_torch", () -> new StandingAndWallBlockItem(BlockRegistry.EXTINGUISHED_SULFUR_TORCH.get(), BlockRegistry.EXTINGUISHED_SULFUR_WALL_TORCH.get(), new Item.Properties(), Direction.DOWN));
-	public static final DeferredItem<Item> WEEDWOOD_SIGN = ITEMS.register("weedwood_sign", () -> new SignItem(new Item.Properties(), BlockRegistry.WEEDWOOD_SIGN.get(), BlockRegistry.WEEDWOOD_WALL_SIGN.get()));
-
-	public static final DeferredItem<Item> DIRTY_DENTROTHYST_VIAL = ITEMS.register("dirty_dentothyst_vial", () -> new Item(new Item.Properties()));
-	public static final DeferredItem<Item> ORANGE_DENTROTHYST_VIAL = ITEMS.register("orange_dentothyst_vial", () -> new DentrothystVialItem(ItemRegistry.ORANGE_ASPECT_VIAL, new Item.Properties()));
-	public static final DeferredItem<Item> GREEN_DENTROTHYST_VIAL = ITEMS.register("green_dentothyst_vial", () -> new DentrothystVialItem(ItemRegistry.GREEN_ASPECT_VIAL, new Item.Properties()));
-	public static final DeferredItem<Item> ORANGE_ASPECT_VIAL = ITEMS.register("orange_aspect_vial", () -> new AspectVialItem(new Item.Properties().craftRemainder(ORANGE_DENTROTHYST_VIAL.get())));
-	public static final DeferredItem<Item> GREEN_ASPECT_VIAL = ITEMS.register("green_aspect_vial", () -> new AspectVialItem(new Item.Properties().craftRemainder(GREEN_DENTROTHYST_VIAL.get())));
-
-
-	public static final DeferredItem<Item> SWAMP_WATER_BUCKET = ITEMS.register("swamp_water_bucket", () -> new BucketItem(FluidRegistry.SWAMP_WATER_STILL.get(), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> STAGNANT_WATER_BUCKET = ITEMS.register("stagnant_water_bucket", () -> new BucketItem(FluidRegistry.STAGNANT_WATER_STILL.get(), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> TAR_BUCKET = ITEMS.register("tar_bucket", () -> new BucketItem(FluidRegistry.TAR_STILL.get(), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> RUBBER_BUCKET = ITEMS.register("rubber_bucket", () -> new BucketItem(FluidRegistry.RUBBER_STILL.get(), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> DYE_BUCKET = ITEMS.register("dye_bucket", () -> new BucketItem(FluidRegistry.DYE_STILL.get(), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> CLEAN_WATER_BUCKET = ITEMS.register("clean_water_bucket", () -> new BucketItem(FluidRegistry.CLEAN_WATER_STILL.get(), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> FISH_OIL_BUCKET = ITEMS.register("fish_oil_bucket", () -> new BucketItem(FluidRegistry.FISH_OIL_STILL.get(), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> PLANT_TONIC_BUCKET = ITEMS.register("plant_tonic_bucket", () -> new Item(new Item.Properties().stacksTo(1)));
-
-	public static final DeferredItem<Item> NETTLE_SOUP_BUCKET = ITEMS.register("nettle_soup_bucket", () -> new BucketItem(FluidRegistry.NETTLE_SOUP_STILL.get(), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> NETTLE_TEA_BUCKET = ITEMS.register("nettle_tea_bucket", () -> new BucketItem(FluidRegistry.NETTLE_TEA_STILL.get(), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> PHEROMONE_EXTREACT_BUCKET = ITEMS.register("pheromone_extract_bucket", () -> new BucketItem(FluidRegistry.PHEROMONE_EXTRACT_STILL.get(), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> SWAMP_BROTH_BUCKET = ITEMS.register("swamp_broth_bucket", () -> new BucketItem(FluidRegistry.SWAMP_BROTH_STILL.get(), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> STURDY_STOCK_BUCKET = ITEMS.register("sturdy_stock_bucket", () -> new BucketItem(FluidRegistry.STURDY_STOCK_STILL.get(), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> PEAR_CORDIAL_BUCKET = ITEMS.register("pear_cordial_bucket", () -> new BucketItem(FluidRegistry.PEAR_CORDIAL_STILL.get(), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> SHAMANS_BREW_BUCKET = ITEMS.register("shamans_brew_bucket", () -> new BucketItem(FluidRegistry.SHAMANS_BREW_STILL.get(), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> LAKE_BROTH_BUCKET = ITEMS.register("lake_broth_bucket", () -> new BucketItem(FluidRegistry.LAKE_BROTH_STILL.get(), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> SHELL_STOCK_BUCKET = ITEMS.register("shell_stock_bucket", () -> new BucketItem(FluidRegistry.SHELL_STOCK_STILL.get(), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> FROG_LEG_EXTRACT_BUCKET = ITEMS.register("frog_leg_extract_bucket", () -> new BucketItem(FluidRegistry.FROG_LEG_EXTRACT_STILL.get(), new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> WITCH_TEA_BUCKET = ITEMS.register("witch_tea_bucket", () -> new BucketItem(FluidRegistry.WITCH_TEA_STILL.get(), new Item.Properties().stacksTo(1)));
-
-	public static final DeferredItem<Item> AMATE_MAP = ITEMS.register("amate_map", () -> new EmptyAmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
-	public static final DeferredItem<Item> FILLED_AMATE_MAP = ITEMS.register("filled_amate_map", () -> new AmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
+	public static final DeferredItem<Item> SKULL_MASK = ITEMS.register("skull_mask", () -> new ArmorItem(ArmorMaterialRegistry.SKULL_MASK, ArmorItem.Type.HELMET, new Item.Properties()));
+	//explorer hat
+	//tree masks
+	//gallery frames
+	//silk mask
+	//special weps
+	//voodoo doll
+	//swift pick
+	//barb erupters
+	//staffs
 	public static final DeferredItem<Item> RECORD_ASTATOS = ITEMS.register("music_disc_astatos", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.ASTATOS)));
 	public static final DeferredItem<Item> RECORD_BETWEEN_YOU_AND_ME = ITEMS.register("music_disc_between_you_and_me", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.BETWEEN_YOU_AND_ME)));
 	public static final DeferredItem<Item> RECORD_CHRISTMAS_ON_THE_MARSH = ITEMS.register("music_disc_christmas_on_the_marsh", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.CHRISTMAS_ON_THE_MARSH)));
@@ -255,6 +270,17 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> RECORD_WANDERING_WISPS = ITEMS.register("music_disc_wandering_wisps", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.WANDERING_WISPS)));
 	public static final DeferredItem<Item> RECORD_WATERLOGGED = ITEMS.register("music_disc_waterlogged", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.WATERLOGGED)));
 	public static final DeferredItem<Item> RECORD_DEEP_WATER_THEME = ITEMS.register("deep_water_theme", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.DEEP_WATER_THEME)));
+	//amulets
+	//rings
+	//scraps
+	//mummy bait
+	public static final DeferredItem<Item> BARK_AMULET = ITEMS.register("bark_amulet", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> AMATE_MAP = ITEMS.register("amate_map", () -> new EmptyAmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
+	public static final DeferredItem<Item> FILLED_AMATE_MAP = ITEMS.register("filled_amate_map", () -> new AmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
+	//bone wayfinder
+	//magnet
+	//gem singer
+	//snot pod
 
 	public static final DeferredItem<Item> GROUND_LEAF = ITEMS.register("ground_leaf", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> GROUND_CATTAIL = ITEMS.register("ground_cattail", () -> new Item(new Item.Properties()));
@@ -318,7 +344,6 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> GROUND_STRING_ROOTS = ITEMS.register("ground_string_roots", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> GROUND_CRYPTWEED = ITEMS.register("ground_cryptweed", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> GROUND_BETWEENSTONE_PEBBLE = ITEMS.register("ground_betweenstone_pebble", () -> new Item(new Item.Properties()));
-
 	public static final DeferredItem<Item> LEAF = ITEMS.register("leaf", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> ALGAE_CLUMP = ITEMS.register("algae_clump", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> ARROW_ARUM_LEAF = ITEMS.register("arrow_arum_leaf", () -> new Item(new Item.Properties()));
@@ -367,4 +392,40 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> PALE_GRASS_BLADES = ITEMS.register("pale_grass_blades", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> STRING_ROOT_FIBERS = ITEMS.register("string_root_fibers", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> CRYPTWEED_BLADES = ITEMS.register("cryptweed_blades", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> ASPECTRUS_FRUIT = ITEMS.register("apsectrus_fruit", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> ELIXIR = ITEMS.register("elixir", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> GREEN_DENTROTHYST_VIAL = ITEMS.register("green_dentothyst_vial", () -> new DentrothystVialItem(ItemRegistry.GREEN_ASPECT_VIAL, new Item.Properties()));
+	public static final DeferredItem<Item> DIRTY_DENTROTHYST_VIAL = ITEMS.register("dirty_dentothyst_vial", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> ORANGE_DENTROTHYST_VIAL = ITEMS.register("orange_dentothyst_vial", () -> new DentrothystVialItem(ItemRegistry.ORANGE_ASPECT_VIAL, new Item.Properties()));
+	public static final DeferredItem<Item> GREEN_ASPECT_VIAL = ITEMS.register("green_aspect_vial", () -> new AspectVialItem(new Item.Properties().craftRemainder(GREEN_DENTROTHYST_VIAL.get())));
+	public static final DeferredItem<Item> ORANGE_ASPECT_VIAL = ITEMS.register("orange_aspect_vial", () -> new AspectVialItem(new Item.Properties().craftRemainder(ORANGE_DENTROTHYST_VIAL.get())));
+
+	//debug items
+	public static final DeferredItem<Item> GLUE = ITEMS.register("glue", () -> new GlueItem(new Item.Properties()));
+
+	public static final DeferredItem<Item> SWAMP_WATER_BUCKET = ITEMS.register("swamp_water_bucket", () -> new BucketItem(FluidRegistry.SWAMP_WATER_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> STAGNANT_WATER_BUCKET = ITEMS.register("stagnant_water_bucket", () -> new BucketItem(FluidRegistry.STAGNANT_WATER_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> TAR_BUCKET = ITEMS.register("tar_bucket", () -> new BucketItem(FluidRegistry.TAR_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> RUBBER_BUCKET = ITEMS.register("rubber_bucket", () -> new BucketItem(FluidRegistry.RUBBER_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> DYE_BUCKET = ITEMS.register("dye_bucket", () -> new BucketItem(FluidRegistry.DYE_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> CLEAN_WATER_BUCKET = ITEMS.register("clean_water_bucket", () -> new BucketItem(FluidRegistry.CLEAN_WATER_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> FISH_OIL_BUCKET = ITEMS.register("fish_oil_bucket", () -> new BucketItem(FluidRegistry.FISH_OIL_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> PLANT_TONIC_BUCKET = ITEMS.register("plant_tonic_bucket", () -> new Item(new Item.Properties().stacksTo(1)));
+
+	public static final DeferredItem<Item> NETTLE_SOUP_BUCKET = ITEMS.register("nettle_soup_bucket", () -> new BucketItem(FluidRegistry.NETTLE_SOUP_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> NETTLE_TEA_BUCKET = ITEMS.register("nettle_tea_bucket", () -> new BucketItem(FluidRegistry.NETTLE_TEA_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> PHEROMONE_EXTREACT_BUCKET = ITEMS.register("pheromone_extract_bucket", () -> new BucketItem(FluidRegistry.PHEROMONE_EXTRACT_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SWAMP_BROTH_BUCKET = ITEMS.register("swamp_broth_bucket", () -> new BucketItem(FluidRegistry.SWAMP_BROTH_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> STURDY_STOCK_BUCKET = ITEMS.register("sturdy_stock_bucket", () -> new BucketItem(FluidRegistry.STURDY_STOCK_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> PEAR_CORDIAL_BUCKET = ITEMS.register("pear_cordial_bucket", () -> new BucketItem(FluidRegistry.PEAR_CORDIAL_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SHAMANS_BREW_BUCKET = ITEMS.register("shamans_brew_bucket", () -> new BucketItem(FluidRegistry.SHAMANS_BREW_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> LAKE_BROTH_BUCKET = ITEMS.register("lake_broth_bucket", () -> new BucketItem(FluidRegistry.LAKE_BROTH_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SHELL_STOCK_BUCKET = ITEMS.register("shell_stock_bucket", () -> new BucketItem(FluidRegistry.SHELL_STOCK_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> FROG_LEG_EXTRACT_BUCKET = ITEMS.register("frog_leg_extract_bucket", () -> new BucketItem(FluidRegistry.FROG_LEG_EXTRACT_STILL.get(), new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> WITCH_TEA_BUCKET = ITEMS.register("witch_tea_bucket", () -> new BucketItem(FluidRegistry.WITCH_TEA_STILL.get(), new Item.Properties().stacksTo(1)));
+
+	public static final DeferredItem<Item> DAMP_TORCH = ITEMS.register("damp_torch", () -> new StandingAndWallBlockItem(BlockRegistry.DAMP_TORCH.get(), BlockRegistry.DAMP_WALL_TORCH.get(), new Item.Properties(), Direction.DOWN));
+	public static final DeferredItem<Item> SULFUR_TORCH = ITEMS.register("sulfur_torch", () -> new StandingAndWallBlockItem(BlockRegistry.SULFUR_TORCH.get(), BlockRegistry.SULFUR_WALL_TORCH.get(), new Item.Properties(), Direction.DOWN));
+	public static final DeferredItem<Item> EXTINGUISHED_SULFUR_TORCH = ITEMS.register("extinguished_sulfur_torch", () -> new StandingAndWallBlockItem(BlockRegistry.EXTINGUISHED_SULFUR_TORCH.get(), BlockRegistry.EXTINGUISHED_SULFUR_WALL_TORCH.get(), new Item.Properties(), Direction.DOWN));
+	public static final DeferredItem<Item> WEEDWOOD_SIGN = ITEMS.register("weedwood_sign", () -> new SignItem(new Item.Properties(), BlockRegistry.WEEDWOOD_SIGN.get(), BlockRegistry.WEEDWOOD_WALL_SIGN.get()));
 }

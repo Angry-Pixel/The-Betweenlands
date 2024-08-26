@@ -17,6 +17,15 @@ public class ArmorMaterialRegistry {
 
 	public static final DeferredRegister<ArmorMaterial> MATERIALS = DeferredRegister.create(Registries.ARMOR_MATERIAL, TheBetweenlands.ID);
 
+	public static final DeferredHolder<ArmorMaterial, ArmorMaterial> SKULL_MASK = MATERIALS.register("skull_mask", () -> new ArmorMaterial(Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+		map.put(ArmorItem.Type.BOOTS, 0);
+		map.put(ArmorItem.Type.LEGGINGS, 0);
+		map.put(ArmorItem.Type.CHESTPLATE, 0);
+		map.put(ArmorItem.Type.HELMET, 0);
+		map.put(ArmorItem.Type.BODY, 0);
+	}), 0, SoundEvents.ARMOR_EQUIP_CHAIN, Ingredient::of, List.of(new ArmorMaterial.Layer(TheBetweenlands.prefix("skull_mask"))), 0.0F, 0.0F));
+
+
 	public static final DeferredHolder<ArmorMaterial, ArmorMaterial> LURKER_SKIN = MATERIALS.register("lurker_skin", () -> new ArmorMaterial(Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
 		map.put(ArmorItem.Type.BOOTS, 1);
 		map.put(ArmorItem.Type.LEGGINGS, 2);

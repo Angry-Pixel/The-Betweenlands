@@ -20,6 +20,12 @@ public class BlockTagProvider extends net.neoforged.neoforge.common.data.BlockTa
 	public static final TagKey<Block> PRESENTS = tag("presents");
 	public static final TagKey<Block> OCTINE_IGNITES = tag("octine_ignites");
 
+	public static final TagKey<Block> INCORRECT_FOR_WEEDWOOD_TOOL = tag("incorrect_for_weedwood_tool");
+	public static final TagKey<Block> INCORRECT_FOR_BONE_TOOL = tag("incorrect_for_bone_tool");
+	public static final TagKey<Block> INCORRECT_FOR_OCTINE_TOOL = tag("incorrect_for_octine_tool");
+	public static final TagKey<Block> INCORRECT_FOR_VALONITE_TOOL = tag("incorrect_for_valonite_tool");
+
+
 	public BlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
 		super(output, provider, TheBetweenlands.ID, existingFileHelper);
 	}
