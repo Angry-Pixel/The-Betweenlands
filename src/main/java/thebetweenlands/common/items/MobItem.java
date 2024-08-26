@@ -24,15 +24,13 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.EventHooks;
 import thebetweenlands.common.TheBetweenlands;
 
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -99,13 +97,12 @@ public class MobItem extends Item {
 	public InteractionResult useOn(UseOnContext context) {
 		ItemStack stack = context.getItemInHand();
 		Level level = context.getLevel();
-		BlockPos pos = context.getClickedPos();
 		Direction direction = context.getClickedFace();
 		Vec3 hitVec = context.getClickLocation();
 
 		final AtomicBoolean isNewEntity = new AtomicBoolean();
 
-		Entity entity = this.createCapturedEntity(context.getLevel(), pos.getX() + hitVec.x(), pos.getY() + hitVec.y(), pos.getZ() + hitVec.z(), stack, e -> isNewEntity.set(true));
+		Entity entity = this.createCapturedEntity(context.getLevel(), hitVec.x(), hitVec.y(), hitVec.z(), stack, e -> isNewEntity.set(true));
 		if (entity != null) {
 			if (direction.getStepX() != 0) {
 				entity.setPos(entity.getX() + direction.getStepX() * entity.getBbWidth() * 0.5f, entity.getY(), entity.getZ());
@@ -125,12 +122,10 @@ public class MobItem extends Item {
 			InteractionResult result = spawnHandler.apply(entity);
 
 			if (result == InteractionResult.SUCCESS) {
-				result = this.spawnCapturedEntity(context.getPlayer(), level, pos, context.getHand(), direction, hitVec, entity, isNewEntity.get());
+				result = this.spawnCapturedEntity(context.getPlayer(), level, context.getHand(), direction, hitVec, entity, isNewEntity.get());
 
 				if (result == InteractionResult.SUCCESS) {
-					if (!level.isClientSide()) {
-						stack.shrink(1);
-					}
+					stack.shrink(1);
 				}
 			}
 
@@ -167,6 +162,7 @@ public class MobItem extends Item {
 
 		if (this.getDefaultMaxStackSize() == 1) {
 			entity.save(nbt);
+			BeehiveBlockEntity.IGNORED_BEE_TAGS.forEach(nbt::remove);
 		} else {
 			CompoundTag entityNbt = new CompoundTag();
 			if (entity.save(entityNbt) && entityNbt.contains("id", Tag.TAG_STRING)) {
@@ -295,18 +291,18 @@ public class MobItem extends Item {
 
 	@Nullable
 	protected Entity createCapturedEntityFromNBT(Level level, double x, double y, double z, CompoundTag nbt) {
-		Optional<Entity> entity = EntityType.create(nbt, level);
+		Entity entity = EntityType.loadEntityRecursive(nbt, level, p_331097_ -> p_331097_);;
 
-		if (entity.isPresent()) {
-			entity.get().moveTo(x, y, z, level.getRandom().nextFloat() * 360.0f, 0);
-			entity.get().setDeltaMovement(Vec3.ZERO);
-			return entity.get();
+		if (entity != null) {
+			entity.moveTo(x, y, z, level.getRandom().nextFloat() * 360.0f, 0);
+			entity.setDeltaMovement(Vec3.ZERO);
+			return entity;
 		}
 
 		return null;
 	}
 
-	protected InteractionResult spawnCapturedEntity(Player player, Level level, BlockPos pos, InteractionHand hand, Direction facing, Vec3 hitVec, Entity entity, boolean isNewEntity) {
+	protected InteractionResult spawnCapturedEntity(Player player, Level level, InteractionHand hand, Direction facing, Vec3 hitVec, Entity entity, boolean isNewEntity) {
 		if (!level.isClientSide()) {
 			if (isNewEntity) {
 				handleOnInitialSpawn(entity);

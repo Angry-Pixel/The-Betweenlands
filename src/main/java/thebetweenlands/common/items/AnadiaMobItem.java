@@ -1,5 +1,6 @@
 package thebetweenlands.common.items;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -41,8 +42,8 @@ public class AnadiaMobItem extends MobItem {
 	public ItemStack getItemFromEntity(String key, ItemStack stack, Level level) {
 		if (!this.isRotten(level, stack) && this.hasEntityData(stack)) {
 			CompoundTag tag = this.getEntityData(stack);
-			if (tag.contains(key, CompoundTag.TAG_COMPOUND)) {
-				return ItemStack.parse(level.registryAccess(), tag.getCompound(key)).orElse(ItemStack.EMPTY);
+			if (tag.contains(key, CompoundTag.TAG_COMPOUND) && !tag.getCompound(key).isEmpty()) {
+				return ItemStack.parse(level.registryAccess(), tag.getCompound(key)).orElse(new ItemStack(ItemRegistry.ANADIA_REMAINS.get()));
 			}
 		}
 		return new ItemStack(ItemRegistry.ANADIA_REMAINS.get());
@@ -64,11 +65,11 @@ public class AnadiaMobItem extends MobItem {
 	}
 
 	@Override
-	protected InteractionResult spawnCapturedEntity(Player player, Level level, BlockPos pos, InteractionHand hand, Direction facing, Vec3 hitVec, Entity entity, boolean isNewEntity) {
+	protected InteractionResult spawnCapturedEntity(Player player, Level level, InteractionHand hand, Direction facing, Vec3 hitVec, Entity entity, boolean isNewEntity) {
 		if (entity instanceof Anadia anadia && !anadia.getFishColor().isAlive()) {
 			return InteractionResult.PASS;
 		}
-		return super.spawnCapturedEntity(player, level, pos, hand, facing, hitVec, entity, isNewEntity);
+		return super.spawnCapturedEntity(player, level, hand, facing, hitVec, entity, isNewEntity);
 	}
 
 	public void setRotten(Level level, ItemStack stack, boolean rotten) {
@@ -130,36 +131,36 @@ public class AnadiaMobItem extends MobItem {
 			CompoundTag entityNbt = this.getEntityData(stack);
 
 			if (entityNbt != null) {
-				tooltip.add(BuiltInRegistries.ENTITY_TYPE.get(this.getCapturedEntityId(stack)).getDescription());
+				tooltip.add(Anadia.createName(entityNbt.getByte("head_type"), entityNbt.getByte("body_type"), entityNbt.getByte("tail_type")).copy().withStyle(ChatFormatting.GRAY));
 
 				if (entityNbt.getByte("fish_color") != 0) {
 					if (stack.get(DataComponentRegistry.ROT_TIME) != null && context.level() != null) {
 						long rottingTime = stack.get(DataComponentRegistry.ROT_TIME);
 						if (rottingTime - context.level().getGameTime() > 19200)
-							tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.rotting_1")));
+							tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.rotting_1")).withStyle(ChatFormatting.GRAY));
 						else if (rottingTime - context.level().getGameTime() <= 19200 && rottingTime - context.level().getGameTime() > 14400)
-							tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.rotting_2")));
+							tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.rotting_2")).withStyle(ChatFormatting.GRAY));
 						else if (rottingTime - context.level().getGameTime() <= 14400 && rottingTime - context.level().getGameTime() > 9600)
-							tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.rotting_3")));
+							tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.rotting_3")).withStyle(ChatFormatting.GRAY));
 						else if (rottingTime - context.level().getGameTime() <= 9600 && rottingTime - context.level().getGameTime() > 4800)
-							tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.rotting_4")));
+							tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.rotting_4")).withStyle(ChatFormatting.GRAY));
 						else if (rottingTime - context.level().getGameTime() <= 4800 && rottingTime - context.level().getGameTime() > 0)
-							tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.rotting_5")));
+							tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.rotting_5")).withStyle(ChatFormatting.GRAY));
 						else if (rottingTime - context.level().getGameTime() <= 0)
-							tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.rotten")));
+							tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.rotten")).withStyle(ChatFormatting.GRAY));
 					}
 				} else {
-					tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.smoked")));
+					tooltip.add(Component.translatable("item.thebetweenlands.anadia.status").append(Component.translatable("item.thebetweenlands.anadia.smoked")).withStyle(ChatFormatting.GRAY));
 				}
 
-				tooltip.add(Component.translatable("item.thebetweenlands.anadia.health", Mth.ceil(entityNbt.getFloat("Health")), Mth.ceil(5.0D + entityNbt.getFloat(Anadia.HEALTH_MOD))));
-				tooltip.add(Component.translatable("item.thebetweenlands.anadia.size", entityNbt.getFloat("fish_size")));
-				tooltip.add(Component.translatable("item.thebetweenlands.anadia.speed", 0.2D + entityNbt.getFloat(Anadia.SPEED_MOD)));
-				tooltip.add(Component.translatable("item.thebetweenlands.anadia.strength", entityNbt.getFloat(Anadia.STRENGTH_MOD)));
-				tooltip.add(Component.translatable("item.thebetweenlands.anadia.stamina", entityNbt.getFloat(Anadia.STAMINA_MOD)));
+				tooltip.add(Component.translatable("item.thebetweenlands.anadia.health", Mth.ceil(entityNbt.getFloat("Health")), Mth.ceil(5.0D + entityNbt.getFloat(Anadia.HEALTH_MOD))).withStyle(ChatFormatting.GRAY));
+				tooltip.add(Component.translatable("item.thebetweenlands.anadia.size", entityNbt.getFloat("fish_size")).withStyle(ChatFormatting.GRAY));
+				tooltip.add(Component.translatable("item.thebetweenlands.anadia.speed", 0.2D + entityNbt.getFloat(Anadia.SPEED_MOD)).withStyle(ChatFormatting.GRAY));
+				tooltip.add(Component.translatable("item.thebetweenlands.anadia.strength", entityNbt.getFloat(Anadia.STRENGTH_MOD)).withStyle(ChatFormatting.GRAY));
+				tooltip.add(Component.translatable("item.thebetweenlands.anadia.stamina", entityNbt.getFloat(Anadia.STAMINA_MOD)).withStyle(ChatFormatting.GRAY));
 			}
 		} else {
-//			tooltip.add(Component.translatable("tooltip.bl.item_mob.health", Mth.ceil(living.getHealth() / 2), Mth.ceil(living.getMaxHealth() / 2)));
+//			tooltip.add(Component.translatable("tooltip.bl.item_mob.health", Mth.ceil(living.getHealth() / 2), Mth.ceil(living.getMaxHealth() / 2)).withStyle(ChatFormatting.GRAY));
 		}
 	}
 }

@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "type_specific": {
+              "type": "thebetweenlands:anadia_body_type",
+              "body": 0
+            }
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:raw_anadia_meat"
+        }
+      ],
+      "functions": [
+        {
+          "function": "thebetweenlands:set_count_from_anadia",
+          "max_count": 5,
+          "min_count": 1,
+          "size_end": 0.95,
+          "size_start": 0.125
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "thebetweenlands:gameplay/anadia_body"
+}

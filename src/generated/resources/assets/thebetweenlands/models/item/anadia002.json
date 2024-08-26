@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "thebetweenlands:item/anadia_head_1",
+    "layer1": "thebetweenlands:item/anadia_body_1",
+    "layer2": "thebetweenlands:item/anadia_tail_3"
+  }
+}

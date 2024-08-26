@@ -1,7 +1,9 @@
 package thebetweenlands.common.entities.fishing.anadia;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -28,6 +30,7 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.datagen.tags.BiomeTagProvider;
@@ -186,9 +189,9 @@ public class Anadia extends PathfinderMob implements BLEntity {
 		} else {
 			this.setFishColor(AnadiaParts.AnadiaColor.BASE);
 		}
-		this.setHeadItem(this.getPartFromLootTable(LootTableRegistry.ANADIA_HEAD));
-		this.setBodyItem(this.getPartFromLootTable(LootTableRegistry.ANADIA_BODY));
-		this.setTailItem(this.getPartFromLootTable(LootTableRegistry.ANADIA_TAIL));
+		this.setHeadItem(getPartFromLootTable(this.level(), this.position(), this, LootTableRegistry.ANADIA_HEAD));
+		this.setBodyItem(getPartFromLootTable(this.level(), this.position(), this, LootTableRegistry.ANADIA_BODY));
+		this.setTailItem(getPartFromLootTable(this.level(), this.position(), this, LootTableRegistry.ANADIA_TAIL));
 
 		if (!this.level().getBiome(this.blockPosition()).is(BiomeRegistry.DEEP_WATERS)) {
 			if (this.getStaminaModifier() >= 5.0F && this.getFishSize() >= 0.875F) {
@@ -199,13 +202,13 @@ public class Anadia extends PathfinderMob implements BLEntity {
 		}
 	}
 
-	public ItemStack getPartFromLootTable(ResourceKey<LootTable> table) {
-		if (this.level() instanceof ServerLevel level) {
-			LootTable lootTable = level.getServer().reloadableRegistries().getLootTable(table);
+	public static ItemStack getPartFromLootTable(Level level, Vec3 pos, @Nullable Entity entity, ResourceKey<LootTable> table) {
+		if (level instanceof ServerLevel server) {
+			LootTable lootTable = server.getServer().reloadableRegistries().getLootTable(table);
 			if (lootTable != LootTable.EMPTY) {
-				LootParams lootparams = new LootParams.Builder(level)
-					.withParameter(LootContextParams.THIS_ENTITY, this)
-					.withParameter(LootContextParams.ORIGIN, this.position())
+				LootParams lootparams = new LootParams.Builder(server)
+					.withOptionalParameter(LootContextParams.THIS_ENTITY, entity)
+					.withParameter(LootContextParams.ORIGIN, pos)
 					.create(LootContextParamSets.EQUIPMENT);
 				List<ItemStack> loot = lootTable.getRandomItems(lootparams);
 				if (!loot.isEmpty())
@@ -439,10 +442,10 @@ public class Anadia extends PathfinderMob implements BLEntity {
 
 	public void setAsLootFish(boolean lootFish) {
 		if (lootFish) {
-			this.setBodyItem(this.getPartFromLootTable(LootTableRegistry.ANADIA_TREASURE));
+			this.setBodyItem(getPartFromLootTable(this.level(), this.position(), this, LootTableRegistry.ANADIA_TREASURE));
 			this.setTreasureUnlocked(true);
 		} else {
-			this.setBodyItem(this.getPartFromLootTable(LootTableRegistry.ANADIA_BODY));
+			this.setBodyItem(getPartFromLootTable(this.level(), this.position(), this, LootTableRegistry.ANADIA_BODY));
 			this.setTreasureUnlocked(false);
 		}
 	}
@@ -699,5 +702,16 @@ public class Anadia extends PathfinderMob implements BLEntity {
 	@Override
 	public boolean canBeLeashed() {
 		return false;
+	}
+
+	@Override
+	public Component getName() {
+		return createName(this.getEntityData().get(HEAD_TYPE), this.getEntityData().get(BODY_TYPE), this.getEntityData().get(TAIL_TYPE));
+	}
+
+	public static Component createName(int head, int body, int tail) {
+		return Component.translatable("entity.thebetweenlands.anadia.body_" + body).append(" ")
+			.append(Component.translatable("entity.thebetweenlands.anadia.tail_" + tail)).append(" ")
+			.append(Component.translatable("entity.thebetweenlands.anadia.head_" + head));
 	}
 }

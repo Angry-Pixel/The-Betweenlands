@@ -151,22 +151,28 @@ public class AnadiaParts {
 	}
 
 	public enum AnadiaColor implements StringRepresentable {
-		SMOKED(false),
-		ROTTEN(false),
-		BASE(true),
-		SILVER(true),
-		PURPLE(true),
-		GREEN(true),
-		UNKNOWN(false);
+		SMOKED(false, 0xFF747479),
+		ROTTEN(false, 0xFF5FB050),
+		BASE(true, 0xFF717A51),
+		SILVER(true, 0xFFC2B3DB),
+		PURPLE(true, 0xFF714147),
+		GREEN(true, 0xFF415432),
+		UNKNOWN(false, 0xFF717A51);
 
 		private final boolean isAlive;
+		private final int color;
 
-		AnadiaColor(boolean isAlive) {
+		AnadiaColor(boolean isAlive, int color) {
 			this.isAlive = isAlive;
+			this.color = color;
 		}
 
 		public boolean isAlive() {
 			return this.isAlive;
+		}
+
+		public int getColor() {
+			return this.color;
 		}
 
 		public static AnadiaColor get(int id) {
@@ -174,6 +180,10 @@ public class AnadiaParts {
 				return values()[id];
 			}
 			return AnadiaColor.UNKNOWN;
+		}
+
+		public static AnadiaColor random(RandomSource random) {
+			return values()[random.nextInt(values().length - 1)];
 		}
 
 		@Override

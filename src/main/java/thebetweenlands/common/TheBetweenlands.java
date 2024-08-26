@@ -1,7 +1,11 @@
 package thebetweenlands.common;
 
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -14,7 +18,9 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BlockEntityTypeAddBlocksEvent;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
@@ -24,6 +30,7 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.AspectType;
 import thebetweenlands.client.event.ClientEvents;
+import thebetweenlands.common.command.GenerateAnadiaCommand;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.network.*;
 import thebetweenlands.common.network.clientbound.UpdateDecayDataPacket;
@@ -95,6 +102,8 @@ public class TheBetweenlands {
 		BetweenlandsSurfaceRules.SOURCES.register(eventbus);
 		MapDecorationRegistry.DECORATIONS.register(eventbus);
 		MenuRegistry.MENUS.register(eventbus);
+		EntityPredicateRegistry.PREDICATES.register(eventbus);
+		LootFunctionRegistry.FUNCTIONS.register(eventbus);
 
 		StorageRegistry.preInit();
 
@@ -106,6 +115,7 @@ public class TheBetweenlands {
 		eventbus.addListener(CreativeGroupRegistry::populateTabs);
 		eventbus.addListener(this::registerPackets);
 		eventbus.addListener(this::registerDataMaps);
+		NeoForge.EVENT_BUS.addListener(this::registerCommands);
 	}
 
 	@SuppressWarnings("deprecation") // TODO: remove once the jsons are done
@@ -116,6 +126,15 @@ public class TheBetweenlands {
 
 		ItemBlockRenderTypes.setRenderLayer(FluidRegistry.SWAMP_WATER_FLOW.get(), RenderType.translucent());
 		ItemBlockRenderTypes.setRenderLayer(FluidRegistry.SWAMP_WATER_STILL.get(), RenderType.translucent());
+	}
+
+	public void registerCommands(RegisterCommandsEvent event) {
+		LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal("betweenlands")
+			.then(Commands.literal("debug")
+				.then(GenerateAnadiaCommand.register()));
+		LiteralCommandNode<CommandSourceStack> node = event.getDispatcher().register(builder);
+		event.getDispatcher().register(Commands.literal("bl").redirect(node));
+		event.getDispatcher().register(Commands.literal(ID).redirect(node));
 	}
 
 	public void registerBlockEntityValidBlocks(BlockEntityTypeAddBlocksEvent event) {

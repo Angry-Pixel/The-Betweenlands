@@ -3,12 +3,15 @@ package thebetweenlands.client.event;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.entity.NoopRenderer;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -36,8 +39,10 @@ import thebetweenlands.client.particle.BetweenlandsPortalParticle;
 import thebetweenlands.client.renderer.block.*;
 import thebetweenlands.client.renderer.entity.*;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entities.fishing.anadia.AnadiaParts;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
+import thebetweenlands.common.items.AnadiaMobItem;
 import thebetweenlands.common.registries.*;
 
 import javax.annotation.Nullable;
@@ -60,7 +65,9 @@ public class ClientEvents {
 		eventbus.addListener(ClientEvents::registerBlockColors);
 		eventbus.addListener(ClientEvents::registerReloadListeners);
 		eventbus.addListener(ClientEvents::registerGeometryLoaders);
+		eventbus.addListener(ClientEvents::registerPropertyOverrides);
 		eventbus.addListener(ClientEvents::registerOverlays);
+		eventbus.addListener(ClientEvents::registerItemColors);
 		MainMenuEvents.init();
 	}
 
@@ -71,6 +78,22 @@ public class ClientEvents {
 
 	private static void registerScreens(final RegisterMenuScreensEvent event) {
 		event.register(MenuRegistry.FISH_TRIMMING_TABLE.get(), FishTrimmingTableScreen::new);
+	}
+
+	private static void registerItemColors(final RegisterColorHandlersEvent.Item event) {
+		event.register((stack, tintIndex) -> {
+			if (stack.get(DataComponents.ENTITY_DATA) != null) {
+				if (stack.has(DataComponentRegistry.ROT_TIME)) {
+					long rottingTime = stack.get(DataComponentRegistry.ROT_TIME);
+					if (rottingTime - Minecraft.getInstance().level.getGameTime() <= 0) {
+						return 0xFF5FB050;
+					}
+				}
+
+				return AnadiaParts.AnadiaColor.get(stack.get(DataComponents.ENTITY_DATA).copyTag().getByte("fish_color")).getColor();
+			}
+			return AnadiaParts.AnadiaColor.UNKNOWN.getColor();
+		}, ItemRegistry.ANADIA.get());
 	}
 
 	private static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
@@ -131,6 +154,29 @@ public class ClientEvents {
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_2, RootmanSimulacrumModels::makeSimulacrum2);
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_3, RootmanSimulacrumModels::makeSimulacrum3);
 		event.registerLayerDefinition(BLModelLayers.SMOKING_RACK, SmokingRackModel::makeModel);
+	}
+
+	private static void registerPropertyOverrides(ModelEvent.ModifyBakingResult event) {
+		ItemProperties.register(ItemRegistry.ANADIA.get(), TheBetweenlands.prefix("head"), (stack, level, entity, idk) -> {
+			if (stack.getItem() instanceof AnadiaMobItem mob && mob.hasEntityData(stack)) {
+				return mob.getEntityData(stack).getByte("head_type");
+			}
+			return 0;
+		});
+
+		ItemProperties.register(ItemRegistry.ANADIA.get(), TheBetweenlands.prefix("body"), (stack, level, entity, idk) -> {
+			if (stack.getItem() instanceof AnadiaMobItem mob && mob.hasEntityData(stack)) {
+				return mob.getEntityData(stack).getByte("body_type");
+			}
+			return 0;
+		});
+
+		ItemProperties.register(ItemRegistry.ANADIA.get(), TheBetweenlands.prefix("tail"), (stack, level, entity, idk) -> {
+			if (stack.getItem() instanceof AnadiaMobItem mob && mob.hasEntityData(stack)) {
+				return mob.getEntityData(stack).getByte("tail_type");
+			}
+			return 0;
+		});
 	}
 
 	private static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {

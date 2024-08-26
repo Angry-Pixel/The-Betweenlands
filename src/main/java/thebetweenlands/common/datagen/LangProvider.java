@@ -14,6 +14,7 @@ import thebetweenlands.api.aspect.AspectType;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class LangProvider extends LanguageProvider {
@@ -767,6 +768,32 @@ public class LangProvider extends LanguageProvider {
 		this.add("block.thebetweenlands.brew", "Drinkable Brew");
 		this.add("block.thebetweenlands.clean_water", "Clean Water");
 		this.add("block.thebetweenlands.fish_oil", "Fish Oil");
+
+		this.addEntityType(EntityRegistry.ANADIA, "Anadia");
+		this.add("entity.thebetweenlands.anadia.head_0", "Grazer");
+		this.add("entity.thebetweenlands.anadia.head_1", "Thumphead");
+		this.add("entity.thebetweenlands.anadia.head_2", "Prowler");
+		this.add("entity.thebetweenlands.anadia.body_0", "Skittish");
+		this.add("entity.thebetweenlands.anadia.body_1", "Stubby");
+		this.add("entity.thebetweenlands.anadia.body_2", "Slender");
+		this.add("entity.thebetweenlands.anadia.tail_0", "Cliptail");
+		this.add("entity.thebetweenlands.anadia.tail_1", "Fantail");
+		this.add("entity.thebetweenlands.anadia.tail_2", "Longtail");
+
+		this.add("item.thebetweenlands.anadia.health", "Health: %s / %s");
+		this.add("item.thebetweenlands.anadia.size", "Size: %s");
+		this.add("item.thebetweenlands.anadia.speed", "Speed: %s");
+		this.add("item.thebetweenlands.anadia.strength", "Strength: %s");
+		this.add("item.thebetweenlands.anadia.stamina", "Stamina: %s");
+
+		this.add("item.thebetweenlands.anadia.status", "Status: ");
+		this.add("item.thebetweenlands.anadia.rotting_1", "Freshly Caught");
+		this.add("item.thebetweenlands.anadia.rotting_2", "Recently Caught");
+		this.add("item.thebetweenlands.anadia.rotting_3", "Starting to Ripen");
+		this.add("item.thebetweenlands.anadia.rotting_4", "Getting Smelly");
+		this.add("item.thebetweenlands.anadia.rotting_5", "Getting Really Stinky");
+		this.add("item.thebetweenlands.anadia.rotten", "Rotten");
+		this.add("item.thebetweenlands.anadia.smoked", "Smoked");
 
 		this.addItem(ItemRegistry.CRIMSON_SNAIL_SHELL, "Crimson Snail Shell");
 		this.addItem(ItemRegistry.OCHRE_SNAIL_SHELL, "Ochre Snail Shell");

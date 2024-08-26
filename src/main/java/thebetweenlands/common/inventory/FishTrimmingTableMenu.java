@@ -88,6 +88,8 @@ public class FishTrimmingTableMenu extends AbstractContainerMenu {
 			} else {
 				slot.setChanged();
 			}
+
+			slot.onTake(player, stack1);
 		}
 
 		return stack;

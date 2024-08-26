@@ -8,6 +8,7 @@ import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredItem;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entities.fishing.anadia.AnadiaParts;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemModelProvider extends net.neoforged.neoforge.client.model.generators.ItemModelProvider {
@@ -301,6 +302,29 @@ public class ItemModelProvider extends net.neoforged.neoforge.client.model.gener
 		this.basicItem(ItemRegistry.PALE_GRASS_BLADES);
 		this.basicItem(ItemRegistry.STRING_ROOT_FIBERS);
 		this.basicItem(ItemRegistry.CRYPTWEED_BLADES);
+
+		var anadia = this.getBuilder(ItemRegistry.ANADIA.getId().toString())
+			.parent(new ModelFile.UncheckedModelFile("item/generated"))
+			.texture("layer0", TheBetweenlands.prefix("item/anadia_head_1"))
+			.texture("layer0", TheBetweenlands.prefix("item/anadia_body_1"))
+			.texture("layer0", TheBetweenlands.prefix("item/anadia_tail_1"));
+
+		for (int head = 0; head < 3; head++) {
+			for (int body = 0; body < 3; body++) {
+				for (int tail = 0; tail < 3; tail++) {
+					var anadiaModel = this.getBuilder(ItemRegistry.ANADIA.getId().toString() + head + body + tail)
+						.parent(new ModelFile.UncheckedModelFile("item/generated"))
+						.texture("layer0", TheBetweenlands.prefix("item/anadia_head_" + (head + 1)))
+						.texture("layer1", TheBetweenlands.prefix("item/anadia_body_" + (body + 1)))
+						.texture("layer2", TheBetweenlands.prefix("item/anadia_tail_" + (tail + 1)));
+					anadia.override()
+						.predicate(TheBetweenlands.prefix("head"), head)
+						.predicate(TheBetweenlands.prefix("body"), body)
+						.predicate(TheBetweenlands.prefix("tail"), tail)
+						.model(anadiaModel).end();
+				}
+			}
+		}
 	}
 
 	public ItemModelBuilder basicItem(DeferredItem<? extends Item> item) {

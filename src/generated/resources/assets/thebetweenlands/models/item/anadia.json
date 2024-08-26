@@ -1,0 +1,224 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "thebetweenlands:item/anadia000",
+      "predicate": {
+        "thebetweenlands:body": 0.0,
+        "thebetweenlands:head": 0.0,
+        "thebetweenlands:tail": 0.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia001",
+      "predicate": {
+        "thebetweenlands:body": 0.0,
+        "thebetweenlands:head": 0.0,
+        "thebetweenlands:tail": 1.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia002",
+      "predicate": {
+        "thebetweenlands:body": 0.0,
+        "thebetweenlands:head": 0.0,
+        "thebetweenlands:tail": 2.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia010",
+      "predicate": {
+        "thebetweenlands:body": 1.0,
+        "thebetweenlands:head": 0.0,
+        "thebetweenlands:tail": 0.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia011",
+      "predicate": {
+        "thebetweenlands:body": 1.0,
+        "thebetweenlands:head": 0.0,
+        "thebetweenlands:tail": 1.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia012",
+      "predicate": {
+        "thebetweenlands:body": 1.0,
+        "thebetweenlands:head": 0.0,
+        "thebetweenlands:tail": 2.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia020",
+      "predicate": {
+        "thebetweenlands:body": 2.0,
+        "thebetweenlands:head": 0.0,
+        "thebetweenlands:tail": 0.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia021",
+      "predicate": {
+        "thebetweenlands:body": 2.0,
+        "thebetweenlands:head": 0.0,
+        "thebetweenlands:tail": 1.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia022",
+      "predicate": {
+        "thebetweenlands:body": 2.0,
+        "thebetweenlands:head": 0.0,
+        "thebetweenlands:tail": 2.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia100",
+      "predicate": {
+        "thebetweenlands:body": 0.0,
+        "thebetweenlands:head": 1.0,
+        "thebetweenlands:tail": 0.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia101",
+      "predicate": {
+        "thebetweenlands:body": 0.0,
+        "thebetweenlands:head": 1.0,
+        "thebetweenlands:tail": 1.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia102",
+      "predicate": {
+        "thebetweenlands:body": 0.0,
+        "thebetweenlands:head": 1.0,
+        "thebetweenlands:tail": 2.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia110",
+      "predicate": {
+        "thebetweenlands:body": 1.0,
+        "thebetweenlands:head": 1.0,
+        "thebetweenlands:tail": 0.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia111",
+      "predicate": {
+        "thebetweenlands:body": 1.0,
+        "thebetweenlands:head": 1.0,
+        "thebetweenlands:tail": 1.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia112",
+      "predicate": {
+        "thebetweenlands:body": 1.0,
+        "thebetweenlands:head": 1.0,
+        "thebetweenlands:tail": 2.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia120",
+      "predicate": {
+        "thebetweenlands:body": 2.0,
+        "thebetweenlands:head": 1.0,
+        "thebetweenlands:tail": 0.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia121",
+      "predicate": {
+        "thebetweenlands:body": 2.0,
+        "thebetweenlands:head": 1.0,
+        "thebetweenlands:tail": 1.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia122",
+      "predicate": {
+        "thebetweenlands:body": 2.0,
+        "thebetweenlands:head": 1.0,
+        "thebetweenlands:tail": 2.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia200",
+      "predicate": {
+        "thebetweenlands:body": 0.0,
+        "thebetweenlands:head": 2.0,
+        "thebetweenlands:tail": 0.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia201",
+      "predicate": {
+        "thebetweenlands:body": 0.0,
+        "thebetweenlands:head": 2.0,
+        "thebetweenlands:tail": 1.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia202",
+      "predicate": {
+        "thebetweenlands:body": 0.0,
+        "thebetweenlands:head": 2.0,
+        "thebetweenlands:tail": 2.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia210",
+      "predicate": {
+        "thebetweenlands:body": 1.0,
+        "thebetweenlands:head": 2.0,
+        "thebetweenlands:tail": 0.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia211",
+      "predicate": {
+        "thebetweenlands:body": 1.0,
+        "thebetweenlands:head": 2.0,
+        "thebetweenlands:tail": 1.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia212",
+      "predicate": {
+        "thebetweenlands:body": 1.0,
+        "thebetweenlands:head": 2.0,
+        "thebetweenlands:tail": 2.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia220",
+      "predicate": {
+        "thebetweenlands:body": 2.0,
+        "thebetweenlands:head": 2.0,
+        "thebetweenlands:tail": 0.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia221",
+      "predicate": {
+        "thebetweenlands:body": 2.0,
+        "thebetweenlands:head": 2.0,
+        "thebetweenlands:tail": 1.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/anadia222",
+      "predicate": {
+        "thebetweenlands:body": 2.0,
+        "thebetweenlands:head": 2.0,
+        "thebetweenlands:tail": 2.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "thebetweenlands:item/anadia_tail_1"
+  }
+}

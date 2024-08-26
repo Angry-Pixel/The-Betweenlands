@@ -51,6 +51,11 @@ public class AnadiaRenderer extends MobRenderer<Anadia, AnadiaModel> {
 		super.setupRotations(entity, stack, bob, yBodyRot, partialTicks, scale);
 	}
 
+	@Override
+	protected void scale(Anadia entity, PoseStack stack, float partialTick) {
+		stack.scale(entity.getFishSize(), entity.getFishSize(), entity.getFishSize());
+	}
+
 	//[VanillaCopy] of LivingEntityRenderer.render, replaced Model.renderToBuffer with a custom rendering method
 	@Override
 	public void render(Anadia entity, float entityYaw, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {

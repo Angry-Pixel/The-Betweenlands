@@ -39,7 +39,7 @@ public class FishTrimmingTableRenderer implements BlockEntityRenderer<FishTrimmi
 		new Vec3(-0.25F, -0.75F, 0.0F),
 		new Vec3(0.0F, -0.75F, 0.125F),
 		new Vec3(0.25F, -0.75F, 0.0F),
-		new Vec3(-0.25F, -0.75F, 0.25F)};
+		new Vec3(-0.25F, -0.75F, -0.25F)};
 
 	public FishTrimmingTableRenderer(BlockEntityRendererProvider.Context context) {
 		ModelPart root = context.bakeLayer(BLModelLayers.FISH_TRIMMING_TABLE);
@@ -90,6 +90,8 @@ public class FishTrimmingTableRenderer implements BlockEntityRenderer<FishTrimmi
 			if (item.getItem() instanceof AnadiaMobItem anadia && anadia.isRotten(renderEntity.level(), item)) {
 				((Anadia) renderEntity).setFishColor(AnadiaParts.AnadiaColor.ROTTEN);
 			}
+			renderEntity.setXRot(renderEntity.xRotO = 0);
+			renderEntity.setYRot(renderEntity.yRotO = 0);
 			float scale2 = 1F / renderEntity.getBbWidth() * 0.5F;
 			if (item.getItem() instanceof AnadiaMobItem) {
 				scale2 = 1F / ((Anadia) renderEntity).getFishSize() * 0.5F;
@@ -97,8 +99,8 @@ public class FishTrimmingTableRenderer implements BlockEntityRenderer<FishTrimmi
 			stack.pushPose();
 			stack.translate(offset.x(), offset.y(), offset.z());
 			if (item.getItem() instanceof AnadiaMobItem) {
-				stack.translate(0.1875F, 0F, -0.0625F);
-				stack.mulPose(Axis.XP.rotationDegrees(45.0F));
+				stack.translate(0.1375F, 0F, -0.075F);
+				stack.mulPose(Axis.YP.rotationDegrees(45.0F));
 				stack.mulPose(Axis.ZP.rotationDegrees(90.0F));
 			} else {
 				stack.translate(0F, -0.1875F, 0F);
