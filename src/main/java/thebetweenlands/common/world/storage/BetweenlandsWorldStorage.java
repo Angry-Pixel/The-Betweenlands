@@ -26,6 +26,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
+import net.neoforged.neoforge.client.ClientHooks.ClientEvents;
 import thebetweenlands.api.entity.spawning.IBiomeSpawnEntriesData;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
@@ -92,14 +93,11 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		super.tick(level);
 
 		if (level.isClientSide() && level.dimension() == DimensionRegistries.DIMENSION_KEY) {
-			this.updateAmbientCaveSounds(level);
+			this.updateAmbientCaveSounds(level, thebetweenlands.client.event.ClientEvents.getClientPlayer());
 		}
 	}
 
-	protected void updateAmbientCaveSounds(Level level) {
-		Minecraft mc = Minecraft.getInstance();
-		Player player = mc.player;
-
+	protected void updateAmbientCaveSounds(Level level, Player player) {
 		if (player != null) {
 			Set<ChunkPos> closeChunks = new HashSet<>();
 

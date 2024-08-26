@@ -26,6 +26,8 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import thebetweenlands.api.recipes.AnimatorRecipe;
 import thebetweenlands.client.audio.AnimatorSoundInstance;
 import thebetweenlands.common.items.LifeCrystalItem;
@@ -165,6 +167,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 		}
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	protected void playAnimatorSound() {
 		Minecraft.getInstance().getSoundManager().play(new AnimatorSoundInstance(SoundRegistry.ANIMATOR.get(), SoundSource.BLOCKS, this));
 	}

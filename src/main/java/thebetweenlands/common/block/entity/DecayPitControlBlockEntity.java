@@ -22,6 +22,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import thebetweenlands.api.entity.ScreenShaker;
 import thebetweenlands.client.audio.DecayPitGearsSoundInstance;
 import thebetweenlands.common.entities.BLEntity;
@@ -283,7 +285,8 @@ public class DecayPitControlBlockEntity extends SyncedBlockEntity implements Scr
 	private int getTentacleSpawnCountDown() {
 		return tentacleCooldown;
 	}
-
+	
+	@OnlyIn(Dist.CLIENT)
 	public void playGearsSound() {
 		SoundInstance chainSound = new DecayPitGearsSoundInstance(this);
 		Minecraft.getInstance().getSoundManager().play(chainSound);

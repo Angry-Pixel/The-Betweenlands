@@ -18,6 +18,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
+import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
@@ -377,6 +378,12 @@ public class ClientEvents {
 	@Nullable
 	public static ClientLevel getClientLevel() {
 		return Minecraft.getInstance().level;
+	}
+
+	// Hack for when we need to get the client level, but this code could be in a class that runs on dedicated servers to make it not crash
+	@Nullable
+	public static Level getClientLevelWhereThisCouldBeDedicated() {
+		return getClientLevel();
 	}
 
 	@Nullable

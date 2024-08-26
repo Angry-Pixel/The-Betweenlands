@@ -1,7 +1,15 @@
 package thebetweenlands.common;
 
+import java.util.Locale;
+
+import javax.annotation.Nullable;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.commands.CommandSourceStack;
@@ -14,6 +22,7 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -32,21 +41,53 @@ import thebetweenlands.api.aspect.AspectType;
 import thebetweenlands.client.event.ClientEvents;
 import thebetweenlands.common.command.GenerateAnadiaCommand;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
-import thebetweenlands.common.network.*;
+import thebetweenlands.common.network.AddLocalStoragePacket;
+import thebetweenlands.common.network.AmateMapPacket;
+import thebetweenlands.common.network.BlockGuardDataPacket;
+import thebetweenlands.common.network.ChangeBlockGuardSectionPacket;
+import thebetweenlands.common.network.ChopFishPacket;
+import thebetweenlands.common.network.ClearBlockGuardPacket;
+import thebetweenlands.common.network.GemProtectionPacket;
+import thebetweenlands.common.network.InfestWeedwoodBushPacket;
+import thebetweenlands.common.network.RemoveLocalStoragePacket;
+import thebetweenlands.common.network.ShockParticlePacket;
+import thebetweenlands.common.network.ShowFoodSicknessPacket;
+import thebetweenlands.common.network.SoundRipplePacket;
+import thebetweenlands.common.network.SyncChunkStoragePacket;
+import thebetweenlands.common.network.SyncLocalStorageDataPacket;
+import thebetweenlands.common.network.SyncLocalStorageReferencesPacket;
 import thebetweenlands.common.network.clientbound.UpdateDecayDataPacket;
 import thebetweenlands.common.network.clientbound.UpdateDruidAltarProgressPacket;
 import thebetweenlands.common.network.clientbound.UpdateFoodSicknessPacket;
 import thebetweenlands.common.network.clientbound.UpdateGemsPacket;
 import thebetweenlands.common.network.clientbound.UpdateMudWalkerPacket;
 import thebetweenlands.common.network.clientbound.UpdateRotSmellPacket;
-import thebetweenlands.common.registries.*;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
+import thebetweenlands.common.registries.ArmorMaterialRegistry;
+import thebetweenlands.common.registries.AttachmentRegistry;
+import thebetweenlands.common.registries.AttributeRegistry;
+import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.CarverRegistry;
+import thebetweenlands.common.registries.CreativeGroupRegistry;
+import thebetweenlands.common.registries.DataComponentRegistry;
+import thebetweenlands.common.registries.DataMapRegistry;
+import thebetweenlands.common.registries.EntityPredicateRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
+import thebetweenlands.common.registries.EnvironmentEventRegistry;
+import thebetweenlands.common.registries.FeatureRegistry;
+import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.common.registries.FluidTypeRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.LootFunctionRegistry;
+import thebetweenlands.common.registries.MapDecorationRegistry;
+import thebetweenlands.common.registries.MenuRegistry;
+import thebetweenlands.common.registries.ParticleRegistry;
+import thebetweenlands.common.registries.RecipeRegistry;
+import thebetweenlands.common.registries.SimulacrumEffectRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.registries.StorageRegistry;
 import thebetweenlands.common.world.BetweenlandsSurfaceRules;
-
-import javax.annotation.Nullable;
-import java.util.Locale;
 
 @Mod(TheBetweenlands.ID)
 public class TheBetweenlands {
@@ -118,12 +159,19 @@ public class TheBetweenlands {
 		NeoForge.EVENT_BUS.addListener(this::registerCommands);
 	}
 
-	@SuppressWarnings("deprecation") // TODO: remove once the jsons are done
+	
 	private void setup(final FMLCommonSetupEvent event) {
 //		Registry.register(Registries.BIOME_SOURCE, TheBetweenlands.prefix("legacy_biomeprovider"), LegacyBiomeSource.CODEC);
 //		Registry.register(Registries.BIOME_SOURCE, TheBetweenlands.prefix("betweenlands_biomeprovider"), BetweenlandsBiomeProvider.CODEC);
 //		Registry.register(Registries.CHUNK_GENERATOR, TheBetweenlands.prefix("the_betweenlands_chunkgen"), ChunkGeneratorBetweenlands.CODEC);
 
+		if(FMLLoader.getDist() == Dist.CLIENT) {
+			setRenderLayers();
+		}
+	}
+	
+	@OnlyIn(Dist.CLIENT)
+	private void setRenderLayers() {
 		ItemBlockRenderTypes.setRenderLayer(FluidRegistry.SWAMP_WATER_FLOW.get(), RenderType.translucent());
 		ItemBlockRenderTypes.setRenderLayer(FluidRegistry.SWAMP_WATER_STILL.get(), RenderType.translucent());
 	}
@@ -195,7 +243,7 @@ public class TheBetweenlands {
 		if (server != null) {
 			return server.getLevel(dimension);
 		} else if (FMLLoader.getDist().isClient()) {
-			return ClientEvents.getClientLevel();
+			return ClientEvents.getClientLevelWhereThisCouldBeDedicated();
 		}
 		return null;
 	}

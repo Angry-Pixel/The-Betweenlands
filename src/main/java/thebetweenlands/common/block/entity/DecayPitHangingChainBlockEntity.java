@@ -14,6 +14,8 @@ import net.minecraft.world.entity.projectile.ProjectileDeflection;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import thebetweenlands.client.audio.DecayPitChainSoundInstance;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -81,11 +83,13 @@ public class DecayPitHangingChainBlockEntity extends SyncedBlockEntity {
 		}
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	public void playChainSound(Level level, BlockPos pos) {
 		SoundInstance chainSound = new DecayPitChainSoundInstance(this);
 		Minecraft.getInstance().getSoundManager().play(chainSound);
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	public void playChainSoundFinal(Level level, BlockPos pos) {
 		//TODO Add final chain sound/other thing
 	}
