@@ -16,6 +16,7 @@ import thebetweenlands.common.block.entity.WeedwoodCraftingTableBlockEntity;
 public class WeedwoodCraftingMenu extends CraftingMenu {
 
 	private final WeedwoodCraftingTableBlockEntity table;
+	private final Player player;
 
 	@SuppressWarnings("resource")
 	public WeedwoodCraftingMenu(int i, Inventory playerInventory, RegistryFriendlyByteBuf buf) {
@@ -25,7 +26,9 @@ public class WeedwoodCraftingMenu extends CraftingMenu {
 	public WeedwoodCraftingMenu(int containerId, Inventory playerInventory, WeedwoodCraftingTableBlockEntity table, ContainerLevelAccess access) {
 		super(containerId, playerInventory, access);
 		this.table = table;
+		this.player = playerInventory.player;
 		
+		this.resultSlots = new WeedwoodResultContainer(table);
 		this.craftSlots = new WeedwoodCraftingContainer(this, table);
 		this.craftSlots.startOpen(playerInventory.player);
 		
@@ -40,8 +43,14 @@ public class WeedwoodCraftingMenu extends CraftingMenu {
 				this.slots.set(index, new Slot(this.craftSlots, y + x * 3, 30 + y * 18, 17 + x * 18)).index = index;
 			}
 		}
+		
+		this.table.slotChangedCraftingGrid();
 	}
 
+	public void slotChangedCraftingGrid() {
+		CraftingMenu.slotChangedCraftingGrid(this, this.player.level(), this.player, this.craftSlots, this.resultSlots, null);
+	}
+	
 	@Override
 	public boolean stillValid(Player player) {
 		return Container.stillValidBlockEntity(this.table, player, 8.0F);

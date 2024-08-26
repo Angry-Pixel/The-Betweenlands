@@ -1,5 +1,8 @@
 package thebetweenlands.common.block.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
@@ -20,6 +23,7 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import thebetweenlands.common.inventory.WeedwoodCraftingContainer;
 import thebetweenlands.common.inventory.WeedwoodCraftingMenu;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
@@ -36,8 +40,20 @@ public class WeedwoodCraftingTableBlockEntity extends BlockEntity implements Men
 		return this.items;
 	}
 
+	private Set<WeedwoodCraftingContainer> openInventories = new HashSet<>();
+
+	public void openInventory(WeedwoodCraftingContainer inv) {
+		this.openInventories.add(inv);
+	}
+
+	public void closeInventory(WeedwoodCraftingContainer inv) {
+		this.openInventories.remove(inv);
+	}
+	
 	public void slotChangedCraftingGrid() {
-		
+		for(WeedwoodCraftingContainer container : openInventories) {
+			container.menu.slotChangedCraftingGrid();
+		}
 	}
 	
 	@Override
@@ -63,6 +79,7 @@ public class WeedwoodCraftingTableBlockEntity extends BlockEntity implements Men
 		this.items.clear();
 		ContainerHelper.loadAllItems(tag, this.items, registries);
 		this.rotation = tag.getByte("rotation");
+		this.slotChangedCraftingGrid();
 	}
 
 	@Nullable

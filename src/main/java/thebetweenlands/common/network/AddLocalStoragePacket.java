@@ -2,6 +2,8 @@ package thebetweenlands.common.network;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -18,9 +20,6 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.datamanager.GenericDataAccessor;
 import thebetweenlands.common.registries.StorageRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
-import thebetweenlands.common.world.storage.WorldStorageImpl;
-
-import javax.annotation.Nullable;
 
 public class AddLocalStoragePacket implements CustomPacketPayload {
 

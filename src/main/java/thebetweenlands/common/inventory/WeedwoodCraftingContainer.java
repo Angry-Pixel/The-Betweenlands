@@ -6,7 +6,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.StackedContents;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -15,10 +14,10 @@ import thebetweenlands.common.block.entity.WeedwoodCraftingTableBlockEntity;
 
 public class WeedwoodCraftingContainer implements CraftingContainer {
 	
-	public final AbstractContainerMenu menu;
+	public final WeedwoodCraftingMenu menu;
 	private final WeedwoodCraftingTableBlockEntity tile;
 
-	public WeedwoodCraftingContainer(AbstractContainerMenu menu, WeedwoodCraftingTableBlockEntity tile) {
+	public WeedwoodCraftingContainer(WeedwoodCraftingMenu menu, WeedwoodCraftingTableBlockEntity tile) {
 		this.menu = menu;
 		this.tile = tile;
 	}
@@ -39,6 +38,18 @@ public class WeedwoodCraftingContainer implements CraftingContainer {
 		return true;
 	}
 
+	@Override
+	public void startOpen(Player player) {
+		CraftingContainer.super.startOpen(player);
+		this.tile.openInventory(this);
+	}
+
+	@Override
+	public void stopOpen(Player player) {
+		CraftingContainer.super.stopOpen(player);
+		this.tile.closeInventory(this);
+	}
+	
 	protected NonNullList<ItemStack> getItemsMutable() {
 		return tile.getItems();
 	}
