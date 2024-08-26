@@ -28,7 +28,7 @@ public class FoodSicknessHandler {
 	private static ItemStack lastUsedItem = ItemStack.EMPTY;
 	private static FoodSickness lastSickness = null;
 
-	static boolean isFoodSicknessEnabled(Level level) {
+	public static boolean isFoodSicknessEnabled(Level level) {
 		if (level.getGameRules().getBoolean(TheBetweenlands.FOOD_SICKNESS_GAMERULE)) {
 			if (level.dimension() == DimensionRegistries.DIMENSION_KEY && BetweenlandsConfig.useFoodSicknessInBetweenlands) {
 				return true;

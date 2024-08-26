@@ -258,7 +258,7 @@ public class CorrosionHelper {
 					IDecayData cap = player.getData(AttachmentRegistry.DECAY);
 					if(cap != null) {
 						float playerCorruption = cap.getDecayLevel(player) / 20.0F;
-						probability *= (1 - Math.pow(playerCorruption, 2) * 0.9F);
+						probability *= (float) (1 - Math.pow(playerCorruption, 2) * 0.9F);
 					}
 				}
 				if (world.getRandom().nextFloat() < probability) {

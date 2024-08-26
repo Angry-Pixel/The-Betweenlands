@@ -11,6 +11,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
+import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.event.ClientRegistrationEvents;
 import thebetweenlands.client.sky.RiftVariant;
 import thebetweenlands.common.TheBetweenlands;
@@ -224,7 +225,7 @@ public class RiftEvent extends TimedEnvironmentEvent {
 	 * @return
 	 */
 	public RiftVariant getVariant() {
-		List<RiftVariant> availableVariants = ClientRegistrationEvents.getRiftVariantLoader().getRiftVariants();
+		List<RiftVariant> availableVariants = BetweenlandsClient.getRiftVariantLoader().getRiftVariants();
 		if(availableVariants.isEmpty()) {
 			return RiftVariant.DEFAULT;
 		} else {

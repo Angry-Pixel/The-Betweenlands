@@ -542,7 +542,8 @@ public class GenericDataAccessor implements IGenericDataAccessorAccess {
 		private int trackingTimer;
 		private final EntryAccess<T> access;
 
-		private byte @Nullable[] serializedData;
+		@Nullable
+		private byte[] serializedData;
 		@Nullable
 		private Object deserializedValue;
 		@Nullable
