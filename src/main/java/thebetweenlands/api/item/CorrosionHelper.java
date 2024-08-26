@@ -13,12 +13,14 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
+import thebetweenlands.api.capability.IDecayData;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.item.CorrosionData;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.datagen.tags.BiomeTagProvider;
 import thebetweenlands.common.datagen.tags.DimensionTypeTagProvider;
 import thebetweenlands.common.datagen.tags.ItemTagProvider;
+import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 
 public class CorrosionHelper {
@@ -255,11 +257,11 @@ public class CorrosionHelper {
 				if (holder instanceof Player) {
 					Player player = (Player) holder;
 					probability *= (isHeldItem && !player.getMainHandItem().isEmpty() ? 2.8F : 1.0F);
-//					IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
-//					if(cap != null) {
-//						float playerCorruption = cap.getDecayStats().getDecayLevel() / 20.0F;
-//						probability *= (1 - Math.pow(playerCorruption, 2) * 0.9F);
-//					}
+					IDecayData cap = player.getData(AttachmentRegistry.DECAY);
+					if(cap != null) {
+						float playerCorruption = cap.getDecayLevel(player) / 20.0F;
+						probability *= (1 - Math.pow(playerCorruption, 2) * 0.9F);
+					}
 				}
 				if (world.getRandom().nextFloat() < probability) {
 					int coating = getCoating(stack);
