@@ -1,0 +1,68 @@
+{
+  "type": "minecraft:empty",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:music_disc_astatos"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:music_disc_between_you_and_me"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:music_disc_christmas_on_the_marsh"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:music_disc_the_explorer"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:music_disc_hag_dance"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:music_disc_lonely_fire"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:mysterious_record"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:music_disc_ancient"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:music_disc_beneath_a_green_sky"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:dj_wights_mixtape"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:music_disc_onwards"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:music_disc_stuck_in_the_mud"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:music_disc_wandering_wisps"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:music_disc_waterlogged"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "thebetweenlands:gameplay/music_disc"
+}

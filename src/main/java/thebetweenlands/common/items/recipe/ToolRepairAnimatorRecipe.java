@@ -8,6 +8,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -50,7 +51,7 @@ public record ToolRepairAnimatorRecipe(Ingredient input, int minRepairLifeCost, 
 	}
 
 	@Override
-	public Entity getRenderEntity(SingleRecipeInput input) {
+	public Entity getRenderEntity(SingleRecipeInput input, Level level) {
 		return null;
 	}
 
@@ -60,7 +61,7 @@ public record ToolRepairAnimatorRecipe(Ingredient input, int minRepairLifeCost, 
 	}
 
 	@Override
-	public ItemStack onAnimated(Level level, BlockPos pos, SingleRecipeInput input) {
+	public ItemStack onAnimated(ServerLevel level, BlockPos pos, SingleRecipeInput input) {
 		return ItemStack.EMPTY;
 	}
 

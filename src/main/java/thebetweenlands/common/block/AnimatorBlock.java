@@ -9,13 +9,18 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.recipes.AnimatorRecipe;
 import thebetweenlands.common.block.entity.AnimatorBlockEntity;
@@ -28,8 +33,15 @@ import java.util.Optional;
 
 public class AnimatorBlock extends HorizontalBaseEntityBlock {
 
+	private static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
+
 	public AnimatorBlock(Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		return SHAPE;
 	}
 
 	@Override
@@ -39,12 +51,12 @@ public class AnimatorBlock extends HorizontalBaseEntityBlock {
 		}
 		if (level.getBlockEntity(pos) instanceof AnimatorBlockEntity animator) {
 			if (!animator.itemAnimated) {
-				player.openMenu(animator);
+				player.openMenu(animator, buf -> buf.writeBlockPos(pos));
 			} else {
 				SingleRecipeInput recipeInput = new SingleRecipeInput(animator.itemToAnimate);
 				Optional<RecipeHolder<AnimatorRecipe>> recipe = level.getRecipeManager().getRecipeFor(RecipeRegistry.ANIMATOR_RECIPE.get(), recipeInput, level);
 				if (recipe.isPresent() || recipe.get().value().onRetrieved(player, pos, recipeInput)) {
-					player.openMenu(animator);
+					player.openMenu(animator, buf -> buf.writeBlockPos(pos));
 				}
 				animator.fuelConsumed = 0;
 			}

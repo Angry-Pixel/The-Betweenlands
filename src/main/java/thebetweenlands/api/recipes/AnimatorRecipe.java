@@ -2,6 +2,7 @@ package thebetweenlands.api.recipes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -37,7 +38,7 @@ public interface AnimatorRecipe extends Recipe<SingleRecipeInput> {
 	 * @return
 	 */
 	@Nullable
-	Entity getRenderEntity(SingleRecipeInput input);
+	Entity getRenderEntity(SingleRecipeInput input, Level level);
 
 	/**
 	 * Returns the entity that is spawned when this recipe is finished
@@ -55,7 +56,7 @@ public interface AnimatorRecipe extends Recipe<SingleRecipeInput> {
 	 * @param input
 	 * @return
 	 */
-	ItemStack onAnimated(Level level, BlockPos pos, SingleRecipeInput input);
+	ItemStack onAnimated(ServerLevel level, BlockPos pos, SingleRecipeInput input);
 
 	/**
 	 * Called when the animator has finished animating and is right-clicked.

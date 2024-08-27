@@ -1,0 +1,9 @@
+{
+  "type": "thebetweenlands:animator",
+  "input": {
+    "item": "thebetweenlands:item_scroll"
+  },
+  "required_fuel": 16,
+  "required_life": 16,
+  "result_loot_table": "thebetweenlands:gameplay/animator/scroll"
+}

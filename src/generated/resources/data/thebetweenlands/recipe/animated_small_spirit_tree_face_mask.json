@@ -1,0 +1,12 @@
+{
+  "type": "thebetweenlands:animator",
+  "input": {
+    "item": "thebetweenlands:small_spirit_tree_face_mask"
+  },
+  "required_fuel": 24,
+  "required_life": 24,
+  "result_stack": {
+    "count": 1,
+    "id": "thebetweenlands:animated_small_spirit_tree_face_mask"
+  }
+}

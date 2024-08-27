@@ -10,8 +10,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.player.Inventory;
@@ -19,6 +21,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
@@ -28,24 +31,31 @@ import net.minecraft.world.phys.Vec3;
 import thebetweenlands.api.recipes.AnimatorRecipe;
 import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.audio.AnimatorSoundInstance;
+import thebetweenlands.common.inventory.AnimatorMenu;
 import thebetweenlands.common.items.LifeCrystalItem;
 import thebetweenlands.common.registries.*;
 
 import javax.annotation.Nullable;
-import java.util.Optional;
 
 public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 
 	public ItemStack itemToAnimate = ItemStack.EMPTY;
-	public int fuelBurnProgress, lifeCrystalLife, fuelConsumed = 0, requiredFuelCount = 32, requiredLifeCount = 32;
+	public int fuelBurnProgress;
+	public int lifeCrystalLife;
+	public int fuelConsumed = 0;
+	public int requiredFuelCount = 32;
+	public int requiredLifeCount = 32;
 	public boolean itemAnimated = false;
 	private int prevStackSize = 0;
 	private ItemStack prevItem = ItemStack.EMPTY;
 
+	public float oRot;
+	public float rot;
+	public float tRot;
+
 	private boolean running = false;
 
 	private boolean soundPlaying = false;
-	private NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY);
 	public final ContainerData data = new ContainerData() {
 		public int get(int index) {
 			return switch (index) {
@@ -75,25 +85,27 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 		}
 	};
 
+	private NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY);
+	public final RecipeManager.CachedCheck<SingleRecipeInput, AnimatorRecipe> quickCheck = RecipeManager.createCheck(RecipeRegistry.ANIMATOR_RECIPE.get());
+
 	public AnimatorBlockEntity(BlockPos pos, BlockState state) {
 		super(BlockEntityRegistry.ANIMATOR.get(), pos, state);
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, AnimatorBlockEntity entity) {
-		if (entity.isSlotInUse(0) && entity.isValidFocalItem(level)) {
-			entity.itemToAnimate = entity.getItem(0);
-			if (!level.isClientSide()) {
-				SingleRecipeInput input = new SingleRecipeInput(entity.itemToAnimate);
-				Optional<RecipeHolder<AnimatorRecipe>> recipe = level.getRecipeManager().getRecipeFor(RecipeRegistry.ANIMATOR_RECIPE.get(), input, level);
-				if (recipe.isPresent()) {
-					entity.requiredFuelCount = recipe.get().value().getRequiredFuel(input);
-					entity.requiredLifeCount = recipe.get().value().getRequiredLife(input);
-				}
-			}
-		} else {
-			entity.itemToAnimate = ItemStack.EMPTY;
-		}
 		if (!level.isClientSide()) {
+			if (entity.isSlotInUse(0) && entity.isValidFocalItem(level)) {
+				entity.itemToAnimate = entity.getItem(0);
+				SingleRecipeInput input = new SingleRecipeInput(entity.itemToAnimate);
+				RecipeHolder<AnimatorRecipe> recipe = entity.quickCheck.getRecipeFor(input, level).orElse(null);
+				if (recipe != null) {
+					entity.requiredFuelCount = recipe.value().getRequiredFuel(input);
+					entity.requiredLifeCount = recipe.value().getRequiredLife(input);
+				}
+			} else {
+				entity.itemToAnimate = ItemStack.EMPTY;
+			}
+
 			if (entity.isCrystalInSlot())
 				entity.lifeCrystalLife = entity.getCrystalPower();
 			if (!entity.isSlotInUse(0) || !entity.isSlotInUse(1) || !entity.isSlotInUse(2)) {
@@ -123,16 +135,15 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 
 			if (entity.fuelConsumed >= entity.requiredFuelCount && entity.isSlotInUse(0) && entity.isSlotInUse(1) && !entity.itemAnimated) {
 				SingleRecipeInput recipeInput = new SingleRecipeInput(entity.getItem(0));
-				Optional<RecipeHolder<AnimatorRecipe>> recipe = level.getRecipeManager().getRecipeFor(RecipeRegistry.ANIMATOR_RECIPE.get(), recipeInput, level);
-				if (recipe.isPresent()) {
+				RecipeHolder<AnimatorRecipe> recipe = entity.quickCheck.getRecipeFor(recipeInput, level).orElse(null);
+				if (recipe != null) {
 					ItemStack input = entity.getItem(0).copy();
-					ItemStack result = recipe.get().value().onAnimated(level, pos, recipeInput);
-					if (result.isEmpty()) result = recipe.get().value().assemble(recipeInput, level.registryAccess());
+					ItemStack result = recipe.value().onAnimated((ServerLevel) level, pos, recipeInput);
+					if (result.isEmpty()) result = recipe.value().assemble(recipeInput, level.registryAccess());
 					if (!result.isEmpty()) {
 						entity.setItem(0, result.copy());
 
-						AABB aabb = new AABB(pos).inflate(12);
-						for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, aabb, EntitySelector.NO_SPECTATORS)) {
+						for (ServerPlayer player : level.getEntitiesOfClass(ServerPlayer.class, new AABB(pos).inflate(12), EntitySelector.NO_SPECTATORS)) {
 							if (player.distanceToSqr(Vec3.atCenterOf(pos)) <= 144) {
 								AdvancementCriteriaRegistry.ANIMATE.get().trigger(player, input, result.copy());
 							}
@@ -156,12 +167,56 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 				entity.setChanged();
 			}
 		} else {
+			entity.updateEntityRotation();
 			if (entity.isRunning() && !entity.soundPlaying) {
 				BetweenlandsClient.playLocalSound(new AnimatorSoundInstance(SoundRegistry.ANIMATOR.get(), SoundSource.BLOCKS, entity));
 				entity.soundPlaying = true;
 			} else if (!entity.isRunning()) {
 				entity.soundPlaying = false;
 			}
+		}
+	}
+
+	private void updateEntityRotation() {
+		this.oRot = this.rot;
+		double d0 = BetweenlandsClient.getClientPlayer().getX() - this.getBlockPos().getX() - 0.5D;
+		double d1 = BetweenlandsClient.getClientPlayer().getZ() - this.getBlockPos().getZ() - 0.5D;
+		this.tRot = (float) Mth.atan2(d1, d0);
+
+		while (this.rot >= Mth.PI) {
+			this.rot -= Mth.TWO_PI;
+		}
+
+		while (this.rot < -Mth.PI) {
+			this.rot += Mth.TWO_PI;
+		}
+
+		while (this.tRot >= Mth.PI) {
+			this.tRot -= Mth.TWO_PI;
+		}
+
+		while (this.tRot < -Mth.PI) {
+			this.tRot += Mth.TWO_PI;
+		}
+
+		float f2 = this.tRot - this.rot;
+
+		while (f2 >= Mth.PI) {
+			f2 -= Mth.TWO_PI;
+		}
+
+		while (f2 < -Mth.PI) {
+			f2 += Mth.TWO_PI;
+		}
+
+		this.rot += f2 * 0.4F;
+	}
+
+	@Override
+	public void setChanged() {
+		super.setChanged();
+		if (this.getLevel() != null) {
+			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
 		}
 	}
 
@@ -186,7 +241,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 	public boolean isValidFocalItem(Level level) {
 		if (!this.getItem(0).isEmpty()) {
 			SingleRecipeInput recipeInput = new SingleRecipeInput(this.getItem(0));
-			return level.getRecipeManager().getRecipeFor(RecipeRegistry.ANIMATOR_RECIPE.get(), recipeInput, level).isPresent();
+			return this.quickCheck.getRecipeFor(recipeInput, level).isPresent();
 		}
 		return false;
 	}
@@ -210,10 +265,9 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 		this.items = items;
 	}
 
-	//TODO
 	@Override
 	protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
-		return null;
+		return new AnimatorMenu(containerId, inventory, this, this.data);
 	}
 
 	@Override

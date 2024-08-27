@@ -1,4 +1,4 @@
-// 1.21.1	2024-08-19T16:14:42.2868403	Registries
+// 1.21.1	2024-08-27T12:14:18.6020723	Registries
 df1c199e85813eb419aaac253a53fab9b6142d7c data/thebetweenlands/betweenlands/aspect/armaniis.json
 804f2b2a84b6c8653987bb9b0d0fd516e04fe327 data/thebetweenlands/betweenlands/aspect/azuwynn.json
 114d238fa8a03c6cb534cde56f5cf32682a982a7 data/thebetweenlands/betweenlands/aspect/byariis.json
@@ -15,6 +15,7 @@ fc5597279c62fac3e04ba6081c3eeecd14ca5206 data/thebetweenlands/betweenlands/aspec
 f703c2a3913b5bcf737fe12641b7a47651579cbf data/thebetweenlands/betweenlands/aspect/yeowynn.json
 630b160835e8a81ee4e9606886ea5f99099d3182 data/thebetweenlands/betweenlands/aspect/yihinren.json
 72e954e53629c42d951270f5c6c7a4ab534719ac data/thebetweenlands/betweenlands/aspect/yunugaz.json
+3de69333739d59c68a34cbcae05a969c6930ea9d data/thebetweenlands/damage_type/voodoo.json
 e23d7da85b85afde62f91a7e541cb2b768aa6693 data/thebetweenlands/dimension/the_betweenlands.json
 2b786ad82142bd826db2f8d86df9ed42bf08bd5f data/thebetweenlands/dimension_type/the_betweenlands.json
 c2f0f90525ceded7021638ef915fe394c653b537 data/thebetweenlands/jukebox_song/ancient.json

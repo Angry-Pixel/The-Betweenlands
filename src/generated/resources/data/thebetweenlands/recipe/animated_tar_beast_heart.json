@@ -1,0 +1,12 @@
+{
+  "type": "thebetweenlands:animator",
+  "input": {
+    "item": "thebetweenlands:tar_beast_heart"
+  },
+  "required_fuel": 32,
+  "required_life": 32,
+  "result_stack": {
+    "count": 1,
+    "id": "thebetweenlands:animated_tar_beast_heart"
+  }
+}

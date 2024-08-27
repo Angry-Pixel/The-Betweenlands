@@ -172,6 +172,12 @@ public class ItemModelProvider extends net.neoforged.neoforge.client.model.gener
 		this.toolItem(ItemRegistry.NET);
 		this.basicItem(ItemRegistry.TINY_SLUDGE_WORM);
 		this.otherTextureItem(ItemRegistry.TINY_SLUDGE_WORM_HELPER, this.modLoc("tiny_sludge_worm"));
+		this.toolItem(ItemRegistry.WIGHTS_BANE);
+		this.toolItem(ItemRegistry.SLUDGE_SLICER);
+		this.toolItem(ItemRegistry.CRITTER_CRUNCHER);
+		this.toolItem(ItemRegistry.HAG_HACKER);
+		this.toolItem(ItemRegistry.SWIFT_PICK);
+		this.toolItem(ItemRegistry.VOODOO_DOLL);
 
 		this.basicItem(ItemRegistry.RECORD_ANCIENT);
 		this.basicItem(ItemRegistry.RECORD_ASTATOS);

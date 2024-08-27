@@ -17,7 +17,8 @@ public class BaseLootProvider extends LootTableProvider {
 
 	public BaseLootProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
 		super(output, LootTableRegistry.getAllBuiltInTables(), List.of(
-			new LootTableProvider.SubProviderEntry(EntityLootProvider::new, LootContextParamSets.ENTITY)
+			new LootTableProvider.SubProviderEntry(EntityLootProvider::new, LootContextParamSets.ENTITY),
+			new LootTableProvider.SubProviderEntry(provider1 -> new MiscLootProvider(), LootContextParamSets.EMPTY)
 		), provider);
 	}
 

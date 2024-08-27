@@ -1,0 +1,12 @@
+{
+  "type": "thebetweenlands:animator",
+  "input": {
+    "item": "thebetweenlands:inanimate_angry_pebble"
+  },
+  "required_fuel": 1,
+  "required_life": 1,
+  "result_stack": {
+    "count": 1,
+    "id": "thebetweenlands:angry_pebble"
+  }
+}

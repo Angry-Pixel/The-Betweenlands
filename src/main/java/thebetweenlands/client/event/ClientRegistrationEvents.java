@@ -29,6 +29,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import thebetweenlands.client.*;
 import thebetweenlands.client.gui.overlay.DecayBarOverlay;
 import thebetweenlands.client.gui.overlay.FishStaminaBarOverlay;
+import thebetweenlands.client.gui.screen.AnimatorScreen;
 import thebetweenlands.client.gui.screen.FishTrimmingTableScreen;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.block.*;
@@ -83,6 +84,7 @@ public class ClientRegistrationEvents {
 	}
 
 	private static void registerScreens(final RegisterMenuScreensEvent event) {
+		event.register(MenuRegistry.ANIMATOR.get(), AnimatorScreen::new);
 		event.register(MenuRegistry.FISH_TRIMMING_TABLE.get(), FishTrimmingTableScreen::new);
 	}
 
@@ -112,6 +114,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.FISH_HOOK.get(), BLFishHookRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SEAT.get(), NoopRenderer::new);
 
+		event.registerBlockEntityRenderer(BlockEntityRegistry.ANIMATOR.get(), AnimatorRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.CENSER.get(), CenserRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.COMPOST_BIN.get(), CompostBinRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.CRAB_POT.get(), CrabPotRenderer::new);
@@ -135,6 +138,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.ANADIA, AnadiaModel::create);
 		event.registerLayerDefinition(BLModelLayers.FISH_HOOK, BLFishHookModel::create);
 
+		event.registerLayerDefinition(BLModelLayers.ANIMATOR, AnimatorModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.CENSER, CenserModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.COMPOST_BIN, CompostBinModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.CRAB_POT, CrabPotModel::makeModel);
@@ -203,7 +207,7 @@ public class ClientRegistrationEvents {
 		event.registerItem(BLItemRenderer.CLIENT_ITEM_EXTENSION,
 			BlockRegistry.CENSER.asItem(), BlockRegistry.DRUID_ALTAR.asItem(), BlockRegistry.PURIFIER.asItem(), BlockRegistry.COMPOST_BIN.asItem(),
 			BlockRegistry.FISHING_TACKLE_BOX.asItem(), BlockRegistry.SMOKING_RACK.asItem(), BlockRegistry.FISH_TRIMMING_TABLE.asItem(),
-			BlockRegistry.CRAB_POT.asItem(), BlockRegistry.CRAB_POT_FILTER.asItem(),
+			BlockRegistry.CRAB_POT.asItem(), BlockRegistry.CRAB_POT_FILTER.asItem(), BlockRegistry.ANIMATOR.asItem(),
 			BlockRegistry.LOOT_POT_1.asItem(), BlockRegistry.LOOT_POT_2.asItem(), BlockRegistry.LOOT_POT_3.asItem(),
 			BlockRegistry.TAR_LOOT_POT_1.asItem(), BlockRegistry.TAR_LOOT_POT_2.asItem(), BlockRegistry.TAR_LOOT_POT_3.asItem(),
 			BlockRegistry.MUD_LOOT_POT_1.asItem(), BlockRegistry.MUD_LOOT_POT_2.asItem(), BlockRegistry.MUD_LOOT_POT_3.asItem(),

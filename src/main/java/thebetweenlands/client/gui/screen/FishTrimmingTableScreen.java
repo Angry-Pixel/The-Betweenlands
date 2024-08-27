@@ -19,11 +19,9 @@ import thebetweenlands.common.network.ChopFishPacket;
 public class FishTrimmingTableScreen extends AbstractContainerScreen<FishTrimmingTableMenu> {
 
 	private static final ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/gui/fish_trimming_table.png");
-	private final FishTrimmingTableMenu menu;
 
 	public FishTrimmingTableScreen(FishTrimmingTableMenu menu, Inventory playerInventory, Component title) {
 		super(menu, playerInventory, title);
-		this.menu = menu;
 		this.imageWidth = 176;
 		this.imageHeight = 226;
 	}
@@ -52,12 +50,12 @@ public class FishTrimmingTableScreen extends AbstractContainerScreen<FishTrimmin
 		int j = (this.height - this.imageHeight) / 2;
 		graphics.blit(TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
 
-		if (this.menu.getContainer() instanceof FishTrimmingTableBlockEntity table && table.getStoredRecipe() != null && table.hasChopper() && table.allResultSlotsEmpty()) {
+		if (this.getMenu().getContainer() instanceof FishTrimmingTableBlockEntity table && table.getStoredRecipe() != null && table.hasChopper() && table.allResultSlotsEmpty()) {
 			graphics.pose().pushPose();
 			graphics.pose().translate(this.leftPos, this.topPos, 0);
-			this.drawSlotAsBackground(graphics, table.getSlotResult(Minecraft.getInstance().level, 1, 0), this.menu.getSlot(1));
-			this.drawSlotAsBackground(graphics, table.getSlotResult(Minecraft.getInstance().level, 2, 0), this.menu.getSlot(2));
-			this.drawSlotAsBackground(graphics, table.getSlotResult(Minecraft.getInstance().level, 3, 0), this.menu.getSlot(3));
+			this.drawSlotAsBackground(graphics, table.getSlotResult(Minecraft.getInstance().level, 1, 0), this.getMenu().getSlot(1));
+			this.drawSlotAsBackground(graphics, table.getSlotResult(Minecraft.getInstance().level, 2, 0), this.getMenu().getSlot(2));
+			this.drawSlotAsBackground(graphics, table.getSlotResult(Minecraft.getInstance().level, 3, 0), this.getMenu().getSlot(3));
 			graphics.pose().popPose();
 		}
 	}

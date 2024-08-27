@@ -10,6 +10,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation FISH_HOOK = register("fish_hook");
 	public static final ModelLayerLocation SILT_CRAB = register("silt_crab");
 
+	public static final ModelLayerLocation ANIMATOR = register("animator");
 	public static final ModelLayerLocation CENSER = register("censer");
 	public static final ModelLayerLocation COMPOST_BIN = register("compost_bin");
 	public static final ModelLayerLocation CRAB_POT = register("crab_pot");

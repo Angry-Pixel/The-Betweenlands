@@ -9,6 +9,7 @@ import net.minecraft.world.item.*;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.datagen.tags.EntityTagProvider;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.items.*;
 
@@ -86,6 +87,8 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> SAP_BALL = ITEMS.register("sap_ball", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().alwaysEdible().build())));
 	public static final DeferredItem<Item> ROTTEN_FOOD = ITEMS.register("rotten_food", () -> new RottenFoodItem(new Item.Properties().food(new FoodProperties.Builder().nutrition(-1).saturationModifier(-1.0F).effect(() -> new MobEffectInstance(MobEffects.HUNGER, 200, 1), 1.0F).effect(() -> new MobEffectInstance(MobEffects.POISON, 200, 1), 1.0F).build())));
 	//seeds
+	public static final DeferredItem<Item> SPORES = ITEMS.register("spores", () -> new Item(new Item.Properties()));
+
 	public static final DeferredItem<Item> MIRE_SNAIL_EGG = ITEMS.register("mire_snail_egg", () -> new MireSnailEggItem(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.2F).build())));
 	public static final DeferredItem<Item> COOKED_MIRE_SNAIL_EGG = ITEMS.register("cooked_mire_snail_egg", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(8).saturationModifier(1.0F).build())));
 	public static final DeferredItem<Item> RAW_FROG_LEGS = ITEMS.register("raw_frog_legs", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.4F).build())));
@@ -149,19 +152,20 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> CRIMSON_MIDDLE_GEM = ITEMS.register("crimson_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
 	public static final DeferredItem<Item> AQUA_MIDDLE_GEM = ITEMS.register("aqua_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
 	public static final DeferredItem<Item> GREEN_MIDDLE_GEM = ITEMS.register("green_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
-	//life crystal
+	public static final DeferredItem<Item> LIFE_CRYSTAL = ITEMS.register("life_crystal", () -> new LifeCrystalItem(true, new Item.Properties().stacksTo(1).durability(128)));
 	//pyrad flame
 	//critters :)
+	public static final DeferredItem<Item> SLUDGE_WORM_EGG_SAC = ITEMS.register("sludge_worm_egg_sac", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<MobItem> TINY_SLUDGE_WORM = ITEMS.register("tiny_sludge_worm", () -> new MobItem(new Item.Properties().stacksTo(1), null, null));
 	public static final DeferredItem<MobItem> TINY_SLUDGE_WORM_HELPER = ITEMS.register("tiny_sludge_worm_helper", () -> new MobItem(new Item.Properties().stacksTo(1), null, null));
 	public static final DeferredItem<MobItem> ANADIA = ITEMS.register("anadia", () -> new AnadiaMobItem(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<MobItem> BUBBLER_CRAB = ITEMS.register("bubbler_crab", () -> new MobItem(new Item.Properties().stacksTo(1), EntityRegistry.BUBBLER_CRAB.get(), null));
 	public static final DeferredItem<MobItem> SILT_CRAB = ITEMS.register("silt_crab", () -> new MobItem(new Item.Properties().stacksTo(1), EntityRegistry.SILT_CRAB.get(), null));
 	public static final DeferredItem<Item> SHIMMER_STONE = ITEMS.register("shimmer_stone", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
-	//tarminion
+	public static final DeferredItem<Item> TARMINION = ITEMS.register("tarminion", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
 	//sludge ball
 	//rope
-	//angry pebble
+	public static final DeferredItem<Item> ANGRY_PEBBLE = ITEMS.register("angry_pebble", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
 	public static final DeferredItem<Item> OCTINE_INGOT = ITEMS.register("octine_ingot", () -> new OctineIngotItem(new Item.Properties()));
 	public static final DeferredItem<Item> SAP_SPIT = ITEMS.register("sap_spit", () -> new SapSpitItem(new Item.Properties()));
 	public static final DeferredItem<Item> RUNE_DOOR_KEY = ITEMS.register("rune_door_key", () -> new Item(new Item.Properties().stacksTo(1)));
@@ -223,6 +227,7 @@ public class ItemRegistry {
 	//sickle
 	//shockwave sword
 	//arrows
+	public static final DeferredItem<Item> SLUDGE_WORM_ARROW = ITEMS.register("sludge_worm_arrow", () -> new Item(new Item.Properties().stacksTo(1)));
 	//bows
 	//ancient weapons
 	public static final DeferredItem<Item> PESTLE = ITEMS.register("pestle", () -> new Item(new Item.Properties().stacksTo(1)));
@@ -245,14 +250,19 @@ public class ItemRegistry {
 
 	public static final DeferredItem<Item> SKULL_MASK = ITEMS.register("skull_mask", () -> new ArmorItem(ArmorMaterialRegistry.SKULL_MASK, ArmorItem.Type.HELMET, new Item.Properties()));
 	//explorer hat
-	//tree masks
+	public static final DeferredItem<Item> SMALL_SPIRIT_TREE_FACE_MASK = ITEMS.register("small_spirit_tree_face_mask", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
+	public static final DeferredItem<Item> ANIMATED_SMALL_SPIRIT_TREE_FACE_MASK = ITEMS.register("animated_small_spirit_tree_face_mask", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
 	//gallery frames
 	//silk mask
-	//special weps
-	//voodoo doll
-	//swift pick
+	public static final DeferredItem<Item> WIGHTS_BANE = ITEMS.register("wights_bane", () -> new InstakillWeaponItem(ToolMaterialRegistry.WEEDWOOD, EntityTagProvider.WIGHTS_BANE_INSTAKILLS, new Item.Properties().rarity(Rarity.RARE).setNoRepair().stacksTo(1)));
+	public static final DeferredItem<Item> SLUDGE_SLICER = ITEMS.register("sludge_slicer", () -> new InstakillWeaponItem(ToolMaterialRegistry.WEEDWOOD, EntityTagProvider.SLUDGE_SLICER_INSTAKILLS, new Item.Properties().rarity(Rarity.RARE).setNoRepair().stacksTo(1)));
+	public static final DeferredItem<Item> CRITTER_CRUNCHER = ITEMS.register("critter_cruncher", () -> new InstakillWeaponItem(ToolMaterialRegistry.WEEDWOOD, EntityTagProvider.CRITTER_CRUNCHER_INSTAKILLS, new Item.Properties().rarity(Rarity.RARE).setNoRepair().stacksTo(1)));
+	public static final DeferredItem<Item> HAG_HACKER = ITEMS.register("hag_hacker", () -> new HagHackerItem(new Item.Properties().rarity(Rarity.RARE).setNoRepair().stacksTo(1)));
+	public static final DeferredItem<Item> VOODOO_DOLL = ITEMS.register("voodoo_doll", () -> new VoodooDollItem(new Item.Properties().rarity(Rarity.RARE).durability(24).stacksTo(1)));
+	public static final DeferredItem<Item> SWIFT_PICK = ITEMS.register("swift_pick", () -> new SwiftPickItem(ToolMaterialRegistry.VALONITE, new Item.Properties().rarity(Rarity.EPIC).setNoRepair().durability(2500).stacksTo(1)));
 	//barb erupters
-	//staffs
+	public static final DeferredItem<Item> MIST_STAFF = ITEMS.register("mist_staff", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SHADOW_STAFF = ITEMS.register("shadow_staff", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> RECORD_ASTATOS = ITEMS.register("music_disc_astatos", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.ASTATOS)));
 	public static final DeferredItem<Item> RECORD_BETWEEN_YOU_AND_ME = ITEMS.register("music_disc_between_you_and_me", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.BETWEEN_YOU_AND_ME)));
 	public static final DeferredItem<Item> RECORD_CHRISTMAS_ON_THE_MARSH = ITEMS.register("music_disc_christmas_on_the_marsh", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.CHRISTMAS_ON_THE_MARSH)));
@@ -270,15 +280,16 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> RECORD_DEEP_WATER_THEME = ITEMS.register("deep_water_theme", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(MusicRegistry.DEEP_WATER_THEME)));
 	//amulets
 	//rings
+	public static final DeferredItem<Item> RING_OF_POWER = ITEMS.register("ring_of_power", () -> new Item(new Item.Properties().stacksTo(1)));
 	//scraps
 	//mummy bait
 	public static final DeferredItem<Item> BARK_AMULET = ITEMS.register("bark_amulet", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> AMATE_MAP = ITEMS.register("amate_map", () -> new EmptyAmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> FILLED_AMATE_MAP = ITEMS.register("filled_amate_map", () -> new AmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
 	//bone wayfinder
-	//magnet
+	public static final DeferredItem<Item> MAGIC_ITEM_MAGNET = ITEMS.register("magic_item_magnet", () -> new Item(new Item.Properties().stacksTo(1)));
 	//gem singer
-	//snot pod
+	public static final DeferredItem<Item> SNOT_POD = ITEMS.register("snot_pod", () -> new Item(new Item.Properties().stacksTo(1)));
 
 	public static final DeferredItem<Item> GROUND_LEAF = ITEMS.register("ground_leaf", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> GROUND_CATTAIL = ITEMS.register("ground_cattail", () -> new Item(new Item.Properties()));

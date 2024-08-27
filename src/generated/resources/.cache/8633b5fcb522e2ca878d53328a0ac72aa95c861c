@@ -1,6 +1,7 @@
-// 1.21.1	2024-08-22T14:37:56.5391105	Block States: thebetweenlands
+// 1.21.1	2024-08-26T18:05:25.6340411	Block States: thebetweenlands
 16dbe75f277a12df4d36599c00cff59d1d92875d assets/thebetweenlands/blockstates/ancient_remnant_block.json
 054597b2cc6147a93cbe8522b522e25baafe90fe assets/thebetweenlands/blockstates/angry_betweenstone.json
+49034bf16c5702539cdb1366c34a67055017c4ec assets/thebetweenlands/blockstates/animator.json
 02df18eb4a68962c1cae5419f9e13f11dbedef3d assets/thebetweenlands/blockstates/aqua_middle_gem_block.json
 6a00ce7c7a12efc8b51996844dba337c18b090b9 assets/thebetweenlands/blockstates/aqua_middle_gem_ore.json
 475d0a6a28596f0c1b2488eb9367b7567c944387 assets/thebetweenlands/blockstates/bedrock.json
@@ -528,6 +529,7 @@ d87cccda2ac42c641a715d62e911f293fb245ba9 assets/thebetweenlands/blockstates/weed
 587bf333e22e8a400403d808ba74e98196b41e9e assets/thebetweenlands/blockstates/worm_pillar_top.json
 50c2c7e2f418c6a19d12d777619624b9e1bfb628 assets/thebetweenlands/models/block/ancient_remnant_block.json
 eba49c3d9fc5c9428e7cae1efc16e3a2b9bb121c assets/thebetweenlands/models/block/angry_betweenstone.json
+c60fea5d0f51a04cd33588e1c59e414db0b4b6fc assets/thebetweenlands/models/block/animator.json
 1b7b0ec5ed5e6f79aafaedbc24a400301f23b447 assets/thebetweenlands/models/block/aqua_middle_gem_block.json
 8a5455fcf92f848536c24cc01b0efe3a48e8de4d assets/thebetweenlands/models/block/aqua_middle_gem_ore.json
 0a1be98c05d2639cb9d8a47cc919733d043a0921 assets/thebetweenlands/models/block/bedrock.json
@@ -1490,6 +1492,7 @@ a50245a26d75ff43b6c267ebd2c3c9d470a71a82 assets/thebetweenlands/models/block/wor
 dc6580e6390aaa3312646357912caceb1795563e assets/thebetweenlands/models/block/worm_pillar_top.json
 174602535bc7b553bb76c479b9bb8b1625fc4b02 assets/thebetweenlands/models/item/ancient_remnant_block.json
 3e4b979e97d4ea21ee7669e203810807775c68d5 assets/thebetweenlands/models/item/angry_betweenstone.json
+61ffa73f41a5e39e06d7c41a6573c9cfe352ba88 assets/thebetweenlands/models/item/animator.json
 52a535b1f1b99ca416552fdbed0556e26d49e7b8 assets/thebetweenlands/models/item/aqua_middle_gem_block.json
 4bbd702c02b0e5c8f25e392b48c768f727d8c88f assets/thebetweenlands/models/item/aqua_middle_gem_ore.json
 11f42c05ddd8e1a7656b35c61f926c510fcace5d assets/thebetweenlands/models/item/bedrock.json

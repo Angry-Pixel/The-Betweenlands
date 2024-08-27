@@ -795,7 +795,7 @@ public class CreativeGroupRegistry {
 
 	public static final DeferredHolder<CreativeModeTab, CreativeModeTab> BETWEENLANDS_GEAR = CREATIVE_TABS.register("gear", () -> CreativeModeTab.builder()
 		.withTabsBefore(BETWEENLANDS_ITEMS.getKey())
-		.icon(ItemRegistry.ANCIENT_HELMET::toStack) //TODO temp, change to valonite pick when implemented
+		.icon(ItemRegistry.VALONITE_PICKAXE::toStack)
 		.title(Component.translatable("itemGroup.thebetweenlands.gear"))
 		.displayItems((parameters, output) -> {
 			output.accept(ItemRegistry.BONE_HELMET);
@@ -883,22 +883,22 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.SKULL_MASK);
 //			output.accept(ItemRegistry.EXPLORERS_HAT);
 //			output.accept(ItemRegistry.LARGE_SPIRIT_TREE_MASK);
-//			output.accept(ItemRegistry.SMALL_SPIRIT_TREE_MASK);
-//			output.accept(ItemRegistry.SMALL_SPIRIT_TREE_MASK_ANIMATED);
+			output.accept(ItemRegistry.SMALL_SPIRIT_TREE_FACE_MASK);
+			output.accept(ItemRegistry.ANIMATED_SMALL_SPIRIT_TREE_FACE_MASK);
 //			output.accept(ItemRegistry.SMALL_GALLERY_FRAME);
 //			output.accept(ItemRegistry.LARGE_GALLERY_FRAME);
 //			output.accept(ItemRegistry.VERY_LARGE_GALLERY_FRAME);
 //			output.accept(ItemRegistry.SILK_MASK);
-//			output.accept(ItemRegistry.WIGHTS_BANE);
-//			output.accept(ItemRegistry.SLUDGE_SLICER);
-//			output.accept(ItemRegistry.CRITTER_CRUNCHER);
-//			output.accept(ItemRegistry.HAG_HACKER);
-//			output.accept(ItemRegistry.VOODOO_DOLL);
-//			output.accept(ItemRegistry.SWIFT_PICK);
+			output.accept(ItemRegistry.WIGHTS_BANE);
+			output.accept(ItemRegistry.SLUDGE_SLICER);
+			output.accept(ItemRegistry.CRITTER_CRUNCHER);
+			output.accept(ItemRegistry.HAG_HACKER);
+			output.accept(ItemRegistry.VOODOO_DOLL);
+			output.accept(ItemRegistry.SWIFT_PICK);
 //			output.accept(ItemRegistry.CHIROBARB_ERUPTER);
 //			output.accept(ItemRegistry.CHIROBARB_SHOCK_ERUPTER);
-//			output.accept(ItemRegistry.MIST_STAFF);
-//			output.accept(ItemRegistry.SHADOW_STAFF);
+			output.accept(ItemRegistry.MIST_STAFF);
+			output.accept(ItemRegistry.SHADOW_STAFF);
 			output.accept(ItemRegistry.RECORD_ASTATOS);
 			output.accept(ItemRegistry.RECORD_BETWEEN_YOU_AND_ME);
 			output.accept(ItemRegistry.RECORD_CHRISTMAS_ON_THE_MARSH);
@@ -918,13 +918,14 @@ public class CreativeGroupRegistry {
 			//crimson amulet
 			//green amulet
 			//amulet slot
-			//rings x6
+			//rings x5
+			output.accept(ItemRegistry.RING_OF_POWER);
 			//lore scraps x10
 			//mummy bait
 			output.accept(ItemRegistry.BARK_AMULET);
 			output.accept(ItemRegistry.AMATE_MAP);
 			//bone wayfinder
-			//item magnet
+			output.accept(ItemRegistry.MAGIC_ITEM_MAGNET);
 			//gem singer
 			//rocksnot pod
 		}).build());

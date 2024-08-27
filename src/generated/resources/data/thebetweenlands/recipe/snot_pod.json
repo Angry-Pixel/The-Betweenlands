@@ -1,0 +1,12 @@
+{
+  "type": "thebetweenlands:animator",
+  "input": {
+    "item": "thebetweenlands:snot"
+  },
+  "required_fuel": 1,
+  "required_life": 1,
+  "result_stack": {
+    "count": 1,
+    "id": "thebetweenlands:snot_pod"
+  }
+}

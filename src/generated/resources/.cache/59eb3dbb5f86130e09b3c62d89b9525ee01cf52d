@@ -1,4 +1,4 @@
-// 1.21.1	2024-08-25T21:35:23.8476732	Loot Tables
+// 1.21.1	2024-08-27T12:14:18.5990639	Loot Tables
 dc3a81f8c01d95bd4c63e6606d7e9b3e14b5b687 data/thebetweenlands/loot_table/entities/anadia.json
 70e4322dbd1273df2e63287e6aa63992abed72c3 data/thebetweenlands/loot_table/entities/bubbler_crab.json
 2d0b67ae825a12a3266904c32ad12dc3539411dc data/thebetweenlands/loot_table/entities/gecko.json
@@ -9,3 +9,6 @@ dc3a81f8c01d95bd4c63e6606d7e9b3e14b5b687 data/thebetweenlands/loot_table/entitie
 d9f33d5bfe4bd4e5656765f304088271aacdad52 data/thebetweenlands/loot_table/gameplay/anadia_head.json
 bf78f47b8a9077c86b9f95d3b301f03ae666f7f7 data/thebetweenlands/loot_table/gameplay/anadia_tail.json
 151de74f4495caab3d2ee77afdb57d4bd7f2d94b data/thebetweenlands/loot_table/gameplay/anadia_treasure.json
+9eae94e53c378ccc7ef0ffce5136891956ca8e19 data/thebetweenlands/loot_table/gameplay/animator/fabricated_scroll.json
+dde308816f8923b685b72def4b9464557c25f291 data/thebetweenlands/loot_table/gameplay/animator/scroll.json
+9307bc65684d3a6139ba9a0a50633e51c35ba013 data/thebetweenlands/loot_table/gameplay/music_disc.json

@@ -23,7 +23,8 @@ public class RegistryProvider extends DatapackBuiltinEntriesProvider {
 		.add(Registries.DIMENSION_TYPE, DimensionRegistries::bootstrapType)
 		.add(Registries.NOISE_SETTINGS, DimensionRegistries::bootstrapNoise)
 		.add(Registries.JUKEBOX_SONG, MusicRegistry::bootstrap)
-		.add(BLRegistries.Keys.ASPECTS, AspectRegistry::bootstrap);
+		.add(BLRegistries.Keys.ASPECTS, AspectRegistry::bootstrap)
+		.add(Registries.DAMAGE_TYPE, DamageTypeRegistry::bootstrap);
 
 	public RegistryProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
 		super(output, provider, BUILDER, Set.of("minecraft", TheBetweenlands.ID));

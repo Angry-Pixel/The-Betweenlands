@@ -1,0 +1,12 @@
+{
+  "type": "thebetweenlands:animator",
+  "input": {
+    "item": "thebetweenlands:sludge_worm_egg_sac"
+  },
+  "required_fuel": 6,
+  "required_life": 3,
+  "result_stack": {
+    "count": 1,
+    "id": "thebetweenlands:sludge_worm_arrow"
+  }
+}

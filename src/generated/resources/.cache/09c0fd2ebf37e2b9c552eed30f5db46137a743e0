@@ -1,3 +1,5 @@
-// 1.21.1	2024-08-17T11:29:00.9533403	Tags for minecraft:entity_type mod id thebetweenlands
+// 1.21.1	2024-08-27T12:14:18.6050736	Tags for minecraft:entity_type mod id thebetweenlands
 9aac66836fd0f5b82db0bf114aca5ac27d40dfa6 data/minecraft/tags/entity_type/can_breathe_under_water.json
+14cce96b27fee784266db8912b804acfb02fe7b8 data/thebetweenlands/tags/entity_type/hag_hacker_instakills.json
 58b4a5a804ab53c1c5a60a5177f73eb453dd8c57 data/thebetweenlands/tags/entity_type/ignores_weedwood_bushes.json
+2cfa151ea9a92efe076b837822ea3758e566bf72 data/thebetweenlands/tags/entity_type/wights_bane_instakills.json

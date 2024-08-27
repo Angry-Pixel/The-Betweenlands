@@ -1,0 +1,125 @@
+{
+  "type": "minecraft:empty",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 12.0,
+                "min": 5.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "thebetweenlands:octine_ingot",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 12.0,
+                "min": 5.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "thebetweenlands:syrmorite_ingot",
+          "weight": 20
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:voodoo_doll",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:magic_item_magnet",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:swift_pick",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:wights_bane",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:hag_hacker",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:critter_cruncher",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:sludge_slicer",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:skull_mask",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:amulet_socket",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 3.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "thebetweenlands:valonite_shard",
+          "weight": 12
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:ring_of_power",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:loot_table",
+          "value": "thebetweenlands:gameplay/music_disc",
+          "weight": 5
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:shadow_staff",
+          "weight": 10
+        },
+        {
+          "type": "minecraft:item",
+          "name": "thebetweenlands:mist_staff",
+          "weight": 10
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "thebetweenlands:gameplay/animator/scroll"
+}
