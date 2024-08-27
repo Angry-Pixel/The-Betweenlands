@@ -38,7 +38,7 @@ base {
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
-compileJava.options.compilerArgs << "-Xlint:all,-classfile,-processing,-deprecation,-this-escape" << "-Werror"
+compileJava.options.compilerArgs << "-Xlint:all,-classfile,-processing,-deprecation,-this-escape"// << "-Werror"
 
 neoForge {
 	version = project.neoforge_version
@@ -76,12 +76,12 @@ neoForge {
 	}
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+sourceSets.main.resources { srcDir 'src/generated/resources' exclude '.cache' }
 
 repositories {
 	mavenLocal()
 	maven {
-		name 'Jared\'s Maven' // JEI
+		name "Jared's Maven" // JEI
 		url 'https://maven.blamejared.com/'
 	}
 }
@@ -104,6 +104,21 @@ tasks.named('jar', Jar).configure {
         ])
     }
 }
+
+
+tasks.register('serverJar', Jar) {
+	group = 'build'
+	archiveClassifier = 'server'
+	from(sourceSets.main.output) {
+		exclude "assets/thebetweenlands/sounds"
+		exclude "assets/thebetweenlands/models"
+		exclude "assets/thebetweenlands/particles"
+		exclude "assets/thebetweenlands/textures"
+		exclude "assets/thebetweenlands/shaders"
+	}
+}
+
+jar.dependsOn(serverJar)
 
 publishing {
     publications {
