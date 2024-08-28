@@ -31,6 +31,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation LOOT_URN_1 = register("loot_urn_1");
 	public static final ModelLayerLocation LOOT_URN_2 = register("loot_urn_2");
 	public static final ModelLayerLocation LOOT_URN_3 = register("loot_urn_3");
+	public static final ModelLayerLocation OFFERING_TABLE = register("offering_table");
 	public static final ModelLayerLocation PURIFIER = register("purifier");
 	public static final ModelLayerLocation ROOTMAN_SIMULACRUM_1 = register("rootman_simulacrum_1");
 	public static final ModelLayerLocation ROOTMAN_SIMULACRUM_2 = register("rootman_simulacrum_2");

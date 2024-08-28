@@ -63,6 +63,6 @@
     }
   },
   "textures": {
-    "particle": "thebetweenlands:block/particle/wind_chime_particle"
+    "particle": "thebetweenlands:block/smooth_cragrock"
   }
 }

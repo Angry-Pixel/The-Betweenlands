@@ -286,7 +286,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> BARK_AMULET = ITEMS.register("bark_amulet", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> AMATE_MAP = ITEMS.register("amate_map", () -> new EmptyAmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> FILLED_AMATE_MAP = ITEMS.register("filled_amate_map", () -> new AmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
-	//bone wayfinder
+	public static final DeferredItem<Item> BONE_WAYFINDER = ITEMS.register("bone_wayfinder", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> MAGIC_ITEM_MAGNET = ITEMS.register("magic_item_magnet", () -> new Item(new Item.Properties().stacksTo(1)));
 	//gem singer
 	public static final DeferredItem<Item> SNOT_POD = ITEMS.register("snot_pod", () -> new Item(new Item.Properties().stacksTo(1)));
