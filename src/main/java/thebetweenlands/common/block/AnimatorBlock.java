@@ -47,24 +47,24 @@ public class AnimatorBlock extends HorizontalBaseEntityBlock {
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
 		if (level.isClientSide()) {
+			return InteractionResult.SUCCESS;
+		} else {
+			if (level.getBlockEntity(pos) instanceof AnimatorBlockEntity animator) {
+				if (!animator.itemAnimated) {
+					player.openMenu(animator, buf -> buf.writeBlockPos(pos));
+				} else {
+					SingleRecipeInput recipeInput = new SingleRecipeInput(animator.itemToAnimate);
+					Optional<RecipeHolder<AnimatorRecipe>> recipe = level.getRecipeManager().getRecipeFor(RecipeRegistry.ANIMATOR_RECIPE.get(), recipeInput, level);
+					if (recipe.isPresent() || recipe.get().value().onRetrieved(player, pos, recipeInput)) {
+						player.openMenu(animator, buf -> buf.writeBlockPos(pos));
+					}
+					animator.fuelConsumed = 0;
+				}
+				animator.itemToAnimate = ItemStack.EMPTY;
+				animator.itemAnimated = false;
+			}
 			return InteractionResult.CONSUME;
 		}
-		if (level.getBlockEntity(pos) instanceof AnimatorBlockEntity animator) {
-			if (!animator.itemAnimated) {
-				player.openMenu(animator, buf -> buf.writeBlockPos(pos));
-			} else {
-				SingleRecipeInput recipeInput = new SingleRecipeInput(animator.itemToAnimate);
-				Optional<RecipeHolder<AnimatorRecipe>> recipe = level.getRecipeManager().getRecipeFor(RecipeRegistry.ANIMATOR_RECIPE.get(), recipeInput, level);
-				if (recipe.isPresent() || recipe.get().value().onRetrieved(player, pos, recipeInput)) {
-					player.openMenu(animator, buf -> buf.writeBlockPos(pos));
-				}
-				animator.fuelConsumed = 0;
-			}
-			animator.itemToAnimate = ItemStack.EMPTY;
-			animator.itemAnimated = false;
-		}
-
-		return super.useWithoutItem(state, level, pos, player, hitResult);
 	}
 
 	@Override

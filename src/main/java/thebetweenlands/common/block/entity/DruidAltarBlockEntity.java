@@ -17,6 +17,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,13 +26,13 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.api.recipes.DruidAltarRecipe;
 import thebetweenlands.common.block.DruidAltarBlock;
 import thebetweenlands.common.block.DruidStoneBlock;
+import thebetweenlands.common.inventory.DruidAltarMenu;
 import thebetweenlands.common.items.recipe.MultiStackInput;
 import thebetweenlands.common.network.clientbound.UpdateDruidAltarProgressPacket;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 
 import javax.annotation.Nullable;
-import java.util.Optional;
 
 public class DruidAltarBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer {
 
@@ -45,8 +46,7 @@ public class DruidAltarBlockEntity extends BaseContainerBlockEntity implements W
 	public float prevRenderYOffset;
 	public int craftingProgress = 0;
 	private boolean circleShouldRevert = true;
-	@Nullable
-	private DruidAltarRecipe currentRecipe;
+	public final RecipeManager.CachedCheck<MultiStackInput, DruidAltarRecipe> quickCheck = RecipeManager.createCheck(RecipeRegistry.DRUID_ALTAR_RECIPE.get());
 
 	protected NonNullList<ItemStack> items = NonNullList.withSize(5, ItemStack.EMPTY);
 
@@ -59,6 +59,9 @@ public class DruidAltarBlockEntity extends BaseContainerBlockEntity implements W
 			entity.checkDruidCircleBlocks(level, pos);
 			entity.circleShouldRevert = false;
 		}
+
+		MultiStackInput input = new MultiStackInput(entity.getItems().subList(1, 5));
+		RecipeHolder<DruidAltarRecipe> recipe = entity.quickCheck.getRecipeFor(input, level).orElse(null);
 		if (level.isClientSide()) {
 			entity.prevRotation = entity.rotation;
 			entity.rotation += ROTATION_SPEED;
@@ -70,24 +73,23 @@ public class DruidAltarBlockEntity extends BaseContainerBlockEntity implements W
 				entity.craftingProgress++;
 			}
 			entity.prevRenderYOffset = entity.renderYOffset;
-			entity.renderYOffset = (float) ((double) entity.craftingProgress / (double) (entity.currentRecipe != null ? entity.currentRecipe.processTime() : DruidAltarBlockEntity.DEFAULT_CRAFTING_TIME) * (FINAL_HEIGHT - 0.2D) + 1.2D);
+			entity.renderYOffset = (float) ((double) entity.craftingProgress / (double) (recipe != null ? recipe.value().processTime() : DruidAltarBlockEntity.DEFAULT_CRAFTING_TIME) * (FINAL_HEIGHT - 0.2D) + 1.2D);
 		} else {
-			if (entity.currentRecipe != null) {
-				MultiStackInput input = new MultiStackInput(entity.getItems().subList(1, 5));
+			if (entity.craftingProgress != 0) {
 				// Sync clients every second
 				if (entity.craftingProgress % 20 == 0 || entity.craftingProgress == 1) {
 					entity.sendCraftingProgressPacket(level, pos);
 				}
 				entity.craftingProgress++;
-				if (!entity.currentRecipe.matches(input, level) || !entity.getItems().getFirst().isEmpty()) {
+				if (recipe == null || !entity.getItems().getFirst().isEmpty()) {
 					entity.stopCraftingProcess(level, pos, state);
 				} else {
-					entity.currentRecipe.onCrafting(level, pos, input);
-					if (entity.craftingProgress >= entity.currentRecipe.processTime()) {
-						ItemStack stack = entity.currentRecipe.assemble(input, level.registryAccess());
+					recipe.value().onCrafting(level, pos, input);
+					if (entity.craftingProgress >= recipe.value().processTime()) {
+						ItemStack stack = recipe.value().assemble(input, level.registryAccess());
 						entity.getItems().clear();
 						entity.getItems().set(0, stack);
-						entity.currentRecipe.onCrafted(level, pos, input, stack);
+						recipe.value().onCrafted(level, pos, input, stack);
 						entity.stopCraftingProcess(level, pos, state);
 					}
 				}
@@ -127,7 +129,6 @@ public class DruidAltarBlockEntity extends BaseContainerBlockEntity implements W
 		PacketDistributor.sendToPlayersNear((ServerLevel) level, null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 64.0D, new UpdateDruidAltarProgressPacket(this, 0));
 		// Does the metadata stuff for the circle animated textures
 		this.checkDruidCircleBlocks(level, pos);
-		this.currentRecipe = null;
 	}
 
 	public void sendCraftingProgressPacket(Level level, BlockPos pos) {
@@ -160,13 +161,11 @@ public class DruidAltarBlockEntity extends BaseContainerBlockEntity implements W
 
 	@Override
 	public void setItem(int slot, ItemStack stack) {
-		this.getItems().set(slot, stack);
-		stack.limitSize(this.getMaxStackSize(stack));
+		super.setItem(slot, stack);
 		MultiStackInput input = new MultiStackInput(this.getItems().subList(1, 5));
-		Optional<RecipeHolder<DruidAltarRecipe>> holder = this.getLevel().getRecipeManager().getRecipeFor(RecipeRegistry.DRUID_ALTAR_RECIPE.get(), input, this.getLevel());
-		if (!this.getLevel().isClientSide() && holder.isPresent() && !stack.isEmpty() && this.getItem(0).isEmpty() && this.craftingProgress == 0) {
-			this.currentRecipe = holder.get().value();
-			this.currentRecipe.onStartCrafting(this.getLevel(), this.getBlockPos(), input);
+		RecipeHolder<DruidAltarRecipe> recipe = this.quickCheck.getRecipeFor(input, this.getLevel()).orElse(null);
+		if (!this.getLevel().isClientSide() && recipe != null && !stack.isEmpty() && this.getItem(0).isEmpty() && this.craftingProgress == 0) {
+			recipe.value().onStartCrafting(this.getLevel(), this.getBlockPos(), input);
 			this.startCraftingProcess(this.getLevel(), this.getBlockPos(), this.getBlockState());
 		}
 	}
@@ -191,10 +190,9 @@ public class DruidAltarBlockEntity extends BaseContainerBlockEntity implements W
 		this.items = items;
 	}
 
-	//TODO
 	@Override
 	protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
-		return null;
+		return new DruidAltarMenu(containerId, inventory, this);
 	}
 
 	@Override

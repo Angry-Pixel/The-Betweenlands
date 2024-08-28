@@ -11,20 +11,28 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.common.util.RecipeMatcher;
 import thebetweenlands.api.recipes.DruidAltarRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public record DruidAltarAssemblyRecipe(NonNullList<Ingredient> items, ItemStack result, int processTime) implements DruidAltarRecipe {
 
 	@Override
 	public boolean matches(MultiStackInput input, Level level) {
-		if (input.size() != this.items.size()) {
+		if (input.ingredientCount() != this.items.size()) {
 			return false;
 		}
-		return input.size() == 1 && this.items.size() == 1
-			? this.items.getFirst().test(input.getItem(0))
-			: input.stackedContents().canCraft(this, null);
+		List<ItemStack> nonEmptyItems = new ArrayList<>(input.ingredientCount());
+		for (var item : input.items()) {
+			if (!item.isEmpty()) {
+				nonEmptyItems.add(item);
+			}
+		}
+		return RecipeMatcher.findMatches(nonEmptyItems, this.items) != null;
 	}
 
 	@Override

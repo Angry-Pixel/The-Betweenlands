@@ -16,6 +16,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.neoforged.neoforge.common.util.RecipeMatcher;
 import thebetweenlands.api.recipes.DruidAltarRecipe;
 import thebetweenlands.common.block.entity.spawner.BetweenlandsBaseSpawner;
 import thebetweenlands.common.block.entity.spawner.MobSpawnerBlockEntity;
@@ -23,16 +24,23 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public record DruidAltarReversionRecipe(NonNullList<Ingredient> items, int processTime) implements DruidAltarRecipe {
 
 	@Override
 	public boolean matches(MultiStackInput input, Level level) {
-		if (input.size() != this.items.size()) {
+		if (input.ingredientCount() != this.items.size()) {
 			return false;
 		}
-		return input.size() == 1 && this.items.size() == 1
-			? this.items.getFirst().test(input.getItem(0))
-			: input.stackedContents().canCraft(this, null);
+		List<ItemStack> nonEmptyItems = new ArrayList<>(input.ingredientCount());
+		for (var item : input.items()) {
+			if (!item.isEmpty()) {
+				nonEmptyItems.add(item);
+			}
+		}
+		return RecipeMatcher.findMatches(nonEmptyItems, this.items) != null;
 	}
 
 	@Override

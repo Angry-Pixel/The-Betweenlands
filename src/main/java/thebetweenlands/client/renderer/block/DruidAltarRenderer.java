@@ -17,17 +17,21 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.AABB;
+import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
+import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.BLModelLayers;
+import thebetweenlands.client.renderer.BLRenderTypes;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.DruidAltarBlock;
 import thebetweenlands.common.block.entity.DruidAltarBlockEntity;
 
 public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEntity> {
 
-	private static final float HALF_SQRT_3 = (float)(Math.sqrt(3.0) / 2.0);
+	private static final float HALF_SQRT_3 = (float) (Math.sqrt(3.0D) / 2.0D);
 
 	private static final RenderType ACTIVE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/druid_altar_active.png"));
 	private static final RenderType ACTIVE_GLOW = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/druid_altar_active_glow.png"));
@@ -44,25 +48,28 @@ public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEn
 
 	@Override
 	public void render(DruidAltarBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource source, int light, int overlay) {
-
+		float renderRotation = entity.rotation + (entity.rotation - entity.prevRotation) * partialTicks;
+		//altar
+		float lighting = 150.0F;
+		if (entity.getBlockState().getValue(DruidAltarBlock.ACTIVE)) {
+			lighting = (float) Math.sin(Math.toRadians(renderRotation) * 4.0f) * 105.0F + 150.0F;
+		}
 		stack.pushPose();
 		stack.translate(0.5F, 1.0F, 0.5F);
 		stack.mulPose(Axis.XP.rotationDegrees(180.0F));
 		stack.translate(0.0F, 1.0F, 0.0F);
-		stack.scale(-1.0F, 1.0F, 1.0F);
-		//altar
 		stack.pushPose();
+		stack.scale(-1.0F, 1.0F, 1.0F);
+
 		this.altar.render(stack, source.getBuffer(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVE : NORMAL), light, overlay);
-		this.altar.render(stack, source.getBuffer(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVE_GLOW : NORMAL_GLOW), LightTexture.FULL_BRIGHT, overlay);
+		this.altar.render(stack, source.getBuffer(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVE_GLOW : NORMAL_GLOW), Math.max(light + (int) lighting, LightTexture.FULL_BLOCK), overlay);
 		stack.popPose();
 
 		//stones
-		float renderRotation = entity.rotation + (entity.rotation - entity.prevRotation) * partialTicks;
-		stack.pushPose();
 		stack.mulPose(Axis.YP.rotationDegrees(renderRotation));
 		stack.translate(0.0F, -1.5F, 0.0F);
 		this.stones.render(stack, source.getBuffer(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVE : NORMAL), light, overlay);
-		this.stones.render(stack, source.getBuffer(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVE_GLOW : NORMAL_GLOW), LightTexture.FULL_BRIGHT, overlay);
+		this.stones.render(stack, source.getBuffer(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVE_GLOW : NORMAL_GLOW), Math.max(light + (int) lighting, LightTexture.FULL_BLOCK), overlay);
 		stack.popPose();
 
 		//Animate the 4 talisman pieces
@@ -72,10 +79,10 @@ public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEn
 
 			stack.pushPose();
 			stack.translate(0.5D, 3.1D, 0.5D);
-			stack.mulPose(Axis.YP.rotation(renderRotation * 2.0F));
-			float shineScale = (float) (0.04f * Math.pow(1.0D - (DruidAltarBlockEntity.FINAL_HEIGHT + 1.0D - yOff) / DruidAltarBlockEntity.FINAL_HEIGHT, 12));
+			stack.mulPose(Axis.YP.rotationDegrees(renderRotation * 2.0F));
+			float shineScale = (float) (0.04F * Math.pow(1.0D - (DruidAltarBlockEntity.FINAL_HEIGHT + 1.0D - yOff) / DruidAltarBlockEntity.FINAL_HEIGHT, 12));
 			stack.scale(shineScale, shineScale, shineScale);
-			this.renderShine(stack, source.getBuffer(RenderType.dragonRays()), (float) Math.sin(Math.toRadians(renderRotation)) / 2.0f - 0.2f, (int) (80 * Math.pow(1.0D - (DruidAltarBlockEntity.FINAL_HEIGHT + 1.0D - yOff) / DruidAltarBlockEntity.FINAL_HEIGHT, 12)));
+			this.renderShine(stack, source.getBuffer(RenderType.dragonRays()), (float) Math.sin(Math.toRadians(renderRotation)) / 2.0F - 0.2F, (int) (80 * Math.pow(1.0D - (DruidAltarBlockEntity.FINAL_HEIGHT + 1.0D - yOff) / DruidAltarBlockEntity.FINAL_HEIGHT, 12)));
 			stack.popPose();
 		}
 		for (int xi = 0; xi < 2; xi++) {
@@ -84,11 +91,11 @@ public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEn
 				if (item.isEmpty()) {
 					continue;
 				}
-				float xOff = xi == 0 ? -0.18f : 1.18f;
-				float zOff = zi == 0 ? -0.18f : 1.18f;
+				float xOff = xi == 0 ? -0.18F : 1.18F;
+				float zOff = zi == 0 ? -0.18F : 1.18F;
 				stack.pushPose();
 				stack.translate(xOff, 1, zOff);
-				this.renderCone(stack, source.getBuffer(RenderType.dragonRays()), 5);
+				this.renderCone(stack, source.getBuffer(BLRenderTypes.druidCone()), 5);
 				stack.popPose();
 				Vector3d midVec = new Vector3d();
 				midVec.x = 0.5F;
@@ -103,9 +110,9 @@ public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEn
 				midVec.z += diffVec.z;
 				stack.pushPose();
 				stack.translate(midVec.x, yOff, midVec.z);
-				stack.scale(0.3f, 0.3f, 0.3f);
-				stack.mulPose(Axis.YP.rotation(-renderRotation * 2.0f));
-				Minecraft.getInstance().getItemRenderer().renderStatic(item, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
+				stack.scale(0.3F, 0.3F, 0.3F);
+				stack.mulPose(Axis.YP.rotationDegrees(-renderRotation * 2.0F));
+				Minecraft.getInstance().getItemRenderer().renderStatic(item, ItemDisplayContext.FIXED, LightTexture.FULL_BRIGHT, overlay, stack, source, null, 0);
 				stack.popPose();
 			}
 		}
@@ -115,23 +122,23 @@ public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEn
 		if (!itemTalisman.isEmpty()) {
 			stack.pushPose();
 			stack.translate(0.5D, 3.1D, 0.5D);
-			stack.mulPose(Axis.YP.rotation(-renderRotation * 2.0F));
+			stack.mulPose(Axis.YP.rotationDegrees(renderRotation * 2.0F));
 			stack.scale(0.04F, 0.04F, 0.04F);
 			this.renderShine(stack, source.getBuffer(RenderType.dragonRays()), (float) Math.sin(Math.toRadians(renderRotation)) / 2.0F - 0.2F, 80);
 			stack.popPose();
 			stack.pushPose();
 			stack.translate(0.5D, 3.1D, 0.5D);
-			stack.scale(0.3f, 0.3f, 0.3f);
-			stack.mulPose(Axis.YP.rotation(-renderRotation * 2.0F));
-			Minecraft.getInstance().getItemRenderer().renderStatic(itemTalisman, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
+			stack.mulPose(Axis.YP.rotationDegrees(-renderRotation * 2.0F));
+			stack.scale(0.3F, 0.3F, 0.3F);
+
+			Minecraft.getInstance().getItemRenderer().renderStatic(itemTalisman, ItemDisplayContext.FIXED, LightTexture.FULL_BRIGHT, overlay, stack, source, null, 0);
 			stack.popPose();
 		}
-
-		stack.popPose();
 	}
 
 	private void renderShine(PoseStack poseStack, VertexConsumer buffer, float rotation, int iterations) {
-		float f2 = 0.0f;
+		poseStack.pushPose();
+		float f2 = 0.0F;
 		if (rotation > 0.8F) {
 			f2 = (rotation - 0.8F) / 0.2F;
 		}
@@ -144,45 +151,36 @@ public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEn
 		Quaternionf quaternionf = new Quaternionf();
 
 		for (int l = 0; l < iterations; l++) {
-			quaternionf.rotationXYZ(
-					randomsource.nextFloat() * (float) (Math.PI * 2),
-					randomsource.nextFloat() * (float) (Math.PI * 2),
-					randomsource.nextFloat() * (float) (Math.PI * 2))
-				.rotateXYZ(
-					randomsource.nextFloat() * (float) (Math.PI * 2),
-					randomsource.nextFloat() * (float) (Math.PI * 2),
-					randomsource.nextFloat() * (float) (Math.PI * 2) + rotation * (float) (Math.PI / 2));
+			quaternionf
+				.rotationXYZ(randomsource.nextFloat() * Mth.TWO_PI, randomsource.nextFloat() * Mth.TWO_PI, randomsource.nextFloat() * Mth.TWO_PI)
+				.rotateXYZ(randomsource.nextFloat() * Mth.TWO_PI, randomsource.nextFloat() * Mth.TWO_PI, randomsource.nextFloat() * Mth.TWO_PI + rotation * Mth.HALF_PI);
 			poseStack.mulPose(quaternionf);
 			float pos1 = randomsource.nextFloat() * 20.0F + 5.0F + f2 * 10.0F;
 			float pos2 = randomsource.nextFloat() * 2.0F + 1.0F + f2 * 2.0F;
 			vector3f1.set(-HALF_SQRT_3 * pos2, pos1, -0.5F * pos2);
 			vector3f2.set(HALF_SQRT_3 * pos2, pos1, -0.5F * pos2);
 			vector3f3.set(0.0F, pos1, pos2);
-			PoseStack.Pose posestack$pose = poseStack.last();
-			buffer.addVertex(posestack$pose, vector3f).setColor(i);
-			buffer.addVertex(posestack$pose, vector3f1).setColor(16711935);
-			buffer.addVertex(posestack$pose, vector3f2).setColor(16711935);
-			buffer.addVertex(posestack$pose, vector3f).setColor(i);
-			buffer.addVertex(posestack$pose, vector3f2).setColor(16711935);
-			buffer.addVertex(posestack$pose, vector3f3).setColor(16711935);
-			buffer.addVertex(posestack$pose, vector3f).setColor(i);
-			buffer.addVertex(posestack$pose, vector3f3).setColor(16711935);
-			buffer.addVertex(posestack$pose, vector3f1).setColor(16711935);
+			PoseStack.Pose pose = poseStack.last();
+			buffer.addVertex(pose, vector3f).setColor(i);
+			buffer.addVertex(pose, vector3f1).setColor(0x0000FF);
+			buffer.addVertex(pose, vector3f2).setColor(0x0000FF);
+			buffer.addVertex(pose, vector3f).setColor(i);
+			buffer.addVertex(pose, vector3f2).setColor(0x0000FF);
+			buffer.addVertex(pose, vector3f3).setColor(0x0000FF);
+			buffer.addVertex(pose, vector3f).setColor(i);
+			buffer.addVertex(pose, vector3f3).setColor(0x0000FF);
+			buffer.addVertex(pose, vector3f1).setColor(0x0000FF);
 		}
 
 		poseStack.popPose();
 	}
 
 	private void renderCone(PoseStack stack, VertexConsumer consumer, int faces) {
+		Matrix4f matrix = stack.last().pose();
 		stack.pushPose();
-		float step = 360.0f / (float) faces;
+		float step = 360.0F / faces;
 
-		RenderSystem.enableBlend();
-		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
-		RenderSystem.enableCull();
-		RenderSystem.depthMask(false);
-
-		for (float i = 0; i < 360.0f; i += step) {
+		for (float i = 0; i < 360.0F; i += step) {
 			float lr = 0.1F;
 			float ur = 0.3F;
 			float height = 0.2F;
@@ -191,24 +189,24 @@ public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEn
 			float sin2 = Mth.sin((float) Math.toRadians(i + step));
 			float cos2 = Mth.cos((float) Math.toRadians(i + step));
 
-			consumer.addVertex(sin * lr, 0, cos * lr).setColor(255, 255, 255, 0);
-			consumer.addVertex(sin2 * lr, 0, cos2 * lr).setColor(255, 255, 255, 0);
+			consumer.addVertex(matrix, sin * lr, 0, cos * lr).setColor(255, 255, 255, 0);
+			consumer.addVertex(matrix, sin2 * lr, 0, cos2 * lr).setColor(255, 255, 255, 0);
 
-			consumer.addVertex(sin2 * ur, height, cos2 * ur).setColor(0, 0, 255, 60);
-			consumer.addVertex(sin * ur, height, cos * ur).setColor(0, 0, 255, 60);
+			consumer.addVertex(matrix, sin2 * ur, height, cos2 * ur).setColor(0, 0, 255, 60);
+			consumer.addVertex(matrix, sin * ur, height, cos * ur).setColor(0, 0, 255, 60);
 
-			consumer.addVertex(sin * ur, height, cos * ur).setColor(0, 0, 255, 60);
-			consumer.addVertex(sin2 * ur, height, cos2 * ur).setColor(0, 0, 255, 60);
+			consumer.addVertex(matrix, sin * ur, height, cos * ur).setColor(0, 0, 255, 60);
+			consumer.addVertex(matrix, sin2 * ur, height, cos2 * ur).setColor(0, 0, 255, 60);
 
-			consumer.addVertex(sin2 * lr, 0, cos2 * lr).setColor(255, 255, 255, 0);
-			consumer.addVertex(sin * lr, 0, cos * lr).setColor(255, 255, 255, 0);
+			consumer.addVertex(matrix, sin2 * lr, 0, cos2 * lr).setColor(255, 255, 255, 0);
+			consumer.addVertex(matrix, sin * lr, 0, cos * lr).setColor(255, 255, 255, 0);
 		}
 
-		RenderSystem.depthMask(true);
-		RenderSystem.disableCull();
-		RenderSystem.disableBlend();
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		//Lighting.setupForFlatItems();
 		stack.popPose();
+	}
+
+	@Override
+	public AABB getRenderBoundingBox(DruidAltarBlockEntity entity) {
+		return BlockEntityRenderer.super.getRenderBoundingBox(entity).inflate(1.5D);
 	}
 }

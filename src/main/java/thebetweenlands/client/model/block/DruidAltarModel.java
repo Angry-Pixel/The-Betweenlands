@@ -1,10 +1,7 @@
 package thebetweenlands.client.model.block;
 
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.builders.*;
 
 public class DruidAltarModel {
 
@@ -13,7 +10,7 @@ public class DruidAltarModel {
 		PartDefinition partDefinition = definition.getRoot();
 
 		partDefinition.addOrReplaceChild("altar1", CubeListBuilder.create()
-			.addBox(-16.0F, 0.0F, -16.0F, 32, 3, 32),
+			.addBox(-16.0F, 0.0F, -16.0F, 32, 3, 32, new CubeDeformation(-0.001F)),
 			PartPose.offset(0.0F, -3.0F, 0.0F));
 
 		partDefinition.addOrReplaceChild("altar2", CubeListBuilder.create()
@@ -23,7 +20,7 @@ public class DruidAltarModel {
 
 		partDefinition.addOrReplaceChild("altar3", CubeListBuilder.create()
 				.texOffs(0, 68)
-				.addBox(-15.0F, -9.0F, -15.0F, 30, 3, 30),
+				.addBox(-15.0F, -9.0F, -15.0F, 30, 3, 30, new CubeDeformation(-0.001F)),
 			PartPose.offset(0.0F, -3.0F, 0.0F));
 
 		partDefinition.addOrReplaceChild("altar4", CubeListBuilder.create()
@@ -68,22 +65,22 @@ public class DruidAltarModel {
 
 		partDefinition.addOrReplaceChild("altar12", CubeListBuilder.create()
 				.texOffs(129, 47)
-				.addBox(-8.0F, -12.0F, -8.0F, 16, 1, 3),
+				.addBox(-8.0F, -12.0F, -8.0F, 16, 1, 3, new CubeDeformation(0.001F)),
 			PartPose.offset(0.0F, -3.0F, 0.0F));
 
 		partDefinition.addOrReplaceChild("altar13", CubeListBuilder.create()
 				.texOffs(129, 53)
-				.addBox(-8.0F, -12.0F, 5.0F, 16, 1, 3),
+				.addBox(-8.0F, -12.0F, 5.0F, 16, 1, 3, new CubeDeformation(0.001F)),
 			PartPose.offset(0.0F, -3.0F, 0.0F));
 
 		partDefinition.addOrReplaceChild("altar14", CubeListBuilder.create()
 				.texOffs(129, 59)
-				.addBox(-8.0F, -12.0F, -5.0F, 3, 1, 10),
+				.addBox(-8.0F, -12.0F, -5.0F, 3, 1, 10, new CubeDeformation(0.001F)),
 			PartPose.offset(0.0F, -3.0F, 0.0F));
 
 		partDefinition.addOrReplaceChild("altar15", CubeListBuilder.create()
 				.texOffs(129, 72)
-				.addBox(5.0F, -12.0F, -5.0F, 3, 1, 10),
+				.addBox(5.0F, -12.0F, -5.0F, 3, 1, 10, new CubeDeformation(0.001F)),
 			PartPose.offset(0.0F, -3.0F, 0.0F));
 
 		partDefinition.addOrReplaceChild("grass", CubeListBuilder.create()
