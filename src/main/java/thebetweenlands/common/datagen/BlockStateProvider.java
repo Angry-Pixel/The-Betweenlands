@@ -537,6 +537,7 @@ public class BlockStateProvider extends net.neoforged.neoforge.client.model.gene
 		this.basicItemTex(BlockRegistry.SYRMORITE_HOPPER, false);
 		this.basicItemTex(BlockRegistry.MUD_FLOWER_POT, false);
 		this.basicItemTex(BlockRegistry.MUD_FLOWER_POT_CANDLE, false);
+		this.builtinEntityAndItem(BlockRegistry.GECKO_CAGE, this.modLoc("block/weedwood_planks"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.CENSER, this.modLoc("block/particle/censer_particle"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.ANIMATOR, this.modLoc("block/particle/animator_particle"), 0.625F, 0.0F);
 		this.torchBlockWithItem(BlockRegistry.DAMP_TORCH, BlockRegistry.DAMP_WALL_TORCH);

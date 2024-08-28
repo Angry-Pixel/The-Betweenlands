@@ -228,6 +228,13 @@ public class MobItem extends Item {
 		}
 	}
 
+	public float getMobHealth(ItemStack stack) {
+		if (stack.get(DataComponents.ENTITY_DATA) != null && stack.get(DataComponents.ENTITY_DATA).contains("Health")) {
+			return stack.get(DataComponents.ENTITY_DATA).copyTag().getFloat("Health");
+		}
+		return 20.0F;
+	}
+
 	@Nullable
 	public ResourceLocation getCapturedEntityId(ItemStack stack) {
 		if (!(stack.getItem() instanceof MobItem)) {
