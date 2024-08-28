@@ -549,6 +549,7 @@ public class BlockStateProvider extends net.neoforged.neoforge.client.model.gene
 		this.builtinEntityAndItem(BlockRegistry.ROOTMAN_SIMULACRUM_1, this.modLoc("block/root_bottom"), 0.75F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.ROOTMAN_SIMULACRUM_2, this.modLoc("block/root_bottom"), 0.75F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.ROOTMAN_SIMULACRUM_3, this.modLoc("block/root_bottom"), 0.75F, 0.0F);
+		this.builtinEntityAndItem(BlockRegistry.WIND_CHIME, this.modLoc("block/particle/wind_chime_particle"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.FISHING_TACKLE_BOX, this.modLoc("block/particle/fishing_tackle_box_particle"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.SMOKING_RACK, this.modLoc("block/particle/smoking_rack_particle"), 0.45F, -2.0F);
 		this.builtinEntityAndItem(BlockRegistry.FISH_TRIMMING_TABLE, this.modLoc("block/particle/fish_trimming_table_particle"), 0.625F, 0.0F);

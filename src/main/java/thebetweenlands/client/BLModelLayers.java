@@ -36,6 +36,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation ROOTMAN_SIMULACRUM_2 = register("rootman_simulacrum_2");
 	public static final ModelLayerLocation ROOTMAN_SIMULACRUM_3 = register("rootman_simulacrum_3");
 	public static final ModelLayerLocation SMOKING_RACK = register("smoking_rack");
+	public static final ModelLayerLocation WIND_CHIME = register("wind_chime");
 
 	private static ModelLayerLocation register(String name) {
 		return register(name, "main");

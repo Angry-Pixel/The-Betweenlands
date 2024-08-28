@@ -1,4 +1,4 @@
-// 1.21.1	2024-08-26T18:05:25.6340411	Block States: thebetweenlands
+// 1.21.1	2024-08-27T21:12:59.1874198	Block States: thebetweenlands
 16dbe75f277a12df4d36599c00cff59d1d92875d assets/thebetweenlands/blockstates/ancient_remnant_block.json
 054597b2cc6147a93cbe8522b522e25baafe90fe assets/thebetweenlands/blockstates/angry_betweenstone.json
 49034bf16c5702539cdb1366c34a67055017c4ec assets/thebetweenlands/blockstates/animator.json
@@ -524,6 +524,7 @@ b983e9f9c99f427ce8064b0abb3918831811553b assets/thebetweenlands/blockstates/weed
 6f5440a64c5e7f4bd7e24839ed3f930a7c098ee1 assets/thebetweenlands/blockstates/weedwood_stairs.json
 fc4fee844ad2a71d1c7b47983ba32eca1bdc9c68 assets/thebetweenlands/blockstates/weedwood_trapdoor.json
 d87cccda2ac42c641a715d62e911f293fb245ba9 assets/thebetweenlands/blockstates/weedwood_wall_sign.json
+fc51782dad062448fcad2ec81b677439861cc561 assets/thebetweenlands/blockstates/wind_chime.json
 7ccaa38aac50e3e623ae1bd1ab1feaefefda9383 assets/thebetweenlands/blockstates/wisp.json
 8d0001484ae7ff7d917d5c53d5c9556f3f31f4e4 assets/thebetweenlands/blockstates/worm_pillar.json
 587bf333e22e8a400403d808ba74e98196b41e9e assets/thebetweenlands/blockstates/worm_pillar_top.json
@@ -1487,6 +1488,7 @@ b89a816f69da8ae3fa59c3d0817ea47fa8e3ab36 assets/thebetweenlands/models/block/wee
 6ae9605b10fd675727fa56bb78910020e486acd6 assets/thebetweenlands/models/block/weedwood_trapdoor_open.json
 9732e959d577d4a7069fc6839a26df339dbf209b assets/thebetweenlands/models/block/weedwood_trapdoor_top.json
 e47933cf2c4a6a9c4d90cb9b01170be15edaf4ca assets/thebetweenlands/models/block/weedwood_wall_sign.json
+b2b45213088ebc993ab50f57b53fdeb4e4d2eae0 assets/thebetweenlands/models/block/wind_chime.json
 dde52d6f16f0d74fda60f85d50a55b0e2a8c6705 assets/thebetweenlands/models/block/wisp.json
 a50245a26d75ff43b6c267ebd2c3c9d470a71a82 assets/thebetweenlands/models/block/worm_pillar.json
 dc6580e6390aaa3312646357912caceb1795563e assets/thebetweenlands/models/block/worm_pillar_top.json
@@ -2009,6 +2011,7 @@ e0ad665fb2d5dbc7432ca16a64e1a17818bf916d assets/thebetweenlands/models/item/weed
 834e0acee9a8b960308620c8d6dda0ae7940bfcd assets/thebetweenlands/models/item/weedwood_slab.json
 b094fb9dc82a667c0d5b153847c7c8af4cc29186 assets/thebetweenlands/models/item/weedwood_stairs.json
 5f954f017c3c3089d132f3381744df790bd93c80 assets/thebetweenlands/models/item/weedwood_trapdoor.json
+8e2b0f928fc6f689d0b43ca3e024cc51f2ac1d44 assets/thebetweenlands/models/item/wind_chime.json
 f0b89e65d078e91f6fbeb27c8aac19f70dfad30c assets/thebetweenlands/models/item/wisp.json
 f48c91a9610bc40526e6e7cb7233ef6211727e1f assets/thebetweenlands/models/item/worm_pillar.json
 81742caa45bbe967a92939a24ddfebed339b02a0 assets/thebetweenlands/models/item/worm_pillar_top.json

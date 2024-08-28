@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.environment.IEnvironmentEvent;
@@ -29,7 +30,12 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class WindChimeBlock extends BaseEntityBlock {
 
-	public static final VoxelShape SHAPE = Block.box(2.0, 0.0, 2.0, 14.0, 16.0, 14.0);
+	public static final VoxelShape SHAPE = Shapes.or(
+		Block.box(7.5F, 14.0D, 7.5F, 8.5F, 16.0F, 8.5F),
+		Block.box(6.5F, 13.0D, 6.5F, 9.5F, 14.0F, 9.5F),
+		Block.box(6.0F, 11.0D, 6.0F, 10.0F, 13.0F, 10.0F),
+		Block.box(5.5F, 1.0D, 5.5F, 10.5F, 11.0F, 10.5F)
+	);
 
 	public WindChimeBlock(Properties properties) {
 		super(properties);
@@ -43,6 +49,11 @@ public class WindChimeBlock extends BaseEntityBlock {
 	@Override
 	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
 		return SHAPE;
+	}
+
+	@Override
+	protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		return Shapes.empty();
 	}
 
 	@Override

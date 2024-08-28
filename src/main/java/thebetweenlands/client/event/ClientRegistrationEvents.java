@@ -129,6 +129,7 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.PURIFIER.get(), PurifierRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SIMULACRUM.get(), SimulacrumRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SMOKING_RACK.get(), SmokingRackRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.WIND_CHIME.get(), WindChimeRenderer::new);
 	}
 
 	private static void registerLayerDefinition(final EntityRenderersEvent.RegisterLayerDefinitions event) {
@@ -166,6 +167,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_2, RootmanSimulacrumModels::makeSimulacrum2);
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_3, RootmanSimulacrumModels::makeSimulacrum3);
 		event.registerLayerDefinition(BLModelLayers.SMOKING_RACK, SmokingRackModel::makeModel);
+		event.registerLayerDefinition(BLModelLayers.WIND_CHIME, WindChimeModel::makeModel);
 	}
 
 	private static void registerPropertyOverrides(ModelEvent.ModifyBakingResult event) {
