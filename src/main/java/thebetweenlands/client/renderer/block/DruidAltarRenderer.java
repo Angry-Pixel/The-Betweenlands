@@ -50,9 +50,12 @@ public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEn
 	public void render(DruidAltarBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource source, int light, int overlay) {
 		float renderRotation = entity.rotation + (entity.rotation - entity.prevRotation) * partialTicks;
 		//altar
-		float lighting = 150.0F;
-		if (entity.getBlockState().getValue(DruidAltarBlock.ACTIVE)) {
-			lighting = (float) Math.sin(Math.toRadians(renderRotation) * 4.0f) * 105.0F + 150.0F;
+		int lighting = Math.min(150 + light, LightTexture.FULL_BLOCK);
+		if (entity.getLevel() == null) {
+			//render glowing in item form
+			lighting = LightTexture.FULL_BRIGHT;
+		} else if (entity.getBlockState().getValue(DruidAltarBlock.ACTIVE)) {
+			lighting = (int) Math.min(light + Math.sin(Math.toRadians(renderRotation) * 4.0f) * 105.0F + 150.0F, LightTexture.FULL_BLOCK);
 		}
 		stack.pushPose();
 		stack.translate(0.5F, 1.0F, 0.5F);
@@ -62,14 +65,14 @@ public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEn
 		stack.scale(-1.0F, 1.0F, 1.0F);
 
 		this.altar.render(stack, source.getBuffer(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVE : NORMAL), light, overlay);
-		this.altar.render(stack, source.getBuffer(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVE_GLOW : NORMAL_GLOW), Math.max(light + (int) lighting, LightTexture.FULL_BLOCK), overlay);
+		this.altar.render(stack, source.getBuffer(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVE_GLOW : NORMAL_GLOW), lighting, overlay);
 		stack.popPose();
 
 		//stones
 		stack.mulPose(Axis.YP.rotationDegrees(renderRotation));
 		stack.translate(0.0F, -1.5F, 0.0F);
 		this.stones.render(stack, source.getBuffer(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVE : NORMAL), light, overlay);
-		this.stones.render(stack, source.getBuffer(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVE_GLOW : NORMAL_GLOW), Math.max(light + (int) lighting, LightTexture.FULL_BLOCK), overlay);
+		this.stones.render(stack, source.getBuffer(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVE_GLOW : NORMAL_GLOW), lighting, overlay);
 		stack.popPose();
 
 		//Animate the 4 talisman pieces
