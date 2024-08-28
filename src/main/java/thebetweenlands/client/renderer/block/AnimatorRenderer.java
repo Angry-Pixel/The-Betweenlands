@@ -26,10 +26,7 @@ import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.AnimatorBlock;
 import thebetweenlands.common.block.entity.AnimatorBlockEntity;
-import thebetweenlands.common.registries.RecipeRegistry;
 import thebetweenlands.util.EntityCache;
-
-import java.util.Optional;
 
 public class AnimatorRenderer implements BlockEntityRenderer<AnimatorBlockEntity> {
 

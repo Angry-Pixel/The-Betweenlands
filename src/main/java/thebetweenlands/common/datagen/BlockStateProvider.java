@@ -182,7 +182,7 @@ public class BlockStateProvider extends net.neoforged.neoforge.client.model.gene
 		this.builtinEntityAndItem(BlockRegistry.LOOT_POT_1, this.modLoc("block/particle/loot_pot_1_particle"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.LOOT_POT_2, this.modLoc("block/particle/loot_pot_2_particle"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.LOOT_POT_3, this.modLoc("block/particle/loot_pot_3_particle"), 0.625F, 0.0F);
-		//monster spawner
+		this.builtinEntityAndItem(BlockRegistry.MOB_SPAWNER, this.modLoc("block/particle/spawner_crystal_particle"), 0.625F, 0.0F);
 		this.pillarWithItem(BlockRegistry.TEMPLE_PILLAR);
 		this.pillarWithItem(BlockRegistry.BETWEENSTONE_PILLAR);
 		this.pillarWithItem(BlockRegistry.PITSTONE_PILLAR);
