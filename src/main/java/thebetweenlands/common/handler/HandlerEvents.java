@@ -20,6 +20,7 @@ public class HandlerEvents {
 		NeoForge.EVENT_BUS.addListener(PlayerDecayHandler::accelerateDecayOnDamage);
 		NeoForge.EVENT_BUS.addListener(PlayerDecayHandler::tickDecay);
 		NeoForge.EVENT_BUS.addListener(PlayerDecayHandler::syncDecayOnJoin);
+		NeoForge.EVENT_BUS.addListener(PlayerDecayHandler::syncDecayOnChangeDimension);
 		
 		//extended reach
 		NeoForge.EVENT_BUS.addListener(ExtendedReachHandler::onAttackEvent);
