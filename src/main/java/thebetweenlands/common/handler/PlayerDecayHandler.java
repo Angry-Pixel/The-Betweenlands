@@ -11,6 +11,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
@@ -155,17 +156,9 @@ public class PlayerDecayHandler {
 		};
 	}
 
-	static void syncDecayOnJoin(PlayerLoggedInEvent event) {
-		Player player = event.getEntity();
-		if(!player.level().isClientSide() && player instanceof ServerPlayer) {
-			IDecayData decayData = player.getData(AttachmentRegistry.DECAY);
-			((ServerPlayer)player).connection.send(new UpdateDecayDataPacket(decayData.getDecayLevel(player), decayData.getPrevDecayLevel(), decayData.getSaturationLevel(), decayData.getAccelerationLevel()));
-		}
-	}
-	
-	static void syncDecayOnChangeDimension(PlayerChangedDimensionEvent event) {
-		Player player = event.getEntity();
-		if(!player.level().isClientSide() && player instanceof ServerPlayer) {
+	static void syncDecayOnJoin(EntityJoinLevelEvent event) {
+		ServerPlayer player = event.getEntity() instanceof ServerPlayer p ? p : null;
+		if(player != null && !player.level().isClientSide()) { // should always be true
 			IDecayData decayData = player.getData(AttachmentRegistry.DECAY);
 			((ServerPlayer)player).connection.send(new UpdateDecayDataPacket(decayData.getDecayLevel(player), decayData.getPrevDecayLevel(), decayData.getSaturationLevel(), decayData.getAccelerationLevel()));
 		}
