@@ -9,7 +9,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import thebetweenlands.api.item.ICustomCorrodible;
@@ -29,10 +28,12 @@ public class ItemTagProvider extends ItemTagsProvider {
 	 * Whether or not an item should be looked at by the corrosion engine
 	 */
 	public static final TagKey<Item> CORRODIBLE = tag("corrodible");
+	
 	/**
 	 * Use default corrosion on an item. Apply to items from other mods you want to be corrodible.
 	 */
 	public static final TagKey<Item> DEFAULT_CORRODIBLE = tag("corrodible/default");
+	
 	/**
 	 * Whether or not an item has custom corrosion information. The item should implement {@link ICustomCorrodible}; this tag will be ignored if it doesn't.
 	 */
@@ -48,7 +49,7 @@ public class ItemTagProvider extends ItemTagsProvider {
 
 		// Those two "inherit" from this one
 		this.tag(CORRODIBLE).addTag(DEFAULT_CORRODIBLE).addTag(CUSTOM_CORRODIBLE);
-		this.tag(DEFAULT_CORRODIBLE).add(Items.DIAMOND_SWORD);
+		this.tag(DEFAULT_CORRODIBLE);
 		this.tag(CUSTOM_CORRODIBLE);
 
 		this.tag(GIVES_FOOD_SICKNESS).add(ItemRegistry.MIRE_SNAIL_EGG.get(), ItemRegistry.COOKED_MIRE_SNAIL_EGG.get(),
@@ -77,6 +78,69 @@ public class ItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.SMOKED_SNAIL_FLESH.get(), ItemRegistry.RAW_OLM_EGG.get(),
 			ItemRegistry.COOKED_OLM_EGG.get(), ItemRegistry.OLMLETTE.get(),
 			ItemRegistry.SILK_GRUB.get());
+
+		this.tag(ItemTags.SWORDS).add(
+				ItemRegistry.WEEDWOOD_SWORD.get(),
+				ItemRegistry.BONE_SWORD.get(),
+				ItemRegistry.OCTINE_SWORD.get(),
+				ItemRegistry.VALONITE_SWORD.get()
+				// TODO Shockwave, Ancient
+			);
+
+		this.tag(ItemTags.PICKAXES).add(
+				ItemRegistry.WEEDWOOD_PICKAXE.get(),
+				ItemRegistry.BONE_PICKAXE.get(),
+				ItemRegistry.OCTINE_PICKAXE.get(),
+				ItemRegistry.VALONITE_PICKAXE.get(),
+				ItemRegistry.SWIFT_PICK.get()
+			);
+
+		this.tag(ItemTags.AXES).add(
+				ItemRegistry.WEEDWOOD_AXE.get(),
+				ItemRegistry.BONE_AXE.get(),
+				ItemRegistry.OCTINE_AXE.get(),
+				ItemRegistry.VALONITE_AXE.get(),
+				ItemRegistry.VALONITE_GREATAXE.get()
+				// TODO Ancient Greataxe
+			);
+
+		this.tag(ItemTags.SHOVELS).add(
+				ItemRegistry.WEEDWOOD_SHOVEL.get(),
+				ItemRegistry.BONE_SHOVEL.get(),
+				ItemRegistry.OCTINE_SHOVEL.get(),
+				ItemRegistry.VALONITE_SHOVEL.get()
+			);
+		
+		this.tag(DEFAULT_CORRODIBLE).add(
+				//Swords
+				ItemRegistry.WEEDWOOD_SWORD.get(),
+				ItemRegistry.BONE_SWORD.get(),
+				ItemRegistry.OCTINE_SWORD.get(),
+				ItemRegistry.VALONITE_SWORD.get(),
+				// TODO Shockwave, Ancient
+
+				// Pickaxes
+				ItemRegistry.WEEDWOOD_PICKAXE.get(),
+				ItemRegistry.BONE_PICKAXE.get(),
+				ItemRegistry.OCTINE_PICKAXE.get(),
+				ItemRegistry.VALONITE_PICKAXE.get(),
+				ItemRegistry.SWIFT_PICK.get(),
+
+				// Axes
+				ItemRegistry.WEEDWOOD_AXE.get(),
+				ItemRegistry.BONE_AXE.get(),
+				ItemRegistry.OCTINE_AXE.get(),
+				ItemRegistry.VALONITE_AXE.get(),
+				ItemRegistry.VALONITE_GREATAXE.get(),
+				// TODO Ancient Greataxe
+
+				// Shovels
+				ItemRegistry.WEEDWOOD_SHOVEL.get(),
+				ItemRegistry.BONE_SHOVEL.get(),
+				ItemRegistry.OCTINE_SHOVEL.get(),
+				ItemRegistry.VALONITE_SHOVEL.get()
+			);
+		
 	}
 
 	public static TagKey<Item> tag(String tagName) {
