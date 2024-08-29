@@ -28,6 +28,7 @@ public record UpdateDecayDataPacket(int level, int prevLevel, float saturation, 
 		return TYPE;
 	}
 
+	@SuppressWarnings("resource") // Here because otherwise java suggests a try-with-resources (would call Minecraft.close() and crash the game)
 	public static void handle(UpdateDecayDataPacket message, IPayloadContext context) {
 		context.enqueueWork(() -> {
 			Player player = context.player();

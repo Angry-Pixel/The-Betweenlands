@@ -1,6 +1,7 @@
 package thebetweenlands.common.handler;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -11,10 +12,13 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import thebetweenlands.api.capability.IDecayData;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.network.clientbound.UpdateDecayDataPacket;
 import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
@@ -151,6 +155,22 @@ public class PlayerDecayHandler {
 		};
 	}
 
+	static void syncDecayOnJoin(PlayerLoggedInEvent event) {
+		Player player = event.getEntity();
+		if(!player.level().isClientSide() && player instanceof ServerPlayer) {
+			IDecayData decayData = player.getData(AttachmentRegistry.DECAY);
+			((ServerPlayer)player).connection.send(new UpdateDecayDataPacket(decayData.getDecayLevel(player), decayData.getPrevDecayLevel(), decayData.getSaturationLevel(), decayData.getAccelerationLevel()));
+		}
+	}
+	
+	static void syncDecayOnChangeDimension(PlayerChangedDimensionEvent event) {
+		Player player = event.getEntity();
+		if(!player.level().isClientSide() && player instanceof ServerPlayer) {
+			IDecayData decayData = player.getData(AttachmentRegistry.DECAY);
+			((ServerPlayer)player).connection.send(new UpdateDecayDataPacket(decayData.getDecayLevel(player), decayData.getPrevDecayLevel(), decayData.getSaturationLevel(), decayData.getAccelerationLevel()));
+		}
+	}
+	
 	// TODO OverworldItemHandler required for item use methods
 
 	private static boolean isTargetSmelly(LivingEntity entity) {
