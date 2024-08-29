@@ -19,7 +19,12 @@ public class BetweenlandsClient {
 	public static Player getClientPlayer() {
 		return Minecraft.getInstance().player;
 	}
-
+	
+	@Nullable
+	public static Player getCameraPlayer(Minecraft mc) {
+		return mc != null && mc.getCameraEntity() instanceof Player player ? player : null;
+	}
+	
 	public static void playLocalSound(SoundInstance instance) {
 		Minecraft.getInstance().getSoundManager().play(instance);
 	}

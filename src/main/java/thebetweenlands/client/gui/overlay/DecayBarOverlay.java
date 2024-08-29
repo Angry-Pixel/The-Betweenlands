@@ -1,12 +1,15 @@
 package thebetweenlands.client.gui.overlay;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import thebetweenlands.api.capability.IDecayData;
+import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.AttachmentRegistry;
 
@@ -16,11 +19,11 @@ public class DecayBarOverlay {
 	private static final ResourceLocation DECAY_HALF_SPRITE = TheBetweenlands.prefix("hud/decay_half");
 	private static final ResourceLocation DECAY_EMPTY_SPRITE = TheBetweenlands.prefix("hud/decay_empty");
 
-	public static void renderDecayBar(GuiGraphics graphics) {
+	public static void renderDecayBar(GuiGraphics graphics, DeltaTracker partialTickTracker) {
 		Minecraft minecraft = Minecraft.getInstance();
 		Gui gui = minecraft.gui;
-		Player player = minecraft.player;
-		if (player != null) {
+		Player player = BetweenlandsClient.getCameraPlayer(minecraft);
+		if (player != null && player.isAddedToLevel() && player.level() != null && player.hasData(AttachmentRegistry.DECAY)) {
 			IDecayData data = player.getData(AttachmentRegistry.DECAY);
 
 			if (!data.isDecayEnabled(player)) return;

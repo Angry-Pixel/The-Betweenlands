@@ -81,7 +81,7 @@ public class ClientRegistrationEvents {
 	}
 
 	private static void registerOverlays(final RegisterGuiLayersEvent event) {
-		event.registerAbove(VanillaGuiLayers.AIR_LEVEL, TheBetweenlands.prefix("decay_meter"), (graphics, deltaTracker) -> DecayBarOverlay.renderDecayBar(graphics));
+		event.registerAbove(VanillaGuiLayers.AIR_LEVEL, TheBetweenlands.prefix("decay_meter"), DecayBarOverlay::renderDecayBar);
 		event.registerAboveAll(TheBetweenlands.prefix("fishing_minigame"), FishStaminaBarOverlay::renderFishingHud);
 	}
 
