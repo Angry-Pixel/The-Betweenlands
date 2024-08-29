@@ -100,25 +100,36 @@ tasks.named('jar', Jar).configure {
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : "angrypixel",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+				"ModSide": "BOTH" // Just in case it's still supported
         ])
     }
 }
 
 
-tasks.register('serverJar', Jar) {
+task serverJar(type: Jar, dependsOn: jar) {
 	group = 'build'
+	description = "Creates server jar files"
 	archiveClassifier = 'server'
-	from(sourceSets.main.output) {
-		exclude "assets/thebetweenlands/sounds"
-		exclude "assets/thebetweenlands/models"
-		exclude "assets/thebetweenlands/particles"
-		exclude "assets/thebetweenlands/textures"
-		exclude "assets/thebetweenlands/shaders"
+	
+	from(zipTree(jar.archiveFile)) {
+		exclude "assets/thebetweenlands/sounds/**"
+		exclude "assets/thebetweenlands/models/**"
+		exclude "assets/thebetweenlands/particles/**"
+		exclude "assets/thebetweenlands/textures/**"
+		exclude "assets/thebetweenlands/shaders/**"
+	}
+	
+	manifest {
+		attributes jar.manifest.getAttributes()
+		
+		attributes ([
+			"ModSide": "SERVER"
+		])
 	}
 }
 
-jar.dependsOn(serverJar)
+assemble.dependsOn(serverJar)
 
 publishing {
     publications {
