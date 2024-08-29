@@ -1,8 +1,14 @@
 package thebetweenlands.common.items.recipe;
 
+import java.util.List;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -11,7 +17,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -21,19 +26,13 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import thebetweenlands.api.recipes.AnimatorRecipe;
 import thebetweenlands.common.block.entity.AnimatorBlockEntity;
 import thebetweenlands.common.registries.RecipeRegistry;
 import thebetweenlands.util.EntityCache;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Optional;
 
 public record BasicAnimatorRecipe(Ingredient input, Optional<ItemStack> resultStack, Optional<EntityType<?>> resultEntity, int requiredFuel, int requiredLife, Optional<EntityType<?>> renderEntity, Optional<ResourceKey<LootTable>> lootTable, boolean closeOnFinish) implements AnimatorRecipe {
 
@@ -133,10 +132,10 @@ public record BasicAnimatorRecipe(Ingredient input, Optional<ItemStack> resultSt
 			public BasicAnimatorRecipe decode(RegistryFriendlyByteBuf buf) {
 				Ingredient input = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
 				Optional<ItemStack> outputStack = ItemStack.STREAM_CODEC.apply(ByteBufCodecs::optional).decode(buf);
-				Optional<EntityType<?>> resultEntity = ByteBufCodecs.registry(Registries.ENTITY_TYPE).apply(ByteBufCodecs::optional).decode(buf);
+				Optional<EntityType<?>> resultEntity = ByteBufCodecs.registry(Registries.ENTITY_TYPE).<Optional<EntityType<?>>>apply(ByteBufCodecs::optional).decode(buf);
 				int fuel = ByteBufCodecs.INT.decode(buf);
 				int life = ByteBufCodecs.INT.decode(buf);
-				Optional<EntityType<?>> renderEntity = ByteBufCodecs.registry(Registries.ENTITY_TYPE).apply(ByteBufCodecs::optional).decode(buf);
+				Optional<EntityType<?>> renderEntity = ByteBufCodecs.registry(Registries.ENTITY_TYPE).<Optional<EntityType<?>>>apply(ByteBufCodecs::optional).decode(buf);
 				Optional<ResourceKey<LootTable>> lootTable = ResourceKey.streamCodec(Registries.LOOT_TABLE).apply(ByteBufCodecs::optional).decode(buf);
 				boolean close = ByteBufCodecs.BOOL.decode(buf);
 				return new BasicAnimatorRecipe(input, outputStack, resultEntity, fuel, life, renderEntity, lootTable, close);
@@ -146,10 +145,10 @@ public record BasicAnimatorRecipe(Ingredient input, Optional<ItemStack> resultSt
 			public void encode(RegistryFriendlyByteBuf buf, BasicAnimatorRecipe recipe) {
 				Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.input());
 				ItemStack.STREAM_CODEC.apply(ByteBufCodecs::optional).encode(buf, recipe.resultStack());
-				ByteBufCodecs.registry(Registries.ENTITY_TYPE).apply(ByteBufCodecs::optional).encode(buf, recipe.resultEntity());
+				ByteBufCodecs.registry(Registries.ENTITY_TYPE).<Optional<EntityType<?>>>apply(ByteBufCodecs::optional).encode(buf, recipe.resultEntity());
 				ByteBufCodecs.INT.encode(buf, recipe.requiredFuel());
 				ByteBufCodecs.INT.encode(buf, recipe.requiredLife());
-				ByteBufCodecs.registry(Registries.ENTITY_TYPE).apply(ByteBufCodecs::optional).encode(buf, recipe.renderEntity());
+				ByteBufCodecs.registry(Registries.ENTITY_TYPE).<Optional<EntityType<?>>>apply(ByteBufCodecs::optional).encode(buf, recipe.renderEntity());
 				ResourceKey.streamCodec(Registries.LOOT_TABLE).apply(ByteBufCodecs::optional).encode(buf, recipe.lootTable());
 				ByteBufCodecs.BOOL.encode(buf, recipe.closeOnFinish());
 			}
