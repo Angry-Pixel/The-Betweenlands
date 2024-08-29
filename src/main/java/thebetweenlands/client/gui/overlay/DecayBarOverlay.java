@@ -1,5 +1,7 @@
 package thebetweenlands.client.gui.overlay;
 
+import java.util.Random;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.minecraft.client.DeltaTracker;
@@ -19,6 +21,9 @@ public class DecayBarOverlay {
 	private static final ResourceLocation DECAY_HALF_SPRITE = TheBetweenlands.prefix("hud/decay_half");
 	private static final ResourceLocation DECAY_EMPTY_SPRITE = TheBetweenlands.prefix("hud/decay_empty");
 
+	// This has to be a static random that goes here now because the original class got clobbered
+	private static Random random = new Random();
+
 	public static void renderDecayBar(GuiGraphics graphics, DeltaTracker partialTickTracker) {
 		Minecraft minecraft = Minecraft.getInstance();
 		Gui gui = minecraft.gui;
@@ -37,17 +42,24 @@ public class DecayBarOverlay {
 			int decayBalls = maxDecay - currentDecay;
 
 			RenderSystem.enableBlend();
-
+			
+			boolean shake = gui.getGuiTicks() % (decayBalls * 3 + 1) == 0;
+			
 			for (int i = 0; i < 10; ++i) {
 				int ballX = posX - i * 8 - 9;
-				graphics.blitSprite(DECAY_EMPTY_SPRITE, ballX, posY, 9, 9);
+				int ballY = posY;
+				
+				if(shake)
+					ballY += random.nextInt(3) - 1;
+				
+				graphics.blitSprite(DECAY_EMPTY_SPRITE, ballX, ballY, 9, 9);
 
 				if (i * 2 + 1 < decayBalls) {
-					graphics.blitSprite(DECAY_FULL_SPRITE, ballX, posY, 9, 9);
+					graphics.blitSprite(DECAY_FULL_SPRITE, ballX, ballY, 9, 9);
 				}
 
 				if (i * 2 + 1 == decayBalls) {
-					graphics.blitSprite(DECAY_HALF_SPRITE, ballX, posY, 9, 9);
+					graphics.blitSprite(DECAY_HALF_SPRITE, ballX, ballY, 9, 9);
 				}
 			}
 
