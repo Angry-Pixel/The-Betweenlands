@@ -28,12 +28,9 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.api.item.IExtendedReach;
 import thebetweenlands.common.TheBetweenlands;
 
-@EventBusSubscriber(modid = TheBetweenlands.ID, bus = Bus.GAME)
 public class ExtendedReachHandler {
-	// TODO move SubscribeEvent to HandlerEvents
 
-    @SubscribeEvent
-    public static void attack(InputEvent.InteractionKeyMappingTriggered event) {
+    public static void onAttackEvent(InputEvent.InteractionKeyMappingTriggered event) {
     	if(event.isAttack())
     		handleAttack();
     }

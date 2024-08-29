@@ -16,7 +16,11 @@ public class HandlerEvents {
 		NeoForge.EVENT_BUS.addListener(FoodSicknessHandler::modifyEatingStart);
 		if (dist.isClient()) NeoForge.EVENT_BUS.addListener(FoodSicknessHandler::tickSicknessClient);
 
+		//decay
 		NeoForge.EVENT_BUS.addListener(PlayerDecayHandler::accelerateDecayOnDamage);
 		NeoForge.EVENT_BUS.addListener(PlayerDecayHandler::tickDecay);
+		
+		//extended reach
+		NeoForge.EVENT_BUS.addListener(ExtendedReachHandler::onAttackEvent);
 	}
 }
