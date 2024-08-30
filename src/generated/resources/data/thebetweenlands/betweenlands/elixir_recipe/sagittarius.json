@@ -1,0 +1,22 @@
+{
+  "aspects": [
+    "thebetweenlands:freiwynn",
+    "thebetweenlands:dayuniis",
+    "thebetweenlands:byariis",
+    "thebetweenlands:ordaniis",
+    "thebetweenlands:armaniis"
+  ],
+  "base_duration": 3000,
+  "duration_aspect": "thebetweenlands:dayuniis",
+  "duration_modifier": 12000,
+  "infusion_failed_color": -13424382,
+  "infusion_finished_color": -1415375,
+  "infusion_gradient": -16776961,
+  "infusion_time": 2000,
+  "infusion_time_variation": 200,
+  "negative_base_duration": 400,
+  "negative_duration_modifier": 1200,
+  "negative_elixir": "thebetweenlands:weakbow",
+  "positive_elixir": "thebetweenlands:sagittarius",
+  "strength_aspect": "thebetweenlands:freiwynn"
+}

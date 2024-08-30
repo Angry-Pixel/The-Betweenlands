@@ -1,0 +1,22 @@
+{
+  "aspects": [
+    "thebetweenlands:azuwynn",
+    "thebetweenlands:fergalaz",
+    "thebetweenlands:dayuniis",
+    "thebetweenlands:yihinren",
+    "thebetweenlands:yunugaz"
+  ],
+  "base_duration": 1200,
+  "duration_aspect": "thebetweenlands:yihinren",
+  "duration_modifier": 12000,
+  "infusion_failed_color": -13424382,
+  "infusion_finished_color": -9321936,
+  "infusion_gradient": -16776961,
+  "infusion_time": 2000,
+  "infusion_time_variation": 200,
+  "negative_base_duration": 40,
+  "negative_duration_modifier": 200,
+  "negative_elixir": "thebetweenlands:basilisk",
+  "positive_elixir": "thebetweenlands:spiderbreed",
+  "strength_aspect": "thebetweenlands:azuwynn"
+}

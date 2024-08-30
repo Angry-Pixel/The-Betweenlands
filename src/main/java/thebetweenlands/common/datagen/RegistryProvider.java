@@ -25,6 +25,7 @@ public class RegistryProvider extends DatapackBuiltinEntriesProvider {
 		.add(Registries.JUKEBOX_SONG, MusicRegistry::bootstrap)
 		.add(BLRegistries.Keys.ASPECT_ITEMS, AspectItemRegistry::bootstrap)
 		.add(BLRegistries.Keys.ASPECT_TYPES, AspectTypeRegistry::bootstrap)
+		.add(BLRegistries.Keys.ELIXIR_RECIPES, ElixirRecipeRegistry::bootstrap)
 		.add(Registries.DAMAGE_TYPE, DamageTypeRegistry::bootstrap);
 
 	public RegistryProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {

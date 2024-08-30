@@ -1,0 +1,21 @@
+{
+  "aspects": [
+    "thebetweenlands:freiwynn",
+    "thebetweenlands:dayuniis",
+    "thebetweenlands:ordaniis",
+    "thebetweenlands:geoliirgaz"
+  ],
+  "base_duration": 2400,
+  "duration_aspect": "thebetweenlands:dayuniis",
+  "duration_modifier": 9600,
+  "infusion_failed_color": -13424382,
+  "infusion_finished_color": -8738279,
+  "infusion_gradient": -16776961,
+  "infusion_time": 2000,
+  "infusion_time_variation": 200,
+  "negative_base_duration": 160,
+  "negative_duration_modifier": 240,
+  "negative_elixir": "thebetweenlands:blindman",
+  "positive_elixir": "thebetweenlands:cats_eyes",
+  "strength_aspect": "thebetweenlands:freiwynn"
+}

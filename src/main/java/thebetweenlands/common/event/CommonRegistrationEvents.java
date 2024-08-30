@@ -42,6 +42,7 @@ import thebetweenlands.common.entities.fishing.BubblerCrab;
 import thebetweenlands.common.entities.fishing.SiltCrab;
 import thebetweenlands.common.entities.fishing.anadia.Anadia;
 import thebetweenlands.common.handler.HandlerEvents;
+import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.network.*;
 import thebetweenlands.common.network.clientbound.*;
 import thebetweenlands.common.registries.*;
@@ -135,6 +136,7 @@ public class CommonRegistrationEvents {
 	private static void makeDatapackRegistries(DataPackRegistryEvent.NewRegistry event) {
 		event.dataPackRegistry(BLRegistries.Keys.ASPECT_ITEMS, AspectItem.DIRECT_CODEC, AspectItem.DIRECT_CODEC);
 		event.dataPackRegistry(BLRegistries.Keys.ASPECT_TYPES, AspectType.DIRECT_CODEC, AspectType.DIRECT_CODEC);
+		event.dataPackRegistry(BLRegistries.Keys.ELIXIR_RECIPES, ElixirRecipe.CODEC, ElixirRecipe.CODEC);
 	}
 
 	private static void makeNewRegistries(NewRegistryEvent event) {

@@ -1,0 +1,20 @@
+{
+  "aspects": [
+    "thebetweenlands:yeowynn",
+    "thebetweenlands:ordaniis",
+    "thebetweenlands:dayuniis"
+  ],
+  "base_duration": 2400,
+  "duration_aspect": "thebetweenlands:ordaniis",
+  "duration_modifier": 15600,
+  "infusion_failed_color": -13424382,
+  "infusion_finished_color": -7488018,
+  "infusion_gradient": -16776961,
+  "infusion_time": 2000,
+  "infusion_time_variation": 200,
+  "negative_base_duration": 400,
+  "negative_duration_modifier": 1200,
+  "negative_elixir": "thebetweenlands:decay",
+  "positive_elixir": "thebetweenlands:ripening",
+  "strength_aspect": "thebetweenlands:dayuniis"
+}

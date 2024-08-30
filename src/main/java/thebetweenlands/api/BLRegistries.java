@@ -13,6 +13,7 @@ import thebetweenlands.api.storage.IDeferredStorageOperation;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.api.aspect.registry.AspectItem;
 import thebetweenlands.api.aspect.registry.AspectCalculatorType;
+import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 
 public class BLRegistries {
@@ -32,6 +33,7 @@ public class BLRegistries {
 		public static final ResourceKey<Registry<AspectType>> ASPECT_TYPES = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(DATAPACK_PREFIX, "aspect/type"));
 		public static final ResourceKey<Registry<CenserRecipe<?>>> CENSER_RECIPES = ResourceKey.createRegistryKey(TheBetweenlands.prefix("censer_recipe"));
 		public static final ResourceKey<Registry<ElixirEffect>> ELIXIR_EFFECTS = ResourceKey.createRegistryKey(TheBetweenlands.prefix("elixir_effect"));
+		public static final ResourceKey<Registry<ElixirRecipe>> ELIXIR_RECIPES = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(DATAPACK_PREFIX, "elixir_recipe"));
 		public static final ResourceKey<Registry<IEnvironmentEvent>> ENVIRONMENT_EVENTS = ResourceKey.createRegistryKey(TheBetweenlands.prefix("environment_event"));
 		public static final ResourceKey<Registry<SimulacrumEffect>> SIMULACRUM_EFFECTS = ResourceKey.createRegistryKey(TheBetweenlands.prefix("simulacrum_effect"));
 		public static final ResourceKey<Registry<BiMap<ResourceLocation, ? extends IDeferredStorageOperation>>> WORLD_STORAGE = ResourceKey.createRegistryKey(TheBetweenlands.prefix("world_storage"));
