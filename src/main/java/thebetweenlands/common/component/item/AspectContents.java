@@ -40,6 +40,7 @@ public record AspectContents(Optional<Holder<AspectType>> aspect, int amount, Op
 	}
 
 	public int getAspectColor() {
+		if (this.customColor().isPresent()) return this.customColor().get();
 		return this.aspect().map(aspect -> aspect.value().color()).orElse(-13083194);
 	}
 }

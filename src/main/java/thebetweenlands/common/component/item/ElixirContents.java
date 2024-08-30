@@ -61,6 +61,7 @@ public record ElixirContents(Optional<Holder<ElixirEffect>> elixir, int duration
 	}
 
 	public int getElixirColor() {
+		if (this.customColor().isPresent()) return this.customColor().get();
 		return this.elixir().map(elixir -> elixir.value().getColor()).orElse(-13083194);
 	}
 
