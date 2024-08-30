@@ -1,7 +1,7 @@
 package thebetweenlands.common.herblore.elixir;
 
 import net.minecraft.network.chat.Component;
-import thebetweenlands.api.aspect.AspectType;
+import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 
 import javax.annotation.Nullable;

@@ -17,6 +17,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import thebetweenlands.api.aspect.registry.AspectType;
 
 /**
  * The aspect container contains dynamic and static aspects.

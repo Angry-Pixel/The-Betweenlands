@@ -29,7 +29,7 @@ import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
-import thebetweenlands.api.aspect.AspectType;
+import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.api.block.AspectFogBlock;
 import thebetweenlands.api.block.DungeonFogBlock;
 import thebetweenlands.api.recipes.CenserRecipe;

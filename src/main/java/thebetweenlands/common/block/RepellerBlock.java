@@ -35,7 +35,7 @@ import thebetweenlands.api.aspect.AspectContainerItem;
 import thebetweenlands.common.block.entity.RepellerBlockEntity;
 import thebetweenlands.common.items.AspectVialItem;
 import thebetweenlands.common.items.DentrothystVialItem;
-import thebetweenlands.common.registries.AspectRegistry;
+import thebetweenlands.common.registries.AspectTypeRegistry;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -72,7 +72,7 @@ public class RepellerBlock extends HorizontalBaseEntityBlock {
 					if (repeller.hasShimmerstone()) {
 						if (repeller.getFuel() < repeller.getMaxFuel()) {
 							AspectContainerItem aspectContainer = AspectContainerItem.fromItem(stack);
-							int amount = aspectContainer.get(level.registryAccess().registryOrThrow(BLRegistries.Keys.ASPECTS).getHolderOrThrow(AspectRegistry.BYARIIS));
+							int amount = aspectContainer.get(level.registryAccess().registryOrThrow(BLRegistries.Keys.ASPECT_TYPES).getHolderOrThrow(AspectTypeRegistry.BYARIIS));
 							int loss = 10; //Loss when adding
 							if (amount >= loss) {
 								if (!level.isClientSide()) {
@@ -80,7 +80,7 @@ public class RepellerBlock extends HorizontalBaseEntityBlock {
 									if (!player.isCreative()) {
 										int leftAmount = amount - added - loss;
 										if (leftAmount > 0) {
-											aspectContainer.set(level.registryAccess().registryOrThrow(BLRegistries.Keys.ASPECTS).getHolderOrThrow(AspectRegistry.BYARIIS), leftAmount);
+											aspectContainer.set(level.registryAccess().registryOrThrow(BLRegistries.Keys.ASPECT_TYPES).getHolderOrThrow(AspectTypeRegistry.BYARIIS), leftAmount);
 										} else {
 											player.setItemInHand(hand, stack.getCraftingRemainingItem());
 										}

@@ -1,0 +1,10 @@
+{
+  "aspect_calculator": {
+    "type": "thebetweenlands:random_aspects",
+    "amount_multiplier": 0.85,
+    "amount_variation": 0.45,
+    "rolls": 1
+  },
+  "item": "thebetweenlands:ground_mire_coral",
+  "tier": "uncommon"
+}

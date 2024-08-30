@@ -1,0 +1,10 @@
+{
+  "aspect_calculator": {
+    "type": "thebetweenlands:random_aspects",
+    "amount_multiplier": 1.25,
+    "amount_variation": 0.5,
+    "rolls": 1
+  },
+  "item": "thebetweenlands:ground_sundew",
+  "tier": "rare"
+}

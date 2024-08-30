@@ -5,7 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import thebetweenlands.api.aspect.AspectContainerItem;
-import thebetweenlands.api.aspect.AspectType;
+import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.api.block.Censer;
 import thebetweenlands.client.shader.ShaderHelper;
 import thebetweenlands.client.shader.postprocessing.GroundFog;

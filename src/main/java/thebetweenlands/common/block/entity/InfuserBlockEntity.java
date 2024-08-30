@@ -17,7 +17,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.AspectContainerItem;
-import thebetweenlands.api.aspect.AspectType;
+import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.items.LifeCrystalItem;

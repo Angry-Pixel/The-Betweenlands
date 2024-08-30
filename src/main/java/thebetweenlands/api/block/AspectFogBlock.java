@@ -4,7 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import thebetweenlands.api.aspect.AspectType;
+import thebetweenlands.api.aspect.registry.AspectType;
 
 import javax.annotation.Nullable;
 

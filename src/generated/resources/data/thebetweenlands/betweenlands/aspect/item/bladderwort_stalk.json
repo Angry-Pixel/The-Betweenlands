@@ -1,0 +1,10 @@
+{
+  "aspect_calculator": {
+    "type": "thebetweenlands:random_aspects",
+    "amount_multiplier": 0.15,
+    "amount_variation": 0.5,
+    "rolls": 4
+  },
+  "item": "thebetweenlands:ground_bladderwort_stalk",
+  "tier": "common"
+}

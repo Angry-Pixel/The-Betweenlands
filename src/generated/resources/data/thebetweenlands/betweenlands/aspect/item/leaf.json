@@ -1,0 +1,10 @@
+{
+  "aspect_calculator": {
+    "type": "thebetweenlands:random_aspects",
+    "amount_multiplier": 0.15,
+    "amount_variation": 0.2,
+    "rolls": 4
+  },
+  "item": "thebetweenlands:ground_leaf",
+  "tier": "common"
+}

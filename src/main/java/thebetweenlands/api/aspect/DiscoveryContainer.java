@@ -9,6 +9,8 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import thebetweenlands.api.aspect.registry.AspectItem;
+import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.api.item.DiscoveryProvider;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 
@@ -17,10 +19,12 @@ import java.util.*;
 
 public class DiscoveryContainer<T> {
 	private final Map<AspectItem, List<Holder<AspectType>>> discoveredStaticAspects = new HashMap<>();
+	@Nullable
 	private final DiscoveryProvider<T> provider;
+	@Nullable
 	private final T providerObj;
 
-	public DiscoveryContainer(DiscoveryProvider<T> provider, T providerObj) {
+	public DiscoveryContainer(@Nullable DiscoveryProvider<T> provider, @Nullable T providerObj) {
 		this.provider = provider;
 		this.providerObj = providerObj;
 	}
@@ -34,9 +38,8 @@ public class DiscoveryContainer<T> {
 	 * Returns a new empty discovery container
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
 	public static DiscoveryContainer<?> empty() {
-		return new DiscoveryContainer();
+		return new DiscoveryContainer<>();
 	}
 
 	/**
@@ -60,9 +63,9 @@ public class DiscoveryContainer<T> {
 		return !this.discoveredStaticAspects.containsKey(item) ? 0 : this.discoveredStaticAspects.get(item).size();
 	}
 
-	private DiscoveryContainer<T> saveContainer() {
+	private DiscoveryContainer<T> saveContainer(HolderLookup.Provider registries) {
 		if(this.provider != null && this.providerObj != null)
-			this.provider.saveContainer(this.providerObj, this);
+			this.provider.saveContainer(this.providerObj, registries, this);
 		return this;
 	}
 
@@ -72,7 +75,7 @@ public class DiscoveryContainer<T> {
 	 * @param aspectItem
 	 * @return
 	 */
-	public AspectDiscovery discover(AspectManager manager, AspectItem aspectItem) {
+	public AspectDiscovery discover(AspectManager manager, AspectItem aspectItem, HolderLookup.Provider registries) {
 		List<Aspect> staticAspects = manager.getStaticAspects(aspectItem);
 		if(staticAspects.isEmpty()) {
 			return new AspectDiscovery(AspectDiscovery.DiscoveryResult.NONE, null, false);
@@ -82,12 +85,12 @@ public class DiscoveryContainer<T> {
 			return new AspectDiscovery(AspectDiscovery.DiscoveryResult.END, null, false);
 		}
 		Aspect undiscovered = this.getUndiscoveredAspect(staticAspects, this.discoveredStaticAspects.get(aspectItem));
-		this.addDiscovery(aspectItem, undiscovered.type());
+		this.addDiscovery(aspectItem, undiscovered.type(), registries);
 		if(discoveryCount == staticAspects.size()) {
-			this.saveContainer();
+			this.saveContainer(registries);
 			return new AspectDiscovery(AspectDiscovery.DiscoveryResult.LAST, undiscovered, true);
 		} else {
-			this.saveContainer();
+			this.saveContainer(registries);
 			return new AspectDiscovery(AspectDiscovery.DiscoveryResult.NEW, undiscovered, true);
 		}
 	}
@@ -105,29 +108,29 @@ public class DiscoveryContainer<T> {
 	 * Discovers all aspects of all aspect items
 	 * @param manager
 	 */
-	public void discoverAll(AspectManager manager) {
+	public void discoverAll(AspectManager manager, HolderLookup.Provider registries) {
 		for(Map.Entry<AspectItem, List<Aspect>> e : manager.getMatchedAspects().entrySet()) {
 			for(Aspect a : e.getValue())
-				this.addDiscovery(e.getKey(), a.type());
+				this.addDiscovery(e.getKey(), a.type(), registries);
 		}
-		this.saveContainer();
+		this.saveContainer(registries);
 	}
 
 	/**
 	 * Removes all discoveries of the specified item
 	 * @param item
 	 */
-	public void resetDiscovery(AspectItem item) {
+	public void resetDiscovery(AspectItem item, HolderLookup.Provider registries) {
 		this.discoveredStaticAspects.remove(item);
-		this.saveContainer();
+		this.saveContainer(registries);
 	}
 
 	/**
 	 * Resets all aspect discoveries of all aspect items
 	 */
-	public void resetAllDiscovery() {
+	public void resetAllDiscovery(HolderLookup.Provider registries) {
 		this.discoveredStaticAspects.clear();
-		this.saveContainer();
+		this.saveContainer(registries);
 	}
 
 	/**
@@ -135,14 +138,14 @@ public class DiscoveryContainer<T> {
 	 * @param item
 	 * @param discovered
 	 */
-	public void addDiscovery(AspectItem item, Holder<AspectType> discovered) {
+	public void addDiscovery(AspectItem item, Holder<AspectType> discovered, HolderLookup.Provider registries) {
 		List<Holder<AspectType>> discoveredAspects = this.discoveredStaticAspects.get(item);
 		if(discoveredAspects == null) {
 			this.discoveredStaticAspects.put(item, discoveredAspects = new ArrayList<>());
 		}
 		if(!discoveredAspects.contains(discovered))
 			discoveredAspects.add(discovered);
-		this.saveContainer();
+		this.saveContainer(registries);
 	}
 
 	@Nullable
@@ -203,7 +206,7 @@ public class DiscoveryContainer<T> {
 			this.discoveredStaticAspects.put(item, aspectTypeList);
 		}
 		if (save)
-			this.saveContainer();
+			this.saveContainer(registries);
 		return this;
 	}
 
@@ -212,7 +215,7 @@ public class DiscoveryContainer<T> {
 	 * @param other
 	 * @return
 	 */
-	public DiscoveryContainer<T> mergeDiscoveries(DiscoveryContainer<?> other) {
+	public DiscoveryContainer<T> mergeDiscoveries(DiscoveryContainer<?> other, HolderLookup.Provider registries) {
 		boolean changed = false;
 		for (var entry : other.discoveredStaticAspects.entrySet()) {
 			AspectItem otherItem = entry.getKey();
@@ -231,7 +234,7 @@ public class DiscoveryContainer<T> {
 			}
 		}
 		if(changed)
-			this.saveContainer();
+			this.saveContainer(registries);
 		return this;
 	}
 
@@ -257,9 +260,10 @@ public class DiscoveryContainer<T> {
 	public static class AspectDiscovery {
 		public final DiscoveryResult result;
 		public final boolean successful;
+		@Nullable
 		public final Aspect discovered;
 
-		private AspectDiscovery(DiscoveryResult result, Aspect discovered, boolean successful) {
+		private AspectDiscovery(DiscoveryResult result, @Nullable Aspect discovered, boolean successful) {
 			this.result = result;
 			this.discovered = discovered;
 			this.successful = successful;
@@ -291,14 +295,14 @@ public class DiscoveryContainer<T> {
 	 * @return
 	 */
 	public static List<DiscoveryContainer<?>> getWritableDiscoveryContainers(Player player) {
-		List<DiscoveryContainer<?>> containerList = new ArrayList<DiscoveryContainer<?>>();
+		List<DiscoveryContainer<?>> containerList = new ArrayList<>();
 		Inventory inventory = player.getInventory();
 		for(int i = 0; i < inventory.getContainerSize(); i++) {
 			ItemStack stack = inventory.getItem(i);
 			if(!stack.isEmpty() && stack.getItem() instanceof DiscoveryProvider<?>) {
 				@SuppressWarnings("unchecked")
 				DiscoveryProvider<ItemStack> provider = (DiscoveryProvider<ItemStack>) stack.getItem();
-				DiscoveryContainer<?> container = provider.getContainer(stack);
+				DiscoveryContainer<?> container = provider.getContainer(stack, player.registryAccess());
 				if(container != null)
 					containerList.add(container);
 			}
@@ -317,7 +321,7 @@ public class DiscoveryContainer<T> {
 		DiscoveryContainer<?> merged = DiscoveryContainer.empty();
 		for(DiscoveryContainer<?> container : containerList) {
 			if(container != null)
-				merged.mergeDiscoveries(container);
+				merged.mergeDiscoveries(container, player.registryAccess());
 		}
 		return merged;
 	}
@@ -331,6 +335,6 @@ public class DiscoveryContainer<T> {
 	public static void addDiscoveryToContainers(Player player, AspectItem item, Holder<AspectType> type) {
 		List<DiscoveryContainer<?>> discoveryContainers = getWritableDiscoveryContainers(player);
 		for(DiscoveryContainer<?> container : discoveryContainers)
-			container.addDiscovery(item, type);
+			container.addDiscovery(item, type, player.registryAccess());
 	}
 }

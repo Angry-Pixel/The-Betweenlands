@@ -176,7 +176,10 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 
 	@Nullable
 	public static BetweenlandsWorldStorage get(Level level) {
-		return level.getExistingData(AttachmentRegistry.WORLD_STORAGE).orElse(null);
+		if (level.getServer() != null && level.getServer().getLevel(DimensionRegistries.DIMENSION_KEY) != null) {
+			return level.getServer().getLevel(DimensionRegistries.DIMENSION_KEY).getData(AttachmentRegistry.WORLD_STORAGE);
+		}
+		return null;
 	}
 
 	public static boolean isEventActive(Level level, Holder<IEnvironmentEvent> event) {

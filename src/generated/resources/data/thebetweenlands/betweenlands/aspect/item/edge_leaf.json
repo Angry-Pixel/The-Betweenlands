@@ -1,0 +1,23 @@
+{
+  "aspect_calculator": {
+    "type": "thebetweenlands:double_group",
+    "first_roll": {
+      "type": "thebetweenlands:random_aspects",
+      "amount_multiplier": 0.425,
+      "amount_variation": 0.35,
+      "possible_aspects": [
+        "thebetweenlands:uduriis",
+        "thebetweenlands:wodren"
+      ],
+      "rolls": 1
+    },
+    "second_roll": {
+      "type": "thebetweenlands:random_aspects",
+      "amount_multiplier": 0.425,
+      "amount_variation": 0.35,
+      "rolls": 3
+    }
+  },
+  "item": "thebetweenlands:ground_edge_leaf",
+  "tier": "common"
+}

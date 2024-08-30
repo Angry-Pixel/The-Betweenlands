@@ -1,6 +1,9 @@
 package thebetweenlands.api.item;
 
+import net.minecraft.core.HolderLookup;
 import thebetweenlands.api.aspect.DiscoveryContainer;
+
+import javax.annotation.Nullable;
 
 public interface DiscoveryProvider<P> {
 	/**
@@ -9,7 +12,8 @@ public interface DiscoveryProvider<P> {
 	 * @param provider
 	 * @return
 	 */
-	DiscoveryContainer<P> getContainer(P provider);
+	@Nullable
+	DiscoveryContainer<P> getContainer(P provider, HolderLookup.Provider registries);
 
 	/**
 	 * Saves the discovery container
@@ -17,5 +21,5 @@ public interface DiscoveryProvider<P> {
 	 * @param provider
 	 * @param container
 	 */
-	void saveContainer(P provider, DiscoveryContainer<P> container);
+	void saveContainer(P provider, HolderLookup.Provider registries, DiscoveryContainer<P> container);
 }

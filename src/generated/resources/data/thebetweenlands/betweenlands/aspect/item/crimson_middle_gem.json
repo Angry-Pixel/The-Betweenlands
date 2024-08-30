@@ -1,0 +1,12 @@
+{
+  "aspect_calculator": {
+    "type": "thebetweenlands:set_aspects",
+    "amount_multiplier": 1.75,
+    "amount_variation": 0.25,
+    "aspects": [
+      "thebetweenlands:firnalaz"
+    ]
+  },
+  "item": "thebetweenlands:ground_crimson_middle_gem",
+  "tier": "uncommon"
+}

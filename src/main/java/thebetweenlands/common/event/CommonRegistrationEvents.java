@@ -29,9 +29,12 @@ import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import thebetweenlands.api.BLRegistries;
-import thebetweenlands.api.aspect.AspectType;
+import thebetweenlands.api.aspect.registry.AspectItem;
+import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.command.AspectCommand;
 import thebetweenlands.common.command.GenerateAnadiaCommand;
+import thebetweenlands.common.command.ResetAspectsCommand;
 import thebetweenlands.common.datagen.*;
 import thebetweenlands.common.datagen.loot.BaseLootProvider;
 import thebetweenlands.common.datagen.tags.*;
@@ -116,7 +119,9 @@ public class CommonRegistrationEvents {
 	private static void registerCommands(RegisterCommandsEvent event) {
 		LiteralArgumentBuilder<CommandSourceStack> builder = Commands.literal("betweenlands")
 			.then(Commands.literal("debug")
-				.then(GenerateAnadiaCommand.register()));
+				.then(GenerateAnadiaCommand.register()))
+			.then(AspectCommand.register())
+			.then(ResetAspectsCommand.register());
 		LiteralCommandNode<CommandSourceStack> node = event.getDispatcher().register(builder);
 		event.getDispatcher().register(Commands.literal("bl").redirect(node));
 		event.getDispatcher().register(Commands.literal(TheBetweenlands.ID).redirect(node));
@@ -128,10 +133,12 @@ public class CommonRegistrationEvents {
 	}
 
 	private static void makeDatapackRegistries(DataPackRegistryEvent.NewRegistry event) {
-		event.dataPackRegistry(BLRegistries.Keys.ASPECTS, AspectType.DIRECT_CODEC, AspectType.DIRECT_CODEC);
+		event.dataPackRegistry(BLRegistries.Keys.ASPECT_ITEMS, AspectItem.DIRECT_CODEC, AspectItem.DIRECT_CODEC);
+		event.dataPackRegistry(BLRegistries.Keys.ASPECT_TYPES, AspectType.DIRECT_CODEC, AspectType.DIRECT_CODEC);
 	}
 
 	private static void makeNewRegistries(NewRegistryEvent event) {
+		event.register(BLRegistries.ASPECT_CALCULATOR_TYPE);
 		event.register(BLRegistries.CENSER_RECIPES);
 		event.register(BLRegistries.ELIXIR_EFFECTS);
 		event.register(BLRegistries.ENVIRONMENT_EVENTS);

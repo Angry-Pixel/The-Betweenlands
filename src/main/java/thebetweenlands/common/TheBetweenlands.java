@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.network.chat.Style;
 import net.neoforged.fml.loading.FMLEnvironment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,30 +23,7 @@ import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.client.event.ClientRegistrationEvents;
 import thebetweenlands.common.event.CommonRegistrationEvents;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
-import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
-import thebetweenlands.common.registries.ArmorMaterialRegistry;
-import thebetweenlands.common.registries.AttachmentRegistry;
-import thebetweenlands.common.registries.AttributeRegistry;
-import thebetweenlands.common.registries.BlockEntityRegistry;
-import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.CarverRegistry;
-import thebetweenlands.common.registries.CreativeGroupRegistry;
-import thebetweenlands.common.registries.DataComponentRegistry;
-import thebetweenlands.common.registries.EntityPredicateRegistry;
-import thebetweenlands.common.registries.EntityRegistry;
-import thebetweenlands.common.registries.EnvironmentEventRegistry;
-import thebetweenlands.common.registries.FeatureRegistry;
-import thebetweenlands.common.registries.FluidRegistry;
-import thebetweenlands.common.registries.FluidTypeRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.registries.LootFunctionRegistry;
-import thebetweenlands.common.registries.MapDecorationRegistry;
-import thebetweenlands.common.registries.MenuRegistry;
-import thebetweenlands.common.registries.ParticleRegistry;
-import thebetweenlands.common.registries.RecipeRegistry;
-import thebetweenlands.common.registries.SimulacrumEffectRegistry;
-import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.common.registries.StorageRegistry;
+import thebetweenlands.common.registries.*;
 import thebetweenlands.common.world.BetweenlandsSurfaceRules;
 
 @Mod(TheBetweenlands.ID)
@@ -104,6 +82,7 @@ public class TheBetweenlands {
 		MenuRegistry.MENUS.register(eventbus);
 		EntityPredicateRegistry.PREDICATES.register(eventbus);
 		LootFunctionRegistry.FUNCTIONS.register(eventbus);
+		AspectCalculatorRegistry.CALCULATORS.register(eventbus);
 
 		StorageRegistry.preInit();
 	}

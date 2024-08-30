@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.TextureAtlasHolder;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
-import thebetweenlands.api.aspect.AspectType;
+import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.common.TheBetweenlands;
 
 public class AspectIconTextureManager extends TextureAtlasHolder {

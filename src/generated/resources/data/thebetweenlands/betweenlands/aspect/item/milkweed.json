@@ -1,0 +1,10 @@
+{
+  "aspect_calculator": {
+    "type": "thebetweenlands:random_aspects",
+    "amount_multiplier": 0.425,
+    "amount_variation": 0.35,
+    "rolls": 2
+  },
+  "item": "thebetweenlands:ground_milkweed",
+  "tier": "common"
+}

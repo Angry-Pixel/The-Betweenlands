@@ -10,9 +10,9 @@ import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import org.apache.commons.lang3.StringUtils;
-import thebetweenlands.api.aspect.AspectType;
+import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.registries.AspectRegistry;
+import thebetweenlands.common.registries.AspectTypeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -253,6 +253,31 @@ public class LangProvider extends LanguageProvider {
 		this.addBlock(BlockRegistry.FLATHEAD_MUSHROOM, "Flathead Mushroom");
 		this.addBlock(BlockRegistry.FLOWERED_NETTLE, "Flowered Nettle");
 		this.addBlock(BlockRegistry.GECKO_CAGE, "Gecko Cage");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".all_discovered", "You've already discovered all aspects on this item");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".no_aspects", "This item doesn't seem to have any aspects");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".more_aspects", "This item still seems to have some more undiscovered aspects");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".last_aspect", "This seems to be the last undiscovered aspect on this item");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".no_book", "You don't have a book to write down your discoveries");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".no_gecko", "You can't conduct this experiment without a gecko");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".gecko_recovering", "The gecko is still recovering from the last experiment");
+
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".discover_armaniis", "The gecko seems very calm and looks at you with loving eyes");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".discover_azuwynn", "You can see the gecko's muscles twitching uncontrollably");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".discover_byariis", "The gecko is chewing furiously on its tail and looks around as if possessed");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".discover_byrginaz", "The gecko is drooling, sweating and peeing around its cage");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".discover_celawynn", "You can hear the gecko's belly rumbling and it seems to burp a lot");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".discover_dayuniis", "The gecko is walking around like a drunkard and looks around in a schizophrenic manner");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".discover_fergalaz", "The gecko's scales seem to become rock hard, it can barely move");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".discover_firnalaz", "The gecko's scales have a red glow and it breathes a hot breath");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".discover_freiwynn", "The gecko's eyes are pulsating");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".discover_geoliirgaz", "The gecko has an empty look in its eyes and doesn't seem to respond to anything");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".discover_ordaniis", "The gecko's scales seem to be glowing slightly");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".discover_uduriis", "The gecko runs around frantically in nonsensical patterns");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".discover_wodren", "The gecko's eyes flare up and for a moment it looked like it had self awareness...");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".discover_yeowynn", "You've never seen a healthier gecko, it's bursting with energy");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".discover_yihinren", "The gecko's scales became puffy and its head looks... different");
+		this.add(BlockRegistry.GECKO_CAGE.get().getDescriptionId() + ".discover_yunugaz", "The gecko seems light, and its breath sounds like a hollow wind");
+
 		this.addBlock(BlockRegistry.GIANT_ROOT, "Giant Root");
 		this.addBlock(BlockRegistry.GIANT_ROOT_DOOR, "Giant Root Door");
 		this.addBlock(BlockRegistry.GIANT_ROOT_FENCE, "Giant Root Fence");
@@ -1086,22 +1111,33 @@ public class LangProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.STRING_ROOT_FIBERS, "String Root Fibers");
 		this.addItem(ItemRegistry.CRYPTWEED_BLADES, "Cryptweed Blades");
 
-		this.addAspect(AspectRegistry.ARMANIIS, "Desire", "Has effect on the desires of a mob or the player. Could be useful for food, but also things like trading or corrupting the desire.");
-		this.addAspect(AspectRegistry.AZUWYNN, "Muscle", "Has effect on the muscles, could either result in more damage, speed or maybe rapid fire and all stuff in that regard.");
-		this.addAspect(AspectRegistry.BYARIIS, "Corruption", "This effect can corrupt other effects, but even corrupt effects. So it could turn negative into positive, and positive into negative. so for example, if this effect gets combined with health it will do something negative to your health, but if this effect gets combined twice with health, it will corrupt itself and thus do something positive.");
-		this.addAspect(AspectRegistry.BYRGINAZ, "Water", "Magical property which relates to water. Any combination with this effect can be related to water.");
-		this.addAspect(AspectRegistry.CELAWYNN, "Stomach", "Has effect on the stomach. So this could have effect on the hunger bar for example.");
-		this.addAspect(AspectRegistry.DAYUNIIS, "Mind", "Has effect on the player's mind and on how senses work. Could be positive, or negative (think nausea/schizophrenia).");
-		this.addAspect(AspectRegistry.FERGALAZ, "Earth", "Magical property which relates to earth. Any combination with this effect can be related to the element earth.");
-		this.addAspect(AspectRegistry.FIRNALAZ, "Fire", "Magical property which relates to fire. Any combination with this effect can be related to fire.");
-		this.addAspect(AspectRegistry.FREIWYNN, "Vision", "Alters the player's vision. (In combination with other properties. So for example when you combine health with vision, you would be able to spot mobs their health.)");
-		this.addAspect(AspectRegistry.GEOLIIRGAZ, "Void", "Magical property which relates to the void or ether. Any combination with this effect can be related to void or darkness.");
-		this.addAspect(AspectRegistry.ORDANIIS, "Enchance", "Needs new description");
-		this.addAspect(AspectRegistry.UDURIIS, "Chaos", "The aspect that correlates to the natural orderless state of the universe.");
-		this.addAspect(AspectRegistry.WODREN, "Soul", "The aspect that affects the spiritual state and life force of a being.");
-		this.addAspect(AspectRegistry.YEOWYNN, "Health", "Has effect on the health bar, could be both negative or positive, depending on the combination.");
-		this.addAspect(AspectRegistry.YIHINREN, "Form", "This effect has influence on the form of things, both physical and psychological. A very rare aspect that is mainly used in the special potions.");
-		this.addAspect(AspectRegistry.YUNUGAZ, "Wind", "Magical property which relates to wind. Any combination with this effect can be related to the element wind.");
+		this.addAspect(AspectTypeRegistry.ARMANIIS, "Desire", "Has effect on the desires of a mob or the player. Could be useful for food, but also things like trading or corrupting the desire.");
+		this.addAspect(AspectTypeRegistry.AZUWYNN, "Muscle", "Has effect on the muscles, could either result in more damage, speed or maybe rapid fire and all stuff in that regard.");
+		this.addAspect(AspectTypeRegistry.BYARIIS, "Corruption", "This effect can corrupt other effects, but even corrupt effects. So it could turn negative into positive, and positive into negative. so for example, if this effect gets combined with health it will do something negative to your health, but if this effect gets combined twice with health, it will corrupt itself and thus do something positive.");
+		this.addAspect(AspectTypeRegistry.BYRGINAZ, "Water", "Magical property which relates to water. Any combination with this effect can be related to water.");
+		this.addAspect(AspectTypeRegistry.CELAWYNN, "Stomach", "Has effect on the stomach. So this could have effect on the hunger bar for example.");
+		this.addAspect(AspectTypeRegistry.DAYUNIIS, "Mind", "Has effect on the player's mind and on how senses work. Could be positive, or negative (think nausea/schizophrenia).");
+		this.addAspect(AspectTypeRegistry.FERGALAZ, "Earth", "Magical property which relates to earth. Any combination with this effect can be related to the element earth.");
+		this.addAspect(AspectTypeRegistry.FIRNALAZ, "Fire", "Magical property which relates to fire. Any combination with this effect can be related to fire.");
+		this.addAspect(AspectTypeRegistry.FREIWYNN, "Vision", "Alters the player's vision. (In combination with other properties. So for example when you combine health with vision, you would be able to spot mobs their health.)");
+		this.addAspect(AspectTypeRegistry.GEOLIIRGAZ, "Void", "Magical property which relates to the void or ether. Any combination with this effect can be related to void or darkness.");
+		this.addAspect(AspectTypeRegistry.ORDANIIS, "Enchance", "Needs new description");
+		this.addAspect(AspectTypeRegistry.UDURIIS, "Chaos", "The aspect that correlates to the natural orderless state of the universe.");
+		this.addAspect(AspectTypeRegistry.WODREN, "Soul", "The aspect that affects the spiritual state and life force of a being.");
+		this.addAspect(AspectTypeRegistry.YEOWYNN, "Health", "Has effect on the health bar, could be both negative or positive, depending on the combination.");
+		this.addAspect(AspectTypeRegistry.YIHINREN, "Form", "This effect has influence on the form of things, both physical and psychological. A very rare aspect that is mainly used in the special potions.");
+		this.addAspect(AspectTypeRegistry.YUNUGAZ, "Wind", "Magical property which relates to wind. Any combination with this effect can be related to the element wind.");
+
+		this.add("commands.thebetweenlands.aspect.empty_hand", "Must be holding an item");
+		this.add("commands.thebetweenlands.aspect.no_book", "There's no Herblore Book to write to");
+		this.add("commands.thebetweenlands.aspect.no_aspects_held", "Item has no more possible aspects to discover");
+		this.add("commands.thebetweenlands.aspect.discover_held", "Result: %s Aspect: %d");
+		this.add("commands.thebetweenlands.aspect.discover_all", "Discovered all aspects of all items");
+		this.add("commands.thebetweenlands.aspect.reset_held", "Removed discovered aspects");
+		this.add("commands.thebetweenlands.aspect.reset_all", "Removed discovered aspects from all items");
+
+		this.add("commands.thebetweenlands.reset_aspects.confirm", "Confirm with '/resetAspects confirm'");
+		this.add("commands.thebetweenlands.reset_aspects.reset", "All aspects have been reset");
 	}
 
 	private void addItemWithDesc(DeferredItem<Item> item, String name, String desc) {
