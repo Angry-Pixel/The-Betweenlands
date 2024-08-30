@@ -14,6 +14,11 @@ public class ElixirPetrify extends ElixirEffect {
 	}
 
 	@Override
+	public int getColor() {
+		return 0xFF71c230;
+	}
+
+	@Override
 	protected void performEffect(LivingEntity entity, int amplifier) {
 		CompoundTag nbt = entity.getPersistentData();
 

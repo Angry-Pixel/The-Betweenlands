@@ -12,6 +12,11 @@ public class ElixirRipening extends ElixirEffect {
 	}
 
 	@Override
+	public int getColor() {
+		return 0xFF8dbdee;
+	}
+
+	@Override
 	protected void performEffect(LivingEntity entity, int amplifier) {
 		if(!entity.level().isClientSide() && entity instanceof Player player) {
 			DecayData cap = player.getData(AttachmentRegistry.DECAY);

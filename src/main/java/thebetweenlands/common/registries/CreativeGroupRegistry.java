@@ -1,12 +1,21 @@
 package thebetweenlands.common.registries;
 
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import thebetweenlands.api.BLRegistries;
+import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.component.item.AspectContents;
+import thebetweenlands.common.component.item.ElixirContents;
+import thebetweenlands.common.herblore.elixir.ElixirRecipe;
+import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 
 //TODO since we have full control of tab placement consider reorganizing the contents. Theyre currently the same as they were in 1.12
 public class CreativeGroupRegistry {
@@ -1131,8 +1140,37 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.PALE_GRASS_BLADES);
 			output.accept(ItemRegistry.STRING_ROOT_FIBERS);
 			output.accept(ItemRegistry.CRYPTWEED_BLADES);
-			//aspectrus fruits
-			//elixirs
-			//aspect vials
+			output.accept(ItemRegistry.ASPECTRUS_FRUIT);
+			parameters.holders().lookup(BLRegistries.Keys.ASPECT_TYPES).ifPresent(aspect -> createAspectrusFruits(output, aspect));
+			output.accept(ItemRegistry.GREEN_DENTROTHYST_VIAL);
+			output.accept(ItemRegistry.DIRTY_DENTROTHYST_VIAL);
+			output.accept(ItemRegistry.ORANGE_DENTROTHYST_VIAL);
+			parameters.holders().lookup(BLRegistries.Keys.ELIXIR_EFFECTS).ifPresent(effect -> createElixirs(output, effect, parameters.holders()));
+			parameters.holders().lookup(BLRegistries.Keys.ASPECT_TYPES).ifPresent(aspect -> createAspectVials(output, aspect));
 		}).build());
+
+	private static void createAspectrusFruits(CreativeModeTab.Output output, HolderLookup<AspectType> aspects) {
+		aspects.listElements().forEach(holder -> output.accept(AspectContents.createItemStack(ItemRegistry.ASPECTRUS_FRUIT.get(), holder, 250)));
+	}
+
+	private static void createElixirs(CreativeModeTab.Output output, HolderLookup<ElixirEffect> effects, HolderLookup.Provider provider) {
+		effects.listElements().forEach(holder -> {
+			Holder<ElixirRecipe> recipe = ElixirRecipe.getRecipeFor(holder, provider);
+			if (recipe != null) {
+				int baseDuration = holder.value().isAntiInfusion() ? recipe.value().negativeBaseDuration() : recipe.value().baseDuration();
+				int durationModifier = holder.value().isAntiInfusion() ? recipe.value().negativeDurationModifier() : recipe.value().durationModifier();
+				output.accept(ElixirContents.createItemStack(ItemRegistry.GREEN_ELIXIR.get(), holder, baseDuration, ElixirEffect.VIAL_INFUSION_MAX_POTENCY - 1));
+				output.accept(ElixirContents.createItemStack(ItemRegistry.GREEN_ELIXIR.get(), holder, baseDuration + Mth.floor(durationModifier / 6.0F * 5.0F), 0));
+				output.accept(ElixirContents.createItemStack(ItemRegistry.ORANGE_ELIXIR.get(), holder, baseDuration, ElixirEffect.VIAL_INFUSION_MAX_POTENCY - 1));
+				output.accept(ElixirContents.createItemStack(ItemRegistry.ORANGE_ELIXIR.get(), holder, baseDuration + Mth.floor(durationModifier / 6.0F * 5.0F), 0));
+			}
+		});
+	}
+
+	private static void createAspectVials(CreativeModeTab.Output output, HolderLookup<AspectType> aspects) {
+		aspects.listElements().forEach(holder -> {
+			output.accept(AspectContents.createItemStack(ItemRegistry.GREEN_ASPECT_VIAL.get(), holder, 2000));
+			output.accept(AspectContents.createItemStack(ItemRegistry.ORANGE_ASPECT_VIAL.get(), holder, 2000));
+		});
+	}
 }

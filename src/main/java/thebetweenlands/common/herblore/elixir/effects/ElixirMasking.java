@@ -8,6 +8,11 @@ public class ElixirMasking extends ElixirEffect {
 		super(icon);
 	}
 
+	@Override
+	public int getColor() {
+		return 0xFF28ccd5;
+	}
+
 	public boolean canEntityBeSeenBy(LivingEntity target, LivingEntity watcher) {
 		if(this.isActive(target)) {
 			int strength = this.getStrength(target);

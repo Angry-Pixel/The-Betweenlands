@@ -330,6 +330,37 @@ public class ItemModelProvider extends net.neoforged.neoforge.client.model.gener
 				}
 			}
 		}
+
+		this.getBuilder(ItemRegistry.ASPECTRUS_FRUIT.getId().toString())
+			.parent(new ModelFile.UncheckedModelFile("item/generated"))
+			.texture("layer0", TheBetweenlands.prefix("item/aspectrus_fruit"))
+			.texture("layer1", TheBetweenlands.prefix("item/aspectrus_fruit_overlay"));
+
+		this.basicItem(ItemRegistry.GREEN_DENTROTHYST_VIAL);
+		this.basicItem(ItemRegistry.DIRTY_DENTROTHYST_VIAL);
+		this.basicItem(ItemRegistry.ORANGE_DENTROTHYST_VIAL);
+
+		this.getBuilder(ItemRegistry.GREEN_ELIXIR.getId().toString())
+			.parent(new ModelFile.UncheckedModelFile("item/generated"))
+			.texture("layer0", TheBetweenlands.prefix("item/vial_liquid"))
+			.texture("layer1", TheBetweenlands.prefix("item/green_dentrothyst_vial"))
+			.texture("layer2", TheBetweenlands.prefix("item/vial_liquid_glint"));
+
+		this.getBuilder(ItemRegistry.ORANGE_ELIXIR.getId().toString())
+			.parent(new ModelFile.UncheckedModelFile("item/generated"))
+			.texture("layer0", TheBetweenlands.prefix("item/vial_liquid"))
+			.texture("layer1", TheBetweenlands.prefix("item/orange_dentrothyst_vial"))
+			.texture("layer2", TheBetweenlands.prefix("item/vial_liquid_glint"));
+
+		this.getBuilder(ItemRegistry.GREEN_ASPECT_VIAL.getId().toString())
+			.parent(new ModelFile.UncheckedModelFile("item/generated"))
+			.texture("layer0", TheBetweenlands.prefix("item/aspect_liquid"))
+			.texture("layer1", TheBetweenlands.prefix("item/green_dentrothyst_vial"));
+
+		this.getBuilder(ItemRegistry.ORANGE_ASPECT_VIAL.getId().toString())
+			.parent(new ModelFile.UncheckedModelFile("item/generated"))
+			.texture("layer0", TheBetweenlands.prefix("item/aspect_liquid"))
+			.texture("layer1", TheBetweenlands.prefix("item/orange_dentrothyst_vial"));
 	}
 
 	public ItemModelBuilder basicItem(DeferredItem<? extends Item> item) {

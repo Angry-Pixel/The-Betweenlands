@@ -9,6 +9,11 @@ public class ElixirDraining extends ElixirEffect {
 	}
 
 	@Override
+	public int getColor() {
+		return 0xFF1cd67d;
+	}
+
+	@Override
 	protected void performEffect(LivingEntity entity, int amplifier) {
 		if(!entity.level().isClientSide()) {
 			entity.hurt(entity.damageSources().magic(), 1);

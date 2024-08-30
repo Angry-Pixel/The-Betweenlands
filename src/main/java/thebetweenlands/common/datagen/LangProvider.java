@@ -1,6 +1,7 @@
 package thebetweenlands.common.datagen;
 
 import net.minecraft.Util;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceKey;
@@ -12,6 +13,8 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import org.apache.commons.lang3.StringUtils;
 import thebetweenlands.api.aspect.registry.AspectType;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
+import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.registries.AspectTypeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
@@ -1111,6 +1114,58 @@ public class LangProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.STRING_ROOT_FIBERS, "String Root Fibers");
 		this.addItem(ItemRegistry.CRYPTWEED_BLADES, "Cryptweed Blades");
 
+		this.addItem(ItemRegistry.ASPECTRUS_FRUIT, "Aspectrus Fruit");
+		this.add(ItemRegistry.ASPECTRUS_FRUIT.get().getDescriptionId() + ".aspect", "Aspectrus Fruit - %s");
+
+		this.addItem(ItemRegistry.GREEN_DENTROTHYST_VIAL, "Green Dentrothyst Vial");
+		this.addItem(ItemRegistry.DIRTY_DENTROTHYST_VIAL, "Dirty Dentrothyst Vial");
+		this.addItem(ItemRegistry.ORANGE_DENTROTHYST_VIAL, "Orange Dentrothyst Vial");
+
+		this.addItem(ItemRegistry.GREEN_ASPECT_VIAL, "Green Aspect Vial");
+		this.addItem(ItemRegistry.ORANGE_ASPECT_VIAL, "Orange Aspect Vial");
+		this.add("item.thebetweenlands.aspect_vial.aspect", "%s (%s)");
+		this.add("item.thebetweenlands.aspect_vial.byariis", "Can be used as fuel for the Repeller");
+		this.add("item.thebetweenlands.aspect_vial.freiwynn", "Can be used to turn item frames invisible");
+
+		this.addItem(ItemRegistry.GREEN_ELIXIR, "Green Elixir Vial");
+		this.addItem(ItemRegistry.ORANGE_ELIXIR, "Orange Elixir Vial");
+		this.add("item.thebetweenlands.elixir.potency", "Potency: %s");
+		this.add("item.thebetweenlands.elixir.duration", "Duration: %s (%s)");
+		this.addElixir(ElixirEffectRegistry.EFFECT_STRENGTH, "Elixir of Strength", "Increases raw physical strength, causing one to deal more damage when they attack.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_NIMBLEFEET, "Nimblefeet Elixir", "Enhances muscle swiftness and nimbleness, increasing one's movement speed.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_HEALING, "Elixir of Healing", "Accelerates natural regeneration, healing one's wounds over time.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_RIPENING, "Elixir of Ripening", "Reverses the effects of the decaying aura of the Betweenlands, restoring one's physical and psychological health over time.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_TOUGHSKIN, "Toughskin Elixir", "Increases skin toughness, protecting one from harmful plants found throughout the Betweenlands.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_FEASTING, "Elixir of Feasting", "Gives the stomach something tough to feed on, satisfying one's hunger over time.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_HUNTERSSENSE, "Hunter's Sense Brew", "Enhances the senses, allowing one to see and smell the scent trails of creatures in order to track them down.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_MASKING, "Masking Brew", "Masks natural odors like a perfume, making it harder for one to be detected by predators.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_SWIFTARM, "Swiftarm Brew", "Enables arm muscles to work to their fullest, increasing one's arm swinging speed and thus allowing them to mine faster, pull back bows more rapidly, and strike foes more easily.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_CATSEYES, "Brew of the Cat's Eye", "Makes the eyes extremely sensitive to light, allowing one to see very well in the dark.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_SAGITTARIUS, "Draught of Sagittarius", "Contains the power of Sagittarius, allowing one to see exactly what path their arrow will take when fired from a bow.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_SPIDERBREED, "Spiderbreed Draught", "Changes the workings of the skin and muscle, allowing one to climb up and down any obstacle as if they were an insect.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_LIGHTWEIGHT, "Lightweight Draught", "Causes a strange sensation of weightlessness, allowing one to walk slowly over water as if it were solid ground.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_UNCLOUDED, "Draught of the Unclouded", "Clears a foggy mind, allowing one to see through dense fog as if it evaporated in front of their eyes.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_GILLSGROWTH, "Shapeshifter's draught of Gillsgrowth");
+		this.addElixir(ElixirEffectRegistry.EFFECT_WINGS, "Shapeshifter's draught of Wings");
+		this.addElixir(ElixirEffectRegistry.EFFECT_HUNTERSSENSEMASTER, "Hunter's Sense Masterbrew");
+		this.addElixir(ElixirEffectRegistry.EFFECT_WEAKNESS, "Elixir of Weakness", "Weakens the muscles, reducing one's damage output when they attack.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_LUMBERING, "Lumbering Elixir", "Makes the muscles lethargic, reducing one's movement speed.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_DRAINING, "Elixir of Draining", "Drains one's health over time.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_DECAY, "Elixir of Decay", "Increases vulnerability to the decaying aura of the Betweenlands, causing one to experience a quicker decline in physical and psychological health.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_POISONSTING, "Poisonsting Elixir", "Contains the wrath of the sinister plants found in the Betweenlands, poisoning one instantly.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_STARVATION, "Elixir of Starvation", "Makes the stomach digest food faster and less efficiently, causing one to go hungry more quickly.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_DRUNKARD, "Drunkard's Brew", "Causes one to experience a heavy bout of nausea.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_STENCHING, "Stenching Brew", "Causes the emission of a very potent odor that is desired by monsters, making it easier for one to be detected by predators.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_SLUGARM, "Slugarm Brew", "Makes the arms feel numb, decreasing one's arm swinging speed and thus causing them to mine slower and strike foes less easily.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_BLINDMAN, "Blindman's Brew", "Severely limits the function of the eye, causing one to only be able to see a small distance in front of them and be unable to sprint.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_WEAKBOW, "Weakbow Draught", "Reduces archery skill, greatly limiting one's bow shooting range.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_BASILISK, "Basilisk Draught", "Petrifies the motor cortex of the brain, causing one to be frozen in place.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_HEAVYWEIGHT, "Heavyweight Draught", "Gives a strange sense of heaviness, causing one to find swimming more difficult and causing them to sink in Mud despite whatever they may be wearing to protect them from it.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_FOGGEDMIND, "Draught of the Fogged Mind", "Clouds the mind with worrisome thoughts, causing one to see the illusion of a thick fog surrounding them.");
+		this.addElixir(ElixirEffectRegistry.EFFECT_DEFORMED, "Shapeshifter's draught of the Deformed");
+		this.addElixir(ElixirEffectRegistry.EFFECT_LIMBLESS, "Shapeshifter's draught of the Limbless");
+		this.addElixir(ElixirEffectRegistry.EFFECT_ISOLATEDSENSES, "Masterbrew of Isolated Senses");
+
 		this.addAspect(AspectTypeRegistry.ARMANIIS, "Desire", "Has effect on the desires of a mob or the player. Could be useful for food, but also things like trading or corrupting the desire.");
 		this.addAspect(AspectTypeRegistry.AZUWYNN, "Muscle", "Has effect on the muscles, could either result in more damage, speed or maybe rapid fire and all stuff in that regard.");
 		this.addAspect(AspectTypeRegistry.BYARIIS, "Corruption", "This effect can corrupt other effects, but even corrupt effects. So it could turn negative into positive, and positive into negative. so for example, if this effect gets combined with health it will do something negative to your health, but if this effect gets combined twice with health, it will corrupt itself and thus do something positive.");
@@ -1160,5 +1215,17 @@ public class LangProvider extends LanguageProvider {
 		this.add(base, StringUtils.capitalize(aspect.location().getPath()));
 		this.add(base + ".manual", manualType);
 		this.add(base + ".desc", desc);
+	}
+
+	private void addElixir(Holder<ElixirEffect> elixir, String name) {
+		this.add("item.thebetweenlands.elixir." + elixir.getKey().location().getPath(), name);
+		this.add("effect.thebetweenlands." + elixir.getKey().location().getPath(), name);
+	}
+
+	private void addElixir(Holder<ElixirEffect> elixir, String name, String desc) {
+		String base = "item.thebetweenlands.elixir." + elixir.getKey().location().getPath();
+		this.add(base, name);
+		this.add("effect.thebetweenlands." + elixir.getKey().location().getPath(), name);
+		this.add(base + "_effect", desc);
 	}
 }

@@ -8,6 +8,10 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.RegistryFileCodec;
 import thebetweenlands.api.BLRegistries;
+import thebetweenlands.api.aspect.Aspect;
+import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
+
+import java.util.Optional;
 
 public record AspectType(int color, AspectTier tier, boolean rollAsCommonAspect, int amount) {
 

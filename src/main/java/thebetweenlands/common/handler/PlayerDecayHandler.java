@@ -16,6 +16,7 @@ import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.api.capability.IDecayData;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
@@ -160,10 +161,10 @@ public class PlayerDecayHandler {
 		ServerPlayer player = event.getEntity() instanceof ServerPlayer p ? p : null;
 		if(player != null && !player.level().isClientSide()) { // should always be true
 			IDecayData decayData = player.getData(AttachmentRegistry.DECAY);
-			((ServerPlayer)player).connection.send(new UpdateDecayDataPacket(decayData.getDecayLevel(player), decayData.getPrevDecayLevel(), decayData.getSaturationLevel(), decayData.getAccelerationLevel()));
+			PacketDistributor.sendToPlayer(player, new UpdateDecayDataPacket(decayData.getDecayLevel(player), decayData.getPrevDecayLevel(), decayData.getSaturationLevel(), decayData.getAccelerationLevel()));
 		}
 	}
-	
+
 	// TODO OverworldItemHandler required for item use methods
 
 	private static boolean isTargetSmelly(LivingEntity entity) {

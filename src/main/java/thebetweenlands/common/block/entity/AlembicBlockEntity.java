@@ -13,11 +13,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.AspectContainerItem;
 import thebetweenlands.api.aspect.registry.AspectType;
+import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.herblore.Amounts;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
+import thebetweenlands.common.items.DentrothystVialItem;
 import thebetweenlands.common.registries.BlockEntityRegistry;
+import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import javax.annotation.Nullable;
@@ -41,10 +44,10 @@ public class AlembicBlockEntity extends SyncedBlockEntity {
 	private int producableStrength;
 	private int producableDuration;
 	@Nullable
-	private ElixirEffect producableElixir = null;
+	private Holder<ElixirEffect> producableElixir = null;
 	private final List<Aspect> producableItemAspects = new ArrayList<>();
 	@Nullable
-	private final ElixirRecipe recipe = null;
+	private final Holder<ElixirRecipe> recipe = null;
 	private int bucketInfusionTime;
 
 	private boolean loadInfusionData = false;
@@ -132,7 +135,7 @@ public class AlembicBlockEntity extends SyncedBlockEntity {
 	}
 
 	@Nullable
-	public ElixirRecipe getElixirRecipe() {
+	public Holder<ElixirRecipe> getElixirRecipe() {
 		return this.recipe;
 	}
 
@@ -269,7 +272,7 @@ public class AlembicBlockEntity extends SyncedBlockEntity {
 	 * @param vial
 	 * @return
 	 */
-	public ItemStack getElixir(Level level, BlockPos pos, BlockState state, Item vial) {
+	public ItemStack getElixir(Level level, BlockPos pos, BlockState state, DentrothystVialItem vial) {
 		if (this.isFull() && this.hasFinished()) {
 			if (this.producableElixir != null) {
 				ItemStack elixir = ItemStack.EMPTY;
@@ -324,7 +327,7 @@ public class AlembicBlockEntity extends SyncedBlockEntity {
 		level.sendBlockUpdated(pos, state, state, 3);
 	}
 
-	private ItemStack createElixir(ElixirEffect elixir, int strength, int duration, Item vial) {
-		return ItemRegistry.ELIXIR.get().getDefaultInstance();//.getElixirItem(elixir, duration, strength, vial);
+	private ItemStack createElixir(Holder<ElixirEffect> elixir, int strength, int duration, DentrothystVialItem vial) {
+		return ElixirContents.createItemStack(vial.getFullElixirBottle().value(), elixir, duration, strength);
 	}
 }

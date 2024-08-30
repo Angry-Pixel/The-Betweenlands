@@ -10,6 +10,11 @@ public class ElixirStarvation extends ElixirEffect {
 	}
 
 	@Override
+	public int getColor() {
+		return 0xFFc57118;
+	}
+
+	@Override
 	protected void performEffect(LivingEntity entity, int amplifier) {
 		if (!entity.level().isClientSide() && entity instanceof Player player) {
 			if (player.getFoodData().getFoodLevel() > 0) {

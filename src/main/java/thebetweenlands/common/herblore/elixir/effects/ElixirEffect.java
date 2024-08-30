@@ -2,6 +2,8 @@ package thebetweenlands.common.herblore.elixir.effects;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import javax.annotation.Nullable;
 
@@ -14,14 +16,16 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.alchemy.Potion;
 
 public class ElixirEffect {
 	public static final int VIAL_INFUSION_MAX_POTENCY = 5;
 
 	private final ResourceLocation icon;
 	private final int color;
-	private final Map<Holder<Attribute>, AttributeTemplate> elixirAttributeModifiers = new Object2ObjectOpenHashMap<>();
+	public final Map<Holder<Attribute>, AttributeTemplate> elixirAttributeModifiers = new Object2ObjectOpenHashMap<>();
 	private Holder<MobEffect> elixirEffect;
 	private Holder<MobEffect> effect;
 	private boolean isAntiInfusion = false;
@@ -70,54 +74,17 @@ public class ElixirEffect {
 		return this.icon;
 	}
 
-	/**
-	 * Whether this effect should be applied this tick
-	 */
 	protected boolean isReady(int ticks, int strength) {
 		return true;
 	}
 
-	/**
-	 * Effect over time
-	 */
 	protected void performEffect(LivingEntity entity, int strength) {
 	}
 
-	/**
-	 * Instant effect
-	 */
-	protected void affectEntity(@Nullable Entity source, @Nullable Entity indirectSource, LivingEntity target, int amplifier, double health) {
-	}
-
-	/**
-	 * Whether this affect should be applied instantly
-	 *
-	 * @return
-	 */
 	protected boolean isInstant() {
 		return false;
 	}
 
-	/**
-	 * Calculates the modifier from the attribute and elixir strength
-	 *
-	 * @param attributeModifier
-	 * @param strength
-	 * @return
-	 */
-	protected double getAttributeModifier(AttributeModifier attributeModifier, int strength) {
-		return attributeModifier.amount() * (double) (strength + 1);
-	}
-
-	/**
-	 * Adds an entity attribute modifier that is applied when the potion is active.
-	 *
-	 * @param attribute
-	 * @param id
-	 * @param modifier
-	 * @param operation
-	 * @return
-	 */
 	public ElixirEffect addAttributeModifier(Holder<Attribute> attribute, ResourceLocation id, double modifier, AttributeModifier.Operation operation) {
 		if (this.elixirEffect != null) {
 			this.elixirEffect.value().addAttributeModifier(attribute, id, modifier, operation);
@@ -127,6 +94,9 @@ public class ElixirEffect {
 		return this;
 	}
 
+	public void createModifiers(int amplifier, BiConsumer<Holder<Attribute>, AttributeModifier> output) {
+		this.elixirAttributeModifiers.forEach((p_349971_, p_349972_) -> output.accept(p_349971_, p_349972_.create(amplifier)));
+	}
 
 	public ElixirEffect setElixirEffect(Holder<MobEffect> effectHolder) {
 		this.effect = effectHolder;
@@ -197,11 +167,13 @@ public class ElixirEffect {
 		return this.elixirEffect;
 	}
 
+	public static String getName(Optional<Holder<ElixirEffect>> elixir, String descriptionId) {
+		return elixir.map(elixirEffectHolder -> "item.thebetweenlands.elixir." + elixirEffectHolder.getKey().location().getPath()).orElse(descriptionId);
+	}
+
 	public static class ElixirPotionEffect extends MobEffect {
 		private final ElixirEffect effect;
 		private final ResourceLocation icon;
-		public String localizedElixirName;
-		//private TextContainer nameContainer;
 
 		public ElixirPotionEffect(ElixirEffect effect, int color, ResourceLocation icon) {
 			super(MobEffectCategory.BENEFICIAL, color);
@@ -230,7 +202,7 @@ public class ElixirEffect {
 		}
 	}
 
-	record AttributeTemplate(ResourceLocation id, double amount, AttributeModifier.Operation operation) {
+	public record AttributeTemplate(ResourceLocation id, double amount, AttributeModifier.Operation operation) {
 		public AttributeModifier create(int level) {
 			return new AttributeModifier(this.id, this.amount * (double)(level + 1), this.operation);
 		}

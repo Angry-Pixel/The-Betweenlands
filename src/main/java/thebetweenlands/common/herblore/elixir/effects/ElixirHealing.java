@@ -9,6 +9,11 @@ public class ElixirHealing extends ElixirEffect {
 	}
 
 	@Override
+	public int getColor() {
+		return 0xFF1cd67d;
+	}
+
+	@Override
 	protected void performEffect(LivingEntity entity, int ampifier) {
 		if(!entity.level().isClientSide() && entity.getHealth() < entity.getMaxHealth()) {
 			entity.heal(1.0F);

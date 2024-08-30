@@ -10,11 +10,15 @@ import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.NoopRenderer;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
 import net.neoforged.bus.api.IEventBus;
@@ -42,8 +46,11 @@ import thebetweenlands.client.particle.BetweenlandsPortalParticle;
 import thebetweenlands.client.renderer.block.*;
 import thebetweenlands.client.renderer.entity.*;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.component.item.AspectContents;
+import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.entities.fishing.anadia.AnadiaParts;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
+import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.items.AnadiaMobItem;
 import thebetweenlands.common.registries.*;
@@ -105,6 +112,21 @@ public class ClientRegistrationEvents {
 			}
 			return AnadiaParts.AnadiaColor.UNKNOWN.getColor();
 		}, ItemRegistry.ANADIA.get());
+
+		event.register((stack, tintIndex) -> {
+			if (tintIndex != 1) return 0xFFFFFFFF;
+			return stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY).aspect().map(aspect -> aspect.value().color()).orElse(0xFFFFFFFF);
+		}, ItemRegistry.ASPECTRUS_FRUIT.get());
+
+		event.register((stack, tintIndex) -> {
+			if (tintIndex != 0) return 0xFFFFFFFF;
+			return stack.getOrDefault(DataComponentRegistry.ELIXIR_CONTENTS, ElixirContents.EMPTY).getElixirColor();
+		}, ItemRegistry.GREEN_ELIXIR.get(), ItemRegistry.ORANGE_ELIXIR.get());
+
+		event.register((stack, tintIndex) -> {
+			if (tintIndex != 0) return 0xFFFFFFFF;
+			return stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY).getAspectColor();
+		}, ItemRegistry.GREEN_ASPECT_VIAL.get(), ItemRegistry.ORANGE_ASPECT_VIAL.get());
 	}
 
 	private static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
@@ -116,6 +138,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.ANADIA.get(), AnadiaRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.FISH_HOOK.get(), BLFishHookRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.SEAT.get(), NoopRenderer::new);
+		event.registerEntityRenderer(EntityRegistry.ELIXIR.get(), ThrownItemRenderer::new);
 
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ANIMATOR.get(), AnimatorRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.CENSER.get(), CenserRenderer::new);
@@ -258,45 +281,8 @@ public class ClientRegistrationEvents {
 				public boolean renderInventoryIcon(MobEffectInstance instance, EffectRenderingInventoryScreen<?> screen, GuiGraphics graphics, int x, int y, int blitOffset) {
 					if (potEffect.getIcon() != null) {
 						RenderSystem.enableBlend();
-						RenderSystem.setShaderTexture(0, potEffect.getIcon());
-						Tesselator tesselator = Tesselator.getInstance();
-
-						BufferBuilder builder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-						builder.addVertex(x + 6, y + 6, 0).setUv(0, 0);
-						builder.addVertex(x + 6, y + 6 + 20, 0).setUv(0, 1);
-						builder.addVertex(x + 6 + 20, y + 6 + 20, 0).setUv(1, 1);
-						builder.addVertex(x + 6 + 20, y + 6, 0).setUv(1, 0);
-						BufferUploader.drawWithShader(builder.buildOrThrow());
+						graphics.blit(potEffect.getIcon(), x + 1, y + 7, 0, 0, 0, 16, 16, 16, 16);
 					}
-					if (potEffect.localizedElixirName == null) {
-						potEffect.localizedElixirName = potEffect.getDisplayName().getString();
-					}
-					//TODO reimplement once book is added
-//					if (ElixirPotionEffect.this.nameContainer == null) {
-//						ElixirPotionEffect.this.nameContainer = new TextContainer(88, 100, this.localizedElixirName, Minecraft.getInstance().font);
-//						int width = Minecraft.getInstance().font.width(ElixirPotionEffect.this.localizedElixirName);
-//						float scale = 1.0F;
-//						if (width > 88) {
-//							scale = 88.0F / (float) width;
-//							scale -= scale % 0.25F;
-//						}
-//						if (scale < 0.5F) {
-//							scale = 0.5F;
-//						}
-//						ElixirPotionEffect.this.nameContainer.setCurrentScale(scale);
-//						ElixirPotionEffect.this.nameContainer.setCurrentColor(0xFFFFFFFF);
-//						try {
-//							ElixirPotionEffect.this.nameContainer.parse();
-//						} catch (Exception e) {
-//							e.printStackTrace();
-//						}
-//					}
-//					if (ElixirPotionEffect.this.nameContainer != null && ElixirPotionEffect.this.nameContainer.getPages().size() > 0) {
-//						TextContainer.TextPage page0 = this.nameContainer.getPages().get(0);
-//						page0.render(x + 28, y + 6);
-//						String s = Potion.getPotionDurationString(ElixirPotionEffect.this.effect, 1.0F);
-//						graphics.drawString(Minecraft.getInstance().font, s, (float) (x + 10 + 18), (float) (y + 6 + 10), 8355711, true);
-//					}
 					return true;
 				}
 
@@ -308,17 +294,7 @@ public class ClientRegistrationEvents {
 				@Override
 				public boolean renderGuiIcon(MobEffectInstance instance, Gui gui, GuiGraphics graphics, int x, int y, float z, float alpha) {
 					if (potEffect.getIcon() != null) {
-						RenderSystem.enableBlend();
-						RenderSystem.setShaderTexture(0, potEffect.getIcon());
-
-						Tesselator tesselator = Tesselator.getInstance();
-
-						BufferBuilder builder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-						builder.addVertex(x + 2, y + 2, 0).setUv(0, 0);
-						builder.addVertex(x + 2, y + 2 + 20, 0).setUv(0, 1);
-						builder.addVertex(x + 2 + 20, y + 2 + 20, 0).setUv(1, 1);
-						builder.addVertex(x + 2 + 20, y + 2, 0).setUv(1, 0);
-						BufferUploader.drawWithShader(builder.buildOrThrow());
+						graphics.blit(potEffect.getIcon(), x + 4, y + 4, 0, 0, 0, 16, 16, 16, 16);
 					}
 					return true;
 				}

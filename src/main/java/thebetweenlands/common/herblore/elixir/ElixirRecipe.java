@@ -2,6 +2,8 @@ package thebetweenlands.common.herblore.elixir;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.ResourceKey;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.registry.AspectType;
@@ -48,6 +50,16 @@ public record ElixirRecipe(int infusionGradient, int infusionFinishedColor, int 
 		ResourceKey.codec(BLRegistries.Keys.ASPECT_TYPES).optionalFieldOf("duration_aspect").forGetter(ElixirRecipe::durationAspect),
 		ResourceKey.codec(BLRegistries.Keys.ASPECT_TYPES).listOf().fieldOf("aspects").forGetter(ElixirRecipe::aspects)
 	).apply(instance, ElixirRecipe::new));
+
+	@Nullable
+	public static Holder<ElixirRecipe> getRecipeFor(Holder<ElixirEffect> effect, HolderLookup.Provider provider) {
+		for (Holder<ElixirRecipe> recipe : provider.lookupOrThrow(BLRegistries.Keys.ELIXIR_RECIPES).listElements().toList()) {
+			if (effect.value() == recipe.value().negativeElixir() || effect.value() == recipe.value().positiveElixir()) {
+				return recipe;
+			}
+		}
+		return null;
+	}
 
 	public float[] getRGBA(int color) {
 		float a = (float)(color >> 24 & 255) / 255.0F;

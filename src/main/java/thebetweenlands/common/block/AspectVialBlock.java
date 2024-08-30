@@ -88,7 +88,7 @@ public class AspectVialBlock extends BaseEntityBlock {
 					Aspect aspect = vial.getAspect();
 					int removedAmount = vial.removeAmount(100);
 					if (removedAmount > 0) {
-						container = AspectContainerItem.fromItem(new ItemStack(vialItem.getFullBottle()));
+						container = AspectContainerItem.fromItem(new ItemStack(vialItem.getFullAspectBottle()));
 						container.add(aspect.type(), removedAmount);
 
 						stack.shrink(1);
@@ -96,7 +96,7 @@ public class AspectVialBlock extends BaseEntityBlock {
 							player.setItemInHand(hand, stack);
 
 						//Drop new aspect item
-						ItemEntity itemEntity = player.drop(new ItemStack(vialItem.getFullBottle()), false);
+						ItemEntity itemEntity = player.drop(new ItemStack(vialItem.getFullAspectBottle()), false);
 						if (itemEntity != null) itemEntity.setNoPickUpDelay();
 					}
 				}

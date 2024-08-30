@@ -11,6 +11,11 @@ public class ElixirSwiftarm extends ElixirEffect {
 	}
 
 	@Override
+	public int getColor() {
+		return 0xFFe8fc5b;
+	}
+
+	@Override
 	protected void performEffect(LivingEntity entity, int amplifier) {
 		if(entity instanceof Player player) {
 			if(player.swingTime >= 20) player.swing(InteractionHand.MAIN_HAND);

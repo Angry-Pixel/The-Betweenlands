@@ -63,7 +63,7 @@ public class MortarAspectrusRecipe implements MortarRecipe {
 			Aspect aspect = inputAspects.getFirst();
 
 			if(outputStack.getItem() instanceof DentrothystVialItem vial) {
-				ItemStack apsectVial = new ItemStack(vial.getFullBottle());
+				ItemStack apsectVial = new ItemStack(vial.getFullAspectBottle());
 				AspectContainerItem vialContainer = AspectContainerItem.fromItem(apsectVial);
 				vialContainer.add(aspect.type(), aspect.amount());
 				return apsectVial;

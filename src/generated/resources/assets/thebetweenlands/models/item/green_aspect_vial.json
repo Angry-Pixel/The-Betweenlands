@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "thebetweenlands:item/aspect_liquid",
+    "layer1": "thebetweenlands:item/green_dentrothyst_vial"
+  }
+}

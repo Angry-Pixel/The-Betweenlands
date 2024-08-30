@@ -6,9 +6,12 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.component.item.AspectContents;
+import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.datagen.tags.EntityTagProvider;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.items.*;
@@ -401,13 +404,14 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> PALE_GRASS_BLADES = ITEMS.register("pale_grass_blades", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> STRING_ROOT_FIBERS = ITEMS.register("string_root_fibers", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> CRYPTWEED_BLADES = ITEMS.register("cryptweed_blades", () -> new Item(new Item.Properties()));
-	public static final DeferredItem<Item> ASPECTRUS_FRUIT = ITEMS.register("apsectrus_fruit", () -> new Item(new Item.Properties()));
-	public static final DeferredItem<Item> ELIXIR = ITEMS.register("elixir", () -> new Item(new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> GREEN_DENTROTHYST_VIAL = ITEMS.register("green_dentothyst_vial", () -> new DentrothystVialItem(ItemRegistry.GREEN_ASPECT_VIAL, new Item.Properties()));
-	public static final DeferredItem<Item> DIRTY_DENTROTHYST_VIAL = ITEMS.register("dirty_dentothyst_vial", () -> new Item(new Item.Properties()));
-	public static final DeferredItem<Item> ORANGE_DENTROTHYST_VIAL = ITEMS.register("orange_dentothyst_vial", () -> new DentrothystVialItem(ItemRegistry.ORANGE_ASPECT_VIAL, new Item.Properties()));
-	public static final DeferredItem<Item> GREEN_ASPECT_VIAL = ITEMS.register("green_aspect_vial", () -> new AspectVialItem(new Item.Properties().craftRemainder(GREEN_DENTROTHYST_VIAL.get())));
-	public static final DeferredItem<Item> ORANGE_ASPECT_VIAL = ITEMS.register("orange_aspect_vial", () -> new AspectVialItem(new Item.Properties().craftRemainder(ORANGE_DENTROTHYST_VIAL.get())));
+	public static final DeferredItem<Item> ASPECTRUS_FRUIT = ITEMS.register("apsectrus_fruit", () -> new AspectrusFruitItem(new Item.Properties().component(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY)));
+	public static final DeferredItem<Item> GREEN_DENTROTHYST_VIAL = ITEMS.register("green_dentrothyst_vial", () -> new DentrothystVialItem(ItemRegistry.GREEN_ASPECT_VIAL, ItemRegistry.GREEN_ELIXIR, new Item.Properties()));
+	public static final DeferredItem<Item> DIRTY_DENTROTHYST_VIAL = ITEMS.register("dirty_dentrothyst_vial", () -> new Item(new Item.Properties()));
+	public static final DeferredItem<Item> ORANGE_DENTROTHYST_VIAL = ITEMS.register("orange_dentrothyst_vial", () -> new DentrothystVialItem(ItemRegistry.ORANGE_ASPECT_VIAL, ItemRegistry.ORANGE_ELIXIR, new Item.Properties()));
+	public static final DeferredItem<Item> GREEN_ASPECT_VIAL = ITEMS.register("green_aspect_vial", () -> new AspectVialItem(new Item.Properties().stacksTo(1).craftRemainder(GREEN_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY)));
+	public static final DeferredItem<Item> ORANGE_ASPECT_VIAL = ITEMS.register("orange_aspect_vial", () -> new AspectVialItem(new Item.Properties().stacksTo(1).craftRemainder(ORANGE_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY)));
+	public static final DeferredItem<Item> GREEN_ELIXIR = ITEMS.register("green_elixir", () -> new ElixirItem(new Item.Properties().stacksTo(1).craftRemainder(GREEN_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ELIXIR_CONTENTS, ElixirContents.EMPTY)));
+	public static final DeferredItem<Item> ORANGE_ELIXIR = ITEMS.register("orange_elixir", () -> new ElixirItem(new Item.Properties().stacksTo(1).craftRemainder(ORANGE_DENTROTHYST_VIAL.get()).component(DataComponentRegistry.ELIXIR_CONTENTS, ElixirContents.EMPTY)));
 
 	//debug items
 	public static final DeferredItem<Item> GLUE = ITEMS.register("glue", () -> new GlueItem(new Item.Properties()));

@@ -5,14 +5,20 @@ import net.minecraft.world.item.Item;
 
 public class DentrothystVialItem extends Item {
 
-	private final Holder<Item> fullBottle;
+	private final Holder<Item> fullAspectBottle;
+	private final Holder<Item> fullElixirBottle;
 
-	public DentrothystVialItem(Holder<Item> fullBottle, Properties properties) {
+	public DentrothystVialItem(Holder<Item> fullAspectBottle, Holder<Item> fullElixirBottle, Properties properties) {
 		super(properties);
-		this.fullBottle = fullBottle;
+		this.fullAspectBottle = fullAspectBottle;
+		this.fullElixirBottle = fullElixirBottle;
 	}
 
-	public Holder<Item> getFullBottle() {
-		return this.fullBottle;
+	public Holder<Item> getFullAspectBottle() {
+		return this.fullAspectBottle;
+	}
+
+	public Holder<Item> getFullElixirBottle() {
+		return this.fullElixirBottle;
 	}
 }

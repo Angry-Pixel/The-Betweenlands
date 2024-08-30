@@ -33,6 +33,7 @@ import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.aspect.AspectContainerItem;
 import thebetweenlands.common.block.entity.RepellerBlockEntity;
+import thebetweenlands.common.herblore.Amounts;
 import thebetweenlands.common.items.AspectVialItem;
 import thebetweenlands.common.items.DentrothystVialItem;
 import thebetweenlands.common.registries.AspectTypeRegistry;
@@ -95,10 +96,10 @@ public class RepellerBlock extends HorizontalBaseEntityBlock {
 						}
 					}
 				} else if (stack.getItem() instanceof DentrothystVialItem vial && repeller.getFuel() > 0) {
-					ItemStack newStack = new ItemStack(vial.getFullBottle());
+					ItemStack newStack = new ItemStack(vial.getFullAspectBottle());
 					if (!level.isClientSide()) {
 						AspectContainerItem aspectContainer = AspectContainerItem.fromItem(newStack);
-						//aspectContainer.set(AspectRegistry.BYARIIS, repeller.removeFuel(Amounts.VIAL));
+						aspectContainer.set(level.registryAccess().registryOrThrow(BLRegistries.Keys.ASPECT_TYPES).getHolderOrThrow(AspectTypeRegistry.BYARIIS), repeller.removeFuel(Amounts.VIAL));
 					}
 					stack.shrink(1);
 					if (!player.getInventory().add(newStack)) {
