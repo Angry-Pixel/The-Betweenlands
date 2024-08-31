@@ -1,0 +1,207 @@
+{
+  "parent": "thebetweenlands:adventurer/gambling_addict",
+  "criteria": {
+    "ancient": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:music_disc_ancient"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "astatos": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:music_disc_astatos"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "beneath": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:music_disc_beneath_a_green_sky"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "between": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:music_disc_between_you_and_me"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "christmas": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:music_disc_christmas_on_the_marsh"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "explorer": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:music_disc_the_explorer"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "hag": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:music_disc_hag_dance"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "lonely": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:music_disc_lonely_fire"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "mixtape": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:dj_wights_mixtape"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "mystery": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:mysterious_record"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "onwards": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:music_disc_onwards"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "stuck": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:music_disc_stuck_in_the_mud"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "wandering": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:music_disc_wandering_wisps"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "waterlogged": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:music_disc_waterlogged"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.adventurer.vinyl_countdown.desc"
+    },
+    "frame": "challenge",
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:music_disc_wandering_wisps"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.adventurer.vinyl_countdown"
+    }
+  },
+  "requirements": [
+    [
+      "ancient"
+    ],
+    [
+      "astatos"
+    ],
+    [
+      "beneath"
+    ],
+    [
+      "between"
+    ],
+    [
+      "christmas"
+    ],
+    [
+      "explorer"
+    ],
+    [
+      "hag"
+    ],
+    [
+      "lonely"
+    ],
+    [
+      "mixtape"
+    ],
+    [
+      "mystery"
+    ],
+    [
+      "onwards"
+    ],
+    [
+      "stuck"
+    ],
+    [
+      "wandering"
+    ],
+    [
+      "waterlogged"
+    ]
+  ],
+  "rewards": {
+    "experience": 5345
+  },
+  "sends_telemetry_event": true
+}

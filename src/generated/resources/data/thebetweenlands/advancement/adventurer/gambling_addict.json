@@ -1,0 +1,185 @@
+{
+  "parent": "thebetweenlands:adventurer/ruined_it",
+  "criteria": {
+    "animate1": {
+      "conditions": {
+        "input": {
+          "items": "thebetweenlands:item_scroll"
+        }
+      },
+      "trigger": "thebetweenlands:animate_item"
+    },
+    "animate10": {
+      "conditions": {
+        "input": {
+          "items": "thebetweenlands:item_scroll"
+        }
+      },
+      "trigger": "thebetweenlands:animate_item"
+    },
+    "animate11": {
+      "conditions": {
+        "input": {
+          "items": "thebetweenlands:item_scroll"
+        }
+      },
+      "trigger": "thebetweenlands:animate_item"
+    },
+    "animate12": {
+      "conditions": {
+        "input": {
+          "items": "thebetweenlands:item_scroll"
+        }
+      },
+      "trigger": "thebetweenlands:animate_item"
+    },
+    "animate13": {
+      "conditions": {
+        "input": {
+          "items": "thebetweenlands:item_scroll"
+        }
+      },
+      "trigger": "thebetweenlands:animate_item"
+    },
+    "animate14": {
+      "conditions": {
+        "input": {
+          "items": "thebetweenlands:item_scroll"
+        }
+      },
+      "trigger": "thebetweenlands:animate_item"
+    },
+    "animate15": {
+      "conditions": {
+        "input": {
+          "items": "thebetweenlands:item_scroll"
+        }
+      },
+      "trigger": "thebetweenlands:animate_item"
+    },
+    "animate2": {
+      "conditions": {
+        "input": {
+          "items": "thebetweenlands:item_scroll"
+        }
+      },
+      "trigger": "thebetweenlands:animate_item"
+    },
+    "animate3": {
+      "conditions": {
+        "input": {
+          "items": "thebetweenlands:item_scroll"
+        }
+      },
+      "trigger": "thebetweenlands:animate_item"
+    },
+    "animate4": {
+      "conditions": {
+        "input": {
+          "items": "thebetweenlands:item_scroll"
+        }
+      },
+      "trigger": "thebetweenlands:animate_item"
+    },
+    "animate5": {
+      "conditions": {
+        "input": {
+          "items": "thebetweenlands:item_scroll"
+        }
+      },
+      "trigger": "thebetweenlands:animate_item"
+    },
+    "animate6": {
+      "conditions": {
+        "input": {
+          "items": "thebetweenlands:item_scroll"
+        }
+      },
+      "trigger": "thebetweenlands:animate_item"
+    },
+    "animate7": {
+      "conditions": {
+        "input": {
+          "items": "thebetweenlands:item_scroll"
+        }
+      },
+      "trigger": "thebetweenlands:animate_item"
+    },
+    "animate8": {
+      "conditions": {
+        "input": {
+          "items": "thebetweenlands:item_scroll"
+        }
+      },
+      "trigger": "thebetweenlands:animate_item"
+    },
+    "animate9": {
+      "conditions": {
+        "input": {
+          "items": "thebetweenlands:item_scroll"
+        }
+      },
+      "trigger": "thebetweenlands:animate_item"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.adventurer.gambling_addict.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:item_scroll"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.adventurer.gambling_addict"
+    }
+  },
+  "requirements": [
+    [
+      "animate1"
+    ],
+    [
+      "animate2"
+    ],
+    [
+      "animate3"
+    ],
+    [
+      "animate4"
+    ],
+    [
+      "animate5"
+    ],
+    [
+      "animate6"
+    ],
+    [
+      "animate7"
+    ],
+    [
+      "animate8"
+    ],
+    [
+      "animate9"
+    ],
+    [
+      "animate10"
+    ],
+    [
+      "animate11"
+    ],
+    [
+      "animate12"
+    ],
+    [
+      "animate13"
+    ],
+    [
+      "animate14"
+    ],
+    [
+      "animate15"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

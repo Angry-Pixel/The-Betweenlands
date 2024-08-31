@@ -37,6 +37,37 @@ public class LangProvider extends LanguageProvider {
 		this.add("container.thebetweenlands.fish_trimming_table", "Trimming Table");
 		this.add("container.thebetweenlands.fish_trimming_table.butcher", "Chop!");
 
+		this.addAdvancement("adventurer.root", "Adventurer", "The beginning of The Betweenlands Adventure");
+		this.addAdvancement("adventurer.give_me_that", "Give Me That", "Obtain the Swamp Talisman");
+		this.addAdvancement("adventurer.dank_world", "Dank World", "Step through the Portal Tree");
+		this.addAdvancement("adventurer.pothead", "Pothead", "Loot 10 Pots of Chance");
+		this.addAdvancement("adventurer.enter_the_stronghold", "Enter the Stronghold", "Find a Wight Fortress");
+		this.addAdvancement("adventurer.big_wood", "That's Some Big Wood", "Find a Giant Weedwood Tree");
+		this.addAdvancement("adventurer.ruined_it", "Ruined It", "Discover some Ruins");
+		this.addAdvancement("adventurer.idolised", "Idolised", "Discover an Idol Head");
+		this.addAdvancement("adventurer.tall_tough", "Tall 'n Tough", "Find a Cragrock Tower");
+		this.addAdvancement("adventurer.cookie_crumbles", "How the Cookie Crumbles", "Complete a Cragrock Tower");
+		this.addAdvancement("adventurer.environmentalist", "Environmentalist", "Get a Pyrad angry by hitting its tree");
+		this.addAdvancement("adventurer.rule_them_all", "None to Rule Them All", "Obtain all Rings");
+		this.addAdvancement("adventurer.3spoopy5me", "3spoopy5me", "Experience the Spook event");
+		this.addAdvancement("adventurer.winter_is_coming", "Winter is Coming", "Experience the Winter event");
+		this.addAdvancement("adventurer.santa_wight", "Santa Wight", "Break a present");
+		this.addAdvancement("adventurer.bouldery_bois", "Bouldery Bois", "Get rolled over by a Boulder Sprite");
+		this.addAdvancement("adventurer.light_the_braziers", "Light the Braziers", "Find a Sludgeon Tower");
+		this.addAdvancement("adventurer.a_real_poopy_experience", "A Real Poopy Experience", "Enter the Labyrinthine Vaults");
+		this.addAdvancement("adventurer.disgracing_the_dead", "Disgracing the Dead", "Loot 20 Urns of Chance");
+		this.addAdvancement("adventurer.flat_round_and_up_in_the_sky", "Flat, Round and Up in the Sky", "Conquer the Raised Isles");
+		this.addAdvancement("adventurer.captain101", "Captain 101", "Obtain a Weedwood Rowboat");
+		this.addAdvancement("adventurer.full_of_hot_air", "Full of Hot Air", "Obtain a Draeton Aircraft");
+		this.addAdvancement("adventurer.up_up_and_away", "Up, Up and Away", "Obtain a Volarkite");
+		this.addAdvancement("adventurer.king_of_the_hill", "King of the Hill", "Claim a Chiromaw Matriarch Nest");
+		this.addAdvancement("adventurer.queen_of_the_hill", "Queen of the Hill", "Raid a Chiromaw Matriarch Nest without claiming it");
+		this.addAdvancement("adventurer.gambling_addict", "Gambling Addict", "Animate way too many Item Scrolls");
+		this.addAdvancement("adventurer.thunderstruck", "Thunderstruck!", "Fly into lightning while using a Volarkite or riding a Draeton");
+		this.addAdvancement("adventurer.shake_it_off", "Shake It Off", "Get overrun by an Infestation");
+		this.addAdvancement("adventurer.vinyl_countdown", "The Vinyl Countdown", "Collect all Betweenlands music discs");
+		this.addAdvancement("adventurer.i_think_you_urned_this", "I Think You've Urned This", "Loot 20 Alcove Urns");
+
 		this.addBlock(BlockRegistry.ALEMBIC, "Alembic");
 		this.addBlock(BlockRegistry.ALGAE, "Algae");
 		this.addBlock(BlockRegistry.ANCIENT_REMNANT_BLOCK, "Block of Ancient Remnant");
@@ -1227,5 +1258,10 @@ public class LangProvider extends LanguageProvider {
 		this.add(base, name);
 		this.add("effect.thebetweenlands." + elixir.getKey().location().getPath(), name);
 		this.add(base + "_effect", desc);
+	}
+
+	public void addAdvancement(String key, String title, String desc) {
+		this.add("advancement.thebetweenlands." + key, title);
+		this.add("advancement.thebetweenlands." + key + ".desc", desc);
 	}
 }

@@ -1,0 +1,27 @@
+{
+  "parent": "thebetweenlands:adventurer/dank_world",
+  "criteria": {
+    "struck": {
+      "trigger": "thebetweenlands:struck_by_lightning_while_flying"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.adventurer.thunderstruck.desc"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:volarkite"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.adventurer.thunderstruck"
+    }
+  },
+  "requirements": [
+    [
+      "struck"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

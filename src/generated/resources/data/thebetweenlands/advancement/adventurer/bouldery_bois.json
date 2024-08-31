@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:adventurer/dank_world",
+  "criteria": {
+    "boulder": {
+      "trigger": "thebetweenlands:rolled_over_by_boulder_sprite"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.adventurer.bouldery_bois.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:angry_pebble"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.adventurer.bouldery_bois"
+    }
+  },
+  "requirements": [
+    [
+      "boulder"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

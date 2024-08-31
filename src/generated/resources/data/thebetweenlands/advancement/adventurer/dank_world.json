@@ -1,0 +1,39 @@
+{
+  "parent": "thebetweenlands:adventurer/give_me_that",
+  "criteria": {
+    "in_betweenlands": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "dimension": "thebetweenlands:the_betweenlands"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.adventurer.dank_world.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:swamp_grass"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.adventurer.dank_world"
+    }
+  },
+  "requirements": [
+    [
+      "in_betweenlands"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

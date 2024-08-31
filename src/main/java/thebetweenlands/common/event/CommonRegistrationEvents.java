@@ -96,6 +96,7 @@ public class CommonRegistrationEvents {
 		gen.addProvider(data, new RecipeProvider(output, dataProvider));
 		gen.addProvider(data, new BaseLootProvider(output, dataProvider));
 		gen.addProvider(data, new DataMapProvider(output, dataProvider));
+		gen.addProvider(data, new AdvancementCompiler(output, dataProvider, helper));
 
 		// Assets
 		gen.addProvider(assets, new AtlasProvider(output, dataProvider, helper));

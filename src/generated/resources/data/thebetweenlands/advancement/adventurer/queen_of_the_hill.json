@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:adventurer/flat_round_and_up_in_the_sky",
+  "criteria": {
+    "raided_nest": {
+      "trigger": "thebetweenlands:chiromaw_matriarch_nest_raided"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.adventurer.queen_of_the_hill.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:chiromaw_egg"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.adventurer.queen_of_the_hill"
+    }
+  },
+  "requirements": [
+    [
+      "raided_nest"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

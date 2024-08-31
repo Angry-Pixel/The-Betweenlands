@@ -1,0 +1,39 @@
+{
+  "parent": "thebetweenlands:adventurer/dank_world",
+  "criteria": {
+    "isles": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "thebetweenlands:floating_island"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.adventurer.flat_round_and_up_in_the_sky.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:mossy_cragrock_top"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.adventurer.flat_round_and_up_in_the_sky"
+    }
+  },
+  "requirements": [
+    [
+      "isles"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

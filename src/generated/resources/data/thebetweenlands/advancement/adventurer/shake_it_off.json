@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:adventurer/bouldery_bois",
+  "criteria": {
+    "infested": {
+      "trigger": "thebetweenlands:infested"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.adventurer.shake_it_off.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:critter_cruncher"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.adventurer.shake_it_off"
+    }
+  },
+  "requirements": [
+    [
+      "infested"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

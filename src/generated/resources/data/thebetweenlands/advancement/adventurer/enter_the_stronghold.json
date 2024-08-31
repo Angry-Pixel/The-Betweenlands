@@ -1,0 +1,39 @@
+{
+  "parent": "thebetweenlands:adventurer/dank_world",
+  "criteria": {
+    "stronghold": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "thebetweenlands:wight_fortress"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.adventurer.enter_the_stronghold.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:glowing_betweenstone_tile"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.adventurer.enter_the_stronghold"
+    }
+  },
+  "requirements": [
+    [
+      "stronghold"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

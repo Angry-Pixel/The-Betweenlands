@@ -1,0 +1,33 @@
+{
+  "parent": "thebetweenlands:adventurer/dank_world",
+  "criteria": {
+    "struck": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:volarkite"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.adventurer.up_up_and_away.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:volarkite"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.adventurer.up_up_and_away"
+    }
+  },
+  "requirements": [
+    [
+      "struck"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

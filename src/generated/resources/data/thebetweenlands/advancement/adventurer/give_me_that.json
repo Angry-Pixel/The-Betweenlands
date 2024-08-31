@@ -1,0 +1,33 @@
+{
+  "parent": "thebetweenlands:adventurer/root",
+  "criteria": {
+    "talisman": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:swamp_talisman"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.adventurer.give_me_that.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:swamp_talisman"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.adventurer.give_me_that"
+    }
+  },
+  "requirements": [
+    [
+      "talisman"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

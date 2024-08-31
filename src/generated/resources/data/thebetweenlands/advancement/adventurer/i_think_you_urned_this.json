@@ -1,0 +1,140 @@
+{
+  "parent": "thebetweenlands:adventurer/disgracing_the_dead",
+  "criteria": {
+    "alcove1": {
+      "trigger": "thebetweenlands:break_alcove_urn"
+    },
+    "alcove10": {
+      "trigger": "thebetweenlands:break_alcove_urn"
+    },
+    "alcove11": {
+      "trigger": "thebetweenlands:break_alcove_urn"
+    },
+    "alcove12": {
+      "trigger": "thebetweenlands:break_alcove_urn"
+    },
+    "alcove13": {
+      "trigger": "thebetweenlands:break_alcove_urn"
+    },
+    "alcove14": {
+      "trigger": "thebetweenlands:break_alcove_urn"
+    },
+    "alcove15": {
+      "trigger": "thebetweenlands:break_alcove_urn"
+    },
+    "alcove16": {
+      "trigger": "thebetweenlands:break_alcove_urn"
+    },
+    "alcove17": {
+      "trigger": "thebetweenlands:break_alcove_urn"
+    },
+    "alcove18": {
+      "trigger": "thebetweenlands:break_alcove_urn"
+    },
+    "alcove19": {
+      "trigger": "thebetweenlands:break_alcove_urn"
+    },
+    "alcove2": {
+      "trigger": "thebetweenlands:break_alcove_urn"
+    },
+    "alcove20": {
+      "trigger": "thebetweenlands:break_alcove_urn"
+    },
+    "alcove3": {
+      "trigger": "thebetweenlands:break_alcove_urn"
+    },
+    "alcove4": {
+      "trigger": "thebetweenlands:break_alcove_urn"
+    },
+    "alcove5": {
+      "trigger": "thebetweenlands:break_alcove_urn"
+    },
+    "alcove6": {
+      "trigger": "thebetweenlands:break_alcove_urn"
+    },
+    "alcove7": {
+      "trigger": "thebetweenlands:break_alcove_urn"
+    },
+    "alcove8": {
+      "trigger": "thebetweenlands:break_alcove_urn"
+    },
+    "alcove9": {
+      "trigger": "thebetweenlands:break_alcove_urn"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.adventurer.i_think_you_urned_this.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:mud_brick_alcove"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.adventurer.i_think_you_urned_this"
+    }
+  },
+  "requirements": [
+    [
+      "alcove1"
+    ],
+    [
+      "alcove2"
+    ],
+    [
+      "alcove3"
+    ],
+    [
+      "alcove4"
+    ],
+    [
+      "alcove5"
+    ],
+    [
+      "alcove6"
+    ],
+    [
+      "alcove7"
+    ],
+    [
+      "alcove8"
+    ],
+    [
+      "alcove9"
+    ],
+    [
+      "alcove10"
+    ],
+    [
+      "alcove11"
+    ],
+    [
+      "alcove12"
+    ],
+    [
+      "alcove13"
+    ],
+    [
+      "alcove14"
+    ],
+    [
+      "alcove15"
+    ],
+    [
+      "alcove16"
+    ],
+    [
+      "alcove17"
+    ],
+    [
+      "alcove18"
+    ],
+    [
+      "alcove19"
+    ],
+    [
+      "alcove20"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

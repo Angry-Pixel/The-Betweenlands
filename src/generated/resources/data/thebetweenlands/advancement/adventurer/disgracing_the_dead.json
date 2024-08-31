@@ -1,0 +1,320 @@
+{
+  "parent": "thebetweenlands:adventurer/pothead",
+  "criteria": {
+    "urn1": {
+      "conditions": {
+        "block": {
+          "blocks": [
+            "thebetweenlands:loot_urn_1",
+            "thebetweenlands:loot_urn_2",
+            "thebetweenlands:loot_urn_3"
+          ]
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    },
+    "urn10": {
+      "conditions": {
+        "block": {
+          "blocks": [
+            "thebetweenlands:loot_urn_1",
+            "thebetweenlands:loot_urn_2",
+            "thebetweenlands:loot_urn_3"
+          ]
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    },
+    "urn11": {
+      "conditions": {
+        "block": {
+          "blocks": [
+            "thebetweenlands:loot_urn_1",
+            "thebetweenlands:loot_urn_2",
+            "thebetweenlands:loot_urn_3"
+          ]
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    },
+    "urn12": {
+      "conditions": {
+        "block": {
+          "blocks": [
+            "thebetweenlands:loot_urn_1",
+            "thebetweenlands:loot_urn_2",
+            "thebetweenlands:loot_urn_3"
+          ]
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    },
+    "urn13": {
+      "conditions": {
+        "block": {
+          "blocks": [
+            "thebetweenlands:loot_urn_1",
+            "thebetweenlands:loot_urn_2",
+            "thebetweenlands:loot_urn_3"
+          ]
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    },
+    "urn14": {
+      "conditions": {
+        "block": {
+          "blocks": [
+            "thebetweenlands:loot_urn_1",
+            "thebetweenlands:loot_urn_2",
+            "thebetweenlands:loot_urn_3"
+          ]
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    },
+    "urn15": {
+      "conditions": {
+        "block": {
+          "blocks": [
+            "thebetweenlands:loot_urn_1",
+            "thebetweenlands:loot_urn_2",
+            "thebetweenlands:loot_urn_3"
+          ]
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    },
+    "urn16": {
+      "conditions": {
+        "block": {
+          "blocks": [
+            "thebetweenlands:loot_urn_1",
+            "thebetweenlands:loot_urn_2",
+            "thebetweenlands:loot_urn_3"
+          ]
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    },
+    "urn17": {
+      "conditions": {
+        "block": {
+          "blocks": [
+            "thebetweenlands:loot_urn_1",
+            "thebetweenlands:loot_urn_2",
+            "thebetweenlands:loot_urn_3"
+          ]
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    },
+    "urn18": {
+      "conditions": {
+        "block": {
+          "blocks": [
+            "thebetweenlands:loot_urn_1",
+            "thebetweenlands:loot_urn_2",
+            "thebetweenlands:loot_urn_3"
+          ]
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    },
+    "urn19": {
+      "conditions": {
+        "block": {
+          "blocks": [
+            "thebetweenlands:loot_urn_1",
+            "thebetweenlands:loot_urn_2",
+            "thebetweenlands:loot_urn_3"
+          ]
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    },
+    "urn2": {
+      "conditions": {
+        "block": {
+          "blocks": [
+            "thebetweenlands:loot_urn_1",
+            "thebetweenlands:loot_urn_2",
+            "thebetweenlands:loot_urn_3"
+          ]
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    },
+    "urn20": {
+      "conditions": {
+        "block": {
+          "blocks": [
+            "thebetweenlands:loot_urn_1",
+            "thebetweenlands:loot_urn_2",
+            "thebetweenlands:loot_urn_3"
+          ]
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    },
+    "urn3": {
+      "conditions": {
+        "block": {
+          "blocks": [
+            "thebetweenlands:loot_urn_1",
+            "thebetweenlands:loot_urn_2",
+            "thebetweenlands:loot_urn_3"
+          ]
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    },
+    "urn4": {
+      "conditions": {
+        "block": {
+          "blocks": [
+            "thebetweenlands:loot_urn_1",
+            "thebetweenlands:loot_urn_2",
+            "thebetweenlands:loot_urn_3"
+          ]
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    },
+    "urn5": {
+      "conditions": {
+        "block": {
+          "blocks": [
+            "thebetweenlands:loot_urn_1",
+            "thebetweenlands:loot_urn_2",
+            "thebetweenlands:loot_urn_3"
+          ]
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    },
+    "urn6": {
+      "conditions": {
+        "block": {
+          "blocks": [
+            "thebetweenlands:loot_urn_1",
+            "thebetweenlands:loot_urn_2",
+            "thebetweenlands:loot_urn_3"
+          ]
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    },
+    "urn7": {
+      "conditions": {
+        "block": {
+          "blocks": [
+            "thebetweenlands:loot_urn_1",
+            "thebetweenlands:loot_urn_2",
+            "thebetweenlands:loot_urn_3"
+          ]
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    },
+    "urn8": {
+      "conditions": {
+        "block": {
+          "blocks": [
+            "thebetweenlands:loot_urn_1",
+            "thebetweenlands:loot_urn_2",
+            "thebetweenlands:loot_urn_3"
+          ]
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    },
+    "urn9": {
+      "conditions": {
+        "block": {
+          "blocks": [
+            "thebetweenlands:loot_urn_1",
+            "thebetweenlands:loot_urn_2",
+            "thebetweenlands:loot_urn_3"
+          ]
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.adventurer.disgracing_the_dead.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:loot_urn_1"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.adventurer.disgracing_the_dead"
+    }
+  },
+  "requirements": [
+    [
+      "urn1"
+    ],
+    [
+      "urn2"
+    ],
+    [
+      "urn3"
+    ],
+    [
+      "urn4"
+    ],
+    [
+      "urn5"
+    ],
+    [
+      "urn6"
+    ],
+    [
+      "urn7"
+    ],
+    [
+      "urn8"
+    ],
+    [
+      "urn9"
+    ],
+    [
+      "urn10"
+    ],
+    [
+      "urn11"
+    ],
+    [
+      "urn12"
+    ],
+    [
+      "urn13"
+    ],
+    [
+      "urn14"
+    ],
+    [
+      "urn15"
+    ],
+    [
+      "urn16"
+    ],
+    [
+      "urn17"
+    ],
+    [
+      "urn18"
+    ],
+    [
+      "urn19"
+    ],
+    [
+      "urn20"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

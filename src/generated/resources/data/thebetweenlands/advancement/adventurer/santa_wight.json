@@ -1,0 +1,33 @@
+{
+  "parent": "thebetweenlands:adventurer/winter_is_coming",
+  "criteria": {
+    "present": {
+      "conditions": {
+        "block": {
+          "blocks": "#thebetweenlands:presents"
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.thebetweenlands.adventurer.santa_wight.desc"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:red_present"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.adventurer.santa_wight"
+    }
+  },
+  "requirements": [
+    [
+      "present"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

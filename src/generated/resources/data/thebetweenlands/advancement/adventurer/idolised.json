@@ -1,0 +1,39 @@
+{
+  "parent": "thebetweenlands:adventurer/dank_world",
+  "criteria": {
+    "idol": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "thebetweenlands:idol_head"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.adventurer.idolised.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:octine_block"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.adventurer.idolised"
+    }
+  },
+  "requirements": [
+    [
+      "idol"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

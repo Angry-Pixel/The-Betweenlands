@@ -1,0 +1,31 @@
+{
+  "parent": "thebetweenlands:adventurer/dank_world",
+  "criteria": {
+    "event": {
+      "conditions": {
+        "event": "thebetweenlands:spoopy"
+      },
+      "trigger": "thebetweenlands:event"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.thebetweenlands.adventurer.3spoopy5me.desc"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:pyrad_flame"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.adventurer.3spoopy5me"
+    }
+  },
+  "requirements": [
+    [
+      "event"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

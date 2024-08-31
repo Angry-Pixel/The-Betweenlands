@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:adventurer/big_wood",
+  "criteria": {
+    "ruin": {
+      "trigger": "thebetweenlands:pyrad_aggro"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.adventurer.environmentalist.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:weedwood_sapling"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.adventurer.environmentalist"
+    }
+  },
+  "requirements": [
+    [
+      "ruin"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

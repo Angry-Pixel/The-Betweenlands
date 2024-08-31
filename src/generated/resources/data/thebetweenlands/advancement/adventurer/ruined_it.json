@@ -1,0 +1,39 @@
+{
+  "parent": "thebetweenlands:adventurer/dank_world",
+  "criteria": {
+    "ruins": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "thebetweenlands:small_ruins"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.adventurer.ruined_it.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:chiseled_betweenstone"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.adventurer.ruined_it"
+    }
+  },
+  "requirements": [
+    [
+      "ruins"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

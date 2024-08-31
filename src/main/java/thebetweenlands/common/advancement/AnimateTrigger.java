@@ -47,5 +47,13 @@ public class AnimateTrigger extends SimpleCriterionTrigger<AnimateTrigger.Trigge
 		public static Criterion<AnimateTrigger.TriggerInstance> animateItem(ItemLike input, ItemLike output) {
 			return animateItem(ItemPredicate.Builder.item().of(input).build(), ItemPredicate.Builder.item().of(output).build());
 		}
+
+		public static Criterion<TriggerInstance> animateItem(ItemPredicate input) {
+			return AdvancementCriteriaRegistry.ANIMATE.get().createCriterion(new AnimateTrigger.TriggerInstance(Optional.empty(), Optional.of(input), Optional.empty()));
+		}
+
+		public static Criterion<AnimateTrigger.TriggerInstance> animateItem(ItemLike input) {
+			return animateItem(ItemPredicate.Builder.item().of(input).build());
+		}
 	}
 }

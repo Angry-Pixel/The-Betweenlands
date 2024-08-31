@@ -1,0 +1,33 @@
+{
+  "parent": "thebetweenlands:adventurer/captain101",
+  "criteria": {
+    "draeton": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:draeton"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.adventurer.full_of_hot_air.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:draeton"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.adventurer.full_of_hot_air"
+    }
+  },
+  "requirements": [
+    [
+      "draeton"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

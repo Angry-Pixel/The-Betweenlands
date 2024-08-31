@@ -1,0 +1,39 @@
+{
+  "parent": "thebetweenlands:adventurer/light_the_braziers",
+  "criteria": {
+    "maze": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "thebetweenlands:sludge_worm_dungeon_maze"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.adventurer.a_real_poopy_experience.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:dungeon_door_runes"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.adventurer.a_real_poopy_experience"
+    }
+  },
+  "requirements": [
+    [
+      "maze"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
