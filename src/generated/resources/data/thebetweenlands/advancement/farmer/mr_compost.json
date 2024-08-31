@@ -1,0 +1,50 @@
+{
+  "parent": "thebetweenlands:farmer/fertile_soil",
+  "criteria": {
+    "compost": {
+      "conditions": {
+        "location": [
+          {
+            "condition": "minecraft:location_check",
+            "predicate": {
+              "block": {
+                "blocks": [
+                  "thebetweenlands:dug_swamp_dirt",
+                  "thebetweenlands:dug_swamp_grass"
+                ],
+                "state": {
+                  "composted": "false"
+                }
+              }
+            }
+          },
+          {
+            "condition": "minecraft:match_tool",
+            "predicate": {
+              "items": "thebetweenlands:compost"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:item_used_on_block"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.farmer.mr_compost.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:barnacle"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.farmer.mr_compost"
+    }
+  },
+  "requirements": [
+    [
+      "compost"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

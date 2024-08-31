@@ -1,0 +1,44 @@
+{
+  "criteria": {
+    "has_base_root": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "thebetweenlands:adventurer/root": true
+                }
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:tick"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "thebetweenlands:textures/block/dug_swamp_dirt_composted_3.png",
+    "description": {
+      "translate": "advancement.thebetweenlands.farmer.root.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:compost"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancement.thebetweenlands.farmer.root"
+    }
+  },
+  "requirements": [
+    [
+      "has_base_root"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

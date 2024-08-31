@@ -1,0 +1,46 @@
+{
+  "parent": "thebetweenlands:farmer/root",
+  "criteria": {
+    "snails": {
+      "conditions": {
+        "parent": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "thebetweenlands:mire_snail"
+            }
+          }
+        ],
+        "partner": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "thebetweenlands:mire_snail"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:bred_animals"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.farmer.now_kiss.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:ochre_snail_shell"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.farmer.now_kiss"
+    }
+  },
+  "requirements": [
+    [
+      "snails"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

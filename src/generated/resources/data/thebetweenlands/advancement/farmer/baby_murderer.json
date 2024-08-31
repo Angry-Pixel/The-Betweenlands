@@ -1,0 +1,46 @@
+{
+  "parent": "thebetweenlands:farmer/now_kiss",
+  "criteria": {
+    "cooked": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:cooked_mire_snail_egg"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "scramble": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:mire_scramble"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.farmer.baby_murderer.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:cooked_mire_snail_egg"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.farmer.baby_murderer"
+    }
+  },
+  "requirements": [
+    [
+      "cooked"
+    ],
+    [
+      "scramble"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

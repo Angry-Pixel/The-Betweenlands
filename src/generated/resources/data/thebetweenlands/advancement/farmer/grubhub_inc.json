@@ -1,0 +1,45 @@
+{
+  "parent": "thebetweenlands:farmer/multicore_threading",
+  "criteria": {
+    "hub": {
+      "conditions": {
+        "location": [
+          {
+            "condition": "minecraft:location_check",
+            "predicate": {
+              "block": {
+                "blocks": "thebetweenlands:grub_hub"
+              }
+            }
+          },
+          {
+            "condition": "minecraft:match_tool",
+            "predicate": {
+              "items": "thebetweenlands:pheromone_extract_bucket"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:item_used_on_block"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.farmer.grubhub_inc.desc"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:grub_hub"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.farmer.grubhub_inc"
+    }
+  },
+  "requirements": [
+    [
+      "hub"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -93,9 +93,9 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> FUMIGANT = ITEMS.register("fumigant", () -> new FumigantItem(new Item.Properties()));
 	public static final DeferredItem<Item> SAP_BALL = ITEMS.register("sap_ball", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().alwaysEdible().build())));
 	public static final DeferredItem<Item> ROTTEN_FOOD = ITEMS.register("rotten_food", () -> new RottenFoodItem(new Item.Properties().food(new FoodProperties.Builder().nutrition(-1).saturationModifier(-1.0F).effect(() -> new MobEffectInstance(MobEffects.HUNGER, 200, 1), 1.0F).effect(() -> new MobEffectInstance(MobEffects.POISON, 200, 1), 1.0F).build())));
-	//seeds
-	public static final DeferredItem<Item> SPORES = ITEMS.register("spores", () -> new Item(new Item.Properties()));
-
+	public static final DeferredItem<Item> ASPECTRUS_SEEDS = ITEMS.register("aspectrus_seeds", () -> new ItemNameBlockItem(BlockRegistry.ASPECTRUS_CROP.get(), new Item.Properties()));
+	public static final DeferredItem<Item> SPORES = ITEMS.register("spores", () -> new ItemNameBlockItem(BlockRegistry.FUNGUS_CROP.get(), new Item.Properties()));
+	public static final DeferredItem<Item> MIDDLE_FRUIT_BUSH_SEEDS = ITEMS.register("middle_fruit_bush_seeds", () -> new ItemNameBlockItem(BlockRegistry.MIDDLE_FRUIT_BUSH.get(), new Item.Properties()));
 	public static final DeferredItem<Item> MIRE_SNAIL_EGG = ITEMS.register("mire_snail_egg", () -> new MireSnailEggItem(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.2F).build())));
 	public static final DeferredItem<Item> COOKED_MIRE_SNAIL_EGG = ITEMS.register("cooked_mire_snail_egg", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(8).saturationModifier(1.0F).build())));
 	public static final DeferredItem<Item> RAW_FROG_LEGS = ITEMS.register("raw_frog_legs", () -> new Item(new Item.Properties().food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.4F).build())));
@@ -171,7 +171,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> CHIROMAW_EGG = ITEMS.register("chiromaw_egg", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> SHIMMER_STONE = ITEMS.register("shimmer_stone", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
 	public static final DeferredItem<Item> TARMINION = ITEMS.register("tarminion", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
-	//sludge ball
+	public static final DeferredItem<Item> SLUDGE_BALL = ITEMS.register("sludge_ball", () -> new Item(new Item.Properties()));
 	//rope
 	public static final DeferredItem<Item> ANGRY_PEBBLE = ITEMS.register("angry_pebble", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
 	public static final DeferredItem<Item> OCTINE_INGOT = ITEMS.register("octine_ingot", () -> new OctineIngotItem(new Item.Properties()));
@@ -197,7 +197,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> MIDNIGHT_PURPLE_DYE = ITEMS.register("midnight_purple_dye", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> PEWTER_GREY_DYE = ITEMS.register("pewter_grey_dye", () -> new Item(new Item.Properties().stacksTo(1)));
 	//frames
-	//thorax
+	public static final DeferredItem<Item> PHEROMONE_THORAX = ITEMS.register("pheromone_thorax", () -> new Item(new Item.Properties()));
 	public static final DeferredItem<Item> MOSS_FILTER = ITEMS.register("moss_filter", () -> new Item(new Item.Properties().stacksTo(1).durability(400)));
 	public static final DeferredItem<Item> SILK_FILTER = ITEMS.register("silk_filter", () -> new Item(new Item.Properties().stacksTo(1).durability(2000)));
 	//silky pebble

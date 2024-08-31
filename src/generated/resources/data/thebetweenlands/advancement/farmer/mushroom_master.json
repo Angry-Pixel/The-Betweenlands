@@ -1,0 +1,98 @@
+{
+  "parent": "thebetweenlands:farmer/sporadically_radical",
+  "criteria": {
+    "black_hat": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:black_hat_mushroom_item"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "bulb_capped": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:bulb_capped_mushroom_item"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "edge_shroom": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:edge_shroom"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "flathead": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:flathead_mushroom_item"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "rotbulb": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:rotbulb"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "yellow_dotted": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:yellow_dotted_fungus"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.farmer.mushroom_master.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:bulb_capped_mushroom_item"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.farmer.mushroom_master"
+    }
+  },
+  "requirements": [
+    [
+      "yellow_dotted"
+    ],
+    [
+      "bulb_capped"
+    ],
+    [
+      "black_hat"
+    ],
+    [
+      "flathead"
+    ],
+    [
+      "rotbulb"
+    ],
+    [
+      "edge_shroom"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

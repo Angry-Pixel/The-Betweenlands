@@ -6,8 +6,12 @@ import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -17,6 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
@@ -24,6 +29,8 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.api.block.FarmablePlant;
 import thebetweenlands.common.datagen.tags.EntityTagProvider;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.Map;
 
@@ -88,6 +95,17 @@ public class WeedwoodBushBlock extends Block implements FarmablePlant {
 		}
 
 		//todo step sound attachment
+	}
+
+	@Override
+	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+		if (stack.is(ItemRegistry.PHEROMONE_THORAX)) {
+			level.setBlockAndUpdate(pos, BlockRegistry.PHEROMONE_INFUSED_WEEDWOOD_BUSH.get().defaultBlockState());
+			stack.consume(1, player);
+			return ItemInteractionResult.sidedSuccess(level.isClientSide());
+		}
+
+		return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
 	}
 
 	protected void spawnLeafParticles(Level level, BlockPos pos, float strength) {

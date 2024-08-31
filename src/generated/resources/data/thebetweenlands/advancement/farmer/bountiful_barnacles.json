@@ -1,0 +1,33 @@
+{
+  "parent": "thebetweenlands:farmer/root",
+  "criteria": {
+    "barnacle": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:barnacle"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.farmer.bountiful_barnacles.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:barnacle"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.farmer.bountiful_barnacles"
+    }
+  },
+  "requirements": [
+    [
+      "barnacle"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

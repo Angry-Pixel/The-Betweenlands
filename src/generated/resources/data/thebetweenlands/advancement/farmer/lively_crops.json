@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:farmer/sporadically_radical",
+  "criteria": {
+    "compost": {
+      "trigger": "thebetweenlands:sporeling_hatch"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.farmer.lively_crops.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:yellow_dotted_fungus"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.farmer.lively_crops"
+    }
+  },
+  "requirements": [
+    [
+      "compost"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

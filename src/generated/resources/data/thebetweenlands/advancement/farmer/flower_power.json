@@ -1,0 +1,88 @@
+{
+  "parent": "thebetweenlands:farmer/mr_compost",
+  "criteria": {
+    "flower": {
+      "conditions": {
+        "location": [
+          {
+            "condition": "minecraft:location_check",
+            "predicate": {
+              "block": {
+                "blocks": [
+                  "thebetweenlands:dug_swamp_dirt",
+                  "thebetweenlands:dug_swamp_grass",
+                  "thebetweenlands:purified_dug_swamp_dirt",
+                  "thebetweenlands:purified_dug_swamp_grass"
+                ],
+                "state": {
+                  "composted": "true"
+                }
+              }
+            }
+          },
+          {
+            "condition": "minecraft:match_tool",
+            "predicate": {
+              "items": [
+                "thebetweenlands:edge_shroom",
+                "thebetweenlands:edge_moss",
+                "thebetweenlands:edge_leaf",
+                "thebetweenlands:pitcher_plant",
+                "thebetweenlands:weeping_blue",
+                "thebetweenlands:sundew",
+                "thebetweenlands:venus_fly_trap",
+                "thebetweenlands:volarpad",
+                "thebetweenlands:swamp_plant",
+                "thebetweenlands:arrow_arum",
+                "thebetweenlands:blue_eyed_grass",
+                "thebetweenlands:blue_iris",
+                "thebetweenlands:boneset",
+                "thebetweenlands:bottle_brush_grass",
+                "thebetweenlands:broomsedge",
+                "thebetweenlands:button_bush",
+                "thebetweenlands:cardinal_flower",
+                "thebetweenlands:cattail",
+                "thebetweenlands:cave_grass",
+                "thebetweenlands:copper_iris",
+                "thebetweenlands:marsh_hibiscus",
+                "thebetweenlands:marsh_mallow",
+                "thebetweenlands:tall_swamp_grass",
+                "thebetweenlands:milkweed",
+                "thebetweenlands:nettle",
+                "thebetweenlands:flowered_nettle",
+                "thebetweenlands:pickerelweed",
+                "thebetweenlands:phragmites",
+                "thebetweenlands:shoots",
+                "thebetweenlands:sludgecreep",
+                "thebetweenlands:soft_rush",
+                "thebetweenlands:short_swamp_grass",
+                "thebetweenlands:tall_sludgecreep",
+                "thebetweenlands:pale_grass",
+                "thebetweenlands:rotbulb"
+              ]
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:item_used_on_block"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.farmer.flower_power.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:marsh_marigold_flower_drop"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.farmer.flower_power"
+    }
+  },
+  "requirements": [
+    [
+      "flower"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

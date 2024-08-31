@@ -38,6 +38,7 @@ import thebetweenlands.common.command.ResetAspectsCommand;
 import thebetweenlands.common.datagen.*;
 import thebetweenlands.common.datagen.loot.BaseLootProvider;
 import thebetweenlands.common.datagen.tags.*;
+import thebetweenlands.common.entities.MireSnail;
 import thebetweenlands.common.entities.fishing.BubblerCrab;
 import thebetweenlands.common.entities.fishing.SiltCrab;
 import thebetweenlands.common.entities.fishing.anadia.Anadia;
@@ -116,6 +117,7 @@ public class CommonRegistrationEvents {
 		event.put(EntityRegistry.BUBBLER_CRAB.get(), BubblerCrab.registerAttributes().build());
 		event.put(EntityRegistry.SILT_CRAB.get(), SiltCrab.registerAttributes().build());
 		event.put(EntityRegistry.ANADIA.get(), Anadia.registerAttributes().build());
+		event.put(EntityRegistry.MIRE_SNAIL.get(), MireSnail.registerAttributes().build());
 	}
 
 	private static void registerCommands(RegisterCommandsEvent event) {

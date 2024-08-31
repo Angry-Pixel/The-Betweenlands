@@ -90,6 +90,26 @@ public class LangProvider extends LanguageProvider {
 		this.addAdvancement("craftsman.let_it_shine", "Let It Shine", "Use Glowing Goop on an Item Frame");
 		this.addAdvancement("craftsman.dye_hard", "Dye Hard", "Create every dye color using a Steeping Pot");
 
+		this.addAdvancement("farmer.root", "Farmer", "Surviving the hunger");
+		this.addAdvancement("farmer.mr_compost", "Mr. Compost", "Compost your soil");
+		this.addAdvancement("farmer.now_kiss", "Now Kiss", "Breed together two Mire Snails");
+		this.addAdvancement("farmer.baby_murderer", "Baby Murder", "Cook a Mire Snail Egg and scramble it");
+		this.addAdvancement("farmer.necrofarmer", "Necrofarmer", "Feed your decayed crops some Plant Tonic");
+		this.addAdvancement("farmer.sporadically_radical", "Sporadically Radical", "Grow and harvest Yellow Dotted Fungi Spores");
+		this.addAdvancement("farmer.lively_crops", "Lively Crops", "Let a Sporeling hatch from your crops");
+		this.addAdvancement("farmer.mushroom_master", "Mushroom Master", "Collect all the mushrooms");
+		this.addAdvancement("farmer.a_vine_bush", "A Vine Bush", "Collect and plant White Pear Seeds");
+		this.addAdvancement("farmer.flower_power", "Flower Power", "Grow some flowers on your farm");
+		this.addAdvancement("farmer.pure_and_dirty", "Pure and Dirty", "Use Purified Swamp Dirt for your farm");
+		this.addAdvancement("farmer.fertile_soil", "Fertile Soil", "Dig up a worm while making holes for crops");
+		this.addAdvancement("farmer.bountiful_barnacles", "Bountiful Barnacles", "Harvest and replace a cluster of Barnacles");
+		this.addAdvancement("farmer.premium_produce", "Premium Produce", "Craft and consume a Pearled Pear");
+		this.addAdvancement("farmer.your_bush_smells", "Your Bush Smells", "Infuse a Weedwood Bush using a Pheromone Thorax");
+		this.addAdvancement("farmer.moving_day", "Moving Day", "Put Silk Grubs in a Moth House to produce Silk");
+		this.addAdvancement("farmer.multicore_threading", "Multicore Threading", "Use lanterns to boost a Moth House's production speed");
+		this.addAdvancement("farmer.grubhub_inc", "Grubhub Inc.", "Awaken a Grub Hub using Pheromone Extract");
+
+
 		this.addBlock(BlockRegistry.ALEMBIC, "Alembic");
 		this.addBlock(BlockRegistry.ALGAE, "Algae");
 		this.addBlock(BlockRegistry.ANCIENT_REMNANT_BLOCK, "Block of Ancient Remnant");

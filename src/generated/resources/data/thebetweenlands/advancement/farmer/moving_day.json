@@ -1,0 +1,44 @@
+{
+  "parent": "thebetweenlands:farmer/your_bush_smells",
+  "criteria": {
+    "grub": {
+      "conditions": {
+        "location": [
+          {
+            "condition": "minecraft:location_check",
+            "predicate": {
+              "block": {
+                "blocks": "thebetweenlands:moth_house"
+              }
+            }
+          },
+          {
+            "condition": "minecraft:match_tool",
+            "predicate": {
+              "items": "thebetweenlands:silk_grub"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:item_used_on_block"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.farmer.moving_day.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:silk_grub"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.farmer.moving_day"
+    }
+  },
+  "requirements": [
+    [
+      "grub"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

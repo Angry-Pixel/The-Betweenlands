@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:farmer/moving_day",
+  "criteria": {
+    "house_maxed": {
+      "trigger": "thebetweenlands:moth_house_maxed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.farmer.multicore_threading.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:moth_house"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.farmer.multicore_threading"
+    }
+  },
+  "requirements": [
+    [
+      "house_maxed"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

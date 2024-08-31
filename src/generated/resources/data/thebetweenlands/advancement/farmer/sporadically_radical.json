@@ -1,0 +1,49 @@
+{
+  "parent": "thebetweenlands:farmer/mr_compost",
+  "criteria": {
+    "break_fungus": {
+      "conditions": {
+        "block": {
+          "blocks": "thebetweenlands:fungus_crop",
+          "state": {
+            "age": "15",
+            "decayed": "false"
+          }
+        }
+      },
+      "trigger": "thebetweenlands:break_block"
+    },
+    "place_fungus": {
+      "conditions": {
+        "location": [
+          {
+            "block": "thebetweenlands:fungus_crop",
+            "condition": "minecraft:block_state_property"
+          }
+        ]
+      },
+      "trigger": "minecraft:placed_block"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.farmer.sporadically_radical.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:spores"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.farmer.sporadically_radical"
+    }
+  },
+  "requirements": [
+    [
+      "place_fungus"
+    ],
+    [
+      "break_fungus"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

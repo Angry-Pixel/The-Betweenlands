@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:farmer/root",
+  "criteria": {
+    "worm": {
+      "trigger": "thebetweenlands:worm_from_dirt"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.farmer.fertile_soil.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:barnacle"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.farmer.fertile_soil"
+    }
+  },
+  "requirements": [
+    [
+      "worm"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

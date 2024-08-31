@@ -12,9 +12,11 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemDamageFunction;
 import net.minecraft.world.level.storage.loot.functions.SmeltItemFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceWithEnchantedBonusCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -175,6 +177,15 @@ public class EntityLootProvider extends EntityLootSubProvider {
 				.add(LootItem.lootTableItem(ItemRegistry.ASCENT_UPGRADE).setWeight(3)
 					.when(LootItemEntityPropertyCondition.hasProperties(LootContext.EntityTarget.THIS,
 						EntityPredicate.Builder.entity().subPredicate(AnadiaBodyPredicate.body(MinMaxBounds.Ints.exactly(2))).build())))));
+
+		this.add(EntityRegistry.MIRE_SNAIL.get(), LootTable.lootTable()
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.RAW_SNAIL_FLESH)
+				.apply(SmeltItemFunction.smelted()
+					.when(this.shouldSmeltLoot()))
+				.apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 2.0F)))
+				.apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries, UniformGenerator.between(0.0F, 1.0F)))))
+			.withPool(LootPool.lootPool().add(LootItem.lootTableItem(ItemRegistry.OCHRE_SNAIL_SHELL)
+				.when(LootItemRandomChanceWithEnchantedBonusCondition.randomChanceAndLootingBoost(this.registries, 0.5F, 0.0625F)))));
 	}
 
 	public <T extends Entity> void noLoot(DeferredHolder<EntityType<?>, EntityType<T>> type) {

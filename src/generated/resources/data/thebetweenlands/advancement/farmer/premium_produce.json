@@ -1,0 +1,45 @@
+{
+  "parent": "thebetweenlands:farmer/a_vine_bush",
+  "criteria": {
+    "craft_pear": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:pearled_pear"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "eat_pear": {
+      "conditions": {
+        "item": {
+          "items": "thebetweenlands:pearled_pear"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.farmer.premium_produce.desc"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:pearled_pear"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.farmer.premium_produce"
+    }
+  },
+  "requirements": [
+    [
+      "craft_pear"
+    ],
+    [
+      "eat_pear"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

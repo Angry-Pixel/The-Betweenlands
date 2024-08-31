@@ -1,0 +1,44 @@
+{
+  "parent": "thebetweenlands:farmer/mr_compost",
+  "criteria": {
+    "thorax": {
+      "conditions": {
+        "location": [
+          {
+            "condition": "minecraft:location_check",
+            "predicate": {
+              "block": {
+                "blocks": "thebetweenlands:weedwood_bush"
+              }
+            }
+          },
+          {
+            "condition": "minecraft:match_tool",
+            "predicate": {
+              "items": "thebetweenlands:pheromone_thorax"
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:item_used_on_block"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.farmer.your_bush_smells.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:barnacle"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.farmer.your_bush_smells"
+    }
+  },
+  "requirements": [
+    [
+      "thorax"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
