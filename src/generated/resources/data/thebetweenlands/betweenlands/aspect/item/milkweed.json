@@ -3,8 +3,8 @@
     "type": "thebetweenlands:random_aspects",
     "amount_multiplier": 0.425,
     "amount_variation": 0.35,
-    "rolls": 2
+    "rolls": 2,
+    "tier": "common"
   },
-  "item": "thebetweenlands:ground_milkweed",
-  "tier": "common"
+  "item": "thebetweenlands:ground_milkweed"
 }

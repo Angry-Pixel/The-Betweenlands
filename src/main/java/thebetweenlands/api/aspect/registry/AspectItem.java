@@ -8,11 +8,10 @@ import net.minecraft.resources.RegistryFileCodec;
 import net.minecraft.world.item.Item;
 import thebetweenlands.api.BLRegistries;
 
-public record AspectItem(Item item, AspectTier tier, AspectCalculatorType calculator) {
+public record AspectItem(Item item, AspectCalculatorType calculator) {
 
 	public static final Codec<AspectItem> DIRECT_CODEC = RecordCodecBuilder.create(p_345420_ -> p_345420_.group(
 		BuiltInRegistries.ITEM.byNameCodec().fieldOf("item").forGetter(AspectItem::item),
-		AspectTier.CODEC.fieldOf("tier").forGetter(AspectItem::tier),
 		AspectCalculatorType.CODEC.fieldOf("aspect_calculator").forGetter(AspectItem::calculator)
 	).apply(p_345420_, AspectItem::new));
 

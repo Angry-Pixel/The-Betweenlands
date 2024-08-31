@@ -21,10 +21,10 @@ public record DoubleGroupAspectCalculator(AspectCalculatorType firstRoll, Aspect
 		).apply(instance, DoubleGroupAspectCalculator::new));
 
 	@Override
-	public List<Aspect> getAspects(AspectItem item, HolderLookup.Provider provider, LegacyRandomSource random) {
+	public List<Aspect> getAspects(HolderLookup.Provider provider, LegacyRandomSource random) {
 		List<Aspect> aspects = new ArrayList<>();
-		aspects.addAll(this.firstRoll().getAspects(item, provider, random));
-		aspects.addAll(this.secondRoll().getAspects(item, provider, random));
+		aspects.addAll(this.firstRoll().getAspects(provider, random));
+		aspects.addAll(this.secondRoll().getAspects(provider, random));
 		return aspects;
 	}
 

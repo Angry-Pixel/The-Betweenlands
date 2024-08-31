@@ -26,7 +26,7 @@ public record SetAspectCalculator(float amountMultiplier, float amountVariation,
 	).apply(instance, SetAspectCalculator::new));
 
 	@Override
-	public List<Aspect> getAspects(AspectItem item, HolderLookup.Provider provider, LegacyRandomSource random) {
+	public List<Aspect> getAspects(HolderLookup.Provider provider, LegacyRandomSource random) {
 		return this.aspects().stream().map(key -> {
 			Holder<AspectType> type = provider.lookupOrThrow(BLRegistries.Keys.ASPECT_TYPES).getOrThrow(key);
 			float baseAmount = type.value().amount() * this.amountMultiplier;

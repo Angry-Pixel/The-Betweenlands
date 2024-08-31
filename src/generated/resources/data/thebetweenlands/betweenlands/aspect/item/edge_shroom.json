@@ -9,15 +9,16 @@
         "thebetweenlands:uduriis",
         "thebetweenlands:wodren"
       ],
-      "rolls": 1
+      "rolls": 1,
+      "tier": "common"
     },
     "second_roll": {
       "type": "thebetweenlands:random_aspects",
       "amount_multiplier": 0.425,
       "amount_variation": 0.35,
-      "rolls": 1
+      "rolls": 1,
+      "tier": "common"
     }
   },
-  "item": "thebetweenlands:ground_edge_shroom",
-  "tier": "common"
+  "item": "thebetweenlands:ground_edge_shroom"
 }

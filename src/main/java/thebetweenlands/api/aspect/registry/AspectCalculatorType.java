@@ -14,7 +14,7 @@ public interface AspectCalculatorType {
 
 	Codec<AspectCalculatorType> CODEC = BLRegistries.ASPECT_CALCULATOR_TYPE.byNameCodec().dispatch(AspectCalculatorType::codec, Function.identity());
 
-	List<Aspect> getAspects(AspectItem item, HolderLookup.Provider provider, LegacyRandomSource random);
+	List<Aspect> getAspects(HolderLookup.Provider provider, LegacyRandomSource random);
 
 	MapCodec<? extends AspectCalculatorType> codec();
 }

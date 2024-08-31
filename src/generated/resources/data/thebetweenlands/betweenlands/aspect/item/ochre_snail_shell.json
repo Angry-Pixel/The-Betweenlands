@@ -3,8 +3,8 @@
     "type": "thebetweenlands:random_aspects",
     "amount_multiplier": 0.85,
     "amount_variation": 0.45,
-    "rolls": 2
+    "rolls": 2,
+    "tier": "uncommon"
   },
-  "item": "thebetweenlands:ground_ochre_snail_shell",
-  "tier": "uncommon"
+  "item": "thebetweenlands:ground_ochre_snail_shell"
 }

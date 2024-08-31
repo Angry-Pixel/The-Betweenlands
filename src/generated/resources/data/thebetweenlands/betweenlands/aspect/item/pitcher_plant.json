@@ -3,8 +3,8 @@
     "type": "thebetweenlands:random_aspects",
     "amount_multiplier": 1.25,
     "amount_variation": 0.5,
-    "rolls": 1
+    "rolls": 1,
+    "tier": "rare"
   },
-  "item": "thebetweenlands:ground_pitcher_plant",
-  "tier": "rare"
+  "item": "thebetweenlands:ground_pitcher_plant"
 }

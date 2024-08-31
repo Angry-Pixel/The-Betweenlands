@@ -194,7 +194,7 @@ public class AspectManager {
 		LegacyRandomSource random = (LegacyRandomSource) RandomSource.create(seed);
 
 		for (AspectItem entry : provider.lookupOrThrow(BLRegistries.Keys.ASPECT_ITEMS).listElements().map(Holder::value).toList()) {
-			this.matchedAspects.computeIfAbsent(entry, aspectItem -> aspectItem.calculator().getAspects(aspectItem, provider, random));
+			this.matchedAspects.computeIfAbsent(entry, aspectItem -> aspectItem.calculator().getAspects(provider, random));
 		}
 	}
 

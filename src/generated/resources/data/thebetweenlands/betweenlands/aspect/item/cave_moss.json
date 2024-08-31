@@ -3,8 +3,8 @@
     "type": "thebetweenlands:random_aspects",
     "amount_multiplier": 0.425,
     "amount_variation": 0.35,
-    "rolls": 3
+    "rolls": 3,
+    "tier": "common"
   },
-  "item": "thebetweenlands:ground_cave_moss",
-  "tier": "common"
+  "item": "thebetweenlands:ground_cave_moss"
 }

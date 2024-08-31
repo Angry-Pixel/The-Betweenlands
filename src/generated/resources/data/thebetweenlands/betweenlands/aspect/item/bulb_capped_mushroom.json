@@ -3,8 +3,8 @@
     "type": "thebetweenlands:random_aspects",
     "amount_multiplier": 0.85,
     "amount_variation": 0.45,
-    "rolls": 1
+    "rolls": 1,
+    "tier": "uncommon"
   },
-  "item": "thebetweenlands:ground_bulb_capped_mushroom",
-  "tier": "uncommon"
+  "item": "thebetweenlands:ground_bulb_capped_mushroom"
 }
