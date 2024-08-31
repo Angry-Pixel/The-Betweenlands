@@ -114,6 +114,7 @@ public class ClientRegistrationEvents {
 		event.registerEntityRenderer(EntityRegistry.SEAT.get(), NoopRenderer::new);
 		event.registerEntityRenderer(EntityRegistry.ELIXIR.get(), ThrownItemRenderer::new);
 
+		event.registerBlockEntityRenderer(BlockEntityRegistry.ALEMBIC.get(), AlembicRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.ANIMATOR.get(), AnimatorRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.CENSER.get(), CenserRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.COMPOST_BIN.get(), CompostBinRenderer::new);
@@ -142,6 +143,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.ANADIA, AnadiaModel::create);
 		event.registerLayerDefinition(BLModelLayers.FISH_HOOK, BLFishHookModel::create);
 
+		event.registerLayerDefinition(BLModelLayers.ALEMBIC, AlembicModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.ANIMATOR, AnimatorModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.CENSER, CenserModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.COMPOST_BIN, CompostBinModel::makeModel);
@@ -217,7 +219,7 @@ public class ClientRegistrationEvents {
 			BlockRegistry.FISHING_TACKLE_BOX.asItem(), BlockRegistry.SMOKING_RACK.asItem(), BlockRegistry.FISH_TRIMMING_TABLE.asItem(),
 			BlockRegistry.CRAB_POT.asItem(), BlockRegistry.CRAB_POT_FILTER.asItem(), BlockRegistry.ANIMATOR.asItem(),
 			BlockRegistry.WIND_CHIME.asItem(), BlockRegistry.OFFERING_TABLE.asItem(), BlockRegistry.MOB_SPAWNER.asItem(),
-			BlockRegistry.GECKO_CAGE.asItem(),
+			BlockRegistry.GECKO_CAGE.asItem(), BlockRegistry.ALEMBIC.asItem(),
 			BlockRegistry.LOOT_POT_1.asItem(), BlockRegistry.LOOT_POT_2.asItem(), BlockRegistry.LOOT_POT_3.asItem(),
 			BlockRegistry.TAR_LOOT_POT_1.asItem(), BlockRegistry.TAR_LOOT_POT_2.asItem(), BlockRegistry.TAR_LOOT_POT_3.asItem(),
 			BlockRegistry.MUD_LOOT_POT_1.asItem(), BlockRegistry.MUD_LOOT_POT_2.asItem(), BlockRegistry.MUD_LOOT_POT_3.asItem(),

@@ -69,8 +69,9 @@ public record ElixirRecipe(int infusionGradient, int infusionFinishedColor, int 
 		return new float[] {r, g, b, a};
 	}
 
-	public static float[] getInfusionColor(@Nullable ElixirRecipe recipe, int infusionTime) {
-		if(recipe != null) {
+	public static float[] getInfusionColor(@Nullable Holder<ElixirRecipe> holder, int infusionTime) {
+		if(holder != null) {
+			ElixirRecipe recipe = holder.value();
 			if(infusionTime > recipe.idealInfusionTime + recipe.infusionTimeVariation) {
 				return recipe.getRGBA(recipe.infusionFailedColor);
 			} else if(infusionTime > recipe.idealInfusionTime - recipe.infusionTimeVariation

@@ -48,7 +48,7 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 	private float crystalVelocity = 0.0F;
 	private float crystalRotation = 0.0F;
 	@Nullable
-	private ElixirRecipe infusingRecipe = null;
+	private Holder<ElixirRecipe> infusingRecipe = null;
 	private boolean updateRecipe = false;
 
 	/**
@@ -87,13 +87,13 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 			}
 			entity.prevInfusionState = entity.currentInfusionState;
 			if (!level.isClientSide()) {
-				if (entity.infusionTime > entity.infusingRecipe.idealInfusionTime() + entity.infusingRecipe.infusionTimeVariation()) {
+				if (entity.infusionTime > entity.infusingRecipe.value().idealInfusionTime() + entity.infusingRecipe.value().infusionTimeVariation()) {
 					//fail
 					if (entity.currentInfusionState != 3)
 						updateBlock = true;
 					entity.currentInfusionState = 3;
-				} else if (entity.infusionTime > entity.infusingRecipe.idealInfusionTime() - entity.infusingRecipe.infusionTimeVariation()
-					&& entity.infusionTime < entity.infusingRecipe.idealInfusionTime() + entity.infusingRecipe.infusionTimeVariation()) {
+				} else if (entity.infusionTime > entity.infusingRecipe.value().idealInfusionTime() - entity.infusingRecipe.value().infusionTimeVariation()
+					&& entity.infusionTime < entity.infusingRecipe.value().idealInfusionTime() + entity.infusingRecipe.value().infusionTimeVariation()) {
 					//finished
 					if (entity.currentInfusionState != 2)
 						updateBlock = true;
@@ -440,7 +440,8 @@ public class InfuserBlockEntity extends NoMenuContainerBlockEntity implements IF
 		this.stirProgress = progress;
 	}
 
-	public ElixirRecipe getInfusingRecipe() {
+	@Nullable
+	public Holder<ElixirRecipe> getInfusingRecipe() {
 		return this.infusingRecipe;
 	}
 
