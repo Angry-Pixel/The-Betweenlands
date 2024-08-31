@@ -1213,7 +1213,7 @@ public class LangProvider extends LanguageProvider {
 	private void addAspect(ResourceKey<AspectType> aspect, String manualType, String desc) {
 		String base = Util.makeDescriptionId("aspect", aspect.location());
 		this.add(base, StringUtils.capitalize(aspect.location().getPath()));
-		this.add(base + ".manual", manualType);
+		this.add(base + ".type", manualType);
 		this.add(base + ".desc", desc);
 	}
 
