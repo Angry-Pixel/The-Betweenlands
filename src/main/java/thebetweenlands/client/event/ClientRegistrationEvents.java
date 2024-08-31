@@ -36,6 +36,7 @@ import thebetweenlands.client.gui.overlay.FishStaminaBarOverlay;
 import thebetweenlands.client.gui.screen.AnimatorScreen;
 import thebetweenlands.client.gui.screen.DruidAltarScreen;
 import thebetweenlands.client.gui.screen.FishTrimmingTableScreen;
+import thebetweenlands.client.handler.ClientHandlerEvents;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.block.*;
 import thebetweenlands.client.model.block.cage.GeckoCageModel;
@@ -78,6 +79,7 @@ public class ClientRegistrationEvents {
 		eventbus.addListener(ClientRegistrationEvents::registerOverlays);
 		eventbus.addListener(ClientRegistrationEvents::registerItemColors);
 		MainMenuEvents.init();
+		ClientHandlerEvents.init();
 	}
 
 	private static void clientSetup(FMLClientSetupEvent event) {

@@ -20,8 +20,16 @@ public class HandlerEvents {
 		NeoForge.EVENT_BUS.addListener(PlayerDecayHandler::accelerateDecayOnDamage);
 		NeoForge.EVENT_BUS.addListener(PlayerDecayHandler::tickDecay);
 		NeoForge.EVENT_BUS.addListener(PlayerDecayHandler::syncDecayOnJoin);
-		
+
 		//extended reach
 		NeoForge.EVENT_BUS.addListener(ExtendedReachHandler::onAttackEvent);
+
+		//elixirs
+		NeoForge.EVENT_BUS.addListener(ElixirCommonHandler::affectArrowStrength);
+		NeoForge.EVENT_BUS.addListener(ElixirCommonHandler::affectBreakSpeed);
+		NeoForge.EVENT_BUS.addListener(ElixirCommonHandler::affectJumpingPower);
+		NeoForge.EVENT_BUS.addListener(ElixirCommonHandler::changeItemUsageTime);
+		NeoForge.EVENT_BUS.addListener(ElixirCommonHandler::changeMaskingTarget);
+		NeoForge.EVENT_BUS.addListener(ElixirCommonHandler::tickEffects);
 	}
 }
