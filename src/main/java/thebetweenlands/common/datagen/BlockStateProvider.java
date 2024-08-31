@@ -658,6 +658,24 @@ public class BlockStateProvider extends net.neoforged.neoforge.client.model.gene
 		this.basicItemTex(BlockRegistry.WEEDWOOD_SIGN, false);
 		this.builtinEntity(BlockRegistry.MOSS_BED, this.modLoc("block/moss"));
 		this.basicItemTex(BlockRegistry.MOSS_BED, false);
+
+		this.simpleBlockWithItem(BlockRegistry.WHITE_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
+		this.simpleBlockWithItem(BlockRegistry.LIGHT_GRAY_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
+		this.simpleBlockWithItem(BlockRegistry.GRAY_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
+		this.simpleBlockWithItem(BlockRegistry.BLACK_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
+		this.simpleBlockWithItem(BlockRegistry.RED_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
+		this.simpleBlockWithItem(BlockRegistry.ORANGE_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
+		this.simpleBlockWithItem(BlockRegistry.YELLOW_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
+		this.simpleBlockWithItem(BlockRegistry.GREEN_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
+		this.simpleBlockWithItem(BlockRegistry.LIME_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
+		this.simpleBlockWithItem(BlockRegistry.BLUE_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
+		this.simpleBlockWithItem(BlockRegistry.CYAN_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
+		this.simpleBlockWithItem(BlockRegistry.LIGHT_BLUE_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
+		this.simpleBlockWithItem(BlockRegistry.PURPLE_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
+		this.simpleBlockWithItem(BlockRegistry.MAGENTA_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
+		this.simpleBlockWithItem(BlockRegistry.PINK_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
+		this.simpleBlockWithItem(BlockRegistry.BROWN_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
+
 	}
 
 	private void druidStone(DeferredBlock<Block> stone) {

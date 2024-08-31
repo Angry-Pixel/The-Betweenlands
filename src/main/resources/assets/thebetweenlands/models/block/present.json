@@ -1,0 +1,54 @@
+{
+  "texture_size": [64, 64],
+  "parent": "block/block",
+  "render_type": "cutout",
+  "textures": {
+    "present": "thebetweenlands:block/present",
+    "particle": "block/white_wool"
+  },
+  "elements": [
+    {
+      "from": [2, 0, 2],
+      "to": [14, 9, 14],
+      "faces": {
+        "north": {"uv": [3, 3, 6, 5.25], "tintindex": 0, "texture": "#present"},
+        "east": {"uv": [6, 3, 9, 5.25], "tintindex": 0, "texture": "#present"},
+        "south": {"uv": [9, 3, 12, 5.25], "tintindex": 0, "texture": "#present"},
+        "west": {"uv": [0, 3, 3, 5.25], "tintindex": 0, "texture": "#present"},
+        "down": {"uv": [6, 0, 9, 3], "tintindex": 0, "texture": "#present"}
+      }
+    },
+    {
+      "from": [1, 9, 1],
+      "to": [15, 13, 15],
+      "faces": {
+        "north": {"uv": [3.5, 8.75, 7, 9.75], "tintindex": 0, "texture": "#present"},
+        "east": {"uv": [7, 8.75, 10.5, 9.75], "tintindex": 0, "texture": "#present"},
+        "south": {"uv": [10.5, 8.75, 14, 9.75], "tintindex": 0, "texture": "#present"},
+        "west": {"uv": [0, 8.75, 3.5, 9.75], "tintindex": 0, "texture": "#present"},
+        "up": {"uv": [3.5, 5.25, 7, 8.75], "tintindex": 0, "texture": "#present"},
+        "down": {"uv": [7, 5.25, 10.5, 8.75], "tintindex": 0, "texture": "#present"}
+      }
+    },
+    {
+      "from": [8, 13, 3.8],
+      "to": [8, 20, 12.2],
+      "shade": false,
+      "rotation": {"angle": 45, "axis": "y", "origin": [8, 21, 8], "rescale": true},
+      "faces": {
+        "east": {"uv": [3, 10.5, 6, 12.25], "tintindex": 0, "texture": "#present"},
+        "west": {"uv": [0, 10.5, 3, 12.25], "tintindex": 0, "texture": "#present"}
+      }
+    },
+    {
+      "from": [3.8, 13, 8],
+      "to": [12.2, 20, 8],
+      "shade": false,
+      "rotation": {"angle": 45, "axis": "y", "origin": [8, 21, 8], "rescale": true},
+      "faces": {
+        "north": {"uv": [0, 10.5, 3, 12.25], "tintindex": 0, "texture": "#present"},
+        "south": {"uv": [3, 10.5, 6, 12.25], "tintindex": 0, "texture": "#present"}
+      }
+    }
+  ]
+}

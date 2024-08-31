@@ -3,6 +3,7 @@ package thebetweenlands.client.event;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
@@ -18,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
@@ -47,6 +49,7 @@ import thebetweenlands.client.particle.BetweenlandsPortalParticle;
 import thebetweenlands.client.renderer.block.*;
 import thebetweenlands.client.renderer.entity.*;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.PresentBlock;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.entities.fishing.anadia.AnadiaParts;
@@ -98,37 +101,6 @@ public class ClientRegistrationEvents {
 		event.register(MenuRegistry.ANIMATOR.get(), AnimatorScreen::new);
 		event.register(MenuRegistry.DRUID_ALTAR.get(), DruidAltarScreen::new);
 		event.register(MenuRegistry.FISH_TRIMMING_TABLE.get(), FishTrimmingTableScreen::new);
-	}
-
-	private static void registerItemColors(final RegisterColorHandlersEvent.Item event) {
-		event.register((stack, tintIndex) -> {
-			if (stack.get(DataComponents.ENTITY_DATA) != null) {
-				if (stack.has(DataComponentRegistry.ROT_TIME)) {
-					long rottingTime = stack.get(DataComponentRegistry.ROT_TIME);
-					if (rottingTime - Minecraft.getInstance().level.getGameTime() <= 0) {
-						return 0xFF5FB050;
-					}
-				}
-
-				return AnadiaParts.AnadiaColor.get(stack.get(DataComponents.ENTITY_DATA).copyTag().getByte("fish_color")).getColor();
-			}
-			return AnadiaParts.AnadiaColor.UNKNOWN.getColor();
-		}, ItemRegistry.ANADIA.get());
-
-		event.register((stack, tintIndex) -> {
-			if (tintIndex != 1) return 0xFFFFFFFF;
-			return stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY).aspect().map(aspect -> aspect.value().color()).orElse(0xFFFFFFFF);
-		}, ItemRegistry.ASPECTRUS_FRUIT.get());
-
-		event.register((stack, tintIndex) -> {
-			if (tintIndex != 0) return 0xFFFFFFFF;
-			return stack.getOrDefault(DataComponentRegistry.ELIXIR_CONTENTS, ElixirContents.EMPTY).getElixirColor();
-		}, ItemRegistry.GREEN_ELIXIR.get(), ItemRegistry.ORANGE_ELIXIR.get());
-
-		event.register((stack, tintIndex) -> {
-			if (tintIndex != 0) return 0xFFFFFFFF;
-			return stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY).getAspectColor();
-		}, ItemRegistry.GREEN_ASPECT_VIAL.get(), ItemRegistry.ORANGE_ASPECT_VIAL.get());
 	}
 
 	private static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
@@ -373,5 +345,54 @@ public class ClientRegistrationEvents {
 			b = (int) (b * depth + DEEP_COLOR_B * (1 - depth) + 0.5F);
 			return r << 16 | g << 8 | b;
 		}, BlockRegistry.SWAMP_WATER.get());
+
+		event.register((state, level, pos, tintIndex) -> {
+				if (tintIndex == 0 && state.getBlock() instanceof PresentBlock present) {
+					return present.getColor().getTextureDiffuseColor();
+				}
+				return 0xFFFFFFFF;
+			}, BlockRegistry.WHITE_PRESENT.get(), BlockRegistry.LIGHT_GRAY_PRESENT.get(), BlockRegistry.GRAY_PRESENT.get(), BlockRegistry.BLACK_PRESENT.get(),
+			BlockRegistry.RED_PRESENT.get(), BlockRegistry.ORANGE_PRESENT.get(), BlockRegistry.YELLOW_PRESENT.get(), BlockRegistry.GREEN_PRESENT.get(),
+			BlockRegistry.LIME_PRESENT.get(), BlockRegistry.BLUE_PRESENT.get(), BlockRegistry.CYAN_PRESENT.get(), BlockRegistry.LIGHT_BLUE_PRESENT.get(),
+			BlockRegistry.PURPLE_PRESENT.get(), BlockRegistry.MAGENTA_PRESENT.get(), BlockRegistry.PINK_PRESENT.get(), BlockRegistry.BROWN_PRESENT.get());
+	}
+
+	private static void registerItemColors(final RegisterColorHandlersEvent.Item event) {
+		BlockColors blockColors = event.getBlockColors();
+
+		event.register((stack, tintIndex) -> stack.getItem() instanceof BlockItem blocc ? blockColors.getColor(blocc.getBlock().defaultBlockState(), null, null, tintIndex) : 0xFFFFFFFF,
+			BlockRegistry.WHITE_PRESENT.get(), BlockRegistry.LIGHT_GRAY_PRESENT.get(), BlockRegistry.GRAY_PRESENT.get(), BlockRegistry.BLACK_PRESENT.get(),
+			BlockRegistry.RED_PRESENT.get(), BlockRegistry.ORANGE_PRESENT.get(), BlockRegistry.YELLOW_PRESENT.get(), BlockRegistry.GREEN_PRESENT.get(),
+			BlockRegistry.LIME_PRESENT.get(), BlockRegistry.BLUE_PRESENT.get(), BlockRegistry.CYAN_PRESENT.get(), BlockRegistry.LIGHT_BLUE_PRESENT.get(),
+			BlockRegistry.PURPLE_PRESENT.get(), BlockRegistry.MAGENTA_PRESENT.get(), BlockRegistry.PINK_PRESENT.get(), BlockRegistry.BROWN_PRESENT.get());
+
+		event.register((stack, tintIndex) -> {
+			if (stack.get(DataComponents.ENTITY_DATA) != null) {
+				if (stack.has(DataComponentRegistry.ROT_TIME)) {
+					long rottingTime = stack.get(DataComponentRegistry.ROT_TIME);
+					if (rottingTime - Minecraft.getInstance().level.getGameTime() <= 0) {
+						return 0xFF5FB050;
+					}
+				}
+
+				return AnadiaParts.AnadiaColor.get(stack.get(DataComponents.ENTITY_DATA).copyTag().getByte("fish_color")).getColor();
+			}
+			return AnadiaParts.AnadiaColor.UNKNOWN.getColor();
+		}, ItemRegistry.ANADIA.get());
+
+		event.register((stack, tintIndex) -> {
+			if (tintIndex != 1) return 0xFFFFFFFF;
+			return stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY).aspect().map(aspect -> aspect.value().color()).orElse(0xFFFFFFFF);
+		}, ItemRegistry.ASPECTRUS_FRUIT.get());
+
+		event.register((stack, tintIndex) -> {
+			if (tintIndex != 0) return 0xFFFFFFFF;
+			return stack.getOrDefault(DataComponentRegistry.ELIXIR_CONTENTS, ElixirContents.EMPTY).getElixirColor();
+		}, ItemRegistry.GREEN_ELIXIR.get(), ItemRegistry.ORANGE_ELIXIR.get());
+
+		event.register((stack, tintIndex) -> {
+			if (tintIndex != 0) return 0xFFFFFFFF;
+			return stack.getOrDefault(DataComponentRegistry.ASPECT_CONTENTS, AspectContents.EMPTY).getAspectColor();
+		}, ItemRegistry.GREEN_ASPECT_VIAL.get(), ItemRegistry.ORANGE_ASPECT_VIAL.get());
 	}
 }

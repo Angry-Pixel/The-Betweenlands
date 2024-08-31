@@ -476,22 +476,22 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> DECAY_PIT_CONTROL = BLOCKS.register("decay_pit_control", () -> new DecayPitControlBlock(BlockBehaviour.Properties.of().strength(-1.0F, 6000000.0F).sound(SoundType.STONE)));
 	//TODO invisible block variants for the decay pit control
 	//perhaps consider making them all 1 block with variants that cycle the hitbox
-	public static final DeferredBlock<Block> WHITE_PRESENT = register("white_present", () -> new PresentBlock(BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
-	public static final DeferredBlock<Block> LIGHT_GRAY_PRESENT = register("light_gray_present", () -> new PresentBlock(BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
-	public static final DeferredBlock<Block> GRAY_PRESENT = register("gray_present", () -> new PresentBlock(BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
-	public static final DeferredBlock<Block> BLACK_PRESENT = register("black_present", () -> new PresentBlock(BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
-	public static final DeferredBlock<Block> RED_PRESENT = register("red_present", () -> new PresentBlock(BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
-	public static final DeferredBlock<Block> ORANGE_PRESENT = register("orange_present", () -> new PresentBlock(BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
-	public static final DeferredBlock<Block> YELLOW_PRESENT = register("yellow_present", () -> new PresentBlock(BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
-	public static final DeferredBlock<Block> GREEN_PRESENT = register("green_present", () -> new PresentBlock(BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
-	public static final DeferredBlock<Block> LIME_PRESENT = register("lime_present", () -> new PresentBlock(BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
-	public static final DeferredBlock<Block> BLUE_PRESENT = register("blue_present", () -> new PresentBlock(BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
-	public static final DeferredBlock<Block> CYAN_PRESENT = register("cyan_present", () -> new PresentBlock(BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
-	public static final DeferredBlock<Block> LIGHT_BLUE_PRESENT = register("light_blue_present", () -> new PresentBlock(BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
-	public static final DeferredBlock<Block> PURPLE_PRESENT = register("purple_present", () -> new PresentBlock(BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
-	public static final DeferredBlock<Block> MAGENTA_PRESENT = register("magenta_present", () -> new PresentBlock(BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
-	public static final DeferredBlock<Block> PINK_PRESENT = register("pink_present", () -> new PresentBlock(BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
-	public static final DeferredBlock<Block> BROWN_PRESENT = register("brown_present", () -> new PresentBlock(BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
+	public static final DeferredBlock<Block> WHITE_PRESENT = register("white_present", () -> new PresentBlock(DyeColor.WHITE, BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
+	public static final DeferredBlock<Block> LIGHT_GRAY_PRESENT = register("light_gray_present", () -> new PresentBlock(DyeColor.LIGHT_GRAY, BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
+	public static final DeferredBlock<Block> GRAY_PRESENT = register("gray_present", () -> new PresentBlock(DyeColor.GRAY, BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
+	public static final DeferredBlock<Block> BLACK_PRESENT = register("black_present", () -> new PresentBlock(DyeColor.BLACK, BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
+	public static final DeferredBlock<Block> RED_PRESENT = register("red_present", () -> new PresentBlock(DyeColor.RED, BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
+	public static final DeferredBlock<Block> ORANGE_PRESENT = register("orange_present", () -> new PresentBlock(DyeColor.ORANGE, BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
+	public static final DeferredBlock<Block> YELLOW_PRESENT = register("yellow_present", () -> new PresentBlock(DyeColor.YELLOW, BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
+	public static final DeferredBlock<Block> GREEN_PRESENT = register("green_present", () -> new PresentBlock(DyeColor.GREEN, BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
+	public static final DeferredBlock<Block> LIME_PRESENT = register("lime_present", () -> new PresentBlock(DyeColor.LIME, BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
+	public static final DeferredBlock<Block> BLUE_PRESENT = register("blue_present", () -> new PresentBlock(DyeColor.BLUE, BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
+	public static final DeferredBlock<Block> CYAN_PRESENT = register("cyan_present", () -> new PresentBlock(DyeColor.CYAN, BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
+	public static final DeferredBlock<Block> LIGHT_BLUE_PRESENT = register("light_blue_present", () -> new PresentBlock(DyeColor.LIGHT_BLUE, BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
+	public static final DeferredBlock<Block> PURPLE_PRESENT = register("purple_present", () -> new PresentBlock(DyeColor.PURPLE, BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
+	public static final DeferredBlock<Block> MAGENTA_PRESENT = register("magenta_present", () -> new PresentBlock(DyeColor.MAGENTA, BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
+	public static final DeferredBlock<Block> PINK_PRESENT = register("pink_present", () -> new PresentBlock(DyeColor.PINK, BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
+	public static final DeferredBlock<Block> BROWN_PRESENT = register("brown_present", () -> new PresentBlock(DyeColor.BROWN, BlockBehaviour.Properties.of().randomTicks().strength(0.8F).sound(SoundType.WOOL)));
 
 	//plants
 	public static final DeferredBlock<Block> PITCHER_PLANT = register("pitcher_plant", () -> new FarmableDoublePlantBlock(BlockBehaviour.Properties.of().noCollission().noOcclusion().offsetType(BlockBehaviour.OffsetType.XYZ).instabreak().sound(SoundType.GRASS)));
