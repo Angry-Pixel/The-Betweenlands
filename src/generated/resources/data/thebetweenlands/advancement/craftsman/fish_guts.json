@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:craftsman/fishy_business",
+  "criteria": {
+    "trim_fish": {
+      "trigger": "thebetweenlands:take_item_from_output_trimming_table"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.craftsman.fish_guts.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:fish_trimming_table"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.craftsman.fish_guts"
+    }
+  },
+  "requirements": [
+    [
+      "trim_fish"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

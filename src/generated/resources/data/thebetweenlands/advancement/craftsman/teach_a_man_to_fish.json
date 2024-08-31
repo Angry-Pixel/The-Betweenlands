@@ -1,0 +1,33 @@
+{
+  "parent": "thebetweenlands:craftsman/all_over_again",
+  "criteria": {
+    "rod": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:weedwood_fishing_rod"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.craftsman.teach_a_man_to_fish.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:weedwood_fishing_rod"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.craftsman.teach_a_man_to_fish"
+    }
+  },
+  "requirements": [
+    [
+      "rod"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

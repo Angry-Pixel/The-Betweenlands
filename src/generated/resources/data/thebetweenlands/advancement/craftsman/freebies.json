@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:craftsman/efficiency",
+  "criteria": {
+    "add_flux": {
+      "trigger": "thebetweenlands:flux_added"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.craftsman.freebies.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:limestone_flux"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.craftsman.freebies"
+    }
+  },
+  "requirements": [
+    [
+      "add_flux"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

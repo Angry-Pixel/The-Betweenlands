@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:craftsman/fish_guts",
+  "criteria": {
+    "catch_crab": {
+      "trigger": "thebetweenlands:crab_in_pot"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.craftsman.its_a_trap.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:crab_pot"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.craftsman.its_a_trap"
+    }
+  },
+  "requirements": [
+    [
+      "catch_crab"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,44 @@
+{
+  "criteria": {
+    "has_base_root": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type_specific": {
+                "type": "minecraft:player",
+                "advancements": {
+                  "thebetweenlands:adventurer/root": true
+                }
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:tick"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "thebetweenlands:textures/block/weedwood.png",
+    "description": {
+      "translate": "advancement.thebetweenlands.craftsman.root.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:dry_bark"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancement.thebetweenlands.craftsman.root"
+    }
+  },
+  "requirements": [
+    [
+      "has_base_root"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

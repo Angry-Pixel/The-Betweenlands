@@ -1,0 +1,229 @@
+{
+  "parent": "thebetweenlands:craftsman/paint_job",
+  "criteria": {
+    "black": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:raisin_black_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "blue": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:lavender_blue_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "brown": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:brown_rust_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "cadmium": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:cadmium_green_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "caribbean": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:caribbean_green_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "champagne": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:champagne_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "cyan": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:elm_cyan_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "gray": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:pewter_grey_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "lavender": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:dull_lavender_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "magenta": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:camelot_magenta_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "maroon": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:maroon_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "purple": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:midnight_purple_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "saffron": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:saffron_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "shadow": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:shadow_green_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "sushi": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:sushi_green_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "tangerine": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:vivid_tangerine_dye"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.craftsman.dye_hard.desc"
+    },
+    "frame": "challenge",
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:camelot_magenta_dye"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.craftsman.dye_hard"
+    }
+  },
+  "requirements": [
+    [
+      "lavender"
+    ],
+    [
+      "maroon"
+    ],
+    [
+      "shadow"
+    ],
+    [
+      "magenta"
+    ],
+    [
+      "saffron"
+    ],
+    [
+      "caribbean"
+    ],
+    [
+      "tangerine"
+    ],
+    [
+      "champagne"
+    ],
+    [
+      "black"
+    ],
+    [
+      "sushi"
+    ],
+    [
+      "cyan"
+    ],
+    [
+      "cadmium"
+    ],
+    [
+      "blue"
+    ],
+    [
+      "brown"
+    ],
+    [
+      "purple"
+    ],
+    [
+      "gray"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -68,6 +68,28 @@ public class LangProvider extends LanguageProvider {
 		this.addAdvancement("adventurer.vinyl_countdown", "The Vinyl Countdown", "Collect all Betweenlands music discs");
 		this.addAdvancement("adventurer.i_think_you_urned_this", "I Think You've Urned This", "Loot 20 Alcove Urns");
 
+		this.addAdvancement("craftsman.root", "Craftsman", "Creating the world");
+		this.addAdvancement("craftsman.getting_harder_wood", "Getting Harder Wood", "Collect wood in the Betweenlands");
+		this.addAdvancement("craftsman.all_over_again", "All Over Again", "Create a Weedwood Crafting Table");
+		this.addAdvancement("craftsman.efficiency", "Efficiency", "Create a Dual Sulfur Furnace");
+		this.addAdvancement("craftsman.freebies", "Freebies", "Obtain extra ingots using Limestone Flux");
+		this.addAdvancement("craftsman.in_the_air_tonight", "In the Air Tonight", "Predict a weather event with windchimes");
+		this.addAdvancement("craftsman.teach_a_man_to_fish", "Teach a Man to Fish", "Craft a Weedwood Fishing Rod");
+		this.addAdvancement("craftsman.fishy_business", "Fishy Business", "Catch an Anadia using a Weedwood Fishing Rod");
+		this.addAdvancement("craftsman.jar_o_worms", "Jar O' Worms", "Bait your rod from a Silt Glass Jar full of worms");
+		this.addAdvancement("craftsman.net_fish_and_chill", "Net Fish and Chill", "Sit back and relax on a Fishing Tackle Box");
+		this.addAdvancement("craftsman.fish_guts", "Fish Guts", "Craft and use a Trimming Table");
+		this.addAdvancement("craftsman.authentic_flavor", "Authentic Flavor", "Use a Smoking Rack to smoke some food");
+		this.addAdvancement("craftsman.its_a_trap", "It's A Trap!", "Obtain a Crab Pot and lure a crab into it");
+		this.addAdvancement("craftsman.natures_purifier", "Nature's Purifier", "Use a Crab Pot Filter to convert an item");
+		this.addAdvancement("craftsman.aquaman", "Aquaman", "Obtain a full suit of Amphibious armor");
+		this.addAdvancement("craftsman.percolation_station", "Percolation Station", "Place a Water Filter and collect clean water");
+		this.addAdvancement("craftsman.omega_3s", "Omega 3s", "Use a Steeping Pot to obtain Fish Oil");
+		this.addAdvancement("craftsman.ill_treat_you_right", "I'll Treat You Right", "Use Fish Oil to craft Treated Planks");
+		this.addAdvancement("craftsman.paint_job", "Paint Job", "Use Dye to color a block");
+		this.addAdvancement("craftsman.let_it_shine", "Let It Shine", "Use Glowing Goop on an Item Frame");
+		this.addAdvancement("craftsman.dye_hard", "Dye Hard", "Create every dye color using a Steeping Pot");
+
 		this.addBlock(BlockRegistry.ALEMBIC, "Alembic");
 		this.addBlock(BlockRegistry.ALGAE, "Algae");
 		this.addBlock(BlockRegistry.ANCIENT_REMNANT_BLOCK, "Block of Ancient Remnant");

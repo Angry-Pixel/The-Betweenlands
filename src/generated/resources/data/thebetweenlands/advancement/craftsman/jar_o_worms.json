@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:craftsman/teach_a_man_to_fish",
+  "criteria": {
+    "jar": {
+      "trigger": "thebetweenlands:use_worm_jar"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.craftsman.jar_o_worms.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:silt_glass_jar"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.craftsman.jar_o_worms"
+    }
+  },
+  "requirements": [
+    [
+      "jar"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

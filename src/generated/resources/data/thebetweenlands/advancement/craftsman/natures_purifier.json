@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:craftsman/its_a_trap",
+  "criteria": {
+    "filter_item": {
+      "trigger": "thebetweenlands:take_item_from_output_crab_pot_filter"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.craftsman.natures_purifier.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:crab_pot_filter"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.craftsman.natures_purifier"
+    }
+  },
+  "requirements": [
+    [
+      "filter_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -24,16 +24,23 @@ public class ItemTagProvider extends ItemTagsProvider {
 	public static final TagKey<Item> REPAIRS_OCTINE_TOOLS = tag("repairs_octine_tools");
 	public static final TagKey<Item> REPAIRS_VALONITE_TOOLS = tag("repairs_valonite_tools");
 
+	public static final TagKey<Item> BL_LOGS = tag("betweenlands_logs");
+	public static final TagKey<Item> FILTERED_SILT_GLASS = tag("filtered_silt_glass");
+	public static final TagKey<Item> MUD_BRICK_SHINGLES = tag("mud_brick_shingles");
+	public static final TagKey<Item> REED_MATS = tag("reed_mats");
+	public static final TagKey<Item> SAMITE = tag("samite");
+	public static final TagKey<Item> ITEM_FRAMES = tag("item_frames");
+
 	/**
 	 * Whether or not an item should be looked at by the corrosion engine
 	 */
 	public static final TagKey<Item> CORRODIBLE = tag("corrodible");
-	
+
 	/**
 	 * Use default corrosion on an item. Apply to items from other mods you want to be corrodible.
 	 */
 	public static final TagKey<Item> DEFAULT_CORRODIBLE = tag("corrodible/default");
-	
+
 	/**
 	 * Whether or not an item has custom corrosion information. The item should implement {@link ICustomCorrodible}; this tag will be ignored if it doesn't.
 	 */
@@ -110,7 +117,7 @@ public class ItemTagProvider extends ItemTagsProvider {
 				ItemRegistry.OCTINE_SHOVEL.get(),
 				ItemRegistry.VALONITE_SHOVEL.get()
 			);
-		
+
 		this.tag(DEFAULT_CORRODIBLE).add(
 				//Swords
 				ItemRegistry.WEEDWOOD_SWORD.get(),
@@ -140,7 +147,7 @@ public class ItemTagProvider extends ItemTagsProvider {
 				ItemRegistry.OCTINE_SHOVEL.get(),
 				ItemRegistry.VALONITE_SHOVEL.get()
 			);
-		
+
 	}
 
 	public static TagKey<Item> tag(String tagName) {

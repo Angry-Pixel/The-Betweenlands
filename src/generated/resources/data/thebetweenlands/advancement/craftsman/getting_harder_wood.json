@@ -1,0 +1,33 @@
+{
+  "parent": "thebetweenlands:craftsman/root",
+  "criteria": {
+    "has_bl_log": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#thebetweenlands:betweenlands_logs"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.craftsman.getting_harder_wood.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:weedwood_log"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.craftsman.getting_harder_wood"
+    }
+  },
+  "requirements": [
+    [
+      "has_bl_log"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

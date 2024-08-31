@@ -1,0 +1,77 @@
+{
+  "parent": "thebetweenlands:craftsman/omega_3s",
+  "criteria": {
+    "frame": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#thebetweenlands:item_frames"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "glass": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#thebetweenlands:filtered_silt_glass"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "mat": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#thebetweenlands:reed_mats"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "samite": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#thebetweenlands:samite"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "shingles": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#thebetweenlands:mud_brick_shingles"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.craftsman.paint_job.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:dull_lavender_samite"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.craftsman.paint_job"
+    }
+  },
+  "requirements": [
+    [
+      "glass",
+      "shingles",
+      "mat",
+      "samite",
+      "frame"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:craftsman/paint_job",
+  "criteria": {
+    "glowing": {
+      "trigger": "thebetweenlands:item_frame_glowing"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.craftsman.let_it_shine.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:glowing_goop"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.craftsman.let_it_shine"
+    }
+  },
+  "requirements": [
+    [
+      "glowing"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

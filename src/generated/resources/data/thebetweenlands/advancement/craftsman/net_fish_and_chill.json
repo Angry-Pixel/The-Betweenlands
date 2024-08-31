@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:craftsman/jar_o_worms",
+  "criteria": {
+    "sit_on_box": {
+      "trigger": "thebetweenlands:sit_on_tackle_box"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.craftsman.net_fish_and_chill.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:fishing_tackle_box"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.craftsman.net_fish_and_chill"
+    }
+  },
+  "requirements": [
+    [
+      "sit_on_box"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,33 @@
+{
+  "parent": "thebetweenlands:craftsman/teach_a_man_to_fish",
+  "criteria": {
+    "anadia": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:anadia"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.craftsman.fishy_business.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:anadia"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.craftsman.fishy_business"
+    }
+  },
+  "requirements": [
+    [
+      "anadia"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

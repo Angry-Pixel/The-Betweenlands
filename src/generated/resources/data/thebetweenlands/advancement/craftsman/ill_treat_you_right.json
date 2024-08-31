@@ -1,0 +1,88 @@
+{
+  "parent": "thebetweenlands:craftsman/omega_3s",
+  "criteria": {
+    "treated_hearthgrove": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:treated_hearthgrove_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "treated_nibbletwig": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:treated_nibbletwig_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "treated_root": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:treated_giant_root_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "treated_rotten": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:treated_rotten_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "treated_rubber": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:treated_rubber_tree_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "treated_weedwood": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:treated_weedwood_planks"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.craftsman.ill_treat_you_right.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:treated_weedwood_planks"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.craftsman.ill_treat_you_right"
+    }
+  },
+  "requirements": [
+    [
+      "treated_weedwood",
+      "treated_rubber",
+      "treated_root",
+      "treated_nibbletwig",
+      "treated_hearthgrove",
+      "treated_rotten"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

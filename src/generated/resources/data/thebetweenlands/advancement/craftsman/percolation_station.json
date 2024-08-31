@@ -1,0 +1,33 @@
+{
+  "parent": "thebetweenlands:craftsman/all_over_again",
+  "criteria": {
+    "filter": {
+      "conditions": {
+        "items": [
+          {
+            "items": "thebetweenlands:water_filter"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.craftsman.percolation_station.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:water_filter"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.craftsman.percolation_station"
+    }
+  },
+  "requirements": [
+    [
+      "filter"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

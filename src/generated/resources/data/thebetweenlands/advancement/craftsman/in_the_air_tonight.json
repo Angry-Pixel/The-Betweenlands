@@ -1,0 +1,26 @@
+{
+  "parent": "thebetweenlands:craftsman/all_over_again",
+  "criteria": {
+    "prediction": {
+      "trigger": "thebetweenlands:wind_chime_prediction"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.thebetweenlands.craftsman.in_the_air_tonight.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "thebetweenlands:wind_chime"
+    },
+    "title": {
+      "translate": "advancement.thebetweenlands.craftsman.in_the_air_tonight"
+    }
+  },
+  "requirements": [
+    [
+      "prediction"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

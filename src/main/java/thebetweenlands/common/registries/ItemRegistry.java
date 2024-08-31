@@ -7,6 +7,10 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
@@ -176,7 +180,22 @@ public class ItemRegistry {
 	//draeton things
 	public static final DeferredItem<Item> DRAETON = ITEMS.register("draeton", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> AMATE_NAME_TAG = ITEMS.register("amate_name_tag", () -> new Item(new Item.Properties()));
-	//dye bowls
+	public static final DeferredItem<Item> DULL_LAVENDER_DYE = ITEMS.register("dull_lavender_dye", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> MAROON_DYE = ITEMS.register("maroon_dye", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SHADOW_GREEN_DYE = ITEMS.register("shadow_green_dye", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> CAMELOT_MAGENTA_DYE = ITEMS.register("camelot_magenta_dye", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SAFFRON_DYE = ITEMS.register("saffron_dye", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> CARIBBEAN_GREEN_DYE = ITEMS.register("caribbean_green_dye", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> VIVID_TANGERINE_DYE = ITEMS.register("vivid_tangerine_dye", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> CHAMPAGNE_DYE = ITEMS.register("champagne_dye", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> RAISIN_BLACK_DYE = ITEMS.register("raisin_black_dye", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> SUSHI_GREEN_DYE = ITEMS.register("sushi_green_dye", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> ELM_CYAN_DYE = ITEMS.register("elm_cyan_dye", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> CADMIUM_GREEN_DYE = ITEMS.register("cadmium_green_dye", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> LAVENDER_BLUE_DYE = ITEMS.register("lavender_blue_dye", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> BROWN_RUST_DYE = ITEMS.register("brown_rust_dye", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> MIDNIGHT_PURPLE_DYE = ITEMS.register("midnight_purple_dye", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> PEWTER_GREY_DYE = ITEMS.register("pewter_grey_dye", () -> new Item(new Item.Properties().stacksTo(1)));
 	//frames
 	//thorax
 	public static final DeferredItem<Item> MOSS_FILTER = ITEMS.register("moss_filter", () -> new Item(new Item.Properties().stacksTo(1).durability(400)));
@@ -204,10 +223,10 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> ANCIENT_CHESTPLATE = ITEMS.register("ancient_chestplate", () -> new AncientArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(35)).rarity(Rarity.EPIC).stacksTo(1)));
 	public static final DeferredItem<Item> ANCIENT_LEGGINGS = ITEMS.register("ancient_leggings", () -> new AncientArmorItem(ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(35)).rarity(Rarity.EPIC).stacksTo(1)));
 	public static final DeferredItem<Item> ANCIENT_BOOTS = ITEMS.register("ancient_boots", () -> new AncientArmorItem(ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(35)).rarity(Rarity.EPIC).stacksTo(1)));
-//	public static final DeferredItem<Item> AMPHIBIOUS_HELMET = ITEMS.register("amphibious_helmet", () -> new AmphibiousArmorItem(ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(12)).stacksTo(1)));
-//	public static final DeferredItem<Item> AMPHIBIOUS_CHESTPLATE = ITEMS.register("amphibious_chestplate", () -> new AmphibiousArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(12)).stacksTo(1)));
-//	public static final DeferredItem<Item> AMPHIBIOUS_LEGGINGS = ITEMS.register("amphibious_leggings", () -> new AmphibiousArmorItem(ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(12)).stacksTo(1)));
-//	public static final DeferredItem<Item> AMPHIBIOUS_BOOTS = ITEMS.register("amphibious_boots", () -> new AmphibiousArmorItem(ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(12)).stacksTo(1)));
+	public static final DeferredItem<Item> AMPHIBIOUS_HELMET = ITEMS.register("amphibious_helmet", () -> new AmphibiousArmorItem(ArmorItem.Type.HELMET, new Item.Properties().durability(ArmorItem.Type.HELMET.getDurability(12)).stacksTo(1)));
+	public static final DeferredItem<Item> AMPHIBIOUS_CHESTPLATE = ITEMS.register("amphibious_chestplate", () -> new AmphibiousArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(ArmorItem.Type.CHESTPLATE.getDurability(12)).stacksTo(1)));
+	public static final DeferredItem<Item> AMPHIBIOUS_LEGGINGS = ITEMS.register("amphibious_leggings", () -> new AmphibiousArmorItem(ArmorItem.Type.LEGGINGS, new Item.Properties().durability(ArmorItem.Type.LEGGINGS.getDurability(12)).stacksTo(1)));
+	public static final DeferredItem<Item> AMPHIBIOUS_BOOTS = ITEMS.register("amphibious_boots", () -> new AmphibiousArmorItem(ArmorItem.Type.BOOTS, new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(12)).stacksTo(1)));
 	public static final DeferredItem<Item> RUBBER_BOOTS = ITEMS.register("rubber_boots", () -> new RubberBootsItem(new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(10)).stacksTo(1)));
 	public static final DeferredItem<Item> MARSH_RUNNER_BOOTS = ITEMS.register("marsh_runner_boots", () -> new MarshRunnerBootsItem(new Item.Properties().durability(ArmorItem.Type.BOOTS.getDurability(10)).stacksTo(1)));
 	public static final DeferredItem<Item> WEEDWOOD_SWORD = ITEMS.register("weedwood_sword", () -> new SwordItem(ToolMaterialRegistry.WEEDWOOD, new Item.Properties().stacksTo(1)));
