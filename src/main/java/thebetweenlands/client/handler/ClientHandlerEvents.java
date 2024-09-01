@@ -1,6 +1,5 @@
 package thebetweenlands.client.handler;
 
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.neoforge.common.NeoForge;
 
 public class ClientHandlerEvents {
@@ -13,5 +12,7 @@ public class ClientHandlerEvents {
 //		NeoForge.EVENT_BUS.addListener(ElixirClientHandler::setArmSwing);
 //		NeoForge.EVENT_BUS.addListener(ElixirClientHandler::setPredictionRotation);
 //		NeoForge.EVENT_BUS.addListener(ElixirClientHandler::renderArrowPrediction);
+
+		NeoForge.EVENT_BUS.addListener(ItemTooltipHandler::addTooltips);
 	}
 }

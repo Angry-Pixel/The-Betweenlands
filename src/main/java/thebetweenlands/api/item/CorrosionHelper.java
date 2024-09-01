@@ -2,6 +2,7 @@ package thebetweenlands.api.item;
 
 import java.util.List;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -17,9 +18,9 @@ import thebetweenlands.api.capability.IDecayData;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.item.CorrosionData;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.datagen.tags.BiomeTagProvider;
-import thebetweenlands.common.datagen.tags.DimensionTypeTagProvider;
-import thebetweenlands.common.datagen.tags.ItemTagProvider;
+import thebetweenlands.common.datagen.tags.BLBiomeTagProvider;
+import thebetweenlands.common.datagen.tags.BLDimensionTypeTagProvider;
+import thebetweenlands.common.datagen.tags.BLItemTagProvider;
 import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 
@@ -33,12 +34,12 @@ public class CorrosionHelper {
 	/**
 	 * The maximum number of corrosion points a tool can have
 	 */
-	public static final int MAX_CORROSION = 600;
+	public static final int MAX_CORROSION = 255;
 
 	/**
 	 * The maximum number of coating points a tool can have
 	 */
-	public static final int MAX_COATING = 255;
+	public static final int MAX_COATING = 600;
 
 
 	/**
@@ -51,7 +52,7 @@ public class CorrosionHelper {
 			return -1;
 		}
 
-		if(stack.is(ItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible) {
+		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible) {
 			return ((ICustomCorrodible) stack.getItem()).getMaxCorrosion(stack);
 		} else {
 			return MAX_CORROSION;
@@ -68,7 +69,7 @@ public class CorrosionHelper {
 			return -1;
 		}
 
-		if(stack.is(ItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible) {
+		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible) {
 			return ((ICustomCorrodible) stack.getItem()).getCorrosion(stack);
 		} else if(stack.has(DataComponentRegistry.CORROSION)) {
 			return stack.get(DataComponentRegistry.CORROSION).corrosion();
@@ -87,7 +88,7 @@ public class CorrosionHelper {
 			return -1;
 		}
 
-		if(stack.is(ItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible) {
+		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible) {
 			return ((ICustomCorrodible) stack.getItem()).getMaxCoating(stack);
 		} else {
 			return MAX_COATING;
@@ -104,7 +105,7 @@ public class CorrosionHelper {
 			return -1;
 		}
 
-		if(stack.is(ItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible) {
+		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible) {
 			return ((ICustomCorrodible) stack.getItem()).getCoating(stack);
 		} else if(stack.has(DataComponentRegistry.CORROSION)) {
 			return stack.get(DataComponentRegistry.CORROSION).coating();
@@ -124,7 +125,7 @@ public class CorrosionHelper {
 			return;
 		}
 
-		if(stack.is(ItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible) {
+		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible) {
 			((ICustomCorrodible) stack.getItem()).setCorrosion(stack, corrosion);
 		} else {
 			stack.set(DataComponentRegistry.CORROSION, stack.getOrDefault(DataComponentRegistry.CORROSION, new CorrosionData(0, 0)).withCorrosion(corrosion));
@@ -141,7 +142,7 @@ public class CorrosionHelper {
 			return;
 		}
 
-		if(stack.is(ItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible) {
+		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible) {
 			((ICustomCorrodible) stack.getItem()).setCoating(stack, coating);
 		} else {
 			stack.set(DataComponentRegistry.CORROSION, stack.getOrDefault(DataComponentRegistry.CORROSION, new CorrosionData(0, 0)).withCoating(coating));
@@ -159,7 +160,7 @@ public class CorrosionHelper {
 		}
 
 		int corrosion, maxCorrosion;
-		if(stack.is(ItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible corrodible) {
+		if(stack.is(BLItemTagProvider.CUSTOM_CORRODIBLE) && stack.getItem() instanceof ICustomCorrodible corrodible) {
 			corrosion = corrodible.getCorrosion(stack);
 			maxCorrosion = corrodible.getMaxCorrosion(stack);
 		} else if(stack.has(DataComponentRegistry.CORROSION)) {
@@ -173,7 +174,7 @@ public class CorrosionHelper {
 	}
 
 	public static boolean isCorrodible(ItemStack stack) {
-		return stack != null && !stack.isEmpty() && stack.is(ItemTagProvider.CORRODIBLE);
+		return stack != null && !stack.isEmpty() && stack.is(BLItemTagProvider.CORRODIBLE);
 	}
 
 	/**
@@ -216,16 +217,16 @@ public class CorrosionHelper {
 		Holder<Biome> biome = level.getBiome(entity.blockPosition());
 		if(biome != null) {
 			// If the biome disables corrosion: false
-			if(biome.is(BiomeTagProvider.DISABLE_CORROSION))
+			if(biome.is(BLBiomeTagProvider.DISABLE_CORROSION))
 				return false;
 
 			// If the biome enables corrosion (outside of the Betweenlands): true
-			if(biome.is(BiomeTagProvider.CORRODING_AURA))
+			if(biome.is(BLBiomeTagProvider.CORRODING_AURA))
 				return true;
 		}
 
 		// If the dimension enables corrosion: true
-		return level.dimensionTypeRegistration().is(DimensionTypeTagProvider.CORRODING_AURA);
+		return level.dimensionTypeRegistration().is(BLDimensionTypeTagProvider.CORRODING_AURA);
 	}
 
 
@@ -288,45 +289,26 @@ public class CorrosionHelper {
 		boolean advancedItemTooltips = tooltipFlags.isAdvanced();
 
 		if(isCorrosionEnabled()) {
-//			StringBuilder corrosionInfo = new StringBuilder("tooltip.bl.corrosion.");
-//			corrosionInfo.append(getCorrosionStage(stack));
-//			corrosionInfo.replace(0, corrosionInfo.length(), I18n.get(corrosionInfo.toString()));
-//			if (advancedItemTooltips) {
-//				corrosionInfo.append(" (");
-//				corrosionInfo.append(getCorrosion(stack));
-//				corrosionInfo.append("/").append(getMaximumCorrosion(stack)).append(")");
-//			}
-//			lines.add(corrosionInfo.toString());
-			MutableComponent mutableComponent = MutableComponent.create(Component.translatable("tooltip.bl.corrosion." + getCorrosionStage(stack)).getContents());
+			MutableComponent mutableComponent = MutableComponent.create(Component.translatable("item.thebetweenlands.corrosion." + getCorrosionStage(stack)).getContents());
 			if (advancedItemTooltips) {
 				String corrosionInfo = " (" +
 					getCorrosion(stack) +
 					"/" + getMaximumCorrosion(stack) + ")";
 				mutableComponent.append(corrosionInfo);
 			}
-			lines.add(mutableComponent);
+			lines.add(1, mutableComponent.withStyle(ChatFormatting.GRAY));
 		}
 
 		int coating = getCoating(stack);
 		if(coating > 0 || advancedItemTooltips) {
-//			StringBuilder coatingInfo = new StringBuilder("tooltip.bl.coated.");
-//			coatingInfo.append(getCoatingStage(stack));
-//			coatingInfo.replace(0, coatingInfo.length(), I18n.get(coatingInfo.toString()));
-//			if (advancedItemTooltips) {
-//				coatingInfo.append(" (");
-//				coatingInfo.append(coating);
-//				coatingInfo.append("/").append(getMaximumCoating(stack)).append(")");
-//			}
-//			lines.add(coatingInfo.toString());
-
-			MutableComponent mutableComponent = MutableComponent.create(Component.translatable("tooltip.bl.coated." + getCorrosionStage(stack)).getContents());
+			MutableComponent mutableComponent = MutableComponent.create(Component.translatable("item.thebetweenlands.coated." + getCorrosionStage(stack)).getContents());
 			if (advancedItemTooltips) {
 				String corrosionInfo = " (" +
 					coating +
 					"/" + getMaximumCoating(stack) + ")";
 				mutableComponent.append(corrosionInfo);
 			}
-			lines.add(mutableComponent);
+			lines.add(2, mutableComponent.withStyle(ChatFormatting.GRAY));
 		}
 	}
 

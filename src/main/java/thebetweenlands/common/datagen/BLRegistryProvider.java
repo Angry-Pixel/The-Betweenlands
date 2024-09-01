@@ -12,7 +12,7 @@ import thebetweenlands.common.registries.*;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
-public class RegistryProvider extends DatapackBuiltinEntriesProvider {
+public class BLRegistryProvider extends DatapackBuiltinEntriesProvider {
 
 	public static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
 		.add(Registries.BIOME, BiomeRegistry::bootstrap)
@@ -29,7 +29,7 @@ public class RegistryProvider extends DatapackBuiltinEntriesProvider {
 		.add(BLRegistries.Keys.ELIXIR_RECIPES, ElixirRecipeRegistry::bootstrap)
 		.add(Registries.DAMAGE_TYPE, DamageTypeRegistry::bootstrap);
 
-	public RegistryProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
+	public BLRegistryProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
 		super(output, provider, BUILDER, Set.of("minecraft", TheBetweenlands.ID));
 	}
 }

@@ -20,8 +20,8 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class LangProvider extends LanguageProvider {
-	public LangProvider(PackOutput output) {
+public class BLLanguageProvider extends LanguageProvider {
+	public BLLanguageProvider(PackOutput output) {
 		super(output, TheBetweenlands.ID, "en_us");
 	}
 
@@ -862,6 +862,19 @@ public class LangProvider extends LanguageProvider {
 		this.add("block.thebetweenlands.good_fuel", "This dense log is excellent as fuel.");
 		this.add("block.thebetweenlands.tarrable", "Can be tarred");
 		this.add("block.thebetweenlands.mist", "This plant can only grow in Sludgeon mist.");
+		this.add("block.thebetweenlands.simulacrum.effect", "Effect: %s");
+		this.add("simulacrum_effect.thebetweenlands.none", "None");
+		this.add("simulacrum_effect.thebetweenlands.random", "Random");
+		this.add("simulacrum_effect.thebetweenlands.them", "Them");
+		this.add("simulacrum_effect.thebetweenlands.imitation", "Imitation");
+		this.add("simulacrum_effect.thebetweenlands.weakness", "Weakness");
+		this.add("simulacrum_effect.thebetweenlands.resurrection", "Resurrection");
+		this.add("simulacrum_effect.thebetweenlands.sanctuary", "Sanctuary");
+		this.add("simulacrum_effect.thebetweenlands.fertility", "Fertility");
+		this.add("simulacrum_effect.thebetweenlands.attraction", "Attraction");
+		this.add("simulacrum_effect.thebetweenlands.wisp", "Wisp");
+		this.add("simulacrum_effect.thebetweenlands.wisdom", "Wisdom");
+		this.add("simulacrum_effect.thebetweenlands.blessing", "Blessing");
 
 		this.add("block.thebetweenlands.fog", "Fog");
 		this.add("block.thebetweenlands.shallowbreath", "Shallowbreath");
@@ -895,6 +908,51 @@ public class LangProvider extends LanguageProvider {
 		this.add("item.thebetweenlands.anadia.rotting_5", "Getting Really Stinky");
 		this.add("item.thebetweenlands.anadia.rotten", "Rotten");
 		this.add("item.thebetweenlands.anadia.smoked", "Smoked");
+
+		this.add("item.thebetweenlands.corrosion.0", "Good as new!");
+		this.add("item.thebetweenlands.corrosion.1", "Slightly corroded");
+		this.add("item.thebetweenlands.corrosion.2", "Moderately corroded");
+		this.add("item.thebetweenlands.corrosion.3", "Very corroded");
+		this.add("item.thebetweenlands.corrosion.4", "Extremely corroded");
+		this.add("item.thebetweenlands.corrosion.5", "Completely corroded");
+
+		this.add("item.thebetweenlands.coated.0", "Barely any coating left");
+		this.add("item.thebetweenlands.coated.1", "Slightly coated");
+		this.add("item.thebetweenlands.coated.2", "Moderately coated");
+		this.add("item.thebetweenlands.coated.3", "Moderately coated");
+		this.add("item.thebetweenlands.coated.4", "Well coated");
+		this.add("item.thebetweenlands.coated.5", "Well coated");
+
+		this.add("item.thebetweenlands.food_sickness.fine", "Tastes good");
+		this.add("item.thebetweenlands.food_sickness.half", "Tastes fine");
+		this.add("item.thebetweenlands.food_sickness.sick", "Can't eat this anymore");
+
+		this.add("item.thebetweenlands.circle_gem.green", "Green Gem");
+		this.add("item.thebetweenlands.circle_gem.crimson", "Crimson Gem");
+		this.add("item.thebetweenlands.circle_gem.aqua", "Aqua Gem");
+
+		this.add("item.thebetweenlands.decay_food", "Heals decay");
+		this.add("item.thebetweenlands.equippable", "Equippable");
+
+		this.add("item.thebetweenlands.used_in_recipes", "§5Used in: §7%s");
+		this.add("item.thebetweenlands.compost_recipe", "Compost Bin");
+		this.add("item.thebetweenlands.static_aspects", "Gecko Cage");
+		this.add("item.thebetweenlands.aspects", "Infuser");
+		this.add("item.thebetweenlands.animator_recipe", "Animator");
+		this.add("item.thebetweenlands.purifier_recipe", "Purifier");
+		this.add("item.thebetweenlands.censer_primary", "Censer");
+		this.add("item.thebetweenlands.censer_secondary", "Censer (secondary)");
+		this.add("item.thebetweenlands.mortar_recipe", "Mortar");
+		this.add("item.thebetweenlands.offering_table_recipe", "Offering Table");
+		this.add("item.thebetweenlands.water_filter_recipe", "Water Filter");
+		this.add("item.thebetweenlands.steeping_pot_recipe", "Steeping Pot");
+		this.add("item.thebetweenlands.silk_bundle_recipe", "Silk Bundle");
+
+		this.add("item.thebetweenlands.amphibious_upgrade.format", "Amphibious %s");
+		this.add("item.thebetweenlands.amphibious_upgrade.helmet", "Helmet");
+		this.add("item.thebetweenlands.amphibious_upgrade.chestplate", "Chestplate");
+		this.add("item.thebetweenlands.amphibious_upgrade.leggings", "Leggings");
+		this.add("item.thebetweenlands.amphibious_upgrade.boots", "Boots");
 
 		this.addItem(ItemRegistry.CRIMSON_SNAIL_SHELL, "Crimson Snail Shell");
 		this.addItem(ItemRegistry.OCHRE_SNAIL_SHELL, "Ochre Snail Shell");

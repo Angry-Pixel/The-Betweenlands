@@ -1,8 +1,16 @@
 {
   "values": {
+    "thebetweenlands:forbidden_fig": {
+      "decay": 20,
+      "saturation": 0.2
+    },
     "thebetweenlands:sap_ball": {
       "decay": 2,
       "saturation": 0.0
+    },
+    "thebetweenlands:sap_jello": {
+      "decay": 4,
+      "saturation": 0.2
     }
   }
 }

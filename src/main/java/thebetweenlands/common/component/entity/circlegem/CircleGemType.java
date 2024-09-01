@@ -3,6 +3,7 @@ package thebetweenlands.common.component.entity.circlegem;
 import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.ByIdMap;
@@ -19,14 +20,14 @@ import thebetweenlands.common.items.GemSingerItem;
 import java.util.function.IntFunction;
 
 public enum CircleGemType implements StringRepresentable {
-	AQUA("aqua", 1, GemSingerItem.GemSingerTarget.AQUA_MIDDLE_GEM),
-	CRIMSON("crimson", 2, GemSingerItem.GemSingerTarget.CRIMSON_MIDDLE_GEM),
-	GREEN("green", 3, GemSingerItem.GemSingerTarget.GREEN_MIDDLE_GEM),
-	NONE("none", 0, null);
+	AQUA("aqua", 1, ChatFormatting.DARK_BLUE, GemSingerItem.GemSingerTarget.AQUA_MIDDLE_GEM),
+	CRIMSON("crimson", 2, ChatFormatting.DARK_RED, GemSingerItem.GemSingerTarget.CRIMSON_MIDDLE_GEM),
+	GREEN("green", 3, ChatFormatting.DARK_GREEN, GemSingerItem.GemSingerTarget.GREEN_MIDDLE_GEM),
+	NONE("none", 0, ChatFormatting.GRAY, null);
 
 	public final String name;
 	public final int id;
-
+	public final ChatFormatting color;
 	@Nullable
 	public final GemSingerItem.GemSingerTarget gemSingerTarget;
 
@@ -34,9 +35,10 @@ public enum CircleGemType implements StringRepresentable {
 	public static final IntFunction<CircleGemType> BY_ID = ByIdMap.continuous(CircleGemType::getId, values(), ByIdMap.OutOfBoundsStrategy.WRAP);
 	public static final StreamCodec<ByteBuf, CircleGemType> STREAM_CODEC = ByteBufCodecs.idMapper(BY_ID, CircleGemType::getId);
 
-	CircleGemType(String name, int id, @Nullable GemSingerItem.GemSingerTarget gemSingerTarget) {
+	CircleGemType(String name, int id, ChatFormatting color, @Nullable GemSingerItem.GemSingerTarget gemSingerTarget) {
 		this.name = name;
 		this.id = id;
+		this.color = color;
 		this.gemSingerTarget = gemSingerTarget;
 	}
 

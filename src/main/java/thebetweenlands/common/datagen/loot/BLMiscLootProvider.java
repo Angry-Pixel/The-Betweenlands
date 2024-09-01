@@ -13,7 +13,7 @@ import thebetweenlands.common.registries.LootTableRegistry;
 
 import java.util.function.BiConsumer;
 
-public class MiscLootProvider implements LootTableSubProvider {
+public class BLMiscLootProvider implements LootTableSubProvider {
 
 	@Override
 	public void generate(BiConsumer<ResourceKey<LootTable>, LootTable.Builder> output) {

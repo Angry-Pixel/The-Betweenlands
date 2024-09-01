@@ -9,9 +9,9 @@ import thebetweenlands.common.datagen.advancements.*;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class AdvancementCompiler extends AdvancementProvider {
+public class BLAdvancementGenerator extends AdvancementProvider {
 
-	public AdvancementCompiler(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper helper) {
+	public BLAdvancementGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, ExistingFileHelper helper) {
 		super(output, registries, helper, List.of(
 			new AdventurerAdvancementProvider(),
 			new CraftsmanAdvancementProvider(),

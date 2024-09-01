@@ -1,0 +1,8 @@
+{
+  "values": {
+    "#c:ores": {
+      "multiplier": 2,
+      "multiply_chance": 0.33
+    }
+  }
+}

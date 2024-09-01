@@ -16,9 +16,9 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.*;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class BlockStateProvider extends net.neoforged.neoforge.client.model.generators.BlockStateProvider {
+public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.generators.BlockStateProvider {
 
-	public BlockStateProvider(PackOutput output, ExistingFileHelper helper) {
+	public BLBlockStateProvider(PackOutput output, ExistingFileHelper helper) {
 		super(output, TheBetweenlands.ID, helper);
 	}
 

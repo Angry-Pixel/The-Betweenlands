@@ -14,12 +14,12 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import thebetweenlands.common.TheBetweenlands;
 
-public class DimensionTypeTagProvider extends TagsProvider<DimensionType> {
+public class BLDimensionTypeTagProvider extends TagsProvider<DimensionType> {
 
 	public static final TagKey<DimensionType> DECAYING_AURA = TagKey.create(Registries.DIMENSION_TYPE, TheBetweenlands.prefix("decaying_aura"));
 	public static final TagKey<DimensionType> CORRODING_AURA = TagKey.create(Registries.DIMENSION_TYPE, TheBetweenlands.prefix("corroding_aura"));
 
-	public DimensionTypeTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
+	public BLDimensionTypeTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
 		super(output, Registries.DIMENSION_TYPE, provider, TheBetweenlands.ID, existingFileHelper);
 	}
 

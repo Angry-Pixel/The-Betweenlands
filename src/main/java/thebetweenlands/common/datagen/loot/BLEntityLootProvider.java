@@ -31,9 +31,9 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class EntityLootProvider extends EntityLootSubProvider {
+public class BLEntityLootProvider extends EntityLootSubProvider {
 
-	protected EntityLootProvider(HolderLookup.Provider provider) {
+	protected BLEntityLootProvider(HolderLookup.Provider provider) {
 		super(FeatureFlags.REGISTRY.allFlags(), provider);
 	}
 

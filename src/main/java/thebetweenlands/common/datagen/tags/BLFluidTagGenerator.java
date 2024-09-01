@@ -13,7 +13,7 @@ import thebetweenlands.common.registries.FluidRegistry;
 
 import java.util.concurrent.CompletableFuture;
 
-public class FluidTagGenerator extends FluidTagsProvider {
+public class BLFluidTagGenerator extends FluidTagsProvider {
 
 	public static final TagKey<Fluid> SWAMP_WATER = tag("swamp_water");
 	public static final TagKey<Fluid> STAGNANT_WATER = tag("stagnant_water");
@@ -37,7 +37,7 @@ public class FluidTagGenerator extends FluidTagsProvider {
 	public static final TagKey<Fluid> FROG_LEG_EXTRACT = tag("frog_leg_extract");
 	public static final TagKey<Fluid> WITCH_TEA =  tag("witch_tea");
 
-	public FluidTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
+	public BLFluidTagGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
 		super(output, provider, TheBetweenlands.ID, existingFileHelper);
 	}
 

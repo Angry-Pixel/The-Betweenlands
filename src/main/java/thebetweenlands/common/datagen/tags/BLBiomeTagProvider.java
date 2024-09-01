@@ -14,7 +14,7 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BiomeRegistry;
 
-public class BiomeTagProvider extends TagsProvider<Biome> {
+public class BLBiomeTagProvider extends TagsProvider<Biome> {
 
 	public static final TagKey<Biome> CORRODING_AURA = TagKey.create(Registries.BIOME, TheBetweenlands.prefix("corroding_aura"));
 	public static final TagKey<Biome> DISABLE_CORROSION = TagKey.create(Registries.BIOME, TheBetweenlands.prefix("disable_corrosion"));
@@ -23,7 +23,7 @@ public class BiomeTagProvider extends TagsProvider<Biome> {
 	public static final TagKey<Biome> SPAWNS_PURPLE_ANADIA = TagKey.create(Registries.BIOME, TheBetweenlands.prefix("spawns_purple_anadia"));
 	public static final TagKey<Biome> SPAWNS_GREEN_ANADIA = TagKey.create(Registries.BIOME, TheBetweenlands.prefix("spawns_green_anadia"));
 
-	public BiomeTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
+	public BLBiomeTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
 		super(output, Registries.BIOME, provider, TheBetweenlands.ID, existingFileHelper);
 	}
 

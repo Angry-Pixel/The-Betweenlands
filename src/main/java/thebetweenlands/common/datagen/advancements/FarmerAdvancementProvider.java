@@ -43,14 +43,14 @@ public class FarmerAdvancementProvider implements AdvancementGenerator {
 			.addCriterion("barnacle", InventoryChangeTrigger.TriggerInstance.hasItems(ItemRegistry.BARNACLE))
 			.save(consumer, "thebetweenlands:farmer/bountiful_barnacles");
 
-		var fertile = Advancement.Builder.advancement().parent(root).display(ItemRegistry.BARNACLE,
+		var fertile = Advancement.Builder.advancement().parent(root).display(ItemRegistry.TINY_SLUDGE_WORM,
 				Component.translatable("advancement.thebetweenlands.farmer.fertile_soil"),
 				Component.translatable("advancement.thebetweenlands.farmer.fertile_soil.desc"),
 				null, AdvancementType.TASK, true, true, false)
 			.addCriterion("worm", AdvancementCriteriaRegistry.WORM_FROM_DIRT.get().createCriterion(new NoCriteriaTrigger.TriggerInstance(Optional.empty())))
 			.save(consumer, "thebetweenlands:farmer/fertile_soil");
 
-		var compost = Advancement.Builder.advancement().parent(fertile).display(ItemRegistry.BARNACLE,
+		var compost = Advancement.Builder.advancement().parent(fertile).display(ItemRegistry.COMPOST,
 				Component.translatable("advancement.thebetweenlands.farmer.mr_compost"),
 				Component.translatable("advancement.thebetweenlands.farmer.mr_compost.desc"),
 				null, AdvancementType.TASK, true, true, false)
@@ -87,7 +87,7 @@ public class FarmerAdvancementProvider implements AdvancementGenerator {
 
 		//TODO necrofarmer
 
-		Advancement.Builder.advancement().parent(compost).display(ItemRegistry.BARNACLE,
+		Advancement.Builder.advancement().parent(compost).display(BlockRegistry.PURIFIED_SWAMP_DIRT,
 				Component.translatable("advancement.thebetweenlands.farmer.pure_and_dirty"),
 				Component.translatable("advancement.thebetweenlands.farmer.pure_and_dirty.desc"),
 				null, AdvancementType.TASK, true, true, false)
@@ -136,7 +136,7 @@ public class FarmerAdvancementProvider implements AdvancementGenerator {
 			.addCriterion("scramble", InventoryChangeTrigger.TriggerInstance.hasItems(ItemRegistry.MIRE_SCRAMBLE))
 			.save(consumer, "thebetweenlands:farmer/baby_murderer");
 
-		var thorax = Advancement.Builder.advancement().parent(compost).display(ItemRegistry.BARNACLE,
+		var thorax = Advancement.Builder.advancement().parent(compost).display(ItemRegistry.PHEROMONE_THORAX,
 				Component.translatable("advancement.thebetweenlands.farmer.your_bush_smells"),
 				Component.translatable("advancement.thebetweenlands.farmer.your_bush_smells.desc"),
 				null, AdvancementType.TASK, true, true, false)

@@ -36,7 +36,7 @@ import thebetweenlands.common.command.AspectCommand;
 import thebetweenlands.common.command.GenerateAnadiaCommand;
 import thebetweenlands.common.command.ResetAspectsCommand;
 import thebetweenlands.common.datagen.*;
-import thebetweenlands.common.datagen.loot.BaseLootProvider;
+import thebetweenlands.common.datagen.loot.BLLootProvider;
 import thebetweenlands.common.datagen.tags.*;
 import thebetweenlands.common.entities.MireSnail;
 import thebetweenlands.common.entities.fishing.BubblerCrab;
@@ -80,31 +80,31 @@ public class CommonRegistrationEvents {
 		boolean data = event.includeServer();
 
 		// Registry
-		RegistryProvider datapack = new RegistryProvider(output, event.getLookupProvider());
+		BLRegistryProvider datapack = new BLRegistryProvider(output, event.getLookupProvider());
 		CompletableFuture<HolderLookup.Provider> dataProvider = datapack.getRegistryProvider();
 		gen.addProvider(data, datapack);
 
 		// Tags
-		BlockTagProvider blockTags = new BlockTagProvider(output, dataProvider, helper);
+		BLBlockTagProvider blockTags = new BLBlockTagProvider(output, dataProvider, helper);
 		gen.addProvider(data, blockTags);
-		gen.addProvider(data, new EntityTagProvider(output, dataProvider, helper));
-		gen.addProvider(data, new ItemTagProvider(output, dataProvider, blockTags.contentsGetter(), helper));
-		gen.addProvider(data, new FluidTagGenerator(output, dataProvider, helper));
-		gen.addProvider(data, new BiomeTagProvider(output, dataProvider, helper));
-		gen.addProvider(data, new DimensionTypeTagProvider(output, dataProvider, helper));
+		gen.addProvider(data, new BLEntityTagProvider(output, dataProvider, helper));
+		gen.addProvider(data, new BLItemTagProvider(output, dataProvider, blockTags.contentsGetter(), helper));
+		gen.addProvider(data, new BLFluidTagGenerator(output, dataProvider, helper));
+		gen.addProvider(data, new BLBiomeTagProvider(output, dataProvider, helper));
+		gen.addProvider(data, new BLDimensionTypeTagProvider(output, dataProvider, helper));
 
 		// Misc Data
-		gen.addProvider(data, new RecipeProvider(output, dataProvider));
-		gen.addProvider(data, new BaseLootProvider(output, dataProvider));
-		gen.addProvider(data, new DataMapProvider(output, dataProvider));
-		gen.addProvider(data, new AdvancementCompiler(output, dataProvider, helper));
+		gen.addProvider(data, new BLRecipeProvider(output, dataProvider));
+		gen.addProvider(data, new BLLootProvider(output, dataProvider));
+		gen.addProvider(data, new BLDataMapProvider(output, dataProvider));
+		gen.addProvider(data, new BLAdvancementGenerator(output, dataProvider, helper));
 
 		// Assets
-		gen.addProvider(assets, new AtlasProvider(output, dataProvider, helper));
-		gen.addProvider(assets, new LangProvider(output));
-		gen.addProvider(assets, new BlockStateProvider(output, helper));
-		gen.addProvider(assets, new ItemModelProvider(output, helper));
-		gen.addProvider(assets, new SoundDefinitionProvider(output, helper));
+		gen.addProvider(assets, new BLAtlasProvider(output, dataProvider, helper));
+		gen.addProvider(assets, new BLLanguageProvider(output));
+		gen.addProvider(assets, new BLBlockStateProvider(output, helper));
+		gen.addProvider(assets, new BLItemModelProvider(output, helper));
+		gen.addProvider(assets, new BLSoundDefinitionProvider(output, helper));
 	}
 
 	private static void populateVanillaTabs(BuildCreativeModeTabContentsEvent event) {

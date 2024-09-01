@@ -15,7 +15,7 @@ import thebetweenlands.common.advancement.AnimateTrigger;
 import thebetweenlands.common.advancement.BreakBlockTrigger;
 import thebetweenlands.common.advancement.EventTrigger;
 import thebetweenlands.common.advancement.NoCriteriaTrigger;
-import thebetweenlands.common.datagen.tags.BlockTagProvider;
+import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.registries.*;
 
 import java.util.Optional;
@@ -314,7 +314,7 @@ public class AdventurerAdvancementProvider implements AdvancementGenerator {
 				Component.translatable("advancement.thebetweenlands.adventurer.santa_wight"),
 				Component.translatable("advancement.thebetweenlands.adventurer.santa_wight.desc"),
 				null, AdvancementType.TASK, true, false, true)
-			.addCriterion("present", BreakBlockTrigger.TriggerInstance.breakBlock(BlockPredicate.Builder.block().of(BlockTagProvider.PRESENTS).build()))
+			.addCriterion("present", BreakBlockTrigger.TriggerInstance.breakBlock(BlockPredicate.Builder.block().of(BLBlockTagProvider.PRESENTS).build()))
 			.save(consumer, "thebetweenlands:adventurer/santa_wight");
 	}
 }

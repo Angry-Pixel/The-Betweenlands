@@ -32,7 +32,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.datagen.tags.BiomeTagProvider;
+import thebetweenlands.common.datagen.tags.BLBiomeTagProvider;
 import thebetweenlands.common.entities.BLEntity;
 import thebetweenlands.common.entities.fishing.BLFishHook;
 import thebetweenlands.common.registries.BiomeRegistry;
@@ -179,11 +179,11 @@ public class Anadia extends PathfinderMob implements BLEntity {
 		this.setBodyType(AnadiaParts.AnadiaBodyParts.random(this.getRandom()));
 		this.setTailType(AnadiaParts.AnadiaTailParts.random(this.getRandom()));
 		this.setFishSize(Math.round(Math.max(0.125F, this.getRandom().nextFloat()) * 16F) / 16F);
-		if (this.level().getBiome(this.blockPosition()).is(BiomeTagProvider.SPAWNS_SILVER_ANADIA)) {
+		if (this.level().getBiome(this.blockPosition()).is(BLBiomeTagProvider.SPAWNS_SILVER_ANADIA)) {
 			this.setFishColor(AnadiaParts.AnadiaColor.SILVER);
-		} else if (this.level().getBiome(this.blockPosition()).is(BiomeTagProvider.SPAWNS_GREEN_ANADIA)) {
+		} else if (this.level().getBiome(this.blockPosition()).is(BLBiomeTagProvider.SPAWNS_GREEN_ANADIA)) {
 			this.setFishColor(AnadiaParts.AnadiaColor.GREEN);
-		} else if (this.level().getBiome(this.blockPosition()).is(BiomeTagProvider.SPAWNS_PURPLE_ANADIA)) {
+		} else if (this.level().getBiome(this.blockPosition()).is(BLBiomeTagProvider.SPAWNS_PURPLE_ANADIA)) {
 			this.setFishColor(AnadiaParts.AnadiaColor.PURPLE);
 		} else {
 			this.setFishColor(AnadiaParts.AnadiaColor.BASE);

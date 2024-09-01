@@ -2,12 +2,12 @@ package thebetweenlands.common.items;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import thebetweenlands.common.datagen.tags.EntityTagProvider;
+import thebetweenlands.common.datagen.tags.BLEntityTagProvider;
 import thebetweenlands.common.registries.ToolMaterialRegistry;
 
 public class HagHackerItem extends InstakillWeaponItem {
 	public HagHackerItem(Properties properties) {
-		super(ToolMaterialRegistry.WEEDWOOD, EntityTagProvider.HAG_HACKER_INSTAKILLS, properties);
+		super(ToolMaterialRegistry.WEEDWOOD, BLEntityTagProvider.HAG_HACKER_INSTAKILLS, properties);
 	}
 
 	@Override

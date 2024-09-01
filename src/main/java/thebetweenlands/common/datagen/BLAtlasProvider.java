@@ -9,8 +9,8 @@ import thebetweenlands.common.TheBetweenlands;
 
 import java.util.concurrent.CompletableFuture;
 
-public class AtlasProvider extends SpriteSourceProvider {
-	public AtlasProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper helper) {
+public class BLAtlasProvider extends SpriteSourceProvider {
+	public BLAtlasProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper helper) {
 		super(output, lookupProvider, TheBetweenlands.ID, helper);
 	}
 

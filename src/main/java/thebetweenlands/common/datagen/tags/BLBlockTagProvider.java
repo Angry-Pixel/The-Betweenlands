@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import javax.annotation.Nullable;
 import thebetweenlands.common.TheBetweenlands;
@@ -13,7 +14,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 
 import java.util.concurrent.CompletableFuture;
 
-public class BlockTagProvider extends net.neoforged.neoforge.common.data.BlockTagsProvider {
+public class BLBlockTagProvider extends BlockTagsProvider {
 
 	public static final TagKey<Block> BETWEENSTONE_ORE_REPLACEABLE = tag("betweenstone_ore_replaceable");
 	public static final TagKey<Block> PITSTONE_ORE_REPLACEABLE = tag("pitstone_ore_replaceable");
@@ -26,7 +27,7 @@ public class BlockTagProvider extends net.neoforged.neoforge.common.data.BlockTa
 	public static final TagKey<Block> INCORRECT_FOR_VALONITE_TOOL = tag("incorrect_for_valonite_tool");
 
 
-	public BlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
+	public BLBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
 		super(output, provider, TheBetweenlands.ID, existingFileHelper);
 	}
 

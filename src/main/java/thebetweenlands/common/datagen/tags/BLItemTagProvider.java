@@ -15,7 +15,7 @@ import thebetweenlands.api.item.ICustomCorrodible;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class ItemTagProvider extends ItemTagsProvider {
+public class BLItemTagProvider extends ItemTagsProvider {
 
 	public static final TagKey<Item> OCTINE_IGNITES = tag("octine_ignites");
 	public static final TagKey<Item> GIVES_FOOD_SICKNESS = tag("gives_food_sickness");
@@ -32,7 +32,7 @@ public class ItemTagProvider extends ItemTagsProvider {
 	public static final TagKey<Item> ITEM_FRAMES = tag("item_frames");
 
 	/**
-	 * Whether or not an item should be looked at by the corrosion engine
+	 * Whether an item should be looked at by the corrosion engine
 	 */
 	public static final TagKey<Item> CORRODIBLE = tag("corrodible");
 
@@ -42,17 +42,17 @@ public class ItemTagProvider extends ItemTagsProvider {
 	public static final TagKey<Item> DEFAULT_CORRODIBLE = tag("corrodible/default");
 
 	/**
-	 * Whether or not an item has custom corrosion information. The item should implement {@link ICustomCorrodible}; this tag will be ignored if it doesn't.
+	 * Whether an item has custom corrosion information. The item should implement {@link ICustomCorrodible}; this tag will be ignored if it doesn't.
 	 */
 	public static final TagKey<Item> CUSTOM_CORRODIBLE = tag("corrodible/custom");
 
-	public ItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagLookup<Block>> blockTags, ExistingFileHelper helper) {
+	public BLItemTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, CompletableFuture<TagLookup<Block>> blockTags, ExistingFileHelper helper) {
 		super(output, lookupProvider, blockTags, TheBetweenlands.ID, helper);
 	}
 
 	@Override
 	protected void addTags(HolderLookup.Provider provider) {
-		this.copy(BlockTagProvider.OCTINE_IGNITES, OCTINE_IGNITES);
+		this.copy(BLBlockTagProvider.OCTINE_IGNITES, OCTINE_IGNITES);
 
 		// Those two "inherit" from this one
 		this.tag(CORRODIBLE).addTag(DEFAULT_CORRODIBLE).addTag(CUSTOM_CORRODIBLE);
@@ -87,66 +87,70 @@ public class ItemTagProvider extends ItemTagsProvider {
 			ItemRegistry.SILK_GRUB.get());
 
 		this.tag(ItemTags.SWORDS).add(
-				ItemRegistry.WEEDWOOD_SWORD.get(),
-				ItemRegistry.BONE_SWORD.get(),
-				ItemRegistry.OCTINE_SWORD.get(),
-				ItemRegistry.VALONITE_SWORD.get()
-				// TODO Shockwave, Ancient
-			);
+			ItemRegistry.WEEDWOOD_SWORD.get(),
+			ItemRegistry.BONE_SWORD.get(),
+			ItemRegistry.OCTINE_SWORD.get(),
+			ItemRegistry.VALONITE_SWORD.get()
+			// TODO Shockwave, Ancient
+		);
 
 		this.tag(ItemTags.PICKAXES).add(
-				ItemRegistry.WEEDWOOD_PICKAXE.get(),
-				ItemRegistry.BONE_PICKAXE.get(),
-				ItemRegistry.OCTINE_PICKAXE.get(),
-				ItemRegistry.VALONITE_PICKAXE.get(),
-				ItemRegistry.SWIFT_PICK.get()
-			);
+			ItemRegistry.WEEDWOOD_PICKAXE.get(),
+			ItemRegistry.BONE_PICKAXE.get(),
+			ItemRegistry.OCTINE_PICKAXE.get(),
+			ItemRegistry.VALONITE_PICKAXE.get(),
+			ItemRegistry.SWIFT_PICK.get()
+		);
 
 		this.tag(ItemTags.AXES).add(
-				ItemRegistry.WEEDWOOD_AXE.get(),
-				ItemRegistry.BONE_AXE.get(),
-				ItemRegistry.OCTINE_AXE.get(),
-				ItemRegistry.VALONITE_AXE.get(),
-				ItemRegistry.VALONITE_GREATAXE.get()
-				// TODO Ancient Greataxe
-			);
+			ItemRegistry.WEEDWOOD_AXE.get(),
+			ItemRegistry.BONE_AXE.get(),
+			ItemRegistry.OCTINE_AXE.get(),
+			ItemRegistry.VALONITE_AXE.get(),
+			ItemRegistry.VALONITE_GREATAXE.get()
+			// TODO Ancient Greataxe
+		);
 
 		this.tag(ItemTags.SHOVELS).add(
-				ItemRegistry.WEEDWOOD_SHOVEL.get(),
-				ItemRegistry.BONE_SHOVEL.get(),
-				ItemRegistry.OCTINE_SHOVEL.get(),
-				ItemRegistry.VALONITE_SHOVEL.get()
-			);
+			ItemRegistry.WEEDWOOD_SHOVEL.get(),
+			ItemRegistry.BONE_SHOVEL.get(),
+			ItemRegistry.OCTINE_SHOVEL.get(),
+			ItemRegistry.VALONITE_SHOVEL.get()
+		);
 
 		this.tag(DEFAULT_CORRODIBLE).add(
-				//Swords
-				ItemRegistry.WEEDWOOD_SWORD.get(),
-				ItemRegistry.BONE_SWORD.get(),
-				ItemRegistry.OCTINE_SWORD.get(),
-				ItemRegistry.VALONITE_SWORD.get(),
-				// TODO Shockwave, Ancient
+			//Swords
+			ItemRegistry.WEEDWOOD_SWORD.get(),
+			ItemRegistry.BONE_SWORD.get(),
+			ItemRegistry.OCTINE_SWORD.get(),
+			ItemRegistry.VALONITE_SWORD.get(),
+			ItemRegistry.CRITTER_CRUNCHER.get(),
+			ItemRegistry.WIGHTS_BANE.get(),
+			ItemRegistry.SLUDGE_SLICER.get(),
+			// TODO Shockwave, Ancient
 
-				// Pickaxes
-				ItemRegistry.WEEDWOOD_PICKAXE.get(),
-				ItemRegistry.BONE_PICKAXE.get(),
-				ItemRegistry.OCTINE_PICKAXE.get(),
-				ItemRegistry.VALONITE_PICKAXE.get(),
-				ItemRegistry.SWIFT_PICK.get(),
+			// Pickaxes
+			ItemRegistry.WEEDWOOD_PICKAXE.get(),
+			ItemRegistry.BONE_PICKAXE.get(),
+			ItemRegistry.OCTINE_PICKAXE.get(),
+			ItemRegistry.VALONITE_PICKAXE.get(),
+			ItemRegistry.SWIFT_PICK.get(),
 
-				// Axes
-				ItemRegistry.WEEDWOOD_AXE.get(),
-				ItemRegistry.BONE_AXE.get(),
-				ItemRegistry.OCTINE_AXE.get(),
-				ItemRegistry.VALONITE_AXE.get(),
-				ItemRegistry.VALONITE_GREATAXE.get(),
-				// TODO Ancient Greataxe
+			// Axes
+			ItemRegistry.WEEDWOOD_AXE.get(),
+			ItemRegistry.BONE_AXE.get(),
+			ItemRegistry.OCTINE_AXE.get(),
+			ItemRegistry.VALONITE_AXE.get(),
+			ItemRegistry.VALONITE_GREATAXE.get(),
+			ItemRegistry.HAG_HACKER.get(),
+			// TODO Ancient Greataxe
 
-				// Shovels
-				ItemRegistry.WEEDWOOD_SHOVEL.get(),
-				ItemRegistry.BONE_SHOVEL.get(),
-				ItemRegistry.OCTINE_SHOVEL.get(),
-				ItemRegistry.VALONITE_SHOVEL.get()
-			);
+			// Shovels
+			ItemRegistry.WEEDWOOD_SHOVEL.get(),
+			ItemRegistry.BONE_SHOVEL.get(),
+			ItemRegistry.OCTINE_SHOVEL.get(),
+			ItemRegistry.VALONITE_SHOVEL.get()
+		);
 
 	}
 

@@ -15,7 +15,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.entity.DecayData;
 import thebetweenlands.common.component.entity.FoodSicknessData;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.datagen.tags.ItemTagProvider;
+import thebetweenlands.common.datagen.tags.BLItemTagProvider;
 import thebetweenlands.common.items.datamaps.DecayFood;
 import thebetweenlands.common.network.ShowFoodSicknessPacket;
 import thebetweenlands.common.registries.AttachmentRegistry;
@@ -60,7 +60,7 @@ public class FoodSicknessHandler {
 		Player player = event.getEntity() instanceof Player ? (Player) event.getEntity() : null;
 		ItemStack itemStack = event.getItem();
 
-		if (player != null && !itemStack.isEmpty() && FoodSicknessHandler.isFoodSicknessEnabled(event.getEntity().level()) && itemStack.is(ItemTagProvider.GIVES_FOOD_SICKNESS)) {
+		if (player != null && !itemStack.isEmpty() && FoodSicknessHandler.isFoodSicknessEnabled(event.getEntity().level()) && itemStack.is(BLItemTagProvider.GIVES_FOOD_SICKNESS)) {
 			FoodSickness sickness = player.getData(AttachmentRegistry.FOOD_SICKNESS).getSickness(itemStack.getItem());
 
 			if (player.level().isClientSide() && sickness == FoodSickness.SICK) {
@@ -75,7 +75,7 @@ public class FoodSicknessHandler {
 			Player player = event.getEntity() instanceof Player ? (Player) event.getEntity() : null;
 			ItemStack itemStack = event.getItem();
 
-			if (player != null && !itemStack.isEmpty() && FoodSicknessHandler.isFoodSicknessEnabled(event.getEntity().level()) && itemStack.is(ItemTagProvider.GIVES_FOOD_SICKNESS)) {
+			if (player != null && !itemStack.isEmpty() && FoodSicknessHandler.isFoodSicknessEnabled(event.getEntity().level()) && itemStack.is(BLItemTagProvider.GIVES_FOOD_SICKNESS)) {
 				FoodSicknessData data = player.getData(AttachmentRegistry.FOOD_SICKNESS);
 				Item item = itemStack.getItem();
 

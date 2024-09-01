@@ -13,7 +13,7 @@ import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.*;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.datagen.tags.BlockTagProvider;
+import thebetweenlands.common.datagen.tags.BLBlockTagProvider;
 import thebetweenlands.common.world.BetweenlandsSurfaceRuleData;
 
 import java.util.List;
@@ -41,7 +41,7 @@ public class DimensionRegistries {
 			0,
 			256,
 			256,
-			BlockTagProvider.BETWEENSTONE_ORE_REPLACEABLE,
+			BLBlockTagProvider.BETWEENSTONE_ORE_REPLACEABLE,
 			DIMENSION_RENDERER,
 			0.0F,
 			new DimensionType.MonsterSettings(false, false, UniformInt.of(0, 7), 7)

@@ -6,17 +6,12 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.alchemy.PotionContents;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.ElixirContents;
-import thebetweenlands.common.datagen.tags.EntityTagProvider;
+import thebetweenlands.common.datagen.tags.BLEntityTagProvider;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.items.*;
 
@@ -279,9 +274,9 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> ANIMATED_SMALL_SPIRIT_TREE_FACE_MASK = ITEMS.register("animated_small_spirit_tree_face_mask", () -> new Item(new Item.Properties().rarity(Rarity.UNCOMMON).stacksTo(1)));
 	//gallery frames
 	//silk mask
-	public static final DeferredItem<Item> WIGHTS_BANE = ITEMS.register("wights_bane", () -> new InstakillWeaponItem(ToolMaterialRegistry.WEEDWOOD, EntityTagProvider.WIGHTS_BANE_INSTAKILLS, new Item.Properties().rarity(Rarity.RARE).setNoRepair().stacksTo(1)));
-	public static final DeferredItem<Item> SLUDGE_SLICER = ITEMS.register("sludge_slicer", () -> new InstakillWeaponItem(ToolMaterialRegistry.WEEDWOOD, EntityTagProvider.SLUDGE_SLICER_INSTAKILLS, new Item.Properties().rarity(Rarity.RARE).setNoRepair().stacksTo(1)));
-	public static final DeferredItem<Item> CRITTER_CRUNCHER = ITEMS.register("critter_cruncher", () -> new InstakillWeaponItem(ToolMaterialRegistry.WEEDWOOD, EntityTagProvider.CRITTER_CRUNCHER_INSTAKILLS, new Item.Properties().rarity(Rarity.RARE).setNoRepair().stacksTo(1)));
+	public static final DeferredItem<Item> WIGHTS_BANE = ITEMS.register("wights_bane", () -> new InstakillWeaponItem(ToolMaterialRegistry.WEEDWOOD, BLEntityTagProvider.WIGHTS_BANE_INSTAKILLS, new Item.Properties().rarity(Rarity.RARE).setNoRepair().stacksTo(1)));
+	public static final DeferredItem<Item> SLUDGE_SLICER = ITEMS.register("sludge_slicer", () -> new InstakillWeaponItem(ToolMaterialRegistry.WEEDWOOD, BLEntityTagProvider.SLUDGE_SLICER_INSTAKILLS, new Item.Properties().rarity(Rarity.RARE).setNoRepair().stacksTo(1)));
+	public static final DeferredItem<Item> CRITTER_CRUNCHER = ITEMS.register("critter_cruncher", () -> new InstakillWeaponItem(ToolMaterialRegistry.WEEDWOOD, BLEntityTagProvider.CRITTER_CRUNCHER_INSTAKILLS, new Item.Properties().rarity(Rarity.RARE).setNoRepair().stacksTo(1)));
 	public static final DeferredItem<Item> HAG_HACKER = ITEMS.register("hag_hacker", () -> new HagHackerItem(new Item.Properties().rarity(Rarity.RARE).setNoRepair().stacksTo(1)));
 	public static final DeferredItem<Item> VOODOO_DOLL = ITEMS.register("voodoo_doll", () -> new VoodooDollItem(new Item.Properties().rarity(Rarity.RARE).durability(24).stacksTo(1)));
 	public static final DeferredItem<Item> SWIFT_PICK = ITEMS.register("swift_pick", () -> new SwiftPickItem(ToolMaterialRegistry.VALONITE, new Item.Properties().rarity(Rarity.EPIC).setNoRepair().durability(2500).stacksTo(1)));

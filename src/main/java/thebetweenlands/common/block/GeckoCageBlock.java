@@ -107,48 +107,50 @@ public class GeckoCageBlock extends HorizontalBaseEntityBlock {
 						if (DiscoveryContainer.hasDiscoveryProvider(player)) {
 							if (!level.isClientSide()) {
 								AspectManager manager = AspectManager.get(level);
-								AspectItem aspectItem = AspectManager.getAspectItem(stack);
-								List<Aspect> aspects = manager.getStaticAspects(aspectItem);
-								if (!aspects.isEmpty()) {
-									DiscoveryContainer<?> mergedKnowledge = DiscoveryContainer.getMergedDiscoveryContainer(player);
-									DiscoveryContainer.AspectDiscovery discovery = mergedKnowledge.discover(manager, aspectItem, player.registryAccess());
-									switch (discovery.result) {
-										case NEW:
-										case LAST:
-											DiscoveryContainer.addDiscoveryToContainers(player, aspectItem, discovery.discovered.type());
-											cage.setAspectType(level, pos, state, discovery.discovered.type(), 600);
-											if (player instanceof ServerPlayer sp) {
-												AdvancementCriteriaRegistry.GECKO.get().trigger(sp, true, false);
-												if (discovery.result == DiscoveryContainer.AspectDiscovery.DiscoveryResult.LAST && DiscoveryContainer.getMergedDiscoveryContainer(player).haveDiscoveredAll(manager)) {
-													AdvancementCriteriaRegistry.HERBLORE_FIND_ALL.get().trigger(sp);
+								if (manager != null) {
+									AspectItem aspectItem = AspectManager.getAspectItem(stack);
+									List<Aspect> aspects = manager.getStaticAspects(aspectItem);
+									if (!aspects.isEmpty()) {
+										DiscoveryContainer<?> mergedKnowledge = DiscoveryContainer.getMergedDiscoveryContainer(player);
+										DiscoveryContainer.AspectDiscovery discovery = mergedKnowledge.discover(manager, aspectItem, player.registryAccess());
+										switch (discovery.result) {
+											case NEW:
+											case LAST:
+												DiscoveryContainer.addDiscoveryToContainers(player, aspectItem, discovery.discovered.type());
+												cage.setAspectType(level, pos, state, discovery.discovered.type(), 600);
+												if (player instanceof ServerPlayer sp) {
+													AdvancementCriteriaRegistry.GECKO.get().trigger(sp, true, false);
+													if (discovery.result == DiscoveryContainer.AspectDiscovery.DiscoveryResult.LAST && DiscoveryContainer.getMergedDiscoveryContainer(player).haveDiscoveredAll(manager)) {
+														AdvancementCriteriaRegistry.HERBLORE_FIND_ALL.get().trigger(sp);
+													}
 												}
-											}
-											player.displayClientMessage(Component.translatable("block.thebetweenlands.gecko_cage.discover_" + discovery.discovered.type().getKey().location().getPath().toLowerCase()), false);
-											if (discovery.result == DiscoveryContainer.AspectDiscovery.DiscoveryResult.LAST) {
-												player.displayClientMessage(Component.translatable("block.thebetweenlands.gecko_cage.last_aspect"), true);
-												player.displayClientMessage(Component.translatable("block.thebetweenlands.gecko_cage.last_aspect"), false);
-											} else {
-												player.displayClientMessage(Component.translatable("block.thebetweenlands.gecko_cage.more_aspects"), true);
-												player.displayClientMessage(Component.translatable("block.thebetweenlands.gecko_cage.more_aspects"), false);
-											}
-											stack.consume(1, player);
-											return ItemInteractionResult.sidedSuccess(level.isClientSide());
-										case END:
-											//already all discovered
-											player.displayClientMessage(Component.translatable("block.thebetweenlands.gecko_cage.all_discovered"), true);
-											return ItemInteractionResult.CONSUME;
-										default:
-											//no aspects
-											player.displayClientMessage(Component.translatable("block.thebetweenlands.gecko_cage.no_aspects"), true);
-											return ItemInteractionResult.CONSUME;
+												player.displayClientMessage(Component.translatable("block.thebetweenlands.gecko_cage.discover_" + discovery.discovered.type().getKey().location().getPath().toLowerCase()), false);
+												if (discovery.result == DiscoveryContainer.AspectDiscovery.DiscoveryResult.LAST) {
+													player.displayClientMessage(Component.translatable("block.thebetweenlands.gecko_cage.last_aspect"), true);
+													player.displayClientMessage(Component.translatable("block.thebetweenlands.gecko_cage.last_aspect"), false);
+												} else {
+													player.displayClientMessage(Component.translatable("block.thebetweenlands.gecko_cage.more_aspects"), true);
+													player.displayClientMessage(Component.translatable("block.thebetweenlands.gecko_cage.more_aspects"), false);
+												}
+												stack.consume(1, player);
+												return ItemInteractionResult.sidedSuccess(level.isClientSide());
+											case END:
+												//already all discovered
+												player.displayClientMessage(Component.translatable("block.thebetweenlands.gecko_cage.all_discovered"), true);
+												return ItemInteractionResult.CONSUME;
+											default:
+												//no aspects
+												player.displayClientMessage(Component.translatable("block.thebetweenlands.gecko_cage.no_aspects"), true);
+												return ItemInteractionResult.CONSUME;
+										}
+									} else {
+										player.displayClientMessage(Component.translatable("block.thebetweenlands.gecko_cage.no_aspects"), true);
+										return ItemInteractionResult.sidedSuccess(level.isClientSide());
 									}
 								} else {
-									player.displayClientMessage(Component.translatable("block.thebetweenlands.gecko_cage.no_aspects"), true);
-									return ItemInteractionResult.sidedSuccess(level.isClientSide());
+									//no aspects
+									return ItemInteractionResult.CONSUME;
 								}
-							} else {
-								//no aspects
-								return ItemInteractionResult.CONSUME;
 							}
 						} else {
 							//no herblore book

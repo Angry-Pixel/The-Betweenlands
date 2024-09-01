@@ -3,6 +3,7 @@ package thebetweenlands.common.datagen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import thebetweenlands.common.TheBetweenlands;
@@ -15,8 +16,8 @@ import thebetweenlands.common.registries.LootTableRegistry;
 
 import java.util.concurrent.CompletableFuture;
 
-public class RecipeProvider extends net.minecraft.data.recipes.RecipeProvider {
-	public RecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+public class BLRecipeProvider extends RecipeProvider {
+	public BLRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
 		super(output, registries);
 	}
 

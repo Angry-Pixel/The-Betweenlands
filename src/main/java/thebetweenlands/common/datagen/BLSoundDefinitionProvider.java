@@ -6,9 +6,9 @@ import net.neoforged.neoforge.common.data.SoundDefinitionsProvider;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class SoundDefinitionProvider extends SoundDefinitionsProvider {
+public class BLSoundDefinitionProvider extends SoundDefinitionsProvider {
 
-	public SoundDefinitionProvider(PackOutput output, ExistingFileHelper helper) {
+	public BLSoundDefinitionProvider(PackOutput output, ExistingFileHelper helper) {
 		super(output, TheBetweenlands.ID, helper);
 	}
 

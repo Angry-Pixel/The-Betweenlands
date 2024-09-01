@@ -10,7 +10,7 @@ import net.neoforged.neoforge.common.data.AdvancementProvider.AdvancementGenerat
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.advancement.NoCriteriaTrigger;
-import thebetweenlands.common.datagen.tags.ItemTagProvider;
+import thebetweenlands.common.datagen.tags.BLItemTagProvider;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -33,7 +33,7 @@ public class CraftsmanAdvancementProvider implements AdvancementGenerator {
 				Component.translatable("advancement.thebetweenlands.craftsman.getting_harder_wood"),
 				Component.translatable("advancement.thebetweenlands.craftsman.getting_harder_wood.desc"),
 				null, AdvancementType.TASK, true, true, false)
-			.addCriterion("has_bl_log", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(ItemTagProvider.BL_LOGS)))
+			.addCriterion("has_bl_log", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(BLItemTagProvider.BL_LOGS)))
 			.save(consumer, "thebetweenlands:craftsman/getting_harder_wood");
 
 		var table = Advancement.Builder.advancement().parent(wood).display(BlockRegistry.WEEDWOOD_CRAFTING_TABLE,
@@ -97,11 +97,11 @@ public class CraftsmanAdvancementProvider implements AdvancementGenerator {
 				Component.translatable("advancement.thebetweenlands.craftsman.paint_job"),
 				Component.translatable("advancement.thebetweenlands.craftsman.paint_job.desc"),
 				null, AdvancementType.TASK, true, true, false)
-			.addCriterion("glass", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(ItemTagProvider.FILTERED_SILT_GLASS)))
-			.addCriterion("shingles", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(ItemTagProvider.MUD_BRICK_SHINGLES)))
-			.addCriterion("mat", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(ItemTagProvider.REED_MATS)))
-			.addCriterion("samite", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(ItemTagProvider.SAMITE)))
-			.addCriterion("frame", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(ItemTagProvider.ITEM_FRAMES)))
+			.addCriterion("glass", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(BLItemTagProvider.FILTERED_SILT_GLASS)))
+			.addCriterion("shingles", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(BLItemTagProvider.MUD_BRICK_SHINGLES)))
+			.addCriterion("mat", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(BLItemTagProvider.REED_MATS)))
+			.addCriterion("samite", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(BLItemTagProvider.SAMITE)))
+			.addCriterion("frame", InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item().of(BLItemTagProvider.ITEM_FRAMES)))
 			.requirements(AdvancementRequirements.Strategy.OR)
 			.save(consumer, "thebetweenlands:craftsman/paint_job");
 

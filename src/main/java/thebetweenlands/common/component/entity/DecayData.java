@@ -11,7 +11,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.api.capability.IDecayData;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.datagen.tags.DimensionTypeTagProvider;
+import thebetweenlands.common.datagen.tags.BLDimensionTypeTagProvider;
 import thebetweenlands.common.network.clientbound.UpdateDecayDataPacket;
 import thebetweenlands.common.registries.DimensionRegistries;
 
@@ -152,7 +152,7 @@ public class DecayData implements IDecayData {
 	public boolean isDecayEnabled(Player player) {
 		return player.level().getDifficulty() != Difficulty.PEACEFUL &&
 			player.level().getGameRules().getBoolean(TheBetweenlands.DECAY_GAMERULE) && BetweenlandsConfig.useDecay &&
-			(player.level().dimension() == DimensionRegistries.DIMENSION_KEY || BetweenlandsConfig.decayDimensionList.contains(player.level().dimension()) || player.level().dimensionTypeRegistration().is(DimensionTypeTagProvider.DECAYING_AURA)) &&
+			(player.level().dimension() == DimensionRegistries.DIMENSION_KEY || BetweenlandsConfig.decayDimensionList.contains(player.level().dimension()) || player.level().dimensionTypeRegistration().is(BLDimensionTypeTagProvider.DECAYING_AURA)) &&
 			!player.isCreative() && !player.getAbilities().invulnerable;
 	}
 

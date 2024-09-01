@@ -61,8 +61,13 @@ public class AspectManager {
 	 * @param level
 	 * @return
 	 */
+	@Nullable
 	public static AspectManager get(Level level) {
-		return BetweenlandsWorldStorage.getOrThrow(level).getAspectManager();
+		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.get(level);
+		if (storage != null) {
+			return storage.getAspectManager();
+		}
+		return null;
 	}
 
 	/**

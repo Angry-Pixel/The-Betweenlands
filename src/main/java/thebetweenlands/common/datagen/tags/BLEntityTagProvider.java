@@ -14,7 +14,7 @@ import thebetweenlands.common.registries.EntityRegistry;
 
 import java.util.concurrent.CompletableFuture;
 
-public class EntityTagProvider extends EntityTypeTagsProvider {
+public class BLEntityTagProvider extends EntityTypeTagsProvider {
 
 	public static final TagKey<EntityType<?>> IGNORES_WEEDWOOD_BUSHES = TagKey.create(Registries.ENTITY_TYPE, TheBetweenlands.prefix("ignores_weedwood_bushes"));
 	public static final TagKey<EntityType<?>> WIGHTS_BANE_INSTAKILLS = TagKey.create(Registries.ENTITY_TYPE, TheBetweenlands.prefix("wights_bane_instakills"));
@@ -22,7 +22,7 @@ public class EntityTagProvider extends EntityTypeTagsProvider {
 	public static final TagKey<EntityType<?>> CRITTER_CRUNCHER_INSTAKILLS = TagKey.create(Registries.ENTITY_TYPE, TheBetweenlands.prefix("critter_cruncher_instakills"));
 	public static final TagKey<EntityType<?>> SLUDGE_SLICER_INSTAKILLS = TagKey.create(Registries.ENTITY_TYPE, TheBetweenlands.prefix("sludge_slicer_instakills"));
 
-	public EntityTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
+	public BLEntityTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider, @Nullable ExistingFileHelper existingFileHelper) {
 		super(output, provider, TheBetweenlands.ID, existingFileHelper);
 	}
 

@@ -13,12 +13,12 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class BaseLootProvider extends LootTableProvider {
+public class BLLootProvider extends LootTableProvider {
 
-	public BaseLootProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
+	public BLLootProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
 		super(output, LootTableRegistry.getAllBuiltInTables(), List.of(
-			new LootTableProvider.SubProviderEntry(EntityLootProvider::new, LootContextParamSets.ENTITY),
-			new LootTableProvider.SubProviderEntry(provider1 -> new MiscLootProvider(), LootContextParamSets.EMPTY)
+			new LootTableProvider.SubProviderEntry(BLEntityLootProvider::new, LootContextParamSets.ENTITY),
+			new LootTableProvider.SubProviderEntry(provider1 -> new BLMiscLootProvider(), LootContextParamSets.EMPTY)
 		), provider);
 	}
 
