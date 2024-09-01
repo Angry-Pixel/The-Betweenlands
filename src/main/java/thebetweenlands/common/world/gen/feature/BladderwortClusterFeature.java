@@ -19,8 +19,8 @@ public class BladderwortClusterFeature extends Feature<NoneFeatureConfiguration>
 	}
 
 	@Override
-	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> featurePlaceContext) {
-		return false;
+	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+		return generate(context.level(), context.random(), context.origin());
 	}
 
 	public boolean generate(WorldGenLevel level, RandomSource rand, BlockPos pos) {
