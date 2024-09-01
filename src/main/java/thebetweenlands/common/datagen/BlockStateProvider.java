@@ -542,6 +542,7 @@ public class BlockStateProvider extends net.neoforged.neoforge.client.model.gene
 		this.builtinEntityAndItem(BlockRegistry.ALEMBIC, this.modLoc("block/particle/alembic_particle"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.ANIMATOR, this.modLoc("block/particle/animator_particle"), 0.625F, 0.0F);
 		this.torchBlockWithItem(BlockRegistry.DAMP_TORCH, BlockRegistry.DAMP_WALL_TORCH);
+		this.builtinEntityAndItem(BlockRegistry.WAYSTONE, this.modLoc("block/smooth_betweenstone"), 0.25F, -3.0F);
 		this.builtinEntityAndItem(BlockRegistry.DEEPMAN_SIMULACRUM_1, this.modLoc("block/smooth_betweenstone"), 0.75F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.DEEPMAN_SIMULACRUM_2, this.modLoc("block/smooth_betweenstone"), 0.75F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.DEEPMAN_SIMULACRUM_3, this.modLoc("block/smooth_betweenstone"), 0.75F, 0.0F);

@@ -6,10 +6,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
@@ -20,10 +22,15 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.storage.ILocalStorageHandler;
+import thebetweenlands.common.block.entity.SmokingRackBlockEntity;
 import thebetweenlands.common.block.entity.WaystoneBlockEntity;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
@@ -36,6 +43,7 @@ public class WaystoneBlock extends BaseEntityBlock {
 
 	public static final EnumProperty<Part> PART = EnumProperty.create("part", Part.class);
 	public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
+	public static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
 
 	public WaystoneBlock(Properties properties) {
 		super(properties);
@@ -48,8 +56,13 @@ public class WaystoneBlock extends BaseEntityBlock {
 	}
 
 	@Override
+	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		return SHAPE;
+	}
+
+	@Override
 	protected BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
-		return !state.canSurvive(level, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, facing, facingState, level, currentPos, facingPos);
+		return !this.isValidWaystone(level, currentPos, state) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, facing, facingState, level, currentPos, facingPos);
 	}
 
 	@Nullable
@@ -63,6 +76,16 @@ public class WaystoneBlock extends BaseEntityBlock {
 	}
 
 	@Override
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+		if (state.getValue(PART) == Part.MIDDLE && level.getBlockState(pos.below()).is(this)) {
+			this.useWithoutItem(level.getBlockState(pos.below()), level, pos.below(), player, hitResult);
+		} else if (state.getValue(PART) == Part.TOP && level.getBlockState(pos.below(2)).is(this)) {
+			this.useWithoutItem(level.getBlockState(pos.below()), level, pos.below(2), player, hitResult);
+		}
+		return super.useWithoutItem(state, level, pos, player, hitResult);
+	}
+
+	@Override
 	public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 		if (level.getBlockEntity(pos) instanceof WaystoneBlockEntity waystone) waystone.setRotation(level.getRandom().nextFloat() * 360.0F);
 		level.setBlockAndUpdate(pos.above(), this.defaultBlockState().setValue(PART, Part.MIDDLE));
@@ -71,7 +94,7 @@ public class WaystoneBlock extends BaseEntityBlock {
 
 	@Override
 	protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-		if (state.getBlock() != this) return super.canSurvive(state, level, pos);
+		if (state.getValue(PART) == Part.BOTTOM) return super.canSurvive(state, level, pos);
 		return this.isValidWaystone(level, pos, state);
 	}
 
@@ -101,11 +124,11 @@ public class WaystoneBlock extends BaseEntityBlock {
 		super.onRemove(state, level, pos, newState, movedByPiston);
 		var worldStorage = BetweenlandsWorldStorage.get(level);
 		if (worldStorage != null) {
-			ILocalStorageHandler localStorageHandler = worldStorage.getLocalStorageHandler();
-			List<LocationStorage> waystoneLocations = localStorageHandler.getLocalStorages(LocationStorage.class, new AABB(pos), storage -> storage.getType() == EnumLocationType.WAYSTONE);
-			for (LocationStorage waystoneLocation : waystoneLocations) {
-				localStorageHandler.removeLocalStorage(waystoneLocation);
-			}
+//			ILocalStorageHandler localStorageHandler = worldStorage.getLocalStorageHandler();
+//			List<LocationStorage> waystoneLocations = localStorageHandler.getLocalStorages(LocationStorage.class, new AABB(pos), storage -> storage.getType() == EnumLocationType.WAYSTONE);
+//			for (LocationStorage waystoneLocation : waystoneLocations) {
+//				localStorageHandler.removeLocalStorage(waystoneLocation);
+//			}
 		}
 	}
 
@@ -156,7 +179,7 @@ public class WaystoneBlock extends BaseEntityBlock {
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-		return new WaystoneBlockEntity(pos, state);
+		return state.getValue(PART) == Part.BOTTOM ? new WaystoneBlockEntity(pos, state) : null;
 	}
 
 	@Override
