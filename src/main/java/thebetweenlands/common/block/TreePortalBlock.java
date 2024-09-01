@@ -17,12 +17,13 @@ import net.minecraft.world.level.block.Portal;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.pattern.BlockPattern;
+import net.minecraft.world.level.block.state.pattern.BlockPatternBuilder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.portal.DimensionTransition;
-import net.minecraft.world.level.portal.PortalShape;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -36,12 +37,16 @@ import javax.annotation.Nullable;
 public class TreePortalBlock extends Block implements Portal {
 	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
 	protected static final VoxelShape X_AXIS_AABB = Block.box(0.0D, 0.0D, 6.0D, 16.0D, 16.0D, 10.0D);
-	protected static final VoxelShape Y_AXIS_AABB = Block.box(6.0D, 0.0D, 6.0D, 10.0D, 16.0D, 10.0D);
 	protected static final VoxelShape Z_AXIS_AABB = Block.box(6.0D, 0.0D, 0.0D, 10.0D, 16.0D, 16.0D);
+	protected static final VoxelShape Y_AXIS_AABB = Block.box(0.0D, 6.0D, 0.0D, 16.0D, 10.0D, 16.0D);
+
+	public static final BlockPattern FRAME = BlockPatternBuilder.start().aisle("fff").aisle("fpf").aisle("fpf").aisle("fff")
+		.where('f', block -> block.getState().getBlock() instanceof PortalFrameBlock || block.getState().is(BlockRegistry.PORTAL_LOG))
+		.where('p', block -> block.getState().is(BlockRegistry.PORTAL) || block.getState().is(BlockRegistry.PORTAL_LOG) || block.getState().isAir()).build();
 
 	public TreePortalBlock(Properties properties) {
 		super(properties);
-		this.registerDefaultState(this.stateDefinition.any().setValue(AXIS, Direction.Axis.X));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(AXIS, Direction.Axis.X));
 	}
 
 	@Override
@@ -66,7 +71,7 @@ public class TreePortalBlock extends Block implements Portal {
 		Direction.Axis axis = direction.getAxis();
 		Direction.Axis portalAxis = state.getValue(AXIS);
 		boolean flag = portalAxis != axis && axis.isHorizontal();
-		return !flag && !neighborState.is(this) && !(new PortalShape(accessor, pos, portalAxis)).isComplete() ? Blocks.AIR.defaultBlockState() : super.updateShape(state, direction, neighborState, accessor, pos, neighborPos);
+		return !flag && !neighborState.is(this) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, direction, neighborState, accessor, pos, neighborPos);
 	}
 
 	@Override
@@ -156,106 +161,27 @@ public class TreePortalBlock extends Block implements Portal {
 		);
 	}
 
-	public static boolean makePortalX(Level level, BlockPos pos) {
-		level.setBlockAndUpdate(pos.offset(0, 2, -1), BlockRegistry.PORTAL_FRAME_TOP_RIGHT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, Direction.Axis.X));
-		level.setBlockAndUpdate(pos.offset(0, 2, 0), BlockRegistry.PORTAL_FRAME_TOP.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, Direction.Axis.X));
-		level.setBlockAndUpdate(pos.offset(0, 2, 1), BlockRegistry.PORTAL_FRAME_TOP_LEFT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, Direction.Axis.X));
-		level.setBlockAndUpdate(pos.offset(0, 1, -1), BlockRegistry.PORTAL_FRAME_RIGHT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, Direction.Axis.X));
-		level.setBlockAndUpdate(pos.offset(0, 1, 1), BlockRegistry.PORTAL_FRAME_LEFT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, Direction.Axis.X));
-		level.setBlockAndUpdate(pos.offset(0, 0, -1), BlockRegistry.PORTAL_FRAME_RIGHT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, Direction.Axis.X));
-		level.setBlockAndUpdate(pos.offset(0, 0, 1), BlockRegistry.PORTAL_FRAME_LEFT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, Direction.Axis.X));
-		level.setBlockAndUpdate(pos.offset(0, -1, -1), BlockRegistry.PORTAL_FRAME_BOTTOM_RIGHT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, Direction.Axis.X));
-		level.setBlockAndUpdate(pos.offset(0, -1, 0), BlockRegistry.PORTAL_FRAME_BOTTOM.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, Direction.Axis.X));
-		level.setBlockAndUpdate(pos.offset(0, -1, 1), BlockRegistry.PORTAL_FRAME_BOTTOM_RIGHT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, Direction.Axis.X));
+	public static boolean makePortal(Level level, BlockPos pos, Direction dir) {
+		level.setBlock(pos.offset(dir.getStepZ(), 2, dir.getStepX()), BlockRegistry.PORTAL_FRAME_TOP_RIGHT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, dir.getAxis()), 18);
+		level.setBlock(pos.offset(0, 2, 0), BlockRegistry.PORTAL_FRAME_TOP.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, dir.getAxis()), 18);
+		level.setBlock(pos.offset(-dir.getStepZ(), 2, -dir.getStepX()), BlockRegistry.PORTAL_FRAME_TOP_LEFT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, dir.getAxis()), 18);
+		level.setBlock(pos.offset(dir.getStepZ(), 1, dir.getStepX()), BlockRegistry.PORTAL_FRAME_RIGHT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, dir.getAxis()), 18);
+		level.setBlock(pos.offset(-dir.getStepZ(), 1, -dir.getStepX()), BlockRegistry.PORTAL_FRAME_LEFT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, dir.getAxis()), 18);
+		level.setBlock(pos.offset(dir.getStepZ(), 0, dir.getStepX()), BlockRegistry.PORTAL_FRAME_RIGHT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, dir.getAxis()), 18);
+		level.setBlock(pos.offset(-dir.getStepZ(), 0, -dir.getStepX()), BlockRegistry.PORTAL_FRAME_LEFT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, dir.getAxis()), 18);
+		level.setBlock(pos.offset(dir.getStepZ(), -1, dir.getStepX()), BlockRegistry.PORTAL_FRAME_BOTTOM_RIGHT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, dir.getAxis()), 18);
+		level.setBlock(pos.offset(0, -1, 0), BlockRegistry.PORTAL_FRAME_BOTTOM.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, dir.getAxis()), 18);
+		level.setBlock(pos.offset(-dir.getStepZ(), -1, -dir.getStepX()), BlockRegistry.PORTAL_FRAME_BOTTOM_LEFT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, dir.getAxis()), 18);
 
-		if (isPatternValidX(level, pos)) {
-			level.setBlock(pos, BlockRegistry.PORTAL.get().defaultBlockState().setValue(AXIS, Direction.Axis.Z), 2);
-			level.setBlock(pos.above(), BlockRegistry.PORTAL.get().defaultBlockState().setValue(AXIS, Direction.Axis.Z), 2);
+		if (isPatternValid(level, pos)) {
+			level.setBlock(pos, BlockRegistry.PORTAL.get().defaultBlockState().setValue(AXIS, dir.getClockWise().getAxis()), 18);
+			level.setBlock(pos.above(), BlockRegistry.PORTAL.get().defaultBlockState().setValue(AXIS, dir.getClockWise().getAxis()), 18);
 			return true;
 		}
 		return false;
 	}
 
-	public static boolean makePortalZ(Level level, BlockPos pos) {
-		level.setBlockAndUpdate(pos.offset(-1, 2, 0), BlockRegistry.PORTAL_FRAME_TOP_RIGHT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, Direction.Axis.X));
-		level.setBlockAndUpdate(pos.offset(0, 2, 0), BlockRegistry.PORTAL_FRAME_TOP.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, Direction.Axis.X));
-		level.setBlockAndUpdate(pos.offset(1, 2, 0), BlockRegistry.PORTAL_FRAME_TOP_LEFT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, Direction.Axis.X));
-		level.setBlockAndUpdate(pos.offset(-1, 1, 0), BlockRegistry.PORTAL_FRAME_RIGHT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, Direction.Axis.X));
-		level.setBlockAndUpdate(pos.offset(1, 1, 0), BlockRegistry.PORTAL_FRAME_LEFT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, Direction.Axis.X));
-		level.setBlockAndUpdate(pos.offset(-1, 0, 0), BlockRegistry.PORTAL_FRAME_RIGHT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, Direction.Axis.X));
-		level.setBlockAndUpdate(pos.offset(1, 0, 0), BlockRegistry.PORTAL_FRAME_LEFT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, Direction.Axis.X));
-		level.setBlockAndUpdate(pos.offset(-1, -1, 0), BlockRegistry.PORTAL_FRAME_BOTTOM_RIGHT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, Direction.Axis.X));
-		level.setBlockAndUpdate(pos.offset(0, -1, 0), BlockRegistry.PORTAL_FRAME_BOTTOM.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, Direction.Axis.X));
-		level.setBlockAndUpdate(pos.offset(1, -1, 0), BlockRegistry.PORTAL_FRAME_BOTTOM_RIGHT.get().defaultBlockState().setValue(PortalFrameBlock.AXIS, Direction.Axis.X));
-
-		if (isPatternValidZ(level, pos)) {
-			level.setBlock(pos, BlockRegistry.PORTAL.get().defaultBlockState().setValue(AXIS, Direction.Axis.X), 2);
-			level.setBlock(pos.above(), BlockRegistry.PORTAL.get().defaultBlockState().setValue(AXIS, Direction.Axis.X), 2);
-			return true;
-		}
-
-		return false;
+	public static boolean isPatternValid(LevelAccessor level, BlockPos pos) {
+		return FRAME.find(level, pos) != null;
 	}
-
-	public static boolean isPatternValidX(LevelAccessor level, BlockPos pos) {
-		// Layer 0
-		if (!check(level, pos.below()) && !checkPortal(level, pos.below(), Direction.Axis.Z)) {
-			return false;
-		}
-
-		// Layer 1
-		if (!check(level, pos.north())) {
-			return false;
-		}
-		if (!check(level, pos.south())) {
-			return false;
-		}
-
-		// Layer 2
-		if (!check(level, pos.above().north())) {
-			return false;
-		}
-		if (!check(level, pos.above().south())) {
-			return false;
-		}
-
-		// Layer 3
-		return check(level, pos.above(2));
-	}
-
-	public static boolean isPatternValidZ(LevelAccessor level, BlockPos pos) {
-		// Layer 0
-		if (!check(level, pos.below()) && !checkPortal(level, pos.below(), Direction.Axis.X)) {
-			return false;
-		}
-
-		// Layer 1
-		if (!check(level, pos.west())) {
-			return false;
-		}
-		if (!check(level, pos.east())) {
-			return false;
-		}
-
-		// Layer 2
-		if (!check(level, pos.above().west())) {
-			return false;
-		}
-		if (!check(level, pos.above().east())) {
-			return false;
-		}
-
-		// Layer 3
-		return check(level, pos.above(2));
-	}
-
-	private static boolean check(LevelAccessor world, BlockPos pos) {
-		return world.getBlockState(pos).getBlock() instanceof PortalFrameBlock;
-	}
-
-	private static boolean checkPortal(LevelAccessor world, BlockPos pos, Direction.Axis axis) {
-		BlockState state = world.getBlockState(pos);
-		return state.is(BlockRegistry.PORTAL) && state.getValue(AXIS) == axis;
-	}
-
 }

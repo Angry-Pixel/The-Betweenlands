@@ -26,6 +26,7 @@ import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.PortalFrameBlock;
 import thebetweenlands.common.block.TreePortalBlock;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -58,33 +59,30 @@ public class SwampTalismanItem extends Item {
 				BlockPos offsetPos = pos.relative(facing);
 				for (int yo = 3; yo > 0; yo--) {
 					BlockPos portalPos = offsetPos.below(yo);
-					Direction.Axis frameAxis = this.getPortalWoodFrameAxis(level, portalPos);
+					Direction frameAxis = this.getPortalWoodFrameAxis(level, portalPos);
 					if (frameAxis != null) {
 						if (!level.isClientSide()) {
 							Direction closestDir = null;
 							for (Direction dir : Direction.values()) {
-								if (dir.getAxis() == frameAxis) {
+								if (dir.getAxis() == frameAxis.getAxis()) {
 									if (closestDir == null || pos.relative(dir).distToCenterSqr(player.position()) <= pos.relative(closestDir).distToCenterSqr(player.position())) {
 										closestDir = dir;
 									}
 								}
 							}
-							if (frameAxis == Direction.Axis.X) {
-								TreePortalBlock.makePortalX(level, portalPos.above());
-							} else if (frameAxis == Direction.Axis.Z) {
-								TreePortalBlock.makePortalZ(level, portalPos.above());
-							}
-							if (frameAxis == Direction.Axis.X && TreePortalBlock.isPatternValidX(level, portalPos.above()) || frameAxis == Direction.Axis.Z && TreePortalBlock.isPatternValidZ(level, portalPos.above())) {
-
+							TreePortalBlock.makePortal(level, portalPos.above(), frameAxis);
+							if (TreePortalBlock.isPatternValid(level, portalPos.above())) {
 								//Only create new location is none exists
 								if (this.getPortalAt(level, portalPos.above()) == null) {
 									BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
-									LocationPortal location = new LocationPortal(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), portalPos.relative(closestDir).below());
-									location.addBounds(new AABB(portalPos.above()).inflate(1, 2, 1).expandTowards(0, -0.5D, 0));
-									location.setSeed(level.getRandom().nextLong());
-									location.setDirty(true);
-									location.setVisible(false);
-									worldStorage.getLocalStorageHandler().addLocalStorage(location);
+									if (worldStorage != null) {
+										LocationPortal location = new LocationPortal(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), portalPos.relative(closestDir).below());
+										location.addBounds(new AABB(portalPos.above()).inflate(1, 2, 1).expandTowards(0, -0.5D, 0));
+										location.setSeed(level.getRandom().nextLong());
+										location.setDirty(true);
+										location.setVisible(false);
+										//worldStorage.getLocalStorageHandler().addLocalStorage(location);
+									}
 								}
 
 								level.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.PORTAL_ACTIVATE.get(), SoundSource.PLAYERS, 0.5F, level.getRandom().nextFloat() * 0.4F + 0.8F);
@@ -96,19 +94,17 @@ public class SwampTalismanItem extends Item {
 			}
 
 			if (state.is(BlockTags.SAPLINGS)) {
-				if (!level.isClientSide()) {
-					if (BetweenlandsConfig.returnDimension != player.level().dimension() && player.level().dimension() != DimensionRegistries.DIMENSION_KEY) {
-						player.displayClientMessage(Component.translatable("chat.talisman.wrongdimension"), true);
-					} else {
-						if (PortalTree.place(level, level.getRandom(), pos, null)) {
-							level.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.PORTAL_ACTIVATE.get(), SoundSource.PLAYERS, 0.5F, level.getRandom().nextFloat() * 0.4F + 0.8F);
-							player.moveTo(pos.getX() + 0.5D, pos.getY() + 2D, pos.getZ() + 0.5D, player.getYRot(), player.getXRot());
-							if (player instanceof ServerPlayer sp) {
-								sp.connection.teleport(pos.getX() + 0.5D, pos.getY() + 2D, pos.getZ() + 0.5D, player.getYRot(), player.getXRot());
-							}
-						} else {
-							player.displayClientMessage(Component.translatable("chat.talisman.noplace"), true);
+				if (BetweenlandsConfig.returnDimension != player.level().dimension() && player.level().dimension() != DimensionRegistries.DIMENSION_KEY) {
+					player.displayClientMessage(Component.translatable("chat.talisman.wrongdimension"), true);
+				} else {
+					if (PortalTree.place(level, level.getRandom(), pos, null)) {
+						level.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.PORTAL_ACTIVATE.get(), SoundSource.PLAYERS, 0.5F, level.getRandom().nextFloat() * 0.4F + 0.8F);
+						player.moveTo(pos.getX() + 0.5D, pos.getY() + 2D, pos.getZ() + 0.5D, player.getYRot(), player.getXRot());
+						if (player instanceof ServerPlayer sp) {
+							sp.connection.teleport(pos.getX() + 0.5D, pos.getY() + 2D, pos.getZ() + 0.5D, player.getYRot(), player.getXRot());
 						}
+					} else {
+						player.displayClientMessage(Component.translatable("chat.talisman.noplace"), true);
 					}
 				}
 				return InteractionResult.SUCCESS;
@@ -168,9 +164,11 @@ public class SwampTalismanItem extends Item {
 	@Nullable
 	protected LocationPortal getPortalAt(Level level, BlockPos pos) {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
-		List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, pos.getX() + 0.5D, pos.getZ() + 0.5D, location -> location.isInside(pos.getCenter()));
-		if (!portals.isEmpty()) {
-			return portals.getFirst();
+		if (worldStorage != null) {
+//			List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, pos.getX() + 0.5D, pos.getZ() + 0.5D, location -> location.isInside(pos.getCenter()));
+//			if (!portals.isEmpty()) {
+//				return portals.getFirst();
+//			}
 		}
 		return null;
 	}
@@ -178,22 +176,24 @@ public class SwampTalismanItem extends Item {
 	@Nullable
 	protected LocationPortal getLinkPortal(ServerLevel level, BlockPos portal2Pos) {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
-		List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, portal2Pos.getX() + 0.5D, portal2Pos.getZ() + 0.5D, location -> location.isInside(portal2Pos.getCenter()) && portal2Pos.equals(location.getPortalPosition()));
-		if (!portals.isEmpty()) {
-			return portals.getFirst();
+		if (worldStorage != null) {
+//			List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, portal2Pos.getX() + 0.5D, portal2Pos.getZ() + 0.5D, location -> location.isInside(portal2Pos.getCenter()) && portal2Pos.equals(location.getPortalPosition()));
+//			if (!portals.isEmpty()) {
+//				return portals.getFirst();
+//			}
 		}
 		return null;
 	}
 
 	@Nullable
-	protected Direction.Axis getPortalWoodFrameAxis(Level world, BlockPos pos) {
+	protected Direction getPortalWoodFrameAxis(Level world, BlockPos pos) {
 		Direction north = Direction.NORTH;
 		Direction south = Direction.SOUTH;
 		if (this.isPortalWood(world.getBlockState(pos)) && this.isPortalWood(world.getBlockState(pos.relative(north))) && this.isPortalWood(world.getBlockState(pos.relative(south)))
 			&& this.isPortalWood(world.getBlockState(pos.above().relative(north))) && this.isPortalWood(world.getBlockState(pos.above().relative(south)))
 			&& this.isPortalWood(world.getBlockState(pos.above(2).relative(north))) && this.isPortalWood(world.getBlockState(pos.above(2).relative(south)))
 			&& this.isPortalWood(world.getBlockState(pos.above(3))) && this.isPortalWood(world.getBlockState(pos.above(3).relative(north))) && this.isPortalWood(world.getBlockState(pos.above(3).relative(south)))) {
-			return Direction.Axis.X;
+			return Direction.WEST;
 		}
 
 		Direction east = Direction.EAST;
@@ -202,13 +202,13 @@ public class SwampTalismanItem extends Item {
 			&& this.isPortalWood(world.getBlockState(pos.above().relative(east))) && this.isPortalWood(world.getBlockState(pos.above().relative(west)))
 			&& this.isPortalWood(world.getBlockState(pos.above(2).relative(east))) && this.isPortalWood(world.getBlockState(pos.above(2).relative(west)))
 			&& this.isPortalWood(world.getBlockState(pos.above(3))) && this.isPortalWood(world.getBlockState(pos.above(3).relative(east))) && this.isPortalWood(world.getBlockState(pos.above(3).relative(west)))) {
-			return Direction.Axis.Z;
+			return Direction.NORTH;
 		}
 
 		return null;
 	}
 
 	protected boolean isPortalWood(BlockState state) {
-		return state.getBlock() instanceof PortalFrameBlock;
+		return state.getBlock() instanceof PortalFrameBlock || state.is(BlockRegistry.PORTAL_LOG);
 	}
 }

@@ -1,0 +1,21 @@
+{
+	"parent": "block/block",
+	"textures": {
+		"particle": "thebetweenlands:block/portal_log",
+		"log": "#particle"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#frame"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#log"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#frame2"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#log"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#log"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#log"}
+			}
+		}
+	]
+}

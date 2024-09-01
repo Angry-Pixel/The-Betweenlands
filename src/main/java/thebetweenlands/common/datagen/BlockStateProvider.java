@@ -481,16 +481,35 @@ public class BlockStateProvider extends net.neoforged.neoforge.client.model.gene
 		this.simpleBlockWithItem(BlockRegistry.PURIFIED_SWAMP_DIRT);
 		//dug dirt and grass
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.BLACK_ICE, "translucent");
-		this.axisBlock((RotatedPillarBlock) BlockRegistry.PORTAL_LOG.get(), this.modLoc("block/portal_log_side"), this.modLoc("block/weedwood_log_end"));
-		this.simpleBlockItem(BlockRegistry.PORTAL_LOG);
+		this.getVariantBuilder(BlockRegistry.PORTAL.get()).forAllStates(state -> {
+			ModelFile file;
+			if (state.getValue(TreePortalBlock.AXIS) == Direction.Axis.Z) {
+				file = this.models().withExistingParent("tree_portal_ew", this.mcLoc("block/cube"))
+					.texture("portal", this.modLoc("block/portal"))
+					.texture("particle", this.modLoc("block/portal"))
+					.element().from(6, 0, 0).to(10, 16, 16).face(Direction.WEST).texture("#portal").end().face(Direction.EAST).texture("#portal").end().end();
+			} else if (state.getValue(TreePortalBlock.AXIS) == Direction.Axis.X) {
+				file = this.models().withExistingParent("tree_portal_ns", this.mcLoc("block/cube"))
+					.texture("portal", this.modLoc("block/portal"))
+					.texture("particle", this.modLoc("block/portal"))
+					.element().from(0, 0, 6).to(16, 16, 10).face(Direction.NORTH).texture("#portal").end().face(Direction.SOUTH).texture("#portal").end().end();
+			} else {
+				file = this.models().withExistingParent("tree_portal_ud", this.mcLoc("block/cube"))
+					.texture("portal", this.modLoc("block/portal"))
+					.texture("particle", this.modLoc("block/portal"))
+					.element().from(0, 6, 0).to(16, 10, 16).face(Direction.UP).texture("#portal").end().face(Direction.DOWN).texture("#portal").end().end();
+			}
+			return ConfiguredModel.builder().modelFile(file).build();
+		});
+		this.simpleBlockWithItem(BlockRegistry.PORTAL_LOG);
 		this.portalFrame(BlockRegistry.PORTAL_FRAME_BOTTOM);
-		this.portalFrame(BlockRegistry.PORTAL_FRAME_BOTTOM_LEFT);
-		this.portalFrame(BlockRegistry.PORTAL_FRAME_BOTTOM_RIGHT);
-		this.portalFrame(BlockRegistry.PORTAL_FRAME_LEFT);
-		this.portalFrame(BlockRegistry.PORTAL_FRAME_RIGHT);
+		this.portalFrame(BlockRegistry.PORTAL_FRAME_BOTTOM_LEFT, BlockRegistry.PORTAL_FRAME_BOTTOM_RIGHT);
+		this.portalFrame(BlockRegistry.PORTAL_FRAME_BOTTOM_RIGHT, BlockRegistry.PORTAL_FRAME_BOTTOM_LEFT);
+		this.portalFrame(BlockRegistry.PORTAL_FRAME_LEFT, BlockRegistry.PORTAL_FRAME_RIGHT);
+		this.portalFrame(BlockRegistry.PORTAL_FRAME_RIGHT, BlockRegistry.PORTAL_FRAME_LEFT);
 		this.portalFrame(BlockRegistry.PORTAL_FRAME_TOP);
-		this.portalFrame(BlockRegistry.PORTAL_FRAME_TOP_LEFT);
-		this.portalFrame(BlockRegistry.PORTAL_FRAME_TOP_RIGHT);
+		this.portalFrame(BlockRegistry.PORTAL_FRAME_TOP_LEFT, BlockRegistry.PORTAL_FRAME_TOP_RIGHT);
+		this.portalFrame(BlockRegistry.PORTAL_FRAME_TOP_RIGHT, BlockRegistry.PORTAL_FRAME_TOP_LEFT);
 		this.builtinEntityAndItem(BlockRegistry.DRUID_ALTAR, this.modLoc("block/particle/druid_altar_particle"), 0.325F, -1.25F);
 		this.builtinEntityAndItem(BlockRegistry.PURIFIER, this.modLoc("block/particle/purifier_particle"), 0.625F, 0.0F);
 		this.simpleBlock(BlockRegistry.WEEDWOOD_CRAFTING_TABLE.get(), this.models().cube("weedwood_crafting_table", this.modLoc("block/weedwood_planks"), this.modLoc("block/weedwood_workbench_top"), this.modLoc("block/weedwood_workbench_front"), this.modLoc("block/weedwood_workbench"), this.modLoc("block/weedwood_workbench"), this.modLoc("block/weedwood_workbench_front")));
@@ -677,7 +696,6 @@ public class BlockStateProvider extends net.neoforged.neoforge.client.model.gene
 		this.simpleBlockWithItem(BlockRegistry.MAGENTA_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
 		this.simpleBlockWithItem(BlockRegistry.PINK_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
 		this.simpleBlockWithItem(BlockRegistry.BROWN_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
-
 	}
 
 	private void druidStone(DeferredBlock<Block> stone) {
@@ -689,7 +707,12 @@ public class BlockStateProvider extends net.neoforged.neoforge.client.model.gene
 	}
 
 	private void portalFrame(DeferredBlock<Block> frame) {
-		this.getVariantBuilder(frame.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(this.models().cube(frame.getId().getPath(), this.modLoc("block/portal_log_side"), this.modLoc("block/portal_log_side"), this.blockTexture(frame.get()), this.blockTexture(frame.get()), this.modLoc("block/portal_log_side"), this.modLoc("block/portal_log_side"))).rotationY(state.getValue(PortalFrameBlock.AXIS) == Direction.Axis.Z ? 0 : 90).build());
+		this.getVariantBuilder(frame.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(this.models().withExistingParent(frame.getId().getPath(), this.modLoc("block/portal_frame")).texture("frame", this.blockTexture(frame.get())).texture("frame2", this.blockTexture(frame.get()))).rotationY(state.getValue(PortalFrameBlock.AXIS) == Direction.Axis.Z ? 0 : 90).build());
+		this.simpleBlockItem(frame);
+	}
+
+	private void portalFrame(DeferredBlock<Block> frame, DeferredBlock<Block> otherCorner) {
+		this.getVariantBuilder(frame.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(this.models().withExistingParent(frame.getId().getPath(), this.modLoc("block/portal_frame")).texture("frame", this.blockTexture(frame.get())).texture("frame2", this.blockTexture(otherCorner.get()))).rotationY(state.getValue(PortalFrameBlock.AXIS) == Direction.Axis.Z ? 0 : 90).build());
 		this.simpleBlockItem(frame);
 	}
 

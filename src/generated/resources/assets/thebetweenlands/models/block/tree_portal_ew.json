@@ -1,0 +1,29 @@
+{
+  "parent": "minecraft:block/cube",
+  "elements": [
+    {
+      "faces": {
+        "east": {
+          "texture": "#portal"
+        },
+        "west": {
+          "texture": "#portal"
+        }
+      },
+      "from": [
+        6,
+        0,
+        0
+      ],
+      "to": [
+        10,
+        16,
+        16
+      ]
+    }
+  ],
+  "textures": {
+    "particle": "thebetweenlands:block/portal",
+    "portal": "thebetweenlands:block/portal"
+  }
+}

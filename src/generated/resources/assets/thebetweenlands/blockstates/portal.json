@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "thebetweenlands:block/tree_portal_ns"
+    },
+    "axis=y": {
+      "model": "thebetweenlands:block/tree_portal_ud"
+    },
+    "axis=z": {
+      "model": "thebetweenlands:block/tree_portal_ew"
+    }
+  }
+}

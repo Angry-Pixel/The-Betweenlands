@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column_horizontal",
-  "textures": {
-    "end": "thebetweenlands:block/weedwood_log_end",
-    "side": "thebetweenlands:block/portal_log_side"
-  }
-}

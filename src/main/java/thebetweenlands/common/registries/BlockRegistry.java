@@ -585,8 +585,8 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> BLACK_ICE = register("black_ice", () -> new BlackIceBlock(BlockBehaviour.Properties.of().noOcclusion().randomTicks().strength(0.5F).randomTicks().friction(0.98F).sound(SoundType.GLASS).isRedstoneConductor(BlockRegistry::never)));
 	public static final DeferredBlock<Block> SNOW = register("snow", () -> new BLSnowLayerBlock(BlockBehaviour.Properties.of().replaceable().forceSolidOff().randomTicks().strength(0.1F).sound(SoundType.SNOW)));
 	//MISC
-	public static final DeferredBlock<Block> PORTAL_LOG = register("portal_log", () -> new RotatedPillarBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
-	public static final DeferredBlock<Block> PORTAL = BLOCKS.register("portal", () -> new TreePortalBlock(BlockBehaviour.Properties.of().strength(-1.0F, 6000000.0F).lightLevel(value -> 15).sound(SoundType.GLASS)));
+	public static final DeferredBlock<Block> PORTAL_LOG = register("portal_log", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
+	public static final DeferredBlock<Block> PORTAL = register("portal", () -> new TreePortalBlock(BlockBehaviour.Properties.of().strength(-1.0F, 6000000.0F).lightLevel(value -> 15).sound(SoundType.GLASS)));
 	public static final DeferredBlock<Block> PORTAL_FRAME_TOP_LEFT = register("portal_frame_top_left", () -> new PortalFrameBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> PORTAL_FRAME_TOP = register("portal_frame_top", () -> new PortalFrameBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> PORTAL_FRAME_TOP_RIGHT = register("portal_frame_top_right", () -> new PortalFrameBlock(BlockBehaviour.Properties.of().mapColor(MapColor.WOOD).instrument(NoteBlockInstrument.BASS).strength(2.0F).sound(SoundType.WOOD)));

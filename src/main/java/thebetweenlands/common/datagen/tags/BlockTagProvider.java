@@ -33,6 +33,11 @@ public class BlockTagProvider extends net.neoforged.neoforge.common.data.BlockTa
 	protected void addTags(HolderLookup.Provider provider) {
 		this.tag(BlockTags.DIRT).add(BlockRegistry.SWAMP_DIRT.get(), BlockRegistry.SWAMP_GRASS.get(), BlockRegistry.DEAD_GRASS.get(), BlockRegistry.MUD.get());
 		this.tag(OCTINE_IGNITES).add(BlockRegistry.CAVE_MOSS.get(), BlockRegistry.MOSS.get(), BlockRegistry.LICHEN.get(), BlockRegistry.DEAD_MOSS.get(), BlockRegistry.DEAD_LICHEN.get(), BlockRegistry.THORNS.get());
+
+		this.tag(BlockTags.LOGS).add(BlockRegistry.WEEDWOOD_LOG.get(), BlockRegistry.WEEDWOOD_BARK.get(),
+			BlockRegistry.HEARTHGROVE_FENCE_GATE.get(), BlockRegistry.HEARTHGROVE_BARK.get(),
+			BlockRegistry.NIBBLETWIG_LOG.get(), BlockRegistry.NIBBLETWIG_BARK.get(),
+			BlockRegistry.PORTAL_LOG.get(), BlockRegistry.ROTTEN_BARK.get());
 	}
 
 	public static TagKey<Block> tag(String tagName) {
