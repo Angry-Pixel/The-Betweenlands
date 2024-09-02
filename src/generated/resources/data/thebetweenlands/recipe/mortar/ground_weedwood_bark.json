@@ -1,0 +1,21 @@
+{
+  "type": "thebetweenlands:mortar_grind",
+  "input": [
+    {
+      "item": "thebetweenlands:weedwood_bark"
+    },
+    {
+      "item": "thebetweenlands:weedwood"
+    },
+    {
+      "item": "thebetweenlands:weedwood_log"
+    },
+    {
+      "item": "thebetweenlands:dry_bark"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:ground_weedwood_bark"
+  }
+}

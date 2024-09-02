@@ -1,7 +1,6 @@
 package thebetweenlands.client.event;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.gui.Gui;
@@ -13,14 +12,11 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.NoopRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.GrassColor;
 import net.neoforged.bus.api.IEventBus;
@@ -38,6 +34,7 @@ import thebetweenlands.client.gui.overlay.FishStaminaBarOverlay;
 import thebetweenlands.client.gui.screen.AnimatorScreen;
 import thebetweenlands.client.gui.screen.DruidAltarScreen;
 import thebetweenlands.client.gui.screen.FishTrimmingTableScreen;
+import thebetweenlands.client.gui.screen.MortarScreen;
 import thebetweenlands.client.handler.ClientHandlerEvents;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.block.*;
@@ -54,7 +51,6 @@ import thebetweenlands.common.component.item.AspectContents;
 import thebetweenlands.common.component.item.ElixirContents;
 import thebetweenlands.common.entities.fishing.anadia.AnadiaParts;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
-import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.items.AnadiaMobItem;
 import thebetweenlands.common.registries.*;
@@ -101,6 +97,7 @@ public class ClientRegistrationEvents {
 		event.register(MenuRegistry.ANIMATOR.get(), AnimatorScreen::new);
 		event.register(MenuRegistry.DRUID_ALTAR.get(), DruidAltarScreen::new);
 		event.register(MenuRegistry.FISH_TRIMMING_TABLE.get(), FishTrimmingTableScreen::new);
+		event.register(MenuRegistry.MORTAR.get(), MortarScreen::new);
 	}
 
 	private static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
@@ -127,6 +124,7 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.LOOT_POT.get(), LootPotRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.LOOT_URN.get(), LootUrnRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.MOB_SPAWNER.get(), MobSpawnerRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.MORTAR.get(), MortarRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.OFFERING_TABLE.get(), OfferingTableRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.PURIFIER.get(), PurifierRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SIMULACRUM.get(), SimulacrumRenderer::new);
@@ -168,6 +166,7 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.LOOT_URN_2, LootUrnModels::makeUrn2);
 		event.registerLayerDefinition(BLModelLayers.LOOT_URN_3, LootUrnModels::makeUrn3);
 		event.registerLayerDefinition(BLModelLayers.MOB_SPAWNER_CRYSTAL, MobSpawnerCrystalModel::makeModel);
+		event.registerLayerDefinition(BLModelLayers.MORTAR, MortarModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.OFFERING_TABLE, OfferingTableModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.PURIFIER, PurifierModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_1, RootmanSimulacrumModels::makeSimulacrum1);
@@ -199,6 +198,34 @@ public class ClientRegistrationEvents {
 			}
 			return 0;
 		});
+
+		ItemProperties.register(ItemRegistry.PESTLE.get(), TheBetweenlands.prefix("active"), (stack, level, entity, idk) -> stack.has(DataComponentRegistry.PESTLE_ACTIVE) ? 1.0F : 0.0F);
+
+		ItemProperties.register(ItemRegistry.LIFE_CRYSTAL.get(), TheBetweenlands.prefix("remaining"), (stack, level, entity, seed) -> {
+			int damage = stack.getDamageValue();
+			if (damage >= stack.getMaxDamage())
+				return 4;
+			if (damage > stack.getMaxDamage() * 0.75F)
+				return 3;
+			if (damage > stack.getMaxDamage() * 0.5F)
+				return 2;
+			if (damage > stack.getMaxDamage() * 0.25F)
+				return 1;
+			return 0;
+		});
+
+		ItemProperties.register(ItemRegistry.LIFE_CRYSTAL_FRAGMENT.get(), TheBetweenlands.prefix("remaining"), (stack, level, entity, seed) -> {
+			int damage = stack.getDamageValue();
+			if (damage >= stack.getMaxDamage())
+				return 4;
+			if (damage > stack.getMaxDamage() * 0.75F)
+				return 3;
+			if (damage > stack.getMaxDamage() * 0.5F)
+				return 2;
+			if (damage > stack.getMaxDamage() * 0.25F)
+				return 1;
+			return 0;
+		});
 	}
 
 	private static void registerGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
@@ -221,7 +248,7 @@ public class ClientRegistrationEvents {
 			BlockRegistry.FISHING_TACKLE_BOX.asItem(), BlockRegistry.SMOKING_RACK.asItem(), BlockRegistry.FISH_TRIMMING_TABLE.asItem(),
 			BlockRegistry.CRAB_POT.asItem(), BlockRegistry.CRAB_POT_FILTER.asItem(), BlockRegistry.ANIMATOR.asItem(),
 			BlockRegistry.WIND_CHIME.asItem(), BlockRegistry.OFFERING_TABLE.asItem(), BlockRegistry.MOB_SPAWNER.asItem(),
-			BlockRegistry.GECKO_CAGE.asItem(), BlockRegistry.ALEMBIC.asItem(), BlockRegistry.WAYSTONE.asItem(),
+			BlockRegistry.GECKO_CAGE.asItem(), BlockRegistry.ALEMBIC.asItem(), BlockRegistry.WAYSTONE.asItem(), BlockRegistry.MORTAR.asItem(),
 			BlockRegistry.LOOT_POT_1.asItem(), BlockRegistry.LOOT_POT_2.asItem(), BlockRegistry.LOOT_POT_3.asItem(),
 			BlockRegistry.TAR_LOOT_POT_1.asItem(), BlockRegistry.TAR_LOOT_POT_2.asItem(), BlockRegistry.TAR_LOOT_POT_3.asItem(),
 			BlockRegistry.MUD_LOOT_POT_1.asItem(), BlockRegistry.MUD_LOOT_POT_2.asItem(), BlockRegistry.MUD_LOOT_POT_3.asItem(),

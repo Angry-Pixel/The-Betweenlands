@@ -94,7 +94,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 
 	public static void tick(Level level, BlockPos pos, BlockState state, AnimatorBlockEntity entity) {
 		if (!level.isClientSide()) {
-			if (entity.isSlotInUse(0) && entity.isValidFocalItem(level)) {
+			if (entity.isValidFocalItem(level)) {
 				entity.itemToAnimate = entity.getItem(0);
 				SingleRecipeInput input = new SingleRecipeInput(entity.itemToAnimate);
 				RecipeHolder<AnimatorRecipe> recipe = entity.quickCheck.getRecipeFor(input, level).orElse(null);
@@ -108,7 +108,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 
 			if (entity.isCrystalInSlot())
 				entity.lifeCrystalLife = entity.getCrystalPower();
-			if (!entity.isSlotInUse(0) || !entity.isSlotInUse(1) || !entity.isSlotInUse(2)) {
+			if (entity.getItems().subList(0, 3).stream().anyMatch(ItemStack::isEmpty)) {
 				entity.fuelBurnProgress = 0;
 				entity.fuelConsumed = 0;
 			}
@@ -126,14 +126,14 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 				}
 			}
 
-			if (entity.isSlotInUse(2) && !entity.itemAnimated) {
-				if (!entity.isSlotInUse(0) || !entity.isSlotInUse(1)) {
+			if (!entity.getItem(2).isEmpty() && !entity.itemAnimated) {
+				if (entity.getItem(0).isEmpty() || entity.getItem(1).isEmpty()) {
 					entity.fuelBurnProgress = 0;
 					entity.fuelConsumed = 0;
 				}
 			}
 
-			if (entity.fuelConsumed >= entity.requiredFuelCount && entity.isSlotInUse(0) && entity.isSlotInUse(1) && !entity.itemAnimated) {
+			if (entity.fuelConsumed >= entity.requiredFuelCount && !entity.getItem(0).isEmpty() && !entity.getItem(1).isEmpty() && !entity.itemAnimated) {
 				SingleRecipeInput recipeInput = new SingleRecipeInput(entity.getItem(0));
 				RecipeHolder<AnimatorRecipe> recipe = entity.quickCheck.getRecipeFor(recipeInput, level).orElse(null);
 				if (recipe != null) {
@@ -154,14 +154,14 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 				entity.setChanged();
 				entity.itemAnimated = true;
 			}
-			if (entity.prevStackSize != (entity.isSlotInUse(0) ? entity.getItem(0).getCount() : 0))
+			if (entity.prevStackSize != entity.getItem(0).getCount())
 				entity.setChanged();
-			if (entity.prevItem != (entity.isSlotInUse(0) ? entity.getItem(0) : ItemStack.EMPTY))
+			if (entity.prevItem != entity.getItem(0))
 				entity.setChanged();
-			entity.prevItem = entity.isSlotInUse(0) ? entity.getItem(0) : ItemStack.EMPTY;
-			entity.prevStackSize = entity.isSlotInUse(0) ? entity.getItem(0).getCount() : 0;
+			entity.prevItem = entity.getItem(0);
+			entity.prevStackSize = entity.getItem(0).getCount();
 
-			boolean shouldBeRunning = entity.isSlotInUse(0) && entity.isCrystalInSlot() && entity.isSulfurInSlot() && entity.fuelConsumed < entity.requiredFuelCount && entity.lifeCrystalLife >= entity.requiredLifeCount && entity.isValidFocalItem(level);
+			boolean shouldBeRunning = !entity.getItem(0).isEmpty() && entity.isCrystalInSlot() && entity.isSulfurInSlot() && entity.fuelConsumed < entity.requiredFuelCount && entity.lifeCrystalLife >= entity.requiredLifeCount && entity.isValidFocalItem(level);
 			if (entity.running != shouldBeRunning) {
 				entity.running = shouldBeRunning;
 				entity.setChanged();
@@ -221,7 +221,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 	}
 
 	public boolean isCrystalInSlot() {
-		return this.isSlotInUse(1) && this.getItem(1).getItem() instanceof LifeCrystalItem && this.getItem(1).getDamageValue() < this.getItem(1).getMaxDamage();
+		return this.getItem(1).getItem() instanceof LifeCrystalItem && this.getItem(1).getDamageValue() < this.getItem(1).getMaxDamage();
 	}
 
 	public int getCrystalPower() {
@@ -231,11 +231,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 	}
 
 	public boolean isSulfurInSlot() {
-		return this.isSlotInUse(2) && this.getItem(2).is(ItemRegistry.SULFUR);
-	}
-
-	public boolean isSlotInUse(int slot) {
-		return !this.getItem(slot).isEmpty();
+		return this.getItem(2).is(ItemRegistry.SULFUR);
 	}
 
 	public boolean isValidFocalItem(Level level) {
@@ -263,6 +259,14 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 	@Override
 	protected void setItems(NonNullList<ItemStack> items) {
 		this.items = items;
+	}
+
+	@Override
+	public void setItem(int slot, ItemStack stack) {
+		super.setItem(slot, stack);
+		if (slot == 1) {
+			this.lifeCrystalLife = this.getCrystalPower();
+		}
 	}
 
 	@Override
@@ -305,6 +309,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 		this.running = tag.getBoolean("running");
 	}
 
+
 	@Nullable
 	@Override
 	public Packet<ClientGamePacketListener> getUpdatePacket() {
@@ -312,14 +317,7 @@ public class AnimatorBlockEntity extends BaseContainerBlockEntity {
 	}
 
 	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
-		this.loadAdditional(packet.getTag(), registries);
-	}
-
-	@Override
 	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-		CompoundTag tag = super.getUpdateTag(registries);
-		this.saveAdditional(tag, registries);
-		return tag;
+		return this.saveCustomOnly(registries);
 	}
 }

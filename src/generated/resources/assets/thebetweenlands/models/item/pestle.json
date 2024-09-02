@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "thebetweenlands:item/pestle_animated",
+      "predicate": {
+        "thebetweenlands:active": 1.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "thebetweenlands:item/pestle"
+  }
+}

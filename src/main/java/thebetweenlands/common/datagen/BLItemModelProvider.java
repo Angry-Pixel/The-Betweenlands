@@ -362,6 +362,19 @@ public class BLItemModelProvider extends ItemModelProvider {
 			.parent(new ModelFile.UncheckedModelFile("item/generated"))
 			.texture("layer0", TheBetweenlands.prefix("item/aspect_liquid"))
 			.texture("layer1", TheBetweenlands.prefix("item/orange_dentrothyst_vial"));
+
+		this.basicItem(ItemRegistry.PESTLE).override().predicate(TheBetweenlands.prefix("active"), 1).model(this.basicItem(this.modLoc("pestle_animated")));
+		this.basicItem(ItemRegistry.LIFE_CRYSTAL)
+			.override().predicate(TheBetweenlands.prefix("remaining"), 1).model(this.basicItem(this.modLoc("life_crystal_1"))).end()
+			.override().predicate(TheBetweenlands.prefix("remaining"), 2).model(this.basicItem(this.modLoc("life_crystal_2"))).end()
+			.override().predicate(TheBetweenlands.prefix("remaining"), 3).model(this.basicItem(this.modLoc("life_crystal_3"))).end()
+			.override().predicate(TheBetweenlands.prefix("remaining"), 4).model(this.basicItem(this.modLoc("life_crystal_4")));
+
+		this.basicItem(ItemRegistry.LIFE_CRYSTAL_FRAGMENT)
+			.override().predicate(TheBetweenlands.prefix("remaining"), 1).model(this.basicItem(this.modLoc("life_crystal_fragment_1"))).end()
+			.override().predicate(TheBetweenlands.prefix("remaining"), 2).model(this.basicItem(this.modLoc("life_crystal_fragment_2"))).end()
+			.override().predicate(TheBetweenlands.prefix("remaining"), 3).model(this.basicItem(this.modLoc("life_crystal_fragment_3"))).end()
+			.override().predicate(TheBetweenlands.prefix("remaining"), 4).model(this.basicItem(this.modLoc("life_crystal_fragment_4")));
 	}
 
 	public ItemModelBuilder basicItem(DeferredItem<? extends Item> item) {

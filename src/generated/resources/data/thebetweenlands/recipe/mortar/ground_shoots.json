@@ -1,0 +1,10 @@
+{
+  "type": "thebetweenlands:mortar_grind",
+  "input": {
+    "item": "thebetweenlands:shoot_leaves"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:ground_shoots"
+  }
+}

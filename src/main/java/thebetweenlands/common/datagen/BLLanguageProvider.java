@@ -1082,6 +1082,10 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.COOKED_OLM_EGG, "Baked Olm Egg Cluster");
 		this.addItem(ItemRegistry.OLMLETTE, "Olmlette");
 		this.addItem(ItemRegistry.SILK_GRUB, "Silk Grub");
+		this.addItem(ItemRegistry.LIFE_CRYSTAL, "Life Crystal");
+		this.addItem(ItemRegistry.LIFE_CRYSTAL_FRAGMENT, "Life Crystal Fragment");
+		this.add("item.thebetweenlands.life_crystal.remaining", "%s%% remaining");
+
 		this.addItem(ItemRegistry.BONE_HELMET, "Bone Helmet");
 		this.addItem(ItemRegistry.BONE_CHESTPLATE, "Bone Chestplate");
 		this.addItem(ItemRegistry.BONE_LEGGINGS, "Bone Leggings");
@@ -1107,6 +1111,10 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.MARSH_RUNNER_BOOTS, "Boots of the Marsh Runner");
 
 		this.addItem(ItemRegistry.BONE_AXE, "Bone Axe");
+		this.addItem(ItemRegistry.PESTLE, "Pestle");
+		this.add("item.thebetweenlands.pestle.desc", "Place Pestle in Mortar");
+		this.add("item.thebetweenlands.pestle.remaining", "%d%% Remaining: %d more uses.");
+
 		this.addItem(ItemRegistry.WEEDWOOD_FISHING_ROD, "Weedwood Fishing Rod");
 		this.add("item.thebetweenlands.weedwood_fishing_rod.broken", "%s is broken\nand needs a new line and float.");
 		this.add("item.thebetweenlands.weedwood_fishing_rod.baited", "Has Worm: %s");

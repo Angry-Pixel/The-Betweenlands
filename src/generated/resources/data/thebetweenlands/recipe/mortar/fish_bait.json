@@ -1,0 +1,15 @@
+{
+  "type": "thebetweenlands:mortar_grind",
+  "input": [
+    {
+      "item": "thebetweenlands:tiny_sludge_worm"
+    },
+    {
+      "item": "thebetweenlands:tiny_sludge_worm_helper"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:fish_bait"
+  }
+}

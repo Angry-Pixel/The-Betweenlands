@@ -1,0 +1,10 @@
+{
+  "type": "thebetweenlands:mortar_grind",
+  "input": {
+    "item": "thebetweenlands:marsh_marigold_flower_drop"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:ground_marsh_marigold"
+  }
+}

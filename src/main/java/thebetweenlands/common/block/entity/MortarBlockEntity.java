@@ -5,35 +5,55 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Unit;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.api.recipes.MortarRecipe;
+import thebetweenlands.common.inventory.MortarMenu;
 import thebetweenlands.common.items.LifeCrystalItem;
 import thebetweenlands.common.registries.*;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 
 public class MortarBlockEntity extends BaseContainerBlockEntity {
 
 	public int progress;
-	public boolean hasPestle;
-	public boolean hasCrystal;
 	public boolean manualGrinding = false;
 	public float crystalVelocity;
 	public float crystalRotation;
 	public int itemBob;
-	public boolean countUp = true;
 	private NonNullList<ItemStack> items = NonNullList.withSize(4, ItemStack.EMPTY);
+	public final ContainerData data = new ContainerData() {
+		public int get(int index) {
+			return MortarBlockEntity.this.progress;
+		}
+
+		public void set(int index, int value) {
+			if (index == 0) {
+				MortarBlockEntity.this.progress = value;
+			}
+		}
+
+		public int getCount() {
+			return 1;
+		}
+	};
+	private final RecipeManager.CachedCheck<SingleRecipeInput, MortarRecipe> quickCheck = RecipeManager.createCheck(RecipeRegistry.MORTAR_RECIPE.get());
 
 	public MortarBlockEntity(BlockPos pos, BlockState state) {
 		super(BlockEntityRegistry.MORTAR.get(), pos, state);
@@ -41,7 +61,7 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 
 	public static void tick(Level level, BlockPos pos, BlockState state, MortarBlockEntity entity) {
 		if (level.isClientSide()) {
-			if (entity.hasCrystal) {
+			if (entity.isCrystalInstalled()) {
 				entity.crystalVelocity -= Math.signum(entity.crystalVelocity) * 0.05F;
 				entity.crystalRotation += entity.crystalVelocity;
 				if (entity.crystalRotation >= 360.0F)
@@ -50,16 +70,7 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 					entity.crystalRotation += 360.0F;
 				if (Math.abs(entity.crystalVelocity) <= 1.0F && level.getRandom().nextInt(15) == 0)
 					entity.crystalVelocity = level.getRandom().nextFloat() * 18.0F - 9.0F;
-				if (entity.countUp && entity.itemBob <= 20) {
-					entity.itemBob++;
-					if (entity.itemBob == 20)
-						entity.countUp = false;
-				}
-				if (!entity.countUp && entity.itemBob >= 0) {
-					entity.itemBob--;
-					if (entity.itemBob == 0)
-						entity.countUp = true;
-				}
+				entity.itemBob++;
 			}
 
 			if (entity.progress > 0 && entity.progress < 84) {
@@ -72,9 +83,9 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 		boolean validRecipe = false;
 		boolean outputFull = entity.outputIsFull();
 
-		if (entity.pestleInstalled()) {
+		if (entity.isPestleInstalled()) {
 			SingleRecipeInput input = new SingleRecipeInput(entity.getItem(0));
-			Optional<RecipeHolder<MortarRecipe>> holder = level.getRecipeManager().getRecipeFor(RecipeRegistry.MORTAR_RECIPE.get(), input, level);
+			Optional<RecipeHolder<MortarRecipe>> holder = entity.quickCheck.getRecipeFor(input, level);
 
 			if (holder.isPresent()) {
 				MortarRecipe recipe = holder.get().value();
@@ -83,7 +94,7 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 
 				outputFull &= !replacesOutput;
 
-				if ((entity.isCrystalInstalled() && entity.getItem(3).getDamageValue() < entity.getItem(3).getMaxDamage()) || entity.manualGrinding) {
+				if ((entity.isCrystalInstalled() || entity.manualGrinding)) {
 					if (!output.isEmpty() && (replacesOutput || entity.getItem(2).isEmpty() || (ItemStack.isSameItemSameComponents(entity.getItem(2), output) && entity.getItem(2).getCount() + output.getCount() <= output.getMaxStackSize()))) {
 						validRecipe = true;
 
@@ -91,17 +102,14 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 
 						if (entity.progress == 1) {
 							level.playSound(null, pos, SoundRegistry.GRIND.get(), SoundSource.BLOCKS, 1F, 1F);
-
-							//Makes sure client knows that new grinding cycle has started
-							level.sendBlockUpdated(pos, state, state, 2);
 						}
 
 						if (entity.progress == 64 || entity.progress == 84) {
-							level.playSound(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.GRASS_BREAK, SoundSource.BLOCKS, 0.3F, 1F);
-							level.playSound(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.STONE_BREAK, SoundSource.BLOCKS, 0.3F, 1F);
+							level.playSound(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.GRASS_BREAK, SoundSource.BLOCKS, 0.3F, 1.0F);
+							level.playSound(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.STONE_BREAK, SoundSource.BLOCKS, 0.3F, 1.0F);
 						}
 
-						if (!entity.getItem(1).isEmpty())
+						if (entity.isPestleInstalled())
 							entity.getItem(1).set(DataComponentRegistry.PESTLE_ACTIVE, Unit.INSTANCE);
 
 						if (entity.progress > 84) {
@@ -119,14 +127,13 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 							entity.getItem(1).setDamageValue(entity.getItem(1).getDamageValue() + 1);
 
 							if (!entity.manualGrinding)
-								entity.getItem(3).setDamageValue(entity.getItem(3).getDamageValue() + 1);
+								entity.getItem(3).setDamageValue(entity.getItem(1).getDamageValue() + 1);
 
 							entity.progress = 0;
 							entity.manualGrinding = false;
 
 							if (entity.getItem(1).getDamageValue() >= entity.getItem(1).getMaxDamage()) {
 								entity.setItem(1, ItemStack.EMPTY);
-								entity.hasPestle = false;
 							}
 
 							if (!entity.getItem(1).isEmpty())
@@ -138,19 +145,9 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 				}
 			}
 		}
+
 		if (entity.progress > 0) {
 			entity.setChanged();
-		}
-		if (entity.pestleInstalled()) {
-			if (!entity.hasPestle) {
-				entity.hasPestle = true;
-				level.sendBlockUpdated(pos, state, state, 2);
-			}
-		} else {
-			if (entity.hasPestle) {
-				entity.hasPestle = false;
-				level.sendBlockUpdated(pos, state, state, 2);
-			}
 		}
 
 		if (!validRecipe || entity.getItem(0).isEmpty() || entity.getItem(1).isEmpty() || outputFull) {
@@ -159,7 +156,6 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 
 			if (entity.progress > 0) {
 				entity.progress = 0;
-				level.sendBlockUpdated(pos, state, state, 2);
 				entity.setChanged();
 			}
 		}
@@ -168,31 +164,19 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 				entity.getItem(1).remove(DataComponentRegistry.PESTLE_ACTIVE);
 			entity.progress = 0;
 			entity.setChanged();
-			level.sendBlockUpdated(pos, state, state, 2);
-		}
-		if (entity.isCrystalInstalled()) {
-			if (!entity.hasCrystal) {
-				entity.hasCrystal = true;
-				level.sendBlockUpdated(pos, state, state, 2);
-			}
-		} else {
-			if (entity.hasCrystal) {
-				entity.hasCrystal = false;
-				level.sendBlockUpdated(pos, state, state, 2);
-			}
 		}
 	}
 
-	public boolean pestleInstalled() {
-		return !this.getItem(1).isEmpty() && this.getItem(1).is(ItemRegistry.PESTLE);
+	public boolean isPestleInstalled() {
+		return this.getItem(1).is(ItemRegistry.PESTLE);
 	}
 
 	public boolean isCrystalInstalled() {
-		return !this.getItem(3).isEmpty() && this.getItem(3).getItem() instanceof LifeCrystalItem && this.getItem(3).getDamageValue() <= this.getItem(3).getMaxDamage();
+		return this.getItem(3).getItem() instanceof LifeCrystalItem && this.getItem(3).getDamageValue() <= this.getItem(3).getMaxDamage();
 	}
 
 	private boolean outputIsFull() {
-		return !this.getItem(2).isEmpty() && this.getItem(2).getCount() >= this.getMaxStackSize();
+		return this.getItem(2).getCount() >= this.getMaxStackSize();
 	}
 
 	@Override
@@ -210,10 +194,9 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 		this.items = items;
 	}
 
-	//TODO
 	@Override
 	protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
-		return null;
+		return new MortarMenu(containerId, inventory, this, this.data);
 	}
 
 	@Override
@@ -226,8 +209,6 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 		super.saveAdditional(tag, registries);
 		ContainerHelper.saveAllItems(tag, this.items, registries);
 		tag.putInt("progress", this.progress);
-		tag.putBoolean("has_pestle", this.hasPestle);
-		tag.putBoolean("has_crystal", this.hasCrystal);
 		tag.putBoolean("manual_grinding", this.manualGrinding);
 	}
 
@@ -237,8 +218,25 @@ public class MortarBlockEntity extends BaseContainerBlockEntity {
 		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(tag, this.items, registries);
 		this.progress = tag.getInt("progress");
-		this.hasPestle = tag.getBoolean("has_pestle");
-		this.hasCrystal = tag.getBoolean("has_crystal");
 		this.manualGrinding = tag.getBoolean("manual_grinding");
+	}
+
+	@Override
+	public void setChanged() {
+		super.setChanged();
+		if (this.getLevel() != null) {
+			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
+		}
+	}
+
+	@Nullable
+	@Override
+	public Packet<ClientGamePacketListener> getUpdatePacket() {
+		return ClientboundBlockEntityDataPacket.create(this);
+	}
+
+	@Override
+	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
+		return this.saveCustomOnly(registries);
 	}
 }

@@ -1,0 +1,10 @@
+{
+  "type": "thebetweenlands:mortar_grind",
+  "input": {
+    "item": "thebetweenlands:cave_moss_clump"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:ground_cave_moss"
+  }
+}

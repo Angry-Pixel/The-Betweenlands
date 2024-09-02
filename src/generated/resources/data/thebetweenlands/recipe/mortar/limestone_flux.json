@@ -1,0 +1,15 @@
+{
+  "type": "thebetweenlands:mortar_grind",
+  "input": [
+    {
+      "item": "thebetweenlands:limestone"
+    },
+    {
+      "item": "thebetweenlands:polished_limestone"
+    }
+  ],
+  "result": {
+    "count": 3,
+    "id": "thebetweenlands:limestone_flux"
+  }
+}

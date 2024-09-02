@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:item/generated",
+  "overrides": [
+    {
+      "model": "thebetweenlands:item/life_crystal_1",
+      "predicate": {
+        "thebetweenlands:remaining": 1.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/life_crystal_2",
+      "predicate": {
+        "thebetweenlands:remaining": 2.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/life_crystal_3",
+      "predicate": {
+        "thebetweenlands:remaining": 3.0
+      }
+    },
+    {
+      "model": "thebetweenlands:item/life_crystal_4",
+      "predicate": {
+        "thebetweenlands:remaining": 4.0
+      }
+    }
+  ],
+  "textures": {
+    "layer0": "thebetweenlands:item/life_crystal"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "type": "thebetweenlands:mortar_grind",
+  "input": [
+    {
+      "item": "thebetweenlands:skull_mask"
+    },
+    {
+      "item": "thebetweenlands:wights_bane"
+    },
+    {
+      "item": "thebetweenlands:sludge_slicer"
+    },
+    {
+      "item": "thebetweenlands:critter_cruncher"
+    },
+    {
+      "item": "thebetweenlands:hag_hacker"
+    },
+    {
+      "item": "thebetweenlands:voodoo_doll"
+    },
+    {
+      "item": "thebetweenlands:swift_pick"
+    },
+    {
+      "item": "thebetweenlands:magic_item_magnet"
+    },
+    {
+      "item": "thebetweenlands:ring_of_dispersion"
+    },
+    {
+      "item": "thebetweenlands:ring_of_ascent"
+    },
+    {
+      "item": "thebetweenlands:ring_of_power"
+    },
+    {
+      "item": "thebetweenlands:ring_of_gathering"
+    },
+    {
+      "item": "thebetweenlands:ring_of_recruitment"
+    },
+    {
+      "item": "thebetweenlands:ring_of_summoning"
+    },
+    {
+      "item": "thebetweenlands:gem_singer"
+    },
+    {
+      "item": "thebetweenlands:mist_staff"
+    },
+    {
+      "item": "thebetweenlands:shadow_staff"
+    },
+    {
+      "item": "thebetweenlands:amulet_socket"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:loot_scraps"
+  }
+}

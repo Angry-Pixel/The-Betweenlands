@@ -9,8 +9,13 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import org.lwjgl.BufferUtils;
@@ -23,6 +28,19 @@ public class RenderUtils {
 	private static int renderTickCounter = 0;
 	public static boolean framebufferSupported;
 	public static FboMode framebufferType;
+
+	public static void drawGhostItemAtSlot(GuiGraphics graphics, ItemStack stack, Slot slot) {
+		graphics.renderFakeItem(stack, slot.x, slot.y);
+
+		// draw 50% gray rectangle over the item
+		RenderSystem.disableDepthTest();
+		graphics.pose().pushPose();
+		graphics.pose().translate(0.0D, 0.0D, 200.0D);
+		graphics.fill(slot.x, slot.y, slot.x + 16, slot.y + 16, 0x9f8b8b8b);
+		graphics.pose().popPose();
+		RenderSystem.enableDepthTest();
+		graphics.renderItemDecorations(Minecraft.getInstance().font, stack, slot.x, slot.y);
+	}
 
 	public static int getRenderTickCounter() {
 		return renderTickCounter;
@@ -84,7 +102,7 @@ public class RenderUtils {
 		FramebufferStack.State state = null;
 		try {
 			state = FramebufferStack.push();
-			
+
 			fbo.bindWrite(false);
 
 			GL11.glReadBuffer(GL11.GL_FRONT);

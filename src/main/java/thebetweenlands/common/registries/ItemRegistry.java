@@ -154,7 +154,8 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> CRIMSON_MIDDLE_GEM = ITEMS.register("crimson_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
 	public static final DeferredItem<Item> AQUA_MIDDLE_GEM = ITEMS.register("aqua_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
 	public static final DeferredItem<Item> GREEN_MIDDLE_GEM = ITEMS.register("green_middle_gem", () -> new MiddleGemItem(new Item.Properties()));
-	public static final DeferredItem<Item> LIFE_CRYSTAL = ITEMS.register("life_crystal", () -> new LifeCrystalItem(true, new Item.Properties().stacksTo(1).durability(128)));
+	public static final DeferredItem<Item> LIFE_CRYSTAL = ITEMS.register("life_crystal", () -> new LifeCrystalItem(true, new Item.Properties().setNoRepair().stacksTo(1).durability(128)));
+	public static final DeferredItem<Item> LIFE_CRYSTAL_FRAGMENT = ITEMS.register("life_crystal_fragment", () -> new LifeCrystalItem(false, new Item.Properties().setNoRepair().stacksTo(1).durability(64)));
 	public static final DeferredItem<Item> PYRAD_FLAME = ITEMS.register("pyrad_flame", () -> new Item(new Item.Properties()));
 	//critters :)
 	public static final DeferredItem<Item> SLUDGE_WORM_EGG_SAC = ITEMS.register("sludge_worm_egg_sac", () -> new Item(new Item.Properties().stacksTo(1)));
@@ -250,7 +251,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> CHIROMAW_BARB = ITEMS.register("chiromaw_barb", () -> new Item(new Item.Properties()));
 	//bows
 	//ancient weapons
-	public static final DeferredItem<Item> PESTLE = ITEMS.register("pestle", () -> new Item(new Item.Properties().stacksTo(1)));
+	public static final DeferredItem<Item> PESTLE = ITEMS.register("pestle", () -> new PestleItem(new Item.Properties().stacksTo(1).durability(128)));
 	public static final DeferredItem<Item> NET = ITEMS.register("net", () -> new NetItem(new Item.Properties().stacksTo(1).durability(32)));
 	//pouches
 	//caving rope
@@ -312,7 +313,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> FILLED_AMATE_MAP = ITEMS.register("filled_amate_map", () -> new AmateMapItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
 	public static final DeferredItem<Item> BONE_WAYFINDER = ITEMS.register("bone_wayfinder", () -> new Item(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> MAGIC_ITEM_MAGNET = ITEMS.register("magic_item_magnet", () -> new Item(new Item.Properties().stacksTo(1)));
-	//gem singer
+	public static final DeferredItem<Item> GEM_SINGER = ITEMS.register("gem_singer", () -> new GemSingerItem(new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> SNOT_POD = ITEMS.register("snot_pod", () -> new Item(new Item.Properties().stacksTo(1)));
 
 	public static final DeferredItem<Item> GROUND_LEAF = ITEMS.register("ground_leaf", () -> new Item(new Item.Properties()));

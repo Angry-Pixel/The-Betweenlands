@@ -1,0 +1,15 @@
+{
+  "type": "thebetweenlands:mortar_grind",
+  "input": [
+    {
+      "item": "thebetweenlands:giant_root"
+    },
+    {
+      "item": "thebetweenlands:tangled_root"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:ground_roots"
+  }
+}

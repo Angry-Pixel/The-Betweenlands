@@ -1,0 +1,10 @@
+{
+  "type": "thebetweenlands:mortar_grind",
+  "input": {
+    "item": "thebetweenlands:swamp_kelp"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:ground_swamp_kelp"
+  }
+}

@@ -34,6 +34,7 @@ public class BLModelLayers {
 	public static final ModelLayerLocation LOOT_URN_2 = register("loot_urn_2");
 	public static final ModelLayerLocation LOOT_URN_3 = register("loot_urn_3");
 	public static final ModelLayerLocation MOB_SPAWNER_CRYSTAL = register("mob_spawner_crystal");
+	public static final ModelLayerLocation MORTAR = register("mortar");
 	public static final ModelLayerLocation OFFERING_TABLE = register("offering_table");
 	public static final ModelLayerLocation PURIFIER = register("purifier");
 	public static final ModelLayerLocation ROOTMAN_SIMULACRUM_1 = register("rootman_simulacrum_1");
