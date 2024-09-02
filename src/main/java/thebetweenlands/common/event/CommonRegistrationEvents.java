@@ -46,6 +46,13 @@ import thebetweenlands.common.handler.HandlerEvents;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.network.*;
 import thebetweenlands.common.network.clientbound.*;
+import thebetweenlands.common.network.clientbound.attachment.UpdateDecayDataPacket;
+import thebetweenlands.common.network.clientbound.attachment.UpdateDruidAltarProgressPacket;
+import thebetweenlands.common.network.clientbound.attachment.UpdateFoodSicknessPacket;
+import thebetweenlands.common.network.clientbound.attachment.UpdateGemsPacket;
+import thebetweenlands.common.network.clientbound.attachment.UpdateMudWalkerPacket;
+import thebetweenlands.common.network.clientbound.attachment.UpdateRotSmellPacket;
+import thebetweenlands.common.network.serverbound.ChopFishPacket;
 import thebetweenlands.common.registries.*;
 
 import java.util.concurrent.CompletableFuture;

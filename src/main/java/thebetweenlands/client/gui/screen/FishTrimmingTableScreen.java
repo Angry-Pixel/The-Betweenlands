@@ -14,7 +14,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.FishTrimmingTableBlockEntity;
 import thebetweenlands.common.inventory.FishTrimmingTableMenu;
-import thebetweenlands.common.network.ChopFishPacket;
+import thebetweenlands.common.network.serverbound.ChopFishPacket;
 
 public class FishTrimmingTableScreen extends AbstractContainerScreen<FishTrimmingTableMenu> {
 

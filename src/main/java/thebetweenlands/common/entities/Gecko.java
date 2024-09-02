@@ -21,7 +21,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.entities.ai.goals.HideFromRainGoal;
-import thebetweenlands.common.network.WeedwoodBushRustlePacket;
+import thebetweenlands.common.network.clientbound.WeedwoodBushRustlePacket;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;

@@ -17,7 +17,7 @@ import net.minecraft.world.level.saveddata.maps.*;
 import javax.annotation.Nullable;
 
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.network.AmateMapPacket;
+import thebetweenlands.common.network.clientbound.AmateMapPacket;
 import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.util.ExtraCodecs;
 

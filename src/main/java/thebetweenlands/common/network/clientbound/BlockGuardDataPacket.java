@@ -1,5 +1,6 @@
-package thebetweenlands.common.network;
+package thebetweenlands.common.network.clientbound;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -12,13 +13,17 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 
-public record ClearBlockGuardPacket(String id) implements CustomPacketPayload {
+public record BlockGuardDataPacket(String id, CompoundTag data) implements CustomPacketPayload {
 
-	public static final Type<ClearBlockGuardPacket> TYPE = new Type<>(TheBetweenlands.prefix("clear_block_guard"));
-	public static final StreamCodec<RegistryFriendlyByteBuf, ClearBlockGuardPacket> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.STRING_UTF8, ClearBlockGuardPacket::id, ClearBlockGuardPacket::new);
+	public static final Type<BlockGuardDataPacket> TYPE = new Type<>(TheBetweenlands.prefix("block_guard_data"));
+	public static final StreamCodec<RegistryFriendlyByteBuf, BlockGuardDataPacket> STREAM_CODEC = StreamCodec.composite(
+		ByteBufCodecs.STRING_UTF8, BlockGuardDataPacket::id,
+		ByteBufCodecs.COMPOUND_TAG, BlockGuardDataPacket::data,
+		BlockGuardDataPacket::new);
 
-	public ClearBlockGuardPacket(LocationStorage location) {
-		this(location.getID().getStringID());
+
+	public BlockGuardDataPacket(LocationStorage location) {
+		this(location.getID().getStringID(), location.writeGuardNBT(new CompoundTag()));
 	}
 
 	@Override
@@ -26,15 +31,13 @@ public record ClearBlockGuardPacket(String id) implements CustomPacketPayload {
 		return TYPE;
 	}
 
-	public static void handle(ClearBlockGuardPacket packet, IPayloadContext context) {
+	public static void handle(BlockGuardDataPacket packet, IPayloadContext context) {
 		context.enqueueWork(() -> {
 			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.get(context.player().level());
 			if (worldStorage != null) {
 				ILocalStorage storage = worldStorage.getLocalStorageHandler().getLocalStorage(StorageID.fromString(packet.id()));
 				if (storage instanceof LocationGuarded location) {
-					if (location.getGuard() != null) {
-						location.getGuard().clear(context.player().level());
-					}
+					location.readGuardNBT(packet.data());
 				}
 			}
 		});

@@ -1,4 +1,4 @@
-package thebetweenlands.common.network.clientbound;
+package thebetweenlands.common.network.clientbound.attachment;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;

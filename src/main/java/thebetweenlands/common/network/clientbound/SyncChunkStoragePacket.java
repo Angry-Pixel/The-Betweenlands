@@ -1,4 +1,4 @@
-package thebetweenlands.common.network;
+package thebetweenlands.common.network.clientbound;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -15,16 +15,16 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.ExtraCodecs;
 
-public record SyncLocalStorageReferencesPacket(CompoundTag tag, ChunkPos pos) implements CustomPacketPayload {
+public record SyncChunkStoragePacket(CompoundTag tag, ChunkPos pos) implements CustomPacketPayload {
 
-	public static final Type<SyncLocalStorageReferencesPacket> TYPE = new Type<>(TheBetweenlands.prefix("sync_local_storage_refs"));
-	public static final StreamCodec<RegistryFriendlyByteBuf, SyncLocalStorageReferencesPacket> STREAM_CODEC = StreamCodec.composite(
-		ByteBufCodecs.COMPOUND_TAG, SyncLocalStorageReferencesPacket::tag,
-		ExtraCodecs.CHUNK_POS_CODEC, SyncLocalStorageReferencesPacket::pos,
-		SyncLocalStorageReferencesPacket::new);
+	public static final Type<SyncChunkStoragePacket> TYPE = new Type<>(TheBetweenlands.prefix("sync_chunk_storage"));
+	public static final StreamCodec<RegistryFriendlyByteBuf, SyncChunkStoragePacket> STREAM_CODEC = StreamCodec.composite(
+		ByteBufCodecs.COMPOUND_TAG, SyncChunkStoragePacket::tag,
+		ExtraCodecs.CHUNK_POS_CODEC, SyncChunkStoragePacket::pos,
+		SyncChunkStoragePacket::new);
 
-	public SyncLocalStorageReferencesPacket(IChunkStorage storage) {
-		this(storage.writeLocalStorageReferences(new CompoundTag()), storage.getChunk().getPos());
+	public SyncChunkStoragePacket(IChunkStorage storage) {
+		this(storage.writeToNBT(new CompoundTag(), true), storage.getChunk().getPos());
 	}
 
 	@Override
@@ -32,17 +32,15 @@ public record SyncLocalStorageReferencesPacket(CompoundTag tag, ChunkPos pos) im
 		return TYPE;
 	}
 
-	public static void handle(SyncLocalStorageReferencesPacket packet, IPayloadContext context) {
+	public static void handle(SyncChunkStoragePacket packet, IPayloadContext context) {
 		context.enqueueWork(() -> {
 			Level level = context.player().level();
-			ChunkAccess chunk = level.getChunkSource().getChunkNow(packet.pos().x, packet.pos().z);
-			if (chunk != null) {
+			ChunkAccess chunk = level.getChunk(packet.pos().x, packet.pos().z);
+			if(chunk != null) {
 				IWorldStorage worldStorage = BetweenlandsWorldStorage.get(level);
 				if (worldStorage != null) {
 					IChunkStorage chunkStorage = worldStorage.getChunkStorage(chunk);
-					if (chunkStorage != null) {
-						chunkStorage.readLocalStorageReferences(packet.tag);
-					}
+					chunkStorage.readFromNBT(packet.tag, true);
 				}
 			}
 		});

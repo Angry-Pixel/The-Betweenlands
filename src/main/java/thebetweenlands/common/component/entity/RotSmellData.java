@@ -7,7 +7,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
-import thebetweenlands.common.network.clientbound.UpdateRotSmellPacket;
+import thebetweenlands.common.network.clientbound.attachment.UpdateRotSmellPacket;
 import thebetweenlands.common.registries.AttachmentRegistry;
 
 public class RotSmellData {

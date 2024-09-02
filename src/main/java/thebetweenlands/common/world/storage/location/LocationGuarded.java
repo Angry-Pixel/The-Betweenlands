@@ -9,9 +9,9 @@ import thebetweenlands.api.storage.TickableStorage;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
-import thebetweenlands.common.network.BlockGuardDataPacket;
-import thebetweenlands.common.network.ChangeBlockGuardSectionPacket;
-import thebetweenlands.common.network.ClearBlockGuardPacket;
+import thebetweenlands.common.network.clientbound.BlockGuardDataPacket;
+import thebetweenlands.common.network.clientbound.ChangeBlockGuardSectionPacket;
+import thebetweenlands.common.network.clientbound.ClearBlockGuardPacket;
 import thebetweenlands.common.world.storage.location.guard.BlockLocationGuard;
 
 import java.util.HashSet;

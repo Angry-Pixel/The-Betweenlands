@@ -17,7 +17,8 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.network.PacketDistributor;
 import javax.annotation.Nullable;
-import thebetweenlands.common.network.SoundRipplePacket;
+
+import thebetweenlands.common.network.clientbound.SoundRipplePacket;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsChunkStorage;

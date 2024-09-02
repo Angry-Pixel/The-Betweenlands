@@ -6,7 +6,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.network.ShockParticlePacket;
+import thebetweenlands.common.network.clientbound.ShockParticlePacket;
 
 public class ElixirShocked extends ElixirEffect {
 

@@ -20,7 +20,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.api.capability.IDecayData;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.network.clientbound.UpdateDecayDataPacket;
+import thebetweenlands.common.network.clientbound.attachment.UpdateDecayDataPacket;
 import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.common.registries.EnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;

@@ -13,7 +13,7 @@ import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.capability.templates.FluidTank;
 import net.neoforged.neoforge.network.PacketDistributor;
-import thebetweenlands.common.network.InfestWeedwoodBushPacket;
+import thebetweenlands.common.network.clientbound.InfestWeedwoodBushPacket;
 import thebetweenlands.common.registries.*;
 
 public class GrubHubBlockEntity extends NoMenuContainerBlockEntity implements IFluidHandler {

@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.client.BetweenlandsClient;
 import thebetweenlands.common.component.entity.FoodSicknessData;
-import thebetweenlands.common.network.ShowFoodSicknessPacket;
+import thebetweenlands.common.network.clientbound.ShowFoodSicknessPacket;
 import thebetweenlands.common.registries.AttachmentRegistry;
 import thebetweenlands.util.FoodSickness;
 
