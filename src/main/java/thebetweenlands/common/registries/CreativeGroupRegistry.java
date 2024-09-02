@@ -754,9 +754,9 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.CRIMSON_MIDDLE_GEM);
 			output.accept(ItemRegistry.AQUA_MIDDLE_GEM);
 			output.accept(ItemRegistry.GREEN_MIDDLE_GEM);
-			//life crystal
-			//life crystal fragment
-			//pyrad flame
+			output.accept(ItemRegistry.LIFE_CRYSTAL);
+			output.accept(ItemRegistry.LIFE_CRYSTAL_FRAGMENT);
+			output.accept(ItemRegistry.PYRAD_FLAME);
 			//dragonfly
 			//firefly
 			//olm
@@ -777,9 +777,9 @@ public class CreativeGroupRegistry {
 			//lightning chiromaw
 			output.accept(ItemRegistry.SHIMMER_STONE);
 			//tarminion
-			//sludge ball
+			output.accept(ItemRegistry.SLUDGE_BALL);
 			//rope
-			//angry pebble
+			output.accept(ItemRegistry.ANGRY_PEBBLE);
 			output.accept(ItemRegistry.OCTINE_INGOT);
 			output.accept(ItemRegistry.SAP_SPIT);
 			//shambler tongue
@@ -787,15 +787,30 @@ public class CreativeGroupRegistry {
 			//lurker skin patch
 			//draeton balloon
 			//draeton burner
-			//draeton
+			output.accept(ItemRegistry.DRAETON);
 			//draeton furnace
 			//draeton anchor
 			//draeton crafting
 			//weedwood rowboat lantern
 			output.accept(ItemRegistry.AMATE_NAME_TAG);
-			//dyes
+			output.accept(ItemRegistry.DULL_LAVENDER_DYE);
+			output.accept(ItemRegistry.MAROON_DYE);
+			output.accept(ItemRegistry.SHADOW_GREEN_DYE);
+			output.accept(ItemRegistry.CAMELOT_MAGENTA_DYE);
+			output.accept(ItemRegistry.SAFFRON_DYE);
+			output.accept(ItemRegistry.CARIBBEAN_GREEN_DYE);
+			output.accept(ItemRegistry.VIVID_TANGERINE_DYE);
+			output.accept(ItemRegistry.CHAMPAGNE_DYE);
+			output.accept(ItemRegistry.RAISIN_BLACK_DYE);
+			output.accept(ItemRegistry.SUSHI_GREEN_DYE);
+			output.accept(ItemRegistry.ELM_CYAN_DYE);
+			output.accept(ItemRegistry.CADMIUM_GREEN_DYE);
+			output.accept(ItemRegistry.LAVENDER_BLUE_DYE);
+			output.accept(ItemRegistry.BROWN_RUST_DYE);
+			output.accept(ItemRegistry.MIDNIGHT_PURPLE_DYE);
+			output.accept(ItemRegistry.PEWTER_GREY_DYE);
 			//frames
-			//thorax
+			output.accept(ItemRegistry.PHEROMONE_THORAX);
 			output.accept(ItemRegistry.SILK_FILTER);
 			output.accept(ItemRegistry.MOSS_FILTER);
 			//silky pebble
@@ -827,7 +842,10 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.ANCIENT_CHESTPLATE);
 			output.accept(ItemRegistry.ANCIENT_LEGGINGS);
 			output.accept(ItemRegistry.ANCIENT_BOOTS);
-			//amphibious armor
+			output.accept(ItemRegistry.AMPHIBIOUS_HELMET);
+			output.accept(ItemRegistry.AMPHIBIOUS_CHESTPLATE);
+			output.accept(ItemRegistry.AMPHIBIOUS_LEGGINGS);
+			output.accept(ItemRegistry.AMPHIBIOUS_BOOTS);
 			output.accept(ItemRegistry.RUBBER_BOOTS);
 			output.accept(ItemRegistry.MARSH_RUNNER_BOOTS);
 			output.accept(ItemRegistry.WEEDWOOD_SWORD);
@@ -859,7 +877,7 @@ public class CreativeGroupRegistry {
 			//sickle
 			//shockwave sword
 			//arrows x6
-			//chiromaw barb
+			output.accept(ItemRegistry.CHIROMAW_BARB);
 			//weedwood bow
 			//predator bow
 			//ancient greatsword
@@ -867,7 +885,7 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.PESTLE);
 			output.accept(ItemRegistry.NET);
 			//lurker skin pouches
-			//volarkite
+			output.accept(ItemRegistry.VOLARKITE);
 			//slingshot
 			output.accept(ItemRegistry.WEEDWOOD_FISHING_ROD);
 			//weedwood buckets
@@ -922,21 +940,25 @@ public class CreativeGroupRegistry {
 			output.accept(ItemRegistry.RECORD_STUCK_IN_THE_MUD);
 			output.accept(ItemRegistry.RECORD_WANDERING_WISPS);
 			output.accept(ItemRegistry.RECORD_WATERLOGGED);
-			//bark amulet
+			output.accept(ItemRegistry.BARK_AMULET);
 			//aqua amulet
 			//crimson amulet
 			//green amulet
 			//amulet slot
-			//rings x5
 			output.accept(ItemRegistry.RING_OF_POWER);
+			output.accept(ItemRegistry.RING_OF_ASCENT);
+			output.accept(ItemRegistry.RING_OF_RECRUITMENT);
+			output.accept(ItemRegistry.RING_OF_SUMMONING);
+			output.accept(ItemRegistry.RING_OF_DISPERSION);
+			output.accept(ItemRegistry.RING_OF_GATHERING);
 			//lore scraps x10
 			//mummy bait
 			output.accept(ItemRegistry.BARK_AMULET);
 			output.accept(ItemRegistry.AMATE_MAP);
-			//bone wayfinder
+			output.accept(ItemRegistry.BONE_WAYFINDER);
 			output.accept(ItemRegistry.MAGIC_ITEM_MAGNET);
-			//gem singer
-			//rocksnot pod
+			output.accept(ItemRegistry.GEM_SINGER);
+			output.accept(ItemRegistry.SNOT_POD);
 		}).build());
 
 	// Plants tab
