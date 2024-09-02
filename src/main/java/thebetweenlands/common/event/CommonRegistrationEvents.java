@@ -53,6 +53,7 @@ import thebetweenlands.common.network.clientbound.attachment.UpdateGemsPacket;
 import thebetweenlands.common.network.clientbound.attachment.UpdateMudWalkerPacket;
 import thebetweenlands.common.network.clientbound.attachment.UpdateRotSmellPacket;
 import thebetweenlands.common.network.serverbound.ChopFishPacket;
+import thebetweenlands.common.network.serverbound.ExtendedReachAttackPacket;
 import thebetweenlands.common.registries.*;
 
 import java.util.concurrent.CompletableFuture;
@@ -182,6 +183,7 @@ public class CommonRegistrationEvents {
 		registrar.playToClient(UpdateDruidAltarProgressPacket.TYPE, UpdateDruidAltarProgressPacket.STREAM_CODEC, UpdateDruidAltarProgressPacket::handle);
 
 		registrar.playToServer(ChopFishPacket.TYPE, ChopFishPacket.STREAM_CODEC, (payload, context) -> ChopFishPacket.handle(context));
+		registrar.playToServer(ExtendedReachAttackPacket.TYPE, ExtendedReachAttackPacket.STREAM_CODEC, (payload, context) -> ExtendedReachAttackPacket.handle(payload, context));
 	}
 
 	private static void registerDataMaps(RegisterDataMapTypesEvent event) {

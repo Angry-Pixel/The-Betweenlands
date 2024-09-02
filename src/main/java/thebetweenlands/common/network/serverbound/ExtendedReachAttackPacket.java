@@ -57,8 +57,9 @@ public class ExtendedReachAttackPacket implements CustomPacketPayload {
 					List<Entity> entities = message.entityList.getEntities();
 					for(Entity entity : entities) {
 						if (entity != null && entity.isAlive()) {
-							double reach = ((IExtendedReach) heldItem.getItem()).getReach(player, heldItem);
-							if (player.isCreative() || reach * reach >= player.getEyePosition().distanceToSqr(entity.position())) {
+							double reach = extendedReach.getReach(player, heldItem);
+							// Inflation is the actual correct way to check if a player would realistically be able to reach it
+							if (player.isCreative() || entity.getBoundingBox().inflate(reach).contains(player.getEyePosition())) {
 								player.attack(entity);
 							}
 						}

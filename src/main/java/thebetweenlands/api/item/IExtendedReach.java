@@ -31,13 +31,13 @@ public interface IExtendedReach {
     }
 	
     /**
-     * Called when the item is swung, return true on the server to cancel extra attack processing
+     * Called when the item is swung, return false on the server to cancel extra attack processing
      * @param player
      * @param stack
-     * @return cancel
+     * @return false to cancel extra attack processing
      */
     default boolean onSwing(@Nonnull Player player, ItemStack stack) {
     	// Pass
-    	return false;
+    	return true;
     }
 }

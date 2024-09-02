@@ -239,7 +239,7 @@ public class ItemRegistry {
 	public static final DeferredItem<Item> VALONITE_SWORD = ITEMS.register("valonite_sword", () -> new SwordItem(ToolMaterialRegistry.VALONITE, new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> VALONITE_PICKAXE = ITEMS.register("valonite_pickaxe", () -> new PickaxeItem(ToolMaterialRegistry.VALONITE, new Item.Properties().stacksTo(1)));
 	public static final DeferredItem<Item> VALONITE_AXE = ITEMS.register("valonite_axe", () -> new AxeItem(ToolMaterialRegistry.VALONITE, new Item.Properties().stacksTo(1)));
-	public static final DeferredItem<Item> VALONITE_GREATAXE = ITEMS.register("valonite_greataxe", () -> new AxeItem(ToolMaterialRegistry.VALONITE, new Item.Properties().stacksTo(1))); // TODO
+	public static final DeferredItem<Item> VALONITE_GREATAXE = ITEMS.register("valonite_greataxe", () -> new ValoniteGreataxeItem(ToolMaterialRegistry.VALONITE, new Item.Properties().attributes(AxeItem.createAttributes(ToolMaterialRegistry.VALONITE, 5.0F, -3.0F)).stacksTo(1)));
 	public static final DeferredItem<Item> VALONITE_SHOVEL = ITEMS.register("valonite_shovel", () -> new ShovelItem(ToolMaterialRegistry.VALONITE, new Item.Properties().stacksTo(1)));
 	//shields
 	//shears

@@ -22,7 +22,10 @@ public class HandlerEvents {
 		NeoForge.EVENT_BUS.addListener(PlayerDecayHandler::syncDecayOnJoin);
 
 		//extended reach
-		NeoForge.EVENT_BUS.addListener(ExtendedReachHandler::onAttackEvent);
+		if(dist.isClient()) {
+			NeoForge.EVENT_BUS.addListener(ExtendedReachHandler::onAttackEvent);
+			NeoForge.EVENT_BUS.addListener(ExtendedReachHandler::onCrosshairRenderPost);
+		}
 
 		//elixirs
 		NeoForge.EVENT_BUS.addListener(ElixirCommonHandler::affectArrowStrength);
