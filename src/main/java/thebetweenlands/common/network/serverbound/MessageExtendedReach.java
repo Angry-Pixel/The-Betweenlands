@@ -34,7 +34,7 @@ public class MessageExtendedReach extends MessageEntity {
 			for(Entity entity : entities) {
 				if (entity != null && entity.isEntityAlive()) {
 					double reach = ((IExtendedReach) heldItem.getItem()).getReach(player, heldItem);
-					if (player.isCreative() || reach * reach >= player.getPositionEyes(1.0F).squareDistanceTo(entity.getPositionVector())) {
+					if (player.isCreative() || entity.getEntityBoundingBox().grow(entity.getCollisionBorderSize() + reach).contains(player.getPositionEyes(1.0F))) {
 						player.attackTargetEntityWithCurrentItem(entity);
 					}
 				}
