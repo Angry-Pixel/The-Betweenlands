@@ -250,9 +250,14 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach, IBigS
 		return BLMaterialRegistry.getFullRepairLifeCost(BLMaterialRegistry.TOOL_LEGEND);
 	}
 
+//	@Override
+//	public double getReach() {
+//		return 5.5;
+//	}
+	
 	@Override
-	public double getReach() {
-		return 5.5;
+	public double getReachModifier(EntityPlayer player, ItemStack stack) {
+		return 1.0F;
 	}
 
 	@Override
