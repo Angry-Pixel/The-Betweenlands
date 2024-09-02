@@ -10,6 +10,7 @@ import thebetweenlands.common.world.gen.feature.*;
 import thebetweenlands.common.world.gen.feature.config.BlockPlaceConfiguration;
 import thebetweenlands.common.world.gen.feature.config.ChanceConfiguration;
 import thebetweenlands.common.world.gen.feature.config.PebbleClusterConfiguration;
+import thebetweenlands.common.world.gen.feature.config.SimulacrumConfiguration;
 
 public class FeatureRegistry {
 
@@ -27,11 +28,13 @@ public class FeatureRegistry {
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> CAVE_POTS = FEATURES.register("cave_pots",
 		() -> new CavePotsFeature(NoneFeatureConfiguration.CODEC));
 	//Cave Thorns
-	//Deepman Simulacrum
+	public static final DeferredHolder<Feature<?>, Feature<SimulacrumConfiguration>> DEEPMAN_SIMULACRUM = FEATURES.register("deepman_simulacrum",
+		() -> new DeepmanSimulacrumFeature(SimulacrumConfiguration.CODEC));
 	//Double Plant Cluster
 	//Fluid Pool
 	//Giant Root
-	//Lake Cavern Simulacrum
+	public static final DeferredHolder<Feature<?>, Feature<SimulacrumConfiguration>> LAKE_CAVERN_SIMULACRUM = FEATURES.register("lake_cavern_simulacrum",
+		() -> new LakeCavernSimulacrumFeature(SimulacrumConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<ChanceConfiguration>> LYESTONE = FEATURES.register("lyestone",
 		() -> new LyestoneFeature(ChanceConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<BlockPlaceConfiguration>> MOSS_CLUSTER = FEATURES.register("moss_cluster",
@@ -39,11 +42,11 @@ public class FeatureRegistry {
 	public static final DeferredHolder<Feature<?>, Feature<PebbleClusterConfiguration>> PEBBLE_CLUSTER = FEATURES.register("pebble_cluster",
 		() -> new PebbleClusterFeature(PebbleClusterConfiguration.CODEC));
 	//Root Pod Roots
-	//Rootman Simulacrum
+	public static final DeferredHolder<Feature<?>, Feature<SimulacrumConfiguration>> ROOTMAN_SIMULACRUM = FEATURES.register("rootman_simulacrum",
+		() -> new RootmanSimulacrumFeature(SimulacrumConfiguration.CODEC));
 	//Roots Cluster
 	//Rotten Logs
 	//Rotten Weedwood Tree TODO: Tree feature?
-	//Simulacrum
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> SMALL_HOLLOW_LOG = FEATURES.register("small_hollow_log",
 		() -> new SmallHollowLogFeature(NoneFeatureConfiguration.CODEC));
 	//Small Spirit Tree
