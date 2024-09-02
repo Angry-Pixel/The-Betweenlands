@@ -9,6 +9,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.gen.feature.*;
 import thebetweenlands.common.world.gen.feature.config.BlockPlaceConfiguration;
 import thebetweenlands.common.world.gen.feature.config.ChanceConfiguration;
+import thebetweenlands.common.world.gen.feature.config.PebbleClusterConfiguration;
 
 public class FeatureRegistry {
 
@@ -35,7 +36,8 @@ public class FeatureRegistry {
 		() -> new LyestoneFeature(ChanceConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<BlockPlaceConfiguration>> MOSS_CLUSTER = FEATURES.register("moss_cluster",
 		() -> new MossClusterFeature(BlockPlaceConfiguration.CODEC));
-	//Pebble Cluster
+	public static final DeferredHolder<Feature<?>, Feature<PebbleClusterConfiguration>> PEBBLE_CLUSTER = FEATURES.register("pebble_cluster",
+		() -> new PebbleClusterFeature(PebbleClusterConfiguration.CODEC));
 	//Root Pod Roots
 	//Rootman Simulacrum
 	//Roots Cluster
