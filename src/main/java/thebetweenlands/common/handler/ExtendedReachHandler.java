@@ -20,13 +20,10 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.EventBusSubscriber.Bus;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import thebetweenlands.api.item.IExtendedReach;
-import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.network.serverbound.ExtendedReachAttackPacket;
 
 public class ExtendedReachHandler {
 
@@ -42,12 +39,12 @@ public class ExtendedReachHandler {
             Player player = mc.player;
             if (player != null) {
                 ItemStack stack = player.getItemInHand(InteractionHand.MAIN_HAND);
-                if (!stack.isEmpty() && stack.getItem() instanceof IExtendedReach) {
-                	((IExtendedReach)stack.getItem()).onSwing(player, stack);
+                if (!stack.isEmpty() && stack.getItem() instanceof IExtendedReach extendedReach) {
+                	extendedReach.onSwing(player, stack);
                 }
             }
         	
-//            PacketDistributor.sendToServer(new MessageExtendedReach(hitEntities));
+            PacketDistributor.sendToServer(new ExtendedReachAttackPacket(hitEntities));
         }
     }
     

@@ -30,7 +30,14 @@ public interface IExtendedReach {
     	}
     }
 	
-    default void onSwing(@Nonnull Player player, ItemStack stack) {
+    /**
+     * Called when the item is swung, return true on the server to cancel extra attack processing
+     * @param player
+     * @param stack
+     * @return cancel
+     */
+    default boolean onSwing(@Nonnull Player player, ItemStack stack) {
     	// Pass
+    	return false;
     }
 }

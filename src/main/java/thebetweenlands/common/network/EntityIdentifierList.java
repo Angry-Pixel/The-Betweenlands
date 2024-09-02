@@ -75,6 +75,14 @@ public class EntityIdentifierList {
 		entityIdentifiers = new ArrayList<EntityIdentifierList.EntityIdentifier>();
 	}
 
+	public EntityIdentifierList(List<Entity> entities) {
+		entityIdentifiers = new ArrayList<EntityIdentifierList.EntityIdentifier>(entities.size());
+		for(Entity entity : entities) {
+			if(entity != null)
+				this.addEntity(entity);
+		}
+	}
+
 	/**
 	 * Returns the number of entities in this list
 	 */
