@@ -59,7 +59,7 @@ public class ExtendedReachAttackPacket implements CustomPacketPayload {
 						if (entity != null && entity.isAlive()) {
 							double reach = extendedReach.getReach(player, heldItem);
 							// Inflation is the actual correct way to check if a player would realistically be able to reach it
-							if (player.isCreative() || entity.getBoundingBox().inflate(reach).contains(player.getEyePosition())) {
+							if (player.isCreative() || entity.getBoundingBox().inflate(entity.getPickRadius() + reach).contains(player.getEyePosition())) {
 								player.attack(entity);
 							}
 						}
