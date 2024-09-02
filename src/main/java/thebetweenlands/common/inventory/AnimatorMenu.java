@@ -10,6 +10,8 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import thebetweenlands.common.block.entity.AnimatorBlockEntity;
+import thebetweenlands.common.inventory.slot.FilteredSlot;
+import thebetweenlands.common.inventory.slot.SingleItemSlot;
 import thebetweenlands.common.items.LifeCrystalItem;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.MenuRegistry;
@@ -32,29 +34,9 @@ public class AnimatorMenu extends AbstractContainerMenu {
 		this.animator = animator;
 		this.data = data;
 
-		this.addSlot(new Slot(animator, 0, 79, 23) {
-			@Override
-			public int getMaxStackSize() {
-				return 1;
-			}
-		});
-		this.addSlot(new Slot(animator, 1, 34, 57) {
-			@Override
-			public boolean mayPlace(ItemStack stack) {
-				return stack.getItem() instanceof LifeCrystalItem;
-			}
-
-			@Override
-			public int getMaxStackSize() {
-				return 1;
-			}
-		});
-		this.addSlot(new Slot(animator, 2, 124, 57) {
-			@Override
-			public boolean mayPlace(ItemStack stack) {
-				return stack.is(ItemRegistry.SULFUR);
-			}
-		});
+		this.addSlot(new SingleItemSlot(animator, 0, 79, 23));
+		this.addSlot(new FilteredSlot(animator, 1, 34, 57, stack -> stack.getItem() instanceof LifeCrystalItem));
+		this.addSlot(new FilteredSlot(animator, 2, 124, 57, stack -> stack.is(ItemRegistry.SULFUR)));
 
 		for (int k = 0; k < 3; k++) {
 			for (int i1 = 0; i1 < 9; i1++) {

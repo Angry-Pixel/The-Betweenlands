@@ -13,20 +13,6 @@ public class LifeCrystalItem extends Item {
 	public LifeCrystalItem(boolean isRechargeable, Item.Properties properties) {
 		super(properties);
 		this.isRechargeable = isRechargeable;
-
-		//TODO
-//		this.addPropertyOverride(new ResourceLocation("remaining"), (stack, worldIn, entityIn) -> {
-//			int damage = stack.getItemDamage();
-//			if (damage >= stack.getMaxDamage())
-//				return 4;
-//			if (damage > stack.getMaxDamage() * 0.75f)
-//				return 3;
-//			if (damage > stack.getMaxDamage() * 0.5f)
-//				return 2;
-//			if (damage > stack.getMaxDamage() * 0.25f)
-//				return 1;
-//			return 0;
-//		});
 	}
 
 	public boolean isRechargeable(ItemStack stack) {
@@ -35,7 +21,7 @@ public class LifeCrystalItem extends Item {
 
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-		tooltip.add(Component.translatable("item.thebetweenlands.life_crystal.remaining", Math.round(100.0F - 100.0F / stack.getMaxDamage() * this.getDamage(stack)) + "%"));
+		tooltip.add(Component.translatable("item.thebetweenlands.life_crystal.remaining", Math.round(100.0F - 100.0F / stack.getMaxDamage() * this.getDamage(stack))));
 	}
 
 	@Override

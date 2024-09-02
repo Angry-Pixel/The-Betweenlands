@@ -44,11 +44,13 @@ public class AnimatorRenderer implements BlockEntityRenderer<AnimatorBlockEntity
 		stack.mulPose(Axis.XP.rotationDegrees(180.0F));
 		stack.translate(0.0F, 1.0F, 0.0F);
 		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(AnimatorBlock.FACING).toYRot()));
-		stack.pushPose();
 		stack.scale(-1.0F, 1.0F, 1.0F);
 		this.animator.render(stack, source.getBuffer(TEXTURE), light, overlay);
 		stack.popPose();
 
+		stack.pushPose();
+		stack.translate(0.5F, 0.0F, 0.5F);
+		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(AnimatorBlock.FACING).toYRot()));
 		if (entity.getLevel() != null) {
 			RandomSource random = RandomSource.create(entity.getBlockPos().asLong());
 
@@ -57,7 +59,7 @@ public class AnimatorRenderer implements BlockEntityRenderer<AnimatorBlockEntity
 				int items = entity.getItem(2).getCount() / 4 + 1;
 				for (int i = 0; i < items; i++) {
 					stack.pushPose();
-					stack.translate(random.nextDouble() / 3.0D - 1.0D / 6.0D, -0.27D, random.nextDouble() / 3.0D - 1.0D / 6.0D);
+					stack.translate(random.nextDouble() / 3.0D - 1.0D / 6.0D, 0.27D, random.nextDouble() / 3.0D - 1.0D / 6.0D);
 					stack.mulPose(Axis.XP.rotationDegrees(random.nextFloat() * 30.0F - 15.0F));
 					stack.mulPose(Axis.ZP.rotationDegrees(random.nextFloat() * 30.0F - 15.0F));
 					stack.scale(0.125F, 0.125F, 0.125F);

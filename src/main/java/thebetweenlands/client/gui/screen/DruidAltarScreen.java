@@ -1,17 +1,16 @@
 package thebetweenlands.client.gui.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.inventory.DruidAltarMenu;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.util.RenderUtils;
 
 public class DruidAltarScreen extends AbstractContainerScreen<DruidAltarMenu> {
 	private static final ResourceLocation TEXTURE = TheBetweenlands.prefix("textures/gui/druid_altar.png");
@@ -59,22 +58,9 @@ public class DruidAltarScreen extends AbstractContainerScreen<DruidAltarMenu> {
 		graphics.pose().translate(this.leftPos, this.topPos, 0);
 		for (int slot = 1; slot < 5; slot++) {
 			if (!this.getMenu().getSlot(slot).hasItem()) {
-				this.drawSlotAsBackground(graphics, new ItemStack(PIECES[(slot + this.iconCountTool) % 4]), this.getMenu().getSlot(slot));
+				RenderUtils.drawGhostItemAtSlot(graphics, new ItemStack(PIECES[(slot + this.iconCountTool) % 4]), this.getMenu().getSlot(slot));
 			}
 		}
 		graphics.pose().popPose();
-	}
-
-	private void drawSlotAsBackground(GuiGraphics graphics, ItemStack stack, Slot slot) {
-		graphics.renderFakeItem(stack, slot.x, slot.y);
-
-		// draw 50% gray rectangle over the item
-		RenderSystem.disableDepthTest();
-		graphics.pose().pushPose();
-		graphics.pose().translate(0.0D, 0.0D, 200.0D);
-		graphics.fill(slot.x, slot.y, slot.x + 16, slot.y + 16, 0x9f8b8b8b);
-		graphics.pose().popPose();
-		RenderSystem.enableDepthTest();
-		graphics.renderItemDecorations(this.font, stack, slot.x, slot.y);
 	}
 }

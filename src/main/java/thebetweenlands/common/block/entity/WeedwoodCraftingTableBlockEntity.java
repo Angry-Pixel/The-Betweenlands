@@ -14,6 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -27,7 +28,7 @@ import thebetweenlands.common.inventory.WeedwoodCraftingContainer;
 import thebetweenlands.common.inventory.WeedwoodCraftingMenu;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
-public class WeedwoodCraftingTableBlockEntity extends BlockEntity implements MenuProvider {
+public class WeedwoodCraftingTableBlockEntity extends SyncedBlockEntity implements MenuProvider {
 
 	public NonNullList<ItemStack> items = NonNullList.withSize(9, ItemStack.EMPTY);
 	public byte rotation = 0;
@@ -80,23 +81,5 @@ public class WeedwoodCraftingTableBlockEntity extends BlockEntity implements Men
 		ContainerHelper.loadAllItems(tag, this.items, registries);
 		this.rotation = tag.getByte("rotation");
 		this.slotChangedCraftingGrid();
-	}
-
-	@Nullable
-	@Override
-	public Packet<ClientGamePacketListener> getUpdatePacket() {
-		return ClientboundBlockEntityDataPacket.create(this);
-	}
-
-	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
-		this.loadAdditional(packet.getTag(), registries);
-	}
-
-	@Override
-	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-		CompoundTag tag = super.getUpdateTag(registries);
-		this.saveAdditional(tag, registries);
-		return tag;
 	}
 }

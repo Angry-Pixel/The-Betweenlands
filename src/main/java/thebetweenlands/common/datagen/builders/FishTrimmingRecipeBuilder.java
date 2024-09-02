@@ -77,6 +77,6 @@ public class FishTrimmingRecipeBuilder implements RecipeBuilder {
 
 	@Override
 	public void save(RecipeOutput recipeOutput, ResourceLocation id) {
-		recipeOutput.accept(id, new BasicTrimmingTableRecipe(this.input, this.outputs, Optional.ofNullable(this.remains)), null);
+		recipeOutput.accept(id.withPrefix("trimming/"), new BasicTrimmingTableRecipe(this.input, this.outputs, Optional.ofNullable(this.remains)), null);
 	}
 }

@@ -8,6 +8,7 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import thebetweenlands.common.block.DruidAltarBlock;
 import thebetweenlands.common.block.entity.DruidAltarBlockEntity;
+import thebetweenlands.common.inventory.slot.FilteredSlot;
 import thebetweenlands.common.inventory.slot.SingleItemSlot;
 import thebetweenlands.common.registries.MenuRegistry;
 
@@ -27,12 +28,7 @@ public class DruidAltarMenu extends AbstractContainerMenu {
 		altar.startOpen(playerInventory.player);
 		this.altar = altar;
 
-		this.addSlot(new Slot(altar, 0, 81, 35) {
-			@Override
-			public boolean mayPlace(ItemStack stack) {
-				return false;
-			}
-		});
+		this.addSlot(new FilteredSlot(altar, 0, 81, 35, stack -> false));
 		this.addSlot(new SingleItemSlot(altar, 1, 53, 7));
 		this.addSlot(new SingleItemSlot(altar, 2, 109, 7));
 		this.addSlot(new SingleItemSlot(altar, 3, 53, 63));
@@ -70,7 +66,7 @@ public class DruidAltarMenu extends AbstractContainerMenu {
 						return ItemStack.EMPTY;
 					}
 				}
-			} else if (!this.moveItemStackTo(stack1, 5, this.slots.size(), false)) {
+			} else if (!this.moveItemStackTo(stack1, 5, 41, false)) {
 				return ItemStack.EMPTY;
 			}
 			if (stack1.getCount() == 0) {

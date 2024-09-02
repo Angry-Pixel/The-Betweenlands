@@ -1082,6 +1082,18 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.addItem(ItemRegistry.COOKED_OLM_EGG, "Baked Olm Egg Cluster");
 		this.addItem(ItemRegistry.OLMLETTE, "Olmlette");
 		this.addItem(ItemRegistry.SILK_GRUB, "Silk Grub");
+		this.add("item.thebetweenlands.modifiers.armor", "When on armor:");
+		this.add("item.thebetweenlands.modifiers.tool", "When on tool:");
+		this.addItem(ItemRegistry.CRIMSON_MIDDLE_GEM, "Crimson Middle Gem");
+		this.add("item.thebetweenlands.crimson_middle_gem.armor", " - Chance to hurt the enemy when attacked");
+		this.add("item.thebetweenlands.crimson_middle_gem.tool", " - Chance to gain strength when attacking");
+		this.addItem(ItemRegistry.GREEN_MIDDLE_GEM, "Green Middle Gem");
+		this.add("item.thebetweenlands.green_middle_gem.armor", " - Chance to absorb damage when attacked");
+		this.add("item.thebetweenlands.green_middle_gem.tool", " - Chance to heal when attacking");
+		this.addItem(ItemRegistry.AQUA_MIDDLE_GEM, "Aqua Middle Gem");
+		this.add("item.thebetweenlands.aqua_middle_gem.armor", " - Chance to gain defense when attacked");
+		this.add("item.thebetweenlands.aqua_middle_gem.tool", " - Chance to weaken the enemy when attacking");
+
 		this.addItem(ItemRegistry.LIFE_CRYSTAL, "Life Crystal");
 		this.addItem(ItemRegistry.LIFE_CRYSTAL_FRAGMENT, "Life Crystal Fragment");
 		this.add("item.thebetweenlands.life_crystal.remaining", "%s%% remaining");

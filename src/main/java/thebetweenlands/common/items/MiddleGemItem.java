@@ -15,9 +15,9 @@ public class MiddleGemItem extends Item {
 
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-		tooltip.add(Component.translatable("item.thebetweenlands.modifiers.armor").withStyle(ChatFormatting.GRAY));
-		tooltip.add(Component.translatable(this.getDescriptionId() + ".armor").withStyle(ChatFormatting.BLUE));
 		tooltip.add(Component.translatable("item.thebetweenlands.modifiers.tool").withStyle(ChatFormatting.GRAY));
 		tooltip.add(Component.translatable(this.getDescriptionId() + ".tool").withStyle(ChatFormatting.BLUE));
+		tooltip.add(Component.translatable("item.thebetweenlands.modifiers.armor").withStyle(ChatFormatting.GRAY));
+		tooltip.add(Component.translatable(this.getDescriptionId() + ".armor").withStyle(ChatFormatting.BLUE));
 	}
 }

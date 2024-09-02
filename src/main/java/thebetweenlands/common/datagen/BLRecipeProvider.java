@@ -51,7 +51,7 @@ public class BLRecipeProvider extends RecipeProvider {
 			.outputs(ItemRegistry.SILT_CRAB_CLAW)
 			.save(output);
 
-		output.accept(TheBetweenlands.prefix("anadia_trimming"), new AnadiaTrimmingRecipe(), null);
+		output.accept(TheBetweenlands.prefix("trimming/anadia"), new AnadiaTrimmingRecipe(), null);
 
 		AnimatorRecipeBuilder.animator(ItemRegistry.TAR_BEAST_HEART)
 			.setResultStack(ItemRegistry.ANIMATED_TAR_BEAST_HEART)

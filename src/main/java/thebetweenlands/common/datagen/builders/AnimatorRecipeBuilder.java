@@ -116,7 +116,7 @@ public class AnimatorRecipeBuilder implements RecipeBuilder {
 
 	@Override
 	public void save(RecipeOutput output, ResourceLocation id) {
-		output.accept(id, new BasicAnimatorRecipe(this.input, Optional.ofNullable(this.resultStack),
+		output.accept(id.withPrefix("animator/"), new BasicAnimatorRecipe(this.input, Optional.ofNullable(this.resultStack),
 			Optional.ofNullable(this.resultEntity), this.requiredFuel, this.requiredLife,
 			Optional.ofNullable(this.renderEntity), Optional.ofNullable(this.lootTable), this.closeOnFinish), null);
 	}

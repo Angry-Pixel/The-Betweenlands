@@ -269,15 +269,8 @@ public class CrabPotFilterBlockEntity extends BaseContainerBlockEntity implement
 	}
 
 	@Override
-	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, HolderLookup.Provider registries) {
-		this.loadAdditional(packet.getTag(), registries);
-	}
-
-	@Override
 	public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
-		CompoundTag tag = super.getUpdateTag(registries);
-		this.saveAdditional(tag, registries);
-		return tag;
+		return this.saveCustomOnly(registries);
 	}
 
 	@Override

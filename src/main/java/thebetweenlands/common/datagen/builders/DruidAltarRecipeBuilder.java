@@ -95,6 +95,6 @@ public class DruidAltarRecipeBuilder implements RecipeBuilder {
 		} else {
 			recipe = new DruidAltarReversionRecipe(this.ingredients, this.processTime);
 		}
-		recipeOutput.accept(id, recipe, null);
+		recipeOutput.accept(id.withPrefix("druid_altar/"), recipe, null);
 	}
 }

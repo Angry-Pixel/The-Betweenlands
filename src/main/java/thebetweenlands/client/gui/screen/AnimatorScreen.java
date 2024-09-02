@@ -7,8 +7,11 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.inventory.AnimatorMenu;
+import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.util.RenderUtils;
 
 public class AnimatorScreen extends AbstractContainerScreen<AnimatorMenu> {
 
@@ -58,22 +61,34 @@ public class AnimatorScreen extends AbstractContainerScreen<AnimatorMenu> {
 				RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 				RenderSystem.disableBlend();
 			}
+		} else {
+			graphics.pose().pushPose();
+			graphics.pose().translate(this.leftPos, this.topPos, 0);
+			RenderUtils.drawGhostItemAtSlot(graphics, new ItemStack(ItemRegistry.LIFE_CRYSTAL.get()), this.getMenu().getSlot(1));
+			graphics.pose().popPose();
 		}
 
 		//Fuel bar
-		int fuelBurnProgress = this.getMenu().getFuelProgress();
-		graphics.blitSprite(PROGRESS_BAR, 6, 40, 0, fuelBurnProgress, this.leftPos + 129, this.topPos + 8 + fuelBurnProgress, 6, 40 - fuelBurnProgress);
+		if (this.getMenu().getSlot(2).hasItem()) {
+			int fuelBurnProgress = this.getMenu().getFuelProgress();
+			graphics.blitSprite(PROGRESS_BAR, 6, 40, 0, fuelBurnProgress, this.leftPos + 129, this.topPos + 8 + fuelBurnProgress, 6, 40 - fuelBurnProgress);
 
-		double relTotalProgress = this.getMenu().getBurnProgress();
+			double relTotalProgress = this.getMenu().getBurnProgress();
 
-		if (relTotalProgress <= 0.66D) {
-			int barWidth = (int) (relTotalProgress / 0.66D * 32);
-			graphics.blitSprite(SMELT_PROGRESS, 72, 18, 0, 16, this.leftPos + 51, this.topPos + 65, barWidth, 2);
-			graphics.blitSprite(SMELT_PROGRESS, 72, 18, 72 - barWidth, 16, this.leftPos + 123 - barWidth, this.topPos + 65, barWidth, 2);
-		}
-		if (relTotalProgress > 0.66D && relTotalProgress <= 1.0D) {
-			int barHeight = (int) ((relTotalProgress - 0.66D) / 0.4D * 19);
-			graphics.blitSprite(SMELT_PROGRESS, 72, 18, 0, 16 - barHeight, this.leftPos + 51, this.topPos + 65 - barHeight, 72, 2 + barHeight);
+			if (relTotalProgress <= 0.66D) {
+				int barWidth = (int) (relTotalProgress / 0.66D * 32);
+				graphics.blitSprite(SMELT_PROGRESS, 72, 18, 0, 16, this.leftPos + 51, this.topPos + 65, barWidth, 2);
+				graphics.blitSprite(SMELT_PROGRESS, 72, 18, 72 - barWidth, 16, this.leftPos + 123 - barWidth, this.topPos + 65, barWidth, 2);
+			}
+			if (relTotalProgress > 0.66D && relTotalProgress <= 1.0D) {
+				int barHeight = (int) ((relTotalProgress - 0.66D) / 0.4D * 19);
+				graphics.blitSprite(SMELT_PROGRESS, 72, 18, 0, 16 - barHeight, this.leftPos + 51, this.topPos + 65 - barHeight, 72, 2 + barHeight);
+			}
+		} else {
+			graphics.pose().pushPose();
+			graphics.pose().translate(this.leftPos, this.topPos, 0);
+			RenderUtils.drawGhostItemAtSlot(graphics, new ItemStack(ItemRegistry.SULFUR.get()), this.getMenu().getSlot(2));
+			graphics.pose().popPose();
 		}
 	}
 }
