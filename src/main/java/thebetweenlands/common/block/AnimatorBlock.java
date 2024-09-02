@@ -55,7 +55,7 @@ public class AnimatorBlock extends HorizontalBaseEntityBlock {
 				} else {
 					SingleRecipeInput recipeInput = new SingleRecipeInput(animator.itemToAnimate);
 					Optional<RecipeHolder<AnimatorRecipe>> recipe = level.getRecipeManager().getRecipeFor(RecipeRegistry.ANIMATOR_RECIPE.get(), recipeInput, level);
-					if (recipe.isPresent() || recipe.get().value().onRetrieved(player, pos, recipeInput)) {
+					if (recipe.isEmpty() || recipe.get().value().onRetrieved(player, pos, recipeInput)) {
 						player.openMenu(animator, buf -> buf.writeBlockPos(pos));
 					}
 					animator.fuelConsumed = 0;

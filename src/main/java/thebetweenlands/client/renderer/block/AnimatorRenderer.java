@@ -85,7 +85,7 @@ public class AnimatorRenderer implements BlockEntityRenderer<AnimatorBlockEntity
 			ItemStack inputStack = entity.getItem(0);
 			if (!inputStack.isEmpty()) {
 				stack.pushPose();
-				stack.translate(0.0F, -1.43F, 0.0F);
+				stack.translate(0.0F, 1.43F, 0.0F);
 
 				SingleRecipeInput input = new SingleRecipeInput(inputStack);
 				RecipeHolder<AnimatorRecipe> recipe = entity.quickCheck.getRecipeFor(input, entity.getLevel()).orElse(null);
@@ -93,8 +93,7 @@ public class AnimatorRenderer implements BlockEntityRenderer<AnimatorBlockEntity
 				if (recipe != null) {
 					if (!(inputStack.getItem() instanceof SpawnEggItem) && recipe.value().getRenderEntity(input, entity.getLevel()) == null) {
 						stack.scale(0.3F, 0.3F, 0.3F);
-						stack.mulPose(Axis.XP.rotationDegrees(180.0F));
-						stack.mulPose(Axis.YP.rotation(-this.setupRotation(entity, partialTicks) + Mth.PI));
+						stack.mulPose(Axis.YP.rotation(-this.setupRotation(entity, partialTicks)));
 						Minecraft.getInstance().getItemRenderer().renderStatic(inputStack, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);
 					} else {
 						RenderSystem.enableBlend();
@@ -103,8 +102,7 @@ public class AnimatorRenderer implements BlockEntityRenderer<AnimatorBlockEntity
 						Entity renderEntity = this.fetchEntityForRendering(entity, recipe, input);
 						if (renderEntity != null) {
 							stack.translate(0.0D, renderEntity.getBbHeight() / 8.0D, 0.0D);
-							stack.mulPose(Axis.YP.rotation(this.setupRotation(entity, partialTicks) + Mth.PI));
-							stack.mulPose(Axis.ZP.rotationDegrees(180.0F));
+							stack.mulPose(Axis.YP.rotation(-this.setupRotation(entity, partialTicks) + Mth.PI));
 							stack.scale(0.75F, 0.75F, 0.75F);
 							renderEntity.setYRot(0.0F);
 							renderEntity.setXRot(0.0F);
@@ -115,7 +113,7 @@ public class AnimatorRenderer implements BlockEntityRenderer<AnimatorBlockEntity
 							dispatcher.setRenderHitBoxes(false);
 
 							try {
-								dispatcher.render(renderEntity, 0.0D, 0.0D, 0.0D, 0.0F, 0.0F, stack, source, light);
+								dispatcher.render(renderEntity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, stack, source, light);
 							} catch (Exception e) {
 								TheBetweenlands.LOGGER.error("Failed to render entity {} on the animator", renderEntity.getType().getDescriptionId(), e);
 								EntityCache.addEntityToBlacklist(renderEntity.getType());
