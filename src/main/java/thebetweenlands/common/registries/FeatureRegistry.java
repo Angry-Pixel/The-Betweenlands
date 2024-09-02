@@ -33,7 +33,8 @@ public class FeatureRegistry {
 	//Lake Cavern Simulacrum
 	public static final DeferredHolder<Feature<?>, Feature<ChanceConfiguration>> LYESTONE = FEATURES.register("lyestone",
 		() -> new LyestoneFeature(ChanceConfiguration.CODEC));
-	//Moss Cluster
+	public static final DeferredHolder<Feature<?>, Feature<BlockPlaceConfiguration>> MOSS_CLUSTER = FEATURES.register("moss_cluster",
+		() -> new MossClusterFeature(BlockPlaceConfiguration.CODEC));
 	//Pebble Cluster
 	//Root Pod Roots
 	//Rootman Simulacrum
