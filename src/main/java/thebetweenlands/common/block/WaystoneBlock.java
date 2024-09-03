@@ -99,8 +99,8 @@ public class WaystoneBlock extends BaseEntityBlock implements SwampWaterLoggable
 	@Override
 	public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 		if (level.getBlockEntity(pos) instanceof WaystoneBlockEntity waystone) waystone.setRotation(level.getRandom().nextFloat() * 360.0F);
-		level.setBlockAndUpdate(pos.above(), DoublePlantBlock.copyWaterloggedFrom(level, pos, state).setValue(PART, Part.MIDDLE));
-		level.setBlockAndUpdate(pos.above(2), DoublePlantBlock.copyWaterloggedFrom(level, pos, state).setValue(PART, Part.TOP));
+		level.setBlockAndUpdate(pos.above(), DoublePlantBlock.copyWaterloggedFrom(level, pos.above(), state).setValue(PART, Part.MIDDLE));
+		level.setBlockAndUpdate(pos.above(2), DoublePlantBlock.copyWaterloggedFrom(level, pos.above(2), state).setValue(PART, Part.TOP));
 	}
 
 	@Override
