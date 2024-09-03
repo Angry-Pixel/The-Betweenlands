@@ -1,0 +1,11 @@
+{
+  "type": "thebetweenlands:smoking_rack",
+  "input": {
+    "item": "thebetweenlands:raw_frog_legs"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:smoked_frog_legs"
+  },
+  "smoking_time": 200
+}

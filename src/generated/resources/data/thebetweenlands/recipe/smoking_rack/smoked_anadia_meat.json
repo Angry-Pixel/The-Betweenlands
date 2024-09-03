@@ -1,0 +1,11 @@
+{
+  "type": "thebetweenlands:smoking_rack",
+  "input": {
+    "item": "thebetweenlands:raw_anadia_meat"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:smoked_anadia_meat"
+  },
+  "smoking_time": 200
+}

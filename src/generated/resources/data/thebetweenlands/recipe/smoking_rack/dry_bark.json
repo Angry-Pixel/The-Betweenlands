@@ -1,0 +1,16 @@
+{
+  "type": "thebetweenlands:smoking_rack",
+  "input": [
+    {
+      "item": "thebetweenlands:weedwood_log"
+    },
+    {
+      "item": "thebetweenlands:weedwood_bark"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:dry_bark"
+  },
+  "smoking_time": 400
+}

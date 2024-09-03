@@ -34,6 +34,7 @@ import thebetweenlands.api.block.AspectFogBlock;
 import thebetweenlands.api.block.DungeonFogBlock;
 import thebetweenlands.api.recipes.CenserRecipe;
 import thebetweenlands.common.block.entity.CenserBlockEntity;
+import thebetweenlands.common.block.entity.FishTrimmingTableBlockEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
 public class CenserBlock extends HorizontalBaseEntityBlock implements DungeonFogBlock, AspectFogBlock {
@@ -77,10 +78,14 @@ public class CenserBlock extends HorizontalBaseEntityBlock implements DungeonFog
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof CenserBlockEntity censer) {
-			player.openMenu(censer);
+		if (level.isClientSide()) {
+			return InteractionResult.SUCCESS;
+		} else {
+			if (level.getBlockEntity(pos) instanceof CenserBlockEntity censer) {
+				player.openMenu(censer);
+			}
+			return InteractionResult.CONSUME;
 		}
-		return super.useWithoutItem(state, level, pos, player, hitResult);
 	}
 
 	@Override

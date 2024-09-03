@@ -33,9 +33,9 @@ public class SmokingRackRenderer implements BlockEntityRenderer<SmokingRackBlock
 	private final ModelPart rack;
 
 	private static final Vec3[] ITEM_OFFSETS = new Vec3[]{
-		new Vec3(0.0F, 1.525F, 0.0F),
-		new Vec3(0.0F, 0.55F, 0.4F),
-		new Vec3(0.0F, 0.55F, -0.4F)};
+		new Vec3(0.0F, 1.55F, 0.0F),
+		new Vec3(0.0F, 0.7F, 0.4F),
+		new Vec3(0.0F, 0.7F, -0.4F)};
 
 	private static final Vec3[] ANADIA_OFFSETS = new Vec3[]{
 		new Vec3(0.0F, 1.0F, 0.0F),
@@ -55,18 +55,22 @@ public class SmokingRackRenderer implements BlockEntityRenderer<SmokingRackBlock
 		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(SmokingRackBlock.FACING).toYRot()));
 		stack.scale(-1.0F, 1.0F, 1.0F);
 		this.rack.render(stack, source.getBuffer(entity.getBlockState().getValue(SmokingRackBlock.HEATED) ? ACTIVE_TEXTURE : TEXTURE), light, overlay);
+		stack.popPose();
 
+		stack.pushPose();
+		stack.translate(0.5F, 0.0F, 0.5F);
+		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(SmokingRackBlock.FACING).toYRot()));
 		if (entity.getLevel() != null) {
 			if (!entity.getItem(0).isEmpty()) {
-				this.renderItemInSlot(stack, source, entity.getItem(0), new Vec3(0.0F, 0.0F, 0.0F), 1.0F, light, overlay);
+				this.renderItemInSlot(stack, source, entity.getItem(0), Vec3.ZERO, 1.0F, light, overlay);
 			}
 
 			for (int i = 1; i < entity.getContainerSize(); i++) {
-				if (!entity.getItem(i).isEmpty() && (i <= 3 || entity.getItem(i + 3).isEmpty())) {
+				if (!entity.getItem(i).isEmpty() && (i > 3 || entity.getItem(i + 3).isEmpty())) {
 					if (this.shouldRenderAsEntity(entity, i) && entity.getRenderEntity(entity.getLevel(), 1) != null) {
-						this.renderAnadiaInSlot(stack, source, entity.getItem(i), entity.getRenderEntity(entity.getLevel(), i), ANADIA_OFFSETS[(i % 3) - 1], light);
+						this.renderAnadiaInSlot(stack, source, entity.getItem(i), entity.getRenderEntity(entity.getLevel(), i), ANADIA_OFFSETS[((i - 1) % 3)], light);
 					} else {
-						this.renderItemInSlot(stack, source, entity.getItem(i), ITEM_OFFSETS[(i % 3) - 1], 0.5F, light, overlay);
+						this.renderItemInSlot(stack, source, entity.getItem(i), ITEM_OFFSETS[((i - 1) % 3)], 0.5F, light, overlay);
 					}
 				}
 			}
@@ -83,14 +87,18 @@ public class SmokingRackRenderer implements BlockEntityRenderer<SmokingRackBlock
 			if (item.getItem() instanceof AnadiaMobItem anadia && anadia.isRotten(renderEntity.level(), item)) {
 				((Anadia) renderEntity).setFishColor(AnadiaParts.AnadiaColor.ROTTEN);
 			}
-			renderEntity.setXRot(90);
-			renderEntity.setYRot(90);
+			renderEntity.setXRot(renderEntity.xRotO = 0);
+			renderEntity.setYRot(renderEntity.yRotO = 0);
 			float scale2 = 1.0F / ((Anadia) renderEntity).getFishSize() * 0.475F;
 			stack.pushPose();
-			stack.translate(offset.x(), offset.y(), offset.z());
+			stack.translate(0.0F, -0.5F, 0.0F);
+			stack.mulPose(Axis.XN.rotationDegrees(90.0F));
+			stack.mulPose(Axis.ZP.rotationDegrees(90.0F));
+			stack.translate(0.0F, -0.2F, 0.75F);
+			stack.translate(offset.z(), offset.x(), offset.y()); //dont ask
 			stack.scale(scale2, scale2, scale2);
 			EntityRenderer<? super Entity> renderer = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(renderEntity);
-			renderer.render(renderEntity, 90, 0, stack, source, light);
+			renderer.render(renderEntity, 0, 0, stack, source, light);
 			stack.popPose();
 		}
 	}
@@ -102,9 +110,9 @@ public class SmokingRackRenderer implements BlockEntityRenderer<SmokingRackBlock
 			stack.scale(scale, scale, scale);
 
 			if (item.is(BlockRegistry.FALLEN_LEAVES.asItem())) {
-				stack.mulPose(Axis.ZP.rotationDegrees(45.0F));
-			} else {
 				stack.mulPose(Axis.XP.rotationDegrees(90.0F));
+			} else {
+				stack.mulPose(Axis.ZP.rotationDegrees(-45.0F));
 			}
 
 			Minecraft.getInstance().getItemRenderer().renderStatic(item, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);

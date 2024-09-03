@@ -8,10 +8,8 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.datagen.builders.AnimatorRecipeBuilder;
-import thebetweenlands.common.datagen.builders.DruidAltarRecipeBuilder;
-import thebetweenlands.common.datagen.builders.FishTrimmingRecipeBuilder;
-import thebetweenlands.common.datagen.builders.MortarRecipeBuilder;
+import thebetweenlands.common.datagen.builders.*;
+import thebetweenlands.common.items.recipe.AnadiaSmokingRecipe;
 import thebetweenlands.common.items.recipe.AnadiaTrimmingRecipe;
 import thebetweenlands.common.items.recipe.MortarAspectrusRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -188,5 +186,17 @@ public class BLRecipeProvider extends RecipeProvider {
 		MortarRecipeBuilder.grinding(Ingredient.of(ItemRegistry.TINY_SLUDGE_WORM, ItemRegistry.TINY_SLUDGE_WORM_HELPER), ItemRegistry.FISH_BAIT).save(output);
 
 		output.accept(TheBetweenlands.prefix("mortar/aspectrus_fruit"), new MortarAspectrusRecipe(), null);
+
+		SmokingRackRecipeBuilder.smoking(ItemRegistry.RAW_ANADIA_MEAT, ItemRegistry.SMOKED_ANADIA_MEAT, 200).save(output);
+		SmokingRackRecipeBuilder.smoking(ItemRegistry.BARNACLE, ItemRegistry.SMOKED_BARNACLE, 200).save(output);
+		SmokingRackRecipeBuilder.smoking(ItemRegistry.CRAB_STICK, ItemRegistry.SMOKED_CRAB_STICK, 200).save(output);
+		SmokingRackRecipeBuilder.smoking(ItemRegistry.RAW_FROG_LEGS, ItemRegistry.SMOKED_FROG_LEGS, 200).save(output);
+		SmokingRackRecipeBuilder.smoking(ItemRegistry.PUFFSHROOM_TENDRIL, ItemRegistry.SMOKED_PUFFSHROOM_TENDRIL, 200).save(output);
+		SmokingRackRecipeBuilder.smoking(ItemRegistry.SILT_CRAB_CLAW, ItemRegistry.SMOKED_SILT_CRAB_CLAW, 200).save(output);
+		SmokingRackRecipeBuilder.smoking(ItemRegistry.RAW_SNAIL_FLESH, ItemRegistry.SMOKED_SNAIL_FLESH, 200).save(output);
+		SmokingRackRecipeBuilder.smoking(BlockRegistry.SWAMP_REED, ItemRegistry.DRIED_SWAMP_REED, 200).save(output);
+		SmokingRackRecipeBuilder.smoking(Ingredient.of(BlockRegistry.WEEDWOOD_LOG, BlockRegistry.WEEDWOOD_BARK), ItemRegistry.DRY_BARK, 400).save(output);
+
+		output.accept(TheBetweenlands.prefix("smoking_rack/anadia"), new AnadiaSmokingRecipe(), null);
 	}
 }

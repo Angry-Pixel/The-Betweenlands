@@ -25,6 +25,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import thebetweenlands.common.block.entity.MortarBlockEntity;
 import thebetweenlands.common.block.entity.SmokingRackBlockEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -49,11 +50,17 @@ public class SmokingRackBlock extends HorizontalBaseEntityBlock {
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
 		if (state.getValue(HALF) == DoubleBlockHalf.UPPER && level.getBlockState(pos.below()).is(this)) {
-			this.useWithoutItem(level.getBlockState(pos.below()), level, pos.below(), player, hitResult);
-		} else if (!level.isClientSide() && level.getBlockEntity(pos) instanceof SmokingRackBlockEntity rack) {
-			player.openMenu(rack);
+			return this.useWithoutItem(level.getBlockState(pos.below()), level, pos.below(), player, hitResult);
 		}
-		return super.useWithoutItem(state, level, pos, player, hitResult);
+
+		if (level.isClientSide()) {
+			return InteractionResult.SUCCESS;
+		} else {
+			if (level.getBlockEntity(pos) instanceof SmokingRackBlockEntity rack) {
+				player.openMenu(rack);
+			}
+			return InteractionResult.CONSUME;
+		}
 	}
 
 	@Override

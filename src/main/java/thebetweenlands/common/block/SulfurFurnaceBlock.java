@@ -53,8 +53,7 @@ public class SulfurFurnaceBlock extends AbstractFurnaceBlock {
 
 	@Override
 	protected void openContainer(Level level, BlockPos pos, Player player) {
-		BlockEntity blockentity = level.getBlockEntity(pos);
-		if (blockentity instanceof SulfurFurnaceBlockEntity furnace) {
+		if (level.getBlockEntity(pos) instanceof SulfurFurnaceBlockEntity furnace) {
 			player.openMenu(furnace);
 		}
 	}

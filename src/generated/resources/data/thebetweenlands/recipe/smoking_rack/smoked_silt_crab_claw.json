@@ -1,0 +1,11 @@
+{
+  "type": "thebetweenlands:smoking_rack",
+  "input": {
+    "item": "thebetweenlands:crab_claw"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:smoked_silt_crab_claw"
+  },
+  "smoking_time": 200
+}

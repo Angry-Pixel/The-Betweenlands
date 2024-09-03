@@ -1,0 +1,11 @@
+{
+  "type": "thebetweenlands:smoking_rack",
+  "input": {
+    "item": "thebetweenlands:barnacle"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:smoked_barnacle"
+  },
+  "smoking_time": 200
+}

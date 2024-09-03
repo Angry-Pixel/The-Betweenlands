@@ -13,7 +13,8 @@ public class RecipeRegistry {
 	public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(Registries.RECIPE_SERIALIZER, TheBetweenlands.ID);
 	public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(Registries.RECIPE_TYPE, TheBetweenlands.ID);
 
-	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<AnadiaTrimmingRecipe>> ANADIA_SERIALIZER = RECIPE_SERIALIZERS.register("anadia_trimming", AnadiaTrimmingRecipe.Serializer::new);
+	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<AnadiaSmokingRecipe>> ANADIA_SMOKING_SERIALIZER = RECIPE_SERIALIZERS.register("anadia_smoking", AnadiaSmokingRecipe.Serializer::new);
+	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<AnadiaTrimmingRecipe>> ANADIA_TRIMMING_SERIALIZER = RECIPE_SERIALIZERS.register("anadia_trimming", AnadiaTrimmingRecipe.Serializer::new);
 	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<BasicAnimatorRecipe>> ANIMATOR_SERIALIZER = RECIPE_SERIALIZERS.register("animator", BasicAnimatorRecipe.Serializer::new);
 	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ToolRepairAnimatorRecipe>> ANIMATOR_TOOL_SERIALIZER = RECIPE_SERIALIZERS.register("animator_tool", ToolRepairAnimatorRecipe.Serializer::new);
 	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<BubblerCrabPotFilterRecipe>> BUBBLER_CRAB_POT_FILTER_SERIALIZER = RECIPE_SERIALIZERS.register("bubbler_crab_pot_filter", BubblerCrabPotFilterRecipe.Serializer::new);
@@ -25,7 +26,7 @@ public class RecipeRegistry {
 	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<MortarAspectrusRecipe>> MORTAR_ASPECTRUS_SERIALIZER = RECIPE_SERIALIZERS.register("mortar_aspectrus", MortarAspectrusRecipe.Serializer::new);
 	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<PurifierRecipe>> PURIFIER_SERIALIZER = RECIPE_SERIALIZERS.register("purifier", PurifierRecipe.Serializer::new);
 	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<SiltCrabPotFilterRecipe>> SILT_CRAB_POT_FILTER_SERIALIZER = RECIPE_SERIALIZERS.register("silt_crab_pot_filter", SiltCrabPotFilterRecipe.Serializer::new);
-	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<SmokingRackRecipe>> SMOKING_SERIALIZER = RECIPE_SERIALIZERS.register("smoking_rack", SmokingRackRecipe.Serializer::new);
+	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<BasicSmokingRackRecipe>> SMOKING_SERIALIZER = RECIPE_SERIALIZERS.register("smoking_rack", BasicSmokingRackRecipe.Serializer::new);
 	public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<BasicTrimmingTableRecipe>> TRIMMING_SERIALIZER = RECIPE_SERIALIZERS.register("trimming", BasicTrimmingTableRecipe.Serializer::new);
 
 	public static final DeferredHolder<RecipeType<?>, RecipeType<AnimatorRecipe>> ANIMATOR_RECIPE = RECIPE_TYPES.register("animator", () -> RecipeType.simple(TheBetweenlands.prefix("animator")));

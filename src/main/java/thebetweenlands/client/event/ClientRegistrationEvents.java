@@ -31,10 +31,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import thebetweenlands.client.*;
 import thebetweenlands.client.gui.overlay.DecayBarOverlay;
 import thebetweenlands.client.gui.overlay.FishStaminaBarOverlay;
-import thebetweenlands.client.gui.screen.AnimatorScreen;
-import thebetweenlands.client.gui.screen.DruidAltarScreen;
-import thebetweenlands.client.gui.screen.FishTrimmingTableScreen;
-import thebetweenlands.client.gui.screen.MortarScreen;
+import thebetweenlands.client.gui.screen.*;
 import thebetweenlands.client.handler.ClientHandlerEvents;
 import thebetweenlands.client.model.baked.RootGeometry;
 import thebetweenlands.client.model.block.*;
@@ -98,6 +95,7 @@ public class ClientRegistrationEvents {
 		event.register(MenuRegistry.DRUID_ALTAR.get(), DruidAltarScreen::new);
 		event.register(MenuRegistry.FISH_TRIMMING_TABLE.get(), FishTrimmingTableScreen::new);
 		event.register(MenuRegistry.MORTAR.get(), MortarScreen::new);
+		event.register(MenuRegistry.SMOKING_RACK.get(), SmokingRackScreen::new);
 	}
 
 	private static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {

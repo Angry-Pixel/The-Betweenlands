@@ -18,6 +18,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import thebetweenlands.common.block.entity.DruidAltarBlockEntity;
 import thebetweenlands.common.block.entity.FishTrimmingTableBlockEntity;
 import thebetweenlands.common.items.AnadiaMobItem;
 
@@ -43,11 +44,14 @@ public class FishTrimmingTableBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof FishTrimmingTableBlockEntity table) {
-			player.openMenu(table, buf -> buf.writeBlockPos(pos));
+		if (level.isClientSide()) {
+			return InteractionResult.SUCCESS;
+		} else {
+			if (level.getBlockEntity(pos) instanceof FishTrimmingTableBlockEntity table) {
+				player.openMenu(table, buf -> buf.writeBlockPos(pos));
+			}
 			return InteractionResult.CONSUME;
 		}
-		return InteractionResult.SUCCESS;
 	}
 
 	@Override

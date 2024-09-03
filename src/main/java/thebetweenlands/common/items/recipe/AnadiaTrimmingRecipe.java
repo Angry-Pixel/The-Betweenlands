@@ -16,6 +16,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 
 public class AnadiaTrimmingRecipe implements TrimmingTableRecipe {
+
 	@Override
 	public NonNullList<ItemStack> assembleRecipe(SingleRecipeInput input, Level level) {
 		NonNullList<ItemStack> results = NonNullList.withSize(3, ItemStack.EMPTY);
@@ -45,7 +46,7 @@ public class AnadiaTrimmingRecipe implements TrimmingTableRecipe {
 
 	@Override
 	public RecipeSerializer<?> getSerializer() {
-		return RecipeRegistry.ANADIA_SERIALIZER.get();
+		return RecipeRegistry.ANADIA_TRIMMING_SERIALIZER.get();
 	}
 
 	public static class Serializer implements RecipeSerializer<AnadiaTrimmingRecipe> {

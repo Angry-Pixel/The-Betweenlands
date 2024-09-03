@@ -48,8 +48,7 @@ public class PurifierBlock extends HorizontalBaseEntityBlock {
 		if (level.isClientSide()) {
 			return InteractionResult.SUCCESS;
 		} else {
-			BlockEntity blockentity = level.getBlockEntity(pos);
-			if (blockentity instanceof PurifierBlockEntity purifier) {
+			if (level.getBlockEntity(pos) instanceof PurifierBlockEntity purifier) {
 				player.openMenu(purifier);
 			}
 			return InteractionResult.CONSUME;

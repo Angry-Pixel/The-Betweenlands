@@ -697,6 +697,9 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 		this.simpleBlockWithItem(BlockRegistry.MAGENTA_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
 		this.simpleBlockWithItem(BlockRegistry.PINK_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
 		this.simpleBlockWithItem(BlockRegistry.BROWN_PRESENT.get(), this.models().getExistingFile(TheBetweenlands.prefix("block/present")));
+
+		this.simpleBlock(BlockRegistry.FALLEN_LEAVES.get(), this.models().carpet("fallen_leaves", this.modLoc("block/fallen_leaves")));
+		this.basicItemTex(BlockRegistry.FALLEN_LEAVES, false);
 	}
 
 	private void druidStone(DeferredBlock<Block> stone) {

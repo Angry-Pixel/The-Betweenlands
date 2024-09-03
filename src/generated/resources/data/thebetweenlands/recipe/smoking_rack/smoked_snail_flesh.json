@@ -1,0 +1,11 @@
+{
+  "type": "thebetweenlands:smoking_rack",
+  "input": {
+    "item": "thebetweenlands:raw_snail_flesh"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:smoked_snail_flesh"
+  },
+  "smoking_time": 200
+}

@@ -4,111 +4,170 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.util.Mth;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import thebetweenlands.api.recipes.SmokingRackRecipe;
 import thebetweenlands.common.block.SmokingRackBlock;
-import thebetweenlands.common.items.AnadiaMobItem;
+import thebetweenlands.common.inventory.SmokingRackMenu;
 import thebetweenlands.common.items.MobItem;
-import thebetweenlands.common.items.recipe.SmokingRackRecipe;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 
 import javax.annotation.Nullable;
-import java.util.Optional;
+import java.util.List;
 
 public class SmokingRackBlockEntity extends BaseContainerBlockEntity {
 
-	public static final int MAX_SMOKING_TIME = 200; // 10 seconds per moss for a 64 stack = over 10.6 min IRL
-	public int curingModifier1 = 1;
-	public int curingModifier2 = 1;
-	public int curingModifier3 = 1;
-	public int smokeProgress = 0;
-	public int slot1Progress = 0;
-	public int slot2Progress = 0;
-	public int slot3Progress = 0;
+	private static final int SMOKING_TIME = 200;
+	private int smokeProgress;
+	private int slot1Progress;
+	private int slot2Progress;
+	private int slot3Progress;
+	private int slot1Total;
+	private int slot2Total;
+	private int slot3Total;
 	private NonNullList<ItemStack> items = NonNullList.withSize(7, ItemStack.EMPTY);
+	public final ContainerData data = new ContainerData() {
+		public int get(int index) {
+			return switch (index) {
+				case 0 -> SmokingRackBlockEntity.this.smokeProgress;
+				case 1 -> SmokingRackBlockEntity.this.slot1Progress;
+				case 2 -> SmokingRackBlockEntity.this.slot2Progress;
+				case 3 -> SmokingRackBlockEntity.this.slot3Progress;
+				case 4 -> SmokingRackBlockEntity.this.slot1Total;
+				case 5 -> SmokingRackBlockEntity.this.slot2Total;
+				case 6 -> SmokingRackBlockEntity.this.slot3Total;
+				default -> 0;
+			};
+		}
+
+		public void set(int index, int value) {
+			switch (index) {
+				case 0 -> SmokingRackBlockEntity.this.smokeProgress = value;
+				case 1 -> SmokingRackBlockEntity.this.slot1Progress = value;
+				case 2 -> SmokingRackBlockEntity.this.slot2Progress = value;
+				case 3 -> SmokingRackBlockEntity.this.slot3Progress = value;
+				case 4 -> SmokingRackBlockEntity.this.slot1Total = value;
+				case 5 -> SmokingRackBlockEntity.this.slot2Total = value;
+				case 6 -> SmokingRackBlockEntity.this.slot3Total = value;
+			}
+		}
+
+		public int getCount() {
+			return 7;
+		}
+	};
+	private final List<RecipeManager.CachedCheck<SingleRecipeInput, SmokingRackRecipe>> quickChecks = List.of(
+		RecipeManager.createCheck(RecipeRegistry.SMOKING_RECIPE.get()),
+		RecipeManager.createCheck(RecipeRegistry.SMOKING_RECIPE.get()),
+		RecipeManager.createCheck(RecipeRegistry.SMOKING_RECIPE.get()));
 
 	public SmokingRackBlockEntity(BlockPos pos, BlockState state) {
 		super(BlockEntityRegistry.SMOKING_RACK.get(), pos, state);
 	}
 
 	public static void tick(Level level, BlockPos pos, BlockState state, SmokingRackBlockEntity entity) {
-
 		if (!level.isClientSide()) {
+			boolean setChanged = false;
 			if (state.getValue(SmokingRackBlock.HEATED)) {
-				if (entity.updateFuelState(level, pos, state)) {
-					entity.setSmokeProgress(entity.getSmokeProgress() + 1);
-
-					if (entity.getSmokeProgress() % 10 == 0) {
-						level.sendBlockUpdated(pos, state, state, 2);
-					}
-
-					if (entity.getSmokeProgress() > MAX_SMOKING_TIME) { // not equal because stuff needs to work on 1 fuel item use
-						entity.consumeFuel(level, pos, state);
-					}
+				if (entity.smokeProgress > 0) {
+					entity.smokeProgress--;
 				}
+				boolean setSmokingAlready = false;
 
-				for (int i = 0; i < 3; i++) {
-					Optional<RecipeHolder<SmokingRackRecipe>> recipe = level.getRecipeManager().getRecipeFor(RecipeRegistry.SMOKING_RECIPE.get(), new SingleRecipeInput(entity.getItem(i + 1)), level);
-					if (entity.canSmokeSlots(recipe, level, pos, state, 1 + i, 4 + i)) {
-						entity.updateCuringModifier(recipe, level, pos, state, 1 + i);
+				for (int i = 1; i <= 3; i++) {
+					SingleRecipeInput input = new SingleRecipeInput(entity.getItem(i));
+					RecipeHolder<SmokingRackRecipe> recipe = entity.quickChecks.get(i - 1).getRecipeFor(input, level).orElse(null);
 
-						entity.setSlotProgress(1 + i, entity.getSlotProgress(1 + i) + 1);
+					if (!setSmokingAlready && entity.smokeProgress <= 0 && entity.canSmokeItem(level, i, recipe)) {
+						entity.smokeProgress = SMOKING_TIME;
+						entity.getItem(0).shrink(1);
+						setSmokingAlready = true;
+						setChanged = true;
+					}
 
-						if (entity.getSlotProgress(1 + i) >= MAX_SMOKING_TIME * entity.curingModifier1) {
-							entity.smokeItem(recipe, level, pos, state, 1 + i, 4 + i);
+					if (entity.smokeProgress > 0 && entity.canSmokeItem(level, i, recipe)) {
+						entity.data.set(i, entity.data.get(i) + 1);
+						if (entity.data.get(i) == entity.data.get(i + 3)) {
+							entity.data.set(i, 0);
+							entity.data.set(i + 3, entity.getTotalSmokeTime(level, i));
+							entity.smokeItem(level, i, recipe);
+							setChanged = true;
 						}
 					} else {
-						if (entity.getSlotProgress(1 + i) > 0) {
-							entity.setSlotProgress(1 + i, 0);
-							level.sendBlockUpdated(pos, state, state, 2);
-						}
+						entity.data.set(i, 0);
 					}
 				}
-			} else { // just reset all progress if the fuel runs out or inactive I suppose
-				if (entity.getSmokeProgress() > 0) {
-					entity.setSmokeProgress(0);
-					level.sendBlockUpdated(pos, state, state, 2);
+			} else {
+				for (int i = 1; i <= 3; i++) {
+					if (entity.data.get(i) > 0) {
+						entity.data.set(i, Mth.clamp(entity.data.get(i) - 2, 0, entity.data.get(i + 3)));
+					}
 				}
+			}
 
-				for (int i = 0; i < 3; i++) {
-					if (entity.getSlotProgress(1 + i) > 0) {
-						entity.setSlotProgress(1 + i, 0);
-						level.sendBlockUpdated(pos, state, state, 2);
-					}
-				}
+			if (setChanged) {
+				entity.setChanged();
 			}
 		}
 	}
 
-	private void setSlotProgress(int slot, int counter) {
-		switch (slot) {
-			case 1 -> this.slot1Progress = counter;
-			case 2 -> this.slot2Progress = counter;
-			case 3 -> this.slot3Progress = counter;
+	private boolean canSmokeItem(Level level, int index, @Nullable RecipeHolder<SmokingRackRecipe> recipe) {
+		if (!this.getItem(index).isEmpty() && recipe != null) {
+			ItemStack itemstack = recipe.value().assemble(new SingleRecipeInput(this.getItem(index)), level.registryAccess());
+			if (itemstack.isEmpty()) {
+				return false;
+			} else {
+				ItemStack itemstack1 = this.getItem(index + 3);
+				if (itemstack1.isEmpty()) {
+					return true;
+				} else if (!ItemStack.isSameItemSameComponents(itemstack1, itemstack)) {
+					return false;
+				} else {
+					return itemstack1.getCount() + itemstack.getCount() <= this.getMaxStackSize() && itemstack1.getCount() + itemstack.getCount() <= itemstack1.getMaxStackSize() || itemstack1.getCount() + itemstack.getCount() <= itemstack.getMaxStackSize();
+				}
+			}
+		} else {
+			return false;
 		}
 	}
 
-	private int getSlotProgress(int slot) {
-		return switch (slot) {
-			case 1 -> this.slot1Progress;
-			case 2 -> this.slot2Progress;
-			case 3 -> this.slot3Progress;
-			default -> 0;
-		};
+	private boolean smokeItem(Level level, int index, @Nullable RecipeHolder<SmokingRackRecipe> recipe) {
+		if (recipe != null && this.canSmokeItem(level, index, recipe)) {
+			ItemStack itemstack = this.getItem(index);
+			ItemStack itemstack1 = recipe.value().assemble(new SingleRecipeInput(this.getItem(index)), level.registryAccess());
+			ItemStack itemstack2 = this.getItem(index + 3);
+			if (itemstack2.isEmpty()) {
+				this.setItem(index + 3, itemstack1.copy());
+			} else if (ItemStack.isSameItemSameComponents(itemstack2, itemstack1)) {
+				itemstack2.grow(itemstack1.getCount());
+			}
+
+			itemstack.shrink(1);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private int getTotalSmokeTime(Level level, int index) {
+		SingleRecipeInput input = new SingleRecipeInput(this.getItem(index));
+		return this.quickChecks.get(index - 1).getRecipeFor(input, level).map(recipe -> recipe.value().smokingTime()).orElse(200);
 	}
 
 	@Nullable
@@ -118,108 +177,6 @@ public class SmokingRackBlockEntity extends BaseContainerBlockEntity {
 			return mob.createCapturedEntity(level, 0, 0, 0, stack, false);
 		}
 		return null;
-	}
-
-	public void consumeFuel(Level level, BlockPos pos, BlockState state) {
-		ItemStack fuelStack = this.getItems().getFirst();
-		this.setSmokeProgress(0);
-		level.sendBlockUpdated(pos, state, state, 2);
-		fuelStack.shrink(1);
-	}
-
-	private boolean canSmokeSlots(Optional<RecipeHolder<SmokingRackRecipe>> recipe, Level level, BlockPos pos, BlockState state, int input, int output) {
-		if (!state.getValue(SmokingRackBlock.HEATED) || !this.updateFuelState(level, pos, state) || getItems().get(input).isEmpty() || !getItems().get(output).isEmpty())
-			return false;
-		else {
-			if (recipe.isEmpty())
-				return false;
-			else {
-				ItemStack stack = this.getItems().get(input);
-				if(!stack.isEmpty() && stack.getItem() instanceof AnadiaMobItem mob && mob.hasEntityData(stack)) {
-					CompoundTag entityNbt = mob.getEntityData(stack);
-
-					return entityNbt == null || !entityNbt.contains("fish_color") || (entityNbt.getByte("fish_color") != 0 && entityNbt.getByte("fish_color") != 1);
-				}
-				return true;
-			}
-		}
-	}
-
-	private int updateCuringModifier(Optional<RecipeHolder<SmokingRackRecipe>> recipe, Level level, BlockPos pos, BlockState state, int slot) {
-		int modifier = recipe.map(holder -> holder.value().smokingTime()).orElse(0);
-		if(modifier <= 0) // just in case
-			modifier = 1;
-		switch (slot) {
-			case 1 -> {
-				if (this.curingModifier1 != modifier) {
-					this.curingModifier1 = modifier;
-					level.sendBlockUpdated(pos, state, state, 2);
-				}
-			}
-			case 2 -> {
-				if (this.curingModifier2 != modifier) {
-					this.curingModifier2 = modifier;
-					level.sendBlockUpdated(pos, state, state, 2);
-				}
-			}
-			case 3 -> {
-				if (this.curingModifier3 != modifier) {
-					this.curingModifier3 = modifier;
-					level.sendBlockUpdated(pos, state, state, 2);
-				}
-			}
-		}
-		return modifier;
-	}
-
-	public boolean updateFuelState(Level level, BlockPos pos, BlockState state) {
-		ItemStack fuelStack = this.getItems().getFirst();
-		if (!fuelStack.isEmpty()) {
-			return true;
-		} else if (this.getSmokeProgress() > 0) {
-			this.setSmokeProgress(0);
-			level.sendBlockUpdated(pos, state, state, 2);
-		}
-		return false;
-	}
-
-	public void smokeItem(Optional<RecipeHolder<SmokingRackRecipe>> recipe, Level level, BlockPos pos, BlockState state, int input, int output) {
-		if (this.canSmokeSlots(recipe, level, pos, state, input, output)) {
-			ItemStack itemstack = this.getItem(input);
-			ItemStack result = recipe.map(holder -> holder.value().result()).orElse(ItemStack.EMPTY);
-			if (!result.isEmpty()) {
-				ItemStack itemstack2 = this.getItem(output);
-				if (itemstack2.isEmpty())
-					this.setItem(output, result.copy());
-				this.setSlotProgress(input, 0);
-				level.sendBlockUpdated(pos, state, state, 2);
-				itemstack.shrink(1);
-			}
-		}
-	}
-
-	public void setSmokeProgress(int duration) {
-		this.smokeProgress = duration;
-	}
-
-	private int getSmokeProgress() {
-		return this.smokeProgress;
-	}
-
-	public int getSmokeProgressScaled(int index, int count) {
-		return getSmokeProgress() * count / MAX_SMOKING_TIME;
-	}
-
-	public int getItemProgressScaledTop(int index, int count) {
-		return getSlotProgress(1) * count / (MAX_SMOKING_TIME * curingModifier1);
-	}
-
-	public int getItemProgressScaledMid(int index, int count) {
-		return getSlotProgress(2) * count / (MAX_SMOKING_TIME * curingModifier2);
-	}
-
-	public int getItemProgressScaledBottom(int index, int count) {
-		return getSlotProgress(3) * count / (MAX_SMOKING_TIME * curingModifier3);
 	}
 
 	@Override
@@ -237,10 +194,30 @@ public class SmokingRackBlockEntity extends BaseContainerBlockEntity {
 		this.items = items;
 	}
 
-	//TODO
+	@Override
+	public void setItem(int slot, ItemStack stack) {
+		ItemStack itemstack = this.items.get(slot);
+		boolean flag = !stack.isEmpty() && ItemStack.isSameItemSameComponents(itemstack, stack);
+		this.items.set(slot, stack);
+		stack.limitSize(this.getMaxStackSize(stack));
+		if (slot > 0 && slot < 4 && !flag) {
+			this.data.set(slot + 3, this.getTotalSmokeTime(this.getLevel(), slot));
+			this.data.set(slot, 0);
+			this.setChanged();
+		}
+	}
+
+	@Override
+	public void setChanged() {
+		super.setChanged();
+		if (this.getLevel() != null) {
+			this.getLevel().sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), 2);
+		}
+	}
+
 	@Override
 	protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
-		return null;
+		return new SmokingRackMenu(containerId, inventory, this, this.data);
 	}
 
 	@Override
@@ -252,13 +229,13 @@ public class SmokingRackBlockEntity extends BaseContainerBlockEntity {
 	protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
 		super.saveAdditional(tag, registries);
 		ContainerHelper.saveAllItems(tag, this.items, registries);
-		tag.putInt("smoke_progress", this.getSmokeProgress());
+		tag.putInt("smoke_progress", this.smokeProgress);
 		tag.putInt("slot_1_progress", this.slot1Progress);
 		tag.putInt("slot_2_progress", this.slot2Progress);
 		tag.putInt("slot_3_progress", this.slot3Progress);
-		tag.putInt("curing_modifier_1", this.curingModifier1);
-		tag.putInt("curing_modifier_2", this.curingModifier2);
-		tag.putInt("curing_modifier_3", this.curingModifier3);
+		tag.putInt("slot_1_total", this.slot1Total);
+		tag.putInt("slot_2_total", this.slot2Total);
+		tag.putInt("slot_3_total", this.slot3Total);
 	}
 
 	@Override
@@ -266,13 +243,13 @@ public class SmokingRackBlockEntity extends BaseContainerBlockEntity {
 		super.loadAdditional(tag, registries);
 		this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
 		ContainerHelper.loadAllItems(tag, this.items, registries);
-		this.setSmokeProgress(tag.getInt("smoke_progress"));
+		this.smokeProgress = tag.getInt("smoke_progress");
 		this.slot1Progress = tag.getInt("slot_1_progress");
 		this.slot2Progress = tag.getInt("slot_2_progress");
 		this.slot3Progress = tag.getInt("slot_3_progress");
-		this.curingModifier1 = tag.getInt("curing_modifier_1");
-		this.curingModifier2 = tag.getInt("curing_modifier_2");
-		this.curingModifier3 = tag.getInt("curing_modifier_3");
+		this.slot1Total = tag.getInt("slot_1_total");
+		this.slot2Total = tag.getInt("slot_2_total");
+		this.slot3Total = tag.getInt("slot_3_total");
 	}
 
 	@Nullable

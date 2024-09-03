@@ -27,6 +27,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.entity.FishingTackleBoxBlockEntity;
+import thebetweenlands.common.block.entity.SmokingRackBlockEntity;
 import thebetweenlands.common.entities.Seat;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -69,17 +70,23 @@ public class FishingTackleBoxBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-		if (!level.isClientSide()) {
+		if (level.isClientSide()) {
+			return InteractionResult.SUCCESS;
+		} else {
 			if (level.getBlockEntity(pos) instanceof FishingTackleBoxBlockEntity box) {
 				if (!state.getValue(OPEN) && !isSatOn(level, pos)) {
-					if (level.isEmptyBlock(pos.above()) && level.isEmptyBlock(pos.above(2)) && hitResult.getDirection() == Direction.UP)
+					if (level.isEmptyBlock(pos.above()) && level.isEmptyBlock(pos.above(2)) && hitResult.getDirection() == Direction.UP) {
 						box.seatPlayer(player, level, pos);
+						return InteractionResult.CONSUME;
+					}
 				}
-				if (state.getValue(OPEN))
+				if (state.getValue(OPEN)) {
 					player.openMenu(box);
+					return InteractionResult.CONSUME;
+				}
 			}
+			return InteractionResult.PASS;
 		}
-		return InteractionResult.sidedSuccess(level.isClientSide());
 	}
 
 	@Override

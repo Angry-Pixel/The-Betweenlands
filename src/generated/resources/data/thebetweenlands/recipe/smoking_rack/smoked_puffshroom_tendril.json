@@ -1,0 +1,11 @@
+{
+  "type": "thebetweenlands:smoking_rack",
+  "input": {
+    "item": "thebetweenlands:puffshroom_tendril"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:smoked_puffshroom_tendril"
+  },
+  "smoking_time": 200
+}

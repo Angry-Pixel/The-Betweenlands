@@ -36,6 +36,7 @@ public class BLLanguageProvider extends LanguageProvider {
 
 		this.add("container.thebetweenlands.fish_trimming_table", "Trimming Table");
 		this.add("container.thebetweenlands.fish_trimming_table.butcher", "Chop!");
+		this.add("container.thebetweenlands.smoking_rack", "Smoking Rack");
 
 		this.addAdvancement("adventurer.root", "Adventurer", "The beginning of The Betweenlands Adventure");
 		this.addAdvancement("adventurer.give_me_that", "Give Me That", "Obtain the Swamp Talisman");

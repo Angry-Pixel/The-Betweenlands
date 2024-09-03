@@ -22,6 +22,7 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.block.entity.CrabPotFilterBlockEntity;
+import thebetweenlands.common.block.entity.SmokingRackBlockEntity;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
 public class CrabPotFilterBlock extends HorizontalBaseEntityBlock implements SimpleWaterloggedBlock {
@@ -41,10 +42,14 @@ public class CrabPotFilterBlock extends HorizontalBaseEntityBlock implements Sim
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof CrabPotFilterBlockEntity filter) {
-			player.openMenu(filter);
+		if (level.isClientSide()) {
+			return InteractionResult.SUCCESS;
+		} else {
+			if (level.getBlockEntity(pos) instanceof CrabPotFilterBlockEntity filter) {
+				player.openMenu(filter);
+			}
+			return InteractionResult.CONSUME;
 		}
-		return super.useWithoutItem(state, level, pos, player, hitResult);
 	}
 
 	@Override

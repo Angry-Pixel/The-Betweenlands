@@ -46,12 +46,11 @@ public class DruidAltarBlock extends BaseEntityBlock {
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult result) {
-		if (state.getValue(ACTIVE)) return InteractionResult.CONSUME;
+		if (state.getValue(ACTIVE)) return InteractionResult.PASS;
 		if (level.isClientSide()) {
 			return InteractionResult.SUCCESS;
 		} else {
-			BlockEntity blockentity = level.getBlockEntity(pos);
-			if (blockentity instanceof DruidAltarBlockEntity altar) {
+			if (level.getBlockEntity(pos) instanceof DruidAltarBlockEntity altar) {
 				player.openMenu(altar, buf -> buf.writeBlockPos(pos));
 			}
 			return InteractionResult.CONSUME;

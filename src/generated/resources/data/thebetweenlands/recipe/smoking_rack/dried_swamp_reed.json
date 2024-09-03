@@ -1,0 +1,11 @@
+{
+  "type": "thebetweenlands:smoking_rack",
+  "input": {
+    "item": "thebetweenlands:swamp_reed"
+  },
+  "result": {
+    "count": 1,
+    "id": "thebetweenlands:dried_swamp_reed"
+  },
+  "smoking_time": 200
+}

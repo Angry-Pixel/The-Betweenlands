@@ -21,7 +21,7 @@ import thebetweenlands.common.block.entity.WeedwoodCraftingTableBlockEntity;
 public class WeedwoodCraftingTableBlock extends BaseEntityBlock {
 
     public static final MapCodec<WeedwoodCraftingTableBlock> CODEC = simpleCodec(WeedwoodCraftingTableBlock::new);
-    
+
 	public WeedwoodCraftingTableBlock(Properties properties) {
 		super(properties);
 	}
@@ -43,8 +43,7 @@ public class WeedwoodCraftingTableBlock extends BaseEntityBlock {
 		if (level.isClientSide()) {
 			return InteractionResult.SUCCESS;
 		} else {
-			BlockEntity blockentity = level.getBlockEntity(pos);
-			if (blockentity instanceof WeedwoodCraftingTableBlockEntity table) {
+			if (level.getBlockEntity(pos) instanceof WeedwoodCraftingTableBlockEntity table) {
 				player.openMenu(table);
 			}
 			return InteractionResult.CONSUME;

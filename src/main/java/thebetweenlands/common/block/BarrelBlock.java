@@ -20,6 +20,7 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.common.block.entity.BarrelBlockEntity;
+import thebetweenlands.common.block.entity.SmokingRackBlockEntity;
 import thebetweenlands.common.registries.DimensionRegistries;
 import thebetweenlands.common.registries.FluidRegistry;
 
@@ -73,11 +74,14 @@ public class BarrelBlock extends HorizontalBaseEntityBlock {
 
 	@Override
 	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
-		if (!level.isClientSide() && level.getBlockEntity(pos) instanceof BarrelBlockEntity barrel) {
-			player.openMenu(barrel);
+		if (level.isClientSide()) {
 			return InteractionResult.SUCCESS;
+		} else {
+			if (level.getBlockEntity(pos) instanceof BarrelBlockEntity barrel) {
+				player.openMenu(barrel);
+			}
+			return InteractionResult.CONSUME;
 		}
-		return super.useWithoutItem(state, level, pos, player, hitResult);
 	}
 
 	@Nullable
