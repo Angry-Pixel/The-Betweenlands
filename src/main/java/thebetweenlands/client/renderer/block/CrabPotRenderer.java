@@ -13,7 +13,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import thebetweenlands.client.BLModelLayers;
+import thebetweenlands.client.model.entity.BubblerCrabModel;
+import thebetweenlands.client.model.entity.SiltCrabModel;
+import thebetweenlands.client.renderer.entity.BubblerCrabRenderer;
+import thebetweenlands.client.renderer.entity.SiltCrabRenderer;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.AlembicBlock;
 import thebetweenlands.common.block.CrabPotBlock;
 import thebetweenlands.common.block.entity.CrabPotBlockEntity;
 import thebetweenlands.common.entities.fishing.BubblerCrab;
@@ -22,22 +27,26 @@ import thebetweenlands.common.items.MobItem;
 
 public class CrabPotRenderer implements BlockEntityRenderer<CrabPotBlockEntity> {
 
-	private static final RenderType TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/crab_pot.png"));
+	private static final RenderType TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/crab_pot.png"));
 	private final ModelPart pot;
+
+	private final BubblerCrabModel bubbler;
+	private final SiltCrabModel silt;
 
 	public CrabPotRenderer(BlockEntityRendererProvider.Context context) {
 		this.pot = context.bakeLayer(BLModelLayers.CRAB_POT);
+		this.bubbler = new BubblerCrabModel(context.bakeLayer(BLModelLayers.BUBBLER_CRAB));
+		this.silt = new SiltCrabModel(context.bakeLayer(BLModelLayers.SILT_CRAB));
 	}
 
 	@Override
 	public void render(CrabPotBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource source, int light, int overlay) {
 		stack.pushPose();
-		stack.translate(0.5F, 1.0F, 0.5F);
-		stack.mulPose(Axis.XP.rotationDegrees(180.0F));
-		stack.translate(0.0F, 1.0F, 0.0F);
-		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(CrabPotBlock.FACING).toYRot()));
-		stack.scale(-1.0F, 1.0F, 1.0F);
+		stack.translate(0.5F, 0.0F, 0.5F);
+		stack.mulPose(Axis.YP.rotationDegrees(-entity.getBlockState().getValue(AlembicBlock.FACING).toYRot()));
+		stack.scale(1.0F, -1.0F, -1.0F);
 		this.pot.render(stack, source.getBuffer(TEXTURE), light, overlay);
+		stack.popPose();
 
 		if (entity.getLevel() != null) {
 			// inputs
@@ -60,27 +69,27 @@ public class CrabPotRenderer implements BlockEntityRenderer<CrabPotBlockEntity> 
 
 						Entity renderEntity = entity.getEntity(entity.getLevel());
 
-//						if (renderEntity != null) {
-//							if (renderEntity.getClass() == SiltCrab.class) {
-//								stack.pushPose();
-//								stack.scale(0.95F, -0.95F, -0.95F);
-//								if (entity.animate)
-//									MODEL_SILT.renderEating(animationTicks, 0.0625F);
-//								else
-//									MODEL_SILT.render(entity, 0F, 0F, 0F, 0F, 0F, 0.0625F);
-//								stack.popPose();
-//							}
-//
-//							if (renderEntity.getClass() == BubblerCrab.class) {
-//								stack.pushPose();
-//								stack.scale(0.95F, -0.95F, -0.95F);
-//								if (entity.animate)
-//									MODEL_BUBBLER.renderEating(animationTicks, 0.0625F);
-//								else
-//									MODEL_BUBBLER.render(entity, 0F, 0F, 0F, 0F, 0F, 0.0625F);
-//								stack.popPose();
-//							}
-//						}
+						if (renderEntity != null) {
+							if (renderEntity.getClass() == SiltCrab.class) {
+								stack.pushPose();
+								stack.scale(0.95F, -0.95F, -0.95F);
+								if (entity.animate)
+									this.silt.renderCrabEating(stack, source.getBuffer(RenderType.entityCutoutNoCull(SiltCrabRenderer.TEXTURE)), light, overlay, animationTicks);
+								else
+									this.silt.renderToBuffer(stack, source.getBuffer(RenderType.entityCutoutNoCull(SiltCrabRenderer.TEXTURE)), light, overlay);
+								stack.popPose();
+							}
+
+							if (renderEntity.getClass() == BubblerCrab.class) {
+								stack.pushPose();
+								stack.scale(0.95F, -0.95F, -0.95F);
+								if (entity.animate)
+									this.bubbler.renderCrabEating(stack, source.getBuffer(RenderType.entityCutoutNoCull(BubblerCrabRenderer.TEXTURE)), light, overlay, animationTicks);
+								else
+									this.bubbler.renderToBuffer(stack, source.getBuffer(RenderType.entityCutoutNoCull(BubblerCrabRenderer.TEXTURE)), light, overlay);
+								stack.popPose();
+							}
+						}
 
 						stack.popPose();
 					}
@@ -89,7 +98,6 @@ public class CrabPotRenderer implements BlockEntityRenderer<CrabPotBlockEntity> 
 				}
 			}
 		}
-		stack.popPose();
 	}
 
 	public boolean isSafeMobItem(CrabPotBlockEntity entity) {

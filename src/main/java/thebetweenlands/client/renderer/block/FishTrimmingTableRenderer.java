@@ -28,8 +28,8 @@ import javax.annotation.Nullable;
 
 public class FishTrimmingTableRenderer implements BlockEntityRenderer<FishTrimmingTableBlockEntity> {
 
-	private static final RenderType TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/fish_trimming_table.png"));
-	private static final RenderType USED_TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/fish_trimming_table_used.png"));
+	private static final RenderType TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/fish_trimming_table.png"));
+	private static final RenderType USED_TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/fish_trimming_table_used.png"));
 	private final ModelPart table;
 	private final ModelPart cleaver;
 	private final ModelPart blood;
@@ -51,10 +51,9 @@ public class FishTrimmingTableRenderer implements BlockEntityRenderer<FishTrimmi
 	@Override
 	public void render(FishTrimmingTableBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource source, int light, int overlay) {
 		stack.pushPose();
-		stack.translate(0.5F, 1.0F, 0.5F);
-		stack.mulPose(Axis.XP.rotationDegrees(180.0F));
-		stack.translate(0.0F, 1.0F, 0.0F);
-		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(FishTrimmingTableBlock.FACING).toYRot()));
+		stack.translate(0.5F, 0.0F, 0.5F);
+		stack.mulPose(Axis.YP.rotationDegrees(-entity.getBlockState().getValue(FishTrimmingTableBlock.FACING).toYRot()));
+		stack.scale(1.0F, -1.0F, -1.0F);
 		this.table.render(stack, source.getBuffer(!entity.getItem(4).isEmpty() ? USED_TEXTURE : TEXTURE), light, overlay);
 		if (!entity.getItem(5).isEmpty()) {
 			this.cleaver.render(stack, source.getBuffer(!entity.getItem(4).isEmpty() ? USED_TEXTURE : TEXTURE), light, overlay);

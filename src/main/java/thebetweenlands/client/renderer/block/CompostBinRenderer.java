@@ -16,13 +16,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.CenserBlock;
+import thebetweenlands.common.block.AlembicBlock;
 import thebetweenlands.common.block.entity.CompostBinBlockEntity;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class CompostBinRenderer implements BlockEntityRenderer<CompostBinBlockEntity> {
 
-	private static final RenderType TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/compost_bin.png"));
+	private static final RenderType TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/compost_bin.png"));
 	private final ModelPart bin;
 	private final ModelPart lid;
 
@@ -53,10 +53,9 @@ public class CompostBinRenderer implements BlockEntityRenderer<CompostBinBlockEn
 
 
 		stack.pushPose();
-		stack.translate(0.5F, 1.0F, 0.5F);
-		stack.mulPose(Axis.XP.rotationDegrees(180.0F));
-		stack.translate(0.0F, -0.5F, 0.0F);
-		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(CenserBlock.FACING).toYRot()));
+		stack.translate(0.5F, 0.0F, 0.5F);
+		stack.mulPose(Axis.YP.rotationDegrees(-entity.getBlockState().getValue(AlembicBlock.FACING).toYRot()));
+		stack.scale(1.0F, -1.0F, -1.0F);
 		this.lid.zRot = entity.getLevel() != null ? (float) Math.toRadians(entity.getLidAngle(entity.getBlockState(), partialTicks)) : 0.0F;
 		this.bin.render(stack, source.getBuffer(TEXTURE), light, overlay);
 		stack.popPose();

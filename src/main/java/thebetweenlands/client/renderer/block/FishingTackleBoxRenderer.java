@@ -14,7 +14,7 @@ import thebetweenlands.common.block.entity.FishingTackleBoxBlockEntity;
 
 public class FishingTackleBoxRenderer implements BlockEntityRenderer<FishingTackleBoxBlockEntity> {
 
-	private static final RenderType TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/fishing_tackle_box.png"));
+	private static final RenderType TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/fishing_tackle_box.png"));
 	private final ModelPart box;
 	private final ModelPart lid;
 
@@ -27,10 +27,9 @@ public class FishingTackleBoxRenderer implements BlockEntityRenderer<FishingTack
 	@Override
 	public void render(FishingTackleBoxBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource source, int light, int overlay) {
 		stack.pushPose();
-		stack.translate(0.5F, 1.0F, 0.5F);
-		stack.mulPose(Axis.XP.rotationDegrees(180.0F));
-		stack.translate(0.0F, 1.0F, 0.0F);
-		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(FishingTackleBoxBlock.FACING).toYRot()));
+		stack.translate(0.5F, 0.0F, 0.5F);
+		stack.mulPose(Axis.YP.rotationDegrees(-entity.getBlockState().getValue(FishingTackleBoxBlock.FACING).toYRot()));
+		stack.scale(1.0F, -1.0F, -1.0F);
 		this.lid.xRot = entity.getLevel() != null ? (float) -Math.toRadians(entity.getLidAngle(entity.getBlockState(), partialTicks)) : 0.0F;
 		this.box.render(stack, source.getBuffer(TEXTURE), light, overlay);
 		stack.popPose();

@@ -1,0 +1,6 @@
+@MethodsReturnNonnullByDefault
+@FieldsAreNonnullByDefault
+package thebetweenlands.client.model.block.simulacrum;
+
+import net.minecraft.FieldsAreNonnullByDefault;
+import net.minecraft.MethodsReturnNonnullByDefault;

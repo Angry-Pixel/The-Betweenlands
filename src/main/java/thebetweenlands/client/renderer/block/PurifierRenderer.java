@@ -20,7 +20,7 @@ import thebetweenlands.common.block.entity.PurifierBlockEntity;
 
 public class PurifierRenderer implements BlockEntityRenderer<PurifierBlockEntity> {
 
-	private static final RenderType TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/purifier.png"));
+	private static final RenderType TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/purifier.png"));
 	private final ModelPart base;
 	private final ModelPart fire;
 
@@ -33,11 +33,9 @@ public class PurifierRenderer implements BlockEntityRenderer<PurifierBlockEntity
 	@Override
 	public void render(PurifierBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource source, int light, int overlay) {
 		stack.pushPose();
-		stack.translate(0.5F, 1.0F, 0.5F);
-		stack.mulPose(Axis.XP.rotationDegrees(180.0F));
-		stack.translate(0.0F, 1.0F, 0.0F);
-		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(PurifierBlock.FACING).toYRot()));
-		stack.scale(-1.0F, 1.0F, 1.0F);
+		stack.translate(0.5F, 0.0F, 0.5F);
+		stack.mulPose(Axis.YP.rotationDegrees(-entity.getBlockState().getValue(PurifierBlock.FACING).toYRot()));
+		stack.scale(1.0F, -1.0F, -1.0F);
 		stack.pushPose();
 		this.base.render(stack, source.getBuffer(TEXTURE), light, overlay);
 		if (entity.getBlockState().getValue(PurifierBlock.LIT)) {

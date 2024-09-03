@@ -1,6 +1,5 @@
 package thebetweenlands.client.renderer.block;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.model.geom.ModelPart;
@@ -12,9 +11,7 @@ import net.minecraft.util.FastColor;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.AlembicBlock;
-import thebetweenlands.common.block.CenserBlock;
 import thebetweenlands.common.block.entity.AlembicBlockEntity;
-import thebetweenlands.common.block.entity.CenserBlockEntity;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 
 public class AlembicRenderer implements BlockEntityRenderer<AlembicBlockEntity> {
@@ -35,11 +32,9 @@ public class AlembicRenderer implements BlockEntityRenderer<AlembicBlockEntity> 
 	@Override
 	public void render(AlembicBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource source, int light, int overlay) {
 		stack.pushPose();
-		stack.translate(0.5F, 1.0F, 0.5F);
-		stack.mulPose(Axis.XP.rotationDegrees(180.0F));
-		stack.translate(0.0F, 1.0F, 0.0F);
-		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(AlembicBlock.FACING).toYRot() + 90));
-		stack.scale(-1.0F, 1.0F, 1.0F);
+		stack.translate(0.5F, 0.0F, 0.5F);
+		stack.mulPose(Axis.YP.rotationDegrees(-entity.getBlockState().getValue(AlembicBlock.FACING).toYRot()));
+		stack.scale(1.0F, -1.0F, -1.0F);
 
 		if (entity.getLevel() != null && entity.isFull()) {
 			float[] colors = ElixirRecipe.getInfusionColor(entity.getElixirRecipe(), entity.getInfusionTime());

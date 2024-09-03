@@ -8,21 +8,21 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 
 public class WindChimeModel {
-	public ModelPart base;
-	public ModelPart string1;
-	public ModelPart string2;
-	public ModelPart string3;
-	public ModelPart string4;
-	public ModelPart string5;
-	public ModelPart string6;
-	public ModelPart midstring;
-	public ModelPart rod1;
-	public ModelPart rod2;
-	public ModelPart rod3;
-	public ModelPart rod4;
-	public ModelPart rod5;
-	public ModelPart rod6;
-	public ModelPart clapper;
+	public final ModelPart base;
+	public final ModelPart string1;
+	public final ModelPart string2;
+	public final ModelPart string3;
+	public final ModelPart string4;
+	public final ModelPart string5;
+	public final ModelPart string6;
+	public final ModelPart midstring;
+	public final ModelPart rod1;
+	public final ModelPart rod2;
+	public final ModelPart rod3;
+	public final ModelPart rod4;
+	public final ModelPart rod5;
+	public final ModelPart rod6;
+	public final ModelPart clapper;
 
 	public WindChimeModel(ModelPart root) {
 		this.base = root.getChild("base");

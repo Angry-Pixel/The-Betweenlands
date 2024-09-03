@@ -8,23 +8,20 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.util.FastColor;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GrassColor;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.shader.LightSource;
 import thebetweenlands.client.shader.ShaderHelper;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.CenserBlock;
 import thebetweenlands.common.block.WaystoneBlock;
-import thebetweenlands.common.block.entity.CenserBlockEntity;
 import thebetweenlands.common.block.entity.WaystoneBlockEntity;
 
 public class WaystoneRenderer implements BlockEntityRenderer<WaystoneBlockEntity> {
 
-	private static final RenderType ACTIVE_TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/waystone_active.png"));
-	private static final RenderType INACTIVE_TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/waystone_inactive.png"));
-	private static final RenderType GRASS_TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/waystone_grass.png"));
+	private static final RenderType ACTIVE_TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/waystone_active.png"));
+	private static final RenderType INACTIVE_TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/waystone_inactive.png"));
+	private static final RenderType GRASS_TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/waystone_grass.png"));
 	private final ModelPart waystone;
 
 	public WaystoneRenderer(BlockEntityRendererProvider.Context context) {
@@ -34,10 +31,9 @@ public class WaystoneRenderer implements BlockEntityRenderer<WaystoneBlockEntity
 	@Override
 	public void render(WaystoneBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource source, int light, int overlay) {
 		stack.pushPose();
-		stack.translate(0.5F, 1.0F, 0.5F);
-		stack.mulPose(Axis.XP.rotationDegrees(180.0F));
-		stack.translate(0.0F, 1.0F, 0.0F);
-		stack.mulPose(Axis.YP.rotationDegrees(entity.getRotation()));
+		stack.translate(0.5F, 0.0F, 0.5F);
+		stack.mulPose(Axis.YP.rotationDegrees(-entity.getRotation()));
+		stack.scale(1.0F, -1.0F, -1.0F);
 
 		if (entity.getLevel() != null && entity.getBlockState().getValue(WaystoneBlock.ACTIVE) && ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			double px = entity.getBlockPos().getX() + 0.5D;

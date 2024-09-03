@@ -15,9 +15,9 @@ import thebetweenlands.common.registries.BlockRegistry;
 
 public class LootUrnRenderer implements BlockEntityRenderer<LootUrnBlockEntity> {
 
-	private static final RenderType URN_1_TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/loot_urn_1.png"));
-	private static final RenderType URN_2_TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/loot_urn_2.png"));
-	private static final RenderType URN_3_TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/loot_urn_3.png"));
+	private static final RenderType URN_1_TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/loot_urn_1.png"));
+	private static final RenderType URN_2_TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/loot_urn_2.png"));
+	private static final RenderType URN_3_TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/loot_urn_3.png"));
 
 	private final ModelPart urn1;
 	private final ModelPart urn2;
@@ -32,11 +32,9 @@ public class LootUrnRenderer implements BlockEntityRenderer<LootUrnBlockEntity> 
 	@Override
 	public void render(LootUrnBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource source, int light, int overlay) {
 		stack.pushPose();
-		stack.translate(0.5F, 0.5F, 0.5F);
-		stack.mulPose(Axis.XP.rotationDegrees(180.0F));
-		stack.translate(0.0F, 0.5F, 0.0F);
-		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(LootUrnBlock.FACING).toYRot()));
-		stack.scale(-1.0F, 1.0F, 1.0F);
+		stack.translate(0.5F, 0.0F, 0.5F);
+		stack.mulPose(Axis.YP.rotationDegrees(-entity.getBlockState().getValue(LootUrnBlock.FACING).toYRot()));
+		stack.scale(1.0F, -1.0F, -1.0F);
 		if (entity.getBlockState().is(BlockRegistry.LOOT_URN_1)) {
 			this.urn1.render(stack, source.getBuffer(URN_1_TEXTURE), light, overlay);
 		} else if (entity.getBlockState().is(BlockRegistry.LOOT_URN_2)) {

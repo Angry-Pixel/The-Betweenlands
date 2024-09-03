@@ -17,9 +17,9 @@ import thebetweenlands.common.registries.BlockRegistry;
 
 public class LootPotRenderer implements BlockEntityRenderer<LootPotBlockEntity> {
 
-	private static final RenderType POT_1_TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/loot_pot_1.png"));
-	private static final RenderType POT_2_TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/loot_pot_2.png"));
-	private static final RenderType POT_3_TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/loot_pot_3.png"));
+	private static final RenderType POT_1_TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/loot_pot_1.png"));
+	private static final RenderType POT_2_TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/loot_pot_2.png"));
+	private static final RenderType POT_3_TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/loot_pot_3.png"));
 
 	private static final BlockState TAR = BlockRegistry.SOLID_TAR.get().defaultBlockState();
 	private static final BlockState MUD = BlockRegistry.COMPACTED_MUD.get().defaultBlockState();
@@ -37,11 +37,9 @@ public class LootPotRenderer implements BlockEntityRenderer<LootPotBlockEntity> 
 	@Override
 	public void render(LootPotBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource source, int light, int overlay) {
 		stack.pushPose();
-		stack.translate(0.5F, 0.5F, 0.5F);
-		stack.mulPose(Axis.XP.rotationDegrees(180.0F));
-		stack.translate(0.0F, 0.5F, 0.0F);
-		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(LootPotBlock.FACING).toYRot()));
-		stack.scale(-1.0F, 1.0F, 1.0F);
+		stack.translate(0.5F, 0.0F, 0.5F);
+		stack.mulPose(Axis.YP.rotationDegrees(-entity.getBlockState().getValue(LootPotBlock.FACING).toYRot()));
+		stack.scale(1.0F, -1.0F, -1.0F);
 		if (entity.getBlockState().is(BlockRegistry.LOOT_POT_1)) {
 			stack.mulPose(Axis.YP.rotationDegrees(entity.getModelRotationOffset()));
 			this.pot1.render(stack, source.getBuffer(POT_1_TEXTURE), light, overlay);

@@ -1,7 +1,5 @@
 package thebetweenlands.client.renderer.block;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -22,7 +20,6 @@ import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
-import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.client.renderer.BLRenderTypes;
 import thebetweenlands.common.TheBetweenlands;
@@ -33,10 +30,10 @@ public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEn
 
 	private static final float HALF_SQRT_3 = (float) (Math.sqrt(3.0D) / 2.0D);
 
-	private static final RenderType ACTIVE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/druid_altar_active.png"));
-	private static final RenderType ACTIVE_GLOW = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/druid_altar_active_glow.png"));
-	private static final RenderType NORMAL = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/druid_altar.png"));
-	private static final RenderType NORMAL_GLOW = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/druid_altar_glow.png"));
+	private static final RenderType ACTIVE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/druid_altar_active.png"));
+	private static final RenderType ACTIVE_GLOW = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/druid_altar_active_glow.png"));
+	private static final RenderType NORMAL = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/druid_altar.png"));
+	private static final RenderType NORMAL_GLOW = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/druid_altar_glow.png"));
 
 	private final ModelPart altar;
 	private final ModelPart stones;
@@ -58,15 +55,10 @@ public class DruidAltarRenderer implements BlockEntityRenderer<DruidAltarBlockEn
 			lighting = (int) Math.min(light + Math.sin(Math.toRadians(renderRotation) * 4.0f) * 105.0F + 150.0F, LightTexture.FULL_BLOCK);
 		}
 		stack.pushPose();
-		stack.translate(0.5F, 1.0F, 0.5F);
-		stack.mulPose(Axis.XP.rotationDegrees(180.0F));
-		stack.translate(0.0F, 1.0F, 0.0F);
-		stack.pushPose();
-		stack.scale(-1.0F, 1.0F, 1.0F);
-
+		stack.translate(0.5F, 0.0F, 0.5F);
+		stack.scale(1.0F, -1.0F, -1.0F);
 		this.altar.render(stack, source.getBuffer(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVE : NORMAL), light, overlay);
 		this.altar.render(stack, source.getBuffer(entity.getBlockState().getValue(DruidAltarBlock.ACTIVE) ? ACTIVE_GLOW : NORMAL_GLOW), lighting, overlay);
-		stack.popPose();
 
 		//stones
 		stack.mulPose(Axis.YP.rotationDegrees(renderRotation));

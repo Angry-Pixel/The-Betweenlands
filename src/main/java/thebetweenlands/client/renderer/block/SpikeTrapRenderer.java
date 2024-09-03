@@ -1,13 +1,11 @@
 package thebetweenlands.client.renderer.block;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.core.Direction;
 import net.minecraft.util.FastColor;
 import thebetweenlands.client.BLModelLayers;
 import thebetweenlands.common.TheBetweenlands;
@@ -17,8 +15,8 @@ import thebetweenlands.common.registries.BlockRegistry;
 
 public class SpikeTrapRenderer implements BlockEntityRenderer<SpikeTrapBlockEntity> {
 
-	private static final RenderType NORMAL_TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/spike_block_spikes_1.png"));
-	private static final RenderType MUD_TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/spike_block_spikes_2.png"));
+	private static final RenderType NORMAL_TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/spike_block_spikes_1.png"));
+	private static final RenderType MUD_TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/spike_block_spikes_2.png"));
 	private static final RenderType SPOOP_TEXTURE = RenderType.entityTranslucent(TheBetweenlands.prefix("textures/entity/block/spoop.png"));
 
 	private final ModelPart spikes;

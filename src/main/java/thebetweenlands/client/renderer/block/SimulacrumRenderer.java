@@ -15,15 +15,15 @@ import thebetweenlands.common.registries.BlockRegistry;
 
 public class SimulacrumRenderer implements BlockEntityRenderer<SimulacrumBlockEntity> {
 
-	private static final RenderType DEEPMAN_1 = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/deepman_simulacrum_1.png"));
-	private static final RenderType DEEPMAN_2 = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/deepman_simulacrum_2.png"));
-	private static final RenderType DEEPMAN_3 = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/deepman_simulacrum_3.png"));
-	private static final RenderType LAKEMAN_1 = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/lake_cavern_simulacrum_1.png"));
-	private static final RenderType LAKEMAN_2 = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/lake_cavern_simulacrum_2.png"));
-	private static final RenderType LAKEMAN_3 = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/lake_cavern_simulacrum_3.png"));
-	private static final RenderType ROOTMAN_1 = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/rootman_simulacrum_1.png"));
-	private static final RenderType ROOTMAN_2 = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/rootman_simulacrum_2.png"));
-	private static final RenderType ROOTMAN_3 = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/rootman_simulacrum_3.png"));
+	private static final RenderType DEEPMAN_1 = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/deepman_simulacrum_1.png"));
+	private static final RenderType DEEPMAN_2 = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/deepman_simulacrum_2.png"));
+	private static final RenderType DEEPMAN_3 = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/deepman_simulacrum_3.png"));
+	private static final RenderType LAKEMAN_1 = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/lake_cavern_simulacrum_1.png"));
+	private static final RenderType LAKEMAN_2 = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/lake_cavern_simulacrum_2.png"));
+	private static final RenderType LAKEMAN_3 = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/lake_cavern_simulacrum_3.png"));
+	private static final RenderType ROOTMAN_1 = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/rootman_simulacrum_1.png"));
+	private static final RenderType ROOTMAN_2 = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/rootman_simulacrum_2.png"));
+	private static final RenderType ROOTMAN_3 = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/rootman_simulacrum_3.png"));
 
 	private final ModelPart deepman1, deepman2, deepman3;
 	private final ModelPart lakeman1, lakeman2, lakeman3;
@@ -44,11 +44,9 @@ public class SimulacrumRenderer implements BlockEntityRenderer<SimulacrumBlockEn
 	@Override
 	public void render(SimulacrumBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource source, int light, int overlay) {
 		stack.pushPose();
-		stack.translate(0.5F, 1.0F, 0.5F);
-		stack.mulPose(Axis.XP.rotationDegrees(180.0F));
-		stack.translate(0.0F, 1.0F, 0.0F);
-		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(SimulacrumBlock.FACING).toYRot()));
-		stack.scale(-1.0F, 1.0F, 1.0F);
+		stack.translate(0.5F, 0.0F, 0.5F);
+		stack.mulPose(Axis.YP.rotationDegrees(-entity.getBlockState().getValue(SimulacrumBlock.FACING).toYRot()));
+		stack.scale(1.0F, -1.0F, -1.0F);
 		if (entity.getBlockState().is(BlockRegistry.DEEPMAN_SIMULACRUM_1)) {
 			this.deepman1.render(stack, source.getBuffer(DEEPMAN_1), light, overlay);
 		} else if (entity.getBlockState().is(BlockRegistry.DEEPMAN_SIMULACRUM_2)) {

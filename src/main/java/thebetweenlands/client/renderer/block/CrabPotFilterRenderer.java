@@ -19,7 +19,7 @@ import thebetweenlands.common.block.entity.CrabPotFilterBlockEntity;
 
 public class CrabPotFilterRenderer implements BlockEntityRenderer<CrabPotFilterBlockEntity> {
 
-	private static final RenderType TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/crab_pot_filter.png"));
+	private static final RenderType TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/crab_pot_filter.png"));
 	private final ModelPart filter;
 
 	public CrabPotFilterRenderer(BlockEntityRendererProvider.Context context) {
@@ -29,12 +29,11 @@ public class CrabPotFilterRenderer implements BlockEntityRenderer<CrabPotFilterB
 	@Override
 	public void render(CrabPotFilterBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource source, int light, int overlay) {
 		stack.pushPose();
-		stack.translate(0.5F, 1.0F, 0.5F);
-		stack.mulPose(Axis.XP.rotationDegrees(180.0F));
-		stack.translate(0.0F, 1.0F, 0.0F);
-		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(CrabPotFilterBlock.FACING).toYRot()));
-		stack.scale(-1.0F, 1.0F, 1.0F);
+		stack.translate(0.5F, 0.0F, 0.5F);
+		stack.mulPose(Axis.YP.rotationDegrees(-entity.getBlockState().getValue(CrabPotFilterBlock.FACING).toYRot()));
+		stack.scale(1.0F, -1.0F, -1.0F);
 		this.filter.render(stack, source.getBuffer(TEXTURE), LightTexture.FULL_BLOCK, overlay);
+		stack.popPose();
 
 		if (entity.getLevel() != null) {
 			// input rendering
@@ -73,7 +72,5 @@ public class CrabPotFilterRenderer implements BlockEntityRenderer<CrabPotFilterB
 				stack.popPose();
 			}
 		}
-
-		stack.popPose();
 	}
 }

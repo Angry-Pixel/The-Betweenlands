@@ -28,8 +28,8 @@ import javax.annotation.Nullable;
 
 public class SmokingRackRenderer implements BlockEntityRenderer<SmokingRackBlockEntity> {
 
-	private static final RenderType TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/smoking_rack.png"));
-	private static final RenderType ACTIVE_TEXTURE = RenderType.entityCutoutNoCull(TheBetweenlands.prefix("textures/entity/block/smoking_rack_smoked.png"));
+	private static final RenderType TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/smoking_rack.png"));
+	private static final RenderType ACTIVE_TEXTURE = RenderType.entityCutout(TheBetweenlands.prefix("textures/entity/block/smoking_rack_smoked.png"));
 	private final ModelPart rack;
 
 	private static final Vec3[] ITEM_OFFSETS = new Vec3[]{
@@ -49,17 +49,13 @@ public class SmokingRackRenderer implements BlockEntityRenderer<SmokingRackBlock
 	@Override
 	public void render(SmokingRackBlockEntity entity, float partialTicks, PoseStack stack, MultiBufferSource source, int light, int overlay) {
 		stack.pushPose();
-		stack.translate(0.5F, 1.0F, 0.5F);
-		stack.mulPose(Axis.XP.rotationDegrees(180.0F));
-		stack.translate(0.0F, 1.0F, 0.0F);
-		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(SmokingRackBlock.FACING).toYRot()));
-		stack.scale(-1.0F, 1.0F, 1.0F);
+		stack.translate(0.5F, 0.0F, 0.5F);
+		stack.mulPose(Axis.YP.rotationDegrees(-entity.getBlockState().getValue(SmokingRackBlock.FACING).toYRot()));
+		stack.pushPose();
+		stack.scale(1.0F, -1.0F, -1.0F);
 		this.rack.render(stack, source.getBuffer(entity.getBlockState().getValue(SmokingRackBlock.HEATED) ? ACTIVE_TEXTURE : TEXTURE), light, overlay);
 		stack.popPose();
 
-		stack.pushPose();
-		stack.translate(0.5F, 0.0F, 0.5F);
-		stack.mulPose(Axis.YP.rotationDegrees(entity.getBlockState().getValue(SmokingRackBlock.FACING).toYRot()));
 		if (entity.getLevel() != null) {
 			if (!entity.getItem(0).isEmpty()) {
 				this.renderItemInSlot(stack, source, entity.getItem(0), Vec3.ZERO, 1.0F, light, overlay);
@@ -112,7 +108,7 @@ public class SmokingRackRenderer implements BlockEntityRenderer<SmokingRackBlock
 			if (item.is(BlockRegistry.FALLEN_LEAVES.asItem())) {
 				stack.mulPose(Axis.XP.rotationDegrees(90.0F));
 			} else {
-				stack.mulPose(Axis.ZP.rotationDegrees(-45.0F));
+				stack.mulPose(Axis.ZP.rotationDegrees(45.0F));
 			}
 
 			Minecraft.getInstance().getItemRenderer().renderStatic(item, ItemDisplayContext.FIXED, light, overlay, stack, source, null, 0);

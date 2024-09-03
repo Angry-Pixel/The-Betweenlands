@@ -15,37 +15,37 @@ public class CompostBinModel {
 		var left = partDefinition.addOrReplaceChild("bin_left", CubeListBuilder.create()
 				.texOffs(37, 0)
 				.addBox(0.0F, 1.0F, -8.0F, 2, 12, 16),
-			PartPose.offsetAndRotation(4.5F, 8.5F, 0.0F, 0.0F, 0.0F, -0.091106186954104F));
+			PartPose.offsetAndRotation(4.5F, -15.5F, 0.0F, 0.0F, 0.0F, -0.091106186954104F));
 
 		var right = partDefinition.addOrReplaceChild("bin_right", CubeListBuilder.create()
 				.texOffs(0, 0)
 				.addBox(-2.0F, 1.0F, -8.0F, 2, 12, 16),
-			PartPose.offsetAndRotation(-4.5F, 8.5F, 0.0F, 0.0F, 0.0F, 0.091106186954104F));
+			PartPose.offsetAndRotation(-4.5F, -15.5F, 0.0F, 0.0F, 0.0F, 0.091106186954104F));
 
 		partDefinition.addOrReplaceChild("bin_back", CubeListBuilder.create()
 				.texOffs(75, 0)
 				.addBox(-6.0F, -0.6F, 0.0F, 12, 12, 2),
-			PartPose.offset(0.0F, 10.0F, 5.0F));
+			PartPose.offset(0.0F, -14.0F, 5.0F));
 
 		partDefinition.addOrReplaceChild("bin_top", CubeListBuilder.create()
 				.texOffs(0, 38)
 				.addBox(-15.0F, -1.0F, -8.01F, 16, 2, 16),
-			PartPose.offset(7.0F, 9.0F, 0.0F));
+			PartPose.offset(7.0F, -15.0F, 0.0F));
 
 		partDefinition.addOrReplaceChild("left_support", CubeListBuilder.create()
 				.texOffs(22, 0)
 				.addBox(-2.0F, 0.0F, -2.0F, 2, 6, 4),
-			PartPose.offsetAndRotation(8.0F, 10.0F, -5.0F, 0.0F, 0.0F, 0.136659280431156F));
+			PartPose.offsetAndRotation(8.0F, -14.0F, -5.0F, 0.0F, 0.0F, 0.136659280431156F));
 
 		partDefinition.addOrReplaceChild("right_support", CubeListBuilder.create()
 				.texOffs(35, 0)
 				.addBox(-2.0F, 0.0F, -2.0F, 2, 6, 4),
-			PartPose.offsetAndRotation(8.0F, 10.0F, 5.0F, 0.0F, 0.0F, 0.136659280431156F));
+			PartPose.offsetAndRotation(8.0F, -14.0F, 5.0F, 0.0F, 0.0F, 0.136659280431156F));
 
 		var mainNet = partDefinition.addOrReplaceChild("net_1", CubeListBuilder.create()
 				.texOffs(75, 15)
 				.addBox(-6.0F, 0.0F, 0.0F, 12, 5, 0),
-			PartPose.offsetAndRotation(0.0F, 10.0F, -7.0F, -0.045553093477052F, 0.091106186954104F, 0.0F));
+			PartPose.offsetAndRotation(0.0F, -14.0F, -7.0F, -0.045553093477052F, 0.091106186954104F, 0.0F));
 
 		var subNet = mainNet.addOrReplaceChild("net_2", CubeListBuilder.create()
 				.texOffs(75, 21)
