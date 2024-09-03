@@ -238,7 +238,7 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> SMOOTH_PITSTONE_STAIRS = register("smooth_pitstone_stairs", () -> new StairBlock(SMOOTH_PITSTONE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(SMOOTH_PITSTONE.get())));
 	public static final DeferredBlock<Block> SOLID_TAR_STAIRS = register("solid_tar_stairs", () -> new StairBlock(SOLID_TAR.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(SOLID_TAR.get())));
 	public static final DeferredBlock<Block> TEMPLE_BRICK_STAIRS = register("temple_brick_stairs", () -> new StairBlock(TEMPLE_BRICKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(TEMPLE_BRICKS.get())));
-	public static final DeferredBlock<Block> SPIKE_TRAP = register("spike_trap", () -> new SpikeTrapBlock(BlockBehaviour.Properties.of().strength(10.0F, 2000.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> SPIKE_TRAP = register("spike_trap", () -> new SpikeTrapBlock(false, BlockBehaviour.Properties.of().strength(10.0F, 2000.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> WEEDWOOD_STAIRS = register("weedwood_stairs", () -> new StairBlock(WEEDWOOD_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(WEEDWOOD_PLANKS.get())));
 	public static final DeferredBlock<Block> RUBBER_TREE_STAIRS = register("rubber_tree_stairs", () -> new StairBlock(RUBBER_TREE_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(RUBBER_TREE_PLANKS.get())));
 	public static final DeferredBlock<Block> GIANT_ROOT_STAIRS = register("giant_root_stairs", () -> new StairBlock(GIANT_ROOT_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(GIANT_ROOT_PLANKS.get())));
@@ -460,8 +460,8 @@ public class BlockRegistry {
 	public static final DeferredBlock<Block> CARVED_ROTTEN_BARK_15 = register("carved_rotten_bark_15", () -> new Block(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> CARVED_ROTTEN_BARK_16 = register("carved_rotten_bark_16", () -> new Block(BlockBehaviour.Properties.of().ignitedByLava().strength(2.0F).sound(SoundType.WOOD)));
 	public static final DeferredBlock<Block> MUD_ENERGY_BARRIER = BLOCKS.register("mud_energy_barrier", () -> new Block(BlockBehaviour.Properties.of().lightLevel(value -> 12).strength(-1.0F, 6000000.0F).sound(SoundType.GLASS)));
-	public static final DeferredBlock<Block> MUD_BRICK_SPIKE_TRAP = register("mud_brick_spike_trap", () -> new SpikeTrapBlock(BlockBehaviour.Properties.of().strength(10.0F, 2000.0F).sound(SoundType.STONE)));
-	public static final DeferredBlock<Block> MUD_TILES_SPIKE_TRAP = register("mud_tile_spike_trap", () -> new SpikeTrapBlock(BlockBehaviour.Properties.of().strength(10.0F, 2000.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> MUD_BRICK_SPIKE_TRAP = register("mud_brick_spike_trap", () -> new SpikeTrapBlock(true, BlockBehaviour.Properties.of().strength(10.0F, 2000.0F).sound(SoundType.STONE)));
+	public static final DeferredBlock<Block> MUD_TILES_SPIKE_TRAP = register("mud_tile_spike_trap", () -> new SpikeTrapBlock(false, BlockBehaviour.Properties.of().strength(10.0F, 2000.0F).sound(SoundType.STONE)));
 	public static final DeferredBlock<Block> COMPACTED_MUD_SLOPE = register("compacted_mud_slope", () -> new StairBlock(COMPACTED_MUD.get().defaultBlockState(), BlockBehaviour.Properties.of().strength(1.0F, 10.0F).sound(SoundType.PACKED_MUD)));
 	public static final DeferredBlock<Block> COMPACTED_MUD_SLAB = register("compacted_mud_slab", () -> new SlabBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.PACKED_MUD)));
 	public static final DeferredBlock<Block> COMPACTED_MUD_MIRAGE = register("compacted_mud_mirage", () -> new MirageBlock(BlockBehaviour.Properties.of().strength(1.5F, 10.0F).sound(SoundType.PACKED_MUD)));

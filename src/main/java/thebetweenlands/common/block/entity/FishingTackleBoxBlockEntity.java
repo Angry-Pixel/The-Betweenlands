@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import thebetweenlands.common.block.FishingTackleBoxBlock;
 import thebetweenlands.common.entities.Seat;
+import thebetweenlands.common.inventory.FishingTackleBoxMenu;
 import thebetweenlands.common.registries.AdvancementCriteriaRegistry;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 
@@ -72,10 +73,9 @@ public class FishingTackleBoxBlockEntity extends BaseContainerBlockEntity {
 		this.items = items;
 	}
 
-	//TODO
 	@Override
 	protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
-		return null;
+		return new FishingTackleBoxMenu(containerId, inventory, this);
 	}
 
 	@Override

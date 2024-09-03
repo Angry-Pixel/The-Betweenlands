@@ -34,6 +34,7 @@ public class BLLanguageProvider extends LanguageProvider {
 		this.add("itemGroup.thebetweenlands.plants", "The Betweenlands Plants");
 		this.add("itemGroup.thebetweenlands.herblore", "The Betweenlands Herblore");
 
+		this.add("container.thebetweenlands.fishing_tackle_box", "Fishing Tackle Box");
 		this.add("container.thebetweenlands.fish_trimming_table", "Trimming Table");
 		this.add("container.thebetweenlands.fish_trimming_table.butcher", "Chop!");
 		this.add("container.thebetweenlands.smoking_rack", "Smoking Rack");

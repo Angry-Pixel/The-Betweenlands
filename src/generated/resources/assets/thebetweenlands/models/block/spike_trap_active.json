@@ -2,6 +2,6 @@
   "parent": "minecraft:block/cube_top",
   "textures": {
     "side": "thebetweenlands:block/polished_limestone",
-    "top": "thebetweenlands:block/spike_trap_inactive_top"
+    "top": "thebetweenlands:block/spike_trap_active_top"
   }
 }

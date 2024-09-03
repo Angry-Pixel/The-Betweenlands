@@ -93,6 +93,7 @@ public class ClientRegistrationEvents {
 	private static void registerScreens(final RegisterMenuScreensEvent event) {
 		event.register(MenuRegistry.ANIMATOR.get(), AnimatorScreen::new);
 		event.register(MenuRegistry.DRUID_ALTAR.get(), DruidAltarScreen::new);
+		event.register(MenuRegistry.FISHING_TACKLE_BOX.get(), FishingTackleBoxScreen::new);
 		event.register(MenuRegistry.FISH_TRIMMING_TABLE.get(), FishTrimmingTableScreen::new);
 		event.register(MenuRegistry.MORTAR.get(), MortarScreen::new);
 		event.register(MenuRegistry.SMOKING_RACK.get(), SmokingRackScreen::new);
@@ -127,6 +128,7 @@ public class ClientRegistrationEvents {
 		event.registerBlockEntityRenderer(BlockEntityRegistry.PURIFIER.get(), PurifierRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SIMULACRUM.get(), SimulacrumRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.SMOKING_RACK.get(), SmokingRackRenderer::new);
+		event.registerBlockEntityRenderer(BlockEntityRegistry.SPIKE_TRAP.get(), SpikeTrapRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.WAYSTONE.get(), WaystoneRenderer::new);
 		event.registerBlockEntityRenderer(BlockEntityRegistry.WIND_CHIME.get(), WindChimeRenderer::new);
 	}
@@ -171,6 +173,8 @@ public class ClientRegistrationEvents {
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_2, RootmanSimulacrumModels::makeSimulacrum2);
 		event.registerLayerDefinition(BLModelLayers.ROOTMAN_SIMULACRUM_3, RootmanSimulacrumModels::makeSimulacrum3);
 		event.registerLayerDefinition(BLModelLayers.SMOKING_RACK, SmokingRackModel::makeModel);
+		event.registerLayerDefinition(BLModelLayers.SPIKE_BLOCK, SpikeTrapModel::makeModel);
+		event.registerLayerDefinition(BLModelLayers.SPOOP, SpikeTrapModel::makeSpoop);
 		event.registerLayerDefinition(BLModelLayers.WAYSTONE, WaystoneModel::makeModel);
 		event.registerLayerDefinition(BLModelLayers.WIND_CHIME, WindChimeModel::makeModel);
 	}

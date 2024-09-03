@@ -1,7 +1,56 @@
 {
   "variants": {
-    "": {
+    "active=false,facing=down": {
+      "model": "thebetweenlands:block/mud_tile_spike_trap",
+      "x": 180
+    },
+    "active=false,facing=east": {
+      "model": "thebetweenlands:block/mud_tile_spike_trap",
+      "x": 90,
+      "y": 90
+    },
+    "active=false,facing=north": {
+      "model": "thebetweenlands:block/mud_tile_spike_trap",
+      "x": 90
+    },
+    "active=false,facing=south": {
+      "model": "thebetweenlands:block/mud_tile_spike_trap",
+      "x": 90,
+      "y": 180
+    },
+    "active=false,facing=up": {
       "model": "thebetweenlands:block/mud_tile_spike_trap"
+    },
+    "active=false,facing=west": {
+      "model": "thebetweenlands:block/mud_tile_spike_trap",
+      "x": 90,
+      "y": 270
+    },
+    "active=true,facing=down": {
+      "model": "thebetweenlands:block/mud_tile_spike_trap_active",
+      "x": 180
+    },
+    "active=true,facing=east": {
+      "model": "thebetweenlands:block/mud_tile_spike_trap_active",
+      "x": 90,
+      "y": 90
+    },
+    "active=true,facing=north": {
+      "model": "thebetweenlands:block/mud_tile_spike_trap_active",
+      "x": 90
+    },
+    "active=true,facing=south": {
+      "model": "thebetweenlands:block/mud_tile_spike_trap_active",
+      "x": 90,
+      "y": 180
+    },
+    "active=true,facing=up": {
+      "model": "thebetweenlands:block/mud_tile_spike_trap_active"
+    },
+    "active=true,facing=west": {
+      "model": "thebetweenlands:block/mud_tile_spike_trap_active",
+      "x": 90,
+      "y": 270
     }
   }
 }

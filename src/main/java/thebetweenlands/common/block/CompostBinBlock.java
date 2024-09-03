@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import thebetweenlands.common.block.entity.CompostBinBlockEntity;
 import thebetweenlands.common.component.item.CompostData;
@@ -44,6 +45,11 @@ public class CompostBinBlock extends HorizontalBaseEntityBlock {
 	@Override
 	protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
 		return ALMOST_FULL;
+	}
+
+	@Override
+	protected VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos) {
+		return Shapes.block();
 	}
 
 	@Override

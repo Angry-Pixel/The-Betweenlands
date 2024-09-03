@@ -16,6 +16,8 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.*;
 import thebetweenlands.common.registries.BlockRegistry;
 
+import javax.annotation.Nullable;
+
 public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.generators.BlockStateProvider {
 
 	public BLBlockStateProvider(PackOutput output, ExistingFileHelper helper) {
@@ -232,7 +234,7 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 		this.stairBlockWithItem(BlockRegistry.SMOOTH_PITSTONE_STAIRS, BlockRegistry.SMOOTH_PITSTONE);
 		this.stairBlockWithItem(BlockRegistry.SOLID_TAR_STAIRS, BlockRegistry.SOLID_TAR);
 		this.stairBlockWithItem(BlockRegistry.TEMPLE_BRICK_STAIRS, BlockRegistry.TEMPLE_BRICKS);
-		this.bottomSideTopBlockWithItem(BlockRegistry.SPIKE_TRAP, this.modLoc("block/polished_limestone"), this.modLoc("block/spike_block_inactive_top"), this.modLoc("block/polished_limestone"));
+		this.spikeTrap(BlockRegistry.SPIKE_TRAP, BlockRegistry.POLISHED_LIMESTONE);
 		this.stairBlockWithItem(BlockRegistry.WEEDWOOD_STAIRS, BlockRegistry.WEEDWOOD_PLANKS);
 		this.stairBlockWithItem(BlockRegistry.RUBBER_TREE_STAIRS, BlockRegistry.RUBBER_TREE_PLANKS);
 		this.stairBlockWithItem(BlockRegistry.GIANT_ROOT_STAIRS, BlockRegistry.GIANT_ROOT_PLANKS);
@@ -454,8 +456,8 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_15, this.modLoc("block/rotten_bark_carved_15"), this.modLoc("block/rotten_bark_rotated"));
 		this.sidedBlockWithItem(BlockRegistry.CARVED_ROTTEN_BARK_16, this.modLoc("block/rotten_bark_carved_16"), this.modLoc("block/rotten_bark_rotated"));
 		this.simpleBlockRenderTypeAndItem(BlockRegistry.MUD_ENERGY_BARRIER, "translucent");
-		this.bottomSideTopBlockWithItem(BlockRegistry.MUD_BRICK_SPIKE_TRAP, this.modLoc("block/mud_bricks"), this.modLoc("block/mud_brick_spike_block_inactive_top"), this.modLoc("block/mud_bricks"));
-		this.bottomSideTopBlockWithItem(BlockRegistry.MUD_TILES_SPIKE_TRAP, this.modLoc("block/mud_tiles"), this.modLoc("block/mud_tiles_spike_block_inactive_top"), this.modLoc("block/mud_tiles"));
+		this.spikeTrap(BlockRegistry.MUD_BRICK_SPIKE_TRAP, BlockRegistry.MUD_BRICKS);
+		this.spikeTrap(BlockRegistry.MUD_TILES_SPIKE_TRAP, BlockRegistry.MUD_TILES);
 		//compacted mud slope
 		this.slabBlockWithItem(BlockRegistry.COMPACTED_MUD_SLAB, BlockRegistry.COMPACTED_MUD);
 		this.simpleBlockWithItem(BlockRegistry.COMPACTED_MUD_MIRAGE.get(), this.models().getExistingFile(this.blockTexture(BlockRegistry.COMPACTED_MUD.get())));
@@ -718,6 +720,19 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 	private void portalFrame(DeferredBlock<Block> frame, DeferredBlock<Block> otherCorner) {
 		this.getVariantBuilder(frame.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(this.models().withExistingParent(frame.getId().getPath(), this.modLoc("block/portal_frame")).texture("frame", this.blockTexture(frame.get())).texture("frame2", this.blockTexture(otherCorner.get()))).rotationY(state.getValue(PortalFrameBlock.AXIS) == Direction.Axis.Z ? 0 : 90).build());
 		this.simpleBlockItem(frame);
+	}
+
+	private void spikeTrap(DeferredBlock<Block> trap, DeferredBlock<Block> sideTex) {
+		ModelFile inactive = this.models().cubeTop(trap.getId().getPath(), this.blockTexture(sideTex.get()), this.blockTexture(trap.get()).withSuffix("_inactive_top"));
+		ModelFile active = this.models().cubeTop(trap.getId().getPath() + "_active", this.blockTexture(sideTex.get()), this.blockTexture(trap.get()).withSuffix("_active_top"));
+		this.getVariantBuilder(trap.get()).forAllStates(state -> {
+			Direction dir = state.getValue(BlockStateProperties.FACING);
+			return ConfiguredModel.builder()
+				.modelFile(state.getValue(SpikeTrapBlock.ACTIVE) ? active : inactive)
+				.rotationX(dir == Direction.DOWN ? 180 : dir.getAxis().isHorizontal() ? 90 : 0)
+				.rotationY(dir.getAxis().isVertical() ? 0 : (((int) dir.toYRot()) + 180) % 360).build();
+		});
+		this.simpleBlockItem(trap);
 	}
 
 	private void sidedBlockWithItem(DeferredBlock<Block> block, ResourceLocation side, ResourceLocation end) {

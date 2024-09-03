@@ -2,6 +2,6 @@
   "parent": "minecraft:block/cube_top",
   "textures": {
     "side": "thebetweenlands:block/mud_bricks",
-    "top": "thebetweenlands:block/mud_brick_spike_trap_inactive_top"
+    "top": "thebetweenlands:block/mud_brick_spike_trap_active_top"
   }
 }

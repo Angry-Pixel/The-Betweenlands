@@ -62,6 +62,11 @@ public class LootPotBlock extends HorizontalBaseEntityBlock {
 	}
 
 	@Override
+	protected VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos) {
+		return this.shape == ALMOST_FULL ? Shapes.block() : super.getBlockSupportShape(state, level, pos);
+	}
+
+	@Override
 	public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
 		BlockEntity tile = level.getBlockEntity(pos);
 		if (tile instanceof LootPotBlockEntity pot) {
