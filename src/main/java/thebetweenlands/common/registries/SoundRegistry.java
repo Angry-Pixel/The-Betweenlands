@@ -225,7 +225,7 @@ public class SoundRegistry {
 	public static final DeferredHolder<SoundEvent, SoundEvent> SPLODESHROOM_WINDDOWN = register("splodeshroom_winddown");
 	public static final DeferredHolder<SoundEvent, SoundEvent> SPLODESHROOM_WINDUP = register("splodeshroom_windup");
 	public static final DeferredHolder<SoundEvent, SoundEvent> SPLODESHROOM_POP = register("splodeshroom_pop");
-	public static final DeferredHolder<SoundEvent, SoundEvent> PIT_OF_DECAY_LOOP = register("pit_of_decay_loop");
+	public static final DeferredHolder<SoundEvent, SoundEvent> PIT_OF_DECAY_LOOP = register("pit_of_decay_loop"); //TODO move to music category?
 	public static final DeferredHolder<SoundEvent, SoundEvent> EMBERLING_FLAMES = register("emberling_flames");
 	public static final DeferredHolder<SoundEvent, SoundEvent> EMBERLING_JUMP = register("emberling_jump");
 	public static final DeferredHolder<SoundEvent, SoundEvent> EMBERLING_HURT = register("emberling_hurt");
