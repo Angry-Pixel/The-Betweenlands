@@ -22,12 +22,16 @@ public class FeatureRegistry {
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> BLADDERWORT_CLUSTER = FEATURES.register("bladderwort_cluster",
 		() -> new BladderwortClusterFeature(NoneFeatureConfiguration.CODEC));
 	//Block Replacement Cluster
-	//Cave Grass
-	//Cave Hangers
-	//Cave Moss
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> CAVE_GRASS = FEATURES.register("cave_grass",
+		() -> new CaveGrassFeature(NoneFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> CAVE_HANGERS = FEATURES.register("cave_hangers",
+		() -> new CaveHangersFeature(NoneFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> CAVE_MOSS = FEATURES.register("cave_moss",
+		() -> new CaveMossFeature(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> CAVE_POTS = FEATURES.register("cave_pots",
 		() -> new CavePotsFeature(NoneFeatureConfiguration.CODEC));
-	//Cave Thorns
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> CAVE_THORNS = FEATURES.register("cave_thorns",
+		() -> new CaveThornsFeature(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<SimulacrumConfiguration>> DEEPMAN_SIMULACRUM = FEATURES.register("deepman_simulacrum",
 		() -> new DeepmanSimulacrumFeature(SimulacrumConfiguration.CODEC));
 	//Double Plant Cluster
