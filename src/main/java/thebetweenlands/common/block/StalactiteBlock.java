@@ -9,30 +9,25 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.util.StalactiteHelper.IStalactite;
 
-public class StalactiteBlock extends Block implements SimpleWaterloggedBlock, IStalactite {
+public class StalactiteBlock extends Block implements SwampWaterLoggable, IStalactite {
 
 	public static final int MAX_LENGTH = 32;
 
-	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
-
 	public StalactiteBlock(Properties properties) {
 		super(properties);
-		this.registerDefaultState(this.getStateDefinition().any().setValue(WATERLOGGED, false));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(WATER_TYPE, WaterType.NONE));
 	}
 
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		return this.defaultBlockState().setValue(WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).is(Fluids.WATER));
+		return this.defaultBlockState().setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()));
 	}
 
 	@Override
@@ -47,8 +42,8 @@ public class StalactiteBlock extends Block implements SimpleWaterloggedBlock, IS
 
 	@Override
 	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-		if (state.getValue(WATERLOGGED)) {
-			level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+		if (state.getValue(WATER_TYPE) != WaterType.NONE) {
+			level.scheduleTick(pos, state.getValue(WATER_TYPE).getFluid(), state.getValue(WATER_TYPE).getFluid().getTickDelay(level));
 		}
 
 		return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
@@ -56,12 +51,12 @@ public class StalactiteBlock extends Block implements SimpleWaterloggedBlock, IS
 
 	@Override
 	protected FluidState getFluidState(BlockState state) {
-		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+		return state.getValue(WATER_TYPE).getFluid().defaultFluidState();
 	}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(WATERLOGGED);
+		builder.add(WATER_TYPE);
 	}
 
 	@Override

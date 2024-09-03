@@ -1,6 +1,7 @@
 package thebetweenlands.common.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
@@ -9,14 +10,18 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -25,18 +30,20 @@ import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.BLRegistries;
 import thebetweenlands.api.SimulacrumEffect;
 import thebetweenlands.common.block.entity.simulacrum.SimulacrumBlockEntity;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.DataComponentRegistry;
 import thebetweenlands.common.registries.SimulacrumEffectRegistry;
 
 import java.util.List;
 
-public class SimulacrumBlock extends HorizontalBaseEntityBlock {
+public class SimulacrumBlock extends HorizontalBaseEntityBlock implements SwampWaterLoggable {
 
 	public static final VoxelShape SHAPE = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D);
 
 	public SimulacrumBlock(Properties properties) {
 		super(properties);
+		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(WATER_TYPE, WaterType.NONE));
 	}
 
 	@Override
@@ -77,6 +84,26 @@ public class SimulacrumBlock extends HorizontalBaseEntityBlock {
 
 	@Nullable
 	@Override
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		return super.getStateForPlacement(context).setValue(WATER_TYPE, SwampWaterLoggable.WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()));
+	}
+
+	@Override
+	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+		if (state.getValue(WATER_TYPE) != SwampWaterLoggable.WaterType.NONE) {
+			level.scheduleTick(pos, state.getValue(WATER_TYPE).getFluid(), state.getValue(WATER_TYPE).getFluid().getTickDelay(level));
+		}
+
+		return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+	}
+
+	@Override
+	protected FluidState getFluidState(BlockState state) {
+		return state.getValue(WATER_TYPE).getFluid().defaultFluidState();
+	}
+
+	@Nullable
+	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new SimulacrumBlockEntity(pos, state);
 	}
@@ -101,7 +128,12 @@ public class SimulacrumBlock extends HorizontalBaseEntityBlock {
 	@Override
 	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		if (flag.isCreative()) {
-			tooltip.add(Component.translatable("tooltip.bl.simulacrum.effect", Component.translatable(BLRegistries.SIMULACRUM_EFFECTS.get(stack.getOrDefault(DataComponentRegistry.SIMULACRUM_EFFECT, BLRegistries.SIMULACRUM_EFFECTS.getKey(SimulacrumEffectRegistry.NONE.get()))).getDescriptionId())));
+			tooltip.add(Component.translatable("block.thebetweenlands.simulacrum.effect", Component.translatable(BLRegistries.SIMULACRUM_EFFECTS.get(stack.getOrDefault(DataComponentRegistry.SIMULACRUM_EFFECT, BLRegistries.SIMULACRUM_EFFECTS.getKey(SimulacrumEffectRegistry.NONE.get()))).getDescriptionId())));
 		}
+	}
+
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder.add(WATER_TYPE));
 	}
 }

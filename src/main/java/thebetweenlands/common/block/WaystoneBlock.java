@@ -18,12 +18,14 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -32,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.common.block.entity.SmokingRackBlockEntity;
 import thebetweenlands.common.block.entity.WaystoneBlockEntity;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationStorage;
@@ -39,7 +42,7 @@ import thebetweenlands.common.world.storage.location.LocationStorage;
 import java.util.List;
 import java.util.Locale;
 
-public class WaystoneBlock extends BaseEntityBlock {
+public class WaystoneBlock extends BaseEntityBlock implements SwampWaterLoggable {
 
 	public static final EnumProperty<Part> PART = EnumProperty.create("part", Part.class);
 	public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
@@ -47,7 +50,7 @@ public class WaystoneBlock extends BaseEntityBlock {
 
 	public WaystoneBlock(Properties properties) {
 		super(properties);
-		this.registerDefaultState(this.getStateDefinition().any().setValue(PART, Part.BOTTOM).setValue(ACTIVE, false));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(PART, Part.BOTTOM).setValue(ACTIVE, false).setValue(WATER_TYPE, WaterType.NONE));
 	}
 
 	@Override
@@ -62,6 +65,9 @@ public class WaystoneBlock extends BaseEntityBlock {
 
 	@Override
 	protected BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
+		if (state.getValue(WATER_TYPE) != WaterType.NONE) {
+			level.scheduleTick(currentPos, state.getValue(WATER_TYPE).getFluid(), state.getValue(WATER_TYPE).getFluid().getTickDelay(level));
+		}
 		return !this.isValidWaystone(level, currentPos, state) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, facing, facingState, level, currentPos, facingPos);
 	}
 
@@ -71,7 +77,7 @@ public class WaystoneBlock extends BaseEntityBlock {
 		BlockPos blockpos = context.getClickedPos();
 		Level level = context.getLevel();
 		return blockpos.getY() < level.getMaxBuildHeight() - 2 && level.getBlockState(blockpos.above()).canBeReplaced(context) && level.getBlockState(blockpos.above(2)).canBeReplaced(context)
-			? super.getStateForPlacement(context)
+			? super.getStateForPlacement(context).setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()))
 			: null;
 	}
 
@@ -86,10 +92,15 @@ public class WaystoneBlock extends BaseEntityBlock {
 	}
 
 	@Override
+	protected FluidState getFluidState(BlockState state) {
+		return state.getValue(WATER_TYPE).getFluid().defaultFluidState();
+	}
+
+	@Override
 	public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack) {
 		if (level.getBlockEntity(pos) instanceof WaystoneBlockEntity waystone) waystone.setRotation(level.getRandom().nextFloat() * 360.0F);
-		level.setBlockAndUpdate(pos.above(), this.defaultBlockState().setValue(PART, Part.MIDDLE));
-		level.setBlockAndUpdate(pos.above(2), this.defaultBlockState().setValue(PART, Part.TOP));
+		level.setBlockAndUpdate(pos.above(), DoublePlantBlock.copyWaterloggedFrom(level, pos, state).setValue(PART, Part.MIDDLE));
+		level.setBlockAndUpdate(pos.above(2), DoublePlantBlock.copyWaterloggedFrom(level, pos, state).setValue(PART, Part.TOP));
 	}
 
 	@Override
@@ -184,7 +195,7 @@ public class WaystoneBlock extends BaseEntityBlock {
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(PART, ACTIVE);
+		builder.add(PART, ACTIVE, WATER_TYPE);
 	}
 
 	public enum Part implements StringRepresentable {

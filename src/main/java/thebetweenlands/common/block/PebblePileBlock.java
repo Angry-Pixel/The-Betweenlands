@@ -13,25 +13,22 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 
-public class PebblePileBlock extends Block implements SimpleWaterloggedBlock {
+public class PebblePileBlock extends Block implements SwampWaterLoggable {
 
 	public static final IntegerProperty PEBBLES = IntegerProperty.create("pebbles", 1, 4);
 	public static final BooleanProperty PLANT = BooleanProperty.create("plant");
-	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
 	protected static final VoxelShape SMALL_SHAPE = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 2.0D, 12.0D);
 	protected static final VoxelShape MED_SHAPE = Block.box(3.0D, 0.0D, 3.0D, 13.0D, 2.0D, 13.0D);
@@ -39,7 +36,7 @@ public class PebblePileBlock extends Block implements SimpleWaterloggedBlock {
 
 	public PebblePileBlock(Properties properties) {
 		super(properties);
-		this.registerDefaultState(this.getStateDefinition().any().setValue(PEBBLES, 1).setValue(PLANT, false).setValue(WATERLOGGED, false));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(PEBBLES, 1).setValue(PLANT, false).setValue(WATER_TYPE, WaterType.NONE));
 	}
 
 	@Override
@@ -58,7 +55,7 @@ public class PebblePileBlock extends Block implements SimpleWaterloggedBlock {
 		if (blockstate.is(this)) {
 			return blockstate.cycle(PEBBLES);
 		} else {
-			return this.defaultBlockState().setValue(PLANT, context.getLevel().getRandom().nextBoolean()).setValue(WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).is(Fluids.WATER));
+			return this.defaultBlockState().setValue(PLANT, context.getLevel().getRandom().nextBoolean()).setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()));
 		}
 	}
 
@@ -69,8 +66,8 @@ public class PebblePileBlock extends Block implements SimpleWaterloggedBlock {
 
 	@Override
 	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-		if (state.getValue(WATERLOGGED)) {
-			level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+		if (state.getValue(WATER_TYPE) != WaterType.NONE) {
+			level.scheduleTick(pos, state.getValue(WATER_TYPE).getFluid(), state.getValue(WATER_TYPE).getFluid().getTickDelay(level));
 		}
 
 		return !state.canSurvive(level, pos) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, direction, neighborState, level, pos, neighborPos);
@@ -96,11 +93,11 @@ public class PebblePileBlock extends Block implements SimpleWaterloggedBlock {
 
 	@Override
 	protected FluidState getFluidState(BlockState state) {
-		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+		return state.getValue(WATER_TYPE).getFluid().defaultFluidState();
 	}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(PEBBLES, PLANT, WATERLOGGED);
+		builder.add(PEBBLES, PLANT, WATER_TYPE);
 	}
 }

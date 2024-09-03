@@ -12,23 +12,18 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DirectionalBlock;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 
 import java.util.Map;
 
-public class GlowingGoopBlock extends DirectionalBlock implements SimpleWaterloggedBlock {
-
-	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+public class GlowingGoopBlock extends DirectionalBlock implements SwampWaterLoggable {
 
 	private static final Map<Direction, VoxelShape> SHAPE_BY_DIRECTION = Maps.newEnumMap(ImmutableMap.of(
 		Direction.NORTH, Block.box(2.0D, 2.0D, 12.0D, 14.0D, 14.0D, 16.0D),
@@ -41,7 +36,7 @@ public class GlowingGoopBlock extends DirectionalBlock implements SimpleWaterlog
 
 	public GlowingGoopBlock(Properties properties) {
 		super(properties);
-		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(WATER_TYPE, WaterType.NONE));
 	}
 
 	@Override
@@ -52,7 +47,7 @@ public class GlowingGoopBlock extends DirectionalBlock implements SimpleWaterlog
 	@Nullable
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection()).setValue(WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).is(Fluids.WATER));
+		return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection()).setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()));
 	}
 
 	@Override
@@ -67,19 +62,19 @@ public class GlowingGoopBlock extends DirectionalBlock implements SimpleWaterlog
 
 	@Override
 	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-		if (state.getValue(WATERLOGGED)) {
-			level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+		if (state.getValue(WATER_TYPE) != WaterType.NONE) {
+			level.scheduleTick(pos, state.getValue(WATER_TYPE).getFluid(), state.getValue(WATER_TYPE).getFluid().getTickDelay(level));
 		}
 		return state.canSurvive(level, pos) ? super.updateShape(state, direction, neighborState, level, pos, neighborPos) : Blocks.AIR.defaultBlockState();
 	}
 
 	@Override
 	protected FluidState getFluidState(BlockState state) {
-		return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+		return state.getValue(WATER_TYPE).getFluid().defaultFluidState();
 	}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(FACING, WATERLOGGED);
+		builder.add(FACING, WATER_TYPE);
 	}
 }

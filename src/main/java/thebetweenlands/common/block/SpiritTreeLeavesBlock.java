@@ -9,13 +9,13 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import thebetweenlands.common.block.waterlog.SwampLeavesBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class SpiritTreeLeavesBlock extends LeavesBlock {
+public class SpiritTreeLeavesBlock extends SwampLeavesBlock {
 
 	public static final VoxelShape COLLISION_SHAPE = Block.box(6.5D, 0.0D, 6.5D, 9.5D, 16.0D, 9.5D);
 	public final LeafType type;
@@ -42,12 +42,15 @@ public class SpiritTreeLeavesBlock extends LeavesBlock {
 
 	@Override
 	protected BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
+		if (state.getValue(WATER_TYPE) != WaterType.NONE) {
+			level.scheduleTick(currentPos, state.getValue(WATER_TYPE).getFluid(), state.getValue(WATER_TYPE).getFluid().getTickDelay(level));
+		}
 		return state.canSurvive(level, currentPos) ? state : Blocks.AIR.defaultBlockState();
 	}
 
 	@Override
 	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-		if (random.nextInt(100) == 0) {
+		if (state.getValue(WATER_TYPE) == WaterType.NONE && random.nextInt(100) == 0) {
 			double px = (double) pos.getX() + random.nextDouble() * 0.5D;
 			double py = (double) pos.getY() + random.nextDouble() * 0.5D;
 			double pz = (double) pos.getZ() + random.nextDouble() * 0.5D;

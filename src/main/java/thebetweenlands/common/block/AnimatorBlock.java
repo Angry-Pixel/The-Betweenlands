@@ -7,15 +7,19 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -24,6 +28,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 import thebetweenlands.api.recipes.AnimatorRecipe;
 import thebetweenlands.common.block.entity.AnimatorBlockEntity;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.BlockEntityRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 
@@ -31,12 +36,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class AnimatorBlock extends HorizontalBaseEntityBlock {
+public class AnimatorBlock extends HorizontalBaseEntityBlock implements SwampWaterLoggable {
 
-	private static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D);
+	private static final VoxelShape SHAPE = Block.box(0.01D, 0.0D, 0.01D, 15.99D, 15.0D, 15.99D);
 
 	public AnimatorBlock(Properties properties) {
 		super(properties);
+		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(WATER_TYPE, WaterType.NONE));
 	}
 
 	@Override
@@ -104,6 +110,27 @@ public class AnimatorBlock extends HorizontalBaseEntityBlock {
 		return 0;
 	}
 
+
+	@Nullable
+	@Override
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		return super.getStateForPlacement(context).setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()));
+	}
+
+	@Override
+	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+		if (state.getValue(WATER_TYPE) != WaterType.NONE) {
+			level.scheduleTick(pos, state.getValue(WATER_TYPE).getFluid(), state.getValue(WATER_TYPE).getFluid().getTickDelay(level));
+		}
+
+		return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+	}
+
+	@Override
+	protected FluidState getFluidState(BlockState state) {
+		return state.getValue(WATER_TYPE).getFluid().defaultFluidState();
+	}
+
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
@@ -114,5 +141,10 @@ public class AnimatorBlock extends HorizontalBaseEntityBlock {
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
 		return createTickerHelper(type, BlockEntityRegistry.ANIMATOR.get(), AnimatorBlockEntity::tick);
+	}
+
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder.add(WATER_TYPE));
 	}
 }

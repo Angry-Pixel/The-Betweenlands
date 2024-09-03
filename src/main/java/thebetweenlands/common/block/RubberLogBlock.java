@@ -13,10 +13,12 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class RubberLogBlock extends PipeBlock {
+public class RubberLogBlock extends PipeBlock implements SwampWaterLoggable {
 
 	public static final MapCodec<RubberLogBlock> CODEC = simpleCodec(RubberLogBlock::new);
 	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
@@ -28,7 +30,7 @@ public class RubberLogBlock extends PipeBlock {
 			this.getStateDefinition().any().setValue(AXIS, Direction.Axis.Y).setValue(NATURAL, false)
 				.setValue(NORTH, false).setValue(EAST, false)
 				.setValue(SOUTH, false).setValue(WEST, false)
-				.setValue(UP, false).setValue(DOWN, false));
+				.setValue(UP, false).setValue(DOWN, false).setValue(WATER_TYPE, WaterType.NONE));
 	}
 
 	@Override
@@ -38,7 +40,7 @@ public class RubberLogBlock extends PipeBlock {
 
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-		return this.getStateWithConnections(context.getLevel(), context.getClickedPos(), this.defaultBlockState()).setValue(AXIS, context.getClickedFace().getAxis());
+		return this.getStateWithConnections(context.getLevel(), context.getClickedPos(), this.defaultBlockState()).setValue(AXIS, context.getClickedFace().getAxis()).setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()));
 	}
 
 	public BlockState getStateWithConnections(BlockGetter level, BlockPos pos, BlockState state) {
@@ -57,12 +59,20 @@ public class RubberLogBlock extends PipeBlock {
 
 	@Override
 	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor accessor, BlockPos pos, BlockPos neighborPos) {
+		if (state.getValue(WATER_TYPE) != WaterType.NONE) {
+			accessor.scheduleTick(pos, state.getValue(WATER_TYPE).getFluid(), state.getValue(WATER_TYPE).getFluid().getTickDelay(accessor));
+		}
 		return state.setValue(PROPERTY_BY_DIRECTION.get(direction), this.canConnectTo(accessor, neighborPos));
 	}
 
 	@Override
+	protected FluidState getFluidState(BlockState state) {
+		return state.getValue(WATER_TYPE).getFluid().defaultFluidState();
+	}
+
+	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(AXIS, NORTH, EAST, SOUTH, WEST, UP, DOWN, NATURAL);
+		builder.add(AXIS, NORTH, EAST, SOUTH, WEST, UP, DOWN, WATER_TYPE, NATURAL);
 	}
 
 	@Override

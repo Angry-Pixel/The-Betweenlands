@@ -1,6 +1,7 @@
 package thebetweenlands.common.block;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -8,11 +9,15 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -20,10 +25,11 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
 import thebetweenlands.common.block.entity.LootUrnBlockEntity;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 
 import javax.annotation.Nullable;
 
-public class LootUrnBlock extends HorizontalBaseEntityBlock {
+public class LootUrnBlock extends HorizontalBaseEntityBlock implements SwampWaterLoggable {
 
 	public static final VoxelShape URN_1 = Shapes.or(
 		Block.box(5.0D, 0.0D, 5.0D, 11.0D, 3.0D, 11.0D),
@@ -46,6 +52,7 @@ public class LootUrnBlock extends HorizontalBaseEntityBlock {
 	public LootUrnBlock(VoxelShape shape, Properties properties) {
 		super(properties);
 		this.shape = shape;
+		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH).setValue(WATER_TYPE, WaterType.NONE));
 	}
 
 	@Override
@@ -118,7 +125,32 @@ public class LootUrnBlock extends HorizontalBaseEntityBlock {
 
 	@Nullable
 	@Override
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		return super.getStateForPlacement(context).setValue(WATER_TYPE, WaterType.getFromFluid(context.getLevel().getFluidState(context.getClickedPos()).getType()));
+	}
+
+	@Override
+	protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+		if (state.getValue(WATER_TYPE) != WaterType.NONE) {
+			level.scheduleTick(pos, state.getValue(WATER_TYPE).getFluid(), state.getValue(WATER_TYPE).getFluid().getTickDelay(level));
+		}
+
+		return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+	}
+
+	@Override
+	protected FluidState getFluidState(BlockState state) {
+		return state.getValue(WATER_TYPE).getFluid().defaultFluidState();
+	}
+
+	@Nullable
+	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new LootUrnBlockEntity(pos, state);
+	}
+
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder.add(WATER_TYPE));
 	}
 }

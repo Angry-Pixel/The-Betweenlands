@@ -7,8 +7,8 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.material.Fluids;
 import thebetweenlands.common.block.PebblePileBlock;
+import thebetweenlands.common.block.waterlog.SwampWaterLoggable;
 import thebetweenlands.common.world.gen.WorldGenUtil;
 import thebetweenlands.common.world.gen.feature.config.PebbleClusterConfiguration;
 
@@ -36,7 +36,7 @@ public class PebbleClusterFeature extends Feature<PebbleClusterConfiguration> {
 				this.setBlock(level, offset, config.state()
 					.setValue(PebblePileBlock.PEBBLES, pileSize)
 					.setValue(PebblePileBlock.PLANT, rand.nextBoolean())
-					.setValue(PebblePileBlock.WATERLOGGED, config.underwater() && config.state().getFluidState().is(Fluids.WATER)));
+					.setValue(PebblePileBlock.WATER_TYPE, SwampWaterLoggable.WaterType.getFromFluid(config.state().getFluidState().getType())));
 				generated = true;
 			}
 		}
