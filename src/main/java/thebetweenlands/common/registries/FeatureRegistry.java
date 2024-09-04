@@ -7,10 +7,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.gen.feature.*;
-import thebetweenlands.common.world.gen.feature.config.BlockPlaceConfiguration;
-import thebetweenlands.common.world.gen.feature.config.ChanceConfiguration;
-import thebetweenlands.common.world.gen.feature.config.PebbleClusterConfiguration;
-import thebetweenlands.common.world.gen.feature.config.SimulacrumConfiguration;
+import thebetweenlands.common.world.gen.feature.config.*;
 
 public class FeatureRegistry {
 
@@ -35,7 +32,8 @@ public class FeatureRegistry {
 	public static final DeferredHolder<Feature<?>, Feature<SimulacrumConfiguration>> DEEPMAN_SIMULACRUM = FEATURES.register("deepman_simulacrum",
 		() -> new DeepmanSimulacrumFeature(SimulacrumConfiguration.CODEC));
 	//Double Plant Cluster
-	//Fluid Pool
+	public static final DeferredHolder<Feature<?>, Feature<PoolConfiguration>> FLUID_POOL = FEATURES.register("fluid_pool",
+		() -> new FluidPoolFeature(PoolConfiguration.CODEC));
 	//Giant Root
 	public static final DeferredHolder<Feature<?>, Feature<SimulacrumConfiguration>> LAKE_CAVERN_SIMULACRUM = FEATURES.register("lake_cavern_simulacrum",
 		() -> new LakeCavernSimulacrumFeature(SimulacrumConfiguration.CODEC));
