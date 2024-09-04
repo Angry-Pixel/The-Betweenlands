@@ -58,6 +58,8 @@ public class FeatureRegistry {
 		() -> new SwampKelpClusterFeature(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> SWAMP_REED_CLUSTER = FEATURES.register("swamp_reed_cluster",
 		() -> new SwampReedClusterFeature(NoneFeatureConfiguration.CODEC));
+	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> WATER_ROOTS_CLUSTER = FEATURES.register("water_roots_cluster",
+		() -> new WaterRootsClusterFeature(NoneFeatureConfiguration.CODEC));
 	public static final DeferredHolder<Feature<?>, Feature<NoneFeatureConfiguration>> WEEDWOOD_BUSH = FEATURES.register("weedwood_bush",
 		() -> new WeedwoodBushFeature(NoneFeatureConfiguration.CODEC));
 }
