@@ -439,6 +439,7 @@ public class BLBlockStateProvider extends net.neoforged.neoforge.client.model.ge
 		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_2, BlockRegistry.SLUDGY_MUD_BRICKS_2);
 		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_3, BlockRegistry.SLUDGY_MUD_BRICKS_3);
 		this.slabBlockWithItem(BlockRegistry.SLUDGY_MUD_BRICK_SLAB_4, BlockRegistry.SLUDGY_MUD_BRICKS_4);
+		this.builtinEntityAndItem(BlockRegistry.MUD_BRICK_ALCOVE, this.modLoc("block/particle/mud_brick_alcove_particle"), 0.625F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.LOOT_URN_1, this.modLoc("block/particle/loot_urn_particle"), 0.75F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.LOOT_URN_2, this.modLoc("block/particle/loot_urn_particle"), 0.75F, 0.0F);
 		this.builtinEntityAndItem(BlockRegistry.LOOT_URN_3, this.modLoc("block/particle/loot_urn_particle"), 0.75F, 0.0F);

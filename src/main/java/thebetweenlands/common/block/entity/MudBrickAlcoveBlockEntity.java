@@ -13,31 +13,9 @@ import thebetweenlands.common.registries.BlockEntityRegistry;
 public class MudBrickAlcoveBlockEntity extends NoMenuContainerBlockEntity {
 
 	private NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY);
-	private int urnType = 0;
-	private int rotationOffset = 0;
-	public int dungeonLevel = 0;
 
 	public MudBrickAlcoveBlockEntity(BlockPos pos, BlockState blockState) {
 		super(BlockEntityRegistry.MUD_BRICK_ALCOVE.get(), pos, blockState);
-	}
-
-	public void setUrnRotationOffset(int rotation) {
-		this.rotationOffset = rotation;
-	}
-
-	public int getUrnRotationOffset() {
-		return this.rotationOffset;
-	}
-
-	public void setupUrn(boolean hasUrn, RandomSource random) {
-		if (hasUrn) {
-			this.urnType = random.nextInt(3);
-			this.rotationOffset = random.nextInt(41) - 20;
-		}
-	}
-
-	public void setDungeonLevel(int dungeonLevel) {
-		this.dungeonLevel = dungeonLevel;
 	}
 
 	@Override
@@ -46,8 +24,6 @@ public class MudBrickAlcoveBlockEntity extends NoMenuContainerBlockEntity {
 		if (!this.trySaveLootTable(tag)) {
 			ContainerHelper.saveAllItems(tag, this.items, registries);
 		}
-		tag.putInt("urn_type", this.urnType);
-		tag.putInt("urn_rotation", this.rotationOffset);
 	}
 
 	@Override
@@ -57,8 +33,6 @@ public class MudBrickAlcoveBlockEntity extends NoMenuContainerBlockEntity {
 		if (!this.tryLoadLootTable(tag)) {
 			ContainerHelper.loadAllItems(tag, this.items, registries);
 		}
-		this.urnType = tag.getInt("urn_type");
-		this.rotationOffset = tag.getInt("urn_rotation");
 	}
 
 	@Override
